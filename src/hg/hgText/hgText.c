@@ -36,15 +36,19 @@ struct customTrack *theCtList = NULL;
 /* doMiddle() sets these: */
 struct cart *cart = NULL;
 char *database = NULL;
-char *freezeName;
-boolean tableIsPositional;
-boolean tableIsSplit;
+char *organism = NULL;
+char *freezeName = NULL;
+boolean tableIsPositional = FALSE;
+boolean tableIsSplit = FALSE;
 char fullTableName[256];
-char *position;
-char *chrom;
-int winStart;
-int winEnd;
-boolean allGenome;
+char *position = NULL;
+char *chrom = NULL;
+int winStart = 0;
+int winEnd = 0;
+boolean allGenome = FALSE;
+
+/* main() sets this: */
+struct hash *oldVars = NULL;
 
 /* Representation of bed-filtering operations */
 /* maybe these should be moved to the bed lib? */
@@ -188,6 +192,124 @@ char *ctVisMenu[] =
 int ctVisMenuSize = 3;
 
 
+void storeStringIfSet(char *var)
+/* If var is in CGI, store it in cart. */
+{
+char *val = cgiOptionalString(var);
+if (val != NULL)
+    cartSetString(cart, var, val);
+}
+
+void storeBooleanIfSet(char *var)
+/* If var is in CGI, store it in cart. */
+{
+boolean val = cgiBoolean(var);
+if (cgiBooleanDefined(var) || val)
+    cartSetBoolean(cart, var, val);
+}
+
+void saveChooseTableState()
+/* Store in cart the user's settings in doChooseTable() form */
+{
+storeStringIfSet("table0");
+storeStringIfSet("table1");
+}
+
+void saveFilterOptions(char *tableId)
+/* Store in cart any field constraint CGI variables for the given table */
+{
+struct cgiVar *cv;
+char varName[128];
+
+if (tableId == NULL)
+    tableId = "";
+for (cv=cgiVarList();  cv != NULL;  cv=cv->next)
+    {
+    snprintf(varName, sizeof(varName), "pat%s_", tableId);
+    if (startsWith(varName, cv->name))
+	cartSetString(cart, cv->name, cv->val);
+    snprintf(varName, sizeof(varName), "dd%s_", tableId);
+    if (startsWith(varName, cv->name))
+	cartSetString(cart, cv->name, cv->val);
+    snprintf(varName, sizeof(varName), "cmp%s_", tableId);
+    if (startsWith(varName, cv->name))
+	cartSetString(cart, cv->name, cv->val);
+    snprintf(varName, sizeof(varName), "log_rawQuery%s", tableId);
+    if (sameString(varName, cv->name))
+	cartSetString(cart, cv->name, cv->val);
+    snprintf(varName, sizeof(varName), "rawQuery%s", tableId);
+    if (sameString(varName, cv->name))
+	cartSetString(cart, cv->name, cv->val);
+    }
+}
+
+void saveOutputOptionsState()
+/* Store in cart the user's settings in doOutputOptions() form */
+{
+storeStringIfSet("outputType");
+saveFilterOptions(NULL);
+storeStringIfSet("table2");
+}
+
+void saveChooseFieldsState()
+/* Store in cart the user's settings in doChooseFields() form */
+{
+struct cgiVar *cv;
+
+for (cv=cgiVarList();  cv != NULL;  cv=cv->next)
+    {
+    if (startsWith("field_", cv->name))
+	cartSetBoolean(cart, cv->name, TRUE);
+    }
+}
+
+void saveSequenceOptionsState()
+/* Store in cart the user's settings in doSequenceOptions() form */
+{
+struct cgiVar *cv;
+char shadowPrefix[128];
+
+/* First pass: just store everything in cart as it appears in CGI. */
+for (cv=cgiVarList();  cv != NULL;  cv=cv->next)
+    {
+    if (startsWith("hgSeq", cv->name))
+	cartSetString(cart, cv->name, cv->val);
+    }
+/* Second pass: booleans may not appear in CGI; also, their representation 
+ * is different so translate to boolean and store boolean. */
+snprintf(shadowPrefix, sizeof(shadowPrefix), "%s%s",
+	 cgiBooleanShadowPrefix(), "hgSeq");
+for (cv=cgiVarList();  cv != NULL;  cv=cv->next)
+    {
+    if (startsWith(shadowPrefix, cv->name))
+	{
+	char *varName = cv->name + strlen(cgiBooleanShadowPrefix());
+	cartSetBoolean(cart, varName, cgiBoolean(varName));
+	}
+    }
+}
+
+void saveBedOptionsState()
+/* Store in cart the user's settings in doBedOptions() form */
+{
+storeBooleanIfSet("hgt.doCustomTrack");
+storeStringIfSet("hgt.ctName");
+storeStringIfSet("hgt.ctDesc");
+storeStringIfSet("hgt.ctVis");
+storeStringIfSet("hgt.ctUrl");
+storeBooleanIfSet("hgt.loadCustomTrack");
+}
+
+void saveIntersectOptionsState()
+/* Store in cart the user's settings in doIntersectOptions() form */
+{
+storeStringIfSet("hgt.intersectOp");
+storeStringIfSet("hgt.moreThresh");
+storeStringIfSet("hgt.lessThresh");
+storeBooleanIfSet("hgt.invertTable");
+storeBooleanIfSet("hgt.invertTable2");
+}
+
 void positionLookup(char *phase)
 /* print the location and a jump button */
 {
@@ -219,19 +341,35 @@ else
 }
 
 
+void handleDbChange()
+/* 
+   Copied from hgGateway:
+   If we are changing databases via explicit cgi request,
+   then remove custom track data which will 
+   be irrelevant in this new database .
+   If databases were changed then use the new default position too.
+*/
+{
+char *oldDb = hashFindVal(oldVars, "db");
+if (! strstrNoCase(oldDb, database))
+    {
+    position = hDefaultPos(database);
+    cartRemove(cart, "hgt.customText");
+    cartRemove(cart, "hgt.customFile");
+    cartRemove(cart, "ct");
+    }
+}
+
 void doGateway()
 /* Table Browser gateway page: select organism, db, position */
 {
-char *organism;
-char *defaultPosition;
-char *position;
+char *oldDb;
 
-getDbAndGenome(cart, &database, &organism);
-freezeName = hFreezeFromDb(database);
-defaultPosition = hDefaultPos(database);
-position = cartUsualString(cart, "position", defaultPosition);
+position = cartCgiUsualString(cart, "position", hDefaultPos(database));
 webStart(cart, "Table Browser: %s: Choose Organism &amp; Assembly",
 	 freezeName);
+
+handleDbChange();
 
 puts(
      "<P>This tool allows you to download portions of the database used 
@@ -258,7 +396,8 @@ puts(
 "<tr>\n"
 "<td>\n"
 );
-printf("<FORM ACTION=\"%s\" NAME=\"mainForm\" METHOD=\"GET\" ENCTYPE=\"multipart/form-data\">\n", hgTextName());
+printf("<FORM ACTION=\"%s\" NAME=\"mainForm\" METHOD=\"GET\"\">\n",
+       hgTextName());
 cartSaveSession(cart);
 puts(
 "<input TYPE=\"IMAGE\" BORDER=\"0\" NAME=\"hgt.dummyEnterButton\" src=\"/images/DOT.gif\">\n"
@@ -291,15 +430,13 @@ puts(
 "</center>\n"
 );
 
-printf("<FORM ACTION=\"%s\" METHOD=\"GET\" NAME=\"orgForm\"><input type=\"hidden\" name=\"org\" value=\"%s\">\n", hgTextName(), organism);
+printf("<FORM ACTION=\"%s\" METHOD=\"GET\" NAME=\"orgForm\">\n", hgTextName());
+cgiMakeHiddenVar("org", organism);
 cartSaveSession(cart);
 puts("</FORM>");
 
 hgPositionsHelpHtml(organism);
 webEnd();
-
-freez(&defaultPosition);
-position = NULL;
 }
 
 static boolean allLetters(char *s)
@@ -322,8 +459,10 @@ if (!allLetters(word))
 
 
 char *getPosition(char **retChrom, int *retStart, int *retEnd)
+/* Get position from cgi (not cart); use hgFind if necessary; return NULL 
+ * if we had to display the gateway page or hgFind's selection page. */
 {
-char *pos = cgiOptionalString("position");
+char *pos = cloneString(cgiOptionalString("position"));
 
 if (pos == NULL)
     pos = "";
@@ -498,12 +637,13 @@ else
 }
 
 
-static void printSelectOptions(struct hashEl *optList, char *name)
+static void printSelectOptions(struct hashEl *optList, char *varName)
 /* Print out an HTML select option for each element in a hashEl list.
- * Mark as selected if it's the same as name; strip prefix for display. */
+ * Mark as selected if it's the same as varName; strip prefix for display. */
 {
 struct hashEl *cur;
 char *noPrefix;
+char *curSetting = cartCgiUsualString(cart, varName, "");
 
 for (cur = optList;  cur != NULL;  cur = cur->next)
     {
@@ -511,7 +651,7 @@ for (cur = optList;  cur != NULL;  cur = cur->next)
 	noPrefix++;
     else
 	noPrefix = cur->name;
-    if (existsAndEqual(name, cur->name))
+    if (sameString(curSetting, cur->name))
 	printf("<OPTION SELECTED VALUE=\"%s\">%s</OPTION>\n",
 	       cur->name, noPrefix);
     else
@@ -641,9 +781,12 @@ void doChooseTable()
 struct hashEl *posTableList;
 struct hashEl *nonposTableList;
 
+webStart(cart, "Table Browser: %s: Choose a table", freezeName);
+handleDbChange();
 printf("<FORM ACTION=\"%s\" NAME=\"mainForm\">\n\n", hgTextName());
 cartSaveSession(cart);
 cgiMakeHiddenVar("db", database);
+cartSetString(cart, "db", database);
 puts("<TABLE CELLPADDING=\"8\">");
 puts("<TR><TD>");
 
@@ -736,6 +879,7 @@ offers should select \"%s\".  ", outputOptionsPhase);
 puts("The fields of the table will be listed in the optional filtering
 constraints section." "\n"
      );
+webEnd();
 }
 
 void getFullTableName(char *dest, char *newChrom, char *table)
@@ -760,19 +904,18 @@ else
 checkIsAlpha("table name", dest);
 }
 
-void stringFilterOption (char *field, char *tableId, char *logOp)
+void stringFilterOption(char *field, char *tableId, char *logOp)
 /* Print out a table row with filter constraint options for a string/char. */
 {
 char name[128];
-char *newVal;
 
 printf("<TR VALIGN=BOTTOM><TD> %s </TD><TD>\n", field);
 snprintf(name, sizeof(name), "dd%s_%s", tableId, field);
-cgiMakeDropList(name, ddOpMenu, ddOpMenuSize, ddOpMenu[0]);
+cgiMakeDropList(name, ddOpMenu, ddOpMenuSize,
+		cartCgiUsualString(cart, name, ddOpMenu[0]));
 puts(" match </TD><TD>");
-newVal = "*";
 snprintf(name, sizeof(name), "pat%s_%s", tableId, field);
-cgiMakeTextVar(name, newVal, 20);
+cgiMakeTextVar(name, cartCgiUsualString(cart, name, "*"), 20);
 if (logOp == NULL)
     logOp = "";
 printf("</TD><TD> %s </TD></TR>\n", logOp);
@@ -783,16 +926,15 @@ void numericFilterOption(char *field, char *fieldLabel, char *tableId,
 /* Print out a table row with filter constraint options for a number. */
 {
 char name[128];
-char *newVal;
 
 printf("<TR VALIGN=BOTTOM><TD> %s </TD><TD>\n", fieldLabel);
 puts(" is ");
 snprintf(name, sizeof(name), "cmp%s_%s", tableId, field);
-cgiMakeDropList(name, cmpOpMenu, cmpOpMenuSize, cmpOpMenu[0]);
+cgiMakeDropList(name, cmpOpMenu, cmpOpMenuSize,
+		cartCgiUsualString(cart, name, cmpOpMenu[0]));
 puts("</TD><TD>\n");
-newVal = "";
 snprintf(name, sizeof(name), "pat%s_%s", tableId, field);
-cgiMakeTextVar(name, newVal, 20);
+cgiMakeTextVar(name, cartCgiUsualString(cart, name, ""), 20);
 if (logOp == NULL)
     logOp = "";
 printf("</TD><TD>%s</TD></TR>\n", logOp);
@@ -808,7 +950,8 @@ char name[128];
 printf("<TR VALIGN=BOTTOM><TD> %s </TD><TD>\n", fieldLabel1);
 puts(" is ");
 snprintf(name, sizeof(name), "cmp%s_%s", tableId, field);
-cgiMakeDropList(name, eqOpMenu, eqOpMenuSize, eqOpMenu[0]);
+cgiMakeDropList(name, eqOpMenu, eqOpMenuSize,
+		cartCgiUsualString(cart, name, eqOpMenu[0]));
 /* make a dummy pat_ CGI var for consistency with other filter options */
 snprintf(name, sizeof(name), "pat%s_%s", tableId, field);
 cgiMakeHiddenVar(name, "0");
@@ -902,7 +1045,8 @@ while ((row = sqlNextRow(sr)) != NULL)
 	if (strstr(row[1], "char"))
 	    {
 	    snprintf(name, sizeof(name), "dd%s_%s", tableId, row[0]);
-	    cgiMakeDropList(name, ddOpMenu, ddOpMenuSize, ddOpMenu[0]);
+	    cgiMakeDropList(name, ddOpMenu, ddOpMenuSize,
+			    cartCgiUsualString(cart, name, ddOpMenu[0]));
 	    puts(" match </TD><TD>\n");
 	    newVal = "*";
 	    }
@@ -910,12 +1054,13 @@ while ((row = sqlNextRow(sr)) != NULL)
 	    {
 	    puts(" is \n");
 	    snprintf(name, sizeof(name), "cmp%s_%s", tableId, row[0]);
-	    cgiMakeDropList(name, cmpOpMenu, cmpOpMenuSize, cmpOpMenu[0]);
+	    cgiMakeDropList(name, cmpOpMenu, cmpOpMenuSize,
+			    cartCgiUsualString(cart, name, cmpOpMenu[0]));
 	    puts("</TD><TD>\n");
 	    newVal = "";
 	    }
 	snprintf(name, sizeof(name), "pat%s_%s", tableId, row[0]);
-	cgiMakeTextVar(name, newVal, 20);
+	cgiMakeTextVar(name, cartCgiUsualString(cart, name, newVal), 20);
 	}
     }
 sqlFreeResult(&sr);
@@ -926,12 +1071,14 @@ else
 puts("</TD></TR></TABLE>\n");
 puts(" </TD></TR><TR VALIGN=BOTTOM><TD>");
 snprintf(name, sizeof(name), "log_rawQuery%s", tableId);
-cgiMakeDropList(name, logOpMenu, logOpMenuSize, logOpMenu[0]);
+cgiMakeDropList(name, logOpMenu, logOpMenuSize,
+		cartCgiUsualString(cart, name, logOpMenu[0]));
 puts("Free-form query: ");
 snprintf(name, sizeof(name), "rawQuery%s", tableId);
-cgiMakeTextVar(name, "", 50);
+cgiMakeTextVar(name, cartCgiUsualString(cart, name, ""), 50);
 puts("</TD></TR></TABLE>");
 }
+
 
 void doOutputOptions()
 /* print out a form with output table format & filtering options */
@@ -940,6 +1087,8 @@ struct hashEl *posTableList;
 struct hashEl *nonposTableList;
 char *table = getTableName();
 char *db = getTableDb();
+
+saveChooseTableState();
 
 webStart(cart, "Table Browser: %s: %s", freezeName, outputOptionsPhase);
 checkTableExists(fullTableName);
@@ -952,10 +1101,13 @@ positionLookupSamePhase();
 printf("<P><HR><H3> Select Output Format for %s </H3>\n", table);
 if (tableIsPositional)
     cgiMakeDropList("outputType", outputTypePosMenu, outputTypePosMenuSize,
-		    outputTypePosMenu[0]);
+		    cartCgiUsualString(cart, "outputType",
+				       outputTypePosMenu[0]));
 else
     cgiMakeDropList("outputType", outputTypeNonPosMenu,
-		    outputTypeNonPosMenuSize, outputTypeNonPosMenu[0]);
+		    outputTypeNonPosMenuSize,
+		    cartCgiUsualString(cart, "outputType",
+				       outputTypeNonPosMenu[0]));
 cgiMakeButton("phase", getOutputPhase);
 
 printf("<P><HR><H3> (Optional) Filter %s Records by Field Values </H3>",
@@ -2526,6 +2678,11 @@ char endField[32];
 char *constraints;
 boolean gotResults;
 
+saveChooseTableState();
+saveChooseFieldsState();
+saveOutputOptionsState();
+saveIntersectOptionsState();
+
 if (sameString(customTrackPseudoDb, db))
     {
     doTabSeparatedCT(allFields);
@@ -2636,6 +2793,9 @@ char name[128];
 boolean checkAll;
 boolean clearAll;
 
+saveOutputOptionsState();
+saveIntersectOptionsState();
+
 webStart(cart, "Table Browser: %s: Choose Fields of %s", freezeName, table);
 checkTableExists(fullTableName);
 printf("<FORM ACTION=\"%s\" NAME=\"mainForm\">\n\n", hgTextName());
@@ -2657,20 +2817,18 @@ clearAll = existsAndEqual("submit", "Clear All") ? TRUE : FALSE;
 puts("<TABLE>");
 for (field=allFields;  field != NULL;  field=field->next)
     {
+    boolean fieldChecked;
     puts("<TR><TD>");
     snprintf(name, sizeof(name), "field_%s", field->name);
-    if (checkAll || (existsAndEqual(name, "on") && !clearAll))
-	printf("<INPUT TYPE=\"checkbox\" NAME=\"%s\" CHECKED> %s\n",
-	       name, field->name);
-    else
-	printf("<INPUT TYPE=\"checkbox\" NAME=\"%s\"> %s\n",
-	       name, field->name);
-puts("</TD></TR>");
+    fieldChecked = cartCgiUsualBoolean(cart, name, FALSE);
+    cgiMakeCheckBox(name,
+		    (checkAll || (fieldChecked && !clearAll)));
+    puts(field->name);
+    puts("</TD></TR>");
     }
 puts("</TABLE>\n");
 cgiMakeButton("phase", getSomeFieldsPhase);
 puts("</FORM>");
-
 webEnd();
 }
 
@@ -2679,6 +2837,9 @@ void doSequenceOptions()
 {
 struct hTableInfo *hti = getOutputHti();
 char *outputType = cgiUsualString("outputType", cgiString("phase"));
+
+saveOutputOptionsState();
+saveIntersectOptionsState();
 
 webStart(cart, "Table Browser: %s: %s", freezeName, seqOptionsPhase);
 checkTableExists(fullTableName);
@@ -2691,7 +2852,7 @@ preserveConstraints(fullTableName, getTableDb(), NULL);
 preserveTable2();
 positionLookupSamePhase();
 printf("<H3>Table: %s</H3>\n", hti->rootName);
-hgSeqOptionsHti(hti);
+hgSeqOptionsHtiCart(hti, cart);
 cgiMakeButton("phase", getSequencePhase);
 puts("</FORM>");
 webEnd();
@@ -2703,6 +2864,10 @@ void doGetSequence()
 struct hTableInfo *hti = getOutputHti();
 struct bed *bedList = getBedList();
 int itemCount;
+
+saveOutputOptionsState();
+saveIntersectOptionsState();
+saveSequenceOptionsState();
 
 printf("Content-Type: text/plain\n\n");
 webStartText();
@@ -2896,6 +3061,9 @@ char *db = getTableDb();
 char *track = getTrackName();
 int itemCount;
 
+saveOutputOptionsState();
+saveIntersectOptionsState();
+
 printf("Content-Type: text/plain\n\n");
 webStartText();
 
@@ -2926,8 +3094,11 @@ char *op = cgiOptionalString("hgt.intersectOp");
 char *track = getTrackName();
 char *db = getTableDb();
 char *outputType = cgiUsualString("outputType", cgiString("phase"));
-char *val;
+char *setting;
 char buf[256];
+
+saveOutputOptionsState();
+saveIntersectOptionsState();
 
 webStart(cart, "Table Browser: %s: %s", freezeName, bedOptionsPhase);
 checkTableExists(fullTableName);
@@ -2941,7 +3112,8 @@ preserveTable2();
 positionLookupSamePhase();
 printf("<H3> Select BED Options for %s: </H3>\n", hti->rootName);
 puts("<TABLE><TR><TD>");
-cgiMakeCheckBox("hgt.doCustomTrack", TRUE);
+cgiMakeCheckBox("hgt.doCustomTrack",
+		cartCgiUsualBoolean(cart, "hgt.doCustomTrack", TRUE));
 puts("</TD><TD> <B> Include "
      "<A HREF=\"/goldenPath/help/customTrack.html\" TARGET=_blank>"
      "custom track</A> header: </B>");
@@ -2951,27 +3123,28 @@ if (op == NULL)
 snprintf(buf, sizeof(buf), "tb_%s%s%s", hti->rootName,
 	 (table2 ? "_" : ""),
 	 (table2 ? table2 : ""));
-val = cgiUsualString("hgt.ctName", buf);
-cgiMakeTextVar("hgt.ctName", val, 16);
+setting = cgiUsualString("hgt.ctName", buf);
+cgiMakeTextVar("hgt.ctName", setting, 16);
 puts("</TD></TR><TR><TD></TD><TD>description=");
 snprintf(buf, sizeof(buf), "table browser query on %s%s%s",
 	 hti->rootName,
 	 (table2 ? ", " : ""),
 	 (table2 ? table2 : ""));
-val = cgiUsualString("hgt.ctDesc", buf);
-cgiMakeTextVar("hgt.ctDesc", val, 50);
+setting = cgiUsualString("hgt.ctDesc", buf);
+cgiMakeTextVar("hgt.ctDesc", setting, 50);
 puts("</TD></TR><TR><TD></TD><TD>visibility=");
-val = cgiUsualString("hgt.ctVis", ctVisMenu[1]);
-cgiMakeDropList("hgt.ctVis", ctVisMenu, ctVisMenuSize, val);
+setting = cartCgiUsualString(cart, "hgt.ctVis", ctVisMenu[1]);
+cgiMakeDropList("hgt.ctVis", ctVisMenu, ctVisMenuSize, setting);
 puts("</TD></TR><TR><TD></TD><TD>url=");
-val = cgiUsualString("hgt.ctUrl", "");
-cgiMakeTextVar("hgt.ctUrl", val, 50);
+setting = cartCgiUsualString(cart, "hgt.ctUrl", "");
+cgiMakeTextVar("hgt.ctUrl", setting, 50);
 puts("</TD></TR><TR><TD></TD><TD>");
-cgiMakeCheckBox("hgt.loadCustomTrack", FALSE);
+cgiMakeCheckBox("hgt.loadCustomTrack",
+		cartCgiUsualBoolean(cart, "hgt.loadCustomTrack", FALSE));
 puts("Load this custom track into my session");
 puts("</TD></TR></TABLE>");
 puts("<P> <B> Create one BED record per: </B>");
-fbOptionsHti(hti);
+fbOptionsHtiCart(hti, cart);
 cgiMakeButton("phase", getBedPhase);
 puts("</FORM>");
 webEnd();
@@ -3023,6 +3196,10 @@ char *fbQual = fbOptionsToQualifier();
 char fbTQ[128];
 int fields;
 boolean gotResults = FALSE;
+
+saveOutputOptionsState();
+saveIntersectOptionsState();
+saveBedOptionsState();
 
 printf("Content-Type: text/plain\n\n");
 webStartText();
@@ -3113,10 +3290,10 @@ char *track2 = getTrack2Name();
 char track2CGI[128];
 int itemCount;
 
+saveOutputOptionsState();
+saveIntersectOptionsState();
+
 webStart(cart, "Table Browser: %s: %s", freezeName, linksPhase);
-puts("<FORM ACTION=\"/cgi-bin/hgText\" NAME=\"mainForm\" METHOD=\"GET\">\n");
-cartSaveSession(cart);
-puts("</FORM>");
 printf("<H3> Links to Genome Browser from %s </H3>\n", getTableName());
 
 if ((track2 != NULL) && (track2[0] != 0))
@@ -3153,10 +3330,13 @@ char *table2 = getTable2Name();
 char *track = getTrackName();
 char *db = getTableDb();
 char *db2 = getTable2Db();
+char *setting, *op;
 char fullTableName2[256];
 char query[256];
 char name[128];
 boolean gotFirst;
+
+saveOutputOptionsState();
 
 webStart(cart, "Table Browser: %s: %s", freezeName, intersectOptionsPhase);
 checkTableExists(fullTableName);
@@ -3188,36 +3368,41 @@ printf("<H3> Specify how to combine tables %s and %s: </H3>\n",
 
 printf("These combinations will maintain the gene/alignment structure (if any) of %s: <P>\n",
        table);
-cgiMakeRadioButton("hgt.intersectOp", "any", TRUE);
+op = cartCgiUsualString(cart, "hgt.intersectOp", "any");
+cgiMakeRadioButton("hgt.intersectOp", "any", sameString(op, "any"));
 printf("All %s records that have any overlap with %s <P>\n",
        table, table2);
-cgiMakeRadioButton("hgt.intersectOp", "none", FALSE);
+cgiMakeRadioButton("hgt.intersectOp", "none", sameString(op, "none"));
 printf("All %s records that have no overlap with %s <P>\n",
        table, table2);
-cgiMakeRadioButton("hgt.intersectOp", "more", FALSE);
+cgiMakeRadioButton("hgt.intersectOp", "more", sameString(op, "more"));
 printf("All %s records that have at least ",
        table);
-cgiMakeIntVar("hgt.moreThresh", 80, 3);
+setting = cartCgiUsualString(cart, "hgt.moreThresh", "80");
+cgiMakeTextVar("hgt.moreThresh", setting, 3);
 printf(" %% overlap with %s <P>\n", table2);
-cgiMakeRadioButton("hgt.intersectOp", "less", FALSE);
+cgiMakeRadioButton("hgt.intersectOp", "less", sameString(op, "less"));
 printf("All %s records that have at most ",
        table);
-cgiMakeIntVar("hgt.lessThresh", 80, 3);
+setting = cartCgiUsualString(cart, "hgt.lessThresh", "80");
+cgiMakeTextVar("hgt.lessThresh", setting, 3);
 printf(" %% overlap with %s <P>\n", table2);
 
 printf("These combinations will discard the gene/alignment structure (if any) of %s and produce a simple list of position ranges.\n",
        table);
 puts("To complement a table means to consider a position included if it \n"
      "is <I>not</I> included in the table. <P>");
-cgiMakeRadioButton("hgt.intersectOp", "and", FALSE);
+cgiMakeRadioButton("hgt.intersectOp", "and", sameString(op, "and"));
 printf("Base-pair-wise intersection (AND) of %s and %s <P>\n",
        table, table2);
-cgiMakeRadioButton("hgt.intersectOp", "or", FALSE);
+cgiMakeRadioButton("hgt.intersectOp", "or", sameString(op, "or"));
 printf("Base-pair-wise union (OR) of %s and %s <P>\n",
        table, table2);
-cgiMakeCheckBox("hgt.invertTable", FALSE);
+cgiMakeCheckBox("hgt.invertTable",
+		cartCgiUsualBoolean(cart, "hgt.invertTable", FALSE));
 printf("Complement %s before intersection/union <P>\n", table);
-cgiMakeCheckBox("hgt.invertTable2", FALSE);
+cgiMakeCheckBox("hgt.invertTable2",
+		cartCgiUsualBoolean(cart, "hgt.invertTable2", FALSE));
 printf("Complement %s before intersection/union <P>\n", table2);
 
 cgiMakeButton("phase", outputType);
@@ -3242,7 +3427,7 @@ char trash[32];
 char *db = getTableDb();
 
 cart = theCart;
-database = cartUsualString(cart, "db", hGetDb());
+getDbAndGenome(cart, &database, &organism);
 hSetDb(database);
 hDefaultConnect();
 
@@ -3250,11 +3435,7 @@ freezeName = hFreezeFromDb(database);
 if (freezeName == NULL)
     freezeName = "Unknown";
 
-tableIsPositional = FALSE;
-tableIsSplit = FALSE;
 fullTableName[0] = 0;
-chrom = NULL;
-winStart = winEnd = 0;
 position = getPosition(&chrom, &winStart, &winEnd);
 if (position == NULL)
     return;
@@ -3278,9 +3459,7 @@ if (table == NULL || existsAndEqual("phase", chooseTablePhase))
 		 "Please choose a table and try again.");
     else
 	{
-	webStart(cart, "Table Browser: %s: Choose a table", freezeName);
 	doChooseTable();
-	webEnd();
 	}
     }
 else
@@ -3354,6 +3533,7 @@ else
 		 "Error: unrecognized value of CGI var phase: %s",
 		 cgiUsualString("phase", "(Undefined)"));
     }
+cartSetString(cart, "position", position);
 }
 
 
@@ -3363,10 +3543,11 @@ int main(int argc, char *argv[])
 struct cart *theCart;
 char *excludeVars[] = {NULL};
 
+oldVars = hashNew(8);
 cgiSpoof(&argc, argv);
 // Sometimes we output HTML and sometimes plain text; let each outputter 
 // take care of headers instead of using a fixed cart*Shell().
-theCart = cartAndCookieWithHtml(hUserCookie(), excludeVars, NULL, FALSE);
+theCart = cartAndCookieWithHtml(hUserCookie(), excludeVars, oldVars, FALSE);
 doMiddle(theCart);
 cartCheckout(&theCart);
 return 0;
