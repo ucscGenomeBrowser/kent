@@ -13,8 +13,9 @@
 #include "wiggle.h"
 #include "hgMaf.h"
 #include "mafTrack.h"
+#include "mafSummary.h"
 
-static char const rcsid[] = "$Id: wigMafTrack.c,v 1.55 2005/02/11 23:02:12 kate Exp $";
+static char const rcsid[] = "$Id: wigMafTrack.c,v 1.56 2005/03/08 02:11:08 kate Exp $";
 
 struct wigMafItem
 /* A maf track item -- 
@@ -188,6 +189,13 @@ slReverse(&miList);
 return miList;
 }
 
+static char *summarySetting(struct track *track)
+/* Return the setting for the MAF summary table
+ * or NULL if none set  */
+{
+return trackDbSetting(track->tdb, SUMMARY_VAR);
+}
+
 static char *pairwiseSuffix(struct track *track)
 /* Return the suffix for the wiggle tables for the pairwise alignments,
  * or NULL if none set  */
@@ -252,16 +260,39 @@ safef(table, sizeof(table), "%s_%s", species, suffix);
 return cloneString(table);
 }
 
+static boolean displayPairwise(struct track *track)
+/* determine if tables are present for pairwise display */
+{
+return pairwiseSuffix(track) || summarySetting(track);
+}
+
+static boolean displayZoomedIn(struct track *track)
+/* determine if maf tables are loaded -- zoomed in display */
+{
+return track->customPt != NULL;
+}
+
 static struct wigMafItem *loadPairwiseItems(struct track *track)
 /* Make up items for modes where pairwise data are shown.
    First an item for the score wiggle, then a pairwise item
    for each "other species" in the multiple alignment.
-   These may be density plots (pack) or wiggles (full). */
+   These may be density plots (pack) or wiggles (full).
+   Return item list.  Also set customPt with mafList if
+   zoomed in */
 {
 struct wigMafItem *miList = NULL, *speciesItems = NULL, *mi;
 struct track *wigTrack = track->subtracks;
-char *suffix;
 
+if (winEnd - winStart < 300000)
+    {
+    /* "close in" display uses actual alignments from file */
+    struct sqlConnection *conn = hAllocConn();
+    track->customPt = wigMafLoadInRegion(conn, track->mapName, 
+                                        chromName, winStart, winEnd);
+    hFreeConn(&conn);
+    }
+else
+    track->customPt = NULL;
 if (wigTrack != NULL)
     {
     mi = scoreItem(wigTotalHeight(wigTrack, tvFull));
@@ -269,8 +300,7 @@ if (wigTrack != NULL)
     mi->ix = -1;
     slAddHead(&miList, mi);
     }
-suffix = pairwiseSuffix(track);
-if (suffix != NULL)
+if (displayPairwise(track))
     /* make up items for other organisms by scanning through
      * all mafs and looking at database prefix to source. */
     {
@@ -452,6 +482,51 @@ for (i=0; i < textSize && outPositions < outSize;  i++)
     }
 }
 
+
+static void drawScore(double score, int chromStart, int chromEnd, int seqStart,
+                        double scale, struct vGfx *vg, int xOff, int yOff,
+                        int height, Color color, enum trackVisibility vis)
+/* Draw density plot or graph based on score */
+{
+int x1,x2,y,w;
+int height1 = height - 2;
+
+x1 = round((chromStart - seqStart)*scale);
+x2 = round((chromEnd - seqStart)*scale);
+w = x2-x1;
+if (w < 1) w = 1;
+if (vis == tvFull)
+    {
+    y = score * height1;
+    vgBox(vg, x1 + xOff, yOff + height1 - y, w, y+1, color);
+    }
+else
+    {
+    Color c;
+    int shade = score * maxShade;
+    if ((shade < 0) || (shade >= maxShade))
+        shade = 0;
+    c = shadesOfGray[shade];
+    vgBox(vg, x1 + xOff, yOff, w, height-1, c);
+    }
+}
+
+static void drawScoreSummary(struct mafSummary *summaryList, int height,
+                             int seqStart, int seqEnd, 
+                            struct vGfx *vg, int xOff, int yOff,
+                            int width, MgFont *font, 
+                            Color color, Color altColor,
+                            enum trackVisibility vis)
+/* Draw density plot or graph for summary maf scores */
+{
+struct mafSummary *ms;
+double scale = scaleForPixels(width);
+
+for (ms = summaryList; ms != NULL; ms = ms->next)
+    drawScore(ms->score, ms->chromStart, ms->chromEnd, seqStart, scale,
+                vg, xOff, yOff, height, color, vis);
+}
+
 static void drawScoreOverview(char *tableName, int height,
                              int seqStart, int seqEnd, 
                             struct vGfx *vg, int xOff, int yOff,
@@ -470,74 +545,104 @@ struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr = hRangeQuery(conn, tableName, chromName, 
                                         seqStart, seqEnd, NULL, &rowOffset);
 double scale = scaleForPixels(width);
-int x1,x2,y,w;
-int height1 = height - 2;
-
 while ((row = sqlNextRow(sr)) != NULL)
     {
     struct scoredRef ref;
     scoredRefStaticLoad(row + rowOffset, &ref);
-    x1 = round((ref.chromStart - seqStart)*scale);
-    x2 = round((ref.chromEnd - seqStart)*scale);
-    w = x2-x1;
-    if (w < 1) w = 1;
-    if (vis == tvFull)
-        {
-        y = ref.score * height1;
-        vgBox(vg, x1 + xOff, yOff + height1 - y, w, y+1, color);
-        }
-    else
-        {
-        Color c;
-        int shade = ref.score * maxShade;
-        if ((shade < 0) || (shade >= maxShade))
-            shade = 0;
-        c = shadesOfGray[shade];
-        vgBox(vg, x1 + xOff, yOff, w, height-1, c);
-        }
+    drawScore(ref.score, ref.chromStart, ref.chromEnd, seqStart, scale,
+                vg, xOff, yOff, height, color, vis);
     }
 sqlFreeResult(&sr);
 hFreeConn(&conn);
 }
 
-static void drawMafScore(char *tableName, int height,
-                            int seqStart, int seqEnd, 
-                            struct vGfx *vg, int xOff, int yOff,
-                            int width, MgFont *font, 
-                            Color color, enum trackVisibility vis)
-/* display alignments using on-the-fly scoring */
-{
-struct mafAli *mafList;
-struct sqlConnection *conn;
 
-if (seqEnd - seqStart > 300000)
-    drawScoreOverview(tableName, height, seqStart, seqEnd, vg, xOff, yOff,
-                          width, font, color, color, vis);
-else
-    {
-    /* load mafs */
-    conn = hAllocConn();
-    mafList = wigMafLoadInRegion(conn, tableName, chromName, 
-                                    seqStart, seqEnd);
-    drawMafRegionDetails(mafList, height, seqStart, seqEnd, 
-                             vg, xOff, yOff, width, font,
-                             color, color, vis, FALSE);
-    hFreeConn(&conn);
-    }
-}
-
-static boolean wigMafDrawPairwise(struct track *track, int seqStart, int seqEnd,
+static boolean drawPairsFromSummary(struct track *track, 
+        int seqStart, int seqEnd,
         struct vGfx *vg, int xOff, int yOff, int width, MgFont *font,
         Color color, enum trackVisibility vis)
-/* Draw pairwise tables for this multiple alignment, 
- *  if "pairwise" setting is on.  For full mode, display wiggles,
- *  for pack mode, display density plot of mafs.
- */
 {
-boolean ret = FALSE;
+/* Draw pairwise display for this multiple alignment */
+char *summary;
+struct wigMafItem *miList = track->items, *mi = miList;
+struct sqlConnection *conn;
+struct sqlResult *sr = NULL;
+char **row = NULL;
+int rowOffset = 0;
+struct mafSummary *ms, *summaryList;
+struct hash *componentHash = newHash(6);
+struct hashEl *hel;
+struct hashCookie cookie;
+
+if (miList == NULL)
+    return FALSE;
+
+/* get summary table name from trackDb */
+if ((summary = summarySetting(track)) == NULL)
+    return FALSE;
+
+/* load maf summary entries from table */
+conn = hAllocConn();
+sr = hOrderedRangeQuery(conn, summary, chromName, seqStart, seqEnd,
+                        NULL, &rowOffset);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    AllocVar(ms);
+    mafSummaryStaticLoad(row + rowOffset, ms);
+    if ((hel = hashLookup(componentHash, ms->src)) == NULL)
+        hashAdd(componentHash, ms->src, ms);
+    else
+        slAddHead(&(hel->val), ms);
+    }
+sqlFreeResult(&sr);
+
+/* reverse summary lists */
+cookie = hashFirst(componentHash);
+while ((hel = hashNext(&cookie)) != NULL)
+    slReverse(&hel->val);
+hFreeConn(&conn);
+
+/* display pairwise items */
+for (mi = miList; mi != NULL; mi = mi->next)
+    {
+    if (mi->ix < 0)
+        /* ignore item for the score */
+        continue;
+    summaryList = (struct mafSummary *)hashFindVal(componentHash, mi->db);
+    if (summaryList == NULL)
+        summaryList = 
+            (struct mafSummary *)hashMustFindVal(componentHash, mi->name);
+    if (vis == tvFull)
+        {
+        vgSetClip(vg, xOff, yOff, width, 16);
+        drawScoreSummary(summaryList, mi->height, seqStart, seqEnd, vg, 
+                                xOff, yOff, width, font, track->ixAltColor,
+                                track->ixAltColor, tvFull);
+        vgUnclip(vg);
+        }
+    else 
+        {
+        /* pack */
+        /* get maf table, containing pairwise alignments for this organism */
+        /* display pairwise alignments in this region in dense format */
+        vgSetClip(vg, xOff, yOff, width, mi->height);
+        drawScoreSummary(summaryList, mi->height, seqStart, seqEnd, vg, 
+                                xOff, yOff, width, font, color, color, tvDense);
+        vgUnclip(vg);
+        }
+    yOff += mi->height;
+    }
+return TRUE;
+}
+
+static boolean drawPairsFromPairwiseMafScores(struct track *track, 
+        int seqStart, int seqEnd, struct vGfx *vg, int xOff, int yOff, 
+        int width, MgFont *font, Color color, enum trackVisibility vis)
+/* Draw pairwise display for this multiple alignment */
+{
 char *suffix;
 char *tableName;
-Color newColor;
+Color pairColor;
 struct track *wigTrack = track->subtracks;
 int pairwiseHeight = pairwiseWigHeight(track);
 struct wigMafItem *miList = track->items, *mi = miList;
@@ -545,25 +650,21 @@ struct wigMafItem *miList = track->items, *mi = miList;
 if (miList == NULL)
     return FALSE;
 
-/* get pairwise wiggle suffix from trackDb */
-if ((suffix = pairwiseSuffix(track)) == NULL)
-    return FALSE;
+/* get pairwise table suffix from trackDb */
+suffix = pairwiseSuffix(track);
 
-
-/* we will display pairwise, either a graph (wiggle or on-the-fly),
-   or density plot */
-ret = TRUE;
 if (vis == tvFull)
     {
     double minY = 50.0;
     double maxY = 100.0;
 
+    /* NOTE: later, remove requirement for wiggle */
     if (wigTrack == NULL)
         return FALSE;
     /* swap colors for pairwise wiggles */
-    newColor = wigTrack->ixColor;
+    pairColor = wigTrack->ixColor;
     wigTrack->ixColor = wigTrack->ixAltColor;
-    wigTrack->ixAltColor = newColor;
+    wigTrack->ixAltColor = pairColor;
     wigSetCart(wigTrack, MIN_Y, (void *)&minY);
     wigSetCart(wigTrack, MAX_Y, (void *)&maxY);
     }
@@ -603,9 +704,9 @@ for (mi = miList; mi != NULL; mi = mi->next)
             if (!hTableExists(tableName))
                 tableName = getMafTablename(mi->db, suffix);
             if (hTableExists(tableName))
-                drawMafScore(tableName, mi->height, seqStart, seqEnd, 
-                                 vg, xOff, yOff, width, font,
-                                 track->ixAltColor, tvFull);
+                drawScoreOverview(tableName, mi->height, seqStart, seqEnd, vg, 
+                                xOff, yOff, width, font, track->ixAltColor, 
+                                track->ixAltColor, tvFull);
             vgUnclip(vg);
             }
         /* need to add extra space between wiggles (for now) */
@@ -621,14 +722,117 @@ for (mi = miList; mi != NULL; mi = mi->next)
 	if (!hTableExists(tableName))
 	    tableName = getMafTablename(mi->db, suffix);
         if (hTableExists(tableName))
-            drawMafScore(tableName, mi->height, seqStart, seqEnd, 
-                                 vg, xOff, yOff, width, font,
-                                 color, tvDense);
+            drawScoreOverview(tableName, mi->height, seqStart, seqEnd, vg, 
+                                xOff, yOff, width, font, color, color, tvDense);
         vgUnclip(vg);
         }
     yOff += mi->height;
     }
-return ret;
+return TRUE;
+}
+
+static boolean drawPairsFromMultipleMaf(struct track *track, 
+        int seqStart, int seqEnd,
+        struct vGfx *vg, int xOff, int yOff, int width, MgFont *font,
+        Color color, enum trackVisibility vis)
+/* Draw pairwise display from maf of multiple alignment.
+ * Extract pairwise alignments from maf and rescore.
+ * This is used only when zoomed-in.
+ */
+{
+struct wigMafItem *miList = track->items, *mi = miList;
+int graphHeight = 0;
+Color pairColor = (vis == tvFull ? track->ixAltColor : color);
+
+if (miList == NULL || track->customPt == NULL)
+    return FALSE;
+
+if (vis == tvFull)
+    graphHeight = pairwiseWigHeight(track);
+
+/* display pairwise items */
+for (mi = miList; mi != NULL; mi = mi->next)
+    {
+    struct mafAli *mafList = NULL, *maf, *pairMaf;
+    struct mafComp *mcThis, *mcPair = NULL, *mcMaster = NULL;
+
+    if (mi->ix < 0)
+        /* ignore item for the score */
+        continue;
+
+    /* using maf sequences from file */
+    /* create pairwise maf list from the multiple maf */
+    for (maf = (struct mafAli *)track->customPt; 
+                    maf->next != NULL; maf = maf->next)
+        {
+        //if ((mcThis = mafMayFindComponentDb(maf, mi->db)) == NULL)
+        if ((mcThis = mafMayFindCompPrefix(maf, mi->db, "")) == NULL)
+            continue;
+        AllocVar(mcPair);
+        mcPair->src = cloneString(mcThis->src);
+        mcPair->srcSize = mcThis->srcSize;
+        mcPair->strand = mcThis->strand;
+        mcPair->start = mcThis->start;
+        mcPair->size = mcThis->size;
+        mcPair->text = cloneString(mcThis->text);
+
+        mcThis = mafFindCompPrefix(maf, database, "");
+        AllocVar(mcMaster);
+        mcMaster->src = cloneString(mcThis->src);
+        mcMaster->srcSize = mcThis->srcSize;
+        mcMaster->strand = mcThis->strand;
+        mcMaster->start = mcThis->start;
+        mcMaster->size = mcThis->size;
+        mcMaster->text = cloneString(mcThis->text);
+
+        mcMaster->next = mcPair;
+
+        AllocVar(pairMaf);
+        pairMaf->components = mcMaster;
+        pairMaf->textSize = maf->textSize;
+        slAddHead(&mafList, pairMaf);
+        }
+    slReverse(&mafList);
+
+    /* compute a graph or density on-the-fly from mafs */
+    vgSetClip(vg, xOff, yOff, width, mi->height);
+    drawMafRegionDetails(mafList, mi->height, seqStart, seqEnd, vg, xOff, yOff,
+                         width, font, pairColor, pairColor, vis, FALSE);
+    vgUnclip(vg);
+
+    /* need to add extra space between graphs ?? (for now) */
+    if (vis == tvFull)
+        mi->height = graphHeight;
+
+    yOff += mi->height;
+    mafAliFreeList(&mafList);
+    }
+return TRUE;
+}
+
+static boolean wigMafDrawPairwise(struct track *track, int seqStart, int seqEnd,
+        struct vGfx *vg, int xOff, int yOff, int width, MgFont *font,
+        Color color, enum trackVisibility vis)
+/* Draw pairwise display for this multiple alignment
+ * When zoomed in, use on-the-fly scoring of alignments extracted from multiple
+ * When zoomed out:
+ *  if "pairwise" setting is on, use pairwise tables (maf or wiggle)
+ *      <species>_<suffix> for maf, <species>_<suffix>_wig for wiggle
+ *              For full mode, display graph.
+ *              for pack mode, display density plot.
+ *  if "summary" setting is on, use maf summary table
+ *      (saves space, and performs better) */
+{
+    if (displayZoomedIn(track))
+        return drawPairsFromMultipleMaf(track, seqStart, seqEnd, vg,
+                                        xOff, yOff, width, font, color, vis);
+    if (pairwiseSuffix(track))
+        return drawPairsFromPairwiseMafScores(track, seqStart, seqEnd, vg,
+                                        xOff, yOff, width, font, color, vis);
+    if (summarySetting(track))
+        return drawPairsFromSummary(track, seqStart, seqEnd, vg,
+                                        xOff, yOff, width, font, color, vis);
+    return FALSE;
 }
 
 static void alternateBlocksBehindChars(struct vGfx *vg, int x, int y, 
@@ -936,23 +1140,21 @@ return yOff;
 static void wigMafDraw(struct track *track, int seqStart, int seqEnd,
         struct vGfx *vg, int xOff, int yOff, int width, 
         MgFont *font, Color color, enum trackVisibility vis)
-/* Draw routine for maf type tracks */
+/* Draw routine for wigmaf type tracks */
 {
 int y = yOff;
+y = wigMafDrawScoreGraph(track, seqStart, seqEnd, vg, xOff, y, width,
+                                font, color, vis, zoomedToBaseLevel);
 if (zoomedToBaseLevel)
     {
     struct wigMafItem *wiList = track->items;
     if (track->subtracks != NULL)
         wiList = wiList->next;
-    y = wigMafDrawScoreGraph(track, seqStart, seqEnd, vg, xOff, y, width,
-                                font, color, vis, zoomedToBaseLevel);
     y = wigMafDrawBases(track, seqStart, seqEnd, vg, xOff, y, width, font,
                                 color, vis, wiList);
     }
 else 
     {
-    y = wigMafDrawScoreGraph(track, seqStart, seqEnd, vg, xOff, y, width,
-                                font, color, vis, zoomedToBaseLevel);
     if (vis == tvFull || vis == tvPack)
         wigMafDrawPairwise(track, seqStart, seqEnd, vg, xOff, y, 
                                 width, font, color, vis);
