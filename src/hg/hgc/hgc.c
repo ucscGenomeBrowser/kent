@@ -141,7 +141,7 @@
 #include "bed6FloatScore.h"
 #include "pscreen.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.712 2004/08/05 18:06:03 braney Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.713 2004/08/05 21:21:36 braney Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -13802,6 +13802,8 @@ char *gene = NULL, *pos = NULL;
 char buffer[1024];
 boolean isDm = FALSE;
 
+if (sameString("blastDm1FB", tdb->tableName))
+    isDm = TRUE;
 strcpy(buffer, itemName);
 acc = buffer;
 if ((pos = strchr(acc, '.')) != NULL)
@@ -13811,12 +13813,10 @@ if ((pos = strchr(acc, '.')) != NULL)
 	{
 	*gene++ = 0;
 	useName = gene;
-	if ((prot = strchr(gene, '.')) != NULL)
+	if (!isDm && ((prot = strchr(gene, '.')) != NULL))
 	    *prot++ = 0;
 	}
     }
-if (sameString("blastDm1FB", tdb->tableName))
-    isDm = TRUE;
 if (isDm == TRUE)
     cartWebStart(cart, "FlyBase Protein %s", useName);
 else
@@ -13847,7 +13847,7 @@ if (acc != NULL)
     printEntrezNucleotideUrl(stdout, acc);
     printf("\" TARGET=_blank>%s</A><BR>\n", acc);
     }
-if (prot != NULL)
+if (!isDm && (prot != NULL))
     {
     printf("<B>SwissProt:</B> ");
     printf("<A HREF=\"http://www.expasy.org/cgi-bin/niceprot.pl?%s\" "
