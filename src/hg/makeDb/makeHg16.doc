@@ -1189,3 +1189,10 @@ printf("%s\t%s\t%s\t%s %s\t%s\t%s\t%0.0f\t%0.1f\t%s\n",
 #	Saving bed.tab
 #	Loading hg16
 
+
+# make bizZips/mrna.zip (markd 8 aug 2003)
+  on hgbeta: 
+  cd /genbank
+  ./bin/i386/gbGetSeqs -get=seq -db=hg16 -native genbank mrna download/hg16/bigZips/mrna.fa 
+  zip download/hg16/bigZips/mrna.zip  download/hg16/bigZips/mrna.fa 
+  rm download/hg16/bigZips/mrna.fa 
