@@ -3,6 +3,8 @@
 #ifndef HUI_H
 #define HUI_H
 
+#include "cart.h"
+
 char *hUserCookie();
 /* Return our cookie name. */
 
