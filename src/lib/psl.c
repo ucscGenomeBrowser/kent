@@ -451,7 +451,7 @@ insertFactor = psl->qNumInsert;
 if (!isMrna)
     insertFactor += psl->tNumInsert;
 
-milliBad = (1000 * (psl->misMatch + insertFactor + round(3*log(1+sizeDif)))) / (psl->match + psl->misMatch);
+milliBad = (1000 * (psl->misMatch + insertFactor + round(3*log(1+sizeDif)))) / (psl->match + psl->repMatch + psl->misMatch);
 return milliBad;
 }
 
