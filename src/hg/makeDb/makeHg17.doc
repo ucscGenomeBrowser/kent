@@ -8772,3 +8772,345 @@ echo Loading Psl
 hgLoadPsl hg17 pseudoMrna.psl
 
 ## end of retroGene track
+
+# BLASTZ TETRAODON (tetNig1) (DONE, 2004-08-26, hartera)
+    # blastz requires lineage-specific repeats
+    # Treat all repeats as lineage-specific.
+    ssh kkr1u00
+    mkdir /iscratch/i/gs.18/build35/linSpecRep.notInTetraodon
+ foreach f (/iscratch/i/gs.18/build35/rmsk/chr*.fa.out)
+ cp -p $f /iscratch/i/gs.18/build35/linSpecRep.notInTetraodon/$f:t:r:r.out.spec
+    end
+
+    mkdir /iscratch/i/tetNig1/linSpecRep.notInHuman
+    foreach f (/iscratch/i/tetNig1/rmsk/chr*.fa.out)
+      cp -p $f /iscratch/i/tetNig1/linSpecRep.notInHuman/$f:t:r:r.out.spec
+    end
+    iSync
+
+    ssh kk
+    mkdir -p /cluster/data/hg17/bed/blastz.tetNig1.2004-08-20
+    ln -s /cluster/data/hg17/bed/blastz.tetNig1.2004-08-20 \
+            /cluster/data/hg17/bed/blastz.tetNig1
+    cd /cluster/data/hg17/bed/blastz.tetNig1
+ 
+    # abridge repeats.
+    # Treat all repeats as lineage-specific.
+    cat << '_EOF_' > DEF
+# human vs. Tetraodon
+export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/bin/i386:/cluster/home/angie/schwartzbin
+
+# use same parameters as for danRer1-fr1
+ALIGN=blastz-run
+BLASTZ=blastz
+BLASTZ_H=2000
+BLASTZ_ABRIDGE_REPEATS=1
+
+# TARGET: Human
+SEQ1_DIR=/iscratch/i/hg17/bothMaskedNibs
+SEQ1_RMSK=
+SEQ1_FLAG=
+SEQ1_SMSK=/iscratch/i/hg17/linSpecRep.notInTetraodon
+SEQ1_IN_CONTIGS=0
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Tetraodon
+SEQ2_DIR=/iscratch/i/tetNig1/nib
+SEQ2_RMSK=
+SEQ2_FLAG=
+SEQ2_SMSK=/iscratch/i/tetNig1/linSpecRep.notInHuman
+SEQ2_IN_CONTIGS=0
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+
+BASE=/cluster/data/hg17/bed/blastz.tetNig1
+
+DEF=$BASE/DEF
+RAW=$BASE/raw
+CDBDIR=$BASE
+SEQ1_LEN=$BASE/S1.len
+SEQ2_LEN=$BASE/S2.len
+
+#DEBUG=1
+'_EOF_'
+    # << this line keeps emacs coloring happy
+    # save the DEF file in the current standard place
+    chmod +x DEF
+    cp DEF ~angie/hummus/DEF.hg17-tetNig1.2004-08-20
+ 
+    # make sure BlastZ_run0.sh, BlastZ_run1.sh and BlastZ_run2.sh scripts
+    # are in /cluster/data/hg17/jkStuff
+    # edit BlastZ_run0.sh so directory for blastz is /cluster/bin/penn
+
+    bash # if a csh/tcsh user
+    . ./DEF
+    /cluster/data/hg17/jkStuff/BlastZ_run0.sh
+    cd run.0
+    # check batch looks ok then
+    para try, check, push, check, ....
+# para time
+# Completed: 19437 of 19437 jobs
+# CPU time in finished jobs:    3225816s   53763.60m   896.06h   37.34d  0.102 y
+# IO & Wait Time:                174096s    2901.60m    48.36h    2.01d  0.006 y
+# Average job time:                 175s       2.92m     0.05h    0.00d
+# Longest job:                      709s      11.82m     0.20h    0.01d
+# Submission to last job:          5324s      88.73m     1.48h    0.06d
+
+    # second cluster run: lift raw alignments -> lav dir
+    ssh kki
+    cd /cluster/data/hg17/bed/blastz.tetNig1
+    bash # if a csh/tcsh user
+    . ./DEF
+    /cluster/data/hg17/jkStuff/BlastZ_run1.sh
+    cd run.1
+    para try, check, push, check etc.
+# para time
+# Completed: 341 of 341 jobs
+# CPU time in finished jobs:        280s       4.66m     0.08h    0.00d  0.000 y
+# IO & Wait Time:                  2183s      36.39m     0.61h    0.03d  0.000 y
+# Average job time:                   7s       0.12m     0.00h    0.00d
+# Longest job:                       41s       0.68m     0.01h    0.00d
+# Submission to last job:           469s       7.82m     0.13h    0.01d
+
+    # third run: lav -> axt
+    ssh kki
+    cd /cluster/data/hg17/bed/blastz.tetNig1
+    mkdir axtChrom run.2
+    cd run.2
+    cat << '_EOF_' > do.csh
+#!/bin/csh -ef
+cd $1
+cat `ls -1 *.lav | sort -g` \
+| lavToAxt stdin /iscratch/i/gs.18/build35/bothMaskedNibs \
+/iscratch/i/tetNig1/nib stdout \
+| axtSort stdin $2
+'_EOF_'
+    # << this line makes emacs coloring happy
+    chmod a+x do.csh
+    cat << '_EOF_' > gsub
+#LOOP
+./do.csh {check in exists $(path1)} {check out line+ /cluster/data/hg17/bed/blastz.tetNig1/axtChrom/$(root1).axt}
+#ENDLOOP
+'_EOF_'
+    # << this line makes emacs coloring happy
+    \ls -1Sd ../lav/chr* > chrom.list
+    gensub2 chrom.list single gsub jobList
+    wc -l jobList
+    head jobList
+    para create jobList
+    para try, check, push, check,...
+# para time
+# Completed: 45 of 46 jobs
+# Crashed: 1 jobs
+# CPU time in finished jobs:         52s       0.87m     0.01h    0.00d  0.000 y
+# IO & Wait Time:                   256s       4.27m     0.07h    0.00d  0.000 y
+# Average job time:                   7s       0.11m     0.00h    0.00d
+# Longest job:                       36s       0.60m     0.01h    0.00d
+# Submission to last job:           275s       4.58m     0.08h    0.00d
+
+# one job crashed because chr6_hla_hap1.axt is empty. Checked by running this
+# again and then looked at the lav file which has no alignments in it.
+                                                                                
+   # translate sorted axt files into psl
+    ssh kolossus
+    cd /cluster/data/hg17/bed/blastz.tetNig1
+    mkdir -p pslChrom
+    set tbl = "blastzTetNig1"
+    foreach f (axtChrom/chr*.axt)
+      set c=$f:t:r
+      echo "Processing chr $c"
+      /cluster/bin/i386/axtToPsl $f S1.len S2.len pslChrom/${c}_${tbl}.psl
+    end
+
+    # Load database tables
+    ssh hgwdev
+    cd /cluster/data/hg17/bed/blastz.tetNig1/pslChrom
+    foreach f (./*.psl)
+      /cluster/bin/i386/hgLoadPsl -noTNameIx hg17 $f
+      echo "$f Done"
+    end
+
+# original blastzTetNig1: 
+# BLASTZ_H=2000
+# BLASTZ_Y=3400
+# BLASTZ_L=6000
+# BLASTZ_K=2200
+# BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+# BLASTZ_ABRIDGE_REPEATS=1
+# featureBits -chrom=chr1 hg17 blastzTetNig1
+# 6378680 bases of 222827847 (2.863%) in intersection
+# featureBits -chrom=chr1 hg17 refGene:cds blastzTetNig1 -enrichment
+# refGene:cds 1.246%, blastzTetNig1 2.863%, both 0.856%, cover 68.70%, 
+# enrich 24.00x
+# featureBits -chrom=chr1 hg17 refGene:cds blastzDanRer1 -enrichment
+# refGene:cds 1.246%, blastzDanRer1 3.934%, both 0.831%, cover 66.72%, 
+# enrich 16.96x
+# comparable to zebrafish so good
+# try same parameters with L=8000
+# featureBits -chrom=chr1 hg17 refGene:cds blastzTetNig1L8k -enrichment
+# refGene:cds 1.246%, blastzTetNig1L8k 2.095%, both 0.753%, cover 60.47%, 
+# enrich 28.87x
+# load chr1 with blastz using just H=2000 and default parameters
+# featureBits -chrom=chr1 hg17 refGene:cds blastzTetNig1Default -enrichment
+# refGene:cds 1.246%, blastzTetNig1Default 1.630%, both 0.808%, cover 64.87%, 
+# enrich 39.80x
+# rows in chr1_blastzTetNig1 tables 
+# blastzTetNig1	95156
+# blastzTetNig1L8k 58015
+# blastzTetNig1Default 71342
+# The default values also used for danRer1 vs fugu give good coverage and
+# higher enrichment than blastzTetNig1 with less alignments so this will be
+# used for the blastz track - now called blastzTetNig1.
+
+# CHAIN TETRAODON (tetNig1) BLASTZ (DONE, 2004-08-26, hartera)
+# Make chains with rescored blastz
+    # Run axtChain on little cluster
+    ssh kki
+    cd /cluster/data/hg17/bed/blastz.tetNig1
+    mkdir -p axtChain/run1
+    cd axtChain/run1
+    mkdir out chain
+    ls -1S /cluster/data/hg17/bed/blastz.tetNig1/axtChrom/*.axt \
+        > input.lst
+cat << '_EOF_' > gsub
+#LOOP
+doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain} {check out line+ out/$(root1).out}
+#ENDLOOP
+'_EOF_'
+    # << this line makes emacs coloring happy
+
+    # Make our own linear gap file with reduced gap penalties, 
+    # in hopes of getting longer chains - works well for species at 
+    # chicken-human distance or greater
+    cat << '_EOF_' > ../../chickenHumanTuned.gap
+tablesize	11
+smallSize	111
+position	1	2	3	11	111	2111	12111	32111	72111	152111	252111
+qGap	325	360	400	450	600	1100	3600	7600	15600	31600	56600
+tGap	325	360	400	450	600	1100	3600	7600	15600	31600	56600
+bothGap	625	660	700	750	900	1400	4000	8000	16000	32000	57000
+'_EOF_'
+    # << this line makes emacs coloring happy
+
+cat << '_EOF_' > doChain
+#!/bin/csh
+axtChain -linearGap=../../chickenHumanTuned.gap $1 \
+    /iscratch/i/gs.18/build35/bothMaskedNibs \
+    /iscratch/i/tetNig1/nib $2 >& $3
+'_EOF_'
+    # << this line makes emacs coloring happy
+    chmod a+x doChain
+    gensub2 input.lst single gsub jobList
+    para create jobList
+    para try, check, push, check...
+# para time
+# Completed: 45 of 46 jobs
+# Crashed: 1 jobs
+# CPU time in finished jobs:        553s       9.22m     0.15h    0.01d  0.000 y
+# IO & Wait Time:                   102s       1.69m     0.03h    0.00d  0.000 y
+# Average job time:                  15s       0.24m     0.00h    0.00d
+# Longest job:                       56s       0.93m     0.02h    0.00d
+# Submission to last job:           985s      16.42m     0.27h    0.01d
+
+# one job crashed since chr6_hla_hap1.axt is empty - no alignments
+
+   # now on the cluster server, sort chains
+    ssh kksilo
+    cd /cluster/data/hg17/bed/blastz.tetNig1/axtChain
+    chainMergeSort run1/chain/*.chain > all.chain
+    chainSplit chain all.chain
+   
+    # take a look at score distr's
+    foreach f (chain/*.chain)
+      grep chain $f | awk '{print $2;}' | sort -nr > /tmp/score.$f:t:r
+      echo $f:t:r >> hist5000.out
+      textHistogram -binSize=5000 /tmp/score.$f:t:r >> hist5000.out
+      echo ""
+    end
+
+    # only chr19 has a very large number of chains with score < 5000
+    # load chr 1 into table
+    ssh hgwdev
+    cd /cluster/data/hg17/bed/blastz.tetNig1/axtChain/chain
+    hgLoadChain hg17 chr1_chainTetnig1 chr1.chain
+
+# featureBits -chrom=chr1 hg17 refGene:cds chainTetnig1Link -enrichment
+# refGene:cds 1.246%, chainTetnig1Link 1.582%, both 0.805%, cover 64.59%, 
+# enrich 40.83x
+
+    # try filtering with minScore of 5000
+    ssh kksilo
+    cd /cluster/data/hg17/bed/blastz.tetNig1/axtChain
+    mv all.chain all.chain.unfiltered
+    chainFilter -minScore=5000 all.chain.unfiltered > all.chain
+    rm -r chain
+    chainSplit chain all.chain
+    ssh hgwdev
+    cd /cluster/data/hg17/bed/blastz.tetNig1/axtChain/chain
+    hgLoadChain hg17 chr1_chainTetNig1Filt5k chr1.chain
+# featureBits -chrom=chr1 hg17 refGene:cds chainTetNig1Filt5kLink -enrichment
+# refGene:cds 1.246%, chainTetNig1Filt5kLink 1.487%, both 0.789%, cover 63.33%,
+# enrich 42.58x
+# this cleans it up a lot with little reduction in coverage.
+# check in browser - filtered version looks good.
+
+# add all chains for minScore=5000 filtered chains
+# remove test chain tables for chr1
+    ssh hgwdev
+    hgsql -e "drop table chr1_chainTetnig1;" hg17
+    hgsql -e "drop table chr1_chainTetnig1Link;" hg17
+    hgsql -e "drop table chr1_chainTetNig1Filt5k;" hg17
+    hgsql -e "drop table chr1_chainTetNig1Filt5kLink;" hg17
+
+    cd /cluster/data/hg17/bed/blastz.tetNig1/axtChain/chain
+    foreach i (*.chain)
+        set c = $i:r
+        hgLoadChain hg17 ${c}_chainTetNig1 $i
+        echo done $c
+    end
+
+# NET TETRAODON (tetNig1) BLASTZ (DONE, 2004-08-26, hartera)
+    ssh kksilo
+    cd /cluster/data/hg17/bed/blastz.tetNig1/axtChain
+    mkdir preNet
+    cd chain
+    foreach i (*.chain)
+       echo preNetting $i
+       /cluster/bin/i386/chainPreNet $i ../../S1.len ../../S2.len \
+                                     ../preNet/$i
+    end
+    cd ..
+    mkdir n1
+    cd preNet
+    foreach i (*.chain)
+      set n = $i:r.net
+      echo primary netting $i
+      /cluster/bin/i386/chainNet $i -minSpace=1 ../../S1.len ../../S2.len \
+                                 ../n1/$n /dev/null
+    end
+    cd ..
+    cat n1/*.net | /cluster/bin/i386/netSyntenic stdin noClass.net
+    # memory usage 55373824, utime 415 s/100, stime 45
+    # Add classification info using db tables:
+    cd /cluster/data/hg17/bed/blastz.tetNig1/axtChain
+    # netClass looks for ancient repeats in one of the databases
+    # hg17 has this table - hand-curated by Arian but this is for
+    # human-rodent comparisons so do not use here, use -noAr option
+    mkdir -p /cluster/bluearc/hg17/linSpecRep.notInTetraodon
+    mkdir -p /cluster/bluearc/tetNig1/linSpecRep.notInHuman
+    cp /iscratch/i/hg17/linSpecRep.notInTetraodon/* \
+       /cluster/bluearc/hg17/linSpecRep.notInTetraodon
+    cp /iscratch/i/tetNig1/linSpecRep.notInHuman/* \
+       /cluster/bluearc/tetNig1/linSpecRep.notInHuman
+
+    ssh hgwdev
+    cd /cluster/data/hg17/bed/blastz.tetNig1/axtChain
+    time netClass noClass.net hg17 tetNig1 tetNig1.net \
+          -tNewR=/cluster/bluearc/hg17/linSpecRep.notInTetraodon \
+          -qNewR=/cluster/bluearc/tetNig1/linSpecRep.notInHuman -noAr
+    # 54.100u 31.890s 2:20.01 61.4%   0+0k 0+0io 197pf+0w
+    netFilter -minGap=10 tetNig1.net |  hgLoadNet hg17 netTetNig1 stdin
+    # featureBits hg17 refGene:cds netTetNig1 -enrichment
+    # refGene:cds 0.978%, netTetNig1 25.095%, both 0.778%, cover 79.53%, 
+    # enrich 3.17x
