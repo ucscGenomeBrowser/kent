@@ -26,9 +26,9 @@ struct rmskOut
     char *repClass;	/* Class of repeat */
     char *repFamily;	/* Family of repeat */
     int repStart;	/* Start in repeat sequence */
-    unsigned repEnd;	/* End in repeat sequence */
+    int repEnd;		/* End in repeat sequence */
     int repLeft;	/* Size left in repeat sequence */
-    char id[2];	/* '*' or ' '.  I don't know what this means */
+    char id[2];		/* '*' or ' '.  I don't know what this means */
     };
 
 void rmskOutStaticLoad(char **row, struct rmskOut *ret);
