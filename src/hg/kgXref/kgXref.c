@@ -34,9 +34,10 @@ int main(int argc, char *argv[])
     char *proteinDB;
     char *refSeqName;
     char *hugoID;
+    char *protAcc;	// protein Accession number from NCBI
     char *answer;
 
-    int leg;
+    int leg;		// marker for debugging
     char *mRNA, *spID, *spDisplayID, *geneSymbol, *refseqID, *desc;
 
     if (argc != 3) usage();
@@ -59,6 +60,7 @@ int main(int argc, char *argv[])
 	refseqID 	= strdup("");
 	geneSymbol 	= strdup("");
 	desc		= strdup("");
+	protAcc		= strdup("");
 
         sprintf(cond_str, "displayID='%s'", spDisplayID);
         spID = sqlGetField(conn, proteinDB, "spXref3", "accession", cond_str);
@@ -83,6 +85,13 @@ int main(int argc, char *argv[])
 		refseqID   = kgID;
             	sprintf(cond_str, "mrnaAcc = '%s'", kgID);
             	desc = sqlGetField(conn, database, "refLink", "product", cond_str);
+		
+		sprintf(cond_str, "mrnaAcc='%s'", refseqID);
+        	answer = sqlGetField(conn, database, "refLink", "protAcc", cond_str);
+        	if (answer != NULL)
+            	    {
+	    	    protAcc = strdup(answer);
+	    	    }
                 }
             }
         else
@@ -105,7 +114,13 @@ int main(int argc, char *argv[])
 		{
 		leg = 22;
 		refseqID = strdup(answer);
-		//printf("refseq=%s\n", refseqID);fflush(stdout);
+		
+		sprintf(cond_str, "mrnaAcc='%s'", refseqID);
+        	answer = sqlGetField(conn, database, "refLink", "protAcc", cond_str);
+        	if (answer != NULL)
+            	    {
+	    	    protAcc = strdup(answer);
+	    	    }
 		}
             	
 	    if (strlen(geneSymbol) == 0)
@@ -142,9 +157,8 @@ int main(int argc, char *argv[])
 		desc = strdup("N/A");
 		}
 	
-	fprintf(o1, "%s\t%s\t%s\t%s\t%s\t%s\t%s\n", 
-		kgID, kgID, spID, spDisplayID, geneSymbol, refseqID, desc);
-	fflush(stdout);
+	fprintf(o1, "%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n", 
+		kgID, kgID, spID, spDisplayID, geneSymbol, refseqID, protAcc, desc);
 	row2 = sqlNextRow(sr2);
 	}
 
@@ -153,4 +167,3 @@ int main(int argc, char *argv[])
     system("rm j.dat");
     return(0);
     }
-	
