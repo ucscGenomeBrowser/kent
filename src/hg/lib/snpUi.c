@@ -107,13 +107,21 @@ int snpMapTypeCartSize     = ArraySize(snpMapTypeCart);
 /****** Some stuff for snpColorSource related controls *******/
 /* Source, Molecule Type, Class, Validation, Function */
 
-char *snpColorSourceLabel[] = {
+char *snpColorSourceLabels[] = {
     "Source",
-    "MolType",
-    "Class",
-    "Valid",
-    "Func",
+    "Molecule Type",
+    "Variant Class",
+    "Validation Status",
+    "Functional Classification",
     "Black",
+};
+char *snpColorSourceStrings[] = {
+    "snpColorSourceSource",
+    "snpColorSourceMolType",
+    "snpColorSourceClass",
+    "snpColorSourceValid",
+    "snpColorSourceFunc",
+    "snpColorSourceBlack",
 };
 char *snpColorSourceDataName[] = {
     "snpColor",
@@ -125,7 +133,8 @@ char *snpColorSourceCart[] = {
     "source",
 };
 
-int snpColorSourceLabelSize    = ArraySize(snpColorSourceLabel);
+int snpColorSourceLabelsSize   = ArraySize(snpColorSourceLabels);
+int snpColorSourceStringsSize  = ArraySize(snpColorSourceStrings);
 int snpColorSourceDataNameSize = ArraySize(snpColorSourceDataName);
 int snpColorSourceDefaultSize  = ArraySize(snpColorSourceDefault);
 int snpColorSourceCartSize     = ArraySize(snpColorSourceCart);

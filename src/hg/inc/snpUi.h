@@ -65,12 +65,14 @@ enum snpColorSourceEnum {
     snpColorSourceBlack
 };
 
-extern char *snpColorSourceLabel[];
+extern char *snpColorSourceLabels[];
+extern char *snpColorSourceStrings[];
 extern char *snpColorSourceDataName[];
 extern char *snpColorSourceDefault[];
 extern char *snpColorSourceCart[];
 
-extern int snpColorSourceLabelSize;
+extern int snpColorSourceLabelsSize;
+extern int snpColorSourceStringsSize;
 extern int snpColorSourceDataNameSize;
 extern int snpColorSourceDefaultSize;
 extern int snpColorSourceCartSize;

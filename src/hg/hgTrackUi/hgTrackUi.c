@@ -23,7 +23,7 @@
 #define CDS_HELP_PAGE "../goldenPath/help/hgCodonColoring.html"
 #define CDS_MRNA_HELP_PAGE "../goldenPath/help/hgCodonColoringMrna.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.152 2004/11/25 01:20:56 daryl Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.153 2004/11/29 01:00:57 daryl Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -91,10 +91,10 @@ void snpColorFilterButtons(char *filterTypeVar, char *filterTypeVal)
 /* Put up some filter buttons. */
 {
 radioButton(filterTypeVar, filterTypeVal, "Source");
-radioButton(filterTypeVar, filterTypeVal, "MolType");
-radioButton(filterTypeVar, filterTypeVal, "Class");
-radioButton(filterTypeVar, filterTypeVal, "Valid");
-radioButton(filterTypeVar, filterTypeVal, "Func");
+radioButton(filterTypeVar, filterTypeVal, "Molecule Type");
+radioButton(filterTypeVar, filterTypeVal, "Variant Class");
+radioButton(filterTypeVar, filterTypeVal, "Validation Status");
+radioButton(filterTypeVar, filterTypeVal, "Functional Class");
 radioButton(filterTypeVar, filterTypeVal, "Black");
 }
 
@@ -143,8 +143,11 @@ int   snpClass   = 0;
 int   snpValid   = 0;
 int   snpFunc    = 0;
 
-if (strncmp(database,"hg",2))
-    return;
+
+printf("<BR><B>Colors and Filters:</B>\n");
+printf("<BR>Use the \"Color Specification\" buttons to specify a group to direct coloring for the track display.\n");
+printf("<BR>Variants can optionally be excluded based on their values in each of the subsequent categories by choosing \"exclude\".\n");
+printf("<BR>\n");
 printf("<BR><B>Color Specification:</B><BR>\n");
     snpColorSourceCart[0] = cartUsualString(cart, "snpColor", "Source" );
     snpColorFilterButtons("snpColor", snpColorSourceCart[0]);
@@ -162,7 +165,7 @@ for (snpMolType=0; snpMolType<snpMolTypeCartSize; snpMolType++)
     snpFilterButtons(snpMolTypeStrings[snpMolType], snpMolTypeCart[snpMolType]);
     printf(" - <B>%s</B><BR>\n", snpMolTypeLabels[snpMolType]);
     }
-printf("<BR><B>Classes:</B><BR>\n");
+printf("<BR><B>Variant Classes:</B><BR>\n");
 for (snpClass=0; snpClass<snpClassCartSize; snpClass++)
     {
     snpClassCart[snpClass] = cartUsualString(cart, snpClassStrings[snpClass], snpClassDefault[snpClass]);
@@ -176,7 +179,7 @@ for (snpValid=0; snpValid<snpValidCartSize; snpValid++)
     snpFilterButtons(snpValidStrings[snpValid], snpValidCart[snpValid]);
     printf(" - <B>%s</B><BR>\n",snpValidLabels[snpValid]);
     }
-printf("<BR><B>Functional classification:</B><BR>\n");
+printf("<BR><B>Functional Classes:</B><BR>\n");
 for (snpFunc=0; snpFunc<snpFuncCartSize; snpFunc++)
     {
     snpFuncCart[snpFunc] = cartUsualString(cart, snpFuncStrings[snpFunc], snpFuncDefault[snpFunc]);

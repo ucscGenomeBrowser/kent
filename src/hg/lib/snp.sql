@@ -124,6 +124,11 @@ CREATE TABLE snp (
                    'splice-site',
                    'reference',
                    'exception') DEFAULT 'unknown' NOT NULL,
+    locType    enum(
+                   'unknown',
+                   'range',
+                   'exact',
+                   'between') DEFAULT 'unknown' NOT NULL,
     source     enum(
                    'unknown',
                    'dbSnp',

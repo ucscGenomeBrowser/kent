@@ -9,7 +9,7 @@
 #include "jksql.h"
 #endif
 
-#define SNP_NUM_COLS 14
+#define SNP_NUM_COLS 15
 
 struct snp
 /* Polymorphism data from dbSnp XML files or genotyping arrays */
@@ -28,6 +28,7 @@ struct snp
     float avHet;	/* The average heterozygosity from all observations */
     float avHetSE;	/* The Standard Error for the average heterozygosity */
     char *func;	/* The functional category of the SNP */
+    char *locType;	/* How the variant affects the reference sequence */
     char *source;	/* Source of the data - dbSnp, Affymetrix, ... */
     };
 

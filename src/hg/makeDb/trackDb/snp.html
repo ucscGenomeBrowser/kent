@@ -1,19 +1,29 @@
 <H2>Description</H2>
 <P>
   This track consolidates all the Simple Nucleotide Polymorphisms into
-  a single track.  
+  a single track.  This represents data from dbSnp and commercially
+  available genotyping arrays.
 </P>
 
-<H2>Visualization Controls</H2>
+<H2>Visualization and Controls</H2>
+<P>
+  Variants will be drawn as single tick marks at most zoom levels.
+  When viewing at or near base-level resolution, variants are drawn
+  with a width that represents the variant seen in the reference
+  sequence.  Insertions are displayed as a single tick mark between
+  two nucleotides, single nucleotide polymorphisms are the width of a
+  single base, and multiple nucleotide variants are wider.
+</P>
 <P>
   Variants can be drawn in color based on their source, molecule type,
-  variant class, validation stauts, or functional classification.
+  variant class, validation status, or functional classification.
   Variants can also be excluded from the list based on these same
   categories.
 </P>
 <P>
   These definitions are taken from the DTD that describes the dbSnp
-  XML format, which is available <A target="_BLANK" HREF="ftp://ftp.ncbi.nih.gov/snp/human/XML/00readme">here</A>.
+  XML format, which is available <A target="_BLANK"
+  HREF="ftp://ftp.ncbi.nih.gov/snp/human/XML/00readme">here</A>.  
   <UL>
     <LI>
       <B>Source</B>: Contributor of this data<BR>
@@ -51,7 +61,7 @@
     </LI>
     <LI> 
       <B>Validation Status</B>: How the variant has been validated<BR>
-      <UL>
+        <UL>
         <LI><B>Unknown</B> - no validation has been reported for this refSNP
         <LI><B>Other Population</B> - at least one ss in cluster was validated by independent assay
         <LI><B>By Frequency</B> - at least one subsnp in cluster has frequency data submitted
