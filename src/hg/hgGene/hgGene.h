@@ -178,12 +178,18 @@ boolean isFly();
 char *getFlyBaseId(struct sqlConnection *conn, char *geneId);
 /* Return flyBase ID of gene if any. */
 
+void showSeqFromTable(struct sqlConnection *conn, char *geneId,
+	char *geneName, char *table);
+/* Show some sequence from given table. */
+
 /* -------- CGI Command Variables ---------- */
 #define hggDoPrefix "hgg_do_"	/* Prefix for all commands. */
 #define hggDoKgMethod "hgg_do_kgMethod"
 #define hggDoGetMrnaSeq "hgg_do_getMrnaSeq"
 #define hggDoGetProteinSeq "hgg_do_getProteinSeq"
 #define hggDoRnaFoldDisplay "hgg_do_rnaFoldDisplay"
+#define hggDoOtherProteinSeq "hgg_do_otherProteinSeq"
+#define hggDoOtherProteinAli "hgg_do_otherProteinAli"
 
 #define geneCgi "../cgi-bin/hgGene"
 
@@ -198,6 +204,14 @@ void doGetMrnaSeq(struct sqlConnection *conn, char *geneId, char *geneName);
 void doGetProteinSeq(struct sqlConnection *conn, char *geneId, char *geneName);
 /* Get mRNA sequence in a simple page. */
 
+void doOtherProteinSeq(struct sqlConnection *conn, char *homologName);
+/* Put up page that displays protein sequence from other organism. */
+
+void doOtherProteinAli(struct sqlConnection *conn, 
+	char *localId, char *localName);
+/* Put up page that shows alignment between this protein sequence
+ * and other species. */
+
 void doRnaFoldDisplay(struct sqlConnection *conn, char *geneId, char *geneName);
 /* Display mRNA sequence folding. */
 
@@ -211,6 +225,8 @@ void doRnaFoldDisplay(struct sqlConnection *conn, char *geneId, char *geneName);
 #define hggExpRatioColors "hgg_expRatioColors" /* Expression Ratio coloring. */
 #define hggMrnaFoldRegion "hgg_mrnaFoldRegion"	/* Which region in mRNA to show. */
 #define hggMrnaFoldPs	"hgg_mrnaFoldPs"	/* PostScript file. */
+#define hggOtherId "hgg_otherId"	/* Other organism gene id. */
+#define hggOtherPepTable "hgg_otherPepTable"	/* Other organism peptide table. */
 
 /* -------- Global Variables --------*/
 extern struct cart *cart;	/* This holds cgi and other variables between clicks. */

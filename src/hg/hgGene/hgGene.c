@@ -16,7 +16,7 @@
 #include "hgColors.h"
 #include "hgGene.h"
 
-static char const rcsid[] = "$Id: hgGene.c,v 1.36 2004/09/27 16:15:55 kent Exp $";
+static char const rcsid[] = "$Id: hgGene.c,v 1.37 2004/11/22 20:37:28 kent Exp $";
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
@@ -615,6 +615,10 @@ else if (cartVarExists(cart, hggDoGetProteinSeq))
     doGetProteinSeq(conn, curGeneId, curGeneName);
 else if (cartVarExists(cart, hggDoRnaFoldDisplay))
     doRnaFoldDisplay(conn, curGeneId, curGeneName);
+else if (cartVarExists(cart, hggDoOtherProteinSeq))
+    doOtherProteinSeq(conn, curGeneName);
+else if (cartVarExists(cart, hggDoOtherProteinAli))
+    doOtherProteinAli(conn, curGeneId, curGeneName);
 else
     {
     /* Default case - start fancy web page. */

@@ -5,6 +5,7 @@ name human
 shortLabel Human
 tables hgBlastTab 
 idSql select target from hgBlastTab where query = '%s'
+pepTable knownGenePep
 genomeUrl ../cgi-bin/hgTracks?org=Human&position=%s
 sorterUrl ../cgi-bin/hgNear?org=Human&near.oldOrg=Human&db=0&near_search=%s
 otherUrl http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Search&db=Nucleotide&term=%s&doptcmdl=GenBank&tool=genome.ucsc.edu
@@ -15,6 +16,7 @@ name mouse
 shortLabel Mouse
 tables mmBlastTab 
 idSql select target from mmBlastTab where query = '%s'
+pepTable knownGenePep
 genomeUrl ../cgi-bin/hgTracks?org=Mouse&position=%s
 sorterUrl ../cgi-bin/hgNear?org=Mouse&near.oldOrg=Mouse&db=0&near_search=%s
 otherUrl http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Search&db=Nucleotide&term=%s&doptcmdl=GenBank&tool=genome.ucsc.edu
@@ -25,6 +27,7 @@ name rat
 shortLabel Rat
 tables rnBlastTab 
 idSql select target from rnBlastTab where query = '%s'
+pepTable knownGenePep
 genomeUrl ../cgi-bin/hgTracks?org=Rat&position=%s
 sorterUrl ../cgi-bin/hgNear?org=Rat&near.oldOrg=Rat&db=0&near_search=%s
 otherUrl http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Search&db=Nucleotide&term=%s&doptcmdl=GenBank&tool=genome.ucsc.edu
@@ -35,6 +38,7 @@ name zebrafish
 shortLabel Zebrafish
 tables drBlastTab
 idSql select target from drBlastTab where query = '%s'
+pepTable ensPep
 genomeUrl ../cgi-bin/hgTracks?org=Zebrafish&position=%s
 otherName Ensembl
 otherUrl http://www.ensembl.org/Danio_rerio/protview?peptide=%s
@@ -44,6 +48,7 @@ name drosophila
 shortLabel D. melanogaster
 tables dmBlastTab
 idSql select target from dmBlastTab where query = '%s'
+pepTable bdgpGenePep
 genomeUrl ../cgi-bin/hgTracks?org=D.+melanogaster&position=%s
 sorterUrl ../cgi-bin/hgNear?org=D.+melanogaster&near.oldOrg=D.+melanogaster&db=0&near_search=%s
 otherName FlyBase
@@ -54,6 +59,7 @@ name cElegans
 shortLabel C. elegans
 tables ceBlastTab
 idSql select target from ceBlastTab where query = '%s'
+pepTable sangerPep
 genomeUrl ../cgi-bin/hgTracks?org=C.+elegans&position=%s
 sorterUrl ../cgi-bin/hgNear?org=C.+elegans&near.oldOrg=C.+elegans&db=0&near_search=%s
 otherName WormBase
@@ -64,6 +70,7 @@ name yeast
 shortLabel S. cerevisiae
 tables scBlastTab
 idSql select target from scBlastTab where query = '%s'
+pepTable sgdPep
 genomeUrl ../cgi-bin/hgTracks?org=S.+cerevisiae&position=%s
 sorterUrl ../cgi-bin/hgNear?org=S.+cerevisiae&near.oldOrg=S.+cerevisiae&db=0&near_search=%s
 otherName SGD

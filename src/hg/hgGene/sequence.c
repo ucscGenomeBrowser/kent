@@ -14,7 +14,7 @@
 #include "hCommon.h"
 #include "hgGene.h"
 
-static char const rcsid[] = "$Id: sequence.c,v 1.11 2004/07/13 18:21:42 baertsch Exp $";
+static char const rcsid[] = "$Id: sequence.c,v 1.12 2004/11/22 20:37:28 kent Exp $";
 
 static void printGenomicAnchor(char *table, char *itemName,
 	char *chrom, int start, int end)
@@ -169,11 +169,10 @@ section->print = sequencePrint;
 return section;
 }
 
-static void showSeq(struct sqlConnection *conn, char *geneId,
-	char *geneName, char *tableId)
-/* Show some sequence. */
+void showSeqFromTable(struct sqlConnection *conn, char *geneId,
+	char *geneName, char *table)
+/* Show some sequence from given table. */
 {
-char *table = genomeSetting(tableId);
 char query[512];
 struct sqlResult *sr;
 char **row;
@@ -190,6 +189,14 @@ if ((row = sqlNextRow(sr)) != NULL)
     }
 sqlFreeResult(&sr);
 hPrintf("</PRE></TT>");
+}
+
+static void showSeq(struct sqlConnection *conn, char *geneId,
+	char *geneName, char *tableId)
+/* Show some sequence. */
+{
+char *table = genomeSetting(tableId);
+showSeqFromTable(conn, geneId, geneName, table);
 }
 
 static void showMrnaFromGenePred(struct sqlConnection *conn, 

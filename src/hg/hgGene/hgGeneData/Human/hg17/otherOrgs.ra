@@ -1,0 +1,17 @@
+name mouse
+db mm5
+
+name rat
+db rn3
+
+name zebrafish
+db danRer1
+
+name drosophila
+db dm1
+
+name cElegans
+db ce1
+
+name yeast
+db sacCer1
