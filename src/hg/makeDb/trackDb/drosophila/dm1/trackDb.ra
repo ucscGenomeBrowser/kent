@@ -1,6 +1,6 @@
 track dpseudoChain
 shortLabel D. pseud. Chain
-longLabel Chained Blastz <em>D. pseudoobscura</em>/<em>D. melanogaster</em> Alignments
+longLabel Chained Blastz D. pseudoobscura/D. melanogaster Alignments
 group compGeno
 priority 133
 visibility hide
@@ -12,7 +12,7 @@ otherDb dp1
 
 track dpseudoNet
 shortLabel D. pseud. Net
-longLabel <em>D. pseudoobscura</em>/<em>D. melanogaster</em> Alignment Net
+longLabel D. pseudoobscura/D. melanogaster Alignment Net
 group compGeno
 priority 134
 visibility hide
@@ -22,7 +22,7 @@ otherDb dp1
 
 track axtNetDp1
 shortLabel D. pseud. Aligns
-longLabel <em>D. pseudoobscura</em>/<em>D. melanogaster</em> Blastz Alignments from Net
+longLabel D. pseudoobscura/D. melanogaster Blastz Alignments from Net
 group compGeno
 priority 135
 visibility dense
