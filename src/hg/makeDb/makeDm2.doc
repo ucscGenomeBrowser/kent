@@ -2942,12 +2942,16 @@ _EOF_
     # Translate .lav to psl:
     ssh kolossus
     cd /cluster/data/dm2/bed/blastz.apiMel2.2005-02-08
-    mkdir pslChrom
+    mkdir pslChrom axtChrom
     for chr in `cut -f1 /cluster/data/dm2/chrom.sizes`; do
       echo $chr
       cat lav/${chr}.*/*.lav | lavToPsl stdin stdout \
         | sort -k 14,14 -k 16n,17n \
         | gzip -c > pslChrom/$chr.psl.gz
+      cat lav/${chr}.*/*.lav | lavToAxt stdin \
+          /cluster/data/dm2/nib /cluster/data/apiMel2/nib stdout \
+        | axtSort stdin stdout \
+        | gzip -c > axtChrom/$chr.axt.gz
     done
 
 # CHAIN MELLIFERA 2.0 BLASTZ (DONE 2/9/05 Andy)
