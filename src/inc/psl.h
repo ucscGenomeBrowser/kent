@@ -96,6 +96,12 @@ void pslOutput(struct psl *el, FILE *f, char sep, char lastSep);
 
 /* ----- end autoSql generated part --------------- */
 
+void pslOutFormat(struct psl *el, FILE *f, char sep, char lastSep);
+/* Print out selected psl values.  Separate fields with sep. Follow last field with lastSep. */
+/* Prints out a better format with bold field headings followed by value */
+/* Requires further upstream work to ensure that only the field headers */
+/* declared here are printed if replacing an existing psl print function*/
+
 struct psl *pslLoadAll(char *fileName);
 /* Load all psl's in file. */
 
