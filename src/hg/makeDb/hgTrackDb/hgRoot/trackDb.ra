@@ -690,7 +690,6 @@ shortLabel altGraphX
 longLabel altGraphX
 priority 42.1
 visibility hide
-private 1
 type bed 3
 
 track mgcNcbiPicks
