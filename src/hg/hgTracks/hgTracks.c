@@ -76,7 +76,7 @@
 #include "cds.h"
 #include "simpleNucDiff.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.659 2004/01/26 18:07:45 hiram Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.660 2004/01/26 22:21:47 kent Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
@@ -5686,6 +5686,48 @@ void triangleMethods(struct track *tg)
 tg->drawItems = drawTriangle;
 }
 
+static void drawEranModule(struct track *tg, int seqStart, int seqEnd,
+        struct vGfx *vg, int xOff, int yOff, int width, 
+        MgFont *font, Color color, enum trackVisibility vis)
+/* Draw triangle items.   Relies mostly on bedDrawSimple, but does put
+ * a horizontal box connecting items in full mode. */
+{
+/* In dense mode try and draw golden background for promoter regions. */
+if (vis == tvDense)
+    {
+    if (hTableExists("esRegUpstreamRegion"))
+        {
+	int heightPer = tg->heightPer;
+	Color gold = vgFindColorIx(vg, 250,190,60);
+	int rowOffset;
+	int baseWidth = seqEnd - seqStart;
+	double scale = scaleForPixels(width);
+	struct sqlConnection *conn = hAllocConn();
+	struct sqlResult *sr = hRangeQuery(conn, "esRegUpstreamRegion", 
+		chromName, winStart, winEnd, 
+		NULL, &rowOffset);
+	char **row;
+	while ((row = sqlNextRow(sr)) != NULL)
+	    {
+	    int start, end;
+	    row += rowOffset;
+	    start = atoi(row[1]);
+	    end = atoi(row[2]);
+	    drawScaledBox(vg, start, end, scale, xOff, yOff, heightPer, gold);
+	    }
+	hFreeConn(&conn);
+	}
+    }
+bedDrawSimple(tg, seqStart, seqEnd, vg, xOff, yOff, width, font, color, vis);
+}
+
+void eranModuleMethods(struct track *tg)
+/* Register custom methods for eran regulatory module methods. */
+{
+tg->drawItems = drawEranModule;
+}
+
+
 void smallBreak()
 /* Draw small horizontal break */
 {
@@ -7198,6 +7240,7 @@ registerTrackHandler("altGraphXCon", altGraphXMethods );
 registerTrackHandler("triangle", triangleMethods );
 registerTrackHandler("triangleSelf", triangleMethods );
 registerTrackHandler("transfacHit", triangleMethods );
+registerTrackHandler("esRegGeneToMotif", eranModuleMethods );
 registerTrackHandler("leptin", mafMethods );
 /* Lowe lab related */
 registerTrackHandler("gbProtCode", gbGeneMethods);
