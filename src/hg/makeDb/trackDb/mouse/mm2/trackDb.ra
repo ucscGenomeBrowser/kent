@@ -3,7 +3,7 @@ shortLabel Ensembl/Riken
 longLabel Ensembl/Riken Gene Predictions
 group genes
 priority 40.1
-visibility dense
+visibility hide
 color 0,120,60
 altColor 200,255,220
 type genePred
@@ -13,7 +13,7 @@ shortLabel Ensembl Tier B
 longLabel Ensembl Merged Tier B Gene Predictions
 group genes
 priority 40.2
-visibility dense
+visibility hide
 color 150,0,0
 type genePred ensMergeTierBPep
 
@@ -22,7 +22,7 @@ shortLabel Ensembl Tier C
 longLabel Ensembl Merged Tier C Gene Predictions
 group genes
 priority 40.3
-visibility dense
+visibility hide
 color 150,0,0
 type genePred ensMergeTierCPep
 
@@ -31,7 +31,7 @@ shortLabel Ensembl Tier D
 longLabel Ensembl Merged Tier D Gene Predictions
 group genes
 priority 40.4
-visibility dense
+visibility hide
 color 150,0,0
 type genePred ensMergeTierDPep
 
@@ -40,7 +40,7 @@ shortLabel Riken mRNA
 longLabel Riken Full Length Mouse mRNAs
 group rna
 priority 59.5
-visibility full
+visibility hide
 color 0,60,120
 altColor 200,220,255
 spectrum on
@@ -73,7 +73,7 @@ shortLabel Blastz Rat
 longLabel Merged Blastz Rat Alignments
 group compGeno
 priority 142
-visibility dense
+visibility hide
 color 100,50,0
 altColor 255,240,200
 spectrum on
@@ -84,7 +84,7 @@ shortLabel Best Self
 longLabel Blastz Self Best in Genome Alignments
 group varRep
 priority 156
-visibility dense
+visibility hide
 color 100,50,0
 altColor 255,240,200
 spectrum on
@@ -139,7 +139,7 @@ shortLabel Human Blat
 longLabel Human(Dec01) Translated Blat Alignments
 group compGeno
 priority 122
-visibility dense
+visibility hide
 color 100,50,0
 altColor 255,240,200
 spectrum on
