@@ -7,10 +7,11 @@
 #include <dirent.h>
 #include <sys/utsname.h>
 #include <sys/time.h>
+#include <pwd.h>
 #include "portable.h"
 #include "portimpl.h"
 
-static char const rcsid[] = "$Id: osunix.c,v 1.17 2003/05/06 07:33:43 kate Exp $";
+static char const rcsid[] = "$Id: osunix.c,v 1.18 2003/09/24 02:29:25 kent Exp $";
 
 
 /* Return how long the named file is in bytes. 
@@ -271,4 +272,13 @@ for (;;)
 return fileName;
 }
 
+char *getUser()
+/* Get user name */
+{
+uid_t uid = geteuid();
+struct passwd *pw = getpwuid(uid);
+if (pw == NULL)
+    errnoAbort("can't get user name for uid %d", uid);
+return pw->pw_name;
+}
 
