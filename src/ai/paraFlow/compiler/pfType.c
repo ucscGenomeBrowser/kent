@@ -95,6 +95,28 @@ static void typeMismatch(struct pfParse *pp)
 errAt(pp->tok, "type mismatch");
 }
 
+static int baseTypeLogicalSize(struct pfCompile *pfc, struct pfBaseType *base)
+/* Return logical size of type - 0 for smallest, 1 for next smallest, etc. */
+{
+if (base == pfc->byteType)
+    return 0;
+else if (base == pfc->shortType)
+    return 1;
+else if (base == pfc->intType)
+    return 2;
+else if (base == pfc->longType)
+    return 3;
+else if (base == pfc->floatType)
+    return 4;
+else if (base == pfc->doubleType)
+    return 5;
+else
+    {
+    internalErr();
+    return 0;
+    }
+}
+
 static void numericCast(struct pfCompile *pfc,
 	struct pfType *newType, struct pfParse **pPp)
 /* Insert a cast operation to base on top of *pPp */
@@ -106,35 +128,8 @@ struct pfParse *cast;
 enum pfParseType castType = pptCastByteToByte;
 int numTypeCount = 6;
 
-if (oldBase == pfc->byteType)
-    castType += 0 * numTypeCount;
-else if (oldBase == pfc->shortType)
-    castType += 1 * numTypeCount;
-else if (oldBase == pfc->intType)
-    castType += 2 * numTypeCount;
-else if (oldBase == pfc->longType)
-    castType += 3 * numTypeCount;
-else if (oldBase == pfc->floatType)
-    castType += 4 * numTypeCount;
-else if (oldBase == pfc->doubleType)
-    castType += 5 * numTypeCount;
-else
-    internalErrAt(pp->tok);
-
-if (newBase == pfc->byteType)
-    castType += 0;
-else if (newBase == pfc->shortType)
-    castType += 1;
-else if (newBase == pfc->intType)
-    castType += 2;
-else if (newBase == pfc->longType)
-    castType += 3;
-else if (newBase == pfc->floatType)
-    castType += 4;
-else if (newBase == pfc->doubleType)
-    castType += 5;
-else
-    internalErrAt(pp->tok);
+castType += numTypeCount * baseTypeLogicalSize(pfc, oldBase);
+castType += baseTypeLogicalSize(pfc, newBase);
 
 cast = pfParseNew(castType, pp->tok, pp->parent, pp->scope);
 cast->next = pp->next;
@@ -292,9 +287,19 @@ struct pfParse *type = pp->children;
 struct pfParse *symbol = type->next;
 struct pfParse *init = symbol->next;
 
-coerceOne(pfc, &symbol->next, type->ty);
+if (init != NULL)
+    coerceOne(pfc, &symbol->next, type->ty);
 }
 
+static struct pfType *largerNumType(struct pfCompile *pfc,
+	struct pfType *a, struct pfType *b)
+/* Return a or b, whichever can hold the larger range. */
+{
+if (baseTypeLogicalSize(pfc, a->base) > baseTypeLogicalSize(pfc, b->base))
+    return a;
+else
+    return b;
+}
 
 static void coerceBinaryMathOp(struct pfCompile *pfc, struct pfParse *pp)
 /* Make sure that both sides of a math operation agree. */
@@ -338,7 +343,13 @@ else
     if (rval->ty == NULL)
 	expectingGot("number", rval->tok);
     if (!pfTypeSame(lval->ty, rval->ty))
-	typeMismatch(pp);
+	{
+	struct pfType *ty = largerNumType(pfc, lval->ty, rval->ty);
+	coerceOne(pfc, &lval, ty);
+	coerceOne(pfc, &rval, ty);
+	pp->children = lval;
+	lval->next = rval;
+	}
     pp->ty = lval->ty;
     }
 }
@@ -359,6 +370,7 @@ switch (pp->type)
         break;
     case pptMul:
     case pptDiv:
+    case pptMod:
     case pptPlus:
     case pptMinus:
         coerceBinaryMathOp(pfc, pp);
