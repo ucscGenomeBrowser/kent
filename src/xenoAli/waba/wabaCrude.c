@@ -80,33 +80,33 @@ void wabaCrudeOutput(struct wabaCrude *el, FILE *f, char sep, char lastSep)
 /* Print out wabaCrude.  Separate fields with sep. Follow last field with lastSep. */
 {
 int i;
-fprintf(f, "%u", el->score, sep);
+fprintf(f, "%u", el->score);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->qFile, sep);
-if (sep == ',') fputc('"',f);
-fputc(sep,f);
-if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->qSeq, sep);
-if (sep == ',') fputc('"',f);
-fputc(sep,f);
-fprintf(f, "%u", el->qStart, sep);
-fputc(sep,f);
-fprintf(f, "%u", el->qEnd, sep);
-fputc(sep,f);
-fprintf(f, "%d", el->strand, sep);
-fputc(sep,f);
-if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->tFile, sep);
+fprintf(f, "%s", el->qFile);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->tSeq, sep);
+fprintf(f, "%s", el->qSeq);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
-fprintf(f, "%u", el->tStart, sep);
+fprintf(f, "%u", el->qStart);
 fputc(sep,f);
-fprintf(f, "%u", el->tEnd, lastSep);
+fprintf(f, "%u", el->qEnd);
+fputc(sep,f);
+fprintf(f, "%d", el->strand);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->tFile);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->tSeq);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+fprintf(f, "%u", el->tStart);
+fputc(sep,f);
+fprintf(f, "%u", el->tEnd);
 fputc(lastSep,f);
 }
 
