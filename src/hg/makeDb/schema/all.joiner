@@ -855,12 +855,12 @@ identifier ensemblProteinId external=Ensembl
 identifier ensemblTranscriptId external=Ensembl
 "Ensembl Transcript ID"
     $gbd.ensGene.name chopAfter=.
-    $gbd.ensGeneXref.transcript_name chopAfter=.
-    mm3,hg13.ensemblXref.transcript_name chopAfter=.
-    mm3.ensemblXref2.transcript_name chopAfter=.
-    $gbd.ensGtp.transcript chopAfter=.
-    $gbd.ensPep.name chopAfter=.
-    $gbd.ensTranscript.transcript_name chopAfter=.
+    $gbd.ensGeneXref.transcript_name chopAfter=. minCheck=0.20
+    mm3,hg13.ensemblXref.transcript_name chopAfter=. minCheck=0.20
+    mm3.ensemblXref2.transcript_name chopAfter=. minCheck=0.20
+    $gbd.ensGtp.transcript chopAfter=. minCheck=0.98
+    $gbd.ensPep.name chopAfter=. minCheck=0.98
+    $gbd.ensTranscript.transcript_name chopAfter=. minCheck=0.20
     $kgDb.knownToEnsembl.value chopAfter=.
     $gbd.sfDescription.name chopAfter=.
     mm3.superfamily.name chopAfter=.
@@ -913,7 +913,7 @@ identifier encodeRegion
 
 identifier unigeneId fuzzy
 "NCBI UniGene Cluster ID"
-#   hgFixed.sage.uni oneToOne
+#   hgFixed.sage.uni 
     $gbd.uniGene_2.name chopBefore=.
     $gbd.sage.uni
 
@@ -926,6 +926,6 @@ identifier hgFixedSageExpId
 
 identifier sageExpId
 "Sage experiment (tissue type etc) ID"
-    $gbd.sageExp.num oneToOne
+    $gbd.sageExp.num 
     $gbd.sage.exps comma
 
