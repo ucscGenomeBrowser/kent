@@ -366,31 +366,40 @@ boolean cgiSpoof(int *pArgc, char *argv[])
  *        cgiScript nonCgiArg1 var1=value1 var2=value2 var3=value3 nonCgiArg2
  * or like
  *        cgiScript nonCgiArg1 var1=value1&var2=value2&var3=value3 nonCgiArg2
+ * or even like
+ *        cgiScript nonCgiArg1 -x -y=bogus z=really
  * (The non-cgi arguments can occur anywhere.  The cgi arguments (all containing
- * the character '=') are erased from argc/argv.  Normally you call this
- *        cgiSpoof(&argc, argv);
+ * the character '=' or starting with '-') are erased from argc/argv.  Normally 
+ * you call this cgiSpoof(&argc, argv);
  */
 {
 int argc = *pArgc;
 int i;
 int argcLeft = argc;
 char *name;
-static char queryString[2046];
+static char queryString[4096];
 char *q = queryString;
-boolean needAnd = FALSE;
+boolean needAnd = TRUE;
 boolean gotAny = FALSE;
+boolean startDash;
+boolean gotEq;
 
-q += sprintf(q, "%s", "QUERY_STRING=");
+q += sprintf(q, "%s", "QUERY_STRING=cgiSpoof=on");
 for (i=0; i<argcLeft; )
     {
     name = argv[i];
-    if (strchr(name,'=') != NULL)
+    if (startDash = (name[0] == '-'))
+       ++name;
+    gotEq = (strchr(name, '=') != NULL);
+    if (gotEq || startDash)
         {
         if (needAnd)
             *q++ = '&';
         q += sprintf(q, "%s", name);
-        if (strchr(name, '&') == NULL)
+        if (!gotEq || strchr(name, '&') == NULL)
             needAnd = TRUE;
+	if (!gotEq)
+	    q += sprintf(q, "=on");
         memcpy(&argv[i], &argv[i+1], sizeof(argv[i]) * (argcLeft-i-1));
         argcLeft -= 1;
         gotAny = TRUE;
