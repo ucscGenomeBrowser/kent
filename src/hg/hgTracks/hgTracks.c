@@ -92,7 +92,7 @@
 #include "cutterTrack.h"
 #include "retroGene.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.937 2005/03/30 00:55:54 baertsch Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.938 2005/03/31 18:05:37 kent Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -9749,6 +9749,7 @@ boolean showedRuler = FALSE;
 boolean showTrackControls = cartUsualBoolean(cart, "trackControlsOnMain", TRUE);
 long thisTime = 0, lastTime = 0;
 char *clade = hClade(hGenome(database));
+char *clearButtonJavascript;
 
 zoomedToBaseLevel = (winBaseCount <= insideWidth / tl.mWidth);
 zoomedToCodonLevel = (ceil(winBaseCount/3) * tl.mWidth) <= insideWidth;
@@ -9762,6 +9763,7 @@ if (psOutput != NULL)
 
 /* Tell browser where to go when they click on image. */
 hPrintf("<FORM ACTION=\"%s\" NAME=\"TrackHeaderForm\" METHOD=GET>\n\n", hgTracksName());
+clearButtonJavascript = "document.TrackHeaderForm.position.value=''";
 cartSaveSession(cart);
 
 /* See if want to include sequence search results. */
@@ -9886,6 +9888,7 @@ if (showTrackControls)
     hPrintf("</CENTER></FORM>\n");
     hPrintf("<FORM ACTION=\"%s\" NAME=\"TrackForm\" METHOD=POST>\n\n", hgTracksName());
     cartSaveSession(cart);	/* Put up hgsid= as hidden variable. */
+    clearButtonJavascript = "document.TrackForm.position.value=''";
     hPrintf("<CENTER>");
     }
 
@@ -9907,7 +9910,7 @@ if (showTrackControls)
 	sprintLongWithCommas(buf, winEnd - winStart);
 	hWrites(" ");
 	hButton("submit", "jump");
-	hOnClickButton("document.TrackForm.position.value=''","clear");
+	hOnClickButton(clearButtonJavascript,"clear");
 	hPrintf(" size %s bp. ", buf);
 #ifdef OLD
 	hWrites("&nbsp;image width: ");
