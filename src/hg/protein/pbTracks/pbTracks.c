@@ -15,7 +15,7 @@
 #include "pbStampPict.h"
 #include "pbTracks.h"
 
-static char const rcsid[] = "$Id: pbTracks.c,v 1.8 2003/12/24 19:17:29 fanhsu Exp $";
+static char const rcsid[] = "$Id: pbTracks.c,v 1.9 2003/12/30 00:15:37 fanhsu Exp $";
 
 boolean hgDebug = FALSE;      /* Activate debugging code. Set to true by hgDebug=on in command line*/
 
@@ -87,6 +87,9 @@ int blockGenomeStart[500], blockGenomeStartPositive[500];
 int blockGenomeEnd[500], blockGenomeEndPositive[500];
 
 int trackOrigOffset = 0;	//current track display origin offset
+boolean initialWindow = TRUE;
+struct vGfx *vg, *vg2;
+
 void hvPrintf(char *format, va_list args)
 /* Suppressable variable args hPrintf. */
 {
@@ -149,26 +152,9 @@ freez(&pdfTmpName);
 return pdfName;
 }
 
-
-void hWrites(char *string)
-/* Write string with no '\n' if not suppressed. */
-{
-if (!suppressHtml)
-    fputs(string, stdout);
-}
-
-void hButton(char *name, char *label)
-/* Write out button if not suppressed. */
-{
-if (!suppressHtml)
-    cgiMakeButton(name, label);
-}
-
-
 void makeActiveImagePB(char *psOutput)
 /* Make image and image map. */
 {
-struct vGfx *vg, *vg2;
 struct tempName gifTn, gifTn2;
 char *mapName = "map";
 int pixWidth, pixHeight;
@@ -200,107 +186,11 @@ if (protSeq == NULL)
     errAbort("%s is not a current valid entry in SWISS-PROT/TrEMBL\n", proteinID);
     }
 protSeqLen = strlen(protSeq);
- 
-if (cgiOptionalString("trackOffset") != NULL)
-	{
-	//printf("<br>trackOffset=%s\n", cgiOptionalString("trackOffset") );
-	trackOrigOffset = atoi(cgiOptionalString("trackOffset")); 
-	}
 
-if (cgiOptionalString("pbScaleStr") != NULL)
-	{
-	pbScale  = atoi(cgiOptionalString("pbScaleStr")); 
-	}
-
-if (cgiOptionalString("pbScale") != NULL)
-	{
-	if (strcmp(cgiOptionalString("pbScale"), "1/6")  == 0) pbScale = 1;
-	if (strcmp(cgiOptionalString("pbScale"), "1/2")  == 0) pbScale = 3;
-	if (strcmp(cgiOptionalString("pbScale"), "FULL") == 0) pbScale = 6;
-	if (strcmp(cgiOptionalString("pbScale"), "DNA")  == 0) pbScale =22;
-	sprintf(pbScaleStr, "%d", pbScale);
-	cgiMakeHiddenVar("pbScaleStr", pbScaleStr);
-	trackOrigOffset = 0;
-	}
-
-pixWidth = 160+ protSeqLen*pbScale;
-if (pixWidth > MAX_PB_PIXWIDTH)
-   {
-   pixWidth = MAX_PB_PIXWIDTH;
-   }
-//printf("<br>pixWidth=%d\n", pixWidth);fflush(stdout);
-
-if (pixWidth < 550) pixWidth = 550;
-insideWidth = pixWidth-gfxBorder;
-
-pixHeight = 260;
-
-//make room for individual residues display
-if (pbScale >=6)  pixHeight = pixHeight + 20;
-if (pbScale >=18) pixHeight = pixHeight + 30;
-sfCount = getSuperfamilies(proteinID);
-if (sfCount > 0) pixHeight = pixHeight + 20;
-
-makeTempName(&gifTn, "hgt", ".gif");
-vg = vgOpenGif(pixWidth, pixHeight, gifTn.forCgi);
-g_vg = vg;
-
-bkgColor = vgFindColorIx(vg, 255, 254, 232);
-
-vgBox(vg, 0, 0, insideWidth, pixHeight, bkgColor);
-
-/* Start up client side map. */
-hPrintf("<MAP Name=%s>\n", mapName);
-
-vgSetClip(vg, 0, gfxBorder, insideWidth, pixHeight - 2*gfxBorder);
-
-iypos = 15;
-/* Draw tracks. */
-doTracks(proteinID, mrnaID, protSeq, vg, &iypos);
-/* Finish map. */
-hPrintf("</MAP>\n");
-
-//#include "j.c"
-
-/* Save out picture and tell html file about it. */
-vgClose(&vg);
-
-hPrintf("<IMG SRC=\"%s\" BORDER=1 WIDTH=%d HEIGHT=%d USEMAP=#%s onMouseOut=\"javascript:popupoff();\"><BR>",
-//hPrintf("<IMG SRC=\"%s\" BORDER=1 WIDTH=%d HEIGHT=%d USEMAP=#%s><BR>",
-        gifTn.forCgi, pixWidth, pixHeight, mapName);
-
-hPrintf("<A HREF=\"../goldenPath/help/pbTracksHelp.html\" TARGET=_blank>");
-hPrintf("Explanation of Tracks</A><br>");
-
-if ((pbScale*protSeqLen + 150) > MAX_PB_PIXWIDTH)
-    {
-    /* Put up scroll controls. */
-    hWrites("Move ");
-    hButton("hgt.left3", "<<<");
-    hButton("hgt.left2", " <<");
-    hButton("hgt.left1", " < ");
-    hButton("hgt.right1", " > ");
-    hButton("hgt.right2", ">> ");
-    hButton("hgt.right3", ">>>");
-
-    hPrintf("&nbsp&nbsp&nbsp&nbsp");
-    }
-    
-hPrintf("Current scale: ");
-if (pbScale == 1) hPrintf("1/6 ");
-if (pbScale == 3) hPrintf("1/2 ");
-if (pbScale == 6) hPrintf("FULL ");
-    
-hPrintf("&nbsp&nbsp&nbsp Rescale to ");
-hPrintf("<INPUT TYPE=SUBMIT NAME=\"pbScale\" VALUE=\"1/6\">\n");
-hPrintf("<INPUT TYPE=SUBMIT NAME=\"pbScale\" VALUE=\"1/2\">\n");
-hPrintf("<INPUT TYPE=SUBMIT NAME=\"pbScale\" VALUE=\"FULL\">\n");
-hPrintf("<INPUT TYPE=SUBMIT NAME=\"pbScale\" VALUE=\"DNA\">\n");
-hPrintf("<P>");
+iypos = 15; 
+doTracks(proteinID, mrnaID, protSeq, &iypos);
 
 if (!hTableExists("pbStamp")) goto histDone; 
-
-//hPrintf("<B><font size=4>Protein Property Histograms</font></B>");
 
 pbScale = 3;
 pixWidth = 765;
