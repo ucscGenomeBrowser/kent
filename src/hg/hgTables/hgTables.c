@@ -3,6 +3,7 @@
 #include "linefile.h"
 #include "hash.h"
 #include "memalloc.h"
+#include "obscure.h"
 #include "htmshell.h"
 #include "cheapcgi.h"
 #include "cart.h"
@@ -16,7 +17,7 @@
 #include "customTrack.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: hgTables.c,v 1.31 2004/07/18 23:51:24 kent Exp $";
+static char const rcsid[] = "$Id: hgTables.c,v 1.32 2004/07/19 05:37:08 kent Exp $";
 
 
 void usage()
@@ -140,6 +141,22 @@ pushAbortHandler(textAbortHandler);
 
 /* --------- Utility functions --------------------- */
 
+static struct trackDb *getFullTrackList()
+/* Get all tracks including custom tracks if any. */
+{
+struct trackDb *list = hTrackDb(NULL);
+struct customTrack *ctList, *ct;
+
+/* Create dummy group for custom tracks if any */
+ctList = getCustomTracks();
+for (ct = ctList; ct != NULL; ct = ct->next)
+    {
+    slAddHead(&list, ct->tdb);
+    }
+return list;
+}
+
+
 static struct region *getRegionsFullGenome()
 /* Get a region list that covers all of each chromosome. */
 {
@@ -176,6 +193,13 @@ sqlFreeResult(&sr);
 sqlDisconnect(&conn);
 slReverse(&list);
 return list;
+}
+
+boolean fullGenomeRegion()
+/* Return TRUE if region is full genome. */
+{
+char *regionType = cartUsualString(cart, hgtaRegionType, "genome");
+return sameString(regionType, "genome");
 }
 
 struct region *getRegions()
@@ -445,13 +469,14 @@ boolean isSqlNumType(char *type)
 return strstr(type, "int") || strstr(type, "float") || strstr(type, "double");
 }
 
-
 struct trackDb *findTrackInGroup(char *name, struct trackDb *trackList,
-    struct grp *group)
+	struct grp *group)
 /* Find named track that is in group (NULL for any group).
  * Return NULL if can't find it. */
 {
 struct trackDb *track;
+if (group != NULL && sameString(group->name, "all"))
+    group = NULL;
 for (track = trackList; track != NULL; track = track->next)
     {
     if (sameString(name, track->tableName) &&
@@ -467,18 +492,18 @@ struct trackDb *findTrack(char *name, struct trackDb *trackList)
 return findTrackInGroup(name, trackList, NULL);
 }
 
-struct trackDb *findSelectedTrack(struct trackDb *trackList, 
-    struct grp *group)
+struct trackDb *findSelectedTrack(struct trackDb *trackList, struct grp *group)
 /* Find selected track - from CGI variable if possible, else
  * via various defaults. */
 {
 char *name = cartOptionalString(cart, hgtaTrack);
 struct trackDb *track = NULL;
+
 if (name != NULL)
     track = findTrackInGroup(name, trackList, group);
 if (track == NULL)
     {
-    if (group == NULL)
+    if (group == NULL || sameString(group->name, "all"))
         track = trackList;
     else
 	{
@@ -516,14 +541,15 @@ return hti->chromField[0] && hti->startField[0] && hti->endField[0];
 }
 
 
-void doTabOutTable(
+static void doTabOutDbTable(
 	char *db, 
 	char *table, 
 	struct sqlConnection *conn, 
 	char *fields)
 /* Do tab-separated output on fields of a single table. */
 {
-struct region *region, *regionList = NULL;
+struct region *regionList = getRegions();
+struct region *region;
 struct hTableInfo *hti = NULL;
 struct dyString *fieldSpec = newDyString(256);
 struct hash *idHash = NULL;
@@ -531,7 +557,6 @@ int outCount = 0;
 boolean isPositional;
 char *filter = filterClause(db, table);
 
-regionList = getRegions();
 hti = getHti(db, table);
 
 /* If they didn't pass in a field list assume they want all fields. */
@@ -602,17 +627,215 @@ if (outCount == 0)
     if (idHash != NULL)
 	{
 	if (regionCount <= 1)
-	    hPrintf("No items in selected region matched identifier list.\n");
+	    hPrintf("#No items in selected region matched identifier list\n");
 	else
-	    hPrintf("No items matched identifier list");
+	    hPrintf("#No items matched identifier list");
 	}
     else if (regionCount <= 1)
         {
-	hPrintf("No items in selected region");
+	hPrintf("#No items in selected region");
 	}
+    if (filter != NULL)
+        hPrintf(" passing filter");
+    hPrintf(".");
     }
 freez(&filter);
 hashFree(&idHash);
+}
+
+#ifdef NEVER
+Some useful custom track routines from hgText:
+
+void filterOptionsCustomTrack(char *table, char *tableId)
+/* Print out an HTML table with form inputs for constraints on custom track */
+
+boolean printTabbedBed(struct bed *bedList, struct slName *chosenFields,
+		       boolean initialized)
+/* Print out the chosen fields of a bedList. */
+
+void doTabSeparatedCT(boolean allFields)
+
+#endif /* NEVER */
+
+struct slName *getBedFields(int fieldCount)
+/* Get list of fields for bed of given size. */
+{
+struct slName *fieldList = NULL, *field;
+if (fieldCount >= 3)
+    {
+    field = newSlName("chrom");
+    slAddHead(&fieldList, field);
+    field = newSlName("chromStart");
+    slAddHead(&fieldList, field);
+    field = newSlName("chromEnd");
+    slAddHead(&fieldList, field);
+    }
+if (fieldCount >= 4)
+    {
+    field = newSlName("name");
+    slAddHead(&fieldList, field);
+    }
+if (fieldCount >= 5)
+    {
+    field = newSlName("score");
+    slAddHead(&fieldList, field);
+    }
+if (fieldCount >= 6)
+    {
+    field = newSlName("strand");
+    slAddHead(&fieldList, field);
+    }
+if (fieldCount >= 8)
+    {
+    field = newSlName("thickStart");
+    slAddHead(&fieldList, field);
+    field = newSlName("thickEnd");
+    slAddHead(&fieldList, field);
+    }
+if (fieldCount >= 12)
+    {
+    field = newSlName("reserved");
+    slAddHead(&fieldList, field);
+    field = newSlName("blockCount");
+    slAddHead(&fieldList, field);
+    field = newSlName("blockSizes");
+    slAddHead(&fieldList, field);
+    field = newSlName("chromStarts");
+    slAddHead(&fieldList, field);
+    }
+slReverse(&fieldList);
+return fieldList;
+}
+
+void tabBedRow(struct bed *bed, struct slName *fieldList)
+/* Print out named fields from bed. */
+{
+struct slName *field;
+boolean needTab = FALSE;
+for (field = fieldList; field != NULL; field = field->next)
+    {
+    char *type = field->name;
+    if (needTab)
+        hPrintf("\t");
+    else
+        needTab = TRUE;
+    if (sameString(type, "chrom"))
+        hPrintf("%s", bed->chrom);
+    else if (sameString(type, "chromStart"))
+        hPrintf("%u", bed->chromStart);
+    else if (sameString(type, "chromEnd"))
+        hPrintf("%u", bed->chromEnd);
+    else if (sameString(type, "name"))
+        hPrintf("%s", bed->name);
+    else if (sameString(type, "score"))
+        hPrintf("%d", bed->score);
+    else if (sameString(type, "strand"))
+        hPrintf("%s", bed->strand);
+    else if (sameString(type, "thickStart"))
+        hPrintf("%u", bed->thickStart);
+    else if (sameString(type, "thickEnd"))
+        hPrintf("%u", bed->thickEnd);
+    else if (sameString(type, "reserved"))
+        hPrintf("%u", bed->reserved);
+    else if (sameString(type, "blockCount"))
+        hPrintf("%u", bed->blockCount);
+    else if (sameString(type, "blockSizes"))
+	{
+	unsigned i;
+	for (i=0; i<bed->blockCount; ++i)
+	    hPrintf("%u,", bed->blockSizes[i]);
+	}
+    else if (sameString(type, "chromStarts"))
+	{
+	unsigned i;
+	for (i=0; i<bed->blockCount; ++i)
+	    hPrintf("%u,", bed->chromStarts[i]);
+	}
+    else
+        errAbort("Unrecognized bed field %s", type);
+    }
+hPrintf("\n");
+}
+
+static void doTabOutCustomTracks(struct customTrack *ct, char *fields)
+/* Print out selected fields from custom track.  If fields
+ * is NULL, then print out all fields. */
+{
+struct bed *bedList, *bed;
+struct slName *chosenFields, *field;
+struct bedFilter *bf = NULL;
+struct region *region;
+boolean gotResults = FALSE;
+
+#ifdef SOON
+bf = constrainBedFields(NULL);
+#endif
+
+if (fields == NULL)
+    chosenFields = getBedFields(ct->fieldCount);
+else
+    chosenFields = commaSepToSlNames(fields);
+hPrintf("#");
+for (field = chosenFields; field != NULL; field = field->next)
+    {
+    if (field != chosenFields)
+        hPrintf("\t");
+    hPrintf("%s", field->name);
+    }
+hPrintf("\n");
+
+if (fullGenomeRegion())
+    {
+    for (bed = ct->bedList; bed != NULL; bed = bed->next)
+        {
+	if (bf == NULL)  // or passes filter
+	    {
+	    tabBedRow(bed, chosenFields);
+	    gotResults = TRUE;
+	    }
+	}
+    }
+else
+    {
+    for (region = getRegions(); region != NULL; region = region->next)
+	{
+	for (bed = ct->bedList; bed != NULL; bed = bed->next)
+	    {
+	    if (sameString(bed->chrom, region->chrom))
+		{
+		if (region->end == 0 || 
+		   (bed->chromStart < region->end && bed->chromEnd > region->start))
+		    {
+		    if (bf == NULL)  // or passes filter
+			{
+			tabBedRow(bed, chosenFields);
+			gotResults = TRUE;
+			}
+		    }
+		}
+	    }
+	}
+    }
+if (!gotResults)
+    hPrintf("# No results returned from query.\n");
+}
+
+void doTabOutTable(
+	char *db, 
+	char *table, 
+	struct sqlConnection *conn, 
+	char *fields)
+/* Do tab-separated output on fields of a single table. */
+{
+if (startsWith("ct_", table))
+    {
+    struct customTrack *ct = lookupCt(table);
+    doTabOutCustomTracks(ct, fields);
+    }
+else
+    {
+    doTabOutDbTable(db, table, conn, fields);
+    }
 }
 
 
@@ -718,7 +941,7 @@ cart = cartAndCookieNoContent(hUserCookie(), excludeVars, oldVars);
 getDbAndGenome(cart, &database, &genome);
 hSetDb(database);
 conn = hAllocConn();
-fullTrackList = hTrackDb(NULL);
+fullTrackList = getFullTrackList();
 curTrack = findSelectedTrack(fullTrackList, NULL);
 
 /* Go figure out what page to put up. */

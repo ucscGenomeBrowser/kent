@@ -15,7 +15,7 @@
 #include "grp.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: mainPage.c,v 1.10 2004/07/18 21:52:28 kent Exp $";
+static char const rcsid[] = "$Id: mainPage.c,v 1.11 2004/07/19 05:37:08 kent Exp $";
 
 
 static struct grp *makeGroupList(struct sqlConnection *conn, 
@@ -60,6 +60,13 @@ for (track = trackList; track != NULL; track = track->next)
          warn("Track %s has group %s, which isn't in grp table",
 	 	track->tableName, track->grp);
     }
+
+/* Create dummpy group for all tracks. */
+AllocVar(group);
+group->name = cloneString("all");
+group->label = cloneString("All Tracks");
+slAddTail(&groupList, group);
+
 hashFree(&groupsInTrackList);
 hashFree(&groupsInDatabase);
 return groupList;
@@ -200,14 +207,12 @@ hPrintf("<TABLE BORDER=0>\n");
 	    (group == selGroup ? " SELECTED" : ""),
 	    group->label);
 	}
-    hPrintf(" <OPTION VALUE=custom%s>(Custom Tracks)\n",
-	    (group == selGroup ? " SELECTED" : ""));
-    hPrintf(" <OPTION VALUE=all%s>(All Tracks)\n",
-	    (group == selGroup ? " SELECTED" : ""));
     hPrintf("</SELECT>\n");
 
     hPrintf("<B>track:</B>\n");
-    if (selGroup == NULL)   /* All Tracks */
+    if (selGroup != NULL && sameString(selGroup->name, "all"))
+        selGroup = NULL;
+    if (selGroup == NULL) /* All Tracks */
 	slSort(&fullTrackList, trackDbCmpShortLabel);
     curTrack = findSelectedTrack(fullTrackList, selGroup);
     hPrintf("<SELECT NAME=%s>\n", hgtaTrack);

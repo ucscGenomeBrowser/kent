@@ -58,21 +58,26 @@ void hTableEnd();
 struct region *getRegions();
 /* Consult cart to get list of regions to work on. */
 
+boolean fullGenomeRegion();
+/* Return TRUE if region is full genome. */
+
 struct sqlResult *regionQuery(struct sqlConnection *conn, char *table,
 	char *fields, struct region *region, boolean isPositional,
 	char *extraWhere);
 /* Construct and execute query for table on region. */
 
+struct customTrack *getCustomTracks();
+/* Get custom track list. */
+
 struct trackDb *findTrack(char *name, struct trackDb *trackList);
 /* Find track, or return NULL if can't find it. */
 
-struct trackDb *findTrackInGroup(char *name, struct trackDb *trackList,
-    struct grp *group);
+struct trackDb *findTrackInGroup(char *name, struct trackDb *trackList, 
+	struct grp *group);
 /* Find named track that is in group (NULL for any group).
  * Return NULL if can't find it. */
 
-struct trackDb *findSelectedTrack(struct trackDb *trackList, 
-    struct grp *group);
+struct trackDb *findSelectedTrack(struct trackDb *trackList, struct grp *group);
 /* Find selected track - from CGI variable if possible, else
  * via various defaults. */
 
