@@ -4,7 +4,7 @@
 #include "common.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: wigDataStream.c,v 1.9 2004/08/10 21:00:20 hiram Exp $";
+static char const rcsid[] = "$Id: wigDataStream.c,v 1.10 2004/08/10 21:53:24 hiram Exp $";
 
 /*	PRIVATE	METHODS	************************************************/
 static void addConstraint(struct wiggleDataStream *wDS, char *left, char *right)
@@ -324,6 +324,7 @@ float sumSquares = 0.0;
 unsigned statsCount = 0;
 long int chromStart = -1;
 long int chromEnd = 0;
+boolean summaryOnly = TRUE;
 
 doAscii = operations & wigFetchAscii;
 doBed = operations & wigFetchBed;
@@ -339,8 +340,15 @@ if (doNoOp)
 if (! (doNoOp || doAscii || doBed || doStats) )
     {
 	verbose(2, "wigGetData: no type of data fetch requested ?\n");
-	return;	/*	NOTHING ASKED FOR	*/
+	return;	/*	NOTHING ASKED FOR ?	*/
     }
+
+if (doAscii)
+    summaryOnly = FALSE;
+if (doBed)
+    summaryOnly = FALSE;
+if (!wDS->isFile && wDS->winEnd)
+    summaryOnly = FALSE;
 
 while (nextRow(wDS, row, WIGGLE_NUM_COLS))
     {
@@ -356,14 +364,23 @@ while (nextRow(wDS, row, WIGGLE_NUM_COLS))
 	{
 	if (wDS->chrName)
 	    if (differentString(wDS->chrName,wiggle->chrom))
-		continue;
+		{
+		wiggleFree(&wiggle);
+		continue;	/*	next SQL row	*/
+		}
 	if (wDS->spanLimit)
 	    if (wDS->spanLimit != wiggle->span)
-		continue;
+		{
+		wiggleFree(&wiggle);
+		continue;	/*	next SQL row	*/
+		}
 	if (wDS->winEnd)	/* non-zero means a range is in effect */
 	    if ( (wiggle->chromStart > wDS->winEnd) ||
 		(wiggle->chromEnd < wDS->winStart) )
+		{
+		wiggleFree(&wiggle);
 		continue;	/* entire block is out of range */
+		}
 	}
 
     chromPosition = wiggle->chromStart;
@@ -457,8 +474,26 @@ verbose(2, "#\tnew ascii element chrom, span: %s, %u\n", wigAscii->chrom, wigAsc
 	else
 	    {
 	    bytesSkipped += wiggle->count;
-	    continue;
+	    wiggleFree(&wiggle);
+	    continue;	/*	next SQL row	*/
 	    }
+	}
+    if (summaryOnly && doStats)
+	{
+	if (wiggle->lowerLimit < lowerLimit)
+	    lowerLimit = wiggle->lowerLimit;
+	if (wiggle->lowerLimit+wiggle->dataRange > upperLimit)
+	    upperLimit = wiggle->lowerLimit+wiggle->dataRange;
+	sumData += wiggle->sumData;
+	sumSquares += wiggle->sumSquares;
+	/*	positions are being seen in reverse 	*/
+	if ((chromStart < 0)||(chromStart > wiggle->chromStart))
+	    chromStart = wiggle->chromStart;
+	if (chromEnd < wiggle->chromEnd)
+	    chromEnd = wiggle->chromEnd;
+	statsCount += wiggle->validCount;
+	wiggleFree(&wiggle);
+	continue;	/*	next SQL row	*/
 	}
     if (!skipDataRead)
 	{
