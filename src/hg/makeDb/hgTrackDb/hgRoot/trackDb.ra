@@ -111,6 +111,7 @@ shortLabel U Penn Clones
 longLabel Univ of Penn Clones
 priority 10.1
 visibility hide
+type bed 6 +
 
 track genomicDups
 priority 10.5

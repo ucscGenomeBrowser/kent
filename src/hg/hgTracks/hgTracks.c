@@ -55,6 +55,7 @@
 #include "altGraph.h"
 #include "geneGraph.h"
 #include "sample.h"
+#include "uPennClones.h"
 
 #define ROGIC_CODE 1	/* Please take these out.  It's *everyone's* code now. -jk */
 #define FUREY_CODE 1
@@ -2013,19 +2014,6 @@ linkedFeaturesSeriesMethods(tg);
 tg->loadItems = loadBacEndPairs;
 }
 
-void loadUPennBacEndPairs(struct trackGroup *tg)
-/* Load up bac end pairs from table into trackGroup items. */
-{
-tg->items = lfsFromBedsInRange("uPennBacEndPairs", winStart, winEnd, chromName);
-}
-
-void uPennBacEndPairsMethods(struct trackGroup *tg)
-/* Fill in track group methods for linked features.series */
-{
-linkedFeaturesSeriesMethods(tg);
-tg->loadItems = loadUPennBacEndPairs;
-}
-
 #endif /* FUREY_CODE */
 
 #ifdef ROGIC_CODE
@@ -3734,6 +3722,25 @@ void stsMapMethods(struct trackGroup *tg)
 tg->loadItems = loadStsMap;
 tg->freeItems = freeStsMap;
 tg->itemColor = stsMapColor;
+}
+
+void loadUPennClones(struct trackGroup *tg)
+/* Load up uPennClones from database table to trackGroup items. */
+{
+bedLoadItem(tg, "uPennClones", (ItemLoader)uPennClonesLoad);
+}
+
+void freeUPennClones(struct trackGroup *tg)
+/* Free up uPennClones items. */
+{
+uPennClonesFreeList((struct uPennClones**)&tg->items);
+}
+
+void uPennClonesMethods(struct trackGroup *tg)
+/* Make track group for U Penn Clones */
+{
+tg->loadItems = loadUPennClones;
+tg->freeItems = freeUPennClones;
 }
 
 char *fishClonesFilter;
@@ -7232,7 +7239,7 @@ withRuler = sameWord(s, "on");
 /* Register tracks that include some non-standard methods. */
 registerTrackHandler("cytoBand", cytoBandMethods);
 registerTrackHandler("bacEndPairs", bacEndPairsMethods);
-registerTrackHandler("uPennBacEndPairs", uPennBacEndPairsMethods);
+registerTrackHandler("uPennClones", uPennClonesMethods);
 registerTrackHandler("cgh", cghMethods);
 registerTrackHandler("mcnBreakpoints", mcnBreakpointsMethods);
 registerTrackHandler("fishClones", fishClonesMethods);
