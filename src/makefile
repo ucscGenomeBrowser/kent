@@ -13,7 +13,7 @@ cgi: libs
 	cd hg && ${MAKE} cgi
 
 cgi-alpha: libs
-	cd hg && ${MAKE} clean
+	cd hg && ${MAKE} alpha
 
 cgi-beta: check-beta libs
 	cd hg && ${MAKE} beta
