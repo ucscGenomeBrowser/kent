@@ -397,6 +397,7 @@ hPrintf("<TD ALIGN=CENTER><FONT COLOR=\"#FFFFFF\" SIZE=4>%s</FONT></TD>",
         "UCSC Proteome Browser");
 hPrintf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/pbGlobal?%s=%u&pbt.psOutput=on\">%s</A></TD>\n",
         cartSessionVarName(), cartSessionId(cart), wrapWhiteFont("PDF/PS"));
+hPrintf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/pbGateway\">%s</A></TD>", wrapWhiteFont("New Query"));
 if (proteinInSupportedGenome)
     {
     hPrintf("<TD ALIGN=Right><A HREF=\"../goldenPath/help/pbTracksHelpFiles/pbTracksHelp.shtml\" TARGET=_blank>%s</A></TD>",
