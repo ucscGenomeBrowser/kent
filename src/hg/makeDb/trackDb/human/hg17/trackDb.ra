@@ -215,6 +215,26 @@ exonArrows off
 color 100,0,100
 type bed 4 .
 
+track bi200mD
+shortLabel Opossum Ultras
+longLabel Ultraconserved Elements (200 bp 100% ID in opossum/human inc. contam!)
+group compGeno
+priority 109.351
+visibility hide
+exonArrows off
+color 150,0,0
+type bed 4 .
+
+track bi200gG
+shortLabel Chicken Ultras
+longLabel Ultraconserved Elements (200 bp 100% ID in chicken/human, pre net screen)
+group compGeno
+priority 109.352
+visibility hide
+exonArrows off
+color 150,0,0
+type bed 4 .
+
 track cns
 shortLabel CNS
 longLabel Conserved Non-Coding (Most Conserved Minus Predicted Coding)
