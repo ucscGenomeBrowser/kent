@@ -248,7 +248,10 @@ if (sameWord("Plus", strand))
 else if (sameWord("Minus", strand))
     return -1;
 else
+    {
     bfError(bf, "Expecting Plus or Minus after Strand");
+    return 0;
+    }
 }
 
 static boolean nextBlockLine(struct blastFile *bf, char **retLine)

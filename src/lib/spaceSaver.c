@@ -20,7 +20,7 @@ ss->scale = ss->cellsInRow/winWidth;
 return ss;
 }
 
-struct spaceSaver *spaceSaverFree(struct spaceSaver **pSs)
+void spaceSaverFree(struct spaceSaver **pSs)
 /* Free up a space saver. */
 {
 struct spaceSaver *ss = *pSs;

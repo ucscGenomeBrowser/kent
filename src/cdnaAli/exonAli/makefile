@@ -1,11 +1,10 @@
 .c.o:
-	gcc -o -Wimplicit -I../../inc -c $*.c
+	gcc -O -Wimplicit -I../../inc -c $*.c
 
 O =  exonAli.o
 
 exonAli: $(O)  
-	gcc $O ../../lib/$(MACHTYPE)/jkweb.a
-	mv a.out $(HOME)/bin/$(MACHTYPE)/exonAli
+	gcc -o $(HOME)/bin/$(MACHTYPE)/exonAli $O ../../lib/$(MACHTYPE)/jkweb.a
 
 lib: 
 	cd ../../lib;make; cd ../cdnaAli/exonAli

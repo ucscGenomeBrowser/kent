@@ -110,6 +110,8 @@ boolean warnAboutDupes(struct offsetList **array, int size)
 {
 char *name, *prevName;
 int i;
+boolean ok = TRUE;
+
 if (size < 2)
     return FALSE;
 prevName = array[0]->name;
@@ -117,9 +119,13 @@ for (i=1; i<size; ++i)
     {
     name = array[i]->name;
     if (!differentWord(name, prevName))
+	{
         warn("Duplicate strings: %s %s", prevName, name);
+	ok = FALSE;
+	}
     prevName = name;
     }
+return ok;
 }
 
 static void makeIndex(FILE *in, FILE *out, 

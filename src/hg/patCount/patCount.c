@@ -1,5 +1,5 @@
 /* PatCount - Counts up the number of occurences of each
- * oligo of a fixed size (up to 11) in input sequence.
+ * oligo of a fixed size (up to 13) in input sequence.
  * Writes all patterns that are overrepresented according
  * to a threshold to output. */
 #include "common.h"
@@ -10,14 +10,14 @@
 void usage()
 {
 errAbort("patCount - counts up the number of occurences of each\n"
-         "oligo of a fixed size (up to 11) in input.  Writes out\n"
+         "oligo of a fixed size (up to 13) in input.  Writes out\n"
          "all patterns that are overrepresented by at least factor\n"
          "to output, which is a binary .ooc file used by patSpace\n"
          "nucleotide homology algorithms.\n"
          "usage:\n"
          "   patCount out.ooc oligoSize overFactor faFiles(s)\n"
          "example:\n"
-         "   patCount hgt.ooc 11 6 hgt1.fa hgt2.fa hgt3.fa");
+         "   patCount hgt.ooc 13 6 hgt1.fa hgt2.fa hgt3.fa");
 }
 
 unsigned long powerOfFour(int oligoSize)
@@ -159,7 +159,7 @@ s = argv[2];
 if (!isdigit(s[0]))
     usage();
 oligoSize = atoi(s);
-if (oligoSize <= 0 || oligoSize > 11)
+if (oligoSize <= 0 || oligoSize > 13)
     usage();
 s = argv[3];
 if (!isdigit(s[0]))

@@ -1,5 +1,5 @@
 .c.o:
-	gcc -ggdb -O -I../inc -c $*.c 
+	gcc -ggdb -O -Wformat -Wimplicit -Wuninitialized -Wreturn-type -I../inc -c $*.c
 
 O = ameme.o fragFind.o
 

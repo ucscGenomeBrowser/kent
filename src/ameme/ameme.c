@@ -137,7 +137,7 @@ double factorial(int x)
 /* Return x factorial. */
 {
 double acc = 1;
-for (; x > 2; x -= 1)
+for (; x > 1; x -= 1)
     acc *= x;
 return acc;
 }
@@ -479,7 +479,7 @@ int slog10Percent;
 void statUtilOpen()
 /* Initialize statistical utilities. */
 {
-static initted = FALSE;
+static boolean initted = FALSE;
 
 if (!initted)
     {
@@ -1067,6 +1067,9 @@ switch (nullModel)
     case nmEven:
         return slogOneFourth*patSize;
         break;
+    default:
+        errAbort("Unknown null model");
+	return 0;
     }
 }
 
@@ -1162,7 +1165,8 @@ diff = b->score - a->score;
 return diff;
 }
 
-void matchAtBaseIx(struct seqList *seqEl, struct profileColumn *col, struct profileColumn *rcCol, 
+void matchAtBaseIx(struct seqList *seqEl, struct profileColumn *col, 
+    struct profileColumn *rcCol, 
     int columnCount, int baseIx, int slogInvPos,
     int *retScore, boolean *retIsRc)
 /* Return the score and reverse complement status of profile and rcProfile at position. 
@@ -1178,17 +1182,26 @@ int patScore, rcPatScore, nonPatScore, score;
 nonPatScore = -nullPatSlogProb(seq, baseIx, columnCount, seqEl->frame);
 if (useLocation)
     nonPatScore += slogLocProb[baseIx] - slogInvPos;
-patScore = profilePatSlogProb(dna, softMask+baseIx, col, columnCount);
+patScore = profilePatSlogProb(dna, softMask+baseIx, col, columnCount) + nonPatScore;
 if (rcCol)
     {
-    rcPatScore = profilePatSlogProb(dna, softMask+baseIx, rcCol, columnCount);
+    int rcNonPatScore;
+    reverseComplement(seq+baseIx, columnCount);
+    	// Todo - adjust frame for minus strand here.
+    rcNonPatScore = -nullPatSlogProb(seq, baseIx, columnCount, seqEl->frame);
+    if (useLocation)
+	rcNonPatScore += slogLocProb[baseIx] - slogInvPos;
+    reverseComplement(seq+baseIx, columnCount);
+
+    rcPatScore = profilePatSlogProb(dna, softMask+baseIx, rcCol, columnCount)
+       + rcNonPatScore;
     if (rcPatScore > patScore)
         {
         patScore = rcPatScore;
         isRc = TRUE;
         }
     }
-score = patScore + nonPatScore;
+score = patScore;
 *retScore = score;
 *retIsRc = isRc;
 }
@@ -1489,7 +1502,7 @@ int onePos;
 int seqCount = slCount(seqList);
 struct seqList *seqEl;
 double weight;
-double maxWeight;
+double maxWeight = 0;
 double mean = 0;
 boolean saveWeight = (retProfile != NULL || erase);
 struct position *posList = NULL, *pos, *newPosList;
@@ -2179,7 +2192,7 @@ int lineIx = 0;
 char *goodName = NULL;
 int seqCount = 0;
 int longestLen = 0;
-int oneLen;
+int oneLen = 0;
 
 *retFileName = NULL;
 *retSeqCount = 0;
@@ -2554,7 +2567,7 @@ switch (nullModel)
     {
     case nmCoding:
         {
-        int dnaVal, lastDnaVal, lastLastDnaVal;
+        int dnaVal = -1, lastDnaVal = -1, lastLastDnaVal = -1;
         if (seqLen > 0)
             {
             lastDnaVal = randomNucleotide(mark0);
@@ -2578,7 +2591,7 @@ switch (nullModel)
         }
     case nmMark2:
         {
-        int dnaVal, lastDnaVal, lastLastDnaVal;
+        int dnaVal = -1, lastDnaVal = -1, lastLastDnaVal = -1;
         if (seqLen > 0)
             {
             lastDnaVal = randomNucleotide(mark0);
@@ -2957,11 +2970,11 @@ for (;;)
     double oneProb;
     char *word;
     int baseVal;
-    boolean gotLocation;
+    boolean gotLocation = FALSE;
     boolean gotNt[4];
     int wordCount;
     int profLen = 0;
-    int i,j;
+    int i=0,j=0;
     struct profile *prof;
     struct profileColumn *col;
 

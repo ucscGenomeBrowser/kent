@@ -9,7 +9,7 @@ errAbort(
     "repMaskJobs - make Condor submission file for a bunch of\n"
     "repeat masker jobs.\n"
     "usage:\n"
-    "   repMaskJobs dir maxJobs\n"
+    "   repMaskJobs dir maxJobs clonesPerJob\n"
     "Dir should be something like ~/gs/fin or ~/gs/draft.\n"
     "This will create rmskNN.con files containing up to maxJobs\n"
     "jobs in this directory, which can be submitted to condor.\n"
@@ -33,7 +33,7 @@ sprintf(fullPath, "%s/%s", dir, relName);
 return cloneString(fullPath);
 }
 
-void repMaskJobs(char *rootDir, int maxJobCount)
+void repMaskJobs(char *rootDir, int maxJobCount, int batchSize)
 /* Make condor submission file to repeat mask everything
  * in faDir. */
 {
@@ -62,7 +62,6 @@ if (slCount(faDirList) < 1)
 for (faFile = faDirList; faFile != NULL; )
     {
     char *fa = faFile->name;
-    int batchSize = 6;
     int i;
 
     /* Open output and write out header. */
@@ -107,7 +106,7 @@ carefulClose(&out);
 int main(int argc, char *argv[])
 /* Process command line. */
 {
-if (argc != 3 || !isdigit(argv[2][0]))
+if (argc != 4 || !isdigit(argv[2][0]) || !isdigit(argv[3][0]))
     usage();
-repMaskJobs(argv[1], atoi(argv[2]));
+repMaskJobs(argv[1], atoi(argv[2]), atoi(argv[3]));
 }

@@ -110,7 +110,7 @@ double nextBestLogP = bestLogP;
 int bestFrame = -1;
 int lastDnaStart = dnaSize-3;
 DNA *d;
-int codon, lastCodon; 
+int codon = 0, lastCodon; 
 
 unN(dna, dnaSize);
 for (frame=0; frame<3; ++frame)

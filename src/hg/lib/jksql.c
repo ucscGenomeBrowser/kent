@@ -10,6 +10,7 @@
 #include <mysql.h>
 #include "dlist.h"
 #include "jksql.h"
+#include "hgConfig.h"
 
 struct sqlConnection
 /* This is an item on a list of sql open connections. */
@@ -140,7 +141,14 @@ return sc;
 struct sqlConnection *sqlConnect(char *database)
 /* Connect to database on default host as default user. */
 {
-return sqlConnectRemote(mysqlHost(), "hguser", "hguserstuff", database);
+char* host = cfgOption("db.host");
+char* user = cfgOption("db.user");
+char* password = cfgOption("db.password");
+
+if(host == 0 || user == 0 || password == 0)
+	errAbort("Could not read hostname, user, or password to the database from configuration file.");
+	
+return sqlConnectRemote(host, user, password, database);
 }
 
 void sqlVaWarn(struct sqlConnection *sc, char *format, va_list args)
@@ -148,8 +156,7 @@ void sqlVaWarn(struct sqlConnection *sc, char *format, va_list args)
 {
 MYSQL *conn = sc->conn;
 if (format != NULL) {
-    vfprintf(stderr, format, args);
-    fprintf(stderr, "\n");
+    vaWarn(format, args);
     }
 warn("mySQL error %d: %s", mysql_errno(conn), mysql_error(conn));
 }
@@ -209,14 +216,27 @@ else
     }
 }
 
+
 boolean sqlMaybeMakeTable(struct sqlConnection *sc, char *table, char *query)
 /* Create table from query if it doesn't exist already. 
  * Returns FALSE if didn't make table. */
 {
-MYSQL *conn = sc->conn;
-if (mysql_real_query(conn, query, strlen(query)) != 0)
+if (sqlTableExists(sc, table))
     return FALSE;
+sqlUpdate(sc, query);
 return TRUE;
+}
+
+boolean sqlRemakeTable(struct sqlConnection *sc, char *table, char *create)
+/* Drop table if it exists, and recreate it. */
+{
+if (sqlTableExists(sc, table))
+    {
+    char query[256];
+    sprintf(query, "drop table %s", table);
+    sqlUpdate(sc, query);
+    }
+sqlUpdate(sc, create);
 }
 
 boolean sqlTableExists(struct sqlConnection *sc, char *table)
@@ -250,7 +270,6 @@ return res;
 }
 
 
-/* Query database. If result empty squawk and die. */
 void sqlUpdate(struct sqlConnection *conn, char *query)
 /* Tell database to do something that produces no results table. */
 {
@@ -265,8 +284,19 @@ boolean sqlExists(struct sqlConnection *conn, char *query)
 struct sqlResult *sr;
 if ((sr = sqlGetResult(conn,query)) == NULL)
     return FALSE;
-sqlFreeResult(&sr);
-return TRUE;
+else
+	{
+	if(sqlNextRow(sr) == NULL)
+		{
+		sqlFreeResult(&sr);
+		return FALSE;
+		}
+	else
+		{
+		sqlFreeResult(&sr);
+		return TRUE;
+		}
+	}
 }
 
 struct sqlResult *sqlStoreResult(struct sqlConnection *sc, char *query)
@@ -286,10 +316,25 @@ else
     return mysql_fetch_row(sr->result);
 }
 
+/* repeated calls to this function returns the names of the fields 
+ * the given result */
+char* sqlFieldName(struct sqlResult *sr)
+{
+MYSQL_FIELD *field;
+
+field = mysql_fetch_field(sr->result);
+if(field == 0)
+	return 0;
+
+return field->name;
+}
+
 int sqlCountColumns(struct sqlResult *sr)
 /* Count the number of columns in result. */
 {
-return mysql_field_count(sr->conn->conn);
+if(sr != 0)
+	return mysql_field_count(sr->conn->conn);
+return 0;
 }
 
 #ifdef SOMETIMES  /* Not available for all MYSQL environments. */
@@ -305,7 +350,7 @@ return mysql_field_count(sr->result);
 char *sqlQuickQuery(struct sqlConnection *sc, char *query, char *buf, int bufSize)
 /* Does query and returns first field in first row.  Meant
  * for cases where you are just looking up one small thing.  
- * Return NULL query comes up empty. */
+ * Returns NULL if query comes up empty. */
 {
 struct sqlResult *sr;
 char **row;
@@ -348,6 +393,37 @@ sprintf(query, "select count(*) from %s", table);
 return sqlQuickNum(conn, query);
 }
 
+int sqlFieldIndex(struct sqlConnection *conn, char *table, char *field)
+/* Returns index of field in a row from table, or -1 if it 
+ * doesn't exist. */
+{
+char query[256];
+struct sqlResult *sr;
+char **row;
+int i = 0, ix=-1;
+
+/* Read table description into hash. */
+sprintf(query, "describe %s", table);
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    if (sameString(row[0], field))
+        {
+	ix = i;
+	break;
+	}
+    ++i;
+    }
+sqlFreeResult(&sr);
+return ix;
+}
+
+unsigned int sqlLastAutoId(struct sqlConnection *conn)
+/* Return last automatically incremented id inserted into database. */
+{
+return mysql_insert_id(conn->conn);
+}
+
 /* Stuff to manage and cache up to 16 open connections on 
  * a database.  Typically you only need 3.
  * MySQL takes about 2 milliseconds on a local
@@ -359,18 +435,36 @@ enum {maxConn = 16};
 struct sqlConnCache
     {
     char *database;				/* SQL database. */
+    char *host;					/* Host machine of database. */
+    char *user;					/* Database user name */
+    char *password;				/* Password. */
     int connAlloced;                            /* # open connections. */
     struct sqlConnection *connArray[maxConn];   /* Open connections. */
     boolean connUsed[maxConn];                  /* Tracks used conns. */
     };
 
-struct sqlConnCache *sqlNewConnCache(char *database)
-/* Return a new connection cache. */
+struct sqlConnCache *sqlNewRemoteConnCache(char *database, 
+	char *host, char *user, char *password)
+/* Set up a cache on a remote database. */
 {
 struct sqlConnCache *cache;
 AllocVar(cache);
 cache->database = cloneString(database);
+cache->host = cloneString(host);
+cache->user = cloneString(user);
+cache->password = cloneString(password);
 return cache;
+}
+
+struct sqlConnCache *sqlNewConnCache(char *database)
+/* Return a new connection cache. */
+{
+char* host = cfgOption("db.host");
+char* user = cfgOption("db.user");
+char* password = cfgOption("db.password");
+if (password == NULL || user == NULL || host == NULL)
+    errAbort("Could not read hostname, user, or password to the database from configuration file.");
+return sqlNewRemoteConnCache(database, host, user, password);
 }
 
 void sqlFreeConnCache(struct sqlConnCache **pCache)
@@ -383,6 +477,9 @@ if ((cache = *pCache) != NULL)
     for (i=0; i<cache->connAlloced; ++i)
 	sqlDisconnect(&cache->connArray[i]);
     freeMem(cache->database);
+    freeMem(cache->host);
+    freeMem(cache->user);
+    freeMem(cache->password);
     freez(pCache);
     }
 }
@@ -403,7 +500,8 @@ for (i=0; i<connAlloced; ++i)
     }
 if (connAlloced >= maxConn)
    errAbort("Too many open sqlConnections to %s for cache", cache->database);
-cache->connArray[connAlloced] = sqlConnect(cache->database);
+cache->connArray[connAlloced] = sqlConnectRemote(cache->host, 
+	cache->user, cache->password, cache->database);
 connUsed[connAlloced] = TRUE;
 ++cache->connAlloced;
 return cache->connArray[connAlloced];
@@ -429,5 +527,22 @@ if ((conn = *pConn) != NULL)
 	}
     *pConn = NULL;
     }
+}
+
+struct hash *sqlHashOfDatabases()
+/* Get hash table with names of all databases that are online. */
+{
+struct sqlResult *sr;
+char **row;
+struct sqlConnection *conn = sqlConnect("mysql");
+struct hash *hash = newHash(8);
+
+sr = sqlGetResult(conn, "show databases");
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    hashAdd(hash, row[0], NULL);
+    }
+sqlDisconnect(&conn);
+return hash;
 }
 

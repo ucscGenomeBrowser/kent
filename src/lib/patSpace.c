@@ -8,7 +8,7 @@
 #include "common.h"
 #include "portable.h"
 #include "dnaseq.h"
-#include "sig.h"
+#include "ooc.h"
 #include "patSpace.h"
 
 #define blockSize (256)
@@ -283,61 +283,10 @@ listSizes = ps->listSizes;
 
 /* Scan through over-popular patterns and set their count to value 
  * where they won't be added to pat space. */
-if (oocFileName != NULL)
-    {
-    bits32 sig, psz;
-    FILE *f = mustOpen(oocFileName, "rb");
-    boolean mustSwap = FALSE;
+oocMaskCounts(oocFileName, listSizes, ps->seedSize, maxPat);
 
-    mustReadOne(f, sig);
-    mustReadOne(f, psz);
-    if (sig == oocSig)
-	mustSwap = FALSE;
-    else if (sig == oocSigSwapped)
-	{
-	mustSwap = TRUE;
-	psz = byteSwap32(psz);
-	}
-    else
-        errAbort("Bad signature on %s\n", oocFileName);
-    if (psz != ps->seedSize)
-        errAbort("Oligo size mismatch in %s. Expecting %d got %d\n", 
-            oocFileName, ps->seedSize, psz);
-    if (mustSwap)
-	{
-	union {bits32 whole; UBYTE bytes[4];} u,v;
-	while (readOne(f, u))
-	    {
-	    v.bytes[0] = u.bytes[3];
-	    v.bytes[1] = u.bytes[2];
-	    v.bytes[2] = u.bytes[1];
-	    v.bytes[3] = u.bytes[0];
-	    listSizes[v.whole] = maxPat;
-	    }
-	}
-    else
-	{
-	bits32 oli;
-	while (readOne(f, oli))
-	    listSizes[oli] = maxPat;
-	}
-    fclose(f);
-    }
 /* Get rid of simple repeats as well. */
-for (i=0; i<4; ++i)
-    for (j=0; j<4; ++j)
-        {
-        bits32 repeat = 0;
-        for (k=0; k<8; ++k)
-            {
-            repeat <<= 2;
-            repeat |= i;
-            repeat <<= 2;
-            repeat |= j;
-            }
-        repeat &= (ps->seedSpaceSize-1);
-        listSizes[repeat] = maxPat;
-        }
+oocMaskSimpleRepeats(listSizes, ps->seedSize, maxPat);
 
 
 allocPatSpaceLists(ps);

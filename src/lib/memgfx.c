@@ -6,33 +6,79 @@
 #include "common.h"
 #include "memgfx.h"
 #include "gemfont.h"
+#include "localmem.h"
 
-void mgSetDefaultColorMap(struct rgbColor *cmap)
+#define colHashFunc(r,g,b) (r+g+g+b)
+
+#define sign(a)((a>=0)?(1):(-1))
+
+struct colHashEl
+/* An element in a color hash. */
+    {
+    struct colHashEl *next;	/* Next in list. */
+    struct rgbColor col;	/* Color RGB. */
+    int ix;			/* Color Index. */
+    };
+
+struct colHash
+/* A hash on RGB colors. */
+    {
+    struct colHashEl *lists[4*256];	/* Hash chains. */
+    struct colHashEl elBuf[256];	/* Buffer of elements. */
+    struct colHashEl *freeEl;		/* Pointer to next free element. */
+    };
+
+static struct colHash *colHashNew()
+/* Get a new color hash. */
+{
+struct colHash *cHash;
+AllocVar(cHash);
+cHash->freeEl = cHash->elBuf;
+return cHash;
+}
+
+static void colHashFree(struct colHash **pEl)
+/* Free up color hash. */
+{
+freez(pEl);
+}
+
+struct colHashEl *colHashAdd(struct colHash *cHash, unsigned r, unsigned g, unsigned b, int ix)
+/* Add new element to color hash. */
+{
+struct colHashEl *che = cHash->freeEl++, **pCel;
+che->col.r = r;
+che->col.g = g;
+che->col.b = b;
+che->ix = ix;
+pCel = &cHash->lists[colHashFunc(r,g,b)];
+slAddHead(pCel, che);
+return che;
+}
+
+struct colHashEl *colHashLookup(struct colHash *cHash, unsigned r, unsigned g, unsigned b)
+/* Lookup value in hash. */
+{
+struct colHashEl *che;
+for (che = cHash->lists[colHashFunc(r,g,b)]; che != NULL; che = che->next)
+    if (che->col.r == r && che->col.g == g && che->col.b == b)
+	return che;
+return NULL;
+}
+
+static void mgSetDefaultColorMap(struct memGfx *mg)
 /* Set up default color map for a memGfx. */
 {
-    zeroBytes(cmap, 256*3);
-
-    cmap[MG_WHITE].r = 255;
-    cmap[MG_WHITE].g = 255;
-    cmap[MG_WHITE].b = 255;
-
-    cmap[MG_RED].r = 255;
-    cmap[MG_GREEN].g = 255;
-    cmap[MG_BLUE].b = 255;
-
-    cmap[MG_CYAN].g = 255;
-    cmap[MG_CYAN].b = 255;
-
-    cmap[MG_MAGENTA].r = 255;
-    cmap[MG_MAGENTA].b = 255;
-
-    cmap[MG_YELLOW].r = 255;
-    cmap[MG_YELLOW].g = 255;
-
-    cmap[MG_GRAY].r = 140;
-    cmap[MG_GRAY].g = 140;
-    cmap[MG_GRAY].b = 140;
-
+/* Note dependency in order here and in MG_WHITE, MG_BLACK, etc. */
+mgAddColor(mg, 255, 255, 255);
+mgAddColor(mg, 0, 0, 0);
+mgAddColor(mg, 255, 0, 0);
+mgAddColor(mg, 0, 255, 0);
+mgAddColor(mg, 0, 0, 255);
+mgAddColor(mg, 0, 255, 255);
+mgAddColor(mg, 255, 0, 255);
+mgAddColor(mg, 255, 255, 0);
+mgAddColor(mg, 140, 140, 140);
 }
 
 void mgSetClip(struct memGfx *mg, int x, int y, int width, int height)
@@ -65,13 +111,14 @@ struct memGfx *mgNew(int width, int height)
 /* Return new memGfx. */
 {
 struct memGfx *mg;
+int i;
 
 mg = needMem(sizeof(*mg));
 mg->pixels = needLargeMem(width*height);
 mg->width = width;
 mg->height = height;
-mgSetDefaultColorMap(mg->colorMap);
-mg->colorsUsed = MG_FREE_COLORS_START;
+mg->colorHash = colHashNew();
+mgSetDefaultColorMap(mg);
 mgUnclip(mg);
 return mg;
 }
@@ -82,18 +129,23 @@ void mgClearPixels(struct memGfx *mg)
 zeroBytes(mg->pixels, mg->width*mg->height);
 }
 
-Color mgFindColor(struct memGfx *mg, unsigned char r, unsigned char g, unsigned char b)
+Color _mgFindColor(struct memGfx *mg, unsigned char r, unsigned char g, unsigned char b)
 /* Returns closest color in color map to rgb values.  If it doesn't
  * already exist in color map and there's room, it will create
  * exact color in map. */
 {
-Color cc = mgClosestColor(mg, r, g, b);
-struct rgbColor *c = mg->colorMap + cc;
-if (c->r == r && c->g == g && c->b == b)
-    return cc;
+struct colHashEl *che;
+if ((che = colHashLookup(mg->colorHash, r, g, b)) != NULL)
+    return che->ix;
 if (mgColorsFree(mg))
     return mgAddColor(mg, r, g, b);
-return cc;
+return mgClosestColor(mg, r, g, b);
+}
+
+Color mgFindColor(struct memGfx *mg, unsigned char r, unsigned char g, unsigned char b)
+{
+Color c = _mgFindColor(mg, r, g, b);
+return c;
 }
 
 Color mgClosestColor(struct memGfx *mg, unsigned char r, unsigned char g, unsigned char b)
@@ -128,11 +180,13 @@ Color mgAddColor(struct memGfx *mg, unsigned char r, unsigned char g, unsigned c
 int colIx = mg->colorsUsed;
 if (colIx < 256)
     {
+    struct rgbColor *mapPos;
     struct rgbColor *c = mg->colorMap + mg->colorsUsed;
     c->r = r;
     c->g = g;
     c->b = b;
     mg->colorsUsed += 1;
+    colHashAdd(mg->colorHash, r, g, b, colIx);;
     }
 return (Color)colIx;
 }
@@ -150,6 +204,7 @@ if (mg != NULL)
     {
     if (mg->pixels != NULL)
 	freeMem(mg->pixels);
+    colHashFree(&mg->colorHash);
     zeroBytes(mg, sizeof(*mg));
     freeMem(mg);
     }
@@ -405,7 +460,7 @@ void mgText(struct memGfx *mg, int x, int y, Color color,
 	MgFont *font, char *text)
 /* Draw a line of text with upper left corner x,y. */
 {
-gfText(mg, font, text, x, y, color, mgTextBlit, MG_WHITE);
+gfText(mg, font, text, x, y-1, color, mgTextBlit, MG_WHITE);
 }
 
 void mgTextCentered(struct memGfx *mg, int x, int y, int width, int height, 
@@ -426,6 +481,24 @@ if (font == mgSmallFont())
 mgText(mg, xoff, yoff, color, font, text);
 }
 
+void mgTextRight(struct memGfx *mg, int x, int y, int width, int height, 
+	Color color, MgFont *font, char *text)
+/* Draw a line of text right justified in box defined by x/y/width/height */
+{
+int fWidth, fHeight;
+int xoff, yoff;
+fWidth = mgFontStringWidth(font, text);
+fHeight = mgFontPixelHeight(font);
+xoff = x + width - fWidth - 1;
+yoff = y + (height - fHeight)/2;
+if (font == mgSmallFont())
+    {
+    xoff += 1;
+    yoff += 1;
+    }
+mgText(mg, xoff, yoff, color, font, text);
+}
+
 int mgFontPixelHeight(MgFont *font)
 /* How high in pixels is font? */
 {
@@ -435,7 +508,8 @@ return font_cel_height(font);
 int mgFontLineHeight(MgFont *font)
 /* How many pixels to next line ideally? */
 {
-return font_cel_height(font) * 9/8 + 1;
+int celHeight = font_cel_height(font);
+return celHeight + 1 + (celHeight/5);
 }
 
 int mgFontWidth(MgFont *font, char *chars, int charCount)
@@ -545,8 +619,174 @@ mgDrawRulerBumpText(mg, xOff, yOff, height, width, color, font,
 }
 
 
+
+void mgDrawXSlopedLineAntiAlias( struct memGfx *mg,   Color *pt1, Color *pt1Home, double slope, int mult, int w, double h, Color *colors, double colRange )
+    /*draws a sloped line that is dominated by x-component movement
+     * with anti-aliasing in the sense that for the y-value 0.3 with a
+     * 1 pixel thick line the shading is 70% in the lower pixel and
+     * 30% in the top pixel. A value such as 2.0 would only occupy one
+     * pixel with 100% shading.*/
+{
+
+int j;
+int yLower, pLower;
+int yUpper, pUpper;
+double sum = 0.0;
+for (j=0; j<w; j += 1)
+    {
+    sum += slope;
+
+    yLower = min(abs((int)sum),(int)h);
+    yUpper = min(abs((int)sum)+1,(int)h);
+    pUpper = (int)(colRange * ((double)min(fabs(sum),h) - (double)yLower));
+    pLower = (int)colRange - pUpper;
+
+    if( pUpper != colRange )
+        {
+        pt1 = (mult * yLower) + pt1Home;
+        pt1[j] = colors[max(pLower,3)];
+        }
+
+    if( pLower != colRange )
+        {
+        pt1 = (mult * yUpper) + pt1Home;
+        pt1[j] = colors[max(pUpper,3)];
+        }
+            
+    }
+}
+
+
+void mgDrawYSlopedLineAntiAlias( struct memGfx *mg,   Color *pt1, Color *pt1Home, double slope, int mult, int w, int h, Color *colors, double colRange )
+     /*draws a sloped line that is dominated by y-component movement
+     * with anti-aliasing. See mgDrawXSlopedLineAntiAlias above.*/
+{
+
+int j;
+int yLower, pLower;
+int yUpper, pUpper;
+double sum = 0.0;
+for (j=0; j<h; j += 1)
+    {
+    sum += 1.0 / slope;
+    pt1 += mult;
+
+    yLower = min(abs((int)sum),w);
+    yUpper = min(abs((int)sum)+1,w);
+    pUpper = (int)(colRange * ((double)min(fabs(sum),w) - (double)yLower));
+    pLower = (int)colRange - pUpper;
+
+    if( pUpper != colRange )
+        pt1[yLower] = colors[max(pLower,3)];
+
+    if( pLower != colRange )
+        pt1[yUpper] = colors[max(pUpper,3)];
+            
+    }
+
+}
+
+void mgConnectingLine( struct memGfx *mg, int x1, double y1d, int x2, double y2d, Color *colors )
+/*Draw a line between two points, (x1,y1) to (x2,y2). Will be used
+ * with wiggle tracks to interpolate between samples, connecting the
+ * end of one block to the beginning of the next one.   */
+{
+
+int yLower, pLower;
+int yUpper, pUpper;
+int mult;
+
+int y1i = (int)y1d;
+int y2i = (int)y2d;
+    
+int minY;
+int maxY;
+Color *pt1;
+Color *pt1Home;
+int j;
+int offset;
+double sum, slope;
+int bpr = _mgBpr(mg);
+double h = fabs(y2d-y1d);
+double colRange = 9.0;
+
+if (x1 < mg->clipMinX)
+    x1 = mg->clipMinX;
+if (x2 > mg->clipMaxX)
+    x2 = mg->clipMaxX;
+if ((x2 - x1) <= 0)
+    return;
+
+minY = mg->clipMinY;
+maxY = mg->clipMaxY;
+pt1Home = pt1 = _mgPixAdr(mg,x1,y1i);
+offset = 0;
+
+slope = (double)(y2d - y1d)/(double)(x2-x1);
+mult = bpr * sign(slope);
+sum = 0.0;
+
+
+if (minY <= y1i && y1i < maxY
+     && minY <= y2i && y2i < maxY)
+    {
+    if( fabs( slope ) > 1.0 )  /*y-dominated movement*/
+        mgDrawYSlopedLineAntiAlias( mg, pt1, pt1Home, slope, mult, x2-x1,(int)h, colors, colRange );
+    else                    /*x-dominated movement*/
+        mgDrawXSlopedLineAntiAlias( mg, pt1, pt1Home, slope, mult, x2-x1, h, colors, colRange );
+    }
+
+}
+
+void mgDrawPointAntiAlias( struct memGfx *mg, int x1, double y1d, Color *colors )
+    /*Draws a one base dot (or line) at a fractional position
+     * (possibly) between two pixels so 14.2 and 14.3 are displayed differently.*/
+{
+
+int yLower, pLower;
+int yUpper, pUpper;
+    
+int minY;
+int maxY;
+Color *pt1;
+double sum, slope;
+int bpr = _mgBpr(mg);
+int thisMaxY = 10;
+double colRange = 9.0;
+
+int y1i = (int)y1d;
+
+if (x1 < mg->clipMinX)
+    x1 = mg->clipMinX;
+
+minY = mg->clipMinY;
+maxY = mg->clipMaxY;
+pt1 = _mgPixAdr(mg,x1,y1i);
+
+if (minY <= y1i && y1i < maxY )
+    {
+
+    yLower = min(abs((int)y1d), thisMaxY);
+    yUpper = min(abs((int)y1d)+1, thisMaxY );
+    pUpper = (int)(colRange * ((double)min(y1d,thisMaxY) - (double)yLower));
+    pLower = (int)colRange - pUpper;
+
+    if( pUpper != colRange )
+        pt1[0] = colors[pLower];
+
+    pt1 -= bpr;
+    if( pLower != colRange )
+        pt1[0] = colors[pUpper];
+            
+    }
+
+}
+
+
+
 void mgBarbedHorizontalLine(struct memGfx *mg, int x, int y, 
-	int width, int barbHeight, int barbSpacing, int barbDir, Color color)
+	int width, int barbHeight, int barbSpacing, int barbDir, Color color,
+	boolean drawMiddle)
 /* Draw a horizontal line starting at xOff, yOff of given width.  Will
  * put barbs (successive arrowheads) to indicate direction of line.  
  * BarbDir of 1 points barbs to right, of -1 points them to left. */
@@ -573,19 +813,26 @@ minY = mg->clipMinY;
 maxY = mg->clipMaxY;
 homePt = pt = _mgPixAdr(mg,x,y);
 
-#ifdef NEVER
-if (minY <= y && y < maxY)
-    {
-    i = width;
-    while (--i >= 0)
-	*pt++ = color;
-    }
-#endif
 
+/* Draw barbs in middle */
+if (drawMiddle)
+    {
+    if (barbDir < 0)
+	offset = 0;
+    else
+        offset = barbHeight;
+    if (minY <= y && y < maxY)
+        {
+	for (j=offset; j<width; j += barbSpacing)
+	    {
+	    pt[j] = color;
+	    }
+	}
+    }
 
 /* Draw barbs below */
 if (barbDir > 0)
-    startOffset = offset = barbHeight;
+    startOffset = offset = barbHeight-1;
 else if (barbDir < 0)
     startOffset = offset = 1;
 else

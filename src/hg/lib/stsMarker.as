@@ -5,7 +5,7 @@ table stsMarker
     int chromStart; "Start position in chrom - negative 1 if unpositioned"
     uint chromEnd;	"End position in chrom"
     string name;	"Name of STS marker"
-    uint score;	"Score of a marker - depends on how many contigs it hits"
+    uint score;	"Score of a marker = 1000/# of markers it hits"
 
     uint identNo;	"Identification number of STS"
     string ctgAcc;	"Contig accession number"
@@ -26,5 +26,6 @@ table stsMarker
     string fishChrom;		"Chromosome (no chr) from FISH map or 0 if none"
     string beginBand;		"Beginning of range of bands on FISH map"
     string endBand;		"End of range of bands on FISH map"
+    string lab;			"Laboratory that placed the FISH clone"
     )
 

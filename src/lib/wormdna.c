@@ -858,7 +858,7 @@ char *dot = strrchr(name, '.');
 if (dot == NULL)
     return FALSE;
 toUpperN(name, dot-name);   /* First part always upper case. */
-if (dot[1] == 'N')          /* Nameless cluster - just leave following digits be. */
+if (!isdigit(dot[1]))          /* Nameless cluster - just leave following digits be. */
     return TRUE;
 else
     tolowers(dot+1);        /* Suffix is lower case. */
@@ -956,7 +956,9 @@ if (wormIsGeneName(name))
     {
     syn = wormGeneToOrfNames(name);
     if (syn != NULL)
+	{
         name = syn->name;
+	}
     }
 if (wormFixupOrfName(name)) /* See if ORF, and if so make nice. */
     {
@@ -1125,7 +1127,7 @@ struct gdfGene *wormGdfGenesInRange(char *chrom, int start, int end,
     struct wormGdfCache *geneFinder)
 /* Get list of genes in range according to given gene finder. */
 {
-char *dir;
+char *dir = NULL;
 struct gdfGene *gdfList = NULL, *gdf;
 struct wormFeature *nameList, *name;
 

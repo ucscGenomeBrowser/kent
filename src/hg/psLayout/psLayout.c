@@ -16,8 +16,13 @@
 #include "patSpace.h"
 #include "supStitch.h"
 #include "repMask.h"
+#include "cheapcgi.h"
 #include "psl.h"
 
+/* Variables that can be set by command line options. */
+int minMatch = 4;
+int maxBad = 100;
+int minBases = 25;
 
 /* Stuff to help print meaningful error messages when on a
  * compute cluster. */
@@ -53,20 +58,28 @@ errAbort("psLayout - generate alignments for contig layout programs.\n"
          "usage:\n"
          "    psLayout genomeListFile otherListFile type ignore.ooc outputFile [noHead]\n"
 	 "The individual parameters are:\n"
-	 "    genomeListFile - A text file containing a list of .fa files that are\n"
-	 "        generally genomic.  This may contain up to 5 million bases total.\n"
-	 "        The program expects a .fa.out file (from RepeatMasker) to exist\n"
-	 "        for each .fa file in the genomeListFile.\n"
-	 "    otherListFile - A text file containing a list of .fa files that may be\n"
-	 "        genomic or mRNA. These may be of unlimited size\n"
-	 "    type - either the word 'mRNA' or 'genomic' depending on whether\n"
-	 "        you want to allow introns in the alignment or not. g2g is like\n"
-	 "        genomic but only puts out very tight matches. asm is like genomic\n"
-	 "        but does not compute matches of a fragment to itself\n"
-	 "    ignore.ooc - A list of overused tiles, typically 10.ooc.\n"
+	 "    genomeListFile - Either a .fa file or a a text file containing a list of .fa\n"
+	 "        files.  These files are generally genomic.  This may contain up to 64 million\n"
+	 "        bases total on a machine with enough RAM. (On 256 Meg machines it's best to\n"
+	 "        limit it to 30 million bases. The program expects a .fa.out file (from \n"
+	 "        RepeatMasker) to exist for each .fa file in this parameter.\n"
+	 "    otherListFile - A .fa file or a list of .fa files that may be\n"
+	 "        genomic or mRNA. These files may be of unlimited size, but the largest\n"
+	 "        sequence in them should be no more than about 3 megabases.\n"
+	 "    type - either the word 'mRNA' 'genomic' 'g2g' or 'asm'.\n"
+	 "        mRNA - allows introns\n"
+	 "        genomic - no introns. Finds matches of about 94% or better\n"
+	 "        g2g - no introns. Finds matches of about 98% or better\n"
+	 "        asm - no introns. Matches 98% or better. Skips self alignments\n"
+	 "    ignore.ooc - A list of overused tiles, typically 10.ooc. Can be 'none'.\n"
 	 "    outputFile - Where to put the alignments\n"
 	 "    noHead - if the word 'noHead' is present, this will suppress the header\n"
-	 "         so that the output is a simple tab-delimited file");
+	 "             so that the output is a simple tab-delimited file\n"
+	 "Options:\n"
+	 "    -minMatch=N  Minimum number of tiles that must match.  Default 4\n"
+	 "    -maxBad=N    Mismatch/inserts allowed in parts per thousand. Default 100\n"
+	 "    -minBases=N  Minumum number of bases that must match. Default 25\n"
+	 "                 (Repeat bases are worth 1/4 of a unique base in this parameter)\n");
 }
 
 struct repeatTracker
@@ -213,10 +226,10 @@ if (veryTight)
     }
 else
     {
-    passIt = (milliBad < 100 && 
-	(matchCount >= 25 || 
-	 (matchCount >= 15 && matchCount + repMatch >= 50) ||
-	 (repMatch >= 100 && milliBad < 50)));
+    passIt = (milliBad < maxBad && 
+	(matchCount >= minBases || 
+	 (matchCount >= minBases/2 && matchCount + repMatch >= 2*minBases) ||
+	 (repMatch >= 4*minBases && milliBad < (maxBad/2))));
     }
 if (passIt)
     {
@@ -362,6 +375,31 @@ for (i=0; i<oldCount; ++i)
 *pFileCount = okFileCount;
 }
 
+void readAllWordsOrFa(char *fileName, char ***retFiles, int *retFileCount, 
+   char **retBuf)
+/* Open a file and check if it is .fa.  If so return just that
+ * file in a list of one.  Otherwise read all file and treat file
+ * as a list of filenames.  */
+{
+FILE *f = mustOpen(fileName, "r");
+char c = fgetc(f);
+
+fclose(f);
+if (c == '>')
+    {
+    char **files;
+    *retFiles = AllocArray(files, 1);
+    *retBuf = files[0] = cloneString(fileName);
+    *retFileCount = 1;
+    return;
+    }
+else
+    {
+    readAllWords(fileName, retFiles, retFileCount, retBuf);
+    }
+}
+
+
 int main(int argc, char *argv[])
 {
 char *genoListName;
@@ -391,9 +429,14 @@ struct repeatTracker *rt;
 struct hash *repeatHash = newHash(10);
 
 hostName = getenv("HOST");
-
 pushWarnHandler(warnHandler);
-startTime = clock1000();
+
+startTime = clock1();
+cgiSpoof(&argc, argv);
+minMatch = cgiOptionalInt("minMatch", minMatch);
+maxBad = cgiOptionalInt("maxBad", maxBad);
+minBases = cgiOptionalInt("minBases", minBases);
+
 dnaUtilOpen();
 
 #ifdef DEBUG
@@ -415,6 +458,8 @@ genoListName = argv[1];
 otherListName = argv[2];
 typeName = argv[3];
 oocFileName = argv[4];
+if (sameWord(oocFileName, "none"))
+    oocFileName = NULL;
 outName = argv[5];
 if (argc == 7)
     {
@@ -451,18 +496,17 @@ else
     usage();
     }
 
-readAllWords(genoListName, &genoList, &genoListSize, &genoListBuf);
+readAllWordsOrFa(genoListName, &genoList, &genoListSize, &genoListBuf);
 filterMissingFiles(genoList, &genoListSize);
 if (genoListSize <= 0)
     errAbort("There are no files that exist in %s\n", genoListName);
-readAllWords(otherListName, &otherList, &otherListSize, &otherListBuf);
+readAllWordsOrFa(otherListName, &otherList, &otherListSize, &otherListBuf);
 if (otherListSize <= 0)
     errAbort("There are no files that exist in %s\n", otherListName);
 filterMissingFiles(otherList, &otherListSize);
 out = mustOpen(outName, "w");
 if (!noHead)
     pslWriteHead(out);
-
 
 AllocArray(seqListList, genoListSize);
 for (i=0; i<genoListSize; ++i)
@@ -485,10 +529,9 @@ for (i=0; i<genoListSize; ++i)
     storeMasked(repeatHash, genoName);
     }
 
-patSpace = makePatSpace(seqListList, genoListSize, seedSize, oocFileName,
-    4, 2000);
-endTime = clock1000();
-printf("Made index in %4.3f seconds\n",  (endTime-startTime)*0.001);
+patSpace = makePatSpace(seqListList, genoListSize, seedSize, oocFileName, minMatch, 2000);
+endTime = clock1();
+printf("Made index in %d seconds\n",  (endTime-startTime));
 startTime = endTime;
 
 for (i=0; i<otherListSize; ++i)
@@ -519,8 +562,8 @@ for (i=0; i<otherListSize; ++i)
     fclose(f);
     }
 freePatSpace(&patSpace);
-endTime = clock1000();
-printf("Alignment time is %4.2f\n", 0.001*(endTime-startTime));
+endTime = clock1();
+printf("Alignment time is %d sec\n", (endTime-startTime));
 startTime = endTime;
 fclose(out);
 return 0;

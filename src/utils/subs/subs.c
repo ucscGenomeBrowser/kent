@@ -389,8 +389,9 @@ fclose(sfile);
 static int llcount;
 static char *ltitle;
 static Boolean dirty;
+
 /* "double" buffer for actual substitution */
-static char b1[1024], b2[2048];
+static char b1[128*1024], b2[128*1024];
 
 void report_sub(Sub *sb)
 /******************************************************************

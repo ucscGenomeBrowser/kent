@@ -1,5 +1,5 @@
 .c.o:
-	gcc -Wimplicit -I../../inc -c $*.c
+	gcc -Wformat -Wimplicit -Wuninitialized -I../../inc -c $*.c
 
 O = addCols.o 
 

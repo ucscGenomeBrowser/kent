@@ -633,3 +633,107 @@
 387 - Up to ooGreedy 97 and then back down to 96.  (See ooGreedy/version.doc
       for details).
 388 - Trying to set things up for CVS.
+389 - Seems to be under CVS.  I'm still saving sequentially numbered
+      .zip files.  Hopefully I'll get into the habit of adding everything
+      to the CVS archive that needs adding as a make it.  
+         Also working on unpacking the NT contigs in .gl and gold files.
+390 - Adding DNA sequence info to page that comes up in browser when
+      you click on a known gene.
+391 - Starting on 'genoFind' program which will ultimately sit on
+      kks00 with an index of the human genome in RAM, servicing
+      requests for alignments quickly.
+392 - Modularized and improved genoFind.  Server is 'gfServer' now.
+393 - Made 'gfClient' which produces a (headless) .psl file.
+394 - Fairly well hacked fast sequence searching into genome browser.
+395 - Renamed fast sequence searcher 'BLAT' in UI, and generally
+      polished it in UI.
+396 - Fixed various small BLAT bugs.  Starting on translated protein
+      version.
+397 - Made cgiSpoof capable of handling normal as well as cgi-style
+      command options for the most part.  Added -cvs option to
+      newProg, which will cause it to add the new program to
+      the cvs repository.  Small changes to exonAli and waba.
+398 - Added exoMouse track to browser.
+399 - Fixed BLAT memory leak and added status command.  Work associated
+      with Intronerator update.
+400 - gfServer takes tileSize and minMatch command line parameters.  Various
+      other Intronerator update stuff.  Made hgBlat produce big input
+      box.
+401 - Fixed Y chromosome bug in assembly.  Fixed a few blat bugs and made
+      a stand-alone command line version of blat.  Chuck and I working on
+      Rosetta expression track.
+402 - Starting work on blatp, blatx and tblatx
+403 - blatp, blatx and tblatx are working in stand-alone.
+404 - blatx client/server starting to work.
+405 - protein/translated DNA blat searches starting to work on the web.
+      Displays well in hgTracks.  hgc still needs to show detailed
+      alignment.
+406 - hgc shows detailed protein/translated DNA alignments.  Major
+      blat speed tweaking (about 5x as fast as before) from:
+           o - Putting hit list in local memory.
+	   o - Partial bucket sort on target start to break
+	       up (taming nlogn a little) major sort on hit
+	       diagonal.
+	   o - Custom hit diagonal sort routine.
+407 - Fixed blat standalone bug where it only worked on one sequence
+      databases.  Made hgBlat front end do protein as well as DNA.
+      Bringing stuff over to Lincoln Stein's lab.
+408 - hgBlat does translated dna/rna.
+409 - Various refinements to blat.
+410 - Added 'allow one miss in tile' and long tile sizes (up to
+      8 in protein, 18 in amino acids) to blat.
+411 - A little blat debugging.  Tweaked score function in ssStitch
+      and rationalized stringency parameters.
+412 - Adding in preliminary blat mouse alignment tracks on 21 and 22.
+413 - Added in full genome blat mouse alignment track.
+414 - Fixed Solaris-only BLAT bugs.  
+415 - Fixed a couple of rare translated-blat bugs.
+416 - Made blat find smaller internal exons.  (This was seemingly
+      done in version 304 above, but somehow slipped out).
+417 - blat handles RepeatMasker .out and lower-case repeatMasking
+      now.  (Will not initiate an alignment on a repeat, but will
+      extend through repeats).
+418 - Various small fixes including fix to refSeq derived known genes
+      code which had problems with CDS regions on the minus strand.
+      Code to correlate mouse alignments with known genes.
+419 - Made -t=dnax -q=rnax do better stitching in BLAT.
+420 - Made gfClient compile again.  Some hgTracks/hgc work by
+      Krish and me.
+421 - Minor fixes.  Browser changes.
+422 - BLAT fix for proteins that have too many matches.  Start of
+      DAS server.
+423 - Starting on autoXml.
+424 - AutoXml is done.  Fixed an off-by-one problem in blat target
+      insert calculations.  Browser tracks now are taken from
+      trackDb table in database.  Other odds and ends.
+425 - Mostly tinkering to fix some TPF related problems in GigAssembler.
+426 - Working on mouse conservation stuff mostly.
+427 - More TPF adaptation of GigAssembler.  BLAT handles longer
+      query sequences now.
+428 - A little tinkering on browser and some stats code.
+429 - Made hg/convCoord compile again.  Added fancy DNA fetching options
+      to browser.
+430 - More fancy DNA fancy fetching.  Recompiled from scratch to make sure
+      code is complete.
+431 - Made jabba job control system to sit on top of Codine.  Fixed (I hope)
+      a blat bug that Steve Roels noticed that led to slow, buggy results in
+      some instances where there were matches to the query spread out all over
+      very large regions in the genome.
+432 - Polishing Jabba.  Added Chuck's hgCoordConv program to source.
+      Minor tweaks to browser and blat.
+433 - Polishing browser a little.  Some small BLAT improvements and
+      bug fixes.
+434 - Adding a few tracks to browser.   About to make a big change to 
+      browser.
+435 - Putting in individual track UI for browser.  (Currently ifdefed out)
+436 - Individual track UI back in.  Put 'cart' persistent state into
+      browser.  This version is EXPERIMENTAL.   MIRRORS SHOULD NOT BUILD
+      BROWSERS FROM THIS SOURCE.
+437 - Cart seems to work.
+438 - Fixed bug where EST & mRNA tracks weren't collapsing when they
+      had too many items.  This was introduced in 435.  Fixed bug
+      where blat details page was off introduced who knows when.
+439 - Adapting browser to work with NCBI assembly.  Made blat 
+      handle lower-case masking of database in translated mode.
+      Various minor bug fixes.  Start of several new browser
+      features by other UCSC people.

@@ -11,9 +11,6 @@ void bedStaticLoad(char **row, struct bed *ret)
 /* Load a row from bed table into ret.  The contents of ret will
  * be replaced at the next call to this function. */
 {
-int sizeOne,i;
-char *s;
-
 ret->chrom = row[0];
 ret->chromStart = sqlUnsigned(row[1]);
 ret->chromEnd = sqlUnsigned(row[2]);
@@ -25,9 +22,6 @@ struct bed *bedLoad(char **row)
  * from database.  Dispose of this with bedFree(). */
 {
 struct bed *ret;
-int sizeOne,i;
-char *s;
-
 AllocVar(ret);
 ret->chrom = cloneString(row[0]);
 ret->chromStart = sqlUnsigned(row[1]);
@@ -42,7 +36,6 @@ struct bed *bedCommaIn(char **pS, struct bed *ret)
  * return a new bed */
 {
 char *s = *pS;
-int i;
 
 if (ret == NULL)
     AllocVar(ret);
@@ -63,6 +56,10 @@ struct bed *el;
 if ((el = *pEl) == NULL) return;
 freeMem(el->chrom);
 freeMem(el->name);
+freeMem(el->blockSizes);
+freeMem(el->chromStarts);
+freeMem(el->expIds);
+freeMem(el->expScores);
 freez(pEl);
 }
 
@@ -84,15 +81,15 @@ void bedOutput(struct bed *el, FILE *f, char sep, char lastSep)
 {
 int i;
 if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->chrom, sep);
+fprintf(f, "%s", el->chrom);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
-fprintf(f, "%u", el->chromStart, sep);
+fprintf(f, "%u", el->chromStart);
 fputc(sep,f);
-fprintf(f, "%u", el->chromEnd, sep);
+fprintf(f, "%u", el->chromEnd);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->name, lastSep);
+fprintf(f, "%s", el->name);
 if (sep == ',') fputc('"',f);
 fputc(lastSep,f);
 }
@@ -109,6 +106,14 @@ dif = strcmp(a->chrom, b->chrom);
 if (dif == 0)
     dif = a->chromStart - b->chromStart;
 return dif;
+}
+
+int bedCmpScore(const void *va, const void *vb)
+/* Compare to sort based on score - lowest first. */
+{
+const struct bed *a = *((struct bed **)va);
+const struct bed *b = *((struct bed **)vb);
+return a->score - b->score;
 }
 
 struct bedLine *bedLineNew(char *line)
@@ -211,5 +216,229 @@ for (bl = blList; bl != NULL; bl = bl->next)
 	}
     }
 fclose(f);
+}
+
+struct bed *bedLoad3(char **row)
+/* Load first three fields of bed. */
+{
+struct bed *ret;
+AllocVar(ret);
+ret->chrom = cloneString(row[0]);
+ret->chromStart = sqlUnsigned(row[1]);
+ret->chromEnd = sqlUnsigned(row[2]);
+return ret;
+}
+
+struct bed *bedLoad5(char **row)
+/* Load first five fields of bed. */
+{
+struct bed *ret;
+AllocVar(ret);
+ret->chrom = cloneString(row[0]);
+ret->chromStart = sqlUnsigned(row[1]);
+ret->chromEnd = sqlUnsigned(row[2]);
+ret->name = cloneString(row[3]);
+ret->score = sqlSigned(row[4]);
+return ret;
+}
+
+struct bed *bedLoad12(char **row)
+/* Load a bed from row fetched with select * from bed
+ * from database.  Dispose of this with bedFree(). */
+{
+struct bed *ret;
+int sizeOne,i;
+char *s;
+
+AllocVar(ret);
+ret->blockCount = sqlSigned(row[9]);
+ret->chrom = cloneString(row[0]);
+ret->chromStart = sqlUnsigned(row[1]);
+ret->chromEnd = sqlUnsigned(row[2]);
+ret->name = cloneString(row[3]);
+ret->score = sqlSigned(row[4]);
+strcpy(ret->strand, row[5]);
+ret->thickStart = sqlUnsigned(row[6]);
+ret->thickEnd = sqlUnsigned(row[7]);
+ret->reserved = sqlUnsigned(row[8]);
+sqlSignedDynamicArray(row[10], &ret->blockSizes, &sizeOne);
+assert(sizeOne == ret->blockCount);
+sqlSignedDynamicArray(row[11], &ret->chromStarts, &sizeOne);
+assert(sizeOne == ret->blockCount);
+return ret;
+}
+
+
+struct bed *bedLoadN(char *row[], int wordCount)
+/* Convert a row of strings to a bed. */
+{
+struct bed * bed;
+int count;
+
+AllocVar(bed);
+bed->chrom = cloneString(row[0]);
+bed->chromStart = sqlUnsigned(row[1]);
+bed->chromEnd = sqlUnsigned(row[2]);
+if (wordCount > 3)
+     bed->name = cloneString(row[3]);
+if (wordCount > 4)
+     bed->score = sqlSigned(row[4]);
+if (wordCount > 5)
+     bed->strand[0] = row[5][0];
+if (wordCount > 6)
+     bed->thickStart = sqlUnsigned(row[6]);
+else
+     bed->thickStart = bed->chromStart;
+if (wordCount > 7)
+     bed->thickEnd = sqlUnsigned(row[7]);
+else
+     bed->thickEnd = bed->chromEnd;
+if (wordCount > 8)
+    bed->reserved = sqlUnsigned(row[8]);
+if (wordCount > 9)
+    bed->blockCount = sqlUnsigned(row[9]);
+if (wordCount > 10)
+    sqlSignedDynamicArray(row[10], &bed->blockSizes, &count);
+if (wordCount > 11)
+    sqlSignedDynamicArray(row[11], &bed->chromStarts, &count);
+if (wordCount > 12)
+    bed->expCount = sqlUnsigned(row[12]);
+if (wordCount > 13)
+    sqlSignedDynamicArray(row[13], &bed->expIds, &count);
+if (wordCount > 14)
+    sqlFloatDynamicArray(row[14], &bed->expScores, &count);
+return bed;
+}
+
+void bedOutputN(struct bed *el, int wordCount, FILE *f, char sep, char lastSep)
+/* Write a bed of wordCount fields. */
+{
+int i;
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->chrom);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+fprintf(f, "%u", el->chromStart);
+fputc(sep,f);
+fprintf(f, "%u", el->chromEnd);
+if (wordCount <= 3)
+    {
+    fputc(lastSep, f);
+    return;
+    }
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->name);
+if (sep == ',') fputc('"',f);
+if (wordCount <= 4)
+    {
+    fputc(lastSep, f);
+    return;
+    }
+fputc(sep,f);
+fprintf(f, "%d", el->score);
+if (wordCount <= 5)
+    {
+    fputc(lastSep, f);
+    return;
+    }
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->strand);
+if (sep == ',') fputc('"',f);
+if (wordCount <= 6)
+    {
+    fputc(lastSep, f);
+    return;
+    }
+fputc(sep,f);
+fprintf(f, "%u", el->thickStart);
+if (wordCount <= 7)
+    {
+    fputc(lastSep, f);
+    return;
+    }
+fputc(sep,f);
+fprintf(f, "%u", el->thickEnd);
+if (wordCount <= 8)
+    {
+    fputc(lastSep, f);
+    return;
+    }
+fputc(sep,f);
+fprintf(f, "%u", el->reserved);
+if (wordCount <= 9)
+    {
+    fputc(lastSep, f);
+    return;
+    }
+fputc(sep,f);
+fprintf(f, "%d", el->blockCount);
+if (wordCount <= 10)
+    {
+    fputc(lastSep, f);
+    return;
+    }
+fputc(sep,f);
+if (sep == ',') fputc('{',f);
+for (i=0; i<el->blockCount; ++i)
+    {
+    fprintf(f, "%d", el->blockSizes[i]);
+    fputc(',', f);
+    }
+if (sep == ',') fputc('}',f);
+if (wordCount <= 11)
+    {
+    fputc(lastSep, f);
+    return;
+    }
+fputc(sep,f);
+if (sep == ',') fputc('{',f);
+for (i=0; i<el->blockCount; ++i)
+    {
+    fprintf(f, "%d", el->chromStarts[i]);
+    fputc(',', f);
+    }
+if (sep == ',') fputc('}',f);
+
+if (wordCount <= 12)
+    {
+    fputc(lastSep, f);
+    return;
+    }
+fputc(sep,f);
+fprintf(f, "%d", el->expCount);
+
+if (wordCount <= 13)
+    {
+    fputc(lastSep, f);
+    return;
+    }
+fputc(sep,f);
+if (sep == ',') fputc('{',f);
+for (i=0; i<el->expCount; ++i)
+    {
+    fprintf(f, "%d", el->expIds[i]);
+    fputc(',', f);
+    }
+if (sep == ',') fputc('}',f);
+
+
+if (wordCount <= 14)
+    {
+    fputc(lastSep, f);
+    return;
+    }
+fputc(sep,f);
+if (sep == ',') fputc('{',f);
+for (i=0; i<el->expCount; ++i)
+    {
+    fprintf(f, "%f", el->expScores[i]);
+    fputc(',', f);
+    }
+if (sep == ',') fputc('}',f);
+
+
+fputc(lastSep,f);
 }
 

@@ -633,8 +633,8 @@ DNA b;
 int nCount = 0;
 boolean isN, lastIsN = TRUE;
 boolean open = FALSE;
-int nFirstIx;
-int firstIx;
+int nFirstIx = 0;
+int firstIx = 0;
 
 for (i=0; i<dnaSize; ++i)
     {
@@ -955,7 +955,9 @@ else
     warn("Unexpected %s style on %s", styleName, accession);
     return FALSE;
     }
+return FALSE;
 }
+
 void bacWrite(char *faDir, char *accession, int version, DNA *dna, int dnaSize)
 /* Write all the contigs of one BAC to a file. */
 {
@@ -1065,6 +1067,11 @@ while (readGbInfo(lf))
         flatten(gbStruct);
                 
         /* Get additional keys. */
+	if (com != NULL)
+	    {
+	    if (startsWith("REVIEWED", com))
+	        kvtAdd(kvt, "cur", "yes");
+	    }
 	sprintf(verNum, "%d", version);
 	kvtAdd(kvt, "ver", verNum);
 	if (gi != NULL)
@@ -1087,6 +1094,12 @@ while (readGbInfo(lf))
             kvtAdd(kvt, "cat", words[3]);
             kvtAdd(kvt, "dat", date);
             }
+	else if (wordCount == 5 && sameString(words[2], "bp") && isdigit(words[1][0]))
+	    {
+	    char *mol = words[3];
+	    if (sameString(mol, "mRNA") || sameString(mol, "DNA"))
+		kvtAdd(kvt, "mol", mol);
+	    }
         else
             {
 	    int i;
@@ -1096,7 +1109,8 @@ while (readGbInfo(lf))
 	    uglyf("\n");
             errAbort("Short LOCUS line in %s accession %s", inName, accession);
             }
-        if (sameString(words[4], "EST"))
+        if (wordCount >= 5 && sameString(words[4], "EST") || 
+	    wordCount >= 6 && sameString(words[5], "EST"))
             {
             /* Try and figure out if it's a 3' or 5' EST */
             char *def = definitionField->val;

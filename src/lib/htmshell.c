@@ -18,7 +18,7 @@
 #include "errabort.h"
 #include "dnautil.h"
 
-static jmp_buf htmlRecover;
+jmp_buf htmlRecover;
 
 void htmlVaParagraph(char *line, va_list args)
 /* Print a line in it's own paragraph. */
@@ -65,7 +65,7 @@ fprintf(f, "<P><HR ALIGN=\"CENTER\"></P>");
 }
 
 
-static void htmlVaWarn(char *format, va_list args)
+void htmlVaWarn(char *format, va_list args)
 /* Write an error message. */
 {
 htmlHorizontalLine();
@@ -73,8 +73,8 @@ htmlVaParagraph(format,args);
 htmlHorizontalLine();
 }
 
+void htmlAbort()
 /* Terminate HTML file. */
-static void htmlAbort()
 {
 longjmp(htmlRecover, -1);
 }
@@ -84,19 +84,64 @@ void htmlMemDeath()
 errAbort("Out of memory.");
 }
 
+static char *htmlBackground = NULL;
+
+void htmlSetBackground(char *imageFile)
+/* Set background - needs to be called before htmlStart
+ * or htmShell. */
+{
+htmlBackground = imageFile;
+}
+
+//static char *htmlCookieString = NULL;
+
+void htmlSetCookie(char* name, char* value, char* expires, char* path, char* domain, boolean isSecure)
+/* create a cookie with the given stats */
+{
+char* encoded_name;
+char* encoded_value;
+char* encoded_path = NULL;
+
+encoded_name = cgiEncode(name);
+encoded_value = cgiEncode(value);
+if(path != NULL)
+	encoded_path = cgiEncode(path);
+
+printf("Set-Cookie: %s=%s; ", encoded_name, encoded_value);
+
+if(expires != NULL)
+	printf("expires=%s; ", expires);
+
+if(path != NULL)
+	printf("path=%s; ", encoded_path);
+
+if(domain != NULL)
+	printf("domain=%s; ", domain);
+
+if(isSecure == TRUE)
+	printf("secure");
+
+printf("\n");
+}
+
 void _htmStart(FILE *f, char *title)
 /* Write out bits of header that both stand-alone .htmls
  * and CGI returned .htmls need. */
 {
 fputs("<HTML>", f);
 fprintf(f,"<HEAD>\n<TITLE>%s</TITLE>\n</HEAD>\n\n", title);
-fputs("<BODY>\n",f);
+if (htmlBackground == NULL)
+    fputs("<BODY>\n",f);
+else
+    fprintf(f, "<BODY BACKGROUND=\"%s\">\n", htmlBackground);
 }
 
 /* Write the start of an html from CGI */
 void htmlStart(char *title)
 {
-puts("Content-Type:text/html\n");
+puts("Content-Type:text/html");
+puts("\n");
+
 _htmStart(stdout, title);
 }
 
@@ -110,7 +155,7 @@ _htmStart(f, title);
 /* Write the end of an html file */
 void htmEnd(FILE *f)
 {
-fputs("</P>\n\n</BODY>\n</HTML>\n", f);
+fputs("\n</BODY>\n</HTML>\n", f);
 }
 
 /* Write the end of a stand-alone html file */
@@ -163,19 +208,13 @@ status = setjmp(htmlRecover);
 /* Do your main thing. */
 if (status == 0)
     {
-#ifdef DEBUG
-    /* Debugging output */
-    htmlParagraph("Input is:");
-    htmlEchoInput();
-    htmlHorizontalLine();
-#endif /* DEBUG */
-
     doMiddle();
     }
 
 popWarnHandler();
 popAbortHandler();
 }
+
 
 /* Wrap an html file around the passed in function.
  * The passed in function is already in the body. It

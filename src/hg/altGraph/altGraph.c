@@ -314,7 +314,7 @@ while (genoIx < genoCount)
 		    }
 		if (isRc)
 		    reverseComplement(mrna.dna, mrna.size);
-		bunList = ssFindBundles(ps, &mrna, mrna.name, ffCdna);
+		bunList = ssFindBundles(ps, &mrna, mrna.name, ffCdna, FALSE);
 		for (bun = bunList; bun != NULL; bun = bun->next)
 		    {
 		    struct ssFfItem *ffi;

@@ -37,6 +37,7 @@ struct clone
     int fragCount;		/* Number of fragments in clone. */
     struct frag *fragList;	/* List of fragments in clone. */
     int phase;			/* HTG PHASE (3 = finished, 2 = ordered, 1 = draft. */
+    int size;			/* Clone size. */
     };
 
 struct frag
@@ -61,7 +62,7 @@ subChar(frag->name, '.', '_');
 return frag;
 }
 
-char *gsFiles[] = {"finished.finf", "draft.finf", "predraft.finf"};
+char *gsFiles[] = {"finished.finf", "extras.finf", "draft.finf", "predraft.finf"};
 
 struct hash *cloneHash;
 struct clone *cloneList = NULL;
@@ -85,7 +86,7 @@ char *s, *e;
 strcpy(lastClone, "");
 for (i=0; i<ArraySize(gsFiles); ++i)
     {
-    isFin = (i == 0);
+    isFin = (i <= 0);
     sprintf(fileName, "%s/%s", gsDir, gsFiles[i]);
     printf("Reading info from %s\n", fileName);
     lf = lineFileOpen(fileName, TRUE);
@@ -93,6 +94,7 @@ for (i=0; i<ArraySize(gsFiles); ++i)
         {
 	if (!sameString(words[1], lastClone))
 	    {
+	    struct clone *oldClone;
 	    strcpy(lastClone, words[1]);
 	    strcpy(cloneName, words[1]);
 	    AllocVar(clone);
@@ -103,8 +105,15 @@ for (i=0; i<ArraySize(gsFiles); ++i)
 	        errAbort("Bad clone name format line %d of %s\n", lf->lineIx, lf->fileName);
 	    strcpy(clone->version, s);
 	    chopSuffix(cloneName);
-	    if (hashLookup(cloneHash, cloneName))
-	        warn("%s duplicated\n", cloneName);
+	    clone->size = atoi(words[3]);
+	    if ((oldClone = hashFindVal(cloneHash, cloneName)) != NULL)
+		{
+		if (isFin && clone->size == oldClone->size && sameString(clone->version, oldClone->version))
+		    warn("Apparently benign duplication of %s line %d of %s", cloneName, lf->lineIx, lf->fileName);
+		else
+		    warn("%s duplicated line %d of %s (size %d oldSize %d)", cloneName, lf->lineIx, lf->fileName,
+		    	clone->size, oldClone->size);
+		}
 	    hashAddSaveName(cloneHash, cloneName, clone, &clone->name);
 	    clone->isFin = isFin;
 	    slAddHead(&cloneList, clone);
@@ -162,7 +171,10 @@ while (lineFileRow(lf, words))
 	}
     clone->phase = atoi(words[3]);
     if (clone->phase <= 0 || clone->phase > 3)
-	errAbort("Bad phase %s line %d of %s", words[3], lf->lineIx, lf->fileName);
+	{
+	warn("Bad phase %s line %d of %s", words[3], lf->lineIx, lf->fileName);
+	continue;
+	}
     if (clone->phase == 3)
 	{
         if (!clone->isFin)

@@ -143,6 +143,9 @@ switch (f->id)
 			}
 		return(width);
 		}
+    default:
+         internalErr();
+	 return 0;
     }
 }
 
@@ -191,6 +194,6 @@ int font_cel_height(struct font_hdr *f)
 int dy;
 
 dy = f->frm_hgt;
-return(dy + ((dy+3)>>2) );
+return(dy);
 }
 

@@ -139,7 +139,7 @@ slReverse(&qiList);
 /* Write qa file that corresponds to whole contig to
  * standard output. */
 f = stdout;
-sprintf(fileName, "%s/gold.%d", contigDir, ooVersion);
+sprintf(fileName, "%s/gold.%d.noNt", contigDir, ooVersion);
 lf = lineFileOpen(fileName, TRUE);
 while ((wordCount = lineFileChop(lf, words)) != 0)
     {

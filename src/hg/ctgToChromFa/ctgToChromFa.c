@@ -1,5 +1,6 @@
 /* ctgToChromFa - convert contig level fa files to chromosome level. */
 #include "common.h"
+#include "cheapcgi.h"
 #include "linefile.h"
 #include "portable.h"
 #include "hash.h"
@@ -11,7 +12,11 @@ void usage()
 errAbort(
   "ctgToChromFa - convert contig level fa files to chromosome level\n"
   "usage:\n"
-  "   ctgToChromFa chromName inserts chromDir order.lst outFile\n");
+  "   ctgToChromFa chromName inserts chromDir ordered.lst outFile\n"
+  "options:\n"
+  "   spacing=number  - set spacing between contigs to number (default 200000)\n"
+  "   lift=file.lft - set spacing between contigs from lift file. \n"
+  );
 }
 
 char *rmChromPrefix(char *s)
@@ -81,7 +86,19 @@ while (lineFileNext(lf, &line, &lineSize))
 lineFileClose(&lf);
 }
 
-void ctgToChromFa(char *chromName, char *insertFile, char *chromDir, char *orderLst, char *outName)
+struct lift
+/* Info on where contig is in chromosome, read and computed from
+ * a .lft file. */
+    {
+    struct lift *next;	/* Next in list. */
+    char *contig;	/* Allocated in hash, doesn't include chromosome. */
+    int start;		/* Start of contig in chromosome. */
+    int size;		/* Size of contig. */
+    int nBefore;	/* Number of N's to insert before. */
+    };
+
+void ctgToChromFa(char *chromName, char *insertFile, char *chromDir, 
+	char *orderLst, char *outName, struct hash *liftHash)
 /* ctgToChromFa - convert contig level fa files to chromosome level. */
 {
 struct hash *uniq = newHash(0);
@@ -101,12 +118,19 @@ fprintf(f, ">%s\n", chromName);
 while (lineFileNextRow(lf, words, 1))
     {
     char *contig = words[0];
-    int nSize = chromInsertsGapSize(chromInserts, rmChromPrefix(contig), isFirst);
+    int nSize;
+    
+    if (liftHash != NULL)
+        {
+	struct lift *lift = hashMustFindVal(liftHash, contig);
+	nSize = lift->nBefore;
+	}
+    else
+        nSize = chromInsertsGapSize(chromInserts, rmChromPrefix(contig), isFirst);
     hashAddUnique(uniq, contig, NULL);
     addN(f, nSize);
     isFirst = FALSE;
     sprintf(ctgFaName, "%s/%s/%s.fa", chromDir, contig, contig);
-    printf("Processing %s\n", contig);
     if (fileExists(ctgFaName))
         {
 	addFa(f, ctgFaName);
@@ -116,7 +140,6 @@ lineFileClose(&lf);
 if (chromInserts != NULL)
     if  ((bi = chromInserts->terminal) != NULL)
         {
-	uglyf("Adding %d terminal N's\n", bi->size);
 	addN(f, bi->size);
 	}
 if (linePos != 0)
@@ -124,11 +147,44 @@ if (linePos != 0)
 fclose(f);
 }
 
+struct hash *readLift(char *fileName)
+/* Read a lift file into hash */
+{
+int lastEnd = 0;
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+char *row[5];
+struct lift *lift;
+struct hash *hash = newHash(0);
+char *s;
+
+while (lineFileRow(lf, row))
+    {
+    AllocVar(lift);
+    s = strchr(row[1], '/');
+    if (s == NULL)
+        errAbort("Missing chromosome in chrom/contig field line %d of %s", 
+	    lf->lineIx, lf->fileName);
+    s += 1;
+    hashAddSaveName(hash, s, lift, &lift->contig);
+    lift->start = lineFileNeedNum(lf, row, 0);
+    lift->size = lineFileNeedNum(lf, row, 2);
+    lift->nBefore = lift->start - lastEnd;
+    lastEnd = lift->start + lift->size;
+    }
+return hash;
+}
+
 int main(int argc, char *argv[])
 /* Process command line. */
 {
+struct hash *liftHash = NULL;
+cgiSpoof(&argc, argv);
 if (argc != 6)
     usage();
-ctgToChromFa(argv[1], argv[2], argv[3], argv[4], argv[5]);
+if (cgiVarExists("spacing"))
+    chromInsertsSetDefaultGapSize(cgiInt("spacing"));
+if (cgiVarExists("lift"))
+    liftHash = readLift(cgiString("lift"));
+ctgToChromFa(argv[1], argv[2], argv[3], argv[4], argv[5], liftHash);
 return 0;
 }

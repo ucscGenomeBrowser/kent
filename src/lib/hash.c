@@ -53,6 +53,26 @@ hash->table[hashVal] = el;
 return el;
 }
 
+void *hashRemove(struct hash *hash, char *name)
+/* Remove item of the given name from hash table. 
+ * Returns value of removed item. */
+{
+struct hashEl *hel;
+void *ret;
+struct hashEl **pBucket = &hash->table[hashCrc(name)&hash->mask];
+for (hel = *pBucket; hel != NULL; hel = hel->next)
+    if (sameString(hel->name, name))
+        break;
+if (hel == NULL)
+    {
+    warn("Trying to remove non-existant %s from hash", name);
+    return NULL;
+    }
+ret = hel->val;
+slRemoveEl(pBucket, hel);
+return ret;
+}
+
 struct hashEl *hashAddUnique(struct hash *hash, char *name, void *val)
 /* Add new element to hash table. Squawk and die if not unique */
 {
@@ -169,6 +189,46 @@ for (i=0; i<hash->size; ++i)
     }
 }
 
+int hashElCmp(const void *va, const void *vb)
+/* Compare two hashEl by name. */
+{
+const struct hashEl *a = *((struct hashEl **)va);
+const struct hashEl *b = *((struct hashEl **)vb);
+return strcmp(a->name, b->name);
+}
+
+struct hashEl *hashElListHash(struct hash *hash)
+/* Return a list of all elements of hash.   Free return with hashElFreeList. */
+{
+int i;
+struct hashEl *hel, *dupe, *list = NULL;
+for (i=0; i<hash->size; ++i)
+    {
+    for (hel = hash->table[i]; hel != NULL; hel = hel->next)
+	{
+	dupe = CloneVar(hel);
+	slAddHead(&list, dupe);
+	}
+    }
+return list;
+}
+
+
+void hashElFree(struct hashEl **pEl)
+/* Free hash el list returned from hashListAll.  (Don't use
+ * this internally.) */
+{
+freez(pEl);
+}
+
+void hashElFreeList(struct hashEl **pList)
+/* Free hash el list returned from hashListAll.  (Don't use
+ * this internally. */
+{
+slFreeList(pList);
+}
+
+
 void freeHash(struct hash **pHash)
 /* Free up hash table. */
 {
@@ -190,3 +250,4 @@ if ((hash = *pHash) != NULL)
     freeHash(pHash);
     }
 }
+

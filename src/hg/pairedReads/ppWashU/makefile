@@ -3,7 +3,7 @@
 
 L = -lm
 MYLIBDIR = ../../../lib/$(MACHTYPE)
-MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
+MYLIBS =  $(MYLIBDIR)/jkweb.a $(MYLIBDIR)/jkhgap.a
 
 O = ppWashU.o
 

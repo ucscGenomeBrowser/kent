@@ -9,6 +9,7 @@ O = gpStats.o
 
 gpStats: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/gpStats $O $(MYLIBS) $L
+	strip $(HOME)/bin/$(MACHTYPE)/gpStats
 
 
 lib:

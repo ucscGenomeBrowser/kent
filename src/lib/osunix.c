@@ -32,6 +32,11 @@ static double scale = 1000.0/CLOCKS_PER_SEC;
 return round(scale*clock());
 }
 
+long clock1()
+/* A seconds clock. */
+{
+return clock()/CLOCKS_PER_SEC;
+}
 
 void uglyfBreak()
 /* Go into debugger. */
@@ -79,7 +84,7 @@ while ((de = readdir(d)) != NULL)
     char *fileName = de->d_name;
     if (differentString(fileName, ".") && differentString(fileName, ".."))
 	{
-	if (wildMatch(pattern, fileName))
+	if (pattern == NULL || wildMatch(pattern, fileName))
 	    {
 	    name = newSlName(fileName);
 	    slAddHead(&list, name);
@@ -123,7 +128,9 @@ if ((err = mkdir(dirName, 0777)) < 0)
 	perror("");
 	errAbort("Couldn't make directory %s", dirName);
 	}
+    return FALSE;
     }
+return TRUE;
 }
 
 
@@ -149,7 +156,7 @@ while ((de = readdir(d)) != NULL)
     char *fileName = de->d_name;
     if (differentString(fileName, ".") && differentString(fileName, ".."))
 	{
-	if (wildMatch(pattern, fileName))
+	if (pattern == NULL || wildMatch(pattern, fileName))
 	    {
 	    struct stat st;
 	    bool isDir = FALSE;

@@ -121,48 +121,48 @@ void rmskOutOutput(struct rmskOut *el, FILE *f, char sep, char lastSep)
 /* Print out rmskOut.  Separate fields with sep. Follow last field with lastSep. */
 {
 int i;
-fprintf(f, "%u", el->swScore, sep);
+fprintf(f, "%u", el->swScore);
 fputc(sep,f);
-fprintf(f, "%u", el->milliDiv, sep);
+fprintf(f, "%u", el->milliDiv);
 fputc(sep,f);
-fprintf(f, "%u", el->milliDel, sep);
+fprintf(f, "%u", el->milliDel);
 fputc(sep,f);
-fprintf(f, "%u", el->milliIns, sep);
-fputc(sep,f);
-if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->genoName, sep);
-if (sep == ',') fputc('"',f);
-fputc(sep,f);
-fprintf(f, "%u", el->genoStart, sep);
-fputc(sep,f);
-fprintf(f, "%u", el->genoEnd, sep);
-fputc(sep,f);
-fprintf(f, "%d", el->genoLeft, sep);
+fprintf(f, "%u", el->milliIns);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->strand, sep);
+fprintf(f, "%s", el->genoName);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
+fprintf(f, "%u", el->genoStart);
+fputc(sep,f);
+fprintf(f, "%u", el->genoEnd);
+fputc(sep,f);
+fprintf(f, "%d", el->genoLeft);
+fputc(sep,f);
 if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->repName, sep);
+fprintf(f, "%s", el->strand);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->repClass, sep);
+fprintf(f, "%s", el->repName);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->repFamily, sep);
+fprintf(f, "%s", el->repClass);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
-fprintf(f, "%d", el->repStart, sep);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->repFamily);
+if (sep == ',') fputc('"',f);
 fputc(sep,f);
-fprintf(f, "%u", el->repEnd, sep);
+fprintf(f, "%d", el->repStart);
 fputc(sep,f);
-fprintf(f, "%d", el->repLeft, sep);
+fprintf(f, "%u", el->repEnd);
+fputc(sep,f);
+fprintf(f, "%d", el->repLeft);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->id, lastSep);
+fprintf(f, "%s", el->id);
 if (sep == ',') fputc('"',f);
 fputc(lastSep,f);
 }
@@ -235,9 +235,9 @@ char *class, *family;
 
 if ((wordCount = lineFileChop(lf, words)) == 0)
     return NULL;
-if (wordCount < 14 || wordCount > 15)
-    errAbort("Expecting 14 words line %d of %s", lf->lineIx, lf->fileName);
-if (wordCount == 15)
+if (wordCount < 14 )
+    errAbort("Expecting at least 14 words line %d of %s", lf->lineIx, lf->fileName);
+if (wordCount >= 15)
     id = words[14][0];
 else
     id = 0;

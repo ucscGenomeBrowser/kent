@@ -13,9 +13,19 @@ struct bed
     unsigned chromStart;	/* Start position in chromosome */
     unsigned chromEnd;	/* End position in chromosome */
     char *name;	/* Name of item */
+
     /* The following items are not loaded by   the bedLoad routines. */
-    uint score; /* Score - 0-1000 */
-    char strand[2];  /* + or - */
+    int score; /* Score - 0-1000 */
+    char strand[2];  /* + or -.  */
+    unsigned thickStart; /* Start of where display should be thick (start codon for genes) */
+    unsigned thickEnd;   /* End of where display should be thick (stop codon for genes) */
+    unsigned reserved;   /* Always zero for now. */
+    unsigned blockCount; /* Number of blocks. */
+    int *blockSizes;     /* Comma separated list of block sizes.  */
+    int *chromStarts;    /* Start positions inside chromosome.  Relative to chromStart*/
+    int expCount;	/* Experiment count */
+    int *expIds;		/* Experiment ids */
+    float *expScores;	/* Experiment scores. */
     };
 
 void bedStaticLoad(char **row, struct bed *ret);
@@ -24,7 +34,8 @@ void bedStaticLoad(char **row, struct bed *ret);
 
 struct bed *bedLoad(char **row);
 /* Load a bed from row fetched with select * from bed
- * from database.  Dispose of this with bedFree(). */
+ * from database.  Dispose of this with bedFree(). 
+ * This loads first four fields. */
 
 struct bed *bedCommaIn(char **pS, struct bed *ret);
 /* Create a bed out of a comma separated string. 
@@ -52,6 +63,9 @@ void bedOutput(struct bed *el, FILE *f, char sep, char lastSep);
 int bedCmp(const void *va, const void *vb);
 /* Compare to sort based on chrom,chromStart. */
 
+int bedCmpScore(const void *va, const void *vb);
+/* Compare to sort based on score - lowest first. */
+
 struct bedLine
 /* A line in a bed file with chromosome, start position parsed out. */
     {
@@ -75,6 +89,27 @@ int bedLineCmp(const void *va, const void *vb);
 
 void bedSortFile(char *inFile, char *outFile);
 /* Sort a bed file (in place, overwrites old file. */
+
+struct bed *bedLoad3(char **row);
+/* Load first three fields of bed. */
+
+struct bed *bedLoad5(char **row);
+/* Load first five fields of bed. */
+
+struct bed *bedLoad12(char **row);
+/* Load all 12 fields of bed. */
+
+struct bed *bedLoadN(char *row[], int wordCount);
+/* Convert a row of strings to a bed. */
+
+void bedOutputN(struct bed *el, int wordCount, FILE *f, char sep, char lastSep);
+/* Write a bed of wordCount fields. */
+
+#define bedTabOutN(el,wordCount, f) bedOutputN(el,wordCount,f,'\t','\n');
+/* Print out bed as a line in a tab-separated file. */
+
+#define bedCommaOutN(el,wordCount, f) bedOutputN(el,wordCount,f,',',',');
+/* Print out bed as a comma separated list including final comma. */
 
 #endif /* BED_H */
 

@@ -77,11 +77,11 @@ void pepPredOutput(struct pepPred *el, FILE *f, char sep, char lastSep)
 {
 int i;
 if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->name, sep);
+fprintf(f, "%s", el->name);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->seq, lastSep);
+fprintf(f, "%s", el->seq);
 if (sep == ',') fputc('"',f);
 fputc(lastSep,f);
 }

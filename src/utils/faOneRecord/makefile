@@ -1,5 +1,5 @@
 .c.o:
-	gcc -O -ggdb -Wimplicit -I../../inc -c $*.c
+	gcc -O -ggdb -Wformat -Wimplicit -Wuninitialized -I../../inc -c $*.c
 
 O = faOneRecord.o 
 

@@ -3,6 +3,7 @@
 #include "linefile.h"
 #include "hash.h"
 #include "cheapcgi.h"
+#include "dystring.h"
 
 void usage()
 /* Explain usage and exit. */
@@ -10,23 +11,30 @@ void usage()
 errAbort(
   "calc - Little command line calculator\n"
   "usage:\n"
-  "   calc XXX\n"
-  "options:\n"
-  "   -xxx=XXX\n"
+  "   calc this + that * theOther / (a + b)\n"
   );
 }
 
-void calc(char *XXX)
+void calc(int wordCount, char *words[])
 /* calc - Little command line calculator. */
 {
+struct dyString *dy = newDyString(128);
+int i;
+
+for (i=0; i<wordCount; ++i)
+    {
+    if (i != 0)
+        dyStringAppend(dy, " ");
+    dyStringAppend(dy, words[i]);
+    }
+printf("%s = %d\n", dy->string, intExp(dy->string));
 }
 
 int main(int argc, char *argv[])
 /* Process command line. */
 {
-cgiSpoof(&argc, argv);
-if (argc != 2)
+if (argc < 2)
     usage();
-calc(argv[1]);
+calc(argc-1, argv+1);
 return 0;
 }

@@ -96,15 +96,6 @@ ratio /= psl->qEnd - psl->qStart;
 return ratio;
 }
 
-int pslOrientation(struct psl *psl)
-/* Translate psl strand + or - to orientation +1 or -1 */
-{
-if (psl->strand[0] == '-')
-    return -1;
-else
-    return 1;
-}
-
 boolean filter(struct psl *psl)
 /* Return TRUE if psl looks good enough. */
 {
@@ -162,7 +153,7 @@ for (;;)
 	    {
 	    AllocVar(co);
 	    hel = hashAdd(overlapHash, otherName, co);
-	    co->clone = storeInCloneHash(otherName);
+	    co->clone = hashStoreName(overlapHash, otherName);
 	    slAddHead(&cc->overlapList, co);
 	    }
 	overlap = psl->match + psl->repMatch;

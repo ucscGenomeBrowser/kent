@@ -70,7 +70,7 @@ for (;;)
     }
 
 /* Allocate DNA and fill it up from file. */
-dna = sequence = needLargeMem(dnaSize+1);
+dna = sequence = needHugeMem(dnaSize+1);
 fseek(f, offset, SEEK_SET);
 for (;;)
     {
@@ -106,6 +106,90 @@ else
     return seq;
 }
 
+bioSeq *faNextSeqFromMemText(char **pText, boolean isDna)
+/* Convert fa in memory to bioSeq.  Update *pText to point to next
+ * record.  Returns NULL when no more sequences left. */
+{
+char *name = "";
+char *s, *d;
+struct dnaSeq *seq;
+int size = 0;
+char c;
+char *filter = (isDna ? ntChars : aaChars);
+char *text = *pText;
+
+if (text == NULL)
+    return NULL;
+dnaUtilOpen();
+if (text[0] == '>')
+    {
+    char *end;
+    s = strchr(text, '\n') + 1;
+    name = skipLeadingSpaces(text+1);
+    end = skipToSpaces(name);
+    if (end != NULL)
+        *end = 0;
+    }
+else
+    s = text;
+name = cloneString(name);
+    
+d = text;
+for (;;)
+    {
+    c = *s;
+    if (c == 0 || c == '>')
+        break;
+    ++s;
+    if (isspace(c) || isdigit(c))
+	continue;
+    if ((c = filter[c]) != 0) 
+        d[size++] = c;
+    else
+	{
+	if (isDna)
+	    d[size++] = 'n';
+	else
+	    d[size++] = 'X';
+	}
+    }
+d[size] = 0;
+
+/* Put sequence into our little sequence structure. */
+if (size != 0)
+    {
+    AllocVar(seq);
+    seq->name = name;
+    seq->dna = text;
+    seq->size = size;
+    *pText = s;
+    return seq;
+    }
+else
+    {
+    freeMem(name);
+    *pText = NULL;
+    return NULL;
+    }
+}
+
+bioSeq *faSeqListFromMemText(char *text, boolean isDna)
+/* Convert fa's in memory into list of dnaSeqs. */
+{
+bioSeq *seqList = NULL, *seq;
+while ((seq = faNextSeqFromMemText(&text, isDna)) != NULL)
+    {
+    slAddHead(&seqList, seq);
+    }
+slReverse(&seqList);
+return seqList;
+}
+
+bioSeq *faSeqFromMemText(char *text, boolean isDna)
+/* Convert fa in memory to bioSeq. */
+{
+return faNextSeqFromMemText(&text, isDna);
+}
 
 struct dnaSeq *faFromMemText(char *text)
 /* Return a sequence from a .fa file that's been read into
@@ -114,46 +198,10 @@ struct dnaSeq *faFromMemText(char *text)
  * the returned dnaSeq, which may be freed normally with
  * freeDnaSeq. */
 {
-char *name = "";
-char *s, *d;
-struct dnaSeq *seq;
-int size = 0;
-char c;
-
-dnaUtilOpen();
-if (text[0] == '>')
-    {
-    char *end;
-    s = strchr(text, '\n') + 1;
-    name = text+1;
-    end = skipToSpaces(name);
-    if (end != NULL)
-        *end = 0;
-    }
-else
-    s = text;
-AllocVar(seq);
-seq->name = cloneString(name);
-    
-d = text;
-while ((c = *s++) != 0)
-    {
-    if (isspace(c) || isdigit(c))
-	continue;
-    if ((c = ntChars[c]) != 0) 
-        d[size++] = c;
-    else
-	d[size++] = 'n';
-    }
-d[size] = 0;
-
-/* Put sequence into our little DNA structure. */
-seq->dna = text;
-seq->size = size;
-return seq;
+return faNextSeqFromMemText(&text, TRUE);
 }
 
-struct dnaSeq *faReadDna(char *fileName)
+struct dnaSeq *faReadSeq(char *fileName, boolean isDna)
 /* Open fa file and read a single sequence from it. */
 {
 int maxSize = fileSize(fileName);
@@ -164,12 +212,24 @@ struct dnaSeq *seq;
 
 if (maxSize < 0)
     errAbort("can't open %s", fileName);
-s = needLargeMem(maxSize+1);
+s = needHugeMem(maxSize+1);
 fd = open(fileName, O_RDONLY);
 read(fd, s, maxSize);
 close(fd);
 s[maxSize] = 0;
-return faFromMemText(s);
+return faSeqFromMemText(s, isDna);
+}
+
+struct dnaSeq *faReadDna(char *fileName)
+/* Open fa file and read a single nucleotide sequence from it. */
+{
+return faReadSeq(fileName, TRUE);
+}
+
+struct dnaSeq *faReadAa(char *fileName)
+/* Open fa file and read a peptide single sequence from it. */
+{
+return faReadSeq(fileName, FALSE);
 }
 
 static int faFastBufSize = 0;
@@ -181,13 +241,13 @@ static void expandFaFastBuf(int bufPos)
 if (faFastBufSize == 0)
     {
     faFastBufSize = 64 * 1024;
-    faFastBuf = needLargeMem(faFastBufSize);
+    faFastBuf = needHugeMem(faFastBufSize);
     }
 else
     {
     DNA *newBuf;
     int newBufSize = faFastBufSize + faFastBufSize;
-    newBuf = needLargeMem(newBufSize);
+    newBuf = needHugeMem(newBufSize);
     memcpy(newBuf, faFastBuf, bufPos);
     freeMem(faFastBuf);
     faFastBuf = newBuf;
@@ -270,7 +330,8 @@ void faWriteNext(FILE *f, char *startLine, DNA *dna, int dnaSize)
 {
 int dnaLeft = dnaSize;
 int lineSize;
-fprintf(f, ">%s\n", startLine);
+if (startLine != NULL)
+    fprintf(f, ">%s\n", startLine);
 
 while (dnaLeft > 0)
     {
@@ -292,13 +353,22 @@ faWriteNext(f, startLine, dna, dnaSize);
 fclose(f);
 }
 
-boolean faSpeedReadNext(struct lineFile *lf, DNA **retDna, int *retSize, char **retName)
-/* Read in next FA entry as fast as we can. Faster than that old,
- * pokey faFastReadNext. Return FALSE at EOF. 
- * The returned DNA and name will be overwritten by the next call
- * to this function. */
+void faWriteAll(char *fileName, bioSeq *seqList)
+/* Write out all sequences in list to file. */
 {
-int c;
+FILE *f = mustOpen(fileName, "w");
+bioSeq *seq;
+
+for (seq=seqList; seq != NULL; seq = seq->next)
+    faWriteNext(f, seq->name, seq->dna, seq->size);
+fclose(f);
+}
+
+boolean faMixedSpeedReadNext(struct lineFile *lf, DNA **retDna, int *retSize, char **retName)
+/* Read in DNA or Peptide FA record in mixed case.   Allow any upper or lower case
+ * letter, or the dash character in. */
+{
+char c;
 int bufIx = 0;
 static char name[256];
 int nameIx = 0;
@@ -343,12 +413,8 @@ for (;;)
     for (i=0; i<lineSize; ++i)
         {
 	c = line[i];
-	if (isalpha(c))
-	    {
-	    c = ntChars[c];
-	    if (c == 0) c = 'n';
+	if (isalpha(c) || c == '-')
 	    faFastBuf[bufIx++] = c;
-	    }
 	}
     }
 if (bufIx >= faFastBufSize)
@@ -360,17 +426,90 @@ faFastBuf[bufIx] = 0;
 return TRUE;
 }
 
-struct dnaSeq *faReadAllDna(char *fileName)
-/* Return list of all sequences in FA file. */
+void faToProtein(char *poly, int size)
+/* Convert possibly mixed-case protein to upper case.  Also
+ * convert any strange characters to 'X'.  Does not change size.
+ * of sequence. */
+{
+int i;
+char c;
+dnaUtilOpen();
+for (i=0; i<size; ++i)
+    {
+    if ((c = aaChars[poly[i]]) == 0)
+	c = 'X';
+    poly[i] = c;
+    }
+}
+
+void faToDna(char *poly, int size)
+/* Convert possibly mixed-case DNA to lower case.  Also turn
+ * any strange characters to 'n'.  Does not change size.
+ * of sequence. */
+{
+int i;
+char c;
+dnaUtilOpen();
+for (i=0; i<size; ++i)
+    {
+    if ((c = ntChars[poly[i]]) == 0)
+	c = 'n';
+    poly[i] = c;
+    }
+}
+
+boolean faSomeSpeedReadNext(struct lineFile *lf, DNA **retDna, int *retSize, char **retName, boolean isDna)
+/* Read in DNA or Peptide FA record. */
+{
+char *poly;
+int size;
+
+if (!faMixedSpeedReadNext(lf, retDna, retSize, retName))
+    return FALSE;
+size = *retSize;
+poly = *retDna;
+if (isDna)
+    faToDna(poly, size);
+else
+    faToProtein(poly, size);
+return TRUE;
+}
+
+boolean faPepSpeedReadNext(struct lineFile *lf, DNA **retDna, int *retSize, char **retName)
+/* Read in next peptide FA entry as fast as we can.  */
+{
+return faSomeSpeedReadNext(lf, retDna, retSize, retName, FALSE);
+}
+
+boolean faSpeedReadNext(struct lineFile *lf, DNA **retDna, int *retSize, char **retName)
+/* Read in next FA entry as fast as we can. Faster than that old,
+ * pokey faFastReadNext. Return FALSE at EOF. 
+ * The returned DNA and name will be overwritten by the next call
+ * to this function. */
+{
+return faSomeSpeedReadNext(lf, retDna, retSize, retName, TRUE);
+}
+
+struct dnaSeq *faReadAllSeqMixable(char *fileName, boolean isDna, boolean mixed)
+/* Return list of all sequences in FA file. 
+ * Mixed case parameter overrides isDna.  If mixed is false then
+ * will return DNA in lower case and non-DNA in upper case. */
 {
 struct lineFile *lf = lineFileOpen(fileName, FALSE);
 struct dnaSeq *seqList = NULL, *seq;
 DNA *dna;
 char *name;
 int size;
+boolean ok;
 
-while (faSpeedReadNext(lf, &dna, &size, &name))
+for (;;)
     {
+    if (mixed)
+        ok = faMixedSpeedReadNext(lf, &dna, &size, &name);
+    else
+        ok = faSomeSpeedReadNext(lf, &dna, &size, &name, isDna);
+    if (!ok)
+        break;
     AllocVar(seq);
     seq->name = cloneString(name);
     seq->size = size;
@@ -383,3 +522,26 @@ faFreeFastBuf();
 return seqList;
 }
 
+struct dnaSeq *faReadAllSeq(char *fileName, boolean isDna)
+/* Return list of all sequences in FA file. */
+{
+return faReadAllSeqMixable(fileName, isDna, FALSE);
+}
+
+struct dnaSeq *faReadAllDna(char *fileName)
+/* Return list of all DNA sequences in FA file. */
+{
+return faReadAllSeq(fileName, TRUE);
+}
+
+struct dnaSeq *faReadAllPep(char *fileName)
+/* Return list of all peptide sequences in FA file. */
+{
+return faReadAllSeq(fileName, FALSE);
+}
+
+struct dnaSeq *faReadAllMixed(char *fileName)
+/* Read in mixed case fasta file, preserving case. */
+{
+return faReadAllSeqMixable(fileName, FALSE, TRUE);
+}
