@@ -1747,6 +1747,22 @@ tablesIgnored $hg
     slamNonCodingRat
     syntenyMouse
     syntenyRat
+    encodeAffyChIpRnapHl60PvalHr00
+    encodeAffyChIpRnapHl60PvalHr02
+    encodeAffyChIpRnapHl60PvalHr08
+    encodeAffyChIpRnapHl60PvalHr32
+    encodeAffyChIpRnapHl60SitesHr00
+    encodeAffyChIpRnapHl60SitesHr02
+    encodeAffyChIpRnapHl60SitesHr08
+    encodeAffyChIpRnapHl60SitesHr32
+    encodeAffyRnaHl60SigHr00
+    encodeAffyRnaHl60SigHr02
+    encodeAffyRnaHl60SigHr08
+    encodeAffyRnaHl60SigHr32
+    encodeAffyRnaHl60SitesHr00
+    encodeAffyRnaHl60SitesHr02
+    encodeAffyRnaHl60SitesHr08
+    encodeAffyRnaHl60SitesHr32
 
 tablesIgnored $mm
     chr%_gold
