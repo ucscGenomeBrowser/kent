@@ -272,9 +272,11 @@ while (<L>) {
       } elsif ($words[0] eq "CN") {
 	my ($snpId, $ccNuc, $ccPept, $phase) = ($words[1], $words[8],
 						$words[9], $words[10]);
-	my $sift = "$words[19] $words[20] $words[21]";
-	$sift = "" if (! defined $sift);
 	my $cc = "$ccNuc ($ccPept)";
+	my $sift = "";
+	$sift  =  $words[19] if (defined $words[19]);
+	$sift .= " $words[20]" if (defined $words[20]);
+	$sift .= " $words[21]" if (defined $words[21]);
 	&gsOut($geneName, $snpId, "Coding (Nonsynonymous)", $cc, $phase,
 	       $sift);
       } elsif ($words[0] eq "CF") {
