@@ -20,11 +20,7 @@ DIRS = \
 	dnaMotifFind \
 	eisenInput \
 	emblMatrixToMotif \
-	estLibStats \
 	expToRna \
-	inc \
-	iriToControlTable \
-	iriToDnaMotif \
 	lib \
 	liftPromoHits \
 	motifLogo \
@@ -43,4 +39,7 @@ DIRS = \
 	twinOrfStats3 
 
 BADDIRS = \
-	assessLibs 
+	assessLibs \
+	estLibStats \
+	iriToControlTable \
+	iriToDnaMotif 
