@@ -314,20 +314,21 @@ hgLoadRna new sc1
 hgLoadRna add -type=mRNA sc1 /gbdb/sc1/mrnaViral/viralany.fa viralany.ra
 hgLoadRna addSeq -abbr=prot sc1 /gbdb/sc1/swissprot/viralProt.fa
 hgLoadRna addSeq sc1 /gbdb/sc1/otherSARS/otherSARS.fa -type=otherSARS.fa
+tr acgt ACGT viralany.fa > viralAnyUpper.fa
 
 MRNA ALIGNMENT USING BLASTZ and CHAINING (done 5/16/03)
  
 cd ~/sars/mrna.blastz.all
-gensub2 query.lst single gsub spec
-cd run.1
-mkdir raw
-mkdir raw/chr1
-para create spec
-para push
-mkdir lav
-mkdir lav/chr1
-/cluster/home/angie/schwartzbin/xout2lav chr1 29736 /cluster/store5/SARS_Coronavirus_TOR2/bed/mrna.blastz.all/raw/chr1/1.29736 /cluster/store5/SARS_Coronavirus_TOR2/bed/mrna.blastz.all/lav/chr1/1.29736.lav /cluster/store5/SARS_Coronavirus_TOR2/bed/mrna.blastz.all/DEF
+blastz /cluster/store5/SARS_Coronavirus_TOR2/nib/chr1.nib[1,29736] /cluster/store5/SARS_Coronavirus_TOR2/bed/genbank/viralAllUpper.fa m=40000000 H=2000 K=2000 v=1 M=0 > viralany.out
+/cluster/home/angie/schwartzbin/xout2lav chr1 29736 /cluster/store5/SARS_Coronavirus_TOR2/bed/mrna.blastz.all/ /cluster/store5/SARS_Coronavirus_TOR2/bed/mrna.blastz.all/lav/viralany.lav /cluster/store5/SARS_Coronavirus_TOR2/bed/mrna.blastz.all/DEF 2> viralany.log
+lavToPsl lav/viralany.lav psl/viralany.psl
+pslReps viralany.psl -minAli=0.6 all_mrna.psl /dev/null
+vi all_mrna.psl change tName to chr1 and delete sars self join
+hgLoadPsl sc1 all_mrna.psl
+hgLoadPsl sc1 all_mrna.psl -table=xenoMrna
 
+
+lavToAxt /cluster/store5/SARS_Coronavirus_TOR2/bed/mrna.blastz.all/lav/viralany.lav /cluster/store5/SARS_Coronavirus_TOR2/nib /cluster/store5/SARS_Coronavirus_TOR2/bed/genbank/viralAllUpper.fa axt/viralany.axt -fa
 axtChain axt/xeno.axt /cluster/store5/SARS_Coronavirus_TOR2/nib/ /cluster/store5/SARS_Coronavirus_TOR2/bed/mrna.blastz.all/nib chain/xeno.chain
 chainFilter chain/xeno.chain -minScore=3000 -maxScore=2000000 > chain/filter.chain
 chainToPsl chain/filter.chain S1.len S2.len ../../nib/chr1.nib query.lst psl/xenoBlastzMrna.psl
