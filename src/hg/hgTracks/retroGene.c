@@ -1,7 +1,7 @@
 
 #include "retroGene.h"
 
-static char const rcsid[] = "$Id: retroGene.c,v 1.4 2005/03/25 00:23:33 baertsch Exp $";
+static char const rcsid[] = "$Id: retroGene.c,v 1.5 2005/03/25 00:24:34 baertsch Exp $";
 
 struct linkedFeatures *lfFromRetroGene(struct pseudoGeneLink *pg)
 /* Return a linked feature from a retroGene. */
@@ -91,7 +91,7 @@ for (lf = tg->items; lf != NULL; lf = lf->next)
             dyStringPrintf(name, "%0.7s ", org);
         }
     /* prepend retro- to parent gene name */
-    dyStringAppend(name, "retro");
+    dyStringAppend(name, "retro-");
     /* lookup name using knowngene method */
     if ((useGeneName) && hTableExists("refLink") && hTableExists("knownGeneLink"))
         {
