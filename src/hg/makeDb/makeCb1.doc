@@ -295,7 +295,7 @@ drop table seq; drop table sex; drop table source; drop table tissue;' \
         echo 'delete from defaultDb where name="cb1";' \
         | hgsql -h genome-testdb hgcentraltest
     echo 'insert into dbDb values("cb1", "July 2002", \
-        "/gbdb/cb1/nib", "worm", "chrUn:10000-100000", 1, 10, \
+        "/gbdb/cb1/nib", "Worm", "chrUn:10000-100000", 1, 10, \
         "C. briggsae");' \
         | hgsql -h genome-testdb hgcentraltest
     #  If you need to delete that entry:
