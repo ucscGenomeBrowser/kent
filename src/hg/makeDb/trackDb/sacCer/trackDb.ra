@@ -16,6 +16,7 @@ visibility pack
 color 0,100,180
 type genePred sgdPep
 hgGene on
+exonArrows on
 
 track sgdOther
 shortLabel SGD Other
@@ -24,7 +25,8 @@ group genes
 priority 46
 visibility pack
 color 30,130,210
-type bed 4 +
+type bed 6 +
+exonArrows on
 
 track intronEst
 shortLabel Spliced ESTs
