@@ -105,8 +105,9 @@
 #include "scoredRef.h"
 #include "maf.h"
 #include "hgc.h"
+#include "genbank.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.410 2003/05/11 22:22:28 kent Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.411 2003/05/12 14:45:40 booch Exp $";
 
 
 struct cart *cart;	/* User's settings. */
@@ -3727,7 +3728,7 @@ return psl->blockCount;
 }
 
 
-int showDnaAlignment(struct psl *psl, struct dnaSeq *rnaSeq, FILE *body)
+int showDnaAlignment(struct psl *psl, struct dnaSeq *rnaSeq, FILE *body, int cdsS, int cdsE)
 /* Show alignment for accession. */
 {
 struct dnaSeq *dnaSeq;
@@ -3764,17 +3765,22 @@ if (psl->strand[0] == '-')
     reverseComplement(dnaSeq->dna, dnaSeq->size);
     pslRcBoth(psl);
     tRcAdjustedStart = psl->tSize - tEnd;
+    /*if (cdsE != 0)
+        {
+        cdsS = psl->tSize - cdsS;
+        cdsE = psl->tSize - cdsE;
+        }*/
     }
 ffAli = pslToFfAli(psl, rnaSeq, dnaSeq, tRcAdjustedStart);
 
 blockCount = ffShAliPart(body, ffAli, psl->qName, rna, rnaSize, 0, 
 			 dnaSeq->name, dnaSeq->dna, dnaSeq->size, tStart, 
-			 8, FALSE, isRc, FALSE, TRUE, TRUE, TRUE, TRUE);
+			 8, FALSE, isRc, FALSE, TRUE, TRUE, TRUE, TRUE, cdsS, cdsE);
 return blockCount;
 }
 
 void showSomeAlignment(struct psl *psl, bioSeq *oSeq, 
-		       enum gfType qType, int qStart, int qEnd, char *qName)
+		       enum gfType qType, int qStart, int qEnd, char *qName, int cdsS, int cdsE)
 /* Display protein or DNA alignment in a frame. */
 {
 int blockCount;
@@ -3790,7 +3796,7 @@ makeTempName(&bodyTn, "body", ".html");
 body = mustOpen(bodyTn.forCgi, "w");
 htmStart(body, psl->qName);
 if (qType == gftRna || qType == gftDna)
-    blockCount = showDnaAlignment(psl, oSeq, body);
+    blockCount = showDnaAlignment(psl, oSeq, body, cdsS, cdsE);
 else 
     blockCount = showGfAlignment(psl, oSeq, body, qType, qStart, qEnd, qName);
 fclose(body);
@@ -3835,7 +3841,7 @@ char **row;
 struct psl *psl;
 struct dnaSeq *rnaSeq;
 char *type;
-int start;
+int start, cdsStart = 0, cdsEnd = 0;
 boolean hasBin;
 
 /* Print start of HTML. */
@@ -3847,8 +3853,21 @@ printf("<HEAD>\n<TITLE>%s vs Genomic</TITLE>\n</HEAD>\n\n", acc);
 type = cartString(cart, "aliTrack");
 start = cartInt(cart, "o");
 
-/* Look up alignments in database */
+/* Get cds start and stop, if available */
 conn = hAllocConn();
+sprintf(query, "select cds from mrna where acc = '%s'", acc);
+sr = sqlGetResult(conn, query); 
+if ((row = sqlNextRow(sr)) != NULL)
+    {
+    sprintf(query, "select name from cds where id = '%d'", atoi(row[0]));
+    sqlFreeResult(&sr);
+    sr = sqlGetResult(conn, query);
+    if ((row = sqlNextRow(sr)) != NULL)
+	genbankParseCds(row[0], &cdsStart, &cdsEnd);
+    }
+sqlFreeResult(&sr);
+
+/* Look up alignments in database */
 hFindSplitTable(seqName, type, table, &hasBin);
 sprintf(query, "select * from %s where qName = '%s' and tStart=%d",
 	table, acc, start);
@@ -3861,9 +3880,9 @@ hFreeConn(&conn);
 
 rnaSeq = hRnaSeq(acc);
 if (startsWith("xeno", type))
-    showSomeAlignment(psl, rnaSeq, gftDnaX, 0, rnaSeq->size, NULL);
+    showSomeAlignment(psl, rnaSeq, gftDnaX, 0, rnaSeq->size, NULL, cdsStart, cdsEnd);
 else
-    showSomeAlignment(psl, rnaSeq, gftDna, 0, rnaSeq->size, NULL);
+    showSomeAlignment(psl, rnaSeq, gftDna, 0, rnaSeq->size, NULL, cdsStart, cdsEnd);
 }
 
 void htcChainAli(char *item)
@@ -3918,7 +3937,7 @@ writeFramesetType();
 puts("<HTML>");
 printf("<HEAD>\n<TITLE>%s %s vs %s %s </TITLE>\n</HEAD>\n\n", 
        (otherOrg == NULL ? "" : otherOrg), psl->qName, org, psl->tName );
-showSomeAlignment(psl, qSeq, gftDnaX, psl->qStart, psl->qEnd, name);
+showSomeAlignment(psl, qSeq, gftDnaX, psl->qStart, psl->qEnd, name, 0, 0);
 }
 
 
@@ -3958,7 +3977,7 @@ for (oSeq = oSeqList; oSeq != NULL; oSeq = oSeq->next)
 	break;
     }
 if (oSeq == NULL)  errAbort("%s is in %s but not in %s. Internal error.", qName, pslName, faName);
-showSomeAlignment(psl, oSeq, qt, 0, oSeq->size, NULL);
+showSomeAlignment(psl, oSeq, qt, 0, oSeq->size, NULL, 0, 0);
 }
 
 void htcProteinAli(char *readName, char *table)
@@ -3992,7 +4011,7 @@ psl = pslLoad(row+hasBin);
 sqlFreeResult(&sr);
 hFreeConn(&conn);
 seq = hPepSeq(readName);
-showSomeAlignment(psl, seq, qt, 0, seq->size, NULL);
+showSomeAlignment(psl, seq, qt, 0, seq->size, NULL, 0, 0);
 }
 
 void htcBlatXeno(char *readName, char *table)
@@ -4028,7 +4047,7 @@ psl = pslLoad(row+hasBin);
 sqlFreeResult(&sr);
 hFreeConn(&conn);
 seq = hExtSeq(readName);
-showSomeAlignment(psl, seq, gftDnaX, 0, seq->size, NULL);
+showSomeAlignment(psl, seq, gftDnaX, 0, seq->size, NULL, 0, 0);
 }
 
 void writeMatches(FILE *f, char *a, char *b, int count)
@@ -6679,7 +6698,7 @@ snprintf(name, sizeof(name), "%s.%s", otherOrg, qChrom);
 writeFramesetType();
 puts("<HTML>");
 printf("<HEAD>\n<TITLE>%s %dk</TITLE>\n</HEAD>\n\n", name, psl->qStart/1000);
-showSomeAlignment(psl, qSeq, gftDnaX, psl->qStart, psl->qEnd, name);
+showSomeAlignment(psl, qSeq, gftDnaX, psl->qStart, psl->qEnd, name, 0, 0);
 }
 
 void doBlatFish(struct trackDb *tdb, char *itemName)
@@ -8274,8 +8293,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 doDbSnpRS(ncbiName);
 printf("<P><A HREF=\"http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?");
 printf("type=rs&rs=%s\" TARGET=_blank>dbSNP link</A></P>\n", snp.name);
-if (hTableExists("knownGene"))
-    doSnpLocusLink(tdb, itemName);
+doSnpLocusLink(tdb, itemName);
 printTrackHtml(tdb);
 sqlFreeResult(&sr);
 hFreeConn(&conn);
