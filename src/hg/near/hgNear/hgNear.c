@@ -19,7 +19,7 @@
 #include "hgColors.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: hgNear.c,v 1.145 2004/04/22 19:05:18 galt Exp $";
+static char const rcsid[] = "$Id: hgNear.c,v 1.146 2004/04/24 00:39:29 kent Exp $";
 
 char *excludeVars[] = { "submit", "Submit", idPosVarName, NULL }; 
 /* The excludeVars are not saved to the cart. (We also exclude
@@ -1379,6 +1379,7 @@ void columnVarsFromSettings(struct column *col, char *fileName)
 struct hash *settings = col->settings;
 char *selfLink;
 col->name = mustFindInRaHash(fileName, settings, "name");
+spaceToUnderbar(col->name);
 col->shortLabel = mustFindInRaHash(fileName, settings, "shortLabel");
 col->longLabel = mustFindInRaHash(fileName, settings, "longLabel");
 col->priority = atof(mustFindInRaHash(fileName, settings, "priority"));
