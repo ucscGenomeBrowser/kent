@@ -12,7 +12,7 @@
 #include "chainNetDbLoad.h"
 #include "geneGraph.h"
 
-static char const rcsid[] = "$Id: orthoSplice.c,v 1.7 2003/05/27 07:29:48 sugnet Exp $";
+static char const rcsid[] = "$Id: orthoSplice.c,v 1.8 2003/05/27 20:32:42 sugnet Exp $";
 
 struct spliceEdge 
 /* Structure to hold information about one edge in 
@@ -29,6 +29,7 @@ struct spliceEdge
     int v1;                     /* Vertex 1 in graph. */
     int v2;                     /* Vertex 2 in graph. */
     int alt;                    /* Possible alt splice? 1=TRUE 0=FALSE */
+    int altCons;                /* Possible alt in orthoAg too? */
     int conserved;              /* Conserved in ortholgous genome? 1=TRUE 0=FALSE */    
     int soft;                   /* TRUE (1) if a vertex is soft, FALSE otherwise. */
 };
@@ -171,16 +172,16 @@ fprintf(out, "%s\t%s\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\n", r->agName, r->orthoAgNa
 
 void spliceEdgeHeader(FILE *out)
 {
-fprintf(out, "%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n", "#chrom", "chromStart", "chromEnd", 
+fprintf(out, "%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n", "#chrom", "chromStart", "chromEnd", 
 	"agName", "conf", "strand",
-	"type", "v1", "v2", "alt", "conserved", "soft");
+	"type", "v1", "v2", "alt", "altCons", "conserved", "soft");
 }
 
 void spliceEdgeTabOut(struct spliceEdge *se, FILE *out)
 {
-fprintf(out, "%s\t%d\t%d\t%s\t%d\t%s\t%d\t%d\t%d\t%d\t%d\t%d\n", se->chrom, se->chromStart, se->chromEnd, 
+fprintf(out, "%s\t%d\t%d\t%s\t%d\t%s\t%d\t%d\t%d\t%d\t%d\t%d\t%d\n", se->chrom, se->chromStart, se->chromEnd, 
 	se->agName, se->conf, se->strand,
-	se->type, se->v1, se->v2, se->alt, se->conserved, se->soft);
+	se->type, se->v1, se->v2, se->alt, se->altCons, se->conserved, se->soft);
 }
 
 void outputReport(struct orthoAgReport *rep)
@@ -725,7 +726,9 @@ freeMem(el);
 }
 
 void fillInEdge(struct spliceEdge *se, struct orthoAgReport *agRep , 
-		struct altGraphX *ag, bool **agEm, int v1, int v2, int *edgeSeen)
+		struct altGraphX *ag, bool **agEm,
+		struct altGraphX *commonAg, bool **commonEm, int v1, int v2, 
+		int *edgeSeen, int *cEdgeSeen)
 /** Fill in one edge with information from ag. */
 {
 struct evidence *e = NULL;
@@ -749,19 +752,29 @@ edgeNum = getEdgeNum(ag, v1, v2);
 e = slElementFromIx(ag->evidence, edgeNum);
 se->conf = e->evCount;
 /* Check to se if this edge has been connected to any other vertices. */
-if(edgeSeen[v1] > 1)
-    se->alt = TRUE;
-/* If not search through to see if any are comming. */
-else 
+
+if(agEm[v1][v2])
     {
     eCount =0;
     for(k=v2; k<vCount; k++)
 	{
-	if(agEm[v1][k])
+	if(agEm[v1][k] && (ag->vTypes[k] == ggHardStart || ag->vTypes[k] == ggHardEnd || se->soft))
 	    eCount++;
 	}
     if(eCount > 1)
 	se->alt = TRUE;
+    }
+
+if(commonEm[v1][v2])
+    {
+    eCount=0;
+    for(k=v2; k<vCount; k++)
+	{
+	if(commonEm[v1][k] && (commonAg->vTypes[k] == ggHardStart || commonAg->vTypes[k] == ggHardEnd || se->soft))
+	    eCount++;
+	}
+    if(eCount > 1)
+	se->altCons = TRUE;
     }
 }
 
@@ -810,7 +823,7 @@ for(i=0; i<vCount; i++)
 	    {
 	    AllocVar(se);
 	    edgeSeen[i]++;
-	    fillInEdge(se, agRep, ag, agEm, i,j, edgeSeen);
+	    fillInEdge(se, agRep, ag, agEm, commonAg, commonEm, i,j, edgeSeen, cEdgeSeen);
 	    if(commonEm[i][j])
 		{
 		se->conserved = TRUE;
