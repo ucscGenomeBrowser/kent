@@ -14,7 +14,7 @@
 #include "web.h"
 #include "cheapcgi.h"
 #include "psl.h"
-
+#include "dystring.h"
 char *defaultOldDb = "Dec. 12, 2000";
 char *defaultNewDb = "Aug. 6, 2001";
 char *newDb = NULL;
@@ -32,7 +32,7 @@ char *newGenome = NULL;
 char *origGenome = NULL;
 char *defaultPos = "chr22:17045228-17054909";
 char *origDb = NULL;
-
+struct dyString *webWarning = NULL;
 
 /* keeps track of the database version names and hg's */
 struct namePair 
@@ -71,6 +71,14 @@ void usage()
 errAbort("hgCoordConv - tries to convert coordinates from one draft to another.\n"
 	 "usage:\n"
 	 "\thgCoordConv oldDb=<hg5> chrom=<chromosome> start=<chromStart> end=<chromEnd> newDb=<hg6> -fakeWeb\n");
+}
+
+/* keep track of error messages for the user */
+void appendWarningMsg(char *warning)
+{
+struct dyString *warn = newDyString(1024);
+dyStringPrintf(warn, "%s", warning);
+slAddHead(&webWarning, warn);
 }
 
 /** print error message about format of position input */
@@ -142,6 +150,7 @@ end = cgiOptionalInt("end", -1);
 calledSelf = cgiBoolean("calledSelf");
 
 /* parse the position string and make sure that it makes sense */
+
 if (position != NULL && position[0] != 0)
     {
     parsePosition(cloneString(position), &chrom, &start, &end);
@@ -161,6 +170,7 @@ if(origGenome != NULL && oldDb == NULL)
 if(newGenome != NULL && newDb == NULL)
     newDb = findNewDbForGenome(newGenome);
 
+
 /* make sure that we've got valid arguments */
 if((newDb == NULL || oldDb == NULL || chrom == NULL || start == -1 || end == -1) && (onWeb && calledSelf)) 
     {
@@ -172,6 +182,13 @@ if((newDb == NULL || oldDb == NULL || chrom == NULL || start == -1 || end == -1)
 	{
 	usage();
 	}
+    }
+if( oldDb != NULL && sameString(oldDb, newDb) && onWeb)
+    {
+    struct dyString *warning = newDyString(1024);
+    dyStringPrintf(warning, "Did you really want to convert from %s to %s (the same genome)?", origGenome, newGenome);
+    appendWarningMsg(warning->string);
+    dyStringFree(&warning);
     }
 }
 
@@ -187,6 +204,23 @@ return cloneString(url);
 void outputBlatLink(char *link, char *db, struct dnaSeq *seq) 
 {
 printf("<a href=\"%stype=DNA&genome=%s&sort=query,score&output=hyperlink&userSeq=%s\">%s</a>",blatUrl, db,seq->dna, link);
+}
+
+/** print out any warning messages that we may have
+ * for the user */
+void printWebWarnings() 
+{
+struct dyString *warn = NULL;
+if(webWarning != NULL)
+    {
+    printf("<font color=red>\n");
+    printf("<h3>Warning:</h3><ul>\n");
+    for(warn = webWarning; warn != NULL; warn = warn->next)
+	{
+	printf("<li>%s</li>\n", warn->string);
+	}
+    printf("</ul></font>\n");
+    }
 }
 
 /** output a blat link and the fasta in cut and past form */
@@ -207,7 +241,7 @@ printf("<p>Please be aware that this is merely our best guess of converting from
 /** print out the information used to try and convert */
 void printTroubleShooting(struct coordConvRep *ccr) 
 {
-webNewSection("Trouble Shooting information:");
+webNewSection("Alignment Details:");
 printf("<p>The following sequences from the original draft were aligned to determine the coordinates on the new draft:<br>\n");
 webOutFasta(ccr->upSeq, ccr->to->version);
 webOutFasta(ccr->midSeq, ccr->to->version);
@@ -221,20 +255,19 @@ printf("<i><font size=-1>Comments, Questions, Bug Reports: <a href=\"mailto:sugn
 void doGoodReport(struct coordConvRep *ccr) 
 {
 webStart("Coordinate Conversion for %s %s:%d-%d", ccr->from->date, ccr->from->chrom, ccr->from->chromStart, ccr->from->chromEnd);
+printWebWarnings();
 printf("<p><b>Success:</b> %s\n", ccr->msg);
 if(sameString(ccr->midPsl->strand, "-")) 
     {
     printf(" It appears that the orientation of your coordinate range has been inverted.\n");
     }
 printSucessWarning(); 
-printf("<ul><li><b>Old Coordinates:</b> %s %s:%d-%d</li>\n", ccr->from->date ,ccr->from->chrom, ccr->from->chromStart, ccr->from->chromEnd);
-printf("<li><b>New Coordinates:</b> %s %s:%d-%d</li></ul>\n", ccr->to->date ,ccr->to->chrom, ccr->to->chromStart, ccr->to->chromEnd);
-printf("<p><a href=\"%s\">View old Coordinates in %s browser.</a>\n", 
-       makeBrowserUrl(ccr->from->version, ccr->from->chrom, ccr->from->chromStart, ccr->from->chromEnd),
-       ccr->from->date);
-printf("<p><a href=\"%s\">View new Coordinates in %s browser.</a>\n", 
-       makeBrowserUrl(ccr->to->version, ccr->to->chrom, ccr->to->chromStart, ccr->to->chromEnd),
-       ccr->to->date);
+printf("<ul><li><b>Old Coordinates:</b> %s %s:%d-%d  ", ccr->from->date ,ccr->from->chrom, ccr->from->chromStart, ccr->from->chromEnd);
+printf("<a href=\"%s\">[browser]</a></li>\n", 
+       makeBrowserUrl(ccr->from->version, ccr->from->chrom, ccr->from->chromStart, ccr->from->chromEnd));
+printf("<li><b>New Coordinates:</b> %s %s:%d-%d  ", ccr->to->date ,ccr->to->chrom, ccr->to->chromStart, ccr->to->chromEnd);
+printf("<a href=\"%s\">[browser]</a></li></ul>\n", 
+       makeBrowserUrl(ccr->to->version, ccr->to->chrom, ccr->to->chromStart, ccr->to->chromEnd));
 printTroubleShooting(ccr);
 webEnd();
 }
@@ -243,6 +276,7 @@ webEnd();
 void doBadReport(struct coordConvRep *ccr) 
 {
 webStart("Coordinate Conversion for %s %s:%d-%d", ccr->from->date, ccr->from->chrom, ccr->from->chromStart, ccr->from->chromEnd);
+printWebWarnings();
 printf("<p><b>Conversion Not Successful:</B> %s\n", ccr->msg);
 printf("<p><a href=\"%s\">View old Coordinates in %s browser.</a>\n", 
        makeBrowserUrl(ccr->from->version, ccr->from->chrom, ccr->from->chromStart, ccr->from->chromEnd),
@@ -372,10 +406,9 @@ int main(int argc, char *argv[])
 {
 onWeb = cgiIsOnWeb();
 cgiSpoof(&argc, argv);
-if(onWeb)
-    puts("Content-type:text/html\n");
+puts("Content-type:text/html\n\n");
 checkArguments();
-/* do our thing */
+/* do our thing  */
 if(calledSelf)
     htmEmptyShell(convertCoordinates, NULL);
 else

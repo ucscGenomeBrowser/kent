@@ -7,12 +7,12 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 
 O = hgCoordConv.o
 
-hgCoordConv: $O 
+hgCoordConv: $O makefile
 	gcc $O $(MYLIBS) $(L) 
 	mv a.out hgCoordConv
 	strip hgCoordConv
 	chmod a+rx hgCoordConv
-	mv hgCoordConv $(HGCGI)
+	cp hgCoordConv $(HGCGI)
 
 lib:
 	cd ../../lib; make
