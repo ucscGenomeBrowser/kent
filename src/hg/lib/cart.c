@@ -12,7 +12,7 @@
 #include "hdb.h"
 #include "jksql.h"
 
-static char const rcsid[] = "$Id: cart.c,v 1.39 2004/04/19 23:49:12 kate Exp $";
+static char const rcsid[] = "$Id: cart.c,v 1.40 2004/07/09 18:23:34 kent Exp $";
 
 static char *sessionVar = "hgsid";	/* Name of cgi variable session is stored in. */
 static char *positionCgiName = "position";
@@ -165,19 +165,29 @@ sqlDisconnect(&conn);
 return cart;
 }
 
+
+
 static void updateOne(struct sqlConnection *conn,
 	char *table, struct cartDb *cdb, char *contents, int contentSize)
 /* Update cdb in database. */
 {
-struct dyString *dy = newDyString(4096);
-
-dyStringPrintf(dy, "UPDATE %s SET contents='", table);
-dyStringAppendN(dy, contents, contentSize);
-dyStringPrintf(dy, "',lastUse=now(),useCount=%d ", cdb->useCount+1);
-dyStringPrintf(dy, " where id=%u", cdb->id);
-sqlUpdate(conn, dy->string);
-dyStringFree(&dy);
+if (contentSize <= 6*1024 || cdb->useCount > 0)
+    {
+    struct dyString *dy = newDyString(4096);
+    dyStringPrintf(dy, "UPDATE %s SET contents='", table);
+    dyStringAppendN(dy, contents, contentSize);
+    dyStringPrintf(dy, "',lastUse=now(),useCount=%d ", cdb->useCount+1);
+    dyStringPrintf(dy, " where id=%u", cdb->id);
+    sqlUpdate(conn, dy->string);
+    dyStringFree(&dy);
+    }
+else
+    {
+    fprintf(stderr, "Cart stuffing bot?  Not writing %d bytes to %s id %d on first use\n",
+    	contentSize, table, cdb->id);
+    }
 }
+
 
 static void saveState(struct cart *cart)
 /* Save out state to permanent storage in both user and session db. */
