@@ -133,6 +133,10 @@ void cartSaveSession(struct cart *cart);
 void cartDump(struct cart *cart);
 /* Dump contents of cart. */
 
+struct hashEl *cartFindLike(struct cart *cart, char *wildCard);
+/* Return list of name/val pairs from cart where name matches 
+ * wildcard.  Free when done with hashElFreeList. */
+
 char *cartFindFirstLike(struct cart *cart, char *wildCard);
 /* Find name of first variable that matches wildCard in cart. 
  * Return NULL if none. */

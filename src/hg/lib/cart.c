@@ -11,7 +11,7 @@
 #include "hdb.h"
 #include "jksql.h"
 
-static char const rcsid[] = "$Id: cart.c,v 1.22 2003/06/24 22:23:12 kent Exp $";
+static char const rcsid[] = "$Id: cart.c,v 1.23 2003/06/25 18:56:07 kent Exp $";
 
 static char *sessionVar = "hgsid";	/* Name of cgi variable session is stored in. */
 
@@ -493,7 +493,6 @@ char *cartFindFirstLike(struct cart *cart, char *wildCard)
 struct hashEl *el, *elList = hashElListHash(cart->hash);
 char *name = NULL;
 
-slSort(&elList, hashElCmp);
 for (el = elList; el != NULL; el = el->next)
     {
     if (wildMatch(wildCard, el->name))
@@ -505,6 +504,29 @@ for (el = elList; el != NULL; el = el->next)
 hashElFreeList(&el);
 return name;
 }
+
+struct hashEl *cartFindLike(struct cart *cart, char *wildCard)
+/* Return list of name/val pairs from cart where name matches 
+ * wildcard.  Free when done with hashElFreeList. */
+{
+struct hashEl *el, *next, *elList = hashElListHash(cart->hash);
+struct hashEl *outList = NULL;
+
+for (el = elList; el != NULL; el = next)
+    {
+    next = el->next;
+    if (wildMatch(wildCard, el->name))
+	{
+	slAddHead(&outList, el);
+	}
+    else
+        {
+	hashElFree(&el);
+	}
+    }
+return outList;
+}
+
 
 static char *cookieDate()
 /* Return date string for cookie format.   We'll have to
