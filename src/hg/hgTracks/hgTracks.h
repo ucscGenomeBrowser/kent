@@ -519,6 +519,7 @@ struct simpleFeature *sfFromPslX(struct psl *psl,int grayIx, int
 struct linkedFeatures *lfFromPsl(struct psl *psl, boolean isXeno);
 /* Create a linked feature item from psl. */
 
+void ctWigLoadItems(struct track *tg);
 void wigMethods(struct track *track, struct trackDb *tdb, 
                                 int wordCount, char *words[]);
 
