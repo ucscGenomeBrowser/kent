@@ -9121,7 +9121,7 @@ if (!hideControls)
 	fputs("position ", stdout);
 	cgiMakeTextVar("position", position, 30);
 	printf("  size %d, ", winEnd-winStart);
-	fputs(" pixel width ", stdout);
+	fputs(" image width ", stdout);
 	cgiMakeIntVar("pix", tl.picWidth, 4);
 	fputs(" ", stdout);
 	cgiMakeButton("submit", "jump");
