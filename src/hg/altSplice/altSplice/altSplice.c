@@ -67,21 +67,53 @@
 #include "dnaseq.h"
 #include "hdb.h"
 #include "jksql.h"
-#include "cheapcgi.h"
+//#include "cheapcgi.h"
 #include "bed.h"
+#include "options.h"
 
-static char const rcsid[] = "$Id: altSplice.c,v 1.5 2003/05/27 20:33:11 sugnet Exp $";
+static char const rcsid[] = "$Id: altSplice.c,v 1.6 2003/06/03 04:50:37 sugnet Exp $";
 
 int cassetteCount = 0; /* Number of cassette exons counted. */
 int misSense = 0;      /* Number of cassette exons that would introduce a missense mutation. */
 int clusterCount = 0;  /* Number of gene clusters identified. */
 
+static struct optionSpec optionSpecs[] = 
+/* Our acceptable options to be called with. */
+{
+    {"help", OPTION_BOOLEAN},
+    {"db", OPTION_STRING},
+    {"beds", OPTION_STRING},
+    {"genePreds", OPTION_STRING},
+    {"agxOut", OPTION_STRING},
+    {"consensus", OPTION_BOOLEAN},
+    {NULL, 0}
+};
+
+static char *optionDescripts[] = 
+/* Description of our options for usage summary. */
+{
+    "Display this message.",
+    "Database (i.e. hg15) to load psl records from.",
+    "Coordinate file to base clustering on in bed format.",
+    "Coordinate file to base clustering on in genePred format.",
+    "Name of file to output to.",
+    "Try to extend partials to consensus site instead of farthest."
+};
+
 void usage()
 /* print usage and quit */
 {
-errAbort("altSplice - constructs altSplice graphs using information alignments\n"
-	 "in est and mrna databases. Now for whole genome.\n"
-	 "usage:\n\taltSplice <db> <outputFile.AltGraph.tab> <optional:bedFile>\n");
+int i;
+printf(
+       "altSplice - constructs altSplice graphs using psl alignments\n"
+       "from est and mrna databases. Must specify either a bed file\n"
+       "or a genePred file to load coordinates.\n"
+       "usage:\n"
+       "   altSplice -db=hg15 -beds=rnaCluter.bed -agxOut=out.agx\n"
+       "where options are:\n");
+for(i=0; i<ArraySize(optionSpecs) -1; i++)
+    fprintf(stderr, "   -%s -- %s\n", optionSpecs[i].name, optionDescripts[i]);
+errAbort("");
 }
 
 struct psl *loadPslsFromDb(struct sqlConnection *conn, int numTables, char **tables, 
@@ -162,6 +194,7 @@ return dif;
 
 struct altGraphX *agFromAlignments(struct ggMrnaAli *maList, struct dnaSeq *seq, struct sqlConnection *conn,
 				   struct genePred *gp, int chromStart, int chromEnd, FILE *out )
+/** Custer overlaps from maList into altGraphX structure. */
 {
 struct altGraphX *ag = NULL;
 struct ggMrnaCluster *mcList=NULL, *mc=NULL;
@@ -181,7 +214,7 @@ if(mcList == NULL)
 slSort(&mcList, mcLargestFirstCmp);
 mc = mcList;
 clusterCount++;
-if(cgiBoolean("consensus"))
+if(optionExists("consensus"))
     {
     gg = ggGraphConsensusCluster(mc, ci, TRUE);
     }
@@ -237,7 +270,10 @@ freeGeneGraph(&gg);
 return ag;
 }
 
-struct altGraphX *agFromGp(struct genePred *gp, struct sqlConnection *conn, int maxGap, FILE *out)
+struct altGraphX *agFromGp(struct genePred *gp, struct sqlConnection *conn, 
+			   int maxGap, FILE *out)
+/** Create an altGraphX record by clustering psl records within coordinates
+    specified by genePred record. */
 {
 struct altGraphX *ag = NULL;
 struct dnaSeq *genoSeq = NULL;
@@ -252,7 +288,6 @@ struct psl *pslList = NULL;
 char *chrom = gp->chrom;
 int chromStart = gp->txStart;
 int chromEnd = gp->txEnd;
-char *pslFileName = NULL;
 /* make the tables */
 numTables = (ArraySize(tablePrefixes) + ArraySize(wholeTables));
 tables = needMem(sizeof(char*) * numTables);
@@ -267,11 +302,7 @@ for(i = ArraySize(tablePrefixes); i < numTables; i++)
     }
 
 /* load the psls */
-pslFileName = cgiOptionalString("pslFile");
-if(pslFileName != NULL)
-    pslList = pslLoadAll(pslFileName);
-else
-    pslList = loadPslsFromDb(conn, numTables, tables, gp->chrom, chromStart, chromEnd);
+pslList = loadPslsFromDb(conn, numTables, tables, gp->chrom, chromStart, chromEnd);
 
 for(i=0; i < numTables; i++)
     freez(&tables[i]);
@@ -388,7 +419,7 @@ if (dif == 0)
 return dif;
 }
 
-void createAltSplices(char *outFile, char *bedFile, boolean memTest)
+void createAltSplices(char *outFile,  boolean memTest)
 /* Top level routine, gets genePredictions and runs through them to 
    build altSplice graphs. */
 {
@@ -397,20 +428,26 @@ struct altGraphX *ag=NULL, *agList= NULL;
 FILE *out = NULL;
 struct sqlConnection *conn = hAllocConn();
 char *gpFile = NULL;
+char *bedFile = NULL;
 int count =0;
-gpFile = cgiOptionalString("gpFile");
 
+/* Figure out where to get coordinates from. */
+bedFile = optionVal("beds", NULL);
+gpFile = optionVal("genePreds", NULL);
 if(bedFile != NULL)
     gpList = convertBedsToGps(bedFile);
 else if(gpFile != NULL)
     gpList = genePredLoadAll(gpFile);
 else 
-    gpList = loadRefGene22Annotations(conn);
+    {
+    warn("Must specify either a bed file or a genePred file");
+    usage();
+    }
 slSort(&gpList, gpSmallestFirstCmp);
+
 out = mustOpen(outFile, "w");
 for(gp = gpList; gp != NULL & count < 5; )
     {
-//    count++;
     warn("Starting loci %s:", gp->name);
     fflush(stderr);
     ag = agFromGp(gp, conn, 5, out);
@@ -424,28 +461,24 @@ uglyf("%d genePredictions with %d clusters, %d cassette exons, %d of are not mod
       slCount(gpList), clusterCount, cassetteCount, misSense);
 }
 
-
 int main(int argc, char *argv[])
-/* main routine, calls cgiSpoof and sets database */
+/* main routine, calls optionInt and sets database */
 {
 char *outFile = NULL;
 char *bedFile = NULL;
 char *memTestStr = NULL;
 boolean memTest=FALSE;
 char *db;
-if(argc <3)
+if(argc == 1)
     usage();
-cgiSpoof(&argc, argv);
-if(argc == 4)
-    bedFile = argv[3];
-db = cloneString(argv[1]);
+optionInit(&argc, argv, optionSpecs);
+if(optionExists("help"))
+    usage();
 hSetDb(db);
-outFile = cloneString(argv[2]);
-
-memTest = cgiBoolean("memTest");
+memTest = optionExists("memTest");
 if(memTest == TRUE)
     warn("Testing for memory leaks, use top to monitor and CTRL-C to stop.");
-createAltSplices(outFile,bedFile, memTest );
+createAltSplices(outFile, memTest );
 freez(&outFile);
 freez(&db);
 return 0;

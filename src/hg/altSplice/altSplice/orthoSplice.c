@@ -35,7 +35,7 @@
 #include "chainNetDbLoad.h"
 #include "geneGraph.h"
 
-static char const rcsid[] = "$Id: orthoSplice.c,v 1.9 2003/05/29 12:15:31 sugnet Exp $";
+static char const rcsid[] = "$Id: orthoSplice.c,v 1.10 2003/06/03 04:50:37 sugnet Exp $";
 
 struct spliceEdge 
 /* Structure to hold information about one edge in 
@@ -1029,7 +1029,7 @@ if(optionExists("help"))
 db = optionVal("db", NULL);
 orthoDb = optionVal("orthoDb", NULL);
 if(db == NULL || orthoDb == NULL)
-    errAbort("orthoSplice - Must set db and orhtoDb.");
+    errAbort("orthoSplice - Must set db and orhtoDb. Try -help for usage.");
 hSetDb(db);
 hSetDb2(orthoDb);
 orthoSplice(db, orthoDb);
