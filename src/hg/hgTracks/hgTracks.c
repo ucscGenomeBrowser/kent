@@ -441,19 +441,15 @@ static int sampleTotalHeight(struct track *tg,
 /* Wiggle track will use this to figure out the height they use
 as defined in the cart */
 {
-
 struct slList *item;
-int start, lines;
+int start, lines = 0;
 
 int heightFromCart;
 char o1[128];
 
 snprintf( o1, 128, "%s.heightPer", tg->mapName);
 
-if( vis == tvDense )
-    heightFromCart = 10;
-else
-    heightFromCart = atoi(cartUsualString(cart, o1, "50"));
+heightFromCart = atoi(cartUsualString(cart, o1, "50"));
 
 tg->lineHeight = max(tl.fontHeight+1, heightFromCart);
 tg->heightPer = tg->lineHeight - 1;
@@ -478,6 +474,15 @@ switch (vis)
 	break;
     }
 return tg->height;
+}
+
+int consTotalHeight(struct track *tg, enum trackVisibility vis)
+/* Human/mouse conservation total height. */
+{
+if( vis == tvDense )
+    return tg->height = tg->lineHeight = 10;
+else
+    return sampleTotalHeight(tg, vis); 
 }
 
 int orientFromChar(char c)
@@ -7465,11 +7470,6 @@ if( hasDense != NULL )
     sortGroupList = NULL;
     }
 tg->items = lfList;
-
-/* Since we've taken care of loading too many things using the
-      zoom tables, take care of limiting visibility here. */
-tg->limitedVis = tg->visibility;
-tg->limitedVisSet = TRUE;
 }
 
 void zooMethods( struct track *tg )
@@ -7482,12 +7482,14 @@ void humMusLMethods( struct track *tg )
 /* Overide the humMusL load function to look for zoomed out tracks. */
 {
 tg->loadItems = loadHumMusL;
+tg->totalHeight = consTotalHeight;
 }
 
 void musHumLMethods( struct track *tg )
 /* Overide the musHumL load function to look for zoomed out tracks. */
 {
 tg->loadItems = loadHumMusL;
+tg->totalHeight = consTotalHeight;
 }
 
 
@@ -7571,18 +7573,12 @@ if( hasDense != NULL )
     sortGroupList = NULL;
     }
 tg->items = lfList;
-
-/* Since we've taken care of loading too many things using the 
-   zoom tables, take care of limiting visibility here. */
-tg->limitedVis = tg->visibility;
-tg->limitedVisSet = TRUE;
 }
 
 
 void affyTranscriptomeMethods(struct track *tg)
 /* Overide the load function to look for zoomed out tracks. */
 {
-
 tg->loadItems = loadAffyTranscriptome;
 }
 
@@ -9575,7 +9571,6 @@ tg->loadItems = loadGenePred;
 void fillInFromType(struct track *track, struct trackDb *tdb)
 /* Fill in various function pointers in track from type field of tdb. */
 {
-
 char *typeLine = tdb->type, *words[8], *type;
 int wordCount;
 if (typeLine == NULL)
