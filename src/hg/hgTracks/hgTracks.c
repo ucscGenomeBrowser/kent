@@ -6351,7 +6351,7 @@ int main(int argc, char *argv[])
 {
 cgiSpoof(&argc, argv);
 htmlSetBackground("../images/floret.jpg");
-htmShell("UCSC Human Genome Browser v6", doMiddle, NULL);
+htmShell("UCSC Human Genome Browser v6.1", doMiddle, NULL);
 //htmShell("Browser Being Updated", doDown, NULL);
 return 0;
 }
