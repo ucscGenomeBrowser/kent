@@ -543,6 +543,7 @@ DNA rCodon[4], dCodon[4];
 int codonSnps = 0, codonMismatches = 0;
 int codonGenPos[3];
 int codonMrnaStart = 0;
+int nCodonBases = 0;   /* to deal with partial codons */
 struct indel *mi, *miList=NULL;
 struct indel *codonSub, *codonSubList=NULL;
 ZeroVar(codonGenPos);
@@ -581,6 +582,7 @@ for (i = 0; i < pi->psl->blockCount; i++)
                 }
             rCodon[iCodon] = r[qstart+j];
             dCodon[iCodon] = d[tstart+j];
+            nCodonBases++;
             /* Bases match */
             if ((char)r[qstart+j] == (char)d[tstart+j])
                 pi->cdsMatch++;
@@ -606,7 +608,7 @@ for (i = 0; i < pi->psl->blockCount; i++)
                     pi->thirdPos++;
                 }
             /* If third base, check codon for mismatch */
-            if ((iCodon==2) && !sameString(rCodon, dCodon))
+            if ((iCodon==2) && (nCodonBases == 3) && !sameString(rCodon, dCodon))
                 {
                 if (lookupCodon(rCodon) == lookupCodon(dCodon))
                     {
@@ -628,6 +630,8 @@ for (i = 0; i < pi->psl->blockCount; i++)
                     slAddHead(&codonSubList, codonSub);
                     }
                 }
+            if (iCodon == 2) 
+                nCodonBases = 0;
             }
         }
     }
