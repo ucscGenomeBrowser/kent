@@ -1,4 +1,5 @@
 25:
+     o fixed pslPretty to allow '--' strands in axt output format
      o Made it so that gfServer does not abort when it runs out
        of memory.
      o Fixed bug in pslPretty in case where there is a small
