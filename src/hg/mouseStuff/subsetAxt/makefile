@@ -11,6 +11,8 @@ DATA_FILES = blastz.mat coding.mat medium.mat promoter.mat twilight.mat
 subsetAxt: $O ${MYLIBS}
 	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/subsetAxt $O ${MYLIBS} $L
 	strip ${HOME}/bin/${MACHTYPE}/subsetAxt
+
+copyData:
 	${MKDIR} ${HOME}/data/subsetAxt
 	cp ${DATA_FILES} ${HOME}/data/subsetAxt
 
