@@ -42,6 +42,9 @@
 #include <math.h>
 #include <errno.h>
 #include <unistd.h>
+#if defined(MACHTYPE_ppc)
+#include <sys/wait.h>
+#endif
 #ifdef __CYGWIN32__
 #include <mingw/math.h>
 #else
