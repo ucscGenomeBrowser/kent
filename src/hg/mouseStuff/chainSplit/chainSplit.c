@@ -4,7 +4,7 @@
 #include "hash.h"
 #include "options.h"
 #include "portable.h"
-#include "chainBlock.h"
+#include "chain.h"
 
 boolean splitOnQ = FALSE;
 void usage()
