@@ -173,8 +173,16 @@ foreach $region (sort keys %descriptions) {
 	    my ($start, $end) = split (/-/, $range);
 	    $length = $length + ($end - $start + 1);
 	    $nonNlength = $nonNlength + &countBases($toDb, $chr, $start, $end);
-	    printf("<A HREF=\"/cgi-bin/hgTracks?db=%s&amp;position=%s%s%s&amp;net%s=full\" TARGET=browser2>%s</A>\n", 
+	    if ($end-$start>2000)
+	    {
+		printf("<A HREF=\"/cgi-bin/hgTracks?db=%s&amp;position=%s%s%s&amp;net%s=full\" TARGET=browser2>%s</A>\n", 
 		   $toDb, $LORegionPartPosition{$part}, $baseTracks, $netHide, $fromDbUpper, $chr);
+	    }
+	    else
+	    {
+		printf("[<A HREF=\"/cgi-bin/hgTracks?db=%s&amp;position=%s%s%s&amp;net%s=full\" TARGET=browser2>%s</A>]\n", 
+		   $toDb, $LORegionPartPosition{$part}, $baseTracks, $netHide, $fromDbUpper, $chr);
+	    }
 	}
     } else {printf "-";}
 
@@ -194,8 +202,33 @@ foreach $region (sort keys %descriptions) {
 	    my ($start, $end) = split (/-/, $range);
 	    $length = $length + ($end - $start + 1);
 	    $nonNlength = $nonNlength + &countBases($toDb, $chr, $start, $end);
-	    printf("<A HREF=\"/cgi-bin/hgTracks?db=%s&amp;position=%s%s%s&amp;net%s=full\" TARGET=browser2>%s</A>\n", 
-		   $toDb, $MCRegionPartPosition{$part}, $baseTracks, $netHide, $fromDbUpper, $chr);
+	    $isInConsensus = 0;
+	    if ( defined $consensusRegionParts{$region} ) 
+	    {
+		@partsC = split (/,/, $consensusRegionParts{$region});
+		if ($#partsC == -1) {printf "-";}
+		foreach $partC (@partsC) 
+		{
+		    my ($chrC, $rangeC) = split (/:/, $consensusRegionPartPosition{$partC});
+		    my ($startC, $endC) = split (/-/, $rangeC);
+		    if ($chr eq $chrC && $startC<=$start && $endC>=$end) {$isInConsensus = 1;}
+		}
+	    } 
+	    if ($end-$start<2000)
+	    {
+		printf("[<A HREF=\"/cgi-bin/hgTracks?db=%s&amp;position=%s%s%s&amp;net%s=full\" TARGET=browser2>%s</A>]\n", 
+		       $toDb, $MCRegionPartPosition{$part}, $baseTracks, $netHide, $fromDbUpper, $chr);
+	    }
+	    elsif ($isInConsensus == 0)
+	    {
+		printf("{<A HREF=\"/cgi-bin/hgTracks?db=%s&amp;position=%s%s%s&amp;net%s=full\" TARGET=browser2>%s</A>}\n", 
+		       $toDb, $MCRegionPartPosition{$part}, $baseTracks, $netHide, $fromDbUpper, $chr);
+	    }
+	    else	    
+	    {
+		printf("<A HREF=\"/cgi-bin/hgTracks?db=%s&amp;position=%s%s%s&amp;net%s=full\" TARGET=browser2>%s</A>\n", 
+		       $toDb, $MCRegionPartPosition{$part}, $baseTracks, $netHide, $fromDbUpper, $chr);
+	    }
 	}
     } else {printf "-";}
     my $diff     = $length - $LOlength;
