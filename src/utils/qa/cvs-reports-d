@@ -988,8 +988,25 @@ proc isRevSelected {fileInfo rev} {
     #set revRec [$fileInfo getRevision $rev]
     #return [expr [cnvDateTime [lindex $revRec 1]] >= $::gStartDate]
 
+    # trying to ignore the specific revs of from/to and look at
+    # the parent trunk revs instead, to use those for comparison
     set ftr [$fileInfo getRevisionParent [$fileInfo getTag $::gFromTag] ]
     set ttr [$fileInfo getRevisionParent [$fileInfo getTag $::gToTag]   ]
+    #used to be ftr,ttr were only x.x.x.x branch revisions
+    #but now they can be just trunk/tip x.x revisions also
+    # this compensates for those
+    if {"$ftr"==""} { set ftr [$fileInfo getTag $::gFromTag] }
+    if {"$ttr"==""} { set ttr [$fileInfo getTag $::gToTag] }
+    # however, the review tag is getting set on old files,
+    #  which does not happen by default with branch tags.
+    #  I have added -a to the review rtag command to suppress
+    #   the tagging of removed files in ./Attic.
+
+    # Too new = no from- or to- tags (we don't want to see these)
+    # New     = no from-tag but to-tag ok
+    # Current = both from- and -to tags ok
+    # Recently removed = only from-tag, no to=tag
+    # Removed long ago = no from- nor to- tags (we don't want to see these)
     
     if {"$ttr"==""} { 
 	# is this a recently deleted rev? if not recent, skip
@@ -1221,7 +1238,7 @@ so the change count is the larger of the delete count and add count.
 
 <!-- #added by galt -->
 <!-- #<blockquote><CODE>cvs-reports-build <em>startDate</em></CODE></blockquote> -->
-<blockquote><CODE>cvs-reports-delta <em>FromTag ToTag FromTagDate ToTagDate</em></CODE></blockquote>
+<blockquote><CODE>cvs-reports-delta <em>FromTag ToTag FromTagDate ToTagDate mode</em></CODE></blockquote>
 
 </body>
 </html>
