@@ -69,31 +69,6 @@ slReverse(&list);
 return list;
 }
 
-struct chain *chainLoadWhere(struct sqlConnection *conn, char *table, char *where)
-/* Load all chain from table that satisfy where clause. The
- * where clause may be NULL in which case whole table is loaded
- * Dispose of this with chainFreeList(). */
-{
-struct chain *list = NULL, *el;
-struct dyString *query = dyStringNew(256);
-struct sqlResult *sr;
-char **row;
-
-dyStringPrintf(query, "select * from %s", table);
-if (where != NULL)
-    dyStringPrintf(query, " where %s", where);
-sr = sqlGetResult(conn, query->string);
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-    el = chainLoad(row);
-    slAddHead(&list, el);
-    }
-slReverse(&list);
-sqlFreeResult(&sr);
-dyStringFree(&query);
-return list;
-}
-
 struct chain *chainCommaIn(char **pS, struct chain *ret)
 /* Create a chain out of a comma separated string. 
  * This will fill in ret if non-null, otherwise will
@@ -111,7 +86,7 @@ ret->tStart = sqlUnsignedComma(&s);
 ret->tEnd = sqlUnsignedComma(&s);
 ret->qName = sqlStringComma(&s);
 ret->qSize = sqlUnsignedComma(&s);
-sqlFixedStringComma(&s, ret->qStrand, sizeof(ret->qStrand));
+sqlFixedStringComma(&s, &(ret->qStrand), sizeof(ret->qStrand));
 ret->qStart = sqlUnsignedComma(&s);
 ret->qEnd = sqlUnsignedComma(&s);
 ret->id = sqlUnsignedComma(&s);
@@ -176,5 +151,32 @@ fprintf(f, "%u", el->qEnd);
 fputc(sep,f);
 fprintf(f, "%u", el->id);
 fputc(lastSep,f);
+}
+
+/* -------------------------------- End autoSql Generated Code -------------------------------- */
+
+struct chain *chainLoadWhere(struct sqlConnection *conn, char *table, char *where)
+/* Load all chain from table that satisfy where clause. The
+ * where clause may be NULL in which case whole table is loaded
+ * Dispose of this with chainFreeList(). */
+{
+struct chain *list = NULL, *el;
+struct dyString *query = dyStringNew(256);
+struct sqlResult *sr;
+char **row;
+
+dyStringPrintf(query, "select * from %s", table);
+if (where != NULL)
+    dyStringPrintf(query, " where %s", where);
+sr = sqlGetResult(conn, query->string);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    el = chainLoad(row);
+    slAddHead(&list, el);
+    }
+slReverse(&list);
+sqlFreeResult(&sr);
+dyStringFree(&query);
+return list;
 }
 
