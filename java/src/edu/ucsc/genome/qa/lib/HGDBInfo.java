@@ -62,7 +62,7 @@ public class HGDBInfo {
 
     try {
       Connection con = DriverManager.getConnection(dbURL);
-    
+      con.close();
     } catch (Exception e) {
       System.err.println(e.getMessage());
       return false;

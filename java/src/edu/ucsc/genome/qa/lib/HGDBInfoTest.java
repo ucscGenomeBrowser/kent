@@ -19,22 +19,17 @@ public class HGDBInfoTest {
     
     // get read access to database
     HgConf hgConf;
-    HGDBInfo metadbinfo; 
+    HGDBInfo dbinfo; 
+    String db = "pyrAer1";
     try {
-      metadbinfo = new HGDBInfo("hgwbeta", "hgcentraltest");
+      dbinfo = new HGDBInfo("hgwbeta", db);
     } catch (Exception e) {
       System.out.println(e.toString());
       return;
     }
-    if (!metadbinfo.validate()) return;
-
-  /*  incomplete ?  no HGDBInfo objects with this signature
-    HGDBInfo dbinfo = new HGDBInfo("localhost", assembly, userRead, passwordRead);
-    if (!dbinfo.validate()) {
-      System.out.println("Cannot connect to database for " + assembly);
-      continue;
-    }
-   */
-
+    if (dbinfo.validate()) 
+        System.out.println(db + " is valid");
+     else
+        System.out.println(db + " is not valid");
   }
 }

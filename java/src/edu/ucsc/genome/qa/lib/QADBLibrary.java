@@ -92,7 +92,6 @@ public class QADBLibrary {
   *  @return  true if table exists.
   */
   public static boolean tableExists(HGDBInfo dbinfo, String table) throws Exception {
-
     boolean exists = false;
     String dbURL = jdbcURL(dbinfo);
     Connection con = DriverManager.getConnection(dbURL);
@@ -107,6 +106,25 @@ public class QADBLibrary {
     }
     stmt.close();
     con.close();
+    return exists;
+  }
+
+ /**
+  *  See if a database exists.
+  *  @param  dbinfo    The machine, database, user and password.
+  * 
+  *  @return  true if table exists.
+  */
+  public static boolean databaseExists(HGDBInfo dbinfo) throws Exception {
+    boolean exists = false;
+    String dbURL = jdbcURL(dbinfo);
+    try {
+      Connection con = DriverManager.getConnection(dbURL);
+      con.close();
+      exists = true;
+    } catch (Exception e) {
+       // Do nothing, we'll just report database as not existing. 
+    }
     return exists;
   }
 
