@@ -1361,6 +1361,22 @@ if (tdb->html != NULL && tdb->html[0] != 0)
     }
 }
 
+void qChainRangePlusStrand(struct chain *chain, int *retQs, int *retQe)
+/* Return range of bases covered by chain on q side on the plus
+ * strand. */
+{
+if (chain->qStrand == '-')
+    {
+    *retQs = chain->qSize - chain->qEnd+1;
+    *retQe = chain->qSize - chain->qStart;
+    }
+else
+    {
+    *retQs = chain->qStart+1;
+    *retQe = chain->qEnd;
+    }
+}
+
 void genericChainClick(struct sqlConnection *conn, struct trackDb *tdb, 
     char *item, int start, char *otherDb)
 /* Handle click in chain track, at least the basics. */
@@ -1373,7 +1389,7 @@ char query[256];
 struct sqlResult *sr;
 char **row;
 int rowOffset;
-struct chain chain;
+struct chain *chain = NULL, *subChain = NULL, *toFree = NULL;
 int chainWinSize;
 int qs, qe;
 
@@ -1385,31 +1401,23 @@ sr = sqlGetResult(conn, query);
 row = sqlNextRow(sr);
 if (row == NULL)
     errAbort("Can't find %s in %s", item, table);
-chainHeadStaticLoad(row + rowOffset, &chain);
+chain = chainHeadLoad(row + rowOffset);
+sqlFreeResult(&sr);
 printf("<B>%s position:</B> %s:%d-%d</a>  size: %d <BR>\n",
-    thisOrg, chain.tName, chain.tStart+1, chain.tEnd, chain.tEnd-chain.tStart);
-printf("<B>strand:</B> %c<BR>\n", chain.qStrand);
-if (chain.qStrand == '-')
-    {
-    qs = chain.qSize - chain.qEnd+1;
-    qe = chain.qSize - chain.qStart;
-    }
-else
-    {
-    qs = chain.qStart+1;
-    qe = chain.qEnd;
-    }
-printf("<B>%s position:</B> <a target=\"_blank\" href=\"/cgi-bin/hgTracks?db=%s&position=%s%%3A%d-%d\">%s:%d-%d</a>  size: %d<BR>\n",
-    otherOrg, otherDb, chain.qName, qs, qe, chain.qName, 
-    qs, qe, chain.qEnd - chain.qStart);
+    thisOrg, chain->tName, chain->tStart+1, chain->tEnd, chain->tEnd-chain->tStart);
+printf("<B>strand:</B> %c<BR>\n", chain->qStrand);
+qChainRangePlusStrand(chain, &qs, &qe);
+printf("<B>%s position:</B> <A target=\"_blank\" href=\"/cgi-bin/hgTracks?db=%s&position=%s%%3A%d-%d\">%s:%d-%d</A>  size: %d<BR>\n",
+    otherOrg, otherDb, chain->qName, qs, qe, chain->qName, 
+    qs, qe, chain->qEnd - chain->qStart);
 printf("<B>chain id:</B> %s<BR>\n", item);
-printf("<B>score:</B> %1.0f<BR>\n", chain.score);
+printf("<B>score:</B> %1.0f<BR>\n", chain->score);
 printf("<BR>\n");
 
-chainWinSize = min(winEnd-winStart, chain.tEnd - chain.tStart);
+chainWinSize = min(winEnd-winStart, chain->tEnd - chain->tStart);
 if (chainWinSize < 1000000)
     {
-    hgcAnchorSomewhere("htcChainAli", item, track, chain.tName);
+    hgcAnchorSomewhere("htcChainAli", item, track, chain->tName);
     printf("View details of parts of chain within browser window.</A><BR>\n");
     }
 else
@@ -1417,7 +1425,14 @@ else
     printf("Zoom so that browser window covers 1,000,000 bases or less "
            "and return here to see alignment details.<BR>\n");
     }
-sqlFreeResult(&sr);
+chainDbAddBlocks(chain, track, conn);
+chainSubsetOnT(chain, winStart, winEnd, &subChain, &toFree);
+qChainRangePlusStrand(subChain, &qs, &qe);
+printf("<A target=\"_blank\" href=\"/cgi-bin/hgTracks?db=%s&position=%s%%3A%d-%d\">",
+	otherDb, subChain->qName, qs, qe);
+printf("Open %s browser </A> at position corresponding to the part of chain that is in this window.<BR>\n", otherOrg);
+chainFree(&toFree);
+chainFree(&chain);
 }
 
 char *trackTypeInfo(char *track)
