@@ -589,11 +589,21 @@ rmdir --ignore-fail-on-non-empty /tmp/$d
     para try
     para check
     para push
-XXXX - running 2004-04-06
-    ... etc ...
     # one of the jobs takes quite a while.  Most of the others are OK:
-# Average job time:                2308s      38.46m     0.64h    0.03d
-# Longest job:                    47442s     790.70m    13.18h    0.55d
+Completed: 6950 of 6951 jobs
+Crashed: 1 jobs
+CPU time in finished jobs:   19284472s  321407.87m  5356.80h  223.20d  0.612 y
+IO & Wait Time:                 63556s    1059.26m    17.65h    0.74d  0.002 y
+Average job time:                2784s      46.40m     0.77h    0.03d
+Longest job:                    47017s     783.62m    13.06h    0.54d
+Submission to last job:         58555s     975.92m    16.27h    0.68d
+
+    #	The failed job is:
+    # /cluster/store5/worm/ce2/bed/waba/wabaRun \
+    #	/iscratch/i/worms/Cbriggsae/contigs/c0907.fa \
+    #	/iscratch/i/worms/Celegans2/unmaskedFa/chrI.fa \
+    #	/cluster/store5/worm/ce2/bed/waba/out/chrI/c0907.wab
+XXXX - running 2004-04-07 - retrying this stand-along on kkr1u00
 
     # next machine
     ssh hgwdev
