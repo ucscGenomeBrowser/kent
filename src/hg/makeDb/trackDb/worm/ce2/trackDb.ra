@@ -32,6 +32,14 @@ priority 24.1
 visibility hide
 type bed 4
 
+track altCurated
+shortLabel altCuratedWS100
+longLabel Hand curated list (Zahler/Kabat) splice sites as found by Intronerator WS100
+group map
+priority 24.2
+visibility hide
+type bed 6
+
 track sangerGene
 shortLabel WormBase Genes
 longLabel WormBase Gene Annotations
