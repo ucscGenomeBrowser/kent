@@ -82,8 +82,9 @@ join mgcAccession typeOf=mrnaAccession
     gbd.mgcGenes.name
 
 join proteinAcc typeOf=genbankAccession
-    gbd.kgProtAlias.alias subset 
+    gbd.kgProtAlias.alias 
     gbd.kgXref.protAcc
+    gbd.refLink.protAcc 
 
 join humanFosmidId
     human.fosEndPairs.name
@@ -100,6 +101,8 @@ join hugoName external=HUGO
     human.atlasOncoGene.locusSymbol
     human.kgAlias.alias subset
     human.kgXref.geneSymbol
+    human.refFlat.geneName
+    human.refLink.name
 
 join genBankAuthor
     gbd.mrna.author
@@ -124,6 +127,7 @@ join genBankDescription
 join genBankGeneName
     gbd.mrna.geneName
     gbd.geneName.id
+    gbd.refLink.geneName
 
 join genBankKeyword
     gbd.mrna.keyword
@@ -148,6 +152,7 @@ join genBankMrnaClone
 join genBankProductName
     gbd.mrna.productName
     gbd.productName.id
+    gbd.refLink.prodName
 
 join genBankSex
     gbd.mrna.sex
@@ -173,10 +178,20 @@ join refSeqId typeOf=mrnaAccession
     gbd.kgXref.refseq
     gbd.knownToRefSeq.value
     gbd.mrnaRefseq.refseq
+    gbd.refFlat.name
+    gbd.refGene.name
+    gbd.refLink.mrnaAcc
+    gbd.refSeqId.qName
+    gbd.refSeqStatus.mrnaAcc
+    gbd.refSeqSummarry.mrnaAcc
 
 join locusLinkId external=LocusLink
     gbd.keggPathway.mapID
     gbd.knownToLocusLink.value
+    gbd.refLink.locusLinkId
+
+join omimId external=OMIM
+    gbd.refLink.omimId
 
 join knownAlignId
     gbd.knownGene.alignId
@@ -236,6 +251,9 @@ join swissProtAccession external=SwissProt
     gbd.kgProtAlias.alias part
     gbd.kgProtMap.qName
     gbd.kgXref.spID
+    gbd.pepMwAa.accession
+    gbd.pepPi.accession
+
 
 join pfamId external=Pfam
     gbd.knownToPfam.value
