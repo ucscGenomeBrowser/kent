@@ -87,7 +87,7 @@
 #include "versionInfo.h"
 #include "bedCart.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.903 2005/02/11 23:37:00 hartera Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.904 2005/02/12 20:08:49 kent Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -500,6 +500,35 @@ int tgFixedTotalHeightUsingOverflow(struct track *tg, enum trackVisibility vis)
 {
 int height = tgFixedTotalHeightOptionalOverflow(tg, vis, tl.fontHeight+1, tl.fontHeight, TRUE);
 return height;
+}
+
+void changeTrackVis(struct group *groupList, char *groupTarget, int changeVis)
+/* Change track visibilities. If groupTarget is 
+ * NULL then set visibility for tracks in all groups.  Otherwise,
+ * just set it for the given group.  If vis is -2, then visibility is
+ * unchanged.  If -1 then set visibility to default, otherwise it should 
+ * be tvHide, tvDense, etc. */
+{
+struct group *group;
+if (changeVis == -2)
+    return;
+for (group = groupList; group != NULL; group = group->next)
+    {
+    struct trackRef *tr;
+    if (groupTarget == NULL || sameString(group->name,groupTarget))
+        {
+	for (tr = group->trackList; tr != NULL; tr = tr->next)
+	    {
+	    struct track *track = tr->track;
+	    if (changeVis == -1)
+	        track->visibility = track->tdb->visibility;
+	    else
+	        track->visibility = changeVis;
+	    cartSetString(cart, track->mapName, 
+	    	hStringFromTv(track->visibility));
+	    }
+	}
+    }
 }
 
 char *dnaInWindow()
@@ -9109,6 +9138,7 @@ for (ct = ctList; ct != NULL; ct = ct->next)
     }
 }	/*	void loadCustomTracks(struct track **pGroupList)	*/
 
+#ifdef UNUSED
 void hideAllTracks(struct track *trackList)
 /* hide all the tracks (and any in trackDb too) */
 {
@@ -9129,6 +9159,7 @@ freez(&trackDb);
 sqlFreeResult(&sr);
 hFreeConn(&conn);
 }
+#endif /* UNUSED */
 
 
 void hotLinks()
@@ -9539,7 +9570,9 @@ struct group *group;
 struct track *track;
 char *freezeName = NULL;
 boolean hideAll = cgiVarExists("hgt.hideAll");
+boolean defaultTracks = cgiVarExists("hgt.reset");
 boolean showedRuler = FALSE;
+boolean showTrackControls = cartUsualBoolean(cart, "trackControlsOnMain", TRUE);
 long thisTime = 0, lastTime = 0;
 char *clade = hClade(hGenome(database));
 
@@ -9572,13 +9605,10 @@ trackList = getTrackList();
 groupTracks(&trackList, &groupList);
 
 /* If hideAll flag set, make all tracks hidden */
-if(hideAll)
+if(hideAll || defaultTracks)
     {
-    for (track = trackList; track != NULL; track = track->next)
-	{
-	track->visibility = tvHide;
-	}
-    hideAllTracks(trackList);
+    int vis = (hideAll ? tvHide : -1);
+    changeTrackVis(groupList, NULL, vis);
     }
 
 /* Tell tracks to load their items. */
@@ -9665,6 +9695,8 @@ if (!hideControls)
     topButton("hgt.out3", ZOOM_10X);
     hWrites("<BR>\n");
 
+if (showTrackControls)
+    {
     /* Break into a second form so that zooming and scrolling
      * can be done with a 'GET' so that user can back up from details
      * page without Internet Explorer popping up an annoying dialog.
@@ -9681,6 +9713,7 @@ if (!hideControls)
     hPrintf("<FORM ACTION=\"%s\" NAME=\"TrackForm\" METHOD=POST>\n\n", hgTracksName());
     cartSaveSession(cart);	/* Put up hgsid= as hidden variable. */
     hPrintf("<CENTER>");
+    }
 
 
     /* Make line that says position. */
@@ -9740,47 +9773,35 @@ if (!hideControls)
     // smallBreak();
 
     /* Display bottom control panel. */
-    hButton("hgt.reset", "reset all");
-    hPrintf(" ");
-    hButton("hgt.hideAll", "hide all");
-
-#ifdef OLD
-    if(ideogramAvail)
+    hButton("hgt.reset", "default tracks");
+    if (showTrackControls)
 	{
-	hPrintf(" Chromosome");
-	hCheckBox("ideogram", withIdeogram);
+	hPrintf(" ");
+	hButton("hgt.hideAll", "hide all");
 	}
-    hPrintf(" Guidelines ");
-    hCheckBox("guidelines", withGuidelines);
-    hPrintf(" <B>Labels:</B> ");
-    hPrintf("left ");
-    hCheckBox("leftLabels", withLeftLabels);
-    hPrintf("center ");
-    hCheckBox("centerLabels", withCenterLabels);
-    hPrintf(" ");
-#endif /* OLD */
 
     hPrintf(" ");
     hButton("hgTracksConfigPage", "configure");
-    hPrintf(" ");
-    hButton("submit", "refresh");
+    if (showTrackControls)
+	{
+	hPrintf(" ");
+	hButton("submit", "refresh");
+	}
 
     hPrintf("<BR>\n");
 
-    /* Display viewing options for each track. */
-    /* Chuck: This is going to be wrapped in a table so that
-     * the controls don't wrap around randomly
-     */
     if( chromosomeColorsMade )
         {
         hPrintf("<B>Chromosome Color Key:</B><BR> ");
         hPrintf("<IMG SRC = \"../images/new_colorchrom.gif\" BORDER=1 WIDTH=596 HEIGHT=18 ><BR>\n");
         }
+
+if (showTrackControls)
+    {
+    /* Display viewing options for each track. */
+    /* Chuck: This is going to be wrapped in a table so that
+     * the controls don't wrap around randomly */
     hPrintf("<table border=0 cellspacing=1 cellpadding=1 width=%d>\n", CONTROL_TABLE_WIDTH);
-    // hPrintf("<tr><th colspan=%d>\n", MAX_CONTROL_COLUMNS);
-    // smallBreak();
-    // hPrintf("<B>Track Controls:</B>");
-    // hPrintf("</th></tr>\n");
     hPrintf("<tr><td colspan='5' align='CENTER' nowrap>"
 	   "Use drop down controls below and press refresh to alter tracks "
 	   "displayed.<BR>"
@@ -9846,6 +9867,7 @@ if (!hideControls)
 	    controlGridEndRow(cg);
 	}
     endControlGrid(&cg);
+    }
 
     if (measureTiming)
         {
@@ -9869,7 +9891,8 @@ if (!hideControls)
 	    }
 	}
     }
-hButton("submit", "refresh");
+if (showTrackControls)
+    hButton("submit", "refresh");
 hPrintf("</CENTER>\n");
 
 
@@ -10165,8 +10188,6 @@ withGuidelines = cartUsualBoolean(cart, "guidelines", TRUE);
 insideX = trackOffsetX();
 insideWidth = tl.picWidth-gfxBorder-insideX;
 
-if (cgiVarExists("hgt.hideAll"))
-    cartSetString(cart, RULER_TRACK_NAME, "dense");
 setRulerMode();
 
 /* Do zoom/scroll if they hit it. */
@@ -10550,8 +10571,6 @@ int main(int argc, char *argv[])
 uglyTime(NULL);
 htmlPushEarlyHandlers();
 cgiSpoof(&argc, argv);
-if (cgiVarExists("hgt.reset"))
-    resetVars();
 htmlSetBackground("../images/floret.jpg");
 htmlSetStyle("<LINK REL=\"STYLESHEET\" HREF=\"/style/HGStyle.css\">"); 
 cartHtmlShell("UCSC Genome Browser v"CGI_VERSION, doMiddle, hUserCookie(), excludeVars, NULL);
