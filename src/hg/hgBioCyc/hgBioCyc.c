@@ -3,13 +3,9 @@
 #include "hCommon.h"
 #include "hdb.h"
 
-//char proteinName[20], mrnaName[20];
 FILE *inf;
 char line_in[10000];
 char line[10000];
-//char newInfo[10000], oldInfo[10000];
-//char *oldMrnaStr, *oldProteinStr, *oldAlignStr;
-//char *mrnaStr, *proteinStr, *alignStr;
 char *infileName;
 
 int aaLen;
@@ -21,7 +17,7 @@ void usage()
 /* Explain usage and exit. */
 {   
 errAbort(
-  "bioCyc - Create Creates bioCycPathway.tab for Known Genes to link to SRI BioCyc pathways\n"
+  "bioCyc - Creates bioCycPathway.tab for Known Genes to link to SRI BioCyc pathways\n"
   "usage:\n"
   "   hgBoCyc xxxx yyyy\n"
   "      xxxx is the input file name\n"
@@ -82,9 +78,11 @@ again:
     	}
     else
 	{
-	printf("%s not found\n", refseqID);
+	printf("%s not found in kgAlias nor in refLink\n", refseqID);
 	}
     chp = chp + strlen(mapID);
+    
+    // process remaing refeqID(s)
     goto again;
     }
 
@@ -92,3 +90,4 @@ fclose(o1);
 system("cat j.dat|sort|uniq >bioCycPathway.tab");
 system("rm j.dat");
 }
+
