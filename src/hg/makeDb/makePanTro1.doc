@@ -1,4 +1,4 @@
-# First chimp release
+DONE First chimp release
 
 # DOWNLOAD FILES FROM WHITEHEAD   (kate)
 
@@ -414,7 +414,7 @@ cat > jkStuff/makeGaps.csh << 'EOF'
         # 1311128857 bases of 3109246583 (42.169%) in intersection
 
 
-# REPEATMASKER TRACK (IN PROGRESS 2004-01-21 kate)
+# REPEATMASKER TRACK (DONE 2004-01-21 kate)
 
     # Split chrom into 5MB chunks
     ssh kksilo
@@ -569,7 +569,7 @@ cat > jkStuff/liftToChromOut.csh << 'EOF'
     featureBits panTro1 rmsk
 
 
-# SIMPLE REPEATS TRACK (IN PROGRESS 2004-01-21 kate)
+# SIMPLE REPEATS TRACK (DONE 2004-01-21 kate)
 
     sh kksilo
     mkdir -p /cluster/data/panTro1/bed/simpleRepeat
@@ -663,7 +663,7 @@ cat > jkStuff/hardMaskChrom.csh << 'EOF'
     end
 
 
-# DOWNLOADS (IN PROGRESS 2003-01-23 kate)
+# DOWNLOADS (DONE 2004-02-12 kate)
 
     ssh hgwdev
     cd /cluster/data/panTro1
@@ -1779,49 +1779,6 @@ blat -mask=lower -q=dnax -t=dnax {check in exists $(path1)} {check in line+ $(pa
         echo done $c
     end
     
-# PREP AS QUERY SIDE FOR ALIGNMENTS TO HUMAN HG17 (2004-06-12 kate)
-    # split scaffold fasta file into 3K chunks
-    # NOTE: can't lift PSL's aligned to this as liftUp doesn't
-    # handle negative strand lifts for PSL's
-    ssh kksilo
-    cd /cluster/data/panTro1
-    set split = /cluster/bluearc/panTro1/blatSplit
-    mkdir -p $split/split500K.scaf
-    cd $split/split500K.scaf
-    faSplit about /cluster/data/panTro1/scaffolds.msk.fa 500000 ./
-
-    cd $split
-cat > split.csh << 'EOF'
-    set split = /cluster/bluearc/panTro1/blatSplit
-    cd $split
-    mkdir -p split3K lift3K
-    foreach f (split500K.scaf/*.fa)
-        set d = $f:t:r
-        echo $d
-        faSplit size $f 3000 split3K/${d}_ -lift=lift3K/$d.lft -oneFile 
-    end
-'EOF'
-    csh split.csh >&! split.log &
-    tail -100f split.log
-
-    ssh kksilo
-    cd /cluster/data/panTro1
-    set split = /cluster/bluearc/panTro1/blatSplit
-    mkdir -p $split/splitChrom.3K $split/liftChrom.3K
-    cd $split
-cat > split.csh << 'EOF'
-    set split = /cluster/bluearc/panTro1/blatSplit
-    cd $split
-    foreach f (/cluster/data/panTro1/?{,?}/*.fa)
-        set d = $f:t:r
-        echo $d
-        faSplit gap $f 3000 splitChrom.3K/${d}_ \
-                        -lift=liftChrom.3K/$d.lft -oneFile 
-    end
-'EOF'
-    csh split.csh >&! split.log &
-    tail -100f split.log
-
 
 # LOAD ENSEMBL GENES (DONE 6/16/04 angie)
     ssh kksilo
@@ -1869,7 +1826,7 @@ cat > split.csh << 'EOF'
     hgPepPred panTro1 generic ensPep ensPep.fa
 
 
-# MAP ENCODE ORTHOLOG REGIONS (DONE 2004-07-09 kate)
+# MAP ENCODE ORTHOLOG REGIONS -- FREEZE 1 (DONE 2004-07-09 kate)
     ssh kksilo
     mkdir /cluster/data/panTro1/bed/encodeRegions
     cd /cluster/data/panTro1/bed/encodeRegions
@@ -1949,3 +1906,40 @@ cat > split.csh << 'EOF'
         hgsql panTro1
     hgsql panTro1 -e "SELECT COUNT(*) FROM contigAcc"
         # 361864
+
+
+# HUMAN HG17 NET AXT'S FOR DOWNLOAD (2005-02-11 kate)
+#       By user request
+
+    ssh kolossus
+        # kksilo currently off-limit for logins
+    cd /cluster/data/panTro1/bed
+    mkdir -p blastz.hg17.swp
+    cd blastz.hg17.swp
+    mkdir axtChain
+    cd axtChain
+    cp /cluster/data/hg17/bed/blastz.panTro1/axtChain/chimp.net .
+    netSplit chimp.net chimpNet
+    chainSwap /cluster/data/hg17/bed/blastz.panTro1/axtChain/all.chain all.chain
+    chainSplit chain all.chain
+    mkdir -p ../axtNet
+cat > makeAxt.csh << 'EOF'
+    foreach f (chimpNet/chr*.net)
+        set c = $f:t:r
+        echo "axtNet on $c"
+        netToAxt chimpNet/$c.net chain/$c.chain /cluster/data/panTro1/nib /cluster/data/hg17/nib stdout | axtSort stdin ../axtNet/$c.axt
+    end
+'EOF'
+    csh makeAxt.csh >&! makeAxt.log &
+    tail -100f makeAxt.log
+    cd ../axtNet
+    nice gzip *.axt
+
+    ssh hgwdev
+    cd /usr/local/apache/htdocs/goldenPath/panTro1
+    mkdir -p vsHg17
+    cd vsHg17
+    mkdir -p axtNet
+    nice cp -rp /cluster/data/panTro1/bed/blastz.hg17.swp/axtNet/*.axt.gz axtNet
+
+
