@@ -10,7 +10,7 @@
 #include "hui.h"
 #include "hCommon.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.26 2003/09/29 22:36:14 hiram Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.27 2003/10/01 19:17:12 hiram Exp $";
 
 char *hUserCookie()
 /* Return our cookie name. */
@@ -423,7 +423,7 @@ cgiMakeDropList(var, rosettaExonOptions, ArraySize(rosettaExonOptions), curVal);
 /****** Options for the wiggle track type of graph *******/
 
 static char *wiggleGraphOptions[] = {
-    "Line",
+    "Points",
     "Bar"
     };
 
