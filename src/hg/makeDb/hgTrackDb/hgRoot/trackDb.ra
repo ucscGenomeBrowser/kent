@@ -1348,7 +1348,7 @@ type sample 9
 track refFullAli
 shortLabel DBTSS mRNA
 longLabel RefSeq mRNA extended to the 5' end from DBTSS
-priority 52
+priority 17.95
 visibility hide
 color 0, 0, 100
 type psl .
