@@ -1008,6 +1008,15 @@ searchType bed
 searchPriority 10
 termRegex ux\.[0-9]+
 
+track exoniphy
+shortLabel Exoniphy 
+longLabel Exoniphy Human/Mouse/Rat, Lifted from Hg16
+group genes
+priority 50.9
+visibility hide
+color 173,17,162
+type genePred
+
 searchTable rgdQtl
 searchType bed
 termRegex [BPORUP][A-Z]+[0-9]+(_H)?
