@@ -60,7 +60,7 @@ if (ptHeight != 0.0)
 else
    {
    ps->yScale = ps->xScale;
-   ps->ptHeight = pixHeight * ps->yScale + 2*ptMargin;
+   ptHeight = ps->ptHeight = pixHeight * ps->yScale + 2*ptMargin;
    }
 ps->xOff = ptMargin;
 ps->yOff = ptMargin;
