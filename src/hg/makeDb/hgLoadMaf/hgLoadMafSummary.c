@@ -12,7 +12,7 @@
 #include "dystring.h"
 #include "mafSummary.h"
 
-static char const rcsid[] = "$Id: hgLoadMafSummary.c,v 1.2 2005/03/08 17:11:09 kate Exp $";
+static char const rcsid[] = "$Id: hgLoadMafSummary.c,v 1.3 2005/03/08 23:11:52 kate Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -117,7 +117,6 @@ struct mafComp *mc = NULL, *nextMc = NULL;
 struct mafSummary *ms, *msPending;
 struct mafAli pairMaf;
 long componentCount = 0;
-long mafCount = 0;
 struct mafComp *mcMaster = mafMaster(maf, mf, fileName);
 
 for (mc = maf->components; mc != NULL; mc = nextMc)
@@ -189,16 +188,13 @@ while (((struct mafSummary *)ms = hashNextVal(&hc)) != NULL)
 void hgLoadMafSummary(char *table, char *fileName)
 /* hgLoadMafSummary - Load a summary table of pairs in a maf into a database. */
 {
-int i;
 long mafCount = 0;
 struct mafComp *mcMaster = NULL;
 struct mafAli *maf;
-int dbNameLen = strlen(database);
 struct mafFile *mf = mafOpen(fileName);
 struct sqlConnection *conn = sqlConnect(database);
 FILE *f = hgCreateTabFile(".", table);
-int maxComponents = 0;
-int componentCount = 0;
+long componentCount = 0;
 struct hash *componentHash = newHash(0);
 struct mafSummary *summaryList = NULL, *ms;
 
@@ -206,7 +202,6 @@ hSetDb(database);
 if (!test)
     mafSummaryTableCreate(conn, table, hGetMinIndexLength());
 verbose(1, "Indexing and tabulating %s\n", fileName);
-mf = mafOpen(fileName);
 
 /* process mafs */
 while ((maf = mafNext(mf)) != NULL)
