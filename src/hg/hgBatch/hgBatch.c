@@ -106,7 +106,13 @@ void pasteForm()
 /* Put up form that lets them paste in keys. */
 {
 char tbl[256];
-safef(tbl, sizeof(tbl), "%s.%s", cgiString("db"), cgiString("hgbTrack"));
+char *track = cgiString("hgbTrack");
+char chrN_track[256];
+safef(chrN_track, sizeof(chrN_track), "chr1_%s", track);
+if (hTableExists(chrN_track))
+    safef(tbl, sizeof(tbl), "%s.chrN_%s", cgiString("db"), track);
+else
+    safef(tbl, sizeof(tbl), "%s.%s", cgiString("db"), track);
 webStart(cart, "Table Browser: Paste in Keys for Batch Query");
 puts("Please paste in a list of keys to match.  These may include "
        "* and ? wildcard characters.");
@@ -128,7 +134,13 @@ void uploadForm()
 /* Put up upload form. */
 {
 char tbl[256];
-safef(tbl, sizeof(tbl), "%s.%s", cgiString("db"), cgiString("hgbTrack"));
+char *track = cgiString("hgbTrack");
+char chrN_track[256];
+safef(chrN_track, sizeof(chrN_track), "chr1_%s", track);
+if (hTableExists(chrN_track))
+    safef(tbl, sizeof(tbl), "%s.chrN_%s", cgiString("db"), track);
+else
+    safef(tbl, sizeof(tbl), "%s.%s", cgiString("db"), track);
 webStart(cart, "Table Browser: Upload File of Keys for Batch Query");
 puts("<FORM ACTION=\"/cgi-bin/hgText\" METHOD=\"POST\" ENCTYPE=\"multipart/form-data\">\n");
 cgiContinueHiddenVar("org");
