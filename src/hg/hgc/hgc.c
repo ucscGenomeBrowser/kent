@@ -129,7 +129,7 @@
 #include "hgFind.h"
 #include "botDelay.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.579 2004/03/08 00:19:59 baertsch Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.580 2004/03/09 00:39:28 baertsch Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -7208,6 +7208,7 @@ void pseudoPrintPos(char *chrom, int chromStart, int chromEnd, struct pseudoGene
 char *tbl = cgiUsualString("table", cgiString("g"));
 char chainStr[32];
 char query[256];
+char pfamDesc[128], *pdb;
 char chainTable[64];
 char chainTable_chrom[64];
 struct sqlResult *sr;
@@ -7233,59 +7234,76 @@ printf("<B>Exons Covered:</B> %d out of %d \n",pg->exonCover,pg->exonCount);
 printf("<B>Coverage:</B> %d %%\n",pg->coverage);
 printf("<B>Bases matching:</B> %d \n", pg->matches);
 htmlHorizontalLine();
-printf("<p>");
+printf("<H4>Annotation for Gene locus that spawned PseudoGene</H4>");
+//printf("<p>");
 
 
-printf("<p><B>RefSeq:</B> %s \n", pg->refSeq);
-linkToOtherBrowser(pg->assembly, pg->gChrom, pg->rStart, pg->rEnd);
-printf("%s:%d-%d \n", pg->gChrom, pg->rStart, pg->rEnd);
-printf("</A>");
+if (!sameString(pg->refSeq,"noRefSeq"))
+    {
+    printf("<LI><B>RefSeq:</B> %s \n", pg->refSeq);
+    linkToOtherBrowser(pg->assembly, pg->gChrom, pg->rStart, pg->rEnd);
+    printf("%s:%d-%d \n", pg->gChrom, pg->rStart, pg->rEnd);
+    printf("</A></LI>");
+    }
 
 if (!sameString(pg->kgName,"noKg"))
     {
-    printf("<p><B>KnownGene:</B> " );
+    printf("<LI><B>KnownGene:</B> " );
     printf("<A TARGET=\"_blank\" ");
     printf("HREF=\"../cgi-bin/hgGene?%s&%s=%s&%s=%s&%s=%s&%s=%d&%s=%d\" ",
                 cartSidUrlString(cart),
                 "db", database,
-                "hgg_gene", pg->gene,
+                "hgg_gene", pg->kgName,
                 "hgg_chrom", pg->gChrom,
                 "hgg_start", pg->kStart,
                 "hgg_end", pg->kEnd);
-    printf(">%s</A>  ",pg->gene);
+    printf(">%s</A>  ",pg->kgName);
     linkToOtherBrowser(pg->assembly, pg->gChrom, pg->kStart, pg->kEnd);
     printf("%s:%d-%d \n", pg->gChrom, pg->kStart, pg->kEnd);
-    printf("</A>");
+    printf("</A></LI>");
     if (hTableExists("knownGene"))
         {
         char *description;
         safef(query, sizeof(query), 
-                "select proteinId from knownGene where name = '%s'", pg->gene);
+                "select proteinId from knownGene where name = '%s'", pg->kgName);
         description = sqlQuickString(conn, query);
         if (description != NULL)
-        printf("<B>SwissProt ID: </B> " );
-        printf("<A TARGET=\"_blank\" HREF=");
-        printSwissProtProteinUrl(stdout, description);
-        printf(">%s</A>",description);
-        freez(&description);
+            {
+            printf("<LI><B>SwissProt ID: </B> " );
+            printf("<A TARGET=\"_blank\" HREF=");
+            printSwissProtProteinUrl(stdout, description);
+            printf(">%s</A>",description);
+            freez(&description);
+            printf("</LI>" );
+            }
         }
     }
 else
     {
     /* display mrna */
-    printf("<p><B>mRna:</B> %s \n", pg->gene);
+    printf("<LI><B>mRna:</B> %s \n", pg->gene);
     linkToOtherBrowser(pg->assembly, pg->gChrom, pg->mStart, pg->mEnd);
     printf("%s:%d-%d \n", pg->gChrom, pg->mStart, pg->mEnd);
-    printf("</A>");
+    printf("</A></LI>");
     }
+if (!sameString(pg->mgc,"noMgc"))
+    {
+    printf("<LI><B>Mgc Gene:</B> %s \n", pg->mgc);
+    linkToOtherBrowser(pg->assembly, pg->gChrom, pg->mStart, pg->mEnd);
+    printf("%s:%d-%d \n", pg->gChrom, pg->mStart, pg->mEnd);
+    printf("</A></LI>");
+    }
+
 /* display pfam domains */
 
 printf("<p>");
-if (hTableExists("knownToPfam") && hTableExists("proteins031112.pfamDesc"))
+pdb = hPdbFromGdb(hGetDb());
+safef(pfamDesc, 128, "%s.pfamDesc", pdb);
+if (hTableExists("knownToPfam") && hTableExists(pfamDesc))
     {
     safef(query, sizeof(query), 
-            "select description from knownToPfam kp, proteins031112.pfamDesc p where pfamAC = value and kp.name = '%s'", 
-            pg->gene);
+            "select description from knownToPfam kp, %s p where pfamAC = value and kp.name = '%s'", 
+            pfamDesc, pg->kgName);
     sr = sqlGetResult(conn, query);
     while ((row = sqlNextRow(sr)) != NULL)
         {
@@ -7304,6 +7322,7 @@ if (hTableExists(alignTable))
         printAlignments(pslList, chromStart, "htcCdnaAli", alignTable, pg->name);
     }
 htmlHorizontalLine();
+printf("<H4>Gene/PseudoGene Alignment (multiple records are a result of breaks in the human Self Chaining)</H4>Shows removed introns, frameshifts and in frame stops.");
 safef(chainTable_chrom,sizeof(chainTable_chrom), "%s_chainSelf",chrom);
 if (hTableExists(chainTable_chrom) )
     {
@@ -7312,25 +7331,40 @@ if (hTableExists(chainTable_chrom) )
         {
         if (sameString(pg->gStrand,pg->strand))
             safef(query,sizeof(query),
-                "select id, score from %s_%s where tEnd > %d and tStart < %d and qName = '%s' and qEnd > %d and qStart < %d order by score desc",
+                "select id, score, qStart, qEnd, qStrand, qSize from %s_%s where tEnd > %d and tStart < %d and qName = '%s' and qEnd > %d and qStart < %d order by qStart",
                 chrom, chainTable,chromStart,chromEnd, pg->gChrom, pg->gStart, pg->gEnd);
         else
             {
             safef(query,sizeof(query),
-                "select id, score from %s_%s where tEnd > %d and tStart < %d and qName = '%s' and qEnd > %d and qStart < %d order by score desc",
+                "select id, score, qStart, qEnd, qStrand, qSize from %s_%s where tEnd > %d and tStart < %d and qName = '%s' and qEnd > %d and qStart < %d order by qStart",
                 chrom, chainTable,chromStart,chromEnd, pg->gChrom, hChromSize(pg->gChrom)-(pg->gEnd), hChromSize(pg->gChrom)-(pg->gStart));
             }
         sr = sqlGetResult(conn, query);
         while ((row = sqlNextRow(sr)) != NULL)
             {
             int chainId, score;
+            unsigned int qStart, qEnd, qSize;
+            char qStrand;
             chainId = sqlUnsigned(row[0]);
             score = sqlUnsigned(row[1]);
+            qStart = sqlUnsigned(row[2]);
+            qEnd = sqlUnsigned(row[3]);
+            qStrand =row[4][0];
+            qSize = sqlUnsigned(row[5]);
+            if (qStrand == '-')
+                {
+                unsigned int tmp = qSize - qEnd;
+                qEnd = qSize - qStart;
+                qStart = tmp;
+                }
             if (pg->chainId == 0) pg->chainId = chainId;
             puts("<LI>\n");
-            printf("<B>Chain:</B> %d  \n",chainId);
+            hgcAnchorPseudoGene(pg->kgName, pg->geneTable, chrom, "startcodon", chromStart, chromEnd, 
+                    pg->gChrom, pg->kStart, pg->kEnd, chainId, pg->assembly);
+            printf("Annotated alignment using chainId: %d </A> \n", chainId);
+            printf("score: %d \n", score);
             hgcAnchorTranslatedChain(chainId, chainTable, chrom, pg->gStart, pg->gEnd);
-            printf("View details of parts of chain within browser window</A>. score %d %s:%d-%d<BR>\n",score, pg->gChrom,pg->gStart,pg->gEnd);
+            printf("Raw alignment %s:%d-%d </A> \n", pg->gChrom,qStart,qEnd);
             puts("</LI>\n");
             }
         sqlFreeResult(&sr);
@@ -7338,23 +7372,16 @@ if (hTableExists(chainTable_chrom) )
     else
         {
         puts("<LI>\n");
-        printf("<B>Chain:</B> %d  \n",pg->chainId);
         hgcAnchorTranslatedChain(pg->chainId, chainTable, chrom, pg->gStart, pg->gEnd);
-        printf("View details of parts of chain within browser window</A>.<BR>\n");
+        printf("Raw alignment %s:%d-%d</A> \n", pg->gChrom,pg->gStart,pg->gEnd);
         puts("</LI>\n<b>");
-        }
-    //printf("<p>");
-    if (pg->chainId > 0)
-        {
         puts("<LI>\n");
-        hgcAnchorPseudoGene(pg->gene, pg->geneTable, chrom, "startcodon", chromStart, chromEnd, pg->gChrom, pg->gStart, pg->gEnd, pg->chainId, pg->assembly);
-        printf("Show %s %s aligned to pseudogene</A>  to see frameshifts and in frame stops <BR>\n",hOrganism(pg->assembly), pg->geneTable);
+        hgcAnchorPseudoGene(pg->kgName, pg->geneTable, chrom, "startcodon", chromStart, chromEnd, 
+                pg->gChrom, pg->kStart, pg->kEnd, pg->chainId, pg->assembly);
+        printf("Annotated alignment %s %s to pseudogene</A>  to see frameshifts and in frame stops <BR>\n",hOrganism(pg->assembly), pg->geneTable);
         puts("</LI>\n");
         }
     }
-puts("<LI>\n");
-printf("Open %s browser</A> at position corresponding to the Gene.<BR>\n",hOrganism(pg->assembly));
-puts("</LI>\n");
 }
 
 void doPseudoPsl(struct trackDb *tdb, char *acc)
