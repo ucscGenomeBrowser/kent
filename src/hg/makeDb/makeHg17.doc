@@ -8437,7 +8437,7 @@ hgLoadSeq -prefix=bz hg17 /gbdb/hg17/mrnaBlastz/hg17Mrna.fa
 
 ## end of blastz Mrna track
 
-#### BUILD retroGene track Robert 8/26/2004
+#### BUILD RETROGENE TRACK (done Robert 8/26/2004)
 
 mkdir /cluster/data/hg17/bed/pseudo
 cd /cluster/data/hg17/bed/pseudo
