@@ -1188,21 +1188,32 @@ char other[256];
 showGenePos(geneName, tdb);
 printf("<H3>Links to sequence:</H3>\n");
 printf("<UL>\n");
+
 if (pepTable != NULL && hTableExists(pepTable))
     {
+    puts("<LI>\n");
     hgcAnchorSomewhere(pepClick, pepName, pepTable, seqName);
-    printf("<LI>Predicted Protein</A> \n"); 
+    printf("Predicted Protein</A> \n"); 
+    puts("</LI>\n");
     }
-hgcAnchorSomewhere(mrnaClick, geneName, geneTable, seqName);
 
-printf("<LI>%s</A> may be different from the genomic sequence.\n", 
-	mrnaDescription);
+puts("<LI>\n");
+hgcAnchorSomewhere(mrnaClick, geneName, geneTable, seqName);
+printf("%s</A> may be different from the genomic sequence.\n", 
+       mrnaDescription);
+puts("</LI>\n");
+
+puts("<LI>\n");
 hgcAnchorSomewhere(genomicClick, geneName, geneTable, seqName);
-printf("<LI>Genomic Sequence</A> from assembly\n");
+printf("Genomic Sequence</A> from assembly\n");
+puts("</LI>\n");
+
 if (hTableExists("axtInfo"))
     {
+    puts("<LI>\n");
     hgcAnchorGenePsl(geneName, geneTable, seqName, "startcodon");
-    printf("<LI>Comparative Sequence</A> Annotated codons and translated protein with alignment to another species <BR>\n");
+    printf("Comparative Sequence</A> Annotated codons and translated protein with alignment to another species <BR>\n");
+    puts("</LI>\n");
     }
 printf("</UL>\n");
 }
