@@ -56,7 +56,7 @@ visibility pack
 colorChromDefault off
 type psl protein
 pred dm1.blastFBPep00
-
+url http://flybase.bio.indiana.edu/.bin/fbidq.html?
 
 searchTable bdgpGene
 searchMethod exact

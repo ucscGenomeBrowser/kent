@@ -1253,6 +1253,7 @@ visibility hide
 colorChromDefault off
 type psl protein
 pred dm1.blastFBPep00
+url http://flybase.bio.indiana.edu/.bin/fbidq.html?
 
 track blastHg16KG
 shortLabel Human Proteins
