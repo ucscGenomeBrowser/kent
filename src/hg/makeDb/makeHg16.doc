@@ -8795,9 +8795,88 @@ axtChain -scoreScheme=/cluster/data/blastz/HoxD55.q \
     drop table ensGtp_old;  
     drop table ensPep_old;  
 
-    # Create knownToEnsembl column and knownToSuperfamily column
+    # Create knownToEnsembl column 
     hgMapToGene hg16 ensGene knownGene knownToEnsembl
-    zcat /cluster/store1/superFamily/genomes/ass_11-Jan-2004.tab.gz | hgKnownToSuper hg16 hs stdin
+
+#### BUILD Ensembl cross-reference table, ensemblXref3 (DONE - 2004-05-24 - Fan)
+
+    # Get the ensembl gene/protein cross-reference data from
+    # http://www.ensembl.org/Homo_sapiens/martview
+    # Follow this sequence through the pages:
+    # Page 1) Make sure that the Homo_sapiens choice is selected. Hit next.
+    # Page 2) Uncheck the "Limit to" box in the region choice. Then hit next.
+    # Page 3) Choose the "Feature" box, select gene, transcript, protein, 
+	      SPTrEMBL ID, SWISSPROT ID, and SWISSPROT AC 
+    # Page 4) Choose "Text, tab separated".  choose gzip compression.  hit export.
+    # Save as ensXref.txt
+
+    sed ensXref.txt -e 's/\./\t/g' > ensemblXref3.tab
+
+    hgsql hg16 -e "drop table ensemblXref3"
+    hgsql hg16 < ~/src/hg/lib/ensemblXref3.sql
+
+    hgsql hg16 -e 'load data local infile "ensemblXref3.tab" into table ensemblXref3 ignore 1 lines'
+
+
+#### REBUILD SUPERFAMILY RELATED TABLES (DONE - 2004-05-21 - Fan)
+
+# Download Superfamily data files and build the Superfamily DB
+# from supfam.mrc-lmb.cam.ac.uk
+
+        mkdir /cluster/store1/superFamily/040516
+        cd /cluster/store1/superFamily/040516
+
+# ftp over the following two files:
+
+        ass_16-May-2004.tab.gz
+        supfam_16-May-2004.sql.gz
+
+# This may take about an hour.
+
+     hgsql hg16 -e "create database superfam040516"
+     hgsql superfam040516 < supfam_16-May-2004.sql
+
+# Make sure to add an index on id of the des table of superfam040516.
+
+     hgsql superfam040516 < ~/src/hg/lib/sfAssign.sql
+     hgsql superfam040516 -e 'load data local infile "ass_16-May-2004.tab" into table superfam040516.sfAssign;'
+
+# Build or rebuild Superfamily track and create sf tables needed for PB
+
+   hgsql hg16 < ~/src/hg/lib/sfAssign.sql
+
+   cd /cluster/store1/superFamily/040516
+  
+   hgsql hg16 -e 'load data local infile "ass_16-May-2004.tab" into table hg16.sfAssign;'
+
+# If hg16.sfDes already exists, drop it.
+
+   hgsql superfam040516 -e "select * from des" >sfDes.tab
+
+   hgsql hg16 < ~/src/hg/lib/sfDes.sql
+
+   hgsql hg16 -e 'load data local infile "sfDes.tab" into table hg16.sfDes ignore 1 lines;'
+
+# If hg16.superfamily already exists, drop it.
+
+   hgSuperfam hg16 > sf.log
+
+# It is normal that many proteins does not have corresponding Superfamily entries.
+
+# If hg16.sfDescription exists, drop it.
+
+   hgsql hg16 < ~/src/hg/lib/sfDescription.sql
+   hgsql hg16 -e 'LOAD DATA local INFILE "sfDescription.tab"  into table hg16.sfDescription;'
+
+# Finally, load the superfamily table.
+
+   hgLoadBed hg16 superfamily superfamily.tab -tab
+
+# Create knownToSuperfamily table
+   
+   cat /cluster/store1/superFamily/040516/ass_16-May-2004.tab| hgKnownToSuper hg16 hs stdin
+# creates 32542 rows in knownToSuper
+
 
 # seq table acc field is too small; up the max to match new hgLoadSeq 
 # schema (2004/05/22 markd)
