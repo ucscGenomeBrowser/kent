@@ -9,15 +9,16 @@
 #include "align.h"
 #include <limits.h>
 
-static char const rcsid[] = "$Id: hgCountAlign.c,v 1.4 2003/05/06 07:22:24 kate Exp $";
+
+static char const rcsid[] = "$Id: hgCountAlign.c,v 1.5 2003/06/26 18:20:07 weber Exp $";
 
 void usage()
 /* Explain usage and exit. */
 {
 errAbort(
-  "alignCount - count overlaping or non-overlaping windows in an alignment.\n"
+  "hgCountAlign - count overlaping or non-overlaping windows in an alignment.\n"
   "usage:\n"
-  "   alignCount [options] axtFile tabout\n"
+  "   hgCountAlign [options] axtFile tabout\n"
   "options:\n"
   "   -winSize=n - Size of window, default is 100 bases\n"
   "   -winSlide=n - Number of bases that slide window is advanced\n"
@@ -28,6 +29,7 @@ errAbort(
   "   -countCoords - Coordinates written are the range bounded by the \n"
   "       the first and last position counted in the window. \n"
   "   -selectBed=file - Select positions to be counted from this BED file\n"
+  "   -selectGrid=file - Select output windows instead of sliding (winSlide ignored)\n"
 );
 }
 
@@ -122,6 +124,108 @@ if (((winStart + win->winSize) < block->tStart)
 return winStart;
 }
 
+
+static unsigned nextWinStart( FILE *in, char *winVal )
+/*read the next window start position from input stream. Stop position is ignored, since
+the window size is added to the winStart that this function returns. Input is assumed to be
+of the form 'chrom start stop value ...' so the start must be the second field.*/
+{
+    const int maxChar = 4096;
+    char s[maxChar];
+    unsigned newStart;
+    assert( in );
+    fgets( s, maxChar, in);
+    if( feof(in) ) return 0; 		                //signal EOF with new winStart == 0.
+    else if( s[strlen(s)-1] != '\n' )               //otherwise make sure we have the entire file line.
+    {
+        fprintf( stderr, "In nextWinStart: maxChar = %d is too small for input file lines\n", maxChar );
+        exit(1);
+    }
+    (void)strtok(s," \t"); 			//read chrom and ignore it.
+    newStart = atoi(strtok(0x0," \t"));	//get next window start position we care about.
+    (void)strtok(0x0," \t");		//read chromStop and ignore it too.
+    strcpy( winVal, strtok(0x0," \t\n"));	//copy window name or value into character array.
+    return newStart;
+}
+
+
+
+void countFixedSizeWindowsFromFile(unsigned winSize,
+                           unsigned winSlide,
+                           boolean countCoords,
+                           struct align *align,
+                           char *gridFile, FILE* out)
+/* Count and output sliding windows when the window size is fixed, but the windows start positions are given in a file rather than on a fixed grid. Grid file windows must be non-overlapping and sorted in increasing order based on chromStart.*/
+{
+struct slidingWin *win = slidingWinNew(align->tName, align->tSize,
+                                       winSize, winSlide);
+struct axt *nextBlock = align->head;
+unsigned winStart = 0;
+unsigned gridWinStart = 0;
+
+char winVal[64];
+FILE *fp = mustOpen( gridFile, "r" );
+gridWinStart = nextWinStart( fp,winVal );
+winStart =  gridWinStart;
+
+/* Loop, sliding the window, counting and outputting if there are counts */
+while( nextBlock != NULL )
+    {
+
+    //if we are past the gridWinStart we are looking for, get a new one from input file.
+    if( win->sum->chromStart > gridWinStart )
+    	gridWinStart = nextWinStart(fp, winVal);
+
+    slidingWinAdvance(win, winStart);
+    nextBlock = countWindow(win->tail, align, nextBlock, UINT_MAX);
+
+    /* output if all subwindows are filled */
+    if ( win->curNumSubWins == win->numSubWins)
+       {
+       slidingWinSum(win);
+       /*output only if we are looking exactly at gridWinStart and there are some counts in window*/
+       if( win->sum->chromStart == gridWinStart && win->sum->numCounts > 0 )
+               winCountsTabOut(win->sum, out, countCoords, winVal );
+       }
+
+    /*increment winStart by winSlide, skipping to just before the next
+    window given from the gridFile.*/
+    if( winStart < gridWinStart - winSize ) 
+	winStart = gridWinStart - winSize;
+    else
+    	winStart += win->winSlide;
+
+    }
+
+/* output remaining subwindows */
+while (win->sum->numCounts > 0)
+    {
+
+    	   //if we are past the gridWinStart we are looking for, get a new one from input file.
+       	   if( win->sum->chromStart > gridWinStart )
+    		gridWinStart = nextWinStart(fp,winVal);
+
+            slidingWinAdvance(win, winStart);
+            slidingWinSum(win);
+
+	    /*output only if we are looking exactly at gridWinStart and there are some counts in window*/
+            if( win->sum->chromStart == gridWinStart && win->sum->numCounts > 0 )
+                    winCountsTabOut(win->sum, out, countCoords, winVal );
+
+    	    /*increment winStart by winSlide, skipping to just before the next
+            window given from the gridFile*/
+       	    if( winStart < gridWinStart - winSize ) 
+		winStart = gridWinStart - winSize;
+    	    else
+    		winStart += win->winSlide;
+     }
+
+fclose(fp);
+slidingWinFree(&win);
+}
+
+
+
 void countFixedSizeWindows(unsigned winSize,
                            unsigned winSlide,
                            boolean countCoords,
@@ -146,7 +250,7 @@ while (nextBlock != NULL)
         {
         slidingWinSum(win);
         if (win->sum->numCounts > 0)
-            winCountsTabOut(win->sum, out, countCoords);
+            winCountsTabOut(win->sum, out, countCoords,NULL);
         }
     winStart += win->winSlide;
     }
@@ -157,7 +261,7 @@ while (win->sum->numCounts > 0)
     slidingWinAdvance(win, winStart);
     slidingWinSum(win);
     if (win->sum->numCounts > 0)
-        winCountsTabOut(win->sum, out, countCoords);
+        winCountsTabOut(win->sum, out, countCoords,NULL);
     winStart += win->winSlide;
     }
 slidingWinFree(&win);
@@ -197,7 +301,7 @@ while (nextBlock != NULL)
         slidingWinSum(win);
         assert(win->sum->numCounts == fixedNumCounts);
 
-        winCountsTabOut(win->sum, out, countCoords);
+        winCountsTabOut(win->sum, out, countCoords,NULL);
 
         /* avoid outputing the same window again */
         slidingWinRemoveFirstWithCounts(win);
@@ -217,14 +321,19 @@ void alignCount(unsigned winSize,
                 unsigned fixedNumCounts,
                 boolean countCoords,
                 struct align *align,
-                char* outFile)
+                char* gridFile, char* outFile)
 /* count windows in an alignment. */
 {
 FILE* out = mustOpen(outFile, "w");
 winCountsTabHeaderOut(out);
 
 if (fixedNumCounts == UINT_MAX)
-    countFixedSizeWindows(winSize, winSlide, countCoords, align, out);
+    {
+    if( gridFile == NULL )
+	countFixedSizeWindows(winSize, winSlide, countCoords, align, out); 
+    else
+	countFixedSizeWindowsFromFile( winSize, 1,  countCoords, align, gridFile, out );
+    }
 else
     countFixedCountWindows(winSize, winSlide, fixedNumCounts,
                            countCoords, align, out);
@@ -237,6 +346,7 @@ int winSize, winSlide;
 unsigned fixedNumCounts = UINT_MAX;
 struct align *align;
 char* selectBed;
+char* selectGrid;
 boolean countCoords;
 
 optionHash(&argc, argv);
@@ -257,11 +367,12 @@ if ((winSize % winSlide) != 0)
     errAbort("winSize (%d) must be a even multiple of winSlide (%d)",
              winSize, winSlide);
 selectBed = optionVal("selectBed", NULL);
+selectGrid = optionVal("selectGrid", NULL);
 countCoords = optionExists("countCoords");
 align = alignLoadAxtFile(argv[1]);
 if (selectBed != NULL)
     alignSelectWithBedFile(align, selectBed);
-alignCount(winSize, winSlide, fixedNumCounts, countCoords, align, argv[2]);
+alignCount(winSize, winSlide, fixedNumCounts, countCoords, align, selectGrid, argv[2]);
 alignFree(&align);
 return 0;
 }

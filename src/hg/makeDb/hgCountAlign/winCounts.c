@@ -19,7 +19,7 @@
 #include "jksql.h"
 #include "winCounts.h"
 
-static char const rcsid[] = "$Id: winCounts.c,v 1.2 2003/05/06 07:22:24 kate Exp $";
+static char const rcsid[] = "$Id: winCounts.c,v 1.3 2003/06/26 18:20:07 weber Exp $";
 
 /*
  * Table used to translate (A, C, G, T) to (0, 1, 2, 3), and invalid letters
@@ -184,12 +184,13 @@ return list;
 void winCountsTabHeaderOut(FILE *f)
 /* Print out header for tab-separated file. */
 {
-    fprintf(f,"#chrom\tchromStart\tchromEnd\tcounts\tAA\tAC\tAG\tAT\tCA\tCC\tCG\tCT\tGA\tGC\tGG\tGT\tTA\tTC\tTG\tTT\n");
+    fprintf(f,"#chrom\tchromStart\tchromEnd\tcounts\tAA\tAC\tAG\tAT\tCA\tCC\tCG\tCT\tGA\tGC\tGG\tGT\tTA\tTC\tTG\tTT\tvalue\n");
 }
 
-void winCountsTabOut(struct winCounts *el, FILE *f, boolean tightCoords)
+void winCountsTabOut(struct winCounts *el, FILE *f, boolean tightCoords, char *winVal)
 /* Print out winCounts as a line in a tab-separated file.
  * If tight coords is true, output start/end of counts rather than windows. */
+/*Append a value to the end of each count line if winVal != NULL.*/
 {
 int i;
 fprintf(f, "%s\t", el->chrom);
@@ -208,6 +209,8 @@ for (i=0; i<16; ++i)
     {
     fprintf(f, "\t%u", el->baseCounts[i]);
     }
+if( winVal != NULL )
+    fprintf( f, "\t%s", winVal );
 fputc('\n',f);
 }
 

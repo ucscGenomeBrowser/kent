@@ -63,7 +63,7 @@ struct winCounts *winCountsLoadAll(char *fileName);
 void winCountsTabHeaderOut(FILE *f);
 /* Print out header for tab-separated file. */
 
-void winCountsTabOut(struct winCounts *el, FILE *f, boolean tightCoords);
+void winCountsTabOut(struct winCounts *el, FILE *f, boolean tightCoords, char *winVal);
 /* Print out winCounts as a line in a tab-separated file.
  * If tight coords is true, output start/end of counts rather than windows. */
 #endif /* WINCOUNTS_H */
