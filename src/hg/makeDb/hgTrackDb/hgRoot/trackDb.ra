@@ -254,7 +254,7 @@ chromosomes chr22,
 track mrna
 shortLabel Human mRNAs
 longLabel Human mRNAs from Genbank
-priority 18
+priority 1		8
 visibility full
 spectrum on
 type psl .
@@ -573,7 +573,7 @@ visibility dense
 color 0,0,255
 altColor 255,240,200
 spectrum on
-chromosomes 1,
+chromosomes chr1,
 type bed 12
 private on
 
