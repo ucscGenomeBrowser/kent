@@ -15,18 +15,31 @@ void htmlPrintJointAlignment( char *seq1, char *seq2, int columnNum,
 /* Print sequences 1 and 2 (assumed to be a joint alignment),
  * formatted for html output. Coordinates are printed based on
  * the start and end positions and oriented according to the
- * strand the sequences are on (+ or -).*/
+ * strand the sequences are on (+ or -). (NO COORDINATES YET)*/
 {
-
 int i;
 validateSeqs( seq1, seq2 );
 
-/*print the sequences with lines connecting identical residues*/
+/*print the sequences with lines connecting identical residues
+ *in columns of size columnNum*/
+for( i=0; i<strlen(seq1)-columnNum; i += columnNum )
+    htmlPrintJointAlignmentLine( seq1, seq2, i, i+columnNum );
+
+printf( "<tt><hr><br>%s<br>%s<br><hr></tt>", seq1, seq2 );
+
+}
+
+void htmlPrintJointAlignmentLine( char *seq1, char *seq2, int start, int end)
+/* Prints one line of the joint alignment between seq1 and seq2,
+ * from seq[start] to seq[end-1].*/
+{
+
+int i;
 printf("<tt>");
-for( i=0; i<strlen( seq1 ); i++ )
+for( i=start; i<end; i++ )
     printf("%c",seq1[i]);
 printf("<br>");
-for( i=0; i<strlen( seq1 ); i++ )
+for( i=start; i<end; i++ )
     {
     if(ucaseMatch( seq1[i], seq2[i] ))
         printf("|");
@@ -34,13 +47,11 @@ for( i=0; i<strlen( seq1 ); i++ )
         printf("&nbsp;");
     }
 printf("<br>");
-for( i=0; i<strlen( seq1 ); i++ )
+for( i=start; i<end; i++ )
     printf("%c",seq2[i]);
 printf("</tt>");
 printf("<br><br>");
-
-printf("<tt>%s</tt> &nbsp;&nbsp;<br>", seq1 );
-printf("<tt>%s</tt> &nbsp;&nbsp;<br>", seq2 );
+   
 
 }
 
