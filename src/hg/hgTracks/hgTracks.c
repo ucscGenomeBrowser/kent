@@ -93,10 +93,13 @@ Color shadesOfBlue[EXPR_DATA_SHADES];
 boolean exprBedColorsMade = FALSE; /* Have the shades of Green, Red, and Blue been allocated? */
 int maxRGBShade = EXPR_DATA_SHADES - 1;
 
-/* Declare colors for chromosome coloring 8 colors * 3 shades = 24 colors allocated */
-boolean chromosomeColorsMade = FALSE; /* Have the 3 shades of 8 chromosome colors been allocated? */
-
 Color chromColor[CHROMOSOME_SHADES * 8];
+/* Declare colors for chromosome coloring 8 colors * 3 shades = 24 
+ * colors allocated */
+
+/* Have the 3 shades of 8 chromosome colors been allocated? */
+boolean chromosomeColorsMade = FALSE; 
+
 
 int z;
 int maxCount;
@@ -117,7 +120,11 @@ int winEnd;			/* End of window in sequence. */
 static char *position = NULL; 		/* Name of position. */
 static char *userSeqString = NULL;	/* User sequence .fa/.psl file. */
 static char *ctFileName = NULL;	/* Custom track file. */
+
+int insideX;			/* Start of area to draw track in in pixels. */
 int insideWidth;		/* Width of area to draw tracks in in pixels. */
+int leftLabelX;			/* Start of area to draw left labels on. */
+int leftLabelWidth;		/* Width of area to draw left labels on. */
 
 char *protDbName;               /* Name of proteome database for this genome. */
 
@@ -411,7 +418,7 @@ freeMem(tempstr2);
 return(ret);
 }
 
-static int tgUserDefinedTotalHeight(struct track *tg, 
+static int sampleTotalHeight(struct track *tg, 
 	enum trackVisibility vis)
 /* Wiggle track will use this to figure out the height they use
 as defined in the cart */
@@ -445,7 +452,7 @@ switch (vis)
 	tg->height = lines * tg->lineHeight;
 	break;
     case tvPack:
-        uglyAbort("Sorry can't handle pack in tgUserDefinedTotalHeight");
+        errAbort("Sorry can't handle pack in sampleTotalHeight");
 	break;
     case tvDense:
 	tg->height = tg->lineHeight;
@@ -479,7 +486,7 @@ if (!tg->limitedVisSet)
     {
     enum trackVisibility vis = tg->visibility;
     tg->limitedVisSet = TRUE;
-    if (vis == tvFull)
+    if (vis == tvFull || vis == tvPack)
 	{
 	if (slCount(items) > maxItemsInFullTrack)
 	    vis = tvDense;
@@ -1299,6 +1306,7 @@ if (vis == tvPack)
     {
     struct spaceSaver *ss = tg->ss;
     struct spaceNode *sn;
+    vgSetClip(vg, insideX, yOff, insideWidth, tg->height);
     for (sn = ss->nodeList; sn != NULL; sn = sn->next)
         {
 	struct slList *item = sn->val;
@@ -1317,8 +1325,18 @@ if (vis == tvPack)
 	    int nameWidth = mgFontStringWidth(font, name);
 	    int dotWidth = tl.nWidth/2;
 	    textX -= nameWidth + dotWidth;
-	    vgTextRight(vg, textX, y, nameWidth, heightPer, color, font, name);
-	    name = NULL;
+	    if (textX < insideX)	/* Snap label to the left. */
+	         {
+		 textX = leftLabelX;
+		 vgUnclip(vg);
+		 vgSetClip(vg, leftLabelX, yOff, insideWidth, tg->height);
+		 vgTextRight(vg, leftLabelX, y, leftLabelWidth-1, heightPer,
+		 	color, font, name);
+		 vgUnclip(vg);
+		 vgSetClip(vg, insideX, yOff, insideWidth, tg->height);
+		 }
+	    else
+		 vgTextRight(vg, textX, y, nameWidth, heightPer, color, font, name);
 	    }
 	if (!tg->mapsSelf)
 	    {
@@ -1330,6 +1348,7 @@ if (vis == tvPack)
 		}
 	    }
 	}
+    vgUnclip(vg);
     }
 else
     {
@@ -1460,8 +1479,6 @@ int bin;	      /* Sample Y coordinates are first converted to
 int currentX, currentXEnd, currentWidth;
 
 int leftSide, rightSide;
-
-int insideX = trackOffsetX();
 int trackTabWidth = 11;
 int trackPastTabX = (withLeftLabels ? trackTabWidth : 0);
 int trackPastTabWidth = tl.picWidth - trackPastTabX;
@@ -1917,7 +1934,7 @@ tg->freeItems = linkedFeaturesFreeItems;
 tg->drawItems = wiggleLinkedFeaturesDraw;
 tg->itemName = linkedFeaturesName;
 tg->mapItemName = linkedFeaturesName;
-tg->totalHeight = tgUserDefinedTotalHeight;
+tg->totalHeight = sampleTotalHeight;
 tg->itemHeight = tgFixedItemHeight;
 tg->itemStart = linkedFeaturesItemStart;
 tg->itemEnd = linkedFeaturesItemEnd;
@@ -8752,7 +8769,7 @@ void printYAxisLabel( struct vGfx *vg, int y, struct track *track, char *labelSt
     int fontHeight = mgFontLineHeight(tl.font);
     double ymin = y - (track->heightPer / 2) + fontHeight;
     int itemHeight0 = track->itemHeight(track, track->items);
-    int inWid = trackOffsetX()-gfxBorder*3;
+    int inWid = insideX-gfxBorder*3;
     
     tmp = -whichSampleBin( atof(labelString), min0, max0, 999 );
     tmp = (int)((double)ymin+((double)tmp)*(double)track->heightPer/1000.0+(double)track->heightPer)-fontHeight/2.0;
@@ -8770,7 +8787,6 @@ struct tempName gifTn;
 char *mapName = "map";
 int fontHeight = mgFontLineHeight(font);
 int insideHeight = fontHeight-1;
-int insideX = trackOffsetX();
 int trackTabX = gfxBorder;
 int trackTabWidth = 11;
 int trackPastTabX = (withLeftLabels ? trackTabWidth : 0);
@@ -8778,7 +8794,6 @@ int trackPastTabWidth = tl.picWidth - trackPastTabX;
 int pixWidth, pixHeight;
 int y;
 int typeCount = slCount(trackList);
-int leftLabelWidth = 0;
 int rulerHeight = fontHeight;
 int yAfterRuler = gfxBorder;
 int relNumOff;
@@ -8797,6 +8812,7 @@ int newy;
 
 /* Figure out dimensions and allocate drawing space. */
 pixWidth = tl.picWidth;
+insideX = trackOffsetX();
 insideWidth = pixWidth-gfxBorder-insideX;
 pixHeight = gfxBorder;
 if (withRuler)
@@ -8838,41 +8854,59 @@ for (track = trackList; track != NULL; track = track->next)
 	}
     }
 
-/* Draw left labels. */
+leftLabelX = gfxBorder;
+leftLabelWidth = insideX - gfxBorder*3;
+/* Draw mini-buttons. */
+    {
+    int butOff;
+    y = gfxBorder;
+    if (withRuler)
+        y += rulerHeight;
+    for (track = trackList; track != NULL; track = track->next)
+        {
+	int h, yStart = y, yEnd;
+	if (track->limitedVis != tvHide)
+	    {
+	    if (withCenterLabels)
+		y += fontHeight;
+	    y += track->height;
+	    }
+	yEnd = y;
+	h = yEnd - yStart - 1;
+	drawButtonBox(vg, trackTabX, yStart, trackTabWidth, h, track->hasUi); 
+	if (track->hasUi)
+	    mapBoxTrackUi(trackTabX, yStart, trackTabWidth, h, track);
+	}
+    butOff = trackTabX + trackTabWidth;
+    leftLabelX += butOff;
+    leftLabelWidth -= butOff;
+    }
+
 if (withLeftLabels)
     {
-    int inWid = insideX-gfxBorder*3;
-    int nextY, lastY, trackIx = 0;
     double min0, max0;
     Color lightRed = vgFindColorIx(vg, 255, 180, 180);
 
-    vgBox(vg, insideX-gfxBorder*2, 0, gfxBorder, pixHeight, lightRed);
-    vgSetClip(vg, gfxBorder, gfxBorder, inWid, pixHeight-2*gfxBorder);
+    vgBox(vg, leftLabelX + leftLabelWidth, 0, 
+    	gfxBorder, pixHeight, lightRed);
     y = gfxBorder;
     if (withRuler)
 	{
-	vgTextRight(vg, gfxBorder, y, inWid-1, rulerHeight, 
+	vgTextRight(vg, leftLabelX, y, leftLabelWidth-1, rulerHeight, 
 	    MG_BLACK, font, "Base Position");
 	y += rulerHeight;
 	}
     for (track = trackList; track != NULL; track = track->next)
         {
 	struct slList *item;
-	int h;
 	enum trackVisibility vis = track->limitedVis;
-	double tmp;
-	lastY = y;
-	if (vis != tvHide)
-	    {
-	    nextY = lastY + track->height;
-	    if (withCenterLabels)
-		nextY += fontHeight;
-	    h = nextY - lastY - 1;
- 	    drawButtonBox(vg, trackTabX, lastY, trackTabWidth, h, track->hasUi); 
-	    if (track->hasUi)
-		mapBoxTrackUi(trackTabX, lastY, trackTabWidth, h, track);
-	    }
-
+	int tHeight;
+	if (vis == tvHide)
+	    continue;
+	tHeight = track->height;
+	if (withCenterLabels)
+	    tHeight += fontHeight;
+	vgSetClip(vg, leftLabelX, y, leftLabelWidth, tHeight);
 	if( sameString( track->mapName, "humMus" ) )
 	    {
 	    min0 = whichSampleNum( 300.0, -7.99515, 6.54171, binCount );
@@ -8880,19 +8914,16 @@ if (withLeftLabels)
 	    sprintf( minRangeStr, "%0.2g", min0  );
 	    sprintf( maxRangeStr, "%0.2g", max0 );
 
-
 	    if( vis == tvDense )
 		{
 		printYAxisLabel( vg, y, track, "0.0", min0, max0 );
 		printYAxisLabel( vg, y, track, "2.0", min0, max0 );
 		printYAxisLabel( vg, y, track, "5.0", min0, max0 );
 		}
-
 	    }
 	else if( sameString( track->mapName, "humMusL" ) ||
 		 sameString( track->mapName, "musHumL" ))
 	    {
-
 	    minRange = 0.0;
 	    maxRange = whichSampleBin( 6.0, 0.0, 8.0 ,binCount ); 
 	    min0 = whichSampleNum( minRange, 0.0, 8.0, binCount );
@@ -8987,9 +9018,9 @@ if (withLeftLabels)
 			    {
 			    ymax = y - (track->heightPer / 2) + (fontHeight / 2);
 			    ymin = y + (track->heightPer / 2) - (fontHeight / 2);
-			    vgTextRight(vg, gfxBorder, ymin, inWid-1, itemHeight,
+			    vgTextRight(vg, leftLabelX, ymin, leftLabelWidth-1, itemHeight,
 					track->ixAltColor, font, minRangeStr );
-			    vgTextRight(vg, gfxBorder, ymax, inWid-1, itemHeight,
+			    vgTextRight(vg, leftLabelX, ymax, leftLabelWidth-1, itemHeight,
 					track->ixAltColor, font, maxRangeStr );
 			    }
 			prev = item;
@@ -8997,13 +9028,13 @@ if (withLeftLabels)
 			rootName = cloneString( name );
 			beforeFirstPeriod( rootName );
 			if( sameString( track->mapName, "humMusL" ))
-			    vgTextRight(vg, gfxBorder, y, inWid - 1, itemHeight,
+			    vgTextRight(vg, leftLabelX, y, leftLabelWidth - 1, itemHeight,
 					track->ixColor, font, "Mouse Cons    ");
 			else if( sameString( track->mapName, "musHumL" ))
-			    vgTextRight(vg, gfxBorder, y, inWid - 1, itemHeight,
+			    vgTextRight(vg, leftLabelX, y, leftLabelWidth - 1, itemHeight,
 					track->ixColor, font, "Human Cons    ");
 			else
-			    vgTextRight(vg, gfxBorder, y, inWid - 1, itemHeight,
+			    vgTextRight(vg, leftLabelX, y, leftLabelWidth - 1, itemHeight,
 					track->ixColor, font, rootName );
 
 			freeMem( rootName );
@@ -9012,7 +9043,7 @@ if (withLeftLabels)
 			}
 		    else
 			{
-			vgTextRight(vg, gfxBorder, y, inWid - 1, 
+			vgTextRight(vg, leftLabelX, y, leftLabelWidth - 1, 
 				itemHeight, track->ixColor, font, name);
 			y += itemHeight;
 			}
@@ -9028,18 +9059,22 @@ if (withLeftLabels)
 		    {
 		    ymax = y - (track->heightPer / 2) + (fontHeight / 2);
 		    ymin = y + (track->heightPer / 2) - (fontHeight / 2);
-		    vgTextRight(vg, gfxBorder, ymin, inWid-1, track->lineHeight, 
+		    vgTextRight(vg, leftLabelX, ymin, leftLabelWidth-1, track->lineHeight, 
 				track->ixAltColor, font, minRangeStr );
-		    vgTextRight(vg, gfxBorder, ymax, inWid-1, track->lineHeight, 
+		    vgTextRight(vg, leftLabelX, ymax, leftLabelWidth-1, track->lineHeight, 
 				track->ixAltColor, font, maxRangeStr );
 		    }
-		vgTextRight(vg, gfxBorder, y, inWid-1, track->lineHeight, 
+		vgTextRight(vg, leftLabelX, y, leftLabelWidth-1, track->lineHeight, 
 			    track->ixColor, font, track->shortLabel);
-		y += track->lineHeight;
+		y += track->height;
 		break;
 	    }
+	vgUnclip(vg);
         }
-    vgUnclip(vg);
+    }
+else
+    {
+    leftLabelX = leftLabelWidth = 0;
     }
 
 /* Draw guidelines. */
@@ -9412,7 +9447,7 @@ tg->items = lfList;
 /*turn off full mode if there are too many rows or each row is too
  * large. A total of maxWiggleTrackHeight is allowed for number of
  * rows times the rowHeight*/
-if( tg->visibility == tvFull && tgUserDefinedTotalHeight( tg, tvFull ) > maxWiggleTrackHeight  )
+if( tg->visibility == tvFull && sampleTotalHeight( tg, tvFull ) > maxWiggleTrackHeight  )
     {
     tg->limitedVisSet = TRUE;
     tg->limitedVis = tvDense;
@@ -9480,7 +9515,7 @@ tg->items = lfList;
 /*turn off full mode if there are too many rows or each row is too
  * large. A total of maxWiggleTrackHeight is allowed for number of
  * rows times the rowHeight*/
-if( tg->visibility == tvFull && tgUserDefinedTotalHeight( tg, tvFull ) > maxWiggleTrackHeight  )
+if( tg->visibility == tvFull && sampleTotalHeight( tg, tvFull ) > maxWiggleTrackHeight  )
     {
     tg->limitedVisSet = TRUE;
     tg->limitedVis = tvDense;
@@ -10524,7 +10559,7 @@ int dinkSize(char *var)
 char *stringVal = cartOptionalString(cart, var);
 double x;
 double guideBases = (double)guidelineSpacing * (double)(winEnd - winStart) 
-	/ ((double)tl.picWidth - trackOffsetX());
+	/ ((double)insideWidth);
 
 if (stringVal == NULL || !isdigit(stringVal[0]))
     {
