@@ -1,4 +1,5 @@
 /* para - para - manage a batch of jobs in parallel on a compute cluster.. */
+#include <bits/time.h>
 #include <sys/wait.h>
 #include <signal.h>
 #include "common.h"
