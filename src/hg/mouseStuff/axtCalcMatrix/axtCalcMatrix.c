@@ -74,6 +74,8 @@ int fileIx;
 struct axt *axt;
 static int trans[4] = {A_BASE_VAL, C_BASE_VAL, G_BASE_VAL, T_BASE_VAL};
 static char *bases[4] = {"A", "C", "G", "T"};
+int totalMatch = 0, totalMismatch = 0, 
+	totalGapStart = 0, totalGapExt=0;
 
 AllocArray(histIns, maxInDel);
 AllocArray(histDel, maxInDel);
@@ -103,7 +105,14 @@ for (i=0; i<4; ++i)
     printf(" %s", bases[i]);
     total = 0;
     for (j=0; j<4; ++j)
-        total += matrix[it][j];
+	{
+	int one = matrix[it][j];
+        total += one;
+	if (it == j)
+	    totalMatch += one;
+	else
+	    totalMismatch += one;
+	}
     if (total == 0)
         {
 	for (j=0; j<4; ++j)
@@ -127,8 +136,8 @@ for (i=0; i<100; i += 10)
     int delSum = 0, insSum=0;
     for (j=0; j<10; ++j)
         {
-	delSum += histDel[i+j];
 	insSum += histIns[i+j];
+	delSum += histDel[i+j];
 	}
     printf("%2d to %2d:  %6d %6d\n", i, i+9, insSum, delSum);
     }
@@ -137,12 +146,25 @@ for (i=0; i<1000; i += 100)
     int delSum = 0, insSum=0;
     for (j=0; j<100; ++j)
         {
-	delSum += histDel[i+j];
-	insSum += histIns[i+j];
+	int ix = i+j;
+	int ins = histIns[ix];
+	int del = histDel[ix];
+	int both = ins + del;
+	insSum += ins;
+	delSum += del;
+	totalGapStart += both;
+	totalGapExt += both * (ix-1);
 	}
     printf("%3d to %3d:  %6d %6d\n", i, i+99, insSum, delSum);
     }
 printf(">1000  %6d %6d\n", histIns[1000], histDel[1000]);
+totalGapStart += histIns[1000] + histDel[1000];
+printf("\n");
+printf("%d matches, %d mismatches (%4.2f%%), %d gapStarts (%4.2f%%), %d gap extensions (%4.2f%%)\n", 
+    totalMatch, 
+    totalMismatch, 100.0 * totalMismatch/totalMatch, 
+    totalGapStart, 100.0 * totalGapStart/totalMatch,
+    totalGapExt, 100.0 * totalGapExt/totalMatch);
 }
 
 int main(int argc, char *argv[])
