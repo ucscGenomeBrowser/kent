@@ -75,7 +75,7 @@
 #include "web.h"
 #include "grp.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.539.2.1 2003/06/23 18:19:06 heather Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.539.2.2 2003/06/27 17:20:33 heather Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define EXPR_DATA_SHADES 16
@@ -10542,9 +10542,11 @@ char *debugTmp = NULL;
 struct dyString *state = NULL;
 /* Initialize layout and database. */
 cart = theCart;
-state = cgiUrlString();
 /* Uncomment this to see parameters for debugging. */
-/* printf("State: %s\n", state->string);   */
+/* Be careful though, it breaks if custom track
+ * is more than 4k */
+/*state = cgiUrlString();
+ printf("State: %s\n", state->string);   */
 getDbAndGenome(cart, &database, &organism);
 hSetDb(database);
 protDbName = hPdbFromGdb(database);
