@@ -8,7 +8,7 @@ ssh hgwdev
 set db = hg16
 
 # Cluster together various alt-splicing isoforms.
-hgClusterGenes $db knownGene knownIsoforms knownCannonical
+hgClusterGenes $db knownGene knownIsoforms knownCanonical
 
 # Extract peptides from knownGenes into fasta file
 # and create a blast database out of them.
