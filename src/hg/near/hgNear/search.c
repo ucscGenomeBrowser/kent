@@ -6,7 +6,7 @@
 #include "hdb.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: search.c,v 1.13 2003/10/18 01:23:06 kent Exp $";
+static char const rcsid[] = "$Id: search.c,v 1.14 2003/11/04 07:01:16 angie Exp $";
 
 int searchResultCmpShortLabel(const void *va, const void *vb)
 /* Compare to sort based on short label. */
@@ -196,10 +196,30 @@ else
     }
 }
 
+static char *transcriptToCanonical(struct sqlConnection *conn, char *transcript)
+/* Translate transcript to canonical ID if possible, otherwise just return 
+ * a copy of transcript. */
+{
+struct dyString *dy = newDyString(1024);
+char *cannon = genomeSetting("canonicalTable");
+char *isoform = genomeSetting("isoformTable");
+char buf[128];
+char *result = NULL;
+dyStringPrintf(dy, "select %s.transcript from %s,%s where %s.transcript = '%s'",
+	       cannon, isoform, cannon, isoform, transcript);
+dyStringPrintf(dy, " and %s.clusterId = %s.clusterId", isoform, cannon);
+result = sqlQuickQuery(conn, dy->string, buf, sizeof(buf));
+if (result != NULL)
+    return(cloneString(result));
+else
+    return(cloneString(transcript));
+}
+
 static struct genePos *findKnownAccessions(struct sqlConnection *conn, 
 	char *search)
 /* Return list of known accessions. */
 {
+search = transcriptToCanonical(conn, search);
 return findGenePredPos(conn, genomeSetting("geneTable"), search);
 }
 
