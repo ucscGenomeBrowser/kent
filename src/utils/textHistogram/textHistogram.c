@@ -4,7 +4,7 @@
 #include "hash.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: textHistogram.c,v 1.15 2004/05/19 23:19:55 hiram Exp $";
+static char const rcsid[] = "$Id: textHistogram.c,v 1.16 2004/08/13 21:20:36 hiram Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -139,6 +139,7 @@ double maxCt;
 int truncation = 0;
 int begin, end;
 unsigned long long totalCounts = 0;
+double cpd;
 
 /* Allocate histogram and optionally space for
  * second column totals. */
@@ -249,8 +250,7 @@ if (pValues)
     totalCounts = 0;
     for (i=begin; i<end; ++i)
 	totalCounts += hist[i];
-    if (verboseLevel()>1)
-	printf("#\ttotal data values: %llu\n", totalCounts);
+    verbose(2,"#\ttotal data values: %llu\n", totalCounts);
     if (totalCounts < 1)
 	errAbort("ERROR: No bins with any data ?\n");
     }
@@ -259,12 +259,14 @@ if (verboseLevel()>1)
     {
     if (noStar) {
 	if (pValues)
-	    printf("# bin\tValue\tCount\t\tp-Value\t\tlog2(p-Value)\n");
+	    printf("# bin\tValue\t\tp-Value\t\tlog2(p-Value)\tCPD\t1-CPD\n");
 	else
 	    printf("# bin  Value	ascii graph\n");
     } else
 	printf("# bin  Value	ascii graph\n");
     }
+
+cpd = 0.0;	/*	cumulative probability distribution	*/
 /* Output results. */
 for (i=begin; i<end; ++i)
     {
@@ -296,12 +298,20 @@ for (i=begin; i<end; ++i)
 	if (verboseLevel()>1)
 	    printf("%2d\t", i);
 	if (real)
-	    printf("%3d %g:%g\t%f", i, binStartR, binStartR+binSizeR, ct);
+	    {
+	    if (pValues)
+		printf("%3d %g:%g", i, binStartR, binStartR+binSizeR);
+	    else
+		printf("%3d %g:%g\t%f", i, binStartR, binStartR+binSizeR, ct);
+	    }
 	else
 	    printf("%d\t%f", binStart, ct);
 	if (pValues)
-	    printf("\t%f\t%f\n", (double)ct/(double)totalCounts,
-		log((double)ct/(double)totalCounts)/log(2.0) );
+	    {
+	    cpd += (double)ct/(double)totalCounts;
+	    printf("\t%f\t%f\t%f\t%f\n", (double)ct/(double)totalCounts,
+		log((double)ct/(double)totalCounts)/log(2.0), cpd, 1.0-cpd );
+	    }
 	else
 	    printf("\n");
 	}
