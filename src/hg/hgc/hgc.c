@@ -131,7 +131,7 @@
 #include "hgFind.h"
 #include "botDelay.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.583 2004/03/17 00:55:30 angie Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.584 2004/03/17 19:44:25 angie Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -7890,18 +7890,33 @@ if (bgi != NULL)
 	    printf("&nbsp;&nbsp;&nbsp;%s<BR>\n", words[i]);
 	    }
 	}
-    if (bgi->snp != NULL && bgi->snp[0] != 0)
+    if (bgi->snp != NULL && bgi->snp[0] != 0 && hTableExists("bgiSnp"))
 	{
+	struct sqlConnection *conn = hAllocConn();
+	struct sqlResult *sr;
+	struct bgiSnp snp;
+	char **row;
 	char *words[16];
 	int wordCount = chopCommas(bgi->snp, words);
+	int rowOffset = hOffsetPastBin(seqName, "bgiSnp");
 	int i;
 	printf("<B>BGI SNPs associated with gene %s:</B> <BR>\n", geneName);
 	for (i=0;  i < wordCount && words[i][0] != 0;  i++)
 	    {
-	    printf("&nbsp;&nbsp;&nbsp;<A HREF=%s?%s&g=bgiSnp&i=%s&db=%s&c=%s>%s</A><BR>\n",
-		   hgcName(), cartSidUrlString(cart), words[i], database,
-		   seqName, words[i]);
+	    safef(query, sizeof(query),
+		  "select * from bgiSnp where name = '%s'", words[i]);
+	    sr = sqlGetResult(conn, query);
+	    if ((row = sqlNextRow(sr)) != NULL)
+		{
+		bgiSnpStaticLoad(row+rowOffset, &snp);
+		printf("&nbsp;&nbsp;&nbsp;<A HREF=%s?%s&g=bgiSnp&i=%s&db=%s&c=%s&o=%d&t=%d>%s (%s)</A><BR>\n",
+		       hgcName(), cartSidUrlString(cart), words[i], database,
+		       seqName, snp.chromStart, snp.chromEnd, words[i],
+		       snp.geneAssoc);
+		}
+	    sqlFreeResult(&sr);
 	    }
+	hFreeConn(&conn);
 	}
     }
 printf("<H3>Links to sequence:</H3>\n");
@@ -7950,8 +7965,6 @@ struct sqlResult *sr;
 char **row;
 char query[256];
 int rowOffset = hOffsetPastBin(seqName, table);
-int start = cartInt(cart, "o");
-int end = cartInt(cart, "t");
 
 genericHeader(tdb, itemName);
 
@@ -7969,16 +7982,29 @@ while ((row = sqlNextRow(sr)) != NULL)
     printf("<B>SNP in Broiler?:</B> %s<BR>\n", snp.inBroiler);
     printf("<B>SNP in Layer?:</B> %s<BR>\n", snp.inLayer);
     printf("<B>SNP in Silkie?:</B> %s<BR>\n", snp.inSilkie);
-    if (snp.geneName[0] != 0)
+    if (snp.geneName[0] != 0 && hTableExists("bgiGene"))
 	{
-	printf("<B>Associated gene:</B> <A HREF=%s?%s&g=bgiGene&i=%s&c=%s&db=%s>%s</A><BR>\n",
-	       hgcName(), cartSidUrlString(cart), snp.geneName,
-	       seqName, database, snp.geneName);
-	printf("<B>Relationship to gene:</B> %s<BR>\n", snp.geneAssoc);
-	if (snp.codonChange[0] != 0)
-	    printf("<B>Effect of SNP:</B> %s<BR>\n", snp.codonChange);
-	if (snp.phase[0] != 0)
-	    printf("<B>Phase of SNP:</B> %c<BR>\n", snp.phase[0]);
+	struct genePred *bg;
+	struct sqlConnection *conn2 = hAllocConn();
+	struct sqlResult *sr2;
+	safef(query, sizeof(query),
+	      "select * from bgiGene where name = '%s'", snp.geneName);
+	sr2 = sqlGetResult(conn2, query);
+	if ((row = sqlNextRow(sr2)) != NULL)
+	    {
+	    bg = genePredLoad(row);
+	    printf("<B>Associated gene:</B> <A HREF=%s?%s&g=bgiGene&i=%s&c=%s&db=%s&o=%d&t=%d&l=%d&r=%d>%s</A><BR>\n",
+		   hgcName(), cartSidUrlString(cart), snp.geneName,
+		   seqName, database, bg->txStart, bg->txEnd,
+		   bg->txStart, bg->txEnd, snp.geneName);
+	    printf("<B>Relationship to gene:</B> %s<BR>\n", snp.geneAssoc);
+	    if (snp.codonChange[0] != 0)
+		printf("<B>Effect of SNP:</B> %s<BR>\n", snp.codonChange);
+	    if (snp.phase[0] != 0)
+		printf("<B>Phase of SNP:</B> %c<BR>\n", snp.phase[0]);
+	    }
+	sqlFreeResult(&sr2);
+	hFreeConn(&conn2);
 	}
     printf("<B>Quality Scores:</B> %d in reference, %d in read<BR>\n", 
 	   snp.qualChr, snp.qualReads);
