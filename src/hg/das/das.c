@@ -13,7 +13,7 @@
 #include "trackTable.h"
 #include <regex.h>
 
-static char const rcsid[] = "$Id: das.c,v 1.25 2004/02/28 00:56:00 angie Exp $";
+static char const rcsid[] = "$Id: das.c,v 1.26 2004/05/18 23:46:57 kent Exp $";
 
 char *version = "1.00";
 char *database = NULL;	
@@ -157,7 +157,8 @@ boolean dasableTrack(char *name)
 /* Return TRUE if track can be put into DAS format. */
 {
 if (startsWith("chain", name) || startsWith("net", name)
-	|| startsWith("syntenyNet", name) || startsWith("trackDb_", name))
+	|| startsWith("syntenyNet", name) || startsWith("trackDb_", name)
+	|| endsWith(name, "Chain") || endsWith(name, "Net"))
     return FALSE;
 return TRUE;
 }
