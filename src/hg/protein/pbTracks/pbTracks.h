@@ -9,6 +9,8 @@
 #define NEUTRAL    3
 #define POLAR      4
 
+#define MAX_PB_PIXWIDTH 30000
+
 #ifndef VGFX_H
 #include "vGfx.h"
 #endif
@@ -65,6 +67,7 @@ extern struct vGfx *g_vg;
 extern MgFont *g_font;
 extern int currentYoffset;
 extern int pbScale;
+extern char pbScaleStr[];
 
 extern int *yOffp;
 extern double tx[], ty[];
@@ -90,6 +93,7 @@ extern int blockStart[], blockStartPositive[];
 extern int blockEnd[], blockEndPositive[];
 extern int blockGenomeStart[], blockGenomeStartPositive[];
 extern int blockGenomeEnd[], blockGenomeEndPositive[];
+extern int trackOrigOffset;        //current track display origin offset
 
 void hPrintf(char *format, ...);
 
