@@ -30,7 +30,7 @@ errAbort(
   "options:\n"
   "   -hubInPort=N (default %d)\n"
   "   -nodeInPort=N (default %d)\n"
-  "   -log=fileName - where to write log messages\n"
+  "   -logFacility=facility log to the specified syslog facility.\n"
   "   -drop=N - Drop every Nth packet\n"
   "   -ip=NNN.NNN.NNN.NNN ip address of current machine, usually needed.\n"
   "   -broadIp - network broadcast address, %s by default\n"
