@@ -40,7 +40,7 @@
 #include "minGeneInfo.h"
 #include <regex.h>
 
-static char const rcsid[] = "$Id: hgFind.c,v 1.122 2003/12/04 16:35:14 booch Exp $";
+static char const rcsid[] = "$Id: hgFind.c,v 1.123 2003/12/09 02:56:11 kent Exp $";
 
 /* alignment tables to check when looking for mrna alignments */
 static char *estTables[] = { "all_est", "xenoEst", NULL};
@@ -1627,7 +1627,19 @@ hFreeConn(&conn);
 return ok;
 }
 
-static boolean findGenePredPattern(char *pattern, struct hgPositions *hgp, char *tableName)
+#ifdef UNUSED
+static struct hgPosTable *findTable(struct hgPosTable *list, char *name)
+/* Find named table or return NULL. */
+{
+struct hgPosTable *table = NULL;
+for (table = list; table != NULL; table = table->next)
+    if (sameString(name, table->name))
+        return table;
+return NULL;
+}
+#endif /* UNUSED */
+
+static boolean findGenePredPattern(char *pattern, struct hgPositions *hgp, char *tableName, struct hgPosTable *table)
 /* Look for position pattern in gene prediction table. */
 {
 struct sqlConnection *conn;
@@ -1638,7 +1650,6 @@ boolean ok = FALSE;
 char *chrom;
 struct snp snp;
 char buf[64];
-struct hgPosTable *table = NULL;
 struct hgPos *pos = NULL;
 int rowOffset;
 char *localName;
@@ -1656,12 +1667,15 @@ while ((row = sqlNextRow(sr)) != NULL)
     if (ok == FALSE)
         {
 	ok = TRUE;
-	AllocVar(table);
-	dyStringClear(query);
-	dyStringPrintf(query, "%s Gene Predictions", tableName);
-	table->description = cloneString(query->string);
-	table->name = cloneString(tableName);
-	slAddHead(&hgp->tableList, table);
+	if (table == NULL)
+	    {
+	    AllocVar(table);
+	    dyStringClear(query);
+	    dyStringPrintf(query, "%s Gene Predictions", tableName);
+	    table->description = cloneString(query->string);
+	    table->name = cloneString(tableName);
+	    slAddHead(&hgp->tableList, table);
+	    }
 	}
     
     AllocVar(pos);
@@ -1684,7 +1698,7 @@ static boolean findGenePred(char *spec, struct hgPositions *hgp, char *tableName
 /* Look for exact match of position in gene prediction table. */
     char buf[64];
     snprintf(buf, 64, "%s", spec); 
-    return  findGenePredPattern(buf, hgp, tableName);
+    return  findGenePredPattern(buf, hgp, tableName, NULL);
 }
 
 static boolean findGenePredLike(char *spec, struct hgPositions *hgp, char *tableName)
@@ -1692,7 +1706,7 @@ static boolean findGenePredLike(char *spec, struct hgPositions *hgp, char *table
 /* Look for leading match of position in gene prediction table. */
     char buf[64];
     snprintf(buf, 64, "%s%%", spec); 
-    return findGenePredPattern(buf, hgp, tableName);
+    return findGenePredPattern(buf, hgp, tableName, NULL);
 }
 
 
@@ -2839,6 +2853,102 @@ hFreeConn(&conn);
 
 /* End of Lowe Lab stuff */
 
+static void addUniqYeastGene(struct hash *uniqHash, 
+	struct sqlConnection *conn, char *query, 
+	struct hgPositions *hgp, char *geneTable,
+	struct hgPosTable **pTable)
+/* Execute query which returns a single row, and add genes. */
+{
+struct sqlResult *sr = sqlGetResult(conn, query);
+char **row;
+struct hgPosTable *table = *pTable;
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    char *id = row[0];
+    if (!hashLookup(uniqHash, id))
+	{
+	hashAdd(uniqHash, id, NULL);
+	if (table == NULL)
+	    {
+	    AllocVar(table);
+	    table->name = geneTable;
+	    table->description = "Genes from Sacchromyces Genome Database";
+	    slAddHead(&hgp->tableList, table);
+	    *pTable = table;
+	    }
+	findGenePredPattern(id, hgp, geneTable, table);
+	}
+    }
+sqlFreeResult(&sr);
+}
+
+static void findYeastGenes(char *pattern, struct hgPositions *hgp)
+/* Scan yeast-specific tables. */
+{
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr;
+char **row, query[256];
+struct hgPosTable *table = NULL;
+
+if (hTableExists("sgdGene"))
+    {
+    struct hash *uniqHash = newHash(0);
+    boolean gotNames = FALSE, gotDescriptions = FALSE;
+    safef(query, sizeof(query), 
+        "select name from sgdGene where name = '%s'", pattern);
+    addUniqYeastGene(uniqHash, conn, query, hgp, "sgdGene", &table);
+    if (hTableExists("sgdToName"))
+	{
+	gotNames = TRUE;
+	safef(query, sizeof(query), 
+	    "select name from sgdToName where value like '%s%%'", pattern);
+	addUniqYeastGene(uniqHash, conn, query, hgp, "sgdGene", &table);
+	}
+    if (hTableExists("sgdDescription"))
+        {
+	gotDescriptions = TRUE;
+	safef(query, sizeof(query), 
+	    "select name from sgdDescription where description like '%%%s%%'", 
+	    pattern);
+	addUniqYeastGene(uniqHash, conn, query, hgp, "sgdGene", &table);
+	}
+    hashFree(&uniqHash);
+
+    /* Add descriptions to table. */
+    if (table != NULL)
+        {
+	struct hgPos *pos;
+	for (pos = table->posList; pos != NULL; pos = pos->next)
+	    {
+	    struct dyString *dy = newDyString(1024);
+	    if (gotNames)
+		{
+		safef(query, sizeof(query),
+		   "select value from sgdToName where name = '%s'", pos->name);
+	        sr = sqlGetResult(conn, query);
+		while ((row = sqlNextRow(sr)) != NULL)
+		    dyStringPrintf(dy, "(%s) ", row[0]);
+		sqlFreeResult(&sr);
+		}
+	    if (gotDescriptions)
+		{
+		safef(query, sizeof(query),
+		   "select description from sgdDescription where name = '%s'", 
+		   pos->name);
+	        sr = sqlGetResult(conn, query);
+		if ((row = sqlNextRow(sr)) != NULL)
+		    dyStringPrintf(dy, "%s", row[0]);
+		sqlFreeResult(&sr);
+		}
+	    if (dy->stringSize > 0)
+		pos->description = cloneString(dy->string);
+	    dyStringFree(&dy);
+	    }
+	}
+    }
+hFreeConn(&conn);
+}
+
 static void findBedPos(char *name, struct hgPositions *hgp, char *tableName)
 /* Look for positions in bed table. */
 {
@@ -3223,9 +3333,11 @@ else
 	{
     	findKnownGene(query, hgp, "knownGene");
 	}
-
     findKnownGenes(query, hgp);
     findRefGenes(query, hgp);
+
+    findYeastGenes(query, hgp);
+
     findSuperfamily(query, hgp);
     findFishClones(query, hgp);
     findBacEndPairs(query, hgp);
@@ -3257,7 +3369,8 @@ else
     findGenePredLike(query, hgp, "slamHuman");
     findBedTablePos(query, "HG-U95:", hgp, "affyGnf");
     findBedTablePos(query, "HG-U133:", hgp, "affyUcla");
-    findBedTablePos(query, "", hgp, "uniGene_2");
+    findBedPos(query, hgp, "uniGene_2");
+    findBedPos(query, hgp, "sgdOther");
     // findBedPos(query,hgp,"gbRRNA");
     // findBedPos(query,hgp,"gbTRNA");
     // findBedPos(query,hgp,"gbMiscRNA");
@@ -3390,626 +3503,626 @@ if (useWeb)
 void hgPositionsHelpHtml(char *organism, char *database)
 /* Explain the position box usage, give some organism-specific examples. */
 {
-    char *htmlPath = (char *) NULL;
-    char *htmlString = (char *) NULL;
-    size_t htmlStrLength = 0;
+char *htmlPath = (char *) NULL;
+char *htmlString = (char *) NULL;
+size_t htmlStrLength = 0;
 
-    /*	fetch /gbdb path name from dbDb database */
-    htmlPath= hHtmlPath(database);
+/*	fetch /gbdb path name from dbDb database */
+htmlPath= hHtmlPath(database);
 
-    /*  If that is OK, try opening the file */
-    if( (char *) NULL != htmlPath ) {
-	if( fileExists(htmlPath) ) {
-	    readInGulp(htmlPath, & htmlString, & htmlStrLength );
-/***********   Optionally, we can describe what is missing:
-	} else {
-    printf("<P><H4> HTML description file does not exist: '%s'</H4></P><BR>\n", htmlPath );
-    ***********	In practice, we will allow this to fail silently and
-    *********** the if statements below will fill in some default.
-    **********/
-        }
-    }
-    if( htmlStrLength ) {
-	puts(htmlString);
-	freeMem(htmlString);
-	freeMem(htmlPath);
+/*  If that is OK, try opening the file */
+if( (char *) NULL != htmlPath ) {
+    if( fileExists(htmlPath) ) {
+	readInGulp(htmlPath, & htmlString, & htmlStrLength );
+    /***********   Optionally, we can describe what is missing:
     } else {
+	printf("<P><H4> HTML description file does not exist: '%s'</H4></P><BR>\n", htmlPath );
+	***********	In practice, we will allow this to fail silently and
+	*********** the if statements below will fill in some default.
+	**********/
+    }
+}
+if( htmlStrLength ) {
+    puts(htmlString);
+    freeMem(htmlString);
+    freeMem(htmlPath);
+} else {
 if (strstrNoCase(organism, "human"))
     {
     puts("<P><H3>About the Homo sapiens assembly</P></H3>\n");
     puts(
-"<P>The latest human reference sequence (UCSC version hg16) is based on NCBI \n" 
-"Build 34 and was produced by the International Human \n"
-"Genome Sequencing Consortium. The sequence covers about 99 percent of \n"
-"the gene-containing regions in the genome, and has been sequenced to an \n"
-"accuracy of 99.99 percent. \n"
-"Of note in this release is the addition of the pseudoautosomal regions \n"
-"of the Y chromosome. This sequence was taken from the corresponding regions \n"
-"in the X chromosome and is an exact duplication of that sequence.\n"
-"<P>"
-"There are 2,843,433,602 finished sequenced bases in the \n"
-"ordered and oriented portion of the assembly, which is an increase of 0.4 \n" 
-"percent, or approximately 11 Mb, over the Build 33 assembly. \n"
-"The reference \n"
-"sequence is considered to be &quot;finished&quot;, a technical term indicating that \n"
-"the sequence is highly accurate (with fewer than one error per 10,000 \n"
-"bases) and highly contiguous (with the only remaining gaps corresponding \n"
-"to regions whose sequence cannot be reliably resolved with current \n"
-"technology). Future work on the reference sequence will focus on improving \n"
-"accuracy and reducing gaps in the sequence.\n"
-"<P>"
-"Some sequence joins between adjacent clones in this assembly could not be \n"
-"computationally validated because the clones originated from different \n"
-"haplotypes and contained polymorphisms in the overlapping sequence, or the \n"
-"overlap was too small to be to be reliable. In these instances, the \n"
-"sequencing center responsible for the particular chromosome has provided \n"
-"data to support the join in the form of an electronic certificate. These \n"
-"certificates may be reviewed through the link below. </P>");
+    "<P>The latest human reference sequence (UCSC version hg16) is based on NCBI \n" 
+    "Build 34 and was produced by the International Human \n"
+    "Genome Sequencing Consortium. The sequence covers about 99 percent of \n"
+    "the gene-containing regions in the genome, and has been sequenced to an \n"
+    "accuracy of 99.99 percent. \n"
+    "Of note in this release is the addition of the pseudoautosomal regions \n"
+    "of the Y chromosome. This sequence was taken from the corresponding regions \n"
+    "in the X chromosome and is an exact duplication of that sequence.\n"
+    "<P>"
+    "There are 2,843,433,602 finished sequenced bases in the \n"
+    "ordered and oriented portion of the assembly, which is an increase of 0.4 \n" 
+    "percent, or approximately 11 Mb, over the Build 33 assembly. \n"
+    "The reference \n"
+    "sequence is considered to be &quot;finished&quot;, a technical term indicating that \n"
+    "the sequence is highly accurate (with fewer than one error per 10,000 \n"
+    "bases) and highly contiguous (with the only remaining gaps corresponding \n"
+    "to regions whose sequence cannot be reliably resolved with current \n"
+    "technology). Future work on the reference sequence will focus on improving \n"
+    "accuracy and reducing gaps in the sequence.\n"
+    "<P>"
+    "Some sequence joins between adjacent clones in this assembly could not be \n"
+    "computationally validated because the clones originated from different \n"
+    "haplotypes and contained polymorphisms in the overlapping sequence, or the \n"
+    "overlap was too small to be to be reliable. In these instances, the \n"
+    "sequencing center responsible for the particular chromosome has provided \n"
+    "data to support the join in the form of an electronic certificate. These \n"
+    "certificates may be reviewed through the link below. </P>");
 
     puts("<P><H3>Statistical information</P></H3>\n");
     puts(
-"<UL>"
-"<LI><A HREF=\"/goldenPath/certificates/\">Non-Standard Join Certificates</A>"
-"<LI><A HREF=\"/goldenPath/stats.html\">Summary Statistics</A>"
-"<LI><A HREF=\"/goldenPath/chromReports\">Chromosome Reports</A>"
-"<LI><A HREF=\"/goldenPath/mapPlots/\">Genome Map Plots</A>"
-"</UL></P>"
-"<P></P>"
-);
+    "<UL>"
+    "<LI><A HREF=\"/goldenPath/certificates/\">Non-Standard Join Certificates</A>"
+    "<LI><A HREF=\"/goldenPath/stats.html\">Summary Statistics</A>"
+    "<LI><A HREF=\"/goldenPath/chromReports\">Chromosome Reports</A>"
+    "<LI><A HREF=\"/goldenPath/mapPlots/\">Genome Map Plots</A>"
+    "</UL></P>"
+    "<P></P>"
+    );
     puts("<P><H3>Sample position queries</P></H3>\n");
     puts(
-"<P>A genome position can be specified by the accession number of a \n"
-"sequenced genomic clone, an mRNA or EST or STS marker, or \n"
-"a cytological band, a chromosomal coordinate range, or keywords from \n"
-"the Genbank description of an mRNA. The following list provides \n"
-"examples of various types of position queries for the human genome. \n"
-"See the \n"
-"<A HREF=\"http://genome.cse.ucsc.edu/goldenPath/help/hgTracksHelp.html\" TARGET=_blank>"
-"User Guide</A> for more help. \n"
-"<P>\n"
-"\n"
-"<P>\n"
-"<TABLE  border=0 CELLPADDING=0 CELLSPACING=0>\n"
-"<TR><TD VALIGN=Top NOWRAP><B>Request:</B><br></TD>\n"
-"	<TD VALIGN=Top COLSPAN=2><B>&nbsp;&nbsp; Genome Browser Response:</B><br></TD></TR>\n"
-"	\n"
-"<TR><TD VALIGN=Top><br></TD></TR>\n"
-"	\n"
-"<TR><TD VALIGN=Top NOWRAP>chr7</TD>\n"
-"	<TD WIDTH=14></TD>\n"
-"	<TD VALIGN=Top>Displays all of chromosome 7</TD></TR>\n"
-"<TR><TD VALIGN=Top NOWRAP>20p13</TD>\n"
-"	<TD WIDTH=14></TD>\n"
-"	<TD VALIGN=Top>Displays region for band p13 on chr 20</TD></TR>\n"
-"<TR><TD VALIGN=Top NOWRAP>chr3:1-1000000</TD>\n"
-"	<TD WIDTH=14></TD>\n"
-"	<TD VALIGN=Top>Displays first million bases of chr 3, counting from p arm telomere</TD></TR>\n"
-"<TR><TD VALIGN=Top NOWRAP>scf1:1-1000000</TD>\n"
-"	<TD WIDTH=14></TD>\n"
-"	<TD VALIGN=Top>Displays first million bases of scaffold 1 of an unmapped genome assembly</TD></TR>\n"
-"\n"
-"<TR><TD VALIGN=Top><br></TD></TR>\n"
-"\n"
-"<TR><TD VALIGN=Top NOWRAP>D16S3046</TD>\n"
-"	<TD WIDTH=14></TD>\n"
-"	<TD VALIGN=Top>Displays region around STS marker D16S3046 from the Genethon/Marshfield maps.\n"
-"Includes 100,000 bases on each side as well."
-"</TD></TR>\n"
-"<TR><TD VALIGN=Top NOWRAP>RH18061;RH80175</TD>\n"
-"	<TD WIDTH=14></TD>\n"
-"	<TD VALIGN=Top>Displays region between STS markers RH18061;RH80175.\n"
-"Includes 100,000 bases on each side as well."
-"</TD></TR>\n"
-"<TR><TD VALIGN=Top><br></TD></TR>\n"
-"\n"
-"<TR><TD VALIGN=Top NOWRAP>AA205474</TD>\n"
-"	<TD WIDTH=14></TD>\n"
-"	<TD VALIGN=Top>Displays region of EST with GenBank accession AA205474 in BRCA1 cancer gene on chr 17\n"
-"</TD></TR>\n"
-"<!-- <TR><TD VALIGN=Top NOWRAP>ctgchr7_ctg</TD>\n"
-"	<TD WIDTH=14></TD>\n"
-"	<TD VALIGN=Top>Displays region of the clone contig ctgchr7_ctg\n"
-"	(set \"Map contigs\" track to \"dense\" and refresh to see contigs)</TD></TR> -->\n"
-"<TR><TD VALIGN=Top NOWRAP>AC008101</TD>\n"
-"	<TD WIDTH=14></TD>\n"
-"	<TD VALIGN=Top>Displays region of clone with GenBank accession AC008101\n"
-"</TD></TR>\n"
-"\n"
-"<TR><TD VALIGN=Top><br></TD></TR>\n"
-"\n"
-"<TR><TD VALIGN=Top NOWRAP>AF083811</TD>\n"
-"	<TD WIDTH=14></TD>\n"
-"	<TD VALIGN=Top>Displays region of mRNA with GenBank accession number AF083811</TD></TR>\n"
-"<TR><TD VALIGN=Top NOWRAP>PRNP</TD>\n"
-"	<TD WIDTH=14></TD>\n"
-"	<TD>Displays region of genome with HUGO identifier PRNP</TD></TR>\n"
-"\n"
+    "<P>A genome position can be specified by the accession number of a \n"
+    "sequenced genomic clone, an mRNA or EST or STS marker, or \n"
+    "a cytological band, a chromosomal coordinate range, or keywords from \n"
+    "the Genbank description of an mRNA. The following list provides \n"
+    "examples of various types of position queries for the human genome. \n"
+    "See the \n"
+    "<A HREF=\"http://genome.cse.ucsc.edu/goldenPath/help/hgTracksHelp.html\" TARGET=_blank>"
+    "User Guide</A> for more help. \n"
+    "<P>\n"
+    "\n"
+    "<P>\n"
+    "<TABLE  border=0 CELLPADDING=0 CELLSPACING=0>\n"
+    "<TR><TD VALIGN=Top NOWRAP><B>Request:</B><br></TD>\n"
+    "	<TD VALIGN=Top COLSPAN=2><B>&nbsp;&nbsp; Genome Browser Response:</B><br></TD></TR>\n"
+    "	\n"
+    "<TR><TD VALIGN=Top><br></TD></TR>\n"
+    "	\n"
+    "<TR><TD VALIGN=Top NOWRAP>chr7</TD>\n"
+    "	<TD WIDTH=14></TD>\n"
+    "	<TD VALIGN=Top>Displays all of chromosome 7</TD></TR>\n"
+    "<TR><TD VALIGN=Top NOWRAP>20p13</TD>\n"
+    "	<TD WIDTH=14></TD>\n"
+    "	<TD VALIGN=Top>Displays region for band p13 on chr 20</TD></TR>\n"
+    "<TR><TD VALIGN=Top NOWRAP>chr3:1-1000000</TD>\n"
+    "	<TD WIDTH=14></TD>\n"
+    "	<TD VALIGN=Top>Displays first million bases of chr 3, counting from p arm telomere</TD></TR>\n"
+    "<TR><TD VALIGN=Top NOWRAP>scf1:1-1000000</TD>\n"
+    "	<TD WIDTH=14></TD>\n"
+    "	<TD VALIGN=Top>Displays first million bases of scaffold 1 of an unmapped genome assembly</TD></TR>\n"
+    "\n"
+    "<TR><TD VALIGN=Top><br></TD></TR>\n"
+    "\n"
+    "<TR><TD VALIGN=Top NOWRAP>D16S3046</TD>\n"
+    "	<TD WIDTH=14></TD>\n"
+    "	<TD VALIGN=Top>Displays region around STS marker D16S3046 from the Genethon/Marshfield maps.\n"
+    "Includes 100,000 bases on each side as well."
+    "</TD></TR>\n"
+    "<TR><TD VALIGN=Top NOWRAP>RH18061;RH80175</TD>\n"
+    "	<TD WIDTH=14></TD>\n"
+    "	<TD VALIGN=Top>Displays region between STS markers RH18061;RH80175.\n"
+    "Includes 100,000 bases on each side as well."
+    "</TD></TR>\n"
+    "<TR><TD VALIGN=Top><br></TD></TR>\n"
+    "\n"
+    "<TR><TD VALIGN=Top NOWRAP>AA205474</TD>\n"
+    "	<TD WIDTH=14></TD>\n"
+    "	<TD VALIGN=Top>Displays region of EST with GenBank accession AA205474 in BRCA1 cancer gene on chr 17\n"
+    "</TD></TR>\n"
+    "<!-- <TR><TD VALIGN=Top NOWRAP>ctgchr7_ctg</TD>\n"
+    "	<TD WIDTH=14></TD>\n"
+    "	<TD VALIGN=Top>Displays region of the clone contig ctgchr7_ctg\n"
+    "	(set \"Map contigs\" track to \"dense\" and refresh to see contigs)</TD></TR> -->\n"
+    "<TR><TD VALIGN=Top NOWRAP>AC008101</TD>\n"
+    "	<TD WIDTH=14></TD>\n"
+    "	<TD VALIGN=Top>Displays region of clone with GenBank accession AC008101\n"
+    "</TD></TR>\n"
+    "\n"
+    "<TR><TD VALIGN=Top><br></TD></TR>\n"
+    "\n"
+    "<TR><TD VALIGN=Top NOWRAP>AF083811</TD>\n"
+    "	<TD WIDTH=14></TD>\n"
+    "	<TD VALIGN=Top>Displays region of mRNA with GenBank accession number AF083811</TD></TR>\n"
+    "<TR><TD VALIGN=Top NOWRAP>PRNP</TD>\n"
+    "	<TD WIDTH=14></TD>\n"
+    "	<TD>Displays region of genome with HUGO identifier PRNP</TD></TR>\n"
+    "\n"
 
-"<tr>\n"
-"<td valign=\"Top\" nowrap="">NM_017414</td>\n"
-"<td><br></td>\n"
-"<td valign=\"Top\">Displays the region of genome with RefSeq identifier NM_017414</td></tr>\n"
-"<tr>\n"
-"<td valign=\"Top\" nowrap="">NP_059110</td>\n"
-"<td><br></td>\n"
-"<td valign=\"Top\" nowrap=""> Displays the region of genome with protein acccession number NP_059110</td></tr>\n"
-"<tr>\n"
-"<td valign=\"Top\" nowrap="">11274</td>\n"
-"<td><br></td>\n"
-"<td valign=\"Top\" nowrap="">Displays the region of genome with LocusLink identifier 11274</td></tr>\n"
+    "<tr>\n"
+    "<td valign=\"Top\" nowrap="">NM_017414</td>\n"
+    "<td><br></td>\n"
+    "<td valign=\"Top\">Displays the region of genome with RefSeq identifier NM_017414</td></tr>\n"
+    "<tr>\n"
+    "<td valign=\"Top\" nowrap="">NP_059110</td>\n"
+    "<td><br></td>\n"
+    "<td valign=\"Top\" nowrap=""> Displays the region of genome with protein acccession number NP_059110</td></tr>\n"
+    "<tr>\n"
+    "<td valign=\"Top\" nowrap="">11274</td>\n"
+    "<td><br></td>\n"
+    "<td valign=\"Top\" nowrap="">Displays the region of genome with LocusLink identifier 11274</td></tr>\n"
 
 
-"<TR><TD VALIGN=Top><br></TD></TR>\n"
-"\n"
-"<TR><TD VALIGN=Top NOWRAP>pseudogene mRNA</TD>\n"
-"	<TD WIDTH=14></TD>\n"
-"	<TD VALIGN=Top>Lists transcribed pseudogenes but not cDNAs</TD></TR>\n"
-"<TR><TD VALIGN=Top NOWRAP>homeobox caudal</TD>\n"
-"	<TD WIDTH=14></TD>\n"
-"	<TD VALIGN=Top>Lists mRNAs for caudal homeobox genes</TD></TR>\n"
-"<TR><TD VALIGN=Top NOWRAP>zinc finger</TD>\n"
-"	<TD WIDTH=14></TD>\n"
-"	<TD VALIGN=Top>Lists many zinc finger mRNAs</TD></TR>\n"
-"<TR><TD VALIGN=Top NOWRAP>kruppel zinc finger</TD>\n"
-"	<TD WIDTH=14></TD>\n"
-"	<TD VALIGN=Top>Lists only kruppel-like zinc fingers</TD></TR>\n"
-"<TR><TD VALIGN=Top NOWRAP>huntington</TD>\n"
-"	<TD WIDTH=14></TD>\n"
-"	<TD VALIGN=Top>Lists candidate genes associated with Huntington's disease</TD></TR>\n"
-"<TR><TD VALIGN=Top NOWRAP>zahler</TD>\n"
-"	<TD WIDTH=14></TD>\n"
-"	<TD VALIGN=Top>Lists mRNAs deposited by scientist named Zahler</TD></TR>\n"
-"<TR><TD VALIGN=Top NOWRAP>Evans,J.E.</TD>\n"
-"	<TD WIDTH=14></TD>\n"
-"	<TD VALIGN=Top>Lists mRNAs deposited by co-author J.E.  Evans</TD></TR>\n"
-"\n"
-"<TR><TD VALIGN=Top><br></TD></TR>\n"
-"	\n"
-"<TR><TD COLSPAN=\"3\" > Use this last format for entry authors -- "
-"even though Genbank searches require Evans JE "
-"format, GenBank entries themselves use Evans,J.E.  internally.\n"
-"</TABLE>\n"
-"\n");
+    "<TR><TD VALIGN=Top><br></TD></TR>\n"
+    "\n"
+    "<TR><TD VALIGN=Top NOWRAP>pseudogene mRNA</TD>\n"
+    "	<TD WIDTH=14></TD>\n"
+    "	<TD VALIGN=Top>Lists transcribed pseudogenes but not cDNAs</TD></TR>\n"
+    "<TR><TD VALIGN=Top NOWRAP>homeobox caudal</TD>\n"
+    "	<TD WIDTH=14></TD>\n"
+    "	<TD VALIGN=Top>Lists mRNAs for caudal homeobox genes</TD></TR>\n"
+    "<TR><TD VALIGN=Top NOWRAP>zinc finger</TD>\n"
+    "	<TD WIDTH=14></TD>\n"
+    "	<TD VALIGN=Top>Lists many zinc finger mRNAs</TD></TR>\n"
+    "<TR><TD VALIGN=Top NOWRAP>kruppel zinc finger</TD>\n"
+    "	<TD WIDTH=14></TD>\n"
+    "	<TD VALIGN=Top>Lists only kruppel-like zinc fingers</TD></TR>\n"
+    "<TR><TD VALIGN=Top NOWRAP>huntington</TD>\n"
+    "	<TD WIDTH=14></TD>\n"
+    "	<TD VALIGN=Top>Lists candidate genes associated with Huntington's disease</TD></TR>\n"
+    "<TR><TD VALIGN=Top NOWRAP>zahler</TD>\n"
+    "	<TD WIDTH=14></TD>\n"
+    "	<TD VALIGN=Top>Lists mRNAs deposited by scientist named Zahler</TD></TR>\n"
+    "<TR><TD VALIGN=Top NOWRAP>Evans,J.E.</TD>\n"
+    "	<TD WIDTH=14></TD>\n"
+    "	<TD VALIGN=Top>Lists mRNAs deposited by co-author J.E.  Evans</TD></TR>\n"
+    "\n"
+    "<TR><TD VALIGN=Top><br></TD></TR>\n"
+    "	\n"
+    "<TR><TD COLSPAN=\"3\" > Use this last format for entry authors -- "
+    "even though Genbank searches require Evans JE "
+    "format, GenBank entries themselves use Evans,J.E.  internally.\n"
+    "</TABLE>\n"
+    "\n");
 
     }
 else if (strstrNoCase(organism, "mouse"))
     {
     puts("<P><H3>About the Mus musculus assembly</P></H3>\n");
     puts(
-"<P>The latest mouse genome assembly (UCSC version mm3) \n"
-"is based on NCBI Build 30, a composite assembly of MGSCv3 produced by \n"
-"the Mouse Genome Sequencing Consortium and finished BAC sequence. There \n"
-"is a slight difference between the UCSC and NCBI versions: the NCBI  \n"
-"assembly includes contigs from several strains, but the UCSC \n"
-"version  contains only the reference strain (C57BL/6J). The current assembly \n"
-"includes 705 megabases of finished sequence. While there are \n"
-"many gaps in the sequence, the order and orientation of the contigs on \n"
-"either side of a gap are known in almost all cases. We estimate \n"
-"that 90-96 percent of the mouse genome is present in the assembly.\n</P>");
+    "<P>The latest mouse genome assembly (UCSC version mm3) \n"
+    "is based on NCBI Build 30, a composite assembly of MGSCv3 produced by \n"
+    "the Mouse Genome Sequencing Consortium and finished BAC sequence. There \n"
+    "is a slight difference between the UCSC and NCBI versions: the NCBI  \n"
+    "assembly includes contigs from several strains, but the UCSC \n"
+    "version  contains only the reference strain (C57BL/6J). The current assembly \n"
+    "includes 705 megabases of finished sequence. While there are \n"
+    "many gaps in the sequence, the order and orientation of the contigs on \n"
+    "either side of a gap are known in almost all cases. We estimate \n"
+    "that 90-96 percent of the mouse genome is present in the assembly.\n</P>");
 
     puts("<P><H3>Sample position queries</P></H3>\n");
     puts(
-"<P>A genome position can be specified by the accession number of a "
-"sequenced genomic clone, an mRNA or EST or STS marker, or \n"
-"a cytological band, a chromosomal coordinate range, or keywords from "
-"the Genbank description of an mRNA. The following list provides "
-"examples of various types of position queries for the mouse genome. "
-"See the "
-"<A HREF=\"http://genome.cse.ucsc.edu/goldenPath/help/hgTracksHelp.html\" TARGET=_blank>"
-"User Guide</A> for more help. \n"
-"<P>\n"
-"\n"
-"<P>\n"
-"<TABLE  border=0 CELLPADDING=0 CELLSPACING=0>\n"
-"<TR><TD VALIGN=Top NOWRAP><B>Request:</B><br></TD>\n"
-"	<TD VALIGN=Top COLSPAN=2><B>&nbsp;&nbsp; Genome Browser Response:</B><br></TD></TR>\n"
-"	\n"
-"<TR><TD VALIGN=Top><br></TD></TR>\n"
-"	\n"
-"<TR><TD VALIGN=Top NOWRAP>chr16</TD>\n"
-"	<TD WIDTH=14></TD>\n"
-"	<TD VALIGN=Top>Displays all of chromosome 16</TD></TR>\n"
-"<TR><TD VALIGN=Top NOWRAP>chr16:1-5000000</TD>\n"
-"	<TD WIDTH=14></TD>\n"
-"	<TD VALIGN=Top>Displays first 5 million bases of chr 16</TD></TR>\n"
-"\n"
-"<TR><TD VALIGN=Top><br></TD></TR>\n"
-"\n"
-"<TR><TD VALIGN=Top NOWRAP>D16Mit120</TD>\n"
-"	<TD WIDTH=14></TD>\n"
-"	<TD VALIGN=Top>Displays region around STS marker DMit16120\n"
-" from the MGI consensus genetic map.\n"
-" Includes 100,000 bases on each side as well." 
-"</TD></TR>\n"
-"<TR><TD VALIGN=Top NOWRAP>D16Mit203;D16Mit70</TD>\n"
-"	<TD WIDTH=14></TD>\n"
-"	<TD VALIGN=Top>Displays region between STS markers D16Mit203 and D16Mit70.\n"
-"Includes 100,000 bases on each side as well."
-"</TD></TR>\n"
-"<TR><TD VALIGN=Top NOWRAP>AW045217</TD>\n"
-"	<TD WIDTH=14></TD>\n"
-"	<TD VALIGN=Top>Displays region of EST with GenBank accession AW045217</TD></TR>\n"
-"<TR><TD VALIGN=Top NOWRAP>Ncam2</TD>\n"
-"	<TD WIDTH=14></TD>\n"
-"	<TD VALIGN=Top>Displays region of genome with official MGI mouse genetic nomenclature Ncam2</TD></TR>\n"
-"<TR><TD VALIGN=Top><br></TD></TR>\n"
-"\n"
-"<TR><TD VALIGN=Top NOWRAP>pseudogene mRNA</TD>\n"
-"	<TD WIDTH=14></TD>\n"
-"	<TD VALIGN=Top>Lists transcribed pseudogenes but not cDNAs</TD></TR>\n"
-"<TR><TD VALIGN=Top NOWRAP>zinc finger</TD>\n"
-"	<TD WIDTH=14></TD>\n"
-"	<TD VALIGN=Top>Lists many zinc finger mRNAs</TD></TR>\n"
-"<TR><TD VALIGN=Top NOWRAP>kruppel zinc finger</TD>\n"
-"	<TD WIDTH=14></TD>\n"
-"	<TD VALIGN=Top>Lists only kruppel-like zinc fingers</TD></TR>\n"
-"	<TD VALIGN=Top>Lists candidate genes associated with Huntington's disease</TD></TR>\n"
-"<TR><TD VALIGN=Top NOWRAP>Evans,J.E.</TD>\n"
-"	<TD WIDTH=14></TD>\n"
-"	<TD VALIGN=Top>Lists mRNAs deposited by co-author J.E.  Evans</TD></TR>\n"
-"\n"
-"<TR><TD VALIGN=Top><br></TD></TR>\n"
-"	\n"
-"<TR><TD COLSPAN=\"3\" > Use this last format for entry authors -- "
-"even though Genbank searches require Evans JE "
-"format, GenBank entries themselves use Evans,J.E.  internally.\n"
-"</TABLE>\n"
-"\n");
+    "<P>A genome position can be specified by the accession number of a "
+    "sequenced genomic clone, an mRNA or EST or STS marker, or \n"
+    "a cytological band, a chromosomal coordinate range, or keywords from "
+    "the Genbank description of an mRNA. The following list provides "
+    "examples of various types of position queries for the mouse genome. "
+    "See the "
+    "<A HREF=\"http://genome.cse.ucsc.edu/goldenPath/help/hgTracksHelp.html\" TARGET=_blank>"
+    "User Guide</A> for more help. \n"
+    "<P>\n"
+    "\n"
+    "<P>\n"
+    "<TABLE  border=0 CELLPADDING=0 CELLSPACING=0>\n"
+    "<TR><TD VALIGN=Top NOWRAP><B>Request:</B><br></TD>\n"
+    "	<TD VALIGN=Top COLSPAN=2><B>&nbsp;&nbsp; Genome Browser Response:</B><br></TD></TR>\n"
+    "	\n"
+    "<TR><TD VALIGN=Top><br></TD></TR>\n"
+    "	\n"
+    "<TR><TD VALIGN=Top NOWRAP>chr16</TD>\n"
+    "	<TD WIDTH=14></TD>\n"
+    "	<TD VALIGN=Top>Displays all of chromosome 16</TD></TR>\n"
+    "<TR><TD VALIGN=Top NOWRAP>chr16:1-5000000</TD>\n"
+    "	<TD WIDTH=14></TD>\n"
+    "	<TD VALIGN=Top>Displays first 5 million bases of chr 16</TD></TR>\n"
+    "\n"
+    "<TR><TD VALIGN=Top><br></TD></TR>\n"
+    "\n"
+    "<TR><TD VALIGN=Top NOWRAP>D16Mit120</TD>\n"
+    "	<TD WIDTH=14></TD>\n"
+    "	<TD VALIGN=Top>Displays region around STS marker DMit16120\n"
+    " from the MGI consensus genetic map.\n"
+    " Includes 100,000 bases on each side as well." 
+    "</TD></TR>\n"
+    "<TR><TD VALIGN=Top NOWRAP>D16Mit203;D16Mit70</TD>\n"
+    "	<TD WIDTH=14></TD>\n"
+    "	<TD VALIGN=Top>Displays region between STS markers D16Mit203 and D16Mit70.\n"
+    "Includes 100,000 bases on each side as well."
+    "</TD></TR>\n"
+    "<TR><TD VALIGN=Top NOWRAP>AW045217</TD>\n"
+    "	<TD WIDTH=14></TD>\n"
+    "	<TD VALIGN=Top>Displays region of EST with GenBank accession AW045217</TD></TR>\n"
+    "<TR><TD VALIGN=Top NOWRAP>Ncam2</TD>\n"
+    "	<TD WIDTH=14></TD>\n"
+    "	<TD VALIGN=Top>Displays region of genome with official MGI mouse genetic nomenclature Ncam2</TD></TR>\n"
+    "<TR><TD VALIGN=Top><br></TD></TR>\n"
+    "\n"
+    "<TR><TD VALIGN=Top NOWRAP>pseudogene mRNA</TD>\n"
+    "	<TD WIDTH=14></TD>\n"
+    "	<TD VALIGN=Top>Lists transcribed pseudogenes but not cDNAs</TD></TR>\n"
+    "<TR><TD VALIGN=Top NOWRAP>zinc finger</TD>\n"
+    "	<TD WIDTH=14></TD>\n"
+    "	<TD VALIGN=Top>Lists many zinc finger mRNAs</TD></TR>\n"
+    "<TR><TD VALIGN=Top NOWRAP>kruppel zinc finger</TD>\n"
+    "	<TD WIDTH=14></TD>\n"
+    "	<TD VALIGN=Top>Lists only kruppel-like zinc fingers</TD></TR>\n"
+    "	<TD VALIGN=Top>Lists candidate genes associated with Huntington's disease</TD></TR>\n"
+    "<TR><TD VALIGN=Top NOWRAP>Evans,J.E.</TD>\n"
+    "	<TD WIDTH=14></TD>\n"
+    "	<TD VALIGN=Top>Lists mRNAs deposited by co-author J.E.  Evans</TD></TR>\n"
+    "\n"
+    "<TR><TD VALIGN=Top><br></TD></TR>\n"
+    "	\n"
+    "<TR><TD COLSPAN=\"3\" > Use this last format for entry authors -- "
+    "even though Genbank searches require Evans JE "
+    "format, GenBank entries themselves use Evans,J.E.  internally.\n"
+    "</TABLE>\n"
+    "\n");
     }
 else if (strstrNoCase(organism, "rat"))
     {
     puts("<P><H3>About the Rattus norvegicus assembly</P></H3>\n");
     puts(
-"<P>The latest rat genome assembly (UCSC version rn3) is based on version \n"
-"3.1 produced by the Atlas group at \n"
-"<A HREF=\"http://hgsc.bcm.tmc.edu/\" TARGET=_blank> \n"
-"Baylor Human Genome Sequencing Center</A> \n"
-"(HGSC) as part of the Rat Genome Sequencing Consortium. \n"
-"The rat sequence was assembled using a hybrid approach that combines the \n"
-"clone-by-clone and whole genome shotgun methods. \n"
-"This assembly is a minor update to the 3.0 release. Sequence changes \n"
-"affect only chromosomes 7 and X. No additional assembly releases are planned \n"
-"prior to the publication of the rat genome analysis papers. \n"
-"<P>The 3.x assemblies reflect several sequence \n"
-"additions and software improvements over the previous 2.x assemblies, \n"
-"including the sequencing of over 1100 new BACs to cover gaps, an improved \n"
-"marker set from the Medical College of Wisconsin, a new FPC map from the BC \n"
-"Genome Sciences Centre, and improved linking of bactigs. For detailed \n"
-"information and statistics about the 3.x assemblies, see the Baylor HGSC \n"
-"<A HREF=\"ftp://ftp.hgsc.bcm.tmc.edu/pub/analysis/rat/README\" TARGET=_blank>README</A>. \n"
-"<P>These data are made available with \n"
-"<A HREF=\"http://genome.ucsc.edu/goldenPath/credits.html#rat_use\">specific conditions for use</A>.\n" );
+    "<P>The latest rat genome assembly (UCSC version rn3) is based on version \n"
+    "3.1 produced by the Atlas group at \n"
+    "<A HREF=\"http://hgsc.bcm.tmc.edu/\" TARGET=_blank> \n"
+    "Baylor Human Genome Sequencing Center</A> \n"
+    "(HGSC) as part of the Rat Genome Sequencing Consortium. \n"
+    "The rat sequence was assembled using a hybrid approach that combines the \n"
+    "clone-by-clone and whole genome shotgun methods. \n"
+    "This assembly is a minor update to the 3.0 release. Sequence changes \n"
+    "affect only chromosomes 7 and X. No additional assembly releases are planned \n"
+    "prior to the publication of the rat genome analysis papers. \n"
+    "<P>The 3.x assemblies reflect several sequence \n"
+    "additions and software improvements over the previous 2.x assemblies, \n"
+    "including the sequencing of over 1100 new BACs to cover gaps, an improved \n"
+    "marker set from the Medical College of Wisconsin, a new FPC map from the BC \n"
+    "Genome Sciences Centre, and improved linking of bactigs. For detailed \n"
+    "information and statistics about the 3.x assemblies, see the Baylor HGSC \n"
+    "<A HREF=\"ftp://ftp.hgsc.bcm.tmc.edu/pub/analysis/rat/README\" TARGET=_blank>README</A>. \n"
+    "<P>These data are made available with \n"
+    "<A HREF=\"http://genome.ucsc.edu/goldenPath/credits.html#rat_use\">specific conditions for use</A>.\n" );
     puts("<P><H3>Sample position queries</P></H3>\n");
     puts(
-"<P>A genome position can be specified by the accession number of a "
-"sequenced genomic clone, an mRNA or EST or STS marker, \n"
-"a chromosomal coordinate range, or keywords from "
-"the Genbank description of an mRNA. The following list provides "
-"examples of various types of position queries for the rat genome. "
-"See the "
-"<A HREF=\"http://genome.cse.ucsc.edu/goldenPath/help/hgTracksHelp.html\" TARGET=_blank>"
-"User Guide</A> for more help. \n"
-"<P>\n"
-"\n"
-"<P>\n"
-"<TABLE  border=0 CELLPADDING=0 CELLSPACING=0>\n"
-"<TR><TD VALIGN=Top NOWRAP><B>Request:</B><br></TD>\n"
-"	<TD VALIGN=Top COLSPAN=2><B>&nbsp;&nbsp; Genome Browser Response:</B><br></TD></TR>\n"
-"	\n"
-"<TR><TD VALIGN=Top><br></TD></TR>\n"
-"	\n"
-"<TR><TD VALIGN=Top NOWRAP>chr16</TD>\n"
-"	<TD WIDTH=14></TD>\n"
-"	<TD VALIGN=Top>Displays all of chromosome 16</TD></TR>\n"
-"<TR><TD VALIGN=Top NOWRAP>chr16:1-5000000</TD>\n"
-"	<TD WIDTH=14></TD>\n"
-"	<TD VALIGN=Top>Displays first 5 million bases of chr 16</TD></TR>\n"
-"<TR><TD VALIGN=Top NOWRAP>RNOR03233282;RNOR03233294</TD>\n"
-"	<TD WIDTH=14></TD>\n"
-"	<TD VALIGN=Top>Displays region between Assembly IDs RNOR03233282 and RNOR03233294 \n"
-"</TD></TR>\n"
-"\n"
-"<TR><TD VALIGN=Top><br></TD></TR>\n"
-"\n"
-"<TR><TD VALIGN=Top NOWRAP>AI501130</TD>\n"
-"	<TD WIDTH=14></TD>\n"
-"	<TD VALIGN=Top>Displays region of EST with GenBank accession AI501130</TD></TR>\n"
-"<TR><TD VALIGN=Top NOWRAP>AF199335</TD>\n"
-"	<TD WIDTH=14></TD>\n"
-"	<TD VALIGN=Top>Displays region of mRNA with GenBank accession AF199335</TD></TR>\n"
-"<TR><TD VALIGN=Top NOWRAP>apoe</TD>\n"
-"	<TD WIDTH=14></TD>\n"
-"	<TD VALIGN=Top>Displays region of genome with gene identifier apoE</TD></TR>\n"
-"<TR><TD VALIGN=Top NOWRAP>NM_145881</TD>\n"
-"	<TD WIDTH=14></TD>\n"
-"	<TD VALIGN=Top>Displays region of genome with RefSeq identifier NM_145881</TD></TR>\n"
-"<TR><TD VALIGN=Top NOWRAP>25728</TD>\n"
-"	<TD WIDTH=14></TD>\n"
-"	<TD VALIGN=Top>Displays region of genome with LocusLink identifier 25728</TD></TR>\n"
-"<TR><TD VALIGN=Top><br></TD></TR>\n"
-"\n"
-"<TR><TD VALIGN=Top NOWRAP>pseudogene mRNA</TD>\n"
-"	<TD WIDTH=14></TD>\n"
-"	<TD VALIGN=Top>Lists transcribed pseudogenes but not cDNAs</TD></TR>\n"
-"<TR><TD VALIGN=Top NOWRAP>zinc finger</TD>\n"
-"	<TD WIDTH=14></TD>\n"
-"	<TD VALIGN=Top>Lists many zinc finger mRNAs</TD></TR>\n"
-"<TR><TD VALIGN=Top NOWRAP>kruppel zinc finger</TD>\n"
-"	<TD WIDTH=14></TD>\n"
-"	<TD VALIGN=Top>Lists only kruppel-like zinc fingers</TD></TR>\n"
-"<TR><TD VALIGN=Top NOWRAP>huntington</TD>\n"
-"	<TD WIDTH=14></TD>\n"
-"	<TD VALIGN=Top>Lists candidate genes associated with Huntington's disease</TD></TR>\n"
-"<TR><TD VALIGN=Top NOWRAP>Jones,R.</TD>\n"
-"	<TD WIDTH=14></TD>\n"
-"	<TD VALIGN=Top>Lists mRNAs deposited by co-author R. Jones</TD></TR>\n"
-"\n"
-"<TR><TD VALIGN=Top><br></TD></TR>\n"
-"	\n"
-"<TR><TD COLSPAN=\"3\" > Use this last format for entry authors -- "
-"even though Genbank searches require Jones R "
-"format, GenBank entries themselves use Jones,R.  internally.\n"
-"</TABLE>\n"
-"\n");
+    "<P>A genome position can be specified by the accession number of a "
+    "sequenced genomic clone, an mRNA or EST or STS marker, \n"
+    "a chromosomal coordinate range, or keywords from "
+    "the Genbank description of an mRNA. The following list provides "
+    "examples of various types of position queries for the rat genome. "
+    "See the "
+    "<A HREF=\"http://genome.cse.ucsc.edu/goldenPath/help/hgTracksHelp.html\" TARGET=_blank>"
+    "User Guide</A> for more help. \n"
+    "<P>\n"
+    "\n"
+    "<P>\n"
+    "<TABLE  border=0 CELLPADDING=0 CELLSPACING=0>\n"
+    "<TR><TD VALIGN=Top NOWRAP><B>Request:</B><br></TD>\n"
+    "	<TD VALIGN=Top COLSPAN=2><B>&nbsp;&nbsp; Genome Browser Response:</B><br></TD></TR>\n"
+    "	\n"
+    "<TR><TD VALIGN=Top><br></TD></TR>\n"
+    "	\n"
+    "<TR><TD VALIGN=Top NOWRAP>chr16</TD>\n"
+    "	<TD WIDTH=14></TD>\n"
+    "	<TD VALIGN=Top>Displays all of chromosome 16</TD></TR>\n"
+    "<TR><TD VALIGN=Top NOWRAP>chr16:1-5000000</TD>\n"
+    "	<TD WIDTH=14></TD>\n"
+    "	<TD VALIGN=Top>Displays first 5 million bases of chr 16</TD></TR>\n"
+    "<TR><TD VALIGN=Top NOWRAP>RNOR03233282;RNOR03233294</TD>\n"
+    "	<TD WIDTH=14></TD>\n"
+    "	<TD VALIGN=Top>Displays region between Assembly IDs RNOR03233282 and RNOR03233294 \n"
+    "</TD></TR>\n"
+    "\n"
+    "<TR><TD VALIGN=Top><br></TD></TR>\n"
+    "\n"
+    "<TR><TD VALIGN=Top NOWRAP>AI501130</TD>\n"
+    "	<TD WIDTH=14></TD>\n"
+    "	<TD VALIGN=Top>Displays region of EST with GenBank accession AI501130</TD></TR>\n"
+    "<TR><TD VALIGN=Top NOWRAP>AF199335</TD>\n"
+    "	<TD WIDTH=14></TD>\n"
+    "	<TD VALIGN=Top>Displays region of mRNA with GenBank accession AF199335</TD></TR>\n"
+    "<TR><TD VALIGN=Top NOWRAP>apoe</TD>\n"
+    "	<TD WIDTH=14></TD>\n"
+    "	<TD VALIGN=Top>Displays region of genome with gene identifier apoE</TD></TR>\n"
+    "<TR><TD VALIGN=Top NOWRAP>NM_145881</TD>\n"
+    "	<TD WIDTH=14></TD>\n"
+    "	<TD VALIGN=Top>Displays region of genome with RefSeq identifier NM_145881</TD></TR>\n"
+    "<TR><TD VALIGN=Top NOWRAP>25728</TD>\n"
+    "	<TD WIDTH=14></TD>\n"
+    "	<TD VALIGN=Top>Displays region of genome with LocusLink identifier 25728</TD></TR>\n"
+    "<TR><TD VALIGN=Top><br></TD></TR>\n"
+    "\n"
+    "<TR><TD VALIGN=Top NOWRAP>pseudogene mRNA</TD>\n"
+    "	<TD WIDTH=14></TD>\n"
+    "	<TD VALIGN=Top>Lists transcribed pseudogenes but not cDNAs</TD></TR>\n"
+    "<TR><TD VALIGN=Top NOWRAP>zinc finger</TD>\n"
+    "	<TD WIDTH=14></TD>\n"
+    "	<TD VALIGN=Top>Lists many zinc finger mRNAs</TD></TR>\n"
+    "<TR><TD VALIGN=Top NOWRAP>kruppel zinc finger</TD>\n"
+    "	<TD WIDTH=14></TD>\n"
+    "	<TD VALIGN=Top>Lists only kruppel-like zinc fingers</TD></TR>\n"
+    "<TR><TD VALIGN=Top NOWRAP>huntington</TD>\n"
+    "	<TD WIDTH=14></TD>\n"
+    "	<TD VALIGN=Top>Lists candidate genes associated with Huntington's disease</TD></TR>\n"
+    "<TR><TD VALIGN=Top NOWRAP>Jones,R.</TD>\n"
+    "	<TD WIDTH=14></TD>\n"
+    "	<TD VALIGN=Top>Lists mRNAs deposited by co-author R. Jones</TD></TR>\n"
+    "\n"
+    "<TR><TD VALIGN=Top><br></TD></TR>\n"
+    "	\n"
+    "<TR><TD COLSPAN=\"3\" > Use this last format for entry authors -- "
+    "even though Genbank searches require Jones R "
+    "format, GenBank entries themselves use Jones,R.  internally.\n"
+    "</TABLE>\n"
+    "\n");
     }
 else if (strstrNoCase(organism, "SARS"))
     {
     puts("<P><H3>About the SARS coronavirus TOR2 assembly</P></H3>\n");
     puts(
-"<P>The SARS draft genome assembly (UCSC version sc1) \n"
-"is based on sequence deposited into GenBank as of 14 April 2003. \n"
-"This browser - which represents a departure from UCSC's usual focus on vertebrate \n"
-"genomes - shows gene predictions, locations of putative proteins, and \n"
-"viral mRNA and protein alignments. Protein structure analysis and \n"
-"predictions were determined by using the  \n"
-"<A HREF=\"http://www.cse.ucsc.edu/research/compbio/sam.html\" TARGET=_blank> \n"
-"Sequence Alignment and Modeling (SAM) T02</A> \n"
-"tool. UCSC does not plan to provide a comprehensive set of browsers for viruses.  \n"
-"However, this browser will be maintained as long as there is strong scientific  \n"
-"and public interest in the SARS coronavirus TOR2.\n</P>");
+    "<P>The SARS draft genome assembly (UCSC version sc1) \n"
+    "is based on sequence deposited into GenBank as of 14 April 2003. \n"
+    "This browser - which represents a departure from UCSC's usual focus on vertebrate \n"
+    "genomes - shows gene predictions, locations of putative proteins, and \n"
+    "viral mRNA and protein alignments. Protein structure analysis and \n"
+    "predictions were determined by using the  \n"
+    "<A HREF=\"http://www.cse.ucsc.edu/research/compbio/sam.html\" TARGET=_blank> \n"
+    "Sequence Alignment and Modeling (SAM) T02</A> \n"
+    "tool. UCSC does not plan to provide a comprehensive set of browsers for viruses.  \n"
+    "However, this browser will be maintained as long as there is strong scientific  \n"
+    "and public interest in the SARS coronavirus TOR2.\n</P>");
     puts("<P><H3>Sample position queries</P></H3>\n");
     puts(
-"<P>A genome position can be specified by the accession number of an "
-"mRNA, a coordinate range, a gene identifier, or keywords from "
-"the Genbank description of an mRNA. The following list provides "
-"examples of various types of position queries for the SARS coronavirus TOR2 genome. "
-"See the "
-"<A HREF=\"http://genome.cse.ucsc.edu/goldenPath/help/hgTracksHelp.html\" TARGET=_blank>"
-"User Guide</A> for more help. \n"
-"<P>\n"
-"\n"
-"<P>\n"
-"<TABLE  border=0 CELLPADDING=0 CELLSPACING=0>\n"
-"<TR><TD VALIGN=Top NOWRAP><B>Request:</B><br></TD>\n"
-"	<TD VALIGN=Top COLSPAN=2><B>&nbsp;&nbsp; Genome Browser Response:</B><br></TD></TR>\n"
-"	\n"
-"<TR><TD VALIGN=Top><br></TD></TR>\n"
-"	\n"
-"<TR><TD VALIGN=Top NOWRAP>chr1</TD>\n"
-"	<TD WIDTH=14></TD>\n"
-"	<TD VALIGN=Top>Displays the entire genome for SARS coronavirus TOR2</TD></TR>\n"
-"<TR><TD VALIGN=Top NOWRAP>chr1:15720-186200</TD>\n"
-"	<TD WIDTH=14></TD>\n"
-"	<TD VALIGN=Top>Displays the region between bases 15720 and 186200 showing the protein NP_828870.1.</TD></TR>\n"
-"<TR><TD VALIGN=Top><br></TD></TR>\n"
-"\n"
-"<TR><TD VALIGN=Top NOWRAP>AF391541</TD>\n"
-"	<TD WIDTH=14></TD>\n"
-"	<TD VALIGN=Top>Displays region of mRNA with GenBank accession AF391541</TD></TR>\n"
-"<TR><TD VALIGN=Top NOWRAP>CS000003</TD>\n"
-"	<TD WIDTH=14></TD>\n"
-"	<TD VALIGN=Top>Displays region of genome with fgenesv+ gene identifier CS000003</TD></TR>\n"
-"<TR><TD VALIGN=Top><br></TD></TR>\n"
-"\n"
-"<TR><TD VALIGN=Top NOWRAP>bovine coronavirus</TD>\n"
-"	<TD WIDTH=14></TD>\n"
-"	<TD VALIGN=Top>Lists mRNAs associated with bovine coronavirus </TD></TR>\n"
-"<TR><TD VALIGN=Top NOWRAP>Chouljenko,V.</TD>\n"
-"	<TD WIDTH=14></TD>\n"
-"	<TD VALIGN=Top>Lists mRNAs deposited by co-author V. Chouljenko</TD></TR>\n"
-"\n"
-"<TR><TD VALIGN=Top><br></TD></TR>\n"
-"	\n"
-"<TR><TD COLSPAN=\"3\" > Use this last format for entry authors -- "
-"even though Genbank searches require Chouljenko V "
-"format, GenBank entries themselves use Chouljenko,V. internally.\n"
-"</TABLE>\n"
-"\n");
+    "<P>A genome position can be specified by the accession number of an "
+    "mRNA, a coordinate range, a gene identifier, or keywords from "
+    "the Genbank description of an mRNA. The following list provides "
+    "examples of various types of position queries for the SARS coronavirus TOR2 genome. "
+    "See the "
+    "<A HREF=\"http://genome.cse.ucsc.edu/goldenPath/help/hgTracksHelp.html\" TARGET=_blank>"
+    "User Guide</A> for more help. \n"
+    "<P>\n"
+    "\n"
+    "<P>\n"
+    "<TABLE  border=0 CELLPADDING=0 CELLSPACING=0>\n"
+    "<TR><TD VALIGN=Top NOWRAP><B>Request:</B><br></TD>\n"
+    "	<TD VALIGN=Top COLSPAN=2><B>&nbsp;&nbsp; Genome Browser Response:</B><br></TD></TR>\n"
+    "	\n"
+    "<TR><TD VALIGN=Top><br></TD></TR>\n"
+    "	\n"
+    "<TR><TD VALIGN=Top NOWRAP>chr1</TD>\n"
+    "	<TD WIDTH=14></TD>\n"
+    "	<TD VALIGN=Top>Displays the entire genome for SARS coronavirus TOR2</TD></TR>\n"
+    "<TR><TD VALIGN=Top NOWRAP>chr1:15720-186200</TD>\n"
+    "	<TD WIDTH=14></TD>\n"
+    "	<TD VALIGN=Top>Displays the region between bases 15720 and 186200 showing the protein NP_828870.1.</TD></TR>\n"
+    "<TR><TD VALIGN=Top><br></TD></TR>\n"
+    "\n"
+    "<TR><TD VALIGN=Top NOWRAP>AF391541</TD>\n"
+    "	<TD WIDTH=14></TD>\n"
+    "	<TD VALIGN=Top>Displays region of mRNA with GenBank accession AF391541</TD></TR>\n"
+    "<TR><TD VALIGN=Top NOWRAP>CS000003</TD>\n"
+    "	<TD WIDTH=14></TD>\n"
+    "	<TD VALIGN=Top>Displays region of genome with fgenesv+ gene identifier CS000003</TD></TR>\n"
+    "<TR><TD VALIGN=Top><br></TD></TR>\n"
+    "\n"
+    "<TR><TD VALIGN=Top NOWRAP>bovine coronavirus</TD>\n"
+    "	<TD WIDTH=14></TD>\n"
+    "	<TD VALIGN=Top>Lists mRNAs associated with bovine coronavirus </TD></TR>\n"
+    "<TR><TD VALIGN=Top NOWRAP>Chouljenko,V.</TD>\n"
+    "	<TD WIDTH=14></TD>\n"
+    "	<TD VALIGN=Top>Lists mRNAs deposited by co-author V. Chouljenko</TD></TR>\n"
+    "\n"
+    "<TR><TD VALIGN=Top><br></TD></TR>\n"
+    "	\n"
+    "<TR><TD COLSPAN=\"3\" > Use this last format for entry authors -- "
+    "even though Genbank searches require Chouljenko V "
+    "format, GenBank entries themselves use Chouljenko,V. internally.\n"
+    "</TABLE>\n"
+    "\n");
     }
 else if (strstrNoCase(organism, "zoo"))
     {
     puts("<P><H3>About the NISC Comparative Sequencing Program</P></H3>\n");
     puts(
-"<P>This site contains data generated by the \n"
-"<A HREF=\"http://www.nisc.nih.gov/open_page.html?/projects/zooseq/pubmap/PubZooSeq_Targets.cgi\" TARGET=_blank> \n"
-"NISC Comparative Sequencing Program</A>, \n"
-"whose goal is to sequence the same targeted genomic regions in multiple \n"
-"vertebrates. Currently, data from the first target - corresponding to a \n"
-"1.8-Mb region of human chromosome 7q31 - are available on 12 species. \n"
-"Future builds will \n"
-"include data from additional targeted regions and species. \n"
-"The Target 1 data have been released in conjunction with the paper \n"
-"Thomas, J.W. et. al. (2003) \n"
-"<A HREF=\" http://www.nature.com/cgi-taf/DynaPage.taf?file=/nature/journal/v424/n6950/abs/nature01858_fs.html\" TARGET=_blank>Comparative analyses of multi-species sequences from targeted genomic regions</A>. <em>Nature</em> \n"
-"424:788- 793. </P> \n"
-"<P>The sequence data represented here were compiled from existing GenBank \n"
-"records. In addition to long-range assembly and standard feature \n"
-"annotation, the results of several analyses are displayed, including \n"
-"pair-wise sequence alignments, intrinsic sequence properties, and \n"
-"sequence comparisons that reveal regions highly conserved across \n"
-"multiple species. Flat files of the assembled sequence and annotations \n"
-"can be obtained from <A HREF=\"http://www.nisc.nih.gov/data/\" TARGET=_blank>http://www.nisc.nih.gov/data/</A> \n"
-"or from the <A HREF=\"/downloads.html\">Downloads</A> page on this website. </P>\n"
-"<P>Please review the NISC Comparative Sequencing Program \n"
-"<A HREF=\"http://www.nisc.nih.gov/projects/NISC_DataUsePolicy.html\" TARGET=_blank>\n"
-"data release and usage policy</A> before making use of these data.</P> \n");
+    "<P>This site contains data generated by the \n"
+    "<A HREF=\"http://www.nisc.nih.gov/open_page.html?/projects/zooseq/pubmap/PubZooSeq_Targets.cgi\" TARGET=_blank> \n"
+    "NISC Comparative Sequencing Program</A>, \n"
+    "whose goal is to sequence the same targeted genomic regions in multiple \n"
+    "vertebrates. Currently, data from the first target - corresponding to a \n"
+    "1.8-Mb region of human chromosome 7q31 - are available on 12 species. \n"
+    "Future builds will \n"
+    "include data from additional targeted regions and species. \n"
+    "The Target 1 data have been released in conjunction with the paper \n"
+    "Thomas, J.W. et. al. (2003) \n"
+    "<A HREF=\" http://www.nature.com/cgi-taf/DynaPage.taf?file=/nature/journal/v424/n6950/abs/nature01858_fs.html\" TARGET=_blank>Comparative analyses of multi-species sequences from targeted genomic regions</A>. <em>Nature</em> \n"
+    "424:788- 793. </P> \n"
+    "<P>The sequence data represented here were compiled from existing GenBank \n"
+    "records. In addition to long-range assembly and standard feature \n"
+    "annotation, the results of several analyses are displayed, including \n"
+    "pair-wise sequence alignments, intrinsic sequence properties, and \n"
+    "sequence comparisons that reveal regions highly conserved across \n"
+    "multiple species. Flat files of the assembled sequence and annotations \n"
+    "can be obtained from <A HREF=\"http://www.nisc.nih.gov/data/\" TARGET=_blank>http://www.nisc.nih.gov/data/</A> \n"
+    "or from the <A HREF=\"/downloads.html\">Downloads</A> page on this website. </P>\n"
+    "<P>Please review the NISC Comparative Sequencing Program \n"
+    "<A HREF=\"http://www.nisc.nih.gov/projects/NISC_DataUsePolicy.html\" TARGET=_blank>\n"
+    "data release and usage policy</A> before making use of these data.</P> \n");
     }
 else if (strstrNoCase(organism, "C. elegans"))
     {
     puts("<P><H3>About the Caenorhabditis elegans assembly</P></H3>\n");
     puts(
-"<P>This genome assembly (UCSC version ce1) \n"
-"is based on sequence version WS100 deposited into <A HREF=\"http://www.wormbase.org/about/about_Celegans.html\" TARGET=_blank>WormBase</A> as of 02 May 2003. "
-"C. elegans is a major model organism used for biomedical research. "
-"It is the first multicellular animal to have a fully "
-"sequenced genome, a joint collaboration between the "
-" <A HREF=\"http://genome.wustl.edu/\" TARGET=_blank>Genome Sequencing Center</A> " 
-"at Washington University in St. Louis and the "
-"<A HREF=\"http://www.sanger.ac.uk/\" TARGET=_blank>Sanger Institute</A>. "
-"For more information, see the special issue of <em>Science</em> "
-"&quot;<A HREF=\"http://www.sciencemag.org/content/vol282/issue5396/\" TARGET=_blank>C. elegans: Sequence to Biology</A>&quot;."
+    "<P>This genome assembly (UCSC version ce1) \n"
+    "is based on sequence version WS100 deposited into <A HREF=\"http://www.wormbase.org/about/about_Celegans.html\" TARGET=_blank>WormBase</A> as of 02 May 2003. "
+    "C. elegans is a major model organism used for biomedical research. "
+    "It is the first multicellular animal to have a fully "
+    "sequenced genome, a joint collaboration between the "
+    " <A HREF=\"http://genome.wustl.edu/\" TARGET=_blank>Genome Sequencing Center</A> " 
+    "at Washington University in St. Louis and the "
+    "<A HREF=\"http://www.sanger.ac.uk/\" TARGET=_blank>Sanger Institute</A>. "
+    "For more information, see the special issue of <em>Science</em> "
+    "&quot;<A HREF=\"http://www.sciencemag.org/content/vol282/issue5396/\" TARGET=_blank>C. elegans: Sequence to Biology</A>&quot;."
 
-"</P>");
+    "</P>");
     puts("<P><H3>Sample position queries</P></H3>\n");
     puts(
-"<P>A genome position can be specified by the accession number of a sequenced "
-"genomic clones, an mRNA, or EST, or a gene identifier, chromosomal coordinate "
-"range, or keywords from "
-"the Genbank description of an mRNA. The following list provides "
-"examples of various types of position queries for the C. elegans genome. "
-"See the "
-"<A HREF=\"http://genome.cse.ucsc.edu/goldenPath/help/hgTracksHelp.html\" TARGET=_blank>"
-"User Guide</A> for more help. </P>\n"
-"<P>\n"
-"\n"
-"<P>\n"
-"<TABLE  border=0 CELLPADDING=0 CELLSPACING=0>\n"
-"<TR><TD VALIGN=Top NOWRAP><B>Request:</B><br></TD>\n"
-"	<TD VALIGN=Top COLSPAN=2><B>&nbsp;&nbsp; Genome Browser Response:</B><br></TD></TR>\n"
-"	\n"
-"<TR><TD VALIGN=Top><br></TD></TR>\n"
-"	\n"
+    "<P>A genome position can be specified by the accession number of a sequenced "
+    "genomic clones, an mRNA, or EST, or a gene identifier, chromosomal coordinate "
+    "range, or keywords from "
+    "the Genbank description of an mRNA. The following list provides "
+    "examples of various types of position queries for the C. elegans genome. "
+    "See the "
+    "<A HREF=\"http://genome.cse.ucsc.edu/goldenPath/help/hgTracksHelp.html\" TARGET=_blank>"
+    "User Guide</A> for more help. </P>\n"
+    "<P>\n"
+    "\n"
+    "<P>\n"
+    "<TABLE  border=0 CELLPADDING=0 CELLSPACING=0>\n"
+    "<TR><TD VALIGN=Top NOWRAP><B>Request:</B><br></TD>\n"
+    "	<TD VALIGN=Top COLSPAN=2><B>&nbsp;&nbsp; Genome Browser Response:</B><br></TD></TR>\n"
+    "	\n"
+    "<TR><TD VALIGN=Top><br></TD></TR>\n"
+    "	\n"
 
-"<TR><TD VALIGN=Top NOWRAP>chrII</TD>\n"
-"	<TD WIDTH=14></TD>\n"
-"	<TD VALIGN=Top>Displays all of chromosome II (valid chr entries include I, II, III, IV, V, M, X)</TD></TR>\n"
+    "<TR><TD VALIGN=Top NOWRAP>chrII</TD>\n"
+    "	<TD WIDTH=14></TD>\n"
+    "	<TD VALIGN=Top>Displays all of chromosome II (valid chr entries include I, II, III, IV, V, M, X)</TD></TR>\n"
 
-"<TR><TD VALIGN=Top NOWRAP>chrI:1-100000</TD>\n"
-"	<TD WIDTH=14></TD>\n"
-"	<TD VALIGN=Top>Displays the first 100,000 bases of chrI</TD></TR>\n"
+    "<TR><TD VALIGN=Top NOWRAP>chrI:1-100000</TD>\n"
+    "	<TD WIDTH=14></TD>\n"
+    "	<TD VALIGN=Top>Displays the first 100,000 bases of chrI</TD></TR>\n"
 
-"<TR><TD VALIGN=Top NOWRAP>U40798.1</TD>\n"
-"	<TD WIDTH=14></TD>\n"
-"	<TD VALIGN=Top>Displays clone fragment U40798.1</TD></TR>\n"
+    "<TR><TD VALIGN=Top NOWRAP>U40798.1</TD>\n"
+    "	<TD WIDTH=14></TD>\n"
+    "	<TD VALIGN=Top>Displays clone fragment U40798.1</TD></TR>\n"
 
-"<TR><TD VALIGN=Top NOWRAP>mec-8</TD>\n"
-"	<TD WIDTH=14></TD>\n"
-"	<TD VALIGN=Top>Displays region of genome associated with RefSeq gene mec-8</TD></TR>\n"
+    "<TR><TD VALIGN=Top NOWRAP>mec-8</TD>\n"
+    "	<TD WIDTH=14></TD>\n"
+    "	<TD VALIGN=Top>Displays region of genome associated with RefSeq gene mec-8</TD></TR>\n"
 
-"<TR><TD VALIGN=Top NOWRAP>F46A9.4</TD>\n"
-"	<TD WIDTH=14></TD>\n"
-"	<TD VALIGN=Top>Displays the region associated with the Sanger predicted gene F46A9.4</TD></TR>\n"
+    "<TR><TD VALIGN=Top NOWRAP>F46A9.4</TD>\n"
+    "	<TD WIDTH=14></TD>\n"
+    "	<TD VALIGN=Top>Displays the region associated with the Sanger predicted gene F46A9.4</TD></TR>\n"
 
-"<TR><TD VALIGN=Top NOWRAP>NM_060107</TD>\n"
-"	<TD WIDTH=14></TD>\n"
-"	<TD VALIGN=Top>Displays region of genome associated with RefSeq identifier NM_060107</TD></TR>\n"
+    "<TR><TD VALIGN=Top NOWRAP>NM_060107</TD>\n"
+    "	<TD WIDTH=14></TD>\n"
+    "	<TD VALIGN=Top>Displays region of genome associated with RefSeq identifier NM_060107</TD></TR>\n"
 
-"<TR><TD VALIGN=Top NOWRAP>BJ111711</TD>\n"
-"	<TD WIDTH=14></TD>\n"
-"	<TD VALIGN=Top>Displays region of EST associated with GenBank accession BJ111711</TD></TR>\n"
+    "<TR><TD VALIGN=Top NOWRAP>BJ111711</TD>\n"
+    "	<TD WIDTH=14></TD>\n"
+    "	<TD VALIGN=Top>Displays region of EST associated with GenBank accession BJ111711</TD></TR>\n"
 
-"<TR><TD VALIGN=Top NOWRAP>zinc finger</TD>\n"
-"       <TD WIDTH=14></TD>\n"
-"       <TD VALIGN=Top>Lists many zinc finger mRNAs</TD></TR>\n"
+    "<TR><TD VALIGN=Top NOWRAP>zinc finger</TD>\n"
+    "       <TD WIDTH=14></TD>\n"
+    "       <TD VALIGN=Top>Lists many zinc finger mRNAs</TD></TR>\n"
 
-"<TR><TD VALIGN=Top NOWRAP>kruppel zinc finger</TD>\n"
-"       <TD WIDTH=14></TD>\n"
-"       <TD VALIGN=Top>Lists only kruppel-like zinc fingers</TD></TR>\n"
+    "<TR><TD VALIGN=Top NOWRAP>kruppel zinc finger</TD>\n"
+    "       <TD WIDTH=14></TD>\n"
+    "       <TD VALIGN=Top>Lists only kruppel-like zinc fingers</TD></TR>\n"
 
-"<TR><TD VALIGN=Top NOWRAP>Jones,D.</TD>\n"
-"	<TD WIDTH=14></TD>\n"
-"	<TD VALIGN=Top>Lists mRNAs deposited by co-author D. Jones</TD></TR>\n"
-"\n"
-"<TR><TD VALIGN=Top><br></TD></TR>\n"
-"	\n"
-"<TR><TD COLSPAN=\"3\" > Use this last format for entry authors -- "
-"even though Genbank searches require Jones D "
-"format, GenBank entries themselves use Jones,D. internally.\n"
-"</TABLE>\n"
-"\n");
+    "<TR><TD VALIGN=Top NOWRAP>Jones,D.</TD>\n"
+    "	<TD WIDTH=14></TD>\n"
+    "	<TD VALIGN=Top>Lists mRNAs deposited by co-author D. Jones</TD></TR>\n"
+    "\n"
+    "<TR><TD VALIGN=Top><br></TD></TR>\n"
+    "	\n"
+    "<TR><TD COLSPAN=\"3\" > Use this last format for entry authors -- "
+    "even though Genbank searches require Jones D "
+    "format, GenBank entries themselves use Jones,D. internally.\n"
+    "</TABLE>\n"
+    "\n");
     }
 else if (strstrNoCase(organism, "C. briggsae"))
     {
     puts("<P><H3>About the Caenorhabditis briggsae assembly</P></H3>\n");
     puts(
-"<P>The C. briggsae genome assembly (UCSC version cb1) \n"
-"is based on sequence version cb25.agp8 deposited into "
-"<A HREF=\"http:www.wormbase.org/\" TARGET=_blank>WormBase</A> "
-"as of 11 July 2002. This version was assembled from 2.05 million whole genome "
-"shotgun (WGS) reads, of which 88.2% were in read pairs. The Phusion assembler "
-"was used to assemble the WGS reads into contigs based on overlap information, "
-"and then into supercontigs using read pair information to cross gaps. These "
-"supercontigs were assembled into mapped ultracontigs based on FPC " 
-"fingerprint mapping, with material from previously finished clones used to " 
-"bridge gaps. Draft chromosome sequences are not available for C. briggsae, due "
-"to the lack of dense chromosomal maps that allow assignment of the ultracontigs "
-"to chromosomal locations. As a result, all data in this browser maps to chrUn.\n"
-"</P>"
-"<P>"
-"The N50 contig size in this assembly is 41 kb and the N50 supercontig size is "
-"1450 kb. Most genes should be complete. The sequencing centers estimate that "
-"this whole genome shotgun assembly achieved 98% coverage of the genome.\n"
-"</P>" 
-"<P>"
-"These data carry <A HREF=\"../goldenPath/credits.html#cbr_use\">"
-"specific conditions for use</A>.\n"
-"</P>"
-);
+    "<P>The C. briggsae genome assembly (UCSC version cb1) \n"
+    "is based on sequence version cb25.agp8 deposited into "
+    "<A HREF=\"http:www.wormbase.org/\" TARGET=_blank>WormBase</A> "
+    "as of 11 July 2002. This version was assembled from 2.05 million whole genome "
+    "shotgun (WGS) reads, of which 88.2% were in read pairs. The Phusion assembler "
+    "was used to assemble the WGS reads into contigs based on overlap information, "
+    "and then into supercontigs using read pair information to cross gaps. These "
+    "supercontigs were assembled into mapped ultracontigs based on FPC " 
+    "fingerprint mapping, with material from previously finished clones used to " 
+    "bridge gaps. Draft chromosome sequences are not available for C. briggsae, due "
+    "to the lack of dense chromosomal maps that allow assignment of the ultracontigs "
+    "to chromosomal locations. As a result, all data in this browser maps to chrUn.\n"
+    "</P>"
+    "<P>"
+    "The N50 contig size in this assembly is 41 kb and the N50 supercontig size is "
+    "1450 kb. Most genes should be complete. The sequencing centers estimate that "
+    "this whole genome shotgun assembly achieved 98% coverage of the genome.\n"
+    "</P>" 
+    "<P>"
+    "These data carry <A HREF=\"../goldenPath/credits.html#cbr_use\">"
+    "specific conditions for use</A>.\n"
+    "</P>"
+    );
     puts("<P><H3>Sample position queries</P></H3>\n");
     puts(
-"<P>A genome position can be specified by the accession number of a sequenced "
-"genomic clones, an mRNA, or EST, or a gene identifier, chromosomal coordinate "
-"range, or keywords from "
-"the Genbank description of an mRNA. The following list provides "
-"examples of various types of position queries for the C. briggsae genome. "
-"See the "
-"<A HREF=\"http://genome.cse.ucsc.edu/goldenPath/help/hgTracksHelp.html\" TARGET=_blank>"
-"User Guide</A> for more help. </P>\n"
-"<P>\n"
-"\n"
-"<P>\n"
-"<TABLE  border=0 CELLPADDING=0 CELLSPACING=0>\n"
-"<TR><TD VALIGN=Top NOWRAP><B>Request:</B><br></TD>\n"
-"	<TD VALIGN=Top COLSPAN=2><B>&nbsp;&nbsp; Genome Browser Response:</B><br></TD></TR>\n"
-"	\n"
-"<TR><TD VALIGN=Top><br></TD></TR>\n"
-"	\n"
+    "<P>A genome position can be specified by the accession number of a sequenced "
+    "genomic clones, an mRNA, or EST, or a gene identifier, chromosomal coordinate "
+    "range, or keywords from "
+    "the Genbank description of an mRNA. The following list provides "
+    "examples of various types of position queries for the C. briggsae genome. "
+    "See the "
+    "<A HREF=\"http://genome.cse.ucsc.edu/goldenPath/help/hgTracksHelp.html\" TARGET=_blank>"
+    "User Guide</A> for more help. </P>\n"
+    "<P>\n"
+    "\n"
+    "<P>\n"
+    "<TABLE  border=0 CELLPADDING=0 CELLSPACING=0>\n"
+    "<TR><TD VALIGN=Top NOWRAP><B>Request:</B><br></TD>\n"
+    "	<TD VALIGN=Top COLSPAN=2><B>&nbsp;&nbsp; Genome Browser Response:</B><br></TD></TR>\n"
+    "	\n"
+    "<TR><TD VALIGN=Top><br></TD></TR>\n"
+    "	\n"
 
-"<TR><TD VALIGN=Top NOWRAP>chrUn</TD>\n"
-"	<TD WIDTH=14></TD>\n"
-"	<TD VALIGN=Top>Displays all of chromosome Un (only valid chr entry for this genome)</TD></TR>\n"
+    "<TR><TD VALIGN=Top NOWRAP>chrUn</TD>\n"
+    "	<TD WIDTH=14></TD>\n"
+    "	<TD VALIGN=Top>Displays all of chromosome Un (only valid chr entry for this genome)</TD></TR>\n"
 
-"<TR><TD VALIGN=Top NOWRAP>chrUn:1-1000000</TD>\n"
-"	<TD WIDTH=14></TD>\n"
-"	<TD VALIGN=Top>Displays the first million bases of chrUn</TD></TR>\n"
+    "<TR><TD VALIGN=Top NOWRAP>chrUn:1-1000000</TD>\n"
+    "	<TD WIDTH=14></TD>\n"
+    "	<TD VALIGN=Top>Displays the first million bases of chrUn</TD></TR>\n"
 
-"<TR><TD VALIGN=Top NOWRAP>R02870</TD>\n"
-"	<TD WIDTH=14></TD>\n"
-"	<TD VALIGN=Top>Displays region of EST associated with GenBank accession R02870</TD></TR>\n"
+    "<TR><TD VALIGN=Top NOWRAP>R02870</TD>\n"
+    "	<TD WIDTH=14></TD>\n"
+    "	<TD VALIGN=Top>Displays region of EST associated with GenBank accession R02870</TD></TR>\n"
 
-"<TR><TD VALIGN=Top NOWRAP>U48289</TD>\n"
-"	<TD WIDTH=14></TD>\n"
-"	<TD VALIGN=Top>Displays the region associated with the mRNA accession U48289</TD></TR>\n"
+    "<TR><TD VALIGN=Top NOWRAP>U48289</TD>\n"
+    "	<TD WIDTH=14></TD>\n"
+    "	<TD VALIGN=Top>Displays the region associated with the mRNA accession U48289</TD></TR>\n"
 
-"<TR><TD VALIGN=Top NOWRAP>protein phosphatase PP2C </TD>\n"
-"       <TD WIDTH=14></TD>\n"
-"       <TD VALIGN=Top>Lists only records pertaining to protein phophatase PP2C</TD></TR>\n"
+    "<TR><TD VALIGN=Top NOWRAP>protein phosphatase PP2C </TD>\n"
+    "       <TD WIDTH=14></TD>\n"
+    "       <TD VALIGN=Top>Lists only records pertaining to protein phophatase PP2C</TD></TR>\n"
 
-"<TR><TD VALIGN=Top NOWRAP>Kimble,J.</TD>\n"
-"	<TD WIDTH=14></TD>\n"
-"	<TD VALIGN=Top>Lists mRNAs deposited by co-author J. Kimble</TD></TR>\n"
-"\n"
-"<TR><TD VALIGN=Top><br></TD></TR>\n"
-"	\n"
-"<TR><TD COLSPAN=\"3\" > Use this last format for entry authors -- "
-"even though Genbank searches require Kimble J "
-"format, GenBank entries themselves use Kimble,J. internally.\n"
-"</TABLE>\n"
-"\n");
+    "<TR><TD VALIGN=Top NOWRAP>Kimble,J.</TD>\n"
+    "	<TD WIDTH=14></TD>\n"
+    "	<TD VALIGN=Top>Lists mRNAs deposited by co-author J. Kimble</TD></TR>\n"
+    "\n"
+    "<TR><TD VALIGN=Top><br></TD></TR>\n"
+    "	\n"
+    "<TR><TD COLSPAN=\"3\" > Use this last format for entry authors -- "
+    "even though Genbank searches require Kimble J "
+    "format, GenBank entries themselves use Kimble,J. internally.\n"
+    "</TABLE>\n"
+    "\n");
     }
 else 
     {
     printf("<H2>%s</H2>", organism);
     }
-    }
+}
 }

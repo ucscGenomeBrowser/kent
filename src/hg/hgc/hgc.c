@@ -116,9 +116,10 @@
 #include "flyBaseSwissProt.h"
 #include "affyGenoDetails.h"
 #include "encodeRegionInfo.h"
+#include "sgdDescription.h"
 #include "hgFind.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.530 2003/12/08 10:15:44 kate Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.531 2003/12/09 02:56:38 kent Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -12472,6 +12473,34 @@ showSomeAlignment(psl, seq, gftProt, 0, seq->size, NULL, 0, 0);
 //showSomeAlignment(psl, seq, gftProt, psl->qStart, psl->qEnd, psl->qName, 0, 0);
 }
 
+static void doSgdOther(struct trackDb *tdb, char *item)
+/* Display information about other Sacchromyces Genome Database
+ * other (not-coding gene) info. */
+{
+struct sqlConnection *conn = hAllocConn();
+struct dyString *dy = dyStringNew(1024);
+if (sqlTableExists(conn, "sgdOtherDescription"))
+    {
+    /* Print out description and type if available. */
+    struct sgdDescription sgd;
+    struct sqlResult *sr;
+    char query[256], **row;
+    safef(query, sizeof(query),
+    	"select * from sgdOtherDescription where name = '%s'", item);
+    sr = sqlGetResult(conn, query);
+    while ((row = sqlNextRow(sr)) != NULL)
+        {
+	sgdDescriptionStaticLoad(row, &sgd);
+	dyStringPrintf(dy, "<B>Description:</B> %s<BR>\n", sgd.description);
+	dyStringPrintf(dy, "<B>Type:</B> %s<BR>\n", sgd.type);
+	}
+    sqlFreeResult(&sr);
+    }
+hFreeConn(&conn);
+genericClickHandlerPlus(tdb, item, NULL, dy->string);
+dyStringFree(&dy);
+}
+
 void doMiddle()
 /* Generate body of HTML. */
 {
@@ -13061,6 +13090,10 @@ else if (sameWord(track, "bdgpGene") || sameWord(track, "bdgpNonCoding"))
 else if (sameWord(track, "encodeRegions"))
     {
     doEncodeRegion(tdb, item);
+    }
+else if (sameWord(track, "sgdOther"))
+    {
+    doSgdOther(tdb, item);
     }
 else if (tdb != NULL)
     {
