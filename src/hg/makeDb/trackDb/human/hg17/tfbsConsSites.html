@@ -57,15 +57,15 @@ such that s<sub>ji</sub> is the nucleotide at position i of species j.  Also,
 define an n<sub>s</sub> x 4 background matrix (call it back) giving the background 
 frequencies of each nucleotide in each species.  A sliding window (of length n)
 calculates the "species score" for each species at each position:<br><br>
-<center><IMG SRC="/images/tfbsCons1.jpg"></center><br>
+<center><IMG SRC="/images/tfbsCons1.gif"></center><br>
 
 From this, a log-odds score is calculated for each species (normalizing by the
 length of the matrix and the number of species in the alignment):<br><br>
-<center><IMG SRC="/images/tfbsCons2.jpg"></center><br>
+<center><IMG SRC="/images/tfbsCons2.gif"></center><br>
 
 These scores are then summed for all species, yielding a final log-odds score for
 the current position:<br><br>
-<center><IMG SRC="/images/tfbsCons3.jpg"></center><br>
+<center><IMG SRC="/images/tfbsCons3.gif"></center><br>
 
 Note that the log-odds score of each species must exceed the threshold for that 
 species.  The threshold is calculated for each species such that the only hits
@@ -73,11 +73,11 @@ that will be reported will have a Z score (to be discussed later) of 2.36 or
 higher in each species (corresponding to a p-value of 0.01).  Next, the maximum 
 and minimum possible log-odds scores
 are computed and summed across all species for the given binding matrix:<br><br>
-<center><IMG SRC="/images/tfbsCons4.jpg"></center><br>
-<center><IMG SRC="/images/tfbsCons5.jpg"></center><br>
+<center><IMG SRC="/images/tfbsCons4.gif"></center><br>
+<center><IMG SRC="/images/tfbsCons5.gif"></center><br>
 These are then used to normalize the final, raw log-odds score so that its range is
 between 0 and 1:<br><br>
-<center><IMG SRC="/images/tfbsCons6.jpg"></center><br>
+<center><IMG SRC="/images/tfbsCons6.gif"></center><br>
 Next, the best raw score for each binding matrix is calculated for the 5,000 base 
 upstream region of each human RefSeq gene (taken from the RefGene table for hg17.)
 The mean and standard deviation for each binding matrix are then calculated across
@@ -85,7 +85,7 @@ all RefSeq genes.  These are then used to create the threshold for each binding 
 namely, one standard deviation above the mean.  Tfloc is then run with this threshold
 on each chromosome for the 3-way multiz alignments.  Finally, a Z score is calculated 
 for each binding site hit h to matrix m according to the following formula:<br><br>
-<center><IMG SRC="/images/tfbsCons7.jpg"></center><br>
+<center><IMG SRC="/images/tfbsCons7.gif"></center><br>
 This final Z score can be interpreted as the number of standard deviations above the
 mean raw score for that binding matrix across the upstream regions of all RefSeq genes.<br>
 </P>
