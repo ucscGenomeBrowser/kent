@@ -1043,7 +1043,7 @@ type sample
 
 track snpNih
 shortLabel Overlap SNPs
-longLabel Single Nucleotide Polymorphisms (SNPs) from Clone Overlaps
+longLabel Simple Nucleotide Polymorphisms (SNPs) from Clone Overlaps
 group varRep
 priority 144
 visibility hide
@@ -1051,7 +1051,7 @@ type bed 4 .
 
 track snpTsc
 shortLabel Random SNPs
-longLabel Single Nucleotide Polymorphisms (SNPs) from Random Reads
+longLabel Simple Nucleotide Polymorphisms (SNPs) from Random Reads
 group varRep
 priority 145
 visibility hide
