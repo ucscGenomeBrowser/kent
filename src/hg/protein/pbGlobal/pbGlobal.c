@@ -381,8 +381,6 @@ else
 freez(&pdfFile);
 }
 
-//#include "pbg.c"
-
 void doMiddle(struct cart *theCart)
 /* Print the body of an html file.   */
 {
