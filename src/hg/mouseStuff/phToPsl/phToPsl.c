@@ -73,9 +73,6 @@ char q,t;
 int qs,qe,ts,te;
 int *blocks = NULL, *qStarts = NULL, *tStarts = NULL;
 
-uglyf("alignStringToPsl\n");
-uglyf("%s\n%s\n", qString, tString);
-uglyf("aliSize %d, qStart %d, tStart %d, qIsRc %d\n", aliSize, qStart, tStart, qIsRc);
 
 /* Deal with minus strand issues. */
 if (tStart < 0)
@@ -121,11 +118,12 @@ for (i=0; i<aliSize; ++i)
 	    }
 	else
 	    tInInsert = FALSE;
-
 	}
     else
         {
 	eitherInsert = FALSE;
+	tInInsert = FALSE;
+	qInInsert = FALSE;
 	if (q == t)
 	    ++match;
 	else
@@ -268,7 +266,7 @@ for (;;)
     if (!lineFileNext(lf, &line, NULL))
         break;
     c = line[0];
-    if (!isalpha(c))
+    if (c != '-' && !isalpha(c))
         {
 	lineFileReuse(lf);
 	break;
