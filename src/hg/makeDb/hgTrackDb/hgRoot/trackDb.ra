@@ -151,12 +151,11 @@ chromosomes chr22,
 type sample 9
 
 
-track pGCwiggle
+track pGC
 shortLabel GC Samples 
 longLabel GC Percent Sample Track
 priority 6.1
 visible hide
-chromosomes chr1,
 type sample 9
 
 
@@ -393,7 +392,7 @@ type bed 5+
 
 track sgpGene
 shortLabel SGP Genes
-longLabel SGP Gene Predictions Using Mouse Genome Homology
+longLabel SGP Gene Predictions Using Mouse/Human Homology
 priority 15.5
 visibility dense
 color 0,90,100
@@ -1065,7 +1064,7 @@ shortLabel ZooSeq
 longLabel ZooSeq Conservation Data 
 priority 41.004
 visible hide
-chromosomes chr1,chr7,chr14,
+chromosomes target1,chr7,
 color 0,60,120
 altColor 0,128,0
 type sample 9
