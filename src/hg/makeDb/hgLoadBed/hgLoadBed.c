@@ -1,6 +1,7 @@
 /* hgLoadBed - Load a generic bed file into database. */
 #include "common.h"
 #include "linefile.h"
+#include "obscure.h"
 #include "hash.h"
 #include "cheapcgi.h"
 #include "jksql.h"
@@ -11,6 +12,7 @@
 /* Command line switches. */
 boolean noBin = FALSE;		/* Suppress bin field. */
 boolean oldTable = FALSE;	/* Don't redo table. */
+char *sqlTable = NULL;		/* Read table from this .sql if non-NULL. */
 
 
 void usage()
@@ -23,6 +25,7 @@ errAbort(
   "options:\n"
   "   -nobin   suppress bin field\n"
   "   -oldTable add to existing table\n"
+  "   -sqlTable=table.sql Create table from .sql file\n"
   );
 }
 
@@ -118,8 +121,23 @@ struct sqlConnection *conn = sqlConnect(database);
 struct dyString *dy = newDyString(1024);
 char *tab = "bed.tab";
 
-if (!oldTable)
+/* First make table definition. */
+if (sqlTable != NULL)
     {
+    /* Read from file. */
+    char *sql, *s;
+    readInGulp(sqlTable, &sql, NULL);
+
+    /* Chop of end-of-statement semicolon if need be. */
+    s = strchr(sql, ';');
+    if (s != NULL) *s = 0;
+    
+    sqlRemakeTable(conn, track, sql);
+    freez(&sql);
+    }
+else if (!oldTable)
+    {
+    /* Create definition statement. */
     printf("Creating table definition for \n");
     dyStringPrintf(dy, "CREATE TABLE %s (\n", track);
     if (!noBin)
@@ -188,6 +206,7 @@ if (argc < 4)
     usage();
 noBin = cgiBoolean("noBin");
 oldTable = cgiBoolean("oldTable");
+sqlTable = cgiOptionalString("sqlTable");
 hgLoadBed(argv[1], argv[2], argc-3, argv+3);
 return 0;
 }
