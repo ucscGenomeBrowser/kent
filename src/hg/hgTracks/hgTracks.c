@@ -1576,35 +1576,44 @@ for (fil = mud->filterList; fil != NULL; fil = fil->next)
 for (fil = mud->filterList; fil != NULL; fil = fil->next)
     {
     struct hash *hash = fil->hash;
+    int wordIx, wordCount;
+    char *words[128];
+
     if (hash != NULL)
 	{
 	boolean anyWild;
-	char *pattern = cloneString(fil->pattern);
-	if (lastChar(pattern) != '*')
+	char *dupPat = cloneString(fil->pattern);
+	wordCount = chopLine(dupPat, words);
+	for (wordIx=0; wordIx <wordCount; ++wordIx)
 	    {
-	    int len = strlen(pattern)+1;
-	    pattern = needMoreMem(pattern, len, len+1);
-	    pattern[len-1] = '*';
-	    }
-	anyWild = (strchr(pattern, '*') != NULL || strchr(pattern, '?') != NULL);
-	sprintf(query, "select * from %s", fil->table);
-	touppers(pattern);
-	sr = sqlGetResult(conn, query);
-	while ((row = sqlNextRow(sr)) != NULL)
-	    {
-	    boolean gotMatch;
-	    touppers(row[1]);
-	    if (anyWild)
-		gotMatch = wildMatch(pattern, row[1]);
-	    else
-		gotMatch = sameString(pattern, row[1]);
-	    if (gotMatch)
+	    char *pattern = cloneString(words[wordIx]);
+	    if (lastChar(pattern) != '*')
 		{
-		hashAdd(hash, row[0], NULL);
+		int len = strlen(pattern)+1;
+		pattern = needMoreMem(pattern, len, len+1);
+		pattern[len-1] = '*';
 		}
+	    anyWild = (strchr(pattern, '*') != NULL || strchr(pattern, '?') != NULL);
+	    sprintf(query, "select * from %s", fil->table);
+	    touppers(pattern);
+	    sr = sqlGetResult(conn, query);
+	    while ((row = sqlNextRow(sr)) != NULL)
+		{
+		boolean gotMatch;
+		touppers(row[1]);
+		if (anyWild)
+		    gotMatch = wildMatch(pattern, row[1]);
+		else
+		    gotMatch = sameString(pattern, row[1]);
+		if (gotMatch)
+		    {
+		    hashAdd(hash, row[0], NULL);
+		    }
+		}
+	    sqlFreeResult(&sr);
+	    freez(&pattern);
 	    }
-	sqlFreeResult(&sr);
-	freez(&pattern);
+	freez(&dupPat);
 	}
     }
 
@@ -6757,8 +6766,7 @@ hFreeConn(&conn);
 void hotLinks()
 /* Put up the hot links bar. */
 {
-boolean gotBlat = sameString(database, "hg6") || 
-	sameString(database, "hg7") || sameString(database, "hg8");
+boolean gotBlat = hIsBlatIndexedDatabase(database);
 struct dyString *uiVars = uiStateUrlPart(NULL);
 
 printf("<TABLE WIDTH=\"100%%\" BGCOLOR=\"#000000\" BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"1\"><TR><TD>\n");
