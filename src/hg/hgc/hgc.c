@@ -3,6 +3,7 @@
 #include "common.h"
 #include "hCommon.h"
 #include "hash.h"
+#include "bits.h"
 #include "memgfx.h"
 #include "portable.h"
 #include "errabort.h"
@@ -489,18 +490,25 @@ struct trackDb *tdbList = hTrackDb(seqName), *tdb;
 
 hgcStart("Extended DNA Case/Color");
 printf("<H1>Extended DNA Case/Color Options</H1>\n");
-puts("You can use this page to make the case and/or color of the DNA"
-     "sequence vary for bases that are covered by particular tracks."
+puts("You can use this page to make the case and/or color of the DNA "
+     "sequence vary for bases that are covered by particular tracks. "
      "You effectively can display four tracks - one by case, one by "
      "the red component of the color, one by the green component of "
      "the color, and one by the blue component of the color.   It's "
      "possible to have more than one track toggle the case or have "
      "a non-black color, though the results may not always be clear. "
-     "Red, green, and blue values range from 0 (darkest) to 255 (lightest).");
+     "Red, green, and blue values range from 0 (darkest) to 255 (lightest). "
+     "Use 255 values for most purposes.  To see the depth of coverage in "
+     "a track with multiple overlapping items try a smaller number. "
+     "The colors are added together when more than one colored item "
+     "covers the same base.  If a base is part of a red colored track "
+     "and a green colored track for instance, it will be painted yellow.");
 printf("<FORM ACTION=\"%s\" METHOD=\"POST\">\n\n", hgcPath());
 savePosInHidden();
 cgiMakeHiddenVar("g", "htcGetDna3");
-printf("Default Case: ");
+printf("Letters Per Line ");
+cgiMakeIntVar("lineWidth", 60, 3);
+printf(" Default Case: ");
 cgiMakeRadioButton("case", "upper", FALSE);
 printf(" upper ");
 cgiMakeRadioButton("case", "lower", TRUE);
@@ -511,7 +519,7 @@ printf("Reverse Complement ");
 cgiMakeCheckBox("rc", cgiBoolean("rc"));
 printf("<BR>\n");
 printf("<TABLE BORDER=1>\n");
-printf("<TR><TD>Track<BR>NAME</TD><TD>Toggle<BR>Case</TD><TD>Red</TD><TD>Green</TD><TD>Blue</TD></TR>\n");
+printf("<TR><TD>Track<BR>Name</TD><TD>Toggle<BR>Case</TD><TD>Under-<BR>line</TD><TD>Bold</TD><TD>Italic</TD><TD>Red</TD><TD>Green</TD><TD>Blue</TD></TR>\n");
 slReverse(&tdbList);
 for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
     {
@@ -521,6 +529,18 @@ for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
 	printf("<TR>");
 	printf("<TD>%s</TD>", tdb->shortLabel);
 	sprintf(buf, "%s_case", tdb->tableName);
+	printf("<TD>");
+	cgiMakeCheckBox(buf, FALSE);
+	printf("</TD>");
+	sprintf(buf, "%s_u", tdb->tableName);
+	printf("<TD>");
+	cgiMakeCheckBox(buf, FALSE);
+	printf("</TD>");
+	sprintf(buf, "%s_b", tdb->tableName);
+	printf("<TD>");
+	cgiMakeCheckBox(buf, FALSE);
+	printf("</TD>");
+	sprintf(buf, "%s_i", tdb->tableName);
 	printf("<TD>");
 	cgiMakeCheckBox(buf, FALSE);
 	printf("</TD>");
@@ -600,6 +620,23 @@ for (i=start; i<end; ++i)
     }
 }
 
+void getDnaHandleBits(char *track, char *type, Bits *bits, int winStart, int winEnd, 
+	struct featureBits **pList)
+/* See if track_type variable exists, and if so set corresponding bits. */
+{
+char buf[256];
+struct featureBits *fb;
+
+sprintf(buf, "%s_%s", track, type);
+if (cgiBoolean(buf))
+    {
+    if (*pList == NULL)
+	*pList = fbGetRange(track, seqName, winStart, winEnd);
+    for (fb = *pList; fb != NULL; fb = fb->next)
+	bitSetRange(bits, fb->start - winStart, fb->end - fb->start);
+    }
+}
+
 void doGetDna3()
 /* Do third DNA dialog (or just fetch DNA) */
 {
@@ -609,9 +646,12 @@ int i;
 boolean isRc = cgiBoolean("rc");
 boolean defaultUpper = sameString(cgiString("case"), "upper");
 int winSize = winEnd - winStart;
+int lineWidth = cgiInt("lineWidth");
 struct rgbColor *colors;
 struct trackDb *tdbList = hTrackDb(seqName), *tdb;
-
+Bits *uBits = bitAlloc(winSize);	/* Underline bits. */
+Bits *iBits = bitAlloc(winSize);	/* Italic bits. */
+Bits *bBits = bitAlloc(winSize);	/* Bold bits. */
 
 hgcStart("Extended DNA Output");
 printf("<TT><PRE>");
@@ -628,13 +668,20 @@ for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
     struct featureBits *fbList = NULL, *fb;
     if (fbUnderstandTrack(track))
         {
-	/* Toggle case if necessary. */
 	char buf[256];
 	int r,g,b;
+
+	/* Flip underline/italic/bold bits. */
+	getDnaHandleBits(track, "u", uBits, winStart, winEnd, &fbList);
+	getDnaHandleBits(track, "b", bBits, winStart, winEnd, &fbList);
+	getDnaHandleBits(track, "i", iBits, winStart, winEnd, &fbList);
+
+	/* Toggle case if necessary. */
 	sprintf(buf, "%s_case", track);
 	if (cgiBoolean(buf))
 	    {
-	    fbList = fbGetRange(track, seqName, winStart, winEnd);
+	    if (fbList == NULL)
+		fbList = fbGetRange(track, seqName, winStart, winEnd);
 	    for (fb = fbList; fb != NULL; fb = fb->next)
 	        {
 		DNA *s;
@@ -667,14 +714,18 @@ for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
 	}
     }
 
-cfmInit(&cfm, 50, 50, FALSE, FALSE, stdout, 0);
+cfmInit(&cfm, 0, lineWidth, FALSE, FALSE, stdout, 0);
 for (i=0; i<seq->size; ++i)
    {
    struct rgbColor *color = colors+i;
    int c = (color->r<<16) + (color->g<<8) + color->b;
-   cfmOut(&cfm, seq->dna[i], c);
+   cfmOutExt(&cfm, seq->dna[i], c, 
+   	bitReadOne(uBits, i), bitReadOne(bBits, i), bitReadOne(iBits, i));
    }
 freeDnaSeq(&seq);
+bitFree(&uBits);
+bitFree(&iBits);
+bitFree(&bBits);
 }
 
 void medlineLinkedLine(char *title, char *text, char *search)

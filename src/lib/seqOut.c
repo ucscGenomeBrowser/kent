@@ -20,16 +20,41 @@ cfm->lineNumbers = lineNumbers;
 cfm->countDown = countDown;
 cfm->out = out;
 cfm->numOff = numOff;
+cfm->bold = cfm->underline = cfm->italic = FALSE;
 fprintf(cfm->out, "<FONT COLOR=\"#%06X\">", 0);
 }
 
-void cfmOut(struct cfm *cfm, char c, int color)
-/* Write out a byte, and depending on color formatting extras  */
+void cfmOutExt(struct cfm *cfm, char c, int color, boolean underline, boolean bold, boolean italic)
+/* Write out a byte, and formatting extras  */
 {
 if (color != cfm->lastColor)
     {
     fprintf(cfm->out, "</FONT><FONT COLOR=\"#%06X\">", color);
     cfm->lastColor = color;
+    }
+if (underline != cfm->underline)
+    {
+    if (underline)
+       fprintf(cfm->out, "<U>");
+    else
+       fprintf(cfm->out, "</U>");
+    cfm->underline = underline;
+    }
+if (italic != cfm->italic)
+    {
+    if (italic)
+       fprintf(cfm->out, "<I>");
+    else
+       fprintf(cfm->out, "</I>");
+    cfm->italic = italic;
+    }
+if (bold != cfm->bold)
+    {
+    if (bold)
+       fprintf(cfm->out, "<B>");
+    else
+       fprintf(cfm->out, "</B>");
+    cfm->bold = bold;
     }
 ++cfm->charCount;
 fputc(c, cfm->out);
@@ -59,6 +84,12 @@ if (cfm->lineLen)
 	cfm->inLine = 0;
 	}
     }
+}
+
+void cfmOut(struct cfm *cfm, char c, int color)
+/* Write out a byte, and depending on color formatting extras  */
+{
+cfmOutExt(cfm, c, color, FALSE, FALSE, FALSE);
 }
 
 void cfmCleanup(struct cfm *cfm)
