@@ -6,11 +6,11 @@ table fbGene
     string geneName;	"Gene name - up to a couple of words"
     )
 
-table fgSynonym
+table fbSynonym
 "Links all the names we call a gene to it's flybase ID"
     (
     string geneId;	"FlyBase ID"
-    string name;	"A name (synonym or real"
+    string name;	"A name (synonym or real)"
     )
 
 table fbAllele

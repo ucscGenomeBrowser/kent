@@ -15,7 +15,8 @@ O = affyAtlas.o agpFrag.o agpGap.o altGraph.o altGraphX.o ancientRref.o \
     clonePos.o coordConv.o cpgIsland.o ctgPos.o customTrack.o cytoBand.o \
     defaultDb.o dbDb.o dnaMotif.o dnaProbe.o ensFace.o \
     est3.o estOrientInfo.o estPair.o exoFish.o expData.o expRecord.o \
-    featureBits.o fishClones.o flyBaseSwissProt.o gcPercent.o geneBands.o geneGraph.o \
+    fbTables.o featureBits.o fishClones.o flyBaseSwissProt.o \
+    gcPercent.o geneBands.o geneGraph.o \
     genePred.o genomicDups.o genomicSuperDups.o \
     ggCluster.o ggDbIo.o ggGraph.o goa.o goaPart.o grp.o \
     hCommon.o hdb.o hgConfig.o hgExp.o hgFind.o \

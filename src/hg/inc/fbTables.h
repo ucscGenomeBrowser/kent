@@ -59,54 +59,54 @@ void fbGeneOutput(struct fbGene *el, FILE *f, char sep, char lastSep);
 
 #define FGSYNONYM_NUM_COLS 2
 
-struct fgSynonym
+struct fbSynonym
 /* Links all the names we call a gene to it's flybase ID */
     {
-    struct fgSynonym *next;  /* Next in singly linked list. */
+    struct fbSynonym *next;  /* Next in singly linked list. */
     char *geneId;	/* FlyBase ID */
     char *name;	/* A name (synonym or real */
     };
 
-void fgSynonymStaticLoad(char **row, struct fgSynonym *ret);
-/* Load a row from fgSynonym table into ret.  The contents of ret will
+void fbSynonymStaticLoad(char **row, struct fbSynonym *ret);
+/* Load a row from fbSynonym table into ret.  The contents of ret will
  * be replaced at the next call to this function. */
 
-struct fgSynonym *fgSynonymLoad(char **row);
-/* Load a fgSynonym from row fetched with select * from fgSynonym
- * from database.  Dispose of this with fgSynonymFree(). */
+struct fbSynonym *fbSynonymLoad(char **row);
+/* Load a fbSynonym from row fetched with select * from fbSynonym
+ * from database.  Dispose of this with fbSynonymFree(). */
 
-struct fgSynonym *fgSynonymLoadAll(char *fileName);
-/* Load all fgSynonym from whitespace-separated file.
- * Dispose of this with fgSynonymFreeList(). */
+struct fbSynonym *fbSynonymLoadAll(char *fileName);
+/* Load all fbSynonym from whitespace-separated file.
+ * Dispose of this with fbSynonymFreeList(). */
 
-struct fgSynonym *fgSynonymLoadAllByChar(char *fileName, char chopper);
-/* Load all fgSynonym from chopper separated file.
- * Dispose of this with fgSynonymFreeList(). */
+struct fbSynonym *fbSynonymLoadAllByChar(char *fileName, char chopper);
+/* Load all fbSynonym from chopper separated file.
+ * Dispose of this with fbSynonymFreeList(). */
 
-#define fgSynonymLoadAllByTab(a) fgSynonymLoadAllByChar(a, '\t');
-/* Load all fgSynonym from tab separated file.
- * Dispose of this with fgSynonymFreeList(). */
+#define fbSynonymLoadAllByTab(a) fbSynonymLoadAllByChar(a, '\t');
+/* Load all fbSynonym from tab separated file.
+ * Dispose of this with fbSynonymFreeList(). */
 
-struct fgSynonym *fgSynonymCommaIn(char **pS, struct fgSynonym *ret);
-/* Create a fgSynonym out of a comma separated string. 
+struct fbSynonym *fbSynonymCommaIn(char **pS, struct fbSynonym *ret);
+/* Create a fbSynonym out of a comma separated string. 
  * This will fill in ret if non-null, otherwise will
- * return a new fgSynonym */
+ * return a new fbSynonym */
 
-void fgSynonymFree(struct fgSynonym **pEl);
-/* Free a single dynamically allocated fgSynonym such as created
- * with fgSynonymLoad(). */
+void fbSynonymFree(struct fbSynonym **pEl);
+/* Free a single dynamically allocated fbSynonym such as created
+ * with fbSynonymLoad(). */
 
-void fgSynonymFreeList(struct fgSynonym **pList);
-/* Free a list of dynamically allocated fgSynonym's */
+void fbSynonymFreeList(struct fbSynonym **pList);
+/* Free a list of dynamically allocated fbSynonym's */
 
-void fgSynonymOutput(struct fgSynonym *el, FILE *f, char sep, char lastSep);
-/* Print out fgSynonym.  Separate fields with sep. Follow last field with lastSep. */
+void fbSynonymOutput(struct fbSynonym *el, FILE *f, char sep, char lastSep);
+/* Print out fbSynonym.  Separate fields with sep. Follow last field with lastSep. */
 
-#define fgSynonymTabOut(el,f) fgSynonymOutput(el,f,'\t','\n');
-/* Print out fgSynonym as a line in a tab-separated file. */
+#define fbSynonymTabOut(el,f) fbSynonymOutput(el,f,'\t','\n');
+/* Print out fbSynonym as a line in a tab-separated file. */
 
-#define fgSynonymCommaOut(el,f) fgSynonymOutput(el,f,',',',');
-/* Print out fgSynonym as a comma separated list including final comma. */
+#define fbSynonymCommaOut(el,f) fbSynonymOutput(el,f,',',',');
+/* Print out fbSynonym as a comma separated list including final comma. */
 
 #define FBALLELE_NUM_COLS 3
 

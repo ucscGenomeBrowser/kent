@@ -15,7 +15,7 @@ CREATE TABLE fbGene (
 );
 
 #Links all the names we call a gene to it's flybase ID
-CREATE TABLE fgSynonym (
+CREATE TABLE fbSynonym (
     geneId varchar(255) not null,	# FlyBase ID
     name varchar(255) not null,	# A name (synonym or real
               #Indices

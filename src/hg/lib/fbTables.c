@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "fbTables.h"
 
-static char const rcsid[] = "$Id: fbTables.c,v 1.1 2003/10/27 06:15:22 kent Exp $";
+static char const rcsid[] = "$Id: fbTables.c,v 1.2 2003/10/27 09:48:11 kent Exp $";
 
 void fbGeneStaticLoad(char **row, struct fbGene *ret)
 /* Load a row from fbGene table into ret.  The contents of ret will
@@ -134,8 +134,8 @@ if (sep == ',') fputc('"',f);
 fputc(lastSep,f);
 }
 
-void fgSynonymStaticLoad(char **row, struct fgSynonym *ret)
-/* Load a row from fgSynonym table into ret.  The contents of ret will
+void fbSynonymStaticLoad(char **row, struct fbSynonym *ret)
+/* Load a row from fbSynonym table into ret.  The contents of ret will
  * be replaced at the next call to this function. */
 {
 int sizeOne,i;
@@ -145,11 +145,11 @@ ret->geneId = row[0];
 ret->name = row[1];
 }
 
-struct fgSynonym *fgSynonymLoad(char **row)
-/* Load a fgSynonym from row fetched with select * from fgSynonym
- * from database.  Dispose of this with fgSynonymFree(). */
+struct fbSynonym *fbSynonymLoad(char **row)
+/* Load a fbSynonym from row fetched with select * from fbSynonym
+ * from database.  Dispose of this with fbSynonymFree(). */
 {
-struct fgSynonym *ret;
+struct fbSynonym *ret;
 int sizeOne,i;
 char *s;
 
@@ -159,17 +159,17 @@ ret->name = cloneString(row[1]);
 return ret;
 }
 
-struct fgSynonym *fgSynonymLoadAll(char *fileName) 
-/* Load all fgSynonym from a whitespace-separated file.
- * Dispose of this with fgSynonymFreeList(). */
+struct fbSynonym *fbSynonymLoadAll(char *fileName) 
+/* Load all fbSynonym from a whitespace-separated file.
+ * Dispose of this with fbSynonymFreeList(). */
 {
-struct fgSynonym *list = NULL, *el;
+struct fbSynonym *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
 char *row[2];
 
 while (lineFileRow(lf, row))
     {
-    el = fgSynonymLoad(row);
+    el = fbSynonymLoad(row);
     slAddHead(&list, el);
     }
 lineFileClose(&lf);
@@ -177,17 +177,17 @@ slReverse(&list);
 return list;
 }
 
-struct fgSynonym *fgSynonymLoadAllByChar(char *fileName, char chopper) 
-/* Load all fgSynonym from a chopper separated file.
- * Dispose of this with fgSynonymFreeList(). */
+struct fbSynonym *fbSynonymLoadAllByChar(char *fileName, char chopper) 
+/* Load all fbSynonym from a chopper separated file.
+ * Dispose of this with fbSynonymFreeList(). */
 {
-struct fgSynonym *list = NULL, *el;
+struct fbSynonym *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
 char *row[2];
 
 while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
     {
-    el = fgSynonymLoad(row);
+    el = fbSynonymLoad(row);
     slAddHead(&list, el);
     }
 lineFileClose(&lf);
@@ -195,10 +195,10 @@ slReverse(&list);
 return list;
 }
 
-struct fgSynonym *fgSynonymCommaIn(char **pS, struct fgSynonym *ret)
-/* Create a fgSynonym out of a comma separated string. 
+struct fbSynonym *fbSynonymCommaIn(char **pS, struct fbSynonym *ret)
+/* Create a fbSynonym out of a comma separated string. 
  * This will fill in ret if non-null, otherwise will
- * return a new fgSynonym */
+ * return a new fbSynonym */
 {
 char *s = *pS;
 int i;
@@ -211,11 +211,11 @@ ret->name = sqlStringComma(&s);
 return ret;
 }
 
-void fgSynonymFree(struct fgSynonym **pEl)
-/* Free a single dynamically allocated fgSynonym such as created
- * with fgSynonymLoad(). */
+void fbSynonymFree(struct fbSynonym **pEl)
+/* Free a single dynamically allocated fbSynonym such as created
+ * with fbSynonymLoad(). */
 {
-struct fgSynonym *el;
+struct fbSynonym *el;
 
 if ((el = *pEl) == NULL) return;
 freeMem(el->geneId);
@@ -223,21 +223,21 @@ freeMem(el->name);
 freez(pEl);
 }
 
-void fgSynonymFreeList(struct fgSynonym **pList)
-/* Free a list of dynamically allocated fgSynonym's */
+void fbSynonymFreeList(struct fbSynonym **pList)
+/* Free a list of dynamically allocated fbSynonym's */
 {
-struct fgSynonym *el, *next;
+struct fbSynonym *el, *next;
 
 for (el = *pList; el != NULL; el = next)
     {
     next = el->next;
-    fgSynonymFree(&el);
+    fbSynonymFree(&el);
     }
 *pList = NULL;
 }
 
-void fgSynonymOutput(struct fgSynonym *el, FILE *f, char sep, char lastSep) 
-/* Print out fgSynonym.  Separate fields with sep. Follow last field with lastSep. */
+void fbSynonymOutput(struct fbSynonym *el, FILE *f, char sep, char lastSep) 
+/* Print out fbSynonym.  Separate fields with sep. Follow last field with lastSep. */
 {
 int i;
 if (sep == ',') fputc('"',f);
