@@ -7,6 +7,7 @@
 #include "fa.h"
 #include "nib.h"
 #include "psl.h"
+#include "sig.h"
 #include "cheapcgi.h"
 #include "obscure.h"
 #include "genoFind.h"
@@ -15,12 +16,15 @@
 enum {qSizeMax = 20000};
 
 /* Variables that can be set from command line. */
-int tileSize = 12;
+int tileSize = 11;
 int minMatch = 3;
 int minBases = 20;
 int maxGap = 2;
 int repMatch = 1024;
+int dotEvery = 0;
+boolean oneMismatch = FALSE;
 boolean noHead = FALSE;
+char *makeOoc = NULL;
 char *ooc = NULL;
 enum gfType qType = gftDna;
 enum gfType tType = gftDna;
@@ -32,15 +36,21 @@ void usage()
 errAbort(
   "blat - Standalone BLAT fast sequence search command line tool\n"
   "usage:\n"
-  "   blat database query output.psl\n"
+  "   blat database query [-ooc=11.ooc] output.psl\n"
   "where:\n"
   "   database is either a .fa file, a .nib file, or a list of .fa or .nib files\n"
   "   query is similarly a .fa, .nib, or list of .fa or .nib files\n"
+  "   -ooc=11.ooc tells the program to load over-occurring 11-mers from\n"
+  "               and external file.  This will increase the speed\n"
+  "               by a factor of 40 in many cases, but is not required\n"
   "   output.psl is where to put the output.\n"
   "options:\n"
-  "   -tileSize=N sets the size of perfectly matches.  Usually between 8 and 12\n"
-  "               Default is 12 for DNA and 4 for protein.\n"
-  "   -minMatch=N sets the number of perfect tile matches.  Usually set from 2 to 4\n"
+  "   -tileSize=N sets the size of match that triggers an alignment.  \n"
+  "               Usually between 8 and 12\n"
+  "               Default is 11 for DNA and 4 for protein.\n"
+  "   -oneMismatch If present this allows one mismatch in tile and still\n"
+  "                triggers an alignmetns\n"
+  "   -minMatch=N sets the number of tile matches.  Usually set from 2 to 4\n"
   "               Default is 3\n"
   "   -minBases=N sets minimum number of matching bases.  Default is 20\n"
   "   -maxGap=N   sets the size of maximum gap between tiles in a clump.  Usually set\n"
@@ -50,7 +60,9 @@ errAbort(
   "               4096 for tile size 11, 16384 for tile size 10.\n"
   "               Default is 16384\n"
   "   -noHead     suppress .psl header (so it's just a tab-separated file)\n"
-  "   -ooc=N.ooc  Use overused tile file N.ooc\n"
+  "   -ooc=N.ooc  Use overused tile file N.ooc.  N should correspond to \n"
+  "               the tileSize\n"
+  "   -makeOoc=N.ooc Make overused tile file\n"
   "   -t=type     Database type.  Type is one of:\n"
   "                 dna - DNA sequence\n"
   "                 prot - protein sequence\n"
@@ -64,14 +76,10 @@ errAbort(
   "                 rnax - DNA sequence translated in three frames to protein\n"
   "               The default is dna\n"
   "   -prot       Synonymous with -d=prot -q=prot\n"
+  "   -dots=N     Output dot every N sequences to show program's progress\n"
   );
 }
 
-boolean isNib(char *fileName)
-/* Return TRUE if file is a nib file. */
-{
-return endsWith(fileName, ".nib") || endsWith(fileName, ".NIB");
-}
 
 void getFileArray(char *fileName, char ***retFiles, int *retFileCount)
 /* Check if file if .fa or .nib.  If so return just that
@@ -176,10 +184,26 @@ gfClumpFreeList(&clumpList);
 lmCleanup(&lm);
 }
 
+void dotOut()
+/* Put out a dot every now and then if user want's to. */
+{
+static int mod = 1;
+if (dotEvery > 0)
+    {
+    if (--mod <= 0)
+	{
+	fputc('.', stdout);
+	fflush(stdout);
+	mod = dotEvery;
+	}
+    }
+}
+
 void searchOne(bioSeq *seq, struct genoFind *gf, FILE *psl, boolean isProt)
 /* Search for seq on either strand in index. */
 {
 // uglyf("Searching for hits to %s\n", seq->name);
+dotOut();
 if (isProt)
     {
     searchOneProt(seq, gf, psl);
@@ -338,7 +362,8 @@ for (isRc = FALSE; isRc <= 1; ++isRc)
     t3List = seqListToTrans3List(untransList, dbSeqLists, &t3Hash);
     for (frame = 0; frame < 3; ++frame)
 	{
-	gfs[frame] = gfIndexSeq(dbSeqLists[frame], minMatch, maxGap, tileSize, repMatch, ooc, TRUE);
+	gfs[frame] = gfIndexSeq(dbSeqLists[frame], minMatch, maxGap, tileSize, 
+		repMatch, ooc, TRUE, oneMismatch);
 	}
 
     for (i=0; i<queryCount; ++i)
@@ -348,7 +373,7 @@ for (isRc = FALSE; isRc <= 1; ++isRc)
 	lf = lineFileOpen(queryFiles[i], TRUE);
 	while (faSomeSpeedReadNext(lf, &qSeq.dna, &qSeq.size, &qSeq.name, transQuery))
 	    {
-	    // uglyf("Searching %s of %d letters\n", qSeq.name, qSeq.size);
+	    dotOut();
 	    if (qSeq.size > qSizeMax)
 	        {
 		warn("Truncating %s first qSizeMax bases", qSeq.name);
@@ -389,13 +414,20 @@ struct genoFind *gf;
 
 boolean dbIsProt = (tType == gftProt);
 getFileArray(dbFile, &dbFiles, &dbCount);
+if (makeOoc != NULL)
+    {
+    gfMakeOoc(makeOoc, dbFiles, dbCount, tileSize, repMatch, tType);
+    printf("Done making %s\n", makeOoc);
+    exit(0);
+    }
 getFileArray(queryFile, &queryFiles, &queryCount);
 dbSeqList = getSeqList(dbCount, dbFiles, dbHash, dbIsProt);
 
 if ((tType == gftDna && (qType == gftDna || qType == gftRna))
  || (tType == gftProt && qType == gftProt))
     {
-    gf = gfIndexSeq(dbSeqList, minMatch, maxGap, tileSize, repMatch, ooc, dbIsProt);
+    gf = gfIndexSeq(dbSeqList, minMatch, maxGap, tileSize, repMatch, ooc, 
+    	dbIsProt, oneMismatch);
     searchOneIndex(queryCount, queryFiles, gf, pslOut, dbIsProt);
     }
 else if (tType == gftDnaX && qType == gftProt)
@@ -410,6 +442,8 @@ else
     {
     uglyAbort("Don't handle all translated types yet\n");
     }
+if (dotEvery > 0)
+    printf("\n");
 }
 
 int main(int argc, char *argv[])
@@ -471,16 +505,8 @@ tileSize = cgiOptionalInt("tileSize", tileSize);
 minMatch = cgiOptionalInt("minMatch", minMatch);
 minBases = cgiOptionalInt("minBases", minBases);
 maxGap = cgiOptionalInt("maxGap", maxGap);
-if (dIsProtLike)
-    {
-    if (tileSize < 2 || tileSize > 6)
-	errAbort("protein tileSize must be between 2 and 6");
-    }
-else
-    {
-    if (tileSize < 6 || tileSize > 15)
-	errAbort("DNA tileSize must be between 6 and 15");
-    }
+dotEvery = cgiOptionalInt("dots", 0);
+gfCheckTileSize(tileSize, dIsProtLike);
 if (minMatch < 0)
     errAbort("minMatch must be at least 1");
 if (maxGap > 100)
@@ -488,37 +514,54 @@ if (maxGap > 100)
 
 
 /* Set repMatch parameter from command line, or
- * to reasonable value that depends on tile size.
- * ~~~ Need to add proper support for this for protein case. */
+ * to reasonable value that depends on tile size. */
 if (cgiVarExists("repMatch"))
     repMatch = cgiInt("repMatch");
 else
     {
-    if (tileSize == 15)
-        repMatch = 16;
-    else if (tileSize == 14)
-        repMatch = 64;
-    else if (tileSize == 13)
-        repMatch = 256;
-    else if (tileSize == 12)
-        repMatch = 1024;
-    else if (tileSize == 11)
-        repMatch = 4*1024;
-    else if (tileSize == 10)
-        repMatch = 16*1024;
-    else if (tileSize == 9)
-        repMatch = 64*1024;
-    else if (tileSize == 8)
-        repMatch = 256*1024;
-    else if (tileSize == 7)
-        repMatch = 1024*1024;
-    else if (tileSize == 6)
-        repMatch = 4*1024*1024;
+    if (dIsProtLike)
+	{
+	if (tileSize == 3)
+	    repMatch = 600000;
+	else if (tileSize == 4)
+	    repMatch = 30000;
+	else if (tileSize == 5)
+	    repMatch = 1500;
+	else if (tileSize == 6)
+	    repMatch = 75;
+	else if (tileSize <= 7)
+	    repMatch = 10;
+	}
+    else
+	{
+	if (tileSize == 15)
+	    repMatch = 16;
+	else if (tileSize == 14)
+	    repMatch = 64;
+	else if (tileSize == 13)
+	    repMatch = 256;
+	else if (tileSize == 12)
+	    repMatch = 1024;
+	else if (tileSize == 11)
+	    repMatch = 4*1024;
+	else if (tileSize == 10)
+	    repMatch = 16*1024;
+	else if (tileSize == 9)
+	    repMatch = 64*1024;
+	else if (tileSize == 8)
+	    repMatch = 256*1024;
+	else if (tileSize == 7)
+	    repMatch = 1024*1024;
+	else if (tileSize == 6)
+	    repMatch = 4*1024*1024;
+	}
     }
 
 /* Gather last few command line options. */
-noHead = (cgiVarExists("noHead") || cgiVarExists("nohead"));
+noHead = cgiBoolean("noHead");
+oneMismatch = cgiBoolean("oneMismatch");
 ooc = cgiOptionalString("ooc");
+makeOoc = cgiOptionalString("makeOoc");
 
 /* Call routine that does the work. */
 blat(argv[1], argv[2], argv[3]);
