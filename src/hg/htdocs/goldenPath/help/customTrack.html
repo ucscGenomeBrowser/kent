@@ -59,8 +59,10 @@ simple example:</P>
 <P><B>Step 1.</B><BR>
 Formulate the data set as a tab-separated file using one of the
 formats listed in the sections below.
-Here is an example of a simple track that defines blue 1-base tick marks and
-red 100-base features alternating with blank space across chr22:
+Here is an example of a file that defines one track showing blue
+1-base tick marks every 10000 bases at the begining of chromosome
+22 and another track showing red 100-base features alternating with 
+blank space in part of that same region:
 <PRE><TT>browser position chr22:1-20001
 track name=spacer description="Blue ticks every 10000 bases" color=0,0,255
 chr22   0        1
@@ -99,13 +101,14 @@ For example, if the URL for your track file is <tt>http://anyu.edu/mytrack.html<
 you can use the URL<BR>
 <font color="000099"><tt>http://genome.ucsc.edu/cgi-bin/hgTracks?<br>position=chr22&amp;db=hg10&amp;customText=http://anyu.edu/mytrack.html</tt></font>
 <BR>to share your track with others, either by mailing it to colleagues or putting 
-it on your web page.
+it on your web page. Please send the URL for your track along with a description of 
+the methods, data used and format to genome@cse.ucsc.edu
 <BR><BR>
-In this URL example, "db=hg10" specifies the Dec. '02 freeze and
+In this URL example, "db=hg10" specifies the Dec. 2001 freeze and
 "position=chr22" tells the browser where to start. The customText variable
 tells the browser where to find your track file.
 <BR><BR>
-You can include features on several chromosome in mytrack.html. When the
+You can include features on several chromosomes in mytrack.html. When the
 browser is started with a track that includes multiple chromosomes, you will
 be able to switch between chromosomes while you are browsing and still see
 your custom annotations.</P>
@@ -124,10 +127,11 @@ your custom annotations.</P>
 	</TD></TR></TABLE>
 	<TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0><TR><TH HEIGHT=10></TH></TR>
 	<TR><TD WIDTH=10>&nbsp;</TD><TD>
-<P>Lines that begin with the word 'browser' control the overall browser display. The second word 
-   in the line specifies what to control and may be one of the following:
+<P>Lines in the file such as 'browser position chr22:1-20001' that begin with the 
+   word 'browser' control the overall browser display. The second word in the 
+   line specifies what to control and may be one of the following:
 <UL>
-   <LI>position - Describes the part of the genome the browser will display in 
+   <LI>position - Describes the part of the genome the browser will initially display in 
        chromosome:start-end format.  
    <LI>pix width - Sets the display to width pixels.
    <LI>hide all - Hides all tracks except for custom ones.
