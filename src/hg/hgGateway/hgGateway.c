@@ -12,7 +12,7 @@
 #include "hgFind.h"
 #include "hCommon.h"
 
-static char const rcsid[] = "$Id: hgGateway.c,v 1.50 2003/06/21 03:04:53 kent Exp $";
+static char const rcsid[] = "$Id: hgGateway.c,v 1.51 2003/06/21 03:19:20 kent Exp $";
 
 struct cart *cart = NULL;
 struct hash *oldVars = NULL;
@@ -42,7 +42,7 @@ char *position = cloneString(cartOptionalString(cart, "position"));
 This was done in order to be able to flexibly arrange the UI HTML
 */
 char *onChangeDB = "onchange=\"document.orgForm.db.value = document.mainForm.db.options[document.mainForm.db.selectedIndex].value; document.orgForm.submit();\"";
-char *onChangeOrg = "onchange=\"document.orgForm.org.value = document.mainForm.org.options[document.mainForm.org.selectedIndex].value; document.orgForm.db.value = 0; document.orgForm.submit();\"";
+char *onChangeOrg = "onchange=\"document.orgForm.org.value = document.mainForm.org.options[document.mainForm.org.selectedIndex].value; document.orgForm.submit();\"";
 
 /* If user has changed organisms then we forget their old database. */
 if (organism == NULL || (oldOrganism != NULL && !sameString(oldOrganism, organism)))
