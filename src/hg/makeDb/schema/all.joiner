@@ -23,7 +23,7 @@ set canFam canFam1
 set droYak droYak1
 set anoGam anoGam1
 set cioSav cioSav1
-set tetNig1 tetNig1
+set tetNig tetNig1
 
 # Define all organism/assembly-specific databases.
 set gbd $hg,$mm,$rn,$fr,$ce,$cb,$dm,$dp,$sacCer,$panTro,$galGal,$ci,$danRer,$canFam,$droYak,$anoGam,$cioSav,$tetNig
