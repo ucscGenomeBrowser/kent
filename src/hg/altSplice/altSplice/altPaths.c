@@ -8,7 +8,7 @@
 #include "obscure.h"
 #include "dystring.h"
 
-static char const rcsid[] = "$Id: altPaths.c,v 1.3 2004/07/13 00:22:38 sugnet Exp $";
+static char const rcsid[] = "$Id: altPaths.c,v 1.4 2004/07/15 22:26:04 sugnet Exp $";
 
 static struct optionSpec optionSpecs[] = 
 /* Our acceptable options to be called with. */
@@ -1108,7 +1108,7 @@ struct path *path = NULL;
 /* Initialize first splice. */
 splice = newSplice(agx, 0, sink, source);
 splice->paths = newPath(sink - source);
-
+splice->pathCount++;
 /* Start searching for alt-splicing events. */
 for(vertIx = source; vertIx <= sink; )
     {
@@ -1143,6 +1143,7 @@ for(vertIx = source; vertIx <= sink; )
 	/* Initialize next control path. */
 	splice = newSplice(agx, vertIx, sink, source);
 	splice->paths = newPath(max(sink - vertIx,2));
+	splice->pathCount++;
 	}
     else 
 	{
@@ -1182,7 +1183,8 @@ for(splice = spliceList; splice != NULL; splice = splice->next)
 	    bedFree(&bed);
 	    }
 	}
-    spliceTabOut(splice, spliceOut);
+    if(splice->pathCount != 0)
+	spliceTabOut(splice, spliceOut);
     }
 
 /* Cleanup. */
