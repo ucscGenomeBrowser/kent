@@ -373,27 +373,39 @@ for (;;)
     }
 }
 
-char *remapRangeList(struct chain *chain, struct range *rangeList,
-	int *pThickStart, int *pThickEnd)
+void remapRangeList(struct chain *chain, struct range **pRangeList,
+	int *pThickStart, int *pThickEnd, 
+	struct range **retGood, struct range **retBad, char **retError)
 /* Remap range list through chain.  Return error message on failure,
  * NULL on success. */
 {
 struct boxIn *b = chain->blockList;
-struct range *r = rangeList;
+struct range *r = *pRangeList, *nextR, *goodList = NULL, *badList = NULL;
 int bDiff, rStart = 0;
 bool gotStart = FALSE;
-int startCount = 0, endCount = 0;
-int rCount = slCount(rangeList);
+int rCount = slCount(r), goodCount = 0;
 int thickStart = *pThickStart, thickEnd = *pThickEnd;
 bool gotThickStart = FALSE, gotThickEnd = FALSE;
 bool needThick = (thickStart != thickEnd);
 boolean done = FALSE;
+char *err = NULL;
 
-if (b == NULL || r == NULL)
-    return NULL;
+*pRangeList = NULL;
+if (r == NULL)
+    {
+    *retGood = *retBad = NULL;
+    *retError = NULL;
+    return;
+    }
+if (b == NULL)
+    {
+    *retGood = NULL;
+    *retBad = r;
+    *retError = "Empty block list in intersecting chain";
+    }
+nextR = r->next;
 for (;;)
     {
-
     while (b->tEnd <= r->start)
 	{
 	b = b->next;
@@ -407,12 +419,14 @@ for (;;)
 	break;
     while (r->end <= b->tStart)
 	{
-	r = r->next;
+	slAddHead(&badList, r);
+	r = nextR;
 	if (r == NULL)
 	    {
 	    done = TRUE;
 	    break;
 	    }
+	nextR = r->next;
 	gotStart = FALSE;
 	}
     if (done) 
@@ -435,7 +449,6 @@ for (;;)
 	gotStart = TRUE;
 	bDiff = b->qStart - b->tStart;
 	rStart = r->start + bDiff;
-	++startCount;
 	}
     if (b->tStart < r->end && r->end <= b->tEnd)
 	{
@@ -444,15 +457,21 @@ for (;;)
 	    {
 	    r->start = rStart;
 	    r->end += bDiff;
-	    ++endCount;
+	    slAddHead(&goodList, r);
+	    ++goodCount;
 	    }
-	r = r->next;
-	gotStart = FALSE;
+	else
+	    {
+	    slAddHead(&badList, r);
+	    }
+	r = nextR;
 	if (r == NULL)
 	    {
 	    done = TRUE;
 	    break;
 	    }
+	nextR = r->next;
+	gotStart = FALSE;
 	}
     if (done) 
 	break;
@@ -468,18 +487,24 @@ for (;;)
     if (done) 
 	break;
     }
+slReverse(&goodList);
+slReverse(&badList);
 if (needThick)
     {
     if (!gotThickStart || !gotThickEnd)
-	return "Can't find thickStart/thickEnd";
+	{
+	err = "Can't find thickStart/thickEnd";
+	}
     }
 else
     {
-    *pThickStart = *pThickEnd = rangeList->start;
+    *pThickStart = *pThickEnd = goodList->start;
     }
-if (!( startCount == rCount && endCount == rCount))
-    return "Boundary problem";
-return NULL;
+if (goodCount != rCount)
+    err = "Boundary problem";
+*retGood = goodList;
+*retBad = badList;
+*retError = err;
 }
 
 #ifdef DEBUG
@@ -513,7 +538,7 @@ struct chain *chainList = NULL,  *chain, *subChain, *freeChain;
 int bedSize = sumBedBlocks(bed);
 struct binElement *binList;
 struct binElement *el;
-struct range *rangeList, *range;
+struct range *rangeList, *badRanges = NULL, *range;
 char *error = NULL;
 int i, start, end = 0;
 int thickStart = bed->thickStart;
@@ -548,7 +573,10 @@ if (chain->score  < minMatch * bedSize)
 
 /* Call subroutine to remap range list. */
 if (error == NULL)
-    error = remapRangeList(chain, rangeList, &thickStart, &thickEnd);
+    {
+    remapRangeList(chain, &rangeList, &thickStart, &thickEnd, 
+    	&rangeList, &badRanges, &error);
+    }
 
 
 /* Convert rangeList back to bed blocks.  Also calculate start and end. */
@@ -579,8 +607,8 @@ if (error == NULL)
     bed->thickStart = thickStart;
     bed->thickEnd = thickEnd;
     }
-
 slFreeList(&rangeList);
+slFreeList(&badRanges);
 slFreeList(&binList);
 return error;
 }
