@@ -13,7 +13,7 @@
 #include "ra.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: hgNear.c,v 1.29 2003/06/25 21:47:28 kent Exp $";
+static char const rcsid[] = "$Id: hgNear.c,v 1.30 2003/06/25 21:49:41 kent Exp $";
 
 char *excludeVars[] = { "submit", "Submit", confVarName, 
 	defaultConfName, hideAllConfName, 
@@ -402,7 +402,7 @@ hPrintf("<TR><TD ALIGN=CENTER>");
 
 /* Do sort by drop-down */
     {
-    static char *menu[] = {"expression", "homology", "name", "position", "search"};
+    static char *menu[] = {"expression", "homology", "name", "position", "advanced search"};
     int menuSize = ArraySize(menu);
     if (!gotAdvSearch())
 	menuSize -= 1;
@@ -715,7 +715,7 @@ else if (sameString(groupOn, "position"))
     return getPositionNeighbors(conn);
 else if (sameString(groupOn, "name"))
     return getNameNeighbors(conn);
-else if (sameString(groupOn, "search"))
+else if (sameString(groupOn, "advanced search"))
     return getSearchNeighbors(colList, conn);
 else
     {

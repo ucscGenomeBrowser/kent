@@ -138,7 +138,7 @@ void doAdvancedSearchSubmit(struct sqlConnection *conn, struct column *colList)
 {
 if (gotAdvSearch())
     {
-    groupOn = "search";
+    groupOn = "advanced search";
     cartSetString(cart, groupVarName, groupOn);
     }
 doSearch(conn, colList);
