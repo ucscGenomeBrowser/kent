@@ -43,6 +43,8 @@ void printGenomeListHtml(char *db, char *onChangeText);
  * onChange javascript.
  */
 
+void printSomeGenomeListHtmlNamed(char *customOrgCgiName, char *db, struct dbDb *dbList, char *OnChangeText);
+
 void printSomeGenomeListHtml(char *db, struct dbDb *dbList, char *onChangeText);
 /* Prints to stdout the HTML to render a dropdown list 
  * containing a list of the possible genomes to choose from.
@@ -83,6 +85,11 @@ param javascript - The javascript text for the select box
  */
 
 void printSomeAssemblyListHtml(char *db, struct dbDb *dbList, char *javascript);
+/* Find all assemblies from the list that are active, and print
+ * HTML to render dropdown list 
+ * param db - default assembly.  If NULL, no default selection */
+
+void printSomeAssemblyListHtmlNamed(char *name, char *db, struct dbDb *dbList, char *onChangeText);
 /* Find all assemblies from the list that are active, and print
  * HTML to render dropdown list 
  * param db - default assembly.  If NULL, no default selection */

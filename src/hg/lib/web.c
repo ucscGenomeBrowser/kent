@@ -9,7 +9,7 @@
 #include "axtInfo.h"
 #include "hgColors.h"
 
-static char const rcsid[] = "$Id: web.c,v 1.69 2005/01/25 07:28:04 donnak Exp $";
+static char const rcsid[] = "$Id: web.c,v 1.70 2005/01/26 18:50:41 aamp Exp $";
 
 /* flag that tell if the CGI header has already been outputed */
 boolean webHeadAlreadyOutputed = FALSE;
@@ -423,7 +423,7 @@ cgiMakeDropListFull(cladeCgiName, labels, clades, numClades,
 		    defaultLabel, onChangeText);
 }
 
-void printSomeGenomeListHtml(char *db, struct dbDb *dbList, char *onChangeText)
+void printSomeGenomeListHtmlNamed(char *customOrgCgiName, char *db, struct dbDb *dbList, char *onChangeText)
 /* Prints to stdout the HTML to render a dropdown list 
  * containing a list of the possible genomes to choose from.
  * param db - a database whose genome will be the default genome.
@@ -451,9 +451,20 @@ for (cur = dbList; cur != NULL; cur = cur->next)
         }
     }
 
-cgiMakeDropListFull(orgCgiName, orgList, values, numGenomes, 
+if (customOrgCgiName != NULL)
+    cgiMakeDropListFull(customOrgCgiName, orgList, values, numGenomes, 
                         selGenome, onChangeText);
+else
+    cgiMakeDropListFull(orgCgiName, orgList, values, numGenomes, 
+                        selGenome, onChangeText);
+    
 hashFree(&hash);
+}
+
+void printSomeGenomeListHtml(char *db, struct dbDb *dbList, char *onChangeText)
+/* Prints the dropdown list using the orgCgiName */
+{
+printSomeGenomeListHtmlNamed(NULL, db, dbList, onChangeText);
 }
 
 void printGenomeListHtml(char *db, char *onChangeText)
