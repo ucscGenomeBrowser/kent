@@ -12,7 +12,7 @@ O = affyAtlas.o affy10KDetails.o affy120KDetails.o affyOffset.o affyPairs.o \
     cart.o cartDb.o celeraCoverage.o celeraDupPositive.o cgh.o chainCart.o \
     chainDb.o chainLink.o chainNet.o chainNetDbLoad.o chr18deletions.o \
     chromInfo.o chromInserts.o chromKeeper.o \
-    clonePos.o codeBlast.o columnInfo.o coordConv.o \
+    clonePos.o codeBlast.o codeBlastScore.o columnInfo.o coordConv.o \
     cpgIsland.o cpgIslandExt.o ctgPos.o ctgPos2.o customTrack.o cytoBand.o \
     dbDb.o dbSnpRs.o defaultDb.o dnaMotif.o dnaProbe.o \
     encodeErge.o encodeErgeHssCellLines.o\
