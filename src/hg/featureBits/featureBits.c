@@ -26,6 +26,7 @@ errAbort(
   "Options:\n"
   "   -bed=output.bed   Put intersection into bed format\n"
   "   -fa=output.fa     Put sequence in intersection into .fa file\n"
+  "   -faMerge          For fa output merge overlapping features.\n"
   "   -minSize=N        Minimum size to output (default 1)\n"
   "   -chrom=chrN       Restrict to one chromosome\n"
   "You can include a '!' before a table name to negate it.\n"
@@ -201,6 +202,14 @@ lineFileClose(&lf);
 }
 
 
+void isolateTrackPartOfSpec(char *spec, char track[512])
+/* Convert something like track:exon to just track */
+{
+char *s;
+strcpy(track, spec);
+s = strrchr(track, ':');
+if (s != NULL) *s = 0;
+}
 
 void orTable(Bits *acc, char *track, char *chrom, 
 	int chromSize, struct sqlConnection *conn)
@@ -210,11 +219,8 @@ boolean hasBin;
 char t[512], *s;
 char table[512];
 boolean isSplit;
-strcpy(t, track);
-s = strrchr(t, ':');
-if (s != NULL) *s = 0;
-isSplit = hFindSplitTable(chrom, t, table, &hasBin);
-s = strchr(track, '.');
+isolateTrackPartOfSpec(track, t);
+s = strchr(t, '.');
 if (s != NULL)
     {
     if (sameString(s, ".psl"))
@@ -228,6 +234,7 @@ if (s != NULL)
     }
 else
     {
+    isSplit = hFindSplitTable(chrom, t, table, &hasBin);
     if (hTableExists(table))
 	fbOrTableBits(acc, track, chrom, chromSize, conn);
     }
@@ -283,6 +290,53 @@ bitFree(&acc);
 bitFree(&bits);
 }
 
+void chromFeatureSeq(struct sqlConnection *conn, 
+	char *chrom, char *trackSpec,
+	FILE *bedFile, FILE *faFile,
+	int *retItemCount, int *retBaseCount)
+/* Write out sequence file for features from one chromosome.
+ * This separate routine handles the non-merged case.  It's
+ * reason for being is so that the feature names get preserved. */
+{
+boolean hasBin;
+char t[512], *s = NULL;
+char table[512];
+boolean isSplit;
+struct featureBits *fbList = NULL, *fb;
+
+if (trackSpec[0] == '!')
+   errAbort("Sorry, '!' not available with fa output unless you use faMerge");
+isolateTrackPartOfSpec(trackSpec, t);
+s = strchr(t, '.');
+if (s != NULL)
+    errAbort("Sorry, only database (not file) tracks allowed with "
+             "fa output unless you use faMerge");
+isSplit = hFindSplitTable(chrom, t, table, &hasBin);
+fbList = fbGetRange(trackSpec, chrom, 0, hChromSize(chrom));
+for (fb = fbList; fb != NULL; fb = fb->next)
+    {
+    int s = fb->start, e = fb->end;
+    if (bedFile != NULL)
+	{
+	fprintf(bedFile, "%s\t%d\t%d\t%s", 
+	    fb->chrom, fb->start, fb->end, fb->name);
+	if (fb->strand != '?')
+	    fprintf(bedFile, "\t%c", fb->strand);
+	fprintf(bedFile, "\n");
+	}
+    if (faFile != NULL)
+        {
+	struct dnaSeq *seq = hDnaFromSeq(chrom, s, e, dnaLower);
+	if (fb->strand == '-')
+	    reverseComplement(seq->dna, seq->size);
+	faWriteNext(faFile, fb->name, seq->dna, seq->size);
+	freeDnaSeq(&seq);
+	}
+    }
+featureBitsFreeList(&fbList);
+}
+
+
 void featureBits(char *database, int tableCount, char *tables[])
 /* featureBits - Correlate tables via bitmap projections and booleans. */
 {
@@ -290,29 +344,57 @@ struct sqlConnection *conn = NULL;
 char *bedName = cgiOptionalString("bed"), *faName = cgiOptionalString("fa");
 FILE *bedFile = NULL, *faFile = NULL;
 struct slName *allChroms = NULL, *chrom = NULL;
-double totalBases = 0, totalBits = 0;
+boolean faIndependent = FALSE;
 
 hSetDb(database);
 if (bedName)
     bedFile = mustOpen(bedName, "w");
 if (faName)
+    {
+    boolean faMerge = cgiBoolean("faMerge");
     faFile = mustOpen(faName, "w");
+    if (tableCount > 1)
+        {
+	if (!faMerge)
+	    errAbort("For fa output of multiple tables you must use the "
+	             "faMerge option");
+	}
+    faIndependent = (!faMerge);
+    }
+
 clChrom = cgiUsualString("chrom", clChrom);
 if (sameWord(clChrom, "all"))
     allChroms = hAllChromNames();
 else
     allChroms = newSlName(clChrom);
 conn = hAllocConn();
-for (chrom = allChroms; chrom != NULL; chrom = chrom->next)
+if (!faIndependent)
     {
-    int chromSize, chromBitSize;
-    chromFeatureBits(conn, chrom->name, tableCount, tables,
-        bedFile, faFile, &chromSize, &chromBitSize);
-    totalBases += chromSize;
-    totalBits += chromBitSize;
+    double totalBases = 0, totalBits = 0;
+    for (chrom = allChroms; chrom != NULL; chrom = chrom->next)
+	{
+	int chromSize, chromBitSize;
+	chromFeatureBits(conn, chrom->name, tableCount, tables,
+	    bedFile, faFile, &chromSize, &chromBitSize);
+	totalBases += chromSize;
+	totalBits += chromBitSize;
+	}
+    printf("%1.0f bases of %1.0f (%3.2f%%) in intersection\n",
+	totalBits, totalBases, 100.0*totalBits/totalBases);
     }
-printf("%1.0f bases of %1.0f (%3.2f%%) in intersection\n",
-    totalBits, totalBases, 100.0*totalBits/totalBases);
+else
+    {
+    int totalItems = 0;
+    double totalBases = 0;
+    int itemCount, baseCount;
+    for (chrom = allChroms; chrom != NULL; chrom = chrom->next)
+        {
+	chromFeatureSeq(conn, chrom->name, tables[0],
+		bedFile, faFile, &itemCount, &baseCount);
+	totalBases += baseCount;
+	totalItems += itemCount;
+	}
+    }
 hFreeConn(&conn);
 }
 

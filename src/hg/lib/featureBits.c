@@ -10,6 +10,30 @@
 #include "rmskOut.h"
 #include "featureBits.h"
 
+void featureBitsFree(struct featureBits **pBits)
+/* Free up feature bits. */
+{
+struct featureBits *bits;
+if ((bits = *pBits) != NULL)
+    {
+    freeMem(bits->name);
+    freeMem(bits->chrom);
+    freez(pBits);
+    }
+}
+
+void featureBitsFreeList(struct featureBits **pList)
+/* Free up a list of featureBits */
+{
+struct featureBits *el, *next;
+for (el = *pList; el != NULL; el = next)
+    {
+    next = el->next;
+    freeMem(el);
+    }
+*pList = NULL;
+}
+
 static boolean fetchQualifiers(char *type, char *qualifier, char *extra, int *retSize)
 /* Return true if qualifier is of type.  Convert extra to *retSize. */
 {
@@ -61,12 +85,19 @@ hFreeConn(&conn);
 return understand;
 }
 
-static void fbAddFeature(struct featureBits **pList, int start, int size, int winStart, int winEnd)
-/* Add new feature to head of list. */
+static void fbAddFeature(struct featureBits **pList, char *name,
+	char *chrom, int start, int size, char strand, 
+	int winStart, int winEnd)
+/* Add new feature to head of list.  Name can be NULL. */
 {
 struct featureBits *fb;
 int s, e;
+char nameBuf[512];
 
+if (name == NULL)
+    sprintf(nameBuf, "%s:%d-%d", chrom, start+1, start+size);
+else
+    sprintf(nameBuf, "%s %s:%d-%d", name, chrom, start+1, start+size);
 s = start;
 e = s + size;
 if (s < winStart) s = winStart;
@@ -74,13 +105,18 @@ if (e > winEnd) e = winEnd;
 if (s < e)
     {
     AllocVar(fb);
+    fb->name = cloneString(nameBuf);
+    fb->chrom = cloneString(chrom);
     fb->start = s;
     fb->end = e;
+    fb->strand = strand;
     slAddHead(pList, fb);
     }
 }
 
-void setRangePlusExtra(struct featureBits **pList, int s, int e, int extraStart, int extraEnd, 
+static void setRangePlusExtra(struct featureBits **pList, 
+	char *name, char *chrom, int s, int e, char strand, 
+	int extraStart, int extraEnd, 
 	int winStart, int winEnd)
 /* Set range between s and e plus possibly some extra. */
 {
@@ -88,11 +124,21 @@ int w;
 s -= extraStart;
 e += extraEnd;
 w = e - s;
-fbAddFeature(pList, s, w, winStart,winEnd);
+fbAddFeature(pList, name, chrom, s, w, strand, winStart,winEnd);
 }
 
 
-static struct featureBits *fbPslBits(int winStart, int winEnd, struct sqlResult *sr, int rowOffset,
+char frForStrand(char strand)
+/* Return 'r' for '-', else 'f' */
+{
+if (strand == '-')
+    return 'r';
+else
+    return 'f';
+}
+
+static struct featureBits *fbPslBits(int winStart, int winEnd, 
+	struct sqlResult *sr, int rowOffset,
 	char *qualifier, char *extra)
 /* Given a sqlQuery result on a psl table - or results exon by exon into bits. */
 {
@@ -103,19 +149,36 @@ boolean doUp, doExon;
 int promoSize, extraSize = 0;
 struct featureBits *fbList = NULL, *fb;
 int chromSize;
+char *chrom;
+char nameBuf[512];
 
 doUp = upstreamQualifier(qualifier, extra, &promoSize);
 doExon = exonQualifier(qualifier, extra, &extraSize);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     psl = pslLoad(row+rowOffset);
+    chrom = psl->tName;
     chromSize = psl->tSize;
     if (doUp)
         {
+	int start;
+	char strand;
+
+
 	if (psl->strand[0] == '-')
-	    fbAddFeature(&fbList, psl->tEnd, promoSize, winStart, winEnd);
+	    {
+	    start = psl->tEnd;
+	    strand = '-';
+	    }
 	else
-	    fbAddFeature(&fbList, psl->tStart-promoSize, promoSize, winStart, winEnd);
+	    {
+	    start = psl->tStart - promoSize;
+	    strand = '+';
+	    }
+	sprintf(nameBuf, "%s_up_%d_%s_%d_%c", 
+		psl->qName, promoSize, chrom, start+1, frForStrand(strand));
+	fbAddFeature(&fbList, nameBuf, chrom, start, promoSize, strand, 
+		winStart, winEnd);
 	}
     else
 	{
@@ -129,7 +192,8 @@ while ((row = sqlNextRow(sr)) != NULL)
 		w = blockSizes[i];
 		s = chromSize - tStarts[i] - w;
 		e = s + w;
-		setRangePlusExtra(&fbList, s, e, (i == 0 ? 0 : extraSize), 
+		setRangePlusExtra(&fbList, NULL, chrom, s, e, '-', 
+			(i == 0 ? 0 : extraSize), 
 			(i == blockCount-1 ?  0 : extraSize), winStart, winEnd);
 		}
 	    }
@@ -139,7 +203,8 @@ while ((row = sqlNextRow(sr)) != NULL)
 		{
 		s = tStarts[i];
 		e = s + blockSizes[i];
-		setRangePlusExtra(&fbList, s, e, (i == 0 ? 0 : extraSize), 
+		setRangePlusExtra(&fbList, NULL, chrom, s, e, '+', 
+			(i == 0 ? 0 : extraSize), 
 			(i == blockCount-1 ? 0 : extraSize), winStart, winEnd);
 		}
 	    }
@@ -161,14 +226,17 @@ struct featureBits *fbList = NULL;
 while ((row = sqlNextRow(sr)) != NULL)
     {
     bed = bedLoad3(row+rowOffset);
-    fbAddFeature(&fbList, bed->chromStart, bed->chromEnd - bed->chromStart, winStart, winEnd);
+    fbAddFeature(&fbList, NULL, bed->chrom, 
+    	bed->chromStart, bed->chromEnd - bed->chromStart, 
+    	'?', winStart, winEnd);
     bedFree(&bed);
     }
 slReverse(&fbList);
 return fbList;
 }
 
-static struct featureBits *fbGenePredBits(int winStart, int winEnd, struct sqlResult *sr, int rowOffset,
+static struct featureBits *fbGenePredBits(int winStart, int winEnd, 
+	struct sqlResult *sr, int rowOffset,
 	char *qualifier, char *extra)
 /* Given a sqlQuery result on a genePred table - or results of whole thing. */
 {
@@ -176,8 +244,9 @@ struct genePred *gp;
 char **row;
 int i, count, s, e, w, *starts, *ends;
 boolean doUp, doCds = FALSE, doExon;
-int promoSize, extraSize = 0;
+int promoSize = 0, extraSize = 0;
 struct featureBits *fbList = NULL;
+char nameBuf[512];
 
 if ((doUp = upstreamQualifier(qualifier, extra, &promoSize)) != FALSE)
     {
@@ -193,10 +262,22 @@ while ((row = sqlNextRow(sr)) != NULL)
     gp = genePredLoad(row+rowOffset);
     if (doUp)
 	{
+	int start;
+	char strand;
 	if (gp->strand[0] == '-')
-	    fbAddFeature(&fbList, gp->txEnd, promoSize, winStart, winEnd);
+	    {
+	    start = gp->txEnd;
+	    strand = '-';
+	    }
 	else
-	    fbAddFeature(&fbList, gp->txStart-promoSize, promoSize, winStart, winEnd);
+	    {
+	    start = gp->txStart - promoSize;
+	    strand = '+';
+	    }
+	sprintf(nameBuf, "%s_up_%d_%s_%d_%c", 
+		gp->name, promoSize, gp->chrom, start+1, frForStrand(strand));
+	fbAddFeature(&fbList, nameBuf, gp->chrom, start, promoSize, strand, 
+	    winStart, winEnd);
 	}
     else
 	{
@@ -212,7 +293,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 		if (s < gp->cdsStart) s = gp->cdsStart;
 		if (e > gp->cdsEnd) e = gp->cdsEnd;
 		}
-	    setRangePlusExtra(&fbList, s, e, 
+	    setRangePlusExtra(&fbList, NULL, gp->chrom, s, e, gp->strand[0],
 	    	(i == 0 ? 0 : extraSize), 
 		(i == count-1 ? 0 : extraSize), winStart, winEnd);
 	    }
@@ -223,7 +304,8 @@ slReverse(&fbList);
 return fbList;
 }
 
-static struct featureBits *fbRmskBits(int winStart, int winEnd, struct sqlResult *sr, int rowOffset,
+static struct featureBits *fbRmskBits(int winStart, int winEnd, 
+	struct sqlResult *sr, int rowOffset,
 	char *qualifier, char *extra)
 /* Given a sqlQuery result on a RepeatMasker table - or results of whole thing. */
 {
@@ -234,7 +316,9 @@ struct featureBits *fbList = NULL;
 while ((row = sqlNextRow(sr)) != NULL)
     {
     rmskOutStaticLoad(row+rowOffset, &ro);
-    fbAddFeature(&fbList, ro.genoStart, ro.genoEnd - ro.genoStart, winStart, winEnd);
+    fbAddFeature(&fbList, NULL, ro.genoName, 
+    	ro.genoStart, ro.genoEnd - ro.genoStart, ro.strand[0],
+    	winStart, winEnd);
     }
 slReverse(&fbList);
 return fbList;
