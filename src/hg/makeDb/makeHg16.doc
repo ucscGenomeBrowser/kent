@@ -5663,3 +5663,22 @@ EOF
     gzip *.txt *.truncated
     #	I'll bet you could gzip the .wig files too and zcat them
     #	into hgLoadWiggle
+
+# CREATE chimpSimpleDiff TRACK AND TABLE
+    # Convert chimp quality scores from uncompressed contig to compressed
+    # supercontig format.  This will take half an hour or so.
+    cd /cluster/data/pt0
+    zcat contigs.quals.gz | qaToQac stdin stdout | \
+        chimpSuperQuals assembly.agp stdin scaffolds.qac
+
+    # Make single base pair high quality differences into a bed file
+    # and load into database
+    cd /cluster/data/hg16/bed
+    mkdir chimpSimpleDiff
+    cd chimpSimpleDiff
+    chimpHiQualDiffs /cluster/data/pt0/bed/blastz-blatHg16/axtBest \
+    	/cluster/data/pt0/scaffolds.qac chimpSimpleDiff.bed
+    sed 's/simpleNucDiff/chimpSimpleDiff/' ~/kent/src/hg/lib/simpleNucDiff.sql > \
+    	chimpSimpleDiff.sql
+    hgLoadBed -sqlTable=simpleNucDiff.sql hg166 chimpSimpleDiff.bed
+    
