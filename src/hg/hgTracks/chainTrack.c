@@ -14,7 +14,7 @@
 #include "chainDb.h"
 #include "chainCart.h"
 
-static char const rcsid[] = "$Id: chainTrack.c,v 1.21 2004/07/26 19:27:18 hiram Exp $";
+static char const rcsid[] = "$Id: chainTrack.c,v 1.22 2004/09/05 18:25:12 baertsch Exp $";
 
 
 struct cartOptions
@@ -39,12 +39,13 @@ struct dyString *query = newDyString(1024);
 
 if (chainId == NULL)
     dyStringPrintf(query, 
-	"select chainId,tStart,tEnd,qStart from %sLink where ",fullName);
+	"select chainId,tStart,tEnd,qStart from %sLink force index (bin) where ",fullName);
 else
     dyStringPrintf(query, 
-	"select chainId, tStart,tEnd,qStart from %sLink where chainId=%s and ",fullName,chainId);
+	"select chainId, tStart,tEnd,qStart from %sLink force index (bin) where chainId=%s and ",fullName,chainId);
 hAddBinToQuery(start, end, query);
 dyStringPrintf(query, "tStart<%u and tEnd>%u", end, start);
+//printf("%s<br>\n",query->string);
 sr = sqlGetResult(conn, query->string);
 
 /* Loop through making up simple features and adding them
@@ -146,6 +147,11 @@ if (hash->size)
 	start = seqStart - extra;
 	extra = (STARTSLOP < maxOverRight) ? STARTSLOP : maxOverRight;
 	end = seqEnd + extra;
+        if (start < 0)
+            {
+            printf("<br>ERROR: start coordinate is negative %d - %d extra %d\n",seqStart,seqEnd,extra);
+            start = 0;
+            }
 	doQuery(conn, fullName, lm,  hash, start, end, NULL);
 
 	for (lf = tg->items; lf != NULL; lf = lf->next)
@@ -166,7 +172,10 @@ if (hash->size)
 		extra *= 10;
 		start = end;
 		end = start + extra;
-		doQuery(conn, fullName, lm,  hash, start, end, lf->extra);
+                if (start < 0 || end < 0)
+                    printf("<br>ERROR: start coordinate is negative %d - %d extra %d\n",
+                            seqStart,seqEnd,extra);
+                doQuery(conn, fullName, lm,  hash, start, end, lf->extra);
 		if (lf->components != NULL)
 		    slSort(&lf->components, linkedFeaturesCmpStart);
 		}
@@ -182,6 +191,12 @@ if (hash->size)
 		extra *= 10;
 		end = start;
 		start = end - extra;
+                if (start < 0)
+                    {
+                    printf("<br>ERROR: start coordinate is negative %d - %d extra %d\n",
+                            seqStart,seqEnd,extra);
+                    start = 0;
+                    }
 		doQuery(conn, fullName, lm,  hash, start, end, lf->extra);
 		slSort(&lf->components, linkedFeaturesCmpStart);
 		}
