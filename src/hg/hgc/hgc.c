@@ -142,7 +142,7 @@
 #include "bed6FloatScore.h"
 #include "pscreen.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.736 2004/09/01 18:05:13 braney Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.737 2004/09/02 00:29:09 braney Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -13818,9 +13818,12 @@ char *gene = NULL, *pos = NULL;
 char *ptr;
 char *buffer;
 boolean isDm = FALSE;
+boolean isSacCer = FALSE;
 char *pred = trackDbSettingOrDefault(tdb, "pred", "NULL");
 char *blastRef = trackDbSettingOrDefault(tdb, "blastRef", "NULL");
 
+if (sameString("blastSacCer1SG", tdb->tableName))
+    isSacCer = TRUE;
 if (sameString("blastDm1FB", tdb->tableName))
     isDm = TRUE;
 buffer = needMem(strlen(itemName)+ 1);
@@ -13852,12 +13855,27 @@ else if ((pos = strchr(acc, '.')) != NULL)
     }
 if (isDm == TRUE)
     cartWebStart(cart, "FlyBase Protein %s", useName);
+else if (isSacCer == TRUE)
+    cartWebStart(cart, "Yeast Protein %s", useName);
 else
     cartWebStart(cart, "Human Protein %s", useName);
 sprintf(uiState, "%s=%u", cartSessionVarName(), cartSessionId(cart));
 if (pos != NULL)
     {
-    if (isDm == FALSE)
+    if (isDm == TRUE)
+	{
+	printf("<B>D. melanogaster position:</B>\n");
+	printf("<A TARGET=_blank HREF=\"%s?position=%s&db=%s\">",
+	    hgTracksName(), pos, "dm1");
+	}
+    else if (isSacCer == TRUE)
+	{
+	char *assembly = "sacCer1";
+	printf("<B>Yeast position:</B>\n");
+	printf("<A TARGET=_blank HREF=\"%s?position=%s&db=%s\">",
+	    hgTracksName(), pos, assembly);
+	}
+    else
 	{
 	char *assembly;
 	if (sameString("blastHg16KG", tdb->tableName))
@@ -13865,26 +13883,22 @@ if (pos != NULL)
 	else
 	    assembly = "hg17";
 	printf("<B>Human position:</B>\n");
-	printf("<A TARGET=_BLANK HREF=\"%s?position=%s&db=%s\">",
+	printf("<A TARGET=_blank HREF=\"%s?position=%s&db=%s\">",
 	    hgTracksName(), pos, assembly);
-	}
-    else
-	{
-	printf("<B>D. melanogaster position:</B>\n");
-	printf("<A TARGET=_BLANK HREF=\"%s?position=%s&db=%s\">",
-	    hgTracksName(), pos, "dm1");
 	}
     printf("%s</A><BR>",pos);
     }
 if (acc != NULL)
     {
-    if (isDm== FALSE)
+    if (isDm== TRUE)
+	printf("<B>FlyBase Entry:</B> <A HREF=\" %s%s", tdb->url, acc);
+    else if (isSacCer== TRUE)
+	printf("<B>SGD Entry:</B> <A HREF=\" %s%s", tdb->url, acc);
+    else
 	{
 	printf("<B>Human mRNA:</B> <A HREF=\"");
 	printEntrezNucleotideUrl(stdout, acc);
 	}
-    else
-	printf("<B>FlyBase Entry:</B> <A HREF=\" %s%s", tdb->url, acc);
     printf("\" TARGET=_blank>%s</A><BR>\n", acc);
     }
 if (!isDm && (prot != NULL))
