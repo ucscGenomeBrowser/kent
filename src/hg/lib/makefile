@@ -37,7 +37,8 @@ O = affyAtlas.o affyGenoDetails.o affyOffset.o affyPairs.o agpFrag.o \
     stsMap.o stsMapMouse.o stsMapMouseNew.o stsMapRat.o stsMarker.o \
     synMap.o synteny100000.o syntenyBerk.o syntenySanger.o tableDescriptions.o \
     tigrCmrGene.o tilingPath.o traceInfo.o trackDb.o trackDbCustom.o \
-    trackTable.o vegaInfo.o wabAli.o web.o wiggle.o 
+    trackTable.o vegaInfo.o wabAli.o web.o wiggle.o chromKeeper.o
+
 
 ../../lib/$(MACHTYPE)/jkhgap.a: $(O) 
 	ar rcus ../../lib/$(MACHTYPE)/jkhgap.a $(O)
