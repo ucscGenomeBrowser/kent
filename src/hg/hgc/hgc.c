@@ -118,10 +118,11 @@
 #include "affy10KDetails.h"
 #include "encodeRegionInfo.h"
 #include "encodeErge.h"
+#include "encodeErgeHssCellLines.h"
 #include "sgdDescription.h"
 #include "hgFind.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.536 2003/12/17 19:55:30 braney Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.537 2003/12/18 03:24:27 daryl Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -2313,7 +2314,7 @@ if (sameString(casing, "upper"))
 if (*casing != 0)
     cartSetString(cart, "hgSeq.casing", casing);
 
-printf("<FORM ACTION=\"%s\" METHOD=\"POST\">\n\n", hgcPath());
+printf("<FORM ACTION=\"%s\" METHOD=\"GET\">\n\n", hgcPath());
 cartSaveSession(cart);
 cgiMakeHiddenVar("g", "htcGetDna3");
 
@@ -10037,8 +10038,8 @@ char query[256];
 int rowOffset;
 
 ncbiName += 2;
-cartWebStart(cart, "Single Nucleotide Polymorphism (SNP)");
-printf("<H2>Single Nucleotide Polymorphism (SNP) %s</H2>\n", itemName);
+cartWebStart(cart, "Simple Nucleotide Polymorphism (SNP)");
+printf("<H2>Simple Nucleotide Polymorphism (SNP) %s</H2>\n", itemName);
 sprintf(query, "select * "
 	       "from   %s "
 	       "where  chrom = '%s' "
@@ -10173,8 +10174,8 @@ char query[256];
 int rowOffset;
 int rsId = 0;
 
-cartWebStart(cart, "Single Nucleotide Polymorphism (SNP)");
-printf("<H2>Single Nucleotide Polymorphism (SNP) %s</H2>\n", itemName);
+cartWebStart(cart, "Simple Nucleotide Polymorphism (SNP)");
+printf("<H2>Simple Nucleotide Polymorphism (SNP) %s</H2>\n", itemName);
 sprintf(query, "select * "
 	       "from   affyGeno "
 	       "where  chrom = '%s' "
@@ -10218,14 +10219,15 @@ if (snp!=NULL)
     printf("<B>Base B:                  </B> <font face=\"Courier\">%s<BR></font>\n",snp->baseB);
     printf("<B>Sequence of Allele A:    </B>&nbsp;<font face=\"Courier\">%s</font><BR>\n",snp->sequenceA);
     printf("<B>Sequence of Allele B:    </B>&nbsp;<font face=\"Courier\">%s</font><BR>\n",snp->sequenceB);
+
+    printf("<P><A HREF=\"https://www.affymetrix.com/LinkServlet?probeset=");
+    printf("%s\" TARGET=_blank>Affymetrix NetAffx Analysis Center link for %s</A></P>\n",snp->affyId, snp->affyId);
+
     if (snp->rsId>0)
 	{
 	printf("<P><A HREF=\"http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?");
 	printf("type=rs&rs=%s\" TARGET=_blank>dbSNP link for %s</A></P>\n", snp->rsId, snp->rsId);
 	}
-
-    printf("<P><A HREF=\"https://www.affymetrix.com/LinkServlet?probeset=");
-    printf("%s\" TARGET=_blank>NetAffx link for %s</A></P>\n",snp->affyId, snp->affyId);
 
     printf("<P><A HREF=\"http://snp.cshl.org/cgi-bin/snp?name=");
     printf("%s\" TARGET=_blank>TSC link for %s</A></P>\n",snp->tscId, snp->tscId);
@@ -10250,8 +10252,8 @@ char query[256];
 int rowOffset;
 int rsId = 0;
 
-cartWebStart(cart, "Single Nucleotide Polymorphism (SNP)");
-printf("<H2>Single Nucleotide Polymorphism (SNP) %s</H2>\n", itemName);
+cartWebStart(cart, "Simple Nucleotide Polymorphism (SNP)");
+printf("<H2>Simple Nucleotide Polymorphism (SNP) %s</H2>\n", itemName);
 sprintf(query, "select * "
 	       "from   affy10K "
 	       "where  chrom = '%s' "
@@ -10343,30 +10345,33 @@ genericClickHandlerPlus(tdb, item, NULL, plus);
 }
 
 void doEncodeErge(struct trackDb *tdb, char *item)
-/* Print region desription, along with generic info */
+/* Print ENCODE data from dbERGE II */
 {
-char *descr;
-char *plus = NULL;
-char buf[128];
 struct sqlConnection *conn = hAllocConn();
 char query[1024];
 struct encodeErge *ee=NULL;
 int start = cartInt(cart, "o");
+struct sqlResult *sr;
+char *dupe = cloneString(tdb->type);
+char *type, *words[16];
+int wordCount = chopLine(dupe, words);
+char *encodeName = item+8;
+char encodeId[8];
 
-if ((descr = getEncodeRegionDescr(item)) != NULL)
-    {
-    safef(buf, sizeof(buf), "<B>Description:</B> %s<BR>\n", descr);
-    plus = buf;
-    }
-genericClickHandlerPlus(tdb, item, NULL, plus);
+strncpy(encodeId,item,7);
+encodeId[7]='\0';
+cartWebStart(cart, "ENCODE Region Data: %s", tdb->longLabel+7);
+printf("<H2>ENCODE Region <U>%s</U> Data for %s.</H2>\n", tdb->longLabel+7, encodeName);
+genericHeader(tdb, encodeName);
 
+genericBedClick(conn, tdb, item, start, 14);
 snprintf(query, sizeof(query),
-         "select  chrom, chromStart, chromEnd, name, score, strand, "
-	 "        thickStart, thickEnd, reserved, blockCount, blockSizes, "
-	 "        chromStarts, Id, color "
-         "from    %s "
-         "where   name = '%s' and chromStart = %d", tdb->tableName, item, start);
-
+	 "select   chrom, chromStart, chromEnd, name, score, strand, "
+	 "         thickStart, thickEnd, reserved, blockCount, blockSizes, "
+	 "         chromStarts, Id, color "
+	 "from     %s "
+	 "where    name = '%s' and chromStart = %d "
+	 "order by Id ", tdb->tableName, item, start);
 for (ee = encodeErgeLoadByQuery(conn, query); ee!=NULL; ee=ee->next)
     {
     printf("<BR>\n");
@@ -10374,11 +10379,61 @@ for (ee = encodeErgeLoadByQuery(conn, query); ee!=NULL; ee=ee->next)
 	{
 	printf("<BR>Additional information for <A HREF=\"http://gala.cse.psu.edu/");
 	printf("cgi-bin/dberge/dberge_query?mode=Submit+query&disp=brow+data&pid=");
+	printf("%s\" TARGET=_blank>%s</A>\n is available from <A ", encodeId, encodeName);
+	printf("HREF=\"http://globin.cse.psu.edu/dberge/testmenu.html\">dbERGEII</A>.\n");
+	}
+    }
+printTrackHtml(tdb);
+encodeErgeFree(&ee);
+hFreeConn(&conn);
+}
+
+void doEncodeErgeHssCellLines(struct trackDb *tdb, char *item)
+/* Print ENCODE data from dbERGE II */
+{
+struct sqlConnection *conn = hAllocConn();
+char query[1024];
+struct encodeErgeHssCellLines *ee=NULL;
+int start = cartInt(cart, "o");
+struct sqlResult *sr;
+char *dupe, *type, *words[16];
+int wordCount=0;
+int i;
+
+cartWebStart(cart, "ENCODE Region Data: %s", tdb->longLabel+7);
+printf("<H2>ENCODE Region <U>%s</U> Data for %s</H2>\n", tdb->longLabel+7, item);
+genericHeader(tdb, item);
+
+dupe = cloneString(tdb->type);
+wordCount = chopLine(dupe, words);
+genericBedClick(conn, tdb, item, start, atoi(words[1]));
+snprintf(query, sizeof(query),
+	 "select   chrom, chromStart, chromEnd, name, score, strand, "
+	 "         thickStart, thickEnd, reserved, blockCount, blockSizes, "
+	 "         chromStarts, Id, color, allLines "
+	 "from     %s "
+	 "where    name = '%s' and chromStart = %d "
+	 "order by Id ", tdb->tableName, item, start);
+for (ee = encodeErgeHssCellLinesLoadByQuery(conn, query); ee!=NULL; ee=ee->next)
+    {
+    if (ee->Id>0)
+	{
+	printf("<BR><B>Cell lines:</B> ");
+	dupe = cloneString(ee->allLines);
+	wordCount = chopCommas(dupe, words);
+	for (i=0; i<wordCount-1; i++)
+	    {
+	    printf("%s, ", words[i]);
+	    }
+	printf("%s.\n",words[wordCount-1]);
+	printf("<BR><BR>Additional information for <A HREF=\"http://gala.cse.psu.edu/");
+	printf("cgi-bin/dberge/dberge_query?mode=Submit+query&disp=brow+data&pid=");
 	printf("%s\" TARGET=_blank>%s</A>\n is available from <A ", ee->Id, ee->name);
 	printf("HREF=\"http://globin.cse.psu.edu/dberge/testmenu.html\">dbERGEII</A>\n");
 	}
     }
-encodeErgeFree(&ee);
+printTrackHtml(tdb);
+encodeErgeHssCellLinesFree(&ee);
 hFreeConn(&conn);
 }
 
@@ -13150,6 +13205,10 @@ else if (sameWord(track, "bdgpGene") || sameWord(track, "bdgpNonCoding"))
 else if (sameWord(track, "encodeRegions"))
     {
     doEncodeRegion(tdb, item);
+    }
+else if (sameWord(track, "encodeErgeHssCellLines"))
+    {
+    doEncodeErgeHssCellLines(tdb, item);
     }
 else if (sameWord(track, "encodeErge5race")   || sameWord(track, "encodeErgeInVitroFoot")  || \
 	 sameWord(track, "encodeErgeDNAseI")  || sameWord(track, "encodeErgeMethProm")     || \
