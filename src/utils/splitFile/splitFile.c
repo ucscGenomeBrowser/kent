@@ -1,4 +1,4 @@
-/* splitFile - Split a file into pieces. */
+/* splitFile - Split up a file. */
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"
@@ -8,7 +8,7 @@ void usage()
 /* Explain usage and exit. */
 {
 errAbort(
-  "splitFile - Split a file into pieces\n"
+  "splitFile - Split up a file\n"
   "usage:\n"
   "   splitFile XXX\n"
   "options:\n"
@@ -17,7 +17,7 @@ errAbort(
 }
 
 void splitFile(char *XXX)
-/* splitFile - Split a file into pieces. */
+/* splitFile - Split up a file. */
 {
 }
 
