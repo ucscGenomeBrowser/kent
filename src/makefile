@@ -2,8 +2,7 @@ DIRS = aladdin ameme cdnaAli dnaDust fuzzyFind \
        getgene idbQuery index primeMate protDust reformat \
        scanIntrons tracks weblet wormAli xenoAli
 
-all:
-	cd lib; make; cd ..
+all: libs
 	for i in $(DIRS); do cd $$i; make; cd ..; done
 
 libs:
