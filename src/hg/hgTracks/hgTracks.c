@@ -6817,7 +6817,7 @@ else if(z == 3)
 else 
     snprintf(tableName, sizeof(tableName), "%s", tg->mapName);
 
-printf("<br>%s &nbsp;&nbsp; (%g)<br>\n", tableName, pixPerBase );
+//printf("<br>%s &nbsp;&nbsp; (%g)<br>\n", tableName, pixPerBase );
 
 sr = hRangeQuery(conn, tableName, chromName, winStart, winEnd, where, &rowOffset);
 while ((row = sqlNextRow(sr)) != NULL)
