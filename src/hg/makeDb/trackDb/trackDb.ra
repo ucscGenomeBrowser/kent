@@ -1011,6 +1011,24 @@ visibility hide
 spectrum on
 type netAlign mm2 mouseChain2
 
+track humanNet
+shortLabel Human Net
+longLabel Mouse/Human Alignment Net
+group compGeno
+priority 134
+visibility hide
+spectrum on
+type netAlign hg13 humanChain
+
+track humanNet2
+shortLabel Human Net2
+longLabel Mouse/Human Alignment Net2
+group compGeno
+priority 135
+visibility hide
+spectrum on
+type netAlign hg13 humanChain2
+
 track mouseSynNet
 shortLabel Syntenic Net
 longLabel Mouse/Human Syntenic Alignment Net
