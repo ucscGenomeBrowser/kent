@@ -8,6 +8,8 @@
 #include "hgConfig.h"
 #include "hgFind.h"
 #include "hash.h"
+#include "hdb.h"
+#include "fa.h"
 
 static boolean existsAndEqual(char* var, char* value)
 /* returns true is the given CGI var exists and equals value */
@@ -252,6 +254,7 @@ puts("</SELECT>");
 
 puts("<INPUT TYPE=\"submit\" VALUE=\"Choose fields\" NAME=\"phase\">");
 puts("<INPUT TYPE=\"submit\" VALUE=\"Get all fields\" NAME=\"phase\">");
+puts("<INPUT TYPE=\"submit\" VALUE=\"Get DNA\" NAME=\"phase\">");
 
 puts("</FORM>");
 
@@ -1015,6 +1018,38 @@ else
 
 
 
+void getDNA()
+/* get the DNA for the given position */
+{
+char *chromName;        /* Name of chromosome sequence . */
+int winStart;           /* Start of window in sequence. */
+int winEnd;         /* End of window in sequence. */
+char* position;
+struct dnaSeq *seq;
+char dnaName[256];
+
+/* if the position information is not given, get it */
+position = cgiOptionalString("position");
+if(position == NULL)
+	position = "";
+if(position != NULL && position[0] != 0)
+	{
+	if (!findGenomePos(position, &chromName, &winStart, &winEnd))
+		return;
+	}
+findGenomePos(position, &chromName, &winStart, &winEnd);
+
+
+
+sprintf(dnaName, "%s:%d-%d", chromName, winStart, winEnd);
+puts(dnaName);
+seq = hDnaFromSeq(chromName, winStart, winEnd, dnaMixed);
+printf("<TT><PRE>");
+faWriteNext(stdout, dnaName, seq->dna, seq->size);
+printf("</TT></PRE>");
+freeDnaSeq(&seq);
+}
+
 
 
 /* the main body of the program */
@@ -1051,6 +1086,11 @@ else
 			getSomeFieldsGenome();
 		else
 			getSomeFields();
+		}
+	else if(existsAndEqual("phase", "Get DNA"))
+		{
+		htmlSetBackground("../images/floret.jpg");
+		htmShell("DNA Sequence", getDNA, NULL);
 		}
 	}
 }
