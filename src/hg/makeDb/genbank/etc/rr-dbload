@@ -5,14 +5,14 @@
 # dbload for rr servers.
 opts="$*"
 
-# databases to update
-databases="hg16 hg17 mm3 mm4 mm5 rn3 fr1 dm1 sacCer1 panTro1 galGal2 ce2 danRer1 danRer2 ci1 canFam1 anoGam1 tetNig1 dp2 xenTro1 apiMel1 apiMel2 droYak1 monDom1 bosTau1"
-
 # other options to include
 otherOpts=""
 
-# gbRoot on hgnfs1
+# initialize
 gbRoot=/genbank
+cd $gbRoot
+. $gbRoot/lib/gbCommon.sh
+databases=`gbGetDatabases etc/rr.dbs`
 
 # workdir is a local dir
 workdir=/var/tmp/genbank

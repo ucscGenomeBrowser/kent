@@ -49,7 +49,7 @@ if [ $# != 4 ] ; then
 fi
 
 gbRoot=$1
-databases=$2
+databases="$2"
 timeFile=$3
 workdir=$4
 

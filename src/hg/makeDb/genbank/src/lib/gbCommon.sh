@@ -65,3 +65,14 @@ gbCmpTimeFiles() {
         return 1  # time2 current
     fi
 }
+
+# gbGetDatabases dbs1 ...
+#
+# Get list of database to process.  This takes one or more files
+# containing the databases, removes comment and empty lines and
+# creates a unique list.  The merging is uses to determine which
+# databases must be copied to the rr nfs server, as they must be
+# there for hgwbeta or the rr.
+gbGetDatabases() {
+    sed -r -e 's/#.*$//' -e '/^[[:space:]]*$/d' $* | sort -u
+}
