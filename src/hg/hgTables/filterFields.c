@@ -17,7 +17,7 @@
 #include "joiner.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: filterFields.c,v 1.19 2004/11/22 20:31:56 hiram Exp $";
+static char const rcsid[] = "$Id: filterFields.c,v 1.20 2004/11/22 21:32:10 hiram Exp $";
 
 /* ------- Stuff shared by Select Fields and Filters Pages ----------*/
 
@@ -674,6 +674,14 @@ puts("<TABLE BORDER=0>");
 if (ct->wiggle)
     {
     numericFilterOption("ct", table, filterDataValueVar, filterDataValueVar,"");
+    if ((curTrack != NULL) && (curTrack->type != NULL))
+	{
+	double min, max;
+	wiggleMinMax(curTrack,&min,&max);
+
+	hPrintf("<TR><TD COLSPAN=3 ALIGN=RIGHT> (dataValue limits: %g,%g) "
+		"</TD></TR>\n", min, max);
+	}
     }
 else
     {
