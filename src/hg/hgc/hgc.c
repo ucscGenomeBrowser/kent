@@ -1560,10 +1560,7 @@ if (wordCount > 0)
 	}
     else if (sameString(type, "sample"))
 	{
-	int num = 0;
-	if (wordCount > 1)
-	    num = atoi(words[1]);
-	if (num < 3) num = 3;
+	int num = 9;
         genericSampleClick(conn, tdb, item, start, num);
 	}
     else if (sameString(type, "genePred"))
