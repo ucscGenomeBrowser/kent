@@ -22,7 +22,7 @@ check-beta:
 	# this will fail if we are not in a beta checkout:
 	cvs status makefile | egrep 'v[0-9]+_branch' > /dev/null	
 
-blat: libs
+blatSuite: libs
 	cd blat && ${MAKE} && ${MAKE} test
 	cd gfClient && ${MAKE}
 	cd gfServer && ${MAKE}
