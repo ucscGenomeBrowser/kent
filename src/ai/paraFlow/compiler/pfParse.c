@@ -240,6 +240,10 @@ switch (type)
 	return "pptCastDoubleToDouble";
     case pptCastStringToBit:
         return "pptCastStringToBit";
+    case pptCastTypedToUntyped:
+        return "pptCastTypedToUntyped";
+    case pptCastUntypedToTyped:
+        return "pptCastUntypedToTyped";
     case pptConstBit:
 	return "pptConstBit";
     case pptConstByte:

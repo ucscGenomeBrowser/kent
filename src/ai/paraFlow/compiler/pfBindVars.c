@@ -78,20 +78,7 @@ switch (pp->type)
 	}
     case pptTypeTuple:
         {
-	pp->ty = pfTypeNew(NULL);
-	pp->ty->isTuple = TRUE;
-	if (pp->children != NULL)
-	    {
-	    pp->ty->children = pp->children->ty;
-	    pp = pp->children;
-	    while (pp->next != NULL)
-	        {
-		if (pp->ty == NULL)
-		    errAt(pp->tok, "void value in tuple");
-		pp->ty->next = pp->next->ty;
-		pp = pp->next;
-		}
-	    }
+	pfTypeOnTuple(pfc, pp);
 	break;
 	}
     case pptInto:

@@ -158,6 +158,10 @@ struct pfParse *pp = *pPp;
 struct pfType *pt = pp->ty;
 if (pt == NULL)
     {
+    internalErrAt(pp->tok);
+    }
+else
+    {
     if (pp->type == pptConstUse)
         {
 	struct pfBaseType *base = type->base;
@@ -195,14 +199,7 @@ if (pt == NULL)
 	    }
 	pp->ty = pfTypeNew(base);
 	}
-    else
-	{
-        internalErrAt(pp->tok);
-	}
-    }
-else
-    {
-    if (pt->base != type->base)
+    else if (pt->base != type->base)
 	{
 	boolean ok = FALSE;
 	if (pt->base == NULL)
@@ -322,6 +319,13 @@ switch (pp->type)
     case pptVarInit:
     case pptVarUse:
         return pp->ty;
+    case pptTuple:
+	{
+	struct pfParse *p;
+	for (p = pp->children; p != NULL; p = p->next)
+	    coerceLval(pfc, p);
+        return pp->ty;
+	}
     default:
         errAt(pp->tok, "Left hand of assignment is not a variable");
 	return NULL;
@@ -429,6 +433,37 @@ if (!stringOk)
     }
 }
 
+void pfTypeOnTuple(struct pfCompile *pfc, struct pfParse *pp)
+/* Create tuple type and link in types of all children. */
+{
+pp->ty = pfTypeNew(pfc->tupleType);
+pp->ty->isTuple = TRUE;
+if (pp->children != NULL)
+    {
+    pp->ty->children = pp->children->ty;
+    pp = pp->children;
+    while (pp->next != NULL)
+	{
+	if (pp->ty == NULL)
+	    errAt(pp->tok, "void value in tuple");
+	pp->ty->next = pp->next->ty;
+	pp = pp->next;
+	}
+    }
+}
+
+static void typeConstant(struct pfCompile *pfc, struct pfParse *pp)
+/* Create type for constant. */
+{
+struct pfToken *tok = pp->tok;
+if (tok->type == pftString)
+    pp->ty = pfTypeNew(pfc->stringType);
+else if (tok->type == pftInt)
+    pp->ty = pfTypeNew(pfc->intType);
+else if (tok->type == pftFloat)
+    pp->ty = pfTypeNew(pfc->doubleType);
+}
+
 void pfTypeCheck(struct pfCompile *pfc, struct pfParse *pp)
 /* Check types (adding conversions where needed) on tree,
  * which should have variables bound already. */
@@ -482,6 +517,12 @@ switch (pp->type)
 	break;
     case pptVarInit:
         coerceVarInit(pfc, pp);
+	break;
+    case pptTuple:
+	pfTypeOnTuple(pfc, pp);
+	break;
+    case pptConstUse:
+        typeConstant(pfc, pp);
 	break;
     }
 }

@@ -48,6 +48,9 @@ void pfTypeDump(struct pfType *ty, FILE *f);
 struct pfCompile;
 struct pfParse;
 
+void pfTypeOnTuple(struct pfCompile *compile, struct pfParse *pp);
+/* Create tuple type and link in types of all children. */
+
 void pfTypeCheck(struct pfCompile *pfc, struct pfParse *pp);
 /* Check types (adding conversions where needed) on tree,
  * which should have variables bound already. */

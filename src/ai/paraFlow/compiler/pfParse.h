@@ -137,6 +137,8 @@ enum pfParseType
     pptCastDoubleToDouble,	/* Never emitted. */
 
     pptCastStringToBit,
+    pptCastTypedToUntyped,		
+    pptCastUntypedToTyped,
 
     pptConstBit,
     pptConstByte,
