@@ -1211,6 +1211,28 @@ altColor 255,128,0
 defaultViewLimits 30:70
 type wig 0 100 
 
+track ecoresFr1
+shortLabel Fugu Ecores
+longLabel Human/Fugu Evolutionary Conserved Regions
+group compGeno
+priority 152.1
+visibility hide
+color 0,60,120
+altColor 200,220,255
+type bed 12 .
+url http://www.genoscope.cns.fr/comparative?premier=Human&deuxieme=Takifugu&position=$$
+
+track ecoresTetraodon
+shortLabel Tetraodon Ecores
+longLabel Human/Tetraodon Evolutionary Conserved Regions
+group compGeno
+priority 152.2
+visibility hide
+color 0,60,120
+altColor 200,220,255
+type bed 12 .
+url http://www.genoscope.cns.fr/comparative?premier=Human&deuxieme=Tetraodon&position=$$
+
 track exoniphy
 shortLabel Exoniphy 
 longLabel Exoniphy: Conserved Exon Predictions (Human/Mouse/Rat)
@@ -1220,3 +1242,4 @@ visibility hide
 color 173,17,162
 exonArrows on
 type bed 12
+
