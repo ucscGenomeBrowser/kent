@@ -99,7 +99,6 @@ longLabel PhastCons Conserved Elements (Seven Species of Saccharomyces)
 group compGeno
 priority 105
 visibility hide
-spectrum on
 exonArrows off
 showTopScorers 200
 type bed 5 .

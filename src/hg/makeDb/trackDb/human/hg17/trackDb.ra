@@ -159,7 +159,6 @@ longLabel PhastCons Conserved Elements, Hu/Chimp/Mouse/Rat/Dog/Chick/Fugu/Zfish
 group compGeno
 priority 109.1
 visibility hide
-spectrum on
 exonArrows off
 showTopScorers 200
 type bed 5 .
@@ -219,7 +218,6 @@ longLabel PhastCons Conserved Elements, TBA 37-way
 group compGeno
 priority 109.999
 visibility hide
-spectrum on
 exonArrows off
 showTopScorers 200
 type bed 5 .
@@ -244,7 +242,6 @@ longLabel PhastCons Conserved Elements, VarMultiz 5-Way
 group compGeno
 priority 191.1
 visibility hide
-spectrum on
 exonArrows off
 showTopScorers 200
 type bed 5 .
