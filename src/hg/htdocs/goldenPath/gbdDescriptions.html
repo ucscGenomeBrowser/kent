@@ -245,6 +245,9 @@ stored in a single table rather than one table per chromosome:</P>
   href="#AffyGenoDetails">affyGenoDetails</A> 
   - Affymetrix 120K SNP array information</LI>
   <LI><A 
+  href="#PslInfo">AffyGn1h</A> 
+  - Sequences used for probe selection on Affy GNF1H chips</LI>
+  <LI><A 
   href="#BED">affyRatio</A> 
   - Expression data from GNF using Affymetrix GeneChips</LI>
   <LI><A 
@@ -265,7 +268,7 @@ stored in a single table rather than one table per chromosome:</P>
   - EST alignments (concatenation of chr*_est) 
   <LI><A 
   href="#PslInfo">all_fosends</A> 
-  - Fosmid end alignments 
+- Fosmid end alignments 
   <LI><A 
   href="#PslInfo">all_mrna</A> 
   - mRNA alignments (concatenation of chr*_mrna) 
@@ -525,6 +528,12 @@ stored in a single table rather than one table per chromosome:</P>
   href="#LFS">genscanSubopt</A> 
   - Genscan byproducts: good individual exons out of frame with main predictions (Last used Apr. 2001) </LI>
   <LI><A 
+  href="#BED">gnfAtlas2</A> 
+  - Expression data from the GNF Gene Expression Atlas 2</LI>
+  <LI><A 
+  href="#ExpDistance">gnfAtlas2Distance</A> 
+  - Describes the distance between genes in the expression space (GNF Atlas 2)
+  <LI><A 
   href="#ExpData">gnfHumanU95All</A> 
   - Expression data</LI>
   <LI><A 
@@ -666,9 +675,6 @@ stored in a single table rather than one table per chromosome:</P>
   href="#ExpDistance">knownExpDistance</A> 
   - Describes the distance between genes in the expression space (UCLA)
   <LI><A 
-  href="#ExpDistance">knownGnfDistance</A> 
-  - Describes the distance between genes in the expression space (GNF)
-  <LI><A 
   href="#KnownGene">knownGene</A> 
   - Protein coding genes based on proteins from SWISS-PROT, TrEMBL, and 
 TrEMBL-NEW and their corresponding mRNAs from GenBank
@@ -697,6 +703,9 @@ TrEMBL-NEW and their corresponding mRNAs from GenBank
   <LI><A 
   href="#KnownTo">knownToEnsembl</A> 
   - Associates known gene and Ensembl transcript
+  <LI><A 
+  href="#KnownTo">knownToGnfAtlas2</A> 
+  - Associates known gene and Atlas2 expression data
   <LI><A 
   href="#KnownTo">knownToLocusLink</A> 
   - Associates known gene and LocusLink ID
@@ -1450,6 +1459,7 @@ The following definition is used for several tables as follows:<BR>
 - dhs - first 4 fields <BR>
 - encodeRegions - first 4 fields <BR>
 - firstEF - first 6 fields <BR>
+- gnfAtlas2 - all 15 fields <BR>
 - haplotype - first 12 fields <BR>
 - intersectingMCS - first 4 fields <BR>
 - intersectingMergedMCS - first 4 fields <BR>
