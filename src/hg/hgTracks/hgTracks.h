@@ -741,18 +741,20 @@ char *dnaInWindow();
 Color lighterColor(struct vGfx *vg, Color color);
 /* Get lighter shade of a color */ 
 
-#define configHideAll "hgt.doConfigHideAll"
-#define configShowAll "hgt.doConfigShowAll"
-#define configDefaultAll "hgt.doDefaultShowAll"
+#define configHideAll "hgt_doConfigHideAll"
+#define configShowAll "hgt_doConfigShowAll"
+#define configDefaultAll "hgt_doDefaultShowAll"
+#define configGroupTarget "hgt_configGroupTarget"
+
+void setRulerMode();
+/* Set the rulerMode variable from cart. */
 
 void configPage();
 /* Put up configuration page. */
 
-void configPageSetTrackVis(char *group, int vis);
-/* Do config page after setting track visibility.  If group is
- * NULL then set visibility for tracks in all groups.  Otherwise,
- * just set it for the given group.  If vis is -2, then visibility is
- * unchanged.  If -1 then set visibility to default, otherwise it should 
+void configPageSetTrackVis(int vis);
+/* Do config page after setting track visibility. If vis is -2, then visibility 
+ * is unchanged.  If -1 then set visibility to default, otherwise it should 
  * be tvHide, tvDense, etc. */
 
 #define textSizeVar "textSize"	/* Variable name used for text size. */

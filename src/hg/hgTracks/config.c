@@ -30,6 +30,7 @@ struct group *group, *groupList = NULL;
 boolean showedRuler = FALSE;
 
 groupTracks(&trackList, &groupList);
+setRulerMode();
 
 /* Set up ruler mode according to changeVis. */
 if (changeVis != -2)
@@ -44,6 +45,8 @@ if (changeVis != -2)
 	}
     }
 
+
+cgiMakeHiddenVar(configGroupTarget, "none");
 hTableStart();
 for (group = groupList; group != NULL; group = group->next)
     {
@@ -65,8 +68,24 @@ for (group = groupList; group != NULL; group = group->next)
 	}
 
     hPrintf("<TR>");
-    hPrintf("<TH colspan=3 BGCOLOR=#536ED3>");
-    hPrintf("<B>%s</B>", wrapWhiteFont(group->label));
+    hPrintf("<TH align=LEFT colspan=3 BGCOLOR=#536ED3>");
+    hPrintf("<B>&nbsp;%s</B> ", wrapWhiteFont(group->label));
+#ifdef SOON
+    hPrintf("<INPUT TYPE=button NAME=\"%s\" VALUE=\"%s\" "
+           // "onClick=\"document.mainForm.%s.value='%s';document.mainForm.submit();\">",
+           "onClick=\"document.mainForm.submit();\">",
+	   configHideAll, "Hide All", configGroupTarget, group->name);
+    hPrintf(" ");
+    hPrintf("<INPUT TYPE=button NAME=\"%s\" VALUE=\"%s\" "
+           "onClick=\"document.mainForm.%s.value='%s';document.mainForm.submit();\">",
+	   configShowAll, "Show All", configGroupTarget, group->name);
+    hPrintf(" ");
+    hPrintf("<INPUT TYPE=button NAME=\"%s\" VALUE=\"%s\" "
+           "onClick=\"document.mainForm.%s.value='%s';document.mainForm.submit();\">",
+	   configDefaultAll, "Default", configGroupTarget, group->name);
+#endif /* SOON */
+    hPrintf(" ");
+    cgiMakeButton("submit", "Submit");
     hPrintf("</TH>\n");
     hPrintf("</TR>");
 
@@ -120,13 +139,22 @@ for (group = groupList; group != NULL; group = group->next)
 hTableEnd();
 }
 
-void configPageSetTrackVis(char *group, int vis)
-/* Do config page after setting track visibility.  If group is
- * NULL then set visibility for tracks in all groups.  Otherwise,
- * just set it for the given group.  If vis is -1 then set
- * visibility to default, otherwise it should be tvHide, tvDense, etc. */
+void configPageSetTrackVis(int vis)
+/* Do config page after setting track visibility. If vis is -2, then visibility 
+ * is unchanged.  If -1 then set visibility to default, otherwise it should 
+ * be tvHide, tvDense, etc. */
 {
 struct dyString *title = dyStringNew(0);
+char *group = NULL;
+
+/* Fetch group if any from CGI, and remove var so it doesn't get used again. */
+#ifdef SOON
+group = cloneString(cartUsualString(cart, configGroupTarget, ""));
+uglyf("group='%s', vis=%d<BR>\n", group, vis);
+cartRemove(cart, configGroupTarget);
+if (sameString(group, "none"))
+    freez(&group);
+#endif
 
 dyStringPrintf(title, "Configure Image",
 	       hOrganism(database), hFreezeFromDb(database), database);
@@ -177,11 +205,12 @@ trackConfig(group, vis);
 
 hPrintf("</FORM>");
 dyStringFree(&title);
+freez(&group);
 }
 
 
 void configPage()
 /* Put up configuration page. */
 {
-configPageSetTrackVis(NULL, -2);
+configPageSetTrackVis(-2);
 }

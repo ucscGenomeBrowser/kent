@@ -87,7 +87,7 @@
 #include "versionInfo.h"
 #include "bedCart.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.876 2005/02/01 23:33:56 kent Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.877 2005/02/02 02:20:02 kent Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -9239,7 +9239,7 @@ hButton(var, paddedLabel);
 struct track *getTrackList()
 /* Return list of all tracks. */
 {
-struct track *trackList = NULL;
+struct track *track, *trackList = NULL;
 /* Register tracks that include some non-standard methods. */
 registerTrackHandler("rgdGene", rgdGeneMethods);
 registerTrackHandler("cytoBand", cytoBandMethods);
@@ -9440,6 +9440,26 @@ loadFromTrackDb(&trackList);
 if (userSeqString != NULL) slSafeAddHead(&trackList, userPslTg());
 slSafeAddHead(&trackList, oligoMatchTg());
 loadCustomTracks(&trackList);
+
+/* Get visibility values if any from ui. */
+for (track = trackList; track != NULL; track = track->next)
+    {
+    char *s = cartOptionalString(cart, track->mapName);
+    if (s != NULL)
+	{
+	track->visibility = hTvFromString(s);
+	if (isCompositeTrack(track))
+	    {
+	    struct track *subtrack;
+	    for (subtrack = track->subtracks; subtrack != NULL;
+		 subtrack = subtrack->next)
+		{
+		subtrack->visibility = track->visibility;
+		}
+	    }
+	}
+    }
+
 return trackList;
 }
 
@@ -9481,25 +9501,6 @@ if (!hideControls)
 trackList = getTrackList();
 
 groupTracks(&trackList, &groupList);
-
-/* Get visibility values if any from ui. */
-for (track = trackList; track != NULL; track = track->next)
-    {
-    char *s = cartOptionalString(cart, track->mapName);
-    if (s != NULL)
-	{
-	track->visibility = hTvFromString(s);
-	if (isCompositeTrack(track))
-	    {
-	    struct track *subtrack;
-	    for (subtrack = track->subtracks; subtrack != NULL;
-		 subtrack = subtrack->next)
-		{
-		subtrack->visibility = track->visibility;
-		}
-	    }
-	}
-    }
 
 /* If hideAll flag set, make all tracks hidden */
 if(hideAll)
@@ -10007,13 +10008,24 @@ for(name = nameList; name != NULL; name = name->next)
 slFreeList(&nameList);
 }
 
+void setRulerMode()
+/* Set the rulerMode variable from cart. */
+{
+char *s = cartUsualString(cart, RULER_TRACK_NAME, "full");
+if (sameWord(s, "full") || sameWord(s, "on"))
+    rulerMode = tvFull;
+else if (sameWord(s, "dense"))
+    rulerMode = tvDense;
+else
+    rulerMode = tvHide;
+}
+
 void tracksDisplay()
 /* Put up main tracks display. This routine handles zooming and
  * scrolling. */
 {
 char newPos[256];
 char *defaultPosition = hDefaultPos(database);
-char *s;
 char *motifString = cartOptionalString(cart,"hgt.motifs");
 boolean complementRulerBases = cartUsualBoolean(cart, COMPLEMENT_BASES_VAR, FALSE);
 position = getPositionFromCustomTracks();
@@ -10073,13 +10085,7 @@ insideWidth = tl.picWidth-gfxBorder-insideX;
 
 if (cgiVarExists("hgt.hideAll"))
     cartSetString(cart, RULER_TRACK_NAME, "dense");
-s = cartUsualString(cart, RULER_TRACK_NAME, "full");
-if (sameWord(s, "full") || sameWord(s, "on"))
-    rulerMode = tvFull;
-else if (sameWord(s, "dense"))
-    rulerMode = tvDense;
-else
-    rulerMode = tvHide;
+setRulerMode();
 
 /* Do zoom/scroll if they hit it. */
 if (cgiVarExists("hgt.left3"))
@@ -10380,17 +10386,17 @@ else if (cartVarExists(cart, "hgTracksConfigPage"))
 else if (cartVarExists(cart, configHideAll))
     {
     cartRemove(cart, configHideAll);
-    configPageSetTrackVis(NULL, tvHide);
+    configPageSetTrackVis(tvHide);
     }
 else if (cartVarExists(cart, configShowAll))
     {
     cartRemove(cart, configShowAll);
-    configPageSetTrackVis(NULL, tvDense);
+    configPageSetTrackVis(tvDense);
     }
 else if (cartVarExists(cart, configDefaultAll))
     {
     cartRemove(cart, configDefaultAll);
-    configPageSetTrackVis(NULL, -1);
+    configPageSetTrackVis(-1);
     }
 else
     {
