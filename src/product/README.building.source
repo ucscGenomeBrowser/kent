@@ -49,3 +49,11 @@ To build the source tree.
 	to install binaries in "/destination/prefix/cgi-bin/path"
 
 	[NOTE:  These 'make' commands assume gnu make is being used]
+
+5.  After source tree updates, the make sequence is:
+	$ cd kent/src
+	$ make clean
+	$ make libs
+	$ cd hg
+	$ make compile
+	$ make install DESTDIR=/destination/prefix
