@@ -25,7 +25,7 @@
 #include "fa.h"
 #include "hgRelate.h"
 
-static char const rcsid[] = "$Id: hgLoadRna.c,v 1.23 2003/06/10 19:26:37 markd Exp $";
+static char const rcsid[] = "$Id: hgLoadRna.c,v 1.24 2003/06/12 17:34:26 kate Exp $";
 
 /* Command line options and defaults. */
 char *abbr = NULL;
@@ -425,7 +425,7 @@ hashAdd(raFieldHash, "gen", uniGen = getUniqueTable(conn, "geneName", "gen"));
 hashAdd(raFieldHash, "pro", uniPro = getUniqueTable(conn, "productName", "pro"));
 hashAdd(raFieldHash, "aut", uniAut = getUniqueTable(conn, "author", "aut"));
 hashAdd(raFieldHash, "key", uniKey = getUniqueTable(conn, "keyword", "key"));
-if (sameWord(type, "mRNA"))
+if (sameWord(type, "mRNA") || sameWord(type, "xenoRNA"))
     {
     hashAdd(raFieldHash, "def", uniDef = getUniqueTable(conn, "description", "def"));
     }
