@@ -7,7 +7,7 @@
 #include "dnautil.h"
 #include "xenalign.h"
 
-static char const rcsid[] = "$Id: xensmall.c,v 1.2 2003/09/09 21:44:03 kent Exp $";
+static char const rcsid[] = "$Id: xensmall.c,v 1.3 2004/06/29 22:04:57 kent Exp $";
 
 /* Mommy coding scheme - this is how one cell in the dynamic programming table
  * points to it's parent (mommy) cell.  Since these tables are really big,
@@ -384,13 +384,13 @@ gcCount = counts[C_BASE_VAL] + counts[G_BASE_VAL];
 return (double)gcCount/(double)total;
 }
 
-/* Our three matrices. */
-enum matIx
+/* Our seven matrices. */
+enum sevenStateIx
     {
     hiFiIx = 0,
-    loFiIx,
     qSlipIx,
     tSlipIx,
+    loFiIx,
     c1Ix,
     c2Ix,
     c3Ix,
@@ -435,8 +435,9 @@ static int c1c2MatchTable[26*32];
 static int c3MatchTable[26*32];
 static int hiFiMatchTable[26*32];
 static int loFiMatchTable[26*32];
+static int matchTable[26*32];	/* Generic single match table */
 
-#define nucVal(a) ((a)-'a')
+#define letterIx(a) ((a)-'a')
 
 static void makeMatchTable(int matchTable[], double matchProb, double gcRatio)
 /* Make table of match/mismatch cost/benefits for a given probability of
@@ -462,9 +463,9 @@ for (i=0; i<4; ++i)
         {
         b = valToNt[j];
         if (a == b)
-            matchTable[32*nucVal(a) + nucVal(b)] = scaledLogOfFraction(matchProb, freq[j]);
+            matchTable[32*letterIx(a) + letterIx(b)] = scaledLogOfFraction(matchProb, freq[j]);
         else
-            matchTable[32*nucVal(a) + nucVal(b)] = scaledLogOfFraction(mismatchProb, 1.0 - freq[j]);
+            matchTable[32*letterIx(a) + letterIx(b)] = scaledLogOfFraction(mismatchProb, 1.0 - freq[j]);
         }
     }
 }
@@ -486,25 +487,25 @@ freq[G_BASE_VAL] = freq[C_BASE_VAL] = gcRatio/2;
 
 for (i=0; i<26*32; ++i)
        matchTable[i] = unlikely;
-matchTable[32*nucVal('a') + nucVal('a')] = scaledLogOfFraction(matchProb, freq[A_BASE_VAL]);
-matchTable[32*nucVal('a') + nucVal('c')] = scaledLogOfFraction(mismatchProb, freq[C_BASE_VAL]);
-matchTable[32*nucVal('a') + nucVal('g')] = scaledLogOfFraction(wobbleProb, freq[G_BASE_VAL]);
-matchTable[32*nucVal('a') + nucVal('t')] = scaledLogOfFraction(mismatchProb, freq[T_BASE_VAL]);
+matchTable[32*letterIx('a') + letterIx('a')] = scaledLogOfFraction(matchProb, freq[A_BASE_VAL]);
+matchTable[32*letterIx('a') + letterIx('c')] = scaledLogOfFraction(mismatchProb, freq[C_BASE_VAL]);
+matchTable[32*letterIx('a') + letterIx('g')] = scaledLogOfFraction(wobbleProb, freq[G_BASE_VAL]);
+matchTable[32*letterIx('a') + letterIx('t')] = scaledLogOfFraction(mismatchProb, freq[T_BASE_VAL]);
 
-matchTable[32*nucVal('c') + nucVal('a')] = scaledLogOfFraction(mismatchProb, freq[A_BASE_VAL]);
-matchTable[32*nucVal('c') + nucVal('c')] = scaledLogOfFraction(matchProb, freq[C_BASE_VAL]);
-matchTable[32*nucVal('c') + nucVal('g')] = scaledLogOfFraction(mismatchProb, freq[G_BASE_VAL]);
-matchTable[32*nucVal('c') + nucVal('t')] = scaledLogOfFraction(wobbleProb, freq[T_BASE_VAL]);
+matchTable[32*letterIx('c') + letterIx('a')] = scaledLogOfFraction(mismatchProb, freq[A_BASE_VAL]);
+matchTable[32*letterIx('c') + letterIx('c')] = scaledLogOfFraction(matchProb, freq[C_BASE_VAL]);
+matchTable[32*letterIx('c') + letterIx('g')] = scaledLogOfFraction(mismatchProb, freq[G_BASE_VAL]);
+matchTable[32*letterIx('c') + letterIx('t')] = scaledLogOfFraction(wobbleProb, freq[T_BASE_VAL]);
 
-matchTable[32*nucVal('g') + nucVal('a')] = scaledLogOfFraction(wobbleProb, freq[A_BASE_VAL]);
-matchTable[32*nucVal('g') + nucVal('c')] = scaledLogOfFraction(mismatchProb, freq[C_BASE_VAL]);
-matchTable[32*nucVal('g') + nucVal('g')] = scaledLogOfFraction(matchProb, freq[G_BASE_VAL]);
-matchTable[32*nucVal('g') + nucVal('t')] = scaledLogOfFraction(mismatchProb, freq[T_BASE_VAL]);
+matchTable[32*letterIx('g') + letterIx('a')] = scaledLogOfFraction(wobbleProb, freq[A_BASE_VAL]);
+matchTable[32*letterIx('g') + letterIx('c')] = scaledLogOfFraction(mismatchProb, freq[C_BASE_VAL]);
+matchTable[32*letterIx('g') + letterIx('g')] = scaledLogOfFraction(matchProb, freq[G_BASE_VAL]);
+matchTable[32*letterIx('g') + letterIx('t')] = scaledLogOfFraction(mismatchProb, freq[T_BASE_VAL]);
 
-matchTable[32*nucVal('t') + nucVal('a')] = scaledLogOfFraction(mismatchProb, freq[A_BASE_VAL]);
-matchTable[32*nucVal('t') + nucVal('c')] = scaledLogOfFraction(wobbleProb, freq[C_BASE_VAL]);
-matchTable[32*nucVal('t') + nucVal('g')] = scaledLogOfFraction(mismatchProb, freq[G_BASE_VAL]);
-matchTable[32*nucVal('t') + nucVal('t')] = scaledLogOfFraction(matchProb, freq[T_BASE_VAL]);
+matchTable[32*letterIx('t') + letterIx('a')] = scaledLogOfFraction(mismatchProb, freq[A_BASE_VAL]);
+matchTable[32*letterIx('t') + letterIx('c')] = scaledLogOfFraction(wobbleProb, freq[C_BASE_VAL]);
+matchTable[32*letterIx('t') + letterIx('g')] = scaledLogOfFraction(mismatchProb, freq[G_BASE_VAL]);
+matchTable[32*letterIx('t') + letterIx('t')] = scaledLogOfFraction(matchProb, freq[T_BASE_VAL]);
 }
 
 static void calcCostBenefit(double gcRatio)
@@ -675,8 +676,8 @@ for (tIx = 1; tIx < a.tDim; tIx += 1)
     rowOffset = tIx*a.qDim;
     for (qIx = 1; qIx < a.qDim; qIx += 1)
         {
-        int qBase = nucVal(a.query[qIx-1]);
-        int tBase = nucVal(a.target[tIx-1]);
+        int qBase = letterIx(a.query[qIx-1]);
+        int tBase = letterIx(a.target[tIx-1]);
 
         newCellOffset = rowOffset + qIx;
         
@@ -803,4 +804,206 @@ return bestScore;
 #undef qSlipScore
 #undef tSlipScore
 #undef newScore
+#undef startState
+#undef matchState
+#undef qSlipState
+#undef tSlipState
+#undef shortEndState
+#undef endState
+}
+
+void setupMatchTable(int matchTable[26*32], int match, int mismatch)
+/* Setup simple match table. */
+{
+int i;
+for (i=0; i<26*32; ++i)
+    matchTable[i] = mismatch;
+for (i=0; i<26; ++i)
+    matchTable[32*i + i] = match;
+}
+
+
+int xenAlignAffine(char *query, int querySize, char *target, int targetSize, 
+	FILE *f, boolean printExtraAtEnds)
+/* Use dynamic programming to do protein/protein alignment. */
+{
+struct aliMatrix a;
+struct aliState *hf, *iq, *it;
+int qIx, tIx, sIx;  /* Query, target, and state indices */
+int rowOffset, newCellOffset;
+struct aliPair *pairList;
+int matchOff, qSlipOff, tSlipOff;
+int bestScore = -0x4fffffff;
+struct aliCell *bestCell = NULL;
+int badScore = -0x3fffffff;
+int matchPair;
+int matchTableOffset;
+int gapStart, halfGapStart, gapExt;
+
+/* Check that it's not too big. */
+if ((double)targetSize * querySize > 1.1E7)
+    errAbort("Can't align %d x %d, too big\n", querySize, targetSize);
+
+setupMatchTable(matchTable, 100, -50);
+gapStart = -200;
+halfGapStart = gapStart/2;
+gapExt = -20;
+
+/* Initialize 3 state matrix (match, query insert, target insert). */
+initAliMatrix(&a, 3, query, querySize, target, targetSize);
+hf = nameState(&a, hiFiIx, "match", 'M');
+iq = nameState(&a, qSlipIx, "qSlip", 'Q');
+it = nameState(&a, tSlipIx, "tSlip", 'T');
+
+qSlipOff = -a.qDim;
+tSlipOff = -1;
+matchOff = qSlipOff + tSlipOff;
+
+for (tIx = 1; tIx < a.tDim; tIx += 1)
+    {
+    UBYTE mommy = 0;
+    int score, tempScore;
+
+/* Macros to make me less mixed up when accessing scores from row arrays.*/
+#define matchScore lastScores[qIx-1]
+#define qSlipScore lastScores[qIx]
+#define tSlipScore scores[qIx-1]
+#define newScore scores[qIx]
+
+/* Start up state block (with all ways to enter state) */
+#define startState(state) \
+   score = 0;
+
+/* Define a transition from state while advancing over both
+ * target and query. */
+#define matchState(state, addScore) \
+   { \
+   if ((tempScore = state->matchScore + addScore) > score) \
+        { \
+        mommy = packMommy(state->stateIx, -1, -1); \
+        score = tempScore; \
+        } \
+   } 
+
+/* Define a transition from state while slipping query
+ * and advancing target. */
+#define qSlipState(state, addScore) \
+   { \
+   if ((tempScore = state->qSlipScore + addScore) > score) \
+        { \
+        mommy = packMommy(state->stateIx, 0, -1); \
+        score = tempScore; \
+        } \
+   }
+
+/* Define a transition from state while slipping target
+ * and advancing query. */
+#define tSlipState(state, addScore) \
+   { \
+   if ((tempScore = state->tSlipScore + addScore) > score) \
+        { \
+        mommy = packMommy(state->stateIx, -1, 0); \
+        score = tempScore; \
+        } \
+   }
+
+/* End a block of transitions into state. */
+#define endState(state) \
+    { \
+    struct aliCell *newCell = state->cells + newCellOffset; \
+    if (score <= 0) \
+        { \
+        mommy = nullMommy; \
+        score = 0; \
+        } \
+    newCell->mommy = mommy; \
+    state->newScore = score; \
+    if (score > bestScore) \
+        { \
+        bestScore = score; \
+        bestCell = newCell; \
+        } \
+    } 
+
+/* End a state that you know won't produce an optimal
+ * final score. */
+#define shortEndState(state) \
+    { \
+    struct aliCell *newCell = state->cells + newCellOffset; \
+    if (score <= 0) \
+        { \
+        mommy = nullMommy; \
+        score = 0; \
+        } \
+    newCell->mommy = mommy; \
+    state->newScore = score; \
+    }
+
+
+    rowOffset = tIx*a.qDim;
+    for (qIx = 1; qIx < a.qDim; qIx += 1)
+        {
+        int qBase = letterIx(a.query[qIx-1]);
+        int tBase = letterIx(a.target[tIx-1]);
+
+        newCellOffset = rowOffset + qIx;
+        
+        /* Figure the cost or bonus for pairing target and query residue here. */
+        matchTableOffset = (qBase<<5) + tBase;
+        matchPair = matchTable[matchTableOffset];
+
+        /* Update hiFi space. */
+            {
+            startState(hf);
+            matchState(hf, matchPair);
+            matchState(iq, matchPair + halfGapStart);
+            matchState(it, matchPair + halfGapStart);
+            endState(hf);
+            }
+
+        /* Update query slip space. */
+            {
+            startState(iq);
+            qSlipState(iq, gapExt);
+            qSlipState(hf, halfGapStart);            
+            shortEndState(iq);
+            }
+        
+        /* Update target slip space. */
+            {
+            startState(it);
+            tSlipState(it, gapExt);
+            tSlipState(hf, halfGapStart);            
+            shortEndState(it);
+            }
+
+        }
+    /* Swap score columns so current becomes last, and last gets
+     * reused. */
+    for (sIx = 0; sIx < a.stateCount; ++sIx)
+        {
+        struct aliState *as = &a.states[sIx];
+        int *swapTemp = as->lastScores;
+        as->lastScores = as->scores;
+        as->scores = swapTemp;
+        }
+    }
+
+/* Trace back from best scoring cell. */
+pairList = traceBack(&a, bestCell);
+printTrace(&a, pairList, TRUE, f, printExtraAtEnds);
+
+slFreeList(&pairList);
+cleanupAliMatrix(&a);
+return bestScore;
+#undef matchScore
+#undef qSlipScore
+#undef tSlipScore
+#undef newScore
+#undef startState
+#undef matchState
+#undef qSlipState
+#undef tSlipState
+#undef shortEndState
+#undef endState
 }
