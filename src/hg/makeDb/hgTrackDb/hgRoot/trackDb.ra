@@ -958,7 +958,7 @@ track multAlignWebbcat
 shortLabel Cat alignment
 longLabel Cat alignment from Webb's Multiple Alignment
 priority 51
-visibility hide
+visibility dense
 type psl xeno
 
 track twinscan
