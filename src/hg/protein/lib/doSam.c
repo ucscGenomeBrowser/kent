@@ -3,7 +3,7 @@
 #include "hdb.h"
 #include "pbTracks.h"
 
-static char const rcsid[] = "$Id: doSam.c,v 1.3 2005/01/06 23:14:22 fanhsu Exp $";
+static char const rcsid[] = "$Id: doSam.c,v 1.4 2005/01/07 17:38:47 fanhsu Exp $";
 
 char *getSgdId(char *protId, char *database)
 /* Get SGD gene ID from a Swiss-Prot ID */
@@ -25,7 +25,7 @@ char *itemName = NULL;
 char query2[256];
 struct sqlResult *sr2;
 char **row2;
-struct sqlConnection *conn2 = hAllocConn();
+struct sqlConnection *conn, *conn2 = hAllocConn();
 char condStr[256];
 char *chp;
 
@@ -45,10 +45,12 @@ int  first = 1;
 
 /* return if this genome does not have SAM protein analysis results */
 /* defensive logic to guard against the situation that the binary program is pushed, but the data tables are not */
-if (!(sqlTableExists(conn2, "samSubdir") && sqlTableExists(conn2, "protHomolog")))
+conn = sqlConnect(database);
+if (!(sqlTableExists(conn, "samSubdir") && sqlTableExists(conn, "protHomolog")))
     {
     return;
     }
+sqlDisconnect(&conn);
 if (!sameWord(database, "sacCer1"))
     {
     return;
