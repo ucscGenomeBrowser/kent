@@ -135,19 +135,10 @@ old_alpha:
 	hgTrackDb human hg10  trackDb ../../lib/trackDb.sql .
 	hgTrackDb human hg11  trackDb ../../lib/trackDb.sql .
 
-# This target initializes the MGC-browser database, overriding the default 
-# visibility settings
+# This target adds trackDbLocal to for the mgc-specific server.  This
+# 
 mgc:
-	hgTrackDb -strict=yes -visibility=mgcView.ra human hg15 trackDb ../../lib/trackDb.sql .
-	hgTrackDb -strict=yes -visibility=mgcView.ra human hg16 trackDb ../../lib/trackDb.sql .
-	hgTrackDb -strict=yes -visibility=mgcView.ra mouse mm3 trackDb ../../lib/trackDb.sql .
-	hgTrackDb -strict=yes rat rn2 trackDb ../../lib/trackDb.sql .
-	hgTrackDb -strict=yes rat rn3 trackDb ../../lib/trackDb.sql .
-	hgTrackDb -strict=yes -visibility=fugu/visibility.ra fugu fr1 trackDb ../../lib/trackDb.sql .
-	hgTrackDb worm ce1 trackDb_beta ../../lib/trackDb.sql .
-	hgTrackDb worm cb1 trackDb_beta ../../lib/trackDb.sql .
-	hgTrackDb drosophila dm1 trackDb_beta ../../lib/trackDb.sql .
-	hgTrackDb drosophila dp1 trackDb_beta ../../lib/trackDb.sql .
-	hgTrackDb sacCer sacCer1 trackDb ../../lib/trackDb.sql .
-	hgTrackDb chicken galGal1 trackDb ../../lib/trackDb.sql .
-
+	hgTrackDb -raName=trackDbMgc.ra human hg15 trackDbLocal ../../lib/trackDb.sql .
+	hgTrackDb -raName=trackDbMgc.ra human hg16 trackDbLocal ../../lib/trackDb.sql .
+	hgTrackDb -raName=trackDbMgc.ra human mm3 trackDbLocal ../../lib/trackDb.sql .
+	hgTrackDb -raName=trackDbMgc.ra human mm4 trackDbLocal ../../lib/trackDb.sql .

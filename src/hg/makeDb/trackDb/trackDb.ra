@@ -300,60 +300,6 @@ visibility dense
 color 12,12,120
 type genePred refPep refMrna
 
-track mgcAListGene
-shortLabel MGC A-List
-longLabel MGC A-List RefSeq Genes
-group genes
-priority 35.9
-visibility hide
-color 200,0,50
-type genePred
-
-track mgcGenes
-shortLabel MGC Genes
-longLabel Mammalian Gene Collection Full ORF mRNAs
-group genes
-priority 36
-visibility hide
-color 34,139,34
-type genePred
-
-track baylorRtPcrGeneA
-shortLabel Baylor GeneA
-longLabel Baylor RT-PCR GeneA for MGC
-group genes
-priority 36.1
-visibility hide
-color 200,0,50
-type psl .
-
-track baylorRtPcr
-shortLabel Baylor RT-PCR
-longLabel Baylor RT-PCR for MGC
-group genes
-priority 36.2
-visibility hide
-color 200,0,100
-type psl .
-
-track mgcTSExpPcr
-shortLabel TWINSCAN Exp PCR
-longLabel TWINSCAN predictions proposed for exploratory PCR confirmation
-group genes
-priority 36.5
-visibility hide
-color 125,0,150
-type genePred
-
-track mgcTSFullOrfPcr
-shortLabel TWINSCAN Full ORF PCR
-longLabel TWINSCAN predictions proposed for full-ORF PCR confirmation
-group genes
-priority 36.6
-visibility hide
-color 155,0,125
-type genePred
-
 track genieAlt
 shortLabel AltGenie
 longLabel Genie Gene Predictions from Affymetrix
@@ -713,42 +659,6 @@ group rna
 priority 73
 visibility hide
 type psl .
-
-track mgcIncompleteMrna
-shortLabel MGC Incomplete
-longLabel Mammalian Gene Collection Incomplete mRNAs
-group rna
-priority 75
-visibility hide
-color 120,12,12
-type psl .
-
-track mgcPickedEst
-shortLabel MGC In-progress
-longLabel Mammalian Gene Collection ESTs in Sequencing Pipeline
-group rna
-priority 75.1
-visibility hide
-color 12,100,120
-type psl est
-
-track mgcFailedEst
-shortLabel MGC Failed
-longLabel Mammalian Gene Collection Failed ESTs
-group rna
-priority 75.2
-visibility hide
-color 120,12,0
-type psl est
-
-track mgcUnpickedEst
-shortLabel MGC ESTs
-longLabel Mammalian Gene Collection EST Libraries
-group rna
-priority 75.3
-visibility hide
-color 120,120,220
-type psl est
 
 track cpgIsland
 shortLabel CpG Islands
@@ -1294,14 +1204,6 @@ priority 163
 visibility hide
 spectrum on
 type bed 12
-
-track twinscanMgc
-shortLabel TwinScan MGC
-longLabel TwinScan MGC Candidates
-group x
-priority 159
-visibility hide
-type psl .
 
 track quality
 shortLabel Quality Scores
