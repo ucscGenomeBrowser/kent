@@ -46,3 +46,8 @@ hgMedianMicroarray hgFixed gnfMouseU74aAll gnfMouseU74aAllExps gnfMouseU74aMedia
 hgMedianMicroarray hgFixed gnfMouseU74bAll gnfMouseU74bAllExps gnfMouseU74bMedian.ra gnfMouseU74bMedian gnfMouseU74bMedianExps -minExps=1
 hgMedianMicroarray hgFixed gnfMouseU74cAll gnfMouseU74cAllExps gnfMouseU74cMedian.ra gnfMouseU74cMedian gnfMouseU74cMedianExps -minExps=1
 
+# C. elegans life cycle data from the Kim Lab via the Stanford Microarray Database.
+cd ~/kent/src/hg/makeDb/hgStanfordMicroarray
+hgStanfordMicroarray hgFixed kimWormLifeAllRatio kimWormLifeAllExps /projects/compbio/data/microarray/wormLifeCycle/spots -swap '-trimName=(green)' -suppress=green '-trimTissue=(repeat #?)'
+cd ../hgMedianMicroarray
+hgMedianMicroarray hgFixed kimWormLifeAllRatio kimWormLifeAllExps kimMed.ra kimWormLifeMedianRatio kimWormLifeMedianExps
