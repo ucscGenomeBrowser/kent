@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "ccdsAccessions.h"
 
-static char const rcsid[] = "$Id: ccdsAccessions.c,v 1.1 2005/02/25 01:18:40 markd Exp $";
+static char const rcsid[] = "$Id: ccdsAccessions.c,v 1.2 2005/03/01 23:03:31 markd Exp $";
 
 void ccdsAccessionsStaticLoad(char **row, struct ccdsAccessions *ret)
 /* Load a row from ccdsAccessions table into ret.  The contents of ret will
@@ -20,18 +20,19 @@ ret->chromosome = row[1];
 ret->gene_id = sqlSigned(row[2]);
 ret->group_id = row[3];
 ret->ccds = row[4];
-ret->ncbi_mrna = row[5];
-ret->ncbi_prot = row[6];
-ret->hinxton_mrna = row[7];
-ret->hinxton_prot = row[8];
-ret->ncbi_mrna_non = row[9];
-ret->ncbi_prot_non = row[10];
-ret->hinxton_mrna_non = row[11];
-ret->hinxton_prot_non = row[12];
-strcpy(ret->cds_strand, row[13]);
-ret->cds_from = sqlSigned(row[14]);
-ret->cds_to = sqlSigned(row[15]);
-ret->cds_loc = row[16];
+ret->group_ccds_status = row[5];
+ret->ncbi_mrna = row[6];
+ret->ncbi_prot = row[7];
+ret->hinxton_mrna = row[8];
+ret->hinxton_prot = row[9];
+ret->ncbi_mrna_non = row[10];
+ret->ncbi_prot_non = row[11];
+ret->hinxton_mrna_non = row[12];
+ret->hinxton_prot_non = row[13];
+strcpy(ret->cds_strand, row[14]);
+ret->cds_from = sqlSigned(row[15]);
+ret->cds_to = sqlSigned(row[16]);
+ret->cds_loc = row[17];
 }
 
 struct ccdsAccessions *ccdsAccessionsLoad(char **row)
@@ -46,18 +47,19 @@ ret->chromosome = cloneString(row[1]);
 ret->gene_id = sqlSigned(row[2]);
 ret->group_id = cloneString(row[3]);
 ret->ccds = cloneString(row[4]);
-ret->ncbi_mrna = cloneString(row[5]);
-ret->ncbi_prot = cloneString(row[6]);
-ret->hinxton_mrna = cloneString(row[7]);
-ret->hinxton_prot = cloneString(row[8]);
-ret->ncbi_mrna_non = cloneString(row[9]);
-ret->ncbi_prot_non = cloneString(row[10]);
-ret->hinxton_mrna_non = cloneString(row[11]);
-ret->hinxton_prot_non = cloneString(row[12]);
-strcpy(ret->cds_strand, row[13]);
-ret->cds_from = sqlSigned(row[14]);
-ret->cds_to = sqlSigned(row[15]);
-ret->cds_loc = cloneString(row[16]);
+ret->group_ccds_status = cloneString(row[5]);
+ret->ncbi_mrna = cloneString(row[6]);
+ret->ncbi_prot = cloneString(row[7]);
+ret->hinxton_mrna = cloneString(row[8]);
+ret->hinxton_prot = cloneString(row[9]);
+ret->ncbi_mrna_non = cloneString(row[10]);
+ret->ncbi_prot_non = cloneString(row[11]);
+ret->hinxton_mrna_non = cloneString(row[12]);
+ret->hinxton_prot_non = cloneString(row[13]);
+strcpy(ret->cds_strand, row[14]);
+ret->cds_from = sqlSigned(row[15]);
+ret->cds_to = sqlSigned(row[16]);
+ret->cds_loc = cloneString(row[17]);
 return ret;
 }
 
@@ -67,7 +69,7 @@ struct ccdsAccessions *ccdsAccessionsLoadAll(char *fileName)
 {
 struct ccdsAccessions *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[17];
+char *row[18];
 
 while (lineFileRow(lf, row))
     {
@@ -85,7 +87,7 @@ struct ccdsAccessions *ccdsAccessionsLoadAllByChar(char *fileName, char chopper)
 {
 struct ccdsAccessions *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[17];
+char *row[18];
 
 while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
     {
@@ -111,6 +113,7 @@ ret->chromosome = sqlStringComma(&s);
 ret->gene_id = sqlSignedComma(&s);
 ret->group_id = sqlStringComma(&s);
 ret->ccds = sqlStringComma(&s);
+ret->group_ccds_status = sqlStringComma(&s);
 ret->ncbi_mrna = sqlStringComma(&s);
 ret->ncbi_prot = sqlStringComma(&s);
 ret->hinxton_mrna = sqlStringComma(&s);
@@ -137,6 +140,7 @@ if ((el = *pEl) == NULL) return;
 freeMem(el->chromosome);
 freeMem(el->group_id);
 freeMem(el->ccds);
+freeMem(el->group_ccds_status);
 freeMem(el->ncbi_mrna);
 freeMem(el->ncbi_prot);
 freeMem(el->hinxton_mrna);
@@ -146,11 +150,6 @@ freeMem(el->ncbi_prot_non);
 freeMem(el->hinxton_mrna_non);
 freeMem(el->hinxton_prot_non);
 freeMem(el->cds_loc);
-freeMem(el->ncbiMRnaLst);
-freeMem(el->ncbiProtLst);
-freeMem(el->hinxtonMRnaLst);
-freeMem(el->hinxtonProtLst);
-freeMem(el->exons);
 freez(pEl);
 }
 
@@ -184,6 +183,10 @@ if (sep == ',') fputc('"',f);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->ccds);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->group_ccds_status);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);

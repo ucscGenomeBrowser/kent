@@ -11,7 +11,7 @@ test:
 	(cd tests && ${MAKE} test)
 
 clean:
-	rm -f ${O} ${PROGS} $O
+	rm -f ${O} ${PROGS} $O ccdsImport.o
 
 ${BINARCH}/ccdsImport:  ccdsImport.o ${O} ${LIBGENBANK}
 	@${MKDIR} ${BINARCH}

@@ -6,6 +6,7 @@ table ccdsAccessions
     int gene_id;               "gene id"
     string group_id;           "group id.version"
     string ccds;               "ccds1.1"
+    string group_ccds_status;  "status of CCDS"
     string ncbi_mrna;          "acc.version"
     string ncbi_prot;          "acc.version"
     string hinxton_mrna;       "ensemble id"

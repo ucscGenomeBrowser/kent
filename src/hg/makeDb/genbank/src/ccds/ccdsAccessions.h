@@ -5,12 +5,15 @@
 #ifndef CCDSACCESSIONS_H
 #define CCDSACCESSIONS_H
 
-#define CCDSACCESSIONS_NUM_COLS 17
+#define CCDSACCESSIONS_NUM_COLS 18
 
-struct exonCoords {
+struct exonCoords
+/* coordinate of an exon (hand addition) */
+{
     unsigned start;
     unsigned end;
 };
+
 
 struct ccdsAccessions
 /* parses NcbiHinxtonAllAccessions.txt from NCBI */
@@ -21,6 +24,7 @@ struct ccdsAccessions
     int gene_id;	/* gene id */
     char *group_id;	/* group id.version */
     char *ccds;	/* ccds1.1 */
+    char *group_ccds_status;	/* status of CCDS */
     char *ncbi_mrna;	/* acc.version */
     char *ncbi_prot;	/* acc.version */
     char *hinxton_mrna;	/* ensemble id */
