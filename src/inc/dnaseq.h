@@ -34,9 +34,11 @@ struct dnaSeq *cloneDnaSeq(struct dnaSeq *seq);
 
 void freeDnaSeq(struct dnaSeq **pSeq);
 /* Free up DNA seq.  */
+#define dnaSeqFree freeDnaSeq
 
 void freeDnaSeqList(struct dnaSeq **pSeqList);
 /* Free up list of DNA sequences. */
+#define dnaSeqFreeList freeDnaSeqList
 
 aaSeq *translateSeq(struct dnaSeq *inSeq, int offset, boolean stop);
 /* Return a translated sequence.  Offset is position of first base to

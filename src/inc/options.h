@@ -13,6 +13,9 @@ int optionInt(char *name, int defaultVal);
 /* Return integer value of named option, or default value
  * if not set. */
 
+float optionFloat(char *name, float defaultVal);
+/* Return float value of named option or default. */
+
 boolean optionExists(char *name);
 /* Return TRUE if option has been set. */
 
