@@ -4352,7 +4352,6 @@ cat > split.csh << 'EOF'
     ssh kkr1u00
     iSync
 
-=======
 # LOAD GENEID GENES (DONE 8/2/04 Fan)
     # reloaded 3/16/04 with -gtf instead of -exon=CDS (nec. now! for stop_codon)
     mkdir -p /cluster/data/mm5/bed/geneid/download
@@ -4372,4 +4371,66 @@ http://genome.imim.es/genepredictions/M.musculus/mmMay2004/geneid_v1.2/$chr.prot
     ldHgGene -gtf mm5 geneid download/*.gtf
     hgPepPred mm5 generic geneidPep download/*-fixed.prot
 
->>>>>>> 1.22
+# PRODUCING GENSCAN PREDICTIONS (DONE 08-03-04 Fan)
+    ssh hgwdev
+    mkdir /cluster/data/mm5/bed/genscan
+    cd /cluster/data/mm5/bed/genscan
+    # Check out hg3rdParty/genscanlinux to get latest genscan:
+    cvs co hg3rdParty/genscanlinux
+    # Run on small cluster (more mem than big cluster).
+    ssh kki
+    cd /cluster/data/mm5/bed/genscan
+    # Make 3 subdirectories for genscan to put their output files in
+    mkdir gtf pep subopt
+    # Generate a list file, genome.list, of all the hard-masked contigs that 
+    # *do not* consist of all-N's (which would cause genscan to blow up)
+    rm -f genome.list
+    touch genome.list
+    foreach f ( `ls -1S /cluster/data/mm5/*/chr*_*/chr*_?{,?}.fa.masked` )
+      egrep '[ACGT]' $f > /dev/null
+      if ($status == 0) echo $f >> genome.list
+    end
+    wc -l genome.list
+    # Create template file, gsub, for gensub2.  For example (3-line file):
+    cat << '_EOF_' > gsub
+#LOOP
+/cluster/bin/i386/gsBig {check in line+ $(path1)} {check out line 
+gtf/$(root1).gtf} -trans={check out line pep/$(root1).pep} -subopt={check out 
+line subopt/$(root1).bed} -exe=hg3rdParty/genscanlinux/genscan -
+par=hg3rdParty/genscanlinux/HumanIso.smat -tmp=/tmp -window=2400000
+#ENDLOOP
+'_EOF_'
+    # << this line makes emacs coloring happy
+    gensub2 genome.list single gsub jobList
+    para create jobList
+    para try, check, push, check, ...
+# Completed: 638 of 639 jobs
+# Crashed: 1 jobs
+# CPU time in finished jobs:     386282s    6438.03m   107.30h    4.47d  0.012 y
+# IO & Wait Time:                  3735s      62.25m     1.04h    0.04d  0.000 y
+# Average job time:                 611s      10.19m     0.17h    0.01d
+# Longest job:                    22687s     378.12m     6.30h    0.26d
+# Submission to last job:         33710s     561.83m     9.36h    0.39d
+
+    # If there are crashes, diagnose with "para problems".  
+    # If a job crashes due to genscan running out of memory, re-run it 
+    # manually with "-window=1200000" instead of "-window=2400000".
+/cluster/bin/i386/gsBig /cluster/data/mm5/19/chr19_1/chr19_1.fa.masked 
+gtf/chr19_1.fa.gtf -trans=pep/chr19_1.fa.pep -subopt=subopt/chr19_1.fa.bed -
+exe=hg3rdParty/genscanlinux/genscan -par=hg3rdParty/genscanlinux/HumanIso.smat -
+tmp=/tmp -window=1200000
+
+    # Convert these to chromosome level files as so:
+    ssh kksilo
+    cd /cluster/data/mm5/bed/genscan
+    liftUp genscan.gtf ../../jkStuff/liftAll.lft warn gtf/*.gtf
+    liftUp genscanSubopt.bed ../../jkStuff/liftAll.lft warn subopt/*.bed
+    cat pep/*.pep > genscan.pep
+
+    # Load into the database as so:
+    ssh hgwdev
+    cd /cluster/data/mm5/bed/genscan
+    ldHgGene mm5 genscan genscan.gtf
+    hgPepPred mm5 generic genscanPep genscan.pep
+    hgLoadBed mm5 genscanSubopt genscanSubopt.bed
+
