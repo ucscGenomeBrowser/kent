@@ -180,5 +180,9 @@ char* pslGetCreateSql(char* table, unsigned options);
 /* Get SQL required to create PSL table.  Options is a bit set consisting
  * of PSL_TNAMEIX, PSL_WITH_BIN, and PSL_XA_FORMAT */
 
+int pslCheck(char *pslDesc, FILE* out, struct psl* psl);
+/* Validate a PSL for consistency.  pslDesc is printed the error messages
+ * to file out (open /dev/null to discard). Return count of errors. */
+
 #endif /* PSL_H */
 

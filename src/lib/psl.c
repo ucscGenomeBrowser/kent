@@ -989,3 +989,111 @@ dyStringFree(&sqlCmd);
 return sqlCmdStr;
 }
 
+static int chkRanges(char* pslDesc, FILE* out, char* pName, char* pLabel,
+                     char pCLabel, char pStrand, unsigned pSize,
+                     unsigned pStart, unsigned pEnd,
+                     unsigned blockCount, unsigned* blockSizes,
+                     unsigned* pBlockStarts)
+/* check the target or query ranges in a PSL */
+{
+int errCount = 0;
+unsigned iBlk, prevBlkEnd = 0;
+
+if (pStart >= pEnd)
+    {
+    fprintf(out, "Error: %s: %s %cStart %u >= %cEnd %u\n",
+            pslDesc, pName, pCLabel, pStart, pCLabel, pEnd);
+    errCount++;
+    }
+for (iBlk = 0; iBlk < blockCount; iBlk++)
+    {
+    unsigned blkStart = pBlockStarts[iBlk];
+    unsigned blkEnd = blkStart+blockSizes[iBlk];
+    /* translate stand to genomic coords */
+    unsigned gBlkStart = (pStrand == '+') ? blkStart : (pSize - blkEnd);
+    unsigned gBlkEnd = (pStrand == '+') ? blkEnd : (pSize - blkStart);
+
+    if (blockSizes[iBlk] == 0)
+        {
+        fprintf(out, "Error: %s: %s %s block %u size is 0\n",
+                pslDesc, pName, pLabel, iBlk);
+        errCount++;
+        }
+    if ((pSize > 0) && (blkEnd > pSize))
+        {
+        fprintf(out, "Error: %s: %s %s block %u end %u > %cSize %u\n",
+                pslDesc, pName, pLabel, iBlk, blkEnd, pCLabel, pSize);
+        errCount++;
+        }
+    if (gBlkStart < pStart)
+        {
+        fprintf(out, "Error: %s: %s %s block %u translated start %u < %cStart %u\n",
+                pslDesc, pName, pLabel, iBlk, gBlkStart, pCLabel, pStart);
+        errCount++;
+        }
+    if (gBlkStart >= pEnd)
+        {
+        fprintf(out, "Error: %s: %s %s block %u translated start %u >= %cEnd %u\n",
+                pslDesc, pName, pLabel, iBlk, gBlkStart, pCLabel, pEnd);
+        errCount++;
+        }
+    if (gBlkEnd < pStart)
+        {
+        fprintf(out, "Error: %s: %s %s block %u translated end %u < %cStart %u\n",
+                pslDesc, pName, pLabel, iBlk, gBlkEnd, pCLabel, pStart);
+        errCount++;
+        }
+    if (gBlkEnd > pEnd)
+        {
+        fprintf(out, "Error: %s: %s %s block %u translated end %u > %cEnd %u\n",
+                pslDesc, pName, pLabel, iBlk, gBlkEnd, pCLabel, pEnd);
+        errCount++;
+        }
+    if ((iBlk > 0) && (blkStart < prevBlkEnd))
+        {
+        fprintf(out, "Error: %s: %s %s block %u start %u < previous block end %u\n",
+                pslDesc, pName, pLabel, iBlk, blkStart, prevBlkEnd);
+        errCount++;
+        }
+    prevBlkEnd = blkEnd;
+    }
+return errCount;
+}
+
+int pslCheck(char *pslDesc, FILE* out, struct psl* psl)
+/* Validate a PSL for consistency.  pslDesc is printed the error messages
+ * to file out (open /dev/null to discard). Return count of errors. */
+{
+static char* VALID_STRANDS[] = {
+    "+", "-", "++", "+-", "-+", "--", NULL
+};
+int i, errCount = 0;
+char strand;
+
+/* check strand value */
+for (i = 0; VALID_STRANDS[i] != NULL; i++)
+    {
+    if (strcmp(psl->strand, VALID_STRANDS[i]) == 0)
+        break;
+    }
+if (VALID_STRANDS[i] == NULL)
+    {
+    fprintf(out, "Error: %s: invalid PSL strand: \"%s\"\n",
+            pslDesc, psl->strand);
+    errCount++;
+    }
+
+/* check target */
+strand = ((psl->strand[1] == '\0') ? '+' : psl->strand[1]);
+errCount +=  chkRanges(pslDesc,  out, psl->tName, "target", 't',
+                       strand, psl->tSize, psl->tStart, psl->tEnd,
+                       psl->blockCount, psl->blockSizes, psl->tStarts);
+
+/* check query */
+strand = psl->strand[0];
+errCount += chkRanges(pslDesc, out, psl->qName, "query", 'q',
+                      strand, psl->qSize, psl->qStart, psl->qEnd,
+                      psl->blockCount, psl->blockSizes, psl->qStarts);
+return errCount;
+}
+
