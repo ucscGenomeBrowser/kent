@@ -20,4 +20,5 @@ table snp
     uint    chromHits;  "Number of distinct chromosomes with a hit"
     uint    contigHits; "Number of distinct contigs with a hit"
     uint    seqHits;    "Total number of hits to genome"
+    string  source;     "Source of the data - dbSnp, Affymetrix, ..."
     )

@@ -138,6 +138,12 @@ CREATE TABLE snp (
     chromHits  int(5) unsigned NOT NULL,
     contigHits int(5) unsigned NOT NULL,
     seqHits    int(5) unsigned NOT NULL,
+    source     enum(
+                   'dbSnp',
+                   'Affy10K',
+                   'Affy10Kv2',
+                   'Affy50K_HindIII',
+                   'Affy50K_XbaI') DEFAULT 'unknown' NOT NULL;
     INDEX      chrom      (chrom,bin),
     INDEX      chromStart (chrom,chromStart),
     INDEX      chromEnd   (chrom,chromEnd),
