@@ -748,9 +748,7 @@ AllocArray(gf->sources, seqCount);
 gf->sourceCount = seqCount;
 for (i=0, seq = seqList; i<seqCount; ++i, seq = seq->next)
     {
-    uglyf("ok1\n");
     gfAddLargeSeq(gf, seq, offset);
-    uglyf("ok2\n");
     ss = gf->sources+i;
     ss->seq = seq;
     ss->start = offset;
@@ -1231,6 +1229,31 @@ freez(&buckets);
 return clumpList;
 }
 
+struct gfClump *clumpsOfOne(struct genoFind *gf, struct gfHit *hitList)
+/* Turn each hit into a clump with just one hit. */
+{
+struct gfClump *clumpList = NULL, *clump;
+struct gfHit *hit, *nextHit;
+int tileSize = gf->tileSize;
+
+for (hit = hitList; hit != NULL; hit = nextHit)
+    {
+    nextHit = hit->next;
+    hit->next = NULL;
+    AllocVar(clump);
+    slAddHead(&clumpList, clump);
+    clump->hitCount = 1;
+    clump->hitList = hit;
+    clump->qStart =  hit->qStart;
+    clump->tStart =  hit->tStart;
+    clump->qEnd = hit->qStart + tileSize;
+    clump->tEnd += hit->tStart + tileSize;
+    clump->target = findSource(gf, clump->tStart);
+    }
+slReverse(&clumpList);
+return clumpList;
+}
+
 
 static struct gfHit *gfFastFindDnaHits(struct genoFind *gf, struct dnaSeq *seq, 
 	struct lm *lm, int *retHitCount)
@@ -1372,7 +1395,7 @@ struct gfClump *gfFindClumps(struct genoFind *gf, bioSeq *seq, struct lm *lm, in
 {
 struct gfHit *hitList = NULL;
 
-if (gf->segSize == 0 && !gf->isPep)
+if (gf->segSize == 0 && !gf->isPep && !gf->allowOneMismatch == 0)
     hitList = gfFastFindDnaHits(gf, seq, lm, retHitCount);
 else
     {
@@ -1382,7 +1405,10 @@ else
 	hitList = gfSegmentedFindHits(gf, seq, lm, retHitCount);
     }
 cmpQuerySize = seq->size;
-return clumpHits(gf, hitList, gf->minMatch);
+if (gf->minMatch == 1)
+    return clumpsOfOne(gf, hitList);
+else
+    return clumpHits(gf, hitList, gf->minMatch);
 }
 
 void gfTransFindClumps(struct genoFind *gfs[3], aaSeq *seq, struct gfClump *clumps[3], struct lm *lm, int *retHitCount)
