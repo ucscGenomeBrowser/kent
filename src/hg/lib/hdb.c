@@ -27,7 +27,7 @@
 #include "maf.h"
 #include "ra.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.167 2004/03/29 23:57:52 hiram Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.168 2004/03/30 17:21:52 markd Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
@@ -2394,6 +2394,18 @@ for (tdb = *tdbList; tdb != NULL; prevTdb = tdb, tdb = tdb->next)
 return NULL;
 }
 
+static void processTrackDb(char *database, struct trackDb *tdb, char *chrom,
+                           boolean privateHost, struct trackDb **tdbRetList)
+/* check if a trackDb entry should be included in display, and if so
+ * add it to the list, otherwise free it */
+{
+hLookupStringsInTdb(tdb, database);
+if ((!tdb->private || privateHost) && hTrackOnChrom(tdb, chrom))
+    slAddHead(tdbRetList, tdb);
+else
+    trackDbFree(&tdb);
+}
+
 struct trackDb *hTrackDb(char *chrom)
 /* Load tracks associated with current chromosome (which may be NULL for
  * all). If trackDbLocal exists, then it's row either override or are added to
@@ -2404,7 +2416,7 @@ struct trackDb *tdbList = loadTrackDb(conn, NULL);
 struct trackDb *tdbLocalList = loadTrackDbLocal(conn, NULL);
 struct trackDb *tdbRetList = NULL;
 char *database = hGetDb();
-boolean privateToo = hIsPrivateHost();
+boolean privateHost = hIsPrivateHost();
 
 while (tdbList != NULL)
     {
@@ -2416,16 +2428,15 @@ while (tdbList != NULL)
         trackDbFree(&tdb);
         tdb = tdbLoc;
         }
-    hLookupStringsInTdb(tdb, database);
-    if ((!tdb->private || privateToo) && hTrackOnChrom(tdb, chrom))
-        slAddHead(&tdbRetList, tdb);
-    else
-        trackDbFree(&tdb);
+    processTrackDb(database, tdb, chrom, privateHost, &tdbRetList);
     }
 
 /* add remaing local trackDbs */
-tdbRetList = slCat(tdbRetList, tdbLocalList);
-
+while (tdbLocalList != NULL)
+    {
+    struct trackDb *tdb = slPopHead(&tdbLocalList);
+    processTrackDb(database, tdb, chrom, privateHost, &tdbRetList);
+    }
 hFreeConn(&conn);
 slReverse(&tdbRetList);
 return tdbRetList;

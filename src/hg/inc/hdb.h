@@ -347,8 +347,9 @@ boolean hTrackOnChrom(struct trackDb *tdb, char *chrom);
 /* Return TRUE if track exists on this chromosome. */
 
 struct trackDb *hTrackDb(char *chrom);
-/* Load tracks associated with current chromosome (which may
- * be NULL */
+/* Load tracks associated with current chromosome (which may be NULL for
+ * all). If trackDbLocal exists, then it's row either override or are added to
+ * the standard trackDb. */
 
 struct trackDb *hTrackDbForTrack(char *track);
 /* Load trackDb object for a track. If trackDbLocal exists, then it's row is
