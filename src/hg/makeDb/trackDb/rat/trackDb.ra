@@ -5,7 +5,7 @@ group map
 priority 14
 visibility hide
 color 150,0,0
-type bed 4+
+type bed 4 +
 
 track softberryGene
 shortLabel Fgenesh++ Genes
@@ -15,3 +15,15 @@ priority 48
 visibility dense
 color 0,100,0
 type genePred softberryPep
+
+
+track gold
+shortLabel Assembly
+longLabel Assembly from Fragments
+group map
+priority 10
+visibility hide
+color 150,100,30
+altColor 230,170,40
+type bed 3 +
+

@@ -4,7 +4,7 @@ longLabel GC Percent Sample Track
 group map
 priority 1
 visibility full
-type sample
+type sample 0 100
 
 track ctgPos
 shortLabel Map Contigs

@@ -60,6 +60,11 @@ For nets it's
     3) associated chain track
 For sample
     1) sample
+    2) minVal (optional, default 0).  Used just for label.
+    3) maxVal (optional, default 1000).  Used just for label.
+    4) scale - what to scale samples that
+       min and max values in database end up
+       0 and 1.
     2) number of fields (currently always 9)
 
 If something lacks a type field it needs to have custom
