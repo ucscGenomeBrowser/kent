@@ -1681,7 +1681,7 @@ tg->altColor.b = (b+255)/2;
 }
 
 
-struct linkedFeatures *lfFromPslx(struct psl *psl, int sizeMul, boolean isXeno)
+struct linkedFeatures *lfFromPslx(struct psl *psl, int sizeMul, boolean isXeno, boolean nameGetsPos)
 /* Create a linked feature item from pslx.  Pass in sizeMul=1 for DNA, 
  * sizeMul=3 for protein. */
 {
@@ -1695,7 +1695,16 @@ boolean rcTarget = (psl->strand[1] == '-');
 
 AllocVar(lf);
 lf->grayIx = grayIx;
-strncpy(lf->name, psl->qName, sizeof(lf->name));
+if (nameGetsPos)
+    {
+    char buf[256];
+    snprintf(buf, sizeof(buf), "%s:%d-%d %s:%d-%d", psl->qName, psl->qStart, psl->qEnd,
+    	psl->tName, psl->tStart, psl->tEnd);
+    lf->extra = cloneString(buf);
+    snprintf(lf->name, sizeof(lf->name), "%s %dk", psl->qName, psl->qStart/1000);
+    }
+else
+    strncpy(lf->name, psl->qName, sizeof(lf->name));
 lf->orientation = orientFromChar(psl->strand[0]);
 if (rcTarget)
     lf->orientation = -lf->orientation;
@@ -1726,7 +1735,7 @@ return lf;
 struct linkedFeatures *lfFromPsl(struct psl *psl, boolean isXeno)
 /* Create a linked feature item from psl. */
 {
-return lfFromPslx(psl, 1, isXeno);
+return lfFromPslx(psl, 1, isXeno, FALSE);
 }
 
 void filterMrna(struct trackGroup *tg, struct linkedFeatures **pLfList)
@@ -1898,7 +1907,7 @@ hFreeConn(&conn);
 }
 
 void lfFromPslsInRange(struct trackGroup *tg, int start, int end, 
-	char *chromName, boolean isXeno)
+	char *chromName, boolean isXeno, boolean nameGetsPos)
 /* Return linked features from range of table. */
 {
 char *track = tg->mapName;
@@ -1912,7 +1921,7 @@ sr = hRangeQuery(conn, track, chromName, start, end, NULL, &rowOffset);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     struct psl *psl = pslLoad(row+rowOffset);
-    lf = lfFromPsl(psl, isXeno);
+    lf = lfFromPslx(psl, 1, isXeno, nameGetsPos);
     slAddHead(&lfList, lf);
     pslFree(&psl);
     }
@@ -2127,7 +2136,7 @@ tg->drawItems = linkedFeaturesAverageDensePair;
 
 
 
-char *usrPslMapName(struct trackGroup *tg, void *item)
+char *mapNameFromLfExtra(struct trackGroup *tg, void *item)
 /* Return name of item. */
 {
 struct linkedFeatures *lf = item;
@@ -2182,7 +2191,7 @@ while ((psl = pslNext(f)) != NULL)
     {
     if (sameString(psl->tName, chromName) && psl->tStart < winEnd && psl->tEnd > winStart)
 	{
-	lf = lfFromPslx(psl, sizeMul, TRUE);
+	lf = lfFromPslx(psl, sizeMul, TRUE, FALSE);
 	sprintf(buf2, "%s %s", ss, psl->qName);
 	lf->extra = cloneString(buf2);
 	slAddHead(&lfList, lf);
@@ -2204,7 +2213,7 @@ tg->visibility = tvFull;
 tg->longLabel = "Your Sequence from BLAT Search";
 tg->shortLabel = "BLAT Sequence";
 tg->loadItems = loadUserPsl;
-tg->mapItemName = usrPslMapName;
+tg->mapItemName = mapNameFromLfExtra;
 tg->priority = 11;
 return tg;
 }
@@ -2526,6 +2535,15 @@ tg->itemName = sanger22Name;
 }
 
 
+int cmpAgpFrag(const void *va, const void *vb)
+/* Compare two agpFrags by chromStart. */
+{
+const struct agpFrag *a = *((struct agpFrag **)va);
+const struct agpFrag *b = *((struct agpFrag **)vb);
+return a->chromStart - b->chromStart;
+}
+
+
 void goldLoad(struct trackGroup *tg)
 /* Load up golden path from database table to trackGroup items. */
 {
@@ -2543,7 +2561,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     frag = agpFragLoad(row+rowOffset);
     slAddHead(&fragList, frag);
     }
-slReverse(&fragList);
+slSort(&fragList, cmpAgpFrag);
 sqlFreeResult(&sr);
 tg->items = fragList;
 
@@ -3518,6 +3536,19 @@ void xenoMrnaMethods(struct trackGroup *tg)
 {
 tg->itemName = xenoMrnaName;
 tg->extraUiData = newMrnaUiData(tg->mapName, TRUE);
+}
+
+void loadXenoPslWithPos(struct trackGroup *tg)
+/* load up all of the psls from correct table into tg->items item list*/
+{
+lfFromPslsInRange(tg, winStart,winEnd, chromName, TRUE, TRUE);
+}
+
+void blatMusMethods(struct trackGroup *tg)
+/* Fill in custom parts of blatMus - assembled mouse genome blat vs. human. */
+{
+tg->loadItems = loadXenoPslWithPos;
+tg->mapItemName = mapNameFromLfExtra;
 }
 
 void loadRnaGene(struct trackGroup *tg)
@@ -6767,14 +6798,15 @@ tg->items = lfFromGenePredInRange(tg->mapName, chromName, winStart, winEnd);
 void loadPsl(struct trackGroup *tg)
 /* load up all of the psls from correct table into tg->items item list*/
 {
-lfFromPslsInRange(tg, winStart,winEnd, chromName, FALSE);
+lfFromPslsInRange(tg, winStart,winEnd, chromName, FALSE, FALSE);
 }
 
 void loadXenoPsl(struct trackGroup *tg)
 /* load up all of the psls from correct table into tg->items item list*/
 {
-lfFromPslsInRange(tg, winStart,winEnd, chromName, TRUE);
+lfFromPslsInRange(tg, winStart,winEnd, chromName, TRUE, FALSE);
 }
+
 
 void fillInFromType(struct trackGroup *group, struct trackDb *tdb)
 /* Fill in various function pointers in group from type field of tdb. */
@@ -7207,6 +7239,7 @@ registerTrackHandler("tightEst", mrnaMethods);
 registerTrackHandler("estPair", estPairMethods);
 registerTrackHandler("cpgIsland", cpgIslandMethods);
 registerTrackHandler("exoMouse", exoMouseMethods);
+registerTrackHandler("blatMus", blatMusMethods);
 registerTrackHandler("xenoBestMrna", xenoMrnaMethods);
 registerTrackHandler("xenoMrna", xenoMrnaMethods);
 registerTrackHandler("xenoEst", xenoMrnaMethods);

@@ -1442,8 +1442,9 @@ for (seq = seqList; seq != NULL; seq = seq->next)
 hFreeConn(&conn);
 }
 
-int showGfAlignment(struct psl *psl, bioSeq *oSeq, FILE *f, enum gfType qType, int qStart, int qEnd)
-/* Show protein/DNA alignment. */
+int showGfAlignment(struct psl *psl, bioSeq *oSeq, FILE *f, enum gfType qType, int qStart, 
+	int qEnd, char *qName)
+/* Show protein/DNA alignment or translated DNA alignment. */
 {
 struct dnaSeq *dnaSeq = NULL;
 boolean tIsRc = (psl->strand[1] == '-');
@@ -1482,9 +1483,12 @@ if (qIsRc)
     }
 dna = cloneString(dnaSeq->dna);
 
+if (qName == NULL) 
+    qName = psl->qName;
 fprintf(f, "<TT><PRE>");
-fprintf(f, "<H4><A NAME=cDNA></A>%s%s</H4>\n", psl->qName, (qIsRc  ? " (reverse complemented)" : ""));
+fprintf(f, "<H4><A NAME=cDNA></A>%s%s</H4>\n", qName, (qIsRc  ? " (reverse complemented)" : ""));
 tolowers(oLetters);
+
 /* Display query sequence. */
     {
     struct cfm *cfm;
@@ -1688,7 +1692,8 @@ blockCount = ffShAliPart(body, ffAli, psl->qName, rna, rnaSize, 0,
 return blockCount;
 }
 
-void showSomeAlignment(struct psl *psl, bioSeq *oSeq, enum gfType qType, int qStart, int qEnd)
+void showSomeAlignment(struct psl *psl, bioSeq *oSeq, enum gfType qType, int qStart, int qEnd,
+	char *qName)
 /* Display protein or DNA alignment in a frame. */
 {
 int blockCount;
@@ -1706,15 +1711,17 @@ htmStart(body, psl->qName);
 if (qType == gftRna || qType == gftDna)
     blockCount = showDnaAlignment(psl, oSeq, body);
 else 
-    blockCount = showGfAlignment(psl, oSeq, body, qType, qStart, qEnd);
+    blockCount = showGfAlignment(psl, oSeq, body, qType, qStart, qEnd, qName);
 fclose(body);
 chmod(bodyTn.forCgi, 0666);
 
 /* Write index. */
 index = mustOpen(indexTn.forCgi, "w");
-htmStart(index, psl->qName);
-fprintf(index, "<H3>Alignment of %s</H3>", psl->qName);
-fprintf(index, "<A HREF=\"%s#cDNA\" TARGET=\"body\">%s</A><BR>\n", bodyTn.forCgi, psl->qName);
+if (qName == NULL)
+     qName = psl->qName;
+htmStart(index, qName);
+fprintf(index, "<H3>Alignment of %s</H3>", qName);
+fprintf(index, "<A HREF=\"%s#cDNA\" TARGET=\"body\">%s</A><BR>\n", bodyTn.forCgi, qName);
 fprintf(index, "<A HREF=\"%s#genomic\" TARGET=\"body\">genomic</A><BR>\n", bodyTn.forCgi);
 for (i=1; i<=blockCount; ++i)
     {
@@ -1770,9 +1777,9 @@ hFreeConn(&conn);
 
 rnaSeq = hRnaSeq(acc);
 if (startsWith("xeno", type))
-    showSomeAlignment(psl, rnaSeq, gftDnaX, 0, rnaSeq->size);
+    showSomeAlignment(psl, rnaSeq, gftDnaX, 0, rnaSeq->size, NULL);
 else
-    showSomeAlignment(psl, rnaSeq, gftDna, 0, rnaSeq->size);
+    showSomeAlignment(psl, rnaSeq, gftDna, 0, rnaSeq->size, NULL);
 }
 
 void htcUserAli(char *fileNames)
@@ -1810,7 +1817,7 @@ for (oSeq = oSeqList; oSeq != NULL; oSeq = oSeq->next)
          break;
     }
 if (oSeq == NULL)  errAbort("%s is in %s but not in %s. Internal error.", qName, pslName, faName);
-showSomeAlignment(psl, oSeq, qt, 0, oSeq->size);
+showSomeAlignment(psl, oSeq, qt, 0, oSeq->size, NULL);
 }
 
 void htcBlatXeno(char *readName, char *table)
@@ -1845,7 +1852,7 @@ psl = pslLoad(row+hasBin);
 sqlFreeResult(&sr);
 hFreeConn(&conn);
 seq = hExtSeq(readName);
-showSomeAlignment(psl, seq, gftDnaX, 0, seq->size);
+showSomeAlignment(psl, seq, gftDnaX, 0, seq->size, NULL);
 }
 
 
@@ -3007,12 +3014,119 @@ mustParseRange(tRange, &tName, &tStart, &tEnd);
 return loadPslAt(track, qName, qStart, qEnd, tName, tStart, tEnd);
 }
 
+void pslRecalcBounds(struct psl *psl)
+/* Calculate qStart/qEnd tStart/tEnd at top level to be consistent
+ * with blocks. */
+{
+int qStart, qEnd, tStart, tEnd, size;
+int last = psl->blockCount - 1;
+qStart = psl->qStarts[0];
+tStart = psl->tStarts[0];
+size = psl->blockSizes[last];
+qEnd = psl->qStarts[last] + size;
+tEnd = psl->tStarts[last] + size;
+if (psl->strand[0] == '-')
+    reverseIntRange(&qStart, &qEnd, psl->qSize);
+if (psl->strand[1] == '-')
+    reverseIntRange(&tStart, &tEnd, psl->tSize);
+psl->qStart = qStart;
+psl->qEnd = qEnd;
+psl->tStart = tStart;
+psl->tEnd = tEnd;
+}
+
+struct psl *trimPsl(struct psl *oldPsl, int tMin, int tMax)
+/* Return psl trimmed to fit inside tMin/tMax.  Note this does not
+ * update the match/misMatch and related fields. */
+{
+int newSize;
+int oldBlockCount = oldPsl->blockCount;
+boolean tIsRc = (oldPsl->strand[1] == '-');
+boolean qIsRc = (oldPsl->strand[0] == '-');
+int newBlockCount = 0, completeBlockCount = 0;
+int i, newI = 0;
+struct psl *newPsl = NULL;
+int tMn = tMin, tMx = tMax;   /* tMin/tMax adjusted for strand. */
+
+/* Deal with case where we're completely trimmed out quickly. */
+newSize = rangeIntersection(oldPsl->tStart, oldPsl->tEnd, tMin, tMax);
+if (newSize <= 0)
+    return NULL;
+
+if (tIsRc)
+    reverseIntRange(&tMn, &tMx, oldPsl->tSize);
+
+/* Count how many blocks will survive trimming. */
+oldBlockCount = oldPsl->blockCount;
+for (i=0; i<oldBlockCount; ++i)
+    {
+    int s = oldPsl->tStarts[i];
+    int e = s + oldPsl->blockSizes[i];
+    int sz = e - s;
+    int overlap;
+    if ((overlap = rangeIntersection(s, e, tMn, tMx)) > 0)
+        ++newBlockCount;
+    if (overlap == sz)
+        ++completeBlockCount;
+    }
+
+if (newBlockCount == 0)
+    return NULL;
+
+/* Allocate new psl and fill in what we already know. */
+AllocVar(newPsl);
+strcpy(newPsl->strand, oldPsl->strand);
+newPsl->qName = cloneString(oldPsl->qName);
+newPsl->qSize = oldPsl->qSize;
+newPsl->tName = cloneString(oldPsl->tName);
+newPsl->tSize = oldPsl->tSize;
+newPsl->blockCount = newBlockCount;
+AllocArray(newPsl->blockSizes, newBlockCount);
+AllocArray(newPsl->qStarts, newBlockCount);
+AllocArray(newPsl->tStarts, newBlockCount);
+
+/* Fill in blockSizes, qStarts, tStarts with real data. */
+newBlockCount = completeBlockCount = 0;
+for (i=0; i<oldBlockCount; ++i)
+    {
+    int oldSz = oldPsl->blockSizes[i];
+    int sz = oldSz;
+    int tS = oldPsl->tStarts[i];
+    int tE = tS + sz;
+    int qS = oldPsl->qStarts[i];
+    int qE = qS + sz;
+    if (rangeIntersection(tS, tE, tMn, tMx) > 0)
+        {
+	int diff;
+	if ((diff = (tMn - tS)) > 0)
+	    {
+	    tS += diff;
+	    qS += diff;
+	    sz -= diff;
+	    }
+	if ((diff = (tE - tMx)) > 0)
+	    {
+	    tE -= diff;
+	    qE -= diff;
+	    sz -= diff;
+	    }
+	newPsl->qStarts[newBlockCount] = qS;
+	newPsl->tStarts[newBlockCount] = tS;
+	newPsl->blockSizes[newBlockCount] = sz;
+	++newBlockCount;
+	if (sz == oldSz)
+	    ++completeBlockCount;
+	}
+    }
+pslRecalcBounds(newPsl);
+return newPsl;
+}
 
 void doBlatMus(struct trackDb *tdb, char *item)
 /* Put up cross-species alignment when the second species
  * sequence is in a nib file. */
 {
-struct psl *psl = NULL;
+struct psl *psl = NULL, *trimmedPsl = NULL;
 char otherString[256];
 char *cgiItem = cgiEncode(item);
 
@@ -3024,10 +3138,12 @@ printf("<B>Human position:</B> %s:%d-%d<BR>\n", psl->tName, psl->tStart, psl->tE
 printf("<B>Human size:</B> %d<BR>\n", psl->tEnd - psl->tStart);
 printf("<B>Bases in aligning blocks:</B> %d<BR>\n", psl->match + psl->repMatch);
 printf("<B>Percent identity within aligning blocks:</B> %3.1f%%<BR>\n", 0.1*(1000 - pslCalcMilliBad(psl, FALSE)));
+printf("<B>Browser window position:</B> %s:%d-%d<BR>\n", seqName, winStart, winEnd);
+printf("<B>Browser window size:</B> %d<BR>\n", winEnd - winStart);
 sprintf(otherString, "%d", psl->tStart);
 hgcAnchorSomewhere("htcBlatMus", cgiItem, otherString, psl->tName);
 freez(&cgiItem);
-printf("View detailed alignment</A><BR>\n");
+printf("View details of parts of alignment within browser window.</A><BR>\n");
 printTrackHtml(tdb);
 }
 
@@ -3037,14 +3153,17 @@ void htcBlatMus(char *htcCommand, char *item)
 struct psl *psl = loadPslFromRangePair("blatMus",  item);
 char nibFile[512];
 char query[256];
+char name[256];
 struct dnaSeq *musSeq = NULL;
 struct sqlConnection *conn = hAllocConn();
 
+psl = trimPsl(psl, winStart, winEnd);
 sprintf(query, "select fileName from mouseChrom where chrom = '%s'", psl->qName);
 if (sqlQuickQuery(conn, query, nibFile, sizeof(nibFile)) == NULL)
     errAbort("Sequence %s isn't in mouseChrom", psl->qName);
 musSeq = nibLoadPart(nibFile, psl->qStart, psl->qEnd - psl->qStart);
-showSomeAlignment(psl, musSeq, gftDnaX, psl->qStart, psl->qEnd);
+snprintf(name, sizeof(name), "mouse.%s", psl->qName);
+showSomeAlignment(psl, musSeq, gftDnaX, psl->qStart, psl->qEnd, name);
 hFreeConn(&conn);
 }
 
