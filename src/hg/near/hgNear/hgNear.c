@@ -16,7 +16,7 @@
 #include "ra.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: hgNear.c,v 1.77 2003/09/16 20:54:18 kent Exp $";
+static char const rcsid[] = "$Id: hgNear.c,v 1.78 2003/09/17 01:58:53 kent Exp $";
 
 char *excludeVars[] = { "submit", "Submit", confVarName, colInfoVarName,
 	defaultConfName, hideAllConfName, showAllConfName,
@@ -24,8 +24,11 @@ char *excludeVars[] = { "submit", "Submit", confVarName, colInfoVarName,
 	filSaveCurrentVarName, filUseSavedVarName,
 	getSeqVarName, getSeqPageVarName, getGenomicSeqVarName, getTextVarName, 
 	advFilterVarName, advFilterClearVarName, advFilterBrowseVarName,
-	advFilterListVarName, advFilterListProtVarName,
-	advFilterListAccVarName, idVarName, idPosVarName, NULL }; 
+	advFilterListVarName, 
+#ifdef OLD
+	advFilterListProtVarName, advFilterListAccVarName, 
+#endif /* OLD */
+	idVarName, idPosVarName, NULL }; 
 /* The excludeVars are not saved to the cart. */
 
 /* ---- Global variables. ---- */
@@ -86,6 +89,12 @@ else
     {
     return strcmp(a->protein, b->protein);
     }
+}
+
+boolean anyWild(char *s)
+/* Return TRUE if there are '?' or '*' characters in s. */
+{
+return strchr(s, '?') != NULL || strchr(s, '*') != NULL;
 }
 
 boolean wildMatchAny(char *word, struct slName *wildList)
@@ -1401,10 +1410,12 @@ else if (cartVarExists(cart, advFilterBrowseVarName))
     doAdvFilterBrowse(conn, colList);
 else if (cartVarExists(cart, advFilterListVarName))
     doAdvFilterList(conn, colList);
+#ifdef OLD
 else if (cartVarExists(cart, advFilterListProtVarName))
     doAdvFilterListProt(conn, colList);
 else if (cartVarExists(cart, advFilterListAccVarName))
     doAdvFilterListAcc(conn, colList);
+#endif /* OLD */
 else if (cartVarExists(cart, getSeqPageVarName))
     doGetSeqPage(conn, colList);
 else if (cartVarExists(cart, idVarName))

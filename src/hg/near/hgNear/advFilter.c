@@ -10,7 +10,7 @@
 #include "hdb.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: advFilter.c,v 1.9 2003/09/13 04:10:42 kent Exp $";
+static char const rcsid[] = "$Id: advFilter.c,v 1.10 2003/09/17 01:58:53 kent Exp $";
 
 struct genePos *advFilterResults(struct column *colList, 
 	struct sqlConnection *conn)
@@ -273,8 +273,12 @@ if (!userSettingsAnySaved(filUserSettings()))
 hPrintf(">");
 hPrintf("</TD><TD>");
 cgiMakeButton(advFilterBrowseVarName, "Submit");
-hPrintf("</TD></TR><TR><TD COLSPAN=4>");
-hPrintf(
+hPrintf("</TD></TR></TABLE>");
+hPrintf("Submit will take you back to the main page "
+ "with the current filter.<BR>To quickly get a list of gene "
+ "names that pass the filter push ");
+cgiMakeButton(advFilterListVarName, "List Names");
+#ifdef OLD
 "Hint: you can combine filters by copying the results of 'List Names'<BR>\n"
 "and then doing a 'Paste List' in the Name controls.<BR>");
 hPrintf("</TD></TR><TR><TD>");
@@ -286,6 +290,7 @@ cgiMakeButton(advFilterListProtVarName, "List Proteins");
 hPrintf("</TD><TD>");
 cgiMakeButton(advFilterListAccVarName, "List Accessions");
 hPrintf("</TD></TR></TABLE>\n");
+#endif /* OLD */
 }
 
 void doAdvFilter(struct sqlConnection *conn, struct column *colList)
@@ -405,6 +410,7 @@ void doAdvFilterList(struct sqlConnection *conn, struct column *colList)
 doAdvFilterListCol(conn, colList, "name");
 }
 
+#ifdef OLD
 void doAdvFilterListProt(struct sqlConnection *conn, struct column *colList)
 /* List proteins matching advanced filter. */
 {
@@ -416,6 +422,7 @@ void doAdvFilterListAcc(struct sqlConnection *conn, struct column *colList)
 {
 doAdvFilterListCol(conn, colList, "acc");
 }
+#endif /* OLD */
 
 
 

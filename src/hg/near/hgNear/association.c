@@ -228,12 +228,6 @@ freeHash(&passHash);
 return list;
 }
 
-boolean anyWild(char *s)
-/* Return TRUE if there are '?' or '*' characters in s. */
-{
-return strchr(s, '?') != NULL || strchr(s, '*') != NULL;
-}
-
 struct genePos *associationAdvFilter(struct column *col, 
 	struct sqlConnection *conn, struct genePos *list)
 /* Do advanced filter on position. */

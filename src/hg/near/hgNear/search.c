@@ -6,7 +6,7 @@
 #include "hdb.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: search.c,v 1.8 2003/09/16 19:14:52 kent Exp $";
+static char const rcsid[] = "$Id: search.c,v 1.9 2003/09/17 01:58:53 kent Exp $";
 
 int searchResultCmpShortLabel(const void *va, const void *vb)
 /* Compare to sort based on short label. */
@@ -132,7 +132,13 @@ for (col = colList; col != NULL; col = col->next)
 if (totalCount == 0)
     {
     displayData(conn, colList, NULL);
-    warn("Sorry, couldn't find '%s'", search);
+    if (anyWild(search))
+        warn("Sorry, the search box doesn't take wildcards, "
+	     "though in most cases it will find things without "
+	     "them.  Try entering your search without * or ? "
+	     "characters.");
+    else
+	warn("Sorry, couldn't find '%s'", search);
     }
 else if (totalCount == 1)
     displayData(conn, colList, &srOne->gp);

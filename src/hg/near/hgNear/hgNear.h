@@ -208,10 +208,12 @@ extern struct genePos *curGeneId;	  /* Identity of current gene. */
 	/* Advanced filter browse  button. */
 #define advFilterListVarName "near.do.advFilterList" 
 	/* Advanced filter submit list. */
+#ifdef OLD
 #define advFilterListProtVarName "near.do.advFilterListProt" 
 	/* Advanced filter submit protein list. */
 #define advFilterListAccVarName "near.do.advFilterListAcc" 
 	/* Advanced filter submit accession list. */
+#endif /* OLD */
 
 #define filSaveSettingsPrefix "near_filUserSet_" /* Prefix for filter sets. */
     /* Underbars on this one for sake of javascript. */
@@ -248,6 +250,9 @@ extern struct genePos *curGeneId;	  /* Identity of current gene. */
 
 int genePosCmpName(const void *va, const void *vb);
 /* Sort function to compare two genePos by name. */
+
+boolean anyWild(char *s);
+/* Return TRUE if there are '?' or '*' characters in s. */
 
 boolean wildMatchAny(char *word, struct slName *wildList);
 /* Return TRUE if word matches any thing in wildList. */
@@ -540,11 +545,13 @@ void doAdvFilterBrowse(struct sqlConnection *conn, struct column *colList);
 void doAdvFilterList(struct sqlConnection *conn, struct column *colList);
 /* List gene names matching advanced filter. */
 
+#ifdef OLD
 void doAdvFilterListProt(struct sqlConnection *conn, struct column *colList);
 /* List proteins matching advanced filter. */
 
 void doAdvFilterListAcc(struct sqlConnection *conn, struct column *colList);
 /* List accessions matching advanced filter. */
+#endif /* OLD */
 
 void doConfigure(struct sqlConnection *conn, struct column *colList, 
 	char *bumpVar);
