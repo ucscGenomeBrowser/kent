@@ -110,8 +110,8 @@ search fuzzy
 colWidth 50
 
 name go
-shortLabel GO
-longLabel Gene Ontology Associations
+shortLabel Gene Ontology
+longLabel Gene Ontology (GO) terms associated with gene.
 priority 10
 visibility off
 type go

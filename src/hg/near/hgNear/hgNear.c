@@ -16,7 +16,7 @@
 #include "ra.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: hgNear.c,v 1.62 2003/09/08 09:04:21 kent Exp $";
+static char const rcsid[] = "$Id: hgNear.c,v 1.63 2003/09/09 00:50:05 kent Exp $";
 
 char *excludeVars[] = { "submit", "Submit", confVarName, colInfoVarName,
 	defaultConfName, hideAllConfName, showAllConfName,
@@ -117,6 +117,19 @@ va_list(args);
 va_start(args, format);
 hvPrintf(format, args);
 va_end(args);
+}
+
+void hPrintNonBreak(char *s)
+/* Print out string but replace spaces with &nbsp; */
+{
+char c;
+while (c = *s++)
+    {
+    if (c == ' ')
+	fputs("&nbsp;", stdout);
+    else
+        putchar(c);
+    }
 }
 
 void makeTitle(char *title, char *helpName)
@@ -238,15 +251,17 @@ void cellSimplePrint(struct column *col, struct genePos *gp,
 /* This just prints one field from table. */
 {
 char *s = col->cellVal(col, gp, conn);
+hPrintf("<TD>");
 if (s == NULL) 
     {
-    hPrintf("<TD>n/a</TD>", s);
+    hPrintf("n/a");
     }
 else
     {
-    hPrintf("<TD>%s</TD>", s);
+    hPrintNonBreak(s);
     freeMem(s);
     }
+hPrintf("</TD>");
 }
 
 static void hPrintSpaces(int count)

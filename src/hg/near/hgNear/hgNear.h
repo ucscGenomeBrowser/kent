@@ -211,6 +211,9 @@ void hvPrintf(char *format, va_list args);
 void hPrintf(char *format, ...);
 /* Print out some html. */
 
+void hPrintNonBreak(char *s);
+/* Print out string but replace spaces with &nbsp; */
+
 void makeTitle(char *title, char *helpName);
 /* Make title bar. */
 
