@@ -1,4 +1,4 @@
-track synteny100000
+track syntenyMouse
 shortLabel Mouse Synteny
 longLabel Human/Mouse Synteny using blastz single coverage (100k window)
 group compGeno
