@@ -5,34 +5,20 @@
 #include "portable.h"
 #include "dystring.h"
 #include "hash.h"
+#include "cheapcgi.h"
+#include "web.h"
 #include "jksql.h"
 #include "hdb.h"
 #include "psl.h"
-#include "ctgPos.h"
-#include "clonePos.h"
-#include "bactigPos.h"
 #include "genePred.h"
-#include "glDbRep.h"
 #include "bed.h"
 #include "cytoBand.h"
-#include "mapSts.h"
-#include "fishClones.h"
-#include "lfs.h"
-#include "snp.h"
-#include "snpMap.h"
-#include "rnaGene.h"
-#include "stsMarker.h"
-#include "stsMap.h"
-#include "stsMapMouse.h"
-#include "stsMapMouseNew.h"
-#include "stsMapRat.h"
-#include "knownInfo.h"
 #include "cart.h"
 #include "hgFind.h"
+#include "hgFindSpec.h"
+#include "snp.h"
 #include "refLink.h"
 #include "kgAlias.h"
-#include "cheapcgi.h"
-#include "web.h"
 #include "kgAlias.h"
 #include "kgProtAlias.h"
 #include "findKGAlias.h"
@@ -41,11 +27,104 @@
 #include "minGeneInfo.h"
 #include <regex.h>
 
-static char const rcsid[] = "$Id: hgFind.c,v 1.130 2004/03/03 05:59:31 daryl Exp $";
+static char const rcsid[] = "$Id: hgFind.c,v 1.131 2004/04/03 02:36:28 angie Exp $";
+
+extern struct cart *cart;
+char *hgAppName = "";
 
 /* alignment tables to check when looking for mrna alignments */
 static char *estTables[] = { "all_est", "xenoEst", NULL};
 static char *mrnaTables[] = { "all_mrna", "xenoMrna", NULL};
+
+static void hgPosFree(struct hgPos **pEl)
+/* Free up hgPos. */
+{
+struct hgPos *el;
+if ((el = *pEl) != NULL)
+    {
+    freeMem(el->name);
+    freeMem(el->description);
+    freez(pEl);
+    }
+}
+
+static void hgPosFreeList(struct hgPos **pList)
+/* Free a list of dynamically allocated hgPos's */
+{
+struct hgPos *el, *next;
+
+for (el = *pList; el != NULL; el = next)
+    {
+    next = el->next;
+    hgPosFree(&el);
+    }
+*pList = NULL;
+}
+
+static void hgPosTableFree(struct hgPosTable **pEl)
+/* Free up hgPosTable. */
+{
+struct hgPosTable *el;
+if ((el = *pEl) != NULL)
+    {
+    freeMem(el->name);
+    hgPosFreeList(&el->posList);
+    freez(pEl);
+    }
+}
+
+static void hgPosTableFreeList(struct hgPosTable **pList)
+/* Free a list of dynamically allocated hgPos's */
+{
+struct hgPosTable *el, *next;
+
+for (el = *pList; el != NULL; el = next)
+    {
+    next = el->next;
+    hgPosTableFree(&el);
+    }
+*pList = NULL;
+}
+
+
+static void hgPositionsFree(struct hgPositions **pEl)
+/* Free up hgPositions. */
+{
+struct hgPositions *el;
+if ((el = *pEl) != NULL)
+    {
+    freeMem(el->query);
+    freeMem(el->extraCgi);
+    hgPosTableFreeList(&el->tableList);
+    freez(pEl);
+    }
+}
+
+static void hgPositionsFreeList(struct hgPositions **pList)
+/* Free a list of dynamically allocated hgPos's */
+{
+struct hgPositions *el, *next;
+
+for (el = *pList; el != NULL; el = next)
+    {
+    next = el->next;
+    hgPositionsFree(&el);
+    }
+*pList = NULL;
+}
+
+static char *hgPosBrowserRange(struct hgPos *pos, char range[64])
+/* Convert pos to chrN:123-456 format.  If range parameter is NULL it returns
+ * static buffer, otherwise writes and returns range. */
+{
+static char buf[64];
+
+if (range == NULL)
+    range = buf;
+sprintf(range, "%s:%d-%d", pos->chrom, pos->chromStart, pos->chromEnd);
+return range;
+}
+
 
 char *MrnaIDforGeneName(char *geneName)
 /* return mRNA ID for a gene name */
@@ -273,33 +352,6 @@ static struct hgPositions *handleTwoSites(char *spec, char **retChromName,
 /* Deal with specifications that in form start;end. */
 
 
-void hgPositionsFree(struct hgPositions **pEl)
-/* Free up hgPositions. */
-{
-struct hgPositions *el;
-if ((el = *pEl) != NULL)
-    {
-    freeMem(el->query);
-    freeMem(el->extraCgi);
-    hgPosTableFreeList(&el->tableList);
-    freez(pEl);
-    }
-}
-
-void hgPositionsFreeList(struct hgPositions **pList)
-/* Free a list of dynamically allocated hgPos's */
-{
-struct hgPositions *el, *next;
-
-for (el = *pList; el != NULL; el = next)
-    {
-    next = el->next;
-    hgPositionsFree(&el);
-    }
-*pList = NULL;
-}
-
-
 static char *getUiUrl(struct cart *cart)
 /* Get rest of UI from browser. */
 {
@@ -358,429 +410,6 @@ for (table = hgp->tableList; table != NULL; table = table->next)
 if (posCount != 1)
    hgp->singlePos = NULL;
 hgp->posCount = posCount;
-}
-
-static boolean isContigName(char *contig)
-/* Return TRUE if a FPC contig name. */
-{
-return(startsWith("ctg", contig) ||
-       startsWith("NT_", contig));
-}
-
-static boolean isBactigName(char *name)
-/* Return TRUE if name matches the regular expression for a 
-   Baylor rat assembly bactig name. */
-{
-char *exp = "^[gkt][a-z]{3}(_[gkt][a-z]{3})?(_[0-9])?$";
-regex_t compiledExp;
-char *errStr;
-int errNum;
-
-if (errNum = regcomp(&compiledExp, exp, REG_NOSUB | REG_EXTENDED | REG_ICASE))
-    errAbort("Regular expression compilation error %d", errNum);
-
-return(regexec(&compiledExp, name, 0, NULL, 0) == 0);
-}
-
-static boolean isRatContigName(char *contig)
-/* Return TRUE if a Baylor rat assembly contig name. */
-{
-return(startsWith("RNOR", contig) && (strlen(contig) == 12) &&
-       isdigit(contig[4]) &&
-       isdigit(contig[5]) &&
-       isdigit(contig[6]) &&
-       isdigit(contig[7]) &&
-       isdigit(contig[8]) &&
-       isdigit(contig[9]) &&
-       isdigit(contig[10]) &&
-       isdigit(contig[11]));
-}
-
-static boolean isFlyBaseId(char *id)
-/* Return TRUE if id is a FlyBase ID (e.g. FBgn0123456, FBti0123456). */
-{
-return(startsWith("FB", id) && (strlen(id) == 11) &&
-       isalpha(id[2]) &&
-       isalpha(id[3]) &&
-       isdigit(id[4]) &&
-       isdigit(id[5]) &&
-       isdigit(id[6]) &&
-       isdigit(id[7]) &&
-       isdigit(id[8]) &&
-       isdigit(id[9]) &&
-       isdigit(id[10]));
-}
-
-boolean isBDGPName(char *name)
-/* Return TRUE if name is from BDGP (matching {CG,TE,CR}0123{,4}{,-R?})  */
-{
-int len = strlen(name);
-boolean isBDGP = FALSE;
-if (startsWith("CG", name) || startsWith("TE", name) || startsWith("CR", name))
-    {
-    int numNum = 0;
-    int i;
-    for (i=2;  i < len;  i++)
-	{
-	if (isdigit(name[i]))
-	    numNum++;
-	else
-	    break;
-	}
-    if ((numNum >= 4) && (numNum <= 5))
-	{
-	if (i == len)
-	    isBDGP = TRUE;
-	else if ((i == len-3) &&
-		 (name[i] == '-') && (name[i+1] == 'R') && isalpha(name[i+2]))
-	    isBDGP = TRUE;
-	}
-    }
-return(isBDGP);
-}
-
-static boolean isAncientRName(char *name)
-/* Return TRUE if name is an ancientRepeat ID. */
-{
-return startsWith("ar", name);
-}
-
-
-
-static void findAncientRPos(char *name, char **retChromName, 
-	int *retWinStart, int *retWinEnd)
-/* Find human/mouse ancient repeat start, end, and chrom
- * from "name".  Don't alter
- * return variables if some sort of error. */
-{
-struct sqlConnection *conn = hAllocConn();
-struct sqlResult *sr = NULL;
-struct dyString *query = newDyString(256);
-char **row;
-struct bed *bed = NULL;
-dyStringPrintf(query, "select * from ancientR where name = '%s'", name);
-sr = sqlMustGetResult(conn, query->string);
-row = sqlNextRow(sr);
-if (row == NULL)
-    errAbort("Couldn't find human/mouse ancient repeat: %s", name);
-bed = bedLoadN(row+1,12);  /* 1 here since hasBin is TRUE, 12 for extended bed 12*/
-*retChromName = hgOfficialChromName(bed->chrom);
-*retWinStart = bed->chromStart;
-*retWinEnd = bed->chromEnd;
-bedFree(&bed);
-freeDyString(&query);
-sqlFreeResult(&sr);
-hFreeConn(&conn);
-}
-
-static void findSuperfamily(char *spec, struct hgPositions *hgp)
-/* Look up Superfamily entry using sfDescription table. */
-{
-struct sqlConnection *conn  = hAllocConn();
-struct sqlConnection *conn2 = hAllocConn();
-struct sqlResult *sr  = NULL;
-struct sqlResult *sr2 = NULL;
-struct dyString *ds = newDyString(512);
-char **row, **row2;
-boolean gotOne = FALSE;
-struct hgPosTable *table = NULL;
-struct hgPos *pos;
-struct bed *bed;
-boolean ok;
-char *desc;
-
-if (!hTableExists("superfamily")) return;
- 
-ok = FALSE;
-dyStringClear(ds);
-dyStringPrintf(ds, "select name, description from sfDescription where description like'%c%s%c';", 
-	       '%',spec,'%');
-sr2 = sqlGetResult(conn2, ds->string);
-row2 = sqlNextRow(sr2);
-while (row2 != NULL)
-    {
-    dyStringClear(ds);
-    dyStringPrintf(ds, "select * from superfamily where name = '%s';", row2[0]);
-    sr = sqlGetResult(conn, ds->string);
-        
-    while ((row = sqlNextRow(sr)) != NULL)
-    	{
-	if (ok == FALSE)
-            {
-            ok = TRUE;
-	    AllocVar(table);
-	    slAddHead(&hgp->tableList, table);
-	    table->description = cloneString("Superfamily Associated Search Results");
-	    table->name = cloneString("superfamily");
-	    }
-    	bed = bedLoad3(row+1);
- 
-    	AllocVar(pos);
-    	slAddHead(&table->posList, pos);
-
-    	pos->description = cloneString(row2[1]);
-    	pos->name	 = cloneString(row2[0]);
-    	
-	pos->chrom 	= hgOfficialChromName(bed->chrom);
-    	pos->chromStart = bed->chromStart - (bed->chromEnd - bed->chromStart)/100*200;
-    	pos->chromEnd   = bed->chromEnd + (bed->chromEnd - bed->chromStart)/100*10;
-    	}
-    sqlFreeResult(&sr);
-    row2 = sqlNextRow(sr2);
-    }
-sqlFreeResult(&sr2);
-freeDyString(&ds);
-hFreeConn(&conn);
-}
-
-boolean findContigPos(char *contig, char **retChromName, 
-	int *retWinStart, int *retWinEnd)
-/* Find position in genome of contig.  Don't alter
- * return variables if some sort of error. */
-{
-struct sqlConnection *conn = hAllocConn();
-struct sqlResult *sr = NULL;
-struct dyString *query = newDyString(256);
-char **row;
-boolean foundIt;
-
-if (! hTableExists("ctgPos"))
-    return FALSE;
-
-dyStringPrintf(query, "select * from ctgPos where contig = '%s'", contig);
-sr = sqlMustGetResult(conn, query->string);
-row = sqlNextRow(sr);
-if (row == NULL)
-    foundIt = FALSE;
-else
-    {
-    struct ctgPos *ctgPos = ctgPosLoad(row);
-    *retChromName = hgOfficialChromName(ctgPos->chrom);
-    *retWinStart = ctgPos->chromStart;
-    *retWinEnd = ctgPos->chromEnd;
-    ctgPosFree(&ctgPos);
-    foundIt = TRUE;
-    }
-freeDyString(&query);
-sqlFreeResult(&sr);
-hFreeConn(&conn);
-return foundIt;
-}
-
-boolean findBactigPos(char *bactig, char **retChromName, 
-	int *retWinStart, int *retWinEnd)
-/* Find position in genome of bactig.  Don't alter return variables 
- * unless found. */
-{
-struct sqlConnection *conn = hAllocConn();
-struct sqlResult *sr = NULL;
-struct dyString *query = newDyString(256);
-char **row;
-boolean foundIt;
-
-if (! hTableExists("bactigPos"))
-    return FALSE;
-
-dyStringPrintf(query, "select * from bactigPos where name = '%s'", bactig);
-sr = sqlMustGetResult(conn, query->string);
-row = sqlNextRow(sr);
-if (row == NULL)
-    foundIt = FALSE;
-else
-    {
-    struct bactigPos *bactigPos = bactigPosLoad(row);
-    *retChromName = hgOfficialChromName(bactigPos->chrom);
-    *retWinStart = bactigPos->chromStart;
-    *retWinEnd = bactigPos->chromEnd;
-    bactigPosFree(&bactigPos);
-    foundIt = TRUE;
-    }
-freeDyString(&query);
-sqlFreeResult(&sr);
-hFreeConn(&conn);
-return foundIt;
-}
-
-boolean findChromContigPos(char *name, char **retChromName, 
-	int *retWinStart, int *retWinEnd)
-/* Find position in genome of contig.  Look in all chroms.
- * Don't alter return variables unless found. */
-/* NOTE: could probably speed this up by using the chromInfo hashtable */
-{
-struct sqlConnection *conn = hAllocConn();
-struct sqlResult *sr = NULL;
-struct slName *allChroms = hAllChromNames();
-struct slName *chromPtr;
-char **row;
-char query[256];
-boolean foundIt = FALSE;
-
-for (chromPtr=allChroms;  chromPtr != NULL;  chromPtr=chromPtr->next)
-    {
-    snprintf(query, sizeof(query), 
-                "select chromStart,chromEnd from %s_gold where frag = '%s'",
-	        chromPtr->name, name);
-    sr = sqlMustGetResult(conn, query);
-    row = sqlNextRow(sr);
-    if (row != NULL)
-	{
-	*retChromName = chromPtr->name;
-	*retWinStart = atoi(row[0]);
-	*retWinEnd = atoi(row[1]);
-	foundIt = TRUE;
-	}
-    sqlFreeResult(&sr);
-    if (foundIt)
-	break;
-    }
-hFreeConn(&conn);
-return foundIt;
-}
-
-boolean findRatContigPos(char *name, char **retChromName, 
-	int *retWinStart, int *retWinEnd)
-/* Find position in genome of Baylor rat assembly RNOR* contig.  
- * Don't alter return variables unless found. */
-{
-return findChromContigPos(name, retChromName, retWinStart, retWinEnd);
-}
-
-static boolean isScaffoldPos(char *query)
-/* Return TRUE if the query specifies a numbered scaffold */
-{
-int junk;
-if (sscanf(query, "scaffold_%d", &junk) == 1)
-    return TRUE;
-return FALSE;
-}
-
-char *findFlyBasePos(char *name, char *table,
-		     char **retChromName, int *retWinStart, int *retWinEnd)
-/* Find position in genome of Flybase ID in name.  
- * Don't alter return variables unless found. 
- * Return bdgpGene name for FlyBase ID because that's the table we open up. */
-{
-struct sqlConnection *conn = NULL;
-struct sqlResult *sr = NULL;
-struct genePred *gp = NULL;
-char **row = NULL;
-char *bdgpName = NULL;
-char query[512];
-char buf[128];
-char infoTable[128];
-
-safef(infoTable, sizeof(infoTable), "%sInfo", table);
-if (hTableExists(infoTable))
-    {
-    conn = hAllocConn();
-    safef(query, sizeof(query),
-	  "select bdgpName from %s where flyBaseId = '%s';", infoTable, name);
-    bdgpName = sqlQuickQuery(conn, query, buf, sizeof(buf));
-    if (bdgpName != NULL)
-	{
-	safef(query, sizeof(query),
-	      "select * from %s where name like '%s-%%';",
-	      table, bdgpName);
-	sr = sqlGetResult(conn, query);
-	if ((row = sqlNextRow(sr)) != NULL)
-	    {
-	    gp = genePredLoad(row);
-	    *retChromName = cloneString(gp->chrom);
-	    *retWinStart  = gp->txStart;
-	    *retWinEnd    = gp->txEnd;
-	    bdgpName = cloneString(gp->name);
-	    genePredFree(&gp);
-	    }
-	else
-	    {
-	    bdgpName = NULL;
-	    }
-	sqlFreeResult(&sr);
-	}
-    hFreeConn(&conn);
-    }
-return(bdgpName);
-}
-
-char *findBDGPPos(char *bdgpName, char *table,
-		  char **retChromName, int *retWinStart, int *retWinEnd)
-/* Find position in genome of gene for bdgpName.
- * Don't alter return variables unless found. 
- * Return complete gene name for (possibly incomplete) bdgpName. */
-{
-struct sqlConnection *conn = NULL;
-struct sqlResult *sr = NULL;
-struct genePred *gp = NULL;
-char **row = NULL;
-char *geneName = NULL;
-char *ptr = strchr(bdgpName, '-');
-char query[512];
-char buf[128];
-
-if (hTableExists(table))
-    {
-    conn = hAllocConn();
-    if (ptr != NULL)
-	safef(query, sizeof(query),
-	      "select * from %s where name = '%s';", table, bdgpName);
-    else
-	safef(query, sizeof(query),
-	      "select * from %s where name like '%s-%%';", table, bdgpName);
-    sr = sqlGetResult(conn, query);
-    if ((row = sqlNextRow(sr)) != NULL)
-	{
-	gp = genePredLoad(row);
-	*retChromName = cloneString(gp->chrom);
-	*retWinStart  = gp->txStart;
-	*retWinEnd    = gp->txEnd;
-	geneName = cloneString(gp->name);
-	genePredFree(&gp);
-	}
-    sqlFreeResult(&sr);
-    hFreeConn(&conn);
-    }
-return(geneName);
-}
-
-boolean parseScaffoldRange(char *query, char **retChromName, 
-	int *retWinStart, int *retWinEnd)
-/* Parse scaffold_N or scaffold_N:start-end to obtain position in genome.
- * Don't alter return variables unless found. */
-{
-int scaffoldNum;
-int rangeStart = 0, rangeEnd = 0;
-char scaffoldName[64];
-char *colon;
-char *chrom;
-int chromStart, chromEnd;
-int iStart, iEnd;
-
-fprintf(stderr, "parse scaffold: query=%s\n", query);
-if (!isScaffoldPos(query))
-    return FALSE;
-strncpy(scaffoldName, query, 64);
-colon = strchr(query, ':');
-if (colon != NULL)
-    {
-    /* looks like a range, obtain endpoints */
-    if (sscanf(query, "scaffold_%d:%d-%d", 
-            &scaffoldNum, &rangeStart, &rangeEnd) != 3)
-                return FALSE;
-    *colon = 0;
-    }
-/* locate scaffold on a chromosome */
-if (!findChromContigPos(scaffoldName, &chrom, &chromStart, &chromEnd))
-    return FALSE;
-
-iStart = chromStart + rangeStart;
-iEnd = (rangeEnd == 0) ? chromEnd : chromStart + rangeEnd;
-if (retChromName != NULL)
-    *retChromName = chrom;
-if (retWinStart != NULL)
-    *retWinStart = iStart;
-if (retWinEnd != NULL)
-    *retWinEnd = iEnd;
-return TRUE;
 }
 
 static char *startsWithShortHumanChromName(char *chrom)
@@ -977,6 +606,42 @@ hgFindChromBand(*retChromName, bandName, retWinStart, retWinEnd);
 return TRUE;
 }
 
+boolean findChromContigPos(char *name, char **retChromName, 
+	int *retWinStart, int *retWinEnd)
+/* Find position in genome of contig.  Look in all chroms.
+ * Don't alter return variables unless found. */
+/* NOTE: could probably speed this up by using the chromInfo hashtable */
+{
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr = NULL;
+struct slName *allChroms = hAllChromNames();
+struct slName *chromPtr;
+char **row;
+char query[256];
+boolean foundIt = FALSE;
+
+for (chromPtr=allChroms;  chromPtr != NULL;  chromPtr=chromPtr->next)
+    {
+    snprintf(query, sizeof(query), 
+                "select chromStart,chromEnd from %s_gold where frag = '%s'",
+	        chromPtr->name, name);
+    sr = sqlMustGetResult(conn, query);
+    row = sqlNextRow(sr);
+    if (row != NULL)
+	{
+	*retChromName = chromPtr->name;
+	*retWinStart = atoi(row[0]);
+	*retWinEnd = atoi(row[1]);
+	foundIt = TRUE;
+	}
+    sqlFreeResult(&sr);
+    if (foundIt)
+	break;
+    }
+hFreeConn(&conn);
+return foundIt;
+}
+
 static boolean isAccForm(char *s)
 /* Returns TRUE if s is of format to be a genbank accession. */
 {
@@ -988,46 +653,6 @@ if (!isalpha(s[0]))
 if (!isdigit(s[len-1]))
     return FALSE;
 return TRUE;
-}
-
-boolean hgFindClonePos(char *spec, char **retChromName, 
-	int *retWinStart, int *retWinEnd)
-/* Return clone position. */
-{
-if (!isAccForm(spec) || !hTableExists("clonePos"))
-    return FALSE;
-else
-    {
-    struct sqlConnection *conn = hAllocConn();
-    struct sqlResult *sr = NULL;
-    struct dyString *query = newDyString(256);
-    char **row;
-    boolean ok = FALSE;
-    struct clonePos *clonePos;
-    dyStringPrintf(query, "select * from clonePos where name like '%s%%'", spec);
-    sr = sqlGetResult(conn, query->string);
-    row = sqlNextRow(sr);
-    if (row != NULL)
-	{
-	clonePos = clonePosLoad(row);
-	*retChromName = hgOfficialChromName(clonePos->chrom);
-	*retWinStart = clonePos->chromStart;
-	*retWinEnd = clonePos->chromEnd;
-	clonePosFree(&clonePos);
-	ok = TRUE;
-	}
-    freeDyString(&query);
-    sqlFreeResult(&sr);
-    hFreeConn(&conn);
-    return ok;
-    }
-}
-
-static boolean isRefSeqAcc(char *acc)
-/* determine if an acc looking like a refseq acc */
-{
-char a0 = toupper(acc[0]);
-return ((strlen(acc) > 3) && (acc[2] == '_') && ((a0 == 'N') || (a0 == 'X')));
 }
 
 static boolean mrnaInfo(char *acc, struct sqlConnection *conn, 
@@ -1057,6 +682,12 @@ else
     ret = FALSE;
 sqlFreeResult(&sr);
 return ret;
+}
+
+boolean isRefSeqAcc(char *acc)
+/* Return TRUE if acc looks like a RefSeq acc. */
+{
+return matchRegex(acc, "^(N|X)M_[0-9]{6}$");
 }
 
 static char *mrnaType(char *acc)
@@ -1165,8 +796,7 @@ static void mrnaHtmlOnePos(struct hgPosTable *table, struct hgPos *pos, FILE *f)
 fprintf(f, "%s", pos->description);
 }
 
-static boolean findMrnaPos(char *acc,  struct hgPositions *hgp,
-			   char *hgAppName, struct cart *cart)
+static boolean findMrnaPos(char *acc,  struct hgPositions *hgp)
 /* Find MRNA or EST position(s) from accession number.
  * Look to see if it's an mRNA or EST.  Fill in hgp and return
  * TRUE if it is, otherwise return FALSE. */
@@ -1253,653 +883,6 @@ else
 	return TRUE;
 	}
     }
-}
-
-static boolean findStsPos(char *spec, struct hgPositions *hgp)
-/* Look for position in stsMarker/stsMap table. */
-{
-struct sqlConnection *conn = NULL;
-struct sqlResult *sr = NULL;
-struct dyString *query = NULL;
-char **row;
-boolean ok = FALSE;
-char *alias = NULL, *temp;
-struct stsMap sm;
-struct stsMapMouse smm;
-struct stsMapMouseNew smm_n;
-struct stsMapRat smr;
-char *tableName, *tableAlias;
-boolean newFormat = FALSE, mouse = FALSE, rat = FALSE, mouse_n=FALSE;
-char *chrom;
-char buf[64];
-struct hgPosTable *table = NULL;
-struct hgPos *pos = NULL;
-
- if (hTableExists("stsMapMouse"))
-   {
-     mouse = TRUE;
-     tableName = "stsMapMouse";
-     tableAlias = "stsAliasMouse";
-   }
- else if (hTableExists("stsMapMouseNew"))
-   {
-    mouse_n = TRUE;
-    tableName = "stsMapMouseNew";
-    tableAlias = "stsAlias";
-   }
- else if (hTableExists("stsMapRat"))
-   {
-     rat = TRUE;
-    tableName = "stsMapRat";
-    tableAlias = "stsAlias";
-   }
- else if (hTableExists("stsMap"))
-   {
-     newFormat = TRUE;
-     tableName = "stsMap";
-     tableAlias = "stsAlias";
-   }
- else if (hTableExists("stsMarker"))
-   {
-    newFormat = FALSE;
-    tableName = "stsMarker";
-    tableAlias = "stsAlias";
-   }
- else
-   return FALSE;
- 
- conn = hAllocConn();
- query = newDyString(256);
- if (hTableExists(tableAlias))
-    {
-      dyStringPrintf(query, 
-		     "select trueName from %s where alias = '%s'", tableAlias, spec);
-      alias = sqlQuickQuery(conn, query->string, buf, sizeof(buf));
-      if ((alias != NULL) && (!sameString(alias, spec)))
-        {
-	hgp->useAlias = TRUE;
-	temp = spec;
-	spec = alias;
-	alias = temp;
-	}
-    }
-dyStringClear(query);
-dyStringPrintf(query, "select * from %s where name = '%s'", tableName, spec);
-sr = sqlGetResult(conn, query->string);
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-    if (ok == FALSE)
-        {
-	ok = TRUE;
-	AllocVar(table);
-	dyStringClear(query);
-	if (hgp->useAlias)
-	    dyStringPrintf(query, "STS %s uses name %s in browser", alias, spec);
-	else
-	    dyStringPrintf(query, "STS %s Positions", spec);
-	table->description = cloneString(query->string);
-	table->name = cloneString(tableName);
-	slAddHead(&hgp->tableList, table);
-	}
-    if (mouse)
-      stsMapMouseStaticLoad(row, &smm);
-    else if (mouse_n)
-     stsMapMouseNewStaticLoad(row, &smm_n);
-    else if (rat)
-	stsMapRatStaticLoad(row, &smr);
-    else if (newFormat)
-	stsMapStaticLoad(row, &sm);
-    else
-        {
-	struct stsMarker oldSm;
-	stsMarkerStaticLoad(row, &oldSm);
-	stsMapFromStsMarker(&oldSm, &sm);
-	}
-    if (mouse) 
-	{
-	if ((chrom = hgOfficialChromName(smm.chrom)) == NULL)
-	errAbort("Internal Database error: Odd chromosome name '%s' in %s",
-		 smm.chrom, tableName);
-	}
-    else if (mouse_n) 
-	{
-	if ((chrom = hgOfficialChromName(smm_n.chrom)) == NULL)
-	errAbort("Internal Database error: Odd chromosome name '%s' in %s",
-		 smm_n.chrom, tableName);
-	}
-    else if (rat) 
-	{
-	if ((chrom = hgOfficialChromName(smr.chrom)) == NULL)
-	errAbort("Internal Database error: Odd chromosome name '%s' in %s",
-		 smr.chrom, tableName);
-	}
-    else 
-	{
-	if ((chrom = hgOfficialChromName(sm.chrom)) == NULL)
-	    errAbort("Internal Database error: Odd chromosome name '%s' in %s",
-		     sm.chrom, tableName); 
-	}
-    AllocVar(pos);
-    pos->chrom = chrom;
-    if (mouse) 
-	{
-	pos->chromStart = smm.chromStart - 100000;
-	pos->chromEnd = smm.chromEnd + 100000;
-	}
-    else if (mouse_n) 
-	{
-	pos->chromStart = smm_n.chromStart - 100000;
-	pos->chromEnd = smm_n.chromEnd + 100000;
-	}
-    else if (rat) 
-	{
-	pos->chromStart = smr.chromStart - 100000;
-	pos->chromEnd = smr.chromEnd + 100000;
-	}
-    else 
-	{
-	pos->chromStart = sm.chromStart - 100000;
-	pos->chromEnd = sm.chromEnd + 100000;
-	}
-    if (pos->chromStart < 0)
-	pos->chromStart = 0;
-    pos->name = cloneString(spec);
-    slAddHead(&table->posList, pos);
-    }
-if (table != NULL)
-    slReverse(&table->posList);
-freeDyString(&query);
-sqlFreeResult(&sr);
-hFreeConn(&conn);
-return ok;
-}
-
-static boolean findFishClones(char *spec, struct hgPositions *hgp)
-/* Look for position in fishClones table. */
-{
-struct sqlConnection *conn = NULL;
-struct sqlResult *sr = NULL;
-struct dyString *query = NULL;
-char **row;
-boolean ok = FALSE;
-struct fishClones *fc;
-char *chrom;
-char buf[64];
-struct hgPosTable *table = NULL;
-struct hgPos *pos = NULL;
-
-if (hTableExists("fishClones"))
-    {
-    conn = hAllocConn();
-    query = newDyString(256);
-    dyStringPrintf(query, "select * from fishClones where name = '%s'", spec);
-    sr = sqlGetResult(conn, query->string);
-    while ((row = sqlNextRow(sr)) != NULL)
-        {
-	if (ok == FALSE)
-            {
-	    ok = TRUE;
-	    AllocVar(table);
-	    dyStringClear(query);
-	    slAddHead(&hgp->tableList, table);
-	    }
-	AllocVar(fc);
-	fc = fishClonesLoad(row);
-	if ((chrom = hgOfficialChromName(fc->chrom)) == NULL)
-	     errAbort("Internal Database error: Odd chromosome name '%s' in fishClones",
-		      fc->chrom); 
-	AllocVar(pos);
-	pos->chrom = chrom;
-	pos->chromStart = fc->chromStart;
-	pos->chromEnd = fc->chromEnd;
-	pos->name = cloneString(spec);
-	dyStringPrintf(query, "%s Positions in FISH Clones track", spec);
-	table->description = cloneString(query->string);
-	table->name = cloneString("fishClones");
-	slAddHead(&table->posList, pos);
-	fishClonesFree(&fc);
-	}
-    if (table != NULL)
-        slReverse(&table->posList);
-    }
-freeDyString(&query);
-sqlFreeResult(&sr);
-hFreeConn(&conn);
-return ok;
-}
-
-static boolean findBacEndPairs(char *spec, struct hgPositions *hgp)
-/* Look for position in bacEndPairs table. */
-{
-struct sqlConnection *conn;
-struct sqlResult *sr = NULL;
-struct dyString *query = NULL;
-char **row;
-boolean ok = FALSE;
-struct lfs *be;
-char *chrom;
-char buf[64];
-struct hgPosTable *table = NULL;
-struct hgPos *pos = NULL;
-
-if (hTableExists("bacEndPairs"))
-    {
-    conn = hAllocConn();
-    query = newDyString(256);
-    dyStringPrintf(query, "select * from bacEndPairs where name = '%s'", spec);
-    sr = sqlGetResult(conn, query->string);
-    while ((row = sqlNextRow(sr)) != NULL)
-        {
-	if (ok == FALSE)
-	    {
-	    ok = TRUE;
-	    AllocVar(table);
-	    slAddHead(&hgp->tableList, table);
-	    dyStringClear(query);
-	    dyStringPrintf(query, "%s Positions found using BAC end sequences", spec);
-	    table->description = cloneString(query->string);
-	    table->name = cloneString("bacEndPairs");
-	    }
-	AllocVar(be);
-	be = lfsLoad(row+1);
-	if ((chrom = hgOfficialChromName(be->chrom)) == NULL)
-	    errAbort("Internal Database error: Odd chromosome name '%s' in bacEndPairs",
-		     be->chrom); 
-	AllocVar(pos);
-	pos->chrom = chrom;
-	pos->chromStart = be->chromStart;
-	pos->chromEnd = be->chromEnd;
-	pos->name = cloneString(spec);
-	slAddHead(&table->posList, pos);
-	lfsFree(&be);
-	}
-    if (table != NULL)
-        slReverse(&table->posList);
-    }
-freeDyString(&query);
-sqlFreeResult(&sr);
-hFreeConn(&conn);
-return ok;
-}
-
-static boolean findFosEndPairs(char *spec, struct hgPositions *hgp)
-/* Look for position in fosEndPairs table. */
-{
-struct sqlConnection *conn;
-struct sqlResult *sr = NULL;
-struct dyString *query = NULL;
-char **row;
-boolean ok = FALSE;
-struct lfs *fe;
-char *chrom;
-char buf[64];
-struct hgPosTable *table = NULL;
-struct hgPos *pos = NULL;
-
-if (hTableExists("fosEndPairs"))
-    {
-    conn = hAllocConn();
-    query = newDyString(256);
-    dyStringPrintf(query, "select * from fosEndPairs where name = '%s'", spec);
-    sr = sqlGetResult(conn, query->string);
-    while ((row = sqlNextRow(sr)) != NULL)
-        {
-	if (ok == FALSE)
-	    {
-	    ok = TRUE;
-	    AllocVar(table);
-	    slAddHead(&hgp->tableList, table);
-	    dyStringClear(query);
-	    dyStringPrintf(query, "%s Positions found using fosmid end sequences", spec);
-	    table->description = cloneString(query->string);
-	    table->name = cloneString("fosEndPairs");
-	    }
-	AllocVar(fe);
-	fe = lfsLoad(row+1);
-	if ((chrom = hgOfficialChromName(fe->chrom)) == NULL)
-	    errAbort("Internal Database error: Odd chromosome name '%s' in fosEndPairs",
-		     fe->chrom); 
-	AllocVar(pos);
-	pos->chrom = chrom;
-	pos->chromStart = fe->chromStart;
-	pos->chromEnd = fe->chromEnd;
-	pos->name = cloneString(spec);
-	slAddHead(&table->posList, pos);
-	lfsFree(&fe);
-	}
-    if (table != NULL)
-        slReverse(&table->posList);
-    }
-freeDyString(&query);
-sqlFreeResult(&sr);
-hFreeConn(&conn);
-return ok;
-}
-
-static boolean findFosEndPairsBad(char *spec, struct hgPositions *hgp)
-/* Look for position in fosEndPairsBad table. */
-{
-struct sqlConnection *conn;
-struct sqlResult *sr = NULL;
-struct dyString *query = NULL;
-char **row;
-boolean ok = FALSE;
-struct lfs *fe;
-char *chrom;
-char buf[64];
-struct hgPosTable *table = NULL;
-struct hgPos *pos = NULL;
-
-if (hTableExists("fosEndPairsBad"))
-    {
-    conn = hAllocConn();
-    query = newDyString(256);
-    dyStringPrintf(query, "select * from fosEndPairsBad where name = '%s'", spec);
-    sr = sqlGetResult(conn, query->string);
-    while ((row = sqlNextRow(sr)) != NULL)
-        {
-	if (ok == FALSE)
-	    {
-	    ok = TRUE;
-	    AllocVar(table);
-	    slAddHead(&hgp->tableList, table);
-	    dyStringClear(query);
-	    dyStringPrintf(query, "%s Positions found using fosmid end sequences", spec);
-	    table->description = cloneString(query->string);
-	    table->name = cloneString("fosEndPairsBad");
-	    }
-	AllocVar(fe);
-	fe = lfsLoad(row+1);
-	if ((chrom = hgOfficialChromName(fe->chrom)) == NULL)
-	    errAbort("Internal Database error: Odd chromosome name '%s' in fosEndPairsBad",
-		     fe->chrom); 
-	AllocVar(pos);
-	pos->chrom = chrom;
-	pos->chromStart = fe->chromStart;
-	pos->chromEnd = fe->chromEnd;
-	pos->name = cloneString(spec);
-	slAddHead(&table->posList, pos);
-	lfsFree(&fe);
-	}
-    if (table != NULL)
-        slReverse(&table->posList);
-    }
-freeDyString(&query);
-sqlFreeResult(&sr);
-hFreeConn(&conn);
-return ok;
-}
-
-
-static boolean findGenePredPattern(char *pattern, struct hgPositions *hgp, char *tableName, struct hgPosTable *table)
-/* Look for position pattern in gene prediction table. */
-{
-struct sqlConnection *conn;
-struct sqlResult *sr = NULL;
-struct dyString *query;
-char **row;
-boolean ok = FALSE;
-char *chrom;
-struct snp snp;
-char buf[64];
-struct hgPos *pos = NULL;
-int rowOffset;
-char *localName;
-
-localName = pattern;
-if (!hTableExists(tableName))
-    return FALSE;
-rowOffset = hOffsetPastBin(NULL, tableName);
-conn = hAllocConn();
-query = newDyString(256);
-dyStringPrintf(query, "SELECT chrom, txStart, txEnd, name FROM %s WHERE name LIKE '%s'", tableName, pattern);
-sr = sqlGetResult(conn, query->string);
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-    if (ok == FALSE)
-        {
-	ok = TRUE;
-	if (table == NULL)
-	    {
-	    AllocVar(table);
-	    dyStringClear(query);
-	    dyStringPrintf(query, "%s Gene Predictions", tableName);
-	    table->description = cloneString(query->string);
-	    table->name = cloneString(tableName);
-	    slAddHead(&hgp->tableList, table);
-	    }
-	}
-    
-    AllocVar(pos);
-    pos->chrom = hgOfficialChromName(row[0]);
-    pos->chromStart = atoi(row[1]);
-    pos->chromEnd = atoi(row[2]);
-    pos->name = cloneString(row[3]);
-    slAddHead(&table->posList, pos);
-    }
-if (table != NULL)
-    slReverse(&table->posList);
-freeDyString(&query);
-sqlFreeResult(&sr);
-hFreeConn(&conn);
-return ok;
-}
-
-static boolean findGenePred(char *spec, struct hgPositions *hgp, char *tableName)
-{
-/* Look for exact match of position in gene prediction table. */
-    char buf[64];
-    snprintf(buf, 64, "%s", spec); 
-    return  findGenePredPattern(buf, hgp, tableName, NULL);
-}
-
-static boolean findGenePredLike(char *spec, struct hgPositions *hgp, char *tableName)
-{
-/* Look for leading match of position in gene prediction table. */
-    char buf[64];
-    snprintf(buf, 64, "%s%%", spec); 
-    return findGenePredPattern(buf, hgp, tableName, NULL);
-}
-
-
-static boolean findSnpPos(char *spec, struct hgPositions *hgp, char *tableName)
-/* Look for position in snpMap table. */
-{
-struct sqlConnection *conn = NULL;
-struct sqlResult *sr = NULL;
-struct dyString *query = NULL;
-char **row = NULL;
-boolean ok = FALSE;
-char *chrom = NULL;
-struct snpMap snpMap; /* for snpMap */
-struct hgPosTable *table = NULL;
-struct hgPos *pos = NULL;
-int rowOffset = 0;
-
-/* Make sure it starts with 'rs'.  Then skip over it. */
-if (strlen(spec)<=2 || !startsWith("rs", spec))  /* All SNP searches will start with 'rs' */
-    return FALSE;
-rowOffset = hOffsetPastBin(NULL, tableName);
-conn = hAllocConn();
-query = newDyString(256);
-dyStringPrintf(query, "select * from %s where name = '%s'", tableName, spec);
-sr = sqlGetResult(conn, query->string);
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-    if (!ok)
-        {
-	ok = TRUE;
-	AllocVar(table);
-	dyStringClear(query); /* 'query' no longer needed, reuse memory */
-	dyStringPrintf(query, "Position of %s in %s:", spec, tableName);
-	table->description = cloneString(query->string);
-	table->name = cloneString(tableName);
-	slAddHead(&hgp->tableList, table);
-	}
-    snpMapStaticLoad(row+rowOffset, &snpMap);
-    if ((chrom = hgOfficialChromName(snpMap.chrom)) == NULL)
-	errAbort("Internal Database error: invalid chromosome name '%s' in %s",
-		 snpMap.chrom, tableName); 
-    AllocVar(pos); 
-    pos->chrom = chrom;
-    pos->chromStart = snpMap.chromStart - 5000;
-    pos->chromEnd = snpMap.chromEnd + 5000;
-    pos->name = cloneString(spec);
-    slAddHead(&table->posList, pos);
-    }
-if (table != NULL)
-    slReverse(&table->posList);
-freeDyString(&query);
-sqlFreeResult(&sr);
-hFreeConn(&conn);
-return ok;
-}
-
-static boolean findAffySnpPos(char *spec, struct hgPositions *hgp, char *tableName)
-/* Look for position in affyGeno table. */
-{
-struct sqlConnection *conn = NULL;
-struct sqlResult *sr = NULL;
-struct dyString *query = NULL;
-char **row = NULL;
-boolean ok = FALSE;
-char *chrom = NULL;
-struct snp snp;
-struct hgPosTable *table = NULL;
-struct hgPos *pos = NULL;
-int rowOffset = 0;
-
-/* Make sure it starts with 'rs'.  Then skip over it. */
-/*
-if (!startsWith("rs", spec))
-    return FALSE;
-*/
-if (!hTableExists(tableName))
-    return FALSE;
-rowOffset = hOffsetPastBin(NULL, tableName);
-conn = hAllocConn();
-query = newDyString(256);
-dyStringPrintf(query, "select * from %s where name = '%s'", tableName, spec);
-sr = sqlGetResult(conn, query->string);
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-    if (ok == FALSE)
-        {
-	ok = TRUE;
-	AllocVar(table);
-	dyStringClear(query);
-	dyStringPrintf(query, "SNP %s Position", spec);
-	table->description = cloneString(query->string);
-	table->name = cloneString(tableName);
-	slAddHead(&hgp->tableList, table);
-	}
-    snpStaticLoad(row+rowOffset, &snp);
-    if ((chrom = hgOfficialChromName(snp.chrom)) == NULL)
-	errAbort("Internal Database error: Odd chromosome name '%s' in %s",
-		 snp.chrom, tableName); 
-    AllocVar(pos);
-    pos->chrom = chrom;
-    pos->chromStart = snp.chromStart - 5000;
-    pos->chromEnd = snp.chromEnd + 5000;
-    pos->name = cloneString(spec);
-    slAddHead(&table->posList, pos);
-    }
-if (table != NULL)
-    slReverse(&table->posList);
-freeDyString(&query);
-sqlFreeResult(&sr);
-hFreeConn(&conn);
-return ok;
-}
-
-static boolean findEncodeRegions(char *spec, struct hgPositions *hgp, char *tableName)
-/* Look for position in encodeRegions table. */
-{
-struct sqlConnection *conn = NULL;
-struct sqlResult *sr = NULL;
-struct dyString *query = NULL;
-char **row = NULL;
-boolean ok = FALSE;
-char *chrom = NULL;
-struct hgPosTable *table = NULL;
-struct hgPos *pos = NULL;
-int rowOffset = 0;
-
-if (!hTableExists(tableName))
-    return FALSE;
-rowOffset = hOffsetPastBin(NULL, tableName);
-conn = hAllocConn();
-query = newDyString(256);
-dyStringPrintf(query, "select * from %s where name = '%s'", tableName, spec);
-sr = sqlGetResult(conn, query->string);
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-    if (ok == FALSE)
-        {
-	ok = TRUE;
-	AllocVar(table);
-	dyStringClear(query);
-	dyStringPrintf(query, "ENCODE REGION %s Position", spec);
-	table->description = cloneString(query->string);
-	table->name = cloneString(tableName);
-	slAddHead(&hgp->tableList, table);
-	}
-    if ((chrom = hgOfficialChromName(row[0])) == NULL)
-	errAbort("Internal Database error: Odd chromosome name '%s' in %s",
-		 row[0], tableName); 
-    AllocVar(pos);
-    pos->chrom = chrom;
-    pos->chromStart = sqlUnsigned(row[1]);
-    pos->chromEnd = sqlUnsigned(row[2]);
-    pos->name = cloneString(spec);
-    slAddHead(&table->posList, pos);
-    }
-if (table != NULL)
-    slReverse(&table->posList);
-freeDyString(&query);
-sqlFreeResult(&sr);
-hFreeConn(&conn);
-return ok;
-}
-
-static boolean findOldStsPos(char *table, char *spec,
-                             char **retChromName, int *retWinStart, 
-                             int *retWinEnd)
-/* Look for position in some STS table. */
-/* This code is being replaced by the newer sts pos finder,
- * but is still used on the hg3 (July 17 2000 Freeze) database. */
-{
-struct sqlConnection *conn = hAllocConn();
-struct sqlResult *sr = NULL;
-struct dyString *query = newDyString(256);
-char **row;
-boolean ok = FALSE;
-struct mapSts *mapSts;
-
-if (!hTableExists(table))
-    return FALSE;
-dyStringPrintf(query, "select * from %s where name = '%s'", table, spec);
-sr = sqlGetResult(conn, query->string);
-row = sqlNextRow(sr);
-if (row != NULL)
-    {
-    mapSts = mapStsLoad(row);
-    *retChromName = hgOfficialChromName(mapSts->chrom);
-    *retWinStart = mapSts->chromStart - 100000;
-    *retWinEnd = mapSts->chromEnd + 100000;
-    mapStsFree(&mapSts);
-    ok = TRUE;
-    }
-freeDyString(&query);
-sqlFreeResult(&sr);
-hFreeConn(&conn);
-return ok;
-}
-
-static boolean findGenethonPos(char *spec, char **retChromName, int *retWinStart, int *retWinEnd)
-/* See if it's a genethon map position. */
-{
-return findOldStsPos("mapGenethon", spec, retChromName, retWinStart, retWinEnd);
 }
 
 static void findHitsToTables(char *key, char *tables[], int tableCount, 
@@ -2141,7 +1124,7 @@ if (alignCount > 1)
                             aligns ?  "" : "Non");
     freeMem(organism);
     table->description = cloneString(title);
-    table->name = NULL;
+    table->name = isXeno ? cloneString("xenoMrna") : cloneString("mrna");
     table->htmlOnePos = mrnaKeysHtmlOnePos;
     slAddHead(&hgp->tableList, table);
     }
@@ -2149,8 +1132,7 @@ freeDyString(&dy);
 return alignCount;
 }
 
-static void findMrnaKeys(char *keys, struct hgPositions *hgp,
-			 char *hgAppName, struct cart *cart)
+static boolean findMrnaKeys(char *keys, struct hgPositions *hgp)
 /* Find mRNA that has keyword in one of it's fields. */
 {
 char *words[32];
@@ -2169,11 +1151,13 @@ struct hash *andedHash = NULL;
 struct slName *andedList = NULL;
 struct sqlConnection *conn = hAllocConn();
 int i;
+boolean found = FALSE;
 
 strncpy(buf, keys, sizeof(buf));
 wordCount = chopLine(buf, words);
 if (wordCount == 0)
-    return;
+    return FALSE;
+found = TRUE;
 for (i=0; i<wordCount; ++i)
     {
     findHitsToTables(words[i], tables, ArraySize(tables), &oneKeyHash, &oneKeyList);
@@ -2198,7 +1182,7 @@ for (i=0; i<wordCount; ++i)
 	}
     }
 if (allKeysList == NULL)
-    return;
+    return FALSE;
 
 /* generate position lists and add to hgp */
 /* organism aligning */
@@ -2213,87 +1197,7 @@ addMrnaPositionTable(hgp, allKeysList, cart, conn, hgAppName, FALSE, FALSE);
 if (alignCount < 20)
     addMrnaPositionTable(hgp, allKeysList, cart, conn, hgAppName, TRUE, TRUE);
 hFreeConn(&conn);
-}
-
-static void findKnownGenes(char *spec, struct hgPositions *hgp)
-/* Look up known genes in table. */
-{
-struct sqlConnection *conn = hAllocConn();
-struct sqlResult *sr = NULL;
-struct dyString *query = newDyString(256);
-char **row;
-boolean gotOne = FALSE;
-struct hgPosTable *table = NULL;
-struct hgPos *pos;
-struct genePred *gp;
-struct knownInfo *knownInfo;
-char *kiTable = NULL;
-
-if (sqlTableExists(conn, "knownMore"))
-    kiTable = "knownMore";
-else if (sqlTableExists(conn, "knownInfo"))
-    kiTable = "knownInfo";
-if (kiTable != NULL)
-    {
-    dyStringPrintf(query, "select * from %s where name like '%s%%'", kiTable, spec);
-    sr = sqlGetResult(conn, query->string);
-    while ((row = sqlNextRow(sr)) != NULL)
-	{
-	if (!gotOne)
-	    {
-	    gotOne = TRUE;
-	    AllocVar(table);
-	    slAddHead(&hgp->tableList, table);
-	    table->description = cloneString("RefSeq Genes");
-	    table->name = cloneString(kiTable);
-	    }
-	knownInfo = knownInfoLoad(row);
-	AllocVar(pos);
-	slAddHead(&table->posList, pos);
-	pos->name = cloneString(knownInfo->name);
-	pos->description = cloneString(knownInfo->transId);
-	}
-    sqlFreeResult(&sr);
-
-    if (table != NULL)
-	{
-	slReverse(&table->posList);
-	for (pos = table->posList; pos != NULL; pos = pos->next)
-	    {
-	    dyStringClear(query);
-	    dyStringPrintf(query, "select * from genieKnown where name = '%s'", pos->description);
-	    sr = sqlGetResult(conn, query->string);
-	    if ((row = sqlNextRow(sr)) == NULL)
-		errAbort("Internal error: %s in knownInfo but not genieKnown",
-			 pos->description);
-	    gp = genePredLoad(row);
-	    pos->chrom = hgOfficialChromName(gp->chrom);
-	    pos->chromStart = gp->txStart;
-	    pos->chromEnd = gp->txEnd;
-	    freez(&pos->description);
-	    genePredFree(&gp);
-	    sqlFreeResult(&sr);
-	    table->description = cloneString("RefSeq Genes");
-	    table->name = cloneString("genieKnown");
-	    }
-	}
-    }
-freeDyString(&query);
-hFreeConn(&conn);
-}
-
-static void addRefLinks(struct sqlConnection *conn, struct dyString *query,
-	struct refLink **pList)
-/* Query database and add returned refLinks to head of list. */
-{
-struct sqlResult *sr = sqlGetResult(conn, query->string);
-char **row;
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-    struct refLink *rl = refLinkLoad(row);
-    slAddHead(pList, rl);
-    }
-sqlFreeResult(&sr);
+return(found);
 }
 
 static boolean isUnsignedInt(char *s)
@@ -2481,7 +1385,21 @@ hFreeConn(&conn2);
 return(kgFound);
 }
 
-static void findRefGenes(char *spec, struct hgPositions *hgp)
+static void addRefLinks(struct sqlConnection *conn, struct dyString *query,
+	struct refLink **pList)
+/* Query database and add returned refLinks to head of list. */
+{
+struct sqlResult *sr = sqlGetResult(conn, query->string);
+char **row;
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    struct refLink *rl = refLinkLoad(row);
+    slAddHead(pList, rl);
+    }
+sqlFreeResult(&sr);
+}
+
+static boolean findRefGenes(char *spec, struct hgPositions *hgp)
 /* Look up refSeq genes in table. */
 {
 struct sqlConnection *conn = hAllocConn();
@@ -2494,6 +1412,7 @@ struct hgPos *pos;
 struct genePred *gp;
 struct refLink *rlList = NULL, *rl;
 boolean gotRefLink = sqlTableExists(conn, "refLink");
+boolean found = FALSE;
 
 if (gotRefLink)
     {
@@ -2564,6 +1483,7 @@ if (rlList != NULL)
 	    pos->chromStart = gp->txStart;
 	    pos->chromEnd = gp->txEnd;
 	    genePredFree(&gp);
+	    found = TRUE;
 	    }
 	sqlFreeResult(&sr);
 	}
@@ -2572,84 +1492,9 @@ if (rlList != NULL)
     }
 freeDyString(&ds);
 hFreeConn(&conn);
+return(found);
 }
 
-static void findZooGenes(char *spec, struct hgPositions *hgp)
-/* Look up zoo gene names in manual annotation table. */
-{
-struct sqlConnection *conn = hAllocConn();
-struct sqlResult *sr = NULL;
-struct dyString *ds = newDyString(256);
-char **row = NULL;
-struct hgPosTable *table = NULL;
-struct hgPos *pos = NULL;
-
-if (sqlTableExists(conn, "pjt_gene"))
-    {
-    dyStringPrintf(ds, "select * from pjt_gene where name like '%%%s%%'", spec);
-    }
-else
-    {
-    return;
-    }
-
-AllocVar(table);
-slAddHead(&hgp->tableList, table);
-table->description = cloneString("Curated Genes");
-table->name = cloneString("pjt_gene");
-
-sr = sqlGetResult(conn, ds->string);
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-    AllocVar(pos);
-    slAddHead(&table->posList, pos);
-    pos->name = cloneString(row[3]);
-    pos->description = cloneString(row[3]);
-    pos->chrom = hgOfficialChromName(row[0]);
-    pos->chromStart = sqlUnsigned(row[6]);
-    pos->chromEnd = sqlUnsigned(row[7]);
-    }
-
-freeDyString(&ds);
-hFreeConn(&conn);
-}
-
-static void findRgdGenes(char *spec, struct hgPositions *hgp)
-/* Look up zoo gene names in manual annotation table. */
-{
-struct sqlConnection *conn = hAllocConn();
-struct sqlResult *sr = NULL;
-struct dyString *ds = newDyString(256);
-char **row = NULL;
-struct hgPosTable *table = NULL;
-struct hgPos *pos = NULL;
-
-AllocVar(table);
-slAddHead(&hgp->tableList, table);
-/* Default values */
-table->description = cloneString("RGD Curated Genes");
-table->name = cloneString("rgdGene");
-
-if (sqlTableExists(conn, "rgdGene"))
-    {
-    dyStringPrintf(ds, "select * from rgdGene where name = '%s'", spec);    
-    sr = sqlGetResult(conn, ds->string);
-    
-    while ((row = sqlNextRow(sr)) != NULL)
-        {
-        AllocVar(pos);
-        slAddHead(&table->posList, pos);
-        pos->name = cloneString(row[0]);
-        pos->description = cloneString(row[0]);
-        pos->chrom = hgOfficialChromName(row[1]);
-        pos->chromStart = sqlUnsigned(row[5]);
-        pos->chromEnd = sqlUnsigned(row[6]);
-        }
-    }
-
-freeDyString(&ds);
-hFreeConn(&conn);
-}
 /* Lowe lab additions */
 
 static void addTigrCmrGenes(struct sqlConnection *conn, struct dyString *query,
@@ -2680,7 +1525,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 sqlFreeResult(&sr);
 }
 
-static void findGenbankGenes(char *spec, struct hgPositions *hgp)
+static boolean findGenbankGenes(char *spec, struct hgPositions *hgp)
 {
 /* Look up Genbank genes from keyword */
 struct sqlConnection *conn = hAllocConn();
@@ -2693,6 +1538,7 @@ struct hgPos *pos;
 struct bed *bed;
 struct minGeneInfo *gbList = NULL, *gb;
 boolean gotGBkeys = sqlTableExists(conn, "gbProtCodeXra");
+boolean found = FALSE;
 
 if (gotGBkeys)
     {
@@ -2738,6 +1584,7 @@ if (gbList != NULL)
 	    pos->chromStart = bed->chromStart;
 	    pos->chromEnd = bed->chromEnd;
 	    bedFree(&bed);
+	    found = TRUE;
 	    }
 	sqlFreeResult(&sr);
 	}
@@ -2746,6 +1593,7 @@ if (gbList != NULL)
     }
 freeDyString(&ds);
 hFreeConn(&conn);
+return(found);
 }
 
 static void findTigrGenes(char *spec, struct hgPositions *hgp)
@@ -2819,6 +1667,60 @@ hFreeConn(&conn);
 
 /* End of Lowe Lab stuff */
 
+static boolean findGenePredPattern(char *pattern, struct hgPositions *hgp, char *tableName, struct hgPosTable *table)
+/* Look for position pattern in gene prediction table. */
+{
+struct sqlConnection *conn;
+struct sqlResult *sr = NULL;
+struct dyString *query;
+char **row;
+boolean ok = FALSE;
+char *chrom;
+struct snp snp;
+char buf[64];
+struct hgPos *pos = NULL;
+int rowOffset;
+char *localName;
+
+localName = pattern;
+if (!hTableExists(tableName))
+    return FALSE;
+rowOffset = hOffsetPastBin(NULL, tableName);
+conn = hAllocConn();
+query = newDyString(256);
+dyStringPrintf(query, "SELECT chrom, txStart, txEnd, name FROM %s WHERE name LIKE '%s'", tableName, pattern);
+sr = sqlGetResult(conn, query->string);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    if (ok == FALSE)
+        {
+	ok = TRUE;
+	if (table == NULL)
+	    {
+	    AllocVar(table);
+	    dyStringClear(query);
+	    dyStringPrintf(query, "%s Gene Predictions", tableName);
+	    table->description = cloneString(query->string);
+	    table->name = cloneString(tableName);
+	    slAddHead(&hgp->tableList, table);
+	    }
+	}
+    
+    AllocVar(pos);
+    pos->chrom = hgOfficialChromName(row[0]);
+    pos->chromStart = atoi(row[1]);
+    pos->chromEnd = atoi(row[2]);
+    pos->name = cloneString(row[3]);
+    slAddHead(&table->posList, pos);
+    }
+if (table != NULL)
+    slReverse(&table->posList);
+freeDyString(&query);
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+return ok;
+}
+
 static void addUniqYeastGene(struct hash *uniqHash, 
 	struct sqlConnection *conn, char *query, 
 	struct hgPositions *hgp, char *geneTable,
@@ -2848,13 +1750,14 @@ while ((row = sqlNextRow(sr)) != NULL)
 sqlFreeResult(&sr);
 }
 
-static void findYeastGenes(char *pattern, struct hgPositions *hgp)
+static boolean findYeastGenes(char *pattern, struct hgPositions *hgp)
 /* Scan yeast-specific tables. */
 {
 struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr;
 char **row, query[256];
 struct hgPosTable *table = NULL;
+boolean found = FALSE;
 
 if (hTableExists("sgdGene"))
     {
@@ -2910,64 +1813,66 @@ if (hTableExists("sgdGene"))
 		pos->description = cloneString(dy->string);
 	    dyStringFree(&dy);
 	    }
+	found = TRUE;
 	}
     }
 hFreeConn(&conn);
+return(found);
 }
 
-static void findBedPos(char *name, struct hgPositions *hgp, char *tableName)
-/* Look for positions in bed table. */
+void hgPositionsHtml(struct hgPositions *hgp, FILE *f,
+		     boolean useWeb, char *hgAppName, struct cart *cart)
+/* Write out hgp table as HTML to file. */
 {
-struct sqlConnection *conn = hAllocConn();
-struct sqlResult *sr = NULL;
-struct dyString *query = newDyString(256);
-struct hgPos *pos = NULL;
-char **row;
-struct bed *bed = NULL;
-struct hgPosTable *table = NULL;
-dyStringPrintf(query, "select chrom, chromStart, chromEnd, name from %s where name = '%s'", tableName, name);
-/* if(!hTableExists(tableName))
-   errAbort("Sorry %s track not available yet in this version of the browser.", tableName); */
-if (hTableExists(tableName))
+struct hgPosTable *table;
+struct hgPos *pos;
+char *desc;
+char range[64];
+char *ui = getUiUrl(cart);
+char *extraCgi = hgp->extraCgi;
+char hgAppCombiner = (strchr(hgAppName, '?')) ? '&' : '?';
+
+if (useWeb)
+    webStart(cart, "Select Position");
+
+for (table = hgp->tableList; table != NULL; table = table->next)
     {
-    sr = sqlGetResult(conn, query->string);
-    while ((row = sqlNextRow(sr)) != NULL)
-        {
-        if(table == NULL)
+    if (table->posList != NULL)
+	{
+	if (table->htmlStart) 
+	    table->htmlStart(table, f);
+	else
+	    fprintf(f, "<H2>%s</H2><PRE><TT>", table->description);
+	for (pos = table->posList; pos != NULL; pos = pos->next)
 	    {
-	    AllocVar(table);
-	    dyStringClear(query);
-	    dyStringPrintf(query, "%s Bed Records", tableName);
-	    table->description = cloneString(query->string);
-	    table->name = cloneString(tableName);
-	    slAddHead(&hgp->tableList, table);
+	    if (table->htmlOnePos)
+	        table->htmlOnePos(table, pos, f);
+	    else
+		{
+		hgPosBrowserRange(pos, range);
+		fprintf(f, "<A HREF=\"%s%cposition=%s",
+			hgAppName, hgAppCombiner, range);
+		if (ui != NULL)
+		    fprintf(f, "&%s", ui);
+		fprintf(f, "%s&%s=%s\">%s at %s</A>",
+		    extraCgi, table->name, hTrackOpenVis(table->name), pos->name, range);
+		desc = pos->description;
+		if (desc)
+		    fprintf(f, " - %s", desc);
+		fprintf(f, "\n");
+		}
 	    }
-        bed = bedLoadN(row,4);
-        AllocVar(pos);
-        pos->chrom = hgOfficialChromName(row[0]);
-        pos->chromStart = atoi(row[1]);
-        pos->chromEnd = atoi(row[2]);
-        pos->name = cloneString(row[3]);
-        slAddHead(&table->posList, pos);
-        bedFree(&bed);
-        }
-    if (table != NULL)
-        slReverse(&table->posList);
-    sqlFreeResult(&sr);
+	if (table->htmlEnd) 
+	    table->htmlEnd(table, f);
+	else
+	    fprintf(f, "</PRE></TT>\n");
+	}
     }
-freeDyString(&query);
-hFreeConn(&conn);
+
+if (useWeb)
+    webEnd();
 }
 
-static void findBedTablePos(char *spec, char *prefix, struct hgPositions *hgp, char *tableName)
-/* Look for name in "spec" after "prefix" in tableName where tableName is a bed type table. */
-{
-char *name = strstr(spec, prefix); /* parse name out of something like "HG-U95Av2:probeName" */
-if(name == NULL || *(name + strlen(prefix)) == '\0')
-    return;
-name+=strlen(prefix);
-findBedPos(name, hgp, tableName);
-}
 
 static struct hgPositions *genomePos(char *spec, char **retChromName, 
 	int *retWinStart, int *retWinEnd, struct cart *cart, boolean showAlias,
@@ -3028,7 +1933,8 @@ struct hgPositions *findGenomePos(char *spec, char **retChromName,
  * Return TRUE if the query results in a unique position.  
  * Otherwise display list of positions and return FALSE. */
 {
-return genomePos(spec, retChromName, retWinStart, retWinEnd, cart, TRUE, FALSE, "hgTracks");
+return genomePos(spec, retChromName, retWinStart, retWinEnd, cart, TRUE,
+		 FALSE, "hgTracks");
 }
 
 struct hgPositions *findGenomePosWeb(char *spec, char **retChromName, 
@@ -3109,239 +2015,322 @@ return firstSuccess;
 }
 
 
-struct hgPositions *hgPositionsFind(char *query, char *extraCgi,
-	char *hgAppName, struct cart *cart)
-/* Return table of positions that match query or NULL if none such. */
+static void noRelative(boolean relativeFlag, int relStart, int relEnd,
+		       char *table)
+{
+if (relativeFlag)
+    errAbort("Sorry, range spec (\":%d-%d\") is not supported for %s.",
+	     relStart+1, relEnd, table);
+
+}
+
+static boolean searchSpecial(struct hgFindSpec *hfs, char *term,
+			     struct hgPositions *hgp, boolean relativeFlag,
+			     int relStart, int relEnd, boolean *retFound)
+/* Handle searchTypes for which we have special code.  Return true if 
+ * we have special code.  Set retFind according to whether we find term. */
+{
+boolean isSpecial = TRUE;
+boolean found = FALSE;
+if (sameString(hfs->searchType, "knownGene"))
+    {
+    if (hTableExists("kgAlias"))
+	found = findKgGenesByAlias(term, hgp);
+    if (!found && hTableExists("kgProtAlias"))
+	found = findKgGenesByProtAlias(term, hgp);
+    if (!found)
+    	found = findKnownGene(term, hgp, hfs->searchTable);
+    }
+else if (sameString(hfs->searchType, "refGene"))
+    {
+    found = findRefGenes(term, hgp);
+    }
+else if (sameString(hfs->searchType, "cytoBand"))
+    {
+    char *chrom;
+    int start, end;
+    found = hgFindCytoBand(term, &chrom, &start, &end);
+    if (found)
+	singlePos(hgp, hfs->searchDescription, NULL, hfs->searchTable, term,
+		  chrom, start, end);
+    }
+else if (sameString(hfs->searchType, "gold"))
+    {
+    char *chrom;
+    int start, end;
+    found = findChromContigPos(term, &chrom, &start, &end);
+    if (found)
+	{
+	if (relativeFlag)
+	    {
+	    end = start + relEnd;
+	    start = start + relStart;
+	    }
+	singlePos(hgp, hfs->searchDescription, NULL, hfs->searchTable, term,
+		  chrom, start, end);
+	}
+    }
+else if (sameString(hfs->searchType, "mrnaAcc"))
+    {
+    found = findMrnaPos(term, hgp);
+    }
+else if (sameString(hfs->searchType, "mrnaKeyword"))
+    {
+    found = findMrnaKeys(term, hgp);
+    }
+else if (sameString(hfs->searchType, "sgdGene"))
+    {
+    found = findYeastGenes(term, hgp);
+    }
+else if (sameString(hfs->searchType, "gbProtCode"))
+    {
+    found = findGenbankGenes(term, hgp);
+    }
+else
+    {
+    isSpecial = FALSE;
+    }
+*retFound = found;
+return(isSpecial);
+}
+
+
+static struct slPair *getXrefTerms(struct hgFindSpec *hfs, char *term)
+/* Search xrefTable for xrefQuery with term.  Return all matching names. */
+{
+struct slPair *xrefList = NULL, *xrefPtr = NULL;
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr = NULL;
+char **row;
+char buf[512];
+
+safef(buf, sizeof(buf), hfs->xrefQuery, hfs->xrefTable, term);
+sr = sqlGetResult(conn, buf);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    xrefPtr = slPairNew(cloneString(row[1]), cloneString(row[0]));
+    slAddHead(&xrefList, xrefPtr);
+    }
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+slReverse(&xrefList);
+return(xrefList);
+}
+
+
+static boolean doQuery(struct hgFindSpec *hfs, char *xrefTerm, char *term,
+		       struct hgPositions *hgp,
+		       boolean relativeFlag, int relStart, int relEnd)
+/* Perform a query as specified in hfs, assuming table existence has been 
+ * checked and xref'ing has been taken care of. */
+{
+struct hgPosTable *table = NULL;
+struct hgPos *pos = NULL;
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr = NULL;
+char **row = NULL;
+char *termPrefix = hgFindSpecSetting(hfs, "termPrefix");
+char *paddingStr = hgFindSpecSetting(hfs, "padding");
+int padding = isEmpty(paddingStr) ? 0 : atoi(paddingStr);
+boolean found = FALSE;
+char buf[512];
+
+if (isNotEmpty(termPrefix) && startsWith(termPrefix, term))
+    term += strlen(termPrefix);
+if (isEmpty(term))
+    return(FALSE);
+
+if (hgp->tableList != NULL &&
+    sameString(hgp->tableList->name, hfs->searchTable))
+    table = hgp->tableList;
+
+safef(buf, sizeof(buf), hfs->query, hfs->searchTable, term);
+sr = sqlGetResult(conn, buf);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    if(table == NULL)
+	{
+	AllocVar(table);
+	if (isNotEmpty(hfs->searchDescription))
+	    safef(buf, sizeof(buf), "%s", hfs->searchDescription);
+	else
+	    safef(buf, sizeof(buf), "%s", hfs->searchTable);
+	table->description = cloneString(buf);
+	table->name = cloneString(hfs->searchTable);
+	slAddHead(&hgp->tableList, table);
+	}
+    found = TRUE;
+    AllocVar(pos);
+    pos->chrom = cloneString(row[0]);
+    pos->chromStart = atoi(row[1]);
+    pos->chromEnd = atoi(row[2]);
+    if (isNotEmpty(xrefTerm))
+	safef(buf, sizeof(buf), "%s", xrefTerm);
+    else
+	safef(buf, sizeof(buf), "%s%s", termPrefix ? termPrefix : "", row[3]);
+    pos->name = cloneString(buf);
+    if (isNotEmpty(xrefTerm))
+	{
+	safef(buf, sizeof(buf), "(%s%s)", termPrefix ? termPrefix : "", row[3]);
+	pos->description = cloneString(buf);
+	}
+    if (relativeFlag && (pos->chromStart + relEnd) <= pos->chromEnd)
+	{
+	pos->chromEnd   = pos->chromStart + relEnd;
+	pos->chromStart = pos->chromStart + relStart;
+	}
+    else if (padding > 0)
+	{
+	int chromSize = hChromSize(pos->chrom);
+	pos->chromStart -= padding;
+	pos->chromEnd   += padding;
+	if (pos->chromStart < 0)
+	    pos->chromStart = 0;
+	if (pos->chromEnd > chromSize)
+	    pos->chromEnd = chromSize;
+	}
+    slAddHead(&table->posList, pos);
+    }
+if (table != NULL)
+    slReverse(&table->posList);
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+return(found);
+}
+
+boolean hgFindUsingSpec(struct hgFindSpec *hfs, char *term,
+			struct hgPositions *hgp, boolean relativeFlag,
+			int relStart, int relEnd)
+/* Perform the search described by hfs on term.  If successful, put results
+ * in hgp and return TRUE.  (If not, don't modify hgp.) */
+{
+struct slPair *xrefList = NULL, *xrefPtr = NULL; 
+char *db = hGetDb();
+boolean found = FALSE;
+
+if (hfs == NULL || term == NULL || hgp == NULL)
+    errAbort("NULL passed to hgFindUsingSpec.\n");
+
+if (isNotEmpty(hfs->termRegex) && ! matchRegex(term, hfs->termRegex))
+    return(FALSE);
+
+if (! hTableOrSplitExistsDb(db, hfs->searchTable))
+    return(FALSE);
+
+if (isNotEmpty(hfs->searchType) && searchSpecial(hfs, term, hgp, relativeFlag,
+						 relStart, relEnd, &found))
+    return(found);
+
+if (isNotEmpty(hfs->xrefTable))
+    {
+    if (! hTableOrSplitExistsDb(db, hfs->xrefTable))
+	return(FALSE);
+    xrefList = getXrefTerms(hfs, term);
+    }
+else
+    xrefList = slPairNew(cloneString(""), cloneString(term));
+
+for (xrefPtr = xrefList;  xrefPtr != NULL;  xrefPtr = xrefPtr->next)
+    {
+    found |= doQuery(hfs, xrefPtr->name, (char *)xrefPtr->val, hgp,
+		     relativeFlag, relStart, relEnd);
+    }
+slPairFreeValsAndList(&xrefList);
+return(found);
+}
+
+
+struct hgPositions *hgPositionsFind(char *term, char *extraCgi,
+	char *hgAppNameIn, struct cart *cart)
+/* Return table of positions that match term or NULL if none such. */
 {
 struct hgPositions *hgp;
-struct hgPosTable *table;
-struct hgPos *pos;
-int start,end;
-char *chrom;
-boolean relativeFlag;
-char buf[256];
-char *startOffset,*endOffset;
-char *name;
-int iStart = 0, iEnd = 0;
-int kgFound;
+boolean relativeFlag = FALSE;
+int relStart = 0, relEnd = 0;
+
+hgAppName = hgAppNameIn;
 
 AllocVar(hgp);
 hgp->useAlias = FALSE;
-query = trimSpaces(query);
-if(query == 0)
+term = trimSpaces(term);
+if(term == 0)
     return hgp;
 
-hgp->query = cloneString(query);
+hgp->query = cloneString(term);
 hgp->database = hGetDb();
 if (extraCgi == NULL)
     extraCgi = "";
 hgp->extraCgi = cloneString(extraCgi);
 
-relativeFlag = FALSE;
-safef(buf, sizeof(buf), "%s", query);
-startOffset = strchr(buf, ':');
-if (startOffset != NULL) 
+/* Allow any search term to end with a :Start-End range.  If found, 
+ * strip it off and remember the start and end. */
+if (matchRegex(term, ".*:[0-9, \t]+-[0-9, \t]+$"))
     {
+    char buf[256];
+    char *startOffset, *endOffset;
+    safef(buf, sizeof(buf), "%s", term);
+    startOffset = strchr(buf, ':');
     *startOffset++ = 0;
     endOffset = strchr(startOffset, '-');
-    if (endOffset != NULL)
+    *endOffset++ = 0;
+    startOffset = trimSpaces(startOffset);
+    endOffset = trimSpaces(endOffset);
+    relStart = atoi(stripCommas(startOffset)) - 1;
+    relEnd = atoi(stripCommas(endOffset));
+    if (relStart > relEnd)
 	{
-	*endOffset++ = 0;
-	startOffset = trimSpaces(startOffset);
-	endOffset = trimSpaces(endOffset);
-	if ((isdigit(startOffset[0])) && (isdigit(endOffset[0])))
+	int tmp  = relStart;
+	relStart = relEnd;
+	relEnd   = tmp;
+	}
+    relativeFlag = TRUE;
+    term = buf;
+    }
+
+if (hgOfficialChromName(term) != NULL)
+    {
+    char *chrom;
+    int start, end;
+    hgParseChromRange(term, &chrom, &start, &end);
+    if (relativeFlag)
+	{
+	int chromSize = hChromSize(chrom);
+	end = start + relEnd;
+	start = start + relStart;
+	if (end > chromSize)
+	    end = chromSize;
+	if (start < 0)
+	    start = 0;
+	}
+    singlePos(hgp, "Chromosome Range", NULL, NULL, term, chrom, start, end);
+    }
+else
+    {
+    struct hgFindSpec *hfsList = hgFindSpecGetShortCircuits();
+    struct hgFindSpec *hfs;
+    boolean done = FALSE;
+
+    for (hfs = hfsList;  hfs != NULL;  hfs = hfs->next)
+	{
+	if (hgFindUsingSpec(hfs, term, hgp, relativeFlag, relStart, relEnd))
 	    {
-	    iStart = atoi(stripCommas(startOffset))-1;
-	    iEnd = atoi(stripCommas(endOffset));
-	    relativeFlag = TRUE;
-	    query = buf;
+	    done = TRUE;
+	    break;
 	    }
 	}
-    }
-
-
-if (startsWith("chr", query) && strlen(query) < 6)
-    if (hgOfficialChromName(query) == NULL)
-	return NULL;
-if (hgIsChromRange(query))
-    {
-    hgParseChromRange(query, &chrom, &start, &end);
-    if (relativeFlag == TRUE)
+    hgFindSpecFreeList(&hfsList);
+    if (! done)
 	{
-	end = start + iEnd;
-	start = start + iStart;
+	hfsList = hgFindSpecGetAdditives();
+	for (hfs = hfsList;  hfs != NULL;  hfs = hfs->next)
+	    {
+	    hgFindUsingSpec(hfs, term, hgp, relativeFlag, relStart, relEnd);
+	    }
+	/* Lowe lab additions -- would like to replace these with specs, but 
+	 * will leave in for now. */
+	findGenbankGenes(term, hgp);
+	findTigrGenes(term, hgp);
 	}
-    singlePos(hgp, "Chromosome Range", NULL, NULL, query, chrom, start, end);
-    }
-else if (isContigName(query) && findContigPos(query, &chrom, &start, &end))
-    {
-    if (relativeFlag == TRUE)
-	{
-	end = start + iEnd;
-	start = start + iStart;
-	}
-    singlePos(hgp, "Map Contig", NULL, "ctgPos", query, chrom, start, end);
-    }
-else if (hgFindCytoBand(query, &chrom, &start, &end))
-    {
-    singlePos(hgp, "Cytological Band", NULL, "cytoBand", query, chrom, start, end);
-    }
-else if (hgFindClonePos(query, &chrom, &start, &end))
-    {
-    if (relativeFlag == TRUE)
-	{
-	end = start + iEnd;
-	start = start + iStart;
-	}
-    
-    singlePos(hgp, "Genomic Clone", NULL, "clonePos", query, chrom, start, end);
-    }
-else if (findMrnaPos(query, hgp, hgAppName, cart))
-    {
-    /* here for MRNA's (but not RefSeq) and EST's */
-    /* NOTE: findMrnaPos generates the list
-     * so this block is empty. */
-    }
-else if (findGenethonPos(query, &chrom, &start, &end))	/* HG3 only. */
-    {
-    singlePos(hgp, "STS Position", NULL, "mapGenethon", query, chrom, start, end);
-    }
-else if (isBactigName(query) && findBactigPos(query, &chrom, &start, &end))
-    {
-    if (relativeFlag == TRUE)
-	{
-	end = start + iEnd;
-	start = start + iStart;
-	}
-    singlePos(hgp, "Bactig", NULL, "bactigPos", query, chrom, start, end);
-    }
-else if (isRatContigName(query) && findRatContigPos(query, &chrom, &start, &end))
-    {
-    if (relativeFlag == TRUE)
-	{
-	end = start + iEnd;
-	start = start + iStart;
-	}
-    singlePos(hgp, "Rat Contig", NULL, "gold", query, chrom, start, end);
-    }
-else if (isFlyBaseId(query) &&
-	 ((name = findFlyBasePos(query, "bdgpGene", &chrom, &start, &end))
-	  != NULL))
-    {
-    if (relativeFlag == TRUE)
-	{
-	end = start + iEnd;
-	start = start + iStart;
-	}
-    singlePos(hgp, "FlyBase", NULL, "bdgpGene", name, chrom, start, end);
-    }
-else if (isFlyBaseId(query) &&
-	 ((name = findFlyBasePos(query, "bdgpNonCoding", &chrom, &start, &end))
-	  != NULL))
-    {
-    if (relativeFlag == TRUE)
-	{
-	end = start + iEnd;
-	start = start + iStart;
-	}
-    singlePos(hgp, "FlyBase", NULL, "bdgpNonCoding", name, chrom, start, end);
-    }
-else if (isBDGPName(query) &&
-	 ((name = findBDGPPos(query, "bdgpGene", &chrom, &start, &end))
-	  != NULL))
-    {
-    if (relativeFlag == TRUE)
-	{
-	end = start + iEnd;
-	start = start + iStart;
-	}
-    singlePos(hgp, "BDGP Protein-coding Gene", NULL, "bdgpGene",
-	      name, chrom, start, end);
-    }
-else if (isBDGPName(query) &&
-	 ((name = findBDGPPos(query, "bdgpNonCoding", &chrom, &start, &end))
-	  != NULL))
-    {
-    if (relativeFlag == TRUE)
-	{
-	end = start + iEnd;
-	start = start + iStart;
-	}
-    singlePos(hgp, "BDGP Non-coding Gene", NULL, "bdgpNonCoding",
-	      name, chrom, start, end);
-    }
-else if (isScaffoldPos(query) && 
-        parseScaffoldRange(query, &chrom, &start, &end))
-    {
-    if (relativeFlag == TRUE)
-	{
-	end = start + iEnd;
-	start = start + iStart;
-	}
-    singlePos(hgp, "Scaffold Range", NULL, NULL, query, chrom, start, end);
-    }
-else 
-    {
-    kgFound = 0;
-    if (hTableExists("kgAlias"))
-	{
-	// invoke new Known Genes gene alias search if kgAlias table exists */ 
-	kgFound = findKgGenesByAlias(query, hgp);
-	}
-
-    if (!kgFound && hTableExists("kgProtAlias"))
-	{
-	// invoke new Known Genes protein alias search if kgProtAlias table exists 
-	kgFound = findKgGenesByProtAlias(query, hgp);
-	}
-
-    if (!kgFound)
-	{
-    	findKnownGene(query, hgp, "knownGene");
-	}
-    findKnownGenes(query, hgp);
-    findRefGenes(query, hgp);
-    findYeastGenes(query, hgp);
-    findSuperfamily(query, hgp);
-    findFishClones(query, hgp);
-    findBacEndPairs(query, hgp);
-    findFosEndPairs(query, hgp);
-    findFosEndPairsBad(query, hgp);
-    findStsPos(query, hgp);
-    /* use original query, not range-stripped version,
-     * to suppress spurious matching in Rna tables
-     * RT 752: Jumping to chrY on rat gives strange things
-     */
-    findMrnaKeys(hgp->query, hgp, hgAppName, cart);
-    findZooGenes(query, hgp);
-    findRgdGenes(query, hgp);
-    findEncodeRegions(query, hgp, "encodeRegions");
-    findSnpPos(query, hgp, "snpMap");
-    findAffySnpPos(query, hgp, "affyGeno");
-    findGenePred(query, hgp, "sanger22");
-    findGenePred(query, hgp, "sanger20");
-    findGenePred(query, hgp, "ensGene");
-    findGenePred(query, hgp, "genieAlt");
-    findGenePred(query, hgp, "softberryGene");
-    findGenePred(query, hgp, "acembly");
-    findGenePred(query, hgp, "genscan");
-    findGenePred(query, hgp, "twinscan");
-    findGenePred(query, hgp, "ECgene");
-    findGenePred(query, hgp, "sangerGene");
-    findGenePred(query, hgp, "tigrGeneIndex");
-    findGenePredLike(query, hgp, "slamRat");
-    findGenePredLike(query, hgp, "slamMouse");
-    findGenePredLike(query, hgp, "slamHuman");
-    findBedTablePos(query, "HG-U95:", hgp, "affyGnf");
-    findBedTablePos(query, "HG-U133:", hgp, "affyUcla");
-    findBedPos(query, hgp, "uniGene_2");
-    findBedPos(query, hgp, "sgdOther");
-    findBedPos(query, hgp, "miRNA");
-    // findBedPos(query,hgp,"gbRRNA");
-    // findBedPos(query,hgp,"gbTRNA");
-    // findBedPos(query,hgp,"gbMiscRNA");
-    findGenbankGenes(query, hgp);
-    findTigrGenes(query, hgp);
     }
 
 slReverse(&hgp->tableList);
@@ -3349,746 +2338,32 @@ fixSinglePos(hgp);
 return hgp;
 }
 
-void hgPosTableFree(struct hgPosTable **pEl)
-/* Free up hgPosTable. */
-{
-struct hgPosTable *el;
-if ((el = *pEl) != NULL)
-    {
-    freeMem(el->name);
-    hgPosFreeList(&el->posList);
-    freez(pEl);
-    }
-}
-
-void hgPosTableFreeList(struct hgPosTable **pList)
-/* Free a list of dynamically allocated hgPos's */
-{
-struct hgPosTable *el, *next;
-
-for (el = *pList; el != NULL; el = next)
-    {
-    next = el->next;
-    hgPosTableFree(&el);
-    }
-*pList = NULL;
-}
-
-
-void hgPosFree(struct hgPos **pEl)
-/* Free up hgPos. */
-{
-struct hgPos *el;
-if ((el = *pEl) != NULL)
-    {
-    freeMem(el->name);
-    freeMem(el->description);
-    freez(pEl);
-    }
-}
-
-void hgPosFreeList(struct hgPos **pList)
-/* Free a list of dynamically allocated hgPos's */
-{
-struct hgPos *el, *next;
-
-for (el = *pList; el != NULL; el = next)
-    {
-    next = el->next;
-    hgPosFree(&el);
-    }
-*pList = NULL;
-}
-
-char *hgPosBrowserRange(struct hgPos *pos, char range[64])
-/* Convert pos to chrN:123-456 format.  If range parameter is NULL it returns
- * static buffer, otherwise writes and returns range. */
-{
-static char buf[64];
-
-if (range == NULL)
-    range = buf;
-sprintf(range, "%s:%d-%d", pos->chrom, pos->chromStart, pos->chromEnd);
-return range;
-}
-
-void hgPositionsHtml(struct hgPositions *hgp, FILE *f,
-		     boolean useWeb, char *hgAppName, struct cart *cart)
-/* Write out hgp table as HTML to file. */
-{
-struct hgPosTable *table;
-struct hgPos *pos;
-char *desc;
-char range[64];
-char *ui = getUiUrl(cart);
-char *extraCgi = hgp->extraCgi;
-char hgAppCombiner = (strchr(hgAppName, '?')) ? '&' : '?';
-
-if (useWeb)
-    webStart(cart, "Select Position");
-
-for (table = hgp->tableList; table != NULL; table = table->next)
-    {
-    if (table->posList != NULL)
-	{
-	if (table->htmlStart) 
-	    table->htmlStart(table, f);
-	else
-	    fprintf(f, "<H2>%s</H2><PRE><TT>", table->description);
-	for (pos = table->posList; pos != NULL; pos = pos->next)
-	    {
-	    if (table->htmlOnePos)
-	        table->htmlOnePos(table, pos, f);
-	    else
-		{
-		hgPosBrowserRange(pos, range);
-		fprintf(f, "<A HREF=\"%s%cposition=%s",
-			hgAppName, hgAppCombiner, range);
-		if (ui != NULL)
-		    fprintf(f, "&%s", ui);
-		fprintf(f, "%s&%s=%s\">%s at %s</A>",
-		    extraCgi, table->name, hTrackOpenVis(table->name), pos->name, range);
-		desc = pos->description;
-		if (desc)
-		    fprintf(f, " - %s", desc);
-		fprintf(f, "\n");
-		}
-	    }
-	if (table->htmlEnd) 
-	    table->htmlEnd(table, f);
-	else
-	    fprintf(f, "</PRE></TT>\n");
-	}
-    }
-
-if (useWeb)
-    webEnd();
-}
-
 
 void hgPositionsHelpHtml(char *organism, char *database)
-/* Explain the position box usage, give some organism-specific examples. */
+/* Display contents of dbDb.htmlPath for database, or print an HTML comment 
+ * explaining what's missing. */
 {
-char *htmlPath = (char *) NULL;
-char *htmlString = (char *) NULL;
+char *htmlPath = hHtmlPath(database);
+char *htmlString = NULL;
 size_t htmlStrLength = 0;
 
-/*	fetch /gbdb path name from dbDb database */
-htmlPath= hHtmlPath(database);
-
-/*  If that is OK, try opening the file */
-if( (char *) NULL != htmlPath ) {
-    if( fileExists(htmlPath) ) {
-	readInGulp(htmlPath, & htmlString, & htmlStrLength );
-    /***********   Optionally, we can describe what is missing:
-    } else {
-	printf("<P><H4> HTML description file does not exist: '%s'</H4></P><BR>\n", htmlPath );
-	***********	In practice, we will allow this to fail silently and
-	*********** the if statements below will fill in some default.
-	**********/
+if (htmlPath != NULL && fileExists(htmlPath))
+    {
+    readInGulp(htmlPath, &htmlString, &htmlStrLength);
     }
-}
-if( htmlStrLength ) {
+if (htmlStrLength > 0)
+    {
     puts(htmlString);
     freeMem(htmlString);
     freeMem(htmlPath);
-} else {
-if (strstrNoCase(organism, "human"))
-    {
-    puts("<P><H3>About the Homo sapiens assembly</P></H3>\n");
-    puts(
-    "<P>The latest human reference sequence (UCSC version hg16) is based on NCBI \n" 
-    "Build 34 and was produced by the International Human \n"
-    "Genome Sequencing Consortium. The sequence covers about 99 percent of \n"
-    "the gene-containing regions in the genome, and has been sequenced to an \n"
-    "accuracy of 99.99 percent. \n"
-    "Of note in this release is the addition of the pseudoautosomal regions \n"
-    "of the Y chromosome. This sequence was taken from the corresponding regions \n"
-    "in the X chromosome and is an exact duplication of that sequence.\n"
-    "<P>"
-    "There are 2,843,433,602 finished sequenced bases in the \n"
-    "ordered and oriented portion of the assembly, which is an increase of 0.4 \n" 
-    "percent, or approximately 11 Mb, over the Build 33 assembly. \n"
-    "The reference \n"
-    "sequence is considered to be &quot;finished&quot;, a technical term indicating that \n"
-    "the sequence is highly accurate (with fewer than one error per 10,000 \n"
-    "bases) and highly contiguous (with the only remaining gaps corresponding \n"
-    "to regions whose sequence cannot be reliably resolved with current \n"
-    "technology). Future work on the reference sequence will focus on improving \n"
-    "accuracy and reducing gaps in the sequence.\n"
-    "<P>"
-    "Some sequence joins between adjacent clones in this assembly could not be \n"
-    "computationally validated because the clones originated from different \n"
-    "haplotypes and contained polymorphisms in the overlapping sequence, or the \n"
-    "overlap was too small to be to be reliable. In these instances, the \n"
-    "sequencing center responsible for the particular chromosome has provided \n"
-    "data to support the join in the form of an electronic certificate. These \n"
-    "certificates may be reviewed through the link below. </P>");
-
-    puts("<P><H3>Statistical information</P></H3>\n");
-    puts(
-    "<UL>"
-    "<LI><A HREF=\"/goldenPath/certificates/\">Non-Standard Join Certificates</A>"
-    "<LI><A HREF=\"/goldenPath/stats.html\">Summary Statistics</A>"
-    "<LI><A HREF=\"/goldenPath/chromReports\">Chromosome Reports</A>"
-    "<LI><A HREF=\"/goldenPath/mapPlots/\">Genome Map Plots</A>"
-    "</UL></P>"
-    "<P></P>"
-    );
-    puts("<P><H3>Sample position queries</P></H3>\n");
-    puts(
-    "<P>A genome position can be specified by the accession number of a \n"
-    "sequenced genomic clone, an mRNA or EST or STS marker, or \n"
-    "a cytological band, a chromosomal coordinate range, or keywords from \n"
-    "the Genbank description of an mRNA. The following list provides \n"
-    "examples of various types of position queries for the human genome. \n"
-    "See the \n"
-    "<A HREF=\"http://genome.cse.ucsc.edu/goldenPath/help/hgTracksHelp.html\" TARGET=_blank>"
-    "User Guide</A> for more help. \n"
-    "<P>\n"
-    "\n"
-    "<P>\n"
-    "<TABLE  border=0 CELLPADDING=0 CELLSPACING=0>\n"
-    "<TR><TD VALIGN=Top NOWRAP><B>Request:</B><br></TD>\n"
-    "	<TD VALIGN=Top COLSPAN=2><B>&nbsp;&nbsp; Genome Browser Response:</B><br></TD></TR>\n"
-    "	\n"
-    "<TR><TD VALIGN=Top><br></TD></TR>\n"
-    "	\n"
-    "<TR><TD VALIGN=Top NOWRAP>chr7</TD>\n"
-    "	<TD WIDTH=14></TD>\n"
-    "	<TD VALIGN=Top>Displays all of chromosome 7</TD></TR>\n"
-    "<TR><TD VALIGN=Top NOWRAP>20p13</TD>\n"
-    "	<TD WIDTH=14></TD>\n"
-    "	<TD VALIGN=Top>Displays region for band p13 on chr 20</TD></TR>\n"
-    "<TR><TD VALIGN=Top NOWRAP>chr3:1-1000000</TD>\n"
-    "	<TD WIDTH=14></TD>\n"
-    "	<TD VALIGN=Top>Displays first million bases of chr 3, counting from p arm telomere</TD></TR>\n"
-    "<TR><TD VALIGN=Top NOWRAP>scf1:1-1000000</TD>\n"
-    "	<TD WIDTH=14></TD>\n"
-    "	<TD VALIGN=Top>Displays first million bases of scaffold 1 of an unmapped genome assembly</TD></TR>\n"
-    "\n"
-    "<TR><TD VALIGN=Top><br></TD></TR>\n"
-    "\n"
-    "<TR><TD VALIGN=Top NOWRAP>D16S3046</TD>\n"
-    "	<TD WIDTH=14></TD>\n"
-    "	<TD VALIGN=Top>Displays region around STS marker D16S3046 from the Genethon/Marshfield maps.\n"
-    "Includes 100,000 bases on each side as well."
-    "</TD></TR>\n"
-    "<TR><TD VALIGN=Top NOWRAP>RH18061;RH80175</TD>\n"
-    "	<TD WIDTH=14></TD>\n"
-    "	<TD VALIGN=Top>Displays region between STS markers RH18061;RH80175.\n"
-    "Includes 100,000 bases on each side as well."
-    "</TD></TR>\n"
-    "<TR><TD VALIGN=Top><br></TD></TR>\n"
-    "\n"
-    "<TR><TD VALIGN=Top NOWRAP>AA205474</TD>\n"
-    "	<TD WIDTH=14></TD>\n"
-    "	<TD VALIGN=Top>Displays region of EST with GenBank accession AA205474 in BRCA1 cancer gene on chr 17\n"
-    "</TD></TR>\n"
-    "<!-- <TR><TD VALIGN=Top NOWRAP>ctgchr7_ctg</TD>\n"
-    "	<TD WIDTH=14></TD>\n"
-    "	<TD VALIGN=Top>Displays region of the clone contig ctgchr7_ctg\n"
-    "	(set \"Map contigs\" track to \"dense\" and refresh to see contigs)</TD></TR> -->\n"
-    "<TR><TD VALIGN=Top NOWRAP>AC008101</TD>\n"
-    "	<TD WIDTH=14></TD>\n"
-    "	<TD VALIGN=Top>Displays region of clone with GenBank accession AC008101\n"
-    "</TD></TR>\n"
-    "\n"
-    "<TR><TD VALIGN=Top><br></TD></TR>\n"
-    "\n"
-    "<TR><TD VALIGN=Top NOWRAP>AF083811</TD>\n"
-    "	<TD WIDTH=14></TD>\n"
-    "	<TD VALIGN=Top>Displays region of mRNA with GenBank accession number AF083811</TD></TR>\n"
-    "<TR><TD VALIGN=Top NOWRAP>PRNP</TD>\n"
-    "	<TD WIDTH=14></TD>\n"
-    "	<TD>Displays region of genome with HUGO identifier PRNP</TD></TR>\n"
-    "\n"
-
-    "<tr>\n"
-    "<td valign=\"Top\" nowrap="">NM_017414</td>\n"
-    "<td><br></td>\n"
-    "<td valign=\"Top\">Displays the region of genome with RefSeq identifier NM_017414</td></tr>\n"
-    "<tr>\n"
-    "<td valign=\"Top\" nowrap="">NP_059110</td>\n"
-    "<td><br></td>\n"
-    "<td valign=\"Top\" nowrap=""> Displays the region of genome with protein acccession number NP_059110</td></tr>\n"
-    "<tr>\n"
-    "<td valign=\"Top\" nowrap="">11274</td>\n"
-    "<td><br></td>\n"
-    "<td valign=\"Top\" nowrap="">Displays the region of genome with LocusLink identifier 11274</td></tr>\n"
-
-
-    "<TR><TD VALIGN=Top><br></TD></TR>\n"
-    "\n"
-    "<TR><TD VALIGN=Top NOWRAP>pseudogene mRNA</TD>\n"
-    "	<TD WIDTH=14></TD>\n"
-    "	<TD VALIGN=Top>Lists transcribed pseudogenes but not cDNAs</TD></TR>\n"
-    "<TR><TD VALIGN=Top NOWRAP>homeobox caudal</TD>\n"
-    "	<TD WIDTH=14></TD>\n"
-    "	<TD VALIGN=Top>Lists mRNAs for caudal homeobox genes</TD></TR>\n"
-    "<TR><TD VALIGN=Top NOWRAP>zinc finger</TD>\n"
-    "	<TD WIDTH=14></TD>\n"
-    "	<TD VALIGN=Top>Lists many zinc finger mRNAs</TD></TR>\n"
-    "<TR><TD VALIGN=Top NOWRAP>kruppel zinc finger</TD>\n"
-    "	<TD WIDTH=14></TD>\n"
-    "	<TD VALIGN=Top>Lists only kruppel-like zinc fingers</TD></TR>\n"
-    "<TR><TD VALIGN=Top NOWRAP>huntington</TD>\n"
-    "	<TD WIDTH=14></TD>\n"
-    "	<TD VALIGN=Top>Lists candidate genes associated with Huntington's disease</TD></TR>\n"
-    "<TR><TD VALIGN=Top NOWRAP>zahler</TD>\n"
-    "	<TD WIDTH=14></TD>\n"
-    "	<TD VALIGN=Top>Lists mRNAs deposited by scientist named Zahler</TD></TR>\n"
-    "<TR><TD VALIGN=Top NOWRAP>Evans,J.E.</TD>\n"
-    "	<TD WIDTH=14></TD>\n"
-    "	<TD VALIGN=Top>Lists mRNAs deposited by co-author J.E.  Evans</TD></TR>\n"
-    "\n"
-    "<TR><TD VALIGN=Top><br></TD></TR>\n"
-    "	\n"
-    "<TR><TD COLSPAN=\"3\" > Use this last format for entry authors -- "
-    "even though Genbank searches require Evans JE "
-    "format, GenBank entries themselves use Evans,J.E.  internally.\n"
-    "</TABLE>\n"
-    "\n");
-
     }
-else if (strstrNoCase(organism, "mouse"))
+else
     {
-    puts("<P><H3>About the Mus musculus assembly</P></H3>\n");
-    puts(
-    "<P>The latest mouse genome assembly (UCSC version mm3) \n"
-    "is based on NCBI Build 30, a composite assembly of MGSCv3 produced by \n"
-    "the Mouse Genome Sequencing Consortium and finished BAC sequence. There \n"
-    "is a slight difference between the UCSC and NCBI versions: the NCBI  \n"
-    "assembly includes contigs from several strains, but the UCSC \n"
-    "version  contains only the reference strain (C57BL/6J). The current assembly \n"
-    "includes 705 megabases of finished sequence. While there are \n"
-    "many gaps in the sequence, the order and orientation of the contigs on \n"
-    "either side of a gap are known in almost all cases. We estimate \n"
-    "that 90-96 percent of the mouse genome is present in the assembly.\n</P>");
-
-    puts("<P><H3>Sample position queries</P></H3>\n");
-    puts(
-    "<P>A genome position can be specified by the accession number of a "
-    "sequenced genomic clone, an mRNA or EST or STS marker, or \n"
-    "a cytological band, a chromosomal coordinate range, or keywords from "
-    "the Genbank description of an mRNA. The following list provides "
-    "examples of various types of position queries for the mouse genome. "
-    "See the "
-    "<A HREF=\"http://genome.cse.ucsc.edu/goldenPath/help/hgTracksHelp.html\" TARGET=_blank>"
-    "User Guide</A> for more help. \n"
-    "<P>\n"
-    "\n"
-    "<P>\n"
-    "<TABLE  border=0 CELLPADDING=0 CELLSPACING=0>\n"
-    "<TR><TD VALIGN=Top NOWRAP><B>Request:</B><br></TD>\n"
-    "	<TD VALIGN=Top COLSPAN=2><B>&nbsp;&nbsp; Genome Browser Response:</B><br></TD></TR>\n"
-    "	\n"
-    "<TR><TD VALIGN=Top><br></TD></TR>\n"
-    "	\n"
-    "<TR><TD VALIGN=Top NOWRAP>chr16</TD>\n"
-    "	<TD WIDTH=14></TD>\n"
-    "	<TD VALIGN=Top>Displays all of chromosome 16</TD></TR>\n"
-    "<TR><TD VALIGN=Top NOWRAP>chr16:1-5000000</TD>\n"
-    "	<TD WIDTH=14></TD>\n"
-    "	<TD VALIGN=Top>Displays first 5 million bases of chr 16</TD></TR>\n"
-    "\n"
-    "<TR><TD VALIGN=Top><br></TD></TR>\n"
-    "\n"
-    "<TR><TD VALIGN=Top NOWRAP>D16Mit120</TD>\n"
-    "	<TD WIDTH=14></TD>\n"
-    "	<TD VALIGN=Top>Displays region around STS marker DMit16120\n"
-    " from the MGI consensus genetic map.\n"
-    " Includes 100,000 bases on each side as well." 
-    "</TD></TR>\n"
-    "<TR><TD VALIGN=Top NOWRAP>D16Mit203;D16Mit70</TD>\n"
-    "	<TD WIDTH=14></TD>\n"
-    "	<TD VALIGN=Top>Displays region between STS markers D16Mit203 and D16Mit70.\n"
-    "Includes 100,000 bases on each side as well."
-    "</TD></TR>\n"
-    "<TR><TD VALIGN=Top NOWRAP>AW045217</TD>\n"
-    "	<TD WIDTH=14></TD>\n"
-    "	<TD VALIGN=Top>Displays region of EST with GenBank accession AW045217</TD></TR>\n"
-    "<TR><TD VALIGN=Top NOWRAP>Ncam2</TD>\n"
-    "	<TD WIDTH=14></TD>\n"
-    "	<TD VALIGN=Top>Displays region of genome with official MGI mouse genetic nomenclature Ncam2</TD></TR>\n"
-    "<TR><TD VALIGN=Top><br></TD></TR>\n"
-    "\n"
-    "<TR><TD VALIGN=Top NOWRAP>pseudogene mRNA</TD>\n"
-    "	<TD WIDTH=14></TD>\n"
-    "	<TD VALIGN=Top>Lists transcribed pseudogenes but not cDNAs</TD></TR>\n"
-    "<TR><TD VALIGN=Top NOWRAP>zinc finger</TD>\n"
-    "	<TD WIDTH=14></TD>\n"
-    "	<TD VALIGN=Top>Lists many zinc finger mRNAs</TD></TR>\n"
-    "<TR><TD VALIGN=Top NOWRAP>kruppel zinc finger</TD>\n"
-    "	<TD WIDTH=14></TD>\n"
-    "	<TD VALIGN=Top>Lists only kruppel-like zinc fingers</TD></TR>\n"
-    "	<TD VALIGN=Top>Lists candidate genes associated with Huntington's disease</TD></TR>\n"
-    "<TR><TD VALIGN=Top NOWRAP>Evans,J.E.</TD>\n"
-    "	<TD WIDTH=14></TD>\n"
-    "	<TD VALIGN=Top>Lists mRNAs deposited by co-author J.E.  Evans</TD></TR>\n"
-    "\n"
-    "<TR><TD VALIGN=Top><br></TD></TR>\n"
-    "	\n"
-    "<TR><TD COLSPAN=\"3\" > Use this last format for entry authors -- "
-    "even though Genbank searches require Evans JE "
-    "format, GenBank entries themselves use Evans,J.E.  internally.\n"
-    "</TABLE>\n"
-    "\n");
-    }
-else if (strstrNoCase(organism, "rat"))
-    {
-    puts("<P><H3>About the Rattus norvegicus assembly</P></H3>\n");
-    puts(
-    "<P>The latest rat genome assembly (UCSC version rn3) is based on version \n"
-    "3.1 produced by the Atlas group at \n"
-    "<A HREF=\"http://hgsc.bcm.tmc.edu/\" TARGET=_blank> \n"
-    "Baylor Human Genome Sequencing Center</A> \n"
-    "(HGSC) as part of the Rat Genome Sequencing Consortium. \n"
-    "The rat sequence was assembled using a hybrid approach that combines the \n"
-    "clone-by-clone and whole genome shotgun methods. \n"
-    "This assembly is a minor update to the 3.0 release. Sequence changes \n"
-    "affect only chromosomes 7 and X. No additional assembly releases are planned \n"
-    "prior to the publication of the rat genome analysis papers. \n"
-    "<P>The 3.x assemblies reflect several sequence \n"
-    "additions and software improvements over the previous 2.x assemblies, \n"
-    "including the sequencing of over 1100 new BACs to cover gaps, an improved \n"
-    "marker set from the Medical College of Wisconsin, a new FPC map from the BC \n"
-    "Genome Sciences Centre, and improved linking of bactigs. For detailed \n"
-    "information and statistics about the 3.x assemblies, see the Baylor HGSC \n"
-    "<A HREF=\"ftp://ftp.hgsc.bcm.tmc.edu/pub/analysis/rat/README\" TARGET=_blank>README</A>. \n"
-    "<P>These data are made available with \n"
-    "<A HREF=\"http://genome.ucsc.edu/goldenPath/credits.html#rat_use\">specific conditions for use</A>.\n" );
-    puts("<P><H3>Sample position queries</P></H3>\n");
-    puts(
-    "<P>A genome position can be specified by the accession number of a "
-    "sequenced genomic clone, an mRNA or EST or STS marker, \n"
-    "a chromosomal coordinate range, or keywords from "
-    "the Genbank description of an mRNA. The following list provides "
-    "examples of various types of position queries for the rat genome. "
-    "See the "
-    "<A HREF=\"http://genome.cse.ucsc.edu/goldenPath/help/hgTracksHelp.html\" TARGET=_blank>"
-    "User Guide</A> for more help. \n"
-    "<P>\n"
-    "\n"
-    "<P>\n"
-    "<TABLE  border=0 CELLPADDING=0 CELLSPACING=0>\n"
-    "<TR><TD VALIGN=Top NOWRAP><B>Request:</B><br></TD>\n"
-    "	<TD VALIGN=Top COLSPAN=2><B>&nbsp;&nbsp; Genome Browser Response:</B><br></TD></TR>\n"
-    "	\n"
-    "<TR><TD VALIGN=Top><br></TD></TR>\n"
-    "	\n"
-    "<TR><TD VALIGN=Top NOWRAP>chr16</TD>\n"
-    "	<TD WIDTH=14></TD>\n"
-    "	<TD VALIGN=Top>Displays all of chromosome 16</TD></TR>\n"
-    "<TR><TD VALIGN=Top NOWRAP>chr16:1-5000000</TD>\n"
-    "	<TD WIDTH=14></TD>\n"
-    "	<TD VALIGN=Top>Displays first 5 million bases of chr 16</TD></TR>\n"
-    "<TR><TD VALIGN=Top NOWRAP>RNOR03233282;RNOR03233294</TD>\n"
-    "	<TD WIDTH=14></TD>\n"
-    "	<TD VALIGN=Top>Displays region between Assembly IDs RNOR03233282 and RNOR03233294 \n"
-    "</TD></TR>\n"
-    "\n"
-    "<TR><TD VALIGN=Top><br></TD></TR>\n"
-    "\n"
-    "<TR><TD VALIGN=Top NOWRAP>AI501130</TD>\n"
-    "	<TD WIDTH=14></TD>\n"
-    "	<TD VALIGN=Top>Displays region of EST with GenBank accession AI501130</TD></TR>\n"
-    "<TR><TD VALIGN=Top NOWRAP>AF199335</TD>\n"
-    "	<TD WIDTH=14></TD>\n"
-    "	<TD VALIGN=Top>Displays region of mRNA with GenBank accession AF199335</TD></TR>\n"
-    "<TR><TD VALIGN=Top NOWRAP>apoe</TD>\n"
-    "	<TD WIDTH=14></TD>\n"
-    "	<TD VALIGN=Top>Displays region of genome with gene identifier apoE</TD></TR>\n"
-    "<TR><TD VALIGN=Top NOWRAP>NM_145881</TD>\n"
-    "	<TD WIDTH=14></TD>\n"
-    "	<TD VALIGN=Top>Displays region of genome with RefSeq identifier NM_145881</TD></TR>\n"
-    "<TR><TD VALIGN=Top NOWRAP>25728</TD>\n"
-    "	<TD WIDTH=14></TD>\n"
-    "	<TD VALIGN=Top>Displays region of genome with LocusLink identifier 25728</TD></TR>\n"
-    "<TR><TD VALIGN=Top><br></TD></TR>\n"
-    "\n"
-    "<TR><TD VALIGN=Top NOWRAP>pseudogene mRNA</TD>\n"
-    "	<TD WIDTH=14></TD>\n"
-    "	<TD VALIGN=Top>Lists transcribed pseudogenes but not cDNAs</TD></TR>\n"
-    "<TR><TD VALIGN=Top NOWRAP>zinc finger</TD>\n"
-    "	<TD WIDTH=14></TD>\n"
-    "	<TD VALIGN=Top>Lists many zinc finger mRNAs</TD></TR>\n"
-    "<TR><TD VALIGN=Top NOWRAP>kruppel zinc finger</TD>\n"
-    "	<TD WIDTH=14></TD>\n"
-    "	<TD VALIGN=Top>Lists only kruppel-like zinc fingers</TD></TR>\n"
-    "<TR><TD VALIGN=Top NOWRAP>huntington</TD>\n"
-    "	<TD WIDTH=14></TD>\n"
-    "	<TD VALIGN=Top>Lists candidate genes associated with Huntington's disease</TD></TR>\n"
-    "<TR><TD VALIGN=Top NOWRAP>Jones,R.</TD>\n"
-    "	<TD WIDTH=14></TD>\n"
-    "	<TD VALIGN=Top>Lists mRNAs deposited by co-author R. Jones</TD></TR>\n"
-    "\n"
-    "<TR><TD VALIGN=Top><br></TD></TR>\n"
-    "	\n"
-    "<TR><TD COLSPAN=\"3\" > Use this last format for entry authors -- "
-    "even though Genbank searches require Jones R "
-    "format, GenBank entries themselves use Jones,R.  internally.\n"
-    "</TABLE>\n"
-    "\n");
-    }
-else if (strstrNoCase(organism, "SARS"))
-    {
-    puts("<P><H3>About the SARS coronavirus TOR2 assembly</P></H3>\n");
-    puts(
-    "<P>The SARS draft genome assembly (UCSC version sc1) \n"
-    "is based on sequence deposited into GenBank as of 14 April 2003. \n"
-    "This browser - which represents a departure from UCSC's usual focus on vertebrate \n"
-    "genomes - shows gene predictions, locations of putative proteins, and \n"
-    "viral mRNA and protein alignments. Protein structure analysis and \n"
-    "predictions were determined by using the  \n"
-    "<A HREF=\"http://www.cse.ucsc.edu/research/compbio/sam.html\" TARGET=_blank> \n"
-    "Sequence Alignment and Modeling (SAM) T02</A> \n"
-    "tool. UCSC does not plan to provide a comprehensive set of browsers for viruses.  \n"
-    "However, this browser will be maintained as long as there is strong scientific  \n"
-    "and public interest in the SARS coronavirus TOR2.\n</P>");
-    puts("<P><H3>Sample position queries</P></H3>\n");
-    puts(
-    "<P>A genome position can be specified by the accession number of an "
-    "mRNA, a coordinate range, a gene identifier, or keywords from "
-    "the Genbank description of an mRNA. The following list provides "
-    "examples of various types of position queries for the SARS coronavirus TOR2 genome. "
-    "See the "
-    "<A HREF=\"http://genome.cse.ucsc.edu/goldenPath/help/hgTracksHelp.html\" TARGET=_blank>"
-    "User Guide</A> for more help. \n"
-    "<P>\n"
-    "\n"
-    "<P>\n"
-    "<TABLE  border=0 CELLPADDING=0 CELLSPACING=0>\n"
-    "<TR><TD VALIGN=Top NOWRAP><B>Request:</B><br></TD>\n"
-    "	<TD VALIGN=Top COLSPAN=2><B>&nbsp;&nbsp; Genome Browser Response:</B><br></TD></TR>\n"
-    "	\n"
-    "<TR><TD VALIGN=Top><br></TD></TR>\n"
-    "	\n"
-    "<TR><TD VALIGN=Top NOWRAP>chr1</TD>\n"
-    "	<TD WIDTH=14></TD>\n"
-    "	<TD VALIGN=Top>Displays the entire genome for SARS coronavirus TOR2</TD></TR>\n"
-    "<TR><TD VALIGN=Top NOWRAP>chr1:15720-186200</TD>\n"
-    "	<TD WIDTH=14></TD>\n"
-    "	<TD VALIGN=Top>Displays the region between bases 15720 and 186200 showing the protein NP_828870.1.</TD></TR>\n"
-    "<TR><TD VALIGN=Top><br></TD></TR>\n"
-    "\n"
-    "<TR><TD VALIGN=Top NOWRAP>AF391541</TD>\n"
-    "	<TD WIDTH=14></TD>\n"
-    "	<TD VALIGN=Top>Displays region of mRNA with GenBank accession AF391541</TD></TR>\n"
-    "<TR><TD VALIGN=Top NOWRAP>CS000003</TD>\n"
-    "	<TD WIDTH=14></TD>\n"
-    "	<TD VALIGN=Top>Displays region of genome with fgenesv+ gene identifier CS000003</TD></TR>\n"
-    "<TR><TD VALIGN=Top><br></TD></TR>\n"
-    "\n"
-    "<TR><TD VALIGN=Top NOWRAP>bovine coronavirus</TD>\n"
-    "	<TD WIDTH=14></TD>\n"
-    "	<TD VALIGN=Top>Lists mRNAs associated with bovine coronavirus </TD></TR>\n"
-    "<TR><TD VALIGN=Top NOWRAP>Chouljenko,V.</TD>\n"
-    "	<TD WIDTH=14></TD>\n"
-    "	<TD VALIGN=Top>Lists mRNAs deposited by co-author V. Chouljenko</TD></TR>\n"
-    "\n"
-    "<TR><TD VALIGN=Top><br></TD></TR>\n"
-    "	\n"
-    "<TR><TD COLSPAN=\"3\" > Use this last format for entry authors -- "
-    "even though Genbank searches require Chouljenko V "
-    "format, GenBank entries themselves use Chouljenko,V. internally.\n"
-    "</TABLE>\n"
-    "\n");
-    }
-else if (strstrNoCase(organism, "zoo"))
-    {
-    puts("<P><H3>About the NISC Comparative Sequencing Program</P></H3>\n");
-    puts(
-    "<P>This site contains data generated by the \n"
-    "<A HREF=\"http://www.nisc.nih.gov/open_page.html?/projects/zooseq/pubmap/PubZooSeq_Targets.cgi\" TARGET=_blank> \n"
-    "NISC Comparative Sequencing Program</A>, \n"
-    "whose goal is to sequence the same targeted genomic regions in multiple \n"
-    "vertebrates. Currently, data from the first target - corresponding to a \n"
-    "1.8-Mb region of human chromosome 7q31 - are available on 12 species. \n"
-    "Future builds will \n"
-    "include data from additional targeted regions and species. \n"
-    "The Target 1 data have been released in conjunction with the paper \n"
-    "Thomas, J.W. et. al. (2003) \n"
-    "<A HREF=\" http://www.nature.com/cgi-taf/DynaPage.taf?file=/nature/journal/v424/n6950/abs/nature01858_fs.html\" TARGET=_blank>Comparative analyses of multi-species sequences from targeted genomic regions</A>. <em>Nature</em> \n"
-    "424:788- 793. </P> \n"
-    "<P>The sequence data represented here were compiled from existing GenBank \n"
-    "records. In addition to long-range assembly and standard feature \n"
-    "annotation, the results of several analyses are displayed, including \n"
-    "pair-wise sequence alignments, intrinsic sequence properties, and \n"
-    "sequence comparisons that reveal regions highly conserved across \n"
-    "multiple species. Flat files of the assembled sequence and annotations \n"
-    "can be obtained from <A HREF=\"http://www.nisc.nih.gov/data/\" TARGET=_blank>http://www.nisc.nih.gov/data/</A> \n"
-    "or from the <A HREF=\"/downloads.html\">Downloads</A> page on this website. </P>\n"
-    "<P>Please review the NISC Comparative Sequencing Program \n"
-    "<A HREF=\"http://www.nisc.nih.gov/projects/NISC_DataUsePolicy.html\" TARGET=_blank>\n"
-    "data release and usage policy</A> before making use of these data.</P> \n");
-    }
-else if (strstrNoCase(organism, "C. elegans"))
-    {
-    puts("<P><H3>About the Caenorhabditis elegans assembly</P></H3>\n");
-    puts(
-    "<P>This genome assembly (UCSC version ce1) \n"
-    "is based on sequence version WS100 deposited into <A HREF=\"http://www.wormbase.org/about/about_Celegans.html\" TARGET=_blank>WormBase</A> as of 02 May 2003. "
-    "C. elegans is a major model organism used for biomedical research. "
-    "It is the first multicellular animal to have a fully "
-    "sequenced genome, a joint collaboration between the "
-    " <A HREF=\"http://genome.wustl.edu/\" TARGET=_blank>Genome Sequencing Center</A> " 
-    "at Washington University in St. Louis and the "
-    "<A HREF=\"http://www.sanger.ac.uk/\" TARGET=_blank>Sanger Institute</A>. "
-    "For more information, see the special issue of <em>Science</em> "
-    "&quot;<A HREF=\"http://www.sciencemag.org/content/vol282/issue5396/\" TARGET=_blank>C. elegans: Sequence to Biology</A>&quot;."
-
-    "</P>");
-    puts("<P><H3>Sample position queries</P></H3>\n");
-    puts(
-    "<P>A genome position can be specified by the accession number of a sequenced "
-    "genomic clones, an mRNA, or EST, or a gene identifier, chromosomal coordinate "
-    "range, or keywords from "
-    "the Genbank description of an mRNA. The following list provides "
-    "examples of various types of position queries for the C. elegans genome. "
-    "See the "
-    "<A HREF=\"http://genome.cse.ucsc.edu/goldenPath/help/hgTracksHelp.html\" TARGET=_blank>"
-    "User Guide</A> for more help. </P>\n"
-    "<P>\n"
-    "\n"
-    "<P>\n"
-    "<TABLE  border=0 CELLPADDING=0 CELLSPACING=0>\n"
-    "<TR><TD VALIGN=Top NOWRAP><B>Request:</B><br></TD>\n"
-    "	<TD VALIGN=Top COLSPAN=2><B>&nbsp;&nbsp; Genome Browser Response:</B><br></TD></TR>\n"
-    "	\n"
-    "<TR><TD VALIGN=Top><br></TD></TR>\n"
-    "	\n"
-
-    "<TR><TD VALIGN=Top NOWRAP>chrII</TD>\n"
-    "	<TD WIDTH=14></TD>\n"
-    "	<TD VALIGN=Top>Displays all of chromosome II (valid chr entries include I, II, III, IV, V, M, X)</TD></TR>\n"
-
-    "<TR><TD VALIGN=Top NOWRAP>chrI:1-100000</TD>\n"
-    "	<TD WIDTH=14></TD>\n"
-    "	<TD VALIGN=Top>Displays the first 100,000 bases of chrI</TD></TR>\n"
-
-    "<TR><TD VALIGN=Top NOWRAP>U40798.1</TD>\n"
-    "	<TD WIDTH=14></TD>\n"
-    "	<TD VALIGN=Top>Displays clone fragment U40798.1</TD></TR>\n"
-
-    "<TR><TD VALIGN=Top NOWRAP>mec-8</TD>\n"
-    "	<TD WIDTH=14></TD>\n"
-    "	<TD VALIGN=Top>Displays region of genome associated with RefSeq gene mec-8</TD></TR>\n"
-
-    "<TR><TD VALIGN=Top NOWRAP>F46A9.4</TD>\n"
-    "	<TD WIDTH=14></TD>\n"
-    "	<TD VALIGN=Top>Displays the region associated with the Sanger predicted gene F46A9.4</TD></TR>\n"
-
-    "<TR><TD VALIGN=Top NOWRAP>NM_060107</TD>\n"
-    "	<TD WIDTH=14></TD>\n"
-    "	<TD VALIGN=Top>Displays region of genome associated with RefSeq identifier NM_060107</TD></TR>\n"
-
-    "<TR><TD VALIGN=Top NOWRAP>BJ111711</TD>\n"
-    "	<TD WIDTH=14></TD>\n"
-    "	<TD VALIGN=Top>Displays region of EST associated with GenBank accession BJ111711</TD></TR>\n"
-
-    "<TR><TD VALIGN=Top NOWRAP>zinc finger</TD>\n"
-    "       <TD WIDTH=14></TD>\n"
-    "       <TD VALIGN=Top>Lists many zinc finger mRNAs</TD></TR>\n"
-
-    "<TR><TD VALIGN=Top NOWRAP>kruppel zinc finger</TD>\n"
-    "       <TD WIDTH=14></TD>\n"
-    "       <TD VALIGN=Top>Lists only kruppel-like zinc fingers</TD></TR>\n"
-
-    "<TR><TD VALIGN=Top NOWRAP>Jones,D.</TD>\n"
-    "	<TD WIDTH=14></TD>\n"
-    "	<TD VALIGN=Top>Lists mRNAs deposited by co-author D. Jones</TD></TR>\n"
-    "\n"
-    "<TR><TD VALIGN=Top><br></TD></TR>\n"
-    "	\n"
-    "<TR><TD COLSPAN=\"3\" > Use this last format for entry authors -- "
-    "even though Genbank searches require Jones D "
-    "format, GenBank entries themselves use Jones,D. internally.\n"
-    "</TABLE>\n"
-    "\n");
-    }
-else if (strstrNoCase(organism, "C. briggsae"))
-    {
-    puts("<P><H3>About the Caenorhabditis briggsae assembly</P></H3>\n");
-    puts(
-    "<P>The C. briggsae genome assembly (UCSC version cb1) \n"
-    "is based on sequence version cb25.agp8 deposited into "
-    "<A HREF=\"http:www.wormbase.org/\" TARGET=_blank>WormBase</A> "
-    "as of 11 July 2002. This version was assembled from 2.05 million whole genome "
-    "shotgun (WGS) reads, of which 88.2% were in read pairs. The Phusion assembler "
-    "was used to assemble the WGS reads into contigs based on overlap information, "
-    "and then into supercontigs using read pair information to cross gaps. These "
-    "supercontigs were assembled into mapped ultracontigs based on FPC " 
-    "fingerprint mapping, with material from previously finished clones used to " 
-    "bridge gaps. Draft chromosome sequences are not available for C. briggsae, due "
-    "to the lack of dense chromosomal maps that allow assignment of the ultracontigs "
-    "to chromosomal locations. As a result, all data in this browser maps to chrUn.\n"
-    "</P>"
-    "<P>"
-    "The N50 contig size in this assembly is 41 kb and the N50 supercontig size is "
-    "1450 kb. Most genes should be complete. The sequencing centers estimate that "
-    "this whole genome shotgun assembly achieved 98% coverage of the genome.\n"
-    "</P>" 
-    "<P>"
-    "These data carry <A HREF=\"../goldenPath/credits.html#cbr_use\">"
-    "specific conditions for use</A>.\n"
-    "</P>"
-    );
-    puts("<P><H3>Sample position queries</P></H3>\n");
-    puts(
-    "<P>A genome position can be specified by the accession number of a sequenced "
-    "genomic clones, an mRNA, or EST, or a gene identifier, chromosomal coordinate "
-    "range, or keywords from "
-    "the Genbank description of an mRNA. The following list provides "
-    "examples of various types of position queries for the C. briggsae genome. "
-    "See the "
-    "<A HREF=\"http://genome.cse.ucsc.edu/goldenPath/help/hgTracksHelp.html\" TARGET=_blank>"
-    "User Guide</A> for more help. </P>\n"
-    "<P>\n"
-    "\n"
-    "<P>\n"
-    "<TABLE  border=0 CELLPADDING=0 CELLSPACING=0>\n"
-    "<TR><TD VALIGN=Top NOWRAP><B>Request:</B><br></TD>\n"
-    "	<TD VALIGN=Top COLSPAN=2><B>&nbsp;&nbsp; Genome Browser Response:</B><br></TD></TR>\n"
-    "	\n"
-    "<TR><TD VALIGN=Top><br></TD></TR>\n"
-    "	\n"
-
-    "<TR><TD VALIGN=Top NOWRAP>chrUn</TD>\n"
-    "	<TD WIDTH=14></TD>\n"
-    "	<TD VALIGN=Top>Displays all of chromosome Un (only valid chr entry for this genome)</TD></TR>\n"
-
-    "<TR><TD VALIGN=Top NOWRAP>chrUn:1-1000000</TD>\n"
-    "	<TD WIDTH=14></TD>\n"
-    "	<TD VALIGN=Top>Displays the first million bases of chrUn</TD></TR>\n"
-
-    "<TR><TD VALIGN=Top NOWRAP>R02870</TD>\n"
-    "	<TD WIDTH=14></TD>\n"
-    "	<TD VALIGN=Top>Displays region of EST associated with GenBank accession R02870</TD></TR>\n"
-
-    "<TR><TD VALIGN=Top NOWRAP>U48289</TD>\n"
-    "	<TD WIDTH=14></TD>\n"
-    "	<TD VALIGN=Top>Displays the region associated with the mRNA accession U48289</TD></TR>\n"
-
-    "<TR><TD VALIGN=Top NOWRAP>protein phosphatase PP2C </TD>\n"
-    "       <TD WIDTH=14></TD>\n"
-    "       <TD VALIGN=Top>Lists only records pertaining to protein phophatase PP2C</TD></TR>\n"
-
-    "<TR><TD VALIGN=Top NOWRAP>Kimble,J.</TD>\n"
-    "	<TD WIDTH=14></TD>\n"
-    "	<TD VALIGN=Top>Lists mRNAs deposited by co-author J. Kimble</TD></TR>\n"
-    "\n"
-    "<TR><TD VALIGN=Top><br></TD></TR>\n"
-    "	\n"
-    "<TR><TD COLSPAN=\"3\" > Use this last format for entry authors -- "
-    "even though Genbank searches require Kimble J "
-    "format, GenBank entries themselves use Kimble,J. internally.\n"
-    "</TABLE>\n"
-    "\n");
-    }
-else 
-    {
-    printf("<H2>%s</H2>", organism);
+    printf("<H2>%s</H2>\n", organism);
+    if (htmlPath == NULL || htmlPath[0] == 0)
+	printf("\n<!-- No dbDb.htmlPath for %s -->\n", database);
+    else
+	printf("\n<!-- Couldn't get contents of %s -->\n", htmlPath);
     }
 }
-}
+

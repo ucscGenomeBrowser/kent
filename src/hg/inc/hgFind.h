@@ -7,6 +7,11 @@
 #include "cart.h"
 #endif
 
+#ifndef HGFINDSPEC_H
+#include "hgFindSpec.h"
+#endif
+
+
 struct hgPositions *findGenomePos(char *spec, char **retChromName, int *retWinStart, int *retWinEnd, struct cart *cart);
 /* Search for positions in genome that match user query.   
 Return TRUE if the query results in a unique position.  
@@ -21,25 +26,6 @@ struct hgPositions *findGenomePosWeb(char *spec, char **retChromName,
  * Return TRUE if the query results in a unique position.  
  * Otherwise display list of positions and return FALSE. */
 
-boolean hgFindCytoBand(char *spec, char **retChromName, int *retWinStart, int *retWinEnd);
-/* Return position associated with cytological band if spec looks to be in that form. */
-
-boolean hgIsCytoBandName(char *spec, char **retChromName, char **retBandName);
-/* Return TRUE if spec is a cytological band name including chromosome short name.  
- * Returns chromosome chrN name and band (with chromosome stripped off). */
-
-void hgFindChromBand(char *chromosome, char *band, int *retStart, int *retEnd);
-/* Return start/end of band in chromosome. */
-
-boolean findContigPos(char *contig, char **retChromName, 
-			  int *retWinStart, int *retWinEnd);
-/* Find position in genome of contig.  Don't alter
- * return variables if some sort of error. */
-
-boolean hgFindClonePos(char *spec, char **retChromName, 
-	int *retWinStart, int *retWinEnd);
-
-
 struct hgPositions 
 /* A bunch of positions in genome. */
     {
@@ -53,23 +39,6 @@ struct hgPositions
     boolean useAlias;             /* Set if an alias is used */
     };
 
-void hgPositionsFree(struct hgPositions **pEl);
-/* Free up hgPositions. */
-
-void hgPositionsFreeList(struct hgPositions **pList);
-/* Free a list of dynamically allocated hgPos's */
-
-struct hgPositions *hgPositionsFind(char *query, char *extraCgi, 
-	char *hgAppName, struct cart *cart);
-/* Return table of positions that match query or NULL if none such. */
-
-void hgPositionsHtml(struct hgPositions *positions, FILE *f,
-	boolean useWeb, char *hgAppName, struct cart *cart);
-/* Write out positions table as HTML to file. */
-
-void hgPositionsHelpHtml(char *organism, char *database);
-/* Explain the position box usage, give some organism-specific examples. */
-
 struct hgPosTable
 /* A collection of position lists, one for each type of position. */
     {
@@ -82,12 +51,6 @@ struct hgPosTable
     void (*htmlEnd)(struct hgPosTable *table, FILE *f);    /* Print end. */
     };
 
-void hgPosTableFree(struct hgPosTable **pEl);
-/* Free up hgPosTable. */
-
-void hgPosTableFreeList(struct hgPosTable **pList);
-/* Free a list of dynamically allocated hgPos's */
-
 struct hgPos
 /* A list of positions. */
      {
@@ -99,18 +62,19 @@ struct hgPos
      char *description;		/* Position description - a sentence or so. */
      };
 
-void hgPosFree(struct hgPos **pEl);
-/* Free up hgPos. */
+boolean hgFindUsingSpec(struct hgFindSpec *hfs, char *term,
+			struct hgPositions *hgp, boolean relativeFlag,
+			int relStart, int relEnd);
+/* Perform the search described by hfs on term.  If successful, put results
+ * in hgp and return TRUE.  (If not, don't modify hgp.) */
 
-void hgPosFreeList(struct hgPos **pList);
-/* Free a list of dynamically allocated hgPos's */
+struct hgPositions *hgPositionsFind(char *query, char *extraCgi, 
+	char *hgAppName, struct cart *cart);
+/* Return table of positions that match query or NULL if none such. */
 
-char *hgPosBrowserRange(struct hgPos *pos, char range[64]);
-/* Convert pos to chrN:123-456 format.  If range parameter is NULL it returns
- * static buffer, otherwise writes and returns range. */
-
-boolean isBDGPName(char *name);
-/* Return TRUE if name is from BDGP (matching {CG,TE,CR}0123{,4}{,-R?})  */
+void hgPositionsHelpHtml(char *organism, char *database);
+/* Display contents of dbDb.htmlPath for database, or print an HTML comment 
+ * explaining what's missing. */
 
 #endif /* HGFIND_H */
 
