@@ -6008,6 +6008,9 @@ EOF
     ln -s /cluster/data/hg17/bed/blastz.danRer1.swap/mafNet $mafDir/zebrafish_netBlastz
 
     # remove empty file, disliked by hgLoadMaf
+    # NOTE: these shouldn't be empty -- next time, make sure previous
+    # alignments are copied over to output maf (multiz won't if there's
+    # an empty input file).
     rm chicken/chr18_random.maf
     rm fugu/chr6_hla_hap1.maf
 
@@ -11658,18 +11661,16 @@ rm $tmpfile
 
     ssh eieio
     cd /cluster/data/hg17/bed
-    mkdir multiz.2004-12-17
-    ln -s multiz.2004-12-17 multiz10way
+    mkdir multiz.2004-12-24
+    ln -s multiz.2004-12-24 multiz10way
     cd multiz10way
 
     cat > tree.nh << 'EOF'
 ((((((hg17,panTro1),(rn3,mm5)),canFam1),galGal2),xenTro1)((fr1,tetNig1),danRer1))
 'EOF'
 
-    mkdir /cluster/bluearc/hg17/multiz.2004-12-17
     cd /cluster/bluearc/hg17
-    mkdir 2004-12-17    
-    ln -s multiz.2004-12-17 multiz10way
+    mkdir multiz10way
 
     # setup pairwise MAF's on bluearc for cluster run
     # use existing files from
@@ -11693,17 +11694,19 @@ rm $tmpfile
         cp $f tetNig1/$c.maf
     end
 
+    # Opossum (for 11-way)
+    mkdir -p monDom1
+    cp /cluster/data/xenTro1/bed/zb.hg17/mafNet/*.maf monDom1
+
     # make output dir and run dir
     ssh kk9
     cd /cluster/data/hg17/bed/multiz10way
-    mkdir -p maf
-    mkdir -p run
+    mkdir -p maf run
     cd run
 
     # create scripts to run var_multiz on cluster
 
 cat > oneMultiz.csh << 'EOF'
-#!/bin/csh -fe
     set c = $1
     set multi = /scratch/multiz10way.$c
     set pairs = /cluster/bluearc/hg17/multiz10way
@@ -11757,7 +11760,6 @@ cat > oneMultiz.csh << 'EOF'
 chmod +x oneMultiz.csh
 
 cat > allMultiz.csh << 'EOF'
-#!/bin/csh -fe
     # multiple alignment steps:
     # multiz.v10 mouse.maf rat.maf 0
     # multiz.v10 fugu.maf tetra.maf 0
@@ -11934,6 +11936,130 @@ cat > makeMaf.csh << 'EOF'
     csh makeMaf.csh >&! makeMaf.log &
     tail -100f makeMaf.log
 
-=======
     nice gzip axtChrom/* pslChrom/* axtChain/all.chain axtChain/*.net &
->>>>>>> 1.171
+
+
+# 10-WAY MULTIZ -- 8-WAY PLUS FROG AND TETRA (WORKING 2004-12-22 kate)
+#       Use older multiz (not v10) till bugs fixed
+
+    ssh eieio
+    cd /cluster/data/hg17/bed
+    rm multiz10way
+    ln -s multiz.2004-12-17 multiz10way.v10
+    mkdir multiz.2004-12-22
+    ln -s multiz.2004-12-22 multiz10way
+    cd multiz10way
+
+    cat > tree.nh << 'EOF'
+((((((hg17,panTro1),(rn3,mm5)),canFam1),galGal2),xenTro1)((fr1,tetNig1),danRer1))
+'EOF'
+
+    mkdir /cluster/bluearc/hg17/multiz.2004-12-22
+    cd /cluster/bluearc/hg17
+    mkdir 2004-12-22
+    rm multiz10way
+    ln -s multiz.2004-12-17 multiz10way.v10
+    ln -s multiz.2004-12-22 multiz10way
+    # reuse pairwise MAF's on bluearc
+    mv multiz10way.v10/{canFam1,danRer1,fr1,galGal2,mm5,panTro1,rn3,tetNig1,xenTro1} multiz10way
+
+    # make output dir and run dir
+    ssh kk9
+    cd /cluster/data/hg17/bed
+    cd multiz10way
+    mkdir -p maf
+    mkdir -p run
+    cd run
+
+    # create scripts to run multiz on cluster
+cat > oneMultiz.csh << 'EOF'
+#!/bin/csh -fe
+    set c = $1
+    set multi = /scratch/$user/multiz10way.$c
+    set pairs = /cluster/bluearc/hg17/multiz10way
+
+    # special mode --
+    # with 1 arg, cleanup
+    if ($#argv == 1) then
+        rm -fr $multi
+        exit
+    endif
+
+    set s1 = $2
+    set s2 = $3
+
+    # locate input files -- in pairwise dir, or multiple dir
+    set d1 = $multi
+    set d2 = $multi
+    if (-d $pairs/$s1) then
+        set d1 = $pairs
+    endif
+    if (-d $pairs/$s2) then
+        set d2 = $pairs
+    endif
+    set f1 = $d1/$s1/$c.maf
+    set f2 = $d2/$s2/$c.maf
+    # write to output dir
+    set out = $multi/${s2}${s1}
+    mkdir -p $out
+
+    # check for empty input file
+    if (-s $f1 && -s $f2) then
+        echo "Aligning $f1 $f2"
+        /cluster/bin/penn/multiz $f1 $f2 - > $out/$c.maf
+    else if (-s $f1) then
+        cp $f1 $out
+    else if (-s $f2) then
+        cp $f2 $out
+    endif
+'EOF'
+# << for emacs
+chmod +x oneMultiz.csh
+
+cat > allMultiz.csh << 'EOF'
+#!/bin/csh -fe
+
+set c = $1
+oneMultiz.csh $c mm5 panTro1
+oneMultiz.csh $c rn3 panTro1mm5 
+oneMultiz.csh $c canFam1 panTro1mm5rn3 
+oneMultiz.csh $c galGal2 panTro1mm5rn3canFam1
+oneMultiz.csh $c xenTro1 panTro1mm5rn3canFam1galGal2
+oneMultiz.csh $c fr1 panTro1mm5rn3canFam1galGal2xenTro1
+oneMultiz.csh $c tetNig1 panTro1mm5rn3canFam1galGal2xenTro1fr1
+oneMultiz.csh $c danRer1 panTro1mm5rn3canFam1galGal2xenTro1fr1tetNig1
+# get final alignment file
+cp /scratch/$user/multiz10way.$c/panTro1mm5rn3canFam1galGal2xenTro1fr1tetNig1danRer1/$c.maf /cluster/data/hg17/bed/multiz10way/maf/$c.maf
+#cleanup
+oneMultiz.csh $c
+'EOF'
+# << for emacs
+chmod +x allMultiz.csh
+
+cat > gsub << 'EOF'
+#LOOP
+allMultiz.csh $(root1) {check out line+ /cluster/data/hg17/bed/multiz10way/maf/$(root1).maf}
+#ENDLOOP
+'EOF'
+    cut -f 1 /cluster/data/hg17/chrom.sizes > chrom.lst
+    gensub2 chrom.lst single gsub jobList
+    para create jobList
+    para try; para check
+    para push
+
+    # load table
+    ssh hgwdev
+    set mafDir = /gbdb/hg17
+    set table = multiz10way
+    mkdir -p $mafDir/$table
+    cd /cluster/data/hg17/bed/multiz.2004-12-22/maf
+    ln -s `pwd`/*.maf $mafDir/$table
+    hgLoadMaf hg17 -warn $table
+
+    set table = xenTro1_netBlastz
+    ln -s /cluster/data/xenTro1/bed/zb.hg17/mafNet $mafDir/$table
+    hgLoadMaf hg17 -warn $table -pathPrefix=$mafDir/$table
+
+    set table = tetNig1_netBlastz
+    ln -s /cluster/data/hg17/bed/blastz.tetNig1/mafNet $mafDir/$table
+    hgLoadMaf hg17 -warn $table -pathPrefix=$mafDir/$table

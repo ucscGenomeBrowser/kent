@@ -1059,6 +1059,15 @@ done
     featureBits hg17 netRn3
     #	2817656275 bases of 2866216770 (98.306%) in intersection
 
+# MAKE NET MAFS FOR MULTIZ (2004-12-24 kate)
+    ssh kksilo
+    cd /cluster/data/monDom1/bed/zb.hg17/axtNet
+    mkdir -p ../mafNet
+    cat *.axt | axtSort stdin stdout | axtToMaf -tSplit stdin \
+     -tPrefix=hg17. /cluster/data/hg17/chrom.sizes \
+     -qPrefix=monDom1. /cluster/data/monDom1/chrom.sizes ../mafNet
+
+
 # SWAP EVERYTHING AND REMAKE NET FROM OPOSSUM REFERENCE
 #	Create HUMAN TO OPOSSUM chain, net
     ssh eieio
