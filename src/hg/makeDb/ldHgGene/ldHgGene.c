@@ -10,7 +10,7 @@
 #include "jksql.h"
 #include "genePred.h"
 
-static char const rcsid[] = "$Id: ldHgGene.c,v 1.11 2003/07/24 20:11:04 markd Exp $";
+static char const rcsid[] = "$Id: ldHgGene.c,v 1.12 2003/09/24 04:09:31 kent Exp $";
 
 char *exonType = "exon";	/* Type field that signifies exons. */
 
@@ -50,7 +50,7 @@ char *createString =
 "   exonStarts longblob not null,	# Exon start positions \n"
 "   exonEnds longblob not null,	# Exon end positions \n"
           "   #Indices \n"
-"   INDEX(name), \n"
+"   INDEX(name(16)), \n"
 "   INDEX(chrom(8),txStart), \n"
 "   INDEX(chrom(8),txEnd) \n"
 ")";
