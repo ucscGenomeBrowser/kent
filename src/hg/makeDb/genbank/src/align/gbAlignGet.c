@@ -18,16 +18,21 @@
 #include "gbFa.h"
 #include <stdio.h>
 
-static char const rcsid[] = "$Id: gbAlignGet.c,v 1.4 2003/09/12 15:24:24 markd Exp $";
+static char const rcsid[] = "$Id: gbAlignGet.c,v 1.5 2003/10/06 05:01:35 markd Exp $";
 
 /* version to set in gbEntry.selectVer to indicate an entry is being
  * migrated */
 #define MIGRATE_VERSION -2  
 
+/* BLAT crashed on a bogus EST that only had one base in the entry,
+ * so we skip sequences under this size */
+#define MIN_SEQ_SIZE 6
+
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
     {"fasize", OPTION_INT},
     {"workdir", OPTION_STRING},
+    {"orgCats", OPTION_STRING},
     {"verbose", OPTION_INT},
     {NULL, 0}
 };
@@ -112,7 +117,13 @@ version = gbSplitAccVer(inFa->id, acc);
 entry = gbReleaseFindEntry(select->release, acc);
 if (entry != NULL)
     {
-    if ((version == entry->selectVer) && (entry->clientFlags & ALIGN_FLAG))
+    char* seq = gbFaGetSeq(inFa);
+    if (strlen(seq) < MIN_SEQ_SIZE)
+        {
+        if (verbose >= 3)
+            gbVerbPr(3, "skip %s, less than minimum sequence size", inFa->id);
+        }
+    else if ((version == entry->selectVer) && (entry->clientFlags & ALIGN_FLAG))
         {
         outFaWrite(((entry->orgCat == GB_NATIVE) ? nativeFa : xenoFa), inFa );
         if (verbose >= 3)
@@ -150,8 +161,12 @@ void copySelectedFasta(struct gbSelect* select)
 {
 char inFasta[PATH_LEN];
 struct gbFa* inFa;
-struct outFa* nativeFa = outFaNew(select, GB_NATIVE);
-struct outFa* xenoFa = outFaNew(select, GB_XENO);
+struct outFa* nativeFa = NULL;
+struct outFa* xenoFa = NULL;
+if (select->orgCats & GB_NATIVE)
+    nativeFa = outFaNew(select, GB_NATIVE);
+if (select->orgCats & GB_XENO)
+    xenoFa = outFaNew(select, GB_XENO);
 
 gbProcessedGetPath(select, "fa", inFasta);
 gbVerbEnter(2, "copying from %s", inFasta);
@@ -193,9 +208,8 @@ struct gbAlignInfo gbAlignGet(struct gbSelect* select,
 struct gbAlignInfo alignInfo;
 
 gbVerbEnter(1, "gbAlignGet: %s", gbSelectDesc(select));
-select->orgCats = GB_NATIVE|GB_XENO;
 if (prevSelect != NULL)
-    prevSelect->orgCats = GB_NATIVE|GB_XENO;
+    prevSelect->orgCats = select->orgCats;
 
 /* load the required entry data */
 gbReleaseLoadProcessed(select);
@@ -224,8 +238,10 @@ if (alignInfo.align.accTotalCnt > 0)
     }
 
 /* leave calling cards */
-markAligns(select, GB_NATIVE);
-markAligns(select, GB_XENO);
+if (select->orgCats & GB_NATIVE)
+    markAligns(select, GB_NATIVE);
+if (select->orgCats & GB_XENO)
+    markAligns(select, GB_XENO);
 
 /* print before releasing memory */
 gbVerbLeave(1, "gbAlignGet: %s", gbSelectDesc(select));
@@ -255,6 +271,8 @@ errAbort("   gbAlignGet [options] relname update typeAccPrefix db\n"
          "     building the alignments instead of the work/align/\n"
          "    -fasize=n - Set the maximum fasta file size to be about n\n"
          "     bytes. Fasta files are split for cluster partitioning. \n"
+         "    -orgCats=native,xeno - processon the specified organism \n"
+         "     categories\n"
          "    -verbose=n - enable verbose output, values greater than 1\n"
          "     increase verbosity.\n"
          "\n"
@@ -297,7 +315,7 @@ if (sep != NULL)
     select.accPrefix = sep+1;
     *sep = '.';
     }
-select.orgCats = GB_NATIVE|GB_XENO;
+select.orgCats = gbParseOrgCat(optionVal("orgCats", "native,xeno"));
 
 index = gbIndexNew(database, NULL);
 select.release = gbIndexMustFindRelease(index, relName);

@@ -6,7 +6,7 @@
 #include "gbGenome.h"
 #include "common.h"
 
-static char const rcsid[] = "$Id: gbDefs.c,v 1.2 2003/06/28 04:02:21 markd Exp $";
+static char const rcsid[] = "$Id: gbDefs.c,v 1.3 2003/10/06 05:01:35 markd Exp $";
 
 /* Directories */
 char* GB_PROCESSED_DIR = "data/processed";
@@ -172,7 +172,10 @@ unsigned orgCat = 0;
 char* next = orgCatStr;
 while (*next != '\0')
     {
-    int len = strcspn(next, ",");
+    int len;
+    if (*next == ',')
+        next++;
+    len = strcspn(next, ",");
     if (strncasecmp(next, "native", len) == 0)
         orgCat |= GB_NATIVE;
     else if (strncasecmp(next, "xeno", len) == 0)

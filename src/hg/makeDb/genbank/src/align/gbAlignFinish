@@ -14,7 +14,7 @@
 #
 # Obtains other parameters from etc/genbank.conf
 #
-# $Id: gbAlignFinish,v 1.7 2003/08/19 19:15:40 markd Exp $
+# $Id: gbAlignFinish,v 1.8 2003/10/06 05:01:35 markd Exp $
 #
 use strict;
 use warnings;
@@ -329,14 +329,30 @@ sub checkIfDone($) {
     }
 }
 
-# Do work of combining PSL, etc for release+update+typeAccPrefix+orgCat.
+# Do work of combining and install PSL, etc for a
+# release+update+typeAccPrefix+orgCat.  Skip if orgCat was not aligned.
 sub finishOrgCatAligns($$$$) {
     my($db, $dirPrefix, $orgCat, $tmpDir) = @_;
     my($release, $database, $update, $type, $typeAccPrefix)
         = parseDirPrefix($dirPrefix);
     my $typePrefix = "$typeAccPrefix.$orgCat";
     my $updWorkDir = "$gWorkDir/$release/$database/$update";
+    my $markFile = "$updWorkDir/$typePrefix.aligns";
+    if (! -e $markFile) {
+        return;  # nothing to do
+    }
+    # check if already completed
+    my $alignDir = "data/aligned/$release/$database/$update";
+    my $alidxBase = "$alignDir/$typePrefix";
 
+    if (-e "$alidxBase.$orgCat.alidx") {
+        if ($gbCommon::verbose > 1) {
+            print STDERR "finishAligns: $alidxBase.$orgCat.alidx exists, skipping,\n";
+        }
+        return;
+    }
+
+    # combine files
     my $liftFile = getDbConfNo($db, "lift");
 
     my ($outPsl, $outRawPsl, $outOI, $outRawOI, $outIntronPsl, %pslQueryOffset);
@@ -362,7 +378,24 @@ sub finishOrgCatAligns($$$$) {
             }
         }
     }
-    return ($outPsl, $outRawPsl, $outOI, $outRawOI, $outIntronPsl);
+    
+    # save raw PSLs first, as the index file created by gbAlignInstall
+    # is flag of successful completion
+    if (defined($outRawPsl)) {
+        installRawPsls($outRawPsl, $outRawOI, $alignDir);
+    }
+
+    # copy psl, migrate alignments, and build index.  This is done even
+    # if output files were not produced, as the index lists unaligned seqs.
+    runProg("gbAlignInstall -workdir=$gWorkDir -orgCats=$orgCat $release $update $typeAccPrefix $database");
+
+    if (!$gKeep) {
+        foreach my $f ($outPsl, $outRawPsl, $outOI, $outRawOI, $outIntronPsl) {
+            if (defined($f)) {
+                unlink($f);
+            }
+        }
+    }
 }
 
 # install raw PSL and OI files
@@ -395,48 +428,15 @@ sub finishAligns($$) {
     if ($gbCommon::verbose) {
         print STDERR "finishAligns: $release $database $update $typePrefix\n";
     }
-    # check if already completed
-    my $alignDir = "data/aligned/$release/$database/$update";
-    my $alidxBase = "$alignDir/$typePrefix";
-    my $finished = (-e "$alidxBase.native.alidx" && -e "$alidxBase.xeno.alidx");
-    if ($finished) {
-        if ($gbCommon::verbose) {
-            print STDERR "finishAligns: $alidxBase.*.alidx exists, skipping,\n";
-        }
-        return;
-    }
     my $tmpDir = getTmpDir("gbAlign");
     
-    # combine and save in intermediate files, which will be installed
-    # by gbAlignInstall
-    my @nativeInter = finishOrgCatAligns($db, $dirPrefix, "native", $tmpDir);
-    my @xenoInter = finishOrgCatAligns($db, $dirPrefix, "xeno", $tmpDir);
+    finishOrgCatAligns($db, $dirPrefix, "native", $tmpDir);
+    finishOrgCatAligns($db, $dirPrefix, "xeno", $tmpDir);
 
     if ($gKeep) {
         print STDERR "keeping tmp directory $tmpDir\n";
     } else {
         removeDir($tmpDir);
-    }
-
-    # save raw PSLs first, as the index file created by gbAlignInstall
-    # is flag of successful completion
-    if (defined($nativeInter[1])) {
-        installRawPsls($nativeInter[1], $nativeInter[3], $alignDir);
-    }
-    if (defined($xenoInter[1])) {
-        installRawPsls($xenoInter[1], $xenoInter[3], $alignDir);
-    }
-
-    # copy psl, migrate alignments, and build index.  This is done even
-    # if output files were not produced, as the index lists unaligned seqs.
-    runProg("gbAlignInstall -workdir=$gWorkDir $release $update $typePrefix $database");
-
-    if (!$gKeep) {
-        foreach my $f (@nativeInter, @xenoInter) {
-            if (defined($f)) {
-                unlink($f);
-            }
-        }
     }
 }
 
