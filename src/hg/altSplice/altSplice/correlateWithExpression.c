@@ -30,10 +30,10 @@ void endHtml(FILE *html)
 fprintf(html, "</BODY></HTML></TABLE>\n");
 }
 
-void writeBrowserLink(FILE *html, char *db, struct altGraphX *ag, char *id, char *info, float ave, int count)
+void writeBrowserLink(FILE *html, char *db, struct altGraphX *ag, char *id, char *info, float ave, int count, int edge)
 {
-int start = ag->tStart;
-int end = ag->tEnd;
+int start = ag->vPositions[ag->edgeStarts[edge]];
+int end = ag->vPositions[ag->edgeEnds[edge]];
 char *chrom = ag->tName;
 static int c =0;
 if(c == 0)
@@ -294,6 +294,7 @@ struct affyPres *apList = NULL, *ap = NULL;
 struct hash *apHash = newHash(12);
 char buff[strlen(agxName) + 10];
 int foundCount=0, passCount=0;
+float minConfidence = cgiOptionalDouble("minConf", 2.0);
 hSetDb(db);
 conn = hAllocConn();
 snprintf(buff, (strlen(agxName) + 10), "%s.html", agxName);
@@ -331,12 +332,23 @@ for(agx = agxList; agx != NULL; agx = agx->next)
 	warn("Found %s for %s:%d-%d", affyId, agx->tName, agx->tStart, agx->tEnd);
 	if(count > minCount || (ave > 250 && count > 0)) 
 	    {
-	    char *string = cloneString(ap->info);
-	    fprintf(log, "%f\t%d\n", ave, count);
-	    passCount++;
-	    subChar(string, '_', ' ');
-	    writeBrowserLink(html, db, agx, ap->probeId, string, ave, count);
-	    freez(&string);
+	    int i;
+	    for(i=0;i<agx->edgeCount; i++)
+		{
+		if(agx->edgeTypes[i] == ggCassette)
+		    {
+		    float confidence = altGraphConfidenceForEdge(agx, i, 10);
+		    if(confidence > minConfidence) 
+			{
+			char *string = cloneString(ap->info);
+			fprintf(log, "%f\t%d\n", ave, count);
+			passCount++;
+			subChar(string, '_', ' ');
+			writeBrowserLink(html, db, agx, ap->probeId, string, ave, count, i);
+			freez(&string);
+			}
+		    }
+		}
 	    }
 	}
     }
@@ -350,8 +362,9 @@ carefulClose(&html);
 
 int main(int argc, char *argv[]) 
 {
-if(argc != 5)
+if(argc < 5)
     usage();
+cgiSpoof(&argc, argv);
 correlateWithExpression(argv[1], argv[2], argv[3], argv[4]);
 return 0;
 }

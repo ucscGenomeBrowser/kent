@@ -1,5 +1,6 @@
 #include "common.h"
 #include "altGraphX.h"
+#include "cheapcgi.h"
 #include "dnaseq.h"
 #include "fa.h"
 #include "hdb.h"
@@ -12,131 +13,7 @@ errAbort("spliceStats - counts the number of cassette exons from an altGraphX fi
 	 "which occur in a number of different libraries(confidence). Optionally\n"
 	 "outputs sequence from said exons to a fasta file.\n"
 	 "usage:\n\t"
-	 "spliceStats <altGraphXFile> <confidence> <db>  <optional:fastaFileOut>\n");
-}
-
-boolean altGraphXEdgeSeen(struct altGraphX *ag, int *seen, int *seenCount, int mrnaIx)
-/* is the mrnaIx already in seen? */
-{
-int i=0;
-boolean result = FALSE;
-for(i=0; i<*seenCount; i++)
-    {
-    if(ag->mrnaTissues[seen[i]] == ag->mrnaTissues[mrnaIx] ||
-       ag->mrnaLibs[seen[i]] == ag->mrnaLibs[mrnaIx])
-	{
-	result = TRUE;
-	break;
-	}
-    }
-if(!result)
-    {
-    seen[*seenCount++] = mrnaIx;
-    }
-return result;
-}
-
-
-int altGraphTimesSeenEdge(struct altGraphX *ag, int eIx) 
-/* Count how many times we see evidence for a particular edge. */
-{
-struct evidence *ev = slElementFromIx(ag->evidence, eIx);
-int *seen = NULL;
-int seenCount = 0,i;
-int conf = 0;
-AllocArray(seen, ag->edgeCount);
-for(i=0; i<ag->edgeCount; i++)
-    seen[i] = -1;
-for(i=0; i<ev->evCount; i++)
-    if(!altGraphXEdgeSeen(ag, seen, &seenCount, ev->mrnaIds[i]))
-	conf++;
-freez(&seen);
-return conf;
-}
-
-int assignToArray(int *array, int arraySize, int count, int val)
-{
-if(count >= arraySize)
-    errAbort("Can't have count: %d greater than array size: %d", count, arraySize);
-array[count] = val;
-}
-
-boolean uniqeInArray(int *array, int size, int val)
-{
-int i;
-for(i=0;i<size; i++)
-    if(array[i] == val)
-	return FALSE;
-return TRUE;
-}
-
-int altGraphTimesNotSeenEdge(struct altGraphX *ag, int eIx) 
-/* Discover how many times there is a transcript that uses an alternative
-   to the edge eIx. */
-{
-int eStart =0, eEnd = 0;
-int *intStartEdges = NULL, *intEndEdges =NULL, *altEdges = NULL;
-int intStartCount = 0, intEndCount =0, altCount =0;
-int i,j,k;
-int conf = 0;
-int eCount = ag->edgeCount;
-AllocArray(intStartEdges, ag->edgeCount);
-AllocArray(intEndEdges, ag->edgeCount);
-AllocArray(altEdges, ag->edgeCount);
-eStart = ag->edgeStarts[eIx];
-eEnd = ag->edgeEnds[eIx];
-/* First find the introns that connect to our edge of interest. */
-for(i = 0; i < ag->edgeCount; i++)
-    {
-    if(ag->edgeEnds[i] == eStart)
-	assignToArray(intStartEdges, eCount, intStartCount++, i);
-    if(ag->edgeStarts[i] == eEnd)
-	assignToArray(intEndEdges, eCount, intEndCount++, i);
-    }
-
-/* for each intron that connects to our exon. */
-for(i = 0; i < intStartCount; i++)
-    {
-    for(j =0; j < ag->edgeCount; j++)
-	{
-	/* Look for and edge that starts at the same place as our introns. */
-	if(intStartEdges[i] != j && (ag->edgeStarts[j] == ag->edgeStarts[intStartEdges[i]]))
-	    {
-	    for(k=0; k < intEndCount; k++) 
-		{
-		/* Then connects to one of the same ends. */
-		if(ag->edgeEnds[j] == ag->edgeEnds[intEndEdges[k]])
-		    if(uniqeInArray(altEdges, altCount, j))
-			assignToArray(altEdges, eCount, altCount++, j);
-		}
-	    }
-	}
-    }
-
-for(i=0; i< altCount; i++)
-    {
-    conf += altGraphTimesSeenEdge(ag, altEdges[i]);
-    }
-
-freez(&altEdges);
-freez(&intStartEdges);
-freez(&intEndEdges);
-return conf;
-}
-
-float altGraphConfidenceForEdge(struct altGraphX *ag, int eIx)
-/* Return the score for this cassette exon. Want to have cassette exons
-that are present in multiple transcripts and that are not present in multiple
-exons. We want to see both forms of the cassette exon, we don't want to have
-one outlier be chosen. Thus we count the times that the exon is seen, we
-count the times that the exon isn't seen and we calculate a final score by:
-(seen + notseen)/(abs(seen - notSeen) + 1) . Thus larger scores are better. */
-{
-int seen = altGraphTimesSeenEdge(ag, eIx);
-int notSeen = altGraphTimesNotSeenEdge(ag, eIx);
-float conf = 0;
-conf = (float)(seen + notSeen + 10)/(float)(abs(seen - notSeen) + 10);
-return conf;
+	 "spliceStats <altGraphXFile> <confidence> <db>  <optional:fastaFileOut> <optional: estPrior=10.0>\n");
 }
 
 boolean altGraphXInEdges(struct ggEdge *edges, int v1, int v2)
@@ -181,6 +58,7 @@ int cassetteCount = 0;
 int i =0;
 int mod3 = 0;
 boolean outputted = FALSE;
+float estPrior = cgiOptionalDouble("estPrior", 10);
 FILE *log = mustOpen("confidences.log", "w");
 FILE *html = mustOpen("confidences.html", "w");
 startHtml(html);
@@ -191,7 +69,7 @@ for(ag = agList; ag != NULL; ag = ag->next)
 	{
 	if(ag->edgeTypes[i] == ggCassette)
 	    {
-	    float conf = altGraphConfidenceForEdge(ag, i);
+	    float conf = altGraphConfidenceForEdge(ag, i, estPrior);
 	    fprintf(log, "%f\n", conf);
 	    if(conf >= minConfidence) 
 		{
