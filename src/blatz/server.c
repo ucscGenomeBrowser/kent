@@ -83,10 +83,10 @@ char *out = NULL, *mafT = NULL, *mafQ = NULL;
 for (;;)
     {
     if ((line = netGetString(sd, buf)) == NULL)
-	 {
-	 truncatedQuery(1);
-	 return;
-	 }
+         {
+         truncatedQuery(1);
+         return;
+         }
     word = nextWord(&line);
     line = skipLeadingSpaces(line);
     if (sameString(word, "seq"))
@@ -122,16 +122,16 @@ for (;;)
     char *name = netGetString(sd, buf);
     char *dna;
     if (name == NULL)
-	{
-	truncatedQuery(2);
-	return;
-	}
+        {
+        truncatedQuery(2);
+        return;
+        }
     dna = netGetHugeString(sd);
     if (dna == NULL)
-	{
+        {
         truncatedQuery(3);
-	return;
-	}
+        return;
+        }
     AllocVar(seq);
     seq->dna = dna;
     seq->size = strlen(dna);
@@ -204,54 +204,54 @@ for (;;)
 
     /* Wait for previous processes */
         {
-	int options = 0;
-	int w, status;
-	for (;;)
-	    {
-	    if (cpusUsed < cpuCount)
-		options = WNOHANG;
-	    w = waitpid(-1, &status, options);
-	    if (w > 0)
-		{
-		--cpusUsed;
-		if (!WIFEXITED(status))
-		    ++crashCount;
-		else if (WEXITSTATUS(status) != 0)
-		    ++badQueryCount;
-		else
-		    ++goodQueryCount;
-		}
-	    else
-	        break;
-	    }
-	}
+        int options = 0;
+        int w, status;
+        for (;;)
+            {
+            if (cpusUsed < cpuCount)
+                options = WNOHANG;
+            w = waitpid(-1, &status, options);
+            if (w > 0)
+                {
+                --cpusUsed;
+                if (!WIFEXITED(status))
+                    ++crashCount;
+                else if (WEXITSTATUS(status) != 0)
+                    ++badQueryCount;
+                else
+                    ++goodQueryCount;
+                }
+            else
+                break;
+            }
+        }
 
     sd = netAcceptFrom(acceptor, subnet);
     bzpTime("Since last query");
     command = netGetString(sd, buf);
     if (command != NULL)
-	{
-	verbose(2, "servicing %s\n", command);
-	if (sameString(command, "stop"))
-	    break;
-	else
-	    {
-	    int pid;
-	    ++cpusUsed;
-	    pid = mustFork();
-	    if (pid == 0)
-		{
-		if (command != NULL)
-		    {
-		    if (sameString(command, "status"))
-			statusResponse(sd, bzp, indexList);
-		    else if (sameString(command, "query"))
-			queryResponse(sd, bzp, indexList);
-		    }
-		exit(0);
-		}
-	    }
-	}
+        {
+        verbose(2, "servicing %s\n", command);
+        if (sameString(command, "stop"))
+            break;
+        else
+            {
+            int pid;
+            ++cpusUsed;
+            pid = mustFork();
+            if (pid == 0)
+                {
+                if (command != NULL)
+                    {
+                    if (sameString(command, "status"))
+                        statusResponse(sd, bzp, indexList);
+                    else if (sameString(command, "query"))
+                        queryResponse(sd, bzp, indexList);
+                    }
+                exit(0);
+                }
+            }
+        }
     close(sd);
     }
 }
@@ -275,8 +275,8 @@ for (i=0; i<fileCount; ++i)
     struct dnaLoad *dl = dnaLoadOpen(files[i]);
     while ((seq = dnaLoadNext(dl)) != NULL)
         {
-	slAddHead(&seqList, seq);
-	}
+        slAddHead(&seqList, seq);
+        }
     dnaLoadClose(&dl);
     }
 slReverse(&seqList);

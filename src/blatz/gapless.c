@@ -45,14 +45,14 @@ struct cBlock *block = NULL;
 
     for (i=hitSpan; i<maxBases; ++i)
         {
-	if ((score += matrix[q[i]][t[i]]) > bestScore)
-	    {
-	    bestPos = i;
-	    bestScore = score;
-	    }
-	if (score < bestScore - xDrop)
-	    break;
-	}
+        if ((score += matrix[q[i]][t[i]]) > bestScore)
+            {
+            bestPos = i;
+            bestScore = score;
+            }
+        if (score < bestScore - xDrop)
+            break;
+        }
     totalScore += bestScore;
     rightExt = bestPos+1;
     }
@@ -65,14 +65,14 @@ struct cBlock *block = NULL;
     int i, bestPos=0, score=0, bestScore=0;
     for (i=-1; i>=maxBases; --i)
         {
-	if ((score += matrix[q[i]][t[i]]) > bestScore)
-	    {
-	    bestPos = i;
-	    bestScore = score;
-	    }
-	if (score < bestScore - xDrop)
-	    break;
-	}
+        if ((score += matrix[q[i]][t[i]]) > bestScore)
+            {
+            bestPos = i;
+            bestScore = score;
+            }
+        if (score < bestScore - xDrop)
+            break;
+        }
     totalScore += bestScore;
     leftExt = bestPos;
     }
@@ -81,14 +81,14 @@ if (totalScore >= minScore)
     {
     totalScore *= dnaMatchEntropy(qDna + qPos+leftExt, tDna + tPos + leftExt, rightExt - leftExt);
     if (totalScore >= minScore)
-	{
-	AllocVar(block);
-	block->qStart = qPos + leftExt;
-	block->qEnd = qPos + rightExt;
-	block->tStart = tPos + leftExt;
-	block->tEnd = tPos + rightExt;
-	block->score = totalScore;
-	}
+        {
+        AllocVar(block);
+        block->qStart = qPos + leftExt;
+        block->qEnd = qPos + rightExt;
+        block->tStart = tPos + leftExt;
+        block->tEnd = tPos + rightExt;
+        block->score = totalScore;
+        }
     }
 
 return block;
@@ -97,7 +97,7 @@ return block;
 struct diagonalTrack
 /* Keep track of diagonal. */
     {
-    int diagonal;	  /* Diagonal coordinate (qPos - tPos) */
+    int diagonal;          /* Diagonal coordinate (qPos - tPos) */
     struct cBlock *block;  /* Current block. */
     };
 
@@ -128,13 +128,13 @@ return bufSize;
 struct diagNode
 /* Track diagonals. */
     {
-    struct dlNode node;	/* Val element points to self. */
-    int diag;		/* Diagonal value. */
-    int qPos;		/* Query position. */
+    struct dlNode node;        /* Val element points to self. */
+    int diag;                /* Diagonal value. */
+    int qPos;                /* Query position. */
     };
     
 void blatzGaplessScan(struct bzp *bzp, struct blatzIndex *index, 
-	struct dnaSeq *query, struct cBlock **pMsps)
+        struct dnaSeq *query, struct cBlock **pMsps)
 /* Scan index for hits, do gapless extensions into maximally
  * scoring segment pairs (MSPs), and put MSPs over threshold
  * onto pBlockList. */
@@ -161,11 +161,11 @@ if (multiHits)
     AllocArray(diagNodes, diagBufSize);
     AllocArray(diagLists, diagBufSize);
     for (i=0; i<diagBufSize; ++i)
-	{
-	dlListInit(&diagLists[i]);
-	diagNode = &diagNodes[i];
-	diagNode->node.val = diagNode;
-	}
+        {
+        dlListInit(&diagLists[i]);
+        diagNode = &diagNodes[i];
+        diagNode->node.val = diagNode;
+        }
     }
 
 /* Scan through query collecting hits. */
@@ -175,117 +175,117 @@ for (queryPos=0; queryPos<=lastBase; ++queryPos)
                             index->seedOffsets, index->seedWeight);
     if (key >= 0)
         {
-	/* Add key, and everything that differs by a single transition 
-	 * from key to index.  This relies on the fact that the binary
-	 * representation we've chosen for DNA is a little unusual, and
-	 * has the property that flipping the least significant bit
-	 * is equivalent to a transition (A-G or C-T) mutation. */
-	int tog;
-	for (tog = nbdToggleStart; ; tog >>= 2)
-	    {
-	    struct blatzIndexPos *iPos = &index->slots[tog^key];
-	    bits32 *pos = iPos->pos;
-	    int i, count = iPos->count;
-	    if (multiHits)
-		{
-		for (i=0; i<count; ++i)
-		    {
-		    int targetPos = pos[i];
-		    int diagonal = queryPos - targetPos;
-		    int diagMod = (diagonal & diagMask);
-		    struct dlList *diagList = &diagLists[diagMod];
-		    struct dlNode *node;
-		    boolean gotDoubleHit = FALSE;
-		    ++hitCount;
-		    for (node = diagList->head;  !dlEnd(node); node = node->next)
-			{
-			diagNode = node->val;
-			// if (bzpTimeOn) uglyf("  diagMod %d, diagNode->diag = %d, diagNode->qPos = %d, queryPos=%d, qDif %d\n", diagMod, diagNode->diag, diagNode->qPos, queryPos, queryPos - diagNode->qPos);
-			if (diagNode->diag == diagonal 
-			    && queryPos - diagNode->qPos <= CLOSE_ENOUGH)
-			    {
-			    dlRemove(node);	/* We'll put one back shortly! */
-			    gotDoubleHit = TRUE;
-			    break;
-			    }
-			}
-		    // if (bzpTimeOn) uglyf("qPos %d, tPos %d, diagonal %d, diagMod %d, diagMask %d, doubleHit %d\n", queryPos, targetPos, diagonal, diagMod, diagMask, gotDoubleHit);
-		    if (gotDoubleHit)
-			{
-			struct diagonalTrack sdt, *dt;
-			++doubleHitCount;
-			sdt.diagonal = queryPos - targetPos;
-			dt = rbTreeFind(tree, &sdt);
-			if (dt == NULL || dt->block->qEnd < queryPos)
-			    {
-			    struct cBlock *block = gaplessExtendAndFilter(
-				 query->dna, queryPos, query->size,
-				 target->dna, targetPos, target->size,
-				 index->seedSpan, bzp->ss->matrix, 
-				 bzp->maxDrop, bzp->minGapless);
-			    if (block != NULL)
-				{
-				++mspCount;
-				slAddHead(pMsps, block);
-				if (dt == NULL)
-				    {
-				    lmAllocVar(tree->lm, dt);
-				    dt->diagonal = sdt.diagonal;
-				    rbTreeAdd(tree, dt);
-				    }
-				dt->block = block;
-				}
-			    }
-			}
-		    diagNode = &diagNodes[diagCircIx];
-		    diagCircIx += 1;
-		    diagCircIx &= diagMask;
-		    if (diagNode->node.next != NULL)
-			dlRemove(&diagNode->node);
-		    diagNode->diag = diagonal;
-		    diagNode->qPos = queryPos;
-		    dlAddHead(diagList, &diagNode->node);
-		    }
-		}
-	    else
-	        {
-		/* This is a simpler version of the multi-hit loop.
-		 * Duplicating a bit of code here to avoid putting
-		 * more branches in the time critical inner loop. */
-		for (i=0; i<count; ++i)
-		    {
-		    int targetPos = pos[i];
-		    int diagonal = queryPos - targetPos;
-		    struct diagonalTrack sdt, *dt;
-		    ++hitCount;
-		    sdt.diagonal = queryPos - targetPos;
-		    dt = rbTreeFind(tree, &sdt);
-		    if (dt == NULL || dt->block->qEnd < queryPos)
-			{
-			struct cBlock *block = gaplessExtendAndFilter(
-			     query->dna, queryPos, query->size,
-			     target->dna, targetPos, target->size,
-			     index->seedSpan, bzp->ss->matrix, 
-			     bzp->maxDrop, bzp->minGapless);
-			if (block != NULL)
-			    {
-			    ++mspCount;
-			    slAddHead(pMsps, block);
-			    if (dt == NULL)
-				{
-				lmAllocVar(tree->lm, dt);
-				dt->diagonal = sdt.diagonal;
-				rbTreeAdd(tree, dt);
-				}
-			    dt->block = block;
-			    }
-			}
-		    }
-		}
-	    if (tog == 0)
-		break;
-	    }
-	}
+        /* Add key, and everything that differs by a single transition 
+         * from key to index.  This relies on the fact that the binary
+         * representation we've chosen for DNA is a little unusual, and
+         * has the property that flipping the least significant bit
+         * is equivalent to a transition (A-G or C-T) mutation. */
+        int tog;
+        for (tog = nbdToggleStart; ; tog >>= 2)
+            {
+            struct blatzIndexPos *iPos = &index->slots[tog^key];
+            bits32 *pos = iPos->pos;
+            int i, count = iPos->count;
+            if (multiHits)
+                {
+                for (i=0; i<count; ++i)
+                    {
+                    int targetPos = pos[i];
+                    int diagonal = queryPos - targetPos;
+                    int diagMod = (diagonal & diagMask);
+                    struct dlList *diagList = &diagLists[diagMod];
+                    struct dlNode *node;
+                    boolean gotDoubleHit = FALSE;
+                    ++hitCount;
+                    for (node = diagList->head;  !dlEnd(node); node = node->next)
+                        {
+                        diagNode = node->val;
+                        // if (bzpTimeOn) uglyf("  diagMod %d, diagNode->diag = %d, diagNode->qPos = %d, queryPos=%d, qDif %d\n", diagMod, diagNode->diag, diagNode->qPos, queryPos, queryPos - diagNode->qPos);
+                        if (diagNode->diag == diagonal 
+                            && queryPos - diagNode->qPos <= CLOSE_ENOUGH)
+                            {
+                            dlRemove(node);        /* We'll put one back shortly! */
+                            gotDoubleHit = TRUE;
+                            break;
+                            }
+                        }
+                    // if (bzpTimeOn) uglyf("qPos %d, tPos %d, diagonal %d, diagMod %d, diagMask %d, doubleHit %d\n", queryPos, targetPos, diagonal, diagMod, diagMask, gotDoubleHit);
+                    if (gotDoubleHit)
+                        {
+                        struct diagonalTrack sdt, *dt;
+                        ++doubleHitCount;
+                        sdt.diagonal = queryPos - targetPos;
+                        dt = rbTreeFind(tree, &sdt);
+                        if (dt == NULL || dt->block->qEnd < queryPos)
+                            {
+                            struct cBlock *block = gaplessExtendAndFilter(
+                                 query->dna, queryPos, query->size,
+                                 target->dna, targetPos, target->size,
+                                 index->seedSpan, bzp->ss->matrix, 
+                                 bzp->maxDrop, bzp->minGapless);
+                            if (block != NULL)
+                                {
+                                ++mspCount;
+                                slAddHead(pMsps, block);
+                                if (dt == NULL)
+                                    {
+                                    lmAllocVar(tree->lm, dt);
+                                    dt->diagonal = sdt.diagonal;
+                                    rbTreeAdd(tree, dt);
+                                    }
+                                dt->block = block;
+                                }
+                            }
+                        }
+                    diagNode = &diagNodes[diagCircIx];
+                    diagCircIx += 1;
+                    diagCircIx &= diagMask;
+                    if (diagNode->node.next != NULL)
+                        dlRemove(&diagNode->node);
+                    diagNode->diag = diagonal;
+                    diagNode->qPos = queryPos;
+                    dlAddHead(diagList, &diagNode->node);
+                    }
+                }
+            else
+                {
+                /* This is a simpler version of the multi-hit loop.
+                 * Duplicating a bit of code here to avoid putting
+                 * more branches in the time critical inner loop. */
+                for (i=0; i<count; ++i)
+                    {
+                    int targetPos = pos[i];
+                    int diagonal = queryPos - targetPos;
+                    struct diagonalTrack sdt, *dt;
+                    ++hitCount;
+                    sdt.diagonal = queryPos - targetPos;
+                    dt = rbTreeFind(tree, &sdt);
+                    if (dt == NULL || dt->block->qEnd < queryPos)
+                        {
+                        struct cBlock *block = gaplessExtendAndFilter(
+                             query->dna, queryPos, query->size,
+                             target->dna, targetPos, target->size,
+                             index->seedSpan, bzp->ss->matrix, 
+                             bzp->maxDrop, bzp->minGapless);
+                        if (block != NULL)
+                            {
+                            ++mspCount;
+                            slAddHead(pMsps, block);
+                            if (dt == NULL)
+                                {
+                                lmAllocVar(tree->lm, dt);
+                                dt->diagonal = sdt.diagonal;
+                                rbTreeAdd(tree, dt);
+                                }
+                            dt->block = block;
+                            }
+                        }
+                    }
+                }
+            if (tog == 0)
+                break;
+            }
+        }
     }
 if (bzpTimeOn) verbose(2, "%d hits, %d double hits, %d MSPs, %d diagonals\n", hitCount, doubleHitCount, mspCount, tree->n);
 rbTreeFree(&tree);

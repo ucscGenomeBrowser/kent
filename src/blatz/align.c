@@ -24,9 +24,9 @@
 #include "blatz.h"
 
 static struct chain *chainsCreate(struct gapCalc *gapCalc, 
-	struct axtScoreScheme *ss,
-	struct dnaSeq *query, char strand, 
-	 struct dnaSeq *target, struct cBlock **pBlockList)
+        struct axtScoreScheme *ss,
+        struct dnaSeq *query, char strand, 
+         struct dnaSeq *target, struct cBlock **pBlockList)
 /* Call chainer on blocks and clean things up a bit. */
 {
 struct chain *chain, *chainList;
@@ -45,15 +45,15 @@ for (block = *pBlockList; block != NULL; block = block->next)
     {
     block->score = chainScoreBlock(query->dna + block->qStart,
                                    target->dna + block->tStart,
-				   block->qEnd - block->qStart, ss->matrix);
+                                   block->qEnd - block->qStart, ss->matrix);
     }
 
 /* Call the fancy KD-tree based chainer. */
 chainList = chainBlocks(query->name, query->size, strand, 
-			target->name, target->size, pBlockList, 
-			(ConnectCost)chainConnectCost, 
-			(GapCost)chainConnectGapCost, 
-			&cc, NULL);
+                        target->name, target->size, pBlockList, 
+                        (ConnectCost)chainConnectCost, 
+                        (GapCost)chainConnectGapCost, 
+                        &cc, NULL);
 
 /* Clean up overlaps */
 for (chain = chainList; chain != NULL; chain = chain->next)
@@ -66,7 +66,7 @@ return chainList;
 
 
 static void insertNewBlocks(struct cBlock *blockList, 
-	struct cBlock **pInsertPoint)
+        struct cBlock **pInsertPoint)
 /* Insert new block list at insertion point. */
 {
 if (blockList != NULL)
@@ -78,7 +78,7 @@ if (blockList != NULL)
 }
 
 static struct cBlock *symToBlocks(int symCount, char *qSym, char *tSym, 
-	int qs, int ts)
+        int qs, int ts)
 /* Convert from insert-symbol type representation to blocks. */
 {
 struct cBlock *blockList = NULL, *block = NULL;
@@ -86,36 +86,36 @@ int i;
 for (i=0; i<symCount; ++i)
     {
     if (qSym[i] == '-')
-	{
-	block = NULL;
-	++ts;
-	}
+        {
+        block = NULL;
+        ++ts;
+        }
     else if (tSym[i] == '-')
-	{
-	block = NULL;
-	++qs;
-	}
+        {
+        block = NULL;
+        ++qs;
+        }
     else
-	{
-	if (block == NULL)
-	    {
-	    AllocVar(block);
-	    slAddHead(&blockList, block);
-	    block->qStart = qs;
-	    block->tStart = ts;
-	    }
-	block->qEnd = ++qs;
-	block->tEnd = ++ts;
-	}
+        {
+        if (block == NULL)
+            {
+            AllocVar(block);
+            slAddHead(&blockList, block);
+            block->qStart = qs;
+            block->tStart = ts;
+            }
+        block->qEnd = ++qs;
+        block->tEnd = ++ts;
+        }
     }
 slReverse(&blockList);
 return blockList;
 }
-	
+        
 static struct cBlock *extendInRegion(struct bzp *bzp,
-			     struct dnaSeq *query, int qStart, int qEnd,
-			     struct dnaSeq *target, int tStart, int tEnd,
-			     int dir, char *qSym, char *tSym, int symAlloc)
+                             struct dnaSeq *query, int qStart, int qEnd,
+                             struct dnaSeq *target, int tStart, int tEnd,
+                             int dir, char *qSym, char *tSym, int symAlloc)
 /* Do banded extension in region and return as a list of blocks. */
 {
 int maxExtend = bzp->maxExtend;
@@ -129,23 +129,23 @@ if (qSize > 0 && tSize > 0)
     if (tSize > maxExtend) tSize = maxExtend;
     if (dir < 0)
         {
-	qStart = qEnd - qSize;
-	tStart = tEnd - tSize;
-	}
+        qStart = qEnd - qSize;
+        tStart = tEnd - tSize;
+        }
     bandExt(FALSE, bzp->ss, bzp->maxBandGap, 
-	    query->dna + qStart,  qSize,
-	    target->dna + tStart, tSize,
-	    dir, symAlloc, &symCount, qSym, tSym, &qs, &ts);
+            query->dna + qStart,  qSize,
+            target->dna + tStart, tSize,
+            dir, symAlloc, &symCount, qSym, tSym, &qs, &ts);
     if (dir > 0)
-	{
-	qExtStart = qStart;
-	tExtStart = tStart;
-	}
+        {
+        qExtStart = qStart;
+        tExtStart = tStart;
+        }
     else
-	{
-	qExtStart = qEnd - qs - 1;
-	tExtStart = tEnd - ts - 1;
-	}
+        {
+        qExtStart = qEnd - qs - 1;
+        tExtStart = tEnd - ts - 1;
+        }
     return symToBlocks(symCount, qSym, tSym, qExtStart, tExtStart);
     }
 else
@@ -153,7 +153,7 @@ else
 }
 
 static void chainBandExtend(struct bzp *bzp, struct chain *chain, 
-	struct dnaSeq *query, struct dnaSeq *target)
+        struct dnaSeq *query, struct dnaSeq *target)
 /* Call banded extender on each block of chain. */
 {
 struct cBlock *oldFirst, *mid, *block, *nextBlock, *newList, *endNewList;
@@ -166,7 +166,7 @@ tSym = needMem(symAlloc);
 
 #ifdef DEBUG
 uglyf("chainBandExtend t:%d-%d, q:%d-%d\n", chain->tStart, chain->tEnd, 
-	chain->qStart, chain->qEnd);
+        chain->qStart, chain->qEnd);
 chainWrite(chain, uglyOut);
 #endif /* DEBUG */
 
@@ -189,27 +189,27 @@ for (block = oldFirst; ; block = nextBlock)
 
     /* Extend into beginning of block. */
     newList = extendInRegion(bzp, query, block->qEnd, nextBlock->qStart,
-    			     target, block->tEnd, nextBlock->tStart,
-			     1, qSym, tSym, symAlloc);
+                                 target, block->tEnd, nextBlock->tStart,
+                             1, qSym, tSym, symAlloc);
     if (newList != NULL)
-	{
-	endNewList = slLastEl(newList);
-	endNewList->next = block->next;
-	block->next = newList;
-	mid = endNewList;
-	}
+        {
+        endNewList = slLastEl(newList);
+        endNewList->next = block->next;
+        block->next = newList;
+        mid = endNewList;
+        }
     else
         mid = block;
 
     newList = extendInRegion(bzp, query, block->qEnd, nextBlock->qStart,
-    			     target, block->tEnd, nextBlock->tStart,
-			     -1, qSym, tSym, symAlloc);
+                                 target, block->tEnd, nextBlock->tStart,
+                             -1, qSym, tSym, symAlloc);
 
 #ifdef DEBUG
     uglyf("got %d new blocks in middle\n", slCount(newList));
 #endif /* DEBUG */
     if (newList != NULL)
-	insertNewBlocks(newList, &mid->next);
+        insertNewBlocks(newList, &mid->next);
     }
 
 /* Do extension after last block in chain. */
@@ -231,7 +231,7 @@ freez(&tSym);
 }
 
 static void shrinkBlocks(struct chain *chain, struct dnaSeq *query, 
-	struct dnaSeq *target, int matrix[256][256])
+        struct dnaSeq *target, int matrix[256][256])
 /* Trim away up to 50 bp from each end of each block in
  * so that band extension can correct problems introduced
  * by over-aggressive unbanded extension. */
@@ -263,7 +263,7 @@ chain->tEnd = lastBlock->tEnd;
 }
 
 static void bandExtendChains(struct bzp *bzp, struct chain *chainList, 
-	struct dnaSeq *query, struct dnaSeq *target)
+        struct dnaSeq *query, struct dnaSeq *target)
 /* Loop through chain list doing banded extensions. */
 {
 struct chain *chain;
@@ -286,9 +286,9 @@ for (block = *toAdd; block != NULL; block = next)
     }
 *toAdd = NULL;
 }
-	
+        
 static void chainsToBlocks(struct chain **pChainList, 
-	struct cBlock **pBlockList)
+        struct cBlock **pBlockList)
 /* Convert chains to just a list of blocks.  Free chains. */
 {
 struct cBlock *block, *nextBlock;
@@ -307,7 +307,7 @@ for (chain = *pChainList; chain != NULL; chain = next)
     next = chain->next;
     if (chain->score >= minScore)
         {
-	slAddHead(&chainList, chain);
+        slAddHead(&chainList, chain);
         }
     else
         chainFree(&chain);
@@ -317,8 +317,8 @@ slReverse(&chainList);
 }
 
 static void blatzChainAndExtend(struct bzp *bzp, 
-	struct dnaSeq *query, char strand, struct dnaSeq *target, 
-	struct cBlock **pBlockList, struct chain **retChainList)
+        struct dnaSeq *query, char strand, struct dnaSeq *target, 
+        struct cBlock **pBlockList, struct chain **retChainList)
 /* Process msp block list into chains. */
 {
 struct cBlock *block, *blockList = NULL;
@@ -328,13 +328,13 @@ struct chain *chain, *chainList = NULL, *next;
     {
     for (block = *pBlockList; block != NULL; block = block->next)
         fprintf(uglyOut, "block: %s %d-%d, %s %d-%d\n",
-	        query->name, block->qStart, block->qEnd,
-	        target->name, block->tStart, block->tEnd);
+                query->name, block->qStart, block->qEnd,
+                target->name, block->tStart, block->tEnd);
     }
 #endif /* DEBUG */
 
 chainList = chainsCreate(bzp->cheapGap, bzp->ss, 
-	query, strand, target, pBlockList);
+        query, strand, target, pBlockList);
 bzpTime("chainsCreate %d initial chains", slCount(chainList));
 
 if (bzp->bestChainOnly && chainList != NULL)
@@ -360,7 +360,7 @@ if (bzp->maxExtend > 0)
 chainsToBlocks(&chainList, &blockList);
 
 chainList = chainsCreate(bzp->gapCalc, bzp->ss,
-	query, '+', target, &blockList);
+        query, '+', target, &blockList);
 bzpTime("rechaining with normal gap costs");
 
 #ifdef OLD
@@ -369,9 +369,9 @@ for (chain = chainList; chain != NULL; chain = next)
     {
     next = chain->next;
     if (chain->score >= bzp->minScore)
-	{
-	slAddHead(retChainList, chain);
-	}
+        {
+        slAddHead(retChainList, chain);
+        }
     else
         chainFree(&chain);
     }
@@ -388,7 +388,7 @@ chainList = NULL;
 }
 
 static struct chain *blatzChainAgainstIndex(struct bzp *bzp, 
-	struct blatzIndex *index, struct dnaSeq *query, char strand)
+        struct blatzIndex *index, struct dnaSeq *query, char strand)
 /* Align query sequences against indexed target. */
 {
 struct cBlock *blockList = NULL;
@@ -402,7 +402,7 @@ bzpTime("Scanned index");
 
 if (blockList != NULL)
     blatzChainAndExtend(bzp, query, strand, index->target, 
-	  &blockList, &chainList);
+          &blockList, &chainList);
 slReverse(&chainList);
 return chainList;
 }
@@ -424,10 +424,10 @@ int uglyCount, uglyTotalQ, uglyTotalT;
 double uglyArea;
 
 static void expandInRegion(struct bzp *bzp,
-			     struct dnaSeq *query, int qStart, int qEnd, 
-			     char strand,
-			     struct dnaSeq *target, int tStart, int tEnd,
-			     struct cBlock **pBlockList)
+                             struct dnaSeq *query, int qStart, int qEnd, 
+                             char strand,
+                             struct dnaSeq *target, int tStart, int tEnd,
+                             struct cBlock **pBlockList)
 /* Do alignment on a region inside of query/target governed by bzp parameters. */
 {
 int qSize = qEnd - qStart;
@@ -472,7 +472,7 @@ chainFreeList(&chainList);
 
 
 static struct cBlock *focusOnClumps(struct bzp *bzp, struct dnaSeq *query, 
-	char strand, struct dnaSeq *target, struct boxClump *clumpList)
+        char strand, struct dnaSeq *target, struct boxClump *clumpList)
 /* Do alignment process on each clump at parameters more sensitive than
  * the passed in bzp.  Return list of blocks. */
 {
@@ -496,8 +496,8 @@ for (clump = clumpList; clump != NULL; clump = clump->next)
     {
 #ifdef DEBUG
     uglyf("---- focusing on clump t:%d-%d (%d) q:%d-%d (%d) ----\n", 
-    	clump->tStart, clump->tEnd, clump->tEnd - clump->tStart, 
-	clump->qStart, clump->qEnd, clump->qEnd - clump->qStart);
+            clump->tStart, clump->tEnd, clump->tEnd - clump->tStart, 
+        clump->qStart, clump->qEnd, clump->qEnd - clump->qStart);
 #endif /* DEBUG */
     expandInRegion(&bzpNew, query, clump->qStart, clump->qEnd, strand,
                    target, clump->tStart, clump->tEnd, &blockList);
@@ -518,7 +518,7 @@ slAddHead(pList, box);
 }
 
 static void addClippedBox(struct boxIn **pList, int minSize, int winSize, 
-	int qStart, int qEnd, int tStart, int tEnd)
+        int qStart, int qEnd, int tStart, int tEnd)
 /* Add box if it is big enough. Split and add if too big. */
 {
 int qSize = qEnd - qStart, tSize = tEnd - tStart;
@@ -526,34 +526,34 @@ if (qSize >= minSize && tSize >= minSize)
     {
     if (qSize > winSize || tSize > winSize)
         {
-	/* Must split box in two. */
-	int qe,qs,te,ts;
+        /* Must split box in two. */
+        int qe,qs,te,ts;
 
-	/* Add box at beginning. */
-	qs = qStart;
-	qe = qStart + winSize;
-	if (qe > qEnd) qe = qEnd;
-	ts = tStart;
-	te = tStart + winSize;
-	if (te > tEnd) te = tEnd;
-	addBox(pList, qs, qe, ts, te);
+        /* Add box at beginning. */
+        qs = qStart;
+        qe = qStart + winSize;
+        if (qe > qEnd) qe = qEnd;
+        ts = tStart;
+        te = tStart + winSize;
+        if (te > tEnd) te = tEnd;
+        addBox(pList, qs, qe, ts, te);
 
-	/* Add box at end. */
-	qe = qEnd;
-	qs = qEnd - winSize;
-	if (qs < qStart) qs = qStart;
-	te = tEnd;
-	ts = tEnd - winSize;
-	if (ts < tStart) ts = tStart;
-	addBox(pList, qs, qe, ts, te);
-	}
+        /* Add box at end. */
+        qe = qEnd;
+        qs = qEnd - winSize;
+        if (qs < qStart) qs = qStart;
+        te = tEnd;
+        ts = tEnd - winSize;
+        if (ts < tStart) ts = tStart;
+        addBox(pList, qs, qe, ts, te);
+        }
     else
-	addBox(pList, qStart, qEnd, tStart, tEnd);
+        addBox(pList, qStart, qEnd, tStart, tEnd);
     }
 }
 
 static struct boxClump *clumpGapsAndEnds(struct bzp *bzp, 
-	struct chain *chainList)
+        struct chain *chainList)
 /* Given a list of chains (all on same target and query) create a list of
  * regions where we'll want redo with smaller seeds.  Clump these regions
  * together. */
@@ -568,30 +568,30 @@ int minSize = bzp->weight * 2;
 for (chain = chainList; chain != NULL; chain = chain->next)
     {
     if (chain->score >= bzp->minExpand)
-	{
-	int qs, qe, ts, te;
-	qe = chain->qStart;
-	qs = qe - winSize;
-	if (qs < 0) qs = 0;
-	te = chain->tStart;
-	ts = te - winSize;
-	if (ts < 0) ts = 0;
-	addClippedBox(&boxList, minSize, winSize, qs, qe, ts, te);
-	b1 = chain->blockList;
-	for (b2 = b1->next; b2 != NULL; b2 = b2->next)
-	    {
-	    addClippedBox(&boxList, minSize, winSize, 
-	    	b1->qEnd, b2->qStart, b1->tEnd, b2->tStart);
-	    b1 = b2;
-	    }
-	qs = chain->qEnd;
-	qe = qs + winSize;
-	if (qe > chain->qSize) qe = chain->qSize;
-	ts = chain->tEnd;
-	te = ts + winSize;
-	if (te > chain->tSize) te = chain->tSize;
-	addClippedBox(&boxList, minSize, winSize, qs, qe, ts, te);
-	}
+        {
+        int qs, qe, ts, te;
+        qe = chain->qStart;
+        qs = qe - winSize;
+        if (qs < 0) qs = 0;
+        te = chain->tStart;
+        ts = te - winSize;
+        if (ts < 0) ts = 0;
+        addClippedBox(&boxList, minSize, winSize, qs, qe, ts, te);
+        b1 = chain->blockList;
+        for (b2 = b1->next; b2 != NULL; b2 = b2->next)
+            {
+            addClippedBox(&boxList, minSize, winSize, 
+                    b1->qEnd, b2->qStart, b1->tEnd, b2->tStart);
+            b1 = b2;
+            }
+        qs = chain->qEnd;
+        qe = qs + winSize;
+        if (qe > chain->qSize) qe = chain->qSize;
+        ts = chain->tEnd;
+        te = ts + winSize;
+        if (te > chain->tSize) te = chain->tSize;
+        addClippedBox(&boxList, minSize, winSize, qs, qe, ts, te);
+        }
     }
 clumpList = boxFindClumps(&boxList);
 return clumpList;
@@ -608,33 +608,33 @@ for (b = *pBlockList; b != NULL; b = next)
     next = b->next;
     if (last != NULL)
         {
-	/* Check same diagonal. */
-	if ((b->tStart - b->qStart) == (last->tStart - last->qStart))
-	    {
-	    /* Check for overlap. */
-	    if (last->qEnd >= b->qStart)
-	        {
-		/* Fold this block into previous one. */
-		if (last->qEnd < b->qEnd) last->qEnd = b->qEnd;
-		if (last->tEnd < b->tEnd) last->tEnd = b->tEnd;
-		freez(&b);
-		}
-	    }
-	}
+        /* Check same diagonal. */
+        if ((b->tStart - b->qStart) == (last->tStart - last->qStart))
+            {
+            /* Check for overlap. */
+            if (last->qEnd >= b->qStart)
+                {
+                /* Fold this block into previous one. */
+                if (last->qEnd < b->qEnd) last->qEnd = b->qEnd;
+                if (last->tEnd < b->tEnd) last->tEnd = b->tEnd;
+                freez(&b);
+                }
+            }
+        }
     if (b != NULL)
-	{
-	slAddHead(&newList, b);
-	last = b;
-	}
+        {
+        slAddHead(&newList, b);
+        last = b;
+        }
     }
 slReverse(&newList);
 *pBlockList = newList;
 }
 
 static void findBestGapPos(struct axtScoreScheme *ss,  
-	       DNA *qStart, int qGap, int qSize,
-	       DNA *tStart, int tGap, int tSize,
-	       int *retBestPos, int *retBestScore)
+               DNA *qStart, int qGap, int qSize,
+               DNA *tStart, int tGap, int tSize,
+               int *retBestPos, int *retBestScore)
 /* Figure out where to position gap for maximal score. */
 {
 int maxSize = max(qSize, tSize);
@@ -648,12 +648,12 @@ for (pos=0; pos<matchSize; ++pos)
     {
     score = axtScoreUngapped(ss, qStart+pos, tStart+pos, pos);
     score += axtScoreUngapped(ss, qStart+pos+qGap, tStart+pos+tGap, 
-        		      matchSize - pos);
+                              matchSize - pos);
     if (score > bestScore)
         {
-	bestScore = score;
-	bestPos = pos;
-	}
+        bestScore = score;
+        bestPos = pos;
+        }
     }
 *retBestPos = bestPos;
 *retBestScore = bestScore;
@@ -662,7 +662,7 @@ for (pos=0; pos<matchSize; ++pos)
 
 #ifdef DEBUG
 double chainCalcScore(struct chain *chain, struct axtScoreScheme *ss, 
-	struct gapCalc *gapCalc, struct dnaSeq *query, struct dnaSeq *target)
+        struct gapCalc *gapCalc, struct dnaSeq *query, struct dnaSeq *target)
 /* Calculate chain score freshly. */
 {
 struct cBlock *b1, *b2;
@@ -670,18 +670,18 @@ double score = 0;
 for (b1 = chain->blockList; b1 != NULL; b1 = b2)
     {
     score += axtScoreUngapped(ss, query->dna + b1->qStart, 
-    	target->dna + b1->tStart, b1->tEnd - b1->tStart);
+            target->dna + b1->tStart, b1->tEnd - b1->tStart);
     b2 = b1->next;
     if (b2 != NULL)
         score -=  gapCalcCost(gapCalc, b2->qStart - b1->qEnd, 
-		              b2->tStart - b1->tEnd);
+                              b2->tStart - b1->tEnd);
     }
 return score;
 }
 #endif /* DEBUG */
 
 static void reduceGaps(struct bzp *bzp, 
-	struct dnaSeq *query, struct dnaSeq *target, struct chain *chain)
+        struct dnaSeq *query, struct dnaSeq *target, struct chain *chain)
 /* Go through chain looking for small double-sided gaps that
  * might be turned into single-sided gaps (or even eliminated)
  * in a way that would improve the score. */
@@ -700,50 +700,50 @@ for (b2 = b1->next; b2 != NULL; b2 = b2->next)
     int dq = b2->qStart - b1->qEnd;
     int dt = b2->tStart - b1->tEnd;
     if (dq != 0 && dt != 0)
-	{
-	if (dt == dq && dt < 200)
-	    {
-	    int curScore = -gapCalcCost(bzp->gapCalc, dq, dt);
-	    int score = axtScoreUngapped(bzp->ss, 
-		query->dna + b1->qEnd, target->dna + b1->tEnd, dt);
-	    if (score >= curScore)
-		{
-		/* Merge b2 into b1, pop b2 out of list, and free it. */
-		b1->qEnd = b2->qEnd;
-		b1->tEnd = b2->tEnd;
-		b1->next = b2->next;
-		freeMem(b2);
-		b2 = b1;
-		chain->score += score - curScore;
-		}
-	    }
-	else if (dq < 30 || dt < 30)
-	    {
-	    int curScore = -gapCalcCost(bzp->gapCalc, dq, dt);
-	    int minGap = min(dq,dt);
-	    int newDq = dq - minGap;
-	    int newDt = dt - minGap;
-	    int newGapScore = -gapCalcCost(bzp->gapCalc, newDq, newDt);
-	    int matchScore, bestPos;
-	    int scoreImprovement;
+        {
+        if (dt == dq && dt < 200)
+            {
+            int curScore = -gapCalcCost(bzp->gapCalc, dq, dt);
+            int score = axtScoreUngapped(bzp->ss, 
+                query->dna + b1->qEnd, target->dna + b1->tEnd, dt);
+            if (score >= curScore)
+                {
+                /* Merge b2 into b1, pop b2 out of list, and free it. */
+                b1->qEnd = b2->qEnd;
+                b1->tEnd = b2->tEnd;
+                b1->next = b2->next;
+                freeMem(b2);
+                b2 = b1;
+                chain->score += score - curScore;
+                }
+            }
+        else if (dq < 30 || dt < 30)
+            {
+            int curScore = -gapCalcCost(bzp->gapCalc, dq, dt);
+            int minGap = min(dq,dt);
+            int newDq = dq - minGap;
+            int newDt = dt - minGap;
+            int newGapScore = -gapCalcCost(bzp->gapCalc, newDq, newDt);
+            int matchScore, bestPos;
+            int scoreImprovement;
 
-	    findBestGapPos(bzp->ss, query->dna + b1->qEnd, newDq, dq,
-	                   target->dna + b1->tEnd , newDt, dt,
-			   &bestPos, &matchScore);
-	    scoreImprovement = (newGapScore + matchScore) - curScore;
+            findBestGapPos(bzp->ss, query->dna + b1->qEnd, newDq, dq,
+                           target->dna + b1->tEnd , newDt, dt,
+                           &bestPos, &matchScore);
+            scoreImprovement = (newGapScore + matchScore) - curScore;
 #ifdef DEBUG
-	    uglyf(" score improvement %d\n", scoreImprovement);
+            uglyf(" score improvement %d\n", scoreImprovement);
 #endif /* DEBUG */
-	    if (scoreImprovement >= 0)
-	        {
-		b1->qEnd += bestPos;
-		b1->tEnd += bestPos;
-		b2->qStart = b1->qEnd + newDq;
-		b2->tStart = b1->tEnd + newDt;
-		chain->score += scoreImprovement;
-		}
-	    }
-	}
+            if (scoreImprovement >= 0)
+                {
+                b1->qEnd += bestPos;
+                b1->tEnd += bestPos;
+                b2->qStart = b1->qEnd + newDq;
+                b2->tStart = b1->tEnd + newDt;
+                chain->score += scoreImprovement;
+                }
+            }
+        }
     b1 = b2;
     }
 #ifdef DEBUG
@@ -753,7 +753,7 @@ uglyf("score %f vs %f after reduce gaps\n", chain->score,
 }
 
 struct ffAli *chainToFfAli(struct chain *chain, 
-	struct dnaSeq *query, struct dnaSeq *target)
+        struct dnaSeq *query, struct dnaSeq *target)
 /* Construct ffAli's from chain's blocks. */
 {
 struct ffAli *ff, *ffList = NULL;
@@ -775,10 +775,10 @@ return ffList;
 }
 
 static void slideIntronsInChain(struct chain *chain, 
-	struct dnaSeq *query, struct dnaSeq *target)
+        struct dnaSeq *query, struct dnaSeq *target)
 /* Slide around gaps to maximize gt/ag-ness of ends. */
 {
-if (chain->blockList->next != NULL)	/* Don't waste time on single-exons */
+if (chain->blockList->next != NULL)        /* Don't waste time on single-exons */
     {
     /* Call existing code that works on ffAli's. */
     struct ffAli *ff, *ffList = chainToFfAli(chain, query, target);
@@ -787,20 +787,20 @@ if (chain->blockList->next != NULL)	/* Don't waste time on single-exons */
 
     ffSlideIntrons(ffList);
     for (ff = ffList, block = chain->blockList; 
-	    ff != NULL; 
-	    ff = ff->right, block = block->next)
-	{
-	block->qStart =  ff->nStart - q;
-	block->qEnd =  ff->nEnd - q;
-	block->tStart =  ff->hStart - t;
-	block->tEnd =  ff->hEnd - t;
-	}
+            ff != NULL; 
+            ff = ff->right, block = block->next)
+        {
+        block->qStart =  ff->nStart - q;
+        block->qEnd =  ff->nEnd - q;
+        block->tStart =  ff->hStart - t;
+        block->tEnd =  ff->hEnd - t;
+        }
     ffFreeAli(&ffList);
     }
 }
 
 static struct chain *blatzAlignOne(struct bzp *bzp, struct blatzIndex *index,
-	struct dnaSeq *query, char strand)
+        struct dnaSeq *query, char strand)
 /* Align query sequence against indexed target sequence. */
 {
 struct chain *chain, *chainList, *nextChain;
@@ -822,10 +822,10 @@ if (bzp->expandWindow > 0)
     boxClumpFreeList(&missingClumps);
 #ifdef DEBUG
     uglyf("focus stats:  count %d, area %f, tTotal %d, qTotal %d\n",
-	       uglyCount, uglyArea, uglyTotalT, uglyTotalQ);
+               uglyCount, uglyArea, uglyTotalT, uglyTotalQ);
 #endif /* DEBUG */
     bzpTime("expand chains from finer seeds - got %d new blocks", 
-    	slCount(blockList));
+            slCount(blockList));
     }
 
 /* Add blocks from original chains to the mix. */
@@ -834,7 +834,7 @@ chainsToBlocks(&chainList, &blockList);
 /* Create final list of chains. */
 removeSimpleOverlaps(&blockList);
 chainList = chainsCreate(bzp->gapCalc, bzp->ss,
-	query, strand, target, &blockList);
+        query, strand, target, &blockList);
 thresholdChains(&chainList, bzp->minScore);
 bzpTime("final chaining");
 
@@ -850,8 +850,8 @@ return chainList;
 }
 
 static struct chain *blatzAlignStrand(struct bzp *bzp, 
-	struct blatzIndex *indexList,
-	struct dnaSeq *query, char strand)
+        struct blatzIndex *indexList,
+        struct dnaSeq *query, char strand)
 /* Align query sequence against list of indexed target sequences. 
  * The order of chains returned is close to random. */
 {
@@ -866,15 +866,15 @@ for (index = indexList; index != NULL; index = index->next)
     oneList = blatzAlignOne(bzp, index, query, strand);
     for (chain = oneList; chain != NULL; chain = nextChain)
         {
-	nextChain = chain->next;
-	slAddHead(&chainList, chain);
-	}
+        nextChain = chain->next;
+        slAddHead(&chainList, chain);
+        }
     }
 return chainList;
 }
 
 struct chain *blatzAlign(struct bzp *bzp, struct blatzIndex *indexList, 
-	struct dnaSeq *query)
+        struct dnaSeq *query)
 /* Align both strands of query against index using parameters in bzp.
  * Return chains sorted by score (highest scoring first) */
 {

@@ -4,20 +4,20 @@
  * alignment options to be overridden from the command line. */
 /* Copyright 2005 Jim Kent.  All rights reserved. */
 
-#include "common.h"
-#include "options.h"
-#include "errabort.h"
-#include "dnautil.h"
-#include "dnaseq.h"
-#include "obscure.h"
-#include "fa.h"
-#include "dnaLoad.h"
-#include "net.h"
-#include "bzp.h"
-#include "blatz.h"
+#include "common.h"   /* Compiler directives. Strings. Lists. */
+#include "options.h"  /* Command line option handling. */
+#include "errabort.h  /* Error and warning handling. */
+#include "dnautil.h"  /* Byte <-> 2 bit conversion, reverseComplement etc. */
+#include "dnaseq.h"   /* Sequence, name, and size in a struct. */
+#include "obscure.h"  /* Handy eclectic utility collection. */
+#include "fa.h"       /* Read/write fasta sequence files. */
+#include "dnaLoad.h"  /* Read write dna sequences in many formats. */
+#include "net.h"      /* Network i/o, mostly TCP/IP oriented. */
+#include "bzp.h"      /* Blatz parameter structure. */
+#include "blatz.h"    /* Alignment routines. */
 
-int port = bzpDefaultPort;
-char *host = "localhost";
+int port = bzpDefaultPort;        /* Server TCP/IP port. */
+char *host = "localhost";        /* Name of computer server is running on. */
 
 static void usage()
 /* Explain usage and exit. */

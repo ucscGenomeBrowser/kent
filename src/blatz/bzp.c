@@ -54,7 +54,7 @@ printf("  -rna - If set will treat query as mRNA and look for introns in gaps\n"
 printf("  -multiHits=%d - If nonzero takes multiple hits on diagonal to trigger\n"
        "                  gapless extension (MSP). Greatly speeds up searches\n"
        "                  of larger databases at a modest cost in sensitivity\n", 
-       	bzp->multiHits);
+               bzp->multiHits);
 printf("  -minScore=%d - Minimum score of to output after final chaining.  Each \n"
        "                 matching base contributes roughly 100 to the score.  This has\n"
        "                 little effect on the speed, but higher minScores will weed out\n"
@@ -81,9 +81,9 @@ printf("  -expandWindow=%d - Maximum size of window between blocks of chains\n"
 printf("  -matrix=fileName - Read scoring matrix from file.\n");
 printf("  -gapCost=fileName - Read gap scoring scheme from file.\n");
 printf("  -verbose=%d - Print progress info. 0=silent, 1=default, 2=wordy\n", 
-	verboseLevel());
+        verboseLevel());
 printf("  -out=%s - Output in given format.  Options are chain, axt, maf, psl.\n",
-	bzp->out);
+        bzp->out);
 printf("                For maf there are -mafT=%s and -mafQ=%s options to control\n"
        "                the sequence prefixes in maf files\n", bzp->mafT, bzp->mafQ);
 }
@@ -137,12 +137,12 @@ if (bzpTimeOn && verboseLevel() > 1)
     va_list args;
     va_start(args, label);
     if (label != NULL)
-	{
-	/* fprintf(stdout, "%ld (pid %d): ", time - lastTime, getpid()); */
-	fprintf(stdout, "%ld: ", time - lastTime);
-	vfprintf(stdout, label, args);
-	fprintf(stdout, "\n");
-	}
+        {
+        /* fprintf(stdout, "%ld (pid %d): ", time - lastTime, getpid()); */
+        fprintf(stdout, "%ld: ", time - lastTime);
+        vfprintf(stdout, label, args);
+        fprintf(stdout, "\n");
+        }
     lastTime = time;
     va_end(args);
     }

@@ -42,8 +42,8 @@ if (index != NULL)
 struct seqPos 
 /* A reference to a position within a sequence.  Part of a non-compacted index. */
     {
-    struct seqPos *next;	/* Next in list. */
-    int pos;			/* Position in sequence. */
+    struct seqPos *next;        /* Next in list. */
+    int pos;                        /* Position in sequence. */
     };
 
 
@@ -69,14 +69,14 @@ for (i=0; i<=lastBase; ++i)
     {
     int key = blatzIndexKey(dna + i, seedOffsets, weight);
     if (key >= 0)
-	{
-	struct seqPos *pos, **slot;
-	lmAllocVar(lm, pos);
-	pos->pos = i;
-	slot = &slots[key];
-	slAddHead(slot, pos);
-	++posCount;
-	}
+        {
+        struct seqPos *pos, **slot;
+        lmAllocVar(lm, pos);
+        pos->pos = i;
+        slot = &slots[key];
+        slAddHead(slot, pos);
+        ++posCount;
+        }
     }
 
 /* Allocate index structure and fill in basics. */
@@ -92,19 +92,19 @@ if (posCount > 0)
 
     /* Copy over and compact the slots. */
     for (i=0; i<slotCount; ++i)
-	{
-	int slotSize = 0;
-	struct seqPos *pos;
-	compactSlots->pos = posBuf;
-	for (pos = slots[i]; pos != NULL; pos = pos->next)
-	    {
-	    posBuf[slotSize] = pos->pos;
-	    ++slotSize;
-	    }
-	compactSlots->count = slotSize;
-	posBuf += slotSize;
-	++compactSlots;
-	}
+        {
+        int slotSize = 0;
+        struct seqPos *pos;
+        compactSlots->pos = posBuf;
+        for (pos = slots[i]; pos != NULL; pos = pos->next)
+            {
+            posBuf[slotSize] = pos->pos;
+            ++slotSize;
+            }
+        compactSlots->count = slotSize;
+        posBuf += slotSize;
+        ++compactSlots;
+        }
     }
 
 lmCleanup(&lm);

@@ -23,7 +23,7 @@ return hash;
 }
 
 void chainWriteAllAsPsl(struct chain *chainList, struct dnaSeq *query,
-	struct hash *targetHash, FILE *f)
+        struct hash *targetHash, FILE *f)
 /* Write out chain list to file in psl format. */
 {
 struct chain *chain;
@@ -62,16 +62,16 @@ for (chain = chainList; chain != NULL; chain = chain->next)
     target = hashMustFindVal(targetHash, chain->tName);
     axtList = chainToAxt(chain, qSeq, 0, target, 0, 40, BIGNUM);
     for (axt = axtList; axt != NULL; axt = axt->next)
-	{
-	if (sameString(format, "maf"))
-	    {
-	    struct mafAli *maf = mafFromAxt(axt, target->size, mafT, query->size, mafQ);
-	    mafWrite(f, maf);
-	    mafAliFree(&maf);
-	    }
-	else
-	    axtWrite(axt, f);
-	}
+        {
+        if (sameString(format, "maf"))
+            {
+            struct mafAli *maf = mafFromAxt(axt, target->size, mafT, query->size, mafQ);
+            mafWrite(f, maf);
+            mafAliFree(&maf);
+            }
+        else
+            axtWrite(axt, f);
+        }
     axtFreeList(&axt);
     }
 dnaSeqFree(&rQuery);
@@ -92,7 +92,7 @@ return total;
 }
 
 void chainWriteAllAsBlast(struct chain *chainList, char *blastType, 
-	struct dnaSeq *query, struct hash *targetHash,  FILE *f)
+        struct dnaSeq *query, struct hash *targetHash,  FILE *f)
 /* Write chainList to file in a blat variant */
 {
 struct dnaSeq *target;
@@ -116,10 +116,10 @@ for (chain = chainList; chain != NULL; chain = chain->next)
 dnaSeqFree(&rQuery);
 }
 
-	
+        
 void blatzWriteChains(struct bzp *bzp, struct chain *chainList,
-	struct dnaSeq *query, struct blatzIndex *targetIndexList, 
-	FILE *f)
+        struct dnaSeq *query, struct blatzIndex *targetIndexList, 
+        FILE *f)
 /* Output chainList to file in format specified by bzp->out. */
 {
 struct hash *targetHash = hashTargetsFromIndex(targetIndexList);
@@ -131,7 +131,7 @@ else if (sameString(out, "psl"))
     chainWriteAllAsPsl(chainList, query, targetHash, f);
 else if (sameString(out, "axt") || sameString(out, "maf"))
     chainWriteAllAsAxtOrMaf(chainList, out, query, targetHash, 
-    	bzp->mafQ, bzp->mafT, f);
+            bzp->mafQ, bzp->mafT, f);
 else if (sameString(out, "wublast") || sameString(out, "blast") ||
          sameString(out, "blast8") || sameString(out, "blast9"))
    chainWriteAllAsBlast(chainList, out, query, targetHash, f);

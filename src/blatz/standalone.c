@@ -36,7 +36,7 @@ static struct optionSpec options[] = {
 };
 
 static void alignAll(struct bzp *bzp, struct dnaSeq *targetList, 
-	struct dnaLoad *queryDl, char *outFile)
+        struct dnaLoad *queryDl, char *outFile)
 /* Make up neighorhood index for queryList, and use it to scan
  * targetList.  Put output in outFile */
 {
@@ -54,7 +54,7 @@ while ((query = dnaLoadNext(queryDl)) != NULL)
     chainList = blatzAlign(bzp, indexList, query);
     if (chainList != NULL) bestScore = chainList->score;
     verbose(1, "%s (%d bases) score %2.0f\n", 
-    	query->name, query->size, bestScore);
+            query->name, query->size, bestScore);
     blatzWriteChains(bzp, chainList, query, indexList, f);
     chainFreeList(&chainList);
     dnaSeqFree(&query);
@@ -63,7 +63,7 @@ carefulClose(&f);
 }
 
 static void loadAndAlignAll(struct bzp *bzp, 
-	char *target, char *query, char *output)
+        char *target, char *query, char *output)
 /* blatz - Align genomic dna across species. */
 {
 struct dnaSeq *targetList = dnaLoadAll(target);
