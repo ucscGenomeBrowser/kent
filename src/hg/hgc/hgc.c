@@ -101,6 +101,8 @@ char *seqName;		/* Name of sequence we're working on. */
 int winStart, winEnd;   /* Bounds of sequence. */
 char *database;		/* Name of mySQL database. */
 
+char *protDbName;	/* Name of proteome database */
+
 /* JavaScript to automatically submit the form when certain values are
  * changed. */
 char *onChangeAssemblyText = "onchange=\"document.orgForm.submit();\"";
@@ -4270,6 +4272,439 @@ if (!upgraded)
 puts(
    "<P>Additional information may be available by clicking on the "
    "mRNA associated with this gene in the main browser window.</P>");
+}
+
+void doSPGene(struct trackDb *tdb, char *mrnaName)
+/* Process click on a known gene. */
+{
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr;
+char **row;
+char query[256];
+
+char cond_str[128];
+char *refSeqName;
+char *descID;
+char *mrnaDesc;
+char *proteinID;
+char *proteinDesc;
+char *pdbID;
+char *freezeName;
+char *mgiID;
+struct refLink *rl;
+
+cartWebStart(cart, "Known Gene");
+
+// Display mRNA description and NCBI link
+printf("<B>mRNA:</B> ");
+sprintf(cond_str, "acc='%s'", mrnaName);
+descID = sqlGetField(conn, database, "mrna", "description", cond_str);
+sprintf(cond_str, "id=%s", descID);
+mrnaDesc = sqlGetField(conn, database, "description", "name", cond_str);
+if (mrnaDesc != NULL) printf("%s\n", mrnaDesc);
+
+printf("<UL><LI>");
+printf("<B>NCBI: </B> <A HREF =\"http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?db=nucleotide&cmd=search&term=%s\" TARGET=_blank>%s</A><BR>\n", 
+        mrnaName, mrnaName);
+printf("</UL>");
+
+// Display protein description and links
+printf("<B>Protein:</B> ");
+sprintf(cond_str, "name='%s'", mrnaName);
+proteinID = sqlGetField(conn, database, "knownGene", "proteinID", cond_str);
+if (proteinID == NULL)
+    {
+    errAbort("Couldn't find corresponding protein for mRNA %s.", mrnaName);
+    }
+sprintf(cond_str, "displayID='%s'", proteinID);
+proteinDesc = sqlGetField(conn, protDbName, "spXref3", "description", cond_str);
+if (proteinDesc != NULL) printf("%s\n", proteinDesc);
+sprintf(cond_str, "sp='%s'", proteinID);
+pdbID= sqlGetField(conn, protDbName, "pdbSP", "pdb", cond_str);
+
+printf("<UL>");
+
+if (pdbID != NULL)
+    {
+    printf("<LI><B>PDB: </B>");
+    sprintf(query, "select pdb from %s.pdbSP where sp = '%s'", 
+	    protDbName, proteinID);
+    sr = sqlGetResult(conn, query);
+    while ((row = sqlNextRow(sr)) != NULL)
+    	{
+    	pdbID  = row[0];
+	printf("<A HREF=\"http://www.rcsb.org/pdb/cgi/explore.cgi?pdbId=%s\"", pdbID);
+	printf("TARGET=_blank>%s</A>&nbsp\n", pdbID);
+    	}
+    printf("<BR>");
+    sqlFreeResult(&sr);
+    }
+
+printf("<LI><B>SWISS-PROT/TrEMBL: </B>");
+printf("<A HREF=\"http://www.expasy.org/cgi-bin/niceprot.pl?%s\" TARGET=_blank>%s</A>\n", 
+	proteinID, proteinID);
+
+// print more protein links if there are other proteins correspond to this mRNA
+sprintf(query, "select dupProteinID from %s.dupSpMrna where mrnaID = '%s'", database, mrnaName);
+sr = sqlGetResult(conn, query);
+row = sqlNextRow(sr);
+if (row != NULL) printf(", ");
+while (row != NULL)    
+	{
+    	//spID  = row[0];
+	printf("<A HREF=\"http://www.expasy.org/cgi-bin/niceprot.pl?%s\" TARGET=_blank>%s</A>\n", 
+		row[0], row[0]);
+	row = sqlNextRow(sr);
+	if (row != NULL) printf(", ");
+    	}
+sqlFreeResult(&sr);
+printf("<BR>");
+
+/* The following is disabled until UCSC Proteome Browser relased to public
+
+// display link to UCSC Proteome Browser
+printf("<LI><B>UCSC Proteome Browser: </B>");
+printf("<A HREF=\"http://hgwdev-fanhsu.cse.ucsc.edu/cgi-bin/pb8?");
+printf("proteinDB=SWISS&proteinID=%s&mrnaID=%s\" ", proteinID, mrnaName);
+printf(" target=_blank>");
+printf(" %s</A>", proteinID);
+
+// display additional entries if they exist
+sprintf(query, "select dupProteinID from %s.dupSpMrna where mrnaID = '%s'", database, mrnaName);
+sr = sqlGetResult(conn, query);
+row = sqlNextRow(sr);
+if (row != NULL) printf(", ");
+while (row != NULL)    
+	{
+    	//spID  = row[0];
+	printf("<A HREF=\"http://hgwdev-fanhsu.cse.ucsc.edu/cgi-bin/pb8?");
+	printf("proteinDB=SWISS&proteinID=%s&mrnaID=%s\" ", row[0], mrnaName);
+	printf(" target=_blank>");
+	printf(" %s</A>", row[0]);
+	row = sqlNextRow(sr);
+	if (row != NULL) printf(", ");
+    	}
+sqlFreeResult(&sr);
+*/
+
+printf("</UL>");
+fflush(stdout);
+
+// Display RefSeq related info, if there is a corresponding RefSeq
+//sprintf(query, "select refAcc from proteins.locAccRef where acc = '%s'",  mrnaName);
+sprintf(query, "select refseq from %s.mrnaRefseq where mrna = '%s'",  database, mrnaName);
+sr = sqlGetResult(conn, query);
+row = sqlNextRow(sr);
+if (row == NULL)
+    {
+    printf("<B>RefSeq:</B>"); 
+    printf(" No corresponding RefSeq entry found for %s.<br>\n", mrnaName);
+    fflush(stdout);
+    }
+else
+    {
+    refSeqName = strdup(row[0]);
+    sprintf(query, "select * from refLink where mrnaAcc = '%s'", row[0]);
+    sqlFreeResult(&sr);
+    sr = sqlGetResult(conn, query);
+    if ((row = sqlNextRow(sr)) == NULL) 
+    	{
+    	sqlFreeResult(&sr);
+    	printf("<B>RefSeq:</B>"); 
+    	printf(" A corresponding Reference Sequence ");
+    	printf("<A HREF=");
+    	printEntrezNucleotideUrl(stdout, refSeqName);
+    	printf(" TARGET=_blank>%s</A>", refSeqName);
+	printf(" is not found in our database for "); 
+        freezeName = hFreezeFromDb(database);
+        if(freezeName == NULL) freezeName = "Unknown";
+    	printf("%s Freeze.<BR>\n",freezeName); 
+	fflush(stdout);
+	}
+    else
+	{
+    	rl = refLinkLoad(row);
+    	sqlFreeResult(&sr);
+    
+    	htmlHorizontalLine();
+    	printf("<B>RefSeq:</B> <A HREF=");
+    	printEntrezNucleotideUrl(stdout, rl->mrnaAcc);
+    	printf(" TARGET=_blank>%s</A>", rl->mrnaAcc);
+
+    	/* If refSeqStatus is available, report it: */
+    	if (hTableExists("refSeqStatus"))
+     	    {
+     	    sprintf(query, "select status from refSeqStatus where mrnaAcc = '%s'",
+	    	    refSeqName);
+    	    sr = sqlGetResult(conn, query);
+    	    if ((row = sqlNextRow(sr)) != NULL)
+		{
+		printf("&nbsp;&nbsp; Status: <B>%s</B>", row[0]);
+		}
+    	    sqlFreeResult(&sr);
+    	    }
+	printf("<BR>");
+
+    	printf("<B>Gene ID: %s<BR></B>\n", rl->name);
+    
+    	if (rl->omimId != 0)
+    	    {
+    	    printf("<B>OMIM:</B> ");
+    	    printf("<A HREF = \"http://www.ncbi.nlm.nih.gov/entrez/dispomim.cgi?id=%d\" ",
+		   rl->omimId);
+	    printf("TARGET=_blank>%d</A><BR>\n", rl->omimId);
+    	    }
+    	if (rl->locusLinkId != 0)
+   	    {
+    	    printf("<B>LocusLink:</B> ");
+    	    printf("<A HREF = \"http://www.ncbi.nlm.nih.gov/LocusLink/LocRpt.cgi?");
+	    printf("=%d\" TARGET=_blank>", rl->locusLinkId);
+    	    printf("%d</A><BR>\n", rl->locusLinkId);
+    	    if ((strstr(hgGetDb(), "mm") != NULL) && hTableExists("MGIid"))
+	    	{
+	    	sprintf(query, "select MGIid from MGIid where LLid = '%d';",
+	   	 	rl->locusLinkId);
+
+	    	sr = sqlGetResult(conn, query);
+	    	if ((row = sqlNextRow(sr)) != NULL)
+    		    {
+		    printf("<B>Mouse Genome Informatics:</B> ");
+		    mgiID = strdup(row[0]);
+		    printf("<A HREF=\"http://www.informatics.jax.org/searches/accession_report.cgi?");
+		    printf("id=%s\">%s</A><BR>\n",mgiID, mgiID);
+		    }
+	    	else
+		    {
+		    // per Carol from Jackson Lab 4/12/02, JAX do not always agree
+		    // with Locuslink on seq to gene association.
+		    // Thus, not finding a MGIid even if a LocusLink ID
+		    // exists is always a possibility.
+    		    }
+	    	sqlFreeResult(&sr);
+ 	    	}
+	    }
+    	medlineLinkedLine("PubMed on Gene", rl->name, rl->name);
+    	if (rl->product[0] != 0)
+    		medlineLinkedLine("PubMed on Product", rl->product, rl->product);
+    	printf("\n");
+    	printGeneLynxName(rl->name);
+    	printf("\n");
+    	printf("<B>GeneCards:</B> ");
+    	printf("<A HREF = \"http://bioinfo.weizmann.ac.il/cards-bin/cardsearch.pl?");
+	printf("search=%s\" TARGET=_blank>", rl->name);
+    	printf("%s</A><BR>\n", rl->name);
+    	if (hTableExists("jaxOrtholog"))
+    	    {
+    	    struct jaxOrtholog jo;
+    	    sprintf(query, "select * from jaxOrtholog where humanSymbol='%s'", rl->name);
+    	    sr = sqlGetResult(conn, query);
+    	    while ((row = sqlNextRow(sr)) != NULL)
+             	{
+	    	jaxOrthologStaticLoad(row, &jo);
+	    	printf("<B>MGI Mouse Ortholog:</B> ");
+	    	printf("<A HREF=\"http://www.informatics.jax.org/searches/accession_report.cgi?");
+		printf("id=%s\" target=_BLANK>", jo.mgiId);
+	    	printf("%s</A><BR>\n", jo.mouseSymbol);
+	    	}
+    	    sqlFreeResult(&sr);
+    	    }
+
+    	if (startsWith("hg", hGetDb()))
+    	    {
+    	    printf("\n");
+    	    printf("<B>AceView:</B> ");
+    	    printf("<A HREF = \"http://www.ncbi.nlm.nih.gov/AceView/av.cgi?");
+	    printf("db=human&l=%s\" TARGET=_blank>", rl->name);
+    	    printf("%s</A><BR>\n", rl->name);
+    	    }
+    	printStanSource(rl->mrnaAcc, "mrna");
+    	}
+
+    htmlHorizontalLine();
+    geneShowPosAndLinks(mrnaName, rl->protAcc, tdb, "refPep", "htcTranslatedProtein",
+			"htcRefMrna", "htcGeneInGenome", "mRNA Sequence");
+    }
+
+printTrackHtml(tdb);
+hFreeConn(&conn);
+}
+
+void printEnsemblCustomUrl(struct trackDb *tdb, char *itemName, boolean encode)
+/* Print Ensembl Gene URL. */
+{
+char *url = tdb->url;
+if (url != NULL && url[0] != 0)
+    {
+    char supfamURL[512];
+    char *organism;
+    char genomeStr[10];
+
+    struct sqlConnection *conn = hAllocConn();
+    char cond_str[256];
+    char *proteinID;
+    char *ans;
+
+    organism = hOrganism(database);
+
+    printf("<B>Ensembl Link: </B>");
+    printf("<A HREF=\"%s%s\" target=_blank>", 
+	   "http://www.ensembl.org/perl/transview?transcript=",
+	   itemName);
+    printf("%s</A><BR>\n", itemName);
+
+    if (hTableExists("superfamily"))
+	{
+    	sprintf(cond_str, "transcript_name='%s'", itemName);    
+    	proteinID = sqlGetField(conn, protDbName, "ensemblXref", "translation_name", cond_str);
+   
+    	// get genomeStr to be used in Superfamily URL */ 
+    	if (sameWord(organism, "human"))
+	    {
+            strcpy(genomeStr, "hs");
+	    }
+    	else
+	    {
+    	    if (sameWord(organism, "mouse"))
+	    	{
+	    	strcpy(genomeStr, "mm");
+	    	}
+	    else
+	    	{
+	    	printf("<br>Organism %s not found!!!", organism); fflush(stdout);
+	    	return;
+	    	}
+	    }
+    	sprintf(cond_str, "name='%s'", itemName);    
+    	ans = sqlGetField(conn, database, "superfamily", "name", cond_str);
+    	if (ans != NULL)
+	    {
+            printf("<B>Superfamily Link: </B>");
+            sprintf(supfamURL, "<A HREF=\"%s%s;seqid=%s\" target=_blank>", 
+	            "http://supfam.org/SUPERFAMILY/cgi-bin/gene.cgi?genome=", 
+	    	    genomeStr, proteinID);
+            printf("%s", supfamURL);
+            printf("%s</A><BR><BR>\n", proteinID);
+            }
+    	}
+    }
+}
+
+void doEnsemblGene(struct trackDb *tdb, char *item, char *itemForUrl)
+/* Put up Ensembl Gene track info. */
+{
+char *dupe, *type, *words[16];
+ char title[256];
+int wordCount;
+int start = cartInt(cart, "o");
+struct sqlConnection *conn = hAllocConn();
+
+if (itemForUrl == NULL)
+   itemForUrl = item;
+dupe = cloneString(tdb->type);
+genericHeader(tdb, item);
+wordCount = chopLine(dupe, words);
+printEnsemblCustomUrl(tdb, itemForUrl, item == itemForUrl);
+if (wordCount > 0)
+    {
+    type = words[0];
+    if (sameString(type, "genePred"))
+        {
+	char *pepTable = NULL, *mrnaTable = NULL;
+	if (wordCount > 1)
+	    pepTable = words[1];
+	if (wordCount > 2)
+	    mrnaTable = words[2];
+	genericGenePredClick(conn, tdb, item, start, pepTable, mrnaTable);
+	}
+    }
+printTrackHtml(tdb);
+freez(&dupe);
+hFreeConn(&conn);
+}
+
+void printSuperfamilyCustomUrl(struct trackDb *tdb, char *itemName, boolean encode)
+/* Print Superfamily URL. */
+{
+char *url = tdb->url;
+if (url != NULL && url[0] != 0)
+    {
+    char supfamURL[1024];
+    char *organism;
+    char cond_str[256];
+    char *proteinID;
+    char genomeStr[10];
+
+    struct sqlConnection *conn = hAllocConn();
+    char query[256];
+    struct sqlResult *sr;
+    char **row;
+
+    organism = hOrganism(database);
+    
+    printf("The corresponding protein %s has the following Superfamily domain(s):", itemName);
+    printf("<UL>\n");
+    
+    sprintf(query,
+            "select description from sfDescription where proteinID='%s';",
+            itemName);
+    sr = sqlMustGetResult(conn, query);
+    row = sqlNextRow(sr);
+    while (row != NULL)
+        {
+        printf("<li>%s", row[0]);
+        row = sqlNextRow(sr);
+        }
+    hFreeConn(&conn);
+    sqlFreeResult(&sr);
+    
+    printf("</UL>"); 
+
+    if (sameWord(organism, "human"))
+	{
+        strcpy(genomeStr, "hs");
+	}
+    else
+	{
+    	if (sameWord(organism, "mouse"))
+		{
+		strcpy(genomeStr, "mm");
+		}
+	else
+		{
+		printf("<br>Organism %s not found!!!", organism); fflush(stdout);
+		return;
+		}
+	}
+
+    printf("<B>Superfamily Link: </B>");
+    sprintf(supfamURL, "<A HREF=\"%s%s;seqid=%s\" target=_blank>", 
+	    "http://supfam.org/SUPERFAMILY/cgi-bin/gene.cgi?genome=", 
+	    genomeStr, itemName);
+    printf("%s", supfamURL);
+    printf("%s</A><BR><BR>\n", itemName);
+    }
+}
+
+void doSuperfamily(struct trackDb *tdb, char *item, char *itemForUrl)
+/* Put up Superfamily track info. */
+{
+char *dupe, *type, *words[16];
+char title[256];
+int wordCount;
+int start = cartInt(cart, "o");
+struct sqlConnection *conn = hAllocConn();
+
+if (itemForUrl == NULL)
+   itemForUrl = item;
+
+genericHeader(tdb, item);
+
+printSuperfamilyCustomUrl(tdb, itemForUrl, item == itemForUrl);
+
+printTrackHtml(tdb);
+
+freez(&dupe);
+hFreeConn(&conn);
 }
 
 void doRefGene(struct trackDb *tdb, char *rnaName)
@@ -9251,6 +9686,9 @@ database = cartUsualString(cart, "db", hGetDb());
 
 hDefaultConnect(); 	/* set up default connection settings */
 hSetDb(database);
+
+protDbName = hPdbFromGdb(database);
+
 seqName = cartString(cart, "c");
 winStart = cartIntExp(cart, "l");
 winEnd = cartIntExp(cart, "r");
@@ -9340,6 +9778,18 @@ else if (sameWord(track, "simpleRepeat"))
 else if (sameWord(track, "cpgIsland") || sameWord(track, "cpgIsland2"))
     {
     doCpgIsland(tdb, item);
+    }
+else if (sameWord(track, "knownGene"))
+    {
+    doSPGene(tdb, item);
+    }
+else if (sameWord(track, "superfamily"))
+    {
+    doSuperfamily(tdb, item, NULL);
+    }
+else if (sameWord(track, "ensGene"))
+    {
+    doEnsemblGene(tdb, item, NULL);
     }
 else if (sameWord(track, "refGene"))
     {
