@@ -110,8 +110,8 @@ spectrum on
 type psl est
 
 track tblastnHg16KGPep
-shortLabel Hg17 knownGenePep tBLASTn
-longLabel Human (hg17) knownGenePep tBLASTn
+shortLabel Hg16 knownGenePep tBLASTn
+longLabel Human (hg16) knownGenePep tBLASTn
 group compGeno
 priority 142
 visibility hide
