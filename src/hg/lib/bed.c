@@ -9,7 +9,7 @@
 #include "binRange.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: bed.c,v 1.32 2004/09/15 18:21:44 kate Exp $";
+static char const rcsid[] = "$Id: bed.c,v 1.33 2004/09/29 17:39:46 kate Exp $";
 
 void bedStaticLoad(char **row, struct bed *ret)
 /* Load a row from bed table into ret.  The contents of ret will
@@ -467,6 +467,8 @@ fputc(sep,f);
 fprintf(f, "%d", el->score);
 if (wordCount <= 5)
     {
+    fputc(lastSep, f);
+    return;
     }
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
