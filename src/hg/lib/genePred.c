@@ -11,7 +11,7 @@
 #include "genbank.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: genePred.c,v 1.45 2004/04/12 16:27:55 markd Exp $";
+static char const rcsid[] = "$Id: genePred.c,v 1.46 2004/05/01 09:00:52 markd Exp $";
 
 /* SQL to create a genePred table */
 static char *createSql = 
@@ -800,28 +800,60 @@ else
     }
 }
 
+static int getFrame5(int mrnaStart, int mrnaEnd, struct genbankCds* cds)
+/* get the starting frame for a range of mRNA using the 5' end as reference */
+{
+if ((cds->start >= mrnaStart) && (cds->start < mrnaEnd))
+    {
+    /* exon contains CDS start */
+    return 0;
+    }
+else if ((cds->end > mrnaStart) && (cds->start < mrnaEnd))
+    {
+    /* exon overlaps CDS */
+    return (mrnaStart-cds->start) % 3;
+    }
+else
+    return -1;
+}
+
+static int getFrame3(int mrnaStart, int mrnaEnd, struct genbankCds* cds)
+/* get the starting frame for a range of mRNA using the 3' end as reference */
+{
+if ((cds->end > mrnaStart) && (cds->start < mrnaEnd))
+    {
+    /* exon overlaps CDS.  mrnaStart is used to get the frame for the start of
+     * the exon.  Must map frame to forward direction  */
+    int start = max(cds->start, mrnaStart);
+    int fr = (cds->end-start) % 3;
+    return (fr == 2) ? 1 : (fr == 1) ? 2 : 0;  /* map to forward */
+    }
+else
+    return -1;
+}
+
 static int getFrame(struct psl *psl, int mrnaStart, int mrnaEnd,
                     struct genbankCds* cds)
-/* get the starting frame for a range of mRNA.  This handles strand stuff.
- * A range is passed due to block merging. */
+/* get the starting frame for an exon of a mRNA.  mrnaStart and mrnaEnd are
+ * the bounds of the exon within the mRNA.  This may cover multiple psl
+ * blocks due to merging of small gaps. */
 {
-int frame = -1;
-if ((cds != NULL) && cds->startComplete)
+
+/* if we have CDS, the 3' end is used if it's complete, as it is more often
+ * accurate. */
+if (cds == NULL)
+    return -1;
+else
     {
     if (psl->strand[0] == '-')
         reverseIntRange(&mrnaStart, &mrnaEnd, psl->qSize);
-    if ((cds->start >= mrnaStart) && (cds->start < mrnaEnd))
-        {
-        /* exon contains CDS start */
-        frame = 0;
-        }
-    else if ((cds->end > mrnaStart) && (cds->start < mrnaEnd))
-        {
-        /* exon overlaps CDS */
-        frame = (mrnaStart-cds->start) % 3;
-        }
+    if (cds->endComplete)
+        return getFrame3(mrnaStart, mrnaEnd, cds);
+    else if (cds->startComplete)
+        return getFrame5(mrnaStart, mrnaEnd, cds);
+    else
+        return -1;
     }
-return frame;
 }
 
 static void pslToExons(struct psl *psl, struct genePred *gene,
