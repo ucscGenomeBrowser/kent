@@ -20,7 +20,7 @@
 #include "portable.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: sumStats.c,v 1.6 2004/07/21 09:35:33 kent Exp $";
+static char const rcsid[] = "$Id: sumStats.c,v 1.7 2004/07/21 21:03:50 kent Exp $";
 
 long long basesInRegion(struct region *regionList)
 /* Count up all bases in regions. */
@@ -286,10 +286,11 @@ long long gapTotal = gapsInRegion(conn, regionList);
 long long realSize = regionSize - gapTotal;
 long startTime, loadTime, calcTime;
 struct covStats *covList, *cov;
+int itemCount;
 struct hTableInfo *hti = getHti(database, track->tableName);
 
 
-htmlOpen("%s Summary Statistics", track->shortLabel);
+htmlOpen("%s (%s) Summary Statistics", track->shortLabel, track->tableName);
 cartSaveSession(cart);
 startTime = clock1000();
 bedList = getAllIntersectedBeds(conn, track);
@@ -298,17 +299,21 @@ loadTime = clock1000() - startTime;
 
 hTableStart();
 startTime = clock1000();
-numberStatRow("item count", slCount(bedList));
-covList = calcSpanOverRegions(regionList, bedList);
-cov = covStatsSum(covList);
-percentStatRow("item bases", cov->basesCovered, realSize);
-percentStatRow("item total", cov->sumBases, realSize);
-numberStatRow("smallest item", cov->minBases);
-numberStatRow("average item", round((double)cov->sumBases/cov->itemCount));
-numberStatRow("biggest item", cov->maxBases);
-covStatsFreeList(&covList);
+itemCount = slCount(bedList);
+numberStatRow("item count", itemCount);
+if (itemCount > 0)
+    {
+    covList = calcSpanOverRegions(regionList, bedList);
+    cov = covStatsSum(covList);
+    percentStatRow("item bases", cov->basesCovered, realSize);
+    percentStatRow("item total", cov->sumBases, realSize);
+    numberStatRow("smallest item", cov->minBases);
+    numberStatRow("average item", round((double)cov->sumBases/cov->itemCount));
+    numberStatRow("biggest item", cov->maxBases);
+    covStatsFreeList(&covList);
+    }
 
-if (hti->hasBlocks)
+if (hti->hasBlocks && itemCount > 0)
     {
     covList = calcBlocksOverRegions(regionList, bedList);
     cov = covStatsSum(covList);
@@ -321,6 +326,26 @@ if (hti->hasBlocks)
     numberStatRow("average block", round((double)cov->sumBases/cov->itemCount));
     numberStatRow("biggest block", cov->maxBases);
     covStatsFreeList(&covList);
+    }
+
+if (hti->scoreField[0] != 0 && itemCount > 0)
+    {
+    struct bed *bed;
+    int minScore = BIGNUM, maxScore = -BIGNUM;
+    long long sumScores = 0;
+    for (bed = bedList; bed != NULL; bed = bed->next)
+        {
+	int score = bed->score;
+	if (score < minScore) minScore = score;
+	if (score > maxScore) maxScore = score;
+	sumScores += score;
+	}
+    if (sumScores != 0)
+        {
+	numberStatRow("smallest score", minScore);
+	numberStatRow("average score", round((double)sumScores/itemCount));
+	numberStatRow("biggest score", maxScore);
+	}
     }
 calcTime = clock1000() - startTime;
 hTableEnd();

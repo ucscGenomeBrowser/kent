@@ -18,7 +18,7 @@
 #include "customTrack.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: hgTables.c,v 1.45 2004/07/21 09:35:33 kent Exp $";
+static char const rcsid[] = "$Id: hgTables.c,v 1.46 2004/07/21 21:03:50 kent Exp $";
 
 
 void usage()
@@ -278,7 +278,7 @@ if (isPositional)
 	{
 	sr = hExtendedRangeQuery(conn, table, region->chrom, 
 		region->start, region->end, 
-		extraWhere, FALSE, fields, NULL);
+		extraWhere, TRUE, fields, NULL);
 	}
     }
 else
@@ -691,6 +691,8 @@ else if (sameString(output, outGff))
     doOutGff(track, conn);
 else if (sameString(output, outHyperlinks))
     doOutHyperlinks(track, conn);
+else if (sameString(output, outWigData))
+    doOutWigData(track, conn);
 else
     errAbort("Don't know how to handle %s output yet", output);
 }

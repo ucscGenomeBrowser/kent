@@ -15,7 +15,7 @@
 #include "grp.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: mainPage.c,v 1.21 2004/07/21 09:35:33 kent Exp $";
+static char const rcsid[] = "$Id: mainPage.c,v 1.22 2004/07/21 21:03:50 kent Exp $";
 
 
 struct grp *makeGroupList(struct sqlConnection *conn, 
@@ -134,7 +134,7 @@ jsDropDownCarryOver(dy, "db");
 return jsOnChangeEnd(&dy);
 }
 
-static char *onChangeGroup()
+static char *onChangeGroupOrTrack()
 /* Return javascript executed when they change group. */
 {
 struct dyString *dy = onChangeStart();
@@ -142,6 +142,7 @@ jsDropDownCarryOver(dy, "db");
 jsDropDownCarryOver(dy, "org");
 return jsOnChangeEnd(&dy);
 }
+
 
 void makeRegionButton(char *val, char *selVal)
 /* Make region radio button including a little Javascript
@@ -189,6 +190,63 @@ hPrintf("</TD></TR>\n");
 return selTrack;
 }
 
+static void showOutDropDown(char **types, char **labels, int typeCount)
+/* Display output drop-down. */
+{
+int i;
+char *outputType = cartUsualString(cart, hgtaOutputType, outPrimaryTable);
+int selIx = stringArrayIx(outputType, types, typeCount);
+if (selIx < 0) selIx = 0;
+hPrintf("<SELECT NAME=%s>\n", hgtaOutputType);
+for (i=0; i<typeCount; ++i)
+    {
+    hPrintf(" <OPTION VALUE=%s", types[i]);
+    if (i == selIx)
+	hPrintf(" SELECTED");
+    hPrintf(">%s\n", labels[i]);
+    }
+hPrintf("</SELECT>\n");
+hPrintf("</TD></TR>\n");
+}
+
+static void showOutputTypeRow()
+/* Print output line. */
+{
+static char *usualTypes[] = 
+    {outPrimaryTable, 
+     outSelectedFields, 
+     outSequence, 
+     outGff, 
+     outBed, 
+     outCustomTrack ,
+     outHyperlinks};
+static char *usualLabels[] =
+    {"all fields from primary table", 
+     "selected fields from related tables", 
+     "sequence", 
+     "GTF - gene transfer format", 
+     "BED - browser extensible data", 
+     "custom track",
+     "hyperlinks to Genome Browser"};
+static char *wigTypes[] = 
+     {
+     outWigData, 
+     outBed, 
+     outCustomTrack,
+     };
+static char *wigLabels[] =
+    {"data points", 
+     "thresholded BED - browser extensible data", 
+     "custom track", };
+
+hPrintf("<TR><TD><B>output:</B>\n");
+if (isWiggle(database, curTrack->tableName))
+    showOutDropDown(wigTypes, wigLabels, ArraySize(wigTypes));
+else
+    showOutDropDown(usualTypes, usualLabels, ArraySize(usualTypes));
+}
+
+
 void showMainControlTable(struct sqlConnection *conn)
 /* Put up table with main controls for main page. */
 {
@@ -204,7 +262,8 @@ hPrintf("<TABLE BORDER=0>\n");
     }
 
 /* Print group and track line. */
-curTrack = showGroupTrackRow(hgtaGroup, onChangeGroup(), hgtaTrack, NULL, conn);
+curTrack = showGroupTrackRow(hgtaGroup, onChangeGroupOrTrack(), hgtaTrack, 
+	onChangeGroupOrTrack(), conn);
 
 /* Region line */
     {
@@ -279,48 +338,14 @@ curTrack = showGroupTrackRow(hgtaGroup, onChangeGroup(), hgtaTrack, NULL, conn);
     hPrintf("</TD></TR>\n");
     }
 
+/* Print group and track line. */
+showOutputTypeRow();
 
-/* Output line. */
-    {
-    int i;
-    char *outputType = cartUsualString(cart, hgtaOutputType, outPrimaryTable);
-    static char *symbols[] = 
-        {outPrimaryTable, 
-	 outSelectedFields, 
-	 outSequence, 
-	 // outSchema,
-	 // outSummaryStats, 
-	 outGff, 
-	 outBed, 
-	 outCustomTrack ,
-	 outHyperlinks};
-    static char *labels[] =
-        {"all fields from primary table", 
-	 "selected fields from related tables", 
-	 "sequence", 
-	 // "schema (database organization)",
-	 // "summary/statistics", 
-	 "GTF - gene transfer format", 
-	 "BED - browser extensible data", 
-	 "custom track",
-	 "hyperlinks to Genome Browser"};
-    hPrintf("<TR><TD><B>output:</B>\n");
-    hPrintf("<SELECT NAME=%s>\n", hgtaOutputType);
-    for (i=0; i<ArraySize(symbols); ++i)
-	{
-	hPrintf(" <OPTION VALUE=%s", symbols[i]);
-	if (sameString(symbols[i], outputType))
-	    hPrintf(" SELECTED");
-	hPrintf(">%s\n", labels[i]);
-	}
-    hPrintf("</SELECT>\n");
-    hPrintf("</TD></TR>\n");
-    }
 hPrintf("</TABLE>\n");
 
 /* Submit buttons. */
     {
-    hPrintf("<I>Note: Intersection is ignored in all fields & selected fields output</I><BR>");
+    hPrintf("<I>Note: Intersection is ignored in all fields & selected fields output.</I><BR>");
     cgiMakeButton(hgtaDoTopSubmit, "Get Output");
     hPrintf(" ");
     cgiMakeButton(hgtaDoSummaryStats, "Summary/Statistics");

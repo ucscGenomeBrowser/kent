@@ -190,6 +190,9 @@ struct bed *getAllIntersectedBeds(struct sqlConnection *conn,
 struct hTableInfo *getHti(char *db, char *table);
 /* Return primary table info. */
 
+struct hTableInfo *maybeGetHti(char *db, char *table);
+/* Return primary table info, but don't abort if table not there. */
+
 boolean htiIsPositional(struct hTableInfo *hti);
 /* Return TRUE if hti looks like it's from a positional table. */
 
@@ -323,6 +326,7 @@ boolean anyIntersection();
 #define outGff "gff"
 #define outCustomTrack "customTrack"
 #define outHyperlinks "hyperlinks"
+#define outWigData "wigData"
 
 /* Identifier list handling stuff. */
 
@@ -331,6 +335,13 @@ char *identifierFileName();
 
 struct hash *identifierHash();
 /* Return hash full of identifiers. */
+
+/* ----------- Wiggle stuff. -------------------- */
+boolean isWiggle(char *db, char *table);
+/* Return TRUE if db.table is a wiggle. */
+
+void doOutWigData(struct trackDb *track, struct sqlConnection *conn);
+/* Save as wiggle data. */
 
 /* ----------- Custom track stuff. -------------- */
 boolean isCustomTrack(char *table);

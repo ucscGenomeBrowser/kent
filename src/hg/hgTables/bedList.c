@@ -16,7 +16,7 @@
 #include "portable.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: bedList.c,v 1.4 2004/07/21 09:35:33 kent Exp $";
+static char const rcsid[] = "$Id: bedList.c,v 1.5 2004/07/21 21:03:50 kent Exp $";
 
 static struct bed *dbGetFilteredBedsOnRegions(struct sqlConnection *conn, 
 	struct trackDb *track, struct region *regionList)
@@ -150,13 +150,19 @@ htmlClose();
 void doOutBed(struct trackDb *track, struct sqlConnection *conn)
 /* Put up form to select BED output format. */
 {
-doBedOrCtOptions(track, conn, FALSE);
+if (isWiggle(database, track->tableName))
+    uglyAbort("BED wiggle output not implemented yet");
+else
+    doBedOrCtOptions(track, conn, FALSE);
 }
 
 void doOutCustomTrack(struct trackDb *track, struct sqlConnection *conn)
 /* Put up form to select Custom Track output format. */
 {
-doBedOrCtOptions(track, conn, TRUE);
+if (isWiggle(database, track->tableName))
+    uglyAbort("Wiggle custom track output not implemented yet");
+else
+    doBedOrCtOptions(track, conn, TRUE);
 }
 
 void doGetBedOrCt(struct sqlConnection *conn, boolean doCt, boolean doCtFile)
