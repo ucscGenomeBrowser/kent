@@ -4863,13 +4863,25 @@ char *cgiItem = cgiEncode(item);
 char *name = cartOptionalString(cart, "i");
 char tName[128]  ="xxxxxx", qName[128] = "xxxxxx";
 int tStart = 0, tEnd = 0, qStart = 0, qEnd = 0, qNum = 0, tNum = 0;
+char otherString[128];
+char *thisOrg = hOrganism(database);
 
     cartWebStart(cart, tdb->longLabel);
     sscanf(name,"%3s%d:%d-%d %3s%d:%d-%d", qName, &qNum, &qStart, &qEnd, tName, &tNum, &tStart, &tEnd);
-   printf("<B>%s position:</B> <a target=\"_blank\" href=\"/cgi-bin/hgTracks?db=%s&position=%s%d%%3A%d-%d\">%s:%d-%d</a><BR>\n",
-        otherOrg, otherDb, qName, qNum, qStart+1, qEnd, qName, qStart+1, qEnd);
+   printf("<B>%s position:</B> %s%d:%d-%d</a>  size: %d <BR>\n",
+        thisOrg, tName, tNum, tStart+1, tEnd, tEnd-tStart);
+   printf("<B>%s position:</B> <a target=\"_blank\" href=\"/cgi-bin/hgTracks?db=%s&position=%s%d%%3A%d-%d\">%s:%d-%d</a>  size: %d<BR>\n",
+        otherOrg, otherDb, qName, qNum, qStart+1, qEnd, qName, qStart+1, qEnd, qEnd - qStart);
 
+   /*
 printf("<B>%s size:</B> %d<BR>\n", otherOrg, qEnd - qStart);
+    sprintf(otherString, "%d&pslTable=%s&otherOrg=%s&otherChromTable=%s&otherDb=%s", tStart, 
+    pslTableName, otherOrg, "chromInfo" , otherDb );
+    {
+    hgcAnchorSomewhere("htcLongXenoPsl2", cgiItem, otherString, tName);
+    printf("View details of parts of alignment within browser window.</A><BR>\n");
+    }
+    */
 /*
 if (hTableExists("axtInfo"))
     {
