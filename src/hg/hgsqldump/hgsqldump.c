@@ -4,7 +4,7 @@
 #include "options.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: hgsqldump.c,v 1.1 2003/09/08 21:19:27 hiram Exp $";
+static char const rcsid[] = "$Id: hgsqldump.c,v 1.2 2003/09/08 21:24:43 hiram Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -16,10 +16,13 @@ errAbort(
   "or:\n"
   "   hgsqldump [OPTIONS] --databases [OPTIONS] DB1 [DB2 DB3 ...]\n"
   "or:\n"
-  "   hgsqldump [OPTIONS] --all-databases [OPTIONS]n"
+  "   hgsqldump [OPTIONS] --all-databases [OPTIONS]\n"
   "Generally anything in command line is passed to mysqldump\n"
-  "after an implicit '-u user -ppassword"
+  "\tafter an implicit '-u user -ppassword\n"
   "See also: mysqldump\n"
+  "Note: directory for results must be writable by mysql.  i.e. 'chmod 777 .'\n"
+  "Which is a security risk, so remember to change permissions back after use.\n"
+  "e.g.: hgsqldump --all -c --tab=. cb1"
   );
 }
 
