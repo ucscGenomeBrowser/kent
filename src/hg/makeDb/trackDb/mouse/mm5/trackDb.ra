@@ -350,3 +350,15 @@ spectrum on
 type psl xeno mm2X
 otherDb mm2X
 
+track NIAGene
+shortLabel NIA Gene Index
+longLabel NIA Mouse Gene Index Version 4
+group genes
+priority 54
+visibility hide
+color 0,60,120
+altColor 200,220,255
+spectrum on
+type psl .
+url http://lgsun.grc.nia.nih.gov/geneindex4/bin/giT.cgi?genename=$$
+
