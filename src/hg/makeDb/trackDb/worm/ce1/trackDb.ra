@@ -4,6 +4,56 @@ longLabel Sanger Gene Predictions
 group genes
 priority 48
 visibility pack
-color 0,100,0
+color 0,0,200
 chromosomes chrI,chrII,chrIII,chrIV,chrV,chrX
 type genePred
+url http://www.wormbase.org/db/gene/gene?name=$$
+
+track est
+shortLabel $Organism ESTs
+longLabel $Organism ESTs Including Unspliced
+group rna
+priority 57
+visibility pack
+spectrum on
+type psl est
+
+track mrna
+shortLabel $Organism mRNAs
+longLabel $Organism mRNAs from Genbank  XX
+group rna
+priority 54
+visibility pack
+spectrum on
+type psl .
+url http://www.wormbase.org/db/gene/gene?name=$$
+
+track cbr_waba
+shortLabel C. briggsae
+longLabel C. briggsae homologies
+# group compGeno
+group genes
+priority 50
+visibility dense
+color 140,0,200
+altColor 210,140,250
+
+track blatCi
+shortLabel C. intestinalis BLAT
+longLabel Ciona intestinalis Translated BLAT Alignments
+group compGeno
+priority 113
+visibility hide
+color 0,60,120
+altColor 200,220,255
+spectrum on
+type psl xeno
+
+track refGene
+shortLabel RefSeq Genes
+longLabel RefSeq Genes
+group genes
+priority 35
+visibility pack
+color 12,12,120
+type genePred refPep refMrna

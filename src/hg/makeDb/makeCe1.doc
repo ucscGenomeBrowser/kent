@@ -10,20 +10,20 @@ DOWNLOAD SEQUENCE (DONE 2003-05-12 - Hiram)
 
     # next machine
     ssh eieio
-    mkdir -p /cluster/store4/worm/ce1/sanger
-    cd /cluster/store4/worm/ce1/sanger
+    mkdir -p /cluster/store5/worm/ce1/sanger
+    cd /cluster/store5/worm/ce1/sanger
     wget -o ce1.fetch.log -r -l1 --no-directories \
 	ftp://ftp.sanger.ac.uk/pub/wormbase/current_release/CHROMOSOMES/
 #   Takes about five minutes
 #   This current_release is updated every two weeks.  Although the
-#	sequence is quite stable at this time and rarely changes.
+#	sequence is quite stable at this time and changes very little.
 #   Check that you have some valid files. Should be chroms I II III IV V X
 #	in dna, gff and agp formats
     ls -ogrt
 #   get out of this download data directory, and create your home symlink
 #	shortcut
     cd ..
-    ln -s /cluster/store4/worm/ce1 ~/ce1
+    ln -s /cluster/store5/worm/ce1 ~/ce1
     cd ~/ce1
 #   There is a Mitochondria sequence.  It can be found at NCBI
 #	This search sequence at NCBI in 'nucleotide' selects one
@@ -31,184 +31,25 @@ DOWNLOAD SEQUENCE (DONE 2003-05-12 - Hiram)
 #	Caenorhabditis Elegans[Organism] AND mitochondria AND MTCE
 #	I'd like to figure out a wget command to fetch this, but doing
 #	that manually via the WEB browser is not such a big deal.  And
-#	besides, once it is fetched, it is pretty much stable so you can
+#	besides, once it is fetched, it is stable (haven't seen it
+#	change in years) so you can
 #	merely copy from a previous Ce build.  A copy has been manually
 #	placed in ~/ce1/ncbi/x54252.fa
 #	
-    sed -e "s/^>.*/>chrM/" ./ncbi/x54252.fa > ./chrM.fa
-    mkdir nib
-#   translate to unzipped .fa, all upper case, and to nib and
-#	rename the agp files
-#	These nib files are going to be remade below after RepeatMasker
-#	and simpleRepeat have been run.
+
+#   translate to unzipped .fa, all upper case, and
+#	rename the agp files so hgGoldGap can find them
+    mkdir sangerFa
+    sed -e "s/^>.*/>chrM/" ./ncbi/x54252.fa > sangerFa/chrM.fa
     foreach f (I II III IV V X)
 	echo -n "${f} "
 	zcat sanger/CHROMOSOME_${f}.dna.gz | tr '[a-z]' '[A-Z]' | \
-		sed -e "s/CHROMOSOME_/chr/" > chr${f}.fa
-        ln -s sanger/CHROMOSOME_${f}.agp ./chr${f}.agp
-	faToNib chr${f}.fa nib/chr${f}.nib
+		sed -e "s/CHROMOSOME_/chr/" > sangerFa/chr${f}.fa
+    	mkdir sangerFa/${f}
+        ln -s ~/ce1/sanger/CHROMOSOME_${f}.agp sangerFa/${f}/chr${f}.agp
     end
-#   Typical output:
-#	I Writing 15080473 bases in 7540245 bytes
-#	II Writing 15279303 bases in 7639660 bytes
-#	III Writing 13783268 bases in 6891642 bytes
-#	IV Writing 17493790 bases in 8746903 bytes
-#	V Writing 20922238 bases in 10461127 bytes
-#	X Writing 17705013 bases in 8852515 bytes
-#	M Writing 13794 bases in 6905 bytes
 
-CREATING DATABASE (DONE 2003-05-12 - Hiram)
-
-    # Create the database.
-    # next machine
-    ssh hgwdev
-    echo 'create database ce1' | hgsql ''
-    # if you need to delete that database:  !!! WILL DELETE EVERYTHING !!!
-	echo 'drop database ce1' | hgsql ce1
-    # make a semi-permanent read-only alias:
-    alias ce1 "mysql -u hguser -phguserstuff -A ce1"
-    # Use df to ake sure there is at least 5 gig free on 
-    df -h /var/lib/mysql
-# Before loading data:
-# Filesystem            Size  Used Avail Use% Mounted on
-# /dev/sda1             472G  389G   58G  87% /var/lib/mysql
-
-
-CREATING GRP TABLE FOR TRACK GROUPING (DONE 2003-05-12 - Hiram)
-    # next machine
-    ssh hgwdev
-    #  the following command copies all the data from the table
-    #	grp in the database rn1 to our new database ce1
-    echo "create table grp (PRIMARY KEY(NAME)) select * from rn1.grp" \
-      | hgsql ce1
-    # if you need to delete that table:   !!! WILL DELETE ALL grp data !!!
-	echo 'drop table grp;' | hgsql ce1
-
-STORING O+O SEQUENCE AND ASSEMBLY INFORMATION  (DONE 2003-05-12 - Hiram)
-
-    # Make symbolic links from /gbdb/ce1/nib to the real nibs.
-    # next machine
-    ssh hgwdev
-    mkdir -p /gbdb/ce1/nib
-    foreach f (/cluster/store4/worm/ce1/nib/*.nib)
-      ln -s $f /gbdb/ce1/nib
-    end
-    # Load /gbdb/ce1/nib paths into database and save size info.
-    hgsql ce1  < ~/kent/src/hg/lib/chromInfo.sql
-    # if you need to delete that table:   !!! DELETES ALL DATA IN TABLE !!!
-	echo 'drop table chromInfo;' | hgsql ce1
-    hgNibSeq -preMadeNib ce1 /gbdb/ce1/nib chr*.fa
-# Typical output:
-# Processing chrI.fa to /gbdb/ce1/nib/chrI.nib
-# Processing chrII.fa to /gbdb/ce1/nib/chrII.nib
-# Processing chrIII.fa to /gbdb/ce1/nib/chrIII.nib
-# Processing chrIV.fa to /gbdb/ce1/nib/chrIV.nib
-# Processing chrM.fa to /gbdb/ce1/nib/chrM.nib
-# Processing chrV.fa to /gbdb/ce1/nib/chrV.nib
-# Processing chrX.fa to /gbdb/ce1/nib/chrX.nib
-# 100277879 total bases
-
-#   Verify the hgNibSeq load functioned OK:
-    echo "select chrom,size from chromInfo" | hgsql -N ce1 > chrom.sizes
-    cat chrom.sizes
-#   Typical contents of chrom.sizes:
-chrI    15080473
-chrII   15279303
-chrIII  13783268
-chrIV   17493790
-chrM    13794
-chrV    20922238
-chrX    17705013
-
-    # Set up relational mrna tables.
-    hgLoadRna new ce1
-    # that created a bunch of tables.  If you need to delete them:
-	echo 'drop table author; \
-drop table cds; drop table cell; drop table description; \
-drop table development; drop table extFile; drop table geneName; \
-drop table history; drop table keyword; drop table library; drop table mrna; \
-drop table mrnaClone; drop table organism; drop table productName; \
-drop table seq; drop table sex; drop table source; drop table tissue;' \
-	| hgsql ce1
-
-
-MAKE GCPERCENT (DONE 2003-05-12 - Hiram)
-    # next machine
-     ssh hgwdev
-     mkdir -p /cluster/store4/worm/ce1/bed/gcPercent
-     cd /cluster/store4/worm/ce1/bed/gcPercent
-     hgsql ce1  < ~/kent/src/hg/lib/gcPercent.sql
-    #  If you need to delete that table created
-	echo 'drop table gcPercent;' | hgsql ce1;
-     hgGcPercent ce1 ../../nib
-
-MAKE HGCENTRALTEST ENTRY AND TRACKDB TABLE FOR CE1 (DONE 2002-05-12 - Hiram)
-    # next machine
-     ssh hgwdev
-    echo 'insert into defaultDb values("C. elegans", "ce1");' \
-      | hgsql -h genome-testdb hgcentraltest
-    #  If you need to delete that entry:
-	echo 'delete from defaultDb where name="ce1";' \
-        | hgsql -h genome-testdb hgcentraltest
-    echo 'insert into dbDb values("ce1", "May 2003", \
-	"/gbdb/ce1/nib", "worm", "chrII:9423581-9478692", 1, 10, \
-	"C. elegans");' \
-	| hgsql -h genome-testdb hgcentraltest
-    #  If you need to delete that entry:
-	echo 'delete from dbDb where name="ce1";' \
-	| hgsql -h genome-testdb hgcentraltest
-    # Make trackDb table so browser knows what tracks to expect:
-    cd ~/kent/src/hg/makeDb/trackDb
-    cvs up -d -P
-    # Edit that makefile to add ce1 in all the right places and do
-    make update
-    make alpha
-    cvs commit makefile
-
-MAKE SANGER GENE TRACK (DONE - 2003-05-19 - Hiram)
-
-    # next machine
-    ssh eieio
-    mkdir -p /cluster/store4/worm/ce1/bed/sangerGene
-    cd /cluster/store4/worm/ce1/bed/sangerGene
-    # the perl trims these files down to a reasonable size.  As they are
-    #	they cause ldHgGene to hangup due to memory size.
-    foreach f (I II III IV V X)
-	echo -n "${f} "
-	zcat ../../sanger/CHROMOSOME_${f}.gff.gz | \
-	sed -e "s/CHROMOSOME_III/chrIII/g" -e "s/CHROMOSOME_II/chrII/g" \
-	-e "s/CHROMOSOME_IV/chrIV/g" -e "s/CHROMOSOME_I/chrI/g" \
-	-e "s/CHROMOSOME_X/chrX/g" -e "s/CHROMOSOME_V/chrV/g" \
-	-e 's/Sequence "\(.*\)"$/\1/' -e 's/Transcript "\(.*\)"$/\1/' | \
-	perl -ne '@a = split; \
-        print if($a[1] =~ /curated|DNA|RNA/i && \
-        $a[2] =~ /intron|exon|cds|sequence|transcri/i);' > chr${f}.gff
-    end
-    echo
-    #  check file sizes, should be reasonable
-    ls -ogrt
-# [hiram@eieio sangerGene]$ ls -ogrt
-# total 22656
-# -rw-r--r--    1 hiram     3495873 May 19 11:52 chrI.gff
-# -rw-r--r--    1 hiram     3670984 May 19 11:54 chrII.gff
-# -rw-r--r--    1 hiram     3264917 May 19 11:56 chrIII.gff
-# -rw-r--r--    1 hiram     3642256 May 19 11:59 chrIV.gff
-# -rw-r--r--    1 hiram     4704564 May 19 12:02 chrV.gff
-# -rw-rw-r--    1 hiram     3787721 May 19 12:03 chrX.gff
-
-    # now load database with those transformed gff files
-    # next machine
-    ssh hgwdev
-    cd /cluster/store4/worm/ce1/bed/sangerGene
-    ldHgGene ce1 sangerGene *.gff
-# Read 37330 transcripts in 411148 lines in 6 files
-#  37330 groups 6 seqs 11 sources 6 feature types
-#  22128 gene predictions
-
-    # if you need to delete that table:
-	echo 'drop table sangerGene' | hgsql ce1
-
-PREPARE Split contigs into 100,000 bp chunks for cluster runs
+# PREPARE Split contigs into 100,000 bp chunks for cluster runs
     # next machine
     ssh eieio
     cd ~/ce1
@@ -216,7 +57,7 @@ PREPARE Split contigs into 100,000 bp chunks for cluster runs
     mkdir split
     foreach f (I II III IV V X M)
 	mkdir split/$f
-        faSplit size chr${f}.fa 100000 split/$f/c -lift=split/chr${f}.lft
+        faSplit size sangerFa/chr${f}.fa 100000 split/$f/c -lift=split/chr${f}.lft
     end
 # 151 pieces of 151 written
 # 153 pieces of 153 written
@@ -226,14 +67,15 @@ PREPARE Split contigs into 100,000 bp chunks for cluster runs
 # 178 pieces of 178 written
 # 1 pieces of 1 written
     cat split/*.lft > liftAll.lft
+
     # copy them to /iscratch/i for cluster rsync
     # next machine
     ssh kkr1u00
     cd ~/ce1/split
     foreach c (I II III IV V X M)
 	echo -n "${c} "
-	mkdir -p /iscratch/i/worms/Celegans/${c}
-        cp -p ${c}/c*.fa /iscratch/i/worms/Celegans/${c}
+	mkdir -p /iscratch/i/worms/Celegans/unmaskedSplit/${c}
+        cp -p ${c}/c*.fa /iscratch/i/worms/Celegans/unmaskedSplit/${c}
     end
     ~kent/bin/iSync
 
@@ -243,14 +85,40 @@ PREPARE Split contigs into 100,000 bp chunks for cluster runs
     cd ~/ce1
     mkdir RMRun
     cd RMRun
+    # create the script to use for the RepeatMasker run
+    cat << '_EOF_' > RMWorm
+#!/bin/csh -fe
+#
+#       This is a slight rearrangement of the
+#       /cluster/bin/scripts/RMWorm used in makeHg15.doc
+#       The results here need to go to a different location 
+#       $1 == chrom name: I II III IV V X M
+#       $2 == directory where split contig .fa is found
+#       $3 == name of contig .fa file
+cd $1
+pushd .
+cd $2
+/bin/mkdir -p /tmp/$3/$1
+/bin/cp $3 /tmp/$3/$1
+cd /tmp/$3/$1
+/scratch/hg/RepeatMasker/RepeatMasker -s -el -ali $3
+popd
+/bin/cp /tmp/$3/$1/$3.out ./
+if( -e /tmp/$3/$1/$3.align ) /bin/cp /tmp/$3/$1/$3.align ./
+# /bin/cp /tmp/$2*.masked ../masked/
+/bin/rm -r /tmp/$3/$1
+/bin/rmdir --ignore-fail-on-non-empty /tmp/$3
+'_EOF_'
+    chmod +x RMWorm
+
     # create job list
     rm -f RMJobs
     foreach c (I II III IV V X M)
 	mkdir ~/ce1/RMRun/${c}
-        foreach t ( /iscratch/i/worms/Celegans/$c/c*.fa )
+        foreach t ( /iscratch/i/worms/Celegans/unmaskedSplit/$c/c*.fa )
 	    set d = $t:h
 	    set f = $t:t
-	    echo ~/ce1/scripts/RMLocalSens ${c} ${d} ${f} \
+	    echo ./RMWorm ${c} ${d} ${f} \
 	    '{'check out line+ ~/ce1/RMRun/$c/${f}.out'}' \
 	    >> RMJobs
 	end
@@ -275,7 +143,7 @@ PREPARE Split contigs into 100,000 bp chunks for cluster runs
     # ensure chr*.fa files exist on /iscratch/i
     # next machine
     ssh kkr1u00
-    cp -p /cluster/store4/worm/ce1/*.fa  /iscratch/i/worms/Celegans
+    cp -p /cluster/store5/worm/ce1/*.fa  /iscratch/i/worms/Celegans
     ~kent/bin/iSync
 
     # Create cluster parasol job:
@@ -318,7 +186,7 @@ PREPARE Split contigs into 100,000 bp chunks for cluster runs
     ssh eieio
     cd ~/ce1
     mkdir softMask
-    cd ~/ce1/softMask
+    cd ~/ce1
     foreach c (I II III IV V X M)
         echo -n "masking chr${c} "
 	/cluster/bin/i386/maskOutFa chr${c}.fa RMRun/chr${c}.fa.out \
@@ -343,6 +211,157 @@ PREPARE Split contigs into 100,000 bp chunks for cluster runs
     mkdir -p /iscratch/i/worms/Celegans/trfFa
     cp -p *.fa /iscratch/i/worms/Celegans/trfFa
 
+CREATING DATABASE (DONE 2003-05-12 - Hiram)
+
+    # Create the database.
+    # next machine
+    ssh hgwdev
+    echo 'create database ce1' | hgsql ''
+    # if you need to delete that database:  !!! WILL DELETE EVERYTHING !!!
+	echo 'drop database ce1' | hgsql ce1
+    # make a semi-permanent read-only alias:
+    alias ce1 "mysql -u hguser -phguserstuff -A ce1"
+    # Use df to ake sure there is at least 5 gig free on 
+    df -h /var/lib/mysql
+# Before loading data:
+# Filesystem            Size  Used Avail Use% Mounted on
+# /dev/sda1             472G  389G   58G  87% /var/lib/mysql
+
+
+CREATING GRP TABLE FOR TRACK GROUPING (DONE 2003-05-12 - Hiram)
+    # next machine
+    ssh hgwdev
+    #  the following command copies all the data from the table
+    #	grp in the database rn1 to our new database ce1
+    echo "create table grp (PRIMARY KEY(NAME)) select * from rn1.grp" \
+      | hgsql ce1
+    # if you need to delete that table:   !!! WILL DELETE ALL grp data !!!
+	echo 'drop table grp;' | hgsql ce1
+
+STORING O+O SEQUENCE AND ASSEMBLY INFORMATION  (DONE 2003-05-12 - Hiram)
+
+    # Make symbolic links from /gbdb/ce1/nib to the real nibs.
+    # next machine
+    ssh hgwdev
+    mkdir -p /gbdb/ce1/nib
+    foreach f (/cluster/store5/worm/ce1/nib/*.nib)
+      ln -s $f /gbdb/ce1/nib
+    end
+    # Load /gbdb/ce1/nib paths into database and save size info.
+    hgsql ce1  < ~/kent/src/hg/lib/chromInfo.sql
+    # if you need to delete that table:   !!! DELETES ALL DATA IN TABLE !!!
+	echo 'drop table chromInfo;' | hgsql ce1
+    hgNibSeq -preMadeNib ce1 /gbdb/ce1/nib chr*.fa
+# Typical output:
+# Processing chrI.fa to /gbdb/ce1/nib/chrI.nib
+# Processing chrII.fa to /gbdb/ce1/nib/chrII.nib
+# Processing chrIII.fa to /gbdb/ce1/nib/chrIII.nib
+# Processing chrIV.fa to /gbdb/ce1/nib/chrIV.nib
+# Processing chrM.fa to /gbdb/ce1/nib/chrM.nib
+# Processing chrV.fa to /gbdb/ce1/nib/chrV.nib
+# Processing chrX.fa to /gbdb/ce1/nib/chrX.nib
+# 100277879 total bases
+
+#   Verify the hgNibSeq load functioned OK:
+    echo "select chrom,size from chromInfo" | hgsql -N ce1 > chrom.sizes
+    cat chrom.sizes
+#   Typical contents of chrom.sizes:
+chrI    15080473
+chrII   15279303
+chrIII  13783268
+chrIV   17493790
+chrM    13794
+chrV    20922238
+chrX    17705013
+
+    # Set up relational mrna tables.
+    hgLoadRna new ce1
+    # that created a bunch of tables.  If you need to delete them:
+	echo 'drop table author; \
+drop table cds; drop table cell; drop table description; \
+drop table development; drop table extFile; drop table geneName; \
+drop table history; drop table keyword; drop table library; drop table mrna; \
+drop table mrnaClone; drop table organism; drop table productName; \
+drop table seq; drop table sex; drop table source; drop table tissue;' \
+	| hgsql ce1
+
+
+MAKE GCPERCENT AND GAP tracks (DONE 2003-05-12 - Hiram)
+    # next machine
+     ssh hgwdev
+     mkdir -p /cluster/store5/worm/ce1/bed/gcPercent
+     cd /cluster/store5/worm/ce1/bed/gcPercent
+     hgsql ce1  < ~/kent/src/hg/lib/gcPercent.sql
+    #  If you need to delete that table created
+	echo 'drop table gcPercent;' | hgsql ce1;
+     hgGcPercent ce1 ../../nib
+     hgGoldGapGl -noGl ce1 /cluster/store5/worm/ce1 sangerFa
+
+MAKE HGCENTRALTEST ENTRY AND TRACKDB TABLE FOR CE1 (DONE 2002-05-12 - Hiram)
+    # next machine
+     ssh hgwdev
+    echo 'insert into defaultDb values("C. elegans", "ce1");' \
+      | hgsql -h genome-testdb hgcentraltest
+    #  If you need to delete that entry:
+	echo 'delete from defaultDb where name="ce1";' \
+        | hgsql -h genome-testdb hgcentraltest
+    echo 'insert into dbDb values("ce1", "May 2003", \
+	"/gbdb/ce1/nib", "worm", "chrII:14642289-14671631", 1, 10, \
+	"C. elegans");' \
+	| hgsql -h genome-testdb hgcentraltest
+    #  If you need to delete that entry:
+	echo 'delete from dbDb where name="ce1";' \
+	| hgsql -h genome-testdb hgcentraltest
+    # Make trackDb table so browser knows what tracks to expect:
+    cd ~/kent/src/hg/makeDb/trackDb
+    cvs up -d -P
+    # Edit that makefile to add ce1 in all the right places and do
+    make update
+    make alpha
+    cvs commit makefile
+
+MAKE SANGER GENE TRACK (DONE - 2003-05-19 - Hiram)
+
+    # next machine
+    ssh eieio
+    mkdir -p /cluster/store5/worm/ce1/bed/sangerGene
+    cd /cluster/store5/worm/ce1/bed/sangerGene
+    # the perl trims these files down to a reasonable size.  As they are
+    #	they cause ldHgGene to hangup due to memory size.
+    foreach f (I II III IV V X)
+	echo -n "${f} "
+	zcat ../../sanger/CHROMOSOME_${f}.gff.gz | \
+	sed -e "s/CHROMOSOME_III/chrIII/g" -e "s/CHROMOSOME_II/chrII/g" \
+	-e "s/CHROMOSOME_IV/chrIV/g" -e "s/CHROMOSOME_I/chrI/g" \
+	-e "s/CHROMOSOME_X/chrX/g" -e "s/CHROMOSOME_V/chrV/g" \
+	-e 's/Sequence "\(.*\)"$/\1/' -e 's/Transcript "\(.*\)"$/\1/' | \
+	perl -ne '@a = split; \
+        print if($a[1] =~ /curated|DNA|RNA/i && \
+        $a[2] =~ /intron|exon|cds|sequence|transcri/i);' > chr${f}.gff
+    end
+    echo
+    #  check file sizes, should be reasonable
+    ls -ogrt
+# [hiram@eieio sangerGene]$ ls -ogrt
+# total 22656
+# -rw-r--r--    1 hiram     3495873 May 19 11:52 chrI.gff
+# -rw-r--r--    1 hiram     3670984 May 19 11:54 chrII.gff
+# -rw-r--r--    1 hiram     3264917 May 19 11:56 chrIII.gff
+# -rw-r--r--    1 hiram     3642256 May 19 11:59 chrIV.gff
+# -rw-r--r--    1 hiram     4704564 May 19 12:02 chrV.gff
+# -rw-rw-r--    1 hiram     3787721 May 19 12:03 chrX.gff
+
+    # now load database with those transformed gff files
+    # next machine
+    ssh hgwdev
+    cd /cluster/store5/worm/ce1/bed/sangerGene
+    ldHgGene ce1 sangerGene *.gff
+# Read 37330 transcripts in 411148 lines in 6 files
+#  37330 groups 6 seqs 11 sources 6 feature types
+#  22128 gene predictions
+
+    # if you need to delete that table:
+	echo 'drop table sangerGene' | hgsql ce1
 
 # MAKING AND STORING mRNA AND EST ALIGNMENTS (WORKING 2003-05-28 - Hiram)
     # next machine
@@ -360,7 +379,7 @@ PREPARE Split contigs into 100,000 bp chunks for cluster runs
     mkdir mrna est
     cd mrna
     mkdir psl
-    ls -1S /cluster/store4/worm/ce1/nib/chr*.nib > worm.lst
+    ls -1S /cluster/store5/worm/ce1/nib/chr*.nib > worm.lst
     ls -1S /iscratch/i/worms/Celegans/mRNA/m*.fa > mrna.lst
     echo '#LOOP
 /cluster/bin/i386/blat -q=dna -t=dna -mask=lower {check in exists+ $(path1)} {check in line+ $(path2)} {check out line+ psl/$(root1)_$(root2).psl}
@@ -411,7 +430,7 @@ PREPARE Split contigs into 100,000 bp chunks for cluster runs
     ssh kk
     cd ~/ce1/bed/est
     mkdir psl
-    ls -1S /cluster/store4/worm/ce1/nib/chr*.nib > worm.lst
+    ls -1S /cluster/store5/worm/ce1/nib/chr*.nib > worm.lst
     ls -1S /iscratch/i/worms/Celegans/EST/e*.fa > est.lst
     echo '#LOOP
 /cluster/bin/i386/blat -q=dna -t=dna -mask=lower {check in exists+ $(path1)} {check in line+ $(path2)} {check out line+ psl/$(root1)_$(root2).psl}
@@ -443,7 +462,7 @@ PREPARE Split contigs into 100,000 bp chunks for cluster runs
 
     ln -s /cluster/store5/mrna.134/org/Caenorhabditis_elegans/est.fa \
 	/gbdb/ce1/mrna.134
-    hgLoadRna add -type=EST ce1 /gbdb/ce1/mrna.134/est.fa \
+    hgLoadRna add -mrnaType=EST -type=EST ce1 /gbdb/ce1/mrna.134/est.fa \
 	/cluster/store5/mrna.134/org/Caenorhabditis_elegans/est.ra
     hgLoadPsl ce1 all_est.psl -nobin
 
@@ -482,7 +501,7 @@ SIMPLE REPEAT TRACK (DONE 2003-05-20 - 12:37 - Hiram)
     mkdir trf
     rm -f jobs.csh
     touch jobs.csh
-    foreach f (/cluster/store4/worm/ce1/*.fa)
+    foreach f (/cluster/store5/worm/ce1/*.fa)
       set fout = $f:t:r.bed
       echo "/cluster/home/kent/bin/i386/trfBig -trf=/cluster/home/kent/bin/i386/trf $f /dev/null -bedAt=trf/$fout -tempDir=/tmp" \
         >> jobs.csh
@@ -509,7 +528,7 @@ PRODUCING FUGU FISH ALIGNMENTS  (DONE 2003-05-28 - Hiram)
     cd ~/ce1/bed/blatFugu
     mkdir psl
     ls -1S /iscratch/i/fugu/*.fa > fugu.lst
-    ls -1S /cluster/store4/worm/ce1/nib/chr*.nib > worm.lst
+    ls -1S /cluster/store5/worm/ce1/nib/chr*.nib > worm.lst
     echo '#LOOP
 /cluster/bin/i386/blat -q=dnax -t=dnax -mask=lower {check in exists+ $(path1)} {check in line+ $(path2)} {check out line+ psl/$(root1)_$(root2).psl}
 #ENDLOOP' > gsub
@@ -586,7 +605,7 @@ rmdir --ignore-fail-on-non-empty /tmp/$f' > wabaRun
     chmod +x wabaRun
 
     echo '#LOOP
-/cluster/store4/worm/ce1/bed/waba/wabaRun {check in exists+ $(path1)} /cluster/store4/worm/ce1/bed/waba/elegans.lst {check out exists /cluster/store4/worm/ce1/bed/waba/out/$(root1).wab}
+/cluster/store5/worm/ce1/bed/waba/wabaRun {check in exists+ $(path1)} /cluster/store5/worm/ce1/bed/waba/elegans.lst {check out exists /cluster/store5/worm/ce1/bed/waba/out/$(root1).wab}
 #ENDLOOP' > gsub
 
     gensub2 briggsae.lst dummy.lst gsub spec
@@ -603,10 +622,10 @@ RUN BLASTZ with C. briggsae
     #  These nibs were created in the combined RepeatMasker and TRF above
     mkdir -p /iscratch/i/worms/Celegans/chromTrfMixedNib
     cd /iscratch/i/worms/Celegans/chromTrfMixedNib
-    cp -p /cluster/store4/worm/ce1/nib/chr*.nib .
+    cp -p /cluster/store5/worm/ce1/nib/chr*.nib .
     mkdir -p /iscratch/i/worms/Celegans/rmsk
     cd /iscratch/i/worms/Celegans/rmsk
-    cp -p /cluster/store4/worm/ce1/RMRun/chr*.fa.out .
+    cp -p /cluster/store5/worm/ce1/RMRun/chr*.fa.out .
 
   
 # BEGINNING OF Cbriggsae BLASTZ
@@ -649,7 +668,7 @@ RUN BLASTZ with C. briggsae
 #	    We will see this problem again in lavToAxt
 #
 #	    Our base of operations:
-#	BASE=/cluster/store4/worm/ce1/bed/blastzBriggsae
+#	BASE=/cluster/store5/worm/ce1/bed/blastzBriggsae
 #
 
 #	Reproduced here are the instructions as specified in the
@@ -706,9 +725,9 @@ RUN BLASTZ with C. briggsae
 	para push;para check; ... etc ...
 	# I'm having a problem with one of the jobs in this run:
 #job: /cluster/home/angie/schwartzbin/xout2lav chrIV 17493790
-# /cluster/store4/worm/ce1/bed/blastzBriggsae/raw/chrIV/1.10010000
-# /cluster/store4/worm/ce1/bed/blastzBriggsae/lav/chrIV/1.10010000.lav
-# /cluster/store4/worm/ce1/bed/blastzBriggsae/DEF
+# /cluster/store5/worm/ce1/bed/blastzBriggsae/raw/chrIV/1.10010000
+# /cluster/store5/worm/ce1/bed/blastzBriggsae/lav/chrIV/1.10010000.lav
+# /cluster/store5/worm/ce1/bed/blastzBriggsae/DEF
 # id: 43985786
 # failure type: crash
 # host: kkr8u49.kilokluster.ucsc.edu
@@ -729,8 +748,8 @@ RUN BLASTZ with C. briggsae
     # Translate the .lav files created by the end of ~angie/hummus Notes
     # into axt files
     ssh eieio
-    set base="/cluster/store4/worm/ce1/bed/blastzBriggsae"
-    set seq1_dir="/cluster/store4/worm/ce1/nib"
+    set base="/cluster/store5/worm/ce1/bed/blastzBriggsae"
+    set seq1_dir="/cluster/store5/worm/ce1/nib"
     set seq2_dir="/cluster/store5/worm/cb1/softMask"
     set tbl="blastzBriggsae"
     cd $base
@@ -754,9 +773,9 @@ RUN BLASTZ with C. briggsae
 # LOADING WORM CB1 BLASTZ ALIGNMENTS
     # Translate Penn State .lav files into sorted axt:
     ssh eieio
-    set base="/cluster/store4/worm/ce1/bed/blastzBriggsae"
-    set seq1_dir="/cluster/store4/worm/ce1/nib"
-    set seq2_dir="/cluster/store4/worm/cb1/softMask"
+    set base="/cluster/store5/worm/ce1/bed/blastzBriggsae"
+    set seq1_dir="/cluster/store5/worm/ce1/nib"
+    set seq2_dir="/cluster/store5/worm/cb1/softMask"
     set tbl="blastzCb1"
     cd $base
     mkdir -p axtChrom
@@ -784,7 +803,102 @@ RUN BLASTZ with C. briggsae
     set base="/cluster/store5/gs.16/build33/bed/blastz.rn2.2003-05-06"
     set tbl="blastzRn2"
     cd $base/pslChrom
-    /cluster/bin/i386/hgLoadPsl hg15 chr*_${tbl}.psl
+    /cluster/bin/i386/hgLoadPsl ce1 chr*_${tbl}.psl
+
+# MAKING AND STORING refSeq ALIGNMENTS (WORKING 2003-06-02 - Hiram)
+    # next machine
+    ssh kkr1u00
+    mkdir -p /iscratch/i/worms/Celegans/refSeq
+    cd /iscratch/i/worms/Celegans
+    # there are about 20000 sequences in the refSeq.fa file,
+    #	split them into about 1000 files (THIS IS TOO MANY !)
+    faSplit sequence \
+  /cluster/store5/mrna.134/refSeq/041003/org/Caenorhabditis_elegans/refSeq.fa \
+		1000 refSeq/r
+    ~kent/bin/iSync
+
+    # next machine
+    ssh kk
+    cd ~/ce1/bed
+    mkdir -p refSeq/psl
+    cd refSeq
+    # for reference:
+    ln -s \
+ /cluster/store5/mrna.134/refSeq/041003/org/Caenorhabditis_elegans/refSeq.* .
+    ls -1S /iscratch/i/worms/Celegans/chromTrfMixedNib/chr*.nib > worm.lst
+    ls -1S /iscratch/i/worms/Celegans/refSeq/r*.fa > refSeq.lst
+    cat << '_EOF_' > gsub
+#LOOP
+/cluster/bin/i386/blat -q=dnax -t=dnax -mask=lower {check in exists+ $(path1)} {check in line+ $(path2)} {check out line+ psl/$(root1)_$(root2).psl}
+#ENDLOOP
+'_EOF_'
+
+    gensub2 worm.lst refSeq.lst gsub spec
+    para create spec
+    para try
+    para check
+    para push
+    ... etc ...
+# Average job time:                  20s       0.33m     0.01h    0.00d
+# Longest job:                      924s      15.40m     0.26h    0.01d
+
+    # when cluster run done
+    # next machine
+    ssh eieio
+    cd ~/ce1/bed/refSeq
+    pslSort dirs raw.psl /tmp psl
+    pslReps -minAli=0.98 -sizeMatters -nearTop=0.005 raw.psl all_refSeq.psl \
+      /dev/null
+    pslSortAcc nohead chrom /tmp all_refSeq.psl
+    pslCat -dir chrom > refSeqAli.psl
+
+    # load refSeq tables
+    # next machine
+    ssh hgwdev
+    cd ~/ce1/bed/refSeq
+    hgLoadPsl ce1 -tNameIx refSeqAli.psl
+    cd /gbdb/ce1/mrna.134
+    ln -s \
+ /cluster/store5/mrna.134/refSeq/041003/org/Caenorhabditis_elegans/refSeq.fa .
+    cd /cluster/store2/tmp
+    hgLoadRna add -type=refSeq ce1 /gbdb/ce1/mrna.134/refSeq.fa \
+ /cluster/store5/mrna.134/refSeq/041003/org/Caenorhabditis_elegans/refSeq.ra
+    # to be nice to this tmp directory, remove your tmp files:
+    rm *.tab
+    cd ~/ce1/bed/refSeq
+    hgRefSeqMrna ce1 /gbdb/ce1/mrna.134/refSeq.fa \
+ /cluster/store5/mrna.134/refSeq/041003/org/Caenorhabditis_elegans/refSeq.ra \
+      all_refSeq.psl \
+      /cluster/store5/mrna.134/refSeq/041003/loc2ref \
+      /cluster/store5/mrna.134/refSeq/041003/hs.faa \
+      /cluster/store5/mrna.134/refSeq/041003/mim2loc
+    # Don't worry about the "No gene name" errors
+    # Add RefSeq status info
+    hgRefSeqStatus ce1 /cluster/store5/mrna.134/refSeq/041003/loc2ref
+
+    # Create precomputed join of refFlat and refGene:
+    echo 'CREATE TABLE refFlat \
+          (KEY geneName (geneName), KEY name (name), KEY chrom (chrom))
+\
+          SELECT refLink.name as geneName, refGene.* \
+          FROM refLink,refGene \
+          WHERE refLink.mrnaAcc = refGene.name' \
+    | hgsql hg15
+
+
+    # names must be chr*_mrna.psl
+    foreach d (I II III IV V X M)
+	rm -f chr${d}_mrna.psl
+	mv chr${d}.psl chr${d}_mrna.psl
+    end
+    # there is no chrM file, above will display error on that one
+    hgLoadPsl ce1 *.psl
+    mkdir /gbdb/ce1/mrna.134
+    ln -s /cluster/store5/mrna.134/org/Caenorhabditis_elegans/mrna.fa \
+	/gbdb/ce1/mrna.134
+    hgLoadRna add -type=mRNA ce1 /gbdb/ce1/mrna.134/mrna.fa \
+	/cluster/store5/mrna.134/org/Caenorhabditis_elegans/mrna.ra
+
 
 
 # MAKING THE BLASTZBESTRAT TRACK FROM PENN STATE RN2 AXT FILES
@@ -810,25 +924,25 @@ RUN BLASTZ with C. briggsae
      set base="/cluster/store5/gs.16/build33/bed/blastz.rn2.2003-05-06"
      set tbl="blastzBestRn2"
      cd $base/pslBest
-     /cluster/bin/i386/hgLoadPsl hg15 chr*_${tbl}.psl
+     /cluster/bin/i386/hgLoadPsl ce1 chr*_${tbl}.psl
 
 # Make /gbdb links and add them to the axtInfo table:
 # Not done for build 32:
-     mkdir -p /gbdb/hg15/axtBestRn2
-     cd /gbdb/hg15/axtBestRn2
+     mkdir -p /gbdb/ce1/axtBestRn2
+     cd /gbdb/ce1/axtBestRn2
      foreach f ($base/axtBest/chr*.axt)
        ln -s $f .
      end
      cd $base/axtBest
      rm -f axtInfoInserts.sql
      touch axtInfoInserts.sql
-     foreach f (/gbdb/hg15/axtBestRn2/chr*.axt)
+     foreach f (/gbdb/ce1/axtBestRn2/chr*.axt)
        set chr=$f:t:r
        echo "INSERT INTO axtInfo VALUES ('rn2','Blastz Best in Genome','$chr','$f');" \
          >> axtInfoInserts.sql
      end
-     /cluster/bin/i386/hgsql hg15 < ~/kent/src/hg/lib/axtInfo.sql
-     /cluster/bin/i386/hgsql hg15 < axtInfoInserts.sql
+     /cluster/bin/i386/hgsql ce1 < ~/kent/src/hg/lib/axtInfo.sql
+     /cluster/bin/i386/hgsql ce1 < axtInfoInserts.sql
 
 # MAKING THE AXTTIGHT FROM AXTBEST
 #		DONE - 2003-05-09 - Hiram, to be verified
@@ -850,7 +964,7 @@ RUN BLASTZ with C. briggsae
     # Load tables into database
     ssh hgwdev
     cd /cluster/store5/gs.16/build33/bed/blastz.rn2.2003-05-06/pslTight
-    hgLoadPsl hg15 chr*_blastzTightRn2.psl
+    hgLoadPsl ce1 chr*_blastzTightRn2.psl
 
 # XXX END OF RAT BLASTZ
 
