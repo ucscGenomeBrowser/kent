@@ -40,7 +40,7 @@ struct geneGraph *gg;
 bool **em;
 int totalWithDupes = 0;
 struct maRef *ref;
-HGID *mrnaRefs;
+char **mrnaRefs = NULL;
 int mrnaRefCount;
 
 AllocArray(vAll, vAlloc);
@@ -55,6 +55,7 @@ for (da = mc->mrnaList; da != NULL; da = da->next)
     for (i=0; i<countOne; ++i)
 	{
 	vix = vertexIx(vAll, vAllCount, vOne->position, vOne->type);
+	/* if vOne not in vALL vix == -1 and we need to insert it */
 	if (vix < 0)
 	    {
 	    if (vAllCount >= vAlloc)
@@ -81,6 +82,8 @@ for (i=0; i<vAllCount; ++i)
     }
 
 /* Fill in edge matrix. */
+/* for each alignment in cluster create edges from each exon to the next,
+   as we have seen them in mRNAs we know that they are valid splicings. */
 for (da = mc->mrnaList; da != NULL; da = da->next)
     {
     int countOne = da->vertexCount;
@@ -100,14 +103,14 @@ freeMem(vAll);
 
 
 /* Fill in other info from ci and mc. */
-gg->orientation = mc->orientation;
-gg->startBac = gg->endBac = ci->seqIds[mc->seqIx];
-gg->startPos = mc->tStart;
-gg->endPos = mc->tEnd;
+snprintf(gg->strand, sizeof(gg->strand), "%s", mc->strand);
+gg->tName = cloneString(ci->tName);
+gg->tStart = mc->tStart;
+gg->tEnd = mc->tEnd;
 gg->mrnaRefCount = mrnaRefCount = slCount(mc->refList);
-gg->mrnaRefs = AllocArray(mrnaRefs, mrnaRefCount);
+gg->mrnaRefs = needMem(sizeof(char *) * mrnaRefCount);
 for (ref = mc->refList, i=0; ref != NULL; ref = ref->next, ++i)
-    mrnaRefs[i] = ref->ma->id;
+     gg->mrnaRefs[i] = cloneString(ref->ma->qName);
 return gg;
 }
 
@@ -169,6 +172,7 @@ if (!anyLeft)
     vertices[softIx].type = ggUnused;
 return anyTrim;
 }
+
 
 static int findFurthestLinkedEnd(struct geneGraph *gg, int startIx)
 /* Find index furthest connected end vertex. */
@@ -267,21 +271,29 @@ struct ggVertex *vertices = gg->vertices;
 int softStartPos = vertices[softStartIx].position;
 int hardEndPos = vertices[hardEndIx].position;
 
+/* for each vertice */
 for (eIx = 0; eIx < vCount; ++eIx)
     {
     struct ggVertex *ev = vertices+eIx;
     int type = ev->type;
+    /* if the type is an end */
     if (type == ggSoftEnd || type == ggHardEnd)  
 	{
 	int evpos = ev->position;
 	int softBleedAdjust = (type == ggHardEnd ? softEndBleedLimit : 0);
+	/* if the position of the vertice is > the softStartPosition, assumes coordinates on + strand? */
 	if (evpos > softStartPos)
-	// if (evpos <= hardEndPos && evpos > softStartPos)
+            /* Why did jim comment this out? looks like now if there is a connection to any downstream exon we create the edge */
+	    // if (evpos <= hardEndPos && evpos > softStartPos) 
 	    {
+	    /* for each vertex again, apparently this is an n^2 algorithm  */
 	    for (sIx = 0; sIx < vCount; ++sIx)
 		{
 		if (sIx != softStartIx && em[sIx][eIx])
 		    {
+		    /* look for an exon with a hard end before the softStart position
+		       and before the end that we are looking for if there is one assume
+		       that this is that exon and make the edge */
 		    struct ggVertex *sv = vertices+sIx;
 		    if (sv->position <= softStartPos + softBleedAdjust)
 			{

@@ -16,15 +16,14 @@
 
 
 static void updateActiveClusters(struct ggMrnaCluster **pActiveClusters, 
-    struct ggMrnaCluster **pFinishedClusters,
-    int seqIx, int orientation, int tStart)
+    struct ggMrnaCluster **pFinishedClusters, char *strand, int tStart)
 /* Move clusters that could no longer match off active list onto finished list. */
 {
 struct ggMrnaCluster *mc, *ggNext, *newActive = NULL;
 for (mc = *pActiveClusters; mc != NULL; mc = ggNext)
     {
     ggNext = mc->next;
-    if (mc->seqIx != seqIx || mc->orientation != orientation || mc->tEnd < tStart)
+    if (differentString(mc->strand, strand) || mc->tEnd < tStart)
 	{
 	slAddHead(pFinishedClusters, mc);
 	}
@@ -64,7 +63,7 @@ return FALSE;
 }
 
 
-static struct ggMrnaCluster *mcFromCda(struct ggMrnaAli *ma, struct dnaSeq **contigs)
+static struct ggMrnaCluster *mcFromCda(struct ggMrnaAli *ma, struct dnaSeq *genoSeq)
 /* Make up a ggMrnaCluster with just one thing on it. */
 {
 static struct ggVertex *vertices = NULL;	/* Resized array. */
@@ -77,12 +76,10 @@ int endBlockIx = blockCount-1;
 int isRev = ma->orientation < 0;
 int startGood = 0, endGood = 0;
 int i;
-struct dnaSeq *contig = contigs[ma->seqIx];
 struct ggVertex *v;
 struct ggMrnaCluster *mc;
 struct maRef *ref;
 struct ggAliInfo *da;
-
 
 if (blockCount == 1)
     {
@@ -99,7 +96,7 @@ else
      * by ggHgapIn. */
     for (i=0; i<endBlockIx; ++i)
 	{
-	if (isGoodIntron(contig, blocks+i, blocks+i+1, isRev))
+	if (isGoodIntron(genoSeq, blocks+i, blocks+i+1, isRev))
 	    break;
 	}
     startGood = i;
@@ -107,7 +104,7 @@ else
 	return NULL;
     for (i=startGood+1; i<endBlockIx; ++i)
 	{
-	if (!isGoodIntron(contig, blocks+i, blocks+i+1, isRev))
+	if (!isGoodIntron(genoSeq, blocks+i, blocks+i+1, isRev))
 	    break;
 	}
     endGood = i+1;
@@ -142,10 +139,11 @@ AllocArray(da->vertices, vCount);
 CopyArray(vertices, da->vertices, vCount);
 da->vertexCount = vCount;
 mc->mrnaList = da;
-mc->orientation = (isRev ? -1 : 1);
-mc->tStart = ma->contigStart;
-mc->tEnd = ma->contigEnd;
-mc->seqIx = ma->seqIx;
+mc->tName = cloneString(ma->tName);
+snprintf(mc->strand, sizeof(mc->strand), "%s", ma->strand);
+mc->tStart = ma->tStart;
+mc->tEnd = ma->tEnd;
+mc->genoSeq = genoSeq;
 return mc;
 }
 
@@ -231,7 +229,7 @@ if (aMc->tEnd < bMc->tEnd)
 freeMem(bMc);
 }
 
-static struct ggMrnaCluster *clustersFromCdas(struct ggMrnaAli *maList, struct dnaSeq **contigs)
+static struct ggMrnaCluster *clustersFromCdas(struct ggMrnaAli *maList, struct dnaSeq *genoSeq)
 /* Given a sorted ggMrnaAli list return list of mRNA clusters. */
 {
 struct ggMrnaCluster *activeClusters = NULL;	/* List that can still add to. */
@@ -242,9 +240,8 @@ struct ggMrnaAli *ma;
 for (ma = maList; ma != NULL; ma = ma->next)
     {
     struct ggMrnaCluster *mergableClusters, *newMc;
-    updateActiveClusters(&activeClusters, &finishedClusters, 
-    	ma->seqIx, ma->orientation, ma->contigStart);
-    newMc = mcFromCda(ma, contigs);
+    updateActiveClusters(&activeClusters, &finishedClusters, ma->strand, ma->tStart);
+    newMc = mcFromCda(ma, genoSeq);
     if (newMc)
 	{
 	mergableClusters = findMergableClusters(&activeClusters, newMc);
@@ -271,25 +268,13 @@ slReverse(&finishedClusters);
 return finishedClusters;
 }
 
-static int cmpCdaTargetStart(const void *va, const void *vb)
-/* Compare two ggMrnaAli based on their seqIx, strand, tEnd. */
-{
-const struct ggMrnaAli *a = *((struct ggMrnaAli **)va);
-const struct ggMrnaAli *b = *((struct ggMrnaAli **)vb);
-int diff = a->seqIx - b->seqIx;
-if (diff == 0)
-    diff = a->orientation - b->orientation;
-if (diff == 0)
-    diff = a->contigStart - b->contigStart;
-return diff;
-}
 
 struct ggMrnaCluster *ggClusterMrna(struct ggMrnaInput *ci)
 /* Make a list of clusters from ci. */
 {
 struct ggMrnaCluster *mc;
-slSort(&ci->maList, cmpCdaTargetStart);
-mc =  clustersFromCdas(ci->maList, ci->seqArray);
+slSort(&ci->maList, cmpGgMrnaAliTargetStart);
+mc =  clustersFromCdas(ci->maList, ci->genoSeq);
 return mc;
 }
 

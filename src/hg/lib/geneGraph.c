@@ -30,7 +30,6 @@ if ((gg = *pGg) != NULL)
 	freeMem(em[i]);
     freeMem(em);
     freeMem(gg->vertices);
-    freeMem(gg->mrnaRefs);
     freez(pGg);
     }
 }
@@ -127,3 +126,86 @@ for (i=0; i<vCount; ++i)
     }
 }
 
+static int countUsed(struct ggVertex *v, int vCount, int *translator)
+/* Count number of vertices actually used. */
+{
+int i;
+int count = 0;
+for (i=0; i<vCount; ++i)
+    {
+    translator[i] = count;
+    if (v[i].type != ggUnused)
+	++count;
+    }
+return count;
+}
+
+
+struct altGraph *ggToAltGraph(struct geneGraph *gg)
+/* convert a gene graph to an altGraph data structure */
+{
+struct altGraph *ag = NULL;
+bool **em = gg->edgeMatrix;
+int edgeCount = 0;
+int totalVertexCount = gg->vertexCount;
+int usedVertexCount;
+int usedCount;
+int *translator;	/* Translates away unused vertices. */
+struct ggVertex *vertices = gg->vertices;
+int i,j;
+UBYTE *vTypes;
+unsigned *vBacs, *vPositions, *edgeStarts, *edgeEnds, *mrnaRefs;
+struct maRef *ref;
+
+AllocArray(translator, totalVertexCount);
+usedVertexCount = countUsed(vertices, totalVertexCount, translator);
+for (i=0; i<totalVertexCount; ++i)
+    {
+    bool *waysOut = em[i];
+    for (j=0; j<totalVertexCount; ++j)
+	if (waysOut[j])
+	    ++edgeCount;
+    }
+AllocVar(ag);
+snprintf(ag->strand, sizeof(ag->strand), "%s", gg->strand);
+ag->tName = cloneString(gg->tName);
+ag->tStart = gg->tStart;
+ag->tEnd = gg->tEnd;
+ag->vertexCount = usedVertexCount;
+ag->vTypes = AllocArray(vTypes, usedVertexCount);
+ag->vPositions = AllocArray(vPositions, usedVertexCount);
+ag->mrnaRefCount = gg->mrnaRefCount;
+ag->mrnaRefs = AllocArray(ag->mrnaRefs, gg->mrnaRefCount);
+for(i=0; i < gg->mrnaRefCount; i++)
+    {
+    ag->mrnaRefs[i] = cloneString(gg->mrnaRefs[i]);
+    }
+
+for (i=0,j=0; i<totalVertexCount; ++i)
+    {
+    struct ggVertex *v = vertices+i;
+    if (v->type != ggUnused)
+	{
+	vTypes[j] = v->type;
+	vPositions[j] = v->position;
+	++j;
+	}
+    }
+ag->edgeCount = edgeCount;
+ag->edgeStarts = AllocArray(edgeStarts, edgeCount);
+ag->edgeEnds = AllocArray(edgeEnds, edgeCount);
+edgeCount = 0;
+for (i=0; i<totalVertexCount; ++i)
+    {
+    bool *waysOut = em[i];
+    for (j=0; j<totalVertexCount; ++j)
+	if (waysOut[j])
+	    {
+	    edgeStarts[edgeCount] = translator[i] ;
+	    edgeEnds[edgeCount] = translator[j];
+	    ++edgeCount;
+	    }
+    }
+freeMem(translator);
+return ag;
+}

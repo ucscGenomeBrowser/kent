@@ -9,9 +9,17 @@
 #ifndef GENEGRAPH_H
 #define GENEGRAPH_H
 
+#ifndef GGMRNAALI_H
+#include "ggMrnaAli.h"
+#endif
+
 #ifndef HGRELATE_H
 #include "hgRelate.h"
 #endif 
+
+#ifndef ALTGRAPH_H
+#include "altGraph.h"
+#endif
 
  enum ggVertexType
  /* Classifies a vertex.  */
@@ -38,26 +46,37 @@ struct ggAliInfo
     int vertexCount;             /* Vertex count. */
     };
 
-void freeDenseAliInfo(struct ggAliInfo **pDa);
-/* Free up one ggAliInfo. */
 
-/* Free up a ggAliInfo */
+
+struct ggMrnaCluster
+/* Input structure for gene grapher */
+{
+    struct ggMrnaCluster *next;             /* Next in list. */
+    struct maRef *refList;                  /* Full cDNA alignments. */
+    struct ggAliInfo *mrnaList;             /* List of compact cDNA alignments. */
+    char *tName;                            /* target name, usually chrom. */
+    int tStart,tEnd;                        /* Position in genomic DNA. */
+    char strand[3];                         /* + or - depending on strand */
+    struct dnaSeq *genoSeq;                 /* target sequence defined by coordinates */
+};
+
 struct geneGraph
 /* A graph that represents the alternative splicing paths of a gene. */
-    {
+{
     struct geneGraph *next;		/* Next in list. */
-    HGID id;                            /* Id in database. */
     struct ggVertex *vertices;          /* Splice sites or soft start/ends. */
     int vertexCount;                    /* Vertex count. */
     bool **edgeMatrix;	                /* Adjacency matrix for directed graph. */
-    int orientation;			/* +1 or -1 strand of genomic DNA. */
-    HGID startBac;                   /* Which target sequence starts in. */
-    int startPos;                       /* Which target sequence ends in. */
-    HGID endBac;                     /* Which contig ends in. */
-    int endPos;                         /* Where in contig it ends. */
-    HGID *mrnaRefs;                     /* IDs of mRNAs supporting this. */
+    char *tName;                        /* name of target, usually chromosom */
+    unsigned int tStart;                /* start of graph in target. */
+    unsigned int tEnd;                  /* end of graph in target. */
+    char strand[3];                     /* + or - */
+    char **mrnaRefs;                    /* names/ids of mrnas supporting this. */
     int mrnaRefCount;                   /* Count of mRNAs supporting this. */
-    };
+};
+
+void freeDenseAliInfo(struct ggAliInfo **pDa);
+/* Free up a ggAliInfo */
 
 void freeGeneGraph(struct geneGraph **pGg);
 /* Free up a gene graph. */
@@ -112,6 +131,9 @@ void ggTabOut(struct geneGraph *gg, FILE *f);
 
 struct geneGraph *ggFromRow(char **row);
 /* Create a geneGraph from a row in altGraph table. */
+
+struct altGraph *ggToAltGraph(struct geneGraph *gg);
+/* convert a gene graph to an altGraph data structure */
 
 #endif /* GENEGRAPH_H */
 
