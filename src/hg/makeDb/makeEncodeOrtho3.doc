@@ -47,11 +47,15 @@ create table encodeRegionsMercator (
 )
 
 #!/bin/csh -f
+tar xfz encodeMaps20050304.tar.gz
 foreach db (bosTau1 canFam1 danRer2 galGal2 mm5 monDom1 panTro1 rn3 tetNig1)
-    echo $db
-    hgsql $db -e "drop table encodeRegionsMercator"
-    rm -f $db.log
-    hgLoadBed -tab -sqlTable=${HOME}/kent/src/hg/lib/encodeRegionsMercator.sql $db encodeRegionsMercator $db.bed >& $db.log
+    echo ========= $db ==========
+    rm -f $db.log $db.unmerged.bed5 $db.original.bed
+    mv -f $db.bed $db.original.bed
+    makeBed5.pl < $db.original.bed > $db.unmerged.bed5
+    liftOverMerge -mergeGap=20000 $db.unmerged.bed5 $db.bed5 
+    hgLoadBed -tab -sqlTable=${HOME}/kent/src/hg/lib/encodeRegionsMercator.sql $db encodeRegionsMercator $db.original.bed >& $db.log
+    hgLoadBed -tab $db encodeRegionsMercatorMerged $db.bed5 >>& $db.log
 end
 rm -f bed.tab
 
@@ -184,8 +188,24 @@ rm -f bed.tab
 
 hgsql -e "select chrom, chromStart+1, chromEnd, name from encodeRegions order by name" hg17 | tail +2 | awk '{printf "%s:%d-%d\t%s\n",$1,$2,$3,$4}' > positionFile
 
+# create consensus regions and load them
+$dir = /cluster/data/encode/ortho3/consensus
+mkdir -p $dir
+cd $dir
+
+foreach db (panTro1 rn3 galGal2 mm5 canFam1 monDom1 tetNig1 danRer2)
+    regionOrtho hg17.encodeRegions $db.encodeRegionsLiftOver $db.encodeRegionsMercatorMerged $db.encodeRegionsConsensus.bed $db.order.err
+    hgLoadBed $db encodeRegionConsensus -tab $db.encodeRegionsConsensus.bed
+end
+
+# make html pages
+$dir = /cluster/data/encode/ortho3/html
+mkdir -p $dir
+cd $dir
+
 #./mkOrthologAllFrame.pl descriptionFile positionFile headerFile hg17 consensus/panTro1.bed liftOverRegions/panTro1.bed mercatorInput/panTro1.bed
 foreach db (panTro1 rn3 galGal2 mm5 canFam1 monDom1 tetNig1 danRer2)
-    ./mkOrthologAllFrame.pl descriptionFile positionFile headerFile hg17 consensus/$db.bed liftOverRegions/$db.bed mercatorInput/$db.bed > $db.html
+    rm -f $db.html
+    ./mkOrthologAllFrame.pl descriptionFile positionFile headerFile hg17 ../consensus/$db.encodeRegionsConsensus.bed ../liftOverRegions/$db.bed ../mercatorInput/$db.bed5 > $db.html
 end
 
