@@ -634,33 +634,37 @@ char buf[64];
 struct hgPosTable *table = NULL;
 struct hgPos *pos = NULL;
 
-conn = hAllocConn();
-query = newDyString(256);
-dyStringPrintf(query, "select * from fishClones where name = '%s'", spec);
-sr = sqlGetResult(conn, query->string);
-while ((row = sqlNextRow(sr)) != NULL)
+if (hTableExists("fishClones"))
     {
-    if (ok == FALSE)
+    conn = hAllocConn();
+    query = newDyString(256);
+    dyStringPrintf(query, "select * from fishClones where name = '%s'", spec);
+    sr = sqlGetResult(conn, query->string);
+    while ((row = sqlNextRow(sr)) != NULL)
         {
-	ok = TRUE;
-	AllocVar(table);
-	dyStringClear(query);
-	slAddHead(&hgp->tableList, table);
+	if (ok == FALSE)
+            {
+	    ok = TRUE;
+	    AllocVar(table);
+	    dyStringClear(query);
+	    slAddHead(&hgp->tableList, table);
+	    }
+	AllocVar(fc);
+	fc = fishClonesLoad(row);
+	if ((chrom = hgOfficialChromName(fc->chrom)) == NULL)
+	     errAbort("Internal Database error: Odd chromosome name '%s' in fishClones", fc->chrom); 
+	AllocVar(pos);
+	pos->chrom = chrom;
+	pos->chromStart = fc->chromStart - 100000;
+	pos->chromEnd = fc->chromEnd + 100000;
+	pos->name = cloneString(spec);
+	slAddHead(&table->posList, pos);
+	fishClonesFree(&fc);
 	}
-    fc = fishClonesLoad(row);
-    if ((chrom = hgOfficialChromName(fc->chrom)) == NULL)
-	errAbort("Internal Database error: Odd chromosome name '%s' in fishClones", fc->chrom); 
-    AllocVar(pos);
-    pos->chrom = chrom;
-    pos->chromStart = fc->chromStart - 100000;
-    pos->chromEnd = fc->chromEnd + 100000;
-    pos->name = cloneString(spec);
-    slAddHead(&table->posList, pos);
+    if (table != NULL)
+        slReverse(&table->posList);
     }
-if (table != NULL)
-    slReverse(&table->posList);
 freeDyString(&query);
-fishClonesFree(&fc);
 sqlFreeResult(&sr);
 hFreeConn(&conn);
 return ok;
@@ -680,33 +684,37 @@ char buf[64];
 struct hgPosTable *table = NULL;
 struct hgPos *pos = NULL;
 
-conn = hAllocConn();
-query = newDyString(256);
-dyStringPrintf(query, "select * from bacEndPairs where name = '%s'", spec);
-sr = sqlGetResult(conn, query->string);
-while ((row = sqlNextRow(sr)) != NULL)
+if (hTableExists("bacEndPairs"))
     {
-    if (ok == FALSE)
+    conn = hAllocConn();
+    query = newDyString(256);
+    dyStringPrintf(query, "select * from bacEndPairs where name = '%s'", spec);
+    sr = sqlGetResult(conn, query->string);
+    while ((row = sqlNextRow(sr)) != NULL)
         {
-	ok = TRUE;
-	AllocVar(table);
-	dyStringClear(query);
-	slAddHead(&hgp->tableList, table);
-	}
+	if (ok == FALSE)
+	    {
+	    ok = TRUE;
+	    AllocVar(table);
+	    dyStringClear(query);
+	    slAddHead(&hgp->tableList, table);
+	    }
+	AllocVar(be);
 	be = lfsLoad(row);
-    if ((chrom = hgOfficialChromName(be->chrom)) == NULL)
-	errAbort("Internal Database error: Odd chromosome name '%s' in bacEndPairs", be->chrom); 
-    AllocVar(pos);
-    pos->chrom = chrom;
-    pos->chromStart = be->chromStart - 100000;
-    pos->chromEnd = be->chromEnd + 100000;
-    pos->name = cloneString(spec);
-    slAddHead(&table->posList, pos);
+	if ((chrom = hgOfficialChromName(be->chrom)) == NULL)
+	    errAbort("Internal Database error: Odd chromosome name '%s' in bacEndPairs", be->chrom); 
+	AllocVar(pos);
+	pos->chrom = chrom;
+	pos->chromStart = be->chromStart - 100000;
+	pos->chromEnd = be->chromEnd + 100000;
+	pos->name = cloneString(spec);
+	slAddHead(&table->posList, pos);
+	lfsFree(&be);
+	}
+    if (table != NULL)
+        slReverse(&table->posList);
     }
-if (table != NULL)
-    slReverse(&table->posList);
 freeDyString(&query);
-lfsFree(&be);
 sqlFreeResult(&sr);
 hFreeConn(&conn);
 return ok;
