@@ -139,7 +139,7 @@
 #include "HInv.h"
 #include "bed6FloatScore.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.663 2004/06/13 21:39:53 braney Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.664 2004/06/15 00:46:31 baertsch Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -7298,7 +7298,7 @@ printf("<B>%s PseudoGene:</B> %s:%d-%d   %d bp<BR>\n", hOrganism(database),  bed
 printf("Strand: %c",bed->strand[0]);
 printf("<p>");
 }
-void pseudoPrintPos(char *chrom, int chromStart, int chromEnd, struct pseudoGeneLink *pg, char *alignTable)
+void pseudoPrintPos(struct psl *pseudoList, struct pseudoGeneLink *pg, char *alignTable, int start, char *acc)
 /*    print details of pseudogene record */ 
 {
 char *tbl = cgiUsualString("table", cgiString("g"));
@@ -7322,22 +7322,20 @@ if (!hTableExists(chainTable) )
 //    org[0] = tolower(org[0]);
 //    safef(chainTable,sizeof(chainTable), "%sChain", org);
 //    }
-printf("<B>PseudoGene Confidence:</B> %4.3f \n",pg->posConf);
-printf("<B>PseudoGene Score:</B> %d \n",pg->score);
-printf("<B>Syntenic with mouse:</B> %d %%\n",pg->overlapDiag);
-printf("<B>PolyA tail:</B> %d \n",pg->polyA);
-printf("<B>Start:</B> %d \n",pg->polyAstart);
-printf("<B>Exons Covered:</B> %d out of %d \n",pg->exonCover,pg->exonCount);
-printf("<B>Coverage:</B> %d %%\n",pg->coverage);
-printf("<B>Bases matching:</B> %d \n", pg->matches);
-printf("<p><B>Axt Score:</B> %d \n",pg->axtScore);
-printf("<B>old Score:</B> %d \n",pg->oldScore);
-printf("<B>intron Count:</B> %d / %d\n",pg->intronCount, pg->oldIntronCount);
-printf("<B>intron scores:</B> %s \n",pg->intronScores);
+printf("<B>Description:</B> Retrogenes are processed mRNAs that are inserted back into the genome. Most are pseudogenes, and some are functional genes or anti-sense transcripts that may impede mRNA translation.<p>\n");
+printf("<B>Syntenic&nbsp;in&nbsp;mouse: </B>%d&nbsp;%%<br>\n",pg->overlapDiag);
+printf("<B>PolyA&nbsp;tail:</B>&nbsp;%d&nbsp;bp \n",pg->polyA);
+printf("&nbsp;(%d&nbsp;bp&nbsp;from&nbsp;end&nbsp;of&nbsp;retrogene)<br>\n",pg->polyAstart);
+printf("<B>Exons&nbsp;Inserted:</B>&nbsp;%d&nbsp;out&nbsp;of&nbsp;%d&nbsp;<br>\n",pg->exonCover,pg->exonCount);
+printf("<B>Bases&nbsp;matching:</B>&nbsp;%d&nbsp;\n", pg->matches);
+printf("(%d&nbsp;%% of gene)<p>\n",pg->coverage);
+printf("<H4>RetroGene/Gene Alignment</H4>");
+printAlignments(pseudoList, start, "htcCdnaAli", tbl, acc);
 htmlHorizontalLine();
-printf("<H4>Annotation for Gene locus that spawned PseudoGene</H4>");
+printf("<H4>Annotation for Gene locus that spawned RetroGene</H4>");
 
 
+printf("<ul>");
 if (!sameString(pg->refSeq,"noRefSeq"))
     {
     printf("<LI><B>RefSeq:</B> %s \n", pg->refSeq);
@@ -7394,6 +7392,7 @@ if (!sameString(pg->mgc,"noMgc"))
     printf("</A></LI>");
     }
 
+printf("</ul>");
 /* display pfam domains */
 
 printf("<p>");
@@ -7419,27 +7418,26 @@ if (hTableExists(alignTable))
     {
     pslList = loadPslRangeT(alignTable, pg->name, pg->gChrom, pg->gStart, pg->gEnd);
     if (pslList != NULL)
-        printAlignments(pslList, chromStart, "htcCdnaAli", alignTable, pg->name);
+        printAlignments(pslList, pslList->tStart, "htcCdnaAli", alignTable, pg->name);
     }
 htmlHorizontalLine();
-printf("<H4>Gene/PseudoGene Alignment (multiple records are a result of breaks in the human Self Chaining)</H4>Shows removed introns, frameshifts and in frame stops.");
-safef(chainTable_chrom,sizeof(chainTable_chrom), "%s_chainSelf",chrom);
+safef(chainTable_chrom,sizeof(chainTable_chrom), "%s_chainSelf",pslList->tName);
 if (hTableExists(chainTable_chrom) )
     {
-    /* lookup chain */
+        /* lookup chain */
     dyStringPrintf(dy,
         "select id, score, qStart, qEnd, qStrand, qSize from %s_%s where ", 
-        chrom, chainTable);
-    hAddBinToQuery(chromStart, chromEnd, dy);
+        pseudoList->tName, chainTable);
+    hAddBinToQuery(pseudoList->tStart, pseudoList->tEnd, dy);
     if (sameString(pg->gStrand,pg->strand))
         dyStringPrintf(dy,
             "tEnd > %d and tStart < %d and qName = '%s' and qEnd > %d and qStart < %d and qStrand = '+' ",
-            chromStart,chromEnd, pg->gChrom, pg->gStart, pg->gEnd);
+            pseudoList->tStart, pseudoList->tEnd, pg->gChrom, pg->gStart, pg->gEnd);
     else
         {
         dyStringPrintf(dy,
             "tEnd > %d and tStart < %d and qName = '%s' and qEnd > %d and qStart < %d and qStrand = '-'",
-            chromStart,chromEnd, pg->gChrom, hChromSize(pg->gChrom)-(pg->gEnd), 
+            pseudoList->tStart, pseudoList->tEnd, pg->gChrom, hChromSize(pg->gChrom)-(pg->gEnd), 
             hChromSize(pg->gChrom)-(pg->gStart));
         }
     dyStringAppend(dy, " order by qStart");
@@ -7449,6 +7447,12 @@ if (hTableExists(chainTable_chrom) )
         int chainId, score;
         unsigned int qStart, qEnd, qSize;
         char qStrand;
+        int first = 0;
+        if (first == 0)
+            {
+            printf("<H4>Gene/PseudoGene Alignment (multiple records are a result of breaks in the human Self Chaining)</H4>Shows removed introns, frameshifts and in frame stops.");
+            first = 1;
+            }
         chainId = sqlUnsigned(row[0]);
         score = sqlUnsigned(row[1]);
         qStart = sqlUnsigned(row[2]);
@@ -7463,16 +7467,20 @@ if (hTableExists(chainTable_chrom) )
             }
         //if (pg->chainId == 0) pg->chainId = chainId;
         puts("<LI>\n");
-        hgcAnchorPseudoGene(pg->kgName, "knownGene", chrom, "startcodon", chromStart, chromEnd, 
+        hgcAnchorPseudoGene(pg->kgName, "knownGene", pslList->tName, "startcodon", pseudoList->tStart, pslList->tEnd, 
                 pg->gChrom, pg->kStart, pg->kEnd, chainId, database);
         printf("Annotated alignment using chainId: %d </A> \n", chainId);
         printf("score: %d \n", score);
-        hgcAnchorTranslatedChain(chainId, chainTable, chrom, pg->gStart, pg->gEnd);
+        hgcAnchorTranslatedChain(chainId, chainTable, pslList->tName, pg->gStart, pg->gEnd);
         printf("Raw alignment %s:%d-%d </A> \n", pg->gChrom,qStart,qEnd);
         puts("</LI>\n");
         }
     sqlFreeResult(&sr);
     }
+printf("<p>RetroGene&nbsp;Score:&nbsp;%d \n",pg->axtScore);
+printf("Alignment&nbsp;Score:&nbsp;%d&nbsp;<br>\n",pg->score);
+printf("Heuristic&nbsp;Score:&nbsp;%d \n",pg->oldScore);
+printf("AdaBoost&nbsp;Confidence:</B>&nbsp;%4.3f&nbsp;\n",pg->posConf);
 }
 
 void doPseudoPsl(struct trackDb *tdb, char *acc)
@@ -7529,8 +7537,6 @@ else
 /* Print non-sequence info. */
 cartWebStart(cart, acc);
 
-printf("<H4>PseudoGene/Genomic Alignment</H4>");
-printAlignments(pslList, start, "htcCdnaAli", table, acc);
 
 safef(where, sizeof(where), "name = '%s'", acc);
 sr = hRangeQuery(conn, "pseudoGeneLink", chrom, start, end, where, &rowOffset);
@@ -7539,7 +7545,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     pg = pseudoGeneLinkLoad(row+rowOffset);
     if (hTableExists("axtInfo") && pslList != NULL)
         {
-        pseudoPrintPos(pslList->tName, pslList->tStart, pslList->tEnd, pg, table);
+        pseudoPrintPos(pslList, pg, table, start, acc);
         }
     }
 printTrackHtml(tdb);
@@ -7549,49 +7555,6 @@ hFreeConn(&conn);
 }
 
 
-void doPseudoGene(struct trackDb *tdb, char *geneName)
-/* Handle click on ucsc pseudogene gene track. */
-{
-char query[256];
-struct sqlResult *sr;
-char **row;
-boolean isFirst = TRUE, gotAny = FALSE;
-char *gi;
-struct bed *bed = NULL;
-struct pseudoGeneLink *pg;
-struct sqlConnection *conn = hAllocConn();
-char *tbl = cgiUsualString("table", cgiString("g"));
-char *start = cartString(cart, "o");
-genericHeader(tdb, geneName);
-if (sqlTableExists(conn, tdb->tableName))
-    {
-    sprintf(query, "select * from %s where name = '%s' and chromStart = '%s'", tbl, geneName,start);
-    sr = sqlGetResult(conn, query);
-    while ((row = sqlNextRow(sr)) != NULL)
-	{
-        bed = bedLoadN(row+1, 6);
-        }
-    //sqlFreeResult(&sr);
-    pseudoPrintPosHeader(bed);
-    sprintf(query, "select * from pseudoGeneLink where name = '%s'", geneName);
-    sr = sqlGetResult(conn, query);
-    while ((row = sqlNextRow(sr)) != NULL)
-	{
-        pg = pseudoGeneLinkLoad(row);
-        if (hTableExists("axtInfo") && bed != NULL)
-            {
-            pseudoPrintPos(bed->chrom, bed->chromStart, bed->chromEnd, pg, "mrnaBlat");
-            }
-        }
-    }
-//showHomologies(geneName, "softberryHom");
-//geneShowCommon(geneName, tdb, NULL);
-printf("<p><A HREF=\"%s&o=%d&g=getDna&i=%s&c=%s&l=%d&r=%d&strand=%s&table=%s\">"
-	   "View DNA for this feature</A><BR>\n",  hgcPathAndSettings(),
-	   bed->chromStart, cgiEncode(bed->name), bed->chrom, bed->chromStart,
-           bed->chromEnd, "+", tbl);
-printTrackHtml(tdb);
-}
 
 void doSoftberryPred(struct trackDb *tdb, char *geneName)
 /* Handle click on Softberry gene track. */
@@ -13991,10 +13954,6 @@ else if (sameWord(track, "softberryGene"))
 else if (startsWith(track, "pseudoMrna") || startsWith(track, "pseudoGeneLink"))
     {
     doPseudoPsl(tdb, item);
-    }
-else if (sameWord(track, "pseudoUcsc") || sameWord(track, "pseudoUcscSelf"))
-    {
-    doPseudoGene(tdb, item);
     }
 else if (sameWord(track, "borkPseudo"))
     {
