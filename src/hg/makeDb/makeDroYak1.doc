@@ -879,3 +879,19 @@ chainSome $(path1)
     rm -rf blastOut
 
 # End tblastn
+
+
+# MAKE 11.OOC FILE FOR BLAT (DONE 11/4/04 angie)
+    # Use -repMatch=100 (based on size -- for human we use 1024, and 
+    # fly size is ~4.4% of human judging by gapless dm1 genome size from 
+    # featureBits -- we would use 45, but bump that up a bit to be more 
+    # conservative).
+    ssh kkr1u00
+    mkdir /cluster/bluearc/droYak1
+    blat /cluster/data/droYak1/droYak1.2bit /dev/null /dev/null -tileSize=11 \
+      -makeOoc=/cluster/bluearc/droYak1/11.ooc -repMatch=100
+#Wrote 7023 overused 11-mers to /cluster/bluearc/droYak1/11.ooc
+    cp -p /cluster/bluearc/droYak1/*.ooc /iscratch/i/droYak1/
+    iSync
+
+
