@@ -82,7 +82,7 @@ for(chainBlock = chain->blockList; chainBlock; prevChainBlock = chainBlock, chai
     nextChainBlock = chainBlock->next;
     if ((chainBlock->tEnd > tStart) || (chainBlock->qEnd > qStart))
 	{
-	if  (prevChainBlock && !((prevChainBlock->tEnd < tStart) && (prevChainBlock->qEnd < qStart)))
+	if  (prevChainBlock && !((prevChainBlock->tEnd <= tStart) && (prevChainBlock->qEnd <= qStart)))
 	    return FALSE;
 	if  (chainBlock && !((chainBlock->tStart > tEnd) && (chainBlock->qStart > qEnd)))
 	    return FALSE;
@@ -394,19 +394,7 @@ for(sp = spList; sp; sp = sp->next)
     int count = 0;
     /* make sure we have a chainList */
     chainList = NULL;
-    //slReverse(&sp->psl);
     slSort(&sp->psl,pslCmpScoreDesc);
-
-    /*
-    AllocVar(csp);
-    slAddHead(&cspList, csp);
-    csp->qName = cloneString(sp->psl->qName);
-    csp->tName = cloneString(sp->psl->tName);
-    csp->qStrand = sp->psl->strand[0];
-    dyStringClear(dy);
-    dyStringPrintf(dy, "%s%c%s", csp->qName, csp->qStrand, csp->tName);
-    hashAddSaveName(chainHash, dy->string, csp, &csp->name);
-    */
 
     for(psl = sp->psl; psl ;  psl = nextPsl)
 	{
@@ -421,23 +409,15 @@ for(sp = spList; sp; sp = sp->next)
 	assert(tEnd > tStart);
 	assert(qEnd > qStart);
 	/* check for overlap */
-	    psl->next = 0;
-	    fakePslList = psl;
-	    if (chainList)
-		checkInChains(&fakePslList, &chainList, NULL, &addedBases);
-	    if (fakePslList == NULL)
-		{
-		//freez(&psl);
-		continue;
-		}
-	/*
-	for(chain = chainList; chain ;  chain = chain->next)
+	psl->next = 0;
+	fakePslList = psl;
+	if (chainList)
+	    checkInChains(&fakePslList, &chainList, NULL, &addedBases);
+	if (fakePslList == NULL)
 	    {
-	    if ((((tStart < chain->tEnd) && (tEnd > chain->tStart)) &&
-		 (qStart < chain->qEnd) && (qEnd > chain->qStart)))
-		    goto out;
+	    //freez(&psl);
+	    continue;
 	    }
-	    */
 	count++;
 
 	AllocVar(chain);
@@ -466,8 +446,6 @@ for(sp = spList; sp; sp = sp->next)
 	slAddHead(&chainList, chain);
 	chainList = aggregateChains(chainList);
 
-//out:
-	//freez(&psl);
 	}
 
     for(chain = aggregateChains(chainList); chain ;  chain = chain->next)
