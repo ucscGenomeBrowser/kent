@@ -1,3 +1,6 @@
+23:
+     Made -maxIntron a command line option.  Default is 750000.
+
 22:
      Fixed bug in jiggle-small exons that had reverse strand
      consensus as ca/ct rather than ac/ct.  Thanks to Par
