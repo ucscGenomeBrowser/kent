@@ -4399,7 +4399,7 @@ blat -fine -ooc=/scratch/hg/h/11.ooc  /scratch/hg/gs.18/build35/maskedContigs/$(
     #  387166 build123/updateExceptionList.sql
     #  383759 build124/updateExceptionList.sql
 
-# Add Affy SNPs from new submission 
+    # Add Affy SNPs from new submission 
     #!/bin/csh -fe
     # rm -f log ; date ; ./loadAffySnps.csh > & log ; date ; cat log
 
@@ -4438,6 +4438,51 @@ blat -fine -ooc=/scratch/hg/h/11.ooc  /scratch/hg/gs.18/build35/maskedContigs/$(
     #| Affy50K_HindIII |    56859 |
     #| Affy50K_XbaI    |    58494 |
     #+-----------------+----------+
+
+    #March 7, 2005: fix pseudoautosomal snps:
+    #SNP_A-1606360
+    #SNP_A-1606329
+    #SNP_A-1666553
+    #SNP_A-1715750
+    #SNP_A-1726331
+    #SNP_A-1685712
+    #SNP_A-1735899
+    #SNP_A-1726272
+    #SNP_A-1660936
+    #SNP_A-1662285
+    #SNP_A-1680848
+    #SNP_A-1671440
+    #SNP_A-1719355
+    #SNP_A-1716499
+    #SNP_A-1643847
+    #SNP_A-1646007
+    #SNP_A-1715285
+    #SNP_A-1657714
+    #SNP_A-1725038
+    #SNP_A-1713938
+    #SNP_A-1708565
+    #SNP_A-1510243
+    #SNP_A-1510197
+    #SNP_A-1606356
+
+    delete from snp 
+    where  chrom = 'chrY' 
+    and    name in ('SNP_A-1606360','SNP_A-1606329','SNP_A-1666553','SNP_A-1715750','SNP_A-1726331','SNP_A-1685712','SNP_A-1735899','SNP_A-1726272','SNP_A-1660936','SNP_A-1662285','SNP_A-1680848','SNP_A-1671440','SNP_A-1719355','SNP_A-1716499','SNP_A-1643847','SNP_A-1646007','SNP_A-1715285','SNP_A-1657714','SNP_A-1725038','SNP_A-1713938','SNP_A-1708565','SNP_A-1510243','SNP_A-1510197','SNP_A-1606356');
+
+    update snp 
+    set chrom = 'chrX' 
+    where name in ('SNP_A-1606360','SNP_A-1606329','SNP_A-1666553','SNP_A-1715750','SNP_A-1726331','SNP_A-1685712','SNP_A-1735899','SNP_A-1726272','SNP_A-1660936','SNP_A-1662285','SNP_A-1680848','SNP_A-1671440','SNP_A-1719355','SNP_A-1716499','SNP_A-1643847','SNP_A-1646007','SNP_A-1715285','SNP_A-1657714','SNP_A-1725038','SNP_A-1713938','SNP_A-1708565','SNP_A-1510243','SNP_A-1510197','SNP_A-1606356');
+
+    insert into snp 
+	select  bin, 'chrY' as chrom, chromStart, chromEnd, name, score, strand, 
+		observed, molType, class, valid, avHet, avHetSE, func, locType, source, exception 
+	from    snp 
+	where   name in ('SNP_A-1606360','SNP_A-1606329','SNP_A-1666553','SNP_A-1715750','SNP_A-1726331','SNP_A-1685712','SNP_A-1735899','SNP_A-1726272','SNP_A-1660936','SNP_A-1662285','SNP_A-1680848','SNP_A-1671440','SNP_A-1719355','SNP_A-1716499','SNP_A-1643847','SNP_A-1646007','SNP_A-1715285','SNP_A-1657714','SNP_A-1725038','SNP_A-1713938','SNP_A-1708565','SNP_A-1510243','SNP_A-1510197','SNP_A-1606356');
+
+    select chrom, count(*) 
+    from snp 
+    where name in ('SNP_A-1606360','SNP_A-1606329','SNP_A-1666553','SNP_A-1715750','SNP_A-1726331','SNP_A-1685712','SNP_A-1735899','SNP_A-1726272','SNP_A-1660936','SNP_A-1662285','SNP_A-1680848','SNP_A-1671440','SNP_A-1719355','SNP_A-1716499','SNP_A-1643847','SNP_A-1646007','SNP_A-1715285','SNP_A-1657714','SNP_A-1725038','SNP_A-1713938','SNP_A-1708565','SNP_A-1510243','SNP_A-1510197','SNP_A-1606356') 
+    group by chrom;;
 
 
 

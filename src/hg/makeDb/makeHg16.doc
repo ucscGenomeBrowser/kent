@@ -7536,6 +7536,13 @@ LOAD SNP DETAILS (Done.  Daryl Thomas; February 18, 2004)
     ### hg17snpException.23.bed file before continuing with the next
     ### step.  This could/should be fixed in the next iteration.
 
+    # update snpExceptions table to match the number of exceptions found in the snpValid results
+    # these numbers come from counting the numbers of lines in the output files without headers
+    mysql> update snpExceptions set num=60797  where exceptionId=21;
+    mysql> update snpExceptions set num=5657   where exceptionId=22;
+    mysql> update snpExceptions set num=284098 where exceptionId=23;
+    mysql> update snpExceptions set num=173    where exceptionId=24;
+
     # create list of statements to update the snp table and run them
     time tail +3 ${db}snpException.* | awk '/rs/ {printf "%s\t%d\t%d\n",$4,$2,$5}' | sort -k1,2n > exceptionList.txt
     # ~10 seconds
@@ -7592,6 +7599,22 @@ LOAD SNP DETAILS (Done.  Daryl Thomas; February 18, 2004)
     #5 rows in set (52.96 sec)
 
 
+    # March 7, 2005: fixed pseudoautosomal snps:
+    #affy10Kv2.txt:chrX_par  1920780 1920781 SNP_A-1606360   0       ?       C/T
+    #affy10Kv2.txt:chrX_par  2047561 2047562 SNP_A-1510197   0       ?       G/T
+    #affy10Kv2.txt:chrX_par  2047486 2047487 SNP_A-1510243   0       ?       A/G
+    #affy10Kv2.txt:chrX_par  2060858 2060859 SNP_A-1606356   0       ?       A/G
+    #affy10Kv2.txt:chrX_par  2163964 2163965 SNP_A-1606329   0       ?       C/T
+    
+    delete from snp where chrom = 'chrY' and name in ('SNP_A-1606360','SNP_A-1510197','SNP_A-1510243','SNP_A-1606356','SNP_A-1606329');
+    update snp set chrom = 'chrX' where name in ('SNP_A-1606360','SNP_A-1510197','SNP_A-1510243','SNP_A-1606356','SNP_A-1606329');
+    insert into snp 
+	    select  bin, 'chrY' as chrom, chromStart, chromEnd, name, score, strand, 
+		    observed, molType, class, valid, avHet, avHetSE, func, locType, source, exception 
+	    from    snp 
+	    where   name in ('SNP_A-1606360','SNP_A-1510197','SNP_A-1510243','SNP_A-1606356','SNP_A-1606329');
+    select chrom, count(*) from snp where name in ('SNP_A-1606360','SNP_A-1510197','SNP_A-1510243','SNP_A-1606356','SNP_A-1606329') group by chrom;
+    
 
 # JAX ORTHOLOG (WORKING hiram 2004-02-20 )
     # Add Jackson labs info
@@ -10870,3 +10893,4 @@ cat `ls -1 *.lav | sort -g` \
     # Place file obtained from Mark Gerstein at yale in pseudoYale.gtf
     ldHgGene hg16 pseudoYale pseudoYale.gtf
     # Note - I'm guessing how this goes.  Robert left no record. -jk
+
