@@ -69,7 +69,7 @@
 #include "grp.h"
 #include "chromColors.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.619 2003/10/23 15:39:44 heather Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.619.2.1 2003/10/27 23:10:27 heather Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
@@ -1915,6 +1915,8 @@ struct track *userPslTg()
 /* Make track of user pasted sequence. */
 {
 struct track *tg = linkedFeaturesTg();
+struct trackDb *tdb;
+AllocVar(tdb);
 tg->mapName = "hgUserPsl";
 tg->canPack = TRUE;
 tg->visibility = tvPack;
@@ -1924,6 +1926,12 @@ tg->loadItems = loadUserPsl;
 tg->mapItemName = lfMapNameFromExtra;
 tg->priority = 100;
 tg->groupName = "map";
+tdb->tableName = tg->mapName;
+tdb->shortLabel = tg->shortLabel;
+tdb->longLabel = tg->longLabel;
+tdb->type = cloneString("psl");
+trackDbPolish(tdb);
+tg->tdb = tdb;
 return tg;
 }
 
