@@ -98,7 +98,7 @@ void execProc(char *managingHost, char *jobIdString, char *reserved,
 {
 if (fork() == 0)
     {
-    int newStdin, newStdout, newStderr;
+    int newStdin, newStdout, newStderr, execErr;
 
     /* Change to given dir. */
     chdir(dir);
@@ -120,12 +120,12 @@ if (fork() == 0)
     /* Add jobId to environment. */
     addEnv("JOB_ID", jobIdString);
 
-    if (execvp(exe, params) < 0)
+    if ((execErr = execvp(exe, params)) < 0)
 	{
 	perror("");
 	warn("Error execlp'ing %s %s", exe, params);
 	}
-    exit(0);
+    exit(execErr);
     }
 else
     {
@@ -171,7 +171,7 @@ char *managingHost = nextWord(&line);
 char *jobIdString = nextWord(&line);
 
 clearZombies();
-if (line != NULL)
+if (jobIdString != NULL && line != NULL && line[0] != 0)
     {
     int sd;
 
@@ -323,6 +323,7 @@ void doStatus()
 struct dyString *dy = newDyString(256);
 dyStringPrintf(dy, "%d of %d CPUs busy", busyProcs, maxProcs);
 write(connectionHandle, dy->string, dy->stringSize);
+dyStringFree(&dy);
 }
 
 void paraNode()
@@ -350,34 +351,40 @@ if (socketHandle < 0)
 for (;;)
     {
     connectionHandle = netAccept(socketHandle);
-    if (netReadAll(connectionHandle, signature, sigLen) == sigLen)
+    if (connectionHandle >= 0)
 	{
-	if (sameString(paraSig, signature))
+	if (netReadAll(connectionHandle, signature, sigLen) == sigLen)
 	    {
-	    line = buf = netGetLongString(connectionHandle);
-	    logIt("node  %s: %s\n", hostName, line);
-	    command = nextWord(&line);
-	    if (sameString("quit", command))
-		break;
-	    else if (sameString("run", command))
-		doRun(line);
-	    else if (sameString("jobDone", command))
-	        jobDone(line);
-	    else if (sameString("status", command))
-		doStatus();
-	    else if (sameString("kill", command))
-		doKill(line);
-	    else if (sameString("check", command))
-	        doCheck(line);
-	    else if (sameString("resurrect", command))
-	        doResurrect(line);
-	    freez(&buf);
+	    if (sameString(paraSig, signature))
+		{
+		line = buf = netGetLongString(connectionHandle);
+		if (line != NULL)
+		    {
+		    logIt("node  %s: %s\n", hostName, line);
+		    command = nextWord(&line);
+		    if (sameString("quit", command))
+			break;
+		    else if (sameString("run", command))
+			doRun(line);
+		    else if (sameString("jobDone", command))
+			jobDone(line);
+		    else if (sameString("status", command))
+			doStatus();
+		    else if (sameString("kill", command))
+			doKill(line);
+		    else if (sameString("check", command))
+			doCheck(line);
+		    else if (sameString("resurrect", command))
+			doResurrect(line);
+		    freez(&buf);
+		    }
+		}
 	    }
-	}
-    if (connectionHandle != 0)
-	{
-	close(connectionHandle);
-	connectionHandle = 0;
+	if (connectionHandle != 0)
+	    {
+	    close(connectionHandle);
+	    connectionHandle = 0;
+	    }
 	}
     }
 close(socketHandle);
