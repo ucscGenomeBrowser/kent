@@ -4,10 +4,10 @@ exit; # don't actually run this like a script :)
 # Danio Rerio (zebrafish) from Sanger, version Zv3 (released 11/27/03)
 #   Project website:
 #    http://www.sanger.ac.uk/Projects/D_rerio/
-#  Asembly notes:
+#  Assembly notes:
 #    http://www.sanger.ac.uk/Projects/D_rerio/Zv3_assembly_information.shtml
 
-# DOWNLOAD SEQUENCE 
+# DOWNLOAD SEQUENCE (DONE, 2004-05-17, kate)
 
     ssh kksilo
     mkdir /cluster/store7/danRer1
@@ -18,3 +18,340 @@ exit; # don't actually run this like a script :)
     wget ftp://ftp.ensembl.org/pub/assembly/zebrafish/Zv3release/Zv3.supercontigs.agp
     wget ftp://ftp.ensembl.org/pub/assembly/zebrafish/Zv3release/Zv3.supercontigs.fa 
     wget ftp://ftp.ensembl.org/pub/assembly/zebrafish/Zv3release/Zv3.supercontigs.fa.tag
+
+# DOWNLOAD MITOCHONDRION GENOME SEQUENCE (DONE, 2004-05-24, hartera)
+# CREATE ChrM.agp (DONE, 2004-05-27, hartera)
+
+    mkdir /cluster/data/danRer1/M
+    cd /cluster/data/danRer1/M
+    # go to http://www.ncbi.nih.gov/ and search Nucleotide for
+    # "Danio mitochondrion genome".  That shows the gi number:
+    # 8576324 for the accession, AC024175
+ # Use that number in the entrez linking interface to get fasta:
+    wget -O chrM.fa \
+      'http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Text&db=Nucleotide&uid=8576324&dopt=FASTA'
+    # Edit chrM.fa: make sure the header line says it is the
+    # Danio Rerio mitochondrion complete genome, and then replace the
+    # header line with just ">chrM".
+
+    # Make a "pseudo-contig" for processing chrM too:
+    mkdir M/chrM_1
+    sed -e 's/chrM/chrM_1/' M/chrM.fa > M/chrM_1/chrM_1.fa
+    mkdir M/lift
+    echo "chrM_1/chrM_1.fa.out" > M/lift/oOut.lst
+    echo "chrM_1" > M/lift/ordered.lst
+    echo "0	M/chrM_1	16596	chrM	16596" > M/lift/ordered.lft
+
+# create a .agp file for chrM as hgGoldGapGl and other
+# programs require a .agp file so create chrM.agp
+    cat << '_EOF_' > M/chrM.agp
+M       1       16596	1       F	AC024175.3      1       16596	+
+'_EOF_'
+
+# SPLIT AGP FILES BY CHROMOSOME (DONE, 2004-05-26, hartera)
+    ssh kksilo
+    cd /cluster/data/danRer1
+    # There are 2 .agp files: one for supercontigs and then one for contigs
+    # showing how they map on to supercontigs.
+
+    # split up the agp into one per chrom.
+    foreach c ( 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 \
+                                 21 22 23 24 25 )
+      mkdir $c
+      perl -we "while(<>){if (/^$c\t/) {print;}}" \
+        ./Zv3.contigs.agp \
+        > $c/chr$c.contigs.agp
+      perl -we "while(<>){if (/^$c\t/) {print;}}" \
+        ./Zv3.supercontigs.agp \
+        > $c/chr$c.supercontigs.agp
+
+     end 
+     # From agp files, put together all ctg*, NA* and Finished* as chrUn
+     foreach t ( ctg NA Finished )
+        if ($t == "ctg") then 
+           set c = "Un"
+        else 
+           set c = $t
+        endif
+        mkdir $c
+        perl -we "while(<>){if (/^$t/) {print;} }" \
+                   ./Zv3.contigs.agp \
+        >> $c/chr$c.contigs.agp
+        perl -we "while(<>){if (/^$t/) {print;} }" \
+                 ./Zv3.supercontigs.agp \
+        >> $c/chr$c.supercontigs.agp
+
+     end 
+
+# BUILD CHROM-LEVEL SEQUENCE (DONE, 2004-05-27, hartera)
+     ssh kksilo
+     cd /cluster/data/danRer1
+     # Sequence is already in upper case so no need to change
+
+     foreach c ( 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 \
+                                 21 22 23 24 25)
+       echo "Processing ${c}"
+       $HOME/bin/i386/agpToFa -simpleMultiMixed $c/chr$c.supercontigs.agp $c \
+         $c/chr$c.fa ./Zv3.supercontigs.fa
+       echo "${c} - DONE"
+     end
+
+     # Need to change the number for each chromosome in the .agp and .fa 
+     # files to read "chrN" - should have done this before processing 
+     # original sequence and .agp files
+
+     foreach c ( 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 \
+                                 21 22 23 24 25)
+       echo "Processing ${c}"
+         perl -pi -e 's/^>([0-9]+)/>chr$1/' $c/*.fa
+         perl -pi -e 's/^([0-9]+)/chr$1/' $c/*.agp
+       echo "${c} - DONE"
+     end
+     
+# CREATE ChrUn, chrNA AND chrFinished FASTA, AGP, GAP AND LIFT FILES FROM 
+# ctg*, NA* AND Finished* SUPERCONTIGS 
+# (DONE, 2005-05-27, hartera)
+     ssh kksilo
+     cd /cluster/data/danRer1
+     foreach c ( Finished NA Un )
+       awk '{print $1;}' $c/chr$c.supercontigs.agp > $c/chr$c.supercontigs.lst
+       $HOME/bin/i386/faSomeRecords /cluster/data/danRer1/Zv3.supercontigs.fa \
+          $c/chr$c.supercontigs.lst $c/chr$c.fa
+     end 
+  
+     # check FASTA files then generate AGP and lift files 
+     # from the chromosome fastas 
+    
+     foreach c ( Finished NA Un )
+        $HOME/bin/i386/scaffoldFaToAgp $c/chr$c.fa
+        mv $c/chr$c.fa $c/chr$c.supercontigs.fa
+        perl -pi -e "s/chrUn/chr$c/" $c/chr$c.*
+        $HOME/bin/i386/agpToFa -simpleMultiMixed $c/chr$c.agp \
+                      chr$c $c/chr$c.fa ./Zv3.supercontigs.fa 
+     end
+     # chrFinished
+     # scaffold gap size is 1000, total scaffolds: 209
+     # chrom size is 40167097
+     # chrNA
+     # scaffold gap size is 1000, total scaffolds: 54798
+     # chrom size is 390413307
+     # chrUn
+     # scaffold gap size is 1000, total scaffolds: 1842
+     # chrom size is 367113659
+
+# CHECK CHROM AND VIRTUAL CHROM SEQUENCES (DONE, 2004-05-27, hartera)
+     # Check that the size of each chromosome .fa file is equal to the 
+     # last coord of the .agp:
+     ssh hgwdev
+     cd /cluster/data/danRer1
+     foreach c ( Finished NA Un )
+       foreach f ( $c/chr$c.agp )
+         set agpLen = `tail -1 $f | awk '{print $3;}'`
+         set g = $f:r
+         set faLen = `faSize $g.fa | awk '{print $1;}'`
+         if ($agpLen == $faLen) then
+           echo "   OK: $f length = $g length = $faLen"
+         else
+           echo "ERROR:  $f length = $agpLen, but $g length = $faLen"          
+         endif
+       end
+     end
+
+     foreach c ( 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 \
+                                 21 22 23 24 25)
+       foreach f ( $c/chr$c.supercontigs.agp )
+         set agpLen = `tail -1 $f | awk '{print $3;}'`
+         set h = $f:r
+         set g = $h:r
+         echo "Getting size of $g.fa"
+         set faLen = `faSize $g.fa | awk '{print $1;}'`
+         if ($agpLen == $faLen) then
+           echo "   OK: $f length = $g length = $faLen"
+         else
+           echo "ERROR:  $f length = $agpLen, but $g length = $faLen"          
+         endif
+       end
+     end
+     # All are OK so all Fasta files are the correct size
+
+# BREAK UP SEQUENCE INTO 5MB CHUNKS AT CONTIGS/GAPS FOR CLUSTER RUNS
+# (DONE, 2005-05-27, hartera)
+    
+     ssh kksilo
+     cd /cluster/data/danRer1
+     foreach c ( 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 \
+                                  21 22 23 24 25 Finished NA Un )
+       foreach agp ($c/chr$c.{,contigs.}agp)
+         if (-e $agp) then
+           set fa = $c/chr$c.fa
+           echo splitting $agp and $fa
+           cp -p $agp $agp.bak
+           cp -p $fa $fa.bak
+           splitFaIntoContigs $agp $fa . -nSize=5000000
+         endif
+       end
+     end
+
+# Create list of chromsosomes (DONE, 2004-05-27, hartera)
+    ssh hgwdev
+    cd /cluster/data/danRer1
+    foreach f (*/*.agp)
+      set chr = `echo $f:h | sed -e 's/^chr//'`
+      echo $chr >> chrom
+    end
+    sort -n chrom | uniq > chrom.lst
+    rm chrom
+
+# MAKE JKSTUFF AND BED DIRECTORIES (DONE, 2004-05-27, hartera)
+    # This used to hold scripts -- better to keep them inline here 
+    # Now it should just hold lift file(s) and
+    # temporary scripts made by copy-paste from this file.
+    mkdir /cluster/data/danRer1/jkStuff
+    # This is where most tracks will be built:
+    mkdir /cluster/data/danRer1/bed
+
+# CREATING DATABASE (DONE, 2004-05-27 - hartera)   
+    # Create the database.
+    # next machine                                           
+    ssh hgwdev
+    echo 'create database danRer1' | hgsql ''
+    # if you need to delete that database:  !!! WILL DELETE EVERYTHING !!!
+    echo 'drop database danRer1' | hgsql danRer1
+    # Use df to ake sure there is at least 5 gig free on
+    df -h /var/lib/mysql
+# Before loading data:
+# Filesystem            Size  Used Avail Use% Mounted on
+# /dev/sdc1             1.8T  303G  1.4T  19% /var/lib/mysql
+
+# CREATING GRP TABLE FOR TRACK GROUPING (DONE, 2004-05-27, hartera)
+    # next machine
+    ssh hgwdev
+    #  the following command copies all the data from the table
+    #  grp in the database galGal2 to our new database ce2
+    echo "create table grp (PRIMARY KEY(NAME)) select * from galGal2.grp" \
+      | hgsql danRer1
+    # if you need to delete that table:   !!! WILL DELETE ALL grp data !!!
+    echo 'drop table grp;' | hgsql danRer1
+
+# REPEAT MASKING - Run RepeatMasker on chroms (DONE, 2004-05-28, hartera)    #- Split contigs into 500kb chunks, at gaps if possible:
+    ssh kksilo
+    cd /cluster/data/danRer1
+    foreach c (`cat chrom.lst`)
+      foreach d ($c/chr${c}*_?{,?})
+        cd $d
+        echo "splitting $d"
+        set contig = $d:t
+        ~/bin/i386/faSplit gap $contig.fa 500000 ${contig}_ -lift=$contig.lft \
+            -minGapSize=100
+        cd ../..
+      end
+    end
+
+#- Make the run directory and job list:
+    cd /cluster/data/danRer1
+    cat << '_EOF_' > jkStuff/RMZebrafish
+#!/bin/csh -fe
+                                                                                
+cd $1
+pushd .
+/bin/mkdir -p /tmp/danRer1/$2
+/bin/cp $2 /tmp/danRer1/$2/
+cd /tmp/danRer1/$2
+/cluster/bluearc/RepeatMasker/RepeatMasker -ali -s -spec danio $2
+popd
+/bin/cp /tmp/danRer1/$2/$2.out ./
+if (-e /tmp/danRer1/$2/$2.align) /bin/cp /tmp/danRer1/$2/$2.align ./
+if (-e /tmp/danRer1/$2/$2.tbl) /bin/cp /tmp/danRer1/$2/$2.tbl ./
+if (-e /tmp/danRer1/$2/$2.cat) /bin/cp /tmp/danRer1/$2/$2.cat ./
+/bin/rm -fr /tmp/danRer1/$2/*
+/bin/rmdir --ignore-fail-on-non-empty /tmp/danRer1/$2
+/bin/rmdir --ignore-fail-on-non-empty /tmp/danRer1
+'_EOF_'
+    # << this line makes emacs coloring happy
+    chmod +x jkStuff/RMZebrafish
+    mkdir RMRun
+    cp /dev/null RMRun/RMJobs
+    foreach c (`cat chrom.lst`)
+      foreach d ($c/chr${c}_?{,?})
+          set ctg = $d:t
+          foreach f ( $d/${ctg}_?{,?}.fa )
+            set f = $f:t
+            echo /cluster/data/danRer1/jkStuff/RMZebrafish \
+                 /cluster/data/danRer1/$d $f \
+               '{'check out line+ /cluster/data/danRer1/$d/$f.out'}' \
+              >> RMRun/RMJobs
+          end
+      end
+    end
+
+    #- Do the run
+    ssh kk
+    cd /cluster/data/danRer1/RMRun
+    para create RMJobs
+    para try, para check, para check, para push, para check,...
+# para time
+# Completed: 3623 of 3623 jobs
+# CPU time in finished jobs:    6514173s  108569.55m  1809.49h   75.40d  0.207 y
+# IO & Wait Time:                 34466s     574.43m     9.57h    0.40d  0.001 y
+# Average job time:                1808s      30.13m     0.50h    0.02d
+# Longest job:                     2539s      42.32m     0.71h    0.03d
+# Submission to last job:         23551s     392.52m     6.54h    0.27d
+
+    #- Lift up the 500KB chunk .out's to 5MB ("pseudo-contig") level
+    ssh kksilo
+    cd /cluster/data/danRer1
+    foreach d (*/chr*_?{,?})
+      set contig = $d:t
+      echo $contig
+      liftUp $d/$contig.fa.out $d/$contig.lft warn $d/${contig}_*.fa.out \
+        > /dev/null
+    end
+
+    #- Lift pseudo-contigs to chromosome level
+    foreach c (`cat chrom.lst`)
+      echo lifting $c
+      cd $c
+      if (-e lift/ordered.lft && ! -z lift/ordered.lft) then
+        liftUp chr$c.fa.out lift/ordered.lft warn `cat lift/oOut.lst` \
+        > /dev/null
+      endif
+      cd ..
+    end
+
+    #- Load the .out files into the database with:
+    ssh hgwdev
+    cd /cluster/data/danRer1
+    hgLoadOut danRer1 */chr*.fa.out
+
+# MAKE LIFTALL.LFT (DONE, 2004-05-28, hartera)
+    ssh kksilo
+    cd /cluster/data/danRer1
+    cat */lift/ordered.lft > jkStuff/liftAll.lft
+
+# SIMPLE REPEAT [TRF] TRACK  (in progress, 2004-05-28, hartera)
+    # TRF runs pretty quickly now... it takes a few hours total runtime, 
+    # so instead of binrsyncing and para-running, just do this on the
+    # local fileserver
+    ssh kksilo
+    mkdir -p /cluster/data/danRer1/bed/simpleRepeat
+    cd /cluster/data/danRer1/bed/simpleRepeat
+    mkdir trf
+    cp /dev/null jobs.csh
+    foreach d (/cluster/data/danRer1/*/chr*_?{,?})
+      set ctg = $d:t
+      foreach f ($d/${ctg}.fa)
+        set fout = $f:t:r.bed
+        echo $fout
+        echo "/cluster/bin/i386/trfBig -trf=/cluster/bin/i386/trf $f /dev/null -bedAt=trf/$fout -tempDir=/tmp" \
+        >> jobs.csh
+      end
+    end
+
+    chmod a+x jobs.csh
+    csh -ef jobs.csh >&! jobs.log &
+    # check on this with
+    tail -f jobs.log
+    wc -l jobs.csh
+    ls -1 trf | wc -l
+    endsInLf trf/*
+
