@@ -74,7 +74,7 @@
 
 #define USUAL
 //#define AFFYSPLICE
-static char const rcsid[] = "$Id: altSplice.c,v 1.13 2004/07/06 22:33:55 sugnet Exp $";
+static char const rcsid[] = "$Id: altSplice.c,v 1.14 2004/07/20 21:45:15 sugnet Exp $";
 
 int cassetteCount = 0; /* Number of cassette exons counted. */
 int misSense = 0;      /* Number of cassette exons that would introduce a missense mutation. */
@@ -341,7 +341,7 @@ for(mc = mcList; mc != NULL; mc = mc->next)
 	/* Convert back to genomic coordinates. */
 	altGraphXoffset(ag, chromStart);
 	/* Sort vertices so that they are chromosomal order */
-	altGraphXVertPosSort(ag);
+ 	altGraphXVertPosSort(ag);
 	/* write to file */
 	if(agIsUnique(ag))
 	   altGraphXTabOut(ag, out);    /* genoSeq and maList are freed with ci and gg */
@@ -582,6 +582,11 @@ int chromStart = BIGNUM;
 int chromEnd = -1;
 
 pslList = getPsls(gp, conn);
+if(slCount(pslList) == 0)
+    {
+    warn("No available alignments for %s.", gp->name);
+    return NULL;
+    }
 /* expand to find the furthest boundaries of alignments */
 expandToMaxAlignment(pslList, chrom, &chromStart, &chromEnd);
 
@@ -756,10 +761,11 @@ for(gp = gpList; gp != NULL & count < 5; )
     if (memTest != TRUE) 
 	gp = gp->next;
     }
+warn("%d gene loci led to %d clusters", slCount(gpList), clusterCount);
 genePredFreeList(&gpList);
 hFreeConn(&conn);
-uglyf("%d genePredictions with %d clusters, %d cassette exons, %d of are not mod 3.\n",
-      slCount(gpList), clusterCount, cassetteCount, misSense);
+/* uglyf("%d genePredictions with %d clusters, %d cassette exons, %d of are not mod 3.\n", */
+/*       slCount(gpList), clusterCount, cassetteCount, misSense); */
 }
 
 int main(int argc, char *argv[])
