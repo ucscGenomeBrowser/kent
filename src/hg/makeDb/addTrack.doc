@@ -116,7 +116,7 @@ C) Loading a psl file
    kent/src/hg/pslSort or just plain Unix sort for this if necessary.
    If the number of alignments is somewhat modest (say less than 
    500,000) then do
-   	hgLoadPsl database -table=tableName file.bed -tNameIx
+   	hgLoadPsl database -table=tableName file.psl -tNameIx
    This will load everything into one big table.  For huge numbers of
    alignments the browser will be faster if you first split up the
    date into one file for each chromosome.  Name these files 
