@@ -38,6 +38,14 @@ color 100,50,0
 altColor 175,150,128
 type genePred 
 
+track affyU74
+shortLabel Affymetrix U74
+longLabel Alignments of Affymetrix Targets from MG-U74 v2 (A,B, and C)
+group regulation
+priority 85
+visibility hide
+type psl .
+
 track blatFish
 shortLabel Tetraodon Blat
 longLabel Tetraodon nigroviridis Translated Blat Alignments
