@@ -141,7 +141,7 @@
 #include "bed6FloatScore.h"
 #include "pscreen.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.710 2004/07/29 22:03:34 angie Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.711 2004/08/03 23:44:19 braney Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -13849,7 +13849,6 @@ slSort(&pslList, pslCmpMatch);
 if (slCount(pslList) > 1)
     printf("<P>The alignment you clicked on is first in the table below.<BR>\n");
 printf("<TT><PRE>");
-printf("                                     QUERY             TARGET\n");
 printf("ALIGNMENT PEPTIDE COVERAGE IDENTITY  START END EXTENT  STRAND   LINK TO BROWSER \n");
 printf("--------------------------------------------------------------------------------\n");
 for (same = 1; same >= 0; same -= 1)
