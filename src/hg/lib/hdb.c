@@ -270,6 +270,8 @@ int hChromSize(char *chromName)
 {
 struct sqlConnection *conn = hAllocConn();
 int size = hdbChromSize(conn, chromName);
+if (size == 0)
+    errAbort("There is no chromosome %s in database %s.", chromName, hdbName);
 hFreeConn(&conn);
 return size;
 }
@@ -279,6 +281,8 @@ int hChromSize2(char *chromName)
 {
 struct sqlConnection *conn = hAllocConn2();
 int size = hdbChromSize(conn, chromName);
+if (size == 0)
+    errAbort("There is no chromosome %s in database %s.", chromName, hdbName2);
 hFreeConn2(&conn);
 return size;
 }
