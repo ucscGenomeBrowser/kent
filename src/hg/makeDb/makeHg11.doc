@@ -289,7 +289,11 @@ o - Put orientation info on ESTs into database:
      para try 
      para push
    check until done, or use 'para shove'
-DONE - BUT WHEN DOES THIS GO INTO THE DB???
+
+When the cluster run is done do:
+liftUp estOrientInfo.bed ~/oo/jkStuff/liftAll.lft warn ei/*.tab
+hgLoadBed hg11 estOrientInfo estOrientInfo.bed -sqlTable=$HOME/src/hg/lib/estOrientInfo.sql
+DONE
 
 o - Create rnaCluster table
    ssh hgwdev
@@ -589,17 +593,27 @@ Load into database as so:
        hgLoadRna add hg11 /cluster/store1/mrna.129/xenoRna.fa xenoRna.ra
 DONE
 Similarly do xenoEst aligments:
+   Prepare the est data:
+        cd /cluster/store1/genbank.129
+        gunzip -c gbest*.gz | gbToFaRa ~kent/hg/h/xenoRna.fil ../mrna.129/xenoEst.fa ../mrna.129/xenoEst.ra ../mrna.129/xenoEst.ta stdin
+        cd /cluster/store1/mrna.129
+        faSplit sequence xenoEst.fa 16 xenoEst    
+
        ssh kkstore
        cd /cluster/store1/gs.8/build29/oo/bed
        mkdir xenoEst
        cd xenoEst
        mkdir psl
        ls -1S /scratch/hg/gs.12/build29/trfFa/*.fa.trf > human.lst
+       cp /cluster/store1/mrna.129/xenoEst?*.fa /scratch/hg/mrna.129
        ls -1S /scratch/hg/mrna.129/xenoEst?*.fa > mrna.lst
-       cp ~kent/lastOo/bed/xenoEst/gsub .IN PROGRESS - making xenoEST.fa /.ra
+       cp ~kent/lastOo/bed/xenoEst/gsub .
+
+Request a binrysnc from the admin's of kkstore's /scratch/hg/mrna.129
+When done, do:
        gensub2 human.lst mrna.lst gsub spec
        para create spec
-       para push
+       para push IN PROGRESS
 
 Sort xenoEst alignments:
        ssh kkstore
@@ -986,3 +1000,13 @@ LOADING MOUSE MM2 BLASTZ ALIGNMENTS FROM PENN STATE: (markd)
        /cluster/store1/gs.12/build29/bed/blastz.mm2.2002-04-14/aar/xali
      - Loaded into aarMm2
 
+ MITOCHONDRIAL DNA PSEUDO-CHROMOSOME
+Download the fasta file from http://www.gen.emory.edu/MITOMAP/mitomapRCRS.fasta
+Put it in /cluster/store1/mrna.129
+ssh hgwdev
+cd ~/oo
+mkdir M
+cp /cluster/store1/mrna.129/mitomapRCRS.fasta M/chrM.fa
+Edit jkStuff/makeNib.sh to make sure it also has the "M" directory in its file list
+tcsh jkStuff/makeNib.sh
+hgNibSeq -preMadeNib hg11 /cluster/store1/gs.12/build29/nib ?/chr*.fa ??/chr*.fa
