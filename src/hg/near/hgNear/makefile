@@ -25,4 +25,4 @@ compile: $O $(MYLIBS)
 	chmod a+rx $X
 
 clean:
-	rm *.o
+	rm -f *.o $X
