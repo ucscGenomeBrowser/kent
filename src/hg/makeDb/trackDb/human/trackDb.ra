@@ -488,6 +488,14 @@ visibility hide
 type bed 6 +
 exonArrows off
 
+track affyU133Plus2
+shortLabel Affy U133Plus2
+longLabel Alignments of Affymetrix Consensus/Exemplars from HG-U133 Plus 2.0
+group regulation
+priority 89.15
+visibility hide
+type psl .
+
 searchTable affyGnf
 searchMethod exact
 searchType bed
