@@ -305,13 +305,13 @@ stored in a single table rather than one table per chromosome:</P>
   href="#PslInfo">affyGnf1m</A> 
   - Sequences used for probe selection on Affy GNF1M chips</LI>
   <LI><A 
-  href="#PslInfo">affyGnfU74A</A> 
+  href="#BED">affyGnfU74A</A> 
   - Sequences used for probe selection on Affy GNFU74A chips</LI>
   <LI><A 
-  href="#PslInfo">affyGnfU74B</A> 
+  href="#BED">affyGnfU74B</A> 
   - Sequences used for probe selection on Affy GNFU74B chips</LI>
   <LI><A 
-  href="#PslInfo">affyGnfU74C</A> 
+  href="#BED">affyGnfU74C</A> 
   - Sequences used for probe selection on Affy GNFU74C chips</LI>
   <LI><A 
   href="#PslInfo">affyMOE430</A> 
@@ -2063,6 +2063,16 @@ Last used Apr. 2001.
 </PRE>
 
 <H4><A name=ExpData></A>Expression Data</H4>
+<PRE>table expData
+"Expression data (no mapping, just spots)"
+   (
+   string name; 		"Name of gene/target/probe etc."
+   uint expCount; 		"Number of scores"
+   float[expCount] expScores; 	"Scores. May be absolute or relative ratio"
+   )
+</PRE>
+
+<H4><A name=ExpRatio></A>Expression Ratio</H4>
 <PRE>table expData
 "Expression data (no mapping, just spots)"
    (
