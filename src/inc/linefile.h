@@ -32,12 +32,6 @@ struct lineFile *lineFileMayOpen(char *fileName, bool zTerm);
 struct lineFile *lineFileOpen(char *fileName, bool zTerm);
 /* Open up a lineFile or die trying. */
 
-struct lineFile *lineFileMayOpenLocal(char *fileName, bool zTerm);
-/* Try and open up a lineFile not mounted NFS. */
-
-struct lineFile *lineFileOpenLocal(char *fileName, bool zTerm);
-/* Open up a lineFile not mounted NFS or die trying. */
-
 struct lineFile *lineFileAttatch(char *fileName, bool zTerm, int fd);
 /* Wrap a line file around an open'd file. */
 #define lineFileAttach lineFileAttatch  /* I'm a bad speller, oops. */
