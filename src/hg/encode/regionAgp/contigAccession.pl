@@ -10,7 +10,7 @@
 # The format of the summaries and the contig naming convention
 # differs for each project
 
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/regionAgp/contigAccession.pl,v 1.4 2005/03/18 00:34:45 kate Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/regionAgp/contigAccession.pl,v 1.5 2005/03/23 01:09:04 kate Exp $
 
 sub usage() {
     print "usage: contigAccession <summaryfile>\n";
@@ -80,6 +80,25 @@ while (<SUMMARY>) {
         $_ = <SUMMARY>;
         ($gi, $num, $gb, $acc) = split /\|/;
         print "$contig\t$acc\n";
+    } elsif (/^Bos/) {
+        # scaffold name is BtUn_WGA*_1, in the 3nd line in the Genbank summary
+        # and SCAFFOLD* in the AGP file
+        # accession is also on the 3rd line
+        # skip superscaffolds
+        if (/super/) {
+            # skip superscaffolds
+            $_ = <SUMMARY>;
+            $_ = <SUMMARY>;
+            $_ = <SUMMARY>;
+            $_ = <SUMMARY>;
+        } else {
+            $_ = <SUMMARY>;
+            chomp;
+            ($gi, $num, $gb, $acc, $contig) = split /\|/;
+            $contig =~ s/BtUn_WGA/SCAFFOLD/;
+            $contig =~ s/_1.*//;
+            print "$contig\t$acc\n";
+        }
     } elsif (/^Tetraodon/) {
         # contig name is SCAF*, in the 2nd line in the Genbank summary
         # and the same in the AGP files from the assembly
