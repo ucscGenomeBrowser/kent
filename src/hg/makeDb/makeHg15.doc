@@ -3439,6 +3439,12 @@ rm -rf out
         axtToMaf blastz.rn3/axtNet300 /cluster/data/hg15/chrom.sizes /cluster/data/mm3/chrom.sizes axtNet300/$i.rn3.maf -tPrefix=hg15. -qPrefix=rn3. 
         /cluster/bin/penn/humor.v4 axtNet300/$i.mm3.maf axtNet300/$i.rn3.maf $multizDir/$i.hmr.axtNet300.maf
     end
+run on kkr9 cluster:
+CPU time in finished jobs:      18977s     316.28m     5.27h    0.22d  0.001 y
+IO & Wait Time:                  1237s      20.62m     0.34h    0.01d  0.000 y
+Average job time:                 470s       7.83m     0.13h    0.01d
+Longest job:                     1762s      29.37m     0.49h    0.02d
+Submission to last job:          1817s      30.28m     0.50h    0.02d
 
     mkdir -p /gbdb/hg15/humor300
     cd /gbdb/hg15/humor300
