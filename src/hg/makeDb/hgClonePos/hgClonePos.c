@@ -11,7 +11,7 @@
 #include "gsSeqInfo.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: hgClonePos.c,v 1.12 2004/06/17 19:13:28 hiram Exp $";
+static char const rcsid[] = "$Id: hgClonePos.c,v 1.13 2004/07/16 21:58:17 hiram Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -23,14 +23,16 @@ errAbort(
   "options:\n"
   "   -chromLst=chrom.lst - chromosomes subdirs are named in chrom.lst (1, 2, ...)\n"
   "   -maxErr=N  set maximum allowed errors before aborting (default 0)\n"
+  "   -maxWarn=N  set maximum number of warnings to print (default 10)\n"
   "   -verbose=N  set verbose level to N\n"
   "example:\n"
   "   cd /cluster/store5/gs.18/build35\n"
   "   hgClonePos -chromLst=chrom.lst hg17 build35 ./sequence.inf \\\n"
-  "       /cluster/store5/gs.18 -maxErr=3");
+  "       /cluster/store5/gs.18 -maxErr=3 -maxWarn=2000");
 }
 
 int maxErr = 0;
+int maxWarn = 10;
 
 char *createClonePos = 
 "CREATE TABLE clonePos (\n"
@@ -43,7 +45,7 @@ char *createClonePos =
 "   stage char(1) not null,	# F/D/P for finished/draft/predraft\n"
 "   faFile varchar(255) not null,	# File with sequence.\n"
 "             #Indices\n"
-"   PRIMARY KEY(name(12)),\n"
+"   INDEX(name(12)),\n"
 "   INDEX(chrom(12),chromStart),\n"
 "   INDEX(chrom(12),chromEnd)\n"
 ")\n";
@@ -174,7 +176,7 @@ int numStages = strlen(stages);
 int i;
 char pathName[512];
 char *finfFile, stage;
-int warnsLeft = 10;	/* Only give first 10 warnings about missing clones. */
+int warnsLeft = maxWarn; /* Only show first maxWarn warnings about missing clones. */
 char cloneName[256];
 struct clonePos *clone;
 int wordCount, cloneCount;
@@ -224,7 +226,7 @@ char *line, *words[16];
 int lineSize, wordCount;
 struct clonePos *clone;
 struct gsSeqInfo gs;
-int warnsLeft = 10;	/* Only give first 10 warnings about missing clones. */
+int warnsLeft = maxWarn;  /* Only show first maxWarn warnings about missing clones. */
 static char stages[] = "PPDF";
 
 printf("Processing %s\n", seqInfoName);
@@ -345,6 +347,7 @@ optionHash(&argc, argv);
 if (argc != 5)
     usage();
 maxErr = optionInt("maxErr", maxErr);
+maxWarn = optionInt("maxWarn", maxWarn);
 hgClonePos(argv[1], argv[2], argv[3], argv[4]);
 return 0;
 }
