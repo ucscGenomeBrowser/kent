@@ -159,3 +159,18 @@ shortCircuit 1
 termRegex [gkt][a-z]{3}(_[gkt][a-z]{3})?(_[0-9]+)?
 searchPriority 15
 
+searchName miRNAPrefix
+searchTable miRNA
+searchMethod prefix
+searchType bed
+shortCircuit 1
+termRegex rno-(mir|let)-[0-9]+[a-z]?
+dontCheck rno-(mir|let)-[0-9]+[a-z]?(-[0-9]+)?
+searchPriority 18
+
+searchTable miRNA
+searchMethod exact
+searchType bed
+shortCircuit 1
+termRegex rno-(mir|let)-.+
+searchPriority 18.5
