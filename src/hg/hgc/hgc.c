@@ -44,6 +44,7 @@
 #include "knownMore.h"
 #include "snp.h"
 #include "softberryHom.h"
+#include "sanger22extra.h"
 #include "exprBed.h"
 #include "refLink.h"
 #include "hgConfig.h"
@@ -2662,6 +2663,46 @@ webEnd();
 }
 
 
+void showSangerExtra(char *geneName, char *extraTable)
+/* Show info from sanger22extra table if it exists. */
+{
+if (hTableExists(extraTable))
+    {
+    struct sanger22extra se;
+    char query[256];
+    struct sqlConnection *conn = hAllocConn();
+    struct sqlResult *sr;
+    char **row;
+
+    sprintf(query, "select * from %s where name = '%s'", extraTable, geneName);
+    sr = sqlGetResult(conn, query);
+    while ((row = sqlNextRow(sr)) != NULL)
+        {
+	sanger22extraStaticLoad(row, &se);
+	printf("<B>Name:</B>  %s<BR>\n", se.name);
+	if (!sameString(se.name, se.locus))
+	    printf("<B>Locus:</B> %s<BR>\n", se.locus);
+	printf("<B>Description:</B> %s<BR>\n", se.description);
+	printf("<B>Gene type:</B> %s<BR>\n", se.geneType);
+	if (se.cdsType[0] != 0 && !sameString(se.geneType, se.cdsType))
+	    printf("<B>CDS type:</B> %s<BR>\n", se.cdsType);
+	}
+    sqlFreeResult(&sr);
+    hFreeConn(&conn);
+    }
+}
+
+void doSangerGene(struct trackDb *tdb, char *geneName, char *pepTable, char *mrnaTable, char *extraTable)
+/* Handle click on Sanger gene track. */
+{
+genericHeader(tdb, geneName);
+showSangerExtra(geneName, extraTable);
+geneShowCommon(geneName, tdb->tableName, pepTable);
+puts(tdb->html);
+webEnd();
+}
+
+
 void parseChromPointPos(char *pos, char *retChrom, int *retPos)
 /* Parse out chrN:123 into chrN and 123. */
 {
@@ -4484,6 +4525,14 @@ else if (sameWord(track, "genieKnown"))
 else if (sameWord(track, "softberryGene"))
     {
     doSoftberryPred(tdb, item);
+    }
+else if (sameWord(track, "sanger22"))
+    {
+    doSangerGene(tdb, item, "sanger22pep", "sanger22mrna", "sanger22extra");
+    }
+else if (sameWord(track, "sanger20"))
+    {
+    doSangerGene(tdb, item, "sanger20pep", "sanger20mrna", "sanger20extra");
     }
 else if (sameWord(track, "genomicDups"))
     {
