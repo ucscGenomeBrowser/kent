@@ -128,6 +128,8 @@ struct chain *aggregateChains( struct chain *chainIn)
 {
 struct chain *outChain = NULL;
 struct chain *chain1=NULL, *chain2, *chain2Next, *prevChain2;
+struct psl *totalPsl1;
+struct psl *totalPsl2;
 
 slSort(&chainIn, chainCmpTarget);
 
@@ -150,6 +152,21 @@ while(chainIn)
 		assert(chain1->tEnd <= chain2->tStart);
 		chain1->tEnd =  chain2->tEnd;
 		chain1->qEnd =  chain2->qEnd;
+
+		if (outPsl)
+		    {
+		    totalPsl1 = (struct psl *)chain1->id;
+		    totalPsl2 = (struct psl *)chain2->id;
+		    totalPsl1->match += totalPsl2->match;
+		    totalPsl1->misMatch += totalPsl2->misMatch;
+		    totalPsl1->repMatch += totalPsl2->repMatch;
+		    totalPsl1->nCount += totalPsl2->nCount;	
+		    totalPsl1->qNumInsert += totalPsl2->qNumInsert;
+		    totalPsl1->qBaseInsert += totalPsl2->qBaseInsert;
+		    totalPsl1->tNumInsert += totalPsl2->tNumInsert;
+		    totalPsl1->tBaseInsert += totalPsl2->tBaseInsert;
+		    }
+	
 		chain1->blockList = slCat(chain1->blockList,chain2->blockList);
 		chain2->blockList = NULL;
 		if (prevChain2)
