@@ -564,17 +564,13 @@ visibility dense
 chromosomes chr22,
 type bed 15 +
 
-
 track ancientR
 shortLabel Ancient Repeats
 longLabel Human/Mouse Ancient Repeats
 priority 41
 visibility dense
-color 20,20,170
-altColor 255,240,200
 spectrum on
 chromosomes chr1,
 type bed 12
 private on
-
 
