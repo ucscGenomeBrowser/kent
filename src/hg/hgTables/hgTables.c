@@ -13,7 +13,7 @@
 #include "grp.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: hgTables.c,v 1.2 2004/07/12 23:47:24 kent Exp $";
+static char const rcsid[] = "$Id: hgTables.c,v 1.3 2004/07/13 08:24:11 kent Exp $";
 
 
 void usage()
@@ -109,7 +109,7 @@ pushAbortHandler(textAbortHandler);
 
 /* --------- Test Page --------------------- */
 
-void testPage(struct sqlConnection *conn)
+void doTest(struct sqlConnection *conn)
 /* Put up a page to see what happens. */
 {
 textOpen();
@@ -246,11 +246,24 @@ dyStringPrintf(dy, "document.mainForm.%s.options", var);
 dyStringPrintf(dy, "[document.mainForm.%s.selectedIndex].value;", var);
 }
 
+void jsTextCarryOver(struct dyString *dy, char *var)
+/* Add statement to carry-over text item to dy. */
+{
+dyStringPrintf(dy, 
+    " document.orgForm.%s.value=document.mainForm.%s.value;",
+    var, var);
+}
+
 struct dyString *onChangeStart()
 /* Start up a javascript onchange command */
 {
 struct dyString *dy = dyStringNew(1024);
 dyStringAppend(dy, "onchange=\"");
+jsDropDownCarryOver(dy, hgtaTrack);
+jsDropDownCarryOver(dy, hgtaGroup);
+dyStringAppend(dy, 
+	" document.orgForm.hgta_regionType.value=regionType;");
+jsTextCarryOver(dy, hgtaRange);
 return dy;
 }
 
@@ -266,8 +279,6 @@ char *onChangeOrg()
 {
 struct dyString *dy = onChangeStart();
 jsDropDownCarryOver(dy, "org");
-jsDropDownCarryOver(dy, hgtaTrack);
-jsDropDownCarryOver(dy, hgtaGroup);
 dyStringAppend(dy, " document.orgForm.db.value=0;");
 return onChangeEnd(&dy);
 }
@@ -277,8 +288,6 @@ char *onChangeDb()
 {
 struct dyString *dy = onChangeStart();
 jsDropDownCarryOver(dy, "db");
-jsDropDownCarryOver(dy, hgtaTrack);
-jsDropDownCarryOver(dy, hgtaGroup);
 return onChangeEnd(&dy);
 }
 
@@ -288,11 +297,20 @@ char *onChangeGroup()
 struct dyString *dy = onChangeStart();
 jsDropDownCarryOver(dy, "db");
 jsDropDownCarryOver(dy, "org");
-jsDropDownCarryOver(dy, hgtaTrack);
-jsDropDownCarryOver(dy, hgtaGroup);
 return onChangeEnd(&dy);
 }
 
+void makeRegionButton(char *val, char *selVal)
+/* Make region radio button including a little Javascript
+ * to save selection state. */
+{
+hPrintf("<INPUT TYPE=RADIO NAME=\"hgtaRegionType\"");
+hPrintf(" VALUE=\"%s\"", val);
+hPrintf(" onClick=\"regionType='%s';\"", val);
+if (sameString(val, selVal))
+    hPrintf(" CHECKED");
+hPrintf(">");
+}
 
 void showMainControlTable(struct sqlConnection *conn)
 /* Put up table with main controls for main page. */
@@ -342,18 +360,57 @@ hPrintf("<TABLE BORDER=0>\n");
     hPrintf("</TD></TR>\n");
     }
 
-hPrintf("<TR><TD><B>region:</B>\n");
-hPrintf("</TD></TR>\n");
-hPrintf("<TR><TD><B>select identifiers:</B>\n");
-hPrintf("</TD></TR>\n");
-hPrintf("<TR><TD><B>filter:</B>\n");
-hPrintf("</TD></TR>\n");
+/* Region line */
+    {
+    char *regionType = cartUsualString(cart, hgtaRegionType, "genome");
+    boolean doEncode = sameWord(genome, "human");
+    char *range = cartUsualString(cart, hgtaRange, "");
+
+    hPrintf("<TR><TD><B>region:</B>\n");
+
+    /* If regionType not allowed force it to "genome". */
+    if (!(sameString(regionType, "genome") ||
+        sameString(regionType, "range") ||
+	(doEncode && sameString(regionType, "encode") ) ) )
+	regionType = "genome";
+    hPrintf("<SCRIPT>\n");
+    hPrintf("var regionType='%s';\n", regionType);
+    hPrintf("</SCRIPT>\n");
+    makeRegionButton("genome", regionType);
+    hPrintf(" genome ");
+    if (doEncode)
+        {
+	makeRegionButton("encode", regionType);
+	hPrintf(" ENCODE ");
+	}
+    makeRegionButton("range", regionType);
+    hPrintf(" range ");
+    cgiMakeTextVar(hgtaRange, range, 29);
+    hPrintf("</TD></TR>\n");
+    }
+
+/* Select identifiers line. */
+    {
+    hPrintf("<TR><TD><B>select identifiers:</B>\n");
+    cgiMakeButton(hgtaDoPasteIdentifiers, "Paste List");
+    hPrintf(" ");
+    cgiMakeButton(hgtaDoUploadIdentifiers, "Upload List");
+    hPrintf("</TD></TR>\n");
+    }
+
+/* Filter line. */
+    {
+    hPrintf("<TR><TD><B>filter:</B>\n");
+    cgiMakeButton(hgtaDoFilterPage, "Create");
+    hPrintf("</TD></TR>\n");
+    }
+
 hPrintf("<TR><TD><B>offset:</B>\n");
 hPrintf("</TD></TR>\n");
 hPrintf("<TR><TD><B>output:</B>\n");
 hPrintf("</TD></TR>\n");
 hPrintf("<TR><TD>\n");
-cgiMakeButton("submit", "Submit");
+cgiMakeButton(hgtaDoTopSubmit, "Submit");
 hPrintf(" ");
 cgiMakeButton(hgtaDoIntersect, "Intersect");
 hPrintf("</TD></TR>\n");
@@ -382,6 +439,8 @@ hPrintf("<input type=\"hidden\" name=\"%s\" value=\"\">\n", "org");
 hPrintf("<input type=\"hidden\" name=\"%s\" value=\"\">\n", "db");
 hPrintf("<input type=\"hidden\" name=\"%s\" value=\"\">\n", hgtaGroup);
 hPrintf("<input type=\"hidden\" name=\"%s\" value=\"\">\n", hgtaTrack);
+hPrintf("<input type=\"hidden\" name=\"%s\" value=\"\">\n", hgtaRegionType);
+hPrintf("<input type=\"hidden\" name=\"%s\" value=\"\">\n", hgtaRange);
 cartSaveSession(cart);
 puts("</FORM>");
 
@@ -480,6 +539,47 @@ hPrintf("%s",
 htmlClose();
 }
 
+void doPasteIdentifiers(struct sqlConnection *conn)
+/* Respond to paste identifiers button. */
+{
+htmlOpen("Paste Identifiers");
+uglyf("Theoretically pasting identifiers.");
+htmlClose();
+}
+
+void doUploadIdentifiers(struct sqlConnection *conn)
+/* Respond to upload identifiers button. */
+{
+htmlOpen("Upload Identifiers");
+uglyf("Theoretically uploading identifiers.");
+htmlClose();
+}
+
+void doFilterPage(struct sqlConnection *conn)
+/* Respond to filter create/edit button */
+{
+htmlOpen("Table Browser Filter");
+uglyf("Theoretically making filter.");
+htmlClose();
+}
+
+void doTopSubmit(struct sqlConnection *conn)
+/* Respond to submit button on top level page.
+ * This basically just dispatches based on output type. */
+{
+htmlOpen("Table Browser Top Submit");
+uglyf("Processing submit button... too stupid to do anything real...");
+htmlClose();
+}
+
+void doIntersect(struct sqlConnection *conn)
+/* Respond to intersection button. */
+{
+htmlOpen("Table Browser Intersect");
+uglyf("Processing intersect button... too stupid to do anything real...");
+htmlClose();
+}
+
 void dispatch()
 /* Check phase variable and based on that dispatch to 
  * appropriate page-generator. */
@@ -491,7 +591,17 @@ conn = hAllocConn();
 fullTrackList = hTrackDb(NULL);
 
 if (cartVarExists(cart, hgtaDoTest))
-    testPage(conn);
+    doTest(conn);
+else if (cartVarExists(cart, hgtaDoTopSubmit))
+    doTopSubmit(conn);
+else if (cartVarExists(cart, hgtaDoIntersect))
+    doIntersect(conn);
+else if (cartVarExists(cart, hgtaDoPasteIdentifiers))
+    doPasteIdentifiers(conn);
+else if (cartVarExists(cart, hgtaDoUploadIdentifiers))
+    doUploadIdentifiers(conn);
+else if (cartVarExists(cart, hgtaDoFilterPage))
+    doFilterPage(conn);
 else	/* Default - put up initial page. */
     beginPage(conn);
 cartRemovePrefix(cart, hgtaDo);
