@@ -19,8 +19,6 @@ typedef void (*vg_box)(void *v, int x, int y,
 	int width, int height, int colorIx);
 typedef void (*vg_line)(void *v, 
 	int x1, int y1, int x2, int y2, int colorIx);
-typedef void (*vg_diamond)(void *mg, int xl, int yl, int xr, int yr, 
-	int xt, int yt, int xb, int yb, int color, boolean drawOutline, Color outlineColor);
 typedef void (*vg_text)(void *v, int x, int y, int colorIx, void *font,
 	char *text);
 typedef void (*vg_textRight)(void *v, int x, int y, int width, int height,
@@ -36,7 +34,5 @@ typedef void (*vg_verticalSmear)(void *v,
 	    unsigned char *dots, boolean zeroClear);
 typedef void (*vg_fillUnder)(void *v, int x1, int y1, 
 	int x2, int y2, int bottom, Color color);
-typedef void (*vg_triLeft)(void *v, int x1, int y1, int y2, int color);
-typedef void (*vg_triRight)(void *v, int x1, int y1, int y2, int color);
 typedef void (*vg_drawPoly)(void *v, struct gfxPoly *poly, Color color, boolean filled);
 

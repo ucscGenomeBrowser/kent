@@ -33,12 +33,6 @@ struct vGfx
 	    int x1, int y1, int x2, int y2, int colorIx);
     /* Draw a line from one point to another. */
 
-    void (*diamond)(void *v, 
-	    int xl, int yl, int xr, int yr, 
-            int xt, int yt, int xb, int yb, int colorIx,
-	    boolean drawOutline, Color outlineColor);
-    /* Draw a filled diamond between four points: left, right, top, bottom. */
-
     void (*text)(void *v, int x, int y, int colorIx, void *font, char *text);
     /* Draw a line of text with upper left corner x,y. */
 
@@ -75,14 +69,6 @@ struct vGfx
      * vertical lines from the bottom to y1 on the left and bottom to
      * y2 on the right. */
 
-    void (*triLeft)(void *v, int x1, int y1, int y2, int color);
-    /* Draw a triangle pointing left with straight edge along x+((y1-y2)/2) 
-     * from y1 to y2 (point at x1). */
-
-    void (*triRight)(void *v, int x1, int y1, int y2, int color);
-    /* Draw a triangle pointing right with straight edge along x from y1 
-     * to y2 */
-
     void (*drawPoly)(void *v, struct gfxPoly *poly, Color color, 
     	boolean filled);
     /* Draw polygon, possibly filled in color. */
@@ -108,10 +94,6 @@ void vgClose(struct vGfx **pVg);
 
 #define vgLine(v,x1,y1,x2,y2,color) v->line(v->data,x1,y1,x2,y2,color)
 /* Draw a line from one point to another. */
-
-#define vgDiamond(v,xl,yl,xr,yr,xt,yt,xb,yb,color,drawOutline,outlineColor) \
- v->diamond(v->data,xl,yl,xr,yr,xt,yt,xb,yb,color,drawOutline,outlineColor)
-/* Draw a filled diamond between four points: left, right, top, bottom */
 
 #define vgText(v,x,y,color,font,string) v->text(v->data,x,y,color,font,string)
 /* Draw a line of text with upper left corner x,y. */
@@ -152,16 +134,6 @@ void vgClose(struct vGfx **pVg);
      * it's top, a horizontal line at bottom at it's bottom,  and
      * vertical lines from the bottom to y1 on the left and bottom to
      * y2 on the right. */
-
-#define vgTriLeft(v,x1,y1,y2,color) \
-	v->triLeft(v->data,x1,y1,y2,color)
-    /* Draw a triangle pointing left with straight edge along x+((y1-y2)/2) 
-     * from y1 to y2 (point at x1). */
-
-#define vgTriRight(v,x1,y1,y2,color) \
-	v->triRight(v->data,x1,y1,y2,color)
-    /* Draw a triangle pointing right with straight edge along x from y1 
-     * to y2 */
 
 #define vgDrawPoly(v,poly,color,filled) \
 	v->drawPoly(v->data,poly,color,filled)

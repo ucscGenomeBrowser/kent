@@ -14,7 +14,7 @@
 #include "vGfx.h"
 #include "vGfxPrivate.h"
 
-static char const rcsid[] = "$Id: pscmGfx.c,v 1.10 2005/01/21 05:45:03 kent Exp $";
+static char const rcsid[] = "$Id: pscmGfx.c,v 1.11 2005/01/23 00:15:13 kent Exp $";
 
 
 static struct pscmGfx *boxPscm;	 /* Used to keep from drawing the same box again
@@ -269,23 +269,6 @@ psFillUnder(pscm->ps, x1, y1, x2, y2, bottom);
 boxPscm = NULL;
 }
 
-void pscmTriLeft(struct pscmGfx *pscm, int x1, int y1, int y2, Color color)
-/* Draw a triangle pointing left with straight edge along x1+((y1-y2)/2) 
- * from y1 to y2 (point at x1). */
-{
-pscmSetColor(pscm, color);
-psTriLeft(pscm->ps, x1, y1, y2);
-boxPscm = NULL;
-}
-
-void pscmTriRight(struct pscmGfx *pscm, int x1, int y1, int y2, Color color)
-/* Draw a triangle pointing right with straight edge along x1 from y1 to y2 */
-{
-pscmSetColor(pscm, color);
-psTriRight(pscm->ps, x1, y1, y2);
-boxPscm = NULL;
-}
-
 void pscmDrawPoly(struct pscmGfx *pscm, struct gfxPoly *poly, Color color, 
 	boolean filled)
 /* Draw a polygon, possibly filled, in color. */
@@ -312,8 +295,6 @@ vg->setClip = (vg_setClip)pscmSetClip;
 vg->unclip = (vg_unclip)pscmUnclip;
 vg->verticalSmear = (vg_verticalSmear)pscmVerticalSmear;
 vg->fillUnder = (vg_fillUnder)pscmFillUnder;
-vg->triLeft = (vg_triLeft)pscmTriLeft;
-vg->triRight = (vg_triRight)pscmTriRight;
 vg->drawPoly = (vg_drawPoly)pscmDrawPoly;
 return vg;
 }

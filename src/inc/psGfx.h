@@ -105,13 +105,6 @@ void psPopClipRect(struct psGfx *ps);
  * other graphic variables will be reset to the time of
  * the corresponding psPushClipRect. */
 
-void psTriLeft(struct psGfx *ps, int x1, int y1, int y2);
-/* Draw a triangle pointing left with straight edge along x+((y1-y2)/2) 
- * from y1 to y2 (point at x1). */
-
-void psTriRight(struct psGfx *ps, int x1, int y1, int y2);
-/* Draw a triangle pointing right with straight edge along x from y1 to y2 */
-
 void psDrawPoly(struct psGfx *ps, struct gfxPoly *poly, boolean filled);
 /* Draw a possibly filled polygon */
 

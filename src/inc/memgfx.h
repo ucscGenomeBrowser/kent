@@ -189,13 +189,6 @@ void mgFillUnder(struct memGfx *mg, int x1, int y1, int x2, int y2,
 struct memGfx *mgRotate90(struct memGfx *in);
 /* Create a copy of input that is rotated 90 degrees clockwise. */
 
-void mgTriLeft(struct memGfx *mg, int x1, int y1, int y2, int color);
-/* Draw a triangle pointing left with straight edge along x1+((y1-y2)/2) 
- * from y1 to y2 (point at x1). */
-
-void mgTriRight(struct memGfx *mg, int x1, int y1, int y2, int color);
-/* Draw a triangle pointing right with straight edge along x1 from y1 to y2 */
-
 void mgCircle(struct memGfx *mg, int xCen, int yCen, int rad, 
 	Color color, boolean filled);
 /* Draw a circle using a stepping algorithm.  Doesn't correct
