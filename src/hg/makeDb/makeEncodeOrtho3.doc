@@ -1,10 +1,6 @@
 #!/bin/csh
 exit;
 
-set dir = /cluster/data/encode/ortho3/mercatorInput
-mkdir -p $dir
-cd $dir
-
 # start with Mercator data from Colin Dewey, and copy it to working directory: 
 #    /cluster/data/encode/ortho3/mercatorInput/encodeMaps20050304.tar.gz
 #
@@ -34,17 +30,40 @@ cd $dir
 #Colin
 
 # ${HOME}/kent/src/hg/lib/encodeRegionMercator.sql
-create table encodeRegionsMercator (
-    bin        smallint(5)  unsigned not null,
-    chrom      varchar(255)          not null,
-    chromStart int(10)      unsigned not null,
-    chromEnd   int(10)      unsigned not null,
-    name       varchar(255)          not null,
-    score      int(10)      unsigned not null,
-    strand     char(1)               not null
-)
+#create table encodeRegionsMercator (
+#    bin        smallint(5)  unsigned not null,
+#    chrom      varchar(255)          not null,
+#    chromStart int(10)      unsigned not null,
+#    chromEnd   int(10)      unsigned not null,
+#    name       varchar(255)          not null,
+#    score      int(10)      unsigned not null,
+#    strand     char(1)               not null
+#)
 
-#!/bin/csh -f
+###
+::::::::::::::
+mercatorInput/makeBed5.pl
+::::::::::::::
+#!/usr/bin/perl -W
+
+while (<>)
+{
+    chomp();
+    if (/^(.*)\s+(\d+)\s+(\d+)\s+(EN\D\d\d\d)\.(\d+)_of.*/)
+    {
+        printf("$1\t$2\t$3\t$4\t$5\n");
+    }
+    else
+    {
+        die "Bad input line: $_";
+    }
+}
+###
+
+set dir = /cluster/data/encode/ortho3/mercatorInput
+mkdir -p $dir
+cd $dir
+
 tar xfz encodeMaps20050304.tar.gz
 chmod g+w $dir/*
 foreach db (bosTau1 canFam1 danRer2 galGal2 mm5 monDom1 panTro1 rn3 tetNig1)
@@ -201,7 +220,31 @@ rm -f bed.tab
 #############  (Union of liftOver and Mercator)  #######################
 ########################################################################
 
-hgsql -e "select chrom, chromStart+1, chromEnd, name from encodeRegions order by name" hg17 | tail +2 | awk '{printf "%s:%d-%d\t%s\n",$1,$2,$3,$4}' > positionFile
+###
+::::::::::::::
+consensus/makeBed5.pl
+::::::::::::::
+#!/usr/bin/perl -W
+
+#assumes that input is sorted by name (region)
+
+$region="";
+$regionCounter=0;
+
+while (<>)
+{
+    chomp();
+    if (/^(.*)\s+(\d+)\s+(\d+)\s+(EN[mr]\d\d\d)/)
+    {
+        if ($region eq $4) { $regionCounter++; } else { $region=$4; $regionCounter=1; }
+        printf("$1\t$2\t$3\t$4\t$regionCounter\n");
+    }
+    else
+    {
+        die "Bad input line: $_";
+    }
+}
+###
 
 # create consensus regions and load them
 set dir = /cluster/data/encode/ortho3/consensus
@@ -210,12 +253,21 @@ cd $dir
 
 foreach db (panTro1 rn3 galGal2 mm5 canFam1 monDom1 tetNig1 danRer2)
     rm -f $db.log $db.*.bed*
+    #           db table                  db table                        out file                               err file
     regionOrtho $db.encodeRegionsLiftOver $db.encodeRegionsMercatorMerged $db.encodeRegionsConsensusUnmerged.bed $db.regionOrtho.err >& $db.log
-    makeBed5.pl < $db.encodeRegionsConsensusUnmerged.bed > $db.encodeRegionsConsensusUnmerged.bed5
+    sort -k4 -k1.4n -k2n $db.encodeRegionsConsensusUnmerged.bed | makeBed5.pl > $db.encodeRegionsConsensusUnmerged.bed5
     liftOverMerge -mergeGap=20000 -verbose=2 $db.encodeRegionsConsensusUnmerged.bed5 $db.encodeRegionsConsensus.bed5 >>& $db.log
-    awk '{printf "%s\t%d\t%d\t%s\t%s", $1, $2, $3, $4, $5}' $db.encodeRegionsConsensus.bed5 > $db.encodeRegionsConsensus.bed
+    awk '{printf "%s\t%d\t%d\t%s_%s\n", $1, $2, $3, $4, $5}' $db.encodeRegionsConsensus.bed5 > $db.encodeRegionsConsensus.bed
     hgLoadBed $db encodeRegionsConsensus -tab $db.encodeRegionsConsensus.bed >>& $db.log
+    rm -f $db.encodeRegionsConsensusUnmerged.bed $db.encodeRegionsConsensusUnmerged.bed5
 end
+
+# remove the regions that are smaller than 2 kb
+foreach db (canFam1 danRer2 galGal2 mm5 monDom1 panTro1 rn3 tetNig1)
+    hgsql $db -e "select * from encodeRegionsConsensus where chromEnd-chromStart<2000" > $db.smallRegions.bed
+    hgsql $db -e "delete from encodeRegionsConsensus where chromEnd-chromStart<2000"
+end
+
 
 
 ########################################################################
@@ -226,23 +278,22 @@ set dir = /cluster/data/encode/ortho3/html
 mkdir -p $dir
 cd $dir
 
+hgsql -e "select chrom, chromStart+1, chromEnd, name from encodeRegions order by name" hg17 | tail +2 | awk '{printf "%s:%d-%d\t%s\n",$1,$2,$3,$4}' > positionFile
 
-#foreach db (mm5)
+cp -f ${HOME}/kent/src/hg/encode/regionOrtho/mkOrthologAllFrame.pl /cluster/bin/scripts/mkOrthologAllFrame.pl
+chmod ug+x /cluster/bin/scripts/mkOrthologAllFrame.pl
+
+# 20-30 seconds each - lots of nib lookups
 foreach db (panTro1 rn3 galGal2 mm5 canFam1 monDom1 tetNig1 danRer2)
     echo `date` $db
     rm -f $db.html
-    mkOrthologAllFrame.pl descriptionFile positionFile headerFile hg17 $db ../consensus/$db.encodeRegionsConsensus.bed ../liftOverRegions/$db.bed ../mercatorInput/$db.original.bed > $db.html
+    mkOrthologAllFrame.pl descriptionFile positionFile headerFile hg17 $db encodeRegionsConsensus encodeRegionsLiftOver encodeRegionsMercator > $db.html
 end
 
 set outDir = /usr/local/apache/htdocs/encode/ortho3
 cp -f *.html $outDir
 chmod o+r $outDir/*.html
 
-
-foreach db (canFam1 danRer2 galGal2 mm5 monDom1 panTro1 rn3 tetNig1)
-    hgsql $db -e "select * from encodeRegionsConsensus where chromEnd-chromStart<2000" > $db.smallRegions.bed
-    hgsql $db -e "delete from encodeRegionsConsensus where chromEnd-chromStart<2000"
-end
 
 
 ########################################################################
@@ -259,12 +310,38 @@ end
 set orthoDir     = /cluster/data/encode/ortho3
 set agpDir       = $orthoDir/agp
 set consensusDir = $orthoDir/consensus
-set downloadDir  = /usr/local/apache/htdocs/encode/ortho3/agps
+set downloadDir  = /usr/local/apache/htdocs/encode/ortho3/agp
 set regionAgp    = regionAgp
 mkdir -p $agpDir $downloadDir
 chmod o+rx $downloadDir
 rm -rf $agpDir/* $downloadDir/*
 cd $agpDir
+
+###
+::::::::::::::
+agp/makeBed5.pl
+::::::::::::::
+#!/usr/bin/perl -W
+
+#assumes that input is already numbered
+
+while (<>)
+{
+    chomp();
+    if (/chromStart/)
+    {
+	continue;
+    }
+    if (/^(.*)\s+(\d+)\s+(\d+)\s+(EN[mr]\d\d\d).(\d+)/)
+    {
+        printf("$1\t$2\t$3\t$4_$5\n");
+    }
+    else
+    {
+        die "Bad input line: $_";
+    }
+}
+###
 
 ########################################################################
 # create script to run AGP-maker on an assembly
@@ -295,13 +372,13 @@ else
     set contigArg = ""
 endif
 
+set runRegionAgp = "$regionAgp $contigArg -namePrefix=${org}_ $bedFile stdin -dir $outDir"
+
 if (-f $buildDir/chrom.lst) then
     cat $buildDir/chrom.lst | \
-    xargs -iX cat $buildDir/X/chr{X,X_random}.agp | \
-    $regionAgp $contigArg -namePrefix=${org}_ $bedFile stdin -dir $outDir
+    xargs -iX cat $buildDir/X/chr{X,X_random}.agp | $runRegionAgp
 else
-    cat $buildDir/?{,?}/*.agp | \
-    $regionAgp $contigArg -namePrefix=${org}_ $bedFile stdin -dir $outDir
+    cat $buildDir/?{,?}/*.agp | $runRegionAgp
 endif
 'EOF'
 # << this line makes emacs coloring happy
@@ -310,106 +387,144 @@ rm -f *.contig.tab */*.packing.list >& /dev/null
 
 ########################################################################
 # MOUSE
-ssh hgwdev
+#!/bin/csh -fe
+
 cd /cluster/data/encode/ortho3/agp
-set mouse = mm5
+set db  = mm5
+set org = mouse
+set downloadDir = /usr/local/apache/htdocs/encode/ortho3/agp
+set encodeRegionPackingList = /cluster/data/encode/bin/scripts/encodeRegionPackingList
+
+#create consensus list
+mkdir $db
+hgsql $db -e "select chrom, chromStart, chromEnd, name from encodeRegionsConsensus" | makeBed5.pl > $db/$db.encodeRegionsConsensus.bed5
 
 # Create AGP's
-csh genomeAgps.csh $mouse mouse $mouse
+csh genomeAgps.csh $db $org $db
 
 # Create packing list
-set consensusDir = $orthoDir/consensus
-/cluster/data/encode/bin/scripts/encodeRegionPackingList \
-    $consensusDir/$mouse.encodeRegionsConsensus.bed5 $mouse mouse \
-    "Mus musculus" 10090  C57BL/6J MAY-2004 $mouse "NCBI Build 33" \
-    > $mouse/$mouse.packing.list
+$encodeRegionPackingList $db/$db.encodeRegionsConsensus.bed5 $db $org "Mus musculus" 10090  C57BL/6J MAY-2004 $db "NCBI Build 33" > $db/$db.packing.list
 
 # Copy  to downloads area
-cp -f $mouse/$mouse.packing.list $downloadDir
-tar cvfz $downloadDir/$mouse.agp.tar.gz $mouse/*.agp
+cp -f $db/$db.packing.list $downloadDir
+tar cvfz $downloadDir/$db.agp.tar.gz $db/*.agp
+chmod o+r $downloadDir/*
 
-hgsql -e "select count(*) from $mouse.encodeRegionConsensus"
-tar tvfz $downloadDir/$mouse.agp.tar.gz | wc -l
-grep Region $downloadDir/$mouse.packing.list | wc -l
+hgsql -e "select count(*) from $db.encodeRegionsConsensus"
+tar tvfz $downloadDir/$db.agp.tar.gz | wc -l
+grep Region $downloadDir/$db.packing.list | wc -l
 
-n######################################################################a
+######################################################################a
 # RAT
-set rat = rn3
+#!/bin/csh -fe
+cd /cluster/data/encode/ortho3/agp
+set db  = rn3
+set org = rat
+set downloadDir = /usr/local/apache/htdocs/encode/ortho3/agp
+set encodeRegionPackingList = /cluster/data/encode/bin/scripts/encodeRegionPackingList
+
+#create consensus list
+mkdir $db
+hgsql $db -e "select chrom, chromStart, chromEnd, name from encodeRegionsConsensus" | makeBed5.pl > $db/$db.encodeRegionsConsensus.bed5
 
 # Get contig to accession map
-hgsql $rat -s -e "select * from contigAcc" > rat.contig.tab
+hgsql $db -s -e "select * from contigAcc" > $org.contig.tab
 
 # Create AGP's
-csh genomeAgps.csh $rat rat $rat
+csh genomeAgps.csh $db $org $db
 
 # Create packing list
-/cluster/data/encode/bin/scripts/encodeRegionPackingList \
-    $consensusDir/$rat.encodeRegionsConsensus.bed5 $rat rat \
-    "Rattus norvegicus" 10116 BN/SsNHsdMCW JUN-2003 $rat \
-    "Baylor HGSC v3.1" > $rat/$rat.packing.list
+$encodeRegionPackingList $db/$db.encodeRegionsConsensus.bed5 $db $org "Rattus norvegicus" 10116 BN/SsNHsdMCW JUN-2003 $db "Baylor HGSC v3.1" > $db/$db.packing.list
 
 # Copy  to downloads area
-cp -f $rat/$rat.packing.list $downloadDir
-tar cvfz $downloadDir/$rat.agp.tar.gz $rat/*.agp
+cp -f $db/$db.packing.list $downloadDir
+tar cvfz $downloadDir/$db.agp.tar.gz $db/*.agp
+chmod o+r $downloadDir/*
 
-hgsql -e "select count(*) from $rat.encodeRegionConsensus"
-tar tvfz $downloadDir/$rat.agp.tar.gz | wc -l
-grep Region $downloadDir/$rat.packing.list | wc -l
+hgsql -e "select count(*) from $db.encodeRegionsConsensus"
+tar tvfz $downloadDir/$db.agp.tar.gz | wc -l
+grep Region $downloadDir/$db.packing.list | wc -l
 
 ########################################################################
 # CHICKEN
-ssh hgwdev
+#!/bin/csh -fe
 cd /cluster/data/encode/ortho3/agp
-set chicken = galGal2
+set db  = galGal2
+set org = chicken
+set downloadDir = /usr/local/apache/htdocs/encode/ortho3/agp
+set encodeRegionPackingList = /cluster/data/encode/bin/scripts/encodeRegionPackingList
 
-#reversed order here to make $chicken.contig.tab before making agps
+#create consensus list
+mkdir $db
+hgsql $db -e "select chrom, chromStart, chromEnd, name from encodeRegionsConsensus" | makeBed5.pl > $db/$db.encodeRegionsConsensus.bed5
+
 # Get contig to accession mapping (documented in makeGalGal2.doc) 
-hgsql $chicken -s -e "select * from contigAcc" > chicken.contig.tab
+hgsql $db -s -e "select * from contigAcc" > $org.contig.tab
 
 # Create AGP's
 # errors here: missing /cluster/data/galGal2/chr*_random.agp and chrM.agp files
-csh genomeAgps.csh $chicken chicken $chicken
+# but there are no ENCODE orthologous sequences on these chicken chromosomes
+csh genomeAgps.csh $db $org $db
 
 # Test a region
-ssh kksilo
 cd /cluster/data/encode/ortho3/agp
 mkdir tests
 cd tests
-gunzip -c  /cluster/data/galGal2/chicken_contigs.tar.gz > \
-                test.chicken.contigs.fa
+gunzip -c  /cluster/data/$db/$org_contigs.tar.gz > test.$org.contigs.fa
 
-ssh hgwdev
-cd /cluster/data/encode/ortho3/agp/tests
-set db = galGal2
-set org = chicken
 set region = ENm001_1
-/cluster/data/encode/bin/scripts/agpAccToContig.pl $db \
-        ../$db/${org}_${region}.agp > $db.$region.agp
+/cluster/data/encode/bin/scripts/agpAccToContig.pl $db ../$db/${org}_${region}.agp > $db.$region.agp
 
-ssh kolossus
 cd /cluster/data/encode/ortho3/agp/tests
-set org = chicken
-set db = galGal2
 set region = ENm001_1
 set coords = `awk -v REGION=$region '$4 == REGION {printf "%s.%d.%d", $1, $2, $3}' /cluster/data/encode/ortho3/consensus/$db.bed`
 echo $coords
 set chr = $coords:r:r
-nibFrag /cluster/data/$db/nib/${chr}.nib \
-        $coords:r:e $coords:e + nibTest.$db.$region.fa
+nibFrag /cluster/data/$db/nib/${chr}.nib $coords:r:e $coords:e + nibTest.$db.$region.fa
 
 # takes 7 minutes on kksilo, 2-6 mins on kolossus
-set fa = chicken.contigs.fa
+set fa = $org.contigs.fa
 time agpToFa $db.$region.agp ${org}_$region $db.$region.fa -simpleMulti $fa
 
 faCmp nibTest.$db.$region.fa $db.$region.fa
     # test.fa and nibtest.fa are the same
 
+# Create packing list
+cd ..
+$encodeRegionPackingList /cluster/data/encode/ortho3/agp/$db/$db.encodeRegionsConsensus.bed5 $db $org "Gallus gallus" 9031 N/A FEB-2004 $db "CGSC Feb. 2004" > ${db}/$db.packing.list
+
+# Copy  to downloads area
+cp -f $db/$db.packing.list $downloadDir
+tar cvfz $downloadDir/$db.agp.tar.gz $db/*.agp
+
+hgsql -e "select count(*) from $db.encodeRegionsConsensus"
+tar tvfz $downloadDir/$db.agp.tar.gz | wc -l
+grep Region $downloadDir/$db.packing.list | wc -l
+
+
+
+
+#### ended here.  Need to repeat testing.
+
+
+
+########################################################################
+# DOG
+set db  = canFam1
+set org = dog
+
+#reversed order here to make $org.contig.tab before making agps
+# Get contig to accession mapping (documented in makeGalGal2.doc) 
+hgsql $db -s -e "select * from contigAcc" > $org.contig.tab
+
+# Create AGP's
+csh genomeAgps.csh $db $org $db
 
 # Create packing list
 /cluster/data/encode/bin/scripts/encodeRegionPackingList \
     /cluster/data/encode/ortho3/consensus/$db.encodeRegionsConsensus.bed5 \
-    $db $org "Gallus gallus" 9031 N/A FEB-2004 $db "CGSC Feb. 2004" \
-    > ${db}/$db.packing.list
+    $db $org "Canis Familiaris" 9615 N/A JUL-2004 $db \
+    "Broad Institute v. 1.0" > $db/$db.packing.list
 
 # Copy  to downloads area
 cp -f $db/$db.packing.list $downloadDir
@@ -419,68 +534,36 @@ hgsql -e "select count(*) from $db.encodeRegionConsensus"
 tar tvfz $downloadDir/$db.agp.tar.gz | wc -l
 grep Region $downloadDir/$db.packing.list | wc -l
 
-
-########################################################################
-# DOG
-ssh hgwdev
-cd /cluster/data/encode/ortho3/agp
-set dog = canFam1
-
-#reversed order here to make $dog.contig.tab before making agps
-# Get contig to accession mapping (documented in makeGalGal2.doc) 
-hgsql $dog -s -e "select * from contigAcc" > dog.contig.tab
-
-# Create AGP's
-csh genomeAgps.csh $dog dog $dog
-
-# Create packing list
-/cluster/data/encode/bin/scripts/encodeRegionPackingList \
-    /cluster/data/encode/ortho3/consensus/$dog.encodeRegionsConsensus.bed5 \
-    $dog dog "Canis Familiaris" 9615 N/A JUL-2004 $dog \
-    "Broad Institute v. 1.0" > $dog/$dog.packing.list
-
-# Copy  to downloads area
-cp -f $dog/$dog.packing.list $downloadDir
-tar cvfz $downloadDir/$dog.agp.tar.gz $dog/*.agp
-
-hgsql -e "select count(*) from $dog.encodeRegionConsensus"
-tar tvfz $downloadDir/$dog.agp.tar.gz | wc -l
-grep Region $downloadDir/$dog.packing.list | wc -l
-
 ########################################################################
 # CHIMP
-ssh hgwdev
-cd /cluster/data/encode/ortho3/agp
-set chimp = panTro1
-mkdir -p $chimp
-echo
-echo CHIMP
+set db  = panTro1
+set org = chimp
 
 # Get contig to accession map
-hgsql $chimp -s -e "select * from contigAcc" > chimp.contig.tab
+hgsql $db -s -e "select * from contigAcc" > $org.contig.tab
 
 # Create AGP's
 # NOTE: next time, put chimpChromContigs.agp into $outDir
-cat /cluster/data/$chimp/?{,?}/*.agp | \
-   chimpChromContigAgp stdin /cluster/data/$chimp/assembly.agp chimpChromContigs.agp
+cat /cluster/data/$db/?{,?}/*.agp | \
+   chimpChromContigAgp stdin /cluster/data/$db/assembly.agp chimpChromContigs.agp
 set consensusDir = /cluster/data/encode/ortho3/consensus
-~kate/bin/i386/regionAgp -contigFile=chimp.contig.tab -namePrefix=chimp_ \
-    $consensusDir/$chimp.encodeRegionsConsensus.bed5 chimpChromContigs.agp -dir $chimp
+regionAgp -contigFile=$org.contig.tab -namePrefix=${org}_ \
+    $consensusDir/$db.encodeRegionsConsensus.bed5 chimpChromContigs.agp -dir $db
 
 # Create packing list
 /cluster/data/encode/bin/scripts/encodeRegionPackingList \
-    $consensusDir/$chimp.encodeRegionsConsensus.bed5 \
-    $chimp  chimp "Pan troglodytes" 9598 N/A NOV-2003 $chimp \
-    "NCBI Build 1 v1" > $chimp/$chimp.packing.list
+    $consensusDir/$db.encodeRegionsConsensus.bed5 \
+    $db  $org "Pan troglodytes" 9598 N/A NOV-2003 $db \
+    "NCBI Build 1 v1" > $db/$db.packing.list
 
 # Copy  to downloads area
-cp -f $chimp/$chimp.packing.list $downloadDir
-tar cvfz $downloadDir/$chimp.agp.tar.gz $chimp/*.agp
+cp -f $db/$db.packing.list $downloadDir
+tar cvfz $downloadDir/$db.agp.tar.gz $db/*.agp
 
 set downloadDir  = /usr/local/apache/htdocs/encode/ortho3/agp
-hgsql -e "select count(*) from $chimp.encodeRegionConsensus"
-tar tvfz $downloadDir/$chimp.agp.tar.gz | wc -l
-grep Region $downloadDir/$chimp.packing.list | wc -l
+hgsql -e "select count(*) from $db.encodeRegionConsensus"
+tar tvfz $downloadDir/$db.agp.tar.gz | wc -l
+grep Region $downloadDir/$db.packing.list | wc -l
 
 ########################################################################
 # cleanup
@@ -498,17 +581,18 @@ cat /cluster/data/$mouse/{6,11}/*.agp | $regionAgp tests/test.bed \
 /cluster/data/encode/bin/scripts/encodeRegionPackingList tests/test.bed \
     testMouse mouse "Mus musculus" 10090 C57BL/6J MAY-2004 $mouse "NCBI Build 33"
 
+set db  = galGal2
 rm -fr testChicken
 mkdir -p testChicken
-rm -f $chicken.contig.tab
-hgsql $chicken -s -e "select * from contigAcc" > chicken.contig.tab
-cat /cluster/data/$chicken/{1,13}/*.agp | \
+rm -f $db.contig.tab
+hgsql $db -s -e "select * from contigAcc" > chicken.contig.tab
+cat /cluster/data/$db/{1,13}/*.agp | \
     $regionAgp tests/test.chicken.bed stdin -namePrefix=chicken_ \
     -dir testChicken -contigFile=chicken.contig.tab
 
 /cluster/data/encode/bin/scripts/encodeRegionPackingList \
     tests/test.chicken.bed testChicken chicken "Gallus gallus" \
-    9031 N/A FEB-2004 $chicken "CGSC Feb. 2004"
+    9031 N/A FEB-2004 $db "CGSC Feb. 2004"
 
 ########################################################################
 # Test all chicken, dog, chimp AGP's
