@@ -27,3 +27,7 @@ test::
 	cmp testRnaX.psl refRnaX.psl
 	blat -fine hCrea.geno hCrea.mrna testFine.psl
 	cmp testFine.psl refFine.psl
+
+clean::
+	rm -f testRna.psl testProt.psl testProtX.psl testRnaX.psl \
+	testFine.psl $(O) blat
