@@ -158,147 +158,6 @@ endControlGrid(&cg);
 }
 
 
-void GCwiggleUi(struct trackDb *tdb)
-/* put up UI for the GC percent track (a sample track)*/
-{
-int GCwiggleHeightPer = atoi(cartUsualString(cart, "GCwiggle.heightPer", "100"));
-char *interpolate = cartUsualString(cart, "GCwiggle.linear.interp", "Linear Interpolation");
-char *aa = cartUsualString(cart, "GCwiggle.anti.alias", "on");
-char *fill = cartUsualString(cart, "GCwiggle.fill", "1");
-
-printf("<p><b>Interpolation: </b> ");
-wiggleDropDown("GCwiggle.linear.interp", interpolate );
-printf(" ");
-printf(" <b>Anti-Aliasing</b>: ");
-cgiMakeRadioButton("GCwiggle.anti.alias", "on", sameString(aa, "on"));
-printf(" on ");
-cgiMakeRadioButton("GCwiggle.anti.alias", "off", sameString(aa, "off"));
-printf(" off ");
-
-printf("<br><br>");
-printf(" <b>Fill Blocks</b>: ");
-cgiMakeRadioButton("GCwiggle.fill", "1", sameString(fill, "1"));
-printf(" on ");
-cgiMakeRadioButton("GCwiggle.fill", "0", sameString(fill, "0"));
-printf(" off ");
-
-printf("<p><b>Track Height</b>:&nbsp;&nbsp;");
-cgiMakeIntVar("GCwiggle.heightPer", GCwiggleHeightPer, 5 );
-printf("&nbsp;pixels");
-
-}
-void humMusLUi(struct trackDb *tdb)
-/* put up UI for the human/mouse mutual information (a sample track)*/
-{
-int humMusLHeightPer = atoi(cartUsualString(cart, "humMusL.heightPer", "100"));
-char *interpolate = cartUsualString(cart, "humMusL.linear.interp", "Linear Interpolation");
-char *aa = cartUsualString(cart, "humMusL.anti.alias", "on");
-char *fill = cartUsualString(cart, "humMusL.fill", "1");
-int humMusLLineGap = atoi(cartUsualString(cart, "humMusL.interp.gap", "200"));
-
-printf("<p><b>Interpolation: </b> ");
-wiggleDropDown("humMusL.linear.interp", interpolate );
-printf(" ");
-printf(" <b>Anti-Aliasing</b>: ");
-cgiMakeRadioButton("humMusL.anti.alias", "on", sameString(aa, "on"));
-printf(" on ");
-cgiMakeRadioButton("humMusL.anti.alias", "off", sameString(aa, "off"));
-printf(" off ");
-
-printf("<br><br>");
-printf(" <b>Fill Blocks</b>: ");
-cgiMakeRadioButton("humMusL.fill", "1", sameString(fill, "1"));
-printf(" on ");
-
-cgiMakeRadioButton("humMusL.fill", "0", sameString(fill, "0"));
-printf(" off ");
-
-printf("<p><b>Track Height</b>:&nbsp;&nbsp;");
-cgiMakeIntVar("humMusL.heightPer", humMusLHeightPer, 5 );
-printf("&nbsp;pixels");
-
-printf("<p><b>Maximum Interval to Interpolate Across</b>:&nbsp;&nbsp;");
-cgiMakeIntVar("humMusL.interp.gap", humMusLLineGap, 10 );
-printf("&nbsp;bases");
-
-
-}
-
-
-
-void humMusUi(struct trackDb *tdb)
-/* put up UI for the human/mouse mutual information (a sample track)*/
-{
-int humMusHeightPer = atoi(cartUsualString(cart, "humMus.heightPer", "100"));
-char *interpolate = cartUsualString(cart, "humMus.linear.interp", "Linear Interpolation");
-char *aa = cartUsualString(cart, "humMus.anti.alias", "on");
-char *fill = cartUsualString(cart, "humMus.fill", "1");
-int humMusLineGap = atoi(cartUsualString(cart, "humMus.interp.gap", "200"));
-
-printf("<p><b>Interpolation: </b> ");
-wiggleDropDown("humMus.linear.interp", interpolate );
-printf(" ");
-printf(" <b>Anti-Aliasing</b>: ");
-cgiMakeRadioButton("humMus.anti.alias", "on", sameString(aa, "on"));
-printf(" on ");
-cgiMakeRadioButton("humMus.anti.alias", "off", sameString(aa, "off"));
-printf(" off ");
-
-printf("<br><br>");
-printf(" <b>Fill Blocks</b>: ");
-cgiMakeRadioButton("humMus.fill", "1", sameString(fill, "1"));
-printf(" on ");
-
-cgiMakeRadioButton("humMus.fill", "0", sameString(fill, "0"));
-printf(" off ");
-
-printf("<p><b>Track Height</b>:&nbsp;&nbsp;");
-cgiMakeIntVar("humMus.heightPer", humMusHeightPer, 5 );
-printf("&nbsp;pixels");
-
-printf("<p><b>Maximum Interval to Interpolate Across</b>:&nbsp;&nbsp;");
-cgiMakeIntVar("humMus.interp.gap", humMusLineGap, 10 );
-printf("&nbsp;bases");
-
-
-}
-
-void zooConsUi(struct trackDb *tdb)
-/* put up UI for the human/mouse mutual information (a sample track)*/
-{
-int zooConsHeightPer = atoi(cartUsualString(cart, "zooCons.heightPer", "100"));
-char *interpolate = cartUsualString(cart, "zooCons.linear.interp", "Linear Interpolation");
-char *aa = cartUsualString(cart, "zooCons.anti.alias", "on");
-char *fill = cartUsualString(cart, "zooCons.fill", "1");
-int zooConsLineGap = atoi(cartUsualString(cart, "zooCons.interp.gap", "200"));
-
-printf("<p><b>Interpolation: </b> ");
-wiggleDropDown("zooCons.linear.interp", interpolate );
-printf(" ");
-printf(" <b>Anti-Aliasing</b>: ");
-cgiMakeRadioButton("zooCons.anti.alias", "on", sameString(aa, "on"));
-printf(" on ");
-cgiMakeRadioButton("zooCons.anti.alias", "off", sameString(aa, "off"));
-printf(" off ");
-
-printf("<br><br>");
-printf(" <b>Fill Blocks</b>: ");
-cgiMakeRadioButton("zooCons.fill", "1", sameString(fill, "1"));
-printf(" on ");
-
-cgiMakeRadioButton("zooCons.fill", "0", sameString(fill, "0"));
-printf(" off ");
-
-printf("<p><b>Track Height</b>:&nbsp;&nbsp;");
-cgiMakeIntVar("zooCons.heightPer", zooConsHeightPer, 5 );
-printf("&nbsp;pixels");
-
-printf("<p><b>Maximum Interval to Interpolate Across</b>:&nbsp;&nbsp;");
-cgiMakeIntVar("zooCons.interp.gap", zooConsLineGap, 10 );
-printf("&nbsp;bases");
-}
-
-
 void colorCrossSpeciesUi(struct trackDb *tdb, boolean colorDefaultOn)
 /* Put up UI for selecting rainbow chromosome color or intensity score. */
 {
@@ -316,71 +175,57 @@ printf(" off ");
 printf("<br><br>");
 }
 
-
-void binomialConsUi(struct trackDb *tdb)
-/* put up UI for the GC percent track (a sample track)*/
+void genericWiggleUi(struct trackDb *tdb, int optionNum )
+/* put up UI for any standard wiggle track (a.k.a. sample track)*/
 {
-int binomialConsHeightPer = atoi(cartUsualString(cart, "binomialCons.heightPer", "30"));
-char *interpolate = cartUsualString(cart, "binomialCons.linear.interp", "Linear Interpolation");
-char *aa = cartUsualString(cart, "binomialCons.anti.alias", "on");
-char *fill = cartUsualString(cart, "binomialCons.fill", "1");
-int binomialConsLineGap = atoi(cartUsualString(cart, "binomialCons.interp.gap", "25000"));
+
+char options[5][256];
+int thisHeightPer, thisLineGap;
+char *interpolate, *aa, *fill;
+
+snprintf( &options[0][0], 256, "%s.heightPer", tdb->tableName );
+snprintf( &options[1][0], 256, "%s.linear.interp", tdb->tableName );
+snprintf( &options[2][0], 256, "%s.anti.alias", tdb->tableName );
+snprintf( &options[3][0], 256, "%s.fill", tdb->tableName );
+snprintf( &options[4][0], 256, "%s.interp.gap", tdb->tableName );
+    
+thisHeightPer = atoi(cartUsualString(cart, &options[0][0], "100"));
+interpolate = cartUsualString(cart, &options[1][0], "Linear Interpolation");
+aa = cartUsualString(cart, &options[2][0], "on");
+fill = cartUsualString(cart, &options[3][0], "1");
+thisLineGap = atoi(cartUsualString(cart, &options[4][0], "200"));
 
 printf("<p><b>Interpolation: </b> ");
-wiggleDropDown("binomialCons.linear.interp", interpolate );
+wiggleDropDown(&options[1][0], interpolate );
 printf(" ");
 printf(" <b>Anti-Aliasing</b>: ");
-cgiMakeRadioButton("binomialCons.anti.alias", "on", sameString(aa, "on"));
+cgiMakeRadioButton(&options[2][0], "on", sameString(aa, "on"));
 printf(" on ");
-cgiMakeRadioButton("binomialCons.anti.alias", "off", sameString(aa, "off"));
+cgiMakeRadioButton(&options[2][0], "off", sameString(aa, "off"));
 printf(" off ");
 
 printf("<br><br>");
 printf(" <b>Fill Blocks</b>: ");
-cgiMakeRadioButton("binomialCons.fill", "1", sameString(fill, "1"));
+cgiMakeRadioButton(&options[3][0], "1", sameString(fill, "1"));
 printf(" on ");
 
-cgiMakeRadioButton("binomialCons.fill", "0", sameString(fill, "0"));
+cgiMakeRadioButton(&options[3][0], "0", sameString(fill, "0"));
 printf(" off ");
 
 printf("<p><b>Track Height</b>:&nbsp;&nbsp;");
-cgiMakeIntVar("binomialCons.heightPer", binomialConsHeightPer, 5 );
+cgiMakeIntVar(&options[0][0], thisHeightPer, 5 );
 printf("&nbsp;pixels");
+
+if( optionNum >= 5 )
+    {
+    printf("<p><b>Maximum Interval to Interpolate Across</b>:&nbsp;&nbsp;");
+    cgiMakeIntVar(&options[5][0], thisLineGap, 10 );
+    printf("&nbsp;bases");
+    }
+
 
 }
 
-
-void zooUi(struct trackDb *tdb)
-/* put up UI for the GC percent track (a sample track)*/
-{
-int zooHeightPer = atoi(cartUsualString(cart, "zoo.heightPer", "30"));
-char *interpolate = cartUsualString(cart, "zoo.linear.interp", "Linear Interpolation");
-char *aa = cartUsualString(cart, "zoo.anti.alias", "on");
-char *fill = cartUsualString(cart, "zoo.fill", "1");
-int zooLineGap = atoi(cartUsualString(cart, "zoo.interp.gap", "25000"));
-
-printf("<p><b>Interpolation: </b> ");
-wiggleDropDown("zoo.linear.interp", interpolate );
-printf(" ");
-printf(" <b>Anti-Aliasing</b>: ");
-cgiMakeRadioButton("zoo.anti.alias", "on", sameString(aa, "on"));
-printf(" on ");
-cgiMakeRadioButton("zoo.anti.alias", "off", sameString(aa, "off"));
-printf(" off ");
-
-printf("<br><br>");
-printf(" <b>Fill Blocks</b>: ");
-cgiMakeRadioButton("zoo.fill", "1", sameString(fill, "1"));
-printf(" on ");
-
-cgiMakeRadioButton("zoo.fill", "0", sameString(fill, "0"));
-printf(" off ");
-
-printf("<p><b>Track Height</b>:&nbsp;&nbsp;");
-cgiMakeIntVar("zoo.heightPer", zooHeightPer, 5 );
-printf("&nbsp;pixels");
-
-}
 
 void affyTranscriptomeUi(struct trackDb *tdb)
 /* put up UI for the GC percent track (a sample track)*/
@@ -389,8 +234,6 @@ int affyTranscriptomeHeightPer = atoi(cartUsualString(cart, "affyTranscriptome.h
 char *interpolate = cartUsualString(cart, "affyTranscriptome.linear.interp", "Only samples");
 char *aa = cartUsualString(cart, "affyTranscriptome.anti.alias", "on");
 char *fill = cartUsualString(cart, "affyTranscriptome.fill", "1");
-
-
 
 printf("<br><br>");
 printf(" <b>Fill Blocks</b>: ");
@@ -402,68 +245,6 @@ printf(" off ");
 
 printf("<p><b>Track Height</b>:&nbsp;&nbsp;");
 cgiMakeIntVar("affyTranscriptome.heightPer", affyTranscriptomeHeightPer, 5 );
-printf("&nbsp;pixels");
-
-}
-
-
-void chimpUi(struct trackDb *tdb)
-/* put up UI for the chimp track (a sample track)*/
-{
-int chimpHeightPer = atoi(cartUsualString(cart, "chimp.heightPer", "100"));
-char *interpolate = cartUsualString(cart, "chimp.linear.interp", "Linear Interpolation");
-char *aa = cartUsualString(cart, "chimp.anti.alias", "on");
-char *fill = cartUsualString(cart, "chimp.fill", "1");
-
-printf("<p><b>Interpolation: </b> ");
-wiggleDropDown("chimp.linear.interp", interpolate );
-printf(" ");
-printf(" <b>Anti-Aliasing</b>: ");
-cgiMakeRadioButton("chimp.anti.alias", "on", sameString(aa, "on"));
-printf(" on ");
-cgiMakeRadioButton("chimp.anti.alias", "off", sameString(aa, "off"));
-printf(" off ");
-
-printf("<br><br>");
-printf(" <b>Fill Blocks</b>: ");
-cgiMakeRadioButton("chimp.fill", "1", sameString(fill, "1"));
-printf(" on ");
-cgiMakeRadioButton("chimp.fill", "0", sameString(fill, "0"));
-printf(" off ");
-
-printf("<p><b>Track Height</b>:&nbsp;&nbsp;");
-cgiMakeIntVar("chimp.heightPer", chimpHeightPer, 5 );
-printf("&nbsp;pixels");
-
-}
-
-
-void wiggleUi(struct trackDb *tdb)
-/* put up UI for the wiggle track for representing curves inside * tracks */
-{
-int wiggleHeightPer = atoi(cartUsualString(cart, "wiggle.heightPer", "100"));
-char *interpolate = cartUsualString(cart, "wiggle.linear.interp", "Linear Interpolation");
-char *aa = cartUsualString(cart, "wiggle.anti.alias", "on");
-char *fill = cartUsualString(cart, "wiggle.fill", "1");
-
-printf("<p><b>Interpolation: </b> ");
-wiggleDropDown("wiggle.linear.interp", interpolate );
-printf(" ");
-printf(" <b>Anti-Aliasing</b>: ");
-cgiMakeRadioButton("wiggle.anti.alias", "on", sameString(aa, "on"));
-printf(" on ");
-cgiMakeRadioButton("wiggle.anti.alias", "off", sameString(aa, "off"));
-printf(" off ");
-
-printf("<br><br>");
-printf(" <b>Fill Blocks</b>: ");
-cgiMakeRadioButton("wiggle.fill", "1", sameString(fill, "1"));
-printf(" on ");
-cgiMakeRadioButton("wiggle.fill", "0", sameString(fill, "0"));
-printf(" off ");
-
-printf("<p><b>Track Height</b>:&nbsp;&nbsp;");
-cgiMakeIntVar("wiggle.heightPer", wiggleHeightPer, 5 );
 printf("&nbsp;pixels");
 
 }
@@ -513,24 +294,26 @@ else if (sameString(track, "rosetta"))
     rosettaUi(tdb);
 else if (sameString(track, "affyRatio"))
     affyUi(tdb);
-else if (sameString(track, "wiggle"))
-    wiggleUi(tdb);
-else if (sameString(track, "chimp"))
-    chimpUi(tdb);
-else if (sameString(track, "GCwiggle"))
-    GCwiggleUi(tdb);
-else if (sameString(track, "zoo"))
-    zooUi(tdb);
-else if (sameString(track, "binomialCons"))
-    binomialConsUi(tdb);
 else if (sameString(track, "ancientR"))
     ancientRUi(tdb);
+else if (sameString(track, "wiggle"))
+    genericWiggleUi(tdb,5);
+else if (sameString(track, "chimp"))
+    genericWiggleUi(tdb,5);
+else if (sameString(track, "GCwiggle"))
+    genericWiggleUi(tdb,5);
+else if (sameString(track, "zoo"))
+    genericWiggleUi(tdb,4);
+else if (sameString(track, "binomialCons"))
+    genericWiggleUi(tdb,5);
+else if (sameString(track, "binomialCons2"))
+    genericWiggleUi(tdb,5);
 else if (sameString(track, "humMus"))
-    humMusUi(tdb);
+    genericWiggleUi(tdb,5);
 else if (sameString(track, "humMusL"))
-    humMusLUi(tdb);
+    genericWiggleUi(tdb,5);
 else if (sameString(track, "zooCons"))
-    zooConsUi(tdb);
+    genericWiggleUi(tdb,5);
 else if (sameString(track, "blastzMm2"))
     colorCrossSpeciesUi(tdb, FALSE);
 else if (sameString(track, "blastzMm2Sc"))
