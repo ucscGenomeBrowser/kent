@@ -29,7 +29,7 @@
 #include "dbDb.h"
 #include "htmlPage.h"
 
-static char const rcsid[] = "$Id: qaPushQ.c,v 1.46 2004/06/01 23:17:37 galt Exp $";
+static char const rcsid[] = "$Id: qaPushQ.c,v 1.47 2004/06/03 22:06:39 galt Exp $";
 
 char msg[2048] = "";
 char ** saveEnv;
@@ -758,21 +758,27 @@ switch(col)
 	
 	
     case e_priority:
-	printf("<td>%s", ki->priority);
-	if (ki->priority[0] != 'L')
-	{
-	printf("&nbsp;&nbsp;"
-	    "<A href=\"/cgi-bin/qaPushQ?action=promote&qid=%s&cb=%s\">^</A>&nbsp;&nbsp;"
-	    "<A href=\"/cgi-bin/qaPushQ?action=demote&qid=%s&cb=%s\">v</A>&nbsp;&nbsp;"
-	    "<A href=\"/cgi-bin/qaPushQ?action=top&qid=%s&cb=%s\">T</A>&nbsp;&nbsp;"
-	    "<A href=\"/cgi-bin/qaPushQ?action=bottom&qid=%s&cb=%s\">B</A>", 
-	    ki->qid, newRandState, 
-	    ki->qid, newRandState, 
-	    ki->qid, newRandState, 
-	    ki->qid, newRandState
-	    );
-	}
-	printf("</td>\n");
+	if (ki->priority[0] == 'L')
+	    {
+	    printf("<td>%s</td>", ki->priority);
+	    }
+	else
+	    {
+	    printf(
+		"<td><table><tr><td>%s</td><td>"
+		"<A href=\"/cgi-bin/qaPushQ?action=promote&qid=%s&cb=%s\">^</A>&nbsp;&nbsp;"
+		"<A href=\"/cgi-bin/qaPushQ?action=top&qid=%s&cb=%s\">T</A>&nbsp;&nbsp;"
+		"</td></tr><tr><td>&nbsp</td><td>"
+		"<A href=\"/cgi-bin/qaPushQ?action=demote&qid=%s&cb=%s\">v</A>&nbsp;&nbsp;"
+		"<A href=\"/cgi-bin/qaPushQ?action=bottom&qid=%s&cb=%s\">B</A>"
+		"</td></tr></table></td>\n", 
+		ki->priority,
+		ki->qid, newRandState, 
+		ki->qid, newRandState, 
+		ki->qid, newRandState, 
+		ki->qid, newRandState
+		);
+	    }
 	break;
 	
     case e_rank:
