@@ -1129,6 +1129,16 @@ printf("%s\t%s\t%s\t%s %s\t%s\t%s\t%0.0f\t%0.1f\t%s\n",
      hgSoftberryHom galGal1 *.protein
 
 
+# BUILD BLAST DATABASES
+    cd /cluster/data/galGal1
+    mkdir blastDb
+     for i in `cat chrom.lst`; do for j in `echo $i/chr$i_*/chr*_*_*.fa`; do ln -s `pwd`/$j blastDb/`basename $j .fa`;
+      done; done 
+      cd blastDb
+      for i in *; do formatdb -p F -i $i; done
+# END BLAST
+
+
 # TIGR GENE INDEX (TODO)
     mkdir -p /cluster/data/galGal1/bed/tigr
     cd /cluster/data/galGal1/bed/tigr
@@ -1147,5 +1157,6 @@ printf("%s\t%s\t%s\t%s %s\t%s\t%s\t%0.0f\t%0.1f\t%s\n",
     ldHgGene -exon=TC galGal1 tigrGeneIndex *.gff
        # 139456 gene predictions
     gzip *TCs *.gff
+
 
 
