@@ -1,10 +1,20 @@
-/* paraHub - Parasol hub server.  This is the heart of the parasol system.
- * The hub daemon spawns a heartbeat daemon and a number of spoke deamons
- * on startup,  and then goes into a loop processing messages it recieves
- * on the hub TCP/IP socket.  The hub daemon does not do anything time consuming
- * in this loop.   The main thing the hub daemon does is put jobs on the
- * job list,  move machines from the busy list to the free list,  and call
- * the 'runner' routine.
+/* paraHub - Parasol hub server.  This is the heart of the parasol system
+ * and consists of several threads - sucketSucker, heartbeat, a collection
+ * of spokes, as well as the main hub thread.  The system is synchronized
+ * around a message queue.
+ *
+ * The purpose of socketSucker is to move messages from the UDP
+ * socket, which has a limited queue size, to the message queue, which
+ * can be much larger.  The spoke daemons exist to send messages to compute
+ * nodes.  Since sending a message to a node can take a while depending on
+ * the network conditions, the multiple spokes allow the system to be
+ * delivering messages to multiple nodes simultaniously.  The heartbeat
+ * daemon simply sits in a loop adding a heartbeat message to the message
+ * queue every 15 seconds or so. The hub thead is responsible for
+ * keeping track of everything. The hub thread puts jobs 
+ * on the job list, moves machines from the busy list to the free list,  
+ * and calls the 'runner' routines, and appends job results to results
+ * files in batch directories.
  *
  * The runner routine looks to see if there is a free machine, a free spoke,
  * and a job to run.  If so it will send a message to the spoke telling
@@ -12,7 +22,8 @@
  * to the 'running' list,  the spoke from the freeSpoke to the busySpoke list, 
  * and the machine from the freeMachine to the busyMachine list.   This
  * indirection of starting jobs via a separate spoke process avoids the
- * hub daemon itself having to wait to find out if a machine is down.
+ * hub daemon itself having to wait for a response from a compute node
+ * over the network.
  *
  * When a spoke is done assigning a job, the spoke sends a 'recycleSpoke'
  * message to the hub, which puts the spoke back on the freeSpoke list.
@@ -26,9 +37,8 @@
  * message.   The hub will then move the machine to the deadMachines list,
  * and put the job back on the top of the pending list.
  *
- * The heartbeat daemon simply sits in a loop sending heartbeat messages to
- * the hub every so often (every 30 seconds currently), and sleeping
- * the rest of the time.   When the hub gets a heartbeat message it
+ * The heartbeat messages stimulate the hub to do various background
+ * chores.  When the hub gets a heartbeat message it
  * does a few things:
  *     o - It calls runner to try and start some more jobs.  (Runner
  *         is also called at the end of processing a recycleSpoke, 
@@ -42,23 +52,7 @@
  *         running on the machine they have been assigned to.
  *         If the machine has gone down it is moved to the dead list
  *         and the job is reassigned. 
- *
- * This whole system depends on the hub daemon being able to finish
- * processing messages fast enough to keep the connection queue on the
- * hub socket from overflowing.  Each job involves 3 messages to the
- * hub socket:
- *     addJob - from a client to add the job to the system
- *     recycleSpoke - from the spoke after it's dispatched the job
- *     jobDone - from the compute node when the job is finished
- * On some of the earlier Linux kernals we had trouble with the
- * connection queue overflowing when dispatching lots of short
- * jobs.  This seemed to be from the jobDone messages coming
- * in faster than Linux could make connections rather than the
- * hub daemon being slow.  On the kilokluster with a more modern
- * kernal this has not been a problem - even with very 0.1 second
- * jobs on 1000 CPUs.  Should overflow occur the heartbeat processing
- * should gradually rescue the system in any case, but the throughput
- * will be greatly reduced. */
+ */
 
 #include "paraCommon.h"
 #include "options.h"
