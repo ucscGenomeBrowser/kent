@@ -12,12 +12,11 @@
 #include "hdb.h"
 #include "hui.h"
 #include "cart.h"
-#include "dbDb.h"
 #include "web.h"
 #include "hash.h"
 #include "liftOver.h"
 
-static char const rcsid[] = "$Id: hgLiftOver.c,v 1.24 2004/05/05 22:29:29 kate Exp $";
+static char const rcsid[] = "$Id: hgLiftOver.c,v 1.25 2004/06/16 04:55:21 kate Exp $";
 
 /* CGI Variables */
 #define HGLFT_USERDATA_VAR "hglft_userData"     /* typed/pasted in data */
@@ -99,6 +98,10 @@ if (dbList)
     dbDbFreeList(&dbList);
 dbList = hGetLiftOverToDatabases(fromDb);
 printAllAssemblyListHtmlParm(toDb, dbList, HGLFT_TODB_VAR, TRUE, "");
+cgiTableFieldEnd();
+
+cgiSimpleTableFieldStart();
+puts("<A>HREF=\"../cgi-bin/hgCoordConv?origDb=%s\"<A>);
 cgiTableFieldEnd();
 
 cgiTableRowEnd();
@@ -193,29 +196,10 @@ webNewSection("Command Line Tool");
 cgiParagraph(
 "To lift genome annotations locally on Linux systems, download the "
 "<A HREF=\"http://www.soe.ucsc.edu/~kent/exe/linux/liftOver.gz\">" 
-"<I>liftOver</I></A> executable and the appropriate chain file."
+"<I>liftOver</I></A> executable and the appropriate "
+"<A HREF=\"http://hgdownload.cse.ucsc.edu/downloads.html#liftover\">"
+"chain file</A>."
 " Run <I>liftOver</I> with no arguments to see the usage message.\n");
-
-cgiParagraph("Chain Files:\n");
-/* TODO: automatically generate these links, or pull in from a file */
-puts("<UL>\n");
-puts("<LI>");
-puts( "<A HREF=\"/goldenPath/hg15/liftOver\" TARGET=_blank>" 
-    "Apr. 2003 UCSC hg15 (NCBI Build 33) </A>\n");
-puts("</LI>");
-puts("<LI>");
-puts( "<A HREF=\"/goldenPath/hg13/liftOver\" TARGET=_blank>" 
-    "Nov. 2002 UCSC hg13 (NCBI Build 31) </A>\n");
-puts("</LI>");
-puts("<LI>");
-puts( "<A HREF=\"/goldenPath/hg12/liftOver\" TARGET=_blank>" 
-    "June 2002 UCSC hg12 [ARCHIVED] (NCBI Build 30) </A>\n");
-puts("</LI>");
-puts("<LI>");
-puts( "<A HREF=\"/goldenPath/hg10/liftOver\" TARGET=_blank>" 
-    "Dec. 2001 UCSC hg10 [ARCHIVED] (NCBI Build 28) </A>\n");
-puts("</LI>");
-puts("</UL>");
 }
 
 void doMiddle(struct cart *theCart)
