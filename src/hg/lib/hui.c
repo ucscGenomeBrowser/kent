@@ -170,6 +170,12 @@ static char *recombRateOptions[] = {
     "deCODE Sex Averaged Distances",
     "deCODE Female Distances",
     "deCODE Male Distances",
+    "Marshfield Sex Averaged Distances",
+    "Marshfield Female Distances",
+    "Marshfield Male Distances",
+    "Genethon Sex Averaged Distances",
+    "Genethon Female Distances",
+    "Genethon  Male Distances",
 };
 
 enum recombRateOptEnum rroeStringToEnum(char *string)

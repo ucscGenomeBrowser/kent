@@ -9,9 +9,15 @@ CREATE TABLE recombRate (
     chromStart int unsigned not null,	# Start position in genoSeq
     chromEnd int unsigned not null,	# End position in genoSeq
     name varchar(255) not null,	# Constant string recombRate
-    recombRate float not null,	# Calculated recombination rate for this interval
-    femaleRate float not null,	# Calculated female recombination rate for this interval
-    maleRate float not null,	# Calculated male recombination rate for this interval
+    decodeAvg float not null,	# Calculated deCODE recombination rate
+    decodeFemale float not null,	# Calculated deCODE female recombination rate
+    decodeMale float not null,	# Calculated deCODE male recombination rate
+    marshfieldAvg float not null,	# Calculated Marshfield recombination rate
+    marshfieldFemale float not null,	# Calculated Marshfield female recombination rate
+    marshfieldMale float not null,	# Calculated Marshfield male recombination rate
+    genethonAvg float not null,	# Calculated Genethon recombination rate
+    genethonFemale float not null,	# Calculated Genethon female recombination rate
+    genethonMale float not null,	# Calculated Genethon male recombination rate
               #Indices
     INDEX(chrom(8),chromStart),
     INDEX(chrom(8),chromEnd)

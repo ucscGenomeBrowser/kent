@@ -13,9 +13,15 @@ struct recombRate
     unsigned chromStart;	/* Start position in genoSeq */
     unsigned chromEnd;	/* End position in genoSeq */
     char *name;	/* Constant string recombRate */
-    float recombRate;	/* Calculated recombination rate for this interval */
-    float femaleRate;	/* Calculated female recombination rate for this interval */
-    float maleRate;	/* Calculated male recombination rate for this interval */
+    float decodeAvg;	/* Calculated deCODE recombination rate */
+    float decodeFemale;	/* Calculated deCODE female recombination rate */
+    float decodeMale;	/* Calculated deCODE male recombination rate */
+    float marshfieldAvg;	/* Calculated Marshfield recombination rate */
+    float marshfieldFemale;	/* Calculated Marshfield female recombination rate */
+    float marshfieldMale;	/* Calculated Marshfield male recombination rate */
+    float genethonAvg;	/* Calculated Genethon recombination rate */
+    float genethonFemale;	/* Calculated Genethon female recombination rate */
+    float genethonMale;	/* Calculated Genethon male recombination rate */
     };
 
 void recombRateStaticLoad(char **row, struct recombRate *ret);

@@ -94,6 +94,12 @@ enum recombRateOptEnum {
    rroeDecodeAvg = 0,
    rroeDecodeFemale = 1,
    rroeDecodeMale = 2,
+   rroeMarshfieldAvg = 3,
+   rroeMarshfieldFemale = 4,
+   rroeMarshfieldMale = 5,
+   rroeGenethonAvg = 6,
+   rroeGenethonFemale = 7,
+   rroeGenethonMale = 8,
 };
 
 enum recombRateOptEnum rroeStringToEnum(char *string);

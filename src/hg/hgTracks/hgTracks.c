@@ -4275,11 +4275,35 @@ switch (recombRateType)
 	return TRUE;
         break;
     case rroeDecodeFemale:
-	el->recombRate = el->femaleRate;
+	el->decodeAvg = el->decodeFemale;
         return TRUE;
         break;
     case rroeDecodeMale:
-	el->recombRate = el->maleRate;
+	el->decodeAvg = el->decodeMale;
+        return TRUE;
+        break;
+    case rroeMarshfieldAvg:
+	el->decodeAvg = el->marshfieldAvg;
+	return TRUE;
+        break;
+    case rroeMarshfieldFemale:
+	el->decodeAvg = el->marshfieldFemale;
+        return TRUE;
+        break;
+    case rroeMarshfieldMale:
+	el->decodeAvg = el->marshfieldMale;
+        return TRUE;
+        break;
+    case rroeGenethonAvg:
+	el->decodeAvg = el->genethonAvg;
+	return TRUE;
+        break;
+    case rroeGenethonFemale:
+	el->decodeAvg = el->genethonFemale;
+        return TRUE;
+        break;
+    case rroeGenethonMale:
+	el->decodeAvg = el->genethonMale;
         return TRUE;
         break;
     default:
@@ -4311,17 +4335,17 @@ static char buf[32];
 
 switch (recombRateType)
     {
-    case rroeDecodeAvg:
-	sprintf(buf, "%3.1f cM/Mb (Avg)", rr->recombRate);
+    case rroeDecodeAvg: case rroeMarshfieldAvg: case rroeGenethonAvg:
+	sprintf(buf, "%3.1f cM/Mb (Avg)", rr->decodeAvg);
         break;
-    case rroeDecodeFemale:
-	sprintf(buf, "%3.1f cM/Mb (F)", rr->recombRate);
+    case rroeDecodeFemale: case rroeMarshfieldFemale: case rroeGenethonFemale:
+	sprintf(buf, "%3.1f cM/Mb (F)", rr->decodeAvg);
         break;
-    case rroeDecodeMale:
-	sprintf(buf, "%3.1f cM/Mb (M)", rr->recombRate);
+    case rroeDecodeMale: case rroeMarshfieldMale: case rroeGenethonMale:
+	sprintf(buf, "%3.1f cM/Mb (M)", rr->decodeAvg);
         break;
     default:
-	sprintf(buf, "%3.1f cM/Mb (Avg)", rr->recombRate);
+	sprintf(buf, "%3.1f cM/Mb (Avg)", rr->decodeAvg);
         break;
     }
 return buf;
@@ -4334,11 +4358,11 @@ Color recombRateColor(struct trackGroup *tg, void *item, struct memGfx *mg)
 /* Return color for item in recombRate track item. */
 {
 struct recombRate *rr = item;
-float rate = rr->recombRate;
+float rate = rr->decodeAvg;
 int rcr;
 int grayLevel;
 
-rcr = (int)(rr->recombRate * 200);
+rcr = (int)(rr->decodeAvg * 200);
 grayLevel = grayInRange(rcr, recombRateMin, recombRateMax);
 return shadesOfGray[grayLevel];
 }

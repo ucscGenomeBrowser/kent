@@ -19,9 +19,15 @@ ret->chrom = row[0];
 ret->chromStart = sqlUnsigned(row[1]);
 ret->chromEnd = sqlUnsigned(row[2]);
 ret->name = row[3];
-ret->recombRate = atof(row[4]);
-ret->femaleRate = atof(row[5]);
-ret->maleRate = atof(row[6]);
+ret->decodeAvg = atof(row[4]);
+ret->decodeFemale = atof(row[5]);
+ret->decodeMale = atof(row[6]);
+ret->marshfieldAvg = atof(row[7]);
+ret->marshfieldFemale = atof(row[8]);
+ret->marshfieldMale = atof(row[9]);
+ret->genethonAvg = atof(row[10]);
+ret->genethonFemale = atof(row[11]);
+ret->genethonMale = atof(row[12]);
 }
 
 struct recombRate *recombRateLoad(char **row)
@@ -37,9 +43,15 @@ ret->chrom = cloneString(row[0]);
 ret->chromStart = sqlUnsigned(row[1]);
 ret->chromEnd = sqlUnsigned(row[2]);
 ret->name = cloneString(row[3]);
-ret->recombRate = atof(row[4]);
-ret->femaleRate = atof(row[5]);
-ret->maleRate = atof(row[6]);
+ret->decodeAvg = atof(row[4]);
+ret->decodeFemale = atof(row[5]);
+ret->decodeMale = atof(row[6]);
+ret->marshfieldAvg = atof(row[7]);
+ret->marshfieldFemale = atof(row[8]);
+ret->marshfieldMale = atof(row[9]);
+ret->genethonAvg = atof(row[10]);
+ret->genethonFemale = atof(row[11]);
+ret->genethonMale = atof(row[12]);
 return ret;
 }
 
@@ -49,7 +61,7 @@ struct recombRate *recombRateLoadAll(char *fileName)
 {
 struct recombRate *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[7];
+char *row[13];
 
 while (lineFileRow(lf, row))
     {
@@ -100,9 +112,15 @@ ret->chrom = sqlStringComma(&s);
 ret->chromStart = sqlUnsignedComma(&s);
 ret->chromEnd = sqlUnsignedComma(&s);
 ret->name = sqlStringComma(&s);
-ret->recombRate = sqlFloatComma(&s);
-ret->femaleRate = sqlFloatComma(&s);
-ret->maleRate = sqlFloatComma(&s);
+ret->decodeAvg = sqlFloatComma(&s);
+ret->decodeFemale = sqlFloatComma(&s);
+ret->decodeMale = sqlFloatComma(&s);
+ret->marshfieldAvg = sqlFloatComma(&s);
+ret->marshfieldFemale = sqlFloatComma(&s);
+ret->marshfieldMale = sqlFloatComma(&s);
+ret->genethonAvg = sqlFloatComma(&s);
+ret->genethonFemale = sqlFloatComma(&s);
+ret->genethonMale = sqlFloatComma(&s);
 *pS = s;
 return ret;
 }
@@ -148,11 +166,23 @@ if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->name);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
-fprintf(f, "%f", el->recombRate);
+fprintf(f, "%f", el->decodeAvg);
 fputc(sep,f);
-fprintf(f, "%f", el->femaleRate);
+fprintf(f, "%f", el->decodeFemale);
 fputc(sep,f);
-fprintf(f, "%f", el->maleRate);
+fprintf(f, "%f", el->decodeMale);
+fputc(sep,f);
+fprintf(f, "%f", el->marshfieldAvg);
+fputc(sep,f);
+fprintf(f, "%f", el->marshfieldFemale);
+fputc(sep,f);
+fprintf(f, "%f", el->marshfieldMale);
+fputc(sep,f);
+fprintf(f, "%f", el->genethonAvg);
+fputc(sep,f);
+fprintf(f, "%f", el->genethonFemale);
+fputc(sep,f);
+fprintf(f, "%f", el->genethonMale);
 fputc(lastSep,f);
 }
 
