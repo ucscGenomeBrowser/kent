@@ -11,7 +11,7 @@
 #include "wiggle.h"
 #include "scoredRef.h"
 
-static char const rcsid[] = "$Id: wigTrack.c,v 1.38 2004/02/04 18:13:43 hiram Exp $";
+static char const rcsid[] = "$Id: wigTrack.c,v 1.39 2004/02/09 19:46:21 hiram Exp $";
 
 /*	wigCartOptions structure - to carry cart options from wigMethods
  *	to all the other methods via the track->extraUiData pointer
@@ -198,6 +198,7 @@ struct wigItem *wiList = NULL;
 char *whereNULL = NULL;
 int itemsLoaded = 0;
 char spanName[128];
+char *previousFileName;
 struct hashEl *el, *elList;
 struct hashEl *el2, *elList2;
 struct hash *spans = NULL;	/* Spans encountered during load */
@@ -208,8 +209,8 @@ struct hash *spans = NULL;	/* Spans encountered during load */
  *	level exists.
  */
 int basesPerPixel = (int)((double)(winEnd - winStart)/(double)insideWidth);
-char *span1K = "Span = 1024 limit 1";
-char *spanOver1K = "Span >= 1024";
+char *span1K = "Span >= 1000 limit 1";
+char *spanOver1K = "Span >= 1000";
 
 if (basesPerPixel >= 1024) {
 sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd,
@@ -246,6 +247,7 @@ spans = newHash(0);
 /*	Each row read will be turned into an instance of a wigItem
  *	A growing list of wigItems will be the items list to return
  */
+previousFileName = "";
 itemsLoaded = 0;
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -261,8 +263,12 @@ while ((row = sqlNextRow(sr)) != NULL)
 	wi->name = tg->shortLabel;
 	fileNameSize = strlen(wiggle->file) + 1;
 
-	if (! fileExists(wiggle->file))
-	    errAbort("wigLoadItems: file '%s' missing", wiggle->file);
+	if (differentString(previousFileName,wiggle->file))
+	    {
+	    if (! fileExists(wiggle->file))
+		errAbort("wigLoadItems: file '%s' missing", wiggle->file);
+	    previousFileName = cloneString(wiggle->file);
+	    }
 	wi->file = cloneString(wiggle->file);
 
 	wi->span = wiggle->span;
