@@ -9,7 +9,7 @@
 #include "axt.h"
 #include "hgGene.h"
 
-static char const rcsid[] = "$Id: otherOrgs.c,v 1.7 2004/11/22 22:50:02 kent Exp $";
+static char const rcsid[] = "$Id: otherOrgs.c,v 1.8 2004/11/22 23:05:03 kent Exp $";
 
 struct otherOrg
 /* Links involving another organism. */
@@ -332,10 +332,15 @@ if (localSeq != NULL && otherSeq != NULL)
 	hPrintf("<TT><PRE>");
 	if (axt != NULL)
 	    {
+	    printf("ID (including gaps) %3.1f%%, coverage (of both) %3.1f%%, score %d\n",
+		     axtIdWithGaps(axt)*100, 
+		     axtCoverage(axt, localSeq->size, otherSeq->size)*100, 
+		     axt->score);
 	    printf("Alignment between %s (top %s %daa) and\n",
 		    localName, localSeq->name, localSeq->size);
-	    printf("%s homolog (bottom %s %daa) score %d\n\n",
-		     otherTable, otherSeq->name, otherSeq->size, axt->score);
+	    printf("%s homolog (bottom %s %daa)\n",
+		     otherTable, otherSeq->name, otherSeq->size);
+	    printf("\n");
 	    axtPrintTraditional(axt, 60, ss, stdout);
 	    axtFree(&axt);
 	    }
