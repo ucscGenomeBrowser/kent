@@ -11,7 +11,18 @@
 #include "wiggle.h"
 #include "scoredRef.h"
 
-static char const rcsid[] = "$Id: wigTrack.c,v 1.6 2003/09/25 23:49:08 hiram Exp $";
+static char const rcsid[] = "$Id: wigTrack.c,v 1.7 2003/09/27 08:31:37 hiram Exp $";
+
+struct wigCartOptions
+    {
+    enum wiggleOptEnum wiggleType;
+    boolean zoomCompression;	/*  true - do max() averaging over the bin
+    				 *  false - simple pick one of the
+				 *  points in the bin.
+				 */
+    enum wiggleGridOptEnum horizontalGrid;
+    				/*  true - display grid lines, else not */
+    };
 
 struct wigItem
 /* A wig track item. */
@@ -235,14 +246,44 @@ int rowOffset;
 struct wiggle *wiggle;
 struct linkedFeatures *lfList = NULL;
 struct linkedFeatures *lf;
-char *where = NULL;
+char *whereNULL = NULL;
 int rowsLoaded = 0;
 char spanName[128];
 struct hashEl *el, *elList;
 struct hashEl *el2, *elList2;
 struct hash *spans = NULL;	/* Spans encountered during load */
+/*	Check our scale from the global variables that exist in
+ *	hgTracks.c - This can give us a guide about which rows to load.
+ *	If the scale is more than 1K bases per pixel, we can try loading
+ *	only those rows with Span == 1024 to see if an appropriate zoom
+ *	level exists.
+ */
+int basesPerPixel = (int)((double)(winEnd - winStart)/(double)insideWidth);
+char *span1K = "Span = 1024";
+char *spanOver1K = "Span >= 1024";
 
-sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd, where, &rowOffset);
+if( basesPerPixel >= 1024 ) {
+sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd,
+	span1K, &rowOffset);
+while ((row = sqlNextRow(sr)) != NULL)
+	++rowsLoaded;
+}
+/*	If that worked, excellent, then we have at least another zoom level
+ *	So, for our actual load, use spanOver1K to fetch not only the 1K
+ *	zooms, but potentially others that may be useful.  This will
+ *	save us a huge amount in loaded rows.  On a 250 Mbase chromosome
+ *	there would be 256,000 rows at the 1 base level and only
+ *	256 rows at the 1K zoom level.  Otherwise, we go back to the
+ *	regular query which will give us all rows.
+ */
+if( rowsLoaded )
+    {
+sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd,
+	spanOver1K, &rowOffset);
+    } else {
+sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd,
+	whereNULL, &rowOffset);
+    }
 
 /*	Allocate trackSpans one time only	*/
 if( ! trackSpans )
@@ -270,8 +311,6 @@ while ((row = sqlNextRow(sr)) != NULL)
 	wiggleFree(&wiggle);
     }
 
-if(where != NULL)
-        freez(&where);
 sqlFreeResult(&sr);
 hFreeConn(&conn);
 
@@ -291,27 +330,19 @@ struct linkedFeatures *lf;
 double pixelsPerBase = scaleForPixels(width);
 double basesPerPixel = 1.0;
 struct rgbColor *normal = &(tg->color);
-int black;
+Color drawColor = vgFindColorIx(vg, 0, 0, 0);
 int itemCount = 0;
 char *currentFile = (char *) NULL;	/*	the binary file name */
 FILE *f = (FILE *) NULL;		/*	file handle to binary file */
 struct hashEl *el, *elList;
 char cartStr[64];	/*	to set cart strings	*/
-char *interpolate = NULL;	/*	samples only, or interpolate */
-char o2[128];	/*	Option 2 - interpolate or samples only	*/
+struct wigCartOptions *wigCart;
 enum wiggleOptEnum wiggleType;
+enum wiggleGridOptEnum horizontalGrid;
 
-snprintf( o2, sizeof(o2), "%s.linear.interp", tg->mapName);
-interpolate = cartOptionalString(cart, o2);
-if( interpolate )
-    wiggleType = wiggleStringToEnum(interpolate);
-    else 
-    {
-    wiggleType = wiggleStringToEnum("Linear Interpolation");
-    /*	And set that value back into the cart for hgTrackUi	*/
-    snprintf( cartStr, sizeof(cartStr), "%s", "Linear Interpolation" );
-    cartSetString( cart, o2, cartStr );
-    }
+wigCart = (struct wigCartOptions *) tg->extraUiData;
+wiggleType = wigCart->wiggleType;
+horizontalGrid = wigCart->horizontalGrid;
 
 if( pixelsPerBase > 0.0 )
     basesPerPixel = 1.0 / pixelsPerBase;
@@ -319,20 +350,13 @@ if( pixelsPerBase > 0.0 )
 for (lf = tg->items; lf != NULL; lf = lf->next)
     ++itemCount;
 
-black = vgFindColorIx(vg, 0, 0, 0);
 
 /*	width - width of drawing window in pixels
  *	pixelsPerBase - pixels per base
  *	basesPerPixel - calculated as 1.0/pixelsPerBase
  */
-snprintf(dbgMsg, DBGMSGSZ, "========================  Next Item  ============\nwidth: %d, height: %d, heightPer: %d, pixelsPerBase: %.4f", width, tg->lineHeight, tg->heightPer, pixelsPerBase );
-debugPrint("wigDrawItems");
-snprintf(dbgMsg, DBGMSGSZ, "seqStart: %d, seqEnd: %d, xOff: %d, yOff: %d, black: %d", seqStart, seqEnd, xOff, yOff, black );
-debugPrint("wigDrawItems");
-snprintf(dbgMsg, DBGMSGSZ, "itemCount: %d, Y range: %.1f - %.1f, basesPerPixel: %.4f", itemCount, tg->minRange, tg->maxRange, basesPerPixel );
-debugPrint("wigDrawItems");
-
 itemCount = 0;
+
 for (lf = tg->items; lf != NULL; lf = lf->next)
     {
     struct simpleFeature *sf = lf->components;	/* for each feature */
@@ -352,6 +376,14 @@ for (lf = tg->items; lf != NULL; lf = lf->next)
     int x1 = 0;
     int w,h,x2,y2;
     int loopTimeout = 0;	/*	to catch a runaway drawing loop */
+
+snprintf(dbgMsg, DBGMSGSZ, "========================  Next Item  %d %s ============\nwidth: %d, height: %d, heightPer: %d, pixelsPerBase: %.4f", itemCount, lf->name, width, tg->lineHeight, tg->heightPer, pixelsPerBase );
+debugPrint("wigDrawItems");
+snprintf(dbgMsg, DBGMSGSZ, "seqStart: %d, seqEnd: %d, xOff: %d, yOff: %d", seqStart, seqEnd, xOff, yOff );
+debugPrint("wigDrawItems");
+snprintf(dbgMsg, DBGMSGSZ, "Y range: %.1f - %.1f, basesPerPixel: %.4f", tg->minRange, tg->maxRange, basesPerPixel );
+debugPrint("wigDrawItems");
+
 
     h = tg->lineHeight;
     /*	Take a look through the potential spans, and given what we have
@@ -436,6 +468,13 @@ debugPrint("wigDrawItems");
 snprintf(dbgMsg, DBGMSGSZ, "Total Data Points in this bin: %d, this window w = %d", wi->Count, w );
 debugPrint("wigDrawItems");
 	loopTimeout = 0;
+
+	/*	try filling the entire track with a background color */
+	/*	This doesn't seem to work correctly
+	if( usingDataSpan > 1 ) drawColor = tg->ixColor;
+	else drawColor = tg->ixAltColor;
+	vgBox(vg, x1, yOff, w, h, drawColor );
+	*/
 	for ( pixelToDraw = 0; pixelToDraw < w && loopTimeout < 5000;
 		pixelToDraw += pixelsPerDataValue )
 	    {
@@ -446,9 +485,8 @@ debugPrint("wigDrawItems");
 
 	    ++loopTimeout;
 	    skipDataPoints = dataValuesPerPixel * pixelToDraw;
-	    /*dataValue = *(dataStarts + (pixelToDraw * pixelsPerDataValue) + skipDataPoints);*/
 if( (skipDataPoints + dataOffsetStart) > wi->Count )
-    dataValue = *(dataStarts);
+    dataValue = 0;
 else
     dataValue = *(dataStarts + skipDataPoints);
 /* debug print */
@@ -465,17 +503,18 @@ debugPrint("wigDrawItems");
 		int validData = 0;
 		unsigned char data;
 		dataValue = 0;
+/*
+snprintf(dbgMsg, DBGMSGSZ, "Interpolating %d points from %d to %d", (int) dataValuesPerPixel, (pixelToDraw * pixelsPerDataValue) + skipDataPoints, (pixelToDraw * pixelsPerDataValue) + (int) dataValuesPerPixel + skipDataPoints);
+debugPrint("wigDrawItems");
+*/
 		for( j = 0; j < (int) dataValuesPerPixel; ++j )
 		    {
-			/*
-		    data = *(dataStarts + (pixelToDraw * pixelsPerDataValue) +
-			    j + skipDataPoints );
-			    */
-		    data = *(dataStarts + j + skipDataPoints );
 if( (skipDataPoints + dataOffsetStart + j) > wi->Count ) {
 snprintf(dbgMsg, DBGMSGSZ, "ERROR: interpolate data offset is too large: %d > %d # of data points, at j: %d", (skipDataPoints + dataOffsetStart + j), wi->Count, j );
-			data = *(dataStarts);
 debugPrint("wigDrawItems");
+			data = 0;
+} else {
+		    data = *(dataStarts + j + skipDataPoints );
 }
 		    if( data < WIG_NO_DATA )
 			{
@@ -493,7 +532,7 @@ debugPrint("wigDrawItems");
 	    /*	Display on for valid data */
 	    if( dataValue < WIG_NO_DATA )
 		{
-		boxHeight = (h * dataValue) / 128;
+		boxHeight = (h * dataValue) / MAX_WIG_VALUE;
 		if( boxHeight < 1 ) boxHeight = 1;
 		if( boxHeight > h ) boxHeight = h;
 		x1 = pixelToDraw + xOff +
@@ -508,7 +547,7 @@ snprintf(dbgMsg, DBGMSGSZ, "*** data offset at start:  %d, %d # of data points, 
 debugPrint("wigDrawItems");
 }
 		lastPixel = 0;
-/* debug print */
+/* debug print  !!!*** and kludge for lastPixel not draw situation */
 if( pixelToDraw >= (w - pixelsPerDataValue) ) {
     		lastPixel = 1;
 snprintf(dbgMsg, DBGMSGSZ, "*** end drawing at x1: %d, skipDataPoints: %d, dataValuesPerPixel: %.6f", x1, skipDataPoints, dataValuesPerPixel );
@@ -519,23 +558,51 @@ snprintf(dbgMsg, DBGMSGSZ, "*** end drawing last data offset: %d, pixelToDraw: %
 debugPrint("wigDrawItems");
 }
 if( (yOff+(h-boxHeight)) > yOff+h ) {
-snprintf(dbgMsg, DBGMSGSZ, "ERROR: x1 out of range: %d > %d, yOff: %d, h: %d, boxHeight: %d", yOff+(h-boxHeight), yOff+h, yOff, h, boxHeight);
+snprintf(dbgMsg, DBGMSGSZ, "ERROR: y1 out of range: %d > %d, yOff: %d, h: %d, boxHeight: %d", yOff+(h-boxHeight), yOff+h, yOff, h, boxHeight);
 debugPrint("wigDrawItems");
 }
-		vgBox(vg, x1, yOff+(h-boxHeight), pixelsPerDataValue + lastPixel, boxHeight, tg->ixColor);
+		/* switch color at spans > 1 for debugging purpose */
+		if( usingDataSpan > 1 ) drawColor = tg->ixAltColor;
+    		else drawColor = tg->ixColor;
+
+		vgBox(vg, x1, yOff+(h-boxHeight), pixelsPerDataValue + lastPixel, boxHeight, drawColor );
 		}
 	    }	/*	end of item drawing loop	*/
 if( loopTimeout > 4900 ) {
 snprintf(dbgMsg, DBGMSGSZ, "ERROR: drawing loop timeout: %d", loopTimeout);
 debugPrint("wigDrawItems");
 }
-
 snprintf(dbgMsg, DBGMSGSZ, "itemCount: %d, start: %d, end: %d, X: %d->%d, File: %s", itemCount, sf->start, sf->end, x1, x1+w, wi->File );
 debugPrint("wigDrawItems");
 
 	freeMem(ReadData);
 	}	/*	Draw if span is correct	*/
     }	/*	for ( each item )	*/
+
+    if( horizontalGrid == wiggleHorizontalGridOn )
+	{
+	double yRange;
+	int x1, x2, y1, y2;
+	int gridLines = 2;
+	int drewLines = 0;
+	Color black;
+	black = vgFindColorIx(vg, 0, 0, 0);
+	yRange = tg->maxRange - tg->minRange;
+	x1 = xOff;
+	x2 = x1 + width;
+	if( tg->lineHeight > 64 )
+	    gridLines = 4;
+	else if( tg->lineHeight > 32 )
+	    gridLines = 3;
+	for( y1 = yOff; y1 <= tg->lineHeight+yOff;
+		y1 += ((tg->lineHeight-1) / gridLines) )
+	    {
+	    y2 = y1;
+	    ++drewLines;
+	    vgLine(vg,x1,y1,x2,y2,black);
+	    }
+	}
+
 if( f != (FILE *) NULL )
     {
     fclose(f);
@@ -548,18 +615,27 @@ void wigMethods(struct track *track, struct trackDb *tdb,
 	int wordCount, char *words[])
 {
 char o1[128];	/*	Option 1 - track pixel height:  .heightPer	*/
+char o2[128];	/*	Option 2 - interpolate or samples only	*/
 char o4[128];	/*	Option 4 - minimum Y axis value: .minY	*/
 char o5[128];	/*	Option 5 - maximum Y axis value: .minY	*/
-char *minY_str;	/*	string from cart	*/
-char *maxY_str;	/*	string from cart	*/
-char *heightPer;	/*	string from cart	*/
+char o7[128];	/*	Option 5 - draw horizontal grid lines: horizGrid */
+char *interpolate = NULL;	/*	samples only, or interpolate */
+char *horizontalGrid = NULL;	/*	Grid lines, off by default */
+char *minY_str = NULL;	/*	string from cart	*/
+char *maxY_str = NULL;	/*	string from cart	*/
+char *heightPer = NULL;	/*	string from cart	*/
 int heightFromCart;	/*	truncated by limits	*/
 double minYc;	/*	from cart */
 double maxYc;	/*	from cart */
+enum wiggleOptEnum wiggleType;
+enum wiggleGridOptEnum wiggleHorizGrid;
 double minY;	/*	from trackDb.ra words, the absolute minimum */
 double maxY;	/*	from trackDb.ra words, the absolute maximum */
 char cartStr[64];	/*	to set cart strings	*/
+struct wigCartOptions *wigCart;
 
+
+AllocVar(wigCart);
 
 /*	Start with an arbitrary min,max when not given in the .ra file	*/
 minY = DEFAULT_MIN_Yv;
@@ -571,11 +647,15 @@ if( wordCount > 2 ) maxY = atof(words[2]);
 
 /*	Possibly fetch values from the cart	*/
 snprintf( o1, sizeof(o1), "%s.heightPer", track->mapName);
+snprintf( o2, sizeof(o2), "%s.linear.interp", track->mapName);
 snprintf( o4, sizeof(o4), "%s.minY", track->mapName);
 snprintf( o5, sizeof(o5), "%s.maxY", track->mapName);
+snprintf( o7, sizeof(o7), "%s.horizGrid", track->mapName);
 heightPer = cartOptionalString(cart, o1);
+interpolate = cartOptionalString(cart, o2);
 minY_str = cartOptionalString(cart, o4);
 maxY_str = cartOptionalString(cart, o5);
+horizontalGrid = cartOptionalString(cart, o7);
 
 if( minY_str ) minYc = atof(minY_str);
 else minYc = minY;
@@ -590,12 +670,47 @@ else heightFromCart = DEFAULT_HEIGHT_PER;
 track->heightPer = max( MIN_HEIGHT_PER, heightFromCart );
 
 /*	The values from trackDb.ra are the clipping boundaries, do
- *	not let cart settings go outside that range
+ *	not let cart settings go outside that range, and keep them
+ *	in proper order.
  */
 track->minRange = max( minY, minYc );
 track->maxRange = min( maxY, maxYc );
+if( track->maxRange < track->minRange )
+    {
+	double d;
+	d = track->maxRange;
+	track->maxRange = track->minRange;
+	track->minRange = d;
+    }
 
-/*	And set those values back into the cart for hgTrackUi	*/
+/*	If interpolate is a string, it came from the cart, otherwise set
+ *	the default for this option and stuff it into the cart
+ */
+if( interpolate )
+    wiggleType = wiggleStringToEnum(interpolate);
+    else 
+    {
+    wiggleType = wiggleStringToEnum("Linear Interpolation");
+    snprintf( cartStr, sizeof(cartStr), "%s", "Linear Interpolation" );
+    cartSetString( cart, o2, cartStr );
+    }
+wigCart->wiggleType = wiggleType;
+
+/*	If horizontalGrid is a string, it came from the cart, otherwise set
+ *	the default for this option and stuff it into the cart
+ */
+if( horizontalGrid )
+    wiggleHorizGrid = wiggleGridStringToEnum(horizontalGrid);
+    else 
+    {
+    wiggleHorizGrid = wiggleGridStringToEnum("OFF");
+    snprintf( cartStr, sizeof(cartStr), "%s", "OFF" );
+    cartSetString( cart, o7, cartStr );
+    }
+wigCart->horizontalGrid = wiggleHorizGrid;
+
+
+/*	And set the other values back into the cart for hgTrackUi	*/
 snprintf( cartStr, sizeof(cartStr), "%d", track->heightPer );
 cartSetString( cart, o1, cartStr );
 snprintf( cartStr, sizeof(cartStr), "%g", track->minRange );
@@ -618,4 +733,5 @@ track->itemEnd = tgItemNoEnd;
  */
 track->subType = lfSubSample;     /*make subType be "sample" (=2)*/
 track->mapsSelf = TRUE;
+track->extraUiData = (void *) wigCart;
 }
