@@ -846,3 +846,29 @@ doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain} {check
 # spectrum on
 # type chain ce2
 
+# ADD TWINSCAN PREDICTIONS (DONE, 2004-11-30, hartera)
+    # Provided by Chaochun Wei: wei@cse.wustl.edu
+    # These are gene predictions produced by Iscan (new version of Twinscan)
+    # C. briggsae/C. elegans (version WS98) homology used for predictions.
+    ssh eieio
+    mkdir -p /cluster/data/cb1/bed/twinscan
+    cd /cluster/data/cb1/bed/twinscan
+    wget --timestamp \
+         http://genes.cs.wustl.edu/predictions/worm/C_briggsae/cb25.agp8_11_19_2004/cb25.agp8_11_19_2004.tgz
+    tar xvzf cb25.agp8_11_19_2004.tgz
+    # Add '.a' to end of protein fasta id's, to match gtf transcript_id's:
+    cp /dev/null twinscanPep.fa
+    perl -wpe 's/^(>\S+).*/$1.a/' chr_ptx/*.ptx > twinscanPep.fa
+    # need to do lift up from contigs to chrUn
+    cat ./chr_gtf/cb*.gtf >> cbAll.gtf
+    liftUp cbAll.lifted.gtf /cluster/data/cb1/Un/chrUn.lft warn cbAll.gtf
+    # Got 1156 lifts in /cluster/data/cb1/Un/chrUn.lft
+    # load.
+    ssh hgwdev
+    cd /cluster/data/cb1/bed/twinscan
+    ldHgGene -gtf -genePredExt cb1 twinscan cbAll.lifted.gtf
+    # Read 25001 transcripts in 175327 lines in 1 files
+    # 25001 groups 1 seqs 1 sources 3 feature types
+    # 25001 gene predictions
+    hgPepPred cb1 generic twinscanPep twinscanPep.fa
+# Add track to trackDb.ra for cb1
