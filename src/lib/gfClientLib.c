@@ -1127,7 +1127,7 @@ for (tIsRc=0; tIsRc <= 1; ++tIsRc)
 	splitPath(range->tName, dir, chromName, ext);
 	t3 = range->t3;
 	saveAlignments(chromName, t3->nibSize, t3->start, 
-	    bun, outData, qIsRc, ffTight, minMatch, outFunction);
+	    bun, outData, qIsRc, stringency, minMatch, outFunction);
 	ssBundleFree(&bun);
 	}
 
@@ -1191,7 +1191,7 @@ for (range = rangeList; range != NULL; range = range->next)
     bun->genoSeq = targetSeq;
     bun->data = range;
     bun->ffList = rangesToFfItem(range->components, qSeq);
-    ssStitch(bun, ffTight);
+    ssStitch(bun, stringency);
     saveAlignments(targetSeq->name, targetSeq->size, 0, 
 	bun, outData, isRc, stringency, minMatch, outFunction);
     ssBundleFree(&bun);
