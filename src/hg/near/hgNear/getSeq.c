@@ -14,7 +14,7 @@
 #include "genePred.h"
 #include "bed.h"
 
-static char const rcsid[] = "$Id: getSeq.c,v 1.6 2003/10/18 16:34:37 kent Exp $";
+static char const rcsid[] = "$Id: getSeq.c,v 1.7 2003/10/21 22:07:41 kent Exp $";
 
 static void printNameAndDescription(struct sqlConnection *conn, 
 	struct genePos *gp, struct column *nameCol, struct column *descCol)
@@ -79,7 +79,7 @@ getSeqFromBlob(conn, colList, geneList, "pepTable");
 
 void getGeneMrna(struct sqlConnection *conn, 
 	struct column *colList, struct genePos *geneList, char *tableId)
-/* Get promoter sequence for gene. */
+/* Get mRNA sequence for gene from gene prediction. */
 {
 struct sqlResult *sr;
 char **row;
@@ -112,6 +112,7 @@ for (gp = geneList; gp != NULL; gp = gp->next)
 	bedFree(&bed);
 	genePredFree(&gene);
 	}
+    sqlFreeResult(&sr);
     }
 hPrintf("</TT></PRE>");
 hFreeConn(&conn2);
