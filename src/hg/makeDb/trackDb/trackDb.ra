@@ -551,6 +551,7 @@ priority 56
 visibility dense
 spectrum on
 type psl est
+intronGap 30
 
 track est
 shortLabel $Organism ESTs
@@ -560,6 +561,7 @@ priority 57
 visibility hide
 spectrum on
 type psl est
+intronGap 30
 
 track tightEst
 shortLabel Tight ESTs
