@@ -11,7 +11,7 @@
 #include "genbank.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: genePred.c,v 1.43 2004/03/29 01:02:03 markd Exp $";
+static char const rcsid[] = "$Id: genePred.c,v 1.44 2004/04/12 06:54:18 markd Exp $";
 
 /* SQL to create a genePred table */
 static char *createSql = 
@@ -410,11 +410,34 @@ if (!sameString(gl->seq, gp->chrom) && (gl->strand == gp->strand[0]))
     }
 }
 
-static boolean isCds(char *feat, boolean isGtf)
-/* determine if a feature is CDS */
+static void fixStopFrame(struct genePred *gp)
+/* Nasty corner case: GTF with the all or part of the stop codon as the only
+ * codon in an exon, we must set the frame on this exon.  */
 {
-return sameWord(feat, "CDS") ||  sameWord(feat, "stop_codon")
-    || sameWord(feat, "start_codon");
+int stopPos = (gp->strand[0] == '+') ? gp->cdsEnd-1 : gp->cdsStart;
+int iStop = -1, i;
+
+/* find position containing last base */
+for (i = 0; (i < gp->exonCount) && (iStop < 0); i++)
+    {
+    if ((gp->exonStarts[i] <= stopPos) && (stopPos < gp->exonEnds[i]))
+        iStop = i;
+    }
+if ((iStop >= 0) && (gp->exonFrames[iStop] < 0))
+    {
+    if (gp->strand[0] == '+')
+        {
+        /* pos, compute from previous exon */
+        assert(iStop > 0);
+        gp->exonFrames[iStop] = (gp->exonFrames[iStop-1]+(gp->exonEnds[iStop-1]-gp->exonStarts[iStop-1])) % 3;
+        }
+    else
+        {
+        /* neg, compute from next exon */
+        assert(iStop < gp->exonCount-1);
+        gp->exonFrames[iStop] = (gp->exonFrames[iStop+1]+(gp->exonEnds[iStop+1]-gp->exonStarts[iStop+1])) % 3;
+        }
+    }
 }
 
 static struct genePred *mkFromGroupedGxf(struct gffFile *gff, struct gffGroup *group, char *name,
@@ -438,7 +461,7 @@ for (gl = group->lineList; gl != NULL; gl = gl->next)
     char *feat = gl->feature;
     if (isExon(feat, isGtf, exonSelectWord))
 	++exonCount;
-    if (isCds(feat, isGtf))
+    if (sameWord(feat, "CDS") || sameWord(feat, "stop_codon") || sameWord(feat, "start_codon"))
         {
 	if (gl->start < cdsStart)
             cdsStart = gl->start;
@@ -450,8 +473,11 @@ for (gl = group->lineList; gl != NULL; gl = gl->next)
         haveStartCodon = TRUE;
     if (sameWord(feat, "stop_codon"))
         {
-        stopCodonStart = gl->start;
-        stopCodonEnd = gl->end;
+        /* stop_codon can be split, need bounds for adjusting CDS below */
+        if ((stopCodonStart < 0) || (gl->start < stopCodonStart))
+            stopCodonStart = gl->start;
+        if ((stopCodonEnd < 0) || (gl->end > stopCodonEnd))
+            stopCodonEnd = gl->end;
         haveStopCodon = TRUE;
         }
     }
@@ -463,13 +489,19 @@ if (cdsStart > cdsEnd)
     cdsStart = 0;
     cdsEnd = 0;
     }
-else if (isGtf && (stopCodonStart >= 0))
+else if (stopCodonStart >= 0)
     {
-    /* adjust CDS to include stop codon in GTF */
+    /* adjust CDS to include stop codon as in GTF */
     if (group->strand == '+')
-        cdsEnd = stopCodonEnd;
+        {
+        if (stopCodonEnd > cdsEnd)
+            cdsEnd = stopCodonEnd;
+        }
     else
-        cdsStart = stopCodonStart;
+        {
+        if (stopCodonStart < cdsStart)
+            cdsStart = stopCodonStart;
+        }
     }
 
 /* Allocate genePred and fill in values. */
@@ -551,18 +583,10 @@ for (gl = group->lineList; gl != NULL; gl = gl->next)
             if (gl->end > eEnds[i])
                 eEnds[i] = gl->end;
             }
-        /* extend exon for stop codon in GTF if needed */
-        if (isGtf)
-            {
-            if ((group->strand == '+') && (eEnds[i] == stopCodonStart))
-                eEnds[i] = stopCodonEnd;
-            else if ((group->strand == '-') && (eStarts[i] == stopCodonEnd))
-                eStarts[i] = stopCodonStart;
-            }
-        if ((optFields & genePredExonFramesFld) && isCds(gl->feature, isGtf))
+        if ((optFields & genePredExonFramesFld) && sameWord(gl->feature, "CDS"))
             {
             /* set frame if this is a CDS, convert from GFF/GTF definition.
-            * leave unchanged if no frame.*/
+             * leave unchanged if no frame.*/
             switch (gl->frame) {
                 case '0':
                     eFrames[i] = 0;
@@ -578,6 +602,10 @@ for (gl = group->lineList; gl != NULL; gl = gl->next)
         }
     }
 gp->exonCount = i+1;
+
+if (optFields & genePredExonFramesFld)
+    fixStopFrame(gp);
+
 return gp;
 }
 
@@ -585,13 +613,7 @@ struct genePred *genePredFromGroupedGff(struct gffFile *gff, struct gffGroup *gr
 	char *exonSelectWord, unsigned optFields)
 /* Convert gff->groupList to genePred list. */
 {
-struct genePred *gp;
-int cdsStart = BIGNUM, cdsEnd = -BIGNUM;
-int exonCount = 0;
-boolean haveCds = FALSE, haveStartCodon = FALSE, haveStopCodon = FALSE;
 struct gffLine *gl;
-unsigned *eStarts, *eEnds, *eFrames;
-int i;
 boolean anyExon = FALSE;
 
 /* Look to see if any exons.  If not allow CDS to be used instead. */
