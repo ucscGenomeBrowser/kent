@@ -1,3 +1,14 @@
+track blastHg17KG
+shortLabel Mapped Human
+longLabel Human (hg17) proteins mapped by chained tBLASTn
+group genes
+priority 51
+visibility pack
+colorChromDefault off
+type psl protein
+pred hg17.blastKGPep00
+blastRef hg17.blastKGRef00
+
 track all_mrna
 shortLabel $Organism mRNAs
 longLabel $Organism mRNAs from GenBank
@@ -83,17 +94,6 @@ visibility hide
 spectrum on
 type netAlign hg17 chainHg17
 otherDb hg17
-
-track blastHg17KG
-shortLabel Human Proteins
-longLabel Human Proteins
-group compGeno
-priority 166
-visibility pack
-colorChromDefault off
-type psl protein
-pred hg17.blastKGPep00
-blastRef hg17.blastKGRef00
 
 track chainMm5
 shortLabel $o_Organism Chain 
