@@ -4341,12 +4341,12 @@ numColumns = logBase2(maxVal) - logBase2(minVal);
 printf("<TABLE  BGCOLOR=\"#000000\" BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"1\"><TR><TD>\n");
 printf("<TABLE  BGCOLOR=\"#fffee8\" BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"1\">\n<tr>");
 printf("<th colspan=%d>False Color Key</th></tr>\n<tr>",numColumns);
-for(currentVal = minVal; (currentVal < maxVal && maxVal >= 2*currentVal); currentVal = (2*currentVal))
+for(currentVal = minVal; currentVal <= maxVal; currentVal = (2*currentVal))
     {
-    printf("<th><b> %7.2g </b></th>", currentVal);
+    printf("<th width=55><b> %7.2g </b></th>", currentVal);
     }
 printf("</tr>\n<tr>");
-for(currentVal = minVal; (currentVal <= maxVal && maxVal >= 2*currentVal); currentVal = (2*currentVal))
+for(currentVal = minVal; currentVal <= maxVal; currentVal = (2*currentVal))
     {
     struct rgbColor rgb = getColor(currentVal, maxVal);
     printf("<td bgcolor=\"#%.2X%.2X%.2X\">&nbsp</td>\n", rgb.r, rgb.g, rgb.b);
@@ -4746,6 +4746,25 @@ else
 webEnd();
 }
 
+void printAffyLinks(char *name)
+/* print out links to affymetrix's netaffx website */
+{
+char *netaffxPre = "https://www.netaffx.com/Portal?anlys=true&srsquery=wgetz?-id+PERM+-e+[HG_U95_Target:'";
+char *netaffxPost = "_HG-U95Av2']";
+char *netaffxDisp = "https://www.netaffx.com/svghtml?query=";
+if(name != NULL)
+    {
+    printf("<p>More information about individual probes and probe sets is available ");
+    printf("at Affymetrix's netaffx.com website. [registration required]\n");
+    printf("<ul>\n");
+    printf("<li> Information about probe sequences is <a href=\"%s%s%s\">available there</a></li>\n",
+	   netaffxPre, name, netaffxPost);
+    printf("<li> A graphical representation is also <a href=\"%s%s\">available</a> ",netaffxDisp, name);
+    printf("<basefont size=-2>[svg viewer required]</basefont></li>\n");
+    printf("</ul>\n");
+    }
+}
+
 void affyDetails(struct trackDb *tdb, char *expName) 
 /* print out a page for the affy data from stanford */
 {
@@ -4762,7 +4781,8 @@ bedList = loadMsBed(tdb->tableName, seqName, winStart, winEnd);
 genericHeader(tdb, itemName);
 printf("<h2></h2><p>\n");
 printf("%s", tdb->html);
-printf("<br><br>");
+
+printAffyLinks(itemName);
 if(bedList == NULL)
     printf("<b>No Expression Data in this Range.</b>\n");
 else 
