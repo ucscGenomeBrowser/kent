@@ -203,6 +203,7 @@ Color shadesOfGray[10+1];	/* 10 shades of gray from white to black
 Color shadesOfBrown[10+1];	/* 10 shades of brown from tan to tar. */
 static struct rgbColor brownColor = {100, 50, 0};
 static struct rgbColor tanColor = {255, 240, 200};
+static struct rgbColor guidelineColor = { 220, 220, 255};
 
 Color shadesOfSea[10+1];       /* Ten sea shades. */
 static struct rgbColor darkSeaColor = {0, 60, 120};
@@ -382,7 +383,7 @@ snprintf( o1, 128, "%s.heightPer", tg->mapName);
 if( vis == tvDense )
     heightFromCart = 10;
 else
-    heightFromCart = atoi(cartUsualString(cart, o1, "40"));
+    heightFromCart = atoi(cartUsualString(cart, o1, "50"));
 
 tg->lineHeight = max(mgFontLineHeight(tl.font)+1, heightFromCart);
 tg->heightPer = tg->lineHeight - 1;
@@ -571,8 +572,8 @@ sprintf(table, "%s%s", chromName, tabSuffix);
 return hTableExists(table);
 }
 
-void drawScaledBox(struct memGfx *mg, int chromStart, int chromEnd, double scale, 
-	int xOff, int y, int height, Color color)
+void drawScaledBox(struct memGfx *mg, int chromStart, int chromEnd, 
+	double scale, int xOff, int y, int height, Color color)
 /* Draw a box scaled from chromosome to window coordinates. */
 {
 int x1 = round((double)(chromStart-winStart)*scale) + xOff;
@@ -835,6 +836,12 @@ Color lightGrayIndex()
 return shadesOfGray[3];
 }
 
+int mgFindRgb(struct memGfx *mg, struct rgbColor *rgb)
+/* Find color index corresponding to rgb color. */
+{
+return mgFindColor(mg, rgb->r, rgb->g, rgb->b);
+}
+
 void makeGrayShades(struct memGfx *mg)
 /* Make eight shades of gray in display. */
 {
@@ -845,7 +852,7 @@ for (i=0; i<=maxShade; ++i)
     int level = 255 - (255*i/maxShade);
     if (level < 0) level = 0;
     rgb.r = rgb.g = rgb.b = level;
-    shadesOfGray[i] = mgFindColor(mg, rgb.r, rgb.g, rgb.b);
+    shadesOfGray[i] = mgFindRgb(mg, &rgb);
     }
 shadesOfGray[maxShade+1] = MG_RED;
 }
@@ -1209,18 +1216,16 @@ Color *shadesFromBaseColor( struct rgbColor *rgb )
 }
 
 
-int whichBin( double tmp, double thisMin, double thisMax, int n )
+int whichBin( double num, double thisMin, double thisMax, double binCount )
+/* Get bin value from num. */
 {
-    double atmp = tmp - thisMin;
-    double amax = thisMax - thisMin;
-    double ret = (double)atmp * (double)n / (double)amax;
-    return( ret );
+return (num - thisMin) * binCount / (thisMax - thisMin);
 }
 
-/*gets range nums. from bin values*/
-double whichNum( double tmp, double min0, double max0, int n )
+double whichNum( double bin, double thisMin, double thisMax, double binCount )
+/* gets range nums. from bin values*/
 {
-    return( (max0 - min0)/(double)n * tmp + min0 );
+return( (thisMax - thisMin) / binCount * bin + thisMin );
 }
 
 
@@ -1260,24 +1265,29 @@ if (withLeftLabels)
 return x;
 }
 
-static void mgDrawWiggleHorizontalLine( struct memGfx *mg, double where, double min0, double max0, int binNum, int y, double hFactor, int heightPer, Color lineColor )
-/*draws a blue horizontal line on a wiggle track at a specified
- *    * location based on the range and number of bins*/
+static void drawWiggleHorizontalLine( struct memGfx *mg, 
+	double where, double min0, double max0, 
+	int binCount, int y, double hFactor, int heightPer, 
+	Color lineColor )
+/* Draws a blue horizontal line on a wiggle track at a specified
+ * location based on the range and number of bins*/
 {
-        int tmp;
-        double y1;
-        tmp = -whichBin( where, min0, max0, binNum);
-        y1 = (int)((double)y+((double)tmp)*hFactor+(double)heightPer);
-        mgDrawHorizontalLine( mg, y1, lineColor );
+int bin;
+double y1;
+bin = -whichBin( where, min0, max0, binCount);
+y1 = (int)((double)y+((double)bin)*hFactor+(double)heightPer);
+mgDrawBox( mg, 0, y1, mg->width, 1, lineColor );
 }
 
-static void wiggleLinkedFeaturesDraw(struct trackGroup *tg, int seqStart, int seqEnd,
-        struct memGfx *mg, int xOff, int yOff, int width, 
-        MgFont *font, Color color, enum trackVisibility vis)
-/* currently this routine is adapted from Terry's linkedFeatureSeriesDraw() routine.
-   It is called for 'sample 9' tracks as specified in the trackDb.ra.
-   and it looks at the cart to decide whether to interpolate, fill blocks,
-   and use anti-aliasing.*/
+static void wiggleLinkedFeaturesDraw(struct trackGroup *tg, 
+    int seqStart, int seqEnd,
+    struct memGfx *mg, int xOff, int yOff, int width, 
+    MgFont *font, Color color, enum trackVisibility vis)
+/* Currently this routine is adapted from Terry's 
+ * linkedFeatureSeriesDraw() routine.
+ * It is called for 'sample 9' tracks as specified in the trackDb.ra.
+ * and it looks at the cart to decide whether to interpolate, fill blocks,
+ * and use anti-aliasing.*/
 {
 int i;
 int baseWidth = seqEnd - seqStart;
@@ -1287,20 +1297,22 @@ int y = yOff;
 int heightPer = tg->heightPer;
 int lineHeight = tg->lineHeight;
 int x1,x2;
-double y1, y2;
-int s;
-double e;
 boolean isFull = (vis == tvFull);
-Color *shades = tg->colorShades;
 Color bColor = tg->ixAltColor;
 double scale = width/(double)baseWidth;
-int prevEnd = -1;
-int prevEndSave = -1;
+int prevX = -1;
+int gapPrevX = -1;
 double prevY = -1;
+double y1 = -1, y2;
 int ybase;
-int tmp;
+int sampleX, sampleY; /* A sample in sample coordinates. 
+                       * Sample X coordinate is chromosome coordinate.
+		       * Sample Y coordinate is usually 0-1000 */
+int binCount = 999;   /* Maximum sample Y coordinate. */
+int bin;	      /* Sample Y coordinates are first converted to
+                       * bin coordinates, and then to pixels.  I'm not
+		       * totally sure why.  */
 
-int binNum = 999;
 
 int currentX, currentXEnd, currentWidth;
 
@@ -1315,6 +1327,7 @@ int noZoom = 1;
 enum wiggleOptEnum wiggleType;
 char *interpolate = NULL;
 char *aa = NULL; 
+boolean antiAlias = FALSE;
 int fill; 
 char *lineGapStr = NULL;
 int lineGapSize;
@@ -1328,13 +1341,8 @@ char o4[128]; /* Option 4 - max gap where interpolation is still done */
 double hFactor, hFactor2;
 double minRange, maxRange;
 
-int gapPrevEnd = -1;
 
-Color lineColor = mgFindColor(mg, 220, 220, 255); /*for horizontal lines*/
-
-tg->colorShades = shadesFromBaseColor( &tg->color );
-shades = tg->colorShades;
-
+Color gridColor = mgFindRgb(mg, &guidelineColor); /* for horizontal lines*/
 
 lf=tg->items;    
 if(lf==NULL) return;
@@ -1347,6 +1355,7 @@ snprintf( o4, sizeof(o4),"%s.interp.gap", tg->mapName);
 interpolate = cartUsualString(cart, o1, "Linear Interpolation");
 wiggleType = wiggleStringToEnum(interpolate);
 aa = cartUsualString(cart, o2, "on");
+antiAlias = sameString(aa, "on");
 fill = atoi(cartUsualString(cart, o3, "1"));
 lineGapSize = atoi(cartUsualString(cart, o4, "200"));
 
@@ -1366,140 +1375,130 @@ if( sameString( tg->mapName, "humMus" ) )
 
     /*draw horizontal line across track at 0.0, 2.0, and 5.0*/
     if( !isFull )
-    {
-        mgDrawWiggleHorizontalLine( mg, 0.0, min0, max0, binNum,
-                y, hFactor, heightPer, lineColor );
-        mgDrawWiggleHorizontalLine( mg, 2.0, min0, max0, binNum,
-                y, hFactor, heightPer, lineColor );
-        mgDrawWiggleHorizontalLine( mg, 5.0, min0, max0, binNum,
-                y, hFactor, heightPer, lineColor );
-    }
-    
-    }
-    else if( sameString( tg->mapName, "humMusL" ) || 
-       sameString( tg->mapName, "musHumL" )  )
-    {
+	{
+	drawWiggleHorizontalLine( mg, 0.0, min0, max0, binCount,
+	    y, hFactor, heightPer, gridColor );
+	drawWiggleHorizontalLine( mg, 2.0, min0, max0, binCount,
+	    y, hFactor, heightPer, gridColor );
+	drawWiggleHorizontalLine( mg, 5.0, min0, max0, binCount,
+	    y, hFactor, heightPer, gridColor );
+	}
 
+    }
+else if( sameString( tg->mapName, "humMusL" ) 
+	|| sameString( tg->mapName, "musHumL" )  )
+    {
     minRange = 0.0;
-    maxRange = whichBin( 6.0, 0.0, 8.0 ,binNum );
-    min0 = whichNum( minRange, 0.0, 8.0, binNum );
-    max0 = whichNum( maxRange, 0.0, 8.0, binNum );
+    maxRange = whichBin( 6.0, 0.0, 8.0 ,binCount );
+    min0 = whichNum( minRange, 0.0, 8.0, binCount );
+    max0 = whichNum( maxRange, 0.0, 8.0, binCount );
 
     //errAbort( "whichBin=%g\n", maxRange );
 
     if( isFull )
-        {
-        for( i=1; i<=6; i++ )
-            mgDrawWiggleHorizontalLine( mg, (double)i, min0, max0,
-                    binNum, y, hFactor, heightPer, lineColor );
-        }
+	{
+	for( i=1; i<=6; i++ )
+	    drawWiggleHorizontalLine( mg, (double)i, min0, max0,
+		binCount, y, hFactor, heightPer, gridColor );
+	}
     }
 
-    else if( sameString( tg->mapName, "zoo" ) )
+else if( sameString( tg->mapName, "zoo" ) )
     {
     /*Always interpolate zoo track (since gaps are explicitly defined*/
     lineGapSize = -1;
     minRange = 500.0;
     maxRange = 1000.0;
     }
-    else if( sameString( tg->mapName, "zooCons" ) )
+else if( sameString( tg->mapName, "zooCons" ) )
     {
     minRange = 0.0;
     maxRange = 1000.0;
     }
-    else if( sameString( tg->mapName, "binomialCons2" ) )
+else if( sameString( tg->mapName, "binomialCons2" ) )
     {
     minRange = 0.0;
     maxRange = 300.0;
     }
-    else if( sameString( tg->mapName, "binomialCons3" ) )
+else if( sameString( tg->mapName, "binomialCons3" ) )
     {
     minRange = 0.0;
     maxRange = 200.0;
     }
-    else if( sameString( tg->mapName, "binomialCons" ) )
+else if( sameString( tg->mapName, "binomialCons" ) )
     {
     minRange = 0.0;
     maxRange = 500.0;
     }
-    else
+else
     {
     minRange = 1.0;
     maxRange = 1000.0;
     }
 
-
-
 for(lf = tg->items; lf != NULL; lf = lf->next) 
     {
-    gapPrevEnd = -1;
-    prevEnd = -1;
-    
-    for (sf = lf->components; sf != NULL; sf = sf->next)
-	    {
-	    s = sf->start;
-	    e = sf->end;
+    gapPrevX = -1;
+    prevX = -1;
+    ybase = (int)((double)y+hFactor+(double)heightPer);
 
-        /*mapping or sequencing gap*/
-        if( (sf->start - sf->end) == 0 ) 
-	        {
-            tmp = -whichBin( (int)((maxRange - minRange)/5.0+minRange), minRange, maxRange, binNum );
-            y1 = (int)((double)y+((double)tmp)* hFactor+(double)heightPer);
-            if( gapPrevEnd >= 0 )
-	            drawScaledBox(mg, s, gapPrevEnd, scale, xOff, (int)y1, (int)(.10*heightPer), shadesOfGray[2]);
-            gapPrevEnd = s;
-            prevEnd = -5; /*connect next point with gray bar too*/
-            continue;
-	        }
-	
-        if( -(sf->start - sf->end) > maxRange )
-            {
-            tmp = 1-binNum; 
-            }
-        else if( -(sf->start - sf->end) < minRange )
-	        {
-            prevEnd = -1;  /*set so no interpolation where no data*/
-            gapPrevEnd = -1;
-            continue;
-	        }
-        else
-            {
-            tmp = -whichBin( sf->end - sf->start, minRange, maxRange, binNum );
-            }
-        
-        x1 = round((double)((int)s+1-winStart)*scale) + xOff;
-        y1 = (int)((double)y+((double)tmp)* hFactor+(double)heightPer);
-        ybase = (int)((double)y+hFactor+(double)heightPer);
-	
-        if (prevEnd > 0)
-	        {
-            y2 = prevY;
-	        x2 = round((double)((int)prevEnd-winStart)*scale) + xOff;
-	    
-            if( (x2-x1) > 0)
-                {
-                if( wiggleType == wiggleLinearInterpolation ) /*connect samples*/
-                    {
-                    if( lineGapSize < 0 || prevEnd - s <= lineGapSize )     /*don't interpolate over large gaps*/
-                        {
-                        if( sameString( aa, "on" )) /*use anti-aliasing*/
-                            mgConnectingLine( mg, x1, y1, x2, y2, shades, ybase, 1, fill );
-                        else
-                            mgConnectingLine( mg, x1, y1, x2, y2, shades, ybase, 0, fill );
-                        }
-                    }
-                }
-	        }
-	
-        /*draw the points themselves*/
-	    drawScaledBox(mg, s, s+1, scale, xOff, (int)y1-1, 3, bColor);
-        if( fill )
-	        drawScaledBox(mg, s, s+1, scale, xOff, (int)y1+2, ybase-y1-2, shades[3]);
-        prevEnd = s;
-        gapPrevEnd = prevEnd;
-        prevY = y1;
-	
+    for (sf = lf->components; sf != NULL; sf = sf->next)
+	{
+	sampleX = sf->start;
+	sampleY = sf->end - sampleX;	// Stange encoding but so it is. 
+
+	/*mapping or sequencing gap*/
+	if (sampleY == 0)
+	    {
+	    bin = -whichBin( (int)((maxRange - minRange)/5.0+minRange), 
+	    	minRange, maxRange, binCount );
+	    y1 = (int)((double)y+((double)bin)* hFactor+(double)heightPer);
+	    if( gapPrevX >= 0 )
+		drawScaledBox(mg, sampleX, gapPrevX, scale, 
+			xOff, (int)y1, (int)(.10*heightPer), shadesOfGray[2]);
+	    gapPrevX = sampleX;
+	    prevX = -1; /*connect next point with gray bar too*/
+	    continue;
 	    }
+	if (sampleY > maxRange)
+	    sampleY = maxRange;
+	if (sampleY < minRange)
+	    sampleY = minRange;
+	bin = -whichBin( sampleY, minRange, maxRange, binCount );
+
+	x1 = round((double)(sampleX-winStart)*scale) + xOff;
+	y1 = (int)((double)y+((double)bin)* hFactor+(double)heightPer);
+
+	if (prevX > 0)
+	    {
+	    y2 = prevY;
+	    x2 = round((double)(prevX-winStart)*scale) + xOff;
+	    if( wiggleType == wiggleLinearInterpolation ) 
+	    /*connect samples*/
+		{
+		if( lineGapSize < 0 || sampleX - prevX <= lineGapSize )   
+		    /*don't interpolate over large gaps*/
+		    {
+		    if (fill)
+			mgFillUnder(mg, x1,y1, x2,y2, ybase, bColor);
+		    else
+			mgDrawLine(mg, x1,y1, x2,y2, color);
+		    }
+		}
+	    }
+
+	/* Draw the points themselves*/
+	if (wiggleType != wiggleLinearInterpolation)
+	    {
+	    drawScaledBox(mg, sampleX, sampleX+1, scale, 
+	    	xOff, (int)y1-1, 3, color);
+	    if( fill )
+		drawScaledBox(mg, sampleX, sampleX+1, scale, xOff, (int)y1+2, 
+		    ybase-y1-2, bColor);
+	    }
+	prevX = gapPrevX = sampleX;
+	prevY = y1;
+	}
 
     leftSide = max( tg->itemStart(tg,lf), winStart );
     rightSide = min(  tg->itemEnd(tg,lf), winEnd );
@@ -1509,16 +1508,15 @@ for(lf = tg->items; lf != NULL; lf = lf->next)
     currentWidth = currentXEnd - currentX;
 
     if( noZoom && isFull )
-    {
-        mapBoxHc(lf->start, lf->end, currentX ,y, currentWidth,
-            heightPer, tg->mapName, tg->mapItemName(tg, lf), tg->itemName(tg, lf));
+	{
+	mapBoxHc(lf->start, lf->end, currentX ,y, currentWidth,
+	    heightPer, tg->mapName, tg->mapItemName(tg, lf), tg->itemName(tg, lf));
 
-     if( lf->next != NULL )
-            y += updateY( lf->name, lf->next->name, lineHeight );
-        else
-            y += lineHeight;
-    }
-
+	if( lf->next != NULL )
+	    y += updateY( lf->name, lf->next->name, lineHeight );
+	else
+	    y += lineHeight;
+	}
     }
 }
 
@@ -1786,18 +1784,21 @@ for (lfPair = tg->items; lfPair != NULL; lfPair = lfPair->next)
     int compCount = 0;
     int w, i;
     
-    for(i=1;i<=2;++i){/*  drawing has to be done twice for each pair */
-      if(i==1){
+    for(i=1;i<=2;++i)
+      {/*  drawing has to be done twice for each pair */
+      if(i==1)
+        {
 	lf = lfPair->lf5prime;
-	color = mgFindColor(mg,color5prime.r,color5prime.g,color5prime.b);
+	color = mgFindRgb(mg, &color5prime);
 	bColor = color;
-      }
-      else{
+        }
+      else
+        {
 	lf = lfPair->lf3prime;
 	lf->orientation = -lf->orientation;
-	color = mgFindColor(mg,color3prime.r,color3prime.g,color3prime.b);
+	color = mgFindRgb(mg, &color3prime);
 	bColor = color;
-      } 
+        } 
       if(lf != NULL) 
 	  {
 	  if (tg->itemColor && shades == NULL)
@@ -1844,12 +1845,14 @@ for (lfPair = tg->items; lfPair != NULL; lfPair = lfPair->next)
 		  }
 	      }
 	  }
-    }
+      }
     if (isFull)
 	y += lineHeight;
     }
 }
-static void linkedFeaturesDrawAveragePair(struct trackGroup *tg, int seqStart, int seqEnd,
+
+static void linkedFeaturesDrawAveragePair(struct trackGroup *tg, 
+	int seqStart, int seqEnd,
         struct memGfx *mg, int xOff, int yOff, int width, 
         MgFont *font, Color color, enum trackVisibility vis)
 /* Draw dense clone items for EST pairs. */
@@ -2089,9 +2092,8 @@ for (i=0; i<sampleCount; ++i)
     AllocVar(sf);
     start = X[i] + sample->chromStart;
     sf->start = start;
-    //errAbort( "Y[%d] = %d", i, Y[i]  );
 
-    if( Y[i] == -29 )           /*hack for negative values not loading correctly*/
+    if( Y[i] == -29 )      /*hack for negative values not loading correctly*/
         sf->end = start;
     else if( Y[i] == 0 )
         sf->end = start + 1;
@@ -2992,14 +2994,14 @@ if (hTableExists("refSeqStatus"))
 	    lighter.r = (6*normal->r + 4*255) / 10;
 	    lighter.g = (6*normal->g + 4*255) / 10;
 	    lighter.b = (6*normal->b + 4*255) / 10;
-	    col = mgFindColor(mg, lighter.r, lighter.g, lighter.b);
+	    col = mgFindRgb(mg, &lighter);
 	    }
 	else
 	    {
 	    lightest.r = (1*normal->r + 2*255) / 3;
 	    lightest.g = (1*normal->g + 2*255) / 3;
 	    lightest.b = (1*normal->b + 2*255) / 3;
-	    col = mgFindColor(mg, lightest.r, lightest.g, lightest.b);
+	    col = mgFindRgb(mg, &lightest);
 	    }
 	}
     sqlFreeResult(&sr);
@@ -7661,99 +7663,99 @@ return aV - bV;
 }
 
 void loadHumMusL(struct trackGroup *tg)
-    /* Load humMusL track with 2 zoom levels and one normal level. 
-	Also used for loading the musHumL track (called Human Cons) 
-	on the mm2 mouse browser. It decides which of 4 tables to
-	load based on how large of a window the user is looking at*/
+/* Load humMusL track with 2 zoom levels and one normal level. 
+ * Also used for loading the musHumL track (called Human Cons) 
+ * on the mm2 mouse browser. It decides which of 4 tables to
+ * load based on how large of a window the user is looking at*/
 {
-    struct sqlConnection *conn = hAllocConn();
-    struct sqlResult *sr;
-    char **row;
-    int rowOffset;
-    struct sample *sample;
-    struct linkedFeatures *lfList = NULL, *lf;
-    char *hasDense = NULL;
-    char *where = NULL;
-    char query[256];
-    unsigned int chromSize = hChromSize(chromName);
-    int resolution = 0;
-    char tableName[256];
-    int z;
-    float pixPerBase = 0;
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr;
+char **row;
+int rowOffset;
+struct sample *sample;
+struct linkedFeatures *lfList = NULL, *lf;
+char *hasDense = NULL;
+char *where = NULL;
+char query[256];
+unsigned int chromSize = hChromSize(chromName);
+int resolution = 0;
+char tableName[256];
+int z;
+float pixPerBase = 0;
 
-    if(tl.picWidth == 0)
-            errAbort("hgTracks.c::loadHumMusL() - can't have pixel
-                    width of 0");
-    pixPerBase = (winEnd - winStart)/ tl.picWidth;
+if(tl.picWidth == 0)
+    errAbort("hgTracks.c::loadHumMusL() - can't have pixel
+	    width of 0");
+pixPerBase = (winEnd - winStart)/ tl.picWidth;
 
 
-    /* Determine zoom level. */
-    z = humMusZoomLevel();
-    if(z == 1 )
-            snprintf(tableName, sizeof(tableName), "%s_%s", "zoom1",
-                    tg->mapName);
-    else if( z == 2)
-            snprintf(tableName, sizeof(tableName), "%s_%s", "zoom50",
-                    tg->mapName);
-    else if(z == 3)
-            snprintf(tableName, sizeof(tableName), "%s_%s",
-                    "zoom2500", tg->mapName);
-    else
-            snprintf(tableName, sizeof(tableName), "%s", tg->mapName);
+/* Determine zoom level. */
+z = humMusZoomLevel();
+if(z == 1 )
+    snprintf(tableName, sizeof(tableName), "%s_%s", "zoom1",
+	    tg->mapName);
+else if( z == 2)
+    snprintf(tableName, sizeof(tableName), "%s_%s", "zoom50",
+	    tg->mapName);
+else if(z == 3)
+    snprintf(tableName, sizeof(tableName), "%s_%s",
+	    "zoom2500", tg->mapName);
+else
+    snprintf(tableName, sizeof(tableName), "%s", tg->mapName);
 
-    //printf("<br>%s &nbsp;&nbsp; (%g)<br>\n", tableName, pixPerBase
-    //);
+//printf("<br>%s &nbsp;&nbsp; (%g)<br>\n", tableName, pixPerBase
+//);
 
-    sr = hRangeQuery(conn, tableName, chromName, winStart, winEnd,
-            where, &rowOffset);
-    while ((row = sqlNextRow(sr)) != NULL)
-            {
-                    sample = sampleLoad(row+rowOffset);
-                        lf = lfFromSample(sample);
-                            slAddHead(&lfList, lf);
-                                sampleFree(&sample);
-                                    }
-    if(where != NULL)
-            freez(&where);
-    sqlFreeResult(&sr);
-    hFreeConn(&conn);
-    slReverse(&lfList);
+sr = hRangeQuery(conn, tableName, chromName, winStart, winEnd,
+    where, &rowOffset);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    sample = sampleLoad(row+rowOffset);
+    lf = lfFromSample(sample);
+    slAddHead(&lfList, lf);
+    sampleFree(&sample);
+    }
+if(where != NULL)
+    freez(&where);
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+slReverse(&lfList);
 
-    /* sort to bring items with common names to the same line
-       but only for tracks with a summary table (with name=shortLabel)
-       in
-       dense mode*/
-    if( hasDense != NULL )
-            {
-                    sortGroupList = tg; /* used to put track name at
-                                           top of sorted list. */
-                        slSort(&lfList, lfNamePositionCmp);
-                            sortGroupList = NULL;
-                                }
-    tg->items = lfList;
+/* sort to bring items with common names to the same line
+   but only for tracks with a summary table (with name=shortLabel)
+   in
+   dense mode*/
+if( hasDense != NULL )
+    {
+    sortGroupList = tg; /* used to put track name at
+	                 * top of sorted list. */
+    slSort(&lfList, lfNamePositionCmp);
+    sortGroupList = NULL;
+    }
+tg->items = lfList;
 
-    /* Since we've taken care of loading too many things using the
-          zoom tables, take care of limiting visibility here. */
-    tg->limitedVis = tg->visibility;
-    tg->limitedVisSet = TRUE;
+/* Since we've taken care of loading too many things using the
+      zoom tables, take care of limiting visibility here. */
+tg->limitedVis = tg->visibility;
+tg->limitedVisSet = TRUE;
 }
 
 void zooMethods( struct trackGroup *tg )
 /* Overide the zoo sample type load function to look for zoomed out tracks. */
 {
-   tg->loadItems = loadSampleZoo;
+tg->loadItems = loadSampleZoo;
 }
 
 void humMusLMethods( struct trackGroup *tg )
 /* Overide the humMusL load function to look for zoomed out tracks. */
 {
-   tg->loadItems = loadHumMusL;
+tg->loadItems = loadHumMusL;
 }
 
 void musHumLMethods( struct trackGroup *tg )
 /* Overide the musHumL load function to look for zoomed out tracks. */
 {
-   tg->loadItems = loadHumMusL;
+tg->loadItems = loadHumMusL;
 }
 
 
@@ -9047,7 +9049,7 @@ void printYAxisLabel( struct memGfx *mg, int y, struct trackGroup *group, char *
     tmp = -whichBin( atof(labelString), min0, max0, 999 );
     tmp = (int)((double)ymin+((double)tmp)*(double)group->heightPer/1000.0+(double)group->heightPer)-fontHeight/2.0;
     if( !withCenterLabels ) tmp -= fontHeight;
-    mgTextRight(mg, gfxBorder, tmp, inWid-1, itemHeight0, group->ixAltColor, tl.font, labelString );
+    mgTextRight(mg, gfxBorder, tmp, inWid-1, itemHeight0, group->ixColor, tl.font, labelString );
 }
 
 void makeActiveImage(struct trackGroup *groupList)
@@ -9078,7 +9080,7 @@ int i;
 int ymin, ymax;
 int scaledHeightPer;
 double minRange, maxRange;
-int binNum = 999;
+int binCount = 999;
 char minRangeStr[32];
 char maxRangeStr[32];
 
@@ -9117,10 +9119,8 @@ for (group = groupList; group != NULL; group = group->next)
     {
     if (group->limitedVis != tvHide)
 	{
-	group->ixColor = mgFindColor(mg, 
-		group->color.r, group->color.g, group->color.b);
-	group->ixAltColor = mgFindColor(mg, 
-		group->altColor.r, group->altColor.g, group->altColor.b);
+	group->ixColor = mgFindRgb(mg, &group->color);
+	group->ixAltColor = mgFindRgb(mg, &group->altColor);
 	}
     }
 
@@ -9131,7 +9131,8 @@ if (withLeftLabels)
     int nextY, lastY, trackIx = 0;
     double min0, max0;
 
-    mgDrawBox(mg, insideX-gfxBorder*2, 0, gfxBorder, pixHeight, mgFindColor(mg, 0, 0, 200));
+    mgDrawBox(mg, insideX-gfxBorder*2, 0, gfxBorder, pixHeight, 
+    	mgFindColor(mg, 0, 0, 200));
     mgSetClip(mg, gfxBorder, gfxBorder, inWid, pixHeight-2*gfxBorder);
     y = gfxBorder;
     if (withRuler)
@@ -9160,8 +9161,8 @@ if (withLeftLabels)
 	if( sameString( group->mapName, "humMus" ) )
 	    {
 
-	    min0 = whichNum( 300.0, -7.99515, 6.54171, binNum );
-	    max0 =  whichNum( 1000.0, -7.99515, 6.54171, binNum );
+	    min0 = whichNum( 300.0, -7.99515, 6.54171, binCount );
+	    max0 =  whichNum( 1000.0, -7.99515, 6.54171, binCount );
 	    sprintf( minRangeStr, "%0.2g", min0  );
 	    sprintf( maxRangeStr, "%0.2g", max0 );
 
@@ -9179,9 +9180,9 @@ if (withLeftLabels)
 	    {
 
 	    minRange = 0.0;
-	    maxRange = whichBin( 6.0, 0.0, 8.0 ,binNum ); 
-	    min0 = whichNum( minRange, 0.0, 8.0, binNum );
-	    max0 = whichNum( maxRange, 0.0, 8.0, binNum );
+	    maxRange = whichBin( 6.0, 0.0, 8.0 ,binCount ); 
+	    min0 = whichNum( minRange, 0.0, 8.0, binCount );
+	    max0 = whichNum( maxRange, 0.0, 8.0, binCount );
 
 
 	    sprintf( minRangeStr, " "  );
@@ -9337,7 +9338,7 @@ if (withGuidelines)
     int ochXoff = insideX + clWidth;
     int height = pixHeight - 2*gfxBorder;
     int x;
-    Color color = mgFindColor(mg, 220, 220, 255);
+    Color color = mgFindRgb(mg, &guidelineColor);
     int lineHeight = mgFontLineHeight(tl.font)+1;
 
     mgSetClip(mg, insideX, gfxBorder, insideWidth, height);
@@ -9638,7 +9639,9 @@ char *where = NULL;
 char query[256];
 
 /*see if we have a summary table*/
-snprintf(query, sizeof(query), "select name from %s where name = '%s' limit 1", tg->mapName, tg->shortLabel);
+snprintf(query, sizeof(query), 
+	"select name from %s where name = '%s' limit 1", 
+	tg->mapName, tg->shortLabel);
 //errAbort( "%s", query );
 hasDense = sqlQuickQuery(conn, query, query, sizeof(query));
 
@@ -9831,7 +9834,7 @@ else if (sameWord(type, "sample"))
     group->bedSize = fieldCount;
     if (fieldCount == 9)
 	{
-    group->subType = lfSubSample;     /*make subType be "sample" (=2)*/
+	group->subType = lfSubSample;     /*make subType be "sample" (=2)*/
 	sampleLinkedFeaturesMethods(group);
 	group->loadItems = loadSampleIntoLinkedFeature;
 	}
