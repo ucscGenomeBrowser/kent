@@ -263,7 +263,6 @@ struct wiggleDataStream
     struct bed *bed;		/*	data in bed format	*/
     struct wiggleStats *stats;	/*	list of wiggle stats	*/
     unsigned long long maxOutput;	/*	maximum items fetched	*/
-    boolean bedConstrained;	/*	to simplify checking if it is on */
     boolean useDataConstraint;	/*	to simplify checking if it is on */
     enum wigCompare wigCmpSwitch;	/*	for compare function switch */
     char *dataConstraint;	/*	one of < = >= <= == != 'in range' */
@@ -289,35 +288,39 @@ struct wiggleDataStream
     unsigned long long bytesSkipped; /* reading stats, bytes not examined */
     unsigned long long valuesMatched;  /* reading stats, number of data bytes */
     void (*freeAscii)(struct wiggleDataStream *wDS);
-				/*	free the ascii list results 	*/
+			/*	free the ascii list results 	*/
     void (*freeBed)(struct wiggleDataStream *wDS);
-				/*	free the bed list results 	*/
+			/*	free the bed list results 	*/
     void (*freeStats)(struct wiggleDataStream *wDS);
-				/*	free the stats list results 	*/
+			/*	free the stats list results 	*/
     void (*freeConstraints)(struct wiggleDataStream *wDS);
-				/*	unset all the constraints	*/
+			/*	unset all the constraints	*/
     void (*setPositionConstraint)(struct wiggleDataStream *wDS,
 	int winStart, int winEnd);
-				/*	work only within specified position */
+			/*	work only within specified position */
     void (*setChromConstraint)(struct wiggleDataStream *wDS, char *chr);
-				/*	work only on specified chrom 	*/
+			/*	work only on specified chrom 	*/
     void (*setSpanConstraint)(struct wiggleDataStream *wDS, unsigned span);
-				/*	work only on specified span 	*/
+			/*	work only on specified span 	*/
     void (*setDataConstraint)(struct wiggleDataStream *wDS,
 	char *dataConstraint, double lowerLimit, double upperLimit);
-				/*	setting data compare limits 	*/
-    void (*bedOut)(struct wiggleDataStream *wDS, char *fileName);
-				/*	output the bed list results 	*/
-    void (*statsOut)(struct wiggleDataStream *wDS, char *fileName);
-				/*	output the stats list results 	*/
-    void (*asciiOut)(struct wiggleDataStream *wDS, char *fileName);
-				/*	output the ascii list results 	*/
+			/*	setting data compare limits 	*/
+    void (*bedOut)(struct wiggleDataStream *wDS, char *fileName, boolean sort);
+			/*	output the bed list results 	*/
+    void (*statsOut)(struct wiggleDataStream *wDS,char *fileName, boolean sort);
+			/*	output the stats list results 	*/
+    void (*asciiOut)(struct wiggleDataStream *wDS,char *fileName, boolean sort);
+			/*	output the ascii list results 	*/
+    void (*sortResults)(struct wiggleDataStream *wDS);
+			/*	sort if you want to, the Outs do this too */
     void (*getDataViaBed)(struct wiggleDataStream *wDS, char *db, char *table,
 	int operations, struct bed **bedList);
-				/*	fetch data constrained by bedList */
+			/*	fetch data constrained by bedList */
     void (*getData)(struct wiggleDataStream *wDS, char *db, char *table,
 	int operations);
-				/*	fetch data from db.table */
+			/*	fetch data from db.table */
+    /*	PRIVATE attributes, for internal use only	*/
+    boolean bedConstrained;	/*	signal to output routines */
     };
 
 /*	in lib/wigDataStream.c	*/
