@@ -68,7 +68,7 @@
 #include "web.h"
 #include "grp.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.589.2.2 2003/09/08 23:00:29 genbank Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.589.2.3 2003/09/09 00:37:19 genbank Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROMOSOME_SHADES 4
@@ -2167,8 +2167,7 @@ if (hTableExists("refLink") && hTableExists("knownGeneLink"))
     	    	    sr = sqlGetResult(conn, query); 
     	    	    if ((row = sqlNextRow(sr)) != NULL)
         	    	{
-                        if (strlen(row[0]) > 0)
-                            lf->extra = cloneString(row[0]);
+		    	lf->extra = cloneString(row[0]);
 		    	}
             	    sqlFreeResult(&sr);
 	    	    }
@@ -2524,11 +2523,15 @@ tg->drawName 	= FALSE;
 }
 
 char *refGeneName(struct track *tg, void *item)
-/* Get name to use for refGene item. */
+/* Return abbreviated genie name. */
 {
+static char cat[128];
 struct linkedFeatures *lf = item;
 if (lf->extra != NULL) 
-    return lf->extra;
+    {
+    sprintf(cat,"%s",(char *)lf->extra);
+    return cat;
+    }
 else 
     return lf->name;
 }
@@ -2547,7 +2550,6 @@ struct linkedFeatures *lf;
 char query[256];
 struct sqlConnection *conn = hAllocConn();
 char *newName;
-boolean isMgc = hIsMgcServer();
 
 if (hTableExists("refLink"))
     {
@@ -2561,18 +2563,7 @@ if (hTableExists("refLink"))
 	sr = sqlGetResult(conn, query);
 	if ((row = sqlNextRow(sr)) != NULL)
 	    {
-            if (strlen(row[0]) > 0)
-                {
-                if (isMgc)
-                    {
-                    /* for MGC, we include refSeq acc */
-                    int size = strlen(row[0]) + strlen(lf->name) + 2;
-                    lf->extra = needMem(size);
-                    safef(lf->extra, size, "%s/%s", row[0], lf->name);
-                    }
-                else
-                    lf->extra = cloneString(row[0]);
-                }
+	    lf->extra = cloneString(row[0]);
 	    }
 	sqlFreeResult(&sr);
 	}
