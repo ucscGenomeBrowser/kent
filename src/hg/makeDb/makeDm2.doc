@@ -3721,7 +3721,7 @@ zcat `ls -1 /cluster/bluearc/dm2/phastCons/POSTPROBS/$chr.*.pp.gz \
     hgLoadBed dm2 flyFeepAnova flyFeepAnova.bed
 
 
-# FLYBASE 4.1 ANNOTATIONS (DONE 2/23/05 angie)
+# FLYBASE 4.1 ANNOTATIONS (DONE 2/28/05 angie)
     ssh kksilo
     mkdir /cluster/data/dm2/bed/flybase4.1
     cd /cluster/data/dm2/bed/flybase4.1
@@ -3753,6 +3753,7 @@ zcat `ls -1 /cluster/bluearc/dm2/phastCons/POSTPROBS/$chr.*.pp.gz \
     # Once again, the previous round's parsing needed some updates to 
     # handle the new data.
     extractGenes.pl flybase.gff3
+#Oddball parentless ID=Sps2-exon-10336472..10336531 for exon
 
     # Get predicted proteins (for main annotations only)
     wget ftp://flybase.net/genomes/Drosophila_melanogaster/dmel_r4.1_20050207/fasta/dmel-all-translation-r4.1.fasta.gz
@@ -3838,7 +3839,7 @@ zcat `ls -1 /cluster/bluearc/dm2/phastCons/POSTPROBS/$chr.*.pp.gz \
       > /tmp/1
     awk '{print $1 "\t" $2 "\t" $3 "\t" $4 "\t" $5;}' flyregLift.bed | sort \
       > /tmp/2
-    diff /tmp/[12] > newVsLift
+    diff -c /tmp/[12] > newVsLift
     # Analyzed the differences: 2 duplicates in original (uniquified in v2),
     # 1 new item in v2, and 4 items incorrectly mapped by liftOver (fooled 
     # by what looks like a slightly diverged local duplication) but probably
