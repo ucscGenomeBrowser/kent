@@ -10,7 +10,7 @@
 #include "binRange.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: clusterGenes.c,v 1.18 2004/07/11 19:47:03 markd Exp $";
+static char const rcsid[] = "$Id: clusterGenes.c,v 1.19 2004/11/06 22:06:02 markd Exp $";
 
 /* Command line driven variables. */
 char *clChrom = NULL;
@@ -265,11 +265,14 @@ for (el = *pList; el != NULL; el = next)
 }
 
 int clusterCmp(const void *va, const void *vb)
-/* Compare to sort based on start. */
+/* Compare to sort based on start and end. assumes they are on the chrom */
 {
 const struct cluster *a = *((struct cluster **)va);
 const struct cluster *b = *((struct cluster **)vb);
-return a->start - b->start;
+int dif = a->start - b->start;
+if (dif == 0)
+    dif = a->end - b->end;
+return dif;
 }
 
 struct clusterGene *clusterFindGene(struct cluster *cluster, struct track *track, struct genePred *gp)
@@ -723,6 +726,7 @@ else if (optionExists("chromFile"))
     chromList = readChromFile(optionVal("chromFile", NULL));
 else
     chromList = hAllChromNames();
+slNameSort(&chromList);
 conn = hAllocConn();
 for (chrom = chromList; chrom != NULL; chrom = chrom->next)
     {

@@ -9,7 +9,7 @@ O = clusterGenes.o
 
 clusterGenes: $O $(MYLIBS)
 	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/clusterGenes $O $(MYLIBS) $L
-	#${STRIP} $(HOME)/bin/$(MACHTYPE)/clusterGenes${EXE}
+	${STRIP} $(HOME)/bin/$(MACHTYPE)/clusterGenes${EXE}
 
 test::
 	(cd tests && ${MAKE} test)
