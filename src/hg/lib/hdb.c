@@ -27,7 +27,7 @@
 #include "maf.h"
 #include "ra.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.165 2004/03/03 08:01:34 kent Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.166 2004/03/23 22:43:33 angie Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
@@ -2669,15 +2669,20 @@ struct trackDb *hMaybeTrackInfo(struct sqlConnection *conn, char *trackName)
 char query[256];
 struct sqlResult *sr;
 char **row;
-struct trackDb *tdb;
+struct trackDb *tdb = NULL;
+char *tdbTable = hTrackDbName();
 
-sprintf(query, "select * from %s where tableName = '%s'", hTrackDbName(), trackName);
-sr = sqlGetResult(conn, query);
-if ((row = sqlNextRow(sr)) == NULL)
-    return NULL;
-tdb = trackDbLoad(row);
-hLookupStringsInTdb(tdb, hGetDb());
-sqlFreeResult(&sr);
+if (sqlTableExists(conn, tdbTable))
+    {
+    safef(query, sizeof(query), "select * from %s where tableName = '%s'",
+	  tdbTable, trackName);
+    sr = sqlGetResult(conn, query);
+    if ((row = sqlNextRow(sr)) == NULL)
+	return NULL;
+    tdb = trackDbLoad(row);
+    hLookupStringsInTdb(tdb, hGetDb());
+    sqlFreeResult(&sr);
+    }
 return tdb;
 }
 
