@@ -63,7 +63,7 @@
 #define MAX_CONTROL_COLUMNS 5
 #define NAME_LEN 256
 #define EXPR_DATA_SHADES 16
-boolean hgDebug = TRUE;      /* Activate debugging code. Set to true by hgDebug=on in command line*/
+boolean hgDebug = FALSE;      /* Activate debugging code. Set to true by hgDebug=on in command line*/
 
 /* Declare our color gradients and the the number of colors in them */
 Color shadesOfGreen[EXPR_DATA_SHADES];
@@ -8483,6 +8483,8 @@ database = cartOptionalString(cart, "db");
 debugTmp = cartUsualString(cart, "hgDebug", "off");
 if(sameString(debugTmp, "on"))
     hgDebug = TRUE;
+else
+    hgDebug = FALSE;
 if (database == NULL)
     database = hGetDb();
 hSetDb(database);
