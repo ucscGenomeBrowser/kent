@@ -51,3 +51,12 @@ visibility dense
 color 40,40,160
 altColor 255,0,0
 type bed 6 .
+
+track codeBlast
+shortLabel BLASTP codes
+longLabel Conservation of proteins with BLASTP
+group compGeno
+priority 4.5
+visibility dense
+type bed 6 +
+canPack off

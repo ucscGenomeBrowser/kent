@@ -54,12 +54,3 @@ expStep 0.5
 expTable llaPaePrintAExps
 chip printA
 canPack off
-
-track codeBlast
-shortLabel BLASTP codes
-longLabel Conservation of proteins with BLASTP
-group compGeno
-priority 4.5
-visibility dense
-type bed 6 +
-canPack off
