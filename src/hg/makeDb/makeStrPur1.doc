@@ -1,0 +1,29 @@
+#!/bin/bash  # set emacs mode
+exit; # don't actually run this like a script :)
+
+# Strongylocentrotus purpuratus -- 0.4 assembly
+# 
+# ftp://ftp.hgsc.bcm.tmc.edu/pub/data/Spurpuratus/fasta/
+
+# DOWNLOAD SEQUENCE (DONE 4/4/05 Andy)
+    mkdir -p /cluster/store5/strPur1/downloads
+    ln -s /cluster/store5/strPur1 /cluster/data/strPur1
+    cd /cluster/data/strPur1/downloads
+    wget ftp://ftp.hgsc.bcm.tmc.edu/pub/data/Spurpuratus/fasta/Spur20050323/contigs/Spur20041123-contigs.fa.gz
+    wget ftp://ftp.hgsc.bcm.tmc.edu/pub/data/Spurpuratus/fasta/Spur20050323/contigs/Spur20041123-reptigs.fa.gz
+    wget ftp://ftp.hgsc.bcm.tmc.edu/pub/data/Spurpuratus/fasta/Spur20050323/contigs/Spur20050323.agp
+    wget ftp://ftp.hgsc.bcm.tmc.edu/pub/data/Spurpuratus/fasta/Spur20050323/contigs/accession.contig.txt
+    gunzip *.gz
+    sed 's/^\(\w\+\)\b\W\+Spur_1.1_\(\w\+\).*/\1\t\1|\2/' accession.contig.txt > fromAccs.map
+    sed 's/^\(\w\+\)\b\W\+Spur_1.1_\(\w\+\).*/\2\t\1|\2/' accession.contig.txt > fromContigs.map
+    # agpChangeNames and faChangeNames are uncommitted utilities at this point.  They can maybe go in oneShot
+    # subs was too slow.
+    sed 's/\.1//' Spur20050323.agp | \
+        agpChangeNames /dev/stdin fromAccs.map /dev/stdout | sort -k1,1 -k2,2n > urchin.agp
+    rm Spur20050323.agp
+    faChangeNames Spur20041123-contigs.fa fromContigs.map urchinContigs.fa
+    faChangeNames Spur20041123-reptigs.fa fromContigs.map reptigs.fa
+    cat urchinReptigs.fa >> urchinContigs.fa
+    rm *.map Spur20041123-*.fa
+    agpAllToFaFile urchin.agp urchinContigs.fa urchinSupertigs.fa
+    rm urchinContigs.fa urchinReptigs.fa
