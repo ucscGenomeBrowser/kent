@@ -94,26 +94,19 @@ void rosettaUi(struct trackDb *tdb)
 {
 char *rosettaMap = cartUsualString(cart, "rosetta.type", rosettaEnumToString(0));
 char *col = cartUsualString(cart, "exprssn.color", "rg");
-char *exonTypesOpts[] = {
-    "Confirmed Only",
-    "Predicted Only",
-    "All",
-};
-char *exonTypes = cartUsualString(cart, "rosetta.et",  exonTypesOpts[0]);
+char *exonTypes = cartUsualString(cart, "rosetta.et",  rosettaExonEnumToString(0));
 
-printf("<p><b>Cell Lines: </b> ");
+printf("<p><b>Reference Sample: </b> ");
 rosettaDropDown("rosetta.type", rosettaMap);
 printf("  ");
 printf("<b>Exons Shown:</b> ");
-cgiMakeDropList("rosetta.et", exonTypesOpts, ArraySize(exonTypesOpts), exonTypes);
+rosettaExonDropDown("rosetta.et", exonTypes);
 printf(" <b>Color Scheme</b>: ");
 cgiMakeRadioButton("exprssn.color", "rg", sameString(col, "rg"));
 printf(" red/green ");
 cgiMakeRadioButton("exprssn.color", "rb", sameString(col, "rb"));
 printf(" red/blue ");
 }
-
-
 
 void oneMrnaFilterUi(struct controlGrid *cg, char *text, char *var)
 /* Print out user interface for one type of mrna filter. */
