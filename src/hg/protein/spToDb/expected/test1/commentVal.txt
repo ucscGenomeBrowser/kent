@@ -1,0 +1,27 @@
+1	IN MICRONEME/RHOPTRY COMPLEXES.
+2	SPOROZOITE ANTIGEN.
+3	STAMEN- AND TAPETUM-SPECIFIC.
+4	BELONGS TO THE A9 / FIL1 FAMILY.
+5	THIS PROTEIN IS REQUIRED FOR GERMINATION.
+6	Belongs to the plant defensin family.
+7	THIS IS A SEED STORAGE PROTEIN.
+8	Hexamer; each subunit is composed of an acidic and a basic chain derived from a single precursor and linked by a disulfide bond.
+9	Belongs to the 11S seed storage protein (globulins) family.
+10	MAJOR STRUCTURAL PROTEIN WHICH MAY PLAY A ROLE AS RICKETTSIAL VIRULENCE FACTOR AND/OR IMMUNOGEN DURING INFECTION.
+11	Cell wall. This bacterium is covered by a S- layer with hexagonal symmetry.
+12	ITS C-TERMINUS POTENTIALLY MAY BEAR THE EPITOPES CONFERRING ANTIGENICITY TO THE PROTEIN.
+13	BELONGS TO THE RICKETTSIAE OMPA/OMPB FAMILY.
+14	Belongs to the GTP1 / OBG family.
+15	Catalyzes the oxidation of the 12-alpha-hydroxyl group of bile acids, both in their free and conjugated form. Also acts on bile alcohols.
+16	3-alpha,7-alpha,12-alpha-trihydroxy-5-beta- cholanate + NADP(+) = 3-alpha,7-alpha-dihydroxy-12-oxo-5-beta- cholanate + NADPH.
+17	Homotetramer.
+18	The thermostability of the enzyme is greatly increased due to NADP binding.
+19	Repressed by exogenous auxin.
+20	Seed storage protein.
+21	Hexamer; each subunit is composed of an acidic and a basic chain derived from a single precursor and linked by a disulfide bond (By similarity).
+22	Expressed only in immatures seeds.
+23	Expressed between 7 and 28 days after pollination.
+24	The sequence of the probable beta chain is highly homologous to the N-terminal sequence of BW24KD, a major buckwheat allergen.
+25	Causes an allergic reaction in human.
+26	Seed storage protein with a relatively high level of Lys and Met.
+27	Cotyledons and endosperm protein bodies.

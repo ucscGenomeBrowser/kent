@@ -1,0 +1,11 @@
+1	EMBL
+2	PIR
+3	InterPro
+4	Pfam
+5	SMART
+6	ProDom
+7	PROSITE
+8	PRINTS
+9	TIGRFAMs
+10	FlyBase
+11	GO
