@@ -200,7 +200,7 @@ otherDb rn3
 
 track humorMm3Rn3 
 shortLabel Human/Mouse/Rat
-longLabel Human/Mouse/Rat Alignments
+longLabel Human/Mouse/Rat Humor Alignments (mm3-Feb03, rn3-Jun 03)
 group compGeno
 priority 146
 visibility full
