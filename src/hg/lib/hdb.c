@@ -466,15 +466,10 @@ if (hash == NULL)
     hash = newHash(7);
 if ((hti = hashFindVal(hash, rootName)) == NULL)
     {
-    if (chrom != NULL)
-	{
-	sprintf(fullName, "%s_%s", chrom, rootName);
-	if (hTableExists(fullName))
-	    {
-	    isSplit = TRUE;
-	    }
-        }
-    if (!isSplit)
+    sprintf(fullName, "%s_%s", chrom, rootName);
+    if (hTableExists(fullName))
+	isSplit = TRUE;
+    else
         {
 	strcpy(fullName, rootName);
 	if (!hTableExists(fullName))
@@ -509,6 +504,22 @@ if (hasBin != NULL)
     *hasBin = hti->hasBin;
 return TRUE;
 }
+
+boolean hIsPrivateHost()
+/* Return TRUE if this is running on private web-server. */
+{
+static boolean gotIt = FALSE;
+static boolean private = FALSE;
+if (!gotIt)
+    {
+    char *t = getenv("HTTP_HOST");
+    if (t != NULL && startsWith("genome-test", t))
+        private = TRUE;
+    gotIt = TRUE;
+    }
+return private;
+}
+
 
 int hOffsetPastBin(char *chrom, char *table)
 /* Return offset into a row of table that skips past bin
@@ -715,6 +726,39 @@ if (tdb->restrictCount > 0)
     chromOk =  (stringArrayIx(chrom, tdb->restrictList, tdb->restrictCount) >= 0);
 return (chromOk && hFindSplitTable(chrom, tdb->tableName, NULL, NULL));
 }
+
+struct trackDb *hTrackDb(char *chrom)
+/* Load tracks associated with current chromosome (which may
+ * be NULL */
+{
+struct sqlConnection *conn = hAllocConn();
+struct trackDb *tdbList = NULL, *tdb;
+boolean privateToo = hIsPrivateHost();
+struct sqlResult *sr;
+char **row;
+
+sr = sqlGetResult(conn, "select * from trackDb");
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    boolean keeper = FALSE;
+    tdb = trackDbLoad(row);
+    if (!tdb->private || privateToo)
+	{
+	if (hTrackOnChrom(tdb, chrom))
+	    {
+	    slAddHead(&tdbList, tdb);
+	    keeper = TRUE;
+	    }
+	}
+    if (!keeper)
+       trackDbFree(&tdb);
+    }
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+slReverse(&tdbList);
+return tdbList;
+}
+
 
 boolean hgParseChromRange(char *spec, char **retChromName, 
 	int *retWinStart, int *retWinEnd)

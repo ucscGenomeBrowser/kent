@@ -437,21 +437,6 @@ printf("ALT= \"%s\">\n", statusLine);
 freeMem(encodedItem);
 }
 
-boolean privateVersion()
-/* Returns TRUE if this is the 'private' version. */
-{
-static boolean gotIt = FALSE;
-static boolean private = FALSE;
-if (!gotIt)
-    {
-    char *t = getenv("HTTP_HOST");
-    if (t != NULL && startsWith("genome-test", t))
-        private = TRUE;
-    gotIt = TRUE;
-    }
-return private;
-}
-
 boolean chromTableExists(char *tabSuffix)
 /* Return true if chromosome specific version of table exists. */
 {
@@ -2803,7 +2788,7 @@ void loadGenomicDups(struct trackGroup *tg)
 /* Load up simpleRepeats from database table to trackGroup items. */
 {
 bedLoadItem(tg, "genomicDups", (ItemLoader)genomicDupsLoad);
-if (!privateVersion())
+if (!hIsPrivateHost())
     tg->items = filterOldDupes(tg->items);
 }
 
@@ -2928,7 +2913,7 @@ return shadesOfBrown[grayLevel];
 void exoMouseMethods(struct trackGroup *tg)
 /* Make track group for exoMouse. */
 {
-if (sameString(chromName, "chr22") && privateVersion())
+if (sameString(chromName, "chr22") && hIsPrivateHost())
     tg->visibility = tvDense;
 else
     tg->visibility = tvHide;
@@ -4959,13 +4944,6 @@ mgFree(&mg);
 }
 
 
-void makeCheckBox(char *name, boolean isChecked)
-/* Create a checkbox with the given name in the given state. */
-{
-printf("<INPUT TYPE=CHECKBOX NAME=\"%s\" VALUE=on%s>", name,
-    (isChecked ? " CHECKED" : "") );
-}
-
 void printEnsemblAnchor()
 /* Print anchor to Ensembl display on same window. */
 {
@@ -5184,40 +5162,26 @@ fillInFromType(group, tdb);
 return group;
 }
 
-void loadFromTrackDb(struct trackGroup **pTrackList, boolean privateToo)
+void loadFromTrackDb(struct trackGroup **pTrackList)
 /* Load tracks from database, consulting handler list. */
 {
-struct sqlConnection *conn = hAllocConn();
-struct sqlResult *sr;
-char **row;
-struct trackDb *tdb;
+struct trackDb *tdb, *tdbList = hTrackDb(chromName);
 struct trackGroup *group;
 TrackHandler handler;
-int i;
 
-sr = sqlGetResult(conn, "select * from trackDb");
-while ((row = sqlNextRow(sr)) != NULL)
+for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
     {
-    tdb = trackDbLoad(row);
-    if (!tdb->private || privateToo)
+    group = trackGroupFromTrackDb(tdb);
+    handler = lookupTrackHandler(tdb->tableName);
+    if (handler != NULL)
+	handler(group);
+    if (group->drawItems == NULL || group->loadItems == NULL)
+	warn("No handler for %s", tdb->tableName);
+    else
 	{
-	if (hTrackOnChrom(tdb, chromName))
-	    {
-	    group = trackGroupFromTrackDb(tdb);
-	    handler = lookupTrackHandler(tdb->tableName);
-	    if (handler != NULL)
-		handler(group);
-	    if (group->drawItems == NULL || group->loadItems == NULL)
-		warn("No handler for %s", tdb->tableName);
-	    else
-		{
-		slAddHead(pTrackList, group);
-		}
-	    }
+	slAddHead(pTrackList, group);
 	}
     }
-sqlFreeResult(&sr);
-hFreeConn(&conn);
 }
 
 void ctLoadSimpleBed(struct trackGroup *tg)
@@ -5493,7 +5457,7 @@ registerTrackHandler("uniGene",uniGeneMethods);
 
 /* Load regular tracks, blatted tracks, and custom tracks. 
  * Best to load custom last. */
-loadFromTrackDb(&tGroupList, privateVersion());
+loadFromTrackDb(&tGroupList);
 if (userSeqString != NULL) slSafeAddHead(&tGroupList, userPslTg());
 loadCustomTracks(&tGroupList);
 slSort(&tGroupList, tgCmpPriority);
@@ -5588,12 +5552,12 @@ if (!hideControls)
     cgiMakeIntVar("winEnd", winEnd, 12);
     fputs("<BR>\n", stdout);
     printf(" Guidelines ");
-    makeCheckBox("guidelines", withGuidelines);
+    cgiMakeCheckBox("guidelines", withGuidelines);
     printf(" <B>Labels:</B> ");
     printf("left ");
-    makeCheckBox("leftLabels", withLeftLabels);
+    cgiMakeCheckBox("leftLabels", withLeftLabels);
     printf("center ");
-    makeCheckBox("centerLabels", withCenterLabels);
+    cgiMakeCheckBox("centerLabels", withCenterLabels);
     printf(" ");
     cgiMakeButton("submit", "refresh");
     printf("<BR>\n");

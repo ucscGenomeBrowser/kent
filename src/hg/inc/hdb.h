@@ -84,8 +84,15 @@ char *hDbFromFreeze(char *freeze);
 struct slName *hDbList();
 /* List of all database versions. */
 
+boolean hIsPrivateHost();
+/* Return TRUE if this is running on private web-server. */
+
 boolean hTrackOnChrom(struct trackDb *tdb, char *chrom);
 /* Return TRUE if track exists on this chromosome. */
+
+struct trackDb *hTrackDb(char *chrom);
+/* Load tracks associated with current chromosome (which may
+ * be NULL */
 
 boolean hFindChromStartEndFields(char *table, 
 	char retChrom[32], char retStart[32], char retEnd[32]);

@@ -3,6 +3,7 @@
 #include "common.h"
 #include "hCommon.h"
 #include "hash.h"
+#include "memgfx.h"
 #include "portable.h"
 #include "errabort.h"
 #include "dystring.h"
@@ -14,6 +15,7 @@
 #include "fa.h"
 #include "fuzzyFind.h"
 #include "seqOut.h"
+#include "trackDb.h"
 #include "hdb.h"
 #include "hgRelate.h"
 #include "psl.h"
@@ -52,6 +54,7 @@
 #include "pslWScore.h"
 #include "lfs.h"
 #include "mcnBreakpoints.h"
+#include "featureBits.h"
 
 #define CHUCK_CODE 1
 #define ROGIC_CODE 1
@@ -426,24 +429,251 @@ freez(&dupe);
 hFreeConn(&conn);
 }
 
+void savePosInHidden()
+/* Save basic position/database info in hidden vars. */
+{
+cgiContinueHiddenVar("c");
+cgiContinueHiddenVar("l");
+cgiContinueHiddenVar("r");
+cgiContinueHiddenVar("db");
+}
 
-void doGetDna()
-/* Get dna in window. */
+void doGetDna1()
+/* Do first get DNA dialog. */
+{
+hgcStart("Get DNA in Window");
+printf("<H2>Get DNA for %s:%d-%d</H2>\n", seqName, winStart+1, winEnd);
+printf("<FORM ACTION=\"%s\">\n\n", hgcPath());
+cgiMakeHiddenVar("g", "htcGetDna2");
+savePosInHidden();
+cgiMakeRadioButton("out1", "lcRepeats", TRUE);
+printf(" Lower Case Repeats<BR>\n");
+cgiMakeRadioButton("out1", "lc", FALSE);
+printf(" All lower case<BR>\n");
+cgiMakeRadioButton("out1", "uc", FALSE);
+printf(" All upper case<BR>\n");
+cgiMakeRadioButton("out1", "extended", FALSE);
+printf(" Extended case/color options<BR>\n");
+printf("Reverse Complement ");
+cgiMakeCheckBox("rc", FALSE);
+printf(" ");
+cgiMakeButton("Submit", "Submit");
+printf("</FORM>\n");
+}
+
+void lcRepeats(char *chrom, int chromStart, int chromEnd, DNA *dna, int offset)
+/* Lower case bits corresponding to repeats. */
+{
+int rowOffset;
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr;
+char **row;
+
+sr = hRangeQuery(conn, "rmsk", chrom, chromStart, chromEnd, NULL, &rowOffset);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    struct rmskOut ro;
+    rmskOutStaticLoad(row+rowOffset, &ro);
+    if (ro.genoEnd > chromEnd) ro.genoEnd = chromEnd;
+    if (ro.genoStart < chromStart) ro.genoStart = chromStart;
+    toLowerN(dna+ro.genoStart-offset, ro.genoEnd - ro.genoStart);
+    }
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+}
+
+void doGetDnaExtended1()
+/* Do extended case/color get DNA options. */
+{
+struct trackDb *tdbList = hTrackDb(seqName), *tdb;
+
+hgcStart("Extended DNA Case/Color");
+printf("<H1>Extended DNA Case/Color Options</H1>\n");
+puts("You can use this page to make the case and/or color of the DNA"
+     "sequence vary for bases that are covered by particular tracks."
+     "You effectively can display four tracks - one by case, one by "
+     "the red component of the color, one by the green component of "
+     "the color, and one by the blue component of the color.   It's "
+     "possible to have more than one track toggle the case or have "
+     "a non-black color, though the results may not always be clear. "
+     "Red, green, and blue values range from 0 (darkest) to 255 (lightest).");
+printf("<FORM ACTION=\"%s\" METHOD=\"POST\">\n\n", hgcPath());
+savePosInHidden();
+cgiMakeHiddenVar("g", "htcGetDna3");
+printf("Default Case: ");
+cgiMakeRadioButton("case", "upper", FALSE);
+printf(" upper ");
+cgiMakeRadioButton("case", "lower", TRUE);
+printf(" lower ");
+cgiMakeButton("submit", "submit");
+printf("<BR>");
+printf("Reverse Complement ");
+cgiMakeCheckBox("rc", cgiBoolean("rc"));
+printf("<BR>\n");
+printf("<TABLE BORDER=1>\n");
+printf("<TR><TD>Track<BR>NAME</TD><TD>Toggle<BR>Case</TD><TD>Red</TD><TD>Green</TD><TD>Blue</TD></TR>\n");
+slReverse(&tdbList);
+for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
+    {
+    if (fbUnderstandTrack(tdb->tableName))
+	{
+	char buf[128];
+	printf("<TR>");
+	printf("<TD>%s</TD>", tdb->shortLabel);
+	sprintf(buf, "%s_case", tdb->tableName);
+	printf("<TD>");
+	cgiMakeCheckBox(buf, FALSE);
+	printf("</TD>");
+	printf("<TD>");
+	sprintf(buf, "%s_red", tdb->tableName);
+	cgiMakeIntVar(buf, 0, 3);
+	printf("</TD>");
+	printf("<TD>");
+	sprintf(buf, "%s_green", tdb->tableName);
+	cgiMakeIntVar(buf, 0, 3);
+	printf("</TD>");
+	printf("<TD>");
+	sprintf(buf, "%s_blue", tdb->tableName);
+	cgiMakeIntVar(buf, 0, 3);
+	printf("</TD>");
+	printf("</TR>\n");
+	}
+    }
+printf("</TABLE>\n");
+printf("</FORM>\n");
+trackDbFreeList(&tdbList);
+}
+
+void doGetDna2()
+/* Do second DNA dialog (or just fetch DNA) */
+{
+char *outType = cgiString("out1");
+if (sameString(outType, "extended"))
+    {
+    doGetDnaExtended1();
+    }
+else
+    {
+    struct dnaSeq *seq;
+    char name[256];
+    boolean isRc = cgiBoolean("rc");
+
+    sprintf(name, "%s:%d-%d %s", seqName, winStart+1, winEnd, 
+    	(isRc ? "(reverse complement)" : ""));
+    hgcStart(name);
+    seq = hDnaFromSeq(seqName, winStart, winEnd, dnaLower);
+    if (sameString(outType, "uc"))
+        touppers(seq->dna);
+    else if (sameString(outType, "lcRepeats"))
+        {
+	touppers(seq->dna);
+	lcRepeats(seqName, winStart, winEnd, seq->dna, winStart);
+	}
+    if (isRc)
+	reverseComplement(seq->dna, seq->size);
+    printf("<TT><PRE>");
+    faWriteNext(stdout, name, seq->dna, seq->size);
+    printf("</TT></PRE>");
+    freeDnaSeq(&seq);
+    }
+}
+
+void addColorToRange(int r, int g, int b, struct rgbColor *colors, int start, int end)
+/* Add rgb values to colors array from start to end.  Don't let values
+ * exceed 255 */
+{
+struct rgbColor *c;
+int rr, gg, bb;
+int i;
+for (i=start; i<end; ++i)
+    {
+    c = colors+i;
+    rr = c->r + r;
+    if (rr > 255) rr = 255;
+    c->r = rr;
+    gg = c->g + g;
+    if (gg > 255) gg = 255;
+    c->g = gg;
+    bb = c->b + b;
+    if (bb > 255) bb = 255;
+    c->b = bb;
+    }
+}
+
+void doGetDna3()
+/* Do third DNA dialog (or just fetch DNA) */
 {
 struct dnaSeq *seq;
-char name[256];
-char *strand = cgiOptionalString("strand");
+struct cfm cfm;
+int i;
+boolean isRc = cgiBoolean("rc");
+boolean defaultUpper = sameString(cgiString("case"), "upper");
+int winSize = winEnd - winStart;
+struct rgbColor *colors;
+struct trackDb *tdbList = hTrackDb(seqName), *tdb;
 
-if (strand == NULL || strand[0] == '?')
-    strand = "";
-sprintf(name, "%s:%d-%d %s", seqName, winStart+1, winEnd, strand);
-hgcStart(name);
-seq = hDnaFromSeq(seqName, winStart, winEnd, dnaMixed);
-if (strand[0] == '-')
-    reverseComplement(seq->dna, seq->size);
+
+hgcStart("Extended DNA Output");
 printf("<TT><PRE>");
-faWriteNext(stdout, name, seq->dna, seq->size);
-printf("</TT></PRE>");
+printf(">%s:%d-%d %s\n", seqName, winStart+1, winEnd,
+    	(isRc ? "(reverse complement)" : ""));
+seq = hDnaFromSeq(seqName, winStart, winEnd, dnaLower);
+if (defaultUpper)
+    touppers(seq->dna);
+
+AllocArray(colors, winSize);
+for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
+    {
+    char *track = tdb->tableName;
+    struct featureBits *fbList = NULL, *fb;
+    if (fbUnderstandTrack(track))
+        {
+	/* Toggle case if necessary. */
+	char buf[256];
+	int r,g,b;
+	sprintf(buf, "%s_case", track);
+	if (cgiBoolean(buf))
+	    {
+	    fbList = fbGetRange(track, seqName, winStart, winEnd);
+	    for (fb = fbList; fb != NULL; fb = fb->next)
+	        {
+		DNA *s;
+		int size;
+		s = seq->dna + fb->start - winStart;
+		size = fb->end - fb->start;
+		if (defaultUpper)
+		    toLowerN(s, size);
+		else
+		    toUpperN(s, size);
+		}
+	    }
+
+	/* Add in RGB values if necessary. */
+	sprintf(buf, "%s_red", track);
+	r = cgiInt(buf);
+	sprintf(buf, "%s_green", track);
+	g = cgiInt(buf);
+	sprintf(buf, "%s_blue", track);
+	b = cgiInt(buf);
+	if (r != 0 || g != 0 || b != 0)
+	    {
+	    if (fbList == NULL)
+		fbList = fbGetRange(track, seqName, winStart, winEnd);
+	    for (fb = fbList; fb != NULL; fb = fb->next)
+	        {
+		addColorToRange(r, g, b, colors, fb->start - winStart, fb->end - winStart);
+		}
+	    }
+	}
+    }
+
+cfmInit(&cfm, 50, 50, FALSE, FALSE, stdout, 0);
+for (i=0; i<seq->size; ++i)
+   {
+   struct rgbColor *color = colors+i;
+   int c = (color->r<<16) + (color->g<<8) + color->b;
+   cfmOut(&cfm, seq->dna[i], c);
+   }
 freeDnaSeq(&seq);
 }
 
@@ -739,7 +969,6 @@ sprintf(query, "select * from %s where qName = '%s'", table, acc);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
-    uglyf("Got row %s %s %s<BR>\n", row[0], row[1], row[2]);
     psl = pslLoad(row+hasBin);
     slAddHead(&pslList, psl);
     }
@@ -3740,8 +3969,16 @@ trackHash = makeTrackHash(seqName);
 tdb = hashFindVal(trackHash, track);
 if (sameWord(track, "getDna"))
     {
-    doGetDna();
+    doGetDna1();
     }
+else if (sameWord(track, "htcGetDna2"))
+   {
+   doGetDna2();
+   }
+else if (sameWord(track, "htcGetDna3"))
+   {
+   doGetDna3();
+   }
 else if (sameWord(track, "mrna") || sameWord(track, "mrna2") || 
 	sameWord(track, "est") || sameWord(track, "intronEst") || 
 	sameWord(track, "xenoMrna") || sameWord(track, "xenoBestMrna") ||
