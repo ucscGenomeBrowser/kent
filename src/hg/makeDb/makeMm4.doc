@@ -2390,7 +2390,7 @@ XXX  This is an unusual increase ?
 
     # create primers.psl.filter.blat and epcr.not.found
     # must use -rat here, not the -mouse
-    /projects/compbio/usr/booch/booch/scripts/filterPrimers -rat \
+    /cluster/bin/scripts/filterPrimers -rat \
 	../stsInfoMouse.bed primers.psl ../mouseP.info \
 	../ePCR/all.epcr > primers.psl.filter.blat 2> filterPrimers.err
     #  The filterPrimers.err file should show an increasing count:
@@ -2414,12 +2414,12 @@ XXX  This is an unusual increase ?
 
     # create accession_info.rdb  (chrM added to Terry's script for mouse)
     touch empty_sequence.inf
-    /projects/compbio/usr/booch/booch/scripts/compileAccInfo -mouse \
+    /cluster/bin/scripts/compileAccInfo -mouse \
 	/cluster/data/mm4 empty_sequence.inf
     # works with one seemingly error:
     # cat: /cluster/data/mm4/M/chrM_random.agp: No such file or directory
     mv accession_info.rdb accession_info.rdb.tmp
-    ~booch/bin/sorttbl Chr Ord Start < accession_info.rdb.tmp > accession_info.rdb
+    /cluster/bin/scripts/sorttbl Chr Ord Start < accession_info.rdb.tmp > accession_info.rdb
     rm accession_info.rdb.tmp
     # comparing results to Mm3:
     #  Mm3 wc accession_info.rdb
@@ -2434,7 +2434,7 @@ XXX  This is an unusual increase ?
     # 219652 1885501 11875772 total
 
     # creates epcr.not.found.nomatch and epcr.not.found.psl
-    /projects/compbio/usr/booch/booch/scripts/epcrToPsl -mouse \
+    /cluster/bin/scripts/epcrToPsl -mouse \
 	epcr.not.found ../mouseP.fa \
 	accession_info.rdb /cluster/data/mm4
     ##### epcr.not.found.psl is empty !
@@ -2454,20 +2454,19 @@ XXX  This is an unusual increase ?
 
     # lift those primers  (added chrM to this lifter script for mouse)
     # creates primers.psl.filter.lifted
-    /projects/compbio/usr/booch/booch/scripts/lifter -mouse -psl \
+    /cluster/bin/scripts/lifter -mouse -psl \
 	/cluster/data/mm4 primers.psl.filter
     # wc primers.psl.filter.lifted
     # 32729  687309 3460147 primers.psl.filter.lifted
 
     # create primers.psl.filter.lifted.initial
-    PATH=/cluster/home/booch/bin:$PATH \
-	/projects/compbio/usr/booch/booch/scripts/extractPslInfo \
+	/cluster/bin/scripts/extractPslInfo \
 	primers.psl.filter.lifted
     #	wc primers.psl.filter.lifted.initial
     #	32726  196356 1746894 primers.psl.filter.lifted.initial
 
     # create primers.psl.filter.lifted.initial.acc
-    /projects/compbio/usr/booch/booch/scripts/findAccession -agp \
+    /cluster/bin/scripts/findAccession -agp \
 	-mouse primers.psl.filter.lifted.initial /cluster/data/mm4
     # wc primers.psl.filter.lifted.initial.acc
     # 32726  229082 2069372 primers.psl.filter.lifted.initial.acc
@@ -2475,7 +2474,7 @@ XXX  This is an unusual increase ?
 
     # this needs to be -rat as that specifies how to scan the
     # stsInfoMouse.bed file and it does not work if you use -mouse
-    /projects/compbio/usr/booch/booch/scripts/getStsId -rat \
+    /cluster/bin/scripts/getStsId -rat \
 	../stsInfoMouse.bed  primers.psl.filter.lifted.initial.acc \
 	> primers.initial.acc.trans
     # wc primers.initial.acc.trans
@@ -2492,22 +2491,13 @@ XXX  This is an unusual increase ?
     cd /cluster/data/mm4/bed/STSmarkers
     # stsMarkers.final is empty for mouse
     touch stsMarkers.final dummy
-    PATH=/cluster/home/booch/bin:$PATH \
-    /projects/compbio/usr/booch/booch/scripts/combineSeqPrimerPos \
+    /cluster/bin/scripts/combineSeqPrimerPos \
 	stsMarkers.final primer/primers.final > stsMarkers_pos.rdb
     # Comparing results to Mm3
     # Mm3 wc stsMarkers_pos.rdb
     # 25925  181475 1413458 stsMarkers_pos.rdb
     # Mm4 wc stsMarkers_pos.rdb
     # 31013  217091 1854806 stsMarkers_pos.rdb
-
-    /projects/compbio/usr/booch/booch/scripts/combineAllSeqPrimer \
-	-rat stsInfoMouse.bed \
-	dummy primer/primers.final > stsMarkers_pos_all.rdb
-
-    # can not find this result for Mm3
-    # Mm4 wc stsMarkers_pos_all.rdb
-    # 26811   59539  385261 stsMarkers_pos_all.rdb
 
     /projects/cc/hg/ytlu/bin/script/perl/createStsBed \
 	stsInfoMouse.bed  stsMarkers_pos.rdb 500 > stsMapMouse.bed
@@ -2547,6 +2537,14 @@ XXXX 2002-12-23 This is missing something.  Can not click through to the
 #  STS Markers plots - needs to wait until stsMarkers_pos_all.rdb
 #	is created correctly from above, also needs the three maps files
 ###  XXXXX These are obsolete, not necessary
+    /cluster/bin/scripts/combineAllSeqPrimer \
+	-rat stsInfoMouse.bed \
+	dummy primer/primers.final > stsMarkers_pos_all.rdb
+
+    # can not find this result for Mm3
+    # Mm4 wc stsMarkers_pos_all.rdb
+    # 26811   59539  385261 stsMarkers_pos_all.rdb
+
     mkdir /cluster/data/mm4/bed/STSmarkers/html
     cd /cluster/data/mm4/bed/STSmarkers/html
     mkdir maps plots sts
