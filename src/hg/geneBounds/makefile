@@ -23,7 +23,7 @@ DIRS = \
 	emblMatrixToMotif \
 	expToRna \
 	iriToControlTable \
-	iriToDnaMotif 
+	iriToDnaMotif \
 	lib \
 	liftPromoHits \
 	motifLogo \
