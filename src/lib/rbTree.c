@@ -609,10 +609,10 @@ if (n != NULL)
    {
    int minCmp = compareIt(n->item, minIt);
    int maxCmp = compareIt(n->item, maxIt);
-   if (minCmp >= 0 && maxCmp <= 0)
-       doIt(n->item);
    if (minCmp >= 0)
        rTreeTraverseRange(n->left);
+   if (minCmp >= 0 && maxCmp <= 0)
+       doIt(n->item);
    if (maxCmp <= 0)
        rTreeTraverseRange(n->right);
    }
