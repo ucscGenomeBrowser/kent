@@ -9,9 +9,12 @@
 #include "axt.h"
 #include "chainToAxt.h"
 
-static char const rcsid[] = "$Id: chainToAxt.c,v 1.2 2003/06/14 07:43:39 kent Exp $";
+static char const rcsid[] = "$Id: chainToAxt.c,v 1.3 2003/08/12 20:49:23 kent Exp $";
 
 int maxGap = 100;
+double minIdRatio = 0.0;
+double minScore = 0;
+boolean bedOut = FALSE;
 
 void usage()
 /* Explain usage and exit. */
@@ -22,12 +25,18 @@ errAbort(
   "   chainToAxt in.chain tNibDir qNibDir out.axt\n"
   "options:\n"
   "   -maxGap=maximum gap sized allowed without breaking, default %d\n"
+  "   -minScore=minimum score of chain\n"
+  "   -minId=minimum percentage ID within blocks\n"
+  "   -bed  Output bed instead of axt\n"
   , maxGap
   );
 }
 
 static struct optionSpec options[] = {
    {"maxGap", OPTION_INT},
+   {"minScore", OPTION_FLOAT},
+   {"minId", OPTION_FLOAT},
+   {"bed", OPTION_BOOLEAN},
    {NULL, 0},
 };
 
@@ -59,6 +68,39 @@ else
 return seq;
 }
 
+double axtIdRatio(struct axt *axt)
+/* Return the percentage ID ignoring indels. */
+{
+int match = 0, ali = 0;
+int i, symCount = axt->symCount;
+for (i=0; i<symCount; ++i)
+    {
+    char q = toupper(axt->qSym[i]);
+    char t = toupper(axt->tSym[i]);
+    if (q != '-' && t != '-')
+        {
+	++ali;
+	if (q == t)
+	   ++match;
+	}
+    }
+if (match == 0)
+    return 0.0;
+else
+    return (double)match/(double)ali;
+}
+
+void bedWriteAxt(struct axt *axt, int qSize, int tSize, double idRatio, FILE *f)
+/* Write out bounds of axt to a bed file. */
+{
+int idPpt = idRatio * 1000;
+int qStart = axt->qStart, qEnd = axt->qEnd;
+if (axt->qStrand == '-')
+    reverseIntRange(&qStart, &qEnd, qSize);
+fprintf(f, "%s\t%d\t%d\t", axt->tName, axt->tStart, axt->tEnd);
+fprintf(f, "%s\t%d\t%c\n", axt->qName, idPpt, axt->qStrand);
+}
+
 void doIt(char *inName, char *tNibDir, char *qNibDir, char *outName)
 /* chainToAxt - Convert from chain to axt file. */
 {
@@ -72,17 +114,29 @@ struct nibInfo *qNib = NULL, *tNib = NULL;
 
 while ((chain = chainRead(lf)) != NULL)
     {
-    qNib = nibInfoFromCache(nibHash, qNibDir, chain->qName);
-    tNib = nibInfoFromCache(nibHash, tNibDir, chain->tName);
-    qSeq = nibInfoLoadStrand(qNib, chain->qStart, chain->qEnd, chain->qStrand);
-    tSeq = nibInfoLoadStrand(tNib, chain->tStart, chain->tEnd, '+');
-    axtList = chainToAxt(chain, qSeq, chain->qStart, tSeq, chain->tStart,
-    	maxGap);
-    for (axt = axtList; axt != NULL; axt = axt->next)
-        axtWrite(axt, f);
-    axtFreeList(&axtList);
-    freeDnaSeq(&qSeq);
-    freeDnaSeq(&tSeq);
+    if (chain->score >= minScore)
+	{
+	qNib = nibInfoFromCache(nibHash, qNibDir, chain->qName);
+	tNib = nibInfoFromCache(nibHash, tNibDir, chain->tName);
+	qSeq = nibInfoLoadStrand(qNib, chain->qStart, chain->qEnd, chain->qStrand);
+	tSeq = nibInfoLoadStrand(tNib, chain->tStart, chain->tEnd, '+');
+	axtList = chainToAxt(chain, qSeq, chain->qStart, tSeq, chain->tStart,
+	    maxGap, BIGNUM);
+	for (axt = axtList; axt != NULL; axt = axt->next)
+	    {
+	    double idRatio = axtIdRatio(axt);
+	    if (minIdRatio <= idRatio)
+		{
+		if (bedOut)
+		    axtWrite(axt, f);
+		else
+		    bedWriteAxt(axt, chain->qSize, chain->tSize, idRatio, f);
+		}
+	    }
+	axtFreeList(&axtList);
+	freeDnaSeq(&qSeq);
+	freeDnaSeq(&tSeq);
+	}
     chainFree(&chain);
     }
 lineFileClose(&lf);
@@ -94,6 +148,9 @@ int main(int argc, char *argv[])
 {
 optionInit(&argc, argv, options);
 maxGap = optionInt("maxGap", maxGap);
+minIdRatio = optionFloat("minId", 0.0)/100.0;
+minScore = optionFloat("minScore", minScore);
+bedOut = optionExists("bedOut");
 if (argc != 5)
     usage();
 doIt(argv[1], argv[2], argv[3], argv[4]);
