@@ -23,7 +23,7 @@
 #define CDS_HELP_PAGE "../goldenPath/help/hgCodonColoring.html"
 #define CDS_MRNA_HELP_PAGE "../goldenPath/help/hgCodonColoringMrna.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.163 2005/01/04 15:56:40 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.164 2005/01/12 01:25:46 donnak Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -584,12 +584,12 @@ char tempScore[256];
  * overridden by the scoreFilter setting in the track */
 if (scoreValString != NULL)
     scoreVal = atoi(scoreValString);
-printf("<p><b>Only show items with unnormalized score at or above </b>: ");
+printf("<p><b>Show only items with unnormalized score at or above:</b> ");
 snprintf(scoreVar, sizeof(scoreVar), "%s.scoreFilter", tdb->tableName);
 scoreSetting = cartUsualInt(cart,  scoreVar,  scoreVal);
 safef(tempScore, sizeof(tempScore), "%d",scoreSetting);
 cgiMakeTextVar( scoreVar, tempScore, 11);
-printf(" Data Range (0-2000000000)");
+printf("  Data Range (0-2000000000)");
 }
 
 void crossSpeciesUi(struct trackDb *tdb)
@@ -613,29 +613,31 @@ filterByChrom(tdb);
 }
 
 void transRegCodeUi(struct trackDb *tdb)
-/* Put upt UI for transcriptional regulatory code - not
+/* Put up UI for transcriptional regulatory code - not
  * much more than score UI. */
 {
 scoreUi(tdb);
 printf("%s",
-	"<BR>The scoring ranges from 0 to 1000, and is based on the number of lines "
+	"<P>The scoring ranges from 0 to 1000 and is based on the number of lines "
 	"of evidence that support the motif being active.  Each of the two "
-	"<I>sensu stricto</I> species that the motif was conserved in counts "
+	"<I>sensu stricto</I> species in which the motif was conserved counts "
 	"as a line of evidence.  If the CHIP/CHIP data showed good (P 0.001) "
 	"evidence of binding to the transcription factor associated with the "
 	"motif, that counts as two lines of evidence.  If the CHIP/CHIP data "
 	"showed weaker (P 0.005) evidence of binding, that counts as just one line "
 	"of evidence.  The following table shows the relationship between lines "
-	"of evidence and score.");
+	"of evidence and score:");
 printf("<P>");
 hTableStart();
 printf("%s",
+   "<BLOCKQUOTE>\n"
    "<TR><TH>Evidence</TH><TH>Score</TH></TR>\n"
    "<TR><TD>4</TD><TD>1000</TD></TR>\n"
    "<TR><TD>3</TD><TD>500</TD></TR>\n"
    "<TR><TD>2</TD><TD>333</TD></TR>\n"
    "<TR><TD>1</TD><TD>250</TD></TR>\n"
    "<TR><TD>0</TD><TD>200</TD></TR>\n"
+   "</BLOCKQUOTE>\n"
    );
 hTableEnd();
 }
