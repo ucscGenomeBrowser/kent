@@ -658,6 +658,8 @@ if (hTableExists("fishClones"))
 	pos->chromStart = fc->chromStart - 100000;
 	pos->chromEnd = fc->chromEnd + 100000;
 	pos->name = cloneString(spec);
+	dyStringPrintf(query, "%s Positions in FISH Clones track", spec);
+	table->name = cloneString(query->string);
 	slAddHead(&table->posList, pos);
 	fishClonesFree(&fc);
 	}
@@ -708,6 +710,8 @@ if (hTableExists("bacEndPairs"))
 	pos->chromStart = be->chromStart - 100000;
 	pos->chromEnd = be->chromEnd + 100000;
 	pos->name = cloneString(spec);
+	dyStringPrintf(query, "%s Positions found using BAC end sequences", spec);
+	table->name = cloneString(query->string);
 	slAddHead(&table->posList, pos);
 	lfsFree(&be);
 	}
