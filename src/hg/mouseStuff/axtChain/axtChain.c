@@ -230,20 +230,21 @@ return v[sCount-2] + dv * (x - s[sCount-2]) / ds;
  * These were created by looking at the 'main chain'
  * of alignments between human chromosome 22 and mouse
  * chromosome 2 using a preliminary gap cost of
- * 400 * pow(dq+dt, 0.4) */
+ * 400 * pow(dq+dt, 0.4).   The program 'gapCost' 
+ * did this. */
 static int gapInitPos[29] = { 1,2,3,4,5,6,7,8,9,10,15,20,30,40,
 	60,80,100,150,200,300,400,500,1000,2000,5000,10000,20000,
 	50000,100000,};
-static int gapInitQGap[24] = { -397,-454,-478,-497,-532,-558,-578,
-	-595,-611,-626,-698,-752,-833,-899,-989,-1027,-1033,-1052,
-	-1054,-1155,-1147,-1224,-1344,-1450,};
-static int gapInitTGap[25] = { -359,-412,-443,-467,-492,-512,-528,
-	-540,-555,-565,-619,-669,-763,-842,-956,-1022,-1078,-1148,
-	-1177,-1037,-1192,-1253,-1344,-1426,-1630,};
-static int gapInitBothGap[29] = { 0,-1000,-1010,-1020,-1030,-1040,
-	-1050,-1060,-1070,-1080,-1090, -1100,-1110,-1120,-1130,-1140,-1150,
-	-1160,-1170,-1180,-1190,-1200,-1269,-1338, -1423,-1512,-2000,
-	-3000,-5000,};
+static int gapInitQGap[24] = { 397,454,478,497,532,558,578,
+	595,611,626,698,752,833,899,989,1027,1033,1052,
+	1054,1155,1147,1224,1344,1450,};
+static int gapInitTGap[25] = { 359,412,443,467,492,512,528,
+	540,555,565,619,669,763,842,956,1022,1078,1148,
+	1177,1037,1192,1253,1344,1426,1630,};
+static int gapInitBothGap[29] = { 0,1000,1010,1020,1030,1040,
+	1050,1060,1070,1080,1090, 1100,1110,1120,1130,1140,1150,
+	1160,1170,1180,1190,1200,1269,1338, 1423,1512,2000,
+	3000,5000,};
 
 struct gapAid
 /* A structure that bundles together stuff to help us
@@ -338,6 +339,8 @@ uglyf("bLastPos %d, blastPosVal %f, bLastSlope %f\n", aid.bLastPos, aid.bLastPos
 int gapCost(int dq, int dt)
 /* Figure out gap costs. */
 {
+if (dt < 0) dt = 0;
+if (dq < 0) dq = 0;
 if (dt == 0)
     {
     if (dq < aid.smallSize)
@@ -378,7 +381,6 @@ int connectCost(struct boxIn *a, struct boxIn *b)
 int dq = b->qStart - a->qEnd;
 int dt = b->tStart - a->tEnd;
 int overlapAdjustment = 0;
-int gap;
 if (dq < 0 || dt < 0)
    {
    int overlap = -min(dq, dt);
@@ -391,8 +393,7 @@ if (dq < 0 || dt < 0)
    ++overlapCount;
    }
 ++connCount;
-gap = gapCost(dq, dt);
-return overlapAdjustment - gap;
+return overlapAdjustment + gapCost(dq, dt);
 // return 400 * pow(dt+dq, scoreData.gapPower) + overlapAdjustment;
 }
 
@@ -497,7 +498,7 @@ for (b = sp->blockList; b != NULL; b = b->next)
 /* Get chain list and clean it up a little. */
 startTime = clock1000();
 chainList = chainBlocks(sp->qName, qSeq->size, sp->qStrand, 
-	sp->tName, tSeq->size, &sp->blockList, connectCost);
+	sp->tName, tSeq->size, &sp->blockList, connectCost, gapCost);
 dt = clock1000() - startTime;
 uglyf("Made %d chains in %5.3f s\n", slCount(chainList), dt*0.001);
 for (chain = chainList; chain != NULL; chain = chain->next)
