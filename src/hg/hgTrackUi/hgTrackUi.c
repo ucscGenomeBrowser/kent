@@ -21,7 +21,7 @@
 #define CDS_HELP_PAGE "../goldenPath/help/hgCodonColoring.html"
 #define CDS_MRNA_HELP_PAGE "../goldenPath/help/hgCodonColoringMrna.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.121 2004/07/19 22:51:41 hiram Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.122 2004/07/20 23:14:15 hiram Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -99,9 +99,9 @@ void snpUi(struct trackDb *tdb)
 /* Put up UI snpMarkers. */
 {
 char *snpSourceCart[snpSourceCount];
-char *snpTypeCart[snpTypeCount];
+/* char *snpTypeCart[snpTypeCount];  see comment below */
 int   snpSource = 0;
-int   snpType = 0;
+/* int   snpType = 0;	*/
 
 if (strncmp(database,"hg",2))
     return;
@@ -618,7 +618,10 @@ char *species[100];
 int speciesCt = chopLine(speciesOrder, species);
 int i;
 char option[64];
+//#define CODON_HIGHLIGHT
+#ifdef CODON_HIGHLIGHT
 char *currentCodonMode;
+#endif
 puts("<p><b>Pairwise alignments:</b><br>" );
 puts("<TABLE><TR>");
 for (i = 0; i < speciesCt; i++)
@@ -636,7 +639,6 @@ puts("</TR></TABLE><BR>");
 
 puts("<p><b>Base-level codon highlighting:</b></p>" );
 
-//#define CODON_HIGHLIGHT
 #ifdef CODON_HIGHLIGHT
 
 safef(option, sizeof(option), "%s.%s", tdb->tableName, MAF_FRAME_VAR);
@@ -890,8 +892,8 @@ else if (sameString(track, "humMusL") ||
          sameString( track, "mm3Hg15L" ) ||
          sameString( track, "hg15Mm3L" ))
             humMusUi(tdb,7);
-else if (sameString(track, "XXX_chainRn3")) /* under development */
-            chainColorUi(tdb);
+else if (sameString(database,"hg17") && sameString(track, "XXX_chainRn3"))
+            chainColorUi(tdb);	/* under development */
 /* NOTE: type psl xeno <otherDb> tracks use crossSpeciesUi, so
  * add explicitly here only if track has another type (bed, chain).
  * For crossSpeciesUi, the
