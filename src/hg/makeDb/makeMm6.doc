@@ -1,7 +1,7 @@
 # This file describes browser build for the mouse
 # genome, March 2005, ncbi mouse_34 - Mm6
 #
-#	"$Id: makeMm6.doc,v 1.14 2005/03/30 01:03:21 hiram Exp $"
+#	"$Id: makeMm6.doc,v 1.15 2005/04/02 00:39:53 hiram Exp $"
 #
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2005-03-09 - Hiram)
 #
@@ -1086,7 +1086,11 @@ SEQ2_LEN=$BASE/S2.len
     #	swap results to place mm6 alignments onto Hg17
     time /cluster/bin/scripts/doBlastzChainNet.pl -swap `pwd`/DEF > \
 	swap.run.out 2>&1 &
-XXX - STARTED - 2005-03-29 - 15:58
+    #	STARTED - 2005-03-29 - 15:58
+    #	FINI - 2005-03-29 - 18:48
+    #	real    171m26.172s
+    #	user    0m2.270s
+    #	sys     0m0.870s
 
 #########################################################################
 # BLASTZ RAT Rn3 (FIRST TRY - 2005-03-15 - 2005-03-17 - Hiram)
@@ -1244,6 +1248,14 @@ netFilter -minGap=10 mm6.rn3.net.gz | hgLoadNet -verbose=0 mm6 netRn3 stdin
     time featureBits mm5 chainRn3
     #	2646682349 bases of 2615483787 (101.193%) in intersection
 
+    ssh kolossus
+    time HGDB_CONF=~/.hg.conf.read-only featureBits mm6 chainRn3Link
+    #	1802980225 bases of 2597150411 (69.421%) in intersection
+    #	real    94m48.021s
+    time HGDB_CONF=~/.hg.conf.read-only featureBits mm5 chainRn3Link
+    #	1798705001 bases of 2615483787 (68.771%) in intersection
+    #	real    76m44.580s
+
     #	Prepare for a re-run of the swap, move the 2005_03_22 swap
     #	results out of the way
     ssh hgwdev
@@ -1253,7 +1265,12 @@ netFilter -minGap=10 mm6.rn3.net.gz | hgLoadNet -verbose=0 mm6 netRn3 stdin
     cd /cluster/data/mm6/bed/blastzRn3.2005_03_15
     time /cluster/bin/scripts/doBlastzChainNet.pl -swap `pwd`/DEF > \
 	swap.run_1.out 2>&1 &
-XXX - STARTED - 2005-03-29 15:55
+    #	STARTED - 2005-03-29 15:55
+    #	FINI - 2005-03-30 05:21
+    #	real    807m3.833s
+    #	user    0m2.200s
+    #	sys     0m1.150s
+
 
 
 #########################################################################
@@ -1264,6 +1281,9 @@ XXX - STARTED - 2005-03-29 15:55
     ssh kksilo
     mkdir /cluster/data/mm6/bed/blastzRn3.2005_03_22
     cd /cluster/data/mm6/bed/blastzRn3.2005_03_22
+### XXXX - 2005-03-31 - THERE IS AN ERROR IN THIS DEF FILE SPECIFYING
+### the SEQ2_LEN but it didn't seem to matter.  The blastz run appears
+### to ahve used SEQ2 correctly despite this incorrect specification.
     cat << '_EOF_' > DEF
 export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/bin/i386:/cluster/bin/scripts:/cluster/home/angie/schwartzbin/
 
@@ -1479,12 +1499,46 @@ SEQ2_LEN=$BASE/S2.len
 # Longest job:                      139s       2.32m     0.04h    0.00d
 # Submission to last job:           470s       7.83m     0.13h    0.01d
 
+    #	swap results to place mm6 alignments onto danRer2
+    ssh hgwdev
+    cd /cluster/data/mm6/bed/blastzDanRer2.2005_03_17
+    time /cluster/bin/scripts/doBlastzChainNet.pl -fileServer eieio \
+	-swap `pwd`/DEF > swap.run.out 2>&1 &
+    #	~ 27 minutes
+    cat << '_EOF_' > measurements.sh
+#!/bin/sh
+
+doOne()
+{
+db=$1
+tbl=$2
+echo "    featureBits $db $tbl"
+echo -en "    #\t"
+time featureBits $db $tbl
+}
+
+doOne mm6 netDanRer2
+doOne mm5 netDanRer2
+doOne mm6 chainDanRer2
+doOne mm5 chainDanRer2
+doOne mm6 chainDanRer2Link
+doOne mm5 chainDanRer2Link
+doOne danRer2 netMm6
+doOne danRer2 netMm5
+doOne danRer2 chainMm6
+doOne danRer2 chainMm5
+doOne danRer2 chainMm6Link
+doOne danRer2 chainMm5Link
+'_EOF_'
+    # << keep emacs happy
+    chmod +x measurements.sh
+    time ./measurements.sh > measures.out 2>&1 &
 
 #########################################################################
 # BLASTZ FUGU fr1 (WORKING - 2005-03-17 - Hiram)
     ssh kksilo
-    mkdir /cluster/data/mm6/bed/blastzFr1.2005_03_17
-    cd /cluster/data/mm6/bed/blastzFr1.2005_03_17
+    mkdir /cluster/data/mm6/bed/blastzFr1.2005_04_01
+    cd /cluster/data/mm6/bed/blastzFr1.2005_04_01
 
     cat << '_EOF_' > DEF
 # mouse vs. fugu
@@ -1503,23 +1557,17 @@ BLASTZ_ABRIDGE_REPEATS=0
 
 # TARGET: Mouse
 SEQ1_DIR=/panasas/store/mm6/nib
-SEQ1_RMSK=
-SEQ1_FLAG=
-SEQ1_SMSK=
 SEQ1_IN_CONTIGS=0
 SEQ1_CHUNK=10000000
 SEQ1_LAP=10000
 
 # QUERY: Fugu
 SEQ2_DIR=/iscratch/i/fr1/nib
-SEQ2_RMSK=
-SEQ2_FLAG=
-SEQ2_SMSK=
 SEQ2_IN_CONTIGS=0
 SEQ2_CHUNK=10000000
 SEQ2_LAP=0
 
-BASE=/cluster/data/mm6/bed/blastzFr1.2005_03_17
+BASE=/cluster/data/mm6/bed/blastzFr1.2005_04_01
 
 DEF=$BASE/DEF
 RAW=$BASE/raw
@@ -1534,13 +1582,49 @@ SEQ2_LEN=$BASE/S2.len
     #	establish a screen to control this job
     screen
     time /cluster/bin/scripts/doBlastzChainNet.pl -bigClusterHub kki \
-	`pwd`/DEF > blast.run.out 2>&1 &
+	-fileServer eieio -chainMinScore 5000 `pwd`/DEF > blast.run.out 2>&1 &
+    #	STARTED - 2005-04-01 16:30
+
     #	detach from screen session: Ctrl-a Ctrl-d
     #	to reattach to this screen session:
     ssh kksilo
     screen -d -r
     #	STARTED - 2005-03-17 11:00
     #	FINISHED - 2005-03-19 00:14
+    time /cluster/bin/scripts/doBlastzChainNet.pl -fileServer eieio \
+	-swap `pwd`/DEF > swap.run.out 2>&1 &
+    cat << '_EOF_' > measurements.sh
+#!/bin/sh
+
+doOne()
+{
+db=$1
+tbl=$2
+echo "    featureBits $db $tbl"
+echo -en "    #\t"
+time featureBits $db $tbl
+}
+
+DB=DanRer2
+dB=danRer2
+export DB dB
+doOne mm6 net${DB}
+doOne mm5 net${DB}
+doOne mm6 chain${DB}
+doOne mm5 chain${DB}
+doOne mm6 chain${DB}Link
+doOne mm5 chain${DB}Link
+doOne ${dB} netMm6
+doOne ${dB} netMm5
+doOne ${dB} chainMm6
+doOne ${dB} chainMm5
+doOne ${dB} chainMm6Link
+doOne ${dB} chainMm5Link
+'_EOF_'
+    # << keep emacs happy
+    chmod +x measurements.sh
+    time ./measurements.sh > measures.out 2>&1 &
+
 
 #########################################################################
 # BLASTZ TETRAODON tetNig1 (TBD - 2005-03-17 - Hiram)
@@ -1654,6 +1738,9 @@ SEQ2_LEN=$BASE/S2.len
     cd /cluster/data/mm6/bed/blastzTetNig1.2005_03_17/axtChain/run
 
     # Reuse gap penalties from chicken run.
+    #	It turns out this is unnecessary.  This scoring matrix is
+    #	actually the default scoring matrix used in axtChain
+    #	The processing below does not use this file.
     cat << '_EOF_' | sed 's/  */\t/g' > ../../Tuned.gap
 tablesize	11
 smallSize	111
@@ -1663,22 +1750,17 @@ tGap	325	360	400	450	600	1100	3600	7600	15600	31600	56600
 bothGap	625	660	700	750	900	1400	4000	8000	16000	32000	57000
 '_EOF_'
     # << this line keeps emacs coloring happy
-    mv chain.csh chain.csh.0
-    sed -e \
-    "s#-scoreScheme=/cluster/data/blastz/HoxD55.q#-linearGap=../../Tuned.gap" \
-	chain.csh.0 > chain.csh
-    chmod +x chain.csh
     rm batch
     para make jobList
     para check
     para time
 # Completed: 40 of 40 jobs
-# CPU time in finished jobs:        682s      11.37m     0.19h    0.01d  0.000 y
-# IO & Wait Time:                   173s       2.88m     0.05h    0.00d  0.000 y
-# Average job time:                  21s       0.36m     0.01h    0.00d
+# CPU time in finished jobs:        692s      11.54m     0.19h    0.01d  0.000 y
+# IO & Wait Time:                   295s       4.91m     0.08h    0.00d  0.000 y
+# Average job time:                  25s       0.41m     0.01h    0.00d
 # Longest running job:                0s       0.00m     0.00h    0.00d
-# Longest finished job:              52s       0.87m     0.01h    0.00d
-# Submission to last job:            78s       1.30m     0.02h    0.00d
+# Longest finished job:              60s       1.00m     0.02h    0.00d
+# Submission to last job:            87s       1.45m     0.02h    0.00d
 
     ssh kolossus
     cd /cluster/data/mm6/bed/blastzTetNig1.2005_03_17
@@ -1698,10 +1780,74 @@ bothGap	625	660	700	750	900	1400	4000	8000	16000	32000	57000
     time ./loadUp.csh
     #	~ 7m40s
     gzip mm6.tetNig1.net
+    cd /usr/local/apache/htdocs/goldenPath/mm6/vsTetNig1
+    md5sum *.gz axtNet/*.gz > md5sum.txt
+
+    #	swap results to place mm6 alignments onto TetNig1
+    ssh hgwdev
+    cd /cluster/data/mm6/bed/blastzTetNig1.2005_03_17
+    rm -fr /usr/local/apache/htdocs/goldenPath/tetNig1/vsMm6
+    time /cluster/bin/scripts/doBlastzChainNet.pl -fileServer eieio \
+	-swap `pwd`/DEF > swap.run.out 2>&1 &
+    
+    #	Measurements:
+    cat << '_EOF_' > measurements.sh
+#!/bin/sh
+
+doOne()
+{
+db=$1
+tbl=$2
+echo "    featureBits $db $tbl"
+echo -en "    #\t"
+time featureBits $db $tbl
+}
+
+doOne mm6 netTetNig1
+doOne mm5 netTetNig1
+doOne mm6 chainTetNig1
+doOne mm5 chainTetNig1
+doOne mm6 chainTetNig1Link
+doOne mm5 chainTetNig1Link
+doOne tetNig1 netMm6
+doOne tetNig1 netMm5
+doOne tetNig1 chainMm6
+doOne tetNig1 chainMm5
+doOne tetNig1 chainMm6Link
+doOne tetNig1 chainMm5Link
+'_EOF_'
+    # << keep emacs happy
+    chmod +x measurements.sh
+    time ./measurements.sh
+
+    featureBits mm6 netTetNig1
+    #   720943295 bases of 2597150411 (27.759%) in intersection
+    featureBits mm5 netTetNig1
+    #   618111072 bases of 2615483787 (23.633%) in intersection
+    featureBits mm6 chainTetNig1
+    #   771732145 bases of 2597150411 (29.715%) in intersection
+    featureBits mm5 chainTetNig1
+    #   652622662 bases of 2615483787 (24.952%) in intersection
+    featureBits mm6 chainTetNig1Link
+    #   62346107 bases of 2597150411 (2.401%) in intersection
+    featureBits mm5 chainTetNig1Link
+    #   43905129 bases of 2615483787 (1.679%) in intersection
+    featureBits tetNig1 netMm6
+    #   176451958 bases of 342403326 (51.533%) in intersection
+    featureBits tetNig1 netMm5
+    #   152232538 bases of 342403326 (44.460%) in intersection
+    featureBits tetNig1 chainMm6
+    #   197657323 bases of 342403326 (57.726%) in intersection
+    featureBits tetNig1 chainMm5
+    #   163683179 bases of 342403326 (47.804%) in intersection
+    featureBits tetNig1 chainMm6Link
+    #   55282376 bases of 342403326 (16.145%) in intersection
+    featureBits tetNig1 chainMm5Link
+    #   41736750 bases of 342403326 (12.189%) in intersection
  
 #########################################################################
 # CPGISLANDS (DONE - 2005-03-17 - Hiram)
-ssh hgwdev
+    ssh hgwdev
     mkdir -p /cluster/data/mm6/bed/cpgIsland
     cd /cluster/data/mm6/bed/cpgIsland
 
@@ -1769,72 +1915,6 @@ printf("%s\t%d\t%s\t%s %s\t%s\t%s\t%0.0f\t%0.1f\t%s\t%s\n",
     featureBits mm3 cpgIsland
     #	10102968 bases of 2505900260 (0.403%) in intersection
 
-
-# BUILD KNOWN GENES TABLES (WORKING - 2005-03-18 - Hiram)
-#	this does not work - there are no longer LocusLink files
-#	from ncbi
-
-    #	using previously built swissProt and proteins DB's:
-    #	sp050201 proteins050201
-
-    #	create a temporary DB kgMm6 to assembly the KG data into:
-    ssh hgwdev
-    hgsql mm6 -e "create database kgMm6"
-    #	make sure all the protein utilities are current, evidently they
-    #	are not all on the utils build list:
-    cd ~/kent/src/hg/protein
-    make utils
-
-    #	and create its temporary data space (disk space juggling here)
-    #	this /cluster/data/kgDB/ location is used because it is built
-    #	into the script.  This process can use 2 to 3 Gb of disk space.
-    mkdir /cluster/data/mm6/bed/kgMm6
-    ln -s /cluster/data/mm6/bed/kgMm6 /cluster/data/kgDB/bed/kgMm6
-    cd /cluster/data/kgDB/bed/kgMm6
-
-    nohup /usr/bin/time --portability ~/kent/src/hg/protein/KGprocess.sh \
-	kgMm6 mm6 050201 > kgRun0.out 2>&1 &
-
-XXX - RUNNING - 2005-03-18 09:10
-  
-  The script was run successfully with the last message:
-
-  	Tue Jun  8 15:36:52 PDT 2004 DONE 
-
-  After initial inspection of tables in kgHg17, do the following
-  from mySql prompt:
-
-  alter table kgHg17.cgapAlias rename as hg17.cgapAlias;
-  alter table kgHg17.cgapBiocDesc rename as hg17.cgapBiocDesc;
-  alter table kgHg17.cgapBiocPathway rename as hg17.cgapBiocPathway;
-  alter table kgHg17.dupSpMrna rename as hg17.dupSpMrna;
-  alter table kgHg17.keggMapDesc rename as hg17.keggMapDesc;
-  alter table kgHg17.keggPathway rename as hg17.keggPathway;
-  alter table kgHg17.kgAlias rename as hg17.kgAlias;
-  alter table kgHg17.kgProtAlias rename as hg17.kgProtAlias;
-  alter table kgHg17.kgXref rename as hg17.kgXref;
-  alter table kgHg17.knownGene rename as hg17.knownGene;
-  alter table kgHg17.knownGeneLink rename as hg17.knownGeneLink;
-  alter table kgHg17.knownGeneMrna rename as hg17.knownGeneMrna;
-  alter table kgHg17.knownGenePep rename as hg17.knownGenePep;
-  alter table kgHg17.mrnaRefseq rename as hg17.mrnaRefseq;
-  alter table kgHg17.spMrna rename as hg17.spMrna;
-
-  hg17.knownGene has 43,401 entries and hg16.knownGene has 43,232 entries.
-  and running featireBits shows:
-  
-   	featureBits hg17 knownGene
-   	63983072 bases of 2866216770 (2.232%) in intersection
-   
-   	featureBits hg16 knownGene
-   	63781799 bases of 2865248791 (2.226%) in intersection
-  
-  Connect to genome-testdb and use hgcentraltest DB.
-  Add a new entry in gdbPdb table:
- 
-        insert into gdbPdb values('hg17', 'proteins040515');
-
-
 #########################################################################
 # BLASTZ Dog canFam1 (WORKING - 2005-03-18 - Hiram)
     ssh kksilo
@@ -1885,7 +1965,7 @@ SEQ2_LEN=$BASE/S2.len
     #	establish a screen to control this job
     screen
     time /cluster/bin/scripts/doBlastzChainNet.pl -bigClusterHub kk9 \
-	`pwd`/DEF > blast.run.out 2>&1 &
+	-fileServer eieio -chainMinScore 5000 `pwd`/DEF > blast.run.out 2>&1 &
     #	detach from screen session: Ctrl-a Ctrl-d
     #	to reattach to this screen session:
     ssh kksilo
@@ -1893,6 +1973,8 @@ SEQ2_LEN=$BASE/S2.len
     #	STARTED - 2005-03-18 09:57
     #	BROKEN - 2005-03-20 11:00 - due to rearrangements on /scratch/
     #		need to regenerate the linSpec not in mouse for canFam1
+    #	RESTARTED - 2005-03-30 16:25
+    #	COMPLETELY RESTARTED 2005-04-01 11:40
 
 #########################################################################
 # BLASTZ Cow bosTau1 (WORKING - 2005-03-18 - Hiram)
@@ -1928,3 +2010,212 @@ BASE=/cluster/data/mm6/bed/blastzBosTau1.2005_03_18
     screen -d -r
     #	STARTED - 2005-03-18 13:20
     #	BROKEN - 2005-03-20 - 22:03 - power failure to all machines
+    #	RESTARTED - 2005-03-30 14:35
+
+# BLASTZ SELF (WORKING - 2005-03-31 - Hiram)
+    # The procedure for lineage spec business with self is to simply
+    # use the actual repeat masker output for this mouse assembly as
+    # the lineage specific repeats for itself.  Thus, merely make
+    # symlinks to the repeat masker out files and name them as expected
+    # for blastz.  In this case they are called notInMouse but they
+    # really mean InMouse.  Yes, it is confusing, but that's just the
+    # nature of the game in this case.
+
+    ssh eieio
+    mkdir /panasas/store/mm6/linSpecRep.notInMouse
+    cd /panasas/store/mm6/linSpecRep.notInMouse
+    foreach f (../rmsk/*.fa.out)
+	set base = $f:t:r:r
+	echo $base.out.spec
+	ln -s $f $base.out.spec
+    end
+    
+    mkdir /cluster/data/mm6/bed/blastzSelf
+    cd /cluster/data/mm6/bed/blastzSelf
+    cat << '_EOF_' > DEF
+# mouse vs. mouse
+export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/home/angie/schwartzbin:/cluster/home/kent/bin/i386
+
+ALIGN=blastz-run
+BLASTZ=blastz
+BLASTZ_H=2000
+BLASTZ_ABRIDGE_REPEATS=1
+
+# TARGET: Mouse Mm6
+SEQ1_DIR=/panasas/store/mm6/nib
+# RMSK not currently used
+SEQ1_RMSK=/panasas/store/mm6/rmsk
+# FLAG not currently used
+SEQ1_FLAG=-rodent
+SEQ1_SMSK=/panasas/store/mm6/linSpecRep.notInMouse
+SEQ1_IN_CONTIGS=0
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Mouse Mm6
+SEQ2_DIR=/panasas/store/mm6/nib
+# RMSK not currently used
+SEQ2_RMSK=/panasas/store/mm6/rmsk
+# FLAG not currently used
+SEQ2_FLAG=-rodent
+SEQ2_SMSK=/panasas/store/mm6/linSpecRep.notInMouse
+SEQ2_IN_CONTIGS=0
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+
+BASE=/cluster/data/mm6/bed/blastzSelf
+
+DEF=$BASE/DEF
+RAW=$BASE/raw
+CDBDIR=$BASE
+SEQ1_LEN=$BASE/S1.len
+SEQ2_LEN=$BASE/S2.len
+'_EOF_'
+    # << keep emacs coloring happy
+
+    cp /cluster/data/mm6/chrom.sizes ./S1.len
+    cp /cluster/data/mm6/chrom.sizes ./S2.len
+    #	establish a screen to control this job
+    screen
+    #	kksilo was off-limits to logins as this started, use eieio
+    time /cluster/bin/scripts/doBlastzChainNet.pl -fileServer eieio \
+	`pwd`/DEF > blast.run.out 2>&1 &
+    #	STARTED - 2005-03-31 - 13:53
+    #	detach from screen session: Ctrl-a Ctrl-d
+    #	to reattach to this screen session:
+    ssh eieio
+    screen -d -r
+    #	The job had difficulties due to failing nodes on the KK
+    #	recover the job by going to kk machine and
+    #	directory /cluster/data/mm6/bed/blastzSelf
+    #	to get it to complete with para recover etc...
+
+# BLASTZ CHICKEN - (WORKING - 2005-03-21 - Hiram)
+
+    # MAKE LINEAGE-SPECIFIC REPEATS FOR CHICKEN
+    # In an email 2/13/04, Arian said we could treat all human repeats as 
+    # lineage-specific for human-chicken blastz.  Do the same for mouse.  
+    # Scripts expect *.out.spec filenames, so set that up:
+    ssh eieio
+    mkdir /panasas/store/mm6/linSpecRep.notInChicken
+    cd /panasas/store/mm6/linSpecRep.notInChicken
+    foreach f (../rmsk/*.fa.out)
+	set base = $f:t:r:r
+	echo $base.out.spec
+	ln -s $f $base.out.spec
+    end
+    
+    mkdir /cluster/data/mm6/bed/blastzGalGal2.2005_03_31
+    cd /cluster/data/mm6/bed/blastzGalGal2.2005_03_31
+    cat << '_EOF_' > DEF
+# mouse vs. chicken
+export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/bin/i386:/cluster/home/angie/schwartzbin
+
+ALIGN=blastz-run
+BLASTZ=blastz
+
+# Specific settings for chicken (per Webb email to Brian Raney)
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=10000
+BLASTZ_K=2200
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+BLASTZ_ABRIDGE_REPEATS=1
+
+# TARGET: Mouse Mm6
+SEQ1_DIR=/panasas/store/mm6/nib
+# RMSK not currently used
+SEQ1_RMSK=/panasas/store/mm6/rmsk
+# FLAG not currently used
+SEQ1_FLAG=-rodent
+SEQ1_SMSK=/panasas/store/mm6/linSpecRep.notInChicken
+SEQ1_IN_CONTIGS=0
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Chicken galGal2
+SEQ2_DIR=/iscratch/i/galGal2/nib
+SEQ2_RMSK=
+SEQ2_FLAG=
+SEQ2_SMSK=/iscratch/i/galGal2/linSpecRep
+SEQ2_IN_CONTIGS=0
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+
+BASE=/cluster/data/mm6/bed/blastzGalGal2.2005_03_31
+
+DEF=$BASE/DEF
+RAW=$BASE/raw
+SEQ1_LEN=$BASE/S1.len
+SEQ2_LEN=$BASE/S2.len
+'_EOF_'
+    # << this line keeps emacs coloring happy
+
+    ssh eieio
+    cd /cluster/data/mm6/bed/blastzGalGal2.2005_03_31
+    cp /cluster/data/mm6/chrom.sizes ./S1.len
+    sort -rn +1 /cluster/data/galGal2/chrom.sizes > S2.len
+    #	establish a screen to control this job
+    screen
+    time /cluster/bin/scripts/doBlastzChainNet.pl -chainMinScore=5000 \
+	-fileServer eieio `pwd`/DEF > blast.run.out 2>&1 &
+    #	STARTED 2005-04-01 11:30
+    #	detach from screen session: Ctrl-a Ctrl-d
+    #	to reattach to this screen session:
+    ssh kksilo
+    screen -d -r
+
+# BLASTZ OPOSSUM (WORKING - 2005-04-01 - Hiram)
+    ssh eieio
+    mkdir /cluster/data/mm6/bed/blastzMonDom1.2005_04_01
+    cd /cluster/data/mm6/bed/blastzMonDom1.2005_04_01
+
+    cat << '_EOF_' > DEF
+# mouse vs. opossum
+export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/bin/i386:/cluster/home/angie/schwartzbin
+
+ALIGN=blastz-run
+BLASTZ=blastz
+#	Using parameters from monDom1<->mm5 alignments, see notes there.
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=10000
+BLASTZ_K=2200
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+BLASTZ_ABRIDGE_REPEATS=0
+
+# TARGET: Mouse Mm6
+SEQ1_DIR=/panasas/store/mm6/nib
+SEQ1_IN_CONTIGS=0
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Opossum MonDom1
+SEQ2_DIR=/iscratch/i/monDom1/monDom1.2bit
+SEQ2_IN_CONTIGS=1
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+
+BASE=/cluster/data/mm6/bed/blastzMonDom1.2005_04_01
+
+DEF=$BASE/DEF
+RAW=$BASE/raw
+CDBDIR=$BASE
+SEQ1_LEN=$BASE/S1.len
+SEQ2_LEN=$BASE/S2.len
+'_EOF_'
+  # << this line keeps emacs coloring happy
+
+    ssh eieio
+    cd /cluster/data/mm6/bed/blastzMonDom1.2005_04_01
+    cp /cluster/data/mm6/chrom.sizes ./S1.len
+    sort -rn +1 /cluster/data/monDom1/chrom.sizes > S2.len
+    #	establish a screen to control this job
+    screen
+    time /cluster/bin/scripts/doBlastzChainNet.pl -chainMinScore=5000 \
+	-fileServer eieio `pwd`/DEF > blast.run.out 2>&1 &
+    #	STARTED 2005-04-01 11:30
+    #	detach from screen session: Ctrl-a Ctrl-d
+    #	to reattach to this screen session:
+    ssh kksilo
+    screen -d -r
