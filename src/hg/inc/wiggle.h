@@ -356,7 +356,9 @@ void wiggleDataStreamFree(struct wiggleDataStream **wds);
 void printHistoGram(struct histoResult *histoResults);
 
 void statsPreamble(struct wiggleDataStream *wds, char *chrom,
-    int winStart, int winEnd, unsigned span, unsigned long long valuesMatched);
+    int winStart, int winEnd, unsigned span, unsigned long long valuesMatched,
+	char *table2);
+/*	common beginning to stats table display	*/
 
 /*	This function is being phased out, use the wiggleDataStream to
  *	do this business.
