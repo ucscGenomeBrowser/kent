@@ -10,6 +10,15 @@ join genscanName
     gbd.genscan.name
     gbd.genscan.pep
 
+join sgpGeneName
+    gbd.sgpGene.name
+    gbd.sgbPep.name
+
+join softberryGeneName
+    gbd.softberryGene.name
+    gbd.softberryPep.name
+    gbd.softberryHom.name
+
 join affyU95
     human.affyRatio.name
     human.affyRatioNew.name
@@ -40,10 +49,11 @@ join bacCloneName
     gbd.bacEndPairs.name
 
 join genbankAccession external=genbank
+    gbd.seq.acc
+    gbd.gbSeq.acc
 
 join bacEndAccession typeOf=genbankAccession
     gbd.all_bacends.qName
-    gbd.seq.name subset
     gbd.mrna.acc subset
     gbd.bacEndPairs.lfNames comma
     human.fishClones.beNames comma
@@ -57,7 +67,6 @@ imageCloneId
 
 join estOrMrnaAccession typeOf=genbankAccession
     gbd.mrna.acc subset
-    gbd.seq.name subset
     gbd.gbSeq.acc subset
     gbd.gbStatus.acc subset
     gbd.imageClone.acc subset
@@ -75,6 +84,7 @@ join mrnaAccession typeOf=estOrMrnaAccession
     gbd.dupSpMrna.dupMrnaID
     gbd.mrnaOrientInfo.name
     gbd.mrnaRefseq.mrna
+    gbd.spMrna.mrnaID
 
 join mgcAccession typeOf=mrnaAccession
     gdb.mgcFullMrna.qName 
@@ -205,6 +215,7 @@ join knownGeneId typeOf=mrnaAccession
     human&mouse.ceBlastTab.query
     human&mouse.dmBlastTab.query
     human&mouse.drBlastTab.query
+    human&mouse.scBlastTab.query
     gbd.dupSpMrna.mrnaID
     gbd.mrna.acc subset
     gbd.seq.acc subset
@@ -246,6 +257,7 @@ join swissProtId external=SwissProt
     gbd.kgXref.spDisplayID
     gbd.knownCanonical.protein
     gbd.knownGene.proteinId
+    gbd.spMrna.spID
 
 join swissProtAccession external=SwissProt
     gbd.kgProtAlias.alias part
@@ -260,6 +272,9 @@ join pfamId external=Pfam
 
 join superfamilyId external=Superfamily
     gbd.knownToSuper.value
+    gbd.sfAssign.sfID
+    gbd.sfDes.id
+
 
 join wormBaseId
     gbd.ceBlastTab.target
@@ -267,22 +282,27 @@ join wormBaseId
 join flyBaseId
     gbd.dmBlastTab.target
 
+join scdId
+    gbd.scBlastTab.target
+
 join ensemblTranscriptId
     gbd.ensGene.name
     gbd.ensGeneXref.transcript_name
-    gbd.ensGtp.transcript chop=.
+    gbd.ensGtp.transcript chopAfter=.
     gbd.ensPep.name
     gbd.ensTranscript.transcript_name
     gbd.knownToEnsembl.value
+    gbd.sfDescription.name
 
 join ensemblGeneId
     gbd.ensGeneXref.gene_name
-    gbd.ensGtp.gene chop=.
+    gbd.ensGtp.gene chopAfter=.
     gbd.ensTranscript.gene_name
 
 join ensemblProteinId
-    gbd.ensGtp.protein chop=.
+    gbd.ensGtp.protein chopAfter=.
     gbd.ensTranscript.translation_name
+    gbd.sfDescription.proteinID
 
 join ensemblDanioRerioTranslationId
     gbd.drBlastTab.target
@@ -290,13 +310,13 @@ join ensemblDanioRerioTranslationId
 join humanBacAccession
     human.certificate.accession1
     human.certificate.accession2
-    human.gl.frag chop=.
-    human.gold.frag chop=.
-    human.clonePos.name chop=.
-    human.fishClones.accNames chop=. comma
+    human.gl.frag chopAfter=.
+    human.gold.frag chopAfter=.
+    human.clonePos.name chopAfter=.
+    human.fishClones.accNames chopAfter=. comma
 
 join humanBacAccessionVersion
-    human.gl.frag chop=_
+    human.gl.frag chopAfter=_
     human.gold.frag
     human.clonePos.name
 
@@ -322,6 +342,18 @@ join chainSelf
 
 join dbSnpId external=dbSNP
     gbd.knownToCdsSnp.value
+    gbd.snpMap.name
+    gbd.snpNih.name
+    gbd.snpTsc.name
 
 join nci60Id
     human.nci60.name
+
+join unigeneId
+    gbd.sage.uni
+    gbd.unigene_2.name chopBefore=.
+
+join sageExpId
+    gbd.sageExp.num
+    gbd.sage.exps comma
+
