@@ -44,7 +44,7 @@ function initDb()
 
 function sameOrganism(db1, db2)
 {
-  if (db1.substring(0, 2) == db2.substring(0, 2))
+  if (db1.toLowerCase() == db2.toLowerCase())
   {
     return true;
   }
