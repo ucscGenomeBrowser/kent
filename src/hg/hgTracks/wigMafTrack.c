@@ -14,7 +14,7 @@
 #include "hgMaf.h"
 #include "mafTrack.h"
 
-static char const rcsid[] = "$Id: wigMafTrack.c,v 1.25 2004/05/05 22:30:51 kate Exp $";
+static char const rcsid[] = "$Id: wigMafTrack.c,v 1.26 2004/05/19 21:51:06 kate Exp $";
 
 struct wigMafItem
 /* A maf track item -- 
@@ -735,13 +735,19 @@ y += mi->height;
 
 /* draw base-level alignments */
     {
-    int alternateColorBaseCount;
+    int alternateColorBaseCount, alternateColorBaseOffset;
     safef(buf, sizeof(buf), "%s.%s", track->mapName, BASE_COLORS_VAR);
     alternateColorBaseCount = cartCgiUsualInt(cart, buf, 0);
+    safef(buf, sizeof(buf), "%s.%s", track->mapName, BASE_COLORS_OFFSET_VAR);
+    alternateColorBaseOffset = cartCgiUsualInt(cart, buf, 0);
     if (alternateColorBaseCount != 0)
-        alternateBlocksBehindChars(vg, x, y-1, width, mi->height*(lineCount-2), 
-            tl.mWidth, winBaseCount, alternateColorBaseCount,
-            MG_WHITE, shadesOfSea[0]);
+        {
+        int baseWidth = spreadStringCharWidth(width, winBaseCount);
+        int colorX = x + alternateColorBaseOffset * baseWidth;
+        alternateBlocksBehindChars(vg, colorX, y-1, width, 
+                mi->height*(lineCount-2), tl.mWidth, winBaseCount, 
+                alternateColorBaseCount, shadesOfSea[0], MG_WHITE);
+        }
     }
 
 for (mi = miList->next, i=1; mi != NULL, mi->db != NULL; mi = mi->next, ++i)

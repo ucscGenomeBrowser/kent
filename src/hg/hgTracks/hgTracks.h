@@ -656,5 +656,7 @@ void mapBoxHgcOrHgGene(int start, int end, int x, int y, int width, int height,
 /* Print out image map rectangle that would invoke the hgc (human genome click)
  * program. */
 
+int spreadStringCharWidth(int width, int count);
+
 #endif /* HGTRACKS_H */
 

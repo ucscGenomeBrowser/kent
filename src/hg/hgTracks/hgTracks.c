@@ -84,7 +84,7 @@
 #include "estOrientInfo.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.737 2004/05/19 20:56:20 kate Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.738 2004/05/19 21:51:05 kate Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
@@ -5930,6 +5930,11 @@ rgbColor.r = (rgbColor.r+255)/2;
 rgbColor.g = (rgbColor.g+255)/2;
 rgbColor.b = (rgbColor.b+255)/2;
 return vgFindColorIx(vg, rgbColor.r, rgbColor.g, rgbColor.b);
+}
+
+int spreadStringCharWidth(int width, int count)
+{
+    return width/count;
 }
 
 void spreadAlignString(struct vGfx *vg, int x, int y, int width, int height,
