@@ -473,9 +473,6 @@ char *debugTmp = NULL;
 struct dyString *state = NULL;
 char *chromStr, *cdsStartStr, *cdsEndStr, posStr[255];
 
-/* Initialize layout and database. */
-cart = theCart;
-
 char *supportedGenomeDatabase;
 char *org = NULL;
 char *spID, *displayID, *desc;
@@ -486,6 +483,9 @@ struct sqlResult *sr3;
 char **row3;
 char *answer;
 char *queryID;
+
+/* Initialize layout and database. */
+cart = theCart;
 
 /* Uncomment this to see parameters for debugging. */
 /* Be careful though, it breaks if custom track
