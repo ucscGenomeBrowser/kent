@@ -415,7 +415,6 @@ while ((row = sqlNextRow(sr)) != NULL)
     ++i;
     }
 sqlFreeResult(&sr);
-uglyf("Index of %s in %s is %d\n", field, table, ix);
 return ix;
 }
 

@@ -1260,6 +1260,9 @@ else if (findSnpPos(query, hgp, "snpNih"))
 else if (findGenePred(query, hgp, "sanger22"))
     {
     }
+else if (findGenePred(query, hgp, "sanger20"))
+    {
+    }
 else if (findGenePred(query, hgp, "ensGene"))
     {
     }

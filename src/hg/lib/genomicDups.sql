@@ -5,6 +5,7 @@
 
 #Summary of large genomic Duplications (>1KB >90% similar)
 CREATE TABLE genomicDups (
+    bin smallint unsigned not null,     # Bin number for fast range index
     chrom varchar(255) not null,	# Human chromosome
     chromStart int unsigned not null,	# Start position in chromosome
     chromEnd int unsigned not null,	# End position in chromosome
@@ -20,6 +21,7 @@ CREATE TABLE genomicDups (
     fracMatch float not null,	# fraction of matching bases
     jcK float not null,	# K-value calculated with Jukes-Cantor
               #Indices
-    INDEX(chrom(12),chromStart),
-    INDEX(chrom(12),chromEnd)
+    INDEX(chrom(8),bin),
+    INDEX(chrom(8),chromStart),
+    INDEX(chrom(8),chromEnd)
 );
