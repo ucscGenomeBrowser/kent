@@ -2199,12 +2199,12 @@ XXX END OF RAT BLASTZ
 
 BEGINNING OF HUMAN BLASTZ
 
-LOADING HUMAN HG13 (SELF) BLASTZ ALIGNMENTS: (DONE 01/15/03)
+LOADING HUMAN HG13 (SELF) BLASTZ ALIGNMENTS: (DONE 02/20/03)
 
     # Translate Penn State .lav files into sorted axt, with alignments 
     # to self/diagonal dropped:
     ssh eieio
-    set base="/cluster/store4/gs.14/build31/bed/blastz.hg13.2003-01-14-ASH"
+    set base="/cluster/store4/gs.14/build31/bed/blastz.hg13.2003-02-18-ASH"
     set seq1_dir="/cluster/store4/gs.14/build31/mixedNib/"
     set seq2_dir="/cluster/store4/gs.14/build31/mixedNib/"
     set tbl="blastzHuman"
@@ -2239,16 +2239,16 @@ LOADING HUMAN HG13 (SELF) BLASTZ ALIGNMENTS: (DONE 01/15/03)
 
     # Load tables
     ssh hgwdev
-    set base="/cluster/store4/gs.14/build31/bed/blastz.hg13.2003-01-14-ASH"
+    set base="/cluster/store4/gs.14/build31/bed/blastz.hg13.2003-02-18-ASH"
     set tbl="blastzHuman"
     cd $base/pslChrom
     hgLoadPsl hg13 chr*_${tbl}.psl
 
-MAKING THE BLASTZBESTHUMAN TRACK FROM UNFILTERED AXT FILES (DONE 01/15/03)
+MAKING THE BLASTZBESTHUMAN TRACK FROM UNFILTERED AXT FILES (DONE 02/20/03)
 
     # Consolidate AXT files to chrom level, sort, pick best, make psl.
     ssh eieio
-    set base="/cluster/store4/gs.14/build31/bed/blastz.hg13.2003-01-14-ASH"
+    set base="/cluster/store4/gs.14/build31/bed/blastz.hg13.2003-02-18-ASH"
     set tbl="blastzBestHuman"
     cd $base
     mkdir -p axtBest pslBest
@@ -2256,8 +2256,9 @@ MAKING THE BLASTZBESTHUMAN TRACK FROM UNFILTERED AXT FILES (DONE 01/15/03)
     foreach chrdir (lav/*)
       set chr=$chrdir:t
       echo two-pass axtBesting $chr
-      foreach a ($chrdir/*.axt)
-        axtBest $a $chr $a:r.axtBest
+      foreach a ($chrdir/*.axt.gz)
+        gunzip -c $a \
+        | axtBest stdin $chr $a:r.axtBest
       end
       cat `ls -1 $chrdir/*.axtBest | sort -g` \
         > $chrdir/$chr.axtBestPieces
@@ -2267,7 +2268,7 @@ MAKING THE BLASTZBESTHUMAN TRACK FROM UNFILTERED AXT FILES (DONE 01/15/03)
 
     # Load tables
      ssh hgwdev
-     set base="/cluster/store4/gs.14/build31/bed/blastz.hg13.2003-01-14-ASH"
+     set base="/cluster/store4/gs.14/build31/bed/blastz.hg13.2003-02-18-ASH"
      set tbl="blastzBestHuman"
      cd $base/pslBest
      hgLoadPsl hg13 chr*_${tbl}.psl
@@ -2289,10 +2290,10 @@ MAKING THE BLASTZBESTHUMAN TRACK FROM UNFILTERED AXT FILES (DONE 01/15/03)
      hgsql hg13 < ~/kent/src/hg/lib/axtInfo.sql
      hgsql hg13 < axtInfoInserts.sql
 
-MAKING THE AXTTIGHT FROM AXTBEST (DONE 01/15/03)
+MAKING THE AXTTIGHT FROM AXTBEST (DONE 02/20/03)
     # After creating axtBest alignments above, use subsetAxt to get axtTight:
     ssh eieio
-    cd ~/hg13/bed/blastz.hg13.2003-01-14-ASH/axtBest
+    cd ~/hg13/bed/blastz.hg13.2003-02-18-ASH/axtBest
     mkdir -p ../axtTight
     foreach i (*.axt)
       subsetAxt  $i ../axtTight/$i \
@@ -2307,7 +2308,7 @@ MAKING THE AXTTIGHT FROM AXTBEST (DONE 01/15/03)
     end
     # Load tables into database
     ssh hgwdev
-    cd ~/hg13/bed/blastz.hg13.2003-01-14-ASH/pslTight
+    cd ~/hg13/bed/blastz.hg13.2003-02-18-ASH/pslTight
     hgLoadPsl hg13 chr*_blastzTightHuman.psl
 
 
