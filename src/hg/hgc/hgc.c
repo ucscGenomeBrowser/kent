@@ -39,7 +39,9 @@
 #include "snp.h"
 #include "softberryHom.h"
 #include "roughAli.h"
+#include "exprBed.h"
 
+#define CHUCK_CODE 1
 char *seqName;		/* Name of sequence we're working on. */
 int winStart, winEnd;   /* Bounds of sequence. */
 char *database;		/* Name of mySQL database. */
@@ -1988,6 +1990,172 @@ sqlFreeResult(&sr);
 hFreeConn(&conn);
 }
 
+#ifdef CHUCK_CODE
+
+void chuckHtmlStart(char *title) 
+/* Prints the header appropriate for the title
+ * passed in. Links html to chucks stylesheet for 
+ * easier maintaince 
+ */
+{
+printf("Content-Type: text/html\n\n<HTML><HEAD>\n");
+printf("<LINK REL=STYLESHEET TYPE=\"text/css\" href=\"http://www.cse.ucsc.edu/~sugnet/sugnetStyle.css\" title=\"Chuck Style\">\n");
+printf("<title>%s</title>\n</head><body>",title);
+}
+
+struct rgbColor getColorForExprBed(float val, float max, boolean RG_COLOR_SCHEME)
+/* Return the correct color for a given score */
+{
+float absVal = fabs(val);
+struct rgbColor color; 
+int colorIndex = 0;
+if(absVal > 100) 
+    {
+    color.g = color.r = color.b = 128;
+    return(color);
+    }
+if(absVal > max) 
+    absVal = max;
+
+if (max == 0) 
+    errAbort("ERROR: hgc::getColorForExprBed() maxDeviation can't be zero\n"); 
+colorIndex = (int)(absVal * 255/max);
+if(RG_COLOR_SCHEME) 
+    {
+    if(val > 0) 
+	{
+	color.r = colorIndex; 
+	color.g = 0;
+	color.b = 0;
+	}
+    else 
+	{
+	color.r = 0;
+	color.g = colorIndex;
+	color.b = 0;
+	}
+    }
+else
+    {
+    if(val > 0) 
+	{
+	color.r = colorIndex; 
+	color.g = 0;
+	color.b = 0;
+	}
+    else 
+	{
+	color.r = 0;
+	color.g = 0;
+	color.b = colorIndex;
+	}
+    }
+return color;
+}
+
+void abbr(char *s, char *fluff)
+/* Cut out fluff from s. */
+{
+int len;
+s = strstr(s, fluff);
+if (s != NULL)
+   {
+   len = strlen(fluff);
+   strcpy(s, s+len);
+   }
+}
+
+void printTableHeaderName(char *name) 
+/* creates a table to display a name vertically,
+ * basically creates a column of letters 
+ */
+{
+int i, length;
+char *header = cloneString(name);
+abbr(header, "LINK_");
+subChar(header, '_', ' ');
+length = strlen(header);
+
+printf("<table border=0 cellspacing=0 cellpadding=0>\n");
+for(i = 0; i < length; i++)
+    {
+    if(header[i] == ' ') 
+	printf("<tr><td align=center>&nbsp</td></tr>\n");
+    else
+	printf("<tr><td align=center>%c</td></tr>\n", header[i]);
+    }
+printf("</table>\n");
+}
+
+void exprBedPrintTable(struct exprBed *expList)
+/* prints out a table from the data present in the exprBed */
+{
+int i,featureCount=0, currentRow=0,square=10;
+struct exprBed *exp = NULL;
+if(expList == NULL) 
+    errAbort("No exprBeds were selected.\n");
+
+featureCount = slCount(expList);
+
+/* time to write out some html, first the table and header */
+printf("<basefont size=-1>\n");
+printf("<table cellspacing=0 border=0 cellpadding=0 >\n");
+printf("<tr>\n");
+printf("<th align=center>Hybridization</th>\n");
+printf("<th align=center colspan=%d valign=top>Exons</th>\n",featureCount);
+printf("</tr>\n<tr><td>&nbsp</td>\n");
+for(exp = expList; exp != NULL; exp = exp->next)
+    {
+    printf("<td align=center>\n");
+    printTableHeaderName(exp->name);
+    printf("</td>");
+    }
+printf("</tr>\n");
+
+/* for each experiment write out the name and then all of the values */
+for(i = 0; i < expList->numExp; i++) 
+    {
+    printf("<tr>\n");
+    printf("<td align=left>%s</td>\n",expList->hybes[i]);
+    for(exp = expList;exp != NULL; exp = exp->next)
+	{
+	/* use the background colors to creat patterns */
+	struct rgbColor rgb = getColorForExprBed(exp->scores[i], 2.0, TRUE);
+	printf("<td height=%d width=%d bgcolor=\"#%X%X%X\">&nbsp</td>\n", square, square, rgb.r, rgb.g, rgb.b);
+	}
+    printf("</tr>\n");
+    }
+printf("</table>");
+printf("</basefont>\n");
+}
+
+void doGetExprBed(char *itemName)
+/* Print out a colored table of the expression band track. */
+{
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr;
+char **row;
+char query[256];
+struct exprBed *expList=NULL, *exp=NULL;
+char *table = "exprBed";
+chuckHtmlStart("Expression Data Requested");
+printf("<h2>Expression Data Requested</h2>\n");
+sprintf(query, "select * from %s where chrom = '%s' and chromStart<%u and chromEnd>%u",
+	table, seqName, winEnd, winStart);
+sr = sqlGetResult(conn,query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    exp = exprBedLoad(row);
+    slAddHead(&expList, exp);
+    }
+slReverse(&expList);
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+exprBedPrintTable(expList);
+}
+
+#endif /*CHUCK_CODE*/
+
 void doMiddle()
 /* Generate body of HTML. */
 {
@@ -2143,6 +2311,12 @@ else if (sameWord(group, "htcDnaNearGene"))
    {
    htcDnaNearGene(item);
    }
+#ifdef CHUCK_CODE
+else if (sameWord(group, "hgExprBed"))
+   {
+   doGetExprBed(item);
+   } 
+#endif /*CHUCK_CODE*/
 else
    {
    htmlStart(group);
