@@ -48,7 +48,7 @@ char extFileTable[] =
   "id int unsigned not null primary key,"  /* Unique ID across all tables. */
   "name varchar(64) not null,"	  /* Symbolic name of file.  */
   "path varchar(255) not null,"   /* Full path. Ends in '/' if a dir. */
-  "size int unsigned not null,"            /* Size of file (checked) */
+  "size bigint unsigned not null,"           /* Size of file (checked) */
                    /* Extra indices. */
   "index (name))";
 
@@ -60,7 +60,7 @@ char seqTable[] =
   "size int unsigned not null,"           /* Size of sequence in bases. */
   "gb_date date not null,"       /* GenBank last modified date. */
   "extFile int unsigned not null,"       /* File it is in. */
-  "file_offset int unsigned not null,"    /* Offset in file. */
+  "file_offset bigint not null,"         /* Offset in file. */
   "file_size int unsigned not null,"      /* Size in file. */
 	       /* Extra indices. */
   "unique (acc))";
@@ -221,7 +221,7 @@ struct extFile
     HGID id;
     char *name;
     char *path;
-    unsigned long size;
+    off_t size;
     };
 
 struct hash *extFilesHash = NULL;
@@ -237,7 +237,7 @@ char **row;
 char *name;
 char lastChar;
 int len;
-unsigned long gotSize = 0;
+off_t gotSize = 0;
 
 if (extFilesHash == NULL)
     {
@@ -250,7 +250,7 @@ if (extFilesHash == NULL)
 	hel = hashAdd(hash, row[1], ex);
 	ex->name = name = hel->name;
 	ex->path = cloneString(row[2]);
-	ex->size = sqlUnsigned(row[3]);
+	ex->size = sqlOffset(row[3]);
 	len = strlen(name);
 	lastChar = name[len-1];
         gotSize = fileSize(ex->path);
@@ -258,7 +258,7 @@ if (extFilesHash == NULL)
 	    {
             if(ignore) 
                 {
-                fprintf(stderr, "WARNING: External file %s out of sync.\n Expected size: %lu, got size %lu\n", ex->path, ex->size, gotSize);
+                fprintf(stderr, "WARNING: External file %s out of sync.\n Expected size: %lld, got size %lld\n", ex->path, ex->size, gotSize);
                 }
             else 
                 {
@@ -371,7 +371,6 @@ int faLineSize;
 char faAcc[32];
 char nameBuf[512];
 DNA *faDna;
-int faSize;
 long extFileId = storeExtFilesTable(conn, symFaName, faName);
 boolean gotFaStart = FALSE;
 char *raTag;
@@ -423,7 +422,7 @@ for (;;)
     char dir = '0';
     boolean gotRaAcc = FALSE, gotRaDate = FALSE;
     HGID id;
-    unsigned long faOffset, faEndOffset;
+    off_t faOffset, faEndOffset;
     int faSize;
     char *s;
     int faNameSize;
@@ -516,7 +515,7 @@ for (;;)
 	errAbort("No size in %s\n", faAcc);
     id = hgNextId();
 
-    fprintf(seqTab, "%u\t%s\t%d\t%s\t%lu\t%lu\t%d\n",
+    fprintf(seqTab, "%u\t%s\t%d\t%s\t%lu\t%lld\t%d\n",
 	id, faAcc, dnaSize, sqlDate, extFileId, faOffset, faSize);
     fprintf(mrnaTab, "%u\t%s\t%s\t%s\t%c\t%u\t%u\t%u\t%u\t%u\t%u\t%u\t%u\t%u\t%u\t%u\t%u\t%u\t%u\n",
             id, faAcc, version, mrnaType, dir,
@@ -632,7 +631,7 @@ for (i=0; i<fileCount; ++i)
     for (;;)
 	{
 	HGID id;
-	unsigned long faOffset, faEndOffset;
+	off_t faOffset, faEndOffset;
 	int faSize;
 	char *s;
 	int faNameSize;
@@ -671,7 +670,7 @@ for (i=0; i<fileCount; ++i)
 	faSize = (int)(faEndOffset - faOffset); 
 	id = hgNextId();
 
-	fprintf(seqTab, "%u\t%s\t%d\t%s\t%lu\t%lu\t%d\n",
+	fprintf(seqTab, "%u\t%s\t%d\t%s\t%lu\t%lld\t%d\n",
 	    id, faAcc, dnaSize, sqlDate, extFileId, faOffset, faSize);
 	}
     printf("%d\n", count);
