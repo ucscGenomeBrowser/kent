@@ -724,3 +724,57 @@ cat > jkStuff/zipChroms.csh << 'EOF'
 #	Creating table definition for 
 #	Saving bed.tab
 #	Loading panTro1
+
+#  GC 5 BASE WIGGLE TRACK (DONE - 2004-01-27 - Hiram)
+    #    working kksilo, the fileserver for this data
+    #    ssh kksilo 
+    mkdir /cluster/data/panTro1/bed/gc5Base
+    cd /cluster/data/panTro1/bed/gc5Base
+    mkdir asciiData wigData dataLimits
+for n in ../../nib/*.nib
+do
+    c=`basename ${n} | sed -e "s/.nib//"`
+    C=`echo $c | sed -e "s/chr//"`
+    echo "working on ${c} - ${C}"
+    $HOME/bin/i386/hgGcPercent -chr=${c} -doGaps \
+	-file=stdout -win=5 hg16 ../../nib | \
+    awk '
+{
+        if ($4 == "GC") {
+                bases = $3 - $2
+                count = bases * ($5/1000)
+                printf "%d\t%d\n", $2+1, count-2
+        }
+}' | gzip -c > asciiData/$c.gz
+#       I don't know, it wouldn't work piping the output
+#       of gzip directly into wigAsciiToBinary.  And instead of the if
+#       statement in the awk, that could have been a grep "\tGC\t" into
+#       awk
+zcat asciiData/$c.gz | $HOME/bin/i386//wigAsciiToBinary \
+        -dataSpan=5 -chrom=${c} -wibFile=wigData/gc5Base_${C} \
+        -name=${C} stdin > dataLimits/${c}
+rm -f asciiData/$c.gz
+echo "done ${c}"
+done
+
+    #	data is compete, load track on hgwdev
+    ssh hgwdev
+    cd /cluster/data/panTro1/bed/gc5Base
+    hgLoadWiggle panTro1 gc5Base wigData/*.wig
+    #	create symlinks for .wib files
+    mkdir /gbdb/panTro1/wib
+    ln -s `pwd`/wigData/*.wib /gbdb/panTro1/wib
+    #	the trackDb entry
+track gc5Base
+shortLabel GC Counts
+longLabel 5 base GC Counts
+group map
+priority 23.5
+visibility hide
+autoScaleDefault Off
+maxHeightPixels 128:36:16
+graphTypeDefault Bar
+gridDefault OFF
+color 0,128,255
+altColor 255,128,0
+type wig -2 3
