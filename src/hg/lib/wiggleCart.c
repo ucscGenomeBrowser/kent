@@ -10,7 +10,7 @@
 #include "hui.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: wiggleCart.c,v 1.2 2004/01/20 19:59:37 hiram Exp $";
+static char const rcsid[] = "$Id: wiggleCart.c,v 1.3 2004/01/20 20:40:48 hiram Exp $";
 
 extern struct cart *cart;      /* defined in hgTracks.c or hgTrackUi */
 
@@ -46,6 +46,13 @@ if (debugOpened)
     dbgMsg[0] = (char) NULL;
     fflush(dF);
 }
+
+#ifdef NOT
+/*	example usage:	*/
+snprintf(dbgMsg, DBGMSGSZ, "%s pixels: min,default,max: %d:%d:%d", tdb->tableName, wigCart->minHeight, wigCart->defaultHeight, wigCart->maxHeight);
+wigDebugPrint("wigFetch");
+#endif
+
 #endif
 
 /*	Min, Max Y viewing limits
@@ -109,8 +116,8 @@ correctOrder(minY,maxY);
 if (differentWord("NONE",defaultViewLimits))
     {
     char *words[2];
-    char sep = ':';
-    int wordCount = chopString(defaultViewLimits,&sep,words,ArraySize(words));
+    char *sep = ":";
+    int wordCount = chopString(defaultViewLimits,sep,words,ArraySize(words));
     if (wordCount == 2)
 	{
 	defaultViewMinY = atof(words[0]);
@@ -171,8 +178,7 @@ return;
  *	And default opening display limits may optionally be defined with the
  *		maxHeightPixels declaration from trackDb
  *****************************************************************************/
-void wigFetchMinMaxPixels(struct trackDb *tdb, int *Min, int *Max,
-    int *Default, int wordCount, char **words)
+void wigFetchMinMaxPixels(struct trackDb *tdb, int *Min, int *Max, int *Default)
 {
 char option[MAX_OPT_STRLEN]; /* Option 1 - track pixel height:  .heightPer  */
 char *heightPer = NULL; /*	string from cart	*/
@@ -198,8 +204,9 @@ char cartStr[64];	/*	to set cart strings	*/
 if (differentWord(DEFAULT_HEIGHT_PER,maxHeightPixelString))
     {
     char *words[3];
-    char sep = ':';
-    int wordCount=chopString(maxHeightPixelString,&sep,words,ArraySize(words));
+    char *sep = ":";
+    int wordCount;
+    wordCount=chopString(maxHeightPixelString,sep,words,ArraySize(words));
     switch (wordCount)
 	{
 	case 3:
@@ -230,7 +237,6 @@ if (differentWord(DEFAULT_HEIGHT_PER,maxHeightPixelString))
 	    break;
 	}
     }
-
 snprintf( option, sizeof(option), "%s.heightPer", tdb->tableName);
 heightPer = cartOptionalString(cart, option);
 /*      Clip the cart value to range [minHeightPixels:maxHeightPixels] */
@@ -253,7 +259,7 @@ defaultHeight = max(minHeightPixels, defaultHeight);
  */
 /*	horizontalGrid - off by default **********************************/
 enum wiggleGridOptEnum wigFetchHorizontalGrid(struct trackDb *tdb,
-	char **optString, int wordCount, char **words)
+    char **optString)
 {
 char *Default = wiggleGridEnumToString(wiggleHorizontalGridOff);
 char *notDefault = wiggleGridEnumToString(wiggleHorizontalGridOn);
@@ -283,8 +289,7 @@ return wiggleGridStringToEnum(horizontalGrid);
 }	/*	enum wiggleGridOptEnum wigFetchHorizontalGrid()	*/
 
 /******	autoScale - on by default ***************************************/
-enum wiggleScaleOptEnum wigFetchAutoScale(struct trackDb *tdb,
-	char **optString, int wordCount, char **words)
+enum wiggleScaleOptEnum wigFetchAutoScale(struct trackDb *tdb, char **optString)
 {
 char * Default = wiggleScaleEnumToString(wiggleScaleAuto);
 char * notDefault = wiggleScaleEnumToString(wiggleScaleManual);
@@ -315,8 +320,7 @@ return wiggleScaleStringToEnum(autoScale);
 }	/*	enum wiggleScaleOptEnum wigFetchAutoScale()	*/
 
 /******	graphType - line(points) or bar graph *****************************/
-enum wiggleGraphOptEnum wigFetchGraphType(struct trackDb *tdb,
-	char **optString, int wordCount, char **words)
+enum wiggleGraphOptEnum wigFetchGraphType(struct trackDb *tdb, char **optString)
 {
 char *Default = wiggleGraphEnumToString(wiggleGraphBar);
 char *notDefault = wiggleGraphEnumToString(wiggleGraphPoints);
