@@ -151,7 +151,7 @@
 #include "jalview.h"
 #include "flyreg.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.791 2004/11/29 11:49:09 daryl Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.792 2004/11/30 15:41:02 daryl Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -11006,7 +11006,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     printf("<BR><B>Validation Status: </B>%s\n", (&snp)->valid);
     printf("<BR><B>Function: </B>%s\n",          (&snp)->func);
     if ((&snp)->avHet>0) {printf("<BR><B>Average Heterozygosity: </B>%.3f +/- %.3f", (&snp)->avHet, (&snp)->avHetSE);}
-/*   printf("<BR><B>Location Type: </B>%s\n",     (&snp)->locType); */
+    printf("<BR><B>Location Type: </B>%s\n",     (&snp)->locType);
 /*   printf("<BR><B>Hit Quality: </B>%s\n",       (&snp)->hitQuality);
  *   if ((&snp)->mapWeight>0)  {printf("<BR><B>Map Weight: </B>%d", (&snp)->mapWeight);}
  *   if ((&snp)->chromHits>0)  {printf("<BR><B>Chromosome Hits: </B>%d", (&snp)->chromHits);}

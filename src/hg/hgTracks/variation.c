@@ -50,6 +50,16 @@ for (snpMapType=0; snpMapType<snpMapTypeCartSize; snpMapType++)
 return TRUE;
 }
 
+boolean snpAvHetFilterItem(struct track *tg, void *item)
+/* Return TRUE if item passes filter. */
+{
+struct snp *el = item;
+
+if (el->avHet < atof(cartUsualString(cart, "snpAvHetCutoff", "0.0")))
+    return FALSE;
+return TRUE;
+}
+
 boolean snpSourceFilterItem(struct track *tg, void *item)
 /* Return TRUE if item passes filter. */
 {
@@ -115,6 +125,19 @@ for (snpFunc=0; snpFunc<snpFuncCartSize; snpFunc++)
 return TRUE;
 }
 
+boolean snpLocTypeFilterItem(struct track *tg, void *item)
+/* Return TRUE if item passes filter. */
+{
+struct snp *el = item;
+int    snpLocType = 0;
+
+for (snpLocType=0; snpLocType<snpLocTypeCartSize; snpLocType++)
+    if (containsStringNoCase(el->locType,snpLocTypeDataName[snpLocType]))
+ 	if ( sameString(snpLocTypeCart[snpLocType], "exclude") )
+ 	    return FALSE;
+return TRUE;
+}
+
 void loadSnpMap(struct track *tg)
 /* Load up snpMap from database table to track items. */
 {
@@ -139,7 +162,9 @@ int  snpMolType = 0;
 int  snpClass   = 0;
 int  snpValid   = 0;
 int  snpFunc    = 0;
+int  snpLocType = 0;
 
+snpAvHetCutoff = atof(cartUsualString(cart, "snpAvHetCutoff", "0.0"));
 for (snpSource=0;  snpSource  < snpSourceCartSize; snpSource++)
     snpSourceCart[snpSource] = cartUsualString(cart, snpSourceStrings[snpSource], snpSourceDefault[snpSource]);
 for (snpMolType=0; snpMolType < snpMolTypeCartSize; snpMolType++)
@@ -150,13 +175,17 @@ for (snpValid=0;   snpValid   < snpValidCartSize; snpValid++)
     snpValidCart[snpValid] = cartUsualString(cart, snpValidStrings[snpValid], snpValidDefault[snpValid]);
 for (snpFunc=0;    snpFunc    < snpFuncCartSize; snpFunc++)
     snpFuncCart[snpFunc] = cartUsualString(cart, snpFuncStrings[snpFunc], snpFuncDefault[snpFunc]);
+for (snpLocType=0; snpLocType < snpLocTypeCartSize; snpLocType++)
+    snpLocTypeCart[snpLocType] = cartUsualString(cart, snpLocTypeStrings[snpLocType], snpLocTypeDefault[snpLocType]);
 bedLoadItem(tg, "snp", (ItemLoader)snpLoad);
 
+filterSnpItems(tg, snpAvHetFilterItem);
 filterSnpItems(tg, snpSourceFilterItem);
 filterSnpItems(tg, snpMolTypeFilterItem);
 filterSnpItems(tg, snpClassFilterItem);
 filterSnpItems(tg, snpValidFilterItem);
 filterSnpItems(tg, snpFuncFilterItem);
+filterSnpItems(tg, snpLocTypeFilterItem);
 }
 
 void freeSnpMap(struct track *tg)
@@ -228,6 +257,9 @@ switch (stringArrayIx(snpColorSource, snpColorSourceLabels, snpColorSourceLabels
 	    if (containsStringNoCase(funcString, snpFuncDataName[snpFunc]))
 		thisSnpColor = (enum snpColorEnum) stringArrayIx(snpFuncCart[snpFunc],snpColorLabel,snpColorLabelSize);
 	break;
+    case snpColorSourceLocType:
+	thisSnpColor=(enum snpColorEnum)stringArrayIx(snpLocTypeCart[stringArrayIx(el->locType,snpLocTypeDataName,snpLocTypeDataNameSize)],snpColorLabel,snpColorLabelSize);
+	break;
     default:
 	thisSnpColor = snpColorBlack;
 	break;
@@ -244,8 +276,6 @@ switch (thisSnpColor)
  	return MG_BLUE;
  	break;
     case snpColorBlack:
- 	return MG_BLACK;
- 	break;
     default:
  	return MG_BLACK;
  	break;

@@ -112,7 +112,8 @@ char *snpColorSourceLabels[] = {
     "Molecule Type",
     "Variant Class",
     "Validation Status",
-    "Functional Classification",
+    "Functional Class",
+    "Location Type",
     "Black",
 };
 char *snpColorSourceStrings[] = {
@@ -121,6 +122,7 @@ char *snpColorSourceStrings[] = {
     "snpColorSourceClass",
     "snpColorSourceValid",
     "snpColorSourceFunc",
+    "snpColorSourceLocType",
     "snpColorSourceBlack",
 };
 char *snpColorSourceDataName[] = {
@@ -421,3 +423,49 @@ int snpFuncStringsSize  = ArraySize(snpFuncStrings);
 int snpFuncDataNameSize = ArraySize(snpFuncDataName);
 int snpFuncDefaultSize  = ArraySize(snpFuncDefault);
 int snpFuncCartSize     = ArraySize(snpFuncCart);
+
+/****** Some stuff for snpLocType related controls *******/
+/* unknown, range, exact, between */
+
+char *snpLocTypeLabels[] = {
+    "Unknown",
+    "Range",
+    "Exact",
+    "Between",
+};
+char *snpLocTypeStrings[] = {
+    "snpLocTypeUnknown",
+    "snpLocTypeRange",
+    "snpLocTypeExact",
+    "snpLocTypeBetween",
+};
+char *snpLocTypeDataName[] = {
+    "unknown",
+    "range",
+    "exact",
+    "between",
+};
+char *snpLocTypeDefault[] = {
+    "red",
+    "green",
+    "blue",
+    "black",
+};
+char *snpLocTypeCart[] = {
+    "red",
+    "green",
+    "blue",
+    "black",
+};
+
+int snpLocTypeLabelsSize   = ArraySize(snpLocTypeLabels);
+int snpLocTypeStringsSize  = ArraySize(snpLocTypeStrings);
+int snpLocTypeDataNameSize = ArraySize(snpLocTypeDataName);
+int snpLocTypeDefaultSize  = ArraySize(snpLocTypeDefault);
+int snpLocTypeCartSize     = ArraySize(snpLocTypeCart);
+
+/****** Some stuff for snpLocType related controls *******/
+/* minimum Average Heterozygosity cutoff  */
+
+float snpAvHetCutoff = 0.0;
+

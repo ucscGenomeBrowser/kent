@@ -62,6 +62,7 @@ enum snpColorSourceEnum {
     snpColorSourceClass,
     snpColorSourceValid,
     snpColorSourceFunc,
+    snpColorSourceLocType,
     snpColorSourceBlack
 };
 
@@ -154,6 +155,26 @@ extern int snpFuncStringsSize;
 extern int snpFuncDataNameSize;
 extern int snpFuncDefaultSize;
 extern int snpFuncCartSize;
+
+/****** Some stuff for snpLocType related controls *******/
+/* unknown, range, exact, between */
+
+extern char *snpLocTypeLabels[];
+extern char *snpLocTypeStrings[];
+extern char *snpLocTypeDataName[];
+extern char *snpLocTypeDefault[];
+extern char *snpLocTypeCart[];
+
+extern int snpLocTypeLabelsSize;
+extern int snpLocTypeStringsSize;
+extern int snpLocTypeDataNameSize;
+extern int snpLocTypeDefaultSize;
+extern int snpLocTypeCartSize;
+
+/****** Some stuff for snpLocType related controls *******/
+/* minimum Average Heterozygosity cutoff  */
+
+extern float snpAvHetCutoff;
 
 #endif /* SNPUI_H */
 

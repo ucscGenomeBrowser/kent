@@ -23,7 +23,7 @@
 #define CDS_HELP_PAGE "../goldenPath/help/hgCodonColoring.html"
 #define CDS_MRNA_HELP_PAGE "../goldenPath/help/hgCodonColoringMrna.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.153 2004/11/29 01:00:57 daryl Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.154 2004/11/30 15:40:56 daryl Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -48,7 +48,6 @@ radioButton(filterTypeVar, filterTypeVal, "include");
 if (none)
     radioButton(filterTypeVar, filterTypeVal, "none");
 }
-
 
 void stsMapUi(struct trackDb *tdb)
 /* Put up UI stsMarkers. */
@@ -95,6 +94,7 @@ radioButton(filterTypeVar, filterTypeVal, "Molecule Type");
 radioButton(filterTypeVar, filterTypeVal, "Variant Class");
 radioButton(filterTypeVar, filterTypeVal, "Validation Status");
 radioButton(filterTypeVar, filterTypeVal, "Functional Class");
+radioButton(filterTypeVar, filterTypeVal, "Location Type");
 radioButton(filterTypeVar, filterTypeVal, "Black");
 }
 
@@ -142,15 +142,26 @@ int   snpMolType = 0;
 int   snpClass   = 0;
 int   snpValid   = 0;
 int   snpFunc    = 0;
+int   snpLocType = 0;
 
+/* It would be nice to add a 'reset' button here to reset the snp
+ * variables to their defaults.
+ * I'd also like to see 'submit' buttons at several places along the
+ * page, as the page is very tall and scrolling is tedious. */
 
 printf("<BR><B>Colors and Filters:</B>\n");
 printf("<BR>Use the \"Color Specification\" buttons to specify a group to direct coloring for the track display.\n");
 printf("<BR>Variants can optionally be excluded based on their values in each of the subsequent categories by choosing \"exclude\".\n");
 printf("<BR>\n");
+
 printf("<BR><B>Color Specification:</B><BR>\n");
-    snpColorSourceCart[0] = cartUsualString(cart, "snpColor", "Source" );
-    snpColorFilterButtons("snpColor", snpColorSourceCart[0]);
+snpColorSourceCart[0] = cartUsualString(cart, "snpColor", "Source" );
+snpColorFilterButtons("snpColor", snpColorSourceCart[0]);
+
+snpAvHetCutoff = atof(cartUsualString(cart, "snpAvHetCutoff", "0"));
+printf("<BR><BR><B>Minimum Average Heterozygosity:</B>&nbsp;");
+cgiMakeDoubleVar("snpAvHetCutoff",snpAvHetCutoff,6);
+
 printf("<BR><BR><B>Sources:</B><BR>\n");
 for (snpSource=0; snpSource < snpSourceCartSize; snpSource++)
     {
@@ -185,6 +196,13 @@ for (snpFunc=0; snpFunc<snpFuncCartSize; snpFunc++)
     snpFuncCart[snpFunc] = cartUsualString(cart, snpFuncStrings[snpFunc], snpFuncDefault[snpFunc]);
     snpFilterButtons(snpFuncStrings[snpFunc], snpFuncCart[snpFunc]);
     printf(" - <B>%s</B><BR>\n",snpFuncLabels[snpFunc]);
+    }
+printf("<BR><B>Location Type:</B><BR>\n");
+for (snpLocType=0; snpLocType<snpLocTypeCartSize; snpLocType++)
+    {
+    snpLocTypeCart[snpLocType] = cartUsualString(cart, snpLocTypeStrings[snpLocType], snpLocTypeDefault[snpLocType]);
+    snpFilterButtons(snpLocTypeStrings[snpLocType], snpLocTypeCart[snpLocType]);
+    printf(" - <B>%s</B><BR>\n",snpLocTypeLabels[snpLocType]);
     }
 }
 
@@ -624,7 +642,6 @@ void zooWiggleUi(struct trackDb *tdb )
 /* put up UI for zoo track with one species on each line
  * and checkboxes to toggle each of them on/off*/
 {
-
 char options[7][256];
 int thisHeightPer, thisLineGap;
 float thisMinYRange, thisMaxYRange;
