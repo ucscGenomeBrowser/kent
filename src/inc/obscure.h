@@ -22,6 +22,9 @@ void readAllWords(char *fileName, char ***retWords, int *retWordCount, char **re
 /* Read in whole file and break it into words. You need to freeMem both
  * *retWordCount and *retBuf when done. */
 
+struct slName *readAllLines(char *fileName);
+/* Read all lines of file into a list.  (Removes trailing carriage return.) */
+
 void copyFile(char *source, char *dest);
 /* Copy file from source to dest. */
 
