@@ -10,7 +10,7 @@ A = hgTracks
 O = $A.o
 
 my: compile
-	mv $A /usr/local/apache/cgi-bin-$(USER)/$A.2
+	mv $A /usr/local/apache/cgi-bin-$(USER)/$A
 
 alpha: compile
 	mv $A /usr/local/apache/cgi-bin/$A
