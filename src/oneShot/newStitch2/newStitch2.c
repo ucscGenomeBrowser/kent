@@ -226,7 +226,7 @@ int defaultGapPenalty(int qSize, int tSize)
 int total = qSize + tSize;
 if (total <= 0)
     return 0;
-return 400 * pow(total, 1.0/3.3);
+return 400 * pow(total, 1.0/2.5);
 }
 
 
