@@ -723,82 +723,82 @@ PRODUCING GENSCAN PREDICTIONS (TODO - REDO)
     hgLoadBed rn2 genscanSubopt genscanSubopt.bed
 
 
-LOADING RAT-HUMAN BLASTZ ALIGNMENTS FROM PENN STATE: (TODO)
+SWAPPING HUMAN-RAT BLASTZ ALIGNMENTS TO RAT-HUMAN: (DONE 03/15/03)
 
-    # Translate Penn State .lav files into sorted axt:
     ssh eieio
-    set base="/cluster/store4/rn2/bed/blastz.hg13.2003-02-13-ASH"
-    set seq1_dir="/cluster/store4/rn2/mixedNib/"
-    set seq2_dir="/cluster/store4/gs.14/build31/mixedNib/"
-    set tbl="blastzHg"
-    cd $base
-    mkdir -p axtChrom
-    foreach c (lav/*)
-      pushd $c
-      set chr=$c:t
-      set out=$base/axtChrom/$chr.axt
-      echo "Translating $chr lav to $out"
-      cat `ls -1 *.lav | sort -g` \
-        | lavToAxt stdin $seq1_dir $seq2_dir stdout \
-        | axtSort stdin $out
-      popd
+    # Human-rat alignments were already run and processed into axt.  
+    # Swap target and query to get rat-human alignments.  
+    set aliDir = "/cluster/store4/gs.14/build31/bed/blastz.rn2.2003-03-13-ASH"
+    set revAliDir = "/cluster/store4/rn2/bed/blastz.hg13.2003-03-13-SWAP"
+    mkdir $revAliDir
+    cd $revAliDir
+    # axtBest will need .len files - copy those, swap S1<->S2
+    cp $aliDir/S1.len S2.len
+    cp $aliDir/S2.len S1.len
+    mkdir swapped unsorted axtChrom
+    # Swap target and query coords -- swapped/chrN.axt has all the alignments 
+    # with chrN as query now instead of chrN as target.  
+    foreach f ($aliDir/axtChrom/chr*.axt)
+      echo swapping $f:t:r
+      axtSwap $f $aliDir/S1.len $aliDir/S2.len swapped/$f:t
     end
-
-    # Translate the sorted axt files into psl:
-    cd $base
-    mkdir -p pslChrom
-    foreach f (axtChrom/chr*.axt)
-      set c=$f:t:r
-      axtToPsl $f S1.len S2.len pslChrom/${c}_${tbl}.psl
+    # Re-apportion alignments so that unsorted/chrN.axt has all the alignments 
+    # with chrN as target.
+    cat swapped/*.axt | axtSplitByTarget stdin unsorted
+    # Sorted the shuffled .axt files.
+    foreach f (unsorted/*.axt)
+      echo sorting $f:t:r
+      axtSort $f axtChrom/$f:t
     end
+    rm -r unsorted swapped
+    # Don't bother creating psl for these unfiltered alignments -- but 
+TODO    # tell Jim so he can do chaining/netting.
 
-    # Load tables
-    ssh hgwdev
-    set base="/cluster/store4/rn2/bed/blastz.hg13.2003-02-13-ASH"
-    set tbl="blastzHg"
-    cd $base/pslChrom
-    hgLoadPsl rn2 chr*_${tbl}.psl
 
-MAKING THE BLASTZBESTHUMAN TRACK FROM PENN STATE RN2 AXT FILES (TODO)
+MAKING THE BLASTZBESTHUMAN TRACK FROM PENN STATE RN2 AXT FILES (DONE 03/15/03)
 
     # Consolidate AXT files to chrom level, sort, pick best, make psl.
     ssh eieio
-    set base="/cluster/store4/rn2/bed/blastz.hg13.2003-02-13-ASH"
+    set base="/cluster/store4/rn2/bed/blastz.hg13.2003-03-13-SWAP"
     set seq1_dir="/cluster/store4/rn2/mixedNib/"
     set seq2_dir="/cluster/store4/gs.14/build31/mixedNib/"
-    set tbl="blastzBestHuman"
+    set tbl="blastzBestHg13"
     cd $base
     mkdir -p axtBest pslBest
-    foreach chrdir (lav/chr*)
-      set chr=$chrdir:t
+    foreach f (axtChrom/chr*.axt)
+      set chr=$f:t:r
       echo axtBesting $chr
       axtBest axtChrom/$chr.axt $chr axtBest/$chr.axt -minScore=300
       echo translating axtBest to psl for $chr
       axtToPsl axtBest/$chr.axt S1.len S2.len pslBest/${chr}_${tbl}.psl
     end
-    # If a chromosome has so many alignments that axtBest runs out of mem,
-    # run axtBest in 2 passes to reduce size of the input to final axtBest:
-    foreach chrdir (lav/chr7)
-      set chr=$chrdir:t
+    # If some chromosome's alignments were too big and caused axtSort to 
+    # run out of memory, split it in half (by 4-line axt records) and 
+    # run axtBest just on the halves.  
+    foreach chr (chr1)
       echo two-pass axtBesting $chr
-      foreach d ($chrdir/*.lav)
-        set smallout=$d.axt
-        lavToAxt $d $seq1_dir $seq2_dir stdout \
-        | axtSort stdin $smallout
-      end
-      foreach a ($chrdir/*.axt)
-        axtBest $a $chr $a:r.axtBest
-      end
-      cat `ls -1 $chrdir/*.axtBest | sort -g` \
-        > $chrdir/$chr.axtBestPieces
-      axtBest $chrdir/$chr.axtBestPieces $chr axtBest/$chr.axt
+      set len = `wc -l < axtChrom/$chr.axt`
+      set numRec = `expr $len / 4`
+      if (($numRec * 4) != $len) then
+        echo "Uh-oh: length of axtChrom/$chr.axt is $len, not a multiple of 4"
+        break
+      endif
+      set halfRec   = `expr $numRec / 2`
+      set halfLen   = `expr $halfRec \* 4`
+      set halfLenp1 = `expr $halfLen + 1`
+      head -$halfLen   axtChrom/$chr.axt > axtChrom/$chr.h0.axt
+      tail +$halfLenp1 axtChrom/$chr.axt > axtChrom/$chr.h1.axt
+      axtBest axtChrom/$chr.h0.axt $chr axtChrom/$chr.h0.axtBest -minScore=300
+      axtBest axtChrom/$chr.h1.axt $chr axtChrom/$chr.h1.axtBest -minScore=300
+      cat axtChrom/$chr.h{0,1}.axtBest > axtBest/$chr.axt
       axtToPsl axtBest/$chr.axt S1.len S2.len pslBest/${chr}_${tbl}.psl
+      rm axtChrom/$chr.h*
     end
 
     # Load tables
      ssh hgwdev
-     set base="/cluster/store4/rn2/bed/blastz.hg13.2003-02-13-ASH"
-     set tbl="blastzBestHuman"
+     set base="/cluster/store4/rn2/bed/blastz.hg13.2003-03-13-SWAP"
+     set tbl="blastzBestHg13"
      cd $base/pslBest
      hgLoadPsl rn2 chr*_${tbl}.psl
 
@@ -819,10 +819,10 @@ MAKING THE BLASTZBESTHUMAN TRACK FROM PENN STATE RN2 AXT FILES (TODO)
      hgsql rn2 < ~/kent/src/hg/lib/axtInfo.sql
      hgsql rn2 < axtInfoInserts.sql
 
-MAKING THE HUMAN AXTTIGHT FROM AXTBEST (TODO)
+MAKING THE HUMAN AXTTIGHT FROM AXTBEST (DONE 03/15/03)
     # After creating axtBest alignments above, use subsetAxt to get axtTight:
     ssh eieio
-    cd ~/rn2/bed/blastz.hg13.2003-02-13-ASH/axtBest
+    cd ~/rn2/bed/blastz.hg13.2003-03-13-SWAP/axtBest
     mkdir -p ../axtTight
     foreach i (*.axt)
       subsetAxt  $i ../axtTight/$i \
@@ -833,12 +833,12 @@ MAKING THE HUMAN AXTTIGHT FROM AXTBEST (TODO)
     mkdir -p ../pslTight
     foreach i (*.axt)
       set c = $i:r
-      axtToPsl $i ../S1.len ../S2.len ../pslTight/${c}_blastzTightHuman.psl
+      axtToPsl $i ../S1.len ../S2.len ../pslTight/${c}_blastzTightHg13.psl
     end
     # Load tables into database
     ssh hgwdev
-    cd ~/rn2/bed/blastz.hg13.2003-02-13-ASH/pslTight
-    hgLoadPsl rn2 chr*_blastzTightHuman.psl
+    cd ~/rn2/bed/blastz.hg13.2003-03-13-SWAP/pslTight
+    hgLoadPsl rn2 chr*_blastzTightHg13.psl
 
 
 TWINSCAN GENE PREDICTIONS (TODO)
@@ -963,7 +963,7 @@ o - Copy to hgwdev:/scratch.  Rename to correspond with tables as so and
        hgLoadRna addSeq rn2 /cluster/store2/fish/seq15jun2001/*.fa
 
 
-PRODUCING FUGU FISH ALIGNMENTS (TODO)
+PRODUCING FUGU FISH ALIGNMENTS (DONE 03/13/03)
 
     # (Already done, for mm2:)
     # Download sequence to /cluster/store3/fuguSeq from ... and put it on the 
@@ -971,19 +971,24 @@ PRODUCING FUGU FISH ALIGNMENTS (TODO)
     # Sequence was downloaded from:
     # ftp://ftp.jgi-psf.org/pub/JGI_data/Fugu/fugu_v3_mask.fasta.Z
     # ftp://ftp.jgi-psf.org/pub/JGI_data/Fugu/fugu_v3_prot.fasta.Z
-    #
-    # faSplit sequence ../fugu_v3_mask.fasta 1000 fuguSplit
+    # mkdir split2.5Mb; cd split2.5Mb;
+    # faSplit about ../fugu_v3_mask.fasta 2500000 fuguSplit
+
+    ssh kkr1u00
+    rm -rf /iscratch/i/fugu
+    mkdir /iscratch/i/fugu
+    cp -p /cluster/store3/fuguSeq/split2.5Mb/*.fa /iscratch/i/fugu
+    ~kent/bin/iSync
 
     ssh kk
-    cd ~/rn2/bed
-    mkdir blatFugu
-    cd blatFugu
-    ls -1S /scratch/hg/fugu/* > fugu.lst
+    mkdir ~/rn2/bed/blatFugu
+    cd ~/rn2/bed/blatFugu
+    ls -1S /iscratch/i/fugu/* > fugu.lst
     ls -1S /scratch/hg/rn2/trfFa/* > rat.lst
     cp ~/lastRn/bed/blatFugu/gsub .
     mkdir psl
     foreach f (~/rn2/?{,?}/chr*/chr?{,?}{,_random}_?{,?}.fa)
-      set c=$f:t
+      set c=$f:t:r
       mkdir psl/$c
     end
     gensub2 rat.lst fugu.lst gsub spec
@@ -991,10 +996,7 @@ PRODUCING FUGU FISH ALIGNMENTS (TODO)
     para try
     para check
     para push
-    # do another para check in about 2 hours; if it looks good:
-    para push -maxPush=500000
-    # do para checks and if necessary para pushes until done or use para shove.
-
+    para check
     # Sort alignments:
     ssh eieio
     cd ~/rn2/bed/blatFugu
