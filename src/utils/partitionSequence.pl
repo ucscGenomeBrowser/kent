@@ -9,7 +9,7 @@
 # Actual batch list creation can be done with gensub2 and a spec,
 # using file lists created by this script.  
 
-# $Id: partitionSequence.pl,v 1.3 2005/01/26 01:03:15 angie Exp $
+# $Id: partitionSequence.pl,v 1.4 2005/01/27 01:00:32 angie Exp $
 
 use Getopt::Long;
 use strict;
@@ -17,6 +17,7 @@ use strict;
 use vars qw/
     $opt_help
     $opt_oneBased
+    $opt_concise
     $opt_xdir
     $opt_rawDir
     $opt_lstDir
@@ -42,6 +43,7 @@ usage: $base chunk lap seqDir seqSizeFile
     names in its first column, and sequence sizes in its second column.  
 options:
     -oneBased     Output 1-based start coords (for Scott's blastz-run)
+    -concise      Don't add range specifiers to filenames unless they're split.
     -xdir script  Create a script with mkdir commands, one for each partition.
                   This is useful when two lists of partitions will be crossed 
                   in a cluster job, creating too many files for a single dir.
@@ -179,7 +181,11 @@ sub partitionMonolith {
 	@gloms = ();
       }
       $glomSize += $size;
-      push @gloms, "$file:$chr";
+      my $spec = "$file:$chr";
+      if (! $opt_concise) {
+	$spec .= $opt_oneBased ? ":1-$size" : ":0-$size";
+      }
+      push @gloms, $spec;
     }
   }
   if ($glomSize > 0) {
@@ -208,7 +214,11 @@ sub partitionPerSeqFiles {
       }
     } else {
       # one partition for this seq
-      push @partitions, [$chr, $file];
+      my $spec = $file;
+      if (! $opt_concise) {
+	$spec .= $opt_oneBased ? ":$chr:1-$size" : ":$chr:0-$size";
+      }
+      push @partitions, [$chr, $spec];
     }
   }
   return \@partitions;
@@ -254,6 +264,7 @@ sub partitionSeqs {
 # -- main --
 
 my $ok = GetOptions("oneBased",
+		    "concise",
 		    "xdir=s",
 		    "rawDir=s",
 		    "lstDir=s",
