@@ -51,7 +51,7 @@ errAbort("paraNode - parasol node server.\n"
 	 "    -cpu=N  Number of CPUs to use - default 1.\n");
 }
 
-static char const rcsid[] = "$Id: paraNode.c,v 1.71 2004/09/25 01:07:19 markd Exp $";
+static char const rcsid[] = "$Id: paraNode.c,v 1.72 2004/09/25 01:30:17 markd Exp $";
 
 /* Command line overwriteable variables. */
 char *hubName;			/* Name of hub machine, may be NULL. */
@@ -762,8 +762,8 @@ for (;;)
 	    /* Host and signature look ok,  read a string and
 	     * parse out first word as command. */
 	    line = pmIn.data;
-	    logDebug("message from 0x%x (depth=%d, pid=%d): \"%s\"",
-                     ntohl(pmIn.ipAddress.sin_addr.s_addr), 
+	    logDebug("message from %s (depth=%d, pid=%d): \"%s\"",
+                     paraFormatIp(pmIn.ipAddress.sin_addr.s_addr), 
                      paraForkDepth, getpid(), line);
 	    command = nextWord(&line);
 	    if (command != NULL)
@@ -794,37 +794,13 @@ for (;;)
 	    }
 	else
 	    {
-	    logWarn("command from unauthorized host 0x%x (depth=%d, pid=%d)",
-                    ntohl(pmIn.ipAddress.sin_addr.s_addr),
+	    logWarn("command from unauthorized host %s (depth=%d, pid=%d)",
+                    paraFormatIp(pmIn.ipAddress.sin_addr.s_addr),
                     paraForkDepth, getpid());
 	    }
 	}
     }
 rudpClose(&mainRudp);
-}
-
-void paraFork()
-/* Fork off real daemon and exit.  This effectively
- * removes dependence of paraNode daemon on terminal. 
- * Set up log file if any here as well. */
-{
-/* Set up log handler. */
-logOpenSyslog("paraNode", optionVal("logFacility", NULL));
-if (optionExists("log"))
-    logOpenFile("paraNode", optionVal("log", NULL));
-else    
-    logOpenSyslog("paraNode", optionVal("logFacility", NULL));
-
-/* Close standard file handles. */
-close(0);
-close(1);
-close(2);
-
-if (forkOrDie() == 0)
-    {
-    /* Execute daemon. */
-    paraNode();
-    }
 }
 
 int main(int argc, char *argv[])
@@ -844,8 +820,8 @@ localIp = lookupIp("localhost");
 hubName = optionVal("hub", NULL);
 if (hubName != NULL)
     hubIp = lookupIp(hubName);
-
-paraFork();
+paraDaemonize("paraNode");
+paraNode();
 return 0;
 }
 

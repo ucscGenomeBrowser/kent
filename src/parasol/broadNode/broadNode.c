@@ -458,30 +458,6 @@ close(inSd);
 close(outSd);
 }
 
-void forkDaemon()
-/* Fork off real daemon and exit.  This effectively
- * removes dependence of paraNode daemon on terminal. 
- * Set up log file if any here as well. */
-{
-/* Set up log handler. */
-if (optionExists("log"))
-    logOpenFile("broadNode", optionVal("log", NULL));
-else    
-    logOpenSyslog("broadNode", optionVal("logFacility", NULL));
-
-/* Close standard file handles. */
-close(0);
-close(1);
-close(2);
-
-if (forkOrDie() == 0)
-    {
-    /* Execute daemon. */
-    broadNode();
-    }
-}
-
-
 int main(int argc, char *argv[])
 /* Process command line. */
 {
@@ -492,6 +468,7 @@ nodeInPort = optionInt("nodeInPort", bdNodeInPort);
 hubInPort = optionInt("hubInPort", bdHubInPort);
 broadIp = optionVal("broadIp", broadIp);
 dropTest = optionInt("drop", 0);
-forkDaemon();
+paraDaemonize("broadNode");
+broadNode();
 return 0;
 }

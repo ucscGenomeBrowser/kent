@@ -3,6 +3,8 @@
 #include "options.h"
 #include "errabort.h"
 #include "net.h"
+#include "internet.h"
+#include "log.h"
 #include "paraLib.h"
 
 time_t now;	/* Time when started processing current message */
@@ -73,4 +75,37 @@ void fillInErrFile(char errFile[512], int jobId, char *tempDir )
 /* Fill in error file name */
 {
 sprintf(errFile, "%s/para%d.err", tempDir, jobId);
+}
+
+char* paraFormatIp(bits32 ip)
+/* format a binary IP added into dotted quad format.  Warning:
+ * static return. */
+{
+static char dottedQuad[32];
+if (!internetIpToDottedQuad(ip, dottedQuad))
+    safef(dottedQuad, sizeof(dottedQuad), "<invalid-ip:0x%x>", ip);
+return dottedQuad;
+}
+
+void paraDaemonize(char *progName)
+/* daemonize parasol server process, closing open file descriptors and
+ * starting logging based on the -logFacility and -log command line options */
+{
+if (forkOrDie() == 0)
+    {
+    int i, maxFiles = getdtablesize();
+
+    /* Close all open files first (before logging) */
+    for (i = 0; i < maxFiles; i++)
+        close(i);
+
+    /* Set up log handler. */
+    logOpenSyslog("paraNode", optionVal("logFacility", NULL));
+    if (optionExists("log"))
+        logOpenFile("paraNode", optionVal("log", NULL));
+    else    
+        logOpenSyslog("paraNode", optionVal("logFacility", NULL));
+    }
+else
+    exit(0);  /* parent exits now */
 }

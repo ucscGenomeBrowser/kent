@@ -53,6 +53,15 @@ extern time_t now;	/* Time when started processing current message */
 void findNow();
 /* Just set now to current time. */
 
+char* paraFormatIp(bits32 ip);
+/* format a binary IP added into dotted quad format.  Warning:
+ * static return */
+
+void paraDaemonize(char *progName);
+/* daemonize parasol server process, closing open file descriptors and
+ * starting logging based on the -logFacility and -log command line options */
+
+
 #define NORMAL_PRIORITY 10   /* 1 is highest priority */
 #define MAX_PRIORITY 10000   /* 10000 is the lowest priority */
 

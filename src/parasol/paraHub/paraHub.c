@@ -67,7 +67,7 @@
 #include "machSpec.h"
 #include "log.h"
 
-static char const rcsid[] = "$Id: paraHub.c,v 1.75 2004/09/25 01:07:18 markd Exp $";
+static char const rcsid[] = "$Id: paraHub.c,v 1.76 2004/09/25 01:30:17 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -2135,6 +2135,7 @@ jobCheckPeriod = optionInt("jobCheckPeriod", jobCheckPeriod);
 machineCheckPeriod = optionInt("machineCheckPeriod", machineCheckPeriod);
 initialSpokes = optionInt("spokes",  initialSpokes);
 fillInSubnet();
+paraDaemonize("paraHub");
 startHub(argv[1]);
 return 0;
 }
