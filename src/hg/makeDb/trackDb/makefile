@@ -53,7 +53,7 @@ beta:
 	hgTrackDb mouse mm1 trackDb_beta ../../lib/trackDb.sql .
 	hgTrackDb mouse mm2 trackDb_beta ../../lib/trackDb.sql .
 	hgTrackDb rat rn1 trackDb_beta ../../lib/trackDb.sql .
-	cd zoo; make alpha; cd ..
+	cd zoo; make beta; cd ..
 
 old_alpha:
 	hgTrackDb human hg6  trackDb ../../lib/trackDb.sql .
