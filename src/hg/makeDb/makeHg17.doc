@@ -2332,7 +2332,6 @@ cat > template << 'EOF'
     # strip out N's and wobbles (KS) from primers, as isPcr
     # can't currently handle them
     # strip out primers < 10 as isPcr can't handle them
-    #awk '$0 !~ /[^ACGT0-9\t]/ && (length($2) > 10) && (length($3) > 10) {printf "dbSTS_%s\t%s\t%s\n", $1,$2,$3}' \
     awk '$0 !~ /[^ACGT0-9\-\t]/ && (length($2) > 10) && (length($3) > 10) {printf "dbSTS_%s\t%s\t%s\n", $1,$2,$3}' \
                 all.primers > all.primers.ispcr
     mkdir -p /cluster/bluearc/sts.9/primers
@@ -2354,6 +2353,8 @@ cat > template << 'EOF'
 /cluster/home/kate/bin/i386/isPcr -out=psl -minPerfect=2 -maxSize=5000 -tileSize=10 -ooc=/scratch/hg/h/10.ooc  -stepSize=5 $(path1) $(path2) {check out line /cluster/bluearc/hg17/sts/primers/out/$(root1)_$(root2).psl}
 #ENDLOOP
 'EOF'
+# << for emacs
+
     gensub2 contigs.lst primers.lst template jobList
     para create jobList
 	# 26980 jobs
