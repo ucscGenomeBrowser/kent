@@ -1,5 +1,5 @@
 table displayId
-"Relate ID and primary accession. A good table to use just get handle on all records. */
+"Relate ID and primary accession. A good table to use just get handle on all records."
     (
     char[6] acc;	"Primary accession"
     char[10] val;	"SwissProt display ID"
@@ -87,7 +87,7 @@ table accToKeyword
     (
     char[6] acc;	"Primary accession"
     int keyword;	"ID in keyword table"
-    }
+    )
 
 table commentType
 "A type of comment"
@@ -100,7 +100,7 @@ table commentVal
 "Text of a comment"
     (
     int id;	"Comment value ID - we create this"
-    string val;	"Text of comment."
+    lstring val;	"Text of comment."
     )
 
 table comment
@@ -130,8 +130,9 @@ table extDbRef
     (
     char[6] acc;	"Primary SwissProt accession"
     int extDb;		"ID in extDb table"
-    string extAcc;	"External accession"
-    int rank;	"Which 1st, 2nd, etc accession - 1 is primary */
+    string extAcc1;	"External accession"
+    string extAcc2;	"External accession"
+    string extAcc3;	"External accession"
     )
 
 table featureClass
@@ -145,7 +146,7 @@ table featureType
 "A type of feature"
     (
     int id;	"Database id - we make this up"
-    string val;	"Name of type"
+    lstring val;	"Name of type"
     )
 
 table feature
@@ -170,7 +171,7 @@ table reference
     (
     int id;	"ID of this reference"
     lstring title; "Title"
-    string cite; "Enough info to find journal/patent/etc."
+    lstring cite; "Enough info to find journal/patent/etc."
     string pubMed; "Pubmed cross-reference"
     string medline; "Medline cross-reference"
     )
@@ -196,7 +197,7 @@ table citation
     char[6] acc;	"Primary accession"
     int reference;	"ID in reference table"
     int rp;		"ID in rp table"
-    );
+    )
 
 table rcType
 "Types found in a swissProt reference RC (reference comment) line"
@@ -209,7 +210,7 @@ table rcVal
 "Values found in a swissProt reference RC (reference comment) line"
     (
     int id;	"ID of this"
-    string val; "associated text"
+    lstring val; "associated text"
     )
 
 table citationRc

@@ -18,7 +18,7 @@ CREATE TABLE otherAcc (
     val char(6) not null,	# Secondary accession
               #Indices
     INDEX(val),
-    UNIQUE(acc)
+    INDEX(acc)
 );
 
 #A part of a cell that has it's own genome
@@ -35,9 +35,9 @@ CREATE TABLE singles (
     isCurated tinyint not null,	# True if curated (SwissProt rather than trEMBL)
     aaSize int not null,	# Size in amino acids
     molWeight int not null,	# Molecular weight
-    createDate varchar(255) not null,	# Creation date
-    seqDate varchar(255) not null,	# Sequence last update date
-    annDate varchar(255) not null,	# Annotation last update date
+    createDate date not null,	# Creation date
+    seqDate date not null,	# Sequence last update date
+    annDate date not null,	# Annotation last update date
     organelle int not null,	# Pointer into organelle table
               #Indices
     PRIMARY KEY(acc)
@@ -46,7 +46,7 @@ CREATE TABLE singles (
 #Description lines
 CREATE TABLE description (
     acc char(6) not null,	# Primary accession
-    val longblob not null,	# SwissProt DE lines
+    val longtext not null,	# SwissProt DE lines
               #Indices
     PRIMARY KEY(acc)
 );
@@ -54,7 +54,7 @@ CREATE TABLE description (
 #Gene including and/or logic if multiple
 CREATE TABLE geneLogic (
     acc char(6) not null,	# Primary accession
-    val longblob not null,	# Gene(s) and logic to relate them.
+    val longtext not null,	# Gene(s) and logic to relate them.
               #Indices
     PRIMARY KEY(acc)
 );
@@ -72,7 +72,7 @@ CREATE TABLE gene (
 CREATE TABLE taxon (
     id int not null,	# Taxon NCBI ID
     binomial varchar(255) not null,	# Binomial format name
-    toGenus longblob not null,	# Taxonomy - superkingdom to genus
+    toGenus longtext not null,	# Taxonomy - superkingdom to genus
               #Indices
     INDEX(id),	# NCBI may have updated 1/2 way through SwissProt it seems.
     INDEX(binomial)
@@ -126,7 +126,7 @@ CREATE TABLE commentType (
 #Text of a comment
 CREATE TABLE commentVal (
     id int not null,	# Comment value ID - we create this
-    val varchar(255) not null,	# Text of comment.
+    val longtext not null,	# Amino acids
               #Indices
     PRIMARY KEY(id)
 );
@@ -161,10 +161,13 @@ CREATE TABLE extDb (
 CREATE TABLE extDbRef (
     acc char(6) not null,	# Primary SwissProt accession
     extDb int not null,	# ID in extDb table
-    extAcc varchar(255) not null,	# External accession
+    extAcc1 varchar(255) not null,	# External accession
+    extAcc2 varchar(255) not null,	# External accession
+    extAcc3 varchar(255) not null,	# External accession
     rank int not null,	# Which 1st, 2nd, etc accession - 1 is primary
               #Indices
-    PRIMARY KEY(acc)
+    INDEX(acc),
+    INDEX(extAcc1(10))
 );
 
 #A class of feature
@@ -179,7 +182,7 @@ CREATE TABLE featureClass (
 #A type of feature
 CREATE TABLE featureType (
     id int not null,	# Database id - we make this up
-    val varchar(255) not null,	# Name of type
+    val longtext not null,	# Name of type
               #Indices
     PRIMARY KEY(id),
     INDEX(val(8))
@@ -208,8 +211,8 @@ CREATE TABLE author (
 #An article (or book or patent) in literature.
 CREATE TABLE reference (
     id int not null,	# ID of this reference
-    title longblob not null,	# Title
-    cite varchar(255) not null,	# Enough info to find journal/patent/etc.
+    title longtext not null,	# Title
+    cite longtext not null,	# Enough info to find journal/patent/etc.
     pubMed varchar(10) not null,	# Pubmed cross-reference
     medline varchar(12) not null,	# Medline cross-reference
               #Indices
@@ -229,7 +232,7 @@ CREATE TABLE referenceAuthors (
 #SwissProt RP (Reference Position) line.  Often includes reason for citing.
 CREATE TABLE citationRp (
     id int not null,	# ID of this citationRp
-    val longblob not null,	# Reason for citing/position in sequence of cite.
+    val longtext not null,	# Reason for citing/position in sequence of cite.
               #Indices
     PRIMARY KEY(id)
 );
@@ -257,7 +260,7 @@ CREATE TABLE rcType (
 #Values found in a swissProt reference RC (reference comment) line
 CREATE TABLE rcVal (
     id int not null,	# ID of this
-    val varchar(255) not null,	# associated text
+    val longtext not null,	# associated text
               #Indices
     PRIMARY KEY(id)
 );

@@ -8,7 +8,7 @@
 #include "portable.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: spToDb.c,v 1.4 2003/09/29 20:37:58 kent Exp $";
+static char const rcsid[] = "$Id: spToDb.c,v 1.5 2003/09/29 23:39:18 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -410,14 +410,8 @@ for (;;)
 	while ((word = nextWord(&line)) != NULL)
 	    {
 	    stripLastChar(word);
-	    if (!sameString(word, "-"))
-		{
-		if (dr->idList == NULL || !sameString(dr->idList->name, word))
-		    {
-		    n = lmSlName(lm, word);
-		    slAddHead(&dr->idList, n);
-		    }
-		}
+	    n = lmSlName(lm, word);
+	    slAddHead(&dr->idList, n);
 	    }
 	slReverse(&dr->idList);
 	slAddHead(&spr->dbRefList, dr);
@@ -645,6 +639,7 @@ else
     return s;
 }
 
+
 char *nextGeneWord(char **pS)
 /* Return next gene, which can be "AND" or "OR" separated. */
 {
@@ -846,11 +841,14 @@ for (;;)
 	for (ref = spr->dbRefList; ref != NULL; ref = ref->next)
 	    {
 	    int extDb = uniqueStore(extDbUni, ref->db);
-	    int rank = 0;
-	    for (n = ref->idList; n != NULL; n = n->next)
-	        {
-		fprintf(extDbRef, "%s\t%d\t%s\t%d\n", acc, extDb, n->name, ++rank);
-		}
+	    int i = 0;
+	    char *extAccs[3];
+	    for (i=0; i<ArraySize(extAccs); ++i)
+	        extAccs[i] = "";
+	    for (n = ref->idList, i=0; n != NULL && i<3; n = n->next, ++i)
+		extAccs[i] = n->name;
+	    fprintf(extDbRef, "%s\t%d\t%s\t%s\t%s\n", acc, extDb, 
+	        extAccs[0], extAccs[1], extAccs[2]);
 	    }
 	}
 
