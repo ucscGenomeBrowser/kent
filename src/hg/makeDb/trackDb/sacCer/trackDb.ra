@@ -25,3 +25,22 @@ priority 46
 visibility pack
 color 30,130,210
 type bed 4 +
+
+track sgdGeneBad
+shortLabel Bad SGD Genes
+longLabel Bad Protein-Coding Genes from Sacchromyces Genome Database
+group genes
+priority 45.6
+visibility pack
+color 100,100,180
+type genePred sgdPep
+#hgGene on
+
+track sgdOtherBad
+shortLabel Bad SGD Other
+longLabel Bad Other Features from Sacchromyces Genome Database
+group genes
+priority 46.1
+visibility pack
+color 130,130,210
+type bed 4 +
