@@ -9,6 +9,16 @@
 #include "md5.h"
 #include "broadData.h"
 
+/* command line option specifications */
+static struct optionSpec optionSpecs[] = {
+    {"hubInPort", OPTION_INT},
+    {"nodeInPort", OPTION_INT},
+    {"broadIp", OPTION_STRING},
+    {"verbose", OPTION_INT},
+    {"test", OPTION_INT},
+    {NULL, 0}
+};
+
 char *broadIp = "10.1.255.255";
 int initTimeOut = 50000;
 bits32 broadAddr;
@@ -730,7 +740,7 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 int err = 0; 
-optionHash(&argc, argv);
+optionInit(&argc, argv, optionSpecs);
 nodeInPort = optionInt("nodeInPort", bdNodeInPort);
 hubInPort = optionInt("hubInPort", bdHubInPort);
 broadIp = optionVal("broadIp", broadIp);

@@ -7,6 +7,17 @@
 #include "broadData.h"
 #include "md5.h"
 
+/* command line option specifications */
+static struct optionSpec optionSpecs[] = {
+    {"hubInPort", OPTION_INT},
+    {"nodeInPort", OPTION_INT},
+    {"logFacility", OPTION_STRING},
+    {"drop", OPTION_INT},
+    {"ip", OPTION_STRING},
+    {"broadIp", OPTION_STRING},
+    {NULL, 0}
+};
+
 char *broadIp = "10.1.255.255";
 
 void usage()
@@ -450,20 +461,16 @@ void forkDaemon()
  * removes dependence of paraNode daemon on terminal. 
  * Set up log file if any here as well. */
 {
-char *log = optionVal("log", NULL);
+/* Set up log handler. */
+logOpen("paraNode", optionVal("logFacility", NULL));
 
 /* Close standard file handles. */
 close(0);
-if (log == NULL || !sameString(log, "stdout"))
-    close(1);
+close(1);
 close(2);
 
-if (fork() == 0)
+if (forkOrDie() == 0)
     {
-    /* Set up log handler. */
-    setupDaemonLog(log);
-    logFlush = TRUE;
-
     /* Execute daemon. */
     broadNode();
     }
@@ -473,7 +480,7 @@ if (fork() == 0)
 int main(int argc, char *argv[])
 /* Process command line. */
 {
-optionHash(&argc, argv);
+optionInit(&argc, argv, optionSpecs);
 if (argc != 2)
     usage();
 nodeInPort = optionInt("nodeInPort", bdNodeInPort);
