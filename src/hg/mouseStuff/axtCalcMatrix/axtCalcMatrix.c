@@ -67,14 +67,14 @@ void addPerfect(int *hist, int histSize,
 {
 boolean match, lastMatch = FALSE;
 int startMatch = 0;
-int i, insSize;
+int i, matchSize;
 
 for (i=0; i<=symCount; ++i)
     {
     if (i == symCount)
         match = FALSE;
     else
-	match = (qSym[i] == tSym[i]);
+	match = (toupper(qSym[i]) == toupper(tSym[i]));
     if (match && !lastMatch)
         {
 	startMatch = i;
@@ -82,10 +82,10 @@ for (i=0; i<=symCount; ++i)
 	}
     else if (!match && lastMatch)
         {
-	insSize = i - startMatch;
-	if (insSize >= histSize)
-	     insSize = histSize - 1;
-	hist[insSize] += 1;
+	matchSize = i - startMatch;
+	if (matchSize >= histSize)
+	     matchSize = histSize - 1;
+	hist[matchSize] += 1;
 	lastMatch = match;
 	}
     }
