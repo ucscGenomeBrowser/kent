@@ -42,7 +42,9 @@
 #include <math.h>
 #include <errno.h>
 #include <unistd.h>
-#ifndef __CYGWIN32__
+#ifdef __CYGWIN32__
+#include <mingw/math.h>
+#else
 #include <libgen.h>
 #endif
 
