@@ -271,6 +271,8 @@ FILE *brainSpBedUpOut = NULL;  /* File for paths (in bed format) that
 			      * are brain specific. */
 FILE *brainSpBedDownOut = NULL;
 FILE *brainSpPathBedOut = NULL;
+FILE *brainSpPathBedExonUpOut = NULL;
+FILE *brainSpPathBedExonDownOut = NULL;
 FILE *brainSpTableHtmlOut = NULL; /* Html table for visualizing brain specific events. */
 FILE *brainSpFrameHtmlOut = NULL; /* Html frame for visualizing brain specific events. */
 
@@ -2185,23 +2187,24 @@ fprintf(brainSpTableHtmlOut, "<a target=\"plots\" href=\"./%s/%s:%s:%s:%s:%s:%s:
 	splice->name, refSeqForPSet(event->altPathList->beds[0]->name), 
 	nameForType(splice->type), event->altPathList->beds[0]->name,
 	splice->strand, splice->tName, splice->tStart, splice->tEnd);
-makeJunctMdbGenericLink(splice, buff, "[p]");
-fprintf(brainSpTableHtmlOut, "%s", buff->string);
+/* makeJunctMdbGenericLink(splice, buff, "[p]"); */
+/* fprintf(brainSpTableHtmlOut, "%s", buff->string); */
 fprintf(brainSpTableHtmlOut, "(%5.2f%%, %5.5f) ", 100.0 * event->percentUltra, event->pVal);
-if(splice->type == altCassette)
-    {
-    int i = 0;
-    int *u = event->altPathList->next->motifUpCounts;
-    int *d = event->altPathList->next->motifDownCounts;
-    for(i = 0; i < bindSiteCount; i++)
-	fprintf(brainSpTableHtmlOut, "%d ", u[i] + d[i]);
-    }
+/* if(splice->type == altCassette) */
+/*     { */
+/*     int i = 0; */
+/*     int *u = event->altPathList->next->motifUpCounts; */
+/*     int *d = event->altPathList->next->motifDownCounts; */
+/*     for(i = 0; i < bindSiteCount; i++) */
+/* 	fprintf(brainSpTableHtmlOut, "%d ", u[i] + d[i]); */
+/*     } */
 fprintf(brainSpTableHtmlOut, " </td>");
+fprintf(brainSpTableHtmlOut,"<td>%.4f</td></tr>\n", event->flipScore); 
 // fprintf(brainSpTableHtmlOut,"<td>%s</td>", nameForType(splice->type));
-if(optionExists("flipScoreSort"))
-    fprintf(brainSpTableHtmlOut,"<td>%.4f</td></tr>\n", event->flipScore);
-else
-    fprintf(brainSpTableHtmlOut,"<td>%d</td></tr>\n", diff);
+/* if(optionExists("flipScoreSort")) */
+/*     fprintf(brainSpTableHtmlOut,"<td>%.4f</td></tr>\n", event->flipScore); */
+/* else */
+/*     fprintf(brainSpTableHtmlOut,"<td>%d</td></tr>\n", diff); */
 dyStringFree(&buff);
 }
 
@@ -2361,6 +2364,7 @@ struct dnaSeq *downSeq = NULL;
 struct bed *pathBed = NULL;
 struct bed *upSeqBed = NULL;
 struct bed *downSeqBed = NULL;
+
 struct slRef *brainEvent = NULL;
 boolean lifted = FALSE;
 int i = 0;
@@ -2607,6 +2611,8 @@ for(altPath = event->altPathList; altPath != NULL; altPath = altPath->next, path
        event->flipScore <= optionFloat("maxFlip", 200000) &&
        event->percentUltra >= optionFloat("minIntCons", 0.0))
 	{
+	struct bed *endsBed = NULL;
+	struct bed *upExonBed = NULL, *downExonBed = NULL;
 	struct dyString *dna = newDyString(2*upSeq->size+5);
 	dyStringPrintf(dna, "%sNNN%s", upSeq->dna, downSeq->dna);
 	if(lifted)
@@ -2623,7 +2629,38 @@ for(altPath = event->altPathList; altPath != NULL; altPath = altPath->next, path
 	bedTabOutN(downSeqBed, 6, brainSpBedDownOut);
 	faWriteNext(brainSpDnaMergedOut, upSeqBed->name, dna->string, dna->stringSize);
 	bedTabOutN(pathBed, 6, brainSpPathBedOut);
+
+	/* Find the ends of the intron and make beds for the 
+	   portions of the upstream and downstream exons that connect
+	   to this exon bed. */
+	endsBed = pathToBed(altPath->path, event->splice, -1, -1, TRUE);
+	assert(endsBed);
+	AllocVar(upExonBed);
+	AllocVar(downExonBed);
+	upExonBed->strand[0] = downExonBed->strand[0] = endsBed->strand[0];
+	upExonBed->score = downExonBed->score = pathBed->score;
+	upExonBed->chrom = cloneString(endsBed->chrom);
+	downExonBed->chrom = cloneString(endsBed->chrom);
+	upExonBed->name = cloneString(endsBed->name);
+	downExonBed->name = cloneString(endsBed->name);
+
+	downExonBed->chromStart = endsBed->chromEnd;
+	downExonBed->chromEnd = downExonBed->chromStart + 10;
+	upExonBed->chromEnd = endsBed->chromStart;
+	upExonBed->chromStart = upExonBed->chromEnd - 10;
+	if(endsBed->strand[0] == '-') 
+	    {
+	    struct bed *tmp = upExonBed;
+	    upExonBed = downExonBed;
+	    downExonBed = tmp;
+	    }
+	bedTabOutN(upExonBed, 6, brainSpPathBedExonUpOut);
+	bedTabOutN(downExonBed, 6, brainSpPathBedExonDownOut);
+	bedFree(&upExonBed);
+	bedFree(&downExonBed);
+	bedFree(&endsBed);
 	}
+    
     bedFree(&upSeqBed);
     bedFree(&downSeqBed);
     dnaSeqFree(&upSeq);
@@ -3420,6 +3457,14 @@ dyStringPrintf(file, "%s.path.bed", prefix);
 brainSpPathBedOut = mustOpen(file->string, "w");
 
 dyStringClear(file);
+dyStringPrintf(file, "%s.path.exonUp.bed", prefix);
+brainSpPathBedExonUpOut = mustOpen(file->string, "w");
+
+dyStringClear(file);
+dyStringPrintf(file, "%s.path.exonDown.bed", prefix);
+brainSpPathBedExonDownOut = mustOpen(file->string, "w");
+
+dyStringClear(file);
 dyStringPrintf(file, "%s.up.fa", prefix);
 brainSpDnaUpOut = mustOpen(file->string, "w");
 
@@ -3456,7 +3501,7 @@ dyStringPrintf(file, "%s.table.html", prefix);
 brainSpTableHtmlOut = mustOpen(file->string, "w");
 fprintf(brainSpTableHtmlOut, "<html>\n<body bgcolor=\"#FFF9D2\"><b>Alt-Splice List</b>\n"
 	"<br>Motif Counts: Nova-1, Fox-1, PTB/nPTB, hnRNP-H/F<br>"
-	"<table border=1><tr><th>Name</th><th>Size</th></tr>\n");
+	"<table border=1><tr><th>Name</th><th>Sep</th></tr>\n");
 
 dyStringClear(file);
 dyStringPrintf(file, "%s.frame.html", prefix);
