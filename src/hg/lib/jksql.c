@@ -10,9 +10,10 @@
 #include <mysql.h>
 #include "dlist.h"
 #include "jksql.h"
+#include "sqlNum.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: jksql.c,v 1.44 2003/12/17 22:20:26 baertsch Exp $";
+static char const rcsid[] = "$Id: jksql.c,v 1.45 2004/01/06 00:51:52 genbank Exp $";
 
 boolean sqlTrace = FALSE;  /* setting to true prints each query */
 int sqlTraceIndent = 0;    /* number of spaces to indent traces */
@@ -412,6 +413,19 @@ if (matched != NULL)
 return numChanged;
 }
 
+static boolean isMySql4(struct sqlConnection *conn)
+/* determine if this is at least mysql 4.0 or newer */
+{
+char majorVerBuf[64];
+char *dotPtr = strchr(conn->conn->server_version, '.');
+int len = (dotPtr - conn->conn->server_version);
+assert(dotPtr != NULL);
+strncpy(majorVerBuf, conn->conn->server_version, len);
+majorVerBuf[len] = '\0';
+
+return (sqlUnsigned(majorVerBuf) >= 4);
+}
+
 void sqlLoadTabFile(struct sqlConnection *conn, char *path, char *table,
                     unsigned options)
 /* Load a tab-seperated file into a database table, checking for errors. 
@@ -424,21 +438,19 @@ int numScan, numRecs, numSkipped, numWarnings;
 char *localOpt, *concurrentOpt;
 const char *info;
 struct sqlResult *sr;
-/* at least mysql 4.0 */
-boolean isMySql4 = (conn->conn->server_version[0] > '3');
+boolean mysql4 = isMySql4(conn);
+
 /* Doing an "alter table disable keys" command implicitly commits the current
    transaction. Don't want to use that optimization if we need to be transaction
    safe. */
+/* FIXME: markd 2003/01/05: mysql 4.0.17 - the alter table enable keys hangs,
+ * disable this optimization for now. Verify performance on small loads
+ * before re-enabling*/
+# if 0
 boolean doDisableKeys = !(options & SQL_TAB_TRANSACTION_SAFE);
-
-/* Ocassionally mysql_info() from return NULL on long loads.  It was
- * believed that this was due to the connection timing out during load.
- * So set an really long time out (12 hrs). */
-if (isMySql4)
-    {
-    safef(query, sizeof(query), "SET SESSION wait_timeout=%d", 12*60*60);
-    sqlUpdate(conn, query);
-    }
+#else
+boolean doDisableKeys = FALSE;
+#endif
 
 /* determine if tab file can be accessed directly by the database, or send
  * over the network */
@@ -466,7 +478,7 @@ if (options & SQL_TAB_FILE_CONCURRENT)
 else
     {
     concurrentOpt = "";
-    if (isMySql4 && doDisableKeys)
+    if (mysql4 && doDisableKeys)
         {
         /* disable update of indexes during load. Inompatible with concurrent,
          * since enable keys locks other's out. */
@@ -505,7 +517,7 @@ if ((numSkipped > 0) || (numWarnings > 0))
              "%d row(s) skipped, %d warning(s) loading %s",
              table, numRecs, numSkipped, numWarnings, path);
     }
-if (((options & SQL_TAB_FILE_CONCURRENT) == 0) && isMySql4 && doDisableKeys)
+if (((options & SQL_TAB_FILE_CONCURRENT) == 0) && mysql4 && doDisableKeys)
     {
     /* reenable update of indexes */
     safef(query, sizeof(query), "ALTER TABLE %s ENABLE KEYS", table);
