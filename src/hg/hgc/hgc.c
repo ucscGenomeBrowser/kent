@@ -108,7 +108,7 @@
 #include "axtLib.h"
 #include "ensFace.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.447 2003/06/27 21:44:51 braney Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.448 2003/06/30 20:54:06 kate Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -3042,7 +3042,7 @@ if (row != NULL)
         printf("<B>Version:</B> %s<BR>\n", version);
         }
 
-    if (!startsWith("Worm", organism))
+    if (!startsWith("Worm", organism) && !startsWith("Fugu", organism))
     {
 	/* Put up Gene Lynx */
 	if (sameWord(type, "mrna"))
@@ -7014,43 +7014,6 @@ sqlFreeResult(&sr);
 slReverse(&pslList);
 printAlignments(pslList, start, "htcBlatXeno", track, itemName);
 printTrackHtml(tdb);
-}
-
-void doBlatCompGenoDb(struct trackDb *tdb, char *itemName, char *otherDb)
-/* Handle click on blat track generically, using name in dbDb genome column */
- /* Use this when track name doesn't embed the database name */
-{
-char *genome = hGenome(otherDb);
-if (genome != NULL) 
-    {
-    doBlatCompGeno(tdb, itemName, genome);
-    freeMem(genome);
-    return;
-    }
-/* fall-back if incorrectly used */
-doBlatCompGeno(tdb, itemName, "");
-}
-
-void doBlatCompGenoTrack(struct trackDb *tdb, char *itemName)
-/* Handle click on blat track generically when other db is in trackname */
-    /* track must be named "blat<database-name>" */
-    /* The organism name appearing on the details page is
-     * extracted from the "genome" column of the dbDb table. */
-{
-char *trackName = cloneString(tdb->tableName);
-
-tolowers(trackName);
-if (startsWith("blat", trackName))
-    {
-    /* extract database name from end of track name */
-    doBlatCompGenoDb(tdb, itemName, &trackName[4]);
-    }
-else
-    {
-    /* fall-back if incorrectly used */
-    doBlatCompGeno(tdb, itemName, "");
-    }
-freeMem(trackName);
 }
 
 void doTSS(struct trackDb *tdb, char *itemName)
@@ -11831,10 +11794,11 @@ else if (sameWord(track, "blatFish") ||
     doBlatCompGeno(tdb, item, "Fish");
     }
 /* generic handling of all blat tracks that include other database name 
- * in trackname; e.g. blatCe1, blatCb1, blatCi1, blatHg15, blatMm3... */
+ * in trackname; e.g. blatCe1, blatCb1, blatCi1, blatHg15, blatMm3... 
+ * Uses genome column from database table as display text */
 else if (startsWith("blat", track) && hDbExists(&track[4]))
     {
-    doBlatCompGenoTrack(tdb, item);
+    doBlatCompGeno(tdb, item, hGenome(&track[4]));
     }
 else if (sameWord(track, "humanKnownGene")) 
     {
