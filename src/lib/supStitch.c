@@ -154,11 +154,11 @@ static int bioScoreMatch(boolean isProt, char *a, char *b, int size)
 {
 if (isProt)
     {
-    return dnaOrAaScoreMatch(a, b, size, 3, -1, 'X');
+    return dnaOrAaScoreMatch(a, b, size, 2, -1, 'X');
     }
 else
     {
-    return dnaOrAaScoreMatch(a, b, size, 2, -1, 'n');
+    return dnaOrAaScoreMatch(a, b, size, 1, -1, 'n');
     }
 }
 

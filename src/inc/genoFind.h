@@ -159,12 +159,14 @@ typedef void (*GfSaveAli)(char *chromName, int chromSize, int chromOffset,
 	boolean isRc, enum ffStringency stringency, int minMatch, void  *outputData);
 /* This is the type of a client provided function to save an alignment. */
 
+#ifdef NOWSTATIC
 void gfAlignDnaClumps(struct genoFind *gf, struct gfClump *clumpList, 
     struct dnaSeq *seq, boolean isRc,  int minMatch, GfSaveAli outFunction, 
     void *outData, boolean fastN);
 /* Convert gfClumps to an actual alignment that gets saved via 
  * outFunction/outData. gfSavePsl is a handy outFunction to use.  Put
  * a FILE as outData in this case.. */
+#endif /* NOWSTATIC */
 
 void gfAlignAaClumps(struct genoFind *gf,  struct gfClump *clumpList, aaSeq *seq,
     boolean isRc,  int minMatch,  GfSaveAli outFunction, void *outData);
@@ -176,10 +178,12 @@ void gfFindAlignAaTrans(struct genoFind *gfs[3], aaSeq *qSeq, struct hash *t3Has
 /* Look for qSeq alignment in three translated reading frames. Save alignment
  * via outFunction/outData. */
 
+#ifdef NOWSTATIC
 void gfFindAlignTransTrans(struct genoFind *gfs[3], struct dnaSeq *qSeq, struct hash *t3Hash, 
 	boolean isRc, int minMatch,  GfSaveAli outFunction, void *outData, boolean isRna);
 /* Look for alignment to three translations of qSeq in three translated reading frames. 
  * Save alignment via outFunction/outData. */
+#endif /* NOWSTATIC */
 
 /* ---  Some routines for dealing with gfServer at a low level ---- */
 
@@ -218,12 +222,6 @@ int gfReadMulti(int sd, void *vBuf, size_t size);
 
 /* ---  Some routines for dealing with gfServer at a high level ---- */
 
-void gfSavePsl(char *chromName, int chromSize, int chromOffset,
-	struct ffAli *ali, struct dnaSeq *genoSeq, struct dnaSeq *otherSeq, 
-	boolean isRc, enum ffStringency stringency, int minMatch, void *outputData);
-/* Analyse one alignment and if it looks good enough write it out to file in
- * psl format.  */
-
 struct gfSavePslxData
 /* This is the data structure passed as output data for gfSavePslx below. */
     {
@@ -233,6 +231,9 @@ struct gfSavePslxData
     boolean targetRc;		/* Is target reverse complemented? */
     struct hash *maskHash;	/* Hash to associate target sequence name and mask. */
     int minGood;		/* Minimum sequence identity in parts per thousand. */
+    boolean saveSeq;		/* Save sequence too? */
+    boolean qIsProt;		/* Query is peptide. */
+    boolean tIsProt;		/* Target is peptide. */
     };
 
 void gfSavePslx(char *chromName, int chromSize, int chromOffset,
@@ -267,6 +268,17 @@ int gfConnect(char *hostName, char *portName);
 void gfMakeOoc(char *outName, char *files[], int fileCount, 
 	int tileSize, bits32 maxPat, enum gfType tType);
 /* Count occurences of tiles in seqList and make a .ooc file. */
+
+void gfLongDnaInMem(struct dnaSeq *query, struct genoFind *gf, 
+   boolean isRc, int minScore, GfSaveAli outFunction, void *outData);
+/* Chop up query into pieces, align each, and stitch back
+ * together again. */
+
+void gfLongTransTransInMem(struct dnaSeq *query, struct genoFind *gfs[3], 
+   struct hash *t3Hash, boolean qIsRc, boolean qIsRna,
+   int minScore, GfSaveAli outFunction, void *outData);
+/* Chop up query into pieces, align each in translated space, and stitch back
+ * together again as nucleotides. */
 
 #endif /* GENOFIND_H */
 

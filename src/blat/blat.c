@@ -14,7 +14,9 @@
 #include "trans3.h"
 #include "repMask.h"
 
-enum {qSizeMax = 100000};	/* Maximum size of single query sequence. */
+enum constants {
+	qWarnSize = 5000000,	/* Warn if more than this many bases in one query. */
+	};
 
 /* Variables that can be set from command line. */
 int tileSize = 11;
@@ -32,6 +34,7 @@ enum gfType tType = gftDna;
 char *mask = NULL;
 double minRepDivergence = 15;
 double minIdentity = 90;
+char *outputFormat = "psl";
 
 
 void usage()
@@ -52,8 +55,8 @@ errAbort(
   "   -tileSize=N sets the size of match that triggers an alignment.  \n"
   "               Usually between 8 and 12\n"
   "               Default is 11 for DNA and 8 for protein.\n"
-  "   -oneOff     If present this allows one mismatch in tile and still\n"
-  "               triggers an alignments.  Default is on for protein.\n"
+  "   -oneOff=N   If set to 1 this allows one mismatch in tile and still\n"
+  "               triggers an alignments.  Default is 1 for protein, 0 for DNA.\n"
   "   -minMatch=N sets the number of tile matches.  Usually set from 2 to 4\n"
   "               Default is 2 for nucleotide, 1 for protein.\n"
   "   -minScore=N sets minimum score.  This is twice the matches minus the mismatches\n"
@@ -91,6 +94,9 @@ errAbort(
   "                 file.out - mask database according to RepeatMasker file.out\n"
   "   -minRepDivergence=NN - minimum percent divergence of repeats to allow them to be\n"
   "               unmasked.  Default is 15\n"
+  "   -out=type   Controls output file format.  Type is one of:\n"
+  "                   psl - Default.  Tab separated format without actual sequence\n"
+  "                   pslx - Tab separated format with sequence\n"
   "   -dots=N     Output dot every N sequences to show program's progress\n"
   );
 }
@@ -318,14 +324,22 @@ slReverse(&seqList);
 return seqList;
 }
 
+void outputOptions(struct gfSavePslxData *outForm, FILE *f)
+/* Set up main output data structure. */
+{
+ZeroVar(outForm);
+outForm->f =f;
+outForm->minGood = round(10*minIdentity);
+outForm->saveSeq = sameWord(outputFormat, "pslx");
+}
+
 void searchOneStrand(struct dnaSeq *seq, struct genoFind *gf, FILE *psl, 
 	boolean isRc, struct hash *maskHash)
 /* Search for seq in index, align it, and write results to psl. */
 {
-static struct gfSavePslxData data;
-data.f = psl;
+struct gfSavePslxData data;
+outputOptions(&data, psl);
 data.maskHash = maskHash;
-data.minGood = round(10*minIdentity);
 gfLongDnaInMem(seq, gf, isRc, minScore, gfSavePslx, &data);
 }
 
@@ -334,8 +348,12 @@ void searchOneProt(aaSeq *seq, struct genoFind *gf, FILE *psl)
 {
 int hitCount;
 struct lm *lm = lmInit(0);
+struct gfSavePslxData outForm;
 struct gfClump *clump, *clumpList = gfFindClumps(gf, seq, lm, &hitCount);
-gfAlignAaClumps(gf, clumpList, seq, FALSE, minScore, gfSavePsl, psl);
+outputOptions(&outForm, psl);
+outForm.qIsProt = TRUE;
+outForm.tIsProt = TRUE;
+gfAlignAaClumps(gf, clumpList, seq, FALSE, minScore, gfSavePslx, &outForm);
 gfClumpFreeList(&clumpList);
 lmCleanup(&lm);
 }
@@ -410,11 +428,9 @@ for (i=0; i<fileCount; ++i)
 	struct lineFile *lf = lineFileOpen(fileName, TRUE);
 	while (faSomeSpeedReadNext(lf, &seq.dna, &seq.size, &seq.name, !isProt))
 	    {
-	    if (seq.size > qSizeMax)
+	    if (seq.size > qWarnSize)
 	        {
-		warn("Truncating %s first %d bases", seq.name, qSizeMax);
-		seq.size = qSizeMax;
-		seq.dna[qSizeMax] = 0;
+		warn("Query sequence %d has size %d, it might take a while.", seq.name, seq.size);
 		}
 	    searchOne(&seq, gf, psl, isProt, maskHash);
 	    totalSize += seq.size;
@@ -457,13 +473,13 @@ return t3List;
 void tripleSearch(aaSeq *qSeq, struct genoFind *gfs[3], struct hash *t3Hash, boolean dbIsRc, FILE *f)
 /* Look for qSeq in indices for three frames.  Then do rest of alignment. */
 {
-static struct gfSavePslxData data;
-data.f = f;
-data.t3Hash = t3Hash;
-data.targetRc = dbIsRc;
-data.reportTargetStrand = TRUE;
-data.minGood = round(10*minIdentity);
-gfFindAlignAaTrans(gfs, qSeq, t3Hash, minScore, gfSavePslx, &data);
+static struct gfSavePslxData outForm;
+outputOptions(&outForm, f);
+outForm.t3Hash = t3Hash;
+outForm.targetRc = dbIsRc;
+outForm.reportTargetStrand = TRUE;
+outForm.qIsProt = TRUE;
+gfFindAlignAaTrans(gfs, qSeq, t3Hash, minScore, gfSavePslx, &outForm);
 }
 
 void transTripleSearch(struct dnaSeq *qSeq, struct genoFind *gfs[3], struct hash *t3Hash, 
@@ -471,16 +487,15 @@ void transTripleSearch(struct dnaSeq *qSeq, struct genoFind *gfs[3], struct hash
 /* Translate qSeq three ways and look for each in three frames of index. */
 {
 int qIsRc;
-static struct gfSavePslxData data;
-data.f = f;
-data.t3Hash = NULL;
-data.reportTargetStrand = TRUE;
-data.targetRc = dbIsRc;
-data.minGood = round(10*minIdentity);
+static struct gfSavePslxData outForm;
+outputOptions(&outForm, f);
+outForm.t3Hash = NULL;
+outForm.reportTargetStrand = TRUE;
+outForm.targetRc = dbIsRc;
 
 for (qIsRc = 0; qIsRc <= qIsDna; qIsRc += 1)
     {
-    gfFindAlignTransTrans(gfs, qSeq, t3Hash, qIsRc, minScore, gfSavePslx, &data, !qIsDna);
+    gfLongTransTransInMem(qSeq, gfs, t3Hash, qIsRc, !qIsDna, minScore, gfSavePslx, &outForm);
     if (qIsDna)
         reverseComplement(qSeq->dna, qSeq->size);
     }
@@ -528,11 +543,9 @@ for (isRc = FALSE; isRc <= 1; ++isRc)
 	while (faSomeSpeedReadNext(lf, &qSeq.dna, &qSeq.size, &qSeq.name, transQuery))
 	    {
 	    dotOut();
-	    if (qSeq.size > qSizeMax)
+	    if (qSeq.size > qWarnSize)
 	        {
-		warn("Truncating %s first qSizeMax bases", qSeq.name);
-		qSeq.size = qSizeMax;
-		qSeq.dna[qSizeMax] = 0;
+		warn("Query sequence %d has size %d, it might take a while.", qSeq.name, qSeq.size);
 		}
 	    if (transQuery)
 	        transTripleSearch(&qSeq, gfs, t3Hash, isRc, qIsDna, pslOut);
@@ -686,14 +699,17 @@ if (dIsProtLike)
  * they are within range. */
 tileSize = cgiOptionalInt("tileSize", tileSize);
 minMatch = cgiOptionalInt("minMatch", minMatch);
+oneOff = cgiOptionalInt("oneOff", oneOff);
 minScore = cgiOptionalInt("minScore", minScore);
 maxGap = cgiOptionalInt("maxGap", maxGap);
-dotEvery = cgiOptionalInt("dots", 0);
+minRepDivergence = cgiUsualDouble("minRepDivergence", minRepDivergence);
+minIdentity = cgiUsualDouble("minIdentity", minIdentity);
 gfCheckTileSize(tileSize, dIsProtLike);
 if (minMatch < 0)
     errAbort("minMatch must be at least 1");
 if (maxGap > 100)
     errAbort("maxGap must be less than 100");
+
 
 
 /* Set repMatch parameter from command line, or
@@ -742,12 +758,11 @@ else
 
 /* Gather last few command line options. */
 noHead = cgiBoolean("noHead");
-oneOff = cgiBoolean("oneOff");
 ooc = cgiOptionalString("ooc");
 makeOoc = cgiOptionalString("makeOoc");
 mask = cgiOptionalString("mask");
-minRepDivergence = cgiUsualDouble("minRepDivergence", minRepDivergence);
-minIdentity = cgiUsualDouble("minIdentity", minIdentity);
+outputFormat = cgiUsualString("out", outputFormat);
+dotEvery = cgiOptionalInt("dots", 0);
 
 /* Call routine that does the work. */
 blat(argv[1], argv[2], argv[3]);

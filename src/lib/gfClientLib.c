@@ -599,26 +599,6 @@ slReverse(&bunList);
 return bunList;
 }
 
-#ifdef OLD
-static void gfFfAlignDnaClumps(struct gfClump *clumpList, struct dnaSeq *seq,
-    boolean isRc,  int minMatch, GfSaveAli outFunction, void *outData)
-/* Convert gfClumps to an actual alignment that gets saved via 
- * outFunction/outData. */
-{
-struct gfRange *rangeList;
-struct ssBundle *bun, *bunList = gfClumpsToBundles(clumpList, seq, isRc, &rangeList);
-for (bun = bunList; bun != NULL; bun = bun->next)
-    {
-    struct gfRange *range = bun->data;
-    struct dnaSeq *targetSeq = range->tSeq;
-    saveAlignments(targetSeq->name, targetSeq->size, 0, 
-	bun, outData, isRc, ffCdna, minMatch, outFunction);
-    }
-ssBundleFreeList(&bunList);
-gfRangeFreeList(&rangeList);
-}
-#endif /* OLD */
-
 static int maxDown = 10;
 
 static void extendHitRight(int qMax, int tMax,
@@ -798,14 +778,17 @@ struct gfClump *clump;
 struct gfRange *rangeList = NULL, *range;
 bioSeq *targetSeq;
 struct ssBundle *bun;
+int intronMax = 500000;
 
+if (isProt)
+    intronMax /= 3;
 for (clump = clumpList; clump != NULL; clump = clump->next)
     {
     clumpToHspRange(clump, seq, gf->tileSize, 0, NULL, &rangeList, isProt);
     }
 slReverse(&rangeList);
 slSort(&rangeList, gfRangeCmpTarget);
-rangeList = gfRangesBundle(rangeList, 500000/3);
+rangeList = gfRangesBundle(rangeList, intronMax);
 for (range = rangeList; range != NULL; range = range->next)
     {
     targetSeq = range->tSeq;
@@ -846,50 +829,6 @@ for (comp = range->components; comp != NULL; comp = comp->next)
     }
 return score;
 }
-
-#ifdef OLD
-static void gfFastClumps(struct genoFind *gf,  struct gfClump *clumpList, 
-    bioSeq *seq, boolean isRc,  int minMatch, FILE *f)
-/* Just quickly save clumps. */
-{
-struct gfClump *clump;
-struct gfRange *rangeList = NULL, *range;
-
-for (clump = clumpList; clump != NULL; clump = clump->next)
-    {
-    clumpToHspRange(clump, seq, gf->tileSize, 0, NULL, &rangeList, FALSE);
-    }
-slReverse(&rangeList);
-slSort(&rangeList, gfRangeCmpTarget);
-rangeList = gfRangesBundle(rangeList, 5);
-for (range = rangeList; range != NULL; range = range->next)
-    {
-    int score = rangeScore(range, seq);
-    if (score >= minMatch)
-        fprintf(f, "%d\t%s\t%d\t%d\t%s\t%d\t%d\n", 
-		score, seq->name, range->qStart, range->qEnd,
-		range->tSeq->name, range->tStart, range->tEnd);
-    }
-gfRangeFreeList(&rangeList);
-}
-
-static void gfAlignDnaClumps(struct genoFind *gf, struct gfClump *clumpList, 
-	struct dnaSeq *seq, boolean isRc,  int minMatch, 
-	GfSaveAli outFunction, void *outData, boolean fastN)
-/* Convert gfClumps to an actual alignment that gets saved via 
- * outFunction/outData. */
-{
-if (fastN)
-    {
-    struct gfSavePslxData *data = outData;
-    gfFastClumps(gf, clumpList, seq, isRc, minMatch, data->f);
-    }
-else
-    {
-    gfFfAlignDnaClumps(clumpList, seq, isRc, minMatch, outFunction, outData);
-    }
-}
-#endif /* OLD */
 
 
 void gfFindAlignAaTrans(struct genoFind *gfs[3], aaSeq *qSeq, struct hash *t3Hash, 
@@ -1009,8 +948,7 @@ for (range = rangeList; range != NULL; range = range->next)
 }
 
 
-void gfAlignTrans(int conn, char *nibDir, aaSeq *seq,
-    int minMatch, 
+void gfAlignTrans(int conn, char *nibDir, aaSeq *seq, int minMatch, 
     GfSaveAli outFunction, struct gfSavePslxData *outData)
 /* Search indexed translated genome on server with an amino acid sequence. 
  * Then load homologous bits of genome locally and do detailed alignment.
@@ -1239,8 +1177,9 @@ slFreeList(&ssList);
 lmCleanup(&lm);
 }
 
-void gfFindAlignTransTrans(struct genoFind *gfs[3], struct dnaSeq *qSeq, struct hash *t3Hash, 
-	boolean isRc, int minMatch, GfSaveAli outFunction, void *outData, boolean isRna)
+
+static struct ssBundle *gfTransTransFindBundles(struct genoFind *gfs[3], struct dnaSeq *qSeq, 
+	struct hash *t3Hash, boolean isRc, int minMatch, boolean isRna)
 /* Look for alignment to three translations of qSeq in three translated reading frames. 
  * Save alignment via outFunction/outData. */
 {
@@ -1250,7 +1189,7 @@ struct gfClump *clumps[3][3], *clump;
 struct gfRange *rangeList = NULL, *range;
 int tileSize = gfs[0]->tileSize;
 bioSeq *targetSeq;
-struct ssBundle *bun;
+struct ssBundle *bun, *bunList = NULL;
 int hitCount;
 struct lm *lm = lmInit(0);
 enum ffStringency stringency = (isRna ? ffCdna : ffTight);
@@ -1277,12 +1216,9 @@ for (range = rangeList; range != NULL; range = range->next)
     AllocVar(bun);
     bun->qSeq = qSeq;
     bun->genoSeq = targetSeq;
-    bun->data = range;
     bun->ffList = rangesToFfItem(range->components, qSeq);
     ssStitch(bun, stringency);
-    saveAlignments(targetSeq->name, targetSeq->size, 0, 
-	bun, outData, isRc, stringency, minMatch, outFunction);
-    ssBundleFree(&bun);
+    slAddHead(&bunList, bun);
     }
 for (qFrame = 0; qFrame<3; ++qFrame)
     for (tFrame=0; tFrame<3; ++tFrame)
@@ -1290,7 +1226,10 @@ for (qFrame = 0; qFrame<3; ++qFrame)
 gfRangeFreeList(&rangeList);
 trans3Free(&qTrans);
 lmCleanup(&lm);
+slReverse(&bunList);
+return bunList;
 }
+
 
 void trans3Offset(struct trans3 *t3List, AA *aa, int *retOffset, int *retFrame)
 /* Figure out offset of peptide in context of larger sequences. */
@@ -1346,7 +1285,8 @@ static void gfSavePslOrPslx(char *chromName, int chromSize, int chromOffset,
 	struct ffAli *ali, struct dnaSeq *genoSeq, struct dnaSeq *otherSeq, 
 	boolean isRc, enum ffStringency stringency, int minMatch, FILE *out,
 	struct hash *t3Hash, boolean reportTargetStrand, boolean targetIsRc,
-	struct hash *maskHash, int minIdentity)
+	struct hash *maskHash, int minIdentity, 
+	boolean qIsProt, boolean tIsProt, boolean saveSeq)
 /* Analyse one alignment and if it looks good enough write it out to file in
  * psl format (or pslX format - if t3Hash is non-NULL).  */
 {
@@ -1374,14 +1314,19 @@ struct trans3 *t3 = NULL;
 struct trans3 *t3List = NULL;
 int score = 0;
 Bits *maskBits = NULL;
+int (*scoreFunc)(char *a, char *b, int size);
 
-
+if (qIsProt || tIsProt) 
+    scoreFunc = aaScoreMatch;
+else
+    scoreFunc = dnaScoreMatch;
 if (maskHash != NULL)
     maskBits = hashMustFindVal(maskHash, genoSeq->name);
 if (t3Hash != NULL)
     t3List = hashMustFindVal(t3Hash, genoSeq->name);
 hStart = t3GenoPos(ali->hStart, genoSeq, t3List, FALSE) + chromOffset;
 hEnd = t3GenoPos(right->hEnd, genoSeq, t3List, TRUE) + chromOffset;
+
 
 /* Count up matches, mismatches, inserts, etc. */
 for (ff = ali; ff != NULL; ff = nextFf)
@@ -1390,7 +1335,7 @@ for (ff = ali; ff != NULL; ff = nextFf)
     blockSize = ff->nEnd - ff->nStart;
     np = ff->nStart;
     hp = ff->hStart;
-    score += dnaScoreMatch(np, hp, blockSize);
+    score += scoreFunc(np, hp, blockSize);
     for (i=0; i<blockSize; ++i)
 	{
 	n = np[i];
@@ -1476,8 +1421,21 @@ if (score >= minMatch)
 	    fprintf(out, "%d,", ff->nStart - needle);
 	fprintf(out, "\t");
 	for (ff = ali; ff != NULL; ff = ff->right)
-	    {
 	    fprintf(out, "%d,", t3GenoPos(ff->hStart, genoSeq, t3List, FALSE) + chromOffset);
+	if (saveSeq)
+	    {
+	    fputc('\t', out);
+	    for (ff = ali; ff != NULL; ff = ff->right)
+		{
+		mustWrite(out, ff->nStart, ff->nEnd - ff->nStart);
+		fputc(',', out);
+		}
+	    fputc('\t', out);
+	    for (ff = ali; ff != NULL; ff = ff->right)
+		{
+		mustWrite(out, ff->hStart, ff->hEnd - ff->hStart);
+		fputc(',', out);
+		}
 	    }
 	fprintf(out, "\n");
 	if (ferror(out))
@@ -1489,24 +1447,17 @@ if (score >= minMatch)
     }
 }
 
-void gfSavePsl(char *chromName, int chromSize, int chromOffset,
-	struct ffAli *ali, struct dnaSeq *genoSeq, struct dnaSeq *otherSeq, 
-	boolean isRc, enum ffStringency stringency, int minMatch, void *outputData)
-/* Save psl for simple nucleotide/nucleotide alignments. */
-{
-gfSavePslOrPslx(chromName, chromSize, chromOffset, ali, genoSeq, otherSeq,
-    isRc, stringency, minMatch, outputData, NULL, FALSE, FALSE, NULL, 0);
-}
-
 void gfSavePslx(char *chromName, int chromSize, int chromOffset,
 	struct ffAli *ali, struct dnaSeq *genoSeq, struct dnaSeq *otherSeq, 
 	boolean isRc, enum ffStringency stringency, int minMatch, void *outputData)
 /* Save psl for more complex alignments. */
 {
-struct gfSavePslxData *data = outputData;
+struct gfSavePslxData *outForm = outputData;
+
 gfSavePslOrPslx(chromName, chromSize, chromOffset, ali, genoSeq, otherSeq,
-    isRc, stringency, minMatch, data->f, data->t3Hash, data->reportTargetStrand, data->targetRc,
-    data->maskHash, data->minGood);
+    isRc, stringency, minMatch, outForm->f, outForm->t3Hash, 
+    outForm->reportTargetStrand, outForm->targetRc,
+    outForm->maskHash, outForm->minGood, outForm->qIsProt, outForm->tIsProt, outForm->saveSeq);
 }
 
 static void addToBigBundleList(struct ssBundle **pOneList, struct hash *bunHash, 
@@ -1557,6 +1508,7 @@ for (subOffset = 0; subOffset<query->size; subOffset = nextOffset)
     {
     struct gfClump *clumpList;
     struct gfRange *rangeList;
+
     /* Figure out size of this piece.  If query is
      * maxSize or less do it all.   Otherwise just
      * do prefered size, and set it up to overlap
@@ -1576,7 +1528,6 @@ for (subOffset = 0; subOffset<query->size; subOffset = nextOffset)
 	    nextOffset = subOffset + preferredSize - overlapSize;
 	    }
 	}
-
     subQuery.dna = query->dna + subOffset;
     subQuery.size = subSize;
     endPos = &subQuery.dna[subSize];
@@ -1597,5 +1548,66 @@ for (bun = bigBunList; bun != NULL; bun = bun->next)
     }
 freeHash(&bunHash);
 lmCleanup(&lm);
+}
+
+
+void gfLongTransTransInMem(struct dnaSeq *query, struct genoFind *gfs[3], 
+   struct hash *t3Hash, boolean qIsRc, boolean qIsRna,
+   int minScore, GfSaveAli outFunction, void *outData)
+/* Chop up query into pieces, align each in translated space, and stitch back
+ * together again as nucleotides. */
+{
+enum ffStringency stringency = (qIsRna ? ffCdna : ffTight);
+int hitCount;
+int maxSize = 1500;
+int preferredSize = 1200;	/* PreferredSize - overlapSize might need to be multiple of 3. */
+int overlapSize = 270;
+struct dnaSeq subQuery = *query;
+struct lm *lm = lmInit(0);
+int subOffset, subSize, nextOffset;
+DNA saveEnd, *endPos;
+struct ssBundle *oneBunList = NULL, *bigBunList = NULL, *bun;
+struct hash *bunHash = newHash(8);
+int pieceCount = 0;
+
+for (subOffset = 0; subOffset<query->size; subOffset = nextOffset)
+    {
+    /* Figure out size of this piece.  If query is
+     * maxSize or less do it all.   Otherwise just
+     * do prefered size, and set it up to overlap
+     * with surrounding pieces by overlapSize.  */
+    if (subOffset == 0 && query->size <= maxSize)
+	nextOffset = subSize = query->size;
+    else
+        {
+	subSize = preferredSize;
+	if (subSize + subOffset >= query->size)
+	    {
+	    subSize = query->size - subOffset;
+	    nextOffset = query->size;
+	    }
+	else
+	    {
+	    nextOffset = subOffset + preferredSize - overlapSize;
+	    }
+	}
+    subQuery.dna = query->dna + subOffset;
+    subQuery.size = subSize;
+    endPos = &subQuery.dna[subSize];
+    saveEnd = *endPos;
+    *endPos = 0;
+    oneBunList = gfTransTransFindBundles(gfs, &subQuery, t3Hash, qIsRc, minScore, qIsRna);
+    addToBigBundleList(&oneBunList, bunHash, &bigBunList, query);
+    *endPos = saveEnd;
+    ++pieceCount;
+    }
+for (bun = bigBunList; bun != NULL; bun = bun->next)
+    {
+    if (pieceCount > 1)
+	ssStitch(bun, ffCdna);
+    saveAlignments(bun->genoSeq->name, bun->genoSeq->size, 0, 
+	bun, outData, qIsRc, stringency, minScore, outFunction);
+    }
+ssBundleFreeList(&bigBunList);
 }
 

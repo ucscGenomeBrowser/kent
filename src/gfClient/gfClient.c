@@ -9,6 +9,18 @@
 
 /* Variables that can be overridden by command line. */
 int dots = 0;
+int minScore = 30;
+double minIdentity = 90;
+char *outputFormat = "psl";
+
+void outputOptions(struct gfSavePslxData *outForm, FILE *f)
+/* Set up main output data structure. */
+{
+ZeroVar(outForm);
+outForm->f =f;
+outForm->minGood = round(10*minIdentity);
+outForm->saveSeq = sameWord(outputFormat, "pslx");
+}
 
 void gfClient(char *hostName, char *portName, char *nibDir, char *inName, 
 	char *outName, char *tTypeName, char *qTypeName)
@@ -38,32 +50,35 @@ while (faSomeSpeedReadNext(lf, &seq.dna, &seq.size, &seq.name, qType != gftProt)
 	}
     if (qType == gftProt && (tType == gftDnaX || tType == gftRnaX))
         {
-	static struct gfSavePslxData data;
-	data.f = out;
-	data.reportTargetStrand = TRUE;
-	gfAlignTrans(conn, nibDir, &seq, 12, gfSavePslx, &data);
+	static struct gfSavePslxData outForm;
+	outputOptions(&outForm, out);
+	outForm.reportTargetStrand = TRUE;
+	outForm.qIsProt = TRUE;
+	gfAlignTrans(conn, nibDir, &seq, minScore, gfSavePslx, &outForm);
 	}
     else if ((qType == gftRnaX || qType == gftDnaX) && (tType == gftDnaX || tType == gftRnaX))
         {
-	static struct gfSavePslxData data;
-	data.f = out;
-	data.reportTargetStrand = TRUE;
-	gfAlignTransTrans(conn, nibDir, &seq, FALSE, 12, gfSavePslx, &data, qType == gftRnaX);
+	static struct gfSavePslxData outForm;
+	outputOptions(&outForm, out);
+	outForm.reportTargetStrand = TRUE;
+	gfAlignTransTrans(conn, nibDir, &seq, FALSE, minScore, gfSavePslx, &outForm, qType == gftRnaX);
 	if (qType == gftDnaX)
 	    {
 	    reverseComplement(seq.dna, seq.size);
 	    close(conn);
 	    conn = gfConnect(hostName, portName);
-	    gfAlignTransTrans(conn, nibDir, &seq, TRUE, 12, gfSavePslx, &data, FALSE);
+	    gfAlignTransTrans(conn, nibDir, &seq, TRUE, minScore, gfSavePslx, &outForm, FALSE);
 	    }
 	}
     else if ((tType == gftDna || tType == gftRna) && (qType == gftDna || qType == gftRna))
 	{
-	gfAlignStrand(conn, nibDir, &seq, FALSE, 36, gfSavePsl, out);
+	static struct gfSavePslxData outForm;
+	outputOptions(&outForm, out);
+	gfAlignStrand(conn, nibDir, &seq, FALSE, minScore, gfSavePslx, &outForm);
 	close(conn);
 	conn = gfConnect(hostName, portName);
 	reverseComplement(seq.dna, seq.size);
-	gfAlignStrand(conn, nibDir, &seq, TRUE,  36, gfSavePsl, out);
+	gfAlignStrand(conn, nibDir, &seq, TRUE,  36, gfSavePslx, &outForm);
 	}
     else
         {
@@ -109,10 +124,13 @@ errAbort(
 int main(int argc, char *argv[])
 /* Process command line. */
 {
-cgiSpoof(&argc, argv);
+cgiFromCommandLine(&argc, argv, FALSE);
 if (argc != 6)
     usage();
+minIdentity = cgiUsualDouble("minIdentity", minIdentity);
+minScore = cgiOptionalInt("minScore", minScore);
 dots = cgiOptionalInt("dots", 0);
+outputFormat = cgiUsualString("out", outputFormat);
 gfClient(argv[1], argv[2], argv[3], argv[4], argv[5], cgiUsualString("t", "dna"), cgiUsualString("q", "dna"));
 return 0;
 }
