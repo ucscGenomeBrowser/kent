@@ -2,7 +2,7 @@ GBROOT = ..
 include ${GBROOT}/common.mk
 
 SUBDIRS = lib download process align copy dbload \
-	selectWithPsl gbSanity mgc gbGetSeqs gbFaCheck
+	selectWithPsl gbSanity mgc gbGetSeqs
 
 all: ${SUBDIRS:%=%.suball} build-tools
 %.suball:
