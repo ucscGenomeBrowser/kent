@@ -300,6 +300,11 @@ void mapBoxHc(int start, int end, int x, int y, int width, int height,
 /* Print out image map rectangle that would invoke the htc (human track click)
  * program. */
 
+void mapBoxToggleVis(int x, int y, int width, int height, 
+	struct track *curGroup);
+/* Print out image map rectangle that would invoke this program again.
+ * program with the current track expanded. */
+
 void mapBoxJumpTo(int x, int y, int width, int height, 
 		  char *newChrom, int newStart, int newEnd, char *message);
 /* Print out image map rectangle that would invoke this program again

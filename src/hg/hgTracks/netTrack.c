@@ -11,7 +11,7 @@
 #include "chainNet.h"
 #include "chainNetDbLoad.h"
 
-static char const rcsid[] = "$Id: netTrack.c,v 1.15 2004/09/02 20:54:53 kent Exp $";
+static char const rcsid[] = "$Id: netTrack.c,v 1.16 2004/09/10 18:56:38 kent Exp $";
 
 struct netItem
 /* A net track item. */
@@ -123,15 +123,18 @@ if (w > 3)
     clippedBarbs(rVg, x1, y+rMidLineOff, w, 2, 5, orientation, barbColor, TRUE);
 if (w > 1)
     {
-    struct dyString *bubble = newDyString(256);
-    char popUp[128];
-    char depth[8];
-    snprintf(depth, sizeof(depth), "%d", level);
-    dyStringPrintf(bubble, "%s %c %dk ", 
-    	fill->qName, fill->qStrand, fill->qStart/1000);
-    mapBoxHc(start, end, x1, y, w, rHeightPer, rTg->mapName, 
-    	depth, bubble->string);
-    dyStringFree(&bubble);
+    if (rNextLine > 0)	 /* Put up click info in full mode. */
+	{
+	struct dyString *bubble = newDyString(256);
+	char popUp[128];
+	char depth[8];
+	snprintf(depth, sizeof(depth), "%d", level);
+	dyStringPrintf(bubble, "%s %c %dk ", 
+	    fill->qName, fill->qStrand, fill->qStart/1000);
+	mapBoxHc(start, end, x1, y, w, rHeightPer, rTg->mapName, 
+	    depth, bubble->string);
+	dyStringFree(&bubble);
+	}
     }
 }
 
@@ -161,13 +164,16 @@ if (w >= 1)
     int midY = y + rMidLineOff;
     clippedBarbs(rVg, x1, midY, w, 2, 5, orientation, color, FALSE);
     vgLine(rVg, x1, midY, x2, midY, color);
-    snprintf(depth, sizeof(depth), "%d", level);
-    dyStringPrintf(bubble, "size %d/%d Ns %d/%d newRep %d/%d", 
-	gap->qSize, gap->tSize, gap->qN, gap->tN,
-	gap->qNewR, gap->tNewR);
-    mapBoxHc(start, end, x1, y, w, rHeightPer, rTg->mapName, 
-	depth, bubble->string);
-    dyStringFree(&bubble);
+    if (rNextLine > 0)	 /* Put up click info in full mode. */
+	{
+	snprintf(depth, sizeof(depth), "%d", level);
+	dyStringPrintf(bubble, "size %d/%d Ns %d/%d newRep %d/%d", 
+	    gap->qSize, gap->tSize, gap->qN, gap->tN,
+	    gap->qNewR, gap->tNewR);
+	    mapBoxHc(start, end, x1, y, w, rHeightPer, rTg->mapName, 
+		depth, bubble->string);
+	dyStringFree(&bubble);
+	}
     }
 }
 
@@ -251,7 +257,8 @@ if (net != NULL)
     rNetDraw(net->fillList, 1, yOff);
     chainNetFree(&net);
     }
-
+if (vis == tvDense)
+    mapBoxToggleVis(xOff, yOff, width, tg->heightPer, tg);
 }
 
 void netMethods(struct track *tg)
