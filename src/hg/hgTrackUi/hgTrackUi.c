@@ -19,7 +19,7 @@
 #define CDS_HELP_PAGE "../goldenPath/help/hgCodonColoring.html"
 #define CDS_MRNA_HELP_PAGE "../goldenPath/help/hgCodonColoringMrna.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.102 2004/05/19 19:02:10 kate Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.103 2004/05/19 21:51:55 kate Exp $";
 
 struct cart *cart;	/* Cookie cart with UI settings */
 char *database;		/* Current database. */
@@ -561,11 +561,19 @@ for (i = 0; i < speciesCt; i++)
     puts("</TD>");
     }
 puts("</TR></TABLE><P>");
+
 puts("<p><b>Base-level display:</b><br>" );
 snprintf(option, sizeof(option), "%s.%s", tdb->tableName, BASE_COLORS_VAR);
 puts ("Alternate colors every");
 cgiMakeIntVar(option, cartCgiUsualInt(cart, option, 0), 1);
-puts ("bases");
+puts ("bases<br>");
+
+snprintf(option, sizeof(option), "%s.%s", tdb->tableName, 
+                        BASE_COLORS_OFFSET_VAR);
+puts ("Offset alternate colors by");
+cgiMakeIntVar(option, cartCgiUsualInt(cart, option, 0), 1);
+puts ("bases<br>");
+
 puts("<p><b>Multiple alignment:</b><br>" );
 wigUi(tdb);
 }
