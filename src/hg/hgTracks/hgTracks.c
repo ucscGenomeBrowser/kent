@@ -4864,6 +4864,7 @@ static void netDraw(struct trackGroup *tg, int seqStart, int seqEnd,
 {
 int baseWidth = seqEnd - seqStart;
 struct netItem *ni;
+char chromStr[10];
 int y = yOff;
 int heightPer = tg->heightPer;
 int lineHeight = tg->lineHeight;
@@ -4926,15 +4927,16 @@ else
     {
     char table[64];
     boolean hasBin;
+    struct netAlign na;
     struct dyString *query = newDyString(1024);
     /* Do black and white on single track.  Fetch less than we need from database. */
-    if (!hFindSplitTable(chromName, "blastzNetAlign", table, &hasBin))
+    if (hFindSplitTable(chromName, "blastzNetAlign", table, &hasBin))
         {
-	dyStringPrintf(query, "select tStart,tEnd from %s where ", table);
+	dyStringPrintf(query, "select tStart,tEnd, qName from %s where ", table);
 	if (hasBin)
 	    hAddBinToQuery(winStart, winEnd, query);
 	dyStringPrintf(query, "tStart<%u and tEnd>%u", winEnd, winStart);
-	sr = sqlGetResult(conn, query->string);
+    sr = sqlGetResult(conn, query->string);
 	while ((row = sqlNextRow(sr)) != NULL)
 	    {
 	    int start = sqlUnsigned(row[0]);
@@ -4944,7 +4946,10 @@ else
 	    w = x2-x1;
 	    if (w <= 0)
 		w = 1;
-	    mgDrawBox(mg, x1, yOff, w, heightPer, MG_BLACK);
+        strncpy(chromStr,row[2]+3,2);
+        chromStr[2] = '\0';
+        col = getChromColor(chromStr, mg);
+	    mgDrawBox(mg, x1, yOff, w, heightPer, col);
 	    }
 	}
     dyStringFree(&query);
