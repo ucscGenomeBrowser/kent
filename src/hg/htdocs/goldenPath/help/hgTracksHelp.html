@@ -57,10 +57,10 @@ UCSC Genome Browser created by
 <A HREF="mailto:heather@soe.ucsc.edu">Heather Trumbower</A>,
 and the Genome Bioinformatics Group of UC Santa Cruz.
 <BR>
-Copyright 2001 The Regents of the University of California.
+Copyright (c) The Regents of the University of California.
 All rights reserved. 
 <BR>
-User Guide last updated 28 May 2003. <A HREF="mailto:genome@soe.ucsc.edu">Question and suggestions welcome</A>.
+User Guide last updated 25 Jul 2003. <A HREF="mailto:genome@soe.ucsc.edu">Question and suggestions welcome</A>.
 </CENTER>
 </FONT></TD></TR></TABLE></CENTER>
 			
@@ -281,7 +281,7 @@ TARGET=_blank>Troubleshooting Annotation Display Problems</A>.
 <P>
 <B>Viewing genome data as text</B><BR> 
 The 
-<A HREF="http://hgwdev.cse.ucsc.edu/cgi-bin/hgText" TARGET=_blank>Table Browser</A>,
+<A HREF="http://genome.ucsc.edu/cgi-bin/hgText" TARGET=_blank>Table Browser</A>,
 a portal to the underlying open source <A
 HREF="http://www.MySQL.com" TARGET=_blank>MySQL</A> relational database driving the Genome
 Browser, displays genomic data as columns of text rather than as
@@ -595,9 +595,9 @@ To print or save the image to a file:
 BLAT (BLAST-Like Alignment Tool) is a very fast sequence alignment tool similar to 
 BLAST. 
 For more information on BLAT's internal scoring schemes and its overall n-mer 
-alignment seed strategy, refer to the paper <A
+alignment seed strategy, refer to the paper W. James Kent (2002) <A
 HREF="http://www.genome.org/cgi/content/abstract/12/4/656" TARGET=_blank>BLAT -
-The BLAST-Like Alignment Tool</A>, W. James Kent, Genome Research, 12:4 656-664. 
+The BLAST-Like Alignment Tool</A>, <em>Genome Res</em> 12:4 656-664. 
 <P>
 On DNA queries, BLAT is designed to quickly find sequences with 95% or greater 
 similarity of length 40 bases or more. It may miss genomic sequences that
@@ -1380,7 +1380,7 @@ and using the tracks displayed in the Genome Browser track window, see the secti
 	To quickly toggle between <I>full</I> and <I>dense</I> or <I>pack</I> display modes, click on 
 	the track's center label.</TD></TR>  
 		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
-	Only the most recent assemblies are fully active. Older assemblies are <A HREF="http://genome-archive.cse.ucsc.edu/">archived</A>.</TD></TR>  
+	Only the most recent assemblies are fully active. Older assemblies are <A HREF="http://genome-archive.cse.ucsc.edu/" TARGET=_blank>archived</A>.</TD></TR>  
 		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
 	Not all tracks appear in all assemblies. Only a basic set of tracks 
 	appears
@@ -1389,7 +1389,7 @@ and using the tracks displayed in the Genome Browser track window, see the secti
 	Track data can be viewed equivalently in columns as text tables using
 	the <A HREF="#TableBrowser">Table Browser</A>. </TD></TR> 
 		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
-	<A HREF="http://genome.ucsc.edu/goldenPath/credits.html">Credit</A>
+	<A HREF="http://genome.ucsc.edu/goldenPath/credits.html" TARGET=_blank>Credit</A>
 	goes to many individuals and institutions for generously contributing
 	the tracks. For specific information about the contributors to a given track,
 	look at the track's description page.</TD></TR>  
@@ -1799,7 +1799,7 @@ some reason, perhaps having to do with the regulation of gene expression.
 
 <P><B>DBTSS mRNA</B><BR>
 This track shows RefSeq mRNA sequences extended to the 5' end, based on sequence
-information in the <A HREF="http://dbtss.hgc.jp/home.html">DataBase of 
+information in the <A HREF="http://dbtss.hgc.jp/" TARGET=_blank>DataBase of 
 Transcriptional Start Sites</A> (DBTSS). For more information on the process used
 to construct this track, refer to the track's description page. 
 
@@ -1893,10 +1893,10 @@ the methods used in Ensembl gene prediction, refer to
 <P><B>Exofish ecores</B><BR>
 The track displays conserved regions, generally protein-coding homologs, 
 from a genomics project of long random reads in the 
-<A HREF="http://www.genoscope.cns.fr/exofish">pufferfish</A>, Tetraodon 
+<A HREF="http://www.genoscope.cns.fr/exofish" TARGET=_blank>pufferfish</A>, Tetraodon 
 nigroviridis.  Ecore is an acronym for <B>e</B>volutionary <B>co</B>nserved 
 <b>re</b>gion. The data was 
-<A HREF="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=PubMed&list_uids=10835645&dopt=Abstract">
+<A HREF="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=PubMed&list_uids=10835645&dopt=Abstract" TARGET=_blank>
 used</A> to estimate the number of human genes. 
 
 <TABLE CELLPADDING=0 CELLSPACING=0>
@@ -1922,7 +1922,7 @@ HREF="http://www.softberry.com">Softberry Inc.'s</A> gene-finding
 software. Fgenesh++ uses both hidden Markov models (HMMs) and protein 
 similarity to find genes in a completely automated manner, with less
 emphasis on cDNA/EST data. See the paper 
-<A HREF="http://www.genome.org/cgi/content/full/10/4/516" TARGET=_BLANK>"Ab 
+<A HREF="http://www.genome.org/cgi/content/full/10/4/516" TARGET=_blank>"Ab 
 initio gene finding in Drosophila genomic DNA"</A>, Genome Research 10(4) 516-522 
 for more information. 
 <P>
@@ -2027,7 +2027,7 @@ were done with BLAT in translated protein mode
 requiring 2 nearby 4-mer matches to trigger a detailed alignment. The human 
 genome was masked with RepeatMasker and Tandem Repeat Finder before running 
 BLAT. The fugu sequence used in this track is version 3.0, provided by the
-<A HREF="http://genome.jgi-psf.org/">DOE Joint Genome Institute</A> (JGI).
+<A HREF="http://genome.jgi-psf.org/" TARGET=_blank>DOE Joint Genome Institute</A> (JGI).
 
 <TABLE CELLPADDING=0 CELLSPACING=0>
 		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
@@ -2195,12 +2195,12 @@ Pediatrics, University of Pennsylvania.
 </TABLE></P>
 
 <P><B>Genscan Genes</B><BR>
-This track shows gene predictions from <A HREF="http://genes.mit.edu/GENSCAN.html">
+This track shows gene predictions from <A HREF="http://genes.mit.edu/GENSCAN.html" TARGET=_blank>
 GenScan</A>. These predictions are based on transcriptional, translational, 
 and donor and acceptor splicing signals, plus length and compositional 
 distributions of exons, introns and intergenic regions. The program does not 
 use similarity to known proteins like 
-<A HREF="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=PubMed&list_uids=11337476&dopt=Abstract">
+<A HREF="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=PubMed&list_uids=11337476&dopt=Abstract" TARGET=_blank>
 GenomeScan</A>.  For a description of the Genscan program and the model that
 underlies it, refer to Burge, C. and Karlin, S. (1997) 
 <A HREF="http://linkage.rockefeller.edu/wli/gene/burge97.pdf"
@@ -2547,7 +2547,7 @@ this merged map are shown in this track.
 </TABLE></P>
 
 <P><B>MGC Genes</B><BR>
-This track displays alignments between <A HREF="http://mgc.nci.nih.gov/">Mammalian Gene Collection</A> (MGC) human mRNAs with full-length ORFs and the human genome. 
+This track displays alignments between <A HREF="http://mgc.nci.nih.gov/" TARGET=_blank>Mammalian Gene Collection</A> (MGC) human mRNAs with full-length ORFs and the human genome. 
 <TABLE CELLPADDING=0 CELLSPACING=0>
 		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
 	<B><I>Display conventions:</I></B>
@@ -2568,11 +2568,11 @@ This track displays alignments between <A HREF="http://mgc.nci.nih.gov/">Mammali
 <P><B>Mouse Blat </B><BR>
 This track displays alignments of mouse genome to human. The mouse genomic 
 DNA is from the Arachne assembly of mouse whole genome shotgun reads available 
-at the <A HREF="http://www.ncbi.nlm.nih.gov/Traces/">Trace Repository</A>. 
+at the <A HREF="http://www.ncbi.nlm.nih.gov/Traces/" TARGET=_blank>Trace Repository</A>. 
 The alignments were done with BLAT in translated protein mode requiring 2 nearby 
 4-mer matches to trigger a detailed alignment. The human genome was masked with 
-<A HREF="http://ftp.genome.washington.edu/cgi-bin/RepeatMasker">RepeatMasker</A> 
-and <A HREF="http://tandem.biomath.mssm.edu/trf/trf.html">Tandem Repeat Finder</A> prior 
+<A HREF="http://ftp.genome.washington.edu/cgi-bin/RepeatMasker" TARGET=_blank>RepeatMasker</A> 
+and <A HREF="http://tandem.biomath.mssm.edu/trf/trf.html" TARGET=_blank>Tandem Repeat Finder</A> prior 
 to running BLAT. Regions with more than 300 aligned reads were assumed novel repeat 
 elements and filtered out. Alignments of greater than 97% identity may represent 
 mouse contamination of human or vice versa.
@@ -2749,7 +2749,7 @@ This track shows orthologous (syntenic) regions between mouse and human chromoso
 
 <P><B>NCI60</B><BR>
  This track displays cDNA expression data for a micro-array of 8,000 genes for 
-60 cell lines used in an <A HREF="http://genome-www.stanford.edu/nci60/">NCI 
+60 cell lines used in an <A HREF="http://genome-www.stanford.edu/nci60/" TARGET=_blank>NCI 
 cancer drug screen</A>.  
 
 <TABLE CELLPADDING=0 CELLSPACING=0>
@@ -2757,7 +2757,7 @@ cancer drug screen</A>.
 	<B><I>Display conventions:</I></B>
 	To understand the track, experiment with it set to 
 	full mode but other tracks (except known genes) hidden, while reading its
-	<A HREF="http://genome.ucsc.edu/cgi-bin/hgTrackUi?hgsid=1017057&c=chr3&g=nci60"> 
+	<A HREF="http://genome.ucsc.edu/cgi-bin/hgTrackUi?hgsid=1017057&c=chr3&g=nci60" TARGET=_blank> 
 	filter page</A>. Each column of colored boxes represents variation in 
 	transcript levels for a given cDNA across array experiments; each row 
 	represents the measured transcript levels for all genes in a single sample. 
@@ -2899,7 +2899,7 @@ filter. Some mRNAs align to multiple places but only the near-best are retained.
 <P><B>Overlap SNPs</B><BR>
 This track shows single nucleotide polymorphisms found on overlapping contigs. 
 Overlap SNPs are useful markers in mapping genes and diseases. This data was provided 
-by the <A HREF="http://snp.cshl.org/">SNP Consortium</A>.
+by the <A HREF="http://snp.cshl.org/" TARGET=_blank>SNP Consortium</A>.
 
 <TABLE CELLPADDING=0 CELLSPACING=0>
 		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
@@ -2908,7 +2908,7 @@ by the <A HREF="http://snp.cshl.org/">SNP Consortium</A>.
 		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
 	<B><I>Track details:</I></B> 
 	Clicking in full mode brings up a location description and 
-	<A HREF="http://www.ncbi.nlm.nih.gov/SNP/">dbSNP</A> link.</TD></TR>
+	<A HREF="http://www.ncbi.nlm.nih.gov/SNP/" TARGET=_blank>dbSNP</A> link.</TD></TR>
 		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
 	<B><I>Table details:</I></B> 
 	To view a text version of the data set, select the 
@@ -2960,7 +2960,7 @@ from Perlegen's <A HREF="http://www.perlegen.com/haplotype/" TARGET=_blank>Chrom
 <P><B>QTL</B><BR>
 This track shows approximate positions of quantititive trait loci (QTL) based on 
 reported peak LOD scores taken from Jackson Lab's 
-<A HREF="http://www.informatics.jax.org/"> Mouse Genome Informatics (MGI) Database</A>. 
+<A HREF="http://www.informatics.jax.org/" TARGET=_blank> Mouse Genome Informatics (MGI) Database</A>. 
 
 <TABLE CELLPADDING=0 CELLSPACING=0>
 		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
@@ -2983,7 +2983,7 @@ reported peak LOD scores taken from Jackson Lab's
 This track displays single nucleotide polymorphisms (SNPs)found by random 
 sequencing. Random SNPs are useful markers in mapping genes and complex traits.
 Because these SNPs are detected from random reads, they are useful for
-evolutionary studies. This data was provided by the <A HREF="http://snp.cshl.org/">SNP 
+evolutionary studies. This data was provided by the <A HREF="http://snp.cshl.org/" TARGET=_blank>SNP 
 Consortium</A>.
 
 <TABLE CELLPADDING=0 CELLSPACING=0>
@@ -2993,7 +2993,7 @@ Consortium</A>.
 		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
 	<B><I>Track details:</I></B> 
  	Clicking in full mode brings up a location description 
- 	and <A HREF="http://www.ncbi.nlm.nih.gov/SNP/">dbSNP</A> link.</TD></TR>
+ 	and <A HREF="http://www.ncbi.nlm.nih.gov/SNP/" TARGET=_blank>dbSNP</A> link.</TD></TR>
 		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
 	<B><I>Table details:</I></B> 
 	To view a text version of the data set, select the 
@@ -3095,7 +3095,7 @@ identity to be kept.
 
 <P><B>RepeatMasker</B><BR>
 The track shows dispersed repeats as determined by 
-<A HREF="http://ftp.genome.washington.edu/cgi-bin/RepeatMasker">RepeatMasker</A>
+<A HREF="http://ftp.genome.washington.edu/cgi-bin/RepeatMasker" TARGET=_blank>RepeatMasker</A>
 using the
 <A HREF="http://www.girinst.org/Repbase_Update.html"TARGET=_blank>Repbase Update</A>
 library of repetitive sequences from the Genetic Information Research 
@@ -3148,8 +3148,8 @@ coding genes are displayed elsewhere in the RefSeq Genes track.
 
 <P><B>Rosetta</B><BR>
 This track displays microarray tissue 
-<A HREF="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=PubMed&list_uids=11237012&dopt=Abstract">
-expression data</A> provided by <A HREF="http://www.rii.com">Rosetta Inpharmatics</A>. 
+<A HREF="http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=PubMed&list_uids=11237012&dopt=Abstract" TARGET=_blank>
+expression data</A> provided by <A HREF="http://www.rii.com" TARGET=_blank>Rosetta Inpharmatics</A>. 
 It helps catalogue genes and transcriptome, complements computational gene 
 predictions, and seeks to define gene boundaries via co-regulated expression 
 of nearby exons. 
@@ -3268,7 +3268,7 @@ against other genomic sequences.
 
 <P><B>Simple Repeats</B><BR>
 This track displays simple tandem repeats (possibly imperfect) located by 
-<A HREF="http://tandem.biomath.mssm.edu/trf/trf.html">Tandem Repeat Finder</A>, which 
+<A HREF="http://tandem.biomath.mssm.edu/trf/trf.html" TARGET=_blank>Tandem Repeat Finder</A>, which 
 is specialized to this purpose. These repeats can occur within coding regions of 
 genes and may be quite polymorphic. Repeat expansions are sometimes associated with 
 specific diseases.
@@ -3574,7 +3574,7 @@ page for more details.
 
 <P><B>Tigr Gene Index</B><BR>
 This track displays alignments of the 
-<A HREF="http://www.tigr.org/tdb/hgi/index.html ">TIGR Gene Index</A> (TGI) 
+<A HREF="http://www.tigr.org/tdb/hgi/" TARGET=_blank>TIGR Gene Index</A> (TGI) 
 against the human genome. The TGI is based largely on assemblies of EST
 sequences from the public databases and TIGR.  Entries are 
 actual assemblies providing a consensus sequence, not simply clusters of 
@@ -3643,7 +3643,7 @@ This track displays Twinscan gene predictions. Twinscan predicts genes in a
 manner similar to Genscan, except that Twinscan takes advantage of genome 
 comparison to improve gene prediction accuracy. More information and a web 
 server can be found at the Washington University St. Louis 
-<A HREF="http://genes.cs.wustl.edu/">Twinscan</A> web page.
+<A HREF="http://genes.cs.wustl.edu/" TARGET=_blank>Twinscan</A> web page.
 
 <TABLE CELLPADDING=0 CELLSPACING=0>
 		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
@@ -3668,10 +3668,10 @@ See description for Mouse Synteny (hg13+).
 </P>
 
 <P><B>UniGene</B><BR>
-This track shows <A HREF="http://www.ncbi.nlm.nih.gov/UniGene/">UniGene</A> 
+This track shows <A HREF="http://www.ncbi.nlm.nih.gov/UniGene/" TARGET=_blank>UniGene</A> 
 clusters of ESTs aligned to the genome using BLAT. This data imperfectly 
 indicates exon/intron boundaries and to a lesser extent genes. The Serial 
-Analysis of Gene Expression <A HREF="http://www.ncbi.nlm.nih.gov/SAGE/ ">
+Analysis of Gene Expression <A HREF="http://www.ncbi.nlm.nih.gov/SAGE/" TARGET=_blank>
 (SAGE)</A> project at NCBI - a quantitative measurement of gene expression in 
 various tissues and disease states - mapped small 10bp bar-coded expression 
 markers onto these UniGene clusters in the SageMap project. The Genome Browser 
@@ -3695,7 +3695,7 @@ UniGene track in the assembled and annotated genome.
 </TABLE></P>
 
 <P><B>Vega Genes </B>(Human chr 14, 20, 22 only)<BR> 
-This track shows genes from the <A HREF="http://vega.sanger.ac.uk/">Vertebrate Genome Annotation (VEGA) database</A>, a central repository for manual annotation of different vertebrate finished genome sequence. In collaboration with the genome sequencing centers, Vega attempts to present consistent high-quality curation of the published chromosome sequences. Finished genomic sequence is analysed on a clone by clone basis using a combination of similarity searches against DNA and protein databases as well as a series of <I>ab initio</I> gene predictions (GENSCAN, Fgenes). In addition, comparative analysis using vertebrate datasets such as the Riken mouse cDNAs and Genoscope Tetraodon nigroviridis Ecores (Evolutionary Conserved Regions) are used for novel gene discovery.
+This track shows genes from the <A HREF="http://vega.sanger.ac.uk/" TARGET=_blank>Vertebrate Genome Annotation (VEGA) database</A>, a central repository for manual annotation of different vertebrate finished genome sequence. In collaboration with the genome sequencing centers, Vega attempts to present consistent high-quality curation of the published chromosome sequences. Finished genomic sequence is analysed on a clone by clone basis using a combination of similarity searches against DNA and protein databases as well as a series of <I>ab initio</I> gene predictions (GENSCAN, Fgenes). In addition, comparative analysis using vertebrate datasets such as the Riken mouse cDNAs and Genoscope Tetraodon nigroviridis Ecores (Evolutionary Conserved Regions) are used for novel gene discovery.
  
 <TABLE CELLPADDING=0 CELLSPACING=0>
 		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
@@ -3717,7 +3717,7 @@ This track shows genes from the <A HREF="http://vega.sanger.ac.uk/">Vertebrate G
 </TABLE></P>
 
 <P><B>Vega Pseudogenes </B>(Human chr 14, 20, 22 only)<BR> 
-This track shows annotated pseudogenes and immunoglobulin segments from the <A HREF="http://vega.sanger.ac.uk/">Vertebrate Genome Annotation (VEGA) database</A>, a central repository for manual annotation of different vertebrate finished genome sequence. In collaboration with the genome sequencing centers, Vega attempts to present consistent high-quality curation of the published chromosome sequences. Finished genomic sequence is analysed on a clone by clone basis using a combination of similarity searches against DNA and protein databases as well as a series of <I>ab initio</I> gene predictions (GENSCAN, Fgenes). In addition, comparative analysis using vertebrate datasets such as the Riken mouse cDNAs and Genoscope Tetraodon nigroviridis Ecores (Evolutionary Conserved Regions) are used for novel gene discovery.
+This track shows annotated pseudogenes and immunoglobulin segments from the <A HREF="http://vega.sanger.ac.uk/" TARGET=_blank>Vertebrate Genome Annotation (VEGA) database</A>, a central repository for manual annotation of different vertebrate finished genome sequence. In collaboration with the genome sequencing centers, Vega attempts to present consistent high-quality curation of the published chromosome sequences. Finished genomic sequence is analysed on a clone by clone basis using a combination of similarity searches against DNA and protein databases as well as a series of <I>ab initio</I> gene predictions (GENSCAN, Fgenes). In addition, comparative analysis using vertebrate datasets such as the Riken mouse cDNAs and Genoscope Tetraodon nigroviridis Ecores (Evolutionary Conserved Regions) are used for novel gene discovery.
  
 <TABLE CELLPADDING=0 CELLSPACING=0>
 		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
