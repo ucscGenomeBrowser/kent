@@ -250,6 +250,69 @@ color 20,0,50
 spectrum on
 type bed 4
 
+track zdobnovHg16
+shortLabel Z Synt Human
+longLabel Gene homology-based Human synteny blocks from Zdobnov et al.
+group compGeno
+priority 127.1
+visibility hide
+type bed 12 +
+otherDb hg16
+
+track zdobnovMm3
+shortLabel Z Synt Mouse
+longLabel Gene homology-based Mouse synteny blocks from Zdobnov et al.
+group compGeno
+priority 127.2
+visibility hide
+type bed 12 +
+otherDb mm3
+
+track zdobnovRn3
+shortLabel Z Synt Rat
+longLabel Gene homology-based Rat synteny blocks from Zdobnov et al.
+group compGeno
+priority 127.3
+visibility hide
+type bed 12 +
+otherDb rn3
+
+track deweySyntHg16
+shortLabel D Synt Human
+longLabel Exon-anchored 5-way-symm. Human synteny blocks from Dewey, Pachter
+group compGeno
+priority 127.4
+visibility hide
+type bed 6
+otherDb hg16
+
+track deweySyntPanTro1
+shortLabel D Synt Chimp
+longLabel Exon-anchored 5-way-symm. Chimp synteny blocks from Dewey, Pachter
+group compGeno
+priority 127.5
+visibility hide
+type bed 6
+otherDb panTro1
+
+track deweySyntMm3
+shortLabel D Synt Mouse
+longLabel Exon-anchored 5-way-symm. Mouse synteny blocks from Dewey, Pachter
+group compGeno
+priority 127.6
+visibility hide
+type bed 6
+otherDb mm3
+
+track deweySyntRn3
+shortLabel D Synt Rat
+longLabel Exon-anchored 5-way-symm. Rat synteny blocks from Dewey, Pachter
+group compGeno
+priority 127.7
+visibility hide
+type bed 6
+otherDb rn3
+
 track rnaGene
 shortLabel ncRNA
 longLabel Non-coding RNA Genes
