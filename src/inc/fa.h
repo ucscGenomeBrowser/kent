@@ -54,6 +54,13 @@ bioSeq *faSeqFromMemText(char *text, boolean isDna);
 /* Convert fa in memory to bioSeq. This cannabalizes text
  * as does faFromMemText above. */
 
+bioSeq *faNextSeqFromMemText(char **pText, boolean isDna);
+/* Convert fa in memory to bioSeq.  Update *pText to point to next
+ * record.  Returns NULL when no more sequences left. */
+
+bioSeq *faSeqListFromMemText(char *text, boolean isDna);
+/* Convert fa's in memory into list of dnaSeqs. */
+
 boolean faFastReadNext(FILE *f, DNA **retDna, int *retSize, char **retName);
 /* Read in next FA entry as fast as we can. Return FALSE at EOF. 
  * The returned DNA and name will be overwritten by the next call
@@ -80,4 +87,6 @@ void faWrite(char *fileName, char *startLine, DNA *dna, int dnaSize);
 void faWriteNext(FILE *f, char *startLine, DNA *dna, int dnaSize);
 /* Write next sequence to fa file. */
 
+void faWriteAll(char *fileName, bioSeq *seqList);
+/* Write out all sequences in list to file. */
 #endif /* FA_H */

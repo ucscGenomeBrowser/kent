@@ -106,8 +106,9 @@ else
     return seq;
 }
 
-bioSeq *faSeqFromMemText(char *text, boolean isDna)
-/* Convert fa in memory to bioSeq. */
+bioSeq *faNextSeqFromMemText(char **pText, boolean isDna)
+/* Convert fa in memory to bioSeq.  Update *pText to point to next
+ * record.  Returns NULL when no more sequences left. */
 {
 char *name = "";
 char *s, *d;
@@ -115,7 +116,10 @@ struct dnaSeq *seq;
 int size = 0;
 char c;
 char *filter = (isDna ? ntChars : aaChars);
+char *text = *pText;
 
+if (text == NULL)
+    return NULL;
 dnaUtilOpen();
 if (text[0] == '>')
     {
@@ -128,12 +132,15 @@ if (text[0] == '>')
     }
 else
     s = text;
-AllocVar(seq);
-seq->name = cloneString(name);
+name = cloneString(name);
     
 d = text;
-while ((c = *s++) != 0)
+for (;;)
     {
+    c = *s;
+    if (c == 0 || c == '>')
+        break;
+    ++s;
     if (isspace(c) || isdigit(c))
 	continue;
     if ((c = filter[c]) != 0) 
@@ -149,9 +156,39 @@ while ((c = *s++) != 0)
 d[size] = 0;
 
 /* Put sequence into our little sequence structure. */
-seq->dna = text;
-seq->size = size;
-return seq;
+if (size != 0)
+    {
+    AllocVar(seq);
+    seq->name = name;
+    seq->dna = text;
+    seq->size = size;
+    *pText = s;
+    return seq;
+    }
+else
+    {
+    freeMem(name);
+    *pText = NULL;
+    return NULL;
+    }
+}
+
+bioSeq *faSeqListFromMemText(char *text, boolean isDna)
+/* Convert fa's in memory into list of dnaSeqs. */
+{
+bioSeq *seqList = NULL, *seq;
+while ((seq = faNextSeqFromMemText(&text, isDna)) != NULL)
+    {
+    slAddHead(&seqList, seq);
+    }
+slReverse(&seqList);
+return seqList;
+}
+
+bioSeq *faSeqFromMemText(char *text, boolean isDna)
+/* Convert fa in memory to bioSeq. */
+{
+return faNextSeqFromMemText(&text, isDna);
 }
 
 struct dnaSeq *faFromMemText(char *text)
@@ -161,7 +198,7 @@ struct dnaSeq *faFromMemText(char *text)
  * the returned dnaSeq, which may be freed normally with
  * freeDnaSeq. */
 {
-return faSeqFromMemText(text, TRUE);
+return faNextSeqFromMemText(&text, TRUE);
 }
 
 struct dnaSeq *faReadSeq(char *fileName, boolean isDna)
@@ -315,6 +352,18 @@ FILE *f = mustOpen(fileName, "w");
 faWriteNext(f, startLine, dna, dnaSize);
 fclose(f);
 }
+
+void faWriteAll(char *fileName, bioSeq *seqList)
+/* Write out all sequences in list to file. */
+{
+FILE *f = mustOpen(fileName, "w");
+bioSeq *seq;
+
+for (seq=seqList; seq != NULL; seq = seq->next)
+    faWriteNext(f, seq->name, seq->dna, seq->size);
+fclose(f);
+}
+
 
 boolean faSomeSpeedReadNext(struct lineFile *lf, DNA **retDna, int *retSize, char **retName, boolean isDna)
 /* Read in DNA or Peptide FA record. */
