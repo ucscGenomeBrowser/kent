@@ -100,6 +100,12 @@ searchType bed
 termRegex ([[:alnum:]_ ]+|((RP|PTB)[[:alnum:]]*)?(-[[:alnum:]_]+)+)
 searchPriority 8
 
+searchTable bacEndPairsBad
+searchMethod exact
+searchType bed
+termRegex ([[:alnum:]_ ]+|((RP|PTB)[[:alnum:]]*)?(-[[:alnum:]_]+)+)
+searchPriority 8
+
 searchTable ctgPos
 searchMethod exact
 shortCircuit 1
