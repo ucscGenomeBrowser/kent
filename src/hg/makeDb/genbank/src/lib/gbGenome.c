@@ -3,7 +3,7 @@
 #include "gbDefs.h"
 #include "localmem.h"
 
-static char const rcsid[] = "$Id: gbGenome.c,v 1.20 2004/10/25 18:07:13 fanhsu Exp $";
+static char const rcsid[] = "$Id: gbGenome.c,v 1.21 2004/10/25 18:10:19 fanhsu Exp $";
 
 struct dbToSpecies
 /* structure mapping database prefix to species (e.g. hg -> "Homo sapiens").
@@ -74,6 +74,7 @@ static struct dbToSpecies dbToSpeciesMap[] = {
     {"zooBaboon", zooBaboonNames, NULL},
     {"zooChimp", panTroNames, "Pan troglodytes "},
     {"zooCow", zooCowNames, NULL},
+    {"zooFrog", zooFrogNames, NULL},
     {"zooDog", canFamNames, NULL},
     {"zooFugu", frNames, NULL},
     {"zooMouse", mmNames, "Mus musculus "},
