@@ -8564,7 +8564,6 @@ zcat $file | $PHAST/phastCons - hg17panTro1mm5rn3canFam1galGal2fr1danRer1.names.
     mkdir -p /cluster/data/hg17/bed/firstEF
     cd /cluster/data/hg17/bed/firstEF
     wget "http://bioinformatics.med.ohio-state.edu/downloads/firstEFMay04.bed.gz"
-    gunzip firstEFMay04.bed.gz
     cat << '_EOF_' > sedScript
 s/chr23/chrX/g
 s/chr24/chrY/g
@@ -8573,7 +8572,7 @@ s/chr24/chrY/g
 /^No/d
 '_EOF_'
 
-    sed -f sedScript  firstEFMay04.bed.gz > firstEF.bed
+    zcat firstEFMay04.bed.gz | sed -f sedScript | awk  "{OFS=\"\t\"} {\$3 +=1; print  \$0}" > firstEF.bed
     hgLoadBed hg17 firstEF firstEF.bed
     rm firstEF.tab
     gzip *.bed
