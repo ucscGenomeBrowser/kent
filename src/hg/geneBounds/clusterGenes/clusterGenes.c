@@ -8,7 +8,7 @@
 #include "binRange.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: clusterGenes.c,v 1.9 2004/02/02 01:46:14 markd Exp $";
+static char const rcsid[] = "$Id: clusterGenes.c,v 1.10 2004/02/03 08:39:08 markd Exp $";
 
 /* Command line driven variables. */
 int verbose = 0;
@@ -30,10 +30,10 @@ errAbort(
   "   -chrom=chrN - Just work on one chromosome\n"
   "   -chromFile=file - Just work on chromosomes listed in this file\n"
   "   -cds - cluster only on CDS exons\n"
-  "   -conflicts=file - Output information clusters where there are genes\n"
-  "    that don't share exons.  This indicates case where clusters maybe.\n"
-  "    incorrectly merged or split. Conflicts maybe either internal to \n"
-  "    a table or between tables.\n"
+  "\n"
+  "The conflicts column contains `y' if the cluster has comficts.\n"
+  "A conflict is a cluster where all of the genes don't share exons. \n"
+  "Conflicts maybe either internal to a table or between tables.\n"
   );
 }
 
@@ -42,7 +42,6 @@ static struct optionSpec options[] = {
    {"chrom", OPTION_STRING},
    {"chromFile", OPTION_STRING},
    {"cds", OPTION_BOOLEAN},
-   {"conflicts", OPTION_STRING},
    {NULL, 0},
 };
 
@@ -298,38 +297,7 @@ for (exonIx1 = 0; exonIx1 < gp1->exonCount; exonIx1++)
 return FALSE;
 }
 
-struct conflict
-/* object to store conflicting tracks in a cluster */
-{
-    struct conflict *next;
-    struct track *track1;  /* conflicting pair of tracks */
-    struct track *track2;
-};
-
-
-void addConflict(struct conflict **conflicts, struct track *track1,
-                 struct track *track2)
-/* add a pair of conflicting tracks to a list if not already there.
- * order of tracks is not important */
-{
-struct conflict *con;
-for (con = *conflicts; con != NULL; con = con->next)
-    {
-    if (((con->track1 == track1) && (con->track2 == track2))
-        || ((con->track2 == track1) && (con->track1 == track2)))
-        break; /* got it */
-    }
-if (con == NULL)
-    {
-    AllocVar(con);
-    con->track1 = track1;
-    con->track2 = track2;
-    slAddHead(conflicts, con);
-    }
-}
-
-void findGeneConflicts(struct cluster *cluster, struct conflict **conflicts,
-                       struct clusterGene *gene)
+boolean geneHasConflicts(struct cluster *cluster, struct clusterGene *gene)
 /* find conflicts for a gene in cluster */
 {
 struct clusterGene *cg;
@@ -338,20 +306,22 @@ struct clusterGene *cg;
 for (cg = cluster->genes; cg != NULL; cg = cg->next)
     {
     if ((cg != gene) && !shareExons(cg->gp, gene->gp))
-        addConflict(conflicts, gene->track, cg->track);
+        return TRUE;
     }
+return FALSE;
 }
 
-struct conflict *findClusterConflicts(struct cluster *cluster)
+boolean clusterHasConflicts(struct cluster *cluster)
 /* Get a list of tracks that conflict for a cluster. free with slFreeList */
 {
-struct conflict *conflicts = NULL;
 struct clusterGene *cg;
 
 for (cg = cluster->genes; cg != NULL; cg = cg->next)
-    findGeneConflicts(cluster, &conflicts, cg);
-
-return conflicts;
+    {
+    if (geneHasConflicts(cluster, cg))
+        return TRUE;
+    }
+return FALSE;
 }
 
 int totalGeneCount = 0;
@@ -548,22 +518,9 @@ else
     errAbort("Table or file %s doesn't exist in %s", table, hGetDb());
 }
 
-void reportConflicts(FILE* conflictFh, char* chrom, struct cluster* cluster)
-/* look for conflicts in an cluster and report any found. */
-{
-struct conflict *conflicts = findClusterConflicts(cluster);
-struct conflict *con;
-for (con = conflicts; con != NULL; con = con->next)
-    fprintf(conflictFh, "%d\t%s\t%d\t%d\t%s\t%s\n", cluster->id,
-            chrom, cluster->start, cluster->end,
-            con->track1->name, con->track2->name);
-
-slFreeList(&conflicts);
-}
-
 void clusterGenesOnStrand(struct sqlConnection *conn,
 	int tableCount, char *tables[], char *chrom, char strand, 
-	FILE *f, FILE* conflictFh)
+	FILE *f)
 /* Scan through genes on this strand, cluster, and write clusters to file. */
 {
 struct genePred *gpList = NULL;
@@ -577,16 +534,12 @@ for (tableIx = 0; tableIx < tableCount; ++tableIx)
 clusterList = clusterMakerFinish(&cm);
 for (cluster = clusterList; cluster != NULL; cluster = cluster->next)
     {
+    boolean hasConflicts = clusterHasConflicts(cluster);
     struct clusterGene *cg;
     for (cg = cluster->genes; cg != NULL; cg = cg->next)
-	fprintf(f, "%d\t%s\t%s\t%s\t%d\t%d\n", cluster->id, cg->track->name, cg->gp->name, cg->gp->chrom, cg->gp->txStart, cg->gp->txEnd);
+	fprintf(f, "%d\t%s\t%s\t%s\t%d\t%d\t%c\t%c\n", cluster->id, cg->track->name, cg->gp->name, cg->gp->chrom, cg->gp->txStart, cg->gp->txEnd, strand,
+                (hasConflicts ? 'y' : 'n'));
     ++totalClusterCount;
-    }
-
-if (conflictFh != NULL)
-    {
-    for (cluster = clusterList; cluster != NULL; cluster = cluster->next)
-        reportConflicts(conflictFh, chrom, cluster);
     }
 
 genePredFreeList(&gpList);
@@ -615,22 +568,15 @@ void clusterGenes(char *outFile, char *database, int tableCount, char *tables[])
 struct slName *chromList, *chrom;
 struct sqlConnection *conn;
 FILE *f = mustOpen(outFile, "w");
-char* conflictFile = optionVal("conflicts", NULL);
-FILE* conflictFh = NULL;
 fprintf(f, "#");
 fprintf(f, "cluster\t");
 fprintf(f, "table\t");
 fprintf(f, "gene\t");
 fprintf(f, "chrom\t");
 fprintf(f, "txStart\t");
-fprintf(f, "txEnd\n");
-
-if (conflictFile != NULL)
-    {
-    conflictFh = mustOpen(conflictFile, "w");
-    fprintf(conflictFh, "#cluster\tchrom\tstart\tend\ttrack1\ttrack2\n");
-    }
-    
+fprintf(f, "txEnd\t");
+fprintf(f, "strand\t");
+fprintf(f, "conflicts\n");
 
 hSetDb(database);
 if (optionExists("chrom"))
@@ -642,8 +588,8 @@ else
 conn = hAllocConn();
 for (chrom = chromList; chrom != NULL; chrom = chrom->next)
     {
-    clusterGenesOnStrand(conn, tableCount, tables, chrom->name, '+', f, conflictFh);
-    clusterGenesOnStrand(conn, tableCount, tables, chrom->name, '-', f, conflictFh);
+    clusterGenesOnStrand(conn, tableCount, tables, chrom->name, '+', f);
+    clusterGenesOnStrand(conn, tableCount, tables, chrom->name, '-', f);
     }
 }
 
