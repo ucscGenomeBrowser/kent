@@ -13,7 +13,7 @@
 #include "trackTable.h"
 #include <regex.h>
 
-static char const rcsid[] = "$Id: das.c,v 1.27 2004/05/27 17:45:47 angie Exp $";
+static char const rcsid[] = "$Id: das.c,v 1.28 2004/06/02 19:03:59 kent Exp $";
 
 char *version = "1.00";
 char *database = NULL;	
@@ -151,14 +151,47 @@ if (official == NULL)
 return(official);
 }
 
+
+boolean dasableType(char *type)
+/* Return TRUE if we can handle type. */
+{
+char *dupe = cloneString(type);
+char *line = dupe, *word;
+boolean ok = TRUE;
+word = nextWord(&line);
+if (word != NULL)
+    {
+    if (sameString("chain", word))
+         ok = FALSE;
+    else if (sameString("net", word))
+         ok = FALSE;
+    else if (sameString("netAlign", word))
+         ok = FALSE;
+    }
+freeMem(dupe);
+return ok;
+}
+
 boolean dasableTrack(char *name)
 /* Return TRUE if track can be put into DAS format. */
 {
-if (startsWith("chain", name) || startsWith("net", name)
-	|| startsWith("syntenyNet", name) || startsWith("trackDb_", name)
-	|| endsWith(name, "Chain") || endsWith(name, "Net"))
-    return FALSE;
-return TRUE;
+static struct hash *hash = NULL;
+if (hash == NULL)
+    {
+    struct sqlConnection *conn = hAllocConn();
+    struct sqlResult *sr;
+    char **row;
+    hash = hashNew(10);
+    sr = sqlGetResult(conn, "select tableName,type from trackDb");
+    while ((row = sqlNextRow(sr)) != NULL)
+        {
+	if (dasableType(row[1]))
+	    hashAdd(hash, row[0], NULL);
+	}
+    sqlFreeResult(&sr);
+    hFreeConn(&conn);
+    }
+return hashLookup(hash, name) != NULL;
 }
 
 
@@ -186,6 +219,7 @@ hashAdd(skipHash, "clonePos", NULL);
 hashAdd(skipHash, "gap", NULL);
 hashAdd(skipHash, "rmsk", NULL);
 hashAdd(skipHash, "estPair", NULL);
+hashAdd(skipHash, "altGraphX", NULL);
 
 sr = sqlGetResult(conn, "show tables");
 while ((row = sqlNextRow(sr)) != NULL)
@@ -570,18 +604,15 @@ for (segment = segmentList;;)
 	    segment->seqName, segment->start+1, segment->end, version);
     for (td = tdList; td != NULL; td = td->next)
 	{
-	if (dasableTrack(td->name))
+	if (catTypeFilter(category, td->category, type, td->name) )
 	    {
-	    if (catTypeFilter(category, td->category, type, td->name) )
-		{
-		int count = countFeatures(td, segment);
-		printf("<TYPE id=\"%s\" category=\"%s\" ", td->name, td->category);
-		if (td->method != NULL)
-		    printf("method=\"%s\" ", td->method);
-		printf(">");
-		printf("%d", count);
-		printf("</TYPE>\n");
-		}
+	    int count = countFeatures(td, segment);
+	    printf("<TYPE id=\"%s\" category=\"%s\" ", td->name, td->category);
+	    if (td->method != NULL)
+		printf("method=\"%s\" ", td->method);
+	    printf(">");
+	    printf("%d", count);
+	    printf("</TYPE>\n");
 	    }
 	}
     printf("</SEGMENT>\n");
@@ -764,7 +795,7 @@ for (segment = segmentList; segment != NULL; segment = segment->next)
 	    boolean hasBin;
 	    char table[64];
 
-	    verbose(2, "track %s", td->name);
+	    verbose(2, "track %s\n", td->name);
 	    hFindSplitTable(seq, td->name, table, &hasBin);
 	    tt = hashFindVal(trackHash, td->name);
 	    sr = hRangeQuery(conn, td->name, seq, start, end, NULL, &rowOffset);
@@ -944,11 +975,13 @@ int main(int argc, char *argv[])
 {
 char *path = getenv("PATH_INFO");
 
-#ifdef DEBUG
 if (path == NULL)
     path = cloneString("hg16/features");
+#ifdef DEBUG
 #endif /* DEBUG */
 cgiSpoof(&argc, argv);
+if (cgiVarExists("verbose"))
+    verboseSetLevel(cgiInt("verbose"));
 if (argc == 2)
     path = argv[1];
 das(path);
