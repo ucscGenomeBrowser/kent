@@ -1,3 +1,48 @@
+track flyFeepComposite
+compositeTrack on
+shortLabel FEEP
+longLabel Full Euchromatic Expression Profile
+group regulation
+priority 79
+visibility pack
+color 0,30,60
+altColor 20,120,200
+type expRatio
+expTable flyFeepMedianExps
+expScale 3.0
+expStep 0.5
+chip placeHolderForHgc
+
+track flyFeepAnova
+shortLabel FEEP (Anova)
+longLabel Full Euchromatic Expression Profile - Probes Diff. Expressed by ANOVA
+subTrack flyFeepComposite off
+priority 79.001
+expTable flyFeepMedianExps
+expScale 3.0
+expStep 0.5
+chip placeHolderForHgc
+
+track flyFeepPEAB
+shortLabel FEEP (>Bg)
+longLabel Full Euchromatic Expression Profile - Probes Expressed Above Background
+subTrack flyFeepComposite
+priority 79.002
+expTable flyFeepMedianExps
+expScale 3.0
+expStep 0.5
+chip placeHolderForHgc
+
+track flyFeep
+shortLabel FEEP (All)
+longLabel Full Euchromatic Expression Profile - All Probes
+subTrack flyFeepComposite off
+priority 79.003
+expTable flyFeepMedianExps
+expScale 3.0
+expStep 0.5
+chip placeHolderForHgc
+
 track multiz8way
 shortLabel Conservation
 longLabel 6 Flies, Mosquito and Honeybee Multiz Alignments & phastCons Scores
@@ -23,7 +68,7 @@ showTopScorers 200
 type bed 5 .
 
 track flyBaseGene
-shortLabel FlyBase
+shortLabel FlyBase Genes
 longLabel FlyBase Protein-Coding Genes
 group genes
 priority 34
