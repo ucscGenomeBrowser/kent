@@ -18,7 +18,7 @@ itemUrl http://us.expasy.org/cgi-bin/niceprot.pl?%s
 name refSeq
 type lookup sangerToRefSeq name value
 
-name locusLink
+name entrezGene
 type lookup sangerToLocusLink name value
 
 name altSplice
