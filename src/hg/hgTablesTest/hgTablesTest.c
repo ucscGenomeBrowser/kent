@@ -14,7 +14,7 @@
 #include "qa.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: hgTablesTest.c,v 1.5 2004/11/07 20:08:26 kent Exp $";
+static char const rcsid[] = "$Id: hgTablesTest.c,v 1.6 2004/11/07 20:25:39 kent Exp $";
 
 /* Command line variables. */
 char *clOrg = NULL;	/* Organism from command line. */
@@ -76,7 +76,7 @@ struct tablesTest *tablesTestList = NULL;	/* List of all tests, latest on top. *
 struct tablesTest *tablesTestNew(struct qaStatus *status,
 	char *type, char *org, char *db, char *group, 
 	char *track, char *table)
-/* Save away column test results. */
+/* Save away test test results. */
 {
 struct tablesTest *test;
 AllocVar(test);
@@ -332,6 +332,31 @@ if (outPage != NULL)
     }
 htmlPageFree(&outPage);
 }
+
+void testOutCustomTrack(struct htmlPage *tablePage, struct htmlForm *mainForm,
+     char *org, char *db, char *group, char *track, char *table)
+/* Get as customTrack and make sure nothing explodes. */
+{
+struct htmlPage *outPage;
+
+htmlPageSetVar(tablePage, NULL, hgtaOutputType, "customTrack");
+outPage = quickSubmit(tablePage, org, db, group, track, table,
+    "customTrackUi", hgtaDoTopSubmit, "submit");
+if (outPage != NULL)
+    {
+    struct htmlFormVar *groupVar;
+    serialSubmit(&outPage, org, db, group, track, table, "outCustom",
+    	hgtaDoGetCustomTrackTb, "submit");
+    groupVar = htmlFormVarGet(outPage->forms, hgtaGroup);
+    if (!slNameInList(groupVar->values, "user"))
+	{
+	qaStatusSoftError(tablesTestList->status, 
+		"No custom track group after custom track submission");
+	}
+    }
+htmlPageFree(&outPage);
+}
+
 	
 	
 void testOneTable(struct htmlPage *trackPage, char *org, char *db,
@@ -356,6 +381,7 @@ if (outTypeAvailable(mainForm, "primaryTable"))
 	testOutBed(tablePage, mainForm, org, db, group, track, table, rowCount);
 	testOutHyperlink(tablePage, mainForm, org, db, group, track, table, rowCount);
 	testOutGff(tablePage, mainForm, org, db, group, track, table);
+	testOutCustomTrack(tablePage, mainForm, org, db, group, track, table);
 	}
     }
 verbose(1, "Tested %s %s %s %s %s\n", org, db, group, track, table);
