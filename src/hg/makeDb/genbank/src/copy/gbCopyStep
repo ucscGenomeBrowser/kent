@@ -85,7 +85,9 @@ sub rsyncBuildFiles($$$@) {
     # get aligned for each database
     makeDir("data/aligned");
     foreach my $db (@databases) {
-        $cmd = $baseCmd . " $buildServer:$buildRoot/data/aligned/$db data/aligned";
+        $cmd = $baseCmd .
+            " --include='/*/$db/' --exclude='/*/*'"
+            . " $buildServer:$buildRoot/data/aligned/ data/aligned";
         runProg($cmd);
     }
 }
@@ -148,7 +150,7 @@ if (defined($buildTimeTmp)
     beginTask("copy", "copy");
     my $copyTime = "var/copy/copy.time";
 
-    rsyncBuildFiles($rsyncPort, $buildServer, $buildRoot);
+    rsyncBuildFiles($rsyncPort, $buildServer, $buildRoot, @databases);
 
     if (checkIfGbdbLinkable($gbdbDir)) {
         linkProcessedFastas($gbdbDir);
