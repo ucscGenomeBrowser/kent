@@ -4425,7 +4425,7 @@ cat > multiz5way/loadMaf.csh << 'EOF'
 # speciesOrder rat human dog chicken
 
 
-# MULTIZ DOWNLOAD FILES (WORKING kate 2004-08-03)
+# MULTIZ DOWNLOAD FILES (DONE kate 2004-08-03)
     ssh kksilo
     cd /cluster/data/mm5/bed/multiz5way
 
