@@ -33,6 +33,7 @@ public class ApacheMonitor {
 
     boolean debug = false;
     String mode  = "";
+    int maxReferer = 10;  // set maximum number of records to print
 
     /* Process command line properties, and load them into machine and table. */
     if (args.length < 1 || args.length > 2)
@@ -135,23 +136,38 @@ public class ApacheMonitor {
       if (cnt == 0) System.exit(0);
 
       // get all matching rows
-      String listquery = "SELECT machine_id, request_uri, time_stamp FROM ";
+      String listquery = "SELECT machine_id, referer, remote_host, " +
+        "request_uri, time_stamp FROM ";
       listquery = listquery + target.sourceTable + " ";
       listquery = listquery + "WHERE status = " + target.errorCode + " ";
       listquery = listquery + "AND time_stamp > " + timeDelta;
       if (!allMachines) {
         listquery = listquery + " AND machine_id = " + target.targetMachine;
       }
-
+      String details[] = new String[maxReferer];
+      int i = 0;
       ResultSet listRS = stmt.executeQuery(listquery);
       while (listRS.next()) {
         String request_uri = listRS.getString("request_uri");
+        String referer     = listRS.getString("referer");
+        String remote_host = listRS.getString("remote_host");
         String machine_id  = listRS.getString("machine_id");
 	int time_stamp = listRS.getInt("time_stamp");
 	int deltaSeconds = secondsNow - time_stamp;
 	int deltaMinutes = deltaSeconds / 60;
 	System.out.print("Status " + target.errorCode + " from " + request_uri + " on ");
 	System.out.println(machine_id + "; " + deltaMinutes + " minutes ago");
+        if (i < maxReferer) {
+          details[i] = remote_host + " | " + referer;
+          i++;
+        }
+      }
+      System.out.println("\n print first " + maxReferer + ":");
+      System.out.println(" \n remote_host        |      referer    ");
+      for (int j = 0; j < details.length; j++) {
+        if (details[j] != null) {
+	  System.out.println(details[j]);
+        }
       }
 
       stmt.close();
