@@ -54,6 +54,22 @@ spectrum on
 exonArrows off
 type bed 6 .
 
+track tba37CFTR
+shortLabel 37 Species CFTR
+longLabel CFTR Region 37 Species TBA Alignments & PhyloHMM Cons
+group compGeno
+priority 109.99
+visibility full
+color 0, 10, 100
+altColor 1,128,0
+type wigMaf 0.0 1.0
+maxHeightPixels 100:40:11
+wiggle chr7_phyloHMMcons_CFTR
+yLineOnOff Off
+pairwise tba37CFTR 20
+autoScaleDefault Off
+speciesOrder chimp gorilla orangutan baboon macaque vervet marmoset dusky_titi squirrel_monkey mouse_lemur lemur galago rabbit rat mouse cow sheep muntjak_indian pig horse cat dog ajbat cpbat hedgehog armadillo opossum monodelphis wallaby dunnart platypus chicken tortoise zebrafish tetra fugu
+
 track multiz7way
 shortLabel 7Way Cons
 longLabel Hu/Chimp/Mouse/Rat/Chicken/Fugu/Zfish Multiz Alignments & PhyloHMM Cons 
