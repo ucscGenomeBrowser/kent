@@ -9,7 +9,7 @@
 #include "jksql.h"
 #include "rmskOut.h"
 
-static char const rcsid[] = "$Id: hgLoadOut.c,v 1.7 2003/05/06 07:22:25 kate Exp $";
+static char const rcsid[] = "$Id: hgLoadOut.c,v 1.8 2003/07/09 18:47:13 kent Exp $";
 
 char *createRmskOut = "CREATE TABLE %s (\n"
 "%s"				/* Optional bin */
@@ -94,7 +94,7 @@ char tableName[128];
 struct lineFile *lf;
 char *line, *words[24];
 int lineSize, wordCount;
-char tempName[L_tmpnam];
+char *tempName = "out.tab";
 FILE *f = NULL;
 struct dyString *query = newDyString(1024);
 
@@ -104,10 +104,7 @@ printf("Processing %s\n", rmskFile);
 if (tabFile != NULL)
     f = tabFile;
 else
-    {
-    tmpnam(tempName);
     f = mustOpen(tempName, "w");
-    }
 
 /* Open .out file and process header. */
 lf = lineFileOpen(rmskFile, TRUE);
