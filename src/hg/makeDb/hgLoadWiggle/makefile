@@ -24,6 +24,8 @@ hgWiggle:	hgWiggle.o ${MYLIBS}
 		${MYLIBS} $L
 	${STRIP} ${HOME}/bin/${MACHTYPE}/hgWiggle${EXE}
 
+hgWiggle.o:	../../inc/wiggle.h hgWiggle.c
+
 compile:	${O} hgWiggle.o ${MYLIBS}
 	${CC} -o ${A} $O ${MYLIBS} $L
 	${CC} -o hgWiggle hgWiggle.o ${MYLIBS} $L
