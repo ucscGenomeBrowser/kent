@@ -16,8 +16,7 @@ browser track with 1 chromosome)
     ln -s ctgCFTR/mouse_CFTR.fasta.masked ./chr1.fa
     cd /cluster/store2/zoo/zooMouse1
     mkdir bed
-    ln -s /cluster/store1/gs.11/build28/jkstuff ./jkstuff
-
+    mkdir bed/scripts
 
 PROCESSING MOUSE MRNA FROM GENBANK INTO DATABASE. (done)
 
@@ -55,14 +54,14 @@ REPEAT MASKING (done)
 We don't use the cluster for this because we have such a small input data set.
 Repeat mask on sensitive settings by doing.
     ssh kk
-    cd ~/zoo/bed
+    cd ~/zoo/zooMouse1/bed
     mkdir rmskS
     cd rmskS
-    cp /cluster/store2/mm.2001.11/mm1/bed/rmskS/rmskS.csh  .
+    cp /cluster/store2/mm.2001.11/mm1/bed/rmskS/rmskS.csh  ../scripts
     edit rmskS.csh to update paths to current mouse assembly and to output
     directory called "out"
     mkdir out
-    run ./rmskS.csh chr1.fa     
+    run ../scripts/rmskS.csh chr1.fa     
 
 Then load the .out files into the database with:
     ssh hgwdev
@@ -74,8 +73,9 @@ STORING ZOO SEQUENCE AND ASSEMBLY INFORMATION  (done)
 
 Create packed chromosome sequence files 
      ssh kkstore
-     cd ~/zoo
-     cp /cluster/store2/mm.2001.11/jkStuff/makeNib.sh .
+     cd ~/zoo/zooMouse1
+     cp /cluster/store2/mm.2001.11/mm1/jkStuff/makeNib.sh bed/scripts
+     bed/scripts/makeNib.sh
      You will get some error messages because we aren't processing as
          many chromsomes as makeNib.sh is expecting but that's ok.
 
@@ -98,75 +98,49 @@ Make and load GC percent table
      hgGcPercent zooMouse1 ../../nib
 
 
-MAKING AND STORING mRNA AND EST ALIGNMENTS  (todo)
+MAKING AND STORING mRNA AND EST ALIGNMENTS  (in progress)
 
 o - Load up the local disks of the cluster with refSeq.fa, mrna.fa and est.fa
     from /cluster/store1/mrna.127  into /var/tmp/hg/h/mrna
 
 o - Use BLAT to generate refSeq, mRNA and EST alignments as so:
-      Make sure that /scratch/hg/gs.11/build28/contigs is loaded
-      with NT_*.fa and pushed to the cluster nodes.  The following
-      cshell script needs updating.
-
-	  cd ~/mm/bed
-	  foreach i (refSeq mrna est)
-	      mkdir $i
-	      cd $i
-	      echo /scratch/hg/gs.11/build28/contigs | wordLine stdin > genome.lst
-	      ls -1 /scratch/hg/mrna.127/$i.fa > mrna.lst
-	      mkdir psl
-	      gensub2 genome.lst mrna.lst gsub spec
-	      jabba make hut spec
-	      jabba push hut
-	  end 
-
-    check on progress with jabba check hut in mrna, est, and refSeq
-    directories.
-
+      ssh kkstore
+      cd /cluster/store2/zoo/zooMouse1/bed
+      Run the following shell script: scripts/alignMrna.sh
+      Then cd to each directory in (refSeq, mrna, and est) and run "para make spec" in each one. 
+      This will run the blat job.
+      Check on progress with para check in mrna, est, and refSeq directories.
       
 o - Process refSeq mRNA and EST alignments into near best in genome.
-      cd ~/mm/bed
+      cd ~/zoo/bed
 
       cd refSeq
-      pslSort dirs raw.psl /cluster/fast1/temp psl
+      pslSort dirs raw.psl /tmp psl
       pslReps -minCover=0.2 -sizeMatters -minAli=0.98 -nearTop=0.002 raw.psl contig.psl /dev/null
-      liftUp -nohead all_refSeq.psl ../../jkStuff/liftAll.lft carry contig.psl
-      pslSortAcc nohead chrom /cluster/fast1/temp all_refSeq.psl
+      pslSortAcc nohead chrom /tmp psl/chr1_refSeq.psl
       cd ..
 
       cd mrna
-      pslSort dirs raw.psl /cluster/fast1/temp psl
+      pslSort dirs raw.psl /tmp psl
       pslReps -minAli=0.98 -sizeMatters -nearTop=0.005 raw.psl contig.psl /dev/null
-      liftUp -nohead all_mrna.psl ../../jkStuff/liftAll.lft carry contig.psl
-      pslSortAcc nohead chrom /cluster/fast1/temp all_mrna.psl
+      pslSortAcc nohead chrom /tmp psl/chr1_mrna.psl
       cd ..
 
       cd est
-      pslSort dirs raw.psl /cluster/fast1/temp psl
+      pslSort dirs raw.psl /tmp psl
       pslReps -minAli=0.98 -sizeMatters -nearTop=0.005 raw.psl contig.psl /dev/null
-      liftUp -nohead all_est.psl ../../jkStuff/liftAll.lft carry contig.psl
-      pslSortAcc nohead chrom /cluster/fast1/temp all_est.psl
+      pslSortAcc nohead chrom /tmp psl/chr1_est.psl
       cd ..
 
 o - Load mRNA alignments into database.
       ssh hgwdev
-      cd /cluster/store2/mm.2001.11/mm1/bed/mrna/chrom
-      foreach i (*.psl)
-          mv $i $i:r_mrna.psl
-      end
-      hgLoadPsl mm1 *.psl
-      cd ..
-      hgLoadPsl mm1 all_mrna.psl -nobin
+      cd /cluster/store2/zoo/zooMouse1/bed/mrna/
+      ../scripts/mrnaLoadPsl.sh
 
 o - Load EST alignments into database.
       ssh hgwdev
-      cd /cluster/store2/mm.2001.11/mm1/bed/est/chrom
-      foreach i (*.psl)
-            mv $i $i:r_est.psl
-      end
-      hgLoadPsl mm1 *.psl
-      cd ..
-      hgLoadPsl mm1 all_est.psl -nobin
+      cd /cluster/store2/zoo/zooMouse1/bed/est/
+      ../scripts/estLoadPsl.sh
 
 o - Create subset of ESTs with introns and load into database.
       - ssh kkstore
