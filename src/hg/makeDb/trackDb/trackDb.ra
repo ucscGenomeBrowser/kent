@@ -1740,7 +1740,7 @@ searchPriority 2
 
 searchTable xenoRefGene
 searchType refGene
-searchPriority 1
+searchPriority 2.1
 
 searchTable superfamily
 searchType bed
