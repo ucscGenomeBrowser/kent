@@ -15,5 +15,4 @@ $A: $O $(MYLIBS)
 	gcc -ggdb -o $A $O $(MYLIBS) $L
 
 install:
-	strip $A
 	mv $A $(HOME)/bin/$(MACHTYPE)/$A
