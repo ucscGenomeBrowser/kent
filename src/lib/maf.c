@@ -3,6 +3,7 @@
 #include "linefile.h"
 #include "errabort.h"
 #include "obscure.h"
+#include "dnautil.h"
 #include "axt.h"
 #include "maf.h"
 
@@ -337,5 +338,80 @@ for (el = *pList; el != NULL; el = next)
     mafFileFree(&el);
     }
 *pList = NULL;
+}
+
+struct mafComp *mafMayFindComponent(struct mafAli *maf, char *src)
+/* Find component of given source. Return NULL if not found. */
+{
+struct mafComp *mc;
+for (mc = maf->components; mc != NULL; mc = mc->next)
+    {
+    if (sameString(mc->src, src))
+        return mc;
+    }
+return NULL;
+}
+
+struct mafComp *mafFindComponent(struct mafAli *maf, char *src)
+/* Find component of given source or die trying. */
+{
+struct mafComp *mc = mafMayFindComponent(maf, src);
+if (mc == NULL)
+    errAbort("Couldn't find %s in maf", src);
+return mc;
+}
+
+struct mafAli *mafSubset(struct mafAli *maf, char *componentSource,
+	int newStart, int newEnd)
+/* Extract subset of maf that intersects a given range
+ * in a component sequence.  The newStart and newEnd
+ * are given in the forward strand coordinates of the
+ * component sequence.  The componentSource is typically
+ * something like 'mm3.chr1'.  This will return NULL
+ * if maf does not intersect range.  The score field
+ * in the returned maf will not be filled in (since
+ * we don't know which scoring scheme to use). */
+{
+struct mafComp *mcMaster = mafFindComponent(maf, componentSource);
+struct mafAli *subset;
+struct mafComp *mc, *subMc;
+char *s, *e;
+int textStart, textSize;
+
+/* Reverse complement input range if necessary. */
+if (mcMaster->strand == '-')
+    reverseIntRange(&newStart, &newEnd, mcMaster->srcSize);
+
+/* Check if any real intersection and return NULL if not. */
+if (newStart < mcMaster->start)
+    return NULL;
+if (newEnd > mcMaster->start + mcMaster->size)
+    return NULL;
+if (newStart >= newEnd)
+    return NULL;
+
+/* Translate position in master sequence to position in
+ * multiple alignment. */
+s = skipIgnoringDash(mcMaster->text, newStart - mcMaster->start, TRUE);
+e = skipIgnoringDash(s, newEnd - newStart, FALSE);
+textStart = s - mcMaster->text;
+textSize = e - s;
+
+/* Allocate subset structure and fill it in */
+AllocVar(subset);
+subset->textSize = textSize;
+for (mc = maf->components; mc != NULL; mc = mc->next)
+    {
+    AllocVar(subMc);
+    subMc->src = cloneString(mc->src);
+    subMc->srcSize = mc->srcSize;
+    subMc->strand = mc->strand;
+    subMc->start += countNonDash(mc->text, textStart);
+    subMc->size = countNonDash(mc->text+textStart, textSize);
+    subMc->text = cloneStringZ(mc->text + textStart, textSize);
+    slAddHead(&subset->components, subMc);
+    }
+slReverse(&subset->components);
+return subset;
 }
 
