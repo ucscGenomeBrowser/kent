@@ -485,6 +485,13 @@ if (-e /tmp/galGal1/$2/$2.cat) /bin/cp /tmp/galGal1/$2/$2.cat ./
       sts/stsMarkers.psl.filter
     hgLoadPsl -table=all_sts_seq -fastLoad \
       galGal1 stsMarkers.filter.lifted.psl
+    # load sequences
+    mkdir /gbdb/galGal1/sts
+    ln -s /cluster/data/galGal1/bed/markers/sts/all.sequence.fa \
+      /gbdb/galGal1/sts/
+    ln -s /cluster/data/galGal1/bed/markers/primers/all.primers.fa \
+      /gbdb/galGal1/sts/
+    hgLoadSeq galGal1 /gbdb/galGal1/sts/*.fa
 
 
 # BACENDS (DONE 1/31/04 angie)
@@ -884,7 +891,7 @@ zip -j mrna.zip mrna.fa
     rm -r unsorted
 
 
-# CHAIN HUMAN BLASTZ (DONE 2/3/04 angie)
+# CHAIN HUMAN BLASTZ (DONE 2/4/04 angie)
     # Run axtChain on little cluster
     ssh kkr1u00
     cd /cluster/data/galGal1/bed/blastz.hg16.swap
@@ -902,8 +909,9 @@ doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain} {check
 
     cat << '_EOF_' > doChain
 #!/bin/csh
-axtFilter -notQ=chrUn $1 \
-| axtChain stdin /cluster/bluearc/galGal1/nib \
+axtFilter -notQ=chrUn_random $1 \
+| ~/bin/i386/axtChain -scoreScheme=/cluster/data/blastz/HoxD55.q stdin \
+  /cluster/bluearc/galGal1/nib \
   /cluster/bluearc/scratch/hg/gs.17/build34/bothMaskedNibs $2 > $3
 '_EOF_'
     # << this line makes emacs coloring happy
@@ -912,9 +920,9 @@ axtFilter -notQ=chrUn $1 \
     para create jobList
     para try, check, push, check...
 #Completed: 47 of 47 jobs
-#Average job time:                 478s       7.97m     0.13h    0.01d
-#Longest job:                     2319s      38.65m     0.64h    0.03d
-#Submission to last job:          2319s      38.65m     0.64h    0.03d
+#Average job time:                 437s       7.29m     0.12h    0.01d
+#Longest job:                     2284s      38.07m     0.63h    0.03d
+#Submission to last job:          2284s      38.07m     0.63h    0.03d
 
     # now on the cluster server, sort chains
     ssh kksilo
@@ -933,7 +941,7 @@ axtFilter -notQ=chrUn $1 \
     end
 
 
-# NET HUMAN BLASTZ (DONE 2/3/04 angie)
+# NET HUMAN BLASTZ (DONE 2/5/04 angie)
     ssh kksilo
     cd /cluster/data/galGal1/bed/blastz.hg16.swap/axtChain
     mkdir preNet
@@ -1292,7 +1300,7 @@ galGal1.downloadDir = galGal1
     hgLoadBed galGal1 genscanSubopt genscanSubopt.bed
 
 
-# PRODUCING FUGU FISH ALIGNMENTS (TODO)
+# PRODUCING FUGU BLAT ALIGNMENTS (DONE 2/6/04)
     ssh kk
     mkdir /cluster/data/galGal1/bed/blatFr1
     cd /cluster/data/galGal1/bed/blatFr1
@@ -1308,6 +1316,11 @@ galGal1.downloadDir = galGal1
     gensub2 chicken.lst fugu.lst gsub spec
     para create spec
     para try, check, push, check, ...
+    # cluster & bluearc were very busy => slow:
+#Completed: 1827 of 1827 jobs
+#Average job time:                1685s      28.08m     0.47h    0.02d
+#Longest job:                     4121s      68.68m     1.14h    0.05d
+#Submission to last job:         56039s     933.98m    15.57h    0.65d
 
     # Sort alignments:
     ssh kksilo
@@ -1320,12 +1333,11 @@ galGal1.downloadDir = galGal1
     # load into database:
     ssh hgwdev
     cd /cluster/data/galGal1/bed/blatFr1/chrom
-    hgLoadPsl -fastLoad -table=blatFr1 galGal1 *.psl
-    mkdir -p /gbdb/galGal1/fuguSeq
-    cd /gbdb/galGal1/fuguSeq
-    ln -s /cluster/data/fuguSeq/fugu_v3_mask.fasta
+    cat *.psl | hgLoadPsl -fastLoad -table=blatFr1 galGal1 stdin
+    mkdir /gbdb/galGal1/fuguSeq
+    ln -s /cluster/data/fr1/fugu_v3.masked.fa /gbdb/galGal1/fuguSeq/
     cd /cluster/data/galGal1/bed/blatFr1
-    hgLoadSeq galGal1 /gbdb/galGal1/fuguSeq/fugu_v3_mask.fasta
+    hgLoadSeq galGal1 /gbdb/galGal1/fuguSeq/fugu_v3.masked.fa
 
 
 # LOAD CPGISSLANDS (DONE 2/1/04 angie)
@@ -1406,11 +1418,9 @@ printf("%s\t%s\t%s\t%s %s\t%s\t%s\t%0.0f\t%0.1f\t%s\n",
        # 139456 gene predictions
     gzip *TCs *.gff
 
+
 #  GC 20K BASE WIGGLE TRACK (DONE - 2004-02-04 - Hiram)
     #    working on kksilo, the fileserver for this data.
-    #    The grep in the pipeline below is "\tGC\t" but I
-    #    can't figure out what escaped character to use to represent
-    #    that ?
     ssh kksilo
     mkdir /cluster/data/galGal1/bed/gc20KBase
     cd /cluster/data/galGal1/bed/gc20KBase
@@ -1421,7 +1431,7 @@ do
     C=`echo $c | sed -e "s/chr//"`
     echo -n "working on ${c} - ${C} ... "
     hgGcPercent -chr=${c} -doGaps \
-	-file=stdout -win=20000 galGal1 ../../nib | grep "	GC	" | \
+	-file=stdout -win=20000 galGal1 ../../nib | grep "	GC	" | \
     awk '
 {
     bases = $3 - $2
@@ -1456,4 +1466,110 @@ color 0,128,255
 altColor 255,128,0
 defaultViewLimits 30:70
 type wig 0 100 
+
+
+# SUPERCONTIG LOCATIONS TRACK (DONE 2/5/04 angie)
+    # Supercontig N is a collection of contained "ContigN.*".  
+    # Extract Supercontig starts and ends from AGP into bed.  
+    mkdir /cluster/data/galGal1/bed/supercontig
+    cd /cluster/data/galGal1/bed/supercontig
+    cat ../../chicken_agp/chr*.agp \
+    | perl -we 'while (<>) { \
+                  chop; @words = split("\t"); \
+                  next if ($words[4] eq "N"); \
+                  if ($words[5] =~ /^(Contig\d+)\.(\d+)$/) { \
+                    $sup = $1;  $newNum = $2; \
+                    $firstNum = $newNum if (! defined $firstNum); \
+                    if (defined $lastSup && $lastSup ne $sup) { \
+                      print "$chr\t$start\t$end\t$lastSup (.$firstNum-.$lastNum)\t1000\t$strand\n"; \
+                      undef $start;  undef $end;  $firstNum = $newNum; \
+                    } \
+                    $chr = $words[0]; $cStart = $words[1]; $cEnd = $words[2]; \
+                    $strand = $words[8]; \
+                    $start = $cStart if (\!defined $start || $start > $cStart); \
+                    $end = $cEnd if (\!defined $end || $end < $cEnd); \
+                    $lastSup = $sup;  $lastNum = $newNum; \
+                  } else { die "bad 6th word $words[5]\n"; } \
+                } \
+                print "$chr\t$start\t$end\t$lastSup (.$firstNum-.$lastNum)\t1000\t$strand\n";' \
+    > supercontig.bed
+    ssh hgwdev
+    cd /cluster/data/galGal1/bed/supercontig
+    hgLoadBed -tab galGal1 supercontig supercontig.bed
+
+
+# PLOT MARKER GENETIC VS. GENOMIC POS (DONE 2/5/04 angie)
+    ssh kksilo
+    mkdir /cluster/data/galGal1/bed/markerPlots
+    cd /cluster/data/galGal1/bed/markerPlots
+    # Need to find out where Terry got this file:
+    cp -p /cluster/bluearc/gg1/markers/genetic.map .
+    mkdir gnuplot
+    # This is a one-shot and I'm writing a perl script -- too long for inliner.
+    chmod a+x ./plotMarkers.pl
+    ./plotMarkers.pl genetic.map ../markers/stsMarkersTmp.bed
+    mkdir gif
+    ssh hgwdev
+    cd /cluster/data/galGal1/bed/markerPlots
+    foreach f (gnuplot/*.gnuplot)
+      gnuplot < $f > tmp.ppm
+      ppmtogif tmp.ppm > gif/$f:t:r.gif
+      rm tmp.ppm
+    end
+    mkdir /usr/local/apache/htdocs/angie/chickenPlots
+    cp -p /cluster/data/galGal1/bed/markerPlots/gif/* \
+      /usr/local/apache/htdocs/angie/chickenPlots
+    cp -p /cluster/data/galGal1/bed/markerPlots/*.txt \
+      /usr/local/apache/htdocs/angie/chickenPlots
+    cp -p /cluster/bluearc/gg1/markers/genetic.map \
+      /usr/local/apache/htdocs/angie/chickenPlots/genetic_map.txt
+    cp -p /cluster/data/galGal1/bed/markers/stsMarkersTmp.bed \
+      /usr/local/apache/htdocs/angie/chickenPlots/stsMarkerPlacements.txt
+
+
+# CREATING QUALITY SCORE TRACK (DONE 2/6/04 angie)
+    ssh kksilo
+    mkdir /cluster/data/galGal1/bed/qual
+    cd /cluster/data/galGal1/bed/qual
+    cat ../../chicken_agp/chr*.agp > assembly.agp
+    tar xvzf ../../chicken_040105.contigs.qual.tar.gz
+    cat chicken*.qual | qaToQac stdin stdout \
+    | ~/bin/i386/chimpChromQuals assembly.agp stdin chrom.qac
+    rm chicken*.qual
+    mkdir wigData dataLimits
+    foreach c (`cat ../../chrom.lst`)
+      foreach agp (../../$c/chr$c.agp ../../$c/chr${c}_random.agp)
+        if (-e $agp) then
+          set chr = $agp:t:r
+          set abbrev = `echo $chr | sed -e 's/^chr//;  s/_random/r/;'`
+          echo $chr to $abbrev wiggle
+          qacToWig chrom.qac -name=$chr stdout \
+          | wigAsciiToBinary -dataSpan=1 -chrom=$chr \
+              -wibFile=wigData/qual_$abbrev -name=$abbrev stdin \
+              > dataLimits/$chr
+        endif
+      end
+    end
+    # Verify size of .wib file = chrom length
+    foreach f (wigData/*.wib)
+      set abbrev = $f:t:r
+      set chr = `echo $abbrev | sed -e 's/^qual_/chr/;  s/r$/_random/;'`
+      set wibLen = `ls -l $f | awk '{print $5;}'`
+      set chromLen = `grep -w $chr ../../chrom.sizes | awk '{print $2;}'`
+      if ($wibLen != $chromLen) then
+        echo "ERROR: $chr size is $chromLen but wib size is $wibLen"
+      else
+        echo $chr OK.
+      endif
+    end
+#ERROR: chr26 size is 4262107 but wib size is 3762107
+    # That's OK -- chr26 ends in a 500000bp centromere gap -- not incl'd in wib
+
+    # /gbdb & load:
+    ssh hgwdev
+    cd /cluster/data/galGal1/bed/qual
+    mkdir -p /gbdb/galGal1/wib
+    ln -s `pwd`/wigData/*.wib /gbdb/galGal1/wib
+    hgLoadWiggle galGal1 quality wigData/*.wig
+
 
