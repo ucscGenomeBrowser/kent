@@ -1400,7 +1400,7 @@ SEQ2_LEN=$BASE/S2.len
     cat << '_EOF_' > doBestAxt
 #!/bin/csh -f
 # usage: doBestAxt chr axt-file best-file psl-file
-/cluster/bin/i386/axtBest $2 $1 $3 -minScore-300
+/cluster/bin/i386/axtBest $2 $1 $3 -minScore=300
 sleep 1
 /cluster/bin/i386/axtToPsl $3 /cluster/data/hg16/bed/blastz.mm3/S1.len \
 	/cluster/data/hg16/bed/blastz.mm3/S2.len $4
@@ -1817,7 +1817,7 @@ SEQ2_LEN=$BASE/S2.len
     cat << '_EOF_' > doBestAxt
 #!/bin/csh -f
 # usage: doBestAxt chr axt-file best-file psl-file
-/cluster/bin/i386/axtBest $2 $1 $3 -minScore-300
+/cluster/bin/i386/axtBest $2 $1 $3 -minScore=300
 sleep 1
 /cluster/bin/i386/axtToPsl $3 /cluster/data/hg16/bed/blastz.rn3/S1.len \
 	/cluster/data/hg16/bed/blastz.rn3/S2.len $4
