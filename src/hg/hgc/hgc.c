@@ -116,7 +116,7 @@
 #include "encodeRegionInfo.h"
 #include "hgFind.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.515 2003/11/18 02:05:49 baertsch Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.516 2003/11/18 23:33:18 angie Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -2723,6 +2723,25 @@ for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
         {
 	char buf[256];
 	int r,g,b;
+	// to save a LOT of time, don't fetch track features unless some 
+	// coloring/formatting has been specified for them.
+	boolean hasSettings = FALSE;
+	safef(buf, sizeof(buf), "%s_u", track);
+	hasSettings |= cgiBoolean(buf);
+	safef(buf, sizeof(buf), "%s_b", track);
+	hasSettings |= cgiBoolean(buf);
+	safef(buf, sizeof(buf), "%s_i", track);
+	hasSettings |= cgiBoolean(buf);
+	safef(buf, sizeof(buf), "%s_case", track);
+	hasSettings |= cgiBoolean(buf);
+	safef(buf, sizeof(buf), "%s_red", track);
+	hasSettings |= (cgiInt(buf) != 0);
+	safef(buf, sizeof(buf), "%s_green", track);
+	hasSettings |= (cgiInt(buf) != 0);
+	safef(buf, sizeof(buf), "%s_blue", track);
+	hasSettings |= (cgiInt(buf) != 0);
+	if (! hasSettings)
+	    continue;
 
 	if (sameString("hgUserPsl", track))
 	    {
