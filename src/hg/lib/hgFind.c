@@ -905,10 +905,9 @@ hFreeConn(&conn);
 return ok;
 }
 
-
-
-static boolean findOldStsPos(char *table, char *spec, 
-   char **retChromName, int *retWinStart, int *retWinEnd)
+static boolean findOldStsPos(char *table, char *spec,
+                             char **retChromName, int *retWinStart, 
+                             int *retWinEnd)
 /* Look for position in some STS table. */
 /* This code is being replaced by the newer sts pos finder,
  * but is still used on the hg3 (July 17 2000 Freeze) database. */
@@ -1287,11 +1286,20 @@ if (gotRefLink)
     }
 if (rlList != NULL)
     {
+    struct hash *hash = newHash(8);
     AllocVar(table);
     slAddHead(&hgp->tableList, table);
     table->name = cloneString("Known Genes");
     for (rl = rlList; rl != NULL; rl = rl->next)
         {
+        /* Don't return duplicate mrna accessions */
+        if (hashFindVal(hash, rl->mrnaAcc))
+            {            
+            hashAdd(hash, rl->mrnaAcc, rl);
+            continue;
+            }
+
+        hashAdd(hash, rl->mrnaAcc, rl);
 	dyStringClear(ds);
 	dyStringPrintf(ds, "select * from refGene where name = '%s'", rl->mrnaAcc);
 	sr = sqlGetResult(conn, ds->string);
@@ -1312,6 +1320,7 @@ if (rlList != NULL)
 	sqlFreeResult(&sr);
 	}
     refLinkFreeList(&rlList);
+    freeHash(&hash);
     }
 freeDyString(&ds);
 hFreeConn(&conn);
@@ -1526,7 +1535,15 @@ if (hgIsChromRange(query))
 	}
     singlePos(hgp, "Chromosome Range", NULL, query, chrom, start, end);
     }
-
+else if (hgParseTargetRange(query, &chrom, &start, &end))
+    {
+    if (relativeFlag == TRUE)
+        {
+        end = start + iEnd;
+        start = start + iStart;
+        }
+    singlePos(hgp, "Zoo Target", NULL, query, chrom, start, end);
+    }
 else if (isAffyProbeName(query))
     {
     findAffyProbePos(query, &chrom, &start, &end);
