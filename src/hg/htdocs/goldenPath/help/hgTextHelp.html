@@ -992,6 +992,9 @@ and translated region.  The choices of granularity are
 	low coordinate ("start").  
 	Block structure and translated region info will be lost.
 </UL>
+Note: if a feature is close to the beginning or end of a chromosome 
+and upstream/downstream bases are added, they may be truncated 
+in order to avoid extending past the edge of the chromosome. 
 
 <A NAME="FBPSL"></A>
 <H4> Subregions of alignments </H4>
@@ -1024,6 +1027,9 @@ An alignment table specifies block structure, but not translated region.
 	low coordinate ("start").  
 	Block structure and translated region info will be lost.
 </UL>
+Note: if a feature is close to the beginning or end of a chromosome 
+and upstream/downstream bases are added, they may be truncated 
+in order to avoid extending past the edge of the chromosome. 
 
 
 <A NAME="FBBed8"></A>
@@ -1064,6 +1070,9 @@ does not specify block structure).
 	If the strand is '+', the 3' end is the high coordinate 
 	("end").  If the strand is '-', the 3' end is the 
 	low coordinate ("start").  
+Note: if a feature is close to the beginning or end of a chromosome 
+and upstream/downstream bases are added, they may be truncated 
+in order to avoid extending past the edge of the chromosome. 
 
 <A NAME="FBBed4"></A>
 <H4> Subregions of simple records </H4>
@@ -1087,6 +1096,9 @@ then the meaning of upstream and downstream depend on the strand.
 	("end").  If the strand is '-', the 3' end is the 
 	low coordinate ("start").  
 </UL>
+Note: if a feature is close to the beginning or end of a chromosome 
+and upstream/downstream bases are added, they may be truncated 
+in order to avoid extending past the edge of the chromosome. 
 
 
 </TD></TR></TABLE>
