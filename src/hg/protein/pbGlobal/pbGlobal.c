@@ -241,10 +241,10 @@ answer = sqlGetField(conn, UNIPROT_DB_NAME, "accToTaxon, taxon", "taxon.id", con
 if (answer != NULL)
     {
     safef(cond_str, sizeof(cond_str), "id=%s and nameType='scientific name'", answer);
-    sciName = sqlGetField(conn, UNIPROT_DB_NAME, "taxonNames", "name", cond_str);
+    sciName = sqlGetField(conn, PROTEOME_DB_NAME, "taxonNames", "name", cond_str);
     
     safef(cond_str, sizeof(cond_str), "id=%s and nameType='genbank common name'", answer);
-    commonName = sqlGetField(conn, UNIPROT_DB_NAME, "taxonNames", "name", cond_str);
+    commonName = sqlGetField(conn, PROTEOME_DB_NAME, "taxonNames", "name", cond_str);
     }
 if (sciName != NULL)
     {
