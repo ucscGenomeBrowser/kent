@@ -124,6 +124,16 @@ spectrum on
 type netAlign cb1 chainCb1
 otherDb cb1
 
+track syntenyNetCb1
+shortLabel Briggsae Syntenic Net
+longLabel $o_Organism ($o_date/$o_db) Syntenic Alignment Net
+group compGeno
+priority 126.1
+visibility hide
+spectrum on
+type netAlign cb1 chainCb1
+otherDb cb1
+
 track axtNetCb1
 shortLabel Briggsae Aligns
 longLabel $o_Organism ($o_date/$o_db) Blastz Alignments from Net
