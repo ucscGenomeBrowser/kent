@@ -544,10 +544,19 @@ hPrintf("\n");
 
 void doGeneDetailsLink(char *protDisplayID, char *mrnaID, char *hgsidStr)
 {
+char cond_str[128];
+char *hggChrom, *hggStart, *hggEnd;
+
+/* Feed hgGene with chrom, txStart, and txEnd data, otherwise it would use whatever are in the cart */
+safef(cond_str, sizeof(cond_str), "name='%s'", mrnaID);
+hggChrom = sqlGetField(NULL, database, "knownGene", "chrom", cond_str);
+hggStart = sqlGetField(NULL, database, "knownGene", "txStart", cond_str);
+hggEnd   = sqlGetField(NULL, database, "knownGene", "txEnd", cond_str);
 if (mrnaID != NULL)
     {
     hPrintf("\n<LI>Gene Details Page - ");
-    hPrintf("<A HREF=\"../cgi-bin/hgGene?hgg_gene=%s&db=%s%s\"", mrnaID, database, hgsidStr);
+    hPrintf("<A HREF=\"../cgi-bin/hgGene?db=%s&hgg_gene=%s&hgg_chrom=%s&hgg_start=%s&hgg_end=%s\"", 
+    	    database, mrnaID, hggChrom, hggStart, hggEnd);
     hPrintf(" TARGET=_BLANK>%s</A></LI>\n", mrnaID);
     }
 }
