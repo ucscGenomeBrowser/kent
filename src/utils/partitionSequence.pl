@@ -1,13 +1,13 @@
 #!/usr/bin/perl -w
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
-# edit ~/kent/src/utils/makeChunks.pl instead.
+# edit ~/kent/src/utils/partitionSequence.pl instead.
 
 # Based on Scott Schwartz's tclsh script make-joblist;
 # rewritten in perl and extended to handle .2bit inputs and 
 # multi-record fasta for target as well as query by Angie Hinrichs.
 
-# $Id: partitionSequence.pl,v 1.1 2005/01/24 18:37:55 angie Exp $
+# $Id: partitionSequence.pl,v 1.2 2005/01/24 18:54:55 angie Exp $
 
 use Getopt::Long;
 use strict;
@@ -51,6 +51,9 @@ sub listSeqFiles {
     die "Sorry, $0 only supports one .2bit file per target/query but found multiple .2bit files in $dir";
   }
   closedir(SEQDIR);
+  foreach my $f (@files) {
+    $f = "$dir/$f";
+  }
   return \@files;
 }
 
