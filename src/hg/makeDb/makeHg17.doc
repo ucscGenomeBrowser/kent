@@ -13461,7 +13461,7 @@ SEQ2_LEN=$BASE/S2.len
     axtToMaf $f /cluster/data/hg17/chrom.sizes /cluster/data/bosTau1/chrom.sizes mafNet/$c.maf -tPrefix=hg17. -qPrefix=bosTau1.
   end
 
-# MAKE HG17 DOWNLOADABLES (DONE Feb. 15, 2005 Heather)
+# MAKE VSBOSTAU1 DOWNLOADABLES (DONE Feb. 15, 2005 Heather)
     ssh hgwdev
     cd /usr/local/apache/htdocs/goldenPath/hg17
     mkdir vsBosTau1
