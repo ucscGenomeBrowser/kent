@@ -93,7 +93,7 @@ shortLabel BLASTP codes
 longLabel Conservation of proteins with BLASTP
 group compGeno
 priority 4.52
-visibility dense
+visibility hide
 type bed 6 +
 canPack off
 
