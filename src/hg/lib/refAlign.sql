@@ -19,5 +19,7 @@ CREATE TABLE refAlign (
     humanSeq varchar(255) not null,	# Human sequence, contains - for aligned seq inserts
     alignSeq varchar(255) not null,	# Aligned sequence, contains - for human seq inserts
               #Indices
-    PRIMARY KEY(chrom)
+    PRIMARY KEY(name),
+    UNIQUE(chrom(8),chromStart),
+    UNIQUE(chrom(8),chromEnd)
 );
