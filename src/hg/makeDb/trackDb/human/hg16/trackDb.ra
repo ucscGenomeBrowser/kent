@@ -1012,7 +1012,7 @@ track regPotential2X
 shortLabel 2x Reg Potential
 longLabel 2-Way Regulatory Potential - Human (hg16), Mouse (mm4)
 group regulation
-priority 92
+priority 91.1
 visibility hide
 autoScaleDefault Off
 maxHeightPixels 128:36:16
@@ -1380,8 +1380,21 @@ visibility hide
 color 0,100,100
 type psl .
 
+track eponine
+shortLabel Eponine TSS
+longLabel Eponine Predicted Transcription Start Sites
+group regulation
+priority 91.9
+visibility dense
+color 0,100,100
+type bed 4 +
+
+
+
+
 searchTable HInvGeneMrna
 searchMethod exact
 searchType psl
 termRegex HIT[0-9]{9,9}
 searchPriority 50
+
