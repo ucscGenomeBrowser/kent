@@ -251,7 +251,7 @@ void gfAlignTrans(int conn, char *nibDir, aaSeq *seq,
  * Call 'outFunction' with each alignment that is found. */
 
 void gfAlignTransTrans(int conn, char *nibDir, struct dnaSeq *seq, boolean isRc,
-    int minMatch, GfSaveAli outFunction, struct gfSavePslxData *outData);
+    int minMatch, GfSaveAli outFunction, struct gfSavePslxData *outData, boolean isRna);
 /* Search indexed translated genome on server with an dna sequence.  Translate
  * this sequence in three frames. Load homologous bits of genome locally
  * and do detailed alignment.  Call 'outFunction' with each alignment

@@ -1045,7 +1045,7 @@ for (range = rangeList; range != NULL; range = range->next)
 
 void gfAlignTransTrans(int conn, char *nibDir, struct dnaSeq *qSeq, 
 	boolean qIsRc, int minMatch, GfSaveAli outFunction, 
-	struct gfSavePslxData *outData)
+	struct gfSavePslxData *outData, boolean isRna)
 /* Search indexed translated genome on server with an dna sequence.  Translate
  * this sequence in three frames. Load homologous bits of genome locally
  * and do detailed alignment.  Call 'outFunction' with each alignment
@@ -1062,6 +1062,7 @@ struct trans3 *qTrans = trans3New(qSeq), *t3;
 struct slRef *t3RefList = NULL, *t3Ref;
 struct hash *t3Hash = NULL;
 struct dnaSeq *tSeqList = NULL;
+enum ffStringency stringency = (isRna ? ffCdna : ffTight);
 
 /* Query server for clumps. */
 gfQuerySeqTransTrans(conn, qSeq, clumps, lm, &ssList, &tileSize);
@@ -1121,7 +1122,7 @@ for (tIsRc=0; tIsRc <= 1; ++tIsRc)
 	bun->genoSeq = targetSeq;
 	bun->data = range;
 	bun->ffList = rangesToFfItem(range->components, qSeq);
-	ssStitch(bun, ffTight);
+	ssStitch(bun, stringency);
 	outData->targetRc = tIsRc;
 	splitPath(range->tName, dir, chromName, ext);
 	t3 = range->t3;
