@@ -12,7 +12,7 @@ struct mouseOrtho
     char *chrom;	/* Human Chrom */
     unsigned chromStart;	/* Start on Human */
     unsigned chromEnd;	/* End on Human */
-    char *mouseGene;	/* Mouse Gene Prediction */
+    char *name;	/* Mouse Gene Prediction */
     unsigned score;	/* Human mouse aligment score using Blat */
     char *strand;	/* Strand on Human */
     unsigned thickStart;	/* Start on Human */
