@@ -80,9 +80,14 @@ using the .fa's on NFS for QC analysis - all other placements should be
 done after repeat masking and distributing to cluster nodes)
 
 9) Generate RepeatMasked files for contigs (Patrick)
-   For the NCBI assembly we repeat mask on the sensitive mode setting.
+   For the NCBI assembly we repeat mask on the sensitive mode setting:
+   Change symbolic link for /cluster/bin/scripts/RMLocal to point 
+   to RMLocalSens (instead of RMLocalQuick).
    If there is a new version of RepeatMasker, build it and ask the admins 
-   to binrsync it (/scratch/hg/RepeatMasker/RepeatMasker).
+   to binrsync it (from kkstore:/scratch/hg/RepeatMasker/RepeatMasker).
+   Note: for build30 / hg12, RepeatMaster was run in quick mode 
+   (/cluster/bin/scripts/RMLocalQuick) first, and the .out files were 
+   saved to .out.quick before re-running with RMLocalSens.  
 
         cd ~/oo
         /cluster/bin/scripts/RMfa RMJobs */NT_*/*.fa
@@ -107,7 +112,7 @@ done after repeat masking and distributing to cluster nodes)
 	set chr = ?
 	set nt  = NT_??????
 	mv $chr/$nt/$nt.fa.out $chr/$nt/$nt.fa.out.bak
-	/scratch/hg/RepeatMasker/RepeatMasker -q $chr/$nt/$nt.fa
+	/scratch/hg/RepeatMasker/RepeatMasker -s $chr/$nt/$nt.fa
 	rm $chr/$nt/$nt.fa.{masked,cat,cut,stderr,tbl}
       Compare each $chr/$nt/$nt.fa.out against the original and against 
       the appropriate part of $chr/chr$chr.fa.out (use the coords for 
@@ -159,7 +164,7 @@ o - Create the trackDb table as so
        cvs commit makefile
 
 
-LOAD REPEAT MASKS (DONE 7/12/02)
+LOAD REPEAT MASKS (TODO)
     Load the RepeatMasker .out files into the database with:
        cd ~/oo
        hgLoadOut hg12 ?/*.fa.out ??/*.fa.out
@@ -183,7 +188,7 @@ Store o+o info in database.
      jkStuff/liftGl.sh dummyArg
      hgGoldGapGl hg12 /cluster/store1/gs.13 build30 
      cd /cluster/store1/gs.13
-     hgClonePos hg12 build30 ffa/sequence.inf /cluster/store1/gs.13 -maxErr=3
+TODO     hgClonePos hg12 build30 ffa/sequence.inf /cluster/store1/gs.13 -maxErr=3
 (Ignore warnings about missing clones - these are in chromosomes 21 and 22)
      hgCtgPos hg12 build30 
 
@@ -252,7 +257,8 @@ o - Store the mRNA (non-alignment) info in database.
 MAKING AND STORING mRNA AND EST ALIGNMENTS (IN PROGRESS)
 
 o - Load up the local disks of the cluster with refSeq.fa, mrna.fa and est.fa
-    Copy the above 3 files from /cluster/store1/mrna.129 into /scratch/hg/h/mrna
+    Copy the above 3 files from /cluster/store1/mrna.129 into 
+    kkstore:/scratch/hg/h/mrna
     Request the admins to do a binrsync to the cluster.
 
 o - Use BLAT to generate refSeq, mRNA and EST alignments as so:
@@ -281,8 +287,6 @@ Using the bash shell do:
 
     Now, by hand cd to the mrna, refSeq, and est directories respectively
      and run a para push and para check in each one.
-
-TODO: para check est; then all est steps below.
 
 o - Process refSeq mRNA and EST alignments into near best in genome.
       cd ~/oo/bed
@@ -345,22 +349,24 @@ o - Create subset of ESTs with introns and load into database.
       hgLoadPsl hg12 *.psl
 
 o - Put orientation info on ESTs into database:
-     ssh kkstore
+    Note: the cluster run requires /scratch/.../trfFa/ to be in place,
+    so this step should be run after "PREPARING SEQUENCE FOR CROSS SPECIES 
+    ALIGNMENTS" below.
+     ssh kk
      cd ~/oo/bed/est
      pslSortAcc nohead contig /oldscratch contig.psl
      mkdir -p /scratch/hg/gs.13/build30/bed
+     ssh kkstore
      cp -r contig /scratch/hg/gs.13/build30/bed/est
     Ask admins to binrsync /scratch/hg/gs.13/build30/bed to the cluster.
-     cd ~/oo/bed
-     mkdir estOrientInfo
-     cd estOrientInfo
-     mkdir ei
+     mkdir -p ~/oo/bed/estOrientInfo/ei
+     cd ~/oo/bed/estOrientInfo
      ls -1 /scratch/hg/gs.13/build30/bed/est/*.psl > psl.lst
-
    Now ssh to kk and cd to ~/oo/bed/estOrientInfo.  Copy in
    gsub from the previous version and edit it to say where
    things are located in scratch on this version.  Then:
      gensub2 psl.lst single gsub spec
+TODO
      para create spec
      para try 
      para push
@@ -457,7 +463,7 @@ o - Load this into the database as so
 	hgLoadBed hg12 simpleRepeat simpleRepeat.bed -sqlTable=$HOME/src/hg/lib/simpleRepeat.sql
 
 
-PRODUCING GENSCAN PREDICTIONS (IN PROGRESS)
+PRODUCING GENSCAN PREDICTIONS (TODO)
 	mkdir -p ~/oo/bed/genscan
 	cd ~/oo/bed/genscan
 o - Produce contig genscan.gtf genscan.pep and genscanExtra.bed files like so:
@@ -506,7 +512,7 @@ o - Produce contig genscan.gtf genscan.pep and genscanExtra.bed files like so:
         First issue the following Parasol command:
                 para create jobList
         Run the following command, which will try first 10 jobs from jobList
-TODO                para try
+                para try
         Check if these 10 jobs run OK by
                 para check
         If they have problems, debug and fix your program, template file,
