@@ -754,6 +754,27 @@ LOAD ENSEMBLE GENES (done 05/28/02)
        mouse-ensembl-fixed.pep
      hgPepPred mm2 generic ensPep mouse-ensembl-fixed.pep
 
+LOAD ENSEMBL "Merge" TRACKs - SECRET! (done 6/25/02)
+     - Use mgsc database, not mm2.  Only MGSC members should be able to 
+       access this track, and only by password protection.
+     mkdir -p ~/mm2/bed/ensembl
+     cd ~/mm2/bed/ensembl
+     foreach tier (b c d)
+       GET http://www.ebi.ac.uk/~stabenau/tier$tier.gtf.gz > tier$tier.gtf.gz
+       GET http://www.ebi.ac.uk/~stabenau/mouse_tier$tier.fa.gz > tier$tier.fa.gz
+       gunzip -c tier$tier.gtf.gz | \
+         perl -w -p -e 's/^(\w)/chr$1/' > tier$tier-fixed.gtf
+       gunzip -c tier$tier.fa.gz | \
+         perl -w -p -e 's/^\>.*source_id=(\S+)\s+.*$/\>$1/' > \
+         tier$tier-fixed.pep
+       set Tier = `echo $tier | tr 'a-z' 'A-Z'`
+       ldHgGene mgsc ensMergeTier$Tier tier$tier-fixed.gtf
+       hgPepPred mgsc generic ensMergeTier${Tier}Pep tier$tier-fixed.pep
+     end
+     NOTE: because this track contains ensRiken transcripts, it had to 
+     be made secret - see NOTE's below & revision history comments for 
+     hgTracks.c 1.277.
+
 LOAD ENSEMBL/RIKEN - SECRET! (05/31/02 - pep todo)
      - Use mgsc database, not mm2.  Only MGSC members should be able to 
        access this track, and only by password protection.
