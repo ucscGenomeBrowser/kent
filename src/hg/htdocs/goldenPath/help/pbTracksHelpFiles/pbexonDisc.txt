@@ -1,5 +1,5 @@
 <!------------Discussion----------->
-The human genome sequence may be nearing completion, but there is still much 
+The sequencing of the human genome is in its final stages, but there is still much 
 work to be done to accurately identify all the full-length encoded proteins. 
 Because of persistent homology with other species, protein-coding exons are easier to 
 identify than 5' and 3' untranslated exons. Problems remain for novel genes that 
@@ -18,13 +18,14 @@ TARGET=_blank>sulfatase family</A>.
 The Protein Browser provides information on these features based on NCBI's 
 RefSeq track, which is a mixture of known, reviewed, and predicted genes. 
 The genome-wide statistical distribution is based on the exonCount field of the 
-June '02 refGene table, which contains the exon number for 15,485 genes. 
+[FIXME - verify table name] refGene table, which contains the exon number for 
+the RefSeq genes displayed in the Genome Browser. 
 This data is somewhat distorted because a small number of alternatively 
 spliced genes are counted more than once, and the first and last 
 exons of many predicted genes are incomplete.
 <P>
-Long introns give rise to systematic errors in the tables, in that predicted genes 
-are often unwittingly split into two or more pieces. This shifts the exon number 
+Long introns give rise to systematic errors in the tables, because predicted genes 
+are often unwittingly split into two or more pieces. This skews the exon number 
 distribution toward lower counts. In some cases, purely UTR exons are inappropriately 
 included. While further work will improve and add many gene models, the overall 
 affect on statistics may be slight. 
