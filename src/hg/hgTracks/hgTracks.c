@@ -1105,6 +1105,7 @@ abbr(abbrev, "00000");
 abbr(abbrev, "0000");
 abbr(abbrev, "000");
 abbr(abbrev, "ctg");
+abbr(abbrev, "Affy.");
 return abbrev;
 }
 
