@@ -354,18 +354,27 @@ struct pbStamp *getStampData(char *stampName)
     return(pbStampPtr);
     }
 
+void mapBoxStampTitle(int x, int y, int width, int height, char *title, char *tagName)
+{
+hPrintf("<AREA SHAPE=RECT COORDS=\"%d,%d,%d,%d\" ", x-1, y-1, x+width+1, y+height+1);
+hPrintf("HREF=\"../goldenPath/help/pbTracksHelp.html#%s\"", tagName);
+hPrintf(" target=_blank ALT=\"Click here for explanation of %c%s%c\">\n", '\'', title, '\'');
+}
+
 void drawPbStamp(struct pbStamp *pbStampPtr, struct pbStampPict *stampPictPtr)
 /* draw the stamp */
     {
     int ix, iy, iw, ih;
-    char *stampTable, *stampTitle, *stampDesc;
+    char *stampName, *stampTable, *stampTitle, *stampDesc;
     double txmin, tymin, txmax, tymax;
     int i, n, index;
     int xx, yy;
     char charStr[2];
     int edgeColor;
     Color stampColor;
+    int titleLen;
 
+    stampName   = strdup(pbStampPtr->stampName);
     stampTable  = strdup(pbStampPtr->stampTable);
     stampTitle  = strdup(pbStampPtr->stampTitle);
     n           = pbStampPtr->len;
@@ -379,12 +388,15 @@ void drawPbStamp(struct pbStamp *pbStampPtr, struct pbStampPict *stampPictPtr)
     iy = stampPictPtr->yOrig;
     iw = stampPictPtr->width;
     ih = stampPictPtr->height;
-
+    
     xScale = (double)(iw)/(txmax - txmin);
     yScale = (double)(ih)/(tymax - tymin);
     
     calStampXY(stampPictPtr, txmin+(txmax-txmin)/2.0, tymax, &xx, &yy);
     vgTextCentered(g_vg, xx-5, yy-12, 10, 10, MG_BLACK, g_font, stampTitle);
+    
+    titleLen = strlen(stampTitle);
+    mapBoxStampTitle(xx-5-titleLen*6/2-6, yy-14, titleLen*6+12, 14,  stampTitle, stampName);
     
     edgeColor  = boundaryColor;
     stampColor = vgFindColorIx(g_vg, 220, 220, 220);
@@ -431,6 +443,7 @@ void drawPbStampB(struct pbStamp *pbStampPtr, struct pbStampPict *stampPictPtr)
     int i, n, index;
     int xx, yy;
     char charStr[2];
+    int titleLen;
 
     stampTable  = strdup(pbStampPtr->stampTable);
     stampTitle  = strdup(pbStampPtr->stampTitle);
@@ -451,6 +464,9 @@ void drawPbStampB(struct pbStamp *pbStampPtr, struct pbStampPict *stampPictPtr)
     
     calStampXY(stampPictPtr, txmin+(txmax-txmin)/2.0, tymax, &xx, &yy);
     vgTextCentered(g_vg, xx-5, yy-12, 10, 10, MG_BLACK, g_font, "Amino Acid Anomoly");
+    
+    titleLen = strlen("Amino Acid Anomoly");
+    mapBoxStampTitle(xx-5-titleLen*6/2-6, yy-14, titleLen*6+12, 14,  "Amino Acid Anomoly", "pepRes");
     
     calStampXY(stampPictPtr, txmax-(txmax-txmin)*.25, tymin+(tymax-tymin)/4.0*3.0, &xx, &yy);
     vgTextCentered(g_vg, xx, yy-10, 10, 10, MG_BLACK, g_font, "+2 stddev");
