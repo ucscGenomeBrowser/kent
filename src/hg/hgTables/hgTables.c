@@ -2,6 +2,7 @@
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"
+#include "memalloc.h"
 #include "htmshell.h"
 #include "cheapcgi.h"
 #include "cart.h"
@@ -13,7 +14,7 @@
 #include "grp.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: hgTables.c,v 1.8 2004/07/14 00:36:53 kent Exp $";
+static char const rcsid[] = "$Id: hgTables.c,v 1.9 2004/07/14 05:53:47 kent Exp $";
 
 
 void usage()
@@ -748,7 +749,7 @@ if (track == NULL)
 if (sameString(output, outPrimaryTable))
     doOutPrimaryTable(track, conn);
 else if (sameString(output, outSchema))
-    doTrackSchema(cart, track, conn);
+    doTrackSchema(track, conn);
 else
     errAbort("Don't know how to handle %s output yet", output);
 }
@@ -785,10 +786,13 @@ else if (cartVarExists(cart, hgtaDoFilterPage))
     doFilterPage(conn);
 else if (cartVarExists(cart, hgtaDoSchema))
     {
-    doTableSchema(cart, 
-    	cartString(cart, hgtaDoSchemaDb), 
+    doTableSchema( cartString(cart, hgtaDoSchemaDb), 
     	cartString(cart, hgtaDoSchema), conn);
     }
+else if (cartVarExists(cart, hgtaDoValueHistogram))
+    doValueHistogram(cartString(cart, hgtaDoValueHistogram));
+else if (cartVarExists(cart, hgtaDoValueRange))
+    doValueRange(cartString(cart, hgtaDoValueRange));
 else	/* Default - put up initial page. */
     beginPage(conn);
 cartRemovePrefix(cart, hgtaDo);
