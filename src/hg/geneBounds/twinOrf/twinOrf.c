@@ -5,11 +5,36 @@
 #include "options.h"
 #include "axt.h"
 
+void usage()
+/* Explain usage and exit. */
+{
+errAbort(
+  "twinOrf - Predict open reading frame in cDNA given a cross species alignment\n"
+  "usage:\n"
+  "   twinOrf twinOrf.stats in.axt out.orf\n"
+  "options:\n"
+  "   -checkIn=seq.cds - File that says size and cds position of sequences\n"
+  "   -checkOut=twinOrf.check - File that compares our cds position to real\n"
+  "   -m1  - Use markov 1 model for UTRs  (currently has weird results\n"
+  );
+}
+
+struct mrnaInfo
+/* Cds position and related stuff - just for testing. */
+    {
+    struct mrnaInfo *next;
+    char *name;		/* Allocated in hash */
+    int size;		/* Size of mRNA */
+    int cdsStart;	/* Start of coding. */
+    int cdsEnd;		/* End of coding. */
+    };
+
 #define scaledLog log
 #define neverProb (1.0E-100)
 
 double never;	/* Probability that should never happen */
 double always;	/* Probability that should always happen */
+boolean useM1 = FALSE; /* Use M1 models for UTRs */
 
 enum aStates 
 /* Internal states for HMM. */
@@ -61,16 +86,6 @@ struct dynoData
     double *curScores, *prevScores;	/* Current and previous scores. */
     double *transProbLookup[256];	/* Transition probabilities. */
     int scoreFlopper;			/* Flops between 0 and 1. */
-    };
-
-struct mrnaInfo
-/* Cds position and related stuff - just for testing. */
-    {
-    struct mrnaInfo *next;
-    char *name;		/* Allocated in hash */
-    int size;		/* Size of mRNA */
-    int cdsStart;	/* Start of coding. */
-    int cdsEnd;		/* End of coding. */
     };
 
 static void dynoFlopScores(struct dynoData *dd)
@@ -247,19 +262,6 @@ freeMem(tStates);
 return maxScore;
 }
 
-
-void usage()
-/* Explain usage and exit. */
-{
-errAbort(
-  "twinOrf - Predict open reading frame in cDNA given a cross species alignment\n"
-  "usage:\n"
-  "   twinOrf twinOrf.stats in.axt out.orf\n"
-  "options:\n"
-  "   -checkIn=seq.cds - File that says size and cds position of sequences\n"
-  "   -checkOut=twinOrf.check - File that compares our cds position to real\n"
-  );
-}
 
 char ixToSym[] = {'T', 'C', 'A', 'G', 'N', '-', '.'};
 char lixToSym[] = {'t', 'c', 'a', 'g', 'n', '-', '.'};
@@ -611,7 +613,7 @@ int qIx = symToIx[t[0]]*7 + symToIx[q[0]];
 int tIx = symToIx[t[1]]*7 + symToIx[q[1]];
 double x;
 x = o->odds[tIx][qIx];
-uglyf("  probM1(%c%c %c%c) = %f\n", t[0], t[1], q[0], q[1], x);
+// uglyf("  probM1(%c%c %c%c) = %f\n", t[0], t[1], q[0], q[1], x);
 return x;
 }
 
@@ -629,7 +631,7 @@ for (i=0; i<3; ++i)
     tIx += symToIx[t[i]];
     }
 x =  o->odds[tIx][qIx];
-uglyf("  prob3(%s %s) = %f\n", t, q, x);
+// uglyf("  prob3(%s %s) = %f\n", t, q, x);
 return x;
 }
 
@@ -643,8 +645,9 @@ return x;
 #define endState(curState) \
     dyno->curScores[destState] = newScore; \
     allStates[destState][symIx] = parent; \
-    uglyf(" %d(%c) from %d(%c) score %f\n", curState, visStates[curState], parent, visStates[parent], newScore); \
     }
+
+    // uglyf(" %d(%c) from %d(%c) score %f\n", curState, visStates[curState], parent, visStates[parent], newScore); 
 
 #define source(sourceState, emitScore) \
     if ((oneScore = dyno->transProbLookup[sourceState][destState] + emitScore + dyno->prevScores[sourceState]) > newScore) \
@@ -740,7 +743,7 @@ for (symIx=0; symIx<scanSize; symIx += 1)
     t = tSym + symIx;
     qc = *q;
     tc = *t;
-    uglyf("%d %c %c\n", symIx, qc, tc);
+    // uglyf("%d %c %c\n", symIx, qc, tc);
     if (tc == '-')
         {
 	tNotIns = never;
@@ -755,7 +758,7 @@ for (symIx=0; symIx<scanSize; symIx += 1)
     /* Utr5 state. */
     startState(aUtr5)
         double b;
-	if (symIx == 0)
+	if (symIx == 0 || !useM1)
 	    b = prob1(td->utr5, qc, tc);
 	else
 	    b = probM1(td->m1Utr5, q-1, t-1);
@@ -908,7 +911,7 @@ for (symIx=0; symIx<scanSize; symIx += 1)
     /* UTR states. */
     startState(aUtr3)
         double b;
-	if (symIx == 0)
+	if (symIx == 0 || !useM1)
 	    b = prob1(td->utr3, qc, tc);
 	else
 	    b = probM1(td->m1Utr3, q-1, t-1);
@@ -969,8 +972,8 @@ void twinOrf(char *statsFile, char *axtFile, char *outFile,
 struct trainingData *td = loadTrainingData(statsFile);
 struct dynoData *dyno = newDynoData(aStateCount);
 struct lineFile *lf = lineFileOpen(axtFile, TRUE);
-struct hash *checkInHash = readCheckIn(checkInFile);
 FILE *f = mustOpen(outFile, "w");
+struct hash *checkInHash = readCheckIn(checkInFile);
 FILE *checkOut = NULL;
 struct axt *axt;
 
@@ -999,6 +1002,7 @@ if (argc != 4)
     usage();
 if (optionVal("checkOut", NULL) && !optionVal("checkIn", NULL))
     errAbort("CheckOut without checkIn");
+useM1 = optionExists("m1");
 initSymToIx();
 twinOrf(argv[1], argv[2], argv[3], optionVal("checkIn", NULL), optionVal("checkOut", NULL));
 return 0;

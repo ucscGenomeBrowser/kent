@@ -52,7 +52,7 @@ enum aStates
     aStateCount,		/* Keeps track of total states */
 };
 
-char visStates[] =
+char aVisStates[] =
 /* User visible states of HMM. */
 {
     'U',		     /* 5' UTR. */
@@ -282,9 +282,9 @@ transProbLookup[aUtr3][aUtr3] = always;
     allStates[destState][dnaIx] = parent; \
     }
 
-    // int ufoo = uglyf(" start %d(%c)\n", curState, visStates[curState]);
-    // uglyf(" end %d(%c) from %d(%c) score %f\n", curState, visStates[curState], parent, visStates[parent], newScore); 
-    // uglyf("   source %d(%c) transProb %f, emitScore %f, prevScore %f, t+e %f\n", sourceState, visStates[sourceState], dyno->transProbLookup[sourceState][destState], emitScore, dyno->prevScores[sourceState],  dyno->transProbLookup[sourceState][destState] + emitScore); 
+    // int ufoo = uglyf(" start %d(%c)\n", curState, aVisStates[curState]);
+    // uglyf(" end %d(%c) from %d(%c) score %f\n", curState, aVisStates[curState], parent, aVisStates[parent], newScore); 
+    // uglyf("   source %d(%c) transProb %f, emitScore %f, prevScore %f, t+e %f\n", sourceState, aVisStates[sourceState], dyno->transProbLookup[sourceState][destState], emitScore, dyno->prevScores[sourceState],  dyno->transProbLookup[sourceState][destState] + emitScore); 
 
 #define source(sourceState, emitScore) \
     if ((oneScore = dyno->transProbLookup[sourceState][destState] + emitScore + dyno->prevScores[sourceState]) > newScore) \
@@ -320,7 +320,7 @@ fprintf(f, ">%s %f\n", seq->name, maxScore);
 
 for (i = symCount-1; i >= 0; i -= 1)
     {
-    tStates[i] = visStates[maxState];
+    tStates[i] = aVisStates[maxState];
     states = allStates[maxState];
     maxState = states[i];
     }
@@ -374,6 +374,7 @@ for (i=0; i<10; ++i)
     odds += kozak[i][ntVal[dna[i]]];
 odds += log4;	/* Correct for double use of last two nucleotides. */
 odds += log4;
+// uglyf("  kozakProb %c%c%c%c%c^%c%c%c%c%c = %f\n", dna[0], dna[1], dna[2], dna[3], dna[4], dna[5], dna[6], dna[7], dna[8], dna[9], odds);
 return odds;
 }
 
@@ -395,7 +396,7 @@ int dnaIx;
 int scanSize = dnaSize;
 double reallyUnlikely = 10*never;
 double score;
-double kozakProb = 1.0;
+double kozakAdjustment = 0.0;
 
 /* Allocate state tables. */
 allStates = needMem(stateCount * sizeof(allStates[0]));
@@ -428,42 +429,44 @@ for (dnaIx=0; dnaIx<scanSize; dnaIx += 1)
 
     /* Near start codon states. */
     startState(aKoz0)
-        double b = td->kozak[0][base];
-	source(aUtr5, b);
+	source(aUtr5, always);
     endState(aKoz0)
 
     startState(aKoz1)
-        double b = td->kozak[1][base];
-	source(aKoz0, b);
+	source(aKoz0, always);
     endState(aKoz1)
 
     startState(aKoz2)
-        double b = td->kozak[2][base];
-	source(aKoz1, b);
+	source(aKoz1, always);
     endState(aKoz2)
 
     startState(aKoz3)
-        double b = td->kozak[3][base];
-	source(aKoz2, b);
+	source(aKoz2, always);
     endState(aKoz3)
 
     startState(aKoz4)
-        double b = td->kozak[4][base];
-	source(aKoz3, b);
+	source(aKoz3, always);
     endState(aKoz4)
 
     startState(aStart1)
-	double b = td->kozak[5][base];
-	source(aKoz4, b);
+	source(aKoz4, always);
     endState(aStart1)
 
     startState(aStart2)
-	double b = td->kozak[6][base];
-	source(aStart1, b);
+	source(aStart1, always);
     endState(aStart2)
 
     startState(aStart3)
-	double b = td->kozak[7][base];
+	double b;
+	if (dnaIx < 7 || scanSize - dnaIx < 3)
+	    b = never;
+	else
+	    {
+	    double kOdds = kozakProb(td->kozak, pos-7);
+	    b = kOdds + kozakAdjustment;
+	    if (kOdds > 8.0)
+	        kozakAdjustment -= 4.0;	/* Prefer first reasonable one. */
+	    }
 	source(aStart2, b);
     endState(aStart3)
 
