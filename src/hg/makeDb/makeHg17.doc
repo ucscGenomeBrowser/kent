@@ -8598,3 +8598,177 @@ s/chr24/chrY/g
     #	18052 bases of 2866216770 (0.001%) in intersection
 
     # entry is already in trackDb/trackDb.ra
+
+## blastz mRNA track for internal use - Robert 8/12/04
+mkdir /cluster/bluearc/hg17/mrnaBlastz
+cd /cluster/bluearc/hg17/mrnaBlastz
+/cluster/data/genbank/bin/i386/gbGetSeqs -gbRoot=/cluster/data/genbank genbank mrna mrna.fa -db=hg -native
+mkdir -p split
+faTrimPolyA mrna.fa trim.fa
+faSplit about trim.fa 1000000 split/mrna
+cp -ip trim.fa /panfs/ucsc.edu/home/scratch/hg17/mrnaBlastz
+faSize trim.fa -detailed=on > S2.len
+hgsql hg16 < chromInfo.sql > S1.len
+
+BlastZ_run0.sh
+cd run.0
+para push
+para time
+#113894 jobs in batch
+#207911 jobs (including everybody's) in Parasol queue.
+#Checking finished jobs
+#Completed: 113894 of 113894 jobs
+#CPU time in finished jobs:   14423845s  240397.41m  4006.62h  166.94d  0.457 y
+#IO & Wait Time:                334352s    5572.54m    92.88h    3.87d  0.011 y
+#Average job time:                 130s       2.16m     0.04h    0.00d
+#Longest job:                    38301s     638.35m    10.64h    0.44d
+#Submission to last job:         59841s     997.35m    16.62h    0.69d
+
+mkdir run.1
+~angie/hummus/do.out2lav DEF > run.1/j
+cd run.1
+para create j
+para push
+para time
+#341 jobs in batch
+#208550 jobs (including everybody's) in Parasol queue.
+
+#Checking finished jobs
+#Completed: 341 of 341 jobs
+#CPU time in finished jobs:      28990s     483.17m     8.05h    0.34d  0.001 y
+#IO & Wait Time:                 43139s     718.98m    11.98h    0.50d  0.001 y
+#Average job time:                 212s       3.53m     0.06h    0.00d
+#Longest job:                     2015s      33.58m     0.56h    0.02d
+#Submission to last job:          2187s      36.45m     0.61h    0.03d
+
+#!/bin/tcsh
+set base="/cluster/bluearc/hg17/mrnaBlastz"
+    cd $base
+    mkdir -p pslRaw
+    foreach c (lav/*)
+      pushd $c
+      set chr=$c:t
+      set out=$base/pslRaw/$chr.psl
+      echo "Translating $chr lav to $out"
+      cat `ls -1 *.lav | sort -g` \
+        | lavToPsl stdin stdout \
+        | sed -e 's@scratch/hg/gs.18/build35/bothMaskedNibs//@@' | sed -e 's/\.nib:[0-9]*-[0-9]*//' > $out
+      popd
+    end
+
+mkdir run.2
+
+for i in `awk '{print $1}' S1.len` ; do echo doSortFilter.sh ../pslRaw/$i.psl ../pslFilter/$i.psl  >> run.2/spec.dup ; done
+cd run.2
+para create spec.dup
+para push
+#46 jobs in batch
+#3 jobs (including everybody's) in Parasol queue.
+#Checking finished jobs
+#Completed: 46 of 46 jobs
+#CPU time in finished jobs:       4409s      73.48m     1.22h    0.05d  0.000 y
+#IO & Wait Time:                  1082s      18.04m     0.30h    0.01d  0.000 y
+#Average job time:                 119s       1.99m     0.03h    0.00d
+#Longest job:                     3842s      64.03m     1.07h    0.04d
+#Submission to last job:          3842s      64.03m     1.07h    0.04d
+cd ..
+for i in `awk '{print $1}' S1.len` ; do echo axtChain -linearGap=linearGap.txt -psl pslFilter/$i.psl /scratch/hg/gs.18/build35/bothMaskedNibs/ -faQ /panfs/ucsc.edu/home/scratch/hg17/mrnaBlastz/trim.fa chain/$i.chain >> spec.chain ; done
+para create spec.chain
+para push
+
+cd run.3
+para create spec.filter
+para push
+cd ..
+ls /cluster/data/hg17/nib/*.nib > S1.lst
+#Skip chainPreNet it is not good for mrna
+#mkdir -p preNet
+#
+#cd chainFilter
+#foreach i ( *.chain)
+#chainPreNet $i ../S1.len ../S2.len ../preNet/$i
+#end
+
+mkdir run.4
+cd run.4
+for i in `awk '{print $1}' ../S1.len`; do echo "chainToPsl ../chainFilter/$i.chain ../S1.len ../S2.len ../S1.lst /panfs/ucsc.edu/home/scratch/hg17/mrnaBlastz/trim.fa ../psl/$i.psl" >> spec.chain2psl.new  ; done
+
+pslCat psl/*psl > mrnaBlastz.psl
+hgLoadPsl hg17 mrnaBlastz.psl
+
+cp trim.fa /cluster/data/hg17/bed/mrnaBlastz/hg17Mrna.fa
+ln /cluster/data/hg17/bed/mrnaBlastz/hg17Mrna.fa /gbdb/hg17/mrnaBlastz/ -s
+
+hgLoadSeq -prefix=bz hg17 /gbdb/hg17/mrnaBlastz/hg17Mrna.fa
+
+## end of blastz Mrna track
+
+#### BUILD retroGene track Robert 8/26/2004
+
+mkdir /cluster/data/hg17/bed/pseudo
+cd /cluster/data/hg17/bed/pseudo
+ls /cluster/data/hg17/nib/*.nib > S1.lst
+hgsql hg17 -N -B < allMrna.sql > allMrna.lst
+cp  /cluster/data/genbank/data/aligned/genbank.142.0/hg17/full/mrna.native.psl.gz .
+gunzip mrna.native.psl.gz
+awk  '{OFS="\t";print $1,$2,$3,$4,$5,$6,$7,$8,$9,substr($10,1,index($10,".")-1),$11,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21,$22,$23}' mrna.native.rawPsl  > mrnaBlat.psl
+
+hgsql hg17 -N -B < refGene.sql > refGene.tab
+hgsql hg17 -B -N < mgcGene.sql > mgcGene.tab
+cat ../../*/*.fa.out | awk '$5~/chr*/{OFS="\t";print $5,$6,$7}' >rmsk.bed
+
+cd /cluster/bluearc/hg17/mrnaBlastz/
+zcat /cluster/data/hg17/bed/blastz.mm5/axtChain/mouseSyn.net.gz | netToBed stdin mouseSyn.bed
+
+hgsql hg17 < mrna.sql | grep -v matches | awk '{OFS="\t"; print $2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21,$22}' > all_mrna.psl
+ssh eieio
+pslCat -nohead -check all_mrna.psl /cluster/bluearc/hg17/mrnaBlastz/psl/*.psl |awk '{print $0, $1*3-$2}' | sort -k 10,10 -k 22nr -T /tmp | awk '{OFS="\t"; print $1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21}' >  blatBlastzHg17.psl 
+ssh hgwdev
+cp blatBlastzHg17.psl /scratch/
+
+tawk '$12 > 1 && $12 < 9999999{x=$11;$11=$12;$12=x;print $0}'  /cluster/data/kgDB/bed/hg17/kgBestMrna/sortedKnownGene.tab > sortedKnownGene.tab
+#copy files to iServers for cluster run
+ssh kkr1u00
+/cluster/home/baertsch/bin/i386/pslSplit nohead -chunkSize=121 /iscratch/i/gs.18/build35/pseudo blatBlastzHg17.psl
+cd /cluster/data/hg17/bed/pseudo
+cp refGene.tab /iscratch/i/gs.18/build35/pseudo
+cp /cluster/data/hg17/bed/simpleRepeat/simpleRepeat.bed /iscratch/i/gs.18/build35/pseudo
+cp mrnaHg17.fa /iscratch/i/gs.18/build35/pseudo
+cp sortedKnownGene.tab /iscratch/i/gs.18/build35/pseudo
+cp rmsk.bed /iscratch/i/gs.18/build35/pseudo
+cp all_mrna.psl /iscratch/i/gs.18/build35/pseudo
+cp mouseSyn.bed /iscratch/i/gs.18/build35/pseudo
+for i in `ls tmp*` ; do echo "doBuildkk.sh ${i%%.psl}" ; done | sed -e 's/tmp//g'  > ~/hg17/pseudo/spec.kk   
+cd /iscratch/i/hg/gs.18/build35/pseudo
+iSync
+
+para create spec.kk
+para push
+
+#post process
+
+# run from eieio
+BLUE=/cluster/bluearc/hg17/pseudo
+echo catting output
+cat $BLUE/pseudoGeneLink[0-9]*.bed | sort -k1,1 -k2,3n >pseudoGeneLinkSort.bed ; /bin/rm $BLUE/pseudoGeneLink[0-9]*.bed
+cat $BLUE/pseudo[0-9]*.psl > pseudo.psl ; /bin/rm $BLUE/pseudo[0-9]*.psl &
+echo Filtering pseudoGeneLinkSort.bed
+tawk '$5 > 10 && $15 > 10000 && $35 > 650 {OFS="\t";print $0}' pseudoGeneLinkSort.bed > pseudoGeneLinkSortFilter.bed
+echo Removing Overlaps
+doSplit
+cd /cluster/bluearc/hg17/pseudo/run.o 
+spec.overlap
+cd ~/hg17/pseudo
+cat /cluster/bluearc/hg17/pseudo/chr*pseudoNoOverlap.bed > pseudoGeneLinkNoOverlap.bed
+echo Making psl
+awk '{printf("%s\t%s\t%s\n", $5,$2,$3)}' pseudoGeneLinkNoOverlap.bed > pseudoGeneLinkSelect.tab
+## 350 is the sacrad magic number and will probably change
+tawk '$6>=350{print $0}' pseudoGeneLinkNoOverlap.bed > pseudoGeneLinkNoOverlapFilter.bed                       
+
+pslSelect -qtStart=pseudoGeneLinkSelect.tab pseudo.psl pseudoMrna.psl
+echo Loading Bed
+hgLoadBed hg17 pseudoGeneLink pseudoGeneLinkNoOverlapFilter.bed -hasBin -sqlTable=/cluster/home/baertsch/kent/src/hg/lib/pseudoGeneLink.sql
+echo Loading Psl
+hgLoadPsl hg17 pseudoMrna.psl
+
+## end of retroGene track
