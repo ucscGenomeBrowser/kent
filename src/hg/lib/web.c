@@ -26,6 +26,23 @@ void softAbort()
 exit(0);
 }
 
+void webPushErrHandlers()
+/* Push warn and abort handler for errAbort(). */
+{
+if (webInTextMode)
+    pushWarnHandler(textVaWarn);
+else
+    pushWarnHandler(webVaWarn);
+pushAbortHandler(softAbort);
+}
+
+void webPopErrHandlers()
+/* Pop warn and abort handler for errAbort(). */
+{
+popWarnHandler();
+popAbortHandler();
+}
+
 void webStartText()
 /* output the head for a text page */
 {
@@ -33,8 +50,7 @@ void webStartText()
 
 webHeadAlreadyOutputed = TRUE;
 webInTextMode = TRUE;
-pushWarnHandler(textVaWarn);
-pushAbortHandler(softAbort);
+webPushErrHandlers();
 }
 
 void webStartWrapperGateway(struct cart *theCart, char *format, va_list args, boolean withHttpHeader, boolean withLogo, boolean skipSectionHeader)
@@ -136,9 +152,7 @@ if(!skipSectionHeader)
     );
 };
 
-pushWarnHandler(webVaWarn);
-pushAbortHandler(softAbort);
-
+webPushErrHandlers();
 /* set the flag */
 webHeadAlreadyOutputed = TRUE;
 }
@@ -210,8 +224,7 @@ if(!webInTextMode)
 	    "</TD></TR></TABLE>" "\n"
 	    "</BODY></HTML>" "\n"
 	);
-	popWarnHandler();
-	popAbortHandler();
+	webPopErrHandlers();
 	}
 }
 
@@ -219,7 +232,11 @@ void webVaWarn(char *format, va_list args)
 /* Warning handler that closes out page and stuff in
  * the fancy form. */
 {
+if (! webHeadAlreadyOutputed)
+    webStart(NULL, "Error");
 htmlVaWarn(format, args);
+printf("\n<!-- HGERROR -->\n");
+printf("\n\n");
 webEnd();
 }
 
