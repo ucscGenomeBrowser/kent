@@ -28,6 +28,347 @@ errAbort("exonWalk - uses altGraphX files to construct a splicing graph\n"
 
 int exonProblem = -1;
 int exonOk = 0;
+int inActive = -10;    /* Symbol for when an exonNode should no longer be used. */
+boolean debug = FALSE; /** Turns on some debugging output. */
+boolean diagnostics = FALSE; /* Print out some extra tracks. */
+FILE *hippos = NULL;   /* File for logging graphs that have too many edges or nodes. */
+FILE *whites = NULL;   /* Log file for exons which were never seen. */
+
+struct exonNodeWrap 
+/* Wrapper around an exonNode to make a list. */
+{
+    struct exonNodeWrap *next;   /* Next in list. */
+    struct exonNode *en;         /* Pointer to exon node. */
+};
+
+void exonNodeWrapFreeList(struct exonNodeWrap **pList)
+/* Free a list of dynamically allocated exonNodeWrap's */
+{
+struct exonNodeWrap *el, *next;
+
+for (el = *pList; el != NULL; el = next)
+    {
+    next = el->next;
+    freeMem(el);
+    }
+*pList = NULL;
+}
+
+
+void nodeSanityCheck(struct exonGraph *sg)
+/** Loop through and make sure all the nodes have legit ids. */
+{
+int i,j;
+for(i=0;i<sg->nodeCount; i++)
+    {
+    struct exonNode *sn = sg->nodes[i];
+    for(j=0;j<sn->edgeOutCount && sn->class != inActive; j++)
+	{
+	struct exonNode *target = sg->nodes[sn->edgesOut[j]];
+	if(target->class == inActive)
+	    errAbort("exonWalk::nodeSanityCheck() - How can node %d still point to node %d which is inactive?", sn->id, target->id);
+	if(sn->edgesOut[j] >= sg->nodeCount)
+	    errAbort("exonWalk::nodeSanityCheck() - node with id %d when max is %d\n", sn->edgesOut[j], sg->nodeCount);
+	if((rangeIntersection(sn->tStart, sn->tEnd, target->tStart, target->tEnd) > 0)	   && target->class != BIGNUM && target->class != sn->class )
+	    errAbort("exonWalk::nodeSanityCheck() -Node %u-%u connects to %u-%u but that is the wrong direction.\n",  sn->id, sn->tStart, target->id, target->tStart);
+	if(sn->id == target->id)
+	    errAbort("exonWalk::nodeSanityCheck() -Node %u-%u connects to %u-%u but they are the same node.\n",  sn->id, sn->tStart, target->id, target->tStart);
+
+	}
+    }
+}
+
+void printIntArray(int count, int *array)
+{
+int i;
+for(i=0;i<count; i++)
+    {
+    fprintf(stderr, "%d,", array[i]);
+    }
+fprintf(stderr, "\n");
+fflush(stderr);
+}
+
+int nodeStartCmp(const void *va, const void *vb)
+/** Compart to sort based on tStart of node. */
+{
+const struct exonNode *a = *((struct exonNode **)va);
+const struct exonNode *b = *((struct exonNode **)vb);
+int diff =  a->tStart - b->tStart;
+if(diff == 0)
+    diff = b->edgeInCount - a->edgeInCount;
+return diff;
+}
+
+int exonGraphCountClasses(struct exonGraph *eg)
+/** Count how many different types of classes we have
+    in our graph. */
+{
+int max = 0;
+int i = 0;
+for(i=0; i<eg->nodeCount; i++)
+    {
+    if(eg->nodes[i]->class > max)
+	max = eg->nodes[i]->class;
+    }
+return max +1;
+}
+
+boolean nodesConnected(struct exonNode *from, struct exonNode *to)
+/* Return TRUE if from points to to, FALSE otherwise. */
+{
+int i;
+for(i=0; i < from->edgeOutCount; i++)
+    if(from->edgesOut[i] == to->id)
+	return TRUE;
+return FALSE;
+}
+
+
+
+boolean equivalentNodes(struct exonGraph *eg, struct exonNode *unique, struct exonNode *test)
+/* Return TRUE if both needle and haystack  have the same classes of outgoing nodes and incoming nodes. 
+ FALSE otherwise. */
+{
+int i,j;
+boolean inMatch = TRUE;
+boolean outMatch = TRUE;
+boolean match = FALSE;
+
+if(unique->endClass != test->endClass || unique->startClass != test->startClass )
+  return FALSE;
+if(!nodesConnected(unique, test) || !nodesConnected(test, unique))
+    return FALSE;
+for(i=0; i < test->edgeInCount; i++)
+    {
+    struct exonNode *nIn = eg->nodes[test->edgesIn[i]];
+    boolean currentMatch = FALSE;
+    for(j=0; j < unique->edgeInCount; j++)
+	{
+	struct exonNode *hIn = eg->nodes[unique->edgesIn[j]];
+	if(hIn->class == nIn->class)
+	    {
+	    currentMatch = TRUE;
+	    break;
+	    }
+	}
+    inMatch = (inMatch && currentMatch);
+    }
+
+for(i=0; i < test->edgeOutCount; i++)
+    {
+    struct exonNode *nOut = eg->nodes[test->edgesOut[i]];
+    boolean currentMatch = FALSE;
+    for(j=0; j < unique->edgeOutCount; j++)
+	{
+	struct exonNode *hOut = eg->nodes[unique->edgesOut[j]];
+	if(hOut->class == nOut->class)
+	    {
+	    currentMatch = TRUE;
+	    break;
+	    }
+	}
+    outMatch = (outMatch && currentMatch);
+    }
+match = (inMatch && outMatch);
+return match;
+}
+
+boolean notUnique(struct exonGraph *eg, struct exonNodeWrap *exonClass, 
+		  struct exonNode *mark, struct exonNode **unique)
+/** Check to see if an equivalent exonNode exists in the exonClass list,
+    if so return TRUE and assign unique to be the exon in the exonClass list. 
+    Else return FALSE and set unique to NULL. */
+{
+struct exonNodeWrap *ec = NULL;
+*unique = NULL;
+for(ec = exonClass; ec != NULL; ec = ec->next)
+    {
+    if(equivalentNodes(eg, ec->en, mark))
+	{
+	*unique = ec->en;
+	return TRUE;
+	}
+    }
+return FALSE;
+}
+
+void addUnique(struct exonNodeWrap **exonClass, struct exonNode *en)
+/* Create an exonNodeWapper for en and add the exonNodeWrapper to the
+   exonClass list. */
+{
+struct exonNodeWrap *enw = NULL;
+AllocVar(enw);
+enw->en = en;
+slAddHead(exonClass, enw);
+}
+
+int intCmp(const void *va, const void *vb)
+/** Compart to sort based on tStart of node. */
+{
+return *((int *)va) - *((int *)vb);
+}
+
+int mergeDuplicates(int count, int *array, int id)
+/* Remove any duplicate entries in array which has starting size count. 
+   Return the unique number of entries in array. */
+{
+int i,j;
+int finalCount = count;
+for(i=0; i< finalCount; i++)
+    {
+    if(array[i] == id)
+	{
+	int k;
+	finalCount--;
+	for(k = i; k < count -1; k++)
+	    {
+	    array[k] = array[k+1];
+	    }
+	}
+    else 
+	{
+	for(j=i+1; j<finalCount; j++)
+	    {
+	    if(array[i] == array[j] )
+		{
+		int k;
+		finalCount--;
+		for(k = j; k < count -1; k++)
+		    {
+		    array[k] = array[k+1];
+		    }
+		}
+	    }
+	}
+    }
+return finalCount;
+}
+
+int mergeDuplicatesFast(int count, int *array, int id)
+/* Remove duplicates and entries that correspond to id. */
+{
+int finalCount = count;
+int *head = NULL, *orig = array;
+int *last = array+count;
+int *start = NULL;
+qsort(array, count, sizeof(int), intCmp);
+/* Check to make sure that we don't have forbidden id at start. */
+while((*(array)) == id && (array != last))
+    {
+    array++;
+    finalCount--;
+    }
+/* Remove duplicates in rest of array. */
+head = start = array;
+while(++array != last && array != (last+1))
+    {
+    if( ((*(head)) != (*(array))) && ((*(array)) != id) )
+	*(++head) = *array;
+    else
+	finalCount--;
+    }
+CopyArray(start, orig, finalCount);
+return finalCount;
+}
+
+void spliceOutExonNode(struct exonGraph *eg, struct exonNode *mark, struct exonNode *unique)
+/* Detach mark from its connections, replace with unique. */
+{
+struct exonNode *en;
+int i,j;
+/* if(debug) { nodeSanityCheck(eg); } */
+/* assert(equivalentNodes(eg, unique, mark)); */
+/* First modify the incoming nodes. */
+for(i=0; i < mark->edgeInCount; i++)
+    {
+    en = eg->nodes[mark->edgesIn[i]];
+    for(j=0; j < en->edgeOutCount; j++)
+	{
+	if(en->edgesOut[j] == mark->id)
+	    {
+	    en->edgesOut[j] = unique->id;
+	    }
+	}
+    en->edgeOutCount = mergeDuplicatesFast(en->edgeOutCount, en->edgesOut, en->id);
+    }
+/* if(debug) { nodeSanityCheck(eg); } */
+for(i=0; i < mark->edgeOutCount; i++)
+    {
+    en = eg->nodes[mark->edgesOut[i]];
+    for(j=0; j < en->edgeInCount; j++)
+	{
+	if(en->edgesIn[j] == mark->id)
+	    {
+	    en->edgesIn[j] = unique->id;
+	    }
+	}
+    en->edgeInCount = mergeDuplicatesFast(en->edgeInCount, en->edgesIn, en->id);
+    }
+/* if(debug) { nodeSanityCheck(eg); } */
+mark->class = inActive;
+}
+
+void exonGraphTrim(struct exonGraph *eg)
+/** Look through the nodes in the exonGraph and merge those that have
+    connections to the same class output nodes and same class input nodes.*/
+{
+int numClasses = exonGraphCountClasses(eg);
+int i = 0;
+struct exonNodeWrap **classes = NULL;
+struct exonNodeWrap **exonClass = NULL, *enw = NULL;
+struct exonNode *left = NULL, *right = NULL, *mark=NULL, *unique = NULL;
+
+struct exonNode **orderedNodes = CloneArray(eg->nodes, eg->nodeCount);
+classes = needMem(sizeof(struct exonNodeWrap *) * numClasses);
+qsort(orderedNodes, eg->nodeCount, sizeof(struct exonNode *), nodeStartCmp);
+for(i=0; i < eg->nodeCount; i++)
+    {
+    mark = eg->nodes[i];
+    exonClass = &classes[mark->class];
+    if(notUnique(eg, *exonClass, mark, &unique))
+	{
+	spliceOutExonNode(eg, mark, unique);
+	}
+    else
+	{
+	addUnique(exonClass, mark);
+	}
+    }
+/* Cleanup. */
+for(i=0; i < numClasses; i++)
+    {
+    exonNodeWrapFreeList(&classes[i]);
+    }
+freez(&classes);
+freez(&orderedNodes);
+}
+
+int countActiveNodes(struct exonGraph *eg)
+/* Count how many nodes in eg don't have class == inActive. */
+{
+int i;
+int count = 0;
+for(i=0; i<eg->nodeCount; i++)
+    {
+    if(eg->nodes[i]->class != inActive)
+	count++;
+    }
+return count;
+}
+
+int countActiveEdges(struct exonGraph *eg)
+/* Count how many edges in eg from nodes don't have class == inActive. */
+{
+int i;
+int count = 0;
+for(i=0; i<eg->nodeCount; i++)
+    {
+    if(eg->nodes[i]->class != inActive)
+	count += eg->nodes[i]->edgeOutCount;
+    }
+return count;
+}
 
 int exonNodeCmp(const void *va, const void *vb)
 /* Compare based on tStart. */
@@ -38,36 +379,10 @@ return a->tStart - b->tStart;
 }
 
 struct exonGraph *currentGraph = NULL; /** Pointer to current graph, useful for debugging. */
-boolean debug = FALSE; /** Turns on some debugging output. */
-
-void nodeSanityCheck(struct exonGraph *sg)
-/** Loop through and make sure all the nodes have legit ids. */
-{
-int i,j;
-for(i=0;i<sg->nodeCount; i++)
-    {
-    struct exonNode *sn = sg->nodes[i];
-    if(sn->next != NULL && sn->id == sn->next->id)
-	errAbort("exonWalk::nodeSanityCheck() -Node %u-%u next is  %u-%u but they are the same node.\n",  
-		 sn->id, sn->tStart, sn->next->id, sn->next->tStart);
-    for(j=0;j<sn->edgeOutCount;j++)
-	{
-	struct exonNode *target = sg->nodes[sn->edgesOut[j]];
-	if(sn->edgesOut[j] >= sg->nodeCount)
-	    errAbort("exonWalk::nodeSanityCheck() - node with id %d when max is %d\n", sn->edgesOut[j], sg->nodeCount);
-	if(sn->tStart > target->tStart && target->class != BIGNUM && target->class != sn->class )
-	    errAbort("exonWalk::nodeSanityCheck() -Node %u-%u connects to %u-%u but that is the wrong direction.\n",  
-		     sn->id, sn->tStart, target->id, target->tStart);
-	if(sn->id == target->id)
-	    errAbort("exonWalk::nodeSanityCheck() -Node %u-%u connects to %u-%u but they are the same node.\n",  
-		     sn->id, sn->tStart, target->id, target->tStart);
-	}
-    }
-}
 
 boolean sameExonDifferentEnds(struct exonNode *en1, struct exonNode *en2)
 {
-if(en1->tStart == en2->tStart && en2->tEnd != en2->tEnd)
+if(en1 != NULL && en1->tStart == en2->tStart && en1->tEnd != en2->tEnd)
     return TRUE;
 else
     return FALSE;
@@ -75,7 +390,7 @@ else
 
 boolean sameExonDifferentStarts(struct exonNode *en1, struct exonNode *en2)
 {
-if(en1->tStart == en2->tStart && en2->tEnd != en2->tEnd)
+if(en1 != NULL && en1->tEnd == en2->tEnd && en1->tStart != en2->tStart)
     return TRUE;
 else
     return FALSE;
@@ -124,21 +439,21 @@ if(en->tEnd <= en->tStart)
     exonNodeFree(&en);
     return exonProblem;
     }
-if(sameExonDifferentEnds(tail, en)) /* If this is a duplicate type, change tail to range. */
+if(sameExonDifferentEnds(tail, en)) /* If this is a duplicate type deal with fuzzy edge. */
     {
     tail->type = ggRangeExon;
     if(en->tEnd < tail->tEnd)
 	warn("exonWalk::addNodeToPath() - How can node at %s:%u-%u be greater than node at %s:%u-%u?", 
 	     tail->tName, tail->tStart, tail->tEnd, en->tName, en->tStart, en->tEnd);
-    if(en->endType == ggHardEnd || (en->endType == tail->endType))
+    /* if fuzzy edge, stick with closest hardEnd or longest softEnd. */
+    if((en->endType == ggHardEnd && tail->endType != ggHardEnd) || (tail->endType == ggSoftEnd))
 	{
 	tail->tEnd = en->tEnd;
 	tail->ends[0] = en->tEnd;
 	end = en->tEnd;
+	tail->class = en->class;
+	tail->endClass = en->endClass;
 	}
-    //addExonNodeEnd(tail, en->tEnd);
-/*     tail->class = BIGNUM; */
-/*     tail->endClass = BIGNUM; */
     assert(tail->tEnd >= tail->tStart);
     end = en->tEnd;
     exonNodeFree(&en);
@@ -149,14 +464,14 @@ else if(sameExonDifferentStarts(tail,en))
     if(en->tStart < tail->tStart)
 	warn("exonWalk::addNodeToPath() - How can node at %s:%u-%u be greater than node at %s:%u-%u?", 
 	     tail->tName, tail->tStart, tail->tStart, en->tName, en->tStart, en->tStart);
-    if(en->startType == ggHardStart || (en->startType == tail->startType))
+    /* if fuzzy edge contract to smallest hardStart or stick with biggest softStart. */
+    if(en->startType == ggHardStart)
 	{
 	tail->tStart = en->tStart;
 	tail->starts[0] = en->tStart;
+	tail->startClass = en->startClass;
+	tail->class = en->class;
 	}
-/*     addExonNodeStart(tail, en->tStart); */
-/*     tail->class = BIGNUM; */
-/*     tail->startClass = BIGNUM; */
     assert(tail->tEnd >= tail->tStart);
     exonNodeFree(&en);
     }
@@ -230,6 +545,32 @@ eg->classEnds  = CloneArray(agx->edgeEnds,  eg->classCount);
 eg->classTypes = CloneArray(agx->edgeTypes, eg->classCount);
 }
 
+boolean seenPathBefore(struct exonPath *epList, struct exonPath *query)
+/** Return TRUE if there is a path just like this in the list already. */
+{
+struct exonPath *ep = NULL;
+for(ep = epList; ep != NULL; ep = ep->next)
+    if(sameString(ep->path, query->path))
+	return TRUE;
+return FALSE;
+}
+
+void exonPathCreateStringRep(struct exonPath *ep)
+/** Loop through the nodes in this path and create a string of exons. */
+{
+struct dyString *dy = newDyString(256);
+struct exonNode *en = NULL;
+if(ep->path != NULL)
+    freez(&ep->path);
+for(en = ep->nodes; en != NULL; en = en->next)
+    {
+    dyStringPrintf(dy, "%d-%d", en->startClass, en->endClass);
+    }
+ep->path = cloneString(dy->string);
+freeDyString(&dy);
+}
+
+
 struct exonGraph *exonGraphFromAgx(struct altGraphX *agx)
 /** Construct a list of exon paths, one for every mrnaRef in the altGraphX, and return it. */
 {
@@ -237,7 +578,7 @@ int i,j,k;
 struct exonPath *ep = NULL, *epList = NULL;
 struct exonGraph *eg = NULL;
 struct evidence *ev = NULL;
-char *acc = NULL;
+ char *acc = NULL;
 AllocVar(eg);
 initExonGraphFromAgx(eg, agx);
 for(i=0; i < agx->mrnaRefCount; i++)
@@ -263,7 +604,10 @@ for(i=0; i < agx->mrnaRefCount; i++)
 	    }
 	}
 //    warn("%d nodes in %s.", slCount(ep->nodes), ep->qName);
+    exonPathCreateStringRep(ep);
     if(debug) { nodeSanityCheck(eg); }
+    if(seenPathBefore(epList, ep))
+	addPath = FALSE;
     if(addPath)
 	slSafeAddHead(&epList, ep);
     else
@@ -279,20 +623,6 @@ if(debug) { nodeSanityCheck(eg); }
 return eg;
 }
 
-void exonPathCreateStringRep(struct exonPath *ep)
-/** Loop through the nodes in this path and create a string of exons. */
-{
-struct dyString *dy = newDyString(256);
-struct exonNode *en = NULL;
-if(ep->path != NULL)
-    freez(&ep->path);
-for(en = ep->nodes; en != NULL; en = en->next)
-    {
-    dyStringPrintf(dy, "%d-%d", en->startClass, en->endClass);
-    }
-ep->path = cloneString(dy->string);
-freeDyString(&dy);
-}
 
 char *getRefForNode(struct exonGraph *eg, int id)
 /** Return the mrna accession that generated the node id by
@@ -393,7 +723,10 @@ void connectNodeList(struct exonNode *en1, struct exonNode *en2)
 for(; en1 != NULL && en2 != NULL; en1=en1->next, en2=en2->next)
     {
     if(compatibleNodes(en1, en2))
+	{
 	exonNodeConnect(en1,en2);
+	exonNodeConnect(en2,en1);
+	}
     }
 }
 
@@ -443,8 +776,6 @@ struct exonPath *ep = NULL;
 struct exonPath *path1 = NULL, *path2 = NULL;
 char *mark = NULL;
 /** Create string representations of our exon paths for comparison. */
-for(ep = eg->paths; ep != NULL; ep = ep->next)
-    exonPathCreateStringRep(ep);
 for(path1 = eg->paths; path1 != NULL; path1 = path1->next)
     {
     for(path2 = path1->next; path2 != NULL; path2 = path2->next)
@@ -462,7 +793,9 @@ struct exonNode *exonNodeCopy(struct exonNode *en)
 struct exonNode *enCopy = NULL;
 assert(en);
 enCopy = CloneVar(en);
-enCopy->tName = cloneString(en->tName);
+enCopy->tName = cloneString("chr22");
+enCopy->edgesIn = NULL;
+enCopy->edgesOut = NULL;
 if(en->edgeOutCount != 0)
     enCopy->edgesOut = CloneArray(en->edgesOut, en->edgeOutCount);
 if(en->edgeInCount != 0)
@@ -470,6 +803,7 @@ if(en->edgeInCount != 0)
 enCopy->starts = CloneArray(en->starts, en->startCount);
 enCopy->ends = CloneArray(en->ends, en->endCount);
 enCopy->paths = NULL;
+
 return enCopy;
 }
 
@@ -494,9 +828,6 @@ ep->nodes = NULL;
 for(en=orig->nodes; en != NULL; en = enNext)
     {
     enNext = en->next;
-/*     if(en->edgeOutCount != 0) */
-/* 	enNext = eg->nodes[en->edgesOut[0]]; */
-/*     else */ /* 	enNext = NULL; */
     enCopy = exonNodeCopy(en);
     if(enCopy->tEnd > ep->tEnd)
 	ep->tEnd = enCopy->tEnd;
@@ -507,7 +838,6 @@ for(en=orig->nodes; en != NULL; en = enNext)
 slReverse(&ep->nodes);
 return ep;
 }
-
 
 void checkForMaximalPath(struct exonGraph *eg, struct exonPath **maximalPaths, struct exonPath *epList)
 /** Look to see if the history path is a subpath of any of the 
@@ -599,32 +929,35 @@ while(!heapEmpty(queue))
     struct exonPath *ep = NULL;
     struct exonPath *epCopy = NULL;
     struct exonNode *enCopy = NULL;
-    globalCount++;
     for(i=0; i<en->edgeOutCount; i++)
 	{
 	struct exonNode *target = eg->nodes[en->edgesOut[i]];
+	if(target->class == inActive)
+	    warn("exonGraphBfs() - %s:%d-%d, target %d is inactive!, en = %d", eg->tName, eg->tStart, eg->tEnd, target->id, en->id);
 	for(ep = en->paths; ep != NULL; ep = ep->next)
 	    {
 	    if(debug) { nodeSanityCheck(eg); }
 	    epCopy = exonPathCopy(eg, ep);
 	    /* If we're making a move to another exon then include that exon in the path... */
-
 	    if(target->class != en->class && en->class != BIGNUM)
 		{
 		enCopy = exonNodeCopy(target);
 		slAddHead(&epCopy->nodes, enCopy);
 		epCopy->nodeCount++;
 		}
-	    if(target->paths != NULL && epCopy->nodes == target->paths->nodes)
-		    warn("How can I have two paths with the same nodes?");
 	    slAddHead(&target->paths, epCopy);
-	    if(debug) { nodeSanityCheck(eg); }
-	    if(debug && !checkForCurrentNode(target->paths, target))
-		warn("Why didn't this work at %s:%d-%d", target->tName, target->tStart, target->tEnd);
-	    for(epCopy = target->paths; epCopy->next != NULL; epCopy = epCopy->next)
-		{
-		if(epCopy->nodes == epCopy->next->nodes)
-		    warn("How can I have two paths with the same nodes?");
+
+	    /* Some debuggint stuff. */
+	    if(debug) 
+		{ 
+		nodeSanityCheck(eg); 
+		if( !checkForCurrentNode(target->paths, target))
+		    warn("Why didn't this work at %s:%d-%d", target->tName, target->tStart, target->tEnd);
+		for(epCopy = target->paths; epCopy->next != NULL; epCopy = epCopy->next)
+		    {
+		    if(epCopy->nodes == epCopy->next->nodes)
+			warn("How can I have two paths with the same nodes?");
+		    }
 		}
 	    }
 	
@@ -645,9 +978,38 @@ while(!heapEmpty(queue))
     }
 }
 
+int countNodeForAcc(struct exonGraph *eg, char *acc, boolean onlyActive)
+{
+int count=0;
+int i;
+struct exonNode *en = NULL;
+for(i=0; i<eg->nodeCount; i++)
+    {
+    en = eg->nodes[i];
+    if(sameString(en->ep->qName, acc))
+	{
+	if(onlyActive)
+	    {
+	    if(en->class != inActive)
+		{
+		count++;
+		warn("Node %d:", i);
+		}
+	    }
+	else 
+	    {
+	    count++;
+	    }
+	}
+    }
+return count;
+}
+
 void exonGraphPathDfs(struct exonGraph *eg, struct exonNode *en, int nodeIndex, 
 			struct exonPath **maximalPaths, struct exonPath *history)
-/** Depth first search of the exonGraph starting from node at nodeIndex.
+/** 
+   ********* Deprecated ***********
+   Depth first search of the exonGraph starting from node at nodeIndex.
    keeps track of path taken using history, and will check history against
    maximal paths at black nodes. */
 {
@@ -672,11 +1034,11 @@ if((history->nodes == NULL || history->nodes->class != en->class) && en->class !
     pop =TRUE;
     }
 en->color = enGray;
-//if(en->endType == ggSoftEnd && en->class != BIGNUM) /* It is a terminal node...*/
-//    {
+if(en->endType == ggSoftEnd && en->class != BIGNUM) /* It is a terminal node...*/
+    {
 //    printf("%s\t%d\t%d\n", en->tName, en->tStart, en->tEnd);
     checkForMaximalPath(eg, maximalPaths, history);
-//    }
+    }
 for(i=0; i<en->edgeOutCount; i++)
     {
     struct exonNode *next = eg->nodes[en->edgesOut[i]];
@@ -696,13 +1058,6 @@ exonNodeFree(&copy);
 en->color = enBlack;
 }
 
-int nodeStartCmp(const void *va, const void *vb)
-/** Compart to sort based on tStart of node. */
-{
-const struct exonNode *a = *((struct exonNode **)va);
-const struct exonNode *b = *((struct exonNode **)vb);
-return a->tStart - b->tStart;
-}
 
 int nodeStartHeapCmp(const void *va, const void *vb)
 /** Compart to sort based on tStart of node. */
@@ -729,6 +1084,35 @@ slAddHead(&ep->nodes, enCopy);
 return ep;
 }
 
+void logTooComplicated(struct exonGraph *eg)
+/* Write a little ditty to the hippo log file. */
+{
+int maxNodes = cgiUsualInt("maxNodes", 100);
+int maxEdges = cgiUsualInt("maxEdges", 100);
+int activeNodes, activeEdges;
+activeNodes = countActiveNodes(eg);
+activeEdges = countActiveEdges(eg);
+warn("%s:%u-%u\tmaxNodes = %d\tmaxEdges = %d\tactiveNodes = %d\tactiveEdges = %d\n", 
+	eg->tName, eg->tStart, eg->tEnd, maxNodes, maxEdges, activeNodes, activeEdges);
+fprintf(hippos, "%s:%u-%u\tmaxNodes = %d\tmaxEdges = %d\tactiveNodes = %d\tactiveEdges = %d\n", 
+	eg->tName, eg->tStart, eg->tEnd, maxNodes, maxEdges, activeNodes, activeEdges);
+}
+
+boolean noIncomingEdges(struct exonGraph *eg, struct exonNode *en)
+/* Return TRUE if there is no node that points to this one that
+   isn't of the same class. FALSE otherwise. */
+{
+struct exonNode *target = NULL;
+int i;
+for(i=0; i < en->edgeInCount; i++)
+    {
+    target = eg->nodes[en->edgesIn[i]];
+    if(target->class != en->class)
+	return FALSE;
+    }
+return TRUE;
+}
+
 struct exonPath *exonGraphBreadthFirstMaxPaths(struct exonGraph *eg)
 /** Construct maximal paths through the exonGraph. Maximal paths
    are those which are not subpaths of any other path. Based on breadth
@@ -740,20 +1124,85 @@ int index = 0;
 struct heap *queue = newHeap(8, nodeStartHeapCmp);
 struct exonPath *maximalPaths = NULL, *ep = NULL;
 struct exonNode **orderedNodes = CloneArray(eg->nodes, eg->nodeCount);
+boolean trimGraph = cgiBoolean("trim");
+int maxNodes = cgiUsualInt("maxNodes", 100);
+int maxEdges = cgiUsualInt("maxEdges", 100);
+int activeNodes, activeEdges;
+int grayCount=0,whiteCount=0,blackCount=0;
+
+activeNodes = countActiveNodes(eg);
+activeEdges = countActiveEdges(eg);
 qsort(orderedNodes, eg->nodeCount, sizeof(struct exonNode *), nodeStartCmp);
 if(debug) { nodeSanityCheck(eg); }
+warn("Before Trim: %s:%u-%u\tactiveNodes = %d\tactiveEdges = %d", 
+	eg->tName, eg->tStart, eg->tEnd, activeNodes, activeEdges);
+fflush(stderr);
+if(debug) { nodeSanityCheck(eg); }
+if(trimGraph)
+    {
+    exonGraphTrim(eg);
+    activeNodes = countActiveNodes(eg);
+    activeEdges = countActiveEdges(eg);
+    warn("After Trim: %s:%u-%u\tactiveNodes = %d\tactiveEdges = %d", 
+	eg->tName, eg->tStart, eg->tEnd, activeNodes, activeEdges);
+    fflush(stderr);
+    }
+fflush(stderr);
+if(debug) { nodeSanityCheck(eg); }
+/* If we have too complicated of a situation quit. */
+if(activeNodes > maxNodes || activeEdges > maxEdges)
+    {
+    logTooComplicated(eg);
+    return NULL;
+    }
 for(i=0; i<eg->nodeCount; i++)
     {
-    if(orderedNodes[i]->edgeInCount == 0)
+    if( noIncomingEdges(eg, orderedNodes[i]) && orderedNodes[i]->class != inActive)
 	{
 	struct exonPath *ep = newExonPath(orderedNodes[i]);
 	ep->nodeCount++;
 	slAddHead(&orderedNodes[i]->paths, ep);
 	heapMinInsert(queue, orderedNodes[i]);
+//	warn("%s\t%d\t%d", orderedNodes[i]->tName, orderedNodes[i]->tStart, orderedNodes[i]->tEnd);
 	}
     }
 if(debug) { nodeSanityCheck(eg); }
 exonGraphBfs(eg, &maximalPaths, queue);
+for(i=0; i<eg->nodeCount; i++)
+    {
+    struct exonNode *target = eg->nodes[i];
+    if(target->class != inActive)
+	{
+	exonPathFreeList(&target->paths);
+	if(diagnostics)
+	    {
+	    if(target->color == enWhite)
+		{
+//		warn("White: Node %s:%d-%d %d is %d should be black: %d", target->tName, target->tStart, target->tEnd, target->id, target->color, enBlack);
+		whiteCount++;
+		fprintf(whites, "%s\t%d\t%d\n", target->tName, target->tStart, target->tEnd);
+		}
+	    else if(target->color == enGray)
+		{
+//		warn("Gray: Node %s:%d-%d %d is %d should be black: %d", target->tName, target->tStart, target->tEnd, target->id, target->color, enBlack);
+		grayCount++;
+		}
+	    else if(target->color == enBlack)
+		{
+//		warn("Black: Node %s:%d-%d %d is %d should be black: %d", target->tName, target->tStart, target->tEnd, target->id, target->color, enBlack);
+		blackCount++;
+		}
+	    else
+		{
+		errAbort("Don't know what color %d is for %d", target->color, target->id);
+		}
+	    }
+	}
+
+    }
+if(diagnostics)
+    warn("White: %d, Gray: %d, Black: %d", whiteCount, grayCount, blackCount);
+
 heapFree(&queue);
 freez(&orderedNodes);
 return maximalPaths;
@@ -845,9 +1294,6 @@ for(ep = eg->paths; ep != NULL; ep = ep->next)
 	    }
 	}
     }
-/* for(i=0; i < mark->edgeCount; i++) */
-/*     if(hashLookup(mrnaHash, sg->nodes[mark->edges[i]]->ep->qName)) */
-/* 	return TRUE; */
 return FALSE;
 }
 
@@ -955,7 +1401,7 @@ FILE *f = NULL;
 FILE *exonSites = NULL;
 FILE *cleanEsts = NULL;
 FILE *rejects = NULL;
-boolean diagnostics = cgiBoolean("diagnostics");
+
 boolean mrnaFilter = !(cgiBoolean("mrnaFilterOff"));
 struct hash *mrnaHash = newHash(10);
 int index = 0;
@@ -963,31 +1409,45 @@ int count = 0;
 struct exonPath *ep=NULL, *epList = NULL;
 agxList = altGraphXLoadAll(inFile);
 f = mustOpen(bedOut, "w");
+hippos = mustOpen("tooBig.log", "w");
 if(mrnaFilter)
     addMrnaAccsToHash(mrnaHash);
 
+/* If we're doing diagnostics we need to start a bunch of bed files. */
 if(diagnostics) 
     {
+    whites = mustOpen("whites.bed", "w");
     exonSites = mustOpen("exonSites.bed", "w");
     cleanEsts = mustOpen("cleanEsts.bed", "w");
     rejects = mustOpen("rejects.bed", "w");
     fprintf(rejects, "track name=rejects description=\"exonWalk rejects\" color=178,44,26\n");
     fprintf(exonSites, "track name=exonSites description=\"exonWalk exon sites.\"\n");
     fprintf(cleanEsts, "track name=cleanEsts description=\"exonWalk cleaned ESTs\"\n");
+    fprintf(whites, "track name=rejects description=\"exonWalk white nodes\" color=178,44,26\n"); 
     }
 fprintf(f, "track name=exonWalk description=\"exonWalk Final Picks\" color=23,117,15\n");
 warn("Creating exon graphs.");
+
 for(agx = agxList; agx != NULL; agx = agx->next)
     {
-    if(count++ % 100 == 0)
-	putTic();
+/*     if(count++ % 100 == 0) */
+/* 	putTic(); */
     if(diagnostics)
 	writeOutNodes(agx, exonSites);
     eg = exonGraphFromAgx(agx);
+    if(eg->nodeCount > 10000)
+	{
+	logTooComplicated(eg);
+	exonGraphFree(&eg);
+	continue;
+	}
     currentGraph = eg;
     if(diagnostics)
+	{
 	for(ep = eg->paths; ep != NULL; ep = ep->next)
 	    exonPathBedOut(ep,cleanEsts);
+	fflush(cleanEsts);
+	}
     exonGraphConnectEquivalentNodes(eg);
     if(debug) { nodeSanityCheck(eg); }
     epList = exonGraphBreadthFirstMaxPaths(eg);
@@ -998,8 +1458,7 @@ for(agx = agxList; agx != NULL; agx = agx->next)
 	snprintf(buff, sizeof(buff), "%d", index++);
 	ep->qName = cloneString(buff);
 	exonPathCreateStringRep(ep);
-
-	if(confidentPath(mrnaHash, eg, epList, ep))
+	if(TRUE) //confidentPath(mrnaHash, eg, epList, ep))
 	    {
 	    if(debug)
 		{
@@ -1011,18 +1470,22 @@ for(agx = agxList; agx != NULL; agx = agx->next)
 	else if(diagnostics)
 	    exonPathBedOut(ep, rejects);
 	}
-    exonPathFree(&epList);
+    exonPathFreeList(&epList);
     exonGraphFree(&eg);
     currentGraph = NULL;
     }
 warn("\tDone.");
+/* Do some cleanup. */
 if(diagnostics)
     {
     carefulClose(&exonSites);
     carefulClose(&cleanEsts);
     carefulClose(&rejects);
+    carefulClose(&whites);
     }
+hashFree(&mrnaHash);
 carefulClose(&f);
+carefulClose(&hippos);
 exonGraphFreeList(&egList);
 altGraphXFreeList(&agxList);
 }
@@ -1033,6 +1496,7 @@ int main(int argc, char *argv[])
 if(argc < 3)
     usage();
 cgiSpoof(&argc, argv);
+diagnostics = cgiBoolean("diagnostics");
 debug = cgiBoolean("debug");
 exonWalk(argv[1], argv[2]);
 return 0;
