@@ -74,7 +74,7 @@
 
 #define USUAL
 //#define AFFYSPLICE
-static char const rcsid[] = "$Id: altSplice.c,v 1.14 2004/07/20 21:45:15 sugnet Exp $";
+static char const rcsid[] = "$Id: altSplice.c,v 1.15 2004/07/20 21:56:40 sugnet Exp $";
 
 int cassetteCount = 0; /* Number of cassette exons counted. */
 int misSense = 0;      /* Number of cassette exons that would introduce a missense mutation. */
@@ -120,7 +120,7 @@ static char *optionDescripts[] =
     "Coordinate file to base clustering on in bed format.",
     "Coordinate file to base clustering on in genePred format.",
     "Name of file to output to.",
-    "Try to extend partials to consensus site instead of farthest.",
+    "Try to extend partials to consensus site instead of farthest [recommended].",
     "Minimum percent of a sequence that an alignment can contain and be included.",
     "Minimum percent id of alignment to keep.",
     "Skip loading the tissues and libraries.",
