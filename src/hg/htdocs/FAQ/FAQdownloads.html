@@ -59,8 +59,10 @@
                 <LI><A HREF="#download12">Chromosome M</A>
                 <LI><A HREF="#download13">N characters at beginning of human chr22</A>
                 <LI><A HREF="#download15">100K bp discrepancy in human Build 31 chr22</A>
+                <LI><A HREF="#download23">Linking gene name with accession number</A>
                 <LI><A HREF="#download16">Repeat-masking data</A>
                 <LI><A HREF="#download17">Availability of repeat-masked data</A>
+                <LI><A HREF="#download24">RepeatMasker version differences - UCSC vs. U. of Washington website</A>
                 <LI><A HREF="#download18">Obtaining promoter sequence</A>
                 <LI><A HREF="#download19">Data from Evolutionary Conservation Score tracks</A>
                 <LI><A HREF="#download20">Minus strand coordinates - axtBest files</A>
@@ -792,6 +794,49 @@
 <BR>
 
 <!--Content Table------------------------------------------------------------>
+<A NAME="download23"></A>
+    <!--outer table is for border purposes-->        
+    <TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1">
+        <TR><TD>            
+        <TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0">
+	    <TR><TD>                
+  	    <TABLE BGCOLOR="D9E4F8" BACKGROUND="/images/hr.gif" WIDTH=100%>
+	        <TR><TD>                
+	        <!--cheap trick to get background on row to be continuous-->
+	   	<TABLE CELLPADDING=0 CELLSPACING=0 MARGIN=0 WIDTH="100%">
+		    <TR><TD ALIGN="left">
+	   	    <FONT SIZE="4"><b>&nbsp; Linking gene name with accession number</b></FONT></TD> 
+		    <TD ALIGN="right"><A HREF="#TOP"><IMG SRC="/images/index.gif" ALT="" ALIGN="right" BORDER=0></A>
+	            </TD></TR>
+  	        </TABLE>                
+	        </TD></TR>
+  	    </TABLE>                
+   	    <TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0>
+	        <TR><TH HEIGHT=10></TH></TR>
+                <TR><TD WIDTH=10>&nbsp;</TD>
+		    <TD>
+	            <P>
+			<B><FONT COLOR="#006666">Question: </FONT></B><BR>
+			"I have the accession number for a gene and would like to
+			link it to the gene name. Is there a table that shows both
+			pieces of information?"
+			<P>
+			<B><FONT COLOR="#006666">Response:</FONT></B><BR> 
+			If you are looking at the RefSeq Genes, the 
+			<em>refFlat</em> 
+			positional table contains both the gene name (usually a 
+			HUGO ID) and its accession number. For the Known Genes, 
+			use the non-positional <em>kgAlias</em> table.
+		    </TD><TD WIDTH=15></TD>
+		</TR>
+	    </TABLE>
+	    <br></TD></TR>
+	</TABLE>
+	</TD></TR>
+    </TABLE>
+<BR>
+
+<!--Content Table------------------------------------------------------------>
 <A NAME="download16"></A>
     <!--outer table is for border purposes-->        
     <TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1">
@@ -815,10 +860,19 @@
 		    <TD>
 	            <P>
 			<B><FONT COLOR="#006666">Question: </FONT></B><BR>
-			"What RepeatMasker flags do you use on your data?"
+			"What version of RepeatMasker do you use on your data?
+			Which flags do you use?"
 			<P>
 			<B><FONT COLOR="#006666">Response:</FONT></B><BR> 
-			We use RepeatMasker <em>-s</em>. For mouse repeats, we also use <em>-m</em>. 
+			UCSC is currently using versions of RepeatMasker and
+			repeat libraries that were released to us by Arian Smit
+			in June 2003. These versions were used to process the Rat
+			Jun 2003 and Human Jul 2003 assemblies. Prior to this,
+			we used the Jul 2002 version of the software (listed
+			as 7/01 on the University of Washington 
+			<A HREF="http://repeatmasker.genome.washington.edu/cgi-bin/RepeatMasker" TARGET=_blank>website</A>).
+			<P>We use the RepeatMasker <em>-s</em> flag. For mouse 
+			repeats, we also use <em>-m</em>. 
 			In addition to RepeatMasker, we also use the Tandem Repeat Finder (trf) program, 
 			masking out repeats of period 12 or less. The repeats are 
 			just &quot;soft&quot; masked. Alignments are allowed to extend through repeats, but 
@@ -873,6 +927,48 @@
     </TABLE>
 <BR>
 
+<!--Content Table------------------------------------------------------------>
+<A NAME="download24"></A>
+    <!--outer table is for border purposes-->        
+    <TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1">
+        <TR><TD>            
+        <TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0">
+	    <TR><TD>                
+  	    <TABLE BGCOLOR="D9E4F8" BACKGROUND="/images/hr.gif" WIDTH=100%>
+	        <TR><TD>                
+	        <!--cheap trick to get background on row to be continuous-->
+	   	<TABLE CELLPADDING=0 CELLSPACING=0 MARGIN=0 WIDTH="100%">
+		    <TR><TD ALIGN="left">
+	   	    <FONT SIZE="4"><b>&nbsp; RepeatMasker version differences - UCSC vs. U. of Washington website</b></FONT></TD> 
+		    <TD ALIGN="right"><A HREF="#TOP"><IMG SRC="/images/index.gif" ALT="" ALIGN="right" BORDER=0></A>
+	            </TD></TR>
+  	        </TABLE>                
+	        </TD></TR>
+  	    </TABLE>                
+   	    <TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0>
+	        <TR><TH HEIGHT=10></TH></TR>
+                <TR><TD WIDTH=10>&nbsp;</TD>
+		    <TD>
+	            <P>
+			<B><FONT COLOR="#006666">Question: </FONT></B><BR>
+			"When I run RepeatMasker independently from the University
+			of Washington web server, my results vary from those of 
+			UCSC.  What's the cause?"
+			<P>
+			<B><FONT COLOR="#006666">Response:</FONT></B><BR> 
+			UCSC is using updated versions of the RepeatMasker
+			software and repeat libraries that are not yet available
+			on the University of Washington website (see 
+			<A HREF="#download16">Repeat-masking data</A> for more
+			information).
+		    </TD><TD WIDTH=15></TD>
+		</TR>
+	    </TABLE>
+	    <br></TD></TR>
+	</TABLE>
+	</TD></TR>
+    </TABLE>
+<BR>
 <!--Content Table------------------------------------------------------------>
 <A NAME="download18"></A>
     <!--outer table is for border purposes-->        
@@ -1110,6 +1206,7 @@
 	</TABLE>
 	</TD></TR>
     </TABLE>
+
     </TD><TD WIDTH=15></TD></TR>
 </TABLE>
 </BODY></HTML>
