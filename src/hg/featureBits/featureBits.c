@@ -37,6 +37,10 @@ errAbort(
   "    :upstream:N  Consider the region of N bases before region\n"
   "    :end:N  Consider the region of N bases after region\n"
   "    :score:N Consider records with score >= N \n"
+  "    :upstreamAll:N Like upstream, but doesn't filter out genes that \n"
+  "                   have txStart==cdsStart or txEnd==cdsEnd\n"
+  "    :endAll:N      Like end, but doesn't filter out genes that \n"
+  "                   have txStart==cdsStart or txEnd==cdsEnd\n"
   );
 }
 

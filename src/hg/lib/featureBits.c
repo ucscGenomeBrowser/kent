@@ -69,6 +69,13 @@ return fetchQualifiers("upstream", qualifier, extra, retSize);
 }
 
 
+static boolean upstreamAllQualifier(char *qualifier, char *extra, int *retSize)
+/* Return TRUE if it's a upstreamAll qualifier. */
+{
+return fetchQualifiers("upstreamAll", qualifier, extra, retSize);
+}
+
+
 static boolean exonQualifier(char *qualifier, char *extra, int *retSize)
 /* Return TRUE if it's a exon qualifier. */
 {
@@ -88,12 +95,21 @@ return fetchQualifiers("cds", qualifier, extra, retSize);
 }
 
 static boolean endQualifier(char *qualifier, char *extra, int *retSize)
-/* Return TRUE if it's an end qualifier. */
+/* Return TRUE if it's an end or downstream qualifier. */
 {
 boolean res = fetchQualifiers("downstream", qualifier, extra, retSize);
 if (res)
     return res;
 return fetchQualifiers("end", qualifier, extra, retSize);
+}
+
+static boolean endAllQualifier(char *qualifier, char *extra, int *retSize)
+/* Return TRUE if it's an endAll or downstreamAll qualifier. */
+{
+boolean res = fetchQualifiers("downstreamAll", qualifier, extra, retSize);
+if (res)
+    return res;
+return fetchQualifiers("endAll", qualifier, extra, retSize);
 }
 
 static boolean utr3Qualifier(char *qualifier, char *extra, int *retSize)
@@ -221,7 +237,7 @@ if (isGene)
 else
     puts(" Whole Alignment </TD><TD> ");
 puts(" </TD></TR><TR><TD>\n");
-cgiMakeRadioButton("fbQual", "upstream", FALSE);
+cgiMakeRadioButton("fbQual", "upstreamAll", FALSE);
 puts(" Upstream by </TD><TD> ");
 cgiMakeTextVar("fbUpBases", "200", 8);
 puts(" bases </TD></TR><TR><TD>\n");
@@ -266,7 +282,7 @@ else if (hti->hasCDS)
     puts(" 3' UTR </TD><TD> ");
     puts(" </TD></TR><TR><TD>\n");
     }
-cgiMakeRadioButton("fbQual", "end", FALSE);
+cgiMakeRadioButton("fbQual", "endAll", FALSE);
 puts(" Downstream by </TD><TD> ");
 cgiMakeTextVar("fbDownBases", "200", 8);
 puts(" bases </TD></TR></TABLE>");
@@ -294,8 +310,12 @@ else if (sameString(fbQual, "exon"))
 else if (sameString(fbQual, "intron"))
     snprintf(qual, sizeof(qual), "%s:%s", fbQual,
 			 cgiString("fbIntronBases"));
+else if (sameString(fbQual, "upstreamAll"))
+    snprintf(qual, sizeof(qual), "%s:%s", fbQual, cgiString("fbUpBases"));
 else if (sameString(fbQual, "upstream"))
     snprintf(qual, sizeof(qual), "%s:%s", fbQual, cgiString("fbUpBases"));
+else if (sameString(fbQual, "endAll"))
+    snprintf(qual, sizeof(qual), "%s:%s", fbQual, cgiString("fbDownBases"));
 else if (sameString(fbQual, "end"))
     snprintf(qual, sizeof(qual), "%s:%s", fbQual, cgiString("fbDownBases"));
 else
@@ -316,7 +336,8 @@ char nameBuf[512];
 char *fName;
 char *track, *qualifier, *extra;
 boolean doUp = FALSE, doEnd = FALSE, doCds = FALSE, doExon = FALSE,
-	doUtr3 = FALSE, doUtr5 = FALSE, doIntron = FALSE, doScore = FALSE;
+	doUtr3 = FALSE, doUtr5 = FALSE, doIntron = FALSE, doScore = FALSE,
+	doUpAll = FALSE, doEndAll = FALSE;
 int promoSize = 0, extraSize = 0, endSize = 0, scoreThreshold = 0;
 boolean canDoIntrons, canDoUTR, canDoScore;
 boolean oldClipToWin = clipToWin;
@@ -340,10 +361,16 @@ if ((doScore = scoreQualifier(qualifier, extra, &scoreThreshold)) != FALSE)
 	errAbort("Can't handle score on table %s, sorry", track);
     }
 
-if ((doUp = upstreamQualifier(qualifier, extra, &promoSize)) != FALSE)
+if ((doUpAll = upstreamAllQualifier(qualifier, extra, &promoSize)) != FALSE)
+    {
+    }
+else if ((doUp = upstreamQualifier(qualifier, extra, &promoSize)) != FALSE)
     {
     }
 else if ((doEnd = endQualifier(qualifier, extra, &endSize)) != FALSE)
+    {
+    }
+else if ((doEndAll = endAllQualifier(qualifier, extra, &endSize)) != FALSE)
     {
     }
 else if ((doExon = exonQualifier(qualifier, extra, &extraSize)) != FALSE)
@@ -372,11 +399,14 @@ else if ((doUtr5 = utr5Qualifier(qualifier, extra, &extraSize)) != FALSE)
 	errAbort("Can't handle utr5 on table %s, sorry", track);
     }
 
+if (doUpAll || doEndAll)
+    filterOutNoUTR = FALSE;
+
 bedList = hGetBedRangeDb(db, track, chrom, chromStart, chromEnd,
 			 sqlConstraints);
 for (bed = bedList;  bed != NULL;  bed = bed->next)
     {
-    if (doUp)
+    if (doUp || doUpAll)
         {
 	if (!canDoUTR || !filterOutNoUTR ||
 	    ((bed->chromStart != bed->thickStart) &&
@@ -399,7 +429,7 @@ for (bed = bedList;  bed != NULL;  bed = bed->next)
 			 bed->strand[0], chromStart, chromEnd);
 	    }
 	}
-    else if (doEnd)
+    else if (doEnd || doEndAll)
         {
 	if (!canDoUTR || !filterOutNoUTR ||
 	    ((bed->chromStart != bed->thickStart) &&
