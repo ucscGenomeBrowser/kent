@@ -6,7 +6,7 @@
 
 #include "common.h"   /* Compiler directives. Strings. Lists. */
 #include "options.h"  /* Command line option handling. */
-#include "errabort.h  /* Error and warning handling. */
+#include "errabort.h" /* Error and warning handling. */
 #include "dnautil.h"  /* Byte <-> 2 bit conversion, reverseComplement etc. */
 #include "dnaseq.h"   /* Sequence, name, and size in a struct. */
 #include "obscure.h"  /* Handy eclectic utility collection. */
