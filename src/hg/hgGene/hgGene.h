@@ -57,8 +57,12 @@ struct section *goSection(struct sqlConnection *conn,
 	struct hash *sectionRa);
 /* Create GO annotations section. */
 
+struct section *mrnaDescriptionsSection(struct sqlConnection *conn, 
+	struct hash *sectionRa);
+/* Create mrnaDescriptions section. */
+
 #ifdef EXAMPLE
-struct section *xyzOrgsSection(struct sqlConnection *conn, 
+struct section *xyzSection(struct sqlConnection *conn, 
 	struct hash *sectionRa);
 /* Create xyz section. */
 #endif /* EXAMPLE */

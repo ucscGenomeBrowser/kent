@@ -48,3 +48,7 @@ shortLabel GO Annotations
 longLabel Gene Ontology (GO) Annotations with Structured Vocabulary
 priority 100
 
+name mrnaDescriptions
+shortLabel mRNA Descriptions
+longLabel Descriptions from all associated mRNAs.
+priority 110

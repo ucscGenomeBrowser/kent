@@ -51,15 +51,15 @@ for (aspectIx = 0; aspectIx < ArraySize(aspects); ++aspectIx)
 	char *goTermName = row[1];
 	if (!hasFirst)
 	    {
-	    hPrintf("<B>%s:</B><UL>", aspectNames[aspectIx]);
+	    hPrintf("<B>%s:</B><BR>", aspectNames[aspectIx]);
 	    hasFirst = TRUE;
 	    }
-        hPrintf("<LI><A HREF = \"");
+        hPrintf("<A HREF = \"");
 	hPrintf("http://godatabase.org/cgi-bin/go.cgi?view=details&depth=1&query=%s", goID);
-	hPrintf("\" TARGET=_blank>%s</A> %s</LI>\n", goID, goTermName);
+	hPrintf("\" TARGET=_blank>%s</A> %s<BR>\n", goID, goTermName);
 	}
     if (hasFirst)
-        hPrintf("</UL>");
+        hPrintf("<BR>");
     sqlFreeResult(&sr);
     }
 sqlDisconnect(&goConn);

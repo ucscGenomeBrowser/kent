@@ -14,7 +14,7 @@
 #include "spDb.h"
 #include "hgGene.h"
 
-static char const rcsid[] = "$Id: hgGene.c,v 1.8 2003/10/12 20:21:52 kent Exp $";
+static char const rcsid[] = "$Id: hgGene.c,v 1.9 2003/10/13 01:42:51 kent Exp $";
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
@@ -289,7 +289,7 @@ addGoodSection(sequenceSection(conn, sectionRa), conn, &sectionList);
 // addGoodSection(multipleAlignmentsSection(conn, sectionRa), conn, &sectionList);
 addGoodSection(swissProtCommentsSection(conn, sectionRa), conn, &sectionList);
 addGoodSection(goSection(conn, sectionRa), conn, &sectionList);
-// addGoodSection(xyzSection(conn, sectionRa), conn, &sectionList);
+addGoodSection(mrnaDescriptionsSection(conn, sectionRa), conn, &sectionList);
 // addGoodSection(xyzSection(conn, sectionRa), conn, &sectionList);
 // addGoodSection(xyzSection(conn, sectionRa), conn, &sectionList);
 
