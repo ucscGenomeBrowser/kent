@@ -145,6 +145,14 @@ visibility hide
 type bed 6 +
 exonArrows off
 
+track rhMap
+shortLabel Radiation Hybrid Map
+longLabel Alignments of Sequences for Radiaton Hybrid Map (RH map)
+group map
+priority 14
+visibility hide
+type psl .
+
 searchTable ensGene
 searchType genePred
 shortCircuit 1
@@ -195,4 +203,23 @@ searchType psl
 shortCircuit 1
 termRegex [Dr][[:alnum:]_\.]+.*_at
 searchPriority 15
+
+searchTable ctgPos2
+searchMethod exact
+shortCircuit 1
+termRegex (ctg|BX|AL)[0-9]+
+query select chrom,chromStart,chromEnd,contig from %s where contig like '%s'
+searchPriority 5
+                                                                                
+searchTable bacEndPairs
+searchMethod exact
+searchType bed
+termRegex ([[:alnum:]_ ]+|((RP|DK|BU|CH)[[:alnum:]]+)?(-[[:alnum:]_]+)+)
+searchPriority 8
+                                                                                
+searchTable bacEndSingles
+searchMethod exact
+searchType bed
+termRegex ([[:alnum:]_ ]+|((RP|DK|BU|CH)[[:alnum:]]+)?(-[[:alnum:]_]+)+)
+searchPriority 8
 
