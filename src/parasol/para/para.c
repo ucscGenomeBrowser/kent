@@ -89,6 +89,8 @@ errAbort(
   "para recover jobList newJobList\n"
   "   Generate a job list by selecting jobs from an existing list`where\n"
   "   the `check out' tests fail.\n"
+  "para priority\n"
+  "   Set batch priority\n"
   "\n"
   "Common options\n"
   "   -verbose=1 - set verbosity level.\n"
