@@ -4789,15 +4789,15 @@ else
 for(bed = bedList; bed != NULL; bed = bed->next)
     {
     lf = lfFromBed(bed);
-    lf->tallStart = bed->chromStart;
-    lf->tallEnd = bed->chromEnd;
+    /* lf->tallStart = bed->chromStart;
+       lf->tallEnd = bed->chromEnd; */
     lf->score = bed->score;
     slAddHead(&lfs->features, lf);  
     }
 return lfs;
 }
 
-void expRecordMapTypes(struct hash *expIndexesToNames, struct hash *indexes, int *numIndexes, struct expRecord *erList,  int index)
+void expRecordMapTypes(struct hash *expIndexesToNames, struct hash *indexes, int *numIndexes, struct expRecord *erList,  int index, char *filter, int filterIndex)
 {
 struct expRecord *er = NULL;
 struct slRef *srList=NULL, *sr=NULL, *val=NULL;
@@ -4806,31 +4806,34 @@ char buff[256];
 int unique = 0;
 for(er = erList; er != NULL; er = er->next)
     {
-    val = hashFindVal(seen, er->extras[index]);
-    if(val == NULL)
-	{
-	/* if this type is new 
-        save the index for this type */
-	AllocVar(sr);
-	snprintf(buff, sizeof(buff), "%d", unique);
-	hashAdd(expIndexesToNames, buff, er->extras[index]);
-	sr->val = buff;
-	hashAdd(seen, er->extras[index], sr);
+    if ((filterIndex == -1) || (sameString(filter, er->extras[filterIndex])))
+        {
+	val = hashFindVal(seen, er->extras[index]);
+	if (val == NULL)
+	    {
+	    /* if this type is new 
+	       save the index for this type */
+	    AllocVar(sr);
+	    snprintf(buff, sizeof(buff), "%d", unique);
+	    hashAdd(expIndexesToNames, buff, er->extras[index]);
+	    sr->val = buff;
+	    hashAdd(seen, er->extras[index], sr);
 
-	/* save the indexes associated with this index */
-	AllocVar(sr);
-	sr->val = &er->id;
-	hashAdd(indexes, buff, sr);
-	unique++;
-	}
-    else
-	{
-	/* if this type has been seen before 
-	   tack the new index on the end of the list */
-	AllocVar(sr);
-	srList = hashMustFindVal(indexes, val->val);
-	sr->val = &er->id;
-	slAddTail(&srList,sr);
+	    /* save the indexes associated with this index */
+	    AllocVar(sr);
+	    sr->val = &er->id;
+	    hashAdd(indexes, buff, sr);
+	    unique++;
+	    }
+	else
+	    {
+	    /* if this type has been seen before 
+	       tack the new index on the end of the list */
+	    AllocVar(sr);
+	    srList = hashMustFindVal(indexes, val->val);
+	    sr->val = &er->id;
+	    slAddTail(&srList,sr);
+	    }
 	}
     }
 
@@ -4846,7 +4849,7 @@ const struct linkedFeaturesSeries *b = *((struct linkedFeaturesSeries **)vb);
 return(strcmp(a->name, b->name));
 }
 
-struct linkedFeaturesSeries *msBedGroupByIndex(struct bed *bedList, char *database, char *table, int expIndex) 
+struct linkedFeaturesSeries *msBedGroupByIndex(struct bed *bedList, char *database, char *table, int expIndex, char *filter, int filterIndex) 
 {
 struct linkedFeaturesSeries *lfsList = NULL, *lfs, **lfsArray;
 struct linkedFeatures *lf = NULL;
@@ -4885,10 +4888,9 @@ for(er = erList; er != NULL; er = er->next)
     snprintf(buff, sizeof(buff), "%d", er->id);
     hashAdd(expTypes, buff, er->extras[expIndex]);
     }
-
 /* get the number of indexes and the experiment values associated
    with each index */
-expRecordMapTypes(expIndexesToNames, indexes, &numIndexes, erList, expIndex);
+expRecordMapTypes(expIndexesToNames, indexes, &numIndexes, erList, expIndex, filter, filterIndex);
 lfsArray = needMem(sizeof(struct linkedFeaturesSeries*) * numIndexes);
 
 /* initialize our different tissue linkedFeatureSeries) */
@@ -4918,8 +4920,8 @@ for(bed = bedList; bed != NULL; bed = bed->next)
 
 	/* create the linked features */
 	lf = lfFromBed(bed);
-	lf->tallStart = bed->chromStart;
-	lf->tallEnd = bed->chromEnd;
+	/*lf->tallStart = bed->chromStart;
+	  lf->tallEnd = bed->chromEnd;*/
 
 	/* average the scores together to get the ave score for this
 	   tissue type */
@@ -4976,11 +4978,41 @@ if(tg->visibility == tvDense)
     }
 else if(sameString(grouping,"Tissue"))
     {
-    tg->items = msBedGroupByIndex(bedList, "hgFixed", "nci60Exps", 1);
+    tg->items = msBedGroupByIndex(bedList, "hgFixed", "nci60Exps", 1, NULL, -1);
     }
 else 
     {
-    tg->items = msBedGroupByIndex(bedList, "hgFixed", "nci60Exps", 0);
+    tg->items = msBedGroupByIndex(bedList, "hgFixed", "nci60Exps", 0, NULL, -1);
+    }
+bedFreeList(&bedList);
+}
+
+void lfsFromCghNci60Bed(struct trackGroup *tg)
+{
+struct linkedFeaturesSeries *lfsList = NULL, *lfs;
+struct linkedFeatures *lf;
+struct bed *bed = NULL, *bedList= NULL;
+char *cghNci60Map = cartUsualString(cart, "cghNci60.type", cghoeEnumToString(0));
+enum cghNci60OptEnum cghNci60Type = cghoeStringToEnum(cghNci60Map);
+int i=0;
+bedList = tg->items;
+
+
+if(tg->visibility == tvDense)
+    {
+    tg->items = lfsFromMsBedSimple(bedList, "CGH NCI 60");
+    }
+else if (cghNci60Type == cghoeTissue)
+    {
+    tg->items = msBedGroupByIndex(bedList, "hgFixed", "cghNci60Exps", 1, NULL, -1);
+    }
+else if (cghNci60Type == cghoeAll)
+    {
+    tg->items = msBedGroupByIndex(bedList, "hgFixed", "cghNci60Exps", 0, NULL, -1);
+    }
+else
+    {
+    tg->items = msBedGroupByIndex(bedList, "hgFixed", "cghNci60Exps", 0, cghNci60Map, 1);
     }
 bedFreeList(&bedList);
 }
@@ -5010,8 +5042,8 @@ else
 	for(bed = bedList; bed != NULL; bed = bed->next)
 	    {
 	    lf = lfFromBed(bed);
-	    lf->tallStart = bed->chromStart;
-	    lf->tallEnd = bed->chromEnd;
+	    /* lf->tallStart = bed->chromStart; */
+	    /* lf->tallEnd = bed->chromEnd; */
 	    lf->score = bed->expScores[i];
 	    slAddHead(&lfs->features, lf);
 	    }
@@ -5038,6 +5070,54 @@ for(i=0; i<=maxShade; i++)
     shadesOfBlue[i] = mgFindColor(mg, 0, 0, level);
     }
 exprBedColorsMade = TRUE;
+}
+
+Color cghNci60Color(struct trackGroup *tg, void *item, struct memGfx *mg ) 
+{
+struct linkedFeatures *lf = item;
+float val = lf->score;
+float absVal = fabs(val);
+int colorIndex = 0;
+float maxDeviation = 1.0;
+char *colorScheme = cartUsualString(cart, "cghNci60.color", "rg");
+/* colorScheme should be stored somewhere not looked up every time... */
+
+/* Make sure colors available */
+if(!exprBedColorsMade)
+    makeRedGreenShades(mg);
+if(val == -10000)
+    return shadesOfGray[5];
+if(tg->visibility == tvDense)
+    val = val/100;
+
+/* Check on mode */
+if (tg->visibility == tvFull)
+    {
+    maxDeviation = 0.3;
+    } 
+ else 
+    {
+    maxDeviation = 0.1;
+    }
+
+/* cap the value to be less than or equal to maxDeviation */
+if(absVal > maxDeviation)
+    absVal = maxDeviation;
+
+/* project the value into the number of colors we have.  
+ *   * i.e. if val = 1.0 and max is 2.0 and number of shades is 16 then index would be
+ * 1 * 15 /2.0 = 7.5 = 7
+ */
+colorIndex = (int)(absVal * maxRGBShade/maxDeviation);
+if(val < 0) 
+    return shadesOfRed[colorIndex];
+else 
+    {
+    if(sameString(colorScheme, "rg"))
+	return shadesOfGreen[colorIndex];
+    else 
+	return shadesOfBlue[colorIndex];
+    }
 }
 
 Color nci60Color(struct trackGroup *tg, void *item, struct memGfx *mg ) 
@@ -5121,6 +5201,15 @@ linkedFeaturesSeriesMethods(tg);
 tg->itemColor = nci60Color;
 tg->loadItems = loadMultScoresBed;
 tg->trackFilter = lfsFromNci60Bed ;
+}
+
+void cghNci60Methods(struct trackGroup *tg)
+/* set up special methods for CGH NCI60 track */
+{
+linkedFeaturesSeriesMethods(tg);
+tg->itemColor = cghNci60Color;
+tg->loadItems = loadMultScoresBed;
+tg->trackFilter = lfsFromCghNci60Bed;
 }
 
 
@@ -6354,6 +6443,7 @@ registerTrackHandler("rosettaPe",rosettaPeMethods);
 registerTrackHandler("uniGene",uniGeneMethods);
 registerTrackHandler("perlegen",perlegenMethods);
 registerTrackHandler("nci60", nci60Methods);
+registerTrackHandler("cghNci60", cghNci60Methods);
 
 /* Load regular tracks, blatted tracks, and custom tracks. 
  * Best to load custom last. */
