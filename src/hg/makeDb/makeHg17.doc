@@ -896,6 +896,9 @@ XXX - Come back to this after contig_overlaps.agp has been created
     ssh kki
     mkdir /cluster/data/hg17/bed/gc5Base
     cd /cluster/data/hg17/bed/gc5Base
+
+    mkdir wigData5 dataLimits5 wigData5_1K dataLimits5_1K
+
     cat << '_EOF_' > kkRun.sh
 #!/bin/sh
 NIB=$1
