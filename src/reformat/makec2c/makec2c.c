@@ -15,6 +15,16 @@ struct clonePos
     bool gotEnd;	/* Got end coordinate? */
     };
 
+#if defined(GZ_FILENAMES)
+char *inNames[] = {
+    "CHROMOSOME_I.gff.gz",
+    "CHROMOSOME_II.gff.gz",
+    "CHROMOSOME_III.gff.gz",
+    "CHROMOSOME_IV.gff.gz",
+    "CHROMOSOME_V.gff.gz",
+    "CHROMOSOME_X.gff.gz",
+};
+#else
 char *inNames[] = {
     "CHROMOSOME_I.gff",
     "CHROMOSOME_II.gff",
@@ -23,6 +33,7 @@ char *inNames[] = {
     "CHROMOSOME_V.gff",
     "CHROMOSOME_X.gff",
 };
+#endif
 
 char *bigChromNames[] = {
     "CHROMOSOME_I",
@@ -51,6 +62,7 @@ for (i=0; i<ArraySize(bigChromNames); ++i)
         return smallChromNames[i];
     }
 errAbort("%s isn't a chromosome", bigName);
+return ((char *)NULL);
 }
 
 char *findSmallName(char *smallName)
@@ -64,6 +76,7 @@ for (i=0; i<ArraySize(smallChromNames); ++i)
         return smallChromNames[i];
     }
 errAbort("%s isn't a chromosome", smallName);
+return ((char *)NULL);
 }
 
 
@@ -105,13 +118,27 @@ printf("Read %d old clones in %s\n", count, fileName);
 return hash;
 }
 
+#if defined(GZ_FILENAMES)
+static FILE *
+pipeOpen(char * fileName)
+{
+char cmd[1024];
+FILE * fh;
+
+strcpy(cmd, "gzip -dc ");  /* use "gzip -c" for zwrite */
+strncat(cmd, fileName, sizeof(cmd)-strlen(cmd));
+fh = popen(cmd, "r");  /* use "w" for zwrite */
+if ( (FILE *) NULL == fh )
+    errAbort("makec2c: - can not gzip open: %s\n", fileName );
+return fh;
+}
+#endif	/*	GZ_FILENAMES	*/
 
 int main(int argc, char *argv[])
 {
 char *outName;
 char *gffDir;
 char *inName;
-char *oldC2c;
 int i;
 FILE *in, *c2c;
 char line[4*1024];
@@ -144,7 +171,11 @@ for (i=0; i<ArraySize(inNames); ++i)
     {
     inName = inNames[i];
     printf("Processing %s\n", inName);
+#if defined(GZ_FILENAMES)
+    in = pipeOpen(inName);
+#else
     in = mustOpen(inName, "r");
+#endif
     lineCount = 0;
     while (fgets(line, sizeof(line), in))
         {
@@ -236,6 +267,7 @@ for (i=0; i<ArraySize(inNames); ++i)
 	    }
 	}
     slFreeList(&cloneList);
+    cloneHash = newHash(0);
     }
 return 0;
 }
