@@ -90,10 +90,19 @@ priority 80
 visibility hide
 type psl .
 
+track wz_ests
+shortLabel $Organism WZ ESTs
+longLabel $Organism WZ ESTs from Washington University
+group rna
+priority 58
+visibility hide
+spectrum on
+type psl est
+
 searchTable ensGene
 searchType genePred
 shortCircuit 1
-termRegex ENSDARTT[0-9]+\.[0-9]+
+termRegex ENSDART[0-9]+\.[0-9]+
 searchPriority 50
 
 searchName ensGeneNoSuffix
