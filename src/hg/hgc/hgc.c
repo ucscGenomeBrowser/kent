@@ -108,7 +108,7 @@
 #include "axtLib.h"
 #include "ensFace.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.441 2003/06/20 00:00:14 hiram Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.442 2003/06/21 06:06:06 daryl Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -8720,7 +8720,7 @@ if ((row = sqlNextRow(sr)) != NULL)
     printCustomUrl(tdb, jaxQTL->mgiID, FALSE);
     printf("<B>QTL:</B> %s<BR>\n", jaxQTL->name);
     printf("<B>Description:</B> %s <BR>\n", jaxQTL->description);
-    printf("<B>cM position of marker associated with peak LOD score:</B> %.1f<BR>\n", jaxQTL->cMscore);
+    printf("<B>cM position of marker associated with peak LOD score:</B> %3.1f<BR>\n", jaxQTL->cMscore);
     printf("<B>MIT SSLP marker with highest correlation:</B> %s<BR>",
 	   jaxQTL->marker);
     printf("<B>Chromosome:</B> %s<BR>\n", skipChr(seqName));
