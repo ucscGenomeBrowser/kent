@@ -40,7 +40,7 @@
 #include "minGeneInfo.h"
 #include <regex.h>
 
-static char const rcsid[] = "$Id: hgFind.c,v 1.97 2003/08/05 23:50:00 kate Exp $";
+static char const rcsid[] = "$Id: hgFind.c,v 1.98 2003/08/06 03:02:02 kate Exp $";
 
 /* alignment tables to check when looking for mrna alignments */
 static char *estTables[] = { "all_est", "xenoEst", NULL};
@@ -548,10 +548,11 @@ hFreeConn(&conn);
 return foundIt;
 }
 
-boolean findRatContigPos(char *name, char **retChromName, 
+boolean findChromContigPos(char *name, char **retChromName, 
 	int *retWinStart, int *retWinEnd)
-/* Find position in genome of Baylor rat assembly RNOR* contig.  
+/* Find position in genome of contig.  Look in all chroms.
  * Don't alter return variables unless found. */
+/* NOTE: could probably speed this up by using the chromInfo hashtable */
 {
 struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr = NULL;
@@ -559,16 +560,13 @@ struct slName *allChroms = hAllChromNames();
 struct slName *chromPtr;
 char **row;
 char query[256];
-boolean foundIt;
+boolean foundIt = FALSE;
 
-if (! hTableExists("chr1_gold"))
-    return FALSE;
-
-foundIt = FALSE;
 for (chromPtr=allChroms;  chromPtr != NULL;  chromPtr=chromPtr->next)
     {
-    snprintf(query, sizeof(query), "select chromStart,chromEnd from %s_gold where frag = '%s'",
-	     chromPtr->name, name);
+    snprintf(query, sizeof(query), 
+                "select chromStart,chromEnd from %s_gold where frag = '%s'",
+	        chromPtr->name, name);
     sr = sqlMustGetResult(conn, query);
     row = sqlNextRow(sr);
     if (row != NULL)
@@ -584,6 +582,63 @@ for (chromPtr=allChroms;  chromPtr != NULL;  chromPtr=chromPtr->next)
     }
 hFreeConn(&conn);
 return foundIt;
+}
+
+boolean findRatContigPos(char *name, char **retChromName, 
+	int *retWinStart, int *retWinEnd)
+/* Find position in genome of Baylor rat assembly RNOR* contig.  
+ * Don't alter return variables unless found. */
+{
+return findChromContigPos(name, retChromName, retWinStart, retWinEnd);
+}
+static boolean isScaffoldPos(char *query)
+/* Return TRUE if the query specifies a numbered scaffold */
+{
+int junk;
+if (sscanf(query, "scaffold_%d", &junk) == 1)
+    return TRUE;
+return FALSE;
+}
+
+boolean parseScaffoldRange(char *query, char **retChromName, 
+	int *retWinStart, int *retWinEnd)
+/* Parse scaffold_N or scaffold_N:start-end to obtain position in genome.
+ * Don't alter return variables unless found. */
+{
+int scaffoldNum;
+int rangeStart = 0, rangeEnd = 0;
+char scaffoldName[64];
+char *colon;
+char *chrom;
+int chromStart, chromEnd;
+int iStart, iEnd;
+
+fprintf(stderr, "parse scaffold: query=%s\n", query);
+if (!isScaffoldPos(query))
+    return FALSE;
+strncpy(scaffoldName, query, 64);
+colon = strchr(query, ':');
+if (colon != NULL)
+    {
+    /* looks like a range, obtain endpoints */
+    if (sscanf(query, "scaffold_%d:%d-%d", 
+            &scaffoldNum, &rangeStart, &rangeEnd) != 3)
+                return FALSE;
+    *colon = 0;
+    }
+/* locate scaffold on a chromosome */
+if (!findChromContigPos(scaffoldName, &chrom, &chromStart, &chromEnd))
+    return FALSE;
+
+iStart = chromStart + rangeStart;
+iEnd = (rangeEnd == 0) ? chromEnd : chromStart + rangeEnd;
+if (retChromName != NULL)
+    *retChromName = chrom;
+if (retWinStart != NULL)
+    *retWinStart = iStart;
+if (retWinEnd != NULL)
+    *retWinEnd = iEnd;
+return TRUE;
 }
 
 static char *startsWithShortHumanChromName(char *chrom)
@@ -2792,6 +2847,16 @@ else if (isRatContigName(query) && findRatContigPos(query, &chrom, &start, &end)
 	start = start + iStart;
 	}
     singlePos(hgp, "Rat Contig", NULL, "gold", query, chrom, start, end);
+    }
+else if (isScaffoldPos(query) && 
+        parseScaffoldRange(query, &chrom, &start, &end))
+    {
+    if (relativeFlag == TRUE)
+	{
+	end = start + iEnd;
+	start = start + iStart;
+	}
+    singlePos(hgp, "Scaffold Range", NULL, NULL, query, chrom, start, end);
     }
 else 
     {
