@@ -18,7 +18,7 @@ enum {qSizeMax = 20000};
 /* Variables that can be set from command line. */
 int tileSize = 11;
 int minMatch = 2;
-int minBases = 20;
+int minScore = 40;
 int maxGap = 2;
 int repMatch = 1024;
 int dotEvery = 0;
@@ -52,7 +52,8 @@ errAbort(
   "               triggers an alignmetns\n"
   "   -minMatch=N sets the number of tile matches.  Usually set from 2 to 4\n"
   "               Default is 2\n"
-  "   -minBases=N sets minimum number of matching bases.  Default is 20\n"
+  "   -minScore=N sets minimum score.  This is twice the matches minus the mismatches\n"
+  "               minus some sort of gap penalty.  Default is 40\n"
   "   -maxGap=N   sets the size of maximum gap between tiles in a clump.  Usually set\n"
   "               from 0 to 3.  Default is 2.\n"
   "   -repMatch=N sets the number of repetitions of a tile allowed before\n"
@@ -168,7 +169,7 @@ void searchOneStrand(struct dnaSeq *seq, struct genoFind *gf, FILE *psl, boolean
 int hitCount;
 struct lm *lm = lmInit(0);
 struct gfClump *clumpList = gfFindClumps(gf, seq, lm, &hitCount);
-gfAlignDnaClumps(clumpList, seq, isRc, ffCdna, minBases, gfSavePsl, psl);
+gfAlignDnaClumps(clumpList, seq, isRc, minScore, gfSavePsl, psl);
 gfClumpFreeList(&clumpList);
 lmCleanup(&lm);
 }
@@ -179,7 +180,7 @@ void searchOneProt(aaSeq *seq, struct genoFind *gf, FILE *psl)
 int hitCount;
 struct lm *lm = lmInit(0);
 struct gfClump *clump, *clumpList = gfFindClumps(gf, seq, lm, &hitCount);
-gfAlignAaClumps(gf, clumpList, seq, FALSE, ffCdna, minBases, gfSavePsl, psl);
+gfAlignAaClumps(gf, clumpList, seq, FALSE, minScore, gfSavePsl, psl);
 gfClumpFreeList(&clumpList);
 lmCleanup(&lm);
 }
@@ -308,7 +309,7 @@ data.f = f;
 data.t3Hash = t3Hash;
 data.targetRc = dbIsRc;
 data.reportTargetStrand = TRUE;
-gfFindAlignAaTrans(gfs, qSeq, t3Hash, ffCdna, minBases, gfSavePslx, &data);
+gfFindAlignAaTrans(gfs, qSeq, t3Hash, minScore, gfSavePslx, &data);
 }
 
 void transTripleSearch(struct dnaSeq *qSeq, struct genoFind *gfs[3], struct hash *t3Hash, 
@@ -324,7 +325,7 @@ data.targetRc = dbIsRc;
 
 for (qIsRc = 0; qIsRc <= rcQueryToo; qIsRc += 1)
     {
-    gfFindAlignTransTrans(gfs, qSeq, t3Hash, qIsRc, ffCdna, minBases, gfSavePslx, &data);
+    gfFindAlignTransTrans(gfs, qSeq, t3Hash, qIsRc, minScore, gfSavePslx, &data);
     if (rcQueryToo)
         reverseComplement(qSeq->dna, qSeq->size);
     }
@@ -504,7 +505,7 @@ if (dIsProtLike)
  * they are within range. */
 tileSize = cgiOptionalInt("tileSize", tileSize);
 minMatch = cgiOptionalInt("minMatch", minMatch);
-minBases = cgiOptionalInt("minBases", minBases);
+minScore = cgiOptionalInt("minScore", minScore);
 maxGap = cgiOptionalInt("maxGap", maxGap);
 dotEvery = cgiOptionalInt("dots", 0);
 gfCheckTileSize(tileSize, dIsProtLike);
