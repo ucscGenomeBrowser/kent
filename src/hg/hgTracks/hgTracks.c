@@ -3500,7 +3500,7 @@ fishClonesMap = cartUsualString(cart, "fishClones.type", fcoeEnumToString(0));
 fishClonesType = fcoeStringToEnum(fishClonesMap);
 bedLoadItem(tg, "fishClones", (ItemLoader)fishClonesLoad);
 filterItems(tg, fishClonesFilterItem, fishClonesFilter);
-fishClonesFilterColor = getFilterColor(fishClonesFilter, MG_GREEN);
+fishClonesFilterColor = getFilterColor(fishClonesFilter, 0);
 }
 
 
@@ -3513,7 +3513,7 @@ fishClonesFreeList((struct fishClones**)&tg->items);
 Color fishClonesColor(struct trackGroup *tg, void *item, struct memGfx *mg)
 /* Return color of fishClones track item. */
 {
-if (fishClonesFilterItem(tg, item))
+if ((fishClonesFilterItem(tg, item)) && (fishClonesFilterColor))
     return fishClonesFilterColor;
 else
     return tg->ixColor;
