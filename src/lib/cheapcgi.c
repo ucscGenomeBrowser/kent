@@ -10,7 +10,7 @@
 #include "portable.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: cheapcgi.c,v 1.50 2003/06/26 16:35:40 kent Exp $";
+static char const rcsid[] = "$Id: cheapcgi.c,v 1.51 2003/09/20 01:37:04 braney Exp $";
 
 /* These three variables hold the parsed version of cgi variables. */
 static char *inputString = NULL;
@@ -675,12 +675,20 @@ printf("<INPUT TYPE=TEXT NAME=\"%s\" SIZE=%d VALUE=%g>", varName,
 
 
 void cgiMakeDropList(char *name, char *menu[], int menuSize, char *checked)
+/* Make a drop-down list with names. 
+ * uses style "normalText" */
+{
+    cgiMakeDropListClass(name, menu, menuSize, checked, "normalText");
+}
+
+/* Make a drop-down list with names. */
+void cgiMakeDropListClass(char *name, char *menu[], int menuSize, char *checked, char *class)
 /* Make a drop-down list with names. */
 {
 int i;
 char *selString;
 if (checked == NULL) checked = menu[0];
-printf("<SELECT NAME=\"%s\">\n", name);
+printf("<SELECT NAME=\"%s\" class=%s>\n", name, class);
 for (i=0; i<menuSize; ++i)
     {
     if (!differentWord(menu[i], checked))
