@@ -24,7 +24,7 @@
 #define CDS_HELP_PAGE "../goldenPath/help/hgCodonColoring.html"
 #define CDS_MRNA_HELP_PAGE "../goldenPath/help/hgCodonColoringMrna.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.173 2005/02/03 19:01:53 hartera Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.174 2005/02/08 16:41:54 donnak Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -393,9 +393,9 @@ void cdsColorOptions(struct trackDb *tdb, int value)
     drawOption = cartUsualString(cart, cdsColorVar, cdsDrawDefault);
     cdsColorDropDown(cdsColorVar, drawOption, value);
     if(value>0)
-        printf("<BR><a href=%s>Help on codon coloring</a><br>",CDS_HELP_PAGE);
+        printf("<BR><BR><a href=%s>Help on codon coloring</a><br>",CDS_HELP_PAGE);
     else
-        printf("<BR><a href=%s>Help on mRNA coloring</a><br>",CDS_MRNA_HELP_PAGE);
+        printf("<BR><BR><a href=%s>Help on mRNA coloring</a><br>",CDS_MRNA_HELP_PAGE);
 }
 
 void blastSGUi(struct trackDb *tdb)
