@@ -145,7 +145,7 @@ old_alpha:
 # This target adds trackDbLocal to for the mgc-specific server.  This
 # 
 mgc:
-	hgTrackDb -raName=trackDbMgc.ra human hg15 trackDbLocal ../../lib/trackDb.sql .
-	hgTrackDb -raName=trackDbMgc.ra human hg16 trackDbLocal ../../lib/trackDb.sql .
-	hgTrackDb -raName=trackDbMgc.ra human mm3 trackDbLocal ../../lib/trackDb.sql .
-	hgTrackDb -raName=trackDbMgc.ra human mm4 trackDbLocal ../../lib/trackDb.sql .
+	hgTrackDb -strict=yes -raName=trackDbMgc.ra human hg15 trackDbLocal ../../lib/trackDb.sql .
+	hgTrackDb -strict=yes -raName=trackDbMgc.ra human hg16 trackDbLocal ../../lib/trackDb.sql .
+	hgTrackDb -strict=yes -raName=trackDbMgc.ra human mm3 trackDbLocal ../../lib/trackDb.sql .
+	hgTrackDb -strict=yes -raName=trackDbMgc.ra human mm4 trackDbLocal ../../lib/trackDb.sql .
