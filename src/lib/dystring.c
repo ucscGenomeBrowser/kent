@@ -6,7 +6,7 @@
 #include "common.h"
 #include "dystring.h"
 
-static char const rcsid[] = "$Id: dystring.c,v 1.14 2003/09/06 23:12:11 kent Exp $";
+static char const rcsid[] = "$Id: dystring.c,v 1.15 2004/02/28 21:07:14 kent Exp $";
 
 struct dyString *newDyString(int initialBufSize)
 /* Allocate dynamic string with initial buffer size.  (Pass zero for default) */
@@ -106,6 +106,7 @@ buf[newSize] = 0;
 }
 
 void dyStringVaPrintf(struct dyString *ds, char *format, va_list args);
+
 void dyStringAppend(struct dyString *ds, char *string)
 /* Append zero terminated string to end of dyString. */
 {
