@@ -324,21 +324,37 @@ else if (sameString(track, "zooCons"))
     genericWiggleUi(tdb,5);
 else if (sameString(track, "blastzMm2"))
     colorCrossSpeciesUi(tdb, FALSE);
+else if (sameString(track, "blastzMm2_0817"))
+    colorCrossSpeciesUi(tdb, FALSE);
+else if (sameString(track, "blastzMm2_0824"))
+    colorCrossSpeciesUi(tdb, FALSE);
 else if (sameString(track, "blastzMm2Sc"))
     colorCrossSpeciesUi(tdb, FALSE);
 else if (sameString(track, "blastzMm2Ref"))
     colorCrossSpeciesUi(tdb, FALSE);
 else if (sameString(track, "blastzHgRef"))
     colorCrossSpeciesUi(tdb, FALSE);
+else if (sameString(track, "recipBest"))
+    colorCrossSpeciesUi(tdb, FALSE);
 else if (sameString(track, "blastzHg"))
     colorCrossSpeciesUi(tdb, FALSE);
 else if (sameString(track, "blastzBestMouse"))
     colorCrossSpeciesUi(tdb, FALSE);
+else if (sameString(track, "blastzBestMouse_0824"))
+    colorCrossSpeciesUi(tdb, FALSE);
+else if (sameString(track, "blastzMouse"))
+    colorCrossSpeciesUi(tdb, FALSE);
 else if (sameString(track, "blastzBestHuman"))
+    colorCrossSpeciesUi(tdb, FALSE);
+else if (sameString(track, "blastzBestHuman12"))
     colorCrossSpeciesUi(tdb, FALSE);
 else if (sameString(track, "blastzMmHg"))
     colorCrossSpeciesUi(tdb, FALSE);
+else if (sameString(track, "blastzMmHg12"))
+    colorCrossSpeciesUi(tdb, FALSE);
 else if (sameString(track, "blastzMmHgRef"))
+    colorCrossSpeciesUi(tdb, FALSE);
+else if (sameString(track, "blastzAllHuman"))
     colorCrossSpeciesUi(tdb, FALSE);
 else if (sameString(track, "aarMm2"))
     colorCrossSpeciesUi(tdb, FALSE);
