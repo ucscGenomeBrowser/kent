@@ -86,7 +86,7 @@
 #include "versionInfo.h"
 #include "bedCart.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.859 2005/01/13 01:00:55 angie Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.860 2005/01/13 03:10:03 kate Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -534,42 +534,6 @@ return '.';
 }
 
 
-enum trackVisibility limitVisibility(struct track *tg)
-/* Return default visibility limited by number of items. 
- * This also sets tg->height. */
-{
-if (!tg->limitedVisSet)
-    {
-    enum trackVisibility vis = tg->visibility;
-    int h;
-    int maxHeight = maximumTrackHeight();
-    tg->limitedVisSet = TRUE;
-    h = tg->totalHeight(tg, vis);
-    if (h > maxHeight)
-        {
-	if (vis == tvFull && tg->canPack)
-	    vis = tvPack;
-	else if (vis == tvPack)
-	    vis = tvSquish;
-	else
-	    vis = tvDense;
-	h = tg->totalHeight(tg, vis);
-	if (h > maxHeight && vis == tvPack)
-	    {
-	    vis = tvSquish;
-	    h = tg->totalHeight(tg, vis);
-	    }
-	if (h > maxHeight)
-	    {
-	    vis = tvDense;
-	    h = tg->totalHeight(tg, vis);
-	    }
-	}
-    tg->height = h;
-    tg->limitedVis = vis;
-    }
-return tg->limitedVis;
-}
 
 static struct dyString *uiStateUrlPart(struct track *toggleGroup)
 /* Return a string that contains all the UI state in CGI var
@@ -7195,10 +7159,12 @@ return y;
 
 static bool isCompositeTrack(struct track *track)
 /* Determine if this is a composite track. This is currently defined
- * as a top-level dummy track, with a list of subtracks of the same type */
+ * as a top-level dummy track, with a list of subtracks of the same type.
+ * Need to check trackDb, as we need to ignore wigMaf's which have
+ * subtracks but aren't composites */
 {
 if (track->tdb)
-    return trackDbIsComposite(track->tdb);
+    return track->subtracks && trackDbIsComposite(track->tdb);
 return FALSE;
 }
 
@@ -7224,6 +7190,45 @@ for (subtrack = trackList; subtrack; subtrack = subtrack->next)
     if (subtrackVisible(subtrack->mapName))
         ct++;
 return ct;
+}
+
+enum trackVisibility limitVisibility(struct track *tg)
+/* Return default visibility limited by number of items. 
+ * This also sets tg->height. */
+{
+if (!tg->limitedVisSet)
+    {
+    enum trackVisibility vis = tg->visibility;
+    int h;
+    int maxHeight = maximumTrackHeight();
+    if (isCompositeTrack(tg))
+        maxHeight = maxHeight * subtrackCount(tg->subtracks);
+    tg->limitedVisSet = TRUE;
+    h = tg->totalHeight(tg, vis);
+    if (h > maxHeight)
+        {
+	if (vis == tvFull && tg->canPack)
+	    vis = tvPack;
+	else if (vis == tvPack)
+	    vis = tvSquish;
+	else
+	    vis = tvDense;
+	h = tg->totalHeight(tg, vis);
+	if (h > maxHeight && vis == tvPack)
+	    {
+	    vis = tvSquish;
+	    h = tg->totalHeight(tg, vis);
+	    }
+	if (h > maxHeight)
+	    {
+	    vis = tvDense;
+	    h = tg->totalHeight(tg, vis);
+	    }
+	}
+    tg->height = h;
+    tg->limitedVis = vis;
+    }
+return tg->limitedVis;
 }
 
 void makeActiveImage(struct track *trackList, char *psOutput)
