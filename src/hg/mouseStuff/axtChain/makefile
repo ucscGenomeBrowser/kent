@@ -9,4 +9,4 @@ O = axtChain.o
 
 axtChain: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/axtChain $O $(MYLIBS) $L
-	strip $(HOME)/bin/$(MACHTYPE)/axtChain
+#	strip $(HOME)/bin/$(MACHTYPE)/axtChain
