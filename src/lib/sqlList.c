@@ -67,7 +67,7 @@ void sqlByteDynamicArray(char *s, signed char **retArray, int *retSize)
  * array, which should be freeMem()'d when done. */
 {
 signed char *sArray, *dArray = NULL;
-unsigned size;
+int size;
 
 sqlByteStaticArray(s, &sArray, &size);
 if (size > 0)
@@ -136,7 +136,7 @@ void sqlUbyteDynamicArray(char *s, unsigned char **retArray, int *retSize)
  * array, which should be freeMem()'d when done. */
 {
 unsigned char *sArray, *dArray = NULL;
-unsigned size;
+int size;
 
 sqlUbyteStaticArray(s, &sArray, &size);
 if (size > 0)
@@ -205,7 +205,7 @@ void sqlShortDynamicArray(char *s, short **retArray, int *retSize)
  * array, which should be freeMem()'d when done. */
 {
 short *sArray, *dArray = NULL;
-unsigned size;
+int size;
 
 sqlShortStaticArray(s, &sArray, &size);
 if (size > 0)
@@ -274,7 +274,7 @@ void sqlUshortDynamicArray(char *s, unsigned short **retArray, int *retSize)
  * array, which should be freeMem()'d when done. */
 {
 unsigned short *sArray, *dArray = NULL;
-unsigned size;
+int size;
 
 sqlUshortStaticArray(s, &sArray, &size);
 if (size > 0)
@@ -343,7 +343,7 @@ void sqlFloatDynamicArray(char *s, float **retArray, int *retSize)
  * array, which should be freeMem()'d when done. */
 {
 float *sArray, *dArray = NULL;
-unsigned size;
+int size;
 
 sqlFloatStaticArray(s, &sArray, &size);
 if (size > 0)
@@ -412,7 +412,7 @@ void sqlUnsignedDynamicArray(char *s, unsigned **retArray, int *retSize)
  * array, which should be freeMem()'d when done. */
 {
 unsigned *sArray, *dArray = NULL;
-unsigned size;
+int size;
 
 sqlUnsignedStaticArray(s, &sArray, &size);
 if (size > 0)

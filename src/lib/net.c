@@ -98,7 +98,7 @@ int netReadAll(int sd, void *vBuf, size_t size)
 {
 char *buf = vBuf;
 size_t totalRead = 0;
-size_t oneRead;
+int oneRead;
 
 if (!plumberInstalled)
     netCatchPipes();

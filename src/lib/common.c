@@ -732,6 +732,8 @@ for (;;)
 char *skipToSpaces(char *s)
 {
 char c;
+if (s == NULL)
+    return NULL;
 for (;;)
     {
     c = *s;
@@ -798,6 +800,28 @@ line = skipLeadingSpaces(line);
 if ((e = skipToSpaces(line)) != NULL)
     *e = 0;
 return line;
+}
+
+char *lastWordInLine(char *line)
+/* Returns last word in line if any (white space separated).
+ * Returns NULL if string is empty.  Removes any terminating white space
+ * from line. */
+{
+char *s = line;
+char *word = NULL, *wordEnd = NULL;
+for (;;)
+    {
+    s = skipLeadingSpaces(s);
+    if (s == NULL || s[0] == 0)
+	break;
+    word = s;
+    s = wordEnd = skipToSpaces(s);
+    if (s == NULL)
+        break;
+    }
+if (wordEnd != NULL)
+    *wordEnd = 0;
+return word;
 }
 
 char *nextWord(char **pLine)

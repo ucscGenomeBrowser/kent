@@ -542,7 +542,7 @@ for (i=0; i<blockCount; ++i)
     }
 if (strand == '-')
     {
-    reverseUnsignedRange(&psl->qStart, &psl->qEnd, psl->qSize);
+    reverseIntRange(&psl->qStart, &psl->qEnd, psl->qSize);
     }
 return psl;
 }
