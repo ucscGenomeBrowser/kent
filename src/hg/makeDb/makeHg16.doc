@@ -3719,9 +3719,9 @@ end
 # Load database
     ssh hgwdev
     cd /cluster/data/hg16/bed/rnaStruct/utr5
-    hgLoadRnaFold hg16 knownFoldUtr5 fold
+    hgLoadRnaFold hg16 foldUtr5 fold
     cd ../utr3
-    hgLoadRnaFold hg16 knownFoldUtr3 fold
+    hgLoadRnaFold hg16 foldUtr3 fold
 
 # Clean up
     rm -r split fold err batch.bak
