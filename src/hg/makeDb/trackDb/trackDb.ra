@@ -993,7 +993,7 @@ type bed 4 +
 
 track syntenyRat
 shortLabel Rat Synteny
-longLabel Human/Rat Synteny using blastz single coverage (100k window)
+longLabel $Organism/Rat Synteny using blastz single coverage (100k window)
 group compGeno
 priority 140
 visibility hide
