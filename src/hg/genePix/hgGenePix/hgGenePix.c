@@ -84,7 +84,7 @@ for (image = imageList; image != NULL; image = image->next)
 	    printf(",");
 	}
     slFreeList(&nameList);
-    printf("%s %s<BR>\n",
+    printf(" %s %s<BR>\n",
 	genePixOrganism(conn, id),
 	genePixStage(conn, id, FALSE) );
     printf("</TD>");
@@ -118,7 +118,9 @@ char *treatment, *publication;
 char *setUrl, *itemUrl;
 
 printLabeledList("gene", geneList);
+printf(" ");
 printLabeledList("genbank", genePixGenbank(conn, id));
+printf(" ");
 printf("<B>organism:</B> %s  ", genePixOrganism(conn, id));
 printf("<B>stage:</B> %s<BR>\n", genePixStage(conn, id, TRUE));
 printf("<B>body part:</B> %s ", naForNull(genePixBodyPart(conn,id)));
