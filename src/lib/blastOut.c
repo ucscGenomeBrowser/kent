@@ -6,7 +6,7 @@
 #include "obscure.h"
 #include "genoFind.h"
 
-static char const rcsid[] = "$Id: blastOut.c,v 1.11 2004/04/02 16:35:47 kent Exp $";
+static char const rcsid[] = "$Id: blastOut.c,v 1.12 2004/10/30 02:04:04 kent Exp $";
 
 struct axtRef
 /* A reference to an axt. */
@@ -297,10 +297,9 @@ struct axtRef *ref;
  * score of hits. */
 for (ab = abList; ab != NULL; ab = ab->next)
     {
-    struct axt *axt, *next;
-    for (axt = ab->axtList; axt != NULL; axt = next)
+    struct axt *axt;
+    for (axt = ab->axtList; axt != NULL; axt = axt->next)
 	{
-	next = axt->next;
 	target = hashFindVal(targetHash, axt->tName);
 	if (target == NULL)
 	    {
@@ -316,7 +315,6 @@ for (ab = abList; ab != NULL; ab = ab->next)
 	ref->axt = axt;
 	slAddHead(&target->axtList, ref);
 	}
-    ab->axtList = NULL;
     }
 slSort(&targetList, targetHitsCmpScore);
 for (target = targetList; target != NULL; target = target->next)
@@ -674,7 +672,7 @@ struct targetHits *targetList = NULL, *target;
 
 if (withComment)
     {
-    char * rcsDate = "$Date: 2004/04/02 16:35:47 $";
+    char * rcsDate = "$Date: 2004/10/30 02:04:04 $";
     char dateStamp[11];
     strncpy (dateStamp, rcsDate+7, 10);
     dateStamp[10] = 0;
