@@ -3691,54 +3691,56 @@ if (hti->hasBlocks)
     }
 
 /* Use fixed-font for decimal point/integer alignment: */
-puts("<PRE><TT>");
 puts("<TABLE BORDER=\"1\">");
 /* All these non-blocking spaces are to widen the first column so that some 
  * row descriptions below do not get wrapped (which would mess up the <br> 
  * formatting of row contents). */
-puts("<TR><TH>statistic&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TH>");
+puts("<TR><TH><TT>statistic&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TT></TH>");
 /* These non-blocking spaces are for decimal point/integer alignment: */
-puts("<TH ALIGN=\"RIGHT\">total&nbsp;&nbsp;&nbsp;</TH>");
+puts("<TH ALIGN=\"RIGHT\"><TT>total&nbsp;&nbsp;&nbsp;</TT></TH>");
 if (numCols > 1)
     for (chromPtr=chromList;  chromPtr != NULL;  chromPtr=chromPtr->next)
-	printf("<TH>%s</TH>", breakChromRandomName(chromPtr->name));
+	printf("<TH><TT>%s</TT></TH>", breakChromRandomName(chromPtr->name));
 puts("</TR>");
-puts("<TR><TD>items matching query</TD>");
+puts("<TR><TD><TT>items matching query</TT></TD>");
 for (i=0;  i < numCols;  i++)
-    printf("<TD ALIGN=\"RIGHT\">%d&nbsp;&nbsp;&nbsp;</TD>", itemCounts[i]);
+    printf("<TD ALIGN=\"RIGHT\"><TT>%d&nbsp;&nbsp;&nbsp;</TT></TD>",
+	   itemCounts[i]);
 puts("</TR>");
-puts("<TR><TD>bases covered by matching items</TD>");
+puts("<TR><TD><TT>bases covered by matching items</TT></TD>");
 for (i=0;  i < numCols;  i++)
-    printf("<TD ALIGN=\"RIGHT\">%d&nbsp;&nbsp;&nbsp;</TD>", bitCounts[i]);
+    printf("<TD ALIGN=\"RIGHT\"><TT>%d&nbsp;&nbsp;&nbsp;</TT></TD>",
+	   bitCounts[i]);
 puts("</TR>");
 if ((constraints != NULL) || ((table2 != NULL) && (constraints2 != NULL)))
     {
-    puts("<TR><TD>items without constraints</TD>");
+    puts("<TR><TD><TT>items without constraints</TT></TD>");
     for (i=0;  i < numCols;  i++)
-	printf("<TD ALIGN=\"RIGHT\">%d&nbsp;&nbsp;&nbsp;</TD>", itemUncCounts[i]);
+	printf("<TD ALIGN=\"RIGHT\"><TT>%d&nbsp;&nbsp;&nbsp;</TT></TD>",
+	       itemUncCounts[i]);
     puts("</TR>");
     }
 if (itemCounts[0] > 0)
     {
     if (hti->strandField[0] != 0)
 	{
-	puts("<TR><TD>items on strand: <br>+<br>-<br>?</TD>");
+	puts("<TR><TD><TT>items on strand: <br>+<br>-<br>?</TT></TD>");
 	for (i=0;  i < numCols;  i++)
-	    printf("<TD ALIGN=\"RIGHT\"><br>%d&nbsp;&nbsp;&nbsp;<br>%d&nbsp;&nbsp;&nbsp;<br>%d&nbsp;&nbsp;&nbsp;</TD>",
+	    printf("<TD ALIGN=\"RIGHT\"><TT><br>%d&nbsp;&nbsp;&nbsp;<br>%d&nbsp;&nbsp;&nbsp;<br>%d&nbsp;&nbsp;&nbsp;</TT></TD>",
 		   strandPCounts[i], strandMCounts[i], strandQCounts[i]);
 	puts("</TR>");
 	}
-    puts("<TR><TD>(chromEnd - chromStart): <br>min<br>avg<br>max<br>stdev</TD>");
+    puts("<TR><TD><TT>(chromEnd - chromStart): <br>min<br>avg<br>max<br>stdev</TT></TD>");
     for (i=0;  i < numCols;  i++)
-	printf("<TD ALIGN=\"RIGHT\"><br>%d&nbsp;&nbsp;&nbsp;<br>%.2f<br>%d&nbsp;&nbsp;&nbsp;<br>%.2f</TD>",
+	printf("<TD ALIGN=\"RIGHT\"><TT><br>%d&nbsp;&nbsp;&nbsp;<br>%.2f<br>%d&nbsp;&nbsp;&nbsp;<br>%.2f</TT></TD>",
 	       chromLengthStats[i].min, chromLengthStats[i].avg,
 	       chromLengthStats[i].max, chromLengthStats[i].stdev);
     puts("</TR>");
     if (hti->scoreField[0] != 0)
 	{
-	puts("<TR><TD>score: <br>min<br>avg<br>max<br>stdev</TD>");
+	puts("<TR><TD><TT>score: <br>min<br>avg<br>max<br>stdev</TT></TD>");
 	for (i=0;  i < numCols;  i++)
-	    printf("<TD ALIGN=\"RIGHT\"><br>%d&nbsp;&nbsp;&nbsp;<br>%.2f<br>%d&nbsp;&nbsp;&nbsp;<br>%.2f</TD>",
+	    printf("<TD ALIGN=\"RIGHT\"><TT><br>%d&nbsp;&nbsp;&nbsp;<br>%.2f<br>%d&nbsp;&nbsp;&nbsp;<br>%.2f</TT></TD>",
 		   scoreStats[i].min, scoreStats[i].avg,
 		   scoreStats[i].max, scoreStats[i].stdev);
 	puts("</TR>");
@@ -3746,24 +3748,24 @@ if (itemCounts[0] > 0)
     if (hti->hasCDS != 0)
 	{
 	char *exons = hti->hasBlocks ? " exons" : "";
-	printf("<TR><TD>bases in 5\' UTR%s: <br>min<br>avg<br>max<br>stdev</TD>\n",
+	printf("<TR><TD><TT>bases in 5\' UTR%s: <br>min<br>avg<br>max<br>stdev</TT></TD>\n",
 	       exons);
 	for (i=0;  i < numCols;  i++)
-	    printf("<TD ALIGN=\"RIGHT\"><br>%d&nbsp;&nbsp;&nbsp;<br>%.2f<br>%d&nbsp;&nbsp;&nbsp;<br>%.2f</TD>",
+	    printf("<TD ALIGN=\"RIGHT\"><TT><br>%d&nbsp;&nbsp;&nbsp;<br>%.2f<br>%d&nbsp;&nbsp;&nbsp;<br>%.2f</TT></TD>",
 		   utr5Stats[i].min, utr5Stats[i].avg,
 		   utr5Stats[i].max, utr5Stats[i].stdev);
 	puts("</TR>");
-	printf("<TR><TD>bases in CDS%s: <br>min<br>avg<br>max<br>stdev</TD>\n",
+	printf("<TR><TD><TT>bases in CDS%s: <br>min<br>avg<br>max<br>stdev</TT></TD>\n",
 	       exons);
 	for (i=0;  i < numCols;  i++)
-	    printf("<TD ALIGN=\"RIGHT\"><br>%d&nbsp;&nbsp;&nbsp;<br>%.2f<br>%d&nbsp;&nbsp;&nbsp;<br>%.2f</TD>",
+	    printf("<TD ALIGN=\"RIGHT\"><TT><br>%d&nbsp;&nbsp;&nbsp;<br>%.2f<br>%d&nbsp;&nbsp;&nbsp;<br>%.2f</TT></TD>",
 		   cdsStats[i].min, cdsStats[i].avg,
 		   cdsStats[i].max, cdsStats[i].stdev);
 	puts("</TR>");
-	printf("<TR><TD>bases in 3\' UTR%s: <br>min<br>avg<br>max<br>stdev</TD>\n",
+	printf("<TR><TD><TT>bases in 3\' UTR%s: <br>min<br>avg<br>max<br>stdev</TT></TD>\n",
 	       exons);
 	for (i=0;  i < numCols;  i++)
-	    printf("<TD ALIGN=\"RIGHT\"><br>%d&nbsp;&nbsp;&nbsp;<br>%.2f<br>%d&nbsp;&nbsp;&nbsp;<br>%.2f</TD>",
+	    printf("<TD ALIGN=\"RIGHT\"><TT><br>%d&nbsp;&nbsp;&nbsp;<br>%.2f<br>%d&nbsp;&nbsp;&nbsp;<br>%.2f</TT></TD>",
 		   utr3Stats[i].min, utr3Stats[i].avg,
 		   utr3Stats[i].max, utr3Stats[i].stdev);
 	puts("</TR>");
@@ -3771,24 +3773,23 @@ if (itemCounts[0] > 0)
     if (hti->hasBlocks != 0)
 	{
 	char *thingy = startsWith("psl", hti->type) ? "gapless block" : "exon";
-	printf("<TR><TD>%ss: <br>min<br>avg<br>max<br>stdev</TD>\n",
+	printf("<TR><TD><TT>%ss: <br>min<br>avg<br>max<br>stdev</TT></TD>\n",
 	       thingy);
 	for (i=0;  i < numCols;  i++)
-	    printf("<TD ALIGN=\"RIGHT\"><br>%d&nbsp;&nbsp;&nbsp;<br>%.2f<br>%d&nbsp;&nbsp;&nbsp;<br>%.2f</TD>",
+	    printf("<TD ALIGN=\"RIGHT\"><TT><br>%d&nbsp;&nbsp;&nbsp;<br>%.2f<br>%d&nbsp;&nbsp;&nbsp;<br>%.2f</TT></TD>",
 		   blockCountStats[i].min, blockCountStats[i].avg,
 		   blockCountStats[i].max, blockCountStats[i].stdev);
 	puts("</TR>");
-	printf("<TR><TD>bases per %s: <br>min<br>avg<br>max<br>stdev</TD>\n",
+	printf("<TR><TD><TT>bases per %s: <br>min<br>avg<br>max<br>stdev</TT></TD>\n",
 	       thingy);
 	for (i=0;  i < numCols;  i++)
-	    printf("<TD ALIGN=\"RIGHT\"><br>%d&nbsp;&nbsp;&nbsp;<br>%.2f<br>%d&nbsp;&nbsp;&nbsp;<br>%.2f</TD>",
+	    printf("<TD ALIGN=\"RIGHT\"><TT><br>%d&nbsp;&nbsp;&nbsp;<br>%.2f<br>%d&nbsp;&nbsp;&nbsp;<br>%.2f</TT></TD>",
 		   blockSizeStats[i].min, blockSizeStats[i].avg,
 		   blockSizeStats[i].max, blockSizeStats[i].stdev);
 	puts("</TR>");
 	}
     }
 puts("</TABLE>");
-puts("</TT></PRE>");
 freez(&(chromLengthArrs[0]));
 freez(&chromLengthArrs);
 freez(&chromLengthStats);
