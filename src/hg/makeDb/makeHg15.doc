@@ -1364,6 +1364,24 @@ DONE TO HERE - RUNNING...
 	echo 'load data local infile "cytobands.bed" into table cytoBand;' | hgsql hg15
 
 
+# CREATE AND LOAD RECOMBINATION RATE TRACK (DONE 05/01/2003)
+# (must be done after STS Markers track) 
+
+# Create bed file
+	cd /projects/hg2/booch/psl/gs.16/build33/recombrate
+	make recombRate.bed
+
+# Create database table
+        ssh hgwdev
+        cd /projects/hg2/booch/psl/tables
+        hgsql hg15 < recombRate.sql
+        
+# Load the table
+	cd /projects/hg2/booch/psl/gs.16/build33/recombrate/
+	echo 'load data local infile "recombRate.bed" into table recombRate;' | hgsql hg15
+
+
+
 # CREATE STS MAP COMPARISON PLOTS AND GENETIC PLOTS (DONE 4/28/2003)
 # (Must wait until after the STS Map track has been finished for STS and genetic plots)
 # (Must wait until after the CytoBand, FISH tracks have been finished for cytogenetic plots)
