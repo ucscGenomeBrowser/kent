@@ -9,7 +9,7 @@
 #include "axtInfo.h"
 #include "hgColors.h"
 
-static char const rcsid[] = "$Id: web.c,v 1.74 2005/02/08 18:54:44 angie Exp $";
+static char const rcsid[] = "$Id: web.c,v 1.75 2005/03/01 19:17:30 donnak Exp $";
 
 /* flag that tell if the CGI header has already been outputed */
 boolean webHeadAlreadyOutputed = FALSE;
@@ -187,23 +187,29 @@ else
 	       uiState);
 	puts("           Genome Browser</A> &nbsp; - &nbsp;");
 	}
+    if (!endsWith(scriptName, "hgBlat"))
+	{
+    	printf("       <A HREF=\"/cgi-bin/hgBlat?command=start&%s\" class=\"topbar\">", uiState+1);
+    	puts("           Blat</A> &nbsp; - &nbsp;");
+	}
+    if (!(endsWith(scriptName, "hgTables") || endsWith(scriptName, "hgText")))
+	{
+    	printf("       <A HREF=\"/cgi-bin/hgTables%s\" class=\"topbar\">\n", uiState);
+    	puts("           Tables</A> &nbsp; - &nbsp;");
+	}
+    if (!endsWith(scriptName, "hgNear")) 
     /*  possible to make this conditional: if (db != NULL && hgNearOk(db))	*/
 	{
 	printf("       <A HREF=\"/cgi-bin/hgNear%s\" class=\"topbar\">\n",
 	       uiState);
 	puts("           Gene Sorter</A> &nbsp; - &nbsp;");
 	}
-    printf("       <A HREF=\"/cgi-bin/hgBlat?command=start&%s\" class=\"topbar\">",
-	   uiState+1);
-    puts("           Blat</A> &nbsp; - &nbsp;");
-    if (db == NULL || hgPcrOk(db))
+    if ((!endsWith(scriptName, "hgPcr")) && (db == NULL || hgPcrOk(db)))
 	{
 	printf("       <A HREF=\"/cgi-bin/hgPcr%s\" class=\"topbar\">\n",
 	       uiState);
 	puts("           PCR</A> &nbsp; - &nbsp;");
 	}
-    printf("       <A HREF=\"/cgi-bin/hgTables%s\" class=\"topbar\">\n", uiState);
-    puts("           Tables</A> &nbsp; - &nbsp;");
     puts("       <A HREF=\"/FAQ/\" class=\"topbar\">" "\n"
 	 "           FAQ</A> &nbsp; - &nbsp;" "\n" 
 	 );
