@@ -303,7 +303,73 @@ else
     }
 return(ebuf);
 }
+#endif /* SOME_OFF_BY_ONE_PROBLEMS */
 
+#ifdef CRASHES
+static int *xdda_ebuf(int *ebuf, int x1, int y1, int x2, int y2)
+/* Calculate the x-positions of a line from x1,y1  to x2/y2  */
+{
+WORD height;
+UBYTE rot;
+int   duty_cycle;
+int   delta_x, delta_y;
+int dots;
+int swap;
+
+if (x1 > x2)
+    {
+    swap = x1;
+    x1 = x2;
+    x2 = swap;
+    swap = y1;
+    y1 = y2;
+    y2 = swap;
+    }
+delta_y = y2-y1;
+delta_x = x2-x1;
+rot = ((unsigned)0x80) >> (x1&7);
+
+
+if (delta_y < 0) 
+    {
+    delta_y = -delta_y;
+    }
+duty_cycle = (delta_x - delta_y)/2;
+*ebuf++ = x1;
+if (delta_x < delta_y)
+    {
+    dots = delta_y;
+    while (--dots >= 0)
+	{
+	*ebuf++ = x1;
+	duty_cycle += delta_x;	  /* update duty cycle */
+	if (duty_cycle > 0)
+	    {
+	    duty_cycle -= delta_y;
+	    x1 += 1;
+	    }
+	}
+    }
+else
+    {
+    dots = delta_x;
+    while (--dots >= 0)
+	{
+	duty_cycle -= delta_y;	  /* update duty cycle */
+	if (duty_cycle < 0)
+	    {
+	    *ebuf++ = x1;
+	    duty_cycle += delta_x;
+	    }
+	x1 += 1;
+	}
+    }
+return ebuf;
+}
+#endif /* CRASHES */
+
+
+#ifdef CONVEX_OPTIMIZATION
 int *fill_ebuf(struct gfxPoint *thread, int count, int *ebuf)
 /* Make list of x coordinates for a couple of lines.  Assumes that
  * the y coordinates are monotonic.  Ebuf needs to be as big as the
@@ -413,7 +479,7 @@ while (--i >= 0)
     }	
 return;	/*all points of poly have same y value */
 }
-#endif /* SOME_OFF_BY_ONE_PROBLEMS */
+#endif /* CONVEX_OPTIMIZATION */
 
 void mgDrawPoly(struct memGfx *mg, struct gfxPoly *poly, Color color,
 	boolean filled)
@@ -421,6 +487,7 @@ void mgDrawPoly(struct memGfx *mg, struct gfxPoly *poly, Color color,
 {
 if (filled)
     fillConcave(mg, poly, color);
+    // mgDrawPolyFilled(mg, poly, color);
 mgDrawPolyOutline(mg, poly, color);
 }
 
