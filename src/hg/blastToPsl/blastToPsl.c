@@ -14,7 +14,7 @@
 #include "portable.h"
 #include "blastTab.h"
 
-static char const rcsid[] = "$Id: blastToPsl.c,v 1.6 2003/09/08 17:56:54 braney Exp $";
+static char const rcsid[] = "$Id: blastToPsl.c,v 1.7 2003/09/10 13:19:43 braney Exp $";
 
 
 int minScore = -1000000;
@@ -109,6 +109,7 @@ if (!sameString(newName, *pName))
     {
     *pName = newName;
     *pSeq = seq = hashFindVal(faHash, newName);
+
     uglyf("Loaded %d bases from %s fa\n", seq->size, newName);
     }
 }
@@ -150,13 +151,22 @@ slReverse(&newList);
 *pBoxList = newList;
 }
 
-double scoreBlock(char *q, char *t, int size, int matrix[256][256])
+double scoreBlock(char *q, char *t, int size, int matrix[256][256], 
+	int *pMisMatches)
 /* Score block through matrix. */
 {
 double score = 0;
+int misMatches = 0;
 int i;
 for (i=0; i<size; ++i)
+    {
+    if (q[i] != t[i])
+	misMatches++;
     score += matrix[q[i]][t[i]];
+    }
+if (pMisMatches)
+    *pMisMatches = misMatches;
+
 return score;
 }
 
@@ -183,8 +193,8 @@ aaSeq1 = translateSeqN(tSeq,  left->tEnd - overlap * 3 - 3 , 3*overlap + 10, FAL
 aaSeq2 = translateSeqN(tSeq,  right->tStart ,  3*overlap + 10, FALSE);
 rtStart = aaSeq2->dna;
 ltStart = aaSeq1->dna;
-score = bestScore = rScore = scoreBlock(rqStart, rtStart, overlap, matrix);
-lScore = scoreBlock(lqStart, ltStart, overlap, matrix);
+score = bestScore = rScore = scoreBlock(rqStart, rtStart, overlap, matrix, NULL);
+lScore = scoreBlock(lqStart, ltStart, overlap, matrix, NULL);
 for (i=0; i<overlap; ++i)
     {
     score += matrix[lqStart[i]][ltStart[i]];
@@ -466,7 +476,7 @@ if (dq < 0 || dt < 0)
 	   return 100000;
        /* B is enclosed in A.  Discourage this overlap. */
        overlapAdjustment = scoreBlock(scoreData.qSeq->dna + a->qStart, 
-       	scoreData.tSeq->dna + a->tStart, a->tEnd - a->tStart, scoreData.ss->matrix);
+       	scoreData.tSeq->dna + a->tStart, a->tEnd - a->tStart, scoreData.ss->matrix, NULL);
        }
    else
        {
@@ -627,9 +637,11 @@ if (maxScore < chain->score)
 #endif /* TESTONLY */
 
 double chainScore(struct chain *chain, struct dnaSeq *qSeq, struct dnaSeq *tSeq,
-    int matrix[256][256], int (*gapCost)(int dt, int dq))
+    int matrix[256][256], int (*gapCost)(int dt, int dq), int *pTotalMisMatch)
 /* Calculate score of chain from scratch looking at blocks. */
 {
+int totalMisMatch = 0;
+int misMatch = 0;
 struct boxIn *b, *a = NULL;
 double score = 0;
 for (b = chain->blockList; b != NULL; b = b->next)
@@ -644,12 +656,16 @@ for (b = chain->blockList; b != NULL; b = b->next)
  //   else
 	aaSeq = translateSeqN(tSeq,  b->tStart , size * 3, FALSE);
     score += scoreBlock(qSeq->dna + b->qStart , aaSeq->dna, 
-    	size, matrix);
+    	size, matrix, &misMatch);
+    totalMisMatch += misMatch;
     freeDnaSeq(&aaSeq);
     if (a != NULL)
 	score -= gapCost(b->tStart - a->tEnd, b->qStart - a->qEnd);
     a = b;
     }
+
+if (pTotalMisMatch)
+    *pTotalMisMatch = totalMisMatch;
 return score;
 }
 
@@ -661,6 +677,7 @@ void chainPair(struct seqPair *sp,
 struct chain *chainList, *chain, *next;
 struct boxIn *b;
 long startTime, dt;
+int misMatch;
 
 uglyf("chainPair %s\n", sp->name);
 
@@ -697,7 +714,8 @@ for (chain = chainList; chain != NULL; chain = chain->next)
     {
     removePartialOverlaps(chain, qSeq, tSeq, scoreData.ss->matrix);
     mergeAbutting(chain);
-    chain->score = chainScore(chain, qSeq, tSeq, scoreData.ss->matrix, gapCost);
+    chain->score = chainScore(chain, qSeq, tSeq, scoreData.ss->matrix, gapCost, &misMatch);
+    chain->id = misMatch;
     }
 
 /* Move chains scoring over threshold to master list. */
@@ -791,8 +809,8 @@ spList = readBlastBlocks(tabIn, pairHash);
 faF = lineFileOpen(qNibDir, 0);
 while ( faMixedSpeedReadNext(faF, &dna, &size, &name))
     {
-    seq = newDnaSeq(dna, size, name);
-    hashAdd(faHash, name, seq);
+    seq = newDnaSeq(cloneString(dna), size, name);
+    hashAdd(faHash, seq->name, seq);
     slAddHead(&seqList, seq);
     }
 lineFileClose(&faF);
@@ -821,19 +839,19 @@ for (sp = spList; sp != NULL; sp = sp->next)
     chainPair(sp, qSeq, tSeq, &chainList, details, ss);
     }
 slSort(&chainList, chainCmpScore);
-// pslxWriteHead( f, gftProt, gftDnaX);
+pslxWriteHead( f, gftProt, gftDnaX);
 for (chain = chainList; chain != NULL; chain = chain->next)
     {
     struct psl psl;
-    struct boxIn *b, *nextB;
+    struct boxIn *b, *a = NULL;
     int count = 0;
+    int totalSize = 0;
     assert(chain->qStart == chain->blockList->qStart 
 	&& chain->tStart == chain->blockList->tStart);
 
     memset(&psl, 0, sizeof(psl));
-    psl.match = 0;	/* Number of bases that match that aren't repeats */
-    psl.misMatch = 0;	/* Number of bases that don't match */
-    psl.repMatch = chain->score;	/* Number of bases that match but are part of repeats */
+    psl.misMatch = chain->id;	/* Number of bases that don't match */
+    psl.repMatch =  0;//chain->score;	/* Number of bases that match but are part of repeats */
     psl.nCount = 0;	/* Number of 'N' bases */
     psl.qNumInsert = 0;	/* Number of inserts in query */
     psl.qBaseInsert = 0;	/* Number of bases inserted in query */
@@ -841,7 +859,7 @@ for (chain = chainList; chain != NULL; chain = chain->next)
     psl.tBaseInsert = 0;	/* Number of bases inserted in target */
     psl.strand[0] = '+';
     psl.strand[1] = chain->qStrand;	/* + or - for strand */
-    psl.qName = chain->qName;	/* Query sequence name */
+    psl.qName =  chain->qName;	/* Query sequence name */
     psl.qSize = chain->qSize;	/* Query sequence size */
     psl.qStart = chain->qStart;	/* Alignment start position in query */
     psl.qEnd = chain->qEnd;	/* Alignment end position in query */
@@ -861,18 +879,32 @@ for (chain = chainList; chain != NULL; chain = chain->next)
     psl.qStarts=qStarts;	/* Start of each block in query. */
     psl.tStarts=tStarts;	/* Start of each block in target. */
 
-    for (b = chain->blockList, count = 0; b != NULL; b = nextB)
-	nextB = b->next, count++;
-    psl.blockCount = count;	/* Number of blocks in alignment */
-
-    for (b = chain->blockList, count = 0; b != NULL; count++,b = nextB)
+    a = NULL;
+    for (b = chain->blockList, count = 0; b != NULL; count++,b = b->next)
 	{
-	nextB = b->next;
 	blockSizes[count]= b->qEnd - b->qStart;
 	tStarts[count]=  b->tStart;
 	qStarts[count]=  b->qStart;
+	totalSize += blockSizes[count];
+	if (a != NULL)
+	    {
+	    if (b->qStart > a->qEnd + 1)
+		{
+		psl.qNumInsert++;
+		psl.qBaseInsert += b->qStart - a->qEnd - 1;
+		}
+	    if (b->tStart > a->tEnd + 1)
+		{
+		psl.tNumInsert++;
+		psl.tBaseInsert += b->tStart - a->tEnd - 1;
+		}
+	    }
+
+	a = b;
 	}
 
+    psl.blockCount = count;	/* Number of blocks in alignment */
+    psl.match = totalSize - psl.misMatch;	/* Number of bases that match that aren't repeats */
     pslTabOut(&psl, f);
     }
 
