@@ -1151,7 +1151,7 @@ type bed 5 .
 track pseudoMrna
 shortLabel Pseudo Mrna
 longLabel Processed Pseudogene Locus Based on mrna alignments
-group x
+group genePred
 priority 131
 visibility hide
 color 100,50,0
