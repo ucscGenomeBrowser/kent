@@ -292,11 +292,11 @@ o - Align mRNAs as so:
 
     pslSortAcc head chrom temp rsVsOo27Mixed.psl
     pslCat chrom/*.psl > rsVsOo27.psl
-    grep NM_ rsVsOo27.psl > knownOo27.psl
+    grep NM_ rsVsOo27.psl > known.oo27.psl
 o - Produce refGene, refPep, refMrna, and refLink tables as so:
      ssh cc94
      cd /projects/hg3/refseq.123
-     hgRefSeqMrna hg6 refSeq.fa refSeq.ra knownOo27.psl loc2ref refSeqPep.fa mim2loc
+     hgRefSeqMrna hg6 refSeq.fa refSeq.ra known.oo27.psl loc2ref refSeqPep.fa mim2loc
     
 
 LOADING IN EXTERNAL FILES
@@ -414,7 +414,6 @@ o - Load Softberry genes and associated peptides:
      hgPepPred hg6 softberry *.pro
      hgSoftberryHom hg6 *.pro
 
->>> Done to here ~~~
 
 o - Load exoFish table
      - login to cc94
@@ -433,6 +432,8 @@ o - Load exoFish table
      - Enter database with "hg6" command.
      - At mysql> prompt type in:
           load data local infile 'exoFish.bed' into table exoFish
+
+>>> Done to here ~~~
 
 o - Load Genie predicted genes and associated peptides.
      - cat */ctg*/ctg*.affymetrix.gtf > predContigs.gtf
