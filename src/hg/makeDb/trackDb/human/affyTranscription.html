@@ -15,18 +15,19 @@ chromosomes 21 and 22  (Kapranov, P.,
 Cawley, S. E., Drenkow, J., Bekiranov, S, Strausberg, R. L., Fodor,
 S.P.A. and Gingeras, T.R. (2002) "<a
 href="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=pubmed&dopt=Abstract&list_uids=11988577" TARGET = _BLANK>Large-Scale
-Transcriptional Activity in Chromosomes 21 and 22.</A>" <EM>Science</EM>, 296(5569):916-9).
+Transcriptional Activity in Chromosomes 21 and 22.</A>" <em>Science</em>, 296(5569):916-9).</p>
 
 <p>The track is colored blue in areas that are thought to be
 transcribed at a statistically significant level as described in the
 accompanying <a
 href="../cgi-bin/hgTrackUi?g=affyTransfrags">Transfrags</a>
-(transcribed fragments) track. Transfrags that have a significant BLAT
-hit elsewhere in the genome are colored a lighter shade of
-blue. Transfrags that overlap putative pseudogenes are colored an even
-lighter shade of blue. While the raw data are based on PM - MM values
-and may contain negative values, the track has a minimum value of 0 for
-visualization purposes.
+(transcribed fragments) track and brown. Transfrags that have a
+significant BLAT hit elsewhere in the genome are colored a lighter
+shade of blue. Transfrags that overlap putative pseudogenes are
+colored an even lighter shade of blue. All other regions of the track
+are colored brown. While the raw data are based on prefect match minus
+mismatch probe (PM - MM) values and may contain negative values, the
+track has a minimum value of 0 for visualization purposes.</p>
 
 <h2>Methods</h2>
 
@@ -39,7 +40,7 @@ analysis method used was as follows:
 <ul>
 
     <li>Replicate arrays were quantile-normalized and the median
-    intensity (using both pm and mm intensities) of each array was
+    intensity (using both PM and MM intensities) of each array was
     scaled to a target value of 44.
 
     <li>The expression level was estimated for each mapped probe position by 
@@ -47,17 +48,27 @@ analysis method used was as follows:
        <li>collecting all the probe pairs that fell within a window of &#177
        30 bp.
     
-       <li>calculating all non-redundant pairwise averages of pm - mm
+       <li>calculating all non-redundant pairwise averages of PM - MM
        values of all probe pairs in the window.
-
 
        <li>taking the median of all resulting pairwise averages.
    </ul>
 
    <li>The resulting signal value is the Hodges-Lehmann estimator
-   associated with the Wilcoxon signed-rank statistic of the pm - mm
+   associated with the Wilcoxon signed-rank statistic of the PM - MM
    values that lie within &#177 30 bp of the sliding window centered at
    every genomic coordinate.
 
+</ul></p>
+
+<h2>Credits</h2>
+
+<ul>
+<li> Data Generation and Analysis: Transcriptome group at Affymetrix -
+Bekiranov S, Brubaker S, Cheng J, Dike S, Drenkow J, Ghosh S, Gingeras
+T, Helt G, Kampa D, Kapranov P, Long J, Madhavan G, Manak J, Patel S,
+Piccolboni A, Sementchenko V, Tammana H.</li>
+<li> Data Presentation at UC Santa Cruz - Chuck Sugnet.</li>
 </ul>
+
 </td></tr></table>
