@@ -134,8 +134,8 @@ char lineBuf[256];
 char *words[64];
 int wordCount;
 struct cdna *cdnaList = NULL;
-struct cdna *cdna;
-struct ali *ali;
+struct cdna *cdna = NULL;
+struct ali *ali = NULL;
 int lineCount = 0;
 int lineMod = 0;
 
