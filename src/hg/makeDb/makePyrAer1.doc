@@ -2,7 +2,7 @@
 exit; # don't actually run this like a script :)
  
 # This file describes building the browser database for the archaeal
-# species Pyrobaculum aerophilum and Pyrococcus furiosus.
+# species Pyrobaculum aerophilum.
 
 # DOWNLOAD SEQUENCE FROM GENBANK (DONE 01/07/04)
 
