@@ -16,6 +16,9 @@
 #               feature type (CONTIG)
 # 2. contig.idmap - has an additional column "contig label"
 # This required changing the jkStuff ncbi* utilities (7/1/03 KRR)
+#
+# NOTE: Y chrom was left out of original release at NCBI, and so was
+# added in later, and database reloads were performed to include Y. 7/8/03 KRR
 
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE 2003-06-17 - Hiram)
     ssh eieio
@@ -30,6 +33,17 @@
       mget *
       quit
     gunzip *.agp.gz
+
+# Check chromosome files
+    cd chrfasta
+    cp /dev/null faSize.out
+    foreach f (*.fa)
+        echo $f >> faSize.out
+        /cluster/bin/i386/faSize $f >> faSize.out
+    end
+   /cluster/bin/i386/faSize *.fa >> faSize.out
+   gzip *.fa
+
 
 # GET MISSING FILES FROM NCBI (DONE 2003-07-01 - Kate)
     # These were left out of the original release,
@@ -56,12 +70,16 @@
 
     ssh eieio
     mkdir /cluster/store5/mm.2003.06/mm4
+    ln -s /cluster/store5/mm.2003.06/mm4 /cluster/data/mm4
     cd /cluster/store5/mm.2003.06/mm4
     # splitFaIntoContigs doesn't do right with agp lines arriving in a 
     # different order than fasta chrom sequences.  so split up the agp 
     # into one per chrom.
     foreach c ( 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 X Y Un )
       mkdir $c
+      if (! -e /cluster/store5/mm.2003.06/ncbi/chrfasta/chr$c.fa.gz) then
+        continue
+      endif
       perl -we "while(<>){if (/^chr$c\t/) {print;}}" \
         ../ncbi/allrefcontig.chr.agp \
         > $c/chr$c.agp
@@ -71,7 +89,6 @@
           stdin /cluster/store5/mm.2003.06/mm4 -nSize=5000000
     end
     # NOTE: no chrUn (only random)
-    
 
 
 # CREATE CHROM-LEVEL AGP AND FASTA FOR _RANDOMS (2003-07-02 Kate)
@@ -129,6 +146,7 @@
     # Clean these up to avoid confusion later... they're easily rebuilt.
     rm ?{,?}/*.ctg.agp
 
+
 # BREAK UP _RANDOMS INTO 5 MB CHUNKS AT NON-BRIDGED CONTIGS (2003-07-02 Kate)
     ssh eieio
     cd /cluster/store5/mm.2003.06/mm4
@@ -146,10 +164,11 @@
       endif
     end
 
+
 # MAKE LIFTALL.LFT (DONE 2003-07-04 kate)
 
     # remove spurious files for chrUn (should only be chrUn_random)
-    cd ~/mm4
+    cd /cluster/data/mm4
     rm Un/lift/o*
     cat ?{,?}/lift/{ordered,random}.lft > liftAll.lft
 
@@ -180,7 +199,7 @@ o - Use df to make sure there is at least 5 gig free on hgwdev:/var/lib/mysql
 
     # Create (unmasked) nib files 
     ssh eieio
-    cd /cluster/store5/mm.2003.06/mm4
+    cd /cluster/data/mm4
     mkdir -p unmaskedNib
     foreach f (?{,?}/chr?{,?}{,_random}.fa)
       echo $f:t:r
@@ -193,27 +212,29 @@ o - Use df to make sure there is at least 5 gig free on hgwdev:/var/lib/mysql
       ln -s $f /gbdb/mm4/nib
     end
 
-
     # Load /gbdb nib paths into database and save size info.
     ssh hgwdev
     hgsql mm4  < ~/src/hg/lib/chromInfo.sql
-    cd /cluster/store5/mm.2003.06/mm4
+    cd /cluster/data/mm4
     hgNibSeq -preMadeNib mm4 /gbdb/mm4/nib ?{,?}/chr?{,?}{,_random}.fa
-    # 2968274392 total bases
-    # NOTE: mm3 was 2708220133, an increase of 260 Mb, or 10%
+    # 2988739106 total bases
+    # NOTE: mm3 was 2708220133, an increase of 280 Mb (~10%)
     echo "select chrom,size from chromInfo" | hgsql -N mm4 > chrom.sizes
     # check the resulting file chrom.sizes
 
 Store o+o info in database.
-     cd /cluster/store5/mm.2003.06/mm4
+     cd /cluster/data/mm4
      # remove so as not to confuse hgGoldGap -- they are easily regenerated
      rm */chr*.ctg.agp
+     # to undo/redo: 
+     #     jkStuff/dropSplitTable.csh gap
+     #     jkStuff/dropSplitTable.csh gold
      hgGoldGapGl mm4 /cluster/store5/mm.2003.06 mm4 -noGl
 
 # Make and load GC percent table
      ssh hgwdev
-     mkdir -p /cluster/store5/mm.2003.06/mm4/bed/gcPercent
-     cd /cluster/store5/mm.2003.06/mm4/bed/gcPercent
+     mkdir -p /cluster/data/mm4/bed/gcPercent
+     cd /cluster/data/mm4/bed/gcPercent
      hgsql mm4  < ~/src/hg/lib/gcPercent.sql
      hgGcPercent mm4 ../../unmaskedNib
 
@@ -351,6 +372,9 @@ if (-e /tmp/$USER/$2/$2.align) /bin/cp /tmp/$USER/$2/$2.align ./
         #- Load the .out files into the database with:
         ssh hgwdev
         cd ~/mm4
+        # to redo:
+        #    ./jkStuff/dropSplitTable.csh rmsk  
+        # make sure there's no chrUn -- rm Un/chrUn.fa.out
         hgLoadOut mm4 ?/*.fa.out ??/*.fa.out
 
 
@@ -393,11 +417,12 @@ if (-e /tmp/$USER/$2/$2.align) /bin/cp /tmp/$USER/$2/$2.align ./
 
     ls -1 trf | wc -l
         #    598
+        #    602 after adding Y chrom
 
     # When job is done lift output files
     liftUp simpleRepeat.bed ~/mm4/liftAll.lft warn trf/*.bed
 
-    # Load this into the database as so
+    # Load into the database
     ssh hgwdev
     cd ~/mm4/bed/simpleRepeat
     hgLoadBed mm4 simpleRepeat simpleRepeat.bed \
@@ -435,7 +460,7 @@ if (-e /tmp/$USER/$2/$2.align) /bin/cp /tmp/$USER/$2/$2.align ./
     # since there is no chrUn
     
 
-# MASK SEQUENCE WITH BOTH REPEATMASKER AND SIMPLE REPEAT/TRF (IN PROGRESS 2003-07-07 kate)
+# MASK SEQUENCE WITH BOTH REPEATMASKER AND SIMPLE REPEAT/TRF (DONE 2003-07-08 kate)
     ssh eieio
     cd ~/mm4
     #- Soft-mask (lower-case) the contig and chr .fa's
@@ -457,9 +482,64 @@ if (-e /tmp/$USER/$2/$2.align) /bin/cp /tmp/$USER/$2/$2.align ./
       ln -s $f /gbdb/mm4/nib
     end
 
-    # Copy the masked contig fa to /cluster/bluearc for cluster runs
+    # Copy data to /cluster/bluearc for cluster runs
     ssh eieio
+
+    # masked contigs
     rm -fr /cluster/bluearc/mm4/trfFa
     mkdir -p /cluster/bluearc/mm4/trfFa
     # cp -p ~/mm4/?{,?}/chr*_*/chr?{,?}{,_random}_?{,?}.fa /cluster/bluearc/mm4/trfFa
     cp ~/mm4/?{,?}/chr*_*/chr?{,?}{,_random}_?{,?}.fa /cluster/bluearc/mm4/trfFa
+
+    # masked chrom nibs
+    cd ~/mm4
+    rm -fr /cluster/bluearc/mm4/mixedNib
+    mkdir -p /cluster/bluearc/mm4/mixedNib
+    cp -p mixedNib/chr*.nib /cluster/bluearc/mm4/mixedNib
+
+    # lift file, for mrna processing
+    cp -p liftAll.lft /cluster/bluearc/mm4
+
+    # also copy to iservers
+    ssh kkr1u00
+    cd ~/mm4
+    cp -p liftAll.lft /iscratch/i/mm4
+    mkdir -p /iscratch/i/mm4/mixedNib
+    cp -p mixedNib/chr*.nib /cluster/bluearc/mm4/mixedNib
+    /cluster/bin/scripts/iSync
+
+
+# AUTO UPDATE GENBANK MRNA RUN  (IN PROGRESS - 2003-07-07 - kate)
+
+    ssh eieio
+    cd /cluster/store5/genbank
+    set db = mm4
+    # set nibGlob = '/cluster/bluearc/mm4/mixedNib/chr*.nib'
+    # set liftFile = /cluster/bluearc/$db/liftAll.lft
+    # make sure 'ssh localhost' works before running this:
+    # NOTE: initially just align RefSeq, for speed
+    # nice bin/gbAlignStep -verbose=1 -initial -iserver=localhost \
+        # -clusterdir=/cluster/bluearc/genbank/work \
+        # -srcDb=refseq -type=mrna $db "$nibGlob" $liftFile &
+    set nibGlob = '/iscratch/i/mm4/mixedNib/chr*.nib'
+    set liftFile = /iscratch/i/$db/liftAll.lft
+     nice bin/gbAlignStep -verbose=1 -initial \
+         -clusterdir=/iscratch/i/genbank/work \
+         -omit-iserver=kkr5u00 -omit-iserver=kkr6u00 \
+         -srcDb=refseq -type=mrna $db "$nibGlob" $liftFile &
+
+    # To watch the progress of your cluster job, go to machine kk and
+    # cd /cluster/store5/genbank/work/initial.mm4/align
+    # where the batch file is.  You can now do normal parasol checking
+    # operations.  Beware of "para check" it can take quite a bit of time
+    # if your batch job is very large.  'parasol list batches' or
+    # 'parasol list users' may be quicker to take a look at status.
+
+    #  After that is finished successfully, load the mRNAs:
+    #  The drop and load is faster if tables have been loaded before.
+    ssh hgwdev
+    cd /cluster/store5/genbank
+    ./bin/i386/gbLoadRna -drop mm4
+    nice ./bin/gbDbLoadStep -verbose=1 -initialLoad mm4
+
+
