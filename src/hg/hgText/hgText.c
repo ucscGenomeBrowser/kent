@@ -19,7 +19,7 @@
 #include "web.h"
 #include "dbDb.h"
 #include "kxTok.h"
-#include "featureBits.h"
+#include "hgSeq.h"
 
 static char * hgFixed = "hgFixed";
 
@@ -30,8 +30,6 @@ char *database = NULL;		/* Which database? */
 int chromStart = 0;		/* Start of range to select from. */
 int chromEnd = BIGNUM;          /* End of range. */
 char *where = NULL;		/* Extra selection info. */
-boolean breakUp = FALSE;	/* Break up things? */
-int merge = -1;			/* Merge close blocks? */
 char *outputType = "fasta";	/* Type of output. */
 char *position = NULL;
 struct cart *cart = NULL;
@@ -748,10 +746,10 @@ else
 printf("<FORM ACTION=\"%s\">\n\n", hgTextName());
 
 /* take a first stab */
-//if (allGenome)
-parseTableName(table, "chr1");
-//else
-//	parseTableName(table, chromName);
+if (allGenome)
+    parseTableName(table, "chr1");
+else
+    parseTableName(table, chromName);
 
 /* make sure that the table name doesn't have anything "weird" in it */
 checkIsAlpha("table name", table);
@@ -1703,21 +1701,16 @@ void outputDna(FILE *f, char *chrom, char *table, int start, int size,
 	       char strand, char *name)
 /* Output DNA either directly from nib or by upper-casing DNA. */
 {
-if (merge >= 0)
-    toUpperN(dna + start, size);
-else
-    {
-    struct dnaSeq *seq = nibLdPart(nibFileName, nibFile, nibSize, start, size);
-    if (strand == '-')
-        reverseComplement(seq->dna, size);
-    writeOut(f, chrom, start, size, strand, seq->dna,
-	     makeFaStartLine(chrom, table, name, start, size, strand));
-    freeDnaSeq(&seq);
-    }
+struct dnaSeq *seq = nibLdPart(nibFileName, nibFile, nibSize, start, size);
+if (strand == '-')
+    reverseComplement(seq->dna, size);
+writeOut(f, chrom, start, size, strand, seq->dna,
+	 makeFaStartLine(chrom, table, name, start, size, strand));
+freeDnaSeq(&seq);
 }
 
 
-void chromFeatDna(char *table, char *chrom, FILE *f, char *fbSpec)
+void chromFeatDna(char *table, char *chrom, FILE *f)
 /* chromFeatDna - Get dna for a type of feature on one chromosome. */
 {
 /* Get chromosome in lower case case.  If merging set bits that 
@@ -1741,7 +1734,7 @@ int nibSize;
 
 s = size = 0;
 
-if (!hFindMoreFieldsDb(getTableDb(), table, chromField, startField, endField,
+if (!hFindBed6FieldsDb(getTableDb(), table, chromField, startField, endField,
 		       nameField, strandField))
     webAbort("Missing field in table", "Couldn't find chrom/start/end fields in table");
 
@@ -1750,124 +1743,13 @@ if (sameString(database, getTableDb()))
 else
     conn = hAllocConn2();
 
-if (merge >= 0)
-    {
-    seq = hLoadChrom(chrom);
-    dna = seq->dna;
-    size = seq->size;
-    }
-else
-    {
-    hNibForChrom(chrom, nibFileName);
-    nibOpenVerify(nibFileName, &nibFile, &nibSize);
-    }
+hNibForChrom(chrom, nibFileName);
+nibOpenVerify(nibFileName, &nibFile, &nibSize);
 
-if (breakUp)
+if (cgiOptionalString("hgSeq.casing") != NULL)
     {
-    if (sameString(startField, "tStart"))
-	{
-	boolean isBinned = hIsBinned(table);
-	dyStringPrintf(query, "select * from %s where tStart >= %d and tEnd < %d",
-		       table, chromStart, chromEnd);
-	dyStringPrintf(query, " and %s = '%s'", chromField, chrom);
-	if (where != NULL)
-	    dyStringPrintf(query, " and %s", where);
-	sr = sqlGetResult(conn, query->string);
-	while ((row = sqlNextRow(sr)) != NULL)
-	    {
-	    struct psl *psl;
-		
-	    psl = pslLoad(row + isBinned);
-	    if (psl->strand[1] == '-')	/* Minus strand on target */
-		{
-		int tSize = psl->tSize;
-		for (i=0; i<psl->blockCount; ++i)
-		    {
-		    sz = psl->blockSizes[i];
-		    s = tSize - (psl->tStarts[i] + sz);
-		    outputDna(f, chrom, table, s, sz, dna, nibFileName, nibFile,
-			      nibSize, '-', NULL);
-		    }
-		}
-	    else
-		{
-		for (i=0; i<psl->blockCount; ++i)
-		    outputDna(f, chrom, table, psl->tStarts[i],
-			      psl->blockSizes[i], dna, nibFileName, nibFile,
-			      nibSize, '+', NULL);
-		}
-	    pslFree(&psl);
-	    }
-	}
-    else if (sameString(startField, "txStart"))
-        {
-	dyStringPrintf(query, "select * from %s where txStart >= %d and txEnd < %d",
-		       table, chromStart, chromEnd);
-	dyStringPrintf(query, " and %s = '%s'", chromField, chrom);
-	if (where != NULL)
-	    dyStringPrintf(query, " and %s", where);
-	sr = sqlGetResult(conn, query->string);
-	while ((row = sqlNextRow(sr)) != NULL)
-	    {
-	    struct genePred *gp = genePredLoad(row);
-	    for (i=0; i<gp->exonCount; ++i)
-		{
-		s = gp->exonStarts[i];
-		sz = gp->exonEnds[i] - s;
-		outputDna(f, chrom, table, 
-			  s, sz, dna, nibFileName, nibFile, nibSize,
-			  gp->strand[0], NULL);
-		}
-	    genePredFree(&gp);
-	    }
-	}
-    else
-        {
-        webAbort("Error", "Can only use breakUp parameter with psl or genePred formatted tables");
-	}
-    }
-else if (fbSpec != NULL && fbSpec[0] != 0)
-    {
-    struct featureBits *fbList, *fbPtr;
-    char fbTQ[256];
-    char table2[128];
-    char *ptr;
-
-    strcpy(table2, table);
-    /* Make sure this table will be recognized by hTrackInfo: */
-    if (startsWith("chr", table))
-	{
-	if ((ptr = strchr(table, '_')) != NULL)
-	    {
-	    ptr++;
-	    if (startsWith("random", ptr))
-		{
-		if ((ptr = strchr(ptr, '_')) != NULL)
-		    {
-		    ptr++;
-		    strcpy(table2, ptr);
-		    }
-		}
-	    else
-		strcpy(table2, ptr);
-	    }
-	}
-    snprintf(fbTQ, sizeof(fbTQ), "%s:%s", table2, fbSpec);
-    fbList = fbGetRange(fbTQ, chrom, chromStart, chromEnd);
-    if (fbList == NULL)
-	printf("# Your query produced no results.\n");
-    for (fbPtr = fbList;  fbPtr != NULL;  fbPtr = fbPtr->next)
-	{
-	s = fbPtr->start;
-	e = fbPtr->end;
-	sz = e - s;
-	if (seq != NULL && (sz < 0 || e >= size))
-	    webAbort("Out of range", "Coordinates out of range %d %d (%s size is %d)",
-		     s, e, chrom, size);
-	outputDna(f, chrom, table, s, sz, dna, nibFileName, nibFile, nibSize,
-		  fbPtr->strand, firstWordInLine(fbPtr->name));
-	}
-    featureBitsFreeList(&fbList);
+    hgSeqItemsInRangeDb(getTableDb(), table, chrom, chromStart, chromEnd,
+			NULL);
     }
 else
     {
@@ -1896,47 +1778,6 @@ else
 	}
     }
 
-/* Merge nearby upper case blocks. */
-if (merge > 0)
-    {
-    e = -merge-10;		/* Don't merge initial block. */
-    for (i=0; i<=size; ++i)
-	{
-	isUpper = isupper(dna[i]);
-	if (isUpper && !lastIsUpper)
-	    {
-	    s = i;
-	    if (s - e <= merge)
-	        {
-		toUpperN(dna+e, s-e);
-		}
-	    }
-	else if (!isUpper && lastIsUpper)
-	    {
-	    e = i;
-	    }
-	lastIsUpper = isUpper;
-	}
-    }
-
-if (merge >= 0)
-    {
-    for (i=0; i<=size; ++i)
-	{
-	isUpper = isupper(dna[i]);
-	if (isUpper && !lastIsUpper)
-	    s = i;
-	else if (!isUpper && lastIsUpper)
-	    {
-	    e = i;
-	    sz = e - s;
-	    writeOut(f, chrom, s, sz, '+', dna+s,
-		     makeFaStartLine(chrom, table, NULL, s, sz, '+'));
-	    }
-	lastIsUpper = isUpper;
-	}
-    }
-
 if (sameString(database, getTableDb()))
     hFreeConn(&conn);
 else
@@ -1946,7 +1787,7 @@ carefulClose(&nibFile);
 }
 
 
-void getFeatDna(char *table, char *chrom, char *outName, char *fbSpec)
+void getFeatDna(char *table, char *chrom, char *outName)
 /* getFeatDna - Get dna for a type of feature an all relevant chromosomes. */
 {
 char chrTableBuf[256];
@@ -1973,7 +1814,7 @@ for (chromEl = chromList; chromEl != NULL; chromEl = chromEl->next)
 	}
     if (!toStdout)
         printf("Processing %s %s\n", chrTable, chrom);
-    chromFeatDna(chrTable, chrom, f, fbSpec);
+    chromFeatDna(chrTable, chrom, f);
     }
 carefulClose(&f);
 if (!toStdout)
@@ -1987,12 +1828,13 @@ void getDNA()
 char* table = getTableName();
 char* position = cgiString("position");
 char *choosenChromName;		/* Name of chromosome sequence . */
-int winStart;				/* Start of window in sequence. */
-int winEnd;					/* End of window in sequence. */
+int winStart;			/* Start of window in sequence. */
+int winEnd;			/* End of window in sequence. */
 char parsedTableName[256];
 int c;
-char *fbQual;
-char fbSpec[64];
+char *hgSeq;
+boolean allGenome = FALSE;	/* this flag is true if we are fetching the 
+				   whole genome not just chrom by chrom */
 
 /* if they haven't choosen a positional table, tell them */
 if (existsAndEqual("table0", "Choose table"))
@@ -2022,115 +1864,34 @@ if (strcmp(position, "genome"))
 	}
     findPositionInGenome(position, &choosenChromName, &winStart, &winEnd);
     }
+else
+    allGenome = TRUE;	/* read all chrom info */
+
+/* Make sure we'll be able to see this table in the DB: */
+if (allGenome)
+    parseTableName(parsedTableName, "chr1");
+else
+    parseTableName(parsedTableName, choosenChromName);
 
 /* make sure that the table name doesn't have anything "weird" in it */
-checkIsAlpha("table name", table);
+checkIsAlpha("table name", parsedTableName);
 
-/* If this table is something featureBits-able, then offer the user 
- * featureBits options (unless we already did). */
-fbQual  = cgiOptionalString("fbQual");
-/* Make sure we can find this in trackDb: */
-if (startsWith("chrN_", table))
-    strcpy(parsedTableName, table+strlen("chrN_"));
-else
-    strcpy(parsedTableName, table);
-if (fbQual == NULL && fbUnderstandTrack(parsedTableName))
+checkTableExists(parsedTableName);
+
+
+if (cgiOptionalString("hgSeq.casing") == NULL)
     {
-    struct trackDb *tdb;
-    boolean doAll=FALSE, doIntron=FALSE;
-    struct sqlConnection *conn;
-
-    if (sameString(database, getTableDb()))
-	conn = hAllocConn();
-    else
-	conn = hAllocConn2();
-    /* Figure out what type of table we have so we know what to offer: */
-    tdb = hTrackInfo(conn, parsedTableName);
-    if (startsWith("genePred", tdb->type))
-	doAll = TRUE;
-    else if (startsWith("bed", tdb->type) &&
-	     (atoi(tdb->type + strlen("bed ")) >= 12))
-	doIntron = TRUE;
-    if (sameString(database, getTableDb()))
-	hFreeConn(&conn);
-    else
-	hFreeConn2(&conn);
     webStart(cart, "Table Browser: Select Gene Regions for %s", table);
     puts("<FORM ACTION=\"/cgi-bin/hgText\" METHOD=\"GET\">\n");
-    puts("<H3> Select Gene Regions: </H3>\n");
-    puts("<TABLE><TR><TD>\n");
-    cgiMakeRadioButton("fbQual", "whole", TRUE);
-    puts(" Whole Gene </TD><TD> ");
-    puts(" </TD></TR><TR><TD>\n");
-    cgiMakeRadioButton("fbQual", "exon", FALSE);
-    puts(" Exons plus </TD><TD> ");
-    cgiMakeTextVar("fbExonBases", "0", 8);
-    puts(" bases at each end </TD></TR><TR><TD>\n");
-    if (doIntron || doAll)
-	{
-	cgiMakeRadioButton("fbQual", "intron", FALSE);
-	puts(" Introns plus </TD><TD> ");
-	cgiMakeTextVar("fbIntronBases", "0", 8);
-	puts(" bases at each end </TD></TR><TR><TD>\n");
-	}
-    if (doAll)
-	{
-	cgiMakeRadioButton("fbQual", "cds", FALSE);
-	puts(" Coding Exons </TD><TD> ");
-	puts(" </TD></TR><TR><TD>\n");
-	cgiMakeRadioButton("fbQual", "utr3", FALSE);
-	puts(" 3' UTR </TD><TD> ");
-	puts(" </TD></TR><TR><TD>\n");
-	cgiMakeRadioButton("fbQual", "utr5", FALSE);
-	puts(" 5' UTR </TD><TD> ");
-	puts(" </TD></TR><TR><TD>\n");
-	}
-    cgiMakeRadioButton("fbQual", "upstream", FALSE);
-    puts(" Upstream by </TD><TD> ");
-    cgiMakeTextVar("fbUpBases", "200", 8);
-    puts(" bases </TD></TR><TR><TD>\n");
-    cgiMakeRadioButton("fbQual", "end", FALSE);
-    puts(" Downstream by </TD><TD> ");
-    cgiMakeTextVar("fbDownBases", "200", 8);
-    puts(" bases </TD></TR></TABLE>");
+    hgSeqOptionsDb(getTableDb(), parsedTableName);
     cgiMakeHiddenVar("db", database);
     cgiMakeHiddenVar("phase", "Get DNA");
     cgiMakeHiddenVar("position", position);
     cgiMakeHiddenVar("table", getTableVar());
     cgiMakeButton("submit", "Submit");
     puts("</FORM>\n");
-    puts("<P>");
-    puts("One of the above options may be chosen to restrict the ");
-    puts("regions for which DNA will be retrieved.  For exon");
-    if (doIntron || doAll)
-	puts(" and intron");
-    puts(", positive numbers extend the exon");
-    if (doIntron || doAll)
-	puts("/intron ");
-    puts("range at ");
-    puts("both ends and negative numbers cut in at both ends. ");
-    puts("For upstream and downstream, genes that are not complete ");
-    puts("are excluded. ");
-    puts("</P>");
-    webEnd();
     return;
     }
-
-/* If featureBits options have been specified, lump them into a string 
- * that featureBits will parse. */
-if (fbQual == NULL || sameString(fbQual, "whole"))
-    fbSpec[0] = 0;
-else if (sameString(fbQual, "exon"))
-    snprintf(fbSpec, sizeof(fbSpec), "%s:%s", fbQual, cgiString("fbExonBases"));
-else if (sameString(fbQual, "intron"))
-    snprintf(fbSpec, sizeof(fbSpec), "%s:%s", fbQual,
-	     cgiString("fbIntronBases"));
-else if (sameString(fbQual, "upstream"))
-    snprintf(fbSpec, sizeof(fbSpec), "%s:%s", fbQual, cgiString("fbUpBases"));
-else if (sameString(fbQual, "end"))
-    snprintf(fbSpec, sizeof(fbSpec), "%s:%s", fbQual, cgiString("fbDownBases"));
-else
-    strcpy(fbSpec, fbQual);
 
 printf("Content-Type: text/plain\n\n");
 webStartText();
@@ -2147,43 +1908,40 @@ if (existsAndEqual("position", "genome"))
 	for (c  = 1; c <= 22; c++)
 	    {
 	    snprintf(parsedTableName, 256, "chr%d_%s", c, post); 
-	    getFeatDna(parsedTableName, "all", "stdout", fbSpec);
+	    getFeatDna(parsedTableName, "all", "stdout");
 	    snprintf(parsedTableName, 256, "chr%d_random_%s", c, post); 
-	    getFeatDna(parsedTableName, "all", "stdout", fbSpec);
+	    getFeatDna(parsedTableName, "all", "stdout");
 	    }
 
 	snprintf(parsedTableName, 256, "chr_%s_%s", "X", post);
-	getFeatDna(parsedTableName, "all", "stdout", fbSpec);
+	getFeatDna(parsedTableName, "all", "stdout");
 	snprintf(parsedTableName, 256, "chr%s_random_%s", "X", post);
-	getFeatDna(parsedTableName, "all", "stdout", fbSpec);
+	getFeatDna(parsedTableName, "all", "stdout");
 
 	snprintf(parsedTableName, 256, "chr%s_%s", "Y", post);
-	getFeatDna(parsedTableName, "all", "stdout", fbSpec);
+	getFeatDna(parsedTableName, "all", "stdout");
 	snprintf(parsedTableName, 256, "chr%s_random_%s", "Y", post);
-	getFeatDna(parsedTableName, "all", "stdout", fbSpec);
+	getFeatDna(parsedTableName, "all", "stdout");
 
 	snprintf(parsedTableName, 256, "chr%s_%s", "NA", post);
-	getFeatDna(parsedTableName, "all", "stdout", fbSpec);
+	getFeatDna(parsedTableName, "all", "stdout");
 	snprintf(parsedTableName, 256, "chr%s_random_%s", "NA", post);
-	getFeatDna(parsedTableName, "all", "stdout", fbSpec);
+	getFeatDna(parsedTableName, "all", "stdout");
 
 	snprintf(parsedTableName, 256, "chr%s_%s", "UL", post);
-	getFeatDna(parsedTableName, "all", "stdout", fbSpec);
+	getFeatDna(parsedTableName, "all", "stdout");
 	snprintf(parsedTableName, 256, "chr%s_random_%s", "UL", post);
-	getFeatDna(parsedTableName, "all", "stdout", fbSpec);
+	getFeatDna(parsedTableName, "all", "stdout");
 	}
     else
-	getFeatDna(table, "all", "stdout", fbSpec);
+	getFeatDna(table, "all", "stdout");
     }
 else
     {
-    /* get the real name of the table */
-    parseTableName(parsedTableName, choosenChromName);
-
     chromStart = winStart;
     chromEnd = winEnd;
 
-    getFeatDna(parsedTableName, choosenChromName, "stdout", fbSpec);
+    getFeatDna(parsedTableName, choosenChromName, "stdout");
     }
 }
 
