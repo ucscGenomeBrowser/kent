@@ -4,6 +4,10 @@
 #ifndef GENOFIND_H
 #define GENOFIND_H
 
+#ifndef FUZZYFIND_H
+#include "fuzzyFind.h"
+#endif
+
 enum gfConstants {
     gfMinMatch = 3,
     gfMaxGap = 2,
@@ -79,7 +83,7 @@ struct gfClump *gfFindClumps(struct genoFind *gf, struct dnaSeq *seq);
 void gfClumpDump(struct genoFind *gf, struct gfClump *clump, FILE *f);
 /* Print out info on clump */
 
-/* ---  Some routines for dealing with gfServer ---- */
+/* ---  Some routines for dealing with gfServer at a low level ---- */
 
 char *gfSignature();
 /* Return signature that starts each command to gfServer. Helps defend 
@@ -91,6 +95,26 @@ void gfSendString(int sd, char *s);
 char *gfRecieveString(int sd, char buf[256]);
 /* Read string into buf and return it.  If buf is NULL
  * an internal buffer will be used. */
+
+/* ---  Some routines for dealing with gfServer at a high level ---- */
+
+typedef void (*GfSaveAli)(char *chromName, int chromSize, int chromOffset,
+	struct ffAli *ali, struct dnaSeq *genoSeq, struct dnaSeq *otherSeq, 
+	boolean isRc, enum ffStringency stringency, int minMatch, void  *outputData);
+/* This is the type of a client provided function to save an alignment. */
+
+void gfSavePsl(char *chromName, int chromSize, int chromOffset,
+	struct ffAli *ali, struct dnaSeq *genoSeq, struct dnaSeq *otherSeq, 
+	boolean isRc, enum ffStringency stringency, int minMatch, void *outputData);
+/* Analyse one alignment and if it looks good enough write it out to file in
+ * psl format.  */
+
+void gfAlignStrand(char *hostName, char *portName, char *nibDir, struct dnaSeq *seq,
+    boolean isRc,  enum ffStringency stringency, int minMatch, GfSaveAli outFunction, void *outData);
+/* Search genome on server with one strand of other sequence to find homology. 
+ * Then load homologous bits of genome locally and do detailed alignment.
+ * Call 'outFunction' with each alignment that is found.  gfSavePsl is a handy
+ * outFunction to use. */
 
 #endif /* GENOFIND_H */
 
