@@ -18,7 +18,7 @@ void usage()
 errAbort("bedSpliceCheck - Check to see if some beds contain invalid splice\n"
 	 "sites, that is other than the consensus GT-AG or rarer GC-AG\n"
 	 "usage:\n"
-	 "   bedSpliceCheck db bedFile rejectsFile\n");
+	 "   bedSpliceCheck db bedFile goodFile rejectsFile\n");
 }
 
 boolean isGoodIntron(struct dnaSeq *targetSeq, 
@@ -44,42 +44,52 @@ else
 return FALSE;
 }
 
-void bedSpliceCheck(char *db, char *bedFile, char *rejectFile)
+void bedSpliceCheck(char *db, char *bedFile, char *goodFile, char *rejectFile)
 /* Loop through beds checking for invalid splicings. */
 {
 struct bed *bed = NULL, *bedList = NULL;
 struct dnaSeq *seq = NULL;
-FILE *out = NULL;
+FILE *rejectOut = NULL;
+FILE *goodOut = NULL;
 int offSet =0;
 int i = 0;
 dotForUser(1000);
 hSetDb(db);
 warn("Reading beds from %s", bedFile);
 bedList = bedLoadAll(bedFile);
-out = mustOpen(rejectFile, "w");
+rejectOut = mustOpen(rejectFile, "w");
+goodOut = mustOpen(goodFile, "w");
 warn("Writing out beds with invalid introns to %s", rejectFile);
 for(bed = bedList; bed != NULL; bed = bed->next)
     {
+    boolean good = TRUE;
     dotForUser();
     seq = hChromSeq(bed->chrom, bed->chromStart, bed->chromEnd);
     offSet = bed->chromStart;
     for(i = 0; i < bed->blockCount - 1; i++)
+	{
 	if(!isGoodIntron(seq, bed->chromStarts[i]+bed->blockSizes[i], bed->chromStarts[i+1], bed->strand[0] == '-'))
 	    {
-	    bedTabOutN(bed, 12, out);
+	    good = FALSE;
+	    bedTabOutN(bed, 12, rejectOut);
 	    dnaSeqFree(&seq);
 	    break;
 	    }
+	}
+    if(good)
+	bedTabOutN(bed, 12, goodOut);
     }
+carefulClose(&rejectOut);
+carefulClose(&goodOut);
 warn("\nDone.");
 }
 
     
 int main(int argc, char *argv[])
 {
-if(argc != 4)
+if(argc != 5)
     usage();
 dnaUtilOpen();
-bedSpliceCheck(argv[1], argv[2], argv[3]);
+bedSpliceCheck(argv[1], argv[2], argv[3], argv[4]);
 return 0;
 }
