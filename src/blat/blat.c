@@ -311,7 +311,6 @@ char *fileName;
 bioSeq *seqList = NULL, *seq;
 int count = 0; 
 unsigned long totalSize = 0;
-boolean maskWarned = FALSE;
 boolean doMask = (maskType != NULL);
 
 for (i=0; i<fileCount; ++i)
@@ -321,24 +320,16 @@ for (i=0; i<fileCount; ++i)
     fileName = files[i];
     if (isNib(fileName))
         {
-	FILE *f;
-	int size;
 	char root[128];
-
-	if (maskType != NULL && !maskWarned)
-	    {
-	    if (sameWord(maskType, "lower") || sameWord(maskType, "upper"))
-	        warn("Warning: mask=lower and mask=upper don't work with .nib files.");
-	    }
-	nibOpenVerify(fileName, &f, &size);
-	seq = nibLdPart(fileName, f, size, 0, size);
+	seq = nibLoadAllMasked(NIB_MASK_MIXED, fileName);
 	splitPath(fileName, NULL, root, NULL);
 	seq->name = cloneString(root);
-	carefulClose(&f);
 	slAddHead(&list, seq);
 	hashAddUnique(hash, seq->name, seq);
-	totalSize += size;
+	totalSize += seq->size;
 	count += 1;
+	if (!doMask)
+	    faToDna(seq->dna, seq->size);
 	}
     else
         {
@@ -499,18 +490,26 @@ for (i=0; i<fileCount; ++i)
         {
 	FILE *f;
 	struct dnaSeq *seq;
+	Bits *qMaskBits = NULL;
 
 	if (isProt)
 	    errAbort("%s: Can't use .nib files with -prot or d=prot option\n", fileName);
-	seq = nibLoadAll(fileName);
+	seq = nibLoadAllMasked(NIB_MASK_MIXED, fileName);
 	freez(&seq->name);
 	seq->name = cloneString(fileName);
+	if (maskQuery)
+	    {
+	    toggleCase(seq->dna, seq->size);
+	    qMaskBits = maskFromUpperCaseSeq(seq);
+	    }
+	faToDna(seq->dna, seq->size);
 	trimSeq(seq, &trimmedSeq);
 	carefulClose(&f);
-	searchOne(&trimmedSeq, gf, outFile, isProt, maskHash, NULL);
+	searchOne(&trimmedSeq, gf, outFile, isProt, maskHash, qMaskBits);
 	totalSize += seq->size;
 	freeDnaSeq(&seq);
 	count += 1;
+	bitFree(&qMaskBits);
 	}
     else
         {
