@@ -18,7 +18,7 @@
 #   - buildRoot - gbRoot directory on buildServer
 #   - db1 - List of databses to update
 #
-# $Id: gbCopyStep,v 1.10 2004/08/24 18:27:33 genbank Exp $
+# $Id: gbCopyStep,v 1.11 2004/10/31 05:55:35 genbank Exp $
 #
 use strict;
 use warnings;
@@ -69,7 +69,10 @@ sub checkBuildTime($$) {
 # rsync the processed and aligned files with the local directory
 sub rsyncBuildFiles($$$@) {
     my($rsyncPort, $buildServer, $buildRoot, @databases) = @_;
-    my $baseCmd = "rsync --stats --archive " . getRSyncPortOpt($rsyncPort);
+
+    # dereference symlinks. so can't use --archive
+    my $baseCmd = "rsync --stats --copy-links --recursive --perms "
+        . "--group --times " . getRSyncPortOpt($rsyncPort);
     makeDir("data");
 
     # get ignore.idx
