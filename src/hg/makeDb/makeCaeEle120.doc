@@ -70,37 +70,47 @@ ln -s features/sanger/*.dir .
 
 makepgo features/c2c features/ .coo
 
-#  XXXXX
-#	This c2g isn't ready yet
 cd sanger
 time gffgenes ../features/sanger/c2g ../features/sanger/genes.gdf \
 	> ../features/sanger/gffgenes.out 2>&1
 #	real    0m36.061s
 #	user    0m31.660s
 #	sys     0m3.660s
+#	Processing CHROMOSOME_I.gff.gz
+#	Read 6479 genes (103864 exons) in CHROMOSOME_I.gff.gz
+#	Processing CHROMOSOME_II.gff.gz
+#	Read 7541 genes (108565 exons) in CHROMOSOME_II.gff.gz
+#	Processing CHROMOSOME_III.gff.gz
+#	Read 5971 genes (93138 exons) in CHROMOSOME_III.gff.gz
+#	Processing CHROMOSOME_IV.gff.gz
+#	Read 7198 genes (106683 exons) in CHROMOSOME_IV.gff.gz
+#	Processing CHROMOSOME_V.gff.gz
+#	Read 10137 genes (139252 exons) in CHROMOSOME_V.gff.gz
+#	Processing CHROMOSOME_X.gff.gz
+#	Read 6141 genes (112575 exons) in CHROMOSOME_X.gff.gz
 
 cd ..
 cp -p features/sanger/c2g features
 makepgo features/sanger/c2g features/sanger/ .pgo
-#	Writing 9 entries nameSize 11 into features/sanger/i.pgo
-#	Writing 7 entries nameSize 9 into features/sanger/ii.pgo
-#	Writing 7 entries nameSize 10 into features/sanger/iii.pgo
-#	Writing 8 entries nameSize 9 into features/sanger/iv.pgo
-#	Writing 6 entries nameSize 8 into features/sanger/v.pgo
-#	Writing 13 entries nameSize 10 into features/sanger/x.pgo
+#	Writing 6479 entries nameSize 20 into features/sanger/i.pgo
+#	Writing 7541 entries nameSize 14 into features/sanger/ii.pgo
+#	Writing 5971 entries nameSize 13 into features/sanger/iii.pgo
+#	Writing 7198 entries nameSize 13 into features/sanger/iv.pgo
+#	Writing 10137 entries nameSize 13 into features/sanger/v.pgo
+#	Writing 6141 entries nameSize 12 into features/sanger/x.pgo
 #	Writing 0 entries nameSize 0 into features/sanger/m.pgo
 
 cd features/sanger
 indexgl genes.gdf genes.ix
 #	Reading input
-#	Got 50 offsets 12 nameSize.  Sorting...
+#	Got 43467 offsets 21 nameSize.  Sorting...
 #	Writing index file 
 
 cd ../..
 ixword3 features/c2c features/c2c.ix
 #	Got 3391 offsets 10 nameSize.  Sorting...
 ixword3 features/c2g features/c2g.ix
-#	Got 50 offsets 12 nameSize.  Sorting...
+#	Got 43467 offsets 21 nameSize.  Sorting...
 
 #	down load genbank mRNA's 
 #	mRNA_title.gb obtained from http://www.ncbi.nlm.nih.gov/entrez/
@@ -185,10 +195,6 @@ time stToXao xeno/cbriggsae/all.st xeno/cbriggsae/
 cd /projects/compbio/experiments/worm/idb.ws120
 mkdir ra ea
 
-#	this needs ea/all.out which is from blasting the mRNA's
-time refiAli ea/all.out cDNA/allcdna nt4 ra/good.txt \
-        ra/bad.txt ra/cool.txt ra/err.txt 0 1000000 features/sanger/c2g \
-        > ra/refiAli.out 2>&1
 
 #  prepare mRNA alignments cluster job
 ssh eieio
@@ -205,6 +211,11 @@ cp -p /cluster/bluearc/ce2/nt4/*.nt4 /iscratch/i/worms/Celegans2/nt4
 ssh kk
 mkdir /cluster/data/ce2/bed/exonAli
 cd /cluster/data/ce2/bed/exonAli
+#	The number 253943 below comes from a count of the number of
+#	records found in allcdna.fa
+#	faCount allcdna.fa > faCount.out
+#	wc faCount.out
+#	253943 2031544 8308388 faCount.out
 date | awk '
 {
         for (i = 0; i < 253943; i+=200) {
@@ -233,6 +244,89 @@ cat results/*.out > /projects/compbio/experiments/worm/idb/idb.ws120/ea/all.out
 #	refine those alignments  (refiAli source is in src/cdnaAli/refineAli)
 ssh kks00
 cd /projects/compbio/experiments/worm/idb.ws120
-refiAli ea/all.out cDNA/allcdna nt4 ra/good.txt \
+#	this uses the ea/all.out which is from blasting the mRNA's
+time refiAli ea/all.out cDNA/allcdna nt4 ra/good.txt \
         ra/bad.txt ra/cool.txt ra/err.txt 0 1000000 features/sanger/c2g \
         > ra/refiAli.out 2>&1
+#	real    100m22.510s
+#	user    96m34.360s
+#	sys     1m29.580s
+binGood ra/good.txt cDNA/good.ali > cDNA/binGood.out 2>&1
+#	real    0m14.993s
+#	user    0m12.610s
+#	sys     0m1.010s
+ixali cDNA/good.ali cDNA/good.ix > cDNA/ixali.out 2>&1
+#	real    0m4.795s
+#	user    0m4.290s
+#	sys     0m0.410s
+ali2alx cDNA/good.ali cDNA/ > cDNA/ali2alx.out 2>&1
+#	real    0m4.038s
+#	user    0m3.770s
+#	sys     0m0.190s
+cdnaOff ra/good.txt cDNA/ > cDNA/cdnaOff.out 2>&1
+#	real    0m12.397s
+#	user    0m11.490s
+#	sys     0m0.570s
+
+XXXX
+mkdir html
+mkdir obsolete
+#	The ra/good.txt is the input, all the other files on the command
+#	line are created by this command,
+#	also using: features/c2g.ix features/c2c.ix
+time introns ra/good.txt cDNA/introns.gff cDNA/introns.txt \
+        obsolete/altintron.txt html/altsplice.raw.html \
+        cDNA/introns.fa > cDNA/introns.out 2>&1
+
+#	Fetch gene name reference list:
+cd /projects/compbio/experiments/worm/idb.ws120/sanger
+wget --timestamping \
+    ftp://ftp.wormbase.org/pub/wormbase/elegans/WS122/GENE_DUMPS/gene_names.txt
+
+cd /projects/compbio/experiments/worm/idb.ws120
+./features/gene_names2orf2gene.pl sanger/gene_names.txt > features/orf2gene.txt
+
+makeOrf2gene features/orf2gene.txt sanger/orf2gene \
+	sanger/syn > sanger/makeOrf2gene.out 2>&1
+moresyn sanger/syn features/syn features/orf2gene \
+	features/orfInfo > features/moresyn.out 2>&1
+
+#
+#	Ready to publish
+#
+ssh hgwdev
+mkdir /cluster/store4/worm/WS120
+mkdir /cluster/store4/worm/WS120/nt4
+mkdir /cluster/store4/worm/WS120/cDNA
+mkdir /cluster/store4/worm/WS120/features
+mkdir /cluster/store4/worm/WS120/xeno
+cd /cluster/store4/worm/WS120/nt4
+cp -p /projects/compbio/experiments/worm/idb.ws120/nt4/*.nt4 .
+mkdir /cluster/store4/worm/WS120/xeno/cbriggsae
+cd /cluster/store4/worm/WS120/xeno/cbriggsae
+cp -p /projects/compbio/experiments/worm/idb.ws120/xeno/cbriggsae/* .
+mkdir /cluster/store4/worm/WS120/features/sanger
+cd /cluster/store4/worm/WS120/features/sanger
+cp -p /projects/compbio/experiments/worm/idb.ws120/features/sanger/* .
+cd /cluster/store4/worm/WS120/features
+cp -p /projects/compbio/experiments/worm/idb.ws120/features/* .
+cd /cluster/store4/worm/WS120/cDNA
+cp -p /projects/compbio/experiments/worm/idb.ws120/cDNA/* .
+
+mkdir /gbdb/intronWS120
+mkdir /gbdb/intronWS120/nt4
+mkdir /gbdb/intronWS120/cDNA
+mkdir /gbdb/intronWS120/features
+mkdir /gbdb/intronWS120/xeno
+ln -s /cluster/store4/worm/WS120/nt4/* /gbdb/intronWS120/nt4
+ln -s /cluster/store4/worm/WS120/cDNA/* /gbdb/intronWS120/cDNA
+ln -s /cluster/store4/worm/WS120/features/* /gbdb/intronWS120/features
+ln -s /cluster/store4/worm/WS120/xeno/* /gbdb/intronWS120/xeno
+
+mkdir /usr/local/apache/htdocs/IntronWS120
+cd /usr/local/apache/htdocs/IntronWS120
+echo "/gbdb/intronWS120/cDNA/" > cdna.dir
+echo "/gbdb/intronWS120/features/" > feat.dir
+echo "/gbdb/intronWS120/nt4/" > nt4.dir
+echo "/gbdb/intronWS120/xeno/" > xeno.dir
+
