@@ -17,6 +17,7 @@
 #include "snp.h"
 #include "rnaGene.h"
 #include "stsMarker.h"
+#include "stsMap.h"
 #include "knownInfo.h"
 #include "hgFind.h"
 #include "hdb.h"
@@ -532,22 +533,33 @@ else
 }
 
 static boolean findStsPos(char *spec, struct hgPositions *hgp)
-/* Look for position in stsMarker table. */
+/* Look for position in stsMarker/stsMap table. */
 {
 struct sqlConnection *conn;
 struct sqlResult *sr = NULL;
 struct dyString *query;
 char **row;
 boolean ok = FALSE;
-struct stsMarker sm;
-char *tableName = "stsMarker";
+struct stsMap sm;
+char *tableName;
+boolean newFormat;
 char *chrom;
 char *alias;
 char buf[64];
 struct hgPosTable *table = NULL;
 struct hgPos *pos = NULL;
 
-if (!hTableExists(tableName))
+if (hTableExists("stsMap"))
+    {
+    newFormat = TRUE;
+    tableName = "stsMap";
+    }
+else if (hTableExists("stsMarker"))
+    {
+    newFormat = FALSE;
+    tableName = "stsMarker";
+    }
+else
     return FALSE;
 conn = hAllocConn();
 query = newDyString(256);
@@ -573,7 +585,14 @@ while ((row = sqlNextRow(sr)) != NULL)
 	table->name = cloneString(query->string);
 	slAddHead(&hgp->tableList, table);
 	}
-    stsMarkerStaticLoad(row, &sm);
+    if (newFormat)
+	stsMapStaticLoad(row, &sm);
+    else
+        {
+	struct stsMarker oldSm;
+	stsMarkerStaticLoad(row, &oldSm);
+	stsMapFromStsMarker(&oldSm, &sm);
+	}
     if ((chrom = hgOfficialChromName(sm.chrom)) == NULL)
 	errAbort("Internal Database error: Odd chromosome name '%s' in %s", sm.chrom, tableName); 
     AllocVar(pos);
