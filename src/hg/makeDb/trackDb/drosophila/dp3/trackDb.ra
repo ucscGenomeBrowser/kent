@@ -6,14 +6,15 @@ group map
 visibility dense
 type bed 3 +
 
-track flybaseGene
+track flyBaseGene
 shortLabel FlyBase
 longLabel FlyBase Gene Annotations (Mapped Proteins)
 group genes
 priority 34
 visibility pack
 color 0,100,180
-type genePred flybasePep
+type genePred flyBasePep
+symbolTable flyBase2004Xref
 
 track twinscan
 shortLabel Twinscan
