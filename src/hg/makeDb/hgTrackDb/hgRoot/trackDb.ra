@@ -163,8 +163,17 @@ shortLabel Genscan Genes
 longLabel Genscan Gene Predictions
 priority 17.5
 visibility dense
-color 120,50,0
+color 180,90,0
 type genePred genscanPep
+chromosomes chr22,
+
+track genscanExtra
+shortLabel Genscan Extra
+longLabel Genscan Extra (Suboptimal) Exon Predictions 
+priority 17.6
+visibility hide
+color 180,90,0
+type bed 6
 chromosomes chr22,
 
 track mrna
@@ -414,13 +423,6 @@ priority 34
 visibility hide
 type bed 4 +
 
-track bacEnds
-shortLabel BAC Ends
-longLabel BAC End Pairs
-priority 35
-visibility hide
-type psl .
-
 track rosettaTe
 shortLabel Rosetta T. E.
 longLabel Rosetta Confirmed Exon Data
@@ -446,11 +448,3 @@ priority 38
 visibility dense
 type psl .
 
-track bacEndPairs
-shortLabel BAC Ends
-longLabel BAC End Pairs
-priority 39
-visibility hide
-color 67,57,206
-altColor 204,20,35
-private on
