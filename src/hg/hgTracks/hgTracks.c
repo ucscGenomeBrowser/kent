@@ -69,7 +69,7 @@
 #include "grp.h"
 #include "chromColors.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.601 2003/09/23 16:14:19 kent Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.602 2003/09/23 23:58:37 hiram Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
@@ -5330,7 +5330,7 @@ if (withLeftLabels)
 	    sameString( track->mapName, "musHumL" ) ||
 	    sameString( track->mapName, "mm3Rn2L" ) ||		
 	    sameString( track->mapName, "hg15Mm3L" ) ||		
-        sameString( track->mapName, "mm3Hg15L" ) ||
+	    sameString( track->mapName, "mm3Hg15L" ) ||
 	    sameString( track->mapName, "regpotent" ) ||
 	    sameString( track->mapName, "HMRConservation" )  )
 	    {
