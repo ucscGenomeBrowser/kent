@@ -298,6 +298,47 @@ visibility dense
 color 12,12,120
 type genePred refPep refMrna
 
+track rgdEst
+shortLabel RGD EST
+longLabel RGD EST
+group rna
+priority 57.5
+visibility hide
+spectrum on
+color 12,12,120
+type psl est
+url http://rgd.mcw.edu/generalSearch/RgdSearch.jsp?quickSearch=1&searchKeyword=
+
+track rgdGene
+shortLabel RGD Genes
+longLabel Rat Genome Database Curated Genes
+group genes
+priority 35.5
+visibility dense
+color 12,12,120
+type genePred
+url http://rgd.mcw.edu/generalSearch/RgdSearch.jsp?quickSearch=1&searchKeyword=
+
+track rgdSslp
+shortLabel RGD SSLP
+longLabel Rat Genome Database Simple Sequence Length Polymorphisms 
+group varRep
+priority 144.5
+visibility hide
+color 12,12,120
+type bed 4 .
+url http://rgd.mcw.edu/generalSearch/RgdSearch.jsp?quickSearch=1&searchKeyword=
+
+track rgdQtl
+shortLabel RGD QTL
+longLabel Rat Genome Database Quantitative Trait Locus
+group map
+priority 4.5 
+visibility hide
+color 12,12,120
+type bed 4 .
+url http://rgd.mcw.edu/generalSearch/RgdSearch.jsp?quickSearch=1&searchKeyword=
+
 track xenoRefGene
 shortLabel Non-$Organism RefSeq
 longLabel Non-$Organism RefSeq Genes
