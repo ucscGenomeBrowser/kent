@@ -20,7 +20,7 @@
 #include "wiggle.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: wiggle.c,v 1.32 2004/11/17 23:27:56 hiram Exp $";
+static char const rcsid[] = "$Id: wiggle.c,v 1.33 2004/11/18 20:00:25 hiram Exp $";
 
 extern char *maxOutMenu[];
 
@@ -197,7 +197,8 @@ switch (wigOutType)
     };
 
 WIG_INIT;
-freeMem(dataConstraint);	/* been cloned into wds */
+if (hasConstraint)
+    freeMem(dataConstraint);	/* been cloned into wds */
 
 wds->setMaxOutput(wds, maxOut);
 wds->setChromConstraint(wds, region->chrom);
@@ -393,7 +394,8 @@ struct bed *intersectBedList = NULL;
 int maxOut;
 
 WIG_INIT;
-freeMem(dataConstraint);	/* been cloned into wds */
+if (hasConstraint)
+    freeMem(dataConstraint);	/* been cloned into wds */
 
 maxOut = wigMaxOutput(database, curTable);
 
@@ -655,6 +657,9 @@ for (region = regionList; region != NULL; region = region->next)
 	break;	/*	exit this for loop	*/
 	}
     }	/*for (region = regionList; region != NULL; region = region->next) */
+
+if (hasConstraint)
+    freeMem(dataConstraint);	/* been cloned into wds */
 
 if (1 == regionCount)
     {
