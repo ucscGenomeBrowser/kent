@@ -28,7 +28,7 @@
 #include "portable.h"
 #include "customTrack.h"
 
-static char const rcsid[] = "$Id: hgText.c,v 1.101 2003/10/21 21:29:56 angie Exp $";
+static char const rcsid[] = "$Id: hgText.c,v 1.102 2003/10/22 23:11:14 angie Exp $";
 
 /* sources of tracks, other than the current database: */
 static char *hgFixed = "hgFixed";
@@ -3282,7 +3282,10 @@ struct customTrack *ctNew = NULL;
 struct tempName tn;
 char *table = getTableName();
 char *track = getTrackName();
-boolean doCtHdr = cgiBoolean("tbDoCustomTrack") || doCt;
+char *phase = (existsAndEqual("phase", getOutputPhase) ?
+	       cgiString("outputType") : cgiString("phase"));
+boolean doCtHdr = (cgiBoolean("tbDoCustomTrack") || doCt ||
+		   sameString(phase, getCtBedPhase));
 char *ctName = cgiUsualString("tbCtName", table);
 char *ctDesc = cgiUsualString("tbCtDesc", table);
 char *ctVis  = cgiUsualString("tbCtVis", "dense");
