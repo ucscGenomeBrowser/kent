@@ -26,6 +26,3 @@ test:
 clean:
 	rm -f $O $B pslHisto
 	cd tests && ${MAKE} clean
-
-savebak:
-	savebak pslHisto *.c *.h makefile tests/makefile tests/input

@@ -33,11 +33,11 @@ errAbort("\n%s",
          "  o alignsPerQuery - number of alignments per query. Output is one\n"
          "    line per query with the number of alignments.\n"
          "\n"
-         "  o coverDiff - difference between the highest and lowest coverage\n"
+         "  o coverSpread - difference between the highest and lowest coverage\n"
          "    for alignments of a query.  Output line per query, with the difference.\n"
          "    Only includes queries with multiple alignments\n"
          "\n"
-         "  o idDiff - difference between the highest and lowest fraction identity\n"
+         "  o idSpread - difference between the highest and lowest fraction identity\n"
          "    for alignments of a query.  Output line per query, with the difference.\n"
          "\n" 
          "Options:\n"
@@ -87,7 +87,7 @@ else
     return ((float)aligned)/((float)(psl->qSize));
 }
 
-float queryCoverDiff(struct pslQuery *query)
+float queryCoverSpread(struct pslQuery *query)
 /* calculate cover difference for a query */
 {
 struct psl *psl = query->psls;
@@ -102,7 +102,7 @@ for (psl = psl->next; psl != NULL; psl = psl->next)
 return maxCov-minCov;
 }
 
-void coverDiff(struct pslTbl *pslTbl, FILE *outFh)
+void coverSpread(struct pslTbl *pslTbl, FILE *outFh)
 /* difference between the highest and lowest coverage for alignments of a
  * query. */
 {
@@ -111,7 +111,7 @@ struct hashCookie hc = hashFirst(pslTbl->queryHash);
 while ((q = hashNextVal(&hc)) != NULL)
     if (shouldOutput(q))
         {
-        float diff = queryCoverDiff(q);
+        float diff = queryCoverSpread(q);
         if (shouldOutputFloatVal(diff))
             fprintf(outFh, "%0.4g\n", diff);
         }
@@ -127,7 +127,7 @@ else
     return ((float)(psl->match + psl->repMatch))/((float)(aligned));
 }
 
-float queryIdDiff(struct pslQuery *query)
+float queryIdSpread(struct pslQuery *query)
 /* calculate id difference for a query */
 {
 struct psl *psl = query->psls;
@@ -142,7 +142,7 @@ for (psl = psl->next; psl != NULL; psl = psl->next)
 return maxId-minId;
 }
 
-void idDiff(struct pslTbl *pslTbl, FILE *outFh)
+void idSpread(struct pslTbl *pslTbl, FILE *outFh)
 /* difference between the highest and lowest ident for alignments of a
  * query. */
 {
@@ -151,7 +151,7 @@ struct hashCookie hc = hashFirst(pslTbl->queryHash);
 while ((q = hashNextVal(&hc)) != NULL)
     if (shouldOutput(q))
         {
-        float diff = queryIdDiff(q);
+        float diff = queryIdSpread(q);
         if (shouldOutputFloatVal(diff))
             fprintf(outFh, "%0.4g\n", diff);
         }
@@ -164,10 +164,10 @@ struct pslTbl *pslTbl = pslTblNew(inPsl);
 FILE *outFh = mustOpen(outHisto, "w");
 if (sameString(what, "alignsPerQuery"))
     alignsPerQuery(pslTbl, outFh);
-else if (sameString(what, "coverDiff"))
-    coverDiff(pslTbl, outFh);
-else if (sameString(what, "idDiff"))
-    idDiff(pslTbl, outFh);
+else if (sameString(what, "coverSpread"))
+    coverSpread(pslTbl, outFh);
+else if (sameString(what, "idSpread"))
+    idSpread(pslTbl, outFh);
 else
     usage("invalid what argument: %s", what);
 carefulClose(&outFh);
