@@ -30,7 +30,7 @@
 #include "liftOverChain.h"
 #include "grp.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.175 2004/04/13 14:51:02 kate Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.176 2004/04/14 05:24:16 kate Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
@@ -40,6 +40,7 @@ static char const rcsid[] = "$Id: hdb.c,v 1.175 2004/04/13 14:51:02 kate Exp $";
 static struct sqlConnCache *hdbCc = NULL;  /* cache for primary database connection */
 static struct sqlConnCache *hdbCc2 = NULL;  /* cache for second database connection (ortholog) */
 static struct sqlConnCache *centralCc = NULL;
+static struct sqlConnCache *centralArchiveCc = NULL;
 static struct sqlConnCache *cartCc = NULL;  /* cache for cart; normally same as centralCc */
                                                
 
@@ -509,6 +510,30 @@ void hDisconnectCentral(struct sqlConnection **pConn)
 /* Put back connection for reuse. */
 {
 sqlFreeConnection(centralCc, pConn);
+}
+
+struct sqlConnection *hConnectArchiveCentral()
+/* Connect to central database for archives.
+ * Free this up with hDisconnectCentralArchive(). */
+{
+if (centralArchiveCc == NULL)
+    {
+    char *database = cfgOption("central.db");
+    char *host = cfgOption("genome-archive.cse.ucsc.edu");
+    char *user = cfgOption("central.user");
+    char *password = cfgOption("central.password");;
+
+    if (database == NULL || host == NULL || user == NULL || password == NULL)
+	errAbort("Please set central options in the hg.conf file.");
+    centralArchiveCc = sqlNewRemoteConnCache(database, host, user, password);
+    }
+return sqlAllocConnection(centralArchiveCc);
+}
+
+void hDisconnectArchiveCentral(struct sqlConnection **pConn)
+/* Put back connection for reuse. */
+{
+sqlFreeConnection(centralArchiveCc, pConn);
 }
 
 struct sqlConnection *hConnectCart()
@@ -1748,6 +1773,35 @@ slReverse(&dbList);
 return dbList;
 }
 
+struct dbDb *hArchiveDbDbList()
+/* Return list of databases that are actually online. 
+ * The list includes the name, description, and where to
+ * find the nib-formatted DNA files. Free this with dbDbFree. */
+{
+struct sqlConnection *conn = hConnectArchiveCentral();
+struct sqlResult *sr;
+char **row;
+struct dbDb *dbList = NULL, *db;
+struct hash *hash = sqlHashOfDatabases();
+
+sr = sqlGetResult(conn, "select * from dbDb order by orderKey,name desc");
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    db = dbDbLoad(row);
+    if (hashLookup(hash, db->name))
+        {
+	slAddHead(&dbList, db);
+	}
+    else
+        dbDbFree(&db);
+    }
+sqlFreeResult(&sr);
+hashFree(&hash);
+hDisconnectArchiveCentral(&conn);
+slReverse(&dbList);
+return dbList;
+}
+
 struct slName *hDbList()
 /* List of all database versions that are online (database
  * names only).  See also hDbDbList. */
@@ -2768,7 +2822,8 @@ struct dbDb *hGetLiftOverFromDatabases()
  * from this assembly to another.
  * Dispose of this with dbDbFreeList. */
 {
-struct dbDb *allDbList = NULL, *liftOverDbList = NULL, *dbDb, *nextDbDb;
+struct dbDb *currentDbList = NULL, *archiveDbList = NULL;
+struct dbDb *liftOverDbList = NULL, *dbDb, *nextDbDb;
 struct liftOverChain *chainList = NULL, *chain;
 struct hash *hash = newHash(0);
 
@@ -2779,14 +2834,18 @@ chainList = liftOverChainList();
 for (chain = chainList; chain != NULL; chain = chain->next)
     {
     if (!hashFindVal(hash, chain->fromDb))
+        {
         hashAdd(hash, chain->fromDb, chain->fromDb);
+        }
     }
 
 /* Get list of all current databases */
-allDbList = hDbDbList();
+currentDbList = hDbDbList();
+/* Get list of all archived databases */
+//archiveDbList = hArchiveDbDbList();
 
 /* Create a new dbDb list of all entries in the liftOver hash */
-for (dbDb = allDbList; dbDb != NULL; dbDb = nextDbDb)
+for (dbDb = currentDbList; dbDb != NULL; dbDb = nextDbDb)
     {
     nextDbDb = dbDb->next;
     if (hashFindVal(hash, dbDb->name))
@@ -2794,6 +2853,15 @@ for (dbDb = allDbList; dbDb != NULL; dbDb = nextDbDb)
     else
         dbDbFree(&dbDb);
     }
+for (dbDb = archiveDbList; dbDb != NULL; dbDb = nextDbDb)
+    {
+    nextDbDb = dbDb->next;
+    if (hashFindVal(hash, dbDb->name))
+        slAddHead(&liftOverDbList, dbDb);
+    else
+        dbDbFree(&dbDb);
+    }
+
 hashFree(&hash);
 liftOverChainFreeList(&chainList);
 slReverse(&liftOverDbList);
