@@ -43,6 +43,7 @@ DIRS = \
 	chainSplit \
 	chainSwap \
 	gcForBed \
+	knownVsBlat \
 	lavToAxt \
 	lavToPsl \
 	libScan \
