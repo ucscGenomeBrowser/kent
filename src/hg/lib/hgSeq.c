@@ -139,14 +139,24 @@ void hgSeqOptionsDb(char *db, char *table)
 struct hTableInfo *hti;
 char chrom[32];
 char rootName[256];
+boolean canDoUTR, canDoIntrons;
 
-hParseTableName(table, rootName, chrom);
-hti = hFindTableInfoDb(db, chrom, rootName);
-if (hti == NULL)
-    webAbort("Error", "Could not find table info for table %s (%s)",
-	     rootName, table);
-hgSeqFeatureRegionOptions(hti->hasCDS, hti->hasBlocks);
-hgSeqDisplayOptions(hti->hasCDS, hti->hasBlocks);
+if ((table == NULL) || (table[0] == 0))
+    {
+    canDoUTR = canDoIntrons = FALSE;
+    }
+else
+    {
+    hParseTableName(table, rootName, chrom);
+    hti = hFindTableInfoDb(db, chrom, rootName);
+    if (hti == NULL)
+	webAbort("Error", "Could not find table info for table %s (%s)",
+		 rootName, table);
+    canDoUTR = hti->hasCDS;
+    canDoIntrons = hti->hasBlocks;
+    }
+hgSeqFeatureRegionOptions(canDoUTR, canDoIntrons);
+hgSeqDisplayOptions(canDoUTR, canDoIntrons);
 }
 
 
