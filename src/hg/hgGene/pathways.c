@@ -7,7 +7,7 @@
 #include "jksql.h"
 #include "hgGene.h"
 
-static char const rcsid[] = "$Id: pathways.c,v 1.5 2003/11/12 18:47:21 kent Exp $";
+static char const rcsid[] = "$Id: pathways.c,v 1.6 2004/10/01 16:48:29 fanhsu Exp $";
 
 struct pathwayLink
 /* Info to link into a pathway. */
@@ -73,7 +73,7 @@ safef(query, sizeof(query),
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
-    hPrintf("<A HREF=\"http://biocyc.org:1555/HUMAN/new-image?type=PATHWAY&object=%s&detail-level=2\" TARGET=_blank>",
+    hPrintf("<A HREF=\"http://biocyc.org/HUMAN/new-image?type=PATHWAY&object=%s&detail-level=2\" TARGET=_blank>",
     	row[0]);
     hPrintf("%s</A> - %s<BR>\n", row[0], row[1]);
     }

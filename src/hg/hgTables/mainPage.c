@@ -16,7 +16,7 @@
 #include "hgTables.h"
 #include "joiner.h"
 
-static char const rcsid[] = "$Id: mainPage.c,v 1.50 2004/09/27 18:15:39 kent Exp $";
+static char const rcsid[] = "$Id: mainPage.c,v 1.52 2004/10/01 19:27:45 kent Exp $";
 
 
 int trackDbCmpShortLabel(const void *va, const void *vb)
@@ -32,7 +32,6 @@ static struct dyString *onChangeStart()
 {
 struct dyString *dy = dyStringNew(1024);
 dyStringAppend(dy, "onChange=\"");
-jsDropDownCarryOver(dy, hgtaTable);
 jsDropDownCarryOver(dy, hgtaTrack);
 jsDropDownCarryOver(dy, hgtaGroup);
 jsTrackedVarCarryOver(dy, hgtaRegionType, "regionType");
@@ -47,6 +46,7 @@ static char *onChangeOrg()
 {
 struct dyString *dy = onChangeStart();
 jsDropDownCarryOver(dy, "org");
+jsDropDownCarryOver(dy, hgtaTable);
 dyStringAppend(dy, " document.hiddenForm.db.value=0;");
 return jsOnChangeEnd(&dy);
 }
@@ -56,6 +56,7 @@ static char *onChangeDb()
 {
 struct dyString *dy = onChangeStart();
 jsDropDownCarryOver(dy, "db");
+jsDropDownCarryOver(dy, hgtaTable);
 return jsOnChangeEnd(&dy);
 }
 
@@ -65,6 +66,17 @@ static char *onChangeGroupOrTrack()
 struct dyString *dy = onChangeStart();
 jsDropDownCarryOver(dy, "db");
 jsDropDownCarryOver(dy, "org");
+dyStringPrintf(dy, " document.hiddenForm.%s.value=0;", hgtaTable);
+return jsOnChangeEnd(&dy);
+}
+
+static char *onChangeTable()
+/* Return javascript executed when they change group. */
+{
+struct dyString *dy = onChangeStart();
+jsDropDownCarryOver(dy, "db");
+jsDropDownCarryOver(dy, "org");
+jsDropDownCarryOver(dy, hgtaTable);
 return jsOnChangeEnd(&dy);
 }
 
@@ -77,10 +89,10 @@ jsMakeTrackingRadioButton(hgtaRegionType, "regionType", val, selVal);
 }
 
 struct grp *showGroupField(char *groupVar, char *groupScript,
-    struct sqlConnection *conn)
+    struct sqlConnection *conn, boolean allTablesOk)
 /* Show group control. Returns selected group. */
 {
-struct grp *group, *groupList = makeGroupList(conn, fullTrackList);
+struct grp *group, *groupList = makeGroupList(conn, fullTrackList, allTablesOk);
 struct grp *selGroup = findSelectedGroup(groupList, groupVar);
 hPrintf("<B>group:</B>\n");
 hPrintf("<SELECT NAME=%s %s>\n", groupVar, groupScript);
@@ -94,14 +106,23 @@ hPrintf("</SELECT>\n");
 return selGroup;
 }
 
+static void addIfExists(struct hash *hash, struct slName **pList, char *name)
+/* Add name to tail of list if it exists in hash. */
+{
+if (hashLookup(hash, name))
+    slNameAddTail(pList, name);
+}
+
 struct slName *getDbListForGenome()
 /* Get list of selectable databases. */
 {
+struct hash *hash = sqlHashOfDatabases();
 struct slName *dbList = NULL;
-slNameAddTail(&dbList, "swissProt");
-slNameAddTail(&dbList, "proteins");
-slNameAddTail(&dbList, "hgFixed");
-slNameAddTail(&dbList, database);
+addIfExists(hash, &dbList, "ultra");
+addIfExists(hash, &dbList, "swissProt");
+addIfExists(hash, &dbList, "proteins");
+addIfExists(hash, &dbList, "hgFixed");
+addIfExists(hash, &dbList, database);
 return dbList;
 }
 
@@ -162,19 +183,6 @@ else
     }
 hPrintf("\n");
 return selTrack;
-}
-
-struct trackDb *showGroupTrackRow(char *groupVar, char *groupScript,
-    char *trackVar, char *trackScript, struct sqlConnection *conn)
-/* Show group & track row of controls.  Returns selected track */
-{
-struct trackDb *track;
-struct grp *selGroup;
-hPrintf("<TR><TD>");
-selGroup = showGroupField(groupVar, groupScript, conn);
-track = showTrackField(selGroup, trackVar, trackScript);
-hPrintf("</TD></TR>\n");
-return track;
 }
 
 char *unsplitTableName(char *table)
@@ -249,7 +257,7 @@ if (!slNameInList(nameList, selTable))
     selTable = nameList->name;
 /* Print out label and drop-down list. */
 hPrintf("<B>table: </B>");
-hPrintf("<SELECT NAME=%s %s>\n", hgtaTable, onChangeGroupOrTrack());
+hPrintf("<SELECT NAME=%s %s>\n", hgtaTable, onChangeTable());
 for (name = nameList; name != NULL; name = name->next)
     {
     hPrintf("<OPTION VALUE=%s", name->name);
@@ -392,7 +400,7 @@ hPrintf("<TABLE BORDER=0>\n");
 /* Print group and track line. */
     {
     hPrintf("<TR><TD>");
-    selGroup = showGroupField(hgtaGroup, onChangeGroupOrTrack(), conn);
+    selGroup = showGroupField(hgtaGroup, onChangeGroupOrTrack(), conn, TRUE);
     nbSpaces(3);
     curTrack = showTrackField(selGroup, hgtaTrack, onChangeGroupOrTrack());
     hPrintf("</TD></TR>\n");

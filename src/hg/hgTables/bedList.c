@@ -18,7 +18,7 @@
 #include "hgTables.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: bedList.c,v 1.17 2004/09/25 05:38:37 kent Exp $";
+static char const rcsid[] = "$Id: bedList.c,v 1.19 2004/10/01 21:26:43 kent Exp $";
 
 boolean htiIsPsl(struct hTableInfo *hti)
 /* Return TRUE if table looks to be in psl format. */
@@ -259,11 +259,11 @@ static struct bed *dbGetFilteredBedsOnRegions(struct sqlConnection *conn,
 struct region *region;
 struct bed *bedList = NULL, *bed;
 struct hash *idHash = identifierHash();
-char *filter = filterClause(database, table);
 
 for (region = regionList; region != NULL; region = region->next)
     {
     struct bed *nextBed;
+    char *filter = filterClause(database, table, region->chrom);
     struct bed *bedListRegion = getRegionAsBed(database, table, 
         region, filter, idHash, lm);
     for (bed = bedListRegion; bed != NULL; bed = nextBed)
@@ -271,10 +271,10 @@ for (region = regionList; region != NULL; region = region->next)
 	nextBed = bed->next;
 	slAddHead(&bedList, bed);
 	}
+    freez(&filter);
     }
 slReverse(&bedList);
 
-freez(&filter);
 hashFree(&idHash);
 return bedList;
 }
@@ -333,8 +333,6 @@ char buf[256];
 char *setting;
 htmlOpen("Output %s as %s", table, (doCt ? "Custom Track" : "BED"));
 hPrintf("<FORM ACTION=\"../cgi-bin/hgTables\" METHOD=GET>\n");
-hPrintf("%s\n", "<A HREF=\"/goldenPath/help/hgTextHelp.html#BEDOptions\">"
-     "<B>Help</B></A><P>");
 hPrintf("%s\n", "<TABLE><TR><TD>");
 if (doCt)
     {
