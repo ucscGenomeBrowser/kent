@@ -19,14 +19,12 @@ sqlFreeResult(&sr);
 }
 
 struct kgAlias *findKGAlias(char *dataBase, char *spec, char *mode)
-{
 /* findKGAlias Looks up aliases for Known Genes, given a seach spec 
-
-	mode "E" is for Exact match
- 	mode "F" is for Fuzzy match
-
-   it returns a link list of kgAlias nodes, which contain kgID and Alias 
-*/
+ *   mode "E" is for Exact match
+ *   mode "F" is for Fuzzy match
+ *   mode "P" is for Prefix match
+ * it returns a link list of kgAlias nodes, which contain kgID and Alias */
+{
 struct sqlConnection *conn  = hAllocConn();
 struct sqlResult     *sr    = NULL;
 struct dyString      *ds    = newDyString(256);
@@ -35,28 +33,25 @@ char   fullTableName[256];
 
 snprintf(fullTableName, 250, "%s.%s", dataBase, "kgAlias");
 if (!sqlTableExists(conn, fullTableName))
-	{
-	errAbort("Table %s.kgAlias does not exist.\n", dataBase);
-	}
+    {
+    errAbort("Table %s.kgAlias does not exist.\n", dataBase);
+    }
 
-if (strcmp(mode, "E") == 0)
+if (sameString(mode, "E"))
     {
     dyStringPrintf(ds, "select * from %s.kgAlias where alias = '%s'", dataBase, spec);
     }
-else
+else if (sameString(mode, "F"))
     {
-    if (strcmp(mode, "F") == 0)
-	{
-    	dyStringPrintf(ds, "select * from %s.kgAlias where alias like '%%%s%%'", dataBase, spec);
-	}
-    else
-	{
-	errAbort("%s is not a valid mode for findKGAlias()\n", mode);
-	}
+    dyStringPrintf(ds, "select * from %s.kgAlias where alias like '%%%s%%'", 
+    	dataBase, spec);
     }
-
+else if (sameString(mode, "P"))
+    {
+    dyStringPrintf(ds, "select * from %s.kgAlias where alias like '%s%%'", 
+    	dataBase, spec);
+    }
 addKgAlias(conn, ds, &kaList);
 hFreeConn(&conn);
-
 return(kaList);
 }

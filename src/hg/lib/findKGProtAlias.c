@@ -25,6 +25,7 @@ struct kgProtAlias *findKGProtAlias(char *dataBase, char *spec, char *mode)
 
 	mode "E" is for Exact match
  	mode "F" is for Fuzzy match
+ 	mode "P" is for Prefix match
 
    it returns a link list of kgProtAlias nodes, which contain kgID, displayID, and alias 
 */
@@ -36,24 +37,25 @@ char   fullTableName[256];
 
 snprintf(fullTableName, 250, "%s.%s", dataBase, "kgProtAlias");
 if (!sqlTableExists(conn, fullTableName))
-	{
-	errAbort("Table %s.kgProtAlias does not exist.\n", dataBase);
-	}
+    {
+    errAbort("Table %s.kgProtAlias does not exist.\n", dataBase);
+    }
 
-if (strcmp(mode, "E") == 0)
+if (sameString(mode, "E"))
     {
     dyStringPrintf(ds, "select * from %s.kgProtAlias where alias = '%s'", dataBase, spec);
     }
+else if (sameString(mode, "F"))
+    {
+    dyStringPrintf(ds, "select * from %s.kgProtAlias where alias like '%%%s%%'", dataBase, spec);
+    }
+else if (sameString(mode, "P"))
+    {
+    dyStringPrintf(ds, "select * from %s.kgProtAlias where alias like '%s%%'", dataBase, spec);
+    }
 else
     {
-    if (strcmp(mode, "F") == 0)
-	{
-    	dyStringPrintf(ds, "select * from %s.kgProtAlias where alias like '%%%s%%'", dataBase, spec);
-	}
-    else
-	{
-	errAbort("%s is not a valid mode for findKGAlias()\n", mode);
-	}
+    errAbort("%s is not a valid mode for findKGAlias()\n", mode);
     }
 
 addKGProtAlias(conn, ds, &kapList);

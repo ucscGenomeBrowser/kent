@@ -40,7 +40,7 @@
 #include "minGeneInfo.h"
 #include <regex.h>
 
-static char const rcsid[] = "$Id: hgFind.c,v 1.125 2004/02/06 22:24:45 angie Exp $";
+static char const rcsid[] = "$Id: hgFind.c,v 1.126 2004/02/11 07:47:40 kent Exp $";
 
 /* alignment tables to check when looking for mrna alignments */
 static char *estTables[] = { "all_est", "xenoEst", NULL};
@@ -183,7 +183,7 @@ if (!hTableExists(tableName))
 rowOffset = hOffsetPastBin(NULL, tableName);
 conn = hAllocConn();
 query = newDyString(256);
-dyStringPrintf(query, "SELECT chrom, txStart, txEnd, name FROM %s WHERE name LIKE '%%%s%%'", tableName, localName);
+dyStringPrintf(query, "SELECT chrom, txStart, txEnd, name FROM %s WHERE name LIKE '%s%%'", tableName, localName);
 sr = sqlGetResult(conn, query->string);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -212,6 +212,7 @@ sqlFreeResult(&sr);
 hFreeConn(&conn);
 return ok;
 }
+
 static boolean findKnownGene(char *spec, struct hgPositions *hgp, char *tableName)
 /* Look for position in gene prediction table. */
 {
@@ -261,6 +262,7 @@ else
 	    }
 	}
     }
+return FALSE;
 }
 
 static struct hgPositions *handleTwoSites(char *spec, char **retChromName, 
@@ -1627,17 +1629,6 @@ hFreeConn(&conn);
 return ok;
 }
 
-#ifdef UNUSED
-static struct hgPosTable *findTable(struct hgPosTable *list, char *name)
-/* Find named table or return NULL. */
-{
-struct hgPosTable *table = NULL;
-for (table = list; table != NULL; table = table->next)
-    if (sameString(name, table->name))
-        return table;
-return NULL;
-}
-#endif /* UNUSED */
 
 static boolean findGenePredPattern(char *pattern, struct hgPositions *hgp, char *tableName, struct hgPosTable *table)
 /* Look for position pattern in gene prediction table. */
@@ -1911,30 +1902,6 @@ static boolean findGenethonPos(char *spec, char **retChromName, int *retWinStart
 {
 return findOldStsPos("mapGenethon", spec, retChromName, retWinStart, retWinEnd);
 }
-
-#ifdef OLD
-static struct slName *accsThatMatchKey(char *key, char *field)
-/* Return list of accessions that match key on a particular field. */
-{
-struct slName *list = NULL, *el;
-struct sqlConnection *conn = hAllocConn();
-struct sqlResult *sr;
-char **row;
-char query[256];
-
-sprintf(query, "select mrna.acc from mrna,%s where %s.name like '%%%s%%'  and mrna.%s = %s.id", field, field, key, field, field);
-sr = sqlGetResult(conn, query);
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-    el = newSlName(row[0]);
-    slAddHead(&list, el);
-    }
-sqlFreeResult(&sr);
-hFreeConn(&conn);
-slReverse(&list);
-return list;
-}
-#endif /* OLD */
 
 static void findHitsToTables(char *key, char *tables[], int tableCount, 
                             struct hash **retHash, struct slName **retList)
@@ -2369,7 +2336,7 @@ int kgFound 		    = 0;
 if (gotKgAlias)
     {
     /* get a link list of kgAlias (kgID/alias pair) nodes that match the spec using "Fuzzy" mode*/
-    kaList = findKGAlias(hGetDb(), spec, "F");
+    kaList = findKGAlias(hGetDb(), spec, "P");
     }
 
 if (kaList != NULL)
@@ -2453,7 +2420,7 @@ if (gotKgProtAlias)
     {
     /* get a link list of kgProtAlias (kgID, displayID, and alias) nodes that 
        match the query spec using "Fuzzy" search mode*/
-    kpaList = findKGProtAlias(hGetDb(), spec, "F");
+    kpaList = findKGProtAlias(hGetDb(), spec, "P");
     }
 
 if (kpaList != NULL)
@@ -2551,7 +2518,7 @@ if (gotRefLink)
 	}
     else 
 	{
-	dyStringPrintf(ds, "select * from refLink where name like '%%%s%%'", spec);
+	dyStringPrintf(ds, "select * from refLink where name like '%s%%'", spec);
 	addRefLinks(conn, ds, &rlList);
 	dyStringClear(ds);
 	dyStringPrintf(ds, "select * from refLink where product like '%%%s%%'", spec);
@@ -3335,9 +3302,7 @@ else
 	}
     findKnownGenes(query, hgp);
     findRefGenes(query, hgp);
-
     findYeastGenes(query, hgp);
-
     findSuperfamily(query, hgp);
     findFishClones(query, hgp);
     findBacEndPairs(query, hgp);
