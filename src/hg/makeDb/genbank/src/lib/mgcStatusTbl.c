@@ -3,7 +3,7 @@
 #include "localmem.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: mgcStatusTbl.c,v 1.7 2003/08/04 07:48:11 markd Exp $";
+static char const rcsid[] = "$Id: mgcStatusTbl.c,v 1.8 2004/02/10 05:05:59 markd Exp $";
 
 /* 
  * Clone detailed status values.
@@ -76,6 +76,7 @@ static char *organismNameMap[][2] =
     {"Danio rerio", "dr"},
     {"Silurana tropicalis", "st"},
     {"Xenopus laevis", "xl"},
+    {"Xenopus tropicalis", "xt"},
     {"Rattus norvegicus", "rn"},
     {NULL, NULL}
 };
