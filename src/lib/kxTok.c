@@ -8,17 +8,19 @@
 #include "common.h"
 #include "kxTok.h"
 
-static char const rcsid[] = "$Id: kxTok.c,v 1.9 2003/05/06 07:33:43 kate Exp $";
+static char const rcsid[] = "$Id: kxTok.c,v 1.10 2004/11/05 23:08:58 kent Exp $";
 
 boolean includeQuotes = FALSE;
 
-static struct kxTok *kxTokNew(enum kxTokType type, char *string, int stringSize)
+static struct kxTok *kxTokNew(enum kxTokType type, char *string, int stringSize,
+	boolean spaceBefore)
 /* Allocate and initialize a new token. */
 {
 struct kxTok *tok;
 int totalSize = stringSize + sizeof(*tok);
 tok = needMem(totalSize);
 tok->type = type;
+tok->spaceBefore = spaceBefore;
 memcpy(tok->string, string, stringSize);
 return tok;
 }
@@ -37,6 +39,7 @@ struct kxTok *kxTokenizeFancy(char *text, boolean wildAst,
 struct kxTok *tokList = NULL, *tok;
 char c, *s, *start = NULL, *end = NULL;
 enum kxTokType type = 0;
+boolean spaceBefore = FALSE;
 
 s = text;
 for (;;)
@@ -46,6 +49,7 @@ for (;;)
     start = s++;
     if (isspace(c))
         {
+	spaceBefore = TRUE;
         continue;
         }
     else if (isalnum(c) || c == '?' || (wildAst && c == '*') ||
@@ -208,10 +212,11 @@ for (;;)
         {
         errAbort("Unrecognized character %c", c);
         }
-    tok = kxTokNew(type, start, end-start);
+    tok = kxTokNew(type, start, end-start, spaceBefore);
     slAddHead(&tokList, tok);
+    spaceBefore = FALSE;
     }
-tok = kxTokNew(kxtEnd, "end", 3);
+tok = kxTokNew(kxtEnd, "end", 3, spaceBefore);
 slAddHead(&tokList, tok);
 slReverse(&tokList);
 return tokList;

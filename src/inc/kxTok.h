@@ -39,6 +39,7 @@ struct kxTok
     {
     struct kxTok *next;
     enum kxTokType type;
+    bool spaceBefore;	/* True if there is a space before */
     char string[1];  /* Allocated at run time */
     };
 
