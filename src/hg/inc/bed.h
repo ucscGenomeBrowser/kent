@@ -23,6 +23,9 @@ struct bed
     unsigned blockCount; /* Number of blocks. */
     int *blockSizes;     /* Comma separated list of block sizes.  */
     int *chromStarts;    /* Start positions inside chromosome.  Relative to chromStart*/
+    int expCount;	/* Experiment count */
+    int *expIds;		/* Experiment ids */
+    float *expScores;	/* Experiment scores. */
     };
 
 void bedStaticLoad(char **row, struct bed *ret);

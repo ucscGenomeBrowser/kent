@@ -58,6 +58,8 @@ freeMem(el->chrom);
 freeMem(el->name);
 freeMem(el->blockSizes);
 freeMem(el->chromStarts);
+freeMem(el->expIds);
+freeMem(el->expScores);
 freez(pEl);
 }
 
@@ -236,7 +238,7 @@ ret->chrom = cloneString(row[0]);
 ret->chromStart = sqlUnsigned(row[1]);
 ret->chromEnd = sqlUnsigned(row[2]);
 ret->name = cloneString(row[3]);
-ret->score = sqlUnsigned(row[4]);
+ret->score = sqlSigned(row[4]);
 return ret;
 }
 
@@ -254,7 +256,7 @@ ret->chrom = cloneString(row[0]);
 ret->chromStart = sqlUnsigned(row[1]);
 ret->chromEnd = sqlUnsigned(row[2]);
 ret->name = cloneString(row[3]);
-ret->score = sqlUnsigned(row[4]);
+ret->score = sqlSigned(row[4]);
 strcpy(ret->strand, row[5]);
 ret->thickStart = sqlUnsigned(row[6]);
 ret->thickEnd = sqlUnsigned(row[7]);
@@ -280,7 +282,7 @@ bed->chromEnd = sqlUnsigned(row[2]);
 if (wordCount > 3)
      bed->name = cloneString(row[3]);
 if (wordCount > 4)
-     bed->score = sqlUnsigned(row[4]);
+     bed->score = sqlSigned(row[4]);
 if (wordCount > 5)
      bed->strand[0] = row[5][0];
 if (wordCount > 6)
@@ -299,6 +301,12 @@ if (wordCount > 10)
     sqlSignedDynamicArray(row[10], &bed->blockSizes, &count);
 if (wordCount > 11)
     sqlSignedDynamicArray(row[11], &bed->chromStarts, &count);
+if (wordCount > 12)
+    bed->expCount = sqlUnsigned(row[12]);
+if (wordCount > 13)
+    sqlSignedDynamicArray(row[13], &bed->expIds, &count);
+if (wordCount > 14)
+    sqlFloatDynamicArray(row[14], &bed->expScores, &count);
 return bed;
 }
 
@@ -328,7 +336,7 @@ if (wordCount <= 4)
     return;
     }
 fputc(sep,f);
-fprintf(f, "%u", el->score);
+fprintf(f, "%d", el->score);
 if (wordCount <= 5)
     {
     fputc(lastSep, f);
@@ -392,6 +400,45 @@ for (i=0; i<el->blockCount; ++i)
     fputc(',', f);
     }
 if (sep == ',') fputc('}',f);
+
+if (wordCount <= 12)
+    {
+    fputc(lastSep, f);
+    return;
+    }
+fputc(sep,f);
+fprintf(f, "%d", el->expCount);
+
+if (wordCount <= 13)
+    {
+    fputc(lastSep, f);
+    return;
+    }
+fputc(sep,f);
+if (sep == ',') fputc('{',f);
+for (i=0; i<el->expCount; ++i)
+    {
+    fprintf(f, "%d", el->expIds[i]);
+    fputc(',', f);
+    }
+if (sep == ',') fputc('}',f);
+
+
+if (wordCount <= 14)
+    {
+    fputc(lastSep, f);
+    return;
+    }
+fputc(sep,f);
+if (sep == ',') fputc('{',f);
+for (i=0; i<el->expCount; ++i)
+    {
+    fprintf(f, "%f", el->expScores[i]);
+    fputc(',', f);
+    }
+if (sep == ',') fputc('}',f);
+
+
 fputc(lastSep,f);
 }
 
