@@ -5,7 +5,7 @@
 #include "options.h"
 #include "cheapcgi.h"
 
-static char const rcsid[] = "$Id: hgSgdGff3.c,v 1.9 2004/01/26 19:57:31 kent Exp $";
+static char const rcsid[] = "$Id: hgSgdGff3.c,v 1.10 2004/01/26 20:03:41 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -113,8 +113,6 @@ for (tf = tfList; tf != NULL; tf = tf->next)
 		    cgiDecode(note, note, strlen(note));
 		    }
 		}
-	    if (!stringIn(";Note=", id))	/* Fix Mike's typo. */
-		fprintf(f, "%s\t%s\t%s\n", id, tf->fields[2], note);
 	    }
 	tf->fields[8] = id;
 	}
@@ -162,8 +160,9 @@ for (tf = tfList; tf != NULL; tf = nextTf)
 	char strand = tf->fields[6][0];
 	if (strand != '+' && strand != '-')
 	    strand = '.';
-	fprintf(otherFile, "chr%s\t%d\t%d\t%s\t0\t%c\t%s\n",
-		tf->fields[0], start, end, tf->fields[8], strand, type);
+	if (!stringIn(";Note=", tf->fields[8]))	/* Fix Mike's typo. */
+	    fprintf(otherFile, "chr%s\t%d\t%d\t%s\t0\t%c\t%s\n",
+		    tf->fields[0], start, end, tf->fields[8], strand, type);
 	}
     }
 }
