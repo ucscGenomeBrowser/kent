@@ -1,7 +1,7 @@
 include ../../../inc/common.mk
 
-L = -lm
-MYLIBDIR = $(HOME)/src/lib/$(MACHTYPE)
+L = $(MYSQLLIBS) -lm
+MYLIBDIR = ../../../lib/$(MACHTYPE)
 MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 
 O = hgStanfordMicroarray.o

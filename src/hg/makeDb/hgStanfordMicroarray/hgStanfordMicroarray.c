@@ -3,9 +3,13 @@
 #include "linefile.h"
 #include "hash.h"
 #include "options.h"
+#include "dystring.h"
+#include "jksql.h"
 #include "portable.h"
+#include "hdb.h"
+#include "hgRelate.h"
 
-static char const rcsid[] = "$Id: hgStanfordMicroarray.c,v 1.1 2003/09/24 00:14:15 kent Exp $";
+static char const rcsid[] = "$Id: hgStanfordMicroarray.c,v 1.2 2003/09/24 02:25:06 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -25,7 +29,8 @@ errAbort(
 "   -geneField=XXXX - Field with gene name. Default NAME\n"
 "   -url=XXXX - Url to put in expTable\n"
 "   -credit=XXXX - Credits to put in expTable\n"
-"   -ref=XXX - Reference to put in expTable\n");
+"   -ref=XXX - Reference to put in expTable\n"
+"   -noLoad - Don't load into data base, just make tab files\n");
 }
 
 boolean clSwap = FALSE;
@@ -37,6 +42,7 @@ char *clGeneField = "NAME";
 char *clUrl = "n/a";
 char *clCredit = "n/a";
 char *clRef = "n/a";
+boolean clNoLoad = FALSE;
 
 static struct optionSpec options[] = {
    {"swap", OPTION_BOOLEAN,},
@@ -44,6 +50,10 @@ static struct optionSpec options[] = {
    {"trimTissue", OPTION_STRING,},
    {"suppress", OPTION_STRING,},
    {"dataField", OPTION_STRING,},
+   {"url", OPTION_STRING,},
+   {"credit", OPTION_STRING,},
+   {"ref", OPTION_STRING,},
+   {"noLoad", OPTION_BOOLEAN,},
    {NULL, 0},
 };
 
@@ -231,11 +241,10 @@ int dataIx, geneIx, expIx = *pExpCount;
 lineFileClose(&lf);
 }
 
-void saveExps(char *fileName, struct experiment *expList)
+void saveExps(FILE *f, struct experiment *expList)
 /* Save out experiment list to tab file. */
 {
 struct experiment *exp;
-FILE *f = mustOpen(fileName, "w");
 int id = 0;
 for (exp = expList; exp != NULL; exp = exp->next)
     {
@@ -248,15 +257,12 @@ for (exp = expList; exp != NULL; exp = exp->next)
     fprintf(f, "3\t");
     fprintf(f, "%s,%s,%s,\n", "n/a", "n/a", exp->tissue);
     }
-carefulClose(&f);
 }
 
-
-void saveGenes(char *fileName, struct geneSpots *geneList, int expCount)
+void saveGenes(FILE *f, struct geneSpots *geneList, int expCount)
 /* Save list of genes. */
 {
 struct geneSpots *gene;
-FILE *f = mustOpen(fileName, "w");
 int i;
 
 for (gene = geneList; gene != NULL; gene = gene->next)
@@ -267,8 +273,74 @@ for (gene = geneList; gene != NULL; gene = gene->next)
         fprintf(f, "%0.3f,", gene->spots[i]);
     fprintf(f, "\n");
     }
+}
 
-carefulClose(&f);
+void createExpTable(struct sqlConnection *conn, char *table)
+/* Create empty experiment table. */
+{
+struct dyString *dy = newDyString(1024);
+dyStringPrintf(dy, "CREATE TABLE %s (\n", table);
+dyStringAppend(dy, 
+"    id int unsigned not null,	# internal id of experiment\n"
+"    name varchar(255) not null,	# name of experiment\n"
+"    description longblob not null,	# description of experiment\n"
+"    url longblob not null,	# url relevant to experiment\n"
+"    ref longblob not null,	# reference for experiment\n"
+"    credit longblob not null,	# who to credit with experiment\n"
+"    numExtras int unsigned not null,	# number of extra things\n"
+"    extras longblob not null,	# extra things of interest, i.e. classifications\n"
+"              #Indices\n"
+"    PRIMARY KEY(id)\n"
+")\n");
+sqlRemakeTable(conn, table, dy->string);
+dyStringFree(&dy);
+}
+
+void createGeneTable(struct sqlConnection *conn, char *table)
+/* Create empty gene expression table. */
+{
+struct dyString *dy = newDyString(1024);
+dyStringPrintf(dy, "CREATE TABLE %s (\n", table);
+dyStringAppend(dy,
+   " name varchar(255) not null, # Name of gene\n"
+   " expCount int unsigned not null, # Number of experiments\n"
+   " expScores longblob not null, # Scores for each experiment\n"
+   " INDEX(name(10))\n"
+   ")");
+sqlRemakeTable(conn, table, dy->string);
+dyStringFree(&dy);
+}
+
+
+void makeExpTable(char *database, char *table, struct experiment *expList)
+/* Create experiment table and fill it with expList. */
+{
+FILE *f = hgCreateTabFile(".", table);
+saveExps(f, expList);
+if (!clNoLoad)
+    {
+    struct sqlConnection *conn = sqlConnect(database);
+    createExpTable(conn, table);
+    hgLoadTabFile(conn, ".", table, &f);
+    hgRemoveTabFile(".", table);
+    sqlDisconnect(&conn);
+    }
+}
+
+void makeGeneTable(char *database, char *table,  struct geneSpots *geneList, 
+	int expCount)
+/* Create gene table and fill it with geneList. */
+{
+FILE *f = hgCreateTabFile(".", table);
+saveGenes(f, geneList, expCount);
+if (!clNoLoad)
+    {
+    struct sqlConnection *conn = sqlConnect(database);
+    createGeneTable(conn, table);
+    hgLoadTabFile(conn, ".", table, &f);
+    hgRemoveTabFile(".", table);
+    sqlDisconnect(&conn);
+    }
 }
 
 void hgStanfordMicroarray(char *database, char *table, char *expTable, 
@@ -281,6 +353,7 @@ struct geneSpots *geneList = NULL, *gene;
 struct hash *geneHash = newHash(17);
 int maxExps = slCount(dirList);
 int expCount = 0;
+struct sqlConnection *conn;
 
 for (dirEl = dirList; dirEl != NULL; dirEl = dirEl->next)
     addOneXls(dirEl->name, maxExps, &expList, &geneList, geneHash, &expCount);
@@ -288,8 +361,14 @@ slReverse(&expList);
 slReverse(&geneList);
 uglyf("Got %d experiments, %d genes\n", slCount(expList), slCount(geneList));
 
-saveExps("exp.tab", expList);
-saveGenes("gene.tab", geneList, expCount);
+makeExpTable("hgFixed", expTable, expList);
+makeGeneTable(database, table,  geneList, expCount);
+
+/* Update history. */
+hSetDb(database);
+conn = hgStartUpdate();
+hgEndUpdate(&conn, "Loading %s from %s dir. %d experiments %d genes",
+	table, dir, slCount(expList), slCount(geneList));
 }
 
 int main(int argc, char *argv[])
@@ -307,6 +386,7 @@ clGeneField = optionVal("geneField", clGeneField);
 clUrl = optionVal("url", clUrl);
 clCredit = optionVal("credit", clCredit);
 clRef = optionVal("ref", clRef);
+clNoLoad = optionExists("noLoad");
 hgStanfordMicroarray(argv[1], argv[2], argv[3], argv[4]);
 return 0;
 }
