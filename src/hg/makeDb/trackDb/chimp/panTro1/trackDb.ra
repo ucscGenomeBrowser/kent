@@ -70,7 +70,7 @@ otherDb hg16
 
 track axtNetHg16
 shortLabel Human Best
-longLabel Best Human (hg16-Jul 03) Alignments from Net
+longLabel Human (hg16-Jul 03) Best Alignments from Net
 group compGeno
 priority 145.8
 visibility hide

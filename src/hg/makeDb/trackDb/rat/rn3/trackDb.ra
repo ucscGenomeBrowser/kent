@@ -171,6 +171,14 @@ priority 100
 visibility full
 type maf
 
+track tbaFishBirdCFTR
+shortLabel Non-Mammal CFTR
+longLabel CFTR Region TBA Alignments (human,mouse,rat,dog,fugu,chicken)
+group compGeno
+priority 301
+visibility full
+type maf
+
 track blastzMm4
 shortLabel Mm4 Blastz
 longLabel Mouse (Oct 03/Mm4) All Blastz Alignments

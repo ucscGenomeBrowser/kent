@@ -78,6 +78,8 @@ For expRatio
        expStep - amount to step in visible expression scale.  Some
            round number close to expScale/8 is best
        chip - Name of microarray chip.
+For wigMaf
+    
 
 If something lacks a type field it needs to have custom
 display routines.   You can remove a track from the

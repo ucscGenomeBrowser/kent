@@ -68,6 +68,14 @@ type psl xeno hg16
 otherDb hg16
 colorChromDefault off
 
+track tbaFishBirdCFTR
+shortLabel Non-Mammal CFTR
+longLabel CFTR Region TBA Alignments (human,mouse,rat,dog,fugu,chicken)
+group compGeno
+priority 141
+visibility full
+type maf
+
 track blastHg15KG
 shortLabel hg15 protein blast
 longLabel hg15 protein blast
