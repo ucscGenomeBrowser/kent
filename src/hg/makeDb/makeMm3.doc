@@ -1359,6 +1359,47 @@ o - Copy to hgwdev:/scratch.  Rename to correspond with tables as so and
        #*** Make /gbdb/mm3/fish_seq15jun2001 links
        hgLoadRna addSeq mm3 /gbdb/mm3/fish_seq15jun2001/*.fa
 
+# PRODUCING SQUIRT ALIGNMENTS  
+    ssh kkstore
+    mkdir -p ~/mm3/bed/blatCi1
+    cd ~/mm3/bed/blatCi1
+    ls -1S /iscratch/i/squirt/ci1/queryFa/*.fa > squirt.lst
+    ls -1S /scratch/hg/mm3/trfFa/* > mouse.lst
+
+    rm -rf psl
+    foreach ctg (`cat mouse.lst`)
+      mkdir -p psl/$ctg:t:r
+    end
+    # get gsub2D from someplace
+    gensub2 mouse.lst squirt.lst gsub2D spec
+
+    ssh kk
+    cd ~/mm3/bed/blatCi1
+    para create spec
+    ....
+    # When cluster run is done, sort alignments:
+    ssh eieio
+    cd ~/mm3/bed/blatCi1
+    mkdir /tmp/$LOGNAME
+    pslSort dirs raw.psl /tmp/$LOGNAME psl/*
+    pslReps raw.psl cooked.psl /dev/null -minAli=0.25
+    liftUp -nohead lifted.psl ../../jkStuff/liftAll.lft warn cooked.psl
+    pslSortAcc nohead chrom /tmp/$LOGNAME lifted.psl
+
+    # Rename to correspond with tables as so and load into database:
+    ssh hgwdev
+    cd ~/mm3/bed/blatSquirt/chrom
+    rm -f chr*_blatSquirt.psl
+    foreach i (chr?{,?}{,_random}.psl)
+        set r = $i:r
+        mv $i ${r}_blatSquirt.psl
+    end
+    hgLoadPsl mm3 *.psl
+
+    # Make squirt /gbdb/ symlink 
+    mkdir /gbdb/mm3/squirtSeq
+    cd /gbdb/mm3/squirtSeq
+    ln -s /cluster/store5/squirt/ci1/ciona.rm.fasta
 
 PRODUCING FUGU FISH ALIGNMENTS (DONE 03/13/03)
 
