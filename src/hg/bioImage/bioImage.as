@@ -47,7 +47,7 @@ table submissionSet
     lstring publication;	"Name of publication"
     lstring pubUrl;		"Publication URL"
     lstring setUrl;		"URL for whole set"
-    lstring itemUrl;		"URL for item.  Put $$ where image.submitId should go"
+    lstring itemUrl;		"URL for item.  Put %s where image.submitId should go"
     )
 
 table submissionContributer
@@ -68,7 +68,7 @@ table image
 "A single biological image"
     (
     int id;		"ID of image"
-    string name;	"Image name (file name in directory)"
+    string fileName;	"Image file name not including directory"
     int fullLocation;	"Location of full image"
     int thumbLocation;	"Location of thumbnail image"
     int submissionSet;	"Submission set this is part of"

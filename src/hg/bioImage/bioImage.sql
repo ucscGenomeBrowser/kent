@@ -61,7 +61,7 @@ CREATE TABLE submissionSet (
     publication longblob not null,	# Name of publication
     pubUrl longblob not null,	# Publication URL
     setUrl longblob not null,	# URL for whole set
-    itemUrl longblob not null,	# URL for item.  Put $$ where image.submitId should go
+    itemUrl longblob not null,	# URL for item.  Put %s where image.submitId should go
               #Indices
     PRIMARY KEY(id)
 );
@@ -86,7 +86,7 @@ CREATE TABLE sectionSet (
 #A single biological image
 CREATE TABLE image (
     id int auto_increment not null,	# ID of image
-    name varchar(255) not null,	# Image name (file name in directory)
+    fileName varchar(255) not null,	# Image file name not including directory.
     fullLocation int not null,	# Location of full image
     thumbLocation int not null,	# Location of thumbnail image
     submissionSet int not null,	# Submission set this is part of
