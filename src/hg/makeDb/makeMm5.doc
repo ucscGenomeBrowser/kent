@@ -3399,6 +3399,11 @@ cat `ls -1 *.lav | sort -g` \
 
 # CHAIN DANRER1 BLASTZ (DONE, 2004-08-03, hartera)
 # FILTERED WITH A HIGHER MINSCORE THRESHOLD (DONE, 2004-08-04, hartera)
+# RELOADED TABLES (DONE, 2004-08-18, hartera)
+# removed all chainDanRer1 and chainDanRer1Link tables, some extra tables had 
+# been accidentally loaded with this name from a different genome so there
+# were duplicate chain ids causing joinerCheck to complain.
+
     # Re do chains with rescored blastz danRer1
     # Run axtChain on little cluster
     ssh kki
@@ -3452,7 +3457,7 @@ axtChain -scoreScheme=/cluster/data/blastz/HoxD55.q \
     chainMergeSort run1/chain/*.chain > all.chain
     # filter again to use minScore of 7500 (see featureBits below) (2004-08-04)
     mv all.chain all.chain.filt5k
-    chainFilter -minScore=7500 all.chain.filt5k > all.chain
+    chainFilter -minScore=7500 all.chain.unfiltered > all.chain
     # remove old chains
     rm -r chain
     chainSplit chain all.chain
@@ -3604,7 +3609,7 @@ cat > makeMaf.csh << 'EOF'
     csh makeMaf.csh >&! makeMaf.log &
     tail -100f makeMaf.log
  
-# BLASTZ DANRER1 CLEAN UP (in progress, 2004-08-04, hartera)
+# BLASTZ DANRER1 CLEAN UP (DONE, 2004-08-04, hartera)
     ssh kksilo
     cd /cluster/data/mm5/bed/blastz.danRer1
     nice rm -rf raw &
@@ -3612,6 +3617,8 @@ cat > makeMaf.csh << 'EOF'
     nice rm -rf axtChrom.orig &
     nice rm axtChain/run1/chain/* &
     nice gzip {axt,psl}Chrom/* axtChain/{all.chain,*.net} &
+# unzip all.chain.gz and danRer1.net.gz to make vsDanRer1 downloadables
+# then zip these again (hartera, 2004-09-10)
 
 # UPDATE BACEND SEQUENCES (DONE - 2004-07-20 - Fan)
 
@@ -5458,3 +5465,443 @@ Submission to last job:         46761s     779.35m    12.99h    0.54d
     # Processing all.psl
     # load of blatFr1 did not go as planned: 1116383 record(s), 0 row(s) skipped, 1 warning(s) loading psl.tab
     # a record is already in trackDb as type xeno psl fr1, with colorChromDefault off
+
+# BLASTZ TETRAODON (tetNig1) (DONE, 2004-09-08, hartera)
+
+    ssh kkr1u00
+    # blastz requires lineage-specific repeats
+    # Treat all repeats as lineage-specific.
+
+    mkdir -p /iscratch/i/mm5/linSpecRep.notInTetraodon
+    foreach f (/cluster/bluearc/scratch/mus/mm5/rmsk/chr*.fa.out)
+      cp -p $f /iscratch/i/mm5/linSpecRep.notInTetraodon/$f:t:r:r.out.spec
+    end
+
+    mkdir -p /iscratch/i/tetNig1/linSpecRep.notInMouse
+    foreach f (/iscratch/i/tetNig1/rmsk/chr*.fa.out)
+      cp -p $f /iscratch/i/tetNig1/linSpecRep.notInMouse/$f:t:r:r.out.spec
+    end
+    iSync
+
+    ssh kksilo
+    # more space on store8 than store6
+    mkdir -p /cluster/store8/mm5/blastz.tetNig1.2004-09-02
+    ln -s /cluster/store8/mm5/blastz.tetNig1.2004-09-02 \
+          /cluster/data/mm5/bed
+    ln -s /cluster/data/mm5/bed/blastz.tetNig1.2004-09-02 \
+          /cluster/data/mm5/bed/blastz.tetNig1
+    ssh kk
+    cd /cluster/data/mm5/bed/blastz.tetNig1
+    # use same parameters as for danRer1-mm5
+    cat << '_EOF_' > DEF
+# mouse (mm5) vs Tetraodon (tetNig1)
+export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/bin/i386:/cluster/home/angie/schwartzbin
+
+ALIGN=blastz-run
+BLASTZ=blastz
+
+# Reuse parameters from hg16-fr1 and danRer1-hg17.
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=6000
+BLASTZ_K=2200
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+BLASTZ_ABRIDGE_REPEATS=1
+
+# TARGET: Mouse (mm5)
+SEQ1_DIR=/iscratch/i/mus/mm5/test
+SEQ1_RMSK=
+SEQ1_FLAG=
+SEQ1_SMSK=/iscratch/i/mm5/linSpecRep.notInTetraodon
+SEQ1_IN_CONTIGS=0
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Tetraodon (tetNig1)
+SEQ2_DIR=/iscratch/i/tetNig1/nib
+SEQ2_RMSK=
+SEQ2_FLAG=
+SEQ2_SMSK=/iscratch/i/tetNig1/linSpecRep.notInMouse
+SEQ2_IN_CONTIGS=0
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+
+BASE=/cluster/data/mm5/bed/blastz.tetNig1
+
+DEF=$BASE/DEF
+RAW=$BASE/raw
+CDBDIR=$BASE
+SEQ1_LEN=$BASE/S1.len
+SEQ2_LEN=$BASE/S2.len
+
+#DEBUG=1
+'_EOF_'
+    # << this line keeps emacs coloring happy
+    # Save the DEF file in the current standard place
+    chmod +x DEF
+    cp DEF ~angie/hummus/DEF.mm5-tetNig1.2004-09-02
+    # setup cluster run
+    # copy shell scripts for blastz runs if not there already
+    cp -p /cluster/data/danRer1/jkStuff/BlastZ* /cluster/data/mm5/jkStuff/
+    # edit BlastZ_run0.sh
+    # replace line 22: /cluster/home/angie/schwartzbin/ with /cluster/bin/penn/
+    # this is the directory for the latest version of blastz-run
+
+    # source the DEF file
+    bash
+    . ./DEF
+    /cluster/data/mm5/jkStuff/BlastZ_run0.sh
+    cd run.0
+    # check batch looks ok then
+    para try, check, push, check, ....
+# para time
+# Completed: 19437 of 19437 jobs
+# CPU time in finished jobs:    4681483s   78024.71m  1300.41h   54.18d  0.148 y
+# IO & Wait Time:                176260s    2937.67m    48.96h    2.04d  0.006 y
+# Average job time:                 250s       4.17m     0.07h    0.00d
+# Longest job:                      790s      13.17m     0.22h    0.01d
+# Submission to last job:          5475s      91.25m     1.52h    0.06d
+    
+    # second cluster run to convert the .out's to .lav's
+    ssh kki
+    cd /cluster/data/mm5/bed/blastz.tetNig1
+    bash # if a csh/tcsh user
+    . ./DEF
+    /cluster/data/mm5/jkStuff/BlastZ_run1.sh
+    cd run.1
+    para try, check, push, etc ...
+# para time
+# Completed: 341 of 341 jobs
+# CPU time in finished jobs:        262s       4.37m     0.07h    0.00d  0.000 y
+# IO & Wait Time:                   981s      16.35m     0.27h    0.01d  0.000 y
+# Average job time:                   4s       0.06m     0.00h    0.00d
+# Longest job:                        9s       0.15m     0.00h    0.00d
+# Submission to last job:           108s       1.80m     0.03h    0.00d
+
+    #   Third cluster run to convert lav's to axt's
+    ssh kki
+    cd /cluster/data/mm5/bed/blastz.tetNig1
+    mkdir axtChrom
+    # a new run directory
+    mkdir run.2
+    cd run.2
+cat << '_EOF_' > do.csh
+#!/bin/csh
+cd $1
+cat `ls -1 *.lav | sort -g` \
+| lavToAxt stdin /iscratch/i/mus/mm5/softNib \
+/iscratch/i/tetNig1/nib stdout \
+| axtSort stdin $2
+'_EOF_'
+    # << this line makes emacs coloring happy
+    chmod a+x do.csh
+    cat << '_EOF_' > gsub
+#LOOP
+./do.csh {check in exists $(path1)} {check out line+ /cluster/data/mm5/bed/blastz.tetNig1/axtChrom/$(root1).axt}
+#ENDLOOP
+'_EOF_'
+    # << this line makes emacs coloring happy
+    \ls -1Sd ../lav/chr* > chrom.list
+    gensub2 chrom.list single gsub jobList
+    wc -l jobList
+    head jobList
+    para create jobList
+    para try, check, push, check,...
+# para time
+# Completed: 43 of 43 jobs
+# CPU time in finished jobs:         41s       0.68m     0.01h    0.00d  0.000 y
+# IO & Wait Time:                   414s       6.90m     0.12h    0.00d  0.000 y
+# Average job time:                  11s       0.18m     0.00h    0.00d
+# Longest job:                       28s       0.47m     0.01h    0.00d
+# Submission to last job:           396s       6.60m     0.11h    0.00d
+
+    # translate sorted axt files into psl
+    ssh kolossus
+    cd /cluster/data/mm5/bed/blastz.tetNig1
+    mkdir -p pslChrom
+    set tbl = "blastzTetNig1"
+    foreach f (axtChrom/chr*.axt)
+      set c=$f:t:r
+      echo "Processing chr $c"
+      /cluster/bin/i386/axtToPsl $f S1.len S2.len pslChrom/${c}_${tbl}.psl
+    end
+    # Load database tables
+    ssh hgwdev
+    cd /cluster/data/mm5/bed/blastz.tetNig1/pslChrom
+
+    foreach f (./*.psl)
+      /cluster/bin/i386/hgLoadPsl mm5 $f
+    end
+
+# featureBits -chrom=chr1 mm5 refGene:cds blastzTetNig1 -enrichment
+# refGene:cds 0.765%, blastzTetNig1 1.709%, both 0.519%, cover 67.80%, 
+# enrich 39.67x
+# default with H=2000
+# featureBits -chrom=chr1 mm5 refGene:cds blastzTetNig1H2000 -enrichment
+# refGene:cds 0.765%, blastzTetNig1H2000 1.239%, both 0.502%, cover 65.59%, 
+# enrich 52.92x
+# blastzDanRer1 with L=8000
+# featureBits -chrom=chr1 mm5 refGene:cds blastzTetNig1L8k -enrichment
+# refGene:cds 0.765%, blastzTetNig1L8k 1.333%, both 0.444%, cover 58.05%, 
+# enrich 43.56x
+# too much drop in coverage
+# H=2000, L=4000
+# featureBits -chrom=chr1 mm5 refGene:cds blastzTetNig1H2kL4k -enrichment
+# refGene:cds 0.765%, blastzTetNig1H2kL4k 1.166%, both 0.489%, cover 63.91%, 
+# enrich 54.81x
+# H=2000, L=6000
+# featureBits -chrom=chr1 mm5 refGene:cds blastzTetNig1H2kL6k -enrichment
+# refGene:cds 0.765%, blastzTetNig1H2kL6k 1.014%, both 0.437%, cover 57.15%, 
+# enrich 56.36x
+# too much drop in coverage
+
+# number of rows in table
+# blastzTetNig1 	38196
+# blatzTetNig1H2000	38314
+# blastzTetNig1L8k	24749
+# blastzTetNig1H2kL4k	31433
+# blastzTetNig1H2kL6k	21389
+
+# use blastzTetNig1 as this has the best coverage. enrich is quite high too.
+# featureBits -chrom=chr1 hg17 refGene:cds blastzFr1 -enrichment
+# refGene:cds 1.246%, blastzFr1 2.319%, both 0.833%, cover 66.87%, enrich 28.83x
+# similar coverage to blastzFr1 for hg17
+
+# RESCORE TETNIG1 BLASTZ (DONE, 2004-09-08, hartera)
+    # Low scores can occur with repeats abridged and using the
+    # HoxD55.q matrix. PSU's restore_rpts program rescored alignments
+    # with the default matrix instead of the BLASTZ_Q matrix.
+    # Rescore them here so the chainer sees the higher scores:
+                                          
+    ssh kolossus
+    cd /cluster/data/mm5/bed/blastz.tetNig1
+    mkdir axtChrom.rescore
+    foreach f (axtChrom/chr*.axt)
+        axtRescore -scoreScheme=/cluster/data/blastz/HoxD55.q \
+        $f axtChrom.rescore/$f:t
+    end
+    mv axtChrom axtChrom.orig
+    mv axtChrom.rescore axtChrom
+
+# CHAIN TETRAODON (TETNIG1) BLASTZ (DONE, 2004-09-08, hartera)
+    # Re do chains with rescored blastz Hg17
+    # Run axtChain on little cluster
+    ssh kki
+    cd /cluster/data/mm5/bed/blastz.tetNig1
+    mkdir -p axtChain/run1
+    cd axtChain/run1
+    mkdir out chain
+    ls -1S /cluster/data/mm5/bed/blastz.tetNig1/axtChrom/*.axt \
+        > input.lst
+    # Reuse gap penalties from hg16 vs chicken run.
+    cat << '_EOF_' > ../../chickenHumanTuned.gap
+tablesize^V     11
+smallSize^V     111
+position^V      1^V     2^V     3^V     11^V    111^V   2111^V  12111^V 32111^V
+72111^V 152111^V        252111
+qGap^V  325^V   360^V   400^V   450^V   600^V   1100^V  3600^V  7600^V  15600^V
+31600^V 56600
+bothGap^V       625^V   660^V   700^V   750^V   900^V   1400^V  4000^V  8000^V
+16000^V 32000^V 57000
+'_EOF_'
+    # << this line makes emacs coloring happy
+
+ cat << '_EOF_' > gsub
+#LOOP
+doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain} {check out line+ out/$(root1).out}
+#ENDLOOP
+'_EOF_'
+
+ cat << '_EOF_' > doChain
+#!/bin/csh
+axtChain -linearGap=../../chickenHumanTuned.gap $1 \
+    /iscratch/i/mus/mm5/softNib \
+    /iscratch/i/tetNig1/nib $2 >& $3
+'_EOF_'
+    # << this line makes emacs coloring happy
+
+    chmod a+x doChain
+    gensub2 input.lst single gsub jobList
+    para create jobList
+    para try, check, push, check...
+
+# para time
+# Completed: 43 of 43 jobs
+# CPU time in finished jobs:        524s       8.74m     0.15h    0.01d  0.000 y
+# IO & Wait Time:                   140s       2.33m     0.04h    0.00d  0.000 y
+# Average job time:                  15s       0.26m     0.00h    0.00d
+# Longest job:                       25s       0.42m     0.01h    0.00d
+# Submission to last job:           632s      10.53m     0.18h    0.01d
+
+    # now on the cluster server, sort chains
+    ssh kksilo
+    cd /cluster/data/mm5/bed/blastz.tetNig1/axtChain
+    chainMergeSort run1/chain/*.chain > all.chain
+    chainSplit chain all.chain
+    # take a look at score distr's,try also with larger bin size.
+    foreach f (chain/*.chain)
+      grep chain $f | awk '{print $2;}' | sort -nr > /tmp/score.$f:t:r
+      echo $f:t:r >> hist5000.out
+      textHistogram -binSize=5000 /tmp/score.$f:t:r >> hist5000.out
+      echo ""
+    end
+    # not a large amount of changes with score < 5000
+    # load chr1 into database to check
+    ssh hgwdev
+    cd /cluster/data/mm5/bed/blastz.tetNig1/axtChain/chain
+    hgLoadChain mm5 chr1_chainTetNig1 chr1.chain
+# featureBits -chrom=chr1 mm5 refGene:cds chainTetNig1Link -enrichment
+# refGene:cds 0.765%, chainTetNig1Link 1.563%, both 0.512%, cover 66.84%, 
+# enrich 42.76x
+   # try filtering with minScore=5000
+    ssh kksilo
+    cd /cluster/data/mm5/bed/blastz.tetNig1/axtChain
+    mv all.chain all.chain.unfiltered
+    chainFilter -minScore=5000 all.chain.unfiltered > all.chain
+    chainSplit chainFilt5k all.chain
+    ssh hgwdev
+    cd /cluster/data/mm5/bed/blastz.tetNig1/axtChain/chainFilt5k
+    hgLoadChain mm5 chr1_chainTetNig1Filt5k chr1.chain
+# featureBits -chrom=chr1 mm5 refGene:cds chainTetNig1Filt5kLink -enrichment
+# refGene:cds 0.765%, chainTetNig1Filt5kLink 1.398%, both 0.504%, cover 65.91%, # enrich 47.13x
+# chr1_chainTetNig1 21782
+# chr1_chainTetNig1Filt5k 9670
+
+    # loses very little in coverage so use filtering with minScore=5000
+    # remove chain
+    rm -r chain
+    mv chainFilt5k chain
+    rm all.chain.unfiltered
+
+    ssh hgwdev
+    # remove test tables
+    hgsql -e "drop table chr1_chainTetNig1Filt5k;" mm5
+    hgsql -e "drop table chr1_chainTetNig1Filt5kLink;" mm5
+    # load chains into database
+    cd /cluster/data/mm5/bed/blastz.tetNig1/axtChain/chain
+    foreach i (*.chain)
+        set c = $i:r
+        hgLoadChain mm5 ${c}_chainTetNig1 $i
+        echo done $c
+    end
+
+# NET TETRAODON (tetNig1) BLASTZ (DONE, 2004-09-08, hartera)
+    ssh kksilo
+    cd /cluster/data/mm5/bed/blastz.tetNig1/axtChain
+    mkdir preNet
+    cd chain
+    foreach i (*.chain)
+       echo preNetting $i
+       /cluster/bin/i386/chainPreNet $i ../../S1.len ../../S2.len \
+                                     ../preNet/$i
+    end
+    cd ..
+    mkdir n1
+    cd preNet
+    foreach i (*.chain)
+      set n = $i:r.net
+      echo primary netting $i
+      /cluster/bin/i386/chainNet $i -minSpace=1 ../../S1.len ../../S2.len \
+                                 ../n1/$n /dev/null
+    end
+    cd ..
+    cat n1/*.net | /cluster/bin/i386/netSyntenic stdin noClass.net
+    # memory usage 69083136, utime 402 s/100, stime 37
+    # Add classification info using db tables:
+    cd /cluster/data/mm5/bed/blastz.tetNig1/axtChain
+    # netClass looks for ancient repeats in one of the databases
+    # hg17 has this table - hand-curated by Arian but this is for
+    # human-rodent comparisons so do not use here, use -noAr option
+    mkdir -p /cluster/bluearc/mm5/linSpecRep.notInTetraodon
+    mkdir -p /cluster/bluearc/tetNig1/linSpecRep.notInMouse
+    cp /iscratch/i/mm5/linSpecRep.notInTetraodon/* \
+       /cluster/bluearc/mm5/linSpecRep.notInTetraodon
+    cp /iscratch/i/tetNig1/linSpecRep.notInMouse/* \
+       /cluster/bluearc/tetNig1/linSpecRep.notInMouse
+
+    ssh hgwdev
+    cd /cluster/data/mm5/bed/blastz.tetNig1/axtChain
+    # there is no ancient repeats table for rodent vs fish so use -noAr flag
+    time netClass noClass.net mm5 tetNig1 tetNig1.net \
+          -tNewR=/cluster/bluearc/mm5/linSpecRep.notInTetraodon \
+          -qNewR=/cluster/bluearc/tetNig1/linSpecRep.notInMouse -noAr
+    # 59.490u 37.630s 2:41.82 60.0%   0+0k 0+0io 216pf+0w
+
+    netFilter -minGap=10 tetNig1.net |  hgLoadNet mm5 netTetNig1 stdin
+    # featureBits mm5 refGene:cds netTetNig1 -enrichment
+    # refGene:cds 0.921%, netTetNig1 23.633%, both 0.725%, cover 78.70%, 
+    # enrich 3.33x
+
+# MAKE VSTETNIG1 DOWNLOADABLES (DONE, 2004-09-10, hartera)
+    ssh kksilo
+    # zip chains and nets
+    cd /cluster/data/mm5/bed/blastz.tetNig1/axtChain
+    cp all.chain tetNig1.chain
+    zip -j /cluster/data/mm5/zip/tetNig1.chain.zip tetNig1.chain
+    rm tetNig1.chain
+    zip -j /cluster/data/mm5/zip/tetNig1.net.zip tetNig1.net
+
+    ssh hgwdev
+    # copy chains and nets to downloads area
+    set gp = /usr/local/apache/htdocs/goldenPath/mm5
+    mkdir -p $gp/vsTetNig1
+    cd $gp/vsTetNig1
+    mv /cluster/data/mm5/zip/tetNig1*.zip .
+    md5sum *.zip > md5sum.txt
+
+    # move axt files to downloads area and zip
+    cd /cluster/data/mm5/bed/blastz.tetNig1/axtChrom
+    mkdir -p $gp/vsTetNig1/axtChrom
+    cp -p *.axt $gp/vsTetNig1/axtChrom
+    cd $gp/vsTetNig1/axtChrom
+    gzip *.axt
+    md5sum *.gz > md5sum.txt
+
+    # Copy over & edit README.txt w/pointers to chain, net formats.
+
+# MAKE VSDANRER1 DOWNLOADABLES (DONE, 2004-09-10, hartera)
+    ssh kksilo
+    # zip chains and nets
+    cd /cluster/data/mm5/bed/blastz.danRer1/axtChain
+    gunzip all.chain.gz
+    cp all.chain danRer1.chain
+    zip -j /cluster/data/mm5/zip/danRer1.chain.zip danRer1.chain
+    rm danRer1.chain
+    gunzip danRer1.net.gz
+    zip -j /cluster/data/mm5/zip/danRer1.net.zip danRer1.net
+
+    ssh hgwdev
+    # copy chains and nets to downloads area
+    set gp = /usr/local/apache/htdocs/goldenPath/mm5
+    mkdir -p $gp/vsDanRer1
+    cd $gp/vsDanRer1
+    mv /cluster/data/mm5/zip/danRer1*.zip .
+    md5sum *.zip > md5sum.txt
+
+    # move axt files to downloads area and zip
+    cd /cluster/data/mm5/bed/blastz.danRer1/axtChrom
+    mkdir -p $gp/vsDanRer1/axtChrom
+    cp -p *.axt $gp/vsDanRer1/axtChrom
+    cd $gp/vsDanRer1/axtChrom
+    gzip *.axt
+    md5sum *.gz > md5sum.txt
+  
+    # add the axtNet *.axt in blastz.danRer1/axtNet
+    cd /cluster/data/mm5/bed/blastz.danRer1/axtNet
+    set gp = /usr/local/apache/htdocs/goldenPath/mm5
+    mkdir -p $gp/vsDanRer1/axtNet
+    nice cp -p *.axt $gp/vsDanRer1/axtNet
+    cd $gp/vsDanRer1/axtNet
+    nice gzip *.axt
+    md5sum *.gz > md5sum.txt
+
+    # Copy over & edit README.txt w/pointers to chain, net formats.
+
+# BLASTZ TETNIG1 CLEAN UP (DONE, 2004-09-10, hartera)
+    ssh kksilo
+    cd /cluster/data/mm5/bed/blastz.tetNig1
+    nice rm -rf raw &
+    nice rm -rf lav &
+    nice rm -rf axtChrom.orig &
+    nice rm axtChain/run1/chain/* &
+    nice gzip {axt,psl}Chrom/* axtChain/{all.chain,*.net} &
