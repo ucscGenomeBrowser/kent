@@ -1980,6 +1980,10 @@ http://genome.imim.es/genepredictions/G.gallus/golden_path_200402/geneid_v1.1/$c
 
 
 # RUN GENE-CHECK ON MRNA W/CDS, ENSEMBL (DONE 3/29/04 markd)
+    # Note: /cluster/bin/scripts/runGeneCheck should make this easier 
+    # in the future, but this also shows how MarkD ran gene-check on 
+    # mRNAs with annotated CDS:
+
     # get mrna data from hgwbeta, which is most current:
     ssh hgwbeta
     mkdir /cluster/store7/markd/galGal2
@@ -2031,5 +2035,18 @@ http://genome.imim.es/genepredictions/G.gallus/golden_path_200402/geneid_v1.1/$c
     #     unknownSplice - Number of introns with unknown splicing patterns 
     #          (considers the three most common splicing patterns as valid)
     #     causes - list of symbolic names summarizing the failures 
+
+
+# WEBB'S PUTATIVE NON-EXONIC CONSERVED REGIONS (DONE 4/5/04 angie)
+    ssh hgwdev
+    mkdir /cluster/data/galGal2/bed/webbNonExonic
+    cd /cluster/data/galGal2/bed/webbNonExonic
+    wget http://bio.cse.psu.edu/~webb/nonexonic.tar.gz
+    tar xvzf nonexonic.tar.gz 
+    # Score should really be scaled from 5k..276k --> 200-1000
+    cat chr* \
+    | awk '{printf "%s\t%d\t%d\t%s:%d-%d\t%d\t%c\n", $5, $6 - 1, $7, $2, $3, $4, $9, $8;}' \
+    > webbNonExonic.bed
+    hgLoadBed galGal2 webbNonExonic webbNonExonic.bed
 
 
