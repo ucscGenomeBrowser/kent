@@ -65,6 +65,7 @@ puts(
 "<A HREF=\"mailto:angie@soe.ucsc.edu\">Angie Hinrichs</A>, "
 "<A HREF=\"mailto:donnak@soe.ucsc.edu\">Donna Karolchik</A>, "
 "<A HREF=\"mailto:heather@soe.ucsc.edu\">Heather Trumbower</A>, "
+"<A HREF=\"mailto:fanhsu@soe.ucsc.edu\">Fan Hsu</A>, "
 "and the Genome Bioinformatics Group of UC Santa Cruz.<BR>\n"
 "UCSC Genome Browser Software Copyright 2001 The Regents of the University of 
 California. "
