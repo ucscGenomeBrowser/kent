@@ -959,7 +959,7 @@ type netAlign mm4 chainMm4
 otherDb mm4
 
 track syntenyMm4
-shortLabel Mm4 Synteny
+shortLabel Mouse Synteny
 longLabel Human/Mouse (Oct 03/Mm4) Synteny Using Blastz Single Coverage (100k window)
 group compGeno
 priority 129.6
