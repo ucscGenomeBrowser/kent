@@ -79,6 +79,12 @@ void wiggleOutput(struct wiggle *el, FILE *f, char sep, char lastSep);
 
 #include "hdb.h"
 
+/*	anonymous declaration of track to take care of the use of this struct
+ *	in the wigSetCart definition below.  Prevents compiler warnings on
+ *	lib/wiggleCart.c and doesn't disturb the usage in hg/hgTracks/...c
+ */
+struct track;
+
 /*	in hgTracks/wigTrack.c	*/
 void wigSetCart(struct track *track, char *dataID, void *dataValue);
     /*	set one of the variables in the wigCart	*/
