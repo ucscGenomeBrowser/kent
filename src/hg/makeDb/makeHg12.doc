@@ -1910,7 +1910,7 @@ ALIGNMENT COUNTS FOR WIGGLE TRACK
         foreach axt (../../blastz.mm2.2002-08-01/axtBest/chr*.axt)
            set chr=$axt:t:r
            set tab=$chr.50b-aar.cnts  (??? need better name ???)
-           hgCountAlign -selectBed=aarMm2.bed -winSize=50 -winSlide=5b $axt $tab
+           hgCountAlign -selectBed=aarMm2.bed -winSize=50 -winSlide=5 $axt $tab
         end
 
     - Generate counts for all with 50b windows, slide by 5b
