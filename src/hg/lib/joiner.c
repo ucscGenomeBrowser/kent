@@ -752,7 +752,7 @@ slReverse(&newList);
 joiner->jsList = newList;
 }
 
-static void joinerParsePassTwo(struct joiner *joiner)
+static void joinerLinkParents(struct joiner *joiner)
 /* Go through and link together parents and children. */
 {
 struct joinerSet *js, *parent;
@@ -788,7 +788,7 @@ for (js = joiner->jsList; js != NULL; js = js->next)
     }
 }
 
-void checkIgnoreBalance(struct joiner *joiner)
+static void checkIgnoreBalance(struct joiner *joiner)
 /* Check that databases in fields are in the checked list.
  * Check that there is no overlap between checked and ignored
  * list. */
@@ -827,14 +827,49 @@ for (js = joiner->jsList; js != NULL; js = js->next)
     }
 }
 
+static struct joinerTable *tableFromField(struct joinerField *jf)
+/* Extract database/table info out of field. */
+{
+struct joinerTable *table;
+AllocVar(table);
+table->table = cloneString(jf->table);
+table->dbList = slNameCloneList(jf->dbList);
+return table;
+}
+
+static void addDependenciesFromIdentifiers(struct joiner *joiner)
+/* Add dependencies that are specified through dependency 
+ * attribute on identifier line. */
+{
+struct joinerSet *js;
+
+for (js = joiner->jsList; js != NULL; js = js->next)
+    {
+    if (js->isDependency)
+        {
+	struct joinerField *primary = js->fieldList, *jf;
+	for (jf = primary->next; jf != NULL; jf = jf->next)
+	    {
+	    struct joinerDependency *dep;
+	    AllocVar(dep);
+	    dep->table = tableFromField(jf);
+	    dep->dependsOnList = tableFromField(primary);
+	    slAddHead(&joiner->dependencyList, dep);
+	    }
+	}
+    }
+}
+
 struct joiner *joinerRead(char *fileName)
 /* Read in a .joiner file. */
 {
 struct hash *jeList = NULL;
 struct joiner *joiner = joinerParsePassOne(fileName);
 joinerExpand(joiner);
-joinerParsePassTwo(joiner);
+joinerLinkParents(joiner);
 checkIgnoreBalance(joiner);
+addDependenciesFromIdentifiers(joiner);
+slReverse(&joiner->dependencyList);
 return joiner;
 }
 
