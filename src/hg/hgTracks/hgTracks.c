@@ -6156,7 +6156,7 @@ struct hgPositions *hgp;
 struct hgPos *pos;
 struct dyString *ui;
 
-hgp = hgPositionsFind(spec, "", TRUE);
+hgp = hgPositionsFind(spec, "", TRUE, cart);
 if (hgp == NULL || hgp->posCount == 0)
     {
     hgPositionsFree(&hgp);
@@ -6173,7 +6173,7 @@ if (((pos = hgp->singlePos) != NULL) && (!hgp->useAlias))
     }
 else
     {
-    hgPositionsHtml(hgp, stdout, TRUE);
+    hgPositionsHtml(hgp, stdout, TRUE, cart);
     hgPositionsFree(&hgp);
     return FALSE;
     }
