@@ -284,6 +284,9 @@ struct track *getTrackList();
 void groupTracks(struct track **pTrackList, struct group **pGroupList);
 /* Make up groups and assign tracks to groups. */
 
+void removeTrackFromGroup(struct track *track);
+/* Remove track from group it is part of. */
+
 void hPrintf(char *format, ...);
 /* Printf that can be suppressed if not making html. 
  * All cgi output should go through here, hPuts, hPutc
@@ -741,13 +744,17 @@ char *dnaInWindow();
 Color lighterColor(struct vGfx *vg, Color color);
 /* Get lighter shade of a color */ 
 
+struct track *chromIdeoTrack(struct track *trackList);
+/* Find chromosome ideogram track */
+
+void setRulerMode();
+/* Set the rulerMode variable from cart. */
+
+
 #define configHideAll "hgt_doConfigHideAll"
 #define configShowAll "hgt_doConfigShowAll"
 #define configDefaultAll "hgt_doDefaultShowAll"
 #define configGroupTarget "hgt_configGroupTarget"
-
-void setRulerMode();
-/* Set the rulerMode variable from cart. */
 
 void configPage();
 /* Put up configuration page. */

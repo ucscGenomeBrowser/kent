@@ -87,7 +87,7 @@
 #include "versionInfo.h"
 #include "bedCart.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.878 2005/02/02 19:09:29 heather Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.879 2005/02/02 21:38:00 kent Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -6720,11 +6720,42 @@ mapBoxToggleComplement(x, y, width, height, NULL, chromName, winStart, winEnd,
                                 "complement bases");
 }
 
+struct track *chromIdeoTrack(struct track *trackList)
+/* Find chromosome ideogram track */
+{
+struct track *track;
+for(track = trackList; track != NULL; track = track->next)
+    {
+    if(sameString(track->mapName, "cytoBandIdeo"))
+	{
+	if (hTableExists(track->mapName))
+	    return track;
+	else
+	    return NULL;
+	}
+    }
+return NULL;
+}
+
+void removeTrackFromGroup(struct track *track)
+/* Remove track from group it is part of. */
+{
+struct trackRef *tr = NULL;
+for(tr = track->group->trackList; tr != NULL; tr = tr->next)
+    {
+    if(tr->track == track)
+	{
+	slRemoveEl(&track->group->trackList, tr);
+	break;
+	}
+    }
+}
+
 void makeChromIdeoImage(struct track **pTrackList, char *psOutput)
 /* Make an ideogram image of the chromsome and our position in
    it. */
 {
-struct track *track = NULL, *ideoTrack = NULL;
+struct track *ideoTrack = NULL;
 MgFont *font = tl.font;
 char *mapName = "ideoMap";
 struct vGfx *vg;
@@ -6733,29 +6764,17 @@ boolean doIdeo = TRUE;
 int ideoWidth = round(.65 *tl.picWidth);
 int ideoHeight = 0;
 int textWidth = 0;
-/* Find the ideogram track. */
-for(track = *pTrackList; track != NULL; track = track->next)
-    {
-    if(sameString(track->mapName, "cytoBandIdeo"))
-	{
-	ideoTrack = track;
-	break;
-	}
-    }
+
+ideoTrack = chromIdeoTrack(*pTrackList);
+
 /* If no ideogram don't draw. */
-if(ideoTrack == NULL || !hTableExists(track->mapName))
+if(ideoTrack == NULL)
     doIdeo = FALSE;
 else
     {
-    struct trackRef *tr = NULL;
-    /* Find and remove the track from the group and track list. */
     ideogramAvail = TRUE;
-    for(tr = ideoTrack->group->trackList; tr != NULL; tr = tr->next)
-	{
-	if(tr->track == ideoTrack)
-	    break;
-	}
-    slRemoveEl(&ideoTrack->group->trackList, tr);
+    /* Remove the track from the group and track list. */
+    removeTrackFromGroup(ideoTrack);
     slRemoveEl(pTrackList, ideoTrack);
 
     /* Fix for hide all button hiding the ideogram as well. */
@@ -9640,6 +9659,7 @@ if (!hideControls)
 
 /* Make chromsome ideogram gif and map. */
 makeChromIdeoImage(&trackList, psOutput);
+
 /* Make clickable image and map. */
 makeActiveImage(trackList, psOutput);
 if (!hideControls)

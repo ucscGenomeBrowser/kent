@@ -18,26 +18,25 @@ cartUsualString(cart, textSizeVar, "small");
 hDropList(textSizeVar, sizes, ArraySize(sizes), tl.textSize);
 }
 
-void trackConfig(char *groupToChange,  int changeVis)
-/* Put up track configurations. If groupToChange is 
+void trackConfig(struct track *trackList, struct group *groupList,
+	char *groupTarget,  int changeVis)
+/* Put up track configurations. If groupTarget is 
  * NULL then set visibility for tracks in all groups.  Otherwise,
  * just set it for the given group.  If vis is -2, then visibility is
  * unchanged.  If -1 then set visibility to default, otherwise it should 
  * be tvHide, tvDense, etc. */
 {
-struct track *trackList = getTrackList();
-struct group *group, *groupList = NULL;
+struct group *group;
 boolean showedRuler = FALSE;
 
-groupTracks(&trackList, &groupList);
 setRulerMode();
 
 /* Set up ruler mode according to changeVis. */
 #ifdef BOB_DOESNT_LIKE
 if (changeVis != -2)
     {
-    if (groupToChange == NULL || 
-    	(groupList != NULL && sameString(groupToChange, groupList->name)))
+    if (groupTarget == NULL || 
+    	(groupList != NULL && sameString(groupTarget, groupList->name)))
 	{
 	if (changeVis == -1)
 	    rulerMode = tvFull;
@@ -56,7 +55,7 @@ for (group = groupList; group != NULL; group = group->next)
     if (group->trackList == NULL)
 	continue;
 
-    if (changeVis != -2 && (groupToChange == NULL || sameString(group->name,groupToChange)))
+    if (changeVis != -2 && (groupTarget == NULL || sameString(group->name,groupTarget)))
         {
 	for (tr = group->trackList; tr != NULL; tr = tr->next)
 	    {
@@ -143,13 +142,28 @@ void configPageSetTrackVis(int vis)
  * be tvHide, tvDense, etc. */
 {
 struct dyString *title = dyStringNew(0);
-char *group = NULL;
+char *groupTarget = NULL;
+struct track *trackList =  NULL;
+struct track *ideoTrack = NULL;
+struct group *groupList = NULL;
 
-/* Fetch group if any from CGI, and remove var so it doesn't get used again. */
-group = cloneString(cartUsualString(cart, configGroupTarget, ""));
+/* Get track list and group them. */
+trackList = getTrackList();
+groupTracks(&trackList, &groupList);
+
+/* The ideogram for some reason is considered a track.
+ * We don't really want to process it as one though, so
+ * we see if it's there, and if necessary remove it. */
+ideoTrack = chromIdeoTrack(trackList);
+if (ideoTrack != NULL)
+    removeTrackFromGroup(ideoTrack);
+
+/* Fetch group to change on if any from CGI, 
+ * and remove var so it doesn't get used again. */
+groupTarget = cloneString(cartUsualString(cart, configGroupTarget, ""));
 cartRemove(cart, configGroupTarget);
-if (sameString(group, "none"))
-    freez(&group);
+if (sameString(groupTarget, "none"))
+    freez(&groupTarget);
 
 dyStringPrintf(title, "Configure Image",
 	       hOrganism(database), hFreezeFromDb(database), database);
@@ -165,11 +179,14 @@ hPrintf(" ");
 cgiMakeButton("Submit", "Submit");
 hPrintf("<P>");
 hTableStart();
-hPrintf("<TR><TD>");
-hCheckBox("ideogram", cartUsualBoolean(cart, "ideogram", TRUE));
-hPrintf("</TD><TD>");
-hPrintf("Display chromosome ideogram above main graphic.");
-hPrintf("</TD></TR>");
+if (ideoTrack != NULL)
+    {
+    hPrintf("<TR><TD>");
+    hCheckBox("ideogram", cartUsualBoolean(cart, "ideogram", TRUE));
+    hPrintf("</TD><TD>");
+    hPrintf("Display chromosome ideogram above main graphic.");
+    hPrintf("</TD></TR>");
+    }
 hPrintf("<TR><TD>");
 hCheckBox("guidelines", cartUsualBoolean(cart, "guidelines", TRUE));
 hPrintf("</TD><TD>");
@@ -196,11 +213,11 @@ hPrintf(" ");
 cgiMakeButton(configDefaultAll, "Default");
 hPrintf(" ");
 hPrintf("or control tracks visibility more selectively below.<BR>");
-trackConfig(group, vis);
+trackConfig(trackList, groupList, groupTarget, vis);
 
 hPrintf("</FORM>");
 dyStringFree(&title);
-freez(&group);
+freez(&groupTarget);
 }
 
 
