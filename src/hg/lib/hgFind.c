@@ -27,7 +27,7 @@
 #include "minGeneInfo.h"
 #include <regex.h>
 
-static char const rcsid[] = "$Id: hgFind.c,v 1.150 2004/09/17 03:17:21 kent Exp $";
+static char const rcsid[] = "$Id: hgFind.c,v 1.151 2004/10/12 13:24:15 aamp Exp $";
 
 extern struct cart *cart;
 char *hgAppName = "";
@@ -1521,92 +1521,6 @@ while ((row = sqlNextRow(sr)) != NULL)
 sqlFreeResult(&sr);
 }
 
-static void addGbGenes(struct sqlConnection *conn, struct dyString *query,
-		       struct minGeneInfo **pList)
-/* Query database and add returned genbank genes to head of list. */
-{
-struct sqlResult *sr = sqlGetResult(conn, query->string);
-char **row;
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-    struct minGeneInfo *rl = minGeneInfoLoad(row);
-    slAddHead(pList, rl);
-    }
-sqlFreeResult(&sr);
-}
-
-static boolean findGenbankGenes(char *spec, struct hgPositions *hgp)
-{
-/* Look up Genbank genes from keyword */
-struct sqlConnection *conn = hAllocConn();
-struct sqlResult *sr = NULL;
-struct dyString *ds = newDyString(256);
-char **row;
-boolean gotOne = FALSE;
-struct hgPosTable *table = NULL;
-struct hgPos *pos;
-struct bed *bed;
-struct minGeneInfo *gbList = NULL, *gb;
-boolean gotGBkeys = sqlTableExists(conn, "gbProtCodeXra");
-boolean found = FALSE;
-
-if (gotGBkeys)
-    {
-    dyStringPrintf(ds, "select * from gbProtCodeXra where name like '%%%s%%'", spec);
-    addGbGenes(conn, ds, &gbList);
-    dyStringClear(ds);
-    dyStringPrintf(ds, "select * from gbProtCodeXra where note like '%%%s%%'", spec);
-    addGbGenes(conn, ds, &gbList);
-    dyStringClear(ds);
-    dyStringPrintf(ds, "select * from gbProtCodeXra where product like '%%%s%%'", spec);
-    addGbGenes(conn, ds, &gbList);
-    dyStringClear(ds);
-    }
-if (gbList != NULL)
-    {
-    struct hash *hash = newHash(8);
-    AllocVar(table);
-    slAddHead(&hgp->tableList, table);
-    table->description = cloneString("Genbank Protein-coding Genes");
-    table->name = cloneString("gbExtraInfo");
-    for (gb = gbList; gb != NULL; gb = gb->next)
-        {
-        /* Don't return duplicate genbank accessions */
-        if (hashFindVal(hash, gb->name))
-            {
-            hashAdd(hash, gb->name, gb);
-            continue;
-            }
-        hashAdd(hash, gb->name, gb);
-	dyStringClear(ds);
-	dyStringPrintf(ds, "select * from gbProtCode where name = '%s'", gb->name);
-	sr = sqlGetResult(conn, ds->string);
-	while ((row = sqlNextRow(sr)) != NULL)
-	    {
-	    bed = bedLoadN(row+1,6);
-	    AllocVar(pos);
-	    slAddHead(&table->posList, pos);
-	    pos->name = cloneString(gb->name);
-	    pos->browserName = cloneString(gb->name);
-	    dyStringClear(ds);
-	    dyStringPrintf(ds, "%s; %s; %s", gb->name, gb->product, gb->note);
-	    pos->description = cloneString(ds->string);
-	    pos->chrom = hgOfficialChromName(bed->chrom);
-	    pos->chromStart = bed->chromStart;
-	    pos->chromEnd = bed->chromEnd;
-	    bedFree(&bed);
-	    found = TRUE;
-	    }
-	sqlFreeResult(&sr);
-	}
-    minGeneInfoFreeList(&gbList);
-    freeHash(&hash);
-    }
-freeDyString(&ds);
-hFreeConn(&conn);
-return(found);
-}
-
 static void findTigrGenes(char *spec, struct hgPositions *hgp)
 /* Look up TIGR and Genbank genes from keyword */
 {
@@ -2062,10 +1976,6 @@ else if (sameString(hfs->searchType, "sgdGene"))
     {
     found = findYeastGenes(term, hgp);
     }
-else if (sameString(hfs->searchType, "gbProtCode"))
-    {
-    found = findGenbankGenes(term, hgp);
-    }
 else
     {
     isSpecial = FALSE;
@@ -2368,7 +2278,6 @@ else
 	    }
 	/* Lowe lab additions -- would like to replace these with specs, but 
 	 * will leave in for now. */
-	findGenbankGenes(term, hgp);
 	findTigrGenes(term, hgp);
 	}
     hgFindSpecFreeList(&shortList);
