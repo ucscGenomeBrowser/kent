@@ -105,7 +105,7 @@ done after repeat masking and distributing to cluster nodes)
           cd $d
           set contig = $d:t
           faSplit size $contig.fa 500000 ${contig}_ -lift=$contig.lft \
-            -maxN=499999
+            -maxN=500000
           cd ../..
         end
 
@@ -322,7 +322,7 @@ o - Store the mRNA (non-alignment) info in database.
     The est line will take quite some time to complete.
 
 
-MAKING AND STORING mRNA AND EST ALIGNMENTS (TODO w/ mrna.130)
+MAKING AND STORING mRNA AND EST ALIGNMENTS (IN PROGRESS)
 
 o - Load up the local disks of the cluster with refSeq.fa, mrna.fa and est.fa
     Copy the above 3 files from /cluster/store1/mrna.130 into 
@@ -339,25 +339,28 @@ o - Use BLAT to generate refSeq, mRNA and EST alignments as so:
           cd /cluster/store1/gs.13/build30/bed
 
 Using the bash shell do:
-	  for i in 'refSeq' 'mrna' 'est'
+          for i in 'refSeq' 'mrna' 'est'
           do
-	      mkdir -p $i
-	      cd $i
+              mkdir -p $i
+              cd $i
               cp ~kent/lastOo/bed/$i/gsub .
-	      ls -1 /scratch/hg/gs.13/build30/contig.0729/*.fa > genome.lst
-	      ls -1 /scratch/hg/mrna.130/$i.fa > mrna.lst
-	      mkdir -p psl
-	      gensub2 genome.lst mrna.lst gsub spec
-	      para create spec
+              ls -1S /scratch/hg/gs.13/build30/contig.0729/*.fa > genome.lst
+              ls -1 /scratch/hg/mrna.130/$i/$i.fa > mrna.lst
+              mkdir -p psl
+              # Note: build30/bed/refSeq directory not writeable, so I had to 
+              # create a bed/refSeq.angie/psl and change the gsub
+              mkdir -p /cluster/store1/gs.13/build30/bed/refSeq.angie/psl
+              gensub2 genome.lst mrna.lst gsub spec
+              para create spec
               cd ..
-	  done 
+          done 
 
     Now, by hand cd to the mrna, refSeq, and est directories respectively
-     and run a para push and para check in each one.
+    and run a para push and para check in each one.
 
 o - Process refSeq mRNA and EST alignments into near best in genome.
       cd ~/oo/bed
-      cd refSeq
+      cd refSeq.angie
       pslSort dirs raw.psl /tmp psl
       pslReps -minCover=0.2 -sizeMatters -minAli=0.98 -nearTop=0.002 raw.psl contig.psl /dev/null
       liftUp -nohead all_refSeq.psl ../../jkStuff/liftAll.lft carry contig.psl
@@ -380,7 +383,7 @@ o - Process refSeq mRNA and EST alignments into near best in genome.
 
 o - Load refSeq alignments into database
       ssh hgwdev
-      cd /cluster/store1/gs.13/build30/bed/refSeq
+      cd /cluster/store1/gs.13/build30/bed/refSeq.angie
       pslCat -dir chrom > refSeqAli.psl
       hgLoadPsl hg12 -tNameIx refSeqAli.psl
 
@@ -478,6 +481,7 @@ o - Get extra info from NCBI and produce refGene table as so:
        cd ~/oo/bed
        mkdir refSeq
        cd refSeq
+       # Note: downloaded these to refSeq.angie (refSeq dir perms)
        wget ftp://ftp.ncbi.nih.gov/refseq/LocusLink/loc2ref 
        wget ftp://ftp.ncbi.nih.gov/refseq/LocusLink/mim2loc 
 o - Similarly download refSeq proteins in fasta format to refSeq.pep - I believe this is hs.faa
@@ -485,15 +489,20 @@ o - RefSeq should have already been aligned to the genome by processes
         described under mRNA/EST alignments above.
 o - Produce refGene, refPep, refMrna, and refLink tables as so:
        ssh hgwdev
-       cd ~/oo/bed/refSeq
+       cd ~/oo/bed/refSeq.angie
        ln -s /cluster/store1/mrna.130 mrna
-       cp mrna/refSeq/mim2loc .
-       cp mrna/refSeq/loc2ref .
-       hgRefSeqMrna hg12 mrna/refSeq.fa mrna/refSeq.ra all_refSeq.psl loc2ref mrna/refSeq/hs.faa mim2loc
+TODO:
+#
+# NOTE: hgRefSeqMrna is losing refLink's protAcc field, I think due to 
+# a format-change issue with .-suffixes in mrna acc's
+#
+       hgRefSeqMrna hg12 mrna/refSeq.fa mrna/refSeq.ra all_refSeq.psl \
+         loc2ref mrna/refSeq/human/hs.fa mim2loc
 
 o - Add RefSeq status info 
     hgRefSeqStatus hg12 loc2ref
 
+TODO:
 o - Add Jackson labs info
      cd ~/oo/bed
      mkdir jaxOrtholog
@@ -502,8 +511,8 @@ o - Add Jackson labs info
      cp /cluster/store1/gs.12/build29/bed/jaxOrtholog/filter.awk .
      awk -f filter.awk *.rpt > jaxOrtholog.tab
     Load this into mysql with something like:
-     mysql -u hgcat -pBIGSECRET hg12 < ~/src/hg/lib/jaxOrtholog.sql
-     mysql -u hgcat -pBIGSECRET -A hg12
+     hgsql hg12 < ~/src/hg/lib/jaxOrtholog.sql
+     hgsql -A hg12
     and at the mysql> prompt
      load data local infile 'jaxOrtholog.tab' into table jaxOrtholog;
 
@@ -920,116 +929,155 @@ CREATE CHROMOSOME REPORTS
 CREATE STS MAP COMPARISON PLOTS
 
 
-DOING HUMAN/MOUSE ALIGMENTS (TODO - IN PROGRESS 7/23/02)
+HUMAN/MOUSE BLAT ALIGNMENTS (DONE 8/22/02)
 
-o - Start with the mouse assembly in 1 Mb chunks lower-case
-    repeat and tandem-repeat masked on kkstore by copying files there
-    in the following way.
+    # Process the trfFa files (contigs, lower-case repeat and tandem-repeat 
+    # masked) into about 500 files containing records of <= 20kb each:
+    # 
+    # First, make .unlft (unlifted) versions of all mouse contig .agp's:
+    ssh kkstore
+    cd ~/mm2
+    foreach ctgAgp (?{,?}/chr*/chr?{,?}_?{,?}.agp)
+      ~/kent/src/hg/splitFaIntoContigs/deLiftAgp.pl jkStuff/liftAll.lft \
+        $ctgAgp > $ctgAgp.unlft
+    end
 
-ssh kk
-Check the destination directories below and make sure they are current.
-If not, do the steps below.
+    # Now use the unlifted contig .agp's to further split the (super-)contigs 
+    # into smaller "sub"-contigs (still at contig boundaries):
+    foreach ctgAgp (?{,?}/chr*/chr?{,?}_?{,?}.agp.unlft)
+      set ctg=$ctgAgp:t:r:r
+      splitFaIntoContigs $ctgAgp trfFa/$ctg.fa.trf trfFaSplit -nSize=15000
+    end
+    # Create a lift file for all sub-contigs.
+    cat trfFaSplit/*/lift/ordered.lft > trfFaSplit/allSubContigs.lft
 
-ssh kkstore
-Mouse contigs:
-mkdir /scratch/hg/mm2/rmsk
-cp -p /cluster/store2/mm.2002.02/mm2/?{,?}/chr*/chr?{,?}_?{,?}.fa.out \
-    /scratch/hg/mm2/rmsk
-cp -Rp /cluster/store2/mm.2002.02/mm2/trfFa/ /scratch/hg/mm2/trfFa.0802
-
-Human contigs:
-mkdir /scratch/hg/gs.13/build30/rmsk
-cp -p /cluster/store1/gs.13/build30/?{,?}/*/NT_??????.fa.out \
-    /scratch/hg/gs.13/build30/rmsk
-#- (handled in trfFa gen step) cp -Rp /cluster/store1/gs.13/build30/bed/trfFa/trf /scratch/hg/gs.13/build30/trfFa.0730
-
-    Then
-        ssh kkstore
-	cd ~/oo/bed
-	mkdir blatMus
-	cd blatMus
-	ls -1 /scratch/hg/mm2/trfFa.0802/chr*.fa.trf > mouseAll
-	mkdir mm
-	cd mm
-	splitFile ../mouseAll 10 mmsplitFile
-	cd ..
-	ls -1 mm/* > mouse.lst
-    Then bundle up the human into pieces of less than 12
-    meg mostly by
-	ls -lhS /scratch/hg/gs.13/build30/trfFa.0730/*.fa.trf > bigHuman
-    edit this file and move all of the lines less than 3 meg
-    into the file smallHuman.  Then do
-        awk '{printf("%s\n", $9);}' bigHuman > bigH
-        awk '{printf("%s\n", $9);}' smallHuman > smallH
-	mkdir hs
-	cd hs
-	splitFile ../bigH 1 big
-	rm bigXX # Note, this is just an empty file that the splitFile program erroneously created. Remove the last one.
-	splitFile ../smallH 4 small
-	rm smallXXX
-        cd ..
-	ls -1 hs/* > human.lst
-    (The rm commands above indicate that splitFile needs a fix - they are zero length).
-
-Copy the old gsub here
-cp /cluster/store1/gs.12/build29/bed/blatMouse/gsub .
-    Finally generate the job list with
-        gensub2 human.lst mouse.lst gsub spec
-
-o - Do the cluster run as so
-       ssh kk
-       cd ~/oo/bed/blatMus
-       mkdir psl
-       para create spec
-
-       para try
-       para check
-       para push
-
-    and then do para check etc.
-
-o - Sort alignments as so 
-       ssh kkstore
-       cd ~/oo/bed/blatMus
-       pslCat -dir -check psl | liftUp -type=.psl stdout ../../jkStuff/liftAll.lft warn stdin | liftUp -type=.psl stdout ~/mm/jkStuff/liftAll.lft warn stdin -pslQ | pslSortAcc nohead chromPile /cluster/store2/temp stdin
-o - Get rid of big pile-ups due to contamination as so:
-       mkdir chrom
-       cd chromPile
-       foreach i (*.psl)
-           echo $i
-           pslUnpile -maxPile=250 $i ../chrom/$i
-       end
-o - Rename to correspond with tables as so and load into database:
-       ssh hgwdev
-       cd ~/oo/bed/blatMus/chrom
-       foreach i (*.psl)
-	   set r = $i:r
-           mv $i ${r}_blatMus.psl
-       end
-       hgLoadPsl hg12 *.psl
-o - load sequence into database as so:
-	ssh kks00
-	faSplit about /projects/hg3/mouse/arachne.3/whole/Unplaced.mfa 1200000000 /projects/hg3/mouse/arachne.3/whole/unplaced
-	ssh hgwdev
-	hgLoadRna addSeq '-abbr=gnl|' hg12 /projects/hg3/mouse/arachne.3/whole/unpla*.fa
-	hgLoadRna addSeq '-abbr=con' hg12 /projects/hg3/mouse/arachne.3/whole/SET*.mfa
-    This will take quite some time.  Perhaps an hour .
-
-o - Produce 'best in genome' filtered version:
-        ssh kks00
-	cd ~/mouse/vsOo33
-	pslSort dirs blatMouseAll.psl temp blatMouse
-	pslReps blatMouseAll.psl bestMouseAll.psl /dev/null -singleHit -minCover=0.3 -minIdentity=0.1
-	pslSortAcc nohead bestMouse temp bestMouseAll.psl
-	cd bestMouse
-        foreach i (*.psl)
-	   set r = $i:r
-           mv $i ${r}_bestMouse.psl
+    # Since splitFaIntoContigs enforces a min/approximate size and we need 
+    # to enforce a max size, use faSplit on sub-contigs.  Build up a list 
+    # file naming all the split sub-contigs.  
+    set splitSubDir=trfFaSplit/splitSubs
+    mkdir -p $splitSubDir
+    rm -f $splitSubDir/splitSubs.lst
+    touch $splitSubDir/splitSubs.lst
+    foreach ctgDir (trfFaSplit/?{,?}_?{,?})
+      foreach subCtgFa ($ctgDir/chr*/chr*.fa)
+        set subCtg=$subCtgFa:t:r
+        faSplit size $subCtgFa 20000 $splitSubDir/${subCtg}_ \
+          -lift=$splitSubDir/$subCtg.lft -maxN=20000
+        foreach ss ($splitSubDir/${subCtg}_*)
+          echo $ss >> $splitSubDir/splitSubs.lst
         end
-o - Load best in genome into database as so:
-	ssh hgwdev
-	cd ~/mouse/vsOo33/bestMouse
-        hgLoadPsl hg12 *.psl
+      end
+    end
+    # Create a lift file for all split sub-contigs.
+    # or not -- too many files for cat.  Create per-chunk lift files below.
+
+    # Divide the list of split sub-contigs into ~500 chunks
+    splitFile  $splitSubDir/splitSubs.lst 350 $splitSubDir/splitSubs_
+
+    # cat the split-sub-contig .fa's into multi-record chunk .fa's 
+    # for para job generation.  Make a lift file for each chunk.  
+    set chunkDir = trfFaSplit/chunks
+    mkdir -p $chunkDir
+    rm -f /tmp/makeLft.log
+    touch /tmp/makeLft.log
+    foreach chunkLst ($splitSubDir/splitSubs_*)
+      set chunkNum=`echo $chunkLst | sed -e 's/.*_//g'`
+      set chunkLft = $chunkDir/chunk_$chunkNum.lft
+      rm -f $chunkLft
+      touch $chunkLft
+      set lastSubCtg = ""
+      foreach splitSubFa (`cat $chunkLst`)
+        set splitSub = $splitSubFa:r
+        set subCtg = `echo $splitSub | perl -wpe 's/(chr\w+_\d+_\d+)_\d+/$1/'`
+        if ("$subCtg" != "$lastSubCtg") then
+          echo "subCtg changed from $lastSubCtg to $subCtg; catting $subCtg.lft onto $chunkLft" >> /tmp/makeLft.log
+          cat $subCtg.lft >> $chunkLft
+          set lastSubCtg = $subCtg
+        endif
+      end
+      cat `cat $chunkLst` > $chunkDir/chunk_$chunkNum.fa
+    end
+    # Put those files on cluster nodes' /scratch:
+    mkdir /scratch/hg/mm2/splitContigChunks
+    cp -p $chunkDir/chunk_* /scratch/hg/mm2/splitContigChunks
+    # Ask sysadmins for an updateLocal/binrsync
+
+    # Now we're ready to set up the cluster run!
+    mkdir -p ~/oo/bed/blatMus
+    cd ~/oo/bed/blatMus
+    # Use the mouse multi-record chunks created above:
+    ls -1 /scratch/hg/mm2/splitContigChunks/chunk_*.fa > mouse.lst
+    # Then bundle up the human into pieces of less than 12 meg mostly:
+    rm -f bigH smallH
+    foreach f (/scratch/hg/gs.13/build30/trfFa.0730/*.fa.trf)
+      set size = `ls -l $f | awk '{print $5;}'`
+      if ($size < 13000000) then
+        echo $f >> smallH
+      else
+        echo $f >> bigH
+      endif
+    end
+    mkdir hs
+    cd hs
+    splitFile ../bigH 1 big
+    rm bigXX # Note, this is just an empty file that the splitFile program erroneously created. Remove the last one.
+    splitFile ../smallH 4 small
+    rm smallXXX
+    cd ..
+    ls -1 hs/* > human.lst
+    cat > gsub <<EOF
+#LOOP
+/cluster/home/kent/bin/i386/blat -qMask=lower -mask=lower -q=dnax -t=dnax {check in line+ \$(path1)} {check in line+ \$(path2)} {check out line+ psl/\$(root1)_\$(root2).psl}
+#ENDLOOP
+EOF
+    gensub2 human.lst mouse.lst gsub spec
+
+    # Do the cluster run
+    ssh kk
+    cd ~/oo/bed/blatMus
+    mkdir psl
+    para create spec
+    para try, para check
+    # Note: multiple "para push"es may be required, or 
+    # "para push -maxQueue 200000 -maxPush 200000" or so.
+    para push, para check...
+
+    # Aggregate results and perform several kinds of coord-lifting:
+    ssh kkstore
+    cd ~/oo/bed/blatMus
+    # First from mouse split-sub-contigs to sub-contigs (individual .lft 
+    # file for each chunk of split-sub-contigs):
+    set chunkDir = ~/mm2/trfFaSplit/chunks
+    mkdir pslLft
+    rm -f /tmp/lft.log
+    touch /tmp/lft.log
+    foreach f (psl/*.psl)
+      set chunk = `echo $f:t:r | perl -wpe 's/.*(chunk_\d+)/$1/'`
+      liftUp -type=.psl -pslQ pslLft/$f:t $chunkDir/$chunk.lft warn $f \
+        >>& /tmp/lft.log
+    end
+    # Then the kinds of lifting we can do all at once: 
+    # mouse sub-contigs to mouse contigs, 
+    # mouse contigs to mouse chrom, 
+    # human contigs to human chrom:
+    pslCat -dir -check pslLft \
+      | liftUp -type=.psl -pslQ stdout ~/mm2/trfFaSplit/allSubContigs.lft \
+        warn stdin \
+      | liftUp -type=.psl -pslQ stdout ~/mm2/jkStuff/liftAll.lft warn stdin \
+      | liftUp -type=.psl stdout ../../jkStuff/liftAll.lft warn stdin \
+      | pslSortAcc nohead chromPile /cluster/store2/temp stdin
+
+    # Get rid of big pile-ups due to contamination as so:
+    mkdir chrom
+    cd chromPile
+    foreach i (*.psl)
+      echo $i
+      pslUnpile -maxPile=250 $i ../chrom/${i:r}_blatMus.psl
+    end
+    # Load into database:
+    ssh hgwdev
+    cd ~/oo/bed/blatMus/chrom
+    hgLoadPsl hg12 *.psl
 
 
 PRODUCING CROSS_SPECIES mRNA ALIGNMENTS (DONE 8/7/02)
@@ -1365,20 +1413,18 @@ LOAD EXOFISH (todo)
      - awk -f filter.awk all_maping_ecore > exoFish.bed
      - hgLoadBed hg12 exoFish exoFish.bed
 
-LOAD MOUSE SYNTENY (todo)
-     - login to hgwdev.
-     - cd ~/kent/src/hg/lib
-     - hg12 < mouseSyn.sql
-     - mkdir ~/oo/bed/mouseSyn
-     - cd ~/oo/bed/mouseSyn
-     - Put Dianna Church's (church@ncbi.nlm.nih.gov) email attatchment as
-       mouseSyn.txt
-     - awk -f format.awk *.txt > mouseSyn.bed
-     - delete first line of mouseSyn.bed
-     - Enter database with "hg12" command.
-     - At mysql> prompt type in:
-          load data local infile 'mouseSyn.bed' into table mouseSyn
-
+LOAD MOUSE SYNTENY (DONE 8/22/02)
+     ssh hgwdev
+     mkdir -p ~/oo/bed/mouseSyn
+     cd ~/oo/bed/mouseSyn
+     # Saved Michael Kamal's email attachment: allDirectedSegmentsBySize300.txt
+     # Process the .txt file (minus header) into a bed 6 + file:
+     grep -v "^#" allDirectedSegmentsBySize300.txt \
+       | awk '($6 > $5) {printf "%s\t%d\t%d\t%s\t%d\t%s\t%d\t%d\t%s\n", $4, $5-1, $6, $1, 999, $7, $2-1, $3, $8;} \
+              ($5 > $6) {printf "%s\t%d\t%d\t%s\t%d\t%s\t%d\t%d\t%s\n", $4, $6-1, $5, $1, 999, $7, $2-1, $3, $8;}' \
+       > mouseSynWhd.bed
+     hgLoadBed -noBin -sqlTable=$HOME/kent/src/hg/lib/mouseSynWhd.sql \
+       hg12 mouseSynWhd mouseSynWhd.bed
 
 LOAD GENIE (todo)
      - cat */ctg*/ctg*.affymetrix.gtf > predContigs.gtf
@@ -1638,7 +1684,9 @@ LOADING MOUSE MM2 BLASTZ ALIGNMENTS FROM PENN STATE: (DONE 8/18/02)
        foreach chrdir (lav-psl/*)
          set chr=$chrdir:t
          pslCat -check -nohead -ext=.psl -dir lav-psl/$chr \
-          | sort -k 15n -k 16n \
+          | sort -k 15n -k 16n -T /cluster/store2/temp \
+          | liftUp -type=.psl -pslQ -nohead stdout \
+            /cluster/store2/mm.2002.02/mm2/jkStuff/liftAll.lft warn stdin \
           > lav-xa/${chr}_${tbl}.psl
        end
 
@@ -1651,6 +1699,7 @@ LOADING MOUSE MM2 BLASTZ ALIGNMENTS FROM PENN STATE: (DONE 8/18/02)
 
     - Load tables
         ssh hgwdev
+        set base="/cluster/store1/gs.13/build30/blastz.mm2.2002-08-15-ASH"
         cd $base/lav-xa
         hgLoadPsl hg12 *.psl
 
@@ -1681,8 +1730,22 @@ MAKING THE BLASTZBESTMOUSE TRACK FROM PENN STATE MM2 AXT FILES (DONE 8/18/02)
       axtToPsl axtBest/$chr.axt tSizes qSizes pslBest/${chr}_blastzBestMouse.psl
       echo Done with $chr.
     end
-TODO    - If a chromosome's axts are too large for gunzip to unpack into 1 file,
-      individually lift, cat, sort...?
+    - If a chromosome has so many alignments that axtBest runs out of mem,
+      run axtBest in 2 passes to reduce size of the input to final axtBest:
+    foreach chrdir (lav/chr19)
+      set chr=$chrdir:t
+      foreach a ($chrdir/*.axt.gz)
+        gunzip $a
+        axtBest $a:r $chr $a:r:r.axtBest
+        gzip $a:r $a:r:r.axtBest
+      end
+      gunzip -c $chrdir/*.axtBest.gz | \
+        liftUp -type=.axt -axtQ axtChrom/$chr.lifted.axt \
+        /cluster/store2/mm.2002.02/mm2/jkStuff/liftAll.lft warn stdin
+      axtBest axtChrom/$chr.lifted.axt $chr axtBest/$chr.axt
+      axtToPsl axtBest/$chr.axt tSizes qSizes pslBest/${chr}_blastzBestMouse.psl
+      echo Done with $chr.
+    end
 
     - Load tables
      ssh hgwdev
@@ -1713,6 +1776,21 @@ Edit jkStuff/makeNib.sh to make sure it also has the "M" directory in its file l
 tcsh jkStuff/makeNib.sh
 hgNibSeq -preMadeNib hg12 /cluster/store1/gs.13/build30/nib ?/chr*.fa ??/chr*.fa
 
+
+TWINSCAN GENE PREDICTIONS (DONE 8/22/02)
+    mkdir -p ~/oo/bed/twinscan
+    cd ~/oo/bed/twinscan
+    wget http://genes.cs.wustl.edu/NCBI30/gtf/gtf.tgz
+    wget http://genes.cs.wustl.edu/NCBI30/ptx/ptx.tgz
+    gunzip -c gtf.tgz | tar xvf -
+    gunzip -c ptx.tgz | tar xvf -
+    ldHgGene hg12 twinscan chr*.gtf -exon=CDS
+    - pare down to id:
+    foreach c (1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 X Y)
+      perl -wpe 's/^\>.*\s+source_id\s*\=\s*(\S+).*$/\>$1/;' < \
+        chr$c.ptx > chr$c-fixed.fa
+    end
+    hgPepPred hg12 generic twinscanPep chr*-fixed.fa
 
 MAKING THE DOWNLOADABLE DATABASE FILES - TODO
 
