@@ -134,7 +134,7 @@
 #include "bgiGeneSnp.h"
 #include "botDelay.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.605 2004/04/06 06:04:04 baertsch Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.606 2004/04/12 23:12:35 fanhsu Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -6678,15 +6678,26 @@ if (url != NULL && url[0] != 0)
 	{
     	sprintf(cond_str, "transcript_name='%s'", shortItemName);    
 	
-        // this is necessary because Ensembl is changine their xref table definition
-    	if (hTableExists("ensemblXref2"))
+        //This is necessary, Ensembl kept changing their gene_xref table definition and content.
+    	proteinID = NULL;
+	if (hTableExists("ensTranscript"))
 	    {
-	    proteinID = sqlGetField(conn, database, "ensemblXref2", "translation_name", cond_str);
+	    proteinID = sqlGetField(conn, database, "ensTranscript", "translation_name", cond_str);
   	    }
 	else
 	    {
-	    proteinID = sqlGetField(conn, database, "ensemblXref", "translation_name", cond_str);
-  	    }
+    	    if (hTableExists("ensemblXref2"))
+	    	{
+	    	proteinID = sqlGetField(conn, database, "ensemblXref2","translation_name", cond_str);
+  	    	}
+	    else
+		{
+		if (hTableExists("ensemblXref"))
+	    	    {
+	    	    proteinID=sqlGetField(conn,database,"ensemblXref","translation_name",cond_str);
+  	    	    }
+		}
+	    }
 
 	if (proteinID != NULL)
 	    { 
