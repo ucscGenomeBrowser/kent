@@ -3184,6 +3184,36 @@ cat << 'EOF' > makeMaf.csh
     nice rm axtChain/run1/chain/* &
     nice gzip {axt,psl}Chrom/* lav/*/* axtChain/{all.chain,*.net} &
 
+# MAKE VSRN3 DOWNLOADABLES (DONE 9/14/04 Fan)
+    ssh kksilo
+    cd /cluster/data/mm5/bed/blastz.rn3/axtChain
+    ln all.chain rat.chain
+    foreach f (rat.chain rat.net)
+      gzip -c $f > $f.gz
+    end
+    rm rat.chain
+
+    # Make chain-format of raw alignments
+    ssh kksilo
+    cd /cluster/data/mm5/bed/blastz.rn3
+    mkdir blastzECF
+    foreach f (axtChrom/chr*.axt)
+      set chr = $f:t:r
+      axtToChain $f S1.len S2.len stdout \
+      | gzip -c - > blastzECF/$chr.ecf.gz
+    end
+
+    ssh hgwdev
+    mkdir /usr/local/apache/htdocs/goldenPath/mm5/vsRn3
+    cd /usr/local/apache/htdocs/goldenPath/mm5/vsRn3
+    mv /cluster/data/mm5/bed/blastz.rn3/axtChain/rat*.gz .
+    md5sum *.gz > md5sum.txt
+    # Copy over & edit README.txt w/pointers to chain, net formats.
+    # Not for pushing -- handle separately.
+    mv /cluster/data/mm5/bed/blastz.rn3/blastzECF .
+    cd blastzECF
+    md5sum *.gz > md5sum.txt
+
 # BLASTZ ZEBRAFISH (DANRER1) (DONE, 2004-07-29, hartera)
 
     ssh kkr1u00
