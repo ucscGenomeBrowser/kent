@@ -222,6 +222,8 @@ if (protSeq == NULL)
     }
 protSeqLen = strlen(protSeq);
 
+fflush(stdout);
+
 iypos = 15; 
 doTracks(proteinID, mrnaID, protSeq, &iypos, psOutput);
 if (!hTableExists("pbStamp")) goto histDone; 
@@ -435,8 +437,7 @@ else
     /* search existing GB databases to see if this protein can be found */
     protCntInSupportedGenomeDb = 
     	searchProteinsInSupportedGenomes(queryID, &supportedGenomeDatabase);
-   
-    if ((protCntInSupportedGenomeDb > 1) || protCntInSwissByGene > 1)
+    if ((protCntInSupportedGenomeDb > 1) || protCntInSwissByGene >= 1)
     	{
 	/* more than 1 proteins match the query ID, present selection web page */
 	presentProteinSelections(queryID);
