@@ -14,37 +14,14 @@
 #include "memgfx.h"
 #include "htmshell.h"
 #include "cheapcgi.h"
+#include "slog.h"
+#include "dnaMarkov.h"
 #include "ameme.h"
 #include "fragFind.h"
 
 boolean isFromWeb;          /* True if run as CGI. */
 boolean isMotifMatcher;     /* True if run from motifMatcher.html. */
 FILE *htmlOut;		    /* Where to send output. */
-
-int scaleShift = 13;
-int slogScale = 8192;
-double fSlogScale = 8192.0;
-double invSlogScale = 0.0001220703125;
-
-int slog(double val)
-/* Return scaled log. */
-{
-return (round(fSlogScale*log(val)));
-}
-
-int carefulSlog(double val)
-/* Returns scaled log that makes sure there's no int overflow. */
-{
-if (val < 0.0000001)
-    val = 0.0000001;
-return slog(val);
-}
-
-double sexp(int scaledLog)
-/* Inverse of slog. */
-{
-return exp(scaledLog*invSlogScale);
-}
 
 static void vaProgress(char *format, va_list args)
 /* Print message to indicate progress - to web page if in 
@@ -222,14 +199,14 @@ return time;
 
 /* Frequency tables for the null model (background). */
 
-double freqBase[5] = {1.0, 0.25, 0.25, 0.25, 0.25};
+double mark0[5] = {1.0, 0.25, 0.25, 0.25, 0.25};
 /* The probability of finding a base in sequence. */
                     /* N     T     C     A     G */
-double *freq = &freqBase[1];
+double *freq = &mark0[1];
 /* Frequency table that allows -1 indices for N's */
 
-int slogFreqBase[5];
-int *slogFreq = &slogFreqBase[1];
+int slogMark0[5];
+int *slogFreq = &slogMark0[1];
 /* Log of frequency. */
 
 double mark1[5][5];
@@ -239,7 +216,7 @@ int slogMark1[5][5];
 
 double mark2[5][5][5];
 int slogMark2[5][5][5];
-/* Second order Markove model - probability that a nucleotide follows two previous. */
+/* Second order Markov model - probability that a nucleotide follows two previous. */
 #define slogMark2Prob(v1,v2,v3) (slogMark2[(v1)+1][(v2)+1][(v3)+1])
 
 double codingMark2[3][5][5][5];
@@ -280,6 +257,21 @@ while (faReadNext(f, NULL, TRUE, &comment, &seq))
 slReverse(&seqList);
 fclose(f);
 return seqList;
+}
+
+struct dnaSeq *seqsInList(struct seqList *seqList)
+/* Return dnaSeq's in seqList threaded into a singly
+ * linked list. */
+{
+struct seqList *seqEl;
+struct dnaSeq *list = NULL, *el;
+for (seqEl = seqList; seqEl != NULL; seqEl = seqEl->next)
+    {
+    el = seqEl->seq;
+    slAddHead(&list, el);
+    }
+slReverse(&list);
+return list;
 }
 
 struct seqList *readSeqMaybeMakeFrame(char *faFileName, int nullModel)
@@ -812,148 +804,40 @@ return profList;
 void makeFreqTable(struct seqList *seqList)
 /* Figure out frequency of bases in input. */
 {
-struct dnaSeq *seq;
-int histo[4];
-int oneHisto[4];
-double total;
-int i;
-
-zeroBytes(histo, sizeof(histo));
-for (;seqList != NULL; seqList = seqList->next)
-    {
-    seq = seqList->seq;
-    dnaBaseHistogram(seq->dna, seq->size, oneHisto);
-    for (i=0; i<4; ++i)
-        histo[i] += oneHisto[i];
-    }
-total = histo[0] + histo[1] + histo[2] + histo[3];
-freq[-1] = 1.0;
-for (i=0; i<4; ++i)
-    freq[i] = (double)histo[i] / total;
-slogFreq[-1] = 0;
-for (i=0; i<4; ++i)
-    slogFreq[i] = slog(freq[i]);
+struct dnaSeq *list = seqsInList(seqList);
+dnaMark0(list, mark0, slogMark0);
 }
 
-
-
-void makeMark1(struct seqList *seqList, double mark1[5][5], int slogMark1[5][5])
+void makeMark1(struct seqList *seqList, double mark0[5], int slogMark0[5], 
+	double mark1[5][5], int slogMark1[5][5])
 /* Make up 1st order Markov model - probability that one nucleotide
  * will follow another. */
 {
-struct dnaSeq *seq;
-DNA *dna, *endDna;
-int i,j;
-int histo[5][5];
-int hist1[5];
-
-zeroBytes(histo, sizeof(histo));
-zeroBytes(hist1, sizeof(hist1));
-for (;seqList != NULL; seqList = seqList->next)
-    {
-    seq = seqList->seq;
-    dna = seq->dna;
-    endDna = dna + seq->size-1;
-    for (;dna < endDna; ++dna)
-        {
-        i = ntVal[dna[0]];
-        j = ntVal[dna[1]];
-        hist1[i+1] += 1;
-        histo[i+1][j+1] += 1;
-        }
-    }
-for (i=0; i<5; ++i)
-    {
-    for (j=0; j<5; ++j)
-        {
-        double mark1Val;
-        int matVal = histo[i][j] + 1;
-        mark1Val = ((double)matVal)/(hist1[i]+5);
-        mark1[i][j] = mark1Val;
-        slogMark1[i][j] = slog(mark1Val);
-        }
-    }
-for (i=0; i<5; ++i)
-    {
-    mark1[i][0] = freqBase[i];
-    mark1[0][i] = 1;
-    slogMark1[i][0] = slogFreqBase[i];
-    slogMark1[0][i] = 0;
-    }
+struct dnaSeq *list = seqsInList(seqList);
+dnaMark1(list, mark0, slogMark0, mark1, slogMark1);
 }
 
-void makeTripleTable(struct seqList *seqList, double mark2[5][5][5], int slogMark2[5][5][5],
-    int offset, int advance, int earlyEnd)
-/* Make up a table of how the probability of a nucleotide depends on the previous two.
- * Depending on offset and advance parameters this could either be a straight 2nd order
- * Markov model, or a model for a particular coding frame. */
+void makeTripleTable(struct seqList *seqList, 
+	double mark0[5], int slogMark0[5],
+	double mark1[5][5], int slogMark1[5][5],
+	double mark2[5][5][5], int slogMark2[5][5][5],
+	int offset, int advance, int earlyEnd)
+/* Convert seqList to dnaSeqs and call the real routine. */
 {
-struct dnaSeq *seq;
-DNA *dna, *endDna;
-int i,j,k;
-int histo[5][5][5];
-int hist2[5][5];
-int total = 0;
-zeroBytes(histo, sizeof(histo));
-zeroBytes(hist2, sizeof(hist2));
-for (;seqList != NULL; seqList = seqList->next)
-    {
-    seq = seqList->seq;
-    dna = seq->dna;
-    endDna = dna + seq->size - earlyEnd - 2;
-    dna += offset;
-    for (;dna < endDna; dna += advance)
-        {
-        i = ntVal[dna[0]];
-        j = ntVal[dna[1]];
-        k = ntVal[dna[2]];
-        hist2[i+1][j+1] += 1;
-        histo[i+1][j+1][k+1] += 1;
-        total += 1;
-        }
-    }
-for (i=0; i<5; ++i)
-    {
-    for (j=0; j<5; ++j)
-        {
-        for (k=0; k<5; ++k)
-            {
-            double markVal;
-            int matVal = histo[i][j][k]+1;
-            if (i == 0 || j == 0 || k == 0)
-                {
-                if (k == 0)
-                    {
-                    mark2[i][j][k] = 1;
-                    slogMark2[i][j][k] = 0;
-                    }
-                else if (j == 0)
-                    {
-                    mark2[i][j][k] = freqBase[k];
-                    slogMark2[i][j][k] = slogFreqBase[k];
-                    }
-                else if (i == 0)
-                    {
-                    mark2[i][j][k] = mark1[j][k];
-                    slogMark2[i][j][k] = slogMark1[j][k];
-                    }
-                }
-            else
-                {
-                markVal = ((double)matVal)/(hist2[i][j]+5);
-                mark2[i][j][k] = markVal;
-                slogMark2[i][j][k] = slog(markVal);
-                }
-            }
-        }
-    }
+struct dnaSeq *list = seqsInList(seqList);
+dnaMarkTriple(list, mark0, slogMark0, mark1, slogMark1, 
+	mark2, slogMark2, offset, advance, earlyEnd);
 }
 
-void makeMark2(struct seqList *seqList, double mark2[5][5][5], int slogMark2[5][5][5])
+void makeMark2(struct seqList *seqList, 
+	double mark0[5], int slogMark0[5],
+	double mark1[5][5], int slogMark1[5][5],
+	double mark2[5][5][5], int slogMark2[5][5][5])
 /* Make up 1st order Markov model - probability that one nucleotide
  * will follow the previous two. */
 {
-makeTripleTable(seqList, mark2, slogMark2, 0, 1, 0);
+makeTripleTable(seqList, mark0, slogMark0, mark1, slogMark1, 
+	mark2, slogMark2, 0, 1, 0);
 }
 
 int mark0PatSlogProb(DNA *pat, int patSize)
@@ -1481,7 +1365,7 @@ struct position *pos;
 for (pos = posList; pos != NULL; pos = pos->next)
     {
     oneScore = pos->score;
-    weight = 1.0/(1.0 + sexp(-oneScore));
+    weight = 1.0/(1.0 + invSlog(-oneScore));
     pos->weight = weight;
     accWeight += weight;
     if (maxWeight < weight)
@@ -1897,7 +1781,7 @@ for (i = 0; i<4; ++i)
     fprintf(f, "\t%c  ", valToNt[baseVal]);
     for (col = prof->columns; col != NULL; col = col->next)
         {
-        fprintf(f, "%4.3f ", sexp(col->slogProb[baseVal]) );
+        fprintf(f, "%4.3f ", invSlog(col->slogProb[baseVal]) );
         }
     fprintf(f, "\n");
     }
@@ -1911,12 +1795,13 @@ static DNA *stopCodons[3]  = {"tag", "tga", "taa"};
 int i;
 
 makeFreqTable(bgSeq);
-makeMark1(bgSeq, mark1, slogMark1);
-makeMark2(bgSeq, mark2, slogMark2);
+makeMark1(bgSeq, mark0, slogMark0, mark1, slogMark1);
+makeMark2(bgSeq, mark0, slogMark0, mark1, slogMark1, mark2, slogMark2);
 for (frame=0; frame<3; frame += 1)
     {
     int readFrame = (frame+2)%3;
-    makeTripleTable(bgSeq, codingMark2[readFrame], slogCodingMark2[readFrame], frame, 3, 3);
+    makeTripleTable(bgSeq, mark0, slogMark0, mark1, slogMark1,
+    	codingMark2[readFrame], slogCodingMark2[readFrame], frame, 3, 3);
     }
 /* Usually there's a little noise in our data that makes stop codons appear at a small
  * frequency in coding regions.  We won't eliminate this completely, but reduce it
@@ -1952,8 +1837,8 @@ if ((f = fopen(bgName, "rb")) == NULL)
     f = mustOpen(bgName, "wb");
     sig = lm2Signature;
     writeOne(f, sig);
-    mustWrite(f, freqBase, sizeof(freqBase));
-    mustWrite(f, slogFreqBase, sizeof(slogFreqBase));
+    mustWrite(f, mark0, sizeof(mark0));
+    mustWrite(f, slogMark0, sizeof(slogMark0));
     mustWrite(f, mark1, sizeof(mark1));
     mustWrite(f, slogMark1, sizeof(slogMark1));
     mustWrite(f, mark2, sizeof(mark2));
@@ -1966,8 +1851,8 @@ else
     mustReadOne(f, sig);
     if (sig != lm2Signature)
         errAbort("Bad signature on %s", bgName);
-    mustRead(f, freqBase, sizeof(freqBase));
-    mustRead(f, slogFreqBase, sizeof(slogFreqBase));
+    mustRead(f, mark0, sizeof(mark0));
+    mustRead(f, slogMark0, sizeof(slogMark0));
     mustRead(f, mark1, sizeof(mark1));
     mustRead(f, slogMark1, sizeof(slogMark1));
     mustRead(f, mark2, sizeof(mark2));
@@ -2678,7 +2563,7 @@ int i;
 
 for (i=0; i<numSeq; ++i)
     {
-    generateOneSeq(f, i, lenSeq, evenProb, freqBase, mark1, mark2, codingMark2, rand()%3, nullModel);
+    generateOneSeq(f, i, lenSeq, evenProb, mark0, mark1, mark2, codingMark2, rand()%3, nullModel);
     }
 fclose(f);
 }
@@ -2699,7 +2584,7 @@ f = mustOpen(tn.forCgi, "w");
 for (seqEl = seqList; seqEl != NULL; seqEl = seqEl->next)
     {
     generateOneSeq(f, ++num, seqEl->seq->size, 
-        evenProb, freqBase, mark1, mark2, codingMark2, seqEl->frame, nullModel);
+        evenProb, mark0, mark1, mark2, codingMark2, seqEl->frame, nullModel);
     }
 fclose(f);
 freeSeqList(&seqList);
