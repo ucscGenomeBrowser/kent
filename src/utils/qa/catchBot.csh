@@ -41,11 +41,12 @@ set max=0
 
 # write header ot file
 rm -f $output
+echo "\nfrom apachelogs.access_log" >> $output
 echo "\ntotal hits: $totalHits" >> $output
 echo "users with the most hits:" >> $output
-echo "                                                                  per   per" >> $output
-echo "  hits                                          from    hours    hour   min" >> $output
-echo "---------------------------------------------------------------------------" >> $output
+echo "                                                                   per    per" >> $output
+echo "   hits                                   remote_host    hours    hour    min" >> $output
+echo "-----------------------------------------------------------------------------" >> $output
 
 while ($checked < $size)
 
@@ -72,7 +73,7 @@ while ($checked < $size)
   # write a line in output file for this record
   # s is string, d is decimal
   echo "$num $host $timeHours $hitsPerHr $hitsPerMin " \
-       | gawk '{ printf("%6s %45s %8s %7s %5s\n", \
+       | gawk '{ printf("%7s %45s %8s %7s %6s\n", \
        $1, $2, $3, $4, $5) }' >> $output
   @ checked ++
 end
