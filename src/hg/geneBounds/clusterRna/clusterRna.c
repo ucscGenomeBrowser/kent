@@ -637,7 +637,7 @@ for (el = list; el != NULL; el = el->next)
     printClosestInfo(f, start, end, cluster, mgcRnaHash, TRUE);
     printClosestInfo(f, start, end, cluster, rnaHash, FALSE);
     printClosestInfo(f, start, end, cluster, refSeqHash, FALSE);
-    fprintf(f, "\t%s:%d", chromName, ++clusterIx);
+    fprintf(f, "\t%s.%d", chromName, ++clusterIx);
     fprintf(f, "\n");
     }
 carefulClose(&f);
