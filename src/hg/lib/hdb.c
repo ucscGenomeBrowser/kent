@@ -15,6 +15,7 @@
 #include "hCommon.h"
 
 static struct sqlConnCache *hdbCc = NULL;
+static struct sqlConnCache *centralCc = NULL;
 
 struct dbConv
 /* Pair for converting database to assembly and vice-versa */
@@ -36,6 +37,7 @@ static char *hdbHost;
 static char *hdbName = "hg8";
 static char *hdbUser;
 static char *hdbPassword;
+static char *centralHost;
 
 void hDefaultConnect()
 /* read in the connection options from config file */
@@ -47,6 +49,7 @@ hdbPassword	= cfgOption("db.password");
 if(hdbHost == NULL || hdbUser == NULL || hdbPassword == NULL)
 	errAbort("cannot read in connection setting from configuration file.");
 }
+
 
 void hSetDbConnect(char* host, char *db, char *user, char *password)
 /* set the connection information for the database */
@@ -103,10 +106,32 @@ if (hdbCc == NULL)
 return sqlAllocConnection(hdbCc);
 }
 
-struct sqlConnection *hFreeConn(struct sqlConnection **pConn)
+void hFreeConn(struct sqlConnection **pConn)
 /* Put back connection for reuse. */
 {
 sqlFreeConnection(hdbCc, pConn);
+}
+
+struct sqlConnection *hConnectCentral()
+/* Connect to central database where user info and other info
+ * not specific to a particular genome lives.  Free this up
+ * with hDisconnectCentral(). */
+{
+if (centralCc == NULL)
+    {
+    if (centralHost == NULL)
+	centralHost = cfgOption("central.host");
+    if (centralHost == NULL)
+	errAbort("Please set central.host in the hg.conf file.");
+    centralCc = sqlNewConnCache("hgcentral");
+    }
+return sqlAllocConnection(centralCc);
+}
+
+void hDisconnectCentral(struct sqlConnection **pConn)
+/* Put back connection for reuse. */
+{
+sqlFreeConnection(centralCc, pConn);
 }
 
 boolean hTableExists(char *table)

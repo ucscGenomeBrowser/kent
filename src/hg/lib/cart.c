@@ -8,6 +8,7 @@
 #include "htmshell.h"
 #include "cart.h"
 #include "web.h"
+#include "hdb.h"
 
 static char *sessionVar = "hgsid";	/* Name of cgi variable session is stored in. */
 
@@ -47,13 +48,6 @@ while (namePt != NULL && namePt[0] != 0)
     hashUpdateDynamicVal(hash, namePt, cloneString(dataPt));
     namePt = nextNamePt;
     }
-}
-
-struct sqlConnection *cartSqlConnect()
-/* Return sqlConnection to cart database. 
- * Free this with sqlDisconnect(). */
-{
-return sqlConnect("hgcentral");
 }
 
 struct cartDb *cartDbLoadFromId(struct sqlConnection *conn, char *table, int id)
@@ -104,7 +98,7 @@ struct cart *cartNew(unsigned int userId, unsigned int sessionId, char **exclude
 {
 struct cgiVar *cv, *cvList = cgiVarList();
 struct cart *cart;
-struct sqlConnection *conn = cartSqlConnect();
+struct sqlConnection *conn = hConnectCentral();
 char *ex;
 char *booShadow = cgiBooleanShadowPrefix();
 int booSize = strlen(booShadow);
@@ -193,7 +187,7 @@ updateOne(conn, "userDb", cart->userInfo, encoded->string, encoded->stringSize);
 updateOne(conn, "sessionDb", cart->sessionInfo, encoded->string, encoded->stringSize);
 
 /* Cleanup */
-sqlDisconnect(&conn);
+hDisconnectCentral(&conn);
 hashElFreeList(&elList);
 dyStringFree(&encoded);
 }
@@ -411,10 +405,10 @@ void cartResetInDb(char *cookieName)
 {
 int hguid = getCookieId(cookieName);
 int hgsid = getSessionId();
-struct sqlConnection *conn = cartSqlConnect();
+struct sqlConnection *conn = hConnectCentral();
 clearDbContents(conn, "userDb", hguid);
 clearDbContents(conn, "sessionDb", hgsid);
-sqlDisconnect(&conn);
+hDisconnectCentral(&conn);
 }
 
 static struct cart *cartAndCookie(char *cookieName, char **exclude)
@@ -484,7 +478,7 @@ void cartWebStart(char *format, ...)
 va_list args;
 va_start(args, format);
 pushWarnHandler(htmlVaWarn);
-webStartWrapper(format, args, FALSE);
+webStartWrapper(format, args, FALSE, FALSE);
 va_end(args);
 }
 

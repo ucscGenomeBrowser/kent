@@ -22,5 +22,6 @@ CREATE TABLE fishClones (
     beCount int unsigned not null,	# Number of BAC end sequences associated with this clone
     beNames longblob not null,	# Accessions of BAC ends
               #Indices
-    INDEX(chrom,chromStart,name)
+    INDEX(chrom,chromStart),
+    INDEX(name)
 );

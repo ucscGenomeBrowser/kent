@@ -537,9 +537,9 @@ else
 static boolean findStsPos(char *spec, struct hgPositions *hgp)
 /* Look for position in stsMarker/stsMap table. */
 {
-struct sqlConnection *conn;
+struct sqlConnection *conn = NULL;
 struct sqlResult *sr = NULL;
-struct dyString *query;
+struct dyString *query = NULL;
 char **row;
 boolean ok = FALSE;
 char *alias = NULL, *temp;
@@ -623,9 +623,9 @@ return ok;
 static boolean findFishClones(char *spec, struct hgPositions *hgp)
 /* Look for position in fishClones table. */
 {
-struct sqlConnection *conn;
+struct sqlConnection *conn = NULL;
 struct sqlResult *sr = NULL;
-struct dyString *query;
+struct dyString *query = NULL;
 char **row;
 boolean ok = FALSE;
 struct fishClones *fc;
@@ -677,7 +677,7 @@ static boolean findBacEndPairs(char *spec, struct hgPositions *hgp)
 {
 struct sqlConnection *conn;
 struct sqlResult *sr = NULL;
-struct dyString *query;
+struct dyString *query = NULL;
 char **row;
 boolean ok = FALSE;
 struct lfs *be;
