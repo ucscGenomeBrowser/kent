@@ -16,7 +16,7 @@
 #include "hgTables.h"
 #include "joiner.h"
 
-static char const rcsid[] = "$Id: mainPage.c,v 1.46 2004/09/24 05:03:18 kent Exp $";
+static char const rcsid[] = "$Id: mainPage.c,v 1.47 2004/09/24 05:34:01 kent Exp $";
 
 
 struct grp *makeGroupList(struct sqlConnection *conn, 
@@ -295,9 +295,13 @@ struct outputType otWigData = { NULL,
 struct outputType otWigBed = { NULL, 
      outWigBed, 
     "bed format", };
+struct outputType otMaf = { NULL,
+     outMaf,
+     "MAF - multiple alignment format", };
 
 
-static void showOutputTypeRow(boolean isWig, boolean isPositional)
+static void showOutputTypeRow(boolean isWig, boolean isPositional,
+	boolean isMaf)
 /* Print output line. */
 {
 struct outputType *otList = NULL, *ot;
@@ -311,6 +315,11 @@ if (isWig)
     if (galaAvail(database))
         slAddTail(&otList, &otGala);
     slAddTail(&otList, &otCustomTrack);
+    }
+else if (isMaf)
+    {
+    slAddTail(&otList, &otMaf);
+    slAddTail(&otList, &otAllFields);
     }
 else if (isPositional)
     {
@@ -344,7 +353,7 @@ void showMainControlTable(struct sqlConnection *conn)
 /* Put up table with main controls for main page. */
 {
 struct grp *selGroup;
-boolean isWig, isPositional = FALSE;
+boolean isWig, isPositional = FALSE, isMaf = FALSE;
 hPrintf("<TABLE BORDER=0>\n");
 
 /* Print genome and assembly line. */
@@ -376,6 +385,7 @@ hPrintf("<TABLE BORDER=0>\n");
 	isPositional = htiIsPositional(hti);
 	}
     isWig = isWiggle(database, curTable);
+    isMaf = isMafTable(database, curTrack, curTable);
     if (isWig)
 	isPositional = TRUE;
     nbSpaces(1);
@@ -470,7 +480,7 @@ if (isPositional)
     }
 
 /* Print output type line. */
-showOutputTypeRow(isWig, isPositional);
+showOutputTypeRow(isWig, isPositional, isMaf);
 
 /* Print output destination line. */
     {

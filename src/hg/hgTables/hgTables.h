@@ -405,6 +405,7 @@ boolean anyIntersection();
 #define outWigData "wigData"
 #define outWigBed "wigBed"
 #define outGala "galaQuery"
+#define outMaf "maf"
 
 /* --------- Identifier list handling stuff. ------------ */
 
@@ -436,6 +437,14 @@ void floatStatRow(char *label, double x);
 
 void stringStatRow(char *label, char *val);
 /* Print label, string value. */
+
+/* ----------- Maf stuff in maf.c ------------------------------*/
+
+boolean isMafTable(char *database, struct trackDb *track, char *table);
+/* Return TRUE if table is maf. */
+
+void doOutMaf(struct trackDb *track, char *table, struct sqlConnection *conn);
+/* Output regions as MAF. */
 
 /* ----------- Wiggle business in wiggle.c -------------------- */
 
