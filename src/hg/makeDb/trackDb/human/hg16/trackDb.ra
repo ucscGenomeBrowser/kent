@@ -254,7 +254,7 @@ track chimpDels
 shortLabel Chimp Deletions
 longLabel Deletions in Chimp (panTro1-Nov 03) Relative to Human
 group compGeno
-priority 147.4
+priority 145.8
 visibility hide
 type bed
 
