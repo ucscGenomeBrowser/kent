@@ -138,7 +138,7 @@
 #include "zdobnovSynt.h"
 #include "HInv.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.636 2004/05/20 21:47:41 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.637 2004/05/20 23:17:34 fanhsu Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -595,8 +595,8 @@ hFindSplitTable(seqName, tdb->tableName, table, &hasBin);
 sprintf(query, "select * from %s where name = '%s' and chrom = '%s' and chromStart = %d",
         table, item, seqName, start);
 
-//errAbort( "select * from %s where name = '%s' and chrom = '%s' and chromStart = %d",
-//        table, item, seqName, start);
+/*errAbort( "select * from %s where name = '%s' and chrom = '%s' and chromStart = %d",
+          table, item, seqName, start);*/
 
 
 sr = sqlGetResult(conn, query);
@@ -815,7 +815,7 @@ DNA qCodon[4];
 DNA tCodon[4];
 AA qProt, tProt = 0;
 int tPtr = 0;
-//char nibFile[128];
+/* char nibFile[128]; */
 
 if (gp->strand[0] == '+')
     {
@@ -845,7 +845,7 @@ else
     exit(0);
     }
 
-//safef(nibFile, sizeof(nibFile), "%s/%s.nib",nibDir,gp->chrom);
+/* safef(nibFile, sizeof(nibFile), "%s/%s.nib",nibDir,gp->chrom); */
 /* if no alignment , make a bad one */
 if (axtList == NULL)
     if (gp->strand[0] == '+')
@@ -7224,105 +7224,17 @@ if (rl->locusLinkId != 0)
     printf("<A HREF = \"http://www.ncbi.nlm.nih.gov/LocusLink/LocRpt.cgi?l=%d\" TARGET=_blank>",
 	   rl->locusLinkId);
     printf("%d</A><BR>\n", rl->locusLinkId);
-
-    if ( (strstr(hgGetDb(), "mm") != NULL) && hTableExists("MGIid"))
-    	{
-	sprintf(query, "select MGIid from MGIid where LLid = '%d';",
-		rl->locusLinkId);
-
-	sr = sqlGetResult(conn, query);
-	if ((row = sqlNextRow(sr)) != NULL)
-	    {
-	    printf("<B>Mouse Genome Informatics:</B> ");
-	    mgiID = strdup(row[0]);
-		
-	    printf("<A HREF=\"http://www.informatics.jax.org/searches/accession_report.cgi?id=%s\" TARGET=_BLANK>%s</A><BR>\n",mgiID, mgiID);
-	    }
-	else
-	    {
-	    // per Carol from Jackson Lab 4/12/02, JAX do not always agree
-	    // with Locuslink on seq to gene association.
-	    // Thus, not finding a MGIid even if a LocusLink ID
-	    // exists is always a possibility.
-	    }
-	sqlFreeResult(&sr);
-	}
     } 
-if (!startsWith("Worm", organism))
-    {
-    if (startsWith("dm", database))
-	{
-	// PubMed never seems to have BDGP gene IDs... so if that's all 
-	// that's given for a name/product, ignore name / truncate product.
-	char *cgp = strstr(rl->product, "CG");
-	if (cgp != NULL)
-	    {
-	    char *cgWord = firstWordInLine(cloneString(cgp));
-	    char *dashp = strchr(cgWord, '-');
-	    if (dashp != NULL)
-		*dashp = 0;
-	    if (isBDGPName(cgWord))
-		*cgp = 0;
-	    }
-	if (! isBDGPName(rl->name))
-	    medlineLinkedLine("PubMed on Gene", rl->name, rl->name);
-	if (rl->product[0] != 0)
-	    medlineProductLinkedLine("PubMed on Product", rl->product);
-	}
-    else
-	{
-	medlineLinkedLine("PubMed on Gene", rl->name, rl->name);
-	if (rl->product[0] != 0)
-	    medlineProductLinkedLine("PubMed on Product", rl->product);
-	}
-    printf("\n");
-    if (startsWith("Human", organism)) 
-        {
-        printGeneLynxName(rl->name);
-	printf("\n");
-        }
-    printGeneCards(rl->name);
-    }
-if (hTableExists("jaxOrtholog"))
-    {
-    struct jaxOrtholog jo;
-    char * sqlRlName = rl->name;
-
-    /* Make sure to escape single quotes for DB parseability */
-    if (strchr(rl->name, '\''))
-        {
-        sqlRlName = replaceChars(rl->name, "'", "''");
-        }
-    sprintf(query, "select * from jaxOrtholog where humanSymbol='%s'", sqlRlName);
-    sr = sqlGetResult(conn, query);
-    while ((row = sqlNextRow(sr)) != NULL)
-        {
-	jaxOrthologStaticLoad(row, &jo);
-	printf("<B>MGI Mouse Ortholog:</B> ");
-	printf("<A HREF=\"http://www.informatics.jax.org/searches/accession_report.cgi?id=%s\" target=_BLANK>", jo.mgiId);
-	printf("%s</A><BR>\n", jo.mouseSymbol);
-	}
-    sqlFreeResult(&sr);
-    }
-if (startsWith("hg", hGetDb()))
-    {
-    printf("\n");
-    printf("<B>AceView:</B> ");
-    printf("<A HREF = \"http://www.ncbi.nih.gov/IEB/Research/Acembly/av.cgi?db=human&l=%s\" TARGET=_blank>",
-	   rl->name);
-    printf("%s</A><BR>\n", rl->name);
-    }
 printStanSource(rl->mrnaAcc, "mrna");
 
 htmlHorizontalLine();
 
 /* print alignments that track was based on */
-{
+
 char *aliTbl = (sameString(track, "rgdGene") ? "refSeqAli" : "xenoRGDAli");
 struct psl *pslList = getAlignments(conn, aliTbl, rl->mrnaAcc);
 printf("<H3>mRNA/Genomic Alignments</H3>");
 printAlignments(pslList, start, "htcCdnaAli", aliTbl, rl->mrnaAcc);
-}
 
 htmlHorizontalLine();
 
