@@ -1,21 +1,20 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <limits.h>
 
 #include "common.h"
 
-const long GLOBAL_NUMBER = 97210242;
-const float GLOBAL_PERCENT_ID = 0.669295515178329;
 
 typedef struct bgPoint {
-    long position;
-    float score;
-    int number;
-    long radius;
+    long  position;
+    double score;
+    long  number;
+    long  radius;
 } bgPoint;
 
 /* finds the smallest point between the first and last iterators whoes position 
  * is grather than or equal to position */
-bgPoint* findUpperBound(long position, bgPoint* first, int length) {
+bgPoint* findUpperBound(long position, bgPoint* first, long length) {
     int half;
     bgPoint* middle;
 
@@ -41,7 +40,7 @@ void usage(char* programName) {
     char extension[64];
     
     splitPath(programName, dir, name, extension);
-    printf("usage: %s backgroundFile windowsFile\n", name);
+    fprintf(stderr, "usage: %s backgroundFile windowsFile defaultBackgroundSize defaultBackgroundPercentID [semi]\n", name);
 }
 
 /* load the background from the given filename and put the numnber of windows
@@ -51,9 +50,25 @@ bgPoint* loadBackground(char* filename, long* numberOfWindows) {
     char c[16];
     long chromStart;
     long chromEnd;
-    float percentId;
+    double percentId;
     long number;
     long invalid;
+    long AA;
+    long AC;
+    long AG;
+    long AT;
+    long CA;
+    long CC;
+    long CG;
+    long CT;
+    long GA;
+    long GC;
+    long GG;
+    long GT;
+    long TA;
+    long TC;
+    long TG;
+    long TT;
 
     FILE* backgroundFile;
     bgPoint* backgroundData = 0;
@@ -62,31 +77,67 @@ bgPoint* loadBackground(char* filename, long* numberOfWindows) {
     *numberOfWindows = 0;
     backgroundFile = mustOpen(filename, "r");
 
+    /* see if the first character is a # */
+    *c = fgetc(backgroundFile);
+    if(*c == '#') {
+        /* read the rest of the line */
+        while(fgetc(backgroundFile) != '\n')
+            ;
+    } else
+        ungetc(*c, backgroundFile);
+        
     /* count now many windows there are */
     while(!feof(backgroundFile)) {
-        if(fscanf(backgroundFile, "%15s\t%ld\t%ld\t%f\t%ld\t%ld",
-                c, &chromStart, &chromEnd, &percentId, &number, &invalid) == 6)
+        if(fscanf(backgroundFile, "%15s\t%ld\t%ld\t%ld\t%ld\t%ld\t%ld\t%ld\t%ld\t%ld\t"
+                                  "%ld\t%ld\t%ld\t%ld\t%ld\t%ld\t%ld\t%ld\t%ld\t%ld",
+                c, &chromStart, &chromEnd, &number, 
+                &AA, &AC, &AG, &AT, &CA, &CC, &CG, &CT,
+                &GA, &GC, &GG, &GT, &TA, &TC, &TG, &TT) == 20)
             (*numberOfWindows)++;
     }
+    
+    /* add two to account for the end and begin sentries */
+    (*numberOfWindows) += 2;
 
     backgroundData = needLargeMem((*numberOfWindows) * sizeof(bgPoint));
     
     /* now read the data starting from the begining of the file */
     rewind(backgroundFile); 
+
+    /* see if the first character is a # */
+    *c = fgetc(backgroundFile);
+    if(*c == '#') {
+        /* read the rest of the line */
+        while(fgetc(backgroundFile) != '\n')
+            ;
+    } else
+        ungetc(*c, backgroundFile);
     
+    /* added a begin of list sentry */
+    backgroundData[0].position = -1;
+    backgroundData[0].score = -1;
+    backgroundData[0].number = -1;
+    backgroundData[0].radius = -1;
+
     /* read the first data file, and store the chrom to make sure that they
      * are the same for all windows */
-    assert(fscanf(backgroundFile, "%10s\t%ld\t%ld\t%f\t%ld\t%ld",
-            chrom, &chromStart, &chromEnd, &percentId, &number, &invalid)
-            == 6);
-    backgroundData[0].position = (chromStart + chromEnd) / 2;
-    backgroundData[0].score = percentId;
-    backgroundData[0].number = number;
-    backgroundData[0].radius = (chromEnd - chromStart) / 2;
+    assert(fscanf(backgroundFile, "%15s\t%ld\t%ld\t%ld\t%ld\t%ld\t%ld\t%ld\t%ld\t%ld\t"
+                                  "%ld\t%ld\t%ld\t%ld\t%ld\t%ld\t%ld\t%ld\t%ld\t%ld",
+                chrom, &chromStart, &chromEnd, &number, 
+                &AA, &AC, &AG, &AT, &CA, &CC, &CG, &CT,
+                &GA, &GC, &GG, &GT, &TA, &TC, &TG, &TT) == 20);
+    backgroundData[1].position = (chromStart + chromEnd) / 2;
+    backgroundData[1].score = (((double)AA) + CC + GG +TT) /
+        (((double)AA) + AC + AG + AT + CA + CC + CG + CT + GA + GC + GG + GT + TA + TC + TG + TT);
+    backgroundData[1].number = number;
+    backgroundData[1].radius = (chromEnd - chromStart) / 2;
 
-    for(i = 1; i < *numberOfWindows; i++) {
-        fscanf(backgroundFile, "%10s\t%ld\t%ld\t%f\t%ld\t%ld",
-                c, &chromStart, &chromEnd, &percentId, &number, &invalid);
+    for(i = 2; i < *numberOfWindows - 1; i++) {
+        assert(fscanf(backgroundFile, "%15s\t%ld\t%ld\t%ld\t%ld\t%ld\t%ld\t%ld\t%ld\t%ld\t"
+                               "%ld\t%ld\t%ld\t%ld\t%ld\t%ld\t%ld\t%ld\t%ld\t%ld",
+                c, &chromStart, &chromEnd, &number, 
+                &AA, &AC, &AG, &AT, &CA, &CC, &CG, &CT,
+                &GA, &GC, &GG, &GT, &TA, &TC, &TG, &TT) == 20);
 
         /* make sure that all the windows are on the smae chrom */
         if(!sameString(chrom, c))
@@ -94,10 +145,17 @@ bgPoint* loadBackground(char* filename, long* numberOfWindows) {
                     "in file %s\n", filename);
 
         backgroundData[i].position = (chromStart + chromEnd) / 2;
-        backgroundData[i].score = percentId;
+        backgroundData[i].score = (((double)AA) + CC + GG +TT) /
+            (((double)AA) + AC + AG + AT + CA + CC + CG + CT + GA + GC + GG + GT + TA + TC + TG + TT);
         backgroundData[i].number = number;
         backgroundData[i].radius = (chromEnd - chromStart) / 2;
     }
+
+    /* added an end of list sentry */
+    backgroundData[i].position = LONG_MAX;
+    backgroundData[i].score = -1;
+    backgroundData[i].number = -1;
+    backgroundData[i].radius = -1;
     
     fclose(backgroundFile);
 
@@ -106,7 +164,7 @@ bgPoint* loadBackground(char* filename, long* numberOfWindows) {
 
 /* get the largest radius from the given array of background points */
 long getMaxRadius(bgPoint* backgroundData, long numberOfWindows) {
-    int maxRadius = 0;
+    long maxRadius = 0;
 
     long i;
 
@@ -124,12 +182,12 @@ bgPoint* getNearestEnclosing(long position, bgPoint* backgroundData, long number
         long maxRadius) {
 
     bgPoint* current;
-    int minDistance = maxRadius + 1;
+    long minDistance = LONG_MAX;
     bgPoint* minWindow = 0;
 
     current = findUpperBound(position + maxRadius, backgroundData, numberOfWindows);
 
-    while(current->position >= position - maxRadius && current != backgroundData - 1) {
+    while(current->position >= position - maxRadius && current >= backgroundData) {
         /* if the current window contains the point */
         if(current->position - current->radius <= position &&
                 position <= current->position + current->radius) {
@@ -166,16 +224,36 @@ int main(int argc, char* argv[]) {
     char chrom[16];
     long chromStart;
     long chromEnd;
-    float percentId;
+    double percentId;
     long number;
     long invalid;
 
-    float backgroundPercentId;
+    double backgroundPercentId;
     long backgroundNumber;
-    float score;
+    double score;
+
+    long AA;
+    long AC;
+    long AG;
+    long AT;
+    long CA;
+    long CC;
+    long CG;
+    long CT;
+    long GA;
+    long GC;
+    long GG;
+    long GT;
+    long TA;
+    long TC;
+    long TG;
+    long TT;
+    
+    long globalNumber;
+    double globalPercentId;
     
     /* make sure that there are the correct number of arguments */
-    if(argc != 3) {
+    if(argc < 5 || argc > 6) {
         usage(argv[0]);
         exit(10);
     }
@@ -185,31 +263,54 @@ int main(int argc, char* argv[]) {
     maxRadius = 200 * getMaxRadius(backgroundData, numberOfWindows);
     qsort(backgroundData, numberOfWindows, sizeof(bgPoint), bgPointCompar);
 
+    globalNumber = atol(argv[3]); // 100516125;
+    globalPercentId = atof(argv[4]); // 0.668947295769709;
+
     fprintf(stderr, "maxRadius: %ld\n", maxRadius);
+    fprintf(stderr, "number of windows: %ld\n", numberOfWindows - 2);
 
     windowsFile = mustOpen(argv[2], "r");
+    /* see if the first character is a # */
+    *chrom = fgetc(windowsFile);
+    if(*chrom == '#') {
+        /* read the rest of the line */
+        while(fgetc(windowsFile) != '\n')
+            ;
+    } else
+        ungetc(*chrom, windowsFile);
+    
     while(!feof(windowsFile)) {
-        if(fscanf(windowsFile, "%15s\t%ld\t%ld\t%f\t%ld\t%ld",
-                chrom, &chromStart, &chromEnd, &percentId, &number, &invalid) == 6) {
+        fscanf(windowsFile, "%15s\t%ld\t%ld\t%ld\t%ld\t%ld\t%ld\t%ld\t%ld\t%ld\t"
+                               "%ld\t%ld\t%ld\t%ld\t%ld\t%ld\t%ld\t%ld\t%ld\t%ld",
+                chrom, &chromStart, &chromEnd, &number, 
+                &AA, &AC, &AG, &AT, &CA, &CC, &CG, &CT,
+                &GA, &GC, &GG, &GT, &TA, &TC, &TG, &TT);
 
-            background = getNearestEnclosing( (chromStart + chromEnd) / 2, backgroundData,
-                numberOfWindows, maxRadius);            
+        percentId = (((double)AA) + CC + GG +TT) /
+            (((double)AA) + AC + AG + AT + CA + CC + CG + CT + GA + GC + GG + GT + TA + TC + TG + TT);
 
-            if(background == 0) {
-                backgroundPercentId = GLOBAL_PERCENT_ID;
-                backgroundNumber = GLOBAL_NUMBER;
-            } else {
-                backgroundPercentId = background->score;
-                backgroundNumber = background->number;
-            }
+        background = getNearestEnclosing( (chromStart + chromEnd) / 2, backgroundData,
+            numberOfWindows, maxRadius);            
 
-            /* adjust for the percent identity for the current window */
-            backgroundPercentId = (backgroundPercentId * backgroundNumber - number * percentId) /
-                (backgroundNumber - number);
-            
-            score = number * (percentId - backgroundPercentId) / sqrt(number);
-            printf("%s\t%ld\t%ld\t%f\t%ld\n", chrom, chromStart, chromEnd, score, number);
+        /* if we didn't find an enclosing window */
+        if(background == 0 || background->number == -1) {
+            /* used the genome-wide background numbers */
+            backgroundPercentId = globalPercentId;
+            backgroundNumber = globalNumber;
+        } else {
+            backgroundPercentId = background->score;
+            backgroundNumber = background->number;
         }
+
+        /* adjust for the percent identity for the current window */
+        backgroundPercentId = (backgroundPercentId * backgroundNumber - number * percentId) /
+            (backgroundNumber - number);
+        
+        if(argc == 5)
+            score = number * (percentId - backgroundPercentId) / sqrt(number * backgroundPercentId * (1.0 - backgroundPercentId));
+        else
+            score = number * (percentId - backgroundPercentId) / sqrt(number);
+        printf("%s\t%ld\t%ld\t%lf\t%ld\n", chrom, chromStart, chromEnd, score, number);
     }
     
     return 0;
