@@ -1,8 +1,0 @@
-#
-#	C elegans GC count probabilities from AT/GC genome content
-#
-#	AT: %64.63	GC: %35.37
-#
-#  Counts:
-#    0      1      2      3      4      5
-0.1127 0.3084 0.3376 0.1846 0.0504 0.0055
