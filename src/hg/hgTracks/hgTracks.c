@@ -6284,6 +6284,7 @@ if (!findGenomePos(position, &chromName, &winStart, &winEnd))
     return;
 
 seqBaseCount = hChromSize(chromName);
+winBaseCount = winEnd - winStart;
 
 /* Do zoom/scroll if they hit it. */
 if (cgiVarExists("hgt.left3"))
