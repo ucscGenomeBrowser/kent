@@ -610,8 +610,8 @@ if ((user == NULL) || (fileName != NULL))
     pmClear(&pmIn);
     if (f == NULL)
 	{
-	pmPrintf(&pmIn, "Couldn't open %s %s", fileName, strerror(errno));
-	warn("Couldn't open %s %s", fileName, strerror(errno));
+	pmPrintf(&pmIn, "Couldn't open fetch file %s %s", fileName, strerror(errno));
+	warn("Couldn't open fetch file %s %s", fileName, strerror(errno));
 	pmSend(&pmIn, mainRudp);
 	pmClear(&pmIn);
 	pmSend(&pmIn, mainRudp);
@@ -625,7 +625,7 @@ if ((user == NULL) || (fileName != NULL))
 	    if (size < 0)
 		{
 		size = 0;
-		warn("Couldn't read %s %s", fileName, strerror(errno));
+		warn("Couldn't read fetch file %s %s", fileName, strerror(errno));
 		}
 	    pmIn.size = size;
 	    pmSend(&pmIn, mainRudp);
