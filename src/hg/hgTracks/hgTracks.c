@@ -277,6 +277,25 @@ int tgWeirdItemEnd(struct trackGroup *tg, void *item)
 return -1;
 }
 
+int orientFromChar(char c)
+/* Return 1 or -1 in place of + or - */
+{
+if (c == '-')
+    return -1;
+else
+    return 1;
+}
+
+char charFromOrient(int orient)
+/* Return + or - in place of 1 or -1 */
+{
+if (orient < 0)
+    return '-';
+else
+    return '+';
+}
+
+
 void makeHiddenVar(char *name, char *val)
 /* Make hidden variable. */
 {
@@ -979,23 +998,37 @@ tg->itemEnd = linkedFeaturesItemEnd;
 return tg;
 }
 
-int orientFromChar(char c)
-/* Return 1 or -1 in place of + or - */
+struct linkedFeatures *lfFromBed(struct bed *bed)
+/* Return a linked feature from a (full) bed. */
 {
-if (c == '-')
-    return -1;
-else
-    return 1;
+struct linkedFeatures *lf;
+struct simpleFeature *sf, *sfList = NULL;
+int grayIx = grayInRange(bed->score, 0, 1000);
+int *starts = bed->chromStarts, start;
+int *sizes = bed->blockSizes;
+int blockCount = bed->blockCount, i;
+
+assert(starts != NULL && sizes != NULL && blockCount > 0);
+AllocVar(lf);
+lf->grayIx = grayIx;
+strncpy(lf->name, bed->name, sizeof(lf->name));
+lf->orientation = orientFromChar(bed->strand[0]);
+for (i=0; i<blockCount; ++i)
+    {
+    AllocVar(sf);
+    start = starts[i] + bed->chromStart;
+    sf->start = start;
+    sf->end = start + sizes[i];
+    sf->grayIx = grayIx;
+    slAddHead(&sfList, sf);
+    }
+slReverse(&sfList);
+lf->components = sfList;
+finishLf(lf);
+return lf;
 }
 
-char charFromOrient(int orient)
-/* Return + or - in place of 1 or -1 */
-{
-if (orient < 0)
-    return '-';
-else
-    return '+';
-}
+
 
 void setTgDarkLightColors(struct trackGroup *tg, int r, int g, int b)
 /* Set track group color to r,g,b.  Set altColor to a lighter version
@@ -4619,6 +4652,7 @@ void bedFreeItemList(struct trackGroup *tg)
 bedFreeList((struct bed **)&tg->items);
 }
 
+#ifdef UNNEEDED
 static void bedWScoresDraw(struct trackGroup *tg, int seqStart, int seqEnd,
 			   struct memGfx *mg, int xOff, int yOff, int width, 
 			   MgFont *font, Color color, enum trackVisibility vis)
@@ -4649,52 +4683,52 @@ for (item = tg->items; item != NULL; item = item->next)
 	y += lineHeight;
     }
 }
+#endif /* unneeded */
 
-struct trackGroup *createBedTg(struct browserTable *table)
+void btToTgBasicCopy(struct browserTable *bt, struct trackGroup *tg)
+/* Update track group with data in browser table. */
+{
+char buff[256];
+sprintf(buff, "%s [%s]", bt->longLabel, bt->version);
+
+tg->mapName = cloneString(bt->mapName);
+tg->longLabel = cloneString(buff);
+tg->shortLabel = cloneString(bt->shortLabel);
+strncpy(tg->tableName, bt->tableName, ArraySize(bt->tableName));
+tg->visibility = bt->visibility;
+
+tg->private = bt->private;
+tg->isSplit = bt->isSplit;
+tg->priority = bt->priority;
+strncpy(tg->trackType,bt->trackType,ArraySize(bt->trackType));
+if(bt->useScore) 
+    {
+    /* with scores we only support black and shades of grey */
+    tg->colorShades = shadesOfGray;
+    }
+else 
+    {
+    tg->color.r = bt->colorR;
+    tg->color.g = bt->colorG;
+    tg->color.b = bt->colorB;
+    tg->altColor.r = bt->altColorR;
+    tg->altColor.g = bt->altColorG;
+    tg->altColor.b = bt->altColorB;
+    }
+}
+
+struct trackGroup *createBedTg(struct browserTable *bt)
 /* create a generic bed track using information from browser
  * meta table. */
 {
 struct trackGroup *tg = bedTg();
-char buff[strlen(table->longLabel) + strlen(table->version) + 10];
-sprintf(buff, "%s [%s]", table->longLabel, table->version);
-
-tg->mapName = cloneString(table->mapName);
-tg->longLabel = cloneString(buff);
-tg->shortLabel = cloneString(table->shortLabel);
-strncpy(tg->tableName, table->tableName, ArraySize(table->tableName));
-tg->visibility = table->visibility;
-
-
-tg->private = table->private;
-tg->isSplit = table->isSplit;
-tg->priority = table->priority;
-strncpy(tg->trackType,table->trackType,ArraySize(table->trackType));
+btToTgBasicCopy(bt, tg);
 tg->freeItems = bedFreeItemList;
-if(table->useScore) 
-    {
+tg->drawItems = bedDrawSimple;
+if(bt->useScore) 
     tg->loadItems = bedWScoresLoad;
-    tg->drawItems = bedWScoresDraw;
-    /* with scores we only support black and shades of grey */
-    tg->color.r = 0;
-    tg->color.g = 0;
-    tg->color.b = 0;
-    
-    tg->altColor.r = 0;
-    tg->altColor.g = 0;
-    tg->altColor.b = 0;
-    }
-else 
-    {
-    tg->color.r = table->colorR;
-    tg->color.g = table->colorG;
-    tg->color.b = table->colorB;
-    
-    tg->altColor.r = table->altColorR;
-    tg->altColor.g = table->altColorG;
-    tg->altColor.b = table->altColorB;
+else
     tg->loadItems = bedBasicLoad;
-    tg->drawItems = bedDrawSimple;
-    }
 return tg;
 }
 
@@ -4933,7 +4967,7 @@ return tg;
 }
 #endif /* SOMEDAY */
 
-void customTrackLoadItems(struct trackGroup *tg)
+void ctLoadSimpleBed(struct trackGroup *tg)
 /* Load the items in one custom track - just move beds in
  * window... */
 {
@@ -4952,12 +4986,44 @@ slReverse(&list);
 tg->items = list;
 }
 
+void ctLoadGappedBed(struct trackGroup *tg)
+/* Convert bed info in window to linked feature. */
+{
+struct customTrack *ct = tg->customPt;
+struct bed *bed;
+struct linkedFeatures *lfList = NULL, *lf;
+
+for (bed = ct->bedList; bed != NULL; bed = bed->next)
+    {
+    if (bed->chromStart < winEnd && bed->chromEnd > winStart 
+    		&& sameString(chromName, bed->chrom))
+	{
+	lf = lfFromBed(bed);
+	slAddHead(&lfList, lf);
+	}
+    }
+slReverse(&lfList);
+tg->items = lfList;
+}
+
 struct trackGroup *newCustomTrack(struct customTrack *ct)
 /* Make up a new custom track. */
 {
-struct trackGroup *tg = createBedTg(ct->bt);
+struct trackGroup *tg;
+
+if (ct->fieldCount < 12)
+    {
+    tg = createBedTg(ct->bt);
+    tg->loadItems = ctLoadSimpleBed;
+    }
+else
+    {
+    struct browserTable *bt = ct->bt;
+    tg = linkedFeaturesTg();
+    btToTgBasicCopy(bt, tg);
+    tg->loadItems = ctLoadGappedBed;
+    }
 tg->customPt = ct;
-tg->loadItems = customTrackLoadItems;
 return tg;
 }
 
@@ -4970,6 +5036,8 @@ struct trackGroup *tg;
 char *customText = cgiOptionalString("customText");
 char *fileName = cgiOptionalString("ct");
 
+if (customText == NULL || customText[0] == 0)
+    customText = cgiOptionalString("customFile");
 customText = skipLeadingSpaces(customText);
 if (customText != NULL && customText[0] != 0)
     {
@@ -4988,7 +5056,11 @@ else if (fileName != NULL)
     }
 for (ct = ctList; ct != NULL; ct = ct->next)
     {
+    char *vis;
     tg = newCustomTrack(ct);
+    vis = cgiOptionalString(tg->mapName);
+    if (vis != NULL)
+	tg->visibility = stringArrayIx(vis, tvStrings, ArraySize(tvStrings));
     slAddHead(pGroupList, tg);
     }
 }
