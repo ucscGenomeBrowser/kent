@@ -588,3 +588,12 @@ without refseq:
 
 
 - http://pubcrawler.gen.tcd.ie/program.html - program that monitors genbank.
+
+- gbGetSeqs should have an option take an accession.
+
+- storing fa offset in gbidx would speed up gbGetSeqs
+
+- para make queue size maybe too small
+
+- in sqlLoadTablFile make this version 10 robust:
+  boolean isMySql4 = (conn->conn->server_version[0] > '3');
