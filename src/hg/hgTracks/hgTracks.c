@@ -3286,7 +3286,9 @@ while ((row = sqlNextRow(sr)) != NULL)
     item = loader(row + rowOffset);
     slAddHead(&itemList, item);
     }
+
 slReverse(&itemList);
+slSort(&itemList, bedCmp);
 sqlFreeResult(&sr);
 tg->items = itemList;
 hFreeConn(&conn);
@@ -6131,8 +6133,8 @@ tg->items = lfFromPslsWScoresInRange("uniGene", winStart, winEnd, chromName,FALS
 
 void uniGeneMethods(struct trackGroup *tg)
 {
-linkedFeaturesMethods(tg);
-tg->loadItems = loadUniGeneAli;
+//linkedFeaturesMethods(tg);
+//tg->loadItems = loadUniGeneAli;
 tg->colorShades = shadesOfGray;
 }
 
@@ -8482,6 +8484,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 sqlFreeResult(&sr);
 hFreeConn(&conn);
 slReverse(&lfList);
+slSort(&lfList, linkedFeaturesCmp);
 tg->items = lfList;
 }
 
@@ -9205,7 +9208,7 @@ registerTrackHandler("tet_waba", tetWabaMethods);
 registerTrackHandler("rnaGene", rnaGeneMethods);
 registerTrackHandler("rmsk", repeatMethods);
 registerTrackHandler("simpleRepeat", simpleRepeatMethods);
-registerTrackHandler("uniGene",uniGeneMethods);
+//registerTrackHandler("uniGene",uniGeneMethods);
 registerTrackHandler("perlegen",perlegenMethods);
 registerTrackHandler("nci60", nci60Methods);
 registerTrackHandler("cghNci60", cghNci60Methods);
