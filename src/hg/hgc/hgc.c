@@ -122,7 +122,7 @@
 #include "sgdDescription.h"
 #include "hgFind.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.543 2004/01/07 19:01:24 kent Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.544 2004/01/07 22:15:42 kent Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -416,7 +416,7 @@ if (featDna)
     printf("<A HREF=\"%s&o=%d&g=getDna&i=%s&c=%s&l=%d&r=%d&strand=%s&table=%s\">"
 	   "View DNA for this feature</A><BR>\n",  hgcPathAndSettings(),
 	   start, (item != NULL ? cgiEncode(item) : ""),
-	   chrom, start, end, cgiEncode(strand), tbl);
+	   chrom, start, end, strand, tbl);
     }
 }
 
