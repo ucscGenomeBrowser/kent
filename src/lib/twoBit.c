@@ -6,8 +6,9 @@
 #include "localmem.h"
 #include "obscure.h"
 #include "twoBit.h"
+#include "nib.h"
 
-static char const rcsid[] = "$Id: twoBit.c,v 1.6 2004/02/25 07:42:31 kent Exp $";
+static char const rcsid[] = "$Id: twoBit.c,v 1.7 2004/06/01 16:49:03 kent Exp $";
 
 static int countBlocksOfN(char *s, int size)
 /* Count number of blocks of N's (or n's) in s. */
@@ -695,6 +696,4 @@ boolean twoBitIsFileOrRange(char *spec)
 {
 return twoBitIsFile(spec) || twoBitIsRange(spec);
 }
-
-
 

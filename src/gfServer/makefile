@@ -21,5 +21,6 @@ test:
 	cd tests && testProtTwoBit output/testProtTwoBit
 	cd tests && testTransNib output/testTransNib
 	cd tests && testTransTwoBit output/testTransTwoBit
+	cd tests && testPcr expected/testPcr
 	diff -r -x CVS tests/expected tests/output
 	rm -r tests/output

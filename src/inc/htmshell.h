@@ -97,7 +97,8 @@ void htmEmptyShell(void (*doMiddle)(), char *method);
 /* Wrap an html file around the passed in function.
  * The passed in function is already in the body. It
  * should just make paragraphs and return. 
- * Method should be "query" or "get" or "post".
+ * Method should be "query" or "get" or "post" (or NULL
+ * if you don't care)..
  */
 void htmShell( char *title, void (*doMiddle)(), char *method); 
 

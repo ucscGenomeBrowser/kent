@@ -16,9 +16,9 @@
 #include "obscure.h"
 #include "genoFind.h"
 #include "trans3.h"
-#include "repMask.h"
+#include "gfClientLib.h"
 
-static char const rcsid[] = "$Id: blat.c,v 1.94 2004/04/02 16:23:08 kent Exp $";
+static char const rcsid[] = "$Id: blat.c,v 1.95 2004/06/01 16:49:02 kent Exp $";
 
 /* Variables shared with other modules.  Set in this module, read only
  * elsewhere. */
@@ -32,6 +32,7 @@ enum constants {
 
 /* Variables that can be set from command line. */
 int tileSize = 11;
+int stepSize = 0;	/* Default (same as tileSize) */
 int minMatch = 2;
 int minScore = 30;
 int maxGap = 2;
@@ -94,6 +95,7 @@ printf(
   "   -tileSize=N sets the size of match that triggers an alignment.  \n"
   "               Usually between 8 and 12\n"
   "               Default is 11 for DNA and 5 for protein.\n"
+  "   -stepSize=N spacing between tiles. Default is tileSize.\n"
   "   -oneOff=N   If set to 1 this allows one mismatch in tile and still\n"
   "               triggers an alignments.  Default is 0.\n"
   "   -minMatch=N sets the number of tile matches.  Usually set from 2 to 4\n"
@@ -150,205 +152,36 @@ exit(-1);
 }
 
 
-void getFileArray(char *fileName, char ***retFiles, int *retFileCount)
-/* Check if file if .fa or .nib.  If so return just that
- * file in a list of one.  Otherwise read all file and treat file
- * as a list of filenames.  */
-{
-boolean gotSingle = FALSE;
-char *buf;		/* This will leak memory but won't matter. */
+struct optionSpec options[] = {
+   {"t", OPTION_STRING},
+   {"q", OPTION_STRING},
+   {"prot", OPTION_BOOLEAN},
+   {"ooc", OPTION_STRING},
+   {"tileSize", OPTION_INT},
+   {"stepSize", OPTION_INT},
+   {"oneOff", OPTION_INT},
+   {"minMatch", OPTION_INT},
+   {"minScore", OPTION_INT},
+   {"minIdentity", OPTION_FLOAT},
+   {"maxGap", OPTION_INT},
+   {"noHead", OPTION_BOOLEAN},
+   {"makeOoc", OPTION_STRING},
+   {"repMatch", OPTION_INT},
+   {"mask", OPTION_STRING},
+   {"qMask", OPTION_STRING},
+   {"minRepDivergence", OPTION_FLOAT},
+   {"dots", OPTION_INT},
+   {"trimT", OPTION_BOOLEAN},
+   {"noTrimA", OPTION_BOOLEAN},
+   {"trimHardA", OPTION_BOOLEAN},
+   {"fastMap", OPTION_BOOLEAN},
+   {"out", OPTION_STRING},
+   {"fine", OPTION_BOOLEAN},
+   {"maxIntron", OPTION_INT},
+   {"extendThroughN", OPTION_BOOLEAN},
+   {NULL, 0},
+};
 
-if (nibIsFile(fileName) || twoBitIsFileOrRange(fileName) 
-	|| sameString(fileName, "stdin"))
-    gotSingle = TRUE;
-/* Detect .fa files (where suffix is not standardized)
- * by first character being a '>'. */
-else
-    {
-    FILE *f = mustOpen(fileName, "r");
-    char c = fgetc(f);
-    fclose(f);
-    if (c == '>')
-        gotSingle = TRUE;
-    }
-if (gotSingle)
-    {
-    char **files;
-    *retFiles = AllocArray(files, 1);
-    files[0] = cloneString(fileName);
-    *retFileCount = 1;
-    return;
-    }
-else
-    {
-    readAllWords(fileName, retFiles, retFileCount, &buf);
-    }
-}
-
-void unmaskNucSeqList(struct dnaSeq *seqList)
-/* Unmask all sequences. */
-{
-struct dnaSeq *seq;
-for (seq = seqList; seq != NULL; seq = seq->next)
-    faToDna(seq->dna, seq->size);
-}
-
-void maskFromOut(struct dnaSeq *seqList, char *outFile)
-/* Mask DNA sequence by putting bits more than 85% identical to
- * repeats as defined in RepeatMasker .out file to upper case. */
-{
-struct lineFile *lf = lineFileOpen(outFile, TRUE);
-struct hash *hash = newHash(0);
-struct dnaSeq *seq;
-char *line;
-
-for (seq = seqList; seq != NULL; seq = seq->next)
-    hashAdd(hash, seq->name, seq);
-if (!lineFileNext(lf, &line, NULL))
-    errAbort("Empty mask file %s\n", lf->fileName);
-if (!startsWith("There were no", line))	/* No repeats is ok. Not much work. */
-    {
-    if (!startsWith("   SW", line))
-	errAbort("%s isn't a RepeatMasker .out file.", lf->fileName);
-    if (!lineFileNext(lf, &line, NULL) || !startsWith("score", line))
-	errAbort("%s isn't a RepeatMasker .out file.", lf->fileName);
-    lineFileNext(lf, &line, NULL);  /* Blank line. */
-    while (lineFileNext(lf, &line, NULL))
-	{
-	char *words[32];
-	struct repeatMaskOut rmo;
-	int wordCount;
-	int seqSize;
-	int repSize;
-	wordCount = chopLine(line, words);
-	if (wordCount < 14)
-	    errAbort("%s line %d - error in repeat mask .out file\n", lf->fileName, lf->lineIx);
-	repeatMaskOutStaticLoad(words, &rmo);
-	/* If repeat is more than 15% divergent don't worry about it. */
-	if (rmo.percDiv + rmo.percDel + rmo.percInc <= minRepDivergence)
-	    {
-	    if((seq = hashFindVal(hash, rmo.qName)) == NULL)
-		errAbort("%s is in %s but not corresponding sequence file, files out of sync?\n", 
-			rmo.qName, lf->fileName);
-	    seqSize = seq->size;
-	    if (rmo.qStart <= 0 || rmo.qStart > seqSize || rmo.qEnd <= 0 
-	    	|| rmo.qEnd > seqSize || rmo.qStart > rmo.qEnd)
-		{
-		warn("Repeat mask sequence out of range (%d-%d of %d in %s)\n",
-		    rmo.qStart, rmo.qEnd, seqSize, rmo.qName);
-		if (rmo.qStart <= 0)
-		    rmo.qStart = 1;
-		if (rmo.qEnd > seqSize)
-		    rmo.qEnd = seqSize;
-		}
-	    repSize = rmo.qEnd - rmo.qStart + 1;
-	    if (repSize > 0)
-		toUpperN(seq->dna + rmo.qStart - 1, repSize);
-	    }
-	}
-    }
-freeHash(&hash);
-lineFileClose(&lf);
-}
-
-void maskNucSeqList(struct dnaSeq *seqList, char *seqFileName, char *maskType,
-	boolean hardMask)
-/* Apply masking to simple nucleotide sequence by making masked nucleotides
- * upper case (since normal DNA sequence is lower case for us. */
-{
-struct dnaSeq *seq;
-DNA *dna;
-int size, i;
-char *outFile = NULL, outNameBuf[512];
-
-if (sameWord(maskType, "upper"))
-    {
-    /* Already has dna to be masked in upper case. */
-    }
-else if (sameWord(maskType, "lower"))
-    {
-    for (seq = seqList; seq != NULL; seq = seq->next)
-	toggleCase(seq->dna, seq->size);
-    }
-else
-    {
-    /* Masking from a RepeatMasker .out file. */
-    if (sameWord(maskType, "out"))
-	{
-	sprintf(outNameBuf, "%s.out", seqFileName);
-	outFile = outNameBuf;
-	}
-    else
-	{
-	outFile = maskType;
-	}
-    unmaskNucSeqList(seqList);
-    maskFromOut(seqList, outFile);
-    }
-if (hardMask)
-    {
-    for (seq = seqList; seq != NULL; seq = seq->next)
-	upperToN(seq->dna, seq->size);
-    }
-}
-
-bioSeq *getSeqList(int fileCount, char *files[], struct hash *hash, 
-	boolean isProt, boolean isTransDna, char *maskType, boolean showStatus)
-/* From an array of .fa and .nib file names, create a
- * list of dnaSeqs. */
-{
-int i;
-char *fileName;
-bioSeq *seqList = NULL, *seq;
-boolean doMask = (maskType != NULL);
-
-for (i=0; i<fileCount; ++i)
-    {
-    struct dnaSeq *list = NULL, sseq;
-    ZeroVar(&sseq);
-    fileName = files[i];
-    if (nibIsFile(fileName))
-	list = nibLoadAllMasked(NIB_MASK_MIXED|NIB_BASE_NAME, fileName);
-    else if (twoBitIsFileOrRange(fileName))
-	list = twoBitLoadAll(fileName);
-    else if (isProt)
-      list = faReadAllPep(fileName);
-    else
-      list = faReadAllMixed(fileName);
-
-    /* If necessary mask sequence from file. */
-    if (doMask)
-	{
-	maskNucSeqList(list, fileName, maskType, isTransDna);
-	}
-    else
-        {
-	/* If not masking send everything to proper case here. */
-	for (seq = list; seq != NULL; seq = seq->next)
-	    {
-	    if (isProt)
-		faToProtein(seq->dna, seq->size);
-	    else
-		faToDna(seq->dna, seq->size);
-	    }
-	}
-    /* Move local list to end of bigger list. */
-    seqList = slCat(seqList, list);
-    }
-if (showStatus)
-    {
-    /* Total up size and sequence count and report. */
-    int count = 0; 
-    unsigned long totalSize = 0;
-    for (seq = seqList; seq != NULL; seq = seq->next)
-        {
-	totalSize += seq->size;
-	count += 1;
-	}
-    printf("Loaded %lu letters in %d sequences\n", totalSize, count);
-    }
-return seqList;
-}
 
 /* Stuff to support various output formats. */
 struct gfOutput *gvo;		/* Overall output controller */
@@ -633,7 +466,7 @@ for (isRc = FALSE; isRc <= 1; ++isRc)
     for (frame = 0; frame < 3; ++frame)
 	{
 	gfs[frame] = gfIndexSeq(dbSeqLists[frame], minMatch, maxGap, tileSize, 
-		repMatch, ooc, TRUE, oneOff, FALSE);
+		repMatch, ooc, TRUE, oneOff, FALSE, stepSize);
 	}
 
     for (i=0; i<queryCount; ++i)
@@ -692,7 +525,6 @@ void blat(char *dbFile, char *queryFile, char *outName)
 char **dbFiles, **queryFiles;
 int dbCount, queryCount;
 struct dnaSeq *dbSeqList, *seq;
-struct hash *dbHash = newHash(16);
 struct genoFind *gf;
 boolean tIsProt = (tType == gftProt);
 boolean qIsProt = (qType == gftProt);
@@ -701,7 +533,7 @@ FILE *f = mustOpen(outName, "w");
 boolean showStatus = (f != stdout);
 
 databaseName = dbFile;
-getFileArray(dbFile, &dbFiles, &dbCount);
+gfClientFileArray(dbFile, &dbFiles, &dbCount);
 if (makeOoc != NULL)
     {
     gfMakeOoc(makeOoc, dbFiles, dbCount, tileSize, repMatch, tType);
@@ -709,8 +541,9 @@ if (makeOoc != NULL)
 	printf("Done making %s\n", makeOoc);
     exit(0);
     }
-getFileArray(queryFile, &queryFiles, &queryCount);
-dbSeqList = getSeqList(dbCount, dbFiles, dbHash, tIsProt, tType == gftDnaX, mask, showStatus);
+gfClientFileArray(queryFile, &queryFiles, &queryCount);
+dbSeqList = gfClientSeqList(dbCount, dbFiles, tIsProt, tType == gftDnaX, mask, 
+	minRepDivergence, showStatus);
 databaseSeqCount = slCount(dbSeqList);
 for (seq = dbSeqList; seq != NULL; seq = seq->next)
     databaseLetters += seq->size;
@@ -723,7 +556,7 @@ if (bothSimpleNuc || (tIsProt && qIsProt))
     struct hash *maskHash = NULL;
     /* Build index, possibly upper-case masked. */
     gf = gfIndexSeq(dbSeqList, minMatch, maxGap, tileSize, repMatch, ooc, 
-    	tIsProt, oneOff, mask != NULL);
+    	tIsProt, oneOff, mask != NULL, stepSize);
     if (mask != NULL)
 	{
 	int i;
@@ -732,7 +565,7 @@ if (bothSimpleNuc || (tIsProt && qIsProt))
 	for (i=0; i<gf->sourceCount; ++i)
 	    if (source[i].maskedBits)
 		hashAdd(maskHash, source[i].seq->name, source[i].maskedBits);
-        unmaskNucSeqList(dbSeqList);
+        gfClientUnmask(dbSeqList);
 	}
     searchOneIndex(queryCount, queryFiles, gf, outName, tIsProt, maskHash, f, showStatus);
     freeHash(&maskHash);
@@ -752,7 +585,6 @@ else
 if (dotEvery > 0)
     printf("\n");
 freeDnaSeqList(&dbSeqList);
-hashFree(&dbHash);
 }
 
 int main(int argc, char *argv[])
@@ -773,7 +605,7 @@ argv = words;
 }
 #endif /* DEBUG */
 
-optionHash(&argc, argv);
+optionInit(&argc, argv, options);
 if (argc != 4)
     usage();
 
@@ -833,6 +665,8 @@ if (dIsProtLike)
 /* Get tile size and related parameters from user and make sure
  * they are within range. */
 tileSize = optionInt("tileSize", tileSize);
+stepSize = optionInt("stepSize", stepSize);
+uglyf("stepSize in commandLine = %d\n", stepSize);
 minMatch = optionInt("minMatch", minMatch);
 oneOff = optionExists("oneOff");
 fastMap = optionExists("fastMap");

@@ -11,7 +11,7 @@
 #include "linefile.h"
 #include "errabort.h"
 
-static char const rcsid[] = "$Id: cheapcgi.c,v 1.63 2004/04/29 22:33:37 angie Exp $";
+static char const rcsid[] = "$Id: cheapcgi.c,v 1.64 2004/06/01 16:49:03 kent Exp $";
 
 /* These three variables hold the parsed version of cgi variables. */
 static char *inputString = NULL;
@@ -824,7 +824,8 @@ void cgiMakeDropList(char *name, char *menu[], int menuSize, char *checked)
 }
 
 /* Make a drop-down list with names. */
-void cgiMakeDropListClass(char *name, char *menu[], int menuSize, char *checked, char *class)
+void cgiMakeDropListClass(char *name, char *menu[], 
+	int menuSize, char *checked, char *class)
 /* Make a drop-down list with names. */
 {
 int i;

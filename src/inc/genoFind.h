@@ -89,6 +89,7 @@ struct genoFind
                                           * to trigger a clump hit. */
     int maxGap;                          /* Max gap between tiles in a clump. */
     int tileSize;			 /* Size of each N-mer. */
+    int stepSize;			 /* Spacing between N-mers. */
     int tileSpaceSize;                   /* Number of N-mer values. */
     int tileMask;			 /* 1-s for each N-mer. */
     int sourceCount;			 /* Count of source files. */
@@ -222,7 +223,8 @@ void gfCheckTileSize(int tileSize, boolean isPep);
 
 struct genoFind *gfIndexSeq(bioSeq *seqList,
 	int minMatch, int maxGap, int tileSize, int maxPat, char *oocFile,
-	boolean isPep, boolean allowOneMismatch, boolean maskUpper);
+	boolean isPep, boolean allowOneMismatch, boolean maskUpper,
+	int stepSize);
 /* Make index for all seqs in list. 
  *      minMatch - minimum number of matching tiles to trigger alignments
  *      maxGap   - maximum deviation from diagonal of tiles
@@ -231,17 +233,25 @@ struct genoFind *gfIndexSeq(bioSeq *seqList,
  *      oocFile  - .ooc format file that lists repeat tiles.  May be NULL. 
  *      isPep    - TRUE if indexing proteins, FALSE for DNA. 
  *      maskUpper - Mask out upper case sequence (currently only for nucleotides).
+ *      stepSize - space between tiles.  Zero means default (which is tileSize). 
  * For DNA sequences upper case bits will be unindexed. */
 
 struct genoFind *gfIndexNibsAndTwoBits(int fileCount, char *fileNames[],
 	int minMatch, int maxGap, int tileSize, int maxPat, char *oocFile, 
-	boolean allowOneMismatch);
-/* Make index for all .nib and .2bit files. */
+	boolean allowOneMismatch, int stepSize);
+/* Make index for all .nib and .2bits in list. 
+ *      minMatch - minimum number of matching tiles to trigger alignments
+ *      maxGap   - maximum deviation from diagonal of tiles
+ *      tileSize - size of tile in nucleotides
+ *      maxPat   - maximum use of tile to not be considered a repeat
+ *      oocFile  - .ooc format file that lists repeat tiles.  May be NULL. 
+ *      allowOneMismatch - allow one mismatch in a tile.  
+ *      stepSize - space between tiles.  Zero means default (which is tileSize). */
 
 void gfIndexTransNibsAndTwoBits(struct genoFind *transGf[2][3], 
     int fileCount, char *fileNames[], 
     int minMatch, int maxGap, int tileSize, int maxPat, char *oocFile,
-    boolean allowOneMismatch, boolean mask);
+    boolean allowOneMismatch, boolean mask, int stepSize);
 /* Make translated (6 frame) index for all .nib and .2bit files. */
 
 /* -------- Routines to scan index for homolgous areas ------------ */
@@ -346,6 +356,11 @@ void gfLongTransTransInMem(struct dnaSeq *query, struct genoFind *gfs[3],
    int minScore, struct gfOutput *out);
 /* Chop up query into pieces, align each in translated space, and stitch back
  * together again as nucleotides. */
+
+struct gfClump *gfPcrClumps(struct genoFind *gf, 
+        char *fPrimer, int fPrimerSize, char *rPrimer, int rPrimerSize,
+	int minDistance, int maxDistance);
+/* Find possible PCR hits.  The fPrimer and rPrimer are on opposite strands. */
 
 #define gfVersion 28	/* Current BLAT version number */
 

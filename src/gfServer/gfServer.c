@@ -20,13 +20,14 @@
 #include "cheapcgi.h"
 #include "trans3.h"
 
-static char const rcsid[] = "$Id: gfServer.c,v 1.38 2004/02/25 05:42:02 kent Exp $";
+static char const rcsid[] = "$Id: gfServer.c,v 1.39 2004/06/01 16:49:02 kent Exp $";
 
 int maxNtSize = 40000;
 int maxAaSize = 8000;
 
 int minMatch = gfMinMatch;	/* Can be overridden from command line. */
 int tileSize = gfTileSize;	/* Can be overridden from command line. */
+int stepSize = 0;		/* Can be overridden from command line. */
 boolean doTrans = FALSE;	/* Do translation? */
 boolean allowOneMismatch = FALSE; 
 int repMatch = 1024;    /* Can be overridden from command line. */
@@ -54,8 +55,12 @@ errAbort(
   "   gfServer protQuery host port probe.fa\n"
   "To query a server with translated dna sequence:\n"
   "   gfServer transQuery host port probe.fa\n"
+  "To query server with PCR primers\n"
+  "   gfServer pcr host port fPrimer rPrimer maxDistance\n"
   "To process one probe fa file against a .nib format genome (not starting server):\n"
   "   gfServer direct probe.fa file(s).nib\n"
+  "To test pcr without starting server:\n"
+  "   gfServer pcrDirect fPrimer rPrimer file(s).nib\n"
   "To figure out usage level\n"
   "   gfServer status host port\n"
   "To get input file list\n"
@@ -93,7 +98,6 @@ void genoFindDirect(char *probeName, int fileCount, char *seqFiles[])
 /* Don't set up server - just directly look for matches. */
 {
 struct genoFind *gf = NULL;
-static struct genoFind *transGf[2][3];
 struct lineFile *lf = lineFileOpen(probeName, TRUE);
 struct dnaSeq seq;
 int hitCount = 0, clumpCount = 0, oneHit;
@@ -104,7 +108,7 @@ if (doTrans)
 
 gf = gfIndexNibsAndTwoBits(fileCount, seqFiles, minMatch, maxGap, 
 	tileSize, repMatch, FALSE,
-	allowOneMismatch);
+	allowOneMismatch, stepSize);
 
 while (faSpeedReadNext(lf, &seq.dna, &seq.size, &seq.name))
     {
@@ -121,6 +125,40 @@ while (faSpeedReadNext(lf, &seq.dna, &seq.size, &seq.name))
     lmCleanup(&lm);
     }
 lineFileClose(&lf);
+genoFindFree(&gf);
+}
+
+void genoPcrDirect(char *fPrimer, char *rPrimer, int fileCount, char *seqFiles[])
+/* Do direct PCR for testing purposes. */
+{
+struct genoFind *gf = NULL;
+int fPrimerSize = strlen(fPrimer);
+int rPrimerSize = strlen(rPrimer);
+struct gfClump *clumpList, *clump;
+time_t startTime, endTime;
+
+startTime = clock1000();
+gf = gfIndexNibsAndTwoBits(fileCount, seqFiles, minMatch, maxGap, 
+	tileSize, repMatch, FALSE,
+	allowOneMismatch, stepSize);
+endTime = clock1000();
+printf("Index built in %4.3f seconds\n", 0.001 * (endTime - startTime));
+
+printf("plus strand:\n");
+startTime = clock1000();
+clumpList = gfPcrClumps(gf, fPrimer, fPrimerSize, rPrimer, rPrimerSize, 0, 4*1024);
+endTime = clock1000();
+printf("Index searched in %4.3f seconds\n", 0.001 * (endTime - startTime));
+for (clump = clumpList; clump != NULL; clump = clump->next)
+    gfClumpDump(gf, clump, stdout);
+printf("minus strand:\n");
+startTime = clock1000();
+clumpList = gfPcrClumps(gf, rPrimer, rPrimerSize, fPrimer, fPrimerSize, 0, 4*1024);
+endTime = clock1000();
+printf("Index searched in %4.3f seconds\n", 0.001 * (endTime - startTime));
+for (clump = clumpList; clump != NULL; clump = clump->next)
+    gfClumpDump(gf, clump, stdout);
+
 genoFindFree(&gf);
 }
 
@@ -149,7 +187,7 @@ if (logFile != NULL)
 }
 
 /* Some variables to gather statistics on usage. */
-long baseCount = 0, queryCount = 0, aaCount = 0;
+long baseCount = 0, blatCount = 0, aaCount = 0, pcrCount = 0;
 int warnCount = 0;
 int noSigCount = 0;
 int missCount = 0;
@@ -292,6 +330,43 @@ if (clumpCount == 0)
 logIt("%d clumps, %d hits\n", clumpCount, hitCount);
 }
 
+static void pcrQuery(struct genoFind *gf, char *fPrimer, char *rPrimer, 
+	int maxDistance, int connectionHandle)
+/* Do PCR query and report results down socket. */
+{
+int fPrimerSize = strlen(fPrimer);
+int rPrimerSize = strlen(rPrimer);
+struct gfClump *clumpList, *clump;
+int clumpCount = 0;
+char buf[256];
+
+clumpList = gfPcrClumps(gf, fPrimer, fPrimerSize, rPrimer, rPrimerSize, 0, maxDistance);
+for (clump = clumpList; clump != NULL; clump = clump->next)
+    {
+    struct gfSeqSource *ss = clump->target;
+    safef(buf, sizeof(buf), "%s\t%d\t%d\t+", ss->fileName, 
+        clump->tStart - ss->start, clump->tEnd - ss->start);
+    netSendString(connectionHandle, buf);
+    ++clumpCount;
+    }
+gfClumpFreeList(&clumpList);
+
+clumpList = gfPcrClumps(gf, rPrimer, rPrimerSize, fPrimer, fPrimerSize, 0, maxDistance);
+
+for (clump = clumpList; clump != NULL; clump = clump->next)
+    {
+    struct gfSeqSource *ss = clump->target;
+    safef(buf, sizeof(buf), "%s\t%d\t%d\t-", ss->fileName, 
+        clump->tStart - ss->start, clump->tEnd - ss->start);
+    netSendString(connectionHandle, buf);
+    ++clumpCount;
+    }
+gfClumpFreeList(&clumpList);
+netSendString(connectionHandle, "end");
+logIt("PCR %s %s %d clumps\n", fPrimer, rPrimer, clumpCount);
+}
+
+
 static jmp_buf gfRecover;
 static char *ripCord = NULL;	/* A little memory to give back to system
                                  * during error recovery. */
@@ -303,15 +378,29 @@ freez(&ripCord);
 longjmp(gfRecover, -1);
 }
 
+static void errorSafeSetup()
+/* Start up error safe stuff. */
+{
+memTrackerStart();
+pushAbortHandler(gfAbort);
+ripCord = needMem(64*1024); /* Memory for error recovery. memTrackerEnd frees */
+}
+
+static void errorSafeCleanupMess(int connectionHandle, char *message)
+/* Clean up and report problem. */
+{
+popAbortHandler();
+logIt("Recovering from error via longjmp\n");
+netSendString(connectionHandle, message);
+}
+
 static void errorSafeQuery(boolean doTrans, boolean queryIsProt, 
 	struct dnaSeq *seq, struct genoFind *gf, struct genoFind *transGf[2][3], 
 	int connectionHandle, char *buf)
 /* Wrap error handling code around index query. */
 {
 int status;
-memTrackerStart();
-pushAbortHandler(gfAbort);
-ripCord = needMem(64*1024); /* Memory for error recovery. memTrackerEnd frees */
+errorSafeSetup();
 status = setjmp(gfRecover);
 if (status == 0)    /* Always true except after long jump. */
     {
@@ -329,12 +418,32 @@ if (status == 0)    /* Always true except after long jump. */
     }
 else    /* They long jumped here because of an error. */
     {
-    popAbortHandler();
-    logIt("Recovering from error via longjmp\n");
-    netSendString(connectionHandle, "Error: gfServer out of memory. Try reducing size of query.");
+    errorSafeCleanupMess(connectionHandle, 
+    	"Error: gfServer out of memory. Try reducing size of query.");
     }
 memTrackerEnd();
 }
+
+static void errorSafePcr(struct genoFind *gf, char *fPrimer, char *rPrimer, 
+	int maxDistance, int connectionHandle)
+/* Wrap error handling around pcr index query. */
+{
+int status;
+errorSafeSetup();
+status = setjmp(gfRecover);
+if (status == 0)    /* Always true except after long jump. */
+    {
+    pcrQuery(gf, fPrimer, rPrimer, maxDistance, connectionHandle);
+    popAbortHandler();
+    }
+else    /* They long jumped here because of an error. */
+    {
+    errorSafeCleanupMess(connectionHandle, 
+    	"Error: gfServer out of memory."); 
+    }
+memTrackerEnd();
+}
+
 
 void startServer(char *hostName, char *portName, int fileCount, 
 	char *seqFiles[])
@@ -358,12 +467,13 @@ if (doTrans)
     {
     logIt("setting up translated index\n");
     gfIndexTransNibsAndTwoBits(transGf, fileCount, seqFiles, 
-    	minMatch, maxGap, tileSize, repMatch, NULL, allowOneMismatch, doMask);
+    	minMatch, maxGap, tileSize, repMatch, NULL, allowOneMismatch, 
+	doMask, stepSize);
     }
 else
     {
     gf = gfIndexNibsAndTwoBits(fileCount, seqFiles, minMatch, 
-    	maxGap, tileSize, repMatch, NULL, allowOneMismatch);
+    	maxGap, tileSize, repMatch, NULL, allowOneMismatch, stepSize);
     }
 logIt("indexing complete\n");
 
@@ -425,9 +535,13 @@ for (;;)
 	netSendString(connectionHandle, buf);
 	sprintf(buf, "tileSize %d", tileSize);
 	netSendString(connectionHandle, buf);
+	sprintf(buf, "stepSize %d", stepSize);
+	netSendString(connectionHandle, buf);
 	sprintf(buf, "minMatch %d", minMatch);
 	netSendString(connectionHandle, buf);
-	sprintf(buf, "requests %ld", queryCount);
+	sprintf(buf, "pcr requests %ld", pcrCount);
+	netSendString(connectionHandle, buf);
+	sprintf(buf, "blat requests %ld", blatCount);
 	netSendString(connectionHandle, buf);
 	sprintf(buf, "bases %ld", baseCount);
 	netSendString(connectionHandle, buf);
@@ -476,7 +590,7 @@ for (;;)
 		seq.name = NULL;
 		if (seq.size > 0)
 		    {
-		    ++queryCount;
+		    ++blatCount;
 		    seq.dna = needLargeMem(seq.size+1);
 		    if (gfReadMulti(connectionHandle, seq.dna, seq.size) != seq.size)
 			{
@@ -520,6 +634,29 @@ for (;;)
 		    }
 		netSendString(connectionHandle, "end");
 		}
+	    }
+	}
+    else if (sameString("pcr", command))
+        {
+	char *f = nextWord(&line);
+	char *r = nextWord(&line);
+	char *s = nextWord(&line);
+	int maxDistance;
+	++pcrCount;
+	if (s == NULL || !isdigit(s[0]))
+	    {
+	    warn("Badly formatted pcr command");
+	    ++warnCount;
+	    }
+	else if (doTrans)
+	    {
+	    warn("Can't pcr on translated server");
+	    ++warnCount;
+	    }
+	else
+	    {
+	    maxDistance = atoi(s);
+	    errorSafePcr(gf, f, r, maxDistance, connectionHandle);
 	    }
 	}
     else if (sameString("files", command))
@@ -643,6 +780,38 @@ for (;;)
 close(sd);
 }
 
+void pcrServer(char *hostName, char *portName, char *fPrimer, char *rPrimer, int maxSize)
+/* Do a PCR query to server daemon. */
+{
+char buf[256];
+int sd = 0;
+
+/* Put together query command and send. */
+sd = netMustConnectTo(hostName, portName);
+sprintf(buf, "%spcr %s %s %d", gfSignature(), fPrimer, rPrimer, maxSize);
+write(sd, buf, strlen(buf));
+
+/* Fetch and display results. */
+for (;;)
+    {
+    if (netGetString(sd, buf) == NULL)
+        break;
+    if (sameString(buf, "end"))
+	break;
+    else if (startsWith("Error:", buf))
+	{
+	errAbort(buf);
+	break;
+	}
+    else
+	{
+        printf("%s\n", buf);
+	}
+    }
+close(sd);
+}
+
+
 void getFileList(char *hostName, char *portName)
 /* Get and display input file list. */
 {
@@ -687,6 +856,10 @@ if (cgiBoolean("trans"))
     repMatch = gfPepMaxTileUse;
     }
 tileSize = cgiOptionalInt("tileSize", tileSize);
+stepSize = cgiOptionalInt("stepSize", stepSize);
+if (stepSize == 0)
+    stepSize = tileSize;
+repMatch = round( (double)tileSize/(double)stepSize * repMatch);
 minMatch = cgiOptionalInt("minMatch", minMatch);
 repMatch = cgiOptionalInt("repMatch", repMatch);
 maxDnaHits = cgiOptionalInt("maxDnaHits", maxDnaHits);
@@ -703,6 +876,12 @@ if (sameWord(command, "direct"))
     if (argc < 4)
         usage();
     genoFindDirect(argv[2], argc-3, argv+3);
+    }
+else if (sameWord(command, "pcrDirect"))
+    {
+    if (argc < 5)
+        usage();
+    genoPcrDirect(argv[2], argv[3], argc-4, argv+4);
     }
 else if (sameWord(command, "start"))
     {
@@ -733,6 +912,12 @@ else if (sameWord(command, "transQuery"))
     if (argc != 5)
 	usage();
     queryServer(command, argv[2], argv[3], argv[4], TRUE, FALSE);
+    }
+else if (sameWord(command, "pcr"))
+    {
+    if (argc != 7)
+        usage();
+    pcrServer(argv[2], argv[3], argv[4], argv[5], atoi(argv[6]));
     }
 else if (sameWord(command, "status"))
     {

@@ -18,6 +18,7 @@ struct gfRange
     int frame;		/* Reading frame (just for translated alignments) */
     struct trans3 *t3;	/* Translated frame or NULL. */
     int tTotalSize;	/* Size of entire target sequence, not just loaded parts.  Not set until late in the game. */
+    char tStrand;	/* Just for PCR. */
     };
 
 void gfRangeFree(struct gfRange **pEl);
@@ -45,3 +46,17 @@ struct ssBundle *ffSeedExtInMem(struct genoFind *gf, struct dnaSeq *qSeq, Bits *
 
 void dumpBuns(struct ssBundle *bunList);  /* uglyf */
 void dumpFf(struct ffAli *left, DNA *needle, DNA *hay);/* uglyf */
+
+void gfiExpandRange(struct gfRange *range, int qSize, int tSize, 
+	boolean respectFrame, int expansion);
+/* Expand range to cover an additional 500 bases on either side. */
+
+struct dnaSeq *gfiExpandAndLoadCached(struct gfRange *range, 
+	struct hash *tFileCache, char *tSeqDir, int querySize, 
+	int *retTotalSeqSize, boolean respectFrame, boolean isRc, int expansion);
+/* Expand range to cover an additional expansion bases on either side.
+ * Load up target sequence and return. (Done together because don't
+ * know target size before loading.) */
+
+void gfiGetSeqName(char *spec, char *name);
+/* Extract sequence name from spec, which includes nib and 2bit files. */
