@@ -766,7 +766,7 @@ hDisconnectCentral(&connCentral);
 return(pbProteinCnt);	
 }
 
-void presentProteinSelections(char *queryID)
+void presentProteinSelections(char *queryID, int protCntInSwissByGene, int protCntInSupportedGenomeDb)
 /* Fuction to present a web page with proteins of different organisms */
 {
 int  pbProteinCnt = {0};
@@ -797,8 +797,16 @@ hPrintf("<TABLE WIDTH=\"100%%\" BGCOLOR=\"#"HG_COL_HOTLINKS"\" BORDER=\"0\" CELL
 hPrintf("CELLPADDING=\"2\"><TR>\n");
 hPrintf("<TD ALIGN=LEFT><A HREF=\"/index.html\">%s</A></TD>", wrapWhiteFont("Home"));
 hPrintf("<TD ALIGN=CENTER><FONT COLOR=\"#FFFFFF\" SIZE=4>%s</FONT></TD>",
-        "UCSC Proteome Browser (V1.1)");
-hPrintf("<TD ALIGN=Right><A HREF=\"../goldenPath/help/pbTracksHelpFiles/pbTracksHelp.shtml\"");
+        "UCSC Proteome Browser");
+if (proteinInSupportedGenome)
+    {
+    hPrintf("<TD ALIGN=Right><A HREF=\"../goldenPath/help/pbTracksHelpFiles/pbTracksHelp.shtml\"");
+    }
+else
+    {
+    hPrintf("<TD ALIGN=Right><A HREF=\"../goldenPath/help/pbTracksHelpFiles/pbGlobal/pbTracksHelp.shtml\"");
+    }
+
 hPrintf("TARGET=_blank>%s</A></TD>", wrapWhiteFont("Help"));
 hPrintf("</TR></TABLE>");
   
@@ -838,7 +846,10 @@ while (row3 != NULL)
     if ((answer != NULL) && (!sameWord(answer, "0")))
 	{
 	/* display organism name */
-	hPrintf("<FONT SIZE=4><B>%s (%s):</B></FONT>\n", orgSciName, org);
+	hPrintf("<FONT SIZE=4><B>");
+	hPrintf("<A href=\"http://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?mode=Undef&name=%s&lvl=0&srchmode=1\" TARGET=_blank>%s</A>",
+           cgiEncode(orgSciName), orgSciName);
+	hPrintf(" (%s):</B></FONT>\n", org);
 	hPrintf("<UL>");
     	    
 	conn = sqlConnect(gDatabase);
@@ -942,14 +953,15 @@ if (protCntInSwissByGene > protCntInSupportedGenomeDb)
 	    	{
     		safef(cond_str, sizeof(cond_str), "id=%s and nameType='genbank common name'", taxonId);
     		answer = sqlGetField(conn, "proteins", "taxonNames", "name", cond_str);
+		hPrintf("<FONT SIZE=3><B>");
+		//%s (%s):</B></FONT>\n", protOrg, answer);
+		hPrintf("<A href=\"http://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?mode=Undef&name=%s&lvl=0&srchmode=1\" TARGET=_blank>%s</A>",
+           		cgiEncode(protOrg), protOrg);
 		if (answer != NULL)
 		    {
-		    hPrintf("<FONT SIZE=3><B>%s (%s):</B></FONT>\n", protOrg, answer);
+		    hPrintf(" (%s)", answer);
 		    }
-		else
-		    {
-		    hPrintf("<FONT SIZE=3><B>%s:</B></FONT>\n", protOrg);
-		    }
+		hPrintf(":</B></FONT>\n");
 		}
             hPrintf("<UL>\n");
 	    }
