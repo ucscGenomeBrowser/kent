@@ -106,9 +106,9 @@ longLabel BAC End Pairs
 priority 10
 visibility hide
 
-track uPennBacEndPairs
-shortLabel UPenn BE Pairs
-longLabel Univ of Penn BAC End Pairs
+track uPennClones
+shortLabel U Penn Clones
+longLabel Univ of Penn Clones
 priority 10.1
 visibility hide
 
