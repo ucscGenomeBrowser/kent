@@ -64,6 +64,7 @@
 #include "web.h"
 #include "jaxOrtholog.h"
 #include "expRecord.h"
+#include "dnaProbe.h"
 
 #define CHUCK_CODE 1
 #define ROGIC_CODE 1
@@ -3841,6 +3842,40 @@ void doMgcMrna(char *track, char *acc)
 #endif /* ROGIC_CODE */
 #ifdef CHUCK_CODE
 
+void doProbeDetails(struct trackDb *tdb, char *item)
+{
+struct sqlConnection *conn = hAllocConn();
+int start = cartInt(cart, "o");
+struct dnaProbe *dp = NULL;
+char buff[256];
+ genericHeader(tdb, item); 
+snprintf(buff, sizeof(buff), "select * from dnaProbe where name='%s'",  item);
+dp = dnaProbeLoadByQuery(conn, buff);
+if(dp != NULL)
+    {
+    printf("<b>Name:</b> %s<br>\n",dp->name);
+    printf("<b>Dna:</b> %s", dp->dna );
+    printf("[<a href=\"hgBlat?type=DNA&genome=hg8&sort=&query,score&output=hyperlink&userSeq=%s\">blat</a>]<br>", dp->dna);
+    printf("<b>Size:</b> %d<br>", dp->size );
+    printf("<b>Chrom:</b> %s<br>", dp->chrom );
+    printf("<b>ChromStart:</b> %d<br>", dp->start );
+    printf("<b>ChromEnd:</b> %d<br>", dp->end );
+    printf("<b>Strand:</b> %s<br>", dp->strand );
+    printf("<b>3' Dist:</b> %d<br>", dp->tpDist );
+    printf("<b>Tm:</b> %f<br>", dp->tm );
+    printf("<b>%%GC:</b> %f<br>", dp->pGC );
+    printf("<b>Affy:</b> %d<br>", dp->affyHeur );
+    printf("<b>Sec Struct:</b> %f<br>", dp->secStruct);
+    printf("<b>blatScore:</b> %d<br>", dp->blatScore );
+    printf("<b>Comparison:</b> %f<br>", dp->comparison);
+    printf("<hr>\n");
+    }
+genericBedClick(conn, tdb, item, start, 1);
+printTrackHtml(tdb);
+hFreeConn(&conn);
+webEnd();
+}
+
 void perlegenDetails(struct trackDb *tdb, char *item)
 {
 char *dupe, *type, *words[16];
@@ -4252,8 +4287,8 @@ if(printKey != NULL)
     printKey(maxScore, getColor);
 printf("<p>\n");
 printf("<basefont size=-1>\n");
-printf("<TABLE  BGCOLOR=\"#000000\" BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"1\"><TR><TD>");
-printf("<TABLE  BGCOLOR=\"#fffee8\" BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"1\"><TR>");
+printf("<table  bgcolor=\"#000000\" border=\"0\" cellspacing=\"0\" cellpadding=\"1\"><tr><td>");
+printf("<table  bgcolor=\"#fffee8\" border=\"0\" cellspacing=\"0\" cellpadding=\"1\"><tr>");
 printHeader(bedList, erHash, itemName);
 for(i=0; i<bedList->expCount; i++)
     {
@@ -4563,6 +4598,9 @@ else
     }
 webEnd();
 }
+
+void oligoSelectionDetails(struct trackDb *tdb, char *oligoName)
+{}
 
 struct rgbColor getColorForCghBed(float val, float max)
 /* Return the correct color for a given score */
@@ -5247,6 +5285,10 @@ else if (sameWord(track, "perlegen"))
 else if(sameWord(track, "rosetta"))
     {
     rosettaDetails(tdb, item);
+    }
+else if(sameWord(track, "loweProbes"))
+    {
+    doProbeDetails(tdb, item);
     }
 else if( sameWord(track, "ancientR"))
     {
