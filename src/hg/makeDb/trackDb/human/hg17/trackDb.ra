@@ -944,7 +944,6 @@ searchType bed
 searchPriority 10
 termRegex ux\.[0-9]+
 
-searchPriority 50
 searchTable rgdQtl
 searchType bed
 termRegex [BPORUP][A-Z]+[0-9]+(_H)?
