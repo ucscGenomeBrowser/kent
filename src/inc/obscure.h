@@ -89,6 +89,3 @@ void shuffleList(void *pList, int shuffleCount);
 char *stripCommas(char *position);
 /* make a new string with commas stripped out */
 
-char *addCommasToPos(char *position);
-/* add commas to the numbers in a position 
- * returns pointer to static */
