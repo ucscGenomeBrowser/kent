@@ -136,7 +136,7 @@ shortLabel Rankprop<BR>Score
 longLabel Rankprop Homology Score
 priority 6.2
 visibility on
-type distance rankProp qKgId tKgId score
+type distance rankProp query target score
 itemUrl ../cgi-bin/hgNear?near_search=%s
 urlOtherGeneVar near.do.affineAli
 hgsid on
@@ -146,7 +146,7 @@ shortLabel PSI-BLAST<BR>E-Value
 longLabel PSI-BLAST E-Value
 priority 6.3
 visibility off
-type distance spPsiBlast kgId1 kgId2 eval
+type distance spPsiBlast kgId1 kgId2 eValue
 itemUrl ../cgi-bin/hgNear?near_search=%s
 urlOtherGeneVar near.do.affineAli
 hgsid on
@@ -261,13 +261,13 @@ shortLabel Pfam Domains
 longLabel Protein Family Domain Structure
 priority 9
 visibility off
-type pfam proteins040515.pfamXref proteins040515.pfamDesc
-queryFull select swissDisplayID,description from proteins040515.pfamXref,proteins040515.pfamDesc where pfamXref.pfamAC = pfamDesc.pfamAC
-queryOne select description,proteins040515.pfamDesc.pfamAC from proteins040515.pfamXref,proteins040515.pfamDesc where swissDisplayID = '%s' and pfamXref.pfamAC = pfamDesc.pfamAC order by description
-invQueryOne select swissDisplayID from proteins040515.pfamXref,proteins040515.pfamDesc where description = '%s' and pfamXref.pfamAC = pfamDesc.pfamAC
+type pfam proteins.pfamXref proteins.pfamDesc
+queryFull select swissDisplayID,description from proteins.pfamXref,proteins.pfamDesc where pfamXref.pfamAC = pfamDesc.pfamAC
+queryOne select description,proteins.pfamDesc.pfamAC from proteins.pfamXref,proteins.pfamDesc where swissDisplayID = '%s' and pfamXref.pfamAC = pfamDesc.pfamAC order by description
+invQueryOne select swissDisplayID from proteins.pfamXref,proteins.pfamDesc where description = '%s' and pfamXref.pfamAC = pfamDesc.pfamAC
 protKey on
 itemUrl http://www.sanger.ac.uk/cgi-bin/Pfam/getacc?%s
-protDb proteins040515
+protDb proteins
 
 name superfamily
 shortLabel Superfamily
@@ -286,11 +286,11 @@ shortLabel PDB
 longLabel Protein Data Bank
 priority 9.5
 visibility off
-type association proteins040515.pdbSP
+type association proteins.pdbSP
 protKey on
-queryFull select sp,pdb from proteins040515.pdbSP
-queryOne select pdb,pdb from proteins040515.pdbSP where sp = '%s'
-invQueryOne select sp from proteins040515.pdbSP where pdb = '%s'
+queryFull select sp,pdb from proteins.pdbSP
+queryOne select pdb,pdb from proteins.pdbSP where sp = '%s'
+invQueryOne select sp from proteins.pdbSP where pdb = '%s'
 itemUrl http://www.rcsb.org/pdb/cgi/explore.cgi?pdbId=%s
 search exact
 

@@ -40,13 +40,13 @@ priority 3
 name rankProp
 shortLabel Protein Homology - Rankprop
 longLabel Rankprop score with Selected Gene
-type pair rankProp qKgId tKgId score -1
+type pair rankProp query target score -1
 priority 3.1
 
 name spPsiBlast
 shortLabel Protein Homology - PSI-BLAST
 longLabel PSI-BLAST E-Value with Selected Gene
-type pair spPsiBlast kgId1 kgId2 eval 1
+type pair spPsiBlast kgId1 kgId2 eValue 1
 priority 3.2
 
 name pfamSimilarity
