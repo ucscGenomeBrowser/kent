@@ -15,8 +15,8 @@ defaultViewLimits 30:70
 type wig 0 100
 
 track gbProtCode
-shortLabel Genbank CDS
-longLabel Genbank protein-coding genes
+shortLabel GenBank CDS
+longLabel GenBank protein-coding genes
 group genes
 priority 2.1
 visibility dense

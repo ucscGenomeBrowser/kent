@@ -19,7 +19,7 @@ url http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Search&db=Nucleotide&term=
 
 track xenoDrosMrna
 shortLabel All-Dros. mRNAs
-longLabel All Drosophila Species mRNAs from Genbank
+longLabel All Drosophila Species mRNAs from GenBank
 group rna
 priority 63
 visibility dense
@@ -29,7 +29,7 @@ url http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Search&db=Nucleotide&term=
 
 track xenoDrosEst
 shortLabel All-Dros. ESTs
-longLabel All Drosophila Species ESTs from Genbank 
+longLabel All Drosophila Species ESTs from GenBank 
 group rna
 priority 65
 visibility dense
