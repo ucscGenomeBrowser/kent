@@ -14,6 +14,7 @@
 /* Variables that can be set from command line. */
 int dotEvery = 0;	/* How often to print I'm alive dots. */
 char *clChrom = "all";	/* Which chromosome. */
+boolean reportPercentId = FALSE;  /* Report percent id. */
 
 void usage()
 /* Explain usage and exit. */
@@ -21,10 +22,11 @@ void usage()
 errAbort(
   "knownVsBlat - Categorize BLAT mouse hits to known genes\n"
   "usage:\n"
-  "   knownVsBlat database output.stats\n"
+  "   knownVsBlat database table output.stats\n"
   "options:\n"
   "   -dots=N - Output a dot every N known genes\n"
   "   -chrom=chrN - Restrict to a single chromosome\n"
+  "   -percentId - calculate percent identity. Only works for blat tables. Slow\n"
   );
 }
 
@@ -98,15 +100,23 @@ sprintf(buf, "%4.1f%% (%d/%d)",
 	divAsPercent(stat->hits, stat->features),
 	stat->hits, stat->features);
 fprintf(f, "%-20s ", buf);
-fprintf(f, "%4.1f%%\n", divAsPercent(stat->cumIdRatio, stat->basesPainted));
+if (reportPercentId)
+    fprintf(f, "%4.1f%%", divAsPercent(stat->cumIdRatio, stat->basesPainted));
+fprintf(f, "\n");
 }
 
 void reportStats(FILE *f, struct blatStats *stats, char *name)
 /* Print out stats. */
 {
 fprintf(f, "%s stats:\n", name);
-fprintf(f, "region         bases hit            features hit     percent identity\n");
-fprintf(f, "---------------------------------------------------------------------\n");
+fprintf(f, "region         bases hit           features hit ");
+if (reportPercentId)
+    fprintf(f, "percent identity");
+fprintf(f, "\n");
+fprintf(f, "------------------------------------------------");
+if (reportPercentId)
+    fprintf(f, "---------------------");
+fprintf(f, "\n");
 reportStat(f, "upstream 100", &stats->upstream100);
 reportStat(f, "upstream 200", &stats->upstream200);
 reportStat(f, "upstream 400", &stats->upstream400);
@@ -251,6 +261,56 @@ if (tIsRc)
     reverseComplement(geno->dna, regionSize);
 }
 
+int pslMilliId(struct psl *psl)
+/* Return percent ID more or less. */
+{
+1000 - pslCalcMilliBad(psl, FALSE);
+}
+
+void addFakeMilli(struct psl *psl, int *milliMatches, 
+	int genoStart, int genoEnd)
+/* Similar to addBestMilli above.  However this only makes as much
+ * of the stats as it can without having the sequence loaded. */
+{
+int  i, j, blockCount = psl->blockCount, blockStart, blockEnd;
+int same, milli = pslMilliId(psl), *milliPt;
+boolean tIsRc = (psl->strand[1] == '-');
+int start, end;
+int intersection;
+
+/* Loop through each block.... */
+for (i=0; i<blockCount; ++i)
+    {
+    /* Get coordinates of block, coping with minus strand adjustment
+     * if necessary. */
+    blockStart = psl->tStarts[i];
+    blockEnd = blockStart + psl->blockSizes[i];
+    if (tIsRc)
+        {
+	start = psl->tSize - blockEnd;
+	end = psl->tSize - blockStart;
+	}
+    else
+        {
+	start = blockStart;
+	end = blockEnd;
+	}
+
+    /* Clip to window and if anything left update score array. */
+    if (start < genoStart) start = genoStart;
+    if (end > genoEnd) end = genoEnd;
+    if (start < end)
+        {
+	start -= genoStart;
+	end -= genoStart;
+	for (j=start; j<end; ++j)
+	    {
+	    if (milli > milliMatches[j]) milliMatches[j] = milli;
+	    }
+	}
+    }
+}
+
 int halfAddToStats(struct stat *stat, int hitStart, int hitEnd, 
     int genoStart, int genoEnd, int *milliMatches)
 /* Fold in info from milliMatches between hitStart and hitEnd to stat.
@@ -261,7 +321,6 @@ int painted = 0;
 
 if (rangeIntersection(hitStart, hitEnd, genoStart, genoEnd) <= 0)
     {
-    uglyf("hitStart %d, hitEnd %d, genoStart %d, genoEnd %d\n", hitStart, hitEnd, genoStart, genoEnd);
     return 0;
     }
 if (hitStart < genoStart) hitStart = genoStart;
@@ -295,12 +354,13 @@ stat->features += 1;
 return painted;
 }
 
-
-struct blatStats *geneStats(char *chrom, 
+struct blatStats *calcGeneStats(char *chrom, 
 	struct dnaSeq *geno, int genoStart, int genoEnd,
 	struct psl *pslList,
 	struct genePred *gp)
-/* Figure out how BLAT hits gene and return resulting stats. */
+/* Figure out how psl hits gene and return resulting stats. 
+ * This will take a short-cut and be much faster if geno is NULL.
+ * (But the percent ID stuff won't be calculated. */
 {
 struct blatStats *stats;
 struct hash *traceHash = newHash(0);
@@ -315,7 +375,7 @@ int exonCount = gp->exonCount, exonIx, exonStart, exonEnd;
 boolean anyMrna = FALSE;
 
 AllocVar(stats);
-AllocArray(milliMatches, geno->size);
+AllocArray(milliMatches, genoEnd - genoStart);
 
 /* Loop through alignments that might intersect window. */
 for (psl = pslList; psl != NULL && psl->tStart < genoEnd; psl = psl->next)
@@ -326,14 +386,21 @@ for (psl = pslList; psl != NULL && psl->tStart < genoEnd; psl = psl->next)
      * milliMatches. */
     if (psl->tStart < genoEnd && psl->tEnd > genoStart)
 	{
-	traceName = psl->qName;
-	if ((trace = hashFindVal(traceHash, traceName)) == NULL)
+	if (geno != NULL)
 	    {
-	    trace = hExtSeq(traceName);
-	    slAddHead(&traceList, trace);
-	    hashAdd(traceHash, traceName, trace);
+	    traceName = psl->qName;
+	    if ((trace = hashFindVal(traceHash, traceName)) == NULL)
+		{
+		trace = hExtSeq(traceName);
+		slAddHead(&traceList, trace);
+		hashAdd(traceHash, traceName, trace);
+		}
+	    addBestMilli(psl, milliMatches, geno, genoStart, genoEnd, trace);
 	    }
-	addBestMilli(psl, milliMatches, geno, genoStart, genoEnd, trace);
+	else
+	    {
+	    addFakeMilli(psl, milliMatches, genoStart, genoEnd);
+	    }
 	}
     }
 
@@ -468,6 +535,16 @@ freez(&milliMatches);
 return stats;
 }
 
+struct blatStats *fastGeneStats(char *chrom, 
+	int genoStart, int genoEnd,
+	struct psl *pslList,
+	struct genePred *gp)
+/* Figure out how psl hits gene and return resulting stats. 
+ * This is the slow routine that does calculate percent ID. */
+{
+}
+
+
 struct geneIsoforms
 /* A list of isoforms for each gene. */
     {
@@ -592,7 +669,7 @@ return pslList;
 }
 
 
-struct blatStats *chromStats(char *chrom, struct hash *nmToGeneHash)
+struct blatStats *chromStats(char *chrom, struct hash *nmToGeneHash, char *table)
 /* Produce stats for one chromosome. Just consider longest isoform
  * of each gene. */
 {
@@ -603,7 +680,7 @@ char nibName[512];
 FILE *nibFile;
 int chromSize;
 struct psl *pslList, *psl;
-struct dnaSeq *geno;
+struct dnaSeq *geno = NULL;
 int extraBefore = 800;
 int extraAfter = 200;
 int startRegion, endRegion;
@@ -611,21 +688,19 @@ int sizeRegion;
 
 hNibForChrom(chrom, nibName);
 nibOpenVerify(nibName, &nibFile, &chromSize);
-psl = pslList = getChromBlat(chrom, "blatMouse");
+psl = pslList = getChromBlat(chrom, table);
 AllocVar(stats);
 giList = getChromGenes(chrom, nmToGeneHash);
 for (gi = giList; gi != NULL; gi = gi->next)
     {
     gp = longestIsoform(gi);
-
-    /* Expand region around gene a little and load corresponding sequence. */
     if (gp->strand[0] == '+')
-        {
+	{
 	startRegion = gp->txStart - extraBefore;
 	endRegion = gp->txEnd + extraAfter;
 	}
     else
-        {
+	{
 	startRegion = gp->txStart - extraAfter;
 	endRegion = gp->txEnd + extraBefore;
 	}
@@ -634,8 +709,10 @@ for (gi = giList; gi != NULL; gi = gi->next)
 	endRegion = chromSize;
     sizeRegion = endRegion - startRegion;
 
-    geno = nibLdPart(nibName, nibFile, chromSize, startRegion, sizeRegion);
-    gStats = geneStats(chrom, geno, startRegion, endRegion, psl, gp);
+    /* Expand region around gene a little and load corresponding sequence. */
+    if (reportPercentId)
+	geno = nibLdPart(nibName, nibFile, chromSize, startRegion, sizeRegion);
+    gStats = calcGeneStats(chrom, geno, startRegion, endRegion, psl, gp);
     addStats(gStats, stats);
     freez(&gStats);
     freeDnaSeq(&geno);
@@ -668,7 +745,7 @@ hFreeConn(&conn);
 return hash;
 }
 
-void knownVsBlat(char *database, char *output)
+void knownVsBlat(char *database, char *table, char *output)
 /* knownVsBlat - Categorize BLAT mouse hits to known genes. */
 {
 struct slName *allChroms, *chrom;
@@ -685,7 +762,7 @@ else
 slReverse(&allChroms);
 for (chrom = allChroms; chrom != NULL; chrom = chrom->next)
     {
-    stats = chromStats(chrom->name, nmToGeneHash);
+    stats = chromStats(chrom->name, nmToGeneHash, table);
     reportStats(f, stats, chrom->name);
     fprintf(f, "\n");
     slAddHead(&statsList, stats);
@@ -707,8 +784,9 @@ int main(int argc, char *argv[])
 cgiSpoof(&argc, argv);
 dotEvery = cgiUsualInt("dots", dotEvery);
 clChrom = cgiUsualString("chrom", clChrom);
-if (argc != 3)
+reportPercentId = cgiBoolean("percentId");
+if (argc != 4)
     usage();
-knownVsBlat(argv[1], argv[2]);
+knownVsBlat(argv[1], argv[2], argv[3]);
 return 0;
 }
