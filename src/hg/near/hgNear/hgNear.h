@@ -133,6 +133,20 @@ extern struct genePos *curGeneId;	  /* Identity of current gene. */
 #define advSearchPrefix "near.as."      /* Prefix for advanced search variables. */
 #define advSearchPrefixI "near.asi."    /* Prefix for advanced search variables not forcing search. */
 
+/* ---- General purpose helper routines. ---- */
+
+int genePosCmpName(const void *va, const void *vb);
+/* Sort function to compare two genePos by name. */
+
+boolean wildMatchAny(char *word, struct slName *wildList);
+/* Return TRUE if word matches any thing in wildList. */
+
+boolean wildMatchAll(char *word, struct slName *wildList);
+/* Return TRUE if word matches all things in wildList. */
+
+boolean wildMatchList(char *word, struct slName *wildList, boolean orLogic);
+/* Return TRUE if word matches things in wildList. */
+
 /* ---- Some html helper routines. ---- */
 
 void hvPrintf(char *format, va_list args);

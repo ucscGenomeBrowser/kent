@@ -9,7 +9,7 @@
 #include "hdb.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: advSearch.c,v 1.11 2003/07/31 02:51:43 kent Exp $";
+static char const rcsid[] = "$Id: advSearch.c,v 1.12 2003/07/31 06:26:08 kent Exp $";
 
 struct genePos *advancedSearchResults(struct column *colList, 
 	struct sqlConnection *conn)
@@ -75,6 +75,7 @@ static char name[64];
 safef(name, sizeof(name), "%s%s.%s", advSearchPrefix, col->name, varName);
 return name;
 }
+
 
 char *advSearchVal(struct column *col, char *varName)
 /* Return value for advanced search variable.  Return NULL if it

@@ -14,7 +14,7 @@
 #include "ra.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: hgNear.c,v 1.36 2003/07/31 02:51:43 kent Exp $";
+static char const rcsid[] = "$Id: hgNear.c,v 1.37 2003/07/31 06:26:09 kent Exp $";
 
 char *excludeVars[] = { "submit", "Submit", confVarName, 
 	defaultConfName, hideAllConfName, 
@@ -40,6 +40,35 @@ int genePosCmpName(const void *va, const void *vb)
 const struct genePos *a = *((struct genePos **)va);
 const struct genePos *b = *((struct genePos **)vb);
 return strcmp(a->name, b->name);
+}
+
+boolean wildMatchAny(char *word, struct slName *wildList)
+/* Return TRUE if word matches any thing in wildList. */
+{
+struct slName *w;
+for (w = wildList; w != NULL; w = w->next)
+    if (wildMatch(w->name, word) )
+        return TRUE;
+return FALSE;
+}
+
+boolean wildMatchAll(char *word, struct slName *wildList)
+/* Return TRUE if word matches all things in wildList. */
+{
+struct slName *w;
+for (w = wildList; w != NULL; w = w->next)
+    if (!wildMatch(w->name, word) )
+        return FALSE;
+return TRUE;
+}
+
+boolean wildMatchList(char *word, struct slName *wildList, boolean orLogic)
+/* Return TRUE if word matches things in wildList. */
+{
+if (orLogic)
+   return wildMatchAny(word, wildList);
+else
+   return wildMatchAll(word, wildList);
 }
 
 /* ---- Some html helper routines. ---- */
@@ -271,42 +300,73 @@ return resList;
 void lookupSearchControls(struct column *col, struct sqlConnection *conn)
 /* Print out controls for advanced search. */
 {
+char *oldFileName = advSearchVal(col, "keys__filename");
+if (oldFileName == NULL) oldFileName = "";
 hPrintf("%s search (including * and ? wildcards):", col->shortLabel);
 advSearchRemakeTextVar(col, "wild", 18);
 hPrintf("<BR>\n");
 hPrintf("Include if ");
 advSearchAnyAllMenu(col, "logic", TRUE);
 hPrintf("words in search term match.");
+#ifdef MAYBE_SOMEDAY
+hPrintf("<BR>\nMust also match a word in file: ");
+// hPrintf("<INPUT TYPE=FILE NAME=\"%s\" VALUE=\"%s\"><BR>\n", 
+hPrintf("<INPUT TYPE=FILE NAME=\"%s\"><BR>\n", 
+	advSearchName(col, "keys"),
+	oldFileName);
+#endif /* MAYBE_SOMEDAY */
 }
 
-boolean wildMatchAny(char *word, struct slName *wildList)
-/* Return TRUE if word matches any thing in wildList. */
+#ifdef MAYBE_SOMEDAY
+static char *skipToLineEnd(char *s)
+/* Return pointing to line end - either '\r', '\n', or 0. */
 {
-struct slName *w;
-for (w = wildList; w != NULL; w = w->next)
-    if (wildMatch(w->name, word) )
-        return TRUE;
-return FALSE;
+char c;
+for (;;)
+    {
+    c = *s;
+    if (c == 0 || c == '\r' || c == '\n')
+        break;
+    s += 1;
+    }
+return s;
 }
 
-boolean wildMatchAll(char *word, struct slName *wildList)
-/* Return TRUE if word matches all things in wildList. */
+static char *findNonSpaceBefore(char *s)
+/* Find first non-space character before s */
 {
-struct slName *w;
-for (w = wildList; w != NULL; w = w->next)
-    if (!wildMatch(w->name, word) )
-        return FALSE;
-return TRUE;
+while (isspace(*s))
+    s -= 1;
+return s;
 }
 
-boolean wildMatchList(char *word, struct slName *wildList, boolean orLogic)
-/* Return TRUE if word matches things in wildList. */
+struct hash *hashLines(char *s)
+/* Return hash of all lines in file (trimming leading and
+ * trailing white space). */
 {
-if (orLogic)
-   return wildMatchAny(word, wildList);
-else
-   return wildMatchAll(word, wildList);
+char *e, *trimE;
+struct hash *hash = NULL;
+s = skipLeadingSpaces(s);
+if (s == NULL || s[0] == 0)
+    return NULL;
+hash = hashNew(0);
+for (;;)
+    {
+    s = skipLeadingSpaces(s);
+    if (s == NULL || s[0] == 0)
+        break;
+    e = skipToLineEnd(s);
+    trimE = findNonSpaceBefore(e);
+    hashAddN(hash, s, trimE-s, NULL);
+        {
+	mustWrite(uglyOut, s, trimE - s);
+	uglyf("\n");
+	}
+    s = e;
+    }
+return hash;
 }
+#endif /* MAYBE_SOMEDAY */
 
 struct genePos *lookupAdvancedSearch(struct column *col, 
 	struct sqlConnection *conn, struct genePos *list)
