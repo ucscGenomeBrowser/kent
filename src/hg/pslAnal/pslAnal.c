@@ -515,10 +515,13 @@ void cdsIndels(struct sqlConnection *conn, struct pslInfo *pi, struct dnaSeq *rn
 	/* Adjust if previous end is not in coding region */
 	if (prevqend < pi->cdsStart)
 	  {
-	    int diff = cdsS - prevqend;
+	  /*int diff = cdsS - prevqend;
 	    prevqend += diff;
-	    prevtend += diff;
+	    prevtend += diff;*/
+	  prevqend = cdsS;
+	  prevtend = tstart;
 	  }
+
 	unaligned = qstart - prevqend;
 	/* Check if unaligned part is a gap in the mRNA alignment, not an insertion */
 	if (unaligned > 30)
@@ -564,9 +567,11 @@ void cdsIndels(struct sqlConnection *conn, struct pslInfo *pi, struct dnaSeq *rn
 	/* Adjust if previous end is not in coding region */
 	if (prevqend < pi->cdsStart)
 	  {
-	    int diff = cdsS - prevqend;
+	  /*int diff = cdsS - prevqend;
 	    prevqend += diff;
-	    prevtend += diff;
+	    prevtend += diff;*/
+	  prevqend = qstart;
+	  prevtend = tstart;
 	  }
 	unaligned = tstart - prevtend;
 	/* Check if unaligned part is an intron */
@@ -653,6 +658,12 @@ if (psl->strand[0] == '-')
 /* Analyze the coding region */
 processCds(conn, pi, rnaSeq, dnaSeq);
 
+/* Revert back to original psl record for printing */
+if (psl->strand[0] == '-') 
+  {
+   pslRcBoth(pi->psl);
+  }
+
 freeDnaSeq(&dnaSeq);
 return(pi);
 }
@@ -669,7 +680,7 @@ int i;
 fprintf(of, "%s\t%s\t%d\t%d\t%d\t%d\t%d\t%d\t", pi->psl->qName, pi->psl->tName, pi->psl->tStart, 
 	pi->psl->tEnd,pi->psl->qStart,pi->psl->qEnd,pi->psl->qSize,pi->loci);
 fprintf(of, "%.4f\t%.4f\t%d\t%d\t%.4f\t%.4f\t%d\t%d\t%d\t%d\t%d\t%d\t", 
-	pi->coverage, pi->pctId, pi->cdsStart, 
+	pi->coverage, pi->pctId, pi->cdsStart+1, 
 	pi->cdsEnd, pi->cdsCoverage, pi->cdsPctId, pi->cdsMatch, 
 	pi->cdsMismatch, pi->snp, pi->thirdPos, pi->introns, pi->stdSplice);
 fprintf(of, "%d\t%d\t%d\t%d\t", pi->unalignedCds, pi->singleIndel, pi->tripleIndel, pi->totalIndel);
