@@ -546,7 +546,10 @@ for (qIsRc = 0; qIsRc <= qIsDna; qIsRc += 1)
     {
     gfLongTransTransInMem(qSeq, gfs, t3Hash, qIsRc, !qIsDna, minScore, gfSavePslx, &outForm);
     if (qIsDna)
+	{
+	uglyf("Reverse Complement\n");
         reverseComplement(qSeq->dna, qSeq->size);
+	}
     }
 }
 
