@@ -9219,4 +9219,74 @@ hgsql hg17 -e 'load data local infile "rgdQtlLink.tab" into table hg17.rgdQtlLin
 # updated trackDb.ra under /kent/src/hg/makeDb/trackDb/human/hg17 and
 # added rgdQtl.html.
 
+# AFFYMETRIX HG-U133 PLUS TRACK (DONE, 2004-10-11, hartera)
+     ssh hgwdev
+     mkdir -p /projects/compbio/data/microarray/affyHuman/HG-U133Plus2
+     # Go to 
+#http://www.affymetrix.com/support/technical/byproduct.affx?product=hg-u133-plus 
+     # and download the consensus and exemplar sequences to this directory
+     cd /projects/compbio/data/microarray/affyHuman/HG-U133Plus2
+     unzip HG-U133_Plus_2_consensus.zip
+     unzip HG-U133_Plus_2_exemplar.zip
+     cat HG-U133_Plus_2_consensus HG-U133_Plus_2_exemplar >> U133Plus2_all.fa
+     perl -pi.bak -e "s/(consensus|exemplar):HG-U133_Plus_2:/U133+2:/" \
+                     U133Plus2_all.fa
+     # remove ";" from probe set names
+     perl -pi.bak -e "s/;//" U133Plus2_all.fa
+     # clean up
+     rm *.zip *.bak
+     mkdir -p /cluster/data/hg17/bed/affyU133Plus2.2004-10-11
+     cp U133Plus2_all.fa /cluster/data/hg17/bed/affyU133Plus2.2004-10-11
+     # Set up cluster job to align consensus/exemplars to hg16
+     ssh kkr1u00
+     mkdir -p /iscratch/i/affy
+     mv /cluster/data/hg17/bed/affyU133Plus2.2004-10-11/U133Plus2_all.fa \
+        /iscratch/i/affy
+     iSync
 
+     ssh kk
+     cd /cluster/data/hg17/bed/affyU133Plus2.2004-10-11
+     ls -1 /iscratch/i/affy/U133Plus2_all.fa > affy.lst
+     ls -1 /iscratch/i/gs.18/build35/maskedContigs/* > allctg.lst
+
+    cat << '_EOF_' > template.sub
+#LOOP
+/cluster/bin/i386/blat -fine -mask=lower -minIdentity=95 -ooc=/iscratch/i/gs.18/build35/hg17.11.ooc $(path1) $(path2) {check out line+ psl/$(root1)_$(root2).psl}
+#ENDLOOP
+'_EOF_'
+    gensub2 allctg.lst affy.lst template.sub para.spec
+    mkdir psl
+    para create para.spec
+    para try, para check, para push .....
+# para time
+# Completed: 380 of 380 jobs
+# CPU time in finished jobs:      24533s     408.88m     6.81h    0.28d  0.001 y
+# IO & Wait Time:                  2180s      36.34m     0.61h    0.03d  0.000 y
+# Average job time:                  70s       1.17m     0.02h    0.00d
+# Longest job:                      751s      12.52m     0.21h    0.01d
+# Submission to last job:          2425s      40.42m     0.67h    0.03d
+
+    # Do sort, best in genome filter, and convert to chromosome coordinates
+    # to create affyU133Plus2.psl
+    pslSort dirs raw.psl tmp psl
+                                                                                
+    # use filter parameters for these sequences. only use alignments that
+    # cover 30% of sequence and have at least 95% identity in aligned region.
+    # minAli = 0.97 too high. low minCover as a lot of n's in these sequences
+  pslReps -minCover=0.3 -minAli=0.95 -nearTop=0.005 raw.psl contig.psl /dev/null
+    liftUp affyU133Plus2.psl ../../jkStuff/liftAll.lft warn contig.psl
+    perl -pi.bak -e "s/U133\+2://" affyU133Plus2.psl
+    # load into the database
+    ssh hgwdev
+    cd /cluster/data/hg17/bed/affyU133Plus2.2004-10-11
+    hgLoadPsl hg17 affyU133Plus2.psl
+    # Add sequence data to database
+        # Copy probe sequence to /gbdb if it isn't already
+    mkdir -p /gbdb/hgFixed/affyProbes
+    cd /gbdb/hgFixed/affyProbes
+    ln -s /projects/compbio/data/microarray/affyHuman/HG-U133Plus2/U133Plus2_all.fa .
+    cd /cluster/data/hg17/bed/affyU133Plus2.2004-10-11
+    hgLoadSeq -abbr=U133+2: hg17 /gbdb/hgFixed/affyProbes/U133Plus2_all.fa
+    
+    # clean up
+    rm -r psl tmp err contig.psl raw.psl *.bak psl.tab seq.tab
