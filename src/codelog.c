@@ -703,3 +703,6 @@
 422 - BLAT fix for proteins that have too many matches.  Start of
       DAS server.
 423 - Starting on autoXml.
+424 - AutoXml is done.  Fixed an off-by-one problem in blat target
+      insert calculations.  Browser tracks now are taken from
+      trackDb table in database.  Other odds and ends.
