@@ -117,6 +117,6 @@ set subject = '"'"Branch tag move complete."'"'
 echo "$mailMsg" | mail -s "$subject" galt heather kuhn
 
 date +%Y-%m-%d   >> $BUILDDIR/v${BRANCHNN}_branch/branchMoves.log
-echo "$msg\n"    >> $BUILDDIR/v${BRANCHNN}_branch/branchMoves.log
+echo "$msg"    >> $BUILDDIR/v${BRANCHNN}_branch/branchMoves.log
 exit 0
 
