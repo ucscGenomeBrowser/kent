@@ -345,36 +345,30 @@ for (job = db->jobList; job != NULL; job = job->next)
     jobCommaOut(job, f);
     fprintf(f, "\n");
     }
+if (ferror(f))
+    errAbort("error writing %s", fileName);
 carefulClose(&f);
 }
 
-boolean gotSig = FALSE;	/* Set to true if got signal. */
-int sigVal;		/* Which signal we got. */
-
-void catchSig(int sig)
-/* Catch termination signal. */
-{
-gotSig = TRUE;
-sigVal = sig;
-}
-
 void atomicWriteBatch(struct jobDb *db, char *fileName)
-/* Wrapper to avoid termination in the middle of
- * writing a batch file out. */
+/* Wrapper to avoid corruption file by two para process being run in the same
+ * directory. */
 {
-void (*oldHup)(int) = signal(SIGHUP, catchSig);
-void (*oldTerm)(int) = signal(SIGTERM, catchSig);
-void (*oldInt)(int) = signal(SIGINT, catchSig);
-void (*oldQuit)(int) = signal(SIGQUIT, catchSig);
-writeBatch(db, fileName);
-signal(SIGHUP, oldHup);
-signal(SIGTERM, oldTerm);
-signal(SIGINT, oldInt);
-signal(SIGQUIT, oldQuit);
-if (gotSig)
-    errAbort("Exiting from signal %d", sigVal);
-}
+char hostName[128];
+char tmpName[PATH_LEN];
 
+/* generate a unique name for tmp file */
+if (gethostname(hostName, sizeof(hostName)) < 0)
+    errnoAbort("can't get host name");
+safef(tmpName, sizeof(tmpName), "%s.%d.%s.tmp", fileName, getpid(), 
+      hostName);
+
+writeBatch(db, tmpName);
+
+/* now rename (which is attomic) */
+if (rename(tmpName, fileName) < 0)
+    errnoAbort("can't rename %s to %s", tmpName, fileName);
+}
 
 struct jobDb *readBatch(char *batch)
 /* Read a batch file. */
@@ -506,7 +500,7 @@ slReverse(&db->jobList);
 
 doChecks(db, "in");
 sprintf(backup, "%s.bak", batch);
-writeBatch(db, backup);
+atomicWriteBatch(db, backup);
 atomicWriteBatch(db, batch);
 printf("%d jobs written to %s\n", db->jobCount, batch);
 }
