@@ -1667,6 +1667,9 @@ tablesIgnored $hg
     chimpDels
     chimpSimpleDiff
     ctgPos
+    celeraCoverage
+    celeraDupPositive
+    celeraOverlay
     genomicSuperDups
     haplotype
     perlegen
