@@ -11,7 +11,7 @@
 #include "hCommon.h"
 #include "chainCart.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.52 2004/11/30 18:07:30 kate Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.53 2004/12/15 04:17:05 kate Exp $";
 
 char *hUserCookie()
 /* Return our cookie name. */
@@ -1084,7 +1084,11 @@ while (tdbs != NULL)
             struct trackDb *subtrack;
             for (subtrack = tdb->subtracks; subtrack != NULL; 
                         subtrack = subtrack->next)
+                {
+                /* need track description for hgc */
+                subtrack->html = cloneString(tdb->html);
                 hashAdd(trackHash, subtrack->tableName, subtrack);
+                }
             }
         else
             hashAdd(trackHash, tdb->tableName, tdb);
