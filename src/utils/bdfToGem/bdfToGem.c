@@ -7,7 +7,7 @@
 #include	"linefile.h"
 #include	"gemfont.h"
 
-static char const rcsid[] = "$Id: bdfToGem.c,v 1.4 2005/02/18 00:33:36 hiram Exp $";
+static char const rcsid[] = "$Id: bdfToGem.c,v 1.5 2005/02/18 01:16:58 hiram Exp $";
 
 static char *name = (char *)NULL;	/* to name the font in the .c file */
 
@@ -23,7 +23,8 @@ errAbort(
 "bdfToGem - convert font bdf files to Gem C source font definitions\n"
 "usage: bdfToGem [options] <file.bdf> <gem_definition.c>\n"
 "options:\n"
-"    -name=name - the name of the font to place into the .c file\n"
+"    -name=Small - the name of the font to place into the .c file\n"
+"               - should be one of: Tiny Small Smallish Medium Large\n"
 "    -verbose=4 - to see all glyphs as they are processed\n"
 "    -verbose=2 - to see processing statistics"
 );
@@ -34,6 +35,7 @@ errAbort(
 #define HI_LMT	(127)
 /*	given w pixels, round up to number of bytes needed	*/
 #define BYTEWIDTH(w)	(((w) + 3)/4)
+#define DEFAULT_FONT	"Small"
 
 /*	a structure to store the incoming glyphs from the bdf file */
 struct bdfGlyph
@@ -225,7 +227,7 @@ for (glyph = glyphs; glyph; glyph=glyph->next)
     }
 
 if ((char *)NULL == name)
-	name = cloneString("name");	/*	default name of font */
+	name = cloneString(DEFAULT_FONT);	/*	default name of font */
 
 fprintf(f, "\n/* %s.c - compiled data for font %s */\n\n", name,font->facename);
 
@@ -233,7 +235,8 @@ fprintf(f, "#include \"common.h\"\n");
 fprintf(f, "#include \"memgfx.h\"\n");
 fprintf(f, "#include \"gemfont.h\"\n\n");
 
-fprintf(f, "static UBYTE %s_data[] = {\n", name);
+fprintf(f, "static UBYTE %s_data[%d] = {\n", name,
+	font->frm_hgt * BYTEWIDTH(font->frm_wdt));
 
 bytesOut = 0;
 for (row = 0; row < font->frm_hgt ; ++row)
@@ -302,7 +305,7 @@ fprintf(f, "NULL,\n");	/*	nxt_fnt	*/
 fprintf(f, "%hd, %hd, /* x/y offset */\n", font->xOff, font->yOff);
 fprintf(f, "};\n\n");
 
-fprintf(f, "MgFont *mgLargeFont()\n");
+fprintf(f, "MgFont *mg%sFont()\n", name);
 fprintf(f, "{\n");
 fprintf(f, "return &%s_font;\n", name);
 fprintf(f, "}\n");
