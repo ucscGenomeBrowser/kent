@@ -938,14 +938,17 @@ else
     {
 /* do our thing  */
     if(calledSelf)  
+        {
 	cartEmptyShell(doConvertCoordinates, hUserCookie(), excludeVars, NULL);
-    else{
-    /* Check to see if in zoo browser... if so call doFormZoo */
-    if(strstr(origDb, "hg"))
+        }
+    else
+        {
+        /* Check to see if in zoo browser... if so call doFormZoo */
+        if (!containsStringNoCase(origDb, "zoo"))
 	cartEmptyShell(doForm, hUserCookie(), excludeVars, NULL);
     else
 	cartEmptyShell(doFormZoo, hUserCookie(), excludeVars, NULL);
-    }    
+        }    
     }
 return 0;
 }
