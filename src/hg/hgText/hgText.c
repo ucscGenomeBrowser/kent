@@ -30,7 +30,7 @@
 #include "hgColors.h"
 #include "tableDescriptions.h"
 
-static char const rcsid[] = "$Id: hgText.c,v 1.105 2003/12/11 00:49:30 angie Exp $";
+static char const rcsid[] = "$Id: hgText.c,v 1.106 2003/12/15 20:28:42 angie Exp $";
 
 /* sources of tracks, other than the current database: */
 static char *hgFixed = "hgFixed";
@@ -2321,7 +2321,9 @@ for (chromPtr=chromList;  chromPtr != NULL;  chromPtr = chromPtr->next)
     if (sameString(customTrackPseudoDb, db))
 	{
 	struct customTrack *ct = lookupCt(table);
-	struct bedFilter *bf = constrainBedFields(NULL);
+	struct bedFilter *bf = NULL;
+	if (! ignoreConstraints)
+	    bf = constrainBedFields(NULL);
 	bedListT1 = bedFilterListInRange(ct->bedList, bf,
 					 chrom, winStart, winEnd);
 	}
@@ -2369,10 +2371,12 @@ for (chromPtr=chromList;  chromPtr != NULL;  chromPtr = chromPtr->next)
 	else if (sameString(customTrackPseudoDb, db2))
 	    {
 	    struct customTrack *ct2 = lookupCt(table2);
-	    struct bedFilter *bf2 = constrainBedFields("2");
+	    struct bedFilter *bf2 = NULL;
 	    struct bed *bedListT2 = bedFilterListInRange(ct2->bedList, bf2,
 						      chrom, winStart, winEnd);
 	    struct hTableInfo *hti2 = ctToHti(ct2);
+	    if (! ignoreConstraints)
+		bf2 = constrainBedFields("2");
 	    fbListT2 = fbFromBed(track2, hti2, bedListT2, winStart, winEnd,
 				 FALSE, FALSE);
 	    bedFreeList(&bedListT2);
