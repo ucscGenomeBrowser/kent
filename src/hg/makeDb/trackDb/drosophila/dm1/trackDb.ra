@@ -4,7 +4,7 @@ longLabel Chromosome Bands
 group map
 priority .1
 visibility dense
-altColor 150,50,50
+altColor 200,150,150
 type bed 4 +
 
 track cytoBand
@@ -13,7 +13,7 @@ longLabel Chromosome Bands
 group map
 priority .1
 visibility dense
-altColor 150,50,50
+altColor 200,150,150
 type bed 4 +
 
 track multizDroYak1Dp1AnoGam1
