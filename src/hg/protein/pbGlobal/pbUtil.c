@@ -554,7 +554,7 @@ if (mrnaID != NULL)
 
 void doBlatLink(char *db, char *sciName, char *commonName)
 {
-hPrintf("\n<B>BLAT - </B>");
+hPrintf("\n<LI>BLAT - ");
 hPrintf("<A HREF=\"../cgi-bin/hgBlat?db=%s\"", db);
 hPrintf(" TARGET=_BLANK>%s", sciName);
 if (commonName != NULL) hPrintf(" (%s)", commonName);
