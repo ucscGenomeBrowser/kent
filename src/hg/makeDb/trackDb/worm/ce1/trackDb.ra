@@ -5,4 +5,5 @@ group genes
 priority 48
 visibility pack
 color 0,100,0
+chromosomes chrI,chrII,chrIII,chrIV,chrV,chrX
 type genePred
