@@ -4737,7 +4737,7 @@ return tg;
 void loadPsl(struct trackGroup *tg)
 /* load up all of the psls from correct table into tg->items item list*/
 {
-tg->items = lfFromPslsInRange(tg->tableName,winStart,winEnd,NULL,FALSE);
+tg->items = lfFromPslsInRangeByChrom(tg->tableName, chromName, winStart,winEnd);
 }
 
 struct trackGroup *createPslTg(struct browserTable *table)
