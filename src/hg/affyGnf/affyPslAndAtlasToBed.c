@@ -8,7 +8,7 @@
 #include "dystring.h"
 #include "expRecord.h"
 
-static char const rcsid[] = "$Id: affyPslAndAtlasToBed.c,v 1.2 2003/05/06 07:22:13 kate Exp $";
+static char const rcsid[] = "$Id: affyPslAndAtlasToBed.c,v 1.3 2003/09/20 21:10:25 kent Exp $";
 
 
 #define DEBUG 0
@@ -25,18 +25,18 @@ errAbort("affyPslAndAtlasToBed - Takes an alignment of affy probe target\n"
 	 "\taffyPslAndAtlasToBed pslFile atlasFile out.bed out.expRecord\n");
 }
 
-struct stat
+struct idVal
 /* generic structure with float val */
     {
-    struct stat *next;  /* Next in singly linked list. */
+    struct idVal *next;  /* Next in singly linked list. */
     char id[33];	/* identifier */
     float val;	/* the value of interest */
     };
 
 int statSortable(const void *e1, const void *e2)
 {
-const struct stat *v1 = *((struct stat**)e1);
-const struct stat *v2 = *((struct stat**)e2);
+const struct idVal *v1 = *((struct idVal**)e1);
+const struct idVal *v2 = *((struct idVal**)e2);
 float val = v1->val - v2->val;
 if(val > 0) return 1;
 if(val < 0) return -1;
@@ -44,18 +44,18 @@ if(val == 0) return 0;
 }
 
 
-void statSort(struct stat **statList) 
+void statSort(struct idVal **statList) 
 /* sorts a stat in increasing order */
 {
 slSort(statList,statSortable);
 }
 
-float statMedian(struct stat **statList)
+float statMedian(struct idVal **statList)
 /* finds the median of the list, will sort list to do this */
 {
 boolean odd = slCount(*statList)%2;
 int half = slCount(*statList)/2;
-struct stat *s=NULL, *s2=NULL;
+struct idVal *s=NULL, *s2=NULL;
 float median = -1;
 statSort(statList);
 
@@ -77,20 +77,20 @@ else
 return median;
 }
 
-void statFree(struct stat **pEl)
+void statFree(struct idVal **pEl)
 /* Free a single dynamically allocated stat such as created
  * with statLoad(). */
 {
-struct stat *el;
+struct idVal *el;
 
 if ((el = *pEl) == NULL) return;
 freez(pEl);
 }
 
-void statFreeList(struct stat **pList)
+void statFreeList(struct idVal **pList)
 /* Free a list of dynamically allocated stat's */
 {
-struct stat *el, *next;
+struct idVal *el, *next;
 
 for (el = *pList; el != NULL; el = next)
     {
@@ -339,7 +339,7 @@ intensity. */
 {
 FILE *mediansOut = NULL, *valuesOut = NULL;
 float median = 0;
-struct stat *statList = NULL, *stat = NULL;
+struct idVal *statList = NULL, *stat = NULL;
 struct bed *bed = NULL;
 int i = 0;
 #ifdef DEBUG
