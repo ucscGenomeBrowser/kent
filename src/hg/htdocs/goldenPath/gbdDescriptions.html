@@ -149,6 +149,12 @@ format description of their fields.</P>
   href="#ChainGap">chrN_ce1ChainLink</A> 
   - Alignment block in C. elegans chain </LI>
   <LI><A 
+  href="#Chain">chrN_chainFr1</A> 
+  - Summary info about chain of Fugu (fr1 assembly) alignments</LI>
+  <LI><A 
+  href="#Chain">chrN_chainGalGal2</A> 
+  - Summary info about chain of chicken (galGal2 assembly) alignments</LI>
+  <LI><A 
   href="#Chain">chrN_chainMm3</A> 
   - Summary info about chain of mouse (mm3 assembly) alignments</LI>
   <LI><A 
@@ -160,6 +166,9 @@ format description of their fields.</P>
   <LI><A 
   href="#ChainGap">chrN_chainMm4Link</A> 
   - Alignment block in mouse (mm4 assembly) chain </LI>
+  <LI><A 
+  href="#Chain">chrN_chainPanTro1</A> 
+  - Summary info about chain of chimp (panTro1 assembly) alignments</LI>
   <LI><A 
   href="#Chain">chrN_chainPt0</A> 
   - Summary info about chain of chimp (13 Nov 2003 assembly) alignments</LI>
@@ -202,6 +211,9 @@ format description of their fields.</P>
   <LI><A 
   href="#WiggleTrack">chrN_musHumL</A> 
   - Mouse/Human Evolutionary Conservation Scores 
+  <LI><A 
+  href="#Chain">chrN_rBestChainPanTro1</A> 
+  - Reciprocal best chain alignments of the panTro1 chimp assembly to the human genome</LI>
   <LI><A 
   href="#RepeatInfo">chrN_rmsk</A> 
   - Repeating elements created using RepeatMasker </LI>
@@ -433,6 +445,12 @@ stored in a single table rather than one table per chromosome:</P>
   href="#PepPredictions">ECgenePep</A> 
   - Translations of ECgene genes into corresponding amino acid sequences </LI>
   <LI><A 
+  href="#BED">ecoresFr1</A> 
+  - Human/Fugu evolutionary conserved regions (ecores) computed by Exofish</LI>
+  <LI><A 
+  href="#BED">ecoresTetraodon</A> 
+  - Human/Tetraodon evolutionary conserved regions (ecores) computed by Exofish</LI>
+  <LI><A 
   href="#BED">encodeRegions</A> 
   - Names and positions of selected regions for the ENCODE project</LI>
   <LI><A 
@@ -490,8 +508,11 @@ stored in a single table rather than one table per chromosome:</P>
   href="#FosEndPairs">fosEndPairs</A> 
   - Positions of end pairs for fosmids
   <LI><A 
+  href="#WiggleTrack2">gc5Base</A> 
+  - Percentage of G or C bases in a 5-base window
+  <LI><A 
   href="#GCpercent">gcPercent</A> 
-  - Average number of G and C per 1000 bases in non-overlapping 20Kb windows 
+  - Percentage of G or C bases in a 20,000-base window
   <LI><A 
   href="#GeneBands">geneBands</A> 
   - Band locations of known genes
@@ -800,6 +821,12 @@ TrEMBL-NEW and their corresponding mRNAs from GenBank
   href="#ExpRecord">nci60Exps</A> 
   - Experiment descriptive data</LI>
   <LI><A 
+  href="#NetAlign">netFr1</A> 
+  - Database representation of a net of alignments with Fugu assembly fr1 </LI>
+  <LI><A 
+  href="#NetAlign">galGal2</A> 
+  - Database representation of a net of alignments with chicken assembly galGal2 </LI>
+  <LI><A 
   href="#NetAlign">netMm3</A> 
   - Database representation of a net of alignments with mouse assembly Mm3 </LI>
   <LI><A 
@@ -871,6 +898,9 @@ TrEMBL-NEW and their corresponding mRNAs from GenBank
   <LI><A 
   href="#ScoredRef">rat_hmrg</A> 
   - Rat scored reference file for human/chimp/mouse/rat/chicken alignments
+  <LI><A 
+  href="#NetAlign">rBestNetPanTro1</A> 
+  - Database representation of a reciprocal best net of alignments with chimp assembly panTro1 </LI>
   <LI><A 
   href="#RecombRate">recombRate</A> 
   - Describes the recombination rate in 1Mb intervals based on deCODE, Genethon and Marshfield maps</LI>
@@ -970,6 +1000,9 @@ TrEMBL-NEW and their corresponding mRNAs from GenBank
   href="#KnownCanonical">sangerCanonical</A> 
   - Describes the canonical splice variant of a Sanger gene (<em>C. elegans</em>)
   <LI><A 
+  href="#SangerGene">sangerGene</A> 
+  - Sanger gene predictions, containing protein ID (<em>C. elegans</em>)
+  <LI><A 
   href="#KnownIsoforms">sangerIsoforms</A> 
   - Links together various transcripts of Sanger gene into a cluster (<em>C. elegans</em>)
   <LI><A 
@@ -1026,6 +1059,9 @@ TrEMBL-NEW and their corresponding mRNAs from GenBank
   <LI><A 
   href="#BED">slamRatNonCoding</A> 
   - Slam predictions of conserved noncoding regions in homologous DNA sequences (rat genome)
+  <LI><A 
+  href="#SnpMap">snpMap</A> 
+  - SNP positions from various sources</LI>
   <LI><A 
   href="#SNPsites">snpNih</A> 
   - Locations of SNPs detected by aligning reads from random genomic clones against the genome </LI>
@@ -1095,6 +1131,9 @@ cover the same region </LI>
   href="#SyntenyRat">syntenyRat</A> 
   - Synteny between rat and human chromosomes (First used in hg13) </LI>
   <LI><A 
+  href="#tfbsCons">tfbsCons</A> 
+  - Transcription factor binding sites conserved in a multiple species alignment</LI>
+  <LI><A 
   href="#GenePredictions">tigrGeneIndex</A> 
   - Fgenesh++ Gene Predictions </LI>
   <LI><A 
@@ -1124,6 +1163,9 @@ cover the same region </LI>
   <LI><A 
   href="#GenePredictions">vegaPseudoGene</A> 
   - Annotated pseudogenes and immunoglobulin segments from the VEGA database</A> (Human chr14, 20, 22 only) </LI>
+  <LI><A 
+  href="#Vntr">vntr</A> 
+  - Microsatellites from Gerome Breen's VNTR program
   <LI><A 
   href="#WabaFullCreate">wabaCbr</A> 
   - C. briggsae WABA alignments - full description
@@ -1466,13 +1508,15 @@ for various organisms.
 </PRE>
 
 
-<H4><A name=BED></A>Browser Extensible Data</H4>
+<H4><A name=BED></A>Browser Extensible Data (BED)</H4>
 The following definition is used for several tables as follows:<BR>
 - affy10K -first 5 fields <BR>
 - affyGeno -first 4 fields <BR>
 - affyRatio -all 15 fields <BR>
-- chimpDels -first 5 fields <BR>
+- chimpDels -first 4 fields <BR>
 - dhs - first 4 fields <BR>
+- ecoresFr1 - first 12 fields <BR>
+- ecoresTetraodon - first 12 fields <BR>
 - encodeRegions - first 4 fields <BR>
 - firstEF - first 6 fields <BR>
 - gnfAtlas2 - all 15 fields <BR>
@@ -2346,6 +2390,23 @@ Last used Oct. 2000
     )
 </PRE>
 
+<H4><A name=Vntr></A>Microsatellites from Gerome Breen's VNTR Program"</H4>
+<PRE>table vntr
+"Microsatellites from Gerome Breen's VNTR program"
+    (
+    string chrom;      		"chrom"
+    uint   chromStart; 		"Start position in chromosome"
+    uint   chromEnd;   		"End position in chromosome"
+    string name;       		"Name of item (Repeat unit)"
+    float  repeatCount; 	"Number of perfect repeats"
+    int distanceToLast; 	"Distance to previous microsat. repeat"
+    int distanceToNext; 	"Distance to next microsat. repeat"
+    string forwardPrimer; 	"Forward PCR primer sequence (or Design_Failed)"
+    string reversePrimer; 	"Reverse PCR primer sequence (or Design_Failed)"
+    string pcrLength;     	"PCR product length (or Design_Failed)"
+    )
+</PRE>
+
 <H4><A name=MouseSyn></A>Mouse Synteny</H4>
 Last used Apr. 2001.
 <PRE>table mouseSyn
@@ -2972,7 +3033,7 @@ L-scores with the formula: L = 8.0 * X / 1000.0 for sampleHeight X.
 </PRE>
 
 <H4><A name=WiggleTrack2></A>Sample Tracks for Plotting Real-valued Data (Rev 2)</H4>
-The following definition is used for: regPotential2X, regPotential3X.
+The following definition is used for: gc5Base, regPotential2X, regPotential3X.
 <PRE>table wiggle
 "Wiggle track values to display as y-values (first 6 fields are bed6)"
     (
@@ -3001,6 +3062,24 @@ The following definition is used for: regPotential2X, regPotential3X.
     lstring description;  "Description from Sanger gene GFFs"
     string geneType;	  "Type field from Sanger gene GFFs"
     string cdsType;	  "Type field from Sanger CDS GFFs"
+    )
+</PRE>
+
+<H4><A name=SangerGene></A>Sanger Genes (WormBase)</H4>
+<PRE>table sangerGene
+"GenePred table with proteinID field for WormBase Genes."
+    (
+    string name;        	"Name of gene"
+    string chrom;       	"Chromosome name"
+    char[1] strand;     	"+ or - for strand"
+    uint txStart;       	"Transcription start position"
+    uint txEnd;         	"Transcription end position"
+    uint cdsStart;      	"Coding region start"
+    uint cdsEnd;        	"Coding region end"
+    uint exonCount;     	"Number of exons"
+    uint[exonCount] exonStarts; "Exon start positions"
+    uint[exonCount] exonEnds;   "Exon end positions"
+    string proteinID;   	"Swiss-Prot protein ID"
     )
 </PRE>
 
@@ -3110,6 +3189,19 @@ of finding simple tandem repeats than RepeatMasker does.
    )
 </PRE>
 
+<H4><A name=SnpMap></A>SNP Map (combined table of SNPs)</H4>
+<PRE>table snpMap
+"SNP positions from various sources"
+    (
+    string chrom;       "Chromosome or 'unknown'"
+    uint   chromStart;  "Start position in chrom"
+    uint   chromEnd;    "End position in chrom"
+    string name;        "Name of SNP - rsId or Affy name"
+    string source;      "BAC_OVERLAP | MIXED | RANDOM | OTHER | Affy10K | Affy120K
+"
+    string type;        "SNP | INDEL | SEGMENTAL"
+    )
+</PRE>
 
 <H4><A name=SNPsites></A>SNP Positions</H4>
 This table is used for both the snpNih and snpTsc tables.
@@ -3569,6 +3661,22 @@ The bacEndPairs table uses all fields.
     string clone;       "Clone name in BAC library"
     string contig;      "Contig (or gap size)"
     int chromIx;        "Number of clone in tiling path starting chrom start"
+    )
+</PRE>
+
+<H4><A name=tfbsCons></A>Transcription Factor Binding Sites</H4>
+<PRE>table tfbsCons
+"TFBS data"
+    (
+    string chrom;      	"Human chromosome"
+    uint   chromStart; 	"Start position in chromosome"
+    uint   chromEnd;   	"End position in chromosome"
+    string name;       	"Name of item"
+    uint   score;      	"Score from 0-1000"
+    char[1] strand;    	"+ or -"
+    char[6] species;  	"Common name, scientific name"
+    char[64] factor;  	"Factor"
+    char[10] id;  	"ID"
     )
 </PRE>
 
