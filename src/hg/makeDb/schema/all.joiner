@@ -1033,6 +1033,9 @@ identifier sgdCodingId typeOf=sgdId dependency
     $sacCer.sgdToSgd.name
     $sacCer.sgdToSgd.value
     $sacCer.sgdToName.name
+    $sacCer.esRegGeneToModule.gene
+    $sacCer.esRegGeneToMotif.gene
+    $sacCer.esRegGeneUpstreamRegion.name
 
 identifier sgdNoncodingId typeOf=sgdId
 "Sacchromyces Genome Database Noncoding/Dubious feature ID"
@@ -1278,6 +1281,16 @@ identifier encodeRegion
      galGal2.blastHg16KG.qName
 
 
+identifier esRegModule
+"Eran Segal's collection of motifs that appear together in a regulatory module"
+    $sacCer.esRegModuleToMotif.module dupeOk
+    $sacCer.esRegGeneToModule.module full minCheck=0.99
+
+identifier esRegMotif
+"Eran Segal's motifs deduced from coregulated genes"
+    $sacCer.esRegMotif.name
+    $sacCer.esRegModuleToMotif.motif 
+    $sacCer.esRegGeneToMotif.name 
 
 # Dependencies not already captured in identifiers
 
