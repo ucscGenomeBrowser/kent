@@ -12,7 +12,7 @@
 #include "agpGap.h"
 #include "contigAcc.h"
 
-static char const rcsid[] = "$Id: regionAgp.c,v 1.10 2004/10/08 19:54:01 kate Exp $";
+static char const rcsid[] = "$Id: regionAgp.c,v 1.11 2004/10/13 04:43:31 kate Exp $";
 
 #define DIR_OPTION              "dir"
 #define NAME_PREFIX_OPTION      "namePrefix"
@@ -125,6 +125,7 @@ for (pos = posList; pos != NULL; pos = pos->next)
             /* fragment */
             int chromStart, chromEnd;
             struct agpFrag frag, *agpFrag = (struct agpFrag *)agp->entry;
+            int fragLen = 0;
 
             /* determine if this AGP entry intersects the range */
             if (pos->chromEnd < agpFrag->chromStart ||
@@ -138,10 +139,27 @@ for (pos = posList; pos != NULL; pos = pos->next)
             frag.chrom = regionName;
             frag.chromStart = start - 1;  // agpFragOutput adds 1
             frag.chromEnd = start + chromEnd - chromStart;
-            frag.fragStart = agpFrag->fragStart +
+            fragLen = frag.chromEnd - frag.chromStart;
+            if (agpFrag->strand[0] == '-' && agpFrag->chromStart < pos->chromStart)
+                {
+                /* first contig */
+                frag.fragStart = agpFrag->fragStart - 1;
+                frag.fragEnd = agpFrag->fragStart + fragLen - 1;
+                }
+            else if (agpFrag->strand[0] == '-' && agpFrag->chromEnd > pos->chromEnd)
+                {
+                /* last contig */
+                frag.fragStart = agpFrag->fragEnd - fragLen;
+                frag.fragEnd = agpFrag->fragEnd;
+                }
+            else
+                {
+                /* in the middle, or else on the plus strand */
+                frag.fragStart = agpFrag->fragStart +
                                 chromStart - agpFrag->chromStart - 1;
-            frag.fragEnd = agpFrag->fragEnd -
+                frag.fragEnd = agpFrag->fragEnd -
                                 (agpFrag->chromEnd - chromEnd);
+                }
             start = frag.chromEnd + 1;
             frag.ix = seqNum++;;
             frag.type[0] = agpFrag->type[0];
