@@ -137,13 +137,11 @@ vi editor set ts=8  set sw=4)
 
 NAMES
 
-Variable, function, and field names begin with
-a lower-case letter.  The second and subsequent
-words in a name begin with a capital letter to
-help visually separate the words.  Abbreviation
-of words is strongly discouraged.  If a word
-is abbreviated in general it is abbreviated to
-the first three letters:
+Symbol names begin with a lower-case letter.  The second 
+and subsequent words in a name begin with a capital letter 
+to help visually separate the words.  Abbreviation of words 
+is strongly discouraged.  If a word is abbreviated in 
+general it is abbreviated to the first three letters:
    tabSeparatedFile -> tabSepFile
 In some cases, for local variables abbreviating
 to a single letter for each word is ok:
@@ -156,6 +154,11 @@ Numbers are considered words.  You would
 represent "chromosome 22 annotations"
 as "chromosome22Annotations" or "chr22Ann."
 Note the capitalized 'A" after the 22.
+
+These naming rules apply to variables, constants, functions, fields,
+and structures.  Whenever possible they should be used for
+file names, database table and database column names as well.
+
 
 ERROR HANDLING AND MEMORY ALLOCATION
 
