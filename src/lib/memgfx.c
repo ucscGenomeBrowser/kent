@@ -644,7 +644,7 @@ if( abs(slope) < 1 )
         if( pLower != colRange ) 
             pt1 = (mult * yUpper) + pt1Home;
         else
-            pt1 = (mult * yUpper) + pt1Home;
+            pt1 = (mult * yLower) + pt1Home;
 
         while( pt1 < pt1Base )
             {
