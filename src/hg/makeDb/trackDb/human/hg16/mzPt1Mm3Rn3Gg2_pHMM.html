@@ -1,19 +1,17 @@
 <H2>Description</H2> <P>
-This track shows a measure of evolutionary conservation in human, chimp, mouse, rat, and
-chicken based on a phylogenetic hidden Markov model (phylo-HMM).
-The multiz alignments of the human Jul. 2003 (hg16), chimpanzee Nov. 2003 (panTro1), mouse Feb. 2003 (mm3), rat Jun. 2003 (rn3), and chicken Feb. 2004 (galGal2) assemblies were used to generate
-the annotation.</P>
-
+This track shows a measure of evolutionary conservation in human, chimp, mouse, 
+rat, and chicken based on a phylogenetic hidden Markov model (phylo-HMM).
+The multiz alignments of the human Jul. 2003 (hg16), chimpanzee Nov. 2003 
+(panTro1), mouse Feb. 2003 (mm3), rat Jun. 2003 (rn3), and chicken Feb. 2004 
+(galGal2) assemblies were used to generate the annotation.</P>
 <P>
 In &quot;full&quot; visibility mode, this track displays pairwise alignments 
-of chimp, mouse, rat, and chicken, each aligned to the human genome.  The pairwise 
-alignments are
-displayed in the standard UCSC browser &quot;dense&quot; mode using a greyscale 
+of chimp, mouse, rat, and chicken, each aligned to the human genome. The pairwise 
+alignments are displayed in the standard UCSC browser &quot;dense&quot; mode 
+using a greyscale 
 density gradient.  The checkboxes in the track configuration section allow
 the exclusion of species from the pairwise display; however, this does not
-remove them from the conservation score display.
-</P>
-
+remove them from the conservation score display.  </P>
 <P>
 When zoomed-in to the base display level, the track shows the base 
 composition of each alignment. The numbers and symbols on the &quot;human 
@@ -21,113 +19,70 @@ gap&quot; line indicate the lengths of gaps in the human sequence at those
 alignment positions. If the gap size is greater than 9, the &quot;+&quot; 
 symbol is displayed. To view detailed information about the 
 alignments at a specific position, zoom the display in to 30,000 or fewer bases, 
-then click on the alignment.
-</P>
+then click on the alignment.  </P>
+<P>
+This track may be configured in a variety of ways to highlight different aspects 
+of the displayed information. Click the &quot;Graph configuration help&quot; link
+for an explanation of the configuration options.
 
 <H2>Methods</H2>
-
-<P> Best-in-genome blastz pairwise alignments of human-mouse and
+<P> 
+Best-in-genome blastz pairwise alignments of human-mouse and
 human-rat were multiply aligned using a program called humor
 (HUman-MOuse-Rat), which is a special variant of the <em>Multiz</em>
 program.  Multiz was used first to align the humor results with
 reciprocal best human-chimp alignments, and then to align the human-chimp-mouse-rat multiple alignment with best-in-genome blastz human-chicken alignments.  The resulting
 human-chimp-mouse-rat-chicken multiple alignments were then assigned 
 conservation scores by phylo-HMM.</P>
-
-  <P>A phylo-HMM is a probabilistic model that describes both the process
-    of DNA substitution at each site in a genome, and the way this process
-    changes from one site to the next (Felsenstein and Churchill 1996,
-    Yang 1995, Siepel and Haussler 2003, Siepel and Haussler 2004).  
-    A phylo-HMM can be thought
-    of as a machine that generates a multiple alignment, in the same way
-    that an ordinary hidden Markov model (HMM) generates an individual
-    sequence.  While the states of an ordinary HMM are associated with
-    simple multinomial probability distributions, the states of a
-    phylo-HMM are associated with more complex distributions defined by
-    probabilistic phylogenetic models.  These distributions can capture
-    differences in the rates and patterns of nucleotide
-    substitution observed in different types of genomic regions (e.g., coding
-    or noncoding regions, conserved or nonconserved regions).
-
-    <P> <img src="/images/fels-church.jpg" border="1"
-    align="right"> To compute a conservation score, we use a
-    <em>k</em>-state phylo-HMM, whose <em>k</em> associated phylogenetic
-    models differ only in overall evolutionary rate (Felsenstein and
-    Churchill 1996, Yang 1995). In the image at right, there are three
-    <EM>k</EM> states, 
-    S<SUB>1</SUB>, S<SUB>2</SUB>, and S<SUB>3</SUB>, but in practice we 
-    use <EM>k</EM> = 10.  
-    A phylogenetic model is estimated globally, using the discrete gamma model
-    for rate variation (Yang 1994), then a scaled version of the estimated model
-    is associated with each state in a phylo-HMM. There is a
-    separate &quot;rate constant&quot;, <em>r<sub>i</sub></em>, for each state i, 
-    which is multiplied by all branch lengths in the globally estimated model.
-    The transition probabilities between states allow for autocorrelation of
-    substitution rates, i.e., for adjacent sites to tend to exhibit similar
-    overall substitution rates.  A single parameter, lambda, describes the
-    degree of autocorrelation and defines all transition probabilities.  
-    Here, we have estimated the rate constants from the data,
-    similarly to Yang (1995) (Siepel and Haussler 2003), but have
-    allowed lambda to be treated as a tuning parameter.  For the
-    conservation score, we use the posterior probability that each site was
-    "generated" by the state having the smallest rate constant.  Because of
-    the way the rate categories are defined, the plotted values can be
-    thought of as approximately representing the posterior probability that
-    each site is among the 10% most conserved sites in the data set
-    (allowing for autocorrelation of substitution rates).  </P>
-
-    <P> In this case, the general reversible (REV) substitution model was
-    used in parameter estimation, and lambda was set to 0.9.  Alignment
-    gaps were treated as missing data, which sometimes has the effect of
-    producing undesirably high posterior probabilities in gappy regions of
-    the alignment.  We are looking at several possible ways of improving
-    the handling of alignment gaps.</P>
-
-
-<H2>Using the Filter</H2>
 <P>
-The track filter can be used to configure display attributes of
-the track's graph. 
-<UL>
-<LI><B>Pairwise alignments</B>: The checked boxes indicate the pairwise 
-alignments displayed in the track. To exclude one or more species, uncheck the
-appropriate boxes.
-<LI><B>Type of graph</B>: The default &quot;Bar&quot; setting depicts the graph
-data using color-filled bars. To view the data as a series of points or lines, 
-select the &quot;Points&quot; setting. 
-<LI><B>y = 0.0 line</B>: Select the &quot;ON&quot; setting to display a
-line marking the 0.0 position on the graph (default is &quot;OFF&quot;).
-<LI><B>Track height</B>: To change the default display height of the graph
-in pixels, type in a value from within the indicated range.
-<LI><B>Vertical viewing range</B>: The min and max values specify the 
-vertical portion of the graph that is displayed (default
-range is 0-0.01). These numbers can be used to set data threshold indicators. 
-For example, setting the min to &quot;0.005&quot; restricts the display
-to data equal to or greater than that value. 
-<LI><B>Data view scaling</B>: The default &quot;Use vertical viewing range
-setting&quot; option displays the data using the parameters specified in the Vertical
-viewing range setting. To configure the graph to automatically scale to a
-range defined by the minimum and maximum data points in the current 
-view, select the &quot;Auto-scale to data view&quot; option. 
-<LI><B>Windowing function</B>: When a  view is too large to show individual
-data values, the values must be combined to produce a plot point.
-This option specifies the combining function to be used: &quot;Maximim&quot; - 
-the maximum value of all the points to be combined, &quot;Mean&quot; - 
-the mean, or &quot;Minimum&quot; - the minimum of all the
-points to be combined (default is &quot;Mean&quot;).
-<LI><B>Smoothing window</B>: When set to a numerical value, this option 
-determines the size, in pixels, of a smoothing window
-to be passed over the plot to smooth the edges of the bars or lines.  
-This is equivalent to a trend line calculation on the graph.
-The default setting is &quot;OFF&quot;.
-<LI><B>Draw indicator line at y =</B>: When set to &quot;ON&quot;, the track
-displays an arbitrary line on the graph at the specified numerical value 
-(defaults are &quot;0&quot; and &quot;OFF&quot;). This line can be used to 
-mark a significant threshold on the graph.
-</UL></P>
-<P>
-When you have finished configuring the filter, click the <em>Submit</em> button.
-</P>
+A phylo-HMM is a probabilistic model that describes both the process
+of DNA substitution at each site in a genome, and the way this process
+changes from one site to the next (Felsenstein and Churchill 1996,
+Yang 1995, Siepel and Haussler 2003, Siepel and Haussler 2004).  
+A phylo-HMM can be thought
+of as a machine that generates a multiple alignment, in the same way
+that an ordinary hidden Markov model (HMM) generates an individual
+sequence.  While the states of an ordinary HMM are associated with
+simple multinomial probability distributions, the states of a
+phylo-HMM are associated with more complex distributions defined by
+probabilistic phylogenetic models.  These distributions can capture
+differences in the rates and patterns of nucleotide
+substitution observed in different types of genomic regions (e.g., coding
+or noncoding regions, conserved or nonconserved regions).
+<P> 
+<img src="/images/fels-church.jpg" border="1"
+align="right"> To compute a conservation score, we use a
+<em>k</em>-state phylo-HMM, whose <em>k</em> associated phylogenetic
+models differ only in overall evolutionary rate (Felsenstein and
+Churchill 1996, Yang 1995). In the image at right, there are three
+<EM>k</EM> states, 
+S<SUB>1</SUB>, S<SUB>2</SUB>, and S<SUB>3</SUB>, but in practice we 
+use <EM>k</EM> = 10.  
+A phylogenetic model is estimated globally, using the discrete gamma model
+for rate variation (Yang 1994), then a scaled version of the estimated model
+is associated with each state in a phylo-HMM. There is a
+separate &quot;rate constant&quot;, <em>r<sub>i</sub></em>, for each state i, 
+which is multiplied by all branch lengths in the globally estimated model.
+The transition probabilities between states allow for autocorrelation of
+substitution rates, i.e., for adjacent sites to tend to exhibit similar
+overall substitution rates.  A single parameter, lambda, describes the
+degree of autocorrelation and defines all transition probabilities.  
+Here, we have estimated the rate constants from the data,
+similarly to Yang (1995) (Siepel and Haussler 2003), but have
+allowed lambda to be treated as a tuning parameter.  For the
+conservation score, we use the posterior probability that each site was
+"generated" by the state having the smallest rate constant.  Because of
+the way the rate categories are defined, the plotted values can be
+thought of as approximately representing the posterior probability that
+each site is among the 10% most conserved sites in the data set
+(allowing for autocorrelation of substitution rates).  </P>
+<P> 
+In this case, the general reversible (REV) substitution model was
+used in parameter estimation, and lambda was set to 0.9.  Alignment
+gaps were treated as missing data, which sometimes has the effect of
+producing undesirably high posterior probabilities in gappy regions of
+the alignment.  We are looking at several possible ways of improving
+the handling of alignment gaps.</P>
 
 <H2>Credits</H2>
 <P>
