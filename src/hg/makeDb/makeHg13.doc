@@ -237,25 +237,23 @@ Load chromosome sequence info into database and save chrom sizes
      cd ~/oo
      hgNibSeq -preMadeNib hg13 /cluster/store4/gs.14/build31/nib ?{,?}/chr*.fa
      echo "select chrom,size from chromInfo" | hgsql -N hg13 > chrom.sizes
-DONE TO HERE
-TODO BELOW - WAITING for contig.gl and the fin,fa,draft,predraft,extras files.
+
 Store o+o info in database.
 Note: for build31, Terry specially requested these files from NCBI:
   finished.finf
   draft.finf
   predraft.finf
   extras.finf
+DONE TO HERE
+TODO BELOW
      cd /cluster/store4/gs.14/build31
      jkStuff/liftGl.sh contig.gl
-DONE BELOW HERE - ABOVE IS TODO
      hgGoldGapGl hg13 /cluster/store4/gs.14 build31 
-TODO BELOW
      cd /cluster/store4/gs.14
      hgClonePos hg13 build31 ffa/sequence.inf /cluster/store4/gs.14 -maxErr=3
 #(Ignore warnings about missing clones - these are in chromosomes 21 and 22)
      hgCtgPos hg13 build31 
-
-DONE BELOW
+DONE BELOW HERE - ABOVE IS TODO
 Make and load GC percent table
      ssh hgwdev
      cd ~/oo
@@ -344,7 +342,7 @@ o - Store the mRNA (non-alignment) info in database.
     The est line will take quite some time to complete.
 
 
-MAKING AND STORING mRNA AND EST ALIGNMENTS (IN PROGRESS)
+MAKING AND STORING mRNA AND EST ALIGNMENTS (DONE 12/09/02 - MATT)
 
 o - Load up the local disks of the cluster with refSeq.fa, mrna.fa and est.fa
     Copy the above 3 files from /cluster/store1/mrna.132 into 
@@ -437,7 +435,7 @@ o - Create subset of ESTs with introns and load into database.
       - ssh hgwdev
       cd ~/oo/bed/est/intronEst
       hgLoadPsl hg13 *.psl
-DONE TO HERE
+
 o - Put orientation info on ESTs and mRNAs into database:
     Note: the cluster run requires /scratch/.../trfFa.1204/ to be in place,
     so this step should be run after "PREPARING SEQUENCE FOR CROSS SPECIES 
@@ -447,10 +445,11 @@ o - Put orientation info on ESTs and mRNAs into database:
      pslSortAcc nohead contig /cluster/store3/tmp contig.psl
      cd ~/oo/bed/mrna
      pslSortAcc nohead contig /cluster/store3/tmp contig.psl
-     ssh eieio
+     ssh kkstore
      mkdir -p /scratch/hg/gs.14/build31/bed
      cp -r ~/oo/bed/est/contig /scratch/hg/gs.14/build31/bed/est
      cp -r ~/oo/bed/mrna/contig /scratch/hg/gs.14/build31/bed/mrna
+
     Ask admins to binrsync /scratch/hg/gs.14/build31/bed/* to the cluster.
      ssh kk
      foreach d (est mrna)
@@ -468,6 +467,7 @@ o - Put orientation info on ESTs and mRNAs into database:
      para push
    check until done, or use 'para shove'
 
+ssh hgwdev
    When the cluster run is done do:
      foreach d (est mrna)
        cd ~/oo/bed/${d}OrientInfo
@@ -494,6 +494,7 @@ o - Create rnaCluster table (depends on {est,mrna}OrientInfo above)
        end
        cd ..
    end
+
    cd bed/rnaCluster
    hgLoadBed hg13 rnaCluster chrom/*.bed > /dev/null
 
@@ -1298,7 +1299,6 @@ sure /scratch/hg/mrna.132 is loaded with xenoRna.fa Then do:
        para try
        para check
        para push 
-DONE TO HERE 
 
 Do para check until the run is done, doing para push if
 necessary on occassion.
@@ -1312,6 +1312,7 @@ Sort xeno mRNA alignments as so:
        pslSortAcc nohead chrom /cluster/store2/temp chrom.psl
        pslCat -dir chrom > xenoMrna.psl
        rm -r chrom raw.psl cooked.psl chrom.psl
+
 Load into database as so:
        ssh hgwdev
        cd ~/oo/bed/xenoMrna
@@ -1322,6 +1323,7 @@ Load into database as so:
        hgLoadRna add -type=xenoRna hg13 /gbdb/hg13/mrna.132/xenoRna.fa /gbdb/hg13/mrna.132/xenoRna.ra
        hgLoadRna add -type=xenoEst hg13 /gbdb/hg13/mrna.132/xenoEst.fa /gbdb/hg13/mrna.132/xenoEst.ra
 
+DONE TO HERE 
 Similarly do xenoEst aligments:
    Prepare the est data:
         cd /cluster/store1/mrna.132
