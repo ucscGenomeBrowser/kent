@@ -84,7 +84,7 @@
 #include "estOrientInfo.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.725 2004/05/07 23:38:08 kate Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.726 2004/05/08 00:11:12 kate Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
@@ -1433,7 +1433,6 @@ void genericDrawItems(struct track *tg,
  * and tg->drawItemAt has to be filled in. */
 {
 double scale = scaleForWindow(width, seqStart, seqEnd);
-//double scale = scaleForPixels(width);
 int lineHeight = tg->lineHeight;
 int heightPer = tg->heightPer;
 int s, e;
@@ -6255,9 +6254,6 @@ if (withLeftLabels)
 	    maxRange = whichSampleBin( maxRangeCutoff, track->minRange, track->maxRange ,binCount ); 
 	    min0 = whichSampleNum( minRange, track->minRange,track->maxRange, binCount );
 	    max0 = whichSampleNum( maxRange, track->minRange, track->maxRange, binCount );
-	    
-	    //errAbort( "%g,%g\n", minRangeCutoff, maxRangeCutoff );
-	    
 	    sprintf( minRangeStr, " "  );
 	    sprintf( maxRangeStr, " " );
 	    if( vis == tvFull && track->heightPer >= 74  )
@@ -6636,8 +6632,6 @@ hPrintf("</MAP>\n");
 
 /* Save out picture and tell html file about it. */
 vgClose(&vg);
-/* smallBreak(); */
-/* smallBreak(); */
 hPrintf("<IMG SRC = \"%s\" BORDER=1 WIDTH=%d HEIGHT=%d USEMAP=#%s ",
     gifTn.forHtml, pixWidth, pixHeight, mapName);
 hPrintf("><BR>\n");
@@ -7131,7 +7125,10 @@ if (tdb->useScore)
 	track->colorShades = shadesOfGray;
     }
 track->tdb = tdb;
-track->exonArrows = (trackDbSetting(tdb, "exonArrows") != NULL);
+if (sameString(trackDbSettingOrDefault(tdb, "exonArrows", "on"), "on"))
+    track->exonArrows = TRUE;
+else
+    track->exonArrows = FALSE;
 iatName = trackDbSetting(tdb, "itemAttrIdTbl");
 if (iatName != NULL)
     track->itemAttrTbl = itemAttrTblNew(iatName);
