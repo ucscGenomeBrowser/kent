@@ -348,7 +348,7 @@ sub getFileModTime($) {
 # Run a program, exit if an error occurs.
 sub runProg($;$) {
   my($command, $quiet) = @_;
-  if ($gbCommon::verbose && !$quite) {
+  if ($gbCommon::verbose && !$quiet) {
       print STDERR "$command\n";
   }
   my $stat = system($command);
@@ -375,10 +375,10 @@ sub runProgNoAbort($) {
 sub callProg($;$) {
   my($command, $quiet) = @_;
   if (!defined($quiet)) {
-      $quite = 0;
+      $quiet = 0;
   }
   
-  if ($gbCommon::verbose && !$quite) {
+  if ($gbCommon::verbose && !$quiet) {
       print STDERR "$command\n";
   }
   my $output = `$command`;

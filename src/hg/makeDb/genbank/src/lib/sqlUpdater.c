@@ -7,7 +7,7 @@
 #include "gbFileOps.h"
 #include "errabort.h"
 
-static char const rcsid[] = "$Id: sqlUpdater.c,v 1.1 2003/06/03 01:27:47 markd Exp $";
+static char const rcsid[] = "$Id: sqlUpdater.c,v 1.2 2003/08/24 17:31:43 markd Exp $";
 
 #define UPDATE_QUERY_MAX 4096
 
@@ -134,13 +134,8 @@ if (su->verbose)
 if (ferror(su->tabFh))
     errnoAbort("writing %s", su->tabFile);
 carefulClose(&su->tabFh);
-/* FIXME: add  SQL_SERVER_TAB_FILE */
-/* FIXME: try getting a connection each time to prevent problems with
- * sql_info() return null on load (but it still happened, turned into a 
- * warning in jksql for now.*/
-conn = sqlConnect(sqlGetDatabase(conn));
-sqlLoadTabFile(conn, su->tabFile, su->table, 0);
-sqlDisconnect(&conn);
+sqlLoadTabFile(conn, su->tabFile, su->table,
+               SQL_TAB_FILE_ON_SERVER|SQL_TAB_FILE_CONCURRENT);
 }
 
 void sqlUpdaterCommit(struct sqlUpdater* su, struct sqlConnection *conn)
