@@ -55,6 +55,19 @@ visibility hide
 color 0,90,100
 type genePred sgpPep
 
+track tfbsCons
+shortLabel TFBS Conserved
+longLabel HMR Conserved Transcription Factor Binding Sites
+priority 94
+group regulation
+visibility hide
+type bed 6+
+spectrum on
+scoreMin 830
+scoreMax 1000
+urlLabel Transfac matrix link:
+url http://www.gene-regulation.com/cgi-bin/pub/databases/transfac/getTF.cgi?AC=$$
+
 track multizMm3Rn2 
 shortLabel Human/Mouse/Rat
 longLabel Human/Mouse/Rat Alignments
