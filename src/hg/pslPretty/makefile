@@ -13,4 +13,4 @@ pslPretty: $O $(MYLIBS)
 test: test1
 %:	input/%.psl
 	${MKDIR} output
-	pslPretty -long input/$@.psl input/S1.lst input/S2.lst output/$@.axt
+	pslPretty -long -axt input/$@.psl input/S1.lst input/S2.lst output/$@.axt
