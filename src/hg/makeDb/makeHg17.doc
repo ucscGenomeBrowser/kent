@@ -38,8 +38,7 @@ exit; # don't actually run this like a script :)
     wget --timestamping ftp://ftp.ncbi.nlm.nih.gov/build_35/*
 
     # FYI: agp file format documented at:
-    #	http://www.ncbi.nlm.nih.gov/Genbank/WGS.agpformat.html
-    # fixup a couple of names for our own purposes here
+    #	http://www.ncbi.nlm.nih.gov/Genbank/WGS.agpformat.html    # fixup a couple of names for our own purposes here
     cd /cluster/store5/gs.18/agp
     ln -s ../ncbi/chr*.agp ../ncbi/chr*.fa.gz .
     sed -e "s#MT/NC_001807.4#NC_001807#" ../ncbi/chrMT.agp > chrM.agp
@@ -2029,8 +2028,8 @@ cat > split.csh << 'EOF'
 
    # update from NCBI
     ssh eieio
-   ln -s /cluster/store5/sts.2004-06 /cluster/data/ncbi
-   cd /cluster/data/ncbi/sts.2004-06
+    ln -s /cluster/store5/sts.2004-06 /cluster/data/ncbi
+    cd /cluster/data/ncbi/sts.2004-06
     ln -s /cluster/data/ncbi/sts.2004-06 sts.9
     wget ftp://ftp.ncbi.nih.gov/repository/dbSTS/dbSTS.sts
     wget ftp://ftp.ncbi.nih.gov/repository/dbSTS/dbSTS.aliases
@@ -2046,14 +2045,27 @@ cat > split.csh << 'EOF'
     cd /cluster/data/ncbi/sts.9
 
     # this time, snag from Terry's dir
-    cp ~booch/tracks/update/all.STS.fa.new /cluster/data/sts.9/all.STS.fa.old
-    cp ~booch/tracks/update/stsInfo2.bed .
+    cp ~booch/tracks/update/all.STS.fa.new /cluster/data/sts.9/all.STS.fa.prev
+    cp ~booch/tracks/update/stsInfo2.bed ./stsInfo2.bed.prev
 
-    # NOTE: checkStsIds modifies stsInfo2.bed and all.STS.fa
-    # It creates all.primers, all.primers.fa, stsAlias.bed
-    cp /cluster/data/ncbi/sts.8/all.STS.fa all.STS.fa.old
-    /cluster/bin/scripts/checkStsIds stsInfo2.bed dbSTS.aliases dbSTS.sts \
-                        dbSTS.fa all.STS.fa.old
+    # this time, also fix all.STS.fa.prev to have correct names of fa record
+    # also gets rid of non-human sequences
+    fixFa.pl stsInfo2.bed all.STS.fa.prev > all.STS.fa.prev.fix
+    mv all.STS.fa.prev all.STS.fa.prev.orig
+    mv all.STS.fa.prev.fix all.STS.fa.prev
+
+    # Convert dbSTS.fa file to easier reading format, and get accessions
+    /cluster/bin/scripts/convertGbFaFile dbSTS.fa > dbSTS.convert.fa
+    grep ">" dbSTS.convert.fa | cut -f 2 -d ">" > dbSTS.acc
+
+    # NOTE: updateStsInfo creates new stsInfo2.bed, all.primers, all.STS.fa files 
+    updateStsInfo -verbose=1 -gb=dbSTS.acc stsInfo2.bed.prev all.STS.fa.prev dbSTS.sts \
+	dbSTS.aliases dbSTS.convert.fa new
+    mv new.info stsInfo2.bed
+    mv new.primers all.primers
+    mv new.alias stsAlias.bed
+    /cluster/bin/scripts/convertPrimerToFA all.primers > all.primers.fa
+    mv new.fa all.STS.fa
     # Copy stsInfo2.bed and stsAlias.bed to data directory becuase
     # these will be loaded into the database later
     mkdir -p /cluster/data/hg17/bed/sts
@@ -2079,37 +2091,39 @@ cat > template << 'EOF'
 'EOF'
     gensub2 contigs.lst sts.lst template jobList
     para create jobList
-        # 3420 jobs
+        # 3800 jobs
     para try
     para check
     para push
 
-# Final run
-# Completed: 3420 of 3420 jobs
-# CPU time in finished jobs:      36777s     612.95m    10.22h    0.43d  0.001 y
-# IO & Wait Time:                 18962s     316.04m     5.27h    0.22d  0.001 y
-# Average job time:                  16s       0.27m     0.00h    0.00d
-# Longest job:                      157s       2.62m     0.04h    0.00d
-# Submission to last job:           328s       5.47m     0.09h    0.00d
-
-# Initial run
-# CPU time in finished jobs:      36148s     602.47m    10.04h    0.42d  0.001 y
-# IO & Wait Time:                 22211s     370.18m     6.17h    0.26d  0.001 y
-# Average job time:                  17s       0.28m     0.00h    0.00d
-# Longest job:                      154s       2.57m     0.04h    0.00d
-# Submission to last job:           362s       6.03m     0.10h    0.00d
-
-    # NOTE: this went really fast -- probably not even necessary
-    #   to split the all.STS.fa file
+    #Completed: 3800 of 3800 jobs
+    #CPU time in finished jobs:      36531s     608.84m    10.15h    0.42d  0.001 y
+    #IO & Wait Time:                 24769s     412.82m     6.88h    0.29d  0.001 y
+    #Average job time:                  16s       0.27m     0.00h    0.00d
+    #Longest job:                      175s       2.92m     0.05h    0.00d
+    #Submission to last job:           233s       3.88m     0.06h    0.00d
 
     # Compile sts sequence results
     ssh eieio
     cd /cluster/bluearc/hg17/sts/sts
     pslSort dirs raw.psl temp out
     rm -rf temp
-    pslReps -nearTop=0.01 -minCover=0.6 -minAli=0.8 -noIntrons raw.psl \ 
+    pslReps -nearTop=0.0001 -minCover=0.6 -minAli=0.8 -noIntrons raw.psl \
 	stsMarkers.psl /dev/null
     cp stsMarkers.psl /cluster/data/hg17/bed/sts/run
+
+    # Lift them and get them ready to combine with primer alignments
+    cd  /cluster/data/hg17/bed/sts/run
+    liftUp -nohead /cluster/data/hg17/bed/sts/run/stsMarkers.lifted.psl \
+        /cluster/data/hg17/jkStuff/liftAll.lft warn stsMarkers.psl
+    /cluster/bin/scripts/extractPslInfo stsMarkers.lifted.psl
+    /cluster/bin/scripts/findAccession -agp stsMarkers.lifted.psl.initial \
+	/cluster/data/hg17
+    rm stsMarkers.lifted.psl.initial
+    sort -k 4n stsMarkers.lifted.psl.initial.acc > stsMarkers.final
+    rm stsMarkers.lifted.psl.initial.acc
+    wc stsMarkers.final
+    #  91508  640556 4851492 stsMarkers.final
 
     # primers
     ssh eieio
@@ -2125,7 +2139,7 @@ cat > template << 'EOF'
     split -l 2000 /cluster/data/ncbi/sts.9/all.primers.ispcr primers_
 
     ssh kk
-	cd /cluster/data/hg17/bed/sts
+    cd /cluster/data/hg17/bed/sts
     mkdir primers
     cd primers
     mkdir run
@@ -2133,7 +2147,7 @@ cat > template << 'EOF'
     ls -1S /scratch/hg/gs.18/build35/maskedContigs/*.fa > contigs.lst
     ls -1S /cluster/bluearc/sts.9/primers/primers_* > primers.lst
     mkdir -p /cluster/bluearc/hg17/sts/primers/out
-    # first run used minPerfect=0
+
 cat > template << 'EOF'
 #LOOP
 /cluster/home/kate/bin/i386/isPcr -out=psl -minPerfect=2 -maxSize=5000 -tileSize=10 -ooc=/scratch/hg/h/10.ooc  $(path1) $(path2) {check out line /cluster/bluearc/hg17/sts/primers/out/$(root1)_$(root2).psl}
@@ -2141,100 +2155,50 @@ cat > template << 'EOF'
 'EOF'
     gensub2 contigs.lst primers.lst template jobList
     para create jobList
-        ## 9500 jobs
-        # 11020 jobs
-	# 27360 jobs
+	# 26980 jobs
     para try
     para check
     para push
 
-    # para time
-    # Completed: 25979 of 27360 jobs
-    # Crashed: 1379 jobs
-    # CPU time in finished jobs:    1151897s   19198.29m   319.97h   13.33d  0.037 y
-    # IO & Wait Time:                 75325s    1255.41m    20.92h    0.87d  0.002 y
-    # Average job time:                  47s       0.79m     0.01h    0.00d
-    # Longest job:                     1056s      17.60m     0.29h    0.01d
-    # Submission to last job:          3012s      50.20m     0.84h    0.03d
+    #Completed: 26953 of 26980 jobs
+    #Crashed: 27 jobs
+    #CPU time in finished jobs:    1130353s   18839.22m   313.99h   13.08d  0.036 y
+    #IO & Wait Time:                 86067s    1434.44m    23.91h    1.00d  0.003 y
+    #Average job time:                  45s       0.75m     0.01h    0.00d
+    #Longest job:                     1255s      20.92m     0.35h    0.01d
+    #Submission to last job:          2762s      46.03m     0.77h    0.03d
 
-    # Of the 1379 jobs that crashed, 1325 are because the resulting psl file
-    # was empty.  This shouldn't happen anymore as the '+' in the 
-    # 'check out line' is now removed and shouldn't consider an empty file an error.
+    # 27 jobs seg faulted due to -minPerfect=2.
+    # These were re-run manually with higher minPerfect values until they completed
+    # normally.  The final jobs are listed in file "rerun" and were initially created by
 
-    # The remaining 4 seg faulted due to -minPerfect=2.
-    # These were re-run with higher minPerfect values until they completed
-    # normally.  The final jobs were :
+    para crashed > rerun
 
-    /cluster/home/kate/bin/i386/isPcr -out=psl -minPerfect=3 -maxSize=5000 -tileSize=10 -ooc=/scratch/hg/h/10.ooc /scratch/hg/gs.18/build35/maskedContigs/NT_086608.fa /cluster/bluearc/sts.9/primers/primers_ad /cluster/bluearc/hg17/sts/primers/out/NT_086608_primers_ad.psl
-        
-    /cluster/home/kate/bin/i386/isPcr -out=psl -minPerfect=3 -maxSize=5000 -tileSize=10 -ooc=/scratch/hg/h/10.ooc /scratch/hg/gs.18/build35/maskedContigs/NT_035158.fa /cluster/bluearc/sts.9/primers/primers_cb /cluster/bluearc/hg17/sts/primers/out/NT_035158_primers_cb.psl
-
-    /cluster/home/kate/bin/i386/isPcr -out=psl -minPerfect=3 -maxSize=5000 -tileSize=10 -ooc=/scratch/hg/h/10.ooc /scratch/hg/gs.18/build35/maskedContigs/NT_079540.fa /cluster/bluearc/sts.9/primers/primers_cg /cluster/bluearc/hg17/sts/primers/out/NT_079540_primers_cg.psl
-
-/cluster/home/kate/bin/i386/isPcr -out=psl -minPerfect=5 -maxSize=5000 -tileSize=10 -ooc=/scratch/hg/h/10.ooc  /scratch/hg/gs.18/build35/maskedContigs/NT_025965.fa /cluster/bluearc/sts.9/primers/primers_cr /cluster/bluearc/hg17/sts/primers/out/NT_025965_primers_cr.psl
-
-    # In addition, two other jobs were run manually due to cluster errors
-    
-    /cluster/home/kate/bin/i386/isPcr -out=psl -minPerfect=2 -maxSize=5000 -tileSize=10 -ooc=/scratch/hg/h/10.ooc  /scratch/hg/gs.18/build35/maskedContigs/NT_022139.fa /cluster/bluearc/sts.9/primers/primers_by /cluster/bluearc/hg17/sts/primers/out/NT_022139_primers_by.psl
-Loaded 1426129 letters in 1 sequences
-
-    /cluster/home/kate/bin/i386/isPcr -out=psl -minPerfect=2 -maxSize=5000 -tileSize=10 -ooc=/scratch/hg/h/10.ooc  /scratch/hg/gs.18/build35/maskedContigs/NT_006238.fa /cluster/bluearc/sts.9/primers/primers_bw /cluster/bluearc/hg17/sts/primers/out/NT_006238_primers_bw.psl
-Loaded 9040907 letters in 1 sequences
-
-
-
-    # This not necessary anymore
-    # ssh eieio
-    # cd /cluster/bluearc/hg17/sts/primers/out
-    # Note: got error that -4 is invalid number -- must remove all
-    # these before liftUp
-    # ls | xargs sed '/-[1-9]/d' > all.psl.unlifted
-    # Do the lift later after epcr alignments added
-
-    # Alternative to above paragrapgh
     # Filter output file quickly based on simple parameters
     ssh kolossus
     cd /cluster/bluearc/hg17/sts/primers/
     mkdir -p filter
     pslQuickFilter -minMatch=26 -maxMismatch=5 -maxTinsert=5000 -verbose out/ filter/
-    pslSort dirs all.psl.unlifted temp filter
-    cp all.psl.unlifted  /cluster/bluearc/hg17/sts/primers/
+	# Note: there will be many messages saying files are empty - this is OK
+    pslSort dirs primers.psl.unlifted temp filter
 
     # filter primer alignments and create not found primer file for ePCR run (booch)
     cd /cluster/data/hg17/bed/sts/primers
-    pslFilterPrimers /cluster/bluearc/hg17/sts/primers/all.psl.unlifted  \
-	/cluster/data/ncbi/sts.9/all.primers all.filter.psl
-    wc all.filter.psl.notfound.primers
-    # 22125  110625 1354325 all.filter.psl.notfound.primers
+    pslFilterPrimers /cluster/bluearc/hg17/sts/primers/primers.psl.unlifted  \
+	/cluster/data/ncbi/sts.9/all.primers primers.filter.unlifted.psl
+    wc primers.filter.unlifted.psl.notfound.primers                   
+    # 21919  109595 1341660 primers.filter.unlifted.psl.notfound.primers
 
     # use Greg Schuler's ePCR to attempt alignment of primers missed
     # by isPcr (kate)
     ssh eieio
-    cd /cluster/data/hg17/bed/sts/primers
-    mkdir run.epcr
-    cd run.epcr
-    cp /cluster/data/hg17/bed/sts/primers/all.filter.psl.notfound.primers .
-
-# The following is not necessary anymore
-#cat > listPrimers.sh << 'EOF'
-#    sed -n "s/^$1\t/dbSTS_$1\t/p" /cluster/data/ncbi/sts.9/all.primers 
-#'EOF'
-#    chmod +x listPrimers.sh
-#    # this takes a few hours -- but shouldn't (ac to Hiram) ? 
-#    cat /cluster/data/hg17/bed/sts/primers/missing.primers.list | \
-#                xargs -n 1 listPrimers.sh > missing.primers
-
+    mkdir -p /cluster/data/hg17/bed/sts/primers/run.epcr
     mkdir -p /cluster/bluearc/hg17/sts/epcr
     cd /cluster/bluearc/hg17/sts/epcr
-    split -l 2500 /cluster/data/hg17/bed/sts/primers/all.filter.psl.notfound.primers \
+    split -l 2500 /cluster/data/hg17/bed/sts/primers/primers.filter.unlifted.psl.notfound.primers \
                         primers_
     cd /cluster/data/hg17/bed/sts/primers/run.epcr
     ls -1S /cluster/bluearc/hg17/sts/epcr/primers_* > primers.lst
-    #ls -1S /scratch/hg/gs.18/build35/maskedContigs/*.fa > contigs.lst
-    #ls -1S /scratch/hg/gs.18/build35/maskedContigs/*.fa > \
-        #/cluster/bluearc/hg17/sts/epcr/contigs.lst
-    #ls -1S /iscratch/i/hg17/maskedContigs/*.fa > \
-        #/cluster/bluearc/hg17/sts/epcr/contigs.lst
     /cluster/bin/scripts/splitContigList -ncbi /cluster/data/hg17 1
     mkdir -p /cluster/bluearc/hg17/sts/epcr/out
 
@@ -2253,62 +2217,75 @@ cat > template << 'EOF'
     para check
     para push
 
-#Completed: 3420 of 3420 jobs
-#CPU time in finished jobs:      82224s    1370.40m    22.84h    0.95d  0.003 y
-#IO & Wait Time:                 55877s     931.28m    15.52h    0.65d  0.002 y
-#Average job time:                  40s       0.67m     0.01h    0.00d
-#Longest job:                      522s       8.70m     0.14h    0.01d
-#Submission to last job:           875s      14.58m     0.24h    0.01d
+    #Completed: 3420 of 3420 jobs
+    #CPU time in finished jobs:      78057s    1300.95m    21.68h    0.90d  0.002 y
+    #IO & Wait Time:                239998s    3999.97m    66.67h    2.78d  0.008 y
+    #Average job time:                  93s       1.55m     0.03h    0.00d
+    #Longest job:                      744s      12.40m     0.21h    0.01d
+    #Submission to last job:           753s      12.55m     0.21h    0.01d
 
-#Completed: 8 of 8 jobs
-#CPU time in finished jobs:      33914s     565.23m     9.42h    0.39d  0.001 y
-#IO & Wait Time:                  3104s      51.74m     0.86h    0.04d  0.000 y
-#Average job time:                4627s      77.12m     1.29h    0.05d
-#Longest job:                     5248s      87.47m     1.46h    0.06d
-#Submission to last job:          5248s      87.47m     1.46h    0.06d
-
-
+    # merge output
     ssh eieio
     cd /cluster/bluearc/hg17/sts/epcr
-
-    # merge output - not expecting 4-column format
     cat out/*.epcr > all.epcr
     wc all.epcr
-    # 3482   13928  178794 all.epcr
-
-    # This not needed anymore
-    # merge results, convert to 4 column format, and add rdb header
-    #cat out/*.epcr | sed 's/\.\./\t/' > all.epcr
-    #wc -l all.epcr
-    #    # 375977 all.epcr
-    #sed 's/dbSTS_//' all.epcr | awk '{print $4}' | sort -g | uniq | wc -l
-    #    # total aligned =
-    #    # 18511 (out of 39000 total missing)
-    #sed 's/dbSTS_//' all.epcr | sort -g -k 4 | \
-    #    awk '{printf "%s\t%s\t%s\tdbSTS_%s\n", $1, $2, $3, $4}' \
-    #            > all.epcr.initial
+    # 3465   13860  177923 all.epcr
 
     # use all.epcr file to re-filter alignemnts and determine which
     # ePCR records to keep
     cp all.epcr /cluster/data/hg17/bed/sts/primers
     cd /cluster/data/hg17/bed/sts/primers
-    pslFilterPrimers -epcr=all.epcr -verbose=1 \
-	/cluster/bluearc/hg17/sts/primers/all.psl.unlifted \
-	/cluster/data/ncbi/sts.9/all.primers all.filter.epcr.psl
+    pslFilterPrimers -epcr=all.epcr -verbose=1 /cluster/bluearc/hg17/sts/primers/primers.psl.unlifted \
+	/cluster/data/ncbi/sts.9/all.primers primers.unlifted.epcr.psl
 
-    # convert to PSL and combine with other psl file
+    # convert to PSL and combine with other psl file (this takes a couple hours)
     /cluster/bin/scripts/epcrToHgPsl epcr.not.found /cluster/data/ncbi/sts.9/all.primers \
 	/cluster/data/hg17
+    cat primers.unlifted.epcr.psl epcr.not.found.psl | sort -k 10n > primers.final.unlifted.psl
 
-    # GOT HERE
-
-    cat all.filter.epcr.psl epcr.not.found.psl | sort -k 10n > primers.psl.unlifted
+    # Fix the query gap lengths so that they match the all.primers.fa file lengths
+    /cluster/bin/scripts/fixPrimersQueryGaps /cluster/data/ncbi/sts.9/all.primers \
+	primers.final.unlifted.psl > primers.final.unlifted.fix.psl
 
     # lift results from contigs to chrom coordinates, and create final file
-    liftUp /cluster/data/hg17/bed/sts/primers/primers.psl \
-	/cluster/data/hg17/jkStuff/liftAll.lft warn primers.psl.unlifted
-    extractPslInfo primers.filter
-    # need to do more stuff to merge sequence and primer alignments
+    liftUp -nohead /cluster/data/hg17/bed/sts/primers/primers.psl \
+	/cluster/data/hg17/jkStuff/liftAll.lft warn primers.final.unlifted.fix.psl
+    # Extract relevant info, make alignemnts unique, and create final file to be merged
+    # with full sequence alignments
+    /cluster/bin/scripts/extractPslInfo primers.psl
+    /cluster/bin/scripts/findAccession -agp primers.psl.initial /cluster/data/hg17
+    rm primers.psl.initial
+    /cluster/bin/scripts/getStsId /cluster/data/hg17/bed/sts/stsInfo2.bed \
+	primers.psl.initial.acc | sort -k 4n > primers.final
+    rm primers.psl.initial.acc
+    wc primers.final
+    # 314710 2202970 16827808 primers.final
+
+    # Merge primer and sequence files to create final bed file
+    # Merge (combineSeqPrimerPos) takes about an hour to run
+    cd /cluster/store5/gs.18/build35/bed/sts
+    /cluster/bin/scripts/combineSeqPrimerPos run/stsMarkers.final \
+	primers/primers.final
+    /cluster/bin/scripts/createSTSbed stsInfo2.bed stsMarkers_pos.rdb > stsMap.bed
+
+    # Set up sequence files
+    ssh hgwdev
+    mkdir -p /gbdb/hg17/sts.9/
+    ln -s /cluster/data/ncbi/sts.9/all.STS.fa /gbdb/hg17/sts.9/all.STS.fa
+    ln -s /cluster/data/ncbi/sts.9/all.primers.fa /gbdb/hg17/sts.9/all.primers.fa
+
+    # Load all files
+    cd /cluster/data/hg17/bed/sts
+    hgLoadSeq hg17 /gbdb/hg17/sts.9/all.STS.fa /gbdb/hg17/sts.9/all.primers.fa
+    hgsql hg17 < ~kent/src/hg/lib/stsInfo2.sql
+    hgsql hg17 < ~kent/src/hg/lib/stsAlias.sql
+    hgsql hg17
+    mysql> load data local infile 'stsInfo2.bed' into table stsInfo2;
+    mysql> load data local infile 'stsAlias.bed' into table stsAlias;
+    hgLoadBed -noBin -tab -sqlTable=/cluster/home/kent/src/hg/lib/stsMap.sql \
+	hg17 stsMap stsMap.bed
+    hgLoadPsl -nobin -table=all_sts_primer hg17 primers/primers.psl
+    hgLoadPsl -nobin -table=all_sts_seq hg17 run/stsMarkers.lifted.psl
     
 
     
