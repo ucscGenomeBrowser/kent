@@ -84,7 +84,7 @@
 #include "estOrientInfo.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.733 2004/05/17 22:38:59 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.734 2004/05/19 16:38:31 kate Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
@@ -157,8 +157,21 @@ boolean ideogramAvail = FALSE;           /* Is the ideogram data available for t
 boolean withLeftLabels = TRUE;		/* Display left labels? */
 boolean withCenterLabels = TRUE;	/* Display center labels? */
 boolean withGuidelines = TRUE;		/* Display guidelines? */
-boolean withRuler = TRUE;		/* Display ruler? */
 boolean hideControls = FALSE;		/* Hide all controls? */
+
+#define RULER_MODE_OFF 0
+#define RULER_MODE_ON 1
+#define RULER_MODE_FULL 2
+
+int rulerMode = RULER_MODE_ON;         /* on, off, full */
+
+char *rulerMenu[] =
+/* dropdown for ruler visibility */
+    {
+    "hide",
+    "dense",
+    "full"
+    };
 
 /* Structure returned from findGenomePos. 
  * We use this to to expand any tracks to full
@@ -297,12 +310,6 @@ setPicWidth(cartOptionalString(cart, "pix"));
 }
 
 
-char *offOn[] =
-/* Off/on control. */
-    {
-    "off",
-    "on",
-    };
 
 /* Other global variables. */
 int seqBaseCount;	/* Number of bases in sequence. */
@@ -1248,10 +1255,11 @@ for (sf = lf->components; sf != NULL; sf = sf->next)
 	{
         if (zoomedToCdsColorLevel && drawOptionNum>0 && vis != tvDense &&
             e + 6 >= winStart && s - 6 < winEnd && e-s <= 3) 
-                drawCdsColoredBox(tg, lf, sf->grayIx, cdsColor, vg, xOff, y, scale, 
-	            font, s, e, heightPer, zoomedToCodonLevel, mrnaSeq,
-                    psl, drawOptionNum, errorColor, foundStartPtr,
-                    MAXPIXELS, winStart, color);
+                drawCdsColoredBox(tg, lf, sf->grayIx, cdsColor, vg, xOff, y, 
+                                    scale, font, s, e, heightPer, 
+                                    zoomedToCodonLevel, mrnaSeq, psl, 
+                                    drawOptionNum, errorColor, foundStartPtr,
+                                    MAXPIXELS, winStart, color);
         else
             {
             drawScaledBoxSample(vg, s, e, scale, xOff, y, heightPer, 
@@ -5942,16 +5950,22 @@ spreadAlignString(vg, x, y, width, height, color, font, s, NULL, count);
 }
 
 static void drawBases(struct vGfx *vg, int x, int y, int width, int height,
-	Color color, MgFont *font, boolean complementSeq)
+                        Color color, MgFont *font, boolean complementSeq, 
+                        struct dnaSeq *thisSeq)
 /* Draw evenly spaced bases. */
 {
-struct dnaSeq *seq = hDnaFromSeq(chromName, winStart, winEnd, dnaUpper);
-if(complementSeq)
-    complement(seq->dna,seq->size);
-spreadString(vg, x, y, width, height, color, font, seq->dna, seq->size);
-freeDnaSeq(&seq);
-}
+struct dnaSeq *seq;
 
+if (thisSeq == NULL)
+   seq = hDnaFromSeq(chromName, winStart, winEnd, dnaUpper);
+else
+    seq = thisSeq;
+if (complementSeq)
+    complement(seq->dna, seq->size);
+spreadString(vg, x, y, width, height, color, font, seq->dna, seq->size);
+if (thisSeq == NULL)
+    freeDnaSeq(&seq);
+}
 
 void drawComplementArrow( struct vGfx *vg, int leftLabel, 
         int height, int width, int baseHeight, MgFont *font)
@@ -6083,7 +6097,10 @@ int typeCount = slCount(trackList);
 int rulerHeight = fontHeight;
 int baseHeight = fontHeight;
 int basePositionHeight = rulerHeight;
+int codonHeight = fontHeight;
+int rulerTranslationHeight = codonHeight * 3;        // 3 frames
 int yAfterRuler = gfxBorder;
+int yAfterBases = yAfterRuler;  // differs if base-level translation shown
 int relNumOff;
 int i;
 int ymin, ymax;
@@ -6098,12 +6115,19 @@ pixWidth = tl.picWidth;
 
 /* Figure out height of each visible track. */
 pixHeight = gfxBorder;
-if (withRuler)
+if (rulerMode != RULER_MODE_OFF)
     {
     if (zoomedToBaseLevel)
 	basePositionHeight += baseHeight;
     yAfterRuler += basePositionHeight;
+    yAfterBases = yAfterRuler;
     pixHeight += basePositionHeight;
+
+    if (rulerMode == RULER_MODE_FULL && zoomedToBaseLevel)
+        {
+        yAfterRuler += rulerTranslationHeight;
+        pixHeight += rulerTranslationHeight;
+        }
     }
 for (track = trackList; track != NULL; track = track->next)
     {
@@ -6131,6 +6155,11 @@ else
 makeGrayShades(vg);
 makeBrownShades(vg);
 makeSeaShades(vg);
+if (rulerMode == RULER_MODE_FULL && !cdsColorsMade)
+    {
+    makeCdsShades(vg, cdsColor);
+    cdsColorsMade = TRUE;
+    }
 
 /* Start up client side map. */
 hPrintf("<MAP Name=%s>\n", mapName);
@@ -6154,8 +6183,12 @@ if (withLeftLabels && psOutput == NULL)
     boolean grayButtonGroup = FALSE;
     struct group *lastGroup = NULL;
     y = gfxBorder;
-    if (withRuler)
+    if (rulerMode != RULER_MODE_OFF)
+        {
         y += basePositionHeight;
+        if (rulerMode == RULER_MODE_FULL && zoomedToBaseLevel)
+            y += rulerTranslationHeight;
+        }
     for (track = trackList; track != NULL; track = track->next)
         {
 	int h, yStart = y, yEnd;
@@ -6194,7 +6227,7 @@ if (withLeftLabels)
     vgBox(vg, leftLabelX + leftLabelWidth, 0,
     	gfxBorder, pixHeight, lightRed);
     y = gfxBorder;
-    if (withRuler)
+    if (rulerMode != RULER_MODE_OFF)
 	{
 	vgTextRight(vg, leftLabelX, y, leftLabelWidth-1, rulerHeight, 
 		    MG_BLACK, font, "Base Position");
@@ -6202,6 +6235,8 @@ if (withLeftLabels)
 	    drawComplementArrow(vg,leftLabelX, y+rulerHeight,
 				leftLabelWidth-1, baseHeight, font);
 	y += basePositionHeight;
+        if (rulerMode == RULER_MODE_FULL & zoomedToBaseLevel)
+            y += rulerTranslationHeight;
 	}
     for (track = trackList; track != NULL; track = track->next)
         {
@@ -6412,25 +6447,50 @@ if (withGuidelines)
     }
 
 /* Show ruler at top. */
-if (withRuler)
+if (rulerMode != RULER_MODE_OFF)
     {
     struct track *track = trackList;
+    struct dnaSeq *seq = NULL, *extraSeq = NULL;
+                                /* extraSeq has extra leading & trailing bases
+                                 * for translation in to amino acids */
     y = 0;
-    vgSetClip(vg, insideX, y, insideWidth, basePositionHeight);
+    vgSetClip(vg, insideX, y, insideWidth, yAfterRuler-y+1);
     relNumOff = winStart;
-    vgDrawRulerBumpText(vg, insideX, y, rulerHeight, insideWidth, MG_BLACK, font,
-			relNumOff, winBaseCount, 0, 1);
+    vgDrawRulerBumpText(vg, insideX, y, rulerHeight, insideWidth, MG_BLACK, 
+                        font, relNumOff, winBaseCount, 0, 1);
     if (zoomedToBaseLevel)
         {
         Color baseColor = MG_BLACK;
         boolean complementRulerBases = cartUsualBoolean(cart, "complement", FALSE);
         if(complementRulerBases)
             baseColor = MG_GRAY;
+        // TODO: manage off-the-chromosome conditions
+        extraSeq = hDnaFromSeq(chromName, winStart-3, winEnd+3, dnaUpper);
+        /* clip off leading and trailing 3 bases, used for AA translation */
+        seq = cloneDnaSeq(extraSeq);
+        seq = newDnaSeq(seq->dna+3, seq->size-6, seq->name);
         drawBases(vg, insideX, y+rulerHeight, insideWidth, baseHeight, 
-		  baseColor, font, complementRulerBases);
+		  baseColor, font, complementRulerBases, seq);
         /*make a click on the bases complement them*/
         mapBoxToggleComplement(insideX, y+rulerHeight, insideWidth,
-			       baseHeight, NULL, chromName, winStart, winEnd, "complement bases");
+                            baseHeight, NULL, chromName, winStart, winEnd,
+                            "complement bases");
+        if (rulerMode == RULER_MODE_FULL && zoomedToBaseLevel)
+            {
+            char codon[4];
+            int frame;
+            struct simpleFeature *sfList;
+            double scale = scaleForWindow(insideWidth, winStart, winEnd);
+
+            y = yAfterBases;
+            for (frame = 0; frame < 3; frame++, y += codonHeight)
+                {
+                sfList = splitDnaByCodon(frame, winStart, winEnd, extraSeq, 
+                                                complementRulerBases); 
+                drawGenomicCodons(vg, sfList, scale, insideX, y, codonHeight,
+                                    font, cdsColor, winStart, MAXPIXELS);
+                }
+            }
         }
     vgUnclip(vg);
     
@@ -7584,8 +7644,6 @@ if (userSeqString && !ssFilesExist(userSeqString))
     }
 if (!hideControls)
     hideControls = cartUsualBoolean(cart, "hideControls", FALSE);
-s = cartUsualString(cart, "ruler", "on");
-withRuler = sameWord(s, "on");
 
 /* Register tracks that include some non-standard methods. */
 registerTrackHandler("rgdGene", rgdGeneMethods);
@@ -7968,7 +8026,8 @@ if (!hideControls)
 	    showedRuler = TRUE;
 	    controlGridStartCell(cg);
 	    hPrintf(" Base Position <BR>");
-	    hDropList("ruler", offOn, 2, offOn[withRuler]);
+	    hDropList("ruler", rulerMenu, sizeof(rulerMenu)/sizeof(char *), 
+                                                rulerMenu[rulerMode]);
 	    controlGridEndCell(cg);
 	    }
 
@@ -8065,7 +8124,8 @@ void zoomToBaseLevel()
 /* Set things so that it's zoomed to base level. */
 {
 zoomToSize(insideWidth/tl.mWidth);
-cartSetString(cart, "ruler", "on");
+if (rulerMode == RULER_MODE_OFF)
+    cartSetString(cart, "ruler", "dense");
 }
 
 void relativeScroll(double amount)
@@ -8220,6 +8280,8 @@ char newPos[256];
 char *defaultPosition = hDefaultPos(database);
 char *chrom;
 int start, end;
+char *s;
+
 position = getPositionFromCustomTracks();
 if (NULL == position) 
     {
@@ -8270,6 +8332,14 @@ withCenterLabels = cartUsualBoolean(cart, "centerLabels", TRUE);
 withGuidelines = cartUsualBoolean(cart, "guidelines", TRUE);
 insideX = trackOffsetX();
 insideWidth = tl.picWidth-gfxBorder-insideX;
+
+s = cartCgiUsualString(cart, "ruler", "dense");
+if (sameWord(s, "full"))
+    rulerMode = RULER_MODE_FULL;
+else if (sameWord(s, "dense") || sameWord(s, "on"))
+    rulerMode = RULER_MODE_ON;
+else
+    rulerMode = RULER_MODE_OFF;
 
 /* Do zoom/scroll if they hit it. */
 if (cgiVarExists("hgt.left3"))

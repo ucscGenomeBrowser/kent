@@ -65,4 +65,22 @@ int cdsColorSetup(struct vGfx *vg, struct track *tg, Color *cdsColor,
  * sequence and psl record for the given lf->name (only returns
  sequence and psl for mRNA, EST, or xenoMrna*/
 
+struct simpleFeature *splitDnaByCodon(int frame, int chromStart, int chromEnd,
+                                            struct dnaSeq *seq, bool reverse);
+/* Create list of codons from a DNA sequence */
+
+void makeCdsShades(struct vGfx *vg, Color *cdsColor);
+/* setup CDS colors */
+
+Color colorAndCodonFromGrayIx(struct vGfx *vg, char *codon, int grayIx, 
+                                        Color *cdsColor, Color ixColor);
+/*convert grayIx value to color and codon which
+ * are both encoded in the grayIx*/
+
+void drawGenomicCodons(struct vGfx *vg, struct simpleFeature *sfList,
+                double scale, int xOff, int y, int height,
+                MgFont *font, Color *cdsColor, int winStart, int maxPixels);
+/* Draw amino acid translation of genomic sequence based on a list
+   of codons. Used for browser ruler in full mode*/
+
 #endif /* CDS_H */

@@ -17,13 +17,12 @@
 #include "hgTracks.h"
 
 static void drawScaledBoxSampleWithText(struct vGfx *vg, 
-					int chromStart, int chromEnd, double 
-                                        scale, int xOff, int y, int height, 
-                                        Color color, int score, MgFont *font, 
-					char *text, boolean zoomed,
-                                        boolean zoomedBox, Color *cdsColor, 
-					Color textColor, int winStart, int 
-                                        maxPixels)
+                                        int chromStart, int chromEnd,
+                                        double scale, int xOff, int y,
+                                        int height, Color color, int score,
+                                        MgFont *font, char *text, bool zoomed,
+                                        Color *cdsColor, int winStart, 
+                                        int maxPixels)
 /* Draw a box scaled from chromosome to window coordinates with
    a codon or set of 3 or less bases drawn in the box. */
 {
@@ -79,8 +78,6 @@ static int convertCoordUsingPsl( int s, struct psl *psl )
 int i;
 int idx = -1;
 unsigned *qStarts = psl->qStarts;
-unsigned *tStarts = psl->tStarts;
-unsigned *blockSizes = psl->blockSizes;
 unsigned tStart = 0;
 unsigned thisQStart = 0;
 
@@ -243,8 +240,8 @@ Color lighterShade(struct vGfx *vg, Color color, double percentLess)
 
 
 
-static Color colorFromGrayIx(struct vGfx *vg, char *codon, int grayIx, Color 
-        *cdsColor, Color *trackColors, int lfColorIdx, Color ixColor)
+Color colorAndCodonFromGrayIx(struct vGfx *vg, char *codon, int grayIx, 
+                                        Color *cdsColor, Color ixColor)
 /*convert grayIx value to color and codon which
  * are both encoded in the grayIx*/
 {
@@ -283,8 +280,8 @@ return color;
 }
 
 
-static int setColorByCds(DNA *dna, int codon, boolean *foundStart, 
-			 boolean reverse)
+static int setColorByCds(DNA *dna, int codonEven, boolean *foundStart, 
+			                boolean reverse)
 {
 char codonChar;
 
@@ -295,12 +292,13 @@ if (codonChar == 0)
     return(-3);    //stop codon
 else if (codonChar == 'X')
     return(-2);     //bad input to lookupCodon
-else if (codonChar == 'M' && !(*foundStart))
+else if (codonChar == 'M')
     {
-    *foundStart = TRUE;
+    if (foundStart != NULL && !(*foundStart))
+        *foundStart = TRUE;
     return(-1);     //start codon
     }
-else if (codon == 0)
+else if (codonEven == 0)
     return(codonChar - 'A' + 1);       //odd color
 else
     return(codonChar - 'A' + 1 + 26);  //even color
@@ -322,13 +320,13 @@ sprintf(query, "select cds from mrna where acc = '%s'", acc);
 sr = sqlGetResult(conn, query);
 if((row = sqlNextRow(sr)) == NULL)
     errAbort(
-    "cds.c: mushGetMrnaStartStop() - Cannot get cds for %s from table \"mrna\"\n", acc);
+    "cds.c: getMrnaCds() - Cannot get cds for %s from table \"mrna\"\n", acc);
 sprintf(query, "select name from cds where id = '%d'", atoi(row[0]));
 sqlFreeResult(&sr);
 sr = sqlGetResult(conn, query);
 if((row = sqlNextRow(sr)) == NULL)
     errAbort(
-    "cds.c: mushGetMrnaStartStop() - Cannot get cds for %s from table \"cds\"\n", acc);
+    "cds.c: getMrnaCds() - Cannot get cds for %s from table \"cds\"\n", acc);
 genbankCdsParse(row[0], cds);
 sqlFreeResult(&sr);
 hFreeConn(&conn);
@@ -359,8 +357,7 @@ static struct simpleFeature *splitPslByCodon(char *chrom,
                                              isXeno, int maxShade, 
                                              int displayOption)
 {
-struct simpleFeature *sfList = NULL, *sf;
-unsigned cdsStart, cdsEnd;
+struct simpleFeature *sfList = NULL;
 unsigned *retGaps = NULL;
 boolean extraInfo = (displayOption != CDS_DRAW_GENOMIC_CODONS);
 struct genbankCds cds;
@@ -461,14 +458,15 @@ static struct dnaSeq *mustGetSeqUpper(char *name, char *tableName)
         mrnaSeq = hGenBankGetMrna(name, NULL);
 
     if (mrnaSeq == NULL)
-        printf("Cannot find refGene mRNA sequence for %s<br>\n", name );
+        printf("Cannot find refGene mRNA sequence for %s<br>\n", name);
     touppers(mrnaSeq->dna);
     return mrnaSeq;
 }
 
 
 
-static void makeCdsShades(struct vGfx *vg, Color *cdsColor )
+void makeCdsShades(struct vGfx *vg, Color *cdsColor)
+/* setup CDS colors */
 {
     cdsColor[CDS_ERROR] = vgFindColorIx(vg,0,0,0); 
     cdsColor[CDS_ODD] = vgFindColorIx(vg,CDS_ODD_R,CDS_ODD_G,CDS_ODD_B);
@@ -503,6 +501,54 @@ static void updatePartialCodon(char *retStr, char *chrom, int start,
     strncpy( retStr, tmpStr, 4 );
 }
 
+struct simpleFeature *splitDnaByCodon(int frame, int chromStart, int chromEnd,
+                                            struct dnaSeq *seq, bool reverse)
+/* Create list of codons from a DNA sequence.
+   The DNA sequence passed in must include 3 bases extra at the
+   start and the end to allow for creating partial codons */
+{
+struct simpleFeature *sfList = NULL, *sf = NULL;
+char codon[4];
+int codonCount = 0;
+int chromPos = chromStart+1;
+int i;
+DNA *start;
+int seqOffset;
+
+if (frame < 0 || frame > 2 || seq == NULL)
+    return NULL;
+if (reverse)
+    reverseComplement(seq->dna, seq->size);
+
+/* pick up bases for partial codon */
+seqOffset = frame;
+chromPos = chromPos - 3 + frame;
+
+zeroBytes(codon, 4);
+for (i = 0, start = seq->dna + seqOffset; i < seq->size; i++, chromPos++)
+    {
+    int offset = i % 3;
+    codon[offset] = *start++;
+    if (offset != 2)
+        continue;
+
+    /* new codon */
+    codonCount++;
+    AllocVar(sf);
+    sf->start = chromPos - 3;
+    sf->end = sf->start + 3;
+    if (reverse)
+        {
+        sf->start = winEnd - sf->start + winStart - 3;
+        sf->end = sf->start + 3;
+        }
+    sf->grayIx = setColorByCds(codon, codonCount % 2, NULL, FALSE);
+    zeroBytes(codon, 4);
+    slAddHead(&sfList, sf);
+    }
+slReverse(&sfList);
+return sfList;
+}
 
 static struct simpleFeature *splitByCodon( char *chrom, 
         struct linkedFeatures *lf, 
@@ -523,7 +569,6 @@ static struct simpleFeature *splitByCodon( char *chrom,
 
     boolean foundStart = FALSE;
     struct simpleFeature *sfList = NULL, *sf = NULL;
-    struct simpleFeature *tmp = NULL;
 
     int i0, iN, iInc;
     boolean posStrand;
@@ -736,9 +781,7 @@ struct dyString *ds = newDyString(256);
 struct dyString *ds2 = newDyString(256);
 char *retStrDy = NULL; 
 int mrnaS;
-int startI = -1;
 int size, i;
-char retStr[4];
 unsigned *ends = needMem(sizeof(unsigned)*psl->blockCount);
 static char saveStr[4];
 char tempStr[4];
@@ -832,8 +875,7 @@ if(mrnaS >= 0)
 	    reverseComplement(tempStr,strlen(tempStr));
 
         if (isDiff)
-	        genomicColor = colorFromGrayIx( vg, codon, grayIx,
-                        cdsColor, trackColors, lf->grayIx, ixColor );
+	        genomicColor = colorAndCodonFromGrayIx(vg, codon, grayIx, cdsColor, ixColor);
 
 	//re-set color of this block based on mrna seq rather tha
 	//than genomic, but keep the odd/even cycle of dark/light
@@ -841,8 +883,7 @@ if(mrnaS >= 0)
         mrnaGrayIx = setColorByCds(tempStr,(grayIx > 26),nullFoundStart, FALSE);
         if(color == cdsColor[CDS_START])
                 startColor = TRUE;
-	color = colorFromGrayIx(vg, mrnaCodon, mrnaGrayIx, cdsColor,
-                trackColors, lf->grayIx, ixColor);
+	color = colorAndCodonFromGrayIx(vg, mrnaCodon, mrnaGrayIx, cdsColor, ixColor);
         if(startColor && sameString(mrnaCodon,"M"))
                 color = cdsColor[CDS_START];
         if(genomicInsertion)
@@ -853,25 +894,26 @@ if(mrnaS >= 0)
     if (displayOption == CDS_DRAW_MRNA_BASES)
 	drawScaledBoxSampleWithText(vg, s, e, scale, xOff, y, heightPer, 
 				    color, lf->score, font, ds2->string,
-				    zoomedToBaseLevel, TRUE, cdsColor, textColor,
+				    zoomedToBaseLevel, cdsColor,
 				    winStart, maxPixels );
     else if (displayOption == CDS_DRAW_MRNA_CODONS)
 	drawScaledBoxSampleWithText(vg, s, e, scale, xOff, y, heightPer, 
 				    color, lf->score, font, mrnaCodon,
-				    zoomedToCodonLevel, TRUE, cdsColor, textColor,
+				    zoomedToCodonLevel, cdsColor,
 				    winStart, maxPixels );
     else if (displayOption == CDS_DRAW_DIFF_BASES)
 	drawScaledBoxSampleWithText(vg, s, e, scale, xOff, y, heightPer, 
-				    color, lf->score, font, retStrDy, zoomedToBaseLevel,
-				    TRUE, cdsColor, textColor, winStart, maxPixels );
+				    color, lf->score, font, retStrDy, 
+                                    zoomedToBaseLevel, cdsColor, 
+                                    winStart, maxPixels );
  
     else if (displayOption == CDS_DRAW_DIFF_CODONS)
 	{
 	if (mrnaCodon[0] != codon[0])
 	    drawScaledBoxSampleWithText(vg, s, e, scale, xOff, y, 
-					heightPer, color, lf->score, font, mrnaCodon,
-					zoomedToCodonLevel, TRUE, cdsColor, textColor,
-					winStart, maxPixels );
+					heightPer, color, lf->score, font,
+                                        mrnaCodon, zoomedToCodonLevel,
+                                        cdsColor, winStart, maxPixels );
 	else
 	    drawScaledBoxSample(vg, s, e, scale, xOff, y, heightPer, 
 				color, lf->score );
@@ -895,28 +937,30 @@ dyStringFree(&ds2);
 }
 
 void drawCdsColoredBox(struct track *tg,  struct linkedFeatures *lf, 
-		       int grayIx, Color *cdsColor, struct vGfx *vg, int xOff, int y, 
-		       double scale, MgFont *font, int s, int e, int heightPer, 
-		       boolean zoomedToCodonLevel, struct dnaSeq *mrnaSeq, struct psl *psl, 
-		       int drawOptionNum, boolean errorColor, boolean *foundStart, 
-		       int maxPixels, int winStart, Color originalColor)
+		       int grayIx, Color *cdsColor, struct vGfx *vg, int xOff, 
+                       int y, double scale, MgFont *font, int s, int e, 
+                       int heightPer, boolean zoomedToCodonLevel, 
+                       struct dnaSeq *mrnaSeq, struct psl *psl, 
+		       int drawOptionNum, boolean errorColor, 
+                       boolean *foundStart, int maxPixels, int winStart, 
+                       Color originalColor)
 /*draw a box that is colored by the bases inside it and its
  * orientation. Stop codons are red, start are green, otherwise they
  * alternate light/dark blue colors. These are defined in
  * cdsColors.h*/
 {
 
-boolean isGenomic = (drawOptionNum == CDS_DRAW_GENOMIC_CODONS);
 char codon[2] = " ";
-Color color = colorFromGrayIx(vg, codon, grayIx, cdsColor,
-        tg->colorShades, lf->grayIx, originalColor);
+Color color = colorAndCodonFromGrayIx(vg, codon, grayIx, cdsColor, 
+                                                originalColor);
 
 if (drawOptionNum == CDS_DRAW_GENOMIC_CODONS)
     /*any track in the genes category, with the genomic
      * coloring turned on in the options menu*/
     drawScaledBoxSampleWithText(vg, s, e, scale, xOff, y, heightPer, 
-				color, lf->score, font, codon, zoomedToCodonLevel, FALSE,
-				cdsColor, whiteIndex(), winStart, maxPixels );
+                                color, lf->score, font, codon, 
+                                zoomedToCodonLevel, cdsColor,
+                                winStart, maxPixels );
 else if (sameString(tg->mapName,"mrna") || 
 	 sameString(tg->mapName,"xenoMrna")||
          sameString(tg->mapName,"mrnaBlastz"))
@@ -962,7 +1006,6 @@ if (!cdsColorsMade)
     makeCdsShades(vg,cdsColor);
     cdsColorsMade = TRUE;
     }
-
    
 if(drawOptionNum>0 && zoomedToCodonLevel)
     {
@@ -987,7 +1030,21 @@ if(drawOptionNum>0 && zoomedToCodonLevel)
 return(drawOptionNum);
 }
 
+void drawGenomicCodons(struct vGfx *vg, struct simpleFeature *sfList,
+                double scale, int xOff, int y, int height,
+                MgFont *font, Color *cdsColor, int winStart, int maxPixels)
+/* Draw amino acid translation of genomic sequence based on a list
+   of codons. Used for browser ruler in full mode*/
+{
+struct simpleFeature *sf;
 
-
-
-
+for (sf = sfList; sf != NULL; sf = sf->next)
+    {
+    char codon[4];
+    Color color = colorAndCodonFromGrayIx(vg, codon, sf->grayIx, 
+                                                cdsColor, MG_GRAY);
+    drawScaledBoxSampleWithText(vg, sf->start, sf->end, scale, insideX, y,
+                                height, color, 1.0, font, codon, TRUE,
+                                cdsColor, winStart, maxPixels);
+    }
+}
