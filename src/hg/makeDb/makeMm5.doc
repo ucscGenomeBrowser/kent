@@ -6176,3 +6176,18 @@ axtChain -linearGap=../../chickenHumanTuned.gap $1 \
     /cluster/bin/i386/hgLoadPsl -noTNameIx mm5  *_blastzSelf.psl
 
 # end BLASTZSELF
+
+# CREATE kgSpAlias TABLE FOR PB (Done 10/20/04)
+
+    hgsql mm5 -e \
+    'select kgXref.kgID, spID, alias from kgXref, kgAlias where kgXref.kgID=kgAlias.kgID' >j.tmp
+    hgsql mm5 -e \
+    'select kgXref.kgID, spID, alias from kgXref, kgProtAlias where kgXref.kgID=kgProtAlias.kgID'\
+    >>j.tmp
+    cat j.tmp|sort -u |grep -v 'kgID' >mm5.kgSpAlias.tab
+    rm j.tmp
+
+    hgsql mm5 -e 'drop table kgSpAlias';
+    hgsql mm5 < ~/src/hg/lib/kgSpAlis.sql
+    hgsql mm5 -e 'load data local infile "mm5.kgSpAlias.tab" into table kgSpAlias'
+	 
