@@ -85,6 +85,10 @@ The format of the type fields:
       with other organism.  If present the display can be colored by
       chromosome and the chromosome and position in kilobases is shown
       as the item label.
+   Optional variable here, for psl tracks that also have sequence loaded:
+   pslSequence no		# allows user to select the other two
+   pslSequence all		# show nucleotide labels on all bases
+   pslSequence different	# show nucleotide labes only on different bases
 11. type rmsk
    Unique type for Repeat Masker tracks
 12. type sample [min] [max]
