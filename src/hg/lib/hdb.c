@@ -26,7 +26,7 @@
 #include "maf.h"
 #include "ra.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.146 2003/10/13 01:45:43 kent Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.147 2003/10/13 19:01:31 kent Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
@@ -528,6 +528,7 @@ struct hashEl *hashEl;
 if ((hashEl = hashLookup(hdbChromInfoHash(),chromName))!= NULL)
     return ((struct chromInfoEntry *)hashEl->val)->size;
 errAbort("There is no chromosome %s in database %s.",chromName,hdbName);
+return 0;
 }
 
 int hChromSize2(char *chromName)
@@ -537,6 +538,7 @@ struct hashEl *hashEl;
 if ((hashEl = hashLookup(hdbChromInfoHash2(),chromName))!= NULL)
     return ((struct chromInfoEntry *)hashEl->val)->size;
 errAbort("There is no chromosome %s in database %s.",chromName,hdbName2);
+return 0;
 }
 
 void hNibForChrom(char *chromName, char retNibName[512])
