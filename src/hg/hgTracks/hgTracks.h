@@ -101,6 +101,8 @@ struct track
     int subType;     /* Variable to say what subtype this is for similar groups
 	              * to share code. */
 
+    float minRange, maxRange;	/*min and max range for sample tracks 0.0 to 1000.0*/
+
     unsigned short private;	/* True(1) if private, false(0) otherwise. */
     int bedSize;		/* Number of fields if a bed file. */
     float priority;   /* Tracks are drawn in priority order. */

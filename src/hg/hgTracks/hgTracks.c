@@ -1512,7 +1512,7 @@ static void wiggleLinkedFeaturesDraw(struct track *tg,
     MgFont *font, Color color, enum trackVisibility vis)
 /* Currently this routine is adapted from Terry's 
  * linkedFeatureSeriesDraw() routine.
- * It is called for 'sample 9' tracks as specified in the trackDb.ra.
+ * It is called for 'sample' tracks as specified in the trackDb.ra.
  * and it looks at the cart to decide whether to interpolate, fill blocks,
  * and use anti-aliasing.*/
 {
@@ -1535,7 +1535,7 @@ int ybase;
 int sampleX, sampleY; /* A sample in sample coordinates. 
                        * Sample X coordinate is chromosome coordinate.
 		       * Sample Y coordinate is usually 0-1000 */
-int binCount = 999;   /* Maximum sample Y coordinate. */
+int binCount = 1000;   /* Maximum sample Y coordinate. */
 int bin;	      /* Sample Y coordinates are first converted to
                        * bin coordinates, and then to pixels.  I'm not
 		       * totally sure why.  */
@@ -1561,11 +1561,13 @@ double min0, max0;
 char o1[128]; /* Option 1 - linear interp */
 char o2[128]; /* Option 2 - anti alias */
 char o3[128]; /* Option 3 - fill */
-char o4[128]; /* Option 4 - max gap where interpolation is still done */
+char o4[128]; /* Option 4 - minimum vertical range cutoff of plot */	
+char o5[128]; /* Option 5 - maximum vertical range cutoff of plot */
+char o6[128]; /* Option 6 - max gap where interpolation is still done */
 
 double hFactor, hFactor2;
 double minRange, maxRange;
-
+double minRangeCutoff, maxRangeCutoff;
 
 Color gridColor = vgFindRgb(vg, &guidelineColor); /* for horizontal lines*/
 
@@ -1576,49 +1578,41 @@ if(lf==NULL) return;
 snprintf( o1, sizeof(o1),"%s.linear.interp", tg->mapName);
 snprintf( o2, sizeof(o2), "%s.anti.alias", tg->mapName);
 snprintf( o3, sizeof(o3),"%s.fill", tg->mapName);
-snprintf( o4, sizeof(o4),"%s.interp.gap", tg->mapName);
+snprintf( o4, sizeof(o5),"%s.min.cutoff", tg->mapName);
+snprintf( o5, sizeof(o6),"%s.max.cutoff", tg->mapName);
+snprintf( o6, sizeof(o4),"%s.interp.gap", tg->mapName);
+
 interpolate = cartUsualString(cart, o1, "Linear Interpolation");
 wiggleType = wiggleStringToEnum(interpolate);
 aa = cartUsualString(cart, o2, "on");
 antiAlias = sameString(aa, "on");
 fill = atoi(cartUsualString(cart, o3, "1"));
-lineGapSize = atoi(cartUsualString(cart, o4, "200"));
 
+//the 0.1 is so the label doesn't get truncated with integer valued user input min
+//display range.
+minRangeCutoff = max( atof(cartUsualString(cart,o4,"0.0"))-0.1, tg->minRange );
+maxRangeCutoff = min( atof(cartUsualString(cart,o5,"1000.0")), tg->maxRange);
+
+lineGapSize = atoi(cartUsualString(cart, o6, "200"));
 cartSetString( cart, "win", "F" );
 
 heightPer = tg->heightPer+1;
 hFactor = (double)heightPer/1000.0;
 
-//this information should be moved to the trackDb.ra
-if( sameString( tg->mapName, "humMus" ) )
-    {
-    minRange = 300.0;
-    maxRange = 1000.0;
+//errAbort( "min=%g, max=%g\n", minRangeCutoff, maxRangeCutoff );
 
-    min0 = whichSampleNum( minRange, -7.99515, 6.54171, 1000 );
-    max0 = whichSampleNum( maxRange, -7.99515, 6.54171, 1000 );
+minRange = whichSampleBin( minRangeCutoff, tg->minRange, tg->maxRange, binCount );
+maxRange = whichSampleBin( maxRangeCutoff, tg->minRange, tg->maxRange, binCount );
 
-    /*draw horizontal line across track at 0.0, 2.0, and 5.0*/
-    if( !isFull )
-	{
-	drawWiggleHorizontalLine( vg, 0.0, min0, max0, binCount,
-	    y, hFactor, heightPer, gridColor );
-	drawWiggleHorizontalLine( vg, 2.0, min0, max0, binCount,
-	    y, hFactor, heightPer, gridColor );
-	drawWiggleHorizontalLine( vg, 5.0, min0, max0, binCount,
-	    y, hFactor, heightPer, gridColor );
-	}
+//errAbort( "(%g,%g) cutoff=(%g,%g)\n", tg->minRange, tg->maxRange, minRangeCutoff, maxRangeCutoff );
 
-    }
-else if( sameString( tg->mapName, "humMusL" ) 
+if( sameString( tg->mapName, "humMusL" ) 
 	|| sameString( tg->mapName, "musHumL" )  )
     {
-    minRange = 0.0;
-    maxRange = whichSampleBin( 6.0, 0.0, 8.0 ,binCount );
-    min0 = whichSampleNum( minRange, 0.0, 8.0, binCount );
-    max0 = whichSampleNum( maxRange, 0.0, 8.0, binCount );
 
-    //errAbort( "whichSampleBin=%g\n", maxRange );
+
+    min0 = whichSampleNum( minRange, tg->minRange, tg->maxRange, binCount );
+    max0 = whichSampleNum( maxRange, tg->minRange, tg->maxRange,  binCount );
 
     if( isFull )
 	{
@@ -1627,38 +1621,10 @@ else if( sameString( tg->mapName, "humMusL" )
 		binCount, y, hFactor, heightPer, gridColor );
 	}
     }
-
 else if( sameString( tg->mapName, "zoo" ) )
     {
     /*Always interpolate zoo track (since gaps are explicitly defined*/
     lineGapSize = -1;
-    minRange = 500.0;
-    maxRange = 1000.0;
-    }
-else if( sameString( tg->mapName, "zooCons" ) )
-    {
-    minRange = 0.0;
-    maxRange = 1000.0;
-    }
-else if( sameString( tg->mapName, "binomialCons2" ) )
-    {
-    minRange = 0.0;
-    maxRange = 1000.0;
-    }
-else if( sameString( tg->mapName, "binomialCons3" ) )
-    {
-    minRange = 0.0;
-    maxRange = 200.0;
-    }
-else if( sameString( tg->mapName, "binomialCons" ) )
-    {
-    minRange = 0.0;
-    maxRange = 500.0;
-    }
-else
-    {
-    minRange = 1.0;
-    maxRange = 1000.0;
     }
 
 for(lf = tg->items; lf != NULL; lf = lf->next) 
@@ -8579,7 +8545,7 @@ void printYAxisLabel( struct vGfx *vg, int y, struct track *track, char *labelSt
     int itemHeight0 = track->itemHeight(track, track->items);
     int inWid = insideX-gfxBorder*3;
     
-    tmp = -whichSampleBin( atof(labelString), min0, max0, 999 );
+    tmp = -whichSampleBin( atof(labelString), min0, max0, 1000 );
     tmp = (int)((double)ymin+((double)tmp)*(double)track->heightPer/1000.0+(double)track->heightPer)-fontHeight/2.0;
     if( !withCenterLabels ) tmp -= fontHeight;
     vgTextRight(vg, gfxBorder, tmp, inWid-1, itemHeight0, track->ixColor, tl.font, labelString );
@@ -8609,7 +8575,7 @@ int i;
 int ymin, ymax;
 int scaledHeightPer;
 double minRange, maxRange;
-int binCount = 999;
+int binCount = 1000;
 char minRangeStr[32];
 char maxRangeStr[32];
 struct slList *prev = NULL;
@@ -8721,27 +8687,25 @@ if (withLeftLabels)
 	if (withCenterLabels)
 	    tHeight += fontHeight;
 	vgSetClip(vg, leftLabelX, y, leftLabelWidth, tHeight);
-	if( sameString( track->mapName, "humMus" ) )
-	    {
-	    min0 = whichSampleNum( 300.0, -7.99515, 6.54171, binCount );
-	    max0 =  whichSampleNum( 1000.0, -7.99515, 6.54171, binCount );
-	    sprintf( minRangeStr, "%0.2g", min0  );
-	    sprintf( maxRangeStr, "%0.2g", max0 );
-
-	    if( vis == tvDense )
-		{
-		printYAxisLabel( vg, y, track, "0.0", min0, max0 );
-		printYAxisLabel( vg, y, track, "2.0", min0, max0 );
-		printYAxisLabel( vg, y, track, "5.0", min0, max0 );
-		}
-	    }
-	else if( sameString( track->mapName, "humMusL" ) ||
+	
+    	if( sameString( track->mapName, "humMusL" ) ||
 		 sameString( track->mapName, "musHumL" ))
 	    {
+	    double minRangeCutoff, maxRangeCutoff;
+	    char o4[128];
+	    char o5[128];
 	    minRange = 0.0;
-	    maxRange = whichSampleBin( 6.0, 0.0, 8.0 ,binCount ); 
-	    min0 = whichSampleNum( minRange, 0.0, 8.0, binCount );
-	    max0 = whichSampleNum( maxRange, 0.0, 8.0, binCount );
+	    snprintf( o4, sizeof(o4),"%s.min.cutoff", track->mapName);
+	    snprintf( o5, sizeof(o5),"%s.max.cutoff", track->mapName);
+
+            minRangeCutoff = max( atof(cartUsualString(cart,o4,"0.0"))-0.1, track->minRange );
+   	    maxRangeCutoff = min( atof(cartUsualString(cart,o5,"1000.0")), track->maxRange);
+	    minRange = whichSampleBin( minRangeCutoff, track->minRange, track->maxRange, binCount );
+	    maxRange = whichSampleBin( maxRangeCutoff, track->minRange, track->maxRange ,binCount ); 
+	    min0 = whichSampleNum( minRange, track->minRange,track->maxRange, binCount );
+	    max0 = whichSampleNum( maxRange, track->minRange, track->maxRange, binCount );
+
+	//errAbort( "%g,%g\n", minRangeCutoff, maxRangeCutoff );
 
 
 	    sprintf( minRangeStr, " "  );
@@ -8758,36 +8722,10 @@ if (withLeftLabels)
 		}
 
 	    }
-
-	else if( sameString( track->mapName, "zoo" ) )
-	    {
-	    sprintf( minRangeStr, "%d", (int)whichSampleNum( 500.0, 1.0, 100.0, 1000 ));
-	    sprintf( maxRangeStr, "%d", (int)whichSampleNum( 1000.0, 1.0, 100.0, 1000 ));
-	    }
-	else if( sameString( track->mapName, "zooCons" ) )
-	    {
-	    sprintf( minRangeStr, "%d", (int)whichSampleNum( 0.0, 0.0, 5.0, 1000 ));
-	    sprintf( maxRangeStr, "%d", (int)whichSampleNum( 1000.0, 0.0, 5.0, 1000 ));
-	    }
-	else if( sameString( track->mapName, "binomialCons2" ) )
-	    {
-	    sprintf( minRangeStr, "%d", (int)0.0 );
-	    sprintf( maxRangeStr, "%d", (int)300.0);
-	    }
-	else if( sameString( track->mapName, "binomialCons3" ) )
-	    {
-	    sprintf( minRangeStr, "%d", (int)0.0);
-	    sprintf( maxRangeStr, "%d", (int)200.0);
-	    }
-	else if( sameString( track->mapName, "binomialCons" ) )
-	    {
-	    sprintf( minRangeStr, "%d", (int)0.0);
-	    sprintf( maxRangeStr, "%d", (int)500.0);
-	    }
 	else
 	    {
-	    sprintf( minRangeStr, "%d", 1); 
-	    sprintf( maxRangeStr, "%d", 100);
+	    sprintf( minRangeStr, "%d", (int)track->minRange);
+	    sprintf( maxRangeStr, "%d", (int)track->maxRange);
 	    }
 
 	
@@ -8843,7 +8781,7 @@ if (withLeftLabels)
 			rootName = cloneString( name );
 			beforeFirstPeriod( rootName );
 			if( sameString( track->mapName, "humMusL" ))
-			    vgTextRight(vg, leftLabelX, y, leftLabelWidth - 1, itemHeight,
+			    vgTextRight(vg, leftLabelX-30, y, leftLabelWidth - 1, itemHeight,
 					track->ixColor, font, "Mouse Cons");
 			else if( sameString( track->mapName, "musHumL" ))
 			    vgTextRight(vg, leftLabelX, y, leftLabelWidth - 1, itemHeight,
@@ -9451,19 +9389,21 @@ else if (sameWord(type, "sample"))
     {
     int fieldCount = 9;
 
-    if (wordCount > 1)
-        fieldCount = atoi(words[1]);
-    track->bedSize = fieldCount;
-    if (fieldCount == 9)
-	{
+    if (wordCount > 1)     /*sample minRange maxRange*/
+    {
+        track->minRange = atof(words[1]);
+        track->maxRange = atof(words[2]);
+    }
+    else                    /*default range settings*/
+    {
+        track->minRange = 0.0;
+        track->maxRange = 1000.0;
+    }
+
+    track->bedSize = 9;
 	track->subType = lfSubSample;     /*make subType be "sample" (=2)*/
 	sampleLinkedFeaturesMethods(track);
 	track->loadItems = loadSampleIntoLinkedFeature;
-	}
-    else
-	{
-	errAbort("A 'sample' track must have exactly 9 fields.(%d)", fieldCount);
-	}
     }
 else if (sameWord(type, "genePred"))
     {
