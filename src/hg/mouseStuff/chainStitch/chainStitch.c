@@ -7,7 +7,7 @@
 #include "chain.h"
 #include "dystring.h"
 
-int fudge=50000;
+int maxGap=250000;
  
 void usage()
 /* Explain usage and exit. */
@@ -17,11 +17,12 @@ errAbort(
   "usage:\n"
   "   chainStitch psls chains outChains outFound outNotFound\n"
   "options:\n"
-  "   -xxx=XXX\n"
+  "   -maxGap=N    defines max gap possible (default 250,000)\n"
   );
 }
 
 static struct optionSpec options[] = {
+   {"maxGap", OPTION_INT},
    {NULL, 0},
 };
 
@@ -255,8 +256,8 @@ for(psl = *pslList; psl ;  psl = nextPsl)
     for(chain = *chainList; chain ; prevChain = chain , chain = nextChain)
 	{
 	nextChain = chain->next;
-	if (((tStart <= chain->tEnd + fudge) && (tStart > chain->tEnd)) &&
-	     (qStart <= chain->qEnd + fudge) && (qStart > chain->qEnd))
+	if (((tStart <= chain->tEnd + maxGap) && (tStart > chain->tEnd)) &&
+	     (qStart <= chain->qEnd + maxGap) && (qStart > chain->qEnd))
 	    {
 	    if (!addPslToChain(chain, psl, addedBases))
 		errAbort("after chains");
@@ -288,8 +289,8 @@ for(chain1 = chainIn; chain1 ; chain1 = chain1Next)
     chain1Next = chain1->next;
     for(chain2 = chain1Next; chain2 ; chain2 = chain2->next)
 	{
-	    if ((chain1->tStart <= chain2->tStart) && (chain1->tEnd + fudge > chain2->tStart)
-	       && (chain1->qStart <= chain2->qStart) && (chain1->qEnd + fudge > chain2->qStart) &&
+	    if ((chain1->tStart <= chain2->tStart) && (chain1->tEnd + maxGap > chain2->tStart)
+	       && (chain1->qStart <= chain2->qStart) && (chain1->qEnd + maxGap > chain2->qStart) &&
 		(chain1->qEnd < chain2->qStart) && (chain1->tEnd < chain2->tStart))
 		{
 		assert(chain1->tStart < chain1->tEnd);
@@ -307,8 +308,8 @@ for(chain1 = chainIn; chain1 ; chain1 = chain1Next)
 		freez(&chain1);
 		break;
 		}
-	    else if ((chain1->tStart >= chain2->tEnd) && (chain1->tStart - fudge < chain2->tEnd)
-		&& (chain1->qStart >= chain2->qEnd) && (chain1->qStart - fudge < chain2->qEnd))
+	    else if ((chain1->tStart >= chain2->tEnd) && (chain1->tStart - maxGap < chain2->tEnd)
+		&& (chain1->qStart >= chain2->qEnd) && (chain1->qStart - maxGap < chain2->qEnd))
 		{
 		errAbort("shouldn't get here\n");
 		chain2->tEnd = chain1->tEnd;
@@ -347,8 +348,8 @@ for(psl = *pslList; psl ;  psl = nextPsl)
     for(chain = *chainList; chain ; prevChain = chain , chain = nextChain)
 	{
 	nextChain = chain->next;
-	if (((tStart > chain->tStart - fudge) && (tEnd < chain->tStart)) &&
-	     (qStart > chain->qStart - fudge) && (qEnd < chain->qStart))
+	if (((tStart > chain->tStart - maxGap) && (tEnd < chain->tStart)) &&
+	     (qStart > chain->qStart - maxGap) && (qEnd < chain->qStart))
 	    {
 	    if (!addPslToChain(chain, psl, addedBases))
 		errAbort("before chains");
@@ -395,7 +396,7 @@ int count;
 count = 0;
 while ((psl = pslNext(pslLf)) != NULL)
     {
-    assert(psl->strand[1] == '+');
+    assert((psl->strand[1] == 0) || (psl->strand[1] == '+'));
     count++;
     dyStringClear(dy);
     dyStringPrintf(dy, "%s%c%s", psl->qName, psl->strand[0], psl->tName);
@@ -416,7 +417,8 @@ lineFileClose(&pslLf);
 printf("read in  %d psls\n",count);
 
 for(sp = spList; sp; sp = sp->next)
-    slSort(&sp->psl, pslCmpTarget);
+    slReverse(&sp->psl);
+    //slSort(&sp->psl, pslCmpTarget);
 
 count = 0;
 while ((chain = chainRead(chainsLf)) != NULL)
@@ -450,6 +452,7 @@ for(csp = cspList; csp; csp = csp->next)
 addedBases = deletedBases = 0;
 for(sp = spList; sp; sp = sp->next)
     {
+#ifdef NOTNOW
     /* find the chains associated with this strand */
     if ((csp = hashFindVal(chainHash, sp->name)) != NULL)
 	{
@@ -463,6 +466,7 @@ for(sp = spList; sp; sp = sp->next)
 	slReverse(&sp->psl);
 	checkBeforeChains(&sp->psl, &csp->chain, outFound, &addedBases);
 	}
+#endif
 
     /* do we still have psl's */
     if (sp->psl != NULL)
@@ -496,8 +500,8 @@ for(sp = spList; sp; sp = sp->next)
 		//freez(&psl);
 		continue;
 		}
-	    if (chainList)
-		checkAfterChains(&fakePslList, &chainList, outFound, &addedBases);
+	//    if (chainList)
+	//	checkAfterChains(&fakePslList, &chainList, outFound, &addedBases);
 	    if (fakePslList == NULL)
 		{
 		//freez(&psl);
@@ -577,6 +581,7 @@ int main(int argc, char *argv[])
 optionInit(&argc, argv, options);
 if (argc != 6)
     usage();
+maxGap = optionInt("maxGap", maxGap);
 chainStitch(argv[1], argv[2], argv[3], argv[4], argv[5]);
 return 0;
 }
