@@ -107,11 +107,13 @@ return count;
 static boolean isGtfGroup(char *group)
 /* Return TRUE if group field looks like GTF */
 {
-if (countChars(group, '"') < 2)
-    return FALSE;
 if (strstr(group, "gene_id") == NULL)
     return FALSE;
-return TRUE;
+if (countChars(group, '"') >= 2)
+    return TRUE;
+if (strstr(group, "transcript_id") != NULL)
+    return TRUE;
+return FALSE;
 }
 
 static void readQuotedString(struct lineFile *lf, char *in, char *out, char **retNext)
@@ -127,9 +129,11 @@ static void parseGtfEnd(char *s, struct gffFile *gff, struct gffLine *gl, struct
 {
 char *type, *val;
 struct hashEl *hel;
+bool gotSemi;
 
 for (;;)
    {
+   gotSemi = FALSE;
    if ((type = nextWord(&s)) == NULL)
        break;
    s = skipLeadingSpaces(s);
@@ -141,8 +145,17 @@ for (;;)
        readQuotedString(lf, s, val, &s);
        }
    else
+       {
+       int len;
        val = nextWord(&s);
-   if (s != NULL)
+       len = strlen(val) - 1;
+       if (val[len] == ';')
+	   {
+	   val[len] = 0;
+           gotSemi = TRUE;
+	   }
+       }
+   if (s != NULL && !gotSemi)
       {
       s = strchr(s, ';');
       if (s != NULL)

@@ -825,6 +825,10 @@ FILE *mustOpen(char *fileName, char *mode)
 {
 FILE *f;
 
+if (sameString(fileName, "stdin"))
+    return stdin;
+if (sameString(fileName, "stdout"))
+    return stdout;
 if ((f = fopen(fileName, mode)) == NULL)
     {
     char *modeName = "";
@@ -982,7 +986,8 @@ void carefulClose(FILE **pFile)
 FILE *f;
 if ((f = *pFile) != NULL)
     {
-    fclose(f);
+    if (f != stdin && f != stdout)
+	fclose(f);
     *pFile = NULL;
     }
 }

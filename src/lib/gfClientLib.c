@@ -1220,17 +1220,31 @@ for (t3 = t3List; t3 != NULL; t3 = t3->next)
 	    }
 	}
     }
+uglyf("I should be gone in trans3Offset<BR>\n");
+uglyf("aa = %p\n", aa);
+for (t3 = t3List; t3 != NULL; t3 = t3->next)
+    {
+    for (frame = 0; frame < 3; ++frame)
+        {
+	seq = t3->trans[frame];
+	uglyf("  %s frame %d, %p - %p<BR>\n", t3->name, frame, seq->dna, seq->dna + seq->size);
+	}
+    }
 internalErr();
 }
 
-static int t3GenoPos(char *pt, bioSeq *seq, struct trans3 *t3List)
+static int t3GenoPos(char *pt, bioSeq *seq, struct trans3 *t3List, boolean isEnd)
 /* Convert from position in one of three translated frames in
  * t3List to genomic offset. */
 {
 int offset, frame;
 if (t3List != NULL)
     {
+    if (isEnd)
+        pt -= 1;
     trans3Offset(t3List, pt, &offset, &frame);
+    if (isEnd)
+        offset += 1;
     return offset*3 + frame;
     }
 else
@@ -1272,9 +1286,11 @@ int score = 0;
 
 
 if (t3Hash != NULL)
+    {
     t3List = hashMustFindVal(t3Hash, genoSeq->name);
-hStart = t3GenoPos(ali->hStart, genoSeq, t3List) + chromOffset;
-hEnd = t3GenoPos(right->hEnd, genoSeq, t3List) + chromOffset;
+    }
+hStart = t3GenoPos(ali->hStart, genoSeq, t3List, FALSE) + chromOffset;
+hEnd = t3GenoPos(right->hEnd, genoSeq, t3List, TRUE) + chromOffset;
 
 /* Count up matches, mismatches, inserts, etc. */
 for (ff = ali; ff != NULL; ff = nextFf)
@@ -1300,8 +1316,8 @@ for (ff = ali; ff != NULL; ff = nextFf)
 	}
     if (nextFf != NULL)
 	{
-	int nhStart = t3GenoPos(nextFf->hStart, genoSeq, t3List) + chromOffset;
-	int ohEnd = t3GenoPos(ff->hEnd, genoSeq, t3List) + chromOffset;
+	int nhStart = t3GenoPos(nextFf->hStart, genoSeq, t3List, FALSE) + chromOffset;
+	int ohEnd = t3GenoPos(ff->hEnd-1, genoSeq, t3List, TRUE) + chromOffset;
 	int hGap = nhStart - ohEnd;
 	int nGap = nextFf->nStart - ff->nEnd;
 
@@ -1355,7 +1371,7 @@ if (score >= minMatch)
     fprintf(out, "\t");
     for (ff = ali; ff != NULL; ff = ff->right)
 	{
-	fprintf(out, "%d,", t3GenoPos(ff->hStart, genoSeq, t3List) + chromOffset);
+	fprintf(out, "%d,", t3GenoPos(ff->hStart, genoSeq, t3List, FALSE) + chromOffset);
 	}
     fprintf(out, "\n");
     if (ferror(out))
