@@ -41,6 +41,7 @@ errAbort(
  "options:\n"
  "   -nohead  No header written for .psl files\n"
  "   -dots=N Output a dot every N lines processed\n"
+ "   -pslQ  Lift query (rather than target) side of psl\n"
  );
 }
 
@@ -255,7 +256,8 @@ for (i=0; i<sourceCount; ++i)
 fclose(dest);
 }
 
-void liftPsl(char *destFile, struct hash *liftHash, int sourceCount, char *sources[])
+void liftPsl(char *destFile, struct hash *liftHash, int sourceCount, char *sources[],
+	boolean querySide)
 /* Lift up coordinates in .psl file. */
 {
 FILE *dest = mustOpen(destFile, "w");
@@ -265,12 +267,14 @@ struct lineFile *lf;
 int lineSize, wordCount;
 char *line, *words[32];
 struct psl *psl;
-unsigned *tStarts;
+unsigned *starts;
 struct liftSpec *spec;
 int offset;
 int blockCount;
-char *tName;
+char *seqName;
 int dotMod = dots;
+int seqSize;
+int strandChar = (querySide ? 0 : 1);
 
 if (!nohead)
     pslWriteHead(dest);
@@ -295,8 +299,11 @@ for (i=0; i<sourceCount; ++i)
 		dotMod = dots;
 		}
 	    }
-	tName = psl->tName;
-	spec = findLift(liftHash, tName, lf);
+	if (querySide)
+	    seqName = psl->qName;
+	else
+	    seqName = psl->tName;
+	spec = findLift(liftHash, seqName, lf);
 	if (spec == NULL)
 	    {
 	    if (!carryMissing)
@@ -308,29 +315,51 @@ for (i=0; i<sourceCount; ++i)
 	else
 	    {
 	    offset = spec->offset;
-	    psl->tStart += offset;
-	    psl->tEnd += offset;
+	    if (querySide)
+	        {
+		psl->qStart += offset;
+		psl->qEnd += offset;
+		starts = psl->qStarts;
+		seqSize = psl->qSize;
+		}
+	    else
+	        {
+		psl->tStart += offset;
+		psl->tEnd += offset;
+		starts = psl->tStarts;
+		seqSize = psl->tSize;
+		}
 	    blockCount = psl->blockCount;
-	    tStarts = psl->tStarts;
-	    if (psl->strand[1] == '-')
+	    if (psl->strand[strandChar] == '-')
 	        {
 		for (j=0; j<blockCount; ++j)
 		    {
-		    int tr = psl->tSize - tStarts[j];
+		    int tr = seqSize - starts[j];
 		    tr += offset;
-		    tStarts[j] = spec->size - tr;
+		    starts[j] = spec->size - tr;
 		    }
 		}
 	    else
 	        {
 		for (j=0; j<blockCount; ++j)
-		    tStarts[j] += offset;
+		    starts[j] += offset;
 		}
-	    psl->tSize = spec->size;
-	    psl->tName = spec->newName;
+	    if (querySide)
+	        {
+		psl->qSize = spec->size;
+		psl->qName = spec->newName;
+		}
+	    else
+	        {
+		psl->tSize = spec->size;
+		psl->tName = spec->newName;
+		}
 	    }
 	pslTabOut(psl, dest);
-	psl->tName = tName;
+	if (querySide)
+	    psl->qName = seqName;
+	else
+	    psl->tName = seqName;
 	pslFree(&psl);
 	}
     lineFileClose(&lf);
@@ -726,7 +755,7 @@ else if (endsWith(destType, ".psl") || endsWith(destType, ".pslx"))
     {
     rmChromPart(lifts);
     liftHash = hashLift(lifts);
-    liftPsl(destFile, liftHash, sourceCount, sources);
+    liftPsl(destFile, liftHash, sourceCount, sources, cgiBoolean("pslQ") || cgiBoolean("pslq"));
     }
 else if (endsWith(destType, ".agp"))
     {
