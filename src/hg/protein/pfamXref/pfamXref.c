@@ -61,7 +61,7 @@ if ((inf = fopen(proteinFileName, "r")) == NULL)
 done = 0;
 while (!done)
     {
-    // get to the beginning of a Pfam record
+    /* get to the beginning of a Pfam record */
     idFound = 0;
     while (fgets(line, 1000, inf) != NULL)
     	{
@@ -75,20 +75,20 @@ while (!done)
     if (!idFound) break;
     
     chp = chp + 8;
-    *(chp + strlen(chp) - 1) = '\0'; // remove LF
+    *(chp + strlen(chp) - 1) = '\0'; /* remove LF */
     pfamID = strdup(chp);
     
-    // Get Pfam AC
+    /* Get Pfam AC */
 
     fgets(line, 1000, inf);
     chp = strstr(line, "GF AC   ");
     chp = chp + 8;
     *(chp + strlen(chp) - 1) = '\0'; // remove LF
+    chp1 = strstr(chp, ".");
+    if (chp1 != NULL) *chp1 = '\0';
     pfamAC = strdup(chp);
-
-    // Get Pfam description
-    // Please note, Pfam-B does not have this field.
-
+    
+    /* Get Pfam description.  Please note, Pfam-B does not have this field.*/
     fgets(line, 1000, inf);
     chp = strstr(line, "GF DE   ");
     chp = chp + 8;
@@ -98,7 +98,7 @@ while (!done)
     fprintf(o1, "%s\t%s\t%s\n", pfamAC, pfamID, desc);
     fflush(o1); 
 
-    // work on "#=GS ... AC ... " lines to get SWISS-PROT accession number
+    /* work on "#=GS ... AC ... " lines to get SWISS-PROT accession number */
 
     gsDone  = 0;
     gsFound = 0;
