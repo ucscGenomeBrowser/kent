@@ -162,8 +162,16 @@ type sample 9
 
 track parsPValues
 shortLabel parsPValues
-longlabel PValues of parsimony scores
+longlabel Parsimony PValues Conservation Score
 priority 430
+altColor 0,160,0
+visibility full
+type sample 9
+
+track uniformPValues
+shortLabel uniformPValues
+longlabel Uniform PValues Conservation Score
+priority 435
 altColor 0,160,0
 visibility full
 type sample 9
@@ -334,7 +342,7 @@ type psl xeno
 
 track mcs_u
 shortLabel MCS (Uniform)
-longLabel Uniform P-Value Based Approach
+longLabel Uniform P-Value based MCSs
 priority 500
 visibility hide
 color 0,120,0
@@ -342,8 +350,16 @@ type bed 3 .
 
 track mcs_b
 shortLabel MCS (Binomial)
-longLabel Binomial-based Conservation Score, threshold = 1.05
+longLabel Binomial-based MCSs
 priority 510
+visibility hide
+color 0,60,120
+type bed 3 .
+
+track mcs_p
+shortLabel MCS (Parsimony P-Value)
+longLabel Parsimony P_Value based MCSs
+priority 520
 visibility hide
 color 0,60,120
 type bed 3 .
