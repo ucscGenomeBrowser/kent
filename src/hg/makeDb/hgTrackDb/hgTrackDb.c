@@ -98,7 +98,7 @@ sprintf(dirName, "%s", hgRoot);
 sprintf(raName, "%s/%s", dirName, "trackDb.ra");
 addVersion(database, dirName, raName, uniqHash, htmlHash, &tdList);
 slSort(&tdList, trackDbCmp);
-printf("Loaded %d track descriptions from %s\n", slCount(tdList), hgRoot);
+printf("Loaded %d track descriptions total\n", slCount(tdList));
 
 /* Write to tab-separated file. */
     {

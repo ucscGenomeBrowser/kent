@@ -15,6 +15,14 @@ type bed 5 +
 
 track stsMarker
 shortLabel STS Markers
+longLabel STS Markers on Genetic (blue), FISH (green) and RH (black) Maps
+priority 3
+visibility dense
+altColor 128,128,255,
+type bed 5 +
+
+track stsMap
+shortLabel STS Markers
 longLabel STS Markers on Genetic (blue), FISH (green) and Radiation Hybrid (black) Maps
 priority 3
 visibility dense
@@ -174,6 +182,7 @@ priority 20
 visibility hide
 color 67,57,206
 altColor 204,20,35
+private on
 
 track mgc_mrna
 shortLabel MGC mRNAs
@@ -182,6 +191,7 @@ priority 21
 visibility hide
 spectrum on
 type psl .
+private on
 
 track cpgIsland
 shortLabel CpG Islands
@@ -197,6 +207,8 @@ shortLabel Other mRNAs
 longLabel Non-Human mRNAs from Genbank
 priority 23
 visibility dense
+color 0,60,120
+altColor 200,220,255
 spectrum on
 type psl xeno
 
@@ -205,8 +217,11 @@ shortLabel Other Best mRNAs
 longLabel Non-Human mRNAs from Genbank Best in Genome Alignments
 priority 23.1
 visibility dense
+color 0,60,120
+altColor 200,220,255
 spectrum on
 type psl xeno
+private on
 
 track blatMouse
 shortLabel Mouse Blat
@@ -227,6 +242,7 @@ color 100,50,0
 altColor 255,240,200
 spectrum on
 type psl xeno
+private on
 
 track exoMouse
 shortLabel Exonerate Mouse
@@ -266,6 +282,7 @@ color 0,60,120
 altColor 200,220,255
 spectrum on
 type psl xeno
+private on
 
 track tet_waba
 shortLabel Tetraodon
@@ -326,6 +343,7 @@ priority 36
 visibility dense
 chromosomes chr22,
 type bed 4 +
+private on
 
 track rosettaPe
 shortLabel Rosetta P. E.
@@ -334,6 +352,7 @@ priority 37
 visibility dense
 chromosomes chr22,
 type bed 4 +
+private on
 
 track uniGene
 shortLabel UniGene
