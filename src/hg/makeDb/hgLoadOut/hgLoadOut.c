@@ -9,10 +9,10 @@
 #include "jksql.h"
 #include "rmskOut.h"
 
-static char const rcsid[] = "$Id: hgLoadOut.c,v 1.10 2004/02/23 09:07:21 kent Exp $";
+static char const rcsid[] = "$Id: hgLoadOut.c,v 1.11 2004/10/24 18:31:22 kent Exp $";
 
 char *createRmskOut = "CREATE TABLE %s (\n"
-"%s"				/* Optional bin */
+"   bin smallint unsigned not null,     # bin index field for range queries\n"
 "   swScore int unsigned not null,	# Smith Waterman alignment score\n"
 "   milliDiv int unsigned not null,	# Base mismatches in parts per thousand\n"
 "   milliDel int unsigned not null,	# Bases deleted in parts per thousand\n"
@@ -29,13 +29,10 @@ char *createRmskOut = "CREATE TABLE %s (\n"
 "   repEnd int not null,	# End in repeat sequence\n"
 "   repLeft int not null,	# Size of repeat sequence\n"
 "   id char(1) not null,	# '*' or ' '.  I don't know what this means\n"
-"             #Indices\n"
-"%s"                            /* Optional bin. */
-"   INDEX(genoStart),\n"
-"   INDEX(genoEnd)\n"
-")\n";
+"             #Indices\n";
 
 boolean noBin = FALSE;
+boolean noSplit = FALSE;
 char *tabFileName = NULL;
 char *suffix = NULL;
 FILE *tabFile = NULL;
@@ -50,8 +47,8 @@ errAbort(
   "For each table chrN.out this will create the table\n"
   "chrN_rmsk in the database\n"
   "options:\n"
-  "   -nobin - don't introduce bin fields\n"
   "   -tabFile=text.tab - don't actually load database, just create tab file\n"
+  "   -nosplit - assume single rmsk table rather than chrN_rmsks\n"
   "   -table=name - use a different suffix other than the default (rmsk)\n");
 }
 
@@ -158,18 +155,38 @@ if (tabFile == NULL)
     {
     carefulClose(&f);
     splitPath(rmskFile, dir, base, extension);
-    chopSuffix(base);
-    sprintf(tableName, "%s_%s", base,suffix);
+    if (!noSplit)
+	{
+	chopSuffix(base);
+	sprintf(tableName, "%s_%s", base,suffix);
+	}
+    else
+        sprintf(tableName, "%s", suffix);
     verbose(1, "Loading up table %s\n", tableName);
     if (sqlTableExists(conn, tableName))
 	{
 	dyStringPrintf(query, "DROP table %s", tableName);
 	sqlUpdate(conn, query->string);
 	}
+
+    /* Create first part of table definitions, the fields. */
     dyStringClear(query);
-    dyStringPrintf(query, createRmskOut, tableName,
-       (noBin ? "" : "  bin smallint unsigned not null,\n"),
-       (noBin ? "" : "   INDEX(bin),\n") );
+    dyStringPrintf(query, createRmskOut, tableName);
+
+    /* Create the indexes */
+    if (!noSplit)
+        {
+	dyStringAppend(query, 
+	   "INDEX(bin), INDEX(genoStart), INDEX(genoEnd))\n");
+	}
+    else
+        {
+	dyStringAppend(query, 
+	   "INDEX(genoName(16),bin),\n"
+	   "INDEX(genoName(16),genoStart), \n"
+	   "INDEX(genoName(16),genoEnd))\n");
+	}
+
     sqlUpdate(conn, query->string);
 
     /* Load database from tab-file. */
@@ -203,7 +220,7 @@ int main(int argc, char *argv[])
 cgiSpoof(&argc, argv);
 if (argc < 3)
     usage();
-noBin = (cgiBoolean("nobin") || cgiBoolean("noBin"));
+noSplit = (cgiBoolean("noSplit") || cgiBoolean("nosplit"));
 suffix = cgiOptionalString("table");
 if (suffix == NULL) 
     suffix = "rmsk";
