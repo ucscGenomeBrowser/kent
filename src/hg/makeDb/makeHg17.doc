@@ -355,6 +355,8 @@ done >> seq_contig.md
 # REPEAT MASKING (DONE - 2004-05-24 - Hiram)
     #	The randoms were rearranged after this was first done,
     #	they are re-made below 2004-06-02)
+    #	RM version:
+    #	RepBase Update 8.12, RM database version 20040130
 
     # Split contigs, run RepeatMasker, lift results
 
@@ -7798,6 +7800,18 @@ axtChain $1 /iscratch/i/gs.18/build35/bothMaskedNibs \
     #	682833453 bases of 2866216770 (23.824%) in intersection
     #	featureBits hg16 chainSelf
     #	626345319 bases of 2865248791 (21.860%) in intersection
+
+    #	DELIVER these chain files to hgdownload (2005-01-27 - Hiram)
+    ssh eieio
+    cd /cluster/data/hg17/bed/blastzSelf/axtChain/chain
+    gzip chr*.chain
+
+    ssh hgwdev
+    mkdir /usr/local/apache/htdocs/goldenPath/hg17/vsSelf
+    cd /cluster/data/hg17/bed/blastzSelf/axtChain/chain
+    cp -p *.chain.gz /usr/local/apache/htdocs/goldenPath/hg17/vsSelf
+
+    #	fixup README file, request push
 
 # NET SELF (DONE - 2004-07-13 - Hiram)
 
