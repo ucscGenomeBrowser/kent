@@ -92,8 +92,8 @@ return val;
 }
 
 int findExactSubmissionId(struct sqlConnection *conn,
-	char *contributors, char *publication, 
-	char *pubUrl, char *setUrl, char *itemUrl)
+	char *contributors, char *publication, char *pubUrl, 
+	char *setUrl, char *itemUrl)
 /* Find ID of submissionSet that matches all parameters.  Return 0 if none found. */
 {
 char query[1024];
@@ -103,6 +103,7 @@ safef(query, sizeof(query),
       "and publication = \"%s\" "
       "and pubUrl = '%s' and setUrl = '%s' and itemUrl = '%s'"
       , contributors, publication, pubUrl, setUrl, itemUrl);
+uglyf("query %s\n", query);
 return sqlQuickNum(conn, query);
 }
 
@@ -119,27 +120,59 @@ if (id == 0)
     {
     safef(query, sizeof(query), "insert into %s values(default, \"%s\")",
     	table, value);
+    uglyf("%s\n", query);
     sqlUpdate(conn, query);
     id = sqlLastAutoId(conn);
     }
 return id;
 }
 
+int doJournal(struct sqlConnection *conn, char *name, char *url)
+/* Update journal table if need be.  Return journal ID. */
+{
+struct dyString *dy = dyStringNew(0);
+int id = 0;
+
+dyStringPrintf(dy, "select id from journal where name = '%s'", name);
+id = sqlQuickNum(conn, dy->string);
+if (id == 0)
+    {
+    dyStringClear(dy);
+    dyStringPrintf(dy, "insert into journal set");
+    dyStringPrintf(dy, " id=default,\n");
+    dyStringPrintf(dy, " name=\"%s\",\n", name);
+    dyStringPrintf(dy, " url=\"%s\"\n", url);
+    uglyf("%s\n", dy->string);
+    sqlUpdate(conn, dy->string);
+    id = sqlLastAutoId(conn);
+    }
+dyStringFree(&dy);
+return id;
+}
+
 int createSubmissionId(struct sqlConnection *conn,
 	char *contributors, char *publication, 
-	char *pubUrl, char *setUrl, char *itemUrl)
+	char *pubUrl, char *setUrl, char *itemUrl,
+	char *journal, char *journalUrl)
 /* Add submission and contributors to database and return submission ID */
 {
 struct slName *slNameListFromString(char *s, char delimiter);
 struct slName *contribList = NULL, *contrib;
 int submissionSetId;
+int journalId = doJournal(conn, journal, journalUrl);
+struct dyString *dy = dyStringNew(0);
 char query[1024];
 
-safef(query, sizeof(query),
-    "insert into submissionSet "
-    "values(default, \"%s\", \"%s\", '%s', '%s', '%s')",
-    contributors, publication, pubUrl, setUrl, itemUrl);
-sqlUpdate(conn, query);
+dyStringPrintf(dy, "insert into submissionSet set");
+dyStringPrintf(dy, " id = default,\n");
+dyStringPrintf(dy, " contributors = \"%s\",\n", contributors);
+dyStringPrintf(dy, " publication = \"%s\",\n", publication);
+dyStringPrintf(dy, " pubUrl = \"%s\",\n", pubUrl);
+dyStringPrintf(dy, " journal = %d,\n", journalId);
+dyStringPrintf(dy, " setUrl = \"%s\",\n", setUrl);
+dyStringPrintf(dy, " itemUrl = \"%s\"\n", itemUrl);
+uglyf("%s\n", dy->string);
+sqlUpdate(conn, dy->string);
 submissionSetId = sqlLastAutoId(conn);
 
 contribList = slNameListFromComma(contributors);
@@ -150,9 +183,11 @@ for (contrib = contribList; contrib != NULL; contrib = contrib->next)
     safef(query, sizeof(query),
           "insert into submissionContributor values(%d, %d)",
 	  submissionSetId, contribId);
+    uglyf("%s\n", query);
     sqlUpdate(conn, query);
     }
 slFreeList(&contribList);
+dyStringFree(&dy);
 return submissionSetId;
 }
 
@@ -164,13 +199,15 @@ char *publication = hashValOrDefault(raHash, "publication", "");
 char *pubUrl = hashValOrDefault(raHash, "pubUrl", "");
 char *setUrl = hashValOrDefault(raHash, "setUrl", "");
 char *itemUrl = hashValOrDefault(raHash, "itemUrl", "");
+char *journal = hashValOrDefault(raHash, "journal", "");
+char *journalUrl = hashValOrDefault(raHash, "journalUrl", "");
 int submissionId = findExactSubmissionId(conn, contributor, 
 	publication, pubUrl, setUrl, itemUrl);
 if (submissionId != 0)
      return submissionId;
 else
      return createSubmissionId(conn, contributor, 
-     	publication, pubUrl, setUrl, itemUrl);
+     	publication, pubUrl, setUrl, itemUrl, journal, journalUrl);
 }
 
 int cachedId(struct sqlConnection *conn, char *tableName, char *fieldName,
@@ -239,9 +276,9 @@ if (gene[0] == 0 && locusLink[0] == 0 && refSeq[0] == 0
 	     " specified line %d of %s", lf->lineIx, lf->fileName);
 
 /* Create query string that will catch relevant existing genes. */
-dyStringPrintf(dy, "select id,name,locusLink,refSeq,genbank,uniProt ");
+dyStringPrintf(dy, "select id,name,locusLink,refSeq,genbank,uniProt from gene ");
 dyStringPrintf(dy, "where taxon = %s and (",  taxon);
-needOr = optionallyAddOr(dy, "gene", gene, needOr);
+needOr = optionallyAddOr(dy, "name", gene, needOr);
 needOr = optionallyAddOr(dy, "locusLink", locusLink, needOr);
 needOr = optionallyAddOr(dy, "refSeq", refSeq, needOr);
 needOr = optionallyAddOr(dy, "uniProt", uniProt, needOr);
@@ -317,7 +354,7 @@ else
 
    /* Handle updating name field - possibly creating a synonym. */
    dyStringClear(dy);
-   dyStringPrintf(dy, "select name from gene where id = %s", geneId);
+   dyStringPrintf(dy, "select name from gene where id = %d", geneId);
    oldName = sqlQuickString(conn, dy->string);
    if (gene[0] != 0)
        {
@@ -434,6 +471,7 @@ if (abName[0] != 0)
 	    dyStringPrintf(dy, "update antibody set description = \"%s\"",
 		    abDescription);
 	    dyStringPrintf(dy, " where id = %d", antibodyId);
+	    uglyf("%s\n", dy->string);
 	    sqlUpdate(conn, dy->string);
 	    }
 	if (abTaxon[0] != 0)
@@ -441,6 +479,7 @@ if (abName[0] != 0)
 	    dyStringClear(dy);
 	    dyStringPrintf(dy, "update antibody set taxon = %s", abTaxon);
 	    dyStringPrintf(dy, " where id = %d", antibodyId);
+	    uglyf("%s\n", dy->string);
 	    sqlUpdate(conn, dy->string);
 	    }
 	}
@@ -485,6 +524,7 @@ if (probeTypeId == 0)
     dyStringClear(dy);
     dyStringPrintf(dy, "insert into probeType values(default, '%s')", 
     	probeType);
+    uglyf("%s\n", dy->string);
     sqlUpdate(conn, dy->string);
     probeTypeId  = sqlLastAutoId(conn);
     }
@@ -541,7 +581,7 @@ if (probeId == 0)
     dyStringPrintf(dy, " id=default,\n");
     dyStringPrintf(dy, " gene=%d,\n", geneId);
     dyStringPrintf(dy, " antibody=%d,\n", antibodyId);
-    dyStringPrintf(dy, " probeType=%d,\n", probeType);
+    dyStringPrintf(dy, " probeType=%d,\n", probeTypeId);
     dyStringPrintf(dy, " fPrimer='%s',\n", fPrimer);
     dyStringPrintf(dy, " rPrimer='%s',\n", rPrimer);
     dyStringPrintf(dy, " seq='%s'\n", seq);
@@ -605,6 +645,7 @@ if (imageFileId == 0)
     dyStringPrintf(dy, " screenLocation = %d,\n", screenDir);
     dyStringPrintf(dy, " thumbLocation = %d,\n", thumbDir);
     dyStringPrintf(dy, " submitId = '%s'\n", submitId);
+    uglyf("%s\n", dy->string);
     sqlUpdate(conn, dy->string);
     imageFileId = sqlLastAutoId(conn);
     }
@@ -706,11 +747,11 @@ submissionSetId = saveSubmissionSet(conn, raHash);
 while (lineFileNextRowTab(lf, words, rowSize))
     {
     /* Find/add fields that are in simple id/name type tables. */
-    int fullDir = cachedId(conn, "location", "name", 
+    int fullDir = cachedId(conn, "fileLocation", "name", 
     	fullDirHash, "fullDir", raHash, rowHash, words);
-    int screenDir = cachedId(conn, "location", "name", 
+    int screenDir = cachedId(conn, "fileLocation", "name", 
     	screenDirHash, "screenDir", raHash, rowHash, words);
-    int thumbDir = cachedId(conn, "location", 
+    int thumbDir = cachedId(conn, "fileLocation", 
     	"name", thumbDirHash, "thumbDir", raHash, rowHash, words);
     int bodyPart = cachedId(conn, "bodyPart", 
     	"name", bodyPartHash, "bodyPart", raHash, rowHash, words);
@@ -726,7 +767,6 @@ while (lineFileNextRowTab(lf, words, rowSize))
     char *taxon = getVal("taxon", raHash, rowHash, words, NULL);
     char *isEmbryo = getVal("isEmbryo", raHash, rowHash, words, NULL);
     char *age = getVal("age", raHash, rowHash, words, NULL);
-    char *color = getVal("color", raHash, rowHash, words, NULL);
     char *submitId = getVal("submitId", raHash, rowHash, words, "");
     char *sectionSet = getVal("sectionSet", raHash, rowHash, words, "");
     char *sectionIx = getVal("sectionIx", raHash, rowHash, words, "0");
@@ -798,7 +838,7 @@ while (lineFileNextRowTab(lf, words, rowSize))
     uglyf("%s\n", dy->string);
     sqlUpdate(conn, dy->string);
     if (imageId == 0)
-	imageFileId = sqlLastAutoId(conn);
+	imageId = sqlLastAutoId(conn);
 
     doImageProbe(conn, imageId, probeId, probeColor, replace);
     }
