@@ -100,11 +100,23 @@ char **env = envExpand(1);
 }
 
 void changeUid(char *name)
-/* Try and change process user id to that of name. */
+/* Try and change process user (and group) id to that of name. */
 {
 struct passwd *pw = getpwnam(name);
 setgid(pw->pw_gid);
 setuid(pw->pw_uid);
+}
+
+static int grandChildId = 0;
+
+void termHandler()
+/* Handle termination signal. */
+{
+if (grandChildId != 0)
+    {
+    kill(grandChildId, SIGTERM);
+    grandChildId = 0;
+    }
 }
 
 void execProc(char *managingHost, char *jobIdString, char *reserved,
@@ -115,7 +127,7 @@ void execProc(char *managingHost, char *jobIdString, char *reserved,
  * work and waits on it.  It sends message to the
  * main message loop here when done. */
 {
-if (fork() == 0)
+if ((grandChildId = fork()) == 0)
     {
     int newStdin, newStdout, newStderr, execErr;
 
@@ -155,6 +167,7 @@ else
     int status;
     int sd;
 
+    signal(SIGTERM, termHandler);
     wait(&status);
     sd = netConnect("localhost", paraPort);
     if (sd >= 0)

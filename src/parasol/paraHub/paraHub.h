@@ -8,7 +8,7 @@ struct job
     int id;			/* Uniq	job id. */
     char *exe;			/* Executable name - no path or parameters. */
     char *cmd;                  /* Executable name plus parameters. */
-    char *user;			/* User name. */
+    struct user *user;		/* User who submitted job. */
     char *dir;			/* Starting dir. */
     char *in;			/* Stdin. */
     char *out;			/* Stdout. */
@@ -30,6 +30,16 @@ struct machine
     time_t lastChecked;		/* Last time we checked machine in seconds past 1972 */
     boolean isDead;		/* True if machine dead. */
     char *tempDir;		/* Name of local temp dir. */
+    };
+
+struct user
+/* One of our users. */
+    {
+    struct user *next;		/* Next in master list. */
+    struct dlNode *node;	/* Node in active/idle list. */
+    char *name;			/* User name. Not allocated here. */
+    struct dlList *jobQueue;	/* List of jobs not including running ones. */
+    int runningCount;		/* Count of jobs currently running. */
     };
 
 struct spoke

@@ -53,6 +53,7 @@ errAbort(
   "         match jobPattern (which may include ? and * escaped for shell)\n"
   "   parasol list machines - list machines in pool\n"
   "   parasol list jobs - list jobs one per line\n"
+  "   parasol list users - list users one per line\n"
   "   parasol status - summarize status of machines, jobs, and spoke daemons\n"
   );
 }
@@ -295,6 +296,12 @@ void listMachines()
 hubCommandAndPrint("listMachines");
 }
 
+void listUsers()
+/* Send list users command to hub and print. */
+{
+hubCommandAndPrint("listUsers");
+}
+
 void status()
 /* Send status command to hub and print. */
 {
@@ -363,6 +370,8 @@ else if (sameString(command, "list"))
         listMachines();
     else if (sameString(subType, "job") || sameString(subType, "jobs"))
         listJobs();
+    else if (sameString(subType, "user") || sameString(subType, "users"))
+        listUsers();
     else
         usage();
     }

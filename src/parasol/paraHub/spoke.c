@@ -286,7 +286,7 @@ if (sd > 0)
     dyStringPrintf(dy, " %s", hubHost);
     dyStringPrintf(dy, " %d", job->id);
     dyStringPrintf(dy, " %s", reserved);
-    dyStringPrintf(dy, " %s", job->user);
+    dyStringPrintf(dy, " %s", job->user->name);
     dyStringPrintf(dy, " %s", job->dir);
     dyStringPrintf(dy, " %s", job->in);
     dyStringPrintf(dy, " %s", job->out);
