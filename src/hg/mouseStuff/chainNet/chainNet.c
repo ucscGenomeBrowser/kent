@@ -11,7 +11,7 @@ int minSpace = 25;	/* Minimum gap size to fill. */
 int minFill;		/* Minimum fill to record. */
 int minScore = 2000;	/* Minimum chain score to look at. */
 
-boolean uglier = FALSE;
+boolean uglier = FALSE;	/* True for verbose debugging info. */
 
 void usage()
 /* Explain usage and exit. */
@@ -19,7 +19,7 @@ void usage()
 errAbort(
   "chainNet - Make alignment nets out of chains\n"
   "usage:\n"
-  "   chainNet in.chain target.sizes query.sizes target.net query.net\n"
+  "   chainNet database in.chain target.sizes query.sizes target.net query.net\n"
   "options:\n"
   "   -minSpace=N - minimum gap size to fill, default %d\n"
   "   -minFill=N  - default half of minSpace\n"
@@ -105,29 +105,6 @@ void doSpace(void *item)
 {
 struct space *space = item;
 printf("%d,%d\n", space->start, space->end);
-}
-
-void testRanges()
-{
-static int testStarts[] = {0, 10, 20, 30, 40, 50, 60, 70, 80, 90};
-static int testEnds[]   = {5, 15, 25, 35, 45, 60, 70, 80, 90, 99};
-int i;
-struct space *r, s;
-struct rbTree *tree = rbTreeNew(spaceCmp);
-
-for (i=0; i<ArraySize(testStarts); ++i)
-    {
-    AllocVar(r);
-    r->start = testStarts[i];
-    r->end = testEnds[i];
-    rbTreeAdd(tree, r);
-    }
-rbTreeDump(tree, uglyOut, dumpSpace);
-
-s.start = 20;
-s.end = 81;
-uglyf("rbTreeTraverse(%d %d)\n", s.start, s.end);
-rbTreeTraverseRange(tree, &s, &s, doSpace);
 }
 
 struct gap *addGap(struct chrom *chrom, 
@@ -228,8 +205,6 @@ AllocVar(fill);
 fill->start = s;
 fill->end = e;
 fill->chain = chain;
-//uglyf("fillSpace %s%c%s\n", chain->tName, chain->qStrand, chain->qName);
-//uglyf("  old %d,%d\n", space->start, space->end);
 rbTreeRemove(chrom->spaces, space);
 if (s - space->start >= minSpace)
     {
@@ -238,9 +213,7 @@ if (s - space->start >= minSpace)
     lSpace->start = space->start;
     lSpace->end = s;
     rbTreeAdd(chrom->spaces, lSpace);
- //   uglyf("  left %d,%d\n", lSpace->start, lSpace->end);
     }
-//uglyf("  mid %d,%d\n", fill->start, fill->end);
 if (space->end - e >= minSpace)
     {
     AllocVar(rSpace);
@@ -248,7 +221,6 @@ if (space->end - e >= minSpace)
     rSpace->start = e;
     rSpace->end = space->end;
     rbTreeAdd(chrom->spaces, rSpace);
-//    uglyf("  right %d,%d\n", rSpace->start, rSpace->end);
     }
 slAddHead(&space->gap->fillList, fill);
 return fill;
@@ -298,7 +270,6 @@ struct fill *fill = NULL;
 
 spaceList = findSpaces(chrom->spaces,chain->tStart,chain->tEnd);
 startBlock = chain->blockList;
-uglyf("Got %d tSpaces\n", slCount(spaceList));
 for (ref = spaceList; ref != NULL; ref = ref->next)
     {
     struct space *space = ref->val;
@@ -356,7 +327,6 @@ if (isRev)
 spaceList = findSpaces(chrom->spaces,qStart,qEnd);
 startBlock = chain->blockList;
 
-uglyf("Got %d qSpaces\n", slCount(spaceList));
 for (ref = spaceList; ref != NULL; ref = ref->next)
     {
     struct space *space = ref->val;
@@ -549,9 +519,9 @@ for (chrom = chromList; chrom != NULL; chrom = chrom->next)
     {
     rOutDepth = 0;
     rOutQ = isQ;
-    fprintf(f, "net %s %d\n", chrom->name, chrom->size);
-    if (chrom->root != NULL)
+    if (chrom->root != NULL && chrom->root->fillList != NULL)
 	{
+	fprintf(f, "net %s %d\n", chrom->name, chrom->size);
 	sortNet(chrom->root);
 	rOutputGap(chrom->root, f);
 	}
@@ -574,7 +544,7 @@ if (lineFileNext(lf, &line, NULL))
 lineFileClose(&lf);
 }
 
-void chainNet(char *chainFile, char *tSizes, char *qSizes
+void chainNet(char *database, char *chainFile, char *tSizes, char *qSizes
 	, char *tNet, char *qNet)
 /* chainNet - Make alignment nets out of chains. */
 {
@@ -605,7 +575,7 @@ while ((chain = chainRead(lf)) != NULL)
 		chain->tSize, chainFile,
 		tChrom->size, tSizes);
     addChain(qChrom, tChrom, chain);
-    uglyf("%s has %d inserts, %s has %d\n", tChrom->name, tChrom->spaces->n, qChrom->name, qChrom->spaces->n);
+    // uglyf("%s has %d inserts, %s has %d\n", tChrom->name, tChrom->spaces->n, qChrom->name, qChrom->spaces->n);
     }
 printf("writing %s\n", tNet);
 outputNetSide(tChromList, tNet, FALSE);
@@ -618,11 +588,11 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 optionHash(&argc, argv);
-if (argc != 6)
+if (argc != 7)
     usage();
 minSpace = optionInt("minSpace", minSpace);
 minFill = optionInt("minFill", minSpace/2);
 minScore = optionInt("minScore", minScore);
-chainNet(argv[1], argv[2], argv[3], argv[4], argv[5]);
+chainNet(argv[1], argv[2], argv[3], argv[4], argv[5], argv[6]);
 return 0;
 }
