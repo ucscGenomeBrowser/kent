@@ -2600,18 +2600,26 @@ CREATING HUMAN/MOUSE/RAT ALIGNMENTS AND LOADING INTO DATABASE
 
 
 # PREP FOR LIFTOVER CHAINS TO HG13
+
+    # split into 3K chunks
     ssh eieio
-    set splitDir = /cluster/bluearc/hg13/split3K
-    mkdir -p $splitDir $splitDir/lift
-cat > $splitDir/split.csh << 'EOF'
+    set tempDir = /cluster/bluearc/hg/hg13/liftOver
+    mkdir -p $tempDir
+    cd $tempDir
+    mkdir lift 
+cat > split.csh << 'EOF'
+    set scratch = /iscratch/i/hg13/liftOver/split
+    mkdir -p $scratch
     foreach i (1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 X Y M)
         echo chr$i
-        gunzip -c /cluster/data/hg13/$i/chr$i.fa.gz | \
-            faSplit -lift=$splitDir/lift/chr$i.lft size stdin \
-                        -oneFile 3000 /cluster/bluearc/hg13/split3K/chr$i
+        faSplit -lift=lift/chr$i.lft size /cluster/data/hg13/$i/chr$i.fa -oneFile 3000 $scratch/chr$i
     end
 'EOF'
-    csh $splitDir/split.csh >&! $splitDir/split.log &
+    csh split.csh >&! split.log &
+    tail -100f split.log
+
+    ssh kkr1u00
+    /cluster/bin/iSync
 
 
 # LIFTOVER CHAINS TO HG16 FOR ENCODE (2004-03-26 kate)
@@ -2696,5 +2704,23 @@ cat > liftup.csh << 'EOF'
     ln -s /cluster/data/hg13/bed/bedOver/hg13ToHg16.over.chain \
         /gbdb/hg13/liftOver
     hgAddLiftOverChain hg13 hg16
+
+
+# LIFTOVER CHAIN TO HG15
+
+    cp /cluster/data/hg15/bed/bedOver/over.chain \
+        /cluster/data/hg13/bed/bedOver/hg13ToHg15.over.chain
+
+    # save to download area
+    cd /usr/local/apache/htdocs/goldenPath/hg13
+    mkdir -p liftOver
+    cp /cluster/data/hg13/bed/bedOver/hg13ToHg15.over.chain liftOver
+    gzip liftOver/hg13ToHg15.over.chain
+
+    # load into database
+    mkdir -p /gbdb/hg13/liftOver
+    ln -s /cluster/data/hg13/bed/bedOver/hg13ToHg15.over.chain \
+        /gbdb/hg13/liftOver
+    hgAddLiftOverChain hg13 hg15
 
 
