@@ -100,6 +100,28 @@ extern enum wiggleWindowingEnum wigFetchWindowingFunction(struct trackDb *tdb,
 extern enum wiggleSmoothingEnum wigFetchSmoothingWindow(struct trackDb *tdb,
 	char **optString);
 /* return smoothing window size N: [0:16]	*/
+extern enum wiggleYLineMarkEnum wigFetchYLineMark(struct trackDb *tdb,
+    char **optString);
+/* return On/Off status of y= line marker	*/
+void wigFetchYLineMarkValue(struct trackDb *tdb, double *tDbYMark);
+/* return value for the y line marker to be drawn	*/
+
+/*	cart and trackDb strings	*/
+#define DEFAULTVIEWLIMITS "defaultViewLimits"
+#define MIN_Y "minY"
+#define MAX_Y "maxY"
+#define MAXHEIGHTPIXELS "maxHeightPixels"
+#define HEIGHTPER "heightPer"
+#define HORIZGRID "horizGrid"
+#define GRIDDEFAULT "gridDefault"
+#define AUTOSCALE "autoScale"
+#define AUTOSCALEDEFAULT "autoScaleDefault"
+#define LINEBAR "lineBar"
+#define GRAPHTYPEDEFAULT "graphTypeDefault"
+#define WINDOWINGFUNCTION "windowingFunction"
+#define SMOOTHINGWINDOW "smoothingWindow"
+#define YLINEONOFF "yLineOnOff"
+#define YLINEMARK "yLineMark"
 
 #if defined(DEBUG)
 #define DBGMSGSZ	1023
