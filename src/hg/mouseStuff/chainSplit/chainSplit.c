@@ -6,9 +6,11 @@
 #include "portable.h"
 #include "chain.h"
 
-static char const rcsid[] = "$Id: chainSplit.c,v 1.4 2003/05/06 07:22:27 kate Exp $";
+static char const rcsid[] = "$Id: chainSplit.c,v 1.5 2004/10/25 19:01:35 kent Exp $";
 
 boolean splitOnQ = FALSE;
+int lump = 0;
+
 void usage()
 /* Explain usage and exit. */
 {
@@ -18,9 +20,38 @@ errAbort(
   "   chainSplit outDir inChain(s)\n"
   "options:\n"
   "   -q  - Split on query (default is on target)\n"
+  "   -lump=N  Lump together so have only N pieces.\n"
   );
 }
 
+static struct optionSpec options[] = {
+   {"q", OPTION_BOOLEAN},
+   {"lump", OPTION_INT},
+   {NULL, 0},
+};
+
+char *lumpName(char *name)
+/* Look for integer part of name,  then do mod operation 
+ * on it to assign to lump. */
+{
+char *s = name, c;
+for (;;)
+    {
+    c = *s;
+    if (c == 0)
+        errAbort("No digits in %s,  need digits in name for lump optoin", 
+		name);
+    if (isdigit(c))
+        {
+	static char buf[32];
+	int lumpIx = atoi(s) % lump;
+	lumpIx %= lump;
+	safef(buf, sizeof(buf), "%03d", lumpIx);
+	return buf;
+	}
+    ++s;
+    }
+}
 
 void chainSplit(char *outDir, int inCount, char *inFiles[])
 /* chainSplit - Split chains up by target or query sequence. */
@@ -35,13 +66,15 @@ for (inIx = 0; inIx < inCount; ++inIx)
     FILE *f;
     while ((chain = chainRead(lf)) != NULL)
         {
-	char *chromName = (splitOnQ ? chain->qName : chain->tName);
-	if ((f = hashFindVal(hash, chromName)) == NULL)
+	char *name = (splitOnQ ? chain->qName : chain->tName);
+	if (lump > 0)
+	    name = lumpName(name);
+	if ((f = hashFindVal(hash, name)) == NULL)
 	    {
 	    char path[512];
-	    sprintf(path, "%s/%s.chain", outDir, chromName);
+	    sprintf(path, "%s/%s.chain", outDir, name);
 	    f = mustOpen(path, "w");
-	    hashAdd(hash, chromName, f);
+	    hashAdd(hash, name, f);
 	    }
 	chainWrite(chain, f);
 	chainFree(&chain);
@@ -55,6 +88,7 @@ int main(int argc, char *argv[])
 {
 optionHash(&argc, argv);
 splitOnQ = optionExists("q");
+lump = optionInt("lump", 0);
 if (argc < 3)
     usage();
 chainSplit(argv[1], argc-2, argv+2);
