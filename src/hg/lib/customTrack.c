@@ -21,7 +21,7 @@
 #include "cheapcgi.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: customTrack.c,v 1.54 2004/11/24 19:44:02 hiram Exp $";
+static char const rcsid[] = "$Id: customTrack.c,v 1.55 2004/12/09 21:32:46 angie Exp $";
 
 /* Track names begin with track and then go to variable/value pairs.  The
  * values must be quoted if they include white space. Defined variables are:
@@ -301,7 +301,7 @@ row[12] = "";
 static boolean isChromName(char *word)
 /* Return TRUE if it's a contig or chromosome */
 {
-return startsWith("chr", word)  || startsWith("ctg", word) || startsWith("NT_", word) || startsWith("target", word) || startsWith("Scaffold_", word) || startsWith("scaffold", word) || startsWith("SCAFFOLD", word); 
+return (hgOfficialChromName(word) != NULL);
 }
 
 static void checkChromName(char *word, int lineIx)
