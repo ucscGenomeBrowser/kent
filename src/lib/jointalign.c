@@ -1,9 +1,7 @@
-/*****************************************************************************
- * Copyright (C) 2002 Ryan Weber.  This source code may be freely used       *
- * for personal, academic, and non-profit purposes.  Commercial use          *
- * permitted only by explicit agreement with Ryan Weber (weber@cse.ucsc.edu) *
- *****************************************************************************/
-/* jointalign.c - routines for printing a joint alignment in html. */
+/* jointalign.c - routines for printing a joint alignment in html. 
+ *
+ * This file is copyright 2002 Ryan Weber, but license is hereby
+ * granted for all use - public, private or commercial. */
 
 #include <string.h>
 #include "common.h"
