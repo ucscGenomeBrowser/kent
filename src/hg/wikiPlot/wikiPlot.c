@@ -12,7 +12,7 @@ char *contigDir = "/projects/hg3/gs.7/oo.29/19/ctg18433";
 char *mapX = "info.noNt";
 char *mapY = "gold.99";
 int pix = 500;
-double xOff = 0, yOff = 0, zoom = 1.0;
+double xOff = -0.05, yOff = -0.05, zoom = 0.9;
 
 /* Span range of values in x and y. */
 int xStart, xEnd, yStart, yEnd;
@@ -24,7 +24,6 @@ struct clonePos
     struct clonePos *next;
     char *name;	/* Name of clone. */
     int pos;	/* Position in map. */
-    int phase;	/* HTG phase. */
     };
 
 double scaleOne(double raw, double rangeStart, double rangeEnd, int pix,
@@ -62,7 +61,6 @@ while (lineFileRow(lf, row))
 	AllocVar(cp);
 	hashAddSaveName(hash, row[0], cp, &cp->name);
 	cp->pos = lineFileNeedNum(lf, row, 1);
-	cp->phase = lineFileNeedNum(lf, row, 2);
 	slAddHead(&cpList, cp);
 	}
     }
@@ -94,10 +92,6 @@ while ((wordCount = lineFileChop(lf, words)) != 0)
 	AllocVar(cp);
 	hashAddSaveName(hash, clone, cp, &cp->name);
 	cp->pos = lineFileNeedNum(lf, words, 1);
-	if (type[0] == 'F') 
-	    cp->phase = 3;
-	else
-	    cp->phase = 1;
 	slAddHead(&cpList, cp);
 	}
     }
@@ -143,7 +137,6 @@ while (lineFileRow(lf, row))
 	    errAbort("Expecting number first field of line %d of %s", 
 	    	lf->lineIx, lf->fileName);
 	cp->pos = atoi(offset);
-	cp->phase = lineFileNeedNum(lf, row, 2);
 	slAddHead(&cpList, cp);
 	}
     }
@@ -152,6 +145,29 @@ slReverse(&cpList);
 *retList = cpList;
 *retHash = hash;
 }
+
+void readDat(char *fileName, struct clonePos **retList, struct hash **retHash, 
+   int column)
+/* Read in one of Terry Furey's dat files. */ 
+{
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+char *line, *row[3];
+struct clonePos *cpList = NULL, *cp;
+struct hash *hash = newHash(0);
+
+while (lineFileRow(lf, row))
+    {
+    AllocVar(cp);
+    hashAddSaveName(hash, row[2], cp, &cp->name);
+    cp->pos = lineFileNeedNum(lf, row, column);
+    slAddHead(&cpList, cp);
+    }
+lineFileClose(&lf);
+slReverse(&cpList);
+*retList = cpList;
+*retHash = hash;
+}
+
 
 void loadMap(char *fileName, struct clonePos **retList, struct hash **retHash)
 /* Figure out file type and load it. */
@@ -166,6 +182,24 @@ else if (startsWith("gold", file) || sameString(".agp", ext))
     return readGold(fileName, retList, retHash);
 else
     errAbort("Unrecognized file type %s%s", file, ext);
+}
+
+void loadMaps(char *mapA, char *mapB, struct clonePos **retListA, 
+    struct clonePos **retListB, struct hash **retHashA, struct hash **retHashB)
+/* Load some maps. */
+{
+char file[128], ext[64];
+splitPath(mapA, NULL, file, ext);
+if (sameString(".dat", ext))
+    {
+    readDat(mapA, retListA, retHashA, 0);
+    readDat(mapA, retListB, retHashB, 1);
+    }
+else
+    {
+    loadMap(mapA, retListA, retHashA);
+    loadMap(mapB, retListB, retHashB);
+    }
 }
 
 void posSpan(struct clonePos *cpList, int *retStart, int *retEnd)
@@ -311,7 +345,7 @@ pix = cgiUsualInt("pix", pix);
 xOff = cgiUsualDouble("xOff", xOff);
 yOff = cgiUsualDouble("yOff", yOff);
 zoom = cgiUsualDouble("zoom", zoom);
-step = 0.2 * 1/zoom;
+step = 0.1 * 1/zoom;
 
 if (cgiVarExists("boxOut"))
     {
@@ -384,8 +418,7 @@ if (gotDir)
     struct clonePos *xList = NULL, *yList = NULL;
     sprintf(xFile, "%s/%s", contigDir, mapX);
     sprintf(yFile, "%s/%s", contigDir, mapY);
-    loadMap(xFile, &xList, &xHash);
-    loadMap(yFile, &yList, &yHash);
+    loadMaps(xFile, yFile, &xList, &yList, &xHash, &yHash);
     makePlot(xList, yList, yHash);
     }
 
