@@ -764,7 +764,12 @@ end
     cd eranSegal
     # Copy module_assignments.tab, motif_attributes.tab, motif_modules.tab
     # from email from <eran@cs.stanford.edu> into this directory.
-    hgLoadEranModules sacCer1 module_assignments.tab motif_attributes.tab motif_modules.tab
+    echo "select name,chrom,txStart,txEnd,strand,500,0 from sgdGene;" | \
+        hgsql -N sacCer1 > gene_position.tab
+    echo "select name,chrom,chromStart,chromEnd,strand,500,0 from sgdOther;" | \
+        hgsql -N sacCer1 >> gene_position.tab
+    hgLoadEranModules sacCer1 module_assignments.tab motif_modules.tab \
+    	modules_motifs.gxm modules_motif_positions.tab gene_position.tab
 
 #CREATING DOWNLOADS DIRECTORY
     ssh hgwdev
