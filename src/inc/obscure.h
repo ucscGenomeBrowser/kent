@@ -53,3 +53,13 @@ boolean parseQuotedString( char *in, char *out, char **retNext);
 struct hash *hashVarLine(char *line, int lineIx);
 /* Return a symbol table from a line of form:
  *   var1=val1 var2='quoted val2' var3="another val" */
+
+void shuffleArrayOfPointers(void *pointerArray, int arraySize, 
+	int shuffleCount);
+/* Shuffle array of pointers of given size given number of times. */
+
+void shuffleList(void *pList, int shuffleCount);
+/* Randomize order of slList.  Usage:
+ *     randomizeList(&list)
+ * where list is a pointer to a structure that
+ * begins with a next field. */
