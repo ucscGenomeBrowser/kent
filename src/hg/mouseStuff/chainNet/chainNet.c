@@ -24,7 +24,7 @@ void usage()
 errAbort(
   "chainNet - Make alignment nets out of chains\n"
   "usage:\n"
-  "   chainNet targetDb queryDb in.chain target.net query.net\n"
+  "   chainNet targetDb queryDb in.chain target.net query.net target.flat query.flat\n"
   "where:\n"
   "   targetDb is the target genome database (example hg12)\n"
   "   queryDb is the query genome database (example mm2)\n"
@@ -38,6 +38,8 @@ errAbort(
   "   -oGapRatio=0.N - minimum coverage by N's in other sequence for\n"
   "                    a gap to be classified an 'oGap'. Default %3.1f\n"
   "   -verbose - make copious output\n"
+  "   -tFlat=target.flat - Create a flattened, classified file of regions in target\n"
+  "   -qFlat=query.flat  - Create flattened, classified file of regions in query\n"
   , minSpace, minScore, oGapRatio);
 }
 
@@ -62,6 +64,7 @@ struct fill
     {
     struct fill *next;	   /* Next fill in list. */
     int start,end;	   /* Range covered, always plus strand. */
+    int oStart,oEnd;	   /* Range covered in other coordinate, always plus. */
     struct gap *gapList;   /* List of internal gaps. */
     struct chain *chain;   /* Alignment chain (not all is necessarily used) */
     };
@@ -276,6 +279,100 @@ if (end - start < minFill)
 *retEnd = end;
 return TRUE;
 }
+
+static void qFillOtherRange(struct fill *fill)
+/* Given bounds of fill in q coordinates, calculate
+ * oStart/oEnd in t coordinates, and refine 
+ * start/end to reflect parts of chain actually used. */
+{
+struct chain *chain = fill->chain;
+int clipStart = fill->start;
+int clipEnd = fill->end;
+boolean isRev = (chain->qStrand == '-');
+int tMin = BIGNUM, tMax = -BIGNUM;
+int qMin = BIGNUM, qMax = -BIGNUM;
+struct boxIn *b;
+
+if (isRev)
+    reverseIntRange(&clipStart, &clipEnd, chain->qSize);
+for (b = chain->blockList; b != NULL; b = b->next)
+    {
+    int qs, qe, ts, te;	/* Clipped bounds of block */
+    if ((qe = b->qEnd) <= clipStart)
+        continue;
+    if ((qs = b->qStart) >= clipEnd)
+        break;
+    ts = b->tStart;
+    te = b->tEnd;
+    if (qs < clipStart)
+        {
+	ts += (clipStart - qs);
+	qs = clipStart;
+	}
+    if (qe > clipEnd)
+        {
+	te  -= (clipEnd - qe);
+	qe = clipEnd;
+	}
+    if (qMin > qs) qMin = qs;
+    if (qMax < qe) qMax = qe;
+    if (tMin > ts) tMin = ts;
+    if (tMax < te) tMax = te;
+    }
+if (isRev)
+    reverseIntRange(&qMin, &qMax, chain->qSize);
+fill->start = qMin;
+fill->end = qMax;
+fill->oStart = tMin;
+fill->oEnd = tMax;
+assert(tMin < tMax);
+}
+
+static void tFillOtherRange(struct fill *fill)
+/* Given bounds of fill in t coordinates, calculate
+ * oStart/oEnd in q coordinates, and refine 
+ * start/end to reflect parts of chain actually used. */
+{
+struct chain *chain = fill->chain;
+int clipStart = fill->start;
+int clipEnd = fill->end;
+boolean isRev = (chain->qStrand == '-');
+int tMin = BIGNUM, tMax = -BIGNUM;
+int qMin = BIGNUM, qMax = -BIGNUM;
+struct boxIn *b;
+for (b = chain->blockList; b != NULL; b = b->next)
+    {
+    int qs, qe, ts, te;	/* Clipped bounds of block */
+    if ((te = b->tEnd) <= clipStart)
+        continue;
+    if ((ts = b->tStart) >= clipEnd)
+        break;
+    qs = b->qStart;
+    qe = b->qEnd;
+    if (ts < clipStart)
+        {
+	qs += (clipStart - ts);
+	ts = clipStart;
+	}
+    if (te > clipEnd)
+        {
+	qe  -= (clipEnd - te);
+	te = clipEnd;
+	}
+    if (qMin > qs) qMin = qs;
+    if (qMax < qe) qMax = qe;
+    if (tMin > ts) tMin = ts;
+    if (tMax < te) tMax = te;
+    }
+if (isRev)
+    reverseIntRange(&qMin, &qMax, chain->qSize);
+fill->start = tMin;
+fill->end = tMax;
+fill->oStart = qMin;
+fill->oEnd = qMax;
+assert(qMin < qMax);
+}
+
 
 struct fill *fillSpace(struct chrom *chrom, struct space *space, 
 	struct chain *chain, struct boxIn *startBlock, 
@@ -518,6 +615,15 @@ addChainQ(qChrom, tChrom, chain);
 addChainT(tChrom, qChrom, chain);
 }
 
+char *gapType(struct gap *gap)
+/* Return name of gap type */
+{
+if (gap->oGap)
+    return "oGap";
+else
+    return "gap";
+}
+
 int rOutDepth = 0;
 boolean rOutQ = FALSE;
 
@@ -530,103 +636,24 @@ static void rOutputGap(struct gap *gap, FILE *f)
 struct fill *fill;
 ++rOutDepth;
 spaceOut(f, rOutDepth);
-if (gap->oGap)
-    fprintf(f, "oGap");
-else
-    fprintf(f, "gap");
+fprintf(f, "%s", gapType(gap));
 fprintf(f, " %d %d %d\n", gap->start, gap->end, gap->end - gap->start);
 for (fill = gap->fillList; fill != NULL; fill = fill->next)
     rOutputFill(fill, f);
 --rOutDepth;
 }
 
-static void qClipChainOut(FILE *f, struct chain *chain, 
-	int clipStart, int clipEnd)
-/* Output subsection of chain bounded by clipStart/clipEnd on q coordinates. 
- * clipStart/clipEnd are always in plus strand coordinates. */
+void fillOut(FILE *f, struct fill *fill, char *oChrom, int depth)
+/* Output fill. */
 {
-boolean isRev = (chain->qStrand == '-');
-int tMin = BIGNUM, tMax = -BIGNUM;
-int qMin = BIGNUM, qMax = -BIGNUM;
-struct boxIn *b;
-if (isRev)
-    reverseIntRange(&clipStart, &clipEnd, chain->qSize);
-for (b = chain->blockList; b != NULL; b = b->next)
-    {
-    int qs, qe, ts, te;	/* Clipped bounds of block */
-    if ((qe = b->qEnd) <= clipStart)
-        continue;
-    if ((qs = b->qStart) >= clipEnd)
-        break;
-    ts = b->tStart;
-    te = b->tEnd;
-    if (qs < clipStart)
-        {
-	ts += (clipStart - qs);
-	qs = clipStart;
-	}
-    if (qe > clipEnd)
-        {
-	te  -= (clipEnd - qe);
-	qe = clipEnd;
-	}
-    if (qMin > qs) qMin = qs;
-    if (qMax < qe) qMax = qe;
-    if (tMin > ts) tMin = ts;
-    if (tMax < te) tMax = te;
-    }
-if (tMin < tMax)
-    {
-    if (isRev)
-        reverseIntRange(&qMin, &qMax, chain->qSize);
-    spaceOut(f, rOutDepth);
-    fprintf(f, "fill %d %d %d %s %c %d %d %d\n", qMin, qMax, qMax-qMin, 
-    	chain->tName, chain->qStrand, tMin, tMax, tMax-tMin);
-    }
+struct chain *chain = fill->chain;
+spaceOut(f, depth);
+fprintf(f, "fill %d %d %d %s %c %d %d %d id %d\n", 
+	fill->start, fill->end, fill->end - fill->start,
+	oChrom, chain->qStrand, 
+	fill->oStart, fill->oEnd, fill->oEnd - fill->oStart,
+	chain->id);
 }
-
-static void tClipChainOut(FILE *f, struct chain *chain, 
-	int clipStart, int clipEnd)
-/* Output subsection of chain bounded by clipStart/clipEnd on t coordinates. */
-{
-boolean isRev = (chain->qStrand == '-');
-int tMin = BIGNUM, tMax = -BIGNUM;
-int qMin = BIGNUM, qMax = -BIGNUM;
-struct boxIn *b;
-for (b = chain->blockList; b != NULL; b = b->next)
-    {
-    int qs, qe, ts, te;	/* Clipped bounds of block */
-    if ((te = b->tEnd) <= clipStart)
-        continue;
-    if ((ts = b->tStart) >= clipEnd)
-        break;
-    qs = b->qStart;
-    qe = b->qEnd;
-    if (ts < clipStart)
-        {
-	qs += (clipStart - ts);
-	ts = clipStart;
-	}
-    if (te > clipEnd)
-        {
-	qe  -= (clipEnd - te);
-	te = clipEnd;
-	}
-    if (qMin > qs) qMin = qs;
-    if (qMax < qe) qMax = qe;
-    if (tMin > ts) tMin = ts;
-    if (tMax < te) tMax = te;
-    }
-if (qMin < qMax)
-    {
-    if (isRev)
-        reverseIntRange(&qMin, &qMax, chain->qSize);
-    spaceOut(f, rOutDepth);
-    fprintf(f, "fill %d %d %d %s %c %d %d %d id %d\n", tMin, tMax, tMax-tMin, 
-    	chain->qName, chain->qStrand, qMin, qMax, qMax-qMin, chain->id);
-    }
-}
-
 
 static void rOutputFill(struct fill *fill, FILE *f)
 /* Recursively output fill and it's gaps. */
@@ -636,11 +663,13 @@ struct chain *chain = fill->chain;
 ++rOutDepth;
 if (rOutQ)
     {
-    qClipChainOut(f, chain, fill->start, fill->end);
+    qFillOtherRange(fill);
+    fillOut(f, fill, fill->chain->tName, rOutDepth);
     }
 else
     {
-    tClipChainOut(f, chain, fill->start, fill->end);
+    tFillOtherRange(fill);
+    fillOut(f, fill, fill->chain->qName, rOutDepth);
     }
 for (gap = fill->gapList; gap != NULL; gap = gap->next)
     rOutputGap(gap, f);
@@ -661,6 +690,12 @@ for (fill = gap->fillList; fill != NULL; fill = fill->next)
     }
 }
 
+boolean chromHasData(struct chrom *chrom)
+/* Return TRUE if chrom is non-empty */
+{
+return chrom != NULL && chrom->root != NULL && chrom->root->fillList != NULL;
+}
+
 void outputNetSide(struct chrom *chromList, char *fileName, boolean isQ)
 /* Output one side of net */
 {
@@ -670,7 +705,7 @@ for (chrom = chromList; chrom != NULL; chrom = chrom->next)
     {
     rOutDepth = 0;
     rOutQ = isQ;
-    if (chrom->root != NULL && chrom->root->fillList != NULL)
+    if (chromHasData(chrom))
 	{
 	fprintf(f, "net %s %d\n", chrom->name, chrom->size);
 	sortNet(chrom->root);
@@ -701,11 +736,82 @@ void compactChromList(struct chrom *chromList)
 {
 struct chrom *chrom;
 for (chrom = chromList; chrom != NULL; chrom = chrom->next)
-    {
     rbTreeFree(&chrom->spaces);
-    rbTreeFree(&chrom->seqGaps);
+}
+
+void rFlatGapOut(struct gap *gap, char *chromName, FILE *f, 
+	int depth, int parentId, boolean isQuery);
+
+void writeFlatFill(FILE *f, char *chrom, int start, int end, int depth, int parentId, int id,
+	struct chain *chain, boolean isQuery)
+/* Write out flattened fill record. */
+{
+fprintf(f, "%s\t%d\t%d\tfill\t%d\t%d\t%d\t%s\t%c\n", 
+	chrom, start, end, depth, parentId, id,
+	(isQuery ? chain->tName : chain->qName),
+	chain->qStrand);
+}
+
+void rFlatFillOut(struct fill *fill, char *chromName, FILE *f,
+        int depth, int parentId, boolean isQuery)
+/* Write out flattened fill recursively. */
+{
+int lastEnd = fill->start;
+struct gap *gap;
+struct chain *chain = fill->chain;
+int id = chain->id;
+for (gap = fill->gapList; gap != NULL; gap = gap->next)
+    {
+    if (gap->start != lastEnd)
+        {
+	writeFlatFill(f, chromName, lastEnd, gap->start, depth, parentId, id, chain, isQuery);
+	}
+    lastEnd = gap->end;
+    rFlatGapOut(gap, chromName, f, depth+1, id, isQuery);
+    }
+if (lastEnd != fill->end)
+    {
+    writeFlatFill(f, chromName, lastEnd, fill->end, depth, parentId, id, chain, isQuery);
     }
 }
+
+void rFlatGapOut(struct gap *gap, char *chromName, FILE *f, 
+	int depth, int parentId, boolean isQuery)
+/* Write out flattened gap recursively. */
+{
+int lastEnd = gap->start;
+struct fill *fill;
+for (fill = gap->fillList; fill != NULL; fill = fill->next)
+    {
+    if (fill->start != lastEnd)
+        {
+	fprintf(f, "%s\t%d\t%d\t%s\t%d\t%d\n", chromName, lastEnd, fill->start, 
+		gapType(gap), depth, parentId);
+	}
+    rFlatFillOut(fill, chromName, f, depth, parentId, isQuery);
+    lastEnd = fill->end;
+    }
+if (lastEnd != gap->end)
+    {
+    fprintf(f, "%s\t%d\t%d\t%s\t%d\t%d\n", chromName, lastEnd, gap->end, 
+	    gapType(gap), depth, parentId);
+    }
+}
+
+void flatOut(struct chrom *chromList, char *fileName, boolean isQuery)
+/* Output flattened, classified data. */
+{
+FILE *f = mustOpen(fileName, "w");
+struct chrom *chrom;
+
+for (chrom = chromList; chrom != NULL; chrom = chrom->next)
+    {
+    if (chromHasData(chrom))
+	rFlatGapOut(chrom->root, chrom->name, f, 0, 0, isQuery);
+    }
+carefulClose(&f);
+}
+
 
 void chainNet(char *tDb, char *qDb, char *chainFile, char *tNet, char *qNet)
 /* chainNet - Make alignment nets out of chains. */
@@ -753,12 +859,18 @@ while ((chain = chainRead(lf)) != NULL)
 printf("Compacting memory\n");
 compactChromList(tChromList);
 compactChromList(qChromList);
-lmCleanup(&lm);
 
+/* Write out basic net files. */
 printf("writing %s\n", tNet);
 outputNetSide(tChromList, tNet, FALSE);
 printf("writing %s\n", qNet);
 outputNetSide(qChromList, qNet, TRUE);
+
+/* Optionally write out flattened classification files. */
+if (optionExists("tFlat"))
+   flatOut(tChromList, optionVal("tFlat", NULL), FALSE);
+if (optionExists("qFlat"))
+   flatOut(qChromList, optionVal("qFlat", NULL), TRUE);
 printMem();
 }
 
