@@ -12,7 +12,7 @@
 #include "net.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: net.c,v 1.27 2004/01/31 21:22:50 kent Exp $";
+static char const rcsid[] = "$Id: net.c,v 1.28 2004/03/01 04:51:03 kent Exp $";
 
 /* Brought errno in to get more useful error messages */
 
@@ -251,7 +251,7 @@ else
 strncpy(parsed->host, s, sizeof(parsed->host));
 }
 
-static int netGetOpenHttp(char *url)
+static int netGetOpenHttpExt(char *url, char *method)
 /* Return a file handle that will read the url.  This
  * skips past any header. */
 {
@@ -266,7 +266,7 @@ if (!sameString(npu.protocol, "http"))
 sd = netMustConnect(npu.host, atoi(npu.port));
 
 /* Ask remote server for a file. */
-dyStringPrintf(dy, "GET %s HTTP/1.0\r\n", npu.file);
+dyStringPrintf(dy, "%s %s HTTP/1.0\r\n", method, npu.file);
 dyStringPrintf(dy, "User-Agent: genome.ucsc.edu/net.c\r\n");
 dyStringPrintf(dy, "Host: %s:%s\r\n", npu.host, npu.port);
 dyStringPrintf(dy, "Accept: */*\r\n", npu.host, npu.port);
@@ -276,6 +276,38 @@ write(sd, dy->string, dy->stringSize);
 /* Clean up and return handle. */
 dyStringFree(&dy);
 return sd;
+}
+
+static int netGetOpenHttp(char *url)
+/* Return a file handle that will read the url.  This
+ * skips past any header. */
+{
+return netGetOpenHttpExt(url, "GET");
+}
+
+int netUrlStatus(char *url)
+/* Go get head and return status.  Return negative number if
+ * can't get head. */
+{
+int sd = netGetOpenHttpExt(url, "HEAD");
+char buf[256], *line, *word;
+int bytesRead;
+int status = EIO;
+bytesRead = read(sd, buf, sizeof(buf));
+if (bytesRead < 0)
+    status = errno;
+else
+    {
+    line = buf;
+    word = nextWord(&line);
+    if (word != NULL && startsWith("HTTP", word))
+        {
+	word = nextWord(&line);
+	if (word != NULL && isdigit(word[0]))
+	    status = atoi(word);
+	}
+    }
+return status;
 }
 
 int netUrlOpen(char *url)
