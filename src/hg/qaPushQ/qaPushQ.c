@@ -29,7 +29,7 @@
 #include "dbDb.h"
 #include "htmlPage.h"
 
-static char const rcsid[] = "$Id: qaPushQ.c,v 1.68 2004/12/23 00:03:14 galt Exp $";
+static char const rcsid[] = "$Id: qaPushQ.c,v 1.69 2005/01/03 19:58:18 galt Exp $";
 
 char msg[2048] = "";
 char ** saveEnv;
@@ -3081,7 +3081,10 @@ chost     = cfgOption("archivecentral.host"    );
 cuser     = cfgOption("archivecentral.user"    );
 cpassword = cfgOption("archivecentral.password");
 
-webStart(NULL, "Track and Table Releases");
+if (isEncode)
+    webStart(NULL, "10 Latest Changes (all assemblies)");
+else    
+    webStart(NULL, "Track and Table Releases");
 
 
 //printf("%s %s %s %s</br>\n",centraldb, host, user, password);
@@ -3122,21 +3125,11 @@ sqlDisconnect(&betaconn);
 // is this necessary? are we really only allowed one remoteconn at a time?
 conn = sqlConnectRemote(host, user, password, database);
 
+if (!isEncode)
+{
 /* 10 Latest Changes */
 printf("<li><a CLASS=\"toc\" HREF=\"#recent\" ><b>10 Latest Changes (all assemblies)</b></a></li>");
 
-/*
-printf("<li><a HREF=\"#recent\" " 
-"style=\""
-".link {color: #FF0000} "
-".visited {color: #00FF00} "
-".hover {color: #FF00FF} "
-".active {color: #0000FF} "
-"\"> 10 Most Recent Changes (all assemblies) </a></li>\n");
-*/
-
-if (!isEncode)
-{
 /* regular log index #links */
 for (ki = kiList; ki != NULL; ki = ki->next)
     {
@@ -3155,10 +3148,13 @@ printf(" For more information about the tracks and tables listed on this page, r
 }
 
 strftime (now, sizeof(now), "%02d %b %Y", loctime); /* default to today's date */
-printf("<em>Last updated %s. <a HREF=\"mailto:genome@soe.ucsc.edu\">Inquiries and feedback welcome</a>.</em>\n",now);
+if (!isEncode)
+    {
+    printf("<em>Last updated %s. <a HREF=\"mailto:genome@soe.ucsc.edu\">Inquiries and feedback welcome</a>.</em>\n",now);
+    /* 10 LATEST CHANGES */
+    webNewSection("<A NAME=recent></A> 10 Latest Changes (all assemblies)");
+    }
 
-/* 10 LATEST CHANGES */
-webNewSection("<A NAME=recent></A> 10 Latest Changes (all assemblies)");
 printf("<TABLE BORDER=1 BORDERCOLOR=\"#aaaaaa\" CELLPADDING=4 WIDTH=\"100%%\">\n"
     "<TR>\n"
     "<TD nowrap><FONT color=\"#006666\"><B>Track/Table Name</B></FONT></TD>\n"
@@ -3229,6 +3225,12 @@ while ((row = sqlNextRow(sr)) != NULL)
 sqlFreeResult(&sr);
 printf("</table>\n");
 
+if (isEncode)
+    {
+    printf("<br>\n");
+    printf("<em>Last updated %s. <a HREF=\"mailto:genome@soe.ucsc.edu\">Inquiries and feedback welcome</a>.</em>\n",now);
+    }
+    
 if (!isEncode)
 {
 /* REGULAR LOG */
