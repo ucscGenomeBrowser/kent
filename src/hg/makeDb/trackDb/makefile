@@ -39,7 +39,7 @@ old_update:
 	hgTrackDb human hg9 trackDb_$(USER) ../../lib/trackDb.sql .
 	hgTrackDb human hg10 trackDb_$(USER) ../../lib/trackDb.sql .
 	hgTrackDb human hg11 trackDb_$(USER) ../../lib/trackDb.sql .
-	hgTrackDb human mm1 trackDb_$(USER) ../../lib/trackDb.sql .
+	hgTrackDb mouse mm1 trackDb_$(USER) ../../lib/trackDb.sql .
 
 alpha:
 	cvs up -d -P .
