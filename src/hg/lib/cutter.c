@@ -10,7 +10,7 @@
 #include "bed.h"
 #include "cutter.h"
 
-static char const rcsid[] = "$Id: cutter.c,v 1.3 2005/03/25 00:54:42 aamp Exp $";
+static char const rcsid[] = "$Id: cutter.c,v 1.4 2005/03/29 01:20:53 aamp Exp $";
 
 struct cutter *cutterLoad(char **row)
 /* Load a cutter from row fetched with select * from cutter
@@ -552,75 +552,28 @@ struct bed *allocBedEnz(struct cutter *enz, char *seqName, int seqPos, char stra
 struct bed *newbed = NULL;
 AllocVar(newbed);
 newbed->chrom = cloneString(seqName);
-newbed->chromStart = seqPos;
-newbed->chromEnd = seqPos + enz->size;
+newbed->chromStart = (strand == '-') ? seqPos - enz->size : seqPos;
+newbed->chromEnd = (strand == '-') ? seqPos : seqPos + enz->size;
 newbed->name = cloneString(enz->name);
 newbed->score = 1000;
 newbed->strand[0] = strand;
 return newbed;
 }
 
-struct bed *matchEnzymes(struct cutter *cutters, struct dnaSeq *seq, char strand, boolean searchPalindromes, int startOffset)
-/* Match the enzymes to sequence and return a bed list in all cases. */
+struct bed *searchStrand(struct hash *sixers, struct cutter *ACGTo[], struct dnaSeq *seq, int startOffset, char strand)
+/* Cheesey function that checks a strand for the enzymes after they're put in the hash/array structures.  
+   This used to be a part of the matchEnzymes function but I do it twice now. */
 {
-struct hash *sixers = newHash(8);
-struct cutter *enz, *A = NULL, *C = NULL, *G = NULL, *T = NULL, *other = NULL;
+struct cutter *enz;
 struct bed *bedList = NULL;
-int seqPos = 0, i;
+int seqPos;
 
-if (!cutters)
-    return NULL;
-
-/* Put each of the enzymes in either a hash table of six-cutters or */
-
-enz = cutters;
-while (enz != NULL)
-    {
-    int acgtCount = 0;
-    struct cutter *next = enz->next, *garb = NULL;
-    if (enz->palindromic && !searchPalindromes)
-	{
-	enz = next;
-	continue;
-	}
-    acgtCount = countChars(enz->seq,'A') + countChars(enz->seq,'C') + 
-                countChars(enz->seq,'G') + countChars(enz->seq,'T');
-    if (enz->size==6 && acgtCount==6)
-	hashAdd(sixers, enz->seq, enz);
-    else
-	{
-	if (enz->seq[0] == 'A')
-	    slAddHead(&A, enz);
-	else if (enz->seq[0] == 'C')
-	    slAddHead(&C, enz);
-	else if (enz->seq[0] == 'G')
-	    slAddHead(&G, enz);
-	else if (enz->seq[0] == 'T')
-	    slAddHead(&T, enz);
-	else 
-	    slAddHead(&other, enz);
-	}
-    enz = next;
-    }
-
-if (other)
-    {
-    if (A)
-	A = slCat(A, other);
-    if (C)
-	C = slCat(C, other);
-    if (G)
-	G = slCat(G, other);
-    if (T)
-	T = slCat(T, other);
-    }
-
-if (A || C || G || T) 
+if (ACGTo[0] || ACGTo[1] || ACGTo[2] || ACGTo[3]) 
     for (seqPos = 0; seqPos < seq->size; seqPos++)
 	{
 	struct cutter *enzList = NULL;
-	boolean inHash = FALSE;
 	char sixer[7];
+	int bedPos = (strand == '-') ? (seq->size - seqPos) : seqPos;
 	if (seq->size - seqPos >= 6)
 	    {
 	    struct hashEl *el = NULL;
@@ -630,26 +583,27 @@ if (A || C || G || T)
 	    if (el)
 		{	    
 		struct bed *add;
-		inHash = TRUE;
 		enz = el->val;
-		add = allocBedEnz(enz, seq->name, seqPos, strand);
+		add = allocBedEnz(enz, seq->name, bedPos + startOffset, strand);
 		slAddHead(&bedList, add);
+		/* Just in case there's another one with the same sequence. */
 		while (el = hashLookupNext(el))
 		    {
 		    enz = el->val;
-		    add = allocBedEnz(enz, seq->name, seqPos, strand);
+		    add = allocBedEnz(enz, seq->name, bedPos + startOffset, strand);
 		    slAddHead(&bedList, add);
 		    }
 		}
 	    }
+	/* Use a certain list depending on which letter we're on in the sequence. */
 	if (seq->dna[seqPos] == 'A')
-	    enzList = A;
+	    enzList = ACGTo[0];
 	else if (seq->dna[seqPos] == 'C')
-	    enzList = C;
+	    enzList = ACGTo[1];
 	else if (seq->dna[seqPos] == 'G')
-	    enzList = G;
+	    enzList = ACGTo[2];
 	else if (seq->dna[seqPos] == 'T')
-	    enzList = T;
+	    enzList = ACGTo[3];
 	for (enz = enzList; enz != NULL; enz = enz->next)
 	    {
 	    int enzPos = 0;
@@ -660,11 +614,105 @@ if (A || C || G || T)
 		}
 	    if (enzPos == enz->size)
 		{
-		struct bed *add = allocBedEnz(enz, seq->name, seqPos + startOffset, strand);
+		struct bed *add = allocBedEnz(enz, seq->name, bedPos + startOffset, strand);
 		slAddHead(&bedList, add);
 		}
 	    }
 	}
+return bedList;
+}
+
+struct bed *matchEnzymes(struct cutter *cutters, struct dnaSeq *seq, int startOffset)
+/* Match the enzymes to sequence and return a bed list in all cases. */
+{
+struct hash *sixers = newHash(8), *palinSixers = newHash(8);
+struct cutter *enz;
+struct cutter *ACGTo[5], *palinACGTo[5];
+struct bed *bedList = NULL, *tmp;
+int seqPos = 0, i;
+
+if (!cutters)
+    return NULL;
+
+for (i = 0; i < 5; i++)
+    ACGTo[i] = palinACGTo[i] = NULL;
+
+/* Put each of the enzymes in either a hash table of six-cutters or */
+
+enz = cutters;
+while (enz != NULL)
+    {
+    int acgtCount = 0;
+    struct cutter *next = enz->next, *garb = NULL;
+    acgtCount = countChars(enz->seq,'A') + countChars(enz->seq,'C') + 
+                countChars(enz->seq,'G') + countChars(enz->seq,'T');
+    /* Super dumb coding here but it's quick. */
+    if (enz->palindromic)
+	{
+	if (enz->size==6 && acgtCount==6)
+	    hashAdd(palinSixers, enz->seq, enz);
+	else
+	    {
+	    if (enz->seq[0] == 'A')
+		slAddHead(&palinACGTo[0], enz);
+	    else if (enz->seq[0] == 'C')
+		slAddHead(&palinACGTo[1], enz);
+	    else if (enz->seq[0] == 'G')
+		slAddHead(&palinACGTo[2], enz);
+	    else if (enz->seq[0] == 'T')
+		slAddHead(&palinACGTo[3], enz);
+	    else 
+		slAddHead(&palinACGTo[4], enz);
+	    }
+	}
+    else
+	{
+	if (enz->size==6 && acgtCount==6)
+	    hashAdd(sixers, enz->seq, enz);
+	else
+	    {
+	    if (enz->seq[0] == 'A')
+		slAddHead(&ACGTo[0], enz);
+	    else if (enz->seq[0] == 'C')
+		slAddHead(&ACGTo[1], enz);
+	    else if (enz->seq[0] == 'G')
+		slAddHead(&ACGTo[2], enz);
+	    else if (enz->seq[0] == 'T')
+		slAddHead(&ACGTo[3], enz);
+	    else 
+		slAddHead(&ACGTo[4], enz);
+	    }	
+	}
+    enz = next;
+    }
+
+/* At this point we got a hash for the palindromes and non-palindromic six-cutters, 
+   plus an array for each too.  The array is set up so the enzymes starting with 'A' go into [0], 'C'
+   into [1], 'G' into [2], 'T' into [3], and other bases into [4].  */
+
+if (ACGTo[4])
+    {
+    slCat(ACGTo[0], ACGTo[4]);
+    slCat(ACGTo[1], ACGTo[4]);
+    slCat(ACGTo[2], ACGTo[4]);
+    slCat(ACGTo[3], ACGTo[4]);
+    }
+
+if (palinACGTo[4])
+    {
+    slCat(palinACGTo[0], palinACGTo[4]);
+    slCat(palinACGTo[1], palinACGTo[4]);
+    slCat(palinACGTo[2], palinACGTo[4]);
+    slCat(palinACGTo[3], palinACGTo[4]);
+    }
+/* Search the DNA in three ways: on the plus strand for both palindromes and nonpalindromes, and then
+   just nonpalindromes on the minus strand. */
+bedList = searchStrand(palinSixers, palinACGTo, seq, startOffset, '+');
+tmp = searchStrand(sixers, ACGTo, seq, startOffset, '+');
+slCat(bedList, tmp);
+reverseComplement(seq->dna, seq->size);
+tmp = searchStrand(sixers, ACGTo, seq, startOffset, '-');
+slCat(bedList, tmp);
 if (bedList)
     slReverse(&bedList);
 return bedList;
