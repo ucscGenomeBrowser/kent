@@ -32,7 +32,7 @@
 #include "twoBit.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.217 2004/11/05 02:08:26 kent Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.218 2004/11/05 06:13:38 angie Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
@@ -48,7 +48,7 @@ static struct sqlConnCache *cartCc = NULL;  /* cache for cart; normally same as 
 
 static char *hdbHost = NULL;
 static char *hdbName = NULL;
-static char *hdbName2 = "Mouse";
+static char *hdbName2 = NULL;
 static char *hdbUser = NULL;
 static char *hdbPassword = NULL;
 static char *hdbTrackDb = NULL;
@@ -296,18 +296,18 @@ hdbTrackDb = cloneString(trackDbName);
 void hSetDbConnect(char* host, char *db, char *user, char *password)
 /* set the connection information for the database */
 {
-    hdbHost = host;
-    hdbName = db;
-    hdbUser = user;
-    hdbPassword = password;
+    hdbHost = cloneString(host);
+    hdbName = cloneString(db);
+    hdbUser = cloneString(user);
+    hdbPassword = cloneString(password);
 }
 void hSetDbConnect2(char* host, char *db, char *user, char *password)
 /* set the connection information for the database */
 {
-    hdbHost = host;
-    hdbName2 = db;
-    hdbUser = user;
-    hdbPassword = password;
+    hdbHost = cloneString(host);
+    hdbName2 = cloneString(db);
+    hdbUser = cloneString(user);
+    hdbPassword = cloneString(password);
 }
 
 boolean hDbExists(char *database)
@@ -345,7 +345,7 @@ void hSetDb(char *dbName)
 if ((hdbCc != NULL) && !sameString(hdbName, dbName))
     errAbort("Can't hSetDb(%s) after an hAllocConn(%s), sorry.",
 	     dbName, hdbName);
-hdbName = dbName;
+hdbName = cloneString(dbName);
 }
 
 void hSetDb2(char *dbName)
@@ -354,7 +354,7 @@ void hSetDb2(char *dbName)
 if ((hdbCc2 != NULL) && !sameString(hdbName2, dbName))
     errAbort("Can't hSetDb2(%s) after an hAllocConn2(%s), sorry.",
 	     dbName, hdbName2);
-hdbName2 = dbName;
+hdbName2 = cloneString(dbName);
 }
 
 char *hDefaultDbForGenome(char *genome)
@@ -456,7 +456,7 @@ char *hGetDbUsual(char *usual)
 {
 if (NULL == hdbName)
     {
-    hdbName = usual;
+    hdbName = cloneString(usual);
     }
 
 return hdbName;
@@ -478,7 +478,7 @@ char *hGetDb2Usual(char *usual)
 {
 if (NULL == hdbName2)
     {
-    hdbName2 = usual;
+    hdbName2 = cloneString(usual);
     }
 
 return hdbName2;
@@ -2228,10 +2228,7 @@ boolean gotIt = TRUE, binned = FALSE;
 
 if (! sqlTableExists(conn, table))
     {
-    if (sameString(db, hGetDb()))
-	hFreeConn(&conn);
-    else
-	hFreeConn2(&conn);
+    hFreeOrDisconnect(&conn);
     return FALSE;
     }
 
@@ -3713,6 +3710,7 @@ while (grpList != NULL)
 grps = slCat(grps, grpLocalList);
 
 slSort(&grps, grpCmpPriority);
+hFreeConn(&conn);
 return grps;
 }
 
