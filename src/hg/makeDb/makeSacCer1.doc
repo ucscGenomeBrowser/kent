@@ -758,3 +758,14 @@ end
     cd /cluster/data/sacCer1/bed/blastp/hg16/run/out
     hgLoadBlastTab sacCer1 hgBlastTab -maxPer=1 *.tab
 
+#CREATING DOWNLOADS DIRECTORY
+    ssh hgwdev
+    cd /usr/local/apache/htdocs/goldenPath
+    mkdir sacCer1
+    cd sacCer1
+    mkdir bigZips database
+    cd bigZips
+    zip -j chromFa.zip /cluster/data/sacCer1/*/chr*.fa
+    zip -j multizYeast.zip /gbdb/sacCer1/multizYeast/*.maf
+    # Create a README.txt file here.
+
