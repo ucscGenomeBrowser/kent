@@ -30,6 +30,7 @@ compile: $O
 	chmod a+rx $A
 
 install:	compile
+	strip $A
 	@if [ ! -d "${DESTDIR}${CGI_BIN}" ]; then \
 		${MKDIR} "${DESTDIR}${CGI_BIN}"; \
 	fi
