@@ -141,10 +141,9 @@ int ffOneIntronOrientation(struct ffAli *left, struct ffAli *right);
 /* Return 1 for GT/AG intron between left and right, -1 for CT/AC, 0 for no
  * intron. */
 
-int ffIntronOrientation(struct ffAli *ff);
-/* Return 1 if introns make it look like alignment is on + strand,
- *       -1 if introns make it look like alignment is on - strand,
- *        0 if can't tell. */
+int ffIntronOrientation(struct ffAli *ali);
+/* Return + for positive orientation overall, - for negative,
+ * 0 if can't tell. */
 
 
 /************* Functions other alignment modules might use ****************/
