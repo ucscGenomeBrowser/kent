@@ -69,7 +69,7 @@
 #include "grp.h"
 #include "chromColors.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.596 2003/09/18 23:16:55 hiram Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.597 2003/09/19 19:20:43 braney Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
@@ -6936,7 +6936,8 @@ if(sameString(position, ""))
     errAbort("Please go back and enter a coordinate range in the \"position\" field.<br>For example: chr22:20100000-20200000.\n");
 
 chromName = NULL;
-hgp = findGenomePos(position, &chromName, &winStart, &winEnd, cart);
+if (NULL == (hgp = findGenomePos(position, &chromName, &winStart, &winEnd, cart)))
+	hgp = findGenomePos(defaultPosition, &chromName, &winStart, &winEnd, cart);
 
 if (NULL != hgp && NULL != hgp->tableList && NULL != hgp->tableList->name)
     {
