@@ -8,7 +8,7 @@
 #include "hdb.h"
 #include "hgRelate.h"
 
-static char const rcsid[] = "$Id: hgLoadPsl.c,v 1.30 2004/11/19 08:42:59 markd Exp $";
+static char const rcsid[] = "$Id: hgLoadPsl.c,v 1.31 2005/04/06 18:20:45 hiram Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -153,7 +153,18 @@ verbose(1, "Processing %s\n", pslFile);
 if (clTableName != NULL)
     safef(table, sizeof(table), "%s", clTableName);
 else
-    splitPath(pslFile, NULL, table, NULL);
+    {
+    if (endsWith(pslFile, ".gz"))
+	{
+	char *stripGz;
+	stripGz = cloneString(pslFile);
+	chopSuffix(stripGz);
+	splitPath(stripGz, NULL, table, NULL);
+	freeMem(stripGz);
+	}
+    else
+	splitPath(pslFile, NULL, table, NULL);
+    }
 
 setupTable(conn, table);
 
