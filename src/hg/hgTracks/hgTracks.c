@@ -73,7 +73,7 @@
 #include "grp.h"
 #include "chromColors.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.645 2003/12/18 17:36:36 heather Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.645.2.1 2003/12/24 02:19:53 daryl Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
@@ -5158,11 +5158,12 @@ tg->colorShades = shadesOfGray;
 char *perlegenName(struct track *tg, void *item)
 /* return the actual perlegen name, in form xx/yyyy cut off xx/ return yyyy */
 {
-char * name;
+char *name;
 struct linkedFeatures *lf = item;
 name = strstr(lf->name, "/");
-name ++;
-if(name != NULL)
+if (name != NULL)
+    name ++;
+if (name != NULL)
     return name;
 return "unknown";
 }
@@ -5251,11 +5252,12 @@ tg->colorShades = shadesOfSea;
 char *encodeErgeName(struct track *tg, void *item)
 /* return the actual data name, in form xx/yyyy cut off xx/ return yyyy */
 {
-char * name;
+char *name;
 struct linkedFeatures *lf = item;
 name = strstr(lf->name, "/");
-name ++;
-if(name != NULL)
+if (name != NULL)
+    name ++;
+if (name != NULL)
     return name;
 return "unknown";
 }
