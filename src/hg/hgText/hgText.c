@@ -26,7 +26,7 @@
 #include "portable.h"
 #include "customTrack.h"
 
-static char const rcsid[] = "$Id: hgText.c,v 1.84 2003/05/06 07:22:19 kate Exp $";
+static char const rcsid[] = "$Id: hgText.c,v 1.85 2003/06/17 23:11:09 braney Exp $";
 
 /* sources of tracks, other than the current database: */
 static char *hgFixed = "hgFixed";
@@ -114,7 +114,8 @@ retStats->stdev = sqrt(total / N);
 
 
 /* copied from hgGateway: */
-static char * const onChangeText = "onchange=\"document.orgForm.org.value = document.mainForm.org.options[document.mainForm.org.selectedIndex].value; document.orgForm.submit();\"";
+static char *onChangeDb = "onchange=\"document.orgForm.db.value = document.mainForm.db.options[document.mainForm.db.selectedIndex].value; document.orgForm.submit();\"";
+static char *onChangeOrg = "onchange=\"document.orgForm.org.value = document.mainForm.org.options[document.mainForm.org.selectedIndex].value; document.orgForm.db.value = 0; document.orgForm.submit();\"";
 
 /* Droplist menu for selecting output type: */
 #define allFieldsPhase      "Tab-separated, All fields"
@@ -369,9 +370,10 @@ char *oldDb  = hashFindVal(oldVars, "db");
 char *oldPos = hashFindVal(oldVars, "position");
 if ((oldDb != NULL) && (! sameWord(oldDb, database)))
     {
+    position = hDefaultPos(database);
     if ((! isGenome(position)) &&
 	(oldPos != NULL) && sameWord(position, oldPos))
-	position = searchPosition(hDefaultPos(database),
+	position = searchPosition(position,
 				  &chrom, &winStart, &winEnd);
     cartRemove(cart, "hgt.customText");
     cartRemove(cart, "hgt.customFile");
@@ -443,11 +445,11 @@ puts(
 );
 
 puts("<tr><td align=center>\n");
-printGenomeListHtml(database, onChangeText);
+printGenomeListHtml(database, onChangeOrg);
 puts("</td>\n");
 
 puts("<td align=center>\n");
-printAssemblyListHtml(database);
+printAssemblyListHtml(database, onChangeDb);
 puts("</td>\n");
 
 puts("<td align=center>\n");
@@ -468,6 +470,7 @@ puts(
 printf("<FORM ACTION=\"%s\" METHOD=\"%s\" NAME=\"orgForm\">\n", hgTextName(),
        httpFormMethod);
 cgiMakeHiddenVar("org", organism);
+cgiMakeHiddenVar("db", database);
 cartSaveSession(cart);
 puts("</FORM>");
 
