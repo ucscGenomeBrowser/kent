@@ -10,7 +10,7 @@
 #include "gbFileOps.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: gbParse.c,v 1.8 2004/03/09 02:11:36 markd Exp $";
+static char const rcsid[] = "$Id: gbParse.c,v 1.9 2005/01/19 07:04:16 markd Exp $";
 
 
 /* Some fields we'll want to use directly. */
@@ -41,11 +41,21 @@ struct gbField *gbRefSeqRoot = NULL;
 struct gbField *gbRefSeqStatusField = NULL;
 struct gbField *gbRefSeqSummaryField = NULL;
 struct gbField *gbRefSeqCompletenessField = NULL;
+struct gbField *gbRefSeqDerivedField = NULL;
 
 
 /* State flag, indicates end-of-record reached on current entry; needed to
  * detect entries that don't have sequences */
 static boolean gReachedEOR = FALSE;
+
+static char *getCurAcc()
+/* get current accession field, or "unknown" if no defined yet */
+{
+if (gbAccessionField->val->stringSize == 0)
+    return "unknown accession";
+else
+    return gbAccessionField->val->string;
+}
 
 char *skipLeadingNonSpaces(char *s)
 /* Return first non-white space or NULL. */
@@ -292,6 +302,8 @@ gbRefSeqSummaryField = newField("refSeqSummary", "rsu", GBF_NONE, 1024);
 slAddTail(&gbRefSeqRoot, gbRefSeqSummaryField);
 gbRefSeqCompletenessField = newField("refSeqCompleteness", "rsc", GBF_NONE, 128);
 slAddTail(&gbRefSeqRoot, gbRefSeqCompletenessField);
+gbRefSeqDerivedField = newField("refSeqDerived", "rsd", GBF_NONE, 256);
+slAddTail(&gbRefSeqRoot, gbRefSeqDerivedField);
 }
 
 void gbfClearVals(struct gbField *gbf)
@@ -524,28 +536,151 @@ static void parseRefSeqStatus()
 /* Parse refseq status out of comment field */
 {
 char *stat = NULL;
-if (gbCommentField->val != NULL)
-    {
-    if (startsWith("REVIEWED REFSEQ:", gbCommentField->val->string))
-        stat = "rev";
-    else if (startsWith("VALIDATED REFSEQ:", gbCommentField->val->string))
-        stat = "val";
-    else if (startsWith("PROVISIONAL REFSEQ:", gbCommentField->val->string))
-        stat = "pro";
-    else if (startsWith("PREDICTED REFSEQ:", gbCommentField->val->string))
-        stat = "pre";
-    else if (startsWith("INFERRED REFSEQ:", gbCommentField->val->string))
-        stat = "inf";
-    else if (startsWith("MODEL REFSEQ:", gbCommentField->val->string))
-        stat = "mod";
-    }
+if (startsWith("REVIEWED REFSEQ:", gbCommentField->val->string))
+    stat = "rev";
+else if (startsWith("VALIDATED REFSEQ:", gbCommentField->val->string))
+    stat = "val";
+else if (startsWith("PROVISIONAL REFSEQ:", gbCommentField->val->string))
+    stat = "pro";
+else if (startsWith("PREDICTED REFSEQ:", gbCommentField->val->string))
+    stat = "pre";
+else if (startsWith("INFERRED REFSEQ:", gbCommentField->val->string))
+    stat = "inf";
+else if (startsWith("MODEL REFSEQ:", gbCommentField->val->string))
+    stat = "mod";
 if (stat == NULL)
     {
     stat = "unk";
-    warn("refseq %s has unknown status in \"%s\"", 
-         gbAccessionField->val->string, gbCommentField->val->string);
+    warn("Warning: refseq %s has unknown status in \"%s\"", 
+         getCurAcc(), gbCommentField->val->string);
     }
 dyStringAppend(gbRefSeqStatusField->val, stat);
+}
+
+static void parseRefSeqDerivedAcc(char *next, char *prefix)
+/* Parse list sequences a refSeq was derived from when specified as
+ * accessions.  Prefix is used by genomic, null otherwise */
+{
+char *word;
+int numDerived = 0;
+
+/* parse out referenced accessions */
+while ((word = nextWord(&next)) != NULL)
+    {
+    int wlen = strlen(word);
+    char lchr = word[wlen-1];
+    
+    if (!sameString(word, "and"))
+        {
+        if (!isdigit(lchr))
+            word[wlen-1] = '\0';
+        if (numDerived > 0)
+            dyStringAppend(gbRefSeqDerivedField->val, " ");
+        if (prefix != NULL)
+            {
+            dyStringAppend(gbRefSeqDerivedField->val, prefix);
+            dyStringAppend(gbRefSeqDerivedField->val, "/");
+            }
+        dyStringAppend(gbRefSeqDerivedField->val, word);
+        }
+    if (lchr == '.')
+        break; /* end of sentence */
+    numDerived++;
+    }
+if (word == NULL)
+    errAbort("%s: failed to find '.' terminating \"derived from5B\" comment",
+             getCurAcc());
+}
+
+static void parseRefSeqDerivedGenomic(char *next)
+/* Parse list sequences a refSeq was derived from annotated genomic */
+{
+static char *derivedStr = "derived from";
+char genomicAcc[64];
+char *start = NULL, *end = NULL;
+
+/* parse: (NC_003071). */
+if (next[0] == '(')
+    {
+    start = next+1;
+    end = strstr(next, ").");
+    }
+if (end == NULL)
+    {
+    warn("Warning: %s: can't parse derived from genomic acc in RefSeq comment", getCurAcc());
+    return;
+    }
+safef(genomicAcc, sizeof(genomicAcc), "%1.*s", end-start, start);
+
+/* now parse associated accessions */
+next = strstr(next, derivedStr);
+if (next == NULL)
+    {
+    /* no mrna accs */
+    dyStringAppend(gbRefSeqDerivedField->val, genomicAcc);
+    }
+else
+    {
+    next += strlen(derivedStr);
+    next = skipLeadingSpaces(next);
+    if (next == NULL)
+        {
+        warn("Warning: %s: can't find \"%s\" for annotatied genomic in RefSeq comment", getCurAcc(), derivedStr);
+        return;
+        }
+    parseRefSeqDerivedAcc(next, genomicAcc);
+    }
+}
+
+static void parseRefSeqDerived()
+/* Parse list sequences a refSeq was derived from.
+ *
+ * Comment lines are like:
+ * - NCBI review. The reference sequence was derived from D86960.1.
+ *
+ * - reference sequence was derived from AY146652.1, BC015368.2 and
+ *   AW204088.1.
+ *
+ * - reference sequence was derived from BC012479.1 and D31968.1.
+ *
+ * - NCBI review. This record is derived from an annotated genomic
+ *   sequence (NC_003071). The reference sequence was derived from
+ *   mrna.At2g16920.1.
+ *
+ * - NCBI review. This record is derived from an annotated genomic
+ *   sequence (NC_005782).
+ */
+
+{
+static char *derivedStr = "derived from";
+static char *derivedGenomicStr = "derived from an annotated genomic sequence";
+static struct dyString *comBuf = NULL;
+char *next;
+boolean isGenomic = FALSE;
+
+if (comBuf == NULL)
+    comBuf = dyStringNew(1024);
+dyStringClear(comBuf);
+dyStringAppend(comBuf, gbCommentField->val->string);
+
+/* scan up past the two types of derived from strings */
+next = strstr(comBuf->string, derivedGenomicStr);
+if (next != NULL)
+    isGenomic = TRUE;
+else
+    next = strstr(comBuf->string, derivedStr);
+if (next == NULL)
+    {
+    warn("Warning: %s: can't find \"%s\" in RefSeq comment", getCurAcc(), derivedStr);
+    return;
+    }
+next += isGenomic ? strlen(derivedGenomicStr) : strlen(derivedStr);
+next = skipLeadingSpaces(next);
+
+if (isGenomic)
+    parseRefSeqDerivedGenomic(next);
+else
+    parseRefSeqDerivedAcc(next, NULL);
 }
 
 static void parseRefSeqCompleteness(char* completeness)
@@ -585,9 +720,15 @@ static void refSeqParse()
 /* do special parsing of RefSeq data that was stuck in a comment */
 {
 char *next, *name, *value;
-parseRefSeqStatus();
+if (!startsWith("XM_", getCurAcc()))
+    {
+    parseRefSeqStatus();
+    if (!startsWith("XR_", getCurAcc()))
+        parseRefSeqDerived();
+    }
     
-/* start searching for fields past the end of the status */
+/* start searching for fields past the end of the status.
+ * this destroys comment string */
 next = gbCommentField->val->string;
 while ((name = nextRefSeqCommentField(&next, &value)) != NULL)
     {
@@ -606,7 +747,7 @@ gbfClearVals(gbStruct);
 gbfClearVals(gbRefSeqRoot);
 gReachedEOR = FALSE;
 gotRecord = recurseReadFields(lf, gbStruct, -1);
-if (gotRecord && (gbGuessSrcDb(gbAccessionField->val->string) == GB_REFSEQ))
+if (gotRecord && (gbGuessSrcDb(getCurAcc()) == GB_REFSEQ))
     refSeqParse();
 return gotRecord;
 }
@@ -622,8 +763,7 @@ int dnaCount = 0;
 if (gReachedEOR)
     {
     /* some gbcon.seq don't have origin, they reference contigs, just skip */
-    warn("no mRNA sequence for %s in %s", gbAccessionField->val->string,
-         lf->fileName);
+    warn("no mRNA sequence for %s in %s", getCurAcc(), lf->fileName);
     return NULL;  /* no sequence */
     }
 
@@ -664,8 +804,7 @@ dna[dnaCount] = 0;
 
 /* FIXME: make abort */
 if (numAllowedRNABases(dna) > 0)
-    warn("invalid mRNA bases for %s in %s", gbAccessionField->val->string,
-         lf->fileName);
+    warn("invalid mRNA bases for %s in %s", getCurAcc(), lf->fileName);
 return dna;
 }
 
