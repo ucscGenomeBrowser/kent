@@ -20,7 +20,7 @@ cfm->lineNumbers = lineNumbers;
 cfm->countDown = countDown;
 cfm->out = out;
 cfm->numOff = numOff;
-fprintf(cfm->out, "<FONT COLOR=\"#00%X\">", 0);
+fprintf(cfm->out, "<FONT COLOR=\"#%06X\">", 0);
 }
 
 void cfmOut(struct cfm *cfm, char c, int color)
@@ -28,7 +28,7 @@ void cfmOut(struct cfm *cfm, char c, int color)
 {
 if (color != cfm->lastColor)
     {
-    fprintf(cfm->out, "</FONT><FONT COLOR=\"#00%X\">", color);
+    fprintf(cfm->out, "</FONT><FONT COLOR=\"#%06X\">", color);
     cfm->lastColor = color;
     }
 ++cfm->charCount;

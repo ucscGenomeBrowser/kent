@@ -537,6 +537,22 @@ void cgiMakeButton(char *name, char *value)
 printf("<INPUT TYPE=SUBMIT NAME=\"%s\" VALUE=\"%s\">", name, value);
 }
 
+void cgiMakeRadioButton(char *name, char *value, boolean checked)
+/* Make radio type button.  A group of radio buttons should have the
+ * same name but different values.   The default selection should be
+ * sent with checked on. */
+{
+printf("<INPUT TYPE=RADIO NAME=\"%s\" VALUE=\"%s\" %s>", name, value,
+   (checked ? "CHECKED" : ""));
+}
+
+void cgiMakeCheckBox(char *name, boolean checked)
+/* Make check box. */
+{
+printf("<INPUT TYPE=CHECKBOX NAME=\"%s\" VALUE=on%s>", name,
+    (checked ? " CHECKED" : "") );
+}
+
 void cgiMakeTextVar(char *varName, char *initialVal, int charSize)
 /* Make a text control filled with initial value.  If charSize
  * is zero it's calculated from initialVal size. */
