@@ -81,6 +81,9 @@ void sqlFreeResult(struct sqlResult **pRes);
 int sqlCountColumns(struct sqlResult *sr);
 /* Count the number of columns in result. */
 
+int sqlCountRows(struct sqlConnection *sc, char *table);
+/* Count the number of rows in a table. */
+
 boolean sqlTableExists(struct sqlConnection *sc, char *table);
 /* Return TRUE if a table exists. */
 

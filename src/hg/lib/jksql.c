@@ -364,6 +364,26 @@ return mysql_field_count(sr->result);
 }
 #endif /* SOMETIMES */
 
+int sqlCountRows(struct sqlConnection *sc, char *table)
+/* Return the number of fields in a table */
+{
+char query[256];
+struct sqlResult *sr;
+char **row;
+int count;
+
+/* Read table description and count rows. */
+sprintf(query, "describe %s", table);
+sr = sqlGetResult(sc, query);
+count = 0;
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    count++;
+    }
+sqlFreeResult(&sr);
+return count;
+}
+
 char *sqlQuickQuery(struct sqlConnection *sc, char *query, char *buf, int bufSize)
 /* Does query and returns first field in first row.  Meant
  * for cases where you are just looking up one small thing.  
