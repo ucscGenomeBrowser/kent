@@ -10,7 +10,7 @@
 #include "gff.h"
 #include "genePred.h"
 
-static char const rcsid[] = "$Id: hgSanger22.c,v 1.5 2003/05/06 07:22:25 kate Exp $";
+static char const rcsid[] = "$Id: hgSanger22.c,v 1.6 2004/02/15 02:22:56 baertsch Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -260,7 +260,7 @@ gffFileAdd(gff, fileName, 0);
 gffGroupLines(gff);
 for (group = gff->groupList; group != NULL; group = group->next)
     {
-    gp = genePredFromGroupedGff(gff, group, group->name, "exon");
+    gp = genePredFromGroupedGff(gff, group, group->name, "exon", TRUE);
     if (gp != NULL)
 	{
 	slAddHead(&gpList, gp);
