@@ -2905,7 +2905,7 @@ XXXX - ready to go 2003-11-03 16:50
     gzip *.axt
     # add README.txt file to dir, if needed
 
-# LOAD ECgene tables
+# LOAD ECgene tables (re-done with sort (braney, 2004-01-30))
     cd /cluster/data/rn3/bed
     rm -f ECgene
     mkdir ECgene.2003-12-19
@@ -2916,4 +2916,5 @@ XXXX - ready to go 2003-11-03 16:50
     gunzip *.gz
     ldHgGene -predTab rn3 ECgene ECgene_rn3_v1.1_25oct2003_genes.txt
     hgPepPred rn3 tab ECgenePep ECgene_rn3_v1.1_25oct2003_genepep.txt
+    rm genePred.tab
     gzip *
