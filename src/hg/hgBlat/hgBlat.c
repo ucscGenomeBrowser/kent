@@ -27,6 +27,7 @@ struct serverTable
 char *genomeList[] = {/* "Oct. 7, 2000", */ "Dec. 12, 2000", "April 1, 2001"};
 char *typeList[] = {"BLAT's guess", "DNA", "protein", "translated RNA", "translated DNA"};
 char *sortList[] = {"query,score", "query,start", "chrom,score", "chrom,start", "score"};
+char *outputList[] = {"hyperlink", "psl", "psl no head"};
 
 struct serverTable serverTable[] =  {
 // {"hg5", "Oct. 7, 2000", TRUE, "kks00", "17776", "/projects/cc/hg/oo.23/nib"},
@@ -183,6 +184,8 @@ char *browserUrl = hgTracksName();
 char *hgcUrl = hgcName();
 char *uiState;
 char *sort = cgiUsualString("sort", sortList[0]);
+char *output = cgiUsualString("output", outputList[0]);
+boolean pslOut = startsWith("psl", output);
 
 cgiVarExclude("userSeq");
 cgiVarExclude("seqFile");
@@ -226,24 +229,35 @@ else
     {
     slSort(&pslList, pslCmpQueryScore);
     }
-printf("<H2>BLAT Search Results</H2>");
-printf("<TT><PRE>");
-printf("   ACTIONS      QUERY           SCORE START  END QSIZE IDENTITY CHRO STRAND  START    END  \n");
-printf("--------------------------------------------------------------------------------------------\n");
-for (psl = pslList; psl != NULL; psl = psl->next)
+if (pslOut)
     {
-    printf("<A HREF=\"%s?position=%s:%d-%d&db=%s&ss=%s+%s&%s\">",
-	browserUrl, psl->tName, psl->tStart, psl->tEnd, database, 
-	pslName, faName, uiState);
-    printf("browser</A> ");
-    printf("<A HREF=\"%s?o=%d&g=htcUserAli&i=%s+%s+%s&c=%s&l=%d&r=%d&db=%s\">", 
-    	hgcUrl, psl->tStart, pslName, faName, psl->qName,  psl->tName,
-	psl->tStart, psl->tEnd, database);
-    printf("details</A> ");
-    printf("%-14s %5d %5d %5d %5d %5.1f%%  %4s  %2s  %9d %9d\n",
-	psl->qName, pslScore(psl), psl->qStart, psl->qEnd, psl->qSize,
-	100.0 - pslCalcMilliBad(psl, TRUE) * 0.1,
-	skipChr(psl->tName), psl->strand, psl->tStart + 1, psl->tEnd);
+    printf("<TT><PRE>");
+    if (!sameString(output, "psl no head"))
+	pslWriteHead(stdout);
+    for (psl = pslList; psl != NULL; psl = psl->next)
+	pslTabOut(psl, stdout);
+    }
+else
+    {
+    printf("<H2>BLAT Search Results</H2>");
+    printf("<TT><PRE>");
+    printf("   ACTIONS      QUERY           SCORE START  END QSIZE IDENTITY CHRO STRAND  START    END  \n");
+    printf("--------------------------------------------------------------------------------------------\n");
+    for (psl = pslList; psl != NULL; psl = psl->next)
+	{
+	printf("<A HREF=\"%s?position=%s:%d-%d&db=%s&ss=%s+%s&%s\">",
+	    browserUrl, psl->tName, psl->tStart, psl->tEnd, database, 
+	    pslName, faName, uiState);
+	printf("browser</A> ");
+	printf("<A HREF=\"%s?o=%d&g=htcUserAli&i=%s+%s+%s&c=%s&l=%d&r=%d&db=%s\">", 
+	    hgcUrl, psl->tStart, pslName, faName, psl->qName,  psl->tName,
+	    psl->tStart, psl->tEnd, database);
+	printf("details</A> ");
+	printf("%-14s %5d %5d %5d %5d %5.1f%%  %4s  %2s  %9d %9d\n",
+	    psl->qName, pslScore(psl), psl->qStart, psl->qEnd, psl->qSize,
+	    100.0 - pslCalcMilliBad(psl, TRUE) * 0.1,
+	    skipChr(psl->tName), psl->strand, psl->tStart + 1, psl->tEnd);
+	}
     }
 pslFreeList(&pslList);
 printf("</TT></PRE>");
@@ -446,17 +460,21 @@ printf("%s",
 "<TABLE BORDER=0 WIDTH=\"96%\">\n"
 "<TR>\n");
 
-printf("%s", "<TD WIDTH=\"25%\"<CENTER>\n");
+printf("%s", "<TD WIDTH=\"20%\"<CENTER>\n");
 printf("Freeze:<BR>");
 cgiMakeDropList("genome", genomeList, ArraySize(genomeList), serve->genome);
-printf("%s", "</TD><TD WIDTH=\"25%\"<CENTER>\n");
+printf("%s", "</TD><TD WIDTH=\"22%\"<CENTER>\n");
 printf("Query type:<BR>");
 cgiMakeDropList("type", typeList, ArraySize(typeList), NULL);
-printf("%s", "</TD><TD WIDTH=\"25%\"<CENTER>\n");
+printf("%s", "</TD><TD WIDTH=\"20%\"<CENTER>\n");
 printf("Sort output:<BR>");
 cgiMakeDropList("sort", sortList, ArraySize(sortList), NULL);
 printf("%s", "</TD>\n");
-printf("%s", "<TD WIDTH=\"25%\">\n"
+printf("%s", "<TD WIDTH=\"20%\"<CENTER>\n");
+printf("Output type:<BR>");
+cgiMakeDropList("output", outputList, ArraySize(outputList), NULL);
+printf("%s", "</TD>\n");
+printf("%s", "<TD WIDTH=\"18%\">\n"
     "<CENTER>\n"
     "<P><INPUT TYPE=SUBMIT NAME=Submit VALUE=Submit>\n"
     "</CENTER>\n"
