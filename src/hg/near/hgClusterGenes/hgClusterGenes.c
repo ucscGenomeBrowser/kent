@@ -11,7 +11,7 @@
 #include "binRange.h"
 #include "rbTree.h"
 
-static char const rcsid[] = "$Id: hgClusterGenes.c,v 1.4 2003/09/08 09:02:56 kent Exp $";
+static char const rcsid[] = "$Id: hgClusterGenes.c,v 1.5 2003/09/17 17:21:39 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -269,7 +269,6 @@ dyStringPrintf(dy,
     " INDEX(clusterId))\n"
     , tableName, longestName);
 sqlRemakeTable(conn, tableName, dy->string);
-uglyf("%s\n", dy->string);
 dyStringFree(&dy);
 }
 
