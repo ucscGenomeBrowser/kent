@@ -21,7 +21,7 @@
 #define CDS_HELP_PAGE "../goldenPath/help/hgCodonColoring.html"
 #define CDS_MRNA_HELP_PAGE "../goldenPath/help/hgCodonColoringMrna.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.122 2004/07/20 23:14:15 hiram Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.123 2004/07/21 19:47:12 sugnet Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -813,6 +813,17 @@ void ancientRUi(struct trackDb *tdb)
 }
 
 
+void affyTransfragUi(struct trackDb *tdb) 
+/* Options for filtering affymetrix transfrag track based on score. */
+{
+boolean skipPseudos = cartUsualBoolean(cart, "affyTransfrags.skipPseudos", TRUE);
+boolean skipDups = cartUsualBoolean(cart, "affyTransfrags.skipDups", FALSE);
+printf("<br>");
+cgiMakeCheckBox("affyTransfrags.skipPseudos", skipPseudos);
+printf(" Remove transfrags that overlap pseudogenes from display.<br>");
+cgiMakeCheckBox("affyTransfrags.skipDups", skipDups);
+printf(" Remove transfrags that have a BLAT match elsewhere in the genome from display.<br>");
+}
 
 void specificUi(struct trackDb *tdb)
 	/* Draw track specific parts of UI. */
@@ -914,6 +925,8 @@ else if (startsWith("sample", tdb->type))
     genericWiggleUi(tdb,7);
 else if (sameString(track, RULER_TRACK_NAME))
     rulerUi(tdb);
+else if(sameString(track, "affyTransfrags"))
+    affyTransfragUi(tdb);
 else 
     {
     /* handle all tracks with type genePred or bed or "psl xeno <otherDb>" */
