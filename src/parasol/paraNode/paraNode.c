@@ -455,9 +455,26 @@ char *managingHost = nextWord(&line);
 if (managingHost != NULL)
     {
     int sd = netConnect(managingHost, paraPort);
-    char buf[256];
-    snprintf(buf, sizeof(buf), "alive %s", hostName);
-    sendWithSig(sd, buf);
+    struct dyString *dy = dyStringNew(512);
+    struct dlNode *node;
+    int jobsReported = 0;
+    dyStringPrintf(dy, "alive %s", hostName);
+    for (node = jobsRunning->head; !dlEnd(node); node = node->next)
+        {
+	struct job *job = node->val;
+        dyStringPrintf(dy, " %d", job->jobId);
+	++jobsReported;
+	}
+   for (node = jobsFinished->head; !dlEnd(node); node = node->next)
+        {
+	struct job *job = node->val;
+	if (jobsReported >= maxProcs)
+	    break;
+        dyStringPrintf(dy, " %d", job->jobId);
+	++jobsReported;
+	}
+    sendWithSig(sd, dy->string);
+    dyStringFree(&dy);
     close(sd);
     }
 }
