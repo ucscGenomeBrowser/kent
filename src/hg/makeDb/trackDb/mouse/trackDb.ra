@@ -81,7 +81,7 @@ chip GNF1M
 
 track rinnSex
 shortLabel Rinn Sex Exp
-longLabel Rinn et. al Sex Gene Expression Data on MOE430A Chip
+longLabel Rinn et al. Sex Gene Expression Data on MOE430A Chip
 group regulation
 priority 81.1
 visibility hide
