@@ -141,7 +141,7 @@
 #include "bed6FloatScore.h"
 #include "pscreen.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.718 2004/08/12 22:21:13 angie Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.719 2004/08/13 23:39:15 braney Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -4409,8 +4409,13 @@ tSeq = hDnaFromSeq(seqName, tStart, tEnd, dnaLower);
 freez(&tSeq->name);
 tSeq->name = cloneString(psl->tName);
 safef(tName, sizeof(tName), "%s.%s", organism, psl->tName);
-fprintf(f, "<H2>Alignment of %s and %s:%d-%d</H2>\n",
-	qName, psl->tName, psl->tStart+1, psl->tEnd);
+if (qName == NULL)
+    fprintf(f, "<H2>Alignment of %s and %s:%d-%d</H2>\n",
+	    psl->qName, psl->tName, psl->tStart+1, psl->tEnd);
+else
+    fprintf(f, "<H2>Alignment of %s and %s:%d-%d</H2>\n",
+	    qName, psl->tName, psl->tStart+1, psl->tEnd);
+
 fputs("Click on links in the frame to the left to navigate through "
       "the alignment.\n", f);
 blockCount = pslShowAlignment(psl, qType == gftProt, 
