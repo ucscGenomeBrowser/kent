@@ -12,16 +12,18 @@ O = $A.o
 my: compile
 	mv $A ${CGI_BIN}-${USER}/$A
 
-alpha: compile
+alpha: strip
 	mv $A ${CGI_BIN}/$A
 
-beta: compile
+beta: strip
 	mv $A ${CGI_BIN}-beta/$A
+
+strip:  $A
+	strip $A
 
 compile: $O 
 	${CC} $O ${MYLIBS} ${L} 
 	mv a.out $A
-	strip $A
 	chmod a+rx $A
 
 install:	compile

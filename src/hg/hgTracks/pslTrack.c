@@ -333,15 +333,15 @@ static void loadXenoPslWithPos(struct track *tg)
 lfFromPslsInRange(tg, winStart,winEnd, chromName, TRUE, TRUE, 1);
 }
 
-void pslChromMethods(struct track *tg)
-/* Fill in custom parts of blatMus - assembled mouse genome blat vs. human. */
+void pslChromMethods(struct track *tg, char *colorChromDefault)
+/* Fill in custom parts of xeno psl <otherdb> track */
 {
 char option[128]; /* Option -  rainbow chromosome color */
 char optionChr[128]; /* Option -  chromosome filter */
 char *optionChrStr; 
 char *optionStr ;
 snprintf( option, sizeof(option), "%s.color", tg->mapName);
-optionStr = cartUsualString(cart, option, "on");
+optionStr = cartUsualString(cart, option, colorChromDefault);
 tg->mapItemName = lfMapNameFromExtra;
 if( sameString( optionStr, "on" )) /*use chromosome coloring*/
     tg->itemColor = lfChromColor;
@@ -390,7 +390,8 @@ else if (sameString(subType, "xeno"))
     if (argc >= 3)
 	{
 	char *otherDb = argv[2];
-	pslChromMethods(track);
+	pslChromMethods(track, 
+                    trackDbSettingOrDefault(tdb, "colorChromDefault", "on"));
 	}
     }
 else

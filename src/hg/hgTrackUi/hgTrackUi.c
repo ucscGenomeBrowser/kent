@@ -12,7 +12,7 @@
 #include "hui.h"
 #include "sample.h"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.67 2003/09/16 04:30:24 braney Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.68 2003/09/17 00:23:51 kate Exp $";
 
 struct cart *cart;	/* Cookie cart with UI settings */
 char *database;		/* Current database. */
@@ -193,26 +193,27 @@ for (fil = mud->filterList; fil != NULL; fil = fil->next)
 endControlGrid(&cg);
 }
 
-void colorCrossSpeciesUi(struct trackDb *tdb, boolean colorDefaultOn)
+void crossSpeciesUi(struct trackDb *tdb)
 /* Put up UI for selecting rainbow chromosome color or intensity score. */
 {
 char colorVar[256];
 char filterVar[256];
-char *aa, *bb;
-char *colorVal = (colorDefaultOn ? "on" : "off");
+char *colorSetting, *filterSetting;
 char *filterVal = "";
-
+/* initial value of chromosome coloring option is "on", unless
+ * overridden by the colorChromDefault setting in the track */
+char *colorDefault = trackDbSettingOrDefault(tdb, "colorChromDefault", "on");
 printf("<p><b>Color track based on chromosome</b>: ");
 snprintf(colorVar, sizeof(colorVar), "%s.color", tdb->tableName);
-aa = cartUsualString(cart, colorVar, colorVal);
-cgiMakeRadioButton(colorVar, "on", sameString(aa, "on"));
+colorSetting = cartUsualString(cart, colorVar, colorDefault);
+cgiMakeRadioButton(colorVar, "on", sameString(colorSetting, "on"));
 printf(" on ");
-cgiMakeRadioButton(colorVar, "off", sameString(aa, "off"));
+cgiMakeRadioButton(colorVar, "off", sameString(colorSetting, "off"));
 printf(" off ");
 printf("<br><br>");
 printf("<p><b>Filter by chromosome (eg. chr10) </b>: ");
 snprintf(filterVar, sizeof(filterVar), "%s.chromFilter", tdb->tableName);
-bb = cartUsualString(cart, filterVar, filterVal);
+filterSetting = cartUsualString(cart, filterVar, filterVal);
 cgiMakeTextVar(filterVar, cartUsualString(cart, filterVar, ""), 5);
 }
 
@@ -439,75 +440,85 @@ void ancientRUi(struct trackDb *tdb)
 void specificUi(struct trackDb *tdb)
 	/* Draw track specific parts of UI. */
 {
-	char *track = tdb->tableName;
+char *track = tdb->tableName;
+char *typeLine = NULL;
+char *words[8];
+int wordCount = 0;
 
-	if (sameString(track, "stsMap"))
-		stsMapUi(tdb);
-	else if (sameString(track, "cbr_waba"))
-		cbrWabaUi(tdb);
-	else if (sameString(track, "fishClones"))
-		fishClonesUi(tdb);
-	else if (sameString(track, "recombRate"))
-		recombRateUi(tdb);
-	else if (sameString(track, "nci60"))
-		nci60Ui(tdb);
-	else if (sameString(track, "cghNci60"))
-		cghNci60Ui(tdb);
-	else if (sameString(track, "xenoRefGene"))
-		refGeneUI(tdb);
-	else if (sameString(track, "refGene"))
-		refGeneUI(tdb);
-	else if (sameString(track, "mrna"))
-		mrnaUi(tdb, FALSE);
-	else if (sameString(track, "est"))
-		mrnaUi(tdb, FALSE);
-	else if (sameString(track, "tightMrna"))
-		mrnaUi(tdb, FALSE);
-	else if (sameString(track, "tightEst"))
-		mrnaUi(tdb, FALSE);
-	else if (sameString(track, "intronEst"))
-		mrnaUi(tdb, FALSE);
-	else if (sameString(track, "xenoMrna"))
-		mrnaUi(tdb, TRUE);
-	else if (sameString(track, "xenoBestMrna"))
-		mrnaUi(tdb, TRUE);
-	else if (sameString(track, "xenoEst"))
-		mrnaUi(tdb, TRUE);
-	else if (sameString(track, "rosetta"))
-		rosettaUi(tdb);
-	else if (sameString(track, "affyRatio"))
-		affyUi(tdb);
-	else if (sameString(track, "ancientR"))
-		ancientRUi(tdb);
-	else if (sameString(track, "zoo") || sameString(track, "zooNew" ))
-		 zooWiggleUi(tdb);
-	else if (sameString(track, "humMusL") ||
-		 sameString( track, "musHumL") ||
-		 sameString( track, "regpotent") ||
-		 sameString( track, "mm3Rn2L" )	 ||
-		 sameString( track, "mm3Hg15L" ) ||
-		 sameString( track, "hg15Mm3L" ))
-		humMusUi(tdb,7);
-else if (startsWith("blastz", track))
-    colorCrossSpeciesUi(tdb, TRUE);
+if (sameString(track, "stsMap"))
+        stsMapUi(tdb);
+else if (sameString(track, "cbr_waba"))
+        cbrWabaUi(tdb);
+else if (sameString(track, "fishClones"))
+        fishClonesUi(tdb);
+else if (sameString(track, "recombRate"))
+        recombRateUi(tdb);
+else if (sameString(track, "nci60"))
+        nci60Ui(tdb);
+else if (sameString(track, "cghNci60"))
+        cghNci60Ui(tdb);
+else if (sameString(track, "refGene"))
+        refGeneUI(tdb);
+else if (sameString(track, "mrna"))
+        mrnaUi(tdb, FALSE);
+else if (sameString(track, "est"))
+        mrnaUi(tdb, FALSE);
+else if (sameString(track, "tightMrna"))
+        mrnaUi(tdb, FALSE);
+else if (sameString(track, "tightEst"))
+        mrnaUi(tdb, FALSE);
+else if (sameString(track, "intronEst"))
+        mrnaUi(tdb, FALSE);
+else if (sameString(track, "xenoMrna"))
+        mrnaUi(tdb, TRUE);
+else if (sameString(track, "xenoEst"))
+        mrnaUi(tdb, TRUE);
+else if (sameString(track, "rosetta"))
+        rosettaUi(tdb);
+else if (sameString(track, "affyRatio"))
+        affyUi(tdb);
+else if (sameString(track, "ancientR"))
+        ancientRUi(tdb);
+else if (sameString(track, "zoo") || sameString(track, "zooNew" ))
+         zooWiggleUi(tdb);
+else if (sameString(track, "humMusL") ||
+         sameString( track, "musHumL") ||
+         sameString( track, "regpotent") ||
+         sameString( track, "mm3Rn2L" )	 ||
+         sameString( track, "mm3Hg15L" ) ||
+         sameString( track, "hg15Mm3L" ))
+            humMusUi(tdb,7);
+/* NOTE: type psl xeno <otherDb> tracks use crossSpeciesUi, so
+ * add explicitly here only if track has another type (bed, chain).
+ * For crossSpeciesUi, the
+ * default for chrom coloring is "on", unless track setting
+ * colorChromDefault is set to "off" */
 else if (startsWith("selfChain", track))
-    colorCrossSpeciesUi(tdb, TRUE);
-else if (sameString(track, "aarMm2"))
-    colorCrossSpeciesUi(tdb, FALSE);
+    crossSpeciesUi(tdb);
 else if (sameString(track, "orthoTop4"))
-    colorCrossSpeciesUi(tdb, TRUE);
+    /* still used ?? */
+    crossSpeciesUi(tdb);
 else if (sameString(track, "mouseOrtho"))
-    colorCrossSpeciesUi(tdb, TRUE);
+    crossSpeciesUi(tdb);
 else if (sameString(track, "mouseSyn"))
-    colorCrossSpeciesUi(tdb, TRUE);
-else if (sameString(track, "blatMus"))
-    colorCrossSpeciesUi(tdb, FALSE);
-else if (sameString(track, "blatHuman"))
-    colorCrossSpeciesUi(tdb, FALSE);
+    crossSpeciesUi(tdb);
 else if (sameString(track, "affyTranscriptome"))
     affyTranscriptomeUi(tdb);
 else if (startsWith("sample", tdb->type))
     genericWiggleUi(tdb,7);
+else 
+    {
+    /* handle all tracks with type "psl xeno <otherDb>" */
+    if (tdb->type != NULL)
+        typeLine = cloneString(tdb->type);
+        wordCount = chopLine(typeLine, words);
+        if (wordCount == 3)
+            {
+            if (sameWord(words[0], "psl") && sameWord(words[1], "xeno"))
+                crossSpeciesUi(tdb);
+            }
+        freeMem(typeLine);
+    }
 }
 
 void trackUi(struct trackDb *tdb)

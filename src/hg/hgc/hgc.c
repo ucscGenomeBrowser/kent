@@ -111,7 +111,7 @@
 #include "axtLib.h"
 #include "ensFace.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.473 2003/09/16 04:32:35 braney Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.474 2003/09/17 00:23:51 kate Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -7199,7 +7199,8 @@ char *thisOrg = hOrganism(database);
 
 cartWebStart(cart, tdb->longLabel);
 psl = loadPslFromRangePair(tdb->tableName, item);
-printf("<B>%s position:</B> %s:%d-%d<BR>\n", otherOrg,
+printf("<B>%s position:</B> <a target=\"_blank\" href=\"/cgi-bin/hgTracks?db=%s&position=%s%%3A%d-%d\">%s:%d-%d</a><BR>\n",
+       otherOrg, otherDb, psl->qName, psl->qStart+1, psl->qEnd, 
        psl->qName, psl->qStart+1, psl->qEnd);
 printf("<B>%s size:</B> %d<BR>\n", otherOrg, psl->qEnd - psl->qStart);
 printf("<B>%s position:</B> %s:%d-%d<BR>\n", thisOrg,
@@ -7679,6 +7680,21 @@ struct dnaSeq *seq;
 boolean hasBin;
 char table[64];
 
+char *typeLine = cloneString(tdb->type);
+char *words[8];
+int wordCount = chopLine(typeLine, words);
+if (wordCount == 3)
+    {
+    if (sameString(words[0], "psl") &&
+        sameString(words[1], "xeno"))
+            {
+            /* words[2] will contain other db */
+            doAlignmentOtherDb(tdb, itemName);
+            freeMem(typeLine);
+            return;
+            }
+    }
+freeMem(typeLine);
 cartWebStart(cart, itemName);
 printf("<H1>Information on %s Sequence %s</H1>", otherGenome, itemName);
 
