@@ -236,18 +236,22 @@ return faReadSeq(fileName, FALSE);
 static int faFastBufSize = 0;
 static DNA *faFastBuf;
 
-static void expandFaFastBuf(int bufPos)
+static void expandFaFastBuf(int bufPos, int minExp)
 /* Make faFastBuf bigger. */
 {
 if (faFastBufSize == 0)
     {
     faFastBufSize = 64 * 1024;
+    while (minExp > faFastBufSize)
+        faFastBufSize <<= 1;
     faFastBuf = needHugeMem(faFastBufSize);
     }
 else
     {
     DNA *newBuf;
     int newBufSize = faFastBufSize + faFastBufSize;
+    while (newBufSize < minExp)
+        newBufSize <<= 1;
     newBuf = needHugeMem(newBufSize);
     memcpy(newBuf, faFastBuf, bufPos);
     freeMem(faFastBuf);
@@ -313,7 +317,7 @@ for (;;)
 	if (c == 0) c = 'n';
 	}
     if (bufIx >= faFastBufSize)
-	expandFaFastBuf(bufIx);
+	expandFaFastBuf(bufIx, 0);
     faFastBuf[bufIx++] = c;
     if (c == 0)
         {
@@ -410,7 +414,7 @@ for (;;)
 	break;
 	}
     if (bufIx + lineSize >= faFastBufSize)
-	expandFaFastBuf(bufIx);
+	expandFaFastBuf(bufIx, lineSize);
     for (i=0; i<lineSize; ++i)
         {
 	c = line[i];
@@ -419,7 +423,7 @@ for (;;)
 	}
     }
 if (bufIx >= faFastBufSize)
-    expandFaFastBuf(bufIx);
+    expandFaFastBuf(bufIx, 0);
 faFastBuf[bufIx] = 0;
 *retDna = faFastBuf;
 *retSize = bufIx;
