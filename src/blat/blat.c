@@ -159,7 +159,7 @@ for (i=0; i<fileCount; ++i)
 	    }
 	}
     }
-printf("Indexing %lu letters in %d sequences\n", totalSize, count);
+printf("Loaded %lu letters in %d sequences\n", totalSize, count);
 slReverse(&seqList);
 return seqList;
 }
@@ -246,6 +246,147 @@ carefulClose(&psl);
 printf("Searched %lu bases in %d sequences\n", totalSize, count);
 }
 
+struct trans3
+/* A sequence and three translations of it. */
+     {
+     struct trans3 *next;		/* Next in list. */
+     char *name;			/* Name (not allocated here) */
+     struct dnaSeq *seq;		/* Untranslated sequence.  Not allocated here. */
+     aaSeq *trans[3];			/* Translated sequences.  Allocated here*/
+     };
+
+struct trans3 *trans3New(struct dnaSeq *seq)
+/* Create a new set of translated sequences. */
+{
+struct trans3 *t3;
+int frame;
+
+AllocVar(t3);
+t3->name = seq->name;
+t3->seq = seq;
+for (frame=0; frame<3; ++frame)
+    t3->trans[frame] = translateSeq(seq, frame, FALSE);
+return t3;
+}
+
+void trans3Free(struct trans3 **pT3)
+/* Free a trans3 structure. */
+{
+struct trans3 *t3 = *pT3;
+if (t3 != NULL)
+    {
+    freeDnaSeq(&t3->trans[0]);
+    freeDnaSeq(&t3->trans[1]);
+    freeDnaSeq(&t3->trans[2]);
+    freez(pT3);
+    }
+}
+
+void trans3FreeList(struct trans3 **pList)
+/* Free a list of dynamically allocated trans3's */
+{
+struct trans3 *el, *next;
+
+for (el = *pList; el != NULL; el = next)
+    {
+    next = el->next;
+    trans3Free(&el);
+    }
+*pList = NULL;
+}
+
+struct trans3 *seqListToTrans3List(struct dnaSeq *seqList, aaSeq *transLists[3], struct hash **retHash)
+/* Convert sequence list to a trans3 list and lists for each of three frames. */
+{
+int frame;
+struct dnaSeq *seq;
+struct trans3 *t3List = NULL, *t3;
+struct hash *hash = newHash(0);
+
+for (seq = seqList; seq != NULL; seq = seq->next)
+    {
+    t3 = trans3New(seq);
+    hashAddUnique(hash, t3->name, t3);
+    slAddHead(&t3List, t3);
+    for (frame = 0; frame < 3; ++frame)
+        {
+	slAddHead(&transLists[frame], t3->trans[frame]);
+	}
+    }
+slReverse(&t3List);
+for (frame = 0; frame < 3; ++frame)
+    {
+    slReverse(&transLists[frame]);
+    }
+*retHash = hash;
+return t3List;
+}
+
+void tripleSearch(aaSeq *qSeq, struct genoFind *gfs[3], struct hash *t3Hash, boolean isRc, FILE *f)
+/* Look for qSeq in indices for three frames.  Then do rest of alignment. */
+{
+uglyf("Triple search %s on %c strand\n", qSeq->name, (isRc ? '+' : '-'));
+}
+
+void blatx(struct dnaSeq *untransList, int queryCount, char *queryFiles[], char *outFile)
+/* Query is protein.  Run it against translated DNA database 
+ * (3 frames on each strand). */
+{
+int frame, i;
+struct dnaSeq *seq;
+struct genoFind *gfs[3];
+aaSeq *dbSeqLists[3];
+struct trans3 *t3List = NULL, *t3;
+int isRc;
+FILE *pslOut = mustOpen(outFile, "w");
+struct lineFile *lf = NULL;
+struct hash *t3Hash = NULL;
+
+uglyf("Blatx %d sequences in database, %d files in query\n", slCount(untransList), queryCount);
+
+for (isRc = FALSE; isRc <= 1; ++isRc)
+    {
+    /* Initialize local pointer arrays to NULL to prevent surprises. */
+    for (frame = 0; frame < 3; ++frame)
+	{
+	gfs[frame] = NULL;
+	dbSeqLists[frame] = NULL;
+	}
+
+    t3List = seqListToTrans3List(untransList, dbSeqLists, &t3Hash);
+    uglyf("Translated database.\n");
+    for (frame = 0; frame < 3; ++frame)
+	{
+	gfs[frame] = gfIndexSeq(dbSeqLists[frame], minMatch, maxGap, tileSize, repMatch, ooc, TRUE);
+	}
+    uglyf("indexed database.\n");
+
+    for (i=0; i<queryCount; ++i)
+        {
+	aaSeq qSeq;
+
+	lf = lineFileOpen(queryFiles[i], TRUE);
+	while (faPepSpeedReadNext(lf, &qSeq.dna, &qSeq.size, &qSeq.name))
+	    {
+	    tripleSearch(&qSeq, gfs, t3Hash, isRc, pslOut);
+	    }
+	}
+
+    /* Clean up time. */
+    trans3FreeList(&t3List);
+    freeHash(&t3Hash);
+    for (frame = 0; frame < 3; ++frame)
+	{
+	genoFindFree(&gfs[frame]);
+	}
+
+    for (seq = untransList; seq != NULL; seq = seq->next)
+        {
+	reverseComplement(seq->dna, seq->size);
+	}
+    }
+carefulClose(&pslOut);
+}
 
 void blat(char *dbFile, char *queryFile, char *pslOut)
 /* blat - Standalone BLAT fast sequence search command line tool. */
@@ -267,9 +408,13 @@ if ((dType == gftDna && (qType == gftDna || qType == gftRna))
     gf = gfIndexSeq(dbSeqList, minMatch, maxGap, tileSize, repMatch, ooc, dbIsProt);
     searchOneIndex(queryCount, queryFiles, gf, pslOut, dbIsProt);
     }
+else if (dType == gftDnaX && qType == gftProt)
+    {
+    blatx(dbSeqList, queryCount, queryFiles, pslOut);
+    }
 else
     {
-    uglyAbort("Don't handle translated types yet\n");
+    uglyAbort("Don't handle all translated types yet\n");
     }
 }
 
