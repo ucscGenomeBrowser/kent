@@ -30,7 +30,7 @@
 #include "liftOverChain.h"
 #include "grp.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.201 2004/07/23 04:45:41 kent Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.202 2004/08/31 23:08:54 sugnet Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
@@ -692,6 +692,16 @@ strncpy(retNibName,((struct chromInfoEntry *)hashEl->val)->fileName,
 		512);
 }
 
+static void hNibForChrom2(char *chromName, char retNibName[512])
+/* Get .nib file associated with chromosome on db2. */
+{
+struct hashEl *hashEl;
+if ((hashEl = hashLookup(hdbChromInfoHash2(),chromName))== NULL)
+    errAbort("Sequence %s isn't in database", chromName);
+strncpy(retNibName,((struct chromInfoEntry *)hashEl->val)->fileName,
+		512);
+}
+
 struct hash *hCtgPosHash()
 /* Return hash of ctgPos from current database keyed by contig name. */
 {
@@ -717,6 +727,14 @@ struct dnaSeq *hChromSeq(char *chrom, int start, int end)
 {
 char fileName[512];
 hNibForChrom(chrom, fileName);
+return nibLoadPart(fileName, start, end-start);
+}
+
+struct dnaSeq *hChromSeq2(char *chrom, int start, int end)
+/* Return lower case DNA from chromosome in db2.*/
+{
+char fileName[512];
+hNibForChrom2(chrom, fileName);
 return nibLoadPart(fileName, start, end-start);
 }
 

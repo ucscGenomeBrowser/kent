@@ -226,6 +226,9 @@ int hChromSize2(char *chromName);
 struct dnaSeq *hChromSeq(char *chrom, int start, int end);
 /* Return lower case DNA from chromosome. */
 
+struct dnaSeq *hChromSeq2(char *chrom, int start, int end);
+/* Return lower case DNA from chromosome in db2.*/
+
 struct dnaSeq *hSeqForBed(struct bed *bed);
 /* Get the sequence associated with a particular bed concatenated together. */
 
