@@ -2,7 +2,7 @@
 #
 #	Typical sequence of commands for an install
 #
-#	$Id: ex.InstallExample,v 1.5 2005/03/07 18:31:56 hiram Exp $
+#	$Id: ex.InstallExample,v 1.6 2005/03/07 20:57:56 hiram Exp $
 #
 #	The following example sequence assumes everything works
 #	perfectly.  There is no error checking on these commands to
@@ -52,10 +52,10 @@ if [ "$?" -ne 0 ]; then
 fi
 
 #	Create directories for the browser html and cgi binaries
-mkdir ${WEBROOT}/html
-mkdir ${WEBROOT}/cgi-bin
+mkdir -p ${WEBROOT}/html
+mkdir -p ${WEBROOT}/cgi-bin
 chmod 755 ${WEBROOT}/cgi-bin
-mkdir ${WEBROOT}/trash
+mkdir -p ${WEBROOT}/trash
 chmod 777 ${WEBROOT}/trash
 ln -s ${WEBROOT}/trash  ${WEBROOT}/html/trash
 
@@ -64,8 +64,18 @@ cp -Rp ${CDROM}/webrootHTML/* ${WEBROOT}/html
 cp -p ${CDROM}/built_CGI-BIN/* ${WEBROOT}/cgi-bin
 
 #	Create hgcentral database
-mysql -u browser -pgenome -e "create database hgcentral;"
+mysql -u browser -pgenome -e "DROP DATABASE hgcentral;" mysql
+mysql -u browser -pgenome -e "CREATE DATABASE hgcentral;" mysql
+if [ "$?" -ne 0 ]; then
+    echo "ERROR: mysql create database hgcentral not functioning"
+    exit 255;
+fi
+
 mysql -u browser -pgenome hgcentral < ${CDROM}/example/hgcentral.sql
+if [ "$?" -ne 0 ]; then
+    echo "ERROR: mysql loading database hgcentral not functioning"
+    exit 255;
+fi
 
 #	Set cgi-bin/hg.conf for CGI binaries to access MySQL
 cp ${CDROM}/example/hg.conf ${WEBROOT}/cgi-bin
@@ -86,13 +96,18 @@ for DIR_NAME in cb1 hgFixed proteinDB/proteins040315
 do
     DB=`basename ${DIR_NAME}`
     #	Create the cb1 database and load its data
-    mysql -u browser -pgenome -e "create database ${DB};" mysql
+    mysql -u browser -pgenome -e "DROP DATABASE ${DB};" mysql
+    mysql -u browser -pgenome -e "CREATE DATABASE ${DB};" mysql
+    if [ "$?" -ne 0 ]; then
+	echo "ERROR: mysql create database ${DB} not functioning"
+	exit 255;
+    fi
     cd ${WEBROOT}/html/goldenPath/${DIR_NAME}/database
     for SQL in *.sql
     do
 	T_NAME=${SQL%%.sql}
-	echo "loading table ${T_NAME}"
-	mysql -u browser -pgenome ${DB} -e "DROP TABLE ${T_NAME};"
+	echo "loading table ${DB}.${T_NAME} from ${SQL} and ${T_NAME}.txt.gz"
+	mysql -u browser -pgenome ${DB} -e "DROP TABLE ${T_NAME};" 2> /dev/null
 	mysql -u browser -pgenome ${DB} < ${SQL}
 	zcat "${T_NAME}.txt.gz" | mysql -u browser -pgenome ${DB} \
 	    --local-infile=1 -e \

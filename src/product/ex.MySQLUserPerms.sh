@@ -3,15 +3,16 @@
 #	UCSC Genome Browser - Version VER DATE_STAMP
 #		MySQL user permissions setup
 #
-#	$Id: ex.MySQLUserPerms.sh,v 1.5 2005/03/07 18:31:56 hiram Exp $
+#	$Id: ex.MySQLUserPerms.sh,v 1.6 2005/03/07 20:57:56 hiram Exp $
 #
 
-SQL_USER=	# set this to "-u<user_name>" if different than your login name
+SQL_USER=""	# set this to "-u<user_name>" if different than your login name
+SQL_PASSWORD=""	# set this to the MySQL password for the SQL_USER
 MySQL_USER=${SQL_USER}
-export SQL_USER MySQL_USER
+export SQL_USER MySQL_USER SQL_PASSWORD
 
 if [ -z "${SQL_USER}" ]; then
-    MySQL_USER=`id -u -n`
+    MySQL_USER="-u`id -u -n`"
 fi
 
 if [ -z "${SQL_PASSWORD}" ]; then
@@ -20,9 +21,12 @@ if [ -z "${SQL_PASSWORD}" ]; then
 	read SQL_PASSWORD
 fi
 
+MYSQL="mysql ${MySQL_USER} -p${SQL_PASSWORD}"
+export MYSQL
+
 echo "Testing MySQL password"
 
-mysql ${SQL_USER} -p${SQL_PASSWORD} -e "show tables;" mysql
+${MYSQL} -e "show tables;" mysql
 
 if [ "$?" -ne 0 ]; then
 	echo "I gave that a try, it did not work."
@@ -51,7 +55,7 @@ fi
 #
 for DB in cb1 hgcentral hgFixed hg17 proteins040315
 do
-    mysql ${SQL_USER} -p${SQL_PASSWORD} -e "GRANT SELECT, INSERT, UPDATE, \
+    ${MYSQL} -e "GRANT SELECT, INSERT, UPDATE, \
 	DELETE, CREATE, DROP, ALTER on ${DB}.* TO browser@localhost \
 	IDENTIFIED BY 'genome';" mysql
 done
@@ -61,8 +65,17 @@ done
 #
 for DB in cb1 hgFixed hg17 proteins040315
 do
-    mysql ${SQL_USER} -p${SQL_PASSWORD} -e "GRANT SELECT on \
+    ${MYSQL} -e "GRANT SELECT on \
 	${DB}.* TO readonly@localhost IDENTIFIED BY 'access';" mysql
+done
+
+#
+#	Read only access to mysql database for browser user
+#
+for DB in mysql
+do
+    ${MYSQL} -e "GRANT SELECT on \
+	${DB}.* TO browser@localhost IDENTIFIED BY 'genome';" mysql
 done
 
 #
@@ -71,7 +84,10 @@ done
 #
 for DB in hgcentral
 do
-    mysql ${SQL_USER} -p${SQL_PASSWORD} -e "GRANT SELECT, INSERT, UPDATE, \
+    ${MYSQL} -e "GRANT SELECT, INSERT, UPDATE, \
 	DELETE, CREATE, DROP, ALTER on ${DB}.* TO readwrite@localhost \
 	IDENTIFIED BY 'update';" mysql
 done
+
+${MYSQL} -e "FLUSH PRIVILEGES;"
+
