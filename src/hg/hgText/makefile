@@ -21,10 +21,10 @@ beta: compile
 compile: $O 
 	${CC} $O ${MYLIBS} ${L} 
 	mv a.out $A
-	strip $A
 	chmod a+rx $A
 
-install:	compile
+install: compile
+	strip $A
 	@if [ ! -d "${DESTDIR}${CGI_BIN}" ]; then \
 		${MKDIR} "${DESTDIR}${CGI_BIN}"; \
 	fi
