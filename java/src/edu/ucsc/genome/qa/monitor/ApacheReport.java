@@ -85,6 +85,7 @@ public class ApacheReport {
       String thisMonth = getMonth(nowMonth);
 
       if (!thisMonth.equals(yestMonth)) {
+        System.out.println("\n========================================\n");
         System.out.println("\n" + getMonth(month)
                    + " monthly report available at: \n" + fileMonth + "\n");
         String url = "/usr/local/apache/htdocs/";
@@ -452,7 +453,7 @@ public class ApacheReport {
     String outLine = "";
     while (iter.hasNext()) {
       String prevLine = outLine; 
-      outLine = iter.next().toString();
+      outLine = iter.next().toString() + "\n";
       // don't reprint line if run twice in same day
       if (! outLine.equals(prevLine)) {
         pwMonth.print(outLine);
