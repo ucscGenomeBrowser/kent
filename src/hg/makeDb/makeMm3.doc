@@ -1563,41 +1563,88 @@ LOAD CPGISSLANDS (DONE 03/06/03)
      hgLoadBed mm3 cpgIsland -tab -noBin \
        -sqlTable=$HOME/kent/src/hg/lib/cpgIsland.sql cpgIsland.bed
 
-LOAD ENSEMBL ESTs (TODO)
-     ln -s /cluster/store2/mm.2003.02/mm3 ~/mm3
-     mkdir -p ~/mm3/bed/ensembl
-     cd ~/mm3/bed/ensembl
-     wget http://www.ebi.ac.uk/~stabenau/mouse-est.gz
-     wget http://www.ebi.ac.uk/~stabenau/mouse-est.pep.gz
-     gunzip -c mouse-est.gz | \
-       perl -w -p -e 's/^(\w)/chr$1/' > mouse-est-fixed.gtf
-     ldHgGene mm3 ensEst mouse-est-fixed.gtf
-> The id behind '>' is internal and was not in our gtf dump, so
-> you have to do some more parsing.
-     # pick out the transcript= attribute -- that's the id to use:
-     # also remove the first line:
-     gunzip -c mouse-est.pep.gz | tail +2 | \
-       perl -w -p -e 's/^\>gene_id=.*transcript=(\w+)\s+.*$/\>$1/' > \
-       mouse-est-fixed.pep
-     hgPepPred mm3 generic ensEstPep mouse-est-fixed.pep
+LOAD ENSEMBL GENES (DONE June 6, 03)
+     cd ~/mm3/bed
+     mkdir ensembl
+     cd ensembl
 
-LOAD ENSEMBLE GENES (TODO)
-     mkdir -p ~/mm3/bed/ensembl
-     cd ~/mm3/bed/ensembl
-     wget http://www.ebi.ac.uk/~stabenau/mouse-ensembl.gz
-     wget http://www.ebi.ac.uk/~stabenau/mouse-ensembl.pep.gz
-     gunzip -c mouse-ensembl.gz | \
-       perl -w -p -e 's/^(\w)/chr$1/' > mouse-ensembl-fixed.gtf
-     ldHgGene mm3 ensGene mouse-ensembl-fixed.gtf
-> mouse-ensembl contains stopcodons, due to some glitches in our
-> genebuild. The id behind '>' is internal and was not in our gtf dump, so
-> you have to do some more parsing.
-# pick out the transcript= attribute -- that's the id to use:
-# also remove the first line:
-     tail +2 mouse-ensembl.pep | \
-       perl -w -p -e 's/^\>gene_id=.*transcript=(\w+)\s+.*$/\>$1/' > \
-       mouse-ensembl-fixed.pep
-     hgPepPred mm3 generic ensPep mouse-ensembl-fixed.pep
+        Get the ensembl gene data from http://www.ensembl.org/
+        Go to the Martview link
+        Choose Mus musculus as the organism
+        Follow this sequence through the pages:
+        Page 1) Choose the Ensembl Genes choice. Hit next.
+        Page 2) Uncheck the "Limit to" box in the region choice. Then hit next.        
+        Page 3) Choose the "Structures" box. 
+        Page 4) Choose GTF as the ouput, choose gzip compression and then hit Export.gunzip the file and name to mm3EnsGene.gtf.gz. Unzip it.
+
+# Ensembl handles random chromosomes differently than us, so we
+# strip this data.  Fortunately it just loses a couple of genes.
+     grep -v ^6_DR51 ensembl.gtf | grep -v _NT_ > unrandom.gtf
+
+# Add "chr" to front of each line in the gene data gtf file to make 
+# it compatible with ldHgGene 
+     ~matt/bin/addchr.pl unrandom.gtf ensGene.gtf
+     ~matt/bin/fixEns.pl ensGene.gtf ensFixed.gtf 
+     ldHgGene mm3 ensGene ensGene.gtf
+
+o - Load Ensembl peptides:
+        Get the ensembl protein data from http://www.ensembl.org/
+        Go to the Martview link
+        Choose Mus musculus as the organism
+        Follow this sequence through the pages:
+        Page 1) Choose the Ensembl Genes choice. Hit next.
+        Page 2) Uncheck the "Limit to" box in the region choice. Then hit next.
+        Page 3) Choose the "Sequences" box. 
+        Page 4) Choose Transcripts/Proteins and Gene sequence Only as the ouput, choose text/fasta and gzip compression and then hit export. Name to mm3EnsGene.pep.gz
+
+     If needed, substitute ENST for ENSP in ensPep with the program called subs
+     edit subs.in to read: ENSP|ENST
+     subs -e mm3EnsGene.pep > /dev/null
+
+     ~matt/bin/fixPep.pl mm3EnsGene.pep ensembl.pep
+     hgPepPred mm3 generic ensPep ensembl.pep
+
+
+LOAD ENSEMBL ESTS (DONE June 6, 03)
+     cd ~/mm3/bed
+     mkdir ensemblEst
+     cd ensemblEst
+
+        Get the ensembl EST data from http://www.ensembl.org/
+        Go to the Martview link
+        Choose Mus musculus as the organism
+        Follow this sequence through the pages:
+        Page 1) Choose the Ensembl ESTs choice. Hit next.
+        Page 2) Uncheck the "Limit to" box in the region choice. Then hit next.        
+        Page 3) Choose the "Structures" box. 
+        Page 4) Choose GTF as the ouput, choose gzip compression and then hit Export.gunzip the file and name to mm3EnsEst.gtf.gz. Unzip it.
+
+# Ensembl handles random chromosomes differently than us, so we
+# strip this data.  Fortunately it just loses a couple of genes.
+     grep -v ^6_DR51 mm3EnsEst.gtf | grep -v _NT_ > unrandom.gtf
+
+# Add "chr" to front of each line in the gene data gtf file to make 
+# it compatible with ldHgGene 
+     ~matt/bin/addchr.pl unrandom.gtf ensGene.gtf
+     ~matt/bin/fixEns.pl ensGene.gtf ensFixed.gtf 
+     ldHgGene mm3 ensGene ensGene.gtf
+
+o - Load Ensembl peptides:
+        Get the ensembl protein data from http://www.ensembl.org/
+        Go to the Martview link
+        Choose Mus musculus as the organism
+        Follow this sequence through the pages:
+        Page 1) Choose the Ensembl ESTs choice. Hit next.
+        Page 2) Uncheck the "Limit to" box in the region choice. Then hit next.
+        Page 3) Choose the "Sequences" box. 
+        Page 4) Choose Transcripts/Proteins and Gene sequence Only as the ouput, choose text/fasta and gzip compression and then hit export. Name to mm3EnsEst.pep.gz
+
+     If needed, substitute ENST for ENSP in ensPep with the program called subs
+     edit subs.in to read: ENSP|ENST
+     subs -e mm3EnsEst.pep > /dev/null
+
+     ~matt/bin/fixPep.pl mm3EnsEst.pep ensembl.pep
+     hgPepPred mm3 generic ensEstPep ensembl.pep
 
 LOAD RNAGENES (TODO)
       - login to hgwdev
