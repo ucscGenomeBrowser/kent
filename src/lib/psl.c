@@ -18,7 +18,7 @@
 #include "aliType.h"
 #include "binRange.h"
 
-static char const rcsid[] = "$Id: psl.c,v 1.39 2004/01/11 20:32:11 markd Exp $";
+static char const rcsid[] = "$Id: psl.c,v 1.40 2004/01/15 16:40:56 hartera Exp $";
 
 static char *createString = 
 "CREATE TABLE %s (\n"
@@ -364,6 +364,7 @@ void pslOutFormat(struct psl *el, FILE *f, char sep, char lastSep)
 const char *headers[] = {"Matches", "Mismatches", "Matches in repeats", "Number of N bases", "Query name", "Size", "Start", "End", "Chromosome", "Strand", "Start", "End"};
 char *hformat = "<B>%s:</B> "; /* string for formatted print for headers */
 char *uformat = "<B>%s:</B> %u%c"; /* string for formatted print for unsigned variable */
+char *targName;
 
 fprintf(f, uformat, headers[0], el->match, sep);
 fprintf(f, uformat, headers[1], el->misMatch, sep);
@@ -383,9 +384,11 @@ fprintf(f, uformat, headers[7], el->qEnd, sep);
 fprintf(f, hformat, headers[8]);
 if (sep == ',') fputc('"',f);
 /* skip leading 'chr' in string to get only chromosome part */
+targName = el->tName;
 if (startsWith("chr", el->tName))
-   el->tName += 3;
-fprintf(f, "%s", el->tName);
+   targName += 3;
+fprintf(f, "%s", targName);
+
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
 
@@ -399,7 +402,6 @@ fprintf(f, uformat, headers[10], el->tStart, sep);
 fprintf(f, uformat, headers[11], el->tEnd, sep);
 
 fputc(lastSep,f);
-fprintf(f, "</FONT>");
 
 if (ferror(f))
     {
