@@ -257,5 +257,118 @@ int agxFindClosestDownstreamVertex(struct altGraphX *ag, bool **em, int v);
 int agxFindClosestUpstreamVertex(struct altGraphX *ag, bool **em, int v);
 /* Return the closest vertex that connects to v. -1 if none connect. */ 
 
+boolean agxIsAlt3Prime(struct altGraphX *ag, bool **em,  int vs, int ve1, int ve2,
+		       int *altBpStart, int *altBpEnd, int *firstVertex, int *lastVertex);
+/* Return TRUE if we have an edge pattern of:
+   he->hs----->he
+      \-->hs--/
+   Which inicates two possible starts to an exon (alt 3' starts).
+   
+   Use agxEdgesInArea() to investigate an area that begins in the rows with the common
+   hard end and finishes with common hard end. 
+   01234 (4 vertices involved in alt splicing)
+   0  
+   1  ++
+   2    +
+   3    +
+   4   
+*/
+
+boolean agxIsAlt5Prime(struct altGraphX *ag, bool **em,  int vs, int ve1, int ve2,
+		       int *altBpStart, int *altBpEnd, int *termExonStart, int *termExonEnd);
+/* Return TRUE if we have an edge pattern of:
+   hs->he----->hs
+     \-->he--/
+   Which indicates two possible ends to an exon (alt 5' intron starts).
+   
+   Use agxEdgesInArea() to investigate an area that begins in the rows with the common
+   hard end and finishes with common hard end. 
+   esees
+   01234 (4 vertices involved in alt splicing)
+  0  
+  1  ++
+  2    +
+  3    +
+  4   
+*/
+
+boolean agxIsCassette(struct altGraphX *ag, bool **em,  int vs, int ve1, int ve2,
+		      int *altBpStartV, int *altBpEndV, int *startV, int *endV);
+/* Return TRUE if SIMPLE cassette exon.
+   Looking for pattern:
+   he--->hs---->he---->hs
+     \----------------/
+
+   Use agxEdgesInArea() to investigate that encompasses the common hard
+   end and common hard start. Should only be 4 edges in area defined by
+   splicing.
+   sesese 
+   012345 
+  0  
+  1  + +
+  2   + 
+  3    +
+  4   
+  5
+*/
+
+boolean agxIsRetainIntron(struct altGraphX *ag, bool **em,  int vs, int ve1, int ve2,
+			  int *altBpStart, int *altBpEnd);
+/* return TRUE if retained intron. 
+   Looking for pattern:
+   hs-->he---->hs--->he
+    \---------------/
+
+   Use agxEdgesInArea() to investigate that encompasses the common hard
+   end and common hard start. Should only be 4 edges in area defined by
+   splicing.
+   eseses 
+   012345 
+  0  
+  1  + +
+  2   + 
+  3    +
+  4   
+  5
+*/
+
+boolean agxIsAlt5PrimeSoft(struct altGraphX *ag, bool **em,  int vs1, int vs2, int ve1, int ve2,
+			   int *altBpStart, int *altBpEnd, int *termExonStart, int *termExonEnd);
+/* Return TRUE if we have an edge pattern of:
+   ss->he----->hs
+     ss-->he--/
+
+   Which indicates a possible alternative transcription start site.
+   Use agxEdgesInArea() to investigate an area that begins in the rows with
+   differnt starts, one of which is soft, and finishes with common hard start. 
+   esees
+   012345 (4 vertices involved in alt splicing)
+  0  
+  1  +
+  2     +
+  3    +
+  4     +
+  5   
+*/
+
+boolean agxIsAlt3PrimeSoft(struct altGraphX *ag, bool **em,  int vs, int ve1, int ve2,
+			   int *altBpStart, int *altBpEnd, int *firstVertex, int *lastVertex);
+/* Return TRUE if we have an edge pattern of:
+   he->hs----->se
+   \------>hs-->se
+   Which inicates two possible transcription ends.
+   
+   Use agxEdgesInArea() to investigate an area that begins in the rows with the common
+   hard end and finishes with different ends at least one of which
+   is a soft end.
+   012345 (5 vertices involved in alt splicing)
+   0  
+   1 ++
+   2   +
+   3    +
+   4
+   5   
+*/
+
 #endif /* ALTGRAPHX_H */
 

@@ -10,7 +10,7 @@
 #include "geneGraph.h"
 #include "bed.h"
 
-static char const rcsid[] = "$Id: altGraphX.c,v 1.22 2004/05/17 16:24:19 sugnet Exp $";
+static char const rcsid[] = "$Id: altGraphX.c,v 1.23 2004/05/18 20:14:00 sugnet Exp $";
 struct altGraphX *_agxSortable = NULL; /* used for sorting. */
 
 struct evidence *evidenceCommaIn(char **pS, struct evidence *ret)
@@ -1873,4 +1873,361 @@ for(i=0; i<v; i++)
 	}
     }
 return minV;
+}
+
+static int agxRowSum(bool *em, unsigned char *vTypes, int vCount)
+/* Return the number of hard starts and stops in a row. */
+{
+int count =0;
+int i=0;
+for(i=0; i<vCount; i++)
+   {
+   if(em[i] && (vTypes[i] == ggHardStart || vTypes[i] == ggHardEnd) )
+       count++;
+   }
+return count;
+}
+
+int agxColSum(bool **em, unsigned char *vTypes, int vCount, int col)
+/* Return the number or hard starts and ends in a column. */
+{
+int count =0;
+int i=0;
+for(i=0; i<vCount; i++)
+    {
+    if(em[i][col] && (vTypes[i] == ggHardStart || vTypes[i] == ggHardEnd) )
+	count++;
+    }
+return count;
+}
+
+static int agxEdgesInArea(struct altGraphX *ag, bool **em, int v1, int v2)
+/* Return the number of edges in an area of the adjacency matrix. */
+{
+int sum =0;
+int i=0, j=0;
+int vC = ag->vertexCount;
+for(i=0; i<=v1; i++) 
+    {
+    for(j=v2; j<vC; j++)
+	{
+	if(em[i][j])
+	    sum++;
+	}
+    }
+return sum;
+}
+
+boolean agxIsAlt3Prime(struct altGraphX *ag, bool **em,  int vs, int ve1, int ve2,
+		       int *altBpStart, int *altBpEnd, int *firstVertex, int *lastVertex)
+/* Return TRUE if we have an edge pattern of:
+   he->hs----->he
+   \-->hs--/
+   Which inicates two possible starts to an exon (alt 3' starts).
+   
+   Use agxEdgesInArea() to investigate an area that begins in the rows with the common
+   hard end and finishes with common hard end. 
+   01234 (4 vertices involved in alt splicing)
+   0  
+   1  ++
+   2    +
+   3    +
+   4   
+*/
+{
+unsigned char *vTypes = ag->vTypes;
+int i=0;
+int numAltVerts = 4; /* Number of edges in alt spliced portion of graph. */
+/* Quick check. */
+if(vTypes[vs] != ggHardEnd || vTypes[ve1] != ggHardStart || vTypes[ve2] != ggHardStart)
+    return FALSE;
+
+if(em[vs][ve1] && em[vs][ve2]) 
+    {
+    /* Try to find common end for the two hard starts. */
+    for(i=0; i<ag->vertexCount; i++)
+	{
+	if(vTypes[i] == ggHardEnd && em[ve1][i] && em[ve2][i])
+	    {
+	    /* Make sure that they only connect to that one hard start. */
+	    if(agxRowSum(em[ve1],ag->vTypes,ag->vertexCount) == 1 &&
+	       agxRowSum(em[ve2],ag->vTypes,ag->vertexCount) == 1 && 
+	       agxEdgesInArea(ag,em,i-1,vs+1) == numAltVerts)
+		{
+		*lastVertex = i;
+		*firstVertex = agxFindClosestUpstreamVertex(ag, em, vs);
+		*altBpStart = ve1;
+		*altBpEnd = ve2;
+		return TRUE;
+		}
+	    }
+	}
+    }
+return FALSE;
+}
+
+boolean agxIsAlt5Prime(struct altGraphX *ag, bool **em,  int vs, int ve1, int ve2,
+		    int *altBpStart, int *altBpEnd, int *termExonStart, int *termExonEnd)
+/* Return TRUE if we have an edge pattern of:
+   hs->he----->hs
+     \-->he--/
+   Which indicates two possible ends to an exon (alt 5' intron starts).
+   
+   Use agxEdgesInArea() to investigate an area that begins in the rows with the common
+   hard end and finishes with common hard end. 
+   esees
+   01234 (4 vertices involved in alt splicing)
+  0  
+  1  ++
+  2    +
+  3    +
+  4   
+*/
+{
+unsigned char *vTypes = ag->vTypes;
+int i=0;
+int numAltVerts = 4;
+/* Quick check. */
+if(vTypes[vs] != ggHardStart || vTypes[ve1] != ggHardEnd || vTypes[ve2] != ggHardEnd)
+    return FALSE;
+
+if(em[vs][ve1] && em[vs][ve2]) 
+    {
+    /* Try to find common start for the two hard ends. */
+    for(i=0; i<ag->vertexCount; i++)
+	{
+	if(vTypes[i] == ggHardStart && em[ve1][i] && em[ve2][i])
+	    {
+	    /* Make sure that they only connect to that one hard start. */
+	    if(agxRowSum(em[ve1],ag->vTypes,ag->vertexCount) == 1 &&
+	       agxRowSum(em[ve2],ag->vTypes,ag->vertexCount) == 1 &&
+	       agxEdgesInArea(ag,em,i-1,vs+1) == numAltVerts)
+		{
+		/* Report the first and last vertexes. */
+		*termExonStart = i;
+		*termExonEnd = agxFindClosestDownstreamVertex(ag, em, i);
+		*altBpStart = ve1;
+		*altBpEnd = ve2;
+		return TRUE;
+		}
+	    }
+	}
+    }
+return FALSE;
+}
+
+boolean agxIsCassette(struct altGraphX *ag, bool **em,  int vs, int ve1, int ve2,
+		    int *altBpStartV, int *altBpEndV, int *startV, int *endV)
+/* Return TRUE if SIMPLE cassette exon.
+   Looking for pattern:
+   he--->hs---->he---->hs
+     \----------------/
+
+   Use agxEdgesInArea() to investigate that encompasses the common hard
+   end and common hard start. Should only be 4 edges in area defined by
+   splicing.
+   sesese 
+   012345 
+  0  
+  1  + +
+  2   + 
+  3    +
+  4   
+  5
+*/
+{
+unsigned char *vTypes = ag->vTypes;
+int i=0;
+struct altGraphX *subAg = NULL;
+int vCount = ag->vertexCount;
+int numAltVerts = 4;
+int *vPos = ag->vPositions;
+int *starts = ag->edgeStarts;
+int *ends = ag->edgeEnds;
+/* Quick check. */
+if(vTypes[vs] != ggHardEnd || vTypes[ve1] != ggHardStart || vTypes[ve2] != ggHardStart)
+    return FALSE;
+
+if(em[vs][ve1] && em[vs][ve2]) 
+    {
+    /* Try to find a hard end that connects ve1 and ve2. */
+    for(i=0; i<ag->vertexCount; i++)
+	{
+	if(vTypes[i] == ggHardEnd && em[ve1][i] && em[i][ve2])
+	    {
+	    /* Make sure that our cassette only connect to downstream. otherwise not
+	       so simple...*/
+	    if(agxRowSum(em[i],ag->vTypes,ag->vertexCount) == 1 &&
+	       agxRowSum(em[ve1],ag->vTypes,ag->vertexCount) == 1 &&
+	       agxColSum(em, ag->vTypes, ag->vertexCount, ve1) == 1 &&
+	       agxEdgesInArea(ag,em,ve2-1,vs+1) == numAltVerts)
+		{
+		*startV = agxFindClosestUpstreamVertex(ag, em, vs);
+		*endV = agxFindClosestDownstreamVertex(ag, em, ve2);
+		*altBpStartV = ve1;
+		*altBpEndV = i;
+		return TRUE;
+		}
+	    }
+	}
+    }
+return FALSE;
+}
+
+boolean agxIsRetainIntron(struct altGraphX *ag, bool **em,  int vs, int ve1, int ve2,
+		       int *altBpStart, int *altBpEnd)
+/* return TRUE if retained intron. 
+   Looking for pattern:
+   hs-->he---->hs--->he
+    \---------------/
+
+   Use agxEdgesInArea() to investigate that encompasses the common hard
+   end and common hard start. Should only be 4 edges in area defined by
+   splicing.
+   eseses 
+   012345 
+  0  
+  1  + +
+  2   + 
+  3    +
+  4   
+  5
+*/
+{
+unsigned char *vTypes = ag->vTypes;
+int i=0;
+int numAltVerts = 4;
+
+/* Quick check. */
+if(vTypes[vs] != ggHardStart || vTypes[ve1] != ggHardEnd || vTypes[ve2] != ggHardEnd)
+    return FALSE;
+if(em[vs][ve1] && em[vs][ve2]) 
+    {
+    /* Try to find a hard start that connects ve1 and ve2. */
+    for(i=0; i<ag->vertexCount; i++)
+	{
+	if(vTypes[i] == ggHardStart && em[ve1][i] && em[i][ve2] &&
+	   agxEdgesInArea(ag,em,ve2-1,vs+1) == numAltVerts)
+	    {
+	    *altBpStart = ve1;
+	    *altBpEnd = i;
+	    return TRUE;
+	    }
+	}
+    }
+return FALSE;
+}	    
+
+boolean agxIsAlt5PrimeSoft(struct altGraphX *ag, bool **em,  int vs1, int vs2, int ve1, int ve2,
+			   int *altBpStart, int *altBpEnd, int *termExonStart, int *termExonEnd)
+/* Return TRUE if we have an edge pattern of:
+   ss->he----->hs
+     ss-->he--/
+
+   Which indicates a possible alternative transcription start site.
+   Use agxEdgesInArea() to investigate an area that begins in the rows with
+   differnt starts, one of which is soft, and finishes with common hard start. 
+   esees
+   012345 (4 vertices involved in alt splicing)
+  0  
+  1  +
+  2     +
+  3    +
+  4     +
+  5   
+*/
+{
+unsigned char *vTypes = ag->vTypes;
+int i=0;
+int numAltVerts = 4;
+/* Ends must be intron sites */
+if(vTypes[ve1] != ggHardEnd || vTypes[ve2] != ggHardEnd)
+    return FALSE;
+
+/* One has to be soft started (transcription start). */
+if(vTypes[vs1] != ggSoftStart && vTypes[vs2] != ggSoftStart)
+    return FALSE;
+
+if(em[vs1][ve1] && em[vs2][ve2]) 
+    {
+    /* Try to find common start for the two hard ends. */
+    for(i=0; i<ag->vertexCount; i++)
+	{
+	if(vTypes[i] == ggHardStart && em[ve1][i] && em[ve2][i])
+	    {
+	    /* Make sure that they only connect to that one hard start. */
+	    if(agxRowSum(em[ve1],ag->vTypes,ag->vertexCount) <= 1 &&
+	       agxRowSum(em[ve2],ag->vTypes,ag->vertexCount) <= 1 &&
+	       agxEdgesInArea(ag,em,i-1,vs1+1) <= numAltVerts)
+		{
+		/* Report the first and last vertexes. */
+		*termExonStart = i;
+		*termExonEnd = agxFindClosestDownstreamVertex(ag, em, i);
+		*altBpStart = ve1;
+		*altBpEnd = ve2;
+		return TRUE;
+		}
+	    }
+	}
+    }
+return FALSE;
+}
+
+boolean agxIsAlt3PrimeSoft(struct altGraphX *ag, bool **em,  int vs, int ve1, int ve2,
+		       int *altBpStart, int *altBpEnd, int *firstVertex, int *lastVertex)
+/* Return TRUE if we have an edge pattern of:
+   he->hs----->se
+   \------>hs-->se
+   Which inicates two possible transcription ends.
+   
+   Use agxEdgesInArea() to investigate an area that begins in the rows with the common
+   hard end and finishes with different ends at least one of which
+   is a soft end.
+   012345 (5 vertices involved in alt splicing)
+   0  
+   1 ++
+   2   +
+   3    +
+   4
+   5   
+*/
+{
+unsigned char *vTypes = ag->vTypes;
+int i=0;
+int numAltVerts = 5; /* Number of edges in alt spliced portion of graph. */
+
+/* Quick check. */
+if(vTypes[vs] != ggHardEnd || vTypes[ve1] != ggHardStart || vTypes[ve2] != ggHardStart)
+    return FALSE;
+
+if(em[vs][ve1] && em[vs][ve2]) 
+    {
+    int sEnd1 = -1, sEnd2 = -1;
+    /* Find the ends connecting to the vertex ends. */
+    sEnd1 = agxFindClosestDownstreamVertex(ag, em, ve1);
+    sEnd2 = agxFindClosestDownstreamVertex(ag, em, ve2);
+
+    /* Make sure they are connected to something. */
+    if(sEnd1 == -1 || sEnd2 == -1)
+	return FALSE;
+
+    /* Make sure one is a soft end. */
+    if(vTypes[sEnd1] != ggSoftEnd && vTypes[sEnd2] != ggSoftEnd)
+	return FALSE;
+
+    /* Make sure that they only connect to one edge each and
+       that there isn't some other alt-splicing going on around
+       them. */
+    if(agxRowSum(em[ve1],ag->vTypes,ag->vertexCount) <= 1 &&
+       agxRowSum(em[ve2],ag->vTypes,ag->vertexCount) <= 1 && 
+       agxEdgesInArea(ag,em,max(sEnd1,sEnd2),vs+1) <= numAltVerts)
+	{
+	*lastVertex = i;
+	*firstVertex = agxFindClosestUpstreamVertex(ag, em, vs);
+	*altBpStart = ve1;
+	*altBpEnd = ve2;
+	return TRUE;
+	}
+    }
+return FALSE;
 }
