@@ -1,8 +1,8 @@
 track           cpgIsland
-visibility      dense
+visibility      full
 
 track           genscan
-visibility      dense
+visibility      full
 
 track           gcPercent
 visibility      pack
@@ -11,10 +11,10 @@ track           simpleRepeat
 visibility      pack
 
 track           est
-visibility      dense
+visibility      full
 
 track           xenoMrna
-visibility      dense
+visibility      full
 
 track           mrna
 visibility      pack
@@ -26,7 +26,7 @@ track           gap
 visibility      pack
 
 track           blatHg15
-visibility      dense
+visibility      full
 
 track           rmsk
 visibility      full
