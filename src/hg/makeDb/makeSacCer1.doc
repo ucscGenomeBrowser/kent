@@ -736,6 +736,7 @@ chmod a+x blastSome
 blastSome {check in line+ \$(path1)} {check out line out/\$(root1).tab}
 #ENDLOOP
 end
+    # << this line makes emacs coloring happy
 
     # Create parasol batch
     echo ../../split/*.fa | wordLine stdin > split.lst
@@ -781,4 +782,25 @@ end
     zip -j chromFa.zip /cluster/data/sacCer1/*/chr*.fa
     zip -j multizYeast.zip /gbdb/sacCer1/multizYeast/*.maf
     # Create a README.txt file here.
+
+
+# MITOPRED DATA FOR HGGENE (DONE 7/30/04 angie)
+    ssh hgwdev
+    mkdir /cluster/data/sacCer1/bed/mitopred
+    cd /cluster/data/sacCer1/bed/mitopred
+    wget http://mitopred.sdsc.edu/data/yst_30.out
+    perl -wpe 's/^(\S+)\s+\S+\s+(.*)/$1\t$2/' yst_30.out > mitopred.tab
+    cat > mitopred.sql << '_EOF_'
+# Prediction of nuclear-encoded mito. proteins from http://mitopred.sdsc.edu/
+CREATE TABLE mitopred (
+    name varchar(10) not null,      # SwissProt ID
+    confidence varchar(8) not null, # Confidence level
+              #Indices
+    PRIMARY KEY(name(6))
+);
+'_EOF_'
+    # << this line makes emacs coloring happy
+    hgsql sacCer1 < mitopred.sql
+    hgsql sacCer1 -e 'load data local infile "mitopred.tab" into table mitopred'
+
 
