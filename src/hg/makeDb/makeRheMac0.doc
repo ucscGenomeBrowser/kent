@@ -479,9 +479,22 @@ WARNING: negative rEnd: -321 SCAFFOLD110959:5414-5484 L1MCc
 
 ssh kksilo
 cd /cluster/data/hg17/bed/blastz.rheMac0
+# alignments (DONE - March 16 - Robert)
 # edit doBlastzChainNet.pl to add lines for hg17 glitch
 # in function getDbFromPath
 #  if ($db eq "hg") {
 #      $db = "hg17";
 #  }
 doBlastzChainNet.pl DEF -blastzOutRoot /panasas/store/rheMacOut/ >& do.log &
+# make blat ooc (DONE - March 17 - Robert)
+  ssh kkr1u00
+  mkdir /cluster/data/rheMac0/bed/ooc
+  cd /cluster/data/rheMac0/bed/ooc
+  ls -1 /cluster/data/rheMac0/rheMac0.2bit > nib.lst
+  /cluster/bin/i386/blat nib.lst /dev/null /dev/null -tileSize=11 \
+    -makeOoc=11.ooc -repMatch=800
+Writing 11.ooc
+Wrote 38031 overused 11-mers to 11.ooc
+Done making 11.ooc
+  cp -p 11.ooc /iscratch/i/rheMac0/
+  iSync
