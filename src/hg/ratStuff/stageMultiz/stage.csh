@@ -1,4 +1,4 @@
-#!/bin/csh
+#!/bin/tcsh -efx
 
 #Here's a script to to create this directory for the
 #the human/mouse/rat three way alignments.  It assumes
@@ -45,7 +45,36 @@
 #Run stageMultiz as so:
  cd $hm
  foreach i (*.axt)
-   stageMultiz $h/chrom.sizes $m/chrom.sizes $r/chrom.sizes $i $mr -hPrefix=$hg -mPrefix=$mm -rPrefix=$rn $hmr/$i:r
+   stageMultiz $h/chrom.sizes $m/chrom.sizes $r/chrom.sizes $i $mr -hPrefix=$hg. -mPrefix=$mm. -rPrefix=$rn $hmr/$i:r
    echo done $i
  end
+
+#Set up parasol directory to do multiz run proper.
+ cd $hmr
+ mkdir run1
+ cd run1
+
+#List staged directories one per line.
+ echo ../chr*/* | wordLine stdin > in.lst
+
+#create little script to run blastz.
+cat > doMultiz << endDoMultiz
+#!/bin/csh
+multiz \$1/hm.maf \$1/mr.maf > \$1/hmr.maf
+endDoMultiz
+chmod a+x doMultiz
+
+#create gsub file with command to run
+cat > gsub << endGsub
+#LOOP
+doMultiz \$(path1)
+#ENDLOOP
+endGsub
+ 
+#create a spec file with one line per stage directory
+ gensub2 in.lst single gsub spec
+
+#Run parasol on the little cluster
+ ssh kkr1u00 "cd $hmr/run1; para make spec"
+ 
 
