@@ -13,7 +13,7 @@
 #include "ggPrivate.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: ggGraph.c,v 1.7 2003/05/27 20:30:52 sugnet Exp $";
+static char const rcsid[] = "$Id: ggGraph.c,v 1.8 2003/06/18 16:57:48 sugnet Exp $";
 
 static int maxEvidence = 50;
 
@@ -910,6 +910,129 @@ for (i=0; i<vCount; ++i)
 return result;
 }
 
+boolean matchAsWellSoftStart(struct geneGraph *gg, struct ggMrnaCluster *mc,
+			     int softStart, int hardEnd, int hardStart, int upStreamEnd)
+/** Return TRUE if the changing the alignment to gap accross
+    hardStart -- upStreamEnd produces as good of an alignment as
+    softStart -- hardEnd. */
+{
+struct dnaSeq *seq = mc->genoSeq;
+struct ggVertex *v = gg->vertices;
+int i=0;
+for(i=0; i <= v[hardStart].position - v[softStart].position; i++)
+    {
+    if(seq->dna[v[hardStart].position - i] != seq->dna[v[upStreamEnd].position -i])
+	return FALSE;
+    }
+return TRUE;
+}
+
+
+void tryToFixSoftStartAlignment(struct geneGraph *gg, struct ggMrnaCluster *mc, 
+				struct hash *aliHash, int softStart)
+/** Try to fix alignments where the EST/mRNA should reach into the next exon
+    but it isn't big enough for blat to find it. */
+{
+int i, j, k;
+int vCount = gg->vertexCount;
+bool **em = gg->edgeMatrix;
+struct ggVertex *v = gg->vertices;
+for(i=0; i<vCount; i++)
+    {
+    /* For each hard end that this softstart connects to. */
+    if(em[softStart][i] && v[i].type == ggHardEnd)
+	{
+	for(j=0; j<vCount; j++) 
+	    {
+	    /* For each hard start that connects to that hardEnd
+	       before our softStart index and is within 5 base pairs. */
+	    if(em[j][i] && v[j].type == ggHardStart && 
+	       v[j].position - v[softStart].position > 0 &&
+	       v[j].position - v[softStart].position <= 5)
+		{
+		for(k=0; k<vCount; k++)
+		    {
+		    /* If there is a hard end that connects to the hard start take a look */
+		    if(em[k][j] && v[k].type == ggHardEnd)
+			{
+			/* If we get as good of an alignment by extending to the
+			   next exon do it. */
+			if(matchAsWellSoftStart(gg, mc, softStart, i, j, k))
+			   {
+			   em[softStart][i] = FALSE;
+			   ggEvidenceFreeList(&gg->evidence[softStart][i]);
+			   return;
+			   }
+			}
+		    }
+		}
+	    }
+	}
+    }
+}
+		
+boolean matchAsWellSoftEnd(struct geneGraph *gg, struct ggMrnaCluster *mc,
+			     int hardStart, int softEnd, int hardEnd, int downStreamStart)
+/** Return TRUE if the changing the alignment to gap accross
+    hardEnd -- downStreamStart produces as good of an alignment as
+    hardStart -- softEnd. */
+{
+struct dnaSeq *seq = mc->genoSeq;
+struct ggVertex *v = gg->vertices;
+int i=0;
+for(i=0; i < v[softEnd].position - v[hardEnd].position; i++)
+    {
+    if(seq->dna[v[hardEnd].position + i] != seq->dna[v[downStreamStart].position + i])
+	return FALSE;
+    }
+return TRUE;
+}
+
+
+void tryToFixSoftEndAlignment(struct geneGraph *gg, struct ggMrnaCluster *mc, 
+				struct hash *aliHash, int softEnd)
+/** Try to fix alignments where the EST/mRNA should reach into the next exon
+    but it isn't big enough for blat to find it. */
+{
+int i, j, k;
+int vCount = gg->vertexCount;
+bool **em = gg->edgeMatrix;
+struct ggVertex *v = gg->vertices;
+for(i=0; i<vCount; i++)
+    {
+    /* For each hard end that this softstart connects to. */
+    if(em[i][softEnd] && v[i].type == ggHardStart)
+	{
+	for(j=0; j<vCount; j++) 
+	    {
+	    /* For each hard start that connects to that hardEnd
+	       before our softStart index and is within 5 base pairs. */
+	    if(em[i][j] && v[j].type == ggHardEnd && 
+	       v[softEnd].position - v[j].position > 0 &&
+	        v[softEnd].position - v[j].position  <= 5)
+		{
+		for(k=0; k<vCount; k++)
+		    {
+		    /* If there is a hard end that connects to the hard start take a look */
+		    if(em[j][k] && v[k].type == ggHardStart)
+			{
+			/* If we get as good of an alignment by extending to the
+			   next exon do it. */
+			if(matchAsWellSoftEnd(gg, mc, i, softEnd, j, k))
+			   {
+			   em[i][softEnd] = FALSE;
+			   ggEvidenceFreeList(&gg->evidence[i][softEnd]);
+			   return;
+			   }
+			}
+		    }
+		}
+	    }
+	}
+    }
+}
+		
+
 struct geneGraph *ggGraphConsensusCluster(struct ggMrnaCluster *mc, struct ggMrnaInput *ci, boolean fillInEvidence)
 /* Make up a gene transcript graph out of the ggMrnaCluster. Only
  extending truncated exons to consensus splice sites. */
@@ -918,17 +1041,19 @@ struct sqlConnection *conn = hAllocConn();
 struct geneGraph *gg = makeInitialGraph(mc, ci);
 struct hash *aliHash = newAlignmentHash(mc);
 int i;
-//arcsForOverlaps(gg);
 for(i=0; i<gg->vertexCount; i++)
     {
     if(gg->vertices[i].type == ggSoftStart)
-	{
+	tryToFixSoftStartAlignment(gg, mc, aliHash, i);
+    if(gg->vertices[i].type == ggSoftEnd)
+	tryToFixSoftEndAlignment(gg, mc, aliHash, i);
+    }
+for(i=0; i<gg->vertexCount; i++)
+    {
+    if(gg->vertices[i].type == ggSoftStart)
 	softStartOverlapConsensusArcs(gg, aliHash, i, ggHardStart);
-	}
     else if(gg->vertices[i].type == ggSoftEnd)
-	{
 	softEndOverlapConsensusArcs(gg, aliHash, i, ggHardEnd);
-	}
     }
 //softlyTrim(gg);
 softlyTrimConsensus(gg, aliHash);
