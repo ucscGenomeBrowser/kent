@@ -17,7 +17,7 @@
 #include "customTrack.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: hgTables.c,v 1.40 2004/07/20 20:47:40 kent Exp $";
+static char const rcsid[] = "$Id: hgTables.c,v 1.41 2004/07/21 00:30:23 kent Exp $";
 
 
 void usage()
@@ -643,14 +643,6 @@ else
     errAbort("Don't know how to handle %s output yet", output);
 }
 
-void doIntersect(struct sqlConnection *conn)
-/* Respond to intersection button. */
-{
-htmlOpen("Table Browser Intersect");
-hPrintf("Processing intersect button... not yet doing anything real...");
-htmlClose();
-}
-
 void dispatch(struct sqlConnection *conn)
 /* Scan for 'Do' variables and dispatch to appropriate page-generator.
  * By default head to the main page. */
@@ -660,8 +652,14 @@ if (cartVarExists(cart, hgtaDoTest))
     doTest();
 else if (cartVarExists(cart, hgtaDoTopSubmit))
     doTopSubmit(conn);
-else if (cartVarExists(cart, hgtaDoIntersect))
-    doIntersect(conn);
+else if (cartVarExists(cart, hgtaDoIntersectPage))
+    doIntersectPage(conn);
+else if (cartVarExists(cart, hgtaDoClearIntersect))
+    doClearIntersect(conn);
+else if (cartVarExists(cart, hgtaDoIntersectMore))
+    doIntersectMore(conn);
+else if (cartVarExists(cart, hgtaDoIntersectSubmit))
+    doIntersectSubmit(conn);
 else if (cartVarExists(cart, hgtaDoPasteIdentifiers))
     doPasteIdentifiers(conn);
 else if (cartVarExists(cart, hgtaDoPastedIdentifiers))

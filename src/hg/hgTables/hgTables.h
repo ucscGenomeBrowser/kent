@@ -72,6 +72,14 @@ struct sqlResult *regionQuery(struct sqlConnection *conn, char *table,
 	char *extraWhere);
 /* Construct and execute query for table on region. */
 
+struct grp *makeGroupList(struct sqlConnection *conn, 
+	struct trackDb *trackList);
+/* Get list of groups that actually have something in them. */
+
+struct grp *findSelectedGroup(struct grp *groupList, char *cgiVar);
+/* Find user-selected group if possible.  If not then
+ * go to various levels of defaults. */
+
 struct customTrack *getCustomTracks();
 /* Get custom track list. */
 
@@ -157,13 +165,17 @@ char *filterFieldVarName(char *db, char *table, char *field, char *type);
 #define filterRawLogicVar "rawLogic"
 #define filterRawQueryVar "rawQuery"
 
+/* Functions related to intersecting. */
+
+boolean anyIntersection();
+/* Return TRUE if there's an intersection to do. */
+
 /* --------- CGI/Cart Variables --------------------- */
 
 /* Command type variables - control which page is up.  Get stripped from
  * cart. */
 #define hgtaDo "hgta_do" /* All commands start with this and are removed
 	 		  * from cart. */
-#define hgtaDoIntersect "hgta_doIntersect"
 #define hgtaDoMainPage "hgta_doMainPage"
 #define hgtaDoTopSubmit "hgta_doTopSubmit"
 #define hgtaDoPasteIdentifiers "hgta_doPasteIdentifiers"
@@ -174,6 +186,10 @@ char *filterFieldVarName(char *db, char *table, char *field, char *type);
 #define hgtaDoFilterSubmit "hgta_doFilterSubmit"
 #define hgtaDoFilterMore "hgta_doFilterMore"
 #define hgtaDoClearFilter "hgta_doClearFilter"
+#define hgtaDoIntersectPage "hgta_doIntersectPage"
+#define hgtaDoClearIntersect "hgta_doClearIntersect"
+#define hgtaDoIntersectMore "hgta_doIntersectMore"
+#define hgtaDoIntersectSubmit "hgta_doIntersectSubmit"
 #define hgtaDoTest "hgta_doTest"
 #define hgtaDoSchema "hgta_doSchema"
 #define hgtaDoSchemaDb "hgta_doSchemaDb"
@@ -209,6 +225,10 @@ char *filterFieldVarName(char *db, char *table, char *field, char *type);
 #define hgtaCtDesc "hgta_ctDesc"
 #define hgtaCtVis "hgta_ctVis"
 #define hgtaCtUrl "hgta_ctUrl"
+#define hgtaIntersectGroup "hgta_intersectGroup"
+#define hgtaIntersectTrack "hgta_intersectTrack"
+#define hgtaNextIntersectGroup "hgta_nextIntersectGroup"
+#define hgtaNextIntersectTrack "hgta_nextIntersectTrack"
 
 /* Prefix for variables managed by field selector. */
 #define hgtaFieldSelectPrefix "hgta_fs."
@@ -346,6 +366,18 @@ void doFilterSubmit(struct sqlConnection *conn);
 void doClearFilter(struct sqlConnection *conn);
 /* Respond to click on clear filter. */
 
+void doIntersectPage(struct sqlConnection *conn);
+/* Respond to intersect create/edit button */
+
+void doClearIntersect(struct sqlConnection *conn);
+/* Respond to click on clear intersection. */
+
+void doIntersectMore(struct sqlConnection *conn);
+/* Continue working in intersect page. */
+
+void doIntersectSubmit(struct sqlConnection *conn);
+/* Finish working in intersect page. */
+
 void doGenePredSequence(struct sqlConnection *conn);
 /* Output genePred sequence. */
 
@@ -361,8 +393,18 @@ void doGetCustomTrack(struct sqlConnection *conn);
 void doGetCustomTrackFile(struct sqlConnection *conn);
 /* Get Custom Track file output (UI has already told us how). */
 
+/* Other UI stuff. */
+
 void printMainHelp();
 /* Put up main page help info. */
+
+void createHiddenForm(char **vars, int varCount);
+/* Create a hidden form with the given variables */
+
+void showGroupTrackRow(char *groupVar, char *groupScript,
+    char *trackVar, struct sqlConnection *conn);
+/* Show group & track row of controls */
+
 #endif /* HGTABLES_H */
 
 

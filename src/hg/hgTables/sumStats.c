@@ -20,7 +20,7 @@
 #include "portable.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: sumStats.c,v 1.3 2004/07/20 22:13:58 kent Exp $";
+static char const rcsid[] = "$Id: sumStats.c,v 1.4 2004/07/21 00:30:23 kent Exp $";
 
 long long basesInRegion(struct region *regionList)
 /* Count up all bases in regions. */
@@ -97,7 +97,6 @@ static void covAddRange(struct covStats *cov, int start, int end)
 /* Add range to stats. */
 {
 struct region *r = cov->region;
-// uglyf("Add range %d %d to %s:%d-%d<BR>\n", start, end, r->chrom, r->start, r->end);
 if (end > r->start && start < r->end)
     {
     int unclippedSize, size;
@@ -111,7 +110,6 @@ if (end > r->start && start < r->end)
     if (unclippedSize > cov->maxBases) cov->maxBases = unclippedSize;
     if (unclippedSize < cov->minBases) cov->minBases = unclippedSize;
     }
-// uglyAbort("ALl for now");
 }
 
 void covStatsFree(struct covStats **pCov)

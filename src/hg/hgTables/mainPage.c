@@ -15,10 +15,10 @@
 #include "grp.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: mainPage.c,v 1.16 2004/07/20 20:47:40 kent Exp $";
+static char const rcsid[] = "$Id: mainPage.c,v 1.17 2004/07/21 00:30:23 kent Exp $";
 
 
-static struct grp *makeGroupList(struct sqlConnection *conn, 
+struct grp *makeGroupList(struct sqlConnection *conn, 
 	struct trackDb *trackList)
 /* Get list of groups that actually have something in them. */
 {
@@ -72,7 +72,7 @@ hashFree(&groupsInDatabase);
 return groupList;
 }
 
-struct grp *findGroup(struct grp *groupList, char *name)
+static struct grp *findGroup(struct grp *groupList, char *name)
 /* Return named group in list, or NULL if not found. */
 {
 struct grp *group;
@@ -82,12 +82,12 @@ for (group = groupList; group != NULL; group = group->next)
 return NULL;
 }
 
-struct grp *findSelectedGroup(struct grp *groupList)
+struct grp *findSelectedGroup(struct grp *groupList, char *cgiVar)
 /* Find user-selected group if possible.  If not then
  * go to various levels of defaults. */
 {
 char *defaultGroup = "genes";
-char *name = cartUsualString(cart, hgtaGroup, defaultGroup);
+char *name = cartUsualString(cart, cgiVar, defaultGroup);
 struct grp *group = findGroup(groupList, name);
 if (group == NULL)
     group = findGroup(groupList, defaultGroup);
@@ -141,7 +141,7 @@ dyStringAppend(*pDy, "document.hiddenForm.submit();\"");
 return dyStringCannibalize(pDy);
 }
 
-char *onChangeOrg()
+static char *onChangeOrg()
 /* Return javascript executed when they change organism. */
 {
 struct dyString *dy = onChangeStart();
@@ -150,7 +150,7 @@ dyStringAppend(dy, " document.hiddenForm.db.value=0;");
 return onChangeEnd(&dy);
 }
 
-char *onChangeDb()
+static char *onChangeDb()
 /* Return javascript executed when they change database. */
 {
 struct dyString *dy = onChangeStart();
@@ -158,7 +158,7 @@ jsDropDownCarryOver(dy, "db");
 return onChangeEnd(&dy);
 }
 
-char *onChangeGroup()
+static char *onChangeGroup()
 /* Return javascript executed when they change group. */
 {
 struct dyString *dy = onChangeStart();
@@ -179,6 +179,42 @@ if (sameString(val, selVal))
 hPrintf(">");
 }
 
+void showGroupTrackRow(char *groupVar, char *groupScript,
+    char *trackVar, struct sqlConnection *conn)
+/* Show group & track row of controls */
+{
+struct grp *group, *groupList = makeGroupList(conn, fullTrackList);
+struct grp *selGroup = findSelectedGroup(groupList, groupVar);
+struct trackDb *track;
+
+hPrintf("<TR><TD><B>group:</B>\n");
+hPrintf("<SELECT NAME=%s %s>\n", groupVar, groupScript);
+for (group = groupList; group != NULL; group = group->next)
+    {
+    hPrintf(" <OPTION VALUE=%s%s>%s\n", group->name,
+	(group == selGroup ? " SELECTED" : ""),
+	group->label);
+    }
+hPrintf("</SELECT>\n");
+
+hPrintf("<B>track:</B>\n");
+if (selGroup != NULL && sameString(selGroup->name, "all"))
+    selGroup = NULL;
+if (selGroup == NULL) /* All Tracks */
+    slSort(&fullTrackList, trackDbCmpShortLabel);
+curTrack = findSelectedTrack(fullTrackList, selGroup);
+hPrintf("<SELECT NAME=%s>\n", trackVar);
+for (track = fullTrackList; track != NULL; track = track->next)
+    {
+    if (selGroup == NULL || sameString(selGroup->name, track->grp))
+	hPrintf(" <OPTION VALUE=%s%s>%s\n", track->tableName,
+	    (track == curTrack ? " SELECTED" : ""),
+	    track->shortLabel);
+    }
+hPrintf("</SELECT>\n");
+hPrintf("</TD></TR>\n");
+}
+
 void showMainControlTable(struct sqlConnection *conn)
 /* Put up table with main controls for main page. */
 {
@@ -194,38 +230,7 @@ hPrintf("<TABLE BORDER=0>\n");
     }
 
 /* Print group and track line. */
-    {
-    struct grp *group, *groupList = makeGroupList(conn, fullTrackList);
-    struct grp *selGroup = findSelectedGroup(groupList);
-    struct trackDb *track;
-
-    hPrintf("<TR><TD><B>group:</B>\n");
-    hPrintf("<SELECT NAME=%s %s>\n", hgtaGroup, onChangeGroup());
-    for (group = groupList; group != NULL; group = group->next)
-        {
-	hPrintf(" <OPTION VALUE=%s%s>%s\n", group->name,
-	    (group == selGroup ? " SELECTED" : ""),
-	    group->label);
-	}
-    hPrintf("</SELECT>\n");
-
-    hPrintf("<B>track:</B>\n");
-    if (selGroup != NULL && sameString(selGroup->name, "all"))
-        selGroup = NULL;
-    if (selGroup == NULL) /* All Tracks */
-	slSort(&fullTrackList, trackDbCmpShortLabel);
-    curTrack = findSelectedTrack(fullTrackList, selGroup);
-    hPrintf("<SELECT NAME=%s>\n", hgtaTrack);
-    for (track = fullTrackList; track != NULL; track = track->next)
-        {
-	if (selGroup == NULL || sameString(selGroup->name, track->grp))
-	    hPrintf(" <OPTION VALUE=%s%s>%s\n", track->tableName,
-		(track == curTrack ? " SELECTED" : ""),
-		track->shortLabel);
-	}
-    hPrintf("</SELECT>\n");
-    hPrintf("</TD></TR>\n");
-    }
+showGroupTrackRow(hgtaGroup, onChangeGroup(), hgtaTrack, conn);
 
 /* Region line */
     {
@@ -286,6 +291,23 @@ hPrintf("<TABLE BORDER=0>\n");
     hPrintf("</TD></TR>\n");
     }
 
+/* Intersection line. */
+    {
+    hPrintf("<TR><TD><B>intersection:</B>\n");
+    if (anyIntersection())
+        {
+	cgiMakeButton(hgtaDoIntersectPage, "Edit");
+	hPrintf(" ");
+	cgiMakeButton(hgtaDoClearIntersect, "Clear");
+	}
+    else
+        {
+	cgiMakeButton(hgtaDoIntersectPage, "Create");
+	}
+    hPrintf("</TD></TR>\n");
+    }
+
+
 /* Output line. */
     {
     int i;
@@ -318,8 +340,6 @@ hPrintf("<TABLE BORDER=0>\n");
     hPrintf("<TR><TD>\n");
     cgiMakeButton(hgtaDoTopSubmit, "Submit");
     hPrintf(" ");
-    cgiMakeButton(hgtaDoIntersect, "(Intersect)");
-    hPrintf(" ");
     cgiMakeButton(hgtaDoTest, "Test");
 #ifdef SOMETIMES
 #endif /* SOMETIMES */
@@ -328,6 +348,19 @@ hPrintf("<TABLE BORDER=0>\n");
 
 hPrintf("</TABLE>\n");
 hPrintf("<BR><I>Note: buttons and fields in parenthesis are not yet implemented.</I>\n");
+}
+
+void createHiddenForm(char **vars, int varCount)
+/* Create a hidden form with the given variables */
+{
+int i;
+hPrintf(
+    "<FORM ACTION=\"../cgi-bin/hgTables\" "
+    "METHOD=\"GET\" NAME=\"hiddenForm\">\n");
+cartSaveSession(cart);
+for (i=0; i<varCount; ++i)
+    hPrintf("<input type=\"hidden\" name=\"%s\" value=\"\">\n", vars[i]);
+puts("</FORM>");
 }
 
 void mainPageAfterOpen(struct sqlConnection *conn)
@@ -351,13 +384,7 @@ hPrintf("</FORM>\n");
     static char *saveVars[] = {
       "org", "db", hgtaGroup, hgtaTrack, hgtaRegionType,
       hgtaRange, hgtaOutputType, };
-    int i;
-
-    hPrintf("<FORM ACTION=\"../cgi-bin/hgTables\" METHOD=\"GET\" NAME=\"hiddenForm\">\n");
-    cartSaveSession(cart);
-    for (i=0; i<ArraySize(saveVars); ++i)
-	hPrintf("<input type=\"hidden\" name=\"%s\" value=\"\">\n", saveVars[i]);
-    puts("</FORM>");
+    createHiddenForm(saveVars, ArraySize(saveVars));
     }
 
 webNewSection("<A NAME=\"Help\"></A>Using the Table Browser\n");
