@@ -15,7 +15,7 @@
 #include "vGfx.h"
 #endif
 
-extern int pbRed, pbBlue;
+extern Color pbRed, pbBlue;
 
 extern struct cart *cart; /* The cart where we keep persistent variables. */
 extern char *database;	  /* Name of database we're using. */
@@ -106,8 +106,8 @@ extern boolean scaleButtonPushed;
 
 extern struct vGfx *vg, *vg2;
 extern Color bkgColor;
-extern int abnormalColor;
-extern int normalColor;
+extern Color abnormalColor;
+extern Color normalColor;
 extern char hgsidStr[];
 
 void hWrites(char *string);

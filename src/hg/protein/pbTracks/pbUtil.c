@@ -220,7 +220,7 @@ char *exonGenomeStartStr, *exonGenomeEndStr;
 char *strand;
 int exonNumber;
 int printedExonNumber = -1;
-int exonColor[2];
+Color exonColor[2];
 int blockCount;
 int exonIndex;
 int i, isize;

@@ -446,7 +446,7 @@ double txmin, tymin, txmax, tymax;
 int i, n, index;
 int xx, yy;
 char charStr[2];
-int edgeColor;
+Color edgeColor;
 Color stampColor;
 int titleLen;
 

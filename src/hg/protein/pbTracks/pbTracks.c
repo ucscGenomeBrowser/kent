@@ -15,7 +15,7 @@
 #include "pbStampPict.h"
 #include "pbTracks.h"
 
-static char const rcsid[] = "$Id: pbTracks.c,v 1.22 2004/02/02 20:29:22 donnak Exp $";
+static char const rcsid[] = "$Id: pbTracks.c,v 1.23 2004/02/03 23:51:46 fanhsu Exp $";
 
 boolean hgDebug = FALSE;      /* Activate debugging code. Set to true by hgDebug=on in command line*/
 
@@ -67,7 +67,7 @@ char aa[100000];
 struct vGfx *g_vg;
 MgFont *g_font;
 
-int pbRed, pbBlue;
+Color pbRed, pbBlue;
 
 int  currentYoffset;
 int  pbScale = {6};
@@ -102,11 +102,8 @@ boolean initialWindow = TRUE;
 struct vGfx *vg, *vg2;
 Color bkgColor;
 
-//int abnormalColor = MG_RED;
-//int normalColor   = MG_BLUE;
-
-int abnormalColor;
-int normalColor;
+Color abnormalColor;
+Color normalColor;
 
 void dvPrintf(char *format, va_list args)
 /* Suppressable variable args hPrintf. */
