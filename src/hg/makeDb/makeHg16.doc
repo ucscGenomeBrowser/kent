@@ -6069,12 +6069,8 @@ do
 	echo -n "working on ${c} - ${C} ... "
 	hgGcPercent -chr=${c} -doGaps \
 		-file=stdout -win=5 hg16 ../../nib | grep -w GC | \
-		awk '
-{
-	bases = $3 - $2
-	perCent = $5/10.0
-	printf "%d\t%.1f\n", $2+1, perCent
-}' | wigAsciiToBinary \
+		awk '{printf "%d\t%.1f\n", $2+1, $5/10.0 }' | \
+	wigAsciiToBinary \
 	-dataSpan=5 -chrom=${c} -wibFile=wigData5/gc5Base_${C} \
 	-name=${C} stdin 2> dataLimits5/${c}
 echo "done"
@@ -6126,12 +6122,8 @@ do
         echo -n "working on ${c} - ${C} ... "
         hgGcPercent -chr=${c} -doGaps \
                 -file=stdout -win=5 hg16 ../../nib | grep -w GC | \
-                awk '
-{
-        bases = $3 - $2
-        perCent = $5/10.0
-        printf "%d\t%.1f\n", $2+1, perCent
-}' | wigZoom -dataSpan=1000 stdin | wigAsciiToBinary \
+                awk '{printf "%d\t%.1f\n", $2+1, $5/10.0}' | \
+	wigZoom -dataSpan=1000 stdin | wigAsciiToBinary \
         -dataSpan=1000 -chrom=${c} -wibFile=wigData5_1K/gc5Base_${C}_1K \
         -name=${C} stdin 2> dataLimits5_1K/${c}
 echo "done"
