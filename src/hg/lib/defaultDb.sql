@@ -5,8 +5,8 @@
 
 #Description of annotation database
 CREATE TABLE defaultDb (
-    name varchar(255) not null,	# Short name of database.  'hg8' or the like
     genome varchar(255) not null,	# Unifying genome collection for which an assembly is the default
+    name varchar(255) not null,	# Short name of database.  'hg8' or the like
               #Indices
-    PRIMARY KEY(name)
+    PRIMARY KEY(genome)
 );

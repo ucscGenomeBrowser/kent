@@ -15,8 +15,8 @@ void defaultDbStaticLoad(char **row, struct defaultDb *ret)
 int sizeOne,i;
 char *s;
 
-ret->name = row[0];
-ret->genome = row[1];
+ret->genome = row[0];
+ret->name = row[1];
 }
 
 struct defaultDb *defaultDbLoad(char **row)
@@ -28,8 +28,8 @@ int sizeOne,i;
 char *s;
 
 AllocVar(ret);
-ret->name = cloneString(row[0]);
-ret->genome = cloneString(row[1]);
+ret->genome = cloneString(row[0]);
+ret->name = cloneString(row[1]);
 return ret;
 }
 
@@ -61,8 +61,8 @@ int i;
 
 if (ret == NULL)
     AllocVar(ret);
-ret->name = sqlStringComma(&s);
 ret->genome = sqlStringComma(&s);
+ret->name = sqlStringComma(&s);
 *pS = s;
 return ret;
 }
@@ -74,8 +74,8 @@ void defaultDbFree(struct defaultDb **pEl)
 struct defaultDb *el;
 
 if ((el = *pEl) == NULL) return;
-freeMem(el->name);
 freeMem(el->genome);
+freeMem(el->name);
 freez(pEl);
 }
 
@@ -97,11 +97,11 @@ void defaultDbOutput(struct defaultDb *el, FILE *f, char sep, char lastSep)
 {
 int i;
 if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->name);
+fprintf(f, "%s", el->genome);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->genome);
+fprintf(f, "%s", el->name);
 if (sep == ',') fputc('"',f);
 fputc(lastSep,f);
 }
