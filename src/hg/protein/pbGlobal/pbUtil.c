@@ -899,7 +899,7 @@ if (protCntInSwissByGene > protCntInSupportedGenomeDb)
     oldOrg = strdup("");
     conn3 = sqlConnect("swissProt");
     safef(query3, sizeof(query3), 
-     "select taxon.id, gene.acc, displayId.val, binomial, description.val from gene, displayId, accToTaxon,taxon, description where gene.val='%s' and gene.acc=displayId.acc and accToTaxon.taxon=taxon.id and accToTaxon.acc=gene.acc and description.acc=gene.acc order by taxon.id", 
+     "select taxon.id, gene.acc, displayId.val, binomial, description.val from gene, displayId, accToTaxon,taxon, description where gene.val='%s' and gene.acc=displayId.acc and accToTaxon.taxon=taxon.id and accToTaxon.acc=gene.acc and description.acc=gene.acc order by binomial", 
      queryID);
     sr3  = sqlMustGetResult(conn3, query3);
     row3 = sqlNextRow(sr3);
