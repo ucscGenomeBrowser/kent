@@ -409,17 +409,10 @@ struct hash *arHash = getAncientRepeats(tDb, qDb);
 
 getChroms(qDb, &qChromHash, &qChromList);
 
+
 printf("Reading gaps in %s\n", qDb);
 for (chrom = qChromList; chrom != NULL; chrom = chrom->next)
     chrom->nGaps = getSeqGaps(qDb, chrom->name);
-
-printf("Reading simpleRepeats in %s\n", qDb);
-for (chrom = qChromList; chrom != NULL; chrom = chrom->next)
-    chrom->trf = getTrf(qDb, chrom->name);
-
-printf("Reading repeats in %s\n", qDb);
-for (chrom = qChromList; chrom != NULL; chrom = chrom->next)
-    getRepeats(qDb, arHash, chrom->name, &chrom->repeats, &chrom->oldRepeats);
 
 if (qNewR)
     {
@@ -428,6 +421,13 @@ if (qNewR)
         chrom->newRepeats = getNewRepeats(qNewR, chrom->name);
     }
 
+printf("Reading simpleRepeats in %s\n", qDb);
+for (chrom = qChromList; chrom != NULL; chrom = chrom->next)
+    chrom->trf = getTrf(qDb, chrom->name);
+
+printf("Reading repeats in %s\n", qDb);
+for (chrom = qChromList; chrom != NULL; chrom = chrom->next)
+    getRepeats(qDb, arHash, chrom->name, &chrom->repeats, &chrom->oldRepeats);
 
 while ((net = chainNetRead(lf)) != NULL)
     {
