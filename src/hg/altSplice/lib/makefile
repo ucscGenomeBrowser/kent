@@ -20,7 +20,7 @@ L = -lm $(MYSQLLIBS)
 MYLIBDIR = ../../../lib/$(MACHTYPE)
 MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a 
 
-O = spliceGraph.o exonGraph.o heap.o altSpliceSite.o
+O = spliceGraph.o exonGraph.o heap.o altSpliceSite.o pfamDat.o
 
 TESTS = heapTest
 
@@ -32,7 +32,7 @@ TESTS = heapTest
 clean:
 	rm -f $(O);
 	rm -f $(TESTS)
-	rm -f ./$(MACHTYPE)/jkhgap.a;
+	rm -f ./$(MACHTYPE)/libSpliceGraph.a
 
 ctags:
 	ctags *.c *.h ../inc/*.h ../lib/*.c ../../inc/*.h ../../lib/*.c
