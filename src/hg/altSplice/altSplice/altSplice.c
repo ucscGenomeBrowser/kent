@@ -67,14 +67,13 @@
 #include "dnaseq.h"
 #include "hdb.h"
 #include "jksql.h"
-//#include "cheapcgi.h"
 #include "bed.h"
 #include "options.h"
 #include "binRange.h"
 
 #define USUAL
 //#define AFFYSPLICE
-static char const rcsid[] = "$Id: altSplice.c,v 1.15 2004/07/20 21:56:40 sugnet Exp $";
+static char const rcsid[] = "$Id: altSplice.c,v 1.16 2004/08/24 21:16:01 sugnet Exp $";
 
 int cassetteCount = 0; /* Number of cassette exons counted. */
 int misSense = 0;      /* Number of cassette exons that would introduce a missense mutation. */
@@ -404,6 +403,24 @@ struct psl *pslList = NULL, *psl = NULL, *pslCluster = NULL, *pslNext = NULL;
 pslList = loadPslsFromDb(conn, numDbTables, dbTables, chrom, chromStart, chromEnd);
 return pslList;
 }
+
+void readTissueLibraryIntoCache(char *fileName)
+/* Read in the tissue and library information from fileName. */
+{
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+char *words[3];
+struct slInt *tissue = NULL, *library = NULL;
+tissLibHash = newHash(12);
+while(lineFileNextRow(lf, words, ArraySize(words))) 
+    {
+    library = newSlInt(sqlSigned(words[1]));
+    tissue = newSlInt(sqlSigned(words[2]));
+    slAddTail(&library, tissue);
+    hashAdd(tissLibHash, words[0], library);
+    }
+lineFileClose(&lf);
+}
+
 
 void setupTissueLibraryCache(struct sqlConnection *conn)
 /* Hash all of the library and organism ids for this organism from
@@ -742,15 +759,23 @@ else
     }
 slSort(&gpList, genePredCmp);
 setupTables(gpList->chrom);
+
+/* If local memory get things going here. */
 if(optionExists("localMem")) 
     {
     warn("Using local memory. Setting up caches...");
     useChromKeeper = TRUE;
     setupChromKeeper(conn, optionVal("db", NULL), gpList->chrom);
     if(!optionExists("skipTissues"))
-	setupTissueLibraryCache(conn);
+	{
+	if(optionExists("tissueLibFile"))
+	    readTissueLibraryIntoCache(optionVal("tissueLibFile", NULL));
+	else
+	    setupTissueLibraryCache(conn);
+	}
     warn("Done setting up local caches.");
     }
+
 out = mustOpen(outFile, "w");
 for(gp = gpList; gp != NULL & count < 5; )
     {
