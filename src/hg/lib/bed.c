@@ -8,7 +8,7 @@
 #include "bed.h"
 #include "binRange.h"
 
-static char const rcsid[] = "$Id: bed.c,v 1.22 2003/08/21 16:58:11 kent Exp $";
+static char const rcsid[] = "$Id: bed.c,v 1.23 2003/10/02 17:15:21 angie Exp $";
 
 void bedStaticLoad(char **row, struct bed *ret)
 /* Load a row from bed table into ret.  The contents of ret will
@@ -639,7 +639,7 @@ newBed->chromStart = bed->chromStart;
 newBed->chromEnd = bed->chromEnd;
 newBed->name = cloneString(bed->name);
 newBed->score = bed->score;
-strcpy(newBed->strand, bed->strand);
+strncpy(newBed->strand, bed->strand, sizeof(bed->strand));
 newBed->thickStart = bed->thickStart;
 newBed->thickEnd = bed->thickEnd;
 newBed->reserved = bed->reserved;
@@ -664,6 +664,22 @@ if (bed->expCount > 0)
 	   sizeof(float) * bed->expCount);
     }
 return(newBed);
+}
+
+
+struct bed *cloneBedList(struct bed *bedList)
+/* Make an all-newly-allocated list copied from bed. */
+{
+struct bed *bedListOut = NULL, *bed=NULL;
+
+for (bed=bedList;  bed != NULL;  bed=bed->next)
+    {
+    struct bed *newBed = cloneBed(bed);
+    slAddHead(&bedListOut, newBed);
+    }
+
+slReverse(&bedListOut);
+return bedListOut;
 }
 
 

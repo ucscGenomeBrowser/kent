@@ -152,6 +152,9 @@ struct bed *bedFromGenePred(struct genePred *genePred);
 struct bed *cloneBed(struct bed *bed);
 /* Make an all-newly-allocated copy of a single bed record. */
 
+struct bed *cloneBedList(struct bed *bed);
+/* Make an all-newly-allocated list copied from bed. */
+
 /* Constraints that can be placed on bed fields: */
 enum charFilterType
     {
