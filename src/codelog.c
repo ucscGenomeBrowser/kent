@@ -757,3 +757,4 @@
 447 - Blat v. 16 - misc fixes.  Ranlib removed from makefiles for
       SGI compatibility.  Mouse wiggle track now in production 
       (actually probably was back in 446).
+448 - New version (V16) of the genome browser.
