@@ -22,22 +22,22 @@ void usage()
 /* Explain usage and exit. */
 {
 errAbort(
-  "paraNodeStart - Start up parasol node daemons on a list of machines\n"
+  "paraNodeStart - Start up parasol node daemons on a list of machines.\n"
  "usage:\n"
  "    paraNodeStart machineList\n"
- "where machineList is a file containing a list of hosts\n"
+ "where machineList is a file containing a list of hosts.\n"
  "Machine list contains the following columns:\n"
  "     <name> <number of cpus>\n"
- "It may have other columns as well\n"
+ "It may have other columns as well.\n"
  "options:\n"
  "    -exe=/path/to/paraNode\n"
- "    -logFacility=facility log to the specified syslog facility - default local0.\n"
- "    -umask=000 - set file creation mask, defaults to 002\n"
- "    -randomDelay=N - set random start delay in milliseconds - default 5000\n"
- "    -userPath=bin:bin/i386 User dirs to add to path\n"
- "    -sysPath=/sbin:/local/bin System dirs to add to path\n"
- "    -hub=machineHostingParaHub - nodes will ignore messages from elsewhere\n"
- "    -rsh=/path/to/rsh/like/command\n");
+ "    -logFacility=facility  Log to the specified syslog facility - default local0.\n"
+ "    -umask=000  Set umask to run under - default 002.\n"
+ "    -randomDelay=N  Set random start delay in milliseconds - default 5000.\n"
+ "    -userPath=bin:bin/i386  User dirs to add to path.\n"
+ "    -sysPath=/sbin:/local/bin  System dirs to add to path.\n"
+ "    -hub=machineHostingParaHub  Nodes will ignore messages from elsewhere.\n"
+ "    -rsh=/path/to/rsh/like/command.\n");
 }
 
 void carryOption(char *option, struct dyString *dy)

@@ -13,16 +13,16 @@ void usage()
 /* Explain usage and exit. */
 {
 errAbort(
-  "paraNodeStatus - Check status of paraNode on a list of machines\n"
+  "paraNodeStatus - Check status of paraNode on a list of machines.\n"
   "usage:\n"
   "    paraStat machineList\n"
   "options:\n"
-  "    -retries=N Number of retries to get in touch with machine\n"
-  "               The first retry is after 1/100th of a second.  Each\n"
-  "               retry after that takes twice as long up to a maximum\n"
-  "               of 1 second per retry.  7 retries is default and takes\n"
-  "               about a second.\n"
-  "    -long - List details of current and recent jobs\n");
+  "    -retries=N  Number of retries to get in touch with machine.\n"
+  "        The first retry is after 1/100th of a second. \n"
+  "        Each retry after that takes twice as long up to a maximum\n"
+  "        of 1 second per retry.  Default is 7 retries and takes\n"
+  "        about a second.\n"
+  "    -long  List details of current and recent jobs.\n");
 }
 
 void listJobsErr(char *name, int n)

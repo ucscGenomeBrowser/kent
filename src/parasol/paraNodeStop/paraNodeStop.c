@@ -11,7 +11,7 @@ void usage()
 /* Explain usage and exit. */
 {
 errAbort(
-    "paraNodeStop - Shut down parasol node daemons on a list of machines\n"
+    "paraNodeStop - Shut down parasol node daemons on a list of machines.\n"
     "usage:\n"
     "    paraNodeStop machineList\n");
 }

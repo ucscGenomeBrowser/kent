@@ -8,18 +8,18 @@ void usage()
 /* Explain usage and exit. */
 {
 errAbort(
-  "paraTestJob - A good test job to run on Parasol.  Can be configured to take a long time or crash\n"
+  "paraTestJob - A good test job to run on Parasol.  Can be configured to take a long time or crash.\n"
   "usage:\n"
   "   paraTestJob count\n"
-  "Run a relatively time consuming algorithm count times.  This\n"
-  "algorithm takes about 1/10 per second each time\n"
+  "Run a relatively time consuming algorithm count times.\n"
+  "This algorithm takes about 1/10 per second each time.\n"
   "options:\n"
-  "   -crash - Try to write to NULL when done.\n"
-  "   -err   - Return -1 error code when done\n"
-  "   -output=file - make some output in file as well\n"
-  "   -heavy=n - make output heavy: n extra 'lumberjack lines\n"
-  "   -input = file - make it read in a file too\n"
-  "   -sleep=n Sleep for N seconds\n"
+  "   -crash  Try to write to NULL when done.\n"
+  "   -err  Return -1 error code when done.\n"
+  "   -output=file  Make some output in file as well.\n"
+  "   -heavy=n  Make output heavy: n extra lumberjack lines.\n"
+  "   -input=file  Make it read in a file too.\n"
+  "   -sleep=n  Sleep for N seconds.\n"
   );
 }
 
