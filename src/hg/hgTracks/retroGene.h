@@ -23,6 +23,7 @@
 #include "hgTracks.h"
 #include "pseudoGeneLink.h"
 
+extern char *protDbName;               /* Name of proteome database for this genome. */
 struct linkedFeatures *lfFromRetroGene(struct pseudoGeneLink *pg);
 /* Return a linked feature from a retroGene. */
 

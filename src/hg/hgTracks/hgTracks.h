@@ -17,7 +17,6 @@
 #endif
 struct itemAttr;
 struct itemAttrTbl;
-char *protDbName;               /* Name of proteome database for this genome. */
 
 
 /* trackDb setting for expRatio tracks */

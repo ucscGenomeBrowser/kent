@@ -92,10 +92,11 @@
 #include "cutterTrack.h"
 #include "retroGene.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.936 2005/03/30 00:08:26 aamp Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.937 2005/03/30 00:55:54 baertsch Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
+char *protDbName;               /* Name of proteome database for this genome. */
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
