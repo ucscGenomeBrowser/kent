@@ -356,7 +356,7 @@ htmStart(stdout, "do controls");
 printf("<FORM ACTION=\"../cgi-bin/%s\" NAME=\"mainForm\" target=\"_PARENT\" METHOD=GET>\n",
 	hgGenePixCgiName());
 cartSaveSession(cart);
-printf("List: ");
+printf("Gene: ");
 
 /* Put up drop-down list. */
 if (selIx >= 0)
@@ -365,9 +365,6 @@ cgiMakeDropListFull(hgpListHow, listHowMenu, listHowVals,
 	ArraySize(listHowMenu), selected, NULL);
 printf(" ");
 cgiMakeTextVar(hgpListSpec, listSpec, 10);
-
-printf("Image (1-%d): ", genePixMaxImageId(conn));
-cgiMakeIntVar(hgpId,  imageId, 4);
 
 cgiMakeButton("submit", "submit");
 printf("</FORM>\n");
