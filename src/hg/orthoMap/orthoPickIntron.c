@@ -21,7 +21,7 @@
 #include "dnautil.h"
 #include "orthoEval.h"
 
-static char const rcsid[] = "$Id: orthoPickIntron.c,v 1.1 2003/06/24 00:08:54 sugnet Exp $";
+static char const rcsid[] = "$Id: orthoPickIntron.c,v 1.2 2003/06/24 05:53:49 sugnet Exp $";
 
 struct intronEv
 /** Data about one intron. */
@@ -325,6 +325,7 @@ for(ev = evList; ev != NULL; ev = ev->next)
 warn("\nDone");
 warn("Sorting");
 slSort(&ivList, intronEvalCmp);
+warn("Done.");
 htmlOut = mustOpen(htmlFileName, "w");
 bedOut = mustOpen(bedFileName, "w");
 htmlFrameOut = mustOpen(htmlFrameFileName, "w");
