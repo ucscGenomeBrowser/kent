@@ -50,3 +50,12 @@ altColor 200,220,255
 spectrum on
 type psl xeno
 
+track stsMapMouseNew
+shortLabel STS Markers
+longLabel STS Markers on Genetic Maps
+group map
+priority 5
+visibility dense
+altColor 128,128,255,
+type bed 5 +
+
