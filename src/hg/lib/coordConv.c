@@ -13,7 +13,7 @@
 #include "hdb.h"
 #include "dbDb.h"
 
-static char const rcsid[] = "$Id: coordConv.c,v 1.10 2004/02/21 21:31:06 baertsch Exp $";
+static char const rcsid[] = "$Id: coordConv.c,v 1.11 2004/02/25 16:38:07 kent Exp $";
 
 /* #define DEBUG */
 
@@ -244,7 +244,8 @@ carefulClose(&nib);
 sqlDisconnect(&conn);
 }
 
-struct psl* doDnaAlignment(struct dnaSeq *seq, char *db, char *blatHost, char *port, char *nibDir) 
+struct psl* doDnaAlignment(struct dnaSeq *seq, char *db, char *blatHost, 
+	char *port, char *nibDir, struct hash *tFileCache) 
 /* get the alignment from the blat host for this sequence */
 {
 struct psl *pslList = NULL;
@@ -268,10 +269,10 @@ gfOutputHead(gvo, f);
 
 /* align to genome, both strands */
 conn = gfConnect(blatHost, port);
-gfAlignStrand(&conn, nibDir, seq, FALSE, 20, gvo);
+gfAlignStrand(&conn, nibDir, seq, FALSE, 20, tFileCache, gvo);
 reverseComplement(seq->dna, seq->size);
 conn = gfConnect(blatHost, port);
-gfAlignStrand(&conn, nibDir, seq, TRUE, 20 , gvo);
+gfAlignStrand(&conn, nibDir, seq, TRUE, 20 , tFileCache, gvo);
 gfOutputQuery(gvo, f);
 carefulClose(&f);
 pslList = pslLoadAll(pslTn.forCgi);
@@ -283,11 +284,13 @@ return pslList;
 void getAlignmentsForSeqs(struct coordConvRep *ccr, char *blatHost, char *port, char *nibDir)
 /* Do alignments for the the dnaSeqs in a coordConvRep */
 {
+struct hash *tFileCache = gfFileCacheNew();
 if(!(ccr->midSeq && ccr->upSeq && ccr-> downSeq))
     errAbort("coordConv::getAlignmentsForSeqs() - can't have any NULL dnaSeqs.");
-ccr->midPsl = doDnaAlignment(ccr->midSeq, ccr->to->version, blatHost, port, nibDir);
-ccr->upPsl =doDnaAlignment(ccr->upSeq, ccr->to->version, blatHost, port, nibDir);
-ccr->downPsl =doDnaAlignment(ccr->downSeq, ccr->to->version, blatHost, port, nibDir);
+ccr->midPsl = doDnaAlignment(ccr->midSeq, ccr->to->version, blatHost, port, nibDir, tFileCache);
+ccr->upPsl =doDnaAlignment(ccr->upSeq, ccr->to->version, blatHost, port, nibDir, tFileCache);
+ccr->downPsl =doDnaAlignment(ccr->downSeq, ccr->to->version, blatHost, port, nibDir, tFileCache);
+gfFileCacheFree(&tFileCache);
 }
 
 void dropNotBest(struct psl **pslList)
