@@ -141,7 +141,7 @@
 #include "bed6FloatScore.h"
 #include "pscreen.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.711 2004/08/03 23:44:19 braney Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.712 2004/08/05 18:06:03 braney Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -4816,19 +4816,12 @@ if (addp == 1)
     {
     char *ptr;
     sprintf(buffer, "%s",readName);
-    if (sameString("blastDm1FB",table))
-	{
-	psl->qName = cloneString(buffer);
-	ptr = &buffer[strlen(buffer)];
-	*ptr++ = 'p';
-	*ptr = 0;
-	}
-    else if ((ptr = strchr(buffer, '.')) != NULL)
+    if ((ptr = strchr(buffer, '.')) != NULL)
 	{
 	*ptr = 0;
+	psl->qName = cloneString(buffer);
 	*ptr++ = 'p';
 	*ptr = 0;
-	psl->qName = cloneString(buffer);
 	}
     seq = hPepSeq(buffer);
     }
@@ -13807,6 +13800,7 @@ char *useName = itemName;
 char *acc = NULL, *prot = NULL;
 char *gene = NULL, *pos = NULL;
 char buffer[1024];
+boolean isDm = FALSE;
 
 strcpy(buffer, itemName);
 acc = buffer;
@@ -13821,18 +13815,35 @@ if ((pos = strchr(acc, '.')) != NULL)
 	    *prot++ = 0;
 	}
     }
-cartWebStart(cart, "Human Protein %s", useName);
+if (sameString("blastDm1FB", tdb->tableName))
+    isDm = TRUE;
+if (isDm == TRUE)
+    cartWebStart(cart, "FlyBase Protein %s", useName);
+else
+    cartWebStart(cart, "Human Protein %s", useName);
 sprintf(uiState, "%s=%u", cartSessionVarName(), cartSessionId(cart));
 if (pos != NULL)
     {
-    printf("<B>Human position:</B>\n");
-    printf("<A TARGET=_BLANK HREF=\"%s?position=%s&db=%s\">",
-	hgTracksName(), pos, "hg16");
+    if (isDm == FALSE)
+	{
+	printf("<B>Human position:</B>\n");
+	printf("<A TARGET=_BLANK HREF=\"%s?position=%s&db=%s\">",
+	    hgTracksName(), pos, "hg16");
+	}
+    else
+	{
+	printf("<B>D. melanogaster position:</B>\n");
+	printf("<A TARGET=_BLANK HREF=\"%s?position=%s&db=%s\">",
+	    hgTracksName(), pos, "dm1");
+	}
     printf("%s</A><BR>",pos);
     }
 if (acc != NULL)
     {
-    printf("<B>Human mRNA:</B> <A HREF=\"");
+    if (isDm== FALSE)
+	printf("<B>Human mRNA:</B> <A HREF=\"");
+    else
+	printf("<B>Drosophila melanogaster mRNA:</B> <A HREF=\"");
     printEntrezNucleotideUrl(stdout, acc);
     printf("\" TARGET=_blank>%s</A><BR>\n", acc);
     }
