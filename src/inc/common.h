@@ -526,6 +526,10 @@ int intExp(char *text);
 /* Convert text to integer expression and evaluate. 
  * Throws if it finds a non-number. */
 
+double doubleExp(char *text);
+/* Convert text to floating point expression and
+ * evaluate. */
+
 char* readLine(FILE* fh);
 /* Read a line of any size into dynamic memory, return null on EOF */
 
