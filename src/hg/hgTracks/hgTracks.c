@@ -1003,6 +1003,7 @@ static void linkedFeaturesSeriesDrawAverage(struct trackGroup *tg, int seqStart,
 /* Draw dense clone items. */
 {
 int baseWidth = seqEnd - seqStart;
+double scale = width/(double)baseWidth;
 UBYTE *useCounts;
 int i;
 int lineHeight = mgFontLineHeight(font);
@@ -1015,8 +1016,18 @@ AllocArray(useCounts, width);
 memset(useCounts, 0, width * sizeof(useCounts[0]));
 for (lfs = tg->items; lfs != NULL; lfs = lfs->next) 
     {
+    int prevEnd = -1;
     for (lf = lfs->features; lf != NULL; lf = lf->next)
         {
+	if (prevEnd != -1)
+	    {
+	    x1 = round((double)((int)prevEnd-winStart)*scale) + xOff;
+	    x2 = round((double)((int)lf->start-winStart)*scale) + xOff;
+            w = x2 - x1;
+            if (w > 0)
+	        mgDrawBox(mg, x1, yOff + tg->heightPer/2, w, 1, mgFindColor(mg,0,0,0));
+            }
+        prevEnd = lf->end;
         for (sf = lf->components; sf != NULL; sf = sf->next)
 	    {
 	    x1 = roundingScale(sf->start-winStart, width, baseWidth);
