@@ -46,14 +46,15 @@ else
     }
 }
 
-checkPile(struct psl *list)
+boolean checkPile(struct psl *list)
+/* If minPile is at its default, check maxPile; otherwise check minPile. */
 {
     if (minPile == 1)
-	    return (slCount(list) <= maxPile);
+	return (slCount(list) <= maxPile);
     else
-        
         return (slCount(list) >= minPile);
 }
+
 void pslUnpile(char *inName, char *outName)
 /* pslUnpile - Removes huge piles of alignments from sorted 
  * psl files (due to unmasked repeats presumably).. */
@@ -74,7 +75,7 @@ for (;;)
 	if (list != NULL)
 	    {
 	    slReverse(&list);
-        if (checkPile(list))
+	    if (checkPile(list))
 	        {
 		for (el = list; el != NULL; el = el->next)
 		    {
