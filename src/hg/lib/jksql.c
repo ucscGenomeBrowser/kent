@@ -227,6 +227,16 @@ else
     }
 }
 
+void sqlDropTable(struct sqlConnection *sc, char *table)
+/* Drop table if it exists. */
+{
+if (sqlTableExists(sc, table))
+    {
+    char query[256];
+    sprintf(query, "drop table %s", table);
+    sqlUpdate(sc, query);
+    }
+}
 
 boolean sqlMaybeMakeTable(struct sqlConnection *sc, char *table, char *query)
 /* Create table from query if it doesn't exist already. 
@@ -241,12 +251,7 @@ return TRUE;
 boolean sqlRemakeTable(struct sqlConnection *sc, char *table, char *create)
 /* Drop table if it exists, and recreate it. */
 {
-if (sqlTableExists(sc, table))
-    {
-    char query[256];
-    sprintf(query, "drop table %s", table);
-    sqlUpdate(sc, query);
-    }
+sqlDropTable(sc, table);
 sqlUpdate(sc, create);
 }
 
@@ -287,6 +292,28 @@ void sqlUpdate(struct sqlConnection *conn, char *query)
 struct sqlResult *sr;
 sr = sqlGetResult(conn,query);
 sqlFreeResult(&sr);
+}
+
+int sqlUpdateRows(struct sqlConnection *conn, char *query, int* matched)
+/* Execute an update query, returning the number of rows change.  If matched
+ * is not NULL, it gets the total number matching the query. */
+{
+int numChanged, numMatched;
+char *info;
+int numScan = 0;
+struct sqlResult *sr = sqlGetResult(conn,query);
+
+/* Rows matched: 40 Changed: 40 Warnings: 0 */
+info = mysql_info(conn->conn);
+if (info != NULL)
+    numScan = sscanf(info, "Rows matched: %d Changed: %d Warnings: %*d",
+                     &numMatched, &numChanged);
+if ((info == NULL) || (numScan < 2))
+    errAbort("can't get info (maybe not an sql UPDATE): %s", query);
+sqlFreeResult(&sr);
+if (matched != NULL)
+    *matched = numMatched;
+return numChanged;
 }
 
 boolean sqlExists(struct sqlConnection *conn, char *query)

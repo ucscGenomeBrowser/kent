@@ -64,6 +64,10 @@ void sqlFreeConnection(struct sqlConnCache *cache,struct sqlConnection **pConn);
 void sqlUpdate(struct sqlConnection *conn, char *query);
 /* Tell database to do something that produces no results table. */
 
+int sqlUpdateRows(struct sqlConnection *conn, char *query, int* matched);
+/* Execute an update query, returning the number of rows change.  If matched
+ * is not NULL, it gets the total number matching the query. */
+
 boolean sqlExists(struct sqlConnection *conn, char *query);
 /* Query database and return TRUE if it had a non-empty result. */
 
@@ -94,6 +98,9 @@ char *sqlQuickQuery(struct sqlConnection *sc, char *query, char *buf, int bufSiz
 
 int sqlQuickNum(struct sqlConnection *conn, char *query);
 /* Get numerical result from simple query */
+
+void sqlDropTable(struct sqlConnection *sc, char *table);
+/* Drop table if it exists. */
 
 boolean sqlMaybeMakeTable(struct sqlConnection *sc, char *table, char *query);
 /* Create table from query if it doesn't exist already. 
