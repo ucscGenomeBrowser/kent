@@ -13,7 +13,7 @@
 #include "tableDescriptions.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: schema.c,v 1.2 2004/07/14 00:36:53 kent Exp $";
+static char const rcsid[] = "$Id: schema.c,v 1.3 2004/07/14 00:39:31 kent Exp $";
 
 boolean showTableDescriptions(struct sqlConnection *conn, char *table)
 /* Display autoSql definition and gbdDescriptions link for table, 
@@ -74,12 +74,13 @@ if (jpList != NULL)
     for (jp = jpList; jp != NULL; jp = jp->next)
 	{
 	hPrintSpaces(6);
+	hPrintf("%s.", jp->b->database);
 	hPrintf("<A HREF=\"../cgi-bin/hgTables?");
 	hPrintf("%s&", cartSidUrlString(cart));
 	hPrintf("%s=%s&", hgtaDoSchemaDb, jp->b->database);
 	hPrintf("%s=%s", hgtaDoSchema, jp->b->table);
 	hPrintf("\">");
-	hPrintf("%s.%s", jp->b->database, jp->b->table);
+	hPrintf("%s", jp->b->table);
 	hPrintf("</A>");
 	hPrintf(".%s (via %s.%s.<B>%s</B> field)<BR>\n", 
 	    jp->b->field, jp->a->database, jp->a->table, jp->a->field);
