@@ -1,3 +1,12 @@
+track sangerUrl
+shortLabel Sanger 22 URLs
+longLabel Sanger Center Chromosome 22 URL Annotations
+priority 13.1
+visibility hide
+chromosomes chr22,
+color 0,100,180
+type bed 4 .
+
 track mouseTight
 shortLabel Tight Mouse 
 longLabel Tight Mouse Alignments > 100 bp, Match 10 Mismatch 20 Gap 80 Ext 20, Score > 100
@@ -67,3 +76,4 @@ priority 23.5
 visibility dense
 spectrum on
 type psl xeno
+

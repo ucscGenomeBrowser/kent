@@ -173,7 +173,6 @@ priority 17.5
 visibility dense
 color 180,90,0
 type genePred genscanPep
-chromosomes chr22,
 
 track genscanExtra
 shortLabel Genscan Extra
