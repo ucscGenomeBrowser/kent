@@ -142,7 +142,7 @@
 #include "bed6FloatScore.h"
 #include "pscreen.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.724 2004/08/25 12:05:00 aamp Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.725 2004/08/25 18:09:54 braney Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -2792,7 +2792,7 @@ if (psl->strand[1] == '+')
 if ((ptr = strchr(readName, '.')) != NULL)
     *ptr++ = 0;
 
-printf(">%s\n", readName);
+printf(">%s-%s\n", readName,database);
 tSeq = hDnaFromSeq(psl->tName, start, end, dnaLower);
 
 if (psl->strand[1] == '-')
@@ -13772,7 +13772,7 @@ struct lineFile *lf;
 struct psl *psl = 0;
 enum gfType tt = gftDnaX, qt = gftProt;
 boolean isProt = 1;
-struct sqlResult *sr;
+struct sqlResult *sr = NULL;
 struct sqlConnection *conn = hAllocConn();
 struct dnaSeq *seq;
 char query[256], **row;
@@ -13783,15 +13783,31 @@ struct psl* pslList = getAlignments(conn, tdb->tableName, itemName);
 char *useName = itemName;
 char *acc = NULL, *prot = NULL;
 char *gene = NULL, *pos = NULL;
-char buffer[1024];
+char *ptr;
+char *buffer;
 boolean isDm = FALSE;
 char *pred = trackDbSettingOrDefault(tdb, "pred", "NULL");
+char *blastRef = trackDbSettingOrDefault(tdb, "blastRef", "NULL");
 
 if (sameString("blastDm1FB", tdb->tableName))
     isDm = TRUE;
+buffer = needMem(strlen(itemName)+ 1);
 strcpy(buffer, itemName);
 acc = buffer;
-if ((pos = strchr(acc, '.')) != NULL)
+if ((blastRef != NULL) && (hTableExists(blastRef)))
+    {
+    if (ptr = strchr(acc, '.'))
+	*ptr = 0;
+    safef(query, sizeof(query), "select geneId, extra1, refPos from %s where acc = '%s'", blastRef, acc);
+    sr = sqlGetResult(conn, query);
+    if ((row = sqlNextRow(sr)) != NULL)
+	{
+	useName = row[0];
+	prot = row[1];
+	pos = row[2];
+	}
+    }
+else if ((pos = strchr(acc, '.')) != NULL)
     {
     *pos++ = 0;
     if ((gene = strchr(pos, '.')) != NULL)
@@ -13811,9 +13827,14 @@ if (pos != NULL)
     {
     if (isDm == FALSE)
 	{
+	char *assembly;
+	if (sameString("blastHg16KG", tdb->tableName))
+	    assembly = "hg16";
+	else
+	    assembly = "hg17";
 	printf("<B>Human position:</B>\n");
 	printf("<A TARGET=_BLANK HREF=\"%s?position=%s&db=%s\">",
-	    hgTracksName(), pos, "hg16");
+	    hgTracksName(), pos, assembly);
 	}
     else
 	{
@@ -13882,6 +13903,8 @@ for (same = 1; same >= 0; same -= 1)
     printf("</PRE></TT>");
     /* Add description */
     printTrackHtml(tdb);
+    sqlFreeResult(&sr);
+    hFreeConn(&conn);
 }
 
 static void doSgdOther(struct trackDb *tdb, char *item)
@@ -14514,7 +14537,8 @@ else if (sameWord(track, "firstEF"))
     firstEF(tdb, item);
     }
 else if ( sameWord(track, "blastHg16KG") ||  sameWord(track, "blatHg16KG" ) ||
-        sameWord(track, "tblastnHg16KGPep") || sameWord(track, "blastDm1FB") )
+        sameWord(track, "tblastnHg16KGPep") || sameWord(track, "blastDm1FB") ||
+        sameWord(track, "blastHg17KG") )
     {
     blastProtein(tdb, item);
     }
