@@ -317,9 +317,7 @@ if (setting != (char *) NULL)
 
 if (tableIsSplit)
     {
-    char defaultChrom[64];
-    hFindDefaultChrom(db, defaultChrom);
-    getFullTableName(wigFullTableName, defaultChrom, table);
+    getFullTableName(wigFullTableName, hDefaultChromDb(db), table);
     snprintf(query, sizeof(query), "show table status like '%s'", wigFullTableName);
     }
 else
