@@ -302,3 +302,10 @@ mv /tmp/whatever $1
     ln -s /cluster/data/pyrAer1/wiggle/shineDGPos/shineDGPos.wib shineDGPos.wib
     ln -s /cluster/data/pyrAer1/wiggle/shineDGNeg/shineDGNeg.wib shineDGNeg.wib
 
+# RNA genes
+
+cd /cluster/data/pyrAer1/bed
+mkdir rnaGenes
+cp paeAllRNA.bed .
+cp ~/kent/src/hg/lib/rnaGenes.sql .
+hgLoadBed -sqlTable=rnaGenes.sql pyrAer1 rnaGenes paeAllRNA.bed

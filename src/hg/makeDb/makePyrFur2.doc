@@ -248,3 +248,11 @@ canPack off
 cd /cluster/data/pyrFur2/bed/llOperons
 cp matt.bed .
 hgLoadBed pyrFur2 llOperons matt.bed
+
+# RNA genes
+
+cd /cluster/data/pyrFur2/bed
+mkdir rnaGenes
+cp pfuAllRNA.bed .
+cp ~/kent/src/hg/lib/rnaGenes.sql .
+hgLoadBed -sqlTable=rnaGenes.sql pyrFur2 rnaGenes pfuAllRNA.bed
