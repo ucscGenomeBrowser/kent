@@ -246,6 +246,14 @@ color 150,0,0
 type genePred ensPep
 url http://www.ensembl.org/perl/transview?transcript=$$
 
+track mouseOrtho
+shortLabel UCSC Mouse Synteny
+longLabel Mouse Synteny using Fgenesh++ Gene Predictions
+priority 4.1
+visibility hide
+color 0,100,0
+type bed 5+
+
 track softberryGene
 shortLabel Fgenesh++ Genes
 longLabel Fgenesh++ Gene Predictions
