@@ -10,9 +10,8 @@
 #	are created.  See also, scripts:
 #	mkSwissProtDB.sh and mkProteinsDB.sh
 #
-#	"$Id: KGprocess.sh,v 1.17 2004/03/23 23:12:40 fanhsu Exp $"
+#	"$Id: KGprocess.sh,v 1.18 2004/04/19 22:57:33 fanhsu Exp $"
 #
-#	January 2004 - added the kgProtMap process, a second cluster run
 #	Thu Nov 20 11:16:16 PST 2003 - Created - Hiram
 #		Initial version is a translation of makeKgMm3.doc
 #		into a shell script.  For future use on other
@@ -795,146 +794,6 @@ TablePopulated "keggMapDesc" ${DB} || { \
     echo "`date` loading keggMapDesc"; \
     hgsql -e \
     'LOAD DATA local INFILE "keggMapDesc.tab" into table keggMapDesc;' ${DB}; \
-}
-
-#	next cluster run requires a lot of I/O, use the bluearc
-#	to alleviate the stress
-if [ ! -d /cluster/bluearc/kgDB/${DB}/kgProtMap ]; then
-    mkdir -p /cluster/bluearc/kgDB/${DB}/kgProtMap
-    ln -s /cluster/bluearc/kgDB/${DB}/kgProtMap ${TOP}/kgProtMap
-fi
-
-if [ ! -d ${TOP}/kgProtMap ]; then
-    echo "ERROR: directory does not exist: ${TOP}/kgProtMap"
-    echo -e "\tmay be due to pre-existing bluearc directory:"
-    echo -e "\t/cluster/bluearc/kgDB/${DB}/kgProtMap"
-    echo -e "\tCorrect this before continuing"
-    exit 255
-fi
-
-cd ${TOP}/kgProtMap
-
-if [ ! -s kgMrna.fa ]; then
-    echo "`date` creating kgMrna.fa"
-    awk '{print ">" $1;print $2}' ${TOP}/refMrna.tab > kgMrna.fa
-    rm -f formatdb.log kgMrna.fa.nsq kgMrna.fa.nin kgMrna.fa.nhr
-fi
-
-if [ ! -s formatdb.log ]; then
-    echo "`date` creating blast database"
-    /scratch/blast/formatdb -i kgMrna.fa -p F
-fi
-
-if [ ! -s kgPep.fa ]; then
-    echo "`date` creating kgPep.fa"
-hgsql -N -e 'select spID,seq from kgXref,knownGenePep where kgID=name' ${DB} \
-	| awk '{print ">" $1;print $2}' >kgPep.fa
-    rm -fr kgPep
-    rm -f rawJobList
-fi
-
-if [ ! -d kgPep ]; then
-    echo "`date` splitting kgPep.fa"
-    mkdir kgPep
-    faSplit sequence kgPep.fa 5000 kgPep/kgPep
-    rm -f rawJobList
-fi
-
-
-if [ ! -s kgProtMrna.pairs ]; then
-    echo "`date` creating kgProtMrna.pairs"
-    awk '{printf "%s\t%s\n", $3,$2}' ${TOP}/kgXref.tab > kgProtMrna.pairs
-fi
-
-cp -p ~/kent/src/hg/protein/kgProtBlast.csh .
-
-if [ ! -s rawJobList ]; then
-    echo "`date` creating rawJobList"
-    for f in kgPep/*.fa
-    do
-      echo ./kgProtBlast.csh $f >> rawJobList
-    done
-
-fi
-
-if [ ! -s rawJobList ]; then
-    echo "ERROR: job list for kgProtMap cluster run has not been created"
-    echo -e "\tmust fix to continue"
-    exit 255
-fi
-
-if [ ! -f iserverSetupOK ]; then
-    sed -e \
-	"s# kgPep/# /iscratch/i/kgDB/${DB}/kgProtMap/kgPep/#g" \
-	rawJobList > jobList
-
-    rm -f iserverSetupOK
-    echo "`date` Preparing iservers for kluster run"
-    #	required destination format is: kgDB/${DB}/<whatever>
-    ssh kkr1u00 ${ISERVER_SETUP} `pwd`/kgPep kgDB/${DB}/kgProtMap
-    RC=$?
-    if [ "${RC}" -ne 0 ]; then
-	echo "ERROR: iserver setup did not complete successfully"
-	exit 255
-    fi
-    touch iserverSetupOK
-fi
-
-if [ ! -f iserverSetupOK ]; then
-    echo "ERROR: iserver setup is not correct."
-    echo -e "\tsomething has failed in the kluster run setup"
-    exit 255
-fi
-
-if [ ! -f klusterRunComplete ]; then
-    rm -f klusterRunComplete
-    ssh kk "${KLUSTER_RUN}"  `pwd`
-    RC=$?
-    if [ "${RC}" -ne 0 ]; then
-	echo "ERROR: kluster batch did not complete successfully"
-	exit 255
-    fi
-    touch klusterRunComplete
-fi
-
-if [ ! -f klusterRunComplete ]; then
-    echo "ERROR: kluster run has failed."
-    echo -e "\tneeds to be corrected before continuing"
-    exit 255
-fi
-
-
-if [ ! -s psl.tmp/kgProtMrna.psl ]; then
-    echo "`date` Assuming kgProtMap cluster run done."
-    echo "`date` creating psl.tmp/kgProtMrna.psl"
-    find ./psl.tmp -name '*.psl.gz' | xargs zcat | \
-	pslReps -nohead -singleHit -minAli=0.9 stdin \
-		psl.tmp/kgProtMrna.psl /dev/null
-    rm -f psl.tmp/kgProtMap.psl
-fi
-
-if [ ! -s psl.tmp/refSeqAli.psl ]; then
-    hgsql -N -e 'select * from refSeqAli' ${RO_DB} | cut -f 2-30 > \
-	psl.tmp/refSeqAli.psl
-    rm -f psl.tmp/kgProtMap.psl
-fi
-
-if [ ! -s psl.tmp/kgProtMap.psl ]; then
-    echo "`date` creating psl.tmp/kgProtMap.psl"
-    cd ${TOP}/kgProtMap/psl.tmp
-    cat ${TOP}/tight_mrna.psl refSeqAli.psl > both.psl
-    (pslMap kgProtMrna.psl both.psl stdout | \
-	sort -k 14,14 -k 16,16n -k 17,17n > kgProtMap.psl) > kgProtMap.out 2>&1
-    hgsql -e "drop table kgProtMap;" ${DB} 2> /dev/null
-fi
-
-cd ${TOP}/kgProtMap
-
-TablePopulated "kgProtMap" ${DB} || { \
-    echo "`date` creating table kgProtMap"; \
-    hgsql -e "drop table kgProtMap;" ${DB} 2> /dev/null; \
-    echo "`date` hgLoadPsl -tNameIx ${DB} psl.tmp/kgProtMap.psl"; \
-    hgLoadPsl -tNameIx ${DB} psl.tmp/kgProtMap.psl; \
 }
 
 cd ${TOP}
