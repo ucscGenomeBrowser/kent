@@ -514,7 +514,7 @@ else
     hPrintf("<A HREF=\"../cgi-bin/hgNear?near_search=%s%s\"", protDisplayID, hgsidStr);
     }
 hPrintf(" TARGET=_BLANK>%s</A>&nbsp</LI>\n", mrnaID);
-hPrintf("</UL>\n");
+hPrintf("\n");
 }
 
 void doGeneDetailsLink(char *protDisplayID, char *mrnaID, char *hgsidStr)

@@ -15,7 +15,7 @@
 #include "pbStampPict.h"
 #include "pbTracks.h"
 
-static char const rcsid[] = "$Id: pbTracks.c,v 1.28 2004/06/01 23:10:12 fanhsu Exp $";
+static char const rcsid[] = "$Id: pbTracks.c,v 1.29 2004/06/24 20:53:26 kuhn Exp $";
 
 boolean hgDebug = FALSE;      /* Activate debugging code. Set to true by hgDebug=on in command line*/
 
@@ -279,7 +279,7 @@ if (hgNearOk(database))
     doGeneSorterLink(protDisplayID, mrnaID, hgsidStr);
     }
 
-hPrintf("<P>");
+hPrintf("</UL><P>");
 domainsPrint(conn, proteinID);
 
 hPrintf("<P>");
