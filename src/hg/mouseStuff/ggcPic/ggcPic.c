@@ -15,8 +15,14 @@ errAbort(
   "ggcPic - Generic gene conservation picture\n"
   "usage:\n"
   "   ggcPic axtDir chrom.sizes genePred.txt outDir\n"
+  "options:\n"
+  "   -generic - Scale things for generic gene\n"
+  "   -restrict=file  Restrict to only accessions listed in file\n"
+  "          File should have one accession per line\n"
   );
 }
+
+char *restrictFile = NULL;
 
 struct chromGenes
 /* List of all genes on a chromosome. */
@@ -97,9 +103,11 @@ struct pcm
     int pixels;		/* Pixel resolution. */
     int *match;		/* Array of match counts. */
     int *cover;		/* Array of covered counts. */
+    int *coverNondash;  /* Array of covered-by-non-dash counts. */
     int *count;		/* Array of total counts. */
     int totalSize;	/* Sum of all sizes of features */
     int totalFeatures;  /* Number of features. */
+    boolean detailed;	/* True for detailed output. */
     };
 
 struct ggcInfo
@@ -122,75 +130,87 @@ struct ggcInfo
     struct pcm tlStart, tlEnd;	/* Translation start/end */
     };
 
-void initPcm(struct ggcInfo *g, struct pcm *pcm, char *name, int pixels)
+void initPcm(struct ggcInfo *g, struct pcm *pcm, char *name, int pixels, bool detailed)
 /* Allocate and initialize pcm */
 {
 ZeroVar(pcm);
 pcm->name = cloneString(name);
 pcm->pixels = pixels;
+pcm->detailed = detailed;
 AllocArray(pcm->match, pixels);
 AllocArray(pcm->cover, pixels);
+AllocArray(pcm->coverNondash, pixels);
 AllocArray(pcm->count, pixels);
 if (g != NULL)
     slAddTail(&g->pcmList, pcm);
 }
 
-#ifdef FOR_GRAPHS
-struct ggcInfo *newGgcInfo()
+struct ggcInfo *usualGgcInfo()
 /* Initialize ggcInfo */
 {
 struct ggcInfo *g;
 AllocVar(g);
 g->closeSize = 80;
-g->baseUp = g->baseDown = 3000;
-initPcm(g, &g->up, "up", 3000);
-initPcm(g, &g->down, "down", 3000);
-initPcm(g, &g->utr3, "utr3", 800);
-initPcm(g, &g->utr5, "utr5", 200);
-initPcm(g, &g->cdsFirst, "cdsFirst", 170);
-initPcm(g, &g->cdsMiddle, "cdsMiddle", 140);
-initPcm(g, &g->cdsLast, "cdsLast", 220);
-initPcm(g, &g->cdsSingle, "cdsSingle", 200);
-initPcm(g, &g->cdsAll, "cdsAll", 1400);
-initPcm(g, &g->singleExon, "singleExon", 400);
-initPcm(g, &g->intron, "intron", 5000);
-initPcm(g, &g->splice5, "splice5", g->closeSize);
-initPcm(g, &g->splice3, "splice3", g->closeSize);
-initPcm(g, &g->txStart, "txStart", g->closeSize);
-initPcm(g, &g->txEnd, "txEnd", g->closeSize);
-initPcm(g, &g->tlStart, "tlStart", g->closeSize);
-initPcm(g, &g->tlEnd, "tlEnd", g->closeSize);
+g->baseUp = g->baseDown = 5000;
+initPcm(g, &g->up, "up", 5000, FALSE);
+initPcm(g, &g->down, "down", 5000, FALSE);
+initPcm(g, &g->utr3, "utr3", 800, FALSE);
+initPcm(g, &g->utr5, "utr5", 200, FALSE);
+initPcm(g, &g->cdsFirst, "cdsFirst", 170, FALSE);
+initPcm(g, &g->cdsMiddle, "cdsMiddle", 140, FALSE);
+initPcm(g, &g->cdsLast, "cdsLast", 220, FALSE);
+initPcm(g, &g->cdsSingle, "cdsSingle", 200, FALSE);
+initPcm(g, &g->cdsAll, "cdsAll", 1400, FALSE);
+initPcm(g, &g->singleExon, "singleExon", 400, FALSE);
+initPcm(g, &g->intron, "intron", 5000, FALSE);
+initPcm(g, &g->splice5, "splice5", g->closeSize, TRUE);
+initPcm(g, &g->splice3, "splice3", g->closeSize, TRUE);
+initPcm(g, &g->txStart, "txStart", g->closeSize, TRUE);
+initPcm(g, &g->txEnd, "txEnd", g->closeSize, TRUE);
+initPcm(g, &g->tlStart, "tlStart", g->closeSize, TRUE);
+initPcm(g, &g->tlEnd, "tlEnd", g->closeSize, TRUE);
 return g;
 }
-#endif /* FOR_GRAPHS */
 
-struct ggcInfo *newGgcInfo()
-/* Initialize ggcInfo */
+struct ggcInfo *genericGgcInfo()
+/* Initialize ggcInfo scaled right for generic gene*/
 {
 struct ggcInfo *g;
 AllocVar(g);
 g->closeSize = 80;
 g->baseUp = g->baseDown = 500;
-initPcm(g, &g->up, "up", 200);
-initPcm(g, &g->down, "down", 200);
-initPcm(g, &g->utr3, "utr3", 200);
-initPcm(g, &g->utr5, "utr5", 200);
-initPcm(g, &g->cdsFirst, "cdsFirst", 200);
-initPcm(g, &g->cdsMiddle, "cdsMiddle", 200);
-initPcm(g, &g->cdsLast, "cdsLast", 200);
-initPcm(g, &g->cdsSingle, "cdsSingle", 200);
-initPcm(g, &g->cdsAll, "cdsAll", 200);
-initPcm(g, &g->singleExon, "singleExon", 200);
-initPcm(g, &g->intron, "intron", 200);
-initPcm(g, &g->splice5, "splice5", g->closeSize);
-initPcm(g, &g->splice3, "splice3", g->closeSize);
-initPcm(g, &g->txStart, "txStart", g->closeSize);
-initPcm(g, &g->txEnd, "txEnd", g->closeSize);
-initPcm(g, &g->tlStart, "tlStart", g->closeSize);
-initPcm(g, &g->tlEnd, "tlEnd", g->closeSize);
+initPcm(g, &g->up, "up", 200, FALSE);
+initPcm(g, &g->down, "down", 200, FALSE);
+initPcm(g, &g->utr3, "utr3", 200, FALSE);
+initPcm(g, &g->utr5, "utr5", 200, FALSE);
+initPcm(g, &g->cdsFirst, "cdsFirst", 200, FALSE);
+initPcm(g, &g->cdsMiddle, "cdsMiddle", 200, FALSE);
+initPcm(g, &g->cdsLast, "cdsLast", 200, FALSE);
+initPcm(g, &g->cdsSingle, "cdsSingle", 200, FALSE);
+initPcm(g, &g->cdsAll, "cdsAll", 200, FALSE);
+initPcm(g, &g->singleExon, "singleExon", 200, FALSE);
+initPcm(g, &g->intron, "intron", 200, FALSE);
+initPcm(g, &g->splice5, "splice5", g->closeSize, TRUE);
+initPcm(g, &g->splice3, "splice3", g->closeSize, TRUE);
+initPcm(g, &g->txStart, "txStart", g->closeSize, TRUE);
+initPcm(g, &g->txEnd, "txEnd", g->closeSize, TRUE);
+initPcm(g, &g->tlStart, "tlStart", g->closeSize, TRUE);
+initPcm(g, &g->tlEnd, "tlEnd", g->closeSize, TRUE);
 return g;
 }
 
+struct ggcInfo *newGgcInfo()
+/* Initialize ggcInfo */
+{
+if (optionExists("generic"))
+    {
+    return genericGgcInfo();
+    }
+else
+    {
+    return usualGgcInfo();
+    }
+}
 
 void tallyHits(struct pcm *pcm, bool *hits, bool *covers, int hitSize,
    boolean isRev)
@@ -200,8 +220,10 @@ int pixels = pcm->pixels;
 int *match = pcm->match;
 int *count = pcm->count;
 int *cover = pcm->cover;
+int *coverNondash = pcm->coverNondash;
 int i, x;
 double scale = (double)hitSize/(double)pixels;
+bool c;
 
 if (hitSize <= 0)
     return;
@@ -222,8 +244,13 @@ for (i=0; i<pixels; ++i)
     count[i] += 1;
     if (hits[x])
         match[i] += 1;
-    if (covers[x])
+    c = covers[x];
+    if (c)
+	{
         cover[i] += 1;
+	if (c == 2)
+	    coverNondash[i] += 1;
+	}
     if (hits[x] && !covers[x])
         errAbort("%s: i=%d, x=%d, hits[x] = %d, covers[x] = %d", pcm->name, i, x, hits[x], covers[i]);
     }
@@ -248,7 +275,10 @@ if (size > 0)
     tallyHits(pcm, hits+start, covers+start, size, isRev);
 }
 
-void ggcChrom(struct chromGenes *chrom, char *axtFile, struct ggcInfo *g)
+int totalGenes = 0, reviewedGenes = 0, genesUsed = 0;
+
+void ggcChrom(struct chromGenes *chrom, char *axtFile, 
+	struct ggcInfo *g, struct hash *restrictHash)
 /* Tabulate matches on chromosome. */
 {
 struct lineFile *lf = lineFileOpen(axtFile, TRUE);
@@ -258,7 +288,6 @@ struct axt *axt;
 struct genePred *gp;
 int closeSize = g->closeSize;
 int closeHalf = closeSize/2;
-int totalGenes = 0, genesUsed = 0;
 
 /* Build up array of booleans - one per base - which are
  * 1's where mouse/human align and bases match, zero 
@@ -270,7 +299,7 @@ while ((axt = axtRead(lf)) != NULL)
     {
     int tPos = axt->tStart;
     int symCount = axt->symCount, i;
-    char t, *tSym = axt->tSym, *qSym = axt->qSym;
+    char t, q, *tSym = axt->tSym, *qSym = axt->qSym;
 
     if (axt->tEnd > chrom->size)
         errAbort("tEnd %d, chrom size %d in %s", 
@@ -282,12 +311,16 @@ while ((axt = axtRead(lf)) != NULL)
 	t = tSym[i];
 	if (t != '-')
 	    {
-	    if (toupper(t) == toupper(qSym[i]))
+	    q = qSym[i];
+	    if (toupper(t) == toupper(q))
 		{
 	        hits[tPos] = TRUE;
 		++hitCount;
 		}
-	    covers[tPos] = TRUE;
+	    if (q == '-')
+	       covers[tPos] = 1;
+	    else
+	       covers[tPos] = 2;
 	    ++tPos;
 	    }
 	}
@@ -304,8 +337,15 @@ for (gp = chrom->geneList; gp != NULL; gp = gp->next)
     bool *cdsAllHits = NULL, *cdsAllCovers = NULL;
     bool isRev = (gp->strand[0] == '-');
 
-    /* Filter out genes without meaningful UTRs */
+
+    /* Filter out genes not in restrict hash if any. */
     ++totalGenes;
+    if (restrictHash != NULL)
+        if (!hashLookup(restrictHash, gp->name))
+	    continue;
+    ++reviewedGenes;
+
+    /* Filter out genes without meaningful UTRs */
     if (gp->cdsStart - gp->txStart < g->closeSize/2 || 
     	gp->txEnd - gp->cdsEnd < g->closeSize/2)
         continue;
@@ -544,23 +584,29 @@ for (gp = chrom->geneList; gp != NULL; gp = gp->next)
     freez(&utr3Covers);
     freez(&cdsAllCovers);
     }
-printf("%d genes of %d used\n", genesUsed, totalGenes);
 freez(&hits);
 freez(&covers);
 lineFileClose(&lf);
 }
 
 
-void dumpPcm(struct pcm *pcm, FILE *f)
+void dumpPcm(struct pcm *pcm, FILE *f, boolean header)
 /* Dump out PCM to file. */
 {
 int i;
-fprintf(f, "#%s: aveSize %2.1f\n", pcm->name, (double)pcm->totalSize/pcm->totalFeatures);
+if (header)
+    {
+    /* fprintf(f, "#%s: aveSize %2.1f\n", pcm->name, (double)pcm->totalSize/pcm->totalFeatures); */
+    if (pcm->detailed)
+	fprintf(f, "position\t");
+    fprintf(f, "aligning\tidentity\n");
+    }
 for (i=0; i<pcm->pixels; ++i)
     {
     double combined, pid, ali;
     int count = pcm->count[i];
     int cover = pcm->cover[i];
+    int coverNondash = pcm->coverNondash[i];
     int match = pcm->match[i];
     if (count == 0)
         combined = pid = ali = 0;
@@ -571,13 +617,43 @@ for (i=0; i<pcm->pixels; ++i)
 	if (cover == 0)
 	    pid = 0;
 	else
-	    pid = 100.0 * match / cover;
+	    pid = 100.0 * match / coverNondash;
 	   
 	}
-    /* fprintf(f, "%5.2f%% %5.2f%% %5.2f%% (match %d, cover %d)\n", 
-    	pid, ali, combined, match, cover); */
-    fprintf(f, "%5.2f%% %5.2f%% %5.2f%%\n", 
-    	pid, ali, combined);
+    if (pcm->detailed)
+        {
+	int half = pcm->pixels/2;
+	int pos;
+	if (i < half)
+	    {
+	    pos = -(pcm->pixels/2 - i);
+	    }
+	else
+	    {
+	    fprintf(f, "+");
+	    pos = i+1 - pcm->pixels/2;
+	    }
+	fprintf(f, "%d\t", pos);
+	}
+    fprintf(f, "%5.2f%% %5.2f%%\n", 
+    	ali, pid);
+    }
+}
+
+struct hash *readRestrictHash()
+/* Read restricted file into hash */
+{
+if (restrictFile == NULL)
+    return NULL;
+else
+    {
+    struct hash *hash = newHash(0);
+    struct lineFile *lf = lineFileOpen(restrictFile, TRUE);
+    char *row[1];
+    while (lineFileRow(lf, row))
+	hashAdd(hash, row[0], NULL);
+    lineFileClose(&lf);
+    return hash;
     }
 }
 
@@ -591,6 +667,7 @@ char axtFile[512];
 char fileName[512];
 FILE *f = NULL;
 struct pcm *pcm;
+struct hash *restrictHash = readRestrictHash();
 
 makeDir(outDir);
 readGenes(genePred, &chromHash, &chromList);
@@ -598,28 +675,31 @@ addSizes(chromSizes, chromHash, chromList);
 for (chrom = chromList; chrom != NULL; chrom = chrom->next)
     {
     snprintf(axtFile, sizeof(axtFile), "%s/%s.axt", axtDir, chrom->name);
-    ggcChrom(chrom, axtFile, g);
+    ggcChrom(chrom, axtFile, g, restrictHash);
     }
 snprintf(fileName, sizeof(fileName), "%s/%s", outDir, "genericGene.tab");
 f = mustOpen(fileName, "w");
-dumpPcm(&g->up, f);
-dumpPcm(&g->utr5, f);
-dumpPcm(&g->cdsFirst, f);
-dumpPcm(&g->intron, f);
-dumpPcm(&g->cdsMiddle, f);
-dumpPcm(&g->intron, f);
-dumpPcm(&g->cdsLast, f);
-dumpPcm(&g->utr3, f);
-dumpPcm(&g->down, f);
+dumpPcm(&g->up, f, TRUE);
+dumpPcm(&g->utr5, f, FALSE);
+dumpPcm(&g->cdsFirst, f, FALSE);
+dumpPcm(&g->intron, f, FALSE);
+dumpPcm(&g->cdsMiddle, f, FALSE);
+dumpPcm(&g->intron, f, FALSE);
+dumpPcm(&g->cdsLast, f, FALSE);
+dumpPcm(&g->utr3, f, FALSE);
+dumpPcm(&g->down, f, FALSE);
 carefulClose(&f);
 
 for (pcm = g->pcmList; pcm != NULL; pcm = pcm->next)
     {
     snprintf(fileName, sizeof(fileName), "%s/%s.tab", outDir, pcm->name);
     f = mustOpen(fileName, "w");
-    dumpPcm(pcm, f);
+    dumpPcm(pcm, f, TRUE);
     carefulClose(&f);
     }
+printf("\n");
+printf("%d total genes, %d reviewed genes, %d with UTRs\n", 
+	totalGenes, reviewedGenes, genesUsed);
 }
 
 void test(int oldSize, int newSize)
@@ -628,7 +708,7 @@ void test(int oldSize, int newSize)
 struct pcm pcm;
 bool *hits, *covers;
 int i;
-initPcm(NULL, &pcm, "test", newSize);
+initPcm(NULL, &pcm, "test", newSize, FALSE);
 AllocArray(hits, oldSize);
 AllocArray(covers, oldSize);
 for (i=0; i<oldSize; ++i)
@@ -649,6 +729,7 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 optionHash(&argc, argv);
+restrictFile = optionVal("restrict", NULL);
 if (argc != 5)
     usage();
 pushCarefulMemHandler(1000*1000*1000);
