@@ -40,6 +40,7 @@ exit; # don't actually run this like a script :)
 
 # DOWNLOAD MITOCHONDRION GENOME SEQUENCE (DONE, 2004-10-18, hartera)
 # DOWNLOAD SEQUENCE AND CREATE FILES AGAIN (hartera, 2004-11-30)
+# ADD chrM.chunks.agp (DONE, 2004-12-06, hartera)
      ssh kksilo
      mkdir -p /cluster/data/danRer2/M
      cd /cluster/data/danRer2/M
@@ -66,6 +67,11 @@ exit; # don't actually run this like a script :)
     cat << '_EOF_' > ./chrM.agp
 chrM       1       16596   1       F       AC024175.3      1       16596   +
 '_EOF_'
+     # Create a chrM.chunks.agp (hartera, 2004-12-06)
+     cd /cluster/data/danRer2/M/agps
+     awk 'BEGIN {OFS="\t"} \
+        {print $1, $2, $3, $4, $5, $6, $7, $8, $1, $7, $8}' ../chrM.agp \
+         > chrM.chunks.agp
 
 # Create list of chromsosomes (DONE, 2004-10-18, hartera)
 # Add "M" for mitochondrion chromosome (2004-10-25, hartera)
@@ -138,19 +144,33 @@ chrM       1       16596   1       F       AC024175.3      1       16596   +
 cat << '_EOF_' > /cluster/data/danRer2/jkStuff/createChunksAgp.pl
 #!/usr/bin/perl -w
 use strict;
-
-# input is chrN.scaffolds.agp with Ns.
                                                                                 
-my $scaf = $ARGV[0];
+# input is list of scaffolds and chunks and file of chrN.scaffolds.agp with Ns.
+                                                                                
+my $accs = $ARGV[0];
+my $scaf = $ARGV[1];
+                                                                                
+open (ACCS, $accs) || die "Can not open $accs: $!";
 open (SCAFS, $scaf) || die "Can not open $scaf: $!";
+my %accsHash;
+while (<ACCS>) {
+   chomp;
+   my @fi = split(/\t/);
+   $accsHash{$fi[0]} = $fi[1];
+}
+close ACCS;
                                                                                 
-my $s;
 while (my $line = <SCAFS>) {
    chomp $line;
    my @f = split(/\t/, $line);
+   my $acc;
    if ($f[4] ne "N") {
-      $line =~ s/(Zv4_NA[0-9]+)/$1\.1/;
-      print $line;
+      if (exists($accsHash{$f[5]}) ) {
+         $acc = $accsHash{$f[5]};
+      else {
+          print "$f[5] can not be found\n";
+      }
+      print "$f[0]\t$f[1]\t$f[2]\t$f[3]\t$f[4]\t$acc\t$f[6]\t$f[7]\t$f[8]";
       print "\t$f[5]\t$f[6]\t$f[7]";
    }
    else {
@@ -159,9 +179,12 @@ while (my $line = <SCAFS>) {
    print "\n";
 }
 '_EOF_'
-
      chmod +x /cluster/data/danRer2/jkStuff/createChunksAgp.pl
-     perl ../jkStuff/createChunksAgp.pl chrNA.scaffolds.agp > chrNA.chunks.agp
+     
+     awk 'BEGIN {OFS="\t";} { if ($1 ~ /^Zv4_NA/) print $1,$6 }' \
+         /cluster/data/danRer2/Zv4.chunks.agp > NA.accs 
+     perl ../jkStuff/createChunksAgp.pl NA.accs chrNA.scaffolds.agp \
+          > chrNA.chunks.agp
 
    # Also create agp for chrUn - these are scaffolds that map to FPC contigs
    # but are unplaced on the chromosomes
@@ -192,7 +215,12 @@ while (my $line = <SCAFS>) {
      mv chrUn.agp chrUn.scaffolds.agp
      rm *.bak
      # create chunks agp for chrUn
-     perl ../jkStuff/createChunksAgp.pl chrUn.scaffolds.agp > chrUn.chunks.agp
+     # this includes accessions so need to get from Zv4.chunks.agp
+     # modify perl script above to do this (2004-12-06, hartera)
+     awk 'BEGIN {OFS="\t";} { if ($1 ~ /^Zv4_/) print $1,$6 }' \
+         /cluster/data/danRer2/Zv4.chunks.agp > Un.accs 
+     perl ../jkStuff/createChunksAgp.pl Un.accs chrUn.scaffolds.agp \
+          > chrUn.chunks.agp
 
 # BUILD CHROM-LEVEL SEQUENCE (DONE, 2004-10-21, hartera)
 # Move scaffolds files for NA into scaffolds directory (2004-11-22, hartera)
@@ -587,7 +615,7 @@ if (-e /tmp/danRer2/$2/$2.cat) /bin/cp /tmp/danRer2/$2/$2.cat ./
     ssh hgwdev
     cd /cluster/data/danRer2
     hgLoadOut danRer2 */chr*.fa.out
-# Note: 23 records dropped due to repStart > repEnd
+# Note: 23 records dropped due to repStart > repEndm (2004-12-01)
 # Processing 1/chr1.fa.out
 bad rep range in: 1354  157     0       0       chr1    7313059 7313288 -5489473
 5       -       (0)     (917)   (917)   689     5       3        
@@ -665,6 +693,11 @@ bad rep range in: 237   149     0       152     chrUn   96855194        96855206
 # To display the new repeats which are classed as "Unknown", add this class
 # to $HOME/kent/src/hg/hgTracks/rmskTrack.c 
 # to the repeatClassNames and repeatClasses arrays
+# check coverage of repeats masked
+# featureBits -chrom=chr1 danRer1 rmsk
+# 11589712 bases of 40488791 (28.624%) in intersection
+# featureBits -chrom=chr1 danRer2 rmsk
+# 26879295 bases of 61678023 (43.580%) in intersection
 
 # MAKE LIFTALL.LFT (DONE, 2004-10-26, hartera)
 # RE-DONE (hartera, 2004-12-01)
@@ -673,7 +706,7 @@ bad rep range in: 237   149     0       152     chrUn   96855194        96855206
     cat */lift/ordered.lft > jkStuff/liftAll.lft
 
 # SIMPLE REPEAT [TRF] TRACK  (DONE, 2004-10-26, hartera)
-# RE-DONE (in progress, hartera, 2004-12-01)
+# RE-DONE (DONE, hartera, 2004-12-02)
     # TRF runs pretty quickly now... it takes a few hours total runtime,
     # so instead of binrsyncing and para-running, just do this on the
     # local fileserver
@@ -700,7 +733,7 @@ bad rep range in: 237   149     0       152     chrUn   96855194        96855206
     wc -l jobs.csh
     ls -1 trf | wc -l
     endsInLf trf/*
-    # 
+   # kksilo overloaded so take chrNA_35 onwards as jobs2.csh and run on kolossus 
     liftUp simpleRepeat.bed /cluster/data/danRer2/jkStuff/liftAll.lft warn \
       trf/*.bed
     # Load into database
@@ -710,6 +743,7 @@ bad rep range in: 237   149     0       152     chrUn   96855194        96855206
       -sqlTable=$HOME/src/hg/lib/simpleRepeat.sql
 
 # PROCESS SIMPLE REPEATS INTO MASK (DONE, 2004-10-26, hartera)
+# RE-DONE (2004-12-02, hartera)
     # After the simpleRepeats track has been built, make a filtered version
     # of the trf output: keep trf's with period <= 12:
     ssh kksilo
@@ -738,6 +772,7 @@ bad rep range in: 237   149     0       152     chrUn   96855194        96855206
 
 # MASK SEQUENCE WITH REPEATMASKER AND SIMPLE REPEAT/TRF 
 # (DONE, 2004-11-22, hartera)
+# RE-DONE (2004-12-02, hartera)
     ssh kksilo
     cd /cluster/data/danRer2
     # Soft-mask (lower-case) the contig and chr .fa's,
@@ -764,8 +799,11 @@ bad rep range in: 237   149     0       152     chrUn   96855194        96855206
 # co-ordinates which can just be ignored. 
 # WARNING: negative rEnd: -2229 chr18:12479605-12480762 Dr000158
 # WARNING: negative rEnd: -32 chrNA:202800524-202800585 Dr000876
+# with new agp and chrom sequence, there is also an instance of a * instead
+# of a co-ordinate (2004-12-02)
+# repeat- and trf-masking 1/chr1.fa
+# invalid signed number: "*"
     # mask contigs also
-
     foreach c (`cat chrom.lst`)
       echo "repeat- and trf-masking contigs of chr$c"
       foreach d ($c/chr*_?{,?})
@@ -779,6 +817,9 @@ bad rep range in: 237   149     0       152     chrUn   96855194        96855206
 # same warnings here too:
 # WARNING: negative rEnd: -2229 chr18_3:2110746-2111903 Dr000158
 # WARNING: negative rEnd: -32 chrNA_41:1844381-1844442 Dr000876
+# repeat- and trf-masking contigs of chr1
+# invalid signed number: "*"  (2004-12-02) and the co-ordinates for chr18_3
+# are: WARNING: negative rEnd: -2229 chr18_3:1862490-1863647 Dr000158
 
     # Build nib files, using the soft masking in the fa
     mkdir nib
@@ -787,6 +828,7 @@ bad rep range in: 237   149     0       152     chrUn   96855194        96855206
     end
 
 # STORING O+O SEQUENCE AND ASSEMBLY INFORMATION  (DONE, 2004-11-22, hartera)
+# RE-DONE (2004-12-02, hartera)
     # Make symbolic links from /gbdb/danRer2/nib to the real nibs.
     ssh hgwdev
     cd /cluster/data/danRer2
@@ -798,15 +840,16 @@ bad rep range in: 237   149     0       152     chrUn   96855194        96855206
     # hgNibSeq creates chromInfo table
     hgNibSeq -preMadeNib danRer2 /gbdb/danRer2/nib */chr*.fa
     echo "select chrom,size from chromInfo" | hgsql -N danRer2 > chrom.sizes
-    # take a look at chrom.sizes, should be 29 lines
+    # take a look at chrom.sizes, should be 28 lines
     wc chrom.sizes
-                                                                                
+                                             
     # Make one big 2bit file as well, and make a link to it in
     # /gbdb/danRer2/nib because hgBlat looks there:
     faToTwoBit */chr*.fa danRer2.2bit
     ln -s /cluster/data/danRer2/danRer2.2bit /gbdb/danRer2/nib/
 
 # MAKE GOLD AND GAP TRACKS (DONE, 2004-11-22, hartera)
+# RE-DONE (2004-12-03, hartera)
     ssh hgwdev
     cd /cluster/data/danRer2
     # the gold and gap tracks are created from the chrN.agp file and this is
@@ -872,6 +915,7 @@ bad rep range in: 237   149     0       152     chrUn   96855194        96855206
         description.html
 
 # PUT MASKED SEQUENCE OUT FOR CLUSTER RUNS (DONE, 2004-11-22, hartera)
+# RE-DONE (2004-12-03, hartera)
     ssh kkr1u00
     # Chrom-level mixed nibs that have been repeat- and trf-masked:
     rm -rf /iscratch/i/danRer2/nib
@@ -881,7 +925,7 @@ bad rep range in: 237   149     0       152     chrUn   96855194        96855206
     rm -rf /iscratch/i/danRer2/trfFa
     mkdir /iscratch/i/danRer2/trfFa
     foreach d (/cluster/data/danRer2/*/chr*_?{,?})
-      cp $d/$d:t.fa /iscratch/i/danRer2/trfFa
+      cp -p $d/$d:t.fa /iscratch/i/danRer2/trfFa
     end
     rm -rf /iscratch/i/danRer2/rmsk
     mkdir -p /iscratch/i/danRer2/rmsk
@@ -889,33 +933,71 @@ bad rep range in: 237   149     0       152     chrUn   96855194        96855206
     cp -p /cluster/data/danRer2/danRer2.2bit /iscratch/i/danRer2/
     iSync
 
-# CREATE gc5Base wiggle TRACK (in progress, 2004-11-22, hartera)
+# CREATE gc5Base wiggle TRACK (DONE, 2004-12-03, hartera)
     ssh kksilo
-    mkdir /cluster/data/danRer2/bed/gc5Base
+    mkdir -p /cluster/data/danRer2/bed/gc5Base
     cd /cluster/data/danRer2/bed/gc5Base
-    #   in the script below, the 'grep -w GC' selects the lines of
-    #   output from hgGcPercent that are real data and not just some
-    #   information from hgGcPercent.  The awk computes the number
-    #   of bases that hgGcPercent claimed it measured, which is not
-    #   necessarily always 5 if it ran into gaps, and then the division
-    #   by 10.0 scales down the numbers from hgGcPercent to the range
-    #   [0-100].  Two columns come out of the awk print statement:
-    #   <position> and <value> which are fed into wigAsciiToBinary through
-    #   the pipe.  It is set at a dataSpan of 5 because each value
-    #   represents the measurement over five bases beginning with
-    #   <position>.  The result files end up in ./wigData5.
-    #   A new script is used (from makeHg17.doc) which gets around the
-    #   problem that wigAsciiToBinary was calculating chromEnd to be
-    #   beyond the real chromosome end
-                                                                                
-    mkdir wigData5 
-    cd wigData5
-    # this calculates the zoom data too                                                                                
-    hgGcPercent -wigOut -doGaps -file=stdout -win=5 danRer2 \
+    #   The number of bases that hgGcPercent claimed it measured is calculated,     #   which is not necessarily always 5 if it ran into gaps, and then the 
+    #   division by 10.0 scales down the numbers from hgGcPercent to the range
+    #   [0-100].  wigEncode now replaces wigAsciiToBinary and the previous 
+    #   processing step between these two programs. The result file is *.wig.
+    # 	Each value represents the measurement over five bases beginning with
+    #   <position>. wigEncode also calculates the zoomed set of data.
+    
+    nice hgGcPercent -wigOut -doGaps -file=stdout -win=5 danRer2 \
         /iscratch/i/danRer2/nib | \
         wigEncode stdin gc5Base.wig gc5Base.wib
+    # load the .wig file back on hgwdev:
+    ssh hgwdev
+    cd /cluster/data/danRer2/bed/gc5Base
+    hgLoadWiggle -pathPrefix=/gbdb/danRer2/wib/gc5Base \
+                 danRer2 gc5Base gc5Base.wig
+    # and symlink the .wib file into /gbdb
+    mkdir -p /gbdb/danRer2/wib/gc5Base
+    ln -s `pwd`/gc5Base.wib /gbdb/danRer2/wib/gc5Base
 
-# ENSEMBL GENES (in progress, 2004-11-18, hartera)
+# MAKE 10.OOC, 11.OOC FILE FOR BLAT (DONE, 2004-12-03, hartera)
+    # Use -repMatch=512 (based on size -- for human we use 1024, and
+    # the zebrafish genome is ~50% of the size of the human genome
+    ssh kkr1u00
+    mkdir /cluster/data/danRer2/bed/ooc
+    cd /cluster/data/danRer2/bed/ooc
+    mkdir -p /cluster/bluearc/danRer2
+    ls -1 /cluster/data/danRer2/nib/chr*.nib > nib.lst
+    blat nib.lst /dev/null /dev/null -tileSize=11 \
+      -makeOoc=/cluster/bluearc/danRer2/11.ooc -repMatch=512
+    # Wrote 44008 overused 11-mers to /cluster/bluearc/danRer2/11.ooc
+    # For 10.ooc, repMatch = 4096 for human, so use 2048
+    blat nib.lst /dev/null /dev/null -tileSize=10 \
+      -makeOoc=/cluster/bluearc/danRer2/10.ooc -repMatch=2048
+    # Wrote 10639 overused 10-mers to /cluster/bluearc/danRer2/10.ooc
+    # keep copies of ooc files in this directory and copy to iscratch
+    cp /cluster/bluearc/danRer2/*.ooc .
+    cp -p /cluster/bluearc/danRer2/*.ooc /iscratch/i/danRer2/
+    iSync
+
+# ADD CONTIGS TRACK (DONE, 2004-12-06, hartera)
+# make ctgPos2 (contig name, size, chrom, chromStart, chromEnd) from lift
+    ssh kksilo
+    mkdir -p /cluster/data/danRer2/bed/ctgPos2
+    cd /cluster/data/danRer2/bed/ctgPos2
+    # ctgPos2 .sql .as .c and .h files exist - see makeDanRer1.doc
+    foreach c (`cat /cluster/data/danRer2/chrom.lst`) 
+         awk 'BEGIN {OFS="\t"} \
+         {if ($5 != "N") print $6, $3-$2+1, $1, $2-1, $3, $5}' \
+         /cluster/data/danRer2/$c/agps/chr${c}.chunks.agp >> ctgPos2.tab
+    end
+
+    ssh hgwdev
+    cd /cluster/data/danRer2/bed/ctgPos2
+    echo "drop table ctgPos2" | hgsql danRer2
+    hgsql danRer2 < ~/kent/src/hg/lib/ctgPos2.sql
+    echo "load data local infile 'ctgPos2.tab' into table ctgPos2" \
+         | hgsql danRer2
+
+# Add trackDb.ra entry and ctgPos2.html
+
+# ENSEMBL GENES (DONE, 2004-12-06, hartera)
     ssh hgwdev                                                                      mkdir -p /cluster/data/danRer2/bed/ensembl
     cd /cluster/data/danRer2/bed/ensembl
     # Get the ensembl protein data from
@@ -926,10 +1008,421 @@ bad rep range in: 237   149     0       152     chrUn   96855194        96855206
     # Page 3) Choose the "Structures" box.
     # Page 4) Choose GTF as the ouput.  choose gzip compression.  hit export.
     # Save as ensemblGene.gtf.gz
+    
+    # the Ensembl gene predictions are mapped to chromosomes except for 
+    # chrNA and chrUn. So, a lift file needs to be created to lift from the
+    # scaffold to chromosome co-ordinates
+   
+    ssh kksilo
+    mkdir -p /cluster/data/danRer2/bed/ensembl/liftSupertoChrom
+    cd /cluster/data/danRer2/bed/ensembl/liftSupertoChrom
+    # the lift files for scaffolds to chrom for NA and Un are already created
+    cp /cluster/data/danRer2/Un/chrUn.lft .
+    cp /cluster/data/danRer2/NA/chrNA.lft .
+    cat *.lft >> liftUnScaffoldToChrom.lft    
 
+    # get chrUn and chrNA records 
+    cd /cluster/data/danRer2/bed/ensembl
+    awk '$1 ~ /^Zv4_NA[0-9]+/ || $1 ~ /^Zv4_scaffold[0-9]+/' ensemblGene.gtf \
+                    > ensemblGenechrUns.gtf
+    # get records for all other chroms
+    awk '$1 ~ /^[0-9]+/' ensemblGene.gtf > ensemblGenechroms.gtf
+                                    
+    liftUp -type=.gtf ensemblGenechrUns.lifted \
+         ./liftSupertoChrom/liftUnScaffoldToChrom.lft warn ensemblGenechrUns.gtf
+    # Got 38882 lifts in ./liftSupertoChrom/liftUnScaffoldToChrom.lft
+    sed -e "s/^/chr/" ensemblGenechroms.gtf > ensGene.gtf
+    cat ensemblGenechrUns.lifted >> ensGene.gtf
+    # check some of the lifted co-ordinates
+    # load into database
+    ssh hgwdev
+    cd /cluster/data/danRer2/bed/ensembl
+    /cluster/bin/i386/ldHgGene danRer2 ensGene \            
+            /cluster/data/danRer2/bed/ensembl/ensGene.gtf
+    # Read 32062 transcripts in 592139 lines in 1 files
+    # 32062 groups 27 seqs 1 sources 4 feature types
+    # 32062 gene predictions
 
+    # ensGtp associates geneId/transcriptId/proteinId for hgPepPred and
+    # hgKnownToSuper.  Use ensMart to create it as above, except:
+    # Page 3) Choose the "Features" box. In "Ensembl Attributes", check
+    # Ensembl Gene ID, Ensembl Transcript ID, Ensembl Peptide ID.
+    # Choose Text, tab-separated as the output format.  Result name ensGtp.
+    gunzip ensGtp.tsv.gz
+    hgsql danRer2 < ~/kent/src/hg/lib/ensGtp.sql
+    # remove header line from ensGtp.txt
+    echo "load data local infile 'ensGtp.tsv' into table ensGtp" \
+         | hgsql -N danRer2
 
+    # Get the ensembl peptide sequences from
+    # http://www.ensembl.org/Danio_rerio/martview
+    # Choose Danio Rerio as the organism
+    # Follow this sequence through the pages:
+    # Page 1) Choose the Ensembl Genes choice. Hit next.
+    # Page 2) Uncheck the "Limit to" box in the region choice. Then hit next.
+    # Page 3) Choose the "Sequences" tab.
+    # Page 4) Choose Transcripts/Proteins and peptide Only as the output,
+    # choose text/fasta and gzip compression,
+    # name the file ensemblPep.fa.gz and then hit export.
 
+    gunzip ensemblPep.fa.gz
+    hgPepPred danRer2 ensembl ensemblPep.fa
 
+# AFFYMETRIX ZEBRAFISH GENOME ARRAY CHIP (DONE, 2004-12-06, hartera)
+    # sequences already downloaded for danRer1
+    ssh hgwdev
+    cd /projects/compbio/data/microarray/affyZebrafish
+
+    cp /projects/compbio/data/microarray/affyZebrafish/Zebrafish_consensus.fa \       /cluster/bluearc/affy/
+    # Set up cluster job to align Zebrafish consensus sequences to danRer2
+    ssh kkr1u00
+    mkdir -p /cluster/data/danRer2/bed/affyZebrafish.2004-12-06
+    ln -s /cluster/data/danRer2/bed/affyZebrafish.2004-12-06 \
+          /cluster/data/danRer2/bed/affyZebrafish
+    cd /cluster/data/danRer2/bed/affyZebrafish
+    mkdir -p /iscratch/i/affy
+    cp /cluster/bluearc/affy/Zebrafish_consensus.fa /iscratch/i/affy
+    iSync
+
+    ssh kk
+    cd /cluster/data/danRer2/bed/affyZebrafish
+    ls -1 /iscratch/i/affy/Zebrafish_consensus.fa > affy.lst
+    ls -1 /iscratch/i/danRer2/trfFa/ > genome.lst
+                                                                               
+    echo '#LOOP\n/cluster/bin/i386/blat -fine -mask=lower -minIdentity=95 -ooc=/iscratch/i/danRer2/11.ooc /iscratch/i/danRer2/trfFa/$(path1) $(path2) {check out line+ psl/$(root1)_$(root2).psl}\n#ENDLOOP' > template.sub
+    
+    gensub2 genome.lst affy.lst template.sub para.spec
+    mkdir psl
+    para create para.spec
+    para try, check, push ... etc.
+# para time
+# Completed: 299 of 299 jobs
+# CPU time in finished jobs:       4702s      78.37m     1.31h    0.05d  0.000 y
+# IO & Wait Time:                  3077s      51.28m     0.85h    0.04d  0.000 y
+# Average job time:                  26s       0.43m     0.01h    0.00d
+# Longest job:                      128s       2.13m     0.04h    0.00d
+# Submission to last job:           685s      11.42m     0.19h    0.01d
+    ssh kksilo
+    cd /cluster/data/danRer2/bed/affyZebrafish
+    # Do sort, best in genome filter, and convert to chromosome coordinates
+    # to create affyZebrafish.psl
+    pslSort dirs raw.psl tmp psl
+    # only use alignments that have at least
+    # 95% identity in aligned region.
+    # do not use minCover since a lot of sequence is in Un, NA and Finished
+    # so genes may be split up so good to see all alignments
+    pslReps -minAli=0.95 -nearTop=0.005 raw.psl contig.psl /dev/null
+    liftUp affyZebrafish.psl ../../jkStuff/liftAll.lft warn contig.psl
+    # shorten names in psl file
+    sed -e 's/Zebrafish://' affyZebrafish.psl > affyZebrafish.psl.bak
+    mv affyZebrafish.psl.bak affyZebrafish.psl
+    pslCheck affyZebrafish.psl
+    # psl is good
+    # load track into database
+    ssh hgwdev
+    cd /cluster/data/danRer2/bed/affyZebrafish
+    hgLoadPsl danRer2 affyZebrafish.psl
+                                                                               
+    # Add consensus sequences for Zebrafish chip
+    # Copy sequences to gbdb if they are not there already
+    mkdir -p /gbdb/hgFixed/affyProbes
+    ln -s \
+       /projects/compbio/data/microarray/affyZebrafish/Zebrafish_consensus.fa \       /gbdb/hgFixed/affyProbes
+                                                                               
+    hgLoadSeq -abbr=Zebrafish: danRer2 \
+              /gbdb/hgFixed/affyProbes/Zebrafish_consensus.fa
+    # Clean up
+    rm batch.bak contig.psl raw.psl
+    # add entry to trackDb.ra in ~kent/src/hg/makeDb/trackDb/zebrafish/danRer2
+
+# RH MAP TRACK (DONE, 2004-12-07, hartera)
+    # Data from Leonard Zon's lab at the Childrens Hospital, Boston
+    # Rh map data consists of 8707 genomic sequences:
+    #   (1) 2835 BAC clone ends (Max Planck Inst.  Robert
+    #   Geisler's lab, Tuebingen, Germany,
+    #   (2) 2015 NCBI ESTs (submitted from around the planet,
+    #   (3) 171 RH shotgun sequences (Max Planck Inst. & Children^?s
+    #   Hosp. Boston,
+    #   (4) 3686  WZ compiled ESTs from WashU
+    #
+    ssh kkr1u00
+    mkdir -p /cluster/data/danRer2/bed/ZonLab/rhMap
+    cd /cluster/data/danRer2/bed/ZonLab/rhMap
+    
+  # sequences for RHmap are in /cluster/data/danRer1/bed/ZonLab/rhmap/seq/rh.fa\
+  # rhcontigs.fa is the sequences all in one file with formatted header
+    # copy to iscratch if not there already
+    mkdir -p /iscratch/i/danRer2/rhmap
+    cp -p /cluster/data/danRer1/bed/ZonLab/rhmap/seq/rhcontigs.fa \
+          /iscratch/i/danRer2/rhmap    
+    iSync
+    # do the blat run to map RH map sequences to danRer2
+    ssh kk
+    cd /cluster/data/danRer2/bed/ZonLab/rhmap
+    mkdir psl
+    ls -1S  /iscratch/i/danRer2/rhmap/rhcontigs.fa > rhmap.lst
+    ls -1S /iscratch/i/danRer2/trfFa/*.fa > genome.lst
+# try same parameters as for bacEnds
+    cat << '_EOF_' > gsub
+#LOOP
+/cluster/bin/i386/blat {check in line+ $(path1)} {check in line+ $(path2)} -tileSize=10 -ooc=/iscratch/i/danRer2/10.ooc {check out line+ psl/$(root1)_$(root2).psl}
+#ENDLOOP
+'_EOF_'
+    # << this line keeps emacs coloring happy
+     gensub2 genome.lst rhmap.lst gsub spec
+     para create spec
+     para try
+     para check
+     para push, try ... etc.
+# Completed: 299 of 299 jobs
+# CPU time in finished jobs:       7977s     132.94m     2.22h    0.09d  0.000 y
+# IO & Wait Time:                  3114s      51.91m     0.87h    0.04d  0.000 y
+# Average job time:                  37s       0.62m     0.01h    0.00d
+# Longest job:                       54s       0.90m     0.01h    0.00d
+# Submission to last job:           155s       2.58m     0.04h    0.00d
+
+    ssh kksilo
+    cd /cluster/data/danRer2/bed/ZonLab/rhMap
+    # Make & check the psl table
+    # Do sort, best in genome filter, and convert to chromosome coordinates
+    # to create rhmap.psl
+    pslSort dirs raw.psl tmp psl
+    # only use alignments that have at least 80% identity in aligned region.
+    # these are the parameters used for STS markers
+    pslReps -nearTop=0.0001 -minAli=0.8 -noIntrons raw.psl \
+            contig.psl /dev/null
+    # Processed 667164 alignments
+    liftUp rhMap.psl /cluster/data/danRer2/jkStuff/liftAll.lft warn contig.psl
+    pslCheck rhMap.psl
+    # psl is ok.                                      
+    # Load sequence alignments into database.
+    ssh hgwdev
+    cd /cluster/data/danRer2/bed/ZonLab/rhMap
+    echo "drop table rhMap;" | hgsql danRer2
+    hgLoadPsl danRer2 rhMap.psl
+    hgsql -N -e "select qName from rhMap;" danRer2 | sort | uniq | wc
+    # 8492 out of 8690 sequences aligned (98%)
+    # Add RH Map sequences
+    # Copy sequences to gbdb if they are not there already
+    mkdir -p /gbdb/danRer1/rhmap
+    ln -s \
+      /cluster/data/danRer1/bed/ZonLab/rhmap/seq/rhcontigs.fa \
+       /gbdb/danRer1/rhmap
+    cd /cluster/data/danRer2/bed/ZonLab/rhMap
+    hgLoadSeq danRer2 /gbdb/danRer1/rhmap/rhcontigs.fa
+
+# MAKE HGCENTRALTEST BLATSERVERS ENTRY FOR DANRER2
+# (DONE, 2004-12-08, hartera)
+   # hgcentraltest is now on hgwdev                                            
+    ssh hgwdev
+   # DNA port is "0", trans prot port is "1"
+ echo 'insert into blatServers values("danRer2", "blat14", "17789", "0", "0");    insert into blatServers values("danRer2", "blat14", "17788", "1", "0");' \
+    | hgsql hgcentraltest
+    # if you need to delete those entries
+    echo 'delete from blatServers where db="danRer2";' \
+    | hgsql hgcentraltest
+    # to check the entries:
+    echo 'select * from blatServers where db="danRer2";' \
+    | hgsql hgcentraltest
+
+# AUTO UPDATE GENBANK MRNA AND EST RUN  (DONE, 2004-12-09, hartera)
+    ssh eieio
+    cd /cluster/data/genbank
+    # This is a new assembly, edit the etc/genbank.conf file and add:
+# danRer2 (zebrafish)
+danRer2.genome = /iscratch/i/danRer2/nib/chr*.nib
+danRer2.lift = /cluster/data/danRer2/jkStuff/liftAll.lft
+danRer2.downloadDir = danRer2
+    # Default includes native genbank mRNAs and ESTs,
+    # genbank xeno mRNAs but no xenoESTs, native RefSeq mRNAs but
+    # not xeno RefSeq
+    cvs commit -m "Added danRer2" etc/genbank.conf
+    # No need to edit ~/kent/src/hg/makeDb/genbank/src/align/gbBlat 
+    # since the 11.ooc file for danRer1 will be good for both assemblies.
+    # as no new sequence was added, just an improvement on the mapping of 
+    # unmapped sequence to chromosomes
+
+    # ~/kent/src/hg/makeDb/genbank/src/lib/gbGenome.c already contains
+    # danRer genome information
+    # Install to /cluster/data/genbank:
+    make install-server
+
+    ssh eieio
+    cd /cluster/data/genbank
+    # This is an -initial run, RefSeq mRNA only:
+    nice bin/gbAlignStep -verbose=1 -initial danRer2
+ 
+    # Load results for RefSeq mRNAs:
+    ssh hgwdev
+    cd /cluster/data/genbank
+    nice bin/gbDbLoadStep -verbose=1 -drop -initialLoad danRer2
+    # Move results need to be moved out the way
+    cd /cluster/data/genbank/work
+    mv initial.danRer2 initial.danRer2.allseqs
+
+# BLASTZ SWAP FOR hg17 vs. danRer2 BLASTZ TO CREATE danRer2 vs. hg17
+# (DONE, 2004-12-09, hartera)
+# USE RESCORED ALIGNMENTS (see makeHg17.doc)
+    ssh kolossus
+    mkdir -p /cluster/data/danRer2/bed/blastz.hg17.swap
+    cd /cluster/data/danRer2/bed/blastz.hg17.swap
+    # use rescored axtChrom from blastzDanRer2 on hg17
+    set aliDir = /cluster/data/hg17/bed/blastz.danRer2
+    cp $aliDir/S1.len S2.len
+    cp $aliDir/S2.len S1.len
+    mkdir unsorted axtChrom
+    cat $aliDir/axtChrom/chr*.axt \
+    | axtSwap stdin $aliDir/S1.len $aliDir/S2.len stdout \
+    | axtSplitByTarget stdin unsorted
+    # Sort the shuffled .axt files.
+    foreach f (unsorted/*.axt)
+      echo sorting $f:t:r
+      axtSort $f axtChrom/$f:t
+    end
+    du -sh $aliDir/axtChrom unsorted axtChrom
+    # 1.1G    /cluster/data/hg17/bed/blastz.danRer2/axtChrom
+    # 1.1G    unsorted
+    # 1.1G    axtChrom
+
+    rm -r unsorted
+    # translate sorted axt files into psl
+    cd /cluster/data/danRer2/bed/blastz.hg17.swap
+    mkdir -p pslChrom
+    set tbl = "blastzHg17"
+    foreach f (axtChrom/chr*.axt)
+      set c=$f:t:r
+      echo "Processing chr $c"
+      /cluster/bin/i386/axtToPsl $f S1.len S2.len pslChrom/${c}_${tbl}.psl
+    end
+    # Load database tables
+    ssh hgwdev
+    cd /cluster/data/danRer2/bed/blastz.hg17.swap/pslChrom
+    foreach f (./*.psl)
+      /cluster/bin/i386/hgLoadPsl danRer2 $f
+      echo "$f Done"
+    end
+
+# CHAIN HUMAN (hg17) BLASTZ (DONE, 2004-12-10, hartera)
+    # Run axtChain on little cluster
+    ssh kki
+    cd /cluster/data/danRer2/bed/blastz.hg17.swap
+    mkdir -p axtChain/run1
+    cd axtChain/run1
+    mkdir out chain
+    # Reuse gap penalties from hg16 vs chicken run.
+cat << '_EOF_' > ../../chickenHumanTuned.gap
+tablesize^V     11
+smallSize^V     111
+position^V      1^V     2^V     3^V     11^V    111^V   2111^V  12111^V 32111^V
+72111^V 152111^V        252111
+qGap^V  325^V   360^V   400^V   450^V   600^V   1100^V  3600^V  7600^V  15600^V
+31600^V 56600
+bothGap^V       625^V   660^V   700^V   750^V   900^V   1400^V  4000^V  8000^V
+16000^V 32000^V 57000
+'_EOF_'
+    # << this line makes emacs coloring happy
+    cat << '_EOF_' > doChain
+#!/bin/csh
+axtChain -scoreScheme=/cluster/data/blastz/HoxD55.q \
+    -linearGap=../../chickenHumanTuned.gap $1 \
+    /iscratch/i/danRer2/nib \
+    /iscratch/i/gs.18/build35/bothMaskedNibs $2 >& $3
+'_EOF_'
+    # << this line makes emacs coloring happy
+    chmod a+x doChain
+    cat << '_EOF_' > gsub
+#LOOP
+doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain} {check out line+ out/$(root1).out}
+#ENDLOOP
+'_EOF_'
+    # create input list and batch for cluster run
+    ls -1S /cluster/data/danRer2/bed/blastz.hg17.swap/axtChrom/*.axt \
+        > input.lst
+    gensub2 input.lst single gsub jobList
+    para create jobList
+    para try, check, push, check...
+# para time
+# Completed: 28 of 28 jobs
+# CPU time in finished jobs:       2416s      40.27m     0.67h    0.03d  0.000 y
+# IO & Wait Time:                   351s       5.85m     0.10h    0.00d  0.000 y
+# Average job time:                  99s       1.65m     0.03h    0.00d
+# Longest job:                      144s       2.40m     0.04h    0.00d
+# Submission to last job:           524s       8.73m     0.15h    0.01d
+    # now on the cluster server, sort chains
+    ssh kksilo
+    cd /cluster/data/danRer2/bed/blastz.hg17.swap/axtChain
+    chainMergeSort run1/chain/*.chain > all.chain
+    chainSplit chain all.chain
+
+    # take a look at score distr's
+    foreach f (chain/*.chain)
+      grep chain $f | awk '{print $2;}' | sort -nr > /tmp/score.$f:t:r
+      echo $f:t:r >> hist5000.out
+      textHistogram -binSize=5000 /tmp/score.$f:t:r >> hist5000.out
+      echo ""
+    end
+# only chrNA has a large number of chains with score <= 5000 (>200,000 chains)
+# chrUn has about 90,000 chains with score <=5000
+    
+    # apply filter with minScore=5000
+    rm -r chain
+    mv all.chain all.chain.unfiltered
+    chainFilter -minScore=5000 all.chain.unfiltered > all.chain
+    chainSplit chain all.chain
+    # load filtered chains and check
+    ssh hgwdev
+    cd /cluster/data/danRer2/bed/blastz.hg17.swap/axtChain/chain
+    foreach i (*.chain)
+        set c = $i:r
+        hgLoadChain danRer2 ${c}_chainHg17 $i
+        echo done $c
+    end
+# featureBits -chrom=chr1 danRer2 refGene:cds chainHg17 -enrichment
+# refGene:cds 0.512%, chainHg17 34.242%, both 0.444%, cover 86.63%, 
+# enrich 2.53x
+# featureBits -chrom=chr1 danRer2 refGene:cds chainHg17Link -enrichment
+# refGene:cds 0.512%, chainHg17Link 4.760%, both 0.399%, cover 77.80%, 
+# enrich 16.3
+# featureBits -chrom=chr1 danRer1 refGene:cds chainHg17Link -enrichment
+# refGene:cds 0.529%, chainHg17Link 3.924%, both 0.409%, cover 77.24%, 
+# enrich 19.69x
+
+# NET HUMAN (hg17) BLASTZ (DONE, 2004-12-10,hartera)
+    ssh kksilo
+    cd /cluster/data/danRer2/bed/blastz.hg17.swap/axtChain
+    mkdir preNet
+    cd chain
+    foreach i (*.chain)
+       echo preNetting $i
+       /cluster/bin/i386/chainPreNet $i ../../S1.len ../../S2.len \
+                                     ../preNet/$i
+    end
+    cd ..
+    mkdir n1
+    cd preNet
+    foreach i (*.chain)
+      set n = $i:r.net
+      echo primary netting $i
+      /cluster/bin/i386/chainNet $i -minSpace=1 ../../S1.len ../../S2.len \
+                                 ../n1/$n /dev/null
+    end
+    cd ..
+    cat n1/*.net | /cluster/bin/i386/netSyntenic stdin noClass.net
+    # memory usage 130883584, utime 1067 s/100, stime 101
+    # Add classification info using db tables:
+    # netClass looks for ancient repeats in one of the databases
+    # hg17 has this table - hand-curated by Arian but this is for
+    # human-rodent comparisons so do not use here, use -noAr option
+    # linSpecRep.notInHuman and linSpecRep.notInZebrafish exist 
+    # (see makeHg17.doc)
+    ssh hgwdev
+    cd /cluster/data/danRer2/bed/blastz.hg17.swap/axtChain
+    time netClass noClass.net danRer2 hg17 humanhg17.net \
+         -tNewR=/cluster/bluearc/danRer2/linSpecRep.notInHuman \
+         -qNewR=/cluster/bluearc/hg17/linSpecRep.notInZebrafish -noAr
+    # 86.150u 50.120s 3:50.89 59.0%   0+0k 0+0io 200pf+0w
+    # load net into database
+    netFilter -minGap=10 humanhg17.net |  hgLoadNet danRer2 netHg17 stdin
+    
 
 
