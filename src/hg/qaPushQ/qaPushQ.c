@@ -29,7 +29,7 @@
 #include "dbDb.h"
 #include "htmlPage.h"
 
-static char const rcsid[] = "$Id: qaPushQ.c,v 1.69 2005/01/03 19:58:18 galt Exp $";
+static char const rcsid[] = "$Id: qaPushQ.c,v 1.70 2005/01/11 01:28:03 galt Exp $";
 
 char msg[2048] = "";
 char ** saveEnv;
@@ -2226,6 +2226,8 @@ void doShowAllColumns()
 /* Display hidden columns available for resurrection */ 
 {
 int c = 0;
+char templist[512];
+char tempe[64];
 
 printf("<h4>Show Hidden Columns</h4>\n");
 printf("<br>\n");
@@ -2234,9 +2236,12 @@ printf("<br>\n");
 printf("Click on any column below to un-hide it.<br>\n");
 printf("<br>\n");
 
+safef(templist,sizeof(templist),",%s,",showColumns);  /* add sentinel comma values to the ends of the col list */
+
 for (c=0; c<MAXCOLS; c++)
     {
-    if (strstr(showColumns,colName[c])==NULL)
+    safef(tempe,sizeof(tempe),",%s,",colName[c]);  /* add sentinel comma values to the ends of the col element */
+    if (strstr(templist,tempe)==NULL)
 	{
 	printf("<a href=\"/cgi-bin/qaPushQ?action=showColumn&colName=%s&cb=%s\">%s</a><br><br>", 
 	    colName[c], newRandState, colName[c]);
@@ -2253,6 +2258,8 @@ void doShowColumn()
 {
 struct dyString * s = NULL;
 char *colName = NULL;
+char templist[512];
+char tempe[64];
 
 s = newDyString(2048);  /* need room */
 
@@ -2260,7 +2267,9 @@ colName = cgiString("colName");
 
 mapFieldToEnum(colName,TRUE);  /* this will make sure it exists or errAbort */
 
-if (strstr(showColumns,colName)==NULL)  /* make sure not already in list */
+safef(templist,sizeof(templist),",%s,",showColumns);  /* add sentinel comma values to the ends of the col list */
+safef(tempe,sizeof(tempe),",%s,",colName);  /* add sentinel comma values to the ends of the col element */
+if (strstr(templist,tempe)==NULL)  /* make sure not already in list */
     {
     dyStringAppend(s, showColumns);
     dyStringPrintf(s, ",%s", colName);
