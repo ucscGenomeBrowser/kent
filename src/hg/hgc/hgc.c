@@ -120,7 +120,6 @@
 #include "tigrOperon.h"
 #include "easyGene.h"
 #include "llaInfo.h"
-#include "loweTrnaGene.h"
 #include "blastTab.h"
 #include "hgc.h"
 #include "genbank.h"
@@ -150,7 +149,7 @@
 #include "pscreen.h"
 #include "jalview.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.770 2004/10/12 13:22:21 aamp Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.771 2004/10/12 13:32:56 aamp Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -13525,47 +13524,6 @@ printTrackHtml(tdb);
 hFreeConn(&conn);
 }
 
-void doLoweTrnaGene(struct trackDb *tdb, char *trnaName)
-/* Handle click Todd Lowe tRNA track. */
-{
-char *track = tdb->tableName;
-struct loweTrnaGene *trna;
-char query[512];
-struct sqlConnection *conn = hAllocConn();
-struct sqlResult *sr;
-char *dupe, *type, *words[16];
-char **row;
-int wordCount;
-int rowOffset;
-int start = cartInt(cart, "o"), num = 0;
-
-genericHeader(tdb,trnaName);
-dupe = cloneString(tdb->type);
-wordCount = chopLine(dupe, words);
-if (wordCount > 1)
-    num = atoi(words[1]);
-if (num < 3) num = 3;
-genericBedClick(conn, tdb, trnaName, start, num);
-rowOffset = hOffsetPastBin(seqName, track);
-sprintf(query, "select * from %s where name = '%s'", track, trnaName);
-sr = sqlGetResult(conn, query);
-if ((row = sqlNextRow(sr)) != NULL)
-    {
-    trna = loweTrnaGeneLoad(row);
-    }
-sqlFreeResult(&sr);
-hFreeConn(&conn);
-if (trna != NULL)
-    {
-    printf("<B>Amino acid: </B> %s<BR>\n",trna->aa);
-    printf("<B>tRNA anti-codon: </B> %s<BR>\n",trna->ac);
-    printf("<B>Contains an inton? </B> %s<BR>\n",(trna->ci[0]=='Y'?"Yes":"No"));    
-    printf("<B>tRNAScanSE score: </B> %.2f<BR>\n",trna->scan);    
-    }
-printTrackHtml(tdb);
-loweTrnaGeneFree(&trna);
-}
-
 void doTigrOperons(struct trackDb *tdb, char *opName)
 /* track handler for the TIGR operon predictions */
 {
@@ -15500,10 +15458,6 @@ else if (sameWord(track, "tigrCmrORFs"))
 else if (sameWord(track, "tigrOperons"))
     {
     doTigrOperons(tdb,item);
-    }
-else if (sameWord(track, "loweTrnaGene"))
-    {
-    doLoweTrnaGene(tdb,item);
     }
 else if (sameWord(track,"codeBlast"))
     {

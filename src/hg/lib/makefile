@@ -32,7 +32,7 @@ O = affyAtlas.o affy10KDetails.o affy120KDetails.o affyOffset.o affyPairs.o \
     jksql.o joiner.o \
     kgAlias.o kgProtAlias.o knownInfo.o knownMore.o knownToSuper.o \
     lfs.o liftOver.o liftOverChain.o liftUp.o \
-    llaInfo.o loweTrnaGene.o mapSts.o mcnBreakpoints.o minGeneInfo.o \
+    llaInfo.o mapSts.o mcnBreakpoints.o minGeneInfo.o \
     mouseOrtho.o mouseSyn.o mouseSynWhd.o mysqlTableStatus.o \
     netAlign.o ooUtils.o \
     pbStamp.o pepPred.o plasEndPairs.o pscreen.o \

@@ -25,6 +25,7 @@ BAD_DIRS = \
 	makeSeqs \
 	oneShot \
 	synMap \
+	encode \
 	wikiPlot 
 
 # Compile only, the cgi's for those builds without write access
