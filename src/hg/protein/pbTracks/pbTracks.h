@@ -68,6 +68,7 @@ extern MgFont *g_font;
 extern int currentYoffset;
 extern int pbScale;
 extern char pbScaleStr[];
+extern boolean initialWindow;
 
 extern int *yOffp;
 extern double tx[], ty[];
@@ -95,6 +96,10 @@ extern int blockGenomeStart[], blockGenomeStartPositive[];
 extern int blockGenomeEnd[], blockGenomeEndPositive[];
 extern int trackOrigOffset;        //current track display origin offset
 
+extern struct vGfx *vg, *vg2;
+
+void hWrites(char *string);
+void hButton(char *name, char *label);
 void hPrintf(char *format, ...);
 
 char *getAA(char *pepAccession);
@@ -111,7 +116,7 @@ void doGenomeBrowserLink(char *protDisplayID, char *mrnaID);
 void doGeneDetailsLink(char *protDisplayID, char *mrnaID);
 void doFamilyBrowserLink(char *protDisplayID, char *mrnaID);
 
-void doTracks(char *proteinID, char *mrnaID, char *aa, struct vGfx *vg, int *yOffp);
+void doTracks(char *proteinID, char *mrnaID, char *aa, int *yOffp);
 void doStamps(char *proteinID, char *mrnaID, char *aa, struct vGfx *vg, int *yOffp);
 
 void domainsPrint(struct sqlConnection *conn, char *swissProtAcc);
