@@ -34,7 +34,7 @@
 #include "wiggle.h"
 #include "hgText.h"
 
-static char const rcsid[] = "$Id: hgText.c,v 1.135 2004/04/12 23:18:04 hiram Exp $";
+static char const rcsid[] = "$Id: hgText.c,v 1.136 2004/04/13 17:22:01 angie Exp $";
 
 /* sources of tracks, other than the current database: */
 static char *hgFixed = "hgFixed";
@@ -2033,6 +2033,9 @@ struct hTableInfo *ctToHti(struct customTrack *ct)
 {
 struct hTableInfo *hti;
 
+if (ct == NULL)
+    return(NULL);
+
 AllocVar(hti);
 hti->rootName = cloneString(ct->tdb->tableName);
 hti->isPos = TRUE;
@@ -2074,10 +2077,10 @@ if (ct->fieldCount >= 12)
 return(hti);
 }
 
-struct hTableInfo *getHti(char *db, char *table)
+struct hTableInfo *maybeGetHti(char *db, char *table)
 /* Return primary table info. */
 {
-struct hTableInfo *hti;
+struct hTableInfo *hti = NULL;
 
 if (sameString(customTrackPseudoDb, db))
     {
@@ -2093,6 +2096,13 @@ else
 	track = table;
     hti = hFindTableInfoDb(db, chrom, track);
     }
+return(hti);
+}
+
+struct hTableInfo *getHti(char *db, char *table)
+/* Return primary table info. */
+{
+struct hTableInfo *hti = maybeGetHti(db, table);
 
 if (hti == NULL)
     webAbort("Error", "Could not find table info for table %s in db %s",
@@ -2150,6 +2160,19 @@ if ((table2 != NULL) && (table2[0] != 0) && (op != NULL))
     }
 return(hti);
 }
+
+boolean isWiggle(char *db, char *table)
+/* Return TRUE if db.table is a wiggle. */
+{
+boolean typeWiggle = FALSE;
+if (db != NULL && table != NULL)
+    {
+    struct hTableInfo *hti = maybeGetHti(db, table);
+    typeWiggle = (hti != NULL && HTI_IS_WIGGLE);
+    }
+return(typeWiggle);
+}
+
 
 void doOutputOptions()
 /* print out a form with output table format & filtering options */
@@ -3871,8 +3894,7 @@ if (! sameString(outputType, seqOptionsPhase) &&
 
 hti = getHti(db2, table2);
 
-if (HTI_IS_WIGGLE)
-    typeWiggle2 = TRUE;
+typeWiggle2 = isWiggle(db2, table2);
 
 printf("<FORM ACTION=\"%s\" NAME=\"mainForm\" METHOD=\"%s\">\n",
        hgTextName(), httpFormMethod);
@@ -4239,12 +4261,7 @@ saveIntersectOptionsState();
 if (op == NULL)
     table2 = NULL;
 
-if ((db2 != NULL) && (table2 != NULL))
-    {
-    hti2 = getHti(db2, table2);
-    if (hti2->spanField[0] !=0)
-	typeWiggle2 = TRUE;
-    }
+typeWiggle2 = isWiggle(db2, table2);
 
 if (allGenome)
     chromList = getOrderedChromList();
@@ -4882,24 +4899,11 @@ database = cloneString(database);
 hSetDb(database);
 hDefaultConnect();
 
-if (db != NULL && table != NULL)
-    {
-    struct hTableInfo *hti = NULL;
-    hti = getHti(db, table);
-
-    if (HTI_IS_WIGGLE)
-	typeWiggle = TRUE;
-    }
 if ((table2 != NULL) && sameString(table2, "Choose table"))
     table2 = NULL;
-if (db2 != NULL && table2 != NULL)
-    {
-    struct hTableInfo *hti = NULL;
-    hti = getHti(db2, table2);
 
-    if (HTI_IS_WIGGLE)
-	typeWiggle2 = TRUE;
-    }
+typeWiggle = isWiggle(db, table);
+typeWiggle2 = isWiggle(db2, table2);
 
 freezeName = hFreezeFromDb(database);
 if (freezeName == NULL)
