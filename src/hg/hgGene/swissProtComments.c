@@ -95,12 +95,15 @@ if (description != NULL)
 for (com = section->items; com != NULL; com = com->next)
     {
     char *type = spCommentType(spConn, com->typeId);
-    char *val = spCommentVal(spConn, com->valId);
-    hPrintf("<B>%s:</B> ", type);
-    mimSubPrint(val);
-    hPrintf("<BR>");
-    freeMem(type);
-    freeMem(val);
+    if (!sameWord(type, "ALTERNATIVE PRODUCTS"))
+	{
+	char *val = spCommentVal(spConn, com->valId);
+	hPrintf("<B>%s:</B> ", type);
+	mimSubPrint(val);
+	hPrintf("<BR>");
+	freeMem(type);
+	freeMem(val);
+	}
     }
 slFreeList(&section->items);
 freeMem(description);
