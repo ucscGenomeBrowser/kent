@@ -22,7 +22,7 @@
 #include "hgTables.h"
 #include "joiner.h"
 
-static char const rcsid[] = "$Id: hgTables.c,v 1.87 2004/11/19 05:53:01 kent Exp $";
+static char const rcsid[] = "$Id: hgTables.c,v 1.88 2004/11/19 14:58:35 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -1013,6 +1013,7 @@ char *output = cartString(cart, hgtaOutputType);
 char *trackName = NULL;
 char *table = cartString(cart, hgtaTable);
 struct trackDb *track = NULL;
+
 if (!sameString(curGroup->name, "allTables"))
     {
     trackName = cartString(cart, hgtaTrack);

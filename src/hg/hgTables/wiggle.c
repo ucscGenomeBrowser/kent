@@ -18,9 +18,10 @@
 #include "trackDb.h"
 #include "customTrack.h"
 #include "wiggle.h"
+#include "botDelay.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: wiggle.c,v 1.34 2004/11/19 05:53:01 kent Exp $";
+static char const rcsid[] = "$Id: wiggle.c,v 1.35 2004/11/19 14:58:35 kent Exp $";
 
 extern char *maxOutMenu[];
 
@@ -484,12 +485,14 @@ return data;
 void doOutWigData(struct trackDb *track, char *table, struct sqlConnection *conn)
 /* Return wiggle data in variableStep format. */
 {
+hgBotDelay();
 doOutWig(track, table, conn, wigOutData);
 }
 
 void doOutWigBed(struct trackDb *track, char *table, struct sqlConnection *conn)
 /* Return wiggle data in bed format. */
 {
+hgBotDelay();
 doOutWig(track, table, conn, wigOutBed);
 }
 
@@ -527,6 +530,7 @@ double statsSumSquares = 0.0;		/*	"  "	*/
 double lowerLimit = INFINITY;		/*	"  "	*/
 double upperLimit = -1.0 * INFINITY;	/*	"  "	*/
 
+hgBotDelay();
 startTime = clock1000();
 if (track != NULL)
      shortLabel = track->shortLabel;
