@@ -1113,8 +1113,10 @@ Color lineColor = mgFindColor(mg, 220, 220, 255); /*for horizontal lines*/
 tg->colorShades = shadesFromBaseColor( &tg->color );
 shades = tg->colorShades;
 
+
 lf=tg->items;    
 if(lf==NULL) return;
+
 
 //take care of cart options
 snprintf( o1, sizeof(o1),"%s.linear.interp", tg->mapName);
@@ -1133,19 +1135,20 @@ hFactor = (double)heightPer/1000.0;
 //this information should be moved to the trackDb.ra
 if( sameString( tg->mapName, "humMus" ) )
     {
-    minRange = 500.0;
+    minRange = 300.0;
     maxRange = 1000.0;
 
+
     /*draw horizontal line across track at 0.0, 2.0, and 5.0*/
-    tmp = -whichBin( 0.0, -1.8805, 9.1808, 1000 );
+    tmp = -whichBin( 0.0, -1.535, 9.49389, 1000 );
     y1 = (int)((double)y+((double)tmp)* hFactor+(double)heightPer);
     mgDrawHorizontalLine( mg, y1, lineColor );
 
-    tmp = -whichBin( 2.0, -1.8805, 9.1808, 1000 );
+    tmp = -whichBin( 2.0, -1.535, 9.49389, 1000 );
     y1 = (int)((double)y+((double)tmp)* hFactor+(double)heightPer);
     mgDrawHorizontalLine( mg, y1, lineColor );
 
-    tmp = -whichBin( 5.0, -1.8805, 9.1808, 1000 );
+    tmp = -whichBin( 5.0, -1.535, 9.49389, 1000 );
     y1 = (int)((double)y+((double)tmp)* hFactor+(double)heightPer);
     mgDrawHorizontalLine( mg, y1, lineColor );
     
@@ -7001,7 +7004,7 @@ void printYAxisLabel( struct memGfx *mg, int y, struct trackGroup *group, char *
     int itemHeight0 = group->itemHeight(group, group->items);
     int inWid = trackOffsetX()-gfxBorder*3;
     
-    tmp = -whichBin( atof(labelString), -1.8805, 9.1808, 1000 );
+    tmp = -whichBin( atof(labelString), -1.535, 9.49389, 1000 );
     tmp = (int)((double)ymin+((double)tmp)*(double)group->heightPer/1000.0+(double)group->heightPer);
     mgTextRight(mg, gfxBorder, tmp, inWid-1, itemHeight0, group->ixAltColor, tl.font, labelString );
 }
@@ -7112,8 +7115,8 @@ if (withLeftLabels)
 
 	if( sameString( group->mapName, "humMus" ) )
 	    {
-	    sprintf( minRangeStr, "%0.2g", whichNum( 500.0, -12.9418, 9.1808, 1000 ));
-	    sprintf( maxRangeStr, "%0.2g", whichNum( 1000.0, -12.9418, 9.1808, 1000 ));
+	    sprintf( minRangeStr, "%0.2g",  -1.535 );
+	    sprintf( maxRangeStr, "%0.2g",  9.49389 );
 
         printYAxisLabel( mg, y, group, "0.0" );
         printYAxisLabel( mg, y, group, "2.0" );
@@ -7528,6 +7531,7 @@ char query[256];
 
 /*see if we have a summary table*/
 snprintf(query, sizeof(query), "select name from %s where name = '%s' limit 1", tg->mapName, tg->shortLabel);
+//errAbort( "%s", query );
 hasDense = sqlQuickQuery(conn, query, query, sizeof(query));
 
 /* If we're in dense mode and have a summary table load it. */
