@@ -20,11 +20,11 @@
 #define POLYASLIDINGWINDOW 10
 #define POLYAREGION 160
 
-static char const rcsid[] = "$Id: pslPseudo.c,v 1.4 2003/11/06 00:20:44 baertsch Exp $";
+static char const rcsid[] = "$Id: pslPseudo.c,v 1.5 2003/11/17 21:57:42 baertsch Exp $";
 
 double minAli = 0.98;
 double maxRep = 0.35;
-double minAliPseudo = 0.70;
+double minAliPseudo = 0.60;
 double nearTop = 0.01;
 double minCover = 0.90;
 double minCoverPseudo = 0.01;
@@ -64,7 +64,7 @@ errAbort(
     "    -minAli=0.N minimum alignment ratio for mrna\n"
     "               default is 0.98\n"
     "    -minAliPseudo=0.N minimum alignment ratio for pseudogenes\n"
-    "               default is 0.70\n"
+    "               default is 0.60\n"
     "    -nearTop=0.N how much can deviate from top and be taken\n"
     "               default is 0.01\n"
     "    -minNearTopSize=N  Minimum size of alignment that is near top\n"
@@ -81,7 +81,7 @@ int calcMilliScore(struct psl *psl)
 return 1000-pslCalcMilliBad(psl, TRUE);
 }
 
-int intronFactor(struct psl *psl, struct hash *bkHash)
+int intronFactor(struct psl *psl, struct hash *bkHash, struct hash *trfHash)
 /* Figure approx number of introns.  
  * An intron in this case is just a gap of 0 bases in query and
  * maxBlockGap or more in target iwth repeats masked. */
@@ -93,9 +93,6 @@ int intronCount = 0, tGap;
 int maxQGap = 2; /* max size of gap on q size to be considered not an intron */
 
 assert (psl != NULL);
-/* debug statement */
-if (!quiet && (psl->tStart == 15781385 && (sameString(psl->tName,"chr22") )))
-    printf(".") ;
 if (blockCount <= 1)
     return 0;
 sz = psl->blockSizes[0];
@@ -104,15 +101,29 @@ te = psl->tStarts[0] + sz;
 tsRegion = psl->tStarts[0];
 for (i=1; i<blockCount; ++i)
     {
+    int trf = 0;
     int reps = 0, regionReps = 0;
     struct binElement *el, *elist;
     struct rmskOut *rmsk;
+    struct bed *bed;
     qs = psl->qStarts[i];
     ts = psl->tStarts[i];
     teRegion = psl->tStarts[i] + psl->blockSizes[i];
 
     if (bkHash != NULL)
         {
+        if (trfHash != NULL)
+            {
+            bk = hashFindVal(trfHash, psl->tName);
+            elist = binKeeperFindSorted(bk, psl->tStart , psl->tEnd ) ;
+            trf = 0;
+            for (el = elist; el != NULL ; el = el->next)
+                {
+                bed = el->val;
+                trf += positiveRangeIntersection(te, ts, bed->chromStart, bed->chromEnd);
+                }
+            slFreeList(&elist);
+            }
         bk = hashFindVal(bkHash, psl->tName);
         elist = binKeeperFindSorted(bk, tsRegion , teRegion ) ;
         for (el = elist; el != NULL ; el = el->next)
@@ -125,7 +136,6 @@ for (i=1; i<blockCount; ++i)
             /* count repeats in the gap  and surrounding exons  */
             regionReps += positiveRangeIntersection(tsRegion, teRegion, rmsk->genoStart, rmsk->genoEnd);
             }
-        //printf("elist count %d %s s %d e %d\n",slCount(&elist), psl->tName, tsRegion, teRegion);
         if (elist != NULL)
             slFreeList(&elist);
         }
@@ -133,7 +143,7 @@ for (i=1; i<blockCount; ++i)
     if ( regionReps + 10 >= teRegion - tsRegion )
         reps = 0;
 
-    tGap = ts - te - reps;
+    tGap = ts - te - reps - trf;
     if (2*abs(qs - qe) <= tGap && tGap >= maxBlockGap ) 
         /* don't count q gaps in mrna as introns , if they are similar in size to tGap*/
         {
@@ -148,7 +158,7 @@ for (i=1; i<blockCount; ++i)
 return intronCount;
 }
 
-int sizeFactor(struct psl *psl, struct hash *bkHash)
+int sizeFactor(struct psl *psl, struct hash *bkHash, struct hash *trfHash)
 /* Return a factor that will favor longer alignments. An intron is worth 3 bases...  */
 {
 int score;
@@ -157,17 +167,17 @@ assert(psl != NULL);
 score = 4*round(sqrt(psl->match + psl->repMatch/4));
 if (!noIntrons)
     {
-    int bonus = intronFactor(psl, bkHash) * 3;
+    int bonus = intronFactor(psl, bkHash, trfHash) * 3;
     if (bonus > 10) bonus = 10;
     score += bonus;
     }
 return score;
 }
 
-int calcSizedScore(struct psl *psl, struct hash *bkHash)
+int calcSizedScore(struct psl *psl, struct hash *bkHash, struct hash *trfHash)
 /* Return score that includes base matches and size. */
 {
-int score = calcMilliScore(psl) + sizeFactor(psl, bkHash);
+int score = calcMilliScore(psl) + sizeFactor(psl, bkHash, trfHash);
 return score;
 }
 
@@ -178,10 +188,10 @@ return TRUE; //sameString(psl->qName, "NM_006905") || sameString(psl->qName, "AK
 }
 
 
-boolean closeToTop(struct psl *psl, int *scoreTrack , struct hash *bkHash)
+boolean closeToTop(struct psl *psl, int *scoreTrack , struct hash *bkHash, struct hash *trfHash)
 /* Returns TRUE if psl is near the top scorer for at least 20 bases. */
 {
-int milliScore = calcSizedScore(psl, bkHash);
+int milliScore = calcSizedScore(psl, bkHash, trfHash);
 int threshold = round(milliScore * (1.0+nearTop));
 int i, blockIx;
 int start, size, end;
@@ -321,6 +331,49 @@ fclose(f);
 return count;
 }
 
+void mergePslBlocks(struct psl *psl, struct psl *outPsl,
+                       int insertMergeSize)
+/* merge together blocks separated by small inserts. */
+{
+int iBlk, iExon = -1;
+int startIdx, stopIdx, idxIncr;
+
+outPsl->qStarts = needMem(psl->blockCount*sizeof(unsigned));
+outPsl->tStarts = needMem(psl->blockCount*sizeof(unsigned));
+outPsl->blockSizes = needMem(psl->blockCount*sizeof(unsigned));
+
+if (psl->strand[1] == '-')
+    {
+    startIdx = psl->blockCount-1;
+    stopIdx = -1;
+    idxIncr = -1;
+    }
+else
+    {
+    startIdx = 0;
+    stopIdx = psl->blockCount;
+    idxIncr = 1;
+    }
+
+for (iBlk = startIdx; iBlk != stopIdx; iBlk += idxIncr)
+    {
+    unsigned tStart = psl->tStarts[iBlk];
+    unsigned tEnd = tStart+psl->blockSizes[iBlk];
+    unsigned qStart = psl->qStarts[iBlk];
+    unsigned size = psl->blockSizes[iBlk];
+    if (psl->strand[1] == '-')
+        reverseIntRange(&tStart, &tEnd, psl->tSize);
+    if ((iExon < 0) || ((tStart - (outPsl->tStarts[iExon]+outPsl->blockSizes[iExon])) > insertMergeSize))
+        {
+        iExon++;
+        outPsl->tStarts[iExon] = tStart;
+        outPsl->qStarts[iExon] = qStart;
+	}
+    outPsl->blockSizes[iExon] = size;
+    }
+outPsl->blockCount = iExon+1;
+}
+
 int pslCountIntronSpan(struct psl *target, struct psl *query, int maxBlockGap, struct hash *bkHash , int *tReps, int *qReps)
 /* count the number of blocks in the query that overlap the target */
 /* merge blocks that are closer than maxBlockGap */
@@ -330,17 +383,23 @@ int count = 0;
 struct binKeeper *bk = NULL;
 struct binElement *elist = NULL, *el = NULL;
 struct rmskOut *rmsk = NULL;
+struct psl *targetM , *queryM;
 
 *tReps = 0; *qReps = 0;
-/* debug statement */
 if (target == NULL || query == NULL)
     return 0;
+
+AllocVar(targetM);
+AllocVar(queryM);
+mergePslBlocks(target, targetM, maxBlockGap);
+mergePslBlocks(query, queryM, maxBlockGap);
 
 for (i = 0 ; i < target->blockCount ; i++)
   {
     int qe = target->qStarts[i] + target->blockSizes[i];
     int ts = target->tStarts[i] ;
     int te = target->tStarts[i] + target->blockSizes[i];
+    int teReps = 0;
     qs = target->qStarts[start];
     /* combine blocks that are close together */
     if (i < (target->blockCount) -1)
@@ -355,10 +414,11 @@ for (i = 0 ; i < target->blockCount ; i++)
                 assert (el->val != NULL);
                 rmsk = el->val;
                 assert(rmsk != NULL);
-                *tReps += positiveRangeIntersection(ts, te, rmsk->genoStart, rmsk->genoEnd);
+                teReps += positiveRangeIntersection(ts, te, rmsk->genoStart, rmsk->genoEnd);
                 }
             slFreeList(&elist);
-            if (2 * *tReps > (te-ts))
+            *tReps += teReps;
+            if (2 * teReps > (te-ts))
                 continue;
             }
 
@@ -389,6 +449,7 @@ for (i = 0 ; i < target->blockCount ; i++)
             {
             int qqe = query->qStarts[j] + query->blockSizes[j];
             int localReps = 0;
+            assert(qqstart < query->blockCount);
             qqs = query->qStarts[qqstart];
             /* mask repeats */
             bk = hashFindVal(bkHash, query->tName);
@@ -400,12 +461,13 @@ for (i = 0 ; i < target->blockCount ; i++)
                     assert (el->val != NULL);
                     rmsk = el->val;
                     assert(rmsk != NULL);
-                    localReps += positiveRangeIntersection(query->tStarts[j], query->tStarts[j+1], rmsk->genoStart, rmsk->genoEnd);
+                    localReps += positiveRangeIntersection(query->tStarts[j], query->tStarts[j]+query->blockSizes[j], rmsk->genoStart, rmsk->genoEnd);
                     }
                 *qReps += localReps;
                 slFreeList(&elist);
                 /* join together blocks that are close together */
                     if ((query->tStarts[j] + query->blockSizes[j] + maxBlockGap + localReps) > query->tStarts[j+1])   
+                        if (!quiet)
                         {
                         continue;
                         }
@@ -416,16 +478,20 @@ for (i = 0 ; i < target->blockCount ; i++)
       //              qqs = temp;
       //              }
                 }
-            if (query->blockSizes[j] > (2 * localReps) )
-                {
-                if (positiveRangeIntersection(qqs, qqe, qs, qe) > 10)
-                    count++;
-                }
-            qqstart = j + 1;
+           // if (query->blockSizes[j] > (2 * localReps) )
+           //     {
+            if (positiveRangeIntersection(qqs, qqe, qs, qe) > 10)
+                count++;
+            //    }
+            if (j+1 < query->blockCount)
+                qqstart = j + 1;
             }
         }
     start = i+1;
     }
+
+pslFree(&targetM);
+pslFree(&queryM);
 return count;
 }
 void processBestMulti(char *acc, struct psl *pslList, struct hash *trfHash, struct hash *synHash, struct hash *mrnaHash, struct hash *bkHash, char *nibDir)
@@ -434,7 +500,7 @@ void processBestMulti(char *acc, struct psl *pslList, struct hash *trfHash, stru
 {
 struct psl *bestPsl = NULL, *psl;
 struct genePred *gp = NULL, *kg = NULL;
-int geneOverlap;
+int geneOverlap = -1;
 int qSize = 0;
 int *scoreTrack = NULL;
 int milliScore;
@@ -460,9 +526,6 @@ int i ;
 if (pslList == NULL)
     return;
 
-if (sameString(pslList->qName, "AK000045"))
-    printf(".");
-
 /* get biggest mrna - some have polyA tail stripped off */
 for (psl = pslList; psl != NULL; psl = psl->next)
     if (psl->qSize > qSize)
@@ -475,12 +538,13 @@ for (psl = pslList; psl != NULL; psl = psl->next)
     int blockIx;
     char strand = psl->strand[0];
 
+    //printf("checking %s %s:%d-%d\n",psl->qName, psl->tName, psl->tStart, psl->tEnd);
     assert (psl!= NULL);
     milliScore = calcMilliScore(psl);
     if (milliScore >= milliMin)
 	{
 	++goodAliCount;
-	milliScore += sizeFactor(psl, bkHash);
+	milliScore += sizeFactor(psl, bkHash, trfHash);
 //if (uglyTarget(psl)) uglyf("@ %s %s:%d milliScore %d\n", psl->qName, psl->tName, psl->tStart, milliScore);
 	for (blockIx = 0; blockIx < psl->blockCount; ++blockIx)
 	    {
@@ -510,7 +574,7 @@ for (psl = pslList; psl != NULL; psl = psl->next)
     {
     int intronCount = 0;
     if (
-        calcMilliScore(psl) >= milliMin && closeToTop(psl, scoreTrack, bkHash)
+        calcMilliScore(psl) >= milliMin && closeToTop(psl, scoreTrack, bkHash, trfHash)
         && psl->match + psl->repMatch >= minCover * psl->qSize)
 	{
         ++bestAliCount;
@@ -518,7 +582,7 @@ for (psl = pslList; psl != NULL; psl = psl->next)
         bestStart = psl->tStart;
         bestEnd = psl->tEnd;
         bestChrom = cloneString(psl->tName);
-        intronCount = intronFactor(psl, bkHash);
+        intronCount = intronFactor(psl, bkHash, trfHash);
         if (intronCount > maxIntrons )
             maxIntrons = intronCount;
 	}
@@ -529,14 +593,30 @@ if (pslList != NULL)
     for (psl = pslList; psl != NULL; psl = psl->next)
     {
     if (
-        calcMilliScore(psl) >= milliMin && closeToTop(psl, scoreTrack, bkHash)
+        calcMilliScore(psl) >= milliMin && closeToTop(psl, scoreTrack, bkHash, trfHash)
         && psl->match + psl->repMatch >= minCover * psl->qSize)
             {
             pslTabOut(psl, bestFile);
             }
     else 
         {
-        if (intronFactor(psl, bkHash) == 0 && 
+        int overlapDiagonal = -1;
+        /* calculate if pseudogene overlaps the syntenic diagonal with another species */
+        if (synHash != NULL)
+            {
+            bk = hashFindVal(synHash, psl->tName);
+            elist = binKeeperFindSorted(bk, psl->tStart , psl->tEnd ) ;
+            overlapDiagonal = 0;
+            for (el = elist; el != NULL ; el = el->next)
+                {
+                bed = el->val;
+                overlapDiagonal += positiveRangeIntersection(psl->tStart, psl->tEnd, 
+                        bed->chromStart, bed->chromEnd);
+                }
+            slFreeList(&elist);
+            }
+
+        if (intronFactor(psl, bkHash, trfHash) == 0 && 
             maxIntrons > 0 && bestAliCount > 0 && bestChrom != NULL &&
             (calcMilliScore(psl) >= milliMinPseudo && 
             psl->match + psl->repMatch >= minCoverPseudo * (float)psl->qSize))
@@ -544,12 +624,11 @@ if (pslList != NULL)
             /* count # of alignments that span introns */
             int intronSpan = pslCountIntronSpan(bestPsl, psl, maxBlockGap, bkHash, &tReps, &qReps) ;
 
-            if (intronSpan > 1 && intronFactor(psl, bkHash) == 0 && 
+            if (intronSpan > 1 && intronFactor(psl, bkHash, trfHash) == 0 && 
                 maxIntrons > 0 && bestAliCount > 0 && bestChrom != NULL &&
                 (calcMilliScore(psl) >= milliMinPseudo && 
                 psl->match + psl->repMatch >= minCoverPseudo * (float)psl->qSize))
                 {
-                int overlapDiagonal = 0;
                 if (trfHash != NULL)
                     {
                     bk = hashFindVal(trfHash, psl->tName);
@@ -590,32 +669,28 @@ if (pslList != NULL)
                                 assert (rmsk != NULL);
                                 assert (rmsk->genoName != NULL);
                                 assert (psl->tName != NULL);
-            //                    printf("%s %d %d ",psl->tName, psl->tStart,psl->tEnd );
-            //                    printf("%s %d %d\n",rmsk->genoName, rmsk->genoStart, rmsk->genoEnd);
                                 rep += positiveRangeIntersection(ts, te, rmsk->genoStart, rmsk->genoEnd);
+                                //printf("%s %d %d rmsk ",psl->tName, ts,te );
+                                //printf("%s %d %d %d\n",rmsk->genoName, rmsk->genoStart, rmsk->genoEnd, rep);
                                 }
                             }
                         slFreeList(&elist);
                         }
                     }
                 if ((float)rep/(float)(psl->match+(psl->misMatch)) > maxRep )
-                    continue;
-
-
-                /* skip pseudogenes that overlap the syntenic diagonal with another species */
-                if (synHash != NULL)
                     {
-                    bk = hashFindVal(synHash, psl->tName);
-                    elist = binKeeperFindSorted(bk, psl->tStart , psl->tEnd ) ;
-                    overlapDiagonal = 0;
-                    for (el = elist; el != NULL ; el = el->next)
-                        {
-                        bed = el->val;
-                        overlapDiagonal += positiveRangeIntersection(psl->tStart, psl->tEnd, 
-                                bed->chromStart, bed->chromEnd);
-                        }
-                    slFreeList(&elist);
+                    if (!quiet)
+                        printf("NO %s reps %.3f %.3f\n",psl->tName,(float)rep/(float)(psl->match+(psl->misMatch)) , maxRep);
+                    fprintf(linkFile,"%s %d %s maxRep %s %s %d %d %d %d 0 %s %d %d %s %d %d %s -1 %d %d %d %d %d %d %d %d\n",
+                            psl->qName, calcMilliScore(psl), hGetDb(), bestPsl->qName, bestPsl->tName, 
+                            bestPsl->tStart, bestPsl->tEnd, 
+                            maxIntrons, geneOverlap, bestPsl->strand, polyA, polyAstart, 
+                            psl->tName, psl->tStart, psl->tEnd, psl->strand,
+                            intronSpan, intronFactor(psl, bkHash, trfHash), bestAliCount, psl->match+psl->repMatch, 
+                            psl->qSize, rep, qReps, overlapDiagonal); 
+                    continue;
                     }
+
 
                 /* count good mrna overlap with pseudogenes. If name matches then don't filter it.*/
                 if (mrnaHash != NULL)
@@ -634,12 +709,15 @@ if (pslList != NULL)
                             assert (psl->tName != NULL);
                             if (sameString(psl->qName, mPsl->qName))
                                 continue;
-                            if (intronFactor(mPsl, bkHash) > 0 )
+                            //if (intronFactor(mPsl, bkHash, trfHash) > 0 )
+                            if (mPsl->blockCount > 0)
                                 for (blockIx = 0; blockIx < mPsl->blockCount; ++blockIx)
                                     {
                                     mrnaBases += positiveRangeIntersection(psl->tStart, psl->tEnd, 
                                         mPsl->tStarts[blockIx], mPsl->tStarts[blockIx]+mPsl->blockSizes[blockIx]);
                                     }
+                            else
+                                mrnaBases += positiveRangeIntersection(psl->tStart, psl->tEnd, mPsl->tStart, mPsl->tEnd);
                             }
                         }
                     slFreeList(&elist);
@@ -647,12 +725,13 @@ if (pslList != NULL)
                         {
                         if (!quiet)
                             printf("NO %s better blat mrna %s \n",psl->qName,mPsl->qName);
-                        fprintf(linkFile,"%s %d hg15 better %s %s %d %d %d %d 0 %s %d %d %s %d %d %s -1 %d %d %d %d %d %d %d %d\n",
-                                psl->qName, calcMilliScore(psl), mPsl->qName, mPsl->tName, 
+                        fprintf(linkFile,"%s %d %s better %s %s %d %d %d %d 0 %s %d %d %s %d %d %s -1 %d %d %d %d %d %d %d %d\n",
+                                psl->qName, calcMilliScore(psl), hGetDb(), mPsl->qName, mPsl->tName, 
                                 mPsl->tStart, mPsl->tEnd, 
                                 maxIntrons, geneOverlap, bestPsl->strand, polyA, polyAstart, 
                                 psl->tName, psl->tStart, psl->tEnd, psl->strand,
-                                intronSpan, intronFactor(psl, bkHash), bestAliCount, psl->match+psl->repMatch, psl->qSize, tReps, qReps, overlapDiagonal); 
+                                intronSpan, intronFactor(psl, bkHash, trfHash), bestAliCount, psl->match+psl->repMatch, 
+                                psl->qSize, tReps, qReps, overlapDiagonal); 
                         continue;
                         }
                     }
@@ -662,16 +741,18 @@ if (pslList != NULL)
                     if ( positiveRangeIntersection(bestStart, bestEnd, psl->tStart, psl->tEnd) && 
                                 sameString(psl->tName, bestChrom))
                         overlapDiagonal = 999;
-                    if (overlapDiagonal != 0)
+                    if (overlapDiagonal >= 50)
                         {
                         if (!quiet)
-                            printf("NO. %s %d diag %s %d  bestChrom %s\n",psl->qName, overlapDiagonal, psl->tName, psl->tStart, bestChrom);
-                        fprintf(linkFile,"%s %d hg15 diagonal %s %s %d %d %d %d 0 %s %d %d %s %d %d %s 1 %d %d %d %d %d %d %d %d\n",
-                                psl->qName, calcMilliScore(psl), bestPsl->qName, bestPsl->tName, 
+                            printf("NO. %s %d diag %s %d  bestChrom %s\n",psl->qName, 
+                                    overlapDiagonal, psl->tName, psl->tStart, bestChrom);
+                        fprintf(linkFile,"%s %d %s diagonal %s %s %d %d %d %d 0 %s %d %d %s %d %d %s 1 %d %d %d %d %d %d %d %d\n",
+                                psl->qName, calcMilliScore(psl), hGetDb(), bestPsl->qName, bestPsl->tName, 
                                 bestPsl->tStart, bestPsl->tEnd, 
                                 maxIntrons, geneOverlap, bestPsl->strand, polyA, polyAstart, 
                                 psl->tName, psl->tStart, psl->tEnd, psl->strand,
-                                intronSpan, intronFactor(psl, bkHash), bestAliCount, psl->match+psl->repMatch, psl->qSize, tReps, qReps, overlapDiagonal); 
+                                intronSpan, intronFactor(psl, bkHash, trfHash), bestAliCount, 
+                                psl->match+psl->repMatch, psl->qSize, tReps, qReps, overlapDiagonal); 
                         }
                     else
                         {
@@ -679,9 +760,9 @@ if (pslList != NULL)
                                 POLYASLIDINGWINDOW, POLYAREGION, &polyAstart, &polyAend);
                         if (!quiet)
                             {
-                            printf("YES %s %d rr %3.1f rl %d ln %d %s iF %d maxI %d bestAli %d pCB %d score %d match %d cover %3.1f rp %d polyA %d syn %d",
+                            printf("YES %s %d rr %3.1f rl %d ln %d %s iF %d maxI %d bestAli %d isp %d score %d match %d cover %3.1f rp %d polyA %d syn %d",
                                 psl->qName,psl->tStart,((float)rep/(float)(psl->tEnd-psl->tStart) ),rep, 
-                                psl->tEnd-psl->tStart,psl->tName, intronFactor(psl, bkHash), 
+                                psl->tEnd-psl->tStart,psl->tName, intronFactor(psl, bkHash, trfHash), 
                                 maxIntrons , bestAliCount, intronSpan,
                                 calcMilliScore(psl),  psl->match + psl->repMatch , 
                                 minCoverPseudo * (float)psl->qSize, tReps + qReps, polyA, overlapDiagonal );
@@ -695,12 +776,13 @@ if (pslList != NULL)
                                 bestPsl->tEnd , &geneOverlap);
                         if (kg != NULL)
                             {
-                            fprintf(linkFile,"%s %d hg15 knownGene %s %s %d %d %d %d 0 %s %d %d %s %d %d %s 1 %d %d %d %d %d %d %d %d\n",
-                                    psl->qName, calcMilliScore(psl), kg->name, bestPsl->tName, 
+                            fprintf(linkFile,"%s %d %s knownGene %s %s %d %d %d %d 0 %s %d %d %s %d %d %s 1 %d %d %d %d %d %d %d %d\n",
+                                    psl->qName, calcMilliScore(psl), hGetDb(), kg->name, bestPsl->tName, 
                                     bestPsl->tStart, bestPsl->tEnd, 
                                     maxIntrons, geneOverlap, kg->strand, polyA, polyAstart, 
                                     psl->tName, psl->tStart, psl->tEnd, psl->strand, 
-                                    intronSpan, intronFactor(psl, bkHash), bestAliCount, psl->match+psl->repMatch, psl->qSize, tReps, qReps, overlapDiagonal); 
+                                    intronSpan, intronFactor(psl, bkHash, trfHash), bestAliCount, 
+                                    psl->match+psl->repMatch, psl->qSize, tReps, qReps, overlapDiagonal); 
                             }
                         else 
                             {
@@ -708,12 +790,13 @@ if (pslList != NULL)
                                     bestPsl->tEnd , &geneOverlap);
                             if (gp != NULL)
                                 {
-                                fprintf(linkFile,"%s %d hg15 refGene %s %s %d %d %d %d 0 %s %d %d %s %d %d %s 1 %d %d %d %d %d %d %d %d\n",
-                                        psl->qName, calcMilliScore(psl), gp->name, bestPsl->tName, 
+                                fprintf(linkFile,"%s %d %s refGene %s %s %d %d %d %d 0 %s %d %d %s %d %d %s 1 %d %d %d %d %d %d %d %d\n",
+                                        psl->qName, calcMilliScore(psl), hGetDb(), gp->name, bestPsl->tName, 
                                         bestPsl->tStart, bestPsl->tEnd, 
                                         maxIntrons, geneOverlap, gp->strand, polyA, polyAstart, 
                                         psl->tName, psl->tStart, psl->tEnd, psl->strand,
-                                        intronSpan, intronFactor(psl, bkHash), bestAliCount, psl->match+psl->repMatch, psl->qSize, tReps, qReps, overlapDiagonal); 
+                                        intronSpan, intronFactor(psl, bkHash, trfHash), bestAliCount, 
+                                        psl->match+psl->repMatch, psl->qSize, tReps, qReps, overlapDiagonal); 
                                 }
                             else 
                                 {
@@ -721,22 +804,24 @@ if (pslList != NULL)
                                         bestPsl->tEnd , &geneOverlap);
                                 if (gp != NULL)
                                     {
-                                    fprintf(linkFile,"%s %d hg15 mgcGenes %s %s %d %d %d %d 0 %s %d %d %s %d %d %s 1 %d %d %d %d %d %d %d %d\n",
-                                            psl->qName, calcMilliScore(psl), gp->name, bestPsl->tName, 
+                                    fprintf(linkFile,"%s %d %s mgcGenes %s %s %d %d %d %d 0 %s %d %d %s %d %d %s 1 %d %d %d %d %d %d %d %d\n",
+                                            psl->qName, calcMilliScore(psl), hGetDb(), gp->name, bestPsl->tName, 
                                             bestPsl->tStart, bestPsl->tEnd, 
                                             maxIntrons, geneOverlap, gp->strand, polyA, polyAstart, 
                                             psl->tName, psl->tStart, psl->tEnd, psl->strand,
-                                            intronSpan, intronFactor(psl, bkHash), bestAliCount, psl->match+psl->repMatch, psl->qSize, tReps, qReps, overlapDiagonal); 
+                                            intronSpan, intronFactor(psl, bkHash, trfHash), bestAliCount, 
+                                            psl->match+psl->repMatch, psl->qSize, tReps, qReps, overlapDiagonal); 
                                     }
                                 }
                             if (gp == NULL)
                                 {
-                                fprintf(linkFile,"%s %d hg15 mrna %s %s %d %d %d %d 0 %s %d %d %s %d %d %s 1 %d %d %d %d %d %d %d %d\n",
-                                        psl->qName, calcMilliScore(psl), bestPsl->qName, bestPsl->tName, 
+                                fprintf(linkFile,"%s %d %s mrna %s %s %d %d %d %d 0 %s %d %d %s %d %d %s 1 %d %d %d %d %d %d %d %d\n",
+                                        psl->qName, calcMilliScore(psl), hGetDb(), bestPsl->qName, bestPsl->tName, 
                                         bestPsl->tStart, bestPsl->tEnd, 
                                         maxIntrons, geneOverlap, bestPsl->strand, polyA, polyAstart, 
                                         psl->tName, psl->tStart, psl->tEnd, psl->strand,
-                                        intronSpan, intronFactor(psl, bkHash), bestAliCount, psl->match+psl->repMatch, psl->qSize, tReps, qReps, overlapDiagonal); 
+                                        intronSpan, intronFactor(psl, bkHash, trfHash), bestAliCount, 
+                                        psl->match+psl->repMatch, psl->qSize, tReps, qReps, overlapDiagonal); 
                                 }
                             }
                         }
@@ -744,42 +829,45 @@ if (pslList != NULL)
                 else
                 {
                     if (!quiet)
-                        printf("NO. %s %d rr %3.1f rl %d ln %d %s iF %d maxI %d bestAli %d pCB %d score %d match %d cover %3.1f rp %d\n",
+                        printf("NO. %s %d rr %3.1f rl %d ln %d %s iF %d maxI %d bestAli %d isp %d score %d match %d cover %3.1f rp %d\n",
                             psl->qName,psl->tStart,((float)rep/(float)(psl->tEnd-psl->tStart) ),rep, 
-                            psl->tEnd-psl->tStart,psl->tName, intronFactor(psl, bkHash), maxIntrons , 
+                            psl->tEnd-psl->tStart,psl->tName, intronFactor(psl, bkHash, trfHash), maxIntrons , 
                             bestAliCount, intronSpan,
                             calcMilliScore(psl),  psl->match + psl->repMatch , 
                             minCoverPseudo * (float)psl->qSize, tReps + qReps);
-                    fprintf(linkFile,"%s %d hg15 span %s %s %d %d %d %d 0 %s %d %d %s %d %d %s -1 %d %d %d %d %d %d %d %d\n",
-                            psl->qName, calcMilliScore(psl), bestPsl->qName, bestPsl->tName, 
+                    fprintf(linkFile,"%s %d %s span %s %s %d %d %d %d 0 %s %d %d %s %d %d %s -1 %d %d %d %d %d %d %d %d\n",
+                            psl->qName, calcMilliScore(psl), hGetDb(), bestPsl->qName, bestPsl->tName, 
                             bestPsl->tStart, bestPsl->tEnd, 
                             maxIntrons, geneOverlap, bestPsl->strand, polyA, polyAstart, 
                             psl->tName, psl->tStart, psl->tEnd, psl->strand,
-                            intronSpan, intronFactor(psl, bkHash), bestAliCount, psl->match+psl->repMatch, psl->qSize, tReps, qReps, -1); 
+                            intronSpan, intronFactor(psl, bkHash, trfHash), bestAliCount, 
+                            psl->match+psl->repMatch, psl->qSize, tReps, qReps, overlapDiagonal); 
                 }
             }
             else 
             {
                 int intronSpan = pslCountIntronSpan(bestPsl, psl, maxBlockGap, bkHash, &tReps, &qReps) ;
                 if (!quiet)
-                    printf("NO. %s %d rr %3.1f rl %d ln %d %s iF %d maxI %d bestAli %d pCB na score %d match %d cover %3.1f rp %d\n",
+                    printf("NO. %s %d rr %3.1f rl %d ln %d %s iF %d maxI %d bestAli %d isp %d score %d match %d cover %3.1f rp %d\n",
                         psl->qName,psl->tStart,((float)rep/(float)(psl->tEnd-psl->tStart) ),rep, 
-                        psl->tEnd-psl->tStart,psl->tName, intronFactor(psl, bkHash), maxIntrons , bestAliCount,
+                        psl->tEnd-psl->tStart,psl->tName, intronFactor(psl, bkHash, trfHash), maxIntrons , bestAliCount, intronSpan,
                         calcMilliScore(psl),  psl->match + psl->repMatch , minCoverPseudo * (float)psl->qSize, tReps + qReps);
                 if (bestPsl != NULL)
-                    fprintf(linkFile,"%s %d hg15 introns %s %s %d %d %d %d 0 %s %d %d %s %d %d %s -1 %d %d %d %d %d %d %d %d\n",
-                        psl->qName, calcMilliScore(psl), bestPsl->qName, bestPsl->tName, 
+                    fprintf(linkFile,"%s %d %s introns %s %s %d %d %d %d 0 %s %d %d %s %d %d %s -1 %d %d %d %d %d %d %d %d\n",
+                        psl->qName, calcMilliScore(psl), hGetDb(), bestPsl->qName, bestPsl->tName, 
                         bestPsl->tStart, bestPsl->tEnd, 
                         maxIntrons, geneOverlap, bestPsl->strand, polyA, polyAstart, 
                         psl->tName, psl->tStart, psl->tEnd, psl->strand,
-                        intronSpan, intronFactor(psl, bkHash), bestAliCount, psl->match+psl->repMatch, psl->qSize, tReps, qReps, -1); 
+                        intronSpan, intronFactor(psl, bkHash, trfHash), bestAliCount, 
+                        psl->match+psl->repMatch, psl->qSize, tReps, qReps, overlapDiagonal); 
                 else
-                    fprintf(linkFile,"%s %d hg15 introns %s %s %d %d %d %d 0 %s %d %d %s %d %d %s -1 %d %d %d %d %d %d %d %d\n",
-                        psl->qName, calcMilliScore(psl), "none", "none", 
+                    fprintf(linkFile,"%s %d %s introns %s %s %d %d %d %d 0 %s %d %d %s %d %d %s -1 %d %d %d %d %d %d %d %d\n",
+                        psl->qName, calcMilliScore(psl), hGetDb(), "none", "none", 
                         -1, -1, 
                         maxIntrons, geneOverlap, " ", polyA, polyAstart, 
                         psl->tName, psl->tStart, psl->tEnd, psl->strand,
-                        intronSpan, intronFactor(psl, bkHash), bestAliCount, psl->match+psl->repMatch, psl->qSize, tReps, qReps, -1); 
+                        intronSpan, intronFactor(psl, bkHash, trfHash), bestAliCount, 
+                        psl->match+psl->repMatch, psl->qSize, tReps, qReps, overlapDiagonal); 
             }
         }
     }
