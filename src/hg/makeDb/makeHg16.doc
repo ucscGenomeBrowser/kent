@@ -7262,18 +7262,22 @@ LOAD SNP DETAILS (Done.  Daryl Thomas; February 18, 2004)
     # save a little space
     gzip jaxOrtholog.tab
 
-LOAD ACEMBLY (WORKING - 2004-02-21 - Hiram)
+LOAD ACEMBLY (DONE - 2004-03-29 - Hiram)
     mkdir -p /cluster/data/hg16/bed/acembly
     cd /cluster/data/hg16/bed/acembly
-    # Get acembly*gene.gff from Jean and Danielle Thierry-Mieg
-    set build = ncbi_34
-    wget --timestamping ftp://ftp.ncbi.nih.gov/repository/acedb/$build.human.genes/acembly.$build.genes.proteins.fasta.tar.gz
-    wget --timestamping ftp://ftp.ncbi.nih.gov/repository/acedb/$build.human.genes/acembly.$build.genes.gff.tar.gz
-    wget --timestamping ftp://ftp.ncbi.nih.gov/repository/acedb/$build.human.genes/acembly.$build.genes.pfamhits.tar.gz
-    wget --timestamping ftp://ftp.ncbi.nih.gov/repository/acedb/$build.human.genes/acembly.$build.mrnas.fasta.tar.gz
-    gunzip -c acembly.$build.genes.gff.tar.gz | tar xvf -
-    gunzip -c acembly.$build.genes.proteins.fasta.tar.gz | tar xvf -
-    cd acembly.$build.genes.gff
+
+    # Data is obtained from:
+    # Danielle et Jean Thierry-Mieg	mieg@ncbi.nlm.nih.gov
+
+    wget --timestamping ftp://ftp.ncbi.nih.gov/repository/acedb/ncbi_34.human.genes/acembly.ncbi_34.genes.proteins.fasta.tar.gz
+    wget --timestamping ftp://ftp.ncbi.nih.gov/repository/acedb/ncbi_34.human.genes/acembly.ncbi_34.genes.gff.tar.gz
+    wget --timestamping ftp://ftp.ncbi.nih.gov/repository/acedb/ncbi_34.human.genes/acembly.ncbi_34.mrnas.fasta.tar.gz
+    wget --timestamping ftp://ftp.ncbi.nih.gov/repository/acedb/ncbi_34.human.genes/acembly.ncbi_34.genes.pfamhits.tar.gz
+
+    tar xvzf acembly.ncbi_34.genes.gff.tar.gz
+    tar xvzf acembly.ncbi_34.genes.proteins.fasta.tar.gz
+    cd acembly.ncbi_34.genes.gff
+
     # Save just the floating-contig features to different files for lifting 
     # and lift up the floating-contig features to chr*_random coords:
     # NOTE: file prefix (x1) has been added since build 31
@@ -7285,26 +7289,28 @@ LOAD ACEMBLY (WORKING - 2004-02-21 - Hiram)
         liftUp chr${c}_random.gff ../../../$c/lift/random.lft warn \
           ctg-chr${c}_random.gff
       endif
-      # Strip out _random or floating contig lines from the normal chrom gff,
-      # and add the "chr" prefix:
-      grep -v ^$c\| $f | grep -v ^Hs | perl -wpe 's/^/chr/;' > chr$c.gff
+      grep -v ^$c\| $f | grep -v ^Hs | perl -wpe 's/^/chr/;' | \
+	grep -v "^chr//" > chr$c.gff
+      echo "done $c"
     end
-
-    cd ../acembly.$build.genes.proteins.fasta
-    #- Remove G_t*_ prefixes from acemblyproteins.*.fasta:
-    foreach f (x1.acemblyproteins.*.fasta)
-      perl -wpe 's/^\>G_t[\da-zA-Z]+_/\>/' $f > chr$f:r:e.fa
-    end
+    # that last grep strips out _random or floating contig lines from the
+    # normal chrom gff, and add the "chr" prefix
+    #	Three of them end up empty, check for this and remove them
+    #	if necessary
+    rm -f chr19_random.gff chr18_random.gff chrUn.gff
+    #	There was one error in a coordinate on chr17_random:
+    # chr17_random    acembly stop_codon      -2      0       .       +       1      gene_id M17S2; transcript_id M17S2.cDec03;
+    #	This line was removed (shows up as first line) from
+    #	chr17_random.gff before the database load
 
     #- Load into database:
     cd ..
-    ldHgGene hg16 acembly acembly.$build.genes.gff/chr*.gff
+    ldHgGene hg16 acembly acembly.ncbi_34.genes.gff/chr*.gff
     hgPepPred hg16 generic acemblyPep \
-      acembly.$build.genes.proteins.fasta/chr*.fa
-    unset build
-
+	acembly.ncbi_34.genes.proteins.fasta/*.fasta
 
 # MAKE HUMAN-CHIMP OVER.CHAIN FOR LIFTOVER (DONE 3/2/04 angie)
+g 
     ssh kolossus
     mkdir /cluster/data/hg16/bed/bedOver/hg16toPt0
     cd /cluster/data/hg16/bed/bedOver/hg16toPt0
