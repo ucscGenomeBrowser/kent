@@ -13,7 +13,8 @@ O = aliType.o axt.o bits.o binRange.o \
     keys.o kxTok.o largefnt.o linefile.o localmem.o \
     maf.o mafFromAxt.o medfnt.o memalloc.o memgfx.o net.o nib.o \
     nt4.o obscure.o oldGff.o options.o osunix.o \
-    portimpl.o psl.o ra.o repMask.o rle.o sailfnt.o seqOut.o servcis.o \
+    portimpl.o psl.o ra.o rbTree.o \
+    repMask.o rle.o sailfnt.o seqOut.o servcis.o \
     servCrunx.o servcl.o servmsII.o servpws.o shaRes.o \
     sixhi.o slog.o smallishfnt.o snof.o snofmake.o snofsig.o spaceSaver.o \
     sqlNum.o sqlList.o subText.o wildcmp.o wormdna.o \
