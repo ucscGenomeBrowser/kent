@@ -514,6 +514,8 @@ freeMem(el->classStarts);
 freeMem(el->classEnds);
 freeMem(el->classTypes);
 exonPathFreeList(&el->paths);
+exonPathFreeList(&el->rejects);
+freez(&el->nodes);
 freez(pEl);
 }
 

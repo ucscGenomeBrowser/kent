@@ -112,7 +112,7 @@ void exonPathOutput(struct exonPath *el, FILE *f, char sep, char lastSep);
 
 struct exonGraph
 /* A collection of exonNodes forming a graph */
-    {
+{
     struct exonGraph *next;  /* Next in singly linked list. */
     char *tName;	/* name of target sequence, often a chrom. */
     int tStart;	/* start in tName. */
@@ -127,7 +127,8 @@ struct exonGraph
     unsigned pathCount;	/* Number of different paths generating graph. */
     struct exonPath *paths;	/* Array of dynamically allocated exonPaths which make up the graph. */
     struct exonNode **nodes;  /* Array of pointers to each node in graph, ids of nodes index into this array. */
-    };
+    struct exonPath *rejects; /* List of paths that were rejected (duplicates, etc.) */
+};
 
 struct exonGraph *exonGraphLoad(char **row);
 /* Load a exonGraph from row fetched with select * from exonGraph
