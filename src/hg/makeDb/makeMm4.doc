@@ -2474,7 +2474,7 @@ http://genome.imim.es/genepredictions/M.musculus/mmOct2003/geneid_v1.1/$chr.prot
     unset tarFile 
 
     # pare down protein FASTA header to id and add missing .a:
-    foreach c (1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 X )
+    foreach c (1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 X Y )
       echo chr$c
       perl -wpe 's/^(\>\S+)\s.*$/$1.a/' < chr_ptx/chr$c.ptx > chr_ptx/chr$c-fixed.fa
     end
