@@ -1922,3 +1922,30 @@ cat > split.csh << 'EOF'
     hgLoadChain panTro1 liftOverHg16SwpNewIdChain panTro1ToHg16.newId.swp.chain
 
 
+# ACCESSIONS FOR CONTIGS (DONE 2004-08-27 kate)
+#  Used for Scaffold track details and ENCODE AGP's
+    ssh hgwdev
+    cd /cluster/data/panTro1/bed
+    mkdir -p contigAcc
+    cd contigAcc
+    
+    # extract WGS contig to accession mapping from Entrez Nucleotide summaries
+    # To get the summary file, access the Genbank page for the project 
+    # by searching:
+    #       genus[ORGN] AND WGS[KYWD]
+    # At the end of the page, click on the list of accessions for the contigs.
+    # Select summary format, and send to file.
+    # output to file <species>.acc
+
+    contigAccession chimp.acc > contigAcc.tab
+    wc -l contigAcc.tab
+        # 361864 contigAcc.tab
+    # extract all records from chrN_gold, using table browser 
+    # (includes header line)
+    faSize /cluster/data/panTro1/contigs.bases
+        # 361864
+    hgsql panTro1 < $HOME/kent/src/hg/lib/contigAcc.sql
+    echo "LOAD DATA LOCAL INFILE 'contigAcc.tab' INTO TABLE contigAcc" | \
+        hgsql panTro1
+    hgsql panTro1 -e "SELECT COUNT(*) FROM contigAcc"
+        # 361864
