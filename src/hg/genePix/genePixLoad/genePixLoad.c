@@ -279,6 +279,7 @@ char **row;
 
 /* Make sure that at least one field specifying gene is
  * specified. */
+ uglyf("1.1\n");
 if (gene[0] == 0 && locusLink[0] == 0 && refSeq[0] == 0
     && uniProt[0] == 0 && genbank[0] == 0)
     errAbort("No gene, locusLink, refSeq, uniProt, or genbank "
@@ -295,12 +296,14 @@ needOr = optionallyAddOr(dy, "genbank", genbank, needOr);
 dyStringPrintf(dy, ")");
 uglyf("query %s\n", dy->string);
 
+ uglyf("1.2\n");
 /* Loop through query results finding ID that best matches us.
  * The locusLink/refSeq ID's are worth 8,  the genbank 4, the
  * uniProt 2, and the name 1.  This scheme will allow different
  * genes with the same name and even the same uniProt ID to 
  * cope with alternative splicing.  */
 sr = sqlGetResult(conn, dy->string);
+ uglyf("1.3\n");
 while ((row = sqlNextRow(sr)) != NULL)
     {
     int id = sqlUnsigned(row[0]);
@@ -340,10 +343,12 @@ while ((row = sqlNextRow(sr)) != NULL)
 	geneId = id;
 	}
     }
+ uglyf("1.4\n");
 sqlFreeResult(&sr);
 
 if (geneId == 0)
    {
+   uglyf("ok A1\n");
    dyStringClear(dy);
    dyStringAppend(dy, "insert into gene set\n");
    dyStringPrintf(dy, " id = default,\n");
@@ -356,31 +361,41 @@ if (geneId == 0)
    uglyf("%s\n", dy->string);
    sqlUpdate(conn, dy->string);
    geneId = sqlLastAutoId(conn);
+   uglyf("ok A9\n");
    }
 else
    {
    char *oldName;
 
+   uglyf("ok B1\n");
    /* Handle updating name field - possibly creating a synonym. */
    dyStringClear(dy);
    dyStringPrintf(dy, "select name from gene where id = %d", geneId);
+   uglyf("ok B2\n");
    oldName = sqlQuickString(conn, dy->string);
    if (gene[0] != 0)
        {
        if (oldName[0] == 0)
 	   {
+	   uglyf("ok B2a1\n");
 	   dyStringClear(dy);
-	   dyStringPrintf(dy, "update gene set name = '%s'");
-	   dyStringPrintf(dy, " name = '%s',", gene);
+	   uglyf("ok B2a1.1\n");
+	   dyStringPrintf(dy, "update gene set" );
+	   uglyf("ok B2a1.2\n");
+	   dyStringPrintf(dy, " name = '%s'", gene);
+	   uglyf("ok B2a1.3\n");
 	   dyStringPrintf(dy, " where id = %d", geneId);
+	   uglyf("ok B2a2.4\n");
 	   uglyf("%s\n", dy->string);
 	   sqlUpdate(conn, dy->string);
 	   }
        else if (differentString(oldName, gene))
 	   {
+	   uglyf("ok B2b1\n");
 	   dyStringClear(dy);
 	   dyStringAppend(dy, "select count(*) from geneSynonym where ");
 	   dyStringPrintf(dy, "gene = %d and name = '%s'", geneId, gene);
+	   uglyf("ok B2b2\n");
 	   if (sqlQuickNum(conn, dy->string) == 0)
 	       {
 	       dyStringClear(dy);
@@ -389,8 +404,10 @@ else
 	       uglyf("%s\n", dy->string);
 	       sqlUpdate(conn, dy->string);
 	       }
+	   uglyf("ok B2b3\n");
 	   }
        }
+   uglyf("ok B2\n");
 
    /* Update other fields. */
    dyStringClear(dy);
@@ -409,7 +426,9 @@ else
    sqlUpdate(conn, dy->string);
    geneId = geneId;
    freez(&oldName);
+   uglyf("ok B9\n");
    }
+ uglyf("1.5\n");
 dyStringFree(&dy);
 return geneId;
 }
@@ -813,7 +832,9 @@ while (lineFileNextRowTab(lf, words, rowSize))
     int imageId = 0;
 
     sectionId = doSectionSet(conn, sectionSetHash, sectionSet);
+    uglyf("ok 1\n");
     geneId = doGene(lf, conn, gene, locusLink, refSeq, uniProt, genbank, taxon);
+    uglyf("ok 2\n");
     antibodyId = doAntibody(conn, abName, abDescription, abTaxon);
     probeId = doProbe(lf, conn, geneId, antibodyId, fPrimer, rPrimer, seq);
     imageFileId = doImageFile(lf, conn, fileName, fullDir, screenDir, thumbDir,

@@ -8,7 +8,7 @@ O = genePixLoad.o
 
 genePixLoad: $O ${MYLIBS}
 	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/genePixLoad $O ${MYLIBS} $L
-	strip ${HOME}/bin/${MACHTYPE}/genePixLoad
+#	strip ${HOME}/bin/${MACHTYPE}/genePixLoad
 
 clean:
 	rm -f $O
