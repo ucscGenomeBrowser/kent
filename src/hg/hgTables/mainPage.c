@@ -15,7 +15,7 @@
 #include "grp.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: mainPage.c,v 1.6 2004/07/18 01:51:35 kent Exp $";
+static char const rcsid[] = "$Id: mainPage.c,v 1.7 2004/07/18 03:37:22 kent Exp $";
 
 
 static struct grp *makeGroupList(struct sqlConnection *conn, 
@@ -200,7 +200,9 @@ hPrintf("<TABLE BORDER=0>\n");
 	    (group == selGroup ? " SELECTED" : ""),
 	    group->label);
 	}
-    hPrintf(" <OPTION VALUE=all%s>All Tracks\n",
+    hPrintf(" <OPTION VALUE=custom%s>(Custom Tracks)\n",
+	    (group == selGroup ? " SELECTED" : ""));
+    hPrintf(" <OPTION VALUE=all%s>(All Tracks)\n",
 	    (group == selGroup ? " SELECTED" : ""));
     hPrintf("</SELECT>\n");
 
@@ -266,7 +268,7 @@ hPrintf("<TABLE BORDER=0>\n");
 /* Filter line. */
     {
     hPrintf("<TR><TD><B>filter:</B>\n");
-    cgiMakeButton(hgtaDoFilterPage, "Create");
+    cgiMakeButton(hgtaDoFilterPage, "(Create)");
     hPrintf("</TD></TR>\n");
     }
 
@@ -280,10 +282,10 @@ hPrintf("<TABLE BORDER=0>\n");
 	 outStats, outBed, 
 	 outGtf, outCustomTrack };
     static char *labels[] =
-        {"all fields from primary table", "sequence", 
+        {"all fields from primary table", "(sequence)", 
 	 "selected fields from related tables", "schema (database organization)",
-	 "statistics", "BED - Browser Extensible Data", 
-	 "GTF - Gene Transfer Format", "custom track"};
+	 "(statistics", "(BED - Browser Extensible Data)", 
+	 "(GTF - Gene Transfer Format)", "(custom track)"};
     hPrintf("<TR><TD><B>output:</B>\n");
     hPrintf("<SELECT NAME=%s>\n", hgtaOutputType);
     for (i=0; i<ArraySize(symbols); ++i)
@@ -302,13 +304,16 @@ hPrintf("<TABLE BORDER=0>\n");
     hPrintf("<TR><TD>\n");
     cgiMakeButton(hgtaDoTopSubmit, "Submit");
     hPrintf(" ");
-    cgiMakeButton(hgtaDoIntersect, "Intersect");
+    cgiMakeButton(hgtaDoIntersect, "(Intersect)");
+#ifdef SOMETIMES
     hPrintf(" ");
     cgiMakeButton(hgtaDoTest, "Test");
+#endif /* SOMETIMES */
     hPrintf("</TD></TR>\n");
     }
 
 hPrintf("</TABLE>\n");
+hPrintf("<BR><I>Note: buttons and fields in parenthesis are not yet implemented.</I>\n");
 }
 
 void mainPageAfterOpen(struct sqlConnection *conn)
