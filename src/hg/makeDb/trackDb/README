@@ -78,9 +78,27 @@ For expRatio
        expStep - amount to step in visible expression scale.  Some
            round number close to expScale/8 is best
        chip - Name of microarray chip.
-For wigMaf
+For wigMaf tracks:
+    o track name is table name of the multiple alignment maf table,
+        with associated maf file in /gbdb (loaded with hgLoadMaf)
+    o type line includes data value range for conservation wiggle,
+         as for wig track 
+    o standard wig track settings may be included (e.g. 
+        maxHeightPixels, yLineOnOff, autoScaleDefault).  These
+        apply to both conservation and pairwise wiggles
+    o wiggle setting - contains table name of conservation wiggle 
+                          (loaded with hgLoadWiggle)
+    o species order - specifies the order of each pairwise items in the display
+    o pairwise setting - contains suffix of the pairwise maf tables.
+            The prefix is generated from the species name.
+            An underscore is used to separate (e.g. chimp_hmrg if
+            setting is "hmrg").  If there is a wig table named
+            <species>_<suffix>_wig, this is used for pairwise display.
+            In this case, the wiggle height for the pairwise can
+            be specified as the last word on this line.
+            (e.g. pairwise CFTR 20, will have 20 pixel height of
+            pairwise wiggle from tables named <species>_CFTR_wig).
     
-
 If something lacks a type field it needs to have custom
 display routines.   You can remove a track from the
 browser by removing it from the .ra file and doing
@@ -114,3 +132,4 @@ Some settings used by various tracks:
     o exonArrows - if speciufied to draw strand arrows on exons.
     o itemAttrIdTbl - table used to color individual items in a track, selected
       by numeric id.
+
