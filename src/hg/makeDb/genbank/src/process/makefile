@@ -10,7 +10,7 @@ all: ${PROGS}
 ${BINARCH}/gbProcess: ${O}
 
 ${BINARCH}/gbProcessedCheck: gbProcessedCheck.c makefile ${LIBGENBANK}
-	@mkdir -p ${BINARCH}
+	@${MKDIR} ${BINARCH}
 	gcc ${CFLAGS} -o $@ gbProcessedCheck.c $(LIBS)
 
 clean:

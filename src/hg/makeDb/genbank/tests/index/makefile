@@ -11,6 +11,6 @@ clean:
 	rm -f $O ${PROGS}
 
 ${TESTBINARCH}/gbIndexTest: gbIndexTest.o ${LIBGENBANK}
-	@mkdir -p ${TESTBINARCH}
+	@${MKDIR} ${TESTBINARCH}
 	gcc ${CFLAGS} -o ${TESTBINARCH}/gbIndexTest gbIndexTest.o $(LIBS)
 
