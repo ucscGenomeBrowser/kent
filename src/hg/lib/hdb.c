@@ -25,9 +25,17 @@ static struct sqlConnCache *hdbCc = NULL;  /* cache for primary database connect
 static struct sqlConnCache *hdbCc2 = NULL;  /* cache for second database connection (ortholog) */
 static struct sqlConnCache *centralCc = NULL;
 
+#define DEFAULT_HUMAN "hg12"
+#define DEFAULT_MOUSE "mm2"
+#define DEFAULT_ZOO   "zooHuman3"
+
+static char *defaultHuman = DEFAULT_HUMAN;
+static char *defaultMouse = DEFAULT_MOUSE;
+static char *defaultZoo   = DEFAULT_ZOO;
+
 static char *hdbHost;
-static char *hdbName = "hg8";
-static char *hdbName2 = "mm1";
+static char *hdbName = DEFAULT_HUMAN;
+static char *hdbName2 = DEFAULT_MOUSE;
 static char *hdbUser;
 static char *hdbPassword;
 static char *hdbTrackDb = NULL;
@@ -523,6 +531,7 @@ char rangeStr[32];
 int count;
 boolean canDoUTR, canDoIntrons;
 boolean useSqlConstraints = sqlConstraints != NULL && sqlConstraints[0] != 0;
+char tStrand = '?', qStrand = '?';
 int i;
 
 /* Caller can give us either a full table name or root table name. */
@@ -612,8 +621,16 @@ while ((row = sqlNextRow(sr)) != NULL)
 	bedItem->score  = 0;
     if (hti->strandField[0] != 0)
 	if (sameString("tStarts", hti->startsField))
-	    // psl: use target strand
-	    strncpy(bedItem->strand, row[4]+1, 2);
+	    {
+	    // psl: use XOR of qStrand,tStrand
+	    qStrand = row[4][0];
+	    tStrand = row[4][1];
+	    if ((qStrand == '-' && tStrand == '+') ||
+		(qStrand == '+' && tStrand == '-'))
+		strncpy(bedItem->strand, "-", 2);
+	    else
+		strncpy(bedItem->strand, "+", 2);
+	    }
 	else
 	    strncpy(bedItem->strand, row[4], 2);
     else
@@ -654,8 +671,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 		bedItem->blockSizes[i] -= bedItem->chromStarts[i];
 		}
 	    }
-	if (sameString("tStarts", hti->startsField) &&
-	    (bedItem->strand[0] == '-'))
+	if (sameString("tStarts", hti->startsField) && (tStrand == '-'))
 	    {
 	    // psl: if target strand is '-', flip the coords.
 	    // (this is the target part of pslRcBoth from src/lib/psl.c)
@@ -1801,15 +1817,15 @@ char *result = hGetDb();
 
 if (strstrNoCase(organism, "mouse"))
     {
-    result = hdbName2;
+    result = defaultMouse;
     }
 else if (strstrNoCase(organism, "zoo"))
     {
-    result = "zooHuman3";
+    result = defaultZoo;
     }
 else if (strstrNoCase(organism, "human"))
     {
-    result = hdbName;
+    result = defaultHuman;
     }
 
 return result;
