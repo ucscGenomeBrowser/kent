@@ -1091,21 +1091,17 @@ LOAD SNPS (Done; Daryl Thomas May 28, 2002)
       hgLoadBed hg11 snpNih snpNih.bed
      -gzip all of the big files
 
-LOAD CPGISLANDS (todo) NEW RELEASE NOT YET AVAILABLE
+LOAD CPGISLANDS (done 7/18/02)
      - login to hgwdev
-     cd /cluster/store1/gs.12/build29/bed
-     mkdir cpgIsland
-     cd cpgIsland
-     hg11 < ~kent/src/hg/lib/cpgIsland.sql
-     wget http://genome.wustl.edu:8021/pub/gsc1/achinwal/MapAccessions/Freezes/cpg_apr01.oo29.tar 
-     tar -xf cpg*.tar
-     -copy filter.awk from a previous release, e.g. ~kent/oo.33/bed/cpgIsland to cpg_apr01.oo29
-     cd cpg_apr01.oo29
-     awk -f filter.awk */ctg*/*.cpg.out > contig.bed
-     liftUp cpgIsland.bed ../../../jkStuff/liftAll.lft warn contig.bed
-     - Enter database with "hg11" command.
-     - At mysql> prompt type in:
-          load data local infile 'cpgIsland.bed' into table cpgIsland
+     mkdir -p ~/hg11/cpgIsland
+     cd ~/hg11/cpgIsland
+     - Asif Chinwalla <achinwal@watson.wustl.edu> emailed the data in an 
+       attachment; it was unpacked into ~/hg11/cpgIsland
+     - copy filter.awk from a previous release, e.g. ~kent/oo.33/bed/cpgIsland 
+       to cpg_apr2002.masked
+     awk -f filter.awk */*.cpg > cpgIsland.bed
+     hgLoadBed hg11 cpgIsland -tab -noBin \
+       -sqlTable=$HOME/kent/src/hg/lib/cpgIsland.sql cpgIsland.bed
 
 LOAD ENSEMBL GENES (done 7/9/02)
      mkdir -p ~/hg11/bed/ensembl
