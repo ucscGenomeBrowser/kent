@@ -26,7 +26,7 @@ set cioSav cioSav1
 set tetNig1 tetNig1
 
 # Define all organism/assembly-specific databases.
-set gbd $hg,$mm,$rn,$fr,$ce,$cb,$dm,$dp,$sacCer,$panTro,$galGal,$ci,$danRer,$canFam,$droYak,$anoGam,$cioSav,$tetNig1
+set gbd $hg,$mm,$rn,$fr,$ce,$cb,$dm,$dp,$sacCer,$panTro,$galGal,$ci,$danRer,$canFam,$droYak,$anoGam,$cioSav,$tetNig
 
 # Only consider one of members of gbd at a time.
 exclusiveSet $gbd
