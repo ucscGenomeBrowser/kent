@@ -32,7 +32,7 @@
 #include "twoBit.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.236 2005/02/11 23:33:48 hartera Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.237 2005/02/14 21:01:08 angie Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
@@ -3065,7 +3065,8 @@ struct trackDb *hTrackDb(char *chrom)
 struct sqlConnection *conn = hAllocConn();
 struct trackDb *tdbList = loadTrackDb(conn, NULL);
 struct trackDb *tdbLocalList = loadTrackDbLocal(conn, NULL);
-struct trackDb *tdbFullList = NULL, *tdbRetList = NULL;
+struct trackDb *tdbFullList = NULL, *tdbSubtrackedList = NULL;
+struct trackDb *tdbRetList = NULL;
 char *database = hGetDb();
 boolean privateHost = hIsPrivateHost();
 struct hash *compositeHash = newHash(0);
@@ -3129,7 +3130,17 @@ for (tdb = tdbFullList; nextTdb != NULL; tdb = nextTdb)
             }
         }
     else
-        slAddHead(&tdbRetList, tdb);
+        slAddHead(&tdbSubtrackedList, tdb);
+    }
+/* Prune composite tracks that have empty subtracks lists because their 
+ * tables do not exist in the database. */
+for (nextTdb = tdb = tdbSubtrackedList; nextTdb != NULL; tdb = nextTdb)
+    {
+    nextTdb = tdb->next;
+    if (! (trackDbSetting(tdb, "compositeTrack") && tdb->subtracks == NULL))
+        {
+	slAddHead(&tdbRetList, tdb);
+	}
     }
 hFreeConn(&conn);
 return tdbRetList;
