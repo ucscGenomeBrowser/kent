@@ -24,7 +24,7 @@
 #include "scoredRef.h"
 #include "maf.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.106 2003/05/06 07:22:22 kate Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.107 2003/05/07 14:34:12 braney Exp $";
 
 #define DEFAULT_PROTEINS "proteins"
 #define DEFAULT_GENOME "Human"
@@ -85,6 +85,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     hashAdd(hash, row[0], cEntry);
     }
 sqlFreeResult(&sr);
+
 return hash;
 }
 
@@ -541,14 +542,17 @@ return hDnaFromSeq(chromName, 0, size, dnaLower);
 struct slName *hAllChromNames()
 /* Get list of all chromosome names. */
 {
-struct hashEl *hashEl = *(hdbChromInfoHash()->table);
+struct hashCookie cookie;
+struct hashEl *hel;
 struct slName *list = NULL, *el;
 
-for(;hashEl; hashEl = hashEl->next)
+cookie = hashFirst(hdbChromInfoHash());
+while ((hel = hashNext(&cookie)) != NULL)
     {
-    el = newSlName(hashEl->name);
+    el = newSlName(hel->name);
     slAddHead(&list, el);
     }
+
 slReverse(&list);
 return list;
 }
