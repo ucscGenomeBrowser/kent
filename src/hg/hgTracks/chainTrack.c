@@ -14,7 +14,7 @@
 #include "chainDb.h"
 
 
-static void chainDraw(struct trackGroup *tg, int seqStart, int seqEnd,
+static void chainDraw(struct track *tg, int seqStart, int seqEnd,
         struct vGfx *vg, int xOff, int yOff, int width, 
         MgFont *font, Color color, enum trackVisibility vis)
 /* Draw chained features. This loads up the simple features from 
@@ -95,7 +95,7 @@ sqlFreeResult(&sr);
 hFreeConn(&conn);
 }
 
-void chainLoadItems(struct trackGroup *tg)
+void chainLoadItems(struct track *tg)
 /* Load up all of the chains from correct table into tg->items 
  * item list.  At this stage to conserve memory for other tracks
  * we don't load the links into the components list until draw time. */
@@ -151,7 +151,7 @@ sqlFreeResult(&sr);
 hFreeConn(&conn);
 }
 
-void chainMethods(struct trackGroup *tg)
+void chainMethods(struct track *tg)
 /* Fill in custom parts of alignment chains. */
 {
 char option[128]; /* Option -  rainbow chromosome color */

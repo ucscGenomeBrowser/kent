@@ -22,7 +22,7 @@ O = agpFrag.o agpGap.o axtInfo.o bbRepMask.o bed.o blatServers.o blastzNet.o \
     genePred.o genomicDups.o \
     genomicSuperDups.o celeraDupPositive.o celeraCoverage.o\
     ggCluster.o altGraph.o ggDbIo.o \
-    ggGraph.o hCommon.o hdb.o hgConfig.o hgFind.o \
+    ggGraph.o grp.o hCommon.o hdb.o hgConfig.o hgFind.o \
     hgGene.o hgRelate.o hui.o humanParalog.o isochores.o jaxOrtholog.o jaxQTL.o\
     jksql.o knownInfo.o knownMore.o lfs.o stsMap.o stsMapMouse.o \
     jksql.o knownInfo.o knownMore.o lfs.o \

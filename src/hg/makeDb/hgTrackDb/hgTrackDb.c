@@ -188,7 +188,6 @@ printf("Loaded %d track descriptions total\n", slCount(tdList));
     sqlDisconnect(&conn);
     printf("Loaded database %s\n", database);
     }
-
 }
 
 int main(int argc, char *argv[])

@@ -27,14 +27,18 @@ cg->align = cloneString(align);
 return cg;
 }
 
+void controlGridEndRow(struct controlGrid *cg)
+/* Force end of row. */
+{
+printf("</tr>\n<tr>");
+cg->columnIx = 0;
+}
+
 void controlGridStartCell(struct controlGrid *cg)
 /* Start a new cell in control grid. */
 {
 if (cg->columnIx == cg->columns)
-    {
-    printf("</tr>\n<tr>");
-    cg->columnIx = 0;
-    }
+    controlGridEndRow(cg);
 if (cg->align)
     printf("<td align=%s>", cg->align);
 else

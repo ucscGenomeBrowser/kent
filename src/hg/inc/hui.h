@@ -29,6 +29,8 @@ void controlGridEndCell(struct controlGrid *cg);
 void endControlGrid(struct controlGrid **pCg);
 /* Finish up a control grid. */
 
+void controlGridEndRow(struct controlGrid *cg);
+/* Force end of row. */
 
 /******  Some stuff for hide/dense/full controls ******/
 enum trackVisibility 

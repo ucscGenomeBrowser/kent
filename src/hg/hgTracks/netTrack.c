@@ -40,26 +40,26 @@ slReverse(&niList);
 return niList;
 }
 
-static void netLoad(struct trackGroup *tg)
+static void netLoad(struct track *tg)
 /* Load up net tracks.  (Will query database during drawing for a change.) */
 {
 tg->items = makeNetItems();
 }
 
-static void netFree(struct trackGroup *tg)
+static void netFree(struct track *tg)
 /* Free up netGroup items. */
 {
 slFreeList(&tg->items);
 }
 
-static char *netName(struct trackGroup *tg, void *item)
+static char *netName(struct track *tg, void *item)
 /* Return name of net level track. */
 {
 struct netItem *ni = item;
 return ni->className;
 }
 
-static struct trackGroup *rTg;
+static struct track *rTg;
 static struct vGfx *rVg;
 static int rX;          /* X offset of drawing area. */
 static int rHeightPer;  /* Height of boxes. */
@@ -182,7 +182,7 @@ for (fill = fillList; fill != NULL; fill = fill->next)
     }
 }
 
-static void netDraw(struct trackGroup *tg, int seqStart, int seqEnd,
+static void netDraw(struct track *tg, int seqStart, int seqEnd,
         struct vGfx *vg, int xOff, int yOff, int width, 
         MgFont *font, Color color, enum trackVisibility vis)
 /* Draw routine for netAlign type tracks.  This will load
@@ -213,7 +213,7 @@ rNetDraw(net->fillList, 1, yOff);
 chainNetFree(&net);
 }
 
-void netMethods(struct trackGroup *tg)
+void netMethods(struct track *tg)
 /* Make track group for chain/net alignment. */
 {
 tg->loadItems = netLoad;

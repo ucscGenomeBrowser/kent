@@ -16,11 +16,12 @@
 #include "cart.h"
 #endif
 
-struct trackGroup
-/* Structure that displays a group of tracks. The central data structure
+
+struct track
+/* Structure that displays of tracks. The central data structure
  * of the graphical genome browser. */
     {
-    struct trackGroup *next;   /* Next on list. */
+    struct track *next;   /* Next on list. */
     char *mapName;             /* Database track name. Name on image map etc. */
     enum trackVisibility visibility; /* How much of this to see if possible. */
     enum trackVisibility limitedVis; /* How much of this actually see. */
@@ -38,46 +39,46 @@ struct trackGroup
     struct rgbColor altColor;  /* Secondary color. */
     Color ixAltColor;
 
-    void (*loadItems)(struct trackGroup *tg);
+    void (*loadItems)(struct track *tg);
     /* loadItems loads up items for the chromosome range indicated.   */
 
     void *items;               /* Some type of slList of items. */
 
-    char *(*itemName)(struct trackGroup *tg, void *item);
+    char *(*itemName)(struct track *tg, void *item);
     /* Return name of one of a member of items above to display on left side. */
 
-    char *(*mapItemName)(struct trackGroup *tg, void *item);
+    char *(*mapItemName)(struct track *tg, void *item);
     /* Return name to associate on map. */
 
-    int (*totalHeight)(struct trackGroup *tg, enum trackVisibility vis);
+    int (*totalHeight)(struct track *tg, enum trackVisibility vis);
 	/* Return total height. Called before and after drawItems. 
 	 * Must set the following variables. */
     int height;                /* Total height - must be set by above call. */
     int lineHeight;            /* Height per track including border. */
     int heightPer;             /* Height per track minus border. */
 
-    int (*itemHeight)(struct trackGroup *tg, void *item);
+    int (*itemHeight)(struct track *tg, void *item);
     /* Return height of one item. */
 
-    void (*drawItems)(struct trackGroup *tg, int seqStart, int seqEnd,
+    void (*drawItems)(struct track *tg, int seqStart, int seqEnd,
 	struct vGfx *vg, int xOff, int yOff, int width, 
 	MgFont *font, Color color, enum trackVisibility vis);
     /* Draw item list, one per track. */
 
-    int (*itemStart)(struct trackGroup *tg, void *item);
+    int (*itemStart)(struct track *tg, void *item);
     /* Return start of item in base pairs. */
 
-    int (*itemEnd)(struct trackGroup *tg, void *item);
+    int (*itemEnd)(struct track *tg, void *item);
     /* Return start of item in base pairs. */
 
-    void (*freeItems)(struct trackGroup *tg);
+    void (*freeItems)(struct track *tg);
     /* Free item list. */
 
-    Color (*itemColor)(struct trackGroup *tg, void *item, struct vGfx *vg);
+    Color (*itemColor)(struct track *tg, void *item, struct vGfx *vg);
     /* Get color of item (optional). */
 
 
-    void (*mapItem)(struct trackGroup *tg, void *item, 
+    void (*mapItem)(struct track *tg, void *item, 
     	char *itemName, int start, int end, 
 	int x, int y, int width, int height); 
     /* Write out image mapping for a given item */
@@ -85,7 +86,7 @@ struct trackGroup
     boolean hasUi;	/* True if has an extended UI page. */
     void *extraUiData;	/* Pointer for track specific filter etc. data. */
 
-    void (*trackFilter)(struct trackGroup *tg);	
+    void (*trackFilter)(struct track *tg);	
     /* Stuff to handle user interface parts. */
 
     void *customPt;  /* Misc pointer variable unique to group. */
@@ -95,7 +96,26 @@ struct trackGroup
 
     unsigned short private;	/* True(1) if private, false(0) otherwise. */
     int bedSize;		/* Number of fields if a bed file. */
-    float priority; /* Tracks are drawn in priority order. */
+    float priority;   /* Tracks are drawn in priority order. */
+    char *groupName;	/* Name of group if any. */
+    struct group *group;  /* Group this track is associated with. */
+    };
+
+struct trackRef 
+/* A reference to a track. */
+    {
+    struct trackRef *next;	/* Next in list. */
+    struct track *track;	/* Underlying track. */
+    };
+
+struct group
+/* A group of related tracks. */
+    {
+    struct group *next;	   /* Next group in list. */
+    char *name;		   /* Symbolic name. */
+    char *label;	   /* User visible name. */
+    float priority;        /* Display order, 0 is on top. */
+    struct trackRef *trackList;  /* List of tracks. */
     };
 
 struct simpleFeature
@@ -187,7 +207,7 @@ int orientFromChar(char c);
 char charFromOrient(int orient);
 /* Return + or - in place of 1 or -1 */
 
-enum trackVisibility limitVisibility(struct trackGroup *tg, void *items);
+enum trackVisibility limitVisibility(struct track *tg, void *items);
 /* Return default visibility limited by number of items. */
 
 char *hgcNameAndSettings();
@@ -258,16 +278,16 @@ void innerLine(struct vGfx *vg, int x, int y, int w, Color color);
 
 /* Some little functional stubs to fill in track group
  * function pointers with if we have nothing to do. */
-boolean tgLoadNothing(struct trackGroup *tg);
-void tgDrawNothing(struct trackGroup *tg);
-void tgFreeNothing(struct trackGroup *tg);
-int tgItemNoStart(struct trackGroup *tg, void *item);
-int tgItemNoEnd(struct trackGroup *tg, void *item);
+boolean tgLoadNothing(struct track *tg);
+void tgDrawNothing(struct track *tg);
+void tgFreeNothing(struct track *tg);
+int tgItemNoStart(struct track *tg, void *item);
+int tgItemNoEnd(struct track *tg, void *item);
 
-int tgFixedItemHeight(struct trackGroup *tg, void *item);
+int tgFixedItemHeight(struct track *tg, void *item);
 /* Return item height for fixed height track. */
 
-int tgFixedTotalHeight(struct trackGroup *tg, enum trackVisibility vis);
+int tgFixedTotalHeight(struct track *tg, enum trackVisibility vis);
 /* Most fixed height track groups will use this to figure out the height 
  * they use. */
 
@@ -280,27 +300,27 @@ int linkedFeaturesCmpStart(const void *va, const void *vb);
 void linkedFeaturesBoundsAndGrays(struct linkedFeatures *lf);
 /* Calculate beginning and end of lf from components, etc. */
 
-void linkedFeaturesDraw(struct trackGroup *tg, int seqStart, int seqEnd,
+void linkedFeaturesDraw(struct track *tg, int seqStart, int seqEnd,
         struct vGfx *vg, int xOff, int yOff, int width, 
         MgFont *font, Color color, enum trackVisibility vis);
 /* Draw linked features items. */
 
-void linkedFeaturesMethods(struct trackGroup *tg);
+void linkedFeaturesMethods(struct track *tg);
 /* Fill in track group methods for linked features. 
  * Many other methods routines will call this first
  * to get a reasonable set of defaults. */
 
-Color lfChromColor(struct trackGroup *tg, void *item, struct vGfx *vg);
+Color lfChromColor(struct track *tg, void *item, struct vGfx *vg);
 /* Return color of chromosome for linked feature type items
  * where the chromosome is listed somewhere in the lf->name. */
 
-char *lfMapNameFromExtra(struct trackGroup *tg, void *item);
+char *lfMapNameFromExtra(struct track *tg, void *item);
 /* Return map name of item from extra field. */
 
-void chainMethods(struct trackGroup *tg);
+void chainMethods(struct track *tg);
 /* Return name of item from extra field. */
 
-void netMethods(struct trackGroup *tg);
+void netMethods(struct track *tg);
 /* Make track group for chain/net alignment. */
 
 #define uglyh printHtmlComment
