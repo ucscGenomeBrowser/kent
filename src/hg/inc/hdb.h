@@ -125,6 +125,9 @@ boolean hTableExists(char *table);
 boolean hTableExists2(char *table);
 /* Return TRUE if a table exists in secondary database. */
 
+boolean hTableExistsDb(char *db, char *table);
+/* Return TRUE if a table exists in db. */
+
 void hParseTableName(char *table, char trackName[128], char chrom[32]);
 /* Parse an actual table name like "chr17_random_blastzWhatever" into 
  * the track name (blastzWhatever) and chrom (chr17_random). */

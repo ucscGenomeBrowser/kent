@@ -225,24 +225,40 @@ void hDisconnectCentral(struct sqlConnection **pConn)
 sqlFreeConnection(centralCc, pConn);
 }
 
+boolean hTableExistsDb(char *db, char *table)
+/* Return TRUE if a table exists in db. */
+{
+struct sqlConnection *conn;
+boolean exists;
+
+if (sameString(db, hGetDb()))
+    conn = hAllocConn();
+else if (sameString(db, hGetDb2()))
+    conn = hAllocConn2();
+else
+    {
+    hSetDb2(db);
+    conn = hAllocConn2();
+    }
+exists = sqlTableExists(conn, table);
+if (sameString(db, hGetDb()))
+    hFreeConn(&conn);
+else
+    hFreeConn2(&conn);
+return exists;
+}
+
 boolean hTableExists(char *table)
 /* Return TRUE if a table exists in database. */
 {
-struct sqlConnection *conn = hAllocConn();
-boolean exists = sqlTableExists(conn, table);
-hFreeConn(&conn);
-return exists;
+return(hTableExistsDb(hGetDb(), table));
 }
 
 boolean hTableExists2(char *table)
 /* Return TRUE if a table exists in secondary database. */
 {
-struct sqlConnection *conn = hAllocConn2();
-boolean exists = sqlTableExists(conn, table);
-hFreeConn2(&conn);
-return exists;
+return(hTableExistsDb(hGetDb2(), table));
 }
-
 
 void hParseTableName(char *table, char trackName[128], char chrom[32])
 /* Parse an actual table name like "chr17_random_blastzWhatever" into 
@@ -1358,12 +1374,12 @@ if (hash == NULL)
 if ((hti = hashFindVal(hash, rootName)) == NULL)
     {
     sprintf(fullName, "%s_%s", chrom, rootName);
-    if (hTableExists(fullName))
+    if (hTableExistsDb(db, fullName))
 	isSplit = TRUE;
     else
         {
 	strcpy(fullName, rootName);
-	if (!hTableExists(fullName))
+	if (!hTableExistsDb(db, fullName))
 	    return NULL;
 	}
     AllocVar(hti);
