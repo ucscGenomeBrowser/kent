@@ -5,7 +5,7 @@
 #include "options.h"
 #include "chainNet.h"
 
-static char const rcsid[] = "$Id: netFilter.c,v 1.14 2004/05/24 18:32:12 kent Exp $";
+static char const rcsid[] = "$Id: netFilter.c,v 1.15 2004/09/16 00:18:42 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -30,7 +30,7 @@ errAbort(
   "   -minSizeQ=N - restrict to those at least this big on query\n"
   "   -syn        - do filtering based on synteny.  \n"
   "   -nonsyn     - do inverse filtering based on synteny.  \n"
-  "   -type=XXX - restrict to given type\n"
+  "   -type=XXX - restrict to given type, maybe repeated to allow several types\n"
   "   -fill - Only pass fills, not gaps. Only useful with -line.\n"
   "   -gap  - Only pass gaps, not fills. Only useful with -line.\n"
   "   -line - Do this a line at a time, not recursing\n"
@@ -52,7 +52,7 @@ struct optionSpec options[] = {
    {"syn", OPTION_BOOLEAN},
    {"chimpSyn", OPTION_BOOLEAN},
    {"nonsyn", OPTION_BOOLEAN},
-   {"type", OPTION_STRING},
+   {"type", OPTION_STRING|OPTION_MULTI},
    {"fill", OPTION_BOOLEAN},
    {"gap", OPTION_BOOLEAN},
    {"line", OPTION_BOOLEAN},
@@ -111,7 +111,7 @@ int minSizeT = 0;		/* Minimum target size. */
 int minSizeQ = 0;		/* Minimum query size. */
 boolean fillOnly = FALSE;	/* Only pass fills? */
 boolean gapOnly = FALSE;	/* Only pass gaps? */
-char *type = NULL;		/* Only pass given type */
+struct slName *types = NULL;	/* Only pass given types */
 boolean noRandom = FALSE;	/* Only pass non-random chromosomes. */
 
 boolean synFilter(struct cnFill *fill)
@@ -156,12 +156,18 @@ if (qHash != NULL && !hashLookup(qHash, fill->qName))
     return FALSE;
 if (notQHash != NULL && hashLookup(notQHash, fill->qName))
     return FALSE;
-if (type != NULL)
+if (types != NULL)
     {
+    struct slName *t;
     if (fill->type == NULL)
         return FALSE;
-    if (!sameString(type, fill->type))
-        return FALSE;
+    for (t = types; t != NULL; t = t->next)
+        {
+        if (sameString(t->name, fill->type))
+            break;  /* found it */
+        }
+    if (t == NULL)
+        return FALSE;  /* not found in list of types */
     }
 if (fill->qSize < minSizeQ)
     return FALSE;
@@ -279,7 +285,7 @@ minSizeT = optionInt("minSizeT", minSizeT);
 minSizeQ = optionInt("minSizeQ", minSizeQ);
 fillOnly = optionExists("fill");
 gapOnly = optionExists("gap");
-type = optionVal("type", type);
+types = optionMultiVal("type", types);
 noRandom = optionExists("noRandom");
 
 for (i=0; i<inCount; ++i)
