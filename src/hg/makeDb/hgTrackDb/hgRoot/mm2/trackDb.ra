@@ -26,14 +26,6 @@ color 0,120,60
 altColor 200,255,220
 type genePred
 
-track softberryGene
-shortLabel Fgenesh++ Genes
-longLabel Fgenesh++ Gene Predictions
-priority 16
-visibility dense
-color 0,100,0
-type genePred softberryPep
-
 track genieAlt
 shortLabel AltGenie
 longLabel Genie Gene Predictions from Affymetrix
