@@ -21,6 +21,7 @@
 #include "dnaseq.h"
 #include "fa.h"
 #include "keys.h"
+#include "options.h"
 
 /* Default size of directory path string buffers */
 #define PATH_LEN 256
@@ -1558,9 +1559,11 @@ errAbort("gbToFaRa - Convert GenBank flat format file to an fa file containing\n
          "the sequence data, an ra file containing other relevant info and\n"
          "a ta file containing summary statistics.\n"
          "usage:\n"
-         "   gbToFaRa filterFile faFile raFile taFile [-byOrganism=<outputDir>] genBankFile(s)\n"
+         "   gbToFaRa filterFile faFile raFile taFile genBankFile(s)\n"
          "where filterFile is definition of which records and fields\n"
-         "to use or the word null if you want no filtering.");
+         "to use or the word null if you want no filtering."
+	 "options:\n"
+	 "     byOrganism=outputDir - Make separate files for each organism\n");
 }
 
 struct filter *makeFilter(char *fileName)
@@ -1638,28 +1641,17 @@ struct hash *raHash = NULL;
 static char *byOrgOption = "-byOrganism=";
 char command[PATH_LEN];
 
+optionHash(&argc, argv);
 if (argc < 6)
-    {
     usage();
-    }
 
-gByOrganism = (NULL != strstr(argv[5], byOrgOption));
-if (gByOrganism && argc < 7)
-    {
-    usage();
-    }
+gOutputDir = optionVal("byOrganism", NULL);
+gByOrganism = (gOutputDir != NULL);
 
 filterName = argv[1];
 faName = argv[2];
 raName = argv[3];
 taName = argv[4];
-if(gByOrganism)
-    {
-    gOutputDir = strstr(argv[5], "=");
-    /* Move the pointer one past the '=' sign */
-    gOutputDir++;
-    startIndex = 6;
-    }
 
 filter  = makeFilter(filterName);
 uniqHash = newHash(16);
