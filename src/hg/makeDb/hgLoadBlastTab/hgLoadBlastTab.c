@@ -8,7 +8,7 @@
 #include "hgRelate.h"
 #include "blastTab.h"
 
-static char const rcsid[] = "$Id: hgLoadBlastTab.c,v 1.3 2003/06/24 07:06:32 kent Exp $";
+static char const rcsid[] = "$Id: hgLoadBlastTab.c,v 1.4 2003/09/14 22:51:12 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -21,11 +21,15 @@ errAbort(
   "using the -m 8 flag\n"
   "options:\n"
   "   -createOnly - just create the table, don't load it\n"
+  "   -maxPer=N - maximum to load for any query sequenct\n"
   );
 }
 
+int maxPer = BIGNUM;
+
 static struct optionSpec options[] = {
    {"createOnly", OPTION_BOOLEAN},
+   {"maxPer", OPTION_INT},
    {NULL, 0},
 };
 
@@ -66,6 +70,9 @@ if (!optionExists("createOnly"))
     FILE *f = hgCreateTabFile(".", table);
     int i;
     int count = 0;
+    int qHitCount = 0;
+    char lastQ[512];
+    lastQ[0] = 0;
     printf("Scanning through %d files\n", inCount);
 
     for (i=0; i<inCount; ++i)
@@ -78,8 +85,17 @@ if (!optionExists("createOnly"))
 	    blastTabStaticLoad(row, &bt);
 	    bt.qStart -= 1;
 	    bt.tStart -= 1;
-	    blastTabTabOut(&bt, f);
-	    ++count;
+	    if (!sameString(lastQ, bt.query))
+	        {
+		safef(lastQ, sizeof(lastQ), "%s", bt.query);
+		qHitCount = 0;
+		}
+	    ++qHitCount;
+	    if (qHitCount <= maxPer)
+		{
+		blastTabTabOut(&bt, f);
+		++count;
+		}
 	    }
 	lineFileClose(&lf);
 	}
@@ -97,6 +113,7 @@ int main(int argc, char *argv[])
 optionInit(&argc, argv, options);
 if (argc < 4)
     usage();
+maxPer = optionInt("maxPer", maxPer);
 hgLoadBlastTab(argv[1], argv[2], argc-3, argv+3);
 return 0;
 }
