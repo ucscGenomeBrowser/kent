@@ -460,6 +460,236 @@ Locate motifs on all promoters with
       dnaMotifFind motif.200.1000.e.txt upstream1000.fa hits.200.1000.e.txt -rc -markov=2
       liftPromoHits upstream1000.bed hits.200.1000.e.txt triangle.bed
 
+CREATE STS/FISH/BACENDS/CYTOBANDS DIRECTORY STRUCTURE AND SETUP (done)
+
+o - Create directory structure to hold information for these tracks
+	cd /projects/hg2/booch/psl/
+	mkdir gs.12
+	mkdir gs.12/build29
+	mkdir gs.12/build29/sts
+	mkdir gs.12/build29/primers
+	mkdir gs.12/build29/bacends
+	mkdir gs.12/build29/fish
+	mkdir gs.12/build29/cytobands
+
+o - Copy in Makefiles from previous assembly
+	cp gs.11/build28/Makefile gs.12/build29
+	cp gs.11/build28/sts/Makefile gs.12/build29/sts
+	cp gs.11/build28/primers/Makefile gs.12/build29/primers
+	cp gs.11/build28/bacends/Makefile gs.12/build29/bacends
+	cp gs.11/build28/fish/Makefile gs.12/build29/fish
+	cp gs.11/build28/cytobands/Makefile gs.12/build29/cytobands
+
+o - Update all Makefiles with latest OOVERS and GSVERS
+
+o - Create accession_info file
+	make accession_info.rdb
+
+UPDATE STS INFORMATION (done)
+
+o - Download and unpack updated information from dbSTS:
+
+	In a web browser, go to ftp://ftp.ncbi.nih.gov/repository/dbSTS/.  Download 
+    	dbSTS.sts, dbSTS.aliases, and dbSTS.FASTA.dailydump.Z to 
+    	/projects/hg2/booch/psl/update
+
+	-Unpack dbSTS.FASTA.dailydump.Z
+	gunzip dbSTS.FASTA.dailydump.Z
+
+o - Create updated files (takes a while ~1.5 days right now)
+	cd /projects/hg2/booch/psl/update
+	make update
+
+o - Make new directory for this info and move files there
+	ssh kks00
+	mkdir /cluster/store1/sts.# (# = next number not used)
+	cp all.STS.fa /cluster/store1/sts.#
+	cp all.primers /cluster/store1/sts.#
+	cp all.primers.fa /cluster/store1/sts.#
+
+STS ALIGNMENTS (done)
+(alignments done without RepeatMasking, so start ASAP!)
+
+o - Create full sequence alignments
+	ssh kk
+	cd /cluster/home/booch/sts
+	- update Makefile with latest OOVERS and GSVERS
+	- update stsMarkers.lst with latest location of all.STS.fa (from above)
+	make new.assembly
+	make jobList.scratch (if contig files propagated to nodes)
+		- or _
+	make jobList.disk (if contig files not propagated)
+	para create jobList
+	para push (or para try/para check if want to make sure it runs)
+	make stsMarkers.psl
+
+o - Copy files to final destination and remove
+	ssh kks00
+	make copy.assembly
+	make clean.assembly
+
+o - Create primer alignments
+	ssh kk
+	cd /cluster/home/booch/primers
+	- update Makefile with latest OOVERS and GSVERS
+	- update primers.lst with latest location of all.primers.fa (from above)
+	make new.assembly
+	make jobList.scratch (if contig files propagated to nodes)
+		- or _
+	make jobList.disk (if contig files not propagated)
+	para create jobList
+	para push (or para try/para check if want to make sure it runs)
+	make primers.psl
+
+o - Copy files to final destination and remove
+	ssh kks00
+	make copy.assembly
+	make clean.assembly
+	
+CREATE AND LOAD STS MARKERS TRACK (done)
+
+o - Create final version of sts sequence placements
+	ssh kks00
+	cd /projects/hg2/booch/psl/gs.12/build29/sts
+	make stsMarkers.final
+
+o - Create final version of primers placements
+	cd /projects/hg2/booch/psl/gs.12/build29/primers
+	make primers.final
+
+o - Create bed file
+	cd /projects/hg2/booch/psl/gs.12/build29
+	make stsMap.bed
+
+o - Create database tables
+	ssh hgwdev
+	cd /projects/hg2/booch/psl/tables
+	mysql -uhgcat -pXXXXXXX < all_sts_primer.sql
+	mysql -uhgcat -pXXXXXXX < all_sts_seq.sql
+	mysql -uhgcat -pXXXXXXX < stsAlias.sql
+	mysql -uhgcat -pXXXXXXX < stsInfo.sql
+	mysql -uhgcat -pXXXXXXX < stsMap.sql
+
+o - Load the tables
+	load /projects/hg2/booch/psl/gs.12/build29/sts/stsMarkers.psl.filter.lifted into all_sts_seq	
+	load /projects/hg2/booch/psl/gs.12/build29/primers/primers.psl.filter.lifted into all_sts_primer	
+	load /projects/hg2/booch/psl/gs.12/build29/stsAlias.bed into stsAlias
+	load /projects/hg2/booch/psl/gs.12/build29/stsInfo.bed into stsInfo
+	load /projects/hg2/booch/psl/gs.12/build29/stsMap.bed into stsMap
+
+o - Load the sequences (change sts.# to match correct location)
+	hgLoadRna addSeq hg11 /cluster/store1/sts.2/all.STS.fa
+	hgLoadRna addSeq hg11 /cluster/store1/sts.2/all.primers.fa
+
+
+BACEND SEQUENCE ALIGNMENTS (done)
+(alignments done without RepeatMasking, so start ASAP!)
+
+o - Create full sequence alignments
+	ssh kk
+	cd /cluster/home/booch/bacends
+	- update Makefile with latest OOVERS and GSVERS
+	- update bacEnds.lst with latest location of BACends.fa (doesn't usually change)
+	make new
+	make jobList.scratch (if contig files propagated to nodes)
+		- or _
+	make jobList.disk (if contig files not propagated)
+	para create jobList
+	para push (or para try/para check if want to make sure it runs)
+	make stsMarkers.psl
+
+o - Copy files to final destination and remove
+	ssh kks00
+	make copy.assembly
+	make clean.assembly
+
+BACEND PAIRS TRACK
+
+o - Update Makefile with location of pairs files, if necessary
+	cd /projects/hg2/booch/psl/gs.12/build29/bacends
+	edit Makefile (PAIRS=....)
+
+o - Create bed file
+	ssh kks00
+	cd /projects/hg2/booch/psl/gs.12/build29/bacends
+	make bacEndPairs.bed
+
+o - Create database tables
+	ssh hgwdev
+	cd /projects/hg2/booch/psl/tables
+	mysql -uhgcat -pXXXXXXX < all_bacends.sql
+	mysql -uhgcat -pXXXXXXX < bacEndPairs.sql
+
+o - Load the tables
+	load /projects/hg2/booch/psl/gs.12/build29/bacends/bacEnds.psl.filter.lifted into all_bacends	
+	load /projects/hg2/booch/psl/gs.12/build29/bacends/bacEndPairs.bed into bacEndPairs
+
+o - Load the sequences (change bacends.# to match correct location)
+	hgLoadRna addSeq hg11 /cluster/store1/bacends.2/BACends.fa
+		
+UPDATE FISH CLONES INFORMATION
+
+o - Download the latest info from NCBI
+	point browser at http://www.ncbi.nlm.nih.gov/genome/cyto/cytobac.cgi?CHR=all&VERBOSE=ctg
+	change "Show details on sequence-tag" to "yes"
+	change "Download or Display" to "Download table for UNIX"
+	press Submit - save as /projects/hg2/booch/psl/fish/hbrc/hbrc.YYYYMMDD.table
+
+o - Format file just downloaded
+	cd /projects/hg2/booch/psl/fish/
+	make HBRC
+
+o - Copy it to the new freeze location
+	cp /projects/hg2/booch/psl/fish/all.fish.format /projects/hg2/booch/psl/gs.12/build29/fish/
+
+
+CREATE AND LOAD FISH CLONES TRACK
+(must be done after STS markers track and BAC end pairs track)
+
+o - Extract the file with clone positions from database
+	ssh hgwdev
+	mysql -uhgcat -pXXXXXXXX hg11
+	mysql>  select * into outfile "/tmp/booch/clonePos.txt" from clonePos;
+	mysql> quit
+	mv /tmp/booch/clonePos.txt /projects/hg2/booch/psl/gs.12/build29/fish
+
+o - Create bed file
+	cd /projects/hg2/booch/psl/gs.12/build29/fish
+	make bed
+
+o - Create database table
+	ssh hgwdev
+	cd /projects/hg2/booch/psl/tables
+	mysql -uhgcat -pXXXXXXX < fishClones.sql
+
+o - Load the table
+	load /projects/hg2/booch/psl/gs.12/build29/fish/fishClones.bed into fishClones
+	
+
+CREATE AND LOAD CHROMOSOME BANDS TRACK
+(must be done after FISH Clones track) 
+
+o - Create bed file
+	ssh hgwdev
+	make setBands.txt
+	make cytobands.pct.ranges
+	make predict
+
+o - Create database table
+	ssh hgwdev
+	cd /projects/hg2/booch/psl/tables
+	mysql -uhgcat -pXXXXXXX < cytoBand.sql
+	
+
+o - Load the table
+	load /projects/hg2/booch/psl/gs.12/build29/cytobands/cytobands.bed into cytoBand
+
+
+CREATE CHROMOSOME REPORTS
+
+
+CREATE STS MAP COMPARISON PLOTS
+
 
 DOING HUMAN/MOUSE ALIGMENTS (todo)
 
