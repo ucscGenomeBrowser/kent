@@ -1448,13 +1448,13 @@ SEQ2_LEN=$BASE/S2.len
     # sys     0m17.370s
 
 
-XXXX running - 2003-10-31 - 16:00
     # copy to axt's to download area
     cd /cluster/data/mm4/bed/blastz.rn3/axtTight
     mkdir -p /usr/local/apache/htdocs/goldenPath/mm4/vsRn3/axtTight
     cp -p *.axt /usr/local/apache/htdocs/goldenPath/mm4/vsRn3/axtTight
     cd /usr/local/apache/htdocs/goldenPath/mm4/vsRn3/axtTight
     gzip *.axt
+XXXX running - 2003-10-31 - 16:20
     # add README.txt file to dir, if needed
 
 # BLASTZ Self	(IN PROGRESS - 2003-10-21 - Hiram)
