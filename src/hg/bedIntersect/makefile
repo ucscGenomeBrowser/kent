@@ -9,4 +9,4 @@ O = bedIntersect.o
 
 bedIntersect: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/bedIntersect $O $(MYLIBS) $L
-	strip $(HOME)/bin/$(MACHTYPE)/bedIntersect
+#	strip $(HOME)/bin/$(MACHTYPE)/bedIntersect
