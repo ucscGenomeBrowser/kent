@@ -17,7 +17,7 @@
 #include "trans3.h"
 #include "binRange.h"
 
-static char const rcsid[] = "$Id: genoFind.c,v 1.15 2004/06/01 16:49:03 kent Exp $";
+static char const rcsid[] = "$Id: genoFind.c,v 1.16 2004/06/09 01:08:01 kent Exp $";
 
 static int blockSize = 1024;
 static int blockShift = 10;
@@ -1855,8 +1855,10 @@ struct gfClump *clumpList = NULL;
 struct gfHit *hitList;
 int minMatch = gf->minMatch;
 
+#ifdef OLD	/* stepSize makes this obsolete. */
 if (seq->size < gf->tileSize * (gf->minMatch+1))
      minMatch = 1;
+#endif /* OLD */
 
 hitList =  gfFindHitsWithQmask(gf, seq, qMaskBits, qMaskOffset, lm,
 	retHitCount, NULL, 0, 0);
