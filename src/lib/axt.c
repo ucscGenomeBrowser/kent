@@ -20,7 +20,7 @@
 #include "dnautil.h"
 #include "axt.h"
 
-static char const rcsid[] = "$Id: axt.c,v 1.35 2004/07/27 23:01:53 angie Exp $";
+static char const rcsid[] = "$Id: axt.c,v 1.36 2004/09/08 22:00:04 baertsch Exp $";
 
 void axtFree(struct axt **pEl)
 /* Free an axt. */
@@ -151,6 +151,17 @@ const struct axt *b = *((struct axt **)vb);
 return b->score - a->score;
 }
 
+int axtCmpTargetScoreDesc(const void *va, const void *vb)
+/* Compare to sort based on target name and score descending. */
+{
+const struct axt *a = *((struct axt **)va);
+const struct axt *b = *((struct axt **)vb);
+int dif;
+dif = strcmp(a->tName, b->tName);
+if (dif == 0)
+    dif = b->score - a->score;
+return dif;
+}
 
 boolean axtCheck(struct axt *axt, struct lineFile *lf)
 /* Return FALSE if there's a problem with axt. */
