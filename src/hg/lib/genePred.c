@@ -10,7 +10,7 @@
 #include "genePred.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: genePred.c,v 1.22 2004/01/06 05:01:10 weber Exp $";
+static char const rcsid[] = "$Id: genePred.c,v 1.23 2004/01/10 05:36:09 markd Exp $";
 
 /* SQL to create a genePred table */
 static char *createSql = 
@@ -378,78 +378,59 @@ static void findCdsStartEndInGenome(struct psl *psl,
                                     int *retCdsStart, int *retCdsEnd)
 /* Convert cdsStart/End from mrna to genomic coordinates. */
 {
-int startOffset, endOffset;
 int cdsStart = -1, cdsEnd = -1;
-int i;
+int iBlk;
 
-/* get CDS offsets in portion of query that aligned */
 if (psl->strand[0] == '-')
-    {
-    endOffset = rnaCdsStart - psl->qStart;
-    startOffset =  psl->qEnd - rnaCdsEnd;
-    }
-else
-    {
-    startOffset = rnaCdsStart - psl->qStart;
-    endOffset =  psl->qEnd - rnaCdsEnd;
-    }
+    reverseIntRange(&rnaCdsStart, &rnaCdsEnd, psl->qSize);
 
-/* Adjust starting pos. */
-for (i=0; i<psl->blockCount; i++)
-    {
-    int blockSize = psl->blockSizes[i];
-    if (startOffset < 0)
-        startOffset = 0;
-    if (startOffset < blockSize)
-	{
-        cdsStart = psl->tStarts[i] + startOffset;
-	break;
-	}
 
-    /* Adjust start offset for this block.  Also adjust for
-     * query sequence between blocks that doesn't align. */
-    startOffset -= blockSize;
-    if (i != psl->blockCount - 1)
-	{
-	int skip =  psl->qStarts[i+1] - (psl->qStarts[i] + blockSize);
-	startOffset -= skip;
-	}
-    }
-
-/* Adjust end pos. */
-for (i=psl->blockCount-1; i >= 0; --i)
+/* find query block or gap containing start and map to target */
+for (iBlk = 0; (iBlk < psl->blockCount) && (cdsStart < 0); iBlk++)
     {
-    int blockSize = psl->blockSizes[i];
-    if (endOffset < 0) endOffset = 0;
-    if (endOffset < blockSize)
+    if (rnaCdsStart < psl->qStarts[iBlk])
         {
-	cdsEnd = psl->tStarts[i] + blockSize - endOffset;
-	break;
-	}
-    /* Adjust start offset for this block.  Also adjust for
-     * query sequence between blocks that doesn't align. */
-    endOffset -= blockSize;
-    if (i != 0)
+        /* in gap before block, set to start of block */
+        cdsStart = psl->tStarts[iBlk];
+        }
+    else if (rnaCdsStart < (psl->qStarts[iBlk] + psl->blockSizes[iBlk]))
         {
-	int skip =  psl->qStarts[i] - (psl->qStarts[i-1] + psl->blockSizes[i-1]);
-	endOffset -= skip;
-	}
+        /* in this block, map to target */
+        cdsStart = psl->tStarts[iBlk] + (rnaCdsStart - psl->qStarts[iBlk]);
+        }
+    }
+if (cdsStart < 0)
+    {
+    /* after last block, set after end of that block */
+    cdsStart = psl->tStarts[iBlk-1] + psl->blockSizes[iBlk-1];
     }
 
-if ((cdsStart == -1) || (cdsEnd == -1))
+/* find query block or gap containing end and map to target */
+for (iBlk = 0; (iBlk < psl->blockCount) && (cdsEnd < 0); iBlk++)
     {
-    /* one or both not found, mark as no CDS annotation */ 
-    *retCdsStart = psl->tEnd;
-    *retCdsEnd = psl->tEnd;
+    if (rnaCdsEnd < psl->qStarts[iBlk])
+        {
+        /* in gap before block, set to end of gap */
+        cdsEnd = psl->tStarts[iBlk];
+        }
+    else if (rnaCdsEnd < (psl->qStarts[iBlk] + psl->blockSizes[iBlk]))
+        {
+        /* in this block, map to target */
+        cdsEnd = psl->tStarts[iBlk] + (rnaCdsEnd - psl->qStarts[iBlk]);
+        }
     }
-else
+if (cdsEnd < 0)
     {
-    /* return in genomic coords */
-    if (psl->strand[1] == '-')
-        reverseIntRange(&cdsStart, &cdsEnd, psl->tSize);
-    *retCdsStart = cdsStart;
-    *retCdsEnd = cdsEnd;
+    /* after last block, set to end of that block */
+    cdsEnd = psl->tStarts[iBlk-1] + psl->blockSizes[iBlk-1];
     }
+
+if (psl->strand[1] == '-')
+    reverseIntRange(&cdsStart, &cdsEnd, psl->tSize);
+
+assert(cdsStart <= cdsEnd);
+*retCdsStart = cdsStart;
+*retCdsEnd = cdsEnd;
 }
 
 static void pslToExons(struct psl *psl, struct genePred *gene,
