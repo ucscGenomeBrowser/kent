@@ -14,7 +14,8 @@
 #include "hdb.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: joining.c,v 1.30 2004/10/20 23:13:29 angie Exp $";
+
+static char const rcsid[] = "$Id: joining.c,v 1.31 2004/10/26 19:55:40 kent Exp $";
 
 struct joinedRow
 /* A row that is joinable.  Allocated in joinableResult->lm. */
@@ -686,20 +687,28 @@ static struct joinerField *findJoinerField(struct joinerSet *js,
 	struct joinerDtf *dtf)
 /* Find field in set if any that matches dtf */
 {
-struct joinerField *jf;
-while (js != NULL)
+struct slRef *chain = joinerSetInheritanceChain(js), *link;
+struct joinerField *jf, *ret = NULL;
+for (link = chain; link != NULL; link = link->next)
     {
+    js = link->val;
     for (jf = js->fieldList; jf != NULL; jf = jf->next)
 	 {
+	 warn(" %s.%s", jf->table, jf->field);
 	 if (sameString(dtf->table, jf->table) && sameString(dtf->field, jf->field))
 	     {
 	     if (slNameInList(jf->dbList, dtf->database))
-		 return jf;
+		 {
+		 ret = jf;
+		 break;
+		 }
 	     }
 	 }
-    js = js->parent;
+    if (ret != NULL)
+        break;
     }
-return NULL;
+slFreeList(&chain);
+return ret;
 }
 
 struct joinedTables *joinedTablesCreate( struct joiner *joiner, 
@@ -756,7 +765,9 @@ for (route = routeList; route != NULL; route = route->next)
 	internalErr();
     jfA = findJoinerField(route->identifier, route->a);
     if (jfA == NULL)
+	{
 	internalErr();
+	}
     jfB = findJoinerField(route->identifier, route->b);
     if (jfB == NULL)
 	internalErr();
