@@ -367,11 +367,12 @@ void specificUi(struct trackDb *tdb)
 		affyUi(tdb);
 	else if (sameString(track, "ancientR"))
 		ancientRUi(tdb);
-	else if (sameString(track, "zoo"))
+	else if (sameString(track, "zoo") || sameString(track, "zooNew" ))
 		genericWiggleUi(tdb,6);
 	else if (sameString(track, "humMusL") ||
 		 sameString( track, "musHumL") ||
-		 sameString( track, "regpotent") )
+		 sameString( track, "regpotent") ||
+		 sameString( track, "mm3Rn2L" ))
 		humMusUi(tdb,7);
 else if (startsWith("blastz", track))
     colorCrossSpeciesUi(tdb, FALSE);
