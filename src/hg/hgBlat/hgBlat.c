@@ -20,7 +20,7 @@
 #include "hash.h"
 #include "botDelay.h"
 
-static char const rcsid[] = "$Id: hgBlat.c,v 1.69 2004/01/31 02:56:29 kent Exp $";
+static char const rcsid[] = "$Id: hgBlat.c,v 1.70 2004/02/02 21:28:42 kent Exp $";
 
 struct cart *cart;	/* The user's ui state. */
 struct hash *oldVars = NULL;
@@ -419,6 +419,7 @@ pslxWriteHead(f, qType, tType);
 /* Loop through each sequence. */
 for (seq = seqList; seq != NULL; seq = seq->next)
     {
+    hgBotDelay();
     oneSize = realSeqSize(seq, !isTx);
     if (oneSize > maxSingleSize)
 	{
@@ -624,7 +625,6 @@ if(userSeq == NULL || userSeq[0] == '\0' || showPage)
 else
     {
     cartWebStart(theCart, "%s BLAT Results", organism);
-    hgBotDelay();
     blatSeq(skipLeadingSpaces(userSeq));
     }
 cartWebEnd();
