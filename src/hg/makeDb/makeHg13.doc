@@ -185,7 +185,8 @@ done after repeat masking and distributing to cluster nodes)
     but it will show the strand orientation of the floating contigs 
     (grep for '|').
         mdToNcbiLift seq_contig.md jkStuff/ncbi.lft 
-
+    If a lift file has been edited (e.g. as in 6.2.5 above), edit ncbi.lft 
+    to match.
 
 CREATING DATABASE  (DONE 12/03/02 - MATT)
 
@@ -1801,94 +1802,95 @@ o - Rescuing STS track:
      - mv chrom.psl ../convert.psl
 
 
-LOADING MOUSE MM2 BLASTZ ALIGNMENTS FROM PENN STATE: (TO DO)
+LOADING MOUSE MM2 BLASTZ ALIGNMENTS FROM PENN STATE: (DONE 12/6/02)
 
-    # create psl files for each per-contig lav file
-       ssh eieio
-       set base="/cluster/store4/gs.14/build31/blastz.mm2.2002-08-24"
-       cd $base
-       set tbl="blastzMm2"
-       foreach chrdir ($base/lav/chr*)
-         set chr=$chrdir:t
-         set outdir=lav-psl/$chr
-         mkdir -p $outdir
-         foreach lav ($chrdir/*.lav)
-           lavToPsl -target-strand=+ $lav $outdir/$lav:t:r.psl
-         end
-       end
+    # Translate Penn State .lav files into sorted axt:
+    ssh eieio
+    set base="/cluster/store4/gs.14/build31/bed/blastz.mm2.2002-12-5-ASH"
+    set seq1_dir="/cluster/store4/gs.14/build31/mixedNib/"
+    set seq2_dir="/cluster/store2/mm.2002.02/mm2/trfMixedNib/"
+    set tbl="blastzMm2"
+    cd $base
+    mkdir -p axtChrom
+    foreach c (lav/*)
+      pushd $c
+      set chr=$c:t
+      set out=$base/axtChrom/$chr.axt
+      echo "Translating $chr lav to $out"
+      cat `ls -1 *.lav | sort -g` \
+        | lavToAxt stdin $seq1_dir $seq2_dir stdout \
+        | axtSort stdin $out
+      popd
+    end
 
-    # Substitute scratch/... path with chrom name:
-       foreach f (lav-psl/*/*.psl)
-         perl -wpi -e 's@/?scratch/hg/gs.14/build31/[\w\.-_]+/+(chr.+)\.nib:\d+-\d+@$1@; s@/?scratch/hg/mm2/[\w\.-_]+/+(chr.+)\.nib:\d+-\d+@$1@; s@:___@@g;' $f
-       end
+    # chr19 alignments are so huge that they cause axtSort to run out 
+    # of memory.  Run them in two passes like this:
+    foreach c (lav/chr19)
+      pushd $c
+      set chr=$c:t
+      set out=$base/axtChrom/$chr.axt
+      echo "Translating $chr lav to $out"
+      foreach d (*.lav)
+        set smallout=$d.axt
+        lavToAxt $d $seq1_dir $seq2_dir stdout \
+        | axtSort stdin $smallout
+      end
+      cat `ls -1 *.lav.axt | sort -g` \
+        > $out
+      popd
+    end
 
-    # Convert to per-chromsome files, sort, and add sequence
-    # eieio's /tmp might not have enough space; try kk, kkr1u00 etc.
-       mkdir -p lav-xa
-       foreach chrdir (lav-psl/*)
-         set chr=$chrdir:t
-         pslCat -check -nohead -ext=.psl -dir lav-psl/$chr \
-          | sort -k 15n -k 16n -T /cluster/store2/temp \
-          | liftUp -type=.psl -pslQ -nohead stdout \
-            /cluster/store2/mm.2002.02/mm2/jkStuff/liftAll.lft warn stdin \
-          > lav-xa/${chr}_${tbl}.psl
-       end
+    # Translate the sorted axt files into psl:
+    cd $base
+    mkdir -p pslChrom
+    foreach f (axtChrom/chr*.axt)
+      set c=$f:t:r
+      axtToPsl $f S1.len S2.len pslChrom/${c}_${tbl}.psl
+    end
 
     # Load tables
-        ssh hgwdev
-        set base="/cluster/store4/gs.14/build31/blastz.mm2.2002-08-24"
-        cd $base/lav-xa
-        hgLoadPsl hg13 *_${tbl}.psl
+    ssh hgwdev
+    set base="/cluster/store4/gs.14/build31/bed/blastz.mm2.2002-12-5-ASH"
+    set tbl="blastzMm2"
+    cd $base/pslChrom
+    hgLoadPsl hg13 chr*_${tbl}.psl
 
-MAKING THE BLASTZBESTMOUSE TRACK FROM PENN STATE MM2 AXT FILES (TO DO)
-    # When Scott Schwartz is done generating .axt's for the blastz mm2 
-    # alignments (takes longer than the .lav used for blastxMm2 above):
-
-    # Create tSizes (human chrom size) and qSizes (mouse) for axtToPsl.
-      In mysql:
-         use hg13
-         select chrom,size from chromInfo;
-         use mm2
-         select chrom,size from chromInfo;
-      Edit the results of the first select into a tab-separated tSizes,
-      edit the results of the second select into a tab-separated qSizes.
+MAKING THE BLASTZBESTMOUSE TRACK FROM PENN STATE MM2 AXT FILES (DONE 12/6/02)
 
     # Consolidate AXT files to chrom level, sort, pick best, make psl.
     ssh eieio
-    set base="/cluster/store4/gs.14/build31/blastz.mm2.2002-08-24"
+    set base="/cluster/store4/gs.14/build31/bed/blastz.mm2.2002-12-5-ASH"
+    set tbl="blastzBestMouse"
     cd $base
-    mkdir -p axtChrom axtBest pslBest
+    mkdir -p axtBest pslBest
     foreach chrdir (lav/chr*)
       set chr=$chrdir:t
-      gunzip -c $chrdir/*.axt.gz | \
-        liftUp -type=.axt -axtQ axtChrom/$chr.lifted.axt \
-        /cluster/store2/mm.2002.02/mm2/jkStuff/liftAll.lft warn stdin
-      axtBest axtChrom/$chr.lifted.axt $chr axtBest/$chr.axt -minScore=300
-      axtToPsl axtBest/$chr.axt tSizes qSizes pslBest/${chr}_blastzBestMouse.psl
-      echo Done with $chr.
+      echo axtBesting $chr
+      axtBest axtChrom/$chr.axt $chr axtBest/$chr.axt -minScore=300
+      echo translating axtBest to psl for $chr
+      axtToPsl axtBest/$chr.axt S1.len S2.len pslBest/${chr}_${tbl}.psl
     end
     # If a chromosome has so many alignments that axtBest runs out of mem,
     # run axtBest in 2 passes to reduce size of the input to final axtBest:
     foreach chrdir (lav/chr19)
       set chr=$chrdir:t
-      foreach a ($chrdir/*.axt.gz)
-        gunzip $a
-        axtBest $a:r $chr $a:r:r.axtBest
-        gzip $a:r $a:r:r.axtBest
+      echo two-pass axtBesting $chr
+      foreach a ($chrdir/*.axt)
+        axtBest $a $chr $a:r.axtBest
       end
-      gunzip -c $chrdir/*.axtBest.gz | \
-        liftUp -type=.axt -axtQ axtChrom/$chr.lifted.axt \
-        /cluster/store2/mm.2002.02/mm2/jkStuff/liftAll.lft warn stdin
-      axtBest axtChrom/$chr.lifted.axt $chr axtBest/$chr.axt
-      axtToPsl axtBest/$chr.axt tSizes qSizes pslBest/${chr}_blastzBestMouse.psl
-      echo Done with $chr.
+      cat `ls -1 $chrdir/*.axtBest | sort -g` \
+        > $chrdir/$chr.axtBestPieces
+      axtBest $chrdir/$chr.axtBestPieces $chr axtBest/$chr.axt
+      axtToPsl axtBest/$chr.axt S1.len S2.len pslBest/${chr}_${tbl}.psl
     end
 
     # Load tables
      ssh hgwdev
-     set base="/cluster/store4/gs.14/build31/blastz.mm2.2002-08-24"
+     set base="/cluster/store4/gs.14/build31/bed/blastz.mm2.2002-12-5-ASH"
+     set tbl="blastzBestMouse"
      cd $base/pslBest
-     hgLoadPsl hg13 *.psl
+     hgLoadPsl hg13 chr*_${tbl}.psl
+
     # Make /gbdb links and add them to the axtInfo table:
      mkdir -p /gbdb/hg13/axtBestMm2
      cd /gbdb/hg13/axtBestMm2
@@ -1906,10 +1908,10 @@ MAKING THE BLASTZBESTMOUSE TRACK FROM PENN STATE MM2 AXT FILES (TO DO)
      hgsql hg13 < ~/kent/src/hg/lib/axtInfo.sql
      hgsql hg13 < axtInfoInserts.sql
 
-MAKING THE AXTTIGHT FROM AXTBEST (TO DO)
+MAKING THE AXTTIGHT FROM AXTBEST (DONE 12/6/02)
     # After creating axtBest alignments above, use subsetAxt to get axtTight:
     ssh eieio
-    cd ~/oo/blastz.mm2.2002-08-24/axtBest
+    cd ~/hg13/bed/blastz.mm2.2002-12-5-ASH/axtBest
     mkdir -p ../axtTight
     foreach i (*.axt)
       subsetAxt  $i ../axtTight/$i \
@@ -1920,11 +1922,11 @@ MAKING THE AXTTIGHT FROM AXTBEST (TO DO)
     mkdir -p ../pslTight
     foreach i (*.axt)
       set c = $i:r
-      axtToPsl $i ../tSizes ../qSizes ../pslTight/${c}_blastzTightMouse.psl
+      axtToPsl $i ../S1.len ../S2.len ../pslTight/${c}_blastzTightMouse.psl
     end
     # Load tables into database
     ssh hgwdev
-    cd ~/oo/blastz.mm2.2002-08-24/pslTight
+    cd ~/hg13/bed/blastz.mm2.2002-12-5-ASH/pslTight
     hgLoadPsl hg13 chr*_blastzTightMouse.psl
 
 
