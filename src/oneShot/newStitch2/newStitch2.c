@@ -166,7 +166,7 @@ AllocArray(grid->grid, grid->area);
 grid->qDiv = (grid->qSize + dim - 1)/dim;
 grid->tDiv = (grid->tSize + dim - 1)/dim;
 
-uglyf("grid: qStart %d, qEnd %d, qSize %d, tStart %d, tEnd %d, tSize %d, qDiv %d, tDiv %d\n", grid->qStart, grid->qEnd, grid->qSize, grid->tStart, grid->tEnd, grid->tSize, grid->qDiv, grid->tDiv);
+// uglyf("grid: qStart %d, qEnd %d, qSize %d, tStart %d, tEnd %d, tSize %d, qDiv %d, tDiv %d\n", grid->qStart, grid->qEnd, grid->qSize, grid->tStart, grid->tEnd, grid->tSize, grid->qDiv, grid->tDiv);
 return grid;
 }
 
@@ -306,7 +306,7 @@ for (r=0; r<grid->dim; ++r)
 	}
     considerNodes(prev, grid, &candidateList, qIxPrev, tIxPrev, r, r);
     }
-dlSort(&candidateList, asNodeCmp);
+// dlSort(&candidateList, asNodeCmp);
 
 // uglyf("following %d,%d %d (of %d usual) candidates\n", prevBlock->qStart, prevBlock->tStart, dlCount(&candidateList), graph->nodeCount - nodeIx - 1);
 
@@ -567,8 +567,8 @@ startTime = clock1000();
 graph = asGraphMake(blockList, defaultGapPenalty);
 dt = clock1000() - startTime;
 fullSize = (graph->nodeCount + 1)*(graph->nodeCount)/2;
-uglyf("%d edges (%d in full graph) %4.1f%% of full in %5.3f seconds (%ld)\n",
-    graph->edgeCount, fullSize, 100.0*graph->edgeCount/fullSize, 0.001*dt, startTime);
+uglyf("%d edges (%d in full graph) %4.1f%% of full in %5.3f seconds\n",
+    graph->edgeCount, fullSize, 100.0*graph->edgeCount/fullSize, 0.001*dt);
 fprintf(f, 
     "%s %d edges (%d in full graph) %4.1f%% of full in %ld seconds\n",
     sp->name, graph->edgeCount, fullSize, 
