@@ -11,7 +11,8 @@ exit; # don't actually run this like a script :)
     ssh eieio
     mkdir -p /cluster/store5/worm/ce2/sanger
     mkdir -p /cluster/store5/worm/ce2/tmp
-    cd /cluster/store5/worm/ce2/sanger
+    ln -s /cluster/store5/worm/ce2 /cluster/data/ce2
+    cd /cluster/data/ce2/sanger
 
     wget -o ce2.fetch.log -r -l1 --no-directories \
         ftp://ftp.sanger.ac.uk/pub/wormbase/WS120/CHROMOSOMES/
@@ -25,12 +26,6 @@ exit; # don't actually run this like a script :)
 #     gff formats.
 
     ls -ogrt
-
-# get out of this download data directory, and create your home symlink
-# shortcut
-    cd ..
-    ln -s /cluster/store5/worm/ce2 ~/ce2
-    cd ~/ce2
 
 # Rename CHROMOSOME_MtDNA files to CHROMOSOME_M and change to 
 # "CHROMOSOME_M" inside files 
@@ -75,7 +70,7 @@ exit; # don't actually run this like a script :)
 # Filesystem            Size  Used Avail Use% Mounted on
 # /dev/sdc1             1.8T  280G  1.4T  17% /var/lib/mysql    
 
-# CREATING GRP TABLE FOR TRACK GROUPING (in progress, 2003-03-31 - hartera)
+# CREATING GRP TABLE FOR TRACK GROUPING (DONE, 2003-03-31 - hartera)
     # next machine
     ssh hgwdev
     #  the following command copies all the data from the table
@@ -83,13 +78,21 @@ exit; # don't actually run this like a script :)
     echo "create table grp (PRIMARY KEY(NAME)) select * from galGal2.grp" \
       | hgsql ce2
     # if you need to delete that table:   !!! WILL DELETE ALL grp data !!!
-        echo 'drop table grp;' | hgsql ce2
+    echo 'drop table grp;' | hgsql ce2
     
+# MAKE JKSTUFF AND BED DIRECTORIES (DONE, 2004-04-01, hartera)
+    # This used to hold scripts -- better to keep them inline here so
+    # they're in CVS.  Now it should just hold lift file(s) and
+    # temporary scripts made by copy-paste from this file.
+    mkdir /cluster/data/ce2/jkStuff
+    # This is where most tracks will be built:
+    mkdir /cluster/data/ce2/bed
+
 # PREPARE Split contigs into 100,000 bp chunks for cluster runs
-# (in progress, 2004-03-31, hartera)
+# (DONE, 2004-04-01, hartera)
     # next machine
     ssh eieio
-    cd ~/ce2
+    cd /cluster/data/ce2
     rm -fr ./split
     mkdir split
     foreach f (I II III IV V X M)
@@ -106,7 +109,430 @@ exit; # don't actually run this like a script :)
 1 pieces of 1 written
 
    cat split/*.lft > liftAll.lft
+   # copy them to /iscratch/i for cluster rsync
+   # next machine
+   ssh kkr1u00
+   cd /cluster/data/ce2/split
+   foreach c (I II III IV V X M)
+       echo -n "${c} "
+       mkdir -p /iscratch/i/worms/Celegans2/unmaskedSplit/${c}
+       cp -p ${c}/c*.fa /iscratch/i/worms/Celegans2/unmaskedSplit/${c}
+   end
+   iSync
 
+# Run RepeatMasker on the chromosomes (DONE, 2004-04-02 - hartera)
+    # next machine
+    ssh kk
+    cd /cluster/data/ce2
+    # make run directory and job list, create the script to use 
+    # for the RepeatMasker run
+    cat << '_EOF_' > jkStuff/RMWorm
+#!/bin/csh -fe
+#
+#       This is a slight rearrangement of the
+#       RMChicken script used in makeGalGal2.doc
+#       The results here need to go to a different location
+#       $1 == chrom name: I II III IV V X M
+#       $2 == directory where split contig .fa is found
+#       $3 == name of contig .fa file
+cd $1
+pushd .
+cd $2
+/bin/mkdir -p /tmp/ce2/$3/$1
+/bin/cp $3 /tmp/ce2/$3/$1
+cd /tmp/ce2/$3/$1
+/cluster/bluearc/RepeatMasker/RepeatMasker -alignments -s -species elegans $3
+popd
+/bin/cp /tmp/ce2/$3/$1/$3.out ./
+if( -e /tmp/ce2/$3/$1/$3.align ) /bin/cp /tmp/ce2/$3/$1/$3.align ./
+if (-e /tmp/ce2/$3/$1/$3.tbl) /bin/cp /tmp/ce2/$3/$1/$3.tbl ./
+if (-e /tmp/ce2/$3/$1/$3.cat) /bin/cp /tmp/ce2/$3/$1/$3.cat ./
+/bin/rm -r /tmp/ce2/$3/$1
+/bin/rmdir --ignore-fail-on-non-empty /tmp/ce2/$3
+/bin/rmdir --ignore-fail-on-non-empty /tmp/ce2
+'_EOF_'
+    # << this line makes emacs coloring happy
+    chmod +x jkStuff/RMWorm
+    # create job list
+    mkdir RMRun
+    rm -f RMRun/RMJobs
+    foreach c (I II III IV V X M)
+        mkdir /cluster/data/ce2/RMRun/${c}
+        foreach t ( /iscratch/i/worms/Celegans2/unmaskedSplit/$c/c*.fa )
+            set d = $t:h
+            set f = $t:t
+            echo /cluster/data/ce2/jkStuff/RMWorm ${c} ${d} ${f} \
+            '{'check out line+ /cluster/data/ce2/RMRun/$c/${f}.out'}' \
+            >> RMRun/RMJobs
+        end
+    end
+    # Do the run
+    cd /cluster/data/ce2/RMRun
+    para create RMJobs
+    para try, para check, para check, para push, para check, ...
+para try:
+# para time
+# Checking finished jobs
+# Completed: 1006 of 1006 jobs
+# CPU time in finished jobs:     821747s   13695.78m   228.26h    9.51d  0.026 y
+# IO & Wait Time:                 13643s     227.39m     3.79h    0.16d  0.000 y
+# Average job time:                 830s      13.84m     0.23h    0.01d
+# Longest job:                      935s      15.58m     0.26h    0.01d
+# Submission to last job:          5837s      97.28m     1.62h    0.07d
+  
+    # when they are finished, liftUp and load the .out files into the database:
+    # next machine
+    ssh eieio
+    cd /cluster/data/ce2/RMRun
+    foreach c (I II III IV V X M)
+        liftUp chr${c}.fa.out /cluster/data/ce2/split/chr${c}.lft warn ${c}/*.fa.out
+    end
+
+    # next machine
+    ssh hgwdev
+    cd /cluster/data/ce2/RMRun
+    hgLoadOut ce2 chr*.fa.out
+
+    # Noticed one error in this load (reported to Robert Hubley):
+    # Processing chrV.fa.out
+    # Strange perc. field -0.1 line 2196 of chrV.fa.out
+
+# SIMPLE REPEAT [TRF] TRACK  (DONE, hartera 2004-04-01)
+    # ensure chr*.fa files exist on /iscratch/i
+    # next machine
+    ssh kkr1u00
+    mkdir -p /iscratch/i/worms/Celegans2/unmaskedFa
+    cp -p /cluster/data/ce2/sangerFa/*.fa \
+        /iscratch/i/worms/Celegans2/unmaskedFa
+    iSync
+# done iSync, 
+    # Create cluster parasol job:
+    # next machine
+    ssh kk
+    mkdir -p /cluster/data/ce2/bed/simpleRepeat
+    cd /cluster/data/ce2/bed/simpleRepeat
+    mkdir trf
+    ls -1S /iscratch/i/worms/Celegans2/unmaskedFa/chr*.fa > genome.lst
+    cat << '_EOF_' > gsub
+#LOOP
+/cluster/bin/i386/trfBig -trf=/cluster/bin/i386/trf {check in line+ $(path1)}  /dev/null -bedAt={check out line trf/$(root1).bed} -tempDir=/tmp
+#ENDLOOP
+'_EOF_'
+                                                                                
+    echo "" > dummy.lst
+    gensub2 genome.lst dummy.lst gsub spec
+    para create spec
+    para try    # there are only 7, so this runs them all
+    para check
+
+# para time
+# Checking finished jobs
+# Completed: 7 of 7 jobs
+# CPU time in finished jobs:       3301s      55.01m     0.92h    0.04d  0.000 y
+# IO & Wait Time:                    38s       0.64m     0.01h    0.00d  0.000 y
+# Average job time:                 477s       7.95m     0.13h    0.01d
+# Longest job:                      975s      16.25m     0.27h    0.01d
+# Submission to last job:           975s      16.25m     0.27h    0.01d
+
+    #  When cluster run is done, combine into one:
+    cat trf/*.bed > simpleRepeat.bed
+
+    # Load into the database:
+    # next machine
+    ssh hgwdev
+    cd /cluster/data/ce2/bed/simpleRepeat
+    hgLoadBed ce2 simpleRepeat simpleRepeat.bed \
+      -sqlTable=$HOME/src/hg/lib/simpleRepeat.sql
+    # Loaded 28598 elements of size 16
+
+# PROCESS SIMPLE REPEATS INTO MASK (DONE,  2004-04-02 - hartera)
+    # After the simpleRepeats track has been built, make a filtered version
+    # of the trf output: keep trf's with period <= 12:
+
+    # next machine
+    ssh eieio
+    cd /cluster/data/ce2/bed/simpleRepeat
+    mkdir -p trfMask
+    foreach f (trf/*.bed)
+        awk '{if ($5 <= 12) print;}' $f > trfMask/$f:t
+    end
+
+#  create Soft and Hard masks from RepeatMaster and TRF outputs:
+#  and rebuild the nib files using the soft masking in the fa:
+    # next machine
+    ssh eieio
+    cd /cluster/data/ce2
+    mkdir softMask
+    mkdir nib
+    cd /cluster/data/ce2
+    foreach c (I II III IV V X M)
+        echo -n "masking chr${c} "
+        maskOutFa sangerFa/chr${c}.fa RMRun/chr${c}.fa.out \
+                softMask/chr${c}.fa -soft
+        maskOutFa softMask/chr${c}.fa \
+                bed/simpleRepeat/trfMask/chr${c}.bed \
+                softMask/chr${c}.fa -softAdd
+                faToNib -softMask softMask/chr${c}.fa nib/chr${c}.nib
+    end
+
+# output:
+# masking chrI Writing 15080483 bases in 7540250 bytes
+# masking chrII Writing 15279308 bases in 7639662 bytes
+# masking chrIII Writing 13783313 bases in 6891665 bytes
+# masking chrIV Writing 17493791 bases in 8746904 bytes
+# masking chrV Writing 20922231 bases in 10461124 bytes
+# masking chrX Writing 17718849 bases in 8859433 bytes
+# masking chrM Writing 13794 bases in 6905 bytes
+
+# create hard masks 
+mkdir hardMask
+    foreach c (I II III IV V X M)
+        echo "masking chr${c}"
+        /cluster/bin/i386/maskOutFa softMask/chr${c}.fa hard \
+                hardMask/chr${c}.fa
+    end
+
+    ssh kkr1u00
+    cd /cluster/data/ce2/softMask
+    mkdir -p /iscratch/i/worms/Celegans2/bothMasksFa
+    mkdir -p /iscratch/i/worms/Celegans2/nib
+    cp -p *.fa /iscratch/i/worms/Celegans2/bothMasksFa
+    cd /cluster/data/ce2/nib
+    cp -p c*.nib /iscratch/i/worms/Celegans2/nib
+    iSync
+
+STORING O+O SEQUENCE AND ASSEMBLY INFORMATION  (DONE, 2004-04-02 - hartera)
+
+    # Make symbolic links from /gbdb/ce1/nib to the real nibs.
+    # next machine
+    ssh hgwdev
+    mkdir -p /gbdb/ce2/nib
+
+    foreach f (/cluster/data/ce2/nib/*.nib) 
+      ln -s $f /gbdb/ce2/nib
+    end
+    cd /cluster/data/ce2/tmp
+    # Load /gbdb/ce2/nib paths into database and save size info
+    # hgNibSeq creates chromInfo table
+    hgNibSeq -preMadeNib ce2 /gbdb/ce2/nib /cluster/data/ce2/sangerFa/chr*.fa
+
+# Typical output:
+# Processing /cluster/data/ce2/sangerFa/chrI.fa to /gbdb/ce2/nib/chrI.nib
+# Processing /cluster/data/ce2/sangerFa/chrII.fa to /gbdb/ce2/nib/chrII.nib
+# Processing /cluster/data/ce2/sangerFa/chrIII.fa to /gbdb/ce2/nib/chrIII.nib
+# Processing /cluster/data/ce2/sangerFa/chrIV.fa to /gbdb/ce2/nib/chrIV.nib
+# Processing /cluster/data/ce2/sangerFa/chrM.fa to /gbdb/ce2/nib/chrM.nib
+# Processing /cluster/data/ce2/sangerFa/chrV.fa to /gbdb/ce2/nib/chrV.nib
+# Processing /cluster/data/ce2/sangerFa/chrX.fa to /gbdb/ce2/nib/chrX.nib
+# 100291769 total bases
+
+    #   Verify the hgNibSeq load functioned OK:
+    hgsql -e "select chrom, size from chromInfo" ce2 > chrom.sizes
+    cat chrom.sizes
+# chrom.sizes:
+# chrom   size
+# chrI    15080483
+# chrII   15279308
+# chrIII  13783313
+# chrIV   17493791
+# chrM    13794
+# chrV    20922231
+# chrX    17718849
+
+# MAKE GAP tracks AND LOAD ASSEMBLY FRAGMENTS INTO DATABASE (DONE, 2004-04-05, hartera)
+    # next machine
+     ssh hgwdev
+     mkdir -p /cluster/data/ce2/bed/gap
+     cd /cluster/data/ce2/bed/gap
+     # finds motifs and finds location of gaps as part of output
+     foreach c (I II III IV V X M)
+        findMotif -chr=chr${c} -verbose=4 -motif=gcatg /gbdb/ce2/nib >& chr${c}Bed.stderr 
+     end
+     grep -h GAP *.stderr | sed -e "s/#GAP //" > gap.bed
+
+    # hgGoldGap does not handle dir names over 2 characters
+    #   directory III has been moved to 3 when all this was created above
+    hgGoldGapGl -noGl ce2 /cluster/data/ce2 sangerFa
+
+    # All the gap tables are empty
+    # Load in gap.bed
+    # Need to add extra fields to gap.bed file
+
+    cat << '_EOF_' > /cluster/data/ce2/jkStuff/createGapFile.pl
+#!/usr/bin/perl -w
+use strict;
+
+my $oldchr = "";
+while (<STDIN>) {
+  my @fields = split(/\t/);
+  my $chr = $fields[0];
+  if ($chr ne $oldchr) {
+     open(OUT, ">$chr"."_gap.bed");
+     $oldchr = $chr;
+  }
+  print OUT "$fields[0]\t$fields[1]\t$fields[2]\t$fields[3]\tN\t$fields[4]\tfragment\tyes\n";
+}
+'_EOF_'
+ 
+    perl /cluster/data/ce2/jkStuff/createGapFile.pl < gap.bed
+    # load into relevant tables
+    foreach c (I II III IV V X M) 
+        hgLoadBed -tab -oldTable ce2 chr${c}_gap chr${c}_gap.bed
+    end 
+
+# CREATE gc5Base wiggle TRACK (DONE, 2004-04-05, hartera)
+
+    # Perform a gc count with a 5 base window. 
+    # Also compute a "zoomed" view for display efficiency.
+
+    mkdir /cluster/data/ce2/bed/gc5Base
+    cd /cluster/data/ce2/bed/gc5Base
+
+    #   in the script below, the 'grep -w GC' selects the lines of
+    #   output from hgGcPercent that are real data and not just some
+    #   information from hgGcPercent.  The awk computes the number
+    #   of bases that hgGcPercent claimed it measured, which is not
+    #   necessarily always 5 if it ran into gaps, and then the division
+    #   by 10.0 scales down the numbers from hgGcPercent to the range
+    #   [0-100].  Two columns come out of the awk print statement:
+    #   <position> and <value> which are fed into wigAsciiToBinary through
+    #   the pipe.  It is set at a dataSpan of 5 because each value
+    #   represents the measurement over five bases beginning with
+    #   <position>.  The result files end up in ./wigData5.
+    cat << '_EOF_' > /cluster/data/ce2/jkStuff/runGcPercent.sh
+#!/bin/sh
+mkdir -p wigData5
+mkdir -p dataLimits5
+for n in /cluster/data/ce2/nib/*.nib
+do
+        c=`basename ${n} | sed -e "s/.nib//"`
+        C=`echo $c | sed -e "s/chr//"`
+        echo -n "working on ${c} - ${C} ... "
+        hgGcPercent -chr=${c} -doGaps \
+                -file=stdout -win=5 ce2 /cluster/data/ce2/nib | grep -w GC | \
+                awk '{printf "%d\t%.1f\n", $2+1, $5/10.0 }' | \
+        wigAsciiToBinary \
+        -dataSpan=5 -chrom=${c} -wibFile=wigData5/gc5Base_${C} \
+        -name=${C} stdin 2> dataLimits5/${c}
+echo "done"
+done
+'_EOF_'
+
+    chmod +x /cluster/data/ce2/jkStuff/runGcPercent.sh
+
+    #   This is going to take perhaps two hours to run.  It is a lot of
+    #   data.  make sure you do it on the fileserver:
+    ssh eieio
+    cd /cluster/data/ce2/bed/gc5Base
+    /cluster/data/ce2/jkStuff/runGcPercent.sh
+    # load the .wig files back on hgwdev:
+    ssh hgwdev
+    cd /cluster/data/ce2/bed/gc5Base
+    hgLoadWiggle ce2 gc5Base wigData5/*.wig
+    # and symlink the .wib files into /gbdb
+    mkdir /gbdb/ce2/wib
+    ln -s `pwd`/wigData5/*.wib /gbdb/ce2/wib
+
+    # to speed up display for whole chromosome views, compute a "zoomed"
+    # view and load that on top of the existing table.  The savings
+    # comes from the number of data table rows the browser needs to load
+    # for a full chromosome view.  Without the zoomed view there are
+    # over 43,000 data rows for chrom 1.  With the zoomed view there are
+    # only 222 rows needed for the display.  If your original data was
+    # at 1 value per base the savings would be even greater.
+    #   Pretty much the same data calculation
+    # situation as above, although this time note the use of the
+    # 'wigZoom -dataSpan=1000 stdin' in the pipeline.  This will average
+    # together the data points coming out of the awk print statment over
+    # a span of 1000 bases.  Thus each <position> coming out of wigZoom
+    # will represent the measurement of GC in the next 1000 bases.  Note
+    # the use of -dataSpan=1000 on the wigAsciiToBinary to account for
+    # this type of data.  You want your dataSpan here to be an exact
+    # multiple of your original dataSpan (5*200=1000) and on the order
+    # of at least 1000, doesn't need to go too high.  For data that is
+    # originally at 1 base per value, a convenient span is: -dataSpan=1024
+    # A new set of result files ends up in ./wigData5_1K/*.wi[gb]
+
+    cat << '_EOF_' > /cluster/data/ce2/jkStuff/runZoom.sh
+#!/bin/sh
+                                                                                
+mkdir -p wigData5_1K
+mkdir -p dataLimits5_1K
+                                                                                
+for n in /cluster/data/ce2/nib/*.nib
+do
+        c=`basename ${n} | sed -e "s/.nib//"`
+        C=`echo $c | sed -e "s/chr//"`
+        echo -n "working on ${c} - ${C} ... "
+        hgGcPercent -chr=${c} -doGaps \
+                -file=stdout -win=5 ce2 /cluster/data/ce2/nib | grep -w GC | \
+                awk '{printf "%d\t%.1f\n", $2+1, $5/10.0}' | \
+        wigZoom -dataSpan=1000 stdin | wigAsciiToBinary \
+        -dataSpan=1000 -chrom=${c} -wibFile=wigData5_1K/gc5Base_${C}_1K \
+        -name=${C} stdin 2> dataLimits5_1K/${c}
+echo "done"
+done
+'_EOF_'
+
+    chmod +x /cluster/data/ce2/jkStuff/runZoom.sh
+    #   This is going to take even longer than above, certainly do this
+    #   on the fileserver
+    ssh eieio
+    cd /cluster/data/ce2/bed/gc5Base
+    time /cluster/data/ce2/jkStuff/runZoom.sh
+    # 520.000u 19.310s 6:15.09 143.7% 0+0k 0+0io 7875pf+0w
+
+    #   Then load these .wig files into the same database as above
+    ssh hgwdev
+    hgLoadWiggle -oldTable ce2 gc5Base wigData5_1K/*.wig
+    # and symlink these .wib files into /gbdb
+    mkdir /gbdb/ce2/wib
+    ln -s `pwd`/wigData5_1K/*.wib /gbdb/ce2/wib
+
+    #   The browser needs to be fixed so it can display the assembly track 
+    #   without the need for the gap tables to exist.
+
+# MAKE HGCENTRALTEST ENTRY AND TRACKDB TABLE FOR CE2 (DONE, 2002-04-05, hartera)
+    # next machine
+    ssh hgwdev
+    # Make trackDb table so browser knows what to expect:
+    cd $HOME/kent/src/hg/makeDb/trackDb
+    cvs up -d -P
+    # Edit that makefile to add ce2 in all the right places and do
+    make update
+    make alpha
+    cvs commit -m "Added ce2" makefile
+
+    # Add dbDb and defaultDb entries:
+    echo 'insert into dbDb (name, description, nibPath, organism,  \
+          defaultPos, active, orderKey, genome, scientificName,  \
+          htmlPath, hgNearOk)  \
+          values("ce2", "March 2004", \
+          "/gbdb/ce2/nib", "Worm", "chrII:14642289-14671631", 1, \
+          60, "C. elegans", "Caenorhabditis elegans", \
+          "/gbdb/ce2/html/description.html", 0);' \
+    | hgsql -h genome-testdb hgcentraltest
+    echo 'update defaultDb set name = "ce2" where genome = "C. elegans"' \
+        | hgsql -h genome-testdb hgcentraltest
+                                                                               
+# MAKE DESCRIPTION/SAMPLE POSITION HTML PAGE (DONE, 2004-04-05, hartera)
+    ssh hgwdev
+    mkdir /cluster/data/ce2/html
+    cd /cluster/data/ce2/html
+    # make a symbolic link from /gbdb/ce2/html to /cluster/data/ce2/html
+    ln -s /cluster/data/ce2/html /gbdb/ce2/html
+    # Write a description.hmtl - copy from /cluster/data/ce1/html/
+    # with a description of the assembly and some sample position queries.
+    # create ce2 dir in /trackDb/worm and commit to CVS
+    mkdir ~/kent/src/hg/makeDb/trackDb/worm/ce2
+    cvs add ce2
+    cvs commit ce2
+    # Add this also to ~/kent/src/hg/makeDb/trackDb/worm/ce2/description.html
+    chmod a+r $HOME/kent/src/hg/makeDb/trackDb/worm/ce2/description.html    
+    # Check it in and copy (ideally using "make alpha" in trackDb) to
+    # /gbdb/ce2/html
+    cvs commit description.html
+   
 # RUN Waba alignment with briggsae  (WORKING - 2004-04-06 - Hiram)
     # prepare contigs from C. briggsae
     #   Assumes C. briggsae data has been downloaded according to
@@ -216,4 +642,55 @@ exit 0
 #   visibility dense
 #   color 140,0,200
 #   altColor 210,140,250
+
+# NEED TO GET BLAT SERVERS SET UP
+
+# MAKE 11.OOC FILE FOR BLAT (DONE, 2004-04-07, hartera)
+# Use -repMatch=40 (based on size, for human use 1024)
+    ssh kkr1u00
+    mkdir /cluster/bluearc/ce2
+    mkdir /cluster/data/ce2/bed/ooc
+    cd /cluster/data/ce2/bed/ooc
+    ls -1 /cluster/data/ce2/nib/chr*.nib > nib.lst
+    /cluster/bin/i386/blat nib.lst /dev/null /dev/null -tileSize=11 \
+      -makeOoc=/cluster/bluearc/ce2/11.ooc -repMatch=40
+# Writing /cluster/bluearc/ce2/11.ooc
+# Wrote 43676 overused 11-mers to /cluster/bluearc/ce2/11.ooc
+   cp -p /cluster/bluearc/ce2/11.ooc /iscratch/i/worms/Celegans2/
+   iSync
+
+# AUTO UPDATE GENBANK MRNA AND EST RUN (in progress, 2004-04-05, hartera)
+    # next machine
+    ssh hgwdev
+    # Update genbank config and source in CVS:
+    cd ~/kent/src/hg/makeDb/genbank
+    cvsup .
+    # See if /cluster/data/genbank/etc/genbank.conf has had any un-checked-in
+    # edits, check them in if necessary:
+    diff /cluster/data/genbank/etc/genbank.conf etc/genbank.conf
+
+    # Edit etc/genbank.conf: default includes native genbank mRNAs and ESTs, 
+    # genbank xeno mRNAs but no ESTs, native RefSeq mRNAs but not xeno RefSeq
+    # Add these lines:
+# ce2 (C. elegans)
+ce2.genome = /iscratch/i/worms/Celegans2/nib/chr*.nib
+ce2.lift = no
+ce2.downloadDir = ce2
+
+    cvs commit -m "Added ce2" etc/genbank.conf
+    make
+
+    # markd added -maxIntron=100000 for ce to genbank/src/align/gbBlat
+    # Edit src/align/gbBlat to add /iscratch/i/worms/Celegans2/11.ooc
+    cvs diff src/align/gbBlat
+    make
+    cvs commit -m "Added 11.ooc for ce2" src/align/gbBlat
+    # Install to /cluster/data/genbank:
+    make install-server
+    
+    # next machine
+    ssh eieio
+    cd /cluster/data/genbank
+    # This is an -initial run, RefSeq mRNA only:
+    nice bin/gbAlignStep -srcDb=refseq -type=mrna -verbose=1 -initial ce2
 
