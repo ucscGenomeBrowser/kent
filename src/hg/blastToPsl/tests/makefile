@@ -2,7 +2,7 @@ include ../../../inc/common.mk
 
 all:
 
-test: protMrnaTest protDnaTest mrnaDnaTest blockBugTest identityBugTest
+test: protMrnaTest protDnaTest mrnaDnaTest blockBugTest identityBugTest protMrnaEval1Test protMrnaEval2Test
 
 
 protMrnaTest: mkdirs
@@ -33,6 +33,22 @@ identityBugTest: mkdirs
 	../blastToPsl input/identityBug.blast output/identityBugTest.psl
 	pslCheck output/identityBugTest.psl
 	diff -u expected/identityBugTest.psl output/identityBugTest.psl
+
+# test E-value threshold filter
+protMrnaEval1Test: mkdirs
+	../blastToPsl -eVal=1 -scores=output/protMrnaEval1Test.bscores input/kgProtMRna1.blast output/protMrnaEval1Test.psl
+	pslCheck output/protMrnaEval1Test.psl
+	diff -u expected/protMrnaEval1Test.psl output/protMrnaEval1Test.psl
+	diff -u expected/protMrnaEval1Test.bscores output/protMrnaEval1Test.bscores
+
+protMrnaEval2Test: mkdirs
+	../blastToPsl -eVal=1e-10 -scores=output/protMrnaEval2Test.bscores input/kgProtMRna1.blast output/protMrnaEval2Test.psl
+	pslCheck output/protMrnaEval2Test.psl
+	diff -u expected/protMrnaEval2Test.psl output/protMrnaEval2Test.psl
+	diff -u expected/protMrnaEval2Test.bscores output/protMrnaEval2Test.bscores
+
+
+	diff -u expected/protMrnaTest.bscores output/protMrnaTest.bscores
 
 # this test is currently disabled, mega-blast is painful because
 # Database: comes before Query= and there are multiple queries for each
