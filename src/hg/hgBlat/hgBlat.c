@@ -20,7 +20,7 @@
 #include "hash.h"
 #include "botDelay.h"
 
-static char const rcsid[] = "$Id: hgBlat.c,v 1.88 2005/02/16 06:42:31 sugnet Exp $";
+static char const rcsid[] = "$Id: hgBlat.c,v 1.89 2005/02/18 05:28:01 kent Exp $";
 
 struct cart *cart;	/* The user's ui state. */
 struct hash *oldVars = NULL;
@@ -40,7 +40,7 @@ char *typeList[] = {"BLAT's guess", "DNA", "protein", "translated RNA", "transla
 char *sortList[] = {"query,score", "query,start", "chrom,score", "chrom,start", "score"};
 char *outputList[] = {"hyperlink", "psl", "psl no header"};
 
-int minMatchShown = 21;
+int minMatchShown = 20;
 
 struct serverTable *findServer(char *db, boolean isTrans)
 /* Return server for given database.  Db can either be
