@@ -1359,33 +1359,6 @@ spectrum on
 type chain fr1
 otherDb fr1
 
-track DJT_snpSingleValid_knownGeneCds
-shortLabel cons snps
-longLabel Human Variation in Conserved Coding Regions
-group varRep
-priority 144.1
-visibility hide
-useScore 1
-type bed 6
-
-track DJT_snpSingleValid_knownGeneNotCds
-shortLabel cons non-coding transcribed snps
-longLabel Human Variation in Conserved Non-Coding Transcribed Regions
-group varRep
-priority 144.2
-visibility hide
-useScore 1
-type bed 6
-
-track DJT_snpSingleValid_notKnownGene
-shortLabel cons non-coding snps
-longLabel Human Variation in Conserved Non-Coding Regions
-group varRep
-priority 144.3
-visibility hide
-useScore 1
-type bed 6
-
 track webbNonExonic
 shortLabel NonExonic
 longLabel Putative Non-Exonic Regions Conserved with Chicken
