@@ -9,7 +9,7 @@
 #include "bed.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: hgLoadBed.c,v 1.15 2003/05/06 07:22:25 kate Exp $";
+static char const rcsid[] = "$Id: hgLoadBed.c,v 1.16 2003/09/19 19:27:06 baertsch Exp $";
 
 /* Command line switches. */
 boolean noBin = FALSE;		/* Suppress bin field. */
@@ -209,7 +209,7 @@ int i;
 
 for (i=0; i<bedCount; ++i)
     loadOneBed(bedFiles[i], bedSize, &bedList);
-printf("Loaded %d elements\n", slCount(bedList));
+printf("Loaded %d elements of size %d\n", slCount(bedList), bedSize);
 slSort(&bedList, bedStubCmp);
 printf("Sorted\n");
 loadDatabase(database, track, bedSize, bedList);
