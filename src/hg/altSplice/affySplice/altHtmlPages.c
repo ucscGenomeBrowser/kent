@@ -11,8 +11,10 @@
 #include "hash.h"
 #include "linefile.h"
 #include "dystring.h"
-#include <gsl/gsl_math.h>
-#include <gsl/gsl_statistics_double.h>
+#include "altSpliceSite.h"
+#include "altSpliceType.h"
+/* #include <gsl/gsl_math.h> */
+/* #include <gsl/gsl_statistics_double.h> */
 
 struct junctSet 
 /* A set of beds with a common start or end. */
@@ -90,6 +92,9 @@ static struct optionSpec optionSpecs[] =
     {"log2Ratio", OPTION_BOOLEAN},
     {"ratioFile", OPTION_STRING},
     {"junctPsMap", OPTION_STRING},
+    {"agxFile", OPTION_STRING},
+    {"db", OPTION_STRING},
+    {"spliceTypes", OPTION_STRING},
     {NULL, 0}
 };
 
@@ -113,7 +118,10 @@ static char *optionDescripts[] =
     "[optional] Calculate ratios of sj to other sj in same junction set.",
     "[optional] Transform ratios with log base 2.",
     "[optional] File to store sjRatios in.",
-    "[optional] Print out the probe sets in a junction set and quit."
+    "[optional] Print out the probe sets in a junction set and quit.",
+    "[optional] File with graphs to determine types.",
+    "[optional] Database that graphs are from.",
+    "[optional] Try to determine types of splicing in junction sets."
 };
 
 double presThresh = 0;     /* Probability above which we consider
@@ -124,6 +132,19 @@ double disagreeThresh = 0; /* Probability below which we consider
 			    * something to disagree. */
 FILE *exonPsStats = NULL;  /* File to output exon probe set 
 			      confirmation stats into. */
+boolean doJunctionTypes = FALSE;  /* Should we try to determine what type of splice type is out there? */ 
+FILE *bedJunctTypeOut =   NULL;   /* File to write out bed types to. */
+struct hash *junctBedHash = NULL;
+
+/* Counts of different alternative splicing 
+   events. */
+int alt3Count = 0;
+int alt3SoftCount = 0;
+int alt5Count = 0;
+int alt5SoftCount = 0;
+int altCassette = 0;
+int otherCount = 0;
+
 void usage()
 /** Print usage and quit. */
 {
@@ -1166,8 +1187,207 @@ struct hash *bedHash = newHash(12);
 
 bedList = bedLoadAll(fileName);
 for(bed = bedList; bed != NULL; bed = bed->next)
+  {
     hashAddUnique(bedHash, bed->name, bed);
+  }
 return bedHash;
+}
+int agxVertexByPos(struct altGraphX *agx, int position)
+     /* Return the vertex index by to position. */
+{
+  int *vPos = agx->vPositions;
+  int vC = agx->vertexCount;
+  int i = 0;
+  for(i = 0; i < vC; i++)
+    if(vPos[i] == position)
+      return i;
+  return -1;
+}
+
+int bedSpliceStart(const struct bed *bed)
+/* Return the start of the bed splice site. */
+{
+assert(bed->blockSizes);
+return bed->chromStart + bed->blockSizes[0];
+}
+
+int bedSpliceEnd(const struct bed *bed)
+/* Return the end of the bed splice site. */
+{
+assert(bed->blockSizes);
+return bed->chromStart + bed->chromStarts[1];
+}
+
+boolean connectToDownStreamSoft(struct altGraphX *ag, bool **em, int v)
+/* Does this vertex (v) connect to a downstream vertex to 
+   create an soft ended exon. */
+{
+int i = 0;
+int vC = ag->vertexCount;
+unsigned char *vT = ag->vTypes;
+for(i = 0; i < vC; i++)
+    {
+    if(em[v][i] && vT[i] == ggSoftEnd && 
+       getSpliceEdgeType(ag, altGraphXGetEdgeNum(ag, v, i)) == ggExon)
+	return TRUE;
+    }
+return FALSE;
+}
+
+boolean connectToUpstreamSoft(struct altGraphX *ag, bool **em, int v)
+/* Does this vertex (v) connect to a upstream vertex to 
+   create an soft started exon. */
+{
+int i = 0;
+int vC = ag->vertexCount;
+unsigned char *vT = ag->vTypes;
+for(i = 0; i < vC; i++)
+    {
+    if(em[i][v] && vT[i] == ggSoftStart && 
+       getSpliceEdgeType(ag, altGraphXGetEdgeNum(ag, i, v)) == ggExon)
+	return TRUE;
+    }
+return FALSE;
+}
+
+int translateStrand(int type, char strand)
+/* Translate the type by strand. If the strand is negative
+   both alt3Prime and alt5Prime are flipped. */
+{
+boolean isNeg = strand == '-';
+if(type == al3Prime && isNeg)
+    type = alt5Prime;
+else if(type == alt3PrimeSoft && isNeg)
+    type = alt5PrimeSoft;
+return type;
+}
+
+int spliceTypeForJunctSet(struct junctSet *js)
+/* Determine the alternative splicing type for a junction set.  This
+ function is a little long as I have to convert into altGraphX and do
+ some strand specific things. */
+{
+bool **em = NULL;
+int type = -1;
+struct binElement *be = NULL;
+int ssPos[4];
+int ssCount = 0;
+struct bed *bedUp = NULL, *bedDown = NULL;
+unsigned char *vTypes = ag->vTypes;
+/* Can't have more than three introns and be a simple
+   process. */
+if(js->maxJunctCount + js->junctDupCount > 3)
+    return -1;
+if(js->cassette == TRUE)
+    return altCassette;
+
+em = altGraphXCreateEdgeMatrix(ag);
+  /* Get the beds. */
+  bedUp = hashFindVal(bedHash, bed->junctPSets[0]);
+  bedDown = hashFindVal(bedHash, bed->junctPSets[1]);
+  /* Sort the beds. */
+  if(bedUp->chromStart > bedDown->chromStart ||
+     (bedDown->chromStart == bedDown->chromStart && 
+      bedUp->chromEnd > bedDown->chromStart))
+    {
+      struct bed *tmp = bedUp;
+      bedUp = bedDown;
+      bedDown = bedUp;
+    }
+  /* If same start type check for alternative 3' splice. */
+  if(bedUp->chromStart == bedDown->chromStart)
+    {
+      int start = -1, ve1 = -1, ve2 = -2;
+      int altBpStart = 0, altBpEnd = 0, firstVertex = 0, lastVertex = 0;
+      start = agxVertexByPos(agx, bedUp->chromStart+bedUp->blockSizes[0]);
+      ve1 = agxVertexByPos(agx, bedSpliceEnd(bedUp));
+      ve2 = agxVertexByPos(agx, bedSpliceEnd(bedDown));
+      isThreePrime = astIsAlt3Prime(agx, em, start, end);
+      /* Check to see if this is an alt transcription start
+	 or end. */
+      if(isThreePrime && (connectToDownStreamSoft(ag, em, ve1) ||
+			  connectToDownStreamSoft(ag, em, ve2)))
+	  type = alt3PrimeSoft;
+      type = translateStrand(type, ag->strand[0]));
+    }
+  /* If same end then check for an alternative 5' splice site. */
+  else if(bedUp->chromEnd == bedDown->chromEnd)
+      {
+      int start1 = -1, start2 = -1, ve1 = -1, ve2 = -2;
+      int altBpStart = 0, altBpEnd = 0, firstVertex = 0, lastVertex = 0;
+      ve1 = agxVertexByPos(agx, bedSpliceStart(bedUp));
+      ve2 = agxVertexByPos(agx, bedSpliceStart(bedDown));
+      start1 = agxFindClosestUpstreamVertex(agx, em, ve1);
+      start2 = agxFindClosestUpstreamVertex(agx, em, ve2);
+      if(start1 == start2)
+	  {
+	  isFivePrime = astIsAlt5Prime(agx, em, start1, ve1, ve2);
+	  /* If we're on the negative strand then swap the call. */
+	  if(isFivePrime && agx->strand[0] == '-')
+	      type = alt3Prime;
+	  else if(isFivePrime)
+	      type = alt5Prime;
+	  }
+      else /* Check for alternative transcription starts. */
+	  {
+	  if(vTypes[start1] == ggSoftStart ||
+	     vTypes[start2] == ggSoftStart)
+	      type = alt5PrimeSoft;
+	  }
+      }
+
+  altGraphXFreeEdgeMatrix(&em, vC);
+  return type;
+}
+
+void countSpliceType(int type)
+/* Record the counts of different alt-splice types. */
+{
+switch(type)
+    {
+    case alt3Prime:
+	alt3Count++;
+	break;
+    case alt5Prime:
+	alt5Count++;
+	break;
+    case alt3PrimeSoft:
+	alt3SoftCount++;
+	break;
+    case alt5PrimeSoft:
+	alt5SoftCount++;
+	break;
+    case altCassette:
+	altCassetteCount++;
+	break;
+    default:
+	otherCount++;
+    }
+}
+    
+void outputBedsForJunctSet(int type, struct junctSet *js)
+/* Write out the beds for the junction set with the 
+   type as the scores. */
+{
+struct bed *bed = NULL;
+int i = 0;
+for(i = 0; i < js->maxJunctCount; i++)
+    {
+    bed = hashFindVal(bedHash, js->junctPSets[i]);
+    bed->score = type;
+    bedTabOutN(bed, 6, bedJunctTypeOut);
+    }
+}
+void determineSpliceTypes(struct junctSet *jsList)
+{
+  int type = -1;
+  struct junctSet *js = NULL;
+  for(js = jsList; js != NULL)
+    {
+      type = spliceTypeForJunctSet(js);
+      countSpliceType(type);
+      outputBedsForJunctSet(type, js);
+    }
 }
 
 void altHtmlPages(char *junctFile, char *probFile, char *intensityFile, char *bedFile)
@@ -1212,7 +1432,13 @@ assert(bedFile);
 probM = readResultMatrix(probFile);
 warn("Loaded %d rows and %d columns from %s", probM->rowCount, probM->colCount, probFile);
 
-
+if(doJunctionTypes)
+    {
+    determineSpliceTypes(jsList);
+    warn("%d altCassette, %d alt3, %d alt5, %d altTranStart %d altTranEnd, %d other",
+	 altCassetteCount, alt3Count, alt5SoftCount, 
+	 alt5Count, alt3SoftCount, otherCount;);
+    }
 fillInJunctUsed(jsList, intenM);
 fillInProbs(jsList, probM);
 fillInIntens(jsList, intenM);
@@ -1221,6 +1447,7 @@ warn("Calculating expression");
 calcExpressed(jsList, probM);
 
 bedHash = hashBeds(bedFile);
+junctBedHash = bedHash;
 calcExonCorrelation(jsList, bedHash, intenM, probM);
 
 /* Write out the lists. */
@@ -1275,9 +1502,27 @@ fprintf(htmlFrame, "<html><head><title>Junction Sets</title></head>\n"
 	browserName, db, jsList->chrom, jsList->chromStart, jsList->chromEnd);
 }
 
+void agxLoadChromKeeper(char *file)
+     /* Load the agx's in the file into the chromKeeper. */
+{
+  char *db = optionVal("db", NULL);
+  struct altGraphX *agx = NULL, *agxList = NULL;
+  if(db == NULL)
+    errAbort("Must specify a database when loading agxs.");
+  chromKeeperInit(db);
+  agxList = altGraphXLoadAll(file);
+  for(agx = agxList; agx != NULL; agx = agx->next)
+    {
+      chromKeeperAdd(agx->chrom, agx->chromStart, agx->chromEnd, agx);
+    }
+  doJunctionTypes = TRUE;
+}
+
 int main(int argc, char *argv[])
 {
 char *exonPsFile = NULL;
+FILE *agxFile = NULL;
+char *agxFileName = NULL;
 if(argc == 1)
     usage();
 optionInit(&argc, argv, optionSpecs);
@@ -1285,6 +1530,14 @@ if(optionExists("help"))
     usage();
 presThresh = optionFloat("presThresh", .9);
 absThresh = optionFloat("absThresh", .1);
+agxFileName = optionVal("agxFile", NULL);
+
+if(agxFileName != NULL)
+    {
+    agxFile = mustOpen(agxFileName, "w");
+    agxLoadChromKeeper(agxFile);
+    }
+
 if((exonPsFile = optionVal("exonStats", NULL)) != NULL)
     {
     exonPsStats = mustOpen(exonPsFile, "w");
@@ -1299,5 +1552,6 @@ else
 altHtmlPages(optionVal("junctFile", NULL), optionVal("probFile", NULL), 
 	     optionVal("intensityFile", NULL), optionVal("bedFile", NULL));
 carefulClose(&exonPsStats);
+carefulClose(&agxFile);
 return 0;
 }

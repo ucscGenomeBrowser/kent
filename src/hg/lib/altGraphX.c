@@ -10,7 +10,7 @@
 #include "geneGraph.h"
 #include "bed.h"
 
-static char const rcsid[] = "$Id: altGraphX.c,v 1.21 2004/04/29 20:45:31 sugnet Exp $";
+static char const rcsid[] = "$Id: altGraphX.c,v 1.22 2004/05/17 16:24:19 sugnet Exp $";
 struct altGraphX *_agxSortable = NULL; /* used for sorting. */
 
 struct evidence *evidenceCommaIn(char **pS, struct evidence *ret)
@@ -1829,4 +1829,48 @@ for(i=0; i<vC; i++)
 	}
     }
 altGraphXFreeEdgeMatrix(&em, vC);
+}
+
+int agxFindClosestDownstreamVertex(struct altGraphX *ag, bool **em, int v)
+/* Return the closest vertex that connects from v. -1 if none connect. */ 
+{
+int i;
+int minV=-1;
+int minDist = BIGNUM;
+int *vPos = ag->vPositions;
+for(i=v+1; i<ag->vertexCount; i++)
+    {
+    if(em[v][i]) 
+	{
+	int dist = vPos[i] - vPos[v];
+	if(dist < minDist)
+	    {
+	    minDist = dist;
+	    minV = i;
+	    }
+	}
+    }
+return minV;
+}
+
+int agxFindClosestUpstreamVertex(struct altGraphX *ag, bool **em, int v)
+/* Return the closest vertex that connects to v. -1 if none connect. */ 
+{
+int i;
+int minV=-1;
+int minDist = BIGNUM;
+int *vPos = ag->vPositions;
+for(i=0; i<v; i++)
+    {
+    if(em[i][v]) 
+	{
+	int dist = vPos[v] - vPos[i];
+	if(dist < minDist)
+	    {
+	    minDist = dist;
+	    minV = i;
+	    }
+	}
+    }
+return minV;
 }

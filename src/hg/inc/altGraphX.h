@@ -251,5 +251,11 @@ void altGraphXEnlargeExons(struct altGraphX *ag);
    but the coordinates will no longer be meaningful with respect to the
    genome coordinates. */
 
+int agxFindClosestDownstreamVertex(struct altGraphX *ag, bool **em, int v);
+/* Return the closest vertex that connects from v. -1 if none connect. */ 
+
+int agxFindClosestUpstreamVertex(struct altGraphX *ag, bool **em, int v);
+/* Return the closest vertex that connects to v. -1 if none connect. */ 
+
 #endif /* ALTGRAPHX_H */
 
