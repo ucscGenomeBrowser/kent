@@ -85,7 +85,7 @@
 
 
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.710 2004/04/15 00:13:59 galt Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.711 2004/04/20 19:35:30 angie Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
@@ -5096,6 +5096,63 @@ tg->itemColor = mouseSynWhdItemColor;
 tg->subType = lfWithBarbs;
 }
 
+void lfChromColorMethods(struct track *tg)
+/* Standard linked features methods + chrom-coloring (for contrib. synt). */
+{
+tg->itemColor = lfChromColor;
+tg->itemNameColor = NULL;
+}
+
+Color bedChromColor(struct track *tg, void *item, struct vGfx *vg)
+/* Return color of chromosome for bed type items
+ * where the chromosome is listed somewhere in the bed->name. */
+{
+struct bed *bed = item;
+char *chptr = strstr(bed->name, "chr");
+
+if (chptr == NULL)
+    {
+    return(tg->ixColor);
+    }
+else
+    {
+    char chromStr[3];
+    Color c;
+    strncpy(chromStr, (char *)(chptr+3), 2);
+    chromStr[2] = '\0';
+    c = getChromColor(chromStr, vg);
+    tg->ixAltColor = c;
+    return c;
+    }
+}
+
+void bedChromColorMethods(struct track *tg)
+/* Standard simple bed methods + chrom-coloring (for contrib. synt). */
+{
+tg->itemColor = bedChromColor;
+}
+
+char *colonTruncName(struct track *tg, void *item)
+/* Return name of bed track item, chopped at the first ':'. */
+{
+struct bed *bed = item;
+char *ptr = NULL;
+if (bed->name == NULL)
+    return "";
+ptr = strchr(bed->name, ':');
+if (ptr != NULL)
+    *ptr = 0;
+return bed->name;
+}
+
+void deweySyntMethods(struct track *tg)
+/* Standard simple bed methods + chrom-coloring + name-chopping. */
+{
+bedChromColorMethods(tg);
+tg->itemName = colonTruncName;
+}
+
+
 void loadEnsPhusionBlast(struct track *tg)
 /* Load up ensPhusionBlast from database table to track items. */
 {
@@ -7389,6 +7446,14 @@ registerTrackHandler("syntenyRatBerkSmall", syntenyMethods);
 registerTrackHandler("syntenySanger", syntenyMethods);
 registerTrackHandler("syntenyPevzner", syntenyMethods);
 registerTrackHandler("syntenyBaylor", syntenyMethods);
+registerTrackHandler("zdobnovHg16", lfChromColorMethods);
+registerTrackHandler("zdobnovMm3", lfChromColorMethods);
+registerTrackHandler("zdobnovRn3", lfChromColorMethods);
+registerTrackHandler("deweySyntHg16", deweySyntMethods);
+registerTrackHandler("deweySyntMm3", deweySyntMethods);
+registerTrackHandler("deweySyntRn3", deweySyntMethods);
+registerTrackHandler("deweySyntPanTro1", deweySyntMethods);
+registerTrackHandler("deweySyntGalGal2", deweySyntMethods);
 registerTrackHandler("mouseOrtho", mouseOrthoMethods);
 registerTrackHandler("mouseOrthoSeed", mouseOrthoMethods);
 //registerTrackHandler("orthoTop4", drawColorMethods);
