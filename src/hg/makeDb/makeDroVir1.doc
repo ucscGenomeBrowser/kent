@@ -620,3 +620,15 @@ chainSome $(path1)
     hgLoadPsl droVir1 blastDm1FB.psl
 
 # End tblastn
+
+
+# SWAP CHAINS FROM DM2, BUILD NETS ETC. (DONE 3/11/05 angie)
+    ssh kksilo
+    mkdir /cluster/data/droVir1/bed/blastz.dm2.swap
+    cd /cluster/data/droVir1/bed/blastz.dm2.swap
+    doBlastzChainNet.pl -swap /cluster/data/dm2/bed/blastz.droVir1/DEF \
+      >& do.log &
+    tail -f do.log
+    # Add {chain,net}Dm2 to trackDb.ra if necessary.
+
+
