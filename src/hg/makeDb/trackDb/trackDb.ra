@@ -1168,3 +1168,12 @@ visibility hide
 spectrum on
 type bed 12
 
+track twinscanMgc
+shortLabel TwinScan MGC
+longLabel TwinScan MGC candidates
+group x
+priority 159
+visibility hide
+spectrum on
+type psl .
+
