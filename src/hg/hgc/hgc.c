@@ -3084,18 +3084,31 @@ char *mgiID;
 struct refLink *rl;
 struct genePred *gp;
 
-cartWebStart("Known Gene");
+cartWebStart("RefSeq Gene");
 sprintf(query, "select * from refLink where mrnaAcc = '%s'", rnaName);
 sr = sqlGetResult(conn, query);
 if ((row = sqlNextRow(sr)) == NULL)
     errAbort("Couldn't find %s in refLink table - database inconsistency.", rnaName);
 rl = refLinkLoad(row);
 sqlFreeResult(&sr);
-printf("<H2>Known Gene %s</H2>\n", rl->name);
+printf("<H2>RefSeq Gene %s</H2>\n", rl->name);
     
 printf("<B>RefSeq:</B> <A HREF=");
 printEntrezNucleotideUrl(stdout, rl->mrnaAcc);
-printf(" TARGET=_blank>%s</A><BR>", rl->mrnaAcc);
+printf(" TARGET=_blank>%s</A>", rl->mrnaAcc);
+/* If refSeqStatus is available, report it: */
+if (hTableExists("refSeqStatus"))
+    {
+    sprintf(query, "select status from refSeqStatus where mrnaAcc = '%s'",
+	    rnaName);
+    sr = sqlGetResult(conn, query);
+    if ((row = sqlNextRow(sr)) != NULL)
+        {
+	printf("&nbsp;&nbsp; Status: <B>%s</B>", row[0]);
+	}
+    sqlFreeResult(&sr);
+    }
+puts("<BR>");
 if (rl->omimId != 0)
     {
     printf("<B>OMIM:</B> ");
@@ -3172,7 +3185,7 @@ geneShowPosAndLinks(rl->mrnaAcc, rl->protAcc, tdb, "refPep", "htcTranslatedProte
 	"htcRefMrna", "htcGeneInGenome", "mRNA Sequence");
 
 puts(
-   "<P>Known genes are derived from the "
+   "<P>RefSeq genes are derived from the "
    "<A HREF = \"http://www.ncbi.nlm.nih.gov/LocusLink/refseq.html\" TARGET=_blank>"
    "RefSeq</A> mRNA database. "
    "These mRNAs were mapped to the draft "
