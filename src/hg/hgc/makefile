@@ -15,3 +15,5 @@ hgc: $O ../../lib/$(MACHTYPE)/jkweb.a
 	chmod a+rx hgc
 	mv hgc /usr/local/apache/cgi-bin
 
+tags: hgc.c 
+		ctags *.h *.c ../lib/*.c ../inc/*.h ../../lib/*.c ../../inc/*.h
