@@ -85,7 +85,7 @@
 
 
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.704 2004/04/05 20:50:42 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.705 2004/04/08 00:02:40 heather Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
@@ -8219,6 +8219,6 @@ cgiSpoof(&argc, argv);
 if (cgiVarExists("hgt.reset"))
     resetVars(except);
 htmlSetBackground("../images/floret.jpg");
-cartHtmlShell("UCSC Genome Browser v58", doMiddle, hUserCookie(), excludeVars, NULL);
+cartHtmlShell("UCSC Genome Browser v59", doMiddle, hUserCookie(), excludeVars, NULL);
 return 0;
 }
