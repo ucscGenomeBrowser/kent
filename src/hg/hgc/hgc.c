@@ -29,6 +29,7 @@
 #include "agpFrag.h"
 #include "agpGap.h"
 #include "ctgPos.h"
+#include "contigAcc.h"
 #include "ctgPos2.h"
 #include "clonePos.h"
 #include "bactigPos.h"
@@ -146,7 +147,7 @@
 #include "pscreen.h"
 #include "transRegCode.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.755 2004/09/21 01:08:35 kent Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.756 2004/09/21 16:10:07 kate Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -4144,6 +4145,7 @@ char query3[256];
 struct sqlResult *sr3;
 char **row3;
 struct agpFrag frag;
+struct contigAcc contigAcc;
 int start = cartInt(cart, "o");
 boolean hasBin;
 char splitTable[64];
@@ -4165,6 +4167,24 @@ agpFragStaticLoad(row+hasBin, &frag);
 printf("<B>Clone Fragment ID:</B> %s<BR>\n", frag.frag);
 printf("<B>Clone Fragment Type:</B> %s<BR>\n", frag.type);
 printf("<B>Clone Bases:</B> %d-%d<BR>\n", frag.fragStart+1, frag.fragEnd);
+
+if (hTableExists("contigAcc"))
+    {
+    sprintf(query2, "select * from contigAcc where contig = '%s'", frag.frag);
+    if (sr2 = sqlGetResult(conn2, query2))
+        {
+        row = sqlNextRow(sr2);
+        if (row)
+            {
+            contigAccStaticLoad(row, &contigAcc);
+            printf("<B>Genbank Accession: <A HREF=");
+            printEntrezNucleotideUrl(stdout, contigAcc.acc);
+            printf(" TARGET=_BLANK>%s</A></B><BR>\n", contigAcc.acc);
+            }
+        sqlFreeResult(&sr2);
+        }
+    }
+
 printPos(frag.chrom, frag.chromStart, frag.chromEnd, frag.strand, FALSE, NULL);
 
 if (hTableExists("certificate"))
