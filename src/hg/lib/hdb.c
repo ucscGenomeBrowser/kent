@@ -24,7 +24,7 @@
 #include "scoredRef.h"
 #include "maf.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.121 2003/07/14 19:35:24 hiram Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.122 2003/07/17 00:30:42 krish Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
@@ -1298,6 +1298,10 @@ struct sqlConnection *conn = hConnectCentral();
 char buf[128];
 char query[256];
 char *res = NULL;
+
+if (sameString(database, "rep"))    /* bypass dbDb if repeat */
+    return "Repeat";
+
 sprintf(query, "select organism from dbDb where name = '%s'", database);
 if (sqlQuickQuery(conn, query, buf, sizeof(buf)) != NULL)
     res = cloneString(buf);
