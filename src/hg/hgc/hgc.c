@@ -139,7 +139,7 @@
 #include "HInv.h"
 #include "bed6FloatScore.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.661 2004/06/10 18:11:34 braney Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.662 2004/06/10 22:02:12 kent Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -6822,6 +6822,10 @@ if (rl->locusLinkId != 0)
     printf("<B>LocusLink:</B> ");
     printf("<A HREF = \"http://www.ncbi.nlm.nih.gov/LocusLink/LocRpt.cgi?l=%d\" TARGET=_blank>",
 	   rl->locusLinkId);
+    printf("%d</A><BR>\n", rl->locusLinkId);
+    printf("<B>Entrez Gene:</B> ");
+    printf("<A HREF=\"http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?db=gene&cmd=Retrieve&dopt=Graphics&list_uids=%d\" TARGET=_blank>",
+    	rl->locusLinkId);
     printf("%d</A><BR>\n", rl->locusLinkId);
 
     if ( (strstr(hgGetDb(), "mm") != NULL) && hTableExists("MGIid"))
