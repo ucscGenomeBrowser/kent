@@ -15,7 +15,7 @@
 #ifndef CART_H
 #include "cart.h"
 #endif
-
+struct itemAttrTbl;
 
 struct track
 /* Structure that displays of tracks. The central data structure
@@ -123,6 +123,8 @@ struct track
     char *expTable;	/* Expression table in hgFixed. */
 
     boolean exonArrows;	/* Draw arrows on exons? */
+    struct itemAttrTbl *itemAttrTbl;  /* relational attributes for specific
+                                         items (color) */
 
     /* fill in left label drawing area */
     Color labelColor;   /* Fixed color for the track label (optional) */

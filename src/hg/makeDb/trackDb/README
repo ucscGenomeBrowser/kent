@@ -55,8 +55,6 @@ For gene predictions; use `.' when a positional parameter must be skipped.
     1) genePred
     2) (optional) associated protein sequence table
     3) (optional) associated mRNA table.
-    4) (optional) 'exonArrows' to draw strand arrows on exons.
-    5) (optional) name of itemAttr table used to color individual genePreds.
 For chains it's
     1) chain
     2) database for other organism 
@@ -107,4 +105,10 @@ is used to set the default value for chromosome coloring
 in affected tracks (type psl xeno <db>).  Without the field,
 the default is "on".
 
+All ra fields that are not explictly handled in trackDbCustom.c:trackDbAddInfo 
+are added to the trackDb->settingsHash table.
 
+Some settings used by various tracks:
+    o exonArrows - if speciufied to draw strand arrows on exons.
+    o itemAttrIdTbl - table used to color individual items in a track, selected
+      by numeric id.

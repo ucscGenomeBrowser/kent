@@ -85,7 +85,7 @@
 
 
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.690 2004/03/24 19:25:30 markd Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.691 2004/03/24 20:29:49 markd Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
@@ -2120,14 +2120,13 @@ int grayIx = maxShade;
 int rowOffset;
 struct genePredReader *gpr = NULL;
 struct genePred *gp;
-struct itemAttrTbl *iat = tg->customPt;
 
 int drawOptionNum = 0; //off
 if (table != NULL)
     drawOptionNum = getCdsDrawOptionNum(table);
 
-if (iat != NULL)
-    itemAttrTblLoad(iat, conn, chrom, start, end);
+if (tg->itemAttrTbl != NULL)
+    itemAttrTblLoad(tg->itemAttrTbl, conn, chrom, start, end);
 
 gpr = genePredReaderRangeQuery(conn, table, chrom, start, end, NULL);
 while ((gp = genePredReaderNext(gpr)) != NULL)
@@ -2142,8 +2141,8 @@ while ((gp = genePredReaderNext(gpr)) != NULL)
     else
         lf->components = sfFromGenePred(gp, grayIx);
 
-    if ((iat != NULL) && (gp->optFields & genePredIdFld))
-        lf->customPt = itemAttrTblGet(iat, gp->id);
+    if ((tg->itemAttrTbl != NULL) && (gp->optFields & genePredIdFld))
+        lf->customPt = itemAttrTblGet(tg->itemAttrTbl, gp->id);
 
     linkedFeaturesBoundsAndGrays(lf);
 
@@ -6825,14 +6824,8 @@ else if (sameWord(type, "genePred"))
     linkedFeaturesMethods(track);
     track->loadItems = loadGenePred;
     track->colorShades = NULL;
-    if ((wordCount > 3) && sameString(words[3], "exonArrows"))
-        track->exonArrows = TRUE;
-    if ((wordCount > 4) && !sameString(words[4], "."))
-        {
-        assert(track->customPt == NULL);
-        track->customPt = itemAttrTblNew(words[4]);
+    if (track->itemAttrTbl != NULL)
         track->itemColor = genePredItemAttrColor;
-        }
     }
 else if (sameWord(type, "psl"))
     {
@@ -6866,6 +6859,8 @@ struct track *trackFromTrackDb(struct trackDb *tdb)
 /* Create a track based on the tdb. */
 {
 struct track *track = trackNew();
+char *iatName = NULL;
+
 track->mapName = cloneString(tdb->tableName);
 track->visibility = tdb->visibility;
 track->shortLabel = tdb->shortLabel;
@@ -6894,6 +6889,9 @@ if (tdb->useScore)
     }
 track->tdb = tdb;
 track->exonArrows = (trackDbSetting(tdb, "exonArrows") != NULL);
+iatName = trackDbSetting(tdb, "itemAttrIdTbl");
+if (iatName != NULL)
+    track->itemAttrTbl = itemAttrTblNew(iatName);
 fillInFromType(track, tdb);
 return track;
 }
