@@ -107,6 +107,17 @@ priority 74
 visibility hide
 type bed 3
 
+track affyTranscriptome 
+shortLabel Transcriptome
+longLabel Affymetrix Experimentally Derived Transcriptome
+group regulation
+priority 89
+visibility hide
+color 100,50,0
+altColor 0,0,255
+chromosomes chr22,chr21
+type sample
+
 track affyU133
 shortLabel Affymetrix U133
 longLabel Alignments of Affymetrix Consensus/Exemplars from HG-U133
