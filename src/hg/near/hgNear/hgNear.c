@@ -16,7 +16,7 @@
 #include "ra.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: hgNear.c,v 1.72 2003/09/12 21:22:37 kent Exp $";
+static char const rcsid[] = "$Id: hgNear.c,v 1.73 2003/09/12 22:09:41 kent Exp $";
 
 char *excludeVars[] = { "submit", "Submit", confVarName, colInfoVarName,
 	defaultConfName, hideAllConfName, showAllConfName,
@@ -1401,6 +1401,7 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 cgiSpoof(&argc, argv);
+htmlSetStyle(htmlStyleUndecoratedLink);
 cartHtmlShell("Gene Family v1", doMiddle, hUserCookie(), excludeVars, NULL);
 return 0;
 }
