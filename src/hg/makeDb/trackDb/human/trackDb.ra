@@ -499,7 +499,7 @@ track affyTranscription
 shortLabel Transcription
 longLabel Affy. SK-N-AS Transcript Abundance
 group regulation
-priority 100
+priority 99
 visibility hide
 autoScaleDefault Off
 color 175,150,128
@@ -515,7 +515,7 @@ track affyTransfrags
 shortLabel Transfrags
 longLabel Affy. SK-N-AS Transfrags
 group regulation
-priority 100.1
+priority 99.1
 visibility hide
 color 35,35,175
 altColor 160,160,188
