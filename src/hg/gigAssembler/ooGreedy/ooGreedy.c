@@ -5379,11 +5379,11 @@ sprintf(ocpFileName, "%s/cloneOverlap", inDir, version);
 sprintf(bargeOutName, "%s/barge.%d", inDir, version);
 sprintf(raftOutName, "%s/raft.%d", inDir, version);
 sprintf(graphOutName, "%s/graph.%d", inDir, version);
-sprintf(glName, "%s/ooGreedy.%d.gl", inDir, version);
+sprintf(glName, "%s/ooGreedy.%d.gl.noNt", inDir, version);
 sprintf(layoutName, "%s/gl.%d", inDir, version);
 sprintf(raftPslName, "%s/raft.psl", inDir);
 sprintf(contaminatedName, "%s/contaminated.%d", inDir, version);
-sprintf(goldName, "%s/gold.%d", inDir, version);
+sprintf(goldName, "%s/gold.%d.noNt", inDir, version);
 
 /* Open log file file. */
 logFile = mustOpen(oogLogName, "w");

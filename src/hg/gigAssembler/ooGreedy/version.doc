@@ -227,3 +227,6 @@ This log tracks changes from one version of ooGreedy to another
      some troubles with noisy input data.  I'm backing
      up to version 96.  To recover you'll need to get
      diGraph.c.97 and diGraph.h.97 as well.
+98 - Basically back to version 96.  Made output of gold.NN and
+     gl.NN change to gold.NN.noNt and gl.NN.noNt to facilitate
+     swapping individual clones for NT contigs.
