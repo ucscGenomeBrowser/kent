@@ -18,7 +18,8 @@ errAbort(
   "   pslPretty in.psl target.lst query.lst pretty.out\n"
   "options:\n"
   "   -axt - save in Scott Schwartz's axt format\n"
-  "   -dot=N Put out a dot every N records (default 10,000)\n"
+  "   -dot=N Put out a dot every N records\n"
+  "   -long - Don't abbreviate long inserts\n"
   "It's a really good idea if the psl file is sorted by target\n"
   "if it contains multiple targets.  Otherwise this will be\n"
   "very very slow.   The target and query lists can either be\n"
@@ -27,6 +28,7 @@ errAbort(
 }
 
 int dot = 0;
+boolean doShort = FALSE;
 
 struct seqFilePos
 /* Where a sequence is in a file. */
@@ -246,7 +248,7 @@ while (sizeLeft > 0)
 
     for (i=0; i<oneSize; ++i)
         {
-	if (q[i] == t[i])
+	if (q[i] == t[i] && isalpha(q[i]))
 	    fputc('|', f);
 	else
 	    fputc(' ', f);
@@ -262,6 +264,76 @@ while (sizeLeft > 0)
     q += oneSize;
     t += oneSize;
     }
+}
+
+void fillShortGapString(char *buf, int gapSize, char gapChar, int shortSize)
+/* Fill in buf with something like  ---100--- (for gapSize 100
+ * and shortSize 9 */
+{
+char gapAsNum[16];
+int gapNumLen;
+int dashCount, dashBefore, dashAfter;
+sprintf(gapAsNum, "%d", gapSize);
+gapNumLen = strlen(gapAsNum);
+dashCount = shortSize - gapNumLen;
+dashBefore = dashCount/2;
+dashAfter = dashCount - dashBefore;
+memset(buf, gapChar, dashBefore);
+memcpy(buf+dashBefore, gapAsNum, gapNumLen);
+memset(buf+dashBefore+gapNumLen, gapChar, dashAfter);
+buf[shortSize] = 0;
+}
+
+void fillSpliceSites(char *buf, int gapSize, char *gapSeq, int shortSize)
+/* Fill in buf with something like  gtcag...cctag */
+{
+int minDotSize = 3;	  /* Minimum number of dots. */
+int dotSize = minDotSize; /* Actual number of dots. */
+int seqBefore, seqAfter, seqTotal;
+
+if (shortSize - dotSize > gapSize)
+    dotSize =  shortSize - gapSize;
+seqTotal = shortSize - dotSize;
+seqBefore = seqTotal/2;
+seqAfter = seqTotal - seqBefore;
+memcpy(buf, gapSeq, seqBefore);
+memset(buf+seqBefore, '.', dotSize);
+memcpy(buf+seqBefore+dotSize, gapSeq + gapSize - seqAfter, seqAfter);
+buf[shortSize] = 0;
+}
+
+
+void writeInsert(struct dyString *aRes, struct dyString *bRes, char *aSeq, int gapSize)
+/* Write out gap, possibly shortened, to aRes, bRes. */
+{
+int minToAbbreviate = 16;
+if (doShort && gapSize >= minToAbbreviate)
+    {
+    char abbrevGap[16];
+    char abbrevSeq[16];
+    fillSpliceSites(abbrevSeq, gapSize, aSeq, 15);
+    dyStringAppend(aRes, abbrevSeq);
+    fillShortGapString(abbrevGap, gapSize, '-', 15);
+    dyStringAppend(bRes, abbrevGap);
+    }
+else
+    {
+    dyStringAppendN(aRes, aSeq, gapSize);
+    dyStringAppendMultiC(bRes, '-', gapSize);
+    }
+}
+
+
+void writeGap(struct dyString *aRes, int aGap, struct dyString *bRes, int bGap)
+/* Write double - gap.  Something like:
+ *     ....123....
+ *     ...4123.... */
+{
+char abbrev[16];
+fillShortGapString(abbrev, aGap, '.', 13);
+dyStringAppend(aRes, abbrev);
+fillShortGapString(abbrev, bGap, '.', 13);
+dyStringAppend(bRes, abbrev);
 }
 
 void prettyOne(struct psl *psl, struct hash *qHash, struct hash *tHash,
@@ -319,21 +391,18 @@ for (blockIx=0; blockIx < psl->blockCount; ++blockIx)
 	tGap = ts - lastT;
 	minGap = min(qGap, tGap);
 	if (minGap > 0)
-	   {
-	   errAbort("Block %d, minGap = %d, qGap %d, tGap %d, qs %d, ts %d", blockIx, minGap, qGap, tGap, qs, ts);
-	   }
-	if (qGap > 0)
 	    {
-	    dyStringAppendN(q, qSeq->dna + lastQ, qGap);
-	    dyStringAppendMultiC(t, '-', qGap);
+	    writeGap(q, qGap, t, tGap);
+	    }
+	else if (qGap > 0)
+	    {
+	    writeInsert(q, t, qSeq->dna + lastQ, qGap);
 	    }
 	else if (tGap > 0)
 	    {
-	    dyStringAppendN(t, tSeq->dna + lastT, tGap);
-	    dyStringAppendMultiC(q, '-', tGap);
+	    writeInsert(t, q, tSeq->dna + lastT, tGap);
 	    }
 	}
-
     /* Output sequence. */
     size = psl->blockSizes[blockIx];
     dyStringAppendN(q, qSeq->dna + qs, size);
@@ -399,8 +468,8 @@ int main(int argc, char *argv[])
 static boolean axt;
 optionHash(&argc, argv);
 axt = optionExists("axt");
-dot = 10000; /* default value */
-dot = optionInt("dot", 10000);
+dot = optionInt("dot", dot);
+doShort = !optionExists("long");
 if (argc != 5)
     usage();
 pslPretty(argv[1], argv[2], argv[3], argv[4], axt);
