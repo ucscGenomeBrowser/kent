@@ -1,3 +1,11 @@
+track gap
+shortLabel Gap
+longLabel Gap Locations
+priority 11
+group map
+visibility hide
+type bed 3 +
+
 track gold
 shortLabel Assembly
 longLabel Assembly from Fragments
@@ -38,12 +46,11 @@ spectrum on
 type psl .
 url http://www.wormbase.org/db/gene/gene?name=$$
 
-track cbr_waba
+track wabaCbr
 shortLabel Briggsae Waba
 longLabel C. briggsae Waba Alignments
-# group compGeno
-group genes
-priority 50
+group compGeno
+priority 120
 visibility dense
 color 140,0,200
 altColor 210,140,250
@@ -73,7 +80,7 @@ shortLabel Briggsae Blastz
 longLabel Blastz C. briggsae
 group compGeno
 priority 159
-visibility dense
+visibility hide
 color 0,0,0
 altColor 50,128,50
 spectrum on
@@ -84,18 +91,18 @@ shortLabel Briggsae Chain
 longLabel Chained C. briggsae/elegans Alignments
 group compGeno
 priority 125
-visibility dense
+visibility hide
 color 100,50,0
 altColor 255,240,200
 spectrum on
 type chain cb1
 
 track blastzSelf
-shortLabel Blastz Self
+shortLabel Self Blastz
 longLabel Blastz C. elegans (self)
-group compGeno
+group varRep
 priority 159
-visibility dense
+visibility hide
 color 0,0,0
 altColor 50,128,50
 spectrum on
@@ -104,9 +111,9 @@ type psl xeno ce1
 track chainSelf
 shortLabel Self Chain 
 longLabel Chained C. elegans/elegans Alignments
-group compGeno
-priority 125
-visibility dense
+group varRep
+priority 158
+visibility hide
 color 100,50,0
 altColor 255,240,200
 spectrum on
