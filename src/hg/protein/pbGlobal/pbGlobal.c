@@ -544,7 +544,7 @@ else
 	        if (answer == NULL)
 		    {
 	            errAbort(
-		    "'%s' does not seem to be a valid Swiss-Prot/TrEMBL protein ID or a gene symbol."
+		    "'%s' does not seem to be a valid Swiss-Prot/TrEMBL protein ID or a gene symbol.<br><br>Click <A HREF=\"/cgi-bin/pbGateway\">here</A> to start another query."
 		    , queryID);
 	    	    }
 		}
@@ -608,7 +608,8 @@ if (proteinAC == NULL)
     proteinAC = sqlGetField(conn, protDbName, "spXref3", "accession", cond_str);
     if (proteinAC == NULL)
 	{
-	errAbort("'%s' does not seem to be a valid Swiss-Prot/TrEMBL protein ID or gene symbol.", proteinID);
+	errAbort("'%s' does not seem to be a valid Swiss-Prot/TrEMBL protein ID or gene symbol.<br><br>Click <A HREF=\"/cgi-bin/pbGateway\">here</A> to start another query."
+	, proteinID);
 	}
     else
 	{
