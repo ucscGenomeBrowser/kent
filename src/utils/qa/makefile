@@ -16,4 +16,7 @@ install:
 	cp -p --remove-destination catchBot.csh            ${SCRIPTS}
 	cp -p --remove-destination compareWholeColumn.csh  ${SCRIPTS}
 	cp -p --remove-destination compareWholeTable.csh   ${SCRIPTS}
+	cp -p --remove-destination getRRdatabases.csh      ${SCRIPTS}
+	cp -p --remove-destination getRRtables.csh         ${SCRIPTS}
+	cp -p --remove-destination getAssemblies.csh       ${SCRIPTS}
 
