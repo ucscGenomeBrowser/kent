@@ -1067,7 +1067,7 @@ char *table;
 int start = cgiInt("o");
 struct psl *pslList = NULL, *psl;
 
-if (sameString("xenoMrna", track) || sameString("xenoBestMrna", track))
+if (sameString("xenoMrna", track) || sameString("xenoBestMrna", track) || sameString("xenoEst", track))
     {
     type = "non-Human RNA";
     table = track;
@@ -1389,6 +1389,7 @@ if (tIsRc)
 if (qIsRc)
     {
     reverseComplement(oSeq->dna, oSeq->size);
+    reverseComplement(oLetters, oSeq->size);
     qStart = oSeq->size;
     }
 dna = cloneString(dnaSeq->dna);
@@ -1567,8 +1568,7 @@ int blockCount;
 char title[256];
 
 
-/* Get RNA and DNA sequence.  Save a mixed case copy of DNA, make
- * all lower case for fuzzyFinder. */
+/* Get RNA and DNA sequence.  */
 rna = rnaSeq->dna;
 rnaSize = rnaSeq->size;
 tStart = psl->tStart - 100;
@@ -2761,24 +2761,26 @@ boolean hasBin;
 char table[64];
 
 /* Print heading info including link to NCBI. */
-if (tiNum == NULL) 
-    tiNum = itemName;
-else
+if (tiNum != NULL) 
     ++tiNum;
 webStart(itemName);
-printf("<H1>Information on Mouse Read %s</H1>", itemName);
+printf("<H1>Information on Mouse %s %s</H1>", 
+	(tiNum == NULL ? "Contig" : "Read"), itemName);
 
 /* Print links to NCBI and to sequence. */
-printf("Link to ");
-printf("<A HREF=\"http://www.ncbi.nlm.nih.gov/Traces/trace.cgi?val=%s\" TARGET=_blank>", tiNum);
-printf("NCBI Trace Repository for %s\n</A><BR>\n", itemName);
+if (tiNum != NULL)
+    {
+    printf("Link to ");
+    printf("<A HREF=\"http://www.ncbi.nlm.nih.gov/Traces/trace.cgi?val=%s\" TARGET=_blank>", tiNum);
+    printf("NCBI Trace Repository for %s\n</A><BR>\n", itemName);
+    }
 printf("Get ");
 printf("<A HREF=\"%s?g=htcExtSeq&c=%s&l=%d&r=%d&i=%s&db=%s\">",
       hgcPath(), seqName, winStart, winEnd, itemName, database);
-printf("DNA for this read</A><BR>\n");
+printf("Mouse DNA</A><BR>\n");
 
 /* Print info about mate pair. */
-if (sqlTableExists(conn, "mouseTraceInfo"))
+if (tiNum != NULL && sqlTableExists(conn, "mouseTraceInfo"))
     {
     char buf[256];
     char *templateId;
@@ -4368,7 +4370,7 @@ else if (sameWord(track, "htcGetDna3"))
 else if (sameWord(track, "mrna") || sameWord(track, "mrna2") || 
 	sameWord(track, "est") || sameWord(track, "intronEst") || 
 	sameWord(track, "xenoMrna") || sameWord(track, "xenoBestMrna") ||
-	sameWord(track, "psu"))
+	sameWord(track, "xenoEst") || sameWord(track, "psu"))
     {
     doHgRna(tdb, item);
     }
@@ -4434,7 +4436,8 @@ else if (sameWord(track, "genomicDups"))
     {
     doGenomicDups(track, item);
     }
-else if (sameWord(track, "blatMouse") || sameWord(track, "bestMouse"))
+else if (sameWord(track, "blatMouse") || sameWord(track, "bestMouse")
+  || sameWord(track, "blastzTest"))
     {
     doBlatMouse(tdb, item);
     }
