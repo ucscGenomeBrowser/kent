@@ -1,0 +1,12 @@
+track llaPfuPrintf
+shortLabel LL microarray A
+longLabel Lowe lab full-genome P. furiosus microarray experiments
+group regulation
+priority 85.0
+visibility dense
+type expRatio
+expScale 4.0
+expStep 0.5
+expTable llaPfuPrintAExps
+chip printA
+canPack off
