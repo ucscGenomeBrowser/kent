@@ -567,7 +567,6 @@ else
 misFactor /= (psl->match + psl->misMatch + psl->repMatch);
 hitFactor = 1.0 - misFactor;
 res = round(hitFactor * maxShade);
-// uglyf("psl->qName %s, isXeno %d, misFactor %f, hitFactor %f, res %d<BR>\n", psl->qName, isXeno, misFactor, hitFactor, res);
 if (res < 0) res = 0;
 if (res >= maxShade) res = maxShade-1;
 return res;
@@ -1249,7 +1248,9 @@ return tg;
 void loadBlatMouse(struct trackGroup *tg)
 /* Load up mouse alignments (psl format) from table. */
 {
-tg->items = lfFromPslsInRange("blatMouse", winStart, winEnd, chromName, TRUE);
+char table[64];
+sprintf(table, "%s_blatMouse", chromName);
+tg->items = lfFromPslsInRange(table, winStart, winEnd, NULL, TRUE);
 }
 
 struct trackGroup *blatMouseTg()
@@ -1626,7 +1627,7 @@ struct trackGroup *sanger22Tg()
 {
 struct trackGroup *tg = linkedFeaturesTg();
 tg->mapName = "hgSanger22";
-tg->visibility = tvHide;
+tg->visibility = tvFull;
 tg->longLabel = "Sanger Centre Chromosome 22 Annotations";
 tg->shortLabel = "Sanger 22";
 tg->loadItems = loadSanger22Gene;
@@ -2828,7 +2829,7 @@ struct trackGroup *exoMouseTg()
 struct trackGroup *tg = bedTg();
 
 tg->mapName = "hgExoMouse";
-tg->visibility = tvDense;
+tg->visibility = tvHide;
 tg->longLabel = "Mouse/Human Evolutionarily Conserved Regions (by Exonerate)";
 tg->shortLabel = "Exonerate Mouse";
 tg->loadItems = loadExoMouse;
@@ -4897,7 +4898,7 @@ if (chromTableExists("_est")) slSafeAddHead(&tGroupList, estTg());
 if (hTableExists("est3")) slSafeAddHead(&tGroupList, est3Tg());
 if (hTableExists("cpgIsland")) slSafeAddHead(&tGroupList, cpgIslandTg());
 if (hTableExists("cpgIsland2")) slSafeAddHead(&tGroupList, cpgIsland2Tg());
-if (hTableExists("blatMouse")) slSafeAddHead(&tGroupList, blatMouseTg());
+if (chromTableExists("_blatMouse")) slSafeAddHead(&tGroupList, blatMouseTg());
 if (hTableExists("exoMouse")) slSafeAddHead(&tGroupList, exoMouseTg());
 if (hTableExists("musTest1")) slSafeAddHead(&tGroupList, musTest1Tg());
 if (hTableExists("musTest2")) slSafeAddHead(&tGroupList, musTest2Tg());
@@ -5215,7 +5216,7 @@ boolean testing = FALSE;
 /* Initialize layout and database. */
 database = cgiOptionalString("db");
 if (database == NULL)
-    database = "hg4";
+    database = "hg6";
 hSetDb(database);
 initTl();
 
@@ -5310,7 +5311,7 @@ printf("new tracks, including some gene predictions.  Please try again tomorrow.
 int main(int argc, char *argv[])
 {
 htmlSetBackground("../images/floret.jpg");
-htmShell("Draft Genome Browser v4", doMiddle, NULL);
+htmShell("Working Draft Genome Browser v5", doMiddle, NULL);
 //htmShell("Browser Being Updated", doDown, NULL);
 }
 

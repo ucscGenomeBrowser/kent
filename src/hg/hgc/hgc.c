@@ -111,14 +111,14 @@ printf("<P>Here is the sequence around this feature: bases %d to %d of %s.  The 
        "that contain the feature itself are in upper case.</P>\n", s, e, seqName);
 seq = hDnaFromSeq(seqName, s, e, dnaLower);
 toUpperN(seq->dna + (start-s), end - start);
-printf("<TT>");
+printf("<TT><PRE>");
 cfmInit(&cfm, 10, 50, TRUE, FALSE, stdout, s);
 for (i=0; i<seq->size; ++i)
    {
    cfmOut(&cfm, seq->dna[i], 0);
    }
 cfmCleanup(&cfm);
-printf("</TT>");
+printf("</PRE></TT>");
 }
 
 void doGetDna()
@@ -321,6 +321,7 @@ for (same = 1; same >= 0; same -= 1)
 	    }
 	}
     }
+printf("</TT></PRE>");
 }
 
 void doHgRna(char *acc, boolean isEst)
@@ -1155,10 +1156,29 @@ puts("<P>The Simple Tandem Repeats were located with the program "
      "by G. Benson</P>");
 }
 
+char *chromBand(char *chrom, int pos)
+/* Return text string that says what bend pos is on. */
+{
+struct sqlConnection *conn = hAllocConn();
+char query[256];
+char buf[64];
+static char band[64];
+
+sprintf(query, 
+	"select name from cytoBand where chrom = '%s' and chromStart <= %d and chromEnd > %d", 
+	chrom, pos, pos);
+buf[0] = 0;
+sqlQuickQuery(conn, query, buf, sizeof(buf));
+sprintf(band, "%s%s", skipChr(chrom), buf);
+hFreeConn(&conn);
+return band;
+}
+
 void printPos(char *chrom, int start, int end)
 /* Print position lines. */
 {
 printf("<B>Chromosome:</B> %s<BR>\n", skipChr(chrom));
+printf("<B>Band:</B> %s<BR>\n", chromBand(chrom, (start + end)/2));
 printf("<B>Begin in chromosome:</B> %d<BR>\n", start+1);
 printf("<B>End in chromosome:</B> %d<BR>\n", end);
 printf("<A HREF=\"%s?o=%d&g=getDna&i=mixed&c=%s&l=%d&r=%d&db=%s\">"
@@ -1715,7 +1735,7 @@ if (!upgraded)
        "in the near future.</P>");
     }
 puts(
-   "<P>Additional information may be available by clicking on the with the "
+   "<P>Additional information may be available by clicking on the "
    "mRNA associated with this gene in the main browser window.</P>");
 }
 
@@ -1756,9 +1776,9 @@ if (rl->locusLinkId != 0)
     printf("%d</A><BR>\n", rl->locusLinkId);
     }
 
-medlineLinkedLine("Gene", rl->name, rl->name);
+medlineLinkedLine("PubMed on Gene", rl->name, rl->name);
 if (rl->product[0] != 0)
-    medlineLinkedLine("Product", rl->product, rl->product);
+    medlineLinkedLine("PubMed on Product", rl->product, rl->product);
 printf("<B>GeneCards:</B> ");
 printf("<A HREF = \"http://bioinfo.weizmann.ac.il/cards-bin/cardsearch.pl?search=%s\" TARGET=_blank>",
 	rl->name);
@@ -1770,13 +1790,13 @@ geneShowPosAndLinks(rl->mrnaAcc, rl->protAcc, "refGene", "refPep", "htcTranslate
 
 puts(
    "<P>Known genes are derived from the "
-   "<A HREF = \"http://www.ncbi.nlm.nih.gov/LocusLink/\" TARGET=_blank>"
+   "<A HREF = \"http://www.ncbi.nlm.nih.gov/LocusLink/refseq.html\" TARGET=_blank>"
    "RefSeq</A> mRNA database. "
    "These mRNAs were mapped to the draft "
    "human genome using <A HREF = \"http://www.cse.ucsc.edu/~kent\" TARGET=_blank>"
    "Jim Kent's</A> BLAT software.</P>\n");
 puts(
-   "<P>Additional information may be available by clicking on the with the "
+   "<P>Additional information may be available by clicking on the "
    "mRNA associated with this gene in the main browser window.</P>");
 }
 
@@ -2064,6 +2084,12 @@ struct psl *pslList = NULL, *psl;
 htmlStart(itemName);
 printf("<H1>BLAT Alignment of Mouse Read %s</H1>", itemName);
 
+puts(
+ "<P>This track displays alignments of 11 million mouse whole genome "
+ "shotgun reads vs. the draft human genome.  The alignments were done "
+ "with BLAT in translated protein mode requiring two perfect 4-mer hits "
+ "within 100 amino acids of each other to trigger an alignment. </P>");
+htmlHorizontalLine();
 /* Get alignment info. */
 sprintf(query, "select * from blatMouse where qName = '%s'", itemName);
 sr = sqlGetResult(conn, query);
@@ -2076,6 +2102,24 @@ sqlFreeResult(&sr);
 slReverse(&pslList);
 
 printAlignments(pslList, start, "htcBlatMouse", "blatMouse", itemName);
+htmlHorizontalLine();
+puts(
+ "<B>Conditions of Data Release</B><BR>"
+ "These data are made available before scientific publication with the "
+ "following understanding:<BR>"
+ "1.The data may be freely downloaded, used in analyses, and "
+ " repackaged in databases.<BR>"
+ "2.Users are free to use the data in scientific papers analyzing "
+ " particular genes and regions, provided that providers of this data "
+ " (the Sanger Centre, Washington University, and Whitehead Institute "
+ " for the reads, Jim Kent and the University of California at Santa Cruz "
+ " for the alignments) are properly acknowledged. <BR>"
+ "3.The Centers producing the data reserve the right to publish the initial "
+ "  large-scale analyses of the dataset-including large-scale identification "
+ "  of regions of evolutionary conservation and large-scale "
+ "  genomic assembly. Large-scale refers to regions with size on the order of "
+ "  a chromosome (that is, 30 Mb or more). <BR>"
+ "4.Any redistribution of the data should carry this notice.<BR>" );
 }
 
 
