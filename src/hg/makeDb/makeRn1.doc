@@ -304,7 +304,7 @@ hide mol
     hgLoadRna add -type=mRNA rn1 /gbdb/rn1/mrna.132/mrna.fa /gbdb/rn1/mrna.132/mrna.ra
     hgLoadRna add -type=EST rn1 /gbdb/rn1/mrna.132/est.fa /gbdb/rn1/mrna.132/est.ra
 
-MAKING AND STORING mRNA AND EST ALIGNMENTS  (TODO) DONE FOR ALL REFSEQ STEPS
+MAKING AND STORING mRNA AND EST ALIGNMENTS  (IN PROGRESS) DONE FOR ALL REFSEQ STEPS
 
 
     # Use BLAT to generate refSeq, mRNA and EST alignments as so:
@@ -312,7 +312,7 @@ MAKING AND STORING mRNA AND EST ALIGNMENTS  (TODO) DONE FOR ALL REFSEQ STEPS
     #  with chr*_*.fa and pushed to the cluster nodes.  
     ssh kk
     cd ~/rn1/bed
-    foreach i (refSeq mrna est) # DONE FOR REFSEQ
+    foreach i (refSeq mrna est)
       mkdir -p $i
       cd $i
       ls -1S /scratch/hg/rn1/contigs.1126/* > genome.lst
@@ -326,6 +326,7 @@ MAKING AND STORING mRNA AND EST ALIGNMENTS  (TODO) DONE FOR ALL REFSEQ STEPS
     # check on progress with para check in mrna, est, and refSeq directories.
     # report on runtime when finished:
       para create spec
+# DONE TO HERE - WAITING FOR CLUSTER
       para try
       para push
     para time > time
@@ -386,7 +387,7 @@ MAKING AND STORING mRNA AND EST ALIGNMENTS  (TODO) DONE FOR ALL REFSEQ STEPS
     cd ~/rn1/bed/est/intronEst
     hgLoadPsl rn1 *.psl
 
-    # Load refSeq alignments into database - DONE
+    # Load refSeq alignments into database - DONE FOR REFSEQ
     ssh hgwdev
     cd ~/rn1/bed/refSeq
     pslCat -dir chrom > refSeqAli.psl
