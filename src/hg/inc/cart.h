@@ -77,6 +77,10 @@ char *cartString(struct cart *cart, char *var);
 char *cartOptionalString(struct cart *cart, char *var);
 /* Return string valued cart variable or NULL if it doesn't exist. */
 
+char *cartNonemptyString(struct cart *cart, char *name);
+/* Return string value associated with name.  Return NULL
+ * if value doesn't exist or if it is pure white space. */
+
 char *cartUsualString(struct cart *cart, char *var, char *usual);
 /* Return variable value if it exists or usual if not. */
 
