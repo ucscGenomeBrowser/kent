@@ -52,9 +52,11 @@
 #include "pslWScore.h"
 #include "lfs.h"
 #include "mcnBreakpoints.h"
+
 #define CHUCK_CODE 1
 #define ROGIC_CODE 1
 #define FUREY_CODE 1
+
 char *seqName;		/* Name of sequence we're working on. */
 int winStart, winEnd;   /* Bounds of sequence. */
 char *database;		/* Name of mySQL database. */
@@ -212,7 +214,7 @@ hgcStart(buf);
 printf("<H2>%s (%s)</H2>\n", tdb->longLabel, item);
 }
 
-void printCustomUrl(char *url, char *itemName)
+void printCustomUrl(char *url, char *itemName, boolean encode)
 /* Print custom URL. */
 {
 if (url != NULL && url[0] != 0)
@@ -225,7 +227,7 @@ if (url != NULL && url[0] != 0)
     s = stringIn("$$", url);
     if (s != NULL)
        {
-       char *eItem = cgiEncode(itemName);
+       char *eItem = (encode ? cgiEncode(itemName) : cloneString(itemName));
        *s = 0;
        after = s+2;
        dyStringPrintf(uUrl, "%s%s%s", before, itemName, after);
@@ -372,7 +374,7 @@ if (itemForUrl == NULL)
 dupe = cloneString(tdb->type);
 genericHeader(tdb, item);
 wordCount = chopLine(dupe, words);
-printCustomUrl(tdb->url, itemForUrl);
+printCustomUrl(tdb->url, itemForUrl, item == itemForUrl);
 if (wordCount > 0)
     {
     type = words[0];
@@ -2658,13 +2660,23 @@ hFreeConn(&conn);
 void doTigrGeneIndex(struct trackDb *tdb, char *item)
 /* Put up info on tigr gene index item. */
 {
-char *s = strchr(item, '_');
-if (s == NULL)
-   s = item;
+char *animal = cloneString(item);
+char *id = strchr(animal, '_');
+char buf[128];
+
+if (id == NULL)
+   {
+   animal = "human";
+   id = item;
+   }
 else
-   s += 1;
-genericClickHandler(tdb, item, s);
+   *id++ = 0;
+if (sameString(animal, "cow"))
+   animal = "cattle";
+sprintf(buf, "species=%s&tc=%s ", animal, id);
+genericClickHandler(tdb, item, buf);
 }
+
 
 #ifdef FUREY_CODE
 
@@ -3513,7 +3525,7 @@ for (bed = ct->bedList; bed != NULL; bed = bed->next)
 if (bed == NULL)
     errAbort("Couldn't find %s@%s:%d in %s", itemName, seqName, start, fileName);
 bedPrintPos(bed);
-printCustomUrl(ct->tdb->url, itemName);
+printCustomUrl(ct->tdb->url, itemName, TRUE);
 }
 
 struct hash *makeTrackHash(char *chrom)
