@@ -204,7 +204,7 @@ o - Use BLAT to generate refSeq, mRNA and EST alignments as so:
 	  end 
 
     Now, by hand cd to the mrna, refSeq, and est directories respectively
-     and run a para push and para check in each ont.
+     and run a para push and para check in each one.
       
 o - Process refSeq mRNA and EST alignments into near best in genome.
       cd ~/oo/bed
@@ -214,29 +214,29 @@ o - Process refSeq mRNA and EST alignments into near best in genome.
       pslReps -minCover=0.2 -sizeMatters -minAli=0.98 -nearTop=0.002 raw.psl contig.psl /dev/null
       liftUp -nohead all_refSeq.psl ../../jkStuff/liftAll.lft carry contig.psl
       pslSortAcc nohead chrom /cluster/fast1/temp all_refSeq.psl
-      cd ..
+      cd .. DONE
 
       cd mrna
       pslSort dirs raw.psl /cluster/fast1/temp psl
       pslReps -minAli=0.96 -nearTop=0.01 raw.psl contig.psl /dev/null
       liftUp -nohead all_mrna.psl ../../jkStuff/liftAll.lft carry contig.psl
-      pslSortAcc nohead chrom /cluster/fast1/temp chrom.psl
-      cd ..
+      pslSortAcc nohead chrom /cluster/fast1/temp all_mrna.psl
+      cd .. DONE
 
       cd est
       pslSort dirs raw.psl /cluster/fast1/temp psl
       pslReps -minAli=0.93 -nearTop=0.01 raw.psl contig.psl /dev/null
       liftUp -nohead all_est.psl ../../jkStuff/liftAll.lft carry contig.psl
       pslSortAcc nohead chrom /cluster/fast1/temp all_est.psl
-      cd ..
+      cd .. DONE
 
-o - Load refSeq alignments into database
+o - Load refSeq alignments into database DONE
       ssh hgwdev
       cd /cluster/store1/gs.12/build29/bed/refSeq
       pslCat -dir chrom > refSeqAli.psl
       hgLoadPsl hg11 -tNameIx refSeqAli.psl
 
-o - Load mRNA alignments into database.
+o - Load mRNA alignments into database. DONE
       ssh hgwdev
       cd /cluster/store1/gs.12/build29/bed/mrna/chrom
       foreach i (*.psl)
@@ -246,7 +246,7 @@ o - Load mRNA alignments into database.
       cd ..
       hgLoadPsl hg11 all_mrna.psl -nobin
 
-o - Load EST alignments into database.
+o - Load EST alignments into database. DONE
       ssh hgwdev
       cd /cluster/store1/gs.12/build29/bed/est/chrom
       foreach i (*.psl)
@@ -302,7 +302,7 @@ o - Create rnaCluster table
    hgLoadBed hg11 rnaCluster chrom/*.bed
 
 
-PRODUCING KNOWN GENES (todo)
+PRODUCING KNOWN GENES (DONE)
 
 o - Download everything from ftp://ncbi.nlm.nih.gov/refseq/H_sapiens/mRNA_Prot/
     into /cluster/store1/mrna.129/refSeq. DONE
@@ -311,7 +311,7 @@ o - Unpack this into fa files and get extra info with:
        gunzip hs.gbff
        gunzip hs.faa.gz
        gbToFaRa ~/hg/h/mrna.fil ../refSeq.fa ../refSeq.ra ../refSeq.ta DONE
-o - Align refSeq.fa to genome as described under mRNA/EST alignments above. - TODO
+o - Align refSeq.fa to genome as described under mRNA/EST alignments above. - IN PROGRESS
 o - Get extra info from NCBI and produce refGene table as so:
        ssh hgwdev
        cd ~/oo/bed
@@ -319,8 +319,9 @@ o - Get extra info from NCBI and produce refGene table as so:
        cd refSeq
        wget ftp://ncbi.nlm.nih.gov/refseq/LocusLink/loc2ref DONE
        wget ftp://ncbi.nlm.nih.gov/refseq/LocusLink/mim2loc DONE
-o - Similarly download refSeq proteins in fasta format to refSeq.pep
-o - Align these by processes described under mRNA/EST alignments above.
+o - Similarly download refSeq proteins in fasta format to refSeq.pep - WHERE IS THIS FILE?
+o - RefSeq should have already been aligned to the genome by processes 
+        described under mRNA/EST alignments above.
 o - Produce refGene, refPep, refMrna, and refLink tables as so:
        ssh hgwdev
        cd ~/oo/bed/refSeq
@@ -337,7 +338,6 @@ o - Add Jackson labs info
      mysql -u hgcat -pBIGSECRET -A hg11
     and at the mysql> prompt
      load data local infile 'jaxOrtholog.tab' into table jaxOrtholog;
-
 
 
 PRODUCING GENSCAN PREDICTIONS (todo)
