@@ -25,8 +25,11 @@ set plaFac falciparum
 # Define all organism/assembly specific databases.
 set gbd $hg,$mm,$rn,$fr,$ce,$ci,$cb,$dm,$dp,$sc,$sacCer,$panTro,$galGal,$pyrFur,$pyrAer,$plaFac
 
-# Define 'other' database for chains
-set chainDb Hg15,Hg16,Pt0,Mm2,Mm3,Mm4,Rn2,Rn3,Cb1,Dp1,PanTro1
+# Define other databases that we check
+set otherDb swissProt,go,hgFixed
+
+# Define various non-self chains
+set chainDest Hg15,Hg16,Pt0,Mm2,Mm3,Mm4,Rn2,Rn3,Cb1,Dp1,PanTro1
 
 # Define databases that support known genes
 set knownDb $hg,$mm,$rn
@@ -349,7 +352,7 @@ identifier yeastChoCellCycleSampleId
 
 # Stuff to link together alignment chains and nets
 
-identifier chain[${chainDb}]Id
+identifier chain[${chainDest}]Id
 "Link together chain info"
     $gbd.chain[].id
     $gbd.chain[]Link.chainId
@@ -473,24 +476,24 @@ identifier refSeqId typeOf=mrnaAccession
 identifier knownGeneId typeOf=nativeMrnaAccession
 "Known Gene ID - the genbank accession of the representative mRNA"
     $knownDb.knownGene.name dupeOk
-    $gbd.bioCycPathway.kgID
+    $knownDb.bioCycPathway.kgID
     $knownDb.ceBlastTab.query
     $knownDb.dmBlastTab.query
     $knownDb.drBlastTab.query
     $knownDb.mmBlastTab.query
     $knownDb.scBlastTab.query
-    $gbd.dupSpMrna.mrnaID
-    $gbd.foldUtr3.name
-    $gbd.foldUtr5.name
-    $hg.gnfU95Distance.query
-    $hg.gnfU95Distance.target
-    $mm.affyGnfU74ADistance.query
-    $mm.affyGnfU74ADistance.target
-    $mm.affyGnfU74BDistance.query
-    $mm.affyGnfU74BDistance.target
-    $mm.affyGnfU74CDistance.query
-    $mm.affyGnfU74CDistance.target
-    $gbd.keggPathway.kgID
+    $knownDb.dupSpMrna.mrnaID
+    $knownDb.foldUtr3.name
+    $knownDb.foldUtr5.name
+    $knownDb.gnfU95Distance.query
+    $knownDb.gnfU95Distance.target
+    $knownDb.affyGnfU74ADistance.query
+    $knownDb.affyGnfU74ADistance.target
+    $knownDb.affyGnfU74BDistance.query
+    $knownDb.affyGnfU74BDistance.target
+    $knownDb.affyGnfU74CDistance.query
+    $knownDb.affyGnfU74CDistance.target
+    $knownDb.keggPathway.kgID
     $knownDb.kgAlias.kgID
     $knownDb.kgProtAlias.kgID
     $knownDb.kgXref.kgID
@@ -508,8 +511,8 @@ identifier knownGeneId typeOf=nativeMrnaAccession
     $knownDb.knownToPfam.name
     $knownDb.knownToRefSeq.name
     $knownDb.knownToSuper.gene
-    $hg.knownToU133.name
-    $hg.knownToU95.name
+    $knownDb.knownToU133.name
+    $knownDb.knownToU95.name
 
 # Fields parsed out of a Genbank flat file, associated with mRNA records
 
