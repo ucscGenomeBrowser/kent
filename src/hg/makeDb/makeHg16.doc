@@ -2134,31 +2134,27 @@ cd /cluster/data/hg16/bed/syntenyMm3
 cp -p /cluster/data/hg15/bed/syntenyMouse/*.pl .
 
 ./syntenicBest.pl -db=hg16 -table=blastzBestMm3
+XXXX
 ./smooth.pl
 ./joinsmallgaps.pl
 ./fillgap.pl -db=hg16 -table=blastzBestMm3
 ./synteny2bed.pl
 hgLoadBed hg16 syntenyMm3 ucsc100k.bed
-# Save the files from the above procedures.  The scripts are going
-# to rewrite the same file names
-mv genomeBest1phase genomeBest1phase.Mm3
-mv genomeBest2phase genomeBest2phase.Mm3
-mv genomeBest3phase genomeBest3phase.Mm3
-mv genomeBestFinal genomeBestFinal.Mm3
-mv ucsc100k.bed ucsc100k.bed.Mm3
 
-# syntenicBest.pl will overwrite the genomeBest1phase created by the
-#	the previous run of this above.  It takes about 3 hours to run.
-./syntenicBest.pl -db=hg16 -table=blastzBestRn3
+#	And for the Rat, same thing, different directory:
+mkdir ../syntenyRn3
+cd ../syntenyRn3
+../syntenyMm3/syntenicBest.pl -db=hg16 -table=blastzBestRn3
+XXXX
 #	smooth.pl overwrites genomeBest2phase created by the previous
 #	run of this above.  Runs quickly.
-./smooth.pl
+../syntenyMm3/smooth.pl
 # joinsmallgaps.pl overwrites genomeBest3phase created above. Runs quickly.
-./joinsmallgaps.pl
+../syntenyMm3/joinsmallgaps.pl
 # fillgap.pl creates genomeBestFinal
-./fillgap.pl -db=hg16 -table=blastzBestRn3
+../syntenyMm3/fillgap.pl -db=hg16 -table=blastzBestRn3
 # synteny2bed.pl creates ucsc100k.bed
-./synteny2bed.pl
+../syntenyMm3/synteny2bed.pl
 hgLoadBed hg16 syntenyRn3 ucsc100k.bed
 # Loaded 1537 elements
 # save data files from above operation on Rn3
@@ -2822,8 +2818,8 @@ axtFilter -q=$1 $2 | axtChain stdin \
     # Load the nets into database 
     ssh hgwdev
     cd /cluster/data/hg16/bed/blastzSelf/axtChain
-    netFilter -minGap=10 human.net |  hgLoadNet hg16 selfNet stdin
-    netFilter -minGap=10 humanSyn.net | hgLoadNet hg16 syntenySelfNet stdin
+    netFilter -minGap=10 human.net |  hgLoadNet hg16 netSelf stdin
+    netFilter -minGap=10 humanSyn.net | hgLoadNet hg16 syntenyNetSelf stdin
 
     # Add entries for net and chain to human/hg16 trackDb
 
@@ -2845,12 +2841,29 @@ axtFilter -q=$1 $2 | axtChain stdin \
     mkdir -p ../pslTight
     foreach i (*.axt)
       set c = $i:r
-      axtToPsl $i ../S1.len ../S2.len ../pslTight/${c}_blastzTightRn3.psl
+      axtToPsl $i ../S1.len ../S2.len ../pslTight/${c}_blastzTightSelf.psl
       echo "Done: $i"
     end
 
     # Load tables into database
     ssh hgwdev
-    cd /cluster/data/hg16/bed/blastz.rn3/pslTight
-    hgLoadPsl hg16 chr*_blastzTightRn3.psl
+    cd /cluster/data/hg16/bed/blastzSelf/pslTight
+    hgLoadPsl hg16 chr*_blastzTightSelf.psl
 
+# MAKING SELF SYNTENY - Can be done after Best
+
+ssh hgwdev
+mkdir -p /cluster/data/hg16/bed/syntenySelf
+cd /cluster/data/hg16/bed/syntenySelf
+# Use the scripts that were already copied to ../syntenyMm3
+
+The first one takes 3 to 4 hours.
+
+../syntenyMm3/syntenicBest.pl -db=hg16 -table=blastzBestSelf > synBest.out 2>&1
+XXXX - Running 2003-08-27 21:32
+../syntenyMm3/smooth.pl
+../syntenyMm3/joinsmallgaps.pl
+../syntenyMm3/fillgap.pl -db=hg16 -table=blastzBestSelf
+../syntenyMm3/synteny2bed.pl
+#    Load results
+hgLoadBed hg16 syntenySelf ucsc100k.bed
