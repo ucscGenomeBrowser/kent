@@ -8,7 +8,7 @@
 #include "hash.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: hash.c,v 1.17 2003/07/31 06:24:55 kent Exp $";
+static char const rcsid[] = "$Id: hash.c,v 1.18 2003/09/30 00:22:49 kent Exp $";
 
 bits32 hashCrc(char *string)
 /* Returns a CRC value on string. */
@@ -230,6 +230,18 @@ int hashElCmp(const void *va, const void *vb)
 const struct hashEl *a = *((struct hashEl **)va);
 const struct hashEl *b = *((struct hashEl **)vb);
 return strcmp(a->name, b->name);
+}
+
+void *hashElFindVal(struct hashEl *list, char *name)
+/* Look up name in hashEl list and return val or NULL if not found. */
+{
+struct hashEl *el;
+for (el = list; el != NULL; el = el->next)
+    {
+    if (strcmp(el->name, name) == 0)
+        return el->val;
+    }
+return NULL;
 }
 
 struct hashEl *hashElListHash(struct hash *hash)

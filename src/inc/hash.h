@@ -99,6 +99,9 @@ struct hashEl *hashElListHash(struct hash *hash);
 int hashElCmp(const void *va, const void *vb);
 /* Compare two hashEl by name. */
 
+void *hashElFindVal(struct hashEl *list, char *name);
+/* Look up name in hashEl list and return val or NULL if not found. */
+
 void hashElFree(struct hashEl **pEl);
 /* Free hash el list returned from hashListAll.  */
 
