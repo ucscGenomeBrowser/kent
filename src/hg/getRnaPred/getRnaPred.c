@@ -1,20 +1,20 @@
 /* getRnaPred - Get RNA for gene predictions. */
 #include "common.h"
 #include "linefile.h"
-#include "hash.h"
 #include "genePred.h"
+#include "psl.h"
 #include "fa.h"
 #include "jksql.h"
 #include "hdb.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: getRnaPred.c,v 1.8 2004/01/19 23:53:56 markd Exp $";
+static char const rcsid[] = "$Id: getRnaPred.c,v 1.9 2004/01/20 02:52:15 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */
 {
 errAbort(
-  "getRnaPred - Get RNA for gene predictions\n"
+  "getRnaPred - Get virtual RNA for gene predictions\n"
   "usage:\n"
   "   getRnaPred [options] database table chromosome output.fa\n"
   "table can be a table or a file.  Specify chromosome of 'all' to\n"
@@ -26,12 +26,15 @@ errAbort(
   "   -cdsOut=file - write CDS to this tab-separated file, in the form\n"
   "      acc  start..end\n"
   "    where start..end are genbank style, one-based coordinates\n"
+  "   -pslOut=psl - output a PSLs for the virtual mRNAs.  Allows virtual\n"
+  "    mRNA to be analyzed by tools that work on PSLs\n"
   );
 }
 
 static struct optionSpec options[] = {
    {"weird", OPTION_BOOLEAN},
    {"cdsOut", OPTION_STRING},
+   {"pslOut", OPTION_STRING},
    {NULL, 0},
 };
 
@@ -39,6 +42,7 @@ static struct optionSpec options[] = {
 /* parsed from command line */
 boolean weird, cdsUpper;
 char *cdsOut = NULL;
+char *pslOut = NULL;
 
 boolean hasWeirdSplice(struct genePred *gp)
 /* see if a gene has weird splice sites */
@@ -108,12 +112,56 @@ if (cdsFh != NULL)
     fprintf(cdsFh,"%s\t%d..%d\n", gp->name, cdsStart+1, cdsEnd);
 }
 
-void processGenePred(struct genePred *gp, struct dyString *dnaBuf, FILE* faFh, FILE* cdsFh)
+void writePsl(struct genePred *gp, FILE* pslFh)
+/* create a PSL for the virtual mRNA */
+{
+int rnaSize = genePredBases(gp);
+int iRna = 0, iExon;
+struct psl psl;
+ZeroVar(&psl);
+
+psl.match = rnaSize;
+psl.tNumInsert = gp->exonCount-1;
+psl.strand[0] = gp->strand[0];
+psl.qName = gp->name;
+psl.qSize = rnaSize;
+psl.qStart = 0;
+psl.qEnd = rnaSize;
+psl.tName = gp->chrom;
+psl.tSize =  hChromSize(gp->chrom);
+psl.tStart = gp->txStart;
+psl.tEnd = gp->txEnd;
+
+/* fill in blocks */
+AllocArray(psl.blockSizes, 3 * gp->exonCount);
+psl.qStarts = psl.blockSizes + gp->exonCount;
+psl.tStarts = psl.qStarts + gp->exonCount;
+
+for (iExon = 0; iExon < gp->exonCount; iExon++)
+    {
+    int exonSize = gp->exonEnds[iExon] - gp->exonStarts[iExon];
+    int qStart = iRna;
+    int qEnd = qStart + exonSize;
+    if (gp->strand[0] == '-')
+        reverseIntRange(&qStart, &qEnd, rnaSize);
+    psl.blockSizes[iExon] = exonSize;
+    psl.qStarts[iExon] = qStart;
+    psl.tStarts[iExon] = gp->exonStarts[iExon];
+    if (iExon > 0)
+        {
+        /* count intron as bases inserted */
+        psl.tBaseInsert += gp->exonStarts[iExon]-gp->exonEnds[iExon-1];
+        }
+    }
+
+pslTabOut(&psl, pslFh);
+freeMem(psl.blockSizes);
+}
+
+void processGenePred(struct genePred *gp, struct dyString *dnaBuf, FILE* faFh, FILE* cdsFh, FILE* pslFh)
 /* output genePred DNA, check for weird splice sites if requested */
 {
 int i;
-if (weird && !hasWeirdSplice(gp))
-    return;
 
 /* Load exons one by one into dna string. */
 dyStringClear(dnaBuf);
@@ -136,13 +184,14 @@ for (i=0; i<gp->exonCount; ++i)
 if (gp->strand[0] == '-')
     reverseComplement(dnaBuf->string, dnaBuf->stringSize);
 
-if (gp->cdsStart < gp->cdsEnd)
+ if ((gp->cdsStart < gp->cdsEnd) && (cdsUpper || (cdsFh != NULL)))
     processCds(gp, dnaBuf, cdsFh);
 faWriteNext(faFh, gp->name, dnaBuf->string, dnaBuf->stringSize);
-
+if (pslFh != NULL)
+    writePsl(gp, pslFh);
 }
 
-void getRnaForTable(char *table, char *chrom, struct dyString *dnaBuf, FILE *faFh, FILE *cdsFh)
+void getRnaForTable(char *table, char *chrom, struct dyString *dnaBuf, FILE *faFh, FILE *cdsFh, FILE* pslFh)
 /* get RNA for a genePred table */
 {
 int rowOffset;
@@ -153,14 +202,15 @@ while ((row = sqlNextRow(sr)) != NULL)
     {
     /* Load gene prediction from database. */
     struct genePred *gp = genePredLoad(row+rowOffset);
-    processGenePred(gp, dnaBuf, faFh, cdsFh);
+    if ((!weird) || hasWeirdSplice(gp))
+        processGenePred(gp, dnaBuf, faFh, cdsFh, pslFh);
     genePredFree(&gp);
     }
 sqlFreeResult(&sr);
 hFreeConn(&conn);
 }
 
-void getRnaForTables(char *table, char *chrom, struct dyString *dnaBuf, FILE *faFh, FILE *cdsFh)
+void getRnaForTables(char *table, char *chrom, struct dyString *dnaBuf, FILE *faFh, FILE *cdsFh, FILE* pslFh)
 /* get RNA for one for possibly splite genePred table */
 {
 struct slName* chroms = NULL, *chr;
@@ -169,10 +219,10 @@ if (sameString(chrom, "all"))
 else
     chroms = slNameNew(chrom);
 for (chr = chroms; chr != NULL; chr = chr->next)
-    getRnaForTable(table, chr->name, dnaBuf, faFh, cdsFh);
+    getRnaForTable(table, chr->name, dnaBuf, faFh, cdsFh, pslFh);
 }
 
-void getRnaForFile(char *table, char *chrom, struct dyString *dnaBuf, FILE *faFh, FILE* cdsFh)
+void getRnaForFile(char *table, char *chrom, struct dyString *dnaBuf, FILE *faFh, FILE* cdsFh, FILE* pslFh)
 /* get RNA for a genePred file */
 {
 boolean all = sameString(chrom, "all");
@@ -182,7 +232,7 @@ while (lineFileNextRowTab(lf, row, GENEPRED_NUM_COLS))
     {
     struct genePred *gp = genePredLoad(row);
     if (all || sameString(gp->chrom, chrom))
-        processGenePred(gp, dnaBuf, faFh, cdsFh);
+        processGenePred(gp, dnaBuf, faFh, cdsFh, pslFh);
     genePredFree(&gp);
     }
 lineFileClose(&lf); 
@@ -194,16 +244,20 @@ void getRnaPred(char *database, char *table, char *chrom, char *faOut)
 struct dyString *dnaBuf = dyStringNew(16*1024);
 FILE *faFh = mustOpen(faOut, "w");
 FILE *cdsFh = NULL;
+FILE *pslFh = NULL;
 if (cdsOut != NULL)
     cdsFh = mustOpen(cdsOut, "w");
+if (pslOut != NULL)
+    pslFh = mustOpen(pslOut, "w");
 hSetDb(database);
 
 if (fileExists(table))
-    getRnaForFile(table, chrom, dnaBuf, faFh, cdsFh);
+    getRnaForFile(table, chrom, dnaBuf, faFh, cdsFh, pslFh);
 else
-    getRnaForTables(table, chrom, dnaBuf, faFh, cdsFh);
+    getRnaForTables(table, chrom, dnaBuf, faFh, cdsFh, pslFh);
 
 dyStringFree(&dnaBuf);
+carefulClose(&pslFh);
 carefulClose(&cdsFh);
 carefulClose(&faFh);
 }
@@ -217,6 +271,7 @@ if (argc != 5)
 weird = optionExists("weird");
 cdsUpper = optionExists("cdsUpper");
 cdsOut = optionVal("cdsOut", NULL); 
+pslOut = optionVal("pslOut", NULL); 
 getRnaPred(argv[1], argv[2], argv[3], argv[4]);
 return 0;
 }
