@@ -1391,29 +1391,26 @@ return ok;
 static boolean findSnpPos(char *spec, struct hgPositions *hgp, char *tableName)
 /* Look for position in stsMarker table. */
 {
-struct sqlConnection *conn;
+struct sqlConnection *conn = NULL;
 struct sqlResult *sr = NULL;
-struct dyString *query;
-char **row;
+struct dyString *query = NULL;
+char **row = NULL;
 boolean ok = FALSE;
-char *chrom;
+char *chrom = NULL;
 struct snp snp;
-char buf[64];
 struct hgPosTable *table = NULL;
 struct hgPos *pos = NULL;
-int rowOffset;
-char *localName;
+int rowOffset = 0;
 
-/* Make sure it start's with 'rs'.  Then skip over it. */
+/* Make sure it starts with 'rs'.  Then skip over it. */
 if (!startsWith("rs", spec))
     return FALSE;
-localName = spec+2;
 if (!hTableExists(tableName))
     return FALSE;
 rowOffset = hOffsetPastBin(NULL, tableName);
 conn = hAllocConn();
 query = newDyString(256);
-dyStringPrintf(query, "select * from %s where name = '%s'", tableName, localName);
+dyStringPrintf(query, "select * from %s where name = '%s'", tableName, spec);
 sr = sqlGetResult(conn, query->string);
 while ((row = sqlNextRow(sr)) != NULL)
     {
