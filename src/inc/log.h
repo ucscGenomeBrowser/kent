@@ -62,4 +62,9 @@ __attribute__((format(printf, 1, 2)))
 #endif
 ;
 
+void logDaemonize(char *progName);
+/* daemonize server process: closing open file descriptors and
+ * starting logging based on the -logFacility and -log command line options .
+ * if -debug is supplied , don't fork. */
+
 #endif

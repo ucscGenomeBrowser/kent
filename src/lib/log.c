@@ -5,6 +5,9 @@
 #include "log.h"
 #include "errabort.h"
 #include "dystring.h"
+#include "options.h"
+#include "portable.h"
+
 #ifndef NO_SYSLOG
 #include <syslog.h>
 #endif
@@ -237,3 +240,27 @@ va_start(args, format);
 logDebugVa(format, args);
 va_end(args);
 }
+
+void logDaemonize(char *progName)
+/* daemonize parasol server process, closing open file descriptors and
+ * starting logging based on the -logFacility and -log command line options .
+ * if -debug is supplied , don't fork. */
+{
+if (!optionExists("debug"))
+    {
+    int i, maxFiles = getdtablesize();
+    if (mustFork() != 0)
+        exit(0);  /* parent goes away */
+
+    /* Close all open files first (before logging) */
+    for (i = 0; i < maxFiles; i++)
+        close(i);
+    }
+
+/* Set up log handler. */
+if (optionExists("log"))
+    logOpenFile(progName, optionVal("log", NULL));
+else    
+    logOpenSyslog(progName, optionVal("logFacility", NULL));
+}
+
