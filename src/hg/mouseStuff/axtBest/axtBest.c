@@ -145,7 +145,7 @@ for (i=0; i<symCount; ++i)
 	}
     else
         {
-	score += ss->matrix[ntVal5[q]][ntVal5[t]];
+	score += ss->matrix[q][t];
 	lastGap = FALSE;
 	}
     if (score < 0)
