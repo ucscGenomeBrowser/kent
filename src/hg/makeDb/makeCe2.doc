@@ -1799,3 +1799,183 @@ cd /cluster/data/ce2/bed/altSplice
     # these jobs are no big deal on the worm, just run this file:
     chmod +x altSplice.para.spec
 
+# Create frames based page views of alt splice areas of interest
+#	(DONE - 2004-05-16 - Hiram)
+    ssh hgwdev
+    mkdir /cluster/data/ce2/bed/altSplice/altAnalysis
+    cd /cluster/data/ce2/bed/altSplice/altAnalysis
+    altAnalysis ce2 ../altSplice.agx altSummary.txt links.html \
+	frame.html -bedName=all
+    # creates files, (as well as several .bed files):
+    #	-rw-rw-r--    1      282 May 16 09:19 frame.html
+    #	-rw-rw-r--    1   391029 May 16 09:19 links.html
+    #	Copy these to the Intronerator WS120 location, change
+    #	default opening location:
+
+    cp -p links.html /usr/local/apache/htdocs/IntronWS120
+    sed -e \
+    "s/Human Alt Splicing Conserved in Mouse/Alt Splicing in C. elegans/" \
+	-e "s/NM_005487/chrII:14689493-14690232/" \
+	-e "s/hgwdev-sugnet/genome-test/" \
+	 frame.html > /usr/local/apache/htdocs/IntronWS120/frame.html
+
+# MAKE single coverage BEST track from blastz axt's (DONE - 2004-05-11 - Hiram)
+#	This data is for use with the phyloHMM construction, below.
+    ssh eieio
+    cd /cluster/data/ce2
+    cat << '_EOF_' > jkStuff/mkBest.sh
+#!/bin/sh
+
+mkdir axtBest
+mkdir pslBest
+
+for c in I II III IV V X M
+do
+    echo "axtBesting chr$c"
+    /cluster/bin/i386/axtBest axtChrom/chr${c}.axt chr${c} \
+        axtBest/chr${c}.axt -minScore=300
+    echo "processing chr${c}.axt -> chr${c}_blastzBestCb1.psl"
+    /cluster/bin/i386/axtToPsl axtBest/chr${c}.axt \
+        S1.len S2.len pslBest/chr${c}_blastzBestCb1.psl
+    echo "Done: chr${c}_blastzBestRn3.psl"
+done
+'_EOF_'
+    chmod +x jkStuff/mkBest.sh
+    cd /cluster/data/ce2/bed/blastz.cb1
+    time ../../jkStuff/mkBest.sh
+    #	real    1m47.069s
+    #	user    1m1.880s
+    #	sys     0m14.240s
+
+    #	Load this table
+    ssh hgwdev
+    cd /cluster/data/ce2/bed/blastz.cb1/pslBest
+    time /cluster/bin/i386/hgLoadPsl ce2 -table=blastzBestCb1 \
+	chr*_blastzBestCb1.psl
+    #	real    0m21.775s
+    #	user    0m8.510s
+    #	sys     0m1.500s
+
+# MAKE phyloHMM data
+    ssh hgwdev
+    mkdir /cluster/data/ce2/bed/pHMM
+    cd /cluster/data/ce2/bed/pHMM
+    mkdir axt
+    cd axt
+    ln -s ../../blastz.cb1.2004-04-12/axtBest/*.axt .
+    cd ..
+    mkdir maf
+    #	create maf files from axtBest axt files
+for c in I II III IV M V X
+do
+axtToMaf axt/chr${c}.axt tSizes qSizes maf/chr${c}.Tmaf
+sed -e "s/chrUn/cb1.chrUn/" maf/chr${c}.Tmaf | sed -e "s/ chr/ ce2.chr/" > \
+        maf/chr${c}.maf
+rm -f maf/chr${c}.Tmaf
+echo "done chr${c}"
+done
+    #	create .ss files from the maf files
+for i in I II III IV V X M
+do
+echo "chr${i}.ss"
+/cluster/data/woody/bin/msa_view -i MAF maf/chr${i}.maf -o SS -z -O ce2,cb1 > \
+        chr${i}.ss
+done
+    #	create the model parameters
+    /cluster/data/woody/bin/msa_view -i SS -o SS -A ce2,cb1 chr*.ss > all.ss
+    echo "(1,2);" > tree.nh
+    /cluster/data/woody/bin/fit_tree_model -i SS -m all.ss -t tree.nh -s REV \
+        -k 10 -o rev_dg
+    cat rev_dg.mod
+#	ALPHABET: A C G T 
+#	ORDER: 0
+#	SUBST_MOD: REV
+#	NRATECATS: 10
+#	ALPHA: 1.340710
+#	TRAINING_LNL: -17312218.745377
+#	BACKGROUND: 0.314002 0.186665 0.186748 0.312585 
+#	RATE_MAT:
+#	  -0.868000    0.166586    0.469971    0.231443 
+#	   0.280225   -1.221111    0.151932    0.788953 
+#	   0.790216    0.151865   -1.219545    0.277464 
+#	   0.232492    0.471137    0.165766   -0.869395 
+#	TREE: (1:0.228767,2:0.228767);
+
+    #	split up the mafs for the label processing
+    ssh eieio
+    cd /cluster/data/ce2/bed/pHMM
+    mkdir WINDOWS
+    mkdir msa_split
+for c in M I II III IV V X
+do
+    cd /cluster/data/ce2/bed/pHMM
+    maf=maf/chr${c}.maf
+    prefix=chr${c}
+    mkdir msa_split/$prefix
+    /cluster/data/woody/bin/msa_split $maf -i MAF -M \
+	/cluster/data/ce2/sangerFa/$prefix.fa -O ce2,cb1 -w 1000000,0 \
+	-r msa_split/$prefix/$prefix -o SS -I 1000 -d 1 -B 5000
+    cd msa_split/${prefix}
+    for f in *.ss; do gzip -c ${f} > ../../WINDOWS/${f}.gz; done
+    echo "done chr${c}"
+done
+
+    #	perform the label processing as a cluster job
+    ssh kk
+    cd /cluster/data/ce2/bed/pHMM
+    mkdir label.tmp
+    mkdir POSTPROBS
+    cat << '_EOF_' > doPostProbs.sh
+#!/bin/sh
+file=$1
+root=`echo $file | awk -F\/ '{print $NF}' | sed 's/\.ss\.gz//'`
+chrom=`echo $root | awk -F\. '{print $1}'`
+TMP=/tmp/pHMMCe1/${root}
+mkdir -p ${TMP}
+zcat $file |  /cluster/data/woody/bin/label -m - -d rev_dg.mod -i SS \
+    -o ${TMP}/$root -k 10 -L 0.9 -A -p 0 -j 1 -s $chrom -x
+mkdir POSTPROBS/$chrom
+gzip -c ${TMP}/$root.postprob > POSTPROBS/$chrom/$root.postprob.gz
+rm -f ${TMP}/$root.postprob
+rmdir --ignore-fail-on-non-empty ${TMP}
+rmdir --ignore-fail-on-non-empty /tmp/pHMMCe1
+'_EOF_'
+    chmod +x doPostProbs.sh
+    rm -f jobs.lst
+    for file in WINDOWS/chr*.ss.gz
+    do
+        echo "./doPostProbs.sh $file" >> jobs.lst
+    done
+    para create jobs2.lst
+    para try
+    para check
+    para push
+# Completed: 104 of 104 jobs
+# CPU time in finished jobs:      28092s     468.20m     7.80h    0.33d  0.001 y
+# IO & Wait Time:                   704s      11.73m     0.20h    0.01d  0.000 y
+# Average job time:                 277s       4.61m     0.08h    0.00d
+# Longest job:                      335s       5.58m     0.09h    0.00d
+# Submission to last job:           373s       6.22m     0.10h    0.00d
+
+    #	ready to create and load the data track
+    ssh eieio
+    cd /cluster/data/ce2/bed/pHMM
+    mkdir wibLimits
+    mkdir wib
+    for dir in POSTPROBS/*
+    do
+	chrom=${dir/POSTPROBS\//}
+	echo $dir $chrom
+        zcat `ls POSTPROBS/$chrom/*postprob.gz | sort -t\. -k2,2n` | \
+            wigAsciiToBinary -chrom=$chrom -binsize=1024 \
+                -dataSpan=1 -wibFile=wib/${chrom}_phyloHMMcons -name=cb1 \
+                stdin 2> wibLimits/${chrom}
+    done
+
+    #	load the phyloHMM track
+    ssh hgwdev
+    cd /cluster/data/ce2/bed/pHMM
+    hgLoadWiggle -pathPrefix=/gbdb/ce2/wib/pHMMCb1 ce2 phyloHMMcons_Cb1 \
+	wib/*_phyloHMMcons.wig 
+    mkdir /gbdb/ce2/wib/pHMMCb1
+    ln -s `pwd`/wib/chr*_phyloHMMcons.wib /gbdb/ce2/wib/pHMMCb1
