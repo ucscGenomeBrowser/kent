@@ -2394,7 +2394,130 @@ chainSome $(path1)
     # back to eieio
     rm -rf blastOut
 
+# End tblastn Human
+
+# MAKE Drosophila Proteins track
+    ssh eieio
+    mkdir -p /cluster/data/ce2/blastDb
+    cd /cluster/data/ce2/blastDb
+    for i in ../sangerFa/*.fa; do ln -s $i .; done
+    for i in *.fa; do formatdb -i $i -p F 2> /dev/null; done
+    rm *.fa *.log
+
+    ssh kkr1u00
+    mkdir -p /iscratch/i/ce2/blastDb
+    cp /cluster/data/ce2/blastDb/* /iscratch/i/ce2/blastDb
+    (~kent/bin/iSync) 2>&1 > sync.out
+    
+    mkdir -p /cluster/data/ce2/bed/tblastn.dm1FB
+    cd /cluster/data/ce2/bed/tblastn.dm1FB
+    ls -1S /iscratch/i/ce2/blastDb/*.nsq | sed "s/\.nsq//" > worm.lst
+    exit
+
+    # back to eieio
+    cd /cluster/data/ce2/bed/tblastn.dm1FB
+    mkdir fbfa
+    split -l 40 /cluster/data/dm1/bed/blat.dm1FB/dm1FB.psl fbfa/fb
+    cd fbfa
+    for i in *; do pslxToFa $i $i.fa; rm $i; done
+    cd ..
+    ls -1S fbfa/*.fa > fb.lst
+    mkdir blastOut
+    for i in `cat fb.lst`; do  mkdir blastOut/`basename $i .fa`; done
+    tcsh
+    cat << '_EOF_' > blastGsub
+#LOOP
+blastSome $(path1) {check in line $(path2)} {check out exists blastOut/$(root2)/q.$(root1).psl } 
+#ENDLOOP
+'_EOF_'
+    cat << '_EOF_' > blastSome
+#!/bin/sh
+BLASTMAT=/iscratch/i/blast/data
+export BLASTMAT
+g=`basename $2`
+f=/tmp/`basename $3`.$g
+for eVal in 1 0.1 0.01 0.001 0.0001 0.00001 0.000001 1E-09 1E-11
+do
+if /scratch/blast/blastall -M BLOSUM80 -m 0 -F no -e $eVal -p tblastn -d $1 -i $2 -o $f.8
+then
+        mv $f.8 $f.1
+        break;
+fi
+done
+if test -f  $f.1
+then
+if /cluster/bin/i386/blastToPsl $f.1 $f.2
+then
+        liftUp -nosort -type=".psl" -pslQ -nohead $3.tmp /iscratch/i/dm1/protein.lft warn $f.2
+        mv $3.tmp $3
+        rm -f $f.1 $f.2 
+        exit 0
+    fi
+fi
+rm -f $f.1 $f.2 $3.tmp 
+exit 1
+'_EOF_'
+
+    chmod +x blastSome
+    gensub2 worm.lst fb.lst blastGsub blastSpec
+
+    exit
+    ssh kk
+    cd /cluster/data/ce2/bed/tblastn.dm1FB
+    para create blastSpec
+    para push
+# Completed: 3283 of 3283 jobs
+# CPU time in finished jobs:    3063561s   51059.35m   850.99h   35.46d  0.097 y
+# IO & Wait Time:                 25333s     422.22m     7.04h    0.29d  0.001 y
+# Average job time:                 941s      15.68m     0.26h    0.01d
+# Longest job:                     3435s      57.25m     0.95h    0.04d
+# Submission to last job:          9387s     156.45m     2.61h    0.11d
+
+    cat << '_EOF_' > chainGsub
+#LOOP
+chainSome $(path1)
+#ENDLOOP
+'_EOF_'
+
+    cat << '_EOF_' > chainSome
+(cd $1; cat q.*.psl | simpleChain -prot -outPsl -maxGap=25000 stdin ../c.`basename $1`.psl)
+'_EOF_'
+    chmod +x chainSome
+
+    ls -1dS `pwd`/blastOut/fb?? > chain.lst
+    gensub2 chain.lst single chainGsub chainSpec
+
+    ssh kki
+    cd /cluster/data/ce2/bed/tblastn.dm1FB
+    para create chainSpec
+    para push
+# Completed: 469 of 469 jobs
+# CPU time in finished jobs:        721s      12.02m     0.20h    0.01d  0.000 y
+# IO & Wait Time:                  1562s      26.03m     0.43h    0.02d  0.000 y
+# Average job time:                   5s       0.08m     0.00h    0.00d
+# Longest job:                       42s       0.70m     0.01h    0.00d
+# Submission to last job:          5546s      92.43m     1.54h    0.06d
+
+    exit
+    # back to eieio
+    cd /cluster/data/ce2/bed/tblastn.dm1FB/blastOut
+    for i in fb??
+    do 
+	awk "(\$13 - \$12)/\$11 > 0.6 {print}" c.$i.psl > c60.$i.psl
+	sort -rn c60.$i.psl | pslUniq stdin u.$i.psl
+	awk "((\$1 / \$11) ) > 0.60 { print   }" c60.$i.psl > m60.$i.psl
+	echo $i
+    done
+
+    cat u.*.psl m60* |  sort -T /tmp -k 14,14 -k 16,16n -k 17,17n  | uniq  > ../blastDm1FB.psl
+    cd ..
+
+    ssh hgwdev
+    cd /cluster/data/ce2/bed/tblastn.dm1FB
+    hgLoadPsl ce2 blastDm1FB.psl
+    exit
+
+    # back to eieio
+    rm -rf blastOut
+
 # End tblastn
-
-
-
