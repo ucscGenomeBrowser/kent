@@ -20,14 +20,14 @@ ncbiSql contains the last NCBI sql files imported:
    createTables.sql
    createKeys.sql
 
-The script ncbiSql/convertCreateTables, converts createTables.sql to
-MySQL.  The file createKeys.sql is not currently converted,
-since we don't setup foreign key constraints and all required
-indices will come out of the createTables conversion.  The
-result of the conversion is checked-in as createTables.sql
-in this directory.  If the schema changes, it will need
-to be converted by hand.
+After determining what has changed in the NCBI SQL files, copy them
+to ncbiSql and convert them to MySQL with:
 
+   ncbiSql/convertCreateTables ncbiSql/createTables.sql > createTables.sql
+   ncbiSql/convertCreateKeys ncbiSql/createKeys.sql > createKeys.sql
+
+result of the conversion are checked-in to CVS.  These programs may
+have to be modified if the schema changes.
 
 The program ccdsImport imports the table dumps into a database ccds,
 which is then used to generate the tables that are loaded into

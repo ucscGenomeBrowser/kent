@@ -1,6 +1,6 @@
 #!/usr/bin/awk -f
 #
-# Convert NCBI creatTables.sql (which maybe sybase) to mysql.
+# Convert NCBI createTables.sql (which maybe sybase) to mysql.
 #
 {
     $0 = gensub("\\[dbo\\]\\.", "", "g", $0);
