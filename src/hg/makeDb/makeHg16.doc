@@ -60,17 +60,18 @@ exit; # don't actually run this like a script :)
 
     cp seq_contig.md se_contig.md.orig
 
-# For build34, edit the seq_contig.md file to remove the alternative chr7 sequence
-# supplied by the Toronto group: NT_079590, NT_079591, NT_079592, NT_079593, NT_079594,
-# NT_079595, NT_079596, NT_079597
+# For build34, edit the seq_contig.md file to remove the alternative chr7
+# sequence supplied by the Toronto group: NT_079590, NT_079591, NT_079592,
+# NT_079593, NT_079594, NT_079595, NT_079596, NT_079597
 
-# Edit seq_contig.md to make the DR51 alternative haplotype look like a chr6_random
-# sequence:
+# Edit seq_contig.md to make the DR51 alternative haplotype look like a
+# chr6_random sequence:
 # 9606  6       32491690        32629063        +       NG_002432       GI:28212469     CONTIG    DR51    1
 # to 
 # 9606  6|NG_002432     1       137374  +       NG_002432       GI:28212469     CONTIG  DR51      1
 
-# Move this edited line next to other chr6_random contigs (for creating the lift file)
+# Move this edited line next to other chr6_random contigs (for creating
+#	the lift file)
 
 
     
@@ -97,7 +98,8 @@ exit; # don't actually run this like a script :)
 
     /cluster/bin/scripts/getChromSizes ../agp
 
-# Create lift files (this will create chromosome directory structure) and inserts file
+# Create lift files (this will create chromosome directory structure) and
+#	inserts file
   
     /cluster/bin/scripts/createNcbiLifts -s chrom_sizes seq_contig.md .
 
@@ -109,8 +111,9 @@ exit; # don't actually run this like a script :)
 
     /cluster/bin/scripts/createNcbiChrAgp .
 
-# Check that they match the original chrN.agp files (except for gaps), and then copy the
-# originals in since they contain better gap information.  Delete the comments from these.
+# Check that they match the original chrN.agp files (except for gaps),
+# and then copy the originals in since they contain better gap information.
+#	Delete the comments from these.
 
 # Distribute contig .fa to appropriate directory (assumes all files
 # are in "contigs" directory).
@@ -264,6 +267,62 @@ exit; # don't actually run this like a script :)
     # If a lift file has been edited (e.g. as in 6.2.5 above), edit ncbi.lft 
     # to match. If no step 6.2.5 then no editing needed
 
+# REPEAT MASKING Fixups (WORKING)
+    # The main REPEAT MASKING section below was run when all the
+    #	sequences were still in ./contigs.  Since then, the process
+    #	above was reworked such that the ./contigs no longer exist.
+    #	This quick process here will run RepeatMasker on chroms 6, X,
+    #	and Y due to some rearrangements.  This type of processing
+    #	should be used for everything.  It is merely a difference in
+    #	where the contigs are found to be split.
+    #		use: foreach chrom ( ?{,?} ) for everything
+    cd ~/hg16
+    foreach chrom ( {6,X,Y} )
+	foreach c ( $chrom/N{T,G}_* )
+      set contig = $c:t
+	echo "splitting ${chrom}/${contig}/${contig}.fa"
+      faSplit size ${chrom}/${contig}/$contig.fa 500000 \
+	${chrom}/${contig}/${contig}_ -lift=${chrom}/${contig}/$contig.lft \
+	-maxN=500000
+    end
+
+    ssh kk
+    cd hg16
+    mkdir RMRun6XY
+    rm -f RMRun6XY/RMJobs
+    touch RMRun6XY/RMJobs
+	# use: foreach d ( ?{,?} )  for everything
+   foreach d ( {6,X,Y} )
+     foreach c ( $d/N{T,G}_*/N{T,G}_*_*.fa )
+        set f = $c:t
+        set cc = $c:h
+        set contig = $cc:t
+        echo /cluster/store4/gs.17/build34/jkStuff/RMHuman \
+   		/cluster/store4/gs.17/build34/${d}/${contig} $f \
+   '{'check out line+ /cluster/store4/gs.17/build34/${d}/${contig}/$f.out'}' \
+          >> RMRun6XY/RMJobs
+      end
+    end
+# Checking finished jobsCompleted: 731 of 731 jobs
+# CPU time in finished jobs:    5306782s   88446.36m  1474.11h   61.42d  0.168 y
+# IO & Wait Time:                 35192s     586.54m     9.78h    0.41d  0.001 y
+# Average job time:                7308s     121.80m     2.03h    0.08d
+# Longest job:                    10067s     167.78m     2.80h    0.12d
+# Submission to last job:         10084s     168.07m     2.80h    0.12d
+
+    #- Lift up the split-contig .out's to contig-level .out's
+    ssh eieio
+    cd ~/hg16
+    foreach d ( {6,X,Y}/N{T,G}_* )
+        cd $d
+        set contig = $d:t
+        liftUp $contig.fa.out $contig.lft warn ${contig}_?{,?}.fa.out 
+        cd ../..
+    end
+
+hgLoadOut hg16 6/*.fa.out X/*.fa.out Y/*.fa.out
+
+
 # REPEAT MASKING (DONE - 2003-07-25 - Hiram)
     # Split contigs, run RepeatMasker, lift results
     # Notes: 
@@ -283,7 +342,7 @@ exit; # don't actually run this like a script :)
     foreach d (../contigs/NT_* )
       set contig = $d:t
 	echo "splitting $contig"
-      faSplit size ../contigs/$contig 500000 split/${contig}_ \
+      faSplit size ../contigs/$contig 500000 split/${contig}/${contig}_ \
 	-lift=split/$contig.lft -maxN=500000
     end
     #	There are two NG_* files, these were missed in the main run.
@@ -360,7 +419,7 @@ if (-e /tmp/hg16/$2/$2.tbl) /bin/cp /tmp/hg16/$2/$2.tbl ./
 # although these were never used and were not produced in this hg16
 # sequence.  I took a look at the script and it was set to ONLY move
 # *.align files.  I reset it to move .* files.
-# Edit script first!  (This note I believe was from Matt.  Looks like
+# Edit script first!
 # This copies lft/out/align files from the flat dir structure we were forced to use at first.
 # This is a one-time only step.
     /cluster/bin/scripts/distNcbiCtgOut contigOut/split .
@@ -505,7 +564,7 @@ rmdir --ignore-fail-on-non-empty /tmp/$outputFN
       -sqlTable=$HOME/kent/src/hg/lib/simpleRepeat.sql
 #	stringTab = 0
 #	Reading simpleRepeat.bed
-#	Loaded 625197 elements
+#	Loaded 627376 elements
 #	Sorted
 #	Saving bed.tab
 #	Loading hg16
@@ -589,11 +648,11 @@ rmdir --ignore-fail-on-non-empty /tmp/$outputFN
     # reference /cluster/bin instead of ~kent/bin
 
     #- Soft-mask (lower-case) the contig and chr .fa's
-    ./jkStuff/makeFaMasked.sh > maFaMasked.out 2>&1
+    tcsh ./jkStuff/makeFaMasked.sh > maFaMasked.out 2>&1
     #- Make hard-masked .fa.masked files as well:
-    ./jkStuff/makeHardMasked.sh > maHardMasked.out 2>&1
+    tcsh ./jkStuff/makeHardMasked.sh > maHardMasked.out 2>&1
     #- Rebuild the nib, mixedNib, maskedNib files:
-    ./jkStuff/makeNib.sh > maNib.out 2>&1
+    tcsh ./jkStuff/makeNib.sh > maNib.out 2>&1
 
     # Make symbolic links from /gbdb/hg16/nib to the real nibs.
     ssh hgwdev
@@ -607,18 +666,16 @@ rmdir --ignore-fail-on-non-empty /tmp/$outputFN
     hgNibSeq -preMadeNib hg16 /gbdb/hg16/nib ?{,?}/chr?{,?}{,_random}.fa
     echo "select chrom,size from chromInfo" | hgsql -N hg16 > chrom.sizes
 
-    # XXXX Done to here - 2003-07-27 01:10
-
     # Copy the masked contig fa to /iscratch and /scratch:
     ssh kkr1u00
     rm -rf /iscratch/i/gs.17/build34/trfFa
     mkdir -p /iscratch/i/gs.17/build34/trfFa
-    cp -p ~/hg16/?{,?}/NT_*/NT_??????.fa /iscratch/i/gs.17/build34/trfFa
+    cp -p ~/hg16/?{,?}/N{T,G}_*/N{T,G}_??????.fa /iscratch/i/gs.17/build34/trfFa
     ~kent/bin/iSync
     ssh kkstore
     rm -rf /scratch/hg/gs.17/build34/trfFa
     mkdir -p /scratch/hg/gs.17/build34/trfFa
-    cp -p ~/hg16/?{,?}/NT_*/NT_??????.fa /scratch/hg/gs.17/build34/trfFa
+    cp -p ~/hg16/?{,?}/N{T,G}_*/N{T,G}_??????.fa /scratch/hg/gs.17/build34/trfFa
 
 
 # O+O: ASSEMBLY [GOLD], GAP, COVERAGE, MAP CONTIGS TRACKS (DONE - 2003-07-27)
