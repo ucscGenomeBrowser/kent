@@ -30,7 +30,7 @@
 #include "liftOverChain.h"
 #include "grp.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.192 2004/07/13 14:35:05 baertsch Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.193 2004/07/13 18:08:09 baertsch Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
@@ -3162,7 +3162,7 @@ char **row;
 struct axtInfo *aiList = NULL, *ai;
 char query[256];
 
-sprintf(query, "select * from axtInfo where species = '%s' and chrom = '%s'",
+sprintf(query, "select * from axtInfo where species = '%s' and chrom = '%s' order by sort",
 	otherDb, hDefaultChrom());
 /* Scan through axtInfo table, loading into list */
 sr = sqlGetResult(conn, query);
