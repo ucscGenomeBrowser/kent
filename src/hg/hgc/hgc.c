@@ -7608,7 +7608,6 @@ for(se=seList;se!=NULL;se=se->next)
 printf("</table>\n");
 }
 
-
 struct bed *bedWScoreLoadByChrom(char *table, char *chrom, int start, int end)
 {
 struct sqlConnection *conn = hAllocConn();
@@ -7616,10 +7615,27 @@ struct sqlResult *sr = NULL;
 struct bed *bedWS, *bedWSList = NULL;
 char **row;
 int rowOffset;
-sr = hRangeQuery(conn,table,seqName,winStart,winEnd,NULL, &rowOffset);
+char query[256];
+struct hTableInfo *hti = hFindTableInfo(seqName, table);
+if(hti == NULL)
+    errAbort("Can't find table: %s", seqName);
+else if(hti && sameString(hti->startField, "tStart"))
+    snprintf(query, sizeof(query), "select qName,tStart,tEnd from %s where tName='%s' and tStart < %u and tEnd > %u", 
+	     table, seqName, winEnd, winStart);
+else if(hti && sameString(hti->startField, "chromStart"))
+    snprintf(query, sizeof(query), "select name,chromStart,chromEnd from %s where chrom='%s' and chromStart < %u and chromEnd > %u", 
+	     table, seqName, winEnd, winStart);
+else
+    errAbort("%s doesn't have tStart or chromStart");
+
+sr = sqlGetResult(conn, query);
 while((row = sqlNextRow(sr)) != NULL)
     {
-    bedWS = bedLoad12(row+rowOffset);
+    AllocVar(bedWS);
+    bedWS->name = cloneString(row[0]);
+    bedWS->chromStart = sqlUnsigned(row[1]);
+    bedWS->chromEnd = sqlUnsigned(row[2]);
+    bedWS->chrom = cloneString(seqName);
     slAddHead(&bedWSList, bedWS);
     }
 slReverse(&bedWSList);
@@ -7627,7 +7643,6 @@ sqlFreeResult(&sr);
 hFreeConn(&conn);
 return bedWSList;
 }
-
 
 void doSageDataDisp(char *tableName, char *itemName, struct trackDb *tdb) 
 {
@@ -8427,7 +8442,7 @@ else if (sameWord(track, "snpTsc") || sameWord(track, "snpNih"))
     {
     doSnp(tdb, item);
     }
-else if (sameWord(track, "uniGene_2"))
+else if (sameWord(track, "uniGene_2") || sameWord(track, "uniGene"))
     {
     doSageDataDisp(track, item, tdb);
     }
