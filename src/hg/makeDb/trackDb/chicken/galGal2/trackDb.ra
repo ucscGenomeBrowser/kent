@@ -158,7 +158,7 @@ color 50,50,50
 type bed 4 +
 
 track webbNonExonic
-shortLabel NonExonic
+shortLabel Non-Exonic
 longLabel Putative Non-Exonic Regions Conserved with Human
 group x
 priority 130
@@ -246,7 +246,7 @@ exonArrows on
 
 track rnaGene
 shortLabel RNA Genes
-longLabel Non-coding RNA Genes
+longLabel Non-Coding RNA Genes
 group genes
 priority 52
 visibility hide
@@ -345,10 +345,6 @@ searchType genePred
 shortCircuit 1
 termRegex (UM|GBC|GBP|HDG|IG|MG|LA|HC)\.[[:alnum:]._]+
 searchPriority 50
-
-searchTable xenoRefGene
-searchType refGene
-searchPriority 1
 
 searchTable ensGene
 searchType genePred
