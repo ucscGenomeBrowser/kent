@@ -487,7 +487,7 @@ visibility dense
 color 100,50,0
 altColor 255,240,200
 spectrum on
-type psl est
+type psl .
 
 
 track avidUnique
