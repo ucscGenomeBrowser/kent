@@ -2962,3 +2962,118 @@ LOAD SNP DETAILS (Done.  Daryl Thomas; February 18, 2004)
     # remove temp files
     # rm dbSnpRs*
 
+# ECORES FROM GENOSCOPE [in progress, hartera, 2004-03-24]
+# download data from  http://www.genoscope.cns.fr/externe/tetraodon/Data3/ecores# ecotigRF - ecores on Rat, genome conserved with Fugu
+# ecotigRT - ecores on Rat, genome conserved with Tetraodon
+                                                                                
+    ssh hgwdev
+    mkdir /cluster/data/rn3/bed/Ecores/
+    # add parse_ecotig.pl to this directory
+                                                                                
+# FUGU
+    mkdir /cluster/data/rn3/bed/Ecores/fugu
+    cd /cluster/data/rn3/bed/Ecores/fugu/
+                                                                                
+    # download data for ecotigRF to this directory
+    # parse ecotig files to produce a bed format file
+    perl ../parse_ecotig.pl < ecotigRF > ecotigRF.bed
+                                                                                
+    # change from upper to lower case for "CHR"
+    perl -pi.bak -e 's/CHR/chr/g' ecotigRF.bed
+                                                                                
+    # NEED TO LOAD BED FILE INTO DATABASE                                                                            
+# TETRAODON
+    mkdir /cluster/data/rn3/bed/Ecores/tetraodon
+    cd /cluster/data/rn3/bed/Ecores/tetraodon/
+                                                                                
+    # download data for ecotigHT to this directory
+    # parse ecotig files to produce a bed format file
+    perl ../parse_ecotig.pl < ecotigRT > ecotigRT.bed
+    # change from upper to lower case for "CHR"
+    perl -pi.bak -e 's/CHR/chr/g' ecotigRT.bed
+
+    hgLoadBed -tab hg16 ecoresTetraodon ecotigRT.bed
+                                                                                
+    # clean up
+    rm *.bak
+                                                                                
+    # add entries in kent/src/hg/makeDb/trackDb/rat/rn3/trackDb.ra
+    # add html for details pages to this directory:
+    # ecoresFugu.html and ecoresTetraodon.html
+
+# Affymetrix RAE230 GeneChip track - affyRAE230
+# [DONE, hartera, 2003-03-26]
+
+    mkdir /projects/compbio/data/microarray/affyRat
+    # Download RAE230A and RAE230B consensus sequences from Affymetrix web site
+    # http://www.affymetrix.com/support/technical/byproduct.affx?product=rae230
+
+    # check for duplicate probes: 100 from 136745_at to 1367551_a_at 
+    # remove "consensus:" and ";" from FASTA headers to shorten probeset 
+    # names for database 
+   
+    sed -e 's/consensus://' RAE230A_consensus | sed -e 's/;/ /' > RAE230_all.fa
+    sed -e 's/consensus://' RAE230B_consensus | sed -e 's/;/ /' >> RAE230_all.fa
+
+    # copy sequences to a directory visible on kkr1u00
+                                                                                
+    cp /projects/compbio/data/microarray/affyRat/RAE230_all.fa /cluster/bluearc/affy/
+
+    # Set up cluster job to align RAE230 consensus sequences to rn3
+    ssh kkr1u00
+    cd /cluster/data/rn3/bed
+    mkdir affyRat
+    cd affyRat
+    mkdir -p /iscratch/i/affy 
+    cp /cluster/bluearc/affy/RAE230_all.fa /iscratch/i/affy
+    iSync
+
+    ssh kk
+    cd /cluster/data/rn3/bed/affyRat
+    ls -1 /iscratch/i/affy/RAE230_all.fa > affy.lst
+    ls -1 /scratch/rat/rn3/trfFa/ > allctg.lst
+
+    echo '#LOOP\n/cluster/bin/i386/blat -fine -mask=lower -minIdentity=95 -ooc=/scratch/hg/h/11.ooc  /scratch/rat/rn3/trfFa/$(path1) $(path2) {check out line+ psl/$(root1)_$(root2).psl}\n#ENDLOOP' > template.sub
+
+    gensub2 allctg.lst affy.lst template.sub para.spec
+    mkdir psl
+    para create para.spec
+
+    # Actually do the job with usual para try/check/push/time etc.
+# para time 2004-03-25
+#Completed: 591 of 591 jobs
+#CPU time in finished jobs:      17786s     296.43m     4.94h    0.21d  0.001 y
+#IO & Wait Time:                  5807s      96.79m     1.61h    0.07d  0.000 y
+#Average job time:                  40s       0.67m     0.01h    0.00d
+#Longest job:                      104s       1.73m     0.03h    0.00d
+#Submission to last job:           260s       4.33m     0.07h    0.00d
+
+
+    # Do sort, best in genome filter, and convert to chromosome coordinates
+    # to create affyRAE230.psl
+    pslSort dirs raw.psl tmp psl
+
+    # only use alignments that cover 30% of sequence and have at least 
+    # 95% identity in aligned region. minAli = 0.97 too high. 
+    # low minCover as a lot of n's in these sequences
+    pslReps -minCover=0.3 -sizeMatters -minAli=0.95 -nearTop=0.005 raw.psl contig.psl /dev/null
+    liftUp affyRAE230.psl ../../jkStuff/liftAll.lft warn contig.psl
+    
+    # shorten names in psl file
+    sed -e 's/RAE230//' affyRAE230.psl > affyRAE230.psl.bak
+    mv affyRAE230.psl.bak affyRAE230.psl
+    
+    # load track into database
+   
+    hgLoadPsl rn3 affyRAE230.psl
+
+    # Add consensus sequences for RAE230
+    # Copy sequences to gbdb is they are not there already
+    mkdir -p /gbdb/hgFixed/affyProbes
+    cd /gbdb/hgFixed/affyProbes
+    ln -s /projects/compbio/data/microarray/affyRat/RAE230_all.fa .
+   
+    hgLoadSeq -abbr=RAE230 rn3 /gbdb/hgFixed/affyProbes/RAE230_all.fa
+   
+    # Clean up    
+    rm -r psl tmp err batch.bak contig.psl raw.psl seq.tab psl.tab 
