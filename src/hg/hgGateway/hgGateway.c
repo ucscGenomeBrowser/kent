@@ -53,7 +53,9 @@ cgiMakeButton("Submit", "Submit");
 cartSetString(cart, "db", db);
 printf("</CENTER>");
 
-if (isHuman)
+//if (isHuman)
+// TEMPORARY
+if (TRUE)
     {
     puts(
 "<P>A genome position can be specified by the accession number of a "
