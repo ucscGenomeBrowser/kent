@@ -9,4 +9,4 @@ O = pslToXa.o
 
 pslToXa: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/pslToXa $O $(MYLIBS) $L
-	strip $(HOME)/bin/$(MACHTYPE)/pslToXa
+#	strip $(HOME)/bin/$(MACHTYPE)/pslToXa
