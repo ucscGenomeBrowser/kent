@@ -15,7 +15,7 @@
 #include "jobResult.h"
 #include "verbose.h"
 
-static char const rcsid[] = "$Id: para.c,v 1.57 2004/12/14 19:56:00 hiram Exp $";
+static char const rcsid[] = "$Id: para.c,v 1.58 2004/12/14 23:36:58 hiram Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -1667,10 +1667,9 @@ if (timedCount > 0)
 	    {
 	    int jobsInBatch = db->jobCount;
 	    int jobsToRun = jobsInBatch - timedCount;
-	    int jobsToFinish = runningCount + jobsToRun;
-	    double timeMultiple = (double)jobsToFinish / (double)runningCount;
-	    verbose(2, "inBatch: %d, toRun: %d, toFinish: %d, multiple: %.3f\n",
-		jobsInBatch, jobsToRun, jobsToFinish, timeMultiple);
+	    double timeMultiple = (double)jobsToRun / (double)runningCount;
+	    verbose(2, "inBatch: %d, toRun: %d, multiple: %.3f\n",
+		jobsInBatch, jobsToRun, timeMultiple);
 	    printTimes("Estimated complete:",
 		timeMultiple*totalWall/timedCount, FALSE);
 	    }
