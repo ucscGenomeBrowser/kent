@@ -32,7 +32,7 @@ type wig 0 50
 
 track gc20KBase
 shortLabel GC Percent
-longLabel GC Percent in 20K Base Windows
+longLabel GC Percent in 5 Base Windows
 group map
 priority 23.5
 visibility hide
