@@ -96,7 +96,6 @@ gffGroupLines(gff);
 printf("  %d groups %d seqs %d sources %d feature types\n",
     slCount(gff->groupList), slCount(gff->seqList), slCount(gff->sourceList),
     slCount(gff->featureList));
-printf("  %d ungrouped lines\n", slCount(gff->groupList));
 
 /* Convert from gffGroup to genePred representation. */
 for (group = gff->groupList; group != NULL; group = group->next)
