@@ -1,6 +1,9 @@
 #This describes how to lift annotations from one assembly to another.
 #It works best if the assemblies are relatively close.
 #
+# NB - This instructions are not tested yet.  It's best to
+# run them one at a time and check results for now. 
+#
 # I. Preliminaries.  Set up some environment variables to point to
 # data sources and a temporary dir with lots of space:
 set tempDir = /mnt/hg12
@@ -16,7 +19,7 @@ ssh kk
 mkdir lift raw psl blatRun 
 mkdir /scratch/split
 foreach i (1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 X Y M)
-    faSplit -lift=lift/chr$i.lft size ~/lastOo/$i/chr$i.fa -oneFile 3000 /scratch/split/chr$i
+    faSplit -lift=lift/chr$i.lft size ~/oo/$i/chr$i.fa -oneFile 3000 /scratch/split/chr$i
 end
 #and sync the cluster local scratch disks.
 
@@ -24,9 +27,9 @@ cd blatRun
 echo '#LOOP' > gsub
 echo 'blat $(path1) $(path2) {check out line+ ../raw/$(root1)_$(root2).psl} -tileSize=12 -ooc=$HOME/hg/h/12r.ooc -minScore=100 -minIdentity=98 -fastMap' >> gsub
 echo '#ENDLOOP' >> gsub
-ls -1S /scratch/split/*.fa > old.lst
-ls -1S /scratch/hg/hg13/mixedNib/*.nib > new.lst
-gensub2 new.lst old.lst gsub spec
+ls -1S /scratch/split/*.fa > new.lst
+ls -1S /scratch/hg/hg12/mixedNib/*.nib > old.lst
+gensub2 old.lst new.lst gsub spec
 para make spec
 
 #Wait for this job to finish.  Then
@@ -42,7 +45,7 @@ rm -r raw
 mkdir chainRun chainRaw chain
 cd chainRun
 echo '#LOOP' > gsub
-echo 'axtChain -psl $(path1) /scratch/hg/gs.14/build31/chromTrfMixedNib /cluster/store3/gs.13/build30/mixedNib {check out line+ ../chainRaw/$(root1).chain}' >> gsub
+echo 'axtChain -psl $(path1) /cluster/store3/gs.13/build30/mixedNib /scratch/hg/gs.14/build31/chromTrfMixedNib {check out line+ ../chainRaw/$(root1).chain}' >> gsub
 echo '#ENDLOOP' >> gsub
 ls -1S ../psl/*.psl > in.lst
 gensub2 in.lst single gsub spec
@@ -64,7 +67,7 @@ foreach i (*.chain)
     netChainSubset ../net/$i:r.net $i ../over/$i
     echo done $i
 end
-cat ../over/*.chain | chainSwap stdin ~/oo/over.chain
+cat ../over/*.chain ~/oo/over.chain
 
 # V - Lifting Ensembl:
 # Get onto hgwdev

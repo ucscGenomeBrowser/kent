@@ -163,7 +163,10 @@ tell the browser to use trackDb_user instead of trackDb
 to avoid conflicts with other engineers code.   
 
 After the 'make alpha' the browser should show your track.
-Congratulations if you've made it this far.
+Congratulations if you've made it this far.  See also
+http://www.soe.ucsc.edu/~sugnet/doc/trackHowto/browserTalk.pdf
+for Charles Sugnet's description of how to add a track including
+some code customization.
 
 -Jim Kent   Feb 14, 2003.
 
