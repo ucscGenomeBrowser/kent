@@ -11,8 +11,8 @@
  *	Color chains by:
  */
 #define CHROM_COLORS "Chromosome"
-#define SCORE_COLORS "Score"
-#define NO_COLORS "No color"
+#define SCORE_COLORS "Normalized Score"
+#define NO_COLORS "Black"
 
 extern enum chainColorEnum chainFetchColorOption(struct trackDb *tdb,
         char **optString);
