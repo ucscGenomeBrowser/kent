@@ -171,28 +171,37 @@
 <!--
 		    <FONT FACE="courier" SIZE=3><B>16 July 2004  - Genome Browser for Build 33 Mouse Assembly</B></FONT><BR>
 		    <P>
-		    [NOTE: This news item is still under construction - waiting
-		    on information from Deanna.]
-		    <P>
 		    The latest mouse assembly -- Build 33 from NCBI (UCSC version
 		    mm5) -- is now
 		    available via the UCSC Genome Browser and Blat server. This
-		    assembly is a composite version in which phase 3 high 
-		    throughput genome sequence (HTGS) was merged with the
-		    Mouse Genome Sequencing Consortium v3 whole genome shotgun
-		    assembly (MGSCv3). The assembly was driven by a combined
-		    TPF created by Richa Agarwala that put the finished sequence
-		    into the context of the MGSCv3 assembly. The assembly was
-		    manually curated in a few places.
-		    The UCSC mm5 assembly contains only the reference 
-		    strain C57BL/6J.
+		    assembly is a composite version in which phase 3 High 
+		    Throughput Genome Sequence (HTGS) was merged with the
+		    Mouse Genome Sequencing Consortium v3 Whole Genome Shotgun
+		    Assembly (MGSCv3). The assembly was performed by NCBI using
+		    a &quot;combined&quot; tiling path that was created 
+		    automatically for the most part, but was manually curated 
+		    in places. This facilitated the placement of finished 
+		    sequence in the context of the MGSCv3 assembly. Draft 
+		    sequence was not included in this build:  the slight 
+		    increase in coverage gained by using this would have been
+		    offset by the increase in build errors. 
+		    The UCSC mm5 assembly contains only the reference strain 
+		    C57BL/6J. 
 		    <P>
-		    The mm5 assembly includes ??? gigabases of sequence -- ??? 
-		    Gb of which is finished -- contained in chromsomes 1-19, X, 
-		    Y, M (mitochondrial DNA) and Un (unmapped clone contigs). We 
-		    estimate that ????? percent of the mouse genome is present in 
-		    the assembly. For more information about this version, see 
-		    the NCBI assembly notes and Build 33 statistics. 
+		    The mm5 assembly includes approximately 2.6 gigabases of 		 	      sequence 
+<!-- -- ???  Gb of which is finished -- 
+-->
+		    contained in chromsomes 1-19, X, 
+		    Y, M (mitochondrial DNA) and Un (unmapped clone contigs). 
+		    Chromosome 11 is finished in this assembly; the Sanger 
+		    Institute has provided a corresponding agp file. 
+		    The whole genome N50 for Build 33 is 22.3 Mb, in comparison
+		    to 17.7 Mb for the previous build. More information about 
+		    this version will be available soon in the NCBI
+		    <A HREF="http://www.ncbi.nlm.nih.gov/genome/seq/NCBIContigInfo.html"	
+	            TARGET=_blank>assembly notes</A>and 
+		    <A HREF="http://www.ncbi.nlm.nih.gov/mapview/stats/BuildStats.cgi?taxid=10090&build=33&ver=1"
+		    TARGET=_blank>Build 33 statistics</A>. 
 		    <P>
 		    The mm5 sequence and annotation data may be downloaded from 
 		    the Genome Browser 
@@ -207,13 +216,13 @@
 		    <FONT FACE="courier" SIZE=3><B>15 July 2004  - <em>C. intestinalis</em> Genome Browser Released</B></FONT><BR>
 		    <P>
 		    The v1.0 <em>C. intestinalis</em> draft assembly from the
-		    US DOE Joint Genome Institute (JGI) is now available for study
-		    using the UCSC Genome Browser and Blat server. 
+		    US DOE Joint Genome Institute is now available for study 
+		    using the UCSC Genome Browser and Blat server (UCSC database
+		    ci1). 
 		    <P>
-		    This assembly (UCSC version ci1) was generated using a whole 
-		    genome shotgun 
-		    strategy constructed with JGI assembler (JAZZ) paired-end 
-		    sequencing reads at a coverage of 8.2X. The assembly contains 
+		    The whole genome shotgun assembly was constructed with the 
+		    JGI assembler (JAZZ) paired-end 
+		    sequencing reads at a coverage of 8.2X. The draft contains 
 	    	    116.7 million bp of nonrepetitive sequence in 2,501 scaffolds 
 		    greater than 3 kb. 60 Mbp of this has been assembled into 
 		    117 scaffolds longer than 190 Kbp, and 85% of the assembly 
@@ -242,12 +251,11 @@
 		    individuals who contributed to this release. 
 		    <P>
 		    Many thanks to the JGI and their collaborators for providing
-		    the v1.0 sequence. We'd also like to thank Colin Dewey and
-		    JGI for contributing gene prediction annotations for this 
-		    initial release. The ci1 Genome Browser was produced by
+		    the v1.0 sequence and annotations.  The ci1 Genome Browser 
+		    was produced by
 		    Brian Raney, Galt Barber, Heather Trumbower, Robert Kuhn,
 		    Donna Karolchik and the Genome Browser sysadmin team - 
-		    Patrick Gavin, Jorge Garcia, and Paul Tatarksky. We'd also 
+		    Patrick Gavin, Jorge Garcia, and Paul Tatarsky. We'd also 
 		    like to thank Tom Pringle for his technical input and Mark
 		    Diekhans for his work on the incremental updates for this
 		    release.
