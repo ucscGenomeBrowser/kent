@@ -1369,3 +1369,17 @@ altColor 255,220,100
 spectrum on
 type bed 6
 
+track HInvGeneMrna
+shortLabel H-INV mRNA
+longLabel H-Invitational Gene mRNA Alignment
+group rna
+priority 67.5
+visibility hide
+color 0,100,100
+type psl .
+
+searchTable HInvGeneMrna
+searchMethod exact
+searchType psl
+termRegex HIT[0-9]{9,9}
+searchPriority 50
