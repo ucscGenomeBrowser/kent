@@ -104,7 +104,6 @@ exit; # don't actually run this like a script :)
     cvs add sacCer/sacCer1
     cvs commit sacCer
 
-
 # MAKE GCPERCENT (DONE 2003-11-24 - Jim)
      ssh hgwdev
      mkdir /cluster/data/sacCer1/bed/gcPercent
@@ -175,8 +174,11 @@ exit; # don't actually run this like a script :)
     echo 'load data local infile "symbol.txt" \
           into table sgdToName;' | hgsql sacCer1
     hgsql sacCer1 < $HOME/kent/src/hg/lib/sgdDescription.sql
-    echo 'load data local infile "notes.txt" \
+    echo 'load data local infile "descriptions.txt" \
           into table sgdDescription;' | hgsql sacCer1
+    hgsql sacCer1 < $HOME/kent/src/hg/lib/sgdOtherDescription.sql
+    echo 'load data local infile "notes.txt" \
+          into table sgdOtherDescription;' | hgsql sacCer1
 
 # ADDING SWISSPROT ACCESSION TO KNOWN GENES (DONE 2003-11-25 Jim)
     ssh hgwdev
