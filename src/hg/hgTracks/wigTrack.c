@@ -11,7 +11,7 @@
 #include "wiggle.h"
 #include "scoredRef.h"
 
-static char const rcsid[] = "$Id: wigTrack.c,v 1.24 2003/11/13 00:21:15 hiram Exp $";
+static char const rcsid[] = "$Id: wigTrack.c,v 1.25 2004/01/09 22:11:50 hiram Exp $";
 
 /*	wigCartOptions structure - to carry cart options from wigMethods
  *	to all the other methods via the track->extraUiData pointer
@@ -45,14 +45,10 @@ struct wigItem
     {
     struct wigItem *next;
     int start, end;	/* Start/end in chrom (aka browser) coordinates. */
-    int grayIx;         /* Level of gray usually. */
     char *name;		/* Common name */
     char *db;		/* Database */
-    int orientation;	/* Orientation */
     int ix;		/* Position in list. */
     int height;		/* Pixel height of item. */
-    unsigned Max;      /* Maximum score in this block [0:127] */
-    unsigned Min;      /* Minimum score in this block [0:126] */
     unsigned Span;      /* each value spans this many bases */
     unsigned Count;     /* number of values to use */
     unsigned Offset;    /* offset in File to fetch data */
@@ -62,6 +58,8 @@ struct wigItem
     unsigned validCount;        /* number of valid data values in this block */
     double sumData;     /* sum of the data points, for average and stddev calc */
     double sumSquares;      /* sum of data points squared, for stddev calc */
+    double graphUpperLimit;	/* filled in by DrawItems	*/
+    double graphLowerLimit;	/* filled in by DrawItems	*/
     };
 
 static void wigItemFree(struct wigItem **pEl)
@@ -96,9 +94,9 @@ for (el = *pList; el != NULL; el = next)
  */
 static struct hash *trackSpans = NULL;	/* hash of hashes */
 
-#if ! defined(DEBUG)
+#if defined(DEBUG)
 /****           some simple debug output during development	*/
-static char dbgFile[] = "/tmp/wig.dbg";
+static char dbgFile[] = "../trash/wig.dbg";
 static boolean debugOpened = FALSE;
 static FILE * dF;
 
@@ -284,10 +282,8 @@ while ((row = sqlNextRow(sr)) != NULL)
 	AllocVar(wi);
 	wi->start = wiggle->chromStart;
 	wi->end = wiggle->chromEnd;
-	wi->grayIx = grayInRange(wiggle->score, 0, 127);
 	/*	May need unique name here some day XXX	*/
 	wi->name = tg->shortLabel;
-	wi->orientation = orientFromChar(wiggle->strand[0]);
 	fileNameSize = strlen("/gbdb//wib/") + strlen(database)
 	    + strlen(wiggle->File) + 1;
 	File = (char *) needMem((size_t)fileNameSize);
@@ -298,8 +294,6 @@ while ((row = sqlNextRow(sr)) != NULL)
 	wi->File = cloneString(File);
 	freeMem(File);
 
-	wi->Max = wiggle->score;
-	wi->Min = wiggle->Min;
 	wi->Span = wiggle->Span;
 	wi->Count = wiggle->Count;
 	wi->Offset = wiggle->Offset;
@@ -585,6 +579,19 @@ if (autoScale == wiggleScaleAuto)
     }
 graphRange = graphUpperLimit - graphLowerLimit;
 
+/*
+ *	We need to put the graphing limits back into the items
+ *	so the LeftLabels routine can find these numbers.
+ *	This may seem like overkill to put it into each item but
+ *	this will become necessary when these graphs stack up upon
+ *	each other in a multiple item display, each one will have its
+ *	own graph.
+ */
+for (wi = tg->items; wi != NULL; wi = wi->next)
+    {
+	wi->graphUpperLimit = graphUpperLimit;
+	wi->graphLowerLimit = graphLowerLimit;
+    }
 /*	right now this is a simple pixel by pixel loop.  Future
  *	enhancements will smooth this data and draw boxes where pixels
  *	are all the same height in a run.
@@ -608,20 +615,22 @@ for (x1 = 0; x1 < width; ++x1)
 	 *	is from (overallLowerLimit - (overallRange * 0.1)) to
 	 *	The upper limit, not needed here, would be
 	 *	(overallLowerLimit + (overallRange * 1.2))
-	 */
-	/*	See if the zero line is between the limits
+	 *
+	 *	See if the zero line is between the limits
 	 *	If it is, we need to decide which point to draw.
 	 *	We want to draw the one that is farther from zero
 	 *	(we could draw them both if there is more than one data
 	 *	value here, show the high and the low)
-	 */
-	/*	THIS IS NOT DONE YET - IT WILL NOT DO negative values
- 	 *	CORRECTLY !
-	 */
-	/*	Assume .max is the data value to draw,  if the .min is
+	 *
+	 *	Assume .max is the data value to draw,  if the .min is
  	 *	farther away from zero, then it is the one to draw
 	 */
 
+	/*	I don't like this section of code here.
+	 *	This is much too complicated for a simple matter
+	 *	of scaling.  This should be a lot easier here.
+	 *	Too many if() statements.
+	 */
 	dataValue = preDraw[preDrawIndex].max;
 	if (fabs(0.0 - preDraw[preDrawIndex].min) >
 		fabs(0.0 - preDraw[preDrawIndex].max) ) {
@@ -636,58 +645,45 @@ for (x1 = 0; x1 < width; ++x1)
 	y1 = yOff+boxTop;
 	if ( (0.0 > graphLowerLimit) && (0.0 < graphUpperLimit) )
 	    {
-		boxHeight = h * (fabs(dataValue) / graphRange);
-		if (boxHeight > h) boxHeight = h;
-		if (boxHeight < 1) boxHeight = 1;
-		if (dataValue > 0.0) {
-			boxTop =
-	(h * (graphUpperLimit/ graphRange));
-			boxTop -= boxHeight;
-			y1 = yOff+boxTop;
-		} else {
-			boxTop = h -
-			(h * (((0.0-graphLowerLimit) /
-				graphRange)));
-			y1 = yOff+boxTop + boxHeight;
+	    int maxBoxHeight;
+	    maxBoxHeight = h * (graphUpperLimit / graphRange);
+	    boxHeight = h * (fabs(dataValue) / graphRange);
+	    if (boxHeight > maxBoxHeight) boxHeight = maxBoxHeight;
+	    if (boxHeight > h) boxHeight = h;
+	    if (boxHeight < 1) boxHeight = 1;
+	    if (dataValue > 0.0)
+		{
+		boxTop = (h * (graphUpperLimit / graphRange));
+		boxTop -= boxHeight;
+		y1 = yOff+boxTop;
 		}
-	    } else if (graphUpperLimit < 0.0)
-	    {
-		boxHeight= h * ((graphUpperLimit-dataValue) / graphRange);
-		if (boxHeight > h) boxHeight = h;
-		if (boxHeight < 1) boxHeight = 1;
-		boxTop = 0;
+	    else
+		{
+		boxTop = h - (h * (((0.0-graphLowerLimit) / graphRange)));
 		y1 = yOff+boxTop + boxHeight;
+		}
 	    }
-	    if (boxTop > h-1) boxTop = h - 1;
-	    if (boxTop < 0) boxTop = 0;
+	else if (graphUpperLimit < 0.0)
+	    {
+	    boxHeight= h * ((graphUpperLimit-dataValue) / graphRange);
+	    if (boxHeight > h) boxHeight = h;
+	    if (boxHeight < 1) boxHeight = 1;
+	    boxTop = 0;
+	    y1 = yOff+boxTop + boxHeight;
+	    }
+	if (boxTop > h-1) boxTop = h - 1;
+	if (boxTop < 0) boxTop = 0;
 
-/*	drawing region here is from upper left (x1,yOff)
- *	with width of pixelsPerDataValue
- *	and height of h  (! Y axis is 0 at top ! -> h is at bottom)
- *	So, within those constraints, lets figure out where we want to
- *	draw a box, given a 'dataValue' score in range [0:MAX_WIG_VALUE]
- *	and our data scale of range [tg->minRange:tg->maxRange]
- *	with upper data scale limit of wigCart->maxY
- *	and lower data scale limit of wigCart->minY
- *
-		dY = (double) dataValue * dataScale;
-		dataPoint = wigCart->minY + dY;
-
-vgBox(v,x,y,width,height,color)
-
- */
 	if (vis == tvFull)
 	    {
 	    if (lineBar == wiggleGraphBar)
 		{
-		vgBox(vg, x1+xOff, yOff+boxTop,
-				1, boxHeight, drawColor);
+		vgBox(vg, x1+xOff, yOff+boxTop, 1, boxHeight, drawColor);
 		}
 	    else
 		{
 		vgBox(vg, x1+xOff, y1-1, 1, 3, drawColor);
 		}
-
 	    }	/*	vis == tvFull	*/
 	else if (vis == tvDense)
 	    {
@@ -697,41 +693,126 @@ vgBox(v,x,y,width,height,color)
 	    grayIndex = (dataValue/graphRange) * MAX_WIG_VALUE;
 			
 	    drawColor =
-shadesOfPrimary[grayInRange(grayIndex, 0, MAX_WIG_VALUE)];
+		shadesOfPrimary[grayInRange(grayIndex, 0, MAX_WIG_VALUE)];
 
 	    boxHeight = tg->lineHeight;
 	    vgBox(vg, x1+xOff, yOff, 1,
-			    boxHeight, drawColor);
+		boxHeight, drawColor);
 	    }	/*	vis == tvDense	*/
 	}	/*	if (preDraw[].count)	*/
     }	/*	for (x1 = 0; x1 < width; ++x1)	*/
 
-/*	Do we need to draw a horizontalGrid ?	*/
+/*	Do we need to draw a zero line ?
+ *	This is to be generalized in the future to allow horizontal grid
+ *	lines, perhaps user specified to indicate thresholds.
+ */
 if ((vis == tvFull) && (horizontalGrid == wiggleHorizontalGridOn))
     {
-    double yRange;
     int x1, x2, y1, y2;
     int gridLines = 2;
-    int drewLines = 0;
 
-    yRange = tg->maxRange - tg->minRange;
     x1 = xOff;
     x2 = x1 + width;
-    if (tg->lineHeight > 64)
-	gridLines = 4;
-    else if (tg->lineHeight > 32)
-	gridLines = 3;
-    for (y1 = yOff; y1 <= tg->lineHeight+yOff;
-		y1 += (int)((double)(tg->lineHeight-1)/(double)gridLines))
+
+    /*	Let's see if the zero line can be drawn	*/
+    if ( (0.0 <= graphUpperLimit) && (0.0 >= graphLowerLimit) )
 	{
+	int zeroOffset;
+	drawColor = vgFindColorIx(vg, 0, 0, 0);
+	zeroOffset = (int)((graphUpperLimit * tg->lineHeight) /
+			(graphUpperLimit - graphLowerLimit));
+	y1 = yOff + zeroOffset;
+	if (y1 >= (yOff + tg->lineHeight)) y1 = yOff + tg->lineHeight - 1;
 	y2 = y1;
-	++drewLines;
 	vgLine(vg,x1,y1,x2,y2,black);
 	}
+
     }	/*	drawing horizontalGrid	*/
 
 freeMem(preDraw);
 }	/*	wigDrawItems()	*/
+
+static void wigLeftLabels(struct track *tg, int seqStart, int seqEnd,
+	struct vGfx *vg, int xOff, int yOff, int width, int height,
+	boolean withCenterLabels, MgFont *font, Color color,
+	enum trackVisibility vis)
+{
+struct wigItem *wi;
+int fontHeight = tl.fontHeight+1;
+int centerOffset = 0;
+
+if (withCenterLabels)
+	centerOffset = fontHeight;
+
+/*	We only do Dense and Full	*/
+if( tg->visibility == tvDense)
+    {
+    vgTextRight(vg, xOff, yOff+centerOffset, width - 1, height-centerOffset,
+	tg->ixColor, font, tg->shortLabel);
+    }
+else if( tg->visibility == tvFull)
+    {
+    /* track label is centered in the whole region */
+    vgText(vg, xOff, yOff+(height/2)-(fontHeight/2), 
+	tg->ixColor, font, tg->shortLabel);
+    /*	Is there room left to draw the min, max ?	*/
+    if (height >= (3 * fontHeight))
+	{
+	double graphUpperLimit = -1.0e+300;
+	double graphLowerLimit = 1.0e+300;
+	char upper[128];
+	char lower[128];
+	char upperTic = '-';	/* as close as we can get with ASCII */
+			/* the ideal here would be to draw tic marks in
+ 			 * exactly the correct location.
+			 */
+	Color drawColor;
+	if (withCenterLabels)
+	    {
+	    centerOffset = fontHeight;
+	    upperTic = '_';	/*	this is correct	*/
+	    }
+	for (wi = tg->items; wi != NULL; wi = wi->next)
+	    {
+	    if (wi->graphUpperLimit > graphUpperLimit)
+		graphUpperLimit = wi->graphUpperLimit;
+	    if (wi->graphLowerLimit < graphLowerLimit)
+		graphLowerLimit = wi->graphLowerLimit;
+	    }
+	snprintf(upper, 128, "%g %c", graphUpperLimit, upperTic);
+	snprintf(lower, 128, "%g _", graphLowerLimit);
+	drawColor = tg->ixColor;
+	if (graphUpperLimit < 0.0) drawColor = tg->ixAltColor;
+	vgTextRight(vg, xOff, yOff, width - 1, fontHeight, drawColor,
+	    font, upper);
+	drawColor = tg->ixColor;
+	if (graphLowerLimit < 0.0) drawColor = tg->ixAltColor;
+	vgTextRight(vg, xOff, yOff+height-fontHeight, width - 1, fontHeight,
+	    drawColor, font, lower);
+	/*	Maybe zero can be displayed */
+	/*	It may overwrite the track label ...	*/
+	if ( (0.0 < graphUpperLimit) && (0.0 > graphLowerLimit) )
+	    {
+	    int zeroOffset;
+	    drawColor = vgFindColorIx(vg, 0, 0, 0);
+	    zeroOffset = centerOffset +
+		(int)((graphUpperLimit * (height - centerOffset)) /
+			(graphUpperLimit - graphLowerLimit));
+	    snprintf(lower, 128, "0 -" );
+	    /*	only draw zero if it is far enough away from the
+	     *	upper and lower labels.  You could also check here to
+	     *	see about avoiding the central text label.
+	     */
+	    if ((zeroOffset > (fontHeight*2)) &&
+		(zeroOffset < height-(fontHeight*2)) )
+		{
+	    	vgTextRight(vg, xOff, yOff+zeroOffset-(fontHeight/2),
+		    width - 1, fontHeight, drawColor, font, lower);
+	    	}
+	    }	/*	drawing a zero label	*/
+	}	/* if (height >= (3 * fontHeight))	*/
+    }	/*	if( tg->visibility == tvFull)	*/
+}	/* wigLeftLabels */
 
 /* Make track group for wig multiple alignment.
  *	WARNING ! - track->visibility is merely the default value
@@ -928,4 +1009,5 @@ track->subType = lfSubSample;     /*make subType be "sample" (=2)*/
 track->mapsSelf = TRUE;
 track->extraUiData = (void *) wigCart;
 track->colorShades = shadesOfGray;
+track->drawLeftLabels = wigLeftLabels;
 }	/*	wigMethods()	*/
