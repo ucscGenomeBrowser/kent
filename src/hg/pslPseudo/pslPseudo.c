@@ -31,9 +31,9 @@
 /* label for classification stored in pseudoGeneLink table */
 #define PSEUDO 1
 #define NOTPSEUDO -1
-#define BETTER -2
+#define EXPRESSED -2
 
-static char const rcsid[] = "$Id: pslPseudo.c,v 1.21 2004/07/16 23:04:41 baertsch Exp $";
+static char const rcsid[] = "$Id: pslPseudo.c,v 1.22 2004/07/17 00:10:46 baertsch Exp $";
 
 char *db;
 char *nibDir;
@@ -655,7 +655,7 @@ pg->axtScore = -1;
 pg->type = reason->string;
 
 
-if (pg->label == PSEUDO || pg->label == BETTER)
+if (pg->label == PSEUDO || pg->label == EXPRESSED)
     {
     pslTabOut(psl, pseudoFile);
     axt = pslToAxt(psl, qHash, tHash, fileCache);
@@ -1794,15 +1794,15 @@ if (pslList != NULL)
                     /* if overlap > 50 bases , then skip */
                     {
                     if (!quiet)
-                        printf("NO %s:%d-%d %s better blat mrna %s %d bases overlap %f %%\n",
+                        printf("NO %s:%d-%d %s expressed blat mrna %s %d bases overlap %f %%\n",
                                 psl->tName, psl->tStart, psl->tEnd, psl->qName,mrnaOverlap, 
                                 maxOverlap, (float)maxOverlap/(float)psl->qSize);
-                    dyStringAppend(reason,"better ");
+                    dyStringAppend(reason,"expressed ");
                     pg->overName = cloneString(mPsl->qName); 
                     pg->overStart = mPsl->tStart;
                     pg->overEnd = mPsl->tEnd;
                     strncpy(pg->overStrand, mPsl->strand , sizeof(pg->overStrand));
-                    pg->label = BETTER;
+                    pg->label = EXPRESSED;
                     outputLink(psl, pg, reason);
                     keepChecking = FALSE;
                     }
