@@ -190,6 +190,9 @@ boolean hTableExists2(char *table);
 boolean hTableExistsDb(char *db, char *table);
 /* Return TRUE if a table exists in db. */
 
+boolean hTableOrSplitExistsDb(char *db, char *table);
+/* Return TRUE if table (or a chrN_table) exists in db. */
+
 boolean hColExists(char *table, char *column);
 /* Return TRUE if a column exists in table. */
 

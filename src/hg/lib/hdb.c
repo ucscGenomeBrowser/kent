@@ -27,7 +27,7 @@
 #include "maf.h"
 #include "ra.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.170 2004/03/31 04:56:52 hiram Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.171 2004/03/31 07:31:46 angie Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
@@ -569,6 +569,23 @@ boolean hTableExists2(char *table)
 /* Return TRUE if a table exists in secondary database. */
 {
 return(hTableExistsDb(hGetDb2(), table));
+}
+
+boolean hTableOrSplitExistsDb(char *db, char *table)
+/* Return TRUE if a table exists in db. */
+{
+struct sqlConnection *conn = hAllocOrConnect(db);
+boolean exists;
+
+exists = sqlTableExists(conn, table);
+if (! exists)
+    {
+    char split[256];
+    safef(split, sizeof(split), "%s_%s", hDefaultChromDb(db), table);
+    exists = sqlTableExists(conn, table);
+    }
+hFreeOrDisconnect(&conn);
+return exists;
 }
 
 void hParseTableName(char *table, char trackName[128], char chrom[32])
