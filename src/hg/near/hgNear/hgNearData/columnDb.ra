@@ -156,6 +156,18 @@ protKey on
 itemUrl http://www.sanger.ac.uk/cgi-bin/Pfam/getacc?%s
 protDb proteins072003
 
+name superfamily
+shortLabel Superfamily
+longLabel Protein Superfamily Assignments
+priority 9.1
+visibility off
+type association knownToSuper
+queryFull select gene,superfamily from knownToSuper
+queryOne select superfamily,superfamily from knownToSuper where gene = '%s'
+invQueryOne select gene from knownToSuper where superfamily = %s
+itemUrl http://supfam.mrc-lmb.cam.ac.uk/SUPERFAMILY/cgi-bin/scop.cgi?sunid=%s
+weedDupes on
+
 name pdb
 shortLabel PDB
 longLabel Protein Data Bank
