@@ -112,6 +112,7 @@ UTIL_DIRS = \
 	fqToQa \
 	fqToQac \
 	fragPart \
+	gbGetEntries \
 	gbOneAcc \
 	gbToFaRa \
 	geneBounds \
