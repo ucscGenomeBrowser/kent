@@ -14,7 +14,7 @@
 #include "featureBits.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: intersect.c,v 1.10 2004/08/28 21:50:37 kent Exp $";
+static char const rcsid[] = "$Id: intersect.c,v 1.11 2004/09/10 03:42:49 hiram Exp $";
 
 /* We keep two copies of variables, so that we can
  * cancel out of the page. */
@@ -306,7 +306,6 @@ struct featureBits *fbList2 = NULL;
 struct bed *bed;
 Bits *bits2;
 int chromSize = hChromSize(region->chrom);
-int regionSize = region->end - region->start;
 boolean isBpWise = (sameString("and", op) || sameString("or", op));
 struct bed *intersectedBedList = NULL;
 
@@ -320,6 +319,7 @@ if ((!sameString("any", op)) &&
     {
     errAbort("Invalid value \"%s\" of CGI variable %s", op, hgtaIntersectOp);
     }
+
 
 /* Load intersecting track into a bitmap. */
 fbList2 = fbFromBed(table2, hti2, bedList2, region->start, region->end,
