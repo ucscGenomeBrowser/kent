@@ -9478,12 +9478,16 @@ return track;
 void loadFromTrackDb(struct track **pTrackList)
 /* Load tracks from database, consulting handler list. */
 {
-struct trackDb *tdb, *tdbList = hTrackDb(chromName);
+struct trackDb *tdb, *tdbList = NULL;
 struct track *track;
 TrackHandler handler;
 
+fprintf(stderr, "2828282828282828282\n");
+tdbList = hTrackDb(chromName);
+fprintf(stderr, "29292929292929292929\n");
 for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
     {
+    fprintf(stderr, "TABLE: %s\n", tdb->tableName);
     track = trackFromTrackDb(tdb);
     track->hasUi = TRUE;
     handler = lookupTrackHandler(tdb->tableName);
@@ -9805,7 +9809,11 @@ if (sameString(database, "hg12"))
     hPuts("<TD ALIGN=CENTER>");
     printEnsemblAnchor();
     hPrintf("%s</A></TD>", wrapWhiteFont("Ensembl"));
-    hPrintf("<TD ALIGN=CENTER><A HREF=\"http://www.ncbi.nlm.nih.gov/cgi-bin/Entrez/maps.cgi?CHR=%s&BEG=%d&END=%d\" TARGET=_blank>",
+    }
+
+if (sameString(database, "hg13"))
+    {
+    hPrintf("<TD ALIGN=CENTER><A HREF=\"http://www.ncbi.nlm.nih.gov/mapview/maps.cgi?CHR=%s&BEG=%d&END=%d\" TARGET=_blank>",
     	skipChr(chromName), winStart+1, winEnd);
     hPrintf("%s</A></TD>", wrapWhiteFont("Map View"));
     }
@@ -9913,7 +9921,7 @@ if (psOutput != NULL)
 hPrintf("<FORM ACTION=\"%s\" NAME=\"TrackForm\">\n\n", hgTracksName());
 cartSaveSession(cart);
 
-
+fprintf(stderr, "151515151515151515\n");
 /* See if want to include sequence search results. */
 userSeqString = cartOptionalString(cart, "ss");
 if (userSeqString && !ssFilesExist(userSeqString))
@@ -9932,6 +9940,7 @@ withPopUps = cartUsualBoolean(cart, "popUps", TRUE);
 s = cartUsualString(cart, "ruler", "on");
 withRuler = sameWord(s, "on");
 
+fprintf(stderr, "1616161616161616161616\n");
 /* Register tracks that include some non-standard methods. */
 registerTrackHandler("cytoBand", cytoBandMethods);
 registerTrackHandler("bacEndPairs", bacEndPairsMethods);
@@ -9960,6 +9969,7 @@ registerTrackHandler("syntenyBerk", syntenyBerkMethods);
 registerTrackHandler("syntenySanger", syntenySangerMethods);
 registerTrackHandler("mouseOrtho", mouseOrthoMethods);
 registerTrackHandler("mouseOrthoSeed", mouseOrthoMethods);
+fprintf(stderr, "21212121212121212121212121\n");
 //registerTrackHandler("orthoTop4", drawColorMethods);
 registerTrackHandler("humanParalog", humanParalogMethods);
 registerTrackHandler("isochores", isochoresMethods);
@@ -9988,6 +9998,7 @@ registerTrackHandler("cpgIsland", cpgIslandMethods);
 registerTrackHandler("exoMouse", exoMouseMethods);
 registerTrackHandler("blatHuman", longXenoPslMethods);
 registerTrackHandler("blatMus", longXenoPslMethods);
+fprintf(stderr, "22222222222222222222222222222222222222222222222222222222\n");
 registerTrackHandler("multAlignWebbcat", longXenoPslMethods);
 registerTrackHandler("multAlignWebbchicken", longXenoPslMethods);
 registerTrackHandler("multAlignWebbbaboon", longXenoPslMethods);
@@ -10001,6 +10012,7 @@ registerTrackHandler("multAlignWebbpig", longXenoPslMethods);
 registerTrackHandler("multAlignWebbrat", longXenoPslMethods);
 registerTrackHandler("multAlignWebbzebrafish", longXenoPslMethods);
 registerTrackHandler("aarMm2", longXenoPslMethods);
+fprintf(stderr, "2323232323232323232323232323232323232323232323\n");
 registerTrackHandler("blastzRn1", longXenoPslMethods);
 registerTrackHandler("blastzBestRat", longXenoPslMethods);
 registerTrackHandler("blastzTightRat", longXenoPslMethods);
@@ -10021,6 +10033,7 @@ registerTrackHandler("blastzStrictChainPig", longXenoPslMethods);
 registerTrackHandler("blastzStrictChainRat", longXenoPslMethods);
 registerTrackHandler("blastzStrictChainTetra", longXenoPslMethods);
 registerTrackHandler("blastzStrictChainZebrafish", longXenoPslMethods);
+fprintf(stderr, "242424242424242424242424242424242424\n");
 registerTrackHandler("blatChimp", longXenoPslMethods);
 registerTrackHandler("chimpBac", longXenoPslMethods);
 registerTrackHandler("blastzMouse", longXenoPslMethods);
@@ -10042,6 +10055,7 @@ registerTrackHandler("blastzTightHuman", longXenoPslMethods);
 registerTrackHandler("blastzMouseSyn", longXenoPslMethods);
 registerTrackHandler("xenoBestMrna", xenoMrnaMethods);
 registerTrackHandler("xenoMrna", xenoMrnaMethods);
+fprintf(stderr, "2525252525252525252525252525252\n");
 registerTrackHandler("xenoEst", xenoMrnaMethods);
 registerTrackHandler("exoFish", exoFishMethods);
 registerTrackHandler("tet_waba", tetWabaMethods);
@@ -10062,6 +10076,7 @@ registerTrackHandler("triangle", triangleMethods );
 registerTrackHandler("triangleSelf", triangleMethods );
 registerTrackHandler("transfacHit", triangleMethods );
 /* MGC related */
+fprintf(stderr, "262626262626262626262626262626\n");
 registerTrackHandler("mgcNcbiPicks", estMethods);
 registerTrackHandler("mgcNcbiSplicedPicks", intronEstMethods);
 registerTrackHandler("mgcUcscPicks", intronEstMethods);
@@ -10078,15 +10093,18 @@ registerTrackHandler("genomicSuperDups", genomicSuperDupsMethods);
 registerTrackHandler("celeraDupPositive", celeraDupPositiveMethods);
 registerTrackHandler("celeraCoverage", celeraCoverageMethods);
 
+fprintf(stderr, "272727272727272727272727272727272727\n");
 /* Load regular tracks, blatted tracks, and custom tracks. 
  * Best to load custom last. */
 loadFromTrackDb(&trackList);
+fprintf(stderr, "1717171717171717171717\n");
 secretRikenTracks(&trackList);
 if (userSeqString != NULL) slSafeAddHead(&trackList, userPslTg());
 loadCustomTracks(&trackList);
 
 groupTracks(&trackList, &groupList);
 
+fprintf(stderr, "181818181818181818181818\n");
 /* Get visibility values if any from ui. */
 for (track = trackList; track != NULL; track = track->next)
     {
@@ -10178,7 +10196,7 @@ if (!hideControls)
 
 /* Make clickable image and map. */
 makeActiveImage(trackList, psOutput);
-
+fprintf(stderr, "1919191919191919191919\n");
 if (!hideControls)
     {
     struct controlGrid *cg = NULL;
@@ -10221,6 +10239,7 @@ if (!hideControls)
     hButton("submit", "refresh");
     hPrintf("<BR>\n");
 
+fprintf(stderr, "2020202020202020202020\n");
     /* Display viewing options for each track. */
     /* Chuck: This is going to be wrapped in a table so that
      * the controls don't wrap around randomly
@@ -10470,6 +10489,7 @@ void tracksDisplay()
 {
 char newPos[256];
 position = getPositionFromCustomTracks();
+fprintf(stderr, "1111111111111111\n");
 if (NULL == position) 
     {
     /* Read in input from CGI. */
@@ -10482,7 +10502,7 @@ if(sameString(position, ""))
 chromName = NULL;
 hgp = findGenomePos(position, &chromName, &winStart, &winEnd, cart);
 
-
+fprintf(stderr, "131313131313131313131313\n");
 if (NULL != hgp && NULL != hgp->tableList && NULL != hgp->tableList->name)
     {
     cartSetString(cart, hgp->tableList->name, "full");
@@ -10563,7 +10583,7 @@ if (winStart > seqBaseCount)
 winBaseCount = winEnd - winStart;
 if (winBaseCount <= 0)
     errAbort("Window out of range on %s", chromName);
-
+fprintf(stderr, "14141414141414141414\n");
 /* Save computed position in cart. */
 sprintf(newPos, "%s:%d-%d", chromName, winStart+1, winEnd);
 cartSetString(cart, "position", newPos);
@@ -10580,12 +10600,14 @@ void doMiddle(struct cart *theCart)
 char *debugTmp = NULL;
 /* Initialize layout and database. */
 cart = theCart;
+fprintf(stderr, "4444444444444444444444\n");
 
 getDbAndGenome(cart, &database, &organism);
+fprintf(stderr, "555555555555555555555555555\n");
 hSetDb(database);
-
+fprintf(stderr, "66666666666666666666666\n");
 protDbName = hPdbFromGdb(database);
-
+fprintf(stderr, "7777777777777777777777777\n");
 debugTmp = cartUsualString(cart, "hgDebug", "off");
 if(sameString(debugTmp, "on"))
     hgDebug = TRUE;
@@ -10593,10 +10615,13 @@ else
     hgDebug = FALSE;
 
 hDefaultConnect();
+fprintf(stderr, "888888888888888888888888888\n");
 initTl();
+fprintf(stderr, "9999999999999999999999999\n");
 
 /* Do main display. */
 tracksDisplay();
+fprintf(stderr, "1010101010101010101010\n");
 }
 
 void doDown(struct cart *cart)
@@ -10642,9 +10667,10 @@ cgiSpoof(&argc, argv);
 htmlSetBackground("../images/floret.jpg");
 if (cgiVarExists("hgt.reset"))
     resetVars();
-
+fprintf(stderr, "111111111111111\n");
 zooSpeciesHashInit();
-
+fprintf(stderr, "22222222222222222222\n");
 cartHtmlShell("UCSC Genome Browser v16", doMiddle, hUserCookie(), excludeVars, NULL);
+fprintf(stderr, "33333333333333333333333333\n");
 return 0;
 }
