@@ -4189,6 +4189,10 @@ EOF
 #    cd $multizDir/hmr/*.maf
     /cluster/bin/i386/hgLoadMaf -warn hg16 multizMm3Rn3Gg0
 
+    # add dummy entry to dbDb so that name shows up as "Chicken"
+    echo 'insert into dbDb (name, description, nibPath, organism, defaultPos, active, orderKey, genome, scientificName) values ("gg0", "November 2003", "", "Chicken", "", 0, 0, "Chicken", "Gallus gallus");' | hgsql -h genome-testdb hgcentraltest
+
+
 # BLASTZ Mm4  (DONE - 2003-10-31 - Hiram)
 
     ssh kk
