@@ -11,6 +11,7 @@ char *textField = "text";
 char *fileComment = "autoXml generated file";
 boolean picky;	/* Generate a parser that is afraid of the unknown. */
 boolean makeMain;	/* Generate main() routine as test shell. */
+boolean positiveOnly;	/* Don't write out negative numbers. */
 char prefix[128];	/* Added to start of output file and structure names. */
 
 void usage()
@@ -27,6 +28,7 @@ errAbort(
   "   -picky  Generate parser that rejects stuff it doesn't understand\n"
   "   -main   Put in a main routine that's a test harness\n"
   "   -prefix=xxx Prefix to add to structure names. By default same as root\n"
+  "   -positive Don't write out attributes with negative values\n"
   );
 }
 
@@ -428,11 +430,29 @@ fprintf(f, "#endif /* %s_H */\n", upcPrefix);
 fprintf(f, "\n");
 }
 
+boolean optionalChildren(struct element *el)
+/* Return TRUE if not sure whether you have children. */
+{
+struct elChild *ec;
+boolean required = FALSE, optional = FALSE;
+if (el->textType != NULL)
+    optional = TRUE;
+for (ec = el->children; ec != NULL; ec = ec->next)
+    {
+    if (ec->copyCode == '*' || ec->copyCode == '?')
+	optional = TRUE;
+    else
+        required = TRUE;
+    }
+return !required && optional;
+}
+
 void saveFunctionBody(struct element *el, FILE *f)
 /* Write out save function body. */
 {
 struct elChild *ec;
 struct attribute *att;
+boolean optKids = optionalChildren(el);
 
 fprintf(f, "{\n");
 
@@ -445,6 +465,8 @@ for (ec = el->children; ec != NULL; ec = ec->next)
         fprintf(f, "struct %s *%s;\n", name, name);
 	}
     }
+if (optKids)
+    fprintf(f, "boolean isNode = TRUE;\n");
 
 fprintf(f, "if (obj == NULL) return;\n");
 fprintf(f, "xapIndent(indent, f);\n");
@@ -455,36 +477,94 @@ else
     fprintf(f, "fprintf(f, \"<%s\");\n", el->name);
     for (att = el->attributes; att != NULL; att = att->next)
         {
-	if (att->required || sameString(att->type, "INT") || sameString(att->type, "FLOAT"))
+	if (att->required )
 	    fprintf(f, "fprintf(f, \" %s=\\\"%%%c\\\"\", obj->%s);\n", att->name, fAttType(att->type), att->name);
 	else
 	    {
-	    fprintf(f, "if (obj->%s != NULL)\n", att->name);
-	    fprintf(f, "    fprintf(f, \" %s=\\\"%%%c\\\"\", obj->%s);\n", att->name, fAttType(att->type), att->name);
+	    if (sameString(att->type, "INT") || sameString(att->type, "FLOAT"))
+	        {
+		if (positiveOnly)
+		    {
+		    fprintf(f, "if (obj->%s >= 0)\n", att->name);
+		    fprintf(f, "    fprintf(f, \" %s=\\\"%%%c\\\"\", obj->%s);\n", att->name, fAttType(att->type), att->name);
+		    }
+		}
+	    else
+		{
+		fprintf(f, "if (obj->%s != NULL)\n", att->name);
+		fprintf(f, "    fprintf(f, \" %s=\\\"%%%c\\\"\", obj->%s);\n", att->name, fAttType(att->type), att->name);
+		}
 	    }
 	}
     fprintf(f, "fprintf(f, \">\");\n");
     }
 if (el->textType != NULL)
-    fprintf(f, "fprintf(f, \"%%s\", obj->%s);\n", textField);
+    {
+    fprintf(f, "if (obj->%s != NULL && obj->%s[0] != 0)\n", textField, textField);
+    fprintf(f, "    {\n");
+    fprintf(f, "    fprintf(f, \"%%s\", obj->%s);\n", textField);
+    fprintf(f, "    isNode = FALSE;\n");
+    fprintf(f, "    }\n");
+    }
 if (el->children == NULL)
+    {
     fprintf(f, "fprintf(f, \"</%s>\\n\");\n", el->name);
+    }
 else
     {
-    fprintf(f, "fprintf(f, \"\\n\");\n");
+    if (!optKids)
+	fprintf(f, "fprintf(f, \"\\n\");\n");
     for (ec = el->children; ec != NULL; ec = ec->next)
 	{
 	char *name = ec->el->mixedCaseName;
 	if (ec->copyCode == '*' || ec->copyCode == '+')
 	    {
 	    fprintf(f, "for (%s = obj->%s; %s != NULL; %s = %s->next)\n", name, name, name, name, name);
+	    fprintf(f, "   {\n");
+	    if (optKids)
+		{
+		fprintf(f, "   if (isNode)\n");
+		fprintf(f, "       {\n");
+		fprintf(f, "       fprintf(f, \"\\n\");\n");
+		fprintf(f, "       isNode = FALSE;\n");
+		fprintf(f, "       }\n");
+		}
 	    fprintf(f, "   %sSave(%s, indent+2, f);\n", name, name);
+	    fprintf(f, "   }\n");
 	    }
 	else
-	    fprintf(f, "%sSave(obj->%s, indent+2, f);\n", name, name);
+	    {
+	    if (optKids)
+	        {
+		fprintf(f, "if (obj->%s != NULL)\n", name);
+		fprintf(f, "    {\n");
+		fprintf(f, "    if (isNode)\n");
+		fprintf(f, "       {\n");
+		fprintf(f, "       fprintf(f, \"\\n\");\n");
+		fprintf(f, "       isNode = FALSE;\n");
+		fprintf(f, "       }\n");
+		fprintf(f, "    %sSave(obj->%s, indent+2, f);\n", name, name);
+		fprintf(f, "    }\n");
+		}
+	    else
+		fprintf(f, "%sSave(obj->%s, indent+2, f);\n", name, name);
+	    }
 	}
-    fprintf(f, "xapIndent(indent, f);\n");
-    fprintf(f, "fprintf(f, \"</%s>\\n\");\n", el->name);
+    if (optKids)
+        {
+	fprintf(f, "if (isNode)\n");
+	fprintf(f, "    fprintf(f, \"</%s>\\n\");\n", el->name);
+	fprintf(f, "else\n");
+	fprintf(f, "    {\n");
+	fprintf(f, "    xapIndent(indent, f);\n");
+	fprintf(f, "    fprintf(f, \"</%s>\\n\");\n", el->name);
+	fprintf(f, "    }\n");
+	}
+    else
+	{
+	fprintf(f, "xapIndent(indent, f);\n");
+	fprintf(f, "fprintf(f, \"</%s>\\n\");\n", el->name);
+	}
     }
 fprintf(f, "}\n");
 fprintf(f, "\n");
@@ -778,6 +858,7 @@ textField = cgiUsualString("textField", textField);
 fileComment = cgiUsualString("comment", fileComment);
 picky = cgiBoolean("picky");
 makeMain = cgiBoolean("main");
+positiveOnly = cgiBoolean("positive");
 if (argc != 3)
     usage();
 autoXml(argv[1], argv[2]);

@@ -25,19 +25,19 @@
 <!ATTLIST F author CDATA #IMPLIED>       Track author.  Defaults to DASBED URL.
 <!ATTLIST F href CDATA #IMPLIED>         Track level URL. Defaults to DASBED URL.
 <!ATTLIST F strand CDATA #IMPLIED>       +, -, or not even present (relative to parent).
-<!ATTLIST F score INT #IMPLIED>          A number between 0 and 1000.
-<!ATTLIST F thickStart INT #IMPLIED>     CDS start for genes.
-<!ATTLIST F thickEnd INT #IMPLIED>       CDS end for genes.
-<!ATTLIST F frame INT #IMPLIED>          Coding frame 1,2, or 3.
+<!ATTLIST F score INT -1>          A number between 0 and 1000.
+<!ATTLIST F thickStart INT -1>     CDS start for genes.
+<!ATTLIST F thickEnd INT -1>       CDS end for genes.
+<!ATTLIST F frame INT -1>          Coding frame 1,2, or 3.
 <!ATTLIST F qId CDATA #IMPLIED>          ID of query sequence in an alignment.
 
 <!ELEMENT B>                        A block.  Can hold alignment info.  Deliberately small.
 <!ATTLIST B start INT #REQUIRED>       Start in sequence relative to item start.
 <!ATTLIST B end INT #REQUIRED>         End in sequence relative to item start.
-<!ATTLIST B score INT #IMPLIED>        Score between 0 and 1000.
+<!ATTLIST B score INT -1>        Score between 0 and 1000.
 <!ATTLIST B qAli CDATA #IMPLIED>       Query side of alignment including '-' chars.
 <!ATTLIST B tAli CDATA #IMPLIED>       Target (in segment) side of alignment.
-<!ATTLIST B qStart INT #IMPLIED>       Query start coordinate.
-<!ATTLIST B qEnd INT #IMPLIED>         Query end coordinate.
+<!ATTLIST B qStart INT -1>             Query start coordinate.
+<!ATTLIST B qEnd INT -1>               Query end coordinate.
 
 
