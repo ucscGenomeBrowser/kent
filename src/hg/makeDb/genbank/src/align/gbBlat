@@ -27,7 +27,7 @@
 # is still produced.  This script is very careful to exit non-zero if an error
 # occurs.
 #
-# $Id: gbBlat,v 1.24 2004/07/07 22:36:18 angie Exp $
+# $Id: gbBlat,v 1.25 2004/07/15 01:48:55 markd Exp $
 #
 set -e
 
@@ -182,6 +182,9 @@ case "$database" in
     ce*) 
         # limit intron size to 100K
         blatParams="${blatParams} -maxIntron=100000" ;;
+    ci*) 
+        # limit intron size to 20K
+        blatParams="${blatParams} -maxIntron=20000" ;;
 esac
 
 
