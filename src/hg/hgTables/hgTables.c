@@ -16,7 +16,7 @@
 #include "customTrack.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: hgTables.c,v 1.21 2004/07/17 02:25:14 kent Exp $";
+static char const rcsid[] = "$Id: hgTables.c,v 1.22 2004/07/17 18:29:10 kent Exp $";
 
 
 void usage()
@@ -645,6 +645,7 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 htmlPushEarlyHandlers(); /* Make errors legible during initialization. */
+pushCarefulMemHandler(100000000);
 cgiSpoof(&argc, argv);
 hgTables();
 return 0;

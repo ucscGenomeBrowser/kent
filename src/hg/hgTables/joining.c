@@ -6,6 +6,7 @@
 #include "common.h"
 #include "hash.h"
 #include "localmem.h"
+#include "memalloc.h"
 #include "dystring.h"
 #include "obscure.h"
 #include "jksql.h"
@@ -13,7 +14,7 @@
 #include "hdb.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: joining.c,v 1.11 2004/07/17 17:54:50 kent Exp $";
+static char const rcsid[] = "$Id: joining.c,v 1.12 2004/07/17 18:29:10 kent Exp $";
 
 struct joinedRow
 /* A row that is joinable.  Allocated in joinableResult->lm. */
@@ -185,8 +186,7 @@ for (n=suffixList; n!=NULL; n = n->next)
 return key;
 }
 
-
-struct joinerDtf *fieldsToDtfs(struct slName *fieldList)
+static struct joinerDtf *fieldsToDtfs(struct slName *fieldList)
 /* Convert list from dotted triple to dtf format. */
 {
 struct joinerDtf *dtfList = NULL, *dtf;
@@ -200,10 +200,11 @@ slReverse(&dtfList);
 return dtfList;
 }
 
-struct dyString *makeOrderedCommaFieldList(struct sqlConnection *conn, char *table, 
-	struct joinerDtf *dtfList)
-/* Assumes that dtfList all points to same table.  This will return a comma-separated
- * field list in the same order as the fields are in database. */
+static struct dyString *makeOrderedCommaFieldList(struct sqlConnection *conn, 
+	char *table, struct joinerDtf *dtfList)
+/* Assumes that dtfList all points to same table.  This will return 
+ * a comma-separated field list in the same order as the fields are 
+ * in database. */
 {
 struct joinerDtf *dtf;
 struct slName *dbField, *dbFieldList = sqlListFields(conn, table);
@@ -237,11 +238,12 @@ struct tableJoiner
     char *database;		/* Database we're in.  Not alloced here. */
     char *table;		/* Table we're in.  Not alloced here. */
     struct joinerDtf *fieldList;	/* Fields. */
-    struct slRef *keysOut;	/* Keys that connect to output - value is joinerPair. */
+    struct slRef *keysOut;	/* Keys that connect to output.
+                                 * Value is joinerPair. */
     boolean loaded;	/* If true is loaded. */
     };
 
-void tableFieldsFree(struct tableJoiner **pTf)
+void tableJoinerFree(struct tableJoiner **pTf)
 /* Free up memory associated with tableJoiner. */
 {
 struct tableJoiner *tj = *pTf;
@@ -253,7 +255,7 @@ if (tj != NULL)
     }
 }
 
-void tableFieldsFreeList(struct tableJoiner **pList)
+void tableJoinerFreeList(struct tableJoiner **pList)
 /* Free a list of dynamically allocated tableJoiner's */
 {
 struct tableJoiner *el, *next;
@@ -261,24 +263,22 @@ struct tableJoiner *el, *next;
 for (el = *pList; el != NULL; el = next)
     {
     next = el->next;
-    tableFieldsFree(&el);
+    tableJoinerFree(&el);
     }
 *pList = NULL;
 }
 
 
-struct tableJoiner *bundleFieldsIntoTables(struct joinerDtf **pDtfList)
-/* Convert list of fields to list of tables.  This will eat up the
- * input list and transfer it to the fieldList element of the tables. */
+struct tableJoiner *bundleFieldsIntoTables(struct joinerDtf *dtfList)
+/* Convert list of fields to list of tables.  */
 {
 struct hash *hash = newHash(0);
 char fullName[256];
-struct joinerDtf *dtf, *next;
+struct joinerDtf *dtf, *dupe;
 struct tableJoiner *tjList = NULL, *tj;
 
-for (dtf = *pDtfList; dtf != NULL; dtf = next)
+for (dtf = dtfList; dtf != NULL; dtf = dtf->next)
     {
-    next = dtf->next;
     safef(fullName, sizeof(fullName), "%s.%s", dtf->database, dtf->table);
     tj = hashFindVal(hash, fullName);
     if (tj == NULL)
@@ -289,7 +289,8 @@ for (dtf = *pDtfList; dtf != NULL; dtf = next)
 	tj->table = dtf->table;
 	slAddHead(&tjList, tj);
 	}
-    slAddHead(&tj->fieldList, dtf);
+    dupe = joinerDtfClone(dtf);
+    slAddHead(&tj->fieldList, dupe);
     }
 slReverse(&tjList);
 return tjList;
@@ -591,127 +592,142 @@ for (jf = js->fieldList; jf != NULL; jf = jf->next)
 return NULL;
 }
 
+struct joinedTables *joinedTablesCreate( struct joiner *joiner, 
+	char *primaryDb, char *primaryTable,
+	struct joinerDtf *fieldList, int maxRowCount)
+/* Create joinedTables structure from fields. */
+{
+struct tableJoiner *tj, *tjList = bundleFieldsIntoTables(fieldList);
+struct joinerPair *routeList, *route, *lastRoute;
+struct joinerDtf *tableDtfs;
+struct joinedTables *joined = NULL;
+struct hash *tableHash = newHash(8);
+struct sqlConnection *conn = sqlConnect(primaryDb);
+struct region *regionList = getRegions(conn);
+int totalKeyCount = 0, totalFieldCount = 0;
+int curKeyCount = 0, curFieldCount = 0;
+
+for (tj = tjList; tj != NULL; tj = tj->next)
+    {
+    char buf[256];
+    safef(buf, sizeof(buf), "%s.%s", tj->database, tj->table);
+    hashAdd(tableHash, buf, tj);
+    }
+orderTables(&tjList, primaryDb, primaryTable);
+tableDtfs = tableFirstFieldList(tjList);
+routeList = joinerFindRouteThroughAll(joiner, tableDtfs);
+addOutKeys(tableHash, routeList, &tjList);
+
+/* Count up total fields and keys. */
+for (tj = tjList; tj != NULL; tj = tj->next)
+    {
+    totalKeyCount += slCount(tj->keysOut);
+    totalFieldCount += slCount(tj->fieldList);
+	{
+	struct slRef *ref;
+	uglyf("keys for %s:", tj->table);
+	for (ref = tj->keysOut; ref != NULL; ref = ref->next)
+	    {
+	    struct joinerPair *jp = ref->val;
+	    uglyf(" %s", jp->a->field);
+	    }
+	uglyf("\n");
+	}
+    }
+
+uglyf("Got %d hops in route\n", slCount(routeList));
+uglyf("%d total keys, %d total fields\n", totalKeyCount, totalFieldCount);
+for (route = routeList; route != NULL; route = route->next)
+    uglyf("%s.%s.%s -> %s.%s.%s\n", route->a->database, route->a->table, route->a->field, route->b->database, route->b->table, route->b->field);
+
+uglyf("\n");
+uglyf("got %d tables\n", slCount(tjList));
+
+/* Do first table.  This one uses identifier hash if any. */
+    {
+    joined = tjLoadFirst(regionList,
+	    tjList, totalFieldCount, totalKeyCount, maxRowCount);
+    curKeyCount = slCount(tjList->keysOut);
+    curFieldCount = slCount(tjList->fieldList);
+    uglyf("After load first %d rows, %d fields, %d keys\n", joined->rowCount, slCount(joined->fieldList), slCount(joined->keyList));
+    }
+
+/* Follow routing list for rest. */
+if (!sameString(tjList->database, routeList->a->database))
+    internalErr();
+if (!sameString(tjList->table, routeList->a->table))
+    internalErr();
+for (route = routeList; route != NULL; route = route->next)
+    {
+    struct tableJoiner *tj = findTableJoiner(tjList, 
+	    route->b->database, route->b->table);
+    struct joinerField *jfA, *jfB;
+    if (tj == NULL)
+	internalErr();
+    jfA = findJoinerField(route->identifier, route->a);
+    if (jfA == NULL)
+	internalErr();
+    jfB = findJoinerField(route->identifier, route->b);
+    if (jfB == NULL)
+	internalErr();
+    if (!tj->loaded)
+	{
+	struct hTableInfo *hti = getHti(tj->database, tj->table);
+	int keyIx = findDtfIndex(joined->keyList, route->a);
+	struct hash *keyHash = NULL;
+	if (keyIx < 0)
+	    internalErr();
+	uglyf("keyIx for %s.%s.%s = %d\n", route->a->database, route->a->table, route->a->field, keyIx);
+	keyHash = hashKeyField(joined, keyIx, 
+	    jfA->chopBefore, jfA->chopAfter);
+	tjLoadSome(regionList, joined, curFieldCount, curKeyCount,
+	    route->b->field, keyHash, 
+	    jfB->chopBefore, jfB->chopAfter, 
+	    tj, hti, FALSE);
+	curKeyCount += slCount(tj->keysOut);
+	curFieldCount += slCount(tj->fieldList);
+	uglyf("After load next %d rows, %d fields, %d keys\n", joined->rowCount, slCount(joined->fieldList), slCount(joined->keyList));
+	hashFree(&keyHash);
+	}
+    }
+sqlDisconnect(&conn);
+joinerDtfFreeList(&tableDtfs);
+hashFree(&tableHash);
+tableJoinerFreeList(&tjList);
+return joined;
+}
+
 void tabOutFields(
 	char *primaryDb,		/* The primary database. */
 	char *primaryTable, 		/* The primary table. */
 	struct slName *fieldList)	/* List of db.table.field */
 /* Do tab-separated output. */
 {
-struct joinerDtf *dtfList = NULL;
-struct tableJoiner *tjList = NULL, *tj;
+struct joinerDtf *dtfList = fieldsToDtfs(fieldList);
 
-dtfList = fieldsToDtfs(fieldList);
-tjList = bundleFieldsIntoTables(&dtfList);
-
-if (slCount(tjList) == 1)
+carefulCheckHeap();
+if (joinerDtfAllSameTable(dtfList))
     {
-    tj = tjList;
-    struct sqlConnection *conn = sqlConnect(tj->database);
-    struct dyString *dy = makeOrderedCommaFieldList(conn, tj->table, tj->fieldList);
-    doTabOutTable(tj->table, conn, dy->string);
+    struct sqlConnection *conn = sqlConnect(dtfList->database);
+    struct dyString *dy = makeOrderedCommaFieldList(conn, 
+    	dtfList->table, dtfList);
+    doTabOutTable(dtfList->table, conn, dy->string);
     sqlDisconnect(&conn);
     }
 else
     {
     struct joiner *joiner = joinerRead("all.joiner");
-    struct joinerPair *routeList, *route, *lastRoute;
-    struct joinerDtf *tableDtfs;
-    struct joinedTables *joined = NULL;
-    struct hash *tableHash = newHash(8);
-    struct sqlConnection *conn = sqlConnect(primaryDb);
-    struct region *regionList = getRegions(conn);
-    int totalKeyCount = 0, totalFieldCount = 0;
-    int curKeyCount = 0, curFieldCount = 0;
-
-    for (tj = tjList; tj != NULL; tj = tj->next)
-	{
-	char buf[256];
-	safef(buf, sizeof(buf), "%s.%s", tj->database, tj->table);
-        hashAdd(tableHash, buf, tj);
-	}
-    orderTables(&tjList, primaryDb, primaryTable);
-    tableDtfs = tableFirstFieldList(tjList);
-    routeList = joinerFindRouteThroughAll(joiner, tableDtfs);
-    addOutKeys(tableHash, routeList, &tjList);
-
-    /* Count up total fields and keys. */
-    for (tj = tjList; tj != NULL; tj = tj->next)
-        {
-	totalKeyCount += slCount(tj->keysOut);
-	totalFieldCount += slCount(tj->fieldList);
-	    {
-	    struct slRef *ref;
-	    uglyf("keys for %s:", tj->table);
-	    for (ref = tj->keysOut; ref != NULL; ref = ref->next)
-	        {
-		struct joinerPair *jp = ref->val;
-		uglyf(" %s", jp->a->field);
-		}
-	    uglyf("\n");
-	    }
-	}
-
-    uglyf("Got %d hops in route\n", slCount(routeList));
-    uglyf("%d total keys, %d total fields\n", totalKeyCount, totalFieldCount);
-    for (route = routeList; route != NULL; route = route->next)
-        uglyf("%s.%s.%s -> %s.%s.%s\n", route->a->database, route->a->table, route->a->field, route->b->database, route->b->table, route->b->field);
-
-    uglyf("\n");
-    uglyf("got %d tables\n", slCount(tjList));
-
-    /* Do first table.  This one uses identifier hash if any. */
-	{
-	joined = tjLoadFirst(regionList,
-		tjList, totalFieldCount, totalKeyCount, 500000);
-	curKeyCount = slCount(tjList->keysOut);
-	curFieldCount = slCount(tjList->fieldList);
-	uglyf("After load first %d rows, %d fields, %d keys\n", joined->rowCount, slCount(joined->fieldList), slCount(joined->keyList));
-	}
-
-    /* Follow routing list for rest. */
-    if (!sameString(tjList->database, routeList->a->database))
-        internalErr();
-    if (!sameString(tjList->table, routeList->a->table))
-        internalErr();
-    for (route = routeList; route != NULL; route = route->next)
-        {
-	struct tableJoiner *tj = findTableJoiner(tjList, 
-		route->b->database, route->b->table);
-        struct joinerField *jfA, *jfB;
-	if (tj == NULL)
-	    internalErr();
-	jfA = findJoinerField(route->identifier, route->a);
-	if (jfA == NULL)
-	    internalErr();
-	jfB = findJoinerField(route->identifier, route->b);
-	if (jfB == NULL)
-	    internalErr();
-	if (!tj->loaded)
-	    {
-	    struct hTableInfo *hti = getHti(tj->database, tj->table);
-	    int keyIx = findDtfIndex(joined->keyList, route->a);
-	    struct hash *keyHash = NULL;
-	    if (keyIx < 0)
-		internalErr();
-	    uglyf("keyIx for %s.%s.%s = %d\n", route->a->database, route->a->table, route->a->field, keyIx);
-	    keyHash = hashKeyField(joined, keyIx, 
-	    	jfA->chopBefore, jfA->chopAfter);
-	    tjLoadSome(regionList, joined, curFieldCount, curKeyCount,
-	        route->b->field, keyHash, 
-		jfB->chopBefore, jfB->chopAfter, 
-		tj, hti, FALSE);
-	    curKeyCount += slCount(tj->keysOut);
-	    curFieldCount += slCount(tj->fieldList);
-	    uglyf("After load next %d rows, %d fields, %d keys\n", joined->rowCount, slCount(joined->fieldList), slCount(joined->keyList));
-	    hashFree(&keyHash);
-	    }
-	}
+    carefulCheckHeap();
+    struct joinedTables *joined = joinedTablesCreate(joiner, 
+    	primaryDb, primaryTable, dtfList, 1000000);
+    carefulCheckHeap();
     joinedTablesTabOut(joined);
-    sqlDisconnect(&conn);
-    joinerDtfFreeList(&tableDtfs);
-    hashFree(&tableHash);
+    carefulCheckHeap();
+    joinedTablesFree(&joined);
+    carefulCheckHeap();
     }
-tableFieldsFreeList(&tjList);
+joinerDtfFreeList(&dtfList);
+carefulCheckHeap();
 }
 
 void doTest(struct sqlConnection *conn)
@@ -737,10 +753,10 @@ slAddTail(&fieldList, field);
 
 field = slNameNew("hg16.ensGene.name");
 slAddTail(&fieldList, field);
-field = slNameNew("hg16.ensGtp.transcript");
+field = slNameNew("hg16.ensGtp.protein");
 slAddTail(&fieldList, field);
-field = slNameNew("hg16.ensGtp.gene");
-slAddTail(&fieldList, field);
+// field = slNameNew("hg16.ensGtp.gene");
+// slAddTail(&fieldList, field);
 
 textOpen();
 tabOutFields("hg16", "ensGene", fieldList);
