@@ -5002,7 +5002,7 @@ int y = yOff;
 int heightPer = tg->heightPer;
 int midLineOff = heightPer/2;
 int lineHeight = tg->lineHeight;
-int x1,x2,w, g1,g2;
+int x1,x2,w, b1,b2, g1,g2;
 boolean isFull = (vis == tvFull);
 Color col;
 int ix = 0;
@@ -5041,27 +5041,29 @@ if (isFull)
         sr = hOrderedRangeQuery(conn, tg->mapName, chromName, winStart, winEnd, where, &rowOffset);
         row = sqlNextRow(sr) ;
         if (row == NULL) continue;
-        netAlignStaticLoad(row+rowOffset, &na);
         netAlignStaticLoad(row+rowOffset, &np);
-        sprintf(levelName,"%d", na.level-1);
+        netAlignStaticLoad(row+rowOffset, &na);
+        sprintf(levelName,"%d", np.level-1);
         ni = hashMustFindVal(hash, levelName);
         midY = ni->yOffset + midLineOff;
-        percId = na.score;
+        percId = np.score;
         grayLevel = grayInRange(percId, 500, 1000);
         col = shadesOfGray[grayLevel];
         col = netItemColor(&na, vg);
-        if (na.tStart >= winStart)
+        if (np.tStart >= winStart)
             {
-            x1 = roundingScale(na.tStart-winStart, width, baseWidth)+xOff;
-            boxStart = na.tStart;
+            x1 = roundingScale(np.tStart-winStart, width, baseWidth)+xOff;
+            boxStart = np.tStart;
             }
         else
             {
             x1 = roundingScale(0, width, baseWidth)+xOff;
             boxStart = winStart;
             }
-        x2 = roundingScale(na.tEnd-winStart, width, baseWidth)+xOff;
-        boxEnd = na.tEnd;
+        b1 = x1;
+        g1 = x1; //in case there are no gaps
+        x2 = roundingScale(np.tEnd-winStart, width, baseWidth)+xOff;
+        boxEnd = np.tEnd;
         w = x2-x1;
         if (w <= 0)
             w = 1;
@@ -5094,27 +5096,48 @@ if (isFull)
                 dir = -1;
             if (sameString(na.type, "gap"))
                 {
-                g1 = x1;
                 boxEnd = na.tStart;
-                g2 = roundingScale(na.tStart-winStart, width, baseWidth)+xOff;
-                w = g2-g1;
+                if (na.tStart >= winStart)
+                    {
+                    b2 = roundingScale(na.tStart-winStart, width, baseWidth)+xOff;
+                    g1 = b2;
+                    }
+                else
+                    {
+                    b2 = -1;
+                    g1 = roundingScale(0, width, baseWidth)+xOff;
+                    }
+                g2 = roundingScale(na.tEnd-winStart, width, baseWidth)+xOff;
+                if ((g2 - g1) > 3)
+                    /* draw narrow line for gap */
+                    {
+                    clippedBarbs(vg, g1, midY, g2-g1, 2, 5, 
+                                   dir, col, TRUE);
+                    innerLine(vg, g1, midY, g2-g1, col);
+                    }
+                w = b2-b1;
+                /* draw block */
                 if (w <= 0)
                     w = 1;
-                vgBox(vg, g1, ni->yOffset, w, heightPer, col);
+                else
+                    vgBox(vg, b1, ni->yOffset, w, heightPer, col);
                 if (w > 3)
-                    clippedBarbs(vg, g1, midY, w, 2, 5, dir, textColor, TRUE);
+                    clippedBarbs(vg, b1, midY, w, 2, 5, dir, textColor, TRUE);
                 if (w > 1)
                     {
                     sprintf(levelName,"%d", na.level);
-                    mapBoxHc(boxStart, boxEnd, x1, ni->yOffset, w, heightPer, tg->mapName,
+                    mapBoxHc(boxStart, boxEnd, b1, ni->yOffset, w, heightPer, tg->mapName,
                         levelName, bubble->string);
                     }
-		boxStart = na.tEnd;
-		g1 = roundingScale(na.tEnd-winStart, width, baseWidth)+xOff;
-		w = x2-g1;
-		if (w <= 0)
-		    w = 1;
-		x1 = g1;
+                boxStart = na.tEnd;
+                b1 = roundingScale(na.tEnd-winStart, width, baseWidth)+xOff;
+                /*if (np.tStart > winStart)
+                    x1 = roundingScale(np.tStart-winStart, width, baseWidth)+xOff;
+                else 
+                    x1 = roundingScale(0, width, baseWidth)+xOff;*/
+                w = x2-b1;
+                if (w <= 0)
+                    w = 1;
                 }
             else 
                 {
@@ -5139,10 +5162,10 @@ if (isFull)
             netAlignStaticLoad(row+rowOffset, &np);
             dyStringFree(&bubble);
             }
-            vgBox(vg, x1, ni->yOffset, w, heightPer, col);
+            vgBox(vg, b1, ni->yOffset, w, heightPer, col);
             textColor = contrastingColor(vg, col);
             if (w > 3)
-                clippedBarbs(vg, x1, midY, w, 2, 5, dir, textColor, TRUE);
+                clippedBarbs(vg, g1, midY, w, 2, 5, dir, textColor, TRUE);
         }
     freeHash(&hash);
     }
