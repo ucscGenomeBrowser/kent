@@ -9,17 +9,27 @@
 #include "hdb.h"
 #include "dbDb.h"
 
-struct cart *cart;
+struct cart *cart = NULL;
 struct hash *oldVars = NULL;
-static const char * const orgCgiName = "org";
-static const char * const assemblyCgiName = "db";
+static char * const orgCgiName = "org";
+static char * const dbCgiName = "db";
 char *organism = NULL;
+char *db = NULL;
+
+/*
+  Remove any custom track data from the cart.
+*/
+void removeCustomTrackData()
+{
+cartRemove(cart, "hgt.customText");
+cartRemove(cart, "hgt.customFile");
+cartRemove(cart, "ct");
+}
 
 void hgGateway()
 /* hgGateway - Human Genome Browser Gateway. */
 {
-char *db = cartUsualString(cart, "db", hGetDb());
-char *oldDb = hashFindVal(oldVars, "db");
+char *oldDb = NULL;
 char *defaultPosition = hDefaultPos(db);
 char *position = cartUsualString(cart, "position", defaultPosition);
 char *assembly = NULL;
@@ -31,11 +41,22 @@ int numAssemblies = 0;
 struct dbDb *dbList = hGetIndexedDatabases();
 struct dbDb *cur = NULL;
 struct hash *hash = hashNew(7); // 2^^7 entries = 128
-char *onChangeText = "onchange='document.orgForm.submit()';";
+/* JavaScript to copy input data on the change genome button to a hidden form
+This was done in order to be able to flexibly arrange the UI HTML
+*/
+char *onChangeText = "onchange=\"document.orgForm.org.value = document.trackForm.org.options[document.trackForm.org.selectedIndex].value; document.orgForm.submit();\"";
 
-if (oldDb != NULL && !sameString(db, oldDb))
+/* 
+   If we are changing databases via explicit cgi request,
+   then remove custom track data which will 
+   be irrelevant in this new database .
+   If databases were changed then use the new default position too.
+*/
+oldDb = hashFindVal(oldVars, dbCgiName);
+if (!strstrNoCase(oldDb, db))
     {
     position = defaultPosition;
+    removeCustomTrackData();
     }
 
 puts(
@@ -47,6 +68,10 @@ puts(
 "<A HREF=\"http://www.soe.ucsc.edu/~haussler\">David Haussler</A> "
 "of UC Santa Cruz.<BR></CENTER>\n");
 
+printf("<FORM ACTION=\"/cgi-bin/hgGateway\" METHOD=\"GET\" NAME=\"orgForm\"><input type=\"hidden\" name=\"%s\" value=\"%s\">\n", orgCgiName, organism);
+cartSaveSession(cart);
+printf("</FORM>");
+
 puts(
 "<center>\n"
 "<table bgcolor=\"cccc99\" border=\"0\" CELLPADDING=1 CELLSPACING=0>\n"
@@ -56,10 +81,12 @@ puts(
 );
 
 puts(
+"<table bgcolor=\"FFFEF3\" border=0>\n"
+"<tr>\n"
+"<td>\n"
+"<FORM ACTION=\"/cgi-bin/hgTracks\" NAME=\"trackForm\" METHOD=\"POST\" ENCTYPE=\"multipart/form-data\">\n"
 "<table><tr>\n"
-"<td valign=\"top\">genome</td></tr>\n"
-"<tr><td valign=\"top\">\n"
-"<FORM ACTION=\"/cgi-bin/hgGateway\" METHOD=\"GET\" NAME=\"orgForm\">\n"
+"<td align=center>&nbsp; genome &nbsp;\n"
 );
 
 for (cur = dbList; cur != NULL; cur = cur->next)
@@ -75,27 +102,8 @@ for (cur = dbList; cur != NULL; cur = cur->next)
     }
 cgiMakeDropListFull(orgCgiName, orgList, orgList, numOrganisms, 
                            organism, onChangeText);
-cartSaveSession(cart);
-
-puts(
-"</FORM></td></tr>\n"
-"<tr><td>&nbsp</td></tr>\n"
-"</table>\n"
-"</td>\n"
-);
-
-puts(
-"<td>\n"
-"<table bgcolor=\"FFFEF3\" border=0>\n"
-"<tr>\n"
-"<td>\n"
-"<FORM ACTION=\"/cgi-bin/hgTracks\" METHOD=\"POST\" ENCTYPE=\"multipart/form-data\">\n"
-"<table><tr>\n"
-"<td>&nbsp; assembly</td>\n"
-"<td>&nbsp; position</td>\n"
-"<td>&nbsp; pixel width</td></tr>\n"
-"<tr><td>\n"
-);
+printf("</td>\n");
+printf("<td align=center>&nbsp; assembly &nbsp;\n");
 
 /* Find all the assemblies that pertain to the selected genome */
 for (cur = dbList; cur != NULL; cur = cur->next)
@@ -124,22 +132,25 @@ for (cur = dbList; cur != NULL; cur = cur->next)
        }
     }
 
-cgiMakeDropListFull(assemblyCgiName, assemblyList, values, numAssemblies, assembly, NULL);
+cgiMakeDropListFull(dbCgiName, assemblyList, values, numAssemblies, assembly, NULL);
 printf("</td>\n");
-printf("<td>\n");
+
+printf("<td align=center>&nbsp; position &nbsp;\n");
 cgiMakeTextVar("position", position, 30);
 printf("</td>\n");
 freez(&defaultPosition);
 position = NULL;
-printf("<td>\n");
+
+printf("<td align=center>&nbsp; pixel width &nbsp;\n");
 cgiMakeIntVar("pix", cartUsualInt(cart, "pix", 610), 4);
-printf("</td></tr><tr><td colspan=\"3\">");
+printf("</td>\n");
+printf("<td align=center>");
 cgiMakeButton("Submit", "Submit");
-cartSetString(cart, "db", db);
 cartSaveSession(cart);
+printf("</td>\n");
 
 puts(
-"</td></tr></table>\n"
+"</tr></table>\n"
 "</td></tr><tr><td><center>\n"
 "<a HREF=\"../cgi-bin/cartReset\">Click here to reset</a> the browser user interface settings to their defaults.\n"
 "</center>\n"
@@ -368,32 +379,60 @@ dbDbFreeList(&dbList);
 numOrganisms = 0;
 }
 
-void removeCustomTrackData()
+char *getDbForOrganism(char *organism, struct cart *cart)
 /*
-  Remove any custom track data from the cart.
+  Function to find the default database for the given organism.
+It looks in the cart first and then, if that database's organism matches the 
+passed-in organism, returns it. If the organism does not match, it returns the default
+database that does match that organism.
+
+param organism - The organism for which to find a database
+param cart - The cart to use to first search for a suitable database name
+return - The database matching this organism type
 */
 {
-cartRemove(cart, "hgt.customText");
-cartRemove(cart, "hgt.customFile");
-cartRemove(cart, "ct");
+char *retDb = cartUsualString(cart, dbCgiName, hGetDb());
+char *dbOrg = hOrganism(retDb);
+
+if (!strstrNoCase(organism, dbOrg))
+    {
+    retDb = hDefaultDbForOrganism(organism);
+    }
+
+return retDb;
 }
 
 void doMiddle(struct cart *theCart)
 /* Set up pretty web display and save cart in global. */
 {
-char *db = NULL;
 cart = theCart;
 
-db = cartUsualString(cart, "db", hGetDb());
+/*
+  The order of preference here is as follows:
+If we got a request that explicitly names the db, that takes
+highest priority, and we synch the organism to that db.
+If we get a cgi request for a specific organism then we use that
+organism to choose the DB.
 
-/* If we are changing databases, then remove custom track data which will 
-   be irrelevant in this new database */
-if (cgiOptionalString("db"))
+In the cart only, we use the same order of preference.
+If someone requests an organism we try to give them the same db as
+was in their cart, unless the organism doesn't match.
+*/
+db = cgiOptionalString(dbCgiName);
+organism = cgiOptionalString(orgCgiName);
+if (db)
     {
-    removeCustomTrackData();
+    organism = hOrganism(db);
     }
-
-organism = cgiUsualString(orgCgiName, hOrganism(db));
+else if (organism)
+    {
+    db = getDbForOrganism(organism, cart);
+    }
+else
+    {
+    db = cartUsualString(cart, dbCgiName, hGetDb());
+    organism = hOrganism(db);
+    }
 
 cartWebStart("%s Genome Browser Gateway \n", organism);
 hgGateway();
