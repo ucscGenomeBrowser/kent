@@ -736,4 +736,7 @@ int chrSlNameCmp(const void *el1, const void *el2);
  * slName **s (as passed in by slSort) whose names match the regex 
  * "chr([0-9]+|[A-Za-z0-9]+)(_[A-Za-z0-9_]+)?". */
 
+int getTableSize(char *table);
+/* Get count of rows in a table in the primary database */
+
 #endif /* HDB_H */
