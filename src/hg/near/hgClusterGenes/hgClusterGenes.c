@@ -1,0 +1,315 @@
+/* hgClusterGenes - Cluster overlapping gene predictions. */
+#include "common.h"
+#include "linefile.h"
+#include "hash.h"
+#include "options.h"
+#include "dlist.h"
+#include "jksql.h"
+#include "genePred.h"
+#include "hdb.h"
+#include "hgRelate.h"
+#include "binRange.h"
+
+static char const rcsid[] = "$Id: hgClusterGenes.c,v 1.1 2003/08/27 21:58:03 kent Exp $";
+
+void usage()
+/* Explain usage and exit. */
+{
+errAbort(
+  "hgClusterGenes - Cluster overlapping gene predictions\n"
+  "usage:\n"
+  "   hgClusterGenes database geneTable clusterTable\n"
+  "options:\n"
+  "   -chrom=chrN - Just work on one chromosome\n"
+  "   -verbose=0 - Print copious debugging info. 0 for none, 3 for loads\n"
+  );
+}
+
+int verbose = 0;
+
+static struct optionSpec options[] = {
+   {"chrom", OPTION_STRING},
+   {"verbose", OPTION_INT},
+   {NULL, 0},
+};
+
+struct cluster
+/* A cluster of overlapping genes. */
+    {
+    struct cluster *next;	/* Next in list. */
+    struct hash *geneHash;	/* Associated genes. */
+    int start,end;		/* Range covered by cluster. */
+    };
+
+void clusterDump(struct cluster *cluster)
+/* Dump contents of cluster to stdout. */
+{
+struct hashEl *helList = hashElListHash(cluster->geneHash);
+struct hashEl *hel;
+printf("%d-%d", cluster->start, cluster->end);
+for (hel = helList; hel != NULL; hel = hel->next)
+    {
+    struct genePred *gp = hel->val;
+    printf(" %s", gp->name);
+    }
+printf("\n");
+}
+
+struct cluster *clusterNew()
+/* Create new cluster. */
+{
+struct cluster *cluster;
+AllocVar(cluster);
+cluster->geneHash = hashNew(5);
+return cluster;
+}
+
+void clusterFree(struct cluster **pCluster)
+/* Free up a cluster. */
+{
+struct cluster *cluster = *pCluster;
+if (cluster == NULL)
+    return;
+hashFree(&cluster->geneHash);
+freez(pCluster);
+}
+
+void clusterFreeList(struct cluster **pList)
+/* Free a list of dynamically allocated cluster's */
+{
+struct cluster *el, *next;
+
+for (el = *pList; el != NULL; el = next)
+    {
+    next = el->next;
+    clusterFree(&el);
+    }
+*pList = NULL;
+}
+
+int clusterCmp(const void *va, const void *vb)
+/* Compare to sort based on start. */
+{
+const struct cluster *a = *((struct cluster **)va);
+const struct cluster *b = *((struct cluster **)vb);
+return a->start - b->start;
+}
+
+
+
+void clusterAddExon(struct cluster *cluster,
+	int start, int end, struct genePred *gp)
+/* Add exon to cluster. */
+{
+if (!hashLookup(cluster->geneHash, gp->name))
+    hashAdd(cluster->geneHash, gp->name, gp);
+if (cluster->start == cluster->end)
+    {
+    cluster->start = start;
+    cluster->end = end;
+    }
+else
+    {
+    if (start < cluster->start) cluster->start = start;
+    if (cluster->end < end) cluster->end = end;
+    }
+}
+
+void addExon(struct binKeeper *bk, struct dlNode *clusterNode,
+	int start, int end, struct genePred *gp)
+/* Add exon to cluster and binKeeper. */
+{
+clusterAddExon(clusterNode->val, start, end, gp);
+binKeeperAdd(bk, start, end, clusterNode);
+}
+
+void mergeClusters(struct binKeeper *bk, struct binElement *bkRest,
+	struct dlNode *aNode, struct dlNode *bNode)
+/* Move bNode into aNode. */
+{
+struct cluster *aCluster = aNode->val;
+struct cluster *bCluster = bNode->val;
+struct binElement *bkEl;
+struct hashEl *hEl, *hList;
+
+if (verbose >= 3) 
+    {
+    printf(" a: ");
+    clusterDump(aCluster);
+    printf(" b: ");
+    clusterDump(bCluster);
+    }
+
+/* First change references to bNode. */
+binKeeperReplaceVal(bk, bCluster->start, bCluster->end, bNode, aNode);
+for (bkEl = bkRest; bkEl != NULL; bkEl = bkEl->next)
+    if (bkEl->val == bNode) 
+        bkEl->val = aNode;
+
+/* Add b's genes to a. */
+hList = hashElListHash(bCluster->geneHash);
+for (hEl = hList; hEl != NULL; hEl = hEl->next)
+    hashAdd(aCluster->geneHash, hEl->name, hEl->val);
+
+/* Adjust start/end. */
+if (bCluster->start < aCluster->start) 
+    aCluster->start = bCluster->start;
+if (aCluster->end < bCluster->end)
+    aCluster->end = bCluster->end;
+
+/* Remove all traces of bNode. */
+dlRemove(bNode);
+clusterFree(&bCluster);
+if (verbose >= 3) 
+    {
+    printf(" ab: ");
+    clusterDump(aCluster);
+    }
+}
+
+int totalGeneCount = 0;
+int totalClusterCount = 0;
+
+struct cluster *makeCluster(struct genePred *geneList, int chromSize)
+/* Create clusters out of overlapping genes. */
+{
+struct binKeeper *bk = binKeeperNew(0, chromSize);
+struct dlList *clusters = newDlList();
+struct dlNode *node;
+struct cluster *clusterList = NULL, *cluster;
+struct genePred *gp;
+
+/* Build up cluster list with aid of binKeeper.
+ * For each exon look to see if it overlaps an
+ * existing cluster.  If so put it into existing
+ * cluster, otherwise make a new cluster.  The hard
+ * case is where part of the gene is already in one
+ * cluster and the exon overlaps with a new
+ * cluster.  In this case merge the new cluster into
+ * the old one. */
+for (gp = geneList; gp != NULL; gp = gp->next)
+    {
+    int exonIx;
+    struct dlNode *oldNode = NULL;
+    if (verbose >= 2)
+	printf("%s %d-%d\n", gp->name, gp->txStart, gp->txEnd);
+    for (exonIx = 0; exonIx < gp->exonCount; ++exonIx)
+        {
+	int exonStart = gp->exonStarts[exonIx];
+	int exonEnd = gp->exonEnds[exonIx];
+	struct binElement *bEl, *bList = binKeeperFind(bk, exonStart, exonEnd);
+	if (verbose >= 4)
+	    printf("  %d %d\n", exonIx, exonStart);
+	if (bList == NULL)
+	    {
+	    if (oldNode == NULL)
+		{
+		struct cluster *cluster = clusterNew();
+		oldNode = dlAddValTail(clusters, cluster);
+		}
+	    addExon(bk, oldNode, exonStart, exonEnd, gp);
+	    }
+	else
+	    {
+	    for (bEl = bList; bEl != NULL; bEl = bEl->next)
+		{
+		struct dlNode *newNode = bEl->val;
+		if (newNode != oldNode)
+		    {
+		    if (oldNode == NULL)
+			{
+			/* Add to existing cluster. */
+			oldNode = newNode;
+			}
+		    else
+			{
+			/* Merge new cluster into old one. */
+			if (verbose >= 3)
+			    printf("Merging %p %p\n", oldNode, newNode);
+			mergeClusters(bk, bEl->next, oldNode, newNode);
+			}
+		    }
+		}
+	    addExon(bk, oldNode, exonStart, exonEnd, gp);
+	    slFreeList(&bList);
+	    }
+	}
+    }
+
+/* We build up the cluster list as a doubly-linked list
+ * to make it faster to remove clusters that get merged
+ * into another cluster.  At the end though we make
+ * a singly-linked list out of it. */
+for (node = clusters->tail; !dlStart(node); node=node->prev)
+    {
+    cluster = node->val;
+    slAddHead(&clusterList, cluster);
+    }
+slSort(&clusterList, clusterCmp);
+
+/* Clean up and go home. */
+binKeeperFree(&bk);
+dlListFree(&clusters);
+return clusterList;
+}
+
+void clusterGenesOnStrand(struct sqlConnection *conn,
+	char *geneTable, char *chrom, char strand, FILE *f)
+/* Scan through genes on this strand, cluster, and write clusters to file. */
+{
+struct sqlResult *sr;
+char **row;
+int rowOffset;
+struct genePred *gp, *gpList = NULL;
+char extraWhere[64];
+struct cluster *clusterList = NULL, *cluster;
+
+if (verbose >= 1)
+    printf("%s %c\n", chrom, strand);
+safef(extraWhere, sizeof(extraWhere), "strand = '%c'", strand);
+sr = hChromQuery(conn, geneTable, chrom, extraWhere, &rowOffset);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    gp = genePredLoad(row + rowOffset);
+    slAddHead(&gpList, gp);
+    ++totalGeneCount;
+    }
+slReverse(&gpList);
+clusterList = makeCluster(gpList, hChromSize(chrom));
+totalClusterCount += slCount(clusterList);
+genePredFreeList(&gpList);
+}
+
+void hgClusterGenes(char *database, char *geneTable, char *clusterTable)
+/* hgClusterGenes - Cluster overlapping gene predictions. */
+{
+struct slName *chromList, *chrom;
+FILE *f = hgCreateTabFile(".", clusterTable);
+struct sqlConnection *conn;
+
+hSetDb(database);
+if (optionExists("chrom"))
+    chromList = slNameNew(optionVal("chrom", NULL));
+else
+    chromList = hAllChromNames();
+conn = hAllocConn();
+for (chrom = chromList; chrom != NULL; chrom = chrom->next)
+    {
+    clusterGenesOnStrand(conn, geneTable, chrom->name, '+', f);
+    clusterGenesOnStrand(conn, geneTable, chrom->name, '-', f);
+    }
+printf("Got %d clusters, from %d genes in %d chromosomes\n",
+	totalClusterCount, totalGeneCount, slCount(chromList));
+uglyAbort("All for now");
+}
+
+int main(int argc, char *argv[])
+/* Process command line. */
+{
+optionInit(&argc, argv, options);
+verbose = optionInt("verbose", verbose);
+if (argc != 4)
+    usage();
+hgClusterGenes(argv[1], argv[2], argv[3]);
+return 0;
+}
