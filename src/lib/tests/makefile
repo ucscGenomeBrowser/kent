@@ -6,12 +6,20 @@ MYLIBDIR = ../../lib/${MACHTYPE}
 MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 BIN_DIR = bin/${MACHTYPE}
 
-test: htmlPageTest htmlExpandUrlTest
+test: errCatchTest htmlPageTest htmlExpandUrlTest
 	rm -r output
 	echo tested all
 
 mkdirs:
 	${MKDIR} output ${BIN_DIR}
+
+errCatchTest: errCatchTest.o ${MYLIBS} mkdirs
+	${CC} ${COPT} -o ${BIN_DIR}/errCatchTest errCatchTest.o ${MYLIBS} $L
+	strip ${BIN_DIR}/errCatchTest
+	${BIN_DIR}/errCatchTest secret > output/errCatch.good
+	diff expected/errCatch.good output/errCatch.good
+	${BIN_DIR}/errCatchTest bad > output/errCatch.bad
+	diff expected/errCatch.bad output/errCatch.bad
 
 htmlExpandUrlTest: htmlExpandUrlTest.o ${MYLIBS} mkdirs
 	${CC} ${COPT} -o ${BIN_DIR}/htmlExpandUrlTest htmlExpandUrlTest.o ${MYLIBS} $L
