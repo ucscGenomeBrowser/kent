@@ -793,3 +793,11 @@ priority 11
 group X
 visibility dense
 type bed 3 +
+
+track tarjeiUnverify
+shortLabel Unverified Tarjei
+longLabel Insertions found by Tarjei and unverified by Indelible
+priority 11
+group X
+visibility dense
+type bed 3 +
