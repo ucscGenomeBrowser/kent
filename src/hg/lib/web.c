@@ -8,7 +8,7 @@
 #include "dbDb.h"
 #include "axtInfo.h"
 
-static char const rcsid[] = "$Id: web.c,v 1.41 2003/09/26 23:04:34 angie Exp $";
+static char const rcsid[] = "$Id: web.c,v 1.42 2003/10/14 19:58:06 donnak Exp $";
 
 /* flag that tell if the CGI header has already been outputed */
 boolean webHeadAlreadyOutputed = FALSE;
@@ -135,13 +135,13 @@ printf("       <A HREF=\"/cgi-bin/hgGateway%s\" class=\"topbar\">\n",
 puts("           Genome Browser</A> &nbsp; - &nbsp;");
 printf("       <A HREF=\"/cgi-bin/hgBlat?command=start&%s\" class=\"topbar\">",
        uiState+1);
-puts("           Blat Search</A> &nbsp; - &nbsp;");
+puts("           Blat</A> &nbsp; - &nbsp;");
 printf("       <A HREF=\"/cgi-bin/hgText%s\" class=\"topbar\">\n", uiState);
 puts("           Table Browser</A> &nbsp; - &nbsp;");
 puts("       <A HREF=\"/FAQ.html\" class=\"topbar\">" "\n"
      "           FAQ</A> &nbsp; - &nbsp;" "\n" 
      "       <A HREF=\"/goldenPath/help/hgTracksHelp.html\" class=\"topbar\">" "\n"
-     "           User Guide</A> &nbsp;</font></TD>" "\n"
+     "           Help</A> &nbsp;</font></TD>" "\n"
      "       </TR></TABLE>" "\n"
      "</TD></TR></TABLE>" "\n"
      "</TD></TR>	" "\n"	
