@@ -14,7 +14,7 @@
 #include "cdsColors.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.93 2004/04/01 16:16:09 weber Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.94 2004/04/09 02:16:22 daryl Exp $";
 
 struct cart *cart;	/* Cookie cart with UI settings */
 char *database;		/* Current database. */
@@ -109,6 +109,7 @@ for (snpSource=0; snpSource<snpSourceCount; snpSource++)
 			   snpSourceCart[snpSource]);
     printf(" - <B>%s</B><BR>\n",snpSourceLabelEnumToString((enum snpSourceEnum)snpSource));
     }
+/*  Removing code that doesn't work - needs to be fixed.
 printf("<BR><B>Variant Types:</B><BR>\n");
 for (snpType=0; snpType<snpTypeCount; snpType++)
     {
@@ -119,6 +120,7 @@ for (snpType=0; snpType<snpTypeCount; snpType++)
 			 snpTypeCart[snpType]);
     printf(" - <B>%s</B><BR>\n",snpTypeLabelEnumToString((enum snpTypeEnum)snpType));
     }
+*/
 }
 
 void cbrWabaUi(struct trackDb *tdb)
