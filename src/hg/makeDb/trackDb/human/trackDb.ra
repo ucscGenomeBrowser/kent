@@ -164,6 +164,14 @@ priority 90.2
 visibility hide
 type psl .
 
+track affyGnf1h
+shortLabel Affymetrix GNF1H
+longLabel Alignments of Probes from Affymetrix GNF1H Chip
+group regulation
+priority 90.3
+visibility hide
+type psl .
+
 track humMusL 
 shortLabel Mouse Cons
 longLabel Human/Mouse Evolutionary Conservation Score (std units)

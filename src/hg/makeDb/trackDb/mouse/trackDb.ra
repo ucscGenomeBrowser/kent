@@ -105,6 +105,14 @@ priority 86
 visibility hide
 type psl .
 
+track affyGnf1h
+shortLabel Affymetrix GNF1M
+longLabel Alignments of Probes from Affymetrix GNF1M Chip
+group regulation
+priority 86.1
+visibility hide
+type psl .
+
 track blatFish
 shortLabel Tetraodon Blat
 longLabel Tetraodon nigroviridis Translated Blat Alignments
