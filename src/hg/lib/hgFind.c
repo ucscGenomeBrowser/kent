@@ -27,7 +27,7 @@
 #include "minGeneInfo.h"
 #include <regex.h>
 
-static char const rcsid[] = "$Id: hgFind.c,v 1.133 2004/04/14 22:47:07 angie Exp $";
+static char const rcsid[] = "$Id: hgFind.c,v 1.134 2004/04/22 17:43:23 angie Exp $";
 
 extern struct cart *cart;
 char *hgAppName = "";
@@ -2142,6 +2142,8 @@ while ((row = sqlNextRow(sr)) != NULL)
 sqlFreeResult(&sr);
 hFreeConn(&conn);
 slReverse(&xrefList);
+if (xrefList == NULL && hgFindSpecSetting(hfs, "searchBoth") != NULL)
+    xrefList = slPairNew(cloneString(""), cloneString(term));
 return(xrefList);
 }
 
@@ -2163,6 +2165,7 @@ char *termPrefix = hgFindSpecSetting(hfs, "termPrefix");
 char *paddingStr = hgFindSpecSetting(hfs, "padding");
 int padding = isEmpty(paddingStr) ? 0 : atoi(paddingStr);
 boolean found = FALSE;
+char *description = NULL;
 char buf[512];
 
 if (isNotEmpty(termPrefix) && startsWith(termPrefix, term))
@@ -2170,8 +2173,15 @@ if (isNotEmpty(termPrefix) && startsWith(termPrefix, term))
 if (isEmpty(term))
     return(FALSE);
 
+if (isNotEmpty(hfs->searchDescription))
+    safef(buf, sizeof(buf), "%s", hfs->searchDescription);
+else
+    safef(buf, sizeof(buf), "%s", hfs->searchTable);
+description = cloneString(buf);
+
 if (hgp->tableList != NULL &&
-    sameString(hgp->tableList->name, hfs->searchTable))
+    sameString(hgp->tableList->name, hfs->searchTable) &&
+    sameString(hgp->tableList->description, description))
     table = hgp->tableList;
 
 for (tPtr = tableList;  tPtr != NULL;  tPtr = tPtr->next)
@@ -2183,11 +2193,7 @@ for (tPtr = tableList;  tPtr != NULL;  tPtr = tPtr->next)
 	if(table == NULL)
 	    {
 	    AllocVar(table);
-	    if (isNotEmpty(hfs->searchDescription))
-		safef(buf, sizeof(buf), "%s", hfs->searchDescription);
-	    else
-		safef(buf, sizeof(buf), "%s", hfs->searchTable);
-	    table->description = cloneString(buf);
+	    table->description = description;
 	    table->name = cloneString(hfs->searchTable);
 	    slAddHead(&hgp->tableList, table);
 	    }
