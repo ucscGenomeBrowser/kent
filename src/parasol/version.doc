@@ -12,3 +12,6 @@
 7 - Some changes on paraNode to hopefully make it harder for
     a node to lose track of the jobs it is running.  Using
     waitpid() rather than wait, and eliminating the clearZombies().
+8 - Made paraHub just warn rather than abort on failure to close
+    a results file cleanly.  Also changed auto-close time to
+    1 minute rather than 5.
