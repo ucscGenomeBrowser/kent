@@ -526,7 +526,7 @@ wiggle chr7_phyloHMMcons_CFTR
 yLineOnOff Off
 pairwise CFTR 20
 autoScaleDefault Off
-speciesOrder chimp orangutan baboon macaque vervet lemur rabbit rat mouse cow pig horse cat dog ajbat cpbat hedgehog opossum dunnart platypus chicken zfish tetra fugu
+speciesOrder chimp orangutan baboon macaque vervet lemur rabbit rn3 mm3 cow pig horse cat dog ajbat cpbat hedgehog opossum dunnart platypus chicken zfish tetra fr1
 
 track lineageMutations
 shortLabel LineageMutations
@@ -995,7 +995,7 @@ wiggle multizMm3Rn3GalGal2_phyloHMM_wig
 yLineOnOff Off
 autoScaleDefault Off
 pairwise hmrg 
-speciesOrder mouse rat chicken
+speciesOrder mm3 rn3 galGal2
 
 track mzPt1Mm3Rn3Gg2_pHMM
 shortLabel Conservation
@@ -1010,7 +1010,7 @@ wiggle mzPt1Mm3Rn3Gg2_pHMM_wig
 yLineOnOff Off
 autoScaleDefault Off
 pairwise hmrg
-speciesOrder chimp mouse rat chicken
+speciesOrder panTro1 mm3 rn3 galGal2
 
 track pHMM_5_WayTop5
 shortLabel Thresholded Cons
