@@ -21,3 +21,6 @@ mgsc: strip
 
 compile: $O 
 	${CC} -o $A $O ${MYLIBS} ${L}
+
+wigTrack.o:	wigCommon.h
+bedGraph.o:	wigCommon.h
