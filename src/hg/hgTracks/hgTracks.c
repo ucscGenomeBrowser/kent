@@ -76,7 +76,7 @@
 #include "web.h"
 #include "grp.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.567.2.1 2003/08/01 20:13:38 heather Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.567.2.2 2003/08/14 17:11:24 hiram Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define EXPR_DATA_SHADES 16
@@ -1627,7 +1627,19 @@ interpolate = cartUsualString(cart, o1, "Linear Interpolation");
 wiggleType = wiggleStringToEnum(interpolate);
 aa = cartUsualString(cart, o2, "on");
 antiAlias = sameString(aa, "on");
-fill = atoi(cartUsualString(cart, o3, "1"));
+
+//	Patch in sampleTracks.c v1.2 change - Hiram 2003-08-14
+//don't fill gcPercent track by default (but fill others)
+if(sameString( tg->mapName, "pGC") && sameString(database,"zooHuman3"))
+{
+        fill = atoi(cartUsualString(cart, o3, "0"));
+	    cartSetString(cart, o3, "0" );
+}
+else
+{
+        fill = atoi(cartUsualString(cart, o3, "1"));
+	    cartSetString(cart, o3, "1" );
+}
 
 //the 0.1 is so the label doesn't get truncated with integer valued user input min
 //display range.
@@ -10814,6 +10826,6 @@ cgiSpoof(&argc, argv);
 htmlSetBackground("../images/floret.jpg");
 if (cgiVarExists("hgt.reset"))
     resetVars();
-cartHtmlShell("UCSC Genome Browser v30", doMiddle, hUserCookie(), excludeVars, NULL);
+cartHtmlShell("UCSC Genome Browser v30-patched", doMiddle, hUserCookie(), excludeVars, NULL);
 return 0;
 }
