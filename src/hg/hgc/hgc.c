@@ -482,6 +482,11 @@ if (wordCount > 0)
 	genericPslClick(conn, tdb, item, start, subType);
 	}
     }
+if (tdb->html != NULL && tdb->html[0] != 0)
+    {
+    htmlHorizontalLine();
+    puts(tdb->html);
+    }
 printTrackHtml(tdb);
 freez(&dupe);
 hFreeConn(&conn);
@@ -3770,7 +3775,7 @@ printf("</TR>\n</TABLE>\n");
 
 hgFreeConn(&conn);
 webEnd();
-} 
+}
 
 void doMcnBreakpoints(char *track, char *name, struct trackDb *tdb)
 /* Create detail page for MCN breakpoints track */ 
@@ -3841,7 +3846,6 @@ void doMgcMrna(char *track, char *acc)
 
 #endif /* ROGIC_CODE */
 #ifdef CHUCK_CODE
-
 
 void perlegenDetails(struct trackDb *tdb, char *item)
 {
@@ -3946,9 +3950,11 @@ printf("<INPUT TYPE=CHECKBOX NAME=\"%s\" VALUE=on%s>", name,
 }
 
 
-struct rgbColor getColorForExprBed(float val, float max, boolean redGreen)
+struct rgbColor getColorForExprBed(float val, float max)
 /* Return the correct color for a given score */
 {
+char *colorScheme = cartUsualString(cart, "exprssn.color", "rg");
+boolean redGreen = sameString(colorScheme, "rg");
 float absVal = fabs(val);
 struct rgbColor color; 
 int colorIndex = 0;
@@ -4107,12 +4113,11 @@ char *scoresHeader = "Exon Number";
 msBedPrintTableHeader(bedList, erHash, itemName, headerNames, ArraySize(headerNames), scoresHeader);
 }
 
-void printExprssnColorKey(float maxVal)
+void printExprssnColorKey(float maxVal,
+			  struct rgbColor(*getColor)(float val, float maxVal))
 /* print out a little table which provides a color->score key */
 {
 float currentVal = -1 * maxVal;
-char *colorScheme = cartUsualString(cart, "exprssn.color", "rg");
-boolean redColor = sameString(colorScheme, "rg");
 int square = 15;
 int numColumns;
 float stepSize = .2;
@@ -4129,7 +4134,7 @@ for(currentVal = -1 * maxVal; currentVal <= maxVal + stepSize; currentVal += ste
 printf("</tr><tr>\n");
 for(currentVal = -1 * maxVal; currentVal <= maxVal + stepSize; currentVal += stepSize)
     {
-    struct rgbColor rgb = getColorForExprBed(currentVal, maxVal, redColor);
+    struct rgbColor rgb = getColor(currentVal, maxVal);
     printf("<td bgcolor=\"#%.2X%.2X%.2X\">&nbsp</td>\n", rgb.r, rgb.g, rgb.b);
     }
 printf("</tr></table>\n");
@@ -4144,9 +4149,7 @@ void msBedExpressionPrintRow(struct bed *bedList, struct hash *erHash, int expIn
 char buff[32];
 struct bed *bed = bedList;
 struct expRecord *er = NULL;
-char *colorScheme = cartUsualString(cart, "exprssn.color", "rg");
 int square = 10;
-boolean redColor = sameString(colorScheme, "rg");
 snprintf(buff, sizeof(buff), "%d", expIndex);
 er = hashMustFindVal(erHash, buff);
 
@@ -4159,7 +4162,7 @@ else
 for(bed = bedList;bed != NULL; bed = bed->next)
     {
 	/* use the background colors to creat patterns */
-	struct rgbColor rgb = getColorForExprBed(bed->expScores[expIndex], maxScore, redColor);
+	struct rgbColor rgb = getColorForExprBed(bed->expScores[expIndex], maxScore);
 	printf("<td height=%d width=%d bgcolor=\"#%.2X%.2X%.2X\">&nbsp</td>\n", square, square, rgb.r, rgb.g, rgb.b);
 	}
 printf("</tr>\n");
@@ -4168,7 +4171,8 @@ printf("</tr>\n");
 void msBedPrintTable(struct bed *bedList, struct hash *erHash, char *itemName, char *expName, float maxScore,
 		     void(*printHeader)(struct bed *bedList, struct hash *erHash, char *item),
 		     void(*printRow)(struct bed *bedList,struct hash *erHash, int expIndex, char *expName, float maxScore),
-		     void(*printKey)(float maxVal))
+		     void(*printKey)(float maxVal, struct rgbColor(*getColor)(float val, float max)),
+		     struct rgbColor(*getColor)(float val, float max))
 /* prints out a table from the data present in the bedList */
 {
 int i,featureCount=0, currnetRow=0, square=10;
@@ -4180,7 +4184,7 @@ if(bedList == NULL)
 featureCount = slCount(bedList);
 /* time to write out some html, first the table and header */
 if(printKey != NULL)
-    printKey(maxScore);
+    printKey(maxScore, getColor);
 printf("<p>\n");
 printf("<basefont size=-1>\n");
 printf("<TABLE  BGCOLOR=\"#000000\" BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"1\"><TR><TD>");
@@ -4271,9 +4275,7 @@ void rosettaPrintRow(struct bed *bedList, struct hash *erHash, int expIndex, cha
 char buff[32];
 struct bed *bed = bedList;
 struct expRecord *er = NULL;
-char *colorScheme = cartUsualString(cart, "exprssn.color", "rg");
 int square = 10;
-boolean redColor = sameString(colorScheme, "rg");
 snprintf(buff, sizeof(buff), "%d", expIndex);
 er = hashMustFindVal(erHash, buff);
 
@@ -4289,7 +4291,7 @@ else
 for(bed = bedList;bed != NULL; bed = bed->next)
     {
 	/* use the background colors to creat patterns */
-	struct rgbColor rgb = getColorForExprBed(bed->expScores[expIndex], maxScore, redColor);
+	struct rgbColor rgb = getColorForExprBed(bed->expScores[expIndex], maxScore);
 	printf("<td height=%d width=%d bgcolor=\"#%.2X%.2X%.2X\">&nbsp</td>\n", square, square, rgb.r, rgb.g, rgb.b);
 	}
 printf("</tr>\n");
@@ -4312,7 +4314,7 @@ else
 	snprintf(buff, sizeof(buff), "%d", er->id);
 	hashAddUnique(erHash, buff, er);
 	}
-    msBedPrintTable(bedList, erHash, itemName, expName, maxScore, rosettaPrintHeader, rosettaPrintRow, printExprssnColorKey);
+    msBedPrintTable(bedList, erHash, itemName, expName, maxScore, rosettaPrintHeader, rosettaPrintRow, printExprssnColorKey, getColorForExprBed);
     expRecordFreeList(&erList);
     hashFree(&erHash);
     bedFreeList(&bedList);
@@ -4411,7 +4413,136 @@ else
 	snprintf(buff, sizeof(buff), "%d", er->id);
 	hashAddUnique(erHash, buff, er);
 	}
-    msBedPrintTable(bedList, erHash, itemName, expName, maxScore, msBedDefaultPrintHeader, msBedExpressionPrintRow, printExprssnColorKey);
+    msBedPrintTable(bedList, erHash, itemName, expName, maxScore, msBedDefaultPrintHeader, msBedExpressionPrintRow, printExprssnColorKey, getColorForExprBed);
+    expRecordFreeList(&erList);
+    hashFree(&erHash);
+    bedFreeList(&bedList);
+    }
+webEnd();
+}
+
+struct rgbColor getColorForCghBed(float val, float max)
+/* Return the correct color for a given score */
+{
+char *colorScheme = cartUsualString(cart, "cghNci60.color", "gr");
+boolean redColor = sameString(colorScheme, "rg");
+float absVal = fabs(val);
+struct rgbColor color; 
+int colorIndex = 0;
+/* if log score is -10000 data is missing */
+if(val == -10000) 
+    {
+    color.g = color.r = color.b = 128;
+    return(color);
+    }
+
+if(absVal > max) 
+    absVal = max;
+if (max == 0) 
+    errAbort("ERROR: hgc::getColorForCghBed() maxDeviation can't be zero\n"); 
+colorIndex = (int)(absVal * 255/max);
+if(sameString(colorScheme, "gr")) 
+    {
+    if(val < 0) 
+	{
+	color.r = colorIndex; 
+	color.g = 0;
+	color.b = 0;
+	}
+    else 
+	{
+	color.r = 0;
+	color.g = colorIndex;
+	color.b = 0;
+	}
+    } 
+else if(sameString(colorScheme, "rg")) 
+    {
+    if(val > 0) 
+	{
+	color.r = colorIndex; 
+	color.g = 0;
+	color.b = 0;
+	}
+    else 
+	{
+	color.r = 0;
+	color.g = colorIndex;
+	color.b = 0;
+	}
+    }
+else
+    {
+    if(val > 0) 
+	{
+	color.r = colorIndex; 
+	color.g = 0;
+	color.b = 0;
+	}
+    else 
+	{
+	color.r = 0;
+	color.g = 0;
+	color.b = colorIndex;
+	}
+    }
+return color;
+}
+
+void msBedCghPrintRow(struct bed *bedList, struct hash *erHash, int expIndex, char *expName, float maxScore)
+/* print the name of the experiment and color the 
+   background of individual cells using the score to 
+   create false two color display */
+{
+char buff[32];
+struct bed *bed = bedList;
+struct expRecord *er = NULL;
+int square = 10;
+snprintf(buff, sizeof(buff), "%d", expIndex);
+er = hashMustFindVal(erHash, buff);
+
+printf("<tr>\n");
+if(strstr(er->name, expName))
+    printf("<td align=left bgcolor=\"D9E4F8\"> %s</td>\n",er->name);
+else
+    printf("<td align=left> %s</td>\n", er->name);
+
+for(bed = bedList;bed != NULL; bed = bed->next)
+    {
+	/* use the background colors to creat patterns */
+	struct rgbColor rgb = getColorForCghBed(bed->expScores[expIndex], maxScore);
+	printf("<td height=%d width=%d bgcolor=\"#%.2X%.2X%.2X\">&nbsp</td>\n", square, square, rgb.r, rgb.g, rgb.b);
+	}
+printf("</tr>\n");
+}
+
+void cghNci60Details(struct trackDb *tdb, char *expName) 
+/* print out a page for the nci60 data from stanford */
+{
+struct bed *bedList;
+char *tableName = "cghNci60Exps";
+char *itemName = cgiUsualString("i2","none");
+struct expRecord *erList = NULL, *er;
+char buff[32];
+struct hash *erHash;
+float maxScore = 1.6;
+bedList = loadMsBed(tdb->tableName, seqName, winStart, winEnd);
+genericHeader(tdb, itemName);
+
+printf("%s", tdb->html);
+printf("<br><br>");
+if(bedList == NULL)
+    printf("<b>No CGH Data in this Range.</b>\n");
+else 
+    {
+    erHash = newHash(2);
+    erList = loadExpRecord(tableName, "hgFixed");
+    for(er = erList; er != NULL; er=er->next)
+	{
+	snprintf(buff, sizeof(buff), "%d", er->id);
+	hashAddUnique(erHash, buff, er);
+	}
+    msBedPrintTable(bedList, erHash, itemName, expName, maxScore, msBedDefaultPrintHeader, msBedCghPrintRow, printExprssnColorKey, getColorForCghBed);
     expRecordFreeList(&erList);
     hashFree(&erHash);
     bedFreeList(&bedList);
@@ -4947,6 +5078,10 @@ else if (sameWord(track, "htcDnaNearGene"))
    {
    htcDnaNearGene(item);
    }
+else if (sameWord(track, "cghNci60"))
+    {
+    cghNci60Details(tdb, item);
+    }
 else if (sameWord(track, "nci60"))
     {
     nci60Details(tdb, item);
