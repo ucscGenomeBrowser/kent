@@ -43,9 +43,8 @@ chip placeHolderForHgc
 track flyFeepAnova
 shortLabel FEEP (Anova)
 longLabel Full Euchromatic Expression Profile - Probes Diff. Expressed by ANOVA
-subTrack flyFeepComposite
+subTrack flyFeepComposite off
 priority 79.001
-visibility hide
 expTable flyFeepMedianExps
 expScale 3.0
 expStep 0.5
@@ -56,7 +55,6 @@ shortLabel FEEP (>Bg)
 longLabel Full Euchromatic Expression Profile - Probes Expressed Above Background
 subTrack flyFeepComposite
 priority 79.002
-visibility pack
 expTable flyFeepMedianExps
 expScale 3.0
 expStep 0.5
@@ -65,9 +63,8 @@ chip placeHolderForHgc
 track flyFeep
 shortLabel FEEP (All)
 longLabel Full Euchromatic Expression Profile - All Probes
-subTrack flyFeepComposite
+subTrack flyFeepComposite off
 priority 79.003
-visibility hide
 expTable flyFeepMedianExps
 expScale 3.0
 expStep 0.5
