@@ -76,7 +76,7 @@
 #include "web.h"
 #include "grp.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.554 2003/07/09 22:31:37 braney Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.555 2003/07/10 00:40:19 braney Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define EXPR_DATA_SHADES 16
@@ -1236,7 +1236,7 @@ int x1,x2;
 int shortOff = 2, shortHeight = heightPer-4;
 int tallStart, tallEnd, s, e, e2, s2;
 Color bColor;
-boolean chainLines = (vis != tvDense && tg->subType == lfSubChain);
+boolean chainLines = ((vis != tvDense) && (tg->subType == lfSubChain));
 boolean hideLine = ((tg->subType == lfSubChain) || 
 	(vis == tvDense && tg->subType == lfSubXeno));
 int midY = y + (heightPer>>1);
