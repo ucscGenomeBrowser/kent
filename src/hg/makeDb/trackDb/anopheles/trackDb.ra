@@ -6,4 +6,5 @@ priority 112
 visibility pack
 colorChromDefault off
 type psl protein
+pred dm1.blastFBPep
 

@@ -1251,6 +1251,7 @@ priority 112
 visibility hide
 colorChromDefault off
 type psl protein
+pred dm1.blastFBPep00
 
 track blastHg16KG
 shortLabel Human Proteins
@@ -1260,6 +1261,7 @@ priority 142
 visibility pack
 colorChromDefault off
 type psl protein
+pred hg16.blastKGPep00
 
 searchTable ctgPos
 searchMethod exact

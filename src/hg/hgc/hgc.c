@@ -141,7 +141,7 @@
 #include "bed6FloatScore.h"
 #include "pscreen.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.716 2004/08/07 00:45:02 hartera Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.717 2004/08/11 19:45:26 braney Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -4756,12 +4756,13 @@ enum gfType tt = gftDnaX, qt = gftProt;
 boolean isProt = 1;
 struct sqlResult *sr;
 struct sqlConnection *conn = hAllocConn();
-struct dnaSeq *seq;
+struct dnaSeq *seq = NULL;
 char query[256], **row;
 char fullTable[64];
 boolean hasBin;
 char buffer[256];
 int addp = 0;
+char *pred = NULL;
 
 /* Print start of HTML. */
 writeFramesetType();
@@ -4769,6 +4770,7 @@ puts("<HTML>");
 printf("<HEAD>\n<TITLE>Protein Sequence vs Genomic</TITLE>\n</HEAD>\n\n");
 
 addp = cartUsualInt(cart, "addp",0);
+pred = cartUsualString(cart, "pred",NULL);
 start = cartInt(cart, "o");
 hFindSplitTable(seqName, table, fullTable, &hasBin);
 sprintf(query, "select * from %s where qName = '%s' and tName = '%s' and tStart=%d",
@@ -4778,11 +4780,14 @@ if ((row = sqlNextRow(sr)) == NULL)
     errAbort("Couldn't find alignment for %s at %d", readName, start);
 psl = pslLoad(row+hasBin);
 sqlFreeResult(&sr);
-hFreeConn(&conn);
-if (addp == 1)
+if ((addp == 1) || (pred != NULL))
     {
     char *ptr;
+
+    if (!hTableExists(pred))
+	addp = 1;
     sprintf(buffer, "%s",readName);
+    
     if ((ptr = strchr(buffer, '.')) != NULL)
 	{
 	*ptr = 0;
@@ -4790,10 +4795,23 @@ if (addp == 1)
 	*ptr++ = 'p';
 	*ptr = 0;
 	}
-    seq = hPepSeq(buffer);
+    if (addp == 1)
+	seq = hPepSeq(buffer);
+    else
+	{
+	safef(query, sizeof(query),
+	    "select seq from %s where name = '%s'", pred, psl->qName);
+	sr = sqlGetResult(conn, query);
+	if ((row = sqlNextRow(sr)) != NULL)
+	    seq = newDnaSeq(cloneString(row[0]), strlen(row[0]), psl->qName);
+	else
+	    errAbort("Cannot find sequence for '%s' in %s",psl->qName, pred);
+	sqlFreeResult(&sr);
+	}
     }
 else
     seq = hPepSeq(readName);
+hFreeConn(&conn);
 showSomeAlignment(psl, seq, qt, 0, seq->size, NULL, 0, 0);
 }
 
@@ -13768,6 +13786,7 @@ char *acc = NULL, *prot = NULL;
 char *gene = NULL, *pos = NULL;
 char buffer[1024];
 boolean isDm = FALSE;
+char *pred = trackDbSettingOrDefault(tdb, "pred", "NULL");
 
 if (sameString("blastDm1FB", tdb->tableName))
     isDm = TRUE;
@@ -13835,9 +13854,9 @@ for (same = 1; same >= 0; same -= 1)
 	{
 	if (same ^ (psl->tStart != start))
 	    {
-	    printf("<A HREF=\"%s?o=%d&g=htcProteinAli&addp=1&i=%s&c=%s&l=%d&r=%d&db=%s&aliTrack=%s&%s\">", 
+	    printf("<A HREF=\"%s?o=%d&g=htcProteinAli&i=%s&c=%s&l=%d&r=%d&db=%s&aliTrack=%s&%s&pred=%s\">", 
 		hgcName(), psl->tStart, psl->qName,  psl->tName,
-		psl->tStart, psl->tEnd, database,tdb->tableName, uiState);
+		psl->tStart, psl->tEnd, database,tdb->tableName, uiState,pred);
 	    printf("alignment</A> ");
 	    printf("<A HREF=\"%s?o=%d&g=htcGetBlastPep&i=%s&c=%s&l=%d&r=%d&db=%s&aliTrack=%s&%s\">", 
 		hgcName(), psl->tStart, psl->qName,  psl->tName,
@@ -14941,7 +14960,7 @@ cart = theCart;
 doMiddle();
 }
 
-char *excludeVars[] = {"bool.hcg.dna.rc", "Submit", "submit", "g", "i", "aliTrack", NULL};
+char *excludeVars[] = {"bool.hcg.dna.rc", "Submit", "submit", "g", "i", "aliTrack", "addp", "pred", NULL};
 
 int main(int argc, char *argv[])
 {
