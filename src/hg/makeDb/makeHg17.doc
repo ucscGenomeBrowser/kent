@@ -11445,6 +11445,10 @@ axtChain -scoreScheme=/cluster/data/blastz/HoxD55.q \
 # refGene:cds 1.015%, netDanRer2 22.898%, both 0.783%, cover 77.15%, 
 # enrich 3.37x
 
+    # index had NULL cardinality, analyze table to fix (2005-1-18, Heather)
+    hgsql hg17
+    analyze table netDanRer2
+
 # LOAD ACEMBLY TRACK (in progress, 2004-12-09, hartera)
     mkdir -p /cluster/data/hg17/bed/acembly
     cd /cluster/data/hg17/bed/acembly
