@@ -274,7 +274,7 @@ type genePred
 
 track knownGene
 shortLabel Known Genes
-longLabel Known Genes based on SWISS-PROT, TrEMBL, and mRNA
+longLabel Known Genes based on SWISS-PROT, TrEMBL, mRNA, and RefSeq
 group genes
 priority 34
 visibility pack
