@@ -20,7 +20,7 @@
 #include "wiggle.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: wiggle.c,v 1.19 2004/09/13 16:25:41 hiram Exp $";
+static char const rcsid[] = "$Id: wiggle.c,v 1.20 2004/09/13 23:09:33 hiram Exp $";
 
 extern char *maxOutMenu[];
 
@@ -254,13 +254,15 @@ switch (wigOutType)
     case wigDataNoPrint:
 	if (data)
 	    {
-	    /*	if it is not null, then add to it, if null simply move */
-	    if (*data == NULL)
-		{
-		*data = wds->ascii;	/* moving the list to *data */
-		wds->ascii = NULL;	/* gone as far as wds is concerned */
+	    if (*data != NULL)
+		{	/*	data not null, add to existing list	*/
+		struct wigAsciiData *asciiData;
+		for (asciiData = *data; asciiData; asciiData = asciiData->next)
+		    slAddHead(&wds->ascii, asciiData);
 		}
-	    /*	XXX TBD else case not implemented yet	*/
+	    wds->sortResults(wds);
+	    *data = wds->ascii;	/* moving the list to *data */
+	    wds->ascii = NULL;	/* gone as far as wds is concerned */
 	    }
 	    linesOut = valuesMatched;
 	break;
@@ -272,7 +274,6 @@ switch (wigOutType)
 	linesOut = wds->asciiOut(wds, "stdout", TRUE, FALSE);
 	break;		/* TRUE == sort output, FALSE == not raw data out */
     };
-
 
 wiggleDataStreamFree(&wds);
 
