@@ -3,9 +3,9 @@
 
 # Set up some variables and make working directory
 ssh hgwdev
-set db = hg15
-set dbDir = /cluster/store5/gs.16/build33
-mkdir $dbDir/bed/near
+set db = hg16
+set dbDir = /cluster/data/$db
+mkdir -p $dbDir/bed/near
 cd $dbDir/bed/near
 
 # Extract peptides from knownGenes into fasta file
@@ -26,34 +26,39 @@ mkdir -p /iscratch/i/$db/known
 cp $dbDir/bed/near/blastDb/known.* /iscratch/i/$db/known
 
 # Load up iscratch/i with blastp and related files
-mkdir -p /iscratch/i/blast
-cp /projects/compbio/bin/i686/blastall /iscratch/i/blast
-mkdir -p /iscratch/i/blast/data
-cp /projects/compbio/bin/i686/data/* /iscratch/i/blast/data
+# if necessary
+if (! -e /iscratch/i/blast/blastall) then
+    mkdir -p /iscratch/i/blast
+    cp /projects/compbio/bin/i686/blastall /iscratch/i/blast
+    mkdir -p /iscratch/i/blast/data
+    cp /projects/compbio/bin/i686/data/* /iscratch/i/blast/data
+endif
 iSync
-
 
 # Split up fasta file into bite sized chunks for cluster
 cd $dbDir/bed/near
 mkdir split
-faSplit sequence known.faa 6000 split
+faSplit sequence known.faa 6000 split/split
 
 # Make parasol run directory 
+ssh kk
+cd $dbDir/bed/near
 mkdir run
 cd run
 mkdir out
 
 # Make blast script
 cat > blastSome <<end
+#!/bin/csh
 setenv BLASTMAT /iscratch/i/blast/data
-/iscratch/i/blast/blastall -p blastp -d /iscratch/i/hg15/known/known -i $1 -o $2 -e 0.01 -m 8 -b 1000
+/iscratch/i/blast/blastall -p blastp -d /iscratch/i/hg15/known/known -i \$1 -o \$2 -e 0.01 -m 8 -b 1000
 end
 chmod a+x blastSome
 
 # Make gensub2 file
 cat > gsub <<end
 #LOOP
-blastSome {check in line+ $(path1)} {check out line $(path2)}
+blastSome {check in line+ \$(path1)} {check out line out/\$(root1).tab}
 #ENDLOOP
 end
 
@@ -68,9 +73,16 @@ para try
 para push
 # This should finish in 5-10 minutes if the cluster is free.
 
+#Completed: 5815 of 5815 jobs
+#CPU time in finished jobs:     125571s    2092.84m    34.88h    1.45d  0.004 y
+#IO & Wait Time:                 24734s     412.24m     6.87h    0.29d  0.001 y
+#Average job time:                  26s       0.43m     0.01h    0.00d
+#Longest job:                      259s       4.32m     0.07h    0.00d
+#Submission to last job:           438s       7.30m     0.12h    0.01d
+
 # Load into database
 ssh hgwdev
-mkdir $dbDir/bed/near/run/out
+cd $dbDir/bed/near/run/out
 hgLoadBlastTab $db knownBlastTab *.tab
 
 # Create a table that maps between known genes and 
