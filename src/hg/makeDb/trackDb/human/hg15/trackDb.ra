@@ -189,7 +189,7 @@ type chain hg15
 
 track uniGene_2
 shortLabel UniGene
-longLabel UniGene Hs 157 Alignments and SAGEmap Info
+longLabel UniGene Hs 160 Alignments and SAGEmap Info
 group rna
 priority 69
 visibility hide
