@@ -4633,6 +4633,37 @@ printTrackHtml(tdb);
 freez(&cgiItem);
 }
 
+void chainClick(struct trackDb *tdb, char *item, 
+	char *otherOrg, char *otherChromTable, char *otherDb)
+{
+int left = cartIntExp( cart, "l" );
+int right = cartIntExp( cart, "r" );
+int start = cartIntExp( cart, "o" );
+int end = cartIntExp( cart, "t" );
+char *cgiItem = cgiEncode(item);
+char *name = cartOptionalString(cart, "i");
+char tName[128]  ="xxxxxx", qName[128] = "xxxxxx";
+int tStart = 0, tEnd = 0, qStart = 0, qEnd = 0, qNum = 0, tNum = 0;
+
+    cartWebStart(cart, tdb->longLabel);
+    sscanf(name,"%3s%d:%d-%d %3s%d:%d-%d", qName, &qNum, &qStart, &qEnd, tName, &tNum, &tStart, &tEnd);
+   printf("<B>%s position:</B> <a target=\"_blank\" href=\"/cgi-bin/hgTracks?db=%s&position=%s%d%%3A%d-%d\">%s:%d-%d</a><BR>\n",
+        otherOrg, otherDb, qName, qNum, qStart+1, qEnd, qName, qStart+1, qEnd);
+
+printf("<B>%s size:</B> %d<BR>\n", otherOrg, qEnd - qStart);
+/*
+if (hTableExists("axtInfo"))
+    {
+    puts("<LI>\n");
+    hgcAnchorGenePsl(geneName, geneTable, seqName, "startcodon");
+    printf("Comparative Sequence</A> Annotated codons and translated protein with alignment to another species <BR>\n");
+    puts("</LI>\n");
+    }
+printf("</UL>\n");
+*/
+printTrackHtml(tdb);
+freez(&cgiItem);
+}
 
 void doBlatMus(struct trackDb *tdb, char *item)
 /* Put up cross-species alignment when the second species
@@ -4641,6 +4672,47 @@ void doBlatMus(struct trackDb *tdb, char *item)
 longXenoPsl1(tdb, item, "Mouse", "chromInfo", "mm2");
 }
 
+void netAlignClick(struct trackDb *tdb, char *item, 
+	char *otherOrg, char *otherChromTable, char *otherDb)
+/* Put up cross-species alignment when the second species
+ * sequence is in a nib file. */
+{
+struct psl *psl = NULL, *trimmedPsl = NULL;
+char otherString[256];
+char *cgiItem = cgiEncode(item);
+char *thisOrg = hOrganism(database);
+
+cartWebStart(cart, tdb->longLabel);
+psl = loadPslFromRangePair(tdb->tableName, item);
+printf("<B>%s position:</B> %s:%d-%d<BR>\n", otherOrg,
+	psl->qName, psl->qStart+1, psl->qEnd);
+printf("<B>%s size:</B> %d<BR>\n", otherOrg, psl->qEnd - psl->qStart);
+printf("<B>%s position:</B> %s:%d-%d<BR>\n", thisOrg,
+	psl->tName, psl->tStart+1, psl->tEnd);
+printf("<B>%s size:</B> %d<BR>\n", thisOrg,
+	psl->tEnd - psl->tStart);
+printf("<B>Identical Bases:</B> %d<BR>\n", psl->match + psl->repMatch);
+printf("<B>Number of Gapless Aligning Blocks:</B> %d<BR>\n", psl->blockCount );
+printf("<B>Percent identity within gapless aligning blocks:</B> %3.1f%%<BR>\n", 0.1*(1000 - pslCalcMilliBad(psl, FALSE)));
+printf("<B>Strand:</B> %s<BR>\n",psl->strand);
+printf("<B>Browser window position:</B> %s:%d-%d<BR>\n", seqName, winStart+1, winEnd);
+printf("<B>Browser window size:</B> %d<BR>\n", winEnd - winStart);
+/*sprintf(otherString, "%d&pslTable=%s&otherOrg=%s&otherChromTable=%s&otherDb=%s", psl->tStart, 
+	tdb->tableName, otherOrg, otherChromTable, otherDb);*/
+
+printTrackHtml(tdb);
+freez(&cgiItem);
+}
+
+void chainClickHandler(struct trackDb *tdb, char *item)
+{
+chainClick(tdb, item, "Mouse", "chromInfo", "mm2");
+}
+void netAlignClickHandler(struct trackDb *tdb, char *item)
+/* Put up details of one netted alignment */
+{
+netAlignClick(tdb, item, "Mouse", "chromInfo", "mm2");
+}
 
 void doMultAlignZoo(struct trackDb *tdb, char *item, char *otherName )
 /* Put up cross-species alignment when the second species
@@ -8639,8 +8711,6 @@ while ((row = sqlNextRow(sr)) != NULL)
 }
 }
 
-
-
 void footPrinterSampleClick(struct sqlConnection *conn, struct trackDb *tdb, 
 	char *item, int start, int smpSize)
 /* Handle click in humMus sample (wiggle) track. */
@@ -8959,6 +9029,14 @@ else if (sameWord(track, "blatMus")
 	 )
     {
     doBlatMus(tdb, item);
+    }
+else if (stringIn(track, "blastzChain"))
+    {
+    chainClickHandler(tdb, item);
+    }
+else if (stringIn(track, "netAlign"))
+    {
+    netAlignClickHandler(tdb, item);
     }
 else if (startsWith("multAlignWebb", track))
     {
