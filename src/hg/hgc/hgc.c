@@ -3130,10 +3130,11 @@ fprintf(f, "<H4><A NAME=ali></A>Side by Side Alignment*</H4>\n");
 		doBreak = FALSE;
 		}
 	    if (doBreak)
+		{
 		bafFlushLine(&baf);
-	    bafSetPos(&baf, qs, ts);
-	    if (doBreak)
+		bafSetPos(&baf, qs, ts);
 	        bafStartLine(&baf);
+		}
 	    for (j=0; j<sz; ++j)
 		bafOut(&baf, oSeq->dna[qs+j], dnaSeq->dna[ts+j]);
 	    lastQe = qs + sz;
