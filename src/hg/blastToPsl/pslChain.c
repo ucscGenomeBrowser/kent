@@ -14,7 +14,7 @@
 #include "portable.h"
 #include "psl.h"
 
-static char const rcsid[] = "$Id: pslChain.c,v 1.3 2003/11/06 14:39:40 braney Exp $";
+static char const rcsid[] = "$Id: pslChain.c,v 1.4 2003/12/14 15:14:11 braney Exp $";
 
 struct score
 {
@@ -90,6 +90,15 @@ else
     {
     char fileName[512];
     freeDnaSeq(pSeq);
+    if (optionExists("subdir"))
+    {
+    char *ptr = &newName[strlen(newName)] - 1;
+
+    assert(isdigit(*ptr));
+
+    snprintf(fileName, sizeof(fileName), "%s/%c/%s.nib", nibDir, *ptr, newName);
+    }
+    else
     snprintf(fileName, sizeof(fileName), "%s/%s.nib", nibDir, newName);
     *pName = newName;
     *pSeq = seq = nibLoadAllMasked(NIB_MASK_MIXED, fileName);
@@ -217,7 +226,7 @@ for (i=0; i<size; ++i)
 if (pMisMatches)
     *pMisMatches = misMatches;
 
-score *= size ;
+//score *= size ;
 return score;
 }
 
@@ -808,13 +817,13 @@ while (lineFileRow(lf, words))
     AllocVar(score);
 
     dyStringClear(ds);
-    score->tName = cloneString(words[0]);
-    score->strand = words[1][0];
-    score->tStart = atoi(words[2]);
-    score->tEnd = atoi(words[3]);
-    score->qName = cloneString(words[4]);
-    score->qStart = atoi(words[5]);
-    score->qEnd = atoi(words[6]);
+    score->tName = cloneString(words[4]);
+    score->strand = words[0][1];
+    score->tStart = atoi(words[5]);
+    score->tEnd = atoi(words[6]);
+    score->qName = cloneString(words[1]);
+    score->qStart = atoi(words[2]);
+    score->qEnd = atoi(words[3]);
     score->score = atoi(words[7]);
 
     dyStringPrintf(ds, "%s%c%s-%d-%d-%d-%d",score->tName, score->strand,
@@ -992,10 +1001,9 @@ for (chain = chainList; chain != NULL; chain = chain->next)
 	psl.tStart = psl.tSize - (psl.tStarts[psl.blockCount - 1] + 3 * psl.blockSizes[psl.blockCount - 1]);
 	}
     pslTabOut(&psl, f);
-    fprintf(scores, "%s\t%c\t%d\t%d\t%s\t%d\t%d\t%g\n", psl.tName,
-	    psl.strand[1], psl.tStart, psl.tEnd,
-	    psl.qName, psl.qStart, psl.qEnd,
-	    chain->score);
+    fprintf(scores, "%s\t%s\t%d\t%d\t%s\t%d\t%d\t%g\t%g\n", 
+	    psl.strand, psl.qName, psl.qStart, psl.qEnd,
+	    psl.tName,psl.tStart, psl.tEnd, chain->score , 0.0);
     }
 }
 
