@@ -14,7 +14,7 @@
 #include "hgMaf.h"
 #include "mafTrack.h"
 
-static char const rcsid[] = "$Id: wigMafTrack.c,v 1.12 2004/03/15 08:21:00 kate Exp $";
+static char const rcsid[] = "$Id: wigMafTrack.c,v 1.13 2004/03/15 23:20:24 kate Exp $";
 
 struct wigMafItem
 /* A maf track item -- 
@@ -470,7 +470,6 @@ else
     conn = hAllocConn();
     mafList = wigMafLoadInRegion(conn, tableName, chromName, 
                                     seqStart, seqEnd);
-    hFreeConn(&conn);
     drawMafRegionDetails(mafList, height, seqStart, seqEnd, 
                              vg, xOff, yOff, width, font,
                              color, altColor, tvDense, FALSE);
@@ -485,8 +484,6 @@ static boolean wigMafDrawPairwise(struct track *track, int seqStart, int seqEnd,
  *  for pack mode, display density plot of mafs.
  */
 {
-struct mafAli *mafList;
-struct sqlConnection *conn;
 boolean ret = FALSE;
 char *suffix;
 char *tableName;
@@ -498,7 +495,6 @@ int seqSize = seqEnd - seqStart;
 
 if (miList == NULL)
     return FALSE;
-conn = hAllocConn();
 
 /* obtain suffix for pairwise wiggle tables */
 suffix = trackDbSetting(track->tdb, "pairwise");
@@ -547,8 +543,6 @@ for (mi = miList; mi != NULL; mi = mi->next)
         tableName = getMafTablename(mi->name, suffix);
         if (!hTableExists(tableName))
             continue;
-        mafList = wigMafLoadInRegion(conn, tableName, chromName, 
-                                    seqStart, seqEnd);
         /* display pairwise alignments in this region in dense format */
         vgSetClip(vg, xOff, yOff, width, mi->height);
         drawDenseMaf(tableName, mi->height, seqStart, seqEnd, 
@@ -556,11 +550,9 @@ for (mi = miList; mi != NULL; mi = mi->next)
                                  color, track->ixAltColor);
         vgUnclip(vg);
         ret = TRUE;
-        mafAliFreeList(&mafList);
         }
     yOff += mi->height;
     }
-hFreeConn(&conn);
 return ret;
 }
 
