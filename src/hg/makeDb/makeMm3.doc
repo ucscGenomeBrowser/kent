@@ -97,7 +97,32 @@ Make and load GC percent table
      hgGcPercent mm3 ../../nib
 
 
-REPEAT MASKING (IN PROGRESS)
+MAKE HGCENTRALTEST ENTRY AND TRACKDB TABLE FOR MM3 (DONE 02/06/03)
+    # Enter mm3 into hgcentraltest.dbDb so test browser knows about it:
+    mysql -h genome-testdb -u root -pbigSecret -A hgcentraltest
+      insert into dbDb values("mm3", "Mouse Feb. 2003",
+        "/gbdb/mm3/nib", "Mouse", "Espn", 1,
+        30, "Mouse");
+      quit
+    # Make trackDb table so browser knows what tracks to expect:
+    ssh hgwdev
+    cd ~/src/hg/makeDb/trackDb
+    cvs up -d -P
+    # Edit that makefile to add mm3 in all the right places and do
+    make update
+    make alpha
+    cvs commit makefile
+
+
+MAKE HGCENTRALTEST BLATSERVERS ENTRY FOR MM3 (TODO)
+    ssh hgwdev
+    mysql -h genome-testdb -u hgcat -pBIGSECRET -A hgcentraltest
+      insert into blatServers values("mm3", "blat?", "17778", "1");
+      insert into blatServers values("mm3", "blat?", "17779", "0");
+      quit
+
+
+REPEAT MASKING (DONE 02/07/03)
    Split contigs, run RepeatMasker, lift results
    Notes: 
    * If there is a new version of RepeatMasker, build it and ask the admins 
@@ -136,9 +161,10 @@ REPEAT MASKING (IN PROGRESS)
         ssh kk
         cd ~/mm3/RMRun
         para create RMJobs
-TODO        para try, para check, para check, para push, para check,...
+        para try, para check, para check, para push, para check,...
 
         #- Lift up the split-contig .out's to contig-level .out's
+	ssh kkstore
         cd ~/mm3
         foreach d ( ?{,?}/chr*_?{,?} )
           cd $d
@@ -155,69 +181,128 @@ TODO        para try, para check, para check, para push, para check,...
         ssh hgwdev
         cd ~/mm3
         hgLoadOut mm3 ?/*.fa.out ??/*.fa.out
+Strange perc. field -0.3 line 35355 of 7/chr7.fa.out
+Strange perc. field -3.6 line 35355 of 7/chr7.fa.out
+Strange perc. field -0.3 line 35359 of 7/chr7.fa.out
+Strange perc. field -3.6 line 35359 of 7/chr7.fa.out
+Strange perc. field -0.3 line 35361 of 7/chr7.fa.out
+Strange perc. field -3.6 line 35361 of 7/chr7.fa.out
+7/chr7_4/chr7_4_04.fa.out:  865  -0.3 44.1 -3.6  chr7_4_04  363507 363581 (136419) +  ZP3AR_MM       Satellite                  1   39  (359) 1188  
+7/chr7_4/chr7_4_04.fa.out:  865  -0.3 44.1 -3.6  chr7_4_04  363666 363717 (136283) +  ZP3AR_MM       Satellite                 39   65  (333) 1188  
+7/chr7_4/chr7_4_04.fa.out:  865  -0.3 44.1 -3.6  chr7_4_04  363760 363776 (136224) +  ZP3AR_MM       Satellite                 65  398    (0) 1188  
+VERIFY REPEATMASKER RESULTS (IN PROGRESS)
+
+    # Run featureBits on mm3 and on a comparable genome build, and compare:
+    ssh hgwdev
+    featureBits mm3 rmsk
+    # --> 1001999794 bases of 2577261074 (38.878%) in intersection
+    featureBits mm2 rmsk
+    # --> 1037964664 bases of 2726995854 (38.063%) in intersection
 
 
-COPY THE MOUSE SEQUENCE DATA TO THE CLUSTER (TODO)
-o - ssh kkstore
-    # Soft-mask (lower-case) the contig and chr .fa's
+MAKE LIFTALL.LFT (DONE 02/06/03)
+
     cd ~/mm3
-    tcsh jkStuff/makeFaMasked.sh
-    # Copy the rna data to the cluster if it isn't there already:
-       mkdir /scratch/hg/mrna.XXX
-       cp -r /cluster/store1/mrna.XXX/org /scratch/hg/mrna.XXX
-    # Copy the mouse sequence supercontigs to the cluster
-       mkdir -p /scratch/hg/mm3/contigs
-       cp /cluster/store2/mm.2003.02/mm3/?{,?}/chr*/chr?{,?}_?{,?}.fa \
-         /scratch/hg/mm3/contigs
-    # Distribute this data to the local nodes:
-    # ask cluster-admin to rsync, or in an emergency,
-    # sudo /cluster/install/utilities/localUpdate
+    cat ?{,?}/lift/{ordered,random}.lft > jkStuff/liftAll.lft
 
-SIMPLE REPEAT TRACK (TODO)
-
-o - Create cluster parasol job like so:
-        ssh kk
-        cd ~/mm/bed
-        mkdir simpleRepeat
-        cd simpleRepeat
-        cp ~/lastOo/bed/simpleRepeat/gsub
-        mkdir trf
-        ls -1 /scratch/hg/mm3/contigs/*.fa > genome.lst
-        gensub2 genome.lst single gsub spec
-        para make spec
-        para push 
-     When job is done do:
-        liftUp simpleRepeat.bed ~/mm/jkStuff/liftAll.lft warn trf/*.bed
-
-o - Load this into the database as so
-        ssh hgwdev
-        cd ~/mm/bed/simpleRepeat
-        hgLoadBed mm3 simpleRepeat simpleRepeat.bed -sqlTable=$HOME/src/hg/lib/simpleRepeat.sql
-
-
-MASK SEQUENCE WITH BOTH REPEATMASKER AND SIMPLE REPEAT/TRF (TODO)
-        ssh kkstore
-        cd ~/mm3
-        #- Soft-mask (lower-case) the contig and chr .fa's
-        tcsh jkStuff/makeFaMasked.sh
-        #- Make hard-masked .fa.masked files as well:
-        tcsh jkStuff/makeHardMasked.sh
-        #- Rebuild the nib, mixedNib, maskedNib files:
-        tcsh jkStuff/makeNib.sh
-        #- Rebuild the .zip files
-        tcsh jkStuff/zipAll.sh
-        #- copy the contig .fa's to the appropriate place on /scratch
-        cp -p ?{,?}/chr*/chr?{,?}_?{,?}.fa /scratch/hg/mm3/contigs.0730
-
-        #- Copy the .zip files to hgwdev:/usr/local/apache/...
-        ssh hgwdev
-        cd ~/mm3
-        tcsh jkStuff/cpToWeb.sh
-
-
-EXTRACT LINEAGE-SPECIFIC REPEATS (ARIAN SMIT''s scripts) (TODO)
-
+SIMPLE REPEAT TRACK (DONE 02/07/03)
+    # TRF runs pretty quickly now... it takes a few hours total runtime.
+    # Also, it ignores masking of input sequence, so this can be run in 
+    # parallel with RepeatMasker!
+    # So instead of binrsyncing and para-running, just do this on kkstore:
     ssh kkstore
+    mkdir ~/mm3/bed/simpleRepeat
+    cd ~/mm3/bed/simpleRepeat
+    mkdir trf
+    rm -f jobs.csh
+    touch jobs.csh
+    foreach f (/cluster/store2/mm.2003.02/mm3/?{,?}/chr*_*/chr?{,?}{,_random}_?{,?}.fa)
+      set fout = $f:t:r.bed
+      echo "/cluster/home/kent/bin/i386/trfBig -trf=/cluster/home/kent/bin/i386/trf $f /dev/null -bedAt=trf/$fout -tempDir=/tmp" \
+        >> jobs.csh
+    end
+    tcsh jobs.csh |& tee jobs.log
+    wc -l jobs.csh
+    ls -1 trf | wc -l
+    # When job is done do:
+    liftUp simpleRepeat.bed ~/mm3/jkStuff/liftAll.lft warn trf/*.bed
+
+    # Load this into the database as so
+    ssh hgwdev
+    cd ~/mm3/bed/simpleRepeat
+    hgLoadBed mm3 simpleRepeat simpleRepeat.bed \
+      -sqlTable=$HOME/src/hg/lib/simpleRepeat.sql
+
+
+PROCESS SIMPLE REPEATS INTO MASK (DONE 02/07/03)
+
+    # After the simpleRepeats track has been built, make a filtered version 
+    # of the trf output: keep trf's with period <= 12:
+    ssh kkstore
+    cd ~/mm3/bed/simpleRepeat
+    mkdir -p trfMask
+    foreach f (trf/chr*.bed)
+      awk '{if ($5 <= 12) print;}' $f > trfMask/$f:t
+    end
+    # Lift up filtered trf output to chrom coords as well:
+    cd ~/mm3
+    mkdir -p bed/simpleRepeat/trfMaskChrom
+    foreach c (?{,?})
+      perl -wpe 's@(\S+)@bed/simpleRepeat/trfMask/$1.bed@' \
+        $c/lift/ordered.lst > $c/lift/oTrf.lst
+      if (-e $c/lift/random.lst) then
+        perl -wpe 's@(\S+)@bed/simpleRepeat/trfMask/$1.bed@' \
+           $c/lift/random.lst > $c/lift/rTrf.lst
+      endif
+      liftUp bed/simpleRepeat/trfMaskChrom/chr$c.bed \
+        jkStuff/liftAll.lft warn `cat $c/lift/oTrf.lst`
+      if (-e $c/lift/rTrf.lst) then
+        liftUp bed/simpleRepeat/trfMaskChrom/chr${c}_random.bed \
+          jkStuff/liftAll.lft warn `cat $c/lift/rTrf.lst`
+      endif
+    end
+
+
+MASK SEQUENCE WITH BOTH REPEATMASKER AND SIMPLE REPEAT/TRF (DONE 02/07/03)
+    ssh kkstore
+    cd ~/mm3
+    #- Soft-mask (lower-case) the contig and chr .fa's
+    tcsh jkStuff/makeFaMasked.sh
+    #- Make hard-masked .fa.masked files as well:
+    tcsh jkStuff/makeHardMasked.sh
+    #- Rebuild the nib, mixedNib, maskedNib files:
+    tcsh jkStuff/makeNib.sh
+    # Copy the masked contig fa to /scratch:
+    rm -f /scratch/hg/mm3/trfFa
+    mkdir -p /scratch/hg/mm3/trfFa
+    cp -p ~/mm3/?{,?}/chr*_*/chr?{,?}{,_random}_?{,?}.fa /scratch/hg/mm3/trfFa
+
+
+MAKE DOWNLOADABLE SEQUENCE FILES (IN PROGRESS)
+    ssh kkstore
+    cd ~/mm3
+    #- Build the .zip files
+    jkStuff/zipAll.sh |& tee zipAll.log
+    #- Look at zipAll.log to make sure all file lists look reasonable.  
+    #- Check zip file integrity:
+    foreach f (*.zip)
+      unzip -t $f > $f.test
+      tail -1 $f.test
+    end
+    wc -l *.zip.test
+
+    #- Copy the .zip files to hgwdev:/usr/local/apache/...
+    ssh hgwdev
+    cd ~/mm3
+    ./jkStuff/cpToWeb.sh
+TODO    cd /usr/local/apache/htdocs/goldenPath/mmFeb2003
+    #- Take a look at bigZips/* and chromosomes/*, update their README.txt's
+
+
+PREPARE CLUSTER FOR BLASTZ RUN (DONE 02/07/03)
+    # This needs to be done after trf-masking and nib generation.
+    ssh kkstore
+    # Extract lineage-specific repeats using Arian Smit's script:
     mkdir -p ~/mm3/bed/linSpecRep
     cd ~/mm3/bed/linSpecRep
     foreach f (~/mm3/*/*.out)
@@ -227,9 +312,19 @@ EXTRACT LINEAGE-SPECIFIC REPEATS (ARIAN SMIT''s scripts) (TODO)
     /cluster/bin/scripts/perl-rename 's/(\.fa|\.nib)//' *.out.*spec
     /cluster/bin/scripts/perl-rename 's/\.(rod|prim)spec/.spec/' *.out.*spec
     rm *.out
-    rm -rf /scratch/hg/mm3/linSpecRep
     cd ..
-    cp -R linSpecRep /scratch/hg/mm3
+    rm -rf /scratch/hg/mm3/linSpecRep
+    mkdir -p /scratch/hg/mm3
+    cp -Rp linSpecRep /scratch/hg/mm3
+    # RepeatMasker .out:
+    cd ~/mm3
+    rm -rf /scratch/hg/mm3/rmsk
+    mkdir -p /scratch/hg/mm3/rmsk
+    cp -p ?{,?}/chr?{,?}{,_random}.fa.out /scratch/hg/mm3/rmsk
+    # Chrom-level mixed nibs that have been repeat- and trf-masked:
+    rm -rf /scratch/hg/mm3/chromTrfMixedNib
+    mkdir -p /scratch/hg/mm3/chromTrfMixedNib
+    cp -p mixedNib/chr*.nib /scratch/hg/mm3/chromTrfMixedNib
     # Ask cluster-admin@cse.ucsc.edu to binrsync /scratch/hg to clusters
 
 
@@ -239,7 +334,7 @@ o - Load up the local disks of the cluster with refSeq.fa, mrna.fa and est.fa
     from /cluster/store1/mrna.127  into /var/tmp/hg/h/mrna
 
 o - Use BLAT to generate refSeq, mRNA and EST alignments as so:
-      Make sure that /scratch/hg/mm3/contigs is loaded
+      Make sure that /scratch/hg/mm3/trfFa is loaded
       with chr*_*.fa and pushed to the cluster nodes.  The following
       cshell script needs updating.
 
@@ -372,29 +467,12 @@ CREATE RNACLUSTER TABLE (TODO)
    hgLoadBed mm3 rnaCluster est/*.bed
 
 
-PRODUCING KNOWN GENES (TODO)
-
-o - Download everything from ftp://ncbi.nlm.nih.gov/refseq/H_sapiens/mRNA_Prot/
-    into ~/mm/bed/refSeq
-o - Unpack this into fa files and get extra info with:
-       cd ~/mm/bed/refSeq
-       gunzip mouse.faa.gz
-       gunzip mouse.gbff.gz
-       gbToFaRa ~/hg/h/allRna.fil refSeq.fa refSeq.ra refSeq.ta mouse.gbff
-o - Get extra info from NCBI and produce refGene table as so:
-       wget ftp://ncbi.nlm.nih.gov/refseq/LocusLink/loc2ref 
-       wget ftp://ncbi.nlm.nih.gov/refseq/LocusLink/mim2loc
-o - Produce refGenn, refPep, refMrna, and refLink tables as so:
-       hgRefSeqMrna mm3 refSeq.fa refSeq.ra all_refSeq.psl loc2ref mouse.faa mim2loc
-o - Add RefSeq status info
-    hgRefSeqStatus mm3 loc2ref
-
-REFFLAT
+REFFLAT (TODO)
 
 o - create precomputed join of refFlat and refGene:
       echo 'CREATE TABLE refFlat (KEY geneName (geneName), KEY name (name), KEY chrom (chrom)) SELECT refLink.name as geneName, refGene.* FROM refLink,refGene WHERE refLink.mrnaAcc = refGene.name' | hgsql mm3
 
-LOADING MOUSE MM3 HUMAN BLASTZ ALIGNMENTS FROM PENN STATE: (IN PROGRESS: generated 12/7/02, not loaded into db)
+LOADING MOUSE MM3 HUMAN BLASTZ ALIGNMENTS FROM PENN STATE: (TODO)
 
     # Translate Penn State .lav files into sorted axt:
     ssh kkstore
@@ -430,7 +508,7 @@ LOADING MOUSE MM3 HUMAN BLASTZ ALIGNMENTS FROM PENN STATE: (IN PROGRESS: generat
     cd $base/pslChrom
     hgLoadPsl mm3 chr*_${tbl}.psl
 
-MAKING THE BLASTZBESTHUMAN TRACK FROM PENN STATE MM3 AXT FILES (IN PROGRESS: generated 12/7/02, not loaded into db)
+MAKING THE BLASTZBESTHUMAN TRACK FROM PENN STATE MM3 AXT FILES (TODO)
 
     # Consolidate AXT files to chrom level, sort, pick best, make psl.
     ssh kkstore
@@ -490,7 +568,7 @@ MAKING THE BLASTZBESTHUMAN TRACK FROM PENN STATE MM3 AXT FILES (IN PROGRESS: gen
      hgsql mm3 < ~/kent/src/hg/lib/axtInfo.sql
      hgsql mm3 < axtInfoInserts.sql
 
-MAKING THE HUMAN AXTTIGHT FROM AXTBEST (IN PROGRESS: generated 12/7/02, not loaded into db)
+MAKING THE HUMAN AXTTIGHT FROM AXTBEST (TODO)
     # After creating axtBest alignments above, use subsetAxt to get axtTight:
     ssh kkstore
     cd ~/mm3/bed/blastz.gs14.2002-12-6-ASH/axtBest
@@ -635,76 +713,61 @@ MAKING THE RAT AXTTIGHT FROM AXTBEST (TODO)
     hgLoadPsl mm3 chr*_blastzTightRat.psl
 
 
-PRODUCING GENSCAN PREDICTIONS (TODO)
+PRODUCING GENSCAN PREDICTIONS (IN PROGRESS)
     
-o - Produce contig genscan.gtf genscan.pep and genscanExtra.bed files like so:
+    ssh kkstore
+    mkdir -p ~/mm3/bed/genscan
+    cd ~/mm3/bed/genscan
+    # Make 3 subdirectories for genscan to put their output files in
+    mkdir -p gtf pep subopt
+    # Generate a list file, genome.list, of all the contigs
+    # *that do not have pure Ns* (due to heterochromatin, unsequencable 
+    # stuff) which would cause genscan to run forever.
+    rm -f genome.list
+    touch genome.list
+    foreach f ( `ls -1S /cluster/store2/mm.2003.02/mm3/?{,?}/chr*_*/chr*_*.fa.masked` )
+      egrep '[ACGT]' $f > /dev/null
+      if ($status == 0) echo $f >> genome.list
+    end
+        
+    # Log into kkr1u00 (not kk!).  kkr1u00 is the driver node for the small
+    # cluster (kkr2u00 -kkr8u00. Genscan has problem running on the
+    # big cluster, due to limitation of memory and swap space on each
+    # processing node).
+    ssh kkr1u00
+    cd ~/mm3/bed/genscan
+    # Create template file, gsub, for gensub2.  For example (3-line file):
+#LOOP
+/cluster/home/kent/bin/i386/gsBig {check in line+ $(path1)} {check out line gtf/$(root1).gtf} -trans={check out line pep/$(root1).pep} -subopt={check out line subopt/$(root1).bed} -exe=/cluster/home/fanhsu/projects/compbio/bin/genscan-linux/genscan -par=/cluster/home/fanhsu/projects/compbio/bin/genscan-linux/HumanIso.smat -tmp=/tmp -window=2400000
+#ENDLOOP
+    echo "" > dummy.list
+    gensub2 genome.list dummy.list gsub jobList
+    para create jobList
+    para try
+    para check
+    para push
+    # Issue either one of the following two commands to check the
+    # status of the cluster and your jobs, until they are done.
+    parasol status
+TODO    para check
+    # If there were out-of-memory problems (run "para problems"), then 
+    # re-run those jobs by hand but change the -window arg from 2400000
+    # to 1200000.  
 
-        First make sure you have appropriate set up, permissions, etc.
-        and you have tried using Parasol to submit and finished a set 
-        of jobs successfully.
-        
-        Load up the cluster with hard-masked contigs in
-           /scratch/hg/mm3/mContigs
-     	
-        Log into kkr1u00 (not kk!).  kkr1u00 is the driver node for the small
-        cluster (kkr2u00 -kkr8u00. (genscan has problem running on the
-        big cluster, due to limitation of memory and swap space on each
-        processing node).
-             	cd ~/mm
-     		cd bed/genscan
-        Make 3 subdirectories for genscan to put their output files in
-        	mkdir gtf pep subopt
-        Generate a list file, genome.list, of all the contigs
-        	ls -1S /cluster/store2/mm.2003.02/mm3/mContigs/* >genome.list
-        Edit genome.list to remove jobs on all 20 files of chr??_1.fa.masked.
-        Those files have pure Ns due to heterochromatin (unsequencable
-        stuff) and will cause genscan to run forever.
-        
-        Create template file, gsub, for gensub2.  For example (3 lines file):
-        	#LOOP
-        	/cluster/home/fanhsu/bin/i386/gsBig {check in line+ $(path1)} {check out line gtf/$(root1).gtf} -trans={check out line pep/$(root1).pep} -subopt={check out line subopt/$(root1).bed} -exe=/cluster/home/fanhsu/projects/compbio/bin/genscan-linux/genscan -par=/cluster/home/fanhsu/projects/compbio/bin/genscan-linux/HumanIso.smat -tmp=/tmp -window=2400000
-        	#ENDLOOP
-        Create a file containing a single line.
-        	echo single > single
-        Generate job list file, jobList, for Parasol
-        	gensub2 genome.list single gsub jobList
-        
-        Edit jobList to find the line containing "chr12_5.fa.masked"
-        and change "-window=2400000" into "-window=1200000", because
-        genscan has "not enough memory" problem with this particular
-        file.
-        
-        First issue the following Parasol command:
-        	para create jobList
-        Run the following command, which will try first 10 jobs from jobList
-        	para try
-        Check if these 10 jobs run OK by
-        	para check
-        If they have problems, debug and fix your program, template file, 
-        commands, etc. and try again.  If they are OK, then issue the following 
-        command, which will ask Parasol to start all the remaining jobs (around
-        ~252 jobs).
-        	para push
-        Issue either one of the following two commands to check the 
-        status of the cluster and your jobs, until they are done.
-        	parasol status
-        	para check
-        If any job fails to complete, study the problem and ask Jim to help
-        if necessary.
+    # Convert these to chromosome level files as so:     
+    ssh eieio
+    cd ~/mm3/bed/genscan
+    liftUp genscan.gtf ../../jkStuff/liftAll.lft warn gtf/NT*.gtf
+    liftUp genscanSubopt.bed ../../jkStuff/liftAll.lft warn subopt/NT*.bed > \
+      /dev/null
+    cat pep/*.pep > genscan.pep
 
-o - Convert these to chromosome level files as so:
-     cd ~/mm
-     cd bed/genscan
-     liftUp genscan.gtf ../../jkStuff/liftAll.lft warn gtf/*.gtf
-     liftUp genscanSubopt.bed ../../jkStuff/liftAll.lft warn subopt/*.bed
-     cat pep/*.pep > genscan.pep
-
-o - Load into the database as so:
-     ssh hgwdev
-     cd ~/mm/bed/genscan
-     ldHgGene mm3 genscan genscan.gtf
-     hgPepPred mm3 generic genscanPep genscan.pep
-     hgLoadBed mm3 genscanSubopt genscanSubopt.bed
+    # Load into the database as so:
+    ssh hgwdev
+    cd ~/mm3/bed/genscan
+    ldHgGene mm3 genscan genscan.gtf
+    hgPepPred mm3 generic genscanPep genscan.pep
+    hgLoadBed mm3 genscanSubopt genscanSubopt.bed > /dev/null
 
 
 TWINSCAN GENE PREDICTIONS (TODO)
@@ -751,55 +814,6 @@ NCBI GENOMESCAN MODELS (TODO)
     ldHgGene mm3 genomeScan chr_GenomeScan-fixed.gtf
     wget ftp://ftp.ncbi.nih.gov/genomes/M_musculus/MGSCv3_Release1/protein/GS_prot.fsa.gz
     hgPepPred mm3 generic genomeScanPep GS_prot.fsa
-
-PREPARING SEQUENCE FOR CROSS SPECIES ALIGNMENTS (TODO)
-
-Make sure that the contig files are lower-case repeat masked
-then do
-   ssh kkstore
-   cd ~/mm
-   source jkStuff/makeTrfFa.sh
-Then make sure there is enough space available on /scratch
-and do
-   cp -Rp ~/mm/trfFa /scratch/hg/mm3/trfFa.0802
-   # sudo /cluster/install/utilities/updateLocal
-
-
-PREPARING POST-TRF CHROM-LEVEL MIXED NIBs for blastz (TODO)
-
-    # lift trfMask output to chrom-level... this is a pain because all 
-    # trf output was put in the same dir.  maybe next time around, we 
-    # can preserve chrom dir structure...
-    ssh kkstore
-    cd ~/mm3
-    foreach c (?{,?})
-     if (-e $c/lift/ordered.lst) then
-       set ntlist = ()
-       foreach n (`cat $c/lift/ordered.lst`)
-         set ntlist = ($ntlist bed/simpleRepeat/trf/$n.bed)
-       end
-       liftUp $c/chr$c.trf.bed jkStuff/liftAll.lft warn $ntlist
-     endif
-    end
-    # make trf-masked chrom-level .fa
-    foreach c (?{,?})
-      cd $c
-      if (-e chr$c.trf.bed) then
-        echo masking $c...
-        cp chr$c.fa chr$c.trf.fa
-        maskOutFa -softAdd chr$c.trf.fa chr$c.trf.bed chr$c.trf.fa
-      endif
-      cd ..
-    end
-    # make nib
-    mkdir trfMixedNib
-    foreach c (?{,?})
-      if (-e $c/chr$c.trf.fa) then
-        faToNib -softMask $c/chr$c.trf.fa trfMixedNib/chr$c.nib
-      endif
-    end
-    rm -rf /scratch/hg/mm3/chromTrfMixedNib
-    cp -pR trfMixedNib /scratch/hg/mm3/chromTrfMixedNib
 
 
 PRODUCING CROSS_SPECIES mRNA ALIGMENTS (TODO)
@@ -1049,18 +1063,31 @@ LOAD SNPS (TODO)
         createBed < mouse.b27.out > snpNih.bed
         hgLoadBed mm3 snpNih snpNih.bed
 
-LOAD CPGISSLANDS (TODO)
-     login to hgwdev
-       cd /cluster/store2/mm.2003.02/mm3/bed
-       mkdir cpgIsland
-       cd cpgIsland
-     Get cpgisland tarball out of email from Asif (achinwal@watson.wustl.edu)
-     and unpack it.
-       awk -f filter.awk */ctg*/*.cpg > cpgIsland.bed
-       mysql -u hgcat -pBIGSECRET -A mm3 < ~/src/hg/lib/cpgIsland.sql
-       mysql -u hgcat -pBIGSECRET -A mm3 
-     At mysql> prompt type in:
-       load data local infile 'cpgIsland.bed' into table cpgIsland
+LOAD CPGISSLANDS (DONE 02/07/03)
+     ssh kkstore
+     mkdir -p ~/mm3/bed/cpgIsland
+     cd ~/mm3/bed/cpgIsland
+     # Build software emailed from Asif Chinwalla (achinwal@watson.wustl.edu)
+     # copy the tar file to the current directory
+     tar xvf cpg_dist.tar 
+     cd cpg_dist
+     gcc readseq.c cpg_lh.c -o cpglh.exe
+     cd ..
+     # cpglh.exe requires hard-masked (N) .fa's.  
+     # There may be warnings about "bad character" for IUPAC ambiguous 
+     # characters like R, S, etc.  Ignore the warnings.  
+     foreach f (../../?{,?}/chr?{,?}{,_random}.fa.masked)
+       set fout=$f:t:r:r.cpg
+       ./cpg_dist/cpglh.exe $f > $fout
+       echo Done with $fout
+     end
+     cp ~/lastMm/bed/cpgIsland/filter.awk .
+     awk -f filter.awk chr*.cpg > cpgIsland.bed
+     # Load into db
+     ssh hgwdev
+     cd ~/mm3/bed/cpgIsland
+     hgLoadBed mm3 cpgIsland -tab -noBin \
+       -sqlTable=$HOME/kent/src/hg/lib/cpgIsland.sql cpgIsland.bed
 
 LOAD ENSEMBL ESTs (TODO)
      ln -s /cluster/store2/mm.2003.02/mm3 ~/mm3
