@@ -53,7 +53,7 @@
 #include "hdb.h"
 #include "hgRelate.h"
 
-static char const rcsid[] = "$Id: hgFlyBase.c,v 1.2 2003/10/27 09:49:18 kent Exp $";
+static char const rcsid[] = "$Id: hgFlyBase.c,v 1.3 2003/10/28 20:15:38 kent Exp $";
 
 char *tabDir = ".";
 boolean doLoad;
@@ -76,6 +76,99 @@ static struct optionSpec options[] = {
    {"noLoad", OPTION_BOOLEAN},
    {NULL, 0},
 };
+
+char *ungreekTable[] = {
+   "agr", "alpha",
+   "bgr", "beta",
+   "dgr", "delta",
+   "egr", "epsilon",
+   "eegr", "eta",
+   "ggr", "gamma",
+   "igr", "iota",
+   "ohgr", "omega",
+   "thgr", "theta",
+   "zgr", "zeta",
+};
+
+char *hideTagTable[] = {
+   "up", "/up",
+   "down", "/down",
+};
+
+char *spelledGreek(char *abbr)
+/* Convert from 'agr;' to 'alpha' or return NULL */
+{
+int i;
+for (i=0; i<ArraySize(ungreekTable); i += 2)
+    if (sameWord(ungreekTable[i], abbr))
+        return ungreekTable[i+1];
+return NULL;
+}
+
+char *ungreek(char *s)
+/* Get rid of greek characters and unwanted tags. */
+{
+struct dyString *dy = newDyString(0);
+char *result;
+char c;
+while ((c = *s++) != 0)
+    {
+    boolean special = FALSE;
+    if (c == '&')
+        {
+	char *e = strchr(s, ';');
+	if (e != NULL)
+	    {
+	    int size = e - s;
+	    if (size <= 4)
+	        {
+		char abbr[5];
+		char *english;
+		memcpy(abbr, s, size);
+		abbr[size] = 0;
+		english = spelledGreek(abbr);
+		if (english != NULL)
+		    {
+		    dyStringAppend(dy, english);
+		    special = TRUE;
+		    s = e+1;
+		    if (s[0] == '\'')
+		       ++s;
+		    }
+		}
+	    }
+	}
+    else if (c == '<')
+        {
+	char *e = strchr(s, '>');
+	if (e != NULL)
+	    {
+	    int size = e - s;
+	    if (size < 8);
+	        {
+		int i;
+		char tag[8];
+		memcpy(tag, s, size);
+		tag[size] = 0;
+		for (i=0; i<ArraySize(hideTagTable); ++i)
+		    {
+		    if (sameWord(tag, hideTagTable[i]))
+		        {
+			special = TRUE;
+			s = e+1;
+			break;
+			}
+		    }
+		}
+	    }
+	}
+    if (!special)
+        dyStringAppendC(dy, c);
+    }
+result = cloneString(dy->string);
+dyStringFree(&dy);
+return result;
+}
 
 struct dyString *suckSameLines(struct lineFile *lf, char *line)
 /* Suck up lines concatenating as long as they begin with the same
@@ -200,7 +293,7 @@ struct lineFile *lf = lineFileOpen(genesFile, TRUE);
 struct hash *refHash = newHash(19);
 int nextRefId = 0;
 int nextAlleleId = 0;
-char *line, sub, type, *rest;
+char *line, sub, type, *rest, *s;
 char *geneSym = NULL, *geneName = NULL, *geneId = NULL;
 int recordCount = 0;
 struct slName *synList = NULL, *syn;
@@ -224,16 +317,24 @@ while (lineFileNext(lf, &line, NULL))
 		lf->lineIx, lf->fileName);
 
 	/* Write out synonyms. */
-	if (geneSym != NULL)
+	s = naForNull(geneSym);
+	geneSym = ungreek(s);
+	freeMem(s);
+	s = naForNull(geneName);
+	geneName = ungreek(s);
+	freeMem(s);
+	if (geneSym != NULL && !sameString(geneSym, "n/a"))
 	    slNameStore(&synList, geneSym);
-	if (geneName != NULL)
+	if (geneName != NULL && !sameString(geneName, "n/a"))
 	    slNameStore(&synList, geneName);
 	for (syn = synList; syn != NULL; syn = syn->next)
-	    fprintf(fSynonym, "%s\t%s\n", geneId, syn->name);
+	    {
+	    s = ungreek(syn->name);
+	    fprintf(fSynonym, "%s\t%s\n", geneId, s);
+	    freeMem(s);
+	    }
 
 	/* Write out gene record. */
-	geneSym = naForNull(geneSym);
-	geneName = naForNull(geneName);
 	fprintf(fGene, "%s\t%s\t%s\n", geneId, geneSym, geneName);
 
 	/* Clean up. */
@@ -264,8 +365,11 @@ while (lineFileNext(lf, &line, NULL))
 	    errAbort("Bad FlyBase gene ID %s line %d of %s", geneId, 
 		lf->lineIx, lf->fileName);
 	}
-    else if (type == 'i' && (sub == '*') || (sub == '$'))
-	slNameStore(&synList, rest);
+    else if (type == 'i' && (sub == '*' || sub == '$'))
+	{
+	if (strlen(rest) > 2)	/* Avoid short useless ones. */
+	    slNameStore(&synList, rest);
+	}
     else if (sub == '*' && type == 'A')
         {
 	if (geneId == NULL)
@@ -277,7 +381,7 @@ while (lineFileNext(lf, &line, NULL))
 	    !sameString(rest, "in vitro") &&
 	    !sameString(rest, "wild-type") )
 	    {
-	    fprintf(fSynonym, "%s\t%s\n", geneId, rest);
+	    slNameStore(&synList, rest);
 	    }
 	}
     else if (type == 'E')
