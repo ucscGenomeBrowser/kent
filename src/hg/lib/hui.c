@@ -331,6 +331,37 @@ cgiMakeDropList(var, rosettaExonOptions, ArraySize(rosettaExonOptions), curVal);
 }
 
 
+/****** Some stuff for wiggle track related controls *******/
+
+static char *wiggleOptions[] = {
+    "Only samples",
+    "Linear interpolation"
+    };
+
+enum wiggleOptEnum wiggleStringToEnum(char *string)
+/* Convert from string to enum representation. */
+{
+int x = stringIx(string, wiggleOptions);
+if (x < 0)
+   errAbort("hui::wiggleStringToEnum() - Unknown option %s", string);
+return x;
+}
+
+char *wiggleEnumToString(enum wiggleOptEnum x)
+/* Convert from enum to string representation. */
+{
+return wiggleOptions[x];
+}
+
+void wiggleDropDown(char *var, char *curVal)
+/* Make drop down of options. */
+{
+cgiMakeDropList(var, wiggleOptions, ArraySize(wiggleOptions), 
+	curVal);
+}
+
+
+
 /****** Some stuff for mRNA and EST related controls *******/
 
 static void addMrnaFilter(struct mrnaUiData *mud, char *track, char *label, char *key, char *table)

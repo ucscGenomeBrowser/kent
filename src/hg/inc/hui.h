@@ -151,6 +151,25 @@ char *nci60EnumToString(enum nci60OptEnum x);
 void nci60DropDown(char *var, char *curVal);
 /* Make drop down of options. */
 
+
+/*** Some Stuff for the wiggle track ***/
+
+enum wiggleOptEnum {
+   wiggleNoInterpolation = 0,
+   wiggleLinearInterpolaiton = 1,
+};
+
+enum wiggleOptEnum wiggleStringToEnum(char *string);
+/* Convert from string to enum representation. */
+
+char *wiggleEnumToString(enum wiggleOptEnum x);
+/* Convert from enum to string representation. */
+
+void wiggleDropDown(char *var, char *curVal);
+/* Make drop down of options. */
+
+
+
 /*** Some Stuff for the AFFY track ***/
 
 enum affyOptEnum {

@@ -151,6 +151,22 @@ for (fil = mud->filterList; fil != NULL; fil = fil->next)
 endControlGrid(&cg);
 }
 
+void wiggleUi(struct trackDb *tdb)
+/* put up UI for the wiggle track for representing curves inside * tracks */
+{
+char *wiggleMap = cartUsualString(cart, "wiggle.type", wiggleEnumToString(0));
+char *interpolate = cartUsualString(cart, "linear.interp", "on");
+char *aa = cartUsualString(cart, "anti.alias", "on");
+printf("<p><b>Interpolation: </b> ");
+wiggleDropDown("interpolate", wiggleMap);
+printf(" ");
+printf(" <b>Anti-Aliasing</b>: ");
+cgiMakeRadioButton("anti.alias", "on", sameString(aa, "on"));
+printf(" on ");
+cgiMakeRadioButton("anti.alias", "off", sameString(aa, "off"));
+printf(" off ");
+}
+
 
 void specificUi(struct trackDb *tdb)
 /* Draw track specific parts of UI. */
@@ -180,6 +196,8 @@ else if (sameString(track, "rosetta"))
     rosettaUi(tdb);
 else if (sameString(track, "affy"))
     affyUi(tdb);
+else if (sameString(track, "wiggle"))
+    wiggleUi(tdb);
 }
 
 void trackUi(struct trackDb *tdb)
