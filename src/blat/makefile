@@ -5,11 +5,11 @@ L = -lm $(SOCKETLIB)
 MYLIBDIR = ../lib/$(MACHTYPE)
 MYLIBS =  $(MYLIBDIR)/jkOwnLib.a $(MYLIBDIR)/jkweb.a 
 
-O = blat.o blastOut.o
+O = blat.o
 
 blat: $O $(MYLIBS)
-	gcc -ggdb -o ../../bin/$(MACHTYPE)/blat.15 $O $(MYLIBS) $L
-#	strip ../../bin/$(MACHTYPE)/blat.15
+	gcc -ggdb -o ../../bin/$(MACHTYPE)/blat $O $(MYLIBS) $L
+	strip ../../bin/$(MACHTYPE)/blat
 
 all:
 	cd ../lib; make

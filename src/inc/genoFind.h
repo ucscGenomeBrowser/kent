@@ -122,7 +122,7 @@ struct gfOutput
 /* A polymorphic object to help us write many file types. */
     {
     struct gfOutput *next;
-    void *data;		/* Type-specific data pointer. */
+    void *data;		/* Type-specific data pointer.  Must be freeMem'able */
     void (*out)(char *chromName, int chromSize, int chromOffset,
 	    struct ffAli *ali, bioSeq *tSeq, struct hash *t3Hash, bioSeq *qSeq, 
 	    boolean qIsRc, boolean tIsRc,
@@ -203,6 +203,9 @@ void gfOutputQuery(struct gfOutput *out, FILE *f);
 
 void gfOutputHead(struct gfOutput *out, FILE *f);
 /* Write out header if any. */
+
+void gfOutputFree(struct gfOutput **pOut);
+/* Free up output. */
 
 /* -------- Routines to build up index ------------ */
 

@@ -20,6 +20,10 @@
 #ifndef AXT_H
 #define AXT_H
 
+#ifndef LINEFILE_H
+#include "linefile.h"
+#endif 
+
 struct axt
 /* This contains information about one xeno alignment. */
     {
@@ -123,6 +127,20 @@ void axtBundleFree(struct axtBundle **pObj);
 
 void axtBundleFreeList(struct axtBundle **pList);
 /* Free a list of gfAxtBundles. */
+
+void axtBlastOut(struct axtBundle *abList, 
+	int queryIx, boolean isProt, FILE *f, 
+	char *databaseName, int databaseSeqCount, double databaseLetterCount, 
+	boolean isWu, char *ourId);
+/* Output a bundle of axt's on the same query sequence in blast format.
+ * The parameters in detail are:
+ *   ab - the list of bundles of axt's. 
+ *   f  - output file handle
+ *   databaseSeqCount - number of sequences in database
+ *   databaseLetterCount - number of bases or aa's in database
+ *   isWu - TRUE if want wu-blast rather than blastall format
+ *   ourId - optional (may be NULL) thing to put in header
+ */
 
 #endif /* AXT_H */
 

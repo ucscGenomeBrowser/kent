@@ -13,7 +13,7 @@ struct axtRef
     struct axt *axt;
     };
 
-int axtRefCmpScore(const void *va, const void *vb)
+static int axtRefCmpScore(const void *va, const void *vb)
 /* Compare to sort based on score. */
 {
 const struct axtRef *a = *((struct axtRef **)va);
@@ -97,13 +97,13 @@ double logProbOne = -log(2) * bzScore / 32.1948;
 return databaseSize * exp(logProbOne);
 }
 
-int blastzScoreToNcbiBits(int bzScore)
+static int blastzScoreToNcbiBits(int bzScore)
 /* Convert blastz score to bit score in NCBI sense. */
 {
 return round(bzScore * 0.0205);
 }
 
-double blastzScoreToNcbiExpectation(int bzScore)
+static double blastzScoreToNcbiExpectation(int bzScore)
 /* Convert blastz score to expectation in NCBI sense. */
 {
 double bits = bzScore * 0.0205;
@@ -291,7 +291,7 @@ else
     return "Plus";
 }
 
-char *progType(boolean isProt, struct axtBundle *ab)
+static char *progType(boolean isProt, struct axtBundle *ab)
 /* Return blast 'program' */
 {
 if (!isProt)
@@ -416,7 +416,7 @@ for (target = targetList; target != NULL; target = target->next)
 targetHitsFreeList(&targetList);
 }
 
-void ncbiPrintE(FILE *f, double e)
+static void ncbiPrintE(FILE *f, double e)
 /* Print a small number NCBI style. */
 {
 if (e <= 0.0)
