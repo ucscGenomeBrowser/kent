@@ -112,9 +112,11 @@ if ( "$err" == "1" ) then
  exit 1
 endif
 
-set msg = "The v${BRANCHNN} branch-tag has been re-moved to the following:\n $msg"
+set mailMsg = "The v${BRANCHNN} branch-tag has been re-moved to the following:\n$msg"
 set subject = '"'"Branch tag move complete."'"'
-echo "$msg" | mail -s "$subject" galt heather kuhn
+echo "$mailMsg" | mail -s "$subject" galt heather kuhn
 
+echo "date +%Y-%m-%d" >> $BUILDDIR/v${BRANCHNN}_branch/branchMoves.log
+echo "$msg\n"          >> $BUILDDIR/v${BRANCHNN}_branch/branchMoves.log
 exit 0
 

@@ -8,7 +8,7 @@ endif
 
 # the makefile now does zoo automatically now when you call it
 echo "trackDb Make strict."
-cd kent/src/hg/makeDb/trackDb
+cd hiding/kent/src/hg/makeDb/trackDb
 make strict >& make.strict.log
 set res = `/bin/egrep -y "error|warn" make.strict.log`
 set wc = `echo "$res" | wc -w` 

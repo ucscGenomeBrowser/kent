@@ -20,7 +20,7 @@ endif
 set branch=v${BRANCHNN}_branch
 
 if ( "$1" == "tip" ) then
-    set base=$WEEKLYBLD
+    set base=$WEEKLYBLD/hiding
     echo "updating tip sandbox"
     cd $base/kent
     cvs up -dP  >& /dev/null
