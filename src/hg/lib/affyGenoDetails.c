@@ -8,7 +8,8 @@
 #include "jksql.h"
 #include "affyGenoDetails.h"
 
-static char const rcsid[] = "$Id: affyGenoDetails.c,v 1.1 2003/10/09 02:21:38 daryl Exp $";
+static char const rcsid[] = "$Id: affyGenoDetails.c,v 1.2 2003/10/09 10:20:31 daryl Exp $";
+
 
 void affyGenoDetailsStaticLoad(char **row, struct affyGenoDetails *ret)
 /* Load a row from affyGenoDetails table into ret.  The contents of ret will
@@ -176,6 +177,29 @@ lineFileClose(&lf);
 slReverse(&list);
 return list;
 }
+
+struct affyGenoDetails *affyGenoDetailsLoadByQuery(struct sqlConnection *conn, char *query)
+/* Load all affyGenoDetails from table that satisfy the query given. 
+ * Where query is of the form 'select * from example where something=something'
+ * or 'select example.* from example, anotherTable where example.something = 
+ * anotherTable.something'.
+ * Dispose of this with dbSnpRSFreeList(). */
+{
+struct affyGenoDetails *list = NULL, *el;
+struct sqlResult *sr;
+char **row;
+
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    el = affyGenoDetailsLoad(row);
+    slAddHead(&list, el);
+    }
+slReverse(&list);
+sqlFreeResult(&sr);
+return list;
+}
+
 
 struct affyGenoDetails *affyGenoDetailsLoadAllByChar(char *fileName, char chopper) 
 /* Load all affyGenoDetails from a chopper separated file.
@@ -549,4 +573,3 @@ fputc(lastSep,f);
 }
 
 /* -------------------------------- End autoSql Generated Code -------------------------------- */
-

@@ -69,7 +69,7 @@
 #include "grp.h"
 #include "chromColors.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.611 2003/10/09 01:23:18 angie Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.612 2003/10/09 10:20:10 daryl Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
@@ -6555,6 +6555,7 @@ registerTrackHandler("altGraphXCon", altGraphXMethods );
 registerTrackHandler("triangle", triangleMethods );
 registerTrackHandler("triangleSelf", triangleMethods );
 registerTrackHandler("transfacHit", triangleMethods );
+registerTrackHandler("leptin", mafMethods );
 /* Lowe lab related */
 registerTrackHandler("gbProtCode", gbGeneMethods);
 registerTrackHandler("tigrCmrORFs", tigrGeneMethods);
