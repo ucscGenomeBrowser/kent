@@ -24,7 +24,7 @@
 #include "twoBit.h"
 #include "chainToAxt.h"
 
-static char const rcsid[] = "$Id: checkExp.c,v 1.4 2004/11/27 03:17:26 baertsch Exp $";
+static char const rcsid[] = "$Id: checkExp.c,v 1.5 2004/12/06 23:30:36 baertsch Exp $";
 struct axtScoreScheme *ss = NULL; /* blastz scoring matrix */
 struct dnaSeq *mrnaList = NULL; /* list of all input mrna sequences */
 struct hash *pseudoHash = NULL, *mrnaHash = NULL, *chainHash = NULL, *faHash = NULL, *tHash = NULL;
@@ -102,7 +102,6 @@ dyStringAppendMultiC(bRes, '-', gapSize);
 struct hash *readChainToBinKeeper(char *sizeFileName, char *fileName)
 {
 struct binKeeper *bk; 
-int size;
 struct chain *chain;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
 struct lineFile *sf = lineFileOpen(sizeFileName, TRUE);
@@ -304,7 +303,7 @@ struct axt *pslToAxt(struct psl *psl, struct hash *qHash, char *tNibDir,
 	struct dlList *fileCache)
 {
 static char *tName = NULL, *qName = NULL;
-static struct dnaSeq *tSeq = NULL,  *mrna;
+static struct dnaSeq *tSeq = NULL;
 struct dyString *q = newDyString(16*1024);
 struct dyString *t = newDyString(16*1024);
 int blockIx;
@@ -504,10 +503,10 @@ if (nibHash == NULL)
     nibHash = hashNew(0);
 while (lineFileNextRow(bf, row, ArraySize(row)))
     {
-    struct misMatch *misMatchList = NULL, *misMatch;
+    struct misMatch *misMatchList = NULL;
     struct binKeeper *bk = NULL;
     struct binElement *el, *elist = NULL;
-    struct psl *mPsl = NULL, *gPsl = NULL, *rPsl = NULL, *pPsl = NULL, *psl ;
+    struct psl *mPsl = NULL, *rPsl = NULL, *pPsl = NULL, *psl ;
     struct misMatch *mf = NULL;
     ps = pseudoGeneLinkLoad(row);
     tmpName[0] = cloneString(ps->name);
@@ -587,7 +586,6 @@ while (lineFileNextRow(bf, row, ArraySize(row)))
         verbose(2,"axt count %d misMatch cnt %d\n",slCount(axtList), slCount(misMatchList));
         for (axt = axtList; axt != NULL ; axt = axt->next)
             {
-            int i;
             addMisMatch(&misMatchList, axt, chain->qSize);
             }
         verbose(2,"%d in mismatch list %s id %d \n",slCount(misMatchList), chain->qName, id);
@@ -609,7 +607,6 @@ while (lineFileNextRow(bf, row, ArraySize(row)))
     op = fopen(pslName,"w");
     for (el = elist ; el != NULL ; el = el->next)
         {
-        char *sp;
         psl = el->val;
         pslOutput(psl, op, '\t','\n');
         qSeq = twoBitReadSeqFrag(twoBitFile, psl->qName, 0, 0);
@@ -693,7 +690,6 @@ while (lineFileNextRow(bf, row, ArraySize(row)))
 int main(int argc, char *argv[])
 /* Process command line. */
 {
-struct dnaSeq *el;
 optionHash(&argc, argv);
 if (argc != 9)
     usage();
