@@ -153,7 +153,7 @@ while (!gotLf)
 	}
     if (!gotLf && bytesInBuf == lf->bufSize)
         {
-	if (bufSize > 1024*1024)
+	if (bufSize >= 64*1024*1024)
 	    {
 	    errAbort("Line too long (more than %d chars) line %d of %s",
 		lf->bufSize, lf->lineIx+1, lf->fileName);
