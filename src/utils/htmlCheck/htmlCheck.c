@@ -8,7 +8,7 @@
 #include "obscure.h"
 #include "net.h"
 
-static char const rcsid[] = "$Id: htmlCheck.c,v 1.1 2004/02/26 08:30:37 kent Exp $";
+static char const rcsid[] = "$Id: htmlCheck.c,v 1.2 2004/02/26 10:19:22 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -22,7 +22,8 @@ errAbort(
   "   read - read the url and print to stdout\n"
   "   header - read the header and print to stdout\n"
   "   printLinks - print links\n"
-  "   (validate - check that html is good)\n"
+  "   printTags - print out just the tags\n"
+  "   validate - do some basic validations\n"
   );
 }
 
@@ -37,12 +38,30 @@ struct httpStatus
     int status;
     };
 
+struct httpAttribute
+/* An http attribute - part of a set of name/values pairs in form. */
+    {
+    struct httpAttribute *next;
+    char *name;		/* Attribute name. */
+    char *val;		/* Attribute value. */
+    };
+
+struct httpTag
+/* A http tag - includes attribute list and parent, but no text. */
+    {
+    struct httpTag *next;
+    char *name;	/* Tag name. */
+    struct httpAttribute *attributes;  /* Attribute list. */
+    char context[70];	/* Characters following tag. */
+    };
+
 struct httpPage
 /* A complete http page parsed out. */
     {
     struct httpPage *next;
     struct httpStatus *status;		/* Version and status */
     struct hash *header;		/* Hash of header lines (cookies, etc.) */
+    struct httpTag *tags;		/* List of tags in this page. */
     struct slName *links;		/* List of all links. */
     };
 
@@ -121,13 +140,16 @@ for (;;)
 return hash;
 }
 
-struct slName *httpScanAttribute(char *html, char *tag, char *attribute)
-/* Scan HTML for values of particular attribute in particular tag.
- * if tag is NULL then scans in all tags. */
+struct httpTag *httpTagScan(char *html)
+/* Scan HTML for tags and return a list of them. */
 {
 char *dupe = cloneString(html);
 char *s = dupe, c, *e, *tagName;
 struct slName *list = NULL, *link;
+struct httpTag *tagList, *tag;
+struct httpAttribute *att;
+int pos;
+
 for (;;)
     {
     c = *s++;
@@ -154,6 +176,13 @@ for (;;)
 	       *e++ = 0;
 	    tagName = s;
 	    s = e;
+	    
+	    /* Allocate tag, fill in name, and stick it on list. */
+	    AllocVar(tag);
+	    tag->name = cloneString(tagName);
+	    slAddHead(&tagList, tag);
+	    pos = tagName - dupe - 1;
+	    strncpy(tag->context, html+pos, sizeof(tag->context));
 
 	    /* If already got end tag (or EOF) stop processing tag. */
 	    if (c == '>' || c == 0)
@@ -207,14 +236,10 @@ for (;;)
 			++e;
 			}
 		    }
-		if (tag == NULL || sameWord(tag, tagName))
-		    {
-		    if (sameWord(attribute, name))
-			{
-			link = slNameNew(val);
-			slAddHead(&list, link);
-			}
-		    }
+		AllocVar(att);
+		att->name = cloneString(name);
+		att->val = cloneString(val);
+		slAddTail(&tag->attributes, att);
 		s = e;
 		if (gotEnd)
 		    break;
@@ -223,14 +248,8 @@ for (;;)
 	}
     }
 freeMem(dupe);
-slReverse(&list);
-return list;
-}
-
-struct slName *httpLinkScan(char *html)
-/* Scan page for links. (HREFs in tags.) */
-{
-return httpScanAttribute(html, NULL, "HREF");
+slReverse(&tagList);
+return tagList;
 }
 
 struct httpPage *httpPageParse(char *html)
@@ -246,9 +265,53 @@ if (status == NULL)
 AllocVar(page);
 page->status = status;
 page->header = httpHeaderRead(&s);
-page->links = httpLinkScan(s);
+page->tags = httpTagScan(s);
 freeMem(dupe);
 return page;
+}
+
+struct httpPage *httpPageParseOk(char *html)
+/* Parse out page and return only if status ok. */
+{
+struct httpPage *page = httpPageParse(html);
+if (page == NULL)
+   noWarnAbort();
+if (page->status->status != 200)
+   errAbort("Page returned with status code %d", page->status->status);
+return page;
+}
+
+struct slName *httpPageScanAttribute(struct httpPage *page, 
+	char *tagName, char *attribute)
+/* Scan page for values of particular attribute in particular tag.
+ * if tag is NULL then scans in all tags. */
+{
+struct httpTag *tag;
+struct httpAttribute *att;
+struct slName *list = NULL, *el;
+
+for (tag = page->tags; tag != NULL; tag = tag->next)
+    {
+    if (tagName == NULL || sameWord(tagName, tag->name))
+        {
+	for (att = tag->attributes; att != NULL; att = att->next)
+	    {
+	    if (sameWord(attribute, att->name))
+	        {
+		el = slNameNew(att->val);
+		slAddHead(&list, el);
+		}
+	    }
+	}
+    }
+slReverse(&list);
+return list;
+}
+
+struct slName *httpPageLinks(struct httpPage *page)
+/* Scan through tags list and pull out HREF attributes. */
+{
+return httpPageScanAttribute(page, NULL, "HREF");
 }
 
 void checkOk(char *html)
@@ -276,12 +339,192 @@ while ((line = nextCrLfLine(&html)) != NULL)
 void printLinks(char *html)
 /* Print out all links. */
 {
-struct httpPage *page = httpPageParse(html);
-struct slName *link;
-for (link = page->links; link != NULL; link = link->next)
+struct httpPage *page = httpPageParseOk(html);
+struct slName *link, *linkList = httpPageLinks(page);
+for (link = linkList; link != NULL; link = link->next)
     {
     printf("%s\n", link->name);
     }
+}
+
+void printTags(char *html)
+/* Print out all tags. */
+{
+struct httpPage *page = httpPageParseOk(html);
+struct httpTag *tag;
+struct httpAttribute *att;
+for (tag = page->tags; tag != NULL; tag = tag->next)
+    {
+    printf("%s", tag->name);
+    for (att = tag->attributes; att != NULL; att = att->next)
+        {
+	printf(" %s=", att->name);
+	if (hasWhiteSpace(att->val))
+	    printf("\"%s\"", att->val);
+	else
+	    printf("%s", att->val);
+	}
+    printf("\n");
+    }
+}
+
+struct httpRow
+/* Data on a row */
+    {
+    struct httpRow *next;
+    int tdCount;
+    int inTd;
+    };
+
+struct httpTable 
+/* Data on a table. */
+    {
+    struct httpTable *next;
+    struct httpRow *row;
+    int rowCount;
+    };
+
+void tagAbort(struct httpTag *tag, char *format, ...)
+/* Print abort message and some context of tag. */
+{
+va_list args;
+va_start(args, format);
+warn("Error near: %s", tag->context);
+vaErrAbort(format, args);
+va_end(args);
+}
+
+void validateTables(struct httpTag *startTag, struct httpTag *endTag)
+/* Validate <TABLE><TR><TD> are all properly nested, and that there
+ * are no empty rows. */
+{
+struct httpTable *tableStack = NULL, *table;
+struct httpRow *row;
+struct httpTag *tag;
+
+for (tag = startTag; tag != endTag; tag = tag->next)
+    {
+    if (sameWord(tag->name, "TABLE"))
+        {
+	if (tableStack != NULL)
+	    {
+	    if (tableStack->row == NULL || !tableStack->row->inTd)
+	    tagAbort(tag, "TABLE inside of another table, but not inside of <TR><TD>\n");
+	    }
+	AllocVar(table);
+	slAddHead(&tableStack, table);
+	}
+    else if (sameWord(tag->name, "/TABLE"))
+        {
+	if ((table = tableStack) == NULL)
+	    tagAbort(tag, "Extra </TABLE> tag");
+	if (table->rowCount == 0)
+	    tagAbort(tag, "<TABLE> with no <TR>'s");
+	if (table->row != NULL)
+	    tagAbort(tag, "</TABLE> inside of a row");
+	tableStack = table->next;
+	freez(&table);
+	}
+    else if (sameWord(tag->name, "TR"))
+        {
+	if ((table = tableStack) == NULL)
+	    tagAbort(tag, "<TR> outside of TABLE");
+	if (table->row != NULL)
+	    tagAbort(tag, "<TR>...<TR> with no </TR> in between");
+	AllocVar(table->row);
+	table->rowCount += 1;
+	}
+    else if (sameWord(tag->name, "/TR"))
+        {
+	if ((table = tableStack) == NULL)
+	    tagAbort(tag, "</TR> outside of TABLE");
+	if (table->row == NULL)
+	    tagAbort(tag, "</TR> with no <TR>");
+	if (table->row->inTd)
+	    tagAbort(tag, "</TR> while <TD> is open");
+	if (table->row->tdCount == 0)
+	    tagAbort(tag, "Empty row in <TABLE>");
+	freez(&table->row);
+	}
+    else if (sameWord(tag->name, "TD") || sameWord(tag->name, "TH"))
+        {
+	if ((table = tableStack) == NULL)
+	    tagAbort(tag, "<TD> outside of <TABLE>");
+	if ((row = table->row) == NULL)
+	    tagAbort(tag, "<TD> outside of <TR>");
+	if (row->inTd)
+	    tagAbort(tag, "<TD>...<TD> with no </TD> in between");
+	row->inTd = TRUE;
+	row->tdCount += 1;
+	}
+    else if (sameWord(tag->name, "/TD") || sameWord(tag->name, "/TH"))
+        {
+	if ((table = tableStack) == NULL)
+	    tagAbort(tag, "</TD> outside of <TABLE>");
+	if ((row = table->row) == NULL)
+	    tagAbort(tag, "</TD> outside of <TR>");
+	if (!row->inTd)
+	    tagAbort(tag, "</TD> with no <TD>");
+	row->inTd = FALSE;
+	}
+    }
+if (tableStack != NULL)
+    tagAbort(tag, "Missing </TABLE>");
+}
+
+struct httpTag *validateBody(struct httpTag *startTag)
+/* Go through tags from current position (just past <BODY>)
+ * up to and including </BODY> and check some things. */
+{
+struct httpTag *tag, *endTag = NULL;
+
+/* First search for end tag. */
+for (tag = startTag; tag != NULL; tag = tag->next)
+    {
+    if (sameWord(tag->name, "/BODY"))
+        {
+	endTag = tag;
+	break;
+	}
+    }
+if (endTag == NULL)
+    errAbort("Missing </BODY>");
+validateTables(startTag, endTag);
+return endTag->next;
+}
+
+void validate(char *html)
+/* Do some basic validations. */
+{
+struct httpPage *page = httpPageParseOk(html);
+struct httpTag *tag;
+boolean gotTitle;
+
+/* Validate header, and make a suggestion or two */
+if ((tag = page->tags) == NULL)
+    errAbort("No tags");
+if (!sameWord(tag->name, "HTML"))
+    errAbort("Doesn't start with <HTML> tag");
+tag = tag->next;
+if (tag == NULL || !sameWord(tag->name, "HEAD"))
+    errAbort("<HEAD> tag does not follow <HTML> tag");
+for (;;)
+    {
+    tag = tag->next;
+    if (tag == NULL)
+        errAbort("Missing </HEAD>");
+    if (sameWord(tag->name, "TITLE"))
+        gotTitle = TRUE;
+    if (sameWord(tag->name, "/HEAD"))
+        break;
+    }
+tag = tag->next;
+if (tag == NULL || !sameWord(tag->name, "BODY"))
+    errAbort("<BODY> tag does not follow <HTML> tag");
+tag = validateBody(tag->next);
+if (tag == NULL || !sameWord(tag->name, "/HTML"))
+    errAbort("Missing </HTML>");
+verbose(1, "ok\n");
 }
 
 void htmlCheck(char *command, char *url)
@@ -291,21 +534,17 @@ struct dyString *htmlText = netSlurpUrl(url);
 if (sameString(command, "read"))
     mustWrite(stdout, htmlText->string, htmlText->stringSize);
 else if (sameString(command, "ok"))
-    {
     checkOk(htmlText->string);
-    }
 else if (sameString(command, "header"))
-    {
     printHeader(htmlText->string);
-    }
 else if (sameString(command, "printLinks"))
-    {
     printLinks(htmlText->string);
-    }
+else if (sameString(command, "printTags"))
+    printTags(htmlText->string);
+else if (sameString(command, "validate"))
+    validate(htmlText->string);	
 else
-    {
     errAbort("Unrecognized command %s", command);
-    }
 }
 
 int main(int argc, char *argv[])
