@@ -14,7 +14,7 @@
 #include "agpGap.h"
 #include "chain.h"
 
-static char const rcsid[] = "$Id: featureBits.c,v 1.24 2004/04/28 22:48:55 angie Exp $";
+static char const rcsid[] = "$Id: featureBits.c,v 1.25 2004/06/28 20:51:52 kent Exp $";
 
 int minSize = 1;	/* Minimum size of feature. */
 char *clChrom = "all";	/* Which chromosome. */
@@ -22,6 +22,7 @@ boolean orLogic = FALSE;  /* Do ors instead of ands? */
 char *where = NULL;		/* Extra selection info. */
 boolean countGaps = FALSE;	/* Count gaps in denominator? */
 boolean noRandom = FALSE;	/* Exclude _random chromosomes? */
+boolean calcEnrichment = FALSE;	/* Calculate coverage/enrichment? */
 
 void usage()
 /* Explain usage and exit. */
@@ -43,6 +44,8 @@ errAbort(
   "   -minFeatureSize   Don't include bits of the track that are smaller than\n"
   "                     minFeatureSize, useful for differentiating between\n"
   "                     alignment gaps and introns.\n"
+  "   -enrichment       Calculates coverage and enrichment assuming first table\n"
+  "                     is reference gene track and second track something else\n"
   "   '-where=some sql pattern'  restrict to features matching some sql pattern\n"
   "You can include a '!' before a table name to negate it.\n"
   "Some table names can be followed by modifiers such as:\n"
@@ -329,7 +332,8 @@ else
 void chromFeatureBits(struct sqlConnection *conn,
 	char *chrom, int tableCount, char *tables[],
 	FILE *bedFile, FILE *faFile,
-	int *retChromSize, int *retChromBits)
+	int *retChromSize, int *retChromBits,
+	int *retFirstTableBits, int *retSecondTableBits)
 /* featureBits - Correlate tables via bitmap projections and booleans
  * on one chromosome. */
 {
@@ -355,6 +359,8 @@ for (i=0; i<tableCount; ++i)
 	orTable(acc, table, chrom, chromSize, conn);
 	if (not)
 	   bitNot(acc, chromSize);
+	if (retFirstTableBits != NULL)
+	   *retFirstTableBits = bitCountRange(acc, 0, chromSize);
 	}
     else
 	{
@@ -362,6 +368,8 @@ for (i=0; i<tableCount; ++i)
 	orTable(bits, table, chrom, chromSize, conn);
 	if (not)
 	   bitNot(bits, chromSize);
+	if (i == 1 && retSecondTableBits != NULL)
+	   *retSecondTableBits = bitCountRange(bits, 0, chromSize);
 	if (orLogic)
 	    bitOr(acc, bits, chromSize);
 	else
@@ -480,6 +488,15 @@ conn = hAllocConn();
 if (!faIndependent)
     {
     double totalBases = 0, totalBits = 0;
+    int firstTableBits = 0, secondTableBits = 0;
+    int *pFirstTableBits = NULL, *pSecondTableBits = NULL;
+    double totalFirstBits = 0, totalSecondBits = 0;
+
+    if (calcEnrichment)
+        {
+	pFirstTableBits = &firstTableBits;
+	pSecondTableBits = &secondTableBits;
+	}
     for (chrom = allChroms; chrom != NULL; chrom = chrom->next)
 	{
 	if (! (noRandom && (endsWith(chrom->name, "_random") ||
@@ -487,13 +504,23 @@ if (!faIndependent)
 	    {
 	    int chromSize, chromBitSize;
 	    chromFeatureBits(conn, chrom->name, tableCount, tables,
-		bedFile, faFile, &chromSize, &chromBitSize);
+		bedFile, faFile, &chromSize, &chromBitSize,
+		pFirstTableBits, pSecondTableBits
+		);
 	    totalBases += countBases(conn, chrom->name, chromSize);
 	    totalBits += chromBitSize;
+	    totalFirstBits += firstTableBits;
+	    totalSecondBits += secondTableBits;
 	    }
 	}
-    printf("%1.0f bases of %1.0f (%4.3f%%) in intersection\n",
-	totalBits, totalBases, 100.0*totalBits/totalBases);
+    if (calcEnrichment)
+        printf("%s vs %s: coverage %5.2f%%  enrichment %5.2fx\n",
+		tables[0], tables[1],
+		100.0 * totalBits / totalFirstBits,
+		(totalBits/totalSecondBits) / (totalFirstBits/totalBases) );
+    else
+	printf("%1.0f bases of %1.0f (%4.3f%%) in intersection\n",
+	    totalBits, totalBases, 100.0*totalBits/totalBases);
     }
 else
     {
@@ -519,13 +546,18 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 optionHash(&argc, argv);
+if (argc < 3)
+    usage();
 clChrom = optionVal("chrom", clChrom);
 orLogic = optionExists("or");
 countGaps = optionExists("countGaps");
 noRandom = optionExists("noRandom");
-if (argc < 3)
-    usage();
 where = optionVal("where", NULL);
+calcEnrichment = optionExists("enrichment");
+if (calcEnrichment && argc != 4)
+    errAbort("You must specify two tables with enrichment option");
+if (calcEnrichment && orLogic)
+    errAbort("You can't use orLogic with enrichment option");
 featureBits(argv[1], argc-2, argv+2);
 return 0;
 }
