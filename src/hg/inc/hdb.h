@@ -235,6 +235,13 @@ boolean hIsBlatIndexedDatabase(char *db);
 struct blatServerTable *hFindBlatServer(char *db, boolean isTrans);
 /* return the blat server information corresponding to the database */
 
+
+char *hDefaultPos(char *database);
+/* param database - The database within which to look up this position.
+   return - default chromosome position associated with database.
+    Use freeMem on return value when done.
+ */
+
 char *hOrganism(char *database);
 /* Return organism associated with database.   Use freeMem on
  * return value when done. */
