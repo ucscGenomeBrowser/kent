@@ -54,6 +54,7 @@ echo
 echo "Building src utils."
 cd $base/kent/src
 make utils >& make.utils.log
+make blatSuite >>& make.utils.log
 sed -i -e "s/-DJK_WARN//" make.utils.log
 sed -i -e "s/-Werror//" make.utils.log
 #-- to check for errors: 
