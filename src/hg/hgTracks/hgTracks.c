@@ -991,7 +991,7 @@ sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     struct psl *psl = pslLoad(row);
-    lf = lfFromPsl(psl);
+    lf = lfFromPsl(psl, FALSE);
     slAddHead(&lfList, lf);
     pslFree(&psl);
     }
