@@ -32,7 +32,7 @@ track bdgpGene
 shortLabel FlyBase Genes
 longLabel Protein-Coding Genes from FlyBase
 group genes
-priority 45.5
+priority 34
 visibility pack
 color 0,100,180
 type genePred bdgpGenePep
@@ -42,7 +42,7 @@ track bdgpNonCoding
 shortLabel FlyBase Non-coding
 longLabel Non-Coding Genes from FlyBase
 group genes
-priority 46
+priority 34.5
 visibility pack
 color 30,130,210
 type genePred 
