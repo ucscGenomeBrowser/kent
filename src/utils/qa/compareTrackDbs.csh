@@ -76,7 +76,6 @@ set url7 = "&phase=Get+these+fields"
 # doesn't work for settings of because of embedded newlines
 set url6a = ""
 if ($field != "tableName") then
-  echo "getting other field"
   set url6a = "&field_tableName=on"
 endif
 
@@ -85,7 +84,6 @@ rm -f $machine2.$db.$table
 
 set machine=$machine1
 wget -q -O $machine1.$db.$table "$url1$machine$url2$db$url3$db$url4$table$url5$url6a$url6$url7"
-echo "$url1$machine$url2$db$url3$db$url4$table$url5$url6a$url6$url7"
 set mach1Count=`wc -l $machine1.$db.$table | gawk '{print $1}'`
 
 set machine=$machine2
