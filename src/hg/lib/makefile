@@ -13,7 +13,7 @@ MYLIBDIR = ../../lib/$(MACHTYPE)
 MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a 
 
 O = agpFrag.o agpGap.o axtInfo.o bbRepMask.o bed.o blatServers.o blastzNet.o \
-    borf.o borkPseudoHom.o cart.o cartDb.o cgh.o chain.o chainGap.o chainNet.o chainView.o\
+    borf.o borkPseudoHom.o cart.o cartDb.o cgh.o chain.o chainLink.o chainNet.o chainView.o\
     chromInfo.o chromInserts.o chr18deletions.o \
     clonePos.o cpgIsland.o ctgPos.o customTrack.o cytoBand.o \
     dbDb.o dnaMotif.o est3.o estOrientInfo.o estPair.o exoFish.o \
