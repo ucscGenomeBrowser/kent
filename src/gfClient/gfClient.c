@@ -34,6 +34,13 @@ errAbort(
   "gfClient - A client for the genomic finding program that produces a .psl file\n"
   "usage:\n"
   "   gfClient host port nibDir in.fa out.psl\n"
+  "where\n"
+  "   host is the name of the machine running the gfServer\n"
+  "   port is the same as you started the gfServer with\n"
+  "   nibDir is the path of the nib files relative to the current dir\n"
+  "       (note these are needed by the client as well as the server)\n"
+  "   in.fa a fasta format file.  May contain multiple records\n"
+  "   out.psl where to put the output\n"
   "options:\n"
   "   -nohead   Suppresses psl five line header");
 }

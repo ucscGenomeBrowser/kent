@@ -51,7 +51,10 @@ set up a new connection for each query.
 I really built this for the web where this
 overhead doesn't matter, but it would add
 up if you were trying to process a million
-reads or ESTs with gfClient.
+reads or ESTs with gfClient.  Not that
+you *do* need to have the nib files in a
+directory that is accessible from the client
+as well as the server.
 
 hgBlat is currently hard wired to query
 kks00.cse.ucsc.edu.  Please change this

@@ -39,7 +39,7 @@ errAbort(
 void genoFindDirect(char *probeName, int nibCount, char *nibFiles[])
 /* Don't set up server - just directly look for matches. */
 {
-struct genoFind *gf = gfIndexNibs(nibCount, nibFiles, minMatch, gfMaxGap, tileSize, gfMaxTileUse);
+struct genoFind *gf = gfIndexNibs(nibCount, nibFiles, minMatch, gfMaxGap, tileSize, gfMaxTileUse, FALSE);
 struct lineFile *lf = lineFileOpen(probeName, TRUE);
 struct dnaSeq seq;
 
@@ -111,7 +111,7 @@ int trimCount = 0;
 FILE *logFile = mustOpen("gfServer.log", "w");
 
 logIt(logFile, "gfServer version %d on host %s, port %s\n", version, hostName, portName);
-gf = gfIndexNibs(nibCount, nibFiles, gfMinMatch, gfMaxGap, gfTileSize, gfMaxTileUse);
+gf = gfIndexNibs(nibCount, nibFiles, gfMinMatch, gfMaxGap, gfTileSize, gfMaxTileUse, FALSE);
 logIt(logFile, "indexing complete\n");
 
 /* Set up socket.  Get ready to listen to it. */
