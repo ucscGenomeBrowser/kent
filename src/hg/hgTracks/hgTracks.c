@@ -84,7 +84,7 @@
 #include "estOrientInfo.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.793 2004/09/01 22:42:35 braney Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.794 2004/09/02 19:55:22 kent Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
@@ -3815,6 +3815,7 @@ char *rOligo = cloneString(fOligo);
 char *rMatch = NULL, *fMatch = NULL;
 struct bed *bedList = NULL, *bed;
 char strand;
+int count = 0, maxCount = 1000000;
 
 if (oligoSize >= 2)
     {
@@ -3856,14 +3857,24 @@ if (oligoSize >= 2)
 	    fMatch = stringIn(fOligo, fMatch+1);
 	    strand = '+';
 	    }
-	AllocVar(bed);
-	bed->chromStart = winStart + (oneMatch - dna);
-	bed->chromEnd = bed->chromStart + oligoSize;
-	bed->strand[0] = strand;
-	slAddHead(&bedList, bed);
+	if (count < maxCount)
+	    {
+	    ++count;
+	    AllocVar(bed);
+	    bed->chromStart = winStart + (oneMatch - dna);
+	    bed->chromEnd = bed->chromStart + oligoSize;
+	    bed->strand[0] = strand;
+	    slAddHead(&bedList, bed);
+	    }
+	else
+	    break;
 	}
     slReverse(&bedList);
-    tg->items = bedList;
+    if (count < maxCount)
+	tg->items = bedList;
+    else
+        warn("More than %d items in %s, suppressing display",
+	    maxCount, tg->shortLabel);
     }
 }
 
