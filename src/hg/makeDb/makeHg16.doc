@@ -8000,6 +8000,7 @@ EOF
     mkdir -p WINDOWS
     rm -rf WINDOWS/* jobs.lst
     for file in /cluster/bluearc/hg16/bed/humor/*.maf ; do echo "doSplit $file" >> jobs.lst ; done
+
     para create jobs.lst  
     # etc ...   (run cluster job)
 
@@ -8054,3 +8055,45 @@ EOF
 #exonArrows on
 #type bed 12
 
+# ECORES FROM GENOSCOPE [DONE, hartera, 2004-03-31]
+# download data from  http://www.genoscope.cns.fr/externe/tetraodon/Data3/ecores# ecotigHF - ecores on Human, genome conserved with Fugu, Fr1
+# ecotigHT - ecores on Human, genome conserved with Tetraodon (March 2004)
+                                                                                
+    ssh hgwdev
+    mkdir /cluster/data/hg16/bed/ecores/
+    # add parse_ecotig.pl to this directory
+                                                                                
+# FUGU
+    mkdir /cluster/data/hg16/bed/ecores/fr1
+    cd /cluster/data/hg16/bed/ecores/fr1/
+                                                                                
+    # download data for ecotigHF to this directory
+    # parse ecotig files to produce a bed format file
+    perl ../parse_ecotig.pl < ecotigHF > ecotigHF.bed
+                                                                                
+    # change from upper to lower case for "CHR"
+    perl -pi.bak -e 's/CHR/chr/g' ecotigHF.bed
+                                                                                
+    hgLoadBed -tab hg16 ecoresFr1 ecotigHF.bed
+                                                                                
+    # clean up
+    rm *.bak
+                                                                                
+# TETRAODON
+    mkdir /cluster/data/hg16/bed/ecores/tetraodon
+    cd /cluster/data/hg16/bed/ecores/tetraodon/
+                                                                                
+    # download data for ecotigHT to this directory
+    # parse ecotig files to produce a bed format file
+    perl ../parse_ecotig.pl < ecotigHT > ecotigHT.bed
+    # change from upper to lower case for "CHR"
+    perl -pi.bak -e 's/CHR/chr/g' ecotigHT.bed
+                                                                                
+    hgLoadBed -tab hg16 ecoresTetraodon ecotigHT.bed
+                                                                                
+    # clean up
+    rm *.bak
+                                                                                
+    # add entries in kent/src/hg/makeDb/trackDb/human/hg16/trackDb.ra
+    # add html for details pages to this directory:
+    # ecoresFr1.html and ecoresTetraodon.html
