@@ -2,7 +2,7 @@
 #include "common.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: faOneRecord.c,v 1.2 2003/05/06 07:41:06 kate Exp $";
+static char const rcsid[] = "$Id: faOneRecord.c,v 1.3 2003/11/14 23:53:17 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -25,7 +25,13 @@ boolean inRecord = FALSE;
 while (lineFileNext(lf, &line, &lineSize))
     {
     if (line[0] == '>')
-	inRecord =  startsWith(recordName, line+1);
+	{
+	char *header = cloneString(line+1);
+	char *words[2];
+	chopLine(header, words);
+	inRecord = sameString(recordName, words[0]);
+	freeMem(header);
+	}
     if (inRecord)
         mustWrite(stdout, line, lineSize);
     }
