@@ -5718,10 +5718,10 @@ if (hTableExists("cpgIsland")) slSafeAddHead(&tGroupList, cpgIslandTg());
 if (privateVersion())
     {
     if (hTableExists("cpgIsland2")) slSafeAddHead(&tGroupList, cpgIsland2Tg());
-    if (hTableExists("mus7of8")) slSafeAddHead(&tGroupList, mus7of8Tg());
-    if (hTableExists("musPairOf4")) slSafeAddHead(&tGroupList, musPairOf4Tg());
-    if (chromTableExists("_musTest1")) slSafeAddHead(&tGroupList, musTest1Tg());
-    if (chromTableExists("_musTest2")) slSafeAddHead(&tGroupList, musTest2Tg());
+    // if (hTableExists("mus7of8")) slSafeAddHead(&tGroupList, mus7of8Tg());
+    // if (hTableExists("musPairOf4")) slSafeAddHead(&tGroupList, musPairOf4Tg());
+    // if (chromTableExists("_musTest1")) slSafeAddHead(&tGroupList, musTest1Tg());
+    // if (chromTableExists("_musTest2")) slSafeAddHead(&tGroupList, musTest2Tg());
     }
 if (chromTableExists("_blatMouse")) slSafeAddHead(&tGroupList, blatMouseTg());
 if (hTableExists("exoMouse")) slSafeAddHead(&tGroupList, exoMouseTg());
