@@ -11,7 +11,7 @@
 #include "hCommon.h"
 #include "chainCart.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.58 2005/02/15 01:18:54 hiram Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.59 2005/02/16 21:23:50 hiram Exp $";
 
 char *hUserCookie()
 /* Return our cookie name. */
@@ -465,7 +465,7 @@ cgiMakeDropList(var, nci60Options, ArraySize(nci60Options),
 /****** Some stuff for base labeling of EST like track related controls *****/
 
 static char *baseColorOptions[] = {
-    "OFF",
+    "no",
     "all",
     "different"
     };
