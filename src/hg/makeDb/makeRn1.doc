@@ -226,7 +226,7 @@ MAKE HGCENTRALTEST ENTRY AND TRACKDB TABLE FOR RN1 (DONE 11/26/02)
     ssh genome-testdb
     mysql -u root -pbigSecret hgcentral
       insert into dbDb values("rn1", "Rat Nov. 2002",
-        "/cluster/store4/rn1/nib", "Rat", "chr1:20000000-20010000", 1,
+        "/cluster/store4/rn1/nib", "Rat", "chr1:15647901-18981566", 1,
         10, "Rat");
       quit
     # Make trackDb table so browser knows what tracks to expect:
@@ -246,6 +246,31 @@ COPY GENBANK MRNA DATA TO THE CLUSTER (already done)
    cp -r /cluster/store1/mrna.130/org /scratch/hg/mrna.130
    # Distribute this data to the local nodes: ask sysadmins, or run:
    sudo /cluster/install/utilities/updateLocal
+
+
+CREATE RELATIONAL MRNA DATABASE (MRNA/EST DONE 11/26/02; REFSEQ TODO)
+    ssh hgwdev
+    hgLoadRna new rn1
+    mkdir -p /gbdb/rn1/mrna.130
+    cd /gbdb/rn1/mrna.130
+    ln -s /cluster/store1/mrna.130/org/Rattus_norvegicus/mrna.fa
+    ln -s /cluster/store1/mrna.130/org/Rattus_norvegicus/mrna.ra
+    ln -s /cluster/store1/mrna.130/org/Rattus_norvegicus/est.fa
+    ln -s /cluster/store1/mrna.130/org/Rattus_norvegicus/est.ra
+    # TODO: this has not yet been loaded:
+    ln -s /cluster/store1/mrna.130/org/Rattus_norvegicus/refSeq.fa
+    ln -s /cluster/store1/mrna.130/org/Rattus_norvegicus/refSeq.ra
+
+    cd /cluster/store2/temp
+    hgLoadRna add rn1 /gbdb/rn1/mrna.130/mrna.fa \
+      /gbdb/rn1/mrna.130/mrna.ra
+    # This est load will take quite some time to complete:
+    hgLoadRna add rn1 /gbdb/rn1/mrna.130/est.fa \
+      /gbdb/rn1/mrna.130/est.ra
+
+    # TODO: this has not yet been loaded:
+    hgLoadRna add -type=refSeq rn1 /gbdb/rn1/mrna.130/refSeq.fa \
+      /gbdb/rn1/mrna.130/refSeq.ra
 
 
 MAKING AND STORING mRNA AND EST ALIGNMENTS  (TODO)
