@@ -5,9 +5,13 @@
 #include "options.h"
 #include "jksql.h"
 #include "dystring.h"
+#include "hdb.h"
 #include "hgRelate.h"
+#include "binRange.h"
+#include "esMotif.h"
+#include "dnaMotif.h"
 
-static char const rcsid[] = "$Id: hgLoadEranModules.c,v 1.2 2004/01/24 02:22:21 kent Exp $";
+static char const rcsid[] = "$Id: hgLoadEranModules.c,v 1.3 2004/01/26 20:28:05 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -15,7 +19,19 @@ void usage()
 errAbort(
   "hgLoadEranModules - Load regulatory modules from Eran Segal\n"
   "usage:\n"
-  "   hgLoadEranModules database module_assignments.tab motif_attributes.tab motif_modules.tab\n"
+  "   hgLoadEranModules database module_assignments.tab motif_modules.tab modules_motifs.gxm modules_motif_positions.tab gene_positions.tab\n"
+  "where the parameters are:\n"
+  "   database - a genome database such as sacCer1 or hg16\n"
+  "   module_assignments.tab - a two column file: gene, module\n"
+  "   motif_modules.tab - a tab separated file with one line for each module\n"
+  "          The field of each line is the module, subsequent fields are\n"
+  "          the motifs that make up that module\n"
+  "   modules_motifs.gxm - A XML file with the motif weight matrices\n"
+  "   modules_motif_positions.tab - A big table with genes for rows and \n"
+  "          motifs for columns that says the position of each motif relative\n"
+  "          to the start of gene\n"
+  "   gene_positions.tab - A tab separated files with columns:\n"
+  "       geneName,chromosome,txStart,txEnd,strand,upSize,downSize\n"
   "options:\n"
   "   -xxx=XXX\n"
   );
@@ -73,14 +89,128 @@ printf("Loaded %s table\n", table);
 return hashTwoColumnFile(fileName, 0);
 }
 
+struct genomeRange
+/* A part of genome. */
+    {
+    struct genomeRange *next;
+    char *name;		/* Gene name, not allocated here. */
+    char *chrom;	/* Chromosome, not allocated here. */
+    int start,end;	/* Range, zero based, half open. */
+    char strand;	/* + or - */
+    };
+
+struct hash *loadGenePositions(char *fileName)
+/* Read in 7 column file and convert to hash of gene
+ * positions. */
+{
+struct hash *hash = newHash(16);
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+char *row[7];
+int count = 0;
+
+while (lineFileRow(lf, row))
+    {
+    struct genomeRange *range;
+    int geneStart,geneEnd,upSize,downSize;
+
+    AllocVar(range);
+    hashAddSaveName(hash, row[0], range, &range->name);
+    range->chrom = hgOfficialChromName(row[1]);
+    if (range->chrom == NULL)
+        errAbort("Unrecognized chromosome %s line %d of %s",
+		row[1], lf->lineIx, lf->fileName);
+    geneStart = lineFileNeedNum(lf, row, 2);
+    geneEnd = lineFileNeedNum(lf, row, 3);
+    range->strand = row[4][0];
+    if (range->strand != '+' && range->strand != '-')
+        errAbort("Unrecognized strand %s line %d of %s",
+		row[4], lf->lineIx, lf->fileName);
+    upSize = lineFileNeedNum(lf, row, 5);
+    downSize = lineFileNeedNum(lf, row, 6);
+    if (range->strand == '+')
+        {
+	range->start = geneStart - upSize;
+	range->end = geneStart + downSize;
+	}
+    else	
+        {
+	range->start = geneEnd - downSize;
+	range->end = geneEnd + upSize;
+	}
+    ++count;
+    }
+printf("%d genes in %s\n", count, fileName);
+return hash;
+}
+
+void outputMotifPositions(FILE *f, char *posList, struct genomeRange *range, 
+	struct dnaMotif *motif, struct lineFile *lf)
+/* Take a semi-colon separated list of positions relative to given range
+ * and convert it to a line in a bed file. */
+{
+int relStart, start,end;
+char *pos, *e;
+char relStrand, strand;
+
+for (pos = posList; pos != NULL; pos = e)
+    {
+    e = strchr(pos, ';');
+    if (e != NULL)
+        *e++ = 0;
+    if (!isdigit(pos[0]) && !(pos[0] == '-' && isdigit(pos[1])))
+        errAbort("Expecting semicolon separated list of numbers line %d of %s",
+	    lf->lineIx, lf->fileName);
+    relStart = atoi(pos);
+    relStrand = '+';
+    if (relStart < 0)
+        {
+	relStrand = '-';
+	relStart = -relStart;
+	}
+    if (range->strand == '+')
+	{
+	strand = relStrand;
+	start = range->start + relStart;
+	end = start + motif->columnCount;
+	}
+    else
+        {
+	strand = (relStrand == '+' ? '-' : '+');	/* Flip strand */
+	end = range->end - relStart;
+	start = end - motif->columnCount;
+	}
+    fprintf(f, "%d\t", binFromRange(start, end));
+    fprintf(f, "%s\t", range->chrom);
+    fprintf(f, "%d\t%d\t", start, end);
+    fprintf(f, "%s\t", motif->name);
+    fprintf(f, "%d\t", 1000);	/* Not calculated yet. */
+    fprintf(f, "%c\t", strand);
+    fprintf(f, "%s\n", range->name);
+    }
+}
+
+char *fixMotifName(char *in, char *out, int outSize)
+/* Fix motif name to make it consistent.  (Convert
+ * 'Cluster XXX' to 'Motif_XXX' */
+{
+if (startsWith("Cluster", in))
+    safef(out, outSize, "Motif_%s", in+8);
+else
+    safef(out, outSize, "%s", in);
+return out;
+}
+
+
 void loadGeneToMotif(struct sqlConnection *conn, char *fileName, char *table,
-	struct hash *geneToModuleHash, struct hash *moduleAndMotifHash)
+	struct hash *geneToModuleHash, struct hash *moduleAndMotifHash,
+	struct hash *motifHash, struct hash *positionsHash)
 /* Load file which is a big matrix with genes for rows and motifs for
- * columns.  There is a 1 in the matrix where a gene has the motif.
- * The first column and the first row are labels. 
- *
- * Only load bits of this where motif actually occurs in module associated with
- * gene. */
+ * columns.  There is a semicolon-separated list of numbers in the matrix 
+ * where a gene has the motif, and an empty (tab separated) field
+ * where there is no motif.  The numbers are relative to the
+ * region associated with the gene in the positionsHash. 
+ * Only load bits of this where motif actually occurs in module associated 
+ * with gene. */
 {
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
 char *line;
@@ -100,25 +230,43 @@ motifCount = chopLine(line, motifNames);
 if (motifCount >= ArraySize(motifNames))
     errAbort("Too many motifs line 1 of %s", fileName);
 lineFileExpectAtLeast(lf, 2, motifCount);
-for (i=0; i<motifCount; ++i)
-    motifNames[i] = cloneString(motifNames[i]);
+motifNames[0] = NULL;
+for (i=1; i<motifCount; ++i)
+    {
+    char name[64];
+    motifNames[i] = cloneString(fixMotifName(motifNames[i],name,sizeof(name)));
+    if (!hashLookup(motifHash, motifNames[i]))
+        errAbort("Motif %s is in %s but not modules_motifs.gxm",
+		motifNames[i], fileName);
+    }
 
 /* Read subsequent lines. */
-while ((rowSize = lineFileChop(lf, row)) != 0)
+while ((rowSize = lineFileChopTab(lf, row)) != 0)
     {
     lineFileExpectWords(lf, motifCount, rowSize);
     gene = row[0];
     module = hashFindVal(geneToModuleHash, gene);
     if (module == NULL)
-        errAbort("Gene %s in line %d of %s but not geneToModuleHash\n", gene, 
-		lf->lineIx, lf->fileName);
+	{
+        warn("WARNING: Gene %s in line %d of %s but not module_assignments.tab", 
+		gene, lf->lineIx, lf->fileName);
+	continue;
+	}
     for (i=1; i<rowSize; ++i)
         {
-	if (row[i][0] == '1')
+	if (row[i][0] != 0)
 	    {
 	    if (hashLookup2(moduleAndMotifHash, module, motifNames[i]))
 		{
-		fprintf(f, "%s\t%s\n", gene, motifNames[i]);
+		struct genomeRange *range = hashFindVal(positionsHash, gene);
+		if (range == NULL)
+		    {
+		    warn("WARNING: %s in %s but not gene_positions.tab",
+		    	gene, fileName);
+		    i = rowSize; continue;
+		    }
+		outputMotifPositions(f, row[i], range, 
+			hashMustFindVal(motifHash, motifNames[i]), lf);
 		++total;
 		}
 	    }
@@ -127,11 +275,18 @@ while ((rowSize = lineFileChop(lf, row)) != 0)
     }
 dyStringPrintf(dy,
 "CREATE TABLE  %s (\n"
+"    bin smallInt unsigned not null,\n"
+"    chrom varChar(255) not null,\n"
+"    chromStart int not null,\n"
+"    chromEnd int not null,\n"
+"    name varchar(255) not null,\n"
+"    score int not null,\n"
+"    strand char(1) not null,\n"
 "    gene varchar(255) not null,\n"
-"    motif varchar(255) not null,\n"
 "              #Indices\n"
 "    INDEX(gene(12)),\n"
-"    INDEX(motif(16))\n"
+"    INDEX(name(16)),\n"
+"    INDEX(chrom(8),bin)\n"
 ")\n",  table);
 sqlRemakeTable(conn, table, dy->string);
 printf("%d genes, %d motifs, %d motifs in genes\n",
@@ -187,10 +342,77 @@ lineFileClose(&lf);
 return hash;
 }
 
+
+struct hash *loadMotifWeights(struct sqlConnection *conn, char *fileName, 
+	char *table)
+/* Load in XML weight motif file and save it in tab-separated format
+ * and in hash keyed by motif name. */
+{
+struct esmMotifs *motifs = esmMotifsLoad(fileName);
+struct esmMotif *motif;
+char *tmpDir = ".";
+FILE *f = hgCreateTabFile(tmpDir, table);
+struct dyString *dy = dyStringNew(512);
+struct hash *hash = newHash(16);
+
+for (motif = motifs->esmMotif; motif != NULL; motif = motif->next)
+    {
+    struct esmWeights *weights = motif->esmWeights;
+    int posCount = slCount(weights->esmPosition);
+    struct esmPosition *pos;
+    struct dnaMotif *dm;
+    char name[64];
+
+
+    fixMotifName(motif->Name, name, sizeof(name));
+    AllocVar(dm);
+    dm->name = cloneString(name);
+    dm->columnCount = posCount;
+    AllocArray(dm->aProb, posCount);
+    AllocArray(dm->cProb, posCount);
+    AllocArray(dm->gProb, posCount);
+    AllocArray(dm->tProb, posCount);
+    for (pos = weights->esmPosition; pos != NULL; pos = pos->next)
+        {
+	char *row[5];
+	int ix = pos->Num;
+	int rowSize = chopString(pos->Weights, ";", row, ArraySize(row));
+	if (rowSize != 4)
+	    errAbort("Expecting 4 values for weights in position %d of Motif %s",
+               pos->Num, motif->Name);
+	if (ix >= posCount)
+	    errAbort("Num %d out of range in Motif %s", ix, motif->Name);
+	dm->aProb[ix] = atof(row[0]);
+	dm->cProb[ix] = atof(row[1]);
+	dm->gProb[ix] = atof(row[2]);
+	dm->tProb[ix] = atof(row[3]);
+	}
+    dnaMotifTabOut(dm, f);
+    hashAdd(hash, dm->name, dm);
+    }
+dyStringPrintf(dy,
+"CREATE TABLE %s (\n"
+"    name varchar(16) not null,	# Motif name.\n"
+"    columnCount int not null,	# Count of columns in motif.\n"
+"    aProb longblob not null,	# Probability of A's in each column.\n"
+"    cProb longblob not null,	# Probability of C's in each column.\n"
+"    gProb longblob not null,	# Probability of G's in each column.\n"
+"    tProb longblob not null,	# Probability of T's in each column.\n"
+"              #Indices\n"
+"    PRIMARY KEY(name)\n"
+")\n", table);
+sqlRemakeTable(conn, table, dy->string);
+hgLoadTabFile(conn, tmpDir, table, &f);
+hgRemoveTabFile(tmpDir, table);
+printf("Processed %d motifs into %s\n", slCount(motifs->esmMotif), table);
+return hash;
+}
+
 void crossCheck(struct sqlConnection *conn,
-	char *geneToModule, char *geneToMotif, char *moduleToMotif)
+	char *motifWeights, char *geneToModule, char *geneToMotif, char *moduleToMotif)
 /* Do sanity check after loading.  */
 {
+struct hash *motifHash = newHash(0);
 struct hash *geneToModuleHash = newHash(16);
 struct hash *moduleToGeneHash = newHash(16);
 struct hash *moduleToMotifHash = newHash(16);
@@ -202,6 +424,14 @@ char **row;
 int reusedMotifCount = 0;
 int fatalErrorCount = 0;
 
+/* Load up motif hash */
+safef(query, sizeof(query), "select name from %s", motifWeights);
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    hashAdd(motifHash, row[0], NULL);
+    }
+sqlFreeResult(&sr);
 
 /* Load up moduleToMotif table and note how many times
  * a motif is used more than once just for curiousity
@@ -212,6 +442,12 @@ while ((row = sqlNextRow(sr)) != NULL)
     {
     char *module = cloneString(row[0]);
     char *motif = cloneString(row[1]);
+    if (!hashLookup(motifHash, motif))
+        {
+	warn("Motif %s is in %s but not %s", motif, 
+		moduleToMotif, motifWeights);
+	++fatalErrorCount;
+	}
     hashAdd(moduleToMotifHash, module, motif);
     if (hashLookup(motifToModuleHash, motif))
         ++reusedMotifCount;
@@ -260,7 +496,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 sqlFreeResult(&sr);
 
 /* Scan through geneToMotif table checking things. */
-safef(query, sizeof(query), "select gene,motif from %s", geneToMotif);
+safef(query, sizeof(query), "select gene,name from %s", geneToMotif);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -279,29 +515,40 @@ while ((row = sqlNextRow(sr)) != NULL)
 	    gene, motif, module);
 	++fatalErrorCount;
 	}
+    if (!hashLookup(motifHash, motif))
+        {
+	warn("Motif %s is in %s but not %s", motif, 
+		geneToMotif, motifWeights);
+	++fatalErrorCount;
+	}
     }
 sqlFreeResult(&sr);
 
 printf("%d errors\n", fatalErrorCount);
 }
 
-void hgLoadEranModules(char *database, char *geneToModule, 
-	char *geneToMotif, char *moduleToMotif)
+
+void hgLoadEranModules(char *database, 
+	char *geneToModule, char *moduleToMotif, char *motifWeights,
+	char *motifPositions, char *genePositions)
 /* hgLoadEranModules - Load regulatory modules from Eran Segal. */
 {
+struct hash *positionsHash = loadGenePositions(genePositions);
 struct sqlConnection *conn = sqlConnect(database);
 struct hash *moduleAndMotifHash = loadModuleToMotif(conn, moduleToMotif, "esRegModuleToMotif");
 struct hash *geneToModuleHash = loadGeneToModule(conn, geneToModule, "esRegGeneToModule");
-loadGeneToMotif(conn, geneToMotif, "esRegGeneToMotif", geneToModuleHash, moduleAndMotifHash);
-crossCheck(conn, "esRegGeneToModule", "esRegGeneToMotif", "esRegModuleToMotif");
+struct hash *motifHash = loadMotifWeights(conn, motifWeights, "esRegMotif");
+loadGeneToMotif(conn, motifPositions, "esRegGeneToMotif", geneToModuleHash, moduleAndMotifHash, motifHash, positionsHash);
+crossCheck(conn, "esRegMotif", "esRegGeneToModule", "esRegGeneToMotif", "esRegModuleToMotif");
 }
 
 int main(int argc, char *argv[])
 /* Process command line. */
 {
 optionInit(&argc, argv, options);
-if (argc != 5)
+if (argc != 7)
     usage();
-hgLoadEranModules(argv[1], argv[2], argv[3], argv[4]);
+hSetDb(argv[1]);
+hgLoadEranModules(argv[1], argv[2], argv[3], argv[4], argv[5], argv[6]);
 return 0;
 }
