@@ -7,7 +7,7 @@
 #include "bed.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: affyUclaMergePslData.c,v 1.3 2004/02/04 19:52:06 hartera Exp $";
+static char const rcsid[] = "$Id: affyUclaMergePslData.c,v 1.4 2004/02/17 01:36:01 sugnet Exp $";
 static boolean doHappyDots;   /* output activity dots? */
 char *prefix = ":";  /* Prefext to our affymetrix names. */
 
@@ -223,6 +223,14 @@ while(lineFileChopNextTab(lf, row, sizeof(row)))
 	    {
 	    for(b = bed; b != NULL; b = b->next)
 		{
+		int avgCount = 0;
+		for(i = 0; i < b->expCount; i++)
+		    if(b->expScores[i] != -10000)
+			avgCount++;
+		if(avgCount != 0 && b->score > 0)
+		    b->score = log(b->score / avgCount) * 100;
+		else
+		    b->score = 0;
 		bedTabOutN(b, 15, bedOut);
 		if(toDiffOut != NULL)
 		    outputToDiffRecord(b, expNames, toDiffOut);
@@ -246,15 +254,18 @@ while(lineFileChopNextTab(lf, row, sizeof(row)))
     if(bed != NULL)
 	{
 	/* Allocate larger arrays if necessary. */
-	if(numExps >= expCount)
+	if(numExps > expCount)
 	    {
-	    errAbort("Supposed to be %d experiments but probeset %s hash at least %d",
-		     expCount, psl->qName, numExps);
+	    errAbort("Supposed to be %d experiments but probeset %s has at least %d",
+		     expCount, bed->name, numExps);
 	    }
 	for(b = bed; b != NULL; b = b->next)
 	    {
 	    int exp = hashIntVal(expHash, row[1]);
-	    b->expScores[exp] = atof(row[3]);
+	    if(differentWord(row[3], "NaN"))
+	       b->expScores[exp] = atof(row[3]);
+	    if(differentWord(row[2], "NaN"))
+	       b->score += atof(row[2]);
 	    }
 	numExps++;
 	}
