@@ -1,5 +1,5 @@
 <!------------Description---------->
-The Number of Exons histogram displays a genome-wide statistical distribution 
+This histogram displays a genome-wide statistical distribution 
 based on the number of coding exons in the kgProtMap table. The number of
 coding exons in the selected protein is displayed at the top of the graph, 
 and a dark blue vertical line highlights this count relative to the 

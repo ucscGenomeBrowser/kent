@@ -1,6 +1,6 @@
 <!------------Description---------->
 This histogram shows the selected protein's molecular weight and displays it 
 relative to the genome-wide statistical distribution of 5000 randomly selected SwissProt 
-human proteins. The molecular weight is shown at the top of the histogram, and
-the vertical dark blue bar indicates the weight relative to the genome-wide
+human proteins [FIXME - is this still true?]. The molecular weight is shown at the top of the histogram, and
+a vertical dark blue bar indicates the weight relative to the genome-wide
 distribution.

@@ -1,2 +1,2 @@
 <!------------Description----------->
-This track shows the amino acid sequence that comprises the protein.
+This track shows the amino acid sequence comprising the protein.

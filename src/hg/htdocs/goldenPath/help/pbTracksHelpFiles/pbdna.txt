@@ -1,15 +1,19 @@
 <!------------Description---------->
-This track appears as two types of display. If the mRNA matches the 
-forward (+) strand of the genomic sequence as displayed in the Genome Browser, 
-the DNA sequence is displayed as a single row of nucleotides whose codons are
-read directly into the amino acid sequence.
+The display of this track varies, depending on which genomic strand the mRNA
+aligns to. 
+<P>
+If the mRNA matches the forward (+) strand of the genomic sequence as 
+displayed in the Genome Browser, the DNA sequence is displayed as a single row 
+of nucleotides -- labeled &quot;Genomic Sequence&quot; -- whose codons are read 
+directly into the amino acid sequence.
 <P>
 If the mRNA matches the reverse (-) strand of the genomic sequence,
-this track shows both strands of the DNA.
-The upper strand matches the mRNA, to follow the convention that a 
+the track shows both strands of the DNA.
+The upper strand  -- labeled &quot;Coding Sequence&quot; -- matches the mRNA, 
+to follow the convention that a 
 protein sequence is displayed in the amino-to-carboxy direction.  The 
-genomic sequence as viewed in the Genome Browser, therefore, is read from 
-the lower strand (labeled "&amp; Complement") in the reverse direction.
+genomic sequence as displayed in the Genome Browser, therefore, is read from 
+the lower strand (labeled &quot;Genomic Sequence&quot;) in the reverse direction.
 <P>
 For example, the first few codons of the gene for human thymidylate kinase, 
 CDC8, appear on the negative strand of chromosome 2 in the hg16 Genome Browser

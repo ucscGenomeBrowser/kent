@@ -1,5 +1,5 @@
 <!------------Description----------->
-The top and bottom tracks provide a scale to the amino acid length of the 
+The top and bottom tracks provide a scale to determine the amino acid length of the 
 selected protein. The label of the final tick mark on the scale shows the
 protein's total amino acid count. 
 <P>

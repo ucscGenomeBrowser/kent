@@ -4,18 +4,18 @@ estimated by adding 10% to its length in amino acids. For example,
 a 400-residue protein is approximately 440 kD,
 based on an average of 110 daltons per amino acid, assuming
 random composition.
-
-More accurately, as done in the Protein Browser, the composition 
-can be multiplied by the individual molecular weights of each amino 
-acid. Processed signal peptides and 
-covalent modifications (possibly transient or partial) must be 
-taken into account, depending on the situation.  
+<P>
+More accurately, as is done in the Protein Browser, a protein's weight 
+can be calculated from the individual molecular weights of the amino 
+acids. Processed signal peptides and covalent modifications 
+(possibly transient or partial) must be taken into account, depending on 
+the situation.  
 <P>
 The molecular weights displayed in the Protein Browser have been 
 taken from SwissProt when accession numbers were available; otherwise, 
 they have been based on genomic sequence as processed with the SwissProt 
 <A HREF="http://www.expasy.ch/tools/pi_tool.html" TARGET=_blank>molecular 
-weight tool</A>. This reflects the removal of isotopic 
+weight tool</A> [FIXME - is this true?]. This reflects the removal of isotopic 
 abundances and predicted signal peptides, but not modified amino 
 acids. Numbers have been rounded to the nearest kD, which 
 suffices for gel migration (although clearly not for mass 
@@ -27,8 +27,7 @@ proteins are under-represented in this data set. The display thus calls
 attention to unusual molecular weight values that 
 could suggest multiple domains or chain fusion, which can be 
 lineage-specific events.  On predicted protein tracks, 
-molecular weights below 100 kD may indicate an incompletely 
-predicted protein.  
+molecular weights below 100 kD may indicate an incompletely-predicted protein.  
 <P>
 Mammalian molecular weights average 56 kD (627 aa) in the data 
 set used. The distribution exhibits a very long tail of a few 
@@ -46,3 +45,5 @@ average mammalian protein.
 <CENTER>
 <IMG src="mol_wt.gif"> 
 </CENTER>
+
+[FIXME -- Replace with updated graph]

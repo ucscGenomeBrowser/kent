@@ -18,7 +18,7 @@ showing amino acid frequencies and anomalies within the selected protein,
 arrayed according to abundance. These anomalies can contain useful clues to
 subcellular location, protein structure, function, and mutational
 propensity. The distribution of anomalies along the protein primary
-sequence is shown in the Amino Acids Anomalies track.
+sequence is shown in the AA Anomalies track.
 <P>
 Compositional anomalies in general have no ready explanations. Indeed, a
 certain number of departures from mean composition are expected just for
@@ -28,7 +28,7 @@ stabilizing misfolding through disulfides). Anomalies may arise from
 internal sequence repeats, such as runs of a single amino acid, or longer-period  
 structural repeats, with every third residue being glycine to pack the
 triple helix. At longer scales, multiply-repeated
-domains can tilt overall composition. Thus, compositional anomaly suggests
+domains can skew overall composition. Thus, compositional anomalies suggest
 unusual overall amino acid abundances without necessarily suggesting an
 explanation.
 <P>
@@ -38,8 +38,8 @@ Tables of amino acid usage are available elsewhere for other species
 TARGET=_blank>SwissProt</A> as a 
 whole. 
 <P>
-<B>Amino acid abundances based on the [FIXME - add table
-name] table (July 2003 human assembly)</B>
+<B>Amino acid abundances based on the knownGene table [FIXME - is this
+correct?] (July 2003 human assembly)</B>
 <BR>
 <TABLE cellSpacing=5 cellPadding=5>
     <TR>
@@ -72,3 +72,5 @@ Leu	9.71
     	</TD>
     </TD></TR>
 </TABLE>
+
+[FIXME -- Replace with updated graph]

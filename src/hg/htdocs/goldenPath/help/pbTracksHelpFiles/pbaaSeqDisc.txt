@@ -31,4 +31,9 @@ Protein Browser:
     <TR><TD>Tyrosine</TD><TD ALIGN=CENTER>Y</TD><TD ALIGN=CENTER>Tyr</TD></TR>
     <TR><TD>Valine</TD><TD ALIGN=CENTER>V</TD><TD ALIGN=CENTER>Val</TD></TR>
 </TABLE>
+**No attempt has been made to identify selenocysteine residues (for more
+information on selenocysteine, see Kryukov et al., 
+<A HREF="http://www.sciencemag.org/cgi/content/full/300/5624/1439" 
+TARGET=_blank>Characterization of Mammalian Selenoproteomes</A>. 
+<em>Science</em> 2003 300: 1439-1443).
 </BLOCKQUOTE>

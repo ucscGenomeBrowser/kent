@@ -1,129 +1,36 @@
-The existence of disulfide and glycosylation sites within the protein predicts 
-subcellular location: cytoplasmic proteins are not 
-glycosylated and only rarely have disulfides (the intracellular milieu is too 
-reducing). Glycosylation affects protein folding, trafficking, solubility, 
-antigenicity, half-life, localization, and cell-to-cell interactions. Disulfides 
-are important to structural stability and provide the link for some oligomeric proteins. 
+N-glycosylation sites (along with disulfides) predict the cellular location of
+proteins to a certain extent. Proteins are glycosylated on an internal asperagine
+residue as they pass through the endoplasmic reticulum for export.
+Glycosylation affects protein folding, trafficking, solubility,
+antigenicity, half-life, localization, and cell-to-cell interactions.
 <P>
-Potential N-glycosylation sites are somewhat reliably 
-predicted by a tripeptide motif, NXT or NXS, where X is not proline and P seldom follows. 
-Multiple motifs in mature regions 
-of the same protein and conservation in homologs provide strong additional support. 
-Glycoproteins are likely targeted to the cell exterior, lysosome or similar 
-compartment, or extra-cellular space, and not to the cytoplasm, nucleus, or 
-mitochondria. Predictions can sometimes be reinforced by the presence of a signal 
-peptide or a glycosylphosphatidylinositol 
-<A HREF="http://mendel.imp.univie.ac.at/gpi/gpi_server.html"
-TARGET=_blank>(GPI) 
-membrane anchor</A>. 
+Potential N-glycosylation sites are reliably predicted by a tripeptide
+motif, NxT or NxS, where x is not proline and P seldom follows. Multiple
+motifs in mature regions of the same protein and conservation in homologs
+provide significant additional support. Glycoproteins are targeted to the
+cell exterior, lysosome or similar compartment, and  extra-cellular space,
+but not to the cytoplasm, nucleus, or mitochondria. Predictions can
+sometimes be reinforced by the presence of a signal peptide or a
+glycosylphosphatidylinositol (GPI) membrane terminal anchor.
 <P>
-Actual occupancy of N-glycosylation sites <em>in vivo</em> is uneven. Specific sites 
-are substituted to varying degrees of saturation in tissues at 
-different developmental stages, and potential carbohydrate moieties are not always 
-fully built-out. The three amino acids involved are very common; therefore, many 
-chance occurrences will happen. 
-Taking the occurrence of the reversed motif as an estimate of the 
-frequency of these motifs to be expected randomly, the number of glycosylation
-sites that are used genome-wide can be estimated (see Table 1) as the number
-of sites in excess of that.  However, this does not address glycosylation of specific
-occurrences. Some glycosylation sites are quite ancient, but others have been 
-gained or lost over moderate time scales in homologs. 
+Actual occupancy of N-glycosylation sites <em>in vivo</em> is hard to predict.
+Specific sites may be substituted to varying degrees of saturation in
+various tissues at different developmental stages, and complex carbohydrate
+moieties are not always fully built-out. The three amino acids involved are
+very common; therefore, many chance occurrences happen, which can be
+estimated as occurrence of the reversed motif. Thus, the number of
+glycosylation sites used genome-wide can be estimated as the excess,
+(NxT+NxS) -(TxN +SxN), x not P. However, this does not address
+glycosylation of specific motifs. Some glycosylation sites are quite
+ancient, but others have been gained or lost over moderate time scales in
+paralog familes.
 <P>
-<H4>Table 1. Occurrences of N-glycosylation motifs, adjusted for chance
-occurrence.
-</H4>
-<BLOCKQUOTE>
-<TABLE BORDER=1 BORDERCOLOR="#aaaaaa" CELLPADDING=4> 
-    <TR>
-	<TD nowrap ALIGN=RIGHT><FONT color="#006666"><B>Motif</B></FONT></TD>
-        <TD nowrap><FONT color="#006666"><B># Occurrences</B></FONT></TD>
-	<TD nowrap ALIGN=RIGHT><FONT color="#006666"><B>Motif</B></FONT></TD>
-        <TD nowrap ALIGN=RIGHT><FONT color="#006666"><B># Occurrences</B></FONT></TD>
-        <TD nowrap><FONT color="#006666"><B>&nbsp;&nbsp;&nbsp;Total&nbsp;&nbsp;&nbsp;</B></FONT></TD>
-    </TR>
-
-    <TR><TD ALIGN=CENTER COLSPAN=5>Legitimate Glycosylation Sites</TD>
-    </TR>
-
-    <TR><TD ALIGN=RIGHT>N*T</TD>
-        <TD ALIGN=RIGHT>19558</TD>
-        <TD ALIGN=RIGHT>N*S</TD>
-        <TD ALIGN=RIGHT>24776</TD>
-        <TD ALIGN=RIGHT>&nbsp</TD>
-    </TR>
-    <TR><TD ALIGN=RIGHT>NPT</TD>
-        <TD ALIGN=RIGHT>841</TD>
-        <TD ALIGN=RIGHT>NPS</TD>
-        <TD ALIGN=RIGHT>1438</TD>
-        <TD ALIGN=RIGHT>&nbsp</TD>
-     </TR>
-
-    <TR><TD ALIGN=RIGHT>NXT<SUP>*</SUP></TD>
-        <TD ALIGN=RIGHT>18717</TD>
-        <TD ALIGN=RIGHT>NXS<SUP>*</SUP></TD>
-        <TD ALIGN=RIGHT>23338</TD>
-        <TD ALIGN=RIGHT>42055&nbsp;&nbsp;</TD>
-     </TR>
-
-    <TR><TD ALIGN=RIGHT></TD>
-     </TR>
-
-    <TR><TD ALIGN=CENTER COLSPAN=5>Random (Reverse) Sites</TD>
-    </TR>
-
-    <TR><TD ALIGN=RIGHT>T*N</TD>
-        <TD ALIGN=RIGHT>15687</TD>
-        <TD ALIGN=RIGHT>S*N</TD>
-        <TD ALIGN=RIGHT>22451</TD>
-        <TD ALIGN=RIGHT>&nbsp</TD>
-    </TR>
-    <TR><TD ALIGN=RIGHT>TPN</TD>
-        <TD ALIGN=RIGHT>798</TD>
-        <TD ALIGN=RIGHT>SPN</TD>
-        <TD ALIGN=RIGHT>1282</TD>
-        <TD ALIGN=RIGHT>&nbsp</TD>
-     </TR>
-
-    <TR><TD ALIGN=RIGHT>TXN<SUP>*</SUP></TD>
-        <TD ALIGN=RIGHT>14889</TD>
-        <TD ALIGN=RIGHT>SXN<SUP>*</SUP></TD>
-        <TD ALIGN=RIGHT>21169</TD>
-        <TD ALIGN=RIGHT>36058&nbsp;&nbsp;</TD>
-     </TR>
-
-    <TR><TD ALIGN=RIGHT></TD>
-     </TR>
-
-    <TR>
-        <TD ALIGN=RIGHT>&nbsp</TD>
-        <TD ALIGN=RIGHT>&nbsp</TD>
-        <TD nowrap COLSPAN=2><FONT color="#006666"><B>Excess Legitimate</B></FONT></TD>
-        <TD ALIGN=RIGHT>5997&nbsp;&nbsp;</TD>
-     </TR>
-
-    <TR>
-        <TD ALIGN=RIGHT>&nbsp</TD>
-        <TD ALIGN=RIGHT>&nbsp</TD>
-        <TD nowrap COLSPAN=2><FONT color="#006666"><B>Fraction Legitimate</B></FONT></TD>
-        <TD ALIGN=RIGHT>0.75&nbsp;&nbsp;</TD>
-     </TR>
-
-    <TR>
-        <TD ALIGN=RIGHT>&nbsp</TD>
-        <TD ALIGN=RIGHT>&nbsp</TD>
-        <TD nowrap COLSPAN=2><FONT color="#006666"><B>Legitimate per 1000 aa</B></FONT></TD>
-        <TD ALIGN=RIGHT>14%&nbsp;&nbsp;</TD>
-     </TR>
-
-    <TR><TD COLSPAN=5>* where X is any amino acid except P</TD>
-     </TR>
-
-</TABLE>
-</BLOCKQUOTE>
-<P>
-The mouse/human conservation of a potential motif provides only weak support for 
-its utilization. Because overall protein conservation is 85%, the 2 amino acid 
-motif would be invariant 72% of the time regardless. Even observed conservation 
-between pufferfish and human is not persuasive (50% chance). However, a persuasive 
-case can sometimes be made by considering the multiple motifs within a single 
-protein, conservation across paralogs, and ESTs from additional genomes. 
+Conservation of a potential motif in mammals provides only weak support for
+its utilization. Because overall protein conservation is 85% between -- for
+example -- mouse and human, the 2-amino-acid motif would be invariant 72% of 
+the time
+regardless. Even observed conservation between pufferfish and human is not
+persuasive (50% chance). The motif might be conserved for catalytic or
+structural reasons, not glycosylation. However, a persuasive case can
+sometimes be made from integration of all available information on a given
+protein.

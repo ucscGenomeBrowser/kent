@@ -28,7 +28,11 @@ will also surface as amino acid compositional anomalies.
 <TABLE cellSpacing=2 cellPadding=1>
     <TR>
 	<TD><IMG height=227 src="hydrophobic.gif" width=466></TD> 
+    </TR>
+    <BR><BR>
+    <TR>
 	<TD vAlign=top>
+<BLOCKQUOTE>
 <PRE>Kyte-Doolittle hydrophobicity scale
  J. Mol. Biol. 157:105-132(1982)
  Ile:	+4.5
@@ -52,7 +56,11 @@ will also surface as amino acid compositional anomalies.
  Lys:	-3.9
  Arg:	-4.5
 </PRE>
+</BLOCKQUOTE>
 	</TD>
     </TR>
 </TABLE>
 </CENTER>
+
+[FIXME -- Replace with updated graph & chart]
+

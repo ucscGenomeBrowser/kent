@@ -6,7 +6,7 @@ assigns positive values to hydrophobic amino acids, which are shown in blue abov
 track. Hydrophilic amino acids are displayed in red below the center line.
 <P>
 Hydrophobic residues occur most notably in the interior of 
-globular proteins, as trans-membrane segments or membrane-inserted tails, 
+globular proteins, as trans-membrane segments, in membrane-inserted tails, 
 or as surface patches in domains that bind to other subunits of oligomers.
 Hydrophilic amino acids are typically found on protein surfaces exposed to 
 an aqueous environment.
