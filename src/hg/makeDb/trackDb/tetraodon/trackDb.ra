@@ -152,7 +152,7 @@ otherDb tetNig1
 
 track chainSelf
 shortLabel Self Chain
-longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+longLabel $Organism Chained Self-Alignments
 group varRep
 priority 126.2
 visibility dense
@@ -164,7 +164,7 @@ otherDb tetNig1
 
 track netSelf
 shortLabel Self Net
-longLabel $o_Organism ($o_date/$o_db) Alignment Net
+longLabel $Organism Chained Self-Alignment Net
 group varRep
 priority 126.3
 visibility full
