@@ -611,3 +611,39 @@ SEQ2_LEN=$BASE/S2.len
   hgLoadBed bosTau1 genscanSubopt genscanSubopt.bed
 
 
+# RE-INDEX TABLES TO ACCOMODATE LONG SCAFFOLD NAMES
+
+  ssh hgwdev
+# Note: next time around rmsk index redo won't be necessary,
+# because of modifications to hgLoadOut.  Note we're just
+# doing an extremely simplified (chrom-only) index in most
+# of these cases because the scaffolds are so small.
+  hgsql bosTau1 -e 'drop index bin on rmsk'
+  hgsql bosTau1 -e 'create index genoName on rmsk(genoName(16))'
+  hgsql bosTau1 -e 'drop index genoStart on rmsk'
+  hgsql bosTau1 -e 'drop index genoEnd on rmsk'
+
+# Next time around simpleRepeat index redo also not necessary,
+# because of changes to simpleRepeat.sql
+  hgsql bosTau1 -e 'drop index chrom on simpleRepeat'
+  hgsql bosTau1 -e 'drop index chrom_2 on simpleRepeat'
+  hgsql bosTau1 -e 'drop index chrom_3 on simpleRepeat'
+  hgsql bosTau1 -e 'create index chrom on simpleRepeat(chrom(16),bin)'
+
+# I'm not sure if the all_est/intronEst/all_mrna will need
+# redoing next time or not.  Please check with show index from table.
+  hgsql bosTau1 -e 'drop index tName on all_est'
+  hgsql bosTau1 -e 'drop index tName_2 on all_est'
+  hgsql bosTau1 -e 'drop index tname_3 on all_est'
+  hgsql bosTau1 -e 'create index tName on all_est(tName(16))'
+
+  hgsql bosTau1 -e 'drop index tName on intronEst'
+  hgsql bosTau1 -e 'drop index tName_2 on intronEst'
+  hgsql bosTau1 -e 'drop index tname_3 on intronEst'
+  hgsql bosTau1 -e 'create index tName on intronEst(tName(16))'
+
+  hgsql bosTau1 -e 'drop index tName on all_mrna'
+  hgsql bosTau1 -e 'drop index tName_2 on all_mrna'
+  hgsql bosTau1 -e 'drop index tname_3 on all_mrna'
+  hgsql bosTau1 -e 'create index tName on all_mrna(tName(16))'
+
