@@ -7811,6 +7811,7 @@ if (snp!=NULL)
     printf("Sequence in Assembly:&nbsp;%s<BR>\n",snp->assembly);
     printf("Alternate Sequence:&nbsp;&nbsp;&nbsp;%s<BR></font>\n",snp->alternate);
     }
+/* else printf("<BR>%s<BR>\n",query);*/
 dbSnpRSFree(&snp);
 sqlDisconnect(&conn);
 }
@@ -7842,8 +7843,6 @@ while ((row = sqlNextRow(sr)) != NULL)
     bedPrintPos((struct bed *)&snp, 3);
     }
 doDbSnpRS(ncbiName);
-/************************/
-
 printf("<P><A HREF=\"http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=%s", 
        snp.name);
 printf("\" TARGET=_blank>dbSNP link</A></P>\n");
