@@ -10,7 +10,7 @@
 #include "agpFrag.h"
 #include "agpGap.h"
 
-static char const rcsid[] = "$Id: regionAgp.c,v 1.4 2004/08/18 21:48:01 kate Exp $";
+static char const rcsid[] = "$Id: regionAgp.c,v 1.5 2004/08/19 22:08:44 kate Exp $";
 
 #define DIR_OPTION              "dir"
 #define NAME_PREFIX_OPTION      "namePrefix"
@@ -151,8 +151,10 @@ for (pos = posList; pos != NULL; pos = pos->next)
         /* score field of the BED is actually the sequence number
          * of the segment in the region */
         start = 1;
+    /*
     verbose(2, "chr=%s, start=%d, end=%d, region=%s, seqnum=%d\n",
             pos->chrom, pos->chromStart, pos->chromEnd, pos->name, pos->score);
+            */
     safef(regionName, ArraySize(regionName), "%s%s_%d", 
                 namePrefix, pos->name, pos->score);
     if (dirOption)
@@ -165,7 +167,6 @@ for (pos = posList; pos != NULL; pos = pos->next)
         }
     agpList = (struct agp *)hashMustFindVal(agpHash, pos->chrom);
     for (agp = agpList; agp != NULL; agp = agp->next)
-    //for (agp = agpList->next; agp != NULL; agp = agp->next)
         {
         if (agp->isFrag)
             {
