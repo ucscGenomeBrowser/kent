@@ -16,9 +16,21 @@
 #include "errabort.h"
 #include "dnautil.h"
 
-static char const rcsid[] = "$Id: htmshell.c,v 1.25 2004/11/08 18:13:33 kent Exp $";
+static char const rcsid[] = "$Id: htmshell.c,v 1.26 2005/03/24 21:27:26 braney Exp $";
 
 jmp_buf htmlRecover;
+
+static bool NoEscape = FALSE;
+
+void htmlNoEscape()
+{
+NoEscape = TRUE;
+}
+
+void htmlDoEscape()
+{
+NoEscape = FALSE;
+}
 
 void htmlVaParagraph(char *line, va_list args)
 /* Print a line in it's own paragraph. */
@@ -68,6 +80,12 @@ void htmTextOut(FILE *f, char *s)
 /* Print out string to file, if necessary replacing > with &gt; and the like */
 {
 char c;
+if (NoEscape)
+    {
+    fputs(s, f);
+    return;
+    }
+
 while ((c = *s++) != 0)
     {
     switch (c)
