@@ -15,7 +15,7 @@
 #include "pbStampPict.h"
 #include "pbTracks.h"
 
-static char const rcsid[] = "$Id: pbTracks.c,v 1.11 2004/01/07 19:20:15 fanhsu Exp $";
+static char const rcsid[] = "$Id: pbTracks.c,v 1.12 2004/01/13 23:20:34 fanhsu Exp $";
 
 boolean hgDebug = FALSE;      /* Activate debugging code. Set to true by hgDebug=on in command line*/
 
@@ -234,14 +234,19 @@ hPrintf("<P>");
 
 histDone:
 
-domainsPrint(conn, proteinID);
-
-printFASTA(proteinID, protSeq);
 hPrintf("<P>");
-doPathwayLinks(protDisplayID, mrnaID);
+
 doGenomeBrowserLink(protDisplayID, mrnaID);
 doGeneDetailsLink(protDisplayID, mrnaID);
 doFamilyBrowserLink(protDisplayID, mrnaID);
+
+hPrintf("<P>");
+domainsPrint(conn, proteinID);
+
+hPrintf("<P>");
+doPathwayLinks(protDisplayID, mrnaID); 
+
+printFASTA(proteinID, protSeq);
 }
 
 void doTrackForm(char *psOutput)
