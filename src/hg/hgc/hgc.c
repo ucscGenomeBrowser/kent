@@ -932,7 +932,6 @@ else
     sqlFreeResult(&sr);
     if (pp != NULL)
 	{
-	printf("<H3>Translated Protein</H3>\n");
 	printLines(stdout, pp->seq, 50);
 	}
     else
