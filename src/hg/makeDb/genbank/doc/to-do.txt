@@ -626,3 +626,5 @@ Warning: NM_181796: malformed RefSeq CDS: join(76,77..708)
    NCBI.
 
 - make table of db_xref so we can link to flybase, etc (low-pri).
+
+- rawPsl files don't get migrated.
