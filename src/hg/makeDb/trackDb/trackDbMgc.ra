@@ -7,6 +7,7 @@ visibility pack
 color 34,139,34
 type genePred
 exonArrows on
+cdsDrawDefault genomic\ codons
 
 track mgcIncompleteMrna
 shortLabel MGC Incomplete
@@ -17,6 +18,7 @@ visibility pack
 color 120,12,12
 type psl .
 exonArrows on
+cdsDrawDefault off
 
 track mgcPickedEst
 shortLabel MGC In-progress
@@ -26,6 +28,7 @@ priority 12
 visibility pack
 color 12,100,120
 type psl est
+cdsDrawDefault off
 
 track mgcFailedEst
 shortLabel MGC Failed
@@ -36,6 +39,7 @@ visibility pack
 color 120,12,0
 type psl est
 exonArrows on
+cdsDrawDefault off
 
 track mgcUnpickedEst
 shortLabel MGC ESTs
@@ -46,6 +50,7 @@ visibility pack
 color 120,120,220
 type psl est
 exonArrows on
+cdsDrawDefault off
 
 track mgcAListGene
 shortLabel MGC A-List
@@ -56,6 +61,7 @@ visibility pack
 color 200,0,50
 type genePred
 exonArrows on
+cdsDrawDefault genomic\ codons
 
 track mgcBListGene
 shortLabel MGC B-List
@@ -66,6 +72,7 @@ visibility pack
 color 200,50,0
 type genePred
 exonArrows on
+cdsDrawDefault genomic\ codons
 
 track baylorRtPcrGeneA
 shortLabel Baylor GeneA
@@ -75,6 +82,7 @@ priority 16
 visibility hide
 color 10,100,15
 type psl .
+cdsDrawDefault off
 
 track baylorRtPcr
 shortLabel Baylor RT-PCR
@@ -85,6 +93,7 @@ visibility hide
 color 10,100,150
 type psl .
 exonArrows on
+cdsDrawDefault off
 
 track mgcTSExpPcr
 shortLabel TWINSCAN Exp PCR
@@ -95,6 +104,7 @@ visibility hide
 color 125,0,150
 type genePred
 exonArrows on
+cdsDrawDefault genomic\ codons
 
 track mgcTSFullOrfPcr
 shortLabel TWINSCAN Full ORF PCR
@@ -105,6 +115,7 @@ visibility hide
 color 155,0,125
 type genePred
 exonArrows on
+cdsDrawDefault genomic\ codons
 
 # Vancouver GSC
 track gscMgcClones
@@ -116,6 +127,7 @@ visibility pack
 color 155,0,125
 type psl .
 exonArrows on
+cdsDrawDefault off
 
 track twinscanMgc
 shortLabel TwinScan MGC
@@ -125,6 +137,7 @@ priority 22
 visibility hide
 type genepred
 exonArrows on
+cdsDrawDefault genomic\ codons
 
 track refGene
 shortLabel RefSeq Genes
@@ -135,6 +148,7 @@ visibility pack
 color 12,12,120
 type genePred refPep refMrna
 exonArrows on
+cdsDrawDefault genomic\ codons
 
 track refGeneDead
 shortLabel Dead RefSeq Genes
@@ -145,6 +159,7 @@ visibility pack
 color 12,12,120
 type genePred
 exonArrows on
+cdsDrawDefault genomic\ codons
 
 track genomicDups
 shortLabel Duplications
