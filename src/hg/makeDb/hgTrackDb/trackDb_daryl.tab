@@ -33,6 +33,7 @@ sanger22pseudo	Sanger 22 Pseudo	genePred	Sanger Center Chromosome 22 Pseudogenes
 genieAlt	Affy Genes	genePred geniePep	Affymetrix Gene Predictions	1	14.000000	125	0	150	190	127	202	0	0	0			
 acembly	Acembly Genes	genePred acemblyPep acemblyMrna	Acembly Gene Predictions With Alt-splicing	1	14.500000	155	0	125	205	127	190	0	0	0		http://www.ncbi.nlm.nih.gov/AceView/av.cgi?db=28&l=$$	
 aceTest	Acembly Test	genePred	Acembly Test Predictions	2	14.510000	195	50	165	225	152	210	0	0	0		http://www.ncbi.nlm.nih.gov/AceView/av.cgi?db=GP&l=$$	
+ensEst	Ensembl ESTs	genePred ensEstPep	$Organism ESTs From Ensembl	1	15.000000	0	0	0	127	127	127	0	0	0			
 ensGene	Ensembl Genes	genePred ensPep	Ensembl Gene Predictions	1	15.000000	150	0	0	202	127	127	0	0	0		http://www.ensembl.org/perl/transview?transcript=$$	
 sgpGene	SGP Genes	genePred sgpPep	SGP Gene Predictions Using Mouse Genome Homology	1	15.500000	0	90	100	127	172	177	0	0	0			
 softberryGene	Fgenesh++ Genes	genePred softberryPep	Fgenesh++ Gene Predictions	1	16.000000	0	100	0	127	177	127	0	0	0			
