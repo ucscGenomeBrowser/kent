@@ -20,7 +20,7 @@
 #include "wiggle.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: wiggle.c,v 1.26 2004/10/05 23:21:35 hiram Exp $";
+static char const rcsid[] = "$Id: wiggle.c,v 1.27 2004/10/26 18:15:43 hiram Exp $";
 
 extern char *maxOutMenu[];
 
@@ -515,6 +515,12 @@ boolean fullGenome = FALSE;
 boolean statsHeaderDone = FALSE;
 boolean gotSome = FALSE;
 char *shortLabel = table;
+long long statsItemCount = 0;	/*	global accumulators for overall */
+int statsSpan = 0;		/*	stats summary on a multiple region */
+double statsSumData = 0.0;	/*	output */
+double statsSumSquares = 0.0;		/*	"  "	*/
+double lowerLimit = INFINITY;		/*	"  "	*/
+double upperLimit = -1.0 * INFINITY;	/*	"  "	*/
 
 startTime = clock1000();
 if (track != NULL)
@@ -603,8 +609,27 @@ for (region = regionList; region != NULL; region = region->next)
      *	prevent any timeout since this could take a while.
      *	(worst case test is quality track on panTro1)
      */
+    statsItemCount += wds->stats->count;
     if ((regionCount > 1) && (valuesMatched > 0))
 	{
+	double sumData = wds->stats->mean * wds->stats->count;
+	double sumSquares;
+
+	if (wds->stats->count > 1)
+	    sumSquares = (wds->stats->variance * (wds->stats->count - 1)) +
+		((sumData * sumData)/wds->stats->count);
+	else
+	    sumSquares = sumData * sumData;
+
+	/*	global accumulators for overall summary	*/
+	statsSpan = wds->stats->span;
+	statsSumData += sumData;
+	statsSumSquares += sumSquares;
+	if (wds->stats->lowerLimit < lowerLimit)
+	    lowerLimit = wds->stats->lowerLimit;
+	if ((wds->stats->lowerLimit + wds->stats->dataRange) > upperLimit)
+	    upperLimit = wds->stats->lowerLimit + wds->stats->dataRange;
+
 	if (statsHeaderDone)
 	    wds->statsOut(wds, "stdout", TRUE, TRUE, FALSE, TRUE);
 	else
@@ -637,10 +662,45 @@ else
 	 *	pulled out of there and made independent and more
 	 *	versatile.
 	 */
+    long long realSize = regionSize - gapTotal;
+    double variance;
+    double stddev;
+
     /*	close the table which was left open in the loop above	*/
     if (!gotSome)
 	hPrintf("<TR><TH ALIGN=CENTER COLSPAN=12> No data found matching this request </TH></TR>\n");
 
+    hPrintf("<TR><TH ALIGN=LEFT> SUMMARY: </TH>\n");
+    hPrintf("\t<TD> &nbsp; </TD>\n");	/*	chromStart	*/
+    hPrintf("\t<TD> &nbsp; </TD>\n");	/*	chromEnd	*/
+    hPrintf("\t<TD ALIGN=RIGHT> ");
+    printLongWithCommas(stdout, statsItemCount);
+    hPrintf(" </TD>\n" );
+    hPrintf("\t<TD ALIGN=RIGHT> %d </TD>\n", statsSpan);
+    hPrintf("\t<TD ALIGN=RIGHT> ");
+    printLongWithCommas(stdout, statsItemCount*statsSpan);
+    hPrintf("&nbsp;(%.2f%%) </TD>\n",
+	100.0*(double)(statsItemCount*statsSpan)/(double)realSize);
+    hPrintf("\t<TD ALIGN=RIGHT> %g </TD>\n", lowerLimit);
+    hPrintf("\t<TD ALIGN=RIGHT> %g </TD>\n", upperLimit);
+    hPrintf("\t<TD ALIGN=RIGHT> %g </TD>\n", upperLimit - lowerLimit);
+    if (statsItemCount > 0)
+	hPrintf("\t<TD ALIGN=RIGHT> %g </TD>\n", statsSumData/statsItemCount);
+    else
+	hPrintf("\t<TD ALIGN=RIGHT> 0.0 </TD>\n");
+    stddev = 0.0;
+    variance = 0.0;
+    if (statsItemCount > 1)
+	{
+	variance = (statsSumSquares -
+	    ((statsSumData * statsSumData)/(double) statsItemCount)) /
+		(double) (statsItemCount - 1);
+	if (variance > 0.0)
+	    stddev = sqrt(variance);
+	}
+    hPrintf("\t<TD ALIGN=RIGHT> %g </TD>\n", variance);
+    hPrintf("\t<TD ALIGN=RIGHT> %g </TD>\n", stddev);
+    hPrintf("</TR>\n");
     hPrintf("</TABLE></TD></TR></TABLE></P>\n");
     }
 
