@@ -73,7 +73,7 @@ FILE *f = mustOpen(makeName, "w");
 fprintf(f, 
 
 ".c.o:\n"
-"\tgcc -ggdb -O -Wformat -Wimplicit -Wuninitialized -Wreturn-type-I../inc -I../../inc -I../../../inc -c $*.c\n"
+"\tgcc -ggdb -O -Wformat -Wimplicit -Wuninitialized -Wreturn-type -I../inc -I../../inc -I../../../inc -c $*.c\n"
 "\n"
 "L = -lm\n"
 "MYLIBDIR = $(HOME)/src/lib/$(MACHTYPE)\n"
@@ -82,8 +82,10 @@ fprintf(f,
 "O = %s.o\n"
 "\n"
 "%s: $O $(MYLIBS)\n"
-"\tgcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/%s $O $(MYLIBS) $L\n",
-	progName, progName, progName);
+"\tgcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/%s $O $(MYLIBS) $L\n"
+"\tstrip $(HOME)/bin/$(MACHTYPE)/%s\n",
+	progName, progName, progName, progName);
+
 
 
 fclose(f);
@@ -152,6 +154,7 @@ for (i=2; i<argc; ++i)
        dyStringAppend(ds, " ");
     }
 newProg(argv[1], ds->string);
+return 0;
 }
 
 
