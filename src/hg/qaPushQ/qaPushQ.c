@@ -29,7 +29,7 @@
 #include "dbDb.h"
 #include "htmlPage.h"
 
-static char const rcsid[] = "$Id: qaPushQ.c,v 1.44 2004/05/28 16:38:14 galt Exp $";
+static char const rcsid[] = "$Id: qaPushQ.c,v 1.45 2004/05/28 21:40:53 galt Exp $";
 
 char msg[2048] = "";
 char ** saveEnv;
@@ -364,10 +364,7 @@ if (must)
     {
     errAbort("Field not found in mapFieldToEnum: %s",f);
     }
-else
-    {
-    return -1;
-    }
+return -1;
 }
 
 
@@ -511,12 +508,12 @@ if (sameString(ki->lockUser,qaUser))
     myLock = TRUE;
     }
 
-strcpy(html,formQ); 
+safef(html,sizeof(html),"%s",formQ); 
 
 safef(tempSizeMB, sizeof(tempSizeMB), "%u", ki->sizeMB);
 if (ki->sizeMB == 0) 
     {
-    strcpy(tempSizeMB,"");
+    safef(tempSizeMB,sizeof(tempSizeMB),"%s","");
     }
 
 
@@ -653,7 +650,7 @@ else
     
 replaceInStr(html, sizeof(html) , "<!msg>"         , msg           );
 
-safef(msg,sizeof(msg),"");
+safef(msg,sizeof(msg),"%s","");
 
 printf("%s",html);
 
@@ -668,33 +665,34 @@ struct pushQ q;
 ZeroVar(&q);
 
 q.next = NULL;
-strcpy(q.qid       ,"");
-strcpy(q.priority  ,"A");  /* default priority */
+safef(q.qid, sizeof(q.qid), "%s", "");
+safef(q.priority, sizeof(q.priority), "%s", "A");  /* default priority */
 strftime (q.qadate, sizeof(q.qadate), "%Y-%m-%d", loctime); /* default to today's date */
-strcpy(q.newYN     ,"N");  /* default to not new track */
+safef(q.newYN, sizeof(q.newYN), "%s", "N");  /* default to not new track */
 q.track  = ""; 
 q.dbs    = ""; 
 q.tbls   = "";
 q.cgis   = "";
 q.files  = "";
 q.sizeMB = 0;
-strcpy(q.currLoc   ,"hgwdev");  /* default loc */
-strcpy(q.makeDocYN ,"N");
-strcpy(q.onlineHelp,"");
-strcpy(q.ndxYN     ,"N");  /* default to not checked yet */
-strcpy(q.joinerYN  ,"N");  /* default to all.joiner not checked yet */
+safef(q.currLoc   , sizeof(q.currLoc)   , "%s", "hgwdev");  /* default loc */
+safef(q.makeDocYN , sizeof(q.makeDocYN) , "%s", "N");
+safef(q.onlineHelp, sizeof(q.onlineHelp), "%s", "" );
+safef(q.ndxYN     , sizeof(q.ndxYN)     , "%s", "N");  /* default to not checked yet */
+safef(q.joinerYN  , sizeof(q.joinerYN)  , "%s", "N");  /* default to all.joiner not checked yet */
 q.stat   = "";
-strcpy(q.sponsor   ,"");
-strcpy(q.reviewer  ,""); 
+
+safef(q.sponsor   , sizeof(q.sponsor)   , "%s", "" );
+safef(q.reviewer  , sizeof(q.reviewer)  , "%s", "" ); 
 if (sameString(myUser.role,"qa"))
     {
-    strcpy(q.reviewer  ,qaUser);   /* if role is qa, default reviewer to this user */
+    safef(q.reviewer, sizeof(q.reviewer), "%s", qaUser);   /* if role is qa, default reviewer to this user */
     }
 if (sameString(myUser.role,"dev"))
     {
-    strcpy(q.sponsor   ,qaUser);   /* if role is dev, default sponsor to current user */
+    safef(q.sponsor , sizeof(q.sponsor) , "%s", qaUser);   /* if role is dev, default sponsor to current user */
     }
-strcpy(q.extSource ,"");
+safef(q.extSource , sizeof(q.extSource) , "%s", "" );
 q.openIssues   = "";
 q.notes   = "";
 strftime (q.initdate, sizeof(q.initdate), "%Y-%m-%d", loctime); /* automatically use today date */
@@ -740,8 +738,6 @@ return replaceChars(s,"\n","<br>\n");
 
 void drawDisplayLine(enum colEnum col, struct pushQ *ki)
 {
-char url[256];
-
 
 switch(col)
     {
@@ -910,7 +906,7 @@ char monthsql[256];
 /* initialize column display order */
 initColsFromString();
 
-safef(monthsql,sizeof(monthsql),"");
+safef(monthsql,sizeof(monthsql),"%s","");
 if (!sameString(month,""))
     {
     safef(monthsql,sizeof(monthsql)," where priority='L' and qadate like '%s%%' ",month);
@@ -1117,9 +1113,6 @@ void XdoPromote(int change)
  * >0 means promote, <0 means demote */
 {
 
-char **row;
-struct sqlResult *sr;
-
 struct pushQ q;
 char query[256];
 char newQid[sizeof(q.qid)] = "";
@@ -1196,7 +1189,6 @@ int getNextAvailRank(char *priority)
 /* get next available rank at end of priority section */
 {
 struct pushQ q;
-int newqid = 0;
 char query[256];
 char *quickres = NULL;
 safef(query, sizeof(query), 
@@ -1360,9 +1352,6 @@ char *bouncebutton = cgiUsualString("bouncebutton","");
 char *lockbutton   = cgiUsualString("lockbutton"  ,"");
 char *showSizes    = cgiUsualString("showSizes"   ,"");
 
-char **row;
-struct sqlResult *sr;
-
 struct pushQ q;
 
 bool isNew  = FALSE;   /* new rec */
@@ -1372,8 +1361,6 @@ bool lockOK = TRUE;    /* assume for now lock state OK */
 
 char newQid     [sizeof(q.qid)]      = "";
 char newPriority[sizeof(q.priority)] = "";
-
-struct dyString *url = NULL;
 
 ZeroVar(&q);
 
@@ -1415,8 +1402,8 @@ if (!isNew)
 
     if (sameString(lockbutton,"Cancel"))  /* user cancelled */
 	{  /* unlock record */
-	safef(q.lockUser, sizeof(q.lockUser), "");
-	safef(q.lockDateTime, sizeof(q.lockDateTime), "");
+	safef(q.lockUser, sizeof(q.lockUser), "%s", "");
+	safef(q.lockDateTime, sizeof(q.lockDateTime), "%s", "");
 	pushQUpdateEscaped(conn, &q, pushQtbl, updateSize);
 	lockOK = FALSE;
 	}
@@ -1459,7 +1446,7 @@ if (!isNew)
 if (isNew) 
     {
     newqid = getNextAvailQid();
-    safef(q.pqid, sizeof(q.pqid), "");
+    safef(q.pqid, sizeof(q.pqid), "%s", "");
     safef(q.pushState,sizeof(q.pushState),"N");  /* default to: push not done yet */
     }
 
@@ -1657,8 +1644,8 @@ else
 	}
     else
 	{ /* unlock record */
-	safef(q.lockUser, sizeof(q.lockUser), "");
-	safef(q.lockDateTime, sizeof(q.lockDateTime), "");
+	safef(q.lockUser, sizeof(q.lockUser), "%s", "");
+	safef(q.lockDateTime, sizeof(q.lockDateTime), "%s", "");
 	}
     if (isNew)
 	{
@@ -1666,7 +1653,7 @@ else
 	safef(msg, sizeof(msg), "%%0%dd", sizeof(q.qid)-1);
 	safef(newQid,sizeof(newQid),msg,newqid);
 	safef(q.qid, sizeof(q.qid), newQid);
-    	safef(msg, sizeof(msg), "");
+    	safef(msg, sizeof(msg), "%s", "");
 	pushQSaveToDbEscaped(conn, &q, pushQtbl, updateSize);
 	}
     else
@@ -1684,7 +1671,7 @@ if (sameString(clonebutton,"clone"))
     safef(msg, sizeof(msg), "%%0%dd", sizeof(q.qid)-1);
     safef(newQid,sizeof(newQid),msg,newqid);
     safef(q.qid, sizeof(q.qid), newQid);
-    safef(msg, sizeof(msg), "");
+    safef(msg, sizeof(msg), "%s", "");
     q.rank = getNextAvailRank(q.priority);
     safef(q.pushState,sizeof(q.pushState),"N");  /* default to: push not done yet */
     pushQSaveToDbEscaped(conn, &q, pushQtbl, updateSize);
@@ -1911,8 +1898,6 @@ void doPostLogin()
 char *tbl = "users";
 char query[256];
 
-char **row;
-struct sqlResult *sr;
 struct users u;
 
 char *userPassword = NULL;
@@ -2431,7 +2416,6 @@ int i = 0, ii = 0, iii = 0;
 int j = 0, jj = 0, jjj = 0;
 int g = 0, gg = 0, ggg = 0;
 char nicenumber[256]="";
-char host[256]="";
 struct pushQ q;
 char newQid[sizeof(q.qid)] = "";
 
@@ -2747,7 +2731,7 @@ sprintLongWithCommas(nicenumber, sizeMB );
 printf("<p style=\"color:red\">Total: %s MB</p>\n",nicenumber);
 
 printf(" <br>\n");
-printf("<a href=\"/cgi-bin/qaPushQ?action=setSize&qid=%s&sizeMB=%d&cb=%s\">"
+printf("<a href=\"/cgi-bin/qaPushQ?action=setSize&qid=%s&sizeMB=%lu&cb=%s\">"
        "Set Size as %s MB</a> <br>\n",newQid,sizeMB,newRandState,nicenumber);
 printf(" <br>\n");
 printf("<a href=\"/cgi-bin/qaPushQ?action=edit&qid=%s&cb=%s\">RETURN</a> <br>\n",newQid,newRandState);
@@ -2897,8 +2881,8 @@ safef(q.qid, sizeof(q.qid), cgiString("qid"));   /* required cgi var */
 loadPushQ(q.qid, &q, FALSE);
 
 /* unlock record */
-safef(q.lockUser, sizeof(q.lockUser), "");
-safef(q.lockDateTime, sizeof(q.lockDateTime), "");
+safef(q.lockUser, sizeof(q.lockUser), "%s","");
+safef(q.lockDateTime, sizeof(q.lockDateTime), "%s","");
 
 /* update existing record */
 pushQUpdateEscaped(conn, &q, pushQtbl, updateSize);
@@ -2929,7 +2913,7 @@ char query[256];
 char tempName[256];
 char now[256];
 
-int y=0,m=0,d=0;
+int m=0,d=0;
 
 ZeroVar(&dbDbTemp);
 
@@ -3015,7 +2999,7 @@ for (ki = kiList; ki != NULL; ki = ki->next)
     
     webNewSection("<A NAME=%s></A>%s %s (%s, %s)", 
 	ki->name, tempName, ki->description, ki->name, ki->sourceName);
-    printf("<TABLE BORDER=1 BORDERCOLOR=\"#aaaaaa\" CELLPADDING=4 WIDTH=\"100%\">\n"
+    printf("<TABLE BORDER=1 BORDERCOLOR=\"#aaaaaa\" CELLPADDING=4 WIDTH=\"100%%\">\n"
 	"<TR><TD nowrap><FONT color=\"#006666\"><B>Track/Table Name</B></FONT></TD>\n"
 	"    <TD nowrap><FONT color=\"#006666\"><B>Release Date</B></FONT>\n"
 	"</TD></TR>\n"
@@ -3063,7 +3047,7 @@ struct htmlPage *page = NULL;
 char filePath[256] = "";
 FILE *f=NULL;
 
-safef(url, sizeof(url), "http://%s/cgi-bin/qaPushQ?action=releaseLog",utsName.nodename,rlPath);
+safef(url, sizeof(url), "http://%s/cgi-bin/qaPushQ?action=releaseLog",utsName.nodename);
 page = htmlPageGet(url);
 if (page->status->status == 200)
     {
@@ -3138,7 +3122,7 @@ if (!sameString(newmonth,""))
     {
     if (sameString(newmonth,"current"))
 	{
-	safef(month, sizeof(month), "");
+	safef(month, sizeof(month), "%s", "");
 	}
     else
 	{

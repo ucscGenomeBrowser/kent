@@ -1,13 +1,15 @@
 
 # ~galt/kent/src/hg/qaPushQ
 
+include ../../inc/common.mk
+
 JKSRCDIR = ../..
 JKLIBDIR = $(JKSRCDIR)/lib/$(MACHTYPE)
 
 EXE = qaPushQ
 
-.c.o:
-	gcc -ggdb -Wimplicit -pedantic -I$(JKSRCDIR)/inc -I$(JKSRCDIR)/hg/inc -c $*.c
+#.c.o:
+#	gcc -ggdb -Wimplicit -pedantic -I$(JKSRCDIR)/inc -I$(JKSRCDIR)/hg/inc -c $*.c
 
 L = $(MYSQLLIBS) -lm -lcrypt
 MYLIBS = $(JKLIBDIR)/jkhgap.a $(JKLIBDIR)/jkweb.a 
