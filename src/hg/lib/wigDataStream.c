@@ -4,7 +4,7 @@
 #include "common.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: wigDataStream.c,v 1.1 2004/08/04 20:05:59 hiram Exp $";
+static char const rcsid[] = "$Id: wigDataStream.c,v 1.2 2004/08/04 22:01:34 hiram Exp $";
 
 static void addConstraint(struct wiggleDataStream *wDS, char *left, char *right)
 {
@@ -19,14 +19,30 @@ wDS->sqlConstraint = cloneString(constrain->string);
 dyStringFree(&constrain);
 }
 
-static void addChromConstraint(struct wiggleDataStream *wDS, char *chr)
+static void setPositionConstraint(struct wiggleDataStream *wDS,
+	int winStart, int winEnd)
+{
+/*	keep them in proper order	*/
+if (winStart > winEnd)
+    {
+    wDS->winStart = winEnd;
+    wDS->winEnd = winStart;
+    }
+else
+    {
+    wDS->winStart = winStart;
+    wDS->winEnd = winEnd;
+    }
+}
+
+static void setChromConstraint(struct wiggleDataStream *wDS, char *chr)
 {
 addConstraint(wDS, "chrom =", chr);
 freeMem(wDS->chrName);
 wDS->chrName = cloneString(chr);
 }
 
-static void addSpanConstraint(struct wiggleDataStream *wDS, unsigned span)
+static void setSpanConstraint(struct wiggleDataStream *wDS, unsigned span)
 {
 struct dyString *dyTmp = dyStringNew(256);
 dyStringPrintf(dyTmp, "%u", span);
@@ -298,8 +314,9 @@ wds->wibFH = -1;
 wds->limit_0 = -1 * INFINITY;
 wds->limit_1 = INFINITY;
 /*	Set method pointers	*/
-wds->addChromConstraint = addChromConstraint;
-wds->addSpanConstraint = addSpanConstraint;
+wds->setPositionConstraint = setPositionConstraint;
+wds->setChromConstraint = setChromConstraint;
+wds->setSpanConstraint = setSpanConstraint;
 wds->setDataConstraint = setDataConstraint;
 wds->setCompareByte = setCompareByte;
 wds->openWibFile = openWibFile;
