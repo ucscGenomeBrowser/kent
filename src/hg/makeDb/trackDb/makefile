@@ -82,7 +82,7 @@ alpha:
 	cp sars/sc1/description.html /gbdb/sc1/html
 	cp zoo/description.html /gbdb/zoo3/html
 	cp sacCer/sacCer1/description.html /gbdb/sacCer1/html
-	cp archae/pae/description.html /gbdb/pyrAer1/html
+	cp archae/pyrAer1/description.html /gbdb/pyrAer1/html
 	cp chimp/panTro1/description.html /gbdb/panTro1/html
 
 strict:
