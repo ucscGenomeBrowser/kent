@@ -60,4 +60,5 @@ DIRS = \
 	hgBioCyc \
 	hgKegg \
 	hgMrnaRefseq \
-	hgCGAP
+	hgCGAP \
+	tfbsConsSort
