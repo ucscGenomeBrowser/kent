@@ -14,7 +14,7 @@
 #include "gbFa.h"
 #include <stdio.h>
 
-static char const rcsid[] = "$Id: gbGetSeqs.c,v 1.2 2003/06/15 07:11:25 markd Exp $";
+static char const rcsid[] = "$Id: gbGetSeqs.c,v 1.3 2003/07/02 23:47:03 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -216,7 +216,8 @@ for (select = selectList; select != NULL; select = select->next)
 gbFaClose(&outFa);
 slFreeList(&selectList);
 gbIndexFree(&index);
-checkForMissingSeqs();
+if (gIdHash != NULL)
+    checkForMissingSeqs();
 }
 
 void usage()
