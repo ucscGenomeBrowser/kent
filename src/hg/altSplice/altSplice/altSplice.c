@@ -73,7 +73,7 @@
 #include "obscure.h"
 #define USUAL
 //#define AFFYSPLICE
-static char const rcsid[] = "$Id: altSplice.c,v 1.19 2005/01/27 18:26:25 sugnet Exp $";
+static char const rcsid[] = "$Id: altSplice.c,v 1.20 2005/03/12 01:19:43 sugnet Exp $";
 
 int cassetteCount = 0; /* Number of cassette exons counted. */
 int misSense = 0;      /* Number of cassette exons that would introduce a missense mutation. */
@@ -92,6 +92,7 @@ char *chromNib = NULL;    /* Nib file name if not using database. */
 FILE *chromNibFile = NULL; /* File handle for nib file access. */
 int chromNibSize = 0;      /* Size of the chromosome nib file. */
 struct binKeeper *chromPslBin = NULL; /* Bin keeper for chromosome. */
+struct binKeeper *agxSeenBin = NULL; /* AltGraphX records that have already been seen. */
 struct hash *killHash = NULL; /* Hash of psl qNames that we want to avoid, 
 				 hashed with an int value of 1. */
 static struct optionSpec optionSpecs[] = 
@@ -300,11 +301,76 @@ return TRUE;
 }    
 
 
+boolean agxIsSubset(struct altGraphX *query, struct altGraphX *target)
+/** Return TRUE if query is just a subset of target, FALSE otherwise. */
+{
+int *qPos = query->vPositions, *tPos = target->vPositions;
+int *qStarts = query->edgeStarts, *tStarts = target->edgeStarts;
+int *qEnds = query->edgeEnds, *tEnds = target->edgeEnds;
+int qECount = query->edgeCount, tECount = target->edgeCount;
+int qIx = 0, tIx = 0;
+int subset = 0;
+if(query->tStart < target->tStart || query->tEnd > target->tEnd ||
+   query->strand[0] != target->strand[0])
+    return FALSE;
+
+/* Look to see if every query edge is subsumed by 
+   a target edge. */
+for(qIx = 0; qIx < qECount; qIx++) 
+    {
+    boolean edgeFound = FALSE;
+    int qSize = qPos[qEnds[qIx]] - qPos[qStarts[qIx]];
+    /* only looking at exons. */
+    if(altGraphXEdgeType(query, qIx) != ggExon)
+	continue;
+    /* Look at each target exon to try and find one that 
+       subsumes the query exon. */
+    for(tIx = 0; tIx < tECount; tIx++)
+	{
+	if(altGraphXEdgeType(target, tIx) != ggExon)
+	    continue;
+	if(rangeIntersection(qPos[qStarts[qIx]], qPos[qEnds[qIx]],
+			     tPos[tStarts[tIx]], tPos[tEnds[tIx]]) > 0)
+	    {
+	    edgeFound |= TRUE; /* Found one, update edge found. */
+	    break; /* No need to keep looking for this query exon. */
+	    }
+	}
+    if(edgeFound)
+	subset++;
+    }
+return subset > 0;
+}
+
+
+boolean agxIsRedundant(struct altGraphX *agx)
+/** Return TRUE if there has already been an altGraphX record that
+    was a superSet of this data. */
+{
+struct binElement *be = NULL, *beList = NULL;
+struct altGraphX *agxSeen = NULL;
+boolean alreadySeen = FALSE;
+beList = binKeeperFind(agxSeenBin, agx->tStart, agx->tEnd);
+for(be = beList; be != NULL; be = be->next)
+    {
+    agxSeen = (struct altGraphX *)be->val;
+    if(agxSeen == agx) 
+	continue;
+    if(agxIsSubset(agx, agxSeen)) 
+	{
+	alreadySeen = TRUE;
+	break;
+	}
+    }
+slFreeList(&beList);
+return alreadySeen;
+}
+
 struct altGraphX *agFromAlignments(struct ggMrnaAli *maList, struct dnaSeq *seq, struct sqlConnection *conn,
 				   struct genePred *gp, int chromStart, int chromEnd, FILE *out )
 /** Custer overlaps from maList into altGraphX structure. */
 {
-struct altGraphX *ag = NULL;
+struct altGraphX *ag = NULL, *agList = NULL;
 struct ggMrnaCluster *mcList=NULL, *mc=NULL;
 struct ggMrnaInput *ci = NULL;
 struct geneGraph *gg = NULL;
@@ -341,15 +407,26 @@ for(mc = mcList; mc != NULL; mc = mc->next)
 	/* Sort vertices so that they are chromosomal order */
  	altGraphXVertPosSort(ag);
 	/* write to file */
-	if(agIsUnique(ag))
-	   altGraphXTabOut(ag, out);    /* genoSeq and maList are freed with ci and gg */
+	binKeeperAdd(agxSeenBin, ag->tStart, ag->tEnd, ag);
+	slAddHead(&agList, ag);
 	}
     }
+
+/* Sometimes get nested, partial transcripts. Want to filter 
+   those out. */
+for(ag = agList; ag != NULL; ag = ag->next)
+    {
+    if(!agxIsRedundant(ag))
+       altGraphXTabOut(ag, out); 
+    }
+/* genoSeq and maList are freed with ci and gg */
 ggFreeMrnaClusterList(&mcList);
 freeGgMrnaInput(&ci);
 freeGeneGraph(&gg);
-return ag;
+return agList;
 }
+
+
 
 struct psl *getPslsFromCache(char *chrom, int chromStart, int chromEnd)
 /** Get all of the psls for a given gp of interest. */
@@ -467,7 +544,7 @@ for(psl = pslList; psl != NULL; psl = psl->next)
     maxPslEnd = max(psl->tEnd, maxPslEnd);
     }
 chromPslBin = binKeeperNew(minPslStart, maxPslEnd);
-
+agxSeenBin = binKeeperNew(minPslStart, maxPslEnd);
 for(psl = pslList; psl != NULL; psl = pslNext)
     {
     pslNext = psl->next;
@@ -509,6 +586,7 @@ for(i = 0; i < numDbTables; i++)
     }
 
 chromPslBin = binKeeperNew(minPslStart, maxPslEnd);
+agxSeenBin = binKeeperNew(minPslStart, maxPslEnd);
 for(psl = pslList; psl != NULL; psl = psl->next)
     {
     binKeeperAdd(chromPslBin, psl->tStart, psl->tEnd, psl);
@@ -761,14 +839,26 @@ if(optionExists("localMem"))
 	}
     warn("Done setting up local caches.");
     }
+else /* Have to set up agxSeen binKeeper based on genePreds. */
+    {
+    int maxPos = 0;
+    int minPos = BIGNUM;
+    for(gp = gpList; gp != NULL; gp = gp->next)
+	{
+	maxPos = max(maxPos, gp->txEnd);
+	minPos = min(minPos, gp->txStart);
+	}
+    agxSeenBin = binKeeperNew(max(0, minPos-10000), min(BIGNUM,maxPos+10000));
+    }
+
 dotForUserInit(max(slCount(gpList)/10, 1));
 out = mustOpen(outFile, "w");
 for(gp = gpList; gp != NULL & count < 5; )
     {
     dotForUser();
     fflush(stderr);
-    ag = agFromGp(gp, conn, 5, out);
-    altGraphXFree(&ag);
+    ag = agFromGp(gp, conn, 5, out); /* memory held in binKeeper. Free
+				      * later. */
     if (memTest != TRUE) 
 	gp = gp->next;
     }
