@@ -756,27 +756,32 @@ MAKING THE BLASTZBESTRAT TRACK FROM PENN STATE AXT FILES (TODO)
      cvs add ~/kent/src/hg/lib/axtInfoFillRn1.sql
      cvs ci ~/kent/src/hg/lib/axtInfoFillRn1.sql
 
-TWINSCAN GENE PREDICTIONS (TODO)
+TWINSCAN GENE PREDICTIONS (IN PROGRESS)
 
     mkdir -p ~/rn1/bed/twinscan
     cd ~/rn1/bed/twinscan
-    wget http://genes.cs.wustl.edu/rat/Gtf.tgz
-    wget http://genes.cs.wustl.edu/rat/Ptx.tgz
-    gunzip -c Gtf.tgz | tar xvf -
-    gunzip -c Ptx.tgz | tar xvf -
-    ldHgGene rn1 twinscan chr*.gtf -exon=CDS
-    - pare down to id:
-    foreach c (1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 X)
-      perl -wpe 's/^\>.*\s+source_id\s*\=\s*(\S+).*$/\>$1/;' < \
-        chr$c.ptx > chr$c-fixed.fa
+    wget http://genome.cse.wustl.edu/~bio/rat/Nov02/1-22-03/rat_Nov02_1-22-03.tgz
+    gunzip -c *.tgz | tar xvf -
+    rm -r chr_tx
+    # clean up chrom field of GTF files
+    foreach f (chr_gtf/chr*.gtf)
+      set chr = $f:t:r
+      sed -e "s/^[0-9]*/$chr/" $f > chr_gtf/$chr-fixed.gtf
     end
-    hgPepPred rn1 generic twinscanPep chr*-fixed.fa
+    # pare down protein FASTA header to id and add missing .a:
+    foreach f (chr_ptx/chr*.ptx)
+      set chr = $f:t:r
+      perl -wpe 's/^\>.*\s+source_id\s*\=\s*(\S+).*$/\>$1.a/;' < \
+        chr_ptx/$chr.ptx > chr_ptx/$chr-fixed.fa
+    end
+    ldHgGene rn1 twinscan chr_gtf/chr*-fixed.gtf -exon=CDS
+    hgPepPred rn1 generic twinscanPep chr_ptx/chr*-fixed.fa
 
 NCBI GENE MODELS (TODO)
 
     mkdir -p ~/rn1/bed/ncbiGenes
     cd ~/rn1/bed/ncbiGenes
-    wget ftp://ftp.ncbi.nih.gov/genomes/M_musculus/MGSCv3_Release1/maps/chr_genes.gtf.gz
+    wget ftp://ftp.ncbi.nih.gov/genomes/M_musculus/MGSCv3_Release1/maps/chr_geneos.gtf.gz
     wget ftp://ftp.ncbi.nih.gov/genomes/M_musculus/MGSCv3_Release1/protein/protein.fa.gz
     gunzip chr_genes.gtf.gz
     gunzip protein.fa.gz
