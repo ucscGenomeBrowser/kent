@@ -60,28 +60,36 @@ while ((ali = mafNext(mp)) != NULL)
 	    }
 	    else if( startsWith( qName, comp->src ))
 	    {
-		    axt->qName = strdup(strstr( comp->src, "." )+1);	
-            axt->qStrand = comp->strand;
-		    axt->qStart = comp->start;
-		    axt->qEnd = comp->start + comp->size;
-		    axt->qSym = comp->text;
-		    comp->text = NULL;
+                axt->qName = strdup(strstr( comp->src, "." )+1);	
+                axt->qStrand = comp->strand;
+                axt->qStart = comp->start;
+                axt->qEnd = comp->start + comp->size;
+                axt->qSym = comp->text;
+                comp->text = NULL;
 
 	    }
     }
 
-    if( strlen( axt->tSym  ) == strlen( axt->qSym ))
+    if( axt->tSym == NULL || axt->qSym == NULL )
+        {
+        axtFree(&axt);
+        continue;
+        }
+    if (strlen( axt->tSym  ) == strlen( axt->qSym )) 
         axt->symCount = strlen( axt->tSym );
     else
     {
         fprintf( stderr, "Target and query sequences are different
                  lengths\n%s\n%s\n\n", axt->tSym, axt->qSym );
-        exit(1);
+        axtFree(&axt);
+        continue;
+        //exit(1);
     }
     axtWrite(axt,f);
     axtFree(&axt);
    }
 
+fclose(f);
 }
 
 int main(int argc, char *argv[])
