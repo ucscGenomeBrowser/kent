@@ -12,9 +12,15 @@ struct submission
     char *id;	/* Submission ID from scheduler */
     char *errFile;	/* Error file associated with submission */
     char *outFile;	/* Output file associated with submission */
+    float cpuTime;	/* CPU time in seconds */
+    int startTime;	/* Start time of job */
+    int endTime;	/* End time of job */
+    int retVal;	/* Return value of job */
+    unsigned char gotRetVal;	/* True if got return value */
     unsigned char submitError;	/* An error occurred submitting it */
     unsigned char inQueue;	/* Currently in queuing system */
     unsigned char queueError;	/* In error stat in queue */
+    unsigned char trackingError;	/* Have lost track of this somehow - no output, not on queue */
     unsigned char running;	/* Currently running */
     unsigned char crashed;	/* Looks like it ran but crashed */
     unsigned char slow;	/* Run so long we warn user */

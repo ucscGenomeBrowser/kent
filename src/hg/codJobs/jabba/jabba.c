@@ -372,12 +372,14 @@ err = system(cmd->string);
 if (err != 0)
     errAbort("Couldn't execute '%s'", cmd->string);
 
-/* Make hash of submissions based on id. */
+/* Make hash of submissions based on id and clear flags. */
 for (job = db->jobList; job != NULL; job = job->next)
     {
     for (sub = job->submissionList; sub != NULL; sub = sub->next)
         {
 	hashAdd(hash, sub->id, sub);
+	sub->running = FALSE;
+	sub->inQueue = FALSE;
 	}
     }
 
@@ -399,7 +401,7 @@ if (lineFileNext(lf, &line, NULL))	/* Empty is ok. */
 	    {
 	    char *state = words[4];
 	    if (state[0] == 'E')
-		sub->queueError |= TRUE;
+		sub->queueError = TRUE;
 	    else 
 	        {
 		if (sameString(state, "r") || sameString(state, "t"))
@@ -420,19 +422,183 @@ dyStringFree(&cmd);
 return queueSize;
 }
 
-void jabbaCheck(char *batch)
-/* Check on progress of a batch. */
+long dateToSeconds(char *date)
+/* Convert from format like:
+ *   'Wed Nov 7 13:35:11 PST 2001' to seconds since Jan. 1 2001.
+ * This should be in a library somewhere, but I can't find it. 
+ * This function is not totally perfect.  It'll add a leap year in 2200
+ * when it shouldn't for instance. */
 {
-struct jobDb *db = readBatch(batch);
-printf("%d jobs in %s\n", db->jobCount, batch);
+char *dupe = cloneString(skipLeadingSpaces(date));
+char *words[8], *parts[4];
+static char *months[] = {"Jan", "Feb", "Mar", "Apr", "May", "Jun", 
+                         "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
+static int daysInMonths[] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+int wordCount;
+int leapDiv = 4;
+int x;
+int leapCount;
+long secondsInDay = 24*60*60;
+int year, month, day, hour, minute, second;
+long dayCount;
+long result;
 
-writeBatch(db, batch);
+/* Parse string into various integer variables. */
+wordCount = chopLine(dupe, words);
+if (wordCount < 6)
+    errAbort("Badly formated date '%s'", date);
+year = atoi(words[5]);
+if ((month = stringIx(words[1], months)) < 0)
+    errAbort("Unrecognized month '%s'", date);
+day = atoi(words[2]);
+wordCount = chopString(words[3], ":", parts, ArraySize(parts));
+if (wordCount != 3)
+    errAbort("Badly formated time in '%s'", date);
+hour = atoi(parts[0]);
+minute = atoi(parts[1]);
+second = atoi(parts[2]);
+freez(&dupe);
+
+/* Figure out elapsed days with leap-years. */
+x = year - 1 - 2000;	/* 1972 is nearest leap year. */
+leapCount = x/4 + 1;
+dayCount = (year - 2001) * 365 + leapCount;
+for (x=0; x<month; ++x)
+    dayCount += daysInMonths[x];
+if (year%4 == 0 && month >= 2)
+    ++dayCount;
+result = secondsInDay*dayCount + hour*3600 + minute*60 + second;
+return result;
+}
+
+long nowInSeconds()
+/* Return current date in above format. */
+{
+time_t timer;
+timer = time(NULL);
+return dateToSeconds(ctime(&timer));
+}
+
+void parseRunJobOutput(char *fileName, int *retStartTime, int *retEndTime, float *retCpuTime,
+	int *retRet, boolean *gotRet, boolean *retTrackingError)
+/* Parse a run job output file.  Might have trouble if the program output
+ * is horribly complex. */
+{
+struct lineFile *lf;
+char *line, *words[20], *s;
+int wordCount;
+char *startPattern = "Start time: ";
+char *endPattern = "Finish time: ";
+char *returnPattern = "Return value = ";
+boolean gotStart = FALSE, gotEnd = FALSE;
+boolean gotCpu = FALSE, gotReturn = FALSE;
+
+/* Set up default return values. */
+*retCpuTime = *retStartTime = *retEndTime = *retRet = *gotRet = *retTrackingError = 0;
+
+lf = lineFileMayOpen(fileName, TRUE);
+if (lf == NULL)
+    {
+    *retTrackingError = TRUE;
+    return;
+    }
+while (lineFileNext(lf, &line, NULL))
+    {
+    if (startsWith(startPattern, line))
+        {
+	line += strlen(startPattern);
+	*retStartTime = dateToSeconds(line);
+	gotStart = TRUE;
+	}
+    else if (startsWith(endPattern, line))
+	{
+	line += strlen(endPattern);
+	*retEndTime = dateToSeconds(line);
+	gotEnd = TRUE;
+	break;
+	}
+    else if (isdigit(line[0]) )
+	{
+	wordCount = chopLine(line, words);
+	if (wordCount >= 3 && lastChar(words[0]) == 'u'
+	    && lastChar(words[1]) == 's' && isdigit(words[1][0]))
+	    {
+	    *retCpuTime = atof(words[0]) + atof(words[1]);
+	    gotCpu = TRUE;
+	    }
+	}
+    else if (startsWith(returnPattern, line))
+	{
+	line += strlen(returnPattern);
+	line = skipLeadingSpaces(line);
+	*retRet = atoi(line);
+	*gotRet = TRUE;
+	gotReturn = TRUE;
+	}
+    }
+if (!gotStart)
+    {
+    *retTrackingError = TRUE;
+    }
+if (gotEnd)
+    {
+    if (!gotCpu || !gotReturn)
+       errAbort("%s is not in a runJob format jabba can parse", fileName);
+    }
+lineFileClose(&lf);
+}
+
+void markRunJobStatus(struct jobDb *db)
+/* Mark jobs based on runJob output file. */
+{
+struct job *job;
+struct submission *sub;
+char *line, *words[10];
+int wordCount;
+boolean gotRet, trackingError;
+long killSeconds = killTime*60;
+long warnSeconds = warnTime*60;
+long duration;
+
+for (job=db->jobList; job != NULL; job = job->next)
+    {
+    if ((sub = job->submissionList) != NULL)
+        {
+	/* Look for hitherto unclassified jobs that are either running or
+	 * possibly finished. */
+	if (!sub->queueError && !sub->inQueue && !sub->crashed && !sub->ranOk)
+	    {
+	    parseRunJobOutput(sub->outFile, &sub->startTime, &sub->endTime, 
+	        &sub->cpuTime, &sub->retVal, &gotRet, &trackingError);
+	    sub->gotRetVal = gotRet;
+	    sub->trackingError = trackingError;
+	    if (gotRet)
+	        {
+		if (sub->retVal == 0)	/* Put checks on output here. */
+		    sub->ranOk = TRUE;
+		else
+		    sub->crashed = TRUE;
+		}
+	    else
+	        {
+		if (!sub->trackingError)
+		    {
+		    duration = nowInSeconds() - sub->startTime;
+		    if (duration >= killSeconds)
+		        sub->hung = TRUE;
+		    else if (duration >= warnSeconds)
+		        sub->slow = TRUE;
+		    }
+		}
+	    }
+	}
+    }
 }
 
 void reportOnJobs(struct jobDb *db)
 /* Report on status of jobs. */
 {
-int submitError = 0, inQueue = 0, queueError = 0, running = 0, crashed = 0,
+int submitError = 0, inQueue = 0, queueError = 0, trackingError = 0, running = 0, crashed = 0,
     slow = 0, hung = 0, ranOk = 0, jobCount = 0, unsubmitted = 0, total = 0;
 struct job *job;
 struct submission *sub;
@@ -443,6 +609,7 @@ for (job = db->jobList; job != NULL; job = job->next)
         {
 	if (sub->submitError) ++submitError;
 	if (sub->queueError) ++queueError;
+	if (sub->trackingError) ++trackingError;
 	if (sub->inQueue) ++inQueue;
 	if (sub->crashed) ++crashed;
 	if (sub->slow) ++slow;
@@ -460,6 +627,8 @@ if (submitError > 0)
    printf("submission errors: %d\n", submitError);
 if (queueError > 0)
    printf("queue errors: %d\n", queueError);
+if (trackingError > 0)
+   printf("tracking errors: %d\n", trackingError);
 if (inQueue > 0)
    printf("in queue: %d\n", inQueue);
 if (crashed > 0)
@@ -488,7 +657,22 @@ if ((job = db->jobList) != NULL)
     submitJob(job);    
 
 queueSize = markQueuedJobs(db);
-printf("%d jobs currently in queue\n", queueSize);
+printf("jobs (everybody's) in Codine queue: %d\n", queueSize);
+markRunJobStatus(db);
+reportOnJobs(db);
+
+writeBatch(db, batch);
+}
+
+void jabbaCheck(char *batch)
+/* Check on progress of a batch. */
+{
+struct jobDb *db = readBatch(batch);
+int queueSize;
+
+queueSize = markQueuedJobs(db);
+printf("jobs (everybody's) in Codine queue: %d\n", queueSize);
+markRunJobStatus(db);
 reportOnJobs(db);
 
 writeBatch(db, batch);
