@@ -688,3 +688,4 @@ filterRepeats(hh, maxRepeats, minSize);
 writeHits(hh, outName);
 return 0;
 }
+
