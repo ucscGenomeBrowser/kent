@@ -100,6 +100,9 @@ struct mafComp *mafMayFindComponent(struct mafAli *maf, char *src);
 struct mafComp *mafFindComponent(struct mafAli *maf, char *src);
 /* Find component of given source or die trying. */
 
+void mafMoveComponentToTop(struct mafAli *maf, char *componentSource);
+/* Move given component to head of component list. */
+
 void mafFromAxtTemp(struct axt *axt, int tSize, int qSize,
 	struct mafAli *temp);
 /* Make a maf out of axt,  parasiting on the memory in axt.

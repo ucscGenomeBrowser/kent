@@ -7,7 +7,7 @@
 #include "axt.h"
 #include "maf.h"
 
-static char const rcsid[] = "$Id: maf.c,v 1.10 2003/05/06 07:33:43 kate Exp $";
+static char const rcsid[] = "$Id: maf.c,v 1.11 2003/05/16 15:25:19 kent Exp $";
 
 struct mafFile *mafMayOpen(char *fileName)
 /* Open up a maf file and verify header. */
@@ -201,6 +201,7 @@ if (scoring != NULL)
     fprintf(f, " scoring=%s", scoring);
 fprintf(f, "\n");
 }
+
 
 void mafWrite(FILE *f, struct mafAli *ali)
 /* Write next alignment to file. */
@@ -421,6 +422,14 @@ for (mc = maf->components; mc != NULL; mc = mc->next)
     }
 slReverse(&subset->components);
 return subset;
+}
+
+void mafMoveComponentToTop(struct mafAli *maf, char *componentSource)
+/* Move given component to head of component list. */
+{
+struct mafComp *mcMaster = mafFindComponent(maf, componentSource);
+slRemoveEl(&maf->components, mcMaster);
+slAddHead(&maf->components, mcMaster);
 }
 
 boolean mafNeedSubset(struct mafAli *maf, char *componentSource,
