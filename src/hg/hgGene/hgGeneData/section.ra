@@ -63,6 +63,11 @@ shortLabel Pathways
 longLabel Biochemical and Signalling Pathways
 priority 130
 
+name localization
+shortLabel Localization
+longLabel Protein Localization
+priority 103
+
 name method
 shortLabel Methods
 longLabel UCSC Known Genes Methods, Credits, and Data Use Restrictions

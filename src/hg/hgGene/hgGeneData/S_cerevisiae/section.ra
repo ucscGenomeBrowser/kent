@@ -1,6 +1,6 @@
 # Yeast-specific sections.
 
-name sgdLocalization
+name localization
 shortLabel Localization
 longLabel Protein Localization and Abundance
 priority 101
