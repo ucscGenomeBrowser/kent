@@ -11,6 +11,7 @@ struct pfScope
 /* The symbol tables for this scope and a pointer to the
  * parent scope. */
      {
+     struct pfScope *next;	/* Next in scope list. */
      struct pfScope *parent;	/* Parent scope if any. */
      struct hash *types;	/* Types defined in this scope. */
      struct hash *vars;		/* Variables defined in this scope (including functions) */
@@ -23,6 +24,8 @@ struct pfVar
      struct pfScope *scope;		/* Scope we're declared in. */
      struct pfCollectedType *type;	/* Variable type. */
      };
+
+struct pfTokenizer;
 
 struct pfScope *pfScopeNew(struct pfScope *parent, int size);
 /* Create new scope with given parent.  Size is just a hint

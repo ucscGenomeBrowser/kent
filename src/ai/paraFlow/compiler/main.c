@@ -143,12 +143,28 @@ for (pp = pp->children; pp != NULL; pp = pp->next)
     initVars(pp);
 }
 
+static void rParseCount(int *pCount, struct pfParse *pp)
+/* Recursively count. */
+{
+*pCount += 1;
+for (pp = pp->children; pp != NULL; pp = pp->next)
+   rParseCount(pCount, pp);
+}
+
+int pfParseCount(struct pfParse *pp)
+/* Count up number of parses in this el and children. */
+{
+int parseCount = 0;
+rParseCount(&parseCount, pp);
+return parseCount;
+}
+
 void paraFlow(char *fileName)
 /* parse and dump. */
 {
 struct hash *reservedWords = createReservedWords();
 struct pfTokenizer *tkz = pfTokenizerNew(fileName, reservedWords);
-struct pfParse *program = pfParseNew(pptProgram, NULL, NULL);
+struct pfParse *program = pfParseNew(pptProgram, NULL, NULL, tkz->scope);
 struct pfParse *pp = pfParseFile(fileName, tkz, program);
 
 
@@ -159,6 +175,9 @@ slReverse(&program->children);
 initVars(program);
 
 pfParseDump(program, 0, stdout);
+
+printf("%d modules, %d token, %d parse\n",
+	tkz->modules->elCount, tkz->tokenCount, pfParseCount(program));
 }
 
 int main(int argc, char *argv[])

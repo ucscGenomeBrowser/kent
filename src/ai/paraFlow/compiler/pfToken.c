@@ -146,22 +146,22 @@ struct pfTokenizer *pfTokenizerNew(char *fileName, struct hash *reservedWords)
 /* Create tokenizing structure on file.  Reserved words is an int valued hash
  * that may be NULL. */
 {
-struct pfTokenizer *pfTkz;
-AllocVar(pfTkz);
-pfTkz->lm = lmInit(0);
-pfTkz->source = pfSourceNew(fileName);
-pfTkz->pos = pfTkz->source->contents;
-pfTkz->endPos = pfTkz->pos + pfTkz->source->contentSize;
-pfTkz->symbols = hashNew(16);
-pfTkz->strings = hashNew(16);
-pfTkz->modules = hashNew(0);
-pfTkz->dy = dyStringNew(0);
+struct pfTokenizer *tkz;
+AllocVar(tkz);
+tkz->lm = lmInit(0);
+tkz->source = pfSourceNew(fileName);
+tkz->pos = tkz->source->contents;
+tkz->endPos = tkz->pos + tkz->source->contentSize;
+tkz->symbols = hashNew(16);
+tkz->strings = hashNew(16);
+tkz->modules = hashNew(0);
+tkz->dy = dyStringNew(0);
 if (reservedWords == NULL)
     reservedWords = hashNew(1);
-pfTkz->reserved = reservedWords;
-pfTkz->scope = pfScopeNew(NULL, 8);
-addBuiltInTypes(pfTkz->scope);
-return pfTkz;
+tkz->reserved = reservedWords;
+tkz->scope = pfScopeNew(NULL, 8);
+addBuiltInTypes(tkz->scope);
+return tkz;
 }
 
 static void tokSingleChar(struct pfTokenizer *tkz, struct pfToken *tok,
@@ -789,6 +789,7 @@ if (tok->type == pftName)
     if (x != 0)
         tok->type = x;
     }
+tkz->tokenCount += 1;
 return tok;
 }
 

@@ -213,7 +213,7 @@ errAt(tok, "Syntax error #%d", code);
 }
 
 struct pfParse *pfParseNew(enum pfParseType type,
-	struct pfToken *tok, struct pfParse *parent)
+	struct pfToken *tok, struct pfParse *parent, struct pfScope *scope)
 /* Return new parse node.  It's up to caller to fill in
  * children later. */
 {
@@ -222,25 +222,28 @@ AllocVar(pp);
 pp->type = type;
 pp->tok = tok;
 pp->parent = parent;
+pp->scope = scope;
 return pp;
 }
 
-struct pfParse *emptyTuple(struct pfParse *parent, struct pfToken *tok)
+struct pfParse *emptyTuple(struct pfParse *parent, struct pfToken *tok,
+	struct pfScope *scope)
 /* Return empty tuple. */
 {
-return pfParseNew(pptTuple, tok, parent);
+return pfParseNew(pptTuple, tok, parent, scope);
 }
 
-struct pfParse *emptyStatement(struct pfParse *parent, struct pfToken *tok)
+struct pfParse *emptyStatement(struct pfParse *parent, struct pfToken *tok,
+	struct pfScope *scope)
 /* Return no-op statement. */
 {
-return pfParseNew(pptNop, tok, parent);
+return pfParseNew(pptNop, tok, parent, scope);
 }
 
 struct pfParse *singleTuple(struct pfParse *parent, struct pfToken *tok, struct pfParse *single)
 /* Wrap tuple around single. */
 {
-struct pfParse *tuple = pfParseNew(pptTuple, tok, parent);
+struct pfParse *tuple = pfParseNew(pptTuple, tok, parent, parent->scope);
 tuple->children = single;
 single->parent = tuple;
 single->next = NULL;
@@ -261,7 +264,7 @@ struct pfParse *parseNameUse(struct pfParse *parent, struct pfToken **pTokList, 
  * based on it. */
 {
 struct pfToken *tok = *pTokList;
-struct pfParse *pp = pfParseNew(pptNameUse, tok, parent);
+struct pfParse *pp = pfParseNew(pptNameUse, tok, parent, scope);
 if (tok->type != pftName)
     {
     errAt(tok, "Expecting variable.");
@@ -318,12 +321,12 @@ else
 	    expectingGot("name", tok);
 	    break;
 	}
-    first = pfParseNew(type, tok, NULL);
+    first = pfParseNew(type, tok, NULL, scope);
     tok = tok->next;
     }
 
 /* Create dot list parse and add first element to it. */
-dots = pfParseNew(pptDot, tok, parent);
+dots = pfParseNew(pptDot, tok, parent, scope);
 first->parent = dots;
 slAddHead(&dots->children, first);
 
@@ -333,7 +336,7 @@ if (startsSpecial)
     while (tok->type == pftParent)
 	{
 	tok = tok->next;
-	pp = pfParseNew(pptParent, tok, dots);
+	pp = pfParseNew(pptParent, tok, dots, scope);
 	slAddHead(&dots->children, pp);
 	}
     }
@@ -366,7 +369,7 @@ struct pfToken *tok = *pTokList;
 struct pfParse *ofs = NULL;
 if (tok->type == pftOf)
     {
-    ofs = pfParseNew(pptOf, tok, parent);
+    ofs = pfParseNew(pptOf, tok, parent, scope);
     ofs->children = pp;
     pp->parent = ofs;
     while (tok->type == pftOf)
@@ -401,7 +404,7 @@ if (baseType != NULL)
     if (nextTok->type == pftName || nextTok->type == pftOf)
 	{
 	struct pfParse *name, *type;
-	struct pfParse *pp = pfParseNew(pptVarDec, tok, parent);
+	struct pfParse *pp = pfParseNew(pptVarDec, tok, parent, scope);
 	type = parseOfs(pp, &tok, scope);
 	name = parseDottedNames(pp, &tok, scope);
 	pp->children = type;
@@ -417,7 +420,7 @@ struct pfParse *constUse(struct pfParse *parent, struct pfToken **pTokList, stru
 /* Create constant use */
 {
 struct pfToken *tok = *pTokList;
-struct pfParse *pp = pfParseNew(pptConstUse, tok, parent);
+struct pfParse *pp = pfParseNew(pptConstUse, tok, parent, scope);
 *pTokList = tok->next;
 return pp;
 }
@@ -472,7 +475,7 @@ if (tok->type == '(')
     {
     struct pfParse *func = pp;
     struct pfParse *parameters = NULL;
-    pp = pfParseNew(pptCall, tok, parent);
+    pp = pfParseNew(pptCall, tok, parent, scope);
     func->parent = pp;
     pp->children = func;
     tok = tok->next;
@@ -497,19 +500,19 @@ struct pfToken *tok = *pTokList;
 struct pfParse *pp;
 if (tok->type == '-')
     {
-    pp = pfParseNew(pptNegate, tok, parent);
+    pp = pfParseNew(pptNegate, tok, parent, scope);
     tok = tok->next;
     pp->children = parseNegation(pp, &tok, scope);
     }
 else if (tok->type == '!')
     {
-    pp = pfParseNew(pptNot, tok, parent);
+    pp = pfParseNew(pptNot, tok, parent, scope);
     tok = tok->next;
     pp->children = parseNegation(pp, &tok, scope);
     }
 else if (tok->type == '~')
     {
-    pp = pfParseNew(pptFlipBits, tok, parent);
+    pp = pfParseNew(pptFlipBits, tok, parent, scope);
     tok = tok->next;
     pp->children = parseNegation(pp, &tok, scope);
     }
@@ -554,7 +557,7 @@ while (tok->type == '*' || tok->type == '/' || tok->type == '%'
 	   tt = pptBitAnd;
 	   break;
 	}
-    pp = pfParseNew(tt, tok, parent);
+    pp = pfParseNew(tt, tok, parent, scope);
     left->parent = pp;
     tok = tok->next;
     right = parseNegation(pp, &tok, scope);
@@ -590,7 +593,7 @@ while (tok->type == '+' || tok->type == '-' || tok->type == '|' || tok->type == 
 	   tt = pptBitXor;
 	   break;
 	}
-    pp = pfParseNew(tt, tok, parent);
+    pp = pfParseNew(tt, tok, parent, scope);
     left->parent = pp;
     tok = tok->next;
     right = parseProduct(pp, &tok, scope);
@@ -634,7 +637,7 @@ while (tok->type == pftEqualsEquals || tok->type == pftNotEquals
 	    tt = pptLess;
 	    break;
 	}
-    pp = pfParseNew(tt, tok, parent);
+    pp = pfParseNew(tt, tok, parent, scope);
     left->parent = pp;
     tok = tok->next;
     right = parseSum(pp, &tok, scope);
@@ -654,7 +657,7 @@ struct pfParse *pp = parseCmp(parent, &tok, scope);
 if (tok->type == pftLogAnd)
     {
     struct pfParse *left = pp, *right;
-    pp = pfParseNew(pptLogAnd, tok, parent);
+    pp = pfParseNew(pptLogAnd, tok, parent, scope);
     left->parent = pp;
     tok = tok->next;
     right = parseCmp(pp, &tok, scope);
@@ -674,7 +677,7 @@ struct pfParse *pp = parseLogAnd(parent, &tok, scope);
 if (tok->type == pftLogOr)
     {
     struct pfParse *left = pp, *right;
-    pp = pfParseNew(pptLogOr, tok, parent);
+    pp = pfParseNew(pptLogOr, tok, parent, scope);
     left->parent = pp;
     tok = tok->next;
     right = parseLogAnd(pp, &tok, scope);
@@ -720,7 +723,7 @@ switch (tok->type)
     }
 if (type != pptNone)
     {
-    assign = pfParseNew(type, tok, parent);
+    assign = pfParseNew(type, tok, parent, scope);
     assign->children = pp;
     pp->parent = assign;
     for (;;)
@@ -809,7 +812,7 @@ struct pfParse *pp = parseAssign(parent, &tok, scope);
 struct pfParse *tuple = NULL;
 if (tok->type == ',')
     {
-    tuple = pfParseNew(pptTuple, tok, parent);
+    tuple = pfParseNew(pptTuple, tok, parent, scope);
     tuple->children = pp;
     pp->parent = tuple;
     while (tok->type == ',')
@@ -870,7 +873,7 @@ static struct pfParse *parseCompound(struct pfParse *parent,
 /* Parse a compound statement (statement list surrounded
  * by brackets */
 {
-struct pfParse *pp = pfParseNew(pptCompound, *pTokList, parent);
+struct pfParse *pp = pfParseNew(pptCompound, *pTokList, parent, scope);
 compoundToChildren(pp, pTokList, scope);
 return pp;
 }
@@ -880,18 +883,19 @@ static struct pfParse *parseFunction(struct pfParse *parent,
 /* Parse something (...) [into (...)] */
 {
 struct pfToken *tok = *pTokList;
-struct pfParse *pp = pfParseNew(type, tok, parent);
+struct pfParse *pp;
 struct pfParse *name, *input, *output = NULL, *body;
+scope = pfScopeNew(scope, 0);
+pp = pfParseNew(type, tok, parent, scope);
 tok = tok->next;	/* Skip something (implicit in type) */
 name = parseNameUse(parent, &tok, scope);
-scope = pfScopeNew(scope, 0);
 
 if (tok->type != '(')
     expectingGot("(", tok);
 tok = tok->next;
 if (tok->type == ')')
     {
-    input = emptyTuple(pp, tok);
+    input = emptyTuple(pp, tok, scope);
     tok = tok->next;
     }
 else
@@ -911,7 +915,7 @@ if (tok->type == pftInto)
 	output = singleTuple(pp, tok, output);
     }
 else
-    output = emptyTuple(pp, tok);
+    output = emptyTuple(pp, tok, scope);
 body = parseCompound(pp, &tok, scope);
 
 slAddHead(&pp->children, body);
@@ -952,7 +956,7 @@ static struct pfParse *parseClass(struct pfParse *parent,
 struct pfToken *tok = *pTokList;
 struct pfParse *pp;
 struct pfParse *name, *body;
-pp = pfParseNew(pptClass, tok, parent);
+pp = pfParseNew(pptClass, tok, parent, scope);
 tok = tok->next;	/* Skip 'class' token */
 name = parseNameUse(pp, &tok, scope);
 body = parseCompound(pp, &tok, scope);
@@ -968,7 +972,7 @@ static struct pfParse *parseIf(struct pfParse *parent,
 /* Parse if statement (which may include else) */
 {
 struct pfToken *tok = *pTokList;
-struct pfParse *pp = pfParseNew(pptIf, tok, parent);
+struct pfParse *pp = pfParseNew(pptIf, tok, parent, scope);
 struct pfParse *conditional, *trueBody, *falseBody = NULL;
 tok = tok->next;	/* Skip 'if' */
 
@@ -1003,7 +1007,7 @@ static struct pfParse *parseWhile(struct pfParse *parent,
 /* Parse if statement (which may include else) */
 {
 struct pfToken *tok = *pTokList;
-struct pfParse *pp = pfParseNew(pptWhile, tok, parent);
+struct pfParse *pp = pfParseNew(pptWhile, tok, parent, scope);
 struct pfParse *conditional, *body;
 
 tok = tok->next;	/* Skip 'while' */
@@ -1033,7 +1037,7 @@ static struct pfParse *parseForeach(struct pfParse *parent,
 /* Parse foreach statement */
 {
 struct pfToken *tok = *pTokList;
-struct pfParse *pp = pfParseNew(pptForeach, tok, parent);
+struct pfParse *pp = pfParseNew(pptForeach, tok, parent, scope);
 struct pfParse *element;
 struct pfParse *collection;
 struct pfParse *statement;
@@ -1055,13 +1059,14 @@ static struct pfParse *parseFor(struct pfParse *parent,
 /* Parse for statement */
 {
 struct pfToken *tok = *pTokList;
-struct pfParse *pp = pfParseNew(pptFor, tok, parent);
+struct pfParse *pp;
 struct pfParse *init;
 struct pfParse *check;
 struct pfParse *advance;
 struct pfParse *statement;
 
-scope = pfScopeNew(scope, 0);
+scope = pfScopeNew(scope, 2);
+pp = pfParseNew(pptFor, tok, parent, scope);
 tok = tok->next;	/* Skip over 'for' */
 if (tok->type != '(')
     expectingGot("(", tok);
@@ -1069,7 +1074,7 @@ tok = tok->next;
 
 /* Parse up through first semicolon */
 if (tok->type == ';')
-    init = emptyStatement(pp, tok);
+    init = emptyStatement(pp, tok, scope);
 else
     init = pfParseSemilessStatement(pp, &tok, scope);
 if (tok->type != ';')
@@ -1078,7 +1083,7 @@ tok = tok->next;
 
 /* Parse up through through semicolon */
 if (tok->type == ';')
-    check = emptyStatement(pp, tok);
+    check = emptyStatement(pp, tok, scope);
 else
     check = pfParseExpression(pp, &tok, scope);
 if (tok->type != ';')
@@ -1087,7 +1092,7 @@ tok = tok->next;
 
 /* Parse advance statment and closing ')' */
 if (tok->type == ')')
-    advance = emptyStatement(pp, tok);
+    advance = emptyStatement(pp, tok, scope);
 else
     advance = pfParseSemilessStatement(pp, &tok, scope);
 if (tok->type != ')')
@@ -1113,7 +1118,7 @@ static struct pfParse *parseWordStatement(struct pfParse *parent,
 {
 struct pfToken *tok = *pTokList;
 *pTokList = tok->next;
-return pfParseNew(type, tok, parent);
+return pfParseNew(type, tok, parent, scope);
 }
 
 static struct pfParse *parseBreak(struct pfParse *parent,
@@ -1142,7 +1147,7 @@ static struct pfParse *parseInto(struct pfParse *parent,
 /* Parse into statement */
 {
 struct pfToken *tok = *pTokList;
-struct pfParse *pp = pfParseNew(pptInto, tok, parent);
+struct pfParse *pp = pfParseNew(pptInto, tok, parent, scope);
 
 tok = tok->next;	/* Have covered 'into' */
 pp->children = parseDottedNames(pp, &tok, scope);
@@ -1169,7 +1174,7 @@ switch (tok->type)
 	statement = parseCompound(parent, &tok, scope);
 	break;
     case ';':
-	statement = emptyStatement(parent, tok);
+	statement = emptyStatement(parent, tok, scope);
 	break;
     case pftIf:
         statement = parseIf(parent, &tok, scope);
@@ -1273,8 +1278,8 @@ struct pfParse *pfParseFile(char *fileName, struct pfTokenizer *tkz,
 {
 struct pfToken *tokList = NULL, *tok;
 int endCount = 3;
-struct pfParse *modParse = pfParseNew(pptModule, NULL, parent);
 struct pfScope *scope = pfScopeNew(tkz->scope, 16);
+struct pfParse *modParse = pfParseNew(pptModule, NULL, parent, scope);
 char *module = hashStoreName(tkz->modules, fileName);
 
 modParse->name = module;

@@ -89,6 +89,7 @@ struct pfTokenizer
     struct hash *modules;	/* Full path to all modules. */
     struct dyString *dy;	/* Dynamic string buffer - for symbols and
                                  * strings before they go in hash. */
+    int tokenCount;		/* Count of calls to tokenNext. */
     };
 
 union pfTokVal
