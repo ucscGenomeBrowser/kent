@@ -8,3 +8,6 @@ genome-wide distribution.
 To view a linear depiction of the position and layout of the exons within the
 gene and their correspondence to the protein's amino acid sequence, see the
 <A HREF="pbexon.shtml">Exons track</A>.
+<P>
+The exon positions displayed in this track were derived from the kgProtMap
+table (an alignment of protein, mRNA, and genome data).

@@ -8,7 +8,7 @@ serine is given a lower height than aspartic acid.
 <P>
 The pI histogram in the <A HREF="#PiDisc">Polarity</A> discussion section 
 shows the genome-wide statistical distribution of pI of human
-proteins from SWISS-PROT and TrEMBL. For reasons of solubility, few
+proteins from SwissProt and TrEMBL. For reasons of solubility, few
 proteins have a pI near intra-cellular pH, resulting in a bimodal peak about
 this pH.
 <P>

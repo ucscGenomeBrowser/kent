@@ -11,3 +11,6 @@ Click on an exon to display the corresponding region in the UCSC Genome
 Browser. See the <A HREF="pbexonCnt.shtml">Number of Exons histogram</A> to view 
 the exon count for this gene and compare it to a genome-wide 
 statistical distribution. 
+<P>
+The exon positions displayed in this track were derived from the kgProtMap
+table (an alignment of protein, mRNA, and genome data).

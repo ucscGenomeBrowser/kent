@@ -31,6 +31,9 @@ Complement 3'-  TAC CGC CGG GCC GCG CCC CGA GAG -5' (reverse of the genomic)
 </PRE>
 </BLOCKQUOTE>
 <P>
+The genomic sequence and complement displayed in this track are derived from 
+the kgProtMap table (an alignment between protein, mRNA, and genome) and the 
+base genome.
+<P>
 NOTE: This track displays only when the current scale is set to the &quot;DNA scale&quot; 
 option. 
-
