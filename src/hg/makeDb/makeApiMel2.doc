@@ -721,4 +721,137 @@ altColor 199,147,35
 type bed 4 .
     # The description needs some editing.
 
-   
+# MAKE Human Proteins track (hg17 DONE 2005-03-26 braney)
+    ssh kolossus
+    mkdir -p /cluster/data/apiMel2/blastDb
+    cd /cluster/data/apiMel2/blastDb
+    ln -s /cluster/data/apiMel2/faSplits/*/*.fa .
+    for i in *.fa
+    do
+	formatdb -i $i -p F
+    done
+    rm *.log *.fa
+
+    ssh kkr1u00
+    mkdir -p /iscratch/i/apiMel2/blastDb
+    cd /cluster/data/apiMel2/blastDb
+    cp * /iscratch/i/apiMel2/blastDb
+    iSync > sync.out
+    exit # back to kolossus
+
+    mkdir -p /cluster/data/apiMel2/bed/tblastn.hg17KG
+    cd /cluster/data/apiMel2/bed/tblastn.hg17KG
+    ls -1S /iscratch/i/apiMel2/blastDb/*.nsq | sed "s/\.nsq//" > query.lst
+
+    calc `wc /cluster/data/hg17/bed/blat.hg17KG/hg17KG.psl | awk "{print \\\$1}"`/\(350000/`wc query.lst | awk "{print \\\$1}"`\)
+    # 42156/(350000/1077) = 129.720034
+    mkdir -p /cluster/bluearc/apiMel2/bed/tblastn.hg17KG/kgfa
+    split -l 130 /cluster/data/hg17/bed/blat.hg17KG/hg17KG.psl /cluster/bluearc/apiMel2/bed/tblastn.hg17KG/kgfa/kg
+    ln -s /cluster/bluearc/apiMel2/bed/tblastn.hg17KG/kgfa kgfa
+    cd kgfa
+    for i in *; do pslxToFa $i $i.fa; rm $i; done
+    cd ..
+    ls -1S kgfa/*.fa > kg.lst
+    mkdir -p /cluster/bluearc/apiMel2/bed/tblastn.hg17KG/blastOut
+    ln -s /cluster/bluearc/apiMel2/bed/tblastn.hg17KG/blastOut 
+    for i in `cat kg.lst`; do  mkdir blastOut/`basename $i .fa`; done
+    tcsh
+    cat << '_EOF_' > blastGsub
+#LOOP
+blastSome $(path1) {check in line $(path2)} {check out exists blastOut/$(root2)/q.$(root1).psl } 
+#ENDLOOP
+'_EOF_'
+    cat << '_EOF_' > blastSome
+#!/bin/sh
+BLASTMAT=/iscratch/i/blast/data
+export BLASTMAT
+g=`basename $2`
+f=/tmp/`basename $3`.$g
+for eVal in 0.01 0.001 0.0001 0.00001 0.000001 1E-09 1E-11
+do
+if /scratch/blast/blastall -M BLOSUM80 -m 0 -F no -e $eVal -p tblastn -d $1 -i $2 -o $f.8
+then
+        mv $f.8 $f.1
+        break;
+fi
+done
+if test -f  $f.1
+then
+if /cluster/bin/i386/blastToPsl $f.1 $f.2
+then
+	liftUp -nosort -type=".psl" -nohead $f.3 /cluster/data/apiMel2/jkStuff/liftAll.lft warn $f.2  
+	liftUp -nosort -type=".psl" -pslQ -nohead $3.tmp /cluster/data/hg17/bed/blat.hg17KG/protein.lft warn $f.3
+	if pslCheck -prot $3.tmp
+	then
+	    mv $3.tmp $3
+	    rm -f $f.1 $f.2 
+	fi
+        exit 0
+    fi
+fi
+rm -f $f.1 $f.2 $3.tmp $f.8
+exit 1
+'_EOF_'
+
+    chmod +x blastSome
+    gensub2 query.lst kg.lst blastGsub blastSpec
+
+    ssh kk
+    cd /cluster/data/apiMel2/bed/tblastn.hg17KG
+    para create blastSpec
+    para push
+# Completed: 350025 of 350025 jobs
+# CPU time in finished jobs:   18368399s  306139.99m  5102.33h  212.60d  0.582 y
+# IO & Wait Time:               8819533s  146992.21m  2449.87h  102.08d  0.280 y
+# Average job time:                  78s       1.29m     0.02h    0.00d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:            5725s      95.42m     1.59h    0.07d
+# Submission to last job:         37495s     624.92m    10.42h    0.43d
+
+    cat << '_EOF_' > chainGsub
+#LOOP
+chainSome $(path1)
+#ENDLOOP
+'_EOF_'
+
+    cat << '_EOF_' > chainSome
+(cd $1; cat q.*.psl | simpleChain -prot -outPsl -maxGap=25000 stdin ../c.`basename $1`.psl)
+'_EOF_'
+    chmod +x chainSome
+
+    ls -1dS `pwd`/blastOut/kg?? > chain.lst
+    gensub2 chain.lst single chainGsub chainSpec
+
+    ssh kki
+    cd /cluster/data/apiMel2/bed/tblastn.hg17KG
+    para create chainSpec
+    para push
+# Completed: 325 of 325 jobs
+# CPU time in finished jobs:       9334s     155.56m     2.59h    0.11d  0.000 y
+# IO & Wait Time:                 25507s     425.12m     7.09h    0.30d  0.001 y
+# Average job time:                 107s       1.79m     0.03h    0.00d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:            2999s      49.98m     0.83h    0.03d
+# Submission to last job:          3888s      64.80m     1.08h    0.04d
+
+    exit
+    # back to kolossus
+    cd /cluster/data/apiMel2/bed/tblastn.hg17KG/blastOut
+    for i in kg??
+    do 
+	awk "(\$13 - \$12)/\$11 > 0.6 {print}" c.$i.psl > c60.$i.psl
+	sort -rn c60.$i.psl | pslUniq stdin u.$i.psl
+	awk "((\$1 / \$11) ) > 0.60 { print   }" c60.$i.psl > m60.$i.psl
+	echo $i
+    done
+
+    cat u.*.psl m60* | sort -T /tmp -k 14,14 -k 17,17n -k 17,17n  | uniq  > /cluster/data/apiMel2/bed/tblastn.hg17KG/blastHg17KG.psl
+    cd ..
+
+    ssh hgwdev
+    cd /cluster/data/apiMel2/bed/tblastn.hg17KG
+    hgLoadPsl apiMel2 blastHg17KG.psl
+
+    # back to kolossus
+    rm -rf blastOut
+# End tblastn
