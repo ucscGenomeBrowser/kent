@@ -17,7 +17,7 @@
 #include "ra.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: hgNear.c,v 1.93 2003/09/26 02:12:33 kent Exp $";
+static char const rcsid[] = "$Id: hgNear.c,v 1.94 2003/09/26 06:05:08 kent Exp $";
 
 char *excludeVars[] = { "submit", "Submit", confVarName, colInfoVarName,
 	defaultConfName, hideAllConfName, showAllConfName,
@@ -610,7 +610,7 @@ advFilterAnyAllMenu(col, "logic", TRUE);
 hPrintf("words in search term match.<BR>");
 if (!columnSetting(col, "noKeys", NULL))
     {
-    hPrintf("Limit to items in list: ");
+    hPrintf("Limit to items (no wildcards) in list: ");
     advFilterKeyPasteButton(col);
     hPrintf(" ");
     advFilterKeyUploadButton(col);
@@ -619,10 +619,13 @@ if (!columnSetting(col, "noKeys", NULL))
 	{
 	if (fileExists(fileName))
 	    {
+	    int count = countWordsInFile(fileName);
 	    advFilterKeyClearButton(col);
 	    hPrintf("<BR>\n");
-	    hPrintf("(There are currently %d items in list.)",
-		    countWordsInFile(fileName));
+	    if (count == 1)
+		hPrintf("(There is currently 1 item in the list.)", count);
+	    else
+		hPrintf("(There are currently %d items in the list.)", count);
 	    }
 	else
 	    {
