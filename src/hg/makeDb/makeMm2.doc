@@ -348,7 +348,7 @@ o - Load this into the database as so
 	hgLoadBed mm2 simpleRepeat simpleRepeat.bed -sqlTable=$HOME/src/hg/lib/simpleRepeat.sql
 
 
-LOADING MOUSE MM2 BLASTZ ALIGNMENTS FROM PENN STATE: (IN PROGRESS: generated 12/7/02, not loaded into db)
+LOADING MOUSE MM2 HUMAN BLASTZ ALIGNMENTS FROM PENN STATE: (IN PROGRESS: generated 12/7/02, not loaded into db)
 
     # Translate Penn State .lav files into sorted axt:
     ssh kkstore
@@ -384,7 +384,7 @@ LOADING MOUSE MM2 BLASTZ ALIGNMENTS FROM PENN STATE: (IN PROGRESS: generated 12/
     cd $base/pslChrom
     hgLoadPsl mm2 chr*_${tbl}.psl
 
-MAKING THE BLASTZBESTMOUSE TRACK FROM PENN STATE MM2 AXT FILES (IN PROGRESS: generated 12/7/02, not loaded into db)
+MAKING THE BLASTZBESTHUMAN TRACK FROM PENN STATE MM2 AXT FILES (IN PROGRESS: generated 12/7/02, not loaded into db)
 
     # Consolidate AXT files to chrom level, sort, pick best, make psl.
     ssh kkstore
@@ -444,7 +444,7 @@ MAKING THE BLASTZBESTMOUSE TRACK FROM PENN STATE MM2 AXT FILES (IN PROGRESS: gen
      hgsql mm2 < ~/kent/src/hg/lib/axtInfo.sql
      hgsql mm2 < axtInfoInserts.sql
 
-MAKING THE AXTTIGHT FROM AXTBEST (IN PROGRESS: generated 12/7/02, not loaded into db)
+MAKING THE HUMAN AXTTIGHT FROM AXTBEST (IN PROGRESS: generated 12/7/02, not loaded into db)
     # After creating axtBest alignments above, use subsetAxt to get axtTight:
     ssh kkstore
     cd ~/mm2/bed/blastz.gs14.2002-12-6-ASH/axtBest
@@ -464,6 +464,148 @@ MAKING THE AXTTIGHT FROM AXTBEST (IN PROGRESS: generated 12/7/02, not loaded int
     ssh hgwdev
     cd ~/mm2/bed/blastz.gs14.2002-12-6-ASH/pslTight
     hgLoadPsl mm2 chr*_blastzTightHuman.psl
+
+
+LOADING MOUSE MM2 RAT BLASTZ ALIGNMENTS FROM PENN STATE: (DONE 12/17/02)
+
+    # Translate Penn State .lav files into sorted axt:
+    ssh kkstore
+    set base="/cluster/store2/mm.2002.02/mm2/bed/blastz.rn1.2002-12-12-ASH"
+    set seq1_dir="/cluster/store2/mm.2002.02/mm2/trfMixedNib/"
+    set seq2_dir="/cluster/store4/rn1/mixedNib/"
+    set tbl="blastzRn1"
+    cd $base
+    mkdir -p axtChrom
+    foreach c (lav/*)
+      pushd $c
+      set chr=$c:t
+      set out=$base/axtChrom/$chr.axt
+      echo "Translating $chr lav to $out"
+      cat `ls -1 *.lav | sort -g` \
+        | lavToAxt stdin $seq1_dir $seq2_dir stdout \
+        | axtSort stdin $out
+      popd
+    end
+    # If a chromosome has so many alignments that something runs out of mem,
+    # run axtBest in 2 passes to reduce size of the input to final axtBest:
+    foreach c (lav/chrUn lav/chrX)
+      pushd $c
+      set chr=$c:t
+      set out=$base/axtChrom/$chr.axt
+      echo two-pass lavToAxting $chr
+      foreach d (*.lav)
+        set smallout=$d.axt
+        lavToAxt $d $seq1_dir $seq2_dir stdout \
+        | axtSort stdin $smallout
+      end
+      cat `ls -1 *.lav.axt | sort -g` \
+        > $out
+      popd
+    end
+
+    # Translate the sorted axt files into psl:
+    cd $base
+    mkdir -p pslChrom
+    foreach f (axtChrom/chr*.axt)
+      set c=$f:t:r
+      axtToPsl $f S1.len S2.len pslChrom/${c}_${tbl}.psl
+    end
+    # /cluster/store2 ran out of space, so I gzipped the axtChrom files; 
+    # therefore had to run axtToPsl like this:
+    cd axtChrom; gzip *.axt; cd ..
+    foreach f (axtChrom/chr*.axt.gz)
+      set c=$f:t:r:r
+      gunzip -c $f | \
+        axtToPsl stdin S1.len S2.len pslChrom/${c}_${tbl}.psl
+    end
+
+    # Load tables
+    ssh hgwdev
+    set base="/cluster/store2/mm.2002.02/mm2/bed/blastz.rn1.2002-12-12-ASH"
+    set tbl="blastzRn1"
+    cd $base/pslChrom
+    hgLoadPsl mm2 chr*_${tbl}.psl
+
+MAKING THE BLASTZBESTRAT TRACK FROM PENN STATE MM2 AXT FILES (DONE 12/17/02)
+
+    # Consolidate AXT files to chrom level, sort, pick best, make psl.
+    ssh kkstore
+    set base="/cluster/store2/mm.2002.02/mm2/bed/blastz.rn1.2002-12-12-ASH"
+    set seq1_dir="/cluster/store2/mm.2002.02/mm2/trfMixedNib/"
+    set seq2_dir="/cluster/store4/rn1/mixedNib/"
+    set tbl="blastzBestRat"
+    cd $base
+    mkdir -p axtBest pslBest
+    foreach f (axtChrom/chr*.axt.gz)
+      set chr=$f:t:r:r
+      echo axtBesting $chr
+      gunzip -c $f | \
+        axtBest stdin $chr axtBest/$chr.axt -minScore=300
+      echo translating axtBest to psl for $chr
+      axtToPsl axtBest/$chr.axt S1.len S2.len pslBest/${chr}_${tbl}.psl
+    end
+    # If a chromosome has so many alignments that axtBest runs out of mem,
+    # run axtBest in 2 passes to reduce size of the input to final axtBest:
+    foreach chrdir (lav/chrUn lav/chr1)
+      set chr=$chrdir:t
+      echo two-pass axtBesting $chr
+      foreach d ($chrdir/*.lav)
+        set smallout=$d.axt
+        lavToAxt $d $seq1_dir $seq2_dir stdout \
+        | axtSort stdin $smallout
+      end
+      foreach a ($chrdir/*.lav.axt)
+        axtBest $a $chr $a:r.axtBest
+      end
+      cat `ls -1 $chrdir/*.axtBest | sort -g` | \
+        axtBest stdin $chr axtBest/$chr.axt
+      axtToPsl axtBest/$chr.axt S1.len S2.len pslBest/${chr}_${tbl}.psl
+    end
+
+    # Load tables
+     ssh hgwdev
+     set base="/cluster/store2/mm.2002.02/mm2/bed/blastz.rn1.2002-12-12-ASH"
+     set tbl="blastzBestRat"
+     cd $base/pslBest
+     hgLoadPsl mm2 chr*_${tbl}.psl
+
+    # Make /gbdb links and add them to the axtInfo table:
+     mkdir -p /gbdb/mm2/axtBestRn1
+     cd /gbdb/mm2/axtBestRn1
+     foreach f ($base/axtBest/chr*.axt)
+       ln -s $f .
+     end
+     cd $base/axtBest
+     rm -f axtInfoInserts.sql
+     touch axtInfoInserts.sql
+     foreach f (/gbdb/mm2/axtBestRn1/chr*.axt)
+       set chr=$f:t:r
+       echo "INSERT INTO axtInfo VALUES ('rn1','Blastz Best in Genome','$chr','$f');" \
+         >> axtInfoInserts.sql
+     end
+     hgsql mm2 < ~/kent/src/hg/lib/axtInfo.sql
+     hgsql mm2 < axtInfoInserts.sql
+
+MAKING THE RAT AXTTIGHT FROM AXTBEST (DONE 12/17/02)
+    # After creating axtBest alignments above, use subsetAxt to get axtTight:
+    ssh kkstore
+    cd ~/mm2/bed/blastz.rn1.2002-12-12-ASH/axtBest
+    mkdir -p ../axtTight
+    foreach i (*.axt)
+      subsetAxt  $i ../axtTight/$i \
+        ~kent/src/hg/mouseStuff/subsetAxt/coding.mat 3400
+    end
+    # translate to psl
+    cd ../axtTight
+    mkdir -p ../pslTight
+    foreach i (*.axt)
+      set c = $i:r
+      axtToPsl $i ../S1.len ../S2.len ../pslTight/${c}_blastzTightRat.psl
+    end
+    # Load tables into database
+    ssh hgwdev
+    cd ~/mm2/bed/blastz.rn1.2002-12-12-ASH/pslTight
+    hgLoadPsl mm2 chr*_blastzTightRat.psl
 
 
 PRODUCING GENSCAN PREDICTIONS (done)
