@@ -34,6 +34,8 @@ struct orthoEval
 struct orthoEval *orthoEvalLoad(char *row[]);
 /* Load a row of strings to an orthoEval. */
 
+void orthoEvalFree(struct orthoEval **pEv);
+
 void orthoEvalTabOut(struct orthoEval *ev, FILE *f);
 /* Tab out an orthoEval record. Skipping the agxBed, and agx records. */
 

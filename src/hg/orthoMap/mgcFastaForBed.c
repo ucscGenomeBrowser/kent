@@ -35,11 +35,14 @@ void mgcFastaForBeds(struct bed *bedList, FILE *out)
 /* Convert beds to sequence and output. */
 {
 struct bed *bed = NULL;
+char nameBuff[1024];
 warn("Converting beds");
 for(bed = bedList; bed != NULL; bed = bed->next)
     {
     struct dnaSeq *seq = seqFromBed(bed);
-    faWriteNext(out, bed->name, seq->dna, seq->size);
+    safef(nameBuff, sizeof(nameBuff), "%s-%s:%d-%d-%s", bed->name, bed->chrom, 
+	  bed->chromStart, bed->chromEnd, bed->strand);
+    faWriteNext(out, nameBuff, seq->dna, seq->size);
     dnaSeqFree(&seq);
     }
 }

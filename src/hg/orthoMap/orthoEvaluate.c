@@ -22,7 +22,7 @@
 #include "rbTree.h"
 #include "genePred.h"
 
-static char const rcsid[] = "$Id: orthoEvaluate.c,v 1.11 2003/08/15 13:32:01 weber Exp $";
+static char const rcsid[] = "$Id: orthoEvaluate.c,v 1.12 2003/09/14 23:15:02 sugnet Exp $";
 static struct rbTree *gpTree = NULL;
 static struct optionSpec optionSpecs[] = 
 /* Our acceptable options to be called with. */
@@ -492,10 +492,6 @@ if(tmpFa == NULL)
 if(tmpOrf == NULL)
     tmpOrf = optionVal("tmpOrf", cloneString(rTempName("/tmp", "borf", ".out")));
 seq = hSeqForBed(bed);
-/* AllocVar(seq); */
-/* seq->dna = cloneString("aaattaaaccagagtatgtcagtggactaaaggatgaattggacattttaattgttggaggatattggggtaaaggatcacggggtggaatgatgtctcattttctgtgtgcagtagcagagaagccccctcctggtgagaagccatctgtgtttcatactctctctcgtgttgggtctggctgcaccatgaaagaactgtatgatctgggtttgaaattggccaagtattggaagccttttcatagaaaagctccaccaagcagcattttatgtggaacagagaagccagaagtatacattgaaccttgtaattctgtcattgttcagattaaagcagcagagatcgtacccagtgatatgtataaaactggctgcaccttgcgttt"); */
-/* seq->name = cloneString("HALIG4"); */
-/* seq->size = strlen(seq->dna); */
 faWrite(tmpFa, seq->name, seq->dna, seq->size);
 dyStringClear(cmd);
 dyStringPrintf(cmd, "%s %s > %s", exe, tmpFa, tmpOrf);

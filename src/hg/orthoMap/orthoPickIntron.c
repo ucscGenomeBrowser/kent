@@ -58,7 +58,7 @@ chosen if it is overlapped by any transcript evidence. </li>
 #include "dnautil.h"
 #include "orthoEval.h"
 #include "rbTree.h"
-static char const rcsid[] = "$Id: orthoPickIntron.c,v 1.6 2003/08/05 19:54:13 sugnet Exp $";
+static char const rcsid[] = "$Id: orthoPickIntron.c,v 1.7 2003/09/14 23:15:02 sugnet Exp $";
 
 struct intronEv
 /** Data about one intron. */
@@ -180,7 +180,7 @@ iv->support = ev->basesOverlap;
 iv->orientation = ev->orientation[intron];
 iv->inCodInt = ev->inCodInt[intron];
 if(sameString(ev->borf->name, "dummy"))
-    iv->borfScore = ev->orthoBed->score + (ev->borf->score * 100);
+    iv->borfScore = (5*ev->orthoBed->score) + (ev->borf->score * 100);
 else
     iv->borfScore = ev->borf->score;
 return iv;
