@@ -2,10 +2,11 @@
  * Routines for reading Webb Miller format alignments.
  *
  * webb format:
- *  Chr22 13005062-13005547 Chr22:0
+ *  Chr22 13005062-13005547 Chr22:0 attrib
  *  TCAGTGGAGCTGGC--TCTGACGATGCCTCTCTTT
  *  TTAGTGTAGTCTGCAGCCA--GGTGGCCACCTTGC
  *  <blank line>
+ * Where attrib is a optional, comma-seperate list of symbolic attributes.
  */
 
 #include "hgRefAlignWebb.h"
@@ -71,9 +72,11 @@ char buf[WEBB_MAX_HEADER];
 char chrom[WEBB_MAX_HEADER]; /* max size of line to prevent mem corrupt */
 unsigned chromStart, chromEnd;
 char name[WEBB_MAX_HEADER];
+char attribs[WEBB_MAX_HEADER];
 char* humanSeq = NULL;
 char* alignSeq = NULL;
 struct refAlign* refAlign;
+int numFields;
 
 /* Skip blank lines */
 while (fgets(buf, WEBB_MAX_HEADER, fh) != NULL)
@@ -87,7 +90,10 @@ if (feof(fh))
     return NULL;
 
 /* Parse the header line */
-if (sscanf(buf, "%s %u-%u %s", chrom, &chromStart, &chromEnd, name) != 4)
+attribs[0] = '\0'; /* optional */
+numFields = sscanf(buf, "%s %u-%u %s %s", chrom, &chromStart, &chromEnd, name,
+                   attribs);
+if (!((4 <= numFields) && (numFields <= 5)))
     {
     errAbort("invalid record header in %s at %d", fname, *lineNum);
     }
@@ -115,11 +121,14 @@ if (strlen(humanSeq) != strlen(alignSeq))
     errAbort("human and aligned sequences are not the same length for %s in %s at %d",
              name, fname, *lineNum);
     }
+#if 0
+/*FIXME: disable check, we are making tmp tracks with no data */
 if (strlen(humanSeq) == 0)
     {
     errAbort("zero -length alignment for %s in %s at %d",
              name, fname, *lineNum);
     }
+#endif
 
 /* Got it all now fill in the record, converting to [0, end) coordinators */
 AllocVar(refAlign);
@@ -130,7 +139,7 @@ refAlign->chromEnd = chromEnd;
 refAlign->name = cloneString(name);
 refAlign->humanSeq = humanSeq;
 refAlign->alignSeq = alignSeq;
-
+refAlign->attribs = cloneString(attribs);
 return refAlign;
 }
 
@@ -139,14 +148,22 @@ struct refAlign* parseWebbFile(char* fname)
 {
 struct refAlign* refAlignList = NULL;
 int lineNum = 0;
-FILE* fh = mustOpen(fname, "r");
+FILE* fh;
 struct refAlign* refAlign;
+
+if (strcmp(fname, "-") == 0)
+    fh = stdin;
+else
+    fh = mustOpen(fname, "r");
 
 while ((refAlign = parseWebbRec(fname, &lineNum, fh)) != NULL)
     {
     slAddHead(&refAlignList, refAlign);
     }
-fclose(fh);
+if (strcmp(fname, "-") != 0)
+    fclose(fh);
+if (refAlignList == NULL)
+    errAbort("no rows read from %s", fname);
 return refAlignList;
 }
 

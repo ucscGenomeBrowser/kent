@@ -1,7 +1,8 @@
 /*
  * hgRefAlign format db rootTable alignfile ...
  *
- * Load a reference alignment into a table. 
+ * Load a reference alignment into a table.  If alignfile is `-',
+ * stdin is read.
  *
  * o format - Specifies the format of the input.  Currently
  *   support values:
@@ -32,16 +33,17 @@ static char* createTableCmd =
 "    score int unsigned not null,	# Score from 0-1000\n"
 "    matches int unsigned not null,	# Number of bases that match\n"
 "    misMatches int unsigned not null,	# Number of bases that don't match\n"
-"    aNumInsert int unsigned not null,	# Number of inserts in aligned seq\n"
-"    aBaseInsert int not null,	# Number of bases inserted in query\n"
 "    hNumInsert int unsigned not null,	# Number of inserts in human\n"
-"    hBaseInsert int not null,	# Number of bases inserted in human\n"
-"    humanSeq varchar(255) not null,	# Human sequence, contains - for aligned seq inserts\n"
-"    alignSeq varchar(255) not null,	# Aligned sequence, contains - for human seq inserts\n"
+"    hBaseInsert int not null,	        # Number of bases inserted in human\n"
+"    aNumInsert int unsigned not null,	# Number of inserts in aligned seq\n"
+"    aBaseInsert int not null,	        # Number of bases inserted in query\n"
+"    humanSeq text not null,	        # Human sequence, contains - for aligned seq inserts\n"
+"    alignSeq text not null,	        # Aligned sequence, contains - for human seq inserts\n"
+"    attribs varchar(64) not null,	# Comma seperated list of attribute names\n"
 "    #Indices\n"
 "    %s"				/* Optional bin */
-"    UNIQUE(%schromStart),\n"             /* different depending if using one */
-"    UNIQUE(%schromEnd)\n"               /* table per chrom or a single table */
+"    UNIQUE(%schromStart),\n"           /* different depending if using one */
+"    UNIQUE(%schromEnd)\n"              /* table per chrom or a single table */
 ")\n";
 
 static int countInserts(char* insertSeq, char* otherSeq, int* numInsert,
@@ -66,9 +68,13 @@ static void calcScore(struct refAlign* refAlign)
 {
 unsigned numInserts = refAlign->aNumInsert + refAlign->hNumInsert;
 unsigned baseInserts = refAlign->aNumInsert + refAlign->hNumInsert;
-refAlign->score = 1000*(refAlign->matches
-                        /(refAlign->matches+refAlign->misMatches+numInserts
-                          +log((double)baseInserts)));
+double div = (refAlign->matches+refAlign->misMatches+numInserts
+              +log((double)baseInserts));
+/*FIXME: tmp, allow empty sequences for tmp class tracks */
+if (strlen(refAlign->humanSeq) == 0)
+    refAlign->score = 1000;
+else
+    refAlign->score = 1000*(refAlign->matches/div);
 }
 
 static void calcRecStats(struct refAlign* refAlign)
