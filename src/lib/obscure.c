@@ -119,6 +119,21 @@ close(d);
 freeMem(buf);
 }
 
+void cpFile(int s, int d)
+/* Copy from source file to dest until reach end of file. */
+{
+int bufSize = 64*1024, readSize;
+char *buf = needMem(bufSize);
+
+for (;;)
+    {
+    readSize = read(s, buf, bufSize);
+    if (readSize > 0)
+        write(d, buf, readSize);
+    if (readSize <= 0)
+        break;
+    }
+}
 
 void *intToPt(int i)
 /* Convert integer to pointer. Use when really want to store an

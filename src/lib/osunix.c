@@ -84,7 +84,7 @@ while ((de = readdir(d)) != NULL)
     char *fileName = de->d_name;
     if (differentString(fileName, ".") && differentString(fileName, ".."))
 	{
-	if (wildMatch(pattern, fileName))
+	if (pattern == NULL || wildMatch(pattern, fileName))
 	    {
 	    name = newSlName(fileName);
 	    slAddHead(&list, name);
@@ -154,7 +154,7 @@ while ((de = readdir(d)) != NULL)
     char *fileName = de->d_name;
     if (differentString(fileName, ".") && differentString(fileName, ".."))
 	{
-	if (wildMatch(pattern, fileName))
+	if (pattern == NULL || wildMatch(pattern, fileName))
 	    {
 	    struct stat st;
 	    bool isDir = FALSE;

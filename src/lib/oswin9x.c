@@ -86,6 +86,8 @@ else
     otherDir = TRUE;
     }
 
+if (pattern == NULL)
+    pattern = *;
 if( (hFile = _findfirst( pattern, &fileInfo)) == -1L )
     return NULL;
 
