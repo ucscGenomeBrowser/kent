@@ -49,6 +49,15 @@ exonArrows off
 showTopScorers 200
 type bed 5 .
 
+track exoniphyGene
+shortLabel Exoniphy Genes
+longLabel Predicted Genes and Gene Fragments from Exoniphy Exons, orthoMapped from hg17 (Human/Mouse/Rat)
+group genes
+priority 50.9
+visibility hide
+color 173,17,162
+type genePred
+
 track chainSelf
 shortLabel Self Chain 
 longLabel Self Chained Blastz Alignments
