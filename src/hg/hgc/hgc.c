@@ -2288,10 +2288,10 @@ struct trackDb *tdbList = hTrackDb(seqName), *tdb;
 struct trackDb *ctdbList = tdbForCustomTracks();
 struct trackDb *utdbList = tdbForUserPsl();
 char *pos = NULL;
+Bits *uBits;	/* Underline bits. */
+Bits *iBits;    /* Italic bits. */
+Bits *bBits;    /* Bold bits. */
 
-Bits *uBits = bitAlloc(winSize);	/* Underline bits. */
-Bits *iBits = bitAlloc(winSize);	/* Italic bits. */
-Bits *bBits = bitAlloc(winSize);	/* Bold bits. */
 
 if (NULL != (pos = cartOptionalString(cart, "getDnaPos")))
     {
@@ -2304,6 +2304,9 @@ if (NULL != (pos = cartOptionalString(cart, "getDnaPos")))
 with how getDna2 works
 */
 winSize = winEnd - winStart;
+uBits = bitAlloc(winSize);	/* Underline bits. */
+iBits = bitAlloc(winSize);	/* Italic bits. */
+bBits = bitAlloc(winSize);	/* Bold bits. */
 
 ctdbList = slCat(ctdbList, tdbList);
 tdbList = slCat(utdbList, ctdbList);
