@@ -7710,10 +7710,11 @@ axtChain $1 /iscratch/i/gs.18/build35/bothMaskedNibs \
     # copy net axt's to download area - XXX Do we need this for Self ?
     ssh hgwdev
     cd /cluster/data/hg17/bed/blastzSelf/axtNet
-    mkdir -p /usr/local/apache/htdocs/goldenPath/hg17/vsSelf/axtNet
-    cp -p *.axt /usr/local/apache/htdocs/goldenPath/hg17/vsSelf/axtNet
-    cd /usr/local/apache/htdocs/goldenPath/hg17/vsSelf/axtNet
-    gzip *.axt
+    mkdir /usr/local/apache/htdocs/goldenPath/hg17/vsSelf
+    cp -p *.axt /usr/local/apache/htdocs/goldenPath/hg17/vsSelf
+    cd /usr/local/apache/htdocs/goldenPath/hg17/vsSelf
+    nice gzip *.axt
+    nice md5sum *.gz > md5sum.txt
     # add README.txt file to dir (use previous assembly's copy as template)
 
     #  Convert those axt files to psl
