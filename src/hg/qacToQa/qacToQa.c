@@ -4,7 +4,7 @@
 #include "linefile.h"
 #include "qaSeq.h"
 
-static char const rcsid[] = "$Id: qacToQa.c,v 1.2 2003/05/06 07:22:34 kate Exp $";
+static char const rcsid[] = "$Id: qacToQa.c,v 1.3 2003/10/10 16:59:22 heather Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -40,4 +40,5 @@ int main(int argc, char *argv[])
 if (argc < 2)
     usage();
 qacToQa(argv[1], argv[2]);
+return 0;
 }
