@@ -3,7 +3,7 @@
 set scriptDir="/projects/compbio/usr/weber/kent/src/hg/sampleTracks/bin/"
 
 #track specific values
-alias foreachChrom 'foreach f (1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 X)'
+alias foreachChrom 'foreach f (1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 X)'
 set baseDir="/cluster/store5/weber/rat/"
 set target="mm3"
 set query="Rat"
