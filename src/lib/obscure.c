@@ -10,7 +10,7 @@
 #include "obscure.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: obscure.c,v 1.31 2004/07/16 19:05:21 kent Exp $";
+static char const rcsid[] = "$Id: obscure.c,v 1.32 2004/07/17 00:56:21 kent Exp $";
 static int _dotForUserMod = 100; /* How often does dotForUser() output a dot. */
 
 long incCounterFile(char *fileName)
@@ -387,16 +387,19 @@ slReverse(&list);
 return list;
 }
 
-struct slName *commaSepToSlNames(char *commaSep)
-/* Convert comma-separated list of items to slName list. */
+struct slName *charSepToSlNames(char *string, char c)
+/* Convert character-separated list of items to slName list. 
+ * Note that the last occurence of c is optional.  (That
+ * is for a comma-separated list a,b,c and a,b,c, are
+ * equivalent. */
 {
 struct slName *list = NULL, *el;
 char *s, *e;
 
-s = commaSep;
+s = string;
 while (s != NULL && s[0] != 0)
     {
-    e = strchr(s, ',');
+    e = strchr(s, c);
     if (e == NULL)
         {
 	el = slNameNew(s);
@@ -412,6 +415,12 @@ while (s != NULL && s[0] != 0)
     }
 slReverse(&list);
 return list;
+}
+
+struct slName *commaSepToSlNames(char *commaSep)
+/* Convert comma-separated list of items to slName list.  */
+{
+return charSepToSlNames(commaSep, ',');
 }
 
 

@@ -78,6 +78,12 @@ struct slName *stringToSlNames(char *string);
 struct slName *commaSepToSlNames(char *commaSep);
 /* Convert comma-separated list of items to slName list. */
 
+struct slName *charSepToSlNames(char *string, char c);
+/* Convert character-separated list of items to slName list. 
+ * Note that the last occurence of c is optional.  (That
+ * is for a comma-separated list a,b,c and a,b,c, are
+ * equivalent. */
+
 struct hash *hashVarLine(char *line, int lineIx);
 /* Return a symbol table from a line of form:
  *   var1=val1 var2='quoted val2' var3="another val" */
