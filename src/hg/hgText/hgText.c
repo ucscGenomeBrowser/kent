@@ -116,12 +116,14 @@ static char * const onChangeText = "onchange=\"document.orgForm.org.value = docu
 #define chooseFieldsPhase   "Tab-separated, Choose fields..."
 #define seqOptionsPhase     "FASTA (DNA sequence)..."
 #define gffPhase            "GTF"
-#define bedOptionsPhase     "BED/Custom Track..."
+#define bedOptionsPhase     "BED..."
+#define ctOptionsPhase      "Custom Track..."
 #define linksPhase          "Hyperlinks to Genome Browser"
 #define statsPhase          "Summary/Statistics"
 char *outputTypePosMenu[] =
 {
     bedOptionsPhase,
+    ctOptionsPhase,
     seqOptionsPhase,
     gffPhase,
     linksPhase,
@@ -129,7 +131,7 @@ char *outputTypePosMenu[] =
     chooseFieldsPhase,
     statsPhase,
 };
-int outputTypePosMenuSize = 7;
+int outputTypePosMenuSize = 8;
 char *outputTypeNonPosMenu[] =
 {
     allFieldsPhase,
@@ -144,6 +146,7 @@ int outputTypeNonPosMenuSize = 3;
 #define getSomeFieldsPhase  "Get these fields"
 #define getSequencePhase    "Get sequence"
 #define getBedPhase         "Get BED"
+#define getCtPhase         "Get Custom Track"
 #define intersectOptionsPhase "Intersect Results..."
 #define histPhase           "Get histogram"
 /* Old "phase" values handled for backwards compatibility: */
@@ -265,15 +268,14 @@ for (cv=cgiVarList();  cv != NULL;  cv=cv->next)
     }
 }
 
-void saveBedOptionsState()
-/* Store in cart the user's settings in doBedOptions() form */
+void saveBedCtOptionsState()
+/* Store in cart the user's settings in doBedCtOptions() form */
 {
 storeBooleanIfSet("hgt.doCustomTrack");
 storeStringIfSet("hgt.ctName");
 storeStringIfSet("hgt.ctDesc");
 storeStringIfSet("hgt.ctVis");
 storeStringIfSet("hgt.ctUrl");
-storeBooleanIfSet("hgt.loadCustomTrack");
 }
 
 void saveIntersectOptionsState()
@@ -400,7 +402,7 @@ puts(
 
 puts("<P>This tool allows you to download portions of the Genome Browser 
 	database in several output formats.
-	Enter a genome position (or enter \"genome\" to 
+	Enter a genome position (or enter <B>genome</B> to 
         search all chromosomes), then press the Submit button.\n");
 
 printf("Use <A HREF=\"/cgi-bin/hgBlat?db=%s&hgsid=%d\">BLAT Search</A> to 
@@ -2886,7 +2888,7 @@ if (itemCount == 0)
 }
 
 
-void doBedOptions()
+void doBedCtOptions(boolean doCt)
 {
 struct hTableInfo *hti = getOutputHti();
 char *table = getTableName();
@@ -2895,13 +2897,16 @@ char *op = cgiOptionalString("hgt.intersectOp");
 char *track = getTrackName();
 char *db = getTableDb();
 char *outputType = cgiUsualString("outputType", cgiString("phase"));
-char *setting;
+char *phase = (existsAndEqual("phase", getOutputPhase) ?
+	       cgiString("outputType") : cgiString("phase"));
+char *setting = NULL;
 char buf[256];
 
 saveOutputOptionsState();
 saveIntersectOptionsState();
 
-webStart(cart, "Table Browser: %s %s: %s", hOrganism(database),freezeName, bedOptionsPhase);
+webStart(cart, "Table Browser: %s %s: %s", hOrganism(database), freezeName,
+	 phase);
 checkTableExists(fullTableName);
 printf("<FORM ACTION=\"%s\" NAME=\"mainForm\" METHOD=\"POST\">\n",
        hgTextName());
@@ -2912,15 +2917,25 @@ displayPosition();
 cgiMakeHiddenVar("outputType", outputType);
 preserveConstraints(fullTableName, db, NULL);
 preserveTable2();
-printf("<H3> Select BED Options for %s: </H3>\n", hti->rootName);
+printf("<H3> Select %s Options for %s: </H3>\n",
+       (doCt ? "Custom Track" : "BED"), hti->rootName);
 puts("<A HREF=\"/goldenPath/help/hgTextHelp.html#BEDOptions\">"
      "<B>Help</B></A><P>");
 puts("<TABLE><TR><TD>");
-cgiMakeCheckBox("hgt.doCustomTrack",
-		cartCgiUsualBoolean(cart, "hgt.doCustomTrack", TRUE));
-puts("</TD><TD> <B> Include "
-     "<A HREF=\"/goldenPath/help/customTrack.html\" TARGET=_blank>"
-     "custom track</A> header: </B>");
+if (doCt)
+    {
+    puts("</TD><TD>"
+	 "<A HREF=\"/goldenPath/help/customTrack.html\" TARGET=_blank>"
+	 "Custom track</A> header: </B>");
+    }
+else
+    {
+    cgiMakeCheckBox("hgt.doCustomTrack",
+		    cartCgiUsualBoolean(cart, "hgt.doCustomTrack", FALSE));
+    puts("</TD><TD> <B> Include "
+	 "<A HREF=\"/goldenPath/help/customTrack.html\" TARGET=_blank>"
+	 "custom track</A> header: </B>");
+    }
 puts("</TD></TR><TR><TD></TD><TD>name=");
 if (op == NULL)
     table2 = NULL;
@@ -2943,13 +2958,10 @@ puts("</TD></TR><TR><TD></TD><TD>url=");
 setting = cartCgiUsualString(cart, "hgt.ctUrl", "");
 cgiMakeTextVar("hgt.ctUrl", setting, 50);
 puts("</TD></TR><TR><TD></TD><TD>");
-cgiMakeCheckBox("hgt.loadCustomTrack",
-		cartCgiUsualBoolean(cart, "hgt.loadCustomTrack", FALSE));
-puts("Load this custom track into my session");
 puts("</TD></TR></TABLE>");
 puts("<P> <B> Create one BED record per: </B>");
 fbOptionsHtiCart(hti, cart);
-cgiMakeButton("phase", getBedPhase);
+cgiMakeButton("phase", (doCt ? getCtPhase : getBedPhase));
 puts("</FORM>");
 webEnd();
 }
@@ -2979,7 +2991,7 @@ ct->fromPsl = FALSE;
 return(ct);
 }
 
-void doGetBed()
+void doGetBedCt(boolean doCt)
 {
 struct hTableInfo *hti = getOutputHti();
 struct bed *bedList;
@@ -2989,24 +3001,41 @@ struct customTrack *ctNew = NULL;
 struct tempName tn;
 char *table = getTableName();
 char *track = getTrackName();
-boolean doCT = cgiBoolean("hgt.doCustomTrack");
+boolean doCtHdr = cgiBoolean("hgt.doCustomTrack") || doCt;
 char *ctName = cgiUsualString("hgt.ctName", table);
 char *ctDesc = cgiUsualString("hgt.ctDesc", table);
 char *ctVis  = cgiUsualString("hgt.ctVis", "dense");
 char *ctUrl  = cgiUsualString("hgt.ctUrl", "");
-boolean loadCT = cgiBoolean("hgt.loadCustomTrack");
 char *ctFileName = NULL;
 char *fbQual = fbOptionsToQualifier();
 char fbTQ[128];
+char browserUrl[128];
 int fields;
 boolean gotResults = FALSE;
+int redirDelay = 5;
 
 saveOutputOptionsState();
 saveIntersectOptionsState();
-saveBedOptionsState();
+saveBedCtOptionsState();
 
-printf("Content-Type: text/plain\n\n");
-webStartText();
+safef(browserUrl, sizeof(browserUrl),
+      "/cgi-bin/hgTracks?db=%s&position=%s:%d-%d",
+      database, chrom, winStart, winEnd);
+if (doCt)
+    {
+    char headerText[256];
+    safef(headerText, sizeof(headerText),
+	  "<META HTTP-EQUIV=\"REFRESH\" CONTENT=\"%d;URL=%s\">",
+	  redirDelay, browserUrl);
+    webStartHeader(cart, headerText,
+		   "Table Browser: %s %s: %s", hOrganism(database), 
+	     freezeName, getCtPhase);
+    }
+else
+    {
+    printf("Content-Type: text/plain\n\n");
+    webStartText();
+    }
 bedList = getBedList(FALSE, NULL);
 
 if (hti->hasBlocks)
@@ -3020,17 +3049,18 @@ else if (hti->scoreField[0] != 0)
 else
     fields = 4;
 
-if (doCT && (bedList != NULL))
+if (doCtHdr && (bedList != NULL))
     {
     int visNum = (sameString("hide", ctVis)   ? 0 :
 		  sameString("dense", ctVis)  ? 1 :
 		  sameString("squish", ctVis) ? 2 : 
 		  sameString("pack", ctVis)   ? 3 : 
 		  sameString("full", ctVis)   ? 4 : 3);
-    if (loadCT)
+    if (doCt)
 	ctNew = newCT(ctName, ctDesc, visNum, ctUrl, fields);
-    printf("track name=\"%s\" description=\"%s\" visibility=%d url=%s \n",
-	   ctName, ctDesc, visNum, ctUrl);
+    else
+	printf("track name=\"%s\" description=\"%s\" visibility=%d url=%s \n",
+	       ctName, ctDesc, visNum, ctUrl);
     }
 
 if ((fbQual == NULL) || (fbQual[0] == 0))
@@ -3040,7 +3070,10 @@ if ((fbQual == NULL) || (fbQual[0] == 0))
 	char *ptr = strchr(bedPtr->name, ' ');
 	if (ptr != NULL)
 	    *ptr = 0;
-	bedTabOutN(bedPtr, fields, stdout);
+	if (! doCt)
+	    {
+	    bedTabOutN(bedPtr, fields, stdout);
+	    }
 	gotResults = TRUE;
 	}
     if (ctNew != NULL)
@@ -3055,9 +3088,12 @@ else
 	char *ptr = strchr(fbPtr->name, ' ');
 	if (ptr != NULL)
 	    *ptr = 0;
-	printf("%s\t%d\t%d\t%s\t%d\t%c\n",
-	       fbPtr->chrom, fbPtr->start, fbPtr->end, fbPtr->name,
-	       0, fbPtr->strand);
+	if (! doCt)
+	    {
+	    printf("%s\t%d\t%d\t%s\t%d\t%c\n",
+		   fbPtr->chrom, fbPtr->start, fbPtr->end, fbPtr->name,
+		   0, fbPtr->strand);
+	    }
 	gotResults = TRUE;
 	}
     if (ctNew != NULL)
@@ -3082,7 +3118,23 @@ if ((ctNew != NULL) && (ctNew->bedList != NULL))
     }
 
 if (! gotResults)
-    printf("\n# No results returned from query.\n\n");
+    {
+    if (doCt)
+	{
+	puts("No results returned from query -- so no custom track has been added to your session.");
+	}
+    else
+	{
+	printf("\n# No results returned from query.\n\n");
+	}
+    }
+else if (doCt)
+    {
+    printf("You will be automatically redirected to the genome browser in\n"
+	   "%d seconds, or you can <BR>\n"
+	   "<A HREF=\"%s\">click here to continue</A>.\n",
+	   redirDelay, browserUrl);
+    }
 bedFreeList(&bedList);
 }
 
@@ -3166,6 +3218,7 @@ if (! tableIsPositional)
     webAbort("Error", "Table %s is not a positional table.", table);
 if (! sameString(outputType, seqOptionsPhase) &&
     ! sameString(outputType, bedOptionsPhase) &&
+    ! sameString(outputType, ctOptionsPhase) &&
     ! sameString(outputType, linksPhase) &&
     ! sameString(outputType, statsPhase) &&
     ! sameString(outputType, gffPhase))
@@ -4159,7 +4212,9 @@ else
 	else if (existsAndEqual("outputType", gffPhase))
 	    doGetGFF();
 	else if (existsAndEqual("outputType", bedOptionsPhase))
-	    doBedOptions();
+	    doBedCtOptions(FALSE);
+	else if (existsAndEqual("outputType", ctOptionsPhase))
+	    doBedCtOptions(TRUE);
 	else if (existsAndEqual("outputType", linksPhase))
 	    doGetBrowserLinks();
 	else if (existsAndEqual("outputType", statsPhase))
@@ -4183,9 +4238,13 @@ else
     else if (existsAndEqual("phase", gffPhase))
 	doGetGFF();
     else if (existsAndEqual("phase", bedOptionsPhase))
-	doBedOptions();
+	doBedCtOptions(FALSE);
+    else if (existsAndEqual("phase", ctOptionsPhase))
+	doBedCtOptions(TRUE);
     else if (existsAndEqual("phase", getBedPhase))
-	doGetBed();
+	doGetBedCt(FALSE);
+    else if (existsAndEqual("phase", getCtPhase))
+	doGetBedCt(TRUE);
     else if (existsAndEqual("phase", linksPhase))
 	doGetBrowserLinks();
     else if (existsAndEqual("phase", statsPhase))
