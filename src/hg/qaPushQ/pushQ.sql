@@ -30,6 +30,7 @@ CREATE TABLE pushQ (
     notes longblob not null,	# Notes
     pushState char(1) not null,	# Push State = NYD = No, Yes, Done
     initdate char(10) not null,	# Initial Submission Date
+    lastdate char(10) not null,	# Last QA Date
     bounces int unsigned not null,	# Bounce-count (num times bounced back to developer)
     lockUser char(8) not null,	# User who has locked record, or empty string
     lockDateTime char(16) not null,	# When user placed lock, or empty string

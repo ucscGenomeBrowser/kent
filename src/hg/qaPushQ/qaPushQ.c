@@ -29,7 +29,7 @@
 #include "dbDb.h"
 #include "htmlPage.h"
 
-static char const rcsid[] = "$Id: qaPushQ.c,v 1.62 2004/09/22 21:23:10 galt Exp $";
+static char const rcsid[] = "$Id: qaPushQ.c,v 1.63 2004/11/16 02:02:33 galt Exp $";
 
 char msg[2048] = "";
 char ** saveEnv;
@@ -51,7 +51,7 @@ char *qaUser = NULL;
 #define SSSZ 256  /* MySql String Size 255 + 1 */
 #define MAXBLOBSHOW 128
 
-#define MAXCOLS 29
+#define MAXCOLS 30
 
 #define TITLE "Push Queue v"CGI_VERSION
 
@@ -120,6 +120,7 @@ static char const *colName[] = {
  "notes"     ,
  "pushState" ,
  "initdate"  ,  
+ "lastdate"  ,  
  "bounces"   , 
  "lockUser"  , 
  "lockDateTime",
@@ -153,6 +154,7 @@ e_openIssues,
 e_notes     ,
 e_pushState ,
 e_initdate  ,
+e_lastdate  ,
 e_bounces   ,
 e_lockUser  ,
 e_lockDateTime,
@@ -185,6 +187,7 @@ char *colHdr[] = {
 "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Notes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;",
 "PushState",
 "Initial &nbsp;&nbsp;Submission&nbsp;&nbsp; Date",
+"Last &nbsp;&nbsp;QA&nbsp;&nbsp; Date",
 "Bounce Count",
 "Lock User",
 "Lock&nbsp;Date&nbsp;Time",
@@ -700,6 +703,7 @@ safef(q.extSource , sizeof(q.extSource) , "%s", "" );
 q.openIssues   = "";
 q.notes   = "";
 strftime (q.initdate, sizeof(q.initdate), "%Y-%m-%d", loctime); /* automatically use today date */
+safef(q.lastdate, sizeof(q.lastdate), "%s", "" );
 q.releaseLog = "";
 
 if (sameString(myUser.role,"dev"))
@@ -879,6 +883,10 @@ switch(col)
 
     case e_initdate:
 	printf("<td>%s</td>\n", ki->initdate  );
+	break;
+	
+    case e_lastdate:
+	printf("<td>%s</td>\n", ki->lastdate  );
 	break;
 	
     case e_bounces:
@@ -1114,11 +1122,12 @@ loadPushQ(q.qid, &q, FALSE);
 if (sameString(q.lockUser,"") && sameString(q.pushState,"Y"))
     { /* not already locked and pushState=Y */
 
+    safef(q.lastdate, sizeof(q.lastdate), q.qadate);
     strftime (q.qadate  , sizeof(q.qadate  ), "%Y-%m-%d", loctime); /* today's date */
 
     safef(query, sizeof(query), 
-	"update %s set rank = 0, priority ='L', pushState='D', qadate='%s' where qid = '%s' ", 
-	pushQtbl, q.qadate, q.qid);
+	"update %s set rank = 0, priority ='L', pushState='D', qadate='%s', lastdate='%s' where qid = '%s' ", 
+	pushQtbl, q.qadate, q.lastdate, q.qid);
     sqlUpdate(conn, query);
 
 
@@ -1312,7 +1321,7 @@ void pushQUpdateEscaped(struct sqlConnection *conn, struct pushQ *el, char *tabl
  * before inserting into database. */ 
 {
 struct dyString *update = newDyString(updateSize);
-char  *qid, *pqid, *priority, *qadate, *newYN, *track, *dbs, *tbls, *cgis, *files, *currLoc, *makeDocYN, *onlineHelp, *ndxYN, *joinerYN, *stat, *sponsor, *reviewer, *extSource, *openIssues, *notes, *pushState, *initdate, *lockUser, *lockDateTime, *releaseLog;
+char  *qid, *pqid, *priority, *qadate, *newYN, *track, *dbs, *tbls, *cgis, *files, *currLoc, *makeDocYN, *onlineHelp, *ndxYN, *joinerYN, *stat, *sponsor, *reviewer, *extSource, *openIssues, *notes, *pushState, *initdate, *lastdate, *lockUser, *lockDateTime, *releaseLog;
 qid = sqlEscapeString(el->qid);
 pqid = sqlEscapeString(el->pqid);
 priority = sqlEscapeString(el->priority);
@@ -1336,6 +1345,7 @@ openIssues = sqlEscapeString(el->openIssues);
 notes = sqlEscapeString(el->notes);
 pushState = sqlEscapeString(el->pushState);
 initdate = sqlEscapeString(el->initdate);
+lastdate = sqlEscapeString(el->lastdate);
 lockUser = sqlEscapeString(el->lockUser);
 lockDateTime = sqlEscapeString(el->lockDateTime);
 releaseLog = sqlEscapeString(el->releaseLog);
@@ -1346,14 +1356,14 @@ dyStringPrintf(update,
 "track='%s',dbs='%s',tbls='%s',cgis='%s',files='%s',sizeMB=%u,currLoc='%s',"
 "makeDocYN='%s',onlineHelp='%s',ndxYN='%s',joinerYN='%s',stat='%s',"
 "sponsor='%s',reviewer='%s',extSource='%s',"
-"openIssues='%s',notes='%s',pushState='%s',initdate='%s',bounces='%u',lockUser='%s',lockDateTime='%s',releaseLog='%s' "
+"openIssues='%s',notes='%s',pushState='%s', initdate='%s', lastdate='%s', bounces='%u',lockUser='%s',lockDateTime='%s',releaseLog='%s' "
 "where qid='%s'", 
 	tableName,  
 	pqid,  priority, el->rank,  qadate, newYN, track, dbs, 
 	tbls,  cgis,  files, el->sizeMB ,  currLoc,  makeDocYN,  
 	onlineHelp,  ndxYN,  joinerYN,  stat,  
 	sponsor,  reviewer,  extSource,  
-	openIssues,  notes,  pushState, initdate, el->bounces, lockUser, lockDateTime, releaseLog, 
+	openIssues,  notes,  pushState, initdate, lastdate, el->bounces, lockUser, lockDateTime, releaseLog, 
 	qid
 	);
 
@@ -1382,6 +1392,7 @@ freez(&openIssues);
 freez(&notes);
 freez(&pushState);
 freez(&initdate);
+freez(&lastdate);
 freez(&lockUser);
 freez(&lockDateTime);
 freez(&releaseLog);
@@ -1683,12 +1694,14 @@ if (isRedo)
 if (sameString(bouncebutton,"bounce")) 
     {
     safef(newPriority, sizeof(newPriority), "B");
+    safef(q.lastdate, sizeof(q.lastdate), q.qadate);
     strftime (q.qadate, sizeof(q.qadate), "%Y-%m-%d", loctime); /* set to today's date */
     q.bounces++;
     }
 if (sameString(bouncebutton,"unbounce")) 
     {
     safef(newPriority, sizeof(newPriority), "A");
+    safef(q.lastdate, sizeof(q.lastdate), q.qadate);
     strftime (q.qadate, sizeof(q.qadate), "%Y-%m-%d", loctime); /* set to today's date */
     }
 
