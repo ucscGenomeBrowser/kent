@@ -9,9 +9,10 @@
 #include "axt.h"
 #include "chainToAxt.h"
 
-static char const rcsid[] = "$Id: chainToAxt.c,v 1.3 2003/08/12 20:49:23 kent Exp $";
+static char const rcsid[] = "$Id: chainToAxt.c,v 1.4 2003/09/04 04:34:01 baertsch Exp $";
 
 int maxGap = 100;
+int maxChain = BIGNUM;
 double minIdRatio = 0.0;
 double minScore = 0;
 boolean bedOut = FALSE;
@@ -25,15 +26,17 @@ errAbort(
   "   chainToAxt in.chain tNibDir qNibDir out.axt\n"
   "options:\n"
   "   -maxGap=maximum gap sized allowed without breaking, default %d\n"
+  "   -maxChain=maximum chain size allowed without breaking, default %d\n"
   "   -minScore=minimum score of chain\n"
   "   -minId=minimum percentage ID within blocks\n"
   "   -bed  Output bed instead of axt\n"
-  , maxGap
+  , maxGap , maxChain
   );
 }
 
 static struct optionSpec options[] = {
    {"maxGap", OPTION_INT},
+   {"maxChain", OPTION_INT},
    {"minScore", OPTION_FLOAT},
    {"minId", OPTION_FLOAT},
    {"bed", OPTION_BOOLEAN},
@@ -114,6 +117,17 @@ struct nibInfo *qNib = NULL, *tNib = NULL;
 
 while ((chain = chainRead(lf)) != NULL)
     {
+    qNib = nibInfoFromCache(nibHash, qNibDir, chain->qName);
+    tNib = nibInfoFromCache(nibHash, tNibDir, chain->tName);
+    qSeq = nibInfoLoadStrand(qNib, chain->qStart, chain->qEnd, chain->qStrand);
+    tSeq = nibInfoLoadStrand(tNib, chain->tStart, chain->tEnd, '+');
+    axtList = chainToAxt(chain, qSeq, chain->qStart, tSeq, chain->tStart,
+    	maxGap, maxChain);
+    for (axt = axtList; axt != NULL; axt = axt->next)
+        axtWrite(axt, f);
+    axtFreeList(&axtList);
+    freeDnaSeq(&qSeq);
+    freeDnaSeq(&tSeq);
     if (chain->score >= minScore)
 	{
 	qNib = nibInfoFromCache(nibHash, qNibDir, chain->qName);
@@ -148,6 +162,7 @@ int main(int argc, char *argv[])
 {
 optionInit(&argc, argv, options);
 maxGap = optionInt("maxGap", maxGap);
+maxChain = optionInt("maxChain", maxChain);
 minIdRatio = optionFloat("minId", 0.0)/100.0;
 minScore = optionFloat("minScore", minScore);
 bedOut = optionExists("bedOut");
