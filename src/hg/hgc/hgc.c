@@ -111,7 +111,7 @@
 #include "axtLib.h"
 #include "ensFace.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.455 2003/07/17 18:23:41 ytlu Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.456 2003/07/20 04:56:19 markd Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -4811,21 +4811,16 @@ dnaSeqFree(&seq);
 void htcKnownGeneMrna(char *geneName)
 /* Display mRNA associated with a knownGene gene. */
 {
-struct sqlConnection *conn = hAllocConn();
-struct sqlResult *sr;
-char **row;
-char query[256];
+/* check both gbSeq and knowGeneMrna */
+struct dnaSeq *seq = hGenBankGetMrna(geneName, "knownGeneMrna");
+if (seq == NULL)
+    errAbort("Known gene mRNA sequence %s not found", geneName);
 
 hgcStart("Known Gene mRNA");
-sprintf(query, "select name,seq from knownGeneMrna where name = '%s'", geneName);
-sr = sqlGetResult(conn, query);
 printf("<PRE><TT>");
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-    faWriteNext(stdout, row[0], row[1], strlen(row[1]));
-    }
-sqlFreeResult(&sr);
-hFreeConn(&conn);
+faWriteNext(stdout, seq->name, seq->dna, seq->size);
+printf("</TT></PRE>");
+dnaSeqFree(&seq);
 }
 
 void cartContinueRadio(char *var, char *val, char *defaultVal)
