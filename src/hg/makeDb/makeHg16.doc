@@ -2939,4 +2939,43 @@ hgLoadBed hg16 syntenySelf ucsc100k.bed
 
 # HUMAN/MOUSE/RAT ALIGMNMENT USING HUMOR(MULTIZ) (IN PROGRESS 2003-0829 kate)
 # Multiple alignment with Mm3, Rn3
-# /cluster/data/hg16/bed/blastz.rn3/axtNet300
+
+    ssh eieio
+
+    # make mouse axtNet300
+    cd /cluster/data/hg16/bed/blastz.mm3/axtChain/mouseNet
+    mkdir -p ../../axtNet300
+    foreach f (chr*.net)
+        set c = $f:r
+        echo "mouse axtNet300 on $c"
+        netToAxt -maxGap=300 $c.net ../chain/$c.chain /cluster/data/hg16/nib /cluster/data/mm3.RM030619/mixedNib ../../axtNet300/$c.axt
+    end
+
+    # make rat axtNet300
+    cd /cluster/data/hg16/bed/blastz.rn3/axtChain/ratNet
+    mkdir -p ../../axtNet300
+    foreach f (chr*.net)
+        set c = $f:r
+        echo "rat axtNet300 on $c"
+        netToAxt -maxGap=300 $c.net ../chain/$c.chain /cluster/data/hg16/nib /cluster/data/rn3/nib ../../axtNet300/$c.axt
+    end
+
+    # run "humor"
+    set multizDir = /cluster/data/hg16/bed/humor.2003-09-02
+    mkdir -p $multizDir
+    cd /cluster/data/hg16
+    foreach c (?[,?})
+        echo "humor on $c"
+        axtToMaf blastz.mm3/axtNet300 /cluster/data/hg16/chrom.sizes /cluster/data/mm3/chrom.sizes axtNet300/$c.mm3.maf -tPrefix=hg16. -qPrefix=mm3.
+        axtToMaf blastz.rn3/axtNet300 /cluster/data/hg16/chrom.sizes /cluster/data/mm3/chrom.sizes axtNet300/$c.rn3.maf -tPrefix=hg16. -qPrefix=rn3.
+        /cluster/bin/penn/humor.v4 axtNet300/$c.mm3.maf axtNet300/$c.rn3.maf $multizDir/$c.hmr.axtNet300.maf
+    end
+
+    mkdir -p /gbdb/hg16/humorMm3Rn3
+    cd /gbdb/hg16/humorMm3Rn3
+    foreach f ($multizDir/*.maf)
+        ln -s $f .
+    end
+    # load into database
+    /cluster/bin/i386/hgLoadMaf -warn hg16 humorMm3Rn3
+
