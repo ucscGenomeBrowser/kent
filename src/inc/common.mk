@@ -13,6 +13,7 @@ SCRIPTS=/cluster/bin/scripts
 CGI_BIN=/usr/local/apache/cgi-bin
 MKDIR=mkdir -p
 STRIP=strip
+CVS=cvs
 
 # portable naming of compiled executables: add ".exe" if compiled on 
 # Windows (with cygwin).
