@@ -348,6 +348,7 @@ DONE TO HERE
     ls -1S /iscratch/i/gs.16/build33/contigs/*.fa > genome.lst
     ls -1 /iscratch/i/mrna.134/Homo_sapiens/refSeq.fa > mrna.lst
     cp ~/hg13/bed/refSeq/gsub .
+    # Edit the file to make it do blat.x -band
     gensub2 genome.lst mrna.lst gsub spec
     para create spec
     para try, para check, para push, para check....
@@ -508,7 +509,7 @@ DONE TO HERE
     | hgsql hg15
 
 
-# SEQUENCE INFO: CHROMINFO (TO DO)
+# SEQUENCE INFO: CHROMINFO (DONE)
     ssh eieio
     cd ~/hg15
     # Sanity-check */lift/ordered.lft length vs. agp length:
