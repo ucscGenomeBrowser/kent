@@ -20,7 +20,7 @@
 #include "hash.h"
 #include "botDelay.h"
 
-static char const rcsid[] = "$Id: hgBlat.c,v 1.80 2004/07/20 17:15:40 kent Exp $";
+static char const rcsid[] = "$Id: hgBlat.c,v 1.81 2004/07/26 17:29:58 kent Exp $";
 
 struct cart *cart;	/* The user's ui state. */
 struct hash *oldVars = NULL;
@@ -577,6 +577,10 @@ printf("%s",
 "sequence of 5000 or fewer letters will be processed.  Up to 25 sequences\n"
 "can be submitted at the same time. The total limit for multiple sequence\n"
 "submissions is 50,000 bases or 12,500 letters.\n</P>");
+if (hgPcrOk(db))
+    printf(" For locating PCR primers, use <A HREF=\"../cgi-bin/hgPcr?db=%s\">In-Silico PCR</A>"
+           " for best results instead of BLAT.", db);
+
 
 printf("</FORM>\n");
 
@@ -598,8 +602,10 @@ printf("%s",
 "perfect sequence matches of 33 bases, and sometimes find them down to 22 bases.\n"
 "BLAT on proteins finds sequences of 80% and greater similarity of length 20 amino\n"
 "acids or more.  In practice DNA BLAT works well on primates, and protein\n"
-"blat on land vertebrates\n</P>"
-"<P>BLAT is not BLAST.  DNA BLAT works by keeping an index of the entire genome\n"
+"blat on land vertebrates."
+);
+printf("%s",
+"\n</P><P>BLAT is not BLAST.  DNA BLAT works by keeping an index of the entire genome\n"
 "in memory.  The index consists of all non-overlapping 11-mers except for\n"
 "those heavily involved in repeats.  The index takes up a bit less than\n"
 "a gigabyte of RAM.  The genome itself is not kept in memory, allowing\n"
