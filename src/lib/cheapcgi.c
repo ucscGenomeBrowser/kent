@@ -19,6 +19,9 @@ struct cgiVar
     boolean saved;		/* True if saved. */
     };
 
+/* process a multipart form */
+//void cgiParseMultipart(char *input, struct hash **retHash, struct cgiVar **retList);
+
 /* These three variables hold the parsed version of cgi variables. */
 static char *inputString = NULL;
 static struct hash *inputHash = NULL;
@@ -67,6 +70,93 @@ for (i=0; i<inputSize; ++i)
     inputString[i] = r;
     }
 inputString[inputSize] = 0;
+}
+
+/* process a multipart form */
+static void cgiParseMultipart(char *input, struct hash **retHash, struct cgiVar **retList) {
+	char* s;
+	char* boundary;
+	char *namePt, *nameEndPt, *dataPt, *dataEndPt;
+	struct hash *hash = newHash(6);
+	struct hashEl *hel;
+	struct cgiVar *list = NULL, *el;
+
+
+	// find the boundary string
+	s = getenv("CONTENT_TYPE");
+	s = strstr(s, "boundary=");
+	if(s == NULL) {
+		errAbort("Malformated multipart-from.");
+	}
+	// skip the "boundary="
+	s += 9;
+	// allocate enough room plus "--" and '\0'
+	boundary = needMem(strlen(s) + 2 + 1);
+	// setup the string
+	boundary[0] = '-';
+	boundary[1] = '-';
+	strcpy(boundary + 2, s);
+			
+	// remove the '\r' characters from input
+	removeReturns(input, input);
+			
+	//puts("<PRE>");
+	//puts(input);
+	
+	namePt = input;
+	while(namePt != 0) {
+		// find the boundary
+		namePt = strstr(namePt, boundary);
+		if(namePt != 0) {
+			// skip passed the boundary
+			namePt += strlen(boundary);	
+
+			// if we have -, we are done
+			if(*namePt == '-')
+				break;
+			
+			// find the name
+			namePt = strstr(namePt, "name=\"");
+			if(namePt == 0)
+				errAbort("Mangled CGI input (0) string %s", input);
+			namePt += strlen("name=\"");
+
+			// find the end of the name
+    		nameEndPt = strstr(namePt, "\"");
+    		if (nameEndPt == 0)
+				errAbort("Mangled CGI input (1) string %s", input);
+    		*nameEndPt = 0;
+			
+			// find the data
+			dataPt = strstr(nameEndPt + 1, "\n\n");
+    		if (dataPt == 0)
+				errAbort("Mangled CGI input (2) string %s", input);
+			dataPt += 2;
+			
+			// find the end of the data
+			dataEndPt = strstr(dataPt, boundary);
+    		if (dataPt == 0)
+				errAbort("Mangled CGI input (3) string %s", input);
+			*(dataEndPt - 1) = '\0';
+			
+			
+			AllocVar(el);
+			hel = hashAdd(hash, namePt, el);
+			el->name = hel->name;
+			el->val = dataPt;
+			slAddHead(&list, el);
+
+			//printf("%s = %s\n", namePt, dataPt); 
+
+			namePt = dataEndPt;
+		}
+	}
+	//puts("</PRE>");
+	//exit(0);
+
+	slReverse(&list);
+	*retList = list;
+	*retHash = hash;
 }
 
 static char *cgiInputSource(char *s)
@@ -125,18 +215,27 @@ while (namePt != NULL)
     el->name = hel->name;
     el->val = dataPt;
     slAddHead(&list, el);
+
     namePt = nextNamePt;
+
     }
 slReverse(&list);
 *retList = list;
 *retHash = hash;
 }
 
-static void initCgiInput()
-/* Initialize CGI input stuff. */
-{
-_cgiFindInput(NULL);
-cgiParseInput(inputString, &inputHash, &inputList);
+static void initCgiInput() {
+	/* Initialize CGI input stuff. */
+	char* s;
+
+	_cgiFindInput(NULL);
+
+	// check to see if the input is a multipart form
+	s = getenv("CONTENT_TYPE");
+	if(s != NULL && !strncmp(s, "multipart/form-data", 19))  {
+		cgiParseMultipart(inputString, &inputHash, &inputList);
+	} else
+		cgiParseInput(inputString, &inputHash, &inputList);
 }
 
 static char *findVarData(char *varName)
