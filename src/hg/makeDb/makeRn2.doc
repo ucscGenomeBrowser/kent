@@ -837,17 +837,17 @@ MAKING THE HUMAN AXTTIGHT FROM AXTBEST (DONE 03/15/03)
     hgLoadPsl rn2 chr*_blastzTightHg13.psl
 
 
-TWINSCAN GENE PREDICTIONS (TODO)
+TWINSCAN GENE PREDICTIONS (DONE 03/26/03)
 
     mkdir -p ~/rn2/bed/twinscan
     cd ~/rn2/bed/twinscan
-    wget http://genome.cse.wustl.edu/~bio/rat/Nov02/1-22-03/rat_Nov02_1-22-03.tgz
+    wget http://genome.cse.wustl.edu/~bio/rat/Jan03/rat_Jan03_03-26-03.tgz
     gunzip -c *.tgz | tar xvf -
     rm -r chr_tx
     # clean up chrom field of GTF files
     foreach f (chr_gtf/chr*.gtf)
       set chr = $f:t:r
-      sed -e "s/^[0-9]*/$chr/" $f > chr_gtf/$chr-fixed.gtf
+      sed -e "s/^[a-zA-Z0-9]*/$chr/" $f > chr_gtf/$chr-fixed.gtf
     end
     # pare down protein FASTA header to id and add missing .a:
     foreach f (chr_ptx/chr*.ptx)
