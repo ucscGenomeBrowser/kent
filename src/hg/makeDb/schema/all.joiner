@@ -599,7 +599,7 @@ identifier proteinAccession typeOf=genbankAccession fuzzy
 identifier estOrMrnaAccession typeOf=genbankAccession
 "Genbank EST or mRNA accession."
     $gbd.gbSeq.acc 
-    $gbd.gbStatus.acc full unique
+    $gbd.gbStatus.acc unique
     $gbd.mrna.acc unique
     $gbd.imageClone.acc
     $gbd.altGraphX.mrnaRefs comma
