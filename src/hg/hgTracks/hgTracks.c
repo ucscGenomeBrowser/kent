@@ -2810,10 +2810,12 @@ struct genomicDups *dup = item;
 int ppt = dup->score;
 int grayLevel;
 
+#ifdef OLD
 if (ppt > 990)
     return tg->ixColor;
 else if (ppt > 980)
     return tg->ixAltColor;
+#endif /* OLD */
 grayLevel = grayInRange(ppt, 900, 1000);
 return shadesOfGray[grayLevel];
 }
@@ -2930,7 +2932,7 @@ tg->itemColor = exoMouseColor;
 
 char *xenoMrnaName(struct trackGroup *tg, void *item)
 /* Return what to display on left column of open track:
- * In this case display 3 letters of organism name followed
+ * In this case display 6 letters of organism name followed
  * by mRNA accession. */
 {
 struct linkedFeatures *lf = item;
@@ -5472,6 +5474,7 @@ registerTrackHandler("cpgIsland", cpgIslandMethods);
 registerTrackHandler("exoMouse", exoMouseMethods);
 registerTrackHandler("xenoBestMrna", xenoMrnaMethods);
 registerTrackHandler("xenoMrna", xenoMrnaMethods);
+registerTrackHandler("xenoEst", xenoMrnaMethods);
 registerTrackHandler("exoFish", exoFishMethods);
 registerTrackHandler("tet_waba", tetWabaMethods);
 registerTrackHandler("rnaGene", rnaGeneMethods);
