@@ -1100,7 +1100,7 @@ int setPriority(char *userName, char *dir, int priority)
 /* Set new priority for batch */
 {
 struct user *user = findUser(userName);
-struct batch *batch = findBatch(user, results);
+struct batch *batch = findBatch(user, dir);
 if (user == NULL) return 0;
 if (batch == NULL) return 0;
 batch->priority = priority;
