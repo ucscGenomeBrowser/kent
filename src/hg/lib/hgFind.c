@@ -1535,15 +1535,6 @@ if (hgIsChromRange(query))
 	}
     singlePos(hgp, "Chromosome Range", NULL, query, chrom, start, end);
     }
-else if (hgParseTargetRange(query, &chrom, &start, &end))
-    {
-    if (relativeFlag == TRUE)
-        {
-        end = start + iEnd;
-        start = start + iStart;
-        }
-    singlePos(hgp, "Zoo Target", NULL, query, chrom, start, end);
-    }
 else if (isAffyProbeName(query))
     {
     findAffyProbePos(query, &chrom, &start, &end);

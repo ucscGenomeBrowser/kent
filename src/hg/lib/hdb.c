@@ -1161,62 +1161,6 @@ slReverse(&tdbList);
 return tdbList;
 }
 
-boolean hgParseTargetRange(char *spec, char **retTargetName,
-                           int *retWinStart, int *retWinEnd)
-/* Parse something of form target:start-end into pieces. */
-{
-char *target = NULL;
-char *start = NULL;
-char *end = NULL;
-char buf[256];
-int iStart = 0;
-int iEnd = 0;
-
-strncpy(buf, spec, 256);
-target = buf;
-start = strchr(target, ':');
-
-/* T1 is a temporary hack - MATT */
-if (!strstrNoCase(buf, "T1"))
-    {
-    return FALSE;
-    }
-
-if (start == NULL)
-    {
-    *retTargetName = "T1"; // = buf;
-    iStart = 0;
-    iEnd = hChromSize(target);
-    }
-else
-    {
-    *start++ = 0;
-    end = strchr(start, '-');
-    if (end == NULL)
-        return FALSE;
-    else
-        *end++ = 0;
-    target = trimSpaces(target);
-    start = trimSpaces(start);
-    end = trimSpaces(end);
-    if (!isdigit(start[0]))
-        return FALSE;
-    if (!isdigit(end[0]))
-        return FALSE;
-    if (!strstrNoCase(target, "T1"))
-        return FALSE;
-    iStart = atoi(start)-1;
-    iEnd = atoi(end);
-    }
-if (retTargetName != NULL)
-    *retTargetName = target;
-if (retWinStart != NULL)
-    *retWinStart = iStart;
-if (retWinEnd != NULL)
-    *retWinEnd = iEnd;
-return TRUE;
-}
-
 boolean hgParseChromRange(char *spec, char **retChromName, 
 	int *retWinStart, int *retWinEnd)
 /* Parse something of form chrom:start-end into pieces. */
