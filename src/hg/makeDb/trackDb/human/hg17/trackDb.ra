@@ -46,13 +46,24 @@ type bed 5 .
 
 track cns
 shortLabel CNS
-longLabel Conserved Non-Coding (Cons Elements Minus Predicted Coding)
+longLabel Conserved Non-Coding (Most Conserved Minus Predicted Coding)
 priority 109.11
 group compGeno
 visibility hide
 spectrum on
 exonArrows off
 type bed 5 .
+
+track phastConsNew
+shortLabel PhastCons New
+longLabel PhastCons Conservation Score, New Version
+group compGeno
+priority 109.09
+visibility hide
+color 0,10,100
+maxHeightPixels 40
+type wig 0.0 1.0
+autoScaleDefault off
 
 track tba37CFTR
 shortLabel 37 Species CFTR
