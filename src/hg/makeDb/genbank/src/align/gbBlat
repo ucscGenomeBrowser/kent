@@ -27,7 +27,7 @@
 # is still produced.  This script is very careful to exit non-zero if an error
 # occurs.
 #
-# $Id: gbBlat,v 1.14 2004/02/07 17:39:46 markd Exp $
+# $Id: gbBlat,v 1.15 2004/02/10 20:33:08 markd Exp $
 #
 set -e
 
@@ -140,14 +140,6 @@ case "$database" in
     zooRat*) oocOpt="-ooc=${RN_OOC}" ;;
 esac
 
-# other genome-specific parameters
-case "$database" in
-    sacCer*) 
-        # limit intron size on yeast 
-        blatParams="-maxIntron=5000" ;;
-esac
-
-
 # determine blat parameters
 case "$orgCat" in
     native)
@@ -157,23 +149,37 @@ case "$orgCat" in
                 if [ "$srcDb" = "refseq" ] ; then
                     # don't use -trimHardA, results in qSize being less than
                     # the sequence size.
-                    blatParams="${blatParams} -q=rna -fine $oocOpt"
+                    blatParams="-q=rna -fine $oocOpt"
                 else
-                    blatParams="${blatParams} -q=rna -fine $oocOpt"
+                    blatParams="-q=rna -fine $oocOpt"
                 fi
                 ;;
             est)
-                blatParams="${blatParams} -mask=lower $oocOpt" ;;
+                blatParams="-mask=lower $oocOpt" ;;
         esac;;
     xeno) 
         isNative=NO
         case "$type" in
             mrna)
-                blatParams="${blatParams} -q=rnax -t=dnax -mask=lower";;
+                blatParams="-q=rnax -t=dnax -mask=lower";;
             est)
-                blatParams="${blatParams} -q=dnax -t=dnax -mask=lower";;
+                blatParams="-q=dnax -t=dnax -mask=lower";;
         esac;;
 esac
+
+# other genome-specific parameters; done here so it can override blatParams
+case "$database" in
+    panTro*)
+        # until we have more orgCats, use special blatParams for human refseqs
+        case "$srcDb-$orgCat" in
+            refseq-xeno)
+                blatParams="-fine -mask=lower" ;;
+        esac
+    sacCer*) 
+        # limit intron size on yeast 
+        blatParams="-maxIntron=5000" ;;
+esac
+
 
 # local directory for all work.
 tmpDir="/var/tmp/gbBlat.$$.tmp"

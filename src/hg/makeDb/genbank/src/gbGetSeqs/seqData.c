@@ -41,8 +41,11 @@ short version = gbSplitAccVer(inFa->id, acc);
 
 /* will return NULL on ignored sequences */
 struct gbEntry* entry = gbReleaseFindEntry(select->release, acc);
-if ((entry != NULL) && (version == entry->selectVer)
-    && !entry->clientFlags)
+
+fprintf(stderr, "DEBUG: fa %s.%d  entry=%s\n", acc, version,
+        ((entry != NULL)?"YES":"NO"));
+
+if ((entry != NULL) && (version == entry->selectVer) && !entry->clientFlags)
     {
     /* selected, output if it appears valid */
     if (isValidMrnaSeq(inFa))

@@ -16,7 +16,7 @@
 #include "portable.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: gbGetSeqs.c,v 1.8 2004/01/25 20:22:58 markd Exp $";
+static char const rcsid[] = "$Id: gbGetSeqs.c,v 1.9 2004/02/10 20:33:08 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -154,8 +154,7 @@ if ((aligned != NULL) && (aligned->numAligns == 0))
 }
 
 void selectExplict(struct gbEntry* entry)
-/* check if the sequence id was specified in the explict entry list, if so
- * return version, or 0 if not specified */
+/* select when explictly specifying accs  */
 {
 struct seqIdSelect *seqIdSelect = hashFindVal(gIdHash, entry->acc);
 if (seqIdSelect != NULL)

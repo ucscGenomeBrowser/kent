@@ -31,7 +31,7 @@
 #include "genbank.h"
 #include "gbSql.h"
 
-static char const rcsid[] = "$Id: gbMetaData.c,v 1.18 2003/12/27 18:35:10 markd Exp $";
+static char const rcsid[] = "$Id: gbMetaData.c,v 1.19 2004/02/10 20:33:08 markd Exp $";
 
 // FIXME: move mrna, otherse to objects.
 
@@ -653,7 +653,7 @@ gbMetaDataDeleteFromTables(conn, select->release->srcDb, deleter);
 
 sqlDeleterFree(&deleter);
 
-/* if we are cleaning out the ext table, we need to get rid of any
+/* If we are cleaning up the ext table, we need to get rid of any
  * refseq peptides in gbSeq that are no longer referenced.  We don't
  * do it other times as these are not reachable directly.
  */

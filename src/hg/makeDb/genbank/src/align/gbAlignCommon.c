@@ -7,7 +7,7 @@
 #include "gbGenome.h"
 #include "gbVerb.h"
 
-static char const rcsid[] = "$Id: gbAlignCommon.c,v 1.2 2003/09/12 15:24:24 markd Exp $";
+static char const rcsid[] = "$Id: gbAlignCommon.c,v 1.3 2004/02/10 20:33:08 markd Exp $";
 
 void gbCountNeedAligned(struct gbEntryCnts* cnts, struct gbEntry* entry,
                         unsigned accIncr, unsigned recIncr)
@@ -111,6 +111,15 @@ if (!(entry->type & select->type))
     return FALSE;  /* wrong type */
 if (!(entry->orgCat & select->orgCats))
     return FALSE;  /* wrong organism category */
+
+/* FIXME: special handling to only do human xeno refseqs for chimp */
+if ((select->release->srcDb == GB_REFSEQ) && (entry->orgCat == GB_XENO)
+    && startsWith("panTro", select->release->genome->database)
+    && !sameString(entry->processed->organism, "Homo sapiens"))
+    {
+    return FALSE;
+    }
+
 return isNewOrMod(entry, select->update);
 }
 
