@@ -22,7 +22,8 @@ test:
 	cd twoBitToFa && ${MAKE} test
 
 clean:
-	- find . -name \*.o -print | xargs --no-run-if-empty rm
+	touch non-empty-rm.o
+	- find . -name \*.o -print | xargs rm
 
 SCRIPTS = \
         iSync
