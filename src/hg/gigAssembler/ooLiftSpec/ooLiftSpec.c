@@ -3,9 +3,13 @@
  * each chromosome subdir of ooDir based on cloneMap. */
 #include "common.h"
 #include "linefile.h"
+#include "cheapcgi.h"
 #include "portable.h"
 #include "hash.h"
 #include "chromInserts.h"
+
+/* Variables that can be overridden from command line. */
+char *goldName = NULL;
 
 char *finChroms[] = 
 /* Chromosomes that are finished - no need to assemble these. */
@@ -21,7 +25,9 @@ errAbort(
  "   ooLiftSpec cloneMap inserts ooDir\n"
  "This will make lift directory containing ordered.lft and random.lft\n"
  "each chromosome subdir of ooDir based on contigs in cloneMap and\n"
- "large inserts in inserts file.\n");
+ "large inserts in inserts file.\n"
+ "options:\n"
+ "   -goldName=gold.NN - use gold.NN instead of contig.agp\n");
 }
 
 struct contigInfo 
@@ -120,7 +126,10 @@ boolean gotSize = FALSE;
 
 for (ci = ciList; ci != NULL; ci = ci->next)
     {
-    sprintf(fileName, "%s/%s/%s/%s.agp", ooDir, chrom, ci->name, ci->name);
+    if (goldName != NULL)
+	sprintf(fileName, "%s/%s/%s/%s", ooDir, chrom, ci->name, goldName);
+    else
+	sprintf(fileName, "%s/%s/%s/%s.agp", ooDir, chrom, ci->name, ci->name);
     ci->size = sizeFromAgp(fileName);
     if (ci->size)
         gotSize = TRUE;
@@ -149,6 +158,10 @@ while (lineFileNext(lf, &line, &lineSize))
     if (line[0] == '@' || line[0] == '*')
 	continue;
     wordCount = chopLine(line, words);
+    if (wordCount == 0)
+        continue;
+    if (sameString("COMMITTED", words[0]))
+        continue;
     if (wordCount < 6)
 	errAbort("short line %d of %s\n", lf->lineIx, lf->fileName);
     contig = words[3];
@@ -164,6 +177,26 @@ freeHash(&hash);
 slReverse(&ciList);
 return ciList;
 }
+
+void warnUnmapped(char *ctg, char *chrom, struct hash *contigHash)
+/* Warn if ctg is not in hash. */
+{
+char fin[256];
+int i;
+
+if (ctg == NULL)
+    return;
+for (i=0; i<ArraySize(finChroms); ++i)
+    {
+    sprintf(fin, "chr%s", finChroms[i]);
+    if (sameString(fin, chrom))
+        return;
+    }
+if (!hashLookup(contigHash, ctg))
+    warn("Contig %s (chromosome %s) in inserts file but not map",
+	ctg, chrom);
+}
+
 
 void ooLiftSpec(char *mapName, char *inserts, char *ooDir)
 /* This will make ordered.lft and random.lft 'lift specifications' in
@@ -259,12 +292,8 @@ for (chromInserts = chromInsertList; chromInserts != NULL; chromInserts = chromI
     struct bigInsert *bi;
     for (bi = chromInserts->insertList; bi != NULL; bi = bi->next)
         {
-	if (bi->ctgBefore && !hashLookup(contigHash, bi->ctgBefore))
-	    warn("Contig %s (chromosome %s) in inserts file but not map",
-	    	bi->ctgBefore, chromInserts->chrom);
-	if (bi->ctgAfter && !hashLookup(contigHash, bi->ctgAfter))
-	    warn("Contig %s (chromosome %s) in inserts file but not map",
-	    	bi->ctgAfter, chromInserts->chrom);
+	warnUnmapped(bi->ctgBefore, chromInserts->chrom, contigHash);
+	warnUnmapped(bi->ctgAfter, chromInserts->chrom, contigHash);
 	}
     }
 }
@@ -273,7 +302,9 @@ for (chromInserts = chromInsertList; chromInserts != NULL; chromInserts = chromI
 int main(int argc, char *argv[])
 /* Process command line. */
 {
+cgiSpoof(&argc, argv);
 if (argc != 4)
     usage();
+goldName = cgiOptionalString("goldName");
 ooLiftSpec(argv[1], argv[2], argv[3]);
 }
