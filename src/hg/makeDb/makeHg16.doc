@@ -2537,7 +2537,7 @@ end
     hgPepPred hg16 generic twinscanPep chr_ptx/chr*-fixed.fa
 
 
-# LOAD GENEID GENES (TBD)
+# LOAD GENEID GENES (DONE - 2003-09-02 - Hiram)
     mkdir -p /cluster/data/hg16/bed/geneid/download
     cd /cluster/data/hg16/bed/geneid/download
 
