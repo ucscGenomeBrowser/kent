@@ -28,9 +28,8 @@ char buf[128];
 char *answer;
 char *database;
 char *genome, *genomeDesc;  
-char *geneSymbol, *kgID, *spID, *refseq, *geneDescription, *chrom, *txStart, *txEnd;
-char notAvailable[20] = {"N/A"};
-int iCnt = 0;
+char *kgID, *chrom, *txStart, *txEnd;
+int iCnt = 1;
 
 cart = theCart;
 if (hIsMgcServer())
@@ -64,31 +63,21 @@ genomeDesc = strdup(sqlQuickQuery(connCentral, query, buf, sizeof(buf)));
 hDisconnectCentral(&connCentral);
 
 printf("<H2>%s Genome (%s Assembly)</H2>\n", genome, genomeDesc);
-fflush(stdout);
-printf("<TABLE BORDER  BGCOLOR=\"FFFEe0\" BORDERCOLOR=\"cccccc\" CELLSPACING=0 CELLPADDING=2>");
-printf("<TR><TH>Gene Symbol</TH><TH>mRNA</TH><TH>Protein</TH><TH>RefSeq</TH>");
-printf("<TH>Chrom</TH><TH>Start</TH><TH>End</TH><TH>Description</TH></TR>\n");
 
 conn = hAllocConn();
 conn2= hAllocConn();
 
-sprintf(query2,"select kgID,geneSymbol,description,spID, refseq from %s.kgXref order by geneSymbol;",
+sprintf(query2,"select kgID from %s.kgXref order by geneSymbol;",
 	database);
 
 /* use the following for quck testing */
 /*sprintf(query2,"select kgID, geneSymbol, description, spID, refseq from %s.kgXref order by geneSymbol limit 10;", database);
 */
-
 sr2 = sqlMustGetResult(conn2, query2);
 row2 = sqlNextRow(sr2);
 while (row2 != NULL)
     {
-    kgID 		= row2[0];
-    geneSymbol 	 	= row2[1];
-    geneDescription	= row2[2];
-    spID		= row2[3];
-    refseq		= row2[4];
-    if ((refseq == NULL)||(sameWord(refseq, ""))) refseq = notAvailable;
+    kgID = row2[0];
     
     sprintf(query,"select chrom, txSTart, txEnd  from %s.knownGene where name='%s'", database, kgID);
     sr = sqlMustGetResult(conn, query);
@@ -97,19 +86,10 @@ while (row2 != NULL)
     txStart 	= row[1];
     txEnd   	= row[2];
 
-    printf("<TR><TD>");
-    printf("<A href=\"http://hgwdev-fanhsu.cse.ucsc.edu/cgi-bin/hgGene?db=%s&hgg_gene=%s", 
+    printf("<A href=\"/cgi-bin/hgGene?db=%s&hgg_gene=%s", 
     	   database, kgID);
     printf("&hgg_chrom=%s&hgg_start=%s&hgg_end=%s\">", chrom, txStart, txEnd);
-    printf("%s</A></TD>", geneSymbol);
-    printf("<TD>%s</TD>", kgID);
-    printf("<TD>%s</TD>", spID);
-    printf("<TD>%s</TD>", refseq);
-    printf("<TD>%s</TD>", chrom);
-    printf("<TD ALIGN=right>%s</TD>", txStart);
-    printf("<TD ALIGN=right>%s</TD>", txEnd);
-    printf("<TD>%s</TD></TR>\n", geneDescription);
-
+    printf("%d</A><BR>\n", iCnt);
     iCnt++;
     if ((iCnt % 1000) == 0) fflush(stdout);
     
@@ -117,8 +97,7 @@ while (row2 != NULL)
     row2 = sqlNextRow(sr2);
     }
     
-printf("</TABLE>");
-
+sqlFreeResult(&sr2);
 cartWebEnd();
 }
 
