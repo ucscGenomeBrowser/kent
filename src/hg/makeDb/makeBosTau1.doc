@@ -9,7 +9,7 @@ exit; # don't actually run this like a script :)
 # ftp://ftp.hgsc.bcm.tmc.edu/pub/data/Btaurus/fasta/Btau20040927-freeze
 # anonymous ftp, no login/password needed
 
-# DOWNLOAD SEQUENCE (DONE Sept. 27, 2004 Heather)
+# DOWNLOAD SEQUENCE (DONE Sept. 30, 2004 Heather)
     ssh kksilo
     mkdir /cluster/store8/bosTau1
     cd /cluster/data
@@ -52,8 +52,16 @@ exit; # don't actually run this like a script :)
 
 # Check that IDs in .fa match IDs in .qual
   
+  ssh kksilo
+  cd /cluster/data/bosTau1/downloads
+  # foreach Bin0 contigs linearScaffolds repeat-reads
   grep ">" *.fa > id.fa
   grep ">" *.qual > id.qual
+  diff id.fa id.qual
+
+  # this takes about 5-10 minutes
+  /cluster/bin/i386/checkAgpAndFa contigs/Btau_v1.0_20040927.gap linearScaffolds/Btau20040927-freeze >& check.out
+  /cluster/bin/i386/checkAgpAndFa contigs/Btau_v1.0_20040927.gap linearScaffolds/Btau20040927-freeze > check.err
 
 
 # SPLIT SCAFFOLDS
@@ -67,5 +75,12 @@ exit; # don't actually run this like a script :)
   mv 2 scaffolds
   mv 3 scaffolds
   mv 4 scaffolds
+  etc.
+
+# MAKE 2BIT NIB FILE
+
+  ssh kksilo
+  cd /cluster/data/bosTau1/scaffolds
+
 
   
