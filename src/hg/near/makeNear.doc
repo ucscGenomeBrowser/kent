@@ -97,11 +97,10 @@ hgMapToGene $db refGene knownGene knownToRefSeq
 # the nice affyUcla expression data.
 hgMapToGene "-type=bed 12" $db affyUcla knownGene knownToU133
 
-
 # Create expression distance table.  This will take about an hour.
 ### TODO for hg16
 cd ~/src/hg/near/hgExpDistance
-hgExpDistance $db affyUcla affyUclaExp knownExpDistance -weights=affyUcla.weight -lookup=knownToAffyUcla
+hgExpDistance $db affyUcla affyUclaExp knownExpDistance -weights=affyUcla.weight -lookup=knownToU133
 
 # Create table that maps between known genes and 
 # the GNF data.
