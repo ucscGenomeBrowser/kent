@@ -4807,7 +4807,7 @@ if(name != NULL)
     printf("<basefont size=-2>[svg viewer required]</basefont></li>\n");
     printf("</ul>\n");
     printf("<p>A <a href=\"%s%s\">histogram</a> of the data for the probe set selected (%s) over all ",gnfDetailed, name, name);
-    printf("tissues is available at <a href=\"http://expression.gnf.org/cgi-bin/index.cgi\">the Novartis web supplement</a>.\n");
+    printf("tissues is available at the<a href=\"http://expression.gnf.org/cgi-bin/index.cgi\"> GNF web supplement</a>.\n");
     }
 }
 
