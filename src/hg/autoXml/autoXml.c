@@ -4,6 +4,7 @@
 #include "hash.h"
 #include "cheapcgi.h"
 #include "obscure.h"
+#include <expat.h>
 
 /* Variables that can be over-ridden from command line. */
 char *prefix = "";
@@ -307,6 +308,19 @@ else
     return "char *";
 }
 
+void saveFunctionPrototype(struct element *el, FILE *f, boolean addSemi)
+/* Put up function prototype for elSave function. */
+{
+char *name = el->mixedCaseName;
+fprintf(f, "void %sSave(struct %s *obj, int indent, FILE *f)", name, name);
+if (addSemi)
+    fprintf(f, ";");
+fprintf(f, "\n");
+fprintf(f, "/* Save %s to file. */\n",  name);
+fprintf(f, "\n");
+}
+
+
 void makeH(struct element *elList, char *fileName)
 /* Produce C header file. */
 {
@@ -331,22 +345,35 @@ for (el = elList; el != NULL; el = el->next)
     if (el->textType != NULL)
          fprintf(f, "    char *%s;\n", textField);
     for (att = el->attributes; att != NULL; att = att->next)
-	fprintf(f, "    %s%s;\n", cAttType(att->type), att->name);
+	{
+	fprintf(f, "    %s%s;", cAttType(att->type), att->name);
+	if (att->required)
+	    fprintf(f, "\t/* Required */");
+	else 
+	    {
+	    if (att->usual != NULL)
+	       fprintf(f, "\t/* Defaults to %s */", att->usual);
+	    else
+	       fprintf(f, "\t/* Optional */");
+	    }
+	fprintf(f, "\n");
+	}
     for (ec = el->children; ec != NULL; ec = ec->next)
 	{
 	fprintf(f, "    struct %s *%s;", ec->el->mixedCaseName, ec->el->mixedCaseName);
 	if (ec->copyCode == '1')
-	    fprintf(f, "\t/* Single instance required. */");
+	    fprintf(f, "\t/** Single instance required. **/");
 	else if (ec->copyCode == '+')
-	    fprintf(f, "\t/* Non-empty list required. */");
+	    fprintf(f, "\t/** Non-empty list required. **/");
 	else if (ec->copyCode == '*')
-	    fprintf(f, "\t/* Possibly empty list. */");
+	    fprintf(f, "\t/** Possibly empty list. **/");
 	else if (ec->copyCode == '?')
-	    fprintf(f, "\t/* Optional (may be NULL). */");
+	    fprintf(f, "\t/** Optional (may be NULL). **/");
 	fprintf(f, "\n");
 	}
     fprintf(f, "    };\n");
     fprintf(f, "\n");
+    saveFunctionPrototype(el, f, TRUE);
     }
 
 fprintf(f, "#endif /* %s_H */\n", fileOnly);
