@@ -5,7 +5,7 @@
 #include "options.h"
 #include "cheapcgi.h"
 
-static char const rcsid[] = "$Id: hgSgdGff3.c,v 1.1 2003/11/25 19:29:22 kent Exp $";
+static char const rcsid[] = "$Id: hgSgdGff3.c,v 1.2 2003/11/25 20:34:20 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -98,6 +98,49 @@ for (tf = tfList; tf != NULL; tf = tf->next)
     }
 }
 
+void saveFeatures(struct tenFields *tfList, char *inGff,
+	FILE *codingFile, FILE *otherFile)
+/* Save coding genes to coding file as GFF and rest to
+ * otherFile as bed. */
+{
+struct tenFields *tf, *nextTf;
+int i;
+
+for (tf = tfList; tf != NULL; tf = nextTf)
+    {
+    char *type = tf->fields[2];
+    nextTf = tf->next;
+    if (sameString("CDS", type)) 
+        {
+	/* Write exons to coding output. */
+	if (nextTf == NULL || !sameString("exon", nextTf->fields[2]))
+	    errAbort("CDS not followed by exon line %d of %s",
+	    	tf->lineIx, inGff);
+	do  {
+	    nextTf->fields[2] = "CDS";
+	    fprintf(codingFile, "chr%s\t", nextTf->fields[0]);
+	    for (i=1; i<8; ++i)
+	        fprintf(codingFile, "%s\t", nextTf->fields[i]);
+	    fprintf(codingFile, "%s\n", nextTf->fields[8]);
+	    nextTf = nextTf->next;
+	    }
+	while (nextTf != NULL && sameString("exon", nextTf->fields[2]));
+	}
+    else if (sameString("Component", type) || sameString("exon", type))
+        {
+	/* Do nothing. */
+	}
+    else
+        {
+	/* Write BED. */
+	int start = atoi(tf->fields[3]) - 1;
+	int end = atoi(tf->fields[4]);
+	fprintf(otherFile, "chr%s\t%d\t%d\t%s\t%s\t%s\n",
+		tf->fields[0], start, end, tf->fields[8], tf->fields[6], type);
+	}
+    }
+}
+
 void hgSgdGff3(char *inGff, char *outDir)
 /* hgSgdGff3 - Parse out SGD gff3 file into components. */
 {
@@ -106,8 +149,11 @@ FILE *otherFile = openInDir(outDir, "otherFeatures.bed");
 FILE *noteFile = openInDir(outDir, "notes.txt");
 struct tenFields *tf, *tfList = parseTenFields(inGff);
 
-uglyf("Got %d lines\n", slCount(tfList));
 noteIds(tfList, inGff, noteFile);
+saveFeatures(tfList, inGff, codingFile, otherFile);
+carefulClose(&codingFile);
+carefulClose(&otherFile);
+carefulClose(&noteFile);
 }
 
 int main(int argc, char *argv[])
