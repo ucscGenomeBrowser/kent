@@ -105,7 +105,7 @@
 #include "hgc.h"
 #include "genbank.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.419 2003/05/22 21:37:36 weber Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.420 2003/05/22 23:02:50 braney Exp $";
 
 
 struct cart *cart;	/* User's settings. */
@@ -11308,6 +11308,7 @@ else if (sameWord(track, "htcGetDnaExtended1"))
     doGetDnaExtended1();
     }
 else if (sameWord(track, "mrna") || sameWord(track, "mrna2") || 
+         sameWord(track, "all_mrna") ||
          sameWord(track, "est") || sameWord(track, "intronEst") || 
          sameWord(track, "xenoMrna") || sameWord(track, "xenoBestMrna") ||
          sameWord(track, "xenoBlastzMrna") || sameWord(track, "sim4") ||
