@@ -2327,19 +2327,15 @@ void estMethods(struct trackGroup *tg)
 /* Make track group of EST methods - overrides color handler. */
 {
 tg->itemColor = estColor;
-#ifdef FILTER_CODE
 tg->extraUiData = newMrnaUiData(tg->mapName, FALSE);
 tg->extraUi = mrnaUi;
-#endif /* FILTER_CODE */
 }
 
 void mrnaMethods(struct trackGroup *tg)
 /* Make track group of mRNA methods. */
 {
-#ifdef FILTER_CODE
 tg->extraUiData = newMrnaUiData(tg->mapName, FALSE);
 tg->extraUi = mrnaUi;
-#endif /* FILTER_CODE */
 }
 
 
@@ -3356,10 +3352,8 @@ void xenoMrnaMethods(struct trackGroup *tg)
 /* Fill in custom parts of xeno mrna alignments. */
 {
 tg->itemName = xenoMrnaName;
-#ifdef FILTER_CODE
 tg->extraUiData = newMrnaUiData(tg->mapName, TRUE);
 tg->extraUi = mrnaUi;
-#endif /* FILTER_CODE */
 }
 
 void loadRnaGene(struct trackGroup *tg)
@@ -6130,7 +6124,6 @@ if (!hideControls)
     printf("</CENTER>\n");
 
     /* Do Extra parts of UI. */
-#ifdef FILTER_CODE
     htmlHorizontalLine();
     printf("<H2>Additional Track Options</H2>\n");
     for (group = tGroupList; group != NULL; group = group->next)
@@ -6143,7 +6136,6 @@ if (!hideControls)
 	    htmlHorizontalLine();
 	    }
 	}
-#endif
     }
 
 
@@ -6351,7 +6343,7 @@ int main(int argc, char *argv[])
 {
 cgiSpoof(&argc, argv);
 htmlSetBackground("../images/floret.jpg");
-htmShell("UCSC Human Genome Browser v6", doMiddle, NULL);
+htmShell("UCSC Human Genome Browser v8", doMiddle, NULL);
 //htmShell("Browser Being Updated", doDown, NULL);
 return 0;
 }
