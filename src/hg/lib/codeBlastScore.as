@@ -3,7 +3,7 @@ table codeBlastScore
     (
     string qName;       "Name of item"
     char[1] code;    "Code"
-    double evalue;   "evalue"
+    string evalue;   "evalue"
     uint GI;          "GI Number"
     float PI;        "Percent Identity"
     uint length;     "Alignment length"

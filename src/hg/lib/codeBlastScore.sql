@@ -7,7 +7,7 @@
 CREATE TABLE codeBlastScore (
     qName varchar(255) not null,	# Name of item
     code char(1) not null,	# Code
-    evalue double not null,	# evalue
+    evalue varchar(255) not null,	# evalue
     GI int unsigned not null,	# GI Number
     PI float not null,	# Percent Identity
     length int unsigned not null,	# Alignment length

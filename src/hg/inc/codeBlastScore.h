@@ -13,7 +13,7 @@ struct codeBlastScore
     struct codeBlastScore *next;  /* Next in singly linked list. */
     char *qName;	/* Name of item */
     char code[2];	/* Code */
-    double evalue;	/* evalue */
+    char *evalue;	/* evalue */
     unsigned GI;	/* GI Number */
     float PI;	/* Percent Identity */
     unsigned length;	/* Alignment length */

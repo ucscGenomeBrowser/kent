@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "codeBlastScore.h"
 
-static char const rcsid[] = "$Id: codeBlastScore.c,v 1.1 2004/09/03 23:24:46 hiram Exp $";
+static char const rcsid[] = "$Id: codeBlastScore.c,v 1.2 2004/10/08 19:07:03 kschneid Exp $";
 
 void codeBlastScoreStaticLoad(char **row, struct codeBlastScore *ret)
 /* Load a row from codeBlastScore table into ret.  The contents of ret will
@@ -17,7 +17,7 @@ void codeBlastScoreStaticLoad(char **row, struct codeBlastScore *ret)
 
 ret->qName = row[0];
 strcpy(ret->code, row[1]);
-ret->evalue = atof(row[2]);
+ret->evalue = row[2];
 ret->GI = sqlUnsigned(row[3]);
 ret->PI = atof(row[4]);
 ret->length = sqlUnsigned(row[5]);
@@ -39,7 +39,7 @@ struct codeBlastScore *ret;
 AllocVar(ret);
 ret->qName = cloneString(row[0]);
 strcpy(ret->code, row[1]);
-ret->evalue = atof(row[2]);
+ret->evalue = cloneString(row[2]);
 ret->GI = sqlUnsigned(row[3]);
 ret->PI = atof(row[4]);
 ret->length = sqlUnsigned(row[5]);
@@ -100,7 +100,7 @@ if (ret == NULL)
     AllocVar(ret);
 ret->qName = sqlStringComma(&s);
 sqlFixedStringComma(&s, ret->code, sizeof(ret->code));
-ret->evalue = sqlDoubleComma(&s);
+ret->evalue = sqlStringComma(&s);
 ret->GI = sqlUnsignedComma(&s);
 ret->PI = sqlFloatComma(&s);
 ret->length = sqlUnsignedComma(&s);
@@ -123,6 +123,7 @@ struct codeBlastScore *el;
 
 if ((el = *pEl) == NULL) return;
 freeMem(el->qName);
+freeMem(el->evalue);
 freez(pEl);
 }
 
@@ -150,11 +151,13 @@ if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->code);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
-fprintf(f, "%f", el->evalue);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->evalue);
+if (sep == ',') fputc('"',f);
 fputc(sep,f);
 fprintf(f, "%u", el->GI);
 fputc(sep,f);
-fprintf(f, "%f", el->PI);
+fprintf(f, "%g", el->PI);
 fputc(sep,f);
 fprintf(f, "%u", el->length);
 fputc(sep,f);
