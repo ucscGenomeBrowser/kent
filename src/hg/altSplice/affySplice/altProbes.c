@@ -21,11 +21,6 @@
    - Outputs a number of cassette exon specific sequence files.
 */
 
-
- 
-
-
-
 #include "common.h"
 #include "bed.h"
 #include "hash.h"
@@ -692,8 +687,6 @@ lf = lineFileOpen(fileName, TRUE);
 while(lineFileNextRow(lf, words, ArraySize(words)))
     {
     char *mark = NULL;
-    if((mark = strchr(words[0], ':')) != NULL)
-	*mark = '\0';
     hashAdd(splicePValsHash, words[0], slDoubleNew(sqlDouble((words[1]))));
     }
 lineFileClose(&lf);
@@ -727,8 +720,6 @@ while(lineFileNextRow(lf, words, ArraySize(words)))
     char *mark = NULL;
     double d = 0;
     d = sqlDouble(words[1]);
-    if((mark = strchr(words[0], ':')) != NULL)
-	*mark = '\0';
     sd = slDoubleNew(d);
     hashAddUnique(sortScoreHash, words[0], sd);
     }
@@ -740,7 +731,7 @@ double sortScoreForSplice(char *name)
 {
 struct slDouble *d = NULL;
 if(sortScoreHash == NULL)
-    errAbort("Need to specify -sortScore file if using pvalForSplice");
+    errAbort("Need to specify -sortScore file if using sortScoreForSplice");
 assert(name);
 d = hashFindVal(sortScoreHash, name);
 if(d == NULL)
@@ -825,17 +816,19 @@ int i = 0;
 
 /* Nova-1 */
 AllocVar(bs);
-bs->motifCount = 8;
+bs->motifCount = 2;
 AllocArray(bs->motifs, bs->motifCount);
 /* Expand TCATY_3 to all 8 possibilities */
-bs->motifs[i++] = cloneString("TCATCTCATCTCATC");
-bs->motifs[i++] = cloneString("TCATCTCATCTCATT");
-bs->motifs[i++] = cloneString("TCATCTCATTTCATT");
-bs->motifs[i++] = cloneString("TCATCTCATTTCATC");
-bs->motifs[i++] = cloneString("TCATTTCATCTCATC");
-bs->motifs[i++] = cloneString("TCATTTCATCTCATT");
-bs->motifs[i++] = cloneString("TCATTTCATTTCATT");
-bs->motifs[i++] = cloneString("TCATTTCATTTCATC");
+bs->motifs[i++] = cloneString("TTCATT");
+bs->motifs[i++] = cloneString("TTCACT");
+/* bs->motifs[i++] = cloneString("TCATCTCATCTCATC"); */
+/* bs->motifs[i++] = cloneString("TCATCTCATCTCATT"); */
+/* bs->motifs[i++] = cloneString("TCATCTCATTTCATT"); */
+/* bs->motifs[i++] = cloneString("TCATCTCATTTCATC"); */
+/* bs->motifs[i++] = cloneString("TCATTTCATCTCATC"); */
+/* bs->motifs[i++] = cloneString("TCATTTCATCTCATT"); */
+/* bs->motifs[i++] = cloneString("TCATTTCATTTCATT"); */
+/* bs->motifs[i++] = cloneString("TCATTTCATTTCATC"); */
 bs->rnaBinder = cloneString("Nova-1");
 slAddHead(&bsList, bs);
 
@@ -1248,7 +1241,7 @@ for(altPath = altEvent->altPathList; altPath != NULL; altPath = altPath->next)
 	    if(altIndex != -1)
 		{
 		int offSet = geneCount - 1;
-		altEvent->geneBeds[offSet] = hashFindVal(bedHash, geneName);
+		altEvent->geneBeds[offSet] = hashFindVal(bedHash, altGeneName);
 		altEvent->geneExpVals[offSet] = intenM->matrix[altIndex];
 		index =  hashIntValDefault(probM->nameIndex, altGeneName, -1);
 		if(index != -1)
@@ -1692,9 +1685,20 @@ pathExp = pathExp / pCount;
 return pathExp;
 }
 
+char *nameForSplice(struct splice *splice, struct altPath *namePath)
+/* Return a unique name for this splicing event. Memory is owned by
+ this function and will be overwritten each time this function is
+ called. */
+{
+static char buff[256];
+safef(buff, sizeof(buff), "%s:%s:%s:%s:%s:%s:%d:%d", 
+      splice->name, refSeqForPSet(namePath->beds[0]->name), nameForType(splice->type), namePath->beds[0]->name,
+      splice->strand, splice->tName, splice->tStart, splice->tEnd);
+return buff;
+}
 
-
-double calculateFlipScore(struct altEvent *event, char *name, struct dMatrix *probM, 
+double calculateFlipScore(struct altEvent *event, struct altPath *altPath, 
+			  char *name, struct dMatrix *probM, 
 			  boolean *isBrain, boolean doAll, int *incBrain, int *skipBrain)
 
 /* Calculate |(#times skip > include) - (#times skip < include)|/totalTissues */
@@ -1715,7 +1719,7 @@ assert(probM->colCount > 0);
 /* Use the sortScore hash if it is setup. */
 if(sortScoreHash != NULL)
     {
-    double result = sortScoreForSplice(event->splice->name);
+    double result = sortScoreForSplice(nameForSplice(event->splice, altPath));
     if(result > 0) 
 	*incBrain = 1;
     else if(result < 0)
@@ -1768,7 +1772,9 @@ else
 return 0;
 }
 
-boolean brainSpecific(struct altEvent *event, int pathIx, 
+
+
+boolean brainSpecific(struct altEvent *event, struct altPath *path, int pathIx, 
 		      int **expressed, int **notExpressed, 
 		      int pathCount, struct dMatrix *probM)
 /* Output the event if it is alt-expressed and brain
@@ -1807,13 +1813,15 @@ if(!initDone)
     initDone = TRUE;
     }
 
-/* if(event->splice->type == altCassette) */
-/*     event->flipScore = calculateFlipScore(event, probM, isBrainTissue, FALSE, &incBrain, &skipBrain); */
-
 /* If we have pvals specified by the user use them instead. */
 if(splicePValsHash != NULL)
     {
-    double d = pvalForSplice(event->splice->name);
+    double d = 0;
+    if (path->probeCount > 0) 
+	d = pvalForSplice(nameForSplice(event->splice, path));
+    else
+	return FALSE;
+
     if(d <= pvalThresh)
 	return TRUE;
     else
@@ -2155,13 +2163,15 @@ if(hTableExists2(table))
 return percent;
 }
 
-void printLinks(struct altEvent *event, struct bed *pathBed)
+void printLinks(struct altEvent *event)
 /* Loop through and print each splicing event to web page. */
 {
 struct splice *s = NULL;
 struct path *lastPath = NULL;
 struct splice *splice = event->splice;
+struct altPath *altPath = NULL, *namePath = NULL;
 char *brainDiffDir = optionVal("plotDir","brainDiffPlots.9");
+char *fileSuffix = optionVal("fileSuffix", "png");
 char *chrom = NULL;
 char strand;
 int chromStart = 0,  chromEnd = 0;
@@ -2173,66 +2183,80 @@ double overlapPercent = 0;
 struct dyString *buff = NULL;
 if(splice->paths == NULL || splice->type == altControl)
     return;
-lastPath = slLastEl(splice->paths);
-if(slCount(splice->paths) == 2)
-    diff = abs(splice->paths->bpCount - splice->paths->next->bpCount);
-else
-    diff = lastPath->bpCount;
-chrom = cloneString(pathBed->chrom);
-chromStart = pathBed->chromStart;
-chromEnd = pathBed->chromEnd;
-strand = pathBed->strand[0];
 
-if(newDb != NULL)
+for(altPath = event->altPathList; altPath != NULL; altPath = altPath->next) 
     {
-    if(liftOverCoords(&chrom, &chromStart, &chromEnd, &strand))
-	useDb = newDb;
-    }
+    struct bed *bed = NULL;
 
+    /* If we're dealing with a cassette or other limit to 2 paths 
+       use skip/include path model. */
+    if(onlyTwoPaths(event)) 
+	{
+	namePath = event->altPathList;
+	altPath = event->altPathList->next;
+	diff = abs(splice->paths->bpCount - splice->paths->next->bpCount);
+	}
+    else 
+	{
+	diff = altPath->path->bpCount;
+	namePath = altPath;
+	}
 
+    /* Check to make sure that we have probes and that this
+       path is brain specific. */
+    if(namePath->probeCount < 1 || event->geneProbeCount < 1) 
+	continue;
+    if(splicePValsHash != NULL)
+	{
+	double d = 0;
+	d = pvalForSplice(nameForSplice(event->splice,namePath));
+	if(d > pvalThresh)
+	    continue;
+	event->pVal = d;
+	}
+
+    bed = pathToBed(altPath->path, event->splice, -1, -1, FALSE);
+    chrom = cloneString(bed->chrom);
+    chromStart = bed->chromStart;
+    chromEnd = bed->chromEnd;
+    strand = bed->strand[0];
+    
+    if(newDb != NULL)
+	{
+	if(liftOverCoords(&chrom, &chromStart, &chromEnd, &strand))
+	    useDb = newDb;
+	}
 /* overlapPercent = percentIntronBasesOverlappingCons(chrom, chromStart,chromEnd); */
-buff = newDyString(256);
-fprintf(brainSpTableHtmlOut, "<tr><td>");
-if(overlapsPhasCons)
-    fprintf(brainSpTableHtmlOut, "<font color=red> * </font>");
-fprintf(brainSpTableHtmlOut, "<a target=\"browser\" "
-	"href=\"http://%s/cgi-bin/hgTracks?db=%s&position=%s:%d-%d&hgt.motifs=GGGG%%2CCTCTCT%%2CGCATG%%2CTCCTT\",>", browserName,
-	useDb, chrom, chromStart-100, chromEnd+100);
-fprintf(brainSpTableHtmlOut,"%s </a><font size=-1>%s</font>\n", 
-	refSeqForPSet(event->altPathList->beds[0]->name), useDb);
-
-fprintf(brainSpTableHtmlOut, "<a target=\"browser\" "
-	"href=\"http://%s/cgi-bin/hgTracks?db=%s&position=%s:%d-%d&complement=%d&hgt.motifs=GGGG%%2CCTCTCT%%2CGCATG%%2CTCCTT\">[u]</a>", 
-	browserName, useDb, chrom, chromStart-95, chromStart+5,
-	strand == '-' ? 1 : 0);
-fprintf(brainSpTableHtmlOut, "<a target=\"browser\" "
-	"href=\"http://%s/cgi-bin/hgTracks?db=%s&position=%s:%d-%d&complement=%d&hgt.motifs=GGGG%%2CCTCTCT%%2CGCATG%%2CTCCTT\">[d]</a>", 
-	browserName, useDb, chrom, chromEnd-5, chromEnd+95,
-	strand == '-' ? 1 : 0);
-fprintf(brainSpTableHtmlOut, "<a target=\"plots\" href=\"./%s/%s:%s:%s:%s:%s:%s:%d:%d.jpg\">[f]</a>", 
-	brainDiffDir,
-	splice->name, refSeqForPSet(event->altPathList->beds[0]->name), 
-	nameForType(splice->type), event->altPathList->beds[0]->name,
-	splice->strand, splice->tName, splice->tStart, splice->tEnd);
+    buff = newDyString(256);
+    fprintf(brainSpTableHtmlOut, "<tr><td>");
+    if(overlapsPhasCons)
+	fprintf(brainSpTableHtmlOut, "<font color=red> * </font>");
+    fprintf(brainSpTableHtmlOut, "<a target=\"browser\" "
+	    "href=\"http://%s/cgi-bin/hgTracks?db=%s&position=%s:%d-%d&hgt.motifs=GGGG%%2CCTCTCT%%2CGCATG%%2CTCCTT\",>", browserName,
+	    useDb, chrom, chromStart-100, chromEnd+100);
+    fprintf(brainSpTableHtmlOut,"%s </a><font size=-1>%s</font>\n", 
+	    refSeqForPSet(event->geneBeds[0]->name), useDb);
+    
+    fprintf(brainSpTableHtmlOut, "<a target=\"browser\" "
+	    "href=\"http://%s/cgi-bin/hgTracks?db=%s&position=%s:%d-%d&complement=%d&hgt.motifs=GGGG%%2CCTCTCT%%2CGCATG%%2CTCCTT\">[u]</a>", 
+	    browserName, useDb, chrom, chromStart-95, chromStart+5,
+	    strand == '-' ? 1 : 0);
+    fprintf(brainSpTableHtmlOut, "<a target=\"browser\" "
+	    "href=\"http://%s/cgi-bin/hgTracks?db=%s&position=%s:%d-%d&complement=%d&hgt.motifs=GGGG%%2CCTCTCT%%2CGCATG%%2CTCCTT\">[d]</a>", 
+	    browserName, useDb, chrom, chromEnd-5, chromEnd+95,
+	    strand == '-' ? 1 : 0);
+    fprintf(brainSpTableHtmlOut, "<a target=\"plots\" href=\"./%s/%s:%s:%s:%s:%s:%s:%d:%d.%s\">[f]</a>", 
+	    brainDiffDir,
+	    splice->name, refSeqForPSet(namePath->beds[0]->name), 
+	    nameForType(splice->type), namePath->beds[0]->name,
+	    splice->strand, splice->tName, splice->tStart, splice->tEnd, fileSuffix);
 /* makeJunctMdbGenericLink(splice, buff, "[p]"); */
 /* fprintf(brainSpTableHtmlOut, "%s", buff->string); */
-fprintf(brainSpTableHtmlOut, "(%5.2f%%, %5.5f) ", 100.0 * event->percentUltra, event->pVal);
-/* if(splice->type == altCassette) */
-/*     { */
-/*     int i = 0; */
-/*     int *u = event->altPathList->next->motifUpCounts; */
-/*     int *d = event->altPathList->next->motifDownCounts; */
-/*     for(i = 0; i < bindSiteCount; i++) */
-/* 	fprintf(brainSpTableHtmlOut, "%d ", u[i] + d[i]); */
-/*     } */
-fprintf(brainSpTableHtmlOut, " </td>");
-fprintf(brainSpTableHtmlOut,"<td>%.4f</td></tr>\n", event->flipScore); 
-// fprintf(brainSpTableHtmlOut,"<td>%s</td>", nameForType(splice->type));
-/* if(optionExists("flipScoreSort")) */
-/*     fprintf(brainSpTableHtmlOut,"<td>%.4f</td></tr>\n", event->flipScore); */
-/* else */
-/*     fprintf(brainSpTableHtmlOut,"<td>%d</td></tr>\n", diff); */
-dyStringFree(&buff);
+    fprintf(brainSpTableHtmlOut, "<font size=-1>(%5.2f%%, %s)</font>", 100.0 * event->percentUltra, nameForType(splice->type));
+    fprintf(brainSpTableHtmlOut, " </td>");
+    fprintf(brainSpTableHtmlOut,"<td>%.4f</td></tr>\n", event->flipScore); 
+    dyStringFree(&buff);
+    }
 }
 
 double consForIntCoords(char *chrom, int intStart, int intEnd, boolean doLift)
@@ -2399,6 +2423,7 @@ int pathIx = 0;
 struct altPath *altPath = NULL;
 boolean brainSpecificEvent = FALSE;
 struct splice *splice = event->splice;
+boolean eventAdded = FALSE;
 for(altPath = event->altPathList; altPath != NULL; altPath = altPath->next, pathIx++)
     {
     char *chrom = NULL;
@@ -2411,6 +2436,7 @@ for(altPath = event->altPathList; altPath != NULL; altPath = altPath->next, path
     char *skipPSet = NULL;
     struct altPath *skipPath = NULL;
     struct altPath *incPath = NULL;
+    struct altPath *namePath = NULL;
     char buff[256];
     double percentPhastCons = 0;
     double upIntCons = 0;
@@ -2419,35 +2445,44 @@ for(altPath = event->altPathList; altPath != NULL; altPath = altPath->next, path
     double flipScore = 0;
     int incBrain = 0, skipBrain =0;
     int exonCount = -1, exonNum = -1;
-    if(!brainSpecific(event, pathIx, expressed, notExpressed, pathCount, probM) || 
-       (splice->type != altCassette) || event->altPathList->beds == NULL || 
-       event->altPathList->next->beds == NULL)
-/*        (splice->type != altCassette && splice->type != altMutExclusive &&  */
-/* 	splice->type != alt5Prime && splice->type != alt3Prime && */
-/* 	splice->type != altOther)) //	splice->type != alt3PrimeSoft && */
+    if(onlyTwoPaths(event) && altPath == event->altPathList->next)
+	namePath = event->altPathList;
+    else
+	namePath = altPath;
+    if(!brainSpecific(event, namePath, pathIx, expressed, notExpressed, pathCount, probM) ||
+       splice->type == altOther)
 	{
 	continue;
 	}
-    
+
     /* check to make sure this path includes some sequence. */
     pathBed = pathToBed(altPath->path, event->splice, -1, -1, FALSE);
     if(pathBed == NULL)
 	continue;
 
-    /* Add event to our list for later sorting, etc. */
-    AllocVar(brainEvent);
-    brainEvent->val = event;
-    slAddHead(&brainSpEvents, brainEvent);
+    if(!eventAdded) 
+	{
+	/* Add event to our list for later sorting, etc. */
+	AllocVar(brainEvent);
+	brainEvent->val = event;
+	slAddHead(&brainSpEvents, brainEvent);
+	eventAdded = TRUE;
+	}
+
+    if(sortScoreHash != NULL && namePath->probeCount > 0)
+	event->flipScore = sortScoreForSplice(nameForSplice(event->splice, namePath));
+
+    /* Rest of the logging functions are only for cassettes with probes. */
+    if(splice->type != altCassette || event->altPathProbeCount < 2)
+	{
+	continue;
+	}
 
     /* Lets do some stat recording. */
     skipPath = event->altPathList;
     skipPSet = skipPath->beds[0]->name;
     incPath = event->altPathList->next;
 
-/*     /\* Calculate the flip score for now. *\/ */
-/*     if(onlyTwoPaths(event)) */
-/* 	calculateFlipScore(event, probM); */
-    
     chrom = cloneString(pathBed->chrom);
     chromStart = pathBed->chromStart;
     chromEnd = pathBed->chromEnd;
@@ -2520,7 +2555,7 @@ for(altPath = event->altPathList; altPath != NULL; altPath = altPath->next, path
     /* Pvalue. */
     if(splicePValsHash != NULL)
 	{
-	safef(buff, sizeof(buff), "%g", pvalForSplice(event->splice->name));
+	safef(buff, sizeof(buff), "%g", pvalForSplice(nameForSplice(event->splice, skipPath)));
 	vmAddVal(brainSpecificValues, skipPSet, "bsPVal", buff);
 	event->pVal = atof(buff);    
 	}
@@ -2546,7 +2581,7 @@ for(altPath = event->altPathList; altPath != NULL; altPath = altPath->next, path
 
     /* Calculate a flip score using all tissues even if they
        aren't expressed. */
-    event->flipScore = flipScore = calculateFlipScore(event, skipPSet, probM, isBrainTissue, TRUE, &incBrain, &skipBrain);
+    event->flipScore = flipScore = calculateFlipScore(event, skipPath, skipPSet, probM, isBrainTissue, TRUE, &incBrain, &skipBrain);
     safef(buff, sizeof(buff), "%.4f", flipScore);
     vmAddVal(brainSpecificValues, skipPSet, "flipScoreAllTissues", buff);
 
@@ -2555,7 +2590,7 @@ for(altPath = event->altPathList; altPath != NULL; altPath = altPath->next, path
     vmAddVal(brainSpecificValues, skipPSet, "flipScore", buff);
 
     /* Calculate times brain includes and brain excludes. */
-    flipScore = calculateFlipScore(event, skipPSet, probM, isBrainTissue, FALSE, &incBrain, &skipBrain);
+    flipScore = calculateFlipScore(event, skipPath, skipPSet, probM, isBrainTissue, FALSE, &incBrain, &skipBrain);
     safef(buff, sizeof(buff), "%d", incBrain);
     vmAddVal(brainSpecificValues, skipPSet, "incBrain", buff);
     safef(buff, sizeof(buff), "%d", skipBrain);
@@ -2819,17 +2854,7 @@ ap->avgExpVals = event->geneExpVals[geneIx];
 return ap;
 }
 
-char *nameForSplice(struct splice *splice, struct altPath *namePath)
-/* Return a unique name for this splicing event. Memory is owned by
- this function and will be overwritten each time this function is
- called. */
-{
-static char buff[256];
-safef(buff, sizeof(buff), "%s:%s:%s:%s:%s:%s:%d:%d", 
-      splice->name, refSeqForPSet(namePath->beds[0]->name), nameForType(splice->type), namePath->beds[0]->name,
-      splice->strand, splice->tName, splice->tStart, splice->tEnd);
-return buff;
-}
+
 
 void outputRatioStatsForPaths(struct altEvent *event, struct altPath *incPath,
 			      struct altPath *skipPath, struct altPath *namePath,
@@ -3295,7 +3320,9 @@ for(event = eventList; event != NULL; event = event->next)
     doEventAnalysis(event, intenM, probM);
     
     if(event->isExpressed)
+	{
 	logSpliceTypeExp(event->splice->type);
+	}
     if(event->isAltExpressed)
 	logSpliceTypeAltExp(event->splice->type);
     }
@@ -3309,9 +3336,7 @@ if(brainSpBedUpOut != NULL)
     for(ref = brainSpEvents; ref != NULL; ref = ref->next)
 	{
 	struct altEvent *bEvent = ref->val;
-	struct altPath *bAltPath = bEvent->altPathList->next;
-	struct bed *pathBed = pathToBed(bAltPath->path, bEvent->splice, -1, -1, FALSE);
-	printLinks(bEvent, pathBed);
+	printLinks(bEvent);
 	}
     }
 }
@@ -3427,10 +3452,10 @@ fprintf(stderr, "| alt Mutual Exclusive | %5d |      %4d |      %4d |  %3d |  %5
 	altMutExclusiveCount, altMutExclusiveWProbeCount, altMutExclusiveExpCount, altMutExclusiveAltExpCount,
 	calcPercent(altMutExclusiveAltExpCount, altMutExclusiveExpCount));
 fprintf(stderr, "| alt Txn Start        | %5d |      %4d |      %4d |  %3d |  %5.1f%% |\n",
-	alt5PrimeSoftCount, alt5PrimeWProbeCount, alt5PrimeSoftExpCount, alt5PrimeSoftAltExpCount,
+	alt5PrimeSoftCount, alt5PrimeSoftWProbeCount, alt5PrimeSoftExpCount, alt5PrimeSoftAltExpCount,
 	calcPercent(alt5PrimeSoftAltExpCount, alt5PrimeSoftExpCount));
 fprintf(stderr, "| alt Txn End          | %5d |      %4d |      %4d |  %3d |  %5.1f%% |\n",
-	alt3PrimeSoftCount, alt3PrimeWProbeCount, alt3PrimeSoftExpCount, alt3PrimeSoftAltExpCount,
+	alt3PrimeSoftCount, alt3PrimeSoftWProbeCount, alt3PrimeSoftExpCount, alt3PrimeSoftAltExpCount,
 	calcPercent(alt3PrimeSoftAltExpCount, alt3PrimeSoftExpCount));
 fprintf(stderr, "| alt Other            | %5d |      %4d |      %4d |  %3d |  %5.1f%% |\n",
 	altOtherCount, altOtherWProbeCount, altOtherExpCount, altOtherAltExpCount,
@@ -3690,7 +3715,9 @@ for(event = eventList; event != NULL; event = event->next)
     findProbeSetsForEvents(event);
     logSpliceType(event->splice->type);
     if(event->altPathProbeCount >= 2)
+	{
 	logSpliceTypeWProbe(event->splice->type);
+	}
     }
 warn("");
 warn("Reading Data Matrixes.");
@@ -4071,7 +4098,7 @@ for(altPath = event->altPathList; altPath != NULL; altPath = altPath->next)
 	pathExpCount++;
     pathIx++;
     }
-result = brainSpecific(event, 1, expressed, notExpressed, 2, probM);
+result = brainSpecific(event, altPath, 1, expressed, notExpressed, 2, probM);
 if(result != TRUE)
     test->errorMsg = cloneString("Not showing brain expressed.");
 /* Cleanup some memory. */
