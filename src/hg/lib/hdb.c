@@ -24,7 +24,7 @@
 #include "scoredRef.h"
 #include "maf.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.113 2003/05/25 16:12:25 baertsch Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.114 2003/06/20 18:01:11 sugnet Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
@@ -542,6 +542,43 @@ struct dnaSeq *hChromSeq(char *chrom, int start, int end)
 char fileName[512];
 hNibForChrom(chrom, fileName);
 return nibLoadPart(fileName, start, end-start);
+}
+
+struct dnaSeq *hSeqForBed(struct bed *bed)
+/* Get the sequence associated with a particular bed concatenated together. */
+{
+char fileName[512];
+struct dnaSeq *block = NULL;
+struct dnaSeq *bedSeq = NULL;
+int i;
+assert(bed);
+/* Handle very simple beds and beds with blocks. */
+if(bed->blockCount == 0)
+    {
+    bedSeq = hChromSeq(bed->chrom, bed->chromStart, bed->chromEnd);
+    freez(&bedSeq->name);
+    bedSeq->name = cloneString(bed->name);
+    }
+else
+    {
+    int offSet = bed->chromStart;
+    struct dyString *currentSeq = newDyString(512);
+    hNibForChrom(bed->chrom, fileName);
+    for(i=0; i<bed->blockCount; i++)
+	{
+	block = nibLoadPart(fileName, offSet+bed->chromStarts[i], bed->blockSizes[i]);
+	dyStringPrintf(currentSeq, "%s", block->dna);
+	dnaSeqFree(&block);
+	}
+    AllocVar(bedSeq);
+    bedSeq->name = cloneString(bed->name);
+    bedSeq->dna = cloneString(currentSeq->string);
+    bedSeq->size = strlen(bedSeq->dna);
+    dyStringFree(&currentSeq);
+    }
+if(bed->strand[0] == '-')
+    reverseComplement(bedSeq->dna, bedSeq->size);
+return bedSeq;
 }
 
 boolean hChromBandConn(struct sqlConnection *conn, 

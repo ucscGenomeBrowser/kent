@@ -27,6 +27,10 @@
 #include "hgRelate.h"
 #endif
 
+#ifndef BED_H
+#include "bed.h"
+#endif
+
 struct blatServerTable
 /* Information about a BLAT server. */
 {
@@ -165,6 +169,9 @@ int hChromSize2(char *chromName);
 
 struct dnaSeq *hChromSeq(char *chrom, int start, int end);
 /* Return lower case DNA from chromosome. */
+
+struct dnaSeq *hSeqForBed(struct bed *bed);
+/* Get the sequence associated with a particular bed concatenated together. */
 
 boolean hChromBand(char *chrom, int pos, char retBand[64]);
 /* Fill in text string that says what band pos is on. 
