@@ -297,20 +297,6 @@ int qStart = chain->qStart, qEnd = chain->qEnd;
 if (isRev)
     reverseIntRange(&qStart, &qEnd, chain->qSize);
 spaceList = findSpaces(qChrom->spaces,qStart,qEnd);
-#ifdef DEBUG
-if (uglier) uglyf("add chain on q\n");
-if (uglier)
-    {
-    struct slRef *fullSpaceList = findSpaces(qChrom->spaces, 0, qChrom->size);
-    struct slRef *ref;
-    slSort(&fullSpaceList, cmpSpaceRef);
-    for (ref = fullSpaceList; ref != NULL; ref = ref->next)
-        {
-	struct space *space = ref->val;
-	uglyf("  %d-%d\n", space->start, space->end);
-	}
-    }
-#endif /* DEBUG */
 uglyf("Got %d qSpaces\n", slCount(spaceList));
 for (ref = spaceList; ref != NULL; ref = ref->next)
     {
@@ -544,8 +530,9 @@ while ((chain = chainRead(lf)) != NULL)
     addChain(qChrom, tChrom, chain);
     uglyf("%s has %d inserts, %s has %d\n", tChrom->name, tChrom->spaces->n, qChrom->name, qChrom->spaces->n);
     }
-uglyf("About to output\n");
+printf("Outputing %s\n", tNet);
 outputNetSide(tChromList, tNet, FALSE);
+printf("Outputing %s\n", qNet);
 outputNetSide(qChromList, qNet, TRUE);
 }
 
