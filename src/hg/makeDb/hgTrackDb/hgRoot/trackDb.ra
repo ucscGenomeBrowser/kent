@@ -278,6 +278,14 @@ visibility hide
 color 0,90,100
 type genePred geneidPep
 
+track genscan
+shortLabel Genscan Genes
+longLabel Genscan Gene Predictions
+priority 17.5
+visibility hide
+color 170,100,0
+type genePred genscanPep
+
 track genscanExtra
 shortLabel Genscan Extra
 longLabel Genscan Extra (Suboptimal) Exon Predictions 
