@@ -791,6 +791,24 @@ axtChain $1 \
     featureBits borEut1 chainHg17Link
     # 54236215 bases of 70435997 (77.001%) in intersection
 
+# GENBANK/REFSEQ alignments:
+   - added borEut to:
+        /cluster/data/genbank/etc/genbank.conf
+        src/hg/makeDb/genbank/src/lib/gbGenome.c
+        src/hg/makeDb/genbank/src/align/gbBlat
+     cvs commit the changes
+
+     cd src/hg/makeDb/genbank
+     jkmake install-server
+     ssh kksilo
+     cd /cluster/data/genbank
+     ./bin/gbAlignStep -initial borEut1 &
+
+     # load into database
+     ssh hgwdev
+     cd /cluster/data/genbank/                
+     ./bin/gbDbLoadStep  -initialLoad borEut1 &
+
 # BLASTZ EutGli1
     ssh kk
     mkdir /cluster/data/borEut1/bed/blastz.eutGli1
