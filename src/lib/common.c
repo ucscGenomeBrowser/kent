@@ -8,7 +8,7 @@
 #include "errabort.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: common.c,v 1.75 2004/11/26 16:49:48 daryl Exp $";
+static char const rcsid[] = "$Id: common.c,v 1.76 2005/01/10 00:16:15 kent Exp $";
 
 void *cloneMem(void *pt, size_t size)
 /* Allocate a new buffer of given size, and copy pt to it. */
@@ -1733,14 +1733,26 @@ if (s == NULL)
 return s;
 }
 
-void uglyTime(char *label)
+char *trueFalseString(boolean b)
+/* Return "true" or "false" */
+{
+return (b ? "true" : "false");
+}
+
+void uglyTime(char *label, ...)
 /* Print label and how long it's been since last call.  Call with 
  * a NULL label to initialize. */
 {
 static long lastTime = 0;
 long time = clock1000();
+va_list args;
+va_start(args, label);
 if (label != NULL)
-    printf("%s: %ld millis<BR>\n", label, time - lastTime);
+    {
+    vfprintf(stdout, label, args);
+    fprintf(stdout, ": %ld millis<BR>\n", time - lastTime);
+    }
 lastTime = time;
+va_end(args);
 }
 
