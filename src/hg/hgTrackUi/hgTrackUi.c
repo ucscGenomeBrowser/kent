@@ -154,11 +154,10 @@ endControlGrid(&cg);
 void wiggleUi(struct trackDb *tdb)
 /* put up UI for the wiggle track for representing curves inside * tracks */
 {
-char *wiggleMap = cartUsualString(cart, "wiggle.type", wiggleEnumToString(0));
-char *interpolate = cartUsualString(cart, "linear.interp", "on");
+char *interpolate = cartUsualString(cart, "linear.interp", "Linear Interpolation");
 char *aa = cartUsualString(cart, "anti.alias", "on");
 printf("<p><b>Interpolation: </b> ");
-wiggleDropDown("interpolate", wiggleMap);
+wiggleDropDown("linear.interp", interpolate );
 printf(" ");
 printf(" <b>Anti-Aliasing</b>: ");
 cgiMakeRadioButton("anti.alias", "on", sameString(aa, "on"));

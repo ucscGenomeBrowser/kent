@@ -4845,6 +4845,13 @@ int w;
 int prevEnd = -1;
 double prevY = -1;
 
+
+/*process cart options*/
+
+char *interpolate = cartUsualString(cart, "linear.interp", "Linear Interpolation");
+enum wiggleOptEnum wiggleType = wiggleStringToEnum(interpolate);
+char *aa = cartUsualString(cart, "anti.alias", "on");
+
 lf=tg->items;    
 for(lf = tg->items; lf != NULL; lf = lf->next) 
     {
@@ -4863,8 +4870,20 @@ for(lf = tg->items; lf != NULL; lf = lf->next)
             y2 = prevY;
 	        x2 = round((double)((int)prevEnd-winStart)*scale) + xOff;
 
-            if( (x2-x1) > 0 )
-                mgConnectingLine( mg, x1, y1, x2, y2, shadesOfGray );
+            if( (x2-x1) > 0)
+                {
+                if( wiggleType == wiggleLinearInterpolation ) /*connect samples*/
+                    {
+                    if( sameString( aa, "on" )) /*use anti-aliasing*/
+                        mgConnectingLine( mg, x1, y1, x2, y2, shadesOfGray );
+                    else
+                        mgDrawLine( mg, x1, y1, x2, y2, blackIndex() );
+                    }
+                else if( wiggleType == wiggleNoInterpolation )
+                    {
+                        /*do nothing*/
+                    }
+                }
 
 	        }
 

@@ -156,7 +156,7 @@ void nci60DropDown(char *var, char *curVal);
 
 enum wiggleOptEnum {
    wiggleNoInterpolation = 0,
-   wiggleLinearInterpolaiton = 1,
+   wiggleLinearInterpolation = 1,
 };
 
 enum wiggleOptEnum wiggleStringToEnum(char *string);
