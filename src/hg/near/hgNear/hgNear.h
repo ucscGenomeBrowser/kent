@@ -38,6 +38,9 @@ struct column
    void (*labelPrint)(struct column *col);
    /* Print the label in the label row. */
 
+   void (*configControls)(struct column *col);
+   /* Print out configuration controls. */
+
    /* -- Data that may be track-specific. -- */
    char *table;			/* Name of associated table. */
    char *keyField;		/* GeneId field in associated table. */
@@ -48,6 +51,7 @@ struct column
    double expScale;		/* What to scale by to get expression val from -1 to 1. */
    int representativeCount;	/* Count of representative experiments. */
    int *representatives;	/* Array (may be null) of representatives. */
+   boolean expRatioUseBlue;	/* Use blue rather than red in expRatio. */
    };
 
 /* ---- global variables ---- */

@@ -10,7 +10,7 @@
 #include "web.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: configure.c,v 1.5 2003/06/23 17:49:30 kent Exp $";
+static char const rcsid[] = "$Id: configure.c,v 1.6 2003/06/23 18:52:06 kent Exp $";
 
 static char *onOffString(boolean on)
 /* Return "on" or "off". */
@@ -34,6 +34,9 @@ hPrintf("<TH>Name</TH>");
 hPrintf("<TH>State</TH>");
 hPrintf("<TH>Position</TH>");
 hPrintf("<TH>Description</TH>");
+hPrintf("<TH>Configuration</TH>");
+
+/* Print out configuration controls. */
 hPrintf("</TR>");
 
 /* Write out other rows. */
@@ -64,6 +67,11 @@ for (col = colList; col != NULL; col = col->next)
     /* Do long label. */
     hPrintf("<TD>%s</TD>", col->longLabel);
 
+    /* Do configuration controls. */
+    if (col->configControls != NULL)
+         col->configControls(col);
+    else
+         hPrintf("<TD>n/a</TD");
     hPrintf("</TR>\n");
     }
 hPrintf("</TABLE>\n");

@@ -9,8 +9,9 @@
 #include "hdb.h"
 #include "hCommon.h"
 #include "hgNear.h"
+#include "cheapcgi.h"
 
-static char const rcsid[] = "$Id: expRatio.c,v 1.5 2003/06/23 17:21:44 kent Exp $";
+static char const rcsid[] = "$Id: expRatio.c,v 1.6 2003/06/23 18:52:06 kent Exp $";
 
 
 static char *expRatioCellVal(struct column *col, char *geneId, 
@@ -37,7 +38,30 @@ if (hex > 0xFF) hex = 0xFF;
 hPrintf("%02X", hex);
 }
 
-void colorVal(double val, boolean useBlue)
+static char *colSchemeVarName(struct column *col)
+/* Return variable name for use-blue. */
+{
+static char buf[128];
+safef(buf, sizeof(buf), "near.col.%s.color", col->name);
+return buf;
+}
+
+static char *scaleVarName(struct column *col)
+/* Return variable name for use-blue. */
+{
+static char buf[128];
+safef(buf, sizeof(buf), "near.col.%s.scale", col->name);
+return buf;
+}
+
+
+static char *colorSchemeVals[] = {
+/* Menu option for color scheme. */
+   "red high/green low",
+   "blue high/green low",
+};
+
+static void colorVal(double val, boolean useBlue)
 /* Val is -1.0 to 1.0.  Print color in form #FF0000, normally
  * using green for minus values, red for plus values, but
  * optionally using blue for plus values. */
@@ -74,7 +98,6 @@ else
     }
 }
 
-static boolean expRatioUseBlue = FALSE;
 static int expSubcellWidth = 16;
 
 static void startExpCell()
@@ -95,7 +118,6 @@ static void restartExpCell()
 endExpCell();
 startExpCell();
 }
-
 
 static void printRatioShades(struct column *col, int repCount, 
 	int *reps, int valCount, float *vals)
@@ -122,13 +144,14 @@ for (i=0; i<repCount; ++i)
 	else
 	    {
 	    hPrintf("<TD WIDTH=%d BGCOLOR=\"#", expSubcellWidth);
-	    colorVal(val*scale, FALSE);
+	    colorVal(val*scale, col->expRatioUseBlue);
 	    hPrintf("\">&nbsp;</TD>");
 	    }
 	}
     }
 endExpCell();
 }
+
 
 static void replicate(char *s, int repCount, int *reps)
 /* Replicate s in cells of table */
@@ -274,6 +297,30 @@ for (i=0; i<numExpts; ++i)
 freeMem(experiments);
 }
 
+static void expRatioConfigControls(struct column *col)
+/* Print out configuration column */
+{
+hPrintf("<TD>");
+
+/* Make color drop-down. */
+    {
+    char *varName = colSchemeVarName(col);
+    char *checked = cartUsualString(cart, varName, colorSchemeVals[0]);
+    hPrintf("colors: ");
+    cgiMakeDropList(varName, colorSchemeVals, ArraySize(colorSchemeVals), checked);
+    }
+
+/* Make scale drop-down. */
+    {
+    char *varName = scaleVarName(col);
+    char *val = cartUsualString(cart, varName, "1.0");
+    hPrintf("scale: ");
+    cgiMakeTextVar(varName, val, 3);
+    }
+hPrintf("</TD>");
+}
+
+
 void setupColumnExpRatio(struct column *col, char *parameters)
 /* Set up expression ration type column. */
 {
@@ -313,8 +360,25 @@ if (expMax != NULL)
 else
     col->expScale = 1.0/3.0;
 
+/* Figure out color scheme. */
+    {
+    char *varName = colSchemeVarName(col);
+    char *val = cartUsualString(cart, varName, colorSchemeVals[0]);
+    col->expRatioUseBlue = !sameString(val, colorSchemeVals[0]);
+    }
+
+/* Figure out scale. */
+    {
+    char *varName = scaleVarName(col);
+    char *val = cartUsualString(cart, varName, "1 x");
+    double fVal = atof(val);
+    if (fVal == 0) fVal = 1.0;
+    col->expScale *= fVal;
+    }
+
 col->exists = expRatioExists;
 col->cellVal = expRatioCellVal;
 col->cellPrint = expRatioCellPrint;
 col->labelPrint = expRatioLabelPrint;
+col->configControls = expRatioConfigControls;
 }
