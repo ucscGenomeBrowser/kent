@@ -1,5 +1,5 @@
-.c.o:
-	gcc -ggdb -O -Wimplicit -I../inc -I../../inc -I../../../inc -c $*.c
+include ../../inc/common.mk
+
 
 L = -lm
 MYLIBDIR = ../../lib/$(MACHTYPE)
