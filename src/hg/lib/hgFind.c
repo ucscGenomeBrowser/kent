@@ -41,7 +41,7 @@
 #include "minGeneInfo.h"
 #include <regex.h>
 
-static char const rcsid[] = "$Id: hgFind.c,v 1.128 2004/03/02 13:51:56 heather Exp $";
+static char const rcsid[] = "$Id: hgFind.c,v 1.129 2004/03/02 18:37:35 hiram Exp $";
 
 /* alignment tables to check when looking for mrna alignments */
 static char *estTables[] = { "all_est", "xenoEst", NULL};
@@ -3336,6 +3336,7 @@ else
     findBedTablePos(query, "HG-U133:", hgp, "affyUcla");
     findBedPos(query, hgp, "uniGene_2");
     findBedPos(query, hgp, "sgdOther");
+    findBedPos(query, hgp, "miRNA");
     // findBedPos(query,hgp,"gbRRNA");
     // findBedPos(query,hgp,"gbTRNA");
     // findBedPos(query,hgp,"gbMiscRNA");
