@@ -691,8 +691,8 @@ char crLfChopper[] = "\n\r";
 char whiteSpaceChopper[] = " \t\n\r";
 
 
-/* Return first non-white space. */
 char *skipLeadingSpaces(char *s)
+/* Return first non-white space. */
 {
 char c;
 if (s == NULL) return NULL;

@@ -5,6 +5,7 @@
  *****************************************************************************/
 #include "common.h"
 #include "portable.h"
+#include "hash.h"
 #include "obscure.h"
 #include "linefile.h"
 
@@ -210,5 +211,41 @@ for (;;)
 *out = 0;
 *retNext = s;
 return TRUE;
+}
+
+struct hash *hashVarLine(char *line, int lineIx)
+/* Return a symbol table from a line of form:
+ *   var1=val1 var2='quoted val2' var3="another val" */
+{
+char *s = line, c;
+char *var, *val;
+struct hash *hash = newHash(8);
+
+for (;;)
+    {
+    if ((var = skipLeadingSpaces(s)) == NULL)
+        break;
+    if ((c = *var) == 0)
+        break;
+    if (!isalpha(c))
+	errAbort("line %d of custom input: variable needs to start with letter", lineIx);
+    val = strchr(var, '=');
+    if (val == NULL)
+        errAbort("line %d of custom input: missing = in var/val pair", lineIx);
+    *val++ = 0;
+    c = *val;
+    if (c == '\'' || c == '"')
+        {
+	if (!parseQuotedString(val, val, &s))
+	    errAbort("line %d of custom input: missing closing %c", lineIx, c);
+	}
+    else
+	{
+	s = skipToSpaces(val);
+	if (s != NULL) *s++ = 0;
+	}
+    hashAdd(hash, var, cloneString(val));
+    }
+return hash;
 }
 
