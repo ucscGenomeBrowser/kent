@@ -16,7 +16,7 @@
 #include "hash.h"
 #include "liftOver.h"
 
-static char const rcsid[] = "$Id: hgLiftOver.c,v 1.31 2004/10/12 21:04:38 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgLiftOver.c,v 1.32 2004/11/05 19:04:46 kate Exp $";
 
 /* CGI Variables */
 #define HGLFT_USERDATA_VAR "hglft_userData"     /* typed/pasted in data */
@@ -251,6 +251,7 @@ if (userData != NULL && userData[0] != '\0')
     makeTempName(&oldTn, HGLFT, ".user");
     old = mustOpen(oldTn.forCgi, "w");
     fputs(userData, old);
+    fputs("\n", old);           /* in case user doesn't end last line */
     carefulClose(&old);
     chmod(oldTn.forCgi, 0666);
 
