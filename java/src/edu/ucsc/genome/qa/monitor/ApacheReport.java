@@ -43,7 +43,7 @@ public class ApacheReport {
       pw.print("<TITLE>Daily Apache Report</TITLE>\n");
       pw.print("</HEAD>\n");
       pw.print("<BODY>\n");
-      pw.print("<H2>Daily Apache Report " + getMonth(month) + day + "," + year + "</H2>\n");
+      pw.print("<H2>Daily Apache Report " + getMonth(month) + day + ", " + year + "</H2>\n");
       pw.print("<TABLE BORDER CELLSPACING=0 CELLPADDING=5>\n");
       pw.print("<TR>\n");
       pw.print("<TH>Hour</TH>");
@@ -151,6 +151,8 @@ public class ApacheReport {
 
       // iterate through 24 hours
       int secondsInHour = 60 * 60;
+      int totalAccess = 0;
+      int totalError = 0;
       for (int reportHour = 0; reportHour <= 23; reportHour++) {
         pw.print("<TR>\n");
         System.out.println("reportHour = " + reportHour);
@@ -175,6 +177,7 @@ public class ApacheReport {
         int nullcnt = nullRS.getInt("cnt");
         System.out.println("Count of rows with any status code = " + nullcnt);
         pw.print("<TD>" + nullcnt + "</TD>\n");
+	totalAccess = totalAccess + nullcnt;
 
         // check for matching rows
         String testquery = "select count(*) as cnt from ";
@@ -193,12 +196,22 @@ public class ApacheReport {
         int cnt = testRS.getInt("cnt");
         System.out.println("Count of matching rows = " + cnt);
         pw.print("<TD>" + cnt + "</TD>\n");
+	totalError = totalError + cnt;
 
+        // need to convert numerator and denominator to float first?
 	float percent = cnt / nullcnt;
         pw.print("<TD>" + percent + "</TD>\n");
         pw.print("</TR>\n");
 
       }
+      // print totals
+      pw.print("<TR>\n");
+      pw.print("<TD>Totals</TD>\n");
+      pw.print("<TD>" + totalAccess + "</TD>\n");
+      pw.print("<TD>" + totalError + "</TD>\n");
+      float totalPercent = totalError / totalAccess;
+      pw.print("<TD>" + totalPercent + "</TD>\n");
+      pw.print("</TR>\n");
       printFooter(pw);
       pw.close();
       stmt.close();
