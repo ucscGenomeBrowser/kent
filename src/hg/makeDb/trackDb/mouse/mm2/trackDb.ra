@@ -197,3 +197,13 @@ type psl xeno hg10
 otherDb hg10
 colorChromDefault off
 
+track NIAGene
+shortLabel NIA Gene Index
+longLabel NIA Mouse Gene Index Version 1
+group genes
+priority 54
+visibility hide
+color 0,60,120
+altColor 200,220,255
+spectrum on
+type psl .
