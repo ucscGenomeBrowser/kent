@@ -366,3 +366,39 @@ priority 530
 altColor 0,160,0
 visibility hide
 type sample 9
+
+track pjt_gene
+shortLabel Gene Annotations
+longLabel PJT's Curated Gene Annotations
+priority 540
+visibility hide
+color 150,100,30
+altColor 230,170,40
+type bed 12 .
+
+track pjt_genscan
+shortLabel Genscan Annotations
+longLabel PJT's Genscan Annotations
+priority 550
+visibility hide
+color 150,100,30
+altColor 230,170,40
+type bed 12 .
+
+track pjt_mrna
+shortLabel mRNA Annotations
+longLabel PJT's Curated mRNA Annotations
+priority 560
+visibility hide
+color 150,100,30
+altColor 230,170,40
+type bed 12 .
+
+track pjt_cds
+shortLabel CDS Annotations
+longLabel PJT's Curated CDS Annotations
+priority 570
+visibility hide
+color 150,100,30
+altColor 230,170,40
+type bed 12 .
