@@ -1,4 +1,4 @@
-all: cgi intronerator
+all: cgi
 
 alpha: clean cgi-alpha blat
 
@@ -34,12 +34,16 @@ clean:
 tags:
 	ctags $(HOME)/src/lib/*.c $(HOME)/src/inc/*.h $(HOME)/src/hg/lib/*.c $(HOME)/src/jkOwnLib/*.c
 
+utils: libs
+	@for D in $(DIRS) x; do \
+            if test "$$D" != "x" ; then \
+                ( cd $$D && echo $$D && $(MAKE) ) ;\
+                x=$$? ; if [ $$x -ne 0 ]; then exit $$x ; fi \
+            fi ;\
+	done
+	# cd hg && ${MAKE};
+
 DIRS = aladdin ameme cdnaAli dnaDust fuzzyFind \
        getgene idbQuery index primeMate protDust reformat \
        scanIntrons tracks weblet wormAli xenoAli
-
-intronerator: 
-	cd lib && ${MAKE}
-	for i in $(DIRS); do cd $$i && ${MAKE}; done;
-	cd hg && ${MAKE};
 
