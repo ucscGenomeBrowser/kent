@@ -11,7 +11,7 @@
 #include "wiggle.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: hgLoadWiggle.c,v 1.13 2004/12/09 20:14:31 hiram Exp $";
+static char const rcsid[] = "$Id: hgLoadWiggle.c,v 1.14 2005/01/19 00:30:40 hiram Exp $";
 
 /* Command line switches. */
 static boolean noBin = FALSE;		/* Suppress bin field. */
@@ -47,8 +47,8 @@ errAbort(
   "   -tab\t\tSeparate by tabs rather than space\n"
   "   -pathPrefix=<path>\t.wib file path prefix to use "
       "(default /gbdb/<DB>/wib)\n"
-  "   -verbose=N\tN=2 see # of lines input, N=3 see chrom size info,\n"
-  "\t\tN=4 see details on chrom size info"
+  "   -verbose=N\tN=2 see # of lines input and SQL create statement,\n"
+  "\t\tN=3 see chrom size info, N=4 see details on chrom size info"
   );
 }
 
@@ -309,6 +309,7 @@ if ((!oldTable) && (!noLoad))
 	dyStringPrintf(dy, "  INDEX(chrom(%d),chromEnd)\n", indexLen);
 	}
     dyStringAppend(dy, ")\n");
+    verbose(2, "%s", dy->string);
     sqlRemakeTable(conn, track, dy->string);
     }
 
