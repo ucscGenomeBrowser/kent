@@ -1498,6 +1498,8 @@ tablesIgnored $gbd
     chr%_rmsk
     axtNet%
     blat%
+    blast%
+    repeats
 
 tablesIgnored $kgDb
     pbAaDist_
@@ -1513,6 +1515,9 @@ tablesIgnored $ce
     chr%_gold
     chr%_wabaCbr
     wabaCbr
+
+tablesIgnored $ci
+    snapGene
 
 tablesIgnored $dm
     anophelesEcores
