@@ -8,12 +8,14 @@
 #include "seqOut.h"
 #include "htmshell.h"
 
-void cfmInit(struct cfm *cfm, int wordLen, int lineLen, 
+struct cfm *cfmNew(int wordLen, int lineLen, 
 	boolean lineNumbers, boolean countDown, FILE *out, int numOff)
 /* Set up colored sequence formatting for html. */
 {
+struct cfm *cfm;
+AllocVar(cfm);
 cfm->inWord = cfm->inLine = cfm->charCount = 0;
-cfm->lastColor = 0;
+cfm->color = 0;
 cfm->wordLen = wordLen;
 cfm->lineLen = lineLen;
 cfm->lineNumbers = lineNumbers;
@@ -21,56 +23,48 @@ cfm->countDown = countDown;
 cfm->out = out;
 cfm->numOff = numOff;
 cfm->bold = cfm->underline = cfm->italic = FALSE;
-fprintf(cfm->out, "<FONT COLOR=\"#%06X\">", 0);
+return cfm;
+}
+
+static void cfmPopFormat(struct cfm *cfm)
+/* Restore format to default. */
+{
+if (cfm->color != 0)
+   fprintf(cfm->out, "</FONT>");
+if (cfm->underline)
+  fprintf(cfm->out, "</U>");
+if (cfm->bold)
+  fprintf(cfm->out, "</B>");
+if (cfm->italic)
+  fprintf(cfm->out, "</I>");
+}
+
+static void cfmPushFormat(struct cfm *cfm)
+/* Set format. */
+{
+if (cfm->italic)
+  fprintf(cfm->out, "<I>");
+if (cfm->bold)
+  fprintf(cfm->out, "<B>");
+if (cfm->underline)
+  fprintf(cfm->out, "<U>");
+if (cfm->color != 0)
+  fprintf(cfm->out, "<FONT COLOR=\"#%06X\">", cfm->color);
 }
 
 void cfmOutExt(struct cfm *cfm, char c, int color, boolean underline, boolean bold, boolean italic)
 /* Write out a byte, and formatting extras  */
 {
-if (color != cfm->lastColor)
-    {
-    fprintf(cfm->out, "</FONT>");
-    }
-if (underline != cfm->underline)
-    {
-    if (!underline)
-       fprintf(cfm->out, "</U>");
-    }
-if (italic != cfm->italic)
-    {
-    if (!italic)
-       fprintf(cfm->out, "</I>");
-    }
-if (bold != cfm->bold)
-    {
-    if (!bold)
-       fprintf(cfm->out, "</B>");
-    }
-
-if (bold != cfm->bold)
-    {
-    if (bold)
-       fprintf(cfm->out, "<B>");
-    cfm->bold = bold;
-    }
-if (italic != cfm->italic)
-    {
-    if (italic)
-       fprintf(cfm->out, "<I>");
-    cfm->italic = italic;
-    }
-if (underline != cfm->underline)
-    {
-    if (underline)
-       fprintf(cfm->out, "<U>");
-    cfm->underline = underline;
-    }
-if (color != cfm->lastColor)
-    {
-    fprintf(cfm->out, "<FONT COLOR=\"#%06X\">", color);
-    cfm->lastColor = color;
-    }
-
+if (color != cfm->color || underline != cfm->underline
+   || bold != cfm->bold || italic != cfm->italic)
+   {
+   cfmPopFormat(cfm);
+   cfm->color = color;
+   cfm->underline = underline;
+   cfm->bold = bold;
+   cfm->italic = italic;
+   cfmPushFormat(cfm);
+   }
 
 ++cfm->charCount;
 fputc(c, cfm->out);
@@ -108,17 +102,22 @@ void cfmOut(struct cfm *cfm, char c, int color)
 cfmOutExt(cfm, c, color, FALSE, FALSE, FALSE);
 }
 
-void cfmCleanup(struct cfm *cfm)
+void cfmFree(struct cfm **pCfm)
 /* Finish up cfm formatting job. */
 {
-fprintf(cfm->out, "</FONT>\n");
+struct cfm *cfm = *pCfm;
+if (cfm != NULL)
+    {
+    cfmPopFormat(cfm);
+    freez(pCfm);
+    }
 }
 
 int seqOutColorLookup[3] = 
     {
     0x000000,
-    0x0033FF,
-    0xaa22FF,
+    0x3300FF,
+    0x22aaFF,
     };
 
 

@@ -152,7 +152,7 @@ void printCappedSequence(int start, int end, int extra)
 {
 struct dnaSeq *seq;
 int s, e, i;
-struct cfm cfm;
+struct cfm *cfm;
 
 if (!clipToChrom(&start, &end))
     return;
@@ -165,12 +165,12 @@ printf("<P>Here is the sequence around this feature: bases %d to %d of %s.  The 
 seq = hDnaFromSeq(seqName, s, e, dnaLower);
 toUpperN(seq->dna + (start-s), end - start);
 printf("<TT><PRE>");
-cfmInit(&cfm, 10, 50, TRUE, FALSE, stdout, s);
+cfm = cfmNew(10, 50, TRUE, FALSE, stdout, s);
 for (i=0; i<seq->size; ++i)
    {
-   cfmOut(&cfm, seq->dna[i], 0);
+   cfmOut(cfm, seq->dna[i], 0);
    }
-cfmCleanup(&cfm);
+cfmFree(&cfm);
 printf("</PRE></TT>");
 }
 
@@ -448,14 +448,14 @@ printf("<FORM ACTION=\"%s\">\n\n", hgcPath());
 cgiMakeHiddenVar("g", "htcGetDna2");
 savePosInHidden();
 cgiMakeRadioButton("out1", "lcRepeats", TRUE);
-printf(" Lower Case Repeats<BR>\n");
+printf(" lower case repeats<BR>\n");
 cgiMakeRadioButton("out1", "lc", FALSE);
-printf(" All lower case<BR>\n");
+printf(" all lower case<BR>\n");
 cgiMakeRadioButton("out1", "uc", FALSE);
-printf(" All upper case<BR>\n");
+printf(" all upper case<BR>\n");
 cgiMakeRadioButton("out1", "extended", FALSE);
 printf(" Extended case/color options<BR>\n");
-printf("Reverse Complement ");
+printf(" reverse complement ");
 cgiMakeCheckBox("rc", FALSE);
 printf(" ");
 cgiMakeButton("Submit", "Submit");
@@ -483,6 +483,17 @@ sqlFreeResult(&sr);
 hFreeConn(&conn);
 }
 
+boolean dnaIgnoreTrack(char *track)
+/* Return TRUE if this is one of the tracks too boring
+ * to put DNA on. */
+{
+return (sameString("cytoBand", track) ||
+    sameString("gcPercent", track) ||
+    sameString("gold", track) ||
+    sameString("gap", track));
+}
+
+
 void doGetDnaExtended1()
 /* Do extended case/color get DNA options. */
 {
@@ -490,19 +501,17 @@ struct trackDb *tdbList = hTrackDb(seqName), *tdb;
 
 hgcStart("Extended DNA Case/Color");
 printf("<H1>Extended DNA Case/Color Options</H1>\n");
-puts("You can use this page to make the case and/or color of the DNA "
+puts("You can use this page to make the case, text attributes and/or color of the DNA "
      "sequence vary for bases that are covered by particular tracks. "
-     "You effectively can display four tracks - one by case, one by "
-     "the red component of the color, one by the green component of "
-     "the color, and one by the blue component of the color.   It's "
-     "possible to have more than one track toggle the case or have "
-     "a non-black color, though the results may not always be clear. "
-     "Red, green, and blue values range from 0 (darkest) to 255 (lightest). "
-     "Use 255 values for most purposes.  To see the depth of coverage in "
-     "a track with multiple overlapping items try a smaller number. "
-     "The colors are added together when more than one colored item "
-     "covers the same base.  If a base is part of a red colored track "
-     "and a green colored track for instance, it will be painted yellow.");
+     "The red, green, and blue values range from 0 (darkest) to 255 "
+     "lightest.  The color values are additive.   If one track is assigned "
+     "pure red (RGB 255,0,0) and another is assigned pure green (RGB 0,255,0) "
+     "then bases covered by both tracks will be yellow (RGB 255,255,0). "
+     "If the track contains multiple overlapping items it is useful to color "
+     "it with a dark color such as deep green (RGB 0,0,80).  Try this with "
+     "the EST track.   Bases covered by a single EST in this case will be "
+     "a very dark green, while bases covered with more ESTs will get progressively "
+     "brighter - saturating at 4 ESTs.");
 printf("<FORM ACTION=\"%s\" METHOD=\"POST\">\n\n", hgcPath());
 savePosInHidden();
 cgiMakeHiddenVar("g", "htcGetDna3");
@@ -513,17 +522,23 @@ cgiMakeRadioButton("case", "upper", FALSE);
 printf(" upper ");
 cgiMakeRadioButton("case", "lower", TRUE);
 printf(" lower ");
-cgiMakeButton("submit", "submit");
+cgiMakeButton("Submit", "Submit");
 printf("<BR>");
-printf("Reverse Complement ");
+printf("chromosome ");
+cgiMakeTextVar("c", seqName, 6);
+printf(" start ");
+cgiMakeIntVar("l", winStart, 9);
+printf(" end ");
+cgiMakeIntVar("r", winEnd, 9);
+cgiContinueHiddenVar("db");
+printf(" reverse complement ");
 cgiMakeCheckBox("rc", cgiBoolean("rc"));
 printf("<BR>\n");
 printf("<TABLE BORDER=1>\n");
 printf("<TR><TD>Track<BR>Name</TD><TD>Toggle<BR>Case</TD><TD>Under-<BR>line</TD><TD>Bold</TD><TD>Italic</TD><TD>Red</TD><TD>Green</TD><TD>Blue</TD></TR>\n");
-slReverse(&tdbList);
 for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
     {
-    if (fbUnderstandTrack(tdb->tableName))
+    if (fbUnderstandTrack(tdb->tableName) && !dnaIgnoreTrack(tdb->tableName))
 	{
 	char buf[128];
 	printf("<TR>");
@@ -641,7 +656,7 @@ void doGetDna3()
 /* Do third DNA dialog (or just fetch DNA) */
 {
 struct dnaSeq *seq;
-struct cfm cfm;
+struct cfm *cfm;
 int i;
 boolean isRc = cgiBoolean("rc");
 boolean defaultUpper = sameString(cgiString("case"), "upper");
@@ -666,7 +681,7 @@ for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
     {
     char *track = tdb->tableName;
     struct featureBits *fbList = NULL, *fb;
-    if (fbUnderstandTrack(track))
+    if (fbUnderstandTrack(tdb->tableName) && !dnaIgnoreTrack(tdb->tableName))
         {
 	char buf[256];
 	int r,g,b;
@@ -714,14 +729,15 @@ for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
 	}
     }
 
-cfmInit(&cfm, 0, lineWidth, FALSE, FALSE, stdout, 0);
+cfm = cfmNew(0, lineWidth, FALSE, FALSE, stdout, 0);
 for (i=0; i<seq->size; ++i)
    {
    struct rgbColor *color = colors+i;
    int c = (color->r<<16) + (color->g<<8) + color->b;
-   cfmOutExt(&cfm, seq->dna[i], c, 
+   cfmOutExt(cfm, seq->dna[i], c, 
    	bitReadOne(uBits, i), bitReadOne(bBits, i), bitReadOne(iBits, i));
    }
+cfmFree(&cfm);
 freeDnaSeq(&seq);
 bitFree(&uBits);
 bitFree(&iBits);
@@ -1305,7 +1321,7 @@ fprintf(f, "<TT><PRE>");
 fprintf(f, "<H4><A NAME=cDNA></A>%s%s</H4>\n", psl->qName, (qIsRc  ? " (reverse complemented)" : ""));
 /* Display query sequence. */
     {
-    struct cfm cfm;
+    struct cfm *cfm;
     char *colorFlags = needMem(oSeq->size);
     int i,j;
 
@@ -1336,10 +1352,10 @@ fprintf(f, "<H4><A NAME=cDNA></A>%s%s</H4>\n", psl->qName, (qIsRc  ? " (reverse 
 		}
 	    }
 	}
-    cfmInit(&cfm, 10, 60, TRUE, qIsRc, f, qStart);
+    cfm = cfmNew(10, 60, TRUE, qIsRc, f, qStart);
     for (i=0; i<oSeq->size; ++i)
-	cfmOut(&cfm, oSeq->dna[i], seqOutColorLookup[colorFlags[i]]);
-    cfmCleanup(&cfm);
+	cfmOut(cfm, oSeq->dna[i], seqOutColorLookup[colorFlags[i]]);
+    cfmFree(&cfm);
     freez(&colorFlags);
     htmHorizontalLine(f);
     }
@@ -1348,7 +1364,7 @@ fprintf(f, "<H4><A NAME=genomic></A>Genomic %s %s:</H4>\n",
     psl->tName, (tIsRc ? "(reverse strand)" : ""));
 /* Display DNA sequence. */
     {
-    struct cfm cfm;
+    struct cfm *cfm;
     char *colorFlags = needMem(dnaSeq->size);
     int i,j;
     int curBlock = 0;
@@ -1386,7 +1402,7 @@ fprintf(f, "<H4><A NAME=genomic></A>Genomic %s %s:</H4>\n",
 	colorFlags[ts] = socBrightBlue;
 	colorFlags[ts+sz*mulFactor-1] = socBrightBlue;
 	}
-    cfmInit(&cfm, 10, 60, TRUE, tIsRc, f, psl->tStart);
+    cfm = cfmNew(10, 60, TRUE, tIsRc, f, psl->tStart);
     for (i=0; i<dnaSeq->size; ++i)
 	{
 	/* Put down "anchor" on first match position in haystack
@@ -1395,9 +1411,9 @@ fprintf(f, "<H4><A NAME=genomic></A>Genomic %s %s:</H4>\n",
 	     {
 	     fprintf(f, "<A NAME=%d></A>", ++curBlock);
 	     }
-	cfmOut(&cfm, dnaSeq->dna[i], seqOutColorLookup[colorFlags[i]]);
+	cfmOut(cfm, dnaSeq->dna[i], seqOutColorLookup[colorFlags[i]]);
 	}
-    cfmCleanup(&cfm);
+    cfmFree(&cfm);
     freez(&colorFlags);
     htmHorizontalLine(f);
     }

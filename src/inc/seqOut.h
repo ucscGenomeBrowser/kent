@@ -1,6 +1,7 @@
 /* seqOut - stuff to output sequences and alignments in web 
  * or ascii viewable form. */
 
+
 struct cfm
 /* Colored web character output formatter. */
     {
@@ -9,16 +10,16 @@ struct cfm
     int inWord, inLine; /* Position in word and line. */
     bool lineNumbers;   /* True if write position at end of line. */
     bool countDown;     /* True if want numbers counting down. */
-    int lastColor;      /* Cache last color here. */
     long charCount;     /* Number of characters written total. */
     FILE *out;          /* File to write to. */
     int numOff;         /* Number to start with. */
+    int color;          /* Cache last color here. */
     bool underline;	/* Underline? */
     bool bold;		/* Font in bold. */
     bool italic;	/* Italic? */
     };
 
-void cfmInit(struct cfm *cfm, int wordLen, int lineLen, 
+struct cfm *cfmNew(int wordLen, int lineLen, 
 	boolean lineNumbers, boolean countDown, FILE *out, int numOff);
 /* Set up colored sequence formatting for html. */
 
@@ -28,8 +29,8 @@ void cfmOut(struct cfm *cfm, char c, int color);
 void cfmOutExt(struct cfm *cfm, char c, int color, boolean underline, boolean bold, boolean italic);
 /* Write out a byte, and formatting extras  */
 
-void cfmCleanup(struct cfm *cfm);
-/* Finish up cfm formatting job. */
+void cfmFree(struct cfm **pCfm);
+/* Finish and free up cfm formatting job. */
 
 enum seqOutColor
 /* Symbolic color for sequence output. */

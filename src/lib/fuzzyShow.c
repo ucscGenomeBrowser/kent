@@ -21,7 +21,6 @@ int ffShAliPart(FILE *f, struct ffAli *aliList,
 /* Display parts of allignment on html page.  Returns number of blocks (after
  * merging blocks separated by blockMaxGap or less). */
 {
-struct cfm cfm;
 long i;
 struct ffAli *ali;
 struct ffAli *lastAli;
@@ -66,7 +65,7 @@ if (rcNeedle)
 
 if (showNeedle)
     {
-    cfmInit(&cfm, 10, 50, TRUE, FALSE, f, needleNumOffset);
+    struct cfm *cfm = cfmNew(10, 50, TRUE, FALSE, f, needleNumOffset);
     zeroBytes(colorFlags, needleSize);
     for (ali = leftAli; ali != NULL; ali = ali->right)
 	{
@@ -81,18 +80,18 @@ if (showNeedle)
 	}
     for (i=0; i<needleSize; ++i)
 	{
-	cfmOut(&cfm, needle[i], seqOutColorLookup[colorFlags[i]]);
+	cfmOut(cfm, needle[i], seqOutColorLookup[colorFlags[i]]);
 	}
-    cfmCleanup(&cfm);
+    cfmFree(&cfm);
     htmHorizontalLine(f);
     }
 
 if (showHaystack)
     {
+    struct cfm *cfm = cfmNew(10, 50, TRUE, rcHaystack, f, hayNumOffset);
     fprintf(f, "<H4><A NAME=genomic></A>Genomic %s %s:</H4>\n", 
     	haystackName,
 	(rcHaystack ? "(reverse strand)" : ""));
-    cfmInit(&cfm, 10, 50, TRUE, rcHaystack, f, hayNumOffset);
     zeroBytes(colorFlags, haySize);
     for (ali = leftAli; ali != NULL; ali = ali->right)
 	{
@@ -124,9 +123,9 @@ if (showHaystack)
 	    lastAli = ali;
 	    ali = ali->right;
 	    }
-	cfmOut(&cfm, haystack[i], seqOutColorLookup[colorFlags[i]]);
+	cfmOut(cfm, haystack[i], seqOutColorLookup[colorFlags[i]]);
 	}
-    cfmCleanup(&cfm);
+    cfmFree(&cfm);
     htmHorizontalLine(f);
     }
 
