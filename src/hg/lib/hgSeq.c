@@ -575,7 +575,36 @@ for (bedItem = bedList;  bedItem != NULL;  bedItem = bedItem->next)
 		}
 	    else if (bedItem->chromStarts[i] < bedItem->thickEnd)
 		{
-		if (bedItem->chromStarts[i] < bedItem->thickStart)
+		if ((bedItem->chromStarts[i] < bedItem->thickStart) &&
+		    ((bedItem->chromStarts[i] + bedItem->blockSizes[i]) >
+		     bedItem->thickEnd))
+		    {
+		    if ((!isRc && utrExon5)	  || (isRc && utrExon3))
+			{
+			addFeature(&count, starts, sizes, exonFlags, cdsFlags,
+				   bedItem->chromStarts[i],
+				   (bedItem->thickStart -
+				    bedItem->chromStarts[i]),
+				   TRUE, FALSE);
+			}
+		    if (cdsExon)
+			{
+			addFeature(&count, starts, sizes, exonFlags, cdsFlags,
+				   bedItem->thickStart,
+				   (bedItem->thickEnd - bedItem->thickStart),
+				   TRUE, TRUE);
+			}
+		    if ((!isRc && utrExon3)	  || (isRc && utrExon5))
+			{
+			addFeature(&count, starts, sizes, exonFlags, cdsFlags,
+				   bedItem->thickEnd,
+				   (bedItem->chromStarts[i] +
+				    bedItem->blockSizes[i] -
+				    bedItem->thickEnd),
+				   TRUE, FALSE);
+			}
+		    }
+		else if (bedItem->chromStarts[i] < bedItem->thickStart)
 		    {
 		    if ((!isRc && utrExon5)	  || (isRc && utrExon3))
 			{
