@@ -92,7 +92,9 @@ for (;;)
     }
 lineFileClose(&lf);
 for (bt = btList; bt != NULL; bt = bt->next)
+    {
     trackDbPolish(bt);
+    }
 slReverse(&btList);
 return btList;
 }
@@ -118,7 +120,9 @@ void trackDbAddInfo(struct trackDb *bt,
 /* Add info from a variable/value pair to browser table. */
 {
 if (sameString(var, "track"))
+    {
     bt->tableName = cloneString(value);
+    }
 else if (sameString(var, "shortLabel") || sameString(var, "name"))
     bt->shortLabel = cloneString(value);
 else if (sameString(var, "longLabel") || sameString(var, "description"))
@@ -159,6 +163,10 @@ else if (sameWord(var, "chromosomes"))
     sqlStringDynamicArray(value, &bt->restrictList, &bt->restrictCount);
 else if (sameWord(var, "private"))
     bt->private = TRUE;
+else if (sameWord(var, "group"))
+    {
+    bt->grp = cloneString(value);
+    }
 }
 
 void trackDbPolish(struct trackDb *bt)
@@ -182,5 +190,7 @@ if (bt->url == NULL)
     bt->url = cloneString("");
 if (bt->html == NULL)
     bt->html = cloneString("");
+if (bt->grp == NULL)
+    bt->grp = cloneString("x");
 }
 

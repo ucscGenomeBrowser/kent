@@ -23,6 +23,7 @@ CREATE TABLE trackDb (
     restrictList longblob not null,	# List of chromosomes this is on
     url longblob not null,	# URL to link to when they click on an item
     html longblob not null,	# Some html to display when they click on an item
+    grp varchar(255) not null,	# Which group track belongs to
               #Indices
     PRIMARY KEY(tableName)
 );

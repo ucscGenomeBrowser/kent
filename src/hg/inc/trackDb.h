@@ -36,6 +36,7 @@ struct trackDb
     char **restrictList;	/* List of chromosomes this is on */
     char *url;	/* URL to link to when they click on an item */
     char *html;	/* Some html to display when they click on an item */
+    char *grp;	/* Which group track belongs to */
     };
 
 struct trackDb *trackDbLoad(char **row);

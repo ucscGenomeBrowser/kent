@@ -189,7 +189,6 @@ printf("Loaded %d track descriptions total\n", slCount(tdList));
     printf("Loaded database %s\n", database);
     }
 
-remove(tab);
 }
 
 int main(int argc, char *argv[])

@@ -19,4 +19,5 @@ int restrictCount;	"Number of chromosomes this is on (0=all though!)"
 string[restrictCount] restrictList; "List of chromosomes this is on"
 lstring url;	"URL to link to when they click on an item"
 lstring html;   "Some html to display when they click on an item"
+string grp;   "Which group track belongs to"
 )

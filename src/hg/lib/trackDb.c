@@ -36,6 +36,7 @@ sqlStringDynamicArray(row[15], &ret->restrictList, &sizeOne);
 assert(sizeOne == ret->restrictCount);
 ret->url = cloneString(row[16]);
 ret->html = cloneString(row[17]);
+ret->grp = cloneString(row[18]);
 return ret;
 }
 
@@ -118,6 +119,7 @@ s = sqlEatChar(s, '}');
 s = sqlEatChar(s, ',');
 ret->url = sqlStringComma(&s);
 ret->html = sqlStringComma(&s);
+ret->grp = sqlStringComma(&s);
 *pS = s;
 return ret;
 }
@@ -139,6 +141,7 @@ if (el->restrictList != NULL)
 freeMem(el->restrictList);
 freeMem(el->url);
 freeMem(el->html);
+freeMem(el->grp);
 freez(pEl);
 }
 
@@ -213,6 +216,10 @@ if (sep == ',') fputc('"',f);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->html);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->grp);
 if (sep == ',') fputc('"',f);
 fputc(lastSep,f);
 }
