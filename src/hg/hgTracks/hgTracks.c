@@ -4780,7 +4780,7 @@ char optionChr[128]; /* Option -  chromosome filter */
 char *optionChrStr; 
 char *optionStr ;
 snprintf( option, sizeof(option), "%s.color", tg->mapName);
-optionStr = cartUsualString(cart, option, "off");
+optionStr = cartUsualString(cart, option, "on");
 tg->mapItemName = mapNameFromLfExtra;
 if( sameString( optionStr, "on" )) /*use chromosome coloring*/
     tg->itemColor = pslItemColor;
