@@ -1270,6 +1270,11 @@ cat > net.csh << 'EOF'
     hgLoadNet -warn panTro1 netHg16 human.net
     rm -r netChain/hNoClass.net
 
+    # 8/23/04 move aside pre-re-chaining files to avoid confusion (angie)
+    mkdir preChain
+    mv all.scaffold.chain all.chain humanNib.lst chimpNib.lst all.chain.psl \
+      preChain/
+
 
 # CHAIN FILES FROM THE NET (DONE kate)
 #       for downloads area
