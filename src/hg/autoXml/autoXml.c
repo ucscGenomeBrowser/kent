@@ -9,8 +9,8 @@
 /* Variables that can be over-ridden from command line. */
 char *textField = "text";
 char *fileComment = "autoXml generated file";
-
-/* Other globals. */
+boolean picky;	/* Generate a parser that is afraid of the unknown. */
+boolean makeMain;	/* Generate main() routine as test shell. */
 char prefix[128];	/* Added to start of output file and structure names. */
 
 void usage()
@@ -19,11 +19,14 @@ void usage()
 errAbort(
   "autoXml - Generate structures code and parser for XML file from DTD-like spec\n"
   "usage:\n"
-  "   autoXml file.dtdx xxx\n"
-  "This will generate xxx.dtd, xxx.c, xxx.h\n"
+  "   autoXml file.dtdx root\n"
+  "This will generate root.c, root.h\n"
   "options:\n"
-  "   -textField=xxx what to name field that contains text between start/end tags. Default 'text'\n"
+  "   -textField=xxx what to name text between start/end tags. Default 'text'\n"
   "   -comment=xxx Comment to appear at top of generated code files\n"
+  "   -picky  Generate parser that rejects stuff it doesn't understand\n"
+  "   -main   Put in a main routine that's a test harness\n"
+  "   -prefix=xxx Prefix to add to structure names. By default same as root\n"
   );
 }
 
@@ -118,15 +121,19 @@ int wordCount, i;
 struct elChild *ec;
 struct element *el;
 boolean isOr;
+boolean isSmall;
 
 word = needNextWord(&line, lf);
+s = word + strlen(word)-1;
+if (s[0] == '>')
+   *s = 0;
 if ((el = hashFindVal(elHash, word)) != NULL)
     errAbort("Duplicate element %s line %d and %d of %s", word, el->lineIx, lf->lineIx, lf->fileName);
 AllocVar(el);
 el->lineIx = lf->lineIx;
 hashAddSaveName(elHash, word, el, &el->name);
 el->mixedCaseName = mixedCaseName(el->name);
-if ((s = strchr(line, '(')) != NULL)
+if (line != NULL && (s = strchr(line, '(')) != NULL)
     {
     s += 1;
     if ((e = strchr(line, ')')) == NULL)
@@ -561,6 +568,11 @@ for (el = elList; el != NULL; el = el->next)
 	        fprintf(f, "            obj->%s = cloneString(val);\n", att->name);
 	    first = FALSE;
 	    }
+	if (picky)
+	    {
+	    fprintf(f, "        else\n");
+	    fprintf(f, "            xapError(xp, \"Unknown attribute %%s\", name);\n");
+	    }
 	fprintf(f, "        }\n");
 	for (att = el->attributes; att != NULL; att = att->next)
 	    {
@@ -597,8 +609,11 @@ for (el = elList; el != NULL; el = el->next)
 		first = FALSE;
 		}
 	    }
-	fprintf(f, "        else\n");
-	fprintf(f, "            xapError(xp, \"%%s misplaced\", name);\n");
+	if (picky)
+	    {
+	    fprintf(f, "        else\n");
+	    fprintf(f, "            xapError(xp, \"%%s misplaced\", name);\n");
+	    }
 	fprintf(f, "        }\n");
 	}
     fprintf(f, "    return obj;\n");
@@ -606,7 +621,10 @@ for (el = elList; el != NULL; el = el->next)
     }
 fprintf(f, "else\n");
 fprintf(f, "    {\n");
-fprintf(f, "    xapSkip(xp);\n");
+if (picky)
+    fprintf(f, "    xapError(xp, \"Unknown element %%s\", name);\n");
+else
+    fprintf(f, "    xapSkip(xp);\n");
 fprintf(f, "    return NULL;\n");
 fprintf(f, "    }\n");
 fprintf(f, "}\n");
@@ -654,6 +672,11 @@ for (el = elList; el != NULL; el = el->next)
 	        {
 		fprintf(f, "    if (obj->%s == NULL)\n", cSmall);
 		fprintf(f, "        xapError(xp, \"Missing %s\");\n", cBIG);
+		fprintf(f, "    slReverse(&obj->%s);\n", cSmall);
+		}
+	    else if (ec->copyCode == '*')
+	        {
+		fprintf(f, "    slReverse(&obj->%s);\n", cSmall);
 		}
 	    else if (ec->copyCode == '?')
 	        {
@@ -673,6 +696,22 @@ fprintf(f, "}\n");
 fprintf(f, "\n");
 }
 
+
+void makeTestDriver(struct element *rootEl, FILE *f)
+/* Make main routine. */
+{
+char *symName = rootEl->mixedCaseName;
+fprintf(f, "int main(int argc, char *argv[])\n");
+fprintf(f, "/* Test driver for %s routines */\n", prefix);
+fprintf(f, "{\n");
+fprintf(f, "struct %s *obj;\n", symName);
+fprintf(f, "if (argc != 2)\n");
+fprintf(f, "    errAbort(\"Please run again with a xml filename.\");\n");
+fprintf(f, "obj = %sLoad(argv[1]);\n", symName);
+fprintf(f, "%sSave(obj, 0, stdout);\n", symName);
+fprintf(f, "return 0;\n");
+fprintf(f, "}\n");
+}
 
 
 void makeC(struct element *elList, char *fileName)
@@ -705,6 +744,8 @@ for (el = elList; el != NULL; el = el->next)
     }
 makeStartHandler(elList, f);
 makeEndHandler(elList, f);
+if (makeMain)
+   makeTestDriver(elList, f);
 }
 
 void autoXml(char *dtdxFile, char *outRoot)
@@ -714,7 +755,12 @@ struct element *elList = NULL, *el;
 struct hash *elHash = NULL;
 char fileName[512];
 
-splitPath(outRoot, NULL, prefix, NULL);
+if (cgiVarExists("prefix"))
+    {
+    strcpy(prefix, cgiString("prefix"));
+    }
+else
+    splitPath(outRoot, NULL, prefix, NULL);
 parseDtdx(dtdxFile, &elList, &elHash);
 printf("Parsed %d elements in %s\n", slCount(elList), dtdxFile);
 sprintf(fileName, "%s.h", outRoot);
@@ -730,6 +776,8 @@ int main(int argc, char *argv[])
 cgiSpoof(&argc, argv);
 textField = cgiUsualString("textField", textField);
 fileComment = cgiUsualString("comment", fileComment);
+picky = cgiBoolean("picky");
+makeMain = cgiBoolean("main");
 if (argc != 3)
     usage();
 autoXml(argv[1], argv[2]);

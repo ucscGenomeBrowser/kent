@@ -1,0 +1,51 @@
+<!ELEMENT DAS_BED (TEXT? SEGMENT*)>      Top level data structure
+<!ATTLIST DAS_BED version CDATA "1.0">        Version name.
+<!ATTLIST DAS_BED id CDATA #REQUIRED>         Some database ID.
+<!ATTLIST DAS_BED label CDATA #IMPLIED>       One or two word label. Defaults to id.
+<!ATTLIST DAS_BED description CDATA #IMPLIED> One line description. Defaults to label.
+<!ATTLIST DAS_BED author CDATA "anonymous">   Overall author list.
+<!ATTLIST DAS_BED href CDATA #IMPLIED>        Top level URL.  See below for details
+
+<!ELEMENT TEXT (#PCDATA)>             A tag around a possibly long description.
+
+<!ELEMENT SEGMENT (TEXT? TRACK*)>       Encloses annotations around a segment of genome
+<!ATTLIST SEGMENT id CDATA #REQUIRED>     Sequence id (as in DASGFF's SEGMENT)
+<!ATTLIST SEGMENT version CDATA #REQUIRED> Goes with sequence id.
+<!ATTLIST SEGMENT label CDATA #IMPLIED>    One or two word label. Defaults to seq:start-end
+<!ATTLIST SEGMENT description CDATA #IMPLIED> One line description.  Defaults to label.
+<!ATTLIST SEGMENT start INT #REQUIRED>   Start coordinate (1 based)
+<!ATTLIST SEGMENT end INT #REQUIRED>     End coordinate (inclusive)
+
+<!ELEMENT TRACK (TEXT? TRACK* I*)>             A track of data over a specific segment
+<!ATTLIST TRACK id CDATA #REQUIRED>          Some database ID.
+<!ATTLIST TRACK version CDATA #IMPLIED>      Version number.
+<!ATTLIST TRACK label CDATA #REQUIRED>       One or two word label.  Defaults to id.
+<!ATTLIST TRACK description CDATA #REQUIRED> One line description. Defaults to label.
+<!ATTLIST TRACK author CDATA #IMPLIED>       Track author.  Defaults to DASBED URL.
+<!ATTLIST TRACK href CDATA #IMPLIED>         Track level URL. Defaults to DASBED URL.
+
+<!ELEMENT I (TEXT? I* B*)>             An item on a track, may contain multiple blocks.
+<!ATTLIST I id CDATA #REQUIRED>          Some database ID.
+<!ATTLIST I version CDATA #IMPLIED>      Optional version here mostly for curated items.
+<!ATTLIST I label CDATA #IMPLIED>        One or two word label.  Defaults to id.
+<!ATTLIST I description CDATA #IMPLIED>  One line description.  Defaults to label.
+<!ATTLIST I author CDATA #IMPLIED>       Optional author mostly for curated items.
+<!ATTLIST I href CDATA #IMPLIED>         Item level URL.  Defaults to TRACK URL.
+<!ATTLIST I start INT #REQUIRED>       Start of first block relative to segment start.
+<!ATTLIST I end INT #REQUIRED>         End of last block relative to segment start.
+<!ATTLIST I strand CDATA #IMPLIED>       +, -, or not even present.
+<!ATTLIST I score INT #IMPLIED>          A number between 0 and 1000.
+<!ATTLIST I thickStart INT #IMPLIED>     CDS start for genes.
+<!ATTLIST I thickEnd INT #IMPLIED>       CDS end for genes.
+<!ATTLIST I qId CDATA #IMPLIED>          ID of query sequence in an alignment.
+
+<!ELEMENT B>                        A block.  Can hold alignment info.  Deliberately small.
+<!ATTLIST B start INT #REQUIRED>       Start in sequence relative to item start.
+<!ATTLIST B end INT #REQUIRED>         End in sequence relative to item start.
+<!ATTLIST B score INT #IMPLIED>        Score between 0 and 1000.
+<!ATTLIST B qAli CDATA #IMPLIED>       Query side of alignment including '-' chars.
+<!ATTLIST B tAli CDATA #IMPLIED>       Target (in segment) side of alignment.
+<!ATTLIST B qStart INT #IMPLIED>       Query start coordinate.
+<!ATTLIST B qEnd INT #IMPLIED>         Query end coordinate.
+
+
