@@ -1089,6 +1089,14 @@ altColor 0,160,0
 visibility hide
 type sample
 
+track snpMap
+shortLabel SNPs
+longLabel Simple Nucleotide Polymorphisms (SNPs)
+group varRep
+priority 143.9
+visibility hide
+type bed 6 .
+
 track snpNih
 shortLabel Overlap SNPs
 longLabel Simple Nucleotide Polymorphisms (SNPs) from Clone Overlaps
