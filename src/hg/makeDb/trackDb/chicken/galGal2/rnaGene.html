@@ -21,19 +21,25 @@ Feature types include:
 <H2> Methods </H2>
 
 <P>
-<B>tRNAscan-SE      (tRNA genes): </B><BR>
+<B>tRNAscan-SE: </B><BR>
        <A HREF="http://www.genetics.wustl.edu/eddy/tRNAscan-SE/" TARGET=_BLANK>
-       tRNAscan-SE</A> 1.23?.
+       tRNAscan-SE</A> 1.23.
        Score field contains tRNAscan-SE bit score; >20 is good, >50 is great.
 </P>
 <P>    
-<B>Rfam5.0     (??): </B><BR>
+<B>Rfam5.0: </B><BR>
        <A HREF="http://www.sanger.ac.uk/Software/Rfam/" TARGET=_BLANK>
-       Rfam</A> 5.0.
+       Rfam</A> 5.0 covariance models and the INFERNAL 0.55 software using Rfam
+       family specific cutoffs.  The score field contains the INFERNAL bit
+       score.
 </P>
 <P>    
-<B>SGJ     (miRNA, Sam Griffiths-Jones): </B><BR>
-       ??
+<B>miRNA_Registry: </B><BR>
+WU-BLASTN matches to human, mouse and rat miRNAs from the miRNA
+Registry 3.0.  Candidate chicken miRNAs match a precursor miRNA with
+e-value &lt; 1e-4, form a predicted hairpin structure with free energy of
+folding &lt; -20 kJ.mol-1, and match the mature ~22 nt miRNA with 2 or
+fewer mismatches.
 </P>
 <P>  
 </P>
@@ -44,14 +50,20 @@ These data were kindly provided by Sam Griffiths-Jones at
 the <A HREF="http://www.sanger.ac.uk/" TARGET=_BLANK>Sanger Institute</A>.
 </P>
 <P>
-<a href="http://nar.oupjournals.org/cgi/content/abstract/31/1/439">
+<a href="http://nar.oupjournals.org/cgi/content/full/32/suppl_1/D109" TARGET=_BLANK>
+The microRNA Registry</a>.<br>
+Sam Griffiths-Jones. <br>
+<em>Nucleic Acids Research</em>, 2004, 32, Database Issue, D109-D111.
+</P>
+<P>
+<a href="http://nar.oupjournals.org/cgi/content/abstract/31/1/439" TARGET=_BLANK>
 Rfam: an RNA family database</a>.<br>
 Sam Griffiths-Jones, Alex Bateman, Mhairi Marshall, Ajay Khanna and 
 Sean R. Eddy. <br>
 <em>Nucleic Acids Research</em>, 2003, 31, 1, 439-441.
 </P>
 <P>
-<a href="http://www.ncbi.nlm.nih.gov/htbin-post/Entrez/query?uid=9023104&form=6&db=m&Dopt=b"> 
+<a href="    http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?db=PubMed&cmd=Retrieve&list_uids=9023104&dopt=Abstract" TARGET=_BLANK> 
 tRNAscan-SE: a Program For Improved Detection of Transfer RNA genes 
 in Genomic Sequence</a>.<br>
 T. Lowe, S.R. Eddy. <em> Nucl. Acids Res.</em>, 25:955-964, 1997. 
