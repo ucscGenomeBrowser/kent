@@ -1,10 +1,10 @@
-all: cgi utils
+all: cgi blatSuite utils
 
 alpha: clean cgi-alpha blatSuite
 
 beta: check-beta clean cgi-beta
 
-libs:
+topLibs:
 	@if test "$$MACHTYPE x" = " x" ; then \
 		echo "ERROR: missing MACHTYPE definition in environment" ; \
 		echo "it should be something simple: i386 i686 sparc alpha x86_64 ppc, etc..." ; \
@@ -20,6 +20,8 @@ libs:
 	fi ;
 	cd lib && ${MAKE}
 	cd jkOwnLib && ${MAKE}
+
+libs: topLibs
 	cd hg/lib && ${MAKE}
 
 cgi: libs
@@ -35,9 +37,7 @@ check-beta:
 	# this will fail if we are not in a beta checkout:
 	cvs status makefile | egrep 'v[0-9]+_branch' > /dev/null	
 
-blatSuite: 
-	cd lib && ${MAKE}
-	cd jkOwnLib && ${MAKE}
+blatSuite: topLibs 
 	cd blat && ${MAKE} && ${MAKE} test
 	cd gfClient && ${MAKE}
 	cd gfServer && ${MAKE}
