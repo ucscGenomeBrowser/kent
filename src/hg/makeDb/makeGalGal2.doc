@@ -1606,6 +1606,7 @@ printf("%s\t%s\t%s\t%s %s\t%s\t%s\t%0.0f\t%0.1f\t%s\n",
 
 
 # LOAD GENEID GENES (DONE 3/4/04 angie)
+    # reloaded 3/16/04 with -gtf instead of -exon=CDS (nec. now! for stop_codon)
     mkdir -p /cluster/data/galGal2/bed/geneid/download
     cd /cluster/data/galGal2/bed/geneid/download
     foreach f (/cluster/data/galGal2/*/chr*.fa)
@@ -1620,7 +1621,7 @@ http://genome.imim.es/genepredictions/G.gallus/golden_path_200402/geneid_v1.1/$c
       perl -wpe 's/^(>chr\w+)$/$1.1/' $f > $f:r-fixed.prot
     end
     cd ..
-    ldHgGene galGal2 geneid download/*.gtf -exon=CDS
+    ldHgGene -gtf galGal2 geneid download/*.gtf
     hgPepPred galGal2 generic geneidPep download/*-fixed.prot
 
 # LOAD SOFTBERRY GENES (TODO)
@@ -1891,13 +1892,11 @@ http://genome.imim.es/genepredictions/G.gallus/golden_path_200402/geneid_v1.1/$c
     # Their files are very fragmented into a deep dir structure.  
     # Pull the whole thing (except chromatograms) over intact.  
     # Use --active-ftp because passive mode was timing out.  
-    # Replace XXXX and YYYY with username and password emailed from 
+    # Replace XXXX, YYYY and HHHH with username, password & host emailed from 
     # Yong Zhang <zhangy@genomics.org.cn>.
     wget -r --exclude-directories=\*/chromatograms --active-ftp \
-      --timestamping ftp://XXXX:YYYY@61.50.158.101/BGI/
+      --timestamping ftp://XXXX:YYYY@HHHH/BGI/
     # Takes hours... ~30kB/s from China, & lots o' data...
-    mv 61.50.158.101/BGI .
-    rmdir 61.50.158.101
 
     # Coverage track: bed 4 showing where SNP reads were performed.
     # Looks like we can get strain info from filename... 
@@ -1908,13 +1907,12 @@ http://genome.imim.es/genepredictions/G.gallus/golden_path_200402/geneid_v1.1/$c
     # Gene annotations: trim the input file to 10 columns, use as genePred.
     find . -name \*exon_intron.txt -print \
     | sed -e 's/ /\\ /g' \
-    | xargs awk '{printf "%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n", \
-                  $1,$2,$3,$4,$5,$6,$7,$8,$9,$10;}' \
+    | xargs $HOME/kent/src/hg/snp/bgi/bgiExonIntronToGenePred.pl \
       > bgiGene.tab
 
     # Gene annotation peptide seqs:
     cp /dev/null bgiGenePep.fa
-    foreach f (`find 61.50.158.101 -name \*.pep\* -print | g -v HumanDis`)
+    foreach f (`find 6* -name \*.pep\* -print`)
       set gz = `echo $f | grep .gz`
       if ("$gz" != "") then
         gunzip -c $f >> bgiGenePep.fa
@@ -1929,7 +1927,7 @@ http://genome.imim.es/genepredictions/G.gallus/golden_path_200402/geneid_v1.1/$c
     # the longblobs which can't be loaded in from .tab unfortunately)
     find . -name SNPlist-\*.txt\* -print \
       > SNPlists.list
-    find 61.50.158.101/BGI/SNPs_by_cDNA/2004-03-15 -name \*GeneSNPcon\*.txt\* \
+    find 6*/BGI/SNPs_by_cDNA/2004-03-15 -name \*GeneSNPcon\*.txt\* \
       -print \
       > GeneSNPcons.list
     $HOME/kent/src/hg/snp/bgi/bgiXref.pl SNPlists.list GeneSNPcons.list
