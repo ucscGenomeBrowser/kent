@@ -104,12 +104,14 @@ boolean sqlRowExists(struct sqlConnection *conn,
 #define SQL_TAB_TRANSACTION_SAFE   0x20  /* Don't use speed optimizations that 
                                           * implicitly commit the current transaction. 
 					  * For example "alter table" */
+#define SQL_TAB_REPLACE            0x40  /* Replace entries with duplicate
+                                          * unique keys instead of generating an
+                                          * error. */
 
 void sqlLoadTabFile(struct sqlConnection *conn, char *path, char *table,
                     unsigned options);
 /* Load a tab-seperated file into a database table, checking for errors. 
- * Options are SQL_TAB_FILE_ON_SERVER, SQL_TAB_FILE_WARN_ON_WARN
- * SQL_TAB_FILE_WARN_ON_ERROR, SQL_TAB_FILE_CONCURRENT, SQL_TAB_TRANSACTION_SAFE */
+ * Options are the SQL_TAB_* bit set. */
 
 struct sqlResult *sqlGetResult(struct sqlConnection *sc, char *query);
 /* Query database.

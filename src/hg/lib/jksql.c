@@ -13,7 +13,7 @@
 #include "sqlNum.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: jksql.c,v 1.45 2004/01/06 00:51:52 genbank Exp $";
+static char const rcsid[] = "$Id: jksql.c,v 1.46 2004/01/17 09:35:13 markd Exp $";
 
 boolean sqlTrace = FALSE;  /* setting to true prints each query */
 int sqlTraceIndent = 0;    /* number of spaces to indent traces */
@@ -429,13 +429,12 @@ return (sqlUnsigned(majorVerBuf) >= 4);
 void sqlLoadTabFile(struct sqlConnection *conn, char *path, char *table,
                     unsigned options)
 /* Load a tab-seperated file into a database table, checking for errors. 
- * Options are SQL_TAB_FILE_ON_SERVER, SQL_TAB_FILE_WARN_ON_WARN
- * SQL_TAB_FILE_WARN_ON_ERROR, SQL_TAB_FILE_CONCURRENT, SQL_TAB_TRANSACTION_SAFE */
+ * Options are the SQL_TAB_* bit set. */
 {
 char tabPath[PATH_LEN];
 char query[PATH_LEN+256];
 int numScan, numRecs, numSkipped, numWarnings;
-char *localOpt, *concurrentOpt;
+char *localOpt, *concurrentOpt, *dupOpt;
 const char *info;
 struct sqlResult *sr;
 boolean mysql4 = isMySql4(conn);
@@ -487,8 +486,13 @@ else
         }
     }
 
-safef(query, sizeof(query),  "LOAD DATA %s %s INFILE '%s' INTO TABLE %s",
-      concurrentOpt, localOpt, tabPath, table);
+if (options & SQL_TAB_REPLACE)
+    dupOpt = "REPLACE";
+else
+    dupOpt = "";
+
+safef(query, sizeof(query),  "LOAD DATA %s %s %s INFILE '%s' INTO TABLE %s",
+      concurrentOpt, localOpt, dupOpt, tabPath, table);
 sr = sqlGetResult(conn, query);
 info = mysql_info(conn->conn);
 if (info == NULL)
