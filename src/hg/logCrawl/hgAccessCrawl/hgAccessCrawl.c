@@ -6,7 +6,7 @@
 #include "obscure.h"
 #include "cheapcgi.h"
 
-static char const rcsid[] = "$Id: hgAccessCrawl.c,v 1.2 2003/12/24 00:41:46 kent Exp $";
+static char const rcsid[] = "$Id: hgAccessCrawl.c,v 1.3 2003/12/24 04:52:02 kent Exp $";
 
 int verbose = 0;
 
@@ -221,6 +221,12 @@ else if (startsWith("AgentName", program))
     return TRUE;
 else if (startsWith("libwww-perl", program))
     return TRUE;
+else if (startsWith("Googlebot", program))
+    return TRUE;
+else if (startsWith("ia_archiver", program))
+    return TRUE;
+else if (startsWith("Hatena Antenna", program))
+    return TRUE;
 if (roboHash == NULL)
     {
     roboHash = hashNew(0);
@@ -251,6 +257,9 @@ int hgTracksPosted = 0;
 int hgNearTotal = 0;
 int hgGeneTotal = 0;
 int hgTextTotal = 0;
+int hgBlatTotal = 0;
+int hgcTotal = 0;
+int dbTotal = 0;
 int other = 0;
 int fromGateway = 0;
 int fromHgBlat = 0;
@@ -273,6 +282,7 @@ int hgTracksRobot = 0;
 int hgTextRobot = 0;
 int hgGeneRobot = 0;
 int hgNearRobot = 0;
+int hgBlatRobot = 0;
 int undisclosedOutsideSimple = 0;
 int undisclosedOutsideWithCustom = 0;
 int resetAll = 0;
@@ -281,7 +291,8 @@ int postScriptOutput = 0;
 int addYourOwn = 0;
 struct hash *gHash = hashNew(0);
 struct nameCount *gList = NULL, *gEl, *gNone, *gPost, *gRobot;
-int hgcTotal = 0;
+struct hash *dbHash = hashNew(8);
+struct nameCount *dbList = NULL, *dbEl;
 
 /* Allocate dummy group for POSTed htc's. */
 AllocVar(gPost);
@@ -329,6 +340,23 @@ for (i=0; i<logCount; ++i)
 		if (startsWith("/cgi-bin/hgTracks", ll->url))
 		    {
 		    ++hgTracksTotal;
+		    if (ll->referrer != NULL && stringIn("hgGateway", ll->referrer))
+		        {
+			struct cgiVar *cv = hashFindVal(cgiHash, "db");
+			if (cv != NULL)
+			    {
+			    char *db = cv->val;
+			    dbEl = hashFindVal(dbHash, db);
+			    if (dbEl == NULL)
+			        {
+				AllocVar(dbEl);
+				hashAddSaveName(dbHash, db, dbEl, &dbEl->name);
+				slAddHead(&dbList, dbEl);
+				}
+			    dbEl->count += 1;
+			    dbTotal += 1;
+			    }
+			}
 		    if (isRobot(ll->ip, ll->program))
 			++hgTracksRobot;
 		    else if (cgiHashVal(cgiHash, "Submit", "Submit"))
@@ -453,6 +481,12 @@ for (i=0; i<logCount; ++i)
 		    if (isRobot(ll->ip, ll->program))
 		        hgTextRobot += 1;
 		    }
+		else if (startsWith("/cgi-bin/hgBlat", ll->url))
+		    {
+		    hgBlatTotal += 1;
+		    if (isRobot(ll->ip, ll->program))
+		        hgBlatRobot += 1;
+		    }
 		hashFree(&cgiHash);
 		slFreeList(&cgiList);
 		freez(&cgiString);
@@ -493,11 +527,25 @@ for (i=0; i<logCount; ++i)
 		    if (isRobot(ll->ip, ll->program))
 		        hgTextRobot += 1;
 		    }
+		else if (startsWith("/cgi-bin/hgBlat", ll->url))
+		    {
+		    hgBlatTotal += 1;
+		    if (isRobot(ll->ip, ll->program))
+		        hgBlatRobot += 1;
+		    }
 		}
 	    logLineFree(&ll);
 	    }
 	}
     }
+slSort(&dbList, nameCountCmp);
+printf("Total entries from hgGateway with db set: %d\n", dbTotal);
+for (dbEl = dbList; dbEl != NULL; dbEl = dbEl->next)
+    {
+    printf("%4.2f%% db %s: %d\n", 100.0 * dbEl->count/dbTotal, 
+    	dbEl->name, dbEl->count);
+    }
+
 printf("hgTracksTotal: %d\n", hgTracksTotal);
 printf("hgTracksPosted: %d\n", hgTracksPosted);
 printf("fromGateway: %d\n", fromGateway);
@@ -527,6 +575,8 @@ printf("addYourOwn: %d\n", addYourOwn);
 printf("other: %d\n", other);
 printf("\n");
 
+printf("hgBlat total %d, robot %d (%4.2f%%)\n", 
+	hgBlatTotal, hgBlatRobot, 100.0*hgBlatRobot/hgBlatTotal);
 printf("hgText total %d, robot %d (%4.2f%%)\n", 
 	hgTextTotal, hgTextRobot, 100.0*hgTextRobot/hgTextTotal);
 printf("hgGene total %d, robot %d (%4.2f%%)\n", 
