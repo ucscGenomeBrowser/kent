@@ -7849,3 +7849,97 @@ end
     #Add description file: mzPt1Mm3Rn3Gg2_pHMM.html
     #Add track to trackDb.ra: mzPt1Mm3Rn3Gg2_pHMM
 
+# EXONIPHY HMR
+# (started, acs, 2004-03-23)
+
+    ssh hgwdev
+    # (update woody binaries, if necessary -- see above)
+    # (also, make sure /cluster/bin/woody in path)
+    mkdir /cluster/store6/exoniphy.hg16mm3rn3.2004-03-23
+    cd /cluster/data/hg16/bed
+    ln -s /cluster/store6/exoniphy.hg16mm3rn3.2004-03-23
+    ln -s exoniphy.hg16mm3rn3.2004-03-23 exoniphy.hg16mm3rn3
+
+    # first, break up the genome-wide MAFs into pieces; it's worth doing
+    # this as a little cluster job
+    ssh eieio
+    mkdir -p /cluster/bluearc/hg16/bed/humor
+    cp /cluster/data/hg16/bed/humor/hmr/*.maf /cluster/data/hg16/?{,?}/chr*.fa /cluster/bluearc/hg16/bed/humor
+    logout
+    ssh kk
+    cd /cluster/data/hg16/bed/exoniphy.hg16mm3rn3
+    cat << EOF > doSplit
+#!/bin/sh
+
+WOODY=/cluster/bin/woody
+FA_SRC=/cluster/bluearc/hg16/bed/humor
+WINDOWS=/cluster/data/hg16/bed/exoniphy.hg16mm3rn3/WINDOWS
+
+maf=$1
+prefix=`echo $maf | awk -F\/ '{print $NF}' | awk -F\. '{print $1}'` 
+chr=`echo $prefix | sed 's/chr//g ; s/_random//g'`
+mkdir -p /scratch/msa_split
+${WOODY}/msa_split $maf -i MAF -M ${FA_SRC}/$prefix.fa -O hg16,mm3,rn3 -w 50000,2000 -r /scratch/msa_split/$prefix -o SS -I 1000 -d 1 -B 1000 -T 3
+mkdir -p ${WINDOWS}/$chr
+cd /scratch/msa_split
+for file in `ls | egrep -w ${prefix}` ; do gzip -c $file > ${WINDOWS}/$chr/$file.gz ; rm $file ; done
+EOF
+
+    chmod +x doSplit
+    mkdir -p WINDOWS
+    rm -rf WINDOWS/* jobs.lst
+    for file in /cluster/bluearc/hg16/bed/humor/*.maf ; do echo "doSplit $file" >> jobs.lst ; done
+    para create jobs.lst  
+    # etc ...   (run cluster job)
+
+
+    # now set up cluster job for exoniphy.  Use phylo-HMMs estimated
+    # for RECOMB '04 paper.  (below requires bash shell)
+    TRAIN=/cluster/home/acs/RECOMB2004/TRAIN
+    TEST=/cluster/home/acs/RECOMB2004/TEST-NEW
+    OPTIONS="${TEST}/models-icnc-physpldg-gc1,${TEST}/models-icnc-physpldg-gc2,${TEST}/models-icnc-physpldg-gc3,${TEST}/models-icnc-physpldg-gc4,${TEST}/models-icnc-physpldg-gc5 -c ${TRAIN}/exons-newsplice.cm -H ${TRAIN}/exons-hmr-indel-spl_tweak.hmm -f -q -U -W 10,11,20,21,27,28,29,30,start,stop -b cds -V icnc -I cds,background,icnc,5\'splice,3\'splice,prestart -i SS -D 0.4,0.45,0.5,0.55 -X 0.036"
+    # FIXME: next time add -S  (log odds scores)
+    cat << EOF > doLabel
+#!/bin/bash
+zcat \$1 | /cluster/bin/woody/label -m - -d $OPTIONS \${*:2}
+EOF
+    chmod +x doLabel
+    rm -f jobs.lst
+    for dir in WINDOWS/* ; do
+	chr=`echo $dir | awk -F\/ '{print $NF}'`
+	mkdir -p OUTPUT/$chr
+	find OUTPUT/$chr -name "*.bed" -exec rm {} \; 
+	find OUTPUT/$chr -name "*.gff" -exec rm {} \;
+	for file in `ls $dir | sort -n -t\. +1`; do 
+	    base=`basename $file .ss.gz`
+	    prefix=`echo $base | awk -F\. '{print $1}'`
+	    echo "doLabel WINDOWS/$chr/$file -o OUTPUT/$chr/$base -s $prefix " >> jobs.lst 
+	done 
+    done
+    
+    para create jobs.lst
+    # etc... (run cluster job)
+    logout
+
+    # create track
+    ssh hgwdev
+    cd /cluster/data/hg16/bed/exoniphy.hg16mm3rn3
+    rm -f all.bed
+    for dir in OUTPUT/* ; do 
+	    echo "cleaning up $dir..."
+	    find $dir -name "*.bed" -size 0 -exec rm {} \; 
+	    echo "getting predictions from $dir..."
+	    for file in `ls $dir | grep bed | sort -t\. -k1,1 -k2,2n`; do cat $dir/$file >> all.bed ; done 
+    done
+
+    hgLoadBed hg16 exoniphy all.bed 
+#track exoniphy
+#shortLabel Exoniphy 
+#longLabel Exoniphy: Conserved Exon Predictions (Human/Mouse/Rat)
+#group genes
+#priority 50.9
+#visibility hide
+#color 173,17,162
+#exonArrows on
+#type bed 12
+
