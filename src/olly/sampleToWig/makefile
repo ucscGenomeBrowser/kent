@@ -3,10 +3,10 @@
 
 L = -lm
 MYLIBDIR = $(HOME)/src/lib/$(MACHTYPE)
-MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
+MYLIBS =  $(MYLIBDIR)/jkweb.a
 
 O = sampleToWig.o
 
 sampleToWig: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/sampleToWig $O $(MYLIBS) $L
-	strip $(HOME)/bin/$(MACHTYPE)/sampleToWig
+#	strip $(HOME)/bin/$(MACHTYPE)/sampleToWig
