@@ -9241,6 +9241,24 @@ void loadXenoPsl(struct trackGroup *tg)
 lfFromPslsInRange(tg, winStart,winEnd, chromName, TRUE, FALSE);
 }
 
+void drawColorMethods(struct trackGroup *tg)
+/* Fill in color track items based on chrom  */
+{
+char option[128]; /* Option -  rainbow chromosome color */
+char optionChr[128]; /* Option -  chromosome filter */
+char *optionChrStr; 
+char *optionStr ;
+snprintf( option, sizeof(option), "%s.color", tg->mapName);
+optionStr = cartUsualString(cart, option, "off");
+tg->mapItemName = mapNameFromLfExtra;
+if( sameString( optionStr, "on" )) /*use chromosome coloring*/
+    tg->itemColor = pslItemColor;
+else
+    tg->itemColor = NULL;
+linkedFeaturesMethods(tg);
+tg->loadItems = loadGenePred;
+}
+
 
 void fillInFromType(struct trackGroup *group, struct trackDb *tdb)
 /* Fill in various function pointers in group from type field of tdb. */
@@ -9737,6 +9755,7 @@ registerTrackHandler("syntenyBerk", syntenyBerkMethods);
 registerTrackHandler("syntenySanger", syntenySangerMethods);
 registerTrackHandler("mouseOrtho", mouseOrthoMethods);
 registerTrackHandler("mouseOrthoSeed", mouseOrthoMethods);
+//registerTrackHandler("orthoTop4", drawColorMethods);
 registerTrackHandler("humanParalog", humanParalogMethods);
 registerTrackHandler("isochores", isochoresMethods);
 registerTrackHandler("gcPercent", gcPercentMethods);
