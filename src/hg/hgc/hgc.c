@@ -129,7 +129,7 @@
 #include "hgFind.h"
 #include "botDelay.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.576 2004/03/01 16:41:08 kent Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.577 2004/03/02 04:52:46 angie Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -1694,6 +1694,7 @@ struct chain *chain = NULL, *subChain = NULL, *toFree = NULL;
 int chainWinSize;
 double subSetScore = 0.0;
 int qs, qe;
+boolean nullSubset = FALSE;
 
 if (! sameWord(otherDb, "seq"))
     {
@@ -1707,7 +1708,11 @@ if (otherOrg == NULL)
 
 chain = chainDbLoad(conn, database, track, seqName, atoi(item));
 chainSubsetOnT(chain, winStart, winEnd, &subChain, &toFree);
-subSetScore = subChain->score;
+if (subChain == NULL)
+    nullSubset = TRUE;
+else
+    /* Note: chain.c's chainSubsetOnT says this is a "fake" (scaled) score. */
+    subSetScore = subChain->score;
 chainFree(&toFree);
 printf("<B>%s position:</B> %s:%d-%d</a>  size: %d <BR>\n",
        thisOrg, chain->tName, chain->tStart+1, chain->tEnd, chain->tEnd-chain->tStart);
@@ -1726,7 +1731,11 @@ else
     }
 printf("<B>Chain ID:</B> %s<BR>\n", item);
 printf("<B>Score:</B> %1.0f\n", chain->score);
-printf("<B>Score within browser window:</B> %1.0f<BR>\n", subSetScore);
+if (nullSubset)
+    printf("<B>Score within browser window:</B> N/A (no aligned bases)<BR>\n");
+else
+    printf("<B>Approximate Score within browser window:</B> %1.0f<BR>\n",
+	   subSetScore);
 printf("<BR>\n");
 
 chainWinSize = min(winEnd-winStart, chain->tEnd - chain->tStart);
