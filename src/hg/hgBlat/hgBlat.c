@@ -24,7 +24,7 @@ struct serverTable
    };
 
 char *genomeList[] = {"Oct. 7, 2000", "Dec. 12, 2000"};
-char *typeList[] = {"auto", "DNA", "protein"};
+char *typeList[] = {"auto", "DNA", "protein", "tx forward", "tx both"};
 
 struct serverTable serverTable[] =  {
 {"hg5", "Oct. 7, 2000", TRUE, "kks00.cse.ucsc.edu", "17776", "/projects/cc/hg/oo.23/nib"},
@@ -118,13 +118,22 @@ char *type = cgiString("type");
 char *seqLetters = cloneString(userSeq);
 struct serverTable *serve;
 int conn;
-boolean isTx;
+boolean isTx = FALSE;
+boolean isTxTx = FALSE;
+boolean txTxBoth = FALSE;
 
 /* Load user sequence and figure out if it is DNA or protein. */
 if (sameWord(type, "DNA"))
     {
     seq = faSeqFromMemText(seqLetters, TRUE);
     isTx = FALSE;
+    }
+else if (sameWord(type, "tx forward") || sameWord(type, "tx both"))
+    {
+    seq = faSeqFromMemText(seqLetters, TRUE);
+    isTx = TRUE;
+    isTxTx = TRUE;
+    txTxBoth = sameWord(type, "tx both");
     }
 else if (sameWord(type, "protein"))
     {
@@ -166,8 +175,23 @@ if (isTx)
     static struct gfSavePslxData data;
     data.f = f;
     data.reportTargetStrand = TRUE;
-    pslxWriteHead(f, gftProt, gftDnaX);
-    gfAlignTrans(conn, serve->nibDir, seq, 12, gfSavePslx, &data);
+    if (isTxTx)
+        {
+	pslxWriteHead(f, gftDnaX, gftDnaX);
+	gfAlignTransTrans(conn, serve->nibDir, seq, FALSE, 12, gfSavePslx, &data);
+	if (txTxBoth)
+	    {
+	    close(conn);
+	    reverseComplement(seq->dna, seq->size);
+	    conn = gfConnect(serve->host, serve->port);
+	    gfAlignTransTrans(conn, serve->nibDir, seq, TRUE, 12, gfSavePslx, &data);
+	    }
+	}
+    else
+	{
+	pslxWriteHead(f, gftProt, gftDnaX);
+	gfAlignTrans(conn, serve->nibDir, seq, 12, gfSavePslx, &data);
+	}
     }
 else
     {
@@ -203,7 +227,6 @@ printf("%s", "UCSC assembly\n"
 
 printf("%s", "<TD WIDTH=\"15%\"<CENTER>\n");
 cgiMakeDropList("genome", genomeList, ArraySize(genomeList), serve->genome);
-printf("<BR><B>type:</B>\n");
 cgiMakeDropList("type", typeList, ArraySize(typeList), NULL);
 printf("%s", "</TD>\n");
 
@@ -222,14 +245,14 @@ cgiMakeHiddenVar("db", serve->db);
 
 printf("%s", 
 "<P>Only the first 20,000 bases of DNA sequence and the first 4000 bases of\n"
-"a protein sequence will be used.  BLAT on DNA is designed to\n"
+"a protein sequence or translated DNA sequence will be used.  BLAT on DNA is designed to\n"
 "quickly find sequences of 95% and greater similarity of length 40 bases or\n"
 "more.  It may miss more divergent or shorter sequence alignments.  It will find\n"
 "perfect sequence matches of 36 bases, and sometimes find them down to 24 bases.\n"
 "BLAT on proteins finds sequences of 80% and greater similarity of length 20 amino\n"
 "acids or more.  In practice DNA BLAT works well on primates, and protein\n"
 "blat on land vertebrates\n</P>"
-"<P>BLAT is not BLAST.  Nucleotide BLAT works by keeping an index of the entire genome\n"
+"<P>BLAT is not BLAST.  DNA BLAT works by keeping an index of the entire genome\n"
 "in memory.  The index consists of all non-overlapping 12-mers except for\n"
 "those heavily involved in repeats.  The index takes up a bit less than\n"
 "a gigabyte of RAM.  The genome itself is not kept in memory, allowing\n"
