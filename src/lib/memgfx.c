@@ -6,33 +6,77 @@
 #include "common.h"
 #include "memgfx.h"
 #include "gemfont.h"
+#include "localmem.h"
 
-void mgSetDefaultColorMap(struct rgbColor *cmap)
+#define colHashFunc(r,g,b) (r+g+g+b)
+
+struct colHashEl
+/* An element in a color hash. */
+    {
+    struct colHashEl *next;	/* Next in list. */
+    struct rgbColor col;	/* Color RGB. */
+    int ix;			/* Color Index. */
+    };
+
+struct colHash
+/* A hash on RGB colors. */
+    {
+    struct colHashEl *lists[4*256];	/* Hash chains. */
+    struct colHashEl elBuf[256];	/* Buffer of elements. */
+    struct colHashEl *freeEl;		/* Pointer to next free element. */
+    };
+
+static struct colHash *colHashNew()
+/* Get a new color hash. */
+{
+struct colHash *cHash;
+AllocVar(cHash);
+cHash->freeEl = cHash->elBuf;
+return cHash;
+}
+
+static void colHashFree(struct colHash **pEl)
+/* Free up color hash. */
+{
+freez(pEl);
+}
+
+struct colHashEl *colHashAdd(struct colHash *cHash, unsigned r, unsigned g, unsigned b, int ix)
+/* Add new element to color hash. */
+{
+struct colHashEl *che = cHash->freeEl++, **pCel;
+che->col.r = r;
+che->col.g = g;
+che->col.b = b;
+che->ix = ix;
+pCel = &cHash->lists[colHashFunc(r,g,b)];
+slAddHead(pCel, che);
+return che;
+}
+
+struct colHashEl *colHashLookup(struct colHash *cHash, unsigned r, unsigned g, unsigned b)
+/* Lookup value in hash. */
+{
+struct colHashEl *che;
+for (che = cHash->lists[colHashFunc(r,g,b)]; che != NULL; che = che->next)
+    if (che->col.r == r && che->col.g == g && che->col.b == b)
+	return che;
+return NULL;
+}
+
+static void mgSetDefaultColorMap(struct memGfx *mg)
 /* Set up default color map for a memGfx. */
 {
-    zeroBytes(cmap, 256*3);
-
-    cmap[MG_WHITE].r = 255;
-    cmap[MG_WHITE].g = 255;
-    cmap[MG_WHITE].b = 255;
-
-    cmap[MG_RED].r = 255;
-    cmap[MG_GREEN].g = 255;
-    cmap[MG_BLUE].b = 255;
-
-    cmap[MG_CYAN].g = 255;
-    cmap[MG_CYAN].b = 255;
-
-    cmap[MG_MAGENTA].r = 255;
-    cmap[MG_MAGENTA].b = 255;
-
-    cmap[MG_YELLOW].r = 255;
-    cmap[MG_YELLOW].g = 255;
-
-    cmap[MG_GRAY].r = 140;
-    cmap[MG_GRAY].g = 140;
-    cmap[MG_GRAY].b = 140;
-
+/* Note dependency in order here and in MG_WHITE, MG_BLACK, etc. */
+mgAddColor(mg, 255, 255, 255);
+mgAddColor(mg, 0, 0, 0);
+mgAddColor(mg, 255, 0, 0);
+mgAddColor(mg, 0, 255, 0);
+mgAddColor(mg, 0, 0, 255);
+mgAddColor(mg, 0, 255, 255);
+mgAddColor(mg, 255, 0, 255);
+mgAddColor(mg, 255, 255, 0);
+mgAddColor(mg, 140, 140, 140);
 }
 
 void mgSetClip(struct memGfx *mg, int x, int y, int width, int height)
@@ -65,13 +109,14 @@ struct memGfx *mgNew(int width, int height)
 /* Return new memGfx. */
 {
 struct memGfx *mg;
+int i;
 
 mg = needMem(sizeof(*mg));
 mg->pixels = needLargeMem(width*height);
 mg->width = width;
 mg->height = height;
-mgSetDefaultColorMap(mg->colorMap);
-mg->colorsUsed = MG_FREE_COLORS_START;
+mg->colorHash = colHashNew();
+mgSetDefaultColorMap(mg);
 mgUnclip(mg);
 return mg;
 }
@@ -82,18 +127,23 @@ void mgClearPixels(struct memGfx *mg)
 zeroBytes(mg->pixels, mg->width*mg->height);
 }
 
-Color mgFindColor(struct memGfx *mg, unsigned char r, unsigned char g, unsigned char b)
+Color _mgFindColor(struct memGfx *mg, unsigned char r, unsigned char g, unsigned char b)
 /* Returns closest color in color map to rgb values.  If it doesn't
  * already exist in color map and there's room, it will create
  * exact color in map. */
 {
-Color cc = mgClosestColor(mg, r, g, b);
-struct rgbColor *c = mg->colorMap + cc;
-if (c->r == r && c->g == g && c->b == b)
-    return cc;
+struct colHashEl *che;
+if ((che = colHashLookup(mg->colorHash, r, g, b)) != NULL)
+    return che->ix;
 if (mgColorsFree(mg))
     return mgAddColor(mg, r, g, b);
-return cc;
+return mgClosestColor(mg, r, g, b);
+}
+
+Color mgFindColor(struct memGfx *mg, unsigned char r, unsigned char g, unsigned char b)
+{
+Color c = _mgFindColor(mg, r, g, b);
+return c;
 }
 
 Color mgClosestColor(struct memGfx *mg, unsigned char r, unsigned char g, unsigned char b)
@@ -128,11 +178,13 @@ Color mgAddColor(struct memGfx *mg, unsigned char r, unsigned char g, unsigned c
 int colIx = mg->colorsUsed;
 if (colIx < 256)
     {
+    struct rgbColor *mapPos;
     struct rgbColor *c = mg->colorMap + mg->colorsUsed;
     c->r = r;
     c->g = g;
     c->b = b;
     mg->colorsUsed += 1;
+    colHashAdd(mg->colorHash, r, g, b, colIx);;
     }
 return (Color)colIx;
 }
@@ -150,6 +202,7 @@ if (mg != NULL)
     {
     if (mg->pixels != NULL)
 	freeMem(mg->pixels);
+    colHashFree(&mg->colorHash);
     zeroBytes(mg, sizeof(*mg));
     freeMem(mg);
     }
