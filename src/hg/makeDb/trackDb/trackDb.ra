@@ -313,11 +313,11 @@ type genePred
 track ncbiGeneSet
 shortLabel NCBI gene set
 longLabel NCBI $Organism 34.3 gene set
-group x
+group genes
 priority 30.10
 visibility hide
 color 10,100,15
-type genePred
+type genePred +
 
 track ncbiGeneCDS99
 shortLabel NCBI CDS 99 set
