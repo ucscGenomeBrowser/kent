@@ -1,13 +1,38 @@
 
 <h1> Push Queue Form </h1>
 
+<p style=\"color:red\"><!msg></p>
+
 <form ACTION=\"/cgi-bin/qaPushQ\" NAME=\"mainForm\" METHOD=\"POST\">
 
 
-<input TYPE=\"hidden\" NAME=\"action\" VALUE=\"post\"  >
-<input TYPE=\"hidden\" NAME=\"qid\"    VALUE=\"<!qid>\">
+<input TYPE=\"hidden\" NAME=\"action\"   VALUE=\"post\"  >
+<input TYPE=\"hidden\" NAME=\"qid\"      VALUE=\"<!qid>\">
+<input TYPE=\"hidden\" NAME=\"initdate\" VALUE=\"<!initdate>\">
 
 <table cellpadding=6>
+
+<tr><td align=\"right\">
+&nbsp;
+</td>
+<td>
+<input TYPE=SUBMIT NAME=\"submit\" VALUE=\"Submit\">
+&nbsp;
+&nbsp;
+<!delbutton>
+&nbsp;
+&nbsp;
+<!pushbutton>
+&nbsp;
+&nbsp;
+<!clonebutton>
+&nbsp;
+&nbsp;
+<a href=\"/cgi-bin/qaPushQ\">CANCEL</a>
+&nbsp;
+&nbsp;
+<a href=\"/cgi-bin/qaPushQ?action=showEditHelp&qid=<!qid>\">HELP</a>
+</td></tr>
 
 <tr><td align=\"right\">
 Priority:
@@ -21,8 +46,6 @@ Priority:
 <option <!sel-priority-L> value=\"L\">L</option>
 </select>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Queue Id: <!qid> 
-&nbsp;&nbsp;<a href=\"/cgi-bin/qaPushQ\">CANCEL</a>
-&nbsp;&nbsp;<a href=\"/cgi-bin/qaPushQ?action=showEditHelp&qid=<!qid>\">HELP</a>
 </td></tr>
 
 <tr><td align=\"right\">
@@ -196,6 +219,9 @@ Notes:
 &nbsp;
 &nbsp;
 <a href=\"/cgi-bin/qaPushQ\">CANCEL</a>
+&nbsp;
+&nbsp;
+<a href=\"/cgi-bin/qaPushQ?action=showEditHelp&qid=<!qid>\">HELP</a>
 </td></tr>
 
 </table>
