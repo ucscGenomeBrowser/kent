@@ -1,3 +1,17 @@
+28:
+     o Blat, gfClient, and gfServer now work with .2bit files.
+       Like .nib files, .2bit files are a compressed binary
+       random access format for DNA.  There are two advantages
+       to the .2bit files over .nibs.  Most importantly a single
+       .2bit file can hold multiple sequence records.  Also .2bit
+       files as the name implies, use just 2 bits per DNA base
+       rather than the 4 bits/base found in a .nib file.  The .2bit
+       files still do allow for soft-masking by lower case, and
+       for N characters.  They do this by storing lists of masked
+       areas and N's separately from the sequence.  There are also
+       faToTwoBit and twoBitToFa utilities to convert in and out of
+       this format.
+
 27:
      o Made it so that gfClient does not abort when gfServer runs out
        of memory on a request.  Instead it just prints a warning

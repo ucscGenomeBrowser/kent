@@ -16,7 +16,7 @@
 #include "twoBit.h"
 #include "trans3.h"
 
-static char const rcsid[] = "$Id: gfClientLib.c,v 1.27 2004/02/25 07:42:31 kent Exp $";
+static char const rcsid[] = "$Id: gfClientLib.c,v 1.28 2004/02/25 21:51:15 kent Exp $";
 
 void dumpRange(struct gfRange *r, FILE *f)
 /* Dump range to file. */
@@ -428,6 +428,7 @@ if (respectFrame)
 range->tEnd = x;
 }
 
+#ifdef OLD
 static struct dnaSeq *expandAndLoad(struct gfRange *range, char *tSeqDir, 
 	int querySize, int *retNibSize, boolean respectFrame, boolean isRc)
 /* Expand range to cover an additional 500 bases on either side.
@@ -463,6 +464,7 @@ fclose(f);
 *retNibSize = nibSize;
 return target;
 }
+#endif /* OLD */
 
 static struct dnaSeq *expandAndLoadCached(struct gfRange *range, 
 	struct hash *tFileCache, char *tSeqDir, int querySize, 
@@ -1083,7 +1085,7 @@ for (range = rangeList; range != NULL; range = range->next)
 }
 
 static void loadHashT3Ranges(struct gfRange *rangeList, 
-	char *nibDir, int qSeqSize, boolean isRc, 
+	char *tSeqDir, struct hash *tFileCache, int qSeqSize, boolean isRc, 
 	struct hash **retT3Hash, struct dnaSeq **retSeqList,
 	struct slRef **retT3RefList)
 /* Load DNA in ranges into memory, and put translation in a hash
@@ -1098,7 +1100,8 @@ for (range = rangeList; range != NULL; range = range->next)
     {
     struct trans3 *t3, *oldT3;
 
-    targetSeq = expandAndLoad(range, nibDir, qSeqSize*3, &range->tTotalSize, TRUE, isRc);
+    targetSeq = expandAndLoadCached(range, tFileCache,
+    	tSeqDir, qSeqSize*3, &range->tTotalSize, TRUE, isRc);
     slAddHead(&tSeqList, targetSeq);
     freez(&targetSeq->name);
     targetSeq->name = cloneString(range->tName);
@@ -1122,9 +1125,22 @@ for (range = rangeList; range != NULL; range = range->next)
 *retT3RefList = t3RefList;
 }
 
+static void getSeqName(char *spec, char *name)
+/* Extract sequence name from spec. */
+{
+if (nibIsFile(spec))
+    splitPath(spec, NULL, name, NULL);
+else
+    {
+    char *s = strchr(spec, ':');
+    if (s == NULL)
+	errAbort("Expecting colon in %s", spec);
+    strcpy(name, s+1);
+    }
+}
 
-void gfAlignTrans(int *pConn, char *nibDir, aaSeq *seq, int minMatch, 
-    struct gfOutput *out)
+void gfAlignTrans(int *pConn, char *tSeqDir, aaSeq *seq, int minMatch, 
+    struct hash *tFileCache, struct gfOutput *out)
 /* Search indexed translated genome on server with an amino acid sequence. 
  * Then load homologous bits of genome locally and do detailed alignment.
  * Call 'outFunction' with each alignment that is found. */
@@ -1133,7 +1149,7 @@ struct ssBundle *bun;
 struct gfClump *clumps[2][3], *clump;
 struct gfRange *rangeList = NULL, *range, *rl;
 struct dnaSeq *targetSeq, *tSeqList = NULL;
-char dir[256], chromName[128], ext[64];
+char dir[256], chromName[256], ext[64];
 int tileSize;
 int frame, isRc = 0;
 struct hash *t3Hash = NULL;
@@ -1159,7 +1175,8 @@ for (isRc = 0; isRc <= 1;  ++isRc)
     rangeCoorTimes3(rangeList);
     slSort(&rangeList, gfRangeCmpTarget);
     rangeList = gfRangesBundle(rangeList, ffIntronMax);
-    loadHashT3Ranges(rangeList, nibDir, seq->size, isRc, &t3Hash, &tSeqList, &t3RefList);
+    loadHashT3Ranges(rangeList, tSeqDir, tFileCache, seq->size, 
+    	isRc, &t3Hash, &tSeqList, &t3RefList);
 
     /* The old range list was not very precise - it was just to get
      * the DNA loaded.  */
@@ -1198,7 +1215,7 @@ for (isRc = 0; isRc <= 1;  ++isRc)
 	t3 = hashMustFindVal(t3Hash, range->tName);
 	bun->t3List = t3;
 	ssStitch(bun, ffCdna, minMatch, 16);
-	splitPath(range->tName, dir, chromName, ext);
+	getSeqName(range->tName, chromName);
 	saveAlignments(chromName, t3->nibSize, 0, 
 	    bun, t3Hash, FALSE, isRc, ffCdna, minMatch, out);
 	ssBundleFree(&bun);
@@ -1244,16 +1261,16 @@ for (range = rangeList; range != NULL; range = range->next)
     }
 }
 
-void gfAlignTransTrans(int *pConn, char *nibDir, struct dnaSeq *qSeq, 
-	boolean qIsRc, int minMatch, struct gfOutput *out,
-	boolean isRna)
+void gfAlignTransTrans(int *pConn, char *tSeqDir, struct dnaSeq *qSeq, 
+	boolean qIsRc, int minMatch, struct hash *tFileCache, 
+	struct gfOutput *out, boolean isRna)
 /* Search indexed translated genome on server with an dna sequence.  Translate
  * this sequence in three frames. Load homologous bits of genome locally
  * and do detailed alignment.  Call 'outFunction' with each alignment
  * that is found. */
 {
 struct gfClump *clumps[2][3][3], *clump;
-char dir[256], chromName[128], ext[64];
+char dir[256], chromName[256], ext[64];
 int qFrame, tFrame, tIsRc;
 struct gfSeqSource *ssList = NULL, *ss;
 struct lm *lm = lmInit(0);
@@ -1284,7 +1301,8 @@ for (tIsRc=0; tIsRc <= 1; ++tIsRc)
     rangeCoorTimes3(rangeList);
     slSort(&rangeList, gfRangeCmpTarget);
     rangeList = gfRangesBundle(rangeList, ffIntronMax);
-    loadHashT3Ranges(rangeList, nibDir, qSeq->size/3, tIsRc, &t3Hash, &tSeqList, &t3RefList);
+    loadHashT3Ranges(rangeList, tSeqDir, tFileCache,
+    	qSeq->size/3, tIsRc, &t3Hash, &tSeqList, &t3RefList);
 
     /* The old range list was not very precise - it was just to get
      * the DNA loaded.  */
@@ -1326,7 +1344,7 @@ for (tIsRc=0; tIsRc <= 1; ++tIsRc)
 	bun->data = range;
 	bun->ffList = gfRangesToFfItem(range->components, qSeq);
 	ssStitch(bun, stringency, minMatch, 16);
-	splitPath(range->tName, dir, chromName, ext);
+	getSeqName(range->tName, chromName);
 	t3 = range->t3;
 	saveAlignments(chromName, t3->nibSize, t3->start, 
 	    bun, NULL, qIsRc, tIsRc, stringency, minMatch, out);

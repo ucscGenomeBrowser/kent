@@ -20,7 +20,7 @@
 #include "hash.h"
 #include "botDelay.h"
 
-static char const rcsid[] = "$Id: hgBlat.c,v 1.72 2004/02/25 07:42:29 kent Exp $";
+static char const rcsid[] = "$Id: hgBlat.c,v 1.73 2004/02/25 21:51:12 kent Exp $";
 
 struct cart *cart;	/* The user's ui state. */
 struct hash *oldVars = NULL;
@@ -448,17 +448,19 @@ for (seq = seqList; seq != NULL; seq = seq->next)
 	gvo->reportTargetStrand = TRUE;
 	if (isTxTx)
 	    {
-	    gfAlignTransTrans(&conn, serve->nibDir, seq, FALSE, 5, gvo, !txTxBoth);
+	    gfAlignTransTrans(&conn, serve->nibDir, seq, FALSE, 5, 
+	    	tFileCache, gvo, !txTxBoth);
 	    if (txTxBoth)
 		{
 		reverseComplement(seq->dna, seq->size);
 		conn = gfConnect(serve->host, serve->port);
-		gfAlignTransTrans(&conn, serve->nibDir, seq, TRUE, 5, gvo, FALSE);
+		gfAlignTransTrans(&conn, serve->nibDir, seq, TRUE, 5, 
+			tFileCache, gvo, FALSE);
 		}
 	    }
 	else
 	    {
-	    gfAlignTrans(&conn, serve->nibDir, seq, 5, gvo);
+	    gfAlignTrans(&conn, serve->nibDir, seq, 5, tFileCache, gvo);
 	    }
 	}
     else

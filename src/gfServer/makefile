@@ -5,7 +5,7 @@ MYLIBDIR = ../lib/$(MACHTYPE)
 MYLIBS =  $(MYLIBDIR)/jkOwnLib.a $(MYLIBDIR)/jkweb.a 
 
 O = gfServer.o
-X = gfServer.27x1
+X = gfServer
 
 gfServer: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/$X $O $(MYLIBS) $L

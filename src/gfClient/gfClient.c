@@ -9,7 +9,7 @@
 #include "options.h"
 #include "fuzzyFind.h"
 
-static char const rcsid[] = "$Id: gfClient.c,v 1.28 2004/02/25 07:42:28 kent Exp $";
+static char const rcsid[] = "$Id: gfClient.c,v 1.29 2004/02/25 21:51:10 kent Exp $";
 
 /* Variables that can be overridden by command line. */
 int dots = 0;
@@ -105,18 +105,20 @@ while (faSomeSpeedReadNext(lf, &seq.dna, &seq.size, &seq.name, qType != gftProt)
     if (qType == gftProt && (tType == gftDnaX || tType == gftRnaX))
         {
 	gvo->reportTargetStrand = TRUE;
-	gfAlignTrans(&conn, tSeqDir, &seq, minScore, gvo);
+	gfAlignTrans(&conn, tSeqDir, &seq, minScore, tFileCache, gvo);
 	}
     else if ((qType == gftRnaX || qType == gftDnaX) && (tType == gftDnaX || tType == gftRnaX))
         {
 	gvo->reportTargetStrand = TRUE;
-	gfAlignTransTrans(&conn, tSeqDir, &seq, FALSE, minScore, gvo, qType == gftRnaX);
+	gfAlignTransTrans(&conn, tSeqDir, &seq, FALSE, minScore, tFileCache, 
+		gvo, qType == gftRnaX);
 	if (qType == gftDnaX)
 	    {
 	    reverseComplement(seq.dna, seq.size);
 	    close(conn);
 	    conn = gfConnect(hostName, portName);
-	    gfAlignTransTrans(&conn, tSeqDir, &seq, TRUE, minScore, gvo, FALSE);
+	    gfAlignTransTrans(&conn, tSeqDir, &seq, TRUE, minScore, tFileCache,
+	    	gvo, FALSE);
 	    }
 	}
     else if ((tType == gftDna || tType == gftRna) && (qType == gftDna || qType == gftRna))

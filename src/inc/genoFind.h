@@ -315,14 +315,14 @@ void gfAlignStrand(int *pConn, char *nibDir, struct dnaSeq *seq,
  * outFunction to use. */
 
 void gfAlignTrans(int *pConn, char *nibDir, aaSeq *seq,
-    int minMatch, struct gfOutput *out);
+    int minMatch, struct hash *tFileHash, struct gfOutput *out);
 /* Search indexed translated genome on server with an amino acid sequence. 
  * Then load homologous bits of genome locally and do detailed alignment.
  * Call 'outFunction' with each alignment that is found. */
 
 void gfAlignTransTrans(int *pConn, char *nibDir, struct dnaSeq *seq, 
-	boolean qIsRc, int minMatch, struct gfOutput *out, 
-	boolean isRna);
+	boolean qIsRc, int minMatch, struct hash *tFileCache, 
+	struct gfOutput *out, boolean isRna);
 /* Search indexed translated genome on server with an dna sequence.  Translate
  * this sequence in three frames. Load homologous bits of genome locally
  * and do detailed alignment.  Call 'outFunction' with each alignment
