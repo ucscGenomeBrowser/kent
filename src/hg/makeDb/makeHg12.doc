@@ -1179,7 +1179,7 @@ LOAD AVID MOUSE TRACK (todo)
       hgLoadBed avidRepeat avidRepeat.bed
       hgLoadBed avidUnique avidUnique.bed
 
-LOAD SNPS (Done; Daryl Thomas May 28, 2002)
+LOAD SNPS (Done; Daryl Thomas July 29, 2002)
       ssh hgwdev
       cd ~/oo/bed
       mkdir snp
@@ -1187,13 +1187,13 @@ LOAD SNPS (Done; Daryl Thomas May 28, 2002)
      -Download SNPs from ftp://ftp.ncbi.nlm.nih.gov/pub/sherry/gp.ncbi.b29.gz
      -Unpack.
       ln -s ../../seq_contig.md .
-      calcFlipSnpPos seq_contig.md gp.ncbi.b29 gp.ncbi.b29.flipped
-      mv gp.ncbi.b29 gp.ncbi.b29.original
-      gzip gp.ncbi.b29.original
-      grep RANDOM       gp.ncbi.b29.flipped >  snpTsc.txt
-      grep MIXED        gp.ncbi.b29.flipped >> snpTsc.txt
-      grep BAC_OVERLAP  gp.ncbi.b29.flipped >  snpNih.txt
-      grep OTHER        gp.ncbi.b29.flipped >> snpNih.txt
+      calcFlipSnpPos seq_contig.md gp.ncbi.b30 gp.ncbi.b30.flipped
+      mv gp.ncbi.b30 gp.ncbi.b30.original
+      gzip gp.ncbi.b30.original
+      grep RANDOM       gp.ncbi.b30.flipped >  snpTsc.txt
+      grep MIXED        gp.ncbi.b30.flipped >> snpTsc.txt
+      grep BAC_OVERLAP  gp.ncbi.b30.flipped >  snpNih.txt
+      grep OTHER        gp.ncbi.b30.flipped >> snpNih.txt
       awk -f filter.awk snpTsc.txt > snpTsc.contig.bed
       awk -f filter.awk snpNih.txt > snpNih.contig.bed
       liftUp snpTsc.bed ../../jkStuff/liftAll.lft warn snpTsc.contig.bed
