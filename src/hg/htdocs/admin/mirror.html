@@ -65,7 +65,7 @@
 			    MINIMUM the following disk partitions and sizes:
 			    <UL>
 			        <LI>MySQL Table spaces: ~ 400 Gb
-			        <LI>Apache web pages area: ~ 1 Gb
+			        <LI>Apache web pages area: ~ 270 Mb
 			        <LI>"/gbdb" area for the browser: ~ 400 Gb
 			        <LI>Genome database text dumps: ~ 100 Gb
 			    </UL></P><P>
@@ -95,7 +95,7 @@
 
 <OL>
 <LI><A HREF="#step1">Install Apache server and MySQL server</A>
-<LI><A HREF="#step2">Get all the html files and most of the text files</A>&nbsp;(1 Gb)
+<LI><A HREF="#step2">Get all the html files and most of the text files</A>&nbsp;(270 Mb)
 <LI><A HREF="#step3">Get the data for each individual genome assembly and install
 databases </A>&nbsp;(100 Gb)
 <LI><A HREF="#step4">Obtain the /gbdb data file area</A>&nbsp;(400 Gb)
@@ -174,43 +174,11 @@ gbdb            UCSC Human Genome Browser New Config Files (313 GB)
 mysql           UCSC Human Genome Raw Mysql Tables (356 GB)
 </PRE>
 <BR>
-<LI>Determine the destination of the copy ($WEBROOT) and fire off the production copy<BR>
+<LI>Determine the destination of the copy ($WEBROOT) and fire off the production copy (270 Mb)<BR>
 <em>The trailing slash is important!</em><BR>
 <PRE>
-rsync --progress --partial -avz \
- --exclude='goldenPath/hg1*' \
- --exclude='goldenPath/10april2003/*' \
- --exclude='goldenPath/14nov2002/*' \
- --exclude='goldenPath/panTro1/*' \
- --exclude='goldenPath/canFam1/*' \
- --exclude='goldenPath/misc' \
- --exclude='goldenPath/mmFeb2003/*' \
- --exclude='goldenPath/mm4/*' \
- --exclude='goldenPath/mm5/*' \
- --exclude='goldenPath/rnJun2003/*' \
- --exclude='goldenPath/rnJan2003/*' \
- --exclude='goldenPath/galGal2/*' \
- --exclude='goldenPath/danRer1/*' \
- --exclude='goldenPath/fr1/*' \
- --exclude='goldenPath/ci1/*' \
- --exclude='goldenPath/dm1/*' \
- --exclude='goldenPath/dp1/*' \
- --exclude='goldenPath/dp2/*' \
- --exclude='goldenPath/droYak1/*' \
- --exclude='goldenPath/anoGam1/*' \
- --exclude='goldenPath/ceMay2003/*' \
- --exclude='goldenPath/ce2/*' \
- --exclude='goldenPath/cbJul2002/*' \
- --exclude='goldenPath/sacCer1/*' \
- --exclude='goldenPath/scApr2003/*' \
- --exclude='goldenPath/hgFixed/*' \
- --exclude='goldenPath/chromReports/*' \
- --exclude='goldenPath/protein*' \
- --exclude='goldenPath/mapPlots/*' \
- --exclude='ancestors/*' \
- --exclude='zoo/*' \
- --exclude='ENCODE/*' \
- rsync://hgdownload.cse.ucsc.edu/genome/ $WEBROOT/
+rsync -avzP --delete --max-delete=20 \
+  rsync://hgdownload.cse.ucsc.edu/htdocs/ $WEBROOT/
 </PRE>
 </OL>
 <P>
@@ -222,177 +190,217 @@ rsync --progress --partial -avz \
 <LI>Get Human May, 2004 full data set (hg17: 7.5 Gb) by doing:
 <P>
 <PRE>
-rsync --progress --partial -avz \
+mkdir -p $WEBROOT/goldenPath/hg17/database/
+rsync -avzP --delete --max-delete=20 \
   rsync://hgdownload.cse.ucsc.edu/genome/goldenPath/hg17/database/ \
-  $WEBROOT/goldenPath/hg17/
+  $WEBROOT/goldenPath/hg17/database/
 </PRE>
 
 <LI>Get Human July, 2003 full data set (hg16: 9.5 Gb) by doing:
 <P>
 <PRE>
-rsync --progress --partial -avz  \
+mkdir -p $WEBROOT/goldenPath/hg16/database/
+rsync -avzP --delete --max-delete=20 \
   rsync://hgdownload.cse.ucsc.edu/genome/goldenPath/hg16/database/ \
-  $WEBROOT/goldenPath/hg16/
+  $WEBROOT/goldenPath/hg16/database/
 </PRE>
 
 <LI>Get Human April 10, 2003 full data set (hg15: 4.4 Gb) by doing:
 <P>
 <PRE>
-rsync --progress --partial -avz  \
+mkdir -p $WEBROOT/goldenPath/10april2003/database/
+rsync -avzP --delete --max-delete=20 \
   rsync://hgdownload.cse.ucsc.edu/genome/goldenPath/10april2003/database/ \
-  $WEBROOT/goldenPath/10april2003/
+  $WEBROOT/goldenPath/10april2003/database/
 </PRE>
 
 <LI>Get Chimp November, 2003 full data set (panTro1: 3.0 Gb) by doing:
 <P>
 <PRE>
-rsync --progress --partial -avz \
+mkdir -p $WEBROOT/goldenPath/panTro1/database/
+rsync -avzP --delete --max-delete=20 \
   rsync://hgdownload.cse.ucsc.edu/genome/goldenPath/panTro1/database/ \
-  $WEBROOT/goldenPath/panTro1/
+  $WEBROOT/goldenPath/panTro1/database/
 </PRE>
 
 <LI>Get Dog July, 2004 full data set (canFam1: 2.3 Gb) by doing:
 <P>
 <PRE>
-rsync --progress --partial -avz \
+mkdir -p $WEBROOT/goldenPath/canFam1/database/
+rsync -avzP --delete --max-delete=20 \
   rsync://hgdownload.cse.ucsc.edu/genome/goldenPath/canFam1/database/ \
-  $WEBROOT/goldenPath/canFam1/
+  $WEBROOT/goldenPath/canFam1/database/
 </PRE>
 
 <LI>Get Mouse May, 2004 full data set (mm5: 8.6 Gb) by doing:
 <P>
 <PRE>
-rsync --progress --partial -avz \
+mkdir -p $WEBROOT/goldenPath/mm5/database/
+rsync -avzP --delete --max-delete=20 \
   rsync://hgdownload.cse.ucsc.edu/genome/goldenPath/mm5/database/ \
-  $WEBROOT/goldenPath/mm5/
+  $WEBROOT/goldenPath/mm5/database/
 </PRE>
 
-<LI>Get Mouse October, 2003 full data set (mm4: 8.2 Gb) by doing:
+<LI>Get Mouse October, 2003 full data set (mm4: 8.4 Gb) by doing:
 <P>
 <PRE>
-rsync --progress --partial -avz  \
+mkdir -p $WEBROOT/goldenPath/mm4/database/
+rsync -avzP --delete --max-delete=20 \
   rsync://hgdownload.cse.ucsc.edu/genome/goldenPath/mm4/database/ \
-  $WEBROOT/goldenPath/mm4/
+  $WEBROOT/goldenPath/mm4/database/
+</PRE>
+
+<LI>Get Mouse February, 2003 full data set (mm3: 5.4 Gb) by doing:
+<P>
+<PRE>
+mkdir -p $WEBROOT/goldenPath/mmFeb2003/database/
+rsync -avzP --delete --max-delete=20 \
+  rsync://hgdownload.cse.ucsc.edu/genome/goldenPath/mmFeb2003/database/ \
+  $WEBROOT/goldenPath/mmFeb2003/database/
 </PRE>
 
 <LI>Get Rat June, 2003 full data set (rn3: 3.7 Gb) by doing:
 <P>
 <PRE>
-rsync --progress --partial -avz \
+mkdir -p $WEBROOT/goldenPath/rnJun2003/database/
+rsync -avzP --delete --max-delete=20 \
   rsync://hgdownload.cse.ucsc.edu/genome/goldenPath/rnJun2003/database/ \
-  $WEBROOT/goldenPath/rnJun2003/
+  $WEBROOT/goldenPath/rnJun2003/database/
 </PRE>
 
 <LI>Get Rat January, 2003 full data set (rn2: 537 Mb) by doing:
 <P>
 <PRE>
-rsync --progress --partial -avz  \
+mkdir -p $WEBROOT/goldenPath/rnJan2003/database/
+rsync -avzP --delete --max-delete=20 \
   rsync://hgdownload.cse.ucsc.edu/genome/goldenPath/rnJan2003/database/ \
-  $WEBROOT/goldenPath/rnJan2003/
+  $WEBROOT/goldenPath/rnJan2003/database/
 </PRE>
 
 <LI>Get Chicken February, 2004 full data set (galGal2: 755 Mb) by doing:
 <P>
 <PRE>
-rsync --progress --partial -avz \
+mkdir -p $WEBROOT/goldenPath/galGal2/database/
+rsync -avzP --delete --max-delete=20 \
   rsync://hgdownload.cse.ucsc.edu/genome/goldenPath/galGal2/database/ \
-  $WEBROOT/goldenPath/galGal2/
+  $WEBROOT/goldenPath/galGal2/database/
 </PRE>
 
 <LI>Get Zebrafish November, 2003 full data set (danRer1: 1.2 Gb) by doing:
 <P>
 <PRE>
-rsync --progress --partial -avz \
+mkdir -p $WEBROOT/goldenPath/danRer1/database/
+rsync -avzP --delete --max-delete=20 \
   rsync://hgdownload.cse.ucsc.edu/genome/goldenPath/danRer1/database/ \
-  $WEBROOT/goldenPath/danRer1/
+  $WEBROOT/goldenPath/danRer1/database/
 </PRE>
 
-<LI>Get C. intestinalis December, 2002 full data set (ci1: 179 Mb) by doing:
+<LI>Get Tetraodon February, 2004 full data set (tetNig1: 315 Mb) by doing:
 <P>
 <PRE>
-rsync --progress --partial -avz \
-  rsync://hgdownload.cse.ucsc.edu/genome/goldenPath/ci1/database/ \
-  $WEBROOT/goldenPath/ci1/
+mkdir -p $WEBROOT/goldenPath/tetNig1/database/
+rsync -avzP --delete --max-delete=20 \
+  rsync://hgdownload.cse.ucsc.edu/genome/goldenPath/tetNig1/database/ \
+  $WEBROOT/goldenPath/tetNig1/database/
 </PRE>
 
 <LI>Get Fugu August, 2003 full data set (fr1: 149 Mb) by doing:
 <P>
 <PRE>
-rsync --progress --partial -avz \
+mkdir -p $WEBROOT/goldenPath/fr1/database/
+rsync -avzP --delete --max-delete=20 \
   rsync://hgdownload.cse.ucsc.edu/genome/goldenPath/fr1/database/ \
-  $WEBROOT/goldenPath/fr1/
+  $WEBROOT/goldenPath/fr1/database/
+</PRE>
+
+<LI>Get C. intestinalis December, 2002 full data set (ci1: 179 Mb) by doing:
+<P>
+<PRE>
+mkdir -p $WEBROOT/goldenPath/ci1/database/
+rsync -avzP --delete --max-delete=20 \
+  rsync://hgdownload.cse.ucsc.edu/genome/goldenPath/ci1/database/ \
+  $WEBROOT/goldenPath/ci1/database/
 </PRE>
 
 <LI>Get Fruitfly January, 2003 full data set (dm1: 299 Mb) by doing:
 <P>
 <PRE>
-rsync --progress --partial -avz \
+mkdir -p $WEBROOT/goldenPath/dm1/database/
+rsync -avzP --delete --max-delete=20 \
   rsync://hgdownload.cse.ucsc.edu/genome/goldenPath/dm1/database/ \
-  $WEBROOT/goldenPath/dm1/
+  $WEBROOT/goldenPath/dm1/database/
 </PRE>
 
-<LI>Get D. pseudoobscura August 2003 full data set (dp1: 15 Mb) by doing:
+<LI>Get D. yakuba April 2003 full data set (droYak1: 15 Mb) by doing:
 <P>
 <PRE>
-rsync --progress --partial -avz \
-  rsync://hgdownload.cse.ucsc.edu/genome/goldenPath/dp1/database/ \
-  $WEBROOT/goldenPath/dp1/
-</PRE>
-
-<LI>Get D. yakuba April 2004 full data set (droYak1: 127 Mb) by doing:
-<P>
-<PRE>
-rsync --progress --partial -avz \
+mkdir -p $WEBROOT/goldenPath/droYak1/database/
+rsync -avzP --delete --max-delete=20 \
   rsync://hgdownload.cse.ucsc.edu/genome/goldenPath/droYak1/database/ \
-  $WEBROOT/goldenPath/droYak1/
+  $WEBROOT/goldenPath/droYak1/database/
+</PRE>
+
+<LI>Get D. pseudoobscura August 2003 full data set (dp2: 130 Mb) by doing:
+<P>
+<PRE>
+mkdir -p $WEBROOT/goldenPath/dp2/database/
+rsync -avzP --delete --max-delete=20 \
+  rsync://hgdownload.cse.ucsc.edu/genome/goldenPath/dp2/database/ \
+  $WEBROOT/goldenPath/dp2/database/
 </PRE>
 
 <LI>Get A. gambiae Feb 2003 full data set (anoGam1: 127 Mb) by doing:
 <P>
 <PRE>
-rsync --progress --partial -avz \
+mkdir -p $WEBROOT/goldenPath/anoGam1/database/
+rsync -avzP --delete --max-delete=20 \
   rsync://hgdownload.cse.ucsc.edu/genome/goldenPath/anoGam1/database/ \
-  $WEBROOT/goldenPath/anoGam1/
+  $WEBROOT/goldenPath/anoGam1/database/
 </PRE>
 
 <LI>Get C. elegans March, 2004 full data set (ce2: 562 Mb) by doing:
 <P>
 <PRE>
-rsync --progress --partial -avz \
+mkdir -p $WEBROOT/goldenPath/ce2/database/
+rsync -avzP --delete --max-delete=20 \
   rsync://hgdownload.cse.ucsc.edu/genome/goldenPath/ce2/database/ \
-  $WEBROOT/goldenPath/ce2/
+  $WEBROOT/goldenPath/ce2/database/
 </PRE>
 
 <LI>Get C. elegans May, 2003 full data set (ce1: 1.2 Gb) by doing:
 <P>
 <PRE>
-rsync --progress --partial -avz \
+mkdir -p $WEBROOT/goldenPath/ceMay2003/database/
+rsync -avzP --delete --max-delete=20 \
   rsync://hgdownload.cse.ucsc.edu/genome/goldenPath/ceMay2003/database/ \
-  $WEBROOT/goldenPath/ceMay2003/
+  $WEBROOT/goldenPath/ceMay2003/database/
 </PRE>
 
 <LI>Get C. briggsae July, 2002 full data set (cb1: 185 Mb) by doing:
 <P>
 <PRE>
-rsync --progress --partial -avz \
+mkdir -p $WEBROOT/goldenPath/cbJul2002/database/
+rsync -avzP --delete --max-delete=20 \
   rsync://hgdownload.cse.ucsc.edu/genome/goldenPath/cbJul2002/database/ \
-  $WEBROOT/goldenPath/cbJul2002/
+  $WEBROOT/goldenPath/cbJul2002/database/
 </PRE>
 
 <LI>Get Yeast (Saccharomyces cerevisiae) October, 2003 full data set (sacCer1: 58 Mb) by doing:
 <P>
 <PRE>
-rsync --progress --partial -avz \
+mkdir -p $WEBROOT/goldenPath/sacCer1/database/
+rsync -avzP --delete --max-delete=20 \
   rsync://hgdownload.cse.ucsc.edu/genome/goldenPath/sacCer1/database/ \
-  $WEBROOT/goldenPath/sacCer1/
+  $WEBROOT/goldenPath/sacCer1/database/
 </PRE>
 
 <LI>Get SARS coronavirus April, 2003 full data set (sc1: 12 Mb) by doing:
 <P>
 <PRE>
-rsync --progress --partial -avz \
+mkdir -p $WEBROOT/goldenPath/scApr2003/database/
+rsync -avzP --delete --max-delete=20 \
   rsync://hgdownload.cse.ucsc.edu/genome/goldenPath/scApr2003/database/ \
-  $WEBROOT/goldenPath/scApr2003/
+  $WEBROOT/goldenPath/scApr2003/database/
 </PRE>
 
 </OL>
@@ -404,7 +412,8 @@ rsync --progress --partial -avz \
 <LI>You will need the portions of /gbdb used by the browser (400 Gb):
 <BR>
 <PRE>
-rsync --progress --partial -avz rsync://hgdownload.cse.ucsc.edu/gbdb/ /
+rsync -avzP --delete --max-delete=20 \
+  rsync://hgdownload.cse.ucsc.edu/gbdb/ /gbdb/
 </PRE>
 <BR>
 </OL>
@@ -433,15 +442,17 @@ assembly:
 <TR><TD> canFam1     </TD><TD></TD><TD> canFam1     </TD></TR>
 <TR><TD> mm5         </TD><TD></TD><TD> mm5         </TD></TR>
 <TR><TD> mm4         </TD><TD></TD><TD> mm4         </TD></TR>
+<TR><TD> mmFeb2003   </TD><TD></TD><TD> mm3         </TD></TR>
 <TR><TD> rnJun2003   </TD><TD></TD><TD> rn3         </TD></TR>
 <TR><TD> rnJan2003   </TD><TD></TD><TD> rn2         </TD></TR>
 <TR><TD> galGal2     </TD><TD></TD><TD> galGal2     </TD></TR>
 <TR><TD> danRer1     </TD><TD></TD><TD> danRer1     </TD></TR>
+<TR><TD> tetNig1     </TD><TD></TD><TD> tetNig1     </TD></TR>
 <TR><TD> fr1         </TD><TD></TD><TD> fr1         </TD></TR>
 <TR><TD> ci1         </TD><TD></TD><TD> ci1         </TD></TR>
 <TR><TD> dm1         </TD><TD></TD><TD> dm1         </TD></TR>
-<TR><TD> dp1         </TD><TD></TD><TD> dp1         </TD></TR>
 <TR><TD> droYak1     </TD><TD></TD><TD> droYak1     </TD></TR>
+<TR><TD> dp2         </TD><TD></TD><TD> dp2         </TD></TR>
 <TR><TD> anoGam1     </TD><TD></TD><TD> anoGam1     </TD></TR>
 <TR><TD> ce2         </TD><TD></TD><TD> ce2         </TD></TR>
 <TR><TD> ceMay2003   </TD><TD></TD><TD> ce1         </TD></TR>
@@ -497,7 +508,8 @@ database is restricted to read-only.
 <LI>The cgi-bin binaries are available via:
 <BR>
 <PRE>
-rsync --progress --partial -avz rsync://hgdownload.cse.ucsc.edu/cgi-bin/ $CGIBIN/
+rsync -avzP --delete --max-delete=20 \
+  rsync://hgdownload.cse.ucsc.edu/cgi-bin/ $CGIBIN/
 </PRE>
 <BR>
 
@@ -586,9 +598,9 @@ that runs the web server write access to it.
 <OL type="a">
 <LI>Download a copy of the dumped hgFixed tables.  (500 Mb)
 <PRE>
-rsync --progress --partial -avz \
+rsync -avzP --delete --max-delete=20 \
    rsync://hgdownload.cse.ucsc.edu/genome/goldenPath/hgFixed/ \
-   $WEBROOT/goldenPath/
+   $WEBROOT/goldenPath/hgFixed/
 </PRE>
 <LI>Create a hgFixed database</LI>
 <PRE>
@@ -603,7 +615,7 @@ mysql&gt; create database hgFixed
 <OL type="a">
 <LI>Download a copy of the dumped protein tables. (700 Mb)
 <PRE>
-rsync --progress --partial -avz  \
+rsync -avzP --delete --max-delete=20 \
     rsync://hgdownload.cse.ucsc.edu/genome/goldenPath/proteinDB/ \
     $WEBROOT/goldenPath/proteinDB/
 </PRE>
@@ -628,9 +640,9 @@ mysql&gt; create database proteins040915
 
 <LI>Download a copy of the dumped swissProt tables. (400 Mb)
 <PRE>
-rsync --progress --partial -avz  \
-    rsync://hgdownload.cse.ucsc.edu/genome/goldenPath/swissProt/ \
-    $WEBROOT/goldenPath/
+rsync -avzP --delete --max-delete=20 \
+  rsync://hgdownload.cse.ucsc.edu/genome/goldenPath/swissProt/ \
+  $WEBROOT/goldenPath/swissProt/
 </PRE>
 <LI>Create the swissProt database
 <PRE>
