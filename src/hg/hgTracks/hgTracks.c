@@ -38,6 +38,7 @@
 #include "roughAli.h"
 #include "snp.h"
 #include "rnaGene.h"
+#include "fishClones.h"
 #include "stsMarker.h"
 #include "stsMap.h"
 #include "mouseSyn.h"
@@ -3097,6 +3098,26 @@ tg->freeItems = freeStsMap;
 tg->itemColor = stsMapColor;
 }
 
+void loadFishClones(struct trackGroup *tg)
+/* Load up fishClones from database table to trackGroup items. */
+{
+bedLoadItem(tg, "fishClones", (ItemLoader)fishClonesLoad);
+}
+
+
+void freeFishClones(struct trackGroup *tg)
+/* Free up fishClones items. */
+{
+fishClonesFreeList((struct fishClones**)&tg->items);
+}
+
+void fishClonesMethods(struct trackGroup *tg)
+/* Make track group for FISH clones. */
+{
+tg->loadItems = loadFishClones;
+tg->freeItems = freeFishClones;
+}
+
 void loadMouseSyn(struct trackGroup *tg)
 /* Load up mouseSyn from database table to trackGroup items. */
 {
@@ -5425,6 +5446,7 @@ registerTrackHandler("cytoBand", cytoBandMethods);
 registerTrackHandler("bacEndPairs", bacEndPairsMethods);
 registerTrackHandler("cgh", cghMethods);
 registerTrackHandler("mcnBreakpoints", mcnBreakpointsMethods);
+registerTrackHandler("fishClones", fishClonesMethods);
 registerTrackHandler("mapGenethon", genethonMethods);
 registerTrackHandler("stsMarker", stsMarkerMethods);
 registerTrackHandler("stsMap", stsMapMethods);

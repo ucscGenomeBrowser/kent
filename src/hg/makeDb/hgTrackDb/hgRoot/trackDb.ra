@@ -13,6 +13,14 @@ priority 2
 visibility dense
 type bed 5 +
 
+track fishClones
+shortLabel FISH Clones
+longLabel Clones placed on Cytogenetic Map using FISH
+priority 2.5
+visibility hide
+color 0,150,0,
+type bed 5 +
+
 track stsMarker
 shortLabel STS Markers
 longLabel STS Markers on Genetic (blue), FISH (green) and RH (black) Maps
