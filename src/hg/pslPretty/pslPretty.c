@@ -18,12 +18,15 @@ errAbort(
   "   pslPretty in.psl target.lst query.lst pretty.out\n"
   "options:\n"
   "   -axt - save in Scott Schwartz's axt format\n"
+  "   -dot=N Put out a dot every N records\n"
   "It's a really good idea if the psl file is sorted by target\n"
   "if it contains multiple targets.  Otherwise this will be\n"
   "very very slow.   The target and query lists can either be\n"
   "fasta files, nib files, or a list of fasta and/or nib files\n"
   "one per line\n");
 }
+
+int dot = 0;
 
 struct seqFilePos
 /* Where a sequence is in a file. */
@@ -217,8 +220,8 @@ int qs = psl->qStart, qe = psl->qEnd;
 if (psl->strand[0] == '-')
     reverseIntRange(&qs, &qe, psl->qSize);
 
-fprintf(f, "%d %s %d %d %s %d %d %s\n", ++ix, psl->tName, psl->tStart+1, psl->tEnd,
-	psl->qName, qs+1, qe, psl->strand);
+fprintf(f, "%d %s %d %d %s %d %d %s 0\n", ++ix, psl->tName, psl->tStart+1, 
+	psl->tEnd, psl->qName, qs+1, qe, psl->strand);
 fprintf(f, "%s\n%s\n\n", t, q);
 }
 
@@ -362,6 +365,7 @@ struct dlList *fileCache = newDlList();
 struct lineFile *lf = pslFileOpen(pslName);
 FILE *f = mustOpen(prettyName, "w");
 struct psl *psl;
+int dotMod = dot;
 
 printf("Scanning %s\n", targetList);
 hashFileList(targetList, fileHash, tHash);
@@ -370,7 +374,14 @@ hashFileList(queryList, fileHash, qHash);
 printf("Converting %s\n", pslName);
 while ((psl = pslNext(lf)) != NULL)
     {
-    uglyf("%s %s %s\n", psl->qName, psl->strand, psl->tName);
+    if (dot > 0)
+        {
+	if (--dotMod <= 0)
+	   {
+	   printf(".");
+	   dotMod = dot;
+	   }
+	}
     prettyOne(psl, qHash, tHash, fileCache, f, axt);
     pslFree(&psl);
     }
@@ -384,6 +395,7 @@ static boolean axt;
 
 optionHash(&argc, argv);
 axt = optionExists("axt");
+dot = optionInt("dot", dot);
 if (argc != 5)
     usage();
 pslPretty(argv[1], argv[2], argv[3], argv[4], axt);
