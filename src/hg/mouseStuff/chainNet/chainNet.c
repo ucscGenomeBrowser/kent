@@ -586,7 +586,18 @@ for (ref = spaceList; ref != NULL; ref = ref->next)
 	    gapEnd = nextBlock->qStart;
 	    if (strictlyInside(space->start, space->end, gapStart, gapEnd))
 		{
-		gap = gapNew(gapStart, gapEnd, block->tEnd, nextBlock->tStart);
+		int ts, te;
+		if (chain->qStrand == '+')
+		    {
+		    ts = block->tEnd;
+		    te = nextBlock->tStart;
+		    }
+		else
+		    {
+		    ts = nextBlock->tStart;
+		    te = block->tEnd;
+		    }
+		gap = gapNew(gapStart, gapEnd, ts, te);
 		addSpaceForGap(chrom, gap);
 		slAddHead(&fill->gapList, gap);
 		}
