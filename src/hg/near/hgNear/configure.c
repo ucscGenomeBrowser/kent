@@ -14,7 +14,7 @@
 #include "hgColors.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: configure.c,v 1.39 2003/10/30 07:54:05 kent Exp $";
+static char const rcsid[] = "$Id: configure.c,v 1.40 2004/02/15 01:10:48 kent Exp $";
 
 static char *onOffString(boolean on)
 /* Return "on" or "off". */
@@ -233,7 +233,7 @@ void doConfigure(struct sqlConnection *conn, struct column *colList, char *bumpV
 if (bumpVar)
     bumpColList(bumpVar, &colList);
 hPrintf("<FORM ACTION=\"../cgi-bin/hgNear\" METHOD=POST>\n");
-makeTitle("Configure Gene Family Browser", "hgNearConfigure.html");
+makeTitle("Configure Gene Family Browser", "hgNearHelp.html#Configure");
 configControlPanel();
 cartSaveSession(cart);
 
