@@ -24,7 +24,7 @@
 #define CDS_HELP_PAGE "../goldenPath/help/hgCodonColoring.html"
 #define CDS_MRNA_HELP_PAGE "../goldenPath/help/hgCodonColoringMrna.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.170 2005/02/01 20:22:01 angie Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.171 2005/02/02 23:47:16 kate Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -914,18 +914,22 @@ void compositeUi(struct trackDb *tdb)
 {
 struct trackDb *subtrack;
 char option[64];
+char *words[2];
 
 puts("<P>");
 puts("<TABLE>");
 slSort(&(tdb->subtracks), trackDbCmp);
 for (subtrack = tdb->subtracks; subtrack != NULL; subtrack = subtrack->next)
     {
-    boolean alreadySet = FALSE;
+    boolean alreadySet = TRUE;
+    char *setting;
     puts("<TR>");
     puts("<TD>");
-    safef(option, sizeof(option), "%s", subtrack->tableName);
-    alreadySet = cartUsualBoolean(cart, option,
-				  (subtrack->visibility != tvHide));
+    safef(option, sizeof(option), "%s_sel", subtrack->tableName);
+    if ((setting = trackDbSetting(tdb, "subTrack")) != NULL)
+        if (chopLine(cloneString(setting), words) >= 2)
+            alreadySet = differentString(words[1], "off");
+    alreadySet = cartUsualBoolean(cart, option, alreadySet);
     cgiMakeCheckBox(option, alreadySet);
 		    
     printf ("%s", subtrack->longLabel);
