@@ -256,3 +256,13 @@ mkdir rnaGenes
 cp pfuAllRNA.bed .
 cp ~/kent/src/hg/lib/rnaGenes.sql .
 hgLoadBed -sqlTable=rnaGenes.sql pyrFur2 rnaGenes pfuAllRNA.bed
+
+# EasyGene
+
+cd /cluster/data/pyrFur2/bed
+mkdir easyGene
+cd easyGene
+wget -O easyGene.gff "http://www.binf.ku.dk/cgi-bin/easygene/output?id=129&format=gff&desc=CDS&desc=ORF&desc=ALT&r_cutoff=2&start=&stop=&strand=plus&strand=minus&per_page=-1&250="
+pernilleGffToBed easyGene.gff easyGene.bed
+cp ~/kent/src/hg/lib/easyGene.sql .
+hgLoadBed -sqlTable=easyGene.sql pyrFur2 easyGene easyGene.bed
