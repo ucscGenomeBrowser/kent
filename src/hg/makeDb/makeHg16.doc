@@ -3821,6 +3821,7 @@ LOAD AffyUclaRatio [in progress jk Sept 19, 2003]
     # Note that the unmapped 11000 records are from all-N sequences.
     hgLoadBed hg16 gnfAtlas2 gnfAtlas2.bed
     hgMapToGene hg16 gnfAtlas2 knownGene knownToGnfAtlas2
+    hgExpDistance hg16 hgFixed.gnfHumanAtlas2MedianRatio hgFixed.gnfHumanAtlsas2MedianExps gnfAtlas2Distance -lookup=knownToGnfAtlas2
 
     
 
