@@ -28,7 +28,7 @@ struct dbConv dbTable[] = {
 };
 
 static char *hdbHost;
-static char *hdbName;
+static char *hdbName = "hg6";
 static char *hdbUser;
 static char *hdbPassword;
 
@@ -39,7 +39,7 @@ hdbHost 	= cfgOption("db.host");
 hdbUser 	= cfgOption("db.user");
 hdbPassword	= cfgOption("db.password");
 
-if(hdbHost == 0 || hdbUser == 0 || hdbPassword == 0)
+if(hdbHost == NULL || hdbUser == NULL || hdbPassword == NULL)
 	errAbort("cannot read in connection setting from configuration file.");
 }
 
