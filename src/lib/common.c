@@ -1136,7 +1136,10 @@ FILE *f;
 if ((f = *pFile) != NULL)
     {
     if (f != stdin && f != stdout)
-	fclose(f);
+        {
+        if (fclose(f) != 0)
+            errnoAbort("fclose failed");
+        }
     *pFile = NULL;
     }
 }

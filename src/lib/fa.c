@@ -362,7 +362,8 @@ void faWrite(char *fileName, char *startLine, DNA *dna, int dnaSize)
 {
 FILE *f = mustOpen(fileName, "w");
 faWriteNext(f, startLine, dna, dnaSize);
-fclose(f);
+if (fclose(f) != 0)
+    errnoAbort("fclose failed");
 }
 
 void faWriteAll(char *fileName, bioSeq *seqList)
@@ -373,7 +374,8 @@ bioSeq *seq;
 
 for (seq=seqList; seq != NULL; seq = seq->next)
     faWriteNext(f, seq->name, seq->dna, seq->size);
-fclose(f);
+if (fclose(f) != 0)
+    errnoAbort("fclose failed");
 }
 
 boolean faMixedSpeedReadNext(struct lineFile *lf, DNA **retDna, int *retSize, char **retName)

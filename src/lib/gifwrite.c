@@ -62,5 +62,6 @@ if (!mgSaveToGif(gifFile, screen))
     remove(name);
     errAbort("Couldn't save %s", name);
     }
-fclose(gifFile);
+if (fclose(gifFile) != 0)
+    errnoAbort("fclose failed");
 }

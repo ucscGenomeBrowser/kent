@@ -28,7 +28,8 @@ else
 if (f != NULL)
     {
     fwrite(&val, sizeof(val), 1, f);
-    fclose(f);
+    if (fclose(f) != 0)
+        errnoAbort("fclose failed");
     }
 return val;
 }
@@ -136,7 +137,8 @@ while ((bytesRead = read(s, buf, bufSize)) > 0)
         errAbort("Write error on %s. %s\n", dest, strerror(errno));
     }
 close(s);
-close(d);
+if (close(d) != 0)
+    errnoAbort("close failed");
 freeMem(buf);
 }
 
