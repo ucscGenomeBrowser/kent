@@ -28,15 +28,18 @@ DOWNLOAD SEQUENCE (DONE 2003-05-20 - Hiram)
     cd ..
     ln -s /cluster/store4/worm/cb1 ~/cb1
     cd ~/cb1
+#   create chromosome subdirectory and populate it
+    mkdir Un
     # unzip the ultra contig file
     zcat sanger/cb25.agp8.fasta.gz > cb25.agp8.ultra.fa
-    # create an artifical chrUn agp file:  (does 1000 N gaps
+    # create an artifical chrUn agp file:  (does 1000 N gaps)
+    rm -f cb25.agp8.ultra.agp Un
     scaffoldFaToAgp cb25.agp8.ultra.fa
     # and create the artifical chrUn.fa file:  (does 1000 N gaps)
-    ~hiram/bin/fa2chrUn.pl cb25.agp8.ultra.fa > chrUn.fa
+    ~hiram/bin/fa2chrUn.pl cb25.agp8.ultra.fa > Un/chrUn.fa
     # create nib file:
     mkdir nib
-    faToNib chrUn.fa nib/chrUn.nib
+    faToNib Un/chrUn.fa nib/chrUn.nib
 # Writing 109024926 bases in 54512471 bytes
 
 CREATING DATABASE (DONE 2003-05-20 - Hiram)
@@ -74,8 +77,8 @@ STORING O+O SEQUENCE AND ASSEMBLY INFORMATION  (DONE 2003-05-20 - Hiram)
     # !!!
         echo 'drop table chromInfo;' | hgsql cb1
     cd ~/cb1
-    hgNibSeq -preMadeNib cb1 /gbdb/cb1/nib chrUn.fa
-# Processing chrUn.fa to /gbdb/cb1/nib/chrUn.nib
+    hgNibSeq -preMadeNib cb1 /gbdb/cb1/nib Un/chrUn.fa
+# Processing Un/chrUn.fa to /gbdb/cb1/nib/chrUn.nib
 # 109024926 total bases
 #   Verify the hgNibSeq load functioned OK: 
     echo "select chrom,size from chromInfo" | hgsql -N cb1 > chrom.sizes
@@ -116,7 +119,7 @@ MAKE HGCENTRALTEST ENTRY AND TRACKDB TABLE FOR CB1 (DONE 2002-05-20 - Hiram)
         | hgsql -h genome-testdb hgcentraltest
     echo 'insert into dbDb values("cb1", "July 2002", \
         "/gbdb/cb1/nib", "worm", "chrUn", 1, 10, \
-        "Caenorhabditis briggsae");' \
+        "C. briggsae");' \
         | hgsql -h genome-testdb hgcentraltest
     #  If you need to delete that entry:
         echo 'delete from dbDb where name="cb1";' \
@@ -140,7 +143,7 @@ SIMPLE REPEAT TRACK (DONE 2003-05-20 - 15:46 - Hiram)
     mkdir trf
     rm -f jobs.csh
     touch jobs.csh
-    foreach f (/cluster/store4/worm/cb1/chrUn.fa)
+    foreach f (/cluster/store4/worm/cb1/Un/chrUn.fa)
       set fout = $f:t:r.bed
       echo "/cluster/bin/i386/trfBig -trf=/cluster/bin/i386/trf ${f} /dev/null -bedAt=trf/${fout} -tempDir=/tmp" \
         >> jobs.csh
@@ -161,10 +164,9 @@ SIMPLE REPEAT TRACK (DONE 2003-05-20 - 15:46 - Hiram)
 Split into contigs for RepeatMasker, BLAT, and other cluster jobs
     ssh eieio
     cd ~cb1
-    mkdir split
     # it is a little over 100,000,000 bases, thus 100,000 sized chunks
     # produces about 1000 files  (1091 precisely)
-    faSplit size chrUn.fa 100000 split/c -lift=split.lft
+    faSplit size Un/chrUn.fa 100000 split/c -lift=split.lft
 
     # copy those to scratch
     ssh kk
