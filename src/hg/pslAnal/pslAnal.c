@@ -48,6 +48,7 @@ struct acc
 
 struct clone
 {
+  struct clone *next;
   int id;
   int imageId;
 };
@@ -90,7 +91,8 @@ struct indel
   char *mrna;
   int mrnaStart;
   int mrnaEnd;
-  /* struct clone *mrnaCloneId; */
+  struct clone *clones;
+  struct acc *accs;
   struct evid *hs;
   struct evid *xe;
 
@@ -151,6 +153,19 @@ struct clone *c;
 
 if ((c = *clone) == NULL) return;
 freez(clone);
+}
+
+void cloneFreeList(struct clone **cList)
+/* Free a dynamically allocated list of acc's */
+{
+struct clone *c = NULL, *next = NULL;
+
+for (c = *cList; c != NULL; c = next)
+    {
+    next = c->next;
+    cloneFree(&c);
+    }
+*cList = NULL;
 }
 
 void accFree(struct acc **acc)
@@ -215,7 +230,8 @@ struct indel *i;
 if ((i = *in) == NULL) return;
 evidListFree(&(i->hs));
 evidListFree(&(i->xe));
-/* cloneFree(&(i->mrnaCloneId)); */
+cloneFreeList(&(i->clones));
+/* accFreeList(&(i->accs)); - freed by evidFreeList */
 freez(in);
 }
 
@@ -411,8 +427,8 @@ int wordCount, id = -1;
 
 a = cloneString(acc->name);
 wordCount = chopByChar(a, '.', accs, ArraySize(accs)); 
-if (wordCount != 2) 
-    errAbort("Accession not standard, %s\n", acc->name);
+if (wordCount > 2) 
+  errAbort("Accession not standard, %s\n", acc->name);
 sprintf(query, "select organism from mrna where acc = '%s'", accs[0]); 
 sr = sqlGetResult(conn, query);
 if ((row = sqlNextRow(sr)) != NULL)
@@ -444,6 +460,7 @@ int wordCount, i;
 struct clone *ret = NULL;
 
 AllocVar(ret);
+ret->next = NULL;
 a = cloneString(acc);
 wordCount = chopByChar(a, '.', accs, ArraySize(accs)); 
 if (wordCount > 2) 
@@ -464,6 +481,29 @@ sqlFreeResult(&sr);
 return(ret);
 }
 
+boolean sameAcc(struct acc *a1, struct acc *a2)
+/* Determine if two accessions are the same */
+{
+if ((a1 == NULL) || (a2 == NULL))
+    return(0);
+ if (sameString(a1->name,a2->name))
+    return(1);
+return(0);
+}
+
+boolean usedAcc(struct acc *a, struct acc *alist) 
+/* Determine if acc is in list */
+{
+struct acc *el;
+
+if ((a == NULL) || (alist == NULL))
+    return(0);
+for (el = alist; el != NULL; el = el->next)
+    if (sameAcc(a, el))
+       return(1);
+return(0);
+}
+
 boolean sameClone(struct clone *c1, struct clone *c2)
 /* Determine if two clones are the same */
 {
@@ -471,6 +511,19 @@ if ((c1 == NULL) || (c2 == NULL))
     return(0);
  if (((c1->id) && (c2->id) && (c1->id == c2->id)) || ((c1->imageId) && (c2->imageId) && (c1->imageId == c2->imageId)))
     return(1);
+return(0);
+}
+
+boolean usedClone(struct clone *c, struct clone *clist) 
+/* Determine if clone is in list */
+{
+struct clone *el;
+
+if ((c == NULL) || (clist == NULL))
+    return(0);
+for (el = clist; el != NULL; el = el->next)
+    if (sameClone(c, el))
+       return(1);
 return(0);
 }
 
@@ -528,14 +581,13 @@ else
 /*return(ret);*/
 }
 
-void searchTransPsl(char *table, char *mrnaName, DNA *mdna, struct indel *ni, char *strand, unsigned type, struct psl* psl, struct dnaSeq *gseq)
+void searchTransPsl(char *table, char *mrnaName, DNA *mdna, struct indel *ni, char *strand, unsigned type, struct psl* psl, struct dnaSeq *gseq, struct acc *acc)
 /* process one mRNA or EST for searchTrans */
 {
 int start = 0, end = 0;
 struct dnaSeq *dummy = NULL, *mseq = NULL;
 char *dna = NULL;
 char thisStrand[2];
-struct acc *acc;
 struct sqlConnection *conn2 = hAllocConn();
 
 /* Get the start and end coordinates for the mRNA or EST sequence */
@@ -561,60 +613,56 @@ if ((end-start) > 0)
 else
     dna = cloneString("");
 
-/* Classify this mrna/est */
-AllocVar(acc);
-acc->name = cloneString(seq->name);
-acc->organism = NULL;
 /* If it doesn't align to this region */
 if (start == end)
     {
     if (sameString(table, "mrna"))
         {
-        ni->hs->unMrna++;
-        slAddHead(&ni->hs->unMrnaAcc, acc);
+	  ni->hs->unMrna++;
+	  slAddHead(&ni->hs->unMrnaAcc, acc);
         } 
     else if (sameString(table, "xenoMrna"))
         {
-        ni->xe->unMrna++;
-	findOrganism(conn2, acc);
-	slAddHead(&ni->xe->unMrnaAcc, acc);
+	  ni->xe->unMrna++;
+	  findOrganism(conn2, acc);
+	  slAddHead(&ni->xe->unMrnaAcc, acc);
 	}
     else if (sameString(table, "est"))
         {
-        ni->hs->unEst++;
-        slAddHead(&ni->hs->unEstAcc, acc);
+	  ni->hs->unEst++;
+	  slAddHead(&ni->hs->unEstAcc, acc);
 	}
      else if (sameString(table, "xenoEst"))
         {
-        ni->xe->unEst++;
-	findOrganism(conn2, acc);
-	slAddHead(&ni->xe->unEstAcc, acc);
-        }
+	  ni->xe->unEst++;
+	  findOrganism(conn2, acc);
+	  slAddHead(&ni->xe->unEstAcc, acc);
+	}
     }
 /* If it agrees with the genomic sequence */
 else if ((sameString(gseq->dna, dna)) || ((type == INDEL) && (strlen(dna) == gseq->size))) 
     {
     if (sameString(table, "mrna"))
         {
-        ni->hs->genMrna++;
-        slAddHead(&ni->hs->genMrnaAcc, acc);
-        } 
+	  ni->hs->genMrna++;
+	  slAddHead(&ni->hs->genMrnaAcc, acc);
+	} 
     else if (sameString(table, "xenoMrna"))
         {
-        ni->xe->genMrna++;
-	findOrganism(conn2, acc);
-	slAddHead(&ni->xe->genMrnaAcc, acc);
+	  ni->xe->genMrna++;
+	  findOrganism(conn2, acc);
+	  slAddHead(&ni->xe->genMrnaAcc, acc);
 	}
     else if (sameString(table, "est"))
         {
-        ni->hs->genEst++;
-        slAddHead(&ni->hs->genEstAcc, acc);
+	  ni->hs->genEst++;
+	  slAddHead(&ni->hs->genEstAcc, acc);
 	}
      else if (sameString(table, "xenoEst"))
         {
-        ni->xe->genEst++;
-	findOrganism(conn2, acc);
-	slAddHead(&ni->xe->genEstAcc, acc);
+	  ni->xe->genEst++;
+	  findOrganism(conn2, acc);
+	  slAddHead(&ni->xe->genEstAcc, acc);
         }
     }
 /* If it agrees with the mrna sequence */
@@ -622,25 +670,25 @@ else if ((sameString(mdna, dna)) || ((type == INDEL) && (strlen(dna) == strlen(m
     {
     if (sameString(table, "mrna"))
         {
-        ni->hs->mrnaMrna++;
-        slAddHead(&ni->hs->mrnaMrnaAcc, acc);
+	  ni->hs->mrnaMrna++;
+	  slAddHead(&ni->hs->mrnaMrnaAcc, acc);
         } 
     else if (sameString(table, "xenoMrna"))
         {
-        ni->xe->mrnaMrna++;
-	findOrganism(conn2, acc);
-	slAddHead(&ni->xe->mrnaMrnaAcc, acc);
+	  ni->xe->mrnaMrna++;
+	  findOrganism(conn2, acc);
+	  slAddHead(&ni->xe->mrnaMrnaAcc, acc);
 	}
     else if (sameString(table, "est"))
         {
-        ni->hs->mrnaEst++;
-        slAddHead(&ni->hs->mrnaEstAcc, acc);
+	  ni->hs->mrnaEst++;
+	  slAddHead(&ni->hs->mrnaEstAcc, acc);
 	}
      else if (sameString(table, "xenoEst"))
         {
-        ni->xe->mrnaEst++;
-	findOrganism(conn2, acc);
-	slAddHead(&ni->xe->mrnaEstAcc, acc);
+	  ni->xe->mrnaEst++;
+	  findOrganism(conn2, acc);
+	  slAddHead(&ni->xe->mrnaEstAcc, acc);
         }
     }
 /* if it agrees with neither */
@@ -648,26 +696,26 @@ else
     {
     if (sameString(table, "mrna"))
         {
-	ni->hs->noMrna++;
-        slAddHead(&ni->hs->noMrnaAcc, acc);
-        } 
+	  ni->hs->noMrna++;
+	  slAddHead(&ni->hs->noMrnaAcc, acc);
+	}
     else if (sameString(table, "xenoMrna"))
         {
-        ni->xe->noMrna++;
-	findOrganism(conn2, acc);
-	slAddHead(&ni->xe->noMrnaAcc, acc);
+	  ni->xe->noMrna++;
+	  findOrganism(conn2, acc);
+	  slAddHead(&ni->xe->noMrnaAcc, acc);
 	}
     else if (sameString(table, "est"))
         {
-        ni->hs->noEst++;
-        slAddHead(&ni->hs->noEstAcc, acc);
+	  ni->hs->noEst++;
+	  slAddHead(&ni->hs->noEstAcc, acc);
 	}
      else if (sameString(table, "xenoEst"))
         {
-        ni->xe->noEst++;
-	findOrganism(conn2, acc);
-	slAddHead(&ni->xe->noEstAcc, acc);
-        }
+	  ni->xe->noEst++;
+	  findOrganism(conn2, acc);
+	  slAddHead(&ni->xe->noEstAcc, acc);
+	}
     }  
 freez(&dna);
 dnaSeqFree(&seq);
@@ -686,6 +734,7 @@ DNA mdna[10000];
 struct sqlConnection *conn2 = hAllocConn();
 struct dnaSeq *gseq;
 char thisStrand[2];
+struct acc *acc;
 
 if (type == CODONSUB)
     assert(((ni->mrnaEnd-ni->mrnaStart)+1) == 3);
@@ -698,7 +747,7 @@ if (type == INDEL)
 	assert((ni->mrnaEnd-ni->mrnaStart+3) < sizeof(mdna));
         strncpy(mdna,rna->dna + ni->mrnaStart - 1,ni->mrnaEnd-ni->mrnaStart+2);
         mdna[ni->mrnaEnd-ni->mrnaStart+2] = '\0';
-        printf("Indel at %d-%d (%d) in %s:%d-%d bases %s\n", ni->mrnaStart, ni->mrnaEnd, rna->size, ni->chrom, ni->chromStart, ni->chromEnd, mdna);
+        /* printf("Indel at %d-%d (%d) in %s:%d-%d bases %s\n", ni->mrnaStart, ni->mrnaEnd, rna->size, ni->chrom, ni->chromStart, ni->chromEnd, mdna); */
         }
     else
         mdna[0] = '\0';
@@ -729,10 +778,22 @@ else
 while ((row = sqlNextRow(sr)) != NULL) 
     {
     psl = pslLoad(row+offset);
+    AllocVar(acc);
+    acc->name = cloneString(psl->qName);
+    acc->organism = NULL;
     cloneId = getMrnaCloneId(conn2, psl->qName);
-    if ((!sameString(psl->qName,mrnaName)) && (!sameClone(cloneId,mrnaCloneId)))
-	searchTransPsl(table, mrnaName, mdna, ni, strand, type, psl, gseq);
-    cloneFree(&cloneId);
+    if ((!sameString(psl->qName,mrnaName)) && (!sameClone(cloneId,mrnaCloneId)) && 
+	(!usedClone(cloneId, ni->clones)) && (!usedAcc(acc, ni->accs)))
+      {
+	slAddHead(&(ni->clones), cloneId);
+	slAddHead(&(ni->accs), acc);	
+	searchTransPsl(table, mrnaName, mdna, ni, strand, type, psl, gseq, acc);
+      }
+    else 
+      {
+	accFree(&acc);
+	cloneFree(&cloneId);
+      }
     pslFree(&psl);
     }
 dnaSeqFree(&gseq);
