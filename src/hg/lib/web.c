@@ -9,7 +9,7 @@
 #include "axtInfo.h"
 #include "hgColors.h"
 
-static char const rcsid[] = "$Id: web.c,v 1.54 2004/06/08 20:56:51 angie Exp $";
+static char const rcsid[] = "$Id: web.c,v 1.55 2004/06/08 21:05:18 angie Exp $";
 
 /* flag that tell if the CGI header has already been outputed */
 boolean webHeadAlreadyOutputed = FALSE;
@@ -136,7 +136,7 @@ puts("           Home</A> &nbsp; - &nbsp;");
 printf("       <A HREF=\"/cgi-bin/hgGateway%s\" class=\"topbar\">\n",
        uiState);
 puts("           Genomes</A> &nbsp; - &nbsp;");
-if (endsWith(scriptName, "hgTracks") ||
+if (endsWith(scriptName, "hgTracks") || endsWith(scriptName, "hgGene") ||
     endsWith(scriptName, "hgTrackUi") || endsWith(scriptName, "hgc"))
     {
     printf("       <A HREF=\"/cgi-bin/hgTracks%s\" class=\"topbar\">\n",
