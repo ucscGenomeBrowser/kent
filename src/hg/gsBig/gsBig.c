@@ -9,7 +9,7 @@
 #include "dystring.h"
 #include "bits.h"
 
-static char const rcsid[] = "$Id: gsBig.c,v 1.11 2003/05/06 07:22:19 kate Exp $";
+static char const rcsid[] = "$Id: gsBig.c,v 1.12 2004/01/06 00:20:30 angie Exp $";
 
 char *exePath = "/projects/compbio/bin/genscan-linux/genscan";
 char *parPath = "/projects/compbio/bin/genscan-linux/HumanIso.smat";
@@ -637,9 +637,10 @@ else
 
     splitPath(faName, dir1, root1, ext1);
     
-    sprintf(temp_str, "%s/temp_gsBig_%d_%s.fa", tmpDir, getpid(), root1);
+    sprintf(temp_str, "%s/temp_gsBig_%d_%s.fa", tmpDir, (int)getpid(), root1);
     tempFa = cloneString(temp_str);		    
-    sprintf(temp_str,"%s/temp_gsBig_%d_%s.genscan", tmpDir, getpid(), root1);
+    sprintf(temp_str,"%s/temp_gsBig_%d_%s.genscan", tmpDir, (int)getpid(),
+	    root1);
     tempGs = cloneString(temp_str);	
     
     while (faSpeedReadNext(lf, &seq.dna, &seq.size, &seq.name))
