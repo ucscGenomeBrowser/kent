@@ -640,7 +640,7 @@ tMax -= tMin;
 ssStringency = stringency;
 ssIsProt = isProt;
 chainList = chainBlocks(qSeq->name, qSeq->size, '+', "tSeq", tMax, &boxList,
-	ssConnectCost, ssGapCost);
+	ssConnectCost, ssGapCost, NULL);
 
 /* Fixup crossovers on best (first) chain. */
 bestChain = chainList;
