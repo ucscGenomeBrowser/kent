@@ -12,7 +12,7 @@
 #include "htmshell.h"
 #include "axt.h"
 
-static char const rcsid[] = "$Id: seqOut.c,v 1.23 2004/07/10 00:07:08 kent Exp $";
+static char const rcsid[] = "$Id: seqOut.c,v 1.24 2004/11/22 16:56:21 kent Exp $";
 
 struct cfm *cfmNew(int wordLen, int lineLen, 
 	boolean lineNumbers, boolean countDown, FILE *out, int numOff)
@@ -198,6 +198,8 @@ static struct axtScoreScheme *ss = 0;  /* Scoring scheme. */
 struct cfm cfm;
 extern char blosumText[];
 extern struct axtScoreScheme *axtScoreSchemeFromProteinText(char *text, char *fileName);
+boolean revArrows = (baf->nCountDown ^ baf->hCountDown);
+char arrowChar = (revArrows ? '<' : '>');
 
 cfm.out = baf->out;
 if (ss == 0)
@@ -219,7 +221,7 @@ for (i=0; i<count; ++i)
 fprintf(baf->out, " %0*d\n", endDigits, nEndNum);
 
 for (i=0; i<startDigits; ++i)
-    fputc('>', baf->out);
+    fputc(arrowChar, baf->out);
 fputc(' ', baf->out);
 for (i=0; i<count; ++i)
     {
@@ -269,7 +271,7 @@ for (i=0; i<count; ++i)
     }
 fputc(' ', baf->out);
 for (i=0; i<endDigits; ++i)
-    fputc('<', baf->out);
+    fputc(arrowChar, baf->out);
 fprintf(baf->out, "\n");
 
 if (baf->hCountDown)
