@@ -1020,3 +1020,16 @@ printf("%s\t%d\t%s\t%s %s\t%s\t%s\t%0.0f\t%0.1f\t%s\t%s\n",
     hgPepPred bosTau1 generic geneidPep geneid.fa
 
 
+# SWAP CHAINS FROM MM5, BUILD NETS ETC. (DONE 2/26/05 angie)
+    ssh kksilo
+    mkdir /cluster/data/bosTau1/bed/blastz.mm5.swap
+    cd /cluster/data/bosTau1/bed/blastz.mm5.swap
+    # Small cluster is quiet, workhorse needs to see cluster /scratch (and 
+    # kolossus has its own local /scratch/), so use kkr7u00:
+    doBlastzChainNet.pl -swap /cluster/data/mm5/bed/blastz.bosTau1/DEF \
+      -workhorse=kkr7u00 >& do.log &
+    tail -f do.log
+    # Add {chain,net}Mm5 to trackDb.ra if necessary.
+    # Add /usr/local/apache/htdocs/goldenPath/bosTau1/vsMm5/README.txt
+
+
