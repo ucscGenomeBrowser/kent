@@ -76,7 +76,7 @@
 #include "web.h"
 #include "grp.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.546 2003/06/30 23:29:49 hiram Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.547 2003/07/01 22:45:46 baertsch Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define EXPR_DATA_SHADES 16
@@ -9875,6 +9875,7 @@ registerTrackHandler("syntenyBuild30", syntenyMethods);
 registerTrackHandler("syntenyBerk", syntenyMethods);
 registerTrackHandler("syntenyRatBerkSmall", syntenyMethods);
 registerTrackHandler("syntenySanger", syntenyMethods);
+registerTrackHandler("syntenyPevzner", syntenyMethods);
 registerTrackHandler("mouseOrtho", mouseOrthoMethods);
 registerTrackHandler("mouseOrthoSeed", mouseOrthoMethods);
 //registerTrackHandler("orthoTop4", drawColorMethods);
@@ -9971,6 +9972,7 @@ registerTrackHandler("blastzMouseSyn", longXenoPslMethods);
 registerTrackHandler("blastzCb1", longXenoPslMethods);
 registerTrackHandler("blastzCe1", longXenoPslMethods);
 registerTrackHandler("blastzSelf", longXenoPslMethods);
+registerTrackHandler("pseudoMrna", xenoMrnaMethods);
 registerTrackHandler("xenoBlastzMrna", xenoMrnaMethods);
 registerTrackHandler("xenoBestMrna", xenoMrnaMethods);
 registerTrackHandler("xenoMrna", xenoMrnaMethods);
