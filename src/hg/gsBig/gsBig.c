@@ -3,7 +3,7 @@
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"
-#include "cheapcgi.h"
+#include "options.h"
 #include "portable.h"
 #include "fa.h"
 #include "dystring.h"
@@ -292,33 +292,40 @@ void writeSeg(char *seqName, struct segment *seg, FILE *gtf, FILE *sub, FILE *tr
 {
 struct genScanGene *gene;
 struct genScanFeature *gsf;
+struct hash *nameHash = newHash(0);
 
 for (gene = seg->geneList; gene != NULL; gene = gene->next)
     {
     char geneName[128];
+    boolean someCds = FALSE;
     sprintf(geneName, "%s.%d", seqName, gene->id);
     for (gsf = gene->featureList; gsf != NULL; gsf = gsf->next)
         {
 	if (sameString("Init", gsf->type))
 	    {
 	    cdsOut(gtf, gsf, geneName, seqName);
+	    someCds = TRUE;
 	    }
 	else if (sameString("Intr", gsf->type))
 	    {
 	    cdsOut(gtf, gsf, geneName, seqName);
+	    someCds = TRUE;
 	    }
 	else if (sameString("Term", gsf->type))
 	    {
 	    cdsOut(gtf, gsf, geneName, seqName);
+	    someCds = TRUE;
 	    }
 	else if (sameString("Sngl", gsf->type))
 	    {
 	    cdsOut(gtf, gsf, geneName, seqName);
+	    someCds = TRUE;
 	    }
 	}
     if ((trans != NULL) && (gene->featureList != NULL))
         {
-	faWriteNext(trans, geneName, gene->translation, strlen(gene->translation));
+	if (someCds)
+	    faWriteNext(trans, geneName, gene->translation, strlen(gene->translation));
 	}
     }
 
@@ -577,9 +584,9 @@ if (parName != NULL)
 if (tmpDirName != NULL)
         tmpDir = strdup(tmpDirName);
 	
-if (cgiVarExists("prerun"))
+if (optionExists("prerun"))
     {
-    char *preFileName = cgiString("prerun");
+    char *preFileName = optionVal("prerun", NULL);
     char seqName[128];
     struct segment *seg = parseSegment(preFileName, 0, 100000000, seqName);
     writeSeg(seqName, seg, gtfFile, subFile, transFile);
@@ -631,17 +638,17 @@ else
 int main(int argc, char *argv[])
 /* Process command line. */
 {
-cgiSpoof(&argc, argv);
+optionHash(&argc, argv);
 if (argc < 3)
     usage();
-winSize = cgiUsualInt("window", winSize);
+winSize = optionInt("window", winSize);
 stepSize = 2*winSize/3;
 gsBig(argv[1], argv[2], 
-	cgiOptionalString("subopt"),
-	cgiOptionalString("trans"),
-	cgiOptionalString("exe"), 
-	cgiOptionalString("par"),
-        cgiOptionalString("tmp")
+	optionVal("subopt", NULL),
+	optionVal("trans", NULL),
+	optionVal("exe", NULL), 
+	optionVal("par", NULL),
+        optionVal("tmp", NULL)
     );
 return 0;
 }
