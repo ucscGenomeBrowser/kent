@@ -28,7 +28,7 @@ set gbd $hg,$mm,$rn,$fr,$ce,$ci,$cb,$dm,$dp,$sc,$sacCer,$panTro,$galGal,$pyrFur,
 set otherDb swissProt,go,hgFixed
 
 # Define various non-self chains
-set chainDest Hg15,Hg16,Pt0,Mm2,Mm3,Mm4,Rn2,Rn3,Cb1,Dp1,PanTro1
+set chainDest Hg15,Hg16,Pt0,Mm2,Mm3,Mm4,Rn2,Rn3,Cb1,Dp1,PanTro1,GalGal2
 
 # Define databases that support known genes
 set kgDb $hg,$mm,$rn
@@ -377,37 +377,42 @@ identifier chainSelf
 
 # Genbank/trEMBL Accessions and meaningful subsets thereof
 
-identifier genbankAccession external=genbank fuzzy
+identifier genbankAccession external=genbank
 "Generic Genbank Accession.  More specific Genbank accessions follow"
     $gbd.seq.acc
 
 identifier stsAccession external=genbank typeOf=genbankAccession
 "Genbank accession of a Sequence Tag Site (STS) sequence."
-    $gbd.stsInfo2.genbank
+    $gbd.stsInfo2.genbank dupeOk
 
 identifier bacEndAccession typeOf=genbankAccession
 "Genbank accession of a BAC end read."
     $gbd.all_bacends.qName dupeOk
     $gbd.bacEndPairs.lfNames comma
-    $hg.fishClones.beNames comma
+    $hg.fishClones.beNames comma minCheck=0.70
 
 identifier bacAccession typeOf=genbankAccession
 "Genbank accession of a sequenced BAC (~150kb of genomic sequence)."
 
-identifier $hg.acAccession typeOf=bacAccession
+identifier humanBacAccession typeOf=bacAccession
 "Genbank accession of a sequenced $hg.BAC (~150kb of genomic sequence)."
-    $hg.clonePos.name chopAfter=.
+    $hg.clonePos.name chopAfter=. dupeOk
     $hg.gold.frag chopAfter=. $split
-    $hg.certificate.accession1
-    $hg.certificate.accession2
+    hg16.certificate.accession1 
+    hg16.certificate.accession2
+    hg15.certificate.accession1 minCheck=0.98
+    hg15.certificate.accession2 minCheck=0.98
+    hg13.certificate.accession1 minCheck=0.90
+    hg13.certificate.accession2 minCheck=0.90
     $hg.gl.frag chopAfter=. $split
-    $hg.fishClones.accNames chopAfter=. comma
+    $hg.gold.frag chopAfter=. $split
+    $hg.fishClones.accNames chopAfter=. comma minCheck=0.70
 
-identifier $hg.acAccessionVersion typeOf=bacAccession
+identifier humanBacAccessionVersion typeOf=bacAccession
 "Genbank accession.version of sequence $hg.BAC"
-    $hg.clonePos.name
-    $hg.gl.frag chopAfter=_
-    $hg.gold.frag
+    $hg.clonePos.name dupeOk
+    $hg.gl.frag $split chopAfter=_
+    $hg.gold.frag $split
 
 identifier proteinAccession typeOf=genbankAccession fuzzy
 "Genbank protein accession."
@@ -417,8 +422,8 @@ identifier proteinAccession typeOf=genbankAccession fuzzy
 
 identifier estOrMrnaAccession typeOf=genbankAccession
 "Genbank EST or mRNA accession."
+    $gbd.gbSeq.acc 
     $gbd.mrna.acc 
-    $gbd.gbSeq.acc oneToOne
     $gbd.gbStatus.acc
     $gbd.imageClone.acc
 
@@ -443,38 +448,34 @@ identifier xenoMrnaAccession typeOf=mrnaAccession
 "Genbank xeno (different organism from database) mRNA accession"
     $gbd.xenoMrna.qName dupeOk
 
-identifier nativeMrnaAccession typeOf=mrnaAccession
+identifier nativeMrnaAccession typeOf=mrnaAccession fuzzy
 "Genbank Native (same organism as database) mRNA accession"
-    $gbd.all_mrna.qName dupeOk
-    $gbd.mrna.qName $split
-    $gbd.dupSpMrna.mrnaID
-    $gbd.dupSpMrna.dupMrnaID
-    $gbd.mrnaOrientInfo.name
+    $gbd.all_mrna.qName 
+    $gbd.mrnaOrientInfo.name dupeOk
+    $gbd.dupSpMrna.mrnaID minCheck=0.95
+    $gbd.dupSpMrna.dupMrnaID minCheck=0.95
     $gbd.mrnaRefseq.mrna
     $gbd.spMrna.mrnaID
 
 identifier mgcAccession typeOf=nativeMrnaAccession
 "Mammalian Gene Collection Genbank mRNA accession."
-    $gbd.mgcFullMrna.qName dupeOk
     $gbd.mgcFullStatus.acc
+    $gbd.mgcFullMrna.qName 
     $gbd.mgcGenes.name
 
 identifier refSeqId typeOf=mrnaAccession
 "RefSeq mRNA accession"
-    $gbd.refSeqStatus.mrnaAcc
     $gbd.refLink.mrnaAcc 
+    $gbd.refSeqStatus.mrnaAcc minCheck=0.10
     $gbd.bioCycPathway.geneID
-    $gbd.cgapAlias.alias
-    $gbd.imageClone.acc
-    $kgDb.kgAlias.alias
-    $kgDb.kgXref.refseq
+    $kgDb.kgXref.refseq exclude= minCheck=0.50
     $kgDb.knownToRefSeq.value
-    $gbd.mrnaRefseq.refseq
+    $gbd.mrnaRefseq.refseq minCheck=0.10
     $gbd.refFlat.name
     $gbd.refGene.name
     $gbd.refSeqAli.qName
-    $gbd.refSeqSummary.mrnaAcc
-    $dm.bdgpToRefSeq.value
+    $gbd.refSeqSummary.mrnaAcc minCheck=0.99
+    $dm.bdgpToRefSeq.value minCheck=0.99
 
 identifier knownGeneId typeOf=nativeMrnaAccession
 "Known Gene ID - the genbank accession of the representative mRNA"
@@ -604,11 +605,11 @@ identifier imageCloneId external=IMAGEConsortium fuzzy
     $gbd.imageClone.imageId
     $gbd.mgcFullStatus.imageId
 
-identifier $hg.fosmidId
+identifier humanFosmidId
 "Human Fosmid (~50kb genomic sequence) clone"
     $hg.fosEndPairs.name dupeOk
 
-identifier $hg.fosmidEndId
+identifier humanFosmidEndId
 "Identifier of read from one end of human formid."
     $hg.all_fosends.qName dupeOk
     $hg.fosEndPairs.lfNames comma
@@ -626,8 +627,11 @@ identifier ucscStsId
     $gbd.stsInfo2.identNo
     $gbd.stsAlias.identNo
     $gbd.stsMap.identNo
-    $mm.all_sts_primer.qName chopAfter=_
+
+identifier ucscMouseStsId
+"UCSC Mouse STS (Sequenced Tagged Site, aka mapping sequence) ID"
     $mm.stsInfoMouseNew.identNo
+    $mm.all_sts_primer.qName chopAfter=_ minCheck=0.99
     $mm.stsMapMouseNew.identNo
 
 identifier stsName fuzzy
@@ -641,8 +645,11 @@ identifier stsTrueName typeOf=stsName
     $gbd.stsInfo2.name
     $gbd.stsAlias.trueName
     $gbd.stsMap.name
-    $mm.all_sts_primer.qName chopBefore=_
+
+identifier mouseStsTrueName typeOf=stsName
+"Mouse STS (Sequenced Tagged Site, aka mapping sequence) Unique Name"
     $mm.stsInfoMouseNew.name
+    $mm.all_sts_primer.qName chopBefore=_ minCheck=0.99
     $mm.stsMapMouseNew.name
 
 identifier hugoName external=HUGO fuzzy
@@ -666,14 +673,14 @@ identifier keggMapId external=KEGG
 
 identifier locusLinkId external=LocusLink
 "NCBI LocusLink ID"
-    $gbd.refLink.locusLinkId
-    $gbd.keggPathway.mapID
+    $gbd.refLink.locusLinkId dupeOk
+    $gbd.keggPathway.locusID minCheck=0.99
     $kgDb.knownToLocusLink.value
-    $dm.bdgpToLocusLink.value
+    $dm.bdgpToLocusLink.value minCheck=0.99
 
 identifier omimId external=OMIM
 "Online Mendelian Inheritance in Man (OMIM) ID"
-    $gbd.refLink.omimId
+    $gbd.refLink.omimId dupeOk exclude=0
 
 identifier knownAlignId
 "Which (of sometimes multiple) mapping of a known gene"
