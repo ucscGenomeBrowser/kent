@@ -31,7 +31,7 @@ public class HGNearCheck {
       "   java HGNearCheck default\n" +
       "      This will use the default properties\n"
       );
-    System.exit(0);
+    System.exit(1);
  }
 
   public static void main(String[] args) {

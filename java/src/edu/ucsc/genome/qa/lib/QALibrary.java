@@ -12,7 +12,7 @@ public class QALibrary {
   *
   *  @param  filename  The name of the file.
   *
-  *  @returns  True if filename exists.
+  *  @return  True if filename exists.
   */
   static public boolean checkFile(String filename) {
 
@@ -32,7 +32,7 @@ public class QALibrary {
   *
   *  @param  dirname  The name of the directory.
   *
-  *  @returns  True if directory name exists.
+  *  @return  True if directory name exists.
   */
   static public boolean checkDir(String dirname) {
   
@@ -52,7 +52,7 @@ public class QALibrary {
   *
   *  @param  inputfile  The name of the input file.
   *
-  *  @returns  List of Strings representing lines in the file.
+  *  @return  List of Strings representing lines in the file.
   */
   static public ArrayList readFile(String inputfile) {
 
@@ -81,7 +81,7 @@ public class QALibrary {
   *
   *  @param  filename  The file containing the properties.
   *
-  *  @returns  The Properties listed in the file.
+  *  @return  The Properties listed in the file.
   */
   public static Properties readProps(String filename) {
     FileInputStream fin = null;
@@ -104,7 +104,7 @@ public class QALibrary {
   *
   *  @param  filename  The file.
   *
-  *  @returns  The number of characters in the file.
+  *  @return  The number of characters in the file.
   */
   static public int numCharsInFile(String filename) {
 

@@ -29,7 +29,7 @@ public class HGGeneCheck {
       "   java HGGeneCheck default\n" +
       "This will use the default properties\n"
       );
-    System.exit(0);
+    System.exit(1);
  }
 
  /** 
