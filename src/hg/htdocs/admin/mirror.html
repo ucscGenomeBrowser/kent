@@ -554,32 +554,55 @@ contact us for an incremental fix.
  get started, consider trying the same user.
 <LI>Add that user to the hg.conf. A sample hg.conf is below:
 <PRE>
-# Config file for the UCSC Human Genome server
+###########################################################
+# Config file for the UCSC Human Genome server.
+#	This file specifies the host and user for MySQL
+#	database access.
 #
 # the format is in the form of name/value pairs
 # written 'name=value' (note that there is no space between
 # the name and its value. Also, no blank lines should be in
-# this file
+# this file.
 ###########################################################
 # db.host is the name of the MySQL host to connect to
 db.host=localhost
 # db.user is the username is use when connecting to the host
+#	This user only needs SELECT permissions for read-only access
 db.user=myhguser
 # this is the password to use with the above hostname
 db.password=myhguserpassword
 db.trackDb=trackDb
-
+###########################################################
 # central.host is the name of the host of the central MySQL
-# database where stuff common to all versions of the genome
-# and the user database is stored.
-central.db=hgcentral
+# database where items common to all versions of the genome
+# and the user database is stored.  central.db is the name of
+# the database to access on that host for this information.
+# Typical table names in the central.db:
+#	blatServers
+#	dbDb
+#	defaultDb
+#	gdbPdb
+#	liftOverChain
+#	sessionDb
+#	userDb
 central.host=localhost
+central.db=hgcentral
 #
-# Be sure this user has UPDATE AND INSERT privs for hgcentral
+# The central.user needs SELECT, INSERT, UPDATE, DELETE, CREATE, DROP and ALTER
+#	permissions for hgcentral to allow maintainence of the session
+#	and user Db's
 #
 central.user=myhguser
 central.password=myhguserpassword
 central.domain=.mydomain.edu
+###########################################################
+# backupcentral is used when the primary central DB fails.
+#	This can be identical to the central entries as above.
+backupcentral.host=localhost
+backupcentral.db=hgcentral
+backupcentral.user=myhguser
+backupcentral.password=myhguserpassword
+backupcentral.domain=.mydomain.edu
 </PRE>
 </OL>
 
