@@ -7,7 +7,7 @@
 #include "jksql.h"
 #include "pepPred.h"
 
-static char const rcsid[] = "$Id: hgPepPred.c,v 1.12 2003/12/19 19:52:10 braney Exp $";
+static char const rcsid[] = "$Id: hgPepPred.c,v 1.13 2004/11/09 00:14:10 hiram Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -117,6 +117,7 @@ while (lineFileNext(lf, &line, &lineSize))
     {
     if (line[0] == '>')
         {
+	char *upperCase;
 	char *transcript;
 	/* End last line. */
 	if (firstTime)
@@ -124,9 +125,12 @@ while (lineFileNext(lf, &line, &lineSize))
 	else
 	    fputc('\n', f);
 	translation = findEnsTrans(lf, line);
-	if (hashLookup(uniq, translation) != NULL)
-	    errAbort("Duplicate %s line %d of %s", translation, lf->lineIx, lf->fileName);
-	hashAdd(uniq, translation, NULL);
+	if (hashLookupUpperCase(uniq, translation) != NULL)
+	    errAbort("Duplicate (case insensitive) '%s' line %d of %s", translation, lf->lineIx, lf->fileName);
+	upperCase = cloneString(translation);
+	touppers(upperCase);
+	hashAdd(uniq, upperCase, NULL);
+	freeMem(upperCase);
 	transcript = hashFindVal(pToT, translation);
 	if (transcript == NULL)
 	    errAbort("Can't find transcript for %s", translation);
@@ -218,14 +222,18 @@ while (lineFileNext(lf, &line, &lineSize))
 	trans = firstWordInLine(line+1);
 	if (abbr != NULL && startsWith(abbr, trans))
 	    trans += strlen(abbr);
-	if (hashLookup(uniq, trans) != NULL)
+	if (hashLookupUpperCase(uniq, trans) != NULL)
 	    {
-	    warn("Duplicate %s line %d of %s. Ignoring all but first.", trans, lf->lineIx, lf->fileName);
+	    warn("Duplicate (case insensitive) '%s' line %d of %s. Ignoring all but first.", trans, lf->lineIx, lf->fileName);
 	    skip = TRUE;
 	    }
 	else
 	    {
-	    hashAdd(uniq, trans, NULL);
+	    char *upperCase;
+	    upperCase = cloneString(trans);
+	    touppers(upperCase);
+	    hashAdd(uniq, upperCase, NULL);
+	    freeMem(upperCase);
 	    fprintf(f, "%s\t", trans);
 	    skip = FALSE;
 	    }
@@ -281,6 +289,7 @@ while (lineFileNext(lf, &line, &lineSize))
     {
     if (line[0] == '>')
         {
+	char *upperCase;
 	/* End last line. */
 	if (firstTime)
 	    firstTime = FALSE;
@@ -289,9 +298,12 @@ while (lineFileNext(lf, &line, &lineSize))
 	trans = firstWordInLine(line+1);
 	if (abbr != NULL && startsWith(abbr, trans))
 	    trans += strlen(abbr);
-	if (hashLookup(uniq, trans) != NULL)
-	    errAbort("Duplicate %s line %d of %s", trans, lf->lineIx, lf->fileName);
-	hashAdd(uniq, trans, NULL);
+	if (hashLookupUpperCase(uniq, trans) != NULL)
+	    errAbort("Duplicate (case insensitive) '%s' line %d of %s", trans, lf->lineIx, lf->fileName);
+	upperCase = cloneString(trans);
+	touppers(upperCase);
+	hashAdd(uniq, upperCase, NULL);
+	freeMem(upperCase);
 	fprintf(f, "%s\t", trans);
 	}
     else
@@ -342,9 +354,13 @@ makeCustomTable(database, table, createString);
 printf("Processing %s\n", fileNames[0]);
 while (lineFileRow(lf, words))
     {
-    if (hashLookup(uniq, words[0]) != NULL)
-	errAbort("Duplicate %s line %d of %s", words[0], lf->lineIx, lf->fileName);
-    hashAdd(uniq, words[0], NULL);
+    char *upperCase;
+    if (hashLookupUpperCase(uniq, words[0]) != NULL)
+	errAbort("Duplicate (case insensitive) '%s' line %d of %s", words[0], lf->lineIx, lf->fileName);
+    upperCase = cloneString(words[0]);
+    touppers(upperCase);
+    hashAdd(uniq, upperCase, NULL);
+    freeMem(upperCase);
     }
 lineFileClose(&lf);
 printf("Loading %s\n", fileNames[0]);
