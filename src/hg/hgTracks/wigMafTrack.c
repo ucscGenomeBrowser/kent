@@ -14,7 +14,7 @@
 #include "hgMaf.h"
 #include "mafTrack.h"
 
-static char const rcsid[] = "$Id: wigMafTrack.c,v 1.46 2004/11/02 02:36:12 kate Exp $";
+static char const rcsid[] = "$Id: wigMafTrack.c,v 1.47 2004/11/05 17:18:10 kent Exp $";
 
 struct wigMafItem
 /* A maf track item -- 
@@ -180,6 +180,14 @@ track->customPt = wigMafLoadInRegion(conn, track->mapName,
                                         chromName, winStart, winEnd);
 hFreeConn(&conn);
 
+/* Add item for score wiggle base alignment */
+if (track->subtracks != NULL)
+    {
+    enum trackVisibility wigVis = 
+    	(track->visibility == tvDense ? tvDense : tvFull);
+    mi = scoreItem(wigTotalHeight(track->subtracks, wigVis));
+    slAddHead(&miList, mi);
+    }
 /* Make up item that will show gaps in this organism. */
 AllocVar(mi);
 mi->name = "Gaps";
@@ -194,14 +202,6 @@ slAddHead(&miList, mi);
 speciesList = newSpeciesItems(track, tl.fontHeight);
 miList = slCat(speciesList, miList);
 
-/* Add item for score wiggle after base alignment */
-if (track->subtracks != NULL)
-    {
-    enum trackVisibility wigVis = 
-                (track->visibility == tvFull ? tvFull : tvDense);
-    mi = scoreItem(wigTotalHeight(track->subtracks, wigVis));
-    slAddHead(&miList, mi);
-    }
 slReverse(&miList);
 return miList;
 }
@@ -627,7 +627,6 @@ for (mi = miList; mi != NULL; mi = mi->next)
             vgUnclip(vg);
             }
         /* need to add extra space between wiggles (for now) */
-        //mi->height = wigTotalHeight(wigTrack, tvFull);
         mi->height = pairwiseHeight;
         }
     else 
@@ -706,10 +705,11 @@ for (i = 0; i < size; i++, dna++)
     
 static int wigMafDrawBases(struct track *track, int seqStart, int seqEnd,
         struct vGfx *vg, int xOff, int yOff, int width, 
-        MgFont *font, Color color, enum trackVisibility vis)
+        MgFont *font, Color color, enum trackVisibility vis,
+	struct wigMafItem *miList)
 /* Draw base-by-base view, return new Y offset. */
 {
-struct wigMafItem *miList = track->items, *mi;
+struct wigMafItem *mi;
 struct mafAli *mafList, *maf, *sub, *infoMaf;
 struct mafComp *mc, *mcMaster;
 int lineCount = slCount(miList);
@@ -896,7 +896,7 @@ y += mi->height;
     }
 
 /* draw base-level alignments */
-for (mi = miList->next, i=1; mi != NULL, mi->db != NULL; mi = mi->next, ++i)
+for (mi = miList->next, i=1; mi != NULL && mi->db != NULL; mi = mi->next, ++i)
     {
     char *line;
     line  = lines[i];
@@ -933,26 +933,12 @@ static int wigMafDrawScoreGraph(struct track *track, int seqStart, int seqEnd,
 struct track *wigTrack = track->subtracks;
 enum trackVisibility wigVis;
 
-if (zoomedToBaseLevel)
-    /* wiggle is displayed dense for all visibilities except full and  pack */
-    wigVis = (vis == tvFull || vis == tvPack ? tvFull : tvDense);
-else
-    /* wiggle is displayed full for all visibilities except dense */
-    wigVis = (vis == tvDense ? tvDense : tvFull);
+wigVis = (vis == tvDense ? tvDense : tvFull);
 if (wigTrack != NULL)
     {
     wigTrack->ixColor = vgFindRgb(vg, &wigTrack->color);
     wigTrack->ixAltColor = vgFindRgb(vg, &wigTrack->altColor);
-    if (zoomedToBaseLevel && (vis == tvSquish || vis == tvPack))
-        {
-        /* display squished wiggle by reducing wigTrack height */
-        wigTrack->height = 
-            wigTrack->lineHeight = 
-            wigTrack->heightPer = tl.fontHeight - 1;
-        vgSetClip(vg, xOff, yOff, width, wigTrack->height - 1);
-        }
-    else
-        vgSetClip(vg, xOff, yOff, width, wigTotalHeight(wigTrack, wigVis) - 1);
+    vgSetClip(vg, xOff, yOff, width, wigTotalHeight(wigTrack, wigVis) - 1);
     wigTrack->drawItems(wigTrack, seqStart, seqEnd, vg, xOff, yOff,
                          width, font, color, wigVis);
     vgUnclip(vg);
@@ -970,10 +956,13 @@ static void wigMafDraw(struct track *track, int seqStart, int seqEnd,
 int y = yOff;
 if (zoomedToBaseLevel)
     {
-    y = wigMafDrawBases(track, seqStart, seqEnd, vg, xOff, y, width, font,
-                                color, vis);
+    struct wigMafItem *wiList = track->items;
+    if (track->subtracks != NULL)
+        wiList = wiList->next;
     y = wigMafDrawScoreGraph(track, seqStart, seqEnd, vg, xOff, y, width,
                                 font, color, vis, zoomedToBaseLevel);
+    y = wigMafDrawBases(track, seqStart, seqEnd, vg, xOff, y, width, font,
+                                color, vis, wiList);
     }
 else 
     {
