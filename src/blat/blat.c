@@ -823,7 +823,7 @@ if (dIsProtLike)
  * they are within range. */
 tileSize = cgiOptionalInt("tileSize", tileSize);
 minMatch = cgiOptionalInt("minMatch", minMatch);
-oneOff = cgiOptionalInt("oneOff", oneOff);
+oneOff = cgiExists("oneOff", oneOff);
 minScore = cgiOptionalInt("minScore", minScore);
 maxGap = cgiOptionalInt("maxGap", maxGap);
 minRepDivergence = cgiUsualDouble("minRepDivergence", minRepDivergence);

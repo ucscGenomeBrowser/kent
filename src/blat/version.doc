@@ -1,3 +1,5 @@
+18 - Fixed bug where you had to do -oneOff=1 rather than -oneOff
+     in command line of blat.
 17 - Added -minScore -minIdentity and -prot command line options
      to gfClient.  gfClient uses same protein default minScore as 
      blat does. Made -mask=lower work with nib files in blat, 
