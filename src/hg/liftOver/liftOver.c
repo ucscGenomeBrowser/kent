@@ -10,7 +10,7 @@
 #include "sample.h"
 #include "liftOver.h"
 
-static char const rcsid[] = "$Id: liftOver.c,v 1.16 2004/10/06 17:22:44 kate Exp $";
+static char const rcsid[] = "$Id: liftOver.c,v 1.17 2004/10/18 00:09:30 kate Exp $";
 
 double minMatch = LIFTOVER_MINMATCH;
 double minBlocks = LIFTOVER_MINBLOCKS;
@@ -47,7 +47,6 @@ errAbort(
   "   -minSizeT, -minSizeQ    Minimum chain size in target/query,\n" 
   "                             when mapping to multiple output regions\n"
   "                                     (default 0, 0)\n"
-  "   -multiple               Allow multiple output regions\n"
   "   -chainTable             Used with -multiple, format is db.tablename,\n"
   "                               to extend chains from net (preserves dups)\n"
   "   -errorHelp              Explain error messages\n",
