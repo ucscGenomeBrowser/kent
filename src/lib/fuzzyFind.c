@@ -1932,6 +1932,9 @@ struct ffAli *ffFind(DNA *needleStart, DNA *needleEnd, DNA *hayStart, DNA *hayEn
 struct ffAli *bestAli;
 int status;
 
+assert(needleStart <= needleEnd);
+assert(hayStart <= hayEnd);
+
 ffMemInit();
 dnaUtilOpen();
 
