@@ -7654,8 +7654,18 @@ void doDbSnpRS(char *name)
 struct sqlConnection *conn = sqlConnect("hgFixed");
 char query[256];
 struct dbSnpRS *snp=NULL;
-snprintf(query, sizeof(query),"select * from dbSnpRS where rsId = '%s'",name);
-snp=dbSnpRSLoadByQuery(conn, query);
+snprintf(query, sizeof(query),
+	 "select rsId, "
+	 "       avHet, "
+	 "       avHetSE, "
+	 "       valid, "
+	 "       base1, "
+	 "       base2, "
+	 "       assembly, "
+	 "       alternate "
+	 "from   dbSnpRS "
+	 "where  rsId = '%s'", name);
+snp = dbSnpRSLoadByQuery(conn, query);
 if (snp!=NULL)
     {
     printf("<BR>\n");
@@ -7670,8 +7680,8 @@ if (snp!=NULL)
 	printf("<B>Standard Error of Average Heterozygosity:</B> Not Known<BR>\n");
 	}
     printf("<B>Validation Status:</B> %s<BR>\n",snp->valid);
-    printf("<B>Allele1:</B> %s<BR>\n",snp->allele1);
-    printf("<B>Allele2:</B> %s<BR>\n",snp->allele2);
+    printf("<B>Allele1:          </B> %s<BR>\n",snp->allele1);
+    printf("<B>Allele2:          </B> %s<BR>\n",snp->allele2);
     printf("<font face=\"Courier New\">Sequence in Assembly:&nbsp;%s<BR></font>\n",snp->assembly);
     printf("<font face=\"Courier New\">Alternate Sequence:&nbsp;&nbsp;&nbsp;%s<BR></font>\n",snp->alternate);
     }
