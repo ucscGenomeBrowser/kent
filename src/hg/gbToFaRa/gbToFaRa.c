@@ -1462,6 +1462,8 @@ while (readGbInfo(lf))
         }
     } /* End of outermost while loop */
     
+
+freez(&oldOrg);
 freeDyString(&ctgDs);
 lineFileClose(&lf);
 printf(" %d\n", gbCount);
