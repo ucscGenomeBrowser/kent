@@ -1253,3 +1253,39 @@ samHit $2 /projects/compbio/experiments/protein-predict/yeast/$1/$2/$2.t2k.best-
 # remove all intermediate .tab files
     rm *.tab
 
+# COPY PART OF SAM-T02 RESULTS TO UCSC GB SERVER (DONE 1/10/05, Fan)
+# Kevin is going to do monthly updates on SAM-T02 results.
+# To prevent data inconsistency problems, we now will copy 
+# over some key files and host them on our own server.
+    ssh hgwdev
+    cd /cluster/data/sacCer1/bed/sam
+    mkdir yeast050107
+    cd yeast050107
+
+# create script to process 1 SAM subdirectory
+    cat << '_EOF_' >do1Subdir
+mkdir -p yeast/$1
+'_EOF_'
+
+    chmod +x do1Subdir
+    cp -p ../doAllSubdir .
+    mkdir yeast
+    doAllSubdir
+
+    cp -p ../doall .
+    
+# create script doall to copy over needed SAM output result files
+    cat << '_EOF_' >do1
+echo processing $2
+mkdir yeast/$1/$2
+cp -f /projects/compbio/experiments/protein-predict/yeast/$1/$2/*.jpg yeast/$1/$2
+cp -f /projects/compbio/experiments/protein-predict/yeast/$1/$2/$2.t2k.w0.5-logo.pdf yeast/$1/$2
+cp -f /projects/compbio/experiments/protein-predict/yeast/$1/$2/$2.t2k.dssp-ehl2-logo.pdf yeast/$1/$2
+cp -f /projects/compbio/experiments/protein-predict/yeast/$1/$2/$2.t2k.undertaker-align.pdb.gz yeast/$1/$2
+'_EOF_'
+
+    chmod +x do1
+    doall
+
+    ln -s ./yeast /usr/local/apache/htdocs/goldenPath/sacCer1/sam    
+
