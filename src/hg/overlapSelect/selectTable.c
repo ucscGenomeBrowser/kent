@@ -10,6 +10,7 @@
 #include "verbose.h"
 
 extern FILE *fractionFh;
+float cdsOverlap;
 
 /* tables are never freed */
 static struct hash* selectChromHash = NULL;  /* hash per-chrom binKeeper of
@@ -151,7 +152,6 @@ int inBases = 0;
 int threshBases = 0, overBases = 0;
 boolean result;
 struct chromAnnBlk *inCaBlk, *selCaBlk;
-float cdsOverlap;
 
 result = FALSE;
 if (overlapThreshold > 0.0)
@@ -175,11 +175,10 @@ for (inCaBlk = inCa->blocks; inCaBlk != NULL; inCaBlk = inCaBlk->next)
     }
 if (fractionFh != NULL)
     {
-    cdsOverlap = (float)overBases / (float)inBases;
     if (overBases >= threshBases)
     	{
-    	fprintf(fractionFh, "%s\t%s\t%f\n", inCa->name, selCa->name, cdsOverlap);
-    	}
+        cdsOverlap = (float)overBases / (float)inBases;
+	}
     }
 return result;
 }
@@ -188,16 +187,32 @@ static boolean isOverlapped(unsigned opts, struct chromAnn *inCa, struct chromAn
                             float overlapThreshold, float overlapSimilarity)
 /* see if a chromAnn objects overlap */
 {
+boolean isOverlap1, isOverlap2;
+float cdsOverlap1, cdsOverlap2;
+
 if (overlapSimilarity > 0.0)
     {
     /* bi-directional */
-    return checkOverlap(inCa, selCa, overlapSimilarity)
-        && checkOverlap(selCa, inCa, overlapSimilarity);
+    isOverlap1  = checkOverlap(inCa, selCa, overlapSimilarity);
+    cdsOverlap1 = cdsOverlap;
+    isOverlap2  = checkOverlap(selCa, inCa, overlapSimilarity);
+    cdsOverlap2 = cdsOverlap;
+    if ((isOverlap1 && isOverlap2) && (fractionFh != NULL))
+    	{
+	fprintf(fractionFh, "%s\t%s\t%f\n", inCa->name, selCa->name, cdsOverlap1);
+	}
+    return isOverlap1 && isOverlap2;
     }
 else
     {
     /* uni-directional */
-    return checkOverlap(inCa, selCa, overlapThreshold);
+    isOverlap1  = checkOverlap(inCa, selCa, overlapThreshold);
+    cdsOverlap1 = cdsOverlap;
+    if (isOverlap1 && (fractionFh != NULL))
+    	{
+	fprintf(fractionFh, "%s\t%s\t%f\n", inCa->name, selCa->name, cdsOverlap1);
+	}
+    return isOverlap1;
     }
 }
 
