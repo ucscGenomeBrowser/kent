@@ -120,15 +120,13 @@ All rights reserved.
   <LI><A CLASS="toc" HREF="#Intersection">
       Filtering Results by Comparing Two Tables</A>
       <UL>
-        <LI><A CLASS="toc" HREF="#WhatIntersect">
-	What can comparing two tables do?</A>
         <LI><A CLASS="toc" HREF="#Preserving">
         Comparisons that preserve primary table structure</A>
         <LI><A CLASS="toc" HREF="#BaseByBase">
         Base-by-base comparisons</A>
       </UL>
   <LI><A CLASS="toc" HREF="#FeatureBits">
-      Retrieving Upstream/Downstream/Blocks of Genes/Alignments</A>
+      Retrieving Subregions of Features</A>
       <UL>
         <LI><A CLASS="toc" HREF="#FBGenePred">
 	Subregions of gene predictions</A>
@@ -586,7 +584,7 @@ CGGCAGGGCTAA
 <A NAME="GTF"></A>
 <H4> GTF </H4>
 
-GTF stands for Gene Transfer format.  It is also known as 
+GTF stands for Gene Transfer Format.  It is also known as 
 GFF version 2.  The spec can be found 
 <A HREF="http://www.sanger.ac.uk/Software/formats/GFF/GFF_Spec.shtml">
 here</A>.  
@@ -750,25 +748,86 @@ Free-form query examples (taken from the refGene table):
 <TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0><TR><TH HEIGHT=10></TH></TR>
 <TR><TD WIDTH=10>&nbsp;</TD><TD>
 
-<A NAME="WhatIntersect"></A>
-<H4> What can comparing two tables do? </H4>
+Sometimes it is interesting to see where the features of two 
+positional 
+tables do or do not cover the same positions in the genome.  
+The Table Browser offers several kinds of comparisons of tables 
+by feature positions.  
+
 
 
 <A NAME="Preserving"></A>
 <H4> Comparisons that preserve primary table structure </H4>
 
+Some comparisons preserve the structure of the primary table.  
+In other words, if the primary table describes exon structure 
+and is filtered by one of these comparisons to any other table, 
+then the results will decribe exon structure (unless the user 
+chooses an output format in which the structure is lost).  
+Primary table features are kept or discarded based on the 
+amount of positional overlap with secondary table features.  
+
+<UL>
 <A NAME="AnyOverlap"></A>
+<LI> <B>Any overlap:</B> A primary table record will appear in the output 
+     if any of its base positions are also covered by 
+     any feature in the secondary table.  
 <A NAME="NoOverlap"></A>
+<LI> <B>No overlap:</B> A primary table record will appear in the output 
+     only if none of its base positions are also covered by 
+     any feature in the secondary table.  
 <A NAME="OverOverlap"></A>
+<LI> <B>Overlap over a specified threshold:</B> A primary table record will 
+     appear in the output 
+     if the ratio of the number of its base positions covered by 
+     secondary table features to the total number 
+     of its base positions is greater than the user-specified threshold.  
 <A NAME="UnderOverlap"></A>
+<LI> <B>Overlap under a specified threshold:</B> A primary table record will 
+     appear in the output 
+     if the ratio of the number of its base positions covered by 
+     secondary table features to the total number 
+     of its base positions is less than the user-specified threshold.  
+</UL>
+
+<B>Note:</B> If the primary table has exon/block structure, then only 
+base positions in exons/blocks will be counted.  
+
 
 <A NAME="BaseByBase"></A>
 <H4> Base-by-base comparisons </H4>
 
-<A NAME="BaseByBaseAND"></A>
-<A NAME="BaseByBaseOR"></A>
-<A NAME="BaseByBaseNOT"></A>
+The positions covered by features of the primary and secondary tables 
+can be compared one base position at a time, or base-by-base (as opposed 
+to feature-by-feature like above).  
+If the user selects one of the following comparisons, then the structure 
+of the primary table will not be preserved.  
+In other words, even if the primary table describes exon structure, 
+the results will not describe exon structure.  Only position ranges 
+will be returned, with no information about exon/block structure, 
+strand, or translation region.  
 
+<UL>
+<A NAME="BaseByBaseAND"></A>
+<LI> <B>Base-by-base intersection (AND):</B> If a nucleotide position is 
+     covered by at least one feature of both the primary table and the 
+     secondary table, then it will be included in the output.  
+<A NAME="BaseByBaseOR"></A>
+<LI> <B>Base-by-base union (OR):</B>  If a nucleotide position is 
+     covered by at least one feature of either the primary table or the 
+     secondary table, then it will be included in the output.  
+</UL>
+
+<B>Note:</B> If the primary table has exon/block structure, then only 
+base positions in exons/blocks will be counted.  
+<P>
+<A NAME="BaseByBaseNOT"></A>
+<B>Base-by-base complement (NOT):</B> Before either of the above 
+comparisons are applied, the set of positions covered by a table 
+can be inverted.  In other words, if this is selected, then any 
+position covered by the table's features will be considered 
+<I>not</I> covered, and vice versa.  This gives the user more 
+flexibility in comparing table positions.  
 
 </TD></TR></TABLE>
 <BR></TD></TR>
@@ -786,7 +845,7 @@ Free-form query examples (taken from the refGene table):
 <TR><TD>
 <TABLE BGCOLOR="D9E4F8" BACKGROUND="/images/hr.gif" WIDTH=100%>
 <TR><TD>
-<FONT SIZE="4"><B>&nbsp; Retrieving Upstream/Downstream/Blocks of Genes/Alignments </B></FONT>
+<FONT SIZE="4"><B>&nbsp; Retrieving Subregions of Features </B></FONT>
 </TD></TR></TABLE>
 <TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0><TR><TH HEIGHT=10></TH></TR>
 <TR><TD WIDTH=10>&nbsp;</TD><TD>
