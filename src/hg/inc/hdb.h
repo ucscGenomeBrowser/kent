@@ -131,4 +131,12 @@ int hOffsetPastBin(char *chrom, char *table);
 /* Return offset into a row of table that skips past bin
  * field if any. */
 
+enum trackVisibility 
+/* How to look at a track. */
+    {
+    tvHide=0, 		/* Hide it. */
+    tvDense=1,        /* Squish it together. */
+    tvFull=2        /* Expand it out. */
+    };  
+
 #endif /* HDB_H */
