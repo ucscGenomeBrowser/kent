@@ -5,7 +5,7 @@
 #include "portable.h"
 #include "dystring.h"
 
-static char const rcsid[] = "$Id: ccCp.c,v 1.2 2003/05/06 07:41:04 kate Exp $";
+static char const rcsid[] = "$Id: ccCp.c,v 1.3 2005/03/04 20:05:37 galt Exp $";
 
 boolean amFirst = FALSE; /* Is this the copy that launched the copies? */
 
@@ -168,7 +168,6 @@ int firstLock;
 int childPid;
 char *thisHost = getenv("HOST");
 char ok;
-long startTime = clock1000();
 
 if (thisHost == NULL)
     errAbort("HOST environment variable undefined\n");
@@ -218,10 +217,7 @@ else
 	int endCount = 0;
 	int errCount = 0;
 	int toGo = 0;
-	int procCount = 0;
-	int lastProcCount = 0;
 	int finCount;
-	boolean reportErr;
 
 	for (i=0; i<hostCount; ++i)
 	    {
@@ -298,7 +294,7 @@ else
 int main(int argc, char *argv[])
 /* Process command line. */
 {
-int start = 0, count = 0;
+int start = 0;
 char *lockDir;
 char *source, *dest, *hostList;
 
