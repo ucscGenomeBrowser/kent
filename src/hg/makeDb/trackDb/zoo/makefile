@@ -7,11 +7,11 @@
 # or in the cgi-bin-$(USER)/hg.conf file. Something like: 
 # db.trackDb=trackDb_YourUserName
 
-DBS =   zooBaboon3 zooCat3 zooChicken3 zooChimp3 zooCow3 zooDog3 zooFugu3 \
-        zooHuman3 zooMouse3 zooPig3 zooRat3 zooTetra3 zooZebrafish3 
+ZOO_DBS =   zooBaboon3 zooCat3 zooChicken3 zooChimp3 zooCow3 zooDog3 zooFugu3 \
+            zooHuman3 zooMouse3 zooPig3 zooRat3 zooTetra3 zooZebrafish3 
 
 update:
-	@for DB in $(DBS) x; do \
+	@for DB in $(ZOO_DBS) x; do \
 	    if test "$$DB" != "x" ; then \
 		cmd="hgTrackDb zoo $$DB trackDb_${USER} ../../../lib/trackDb.sql ." ; \
 		echo $$cmd ;  $$cmd ; \
@@ -21,7 +21,7 @@ update:
 	done
 
 alpha:
-	@for DB in $(DBS) x; do \
+	@for DB in $(ZOO_DBS) x; do \
 	    if test "$$DB" != "x" ; then \
 		cmd="hgTrackDb zoo $$DB trackDb ../../../lib/trackDb.sql ." ; \
 		echo $$cmd ;  $$cmd ; \
@@ -33,7 +33,7 @@ alpha:
 beta: alpha
 
 strict:
-	@for DB in $(DBS) x; do \
+	@for DB in $(ZOO_DBS) x; do \
 	    if test "$$DB" != "x" ; then \
 		cmd="hgTrackDb -strict=yes zoo $$DB trackDb ../../../lib/trackDb.sql ." ; \
 		echo $$cmd ;  $$cmd ; \
