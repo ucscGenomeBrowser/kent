@@ -1351,7 +1351,8 @@ if( sameString( tg->mapName, "humMus" ) )
     }
     
     }
-    else if( sameString( tg->mapName, "humMusL" ) )
+    else if( sameString( tg->mapName, "humMusL" ) || 
+             sameString( tg->mapName, "musHumL" ))
     {
 
     minRange = 0.0;
@@ -6985,6 +6986,12 @@ void humMusLMethods( struct trackGroup *tg )
    tg->loadItems = loadHumMusL; 
 }
 
+void musHumLMethods( struct trackGroup *tg )
+/* Overide the musHumL load function to look for zoomed out tracks. */
+{
+   tg->loadItems = loadHumMusL; 
+}
+
 void mapBoxHcTwoItems(int start, int end, int x, int y, int width, int height, 
 	char *group, char *item1, char *item2, char *statusLine)
 /* Print out image map rectangle that would invoke the htc (human track click)
@@ -8308,7 +8315,8 @@ if (withLeftLabels)
         }
 
 	    }
-    else if( sameString( group->mapName, "humMusL" ) )
+    else if( sameString( group->mapName, "humMusL" ) ||
+             sameString( group->mapName, "musHumL" ))
     {
         min0 = whichNum( 0.0, 0.0, 8.0, 1000 );
         max0 =  whichNum( 1000.0, 0.0, 8.0, 1000 );
@@ -8407,6 +8415,9 @@ if (withLeftLabels)
             if( sameString( group->mapName, "humMusL" ))
 			    mgTextRight(mg, gfxBorder, y, inWid - 1, itemHeight,
                     group->ixColor, font, "Mouse Cons    ");
+            else if( sameString( group->mapName, "musHumL" ))
+			    mgTextRight(mg, gfxBorder, y, inWid - 1, itemHeight,
+                    group->ixColor, font, "Human Cons    ");
             else
                 mgTextRight(mg, gfxBorder, y, inWid - 1, itemHeight,
                     group->ixColor, font, rootName );
@@ -9516,6 +9527,7 @@ registerTrackHandler("mgcNcbiPicks", estMethods);
 registerTrackHandler("mgcNcbiSplicedPicks", intronEstMethods);
 registerTrackHandler("mgcUcscPicks", intronEstMethods);
 registerTrackHandler("humMusL", humMusLMethods);
+registerTrackHandler("musHumL", musHumLMethods);
 registerTrackHandler("affyTranscriptome", affyTranscriptomeMethods);
 registerTrackHandler("rikenMrna", rikenMethods);
 registerTrackHandler("ensRiken", ensRikenMethods);
