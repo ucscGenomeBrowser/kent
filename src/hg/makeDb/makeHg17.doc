@@ -5518,7 +5518,7 @@ mkdir -p $3:h
     cp $workingDir/maf/*.maf maf
 
 
-# PHYLO-HMM (PHASTCONS) CONSERVATION FOR 8-WAY MM5 (DONE 2004-07-20 kate)
+# PHYLO-HMM (PHASTCONS) CONSERVATION FOR 8-WAY WITH MM5 (DONE 2004-07-20 kate)
 # (this was partially redone by acs using the new phastCons, 08-28;
 # I've tried to merge the two sets of docs into one cohesive
 # description)
@@ -5591,14 +5591,14 @@ echo "Done" >> ${WINDOWS}/$c.done
 
     # first produce a rough starting model; in this case, we can just
     # use the model previously estimated (see the entry below on PHYLOFIT/PHASTCONS)
-    cp ../run.cons/hg17panTro1mm5rn3canFam1galGal2fr1danRer1.names.mod starting-tree.mod
+    cp /cluster/bluearc/hg17/multiz.2004-07-13/panTro1mm5rn3canFam1/hg17panTro1rn3mm5canFam1galGal2fr1danRer1.mod starting-tree.mod
     # In other cases, it would be sufficient to choose an arbitrary
     # input file from the WINDOWS directory (choose one with plenty of
-    # data) and run phyloFit on it with the correct tree topology,
-    # e.g.,
+    # data, i.e., large NTUPLES) and run phyloFit on it with the
+    # correct tree topology, e.g.,
     # phyloFit -i SS datafile.ss --tree \
-    # "(((((hg17,panTro1),(mm5,rn3)),canFam1),galGal2),(fr1,danRer1))" \
-    # --out-root starting-tree
+    #    "(((((hg17,panTro1),(mm5,rn3)),canFam1),galGal2),(fr1,danRer1))" \
+    #    --out-root starting-tree
 
     # Get genome-wide average GC content (for all species together,
     # not just the reference genome).  If you have a globally
@@ -5613,7 +5613,7 @@ echo "Done" >> ${WINDOWS}/$c.done
     # directly from the MAFs, e.g., by running
     # msa_view --aggregate hg17,panTro1,rn3,mm5,canFam1,galGal2,danRer1,fr1 -i MAF --summary-only \
     #       /cluster/data/hg17/bed/multiz.2004-07-13/maf/chr*.maf> maf_summary.txt
-    # This will take a little while (~30 min).  Run on eieio.
+    # This will take a little while (30-60 min).  Run on eieio. 
 
     # now set up cluster job to estimate model parameters.  Parameters
     # will be estimated separately for each alignment fragment then
@@ -5635,6 +5635,7 @@ EOF
     rm -fr LOG LNL TREES
     mkdir -p LOG LNL TREES
     rm -f jobs.lst
+    # watch out: bash assumed below in a few places
     for f in /cluster/bluearc/hg17/multiz.2004-07-13/cons/WINDOWS/*.ss.gz ; do \
 	root=`basename $f .ss.gz` ;\
 	echo doEstimate.sh $f LNL/$root.lnl LOG/$root.log TREES/$root >> jobs.lst ;\
@@ -5700,7 +5701,7 @@ rm $tmpfile
 EOF
     chmod u+x doPhastCons.sh
 
-    rm -fr POSTPROBS ELEMENTS
+    rm -fr /cluster/bluearc/hg17/phastCons/POSTPROBS /cluster/bluearc/hg17/phastCons/ELEMENTS
     rm -f jobs2.lst
     for f in /cluster/bluearc/hg17/multiz.2004-07-13/cons/WINDOWS/*.ss.gz ; do echo doPhastCons.sh $f >> jobs2.lst ; done
 
