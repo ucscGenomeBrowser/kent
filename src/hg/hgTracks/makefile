@@ -11,7 +11,7 @@ O = $A.o altGraphXTrack.o chainTrack.o contigTrack.o \
         expRatioTracks.o goldTrack.o loweLabTracks.o \
 	mafTrack.o netTrack.o pslTrack.o rmskTrack.o \
 	sampleTracks.o wabaTrack.o wigTrack.o cds.o \
-	wigMafTrack.o encode.o variation.o
+	wigMafTrack.o encode.o variation.o transcriptome.o
 
 include ../../inc/cgi_build_rules.mk
 
@@ -21,4 +21,5 @@ mgsc: compile
 compile: $O 
 	${CC} $O ${MYLIBS} ${L}
 	mv a.out $A
+	strip $A
 	chmod a+rx $A
