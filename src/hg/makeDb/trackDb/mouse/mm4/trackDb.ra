@@ -225,12 +225,3 @@ group compGeno
 priority 150.1
 visibility pack
 type bed 3
-
-track encodeRegions
-shortLabel ENCODE Regions
-longLabel ENCODE Orthologous Regions
-group encode
-priority 170
-color 150,100,30
-visibility hide
-type bed 4 .
