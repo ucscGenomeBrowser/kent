@@ -1146,6 +1146,7 @@ bad rep range in: 237   149     0       152     chrUn   96855194        96855206
     # add entry to trackDb.ra in ~kent/src/hg/makeDb/trackDb/zebrafish/danRer2
 
 # RH MAP TRACK (DONE, 2004-12-07, hartera)
+# create sym links to RH sequences in /gbdb/danRer2 (2004-12-17, hartera)
     # Data from Leonard Zon's lab at the Childrens Hospital, Boston
     # Rh map data consists of 8707 genomic sequences:
     #   (1) 2835 BAC clone ends (Max Planck Inst.  Robert
@@ -1214,12 +1215,16 @@ bad rep range in: 237   149     0       152     chrUn   96855194        96855206
     # 8492 out of 8690 sequences aligned (98%)
     # Add RH Map sequences
     # Copy sequences to gbdb if they are not there already
-    mkdir -p /gbdb/danRer1/rhmap
+    # create sym link in /gbdb/danRer2 directory instead of /gbdb/danRer1
+    # (2004-12-17, hartera)
+    mkdir -p /gbdb/danRer2/rhMap
     ln -s \
       /cluster/data/danRer1/bed/ZonLab/rhmap/seq/rhcontigs.fa \
-       /gbdb/danRer1/rhmap
+       /gbdb/danRer2/rhMap
     cd /cluster/data/danRer2/bed/ZonLab/rhMap
     hgLoadSeq danRer2 /gbdb/danRer1/rhmap/rhcontigs.fa
+    # change extFile entry
+    echo 'update extFile set path = "/gbdb/danRer2/rhMap/rhcontigs.fa" where id = 15513;' | hgsql danRer2
 
 # MAKE HGCENTRALTEST BLATSERVERS ENTRY FOR DANRER2
 # (DONE, 2004-12-08, hartera)
@@ -1313,6 +1318,8 @@ danRer2.downloadDir = danRer2
     end
 
 # CHAIN HUMAN (hg17) BLASTZ (DONE, 2004-12-10, hartera)
+# APPLY chainAntiRepeat TO REMOVE CHAINS THAT ARE THE RESULTS OF REPEATS
+# AND DEGENERATE DNA (DONE, 2004-12-21, hartera)
     # Run axtChain on little cluster
     ssh kki
     cd /cluster/data/danRer2/bed/blastz.hg17.swap
@@ -1363,7 +1370,6 @@ doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain} {check
     cd /cluster/data/danRer2/bed/blastz.hg17.swap/axtChain
     chainMergeSort run1/chain/*.chain > all.chain
     chainSplit chain all.chain
-
     # take a look at score distr's
     foreach f (chain/*.chain)
       grep chain $f | awk '{print $2;}' | sort -nr > /tmp/score.$f:t:r
@@ -1379,9 +1385,26 @@ doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain} {check
     mv all.chain all.chain.unfiltered
     chainFilter -minScore=5000 all.chain.unfiltered > all.chain
     chainSplit chain all.chain
+
+    # remove repeats from chains and reload into database
+    # (2004-12-21, hartera)
+    
+    mv chain chainRaw
+    mkdir chain
+    cd chainRaw
+    foreach f (*.chain)
+       set c = $f:r
+       echo $c 
+       nice chainAntiRepeat /iscratch/i/danRer2/nib \
+                       /iscratch/i/gs.18/build35/bothMaskedNibs $f \
+                       ../chain/$c.chain
+    end
+    cd ..  
+    chainMergeSort ./chain/*.chain > all.chain.antirepeat
+    chainSplit chainAR all.chain.antirepeat
     # load filtered chains and check
     ssh hgwdev
-    cd /cluster/data/danRer2/bed/blastz.hg17.swap/axtChain/chain
+    cd /cluster/data/danRer2/bed/blastz.hg17.swap/axtChain/chainAR
     foreach i (*.chain)
         set c = $i:r
         hgLoadChain danRer2 ${c}_chainHg17 $i
@@ -1396,12 +1419,21 @@ doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain} {check
 # featureBits -chrom=chr1 danRer1 refGene:cds chainHg17Link -enrichment
 # refGene:cds 0.529%, chainHg17Link 3.924%, both 0.409%, cover 77.24%, 
 # enrich 19.69x
+# number of rows for chr1:
+# chainHg17Link 185694
+# after using chainAntiRepeat
+# chainHg17ARLink 176455
+# after chainAntiRepeat done on filtered chains:
+# featureBits -chrom=chr1 danRer2 refGene:cds chainHg17ARLink -enrichment
+# refGene:cds 0.512%, chainHg17ARLink 4.625%, both 0.398%, cover 77.79%, 
+# enrich 16.82x
 
 # NET HUMAN (hg17) BLASTZ (DONE, 2004-12-10,hartera)
+# RE-DO NET WITH CHAINS FILTERED BY chainAntiRepeat (DONE, 2004-12-21,hartera)
     ssh kksilo
     cd /cluster/data/danRer2/bed/blastz.hg17.swap/axtChain
     mkdir preNet
-    cd chain
+    cd chainAR
     foreach i (*.chain)
        echo preNetting $i
        /cluster/bin/i386/chainPreNet $i ../../S1.len ../../S2.len \
@@ -1418,7 +1450,7 @@ doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain} {check
     end
     cd ..
     cat n1/*.net | /cluster/bin/i386/netSyntenic stdin noClass.net
-    # memory usage 130883584, utime 1067 s/100, stime 101
+    # memory usage 126734336, utime 657 s/100, stime 69
     # Add classification info using db tables:
     # netClass looks for ancient repeats in one of the databases
     # hg17 has this table - hand-curated by Arian but this is for
@@ -1430,9 +1462,13 @@ doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain} {check
     time netClass noClass.net danRer2 hg17 humanhg17.net \
          -tNewR=/cluster/bluearc/danRer2/linSpecRep.notInHuman \
          -qNewR=/cluster/bluearc/hg17/linSpecRep.notInZebrafish -noAr
-    # 86.150u 50.120s 3:50.89 59.0%   0+0k 0+0io 200pf+0w
+    # 87.940u 51.110s 4:05.95 56.5%   0+0k 0+0io 631pf+0w 
     # load net into database
     netFilter -minGap=10 humanhg17.net |  hgLoadNet danRer2 netHg17 stdin
+# featureBits danRer1 refGene:cds netHg17 -enrichment
+# refGene:cds 0.462%, netHg17 27.868%, both 0.384%, cover 83.21%, enrich 2.99x
+# featureBits danRer2 refGene:cds netHg17 -enrichment
+# refGene:cds 0.468%, netHg17 30.608%, both 0.406%, cover 86.82%, enrich 2.84x
 
 # BLASTZ SWAP FOR mm5 vs danRer2 BLASTZ TO CREATE danRer2 vs mm5 BLASTZ
 # (DONE, 2004-12-13, hartera)
@@ -1682,6 +1718,8 @@ zip -j est.zip est.fa
     # Take a look at bigZips/* and chromosomes/*, update their README.txt's
 
 # MAKE VSHG17 DOWNLOADABLES (DONE, 2004-12-14, hartera)
+# REMAKE FOR CHAINS AND NET AFTER USING chainAntiRepeat 
+# (DONE, 2004-12-21, hartera)
     ssh hgwdev
     cd /cluster/data/danRer2/bed/blastz.hg17.swap/axtChrom
     set gp = /usr/local/apache/htdocs/goldenPath/danRer2
@@ -1691,10 +1729,12 @@ zip -j est.zip est.fa
     gzip *.axt
     md5sum *.gz > md5sum.txt
     
-    # copy chains and nets to downloads area
+    # copy chains and net to downloads area
+    # re-make chains and net downloadables (2004-12-21, hartera)
+    rm $gp/vsHg17/human*.gz $gp/vsHg17/md5sum.txt
     cd /cluster/data/danRer2/bed/blastz.hg17.swap/axtChain
-    gzip -c all.chain > /cluster/data/danRer2/zip/human.chain.gz
-    gzip -c humanhg17.net > /cluster/data/danRer2/zip/human.net.gz
+    gzip -c all.chain.antirepeat > /cluster/data/danRer2/zip/humanHg17.chain.gz
+    gzip -c humanhg17.net > /cluster/data/danRer2/zip/humanHg17.net.gz
     cd $gp/vsHg17
     mv /cluster/data/danRer2/zip/human*.gz .
     md5sum *.gz > md5sum.txt
@@ -1954,6 +1994,7 @@ axtChain $1 /iscratch/i/danRer2/nib \
 # refGene:cds 0.529%, chainFr1Link 4.686%, both 0.450%, cover 85.11%, enrich 18.16x
 
 # NET FUGU (fr1) BLASTZ (DONE, 2004-12-14, hartera)
+# REMADE NET FOR FUGU (2004-12-15, hartera)
     ssh kksilo
     cd /cluster/data/danRer2/bed/blastz.fr1/axtChain
     mkdir preNet
@@ -1976,12 +2017,14 @@ axtChain $1 /iscratch/i/danRer2/nib \
                                                                                 
     cd ..
     cat n1/*.net | /cluster/bin/i386/netSyntenic stdin noClass.net
-    # memory usage 108793856, utime 965 s/100, stime 287
+    # memory usage 108797952, utime 679 s/100, stime 103
     # Add classification info using db tables:
     ssh hgwdev
     cd /cluster/data/danRer2/bed/blastz.fr1/axtChain
     # use -noAr option - don't look for ancient repeats
-    netClass -noAr noClass.net danRer1 fr1 fuguFr1.net
+    # redo net as used danRer1 for netClass instead of danRer2 (2004-12-15)
+    # and load new net into database
+    netClass -noAr noClass.net danRer2 fr1 fuguFr1.net
                                                                                 
     # Load the nets into database
     ssh hgwdev
@@ -1993,6 +2036,7 @@ axtChain $1 /iscratch/i/danRer2/nib \
 # refGene:cds 0.461%, netFr1 17.530%, both 0.391%, cover 84.78%, enrich 4.84x
 
 # MAKE VSFR1 DOWNLOADABLES (DONE, 2004-12-15, hartera)
+# REPLACE FR1 NET WITH NEW VERSION IN DOWNLOADS (2004-12-15, hartera)
     ssh hgwdev
     cd /cluster/data/danRer2/bed/blastz.fr1/axtChrom
     set gp = /usr/local/apache/htdocs/goldenPath/danRer2
@@ -2016,26 +2060,30 @@ axtChain $1 /iscratch/i/danRer2/nib \
     cd /cluster/data/danRer2/bed/blastz.fr1
     nice rm axtChain/run1/chain/* &
     nice rm -fr axtChain/n1 axtChain/noClass.net &
-    nice gzip axtChrom/* pslChrom/* axtChain/all.chainFilt5k axtChain/all.chain.unfiltered xtChain/*.net &
+    nice gzip axtChrom/* pslChrom/* axtChain/all.chainFilt5k axtChain/all.chain.unfiltered axtChain/*.net &
+    nice rm -r axtChain/chain axtChain/preNet &
 
 # BLASTZ FOR TETRAODON (tetNig1) (in progress, 2004-12-14, hartera)
     # blastz requires lineage-specific repeats but there are none
     # available between these two fish species 
     ssh kk
-    mkdir -p /cluster/data/danRer2/bed/blastz.tetNig1.2004-12-14
-    ln -s /cluster/data/danRer2/bed/blastz.tetNig1.2004-12-14 \
+    mkdir -p /cluster/data/danRer2/bed/blastz.tetNig1.2004-12-21
+    ln -s /cluster/data/danRer2/bed/blastz.tetNig1.2004-12-21 \
           /cluster/data/danRer2/bed/blastz.tetNig1
     cd /cluster/data/danRer2/bed/blastz.tetNig1
+# use tetraodon sequence in contigs for dynamic masking - see below
 cat << '_EOF_' > DEF
-# zebrafish (danRer2) vs. Fugu (fr1)
+# zebrafish (danRer2) vs. tetraodon (tetNig1)
 export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/bin/i386:/cluster/home/angie/schwartzbin
-                                                                                
-ALIGN=blastz-run
+
+# use BLASTZ_M=50 in blastz-run1
+ALIGN=blastz-run1
 BLASTZ=blastz
-BLASTZ_H=2000
+BLASTZ_H=2500
+
 #BLASTZ_ABRIDGE_REPEATS=1 if SMSK is specified
 BLASTZ_ABRIDGE_REPEATS=0
-                                                                                
+
 # TARGET - zebrafish (danRer2)
 SEQ1_DIR=/iscratch/i/danRer2/nib
 SEQ1_RMSK=
@@ -2045,35 +2093,34 @@ SEQ1_SMSK=
 SEQ1_FLAG=
 SEQ1_IN_CONTIGS=0
 # 10 MB chunk for target
-SEQ1_CHUNK=10000000
-SEQ1_LAP=10000
-                                                                                
+SEQ1_CHUNK=500000
+SEQ1_LAP=500
+
 # QUERY - Tetraodon (tetNig1)
 # soft-masked chrom nib
-SEQ2_DIR=/iscratch/i/tetNig1/nib
+SEQ2_DIR=/iscratch/i/tetNig1/contigs
 SEQ2_RMSK=
 SEQ2_SMSK=
 SEQ2_FLAG=
-SEQ2_IN_CONTIGS=0
-# 10 Mbase for query
-SEQ2_CHUNK=10000000
-SEQ2_LAP=0
-                                                                                
+SEQ2_IN_CONTIGS=1
+SEQ2_CHUNK=
+SEQ2_LAP=
+
 BASE=/cluster/data/danRer2/bed/blastz.tetNig1
-                                                                                
+
 DEF=$BASE/DEF
-RAW=$BASE/raw
+RAW=$BASE/raw 
 CDBDIR=$BASE
 SEQ1_LEN=$BASE/S1.len
 SEQ2_LEN=$BASE/S2.len
-                                                                                
+
 #DEBUG=1
 '_EOF_'
     # << this line keeps emacs coloring happy
                                                                                 
     # save the DEF file in the current standard place
     chmod +x DEF
-    cp DEF ~angie/hummus/DEF.danRer2-tetNig1.2004-12-14
+    cp DEF ~angie/hummus/DEF.danRer2-tetNig1.2004-12-21
 
     # setup cluster run
     # source the DEF file
@@ -2084,5 +2131,211 @@ SEQ2_LEN=$BASE/S2.len
     # check batch looks ok then
     para try, check, push, check, ....
 # para time
+# Completed: 3193 of 3193 jobs
+# CPU time in finished jobs:    4460310s   74338.50m  1238.97h   51.62d  0.141 y
+# IO & Wait Time:                 41176s     686.27m    11.44h    0.48d  0.001 y
+# Average job time:                1410s      23.50m     0.39h    0.02d
+# Longest job:                     2398s      39.97m     0.67h    0.03d
+# Submission to last job:         12372s     206.20m     3.44h    0.14d
  
+    ssh kki
+    cd /cluster/data/danRer2/bed/blastz.tetNig1
+    bash # if a csh/tcsh user
+    . ./DEF
+    /cluster/data/danRer2/jkStuff/BlastZ_run1.sh
+    cd run.1
+    para try, check, push, etc ...
+# para time
+# Completed: 3193 of 3193 jobs
+# CPU time in finished jobs:        401s       6.69m     0.11h    0.00d  0.000 y
+# IO & Wait Time:                  8321s     138.68m     2.31h    0.10d  0.000 y
+# Average job time:                   3s       0.05m     0.00h    0.00d
+# Longest job:                        9s       0.15m     0.00h    0.00d
+# Submission to last job:           906s      15.10m     0.25h    0.01d
 
+    #   Third cluster run to convert lav's to axt's
+    ssh kki
+    cd /cluster/data/danRer2/bed/blastz.tetNig1
+    mkdir axtChrom
+    # a new run directory
+    mkdir run.2
+    cd run.2
+cat << '_EOF_' > do.csh
+#!/bin/csh
+cd $1
+cat `ls -1 *.lav | sort -g` \
+| lavToAxt -fa stdin /iscratch/i/danRer2/nib \
+/iscratch/i/tetNig1/contigs/tetNig1Contigs.fa stdout \
+| axtSort stdin $2
+'_EOF_'
+    # << this line makes emacs coloring happy
+    chmod a+x do.csh
+    cat << '_EOF_' > gsub
+#LOOP
+./do.csh {check in exists $(path1)} {check out line+ /cluster/data/danRer2/bed/blastz.tetNig1/axtChrom/$(root1).axt}
+#ENDLOOP
+'_EOF_'
+    # << this line makes emacs coloring happy
+    \ls -1Sd ../lav/chr* > chrom.list
+    gensub2 chrom.list single gsub jobList
+    wc -l jobList
+    head jobList
+    para create jobList
+    para try, check, push, check,...
+# para time
+# Completed: 28 of 28 jobs
+# CPU time in finished jobs:        242s       4.04m     0.07h    0.00d  0.000 y
+# IO & Wait Time:                   729s      12.14m     0.20h    0.01d  0.000 y
+# Average job time:                  35s       0.58m     0.01h    0.00d
+# Longest job:                      121s       2.02m     0.03h    0.00d
+# Submission to last job:           192s       3.20m     0.05h    0.00d
+    # lift up query sequences
+    #- Lift up the 500KB chunk .out's to 5MB ("pseudo-contig") level
+    ssh kksilo
+    cd /cluster/data/danRer2/bed/blastz.tetNig1
+
+    foreach d (axtChrom/chr*.axt)
+      echo $d
+      liftUp -axtQ ${d}.out.axt \
+      /cluster/data/tetNig1/bed/blastzSelf/contigSeqs/500kbcontigs.lft warn $d \
+        > /dev/null
+    end
+
+    #- Lift pseudo-contigs to chromosome level
+    # check this is working correctly
+    set dr = "/cluster/data/danRer2"
+    foreach c (`cat ${dr}/chrom.lst`)
+      echo lifting $c
+      liftUp -axtQ ./axtChrom/chr${c}.out2.axt \
+         /cluster/data/tetNig1/jkStuff/liftAll.lft warn \
+        ./axtChrom/chr${c}.axt.out.axt > /dev/null
+    end
+    cd axtChrom
+    foreach c (`cat ${dr}/chrom.lst`)
+       mv chr${c}.axt chr${c}.axt.old
+       mv chr${c}.out2.axt chr${c}.axt
+       rm chr${c}.axt.out.axt
+    end
+   # translate sorted axt files into psl
+    ssh kolossus
+    cd /cluster/data/danRer2/bed/blastz.tetNig1
+    mkdir -p pslChrom
+    # need to copy S2.len for whole tetNig1 genome
+    set tbl = "blastzTetNig1"
+    foreach f (axtChrom/chr*.axt)
+      set c=$f:t:r
+      echo "Processing chr $c"
+      /cluster/bin/i386/axtToPsl $f \
+              S1.len S2contigs.len pslChrom/${c}_${tbl}.psl
+    end 
+    # UP TO HERE
+    # Load database tables
+    ssh hgwdev
+    cd /cluster/data/danRer2/bed/blastz.tetNig1/pslChrom                                                   
+    foreach f (./*.psl)
+      /cluster/bin/i386/hgLoadPsl danRer2 $f
+      echo "$f Done"
+    end
+# H=2000
+# featureBits -chrom=chr1 danRer2 refGene:cds blastzTetNig1 -enrichment
+# refGene:cds 0.512%, blastzTetNig1 22.057%, both 0.435%, cover 84.94%, 
+# enrich 3.85x
+# H=2000 and L=8000
+# featureBits -chrom=chr1 danRer2 refGene:cds blastzTetNig1L8k -enrichment
+# refGene:cds 0.512%, blastzTetNig1L8k 16.326%, both 0.401%, cover 78.28%, 
+# enrich 4.80x
+# use query in contigs in one file and use dynamic masking with M=100
+# should mask out more sequence in query, tetraodon has no specific repeats
+# library so it is not fully repeat masked. H=2500, M=100
+# featureBits -chrom=chr1 danRer2 refGene:cds blastzTetNig1Contigs -enrichment
+# refGene:cds 0.512%, blastzTetNig1Contigs 13.052%, both 0.427%, cover 83.43%, 
+# enrich 6.39x
+# contigs used as above but H=2000
+#featureBits -chrom=chr1 danRer2 refGene:cds blastzTetNig1ContigsH2k -enrichment
+# refGene:cds 0.512%, blastzTetNig1ContigsH2k 17.517%, both 0.433%, 
+# cover 84.51%, enrich 4.82x
+# contigs used with H=2500, L=6000
+# refGene:cds 0.512%, blastzTetNig1ContigsL6k 11.380%, both 0.415%,
+# cover 80.94%, enrich 7.11x
+# use M=50 and then try with seq1 in contigs and do swap
+#featureBits -chrom=chr1 danRer2 refGene:cds blastzTetNig1ContigsM50 -enrichment
+# refGene:cds 0.512%, blastzTetNig1ContigsM50 12.643%, both 0.427%, cover 83.42%# ,enrich 6.60x
+# using contigs and dynamic masking improves the enrichment and makes little
+# difference to coverage. the blastz track % is lower since more sequence
+# is being masked and since coverage is not much different, it is probably
+# being masked in non coding regions
+# at chr1:6,128,109-6,135,734 there are a lot of short alignments in low
+# complexity regions that are removed using L=6000.
+# Use contigs with H=2500, keep lower scoring alignments until after chaining
+# Number of rows:
+# blastzTetNig1	2360350 
+# blastzTetNig1L8k 1177874
+# blastzTetNig1Contigs 725076 
+# blastzTetNig1ContigsH2k 825927
+# blastzTetNig1ContigsL6k 538149
+# blastzTetNig1ContigsM50 479228
+# Using M=50 reducse the number of alignments but coverage is the same as 
+# for using M=100 so use the dynamic masking with M=50 and H=2500
+
+# BACENDS (in progress, 2004-12-16, hartera)
+# provided by Anthony DiBiase, Yi Zhou and Leonard Zon at the Boston
+# Children's Hospital. Collaborated with them on this track.
+# Anthony DiBiase:adibiase@enders.tch.harvard.edu
+# Yi Zhou:yzhou@enders.tch.harvard.edu
+# BAC clone end sequences are from Robert Geisler's lab,
+# Max Planck Institute for Developmental Biology, Tuebingen, Germany
+    ssh kksilo
+    mkdir -p /cluster/data/danRer2/bed/ZonLab/bacends
+    cd /cluster/data/danRer2/bed/ZonLab/bacends 
+    # copy BAC ends sequence from previous assembly
+    cp /cluster/data/danRer1/bed/ZonLab/bacends/bacends.fa .
+    faSize bacends.fa
+    # 486978153 bases (39070196 N's 447907957 real) in 594614 sequences in
+    # 1 files Total size: mean 819.0 sd 230.3 min 0 (zKp108-H09.za)
+    # max 5403 (zC259G13.zb) median 796
+    # N count: mean 65.7 sd 154.7
+    mkdir -p /iscratch/i/danRer2/bacends
+
+    # if not split alreday, split up sequence for cluster runs
+    faSplit sequence bacends.fa 20 /iscratch/i/danRer2/bacends/bacends
+    ssh kkr1u00
+    # iSync bacends to kilokluster
+    iSync
+    ssh kk
+    cd /cluster/data/danRer2/bed/ZonLab/bacends
+    ls -1S /iscratch/i/danRer1/bacends/*.fa > bacends.lst
+    ls -1S /iscratch/i/danRer2/trfFa/*.fa > genome.lst
+    cat << '_EOF_' > template
+#LOOP
+/cluster/bin/i386/blat $(path1) $(path2) -tileSize=10 -ooc=/iscratch/i/danRer2/10.ooc {check out line+ psl/$(root1)_$(root2).psl}
+#ENDLOOP
+'_EOF_'
+   # << this line keeps emacs coloring happy
+    mkdir psl
+    gensub2 genome.lst bacends.lst template jobList
+    cd /cluster/data/danRer2/bed/ZonLab/bacends
+    para create jobList
+    para try, check, push, check, ...
+# para time
+# Completed: 5980 of 5980 jobs
+# CPU time in finished jobs:    5427997s   90466.61m  1507.78h   62.82d  0.172 y
+# IO & Wait Time:                516171s    8602.85m   143.38h    5.97d  0.016 y
+# Average job time:                 994s      16.57m     0.28h    0.01d
+# Longest job:                    10284s     171.40m     2.86h    0.12d
+# Submission to last job:         12422s     207.03m     3.45h    0.14d
+  
+Completed: 2990 of 2990 jobs
+# CPU time in finished jobs:    5425708s   90428.47m  1507.14h   62.80d  0.172 y
+# IO & Wait Time:                 39306s     655.10m    10.92h    0.45d  0.001 y
+# Average job time:                1828s      30.46m     0.51h    0.02d
+# Longest job:                    18662s     311.03m     5.18h    0.22d
+# Submission to last job:         25307s     421.78m     7.03h    0.29d
+
+    # back on kksilo, filter and lift results:
+    ssh kksilo
+    cd /cluster/data/danRer2/bed/ZonLab/bacends
+    pslCheck ./psl/*.psl >& pslCheck.log
+    foreach p (./psl/*.psl)
+      pslCheck $p >>& pslCheck.log
+    end
+    # 7344 problems with overlapping exons reported by pslCheck
