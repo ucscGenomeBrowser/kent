@@ -1407,3 +1407,47 @@ printf "./runPsLayout.sh %s %s %s {check out line+ psl/%s/%s.psl}\n",
     liftUp chr22.psl /cluster/data/hg17/jkStuff/liftAll.lft \
 	warn repsSingle.psl
     hgLoadPsl -table=cloneTest hg17 chr22.psl
+
+# BUILD KNOWN GENES TABLES (DONE 6/8/04 Fan)
+
+  hgsql hg17 -e "create database kgHg17"
+  
+  cd /cluster/store6/kgDB/bed
+  mkdir kgHg17
+  cd /cluster/store6/kgDB/bed/kgHg17
+
+  ~/src/hg/protein/KGprocess.sh kgHg17 hg17 040515
+  
+  The script was run successfully with the last message:
+
+  	Tue Jun  8 15:36:52 PDT 2004 DONE =========================
+
+  After initial inspection of tables in kgHg17, do the following
+  from mySql prompt:
+
+  alter table kgHg17.cgapAlias rename as hg17.cgapAlias;
+  alter table kgHg17.cgapBiocDesc rename as hg17.cgapBiocDesc;
+  alter table kgHg17.cgapBiocPathway rename as hg17.cgapBiocPathway;
+  alter table kgHg17.dupSpMrna rename as hg17.dupSpMrna;
+  alter table kgHg17.keggMapDesc rename as hg17.keggMapDesc;
+  alter table kgHg17.keggPathway rename as hg17.keggPathway;
+  alter table kgHg17.kgAlias rename as hg17.kgAlias;
+  alter table kgHg17.kgProtAlias rename as hg17.kgProtAlias;
+  alter table kgHg17.kgXref rename as hg17.kgXref;
+  alter table kgHg17.knownGene rename as hg17.knownGene;
+  alter table kgHg17.knownGeneLink rename as hg17.knownGeneLink;
+  alter table kgHg17.knownGeneMrna rename as hg17.knownGeneMrna;
+  alter table kgHg17.knownGenePep rename as hg17.knownGenePep;
+  alter table kgHg17.mrnaRefseq rename as hg17.mrnaRefseq;
+  alter table kgHg17.spMrna rename as hg17.spMrna;
+
+  hg17.knownGene has 43,401 entries and hg16.knownGene has 43,232 entries.
+  and running featireBits shows:
+  
+   	featureBits hg17 knownGene
+   	63983072 bases of 2866216770 (2.232%) in intersection
+   
+   	featureBits hg16 knownGene
+   	63781799 bases of 2865248791 (2.226%) in intersection
+  
+  
