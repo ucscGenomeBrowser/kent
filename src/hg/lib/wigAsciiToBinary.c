@@ -40,7 +40,7 @@
 #include	"wiggle.h"
 
 
-static char const rcsid[] = "$Id: wigAsciiToBinary.c,v 1.6 2004/05/13 17:31:50 hiram Exp $";
+static char const rcsid[] = "$Id: wigAsciiToBinary.c,v 1.7 2004/05/14 22:34:19 hiram Exp $";
 
 /*	This list of static variables is here because the several
  *	subroutines in this source file need access to all this business
@@ -443,6 +443,9 @@ while (lineFileNext(lf, &line, NULL))
 	prevChromName = cloneString(chromName);
 	}
 
+    /*	We must be in one of these data formats at this point */
+    if (!(variableStep || fixedStep || bedData))
+	errAbort("at the line beginning: %s, variableStep or fixedStep data declaration not found or BED data 4 column format not recognized.", words[0]); 
     if (variableStep && (wordCount != 2))
 	errAbort("Expecting two words for variableStep data at line %lu, found %d",
 	    lineCount, wordCount);
