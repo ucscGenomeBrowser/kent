@@ -168,7 +168,7 @@ slAddHead(&axtList, axt);
 slReverse(&axtList);
 return axtList;
 }
-#endif DUPE
+#endif /* DUPE */
 
 void writeGaps(struct chain *chain, FILE *f)
 /* Write gaps to simple two column file. */
