@@ -764,3 +764,5 @@
       and chains, squished and packed display modes, and grouping.
 451 - New version (V17) of the genome browser that's survived some
       testing.
+452 - Blat v. 20. Genome Browser v. 17 with relatively minor updates. 
+      Parasol v. 6 (UDP + threads). 
