@@ -20,7 +20,7 @@
 #include "htmlPage.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: gala.c,v 1.6 2004/11/19 20:59:49 kent Exp $";
+static char const rcsid[] = "$Id: gala.c,v 1.7 2004/12/08 00:03:51 kate Exp $";
 
 boolean galaAvail(char *db) 
 /* Return TRUE if GALA is available for this build */
@@ -235,8 +235,6 @@ else
     char headerText[512];
     int redirDelay = 0;
     char urlForResultTrack[PATH_LEN];
-    struct lineFile *lf;
-    char *line;
 
     /* Overwrite existing custom track for GALA: */
         {

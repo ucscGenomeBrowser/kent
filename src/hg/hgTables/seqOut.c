@@ -16,7 +16,7 @@
 #include "hgSeq.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: seqOut.c,v 1.13 2004/11/19 20:59:49 kent Exp $";
+static char const rcsid[] = "$Id: seqOut.c,v 1.14 2004/12/08 00:03:51 kate Exp $";
 
 static char *genePredMenu[] = 
     {
@@ -237,7 +237,7 @@ textOpen();
 for (region = regionList; region != NULL; region = region->next)
     {
     struct lm *lm = lmInit(64*1024);
-    struct bed *bed, *bedList = cookedBedList(conn, curTable, region, lm, &fieldCount);
+    struct bed *bedList = cookedBedList(conn, curTable, region, lm, &fieldCount);
     hgSeqBed(hti, bedList);
     lmCleanup(&lm);
     }
@@ -246,7 +246,6 @@ for (region = regionList; region != NULL; region = region->next)
 void doGenePredSequence(struct sqlConnection *conn)
 /* Output genePred sequence. */
 {
-char *table = curTable;
 char *type = cartString(cart, hgtaGeneSeqType);
 
 if (sameWord(type, "protein"))

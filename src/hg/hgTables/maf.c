@@ -15,7 +15,7 @@
 #include "hgMaf.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: maf.c,v 1.5 2004/12/03 22:27:42 kent Exp $";
+static char const rcsid[] = "$Id: maf.c,v 1.6 2004/12/08 00:03:51 kate Exp $";
 
 boolean isMafTable(char *database, struct trackDb *track, char *table)
 /* Return TRUE if table is maf. */
@@ -46,7 +46,6 @@ mafWriteStart(stdout, NULL);
 for (region = regionList; region != NULL; region = region->next)
     {
     struct mafAli *mafList, *maf;
-    int end = region->end;
     char dbChrom[64];
     safef(dbChrom, sizeof(dbChrom), "%s.%s", database, region->chrom);
     mafList = mafLoadInRegion(conn, table, region->chrom, 

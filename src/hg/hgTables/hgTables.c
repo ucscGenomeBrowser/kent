@@ -23,7 +23,7 @@
 #include "joiner.h"
 #include "bedCart.h"
 
-static char const rcsid[] = "$Id: hgTables.c,v 1.95 2004/12/02 06:18:58 kent Exp $";
+static char const rcsid[] = "$Id: hgTables.c,v 1.96 2004/12/08 00:03:51 kate Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -780,6 +780,7 @@ static void addTablesAccordingToTrackType(struct slName **pList,
 	struct hash *uniqHash, struct trackDb *track)
 /* Parse out track->type and if necessary add some tables from it. */
 {
+struct slName *name;
 char *trackDupe = cloneString(track->type);
 if (trackDupe != NULL && trackDupe[0] != 0)
     {
@@ -790,11 +791,23 @@ if (trackDupe != NULL && trackDupe[0] != 0)
 	char *wigTrack = trackDbSetting(track, "wiggle");
 	if (wigTrack != NULL) 
 	    {
-	    struct slName *name = slNameNew(wigTrack);
+	    name = slNameNew(wigTrack);
 	    slAddHead(pList, name);
 	    hashAdd(uniqHash, wigTrack, NULL);
 	    }
 	}
+    if (trackDbIsComposite(track))
+        {
+        struct trackDb *subTdb;
+        struct slName *subList = NULL;
+        for (subTdb = track->subtracks; subTdb != NULL; subTdb = subTdb->next)
+            {
+	    name = slNameNew(subTdb->tableName);
+	    slAddTail(&subList, name);
+	    hashAdd(uniqHash, subTdb->tableName, NULL);
+            }
+        pList = slCat(pList, subList);
+        }
     }
 freez(&trackDupe);
 }
@@ -830,7 +843,9 @@ for (jp = jpList; jp != NULL; jp = jp->next)
     }
 slNameSort(&nameList);
 name = slNameNew(trackTable);
-slAddHead(&nameList, name);
+if (!trackDbIsComposite(track))
+    /* suppress for composite tracks -- only the subtracks have tables */
+    slAddHead(&nameList, name);
 addTablesAccordingToTrackType(&nameList, uniqHash, track);
 hashFree(&uniqHash);
 return nameList;

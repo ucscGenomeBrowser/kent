@@ -14,7 +14,7 @@
 #include "featureBits.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: intersect.c,v 1.19 2004/11/21 17:44:53 kent Exp $";
+static char const rcsid[] = "$Id: intersect.c,v 1.20 2004/12/08 00:03:51 kate Exp $";
 
 /* We keep two copies of variables, so that we can
  * cancel out of the page. */
@@ -298,7 +298,6 @@ static struct bed *bitsToBed4List(Bits *bits, int bitSize,
 /* Translate ranges of set bits to bed 4 items. */
 {
 struct bed *bedList = NULL, *bed;
-boolean thisBit, lastBit;
 int start = 0;
 int end = 0;
 int id = 0;

@@ -15,7 +15,7 @@
 #include "hgTables.h"
 
 
-static char const rcsid[] = "$Id: joining.c,v 1.36 2004/11/24 01:47:15 kent Exp $";
+static char const rcsid[] = "$Id: joining.c,v 1.37 2004/12/08 00:03:51 kate Exp $";
 
 struct joinedRow
 /* A row that is joinable.  Allocated in joinableResult->lm. */
@@ -66,7 +66,6 @@ for (field = joined->fieldList; field != NULL; field = field->next)
 for (jr = joined->rowList; jr != NULL; jr = jr->next)
     {
     int i;
-    boolean passRow = TRUE;
     if (jr->passedFilter)
 	{
 	for (i=0; i<joined->fieldCount; ++i)
@@ -161,8 +160,8 @@ static void jrRowExpand(struct joinedTables *joined,
 int i;
 struct slName **keys = jr->keys + keyOffset;
 struct slName **fields = jr->fields + fieldOffset;
-struct slName *name, **pList;
 struct lm *lm = joined->lm;
+struct slName *name;
 
 if (fieldCount + fieldOffset > joined->fieldCount)
     internalErr();
@@ -466,7 +465,6 @@ void addOutKeys(struct hash *tableHash, struct joinerPair *routeList,
 struct joinerPair *route;
 struct tableJoiner *tj;
 char fullName[256];
-struct slName *key;
 
 for (route = routeList; route != NULL; route = route->next)
     {
@@ -575,7 +573,6 @@ for (region = regionList; region != NULL; region = region->next)
 	else
 	    {
 	    char *id = row[idFieldIx];
-	    char *e;
 	    if (isFirst)
 		{
 		if (hashLookup(idHash, id))
@@ -799,7 +796,6 @@ for (route = routeList; route != NULL; route = route->next)
 	internalErr();
     if (!tj->loaded)
 	{
-	struct hTableInfo *hti;
 	int keyIx;
 	struct hash *keyHash = NULL;
 	keyIx = findDtfIndex(joined->keyList, route->a);
