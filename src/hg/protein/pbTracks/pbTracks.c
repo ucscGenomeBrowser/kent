@@ -15,7 +15,7 @@
 #include "pbStampPict.h"
 #include "pbTracks.h"
 
-static char const rcsid[] = "$Id: pbTracks.c,v 1.34 2005/02/09 22:57:22 fanhsu Exp $";
+static char const rcsid[] = "$Id: pbTracks.c,v 1.35 2005/03/02 00:49:59 fanhsu Exp $";
 
 boolean hgDebug = FALSE;      /* Activate debugging code. Set to true by hgDebug=on in command line*/
 
@@ -457,6 +457,14 @@ else
     protDisplayID = sqlGetField(conn, protDbName, "spXref3", "displayID", cond_str);
     }
 
+if (proteinID != spFindAcc(spConn, proteinID))
+    {
+    hPrintf("%s seems to be an outdated protein ID.", proteinID);
+    printf("<BR><BR>Please try ");
+    hPrintf("<A HREF=\"http://hgwdev-fanhsu.cse.ucsc.edu/cgi-bin/pbGlobal?proteinID=%s\">  %s</A> instead.\n",
+	     spFindAcc(spConn, proteinID), spFindAcc(spConn, proteinID));fflush(stdout);
+    errAbort(" ");
+    }
 safef(cond_str, sizeof(cond_str), "proteinID='%s'", protDisplayID);
 mrnaID = sqlGetField(conn, database, "knownGene", "name", cond_str);
 
