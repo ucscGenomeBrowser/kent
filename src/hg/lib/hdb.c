@@ -23,7 +23,7 @@ static struct sqlConnCache *hdbCc = NULL;
 static struct sqlConnCache *centralCc = NULL;
 
 static char *hdbHost;
-static char *hdbName = "hg11";
+static char *hdbName = "hg12";
 static char *hdbUser;
 static char *hdbPassword;
 static char *hdbTrackDb = NULL;
