@@ -19,22 +19,29 @@ DOWNLOAD SEQUENCE (DONE 2003-05-12 - Hiram)
 #   Check that you have some valid files. Should be chroms I II III IV V X
 #	in dna, gff and agp formats
     ls -ogrt
-#   There is a Mitochondria sequence.  It is supposedly from NCBI
-#	and it needs to be determined what query will fetch this
-#	sequence.  Until we figure that out, we use the only
-#	copy we have:
-    cp -p /projects/compbio/experiments/worm/idb/nt4/M.dna.gz \
-	CHROMOSOME_M.dna.gz
 #   get out of this download data directory, and create your home symlink
 #	shortcut
     cd ..
     ln -s /cluster/store4/worm/ce1 ~/ce1
     cd ~/ce1
+#   There is a Mitochondria sequence.  It can be found at NCBI
+#	This search sequence at NCBI in 'nucleotide' selects one
+#	entry: X54252:
+#	Caenorhabditis Elegans[Organism] AND mitochondria AND MTCE
+#	I'd like to figure out a wget command to fetch this, but doing
+#	that manually via the WEB browser is not such a big deal.  And
+#	besides, once it is fetched, it is pretty much stable so you can
+#	merely copy from a previous Ce build.  A copy has been manually
+#	placed in ~ce1/ncbi/x54252.fa
+#	
+    sed -e "s/^>.*/>chrM/" ./ncbi/x54252.fa > ./chrM.fa
     mkdir nib
-#   translate to unzipped .fa and to nib
-    foreach f (I II III IV V X M)
+#   translate to unzipped .fa and to nib and rename the agp files
+    foreach f (I II III IV V X)
 	echo -n "${f} "
-	zcat sanger/CHROMOSOME_${f}.dna.gz > chr${f}.fa
+	zcat sanger/CHROMOSOME_${f}.dna.gz | \
+		sed -e "s/CHROMOSOME_/chr/" > chr${f}.fa
+        ln -s sanger/CHROMOSOME_${f}.agp ./chr${f}.agp
 	faToNib chr${f}.fa nib/chr${f}.nib
     end
 #   Typical output:
@@ -45,7 +52,6 @@ DOWNLOAD SEQUENCE (DONE 2003-05-12 - Hiram)
 #	V Writing 20922238 bases in 10461127 bytes
 #	X Writing 17705013 bases in 8852515 bytes
 #	M Writing 13794 bases in 6905 bytes
-
 
 CREATING DATABASE (DONE 2003-05-12 - Hiram)
 
@@ -129,7 +135,7 @@ MAKE GCPERCENT (DONE 2003-05-12 - Hiram)
 	echo 'drop table gcPercent;' | hgsql ce1;
      hgGcPercent ce1 ../../nib
 
-MAKE HGCENTRALTEST ENTRY AND TRACKDB TABLE FOR SC1 (DONE 2002-05-12 - Hiram)
+MAKE HGCENTRALTEST ENTRY AND TRACKDB TABLE FOR CE1 (DONE 2002-05-12 - Hiram)
      ssh hgwdev
     echo 'insert into defaultDb values("Caenorhabditis elegans", "ce1");' \
       | hgsql -h genome-testdb hgcentraltest
@@ -192,7 +198,27 @@ MAKE SANGER GENE TRACK (DONE - 2003-05-19 - Hiram)
     # if you need to delete that table:
 	echo 'drop table sangerGene' | hgsql ce1
 
-# *****************   END HERE 2003-05-19 12:05 - Hiram  ***************
+# Run RepeatMasker on the chromosomes
+    ssh kk
+    cd ~/ce1
+    mkdir RMRun
+    cd RMRun
+    cp -p ../chr*.fa .
+    # create job list
+    rm -f RMJobs
+    foreach f (I II III IV V X M)
+	echo /scratch/hg/RepeatMasker/RepeatMasker -el chr${f}.fa \
+	'{'check out line+ /cluster/store4/worm/ce1/RMRun/chr${f}.fa.out'}' \
+	>> RMJobs
+    end
+    para create RMJobs
+    para try	#	Since there are only 7, this runs them all
+    para check
+    # when they are finished, load the .out files into the database:
+    ssh hgwdev
+    cd ~ce1/RMRun
+    hgLoadOut ce1 chr*.fa.out
+
 
 # MAKING AND STORING mRNA AND EST ALIGNMENTS (WORKING 2003-05-19 - Hiram)
     ssh kkstore
@@ -214,23 +240,23 @@ MAKE SANGER GENE TRACK (DONE - 2003-05-19 - Hiram)
     para create spec
     para try
 
-MAKE HGCENTRALTEST BLATSERVERS ENTRY FOR SC1 (TODO)
+MAKE HGCENTRALTEST BLATSERVERS ENTRY FOR CE1 (TODO)
     ssh hgwdev
     echo 'insert into blatServers values("ce1", "blat10", "17778", "1"); \
           insert into blatServers values("ce1", "blat10", "17779", "0");' \
       | hgsql -h genome-testdb hgcentraltest
 
 
-SIMPLE REPEAT TRACK (DONE 04/15/03)
-    # TRF runs pretty quickly now... it takes a few hours total runtime, 
+SIMPLE REPEAT TRACK (DONE 2003-05-20 - 12:37 - Hiram)
+    # This TRF run takes about an hour on eieio
     # so instead of binrsyncing and para-running, just do this on eieio:
     ssh eieio
-    mkdir ~/sc1/bed/simpleRepeat
-    cd ~/sc1/bed/simpleRepeat
+    mkdir ~/ce1/bed/simpleRepeat
+    cd ~/ce1/bed/simpleRepeat
     mkdir trf
     rm -f jobs.csh
     touch jobs.csh
-    foreach f (/cluster/store5/SARS_Coronavirus_TOR2/*.fa)
+    foreach f (/cluster/store4/worm/ce1/*.fa)
       set fout = $f:t:r.bed
       echo "/cluster/home/kent/bin/i386/trfBig -trf=/cluster/home/kent/bin/i386/trf $f /dev/null -bedAt=trf/$fout -tempDir=/tmp" \
         >> jobs.csh
@@ -238,15 +264,13 @@ SIMPLE REPEAT TRACK (DONE 04/15/03)
     tcsh jobs.csh |& tee jobs.log
     wc -l jobs.csh
     ls -1 trf | wc -l
-# STOPPED HERE -- no simple repeats found.
 
-    # When job is done do:
-    liftUp simpleRepeat.bed ~/sc1/jkStuff/liftAll.lft warn trf/*.bed
-
-    # Load this into the database as so
+    # When jobs are done,
+    # To Load this into the database as so
     ssh hgwdev
-    cd ~/sc1/bed/simpleRepeat
-    hgLoadBed sc1 simpleRepeat simpleRepeat.bed \
+    cd ~/ce1/bed/simpleRepeat
+    cat trf/chr*.bed > simpleRepeat.bed
+    hgLoadBed ce1 simpleRepeat simpleRepeat.bed \
       -sqlTable=$HOME/src/hg/lib/simpleRepeat.sql
 
 
