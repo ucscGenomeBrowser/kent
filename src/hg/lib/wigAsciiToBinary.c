@@ -40,7 +40,7 @@
 #include	"wiggle.h"
 
 
-static char const rcsid[] = "$Id: wigAsciiToBinary.c,v 1.4 2004/05/07 20:01:38 hiram Exp $";
+static char const rcsid[] = "$Id: wigAsciiToBinary.c,v 1.5 2004/05/10 23:46:04 hiram Exp $";
 
 /*	This list of static variables is here because the several
  *	subroutines in this source file need access to all this business
@@ -433,10 +433,12 @@ while (lineFileNext(lf, &line, NULL))
 	    bedChromStart -= 1;	/* zero relative half-open */
 	if (bedChromStart > bedChromEnd)
 	    errAbort("Found chromStart > chromEnd at line %lu (%llu > %llu)",
-		lineCount, bedChromStart, bedChromEnd);
+		lineCount, bedChromStart+1, bedChromEnd);
 	if (bedChromEnd > (bedChromStart + 10000000))
 	    errAbort("Limit of 10,000,000 length specification for bed format at line %lu, found: %llu)",
 		lineCount, bedChromEnd-bedChromStart);
+	if (bedChromStart < previousOffset)
+	    errAbort("chrom positions not in numerical order at line %lu. previous: %llu > %llu <-current", lineCount, previousOffset+1, bedChromStart+1);
 	freez(&prevChromName);
 	prevChromName = cloneString(chromName);
 	}
@@ -492,7 +494,7 @@ while (lineFileNext(lf, &line, NULL))
 	int skippedBases;
 	int spansSkipped;
 	if (Offset < previousOffset)
-	    errAbort("chrom positions not in numerical order at line %lu. previous: %llu > %llu <-current", lineCount, previousOffset, Offset);
+	    errAbort("chrom positions not in numerical order at line %lu. previous: %llu > %llu <-current", lineCount, previousOffset+1, Offset+1);
 	skippedBases = Offset - previousOffset;
 	spansSkipped = skippedBases / dataSpan;
 	if ((spansSkipped * dataSpan) != skippedBases)
