@@ -9,6 +9,10 @@
 #include "psl.h"
 #endif
 
+#ifndef HASH_H
+#include "hash.h"
+#endif
+
 struct bed
 /* Browser extensible data */
     {
@@ -27,6 +31,8 @@ struct bed
     unsigned blockCount; /* Number of blocks. */
     int *blockSizes;     /* Comma separated list of block sizes.  */
     int *chromStarts;    /* Start positions inside chromosome.  Relative to chromStart*/
+
+
     int expCount;	/* Experiment count */
     int *expIds;		/* Comma separated list of Experiment ids */
     float *expScores;	/* Comma separated list of Experiment scores. */
@@ -108,6 +114,10 @@ struct bed *bedLoad12(char **row);
 
 struct bed *bedLoadN(char *row[], int wordCount);
 /* Convert a row of strings to a bed. */
+
+struct bed *bedLoadNAll(char *fileName, int numFields);
+/* Load all bed from a tab-separated file.
+ * Dispose of this with bedFreeList(). */
 
 struct bed *bedLoadNBin(char *row[], int wordCount);
 /* Convert a row of strings to a bed. */
@@ -203,8 +213,15 @@ struct bed *bedFilterByWildNames(struct bed *bedList, struct slName *wildNames);
 /* Given a bed list and a list of names that may include wildcard characters,
  * return the list of bed items whose name matches at least one wildName. */
 
+
+struct bed *bedCommaInN(char **pS, struct bed *ret, int fieldCount);
+/* Create a bed out of a comma separated string looking for fieldCount
+ * fields. This will fill in ret if non-null, otherwise will return a
+ * new bed */
+
 struct hash *readBedToBinKeeper(char *sizeFileName, char *bedFileName, int wordCount);
 /* read a list of beds and return results in hash of binKeeper structure for fast query*/
+
 
 #endif /* BED_H */
 

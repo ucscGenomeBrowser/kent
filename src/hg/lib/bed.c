@@ -8,7 +8,7 @@
 #include "bed.h"
 #include "binRange.h"
 
-static char const rcsid[] = "$Id: bed.c,v 1.17 2003/07/01 22:43:50 baertsch Exp $";
+static char const rcsid[] = "$Id: bed.c,v 1.18 2003/08/13 18:10:47 sugnet Exp $";
 
 void bedStaticLoad(char **row, struct bed *ret)
 /* Load a row from bed table into ret.  The contents of ret will
@@ -325,6 +325,26 @@ if (wordCount > 14)
     sqlFloatDynamicArray(row[14], &bed->expScores, &count);
 return bed;
 }
+
+struct bed *bedLoadNAll(char *fileName, int numFields) 
+/* Load all bed from a tab-separated file.
+ * Dispose of this with bedFreeList(). */
+{
+struct bed *list = NULL, *el;
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+char *row[numFields];
+
+while (lineFileRow(lf, row))
+    {
+    el = bedLoadN(row, numFields);
+    slAddHead(&list, el);
+    }
+lineFileClose(&lf);
+slReverse(&list);
+return list;
+}
+
+
 struct bed *bedLoadNBin(char *row[], int wordCount)
 /* Convert a row of strings to a bed. */
 {
@@ -789,7 +809,88 @@ slReverse(&bedListOut);
 return bedListOut;
 }
 
- 
+
+struct bed *bedCommaInN(char **pS, struct bed *ret, int fieldCount)
+/* Create a bed out of a comma separated string looking for fieldCount
+ * fields. This will fill in ret if non-null, otherwise will return a
+ * new bed */
+{
+char *s = *pS;
+int i;
+
+if (ret == NULL)
+    AllocVar(ret);
+ret->chrom = sqlStringComma(&s);
+ret->chromStart = sqlUnsignedComma(&s);
+ret->chromEnd = sqlUnsignedComma(&s);
+if (fieldCount > 3)
+    ret->name = sqlStringComma(&s);
+if (fieldCount > 4)
+    ret->score = sqlUnsignedComma(&s);
+if (fieldCount > 5)
+    sqlFixedStringComma(&s, ret->strand, sizeof(ret->strand));
+if (fieldCount > 6)
+    ret->thickStart = sqlUnsignedComma(&s);
+else
+    ret->thickStart = ret->chromStart;
+if (fieldCount > 7)
+    ret->thickEnd = sqlUnsignedComma(&s);
+else
+     ret->thickEnd = ret->chromEnd;
+if (fieldCount > 8)
+    ret->reserved = sqlUnsignedComma(&s);
+if (fieldCount > 9)
+    ret->blockCount = sqlUnsignedComma(&s);
+if (fieldCount > 10)
+    {
+    s = sqlEatChar(s, '{');
+    AllocArray(ret->blockSizes, ret->blockCount);
+    for (i=0; i<ret->blockCount; ++i)
+	{
+	ret->blockSizes[i] = sqlSignedComma(&s);
+	}
+    s = sqlEatChar(s, '}');
+    s = sqlEatChar(s, ',');
+    }
+if(fieldCount > 11)
+    {
+    s = sqlEatChar(s, '{');
+    AllocArray(ret->chromStarts, ret->blockCount);
+    for (i=0; i<ret->blockCount; ++i)
+	{
+	ret->chromStarts[i] = sqlSignedComma(&s);
+	}
+    s = sqlEatChar(s, '}');
+    s = sqlEatChar(s, ',');
+    }
+if (fieldCount > 12)
+    ret->expCount = sqlSignedComma(&s);
+if (fieldCount > 13)
+    {
+    s = sqlEatChar(s, '{');
+    AllocArray(ret->expIds, ret->expCount);
+    for (i=0; i<ret->expCount; ++i)
+	{
+	ret->expIds[i] = sqlSignedComma(&s);
+	}
+    s = sqlEatChar(s, '}');
+    s = sqlEatChar(s, ',');
+    }
+if (fieldCount > 14)
+    {
+    s = sqlEatChar(s, '{');
+    AllocArray(ret->expScores, ret->expCount);
+    for (i=0; i<ret->expCount; ++i)
+	{
+	ret->expScores[i] = sqlFloatComma(&s);
+	}
+    s = sqlEatChar(s, '}');
+    s = sqlEatChar(s, ',');
+    }
+*pS = s;
+return ret;
+}
+
 struct hash *readBedToBinKeeper(char *sizeFileName, char *bedFileName, int wordCount)
 /* read a list of beds and return results in hash of binKeeper structure for fast query*/
 {
@@ -827,3 +928,4 @@ lineFileClose(&bf);
 lineFileClose(&lf);
 return hash;
 }
+
