@@ -213,7 +213,6 @@ tg->drawItems = snpMapDrawItems;
 tg->drawItemAt = snpMapDrawItemAt;
 tg->loadItems = loadSnpMap;
 tg->freeItems = freeSnpMap;
-tg->labelColor = MG_BLUE;
 tg->itemColor = snpMapColor;
 tg->itemNameColor = snpMapColor;
 }
