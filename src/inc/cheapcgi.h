@@ -42,6 +42,10 @@ char *cgiUsualString(char *varName, char *usual);
 /* Return value of string if it exists in cgi environment.  
  * Otherwiser return 'usual' */
 
+struct slName *cgiStringList(char *varName);
+/* Find list of cgi variables with given name.  This
+ * may be empty.  Free result with slFreeList(). */
+
 int cgiOptionalInt(char *varName, int defaultVal);
 /* This returns value of varName if it exists in cgi environment, 
  * otherwise it returns defaultVal. */
