@@ -8,7 +8,7 @@
 #include "obscure.h"
 #include "dystring.h"
 
-static char const rcsid[] = "$Id: altPaths.c,v 1.6 2004/07/20 04:21:28 sugnet Exp $";
+static char const rcsid[] = "$Id: altPaths.c,v 1.7 2004/07/20 21:45:50 sugnet Exp $";
 
 static struct optionSpec optionSpecs[] = 
 /* Our acceptable options to be called with. */
@@ -672,10 +672,10 @@ assert(shortVerts[0] == longVerts[0] && shortVerts[3] == longVerts[1]);
 /* If one path has an intron and the other doesn't and are mutally
    exclusive they are retInt. */
 if(shortPath->vCount == 4 && longPath->vCount == 2 &&
-   vTypes[shortVerts[0]] == ggHardStart &&
+   (vTypes[shortVerts[0]] == ggHardStart || vTypes[shortVerts[0]] == ggSoftStart) &&
    vTypes[shortVerts[1]] == ggHardEnd &&
    vTypes[shortVerts[2]] == ggHardStart &&
-   vTypes[shortVerts[3]] == ggHardEnd &&
+   (vTypes[shortVerts[3]] == ggHardEnd || vTypes[shortVerts[3]] == ggSoftEnd) &&
    vTypes[longVerts[0]] == ggHardStart &&
    vTypes[longVerts[1]] == ggHardEnd &&
    isMutallyExclusive(splice, ag, em, source,sink))
@@ -720,18 +720,19 @@ int *shortVerts = shortPath->vertices;
 int *longVerts = longPath->vertices;
 unsigned char *vTypes = ag->vTypes;
 boolean alt5 = FALSE;
-/* Alt5s have 3 vertices in both paths.
-   Alt5s don't start with the source or end with the sink. */
-if( shortPath->vCount != 3 || longPath->vCount != 3 || 
-    shortVerts[0] == source || shortVerts[2] == sink ||
-    longVerts[0] == source || longVerts[2] == sink)
-    return FALSE;
+
 assert(shortVerts[0] == longVerts[0] && shortVerts[2] == longVerts[2]);
+/* Alt5s have 3 vertices in both paths.
+   Alt5s don't end with the sink. */
+if( shortPath->vCount != 3 || longPath->vCount != 3 || 
+    shortVerts[2] == sink)
+    return FALSE;
+
 
 /* If both paths form an exon end and are mutally
    exclusive they are alt5. */
 if(shortPath->vCount == 3 && longPath->vCount == 3 &&
-   vTypes[shortVerts[0]] == ggHardStart &&
+   (vTypes[shortVerts[0]] == ggHardStart || vTypes[shortVerts[0]] == ggSoftStart) &&
    vTypes[shortVerts[1]] == ggHardEnd &&
    vTypes[shortVerts[2]] == ggHardStart &&
    vTypes[longVerts[1]] == ggHardEnd &&
@@ -778,20 +779,20 @@ int *shortVerts = shortPath->vertices;
 int *longVerts = longPath->vertices;
 unsigned char *vTypes = ag->vTypes;
 boolean alt3 = FALSE;
-/* Alt3s have 3 vertices in both paths.
-   Alt3s don't start with the source or end with the sink. */
-if( shortPath->vCount != 3 || longPath->vCount != 3 || 
-    shortVerts[0] == source || shortVerts[2] == sink ||
-    longVerts[0] == source || longVerts[2] == sink)
-    return FALSE;
 assert(shortVerts[0] == longVerts[0] && shortVerts[2] == longVerts[2]);
+/* Alt3s have 3 vertices in both paths.
+   Alt3s don't start with the source. */
+if( shortPath->vCount != 3 || longPath->vCount != 3 || 
+    shortVerts[0] == source)
+    return FALSE;
+
 
 /* If both paths form an exon end and are mutally
    exclusive they are alt3. */
 if(shortPath->vCount == 3 && longPath->vCount == 3 &&
    vTypes[shortVerts[0]] == ggHardEnd &&
    vTypes[shortVerts[1]] == ggHardStart &&
-   vTypes[shortVerts[2]] == ggHardEnd &&
+   (vTypes[shortVerts[2]] == ggHardEnd  || vTypes[shortVerts[2]] == ggSoftEnd) &&
    vTypes[longVerts[1]] == ggHardStart &&
    isMutallyExclusive(splice, ag, em, source,sink))
     alt3 = TRUE;
