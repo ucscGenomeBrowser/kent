@@ -37,6 +37,10 @@ struct hashEl *hashLookup(struct hash *hash, char *name);
 /* Looks for name in hash table. Returns associated element,
  * if found, or NULL if not. */
 
+struct hashEl *hashLookupNext(struct hashEl *hashEl);
+/* Find the next occurance of name that may occur in the table multiple times,
+ * or NULL if not found. */
+
 struct hashEl *hashAdd(struct hash *hash, char *name, void *val);
 /* Add new element to hash table. */
 

@@ -39,6 +39,20 @@ while (el != NULL)
 return el;
 }
 
+struct hashEl *hashLookupNext(struct hashEl *hashEl)
+/* Find the next occurance of name that may occur in the table multiple times,
+ * or NULL if not found. */
+{
+struct hashEl *el = hashEl->next;
+while (el != NULL)
+    {
+    if (strcmp(el->name, hashEl->name) == 0)
+        break;
+    el = el->next;
+    }
+return el;
+}
+
 struct hashEl *hashAdd(struct hash *hash, char *name, void *val)
 /* Add new element to hash table. */
 {
