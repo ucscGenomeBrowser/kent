@@ -4113,6 +4113,14 @@ char *scoresHeader = "Exon Number";
 msBedPrintTableHeader(bedList, erHash, itemName, headerNames, ArraySize(headerNames), scoresHeader);
 }
 
+void cghNci60PrintHeader(struct bed *bedList, struct hash *erHash, char *itemName)
+/* print out the header for the CGH NCI 60 details table */
+{
+char *headerNames[] = {"Cell Line", "Tissue"};
+char *scoresHeader ="CGH Log Ratio";
+msBedPrintTableHeader(bedList, erHash, itemName, headerNames, ArraySize(headerNames), scoresHeader);
+}
+
 void printExprssnColorKey(float maxVal,
 			  struct rgbColor(*getColor)(float val, float maxVal))
 /* print out a little table which provides a color->score key */
@@ -4507,6 +4515,7 @@ if(strstr(er->name, expName))
 else
     printf("<td align=left> %s</td>\n", er->name);
 
+printf("<td align=left>  %s</td>\n", er->extras[1]);
 for(bed = bedList;bed != NULL; bed = bed->next)
     {
 	/* use the background colors to creat patterns */
@@ -4542,7 +4551,7 @@ else
 	snprintf(buff, sizeof(buff), "%d", er->id);
 	hashAddUnique(erHash, buff, er);
 	}
-    msBedPrintTable(bedList, erHash, itemName, expName, maxScore, msBedDefaultPrintHeader, msBedCghPrintRow, printExprssnColorKey, getColorForCghBed);
+    msBedPrintTable(bedList, erHash, itemName, expName, maxScore, cghNci60PrintHeader, msBedCghPrintRow, printExprssnColorKey, getColorForCghBed);
     expRecordFreeList(&erList);
     hashFree(&erHash);
     bedFreeList(&bedList);
