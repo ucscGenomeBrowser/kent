@@ -117,6 +117,55 @@ ord->exists = tableExists;
 ord->calcDistances = pairCalcDistances;
 }
 
+static void groupCalcDistances(struct order *ord, struct sqlConnection *conn, 
+    struct genePos **pGeneList, struct hash *geneHash, int maxCount)
+/* Fill in distance fields in geneList. */
+{
+struct dyString *query = dyStringNew(1024);
+char *group;
+int count = 0;
+dyStringPrintf(query, "select %s from %s where %s='%s'", 
+	ord->groupField, ord->table, ord->curGeneField, curGeneId->name);
+group = sqlQuickString(conn, query->string);
+if (group != NULL)
+    {
+    struct sqlResult *sr;
+    char **row;
+    dyStringClear(query);
+    dyStringPrintf(query, "select %s from %s where %s=%s",
+    	ord->curGeneField, ord->table, ord->groupField, group);
+    sr = sqlGetResult(conn, query->string);
+    while ((row = sqlNextRow(sr)) != NULL)
+        {
+	struct hashEl *hel = hashLookup(geneHash, row[0]);
+	while (hel != NULL)
+	    {
+	    struct genePos *gp = hel->val;
+	    gp->distance = 0;
+	    hel = hashLookupNext(hel);
+	    ++count;
+	    }
+	if (count >= maxCount)
+	    break;
+	}
+    sqlFreeResult(&sr);
+    }
+dyStringFree(&query);
+}
+
+static void groupMethods(struct order *ord, char *parameters)
+/* Fill in group methods. */
+{
+char *s;
+ord->table = cloneString(nextWord(&parameters));
+ord->curGeneField = cloneString(nextWord(&parameters));
+ord->groupField = cloneString(nextWord(&parameters));
+if (ord->groupField == NULL)
+    errAbort("Not enough parameters in type group line for %s", ord->name);
+ord->exists = tableExists;
+ord->calcDistances = groupCalcDistances;
+}
+
 static int countStartSame(char *prefix, char *name)
 /* Return how many letters of prefix match first characters of name. */
 {
@@ -280,6 +329,8 @@ char *type = nextWord(&s);
 orderDefaultMethods(ord);
 if (sameString(type, "pair"))
      pairMethods(ord, s);
+else if (sameString(type, "group"))
+     groupMethods(ord, s);
 else if (sameString(type, "nameSimilarity"))
      nameSimilarityMethods(ord, s);
 else if (sameString(type, "geneDistance"))
@@ -309,7 +360,6 @@ else if (dif > 0)
 else
     return 0;
 }
-
 
 struct order *orderGetAll(struct sqlConnection *conn)
 /* Return list of row orders available. */
