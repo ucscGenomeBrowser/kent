@@ -5021,6 +5021,8 @@ else
     struct browserTable *bt = ct->bt;
     tg = linkedFeaturesTg();
     btToTgBasicCopy(bt, tg);
+    if (!bt->useScore)
+        tg->colorShades = NULL;
     tg->loadItems = ctLoadGappedBed;
     }
 tg->customPt = ct;
