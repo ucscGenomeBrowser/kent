@@ -104,6 +104,8 @@ extern boolean scaleButtonPushed;
 
 extern struct vGfx *vg, *vg2;
 extern Color bkgColor;
+extern int abnormalColor;
+extern int normalColor;
 
 void hWrites(char *string);
 void hButton(char *name, char *label);
