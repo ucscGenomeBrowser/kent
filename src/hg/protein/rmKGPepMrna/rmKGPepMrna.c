@@ -28,10 +28,11 @@ char cond_str[256];
 char *kgID;
 char *proteinID;
 char *seq;
+char *acc;
 char *bioentryID;
  
 char protDbName[100];
-char biosqlDbName[100];
+char spDbName[100];
 char *dbName;
 
 FILE *o1, *o2;
@@ -46,7 +47,7 @@ o2 = fopen("jj.dat", "w");
 dbName = argv[1];
 hSetDb(dbName);
 sprintf(protDbName,   "proteins%s", argv[2]);
-sprintf(biosqlDbName, "biosql%s",   argv[2]);
+sprintf(spDbName, "sp%s",   argv[2]);
 
 conn2= hAllocConn();
 sprintf(query2,"select name from %s.knownGene;", dbName);
@@ -65,22 +66,33 @@ while (row2 != NULL)
     else
 	{
         sprintf(cond_str, "name = '%s';", kgID);
-        proteinID = sqlGetField(conn, dbName, "knownGene", "proteinID", cond_str);
+        proteinID=sqlGetField(conn, dbName, "knownGene", "proteinID", cond_str);
 	if (proteinID != NULL)
 	    {
-            sprintf(cond_str, "display_id = '%s';", proteinID);
-            bioentryID = sqlGetField(conn, biosqlDbName, "bioentry", "bioentry_id", cond_str);
-	   
-            sprintf(cond_str, "bioentry_id = '%s';", bioentryID);
-            seq = sqlGetField(conn, biosqlDbName, "biosequence", "biosequence_str", cond_str);
-	    if (seq == NULL)
+            sprintf(cond_str, "val = '%s';", proteinID);
+            acc = sqlGetField(conn, spDbName, "displayId", "acc", cond_str);
+	    if (acc == NULL)
 		{
-		fprintf(stderr, "NO protein seq for %s\n", kgID);fflush(stderr);
+fprintf(stderr, "NO acc.displayId.%s: %s from name.knownGene.%s: %s\n", spDbName, proteinID, dbName, kgID);
+		fflush(stderr);
 		}
 	    else
 		{
-           	fprintf(o1, "%s\t%s\n", kgID, seq);
+		sprintf(cond_str, "acc = '%s';", acc);
+		seq = sqlGetField(conn, spDbName, "protein", "val", cond_str);
+		if (seq == NULL)
+		    {
+		    fprintf(stderr, "NO protein seq for %s\n", kgID);
+		    fprintf(stderr, "proteinID.knownGene.%s: %s, acc.displayID.%s: %s\n", dbName, proteinID, spDbName, acc);
+		    fflush(stderr);
+		    }
+		    else
+		    {
+		    fprintf(o1, "%s\t%s\n", kgID, seq);
+		    }
 		}
+	    } else {
+fprintf(stderr, "kgID: %s not in knownGenePep or knownGene\n", kgID);
 	    }
 	}
 
