@@ -27,6 +27,7 @@ update:
 	hgTrackDb sars sc1 trackDb_$(USER) ../../lib/trackDb.sql .
 	hgTrackDb squirt ci1 trackDb_$(USER) ../../lib/trackDb.sql .
 	hgTrackDb fugu fr1 trackDb_$(USER) ../../lib/trackDb.sql .
+	hgTrackDb worm ce1 trackDb_$(USER) ../../lib/trackDb.sql .
 	hgTrackDb worm cb1 trackDb_$(USER) ../../lib/trackDb.sql .
 	cd zoo; make update; cd ..
 
@@ -52,6 +53,7 @@ alpha:
 	hgTrackDb sars sc1 trackDb ../../lib/trackDb.sql .
 	hgTrackDb squirt ci1 trackDb ../../lib/trackDb.sql .
 	hgTrackDb fugu fr1 trackDb ../../lib/trackDb.sql .
+	hgTrackDb worm ce1 trackDb ../../lib/trackDb.sql .
 	hgTrackDb worm cb1 trackDb ../../lib/trackDb.sql .
 	cd zoo; make alpha; cd ..
 
@@ -73,6 +75,7 @@ beta:
 	hgTrackDb sars sc1 trackDb_beta ../../lib/trackDb.sql .
 	hgTrackDb squirt ci1 trackDb_beta ../../lib/trackDb.sql .
 	hgTrackDb fugu fr1 trackDb_beta ../../lib/trackDb.sql .
+	hgTrackDb worm ce1 trackDb_beta ../../lib/trackDb.sql .
 	hgTrackDb worm cb1 trackDb_beta ../../lib/trackDb.sql .
 	cd zoo; make beta; cd ..
 

@@ -104,8 +104,11 @@ struct track
     float minRange, maxRange;	  /*min and max range for sample tracks 0.0 to 1000.0*/
     float scaleRange;             /* What to scale samples by to get logical 0-1 */
 
-    unsigned short private;	/* True(1) if private, false(0) otherwise. */
     int bedSize;		/* Number of fields if a bed file. */
+
+    char *otherDb;		/* Other database for an axt track. */
+
+    unsigned short private;	/* True(1) if private, false(0) otherwise. */
     float priority;   /* Tracks are drawn in priority order. */
     char *groupName;	/* Name of group if any. */
     struct group *group;  /* Group this track is associated with. */
@@ -345,6 +348,9 @@ void netMethods(struct track *tg);
 
 void mafMethods(struct track *tg);
 /* Make track group for maf multiple alignment. */
+
+void axtMethods(struct track *tg, char *otherDb);
+/* Make track group for axt alignments. */
 
 #define uglyh printHtmlComment
 /* Debugging aid. */

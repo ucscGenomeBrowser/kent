@@ -56,7 +56,7 @@
 #include "common.h"
 #include <setjmp.h>
 
-static char const rcsid[] = "$Id: gifcomp.c,v 1.6 2003/05/06 07:33:42 kate Exp $";
+static char const rcsid[] = "$Id: gifcomp.c,v 1.7 2003/05/21 21:03:22 kent Exp $";
 
 #define UBYTE unsigned char
 
@@ -177,63 +177,65 @@ bit_offset = 0;
 init_table(min_code_size);
 write_code(clear_code);
 suffix_char = *gif_wpt++;
-    gif_wcount -= 1;
+gif_wcount -= 1;
 
-    prefix_code = suffix_char;
+prefix_code = suffix_char;
 
-    while (--gif_wcount >= 0)
+while (--gif_wcount >= 0)
+    {
+    suffix_char = *gif_wpt++;
+    hx = prefix_code ^ suffix_char << 5;
+    d = 1;
+
+    for (;;)
 	{
-	    suffix_char = *gif_wpt++;
-	    hx = prefix_code ^ suffix_char << 5;
-	d = 1;
-
-	for (;;)
+	if (code_ids[hx] == 0)
 	    {
-	    if (code_ids[hx] == 0)
+	    write_code(prefix_code);
+
+	    d = free_code;
+
+	    if (free_code <= LARGEST_CODE)
 		{
-		write_code(prefix_code);
+		prior_codes[hx] = prefix_code;
+		added_chars[hx] = (UBYTE)suffix_char;
+		code_ids[hx] = free_code;
+		free_code++;
+		}
 
-		d = free_code;
-
-		if (free_code <= LARGEST_CODE)
+	    if (d == max_code)
+		{
+		if (code_size < 12)
 		    {
-		    prior_codes[hx] = prefix_code;
-		    added_chars[hx] = (UBYTE)suffix_char;
-		    code_ids[hx] = free_code;
-		    free_code++;
+		    code_size++;
+		    max_code <<= 1;
 		    }
+		else
+		    {
+		    write_code(clear_code);
+		    init_table(min_code_size);
+		    }
+	        }
 
-		if (d == max_code)
-		    if (code_size < 12)
-			{
-			code_size++;
-			max_code <<= 1;
-			}
-		    else
-			{
-			write_code(clear_code);
-			init_table(min_code_size);
-			}
-
-		prefix_code = suffix_char;
-		break;
-		}
-
-	    if (prior_codes[hx] == prefix_code &&
-		    added_chars[hx] == suffix_char)
-		{
-		    prefix_code = code_ids[hx];
-		break;
-		}
-
-	    hx += d;
-	    d += 2;
-	    if (hx >= TABLE_SIZE)
-		hx -= TABLE_SIZE;
+	    prefix_code = suffix_char;
+	    break;
 	    }
-	}
 
-    write_code(prefix_code);
+	if (prior_codes[hx] == prefix_code &&
+		added_chars[hx] == suffix_char)
+	    {
+	    prefix_code = code_ids[hx];
+	    break;
+	    }
+
+	hx += d;
+	d += 2;
+	if (hx >= TABLE_SIZE)
+	    hx -= TABLE_SIZE;
+	}
+    }
+
+write_code(prefix_code);
 
 write_code(eof_code);
 
@@ -241,7 +243,23 @@ write_code(eof_code);
 /* Make sure the code buffer is flushed */
 
 if (bit_offset > 0)
-    flush((bit_offset + 7)/8);
+    {
+    int byte_offset = (bit_offset >> 3);
+    if (byte_offset == 255)	/* Make sure we don't write a zero by mistake. */
+        {
+	int bits_left = bit_offset & 7;
+	flush(255);
+	if (bits_left)
+	    {
+	    gif_byte_buff[0] = gif_byte_buff[byte_offset];
+	    flush(1);
+	    }
+	}
+    else
+	{
+	flush((bit_offset + 7)/8);
+	}
+    }
 
 flush(0);				/* end-of-data */
 return 0;

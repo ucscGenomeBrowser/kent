@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "scoredRef.h"
 
-static char const rcsid[] = "$Id: scoredRef.c,v 1.2 2003/05/06 07:22:23 kate Exp $";
+static char const rcsid[] = "$Id: scoredRef.c,v 1.3 2003/05/16 04:01:22 kent Exp $";
 
 void scoredRefStaticLoad(char **row, struct scoredRef *ret)
 /* Load a row from scoredRef table into ret.  The contents of ret will
@@ -126,4 +126,28 @@ fputc(lastSep,f);
 }
 
 /* -------------------------------- End autoSql Generated Code -------------------------------- */
+
+void scoredRefTableCreate(struct sqlConnection *conn, char *tableName)
+/* Create a scored-ref table with the given name. */
+{
+static char *createString =
+"#High level information about a multiple alignment. Link to details in maf file.\n"
+"CREATE TABLE %s (\n"
+"    bin smallint unsigned not null,\n"
+"    chrom varchar(255) not null,	# Chromosome (this species)\n"
+"    chromStart int unsigned not null,	# Start position in chromosome (forward strand)\n"
+"    chromEnd int unsigned not null,	# End position in chromosome\n"
+"    extFile int unsigned not null,	# Pointer to associated MAF file\n"
+"    offset bigint not null,	# Offset in MAF file\n"
+"    score float not null,	# Score\n"
+"              #Indices\n"
+"    INDEX(chrom(8),bin),\n"
+"    INDEX(chrom(8),chromStart),\n"
+"    INDEX(chrom(8),chromStart)\n"
+")\n";
+struct dyString *dy = newDyString(1024);
+dyStringPrintf(dy, createString, tableName);
+sqlRemakeTable(conn, tableName, dy->string);
+dyStringFree(&dy);
+}
 

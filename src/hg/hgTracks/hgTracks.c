@@ -74,7 +74,7 @@
 #include "web.h"
 #include "grp.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.513 2003/05/09 01:11:00 kent Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.520 2003/05/20 01:12:59 blanchem Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define EXPR_DATA_SHADES 16
@@ -2843,7 +2843,7 @@ char *proteinID;
 char *hugoID;
 char cond_str[256];
 
-if (hTableExists("refLink"))
+if (hTableExists("refLink") && hTableExists("knownGeneLink"))
     {
     struct sqlResult *sr;
     char **row;
@@ -7202,7 +7202,11 @@ pixPerBase = (winEnd - winStart)/ tl.picWidth;
 
 
 /* Determine zoom level. */
-z = humMusZoomLevel();
+ if (!strstr(tg->mapName,"HMRConservation"))
+   z = humMusZoomLevel();
+ else z=0;
+
+
 if(z == 1 )
     snprintf(tableName, sizeof(tableName), "%s_%s", "zoom1",
 	    tg->mapName);
@@ -8754,7 +8758,8 @@ if (withLeftLabels)
     	if( sameString( track->mapName, "humMusL" ) ||
 	    sameString( track->mapName, "musHumL" ) ||
 	    sameString( track->mapName, "mm3Rn2L" ) ||		
-	    sameString( track->mapName, "regpotent" ) )
+	    sameString( track->mapName, "regpotent" ) ||
+	    sameString( track->mapName, "HMRConservation" )  )
 	    {
 	    int binCount = round(1.0/track->scaleRange);
 	    minRange = whichSampleBin( minRangeCutoff, track->minRange, track->maxRange, binCount );
@@ -9505,6 +9510,12 @@ else if (sameWord(type, "maf"))
     {
     mafMethods(track);
     }
+else if (sameWord(type, "axt"))
+    {
+    if (wordCount < 2)
+        errAbort("Expecting 2 words in axt track type for %s", tdb->tableName);
+    axtMethods(track, words[1]);
+    }
 }
 
 struct track *trackFromTrackDb(struct trackDb *tdb)
@@ -9903,7 +9914,7 @@ if (sameString(database, "hg13"))
     hPrintf("%s</A></TD>", wrapWhiteFont("Ensembl"));
     }
 
-if (sameString(database, "hg13"))
+if (sameString(database, "hg15"))
     {
     hPrintf("<TD ALIGN=CENTER><A HREF=\"http://www.ncbi.nlm.nih.gov/mapview/maps.cgi?CHR=%s&BEG=%d&END=%d\" TARGET=_blank>",
     	skipChr(chromName), winStart+1, winEnd);
@@ -10103,6 +10114,9 @@ registerTrackHandler("multAlignWebbzebrafish", longXenoPslMethods);
 registerTrackHandler("aarMm2", longXenoPslMethods);
 registerTrackHandler("blastzRn", longXenoPslMethods);
 registerTrackHandler("blastzRn1", longXenoPslMethods);
+registerTrackHandler("blastzRn2", longXenoPslMethods);
+registerTrackHandler("blastzBestRn2", longXenoPslMethods);
+registerTrackHandler("blastzTightRn2", longXenoPslMethods);
 registerTrackHandler("blastzRat", longXenoPslMethods);
 registerTrackHandler("blastzBestRat", longXenoPslMethods);
 registerTrackHandler("blastzTightRat", longXenoPslMethods);
@@ -10174,6 +10188,7 @@ registerTrackHandler("mgcFailedEst", estMethods);
 registerTrackHandler("mgcPickedEst", estMethods);
 registerTrackHandler("mgcUnpickedEst", estMethods);
 
+registerTrackHandler("HMRConservation", humMusLMethods);
 registerTrackHandler("humMusL", humMusLMethods);
 registerTrackHandler("regpotent", humMusLMethods);
 registerTrackHandler("mm3Rn2L", humMusLMethods);
@@ -10770,6 +10785,6 @@ htmlSetBackground("../images/floret.jpg");
 if (cgiVarExists("hgt.reset"))
     resetVars();
 zooSpeciesHashInit();
-cartHtmlShell("UCSC Genome Browser v20-alpha", doMiddle, hUserCookie(), excludeVars, NULL);
+cartHtmlShell("UCSC Genome Browser v22-alpha", doMiddle, hUserCookie(), excludeVars, NULL);
 return 0;
 }

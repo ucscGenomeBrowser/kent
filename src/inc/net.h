@@ -27,6 +27,10 @@ int netMustConnectTo(char *hostName, char *portName);
 int netAcceptingSocket(int port, int queueSize);
 /* Create a socket for to accept connections. */
 
+int netAcceptingSocketFrom(int port, int queueSize, char *host);
+/* Create a socket that can accept connections from a particular
+ * host.  If host is NULL then accept from anyone. */
+
 int netAccept(int sd);
 /* Accept incoming connection from socket descriptor. */
 

@@ -265,6 +265,14 @@ void getTicksToHundreths()
 #endif /* CLK_TCK */
 }
 
+int forkOrDie()
+/* Fork.  Print warning if it fails and return -1. */
+{
+int childId = fork();
+if (childId == -1)
+    errnoAbort("Unable to fork");
+return childId;
+}
 
 void execProc(char *managingHost, char *jobIdString, char *reserved,
 	char *user, char *dir, char *in, char *out, char *err,
@@ -274,7 +282,7 @@ void execProc(char *managingHost, char *jobIdString, char *reserved,
  * work and waits on it.  It sends message to the
  * main message loop here when done. */
 {
-if ((grandChildId = fork()) == 0)
+if ((grandChildId = forkOrDie()) == 0)
     {
     int newStdin, newStdout, newStderr, execErr;
     char *homeDir = "";
@@ -527,7 +535,7 @@ else
 		else
 		    {
 		    args[argCount] = NULL;
-		    if ((childPid = fork()) == 0)
+		    if ((childPid = forkOrDie()) == 0)
 			{
 			/* Do JOB_ID substitutions */
 			struct subText *st = subTextNew("$JOB_ID", rjm.jobIdString);
@@ -775,7 +783,7 @@ if (log == NULL || !sameString(log, "stdout"))
     close(1);
 close(2);
 
-if (fork() == 0)
+if (forkOrDie() == 0)
     {
     /* Set up log handler. */
     setupDaemonLog(log);

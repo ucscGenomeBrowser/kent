@@ -1100,13 +1100,13 @@ LOAD GENEID GENES (DONE 04/01/03)
     ldHgGene rn2 geneid download/*.gtf -exon=CDS
     hgPepPred rn2 generic geneidPep download/*-fixed.prot
 
-SGP GENE PREDICTIONS (TODO)
+SGP GENE PREDICTIONS (DONE 2003-05-19 - Hiram)
     mkdir -p ~/rn2/bed/sgp/download
     cd ~/rn2/bed/sgp/download
     foreach f (~/rn2/?{,?}/chr?{,?}{,_random}.fa)
       set chr = $f:t:r
-      wget http://genome.imim.es/genepredictions/R.norvegicus/rnJan2003/SGP/humangp20020628/$chr.gtf
-      wget http://genome.imim.es/genepredictions/R.norvegicus/rnJan2003/SGP/humangp20020628/$chr.prot
+      wget http://genome.imim.es/genepredictions/R.norvegicus/rnJan2003/SGP/humangp20021114/$chr.gtf
+      wget http://genome.imim.es/genepredictions/R.norvegicus/rnJan2003/SGP/humangp20021114/$chr.prot
     end
     # Add missing .1 to protein id's
     foreach f (*.prot)

@@ -11,7 +11,7 @@
 #include "scoredRef.h"
 #include "dystring.h"
 
-static char const rcsid[] = "$Id: hgLoadMaf.c,v 1.5 2003/05/06 07:22:25 kate Exp $";
+static char const rcsid[] = "$Id: hgLoadMaf.c,v 1.7 2003/05/16 15:26:48 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -21,52 +21,8 @@ errAbort(
   "usage:\n"
   "   hgLoadMaf database table\n"
   "The maf files need to already exist in chromosome coordinates\n"
-  "in the directory /gbdb/database/table.  No file should be larger\n"
-  "than four gig.\n"
+  "in the directory /gbdb/database/table.\n"
   );
-}
-
-char *createString =
-"#High level information about a multiple alignment. Link to details in maf file.\n"
-"CREATE TABLE %s (\n"
-"    bin smallint unsigned not null,\n"
-"    chrom varchar(255) not null,	# Chromosome (this species)\n"
-"    chromStart int unsigned not null,	# Start position in chromosome (forward strand)\n"
-"    chromEnd int unsigned not null,	# End position in chromosome\n"
-"    extFile int unsigned not null,	# Pointer to associated MAF file\n"
-"    offset bigint not null,	# Offset in MAF file\n"
-"    score float not null,	# Score\n"
-"              #Indices\n"
-"    INDEX(chrom(8),bin),\n"
-"    INDEX(chrom(8),chromStart),\n"
-"    INDEX(chrom(8),chromStart)\n"
-")\n";
-
-int addToExtFile(char *path, struct sqlConnection *conn)
-/* Add entry to ext file table.  Delete it if it already exists. 
- * Returns extFile id. */
-{
-char root[128], ext[64], name[256];
-struct dyString *dy = newDyString(1024);
-long long size = fileSize(path);
-HGID id = hgNextId();
-
-/* Construct file name without the directory. */
-splitPath(path, NULL, root, ext);
-safef(name, sizeof(name), "%s%s", root, ext);
-
-/* Delete it from database. */
-dyStringPrintf(dy, "delete from extFile where path = '%s'", path);
-sqlUpdate(conn, dy->string);
-
-/* Add it to table. */
-dyStringClear(dy);
-dyStringPrintf(dy, "INSERT into extFile VALUES(%u,'%s','%s',%lld)",
-    id, name, path, size);
-sqlUpdate(conn, dy->string);
-
-dyStringFree(&dy);
-return id;
 }
 
 struct mafComp *findComponent(struct mafAli *maf, char *prefix)
@@ -91,14 +47,12 @@ struct fileInfo *fileList = NULL, *fileEl;
 struct sqlConnection *conn;
 long mafCount = 0;
 FILE *f = hgCreateTabFile(".", table);
-struct dyString *dy = newDyString(1024);
 
 hSetDb(database);
 safef(extFileDir, sizeof(extFileDir), "/gbdb/%s/%s", database, table);
 fileList = listDirX(extFileDir, "*.maf", TRUE);
 conn = hgStartUpdate();
-dyStringPrintf(dy, createString, table);
-sqlRemakeTable(conn, table, dy->string);
+scoredRefTableCreate(conn, table);
 if (fileList == NULL)
     errAbort("%s doesn't exist or doesn't have any maf files", extFileDir);
 for (fileEl = fileList; fileEl != NULL; fileEl = fileEl->next)
@@ -109,7 +63,7 @@ for (fileEl = fileList; fileEl != NULL; fileEl = fileEl->next)
     struct scoredRef mr;
     struct mafAli *maf;
     off_t offset;
-    HGID extId = addToExtFile(fileName, conn);
+    HGID extId = hgAddToExtFile(fileName, conn);
     int dbNameLen = strlen(database);
 
     mf = mafOpen(fileName);

@@ -14,7 +14,7 @@
 #include "hgRelate.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: hgRelate.c,v 1.8 2003/05/06 07:22:22 kate Exp $";
+static char const rcsid[] = "$Id: hgRelate.c,v 1.9 2003/05/16 04:01:21 kent Exp $";
 
 void hgSetDb(char *dbName)
 /* Set the database name. */
@@ -65,6 +65,27 @@ if (ret == 0)
 return ret;
 }
 
+HGID hgGetMaxId(struct sqlConnection *conn, char *tableName)
+/* get the maximum value of the id column in a table or zero if empry  */
+{
+/* we get a row with NULL if the table is empty */
+char query[128];
+char **row = NULL;
+HGID maxId;
+struct sqlResult *sr;
+
+safef(query, sizeof(query), "SELECT MAX(id) from %s", tableName);
+
+sr = sqlGetResult(conn, query);
+if (sr != NULL)
+    row = sqlNextRow(sr);
+if ((row == NULL) || (row[0] == NULL))
+    maxId = 0;  /* empty table */
+else
+    maxId = sqlUnsigned(row[0]);
+sqlFreeResult(&sr);
+return maxId;
+}
 
 static HGID startUpdateId;	/* First ID in this update. */
 static HGID endUpdateId;	/* One past last ID in this update. */
@@ -128,24 +149,30 @@ carefulClose(tabFh);
 sqlLoadTabFile(conn, path, tableName, SQL_TAB_FILE_WARN_ON_ERROR);
 }
 
-HGID hgGetMaxId(struct sqlConnection *conn, char *tableName)
-/* get the maximum value of the id column in a table or zero if empry  */
+int hgAddToExtFile(char *path, struct sqlConnection *conn)
+/* Add entry to ext file table.  Delete it if it already exists. 
+ * Returns extFile id. */
 {
-/* we get a row with NULL if the table is empty */
-char query[128];
-char **row = NULL;
-HGID maxId;
-struct sqlResult *sr;
+char root[128], ext[64], name[256];
+struct dyString *dy = newDyString(1024);
+long long size = fileSize(path);
+HGID id = hgNextId();
 
-safef(query, sizeof(query), "SELECT MAX(id) from %s", tableName);
+/* Construct file name without the directory. */
+splitPath(path, NULL, root, ext);
+safef(name, sizeof(name), "%s%s", root, ext);
 
-sr = sqlGetResult(conn, query);
-if (sr != NULL)
-    row = sqlNextRow(sr);
-if ((row == NULL) || (row[0] == NULL))
-    maxId = 0;  /* empty table */
-else
-    maxId = sqlUnsigned(row[0]);
-sqlFreeResult(&sr);
-return maxId;
+/* Delete it from database. */
+dyStringPrintf(dy, "delete from extFile where path = '%s'", path);
+sqlUpdate(conn, dy->string);
+
+/* Add it to table. */
+dyStringClear(dy);
+dyStringPrintf(dy, "INSERT into extFile VALUES(%u,'%s','%s',%lld)",
+    id, name, path, size);
+sqlUpdate(conn, dy->string);
+
+dyStringFree(&dy);
+return id;
 }
+

@@ -17,7 +17,7 @@
 #include "altGraphX.h"
 #include "geneGraph.h"
 
-static char const rcsid[] = "$Id: geneGraph.c,v 1.6 2003/05/06 07:22:22 kate Exp $";
+static char const rcsid[] = "$Id: geneGraph.c,v 1.7 2003/05/20 23:34:16 sugnet Exp $";
 
 void ggEvidenceFree(struct ggEvidence **pEl)
 /* Free a single dynamically allocated ggEvidence */
@@ -466,8 +466,9 @@ else if((vertices[v1].type == ggHardEnd || vertices[v1].type == ggSoftEnd) &&
     (vertices[v2].type == ggHardStart || vertices[v2].type == ggSoftStart))
     return ggIntron;
 else
-    errAbort("geneGraph::ggClassifyEdge() - edge from %d -> %d has types %d-%d which isn't recognized as intron or exon.\n",
-	     v1, v2, vertices[v1], vertices[v2]);
+    errAbort("geneGraph::ggClassifyEdge() - "
+	     "Edge from %d -> %d has types %d-%d which isn't recognized as intron or exon.\n",
+	     v1, v2, vertices[v1].type, vertices[v2].type);
 return -1;
 }
 

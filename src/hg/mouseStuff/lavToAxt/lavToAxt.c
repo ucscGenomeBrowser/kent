@@ -8,8 +8,10 @@
 #include "dnaseq.h"
 #include "nib.h"
 #include "axt.h"
+#include "fa.h"
 
-static char const rcsid[] = "$Id: lavToAxt.c,v 1.8 2003/05/06 07:22:28 kate Exp $";
+struct dnaSeq *faList;
+static char const rcsid[] = "$Id: lavToAxt.c,v 1.10 2003/05/18 07:58:09 baertsch Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -19,7 +21,7 @@ errAbort(
   "usage:\n"
   "   lavToAxt in.lav tNibDir qNibDir out.axt\n"
   "options:\n"
-  "   -xxx=XXX\n"
+  "   -fa  qNibDir is interpreted as a fasta file of multiple dna seq instead of directory of nibs\n"
   );
 }
 
@@ -111,7 +113,7 @@ struct block *lastBlock = NULL;
 struct block *block;
 struct dyString *qSym = newDyString(16*1024);
 struct dyString *tSym = newDyString(16*1024);
-struct dnaSeq *qSeq, *tSeq;
+struct dnaSeq *qSeq, *tSeq, *seq = NULL;
 struct axt axt;
 
 static int ix = 0;
@@ -132,12 +134,48 @@ for (block = blockList; block != NULL; block = block->next)
 if (isRc)
     {
     reverseIntRange(&qStart, &qEnd, qSize);
-    qSeq = readFromCache(qCache, qNibDir, qName, qStart, qEnd - qStart, qSize);
+    if (optionExists("fa"))
+        {
+        for (seq = faList ; seq != NULL ; seq = seq->next)
+            if (sameString(qName, seq->name))
+                break;
+        if (seq != NULL)
+            {
+            AllocVar(qSeq);
+            qSeq->size = qEnd - qStart;
+            qSeq->name = cloneString(qName);
+            qSeq->mask = seq->mask;
+            qSeq->dna = cloneMem((seq->dna)+qStart, qSeq->size);
+            }
+        else
+            errAbort("sequence not found %d\n",qName);
+        }
+    else
+        qSeq = readFromCache(qCache, qNibDir, qName, qStart, qEnd - qStart, qSize);
     reverseIntRange(&qStart, &qEnd, qSize);
     reverseComplement(qSeq->dna, qSeq->size);
     }
 else
-    qSeq = readFromCache(qCache, qNibDir, qName, qStart, qEnd - qStart, qSize);
+    {    
+if (optionExists("fa"))
+        {
+        for (seq = faList ; seq != NULL ; seq = seq->next)
+            if (sameString(qName, seq->name))
+                break;
+            if (seq != NULL)
+                {
+                AllocVar(qSeq);
+                qSeq->size = qEnd - qStart;
+                qSeq->name = cloneString(qName);
+                qSeq->mask = seq->mask;
+                qSeq->dna = (seq->dna)+qStart;
+                }
+            else
+                errAbort("sequence not found %d\n",qName);
+        }
+    else
+        qSeq = readFromCache(qCache, qNibDir, qName, qStart, qEnd - qStart, qSize);
+    }
 tSeq = readFromCache(tCache, tNibDir, tName, tStart, tEnd - tStart, tSize);
 
 /* Loop through blocks copying sequence into dynamic strings. */
@@ -163,8 +201,16 @@ for (block = blockList; block != NULL; block = block->next)
 	    dyStringAppendN(tSym, tSeq->dna + lastBlock->tEnd - tStart, tGap);
 	    }
 	}
+    if (qSeq->size < block->qStart - qStart)
+        {
+        errAbort("read past end of sequence %s size =%d block->qStart-qstart=%d block->qStart=%d qEnd=%d \n", qName, qSeq->size, block->qStart-qStart,block->qStart, block->qEnd );
+        }
     dyStringAppendN(qSym, qSeq->dna + block->qStart - qStart,
     	block->qEnd - block->qStart);
+    if (tSeq->size < block->tStart - tStart)
+        {
+        errAbort("read past end of sequence %s size =%d block->tStart-tstart=%d\n", tName, tSeq->size, block->tStart-tStart);
+        }
     dyStringAppendN(tSym, tSeq->dna + block->tStart - tStart,
     	block->tEnd - block->tStart);
     lastBlock = block;
@@ -190,7 +236,8 @@ axt.tSym = tSym->string;
 axtWrite(&axt, f);
 
 /* Clean up. */
-freeDnaSeq(&qSeq);
+if (!optionExists("fa"))
+    freeDnaSeq(&qSeq);
 freeDnaSeq(&tSeq);
 dyStringFree(&qSym);
 dyStringFree(&tSym);
@@ -430,6 +477,10 @@ int main(int argc, char *argv[])
 optionHash(&argc, argv);
 if (argc != 5)
     usage();
+if (optionExists("fa"))
+    {
+    faList = faReadAllMixed(argv[3]);
+    }
 lavToAxt(argv[1], argv[2], argv[3], argv[4]);
 return 0;
 }

@@ -5,17 +5,24 @@
 #include "options.h"
 #include "fa.h"
 
-static char const rcsid[] = "$Id: nibFrag.c,v 1.9 2003/05/06 07:41:07 kate Exp $";
+static char const rcsid[] = "$Id: nibFrag.c,v 1.11 2003/05/21 05:19:17 baertsch Exp $";
 
+static struct optionSpec optionSpecs[] = {
+    {"masked", OPTION_BOOLEAN},
+    {"hardMasked", OPTION_BOOLEAN},
+    {"upper", OPTION_BOOLEAN},
+    {"name", OPTION_STRING},
+    {NULL, 0}
+};
 void usage()
 /* Explain usage and exit. */
 {
 errAbort(
-  "nibFrag - Extract part of a nib file as .fa\n"
+  "nibFrag - Extract part of a nib file as .fa (all bases/gaps lower case by default)\n"
   "usage:\n"
   "   nibFrag [options] file.nib start end strand out.fa\n"
   "options:\n"
-  "   -masked - use lower case characters for masked-out bases\n"
+  "   -masked - use lower case characters for bases meant to be masked out\n"
   "   -hardMasked - use upper case for not masked-out and 'N' characters for masked-out bases\n"
   "   -upper - use uppper case characters for all bases\n"
   "   -name=name Use given name after '>' in output sequence\n"
@@ -52,7 +59,7 @@ int main(int argc, char *argv[])
 int options = 0;
 int optUpper = 0;
 boolean hardMask = FALSE;
-optionHash(&argc, argv);
+optionInit(&argc, argv, optionSpecs);
 if(optionExists("masked") && optionExists("hardMasked"))
     {
     warn("\nError: Must choose 'masked' or 'hardMasked' but not both.\n");

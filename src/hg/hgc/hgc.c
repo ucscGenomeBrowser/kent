@@ -19,7 +19,6 @@
 #include "fa.h"
 #include "fuzzyFind.h"
 #include "seqOut.h"
-#include "trackDb.h"
 #include "hdb.h"
 #include "hui.h"
 #include "hgRelate.h"
@@ -103,11 +102,10 @@
 #include "stsInfoMouseNew.h"
 #include "vegaInfo.h"
 #include "scoredRef.h"
-#include "maf.h"
 #include "hgc.h"
 #include "genbank.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.412 2003/05/13 09:54:15 daryl Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.418 2003/05/20 17:52:49 braney Exp $";
 
 
 struct cart *cart;	/* User's settings. */
@@ -116,6 +114,7 @@ int winStart, winEnd;   /* Bounds of sequence. */
 char *database;		/* Name of mySQL database. */
 
 char *protDbName;	/* Name of proteome database */
+struct hash *trackHash;	/* A hash of all tracks - trackDb valued */
 
 char mousedb[] = "mm1";
 
@@ -391,9 +390,10 @@ printPos(bed->chrom, bed->chromStart, bed->chromEnd, NULL, TRUE);
 void genericHeader(struct trackDb *tdb, char *item)
 /* Put up generic track info. */
 {
-char buf[256];
-sprintf(buf, "%s (%s)\n", tdb->longLabel, item);
-cartWebStart(cart, buf);
+if (item != NULL && item[0] != 0)
+    cartWebStart(cart, "%s (%s)", tdb->longLabel, item);
+else
+    cartWebStart(cart, "%s", tdb->longLabel);
 }
 
 static struct dyString *subMulti(char *orig, int subCount, 
@@ -748,7 +748,7 @@ for (axt = axtList; axt != NULL; axt = axt->next)
                     }
                 }
             else{
-	    if ((tClass==INTRON) && (tPtr <= nextStart-1) && (tPtr <= tStart) && (tPtr > tEnd))
+	    if ((tClass==INTRON) && (tPtr <= nextStart) && (tPtr <= tStart) && (tPtr > tEnd))
 		{ /*start of exon on neg strand */
 		tCoding=TRUE;
 		dyStringPrintf(exonTag, "exon%d",nextEndIndex+1);
@@ -789,7 +789,7 @@ for (axt = axtList; axt != NULL; axt = axt->next)
                 }
             else
                 {
-                if (tPtr == nextEnd-1)
+                if (tPtr == nextEnd)
                     {
                     tCoding=FALSE;
                     qCoding=FALSE;
@@ -824,7 +824,7 @@ for (axt = axtList; axt != NULL; axt = axt->next)
                 }
             else
                 {
-                if ((tPtr <= (tStart)) && (tPtr >=(tStart-2)))
+                if ((tPtr <= (tStart)+1) && (tPtr >=(tStart-1)))
                     {
                     tClass=STARTCODON;
                     qClass=STARTCODON;
@@ -836,10 +836,12 @@ for (axt = axtList; axt != NULL; axt = axt->next)
                         qCodonPos=1;
                         }
                     }
-                if ((tPtr <= tEnd+1) && (tPtr >= (tEnd-1)))
+                if ((tPtr <= tEnd+3) && (tPtr >= (tEnd+1)))
                     {
                     tClass=STOPCODON;
+                    qClass=STOPCODON;
                     tCoding=FALSE;
+                    qCoding=FALSE;
                     }
                 }
             if (posStrand)
@@ -852,7 +854,7 @@ for (axt = axtList; axt != NULL; axt = axt->next)
                 }
             else 
                 {
-                if (tPtr == (tEnd -2) )
+                if (tPtr == (tEnd ) )
                     {
                     tClass = UTR3;
                     qClass = UTR3;
@@ -1136,7 +1138,7 @@ while ((axt = axtRead(lf)) != NULL)
         {
         if (prevEnd < axt->tStart )
             {
-            axtGap = createAxtGap(nib,gp->chrom,prevEnd,(axt->tStart)-1,gp->strand[0]);
+            axtGap = createAxtGap(nib,gp->chrom,prevEnd+1,(axt->tStart)-1,gp->strand[0]);
             if (gp->strand[0] == '-')
                 {
                 reverseComplement(axtGap->qSym, axtGap->symCount);
@@ -1414,6 +1416,13 @@ chainDbAddBlocks(chain, track, conn);
 return chain;
 }
 
+void linkToOtherBrowser(char *otherDb, char *chrom, int start, int end)
+/* Make anchor tag to open another browser window. */
+{
+printf("<A TARGET=\"_blank\" HREF=\"/cgi-bin/hgTracks?db=%s&position=%s%%3A%d-%d\">",
+   otherDb, chrom, start+1, end);
+}
+
 void chainToOtherBrowser(struct chain *chain, char *otherDb, char *otherOrg)
 /* Put up link that lets us use chain to browser on
  * corresponding window of other species. */
@@ -1424,8 +1433,7 @@ chainSubsetOnT(chain, winStart, winEnd, &subChain, &toFree);
 if (subChain != NULL)
     {
     qChainRangePlusStrand(subChain, &qs, &qe);
-    printf("<A target=\"_blank\" href=\"/cgi-bin/hgTracks?db=%s&position=%s%%3A%d-%d\">",
-	   otherDb, subChain->qName, qs, qe);
+    linkToOtherBrowser(otherDb, subChain->qName, qs, qe);
     printf("Open %s browser </A> at position corresponding to the part of chain that is in this window.<BR>\n", otherOrg);
     }
 chainFree(&toFree);
@@ -1622,37 +1630,6 @@ printf("<B>%s size:</B> %d<BR>\n", otherOrg, net->qEnd - net->qStart);
 netAlignFree(&net);
 }
 
-void genericMafClick(struct sqlConnection *conn, struct trackDb *tdb, 
-	char *item, int start)
-{
-if (winEnd - winStart > 20000)
-    {
-    printf("Zoom so that window is 20000 bases or less to see base-by-base alignments\n");
-    }
-else
-    {
-    struct mafAli *mafList, *maf;
-    int realCount = 0;
-    char dbChrom[64];
-    mafList = mafLoadInRegion(conn, tdb->tableName, seqName, winStart, winEnd);
-    safef(dbChrom, sizeof(dbChrom), "%s.%s", database, seqName);
-    printf("<TT><PRE>");
-    for (maf = mafList; maf != NULL; maf = maf->next)
-        {
-	struct mafAli *subset = mafSubset(maf, dbChrom, winStart, winEnd);
-	if (subset != NULL)
-	    {
-	    subset->score = mafScoreMultiz(subset);
-	    mafWrite(stdout, subset);
-	    ++realCount;
-	    }
-	}
-    if (realCount == 0)
-        printf("No multiple alignment in browser window");
-    printf("</PRE></TT>");
-    }
-}
-
 void genericClickHandler(struct trackDb *tdb, char *item, char *itemForUrl)
 /* Put up generic track info. */
 {
@@ -1717,6 +1694,10 @@ if (wordCount > 0)
     else if (sameString(type, "maf"))
         {
 	genericMafClick(conn, tdb, item, start);
+	}
+    else if (sameString(type, "axt"))
+        {
+	genericAxtClick(conn, tdb, item, start, words[1]);
 	}
     }
 printTrackHtml(tdb);
@@ -3023,7 +3004,7 @@ char *table;
 int start = cartInt(cart, "o");
 struct psl *pslList = NULL;
 
-if (sameString("xenoMrna", track) || sameString("xenoBestMrna", track) || sameString("xenoEst", track))
+if (sameString("xenoMrna", track) || sameString("xenoBestMrna", track) || sameString("xenoEst", track) || sameString("sim4", track))
     {
     char *organism = hOrganism(database);
     char temp[256];
@@ -4981,9 +4962,7 @@ struct psl *pslList = NULL;
 
 cartWebStart(cart, "Viral Gene");
 printf("<H2>Viral Gene %s</H2>\n", geneName);
-printf("<A test HREF=");
-printSwissProtProteinUrl(stdout, geneName);
-printf(" TARGET=_blank>Jump to SwissProt / sptrembl</A> " );
+printCustomUrl(tdb, geneName, TRUE);
 
 pslList = getAlignments(conn, "chr1_viralProt", geneName);
 htmlHorizontalLine();
@@ -6029,11 +6008,9 @@ return trackHash;
 void doMouseOrtho(struct trackDb *tdb, char *geneName)
 /* Handle click on MouseOrtho gene track. */
 {
-struct hash *trackHash;
 struct sqlConnection *connMm = sqlConnect(mousedb);
 genericHeader(tdb, geneName);
 showOrthology(geneName, "softberryHom",connMm);
-trackHash = makeTrackHash(seqName);
 tdb = hashFindVal(trackHash, "softberryGene");
 geneShowMouse(geneName, tdb, "softberryPep", connMm);
 printTrackHtml(tdb);
@@ -6722,6 +6699,44 @@ printf("Get ");
 printf("<A HREF=\"%s&g=htcExtSeq&c=%s&l=%d&r=%d&i=%s\">",
        hgcPathAndSettings(), seqName, winStart, winEnd, itemName);
 printf("Fish DNA</A><BR>\n");
+
+/* Get alignment info and print. */
+printf("<H2>Alignments</H2>\n");
+hFindSplitTable(seqName, track, table, &hasBin);
+sprintf(query, "select * from %s where qName = '%s'", table, itemName);
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    psl = pslLoad(row+hasBin);
+    slAddHead(&pslList, psl);
+    }
+sqlFreeResult(&sr);
+slReverse(&pslList);
+printAlignments(pslList, start, "htcBlatXeno", track, itemName);
+printTrackHtml(tdb);
+}
+
+void doBlatSquirt(struct trackDb *tdb, char *itemName)
+/* Handle click on blatSquirt track. */
+{
+char *track = tdb->tableName;
+char query[256];
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr = NULL;
+char **row;
+int start = cartInt(cart, "o");
+struct psl *pslList = NULL, *psl;
+struct dnaSeq *seq;
+boolean hasBin;
+char table[64];
+
+cartWebStart(cart, itemName);
+printf("<H1>Information on Ciona intestinalis Sequence %s</H1>", itemName);
+
+printf("Get ");
+printf("<A HREF=\"%s&g=htcExtSeq&c=%s&l=%d&r=%d&i=%s\">",
+       hgcPathAndSettings(), seqName, winStart, winEnd, itemName);
+printf("Ciona intestinalis DNA</A><BR>\n");
 
 /* Get alignment info and print. */
 printf("<H2>Alignments</H2>\n");
@@ -10876,60 +10891,6 @@ freeMem(path);
 return lf;
 }
 
-#define JK_TESTING_ONLY
-#ifdef JK_TESTING_ONLY
-void doHmrConservation(struct trackDb *tdb, char *item)
-/* Details page for human/mouse/rat alignments. */
-{
-int winWidth = winEnd - winStart;
-
-cartWebStart(cart, "%s", tdb->longLabel);
-
-uglyf("This page shows human/mouse/rat alignments on %s:%d-%d in %s<BR>",
-   seqName, winStart, winEnd, database);
-if (winWidth > 100000)
-    {
-    printf("Zoom so that window is 100000 bases or less to see base-by-base alignments\n");
-    }
-else
-    {
-    struct sqlConnection *conn = hAllocConn();
-    int rowOffset;
-    struct sqlResult *sr = hRangeQuery(conn, "multizMm3Rn2", seqName, 
-    	winStart, winEnd, NULL, &rowOffset);
-    char **row;
-    unsigned int extFileId = 0;
-    struct lineFile *lf = NULL;
-    while ((row = sqlNextRow(sr)) != NULL)
-	{
-	struct scoredRef ref;
-	scoredRefStaticLoad(row + rowOffset, &ref);
-	if (ref.extFile != extFileId)
-	    {
-	    lineFileClose(&lf);
-	    lf = openExtLineFile(ref.extFile);
-	    extFileId = ref.extFile;
-	    }
-	lineFileSeek(lf, ref.offset, SEEK_SET);
-	printf("<TT><PRE>");
-	for (;;)
-	    {
-	    char *line;
-	    if (!lineFileNext(lf, &line, NULL))
-	        break;
-	    printf("%s\n", line);
-	    if (line[0] == 0)
-	        break;
-	    }
-	printf("</PRE></TT>");
-	}
-    sqlFreeResult(&sr);
-    hFreeConn(&conn);
-    }
-webEnd();
-}
-#endif /* JK_TESTING_ONLY */
-
 char *hgcNameAndSettings()
 /* Return path to hgc with variables to store UI settings.
  */
@@ -11316,7 +11277,6 @@ void doMiddle()
 char *track = cartString(cart, "g");
 char *item = cartOptionalString(cart, "i");
 char title[256];
-struct hash *trackHash;
 struct trackDb *tdb;
 
 database = cartUsualString(cart, "db", hGetDb());
@@ -11350,7 +11310,7 @@ else if (sameWord(track, "htcGetDnaExtended1"))
 else if (sameWord(track, "mrna") || sameWord(track, "mrna2") || 
          sameWord(track, "est") || sameWord(track, "intronEst") || 
          sameWord(track, "xenoMrna") || sameWord(track, "xenoBestMrna") ||
-         sameWord(track, "xenoBlastzMrna") ||
+         sameWord(track, "xenoBlastzMrna") || sameWord(track, "sim4") ||
          sameWord(track, "xenoEst") || sameWord(track, "psu") ||
          sameWord(track, "tightMrna") || sameWord(track, "tightEst") ||
          sameWord(track, "mgcIncompleteMrna") ||
@@ -11522,6 +11482,10 @@ else if (sameWord(track, "blatTetra"))
 else if (sameWord(track, "blatFugu"))
     {
     doBlatFish(tdb, item);
+    }
+else if (sameWord(track, "blatSquirt"))
+    {
+    doBlatSquirt(tdb, item);
     }
 /* This is a catch-all for blastz/blat tracks -- any special cases must be 
  * above this point! */
@@ -11729,12 +11693,6 @@ else if( sameWord(track, "altGraphX"))
     {
     doAltGraphXDetails(tdb,item);
     }
-#ifdef JK_TESTING_ONLY
-else if (sameWord(track, "HMRConservation"))
-    {
-    doHmrConservation(tdb, item);
-    }
-#endif /* JK_TESTING_ONLY */
 
 /*Evan's stuff*/
 else if (sameWord(track, "genomicSuperDups"))

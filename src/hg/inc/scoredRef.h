@@ -54,5 +54,8 @@ void scoredRefOutput(struct scoredRef *el, FILE *f, char sep, char lastSep);
 
 /* -------------------------------- End autoSql Generated Code -------------------------------- */
 
+void scoredRefTableCreate(struct sqlConnection *conn, char *tableName);
+/* Create a scored-ref table with the given name. */
+
 #endif /* SCOREDREF_H */
 

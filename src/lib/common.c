@@ -7,7 +7,7 @@
 #include "common.h"
 #include "errabort.h"
 
-static char const rcsid[] = "$Id: common.c,v 1.41 2003/05/06 07:33:41 kate Exp $";
+static char const rcsid[] = "$Id: common.c,v 1.42 2003/05/16 15:24:39 kent Exp $";
 
 void *cloneMem(void *pt, size_t size)
 /* Allocate a new buffer of given size, and copy pt to it. */
@@ -1131,6 +1131,26 @@ char *e = strrchr(s, c);
 if (e != NULL)
     *e = 0;
 }
+
+char *chopPrefixAt(char *s, char c)
+/* Like chopPrefix, but can chop on any character, not just '.' */
+{
+char *e = strchr(s, c);
+if (e == NULL) return s;
+*e++ = 0;
+return e;
+}
+
+char *chopPrefix(char *s)
+/* This will replace the first '.' in a string with
+ * 0, and return the character after this.  If there
+ * is no '.' in the string this will just return the
+ * unchanged s passed in. */
+{
+return chopPrefixAt(s, '.');
+}
+
+
     
 boolean carefulCloseWarn(FILE **pFile)
 /* Close file if open and null out handle to it. 

@@ -12,7 +12,7 @@
 #include "net.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: net.c,v 1.25 2003/05/06 07:33:43 kate Exp $";
+static char const rcsid[] = "$Id: net.c,v 1.26 2003/05/16 19:44:34 sugnet Exp $";
 
 /* Brought errno in to get more useful error messages */
 
@@ -70,7 +70,7 @@ if (!isdigit(portName[0]))
 return netMustConnect(hostName, atoi(portName));
 }
 
-static int netAcceptingSocketFrom(int port, int queueSize, char *host)
+int netAcceptingSocketFrom(int port, int queueSize, char *host)
 /* Create a socket that can accept connections from a particular
  * host.  If host is NULL then accept from anyone. */
 {

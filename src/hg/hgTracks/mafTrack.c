@@ -1,5 +1,7 @@
 /* mafTrack - stuff to handle loading and display of
- * maf type tracks in browser. Mafs are multiple alignments. */
+ * maf type tracks in browser. Mafs are multiple alignments. 
+ * This also handles axt's, mostly by convincing them they
+ * are really mafs.... */
 
 #include "common.h"
 #include "hash.h"
@@ -10,7 +12,7 @@
 #include "maf.h"
 #include "scoredRef.h"
 
-static char const rcsid[] = "$Id: mafTrack.c,v 1.8 2003/05/11 22:21:54 kent Exp $";
+static char const rcsid[] = "$Id: mafTrack.c,v 1.10 2003/05/17 06:26:57 kent Exp $";
 
 struct mafItem
 /* A maf track item. */
@@ -47,6 +49,24 @@ for (el = *pList; el != NULL; el = next)
 *pList = NULL;
 }
 
+struct mafAli *mafOrAxtLoadInRegion(struct sqlConnection *conn, 
+	struct track *tg, char *chrom, 
+	int start, int end, boolean isAxt)
+/* Load mafs from region, either from maf or axt file. */
+{
+if (isAxt)
+    {
+    struct hash *qSizeHash = hChromSizeHash(tg->otherDb);
+    struct mafAli *mafList = axtLoadAsMafInRegion(conn, tg->mapName,
+    	chrom, start, end,
+	database, tg->otherDb, hChromSize(chrom), qSizeHash);
+    hashFree(&qSizeHash);
+    return mafList;
+    }
+else
+    return mafLoadInRegion(conn, tg->mapName, chrom, start, end);
+}
+
 static void dbPartOfName(char *name, char *retDb, int retDbSize)
 /* Parse out just database part of name (up to but not including
  * first dot). */
@@ -65,24 +85,22 @@ else
     }
 }
 
-static struct mafItem *mafBaseByBaseItems(struct track *tg, int scoreHeight)
-/* Load up what we need for base-by-base view. */
+static struct mafItem *baseByBaseItems(struct track *tg, int scoreHeight, 
+	struct mafAli *mafList)
+/* Given a list of mafs, make up base-by-base tracks. */
 {
 struct mafItem *miList = NULL, *mi;
-struct mafAli *mafList = NULL, *maf;
-struct sqlConnection *conn = hAllocConn();
+struct mafAli *maf;
 char *myOrg = hOrganism(database);
 char buf[64];
 
 /* Load up mafs and store in track so drawer doesn't have
  * to do it again. */
-mafList = mafLoadInRegion(conn, tg->mapName, chromName, winStart, winEnd);
 tg->customPt = mafList;
 
 /* Make up item that will show inserts in this organism. */
 AllocVar(mi);
-// snprintf(buf, sizeof(buf), "%s Inserts", myOrg);
-mi->name = cloneString("Hidden");
+mi->name = cloneString("Hidden Gaps");
 mi->height = tl.fontHeight;
 slAddHead(&miList, mi);
 
@@ -124,13 +142,29 @@ mi->name = cloneString("Score");
 mi->height = scoreHeight;
 slAddHead(&miList, mi);
 
-hFreeConn(&conn);
 slReverse(&miList);
 return miList;
 }
 
-static void mafLoad(struct track *tg)
-/* Load up maf tracks.  What this will do depends on
+static struct mafItem *mafBaseByBaseItems(struct track *tg, int scoreHeight, boolean isAxt)
+/* Load up what we need for base-by-base view. */
+{
+struct mafAli *mafList = NULL;
+struct mafItem *miList = NULL;
+struct sqlConnection *conn = hAllocConn();
+
+/* Load up mafs and store in track so drawer doesn't have
+ * to do it again. */
+mafList = mafOrAxtLoadInRegion(conn, tg, chromName, winStart, winEnd, isAxt);
+
+/* Make up tracks for display. */
+miList = baseByBaseItems(tg, scoreHeight, mafList);
+hFreeConn(&conn);
+return miList;
+}
+
+static void mafOrAxtLoad(struct track *tg, boolean isAxt)
+/* Load up maf or axt tracks.  What this will do depends on
  * the zoom level and the display density. */
 {
 struct mafItem *miList = NULL;
@@ -142,7 +176,7 @@ if (tg->visibility == tvFull)
     scoreHeight *= 4;
 if (zoomedToBaseLevel)
     {
-    miList = mafBaseByBaseItems(tg, scoreHeight);
+    miList = mafBaseByBaseItems(tg, scoreHeight, isAxt);
     }
 else
     {
@@ -152,6 +186,14 @@ else
     }
 tg->items = miList;
 }
+
+static void mafLoad(struct track *tg)
+/* Load up maf tracks.  */
+{
+mafOrAxtLoad(tg, FALSE);
+}
+
+
 
 static int mafTotalHeight(struct track *tg, 
 	enum trackVisibility vis)
@@ -343,7 +385,8 @@ struct sqlResult *sr = hRangeQuery(conn, tg->mapName, chromName,
     seqStart, seqEnd, NULL, &rowOffset);
 double scale = scaleForPixels(width);
 int x1,x2,y,w;
-int height1 = tg->heightPer-1;
+struct mafItem *mi = tg->items;
+int height1 = mi->height-2;
 
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -371,7 +414,7 @@ hFreeConn(&conn);
 
 static void mafDrawDetails(struct track *tg, int seqStart, int seqEnd,
         struct vGfx *vg, int xOff, int yOff, int width, 
-        MgFont *font, Color color, enum trackVisibility vis)
+        MgFont *font, Color color, enum trackVisibility vis, boolean isAxt)
 /* Draw wiggle/density plot based on scoring things on the fly. 
  * The */
 {
@@ -384,7 +427,7 @@ struct mafItem *mi = tg->items;
 int height1 = mi->height-2;
 
 safef(dbChrom, sizeof(dbChrom), "%s.%s", database, chromName);
-mafList = mafLoadInRegion(conn, tg->mapName, chromName, seqStart, seqEnd);
+mafList = mafOrAxtLoadInRegion(conn, tg, chromName, seqStart, seqEnd, isAxt);
 for (full = mafList; full != NULL; full = full->next)
     {
     double scoreScale;
@@ -434,11 +477,11 @@ hFreeConn(&conn);
 
 static void mafDrawGraphic(struct track *tg, int seqStart, int seqEnd,
         struct vGfx *vg, int xOff, int yOff, int width, 
-        MgFont *font, Color color, enum trackVisibility vis)
+        MgFont *font, Color color, enum trackVisibility vis, boolean isAxt)
 /* Draw wiggle or density plot, not base-by-base. */
 {
 int seqSize = seqEnd - seqStart;
-if (seqSize >= 500000)
+if (seqSize >= 1000000)
     {
     mafDrawOverview(tg, seqStart, seqEnd, vg, 
     	xOff, yOff, width, font, color, vis);
@@ -446,7 +489,7 @@ if (seqSize >= 500000)
 else
     {
     mafDrawDetails(tg, seqStart, seqEnd, vg, 
-	xOff, yOff, width, font, color, vis);
+	xOff, yOff, width, font, color, vis, isAxt);
     }
 }
 
@@ -583,6 +626,20 @@ freez(&scores);
 hashFree(&miHash);
 }
 
+static void mafOrAxtDraw(struct track *tg, int seqStart, int seqEnd,
+        struct vGfx *vg, int xOff, int yOff, int width, 
+        MgFont *font, Color color, enum trackVisibility vis, 
+	boolean isAxt)
+/* Draw routine for maf or axt type tracks.  This will load
+ * the items as well as drawing them. */
+{
+if (zoomedToBaseLevel)
+    mafDrawBases(tg, seqStart, seqEnd, vg, xOff, yOff, width, font, color, vis);
+else 
+    mafDrawGraphic(tg, seqStart, seqEnd, vg, xOff, yOff, width, font, color, vis, isAxt);
+mapBoxHc(seqStart, seqEnd, xOff, yOff, width, tg->height, tg->mapName, 
+    tg->mapName, NULL);
+}
 
 static void mafDraw(struct track *tg, int seqStart, int seqEnd,
         struct vGfx *vg, int xOff, int yOff, int width, 
@@ -590,12 +647,7 @@ static void mafDraw(struct track *tg, int seqStart, int seqEnd,
 /* Draw routine for mafAlign type tracks.  This will load
  * the items as well as drawing them. */
 {
-if (zoomedToBaseLevel)
-    mafDrawBases(tg, seqStart, seqEnd, vg, xOff, yOff, width, font, color, vis);
-else 
-    mafDrawGraphic(tg, seqStart, seqEnd, vg, xOff, yOff, width, font, color, vis);
-mapBoxHc(seqStart, seqEnd, xOff, yOff, width, tg->height, tg->mapName, 
-    tg->mapName, NULL);
+mafOrAxtDraw(tg,seqStart,seqEnd,vg,xOff,yOff,width,font,color,vis,FALSE);
 }
 
 void mafMethods(struct track *tg)
@@ -604,6 +656,38 @@ void mafMethods(struct track *tg)
 tg->loadItems = mafLoad;
 tg->freeItems = mafFree;
 tg->drawItems = mafDraw;
+tg->itemName = mafName;
+tg->mapItemName = mafName;
+tg->totalHeight = mafTotalHeight;
+tg->itemHeight = mafItemHeight;
+tg->itemStart = tgItemNoStart;
+tg->itemEnd = tgItemNoEnd;
+tg->mapsSelf = TRUE;
+}
+
+static void axtLoad(struct track *tg)
+/* Load up axt tracks.  What this will do depends on
+ * the zoom level and the display density. */
+{
+mafOrAxtLoad(tg, TRUE);
+}
+
+static void axtDraw(struct track *tg, int seqStart, int seqEnd,
+        struct vGfx *vg, int xOff, int yOff, int width, 
+        MgFont *font, Color color, enum trackVisibility vis)
+/* Draw routine for axt type tracks.  This will load
+ * the items as well as drawing them. */
+{
+mafOrAxtDraw(tg,seqStart,seqEnd,vg,xOff,yOff,width,font,color,vis,TRUE);
+}
+
+void axtMethods(struct track *tg, char *otherDb)
+/* Make track group for axt alignments. */
+{
+tg->otherDb = cloneString(otherDb);
+tg->loadItems = axtLoad;
+tg->freeItems = mafFree;
+tg->drawItems = axtDraw;
 tg->itemName = mafName;
 tg->mapItemName = mafName;
 tg->totalHeight = mafTotalHeight;

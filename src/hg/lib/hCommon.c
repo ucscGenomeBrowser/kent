@@ -5,7 +5,7 @@
 #include "chromInfo.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: hCommon.c,v 1.16 2003/05/06 07:22:22 kate Exp $";
+static char const rcsid[] = "$Id: hCommon.c,v 1.17 2003/05/16 03:48:52 kent Exp $";
 
 static char *_hgcName = "../cgi-bin/hgc";	/* Path to click processing program. */
 static char *_hgTracksName = "../cgi-bin/hgTracks"; /* Path back to self. */
@@ -173,14 +173,6 @@ char *skipChr(char *s)
 if (startsWith("chr", s))
     s += 3;
 return s;
-}
-
-boolean hIsFin(char *chrom)
-/* Return TRUE if this is a finished chromosome. */
-{
-chrom = skipChr(chrom);
-return sameString(chrom, "20") || sameString(chrom, "21")
-   || sameString(chrom, "22");
 }
 
 boolean hIsMgcServer()

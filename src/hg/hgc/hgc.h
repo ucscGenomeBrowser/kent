@@ -6,10 +6,23 @@
 #include "cart.h"
 #endif
 
+#ifndef TRACKDB_H
+#include "trackDb.h"
+#endif 
+
+#ifndef BED_H
+#include "bed.h"
+#endif
+
+#ifndef HDB_H
+#include "hdb.h"
+#endif 
+
 extern struct cart *cart;	/* User's settings. */
 extern char *seqName;		/* Name of sequence we're working on. */
 extern int winStart, winEnd;    /* Bounds of sequence. */
 extern char *database;		/* Name of mySQL database. */
+extern struct hash *trackHash;	/* A hash of all tracks - trackDb valued */
 
 void hgcStart(char *title);
 /* Print out header of web page with title.  Set
@@ -35,6 +48,9 @@ void hgcAnchor(char *group, char *item, char *other);
 /* Generate an anchor that calls click processing program with item 
  * and other parameters. */
 
+void linkToOtherBrowser(char *otherDb, char *chrom, int start, int end);
+/* Make anchor tag to open another browser window. */
+
 boolean clipToChrom(int *pStart, int *pEnd);
 /* Clip start/end coordinates to fit in chromosome. */
 
@@ -54,3 +70,12 @@ void genericHeader(struct trackDb *tdb, char *item);
 
 void printTrackHtml(struct trackDb *tdb);
 /* If there's some html associated with track print it out. */
+
+/* ----Routines in other modules in the same directory---- */
+void genericMafClick(struct sqlConnection *conn, struct trackDb *tdb, 
+	char *item, int start);
+/* Display details for MAF tracks. */
+
+void genericAxtClick(struct sqlConnection *conn, struct trackDb *tdb, 
+	char *item, int start, char *otherDb);
+/* Display details for AXT tracks. */

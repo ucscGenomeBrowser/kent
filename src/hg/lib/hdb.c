@@ -24,7 +24,7 @@
 #include "scoredRef.h"
 #include "maf.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.109 2003/05/12 07:57:24 markd Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.111 2003/05/17 16:56:46 kent Exp $";
 
 #define DEFAULT_PROTEINS "proteins"
 #define DEFAULT_GENOME "Human"
@@ -430,7 +430,6 @@ int hChromSize(char *chromName)
 struct hashEl *hashEl;
 if ((hashEl = hashLookup(hdbChromInfoHash(),chromName))!= NULL)
     return ((struct chromInfoEntry *)hashEl->val)->size;
-
 errAbort("There is no chromosome %s in database %s.",chromName,hdbName);
 }
 
@@ -2370,6 +2369,60 @@ while ((row = sqlNextRow(sr)) != NULL)
     }
 sqlFreeResult(&sr);
 mafFileFree(&mf);
+slReverse(&mafList);
+return mafList;
+}
+
+struct hash *hChromSizeHash(char *db)
+/* Get hash of chromosome sizes for database.  Just hashFree it when done. */
+{
+struct sqlConnection *conn = sqlConnect(db);
+struct sqlResult *sr;
+char **row;
+struct hash *hash = newHash(0);
+
+sr = sqlGetResult(conn, "select chrom,size from chromInfo");
+while ((row = sqlNextRow(sr)) != NULL)
+    hashAddInt(hash, row[0], sqlUnsigned(row[1]));
+sqlFreeResult(&sr);
+sqlDisconnect(&conn);
+return hash;
+}
+
+struct mafAli *axtLoadAsMafInRegion(struct sqlConnection *conn, char *table,
+	char *chrom, int start, int end, 
+	char *tPrefix, char *qPrefix, int tSize,  struct hash *qSizeHash)
+/* Return list of alignments in region from axt external file as a maf. */
+{
+char **row;
+unsigned int extFileId = 0;
+struct lineFile *lf = NULL;
+struct mafAli *maf, *mafList = NULL;
+struct axt *axt;
+int rowOffset;
+struct sqlResult *sr = hRangeQuery(conn, table, chrom, 
+    start, end, NULL, &rowOffset);
+
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    struct scoredRef ref;
+    scoredRefStaticLoad(row + rowOffset, &ref);
+    if (ref.extFile != extFileId)
+	{
+	char *path = hExtFileName("extFile", ref.extFile);
+	lf = lineFileOpen(path, TRUE);
+	extFileId = ref.extFile;
+	}
+    lineFileSeek(lf, ref.offset, SEEK_SET);
+    axt = axtRead(lf);
+    if (axt == NULL)
+        internalErr();
+    maf = mafFromAxt(axt, tSize, tPrefix, hashIntVal(qSizeHash, axt->qName), qPrefix);
+    axtFree(&axt);
+    slAddHead(&mafList, maf);
+    }
+sqlFreeResult(&sr);
+lineFileClose(&lf);
 slReverse(&mafList);
 return mafList;
 }

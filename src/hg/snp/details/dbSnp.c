@@ -11,11 +11,12 @@
 #include "hash.h"
 #include "jksql.h"
 
-static char const rcsid[] = "$Id: dbSnp.c,v 1.6 2003/05/08 23:51:13 daryl Exp $";
+static char const rcsid[] = "$Id: dbSnp.c,v 1.7 2003/05/13 17:26:13 daryl Exp $";
 
 #define FLANK  20
 #define ALLELE 20
 #define REGION ((FLANK*2)+ALLELE)
+#define DEBUG  0
 
 struct snpInfo
 /* Various info on a SNP all in one place. */
@@ -51,8 +52,8 @@ struct slName *list = NULL, *el;
 char   queryString[]="select chrom from chromInfo where chrom not like '%M%' "
     " and chrom not like '%N%' and chrom not like '%random'";
 
-/* for debug */
-//sprintf(queryString,"select chrom from chromInfo where chrom='chr22'");
+if (DEBUG) 
+    sprintf(queryString,"select chrom from chromInfo where chrom='chr22'");
 
 sr = sqlGetResult(conn, queryString);
 while ((row=sqlNextRow(sr)))
@@ -88,14 +89,14 @@ struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr;
 char **row=NULL;
 char query[512];
-long int snpCount=0;
+unsigned long int snpCount=0;
 sprintf(query, "select chromStart, name from %s where chrom = '%s'", snpTable, chromName);
 sr = sqlGetResult(conn, query);
 while ((row=sqlNextRow(sr)))
     {
     struct snpInfo *si;
     AllocVar(si);
-    hashAddSaveName(snpHash, row[1], si, &si->name);
+    hashAddSaveName(snpHash, row[1], si, &si->name+2);
     si->chromPos = atoi(row[0]);
     strncpy(si->baseInAsm, seq->dna+(si->chromPos),1);
     strncpy(si->region,seq->dna+(si->chromPos)-FLANK,REGION);
@@ -113,14 +114,14 @@ struct hash *makeSnpInfoHash(int isHuman)
 struct slName *chromList = getChromList();
 struct slName *chrom;
 struct hash *snpHash = newHash(20); /* Make hash 2^20 (1M) big */
-long int snpNihCount=0;
-long int snpTscCount=0;
+unsigned long int snpNihCount=0;
+unsigned long int snpTscCount=0;
 
 for (chrom = chromList; chrom != NULL; chrom = chrom->next)
     {
     struct dnaSeq *seq = hLoadChrom(chrom->name);
     snpNihCount=addSnpsFromChrom(chrom->name, seq, "snpNih", snpHash);
-    if (isHuman) snpTscCount=addSnpsFromChrom(chrom->name, seq, "snpTsc", snpHash);
+    if (isHuman) snpTscCount=addSnpsFromChrom(chrom->name, seq,"snpTsc",snpHash);
     freeDnaSeq(&seq);
     }
 return snpHash;
@@ -133,8 +134,8 @@ struct lineFile *lf = lineFileOpen(input, TRUE);
 FILE *f = mustOpen(output, "w");
 char *row[8];
 struct hash *snpHash = NULL;
-long int counter[4];
-long int offset=0;
+unsigned long int counter[4];
+unsigned long int offset=0;
 int      index=0;
 int      i=0;
 int      isHuman=0;
@@ -173,7 +174,7 @@ while (lineFileRow(lf, row)) /* process one snp at a time */
 
     /* store values from file in local structures */
     snprintf(dbSnp->rsId, strlen(row[0])+3, "rs%s", row[0]);
-    si = hashFindVal(snpHash, dbSnp->rsId);
+    si = hashFindVal(snpHash, dbSnp->rsId+2);
 
     if ( si == NULL )
 	counter[1]++; /* rsId not found in database */
@@ -296,8 +297,7 @@ while (lineFileRow(lf, row)) /* process one snp at a time */
 	    }
 
 	if (flankFail == 0) /* match was found between database and file */
-	    //	  fprintf(f,"%s\t%f\t%f\t%s\t%s\t%s\t%s\t%s\n",
-	    fprintf(f,"%ld\t%s\t%f\t%f\t%s\t%s\t%s\t%s\t%s\n",counter[0],
+	    fprintf(f,"%s\t%f\t%f\t%s\t%s\t%s\t%s\t%s\n",
 		    dbSnp->rsId+2, dbSnp->avgHet, dbSnp->avgHetSE,
 		    dbSnp->valid, dbSnp->allele1, dbSnp->allele2,
 		    dbSnp->observed, dbSnp->alternate);
@@ -308,9 +308,10 @@ fflush(f);
 /* print summary statistics */
 printf("Total SNPs:              \t%ld\n",           counter[0]);
 printf("Not in %s:               \t%ld\n", database, counter[1]);
-printf("Flank < %d bases:        \t%ld\n", 20,       counter[2]);
+//printf("Flank < %d bases:        \t%ld\n", FLANK,    counter[2]);
 printf("%s != %s:\t%ld\t(mismatches in flanking sequences)\n", database,  input, counter[3]);
 printf("There should be %ld lines in the output file %s.\n",counter[0]-counter[1]-counter[3],output);
+printf("\nFinished!!\n");
 fflush(f);
 }
 
@@ -324,11 +325,18 @@ errAbort("dbSnp - Get the top strand allele from the current assembly\n"
 	 "Example:\n\tdbSnp hg13     dbSnpInput dbSnpOutput >& dnSnpLog &\n");
 }
 
+void done()
+/* clean up */
+{
+printf("\nDone.\n\n");
+}
+
 int main(int argc, char *argv[])
 {
 char *database;
 char *input;
 char *output;
+atexit(done);
 if (argc != 4)
     {
     usage();

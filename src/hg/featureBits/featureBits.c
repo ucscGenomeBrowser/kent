@@ -14,7 +14,7 @@
 #include "agpGap.h"
 #include "chain.h"
 
-static char const rcsid[] = "$Id: featureBits.c,v 1.17 2003/05/06 07:22:16 kate Exp $";
+static char const rcsid[] = "$Id: featureBits.c,v 1.18 2003/05/16 19:16:35 booch Exp $";
 
 int minSize = 1;	/* Minimum size of feature. */
 char *clChrom = "all";	/* Which chromosome. */
@@ -69,7 +69,7 @@ boolean thisBit, lastBit = FALSE;
 int start = 0;
 int id = 0;
 
-for (i=0; i<=chromSize; ++i)	/* We depend on extra zero bit at end. */
+for (i=0; i<chromSize; ++i)	/* We depend on extra zero bit at end. */
     {
     thisBit = bitReadOne(bits, i);
     if (thisBit)
@@ -94,6 +94,19 @@ for (i=0; i<=chromSize; ++i)	/* We depend on extra zero bit at end. */
 	    }
 	}
     lastBit = thisBit;
+    }
+if (lastBit && i-start >= minSize)
+    {
+    if (bed)
+	fprintf(bed, "%s\t%d\t%d\t%s.%d\n", chrom, start, i, chrom, ++id);
+    if (fa)
+	{
+	char name[256];
+	struct dnaSeq *seq = hDnaFromSeq(chrom, start, i, dnaLower);
+	sprintf(name, "%s:%d-%d", chrom, start, i);
+	faWriteNext(fa, name, seq->dna, seq->size);
+	freeDnaSeq(&seq);
+	}
     }
 }
 

@@ -1059,22 +1059,31 @@ PRODUCING GENSCAN PREDICTIONS (TODO - REDO)
     hgLoadBed mm3 genscanSubopt genscanSubopt.bed > /dev/null
 
 
-TWINSCAN GENE PREDICTIONS (TODO)
-
+TWINSCAN GENE PREDICTIONS (Done 2003-05-20)
     mkdir -p ~/mm3/bed/twinscan
     cd ~/mm3/bed/twinscan
-    mv Gtf.tgz Gtf.020610.tgz
-    mv Ptx.tgz Ptx.020610.tgz
-    rm chr*.gtf chr*.ptx chr*.fa *.tab
+
+    mkdir -p ~/mm3/bed/twinscan/gtf
+    mkdir -p ~/mm3/bed/twinscan/ptx
     foreach c (1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 X)
-      wget http://genes.cs.wustl.edu/mouse/12-3-02/gtf/chr$c.gtf
-      wget http://genes.cs.wustl.edu/mouse/12-3-02/ptx/chr$c.ptx
+      cd ~/mm3/bed/twinscan/gtf
+      wget http://genes.cs.wustl.edu/mouse/5-01-03/gtf/chr$c.gtf
+      cd ~/mm3/bed/twinscan/ptx
+      wget http://genes.cs.wustl.edu/mouse/5-01-03/ptx/chr$c.ptx
+    end
+
+    cd ~/mm3/bed/twinscan/gtf
+    foreach c (1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 X)
+      f=chr$c
+      cat chr$c.gtf | sed "s/^[0-9]*	//"  | sed "s/^/$f	/" > foo
+      mv foo chr$c.gtf
     end
     ldHgGene mm3 twinscan chr*.gtf -exon=CDS
-    - pare down to id:
+
+    cd ~/mm3/bed/twinscan/ptx
     foreach c (1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 X)
       perl -wpe 's/^\>.*\s+source_id\s*\=\s*(\S+).*$/\>$1/;' < \
-        chr$c.ptx > chr$c-fixed.fa
+        chr$c.ptx | sed  "s/^>chr.*/&.a/" > chr$c-fixed.fa
     end
     hgPepPred mm3 generic twinscanPep chr*-fixed.fa
 
@@ -1683,5 +1692,7 @@ CREATING THE mm3Rn2L SAMPLE TRACK (a.k.a WIGGLE TRACK)
 ------------------------------------------------------
 o - refer to the script at src/hg/sampleTracks/makeMm3Rn2.doc
 
-
+# create MGC Genes track (markd 13 may 2003)
+# this will be automated in the incremental genbank update
+/cluster/store5/genbank/bin/i386/mgcDbLoad mm3 /cluster/store5/genbank/data/download/mgc/2003.05.06/mgcFullStatus.tab.gz 
 
