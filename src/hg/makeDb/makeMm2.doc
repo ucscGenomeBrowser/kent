@@ -1358,12 +1358,22 @@ o - Rescuing STS track:
 
 
 LOAD SLAM GENES 
-     cd ~/mm/bed
+     cd /cluster/store3/gs.13/build30/bed
      mkdir slam
      cd slam
-     wget http://bio.math.berkeley.edu/slam/mouse/gff/mmCDS.gff.gz
-     wget http://baboon.math.berkeley.edu/~scawley/mmCDS.bed.gz
+     wget http://bio.math.berkeley.edu/slam/mouse/gff/UCSC/mmCDS.gff.gz
+     wget http://bio.math.berkeley.edu/slam/mouse/gff/UCSC/mmCNS.gff.gz
      gunzip *
-     - make sure there are no plus signs the gff files it will break the browser.
-     ldHgGene mm2 slam mmCDS.gff
-     hgLoadBed mm2 slamNonCoding mmCDS.bed
+     ldHgGene -exon=CDS mm2 slam mmCDS.gff
+     mv genePred.tab genePred.mm2
+
+     awk '{print $1,$4,$5,$10,$12}' mmCNS.gff > mmCNS.bed
+     sed -e 's/;//g' -e 's/"//g' mmCNS.bed > mmCNS.bed.2
+     sort -n -k 5,5 mmCNS.bed.2 > mmCNS.bed.sort
+     examine head and tail of sorted file for range of scores
+     rm mmCNS.bed.sort
+     size.pl < mmCNS.bed.2 > mmCNS.bed.2.size
+     sort -n -k 2,2 mmCNS.bed.2.size > mmCNS.bed.2.size.sort
+     examine head and tail of sorted file for range of sizes
+     rm mmCNS.bed.2.size.sort
+     expand.pl < mmCNS.bed.2 > mmCNS.bed.2.expand

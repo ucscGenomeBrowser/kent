@@ -2330,13 +2330,23 @@ o - Load dbtss alignments into database
       hgLoadPsl hg12 -tNameIx dbtssAli.psl
 
 LOAD SLAM GENES 
-     ln -s /cluster/store1/gs.13/build30/ ~/oo
-     cd ~/oo/bed
+     cd /cluster/store3/gs.13/build30/bed
      mkdir slam
      cd slam
-     wget http://bio.math.berkeley.edu/slam/mouse/gff/hsCDS.gff.gz
-     wget http://baboon.math.berkeley.edu/~scawley/hsCDS.bed.gz
+     wget http://bio.math.berkeley.edu/slam/mouse/gff/UCSC/hsCDS.gff.gz
+     wget http://bio.math.berkeley.edu/slam/mouse/gff/UCSC/hsCNS.gff.gz
      gunzip *
-     - make sure there are no plus signs the gff files it will break the browser.
-     ldHgGene hg12 slam hsCDS.gff
-     hgLoadBed hg12 slamNonCoding hsCDS.bed
+     ldHgGene -exon=CDS hg12 slam hsCDS.gff
+     mv genePred.tab genePred.hg12
+
+     awk '{print $1,$4,$5,$10,$12}' hsCNS.gff > hsCNS.bed
+     sed -e 's/;//g' -e 's/"//g' hsCNS.bed > hsCNS.bed.2
+     sort -n -k 5,5 hsCNS.bed.2 > hsCNS.bed.sort
+     examine head and tail of sorted file for range of scores
+     rm hsCNS.bed.sort
+     size.pl < hsCNS.bed.2 > hsCNS.bed.2.size
+     sort -n -k 2,2 hsCNS.bed.2.size > hsCNS.bed.2.size.sort
+     examine head and tail of sorted file for range of sizes
+     rm hsCNS.bed.2.size.sort
+     expand.pl < hsCNS.bed.2 > hsCNS.bed.2.expand
+     hgLoadBed -tab hg12 slamNonCoding hsCDS.bed.2.expand
