@@ -19,7 +19,6 @@
 #include "fa.h"
 #include "fuzzyFind.h"
 #include "seqOut.h"
-#include "trackDb.h"
 #include "hdb.h"
 #include "hui.h"
 #include "hgRelate.h"
@@ -103,11 +102,10 @@
 #include "stsInfoMouseNew.h"
 #include "vegaInfo.h"
 #include "scoredRef.h"
-#include "maf.h"
 #include "hgc.h"
 #include "genbank.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.414 2003/05/15 22:02:39 kent Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.415 2003/05/16 00:13:41 kent Exp $";
 
 
 struct cart *cart;	/* User's settings. */
@@ -1416,6 +1414,13 @@ chainDbAddBlocks(chain, track, conn);
 return chain;
 }
 
+void linkToOtherBrowser(char *otherDb, char *chrom, int start, int end)
+/* Make anchor tag to open another browser window. */
+{
+printf("<A TARGET=\"_blank\" HREF=\"/cgi-bin/hgTracks?db=%s&position=%s%%3A%d-%d\">",
+   otherDb, chrom, start+1, end);
+}
+
 void chainToOtherBrowser(struct chain *chain, char *otherDb, char *otherOrg)
 /* Put up link that lets us use chain to browser on
  * corresponding window of other species. */
@@ -1426,8 +1431,7 @@ chainSubsetOnT(chain, winStart, winEnd, &subChain, &toFree);
 if (subChain != NULL)
     {
     qChainRangePlusStrand(subChain, &qs, &qe);
-    printf("<A target=\"_blank\" href=\"/cgi-bin/hgTracks?db=%s&position=%s%%3A%d-%d\">",
-	   otherDb, subChain->qName, qs, qe);
+    linkToOtherBrowser(otherDb, subChain->qName, qs, qe);
     printf("Open %s browser </A> at position corresponding to the part of chain that is in this window.<BR>\n", otherOrg);
     }
 chainFree(&toFree);
@@ -1622,86 +1626,6 @@ printf("<B>%s new repeat bases:</B> %u (%1.1f%%)<BR>\n",
 printf("<B>%s size:</B> %d<BR>\n", org, net->tEnd - net->tStart);
 printf("<B>%s size:</B> %d<BR>\n", otherOrg, net->qEnd - net->qStart);
 netAlignFree(&net);
-}
-
-void genericMafClick(struct sqlConnection *conn, struct trackDb *tdb, 
-	char *item, int start)
-{
-if (winEnd - winStart > 20000)
-    {
-    printf("Zoom so that window is 20000 bases or less to see base-by-base alignments\n");
-    }
-else
-    {
-    struct mafAli *mafList, *maf, *subList = NULL;
-    int realCount = 0;
-    char dbChrom[64];
-    struct slName *dbList = NULL, *dbEl;
-
-    mafList = mafLoadInRegion(conn, tdb->tableName, seqName, winStart, winEnd);
-    safef(dbChrom, sizeof(dbChrom), "%s.%s", database, seqName);
-    printf("<TT><PRE>");
-    for (maf = mafList; maf != NULL; maf = maf->next)
-        {
-	struct mafAli *subset = mafSubset(maf, dbChrom, winStart, winEnd);
-	if (subset != NULL)
-	    {
-	    struct mafComp *mc;
-	    subset->score = mafScoreMultiz(subset);
-	    slAddHead(&subList, subset);
-
-	    /* Get a list of all databases used in any maf. */
-	    for (mc = subset->components; mc != NULL; mc = mc->next)
-	        {
-		char dbOnly[64];
-		char *s;
-		strncpy(dbOnly, mc->src, sizeof(dbOnly));
-		s = strchr(dbOnly, '.');
-		if (s != NULL) *s = 0;
-		slNameStore(&dbList, dbOnly);
-		}
-	    }
-	}
-    slReverse(&subList);
-    slReverse(&dbList);
-    mafAliFreeList(&mafList);
-    printf("Multiple alignments between");
-    for (dbEl = dbList; dbEl != NULL; dbEl = dbEl->next)
-        {
-	char *org = hOrganism(dbEl->name);
-	tolowers(org);
-	if (dbEl != dbList)
-	   {
-	   if (dbEl->next == NULL)
-	       printf(" and");
-	   else
-	       printf(",");
-	   }
-	printf(" %s", org);
-	freez(&org);
-	}
-    printf(".  The versions of each genome used are:");
-    printf("<UL>\n");
-    for (dbEl = dbList; dbEl != NULL; dbEl = dbEl->next)
-        {
-	char *db = dbEl->name;
-	char *org = hOrganism(db);
-	char *freeze = hFreezeFromDb(db);
-	printf("<LI><B>%s</B> - %s (%s)", org, freeze, db);
-	freez(&org);
-	freez(&freeze);
-	}
-    printf("</UL>\n");
-    for (maf = subList; maf != NULL; maf = maf->next)
-        {
-	mafWrite(stdout, maf);
-	++realCount;
-	}
-    if (realCount == 0)
-        printf("No multiple alignment in browser window");
-    printf("</PRE></TT>");
-    mafAliFreeList(&subList);
-    }
 }
 
 void genericClickHandler(struct trackDb *tdb, char *item, char *itemForUrl)

@@ -6,7 +6,7 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 
 A = hgc
 
-O = $A.o
+O = $A.o mafClick.o
 
 my: compile
 	mv $A /usr/local/apache/cgi-bin-$(USER)/$A
