@@ -91,8 +91,8 @@ for (;;)
     wordCount = chopLine(line, words);
     if (wordCount < 9)
         errAbort("Short line in %s\n", inName);
-    if (!wormParseChromRange(words[7], &chrom, &xao->start, &xao->end))
-        errAbort("Bad chromosome range in %s\n", inName);
+    if (!wormParseChromRange(words[8], &chrom, &xao->start, &xao->end))
+        errAbort("Bad chromosome range in %s, %s\n", inName, words[8]);
     chromIx = wormChromIx(chrom);
     slAddHead(&chromXao[chromIx], xao);
 
