@@ -12,7 +12,7 @@
 #include "gff.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: gffOut.c,v 1.11 2004/10/12 00:14:11 kent Exp $";
+static char const rcsid[] = "$Id: gffOut.c,v 1.12 2004/11/08 17:59:37 kent Exp $";
 
 static void addGffLineFromBed(struct gffLine **pGffList, struct bed *bed,
 			      char *source, char *feature,
@@ -34,7 +34,15 @@ if (strand != '+' && strand != '-')
 gff->strand = strand;
 gff->frame = frame;
 gff->group = cloneString(txName);
-gff->geneId = cloneString(bed->name);
+if (bed->name != NULL)
+    gff->geneId = cloneString(bed->name);
+else
+    {
+    static int namelessIx = 0;
+    char buf[64];
+    safef(buf, sizeof(buf), "gene%d", ++namelessIx);
+    gff->geneId = cloneString(buf);
+    }
 slAddHead(pGffList, gff);
 }
 
@@ -91,21 +99,29 @@ struct gffLine *gffList = NULL;
 struct bed *bed;
 int i, j, s, e;
 char txName[256];
+static int namelessIx = 0;
 
 for (bed = bedList;  bed != NULL;  bed = bed->next)
     {
     /* Enforce unique transcript_ids. */
-    struct hashEl *hel = hashLookup(nameHash, bed->name);
-    int dupCount = (hel != NULL ? ptToInt(hel->val) : 0);
-    if (dupCount > 0)
+    if (bed->name != NULL)
 	{
-	safef(txName, sizeof(txName), "%s_dup%d", bed->name, dupCount);
-	hel->val = NULL + dupCount + 1;
+	struct hashEl *hel = hashLookup(nameHash, bed->name);
+	int dupCount = (hel != NULL ? ptToInt(hel->val) : 0);
+	if (dupCount > 0)
+	    {
+	    safef(txName, sizeof(txName), "%s_dup%d", bed->name, dupCount);
+	    hel->val = NULL + dupCount + 1;
+	    }
+	else
+	    {
+	    safef(txName, sizeof(txName), "%s", bed->name);
+	    hashAddInt(nameHash, bed->name, 1);
+	    }
 	}
     else
-	{
-	safef(txName, sizeof(txName), "%s", bed->name);
-	hashAddInt(nameHash, bed->name, 1);
+        {
+	safef(txName, sizeof(txName), "tx%d\n", ++namelessIx);
 	}
     if (hti->hasBlocks && hti->hasCDS)
 	{
