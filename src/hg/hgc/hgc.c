@@ -142,7 +142,7 @@
 #include "bed6FloatScore.h"
 #include "pscreen.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.728 2004/08/26 11:29:31 kent Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.729 2004/08/26 11:31:41 baertsch Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -7683,7 +7683,7 @@ if (!hTableExists(chainTable) )
 //    }
 printf("<B>Description:</B> Retrogenes are processed mRNAs that are inserted back into the genome. Most are pseudogenes, and some are functional genes or anti-sense transcripts that may impede mRNA translation.<p>\n");
 printf("<B>Syntenic&nbsp;in&nbsp;mouse: </B>%d&nbsp;%%<br>\n",pg->overlapDiag);
-printf("<B>PolyA&nbsp;tail:</B>&nbsp;%d As&nbsp;out&nbsp;of&nbsp;%d&nbsp;bp <B>Divergence:&nbsp;</B>%5.1f&nbsp;%%\n",pg->polyA,pg->polyAlen, (float)pg->polyA*100/(float)pg->polyAlen);
+printf("<B>PolyA&nbsp;tail:</B>&nbsp;%d As&nbsp;out&nbsp;of&nbsp;%d&nbsp;bp <B>Percent&nbsp;Id:&nbsp;</B>%5.1f&nbsp;%%\n",pg->polyA,pg->polyAlen, (float)pg->polyA*100/(float)pg->polyAlen);
 printf("&nbsp;(%d&nbsp;bp&nbsp;from&nbsp;end&nbsp;of&nbsp;retrogene)<br>\n",pg->polyAstart);
 printf("<B>Exons&nbsp;Inserted:</B>&nbsp;%d&nbsp;out&nbsp;of&nbsp;%d&nbsp;<br>\n",pg->exonCover,pg->exonCount);
 printf("<B>Bases&nbsp;matching:</B>&nbsp;%d&nbsp;\n", pg->matches);
@@ -7857,10 +7857,10 @@ if (hTableExists("all_mrna"))
             }
         }
     }
-printf("<p>RetroGene&nbsp;Score:&nbsp;%d \n",pg->axtScore);
-printf("Alignment&nbsp;Score:&nbsp;%d&nbsp;<br>\n",pg->score);
-printf("Heuristic&nbsp;Score:&nbsp;%d \n",pg->oldScore);
-printf("AdaBoost&nbsp;Confidence:</B>&nbsp;%4.3f&nbsp;\n",pg->posConf);
+printf("<p>RetroGene&nbsp;Score:&nbsp;%d \n",pg->score);
+printf("Alignment&nbsp;Score:&nbsp;%d&nbsp;<br>\n",pg->axtScore);
+if (pg->posConf != 0)
+    printf("AdaBoost&nbsp;Confidence:</B>&nbsp;%4.3f&nbsp;\n",pg->posConf);
 }
 
 void doPseudoPsl(struct trackDb *tdb, char *acc)
