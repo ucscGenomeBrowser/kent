@@ -134,11 +134,11 @@ group regulation
 visibility hide
 type bed 6+
 spectrum on
-colorLo 0,255,0
-colorMid 140,140,140
-colorHigh 0,0,255
-scoreMid 2.00
-scoreHigh 2.60
+colorLo 0,0,0
+colorMid 255,255,0
+colorHigh 255,0,0
+scoreMid 1.93
+scoreHigh 2.47
 urlLabel Transfac matrix link:
 url http://www.gene-regulation.com/cgi-bin/pub/databases/transfac/getTF.cgi?AC=$$
 
