@@ -9,7 +9,7 @@
 #include "axtInfo.h"
 #include "hgColors.h"
 
-static char const rcsid[] = "$Id: web.c,v 1.65 2004/12/15 17:20:16 angie Exp $";
+static char const rcsid[] = "$Id: web.c,v 1.66 2004/12/22 20:39:16 galt Exp $";
 
 /* flag that tell if the CGI header has already been outputed */
 boolean webHeadAlreadyOutputed = FALSE;
@@ -65,6 +65,7 @@ void webStartWrapperGatewayHeader(struct cart *theCart, char *headerText,
 char uiState[256];
 char *scriptName = cgiScriptName();
 char *db = NULL;
+boolean isEncode = FALSE;
 
 if (theCart)
     db = cartOptionalString(theCart, "db");
@@ -74,6 +75,9 @@ if (scriptName == NULL)
 /* don't output two headers */
 if(webHeadAlreadyOutputed)
     return;
+
+if (sameString(cgiUsualString("action",""),"encodeReleaseLog"))
+    isEncode = TRUE; 
 
 /* Preamble. */
 dnaUtilOpen();
@@ -108,9 +112,21 @@ puts(
     "<TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0 WIDTH=\"100%\">" "\n");
 
 if (withLogo)
-    puts(
-    "<TR><TH COLSPAN=1 ALIGN=\"left\"><IMG SRC=\"/images/title.jpg\"></TH></TR>" "\n"
-    "" "\n"
+    puts("<TR><TH COLSPAN=1 ALIGN=\"left\">");
+    if (isEncode)
+	{
+	puts("<A HREF=\"http://www.genome.gov/10005107\" TARGET=\"_BLANK\">"
+	     "<IMG SRC=\"/images/encodelogo.gif\" height=50 ALT=\"ENCODE Project at NHGRI\">"
+	     "</A>");
+	puts("<IMG SRC=\"/images/encode.jpg\" ALT=\"ENCODE Project at UCSC\">");
+	}
+    else
+	{
+	puts("<IMG SRC=\"/images/title.jpg\">");
+	}
+	
+    puts("</TH></TR>" "\n"
+    	"" "\n"
     );
 
 if (NULL != theCart)
@@ -142,51 +158,61 @@ puts(
        " 	<TD VALIGN=\"middle\"><font color=\"#89A1DE\">&nbsp;" "\n" 
        );
 
-printf("&nbsp;<A HREF=\"/index.html%s\" class=\"topbar\">" "\n", uiState);
-puts("           Home</A> &nbsp; - &nbsp;");
-printf("       <A HREF=\"/cgi-bin/hgGateway%s\" class=\"topbar\">\n",
-       uiState);
-puts("           Genomes</A> &nbsp; - &nbsp;");
-if (endsWith(scriptName, "hgTracks") || endsWith(scriptName, "hgGene") ||
-    endsWith(scriptName, "hgTrackUi") || endsWith(scriptName, "hgc"))
+if (isEncode)
     {
-    printf("       <A HREF=\"/cgi-bin/hgTracks%s\" class=\"topbar\">\n",
-	   uiState);
-    puts("           Genome Browser</A> &nbsp; - &nbsp;");
+    printf("&nbsp;<A HREF=\"/encode/\" class=\"topbar\">" "\n");
+    puts("           Home</A>");
     }
-/*  possible to make this conditional: if (db != NULL && hgNearOk(db))	*/
-    {
-    printf("       <A HREF=\"/cgi-bin/hgNear%s\" class=\"topbar\">\n",
-	   uiState);
-    puts("           Gene Sorter</A> &nbsp; - &nbsp;");
-    }
-printf("       <A HREF=\"/cgi-bin/hgBlat?command=start&%s\" class=\"topbar\">",
-       uiState+1);
-puts("           Blat</A> &nbsp; - &nbsp;");
-if (db == NULL || hgPcrOk(db))
-    {
-    printf("       <A HREF=\"/cgi-bin/hgPcr%s\" class=\"topbar\">\n",
-	   uiState);
-    puts("           PCR</A> &nbsp; - &nbsp;");
-    }
-printf("       <A HREF=\"/cgi-bin/hgTables%s\" class=\"topbar\">\n", uiState);
-puts("           Tables</A> &nbsp; - &nbsp;");
-puts("       <A HREF=\"/FAQ.html\" class=\"topbar\">" "\n"
-     "           FAQ</A> &nbsp; - &nbsp;" "\n" 
-     );
-if (endsWith(scriptName, "hgBlat"))
-    puts("       <A HREF=\"/goldenPath/help/hgTracksHelp.html#BLATAlign\"");
-else if (endsWith(scriptName, "hgText"))
-    puts("       <A HREF=\"/goldenPath/help/hgTextHelp.html\"");
-else if (endsWith(scriptName, "hgNear"))
-    puts("       <A HREF=\"/goldenPath/help/hgNearHelp.html\"");
-else if (endsWith(scriptName, "hgTables"))
-    puts("       <A HREF=\"/goldenPath/help/hgTablesHelp.html\"");
 else
-    puts("       <A HREF=\"/goldenPath/help/hgTracksHelp.html\"");
-puts("       class=\"topbar\">");
+    {
+    printf("&nbsp;<A HREF=\"/index.html%s\" class=\"topbar\">" "\n", uiState);
+    puts("           Home</A> &nbsp; - &nbsp;");
+    printf("       <A HREF=\"/cgi-bin/hgGateway%s\" class=\"topbar\">\n",
+	   uiState);
+    puts("           Genomes</A> &nbsp; - &nbsp;");
+    if (endsWith(scriptName, "hgTracks") || endsWith(scriptName, "hgGene") ||
+	endsWith(scriptName, "hgTrackUi") || endsWith(scriptName, "hgc"))
+	{
+	printf("       <A HREF=\"/cgi-bin/hgTracks%s\" class=\"topbar\">\n",
+	       uiState);
+	puts("           Genome Browser</A> &nbsp; - &nbsp;");
+	}
+    /*  possible to make this conditional: if (db != NULL && hgNearOk(db))	*/
+	{
+	printf("       <A HREF=\"/cgi-bin/hgNear%s\" class=\"topbar\">\n",
+	       uiState);
+	puts("           Gene Sorter</A> &nbsp; - &nbsp;");
+	}
+    printf("       <A HREF=\"/cgi-bin/hgBlat?command=start&%s\" class=\"topbar\">",
+	   uiState+1);
+    puts("           Blat</A> &nbsp; - &nbsp;");
+    if (db == NULL || hgPcrOk(db))
+	{
+	printf("       <A HREF=\"/cgi-bin/hgPcr%s\" class=\"topbar\">\n",
+	       uiState);
+	puts("           PCR</A> &nbsp; - &nbsp;");
+	}
+    printf("       <A HREF=\"/cgi-bin/hgTables%s\" class=\"topbar\">\n", uiState);
+    puts("           Tables</A> &nbsp; - &nbsp;");
+    puts("       <A HREF=\"/FAQ.html\" class=\"topbar\">" "\n"
+	 "           FAQ</A> &nbsp; - &nbsp;" "\n" 
+	 );
+    if (endsWith(scriptName, "hgBlat"))
+	puts("       <A HREF=\"/goldenPath/help/hgTracksHelp.html#BLATAlign\"");
+    else if (endsWith(scriptName, "hgText"))
+	puts("       <A HREF=\"/goldenPath/help/hgTextHelp.html\"");
+    else if (endsWith(scriptName, "hgNear"))
+	puts("       <A HREF=\"/goldenPath/help/hgNearHelp.html\"");
+    else if (endsWith(scriptName, "hgTables"))
+	puts("       <A HREF=\"/goldenPath/help/hgTablesHelp.html\"");
+    else
+	puts("       <A HREF=\"/goldenPath/help/hgTracksHelp.html\"");
+    puts("       class=\"topbar\">");
 
-puts("           Help</A> &nbsp;</font></TD>" "\n"
+    puts("           Help</A> ");
+    }
+    
+puts("&nbsp;</font></TD>" "\n"
      "       </TR></TABLE>" "\n"
      "</TD></TR></TABLE>" "\n"
      "</TD></TR>	" "\n"	

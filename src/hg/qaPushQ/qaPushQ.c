@@ -29,7 +29,7 @@
 #include "dbDb.h"
 #include "htmlPage.h"
 
-static char const rcsid[] = "$Id: qaPushQ.c,v 1.66 2004/12/14 01:10:45 galt Exp $";
+static char const rcsid[] = "$Id: qaPushQ.c,v 1.67 2004/12/22 20:39:05 galt Exp $";
 
 char msg[2048] = "";
 char ** saveEnv;
@@ -3035,7 +3035,7 @@ doDisplay();
 /* ======================================================== */
 		
 
-void doDrawReleaseLog()
+void doDrawReleaseLog(boolean isEncode)
 /* Test - draw the release log using log data in pushQ  */
 {
 
@@ -3055,6 +3055,11 @@ char now[256];
 
 int m=0,d=0;
 int topCount=0;
+
+char *encodeClause = "";
+
+if (isEncode)
+    encodeClause = " and track like '%ENCODE%'";
 
 ZeroVar(&dbDbTemp);
 
@@ -3118,7 +3123,6 @@ sqlDisconnect(&betaconn);
 conn = sqlConnectRemote(host, user, password, database);
 
 /* 10 Latest Changes */
-//printf("<li><a CLASS=\"toc\" HREF=\"#recent\" style=\"color:red\"> 10 Latest Changes (all assemblies) </a></li>");
 printf("<li><a CLASS=\"toc\" HREF=\"#recent\" ><b>10 Latest Changes (all assemblies)</b></a></li>");
 
 /*
@@ -3131,6 +3135,8 @@ printf("<li><a HREF=\"#recent\" "
 "\"> 10 Most Recent Changes (all assemblies) </a></li>\n");
 */
 
+if (!isEncode)
+{
 /* regular log index #links */
 for (ki = kiList; ki != NULL; ki = ki->next)
     {
@@ -3146,6 +3152,7 @@ for (ki = kiList; ki != NULL; ki = ki->next)
 printf("</ul>\n");
 printf("<p>\n");
 printf(" For more information about the tracks and tables listed on this page, refer to the <a href=/goldenPath/gbdDescriptions.html>Description of the annotation database</a> and the <a href=/goldenPath/help/hgTracksHelp.html#IndivTracks>User's Guide</a>.<p>\n");
+}
 
 strftime (now, sizeof(now), "%02d %b %Y", loctime); /* default to today's date */
 printf("<em>Last updated %s. <a HREF=\"mailto:genome@soe.ucsc.edu\">Inquiries and feedback welcome</a>.</em>\n",now);
@@ -3161,9 +3168,8 @@ printf("<TABLE BORDER=1 BORDERCOLOR=\"#aaaaaa\" CELLPADDING=4 WIDTH=\"100%%\">\n
     );
 safef(query,sizeof(query),
     "select releaseLog, dbs, qadate from pushQ "
-    "where priority='L' and releaseLog != '' and dbs != '' "
-    "order by qadate desc, qid desc " 
-    //"limit 10 " 
+    "where priority='L' and releaseLog != '' and dbs != '' %s"
+    "order by qadate desc, qid desc ", encodeClause 
     );
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
@@ -3223,6 +3229,8 @@ while ((row = sqlNextRow(sr)) != NULL)
 sqlFreeResult(&sr);
 printf("</table>\n");
 
+if (!isEncode)
+{
 /* REGULAR LOG */
 for (ki = kiList; ki != NULL; ki = ki->next)
     {
@@ -3262,6 +3270,7 @@ for (ki = kiList; ki != NULL; ki = ki->next)
     printf("</table>\n");
 
     }
+}
 
 dbDbFreeList(&kiList);
 
@@ -3540,7 +3549,12 @@ So it will find all input regardless of Get/Put/Post/etc and make available as c
 
 if (sameString(action,"releaseLog"))
     {
-    doDrawReleaseLog();
+    doDrawReleaseLog(FALSE);
+    return 0;
+    }
+if (sameString(action,"encodeReleaseLog"))
+    {
+    doDrawReleaseLog(TRUE);
     return 0;
     }
 if (sameString(action,"releaseLogPush"))
