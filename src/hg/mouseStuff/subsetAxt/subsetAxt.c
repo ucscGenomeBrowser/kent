@@ -74,7 +74,7 @@ for (end = 0; end < size; ++end)
 	}
     else
         {
-	score += ss->matrix[baseVal[a]][baseVal[b]];
+	score += ss->matrix[a][b];
 	lastGap = FALSE;
 	}
     if (score > bestScore)
