@@ -8,7 +8,7 @@
 #include "xenalign.h"
 #include "pairHmm.h"
 
-static char const rcsid[] = "$Id: xensmall.c,v 1.9 2004/07/02 06:23:16 kent Exp $";
+static char const rcsid[] = "$Id: xensmall.c,v 1.10 2004/07/06 16:57:42 kent Exp $";
 
 static double calcGcRatio(DNA *a, int aSize, DNA *b, int bSize)
 /* Figure out percentage of g/c in a and b. */
@@ -385,9 +385,7 @@ for (tIx = 1; tIx < a->tDim; tIx += 1)
             qSlipState(c1, insertFromCodingCost);
             qSlipState(c2, insertFromCodingCost);
             qSlipState(c3, insertFromCodingCost);
-#ifdef SOON_I_HOPE
 	    qSlipState(it, largeGapExtensionCost); /* Allow double gaps, T first always. */
-#endif /* SOON_I_HOPE */
             shortEndState(iq);
             }
         
