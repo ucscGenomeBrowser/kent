@@ -18,7 +18,7 @@ beta_update:
 	hgTrackDb zooHuman3 trackDb ../../../lib/trackDb.sql .
 	hgTrackDb zooMouse3 trackDb ../../../lib/trackDb.sql .
 	hgTrackDb zooPig3 trackDb ../../../lib/trackDb.sql .
-	hgTrackDb zooRat3 trackDb ../../../lib/trackDb.sql .
+	hgTrackDb zooTetra3 trackDb ../../../lib/trackDb.sql .
 	hgTrackDb zooZebrafish3 trackDb ../../../lib/trackDb.sql .
 
 update:
@@ -33,4 +33,5 @@ update:
 	hgTrackDb zooMouse3 trackDb_$(USER) ../../../lib/trackDb.sql .
 	hgTrackDb zooPig3 trackDb_$(USER) ../../../lib/trackDb.sql .
 	hgTrackDb zooRat3 trackDb_$(USER) ../../../lib/trackDb.sql .
+	hgTrackDb zooTetra3 trackDb_$(USER) ../../../lib/trackDb.sql .
 	hgTrackDb zooZebrafish3 trackDb_$(USER) ../../../lib/trackDb.sql .
