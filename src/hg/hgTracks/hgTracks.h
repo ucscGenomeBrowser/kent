@@ -558,6 +558,9 @@ void pslMethods(struct track *track, struct trackDb *tdb,
 	int argc, char *argv[]);
 /* Load up psl type methods. */
 
+void loadXenoPsl(struct track *tg);
+/* Load a xeno psl */
+
 void loadProteinPsl(struct track *tg);
 /* Load a protein psl */
 
