@@ -1206,6 +1206,22 @@ int basePositionToXAxis( int base, int seqStart, int seqEnd, int width, int xOff
     return(x1);
 }
 
+int humMusZoomLevel( void )
+{
+int zoom1 = 80000, zoom2 = 5000, zoom3 = 300; /* bp per data point */
+int pixPerBase = (winEnd - winStart)/ tl.picWidth;
+if(pixPerBase >= zoom1)
+    return(1);
+else if( pixPerBase >= zoom2 )
+    return(2);
+else if(pixPerBase >= zoom3)
+    return(3);
+else
+    return(0);
+}
+            
+
+
 static void wiggleLinkedFeaturesDraw(struct trackGroup *tg, int seqStart, int seqEnd,
         struct memGfx *mg, int xOff, int yOff, int width, 
         MgFont *font, Color color, enum trackVisibility vis)
@@ -1237,7 +1253,7 @@ int tmp;
 int currentX, currentXEnd, currentWidth;
 int leftSide, rightSide;
 
-
+int noZoom = 0;
 enum wiggleOptEnum wiggleType;
 char *interpolate = NULL;
 char *aa = NULL; 
@@ -1315,33 +1331,35 @@ if( sameString( tg->mapName, "humMus" ) )
     max0 = whichNum( maxRange, 0.0, 6.58323, 1000 );
 
 
-    if( isFull )
-    {   
-    tmp = -whichBin( 1.0, min0, max0, 999 );
-    y1 = (int)((double)y+((double)tmp)* hFactor+(double)heightPer);
-    mgDrawHorizontalLine( mg, y1, lineColor );
+        if( isFull )
+        {   
+        
 
-    tmp = -whichBin( 2.0, min0, max0, 999 );
-    y1 = (int)((double)y+((double)tmp)* hFactor+(double)heightPer);
-    mgDrawHorizontalLine( mg, y1, lineColor );
+            //see if we are zoomed in 
+            noZoom = (humMusZoomLevel() == 0);
+            
+            
+        tmp = -whichBin( 1.0, min0, max0, 999 );
+        y1 = (int)((double)y+((double)tmp)* hFactor+(double)heightPer);
+        mgDrawHorizontalLine( mg, y1, lineColor );
 
-    tmp = -whichBin( 3.0, min0, max0, 999 );
-    y1 = (int)((double)y+((double)tmp)* hFactor+(double)heightPer);
-    mgDrawHorizontalLine( mg, y1, lineColor );
+        tmp = -whichBin( 2.0, min0, max0, 999 );
+        y1 = (int)((double)y+((double)tmp)* hFactor+(double)heightPer);
+        mgDrawHorizontalLine( mg, y1, lineColor );
 
-    tmp = -whichBin( 6.58323, min0, max0, 999 );
-    y1 = (int)((double)y+((double)tmp)* hFactor+(double)heightPer);
-    mgDrawHorizontalLine( mg, y1, lineColor );
-   
-    }
+        tmp = -whichBin( 3.0, min0, max0, 999 );
+        y1 = (int)((double)y+((double)tmp)* hFactor+(double)heightPer);
+        mgDrawHorizontalLine( mg, y1, lineColor );
 
+        tmp = -whichBin( 6.58323, min0, max0, 999 );
+        y1 = (int)((double)y+((double)tmp)* hFactor+(double)heightPer);
+        mgDrawHorizontalLine( mg, y1, lineColor );
+        }
     }
     else if( sameString( tg->mapName, "zoo" ) )
     {
-
     /*Always interpolate zoo track (since gaps are explicitly defined*/
     lineGapSize = -1;
-
     minRange = 500.0;
     maxRange = 1000.0;
     }
@@ -1349,30 +1367,16 @@ if( sameString( tg->mapName, "humMus" ) )
     {
     minRange = 0.0;
     maxRange = 1000.0;
-
-    min0 = whichNum( 1.0, 0.0, 5.0, 1000 );
-    max0 = whichNum( 1000.0, 0.0, 5.0, 1000 );
-    
     }
-    else if( sameString( tg->mapName, "binomialCons" ) )
+    else if( sameString( tg->mapName, "binomialCons3" ) )
+    {
+    minRange = 0.0;
+    maxRange = 300.0;
+    }
+    else if( startsWith( tg->mapName, "binomialCons" ) )
     {
     minRange = 0.0;
     maxRange = 500.0;
-
-    min0 = whichNum( minRange, 0.0, 500.0, 1000 );
-    max0 = whichNum( maxRange, 0.0, 500.0, 1000 );
-    
-    }
-    else if( sameString( tg->mapName, "binomialCons2" ) )
-    {
-    minRange = 0.0;
-    maxRange = 10.0;
-
-    tmp = -whichBin( 6.5, minRange, maxRange, 999 );
-    y1 = (int)((double)y+((double)tmp)* hFactor+(double)heightPer);
-    mgDrawHorizontalLine( mg, y1, lineColor );
-    
-    
     }
     else
     {
@@ -1396,8 +1400,6 @@ for(lf = tg->items; lf != NULL; lf = lf->next)
 	        {
             tmp = -whichBin( (int)((maxRange - minRange)/5.0+minRange), minRange, maxRange, 999 );
             y1 = (int)((double)y+((double)tmp)* hFactor+(double)heightPer);
-            //if( prevEnd == -5 && gapPrevEnd >= 0 )
-	        //    drawScaledBox(mg, s, gapPrevEnd, scale, xOff, (int)y1, (int)(.10*heightPer), shadesOfGray[2]);
             if( gapPrevEnd >= 0 )
 	            drawScaledBox(mg, s, gapPrevEnd, scale, xOff, (int)y1, (int)(.10*heightPer), shadesOfGray[2]);
             gapPrevEnd = s;
@@ -1448,7 +1450,6 @@ for(lf = tg->items; lf != NULL; lf = lf->next)
 	
 	    }
 
-    //megan
     leftSide = max( tg->itemStart(tg,lf), winStart );
     rightSide = min(  tg->itemEnd(tg,lf), winEnd );
 
@@ -1456,7 +1457,7 @@ for(lf = tg->items; lf != NULL; lf = lf->next)
     currentXEnd =  round((double)((int)rightSide-winStart)*scale) + xOff;
     currentWidth = currentXEnd - currentX;
 
-    if( isFull )
+    if( noZoom && isFull )
     {
    	    mapBoxHc(lf->start, lf->end, currentX ,y, currentWidth, 
             heightPer, tg->mapName, tg->mapItemName(tg, lf), tg->itemName(tg, lf));
@@ -6782,6 +6783,75 @@ if (dif == 0)
 return dif;
 }
 
+void loadHumMusL(struct trackGroup *tg)
+/* Load humMusL track with 2 zoom levels and one normal level. */
+{
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr;
+char **row;
+int rowOffset;
+struct sample *sample;
+struct linkedFeatures *lfList = NULL, *lf;
+char *hasDense = NULL;
+char *where = NULL;
+char query[256];
+unsigned int chromSize = hChromSize(chromName);
+int resolution = 0;
+char tableName[256];
+int z;
+float pixPerBase = 0;
+
+if(tl.picWidth == 0)
+    errAbort("hgTracks.c::loadHumMusL() - can't have pixel width of 0");
+pixPerBase = (winEnd - winStart)/ tl.picWidth;
+
+
+/* Determine zoom level. */
+z = humMusZoomLevel();
+if(z == 1 )
+    snprintf(tableName, sizeof(tableName), "%s_%s", "zoom1", tg->mapName);
+else if( z == 2)
+    snprintf(tableName, sizeof(tableName), "%s_%s", "zoom50", tg->mapName);
+else if(z == 3)
+    snprintf(tableName, sizeof(tableName), "%s_%s", "zoom2500", tg->mapName);
+else 
+    snprintf(tableName, sizeof(tableName), "%s", tg->mapName);
+
+printf("<br>%s &nbsp;&nbsp; (%g)<br>\n", tableName, pixPerBase );
+
+sr = hRangeQuery(conn, tableName, chromName, winStart, winEnd, where, &rowOffset);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    sample = sampleLoad(row+rowOffset);
+    lf = lfFromSample(sample);
+    slAddHead(&lfList, lf);
+    sampleFree(&sample);
+    }
+if(where != NULL)
+    freez(&where);
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+slReverse(&lfList);
+
+/* sort to bring items with common names to the same line
+but only for tracks with a summary table (with name=shortLabel) in
+dense mode*/
+if( hasDense != NULL )
+    {
+    sortGroupList = tg; /* used to put track name at top of sorted list. */
+    slSort(&lfList, lfNamePositionCmp);
+    sortGroupList = NULL;
+    }
+tg->items = lfList;
+
+/* Since we've taken care of loading too many things using the 
+   zoom tables, take care of limiting visibility here. */
+tg->limitedVis = tg->visibility;
+tg->limitedVisSet = TRUE;
+}
+
+
+
 void loadAffyTranscriptome(struct trackGroup *tg)
 /* Convert sample info in window to linked feature. */
 {
@@ -6875,6 +6945,12 @@ void affyTranscriptomeMethods(struct trackGroup *tg)
 {
 
 tg->loadItems = loadAffyTranscriptome;
+}
+
+void humMusLMethods( struct trackGroup *tg )
+/* Overide the humMusL load function to look for zoomed out tracks. */
+{
+   tg->loadItems = loadHumMusL; 
 }
 
 void mapBoxHcTwoItems(int start, int end, int x, int y, int width, int height, 
@@ -8240,20 +8316,17 @@ if (withLeftLabels)
 	    sprintf( minRangeStr, "%d", (int)whichNum( 0.0, 0.0, 5.0, 1000 ));
 	    sprintf( maxRangeStr, "%d", (int)whichNum( 1000.0, 0.0, 5.0, 1000 ));
 	    }
-     else if( sameString( group->mapName, "binomialCons" ) )
+         else if( sameString( group->mapName, "binomialCons3" ) )
 	    {
-	    sprintf( minRangeStr, "%d", (int)whichNum( 0.0, 0.0, 500.0, 1000 ));
-	    sprintf( maxRangeStr, "%d", (int)whichNum( 1000.0, 0.0, 500.0, 1000 ));
+	    sprintf( minRangeStr, "%d", (int)0.0 );
+	    sprintf( maxRangeStr, "%d", (int)300.0);
 	    }
-        else if( sameString( group->mapName, "binomialCons2" ) )
+     else if( startsWith( group->mapName, "binomialCons" ) )
 	    {
-	    sprintf( minRangeStr, "%d", (int)whichNum( 0.0, 0.0, 10.0, 1000 ));
-	    sprintf( maxRangeStr, "%d", (int)whichNum( 1000.0, 0.0, 10.0, 1000 ));
-
-        if( group->limitedVis == tvFull && group->heightPer >= 25  )
-           printYAxisLabel( mg, y-5, group, "6.5", 0.0, 10.0 ); 
-
+	    sprintf( minRangeStr, "%d", (int)0.0);
+	    sprintf( maxRangeStr, "%d", (int)500.0);
 	    }
+       
 	
 	else
 	    {
@@ -8269,6 +8342,11 @@ if (withLeftLabels)
 		if (withCenterLabels)
 		    y += fontHeight;
 		start = 1;
+
+        if( group->subType == lfSubSample && group->items == NULL )
+             y += group->height;
+
+
 		for (item = group->items; item != NULL; item = item->next)
 		    {
             char *rootName;
@@ -8280,8 +8358,9 @@ if (withLeftLabels)
 		    /* Do some fancy stuff for sample tracks. Draw y-value limits for 'sample' tracks. */
 		    if(group->subType == lfSubSample )
 			{
-			if( prev != NULL )
-			    {
+			if( prev == NULL )
+                newy += itemHeight;
+            else
 			    newy += updateY( name, group->itemName(group, prev), itemHeight );
 			    if( newy == y )
 			        continue;
@@ -8295,21 +8374,6 @@ if (withLeftLabels)
 			        mgTextRight(mg, gfxBorder, ymax, inWid-1, itemHeight, 
 					    group->ixAltColor, font, maxRangeStr );
 				}
-			    }
-			else
-			    {
-			    newy += itemHeight;
-			    
-			    if( group->heightPer > (3 * fontHeight ) )
-				{
-			        ymax = y - (group->heightPer / 2) + (fontHeight / 2);
-			        ymin = y + (group->heightPer / 2) - (fontHeight / 2);
-			        mgTextRight(mg, gfxBorder, ymin, inWid-1, itemHeight, 
-					    group->ixAltColor, font, minRangeStr );
-			        mgTextRight(mg, gfxBorder, ymax, inWid-1, itemHeight, 
-					    group->ixAltColor, font, maxRangeStr );
-				}
-			    }
 			prev = item;
 
             rootName = cloneString( name );
@@ -8476,18 +8540,20 @@ for (group = groupList; group != NULL; group = group->next)
 		    y += fontHeight;
 		start = 1;
 
-
         
-        
+        if( group->subType == lfSubSample && group->items == NULL )
+             y += group->lineHeight;
 		for (item = group->items; item != NULL; item = item->next)
 		    {
 		    int height = group->itemHeight(group, item);
+
 
             //gigi            
 
 		    /*wiggle tracks don't always increment height (y-value) here*/
             if( group->subType == lfSubSample )
             {
+
 		        newy = y;
 
                 
@@ -9410,6 +9476,7 @@ registerTrackHandler("transfacHit", triangleMethods );
 registerTrackHandler("mgcNcbiPicks", estMethods);
 registerTrackHandler("mgcNcbiSplicedPicks", intronEstMethods);
 registerTrackHandler("mgcUcscPicks", intronEstMethods);
+registerTrackHandler("humMusL", humMusLMethods);
 registerTrackHandler("affyTranscriptome", affyTranscriptomeMethods);
 registerTrackHandler("rikenMrna", rikenMethods);
 registerTrackHandler("ensRiken", ensRikenMethods);
