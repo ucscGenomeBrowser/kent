@@ -792,8 +792,14 @@ Error: danRer1: gene danRer1.refFlat:1854 NM_131267 chr7: NM_131267 geneName "ir
   drop old refseq build programs from tree.
 
 - dna based ones: 
-      select * from kgXref where kgID like "NM_%" limit 10;
+      - select * from kgXref where kgID like "NM_%" limit 10;
         NM_000050 -> P00966 swiss Cross-references ->  L00084 is dna
+
+      - others
+       SPRY3:
+          AJ271735 is a DNA, thus it was not included in our current build process.
+          AF041038 seems to cover only part of SPY3_HUMAN.
+
 
         use kgHg17BTemp
             locus2Acc0;
@@ -834,4 +840,5 @@ Error: danRer1: gene danRer1.refFlat:1854 NM_131267 chr7: NM_131267 geneName "ir
 - tmp load files should be removed first or they get write permission
   errors if loaded by a different user.
 
-
+- mrna cell column comes from /cell_line, but some have /cell_type,
+  eg AY911673.
