@@ -69,7 +69,7 @@
 #include "grp.h"
 #include "chromColors.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.628 2003/11/11 22:11:14 jill Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.629 2003/11/12 17:49:02 braney Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
@@ -404,8 +404,9 @@ int orientFromChar(char c)
 {
 if (c == '-')
     return -1;
-else
+if (c == '+')
     return 1;
+return 0;
 }
 
 int trackOffsetX()
@@ -423,8 +424,9 @@ char charFromOrient(int orient)
 {
 if (orient < 0)
     return '-';
-else
+if (orient > 0)
     return '+';
+return '.';
 }
 
 
@@ -1027,6 +1029,10 @@ void clippedBarbs(struct vGfx *vg, int x, int y,
  * PostScript output support. */
 {
 int x2 = x + width;
+
+if (barbDir == 0)
+    return;
+
 if (x < 0) x = 0;
 if (x2 > vg->width) x2 = vg->width;
 vgBarbedHorizontalLine(vg, x, y, x2 - x, barbHeight, barbSpacing, barbDir,
