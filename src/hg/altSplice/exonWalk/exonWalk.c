@@ -13,7 +13,7 @@
 #include "errabort.h"
 #include "malloc.h"
 
-static char const rcsid[] = "$Id: exonWalk.c,v 1.9 2005/01/02 00:07:30 sugnet Exp $";
+static char const rcsid[] = "$Id: exonWalk.c,v 1.10 2005/01/02 01:26:17 sugnet Exp $";
 
 void usage()
 {
@@ -295,12 +295,9 @@ boolean nodesConnected(struct exonNode *from, struct exonNode *to)
 int i;
 for(i=0; i < from->edgeOutCount; i++)
     if(from->edgesOut[i] == to->id)
-
 	return TRUE;
 return FALSE;
 }
-
-
 
 boolean equivalentNodes(struct exonGraph *eg, struct exonNode *unique, struct exonNode *test)
 /* Return TRUE if both needle and haystack  have the same classes of outgoing nodes and incoming nodes. 
@@ -468,8 +465,8 @@ for(i=0; i < mark->edgeInCount; i++)
 	    nodeIn->edgesOut[j] = unique->id;
 	    }
 	}
-/*     nodeIn->edgeOutCount = mergeDuplicatesFast(nodeIn->edgeOutCount, nodeIn->edgesOut, nodeIn->id); */
-    nodeIn->edgeOutCount = mergeDuplicates(nodeIn->edgeOutCount, nodeIn->edgesOut, nodeIn->id);
+    nodeIn->edgeOutCount = mergeDuplicatesFast(nodeIn->edgeOutCount, nodeIn->edgesOut, nodeIn->id);
+/*     nodeIn->edgeOutCount = mergeDuplicates(nodeIn->edgeOutCount, nodeIn->edgesOut, nodeIn->id); */
     }
 /* if(debug) { nodeSanityCheck(eg); } */
 for(i=0; i < mark->edgeOutCount; i++)
@@ -482,9 +479,15 @@ for(i=0; i < mark->edgeOutCount; i++)
 	    nodeOut->edgesIn[j] = unique->id;
 	    }
 	}
-    exonNodeConnect(unique, nodeOut);
-/*     nodeOut->edgeInCount = mergeDuplicatesFast(nodeOut->edgeInCount, nodeOut->edgesIn, nodeOut->id); */
-    nodeOut->edgeInCount = mergeDuplicates(nodeOut->edgeInCount, nodeOut->edgesIn, nodeOut->id);
+    if(unique->id != nodeOut->id)// && !nodesConnected(unique, nodeOut))
+	{
+	exonNodeConnect(unique, nodeOut); 
+/* 	ExpandArray(unique->edgesOut, unique->edgeOutCount, unique->edgeOutCount+1); */
+/* 	unique->edgesOut[unique->edgeOutCount] = nodeOut->id; */
+/* 	unique->edgeOutCount++; */
+	}
+    nodeOut->edgeInCount = mergeDuplicatesFast(nodeOut->edgeInCount, nodeOut->edgesIn, nodeOut->id);
+/*     nodeOut->edgeInCount = mergeDuplicates(nodeOut->edgeInCount, nodeOut->edgesIn, nodeOut->id); */
     }
 /* if(debug) { nodeSanityCheck(eg); } */
 mark->class = inActive;
@@ -520,10 +523,6 @@ for(i=0; i < eg->nodeCount; i++)
     else
 	{
 	addUnique(exonClass, mark);
-	}
-    if(nodesConnectDijkstra(eg, eg->nodes[13], eg->nodes[1007]) == BIGNUM)
-	{
-	printf("Yikes deleting %d %s:%d-%d ruined the path!\n", mark->id, mark->tName, mark->tStart, mark->tEnd);
 	}
     }
 /* Cleanup. */
@@ -1286,7 +1285,7 @@ if(status == 0)
 		}
 	    }
 	
-	if( noOutEdges(eg,en) && en->class != BIGNUM) /* It is a terminal node...*/
+	if(noOutEdges(eg,en) && en->class != BIGNUM) /* It is a terminal node...*/
 	    {
 	    checkForMaximalPath(eg, maximalPaths, en->paths);
 	    }
