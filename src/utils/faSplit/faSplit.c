@@ -9,7 +9,7 @@
 #include "options.h"
 #include "bits.h"
 
-static char const rcsid[] = "$Id: faSplit.c,v 1.18 2004/02/23 18:10:36 kent Exp $";
+static char const rcsid[] = "$Id: faSplit.c,v 1.19 2004/09/14 04:40:58 baertsch Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -54,6 +54,9 @@ errAbort(
   "                   This helps prevent NFS problems with a large number of\n"
   "                   file in a directory.  Using -outDirDepth=3 would\n"
   "                   produce rootDir/1/2/3/foo.123.fa.\n"
+  "    -prefixLength=N - used with byname option. create a separate output\n"
+  "                   file for each group of sequences names with same prefix\n"
+  "                   of length N.\n"
 );
 
 }
@@ -66,6 +69,7 @@ static struct optionSpec optionSpecs[] = {
     {"lift", OPTION_STRING},
     {"minGapSize", OPTION_INT},
     {"outDirDepth", OPTION_INT},
+    {"prefixLength", OPTION_INT},
     {NULL, 0}
 };
 
@@ -282,6 +286,31 @@ carefulClose(&f);
 lineFileClose(&lf);
 }
 
+void splitByNamePrefix(char *inName, char *outRoot, int preFixCount)
+/* Split into chunks using prefix of sequence names.  */
+{
+struct dnaSeq seq;
+struct lineFile *lf = lineFileOpen(inName, TRUE);
+FILE *f = NULL;
+char outDir[256], outFile[128], ext[64], outPath[512], preFix[512];
+ZeroVar(&seq);
+
+splitPath(outRoot, outDir, outFile, ext);
+assert(preFixCount < sizeof(preFix));
+
+while (faMixedSpeedReadNext(lf, &seq.dna, &seq.size, &seq.name))
+    {
+    carefulClose(&f);
+    strncpy(preFix, seq.name, preFixCount);
+    preFix[preFixCount] = '\0';
+    sprintf(outPath, "%s%s.fa", outDir, preFix);
+    verbose(2, "writing %s\n", outPath);
+    f = mustOpen(outPath, "a");
+    faWriteNext(f, seq.name, seq.dna, seq.size);
+    }
+carefulClose(&f);
+lineFileClose(&lf);
+}
 int countN(char *s, int size)
 /* Count number of N's from s[0] to s[size-1].
  * Treat any parts past end of string as N's. */
@@ -585,6 +614,7 @@ char *how = NULL;
 char *inName = NULL;
 int count;
 char *outRoot;
+int prefixLength = 0;
 
 optionInit(&argc, argv, optionSpecs);
 how = argv[1];
@@ -593,16 +623,24 @@ inName = argv[2];
 if (argc < 4 )
     usage();
 outDirDepth = optionInt("outDirDepth", 0);
+prefixLength = optionInt("prefixLength", prefixLength);
 
 if (sameWord(how, "byname"))
     {
-    if (argc != 4 )
-	usage();
-
+    if (argc != 4)
+        usage();
     dnaUtilOpen();
-    /* no count argument.  Make as many as needed */
     outRoot = argv[3];
-    splitByName(inName, outRoot);
+    if (optionExists("prefixLength"))
+        {
+        /* no count argument.  Make as many as needed */
+        splitByNamePrefix(inName, outRoot, prefixLength);
+        }
+    else
+        {
+        /* no count argument.  Make as many as needed */
+        splitByName(inName, outRoot);
+        }
     }
 else
     {
