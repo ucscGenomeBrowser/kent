@@ -24,7 +24,7 @@
 #include "scoredRef.h"
 #include "maf.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.108 2003/05/11 07:36:03 markd Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.109 2003/05/12 07:57:24 markd Exp $";
 
 #define DEFAULT_PROTEINS "proteins"
 #define DEFAULT_GENOME "Human"
@@ -675,7 +675,7 @@ if ((row == NULL) && sqlTableExists(conn, "gbSeq"))
     sqlFreeResult(&sr);
     if (gbDate != NULL)
         sprintf(query,
-                "select id,gbExtFile,file_offset,file_size,mod_date from gbSeq,gbStatus where (gbSeq.acc = '%s') and (gbStatus.acc = gbSeq.acc)",
+                "select id,gbExtFile,file_offset,file_size,moddate from gbSeq,mrna where (gbSeq.acc = '%s') and (mrna.acc = gbSeq.acc)",
                 acc);
     else
         sprintf(query,
