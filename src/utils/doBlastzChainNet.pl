@@ -3,14 +3,14 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit ~/kent/src/utils/doBlastzChainNet.pl instead.
 
-# $Id: doBlastzChainNet.pl,v 1.4 2005/02/22 03:17:50 angie Exp $
+# $Id: doBlastzChainNet.pl,v 1.5 2005/02/25 00:02:34 angie Exp $
 
 # to-do items:
 # - lots of testing
+# - add -swapFrom option
 # - handle .2bit for target
 # - better logging: right now it just passes stdout and stderr,
 #   leaving redirection to a logfile up to the user
-# - do something sensible with directory location w.r.t. DEF arg   
 # - add swapping (optionally) so we get chains, nets etc. for both
 #   species (non-self alignments only)
 # - compress more files in the cleanup step
@@ -32,7 +32,8 @@ my $bigClusterHub = 'kk';
 my $smallClusterHub = 'kki';
 my $paraRun = ("$para make jobList\n" .
 	       "$para check\n" .
-	       "$para time > run.time\n");
+	       "$para time > run.time\n" .
+	       'cat run.time');
 my $dbHost = 'hgwdev';
 my $clusterData = '/cluster/data';
 my $trackBuild = 'bed';
@@ -119,7 +120,7 @@ Assumptions:
 1. $clusterData/\$db/ is the main directory for database/assembly \$db.
    $clusterData/\$tDb/$trackBuild/blastz.\$qDb.\$date/ will be the directory 
    created for this run, where \$tDb is the target/reference db and 
-   \$qDb is the query.  
+   \$qDb is the query.  (Can be overridden, see #10 below.)  
    $downloadPath/\$tDb/vs\$QDb/ (or vsSelf) 
    is the directory where downloadable files need to go.
    LiftOver chains (not applicable for self-alignments) are to be copied 
@@ -175,7 +176,9 @@ BLASTZ_Q=$clusterData/blastz/HoxD55.q
    then also fasta_subseq, strip_rpts, restore_rpts, and revcomp.  
    If DEF does not contain a PATH, blastz-run-ucsc will use its own default.
 9. DEF's BLASTZ variable can specify an alternate path for blastz.
-10. All other variables in DEF will be ignored!
+10. DEF's BASE variable can specify the blastz/chain/net build directory 
+    (defaults to $clusterData/\$tDb/$trackBuild/blastz.\$qDb.\$date/).
+11. All other variables in DEF will be ignored!
 
 " if ($detailed);
   exit $status;
@@ -682,12 +685,12 @@ sub netChains {
     die "netChains: looks like previous stage was not successful " .
       "(can't find $successFile).\n";
   }
-  my $over = $tDb . "To" . $QDb . ".over.chain";
+  my $over = $tDb . "To" . $QDb . ".over.chain.gz";
   my $bedOverDir = "$clusterData/$tDb/$trackBuild/";
   my $liftOver = ($isSelf ? "# No liftOver chains for self-alignments." :
 		  "# Make liftOver chains:\n" .
 		  "netChainSubset noClass.net all.chain stdout " .
-		  "| chainSort stdin $over\n" .
+		  "| chainSort stdin stdout | gzip -c > $over\n" .
 		  "mkdir -p $bedOverDir\n" .
 		  "cp -p $over $bedOverDir/$over");
   my $bossScript = "$buildDir/axtChain/netChains.csh";
@@ -846,7 +849,7 @@ sub installDownloads {
   my $runDir = "$buildDir/axtChain";
   my $bossScript = "$buildDir/axtChain/installDownloads.csh";
   my $vs = $isSelf ? 'vsSelf' : "vs$QDb";
-  my $over = $tDb . "To" . $QDb . ".over.chain";
+  my $over = $tDb . "To" . $QDb . ".over.chain.gz";
   my $liftOver = ($isSelf ? '# No liftOver chains for self-alignments.' :
 		  "mkdir -p $goldenPath/$tDb/liftOver\n" .
 		  "cp -p $buildDir/axtChain/$over " .
@@ -916,6 +919,14 @@ _EOF_
 #
 # -- main --
 
+# Sometimes it gets hung on tty input at the very end of run.cat/doCatRun.csh
+# (after completing the para run), sometimes it doesn't...?  To get around
+# that, just redirect stdin to be from /dev/null (just closing it causes the
+# stdin filehandle to be used for some files that we open for writing later,
+# which prompts warnings).
+close(STDIN);
+open(STDIN, '/dev/null');
+
 &checkOptions();
 
 &usage(1) if (scalar(@ARGV) != 1);
@@ -926,7 +937,8 @@ _EOF_
 
 my $date = `date +%Y-%m-%d`;
 chomp $date;
-$buildDir = "$clusterData/$tDb/$trackBuild/blastz.$qDb.$date";
+$buildDir = $defVars{'BASE'} ||
+  "$clusterData/$tDb/$trackBuild/blastz.$qDb.$date";
 if (! $opt_blastzOutRoot) {
   &enforceClusterNoNo($buildDir,
 	  'blastz/chain/net build directory (or use -blastzOutRoot)');
@@ -935,6 +947,8 @@ if (! $opt_blastzOutRoot) {
 
 if (! -d $buildDir) {
   &mustMkdir($buildDir);
+}
+if (! -e "$buildDir/DEF") {
   &run("cp $DEF $buildDir/DEF");
 }
 
