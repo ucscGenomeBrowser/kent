@@ -140,7 +140,7 @@ track mcs_b
 shortLabel MCS (Binomial)
 longLabel Binomial-based MCSs
 priority 399
-visibility hide
+visibility dense
 color 0,60,120
 type bed 3 .
 
@@ -158,14 +158,14 @@ shortLabel Conservation Score
 longlabel Binomial_25 Conservation Scores
 priority 410
 altColor 160,0,0
-visibility hide
+visibility full
 type sample 9
 
 track mcs_p
 shortLabel MCS (Parsimony P-Value)
 longLabel Parsimony P_Value based MCSs
 priority 429
-visibility hide
+visibility dense
 color 0,60,120
 type bed 3 .
 
@@ -181,7 +181,7 @@ track mcs_u
 shortLabel MCS (Uniform)
 longLabel Uniform P-Value based MCSs
 priority 434
-visibility hide
+visibility dense
 color 0,120,0
 type bed 3 .
 
