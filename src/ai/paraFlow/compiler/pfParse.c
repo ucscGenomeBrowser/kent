@@ -144,6 +144,8 @@ switch (type)
 	return "pptSymName";
     case pptTypeName:
 	return "pptTypeName";
+    case pptTypeTuple:
+	return "pptTypeTuple";
     default:
         internalErr();
 	return NULL;
@@ -859,6 +861,7 @@ struct pfToken *tok = *pTokList;
 struct pfParse *statement;
 if (tok->type != '{')
     expectingGot("{", tok);
+tok->val.scope->parent = scope;
 scope = tok->val.scope;
 pp = pfParseNew(pptCompound, *pTokList, parent, scope);
 tok = tok->next;

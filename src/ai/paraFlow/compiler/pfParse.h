@@ -75,6 +75,7 @@ enum pfParseType
     pptVarInit,
     pptSymName,
     pptTypeName,
+    pptTypeTuple,
     };
 
 char *pfParseTypeAsString(enum pfParseType type);

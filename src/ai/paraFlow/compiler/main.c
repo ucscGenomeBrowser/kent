@@ -132,13 +132,13 @@ for (pp = pp->children; pp != NULL; pp = pp->next)
     substituteType(pp, oldType, newType);
 }
 
-void initVars(struct pfParse *pp)
+void varDecAndAssignToInit(struct pfParse *pp)
 /* Convert pptVarDec to pptVarInit. */
 {
 struct pfParse *p;
 
 for (p = pp->children; p != NULL; p = p->next)
-    initVars(p);
+    varDecAndAssignToInit(p);
 if (pp->type == pptVarDec)
     {
     pp->type = pptVarInit;
@@ -161,8 +161,6 @@ if (pp->type == pptVarInit)
     struct pfParse *type = pp->children;
     struct pfParse *name = type->next;
     substituteType(type, pptNameUse, pptTypeName);
-#ifdef SOON
-#endif /* SOON */
     name->type = pptSymName;
     }
 }
@@ -235,7 +233,23 @@ switch (pp->type)
     case pptToDec:
     case pptParaDec:
     case pptFlowDec:
+	{
+	struct pfParse *name = pp->children;
+	struct pfParse *input = name->next;
+	struct pfParse *output = input->next;
+	struct pfParse *body = output->next;
+	name->type = pptSymName;
+	assert(input->type == pptTuple);
+	assert(output->type == pptTuple);
+	substituteType(input, pptTuple, pptTypeTuple);
+	substituteType(output, pptTuple, pptTypeTuple);
+#ifdef SOON
+#endif /* SOON */
+	if (hashLookup(pp->scope->parent->vars, name->name))
+	    errAt(pp->tok, "%s redefined", name->name);
+	pfScopeAddVar(pp->scope->parent, name->name, NULL);
         break;
+	}
     }
 for (pp = pp->children; pp != NULL; pp = pp->next)
     addDeclaredVarsToScopes(pp);
@@ -254,6 +268,7 @@ switch (pp->type)
 	    errAt(pp->tok, "Use of undefined variable %s", pp->name);
 	pp->var = var;
 	pp->type = pptVarUse;
+	pp->ct = var->ct;
         break;
 	}
     }
@@ -342,7 +357,7 @@ expandInto(program, tkz, pp);
 slAddHead(&program->children, pp);
 slReverse(&program->children);
 
-initVars(program);
+varDecAndAssignToInit(program);
 evalTypes(program);
 addDeclaredVarsToScopes(program);
 bindVars(program);
