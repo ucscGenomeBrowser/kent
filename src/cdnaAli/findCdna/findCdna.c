@@ -8,7 +8,7 @@ void *ret;
 ret = malloc(size);
 if (ret == NULL)
     {
-    fprintf(stderr, "Out of memory %ld bytes\n", size);
+    fprintf(stderr, "Out of memory %d bytes\n", size);
     exit(-2);
     }
 return ret;
