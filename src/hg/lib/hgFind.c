@@ -40,7 +40,7 @@
 #include "minGeneInfo.h"
 #include <regex.h>
 
-static char const rcsid[] = "$Id: hgFind.c,v 1.99 2003/08/06 21:16:57 booch Exp $";
+static char const rcsid[] = "$Id: hgFind.c,v 1.100 2003/08/08 17:09:41 donnak Exp $";
 
 /* alignment tables to check when looking for mrna alignments */
 static char *estTables[] = { "all_est", "xenoEst", NULL};
@@ -3044,12 +3044,15 @@ if (strstrNoCase(organism, "human"))
     {
     puts("<P><H3>About the Homo sapiens assembly</P></H3>\n");
     puts(
-"<P>The latest human reference sequence (UCSC version hg15) is based on NCBI \n" 
-"Build 33 and was produced by the International Human \n"
+"<P>The latest human reference sequence (UCSC version hg16) is based on NCBI \n" 
+"Build 34 and was produced by the International Human \n"
 "Genome Sequencing Consortium. The sequence covers about 99 percent of \n"
 "the gene-containing regions in the genome, and has been sequenced to an accuracy of \n"
-"99.99 percent. The missing portions are essentially contained in approximately \n"
-"400 defined gaps in the euchromatic region representing DNA regions with unusual structures \n"
+"99.99 percent. There are 2,843,433,602 finished sequenced bases in the \n"
+"ordered and oriented portion of this assembly, which is an increase of 0.4 \n" 
+"percent, or approximately 11 Mb, over the Build 33 assembly. \n"
+"The missing portions are essentially contained in approximately \n"
+"301 defined gaps in the euchromatic region representing DNA regions with unusual structures \n"
 "that can't be reliably sequenced using current technology. The reference \n"
 "sequence is considered to be &quot;finished&quot;, a technical term indicating that \n"
 "the sequence is highly accurate (with fewer than one error per 10,000 \n"
