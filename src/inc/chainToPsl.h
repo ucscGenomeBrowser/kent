@@ -15,8 +15,14 @@
 
 struct psl *chainToPsl(struct chain *chain);
 /* chainToPsl - convert chain to psl.  This does not fill in
- * all the fields perfectly,  but it does get the starts
- * and sizes right. */
+ * the match, repMatch, mismatch, and N fields since it needs
+ * the sequence for that.  It does fill in the rest though. */
+
+struct psl *chainToFullPsl(struct chain *chain, 
+	struct dnaSeq *query,   /* Forward query sequence. */
+	struct dnaSeq *rQuery,	/* Reverse complemented query sequence. */
+	struct dnaSeq *target);
+/* Convert chainList to pslList, filling in matches, N's etc. */
 
 #endif /* CHAINTOPSL_H */
 

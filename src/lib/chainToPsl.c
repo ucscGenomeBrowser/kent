@@ -8,17 +8,17 @@
 #include "psl.h"
 #include "chain.h"
 
-static char const rcsid[] = "$Id: chainToPsl.c,v 1.3 2003/05/06 07:33:41 kate Exp $";
+static char const rcsid[] = "$Id: chainToPsl.c,v 1.4 2005/01/10 00:14:37 kent Exp $";
 
 
 struct psl *chainToPsl(struct chain *chain)
 /* chainToPsl - convert chain to psl.  This does not fill in
- * all the fields perfectly,  but it does get the starts
- * and sizes right. */
+ * the match, repMatch, mismatch, and N fields since it needs
+ * the sequence for that.  It does fill in the rest though. */
 {
 struct psl *psl;
 int blockCount, i;
-struct boxIn *b;
+struct cBlock *b, *nextB;
 
 blockCount = slCount(chain->blockList);
 AllocVar(psl);
@@ -43,13 +43,81 @@ psl->tSize = chain->tSize;
 psl->tStart = chain->tStart;
 psl->tEnd = chain->tEnd;
 psl->blockCount = blockCount;
-for (i=0, b=chain->blockList; i < blockCount; ++i, b = b->next)
+for (i=0, b=chain->blockList; i < blockCount; ++i, b = nextB)
     {
+    nextB = b->next;
     psl->tStarts[i] = b->tStart;
     psl->qStarts[i] = b->qStart;
     psl->blockSizes[i] = b->qEnd - b->qStart;
+    if (nextB != NULL)
+        {
+	int qGap = nextB->qStart - b->qEnd;
+	int tGap = nextB->tStart - b->tEnd;
+	if (qGap != 0)
+	    {
+	    psl->qBaseInsert += qGap;
+	    psl->qNumInsert += 1;
+	    }
+	if (tGap != 0)
+	    {
+	    psl->tBaseInsert += tGap;
+	    psl->tNumInsert += 1;
+	    }
+	}
     }
 return psl;
 }
+
+static void fillInMatchEtc(struct chain *chain, 
+	struct dnaSeq *query, struct dnaSeq *target, struct psl *psl)
+/* Fill in psl->match,mismatch,repMatch, and nCount fields.
+ * Assumes that query and target are on correct strands already. */
+{
+struct cBlock *block;
+unsigned match = 0, misMatch=0, repMatch=0, nCount=0;
+for (block = chain->blockList; block != NULL; block = block->next)
+    {
+    DNA *qDna = query->dna + block->qStart;
+    DNA *tDna = target->dna + block->tStart;
+    int i, size = block->qEnd - block->qStart;
+    for (i=0; i<size; ++i)
+        {
+	DNA q,t;
+	int qv, tv;
+	q = qDna[i];
+	t = tDna[i];
+	qv = ntVal[q];
+	tv = ntVal[t];
+	if (qv < 0 || tv < 0)
+	    ++nCount;
+	else if (qv == tv)
+	    {
+	    if (isupper(q) && isupper(t))
+	        ++match;
+	    else
+	        ++repMatch;
+	    }
+	else 
+	    ++misMatch;
+        }
+    }
+psl->match = match;
+psl->misMatch = misMatch;
+psl->repMatch = repMatch;
+psl->nCount = nCount;
+}
+
+struct psl *chainToFullPsl(struct chain *chain, 
+	struct dnaSeq *query,   /* Forward query sequence. */
+	struct dnaSeq *rQuery,	/* Reverse complemented query sequence. */
+	struct dnaSeq *target)
+/* Convert chainList to pslList, filling in matches, N's etc. */
+{
+struct psl *psl = chainToPsl(chain);
+struct dnaSeq *qSeq = (chain->qStrand == '-' ? rQuery : query);
+fillInMatchEtc(chain, qSeq, target, psl);
+return psl;
+}
+
 
 
