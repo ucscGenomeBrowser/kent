@@ -2720,7 +2720,6 @@ EOF
     #cd $multizDir/hmr/*.maf
     /cluster/bin/i386/hgLoadMaf -warn hg16 humorMm3Rn3
 
-<<<<<<< makeHg16.doc
     # copy files to download area (2003-10-24 kate)
     set dir = /usr/local/apache/htdocs/goldenPath/hg16/humorMm3Rn3
     mkdir -p $dir
@@ -2729,7 +2728,6 @@ EOF
     gzip *
     # edit downloads page to add linke to humorMm3Rn3
 
-=======
     # Create upstream files
     ssh hgwdev
     cd /usr/local/apache/htdocs/goldenPath/hg16/humorMm3Rn3
