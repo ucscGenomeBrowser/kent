@@ -302,7 +302,7 @@ char **row;
 struct featureBits *fbList = NULL;
 char strand = '?';
 boolean doUp, doEnd, doExon = FALSE, doIntron = FALSE, doScore = FALSE;
-int promoSize, endSize, extraSize, scoreThreshold;
+int promoSize, endSize, extraSize = 0, scoreThreshold;
 int i, count, *starts, *sizes;
 
 doScore = scoreQualifier(qualifier, extra, &scoreThreshold);
