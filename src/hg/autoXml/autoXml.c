@@ -5,7 +5,7 @@
 #include "cheapcgi.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: autoXml.c,v 1.15 2003/05/06 07:22:14 kate Exp $";
+static char const rcsid[] = "$Id: autoXml.c,v 1.16 2004/01/24 03:06:38 kent Exp $";
 
 /* Variables that can be over-ridden from command line. */
 char *textField = "text";
@@ -861,7 +861,7 @@ fprintf(f, "}\n");
 }
 
 
-void makeC(struct element *elList, char *fileName)
+void makeC(struct element *elList, char *fileName, char *incName)
 /* Produce C code file. */
 {
 FILE *f = mustOpen(fileName, "w");
@@ -874,7 +874,7 @@ fprintf(f, "/* %s.c %s */\n", prefix, fileComment);
 fprintf(f, "\n");
 fprintf(f, "#include \"common.h\"\n");
 fprintf(f, "#include \"xap.h\"\n");
-fprintf(f, "#include \"%s.h\"\n", prefix);
+fprintf(f, "#include \"%s\"\n", incName);
 fprintf(f, "\n");
 
 startHandlerPrototype(f, ";");
@@ -900,7 +900,7 @@ void autoXml(char *dtdxFile, char *outRoot)
 {
 struct element *elList = NULL, *el;
 struct hash *elHash = NULL;
-char fileName[512];
+char hName[512], cName[512];
 
 if (cgiVarExists("prefix"))
     {
@@ -910,11 +910,11 @@ else
     splitPath(outRoot, NULL, prefix, NULL);
 parseDtdx(dtdxFile, &elList, &elHash);
 printf("Parsed %d elements in %s\n", slCount(elList), dtdxFile);
-sprintf(fileName, "%s.h", outRoot);
-makeH(elList, fileName);
-sprintf(fileName, "%s.c", outRoot);
-makeC(elList, fileName);
-printf("Generated code in %s\n", fileName);
+sprintf(hName, "%s.h", outRoot);
+makeH(elList, hName);
+sprintf(cName, "%s.c", outRoot);
+makeC(elList, cName, hName);
+printf("Generated code in %s\n", cName);
 }
 
 int main(int argc, char *argv[])
