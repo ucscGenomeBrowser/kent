@@ -7303,7 +7303,7 @@ LOAD SNP DETAILS (Done.  Daryl Thomas; February 18, 2004)
     # save a little space
     gzip jaxOrtholog.tab
 
-LOAD ACEMBLY (DONE - 2004-03-29 - Hiram)
+LOAD ACEMBLY (DONE - 2004-03-30 - Hiram)
     mkdir -p /cluster/data/hg16/bed/acembly
     cd /cluster/data/hg16/bed/acembly
 
@@ -7319,11 +7319,44 @@ LOAD ACEMBLY (DONE - 2004-03-29 - Hiram)
     tar xvzf acembly.ncbi_34.genes.proteins.fasta.tar.gz
     cd acembly.ncbi_34.genes.gff
 
+    # chrom 6.gff is broken, it has a bogus number in the first column
+    #	where a 6 should be.  Fix-up until I hear from the authors:
+    mv x1.acemblygenes.6.gff x1.acemblygenes.6.gff.broken
+    sed -e "s/^28212469/6/" x1.acemblygenes.6.gff.broken > x1.acemblygenes.6.gff 
+
+    #	There are a number of start and end coordinates that are
+    #	in reversed order.  Until I hear from the authors, I have
+    #	switched those coords:
+    cat << '_EOF_' > fixupReversedBlocks
+#!/bin/sh
+for i in x1*.gff
+do
+        echo -n "$i working ..."
+        awk -F"\t" '
+{
+if ($4 > $5) {
+        printf "%s\t%s\t%s\t%s\t%s", $1, $2, $3, $5, $4
+        for ( i = 6; i <= NF; ++i ) {
+                printf "\t%s", $i
+        }
+        printf "\n"
+} else
+        print
+}
+' $i > $i.fixed
+        echo " done"
+done
+'_EOF_'
+    chmod +x fixupReversedBlocks
+    ./fixupReversedBlocks
+
     # Save just the floating-contig features to different files for lifting 
     # and lift up the floating-contig features to chr*_random coords:
     # NOTE: file prefix (x1) has been added since build 31
-    foreach f (x1.acemblygenes.*.gff)
+
+    foreach f (x1.acemblygenes.*.gff.fixed)
       set c=$f:r:e
+      set c=$f:r:r:e
       egrep '^[a-zA-Z0-9]+\|NT_[0-9][0-9][0-9][0-9][0-9][0-9]' $f | \
         perl -wpe 's/^(\w+)\|(\w+)/$1\/$2/' > ctg-chr${c}_random.gff
       if (-e ../../../$c/lift/random.lft) then
@@ -7346,7 +7379,7 @@ LOAD ACEMBLY (DONE - 2004-03-29 - Hiram)
 
     #- Load into database:
     cd ..
-    ldHgGene hg16 acembly acembly.ncbi_34.genes.gff/chr*.gff
+    ldHgGene -gtf hg16 acembly acembly.ncbi_34.genes.gff/chr*.gff
     hgPepPred hg16 generic acemblyPep \
 	acembly.ncbi_34.genes.proteins.fasta/*.fasta
 
