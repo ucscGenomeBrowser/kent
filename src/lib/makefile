@@ -1,13 +1,13 @@
 include ../inc/common.mk
 
-O = aliType.o asParse.o axt.o axtAffine.o bandExt.o bits.o binRange.o \
+O = aliType.o asParse.o axt.o axtAffine.o bits.o binRange.o \
     blastOut.o blastParse.o boxClump.o browserGfx.o \
-    cda.o chain.o chainBlock.o chainToAxt.o chainToPsl.o cheapcgi.o \
-    codebias.o colHash.o common.o \
-    dgRange.o diGraph.o dlist.o dnaMarkov.o \
+    cda.o chain.o chainBlock.o chainConnect.o chainToAxt.o \
+    chainToPsl.o cheapcgi.o codebias.o colHash.o common.o \
+    dgRange.o diGraph.o dlist.o dnaLoad.o dnaMarkov.o \
     dnaseq.o dnautil.o dystring.o emblParse.o errabort.o errCatch.o \
     fa.o ffAli.o ffScore.o filePath.o fixColor.o flydna.o fof.o \
-    fuzzyShow.o gdf.o gemfont.o gfNet.o gff.o \
+    fuzzyShow.o gapCalc.o gdf.o gemfont.o gfNet.o gff.o \
     gifcomp.o gifdecomp.o gifLabel.o gifread.o gifwrite.o hash.o \
     histogram.o hmmstats.o htmlPage.o htmshell.o hugefnt.o \
     internet.o intExp.o jointalign.o \
@@ -16,11 +16,12 @@ O = aliType.o asParse.o axt.o axtAffine.o bandExt.o bits.o binRange.o \
     memalloc.o memgfx.o net.o nib.o nibTwo.o \
     nt4.o obscure.o oldGff.o options.o osunix.o pairHmm.o pipeline.o \
     portimpl.o pscmGfx.o psGfx.o psl.o pslShow.o \
-    pthreadWrap.o qa.o ra.o rbTree.o \
+    pthreadWrap.o qa.o ra.o rbIntTree.o rbTree.o \
     repMask.o rle.o rudp.o sailfnt.o scoreWindow.o \
     seqOut.o servBrcMcw.o servcis.o \
     servCrunx.o servcl.o servmsII.o servpws.o shaRes.o \
-    sixhi.o slog.o smallishfnt.o snof.o snofmake.o snofsig.o spaceSaver.o \
+    sixhi.o slog.o smallishfnt.o snof.o snofmake.o snofsig.o \
+    spacedSeed.o spaceSaver.o \
     sqlNum.o sqlList.o subText.o synQueue.o tokenizer.o \
     twoBit.o verbose.o vGfx.o vGif.o wildcmp.o wormdna.o \
     xa.o xAli.o xap.o xenshow.o xp.o
