@@ -7118,7 +7118,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 
     sprintf( tempTableName, "%s_%s", smp->chrom, "blastzBestMouse" );
     hFindSplitTable(seqName, "blastzBestMouse", table, &hasBin);
-    sprintf(query, "select * from %s where tName = '%s' and tStart >= %d and tEnd <= %d" ,
+    sprintf(query, "select * from %s where tName = '%s' and tEnd >= %d and tStart <= %d" ,
         table, smp->chrom, left, right );
 
     pslSr = sqlGetResult(conn2, query);
@@ -7133,17 +7133,24 @@ while ((row = sqlNextRow(sr)) != NULL)
     while(( pslRow = sqlNextRow(pslSr)) != NULL )
     {
         thisPsl = pslLoad( pslRow+hasBin ); 
+        first = 1;
 
-                first = 1;
         for( i=1; i<smp->sampleCount; i=i+2 )
         {
-            if( smp->chromStart + smp->samplePosition[i] < left 
-                    || smp->chromStart + smp->samplePosition[i] <
-                    thisPsl->tStart ) continue;
-            if( !first && smp->samplePosition[i-1] + 1 < smp->samplePosition[i] ) printf("<br>");
-            if( smp->chromStart + smp->samplePosition[i+1] > right
-                    || smp->chromStart + smp->samplePosition[i+1] >
-                    thisPsl->tEnd ) break;
+           if( smp->chromStart + smp->samplePosition[i] < left
+               &&  smp->chromStart + smp->samplePosition[i+1] < left ) continue;
+        //   if( smp->chromStart + smp->samplePosition[i] < thisPsl->tStart 
+        //        && smp->chromStart + smp->samplePosition[i+1] < thisPsl->tStart  ) 
+        //            continue;
+
+           if( smp->chromStart + smp->samplePosition[i] > right
+               && smp->chromStart + smp->samplePosition[i+1]  > right ) continue;
+       //    if( smp->chromStart + smp->samplePosition[i] > thisPsl->tEnd 
+       //         && smp->chromStart + smp->samplePosition[i+1] > thisPsl->tEnd  ) 
+       //             continue;
+
+           if( !first && smp->samplePosition[i-1] + 1 < smp->samplePosition[i] ) 
+               printf("<br>");
 
             first = 0;
 
@@ -7156,7 +7163,7 @@ while ((row = sqlNextRow(sr)) != NULL)
             printf("%d&nbsp;&nbsp;&nbsp;&nbsp;%d&nbsp;&nbsp;&nbsp;&nbsp;%g<br>",
                 smp->chromStart + smp->samplePosition[i],
                 smp->chromStart +  smp->samplePosition[i+1],
-                whichNum(smp->sampleHeight[i],0.0,3.66958,1000) );
+                whichNum(smp->sampleHeight[i],0.0,8.0,1000) );
         }
         
         if( !first )
@@ -7177,8 +7184,8 @@ while ((row = sqlNextRow(sr)) != NULL)
 
     }
 
-    }
     hFreeConn(&conn2);
+    }
 
 }
 
