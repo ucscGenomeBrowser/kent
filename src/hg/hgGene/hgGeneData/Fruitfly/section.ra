@@ -1,0 +1,7 @@
+# Drosophila-specific sections.
+
+name flyBaseInfo
+shortLabel FlyBase Roles
+longLabel FlyBase Biological Roles 
+priority 25
+
