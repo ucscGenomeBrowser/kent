@@ -61,7 +61,7 @@ type psl xeno hg16
 
 track gc20KBase
 shortLabel GC Percent
-longLabel GC Percent in 20,000 base windows
+longLabel GC Percent in 5 base windows
 group map
 priority 23.5
 visibility hide
