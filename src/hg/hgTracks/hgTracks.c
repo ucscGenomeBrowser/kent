@@ -2996,58 +2996,6 @@ tg->mapItemName = knownGeneMapName;
 tg->itemColor 	= knownGeneColor;
 }
 
-static void superfamilyDraw(struct track *tg, int seqStart, int seqEnd,
-        struct vGfx *vg, int xOff, int yOff, int width, 
-        MgFont *font, Color color, enum trackVisibility vis)
-/* Draw simple Bed items for superfamily track */
-{
-int baseWidth = seqEnd - seqStart;
-struct bed *item;
-int y = yOff;
-int heightPer = tg->heightPer;
-int lineHeight = tg->lineHeight;
-int x1,x2,w;
-boolean isFull = (vis == tvFull);
-double scale = width/(double)baseWidth;
-int midLineOff = heightPer/2;
-int midY = y + midLineOff;
-int dir;
-Color *shades = tg->colorShades;
-
-for (item = tg->items; item != NULL; item = item->next)
-    {
-    x1 = round((double)((int)item->chromStart-winStart)*scale) + xOff;
-    x2 = round((double)((int)item->chromEnd-winStart)*scale) + xOff;
-    w = x2-x1;
-    if (tg->itemColor != NULL)
-        color = tg->itemColor(tg, item, vg);
-    else
-	{
-        if (shades)
-            {
-            color = shades[grayInRange(item->score, 0, 1000)];
-            }
-	}
-
-    if (w < 1)
-	w = 1;
-    vgBox(vg, x1, y, w, heightPer, color);
-    if (tg->drawName)
-	{
-	/* Clip here so that text will tend to be more visible... */
-	char *s = tg->itemName(tg, item);
-	if (x1 < xOff)
-	    x1 = xOff;
-	if (x2 > xOff + width)
-	    x2 = xOff + width;
-	w = x2-x1;
-	if (w > mgFontStringWidth(font, s))
-	    vgTextCentered(vg, x1, y, w, heightPer, MG_WHITE, font, s);
-	}
-    if (isFull)
-	y += lineHeight;
-    }
-}
 
 char *superfamilyMapName(struct track *tg, void *item)
 /* Return map name of the track item (used by hgc). */
@@ -3072,7 +3020,7 @@ return(name);
 char sfDesc[100][256];
 char sfBuffer[25600];
 
-char *superfamilyName(struct track *tg, void *item)
+char *superfamilyNameLong(struct track *tg, void *item)
 /* Return domain names of an entry of a Superfamily track item, 
    each item may have multiple names 
    due to possibility of multiple domains. */
@@ -3124,13 +3072,71 @@ sqlFreeResult(&sr);
 return(sfBuffer);
 }
 
+static void superfamilyDraw(struct track *tg, int seqStart, int seqEnd,
+        struct vGfx *vg, int xOff, int yOff, int width, 
+        MgFont *font, Color color, enum trackVisibility vis)
+/* Draw simple Bed items for superfamily track */
+{
+int baseWidth = seqEnd - seqStart;
+struct bed *item;
+int y = yOff;
+int heightPer = tg->heightPer;
+int lineHeight = tg->lineHeight;
+int x1,x2,w;
+boolean isFull = (vis == tvFull);
+double scale = width/(double)baseWidth;
+int midLineOff = heightPer/2;
+int midY = y + midLineOff;
+int dir;
+Color *shades = tg->colorShades;
+
+for (item = tg->items; item != NULL; item = item->next)
+    {
+    char *s = superfamilyNameLong(tg, item);
+    x1 = round((double)((int)item->chromStart-winStart)*scale) + xOff;
+    x2 = round((double)((int)item->chromEnd-winStart)*scale) + xOff;
+    w = x2-x1;
+    if (tg->itemColor != NULL)
+        color = tg->itemColor(tg, item, vg);
+    else
+	{
+        if (shades)
+            {
+            color = shades[grayInRange(item->score, 0, 1000)];
+            }
+	}
+
+    if (w < 1)
+	w = 1;
+    vgBox(vg, x1, y, w, heightPer, color);
+    if (vis == tvFull)
+	{
+    	vgTextRight(vg, x1-mgFontStringWidth(font, s)-2, y, mgFontStringWidth(font, s), 
+		heightPer, MG_BLACK, font, s);
+	}
+    if (tg->drawName)
+	{
+	/* Clip here so that text will tend to be more visible... */
+	if (x1 < xOff)
+	    x1 = xOff;
+	if (x2 > xOff + width)
+	    x2 = xOff + width;
+	w = x2-x1;
+	if (w > mgFontStringWidth(font, s))
+	    vgTextCentered(vg, x1, y, w, heightPer, MG_WHITE, font, s);
+	}
+    if (isFull)
+	y += lineHeight;
+    }
+}
 void superfamilyMethods(struct track *tg)
 /* Make track for simple repeats. */
 {
 tg->drawItems 	= superfamilyDraw;
-tg->itemName  	= superfamilyName;
+tg->totalHeight = tgFixedTotalHeight;
+tg->itemName    = superfamilyMapName;
 tg->mapItemName = superfamilyMapName;
-tg->drawName  	= TRUE;
+tg->drawName  	= FALSE;
 }
 
 char *refGeneName(struct track *tg, void *item)
@@ -9046,7 +9052,7 @@ if (withLeftLabels)
 			else if( sameString( track->mapName, "musHumL" ))
 			    vgTextRight(vg, leftLabelX, y, leftLabelWidth - 1, itemHeight,
 					track->ixColor, font, "Human Cons");
-                        else
+			else
 			    vgTextRight(vg, leftLabelX, y, leftLabelWidth - 1, itemHeight,
 					track->ixColor, font, rootName );
 
