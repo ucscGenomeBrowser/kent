@@ -44,6 +44,7 @@ o1 = fopen("j.dat",  "w");
 o2 = fopen("jj.dat", "w");
     
 dbName = argv[1];
+hSetDb(dbName);
 sprintf(protDbName,   "proteins%s", argv[2]);
 sprintf(biosqlDbName, "biosql%s",   argv[2]);
 
@@ -92,7 +93,8 @@ while (row2 != NULL)
         }
     else
         {
-	kgSeq = hGenBankGetMrna(kgID, "knownGeneMrna");
+	kgSeq = hGenBankGetMrna(kgID, NULL);
+	   
 	if (kgSeq != NULL)
 	    {
             fprintf(o2, "%s\t%s\n", kgID, kgSeq->dna);fflush(o1);
