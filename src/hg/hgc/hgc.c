@@ -9686,6 +9686,9 @@ while ((row = sqlNextRow(sr)) != NULL)
 		min(smp->chromStart +  smp->samplePosition[i] +
 		humMusWinSize / 2, thisEnd ),
 		whichNum(smp->sampleHeight[i],0.0,8.0,1000) );
+		//0 to 8.0 is the fixed total L-score range for
+		//all these conservation tracks. Scores outside 
+		//this range are truncated.
 
 		printSampleWindow( thisPsl,
 		    smp->chromStart + smp->samplePosition[i] -
