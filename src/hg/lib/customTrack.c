@@ -18,7 +18,7 @@
 #include "hdb.h"
 #include "hui.h"
 
-static char const rcsid[] = "$Id: customTrack.c,v 1.41 2004/04/16 15:28:43 heather Exp $";
+static char const rcsid[] = "$Id: customTrack.c,v 1.42 2004/04/28 21:56:44 hiram Exp $";
 
 /* Track names begin with track and then go to variable/value pairs.  The
  * values must be quoted if they include white space. Defined variables are:
@@ -71,15 +71,60 @@ if (! (isdigit(nums[0]) || ((nums[0] == '-') && isdigit(nums[1]))))
 return atoi(nums);
 }
 
+/*	table of wiggle options that could be on the track line */
+static char *wigOptions[] =
+{
+    "offset",
+    "autoScale",
+    "gridDefault",
+    "maxHeightPixels",
+    "graphType",
+    "viewLimits",
+    "yLineMark",
+    "yLineOnOff",
+    "windowingFunction",
+    "smoothingWindow",
+};
+static int wigOptCount = sizeof(wigOptions) / sizeof(char *);
+
+static void parseWiggleSettings(struct trackDb *tdb, struct hash *hash)
+{
+struct dyString *wigSettings = newDyString(0);
+int i;
+char *format0="type='wiggle_0'";
+char *format1="\t%s='%s'";
+
+/* always at least one setting, our special type variable */
+
+dyStringPrintf(wigSettings, format0);
+
+for (i = 0; i < wigOptCount; ++i)
+    {
+    char *val;
+    if ((val = hashFindVal(hash, wigOptions[i])) != NULL)
+	dyStringPrintf(wigSettings, format1, wigOptions[i], val);
+    }
+tdb->settings = dyStringCannibalize(&wigSettings);
+}
+
 static struct customTrack *trackFromLine(char *line, int lineIx)
 /* Convert a track specification line to a custom table. */
 {
 struct customTrack *track;
-struct trackDb *tdb = tdbDefault();
+struct trackDb *tdb = tdbDefault();	/* begin with default track */
 struct hash *hash = hashVarLine(line, lineIx);
 char *val;
+
 AllocVar(track);
 track->tdb = tdb;
+if ((val = hashFindVal(hash, "type")) != NULL)
+    {
+    if (sameString(val,"wiggle_0"))
+	{
+	parseWiggleSettings(tdb, hash);
+	track->wiggle = TRUE;
+	}
+    }
 if ((val = hashFindVal(hash, "name")) != NULL)
     {
     char buf[256];
@@ -126,6 +171,7 @@ else
 if ((val = hashFindVal(hash, "offset")) != NULL)
     track->offset = atoi(val);
 freeHashAndVals(&hash);
+
 return track;
 }
 
@@ -232,13 +278,18 @@ if (wordCount > 11)
     lastEnd = 0;
     for (i=0;  i < bed->blockCount;  i++)
 	{
+/*
+printf("%d:%d %s %s s:%d c:%u cs:%u ce:%u csI:%d bsI:%d ls:%d le:%d<BR>\n", lineIx, i, bed->chrom, bed->name, bed->score, bed->blockCount, bed->chromStart, bed->chromEnd, bed->chromStarts[i], bed->blockSizes[i], lastStart, lastEnd);
+*/
 	if (bed->chromStarts[i]+bed->chromStart >= bed->chromEnd)
+	    {
 	    if (bed->chromStarts[i] >= bed->chromStart)
 		errAbort("line %d of custom input: BED chromStarts offsets must be relative to chromStart, not absolute.  Try subtracting chromStart from each offset in chromStarts.",
 			 lineIx);
 	    else
 		errAbort("line %d of custom input: BED chromStarts[i]+chromStart must be less than chromEnd.",
 			 lineIx);
+	    }
 	lastStart = bed->chromStarts[i];
 	lastEnd = bed->chromStart + bed->chromStarts[i] + bed->blockSizes[i];
 	}
@@ -356,7 +407,7 @@ static boolean rowIsPsl(char **row, int wordCount)
 {
 int i, len;
 char *s, c;
-int blockCount,start,end,size;
+int blockCount;
 if (wordCount != 21)
     return FALSE;
 for (i=0; i<=7; ++i)
@@ -603,21 +654,20 @@ struct hash *chromHash = newHash(8);
 struct lineFile *lf = NULL;
 float prio = 0.0;
 boolean pslIsProt = FALSE;
+boolean inWiggle = FALSE;	/* working on wiggle data */
+unsigned trackDataLineCount = 0;
 
 customDefaultRows(row);
 if (isFile)
     {
     if (stringIn("://", text))
-	{
         lf = netLineFileOpen(text);
-	}
     else
 	lf = lineFileOpen(text, TRUE);
     }
 else
-    {
     nextLine = text;
-    }
+
 for (;;)
     {
     if (!getNextLine(&lf, &line, &nextLine))
@@ -627,7 +677,7 @@ for (;;)
     ++lineIx;
     line = skipLeadingSpaces(line);
     if (line[0] == '#' || line[0] == 0)
-        continue;
+        continue;			/* !!! NOTE continue !!! */
 
     /* Move lines that start with 'browser' to retBrowserLines. */
     if (startsWith("browser", line))
@@ -637,7 +687,7 @@ for (;;)
 	    struct slName *s = newSlName(line);
 	    slAddHead(retBrowserLines, s);
 	    }
-	continue;
+	continue;			/* !!! NOTE continue !!! */
 	}
     /* Skip lines that are psl header. */
     if (startsWith("psLayout version", line))
@@ -646,13 +696,39 @@ for (;;)
 	pslIsProt = (stringIn("protein", line) != NULL);
 	for (i=0; i<4; ++i)
 	    getNextLine(&lf, &line, &nextLine);
-	continue;
+	continue;			/* !!! NOTE continue !!! */
 	}
 
     /* Deal with line that defines new track. */
     if (parseTrackLine(line, lineIx, &track))
         {
-	slAddTail(&trackList, track);
+	if (track->wiggle)
+	    {
+	    slAddTail(&trackList, track);
+	    inWiggle = TRUE;
+	    track->wigData = (char *)NULL;
+	    trackDataLineCount = 0;
+	    }
+	else
+	    {
+	    slAddTail(&trackList, track);
+	    inWiggle = FALSE;
+	    trackDataLineCount = 0;
+	    }
+	continue;			/* !!! NOTE continue !!!  */
+	}
+
+    ++trackDataLineCount;
+    /*	Initial implemention is to simply carry along the wiggle data */
+    if (inWiggle)
+	{
+	struct dyString *wigAscii = newDyString(0);
+	char *format0="%s\n";
+	if (track->wigData)
+		dyStringAppend(wigAscii,track->wigData);
+	dyStringPrintf(wigAscii,format0,line);
+	freeMem(track->wigData);
+	track->wigData = dyStringCannibalize(&wigAscii);
 	continue;
 	}
 
@@ -664,7 +740,8 @@ for (;;)
 	slAddTail(&trackList, track);
 	}
 
-    /* Classify track based on first line of track.   Chop line
+    /* Classify track based on first line of track.   First time through
+     *	the fieldCount is zero, this will be setting it.  Chop line
      * into words and make sure all lines have same number of words. */
     if (track->fieldCount == 0)
         {
@@ -682,11 +759,17 @@ for (;;)
 	}
     else
         {
+/*
+printf("%s ", line);
+*/
 	/* Chop up line and skip empty lines. */
 	if (track->gffHelper != NULL)
 	    wordCount = chopTabs(line, row);
 	else
 	    wordCount = chopLine(line, row);
+/*
+printf(" wc:%d <BR>\n", wordCount);
+*/
 	}
 
     /* Save away this line of data. */
@@ -712,6 +795,7 @@ for (;;)
 	slAddHead(&track->bedList, bed);
 	}
     }
+
 for (track = trackList; track != NULL; track = track->next)
      {
      char buf[64];
@@ -746,6 +830,9 @@ if (retBrowserLines != NULL)
 return trackList;
 }
 
+/*	the following two routines are only referenced from the test
+ *	section at the end of this file.  They are unused elsewhere.
+ */
 struct customTrack *customTracksFromText(char *text)
 /* Parse text into a custom set of tracks. */
 {
@@ -782,16 +869,25 @@ char *customText = cartOptionalString(cart, "hgt.customText");
 char *fileName = cartOptionalString(cart, "ct");
 char *ctFileName = NULL;
 
+/*	the *fileName from cart "ct" is either from here, re-using an
+ *	existing .bed file, or it is an incoming file name from
+ *	hgText which also re-read any existing file and added its
+ *	sequences to the file.
+ */
+
 customText = skipLeadingSpaces(customText);
 if (customText != NULL && bogusMacEmptyChars(customText))
     customText = NULL;
 if (customText == NULL || customText[0] == 0)
     customText = cartOptionalString(cart, "hgt.customFile");
+
 customText = skipLeadingSpaces(customText);
+
 if (customText != NULL && customText[0] != 0)
     {
     static struct tempName tn;
     makeTempName(&tn, "ct", ".bed");
+
     ctList = customTracksParse(customText, FALSE, retBrowserLines);
     ctFileName = tn.forCgi;
     customTrackSave(ctList, tn.forCgi);
@@ -863,6 +959,8 @@ if (tdb->colorR != def->colorR || tdb->colorG != def->colorG || tdb->colorB != d
 if (tdb->altColorR != def->altColorR || tdb->altColorG != def->altColorG 
 	|| tdb->altColorB != tdb->altColorB)
     fprintf(f, "\t%s='%d,%d,%d'", "altColor", tdb->altColorR, tdb->altColorG, tdb->altColorB);
+if (tdb->settings && (strlen(tdb->settings) > 0))
+    fprintf(f, "\t%s", tdb->settings);
 fputc('\n', f);
 if (ferror(f))
     errnoAbort("Write error to %s", fileName);
@@ -915,7 +1013,7 @@ struct customTrack *track;
 struct bed *bed;
 FILE *f = mustOpen(fileName, "w");
 
-#ifdef DEBUG
+#if defined(DEBUG)
     // allow file readability for debug
     chmod(fileName, 0664);
 #endif
@@ -923,8 +1021,16 @@ FILE *f = mustOpen(fileName, "w");
 for (track = trackList; track != NULL; track = track->next)
     {
     saveTdbLine(f, fileName, track->tdb);
-    for (bed = track->bedList; bed != NULL; bed = bed->next)
-         saveBedPart(f, fileName, bed, track->fieldCount);
+    if (track->wiggle)
+	{
+	if (track->wigData)
+	    fprintf(f, "%s", track->wigData);
+	}
+    else
+	{
+	for (bed = track->bedList; bed != NULL; bed = bed->next)
+	     saveBedPart(f, fileName, bed, track->fieldCount);
+	}
     }
 carefulClose(&f);
 }
