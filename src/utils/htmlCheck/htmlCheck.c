@@ -9,7 +9,7 @@
 #include "obscure.h"
 #include "net.h"
 
-static char const rcsid[] = "$Id: htmlCheck.c,v 1.8 2004/02/28 11:26:09 kent Exp $";
+static char const rcsid[] = "$Id: htmlCheck.c,v 1.9 2004/02/28 11:47:22 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -641,7 +641,7 @@ validateTables(startTag, endTag);
 checkTagIsInside("DIR MENU OL UL", "LI", startTag, endTag);
 checkTagIsInside("DL", "DD DT", startTag, endTag);
 checkTagIsInside("COLGROUP TABLE", "COL", startTag, endTag);
-checkTagIsInside("AREA", "MAP", startTag, endTag);
+checkTagIsInside("MAP", "AREA", startTag, endTag);
 checkTagIsInside("FORM", 
 	"INPUT BUTTON /BUTTON OPTION SELECT /SELECT TEXTAREA /TEXTAREA"
 	"FIELDSET /FIELDSET"
