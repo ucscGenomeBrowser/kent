@@ -3,12 +3,9 @@
 #include "memalloc.h"
 #include "linefile.h"
 #include "hash.h"
-#include "portable.h"
 #include "jksql.h"
-#include "trackDb.h"
-#include "hdb.h"
 
-static char const rcsid[] = "$Id: freen.c,v 1.54 2004/11/30 17:22:26 kent Exp $";
+static char const rcsid[] = "$Id: freen.c,v 1.55 2004/12/03 13:56:30 kent Exp $";
 
 struct trackDb* loadTrackDb(struct sqlConnection *conn, char* where);
 /* load list of trackDb objects, with optional where */
@@ -19,22 +16,26 @@ void usage()
 errAbort("usage: freen something");
 }
 
-void freen(char *a)
+void freen(char *db)
 /* Test some hair-brained thing. */
 {
-struct trackDb *tdbList, *tdb;
-struct sqlConnection *conn;
-hSetDb(a);
-conn = hAllocConn();
-// tdbList = loadTrackDb(conn, NULL);
-// tdbList = trackDbLoadWhere(conn, "trackDb_kent", NULL);
-tdbList = hTrackDb(NULL);
+struct sqlConnection *conn = sqlConnect(db);
+struct sqlResult *sr;
+char **row, *query;
 
-for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
+uglyf("connected to %s\n", db);
+query = "show tables like '%gap%'";
+sr = sqlGetResult(conn, query);
+uglyf("sr = %p\n", sr);
+while ((row = sqlNextRow(sr)) != NULL)
     {
-    if (startsWith("blat", tdb->tableName))
-        printf("%s %s %s\n", tdb->tableName, tdb->type, tdb->shortLabel);
+    uglyf("%s\n", row[0]);
     }
+uglyf("done with rows\n");
+sqlFreeResult(&sr);
+uglyf("Freed result\n");
+sqlDisconnect(&conn);
+uglyf("disconnected\n");
 }
 
 
