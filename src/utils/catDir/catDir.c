@@ -6,7 +6,7 @@
 #include "errabort.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: catDir.c,v 1.4 2003/05/06 07:41:04 kate Exp $";
+static char const rcsid[] = "$Id: catDir.c,v 1.5 2005/03/04 19:52:02 galt Exp $";
 
 boolean recurse = FALSE;
 char *wildCard = NULL;
@@ -24,7 +24,7 @@ errAbort(
   "options:\n"
   "   -r            Recurse into subdirectories\n"
   "   -suffix=.suf  This will restrict things to files ending in .suf\n"
-  "   '-wild=*.???' This will match wildcards.\n"
+  "   '-wild=*.\?\?\?' This will match wildcards.\n"
   "   -nonz         Prints file name of non-zero length files\n");
 }
 
