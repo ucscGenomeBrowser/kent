@@ -11,7 +11,8 @@
 boolean webHeadAlreadyOutputed = FALSE;
 /* flag that tell if text CGI header hsa been outputed */
 boolean webInTextMode = FALSE;
-
+static char *dbCgiName = "db";
+static char *orgCgiName = "org";
 
 void webStartText()
 /* output the head for a text page */
@@ -241,12 +242,12 @@ param onChangeText - Optional (can be NULL) text to pass in any onChange javascr
  */
 {
 char *orgList[128];
-char *orgCgiName = "org";
 int numOrganisms = 0;
 struct dbDb *dbList = hGetIndexedDatabases();
 struct dbDb *cur = NULL;
 struct hash *hash = hashNew(7); // 2^^7 entries = 128
 char *selOrganism = hOrganism(db);
+char *values [128];
 
 for (cur = dbList; cur != NULL; cur = cur->next)
     {
@@ -256,11 +257,12 @@ for (cur = dbList; cur != NULL; cur = cur->next)
         {
         hashAdd(hash, cur->organism, cur);
         orgList[numOrganisms] = cur->organism;
+        values[numOrganisms] = cur->organism;
         numOrganisms++;
         }
     }
 
-cgiMakeDropListFull(orgCgiName, orgList, orgList, numOrganisms, selOrganism, onChangeText);
+cgiMakeDropListFull(orgCgiName, orgList, values, numOrganisms, selOrganism, onChangeText);
 }
 
 void printAssemblyListHtml(char *db)
@@ -274,7 +276,6 @@ If NULL, no default selection.
  */
 char *assemblyList[128];
 char *values[128];
-char *dbCgiName = "db";
 int numAssemblies = 0;
 struct dbDb *dbList = hGetIndexedDatabases();
 struct dbDb *cur = NULL;
@@ -311,3 +312,103 @@ for (cur = dbList; cur != NULL; cur = cur->next)
 cgiMakeDropListFull(dbCgiName, assemblyList, values, numAssemblies, assembly, NULL);
 }
 
+void printBlatAssemblyListHtml(char *db)
+{
+/* Find all the assemblies that pertain to the selected genome and that have
+BLAT servers set up.
+Prints to stdout the HTML to render a dropdown list containing a list of the possible
+assemblies to choose from.
+
+param curDb - The assembly (the database name) to choose as selected. 
+If NULL, no default selection.
+ */
+char *assemblyList[128];
+char *values[128];
+int numAssemblies = 0;
+struct dbDb *dbList = hGetIndexedDatabases();
+struct dbDb *cur = NULL;
+struct hash *hash = hashNew(7); // 2^^7 entries = 128
+char *organism = hOrganism(db);
+char *assembly = NULL;
+
+for (cur = dbList; cur != NULL; cur = cur->next)
+    {
+    /* If we are looking at a zoo database then show the zoo database list */
+    if ((strstrNoCase(db, "zoo") || strstrNoCase(organism, "zoo")) &&
+        strstrNoCase(cur->description, "zoo"))
+        {
+        assemblyList[numAssemblies] = cur->description;
+        values[numAssemblies] = cur->name;
+        numAssemblies++;
+        }
+    else if (strstrNoCase(organism, cur->organism) && 
+             !strstrNoCase(cur->description, "zoo") &&
+             (cur->active || strstrNoCase(cur->name, db)))
+        {
+        assemblyList[numAssemblies] = cur->description;
+        values[numAssemblies] = cur->name;
+        numAssemblies++;
+        }
+
+    /* Save a pointer to the current assembly */
+    if (strstrNoCase(db, cur->name))
+       {
+       assembly = cur->description;
+       }
+    }
+
+cgiMakeDropListFull(dbCgiName, assemblyList, values, numAssemblies, assembly, NULL);
+}
+
+char *getDbForOrganism(char *organism, struct cart *cart)
+/*
+  Function to find the default database for the given organism.
+It looks in the cart first and then, if that database's organism matches the 
+passed-in organism, returns it. If the organism does not match, it returns the default
+database that does match that organism.
+
+param organism - The organism for which to find a database
+param cart - The cart to use to first search for a suitable database name
+return - The database matching this organism type
+*/
+{
+char *retDb = cartUsualString(cart, dbCgiName, hGetDb());
+char *dbOrg = hOrganism(retDb);
+
+if (!strstrNoCase(organism, dbOrg))
+    {
+    retDb = hDefaultDbForOrganism(organism);
+    }
+
+return retDb;
+}
+
+void getDbAndOrganism(struct cart *cart, char **retDb, char **retOrganism)
+/*
+  The order of preference here is as follows:
+If we got a request that explicitly names the db, that takes
+highest priority, and we synch the organism to that db.
+If we get a cgi request for a specific organism then we use that
+organism to choose the DB.
+
+In the cart only, we use the same order of preference.
+If someone requests an organism we try to give them the same db as
+was in their cart, unless the organism doesn't match.
+*/
+{
+*retDb = cgiOptionalString(dbCgiName);
+*retOrganism = cgiOptionalString(orgCgiName);
+if (*retDb)
+    {
+    *retOrganism = hOrganism(*retDb);
+    }
+else if (*retOrganism)
+    {
+    *retDb = getDbForOrganism(*retOrganism, cart);
+    }
+else
+    {
+    *retDb = cartUsualString(cart, dbCgiName, hGetDb());
+    *retOrganism = hOrganism(*retDb);
+    }
+}
