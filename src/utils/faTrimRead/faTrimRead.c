@@ -1,6 +1,7 @@
 /* faTrimRead - trim reads based on qual scores */
 #include "common.h"
 #include "fa.h"
+//#include "qaSeq.h"
 #include "hash.h"
 #include "linefile.h"
 #include "obscure.h"
@@ -9,6 +10,7 @@
 #define MINSCORE 20             /* default score threshold */
 #define MINMATCH 20             /* default miniumun matches in window at start/end of read*/
 #define WINDOW 25               /* default window size */
+#define LINESIZE 50             /* default fa output line size */
 
 #define MAXREADSIZE 8192
 #define INTSPERLINE 20 /* number of qual scores per line */
@@ -26,13 +28,17 @@ struct qual {
 int minScore = 0;
 int minMatch = 0;
 int window = 0;
+int lineSize = 50;
 bool showQual = FALSE;
+bool lower = FALSE;
 
 static struct optionSpec optionSpecs[] = {
     {"window",OPTION_INT},
     {"minMatch" ,OPTION_INT},
     {"minScore",OPTION_INT},
+    {"lineSize",OPTION_INT},
     {"showQual",OPTION_BOOLEAN},
+    {"lower",OPTION_BOOLEAN},
     {NULL, 0}
 };
 
@@ -42,12 +48,14 @@ void usage()
 errAbort(
         "trimRead - trim reads based on qual scores - change low scoring bases to N's \n"
         "usage:\n"
-        "       trimRead in.fa qual.fa out.fa\n"
+        "       trimRead in.fa qual.fa out.fa out.lft\n"
         "options:\n"
         "    -minScore=N  score threshold (default %d)\n"
         "    -minMatch N  minimum number of matches above threshold at start/end of read (default %d)\n"
         "    -window=N    window size to check for matches at start and end of read (default %d)\n"
+        "    -lineSize=N  output line size (default 50)\n"
         "    -showQual    show qual scores and trimmed bases for debugging\n",
+        "    -lower       change low scoring bases to lower case instead of N and do not trim sequence ends\n",
         MINSCORE,MINMATCH, WINDOW        );
 }
 
@@ -206,17 +214,19 @@ else
     return -1;
 }
 
-void faTrimRead(char *inFile, char *qualFile, char *outFile)
+void faTrimRead(char *inFile, char *qualFile, char *outFile, char *liftFile)
 /* faTrimRead - trim reads based on qual scores */
 {
 struct lineFile *lf = lineFileOpen(inFile, TRUE);
 struct dnaSeq seq;
 FILE *qf = mustOpen(qualFile, "r");
 FILE *f = mustOpen(outFile, "w");
+FILE *lift = mustOpen(liftFile, "w");
 int seqCount = 0, passCount = 0;
 int nCount;
 ZeroVar(&seq);
 
+fprintf(lift,"## name \tclipStart\tclipEnd\tSize\n");
 while (faSomeSpeedReadNext(lf, &seq.dna, &seq.size, &seq.name, FALSE))
     {
     int i, j, aSize = 0;
@@ -232,12 +242,19 @@ while (faSomeSpeedReadNext(lf, &seq.dna, &seq.size, &seq.name, FALSE))
     if (qualReadAll(qf, TRUE, "name", FALSE, NULL, &qual))
         {
         for (i = 0 ; i<seq.size ; i++)
+            seq.dna[i] = toupper(seq.dna[i]);
+        for (i = 0 ; i<seq.size ; i++)
             {
             if (mode == START && ((clipStart = checkWindow(&qual, i,window)) >= 0))
                 {
                 /* set beginning of read to N's */
                 for (j = 0 ; j < clipStart ; j++)
-                    seq.dna[j] = 'N';
+                    {
+                    if (lower)
+                        seq.dna[j] = tolower(seq.dna[j]);
+                    else
+                        seq.dna[j] = 'N';
+                    }
                 i = clipStart;
                 mode = MIDDLE;
                 }
@@ -247,7 +264,10 @@ while (faSomeSpeedReadNext(lf, &seq.dna, &seq.size, &seq.name, FALSE))
                 assert(i < seq.size);
                 if (qual.array[i] < minScore )
                     {
-                    seq.dna[i] = 'N';
+                    if (lower)
+                        seq.dna[i] = tolower(seq.dna[i]);
+                    else
+                        seq.dna[i] = 'N';
                     if (i == clipStart)
                         clipStart++;
                     }
@@ -256,12 +276,16 @@ while (faSomeSpeedReadNext(lf, &seq.dna, &seq.size, &seq.name, FALSE))
         mode = END;
         for (i = seq.size-window-1 ; i>=0 ; i--)
             {
+            //seq.dna[i] = toupper(seq.dna[i]) ;
             if (mode == END && ((clipEnd = checkWindow(&qual, i,window)) >= 0))
                 {
-                clipEnd += window ; 
-                assert(clipEnd < seq.size);
+                clipEnd += window+1 ; 
+                assert(clipEnd <= seq.size);
                 for (j = clipEnd ; j < seq.size ; j++)
-                    seq.dna[j] = 'N';
+                    if (lower)
+                        seq.dna[j] = tolower(seq.dna[j]) ;
+                    else
+                        seq.dna[j] = 'N';
                 mode = MIDDLE;
                 i = clipEnd+1;
                 }
@@ -269,7 +293,10 @@ while (faSomeSpeedReadNext(lf, &seq.dna, &seq.size, &seq.name, FALSE))
                 {
                 if (qual.array[i] < minScore )
                     {
-                    seq.dna[i] = 'N';
+                    if (lower)
+                        seq.dna[i] = tolower(seq.dna[i]) ;
+                    else
+                        seq.dna[i] = 'N';
                     if (i == clipEnd)
                         clipEnd--;
                     }
@@ -295,24 +322,37 @@ while (faSomeSpeedReadNext(lf, &seq.dna, &seq.size, &seq.name, FALSE))
     if (showQual)
         faWriteWithQualNext(f, seq.name, seq.dna, seq.size, &qual);
     else
-        faWriteNext(f, seq.name, seq.dna+clipStart, clipEnd-clipStart+1);
+        {
+        //faWriteNext(f, seq.name, seq.dna+clipStart, clipEnd-clipStart+1);
+        if (seq.name != NULL)
+            fprintf(f, ">%s\n", seq.name);
+        if (lower)
+            writeSeqWithBreaks(f, seq.dna, seq.size, lineSize);
+        else
+            writeSeqWithBreaks(f, seq.dna+clipStart, clipEnd-clipStart+1, lineSize);
+        }
+    fprintf(lift,"%s\t%d\t%d\t%d\n",seq.name, clipStart, clipEnd, seq.size);
     freez(&qual.array);
     assert(qual.array == NULL);
     ZeroVar(&seq);
     }
+fclose(lift);
+fclose(f);
 }
 
 int main(int argc, char *argv[])
 /* Process command line. */
 {
 optionInit(&argc, argv, optionSpecs);
-if (argc != 4 )
+if (argc != 5 )
     usage();
 minScore = optionInt("minScore",MINSCORE);
 minMatch = optionInt("minMatch" ,MINMATCH);
 window = optionInt("window",WINDOW);
+lineSize = optionInt("lineSize",LINESIZE);
 showQual = optionExists("showQual");
+lower = optionExists("lower");
 dnaUtilOpen();
-faTrimRead(argv[1], argv[2], argv[3]);
+faTrimRead(argv[1], argv[2], argv[3], argv[4]);
 return 0;
 }
