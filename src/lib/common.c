@@ -809,6 +809,13 @@ if (s != NULL)
 return s;
 }
 
+void spaceOut(FILE *f, int count)
+/* Put out some spaces to file. */
+{
+while (--count >= 0)
+    fputc(' ', f);
+}
+
 char *firstWordInLine(char *line)
 /* Returns first word in line if any (white space separated).
  * Puts 0 in place of white space after word. */
