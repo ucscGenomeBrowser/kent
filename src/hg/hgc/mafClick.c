@@ -12,7 +12,7 @@
 #include "hui.h"
 #include "hCommon.h"
 
-static char const rcsid[] = "$Id: mafClick.c,v 1.22 2004/12/07 18:16:45 kate Exp $";
+static char const rcsid[] = "$Id: mafClick.c,v 1.23 2005/01/25 19:58:51 jill Exp $";
 
 /* Javascript to help make a selection from a drop-down
  * go back to the server. */
@@ -55,32 +55,38 @@ for (mc = maf->components; mc != NULL; mc = mc->next)
     }
 }
 
-static void blueCapWrite(FILE *f, char *s, int size)
+static void blueCapWrite(FILE *f, char *s, int size, char *r)
 /* Write capital letters in blue. */
 {
 boolean isBlue = FALSE;
 int i;
 for (i=0; i<size; ++i)
     {
-    char c = s[i];
-    if (isupper(c))
-        {
-	if (!isBlue)
+      if (r!=NULL && s[i]==r[i])
+	fprintf(f, ".");
+      else
+	{
+	  char c = s[i];
+	  if (isupper(c))
 	    {
-	    fprintf(f, "<FONT COLOR=\"#0000FF\">");
-	    isBlue = TRUE;
+	      if (!isBlue)
+		{
+		  fprintf(f, "<FONT COLOR=\"#0000FF\">");
+		  isBlue = TRUE;
+		}
 	    }
-	}
-    else if (islower(c))
-        {
-	if (isBlue)
+	  else if (islower(c))
 	    {
-	    fprintf(f, "</FONT>");
-	    isBlue = FALSE;
+	      if (isBlue)
+		{
+		  fprintf(f, "</FONT>");
+		  isBlue = FALSE;
+		}
 	    }
+	  fprintf(f, "%c", c);
 	}
-    fprintf(f, "%c", c);
     }
+
 if (isBlue)
     fprintf(f, "</FONT>");
 }
@@ -107,7 +113,7 @@ for (i=0; i<size; i++)
     }
 }
 
-static void mafPrettyBody(FILE *f, struct mafAli *maf, int lineSize)
+static void mafPrettyBody(FILE *f, struct mafAli *maf, int lineSize, boolean onlyDiff)
 /* Print MAF base by base with line-breaks. */
 {
 int srcChars = 0;
@@ -137,7 +143,8 @@ for (lineStart = 0; lineStart < maf->textSize; lineStart = lineEnd)
 	fprintf(f, "%-*s ", srcChars, mc->src);
         updateSummaryLine(summaryLine, referenceText + lineStart, 
                                 mc->text + lineStart, size);
-	blueCapWrite(f, mc->text + lineStart, size);
+	blueCapWrite(f, mc->text + lineStart, size, 
+		     (onlyDiff && mc != maf->components) ? referenceText + lineStart : NULL);
 	fprintf(f, "\n");
 	}
     fprintf(f, "%-*s %s\n\n", srcChars, "", summaryLine);
@@ -147,12 +154,12 @@ freeMem(summaryLine);
 
 
 
-static void mafPrettyOut(FILE *f, struct mafAli *maf, int lineSize)
+static void mafPrettyOut(FILE *f, struct mafAli *maf, int lineSize, boolean onlyDiff)
 /* Output MAF in human readable format. */
 {
 mafPrettyHeader(f, maf);
 fprintf(f, "\n");
-mafPrettyBody(f, maf, lineSize);
+mafPrettyBody(f, maf, lineSize,onlyDiff);
 }
 
 static void mafLowerCase(struct mafAli *maf)
@@ -273,6 +280,11 @@ static char *codeAll[] = {
 	"all",
 };
 
+static char *showAll[] = {
+	"all",
+	"diff",
+};
+
 static void mafOrAxtClick(struct sqlConnection *conn, struct trackDb *tdb, char *axtOtherDb)
 /* Display details for MAF or AXT tracks. */
 {
@@ -314,6 +326,9 @@ else
 	char *codeVarName = "hgc.multiCapCoding";
 	char *codeVarVal = cartUsualString(cart, codeVarName, "coding");
 	boolean onlyCds = sameWord(codeVarVal, "coding");
+	char *showVarName = "hgc.showMultiBase";
+	char *showVarVal = cartUsualString(cart, showVarName, "all");
+	boolean onlyDiff = sameWord(showVarVal, "diff");
 
 	if (wigTable)
 	    {
@@ -337,6 +352,10 @@ else
 	printf("exons based on ");
 	capTrack = genePredDropDown(cart, trackHash, 
                                         "gpForm", "hgc.multiCapTrack");
+	printf("show ");
+	cgiMakeDropListFull(showVarName, showAll, showAll, 
+	    ArraySize(showAll), showVarVal, autoSubmit);
+	printf("bases");
 	printf("<BR>\n");
 	printf("</FORM>\n");
 	printf("<TT><PRE>");
@@ -347,7 +366,7 @@ else
 	    	capMafOnTrack(maf, capTrack, onlyCds);
 	    printf("<B>Alignment %d of %d in window, score %0.1f</B>\n",
 		    ++aliIx, realCount, maf->score);
-	    mafPrettyOut(stdout, maf, 70);
+	    mafPrettyOut(stdout, maf, 70,onlyDiff);
 	    }
 	mafAliFreeList(&subList);
 	}
