@@ -10,14 +10,6 @@
 #include "altGraphX.h"
 #include "hgGene.h"
 
-static boolean altSpliceExists(struct section *section, 
-	struct sqlConnection *conn, char *geneId)
-/* Return TRUE if altSplice table exists and has something
- * on this one. */
-{
-return sqlTableExists(conn, "altGraphX") && sqlTableExists(conn, "agxBed");
-}
-
 static int gpBedBasesShared(struct genePred *gp, struct bed *bed)
 /* Return number of bases genePred and bed share. */
 {
@@ -118,12 +110,23 @@ printf(
 return cloneString(gifTn.forHtml);
 }
 
+static boolean altSpliceExists(struct section *section, 
+	struct sqlConnection *conn, char *geneId)
+/* Return TRUE if altSplice table exists and has something
+ * on this one. */
+{
+if (!sqlTableExists(conn, "altGraphX") || !sqlTableExists(conn, "agxBed"))
+    return FALSE;
+section->items = altGraphId(conn, curGenePred);
+return section->items != NULL;
+}
+
 
 static void altSplicePrint(struct section *section, 
 	struct sqlConnection *conn, char *geneId)
 /* Print out altSplicing info. */
 {
-char *altId = altGraphId(conn, curGenePred);
+char *altId = section->items;
 char query[256];
 struct sqlResult *sr;
 char **row;
