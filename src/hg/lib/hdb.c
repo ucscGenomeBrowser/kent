@@ -30,9 +30,10 @@
 #include "liftOverChain.h"
 #include "grp.h"
 #include "twoBit.h"
+#include "genbank.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.242 2005/04/04 23:54:28 angie Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.243 2005/04/04 23:59:11 markd Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
@@ -1459,7 +1460,34 @@ hFreeConn(&conn);
 return seq;
 }
 
+char *hGenBankGetDesc(char *acc, boolean native)
+/* Get a description for a genbank or refseq mRNA. If native is TRUE, an
+ * attempt is made to get a more compact description that doesn't include
+ * species name. Acc may optionally include the version.  NULL is returned if
+ * a description isn't available.  Free string when done. */
+{
+struct sqlConnection *conn = hAllocConn();
+char *desc =  NULL;
+char accId[GENBANK_ACC_BUFSZ], query[256];
 
+genbankDropVer(accId, acc);
+
+if (native && genbankIsRefSeqAcc(accId))
+    {
+    safef(query, sizeof(query), "select product from refLink where mrnaAcc = \"%s\"", accId);
+    desc = sqlQuickString(conn, query);
+    }
+
+if (desc == NULL)
+    {
+    safef(query, sizeof(query), "select description.name from description,gbCdnaInfo "
+          "where gbCdnaInfo.acc = \"%s\" "
+          "and gbCdnaInfo.description = description.id", accId);
+    desc = sqlQuickString(conn, query);
+    }
+hFreeConn(&conn);
+return desc;
+}
 
 struct bed *hGetBedRangeDb(char *db, char *table, char *chrom, int chromStart,
 			   int chromEnd, char *sqlConstraints)

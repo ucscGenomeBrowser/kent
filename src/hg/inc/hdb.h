@@ -355,6 +355,12 @@ aaSeq *hGenBankGetPep(char *acc, char *compatTable);
 aaSeq *hGenBankGetPepC(struct sqlConnection *conn, char *acc, char *compatTable);
 /* Same as above, but can pass in connection to any db */
 
+char *hGenBankGetDesc(char *acc, boolean native);
+/* Get a description for a genbank or refseq mRNA. If native is TRUE, an
+ * attempt is made to get a more compact description that doesn't include
+ * species name. Acc may optionally include the version.  NULL is returned if
+ * a description isn't available.  Free string when done. */
+
 struct bed *hGetBedRange(char *table, char *chrom, int chromStart,
 			 int chromEnd, char *sqlConstraints);
 /* Return a bed list of all items (that match sqlConstraints, if nonNULL) 
