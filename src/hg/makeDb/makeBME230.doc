@@ -1,0 +1,112 @@
+#!/bin/csh -f # set emacs mode
+exit; # don't actually run this like a script :)
+                                                                                               
+# The following are browsers built for BME 230, Spring 2004 class:
+#   Aquifex aeolicus VF5             (bacteria)
+#   Buchnera sp. APS                 (bacteria)
+#   Methanococcus maripaludis S2     (archaea)
+#   Bordetella bronchiseptica RB50   (bacteria)
+#   Deinococcus radiodurans R1       (bacteria)
+#   Salmonella typhimurium LT2       (bacteria)
+#   Methanopyrus kandleri AV19       (archaea)
+#   Aeropyrum pernix                 (archaea)
+#   Escherichia coli O157:H7         (bacteria)
+#   Thermoplasma acidophilum         (archaea)
+#   Sulfolobus tokodaii              (archaea)
+#   Pyrococcus horikoshii            (archaea)
+#   Geobacter sulfurreducens PCA     (bacteria)
+#   Halobacterium sp. NRC-1          (archaea)
+
+# For single chromosome genomes, I just got a script that will set up databases:
+
+ssh hgwdev
+cd ~/kent/src/hg/makeDb/trackDb
+
+~/kent/src/hg/makeDb/bme230.sh aquAeo1 "Aquifex aeolicus VF5" Bacteria ftp://ftp.ncbi.nih.gov/genomes/Bacteria/Aquifex_aeolicus/NC_000918.fna "A. aeolicus VF5"
+mkdir -p bacteria/aquAeo1
+cvs add bacteria bacteria/aquAeo1
+
+~/kent/src/hg/makeDb/bme230.sh bucBuc1 "Buchnera sp. APS" Bacteria ftp://ftp.ncbi.nih.gov/genomes/Bacteria/Buchnera_sp/NC_002528.fna "B. buchnera APS"
+mkdir bacteria/bucBuc1
+cvs add bacteria/bucBuc1
+
+~/kent/src/hg/makeDb/bme230.sh metMar1 "Methanococcus maripaludis S2" Archaea ftp://ftp.ncbi.nlm.nih.gov/genomes/Bacteria/Methanococcus_maripaludis/NC_005791.fna "M. maripaludis S2"
+mkdir archae/metMar1
+cvs add archae/metMar1
+
+~/kent/src/hg/makeDb/bme230.sh borBro1 "Bordetella bronchiseptica RB50" Bacteria ftp://ftp.ncbi.nlm.nih.gov/genomes/Bacteria/Bordetella_bronchiseptica/NC_002927.fna "B. bronchiseptica RB50"
+mkdir bacteria/borBro1
+cvs add bacteria/borBro1
+
+# some sort of error occurred with this one.  i'll try again later.
+
+~/kent/src/hg/makeDb/bme230.sh salTyp1 "Salmonella typhimurium LT2" Bacteria ftp://ftp.ncbi.nih.gov/genomes/Bacteria/Salmonella_typhimurium_LT2/NC_003197.fna "S. typhimurium LT2"
+mkdir bacteria/salTyp1
+cvs add bacteria/salTyp1
+
+~/kent/src/hg/makeDb/bme230.sh metKan1 "Methanopyrus kandleri AV19" Archaea ftp://ftp.ncbi.nih.gov/genomes/Bacteria/Methanopyrus_kandleri/NC_003551.fna "M. kandleri AV19"
+mkdir archae/metKan1
+cvs add archae/metKan1
+
+~/kent/src/hg/makeDb/bme230.sh aerPer1 "Aeropyrum pernix" Archaea ftp://ftp.ncbi.nih.gov/genomes/Bacteria/Aeropyrum_pernix/NC_000854.fna "A. pernix"
+mkdir archae/aerPer1
+cvs add archae/aerPer1
+
+~/kent/src/hg/makeDb/bme230.sh escColH7 "Escherichia coli O157:H7" Bacteria ftp://ftp.ncbi.nih.gov/genomes/Bacteria/Escherichia_coli_O157H7/NC_002695.fna "E. coli O157:H7"
+mkdir bacteria/escColH7
+cvs add bacteria/escColH7
+
+~/kent/src/hg/makeDb/bme230.sh theAci1 "Thermoplasma acidophilum" Archaea ftp://ftp.ncbi.nih.gov/genomes/Bacteria/Thermoplasma_acidophilum/NC_002578.fna "T. acidophilum"
+mkdir archae/theAci1
+cvs add archae/theAci1
+
+~/kent/src/hg/makeDb/bme230.sh sulTok1 "Sulfolobus tokodaii" Archaea ftp://ftp.ncbi.nih.gov/genomes/Bacteria/Sulfolobus_tokodaii/NC_003106.fna "S. tokodaii"
+mkdir archae/sulTok1
+cvs add archae/sulTok1
+
+~/kent/src/hg/makeDb/bme230.sh pyrHor1 "Pyrococcus horikoshii" Archaea ftp://ftp.ncbi.nih.gov/genomes/Bacteria/Pyrococcus_horikoshii/NC_000961.fna "P. horikoshii"
+mkdir archae/pyrHor1
+cvs add archae/pyrHor1
+
+~/kent/src/hg/makeDb/bme230.sh geoSul1 "Geobacter sulfurreducens PCA" Bacteria ftp://ftp.ncbi.nlm.nih.gov/genomes/Bacteria/Geobacter_sulfurreducens/NC_002939.fna "G. sulfurreducens PCA"
+mkdir bacteria/geoSul1
+cvs add bacteria/geoSul1
+
+~/kent/src/hg/makeDb/bme230.sh deiRad1 "Deinococcus radiodurans R1" Bacteria ftp://ftp.ncbi.nlm.nih.gov/genomes/Bacteria/Deinococcus_radiodurans/NC_001263.fna "D. radiodurans R1"
+mkdir bacteria/deiRad1
+cvs add bacteria/deiRad1
+
+# Deal with multi-chrom species:
+
+# aquAeo1 extra plasmid ece1
+
+cd /cluster/data/aquAeo1
+wget ftp://ftp.ncbi.nih.gov/genomes/Bacteria/Aquifex_aeolicus/NC_001880.fna
+sed "s/^>.*/>aquAeo1_ece1/" NC_001880.fna > ece1.fa
+rm NC_001880.fna
+hgNibSeq aquAeo1 /cluster/data/aquAeo1/nib chr1.fa ece1.fa
+
+# for Buchnera sp. APS... plus i used the wrong scientific name
+
+echo update dbDb set organism=\"B. aphidicola str. APS\" where name=\"bucBuc1\" | hgsql
+-h genome-testdb hgcentraltest
+cd /cluster/data/bucBuc1
+wget ftp://ftp.ncbi.nih.gov/genomes/Bacteria/Buchnera_sp/NC_002252.fna
+wget ftp://ftp.ncbi.nih.gov/genomes/Bacteria/Buchnera_sp/NC_002253.fna
+sed "s/^>.*/>bucBuc1_pTrp/" NC_002252.fna > pTrp.fa
+sed "s/^>.*/>bucBuc1_pLeu/" NC_002253.fna > pLeu.fa
+rm NC_002253.fna NC_002252.fna
+hgNibSeq bucBuc1 /cluster/data/bucBuc1/nib chr1.fa pLeu.fa pTrp.fa
+faSize -detailed pLeu.fa >> chrom.sizes
+faSize -detailed pTrp.fa >> chrom.sizes
+mkdir html
+cd html
+echo '<H3>About the <em>Buchnera aphidicola str. APS</em> Sequence</H3>
+<P>
+chr1 is the main chromosome and corresponds to <a href="http://www.ncbi.nlm.nih.gov/entrez/viewer.fcgi?val=NC_002528">NC_002528</a>.  Two extra plasmids are pTrp (<a href="http://www.ncbi.nlm.nih.gov/entrez/viewer.fcgi?val=NC_002252">NC_002252</a>), and pLeu (<a href="http://www.ncbi.nlm.nih.gov/entrez/viewer.fcgi?val=NC_002253">NC_002253</a>).
+</P>' > description.html
+ln -s /cluster/data/bucBuc1/html /gbdb/bucBuc1/html
+echo update dbDb set htmlPath=\"/gbdb/bucBuc1/html/description.html\" where name=\"bucBuc1\" | hgsql
+-h genome-testdb hgcentraltest
+
+
