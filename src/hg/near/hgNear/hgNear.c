@@ -20,7 +20,7 @@
 #include "hgNear.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: hgNear.c,v 1.150 2004/07/06 16:30:25 kent Exp $";
+static char const rcsid[] = "$Id: hgNear.c,v 1.151 2004/07/07 01:14:00 kent Exp $";
 
 char *excludeVars[] = { "submit", "Submit", idPosVarName, NULL }; 
 /* The excludeVars are not saved to the cart. (We also exclude
@@ -436,7 +436,10 @@ else
 	    hPrintf("&%s=%d", col->urlEndVar, gp->end);
 	if (col->urlOtherGeneVar)
 	    hPrintf("&%s=%s", col->urlOtherGeneVar, curGeneId->name);
-	hPrintf("\" TARGET=_blank>");
+	hPrintf("\"");
+	if (!col->useHgsid)
+	    hPrintf(" TARGET=_blank");
+	hPrintf(">");
 	hPrintNonBreak(s);
         hPrintf("</A>");
 	}
