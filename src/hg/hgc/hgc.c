@@ -1548,12 +1548,12 @@ puts("<PRE>");
 if (tbl[0] == 0)
     {
     itemCount = 1;
-    hgSeqRange(seqName, cartInt(cart, "o"), cartInt(cart, "t"),
+    hgSeqRange(seqName, cartInt(cart, "l"), cartInt(cart, "r"),
 	       '?', "dna");
     }
 else
-itemCount = hgSeqItemsInRange(tbl, seqName, cartInt(cart, "o"),
-			      cartInt(cart, "t"), NULL);
+    itemCount = hgSeqItemsInRange(tbl, seqName, cartInt(cart, "o"),
+				  cartInt(cart, "t"), NULL);
 if (itemCount == 0)
     printf("\n# No results returned from query.\n\n");
 puts("</PRE>");
