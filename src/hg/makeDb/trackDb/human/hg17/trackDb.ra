@@ -1281,6 +1281,15 @@ visibility dense
 color 173,17,162
 type genePred
 
+track exoniphyGene
+shortLabel Exoniphy Genes
+longLabel Predicted Genes and Gene Fragments from Exoniphy Exons (Human/Mouse/Rat)
+group genes
+priority 50.9
+visibility hide
+color 173,17,162
+type genePred
+
 searchTable rgdQtl
 searchType bed
 termRegex [A-Z]+[0-9]+(_H)?
