@@ -14,10 +14,15 @@ splitFaIntoContigs - take a .agp file and a .fa file and a split size in kilobas
 Flag showing that we have a non-bridged gap, indicating
 that we can split a sequence here into supercontigs
 */
-static char *NO = "no";
+static const char *NO = "no";
 
 /* Default size of the files into which we are splitting fa entries */
 static const int defaultSize = 1000000;
+
+/*
+The top-level dir where we are sticking all the split up data files
+*/
+static char destDir[256];
 
 void usage()
 /* 
@@ -26,9 +31,9 @@ Explain usage and exit.
 {
 fflush(stdout);
     errAbort(
-      "\nsplitFaIntoContigs - takes a .agp file and .fa file and a size (default 1Mbase) into which to split each chromosome of the fa file along non-bridged gaps\n"
+      "\nsplitFaIntoContigs - takes a .agp file and .fa file a destination directory in which to save data and a size (default 1Mbase) into which to split each chromosome of the fa file along non-bridged gaps\n"
       "usage:\n\n"
-      "   splitFaIntoContigs in.agp in.fa [approx size in kilobases (default 1000)]\n"
+      "   splitFaIntoContigs in.agp in.fa storageDir [approx size in kilobases (default 1000)]\n"
       "\n");
 }
 
@@ -39,15 +44,21 @@ int endOffset = endGap->chromEnd;
 int i = 0;
 FILE *fp = NULL;
 char filename[32];
+char command[32];
+static int sequenceNum = 0;
 
 printf("Writing gap file for chromo %s\n", endGap->chrom);
 printf("Writing file starting at dna[%d] up to but not including dna[%d]\n", startOffset, endOffset);
 
+sprintf(command, "mkdir -p %s", destDir);
+sprintf(command, "mkdir -p %s/%s", destDir, startGap->chrom);
+system(command);
+
 /*
-filename = chromName/startOffset->endOffset
+filename = storageDir/chromName/sequenceNum:startOffset->endOffset
 */
 
-sprintf(filename, "%d->%d", startOffset, endOffset);
+sprintf(filename, "%s/%s/%d:%d->%d", destDir, startGap->chrom, ++sequenceNum, startOffset, endOffset);
 printf("Filename = %s\n", filename);
 fp = fopen(filename, "w");
 
@@ -173,21 +184,24 @@ printf("Done processing agpFile %s and fasta file %s, with split boundaries of %
 
 int main(int argc, char *argv[])
 /* 
-Process command line then delegate  main work to splitFaIntoContigs().
+Process command line then delegate main work to splitFaIntoContigs().
 */
 {
 int size = defaultSize;
+
 cgiSpoof(&argc, argv);
 
-if (3 != argc && 4 != argc)
+if (4 != argc && 5 != argc)
     {
     usage();
     }
 
-if (4 == argc) 
+strcpy(destDir, argv[3]);
+
+if (5 == argc) 
     {
     /* TODO: ensure that this arg is a number/integer */
-    size = atoi(argv[3]);
+    size = atoi(argv[4]);
     size *= 1000;
     }
 
