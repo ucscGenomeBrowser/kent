@@ -8,7 +8,7 @@
 #include "cheapcgi.h"
 #include "hgExp.h"
 
-static char const rcsid[] = "$Id: hgExp.c,v 1.5 2005/03/07 04:25:36 kent Exp $";
+static char const rcsid[] = "$Id: hgExp.c,v 1.6 2005/03/07 04:30:13 kent Exp $";
 
 static char *colorSchemeVals[] = {
 /* Menu option for color scheme. */
@@ -215,7 +215,7 @@ else
     }
 }
 
-static int expSubcellWidth = 16;
+static int expSubcellWidth = 21;
 
 static void startExpCell()
 /* Print out start of expression cell, which contains a table. */
