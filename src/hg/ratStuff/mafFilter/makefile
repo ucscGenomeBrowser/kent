@@ -8,4 +8,4 @@ O = mafFilter.o
 
 mafFilter: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/mafFilter $O $(MYLIBS) $L
-	strip $(HOME)/bin/$(MACHTYPE)/mafFilter
+#	strip $(HOME)/bin/$(MACHTYPE)/mafFilter
