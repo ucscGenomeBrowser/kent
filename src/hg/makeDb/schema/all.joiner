@@ -699,6 +699,7 @@ identifier pfamId external=Pfam fuzzy
 identifier superfamilyId external=SCOP
 "Protein SCOP/Superfamily ID"
     hgFixed.scopDes.sunid    
+# The gbd.sfDes table seems entirely redundant with hgFixed.scopDes
     $gbd.sfDes.id
     $kgDb.knownToSuper.superfamily
     $gbd.sfAssign.sfID
@@ -866,8 +867,8 @@ identifier ensemblTranscriptId external=Ensembl
 
 identifier cgapId
 "NCI Cancer Genome Annotation Project Gene ID"
+    $gbd.cgapAlias.cgapID dupeOk
     $gbd.cgapBiocPathway.cgapID
-    $gbd.cgapAlias.cgapID
 
 identifier cgapMapId
 "NCI Cancer Genome Annotation Project Map ID"
@@ -910,17 +911,21 @@ identifier encodeRegion
     hgFixed.encodeRegionInfo.name
     $hg.encodeRegions.name
 
-identifier unigeneId
+identifier unigeneId fuzzy
 "NCBI UniGene Cluster ID"
-    hgFixed.sage.uni oneToOne
-    $gbd.sage.uni
+#   hgFixed.sage.uni oneToOne
     $gbd.uniGene_2.name chopBefore=.
+    $gbd.sage.uni
 
-identifier sageExpId
-"Sage experiment (tissue type etc) ID"
+identifier hgFixedSageExpId
+# I'd like to drop this table set. Check with Chuck.
+"Sage experiment (tissue type etc) ID in hgFixed"
     hgFixed.sageExp.num
     hgFixed.sage.exps comma
     hgFixed.sageCounts.expCounts comma indexOf
+
+identifier sageExpId
+"Sage experiment (tissue type etc) ID"
     $gbd.sageExp.num oneToOne
     $gbd.sage.exps comma
 
