@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit ~/kent/src/utils/doBlastzChainNet.pl instead.
 
-# $Id: doBlastzChainNet.pl,v 1.12 2005/03/18 01:13:59 baertsch Exp $
+# $Id: doBlastzChainNet.pl,v 1.13 2005/03/18 22:40:17 angie Exp $
 
 # to-do items:
 # - lots of testing
@@ -46,6 +46,7 @@ use vars qw/
     $opt_stop
     $opt_blastzOutRoot
     $opt_swap
+    $opt_chainMinScore
     $opt_workhorse
     $opt_bigClusterHub
     $opt_smallClusterHub
@@ -99,6 +100,7 @@ options:
                           those chains (target for query), then net etc. in
                           a new directory:
                           $clusterData/\$qDb/$trackBuild/blastz.\$tDb.swap/
+    -chainMinScore n      Add -minScore=n to the axtChain command.
     -workhorse machine    Use machine (default: $workhorse) for compute or
                           memory-intensive steps.
     -bigClusterHub mach   Use mach (default: $bigClusterHub) as parasol hub for blastz
@@ -232,6 +234,7 @@ sub checkOptions {
 		      "stop=s",
 		      "blastzOutRoot=s",
 		      "swap",
+		      "chainMinScore=i",
 		      "workhorse=s",
 		      "bigClusterHub=s",
 		      "smallClusterHub=s",
@@ -413,8 +416,8 @@ sub checkDef {
   }
   $tDb = &getDbFromPath('SEQ1_DIR');
   $qDb = &getDbFromPath('SEQ2_DIR');
-  $QDb = ucfirst($qDb);
   $isSelf = ($tDb eq $qDb);
+  $QDb = $isSelf ? 'Self' : ucfirst($qDb);
   if ($isSelf && $opt_swap) {
     die "-swap is not supported for self-alignments\n" .
         "($DEF has $tDb as both target and query).\n";
@@ -656,12 +659,13 @@ _EOF_
   close(GSUB);
 
   my $matrix = $defVars{'BLASTZ_Q'} ? "-scoreScheme=$defVars{BLASTZ_Q} " : "";
+  my $minScore = $opt_chainMinScore ? "-minScore=$opt_chainMinScore" : "";
   open (CHAIN, ">$runDir/chain.csh")
     || die "Couldn't open $runDir/chain.csh for writing: $!\n";
   print CHAIN  <<_EOF_
 #!/bin/csh -ef
 zcat ../../pslParts/\$1*.psl.gz \\
-| axtChain -psl -verbose=0 $matrix stdin \\
+| axtChain -psl -verbose=0 $matrix $minScore stdin \\
     $defVars{SEQ1_DIR} \\
     $defVars{SEQ2_DIR} \\
     stdout \\
@@ -785,7 +789,7 @@ sub swapGlobals {
   my $tmp = $qDb;
   $qDb = $tDb;
   $tDb = $tmp;
-  $QDb = ucfirst($qDb);
+  $QDb = $isSelf ? 'Self' : ucfirst($qDb);
   foreach my $var ('DIR', 'LEN', 'CHUNK', 'LAP', 'SMSK') {
     $tmp = $defVars{"SEQ1_$var"};
     $defVars{"SEQ1_$var"} = $defVars{"SEQ2_$var"};
@@ -910,8 +914,6 @@ sub loadUp {
       "(can't find $successDir).\n";
   }
   my $bossScript = "$buildDir/axtChain/loadUp.csh";
-  my $chain = $isSelf ? 'chainSelf' : "chain$QDb";
-  my $net = $isSelf ? 'netSelf' : "net$QDb";
   open(SCRIPT, ">$bossScript")
     || die "Couldn't open $bossScript for writing: $!\n";
   print SCRIPT <<_EOF_
@@ -931,14 +933,14 @@ _EOF_
 cd $runDir/chain
 foreach f (*.chain)
     set c = \$f:r
-    hgLoadChain $tDb \${c}_$chain \$f
+    hgLoadChain $tDb \${c}_chain$QDb \$f
 end
 _EOF_
       ;
   } else {
     print SCRIPT <<_EOF_
 cd $runDir
-hgLoadChain -tIndex $tDb $chain $tDb.$qDb.all.chain.gz
+hgLoadChain -tIndex $tDb chain$QDb $tDb.$qDb.all.chain.gz
 _EOF_
       ;
   }
@@ -950,7 +952,7 @@ netClass -verbose=0 -noAr noClass.net $tDb $qDb $tDb.$qDb.net
 
 # Load nets:
 netFilter -minGap=10 $tDb.$qDb.net \\
-| hgLoadNet -verbose=0 $tDb $net stdin
+| hgLoadNet -verbose=0 $tDb net$QDb stdin
 _EOF_
   ;
   close(SCRIPT);
@@ -1224,7 +1226,6 @@ sub installDownloads {
   # Load chains; add repeat/gap stats to net; load nets.
   my $runDir = "$buildDir/axtChain";
   my $bossScript = "$buildDir/axtChain/installDownloads.csh";
-  my $vs = $isSelf ? 'vsSelf' : "vs$QDb";
   # Make sure previous stage was successful.
   my $successFile = "$runDir/$tDb.$qDb.net.gz";
   if (! -e $successFile && ! $opt_debug) {
@@ -1252,8 +1253,8 @@ sub installDownloads {
 # and copies the liftOver chains (if applicable) to the liftOver download dir.
 # This script will fail if any of its commands fail.
 
-mkdir $goldenPath/$tDb/$vs
-cd $goldenPath/$tDb/$vs
+mkdir $goldenPath/$tDb/vs$QDb
+cd $goldenPath/$tDb/vs$QDb
 ln -s $runDir/$tDb.$qDb.all.chain.gz .
 ln -s $runDir/$tDb.$qDb.net.gz .
 cp -p $runDir/README.txt .
@@ -1431,11 +1432,14 @@ if ($startStep <= $step && $step <= $stopStep) {
   &cleanup($fileServer);
 }
 
-my $vs = $isSelf ? 'vsSelf' : "vs$QDb";
-verbose(1, "
- *** All done!
- *** Make sure that goldenPath/$tDb/$vs/README.txt is accurate.
- *** Add the new chain and net tracks to trackDb.ra if necessary.
-
-\n");
+verbose(1,
+	"\n *** All done!\n");
+verbose(1,
+	" *** Make sure that goldenPath/$tDb/vs$QDb/README.txt is accurate.\n")
+  if ($stopStep >= $stepVal{'download'});
+verbose(1,
+	" *** Add {chain,net}$QDb tracks to trackDb.ra if necessary.\n")
+  if ($stopStep >= $stepVal{'load'});
+verbose(1,
+	"\n\n");
 
