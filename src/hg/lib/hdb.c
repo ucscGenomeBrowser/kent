@@ -30,6 +30,8 @@ static struct sqlConnCache *centralCc = NULL;
 #define DEFAULT_RAT   "rn1"
 #define DEFAULT_ZOO   "zooHuman3"
 
+#define DEFAULT_PROTEINS   "proteins"
+
 static char *defaultHuman = DEFAULT_HUMAN;
 static char *defaultMouse = DEFAULT_MOUSE;
 static char *defaultRat   = DEFAULT_RAT;
@@ -41,6 +43,8 @@ static char *hdbName2 = DEFAULT_MOUSE;
 static char *hdbUser;
 static char *hdbPassword;
 static char *hdbTrackDb = NULL;
+
+static char *protDbName = DEFAULT_PROTEINS;
 
 static char* getCfgValue(char* envName, char* cfgName)
 /* get a configuration value, from either the environment or the cfg file,
@@ -426,7 +430,7 @@ for (lsf = largeFileList; lsf != NULL; lsf = lsf->next)
     char query[256];
     struct sqlResult *sr;
     char **row;
-    off_t size;
+    long size;
     char *path;
 
     /* Query database to find full path name and size file should be. */
@@ -439,12 +443,8 @@ for (lsf = largeFileList; lsf != NULL; lsf = lsf->next)
     AllocVar(lsf);
     lsf->path = path = cloneString(row[0]);
     size = sqlUnsigned(row[1]);
-
-    if (fileSize(path) != size) 
-        {
-        errAbort("External file %s has changed, need to resync database.  Old size %lld, new size %lld", path, size, fileSize(path));
-        }
-
+    if (fileSize(path) != size)
+        errAbort("External file %s has changed, need to resync database.  Old size %ld, new size %ld", path, size, fileSize(path));
     lsf->id = extId;
     if ((lsf->fd = open(path, O_RDONLY)) < 0)
         errAbort("Couldn't open external file %s", path);
@@ -469,6 +469,47 @@ return buf;
 }
 
 
+
+int hRnaSeqAndIdx(char *acc, struct dnaSeq **retSeq, HGID *retId, char *gbdate, struct sqlConnection *conn)
+/* Return sequence for RNA and it's database ID. */
+{
+//struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr;
+char **row;
+char query[256];
+int fd;
+HGID extId;
+size_t size;
+unsigned long offset;
+char *buf;
+struct dnaSeq *seq;
+struct largeSeqFile *lsf;
+
+char *gb_date;
+
+sprintf(query,
+   "select id,extFile,file_offset,file_size,gb_date from seq where seq.acc = '%s'",
+   acc);
+sr = sqlMustGetResult(conn, query);
+row = sqlNextRow(sr);
+if (row == NULL) return(-1);
+
+//    errAbort("No sequence for %s in database", acc);
+*retId = sqlUnsigned(row[0]);
+extId = sqlUnsigned(row[1]);
+offset = sqlUnsigned(row[2]);
+size = sqlUnsigned(row[3]);
+gb_date = row[4];
+
+strcpy(gbdate, gb_date);
+
+lsf = largeFileHandle(extId);
+buf = readOpenFileSection(lsf->fd, offset, size, lsf->path);
+*retSeq = seq = faFromMemText(buf);
+sqlFreeResult(&sr);
+//hFreeConn(&conn);
+return(0);
+}
 void hRnaSeqAndId(char *acc, struct dnaSeq **retSeq, HGID *retId)
 /* Return sequence for RNA and it's database ID. */
 {
@@ -728,6 +769,32 @@ return(hGetBedRangeDb(hGetDb(), table, chrom, chromStart, chromEnd,
 		      sqlConstraints));
 }
 
+
+// default protein database for older genome releases
+char DEFAULT_PROT_DB[20] = {"proteins1129"};
+char *hPdbFromGdb(char *genomeDb)
+/* Find proteome database name given genome database name */
+{
+struct sqlConnection *conn = hConnectCentral();
+struct sqlResult *sr;
+char **row;
+char *ret = NULL;
+struct dyString *dy = newDyString(128);
+
+if (genomeDb != NULL)
+    dyStringPrintf(dy, "select proteomeDb from gdbPdb where genomeDb = '%s'", genomeDb);
+else
+    internalErr();
+sr = sqlGetResult(conn, dy->string);
+if ((row = sqlNextRow(sr)) != NULL)
+    ret = cloneString(row[0]);
+else
+    ret = strdup(DEFAULT_PROT_DB);
+sqlFreeResult(&sr);
+hDisconnectCentral(&conn);
+freeDyString(&dy);
+return(ret);
+}
 
 static char *hFreezeDbConversion(char *database, char *freeze)
 /* Find freeze given database or vice versa.  Pass in NULL
@@ -2012,3 +2079,44 @@ else if (strstrNoCase(genome, "human"))
 
 return result;
 }
+
+/* get a single field from the database, given database name, 
+   table name, field name, and a condition string */
+char *sqlGetField(struct sqlConnection *connIn, 
+   	          char *dbName, char *tblName, char *fldName, 
+  	          char *condition)
+    {
+    struct sqlConnection *conn;
+    char query[256];
+    struct sqlResult *sr;
+    char **row;
+    char *answer;
+
+    // allocate connection if given NULL
+    if (connIn == NULL)
+    	{
+	conn = hAllocConn();
+	}
+    else
+	{
+        conn = connIn;
+        }
+
+    answer = NULL;
+    sprintf(query, "select %s from %s.%s  where %s;",
+            fldName, dbName, tblName, condition);
+    //printf("<br>%s\n", query); fflush(stdout);
+    sr  = sqlGetResult(conn, query);
+    row = sqlNextRow(sr);
+                
+    if (row != NULL)
+	{
+	answer = strdup(row[0]);
+	}
+    
+    sqlFreeResult(&sr);
+    if (connIn == NULL) hFreeConn(&conn);
+			
+    return(answer);
+    }
+
