@@ -7,7 +7,7 @@
 #include "options.h"
 #include "psl.h"
 
-static char const rcsid[] = "$Id: pslSort.c,v 1.6 2004/07/16 22:19:34 hiram Exp $";
+static char const rcsid[] = "$Id: pslSort.c,v 1.7 2005/03/29 21:24:35 hiram Exp $";
 
 boolean nohead = FALSE; /* No header for psl files?  Command line option. */
 
@@ -308,6 +308,8 @@ if (!secondOnly)
 	{
 	inDir = inDirs[i];
 	dirDir = listDir(inDir, "*.psl");
+	if (slCount(dirDir) == 0)
+	    dirDir = listDir(inDir, "*.psl.gz");
 	if (slCount(dirDir) == 0)
 	    errAbort("No psl files in %s\n", inDir);
 	verbose(1, "%s with %d files\n", inDir, slCount(dirDir));
