@@ -11,7 +11,7 @@
 #include "wiggle.h"
 #include "scoredRef.h"
 
-static char const rcsid[] = "$Id: wigTrack.c,v 1.45 2004/03/08 23:27:28 hiram Exp $";
+static char const rcsid[] = "$Id: wigTrack.c,v 1.46 2004/03/09 18:59:21 hiram Exp $";
 
 /*	wigCartOptions structure - to carry cart options from wigMethods
  *	to all the other methods via the track->extraUiData pointer
@@ -68,6 +68,18 @@ struct wigItem
     double graphUpperLimit;	/* filled in by DrawItems	*/
     double graphLowerLimit;	/* filled in by DrawItems	*/
     };
+
+void wigSetCart(struct track *track, char *dataID, void *dataValue)
+    /*	set one of the variables in the wigCart	*/
+{
+struct wigCartOptions *wigCart;
+wigCart = (struct wigCartOptions *) track->extraUiData;
+
+if (sameWord(dataID, MIN_Y))
+    wigCart->minY = *((double *)dataValue);
+else if (sameWord(dataID, MAX_Y))
+    wigCart->maxY = *((double *)dataValue);
+}
 
 static void wigItemFree(struct wigItem **pEl)
     /* Free up a wigItem. */
@@ -161,17 +173,18 @@ wigCart = (struct wigCartOptions *) tg->extraUiData;
  *	totalHeight artifically high by 1 so this will leave a
  *	blank area one pixel high below the track.  hgTracks will set
  *	our clipping rectangle one less than what we report here to get
- *	this accomplished.
+ *	this accomplished.  In the meantime our actual drawing height is
+ *	recorded properly in lineHeight, heightPer and height
  */
 if (vis == tvDense)
     tg->lineHeight = tl.fontHeight+1;
 else if (vis == tvFull)
-    tg->lineHeight = max(wigCart->minHeight, wigCart->defaultHeight) + 1;
+    tg->lineHeight = max(wigCart->minHeight, wigCart->defaultHeight);
 
 tg->heightPer = tg->lineHeight;
 tg->height = tg->lineHeight;
 
-return tg->height;
+return tg->height + 1;
 }
 
 /*	wigLoadItems - read the table rows that hRangeQuery returns
@@ -985,6 +998,7 @@ wigCart->minHeight = minHeight;
 wigFetchMinMaxY(tdb, &minY, &maxY, &tDbMinY, &tDbMaxY, wordCount, words);
 track->minRange = minY;
 track->maxRange = maxY;
+
 wigCart->minY = track->minRange;
 wigCart->maxY = track->maxRange;
 
