@@ -17,9 +17,10 @@ set dp dp1
 set sacCer sacCer1
 set panTro panTro1
 set galGal galGal2
+set ci ci1
 
 # Define all organism/assembly specific databases.
-set gbd $hg,$mm,$rn,$fr,$ce,$cb,$dm,$dp,$sacCer,$panTro,$galGal
+set gbd $hg,$mm,$rn,$fr,$ce,$cb,$dm,$dp,$sacCer,$panTro,$galGal,$ci
 
 # Only consider one of members of gbd at a time.
 exclusiveSet $gbd
