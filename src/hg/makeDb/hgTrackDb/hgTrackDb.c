@@ -11,7 +11,7 @@
 #include "portable.h"
 #include "dystring.h"
 
-static char const rcsid[] = "$Id: hgTrackDb.c,v 1.16 2004/02/06 09:41:32 markd Exp $";
+static char const rcsid[] = "$Id: hgTrackDb.c,v 1.16.16.1 2004/04/05 18:23:45 hiram Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -24,7 +24,7 @@ errAbort(
   "either in your home directory as '.hg.conf' or in the web \n"
   "server's cgi-bin directory as 'hg.conf'.\n"
   "usage:\n"
-  "   hgTrackDb [options] database trackDb_$(USER) trackDb.sql hgRoot\n"
+  "   hgTrackDb [options] org database trackDb_$(USER) trackDb.sql hgRoot\n"
   "\n"
   "Options:\n"
   "  -visibility=vis.ra - A ra file used to override the initial visibility\n"
@@ -32,6 +32,7 @@ errAbort(
   "   for special-purpose browsers.  All visibility will be set to hide and\n"
   "   then specific track are modified using the track and visibility fields\n"
   "   in this file.\n"
+  "  -hideFirst - Before applying vis.ra, set all visibilities to hide.\n"
   "\n"
   "  -raName=trackDb.ra - Specify a file name to use other than trackDb.ra\n"
   "   for the ra files.\n" 
@@ -42,6 +43,7 @@ static struct optionSpec optionSpecs[] = {
     {"visibility", OPTION_STRING},
     {"raName", OPTION_STRING},
     {"strict", OPTION_STRING},
+    {"hideFirst", OPTION_BOOLEAN},
 };
 
 static char *raName = "trackDb.ra";
@@ -56,43 +58,28 @@ struct trackDb *tdList = NULL, *td, *tdNext;
 struct slName *allChroms = hAllChromNames();
 struct slName *chromPtr;
 char fileName[512];
-char longname[512];
-boolean longnameMatch = FALSE;
 
 tdList = trackDbFromRa(raName);
 
-
 if (strict != NULL) 
     {
+    struct trackDb *strictList = NULL;
     for (td = tdList; td != NULL; td = tdNext)
         {
         tdNext = td->next;
-        if (hTableExists(td->tableName))
+        if (hTableOrSplitExistsDb(database, td->tableName))
             {
-            continue;
+	    slAddHead(&strictList, td);
             }
-    
-        // check for split tables
-        longnameMatch = FALSE;
-        for (chromPtr = allChroms; chromPtr != NULL; chromPtr = chromPtr->next)
+	else
 	    {
-            strcpy(longname, "");
-	    strcat(longname, chromPtr->name);
-	    strcat(longname, "_");
-	    strcat(longname, td->tableName);
-  
-	    if (hTableExists(longname))
-                {
-	        longnameMatch = TRUE;
-	        break;
-	        }
-            }
-        if (!longnameMatch)
-            {
-            // printf("%s missing\n", td->tableName);
-            slRemoveEl(tdList, td);
-            }
+	    if (verboseLevel() > 1)
+		printf("%s missing\n", td->tableName);
+	    trackDbFree(&td);
+	    }
         }
+    /* No need to slReverse, it's sorted later. */
+    tdList = strictList;
     }
    
 
@@ -184,7 +171,10 @@ void layerOn(char *strict, char *database, char *dir, struct hash *uniqHash,
  * and layer them on top of whatever is in tdList. */
 {
 char raFile[512];
-sprintf(raFile, "%s/%s", dir, raName);
+if (raName[0] != '/') 
+    safef(raFile, sizeof(raFile), "%s/%s", dir, raName);
+else
+    safef(raFile, sizeof(raFile), "%s", raName);
 if (fileExists(raFile))
     {
     addVersion(strict, database, dir, raFile, uniqHash, htmlHash, tdList);
@@ -238,7 +228,8 @@ layerOn(strict, database, asmDir, uniqHash, htmlHash, FALSE, &tdList);
 layerOn(strict, database, orgDir, uniqHash, htmlHash, FALSE, &tdList);
 layerOn(strict, database, rootDir, uniqHash, htmlHash, TRUE, &tdList);
 if (visibilityRa != NULL)
-    trackDbOverrideVisbility(uniqHash, visibilityRa);
+    trackDbOverrideVisbility(uniqHash, visibilityRa,
+			     optionExists("hideFirst"));
 slSort(&tdList, trackDbCmp);
 printf("Loaded %d track descriptions total\n", slCount(tdList));
 
