@@ -10,7 +10,7 @@
 #include "obscure.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: obscure.c,v 1.21 2003/09/30 00:23:10 kent Exp $";
+static char const rcsid[] = "$Id: obscure.c,v 1.22 2003/10/01 23:12:32 kent Exp $";
 
 long incCounterFile(char *fileName)
 /* Increment a 32 bit value on disk. */
@@ -247,6 +247,29 @@ for (;;)
 if (retNext != NULL)
     *retNext = s;
 return TRUE;
+}
+
+char *nextQuotedWord(char **pLine)
+/* Generalization of nextWord.  Returns next quoted
+ * string or if no quotes next word.  Updates *pLine
+ * to point past word that is returned. Does not return
+ * quotes. */
+{
+char *line, c;
+line = skipLeadingSpaces(*pLine);
+if (line == NULL || line[0] == 0)
+    return NULL;
+c = *line;
+if (c == '"' || c == '\'')
+    {
+    if (!parseQuotedString(line, line, pLine))
+        return NULL;
+    return line;
+    }
+else
+    {
+    return nextWord(pLine);
+    }
 }
 
 char *makeQuotedString(char *in, char quoteChar)
