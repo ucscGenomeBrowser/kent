@@ -762,6 +762,15 @@
   href="#BlastTab">ceBlastTab</A> 
   - Blastp results of known genes vs. one another (<em>C. elegans</em>)
   <LI><A 
+  href="#CeleraCoverage">celeraCoverage</A> 
+  - Summary of large genomic duplications from Celera data</LI>
+  <LI><A 
+  href="#CeleraDupPositive">celeraDupPositive</A> 
+  - Summary of large genomic duplications from Celera data</LI>
+  <LI><A 
+  href="#CeleraOverlay">celeraOverlay</A> 
+  - Celera assembly overlay in the public NCBI assembly</LI>
+  <LI><A 
   href="#CgapAlias">cgapAlias</A> 
   - Associates CGAP pathway IDs with gene symbols or mRNA accessions</LI>
   <LI><A 
@@ -814,6 +823,9 @@
   <LI><A 
   href="#Contamination">contamination</A> 
   - Contamination information for current assembly
+  <LI><A 
+  href="#ContigAcc">contigAcc</A> 
+  - Maps a contig to its accession
   <LI><A 
   href="#CpGIsland">cpgIsland</A> 
   - CpG islands 
@@ -2388,6 +2400,58 @@ the fields.<BR>
     )
 </PRE>
 
+<H4><A name=CeleraCoverage></A>Celera Coverage</H4>
+<PRE>table celeraCoverage
+"Summary of large genomic Duplications from Celera Data"
+    (
+    string chrom;   	"Chromosome or FPC contig"
+    uint chromStart;    "Start position in chromosome"
+    uint chromEnd;      "End position in chromosome"
+    string name; 	"Source of information"
+    )
+</PRE>
+
+<H4><A name=CeleraDupPositive></A>Celera Duplications</H4>
+<PRE>table celeraDupPositive
+"Summary of large genomic Duplications from Celera Data"
+    (
+    string chrom;   	"Chromosome or FPC contig"
+    uint chromStart;    "Start position in chromosome"
+    uint chromEnd;  	"End position in chromosome"
+    string name;    	"Celera accession name"
+    string fullname;    "Celera accession full name"
+    float fracMatch;    "Fraction of matching bases"
+    float bpalign;  	"Base pair alignment score"
+    )
+</PRE>
+
+<H4><A name=CeleraOverlay></A>Celera Overlay</H4>
+<PRE>table celeraOverlay
+"Celera assembly overlay in the public (NCBI) assembly"
+    (
+    string chrom;      	"Chromosome"
+    uint chromStart;   	"Start position in chromosome"
+    uint chromEnd;     	"End position in chromosome"
+    string name;       	"Other chromosome and start"
+    string otherChrom; 	"Other chromosome"
+    uint otherStart;   	"Start in other chromosome"
+    uint otherEnd;     	"End in other chromosome"
+    char orient;       	"Strand/orientation (F or R)"
+    char field1;       	"? (always M)"
+    char field2;       	"? (r or u)"
+    string localId;    	"?"
+    string parentInfo; 	"?"
+    string refId;      	"Reference ID"
+    uint refStart;     	"Start position in reference"
+    uint refLength;     "Length in reference"
+    byte refOrient;   	"Strand/orientation in reference (-1 or 1)"
+    string queryId;    	"Query ID"
+    uint queryStart;    "Start position in query"
+    uint queryLength;   "Length in query"
+    byte queryOrient; 	"Strand/orientation in query (-1 or 1)"
+    )
+</PRE>
+
 <H4><A name=CgapAlias></A>CGAP Alias</H4>
 <PRE>table cgapAlias
 "Associates CGAP pathway IDs with gene symbols or mRNA accessions"
@@ -2520,6 +2584,15 @@ the fields.<BR>
     string acc;        "NCBI accession where contamination was found"
     string ctg;        "Alternate name (e.g. WGS contig name)"
     int    len;        "Length of contaminated portion of sequence"
+    )
+</PRE>
+
+<H4><A name=ContigAcc></A>Contig/Accession Map</H4>
+<PRE>table contigAcc
+"Maps a contig to its accession."
+    (
+    string contig;      "Contig name"
+    string acc;         "GenBank accession"
     )
 </PRE>
 
