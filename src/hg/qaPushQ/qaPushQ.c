@@ -27,9 +27,9 @@
 #include "web.h"
 #include "hui.h"
 #include "dbDb.h"
+#include "htmlPage.h"
 
-
-static char const rcsid[] = "$Id: qaPushQ.c,v 1.41 2004/05/24 18:25:15 galt Exp $";
+static char const rcsid[] = "$Id: qaPushQ.c,v 1.42 2004/05/26 19:21:46 galt Exp $";
 
 char msg[2048] = "";
 char ** saveEnv;
@@ -964,6 +964,7 @@ printf("&nbsp;<A href=/cgi-bin/qaPushQ?action=showMonths&cb=%s>Log by Month</A>\
 printf("&nbsp;<A href=/cgi-bin/qaPushQ?action=showGateway&cb=%s>Gateway</A>\n",newRandState);
 printf("&nbsp;<A href=/cgi-bin/qaPushQ?action=showDisplayHelp target=\"_blank\">Help</A>\n");
 printf("&nbsp;<A href=/cgi-bin/qaPushQ?action=releaseLog target=\"_blank\">Release Log</A>\n");
+//printf("&nbsp;<A href=/cgi-bin/qaPushQ?action=releaseLogPush target=\"_blank\">Publish RL</A>\n");
 printf("&nbsp;<A href=/cgi-bin/qaPushQ?cb=%s>Refresh</A>\n",newRandState);
 //printf("&nbsp;newRandState=%s\n",newRandState);
 //printf("&nbsp;oldRandState=%s\n",oldRandState);
@@ -2483,6 +2484,11 @@ whiteSpace(q.tbls);
 whiteSpace(q.cgis);
 whiteSpace(q.files);
 
+q.tbls = replaceChars(q.tbls,"chrN_","chr*_");
+q.tbls = replaceChars(q.tbls,"\\","\\\\");
+q.tbls = replaceChars(q.tbls,"%","\\%");
+q.tbls = replaceChars(q.tbls,"_","\\_");
+
 for(j=0;parseList(q.dbs, ',' ,j,dbsComma,sizeof(dbsComma));j++)
     {
     if (dbsComma[0]==0) 
@@ -2550,6 +2556,7 @@ for(j=0;parseList(q.dbs, ',' ,j,dbsComma,sizeof(dbsComma));j++)
 			 || ((c>='0')&&(c<='9'))
 			 || (c=='_')
 			 || (c=='%')
+			 || (c=='\\')
 			)
 			    {
 			    tempVal[iii]=c;
@@ -2820,7 +2827,7 @@ printf("clone button - press if you wish to split the original push queue record
 printf("bounce button - press to bounce from priority A, the QA queue, to B, the developer queue if it needs developer attention.<br>\n");
 printf("lock - press lock to lock the record and edit it.  When in edit mode, make your changes and submit.  Do not leave the record locked.<br>\n");
 printf("<br>\n");
-printf("<a href=\"javascript:window.close();\">CLOSE</a> <br>\n",q.qid);
+printf("<a href=\"javascript:window.close();\">CLOSE</a> <br>\n");
 }
 
 
@@ -2846,7 +2853,7 @@ printf("RETURN - click to return to the details/edit page.<br>\n");
 printf("Set Size As - click to set size to that found, and return to the details/edit page. Saves typing. Be sure to press submit to save changes.<br>\n");
 printf("<br>\n");
 printf("<br>\n");
-printf("<a href=\"javascript:window.close();\">CLOSE</a> <br>\n",q.qid);
+printf("<a href=\"javascript:window.close();\">CLOSE</a> <br>\n");
 }
 
 
@@ -2970,6 +2977,7 @@ dbDbTemp.name        = cloneString("zoo1");
 dbDbTemp.description = cloneString("Jun. 2002");
 dbDbTemp.organism    = cloneString("NISC (Zoo)");
 dbDbTemp.genome      = cloneString("NISC (Zoo)");
+dbDbTemp.sourceName  = cloneString("Comparative Sequencing Program Target 1");
 slAddHead(&kiList, &dbDbTemp);
 
 slReverse(&kiList);
@@ -3001,8 +3009,8 @@ for (ki = kiList; ki != NULL; ki = ki->next)
 	safef(tempName,sizeof(tempName),"<em>%s</em>",ki->genome);
 	}
     
-    webNewSection("<A NAME=%s></A>%s %s (%s)", 
-	ki->name, tempName, ki->description, ki->name);
+    webNewSection("<A NAME=%s></A>%s %s (%s, %s)", 
+	ki->name, tempName, ki->description, ki->name, ki->sourceName);
     printf("<TABLE BORDER=1 BORDERCOLOR=\"#aaaaaa\" CELLPADDING=4 WIDTH=\"100%\">\n"
 	"<TR><TD nowrap><FONT color=\"#006666\"><B>Track/Table Name</B></FONT></TD>\n"
 	"    <TD nowrap><FONT color=\"#006666\"><B>Release Date</B></FONT>\n"
@@ -3039,7 +3047,49 @@ dbDbFreeList(&kiList);
 webEnd();
 }
 
+void doReleaseLogPush()
+/* fetch and write releaseLog and display cut-and-pastable push-request */
+{
+//char *rlPath = "/goldenPath/releaseLogNew.html";
+//char *apache = "/usr/local/apache/htdocs";
+char *rlPath = "/trash/releaseLogNew.html";
+char *apache = "/usr/local/apache";
+char url[256] = "";
+struct htmlPage *page = NULL;
+char filePath[256] = "";
+FILE *f=NULL;
 
+safef(url, sizeof(url), "http://%s/cgi-bin/qaPushQ?action=releaseLog",utsName.nodename,rlPath);
+page = htmlPageGet(url);
+if (page->status->status == 200)
+    {
+    safef(filePath,sizeof(filePath),"%s%s",apache,rlPath);
+    f=mustOpen(filePath, "w");
+    mustWrite(f, page->htmlText, strlen(page->htmlText));
+    carefulClose(&f);
+    printf("<br>\n");
+    printf("Updated release log html %s<br>\n",rlPath);
+    printf("<br>\n");
+    printf("push-request:<br>\n");
+    printf("<br>\n");
+    printf("Please push from beta to RR,MGC: <br>\n");
+    printf("&nbsp;&nbsp;&nbsp;%s<br>\n",filePath);
+    printf("<br>\n");
+    printf("Thanks!<br>\n");
+    printf("<br>\n");
+    printf("<br>\n");
+    printf("See <a href=%s>Release Log</a><br>\n",rlPath);
+    }
+else
+    {
+    printf("Error reading %s: %d<br>\n",rlPath,page->status->status);
+    }
+printf("<br>\n");
+printf("<a href=\"javascript:window.close();\">CLOSE</a> <br>\n");
+
+htmlPageFree(&page);
+
+}
 
 
 /* ======================================================== */
@@ -3257,6 +3307,12 @@ if (sameString(action,"releaseLog"))
     doDrawReleaseLog();
     return 0;
     }
+if (sameString(action,"releaseLogPush"))
+    {
+    htmShell(TITLE, doReleaseLogPush, NULL);
+    return 0;
+    }
+
 
 
 qaUser = findCookieData("qapushq");  /* will also cause internal structures to load cookie data */
