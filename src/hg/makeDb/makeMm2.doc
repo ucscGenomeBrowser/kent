@@ -1357,3 +1357,13 @@ o - Rescuing STS track:
      - mv chrom.psl ../convert.psl
 
 
+LOAD SLAM GENES 
+     cd ~/mm/bed
+     mkdir slam
+     cd slam
+     wget http://bio.math.berkeley.edu/slam/mouse/gff/mmCDS.gff.gz
+     wget http://baboon.math.berkeley.edu/~scawley/mmCDS.bed.gz
+     gunzip *
+     - make sure there are no plus signs the gff files it will break the browser.
+     ldHgGene mm2 slam mmCDS.gff
+     hgLoadBed mm2 slamNonCoding mmCDS.bed
