@@ -1430,7 +1430,7 @@ else
     else
 	*retWinStart = hgp->posCount;
 
-    return hgp;
+    return NULL;
     }
 }
 
