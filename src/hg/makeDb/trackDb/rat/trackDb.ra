@@ -64,7 +64,7 @@ altColor 230,170,40
 type bed 3 +
 
 track slamNonCodingHuman
-shortLabel Slam Non Coding Human
+shortLabel Slam Non-Coding Human
 longLabel Slam Predictions of Human/Rat Conserved Non-Coding Regions
 group compGeno
 priority 120

@@ -1,6 +1,6 @@
 track rnaGene
 shortLabel RNA Genes
-longLabel Non-coding RNA Genes (dark) and Pseudogenes (light)
+longLabel Non-Coding RNA Genes (dark) and Pseudogenes (light)
 group genes
 priority 52
 visibility hide
@@ -29,7 +29,7 @@ color 100,50,0
 altColor 175,150,128
 
 track slamNonCodingMouse
-shortLabel Slam Non Coding Mouse
+shortLabel Slam Non-Coding Mouse
 longLabel Slam Predictions of Human/Mouse Conserved Non-Coding Regions
 group compGeno
 priority 120
@@ -40,7 +40,7 @@ spectrum on
 type bed 5 
 
 track slamNonCodingRat
-shortLabel Slam Non Coding Rat
+shortLabel Slam Non-Coding Rat
 longLabel Slam Predictions of Human/Rat Conserved Non-Coding Regions
 group compGeno
 priority 121
@@ -192,7 +192,7 @@ color 0, 0, 100
 type psl .
 
 track slamNonCodingMouse
-shortLabel Slam Non Coding Mouse
+shortLabel Slam Non-Coding Mouse
 longLabel Slam predictions of human/mouse conserved non-coding regions
 group compGeno
 priority 120
@@ -203,7 +203,7 @@ spectrum on
 type bed 5 
 
 track slamNonCodingRat
-shortLabel Slam Non Coding Rat
+shortLabel Slam Non-Coding Rat
 longLabel Slam predictions of human/rat conserved non-coding regions
 group compGeno
 priority 121

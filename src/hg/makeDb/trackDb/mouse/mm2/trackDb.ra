@@ -56,7 +56,7 @@ altColor 175,150,128
 type genePred 
 
 track slamNonCodingHuman
-shortLabel Slam Non Coding Human
+shortLabel Slam Non-Coding Human
 longLabel Slam Predictions of Human/Mouse Conserved Non-Coding Regions
 group compGeno
 priority 120
