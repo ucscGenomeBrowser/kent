@@ -40,6 +40,12 @@ HGID hgIdQuery(struct sqlConnection *conn, char *query);
 HGID hgRealIdQuery(struct sqlConnection *conn, char *query);
 /* Return first field of first table as HGID- abort if 0. */
 
+void hgHistoryComment(struct sqlConnection *conn, char *comment, ...);
+/* Add comment to history table.  Does not lock the process. */
+/* WARNING: hgStartUpdate implements an advisory lock on the process so */
+/* a program can add a history comment using this function after */
+/* hgStartUpdate has been implemented as long as the same conn is used, */
+/* otherwise the writing of the comment to the history table may be blocked */
 
 struct sqlConnection *hgStartUpdate();
 /* Open and connection and get next global id from the history table */
