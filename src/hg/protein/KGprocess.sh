@@ -10,7 +10,7 @@
 #	are created.  See also, scripts:
 #	mkSwissProtDB.sh and mkProteinsDB.sh
 #
-#	"$Id: KGprocess.sh,v 1.16 2004/03/23 18:37:19 hiram Exp $"
+#	"$Id: KGprocess.sh,v 1.17 2004/03/23 23:12:40 fanhsu Exp $"
 #
 #	January 2004 - added the kgProtMap process, a second cluster run
 #	Thu Nov 20 11:16:16 PST 2003 - Created - Hiram
@@ -112,7 +112,7 @@ fi
 DB=$1
 RO_DB=$2
 DATE=$3
-PDB=prot${DATE}
+PDB=proteins${DATE}
 TOP=/cluster/data/kgDB/bed/${DB}
 export DB RO_DB DATE PDB TOP
 
@@ -830,14 +830,14 @@ if [ ! -s kgPep.fa ]; then
 hgsql -N -e 'select spID,seq from kgXref,knownGenePep where kgID=name' ${DB} \
 	| awk '{print ">" $1;print $2}' >kgPep.fa
     rm -fr kgPep
-    rm -f jobList
+    rm -f rawJobList
 fi
 
 if [ ! -d kgPep ]; then
     echo "`date` splitting kgPep.fa"
     mkdir kgPep
     faSplit sequence kgPep.fa 5000 kgPep/kgPep
-    rm -f jobList
+    rm -f rawJobList
 fi
 
 
@@ -848,24 +848,61 @@ fi
 
 cp -p ~/kent/src/hg/protein/kgProtBlast.csh .
 
-if [ ! -s jobList ]; then
-    echo "`date` creating jobList"
+if [ ! -s rawJobList ]; then
+    echo "`date` creating rawJobList"
     for f in kgPep/*.fa
     do
-      echo ./kgProtBlast.csh $f >> jobList
+      echo ./kgProtBlast.csh $f >> rawJobList
     done
 
 fi
 
-if [ ! -d psl.tmp ]; then
-    echo "`date` Cluster Run kgProtMap has been prepared."
-    echo "on machine kk in: "`pwd`
-    echo "perform:"
-    echo "para create jobList"
-    echo "para try"
-    echo "para push ... etc."
+if [ ! -s rawJobList ]; then
+    echo "ERROR: job list for kgProtMap cluster run has not been created"
+    echo -e "\tmust fix to continue"
     exit 255
 fi
+
+if [ ! -f iserverSetupOK ]; then
+    sed -e \
+	"s# kgPep/# /iscratch/i/kgDB/${DB}/kgProtMap/kgPep/#g" \
+	rawJobList > jobList
+
+    rm -f iserverSetupOK
+    echo "`date` Preparing iservers for kluster run"
+    #	required destination format is: kgDB/${DB}/<whatever>
+    ssh kkr1u00 ${ISERVER_SETUP} `pwd`/kgPep kgDB/${DB}/kgProtMap
+    RC=$?
+    if [ "${RC}" -ne 0 ]; then
+	echo "ERROR: iserver setup did not complete successfully"
+	exit 255
+    fi
+    touch iserverSetupOK
+fi
+
+if [ ! -f iserverSetupOK ]; then
+    echo "ERROR: iserver setup is not correct."
+    echo -e "\tsomething has failed in the kluster run setup"
+    exit 255
+fi
+
+if [ ! -f klusterRunComplete ]; then
+    rm -f klusterRunComplete
+    ssh kk "${KLUSTER_RUN}"  `pwd`
+    RC=$?
+    if [ "${RC}" -ne 0 ]; then
+	echo "ERROR: kluster batch did not complete successfully"
+	exit 255
+    fi
+    touch klusterRunComplete
+fi
+
+if [ ! -f klusterRunComplete ]; then
+    echo "ERROR: kluster run has failed."
+    echo -e "\tneeds to be corrected before continuing"
+    exit 255
+fi
+
 
 if [ ! -s psl.tmp/kgProtMrna.psl ]; then
     echo "`date` Assuming kgProtMap cluster run done."
