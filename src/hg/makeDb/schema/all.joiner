@@ -679,7 +679,7 @@ identifier refSeqId typeOf=mrnaAccession
 "RefSeq mRNA accession"
     $gbd.refLink.mrnaAcc 
     $gbd.refSeqStatus.mrnaAcc minCheck=0.10
-    $gbd.bioCycPathway.geneID
+    $gbd.bioCycPathway.geneID minCheck=0.98
     $kgDb.kgXref.refseq exclude= minCheck=0.50
     $kgDb.knownToRefSeq.value minCheck=0.98
     $gbd,!rn2,!rn3,!ce1.mrnaRefseq.refseq minCheck=0.25
