@@ -103,22 +103,21 @@ hFreeConn(&conn);
 return snpCount;
 }
 
-struct hash *makeSnpInfoHash()
+struct hash *makeSnpInfoHash(int isHuman)
 /* Make hash of info for all SNPs */
 {
 struct slName *chromList = getChromList();
 struct slName *chrom;
 struct hash *snpHash = newHash(20); /* Make hash 2^20 (1M) big */
 long int snpNihCount=0;
-/* long int snpTscCount=0; */
+long int snpTscCount=0;
+
 
 for (chrom = chromList; chrom != NULL; chrom = chrom->next)
     {
     struct dnaSeq *seq = hLoadChrom(chrom->name);
     snpNihCount=addSnpsFromChrom(chrom->name, seq, "snpNih", snpHash);
-    /*
-      snpTscCount=addSnpsFromChrom(chrom->name, seq, "snpTsc", snpHash);
-    */
+    if (isHuman) snpTscCount=addSnpsFromChrom(chrom->name, seq, "snpTsc", snpHash);
     freeDnaSeq(&seq);
     }
 printf("\n");
@@ -165,20 +164,24 @@ void addAsmBase(char *database, char *input, char *output)
 {
 struct lineFile *lf = lineFileOpen(input, TRUE);
 FILE *f = mustOpen(output, "w");
-char *row[8], bases[5]="    \0";
+char *row[8];
+char  bases[5]="    \0";
 struct hash *snpHash = NULL;
 long int counter[4];
 long int offset=0;
 long int counts[96];
 long int counts5[24];
 long int counts3[24];
-int      index;
-int      i;
+int      index=0;
+int      i=0;
+int      isHuman=0;
 
 for (i=0;i<96;i++) counts[i]=0;
 for (i=0;i<4;i++) counter[i]=0;
 hSetDb(database);
-snpHash = makeSnpInfoHash();
+if (strncmp(database,"hg",2)==0) isHuman=1;
+
+snpHash = makeSnpInfoHash(isHuman);
 
 while (lineFileRow(lf, row))
     {
@@ -340,6 +343,7 @@ errAbort("dbSnp - get the top strand base from the current assembly\n"
 	 "based on a specification file including the rs#s for the SNPs\n"
 	 "usage:\n  \tdbSnp database infile     outfile     >& logfile &\n"
 	 "example:\n\tdbSnp hg11     dbSnpInput dbSnpOutput >& dnSnpLog &\n");
+/* dbSnp hg13 chN.observed/observed   dbSnpOutputHg13 */
 }
 
 int main(int argc, char *argv[])
