@@ -9,9 +9,6 @@ CREATE TABLE wiggle (
     chromStart int unsigned not null,	# Start position in chromosome
     chromEnd int unsigned not null,	# End position in chromosome
     name varchar(255) not null,	# Name of item
-    score int unsigned not null,	# range [0:127] == maximum in this block
-    strand char(1) not null,	# + or - (may not be needed for wiggle)
-    Min int unsigned not null,	# range [0:126] == minimum in this block
     Span int unsigned not null,	# each value spans this many bases
     Count int unsigned not null,	# number of values in this block
     Offset int unsigned not null,	# offset in File to fetch data

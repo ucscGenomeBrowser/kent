@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: wiggle.c,v 1.4 2003/11/10 16:38:43 hiram Exp $";
+static char const rcsid[] = "$Id: wiggle.c,v 1.5 2004/01/09 22:08:39 hiram Exp $";
 
 void wiggleStaticLoad(char **row, struct wiggle *ret)
 /* Load a row from wiggle table into ret.  The contents of ret will
@@ -21,18 +21,15 @@ ret->chrom = row[0];
 ret->chromStart = sqlUnsigned(row[1]);
 ret->chromEnd = sqlUnsigned(row[2]);
 ret->name = row[3];
-ret->score = sqlUnsigned(row[4]);
-strcpy(ret->strand, row[5]);
-ret->Min = sqlUnsigned(row[6]);
-ret->Span = sqlUnsigned(row[7]);
-ret->Count = sqlUnsigned(row[8]);
-ret->Offset = sqlUnsigned(row[9]);
-ret->File = row[10];
-ret->lowerLimit = atof(row[11]);
-ret->dataRange = atof(row[12]);
-ret->validCount = sqlUnsigned(row[13]);
-ret->sumData = atof(row[14]);
-ret->sumSquares = atof(row[15]);
+ret->Span = sqlUnsigned(row[4]);
+ret->Count = sqlUnsigned(row[5]);
+ret->Offset = sqlUnsigned(row[6]);
+ret->File = row[7];
+ret->lowerLimit = atof(row[8]);
+ret->dataRange = atof(row[9]);
+ret->validCount = sqlUnsigned(row[10]);
+ret->sumData = atof(row[11]);
+ret->sumSquares = atof(row[12]);
 }
 
 struct wiggle *wiggleLoad(char **row)
@@ -48,18 +45,15 @@ ret->chrom = cloneString(row[0]);
 ret->chromStart = sqlUnsigned(row[1]);
 ret->chromEnd = sqlUnsigned(row[2]);
 ret->name = cloneString(row[3]);
-ret->score = sqlUnsigned(row[4]);
-strcpy(ret->strand, row[5]);
-ret->Min = sqlUnsigned(row[6]);
-ret->Span = sqlUnsigned(row[7]);
-ret->Count = sqlUnsigned(row[8]);
-ret->Offset = sqlUnsigned(row[9]);
-ret->File = cloneString(row[10]);
-ret->lowerLimit = atof(row[11]);
-ret->dataRange = atof(row[12]);
-ret->validCount = sqlUnsigned(row[13]);
-ret->sumData = atof(row[14]);
-ret->sumSquares = atof(row[15]);
+ret->Span = sqlUnsigned(row[4]);
+ret->Count = sqlUnsigned(row[5]);
+ret->Offset = sqlUnsigned(row[6]);
+ret->File = cloneString(row[7]);
+ret->lowerLimit = atof(row[8]);
+ret->dataRange = atof(row[9]);
+ret->validCount = sqlUnsigned(row[10]);
+ret->sumData = atof(row[11]);
+ret->sumSquares = atof(row[12]);
 return ret;
 }
 
@@ -69,7 +63,7 @@ struct wiggle *wiggleLoadAll(char *fileName)
 {
 struct wiggle *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[16];
+char *row[13];
 
 while (lineFileRow(lf, row))
     {
@@ -87,7 +81,7 @@ struct wiggle *wiggleLoadAllByChar(char *fileName, char chopper)
 {
 struct wiggle *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[16];
+char *row[13];
 
 while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
     {
@@ -113,9 +107,6 @@ ret->chrom = sqlStringComma(&s);
 ret->chromStart = sqlUnsignedComma(&s);
 ret->chromEnd = sqlUnsignedComma(&s);
 ret->name = sqlStringComma(&s);
-ret->score = sqlUnsignedComma(&s);
-sqlFixedStringComma(&s, ret->strand, sizeof(ret->strand));
-ret->Min = sqlUnsignedComma(&s);
 ret->Span = sqlUnsignedComma(&s);
 ret->Count = sqlUnsignedComma(&s);
 ret->Offset = sqlUnsignedComma(&s);
@@ -170,14 +161,6 @@ fputc(sep,f);
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->name);
 if (sep == ',') fputc('"',f);
-fputc(sep,f);
-fprintf(f, "%u", el->score);
-fputc(sep,f);
-if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->strand);
-if (sep == ',') fputc('"',f);
-fputc(sep,f);
-fprintf(f, "%u", el->Min);
 fputc(sep,f);
 fprintf(f, "%u", el->Span);
 fputc(sep,f);
