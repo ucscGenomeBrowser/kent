@@ -11,7 +11,7 @@
 #include "hgNear.h"
 #include "cheapcgi.h"
 
-static char const rcsid[] = "$Id: expRatio.c,v 1.13 2003/08/25 23:52:49 kent Exp $";
+static char const rcsid[] = "$Id: expRatio.c,v 1.14 2003/08/29 20:10:41 kent Exp $";
 
 
 static boolean loadExpVals(struct sqlConnection *conn,
@@ -108,13 +108,6 @@ static char buf[128];
 safef(buf, sizeof(buf), "%s%s.scale", colConfigPrefix, col->name);
 return buf;
 }
-
-
-static char *colorSchemeVals[] = {
-/* Menu option for color scheme. */
-   "red high/green low",
-   "blue high/green low",
-};
 
 static void colorVal(double val, boolean useBlue)
 /* Val is -1.0 to 1.0.  Print color in form #FF0000, normally
@@ -343,14 +336,6 @@ static void expRatioConfigControls(struct column *col)
 /* Print out configuration column */
 {
 hPrintf("<TD>");
-
-/* Make color drop-down. */
-    {
-    char *varName = colSchemeVarName(col);
-    char *checked = cartUsualString(cart, varName, colorSchemeVals[0]);
-    hPrintf("colors: ");
-    cgiMakeDropList(varName, colorSchemeVals, ArraySize(colorSchemeVals), checked);
-    }
 
 /* Make scale drop-down. */
     {
@@ -604,9 +589,7 @@ else
 
 /* Figure out color scheme. */
     {
-    char *varName = colSchemeVarName(col);
-    char *val = cartUsualString(cart, varName, colorSchemeVals[0]);
-    col->expRatioUseBlue = !sameString(val, colorSchemeVals[0]);
+    col->expRatioUseBlue = expRatioUseBlue();
     }
 
 /* Figure out scale. */

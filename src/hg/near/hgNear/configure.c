@@ -4,6 +4,7 @@
 #include "linefile.h"
 #include "hash.h"
 #include "cheapcgi.h"
+#include "obscure.h"
 #include "jksql.h"
 #include "htmshell.h"
 #include "hdb.h"
@@ -11,7 +12,7 @@
 #include "web.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: configure.c,v 1.16 2003/08/29 18:48:48 kent Exp $";
+static char const rcsid[] = "$Id: configure.c,v 1.17 2003/08/29 20:10:41 kent Exp $";
 
 static char *onOffString(boolean on)
 /* Return "on" or "off". */
@@ -145,6 +146,28 @@ slSort(pColList, columnCmpPriority);
 savePriorities(*pColList);
 }
 
+static char *colorSchemeVals[] = {
+/* Menu option for color scheme. */
+   "red high/green low",
+   "blue high/green low",
+};
+
+static void colorSchemeDropDown()
+/* Make color drop-down. */
+{
+char *checked = cartUsualString(cart, expRatioColorVarName, colorSchemeVals[0]);
+cgiMakeDropList(expRatioColorVarName, 
+	colorSchemeVals, ArraySize(colorSchemeVals), checked);
+}
+
+boolean expRatioUseBlue()
+/* Return TRUE if should use blue instead of red
+ * in the expression ratios. */
+{
+char *val = cartUsualString(cart, expRatioColorVarName, colorSchemeVals[0]);
+return !sameString(val, colorSchemeVals[0]);
+}
+
 void doConfigure(struct sqlConnection *conn, struct column *colList, char *bumpVar)
 /* Generate configuration page. */
 {
@@ -153,15 +176,36 @@ if (bumpVar)
 makeTitle("Configure Gene Family Browser", "hgNearConfigure.html");
 hPrintf("<FORM ACTION=\"../cgi-bin/hgNear\" METHOD=POST>\n");
 cartSaveSession(cart);
-hPrintf("<TABLE WIDTH=\"100%%\" BORDER=0 CELLSPACING=1 CELLPADDING=1>\n");
+
+hPrintf("<TABLE WIDTH=100% BORDER=0 CELLSPACING=1 CELLPADDING=1>\n");
+hPrintf("<TR><TD ALIGN=LEFT>");
+cgiMakeCheckBox(showAllSpliceVarName, 
+	cartUsualBoolean(cart, showAllSpliceVarName, FALSE));
+hPrintf("Show all splicing varients. ");
+hPrintf("</TD><TD>");
+hPrintf("Expression ratio colors: ");
+colorSchemeDropDown();
+hPrintf(".");
+hPrintf("</TD><TD>");
+cgiMakeButton("submit", "Submit");
+hPrintf("</TD></TR></TABLE>");
+
+hPrintf("<HR>");
+hPrintf("<H2>Column Configuration</H2>\n");
+hPrintf("<TABLE BORDER=0 CELLSPACING=1 CELLPADDING=1>\n");
 hPrintf("<TR><TD ALIGN=LEFT>");
 cgiMakeButton(hideAllConfName, "Hide All");
-hPrintf(" ");
+hPrintf("</TD><TD>");
 cgiMakeButton(showAllConfName, "Show All");
-hPrintf(" ");
-cgiMakeButton(defaultConfName, "Default Configuration");
-hPrintf(" ");
-cgiMakeButton("submit", "Submit");
+hPrintf("</TD><TD>");
+cgiMakeButton(saveCurrentConfName, "Save Current Settings");
+hPrintf("</TD><TD>");
+if (cartVarExists(cart, savedColSettingsVarName))
+    {
+    cgiMakeButton(useSavedConfName, "Use Saved Settings");
+    hPrintf("</TD><TD>");
+    }
+cgiMakeButton(defaultConfName, "Default Columns");
 hPrintf("</TD></TR></TABLE>");
 configTable(colList, conn);
 hPrintf("</FORM>");
@@ -205,4 +249,59 @@ void doConfigShowAll(struct sqlConnection *conn, struct column *colList)
 configAllVis(conn, colList, "on");
 }
 
+struct dyString *hashElsToSettings(struct hashEl *list)
+/* Convert string valued hash elements to settings string. 
+ * That is a string of var="val" pairs. */
+{
+struct dyString *dy = dyStringNew(1024);
+struct hashEl *el;
+char *s, c;
+
+for (el = list; el != NULL; el = el->next)
+    {
+    dyStringPrintf(dy, "%s=", el->name);
+    dyStringAppendC(dy, '"');
+    s = el->val;
+    while ((c = *s++) != 0)
+        {
+	if (c == '"')
+	   dyStringAppendC(dy, '\\');
+	dyStringAppendC(dy, c);
+	}
+    dyStringAppendC(dy, '"');
+    dyStringAppendC(dy, ' ');
+    }
+return dy;
+}
+
+void doConfigSaveCurrent(struct sqlConnection *conn, struct column *colList)
+/* Respond to Save Current Settings buttin in configuration page. */
+{
+struct hashEl *colVars;
+char wild[64];
+struct dyString *dy;
+
+safef(wild, sizeof(wild), "%s*", colConfigPrefix);
+colVars = cartFindLike(cart, wild);
+dy = hashElsToSettings(colVars);
+cartSetString(cart, savedColSettingsVarName, dy->string);
+doConfigure(conn, colList, NULL);
+}
+
+void doConfigUseSaved(struct sqlConnection *conn, struct column *colList)
+/* Respond to Use Saved Settings buttin in configuration page. */
+{
+char *settings = cartOptionalString(cart, savedColSettingsVarName);
+if (settings != NULL)
+    {
+    struct hash *hash = hashVarLine(settings, 1);
+    struct hashEl *list = hashElListHash(hash);
+    struct hashEl *el;
+    for (el = list; el != NULL; el = el->next)
+        {
+	cartSetString(cart, el->name, el->val);
+	}
+    }
+doConfigure(conn, colList, NULL);
+}
 

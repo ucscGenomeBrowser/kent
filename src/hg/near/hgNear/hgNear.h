@@ -119,34 +119,54 @@ extern struct genePos *curGeneId;	  /* Identity of current gene. */
 #define confVarName "near.configure"	/* Configuration button */
 #define countVarName "near.count"	/* How many items to display. */
 #define searchVarName "near.search"	/* Search term. */
-#define idVarName "near.id"         	/* Overrides searchVarName if it exists */
-#define idPosVarName "near.idPos"      	/* chrN:X-Y position of id, may be empty. */
+#define idVarName "near.id"         	
+	/* Overrides searchVarName if it exists */
+#define idPosVarName "near.idPos"      	
+	/* chrN:X-Y position of id, may be empty. */
 #define groupVarName "near.group"	/* Grouping scheme. */
 #define getSeqVarName "near.getSeq"	/* Button to get sequence. */
-#define getGenomicSeqVarName "near.getGenomicSeq"	/* Button to fetch genomic sequence. */
+#define getGenomicSeqVarName "near.getGenomicSeq"	
+	/* Button to fetch genomic sequence. */
 #define getSeqHowVarName "near.getSeqHow" /* How to get sequence. */
 #define getSeqPageVarName "near.getSeqPage" /* Button go to getSequence page. */
 #define proUpSizeVarName "near.proUpSize" /* Promoter upstream size. */
 #define proDownSizeVarName "near.proDownSize" /* Promoter downstream size. */
-#define proIncludeFiveOnly "near.proIncludeFiveOnly" /* Include without 5' UTR? */
+#define proIncludeFiveOnly "near.proIncludeFiveOnly" 
+	/* Include without 5' UTR? */
 #define getTextVarName "near.getText"	/* Button to get as text. */
 #define advSearchVarName "near.advSearch"      /* Advanced search */
-#define advSearchClearVarName "near.advSearchClear" /* Advanced search clear all button. */
-#define advSearchBrowseVarName "near.advSearchBrowse" /* Advanced search browse  button. */
-#define advSearchListVarName "near.advSearchList" /* Advanced search submit list. */
+#define advSearchClearVarName "near.advSearchClear" 
+	/* Advanced search clear all button. */
+#define advSearchBrowseVarName "near.advSearchBrowse" 
+	/* Advanced search browse  button. */
+#define advSearchListVarName "near.advSearchList" 
+	/* Advanced search submit list. */
 #define colOrderVar "near.colOrder"     /* Order of columns. */
 #define defaultConfName "near.default"  /* Restore to default settings. */
 #define hideAllConfName "near.hideAll"  /* Hide all columns. */
 #define showAllConfName "near.showAll"  /* Show all columns. */
-#define resetConfName "near.reset"      /* Ignore setting changes. */
-#define colConfigPrefix "near.col."     /* Prefix for stuff set in configuration pages. */
-#define advSearchPrefix "near.as."      /* Prefix for advanced search variables. */
-#define advSearchPrefixI "near.asi."    /* Prefix for advanced search variables not forcing search. */
+#define saveCurrentConfName "near.saveCurrent"  /* Save current columns. */
+#define useSavedConfName "near.useSaved"  /* Use saved columns. */
+#define savedColSettingsVarName "near.savedColSettings" 
+	/* Variable that stores saved column settings. */
+#define showAllSpliceVarName "near.showAllSplice" 
+	/* Show all splice varients. */
+#define expRatioColorVarName "near.expRatioColors" 
+	/* Color scheme for expression ratios. */
+#define resetConfName "near.reset"      /* Restore default column settings. */
+#define colConfigPrefix "near.col."     
+	/* Prefix for stuff set in configuration pages. */
+#define advSearchPrefix "near.as."      
+	/* Prefix for advanced search variables. */
+#define advSearchPrefixI "near.asi."    
+	/* Prefix for advanced search variables not forcing search. */
 #define keyWordUploadPrefix "near.keyUp." /* Prefix for keyword uploads. */
 #define keyWordPastePrefix "near.keyPaste." /* Prefix for keyword paste-ins. */
-#define keyWordPastedPrefix "near.keyPasted." /* Prefix for keyword paste-ins. */
+#define keyWordPastedPrefix "near.keyPasted." 
+	/* Prefix for keyword paste-ins. */
 #define keyWordClearPrefix "near.keyClear." /* Prefix for keyword paste-ins. */
-#define keyWordClearedPrefix "near.keyCleared." /* Prefix for keyword paste-ins. */
+#define keyWordClearedPrefix "near.keyCleared." 
+	/* Prefix for keyword paste-ins. */
 
 /* ---- General purpose helper routines. ---- */
 
@@ -346,6 +366,10 @@ void setupColumnKnownName(struct column *col, char *parameters);
 void setupColumnExpRatio(struct column *col, char *parameters);
 /* Set up expression ration type column. */
 
+boolean expRatioUseBlue();
+/* Return TRUE if should use blue instead of red
+ * in the expression ratios. */
+
 boolean gotAdvSearch();
 /* Return TRUE if advanced search variables are set. */
 
@@ -385,6 +409,12 @@ void doConfigHideAll(struct sqlConnection *conn, struct column *colList);
 
 void doConfigShowAll(struct sqlConnection *conn, struct column *colList);
 /* Respond to show all button in configuration page. */
+
+void doConfigSaveCurrent(struct sqlConnection *conn, struct column *colList);
+/* Respond to Save Current Settings buttin in configuration page. */
+
+void doConfigUseSaved(struct sqlConnection *conn, struct column *colList);
+/* Respond to Use Saved Settings buttin in configuration page. */
 
 void doGetSeqPage(struct sqlConnection *conn, struct column *colList);
 /* Put up the get sequence page. */

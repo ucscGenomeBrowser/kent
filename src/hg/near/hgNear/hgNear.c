@@ -15,10 +15,11 @@
 #include "ra.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: hgNear.c,v 1.46 2003/08/29 18:48:48 kent Exp $";
+static char const rcsid[] = "$Id: hgNear.c,v 1.47 2003/08/29 20:10:41 kent Exp $";
 
 char *excludeVars[] = { "submit", "Submit", confVarName, 
 	defaultConfName, hideAllConfName, showAllConfName,
+	saveCurrentConfName, useSavedConfName,
 	getSeqVarName, getSeqPageVarName, getGenomicSeqVarName, getTextVarName, 
 	advSearchVarName, advSearchClearVarName, advSearchBrowseVarName,
 	advSearchListVarName, resetConfName, idVarName, idPosVarName, NULL }; 
@@ -1374,6 +1375,10 @@ else if (cartVarExists(cart, hideAllConfName))
     doConfigHideAll(conn, colList);
 else if (cartVarExists(cart, showAllConfName))
     doConfigShowAll(conn, colList);
+else if (cartVarExists(cart, saveCurrentConfName))
+    doConfigSaveCurrent(conn, colList);
+else if (cartVarExists(cart, useSavedConfName))
+    doConfigUseSaved(conn, colList);
 else if (cartVarExists(cart, advSearchVarName))
     doAdvancedSearch(conn, colList);
 else if (cartVarExists(cart, advSearchClearVarName))
@@ -1399,7 +1404,7 @@ else if (cartNonemptyString(cart, searchVarName))
 else
     doExamples(conn, colList);
 hFreeConn(&conn);
-uglyf("Total time %ld<BR>\n", clock1000() - startTime);
+uglyf("<HR>Total time %ld<BR>\n", clock1000() - startTime);
 }
 
 void usage()
