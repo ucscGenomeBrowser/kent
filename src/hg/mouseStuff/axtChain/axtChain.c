@@ -6,6 +6,7 @@
 #include "dystring.h"
 #include "dnaseq.h"
 #include "nib.h"
+#include "twoBit.h"
 #include "fa.h"
 #include "axt.h"
 #include "psl.h"
@@ -13,7 +14,7 @@
 #include "chainBlock.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: axtChain.c,v 1.28 2004/09/08 21:58:42 baertsch Exp $";
+static char const rcsid[] = "$Id: axtChain.c,v 1.29 2004/10/21 21:34:33 kent Exp $";
 
 int minScore = 1000;
 char *detailsName = NULL;
@@ -26,6 +27,8 @@ errAbort(
   "axtChain - Chain together axt alignments.\n"
   "usage:\n"
   "   axtChain in.axt tNibDir qNibDir out.chain\n"
+  "Where tNibDir/qNibDir are either directories full of nib files, or the\n"
+  "name of a .2bit file\n"
   "options:\n"
   "   -psl Use psl instead of axt format for input\n"
   "   -faQ qNibDir is a fasta file with multiple sequences for query\n"
@@ -90,7 +93,23 @@ for (i=0; i<psl->blockCount; ++i)
     }
 }
 
-void loadIfNewSeq(char *nibDir, char *newName, char strand, 
+struct twoBitFile *twoBitOpenCached(char *path)
+/* Return open two bit file associated with path. */
+{
+static struct hash *hash = NULL;
+struct twoBitFile *tbf;
+if (hash == NULL)
+    hash = newHash(8);
+tbf = hashFindVal(hash, path);
+if (tbf == NULL)
+    {
+    tbf = twoBitOpen(path);
+    hashAdd(hash, path, tbf);
+    }
+return tbf;
+}
+
+void loadIfNewSeq(char *seqPath, boolean isTwoBit, char *newName, char strand, 
 	char **pName, struct dnaSeq **pSeq, char *pStrand)
 /* Load sequence unless it is already loaded.  Reverse complement
  * if necessary. */
@@ -109,13 +128,22 @@ else
     {
     char fileName[512];
     freeDnaSeq(pSeq);
-    snprintf(fileName, sizeof(fileName), "%s/%s.nib", nibDir, newName);
+    if (isTwoBit)
+        {
+	struct twoBitFile *tbf = twoBitOpenCached(seqPath);
+	*pSeq = seq = twoBitReadSeqFrag(tbf, newName, 0, 0);
+	verbose(1, "Loaded %d bases of %s from %s\n", seq->size, newName, seqPath);
+	}
+    else
+	{
+	snprintf(fileName, sizeof(fileName), "%s/%s.nib", seqPath, newName);
+	*pSeq = seq = nibLoadAllMasked(NIB_MASK_MIXED, fileName);
+	verbose(1, "Loaded %d bases in %s\n", seq->size, fileName);
+	}
     *pName = newName;
-    *pSeq = seq = nibLoadAllMasked(NIB_MASK_MIXED, fileName);
     *pStrand = strand;
     if (strand == '-')
-        reverseComplement(seq->dna, seq->size);
-    verbose(1, "Loaded %d bases in %s\n", seq->size, fileName);
+	reverseComplement(seq->dna, seq->size);
     }
 }
 
@@ -145,6 +173,7 @@ else
     verbose(1, "Loaded %d bases from %s fa\n", seq->size, newName);
     }
 }
+
 int boxInCmpBoth(const void *va, const void *vb)
 /* Compare to sort based on query, then target. */
 {
@@ -938,6 +967,8 @@ struct hash *faHash = newHash(0);
 struct hash *tFaHash = newHash(0);
 char comment[1024];
 FILE *faF;
+boolean qIsTwoBit = twoBitIsFile(qNibDir);
+boolean tIsTwoBit = twoBitIsFile(tNibDir);
 
 if (detailsName != NULL)
     details = mustOpen(detailsName, "w");
@@ -978,14 +1009,20 @@ for (sp = spList; sp != NULL; sp = sp->next)
         loadFaSeq(faHash, sp->qName, sp->qStrand, &qName, &qSeq, &qStrand);
         }
     else
-        loadIfNewSeq(qNibDir, sp->qName, sp->qStrand, &qName, &qSeq, &qStrand);
+	{
+        loadIfNewSeq(qNibDir, qIsTwoBit, sp->qName, sp->qStrand, 
+		&qName, &qSeq, &qStrand);
+        }
     if (optionExists("faT"))
         {
         assert (tFaHash != NULL);
         loadFaSeq(tFaHash, sp->tName, '+', &tName, &tSeq, &tStrand);
         }
     else 
-        loadIfNewSeq(tNibDir, sp->tName, '+', &tName, &tSeq, &tStrand);
+	{
+        loadIfNewSeq(tNibDir, tIsTwoBit, sp->tName, '+', 
+		&tName, &tSeq, &tStrand);
+	}
     chainPair(sp, qSeq, tSeq, &chainList, details);
     }
 slSort(&chainList, chainCmpScore);
