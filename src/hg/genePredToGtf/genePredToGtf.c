@@ -7,7 +7,7 @@
 #include "jksql.h"
 #include "genePred.h"
 
-static char const rcsid[] = "$Id: genePredToGtf.c,v 1.1 2004/02/05 05:56:15 kent Exp $";
+static char const rcsid[] = "$Id: genePredToGtf.c,v 1.2 2004/02/29 00:35:44 daryl Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -19,12 +19,14 @@ errAbort(
   "If database is 'file' then track is interpreted as a file\n"
   "rather than a table in database.\n"
   "options:\n"
-  "   -xxx=XXX\n"
+  "   -utr   Add UTRs to the output\n"
+  "   -order Order by chrom, txStart\n"
   );
 }
 
 static struct optionSpec options[] = {
-   {NULL, 0},
+   {"utr", OPTION_BOOLEAN},
+   {"order", OPTION_BOOLEAN},
 };
 
 struct genePred *genePredLoadTable(char *database, char *table)
@@ -36,7 +38,10 @@ char query[256];
 struct sqlResult *sr;
 char **row;
 
-safef(query, sizeof(query), "select * from %s", table);
+if (optionExists("order"))
+    safef(query, sizeof(query), "select * from %s order by chrom, txStart", table);
+else
+    safef(query, sizeof(query), "select * from %s", table);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -98,10 +103,26 @@ for (i=0; i<gp->exonCount; ++i)
     {
     int start = gp->exonStarts[i];
     int end = gp->exonEnds[i];
+    int exonStart = start;
+    int exonEnd = end;
+
     writeGtfLine(f, source, geneName, gp, "exon", start, end, i);
     if (start < gp->cdsStart) start = gp->cdsStart;
     if (end > gp->cdsEnd) end = gp->cdsEnd;
-    if (start < end)
+    if (optionExists("utr"))
+	{
+	if (start < end)
+	    {
+	    if (start > exonStart)
+		writeGtfLine(f, source, geneName, gp, "UTR", exonStart, start, i);
+	    writeGtfLine(f, source, geneName, gp, "CDS", start, end, i);
+	    if (end < exonEnd)
+		writeGtfLine(f, source, geneName, gp, "UTR", end, exonEnd, i);
+	    }
+	else 
+	    writeGtfLine(f, source, geneName, gp, "UTR", exonStart, exonEnd, i);
+	}
+    else if (start < end)
 	writeGtfLine(f, source, geneName, gp, "CDS", start, end, i);
     }
 }
@@ -117,9 +138,7 @@ if (sameString(database, "file"))
 else
     gpList = genePredLoadTable(database, table);
 for (gp = gpList; gp != NULL; gp = gp->next)
-    {
     genePredWriteToGtf(gp, table, dupeHash, f);
-    }
 carefulClose(&f);
 }
 
