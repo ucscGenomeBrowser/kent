@@ -2180,3 +2180,11 @@ searchType bed
 searchPriority 50
 termRegex pc[a-z][a-z].[[:alnum:]]+
 
+track encodeRegions2
+shortLabel ENCODE Region Consensus (Freeze 2)
+longLabel Consensus Orthology of ENCODE Regions from liftOver and Mercator (Freeze 2)
+group encode
+priority 170.5
+color 200,0,0
+visibility pack
+type bed 4 .
