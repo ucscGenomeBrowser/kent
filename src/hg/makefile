@@ -182,6 +182,7 @@ DIRS = \
 	qaToQac \
 	qacToQa \
 	relPairs \
+	recycleDb \
 	reviewSanity \
 	sage \
 	scanRa \
