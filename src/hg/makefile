@@ -35,3 +35,5 @@ beta:
 	cd hgTrackUi; make beta; cd ..
 	cd hgc; make beta; cd ..
 
+clean: 
+	cd lib; make clean; cd ..;
