@@ -1039,7 +1039,7 @@ struct trackGroup *genieAltTg()
 {
 struct trackGroup *tg = linkedFeaturesTg();
 tg->mapName = "genieAlt";
-tg->visibility = tvFull;
+tg->visibility = tvDense;
 tg->longLabel = "Affymetrix Gene Predictions (excluding known genes)";
 tg->shortLabel = "Affy Genes";
 tg->loadItems = loadGenieAlt;
@@ -1182,11 +1182,11 @@ return lf->name;
 }
 
 struct trackGroup *ensemblGeneTg()
-/* Make track group of genie predictions. */
+/* Make track group of Ensembl predictions. */
 {
 struct trackGroup *tg = linkedFeaturesTg();
 tg->mapName = "hgEnsGene";
-tg->visibility = tvHide;
+tg->visibility = tvDense;
 tg->longLabel = "Ensembl Gene Predictions";
 tg->shortLabel = "Ensembl Genes";
 tg->loadItems = loadEnsGene;
@@ -1202,6 +1202,30 @@ tg->mapItemName = ensGeneMapName;
 return tg;
 }
 
+void loadSoftberryGene(struct trackGroup *tg)
+/* Load up Softberry genes. */
+{
+tg->items = lfFromGenePredInRange("softberryGene", chromName, winStart, winEnd);
+}
+
+struct trackGroup *softberryGeneTg()
+/* Make track group of Softberry predictions. */
+{
+struct trackGroup *tg = linkedFeaturesTg();
+tg->mapName = "hgSoftberryGene";
+tg->visibility = tvDense;
+tg->longLabel = "Fgenesh++ Gene Predictions";
+tg->shortLabel = "Fgenesh++ Genes";
+tg->loadItems = loadSoftberryGene;
+tg->ignoresColor = FALSE;
+tg->color.r = 0;
+tg->color.g = 100;
+tg->color.b = 0;
+tg->altColor.r = (tg->color.r+255)/2;
+tg->altColor.g = (tg->color.g+255)/2;
+tg->altColor.b = (tg->color.b+255)/2;
+return tg;
+}
 
 void goldLoad(struct trackGroup *tg)
 /* Load up golden path from database table to trackGroup items. */
@@ -4107,6 +4131,7 @@ slSafeAddHead(&tGroupList, coverageTrackGroup());
 if (hTableExists("genieKnown")) slSafeAddHead(&tGroupList, genieKnownTg());
 if (hTableExists("genieAlt")) slSafeAddHead(&tGroupList, genieAltTg());
 if (hTableExists("ensGene")) slSafeAddHead(&tGroupList, ensemblGeneTg());
+if (hTableExists("softberryGene")) slSafeAddHead(&tGroupList, softberryGeneTg());
 if (chromTableExists("_mrna")) slSafeAddHead(&tGroupList, fullMrnaTg());
 if (chromTableExists("_intronEst")) slSafeAddHead(&tGroupList, intronEstTg());
 if (chromTableExists("_est")) slSafeAddHead(&tGroupList, estTg());

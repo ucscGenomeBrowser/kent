@@ -1112,18 +1112,41 @@ puts(
 void doEnsPred(char *geneName)
 /* HAndle click on Ensembl gene track. */
 {
+struct sqlConnection *conn = hAllocConn();
 htmlStart("Ensembl Prediction");
 printf("<H2>Ensembl Prediction %s</H2>\n", geneName);
 showGenePos(geneName, "ensGene");
-showProteinPrediction(geneName, "ensPep");
+if (sqlTableExists(conn, "ensPep"))
+    showProteinPrediction(geneName, "ensPep");
+htmlHorizontalLine();
+if (!sameString(database, "hg3"))
+    {
+    printf("<P>Visit <A HREF=\"http://www.ensembl.org/perl/transview?transcript=%s\" _TARGET=blank>"
+       "Ensembl TransView</A> for more information on this gene prediction.", geneName);      
+    }
+hFreeConn(&conn);
+}
+
+void doSoftberryPred(char *geneName)
+/* Handle click on Softberry gene track. */
+{
+htmlStart("Fgenesh++ Gene Prediction");
+printf("<H2>Fgenesh++ Gene Prediction %s</H2>\n", geneName);
+showGenePos(geneName, "softberryGene");
+showProteinPrediction(geneName, "softberryPep");
 htmlHorizontalLine();
 puts(
-   "<P>This gene prediction was created by "
-   "<A HREF = \"http://www.ensembl.org\" TARGET=_blank>Ensembl</A>."
-   "<P>The treatment of predicted genes in the browser is still "
-   "preliminary.  In particular gene names are not kept stable "
-   "between versions of the draft human genome.");
+   "<P>Fgenesh++ predictions are based on Softberry's gene finding software. "
+   "Fgenesh++ uses both HMMs and protein similarity to find genes.  See the "
+   "paper \"Ab initio gene finding in </I>Drosophila genomic DNA\", <I>"
+   "Genome Research</I> 10(5) 516-522 for more information.</P>"
+   "<P>The Fgenesh++ gene predictions were produced by "
+   "<A HREF=\"http://www.softberry.com\" TARGET=_blank>Softberry Inc.</A> "
+   "Commercial use of these predictions is restricted to viewing in "
+   "this browser.  Please contact Softberry Inc. to make arrangements "
+   "for further commercial access.");
 }
+
 
 void parseChromPointPos(char *pos, char *retChrom, int *retPos)
 /* Parse out chrN:123 into chrN and 123. */
@@ -1545,7 +1568,7 @@ char title[256];
 
 database = cgiOptionalString("db");
 if (database == NULL)
-    database = "hg3";
+    database = "hg5";
 hSetDb(database);
 seqName = cgiString("c");
 winStart = cgiInt("l");
@@ -1618,6 +1641,10 @@ else if (sameWord(group, "genieAlt"))
 else if (sameWord(group, "hgEnsGene"))
     {
     doEnsPred(item);
+    }
+else if (sameWord(group, "hgSoftberryGene"))
+    {
+    doSoftberryPred(item);
     }
 else if (sameWord(group, "hgGenomicDups"))
     {

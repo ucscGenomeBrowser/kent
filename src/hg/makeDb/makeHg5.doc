@@ -347,7 +347,22 @@ o - Load Genie predicted genes and associated peptides.
          mysql> delete * from genieAlt where name like 'RS.%';
          mysql> delete * from genieAlt where name like 'C.%';
 
+o - Load Softberry genes and associated peptides:
+     - cd ~/oo/bed
+     - mkdir softberry
+     - cd softberry
+     - get ftp://www.softberry.com/pub/GP_SCOCT/*
+     - ldHgGene hg5 softberryGene chr*.sgp.gff
+     - hgPepPred hg5 softberry *.pro
 
+o - Load Ensembl genes:
+     - cd ~/oo/bed
+     - mkdir ensembl
+     - wget ftp://ftp.sanger.ac.uk/pub/birney/genome/ensembl_oo23_october.gtf.gz
+     - gunzip *.gz
+     - liftUp chromRaw.gtf ../../jkStuff/liftAll.lft
+     - grep -v start_codon chromRaw.gtf | grep -v stop_codon > chrom.gtf
+     - ldHgGene hg5 ensGene chrom.gtf
 o - Load simpleRepeats
      - login to cc94
      - cd ~kent/src/hg/lib
