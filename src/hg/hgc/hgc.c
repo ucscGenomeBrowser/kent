@@ -142,7 +142,7 @@
 #include "bed6FloatScore.h"
 #include "pscreen.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.735 2004/09/01 16:06:20 braney Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.736 2004/09/01 18:05:13 braney Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -2772,9 +2772,10 @@ struct dnaSeq *tSeq;
 char query[256], **row;
 char fullTable[64];
 boolean hasBin;
-char buffer[2048], *str = buffer;
+char *buffer, *str;
 int i, j, c;
 char *ptr;
+int totalSize = 0;
 
 start = cartInt(cart, "o");
 hFindSplitTable(seqName, table, fullTable, &hasBin);
@@ -2801,6 +2802,11 @@ if (psl->strand[1] == '-')
     start = psl->tSize - end;
     reverseComplement(tSeq->dna, tSeq->size);
     }
+for (i=0; i<psl->blockCount; ++i)
+    totalSize += psl->blockSizes[i];
+
+str = buffer = needMem(totalSize + 1);
+
 for (i=0; i<psl->blockCount; ++i)
     {
     int ts = psl->tStarts[i] - start;
