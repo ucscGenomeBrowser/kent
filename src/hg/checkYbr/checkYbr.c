@@ -7,7 +7,7 @@
 #include "fa.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: checkYbr.c,v 1.4 2003/05/06 07:22:15 kate Exp $";
+static char const rcsid[] = "$Id: checkYbr.c,v 1.5 2003/07/28 20:30:49 booch Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -131,7 +131,7 @@ while (faSizeNext(lf, comment, &size))
 	}
     name[9] = '\0';
     totSize += size;
-    if (name == NULL || !startsWith("NT_", name))
+    if (name == NULL || (!startsWith("NT_", name) && !startsWith("NG_", name)))
 	{
 	++problemCount;
         /* printf("%s has an entry which doesn't have NT_ as a last word\n", fileName); */
@@ -266,7 +266,7 @@ void checkOurDir(char *ourDir, struct contig *contigList, struct hash *hash)
 struct us
     {
     struct us *next;    /* Next in list */
-    char *contig;	/* NT_XXX */
+    char *contig;	/* NT_XXXXXX or NG_XXXXXX */
     char *chrom;        /* 1, 2, 3, etc. */
     };
 struct hash *ourHash = newHash(0);
@@ -283,7 +283,7 @@ for (chromFi = chromList; chromFi != NULL; chromFi = chromFi->next)
     if (chromFi->isDir && strlen(chromFi->name) <= 2)
         {
 	sprintf(chromDir, "%s/%s", ourDir, chromFi->name);
-	ctgList = listDirX(chromDir, "NT_*", FALSE);
+	ctgList = listDirX(chromDir, "N?_*", FALSE);
 	for (ctgFi = ctgList; ctgFi != NULL; ctgFi = ctgFi->next)
 	    {
 	    if (ctgFi->isDir)
