@@ -127,7 +127,7 @@ for (fi = fiList; fi != NULL; fi = fi->next)
 	    }
 	else
 	    {
-	    fprintf(gapTab, "%u\t", hFindBin(start, end));
+	    fprintf(goldTab, "%u\t", hFindBin(start, end));
 	    mustWrite(goldTab, line, lineSize);
 	    }
 	}

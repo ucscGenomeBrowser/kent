@@ -504,8 +504,7 @@ printRnaSpecs(acc);
 sprintf(table, "all_%s", type);
 hFindSplitTable(seqName, table, table, &hasBin);
 
-sprintf(query, "select * from %s where qName = '%s'",
-    table, acc);
+sprintf(query, "select * from %s where qName = '%s'", table, acc);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -581,13 +580,14 @@ struct agpFrag frag;
 struct dnaSeq *seq;
 char dnaName[256];
 int start = cgiInt("o");
+int rowOffset = hOffsetPastBin(seqName, "gold");
 
 htmlStart(fragName);
 sprintf(query, "select * from %s_gold where frag = '%s' and chromStart = %d", 
 	seqName, fragName, start+1);
 sr = sqlMustGetResult(conn, query);
 row = sqlNextRow(sr);
-agpFragStaticLoad(row, &frag);
+agpFragStaticLoad(row+rowOffset, &frag);
 
 printf("Fragment %s bases %d-%d strand %s makes up draft sequence of bases %d-%d of chromosome %s<BR>\n",
 	frag.frag, frag.fragStart+1, frag.fragEnd, frag.strand,
@@ -622,6 +622,22 @@ else
     printf("This gap is bridged by mRNA, EST or BAC end pairs.\n");
 }
 
+void selectOneRow(struct sqlConnection *conn, char *table, char *query, 
+	struct sqlResult **retSr, char ***retRow)
+/* Do query and return one row offset by bin as needed. */
+{
+char fullTable[64];
+boolean hasBin;
+struct sqlResult *sr;
+char **row;
+if (!hFindSplitTable(seqName, table, fullTable, &hasBin))
+    errAbort("Table %s doesn't exist in database", table);
+*retSr = sqlGetResult(conn, query);
+if ((row = sqlNextRow(*retSr)) == NULL)
+    errAbort("No match to query '%s'", query);
+*retRow = row + hasBin;
+}
+
 void doHgContig(char *ctgName)
 /* Click on a contig. */
 {
@@ -634,8 +650,7 @@ int cloneCount;
 
 htmlStart(ctgName);
 sprintf(query, "select * from ctgPos where contig = '%s'", ctgName);
-sr = sqlMustGetResult(conn, query);
-row = sqlNextRow(sr);
+selectOneRow(conn, "ctgPos", query, &sr, &row);
 ctg = ctgPosLoad(row);
 sqlFreeResult(&sr);
 sprintf(query, 
@@ -680,8 +695,7 @@ int fragCount;
 
 htmlStart(cloneName);
 sprintf(query, "select * from clonePos where name = '%s'", cloneName);
-sr = sqlMustGetResult(conn, query);
-row = sqlNextRow(sr);
+selectOneRow(conn, "clonePos", query, &sr, &row);
 clone = clonePosLoad(row);
 sqlFreeResult(&sr);
 
@@ -724,8 +738,7 @@ struct dnaSeq *seqList, *seq;
 
 htmlStart(cloneName);
 sprintf(query, "select * from clonePos where name = '%s'", cloneName);
-sr = sqlMustGetResult(conn, query);
-row = sqlNextRow(sr);
+selectOneRow(conn, "clonePos", query, &sr, &row);
 clone = clonePosLoad(row);
 sqlFreeResult(&sr);
 
@@ -1307,12 +1320,13 @@ if (cgiVarExists("o"))
     char **row;
     char query[256];
     int start = cgiInt("o");
+    int rowOffset = hOffsetPastBin(seqName, "simpleRepeat");
     sprintf(query, "select * from simpleRepeat where  name = '%s' and chrom = '%s' and chromStart = %d",
 	    item, seqName, start);
     sr = sqlGetResult(conn, query);
     while ((row = sqlNextRow(sr)) != NULL)
 	{
-	rep = simpleRepeatLoad(row);
+	rep = simpleRepeatLoad(row+rowOffset);
 	printf("<B>Chromosome:</B> %s<BR>\n", skipChr(rep->chrom));
 	printf("<B>Begin in chromosome:</B> %d<BR>\n", rep->chromStart);
 	printf("<B>End in chromosome:</B> %d<BR>\n", rep->chromEnd);
@@ -1361,12 +1375,13 @@ if (cgiVarExists("o"))
     char **row;
     char query[256];
     int start = cgiInt("o");
+    int rowOffset = hOffsetPastBin(seqName, "softPromoter");
     sprintf(query, "select * from %s where  name = '%s' and chrom = '%s' and chromStart = %d",
 	    "softPromoter", item, seqName, start);
     sr = sqlGetResult(conn, query);
     while ((row = sqlNextRow(sr)) != NULL)
 	{
-	pro = softPromoterLoad(row);
+	pro = softPromoterLoad(row+rowOffset);
 	bedPrintPos((struct bed *)pro);
 	printf("<B>Short Name:</B> %s<BR>\n", pro->name);
 	printf("<B>Full Name:</B> %s<BR>\n", pro->origName);
@@ -1436,12 +1451,13 @@ if (cgiVarExists("o"))
     char **row;
     char query[256];
     int start = cgiInt("o");
+    int rowOffset = hOffsetPastBin(seqName, table);
     sprintf(query, "select * from %s where  name = '%s' and chrom = '%s' and chromStart = %d",
 	    table, item, seqName, start);
     sr = sqlGetResult(conn, query);
     while ((row = sqlNextRow(sr)) != NULL)
 	{
-	island = cpgIslandLoad(row);
+	island = cpgIslandLoad(row+rowOffset);
 	bedPrintPos((struct bed *)island);
 	printf("<B>Size:</B> %d<BR>\n", island->chromEnd - island->chromStart);
 	printf("<B>CpG count:</B> %d<BR>\n", island->cpgNum);
@@ -1524,12 +1540,13 @@ struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr;
 char **row;
 struct genePred *gp;
+int rowOffset = hOffsetPastBin(seqName, table);
 
 sprintf(query, "select * from %s where name = '%s'", table, name);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
-    gp = genePredLoad(row);
+    gp = genePredLoad(row + rowOffset);
     printPos(gp->chrom, gp->txStart, gp->txEnd, gp->strand);
     genePredFree(&gp);
     }
@@ -1678,13 +1695,14 @@ char **row;
 struct genePred *gp;
 struct dnaSeq *seq;
 int cdsStart, cdsEnd;
+int rowOffset = hOffsetPastBin(seqName, table);
 
 htmlStart("DNA Near Gene");
 sprintf(query, "select * from %s where name = '%s'", table, geneName);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
-    gp = genePredLoad(row);
+    gp = genePredLoad(row+rowOffset);
     seq = getCdnaSeq(gp);
     getCdsInMrna(gp, &cdsStart, &cdsEnd);
     toUpperN(seq->dna + cdsStart, cdsEnd - cdsStart);
@@ -1794,13 +1812,14 @@ char *how = cgiString("how");
 int start, end, promoSize;
 boolean isRev;
 char faLine[256];
+int rowOffset = hOffsetPastBin(seqName, table);
 
 htmlStart("Predicted mRNA");
 sprintf(query, "select * from %s where name = '%s'", table, geneName);
 sr = sqlGetResult(conn, query);
 if ((row = sqlNextRow(sr)) != NULL)
     {
-    gp = genePredLoad(row);
+    gp = genePredLoad(row+rowOffset);
     isRev = (gp->strand[0] == '-');
     start = gp->txStart;
     end = gp->txEnd;
@@ -2162,6 +2181,7 @@ printf("<H2>Genomic Duplication</H2>\n");
 if (cgiVarExists("o"))
     {
     int start = cgiInt("o");
+    int rowOffset = hOffsetPastBin(seqName, "genomicDups");
     parseChromPointPos(dupName, oChrom, &oStart);
 
     sprintf(query, "select * from genomicDups where chrom = '%s' and chromStart = %d "
@@ -2170,7 +2190,7 @@ if (cgiVarExists("o"))
     sr = sqlGetResult(conn, query);
     while (row = sqlNextRow(sr))
 	{
-	genomicDupsStaticLoad(row, &dup);
+	genomicDupsStaticLoad(row+rowOffset, &dup);
 	printf("<B>First Position:</B> %s:%d-%d<BR>\n",
 	   dup.chrom, dup.chromStart, dup.chromEnd);
 	printf("<B>Second Position:</B> %s:%d-%d<BR>\n",
@@ -2209,6 +2229,7 @@ char **row;
 char query[256];
 struct browserTable *table = NULL;
 struct browserTable *tableList = checkDbForTables();
+int rowOffset;
 table = getBrowserTableFromList("hgExoFish", tableList);
 
 htmlStart("Exofish Ecores");
@@ -2216,12 +2237,13 @@ printf("<H2>Exofish ECORES</A></H2>\n");
 if(table != NULL)
     printf("<b>version:</b> %s<br>%s<br><br>\n", table->version,table->other);
 
+rowOffset = hOffsetPastBin(seqName, "exoFish");
 sprintf(query, "select * from exoFish where chrom = '%s' and chromStart = %d",
     seqName, start);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
-    exoFishStaticLoad(row, &el);
+    exoFishStaticLoad(row+rowOffset, &el);
     if (!sameString(el.name, "."))
          {
 	 printf("<B>Exofish ID:</B> "
@@ -2264,16 +2286,18 @@ struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr;
 char **row;
 char query[256];
+int rowOffset;
 
 htmlStart("Exonerate Mouse");
 printf("<H2>Exonerate Mouse</A></H2>\n");
 
+rowOffset = hOffsetPastBin(seqName, "exoMouse");
 sprintf(query, "select * from exoMouse where chrom = '%s' and chromStart = %d and name = '%s'",
     seqName, start, itemName);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
-    roughAliStaticLoad(row, &el);
+    roughAliStaticLoad(row+rowOffset, &el);
     printf("<B>score:</B> %d<BR>\n", el.score);
     bedPrintPos((struct bed *)&el);
     htmlHorizontalLine();
@@ -2415,16 +2439,18 @@ struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr;
 char **row;
 char query[256];
+int rowOffset;
 
 htmlStart("EST 3' Ends");
 printf("<H2>EST 3' Ends</H2>\n");
 
+rowOffset = hOffsetPastBin(seqName, "est3");
 sprintf(query, "select * from est3 where chrom = '%s' and chromStart = %d",
     seqName, start);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
-    est3StaticLoad(row, &el);
+    est3StaticLoad(row+rowOffset, &el);
     printf("<B>EST 3' End Count:</B> %d<BR>\n", el.estCount);
     bedPrintPos((struct bed *)&el);
     printf("<B>strand:</B> %s<BR>\n", el.strand);
@@ -2450,10 +2476,11 @@ char **row;
 char query[256];
 struct browserTable *table = NULL;
 struct browserTable *tableList = checkDbForTables();
+int rowOffset;
 table = getBrowserTableFromList("hgRnaGene", tableList);
 
 htmlStart("RNA Genes");
-
+rowOffset = hOffsetPastBin(seqName, "rnaGene");
 printf("<H2>RNA Gene %s</H2>\n", itemName);
 if(table != NULL)
     printf("<b>version:</b> %s<br>%s<br><br>\n", table->version,table->other);
@@ -2497,6 +2524,7 @@ struct sqlResult *sr2;
 char **row2;
 char *alias;
 boolean doAlias = sqlTableExists(conn, "stsAlias");
+int rowOffset;
 
 htmlStart("STS Marker");
 printf("<H2>STS Marker %s</H2>\n", item);
@@ -2506,10 +2534,11 @@ if (sameString(item, "NONAME"))
 else
     sprintf(query, "select * from stsMarker where name = '%s'", item);
 
+rowOffset = hOffsetPastBin(seqName, "stsMarker");
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
-    stsMarkerStaticLoad(row, &el);
+    stsMarkerStaticLoad(row+rowOffset, &el);
     if (firstTime)
 	{
 	boolean firstAlias = TRUE;
@@ -2602,17 +2631,18 @@ struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr;
 char **row;
 char query[256];
+int rowOffset;
 
 htmlStart("Mouse Synteny");
 printf("<H2>Mouse Synteny</H2>\n");
 
 sprintf(query, "select * from mouseSyn where chrom = '%s' and chromStart = %d",
     seqName, start);
-
+rowOffset = hOffsetPastBin(seqName, "mouseSyn");
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
-    mouseSynStaticLoad(row, &el);
+    mouseSynStaticLoad(row+rowOffset, &el);
     printf("<B>mouse chromosome:</B> %s<BR>\n", el.name+6);
     printf("<B>human chromosome:</B> %s<BR>\n", skipChr(el.chrom));
     printf("<B>human starting base:</B> %d<BR>\n", el.chromStart);
@@ -2641,16 +2671,18 @@ char **row;
 char query[256];
 int start = cgiInt("o");
 struct cytoBand el;
+int rowOffset;
 
 htmlStart("Chromosome Bands");
 printf("<H2>Chromosome Bands</H2>\n");
 sprintf(query, 
 	"select * from cytoBand where chrom = '%s' and chromStart = '%d'",
 	seqName, start);
+rowOffset = hOffsetPastBin(seqName, "cytoBand");
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
-    cytoBandStaticLoad(row, &el);
+    cytoBandStaticLoad(row+rowOffset, &el);
     bedPrintPos((struct bed *)&el);
     htmlHorizontalLine();
     }
@@ -2689,17 +2721,19 @@ struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr;
 char **row;
 char query[256];
+int rowOffset;
 
 htmlStart("Single Nucleotide Polymorphism (SNP)");
 printf("<H2>Single Nucleotide Polymorphism (SNP) rs%s</H2>\n", itemName);
 
 sprintf(query, "select * from %s where chrom = '%s' and chromStart = %d and name = '%s'",
     group, seqName, start, itemName);
+rowOffset = hOffsetPastBin(seqName, group);
 
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
-    snpStaticLoad(row, &snp);
+    snpStaticLoad(row+rowOffset, &snp);
     bedPrintPos((struct bed *)&snp);
     }
 printf(
@@ -2940,13 +2974,14 @@ struct exprBed *expList = NULL, *exp = NULL;
 struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr;
 char **row;
+int rowOffset = hOffsetPastBin(seqName, table);
 sprintf(query, 
 	"select * from %s where chrom = '%s' and chromStart<%u and chromEnd>%u order by chromStart",
 	table, chrom, end, start);
 sr = sqlGetResult(conn,query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
-    exp = exprBedLoad(row);
+    exp = exprBedLoad(row+rowOffset);
     slAddHead(&expList, exp);
     }
 

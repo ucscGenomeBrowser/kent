@@ -591,27 +591,13 @@ for (i=0; i<=steps; ++i)
 void makeBrownShades(struct memGfx *mg)
 /* Make some shades of brown in display. */
 {
-int i;
 mgMakeColorGradient(mg, &tanColor, &brownColor, maxShade+1, shadesOfBrown);
 }
 
 void makeSeaShades(struct memGfx *mg)
 /* Make some shades of brown in display. */
 {
-int i;
 mgMakeColorGradient(mg, &lightSeaColor, &darkSeaColor, maxShade+1, shadesOfSea);
-}
-
-
-int percentGrayIx(int percent)
-/* Return gray shade corresponding to a number from 50 - 100 */
-{
-int opPercent = 100-percent;
-int adjPercent = 100-opPercent-(opPercent>>1);
-int level = (adjPercent*maxShade + 50)/100;
-if (level < 0) level = 0;
-if (level > maxShade) level = maxShade;
-return level;
 }
 
 int grayInRange(int val, int minVal, int maxVal)
@@ -623,6 +609,13 @@ level = ((val-minVal)*maxShade + (range>>1))/range;
 if (level <= 0) level = 1;
 if (level > maxShade) level = maxShade;
 return level;
+}
+
+
+int percentGrayIx(int percent)
+/* Return gray shade corresponding to a number from 50 - 100 */
+{
+return grayInRange(percent, 50, 100);
 }
 
 
@@ -1715,20 +1708,18 @@ struct linkedFeatures *lfFromGenePredInRange(char *table,
 	char *chrom, int start, int end)
 /* Return linked features from range of a gene prediction table. */
 {
-char query[256];
 struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr = NULL;
 char **row;
 struct linkedFeatures *lfList = NULL, *lf;
 int grayIx = maxShade;
+int rowOffset;
 
-sprintf(query, "select * from %s where chrom='%s' and txStart<%u and txEnd>%u",
-    table, chrom, winEnd, winStart);
-sr = sqlGetResult(conn, query);
+sr = hRangeQuery(conn, table, chrom, start, end, NULL, &rowOffset);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     struct simpleFeature *sfList = NULL, *sf;
-    struct genePred *gp = genePredLoad(row);
+    struct genePred *gp = genePredLoad(row + rowOffset);
     unsigned *starts = gp->exonStarts;
     unsigned *ends = gp->exonEnds;
     int i, blockCount = gp->exonCount;
@@ -2082,22 +2073,18 @@ return tg;
 void goldLoad(struct trackGroup *tg)
 /* Load up golden path from database table to trackGroup items. */
 {
-char table[64];
-char query[256];
 struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr = NULL;
 char **row;
 struct agpFrag *fragList = NULL, *frag;
 struct agpGap *gapList = NULL, *gap;
+int rowOffset;
 
 /* Get the frags and load into tg->items. */
-sprintf(table, "%s_gold", chromName);
-sprintf(query, "select * from %s where chromStart<%u and chromEnd>%u",
-    table, winEnd, winStart);
-sr = sqlGetResult(conn, query);
+sr = hRangeQuery(conn, "gold", chromName, winStart, winEnd, NULL, &rowOffset);
 while ((row = sqlNextRow(sr)) != NULL)
     {
-    frag = agpFragLoad(row);
+    frag = agpFragLoad(row+rowOffset);
     slAddHead(&fragList, frag);
     }
 slReverse(&fragList);
@@ -2105,13 +2092,10 @@ sqlFreeResult(&sr);
 tg->items = fragList;
 
 /* Get the gaps into tg->customPt. */
-sprintf(table, "%s_gap", chromName);
-sprintf(query, "select * from %s where chromStart<%u and chromEnd>%u",
-    table, winEnd, winStart);
-sr = sqlGetResult(conn, query);
+sr = hRangeQuery(conn, "gap", chromName, winStart, winEnd, NULL, &rowOffset);
 while ((row = sqlNextRow(sr)) != NULL)
     {
-    gap = agpGapLoad(row);
+    gap = agpGapLoad(row+rowOffset);
     slAddHead(&gapList, gap);
     }
 slReverse(&gapList);
@@ -2417,6 +2401,8 @@ return tg;
 
 typedef struct slList *(*ItemLoader)(char **row);
 
+
+#ifdef OLD 
 void bedLoadQuery(struct trackGroup *tg, char *query, ItemLoader loader)
 /* Load up bed items from a query. */
 {
@@ -2454,6 +2440,28 @@ char query[256];
 sprintf(query, "select * from %s where chrom = '%s' and chromStart<%u and chromEnd>%u",
     table, chromName, winEnd, winStart);
 bedLoadQuery(tg, query, loader);
+}
+#endif /* OLD */
+
+void bedLoadItem(struct trackGroup *tg, char *table, ItemLoader loader)
+/* Generic tg->item loader. */
+{
+struct sqlConnection *conn = hAllocConn();
+int rowOffset;
+struct sqlResult *sr = hRangeQuery(conn, table, chromName, 
+	winStart, winEnd, NULL, &rowOffset);
+char **row;
+struct slList *itemList = NULL, *item;
+
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    item = loader(row + rowOffset);
+    slAddHead(&itemList, item);
+    }
+slReverse(&itemList);
+sqlFreeResult(&sr);
+tg->items = itemList;
+hFreeConn(&conn);
 }
 
 static void bedDrawSimple(struct trackGroup *tg, int seqStart, int seqEnd,
@@ -3696,24 +3704,6 @@ for (ix = 1; ix < symCount; ++ix)
 return ix;
 }
 
-#ifdef OLD
-void wabaItemMap(struct trackGroup *tg, void *item, int x, int y, int width, int height)
-/* Print image map line on one waba item. */
-{
-struct wabaChromHit *wch = item;
-char *id = tg->mapName;
-char *shortName = cgiEncode(tg->mapItemName(tg, item));
-char *statusLine = cgiEncode(tg->itemName(tg, item));
-
-printf("<AREA SHAPE=RECT COORDS=\"%d,%d,%d,%d\" ", x, y, x+width, y+height);
-printf("HREF=\"../cgi-bin/hgc?g=%s&i=%s&c=%s&l=%d&r=%d&db=%s&o=%d\" ", 
-    id, shortName, chromName, winStart, winEnd, database, wch->chromStart);
-printf("ALT= \"%s\" TITLE=\"%s\">\n", statusLine, statusLine); 
-freeMem(shortName);
-freeMem(statusLine);
-}
-#endif /* OLD */
-
 
 static void wabaDraw(struct trackGroup *tg, int seqStart, int seqEnd,
         struct memGfx *mg, int xOff, int yOff, int width, 
@@ -4522,8 +4512,6 @@ if (glCloneList == NULL)
     }
 }
 
-
-
 void coverageLoad(struct trackGroup *tg)
 /* Load up clone alignments from database tables and organize. */
 {
@@ -4567,7 +4555,7 @@ return tg;
 void gapLoad(struct trackGroup *tg)
 /* Load up clone alignments from database tables and organize. */
 {
-bedLoadChrom(tg, "gap", (ItemLoader)agpGapLoad);
+bedLoadItem(tg, "gap", (ItemLoader)agpGapLoad);
 }
 
 void gapFree(struct trackGroup *tg)
@@ -4634,14 +4622,6 @@ for (item = tg->items; item != NULL; item = item->next)
 	sprintf(name, "%s", item->type);
 	mapBoxHc(item->chromStart, item->chromEnd, x1, y, w, heightPer, tg->mapName,
 	    name, name);
-#ifdef OLDCRUFT
-	printf("<AREA SHAPE=RECT COORDS=\"%d,%d,%d,%d\" ", x1, y, x1+w, y+heightPer);
-	printf("HREF=\"../cgi-bin/hgc?g=%s&i=%s&c=%s&l=%d&r=%d&db=%s&o=%d\" ", 
-	    tg->mapName, name, chromName, winStart, winEnd, database, 
-	    item->chromStart);
-	printf("ALT= \"%s bridged? %s\" TITLE=\"%s bridged? %s\">\n", item->type, item->bridge,
-		item->type, item->bridge); 
-#endif /* OLDCRUFT */
 	y += lineHeight;
 	}
     }
