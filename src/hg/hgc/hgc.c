@@ -122,7 +122,7 @@
 #include "sgdDescription.h"
 #include "hgFind.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.537.2.2 2003/12/24 18:20:27 daryl Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.537.2.3 2003/12/29 06:14:15 daryl Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -9981,7 +9981,7 @@ if (snp!=NULL)
     printf("Sequence in Assembly:&nbsp;%s<BR>\n",snp->assembly);
     printf("Alternate Sequence:&nbsp;&nbsp;&nbsp;%s<BR></font>\n",snp->alternate);
     }
-else errAbort("<BR>%s<BR>\n",query);
+else printf("Supporting details are not currently available for this SNP.\n");
 dbSnpRSFree(&snp);
 sqlDisconnect(&conn);
 }
@@ -10156,7 +10156,7 @@ if (snp!=NULL)
     printf("PD24:&nbsp;&nbsp;&nbsp;&nbsp;%s&nbsp;&nbsp;", snp->PD24);
     printf("\n</font>\n");
     }
-else errAbort("<BR>%s<BR>\n",query);
+/* else errAbort("<BR>%s<BR>\n",query); */
 affyGenoDetailsFree(&snp);
 sqlDisconnect(&conn);
 }
@@ -10236,7 +10236,7 @@ if (snp!=NULL)
 
     doSnpLocusLink(tdb, name);
     }
-else errAbort("<BR>Error in Query:\n%s<BR>\n",query);
+/* else errAbort("<BR>Error in Query:\n%s<BR>\n",query); */
 affy10KDetailsFree(&snp);
 sqlDisconnect(&conn);
 }
