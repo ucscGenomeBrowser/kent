@@ -75,7 +75,7 @@
 #include "cdsColors.h"
 #include "cds.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.653 2004/01/09 22:13:11 hiram Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.654 2004/01/10 08:22:30 jill Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
@@ -6907,6 +6907,8 @@ char *orgEnc = cgiEncode(organism);
 hPrintf("<TABLE WIDTH=\"100%%\" BGCOLOR=\"#000000\" BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"1\"><TR><TD>\n");
 hPrintf("<TABLE WIDTH=\"100%%\" BGCOLOR=\"#536ED3\" BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"2\"><TR>\n");
 hPrintf("<TD ALIGN=CENTER><A HREF=\"/index.html?org=%s\">%s</A></TD>", orgEnc, wrapWhiteFont("Home"));
+
+hPrintf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/hgGateway?org=%s&db=%s&%s\">%s</A></TD>", orgEnc, database, uiVars->string, wrapWhiteFont("Genomes"));
 
 if (gotBlat)
     {
