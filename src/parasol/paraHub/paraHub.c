@@ -66,7 +66,7 @@
 #include "paraHub.h"
 #include "machSpec.h"
 
-int version = 6;	/* Version number. */
+int version = 7;	/* Version number. */
 
 /* Some command-line configurable quantities and their defaults. */
 int jobCheckPeriod = 10;	/* Minutes between checking running jobs. */
