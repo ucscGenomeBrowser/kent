@@ -41,7 +41,7 @@
 #define	WIG_NO_DATA	128
 #define MAX_BYTE_VALUE	127
 
-static char const rcsid[] = "$Id: wigAsciiToBinary.c,v 1.17 2004/01/08 19:17:22 hiram Exp $";
+static char const rcsid[] = "$Id: wigAsciiToBinary.c,v 1.18 2004/01/09 22:06:43 hiram Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -86,14 +86,14 @@ errAbort(
     "\t-dataSpan=N - # of bases spanned for each data point, default 1\n"
     "\t-chrom=chrN - this data is for chrN\n"
     "\t-wibFile=chrN - to name the .wib output file\n"
-    "\t-name=<feature name> - to name the feature, default chrN or -chrom specified\n"
+    "\t-name=<feature name> - to name the feature, default chrN or\n\t\t-chrom specified\n"
     "\t-verbose - display process while underway\n"
     "\t<file names> - list of files to process\n"
     "If the name of the input files are of the form: chrN.<....> this will\n"
     "\tset the output file names.  Otherwise use the -wibFile option.\n"
     "Each ascii file is a two column file.  Whitespace separator\n"
-    "First column of data is a chromosome location.\n"
-    "Second column is data value for that location, any real data value allowed.\n"
+    "First column of data is a chromosome location (IN NUMERICAL ORDER !).\n"
+    "Second column is data value for that location, any real data value allowed."
 );
 }
 
@@ -106,7 +106,6 @@ static char *chromName = (char *) NULL;	/* pseudo bed-6 data to follow */
 static char featureName[254];			/* the name of this feature */
 static unsigned long long rowCount = 0;	/* to count rows output */
 static char spanName[64];		/* short-hand name for dataSpan */
-static char strand = '+';		/* may never use - strand ? */
 static off_t fileOffsetBegin = 0;	/* where this bin started in binary */
 static char *binfile = (char *) NULL;	/* file name of binary data file */
 static unsigned long long Offset = 0;	/* from data input	*/
@@ -123,8 +122,6 @@ static double overallLowerLimit;	/* for the complete set of data */
  *	places in the code.
  *	Definition of this row format can be found in hg/inc/wiggle.h
  *	and hg/lib/wiggle.as, etc ...
- *	Probably do not need the strand, but will
- *	it them around in case some good use can be found later.
  */
 static void output_row()
 {
@@ -133,8 +130,6 @@ double upperLimit = -1.0e+300;
 double dataRange = 0.0;
 double sumData = 0.0;
 double sumSquares = 0.0;
-int maxScore = 0;		/* max score in this bin */
-int minScore = 1000000;		/* min score in this bin */
 unsigned long long i;
 unsigned long long validCount = 0; /* number of valid data points */
 
@@ -161,8 +156,6 @@ if (bincount)
     /*	With limits determined, can now scale and output the values
      *  compressed down to byte data values for the binary file
      */
-    maxScore = 0;
-    minScore = 1000000;
     for (i=0; i < bincount; ++i)
 	{
 	int byteOutput;	/* should be unsigned char, but fputc() wants int */
@@ -179,10 +172,6 @@ if (bincount)
 		byteOutput = WIG_NO_DATA;
 	    }
 	fputc(byteOutput,binout);	/*	output a data byte */
-	if (byteOutput > maxScore )
-	    maxScore = byteOutput;
-	if (byteOutput < minScore )
-	    minScore = byteOutput;
 	}
 
     chromEnd = chromStart + (bincount * dataSpan);
@@ -191,10 +180,10 @@ if (bincount)
     printf("row: %llu %llu-%llu total: %llu valid: %llu, miss: %llu, file offset: %llu\n", rowCount, chromStart+add_offset, chromEnd+add_offset, bincount, validCount, bincount-validCount, fileOffsetBegin );
 	}
     fprintf( wigout,
-"%s\t%llu\t%llu\t%s.%llu_%s\t%d\t%c\t%d\t%llu\t%llu\t%llu\t%s\t%g\t%g\t%llu\t%g\t%g\n",
+"%s\t%llu\t%llu\t%s.%llu_%s\t%llu\t%llu\t%llu\t%s\t%g\t%g\t%llu\t%g\t%g\n",
 	chromName, chromStart+add_offset, chromEnd+add_offset,
-	featureName, rowCount, spanName, maxScore, strand, minScore,
-	dataSpan, bincount, fileOffsetBegin, binfile, lowerLimit,
+	featureName, rowCount, spanName, dataSpan, bincount,
+	fileOffsetBegin, basename(binfile), lowerLimit,
 	dataRange, validCount, sumData, sumSquares );
     ++rowCount;
     }
