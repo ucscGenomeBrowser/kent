@@ -10,7 +10,7 @@
 #include "portable.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: intersect.c,v 1.2 2004/07/21 03:28:46 kent Exp $";
+static char const rcsid[] = "$Id: intersect.c,v 1.3 2004/07/21 03:43:05 kent Exp $";
 
 /* We keep two copies of variables, so that we can
  * cancel out of the page. */
@@ -92,17 +92,17 @@ hPrintf("These combinations will maintain the gene/alignment structure (if any) 
 op = cartUsualString(cart, hgtaNextIntersectOp, "any");
 jsTrackingVar("op", op);
 makeOpButton("any", op);
-printf("All %s records that have any overlap with %s <P>\n",
+printf("All %s records that have any overlap with %s <BR>\n",
        name, iName);
 makeOpButton("none", op);
-printf("All %s records that have no overlap with %s <P>\n",
+printf("All %s records that have no overlap with %s <BR>\n",
        name, iName);
 makeOpButton("more", op);
 printf("All %s records that have at least ",
        name);
 setting = cartCgiUsualString(cart, hgtaNextMoreThreshold, "80");
 cgiMakeTextVar(hgtaNextMoreThreshold, setting, 3);
-printf(" %% overlap with %s <P>\n", iName);
+printf(" %% overlap with %s <BR>\n", iName);
 makeOpButton("less", op);
 printf("All %s records that have at most ",
        name);
@@ -115,16 +115,16 @@ printf("These combinations will discard the gene/alignment structure (if any) of
 puts("To complement a table means to consider a position included if it \n"
      "is <I>not</I> included in the table. <P>");
 makeOpButton("and", op);
-printf("Base-pair-wise intersection (AND) of %s and %s <P>\n",
+printf("Base-pair-wise intersection (AND) of %s and %s <BR>\n",
        name, iName);
 makeOpButton("or", op);
 printf("Base-pair-wise union (OR) of %s and %s <P>\n",
        name, iName);
-jsMakeTrackingCheckBox(hgtaNextInvertTable, "invertTable", FALSE);
-// cgiMakeCheckBox("tbInvertTable", cgiBoolean("tbInvertTable"));
-printf("Complement %s before intersection/union <P>\n", name);
-jsMakeTrackingCheckBox(hgtaNextInvertTable2, "invertTable2", FALSE);
-// cgiMakeCheckBox("tbInvertTable2", cgiBoolean("tbInvertTable2"));
+jsMakeTrackingCheckBox(hgtaNextInvertTable, "invertTable", 
+	varOn(hgtaInvertTable));
+printf("Complement %s before intersection/union <BR>\n", name);
+jsMakeTrackingCheckBox(hgtaNextInvertTable2, "invertTable2", 
+	varOn(hgtaInvertTable2));
 printf("Complement %s before intersection/union <P>\n", iName);
 
 cgiMakeButton(hgtaDoIntersectSubmit, "Submit");

@@ -15,11 +15,11 @@
 #include "joiner.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: filterFields.c,v 1.1 2004/07/19 20:17:48 kent Exp $";
+static char const rcsid[] = "$Id: filterFields.c,v 1.2 2004/07/21 03:43:04 kent Exp $";
 
 /* ------- Stuff shared by Select Fields and Filters Pages ----------*/
 
-static boolean varOn(char *var)
+boolean varOn(char *var)
 /* Return TRUE if variable exists and is set. */
 {
 return cartVarExists(cart, var) && cartBoolean(cart, var);

@@ -91,6 +91,9 @@ void jsMakeTrackingCheckBox(char *cgiVar, char *jsVar, boolean usualVal);
 
 /* ---------- Other UI stuff. ----------------------*/
 
+boolean varOn(char *var);
+/* Return TRUE if variable exists and is set. */
+
 void printMainHelp();
 /* Put up main page help info. */
 
