@@ -31,7 +31,7 @@ if (!suppressHtml)
 
 
 void aaPropertyInit(int *hasResFreq)
-// initialize AA properties 
+/* initialize AA properties */
 {
 int i, j, ia, iaCnt;
 
@@ -67,33 +67,33 @@ aa_attrib['I'] = NEUTRAL;
 aa_attrib['L'] = NEUTRAL;
 aa_attrib['G'] = NEUTRAL;
 
-//Ala:  1.800  Arg: -4.500  Asn: -3.500  Asp: -3.500  Cys:  2.500  Gln: -3.500
+/* Ala:  1.800  Arg: -4.500  Asn: -3.500  Asp: -3.500  Cys:  2.500  Gln: -3.500 */
 aa_hydro['A'] =  1.800;
 aa_hydro['R'] = -4.500;
 aa_hydro['N'] = -3.500;
 aa_hydro['D'] = -3.500;
 aa_hydro['C'] =  2.500;
 aa_hydro['Q'] = -3.500;
-//Glu: -3.500  Gly: -0.400  His: -3.200  Ile:  4.500  Leu:  3.800  Lys: -3.900
+/* Glu: -3.500  Gly: -0.400  His: -3.200  Ile:  4.500  Leu:  3.800  Lys: -3.900 */
 aa_hydro['E'] = -3.500;
 aa_hydro['G'] = -0.400;
 aa_hydro['H'] = -3.200;
 aa_hydro['I'] =  4.500;
 aa_hydro['L'] =  3.800;
 aa_hydro['K'] = -3.900;
-//Met:  1.900  Phe:  2.800  Pro: -1.600  Ser: -0.800  Thr: -0.700  Trp: -0.900
+/* Met:  1.900  Phe:  2.800  Pro: -1.600  Ser: -0.800  Thr: -0.700  Trp: -0.900 */
 aa_hydro['M'] =  1.900;
 aa_hydro['F'] =  2.800;
 aa_hydro['P'] = -1.600;
 aa_hydro['S'] = -0.800;
 aa_hydro['T'] = -0.700;
 aa_hydro['W'] = -0.900;
-//Tyr: -1.300  Val:  4.200  Asx: -3.500  Glx: -3.500  Xaa: -0.490
+/* Tyr: -1.300  Val:  4.200  Asx: -3.500  Glx: -3.500  Xaa: -0.490 */
 aa_hydro['Y'] = -1.300;
 aa_hydro['V'] =  4.200;
-// ?? Asx: -3.500 Glx: -3.500  Xaa: -0.490 ??
+/* ?? Asx: -3.500 Glx: -3.500  Xaa: -0.490 ?? */
 
-// get average frequency distribution for each AA residue
+/* get average frequency distribution for each AA residue */
 conn= hAllocConn();
 if (!hTableExists("pbResAvgStd"))
     {
@@ -203,7 +203,7 @@ char *qNameStr;
 char *qSizeStr;
 char *qStartStr;
 char *qEndStr;
-char *tNameStr;
+char *tNameStr=NULL;
 char *tSizeStr;
 char *tStartStr;
 char *tEndStr;
@@ -213,65 +213,97 @@ char *qStartsStr;
 char *tStartsStr;
 
 char *chp, *chp0, *chp9;
-int exonStartPos, exonEndPos;
+int exonStartPos;
+int exonEndPos;
 int exonGenomeStartPos, exonGenomeEndPos;
-char *exonStartStr, *exonEndStr, *exonSizeStr;
-char *exonGenomeStartStr, *exonGenomeEndStr;
-char *strand;
+char *exonStartStr = NULL;
+char *exonEndStr   = NULL;
+char *exonSizeStr  = NULL;
+char *exonGenomeStartStr = NULL;
+char *exonGenomeEndStr;
+char *strand       = NULL;
 int exonNumber;
 int printedExonNumber = -1;
 Color exonColor[2];
-int blockCount;
+int blockCount=0;
 int exonIndex;
 int i, isize;
 int done = 0;
+int alignDiff, alignDiffShortest;
+
+char *answer;
+int hggStart   = 0;
+int hggEnd     = 0;
+char *hggGene  = NULL;
+char *hggChrom = NULL;
 
 conn= hAllocConn();
-//!!! current query does not always return only one record back !!!
-sprintf(query,"select qName, qSize, qStart, qEnd, tName, tSize, tStart, tEnd, blockCount, blockSizes, qStarts, tStarts, strand from %s.%s where qName='%s';",
-                database, kgProtMapTableName, proteinID);
+
+/* NOTE: the query below may not always return single answer, */
+/* and kgProtMap and knownGene alignments may not be identical, so pick the closest one. */
+
+safef(query,sizeof(query), "select qName, qSize, qStart, qEnd, tName, tSize, tStart, tEnd, blockCount, blockSizes, qStarts, tStarts, strand from %s.%s where qName='%s';",
+        database, kgProtMapTableName, proteinID);
 sr  = sqlMustGetResult(conn, query);
 row = sqlNextRow(sr);
+
 if (row == NULL)
     {
-    //errAbort("%s does not have Exon info\n", proteinID);
     errAbort("<BLOCKQUOTE>Sorry, cannot display Proteome Browser for %s. <BR>No entry is found in kgProtMap table for this protein.</BLOCKQUOTE>", 
 	     proteinID);
     }
 
-qNameStr        = cloneString(row[0]);
-qSizeStr        = cloneString(row[1]);
-qStartStr       = cloneString(row[2]);
-qEndStr         = cloneString(row[3]);
-tNameStr        = cloneString(row[4]);
-tSizeStr        = cloneString(row[5]);
-tStartStr       = cloneString(row[6]);
-tEndStr         = cloneString(row[7]);
-blockCountStr   = cloneString(row[8]);
-blockSizesStr   = cloneString(row[9]);
-qStartsStr      = cloneString(row[10]);
-tStartsStr      = cloneString(row[11]);
+answer = cloneString(cartOptionalString(cart, "hgg_gene"));
+if (answer != NULL) hggGene = cloneString(answer);
+answer = cloneString(cartOptionalString(cart, "hgg_start"));
+if (answer != NULL) hggStart = atoi(answer);
+answer = cloneString(cartOptionalString(cart, "hgg_end"));
+if (answer != NULL) hggEnd = atoi(answer);
+answer = cloneString(cartOptionalString(cart, "hgg_chrom"));
+if (answer != NULL) hggChrom = cloneString(answer);
 
-strand          = cloneString(row[12]);
+alignDiffShortest = 2000000000;  /* initialize it with a very large number */
+while (row != NULL)
+    {
+    qNameStr        = cloneString(row[0]);
+    qSizeStr        = cloneString(row[1]);
+    qStartStr       = cloneString(row[2]);
+    qEndStr         = cloneString(row[3]);
+    tNameStr        = cloneString(row[4]);
+    tSizeStr        = cloneString(row[5]);
+    tStartStr       = cloneString(row[6]);
+    tEndStr         = cloneString(row[7]);
+    blockCountStr   = cloneString(row[8]);
+    blockSizesStr   = cloneString(row[9]);
+    qStartsStr      = cloneString(row[10]);
+    tStartsStr      = cloneString(row[11]);
+    strand          = cloneString(row[12]);
 
-if (!((strand[0] == '+') || (strand[0] == '-')) || (strand[1] != '\0') ) 
-   errAbort("wrong strand '%s' encountered in getExon(), aborting ...", strand);
+    if (!((strand[0] == '+') || (strand[0] == '-')) || (strand[1] != '\0') ) 
+   	errAbort("wrong strand '%s' data encountered in getExonInfo(), aborting ...", strand);
 
-*strandChar = strand[0];
+    alignDiff = abs(atoi(tStartStr) - hggStart) + abs(atoi(tEndStr) - prevGBEndPos);
+
+    if (alignDiff < alignDiffShortest)
+        {
+        alignDiffShortest  = alignDiff;
+	*strandChar 	   = strand[0];
+	blockCount 	   = atoi(blockCountStr);
+	exonStartStr 	   = qStartsStr;
+	exonGenomeStartStr = tStartsStr;
+	exonSizeStr 	   = blockSizesStr;
+	}
+    row = sqlNextRow(sr);
+    }
 
 hFreeConn(&conn);
 sqlFreeResult(&sr);
 
-blockCount = atoi(blockCountStr);
-
-exonStartStr 	   = qStartsStr;
-exonGenomeStartStr = tStartsStr;
-exonSizeStr 	   = blockSizesStr;
 exonIndex 	   = 0;
 
 while (!done)
     {
-    // get protein side exon position
+    /* get protein side exon position */
 
     chp  = strstr(exonStartStr, ",");
     *chp = '\0';
@@ -281,7 +313,7 @@ while (!done)
     chp++;
     exonStartStr = chp;
 
-    // get Genome side exon position
+    /* get Genome side exon position */
     chp  = strstr(exonGenomeStartStr, ",");
     *chp = '\0';
     exonGenomeStartPos 		= atoi(exonGenomeStartStr);
@@ -305,10 +337,10 @@ while (!done)
     if (exonIndex == blockCount) done = 1;
     }
 
-// reverse the negative strand block size sequence to positive direction 
+/* reverse the negative strand block size sequence to positive direction */
 for (i=0; i<blockCount; i++)
     {
-    if (strand[0] == '-')
+    if (*strandChar == '-')
 	{
 	blockSizePositive[i]          = blockSize[blockCount - i - 1];
 	blockStartPositive[i]         = protSeqLen*3 - blockEnd[blockCount - i - 1] - 1;
@@ -330,7 +362,7 @@ for (i=0; i<blockCount; i++)
 }
 
 void printFASTA(char *proteinID, char *aa)
-//print the FASTA format protein sequence
+/* print the FASTA format protein sequence */
 {
 int i, j, k, jj;
 int l;
@@ -356,7 +388,7 @@ for (i=0; i<l; i++)
 hPrintf("</pre>");
 }
 
-//more sophisticated processing can be done using genome coordinates
+/* more sophisticated processing can be done using genome coordinates */
 void printExonAA(char *proteinID, char *aa, int exonNum)
 {
 int i, j, k, jj;
@@ -449,7 +481,7 @@ for (i=istart; i<=iend; i++)
     }
 hPrintf("</pre>");
 
-// Force black color at the end
+/* Force black color at the end */
 hPrintf("<font color = black>");
 }
 
@@ -474,7 +506,7 @@ void doFamilyBrowserLink(char *protDisplayID, char *mrnaID, char *hgsidStr)
 hPrintf("\n<LI>Family Browser - ");
 if (mrnaID != NULL)
     {
-    //hPrintf("<A HREF=\"../cgi-bin/hgNear?near_search=%s&hgsid=%s\"", mrnaID, hgsid);
+    /* hPrintf("<A HREF=\"../cgi-bin/hgNear?near_search=%s&hgsid=%s\"", mrnaID, hgsid); */
     hPrintf("<A HREF=\"../cgi-bin/hgNear?near_search=%s%s\"", mrnaID, hgsidStr);
     }
 else
@@ -524,11 +556,11 @@ else
     geneSymbol = mrnaName;
     }
 
-// Show Pathway links if any exist
+/* Show Pathway links if any exist */
 hasPathway = FALSE;
 cgapID     = NULL;
 
-//Process BioCarta Pathway link data
+/*Process BioCarta Pathway link data */
 if (sqlTableExists(conn, "cgapBiocPathway"))
     {
     sprintf(cond_str, "alias='%s'", geneSymbol);
@@ -562,7 +594,7 @@ if (sqlTableExists(conn, "cgapBiocPathway"))
 	}
     }
 
-//Process KEGG Pathway link data
+/* Process KEGG Pathway link data */
 if (sqlTableExists(conn, "keggPathway"))
     {
     sprintf(query, "select * from %s.keggPathway where kgID = '%s'", database, mrnaName);
@@ -591,7 +623,7 @@ if (sqlTableExists(conn, "keggPathway"))
     sqlFreeResult(&sr);
     }
 
-// Process SRI BioCyc link data
+/* Process SRI BioCyc link data */
 if (sqlTableExists(conn, "bioCycPathway"))
     {
     sprintf(query, "select * from %s.bioCycPathway where kgID = '%s'", database, mrnaName);
