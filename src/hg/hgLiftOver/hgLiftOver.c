@@ -21,7 +21,7 @@
 #include "botDelay.h"
 #include "liftOver.h"
 
-static char const rcsid[] = "$Id: hgLiftOver.c,v 1.16 2004/04/14 22:18:12 kate Exp $";
+static char const rcsid[] = "$Id: hgLiftOver.c,v 1.17 2004/04/14 23:47:58 kate Exp $";
 
 /* CGI Variables */
 #define HGLFT_USERDATA_VAR "hglft.userData"     /* typed/pasted in data */
@@ -40,7 +40,8 @@ struct hash *oldCart = NULL;
 #define WIGGLE_FORMAT   "Wiggle"
 
 char *formatList[] = 
-        {BED_FORMAT, POSITION_FORMAT, 0};
+        //{BED_FORMAT, POSITION_FORMAT, 0};
+        {BED_FORMAT, 0};
 
 #define DEFAULT_FORMAT  "BED"
 
@@ -201,6 +202,7 @@ cgiParagraph(
 " Run <I>liftOver</I> with no arguments to see the usage message.\n");
 
 cgiParagraph("Chain Files:\n");
+/* TODO: automatically generate these links, or pull in from a file */
 puts("<UL>\n");
 puts("<LI>");
 puts( "<A HREF=\"/goldenPath/hg15/liftOver\" TARGET=_blank>" 
@@ -254,30 +256,13 @@ if (userData != NULL && userData[0] != '\0')
     char *line;
     int lineSize;
     struct lineFile *errFile;
-    char *chrom;
-    int start, end;
-    char *str, *pos;
-    int ct = 0, errCt = 0;
     char *fromDb, *toDb;
+    int ct = 0, errCt = 0;
 
     /* read in user data and save to file */
     makeTempName(&oldTn, HGLFT, ".user");
     old = mustOpen(oldTn.forCgi, "w");
-    if (sameString(dataFormat, POSITION_FORMAT))
-        {
-        /* convert to BED */
-        str = userData;
-        while ((pos = strtok(str, "\n")) != NULL)
-            {
-            if (hgParseChromRangeDb(pos, &chrom, &start, &end, FALSE))
-                fprintf(old, "%s\t%d\t%d\n", chrom, start, end);
-            else
-                fprintf(old, "%s\n", pos);
-            str = NULL;
-            }
-        }
-    else
-        fputs(userData, old);
+    fputs(userData, old);
     carefulClose(&old);
     chmod(oldTn.forCgi, 0666);
 
@@ -300,13 +285,16 @@ if (userData != NULL && userData[0] != '\0')
     if (sameString(dataFormat, WIGGLE_FORMAT))
         /* TODO: implement Wiggle */
             {}
-    else if (sameString(dataFormat, POSITION_FORMAT) ||
-                sameString(dataFormat, BED_FORMAT))
+    else if (sameString(dataFormat, POSITION_FORMAT))
         {
-        if (sameString(dataFormat, POSITION_FORMAT))
-            {
-            /* construct BED file from positions */
-            }
+        /*
+        ct = liftOverPositions(oldTn.forCgi, chainHash, 
+                        LIFTOVER_MINMATCH, LIFTOVER_MINBLOCKS,
+                        FALSE, mapped, unmapped, &errCt);
+                        */
+        }
+    else if (sameString(dataFormat, BED_FORMAT))
+        {
         ct = liftOverBed(oldTn.forCgi, chainHash, 
                         LIFTOVER_MINMATCH, LIFTOVER_MINBLOCKS,
                         FALSE, mapped, unmapped, &errCt);
