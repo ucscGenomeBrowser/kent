@@ -400,11 +400,14 @@ display conventions:<BR>
 	<TR><TD WIDTH="20" VALIGN="top">--</TD><TD><B>mRNA 
 	tracks:</B> 
 	Aligning regions (usually exons) are shown as black 
-	blocks connected by lines representing gaps (usually spliced-out introns). 
+	blocks connected by lines representing gaps (usually spliced-out introns).
+	In dense display mode, darker-shaded items correspond to better 
+	quality matches.  
 	In full display mode, arrowheads on the lines indicate the direction of 
 	transcription.  Only 300 track entries can be displayed in the
 	annotation track window at a time in full display mode; the track 
-	automatically defaults to dense display mode if the number exceeds this limit.
+	automatically defaults to dense display mode if the number exceeds this 
+	limit.
 	</TD></TR> 
 
 	<TR><TD WIDTH="20" VALIGN="top">--</TD><TD><B>EST and BLAT alignment 
@@ -1372,6 +1375,42 @@ and using the tracks displayed in the Genome Browser track window, see the secti
 	look at the track's description page.</TD></TR>  
 </TABLE>
 
+<P><B>2X Reg Potential</B><BR>
+This track displays the 2-way regulatory potential (RP) score computed from 
+alignments of the human and mouse assemblies. RP scores compare frequencies of 
+short alignment patterns between regulatory elements and neutral DNA. 
+
+<TABLE CELLPADDING=0 CELLSPACING=0>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Display conventions:</I></B> 
+	This track uses the display conventions for wiggle tracks.</TD></TR>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+<B><I>Table details:</I></B> 
+	To view a text version of the data set, select the 
+	<I>regPotential2X</I> position table in the Table Browser. To view the table
+	definition, click 
+	<A HREF="http://genome.ucsc.edu/goldenPath/gbdDescriptions.html#WiggleTrack2"
+	TARGET=_blank>here</A>.</TD></TR>
+</TABLE>
+
+<P><B>3X Reg Potential</B><BR>
+This track displays the 3-way regulatory potential (RP) score computed from 
+alignments of the human, mouse, and rat assemblies. RP scores compare frequencies of 
+short alignment patterns between regulatory elements and neutral DNA. 
+
+<TABLE CELLPADDING=0 CELLSPACING=0>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Display conventions:</I></B> 
+	This track uses the display conventions for wiggle tracks.</TD></TR>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+<B><I>Table details:</I></B> 
+	To view a text version of the data set, select the 
+	<I>regPotential3X</I> position table in the Table Browser. To view the table
+	definition, click 
+	<A HREF="http://genome.ucsc.edu/goldenPath/gbdDescriptions.html#WiggleTrack2"
+	TARGET=_blank>here</A>.</TD></TR>
+</TABLE>
+
 <P><B>Acembly Genes</B><BR>
 This track shows gene models reconstructed solely from mRNA and EST evidence 
 by Danielle and Jean Thierry-Mieg and Vahan Simonyan using the Acembly program. 
@@ -1401,7 +1440,75 @@ displayed.
 	TARGET=_blank>here</A>.</TD></TR>
 </TABLE>
 
+<P><B>Affymetrix U133</B><BR>
+This track shows the location of the consensus and exemplar sequences used for 
+the selection of probes on the Affymetrix HG-U133A and HG-U133B chips.
 
+<TABLE CELLPADDING=0 CELLSPACING=0>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Display conventions:</I></B> 
+	This track follows the display conventionns for mRNA tracks.
+	</TD></TR>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Track details:</I></B> 
+	Clicking on an item in one of the fuller modes displays positional
+	and % identity information. </TD></TR>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Table details:</I></B> 
+	To view a text version of the data set, select the 
+	<I>affyU133</I> position table in the Table Browser. To view the table
+	definition, click <A
+	HREF="http://genome.ucsc.edu/goldenPath/gbdDescriptions.html#PslInfo"
+	TARGET=_blank>here</A>.</TD></TR>
+</TABLE></P>
+
+<P><B>Affymetrix U95</B><BR>
+This track shows the location of the consensus and exemplar sequences used for 
+the selection of probes on the Affymetrix HG-U95Av2 chip.
+
+<TABLE CELLPADDING=0 CELLSPACING=0>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Display conventions:</I></B> 
+	This track follows the display conventionns for mRNA tracks.
+	</TD></TR>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Track details:</I></B> 
+	Clicking on an item in one of the fuller modes displays positional
+	and % identity information. </TD></TR>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Table details:</I></B> 
+	To view a text version of the data set, select the 
+	<I>affyU95</I> position table in the Table Browser. To view the table
+	definition, click <A
+	HREF="http://genome.ucsc.edu/goldenPath/gbdDescriptions.html#PslInfo"
+	TARGET=_blank>here</A>.</TD></TR>
+</TABLE></P>
+
+<P><B>Alt-Splicing</B><BR>
+This track summarizes the alternative splicing shown in the mRNA and EST tracks. 
+
+<TABLE CELLPADDING=0 CELLSPACING=0>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Display conventions:</I></B> 
+	Exons are represented by blocks; possible splice junctions by lines. 
+	In full mode with the resolution set to approximately gene-level, 
+	alternative exons are laid out with minimal overlap and are therefore
+	easier to view. The level of shading of exons and splice junctions 
+	reflects the quantity of ESTs and mRNAs that contain that exon or splice 
+	junction.</TD></TR>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Track details:</I></B> 
+	Clicking on an item in one of the fuller modes displays positional 
+	information and alt-splicing plots, as well as a link to a zoomed-in
+	browser view of that feature.</TD></TR>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Table details:</I></B> 
+	To view a text version of the data set, select the 
+	<I>altGraphX</I> position table in the Table Browser. To view the table
+	definition, click <A
+	HREF="http://genome.ucsc.edu/goldenPath/gbdDescriptions.html#AltGraphX"
+	TARGET=_blank>here</A>.</TD></TR>
+</TABLE></P>
 
 <P><B>Assembly</B><BR>
 This track shows the draft assembly of the human genome. This assembly merges
@@ -1879,6 +1986,34 @@ proper position).
 	and start of the other member of the duplication pair. Clicking on an 
 	individual duplication gives details of both locations and match quality 
 	parameters. </TD></TR>
+</TABLE></P>
+
+<P><B>ECgene Genes</B><BR>
+This track shows gene predictions generated by combining genome-based EST 
+clustering and transcript assembly methods. The EST clustering is based on 
+genomic alignment of mRNA and ESTs similar to that of NCBI's UniGene for the 
+human genome. The transcript assembly procedure yields gene models for each 
+cluster that include alternative splicing variants. This algorithm was developed 
+by Prof. Sanghyuk Lee's Lab of Bioinformatics at Ewha Womans University in 
+Seoul, Korea. For more information, see the 
+<A HREF="http://genome.ewha.ac.kr/ECgene" TARGET=_blank>ECgene</A> web site. 
+
+<TABLE CELLPADDING=0 CELLSPACING=0>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Display conventions:</I></B>
+	This track uses the display conventions for gene predictions tracks.</TD></TR>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Track details:</I></B> 
+	Clicking on an entry in full display mode brings up basic track
+	information, links to the predicted mRNA, genomic sequence, and 
+	comparative sequence. </TD></TR>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Table details:</I></B> 
+	To view a text version of the data set, select the 
+	<I>ECgene</I> position table in the Table Browser. To view the table
+	definition, click <A
+	HREF="http://genome.ucsc.edu/goldenPath/gbdDescriptions.html#GenePredictions"
+	TARGET=_blank>here</A>.</TD></TR>
 </TABLE></P>
 
 <P><B>Ensembl ESTs</B><BR>
@@ -2441,6 +2576,39 @@ Dawson E. et. al. (2002), "<A HREF="http://bioinformatics.well.ox.ac.uk/~lon/chr
 	TARGET=_blank>here</A>.</TD></TR>
 </TABLE></P>
 
+<P><B>Hu/Mouse/Rat/Chick</B><BR>
+This track shows a measure of evolutionary conservation in human, mouse, rat, 
+and chicken based on a phylogenetic hidden Markov model (phylo-HMM). The multiz 
+alignments of the human, mouse, rat, and chicken genome assemblies were used to 
+generate the annotation.
+
+<TABLE CELLPADDING=0 CELLSPACING=0>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Display conventions:</I></B>
+	In full display mode, the track displays pairwise alignments of mouse, 
+	rat, and chicken aligned to the human genome. The pairwise alignments 
+	are displayed in standard UCSC browser "dense" mode using a grey-scale 
+	density gradient.  When zoomed-in to the base-display level, the track 
+	shows the base composition of each alignment. The numbers and symbols on 
+	the "human gap" line indicate the lengths of gaps in the human sequence 
+	at those alignment positions. If the gap size is greater than 9, the 
+	"+" symbol is displayed. The track must be zoomed-in to 30,000
+	or fewer bases to access detailed information about the 
+	alignments at a specific position.
+	</TD></TR>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Track details:</I></B> 
+	Clicking on an entry in full display mode will show detailed alignment 
+	information for each of the 4 organisms. </TD></TR>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Table details:</I></B> 
+	To view a text version of the data set, select the 
+	<I>multizMm3Rn3GalGal2_phyloHMM</I> position table in the Table Browser. 
+	To view the table definition, click <A
+	HREF="http://genome.ucsc.edu/goldenPath/gbdDescriptions.html#MultizAlign"
+	TARGET=_blank>here</A>.</TD></TR>
+</TABLE></P>
+
 <P><B>Human Blat </B><BR>
 This track displays translated BLAT alignments of the human genome
 vs. the mouse genome. 
@@ -2569,10 +2737,7 @@ to be kept.
 <TABLE CELLPADDING=0 CELLSPACING=0>
 		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
 	<B><I>Display conventions:</I></B>
-	Aligning regions (usually exons) are shown as black boxes connected by 
-	lines for gaps (usually spliced out introns). In dense display mode,
-	darker gray items correspond to better quality matches. In full display mode,
-	hatch marks on the introns indicate the direction of transcription. </TD></TR>
+	This track follows the display conventions for mRNA tracks. </TD></TR>
 		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
 	<B><I>Track details:</I></B> 
 	Clicking on the mini-button to the left of the track will display the track
@@ -2804,6 +2969,33 @@ This track displays alignments between <A HREF="http://mgc.nci.nih.gov/" TARGET=
 	<I>mgcGenes</I> position table in the Table Browser. To view the table
 	definition, click <A
 	HREF="http://genome.ucsc.edu/goldenPath/gbdDescriptions.html#GenePredictions"
+	TARGET=_blank>here</A>.</TD></TR>
+</TABLE></P>
+
+<P><B>miRNA </B><BR>
+This track shows microRNAs from the 
+<A HREF="http://www.sanger.ac.uk/Software/Rfam/mirna/" TARGET=_blank>miRNA Registry</A> 
+at the Wellcome Trust Sanger Institute. 
+
+<TABLE CELLPADDING=0 CELLSPACING=0>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Display conventions:</I></B> 
+	Mature miRNAs (miRs) are represented by thick lines; the predicted 
+	stem-loop portions of the primary transcripts are indicated by thinner 
+	lines. miRNAs in the sense orientation are shown in black; those in the 
+	reverse orientation are colored grey. When a single precursor produces 
+	two mature miRs from its 5' and 3' parts, it is displayed twice with the 
+	two different positions of the mature miR. </TD></TR>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Track details:</I></B> 
+	Clicking in full mode displays positional information and 
+	a link to item's entry in the miRNA registry.</TD></TR>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Table details:</I></B> 
+	To view a text version of the data set, select the 
+	<I>miRNA</I> position table in the Table Browser. To view the table
+	definition, click <A
+	HREF="http://genome.ucsc.edu/goldenPath/gbdDescriptions.html#BED"
 	TARGET=_blank>here</A>.</TD></TR>
 </TABLE></P>
 
