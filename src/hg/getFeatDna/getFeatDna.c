@@ -84,8 +84,10 @@ else
     errAbort("Unknown output type %s\n", outputType);
 }
 
-void outputDna(FILE *f, char *chrom, char *table, int start, int size, char *dna, 
-	char *nibFileName, FILE *nibFile, int nibSize, char strand)
+void outputDna(FILE *f, char *chrom, char *table, 
+    int start, int size, char *dna, 
+    char *nibFileName, FILE *nibFile, int nibSize, 
+    char strand, char *faName)
 /* Output DNA either directly from nib or by upper-casing DNA. */
 {
 if (merge >= 0)
@@ -95,7 +97,9 @@ else
     struct dnaSeq *seq = nibLdPart(nibFileName, nibFile, nibSize, start, size);
     if (strand == '-')
         reverseComplement(seq->dna, size);
-    writeOut(f, chrom, start, size, strand, seq->dna, makeFaStartLine(chrom, table, start, size));
+    if (faName == NULL)
+        faName = makeFaStartLine(chrom, table, start, size);
+    writeOut(f, chrom, start, size, strand, seq->dna, faName);
     freeDnaSeq(&seq);
     }
 }
@@ -156,14 +160,15 @@ if (breakUp)
 		     {
 		     sz = psl->blockSizes[i];
 		     s = tSize - (psl->tStarts[i] + sz);
-		     outputDna(f, chrom, table, s, sz, dna, nibFileName, nibFile, nibSize, '-');
+		     outputDna(f, chrom, table, 
+		         s, sz, dna, nibFileName, nibFile, nibSize, '-', NULL);
 		     }
 		}
 	    else
 		{
 		for (i=0; i<psl->blockCount; ++i)
 		     outputDna(f, chrom, table, psl->tStarts[i], psl->blockSizes[i], 
-			    dna, nibFileName, nibFile, nibSize, '+');
+			    dna, nibFileName, nibFile, nibSize, '+', NULL);
 		}
 	    pslFree(&psl);
 	    }
@@ -184,7 +189,8 @@ if (breakUp)
 		 s = gp->exonStarts[i];
 		 sz = gp->exonEnds[i] - s;
 		 outputDna(f, chrom, table, 
-		    s, sz, dna, nibFileName, nibFile, nibSize, gp->strand[0]);
+		    s, sz, dna, nibFileName, nibFile, nibSize, 
+		    gp->strand[0], gp->name);
 		 }
 	    genePredFree(&gp);
 	    }
@@ -210,7 +216,8 @@ else
 	sz = e - s;
 	if (seq != NULL && (sz < 0 || e >= size))
 	    errAbort("Coordinates out of range %d %d (%s size is %d)", s, e, chrom, size);
-	outputDna(f, chrom, table, s, sz, dna, nibFileName, nibFile, nibSize, '+');
+	outputDna(f, chrom, table, s, sz, dna, nibFileName, nibFile, nibSize, 
+		'+', NULL);
 	}
     }
 
