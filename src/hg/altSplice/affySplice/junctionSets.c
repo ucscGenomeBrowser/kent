@@ -21,7 +21,8 @@ struct junctionSet
     char *name;                 /* Name of junction. */
     int junctCount;             /* Number of junctions in set. */
     char strand[2];             /* + or - depending on which strand. */
-    char *genePSet;             /* Gene probe set name. */
+    int genePSetCount;          /* Number of gene probe sets. */
+    char **genePSets;           /* Gene probe set name. */
     char *hName;                /* Human name for locus or affy id if not present. */
     int maxJunctCount;          /* Maximum size of bedArray. */
     struct bed **bedArray;      /* Beds in the cluster. */
@@ -69,6 +70,7 @@ int setStartCount = 0;   /* Number of sets with more than one start. */
 int setEndCount = 0;     /* Number of sets with more than one end. */
 int setMergedCount = 0;  /* Number of sets that were merged and contain more than one probe. */
 FILE *ctFile = NULL;     /* File to write beds in sets as custom track to. */
+FILE *notMerged = NULL;  /* File to look at clusters that share probe starts/ends but aren't casssettes. */
 boolean chromKeeperOpen = FALSE; /* Is chromkeeper initialized? */
 
 void usage()
@@ -170,8 +172,18 @@ void junctionSetTabOut(struct junctionSet *js, FILE *out)
 /* Write out junctionSet to a file. */
 {
 int i;
-fprintf(out, "%s\t%d\t%d\t%s\t%d\t%s\t%s\t%s\t", js->chrom, js->chromStart, js->chromEnd, 
-	js->name, js->junctCount, js->strand, js->genePSet, js->hName);
+fprintf(out, "%s\t%d\t%d\t%s\t%d\t%s\t%d\t", js->chrom, js->chromStart, js->chromEnd, 
+	js->name, js->junctCount, js->strand, js->genePSetCount);
+
+/* Print out gene set names. */
+for(i = 0; i < js->genePSetCount - 1; i++)
+    fprintf(out, "%s,", js->genePSets[i]);
+fprintf(out, "%s\t", js->genePSets[i]);
+
+/* Print out human name. */
+fprintf(out, "%s\t", js->hName);
+
+/* Print out beds. */
 for(i = 0; i < js->junctCount - 1; i++) 
     {
     fprintf(out, "%s,", js->bedArray[i]->name);
@@ -236,7 +248,7 @@ for(bed = bedList; bed != NULL; bed = bed->next)
 	{
 	/* Only want junctions that connect to non-soft exons, i.e. not
 	   transcription start and ends. */
-	if(!overlapSoftExon(bed->chrom, bed->chromStart, bedSpliceStart(bed)))
+	if(!overlapSoftExon(bed->chrom, bed->chromStart, bedSpliceStart(bed)) || bed->strand[0] == '-')
 	    {
 	    if(set->junctCount + 1 >= set->maxJunctCount)
 		{
@@ -303,7 +315,7 @@ for(bed = bedList; bed != NULL; bed = bed->next)
 	{
 	/* Only want junctions that connect to non-soft exons, i.e. not
 	   transcription start and ends. */
-	if(!overlapSoftExon(bed->chrom, bedSpliceEnd(bed), bed->chromEnd))
+	if(!overlapSoftExon(bed->chrom, bedSpliceEnd(bed), bed->chromEnd) || bed->strand[0] == '+')
 	    {
 	    if(set->junctCount + 1 >= set->maxJunctCount)
 		{
@@ -340,6 +352,42 @@ for(i = 0; i < start->junctCount; i++)
 	if(start->bedArray[i] == end->bedArray[j])
 	    return TRUE;
 	}
+    }
+return FALSE;
+}
+
+int bedStartEndCmp(const void *va, const void *vb)
+/* Compare to sort based on chrom,chromStart. */
+{
+const struct bed *a = *((struct bed **)va);
+const struct bed *b = *((struct bed **)vb);
+int dif;
+dif = strcmp(a->chrom, b->chrom);
+if (dif == 0)
+    dif = a->chromStart - b->chromStart;
+if(dif == 0)
+    dif = a->chromEnd - b->chromEnd;
+return dif;
+}
+
+boolean formCassetteExon(struct junctionSet *start, struct junctionSet *end)
+/* Return TRUE if the two junctions form a cassette exon. */
+{
+struct bed *cassette[4];
+if(start->junctCount != 2 || end->junctCount != 2)
+    return FALSE;
+cassette[0] = start->bedArray[0];
+cassette[1] = start->bedArray[1];
+cassette[2] = end->bedArray[0];
+cassette[3] = end->bedArray[1];
+qsort(cassette, 4, sizeof(cassette[0]), bedStartEndCmp);
+if(cassette[0]->chromStart == cassette[1]->chromStart &&
+   cassette[1] == cassette[2] &&
+   cassette[2]->chromEnd == cassette[3]->chromEnd &&
+   cassette[3]->chromStart != cassette[0]->chromStart &&
+   cassette[3]->chromEnd != cassette[0]->chromEnd)
+    {
+    return TRUE;
     }
 return FALSE;
 }
@@ -425,11 +473,23 @@ for(jsStart = starts; jsStart != NULL; jsStart = jsNext)
 	/* If we can merge them do so and add them to final list. */
 	if(mergeableSets(jsStart, jsEnd))
 	    {
-	    merged = mergeSets(jsStart, jsEnd);
-	    slAddHead(&mergedList, merged);
-	    jsStart->merged = TRUE;
-	    jsEnd->merged = TRUE;
-	    break;
+	    if(formCassetteExon(jsStart, jsEnd))
+		{
+		merged = mergeSets(jsStart, jsEnd);
+		slAddHead(&mergedList, merged);
+		jsStart->merged = TRUE;
+		jsEnd->merged = TRUE;
+		break;
+		}
+	    else 
+		{
+		fprintf(notMerged, "%s\t%d\t%d\t%s_%s\t%d\n", 
+			jsStart->chrom,
+			min(jsStart->chromStart, jsEnd->chromStart),
+			max(jsStart->chromEnd, jsEnd->chromEnd),
+			jsStart->name, jsEnd->name,
+			jsStart->junctCount + jsEnd->junctCount);
+		}
 	    }
 	}
     /* If this set can't be merged add it to the final list. */
@@ -463,12 +523,31 @@ char *mark = NULL;
 lf = lineFileOpen(geneSetFile, TRUE);
 while(lineFileNextReal(lf, &string))
     {
+    struct slName *name = NULL, *nameList = NULL;
     safef(buff, sizeof(buff), "%s", string);
-    mark = strchr(buff, '_');
-    if(mark == NULL)
-	errAbort("Can't parse gene probe set name %s\n", buff);
-    *mark = '\0';
-    hashAddUnique(hash, buff, cloneString(string));
+
+    /* Look to parse prefix off things like: G6848899EX_RC_a_at */
+    mark = strstr(buff, "EX");
+    if(mark != NULL)
+	{
+	name = newSlName(buff);
+	*mark = '\0';
+	} 
+    else /* Try to parse numbers off of things like: G6848899_RC_a_at */
+	{
+	mark = strchr(buff, '_');
+	if(mark == NULL)
+	    errAbort("Can't parse gene probe set name %s\n", buff);
+	name = newSlName(buff);
+	*mark = '\0';
+	}
+    nameList = hashFindVal(hash, buff);
+    /* If we have seen this gene before append to list other
+       wise start a new list. */
+    if(nameList != NULL)
+	slAddTail(&nameList, name);
+    else
+	hashAddUnique(hash, buff, name);
     }
 lineFileClose(&lf);
 }
@@ -496,7 +575,9 @@ char *name = hashFindVal(hash, id);
 if(name == NULL)
     {
     safef(buff, sizeof(buff), "%s", id);
-    mark = strchr(buff, '_');
+    mark = strstr(buff, "EX");
+    if(mark == NULL)
+	mark = strchr(buff, '_');
     assert(mark);
     *mark = '\0';
     name = cloneString(buff);
@@ -505,19 +586,27 @@ return name;
 }
 	
 
-char *findGeneSet(struct junctionSet *js, struct hash *hash)
+void findGeneSets(struct junctionSet *js, struct hash *hash, char ***pCharArray, int *pCount)
 /* Find the corresponding gene probe set for this junction set. */
 {
 char buff[256];
 char *mark = NULL;
-char *name = NULL;
+struct slName *name = NULL, *nameList = NULL;
 safef(buff, sizeof(buff), "%s", js->bedArray[0]->name);
 mark = strchr(buff, '@');
 if(mark == NULL)
     errAbort("Can't parse gene name from %s", buff);
 *mark = '\0';
-name = hashFindVal(hash, buff);
-return name;
+nameList = hashFindVal(hash, buff);
+if(nameList != NULL)
+    {
+    AllocArray(*pCharArray, slCount(nameList));
+    }
+*pCount = 0;
+for(name = nameList; name != NULL; name = name->next)
+    {
+    (*pCharArray)[(*pCount)++] = name->name;
+    }
 }
 
 void junctionSets(char *bedFile, char *setFile, char *geneSetFile, char *geneMapFile) 
@@ -547,12 +636,12 @@ for(js = merged; js != NULL; js = js->next)
     int i;
     if((js->junctCount + js->junctDupCount) > 1)
 	{
-	js->genePSet = findGeneSet(js, geneSetHash);
+	findGeneSets(js, geneSetHash, &js->genePSets, &js->genePSetCount);
 	/* The only ones we should be missing are the pesky CXXXX ones.
 	   about 30 genes, don't know where they come from. */
-	if(js->genePSet != NULL)
+	if(js->genePSetCount != 0)
 	    {
-	    js->hName = geneNameForId(geneMapHash, js->genePSet);
+	    js->hName = geneNameForId(geneMapHash, js->genePSets[0]);
 	    if(ctFile != NULL)
 		{
 		for(i = 0; i < js->junctCount; i++)
@@ -597,7 +686,9 @@ if(bedFile == NULL || setFile == NULL)
     warn("Error: Must specify both a bedFile and a setFile.");
     usage();
     }
+notMerged = mustOpen("notMerged.tab","w");
 junctionSets(bedFile, setFile, genePName, geneMap);
+carefulClose(&notMerged);
 carefulClose(&ctFile);
 return 0;
 }
