@@ -2680,7 +2680,7 @@ http://genome.imim.es/genepredictions/M.musculus/mmOct2003/SGP/humangp200307/rea
     hgPepPred mm4 generic twinscanPep chr_ptx/chr*-fixed.fa
 
 #### LOAD ENSEMBL GENES (DONE - 2004-02-19 - Hiram)
-#	needed for Family Browser procedure below
+#	needed for Gene Sorter procedure below
 #	Ensembl released Mouse build 32 the week of Feb 16 2004
      mkdir /cluster/data/mm4/bed/ensembl
      cd /cluster/data/mm4/bed/ensembl
@@ -2747,7 +2747,7 @@ o - Load ensGtp table.
     hgsql mm4 < ~/kent/src/hg/lib/ensGtp.sql
     hgsql -N -e 'load data local infile "ensGtpMm4.tab" into table ensGtp;' mm4
 
-### MAKE THE affyU74 TRACK - needed for the Family browser
+### MAKE THE affyU74 TRACK - needed for the Gene Sorter 
 #                              (DONE - 2003-01-06 - Hiram)
 # MAKE THE affyU74 TRACK using Affy consensus sequences instead of 
 # target sequences. Recalculate alignments and load data
@@ -4545,7 +4545,7 @@ hgsql \
  -e 'update gdbPdb set proteomeDb = "proteins040315" where genomeDb = "mm4";' \
         -h genome-testdb hgcentraltest
 
-# Perform preliminary review, using the Genome Browser and Family Browser for mm4.
+# Perform preliminary review, using the Genome Browser and Gene Sorter for mm4.
 # After successful review, notify QA to start formal review. 
 
 # Create table that maps between known genes and LocusLink (DONE 5/25/04 Fan)

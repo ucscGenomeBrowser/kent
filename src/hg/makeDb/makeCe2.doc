@@ -601,7 +601,7 @@ done
 # url http://www.wormbase.org/db/gene/gene?name=$$
 # hgGene on
     
-    # Add proteinID field to sangerGene table, used by Family Browser
+    # Add proteinID field to sangerGene table, used by Gene Sorter
     ssh hgwdev
     cd /cluster/data/ce2/bed/sangerGene
     hgsql -e 'alter table sangerGene add proteinID varchar(40) NOT NULL;' ce2

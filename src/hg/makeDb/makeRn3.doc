@@ -2320,7 +2320,7 @@ LOAD ENSEMBL ESTs (TO DO)
      hgPepPred rn3 generic ensEstPep rat-est-fixed.pep
 
 #### LOAD ENSEMBL GENES (DONE - 2004-04-29 - Fan)
-#	ensGene is needed for Superfamily track, Family Browser, and Proteome Browser
+#	ensGene is needed for Superfamily track, Gene Sorter, and Proteome Browser
 #	Ensembl released Rat build 3.1 the week of Feb 9th, 2004
      mkdir /cluster/data/rn3/bed/ensembl
      cd /cluster/data/rn3/bed/ensembl

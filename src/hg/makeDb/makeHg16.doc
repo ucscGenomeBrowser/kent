@@ -6206,7 +6206,7 @@ sys     16m13.770s
     mkdir -p /gbdb/hg16/wib/gc5Base
     ln -s `pwd`/wigData5_1K/*.wib /gbdb/hg16/wib/gc5Base
 
-# KNOWN GENES TRACK (STARTED - 2004-01-15 - with Family browser complete
+# KNOWN GENES TRACK (STARTED - 2004-01-15 - with Gene Sorter complete
 #				1004-02-17 Hiram)
 
     # you will probably need to make the programs in kent/src/hg/protein
