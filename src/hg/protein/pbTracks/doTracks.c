@@ -14,6 +14,12 @@
 #include "hgColors.h"
 #include "pbTracks.h"
 
+int prevGBOffsetSav;
+char trackOffset[20];
+int pixWidth, pixHeight;
+struct tempName gifTn;
+char *mapName = "map";
+
 void calxy(int xin, int yin, int *outxp, int *outyp)
 /* calxy() converts a logical drawing coordinate into an actual
    drawing coordinate with scaling and minor adjustments */
@@ -37,21 +43,22 @@ void relativeScroll(double amount)
 {
 int offset;
 int newStart, newEnd;
-char trackOffset[20];
 
-//printf("<br>old offset=%d\n", trackOrigOffset);fflush(stdout);
 trackOrigOffset = trackOrigOffset + (int)(amount*MAX_PB_PIXWIDTH);
 
 /* Make sure don't scroll of ends. */
-if (trackOrigOffset > ((pbScale* protSeqLen) - MAX_PB_PIXWIDTH))
-    trackOrigOffset = pbScale*protSeqLen - MAX_PB_PIXWIDTH + 150;
+//if (trackOrigOffset > ((pbScale* protSeqLen) - MAX_PB_PIXWIDTH))
+//    trackOrigOffset = pbScale*protSeqLen - MAX_PB_PIXWIDTH + 150;
+if (trackOrigOffset > ((pbScale* protSeqLen) - 600))
+    trackOrigOffset = pbScale*protSeqLen - 700;
 if (trackOrigOffset < 0) trackOrigOffset = 0;
 //printf("<br>pbScale=%d\n", pbScale);
 //printf("<br>amount=%f offset=%d\n", amount, trackOrigOffset);fflush(stdout);
 //printf("<br>protSeqLen=%d\n", protSeqLen*pbScale);fflush(stdout);
 
-sprintf(trackOffset, "%d", trackOrigOffset);
-cgiMakeHiddenVar("trackOffset", trackOffset);
+//sprintf(trackOffset, "%d", trackOrigOffset);
+//printf("<br>marking Hiden var trackOffset %d\n", trackOrigOffset);fflush(stdout);
+//cgiMakeHiddenVar("trackOffset", trackOffset);
 
 sprintf(pbScaleStr, "%d", pbScale);
 cgiMakeHiddenVar("pbScaleStr", pbScaleStr);
@@ -372,6 +379,130 @@ hPrintf("HREF=\"../cgi-bin/hgTracks?db=%s&position=%s\"", database, posStr);
 hPrintf(" target=_blank ALT=\"UCSC Genome Browser %s\">\n", posStr);
 }
 
+int calPrevGB(int exonCount, char *chrom, char strand, int aaLen, int *yOffp, char *proteinID, char *mrnaID)
+// calculate the appropriate X offset for the previous Genome Browser position range
+{
+int xx, yy, xx0, xxSave;
+int i, j;
+char prevPosMessage[200];
+char exonNumStr[10];
+int mrnaLen;
+
+int exonStartPos, exonEndPos;
+int exonGenomeStartPos, exonGenomeEndPos;
+int exonNumber;
+int printedExonNumber = -1;
+int currentPos;
+int currentPBPos;
+int jPrevStart, jPrevEnd;
+int iPrevExon = -1;
+int jPrevExonPos = 0;
+int prevGBOffset;
+int jcnt = 0;
+
+// The imaginary mRNA length is 3 times of aaLen
+mrnaLen = aaLen * 3;
+
+jPrevStart = mrnaLen-1;
+jPrevEnd   = 0;
+
+exonNumber = 1;
+
+exonStartPos 	   = blockStartPositive[exonNumber-1]; 
+exonEndPos 	   = blockEndPositive[exonNumber-1];
+exonGenomeStartPos = blockGenomeStartPositive[exonNumber-1];
+exonGenomeEndPos   = blockGenomeEndPositive[exonNumber-1];
+
+currentYoffset = *yOffp;
+
+if (strand == '-')
+    {
+    for (i=0; i<(exonCount-2); i++)
+    	{
+    	if ((prevGBStartPos < blockGenomeStartPositive[i]) &&
+            (prevGBStartPos > blockGenomeEndPositive[i+1]) )
+	    {
+	    iPrevExon = i;
+	    jPrevExonPos = blockStartPositive[i+1];
+	    }
+    	}
+
+    // handle special cases at both ends when previous GB position is outside CDS
+    if (prevGBStartPos < blockGenomeStartPositive[exonCount-1]) 
+    	jPrevExonPos = blockEndPositive[exonCount-1] + 3;
+    if (prevGBEndPos > blockGenomeStartPositive[0]) 
+    	jPrevExonPos = blockStartPositive[0];
+    }
+else
+    {
+    for (i=0; i<(exonCount-1); i++)
+    	{
+    	if ((prevGBStartPos > blockGenomeEndPositive[i]) &&
+            (prevGBStartPos < blockGenomeStartPositive[i+1]) )
+	    {
+	    iPrevExon = i;
+	    jPrevExonPos = blockEndPositive[i];
+	    }
+    	}
+
+    // handle special cases at both ends when previous GB position is outside CDS
+    if (prevGBStartPos < blockGenomeStartPositive[0]) 
+    	jPrevExonPos = blockStartPositive[0];
+    if (prevGBEndPos > blockGenomeEndPositive[exonCount-1]) 
+    	jPrevExonPos = blockEndPositive[exonCount-1];
+    }
+
+for (j = 0; j < mrnaLen; j++)
+    {
+    calxy(j/3, *yOffp, &xx, &yy);
+    if (j > exonEndPos)
+	{
+	if (printedExonNumber != exonNumber)
+	    {
+            if ((exonEndPos - exonStartPos)*pbScale/3 > 12) 
+	    	{
+	    	sprintf(exonNumStr, "%d", exonNumber);
+	    	}
+ 	    printedExonNumber = exonNumber;
+	    }
+
+	if (exonNumber < exonCount)
+    	    {
+	    exonNumber++;
+	    exonStartPos       = blockStartPositive[exonNumber-1]; 
+	    exonEndPos 	       = blockEndPositive[exonNumber-1];
+	    exonGenomeStartPos = blockGenomeStartPositive[exonNumber-1];
+	    exonGenomeEndPos   = blockGenomeEndPositive[exonNumber-1];
+	    }
+    	}
+
+    if (strand == '-')
+	{
+    	currentPos = blockGenomeStartPositive[exonNumber-1] + (blockEndPositive[exonNumber-1]-j)+1;
+    	}
+    else
+	{
+    	currentPos = blockGenomeStartPositive[exonNumber-1]+(j - blockStartPositive[exonNumber-1])+1;
+    	}
+
+    if ((currentPos >= prevGBStartPos) && (currentPos <= prevGBEndPos))
+	{
+        jcnt++;
+	if (j < jPrevStart) jPrevStart = j;
+	if (j > jPrevEnd)   jPrevEnd   = j;
+	}
+    }
+if (jcnt > 0)
+    {
+    prevGBOffset = jPrevStart/3 * pbScale ;
+    }
+else
+    {
+    prevGBOffset = jPrevExonPos/3 * pbScale ;
+    }
+return(prevGBOffset);
+}
+
 void doPrevGB(int exonCount, char *chrom, char strand, int aaLen, int *yOffp, char *proteinID, char *mrnaID)
 // draw the previous Genome Browser position range
 {
@@ -461,9 +592,7 @@ else
     	jPrevExonPos = blockStartPositive[0];
     if (prevGBEndPos > blockGenomeEndPositive[exonCount-1]) 
     	jPrevExonPos = blockEndPositive[exonCount-1];
-    //printf("<br>jPrevExonPos = %d\n", jPrevExonPos);fflush(stdout);
     }
-
 
 for (j = 0; j < mrnaLen; j++)
     {
@@ -505,7 +634,8 @@ for (j = 0; j < mrnaLen; j++)
 
     if ((currentPos >= prevGBStartPos) && (currentPos <= prevGBEndPos))
 	{
-	//printf("<br>j=%d currentPos=%d prevGBStartPos=%d prevGBEndPos=%d\n", j, currentPos, prevGBStartPos, prevGBEndPos);fflush(stdout);
+	//printf("<br>j=%d currentPos=%d prevGBStartPos=%d prevGBEndPos=%d\n", 
+	//j, currentPos, prevGBStartPos, prevGBEndPos);fflush(stdout);
 	jcnt++;
 	if (j < jPrevStart) jPrevStart = j;
 	if (j > jPrevEnd)   jPrevEnd   = j;
@@ -527,7 +657,8 @@ if (jcnt > 0)
 
     mapBoxPrevGB(xx+(jPrevStart%3)*6, yy-2, (jPrevEnd-jPrevStart+1)*pbScale/3, 2, positionStr);
     sprintf(prevPosMessage, "You were at: %s", positionStr);
-    if (jPrevStart < (mrnaLen/2))
+    vgText(g_vg, xx+(jPrevStart%3)*pbScale/3, yy-10, MG_BLACK, g_font, prevPosMessage);
+    /*if (jPrevStart < (mrnaLen/2))
    	{
    	vgText(g_vg, xx+(jPrevStart%3)*pbScale/3, yy-10, MG_BLACK, g_font, prevPosMessage);
    	}
@@ -536,11 +667,22 @@ if (jcnt > 0)
    	calxy(jPrevEnd/3, *yOffp, &xx, &yy);
    	vgTextRight(g_vg, xx-6, yy-10, 10, 10, MG_BLACK, g_font, prevPosMessage);
    	}
+    */
     }
 else
     {
-    calxy(jPrevExonPos/3, *yOffp, &xx, &yy);
-    vgBox(g_vg,  xx, yy, 1, 5, MG_RED);
+    //calxy(jPrevExonPos/3, *yOffp, &xx, &yy);
+    if (jPrevExonPos <= 0)
+	{
+        calxy(jPrevExonPos/3, *yOffp, &xx, &yy);
+	vgBox(g_vg,  xx, yy, 1, 5, MG_RED);
+	}
+    else
+	{
+        calxy(jPrevExonPos/3+1, *yOffp, &xx, &yy);
+	vgBox(g_vg,  xx, yy, 1, 5, MG_RED);
+	}
+
     mapBoxPrevGB(xx-1, yy-1, 2, 6, positionStr);
     
     sprintf(prevPosMessage, "You were at: %s (not in a CDS)", positionStr);
@@ -998,7 +1140,7 @@ else
     }
 }
 
-void doTracks(char *proteinID, char *mrnaID, char *aa, struct vGfx *vg, int *yOffp)
+void doTracks(char *proteinID, char *mrnaID, char *aa, int *yOffp)
 /* draw various protein tracks */
 {
 int i,j,l;
@@ -1028,41 +1170,130 @@ char strand;
 
 Color bkgColor;
 
-// initialize AA properties
-aaPropertyInit(&hasResFreq);
-
-g_vg = vg;
 g_font = mgSmallFont();
 
+if (cgiOptionalString("trackOffset") != NULL)
+	{
+	trackOrigOffset = atoi(cgiOptionalString("trackOffset")); 
+	}
+
+if (cgiOptionalString("pbScaleStr") != NULL)
+	{
+	pbScale  = atoi(cgiOptionalString("pbScaleStr")); 
+	}
+
+if (cgiOptionalString("pbScale") != NULL)
+	{
+	if (strcmp(cgiOptionalString("pbScale"), "1/6")  == 0) pbScale = 1;
+	if (strcmp(cgiOptionalString("pbScale"), "1/2")  == 0) pbScale = 3;
+	if (strcmp(cgiOptionalString("pbScale"), "FULL") == 0) pbScale = 6;
+	if (strcmp(cgiOptionalString("pbScale"), "DNA")  == 0) pbScale =22;
+	sprintf(pbScaleStr, "%d", pbScale);
+	cgiMakeHiddenVar("pbScaleStr", pbScaleStr);
+	}
+
 if (cgiVarExists("hgt.left3"))
+    {
     relativeScroll(-0.95);
+    initialWindow = FALSE;
+    }
 else if (cgiVarExists("hgt.left2"))
+    {
     relativeScroll(-0.475);
+    initialWindow = FALSE;
+    }
 else if (cgiVarExists("hgt.left1"))
-    relativeScroll(-0.1);
+    {
+    //relativeScroll(-0.1);
+    relativeScroll(-0.02);
+    initialWindow = FALSE;
+    }
 else if (cgiVarExists("hgt.right1"))
-    relativeScroll(0.1);
+    {
+    //relativeScroll(0.1);
+    relativeScroll(0.02);
+    initialWindow = FALSE;
+    }
 else if (cgiVarExists("hgt.right2"))
+    {
     relativeScroll(0.475);
+    initialWindow = FALSE;
+    }
 else if (cgiVarExists("hgt.right3"))
+    {
     relativeScroll(0.95);
+    initialWindow = FALSE;
+    }
 
 dnaUtilOpen();
 
 l=strlen(aa);
-doAAScale(l, yOffp, 1);
+
+// initialize AA properties
+aaPropertyInit(&hasResFreq);
+
+sfCount = getSuperfamilies(proteinID);
+
 if (mrnaID != NULL)
     {
     getExonInfo(proteinID, &exCount, &chrom, &strand);
+    if (initialWindow) 
+	{
+	prevGBOffsetSav = calPrevGB(exCount, chrom, strand, l, yOffp, proteinID, mrnaID);
+	trackOrigOffset = prevGBOffsetSav;
+    	}
     }
 
+pixWidth = 160+ protSeqLen*pbScale;
+if (pixWidth > MAX_PB_PIXWIDTH)
+   {
+   pixWidth = MAX_PB_PIXWIDTH;
+   }
+
+if ((protSeqLen*pbScale - trackOrigOffset) < MAX_PB_PIXWIDTH)
+    {
+    pixWidth = protSeqLen*pbScale - trackOrigOffset + 160;
+    }
+
+if (pixWidth < 550) pixWidth = 550;
+insideWidth = pixWidth-gfxBorder;
+
+pixHeight = 260;
+
+if (sfCount > 0) pixHeight = pixHeight + 20;
+
+//make room for individual residues display
+if (pbScale >=6)  pixHeight = pixHeight + 20;
+if (pbScale >=18) pixHeight = pixHeight + 30;
+
+makeTempName(&gifTn, "hgt", ".gif");
+vg = vgOpenGif(pixWidth, pixHeight, gifTn.forCgi);
+g_vg = vg;
+
+bkgColor = vgFindColorIx(vg, 255, 254, 232);
+
+vgBox(vg, 0, 0, insideWidth, pixHeight, bkgColor);
+
+/* Start up client side map. */
+hPrintf("<MAP Name=%s>\n", mapName);
+
+vgSetClip(vg, 0, gfxBorder, insideWidth, pixHeight - 2*gfxBorder);
+
+// start drawing indivisual tracks
+
+doAAScale(l, yOffp, 1);
+
 if (pbScale >= 6)  doResidues(aa, l, yOffp);
+
 if (pbScale >= 18) doDnaTrack(chrom, strand, exCount, l, yOffp);
 
 if (mrnaID != NULL)
     {
     doPrevGB(exCount, chrom, strand, l, yOffp, proteinID, mrnaID);
     }
+
+sprintf(trackOffset, "%d", trackOrigOffset);
+cgiMakeHiddenVar("trackOffset", trackOffset);
 
 if (mrnaID != NULL)
     {
@@ -1080,5 +1311,40 @@ if (sfCount > 0) doSuperfamily(ensPepName, sfCount, yOffp);
 if (hasResFreq) doAnomalies(aa, l, yOffp);
 
 doAAScale(l, yOffp, -1);
-}
 
+/* Finish map and save out picture and tell html file about it. */
+hPrintf("</MAP>\n");
+vgClose(&vg);
+
+hPrintf(
+"<IMG SRC=\"%s\" BORDER=1 WIDTH=%d HEIGHT=%d USEMAP=#%s onMouseOut=\"javascript:popupoff();\"><BR>",
+//hPrintf("<IMG SRC=\"%s\" BORDER=1 WIDTH=%d HEIGHT=%d USEMAP=#%s><BR>",
+        gifTn.forCgi, pixWidth, pixHeight, mapName);
+
+hPrintf("<A HREF=\"../goldenPath/help/pbTracksHelp.html\" TARGET=_blank>");
+hPrintf("Explanation of Tracks</A><br>");
+
+/* Put up horizontal scroll controls. */
+hWrites("Move ");
+hButton("hgt.left3", "<<<");
+hButton("hgt.left2", " <<");
+hButton("hgt.left1", " < ");
+hButton("hgt.right1", " > ");
+hButton("hgt.right2", ">> ");
+hButton("hgt.right3", ">>>");
+
+hPrintf(" &nbsp &nbsp &nbsp &nbsp ");
+
+/* Put up scaling controls. */
+hPrintf("Current scale: ");
+if (pbScale == 1) hPrintf("1/6 ");
+if (pbScale == 3) hPrintf("1/2 ");
+if (pbScale == 6) hPrintf("FULL ");
+
+hPrintf("&nbsp&nbsp&nbsp Rescale to ");
+hPrintf("<INPUT TYPE=SUBMIT NAME=\"pbScale\" VALUE=\"1/6\">\n");
+hPrintf("<INPUT TYPE=SUBMIT NAME=\"pbScale\" VALUE=\"1/2\">\n");
+hPrintf("<INPUT TYPE=SUBMIT NAME=\"pbScale\" VALUE=\"FULL\">\n");
+hPrintf("<INPUT TYPE=SUBMIT NAME=\"pbScale\" VALUE=\"DNA\">\n");
+hPrintf("<P>");
+}
