@@ -5,6 +5,7 @@
 
 #Summary of large genomic Duplications (>1KB >90% similar)
 CREATE TABLE genomicSuperDups (
+    bin smallint not null,      # Index field
     chrom varchar(255) not null,	# Human chromosome or FPC contig
     chromStart int unsigned not null,	# Start position in chromosome
     chromEnd int unsigned not null,	# End position in chromosome
@@ -36,7 +37,7 @@ CREATE TABLE genomicSuperDups (
     k2K float not null,	# Kimura K
               #Indices
     PRIMARY KEY(name(32)),
-    index(chrom(16)),
-    index(chromStart),
-    index(chromEnd)
+    INDEX (chrom(8), bin),
+    INDEX (chrom(8), chromStart),
+    INDEX (chrom(8), chromEnd)
 );

@@ -5,6 +5,7 @@
 
 #Summary of large genomic Duplications from Celera Data
 CREATE TABLE celeraDupPositive (
+    bin smallint not null,      # Index field
     chrom varchar(255) not null,	# Human chromosome or FPC contig
     chromStart int unsigned not null,	# Start position in chromosome
     chromEnd int unsigned not null,	# End position in chromosome
@@ -13,8 +14,8 @@ CREATE TABLE celeraDupPositive (
     fracMatch float not null,	# fraction of matching bases
     bpalign float not null,	# base pair alignment score
               #Indices
-    index(chrom),
-    index(chromStart),
-    index(chromEnd)
-
+    INDEX (chrom(8), bin),
+    INDEX (chrom(8), chromStart),
+    INDEX (chrom(8), chromEnd),
+    INDEX (name(18))
 );
