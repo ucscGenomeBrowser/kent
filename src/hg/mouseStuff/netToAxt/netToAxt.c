@@ -11,7 +11,7 @@
 #include "axt.h"
 
 boolean qChain = FALSE;  /* Do chain from query side. */
-int maxGap = 10000;
+int maxGap = 200;
 
 void usage()
 /* Explain usage and exit. */
@@ -22,8 +22,9 @@ errAbort(
   "   netToAxt in.net in.chain tNibDir qNibDir out.axt\n"
   "options:\n"
   "   -qChain - net is with respect to the q side of chains.\n"
-  "   -maxGap=N - maximum size of gap before breaking. Default 10000\n"
+  "   -maxGap=N - maximum size of gap before breaking. Default %d\n"
   "   -gapOut=gap.tab - Output gap sizes to file\n"
+  ,  maxGap
   );
 }
 
