@@ -46,6 +46,50 @@ altColor 200,220,255
 spectrum on
 type psl xeno
 
+track blatDrosophila
+shortLabel blatDrosophila
+longLabel  blatDrosophila
+group compGeno
+priority 49
+visibility dense
+color 0,60,120
+altColor 200,220,255
+spectrum on
+type psl xeno
+
+track blatMBMO
+shortLabel blatMBMO
+longLabel  blatMBMO
+group compGeno
+priority 49
+visibility dense
+color 0,60,120
+altColor 200,220,255
+spectrum on
+type psl xeno
+
+track blatBee
+shortLabel blatBee
+longLabel  blatBee
+group compGeno
+priority 49
+visibility dense
+color 0,60,120
+altColor 200,220,255
+spectrum on
+type psl xeno
+
+track blatSavignyi
+shortLabel blatSavignyi
+longLabel  blatSavignyi
+group compGeno
+priority 49
+visibility dense
+color 0,60,120
+altColor 200,220,255
+spectrum on
+type psl xeno
+
 track blatMm3
 shortLabel Mouse Blat
 longLabel  Translated blat of Mm3
@@ -73,6 +117,17 @@ shortLabel Human Blat
 longLabel  Human Blat
 group compGeno
 priority 149
+visibility dense
+color 0,60,120
+altColor 200,220,255
+spectrum on
+type psl xeno
+
+track blatAnopheles
+shortLabel Anopheles
+longLabel  Anopheles
+group compGeno
+priority 148
 visibility dense
 color 0,60,120
 altColor 200,220,255
@@ -124,3 +179,35 @@ color 100,50,0
 altColor 255,240,200
 spectrum on
 type chain hg15
+
+track hg15Pep
+shortLabel hg15Pep 
+longLabel hg15Pep
+group compgeno
+priority 50
+visibility hide
+type bed 5
+
+track rn2Pep
+shortLabel rn2Pep 
+longLabel rn2Pep
+group compgeno
+priority 50
+visibility hide
+type bed 5
+
+track mm3Pep
+shortLabel mm3Pep 
+longLabel mm3Pep
+group compgeno
+priority 50
+visibility hide
+type bed 5
+
+track xenoRefGene
+shortLabel xenoRefGene 
+longLabel xenoRefGene
+group rna
+priority 50
+visibility hide
+type genePred refPep refMrna
