@@ -14,7 +14,7 @@
 #include "cdsColors.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.94 2004/04/09 02:16:22 daryl Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.95 2004/04/09 11:37:44 weber Exp $";
 
 struct cart *cart;	/* Cookie cart with UI settings */
 char *database;		/* Current database. */
@@ -300,11 +300,6 @@ cg = startControlGrid(4, NULL);
 for (fil = mud->filterList; fil != NULL; fil = fil->next)
      oneMrnaFilterUi(cg, fil->label, fil->key);
 endControlGrid(&cg);
-
-if(sameString(tdb->tableName,"mrna") ||
-        sameString(tdb->tableName,"xenoMrna") ||
-        sameString(tdb->tableName,"mrnaBlastz"))
-        cdsColorOptions(tdb->tableName, -1);
 }
 
 void bedUi(struct trackDb *tdb)
@@ -794,7 +789,7 @@ else
                         if(sameWord(words[1], "xeno"))
 	                        crossSpeciesUi(tdb);
 
-                cdsColorOptions(tdb->tableName,-1);
+                /*cdsColorOptions(tdb->tableName,-1);*/
                 }
     freeMem(typeLine);
     }
