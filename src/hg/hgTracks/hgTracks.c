@@ -2233,6 +2233,8 @@ char *bedName(struct trackGroup *tg, void *item)
 /* Return name of bed track item. */
 {
 struct bed *bed = item;
+if (bed->name == NULL)
+    return "";
 return bed->name;
 }
 
@@ -5015,6 +5017,7 @@ if (ct->fieldCount < 12)
     {
     tg = createBedTg(ct->bt);
     tg->loadItems = ctLoadSimpleBed;
+    tg->freeItems = NULL;
     }
 else
     {
@@ -5632,7 +5635,8 @@ saveHiddenVars();
 for (group = tGroupList; group != NULL; group = group->next)
     {
     if (group->visibility != tvHide)
-	group->freeItems(group);
+	if (group->freeItems != NULL)
+		group->freeItems(group);
     }
 printf("</FORM>");
 }
@@ -5770,7 +5774,6 @@ char *oldSeq;
 char *submitVal;
 boolean testing = FALSE;
 
-// pushCarefulMemHandler(32*1024*1024);
 /* Initialize layout and database. */
 database = cgiOptionalString("db");
 if (database == NULL)
@@ -5873,6 +5876,7 @@ printf("new tracks, including some gene predictions.  Please try again tomorrow.
 
 int main(int argc, char *argv[])
 {
+cgiSpoof(&argc, argv);
 htmlSetBackground("../images/floret.jpg");
 htmShell("Working Draft Genome Browser v5", doMiddle, NULL);
 //htmShell("Browser Being Updated", doDown, NULL);
