@@ -16,7 +16,7 @@
 #include "hgColors.h"
 #include "hgGene.h"
 
-static char const rcsid[] = "$Id: hgGene.c,v 1.38 2004/11/23 18:08:37 kent Exp $";
+static char const rcsid[] = "$Id: hgGene.c,v 1.39 2005/02/07 23:26:39 fanhsu Exp $";
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
@@ -272,6 +272,8 @@ void printDescription(char *id, struct sqlConnection *conn)
 char *description = NULL;
 char *summaryTables = genomeOptionalSetting("summaryTables");
 char *protAcc = getSwissProtAcc(conn, spConn, id);
+char *spDisplayId;
+
 description = genoQuery(id, "descriptionSql", conn);
 hPrintf("<B>Description:</B> ");
 if (description != NULL)
@@ -291,9 +293,12 @@ if (protAcc != NULL)
 	    "TARGET=_blank>%s</A></B>\n",
 	    protAcc, protAcc);
     /* show SWISS-PROT display ID if it is different than the accession ID */
-    if (!sameWord(protAcc, spAccToId(spConn, protAcc)))
+    spDisplayId = spAccToId(spConn, protAcc);
+
+    /* if display name is like: Q03399 | Q03399_HUMAN, don't show display name */
+    if (strstr(spDisplayId, protAcc) == NULL)
 	{
-	hPrintf(" (%s)\n", spAccToId(spConn, protAcc) );
+	hPrintf(" (aka %s or %s)\n", spDisplayId, oldSpDisplayId(spDisplayId));
 	}
     }
 
@@ -602,7 +607,7 @@ getGenomeSettings();
 getGenePosition(conn);
 curGenePred = getCurGenePred(conn);
 curGeneName = getGeneName(curGeneId, conn);
-spConn = sqlConnect("swissProt");
+spConn = sqlConnect(UNIPROT_DB_NAME);
 swissProtAcc = getSwissProtAcc(conn, spConn, curGeneId);
 
 /* Check command variables, and do the ones that
