@@ -87,7 +87,7 @@
 #include "versionInfo.h"
 #include "bedCart.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.900 2005/02/09 20:02:33 hiram Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.901 2005/02/09 23:43:05 kate Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -7877,15 +7877,9 @@ struct sqlResult *sr;
 char **row;
 int rowOffset;
 char option[128]; /* Option -  score filter */
-char *words[3];
-int wordCt;
 char *optionScoreVal;
 int optionScore = 0;
 char query[128] ;
-char *setting = NULL;
-bool doScoreCtFilter = FALSE;
-int scoreFilterCt = 0;
-char *topTable = NULL;
 
 if (tg->bedSize <= 3)
     loader = bedLoad3;
@@ -7896,22 +7890,6 @@ else if (tg->bedSize == 5)
 else
     loader = bedLoad6;
 
-/* limit to a specified count of top scoring items.
- * If this is selected, it overrides selecting item by specified score */
-if ((setting = trackDbSetting(tg->tdb, "filterTopScorers")) != NULL)
-    {
-    wordCt = chopLine(cloneString(setting), words);
-    if (wordCt >= 3)
-        {
-        safef(option, sizeof(option), "%s.filterTopScorersOn", tg->mapName);
-        doScoreCtFilter = 
-            cartCgiUsualBoolean(cart, option, sameString(words[0], "on"));
-        safef(option, sizeof(option), "%s.filterTopScorersCt", tg->mapName);
-        scoreFilterCt = cartCgiUsualInt(cart, option, atoi(words[1]));
-        topTable = words[2];
-        }
-    }
-
 /* limit to items above a specified score */
 safef(option, sizeof(option), "%s.scoreFilter", tg->mapName);
 optionScoreVal = trackDbSetting(tg->tdb, "scoreFilter");
@@ -7919,15 +7897,7 @@ if (optionScoreVal != NULL)
     optionScore = atoi(optionScoreVal);
 optionScore = cartUsualInt(cart, option, optionScore);
 
-if (hTableExists(topTable) && doScoreCtFilter)
-    {
-    safef(query, sizeof(query), 
-                "select * from %s order by score desc limit %d", 
-                                topTable, scoreFilterCt);
-    sr = sqlGetResult(conn, query);
-    rowOffset = hOffsetPastBin(hDefaultChrom(), topTable);
-    }
-else if (optionScore > 0)
+if (optionScore > 0)
     {
     safef(query, sizeof(query), "score >= %d",optionScore);
     sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd, 
@@ -7943,20 +7913,11 @@ while ((row = sqlNextRow(sr)) != NULL)
     bed = loader(row+rowOffset);
     slAddHead(&list, bed);
     }
-if (doScoreCtFilter)
-    {
-    /* filter out items not in this window */
-    struct bed *newList = 
-        bedFilterListInRange(list, NULL, chromName, winStart, winEnd);
-    list = newList;
-    }
 slReverse(&list);
 sqlFreeResult(&sr);
 hFreeConn(&conn);
 tg->items = list;
 }
-
-
 
 void bed8To12(struct bed *bed)
 /* Turn a bed 8 into a bed 12 by defining one block. */
