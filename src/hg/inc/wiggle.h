@@ -116,6 +116,37 @@ struct wiggleStats
     double stddev;	/* standard deviation of data points */
     };
 
+struct wiggleDataStream
+/*	mechanism to access wiggle data, in DB or from file	*/
+    {
+    char *db;			/*	database name	*/
+    char *tblName;		/*	the table or file name	*/
+    boolean isFile;		/*	TRUE means it is a file, not DB */
+    struct lineFile *lf;	/*	file handle in case of file	*/
+    struct wiggleData *data;	/*	linked list of wiggle data values */
+    struct bed *bed;		/*	data in bed format	*/
+    struct wiggleStats *stats;	/*	linked list of wiggle stats	*/
+    boolean useDataConstraint;	/*	to simplify checking if it is on */
+    char *dataConstraint;	/*	one of < = >= <= == != 'in range' */
+    double limit_0;		/*	for constraint comparison	*/
+    double limit_1;		/*	for constraint comparison	*/
+    unsigned char ucLowerLimit;	/*	for comparison direct to bytes	*/
+    unsigned char ucUpperLimit;	/*	for comparison direct to bytes	*/
+    char *sqlConstraint;	/*	extra SQL constraints	*/
+    unsigned int currentSpan;	/*	for use during reading	*/
+    char *currentChrom;		/*	for use during reading	*/
+    char *wibFile;		/*	for use during reading	*/
+    int wibFH;			/*	wibFile handle	*/
+    struct sqlConnection *conn;	/*	SQL connection when talking to db */
+    struct sqlResult *sr;	/*	SQL result when talking to db	*/
+    char *chrName;		/*	for chrom==chrName on file reads */
+    unsigned spanLimit;		/*	for span==spanLimit on file reads */
+    boolean (*cmpDouble)(struct wiggleDataStream *wDS, double lower,
+	double upper);		/*	for comparing with SQL row values */
+    boolean (*cmpByte)(struct wiggleDataStream *wDS, unsigned char *value);
+				/*	for comparing to real data bytes */
+    };
+
 #include "hdb.h"
 
 #define HTI_IS_WIGGLE (hti->spanField[0] !=0)
