@@ -16,3 +16,12 @@ group map
 visibility hide
 type bed 3 +
 
+track genscan
+shortLabel Genscan Genes
+longLabel Genscan Gene Predictions
+group genes
+priority 50
+visibility dense
+color 170,100,0
+type genePred
+
