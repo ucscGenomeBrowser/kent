@@ -715,8 +715,9 @@ otherDb hg16
 track encodeRegions
 shortLabel ENCODE Regions
 longLabel Encyclopedia of DNA Elements (ENCODE) Regions
-group x
+group encode
 priority 170
+color 150,100,30
 visibility hide
 type bed 4 .
 
