@@ -27,7 +27,7 @@
 # is still produced.  This script is very careful to exit non-zero if an error
 # occurs.
 #
-# $Id: gbBlat,v 1.10 2003/10/10 17:30:02 markd Exp $
+# $Id: gbBlat,v 1.11 2004/01/15 19:03:52 markd Exp $
 #
 set -e
 
@@ -124,7 +124,7 @@ case "$orgCat" in
     exit 1;;
 esac
 
-# ooc chosen based on database
+# ooc chosen based on genome
 oocOpt=""
 case "$database" in
     hg*) oocOpt="-ooc=${HG_OOC}" ;;
@@ -133,6 +133,13 @@ case "$database" in
     zooHuman*) oocOpt="-ooc=${HG_OOC}" ;;
     zooMouse*) oocOpt="-ooc=${MM_OOC}" ;;
     zooRat*) oocOpt="-ooc=${RN_OOC}" ;;
+esac
+
+# other genome-specific parameters
+case "$database" in
+    sacCer*) 
+        # limit intron size on yeast 
+        blatParams="-maxIntron=5000" ;;
 esac
 
 
@@ -145,21 +152,21 @@ case "$orgCat" in
                 if [ "$srcDb" = "refseq" ] ; then
                     # -trimHardA was recommended, however this results in
                     # qSize being less than the sequence size.
-                    blatParams="-q=rna -fine $oocOpt"
+                    blatParams="${blatParams} -q=rna -fine $oocOpt"
                 else
-                    blatParams="-q=rna -fine $oocOpt"
+                    blatParams="${blatParams} -q=rna -fine $oocOpt"
                 fi
                 ;;
             est)
-                blatParams="-mask=lower $oocOpt" ;;
+                blatParams="${blatParams} -mask=lower $oocOpt" ;;
         esac;;
     xeno) 
         isNative=NO
         case "$type" in
             mrna)
-                blatParams="-q=rnax -t=dnax -mask=lower";;
+                blatParams="${blatParams} -q=rnax -t=dnax -mask=lower";;
             est)
-                blatParams="-q=dnax -t=dnax -mask=lower";;
+                blatParams="${blatParams} -q=dnax -t=dnax -mask=lower";;
         esac;;
 esac
 
