@@ -9,7 +9,7 @@
 #include "dnaMotif.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: dnaMotif.c,v 1.5 2004/09/13 15:39:06 kent Exp $";
+static char const rcsid[] = "$Id: dnaMotif.c,v 1.6 2004/09/13 15:48:30 kent Exp $";
 
 struct dnaMotif *dnaMotifLoad(char **row)
 /* Load a dnaMotif from row fetched with select * from dnaMotif
@@ -424,7 +424,7 @@ static void dnaMotifDims(struct dnaMotif *motif, double widthPerBase, double hei
 	int *retWidth, int *retHeight)
 /* Calculate dimensions of motif when rendered. */
 {
-static int widthFudgeFactor = 2, heightFudgeFactor = 4;
+static int widthFudgeFactor = 2, heightFudgeFactor = 2;
 *retWidth = ceil(widthPerBase * motif->columnCount) + widthFudgeFactor;
 *retHeight = ceil(height) + heightFudgeFactor;
 }

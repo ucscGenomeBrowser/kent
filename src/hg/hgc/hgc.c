@@ -146,7 +146,7 @@
 #include "pscreen.h"
 #include "transRegCode.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.749 2004/09/13 15:39:54 kent Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.750 2004/09/13 15:48:36 kent Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -5373,9 +5373,8 @@ if (motif != NULL)
     printProbRow("T", motif->tProb, motif->columnCount);
     printf("<BR>\n");
     makeTempName(&pngTn, "logo", ".png");
-    dnaMotifToLogoPng(motif, 40, 120, NULL, "../trash", pngTn.forCgi);
+    dnaMotifToLogoPng(motif, 49, 150, NULL, "../trash", pngTn.forCgi);
     printf("<IMG SRC=\"%s\" BORDER=1>", pngTn.forHtml);
-    printf(" motif sequence logo\n");
     printf("<BR>\n");
     }
 printf("</PRE>");
