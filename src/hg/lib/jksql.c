@@ -14,7 +14,7 @@
 #include "sqlNum.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: jksql.c,v 1.65 2004/10/02 19:35:54 kent Exp $";
+static char const rcsid[] = "$Id: jksql.c,v 1.66 2004/10/11 19:03:32 kent Exp $";
 
 /* flags controlling sql monitoring facility */
 static unsigned monitorInited = FALSE;      /* initialized yet? */
@@ -943,7 +943,7 @@ char *ret = NULL;
 if ((sr = sqlGetResult(sc, query)) == NULL)
     return NULL;
 row = sqlNextRow(sr);
-if (row != NULL)
+if (row != NULL && row[0] != NULL)
     {
     strncpy(buf, row[0], bufSize);
     ret = buf;
@@ -974,8 +974,8 @@ int ret = 0;
 
 sr = sqlGetResult(conn, query);
 row = sqlNextRow(sr);
-if (row != NULL)
-    ret = sqlSigned(row[0]);
+if (row != NULL && row[0] != NULL)
+    ret = atoi(row[0]);
 sqlFreeResult(&sr);
 return ret;
 }
@@ -985,6 +985,9 @@ int sqlNeedQuickNum(struct sqlConnection *conn, char *query)
 {
 char buf[32];
 sqlNeedQuickQuery(conn, query, buf, sizeof(buf));
+if (!(buf[0] == '-' && isdigit(buf[1])) || isdigit(buf[0]))
+    errAbort("Expecting numerical result to query '%s' got '%s'",
+    	query, buf);
 return sqlSigned(buf);
 }
 
@@ -999,7 +1002,7 @@ char *ret = NULL;
 if ((sr = sqlGetResult(sc, query)) == NULL)
     return NULL;
 row = sqlNextRow(sr);
-if (row != NULL)
+if (row != NULL && row[0] != NULL)
     ret = cloneString(row[0]);
 sqlFreeResult(&sr);
 return ret;
