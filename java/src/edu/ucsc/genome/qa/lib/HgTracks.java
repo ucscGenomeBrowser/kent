@@ -545,7 +545,7 @@ public class HgTracks {
           // check if hide is value
           if (valuearray[j].equals("hide")) {
             paramlist.add(paramarray[i]);
-            break;  // question:  break how far back?  just local for-loop?
+            break;  
           }
         }
       }
