@@ -2,7 +2,8 @@ include ../../../../inc/common.mk
 
 all:
 
-test: rnaBindingClusterCorrTest rnaBindingClusterCorrAntiTest altHtmlPagesSjRatioTest
+test: rnaBindingClusterCorrTest rnaBindingClusterCorrAntiTest \
+	altHtmlPagesSjRatioTest altHtmlPagesSjRatioLog2Test
 
 # test files: 
 # clusterTest.tab - List of splice junctions in a fake cluster.
@@ -26,6 +27,11 @@ altHtmlPagesSjRatioTest:
 	altHtmlPages -junctFile=input/altHtmlSjRatioJs.tab -intensityFile=input/altHtmlSjInten.tab  \
 	    -ratioFile=output/sjRatios.tab -doSjRatios >& /dev/null
 	diff -u expected/altHtmlSjRatio.tab output/sjRatios.tab 
+
+altHtmlPagesSjRatioLog2Test:
+	altHtmlPages -junctFile=input/altHtmlSjRatioJs.tab -intensityFile=input/altHtmlSjInten.tab  \
+	    -ratioFile=output/sjRatios.tab -doSjRatios -log2Ratio >& /dev/null
+	diff -u expected/altHtmlSjRatioLog2.tab output/sjRatios.tab 
 
 mkout:
 	${MKDIR} output
