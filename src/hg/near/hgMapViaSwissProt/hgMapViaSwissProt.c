@@ -8,7 +8,7 @@
 #include "hdb.h"
 #include "hgRelate.h"
 
-static char const rcsid[] = "$Id: hgMapViaSwissProt.c,v 1.1 2003/11/15 20:04:32 kent Exp $";
+static char const rcsid[] = "$Id: hgMapViaSwissProt.c,v 1.2 2004/04/16 06:39:45 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -63,6 +63,7 @@ char **geneRow, **row;
 char *spExtDbId;
 char *tempDir = ".";
 FILE *f = hgCreateTabFile(tempDir, outTable);
+struct hash *uniqHash = newHash(18);
 
 /* Look up id for swissprot external database. */
 safef(query, sizeof(query), "select id from extDb where val = '%s'", spExtDb);
@@ -88,7 +89,13 @@ while ((geneRow = sqlNextRow(geneSr)) != NULL)
 	sr = sqlGetResult(spConn, query);
 	while ((row = sqlNextRow(sr)) != NULL)
 	    {
-	    fprintf(f, "%s\t%s\n", name, row[0]);
+	    char uniqId[256];
+	    safef(uniqId, sizeof(uniqId), "%s %s", name, row[0]);
+	    if (!hashLookup(uniqHash, uniqId))
+		{
+		hashAdd(uniqHash, uniqId, NULL);
+		fprintf(f, "%s\t%s\n", name, row[0]);
+		}
 	    }
 	sqlFreeResult(&sr);
 	freez(&acc);
