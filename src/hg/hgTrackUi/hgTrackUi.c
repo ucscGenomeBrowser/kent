@@ -10,8 +10,9 @@
 #include "hdb.h"
 #include "hCommon.h"
 #include "hui.h"
+#include "sample.h"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.64 2003/07/11 23:10:11 baertsch Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.65 2003/07/18 23:00:40 weber Exp $";
 
 struct cart *cart;	/* Cookie cart with UI settings */
 char *database;		/* Current database. */
@@ -204,6 +205,82 @@ bb = cartUsualString(cart, filterVar, filterVal);
 cgiMakeTextVar(filterVar, cartUsualString(cart, filterVar, ""), 5);
 }
 
+void zooWiggleUi(struct trackDb *tdb )
+/* put up UI for zoo track with one species on each line
+ * and checkboxes to toggle each of them on/off*/
+{
+
+char options[7][256];
+int thisHeightPer, thisLineGap;
+float thisMinYRange, thisMaxYRange;
+char *interpolate, *aa, *fill;
+
+char **row;
+int rowOffset;
+struct sample *sample;
+struct sqlResult *sr;
+
+char option[64];
+struct sqlConnection *conn = hAllocConn();
+
+char *chromName = cartString(cart, "c");
+char newRow = 0;
+
+snprintf( &options[0][0], 256, "%s.heightPer", tdb->tableName );
+snprintf( &options[1][0], 256, "%s.linear.interp", tdb->tableName );
+snprintf( &options[3][0], 256, "%s.fill", tdb->tableName );
+snprintf( &options[4][0], 256, "%s.min.cutoff", tdb->tableName );
+snprintf( &options[5][0], 256, "%s.max.cutoff", tdb->tableName );
+snprintf( &options[6][0], 256, "%s.interp.gap", tdb->tableName );
+
+thisHeightPer = atoi(cartUsualString(cart, &options[0][0], "50"));
+interpolate = cartUsualString(cart, &options[1][0], "Linear Interpolation");
+fill = cartUsualString(cart, &options[3][0], "1");
+thisMinYRange = atof(cartUsualString(cart, &options[4][0], "0.0"));
+thisMaxYRange = atof(cartUsualString(cart, &options[5][0], "1000.0"));
+thisLineGap = atoi(cartUsualString(cart, &options[6][0], "200"));
+
+printf("<p><b>Interpolation: </b> ");
+wiggleDropDown(&options[1][0], interpolate );
+printf(" ");
+
+printf("<br><br>");
+printf(" <b>Fill Blocks</b>: ");
+cgiMakeRadioButton(&options[3][0], "1", sameString(fill, "1"));
+printf(" on ");
+
+cgiMakeRadioButton(&options[3][0], "0", sameString(fill, "0"));
+printf(" off ");
+
+printf("<p><b>Track Height</b>:&nbsp;&nbsp;");
+cgiMakeIntVar(&options[0][0], thisHeightPer, 5 );
+printf("&nbsp;pixels");
+
+printf("<p><b>Vertical Range</b>:&nbsp;&nbsp;\nmin:");
+cgiMakeDoubleVar(&options[4][0], thisMinYRange, 6 );
+printf("&nbsp;&nbsp;&nbsp;&nbsp;max:");
+cgiMakeDoubleVar(&options[5][0], thisMaxYRange, 6 );
+
+printf("<p><b>Toggle Species on/off</b><br>" );
+sr = hRangeQuery(conn, tdb->tableName, chromName, 0, 1877426, NULL, &rowOffset);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    sample = sampleLoad(row + rowOffset);
+    snprintf( option, sizeof(option), "zooSpecies.%s", sample->name );
+    if( cartUsualBoolean(cart, option, TRUE ) )
+	cgiMakeCheckBox(option, TRUE );
+    else 
+	cgiMakeCheckBox(option, FALSE );
+    printf("%s&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;", sample->name );
+
+    newRow++;
+    if( newRow % 6 == 0 ) printf("<br>");
+		    
+    sampleFree(&sample);
+    }
+
+}
+
 void genericWiggleUi(struct trackDb *tdb, int optionNum )
 /* put up UI for any standard wiggle track (a.k.a. sample track)*/
 {
@@ -255,6 +332,8 @@ if( optionNum >= 7 )
     printf("&nbsp;bases");
     }
 }
+
+
 
 void humMusUi(struct trackDb *tdb, int optionNum )
 /* put up UI for human/mouse conservation sample tracks (humMusL and musHumL)*/
@@ -386,7 +465,7 @@ void specificUi(struct trackDb *tdb)
 	else if (sameString(track, "ancientR"))
 		ancientRUi(tdb);
 	else if (sameString(track, "zoo") || sameString(track, "zooNew" ))
-		genericWiggleUi(tdb,6);
+		 zooWiggleUi(tdb);
 	else if (sameString(track, "humMusL") ||
 		 sameString( track, "musHumL") ||
 		 sameString( track, "regpotent") ||
