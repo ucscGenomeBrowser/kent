@@ -78,6 +78,15 @@ void printSomeAssemblyListHtml(char *db, struct dbDb *dbList, char *javascript);
  * HTML to render dropdown list 
  * param db - default assembly.  If NULL, no default selection */
 
+void printAllAssemblyListHtmlParm(char *db, struct dbDb *dbList, 
+                                char *dbCgi, bool activeOnly, char *javascript);
+/* Prints to stdout the HTML to render a dropdown list containing the list 
+of all possible assemblies to choose from.
+param db - The default assembly (the database name) to choose as selected. 
+                If NULL, no default selection.
+param active - if set, print only active assemblies with databases
+ */
+
 void printSomeAssemblyListHtmlParm(char *db, struct dbDb *dbList, 
                                         char *dbCgi, char *javascript);
 /* Find all the assemblies from the list that are active.

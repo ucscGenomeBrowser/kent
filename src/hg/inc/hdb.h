@@ -342,6 +342,10 @@ struct dbDb *hDbDbList();
  * The list includes the name, description, and where to
  * find the nib-formatted DNA files. Free this with dbDbFree. */
 
+struct dbDb *hArchiveDbDbList();
+/* Return list of databases in archive central dbDb.
+ * Free this with dbDbFree. */
+
 boolean hIsPrivateHost();
 /* Return TRUE if this is running on private web-server. */
 

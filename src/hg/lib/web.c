@@ -9,7 +9,7 @@
 #include "axtInfo.h"
 #include "hgColors.h"
 
-static char const rcsid[] = "$Id: web.c,v 1.46 2004/04/13 14:54:25 kate Exp $";
+static char const rcsid[] = "$Id: web.c,v 1.47 2004/04/14 22:31:37 kate Exp $";
 
 /* flag that tell if the CGI header has already been outputed */
 boolean webHeadAlreadyOutputed = FALSE;
@@ -366,15 +366,15 @@ void printGenomeListHtml(char *db, char *onChangeText)
 printSomeGenomeListHtml(db, hGetIndexedDatabases(), onChangeText);
 }
 
-void printSomeAssemblyListHtmlParm(char *db, struct dbDb *dbList, 
-                                        char *dbCgi, char *javascript)
+void printAllAssemblyListHtmlParm(char *db, struct dbDb *dbList, 
+                                    char *dbCgi, bool activeOnly, char *javascript)
 {
-/* Find all the assemblies from the list that are active.
-Prints to stdout the HTML to render a dropdown list containing the list 
-of the possible assemblies to choose from.
+/* Prints to stdout the HTML to render a dropdown list containing the list 
+of all possible assemblies to choose from.
 
 param db - The default assembly (the database name) to choose as selected. 
                 If NULL, no default selection.
+param active - if set, print only active assemblies with databases
  */
 char *assemblyList[128];
 char *values[128];
@@ -384,11 +384,12 @@ struct hash *hash = hashNew(7); // 2^^7 entries = 128
 char *genome = hGenome(db);
 char *selAssembly = NULL;
 
+
 for (cur = dbList; cur != NULL; cur = cur->next)
     {
-    if (strstrNoCase(genome, cur->genome)
-        && (cur->active || strstrNoCase(cur->name, db))
-        && haveDatabase(cur->name))
+    if (!activeOnly || strstrNoCase(genome, cur->genome)
+        && ((cur->active || !activeOnly) || strstrNoCase(cur->name, db))
+        && (!activeOnly || haveDatabase(cur->name)))
         {
         assemblyList[numAssemblies] = cur->description;
         values[numAssemblies] = cur->name;
@@ -406,7 +407,19 @@ for (cur = dbList; cur != NULL; cur = cur->next)
 
 cgiMakeDropListFull(dbCgi, assemblyList, values, numAssemblies, selAssembly, javascript);
 }
+void printSomeAssemblyListHtmlParm(char *db, struct dbDb *dbList, 
+                                        char *dbCgi, char *javascript)
+{
+/* Find all the assemblies from the list that are active.
+Prints to stdout the HTML to render a dropdown list containing the list 
+of the possible assemblies to choose from.
 
+param db - The default assembly (the database name) to choose as selected. 
+                If NULL, no default selection.
+                */
+    printAllAssemblyListHtmlParm(db, dbList, dbCgi, TRUE, javascript);
+}
+ 
 void printSomeAssemblyListHtml(char *db, struct dbDb *dbList, char *javascript)
 {
 printSomeAssemblyListHtmlParm(db, dbList, dbCgiName, javascript);
