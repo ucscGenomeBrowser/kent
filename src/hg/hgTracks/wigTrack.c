@@ -11,7 +11,7 @@
 #include "wiggle.h"
 #include "scoredRef.h"
 
-static char const rcsid[] = "$Id: wigTrack.c,v 1.37 2004/02/03 19:33:54 hiram Exp $";
+static char const rcsid[] = "$Id: wigTrack.c,v 1.38 2004/02/04 18:13:43 hiram Exp $";
 
 /*	wigCartOptions structure - to carry cart options from wigMethods
  *	to all the other methods via the track->extraUiData pointer
@@ -323,8 +323,6 @@ enum wiggleScaleOptEnum autoScale;
 enum wiggleWindowingEnum windowingFunction;
 enum wiggleYLineMarkEnum yLineOnOff;
 double yLineMark;
-Color shadesOfPrimary[EXPR_DATA_SHADES];
-Color shadesOfAlt[EXPR_DATA_SHADES];
 Color black = vgFindColorIx(vg, 0, 0, 0);
 struct rgbColor blackColor = {0, 0, 0};
 struct rgbColor whiteColor = {255, 255, 255};
@@ -341,9 +339,6 @@ double graphRange;		/*	scaling choice will set these	*/
 double epsilon;			/*	range of data in one pixel	*/
 int x1 = 0;			/*	screen coordinates	*/
 int x2 = 0;			/*	screen coordinates	*/
-
-vgMakeColorGradient(vg, &whiteColor, &blackColor, 12, shadesOfPrimary);
-vgMakeColorGradient(vg, &whiteColor, &blackColor, 12, shadesOfAlt);
 
 wigCart = (struct wigCartOptions *) tg->extraUiData;
 horizontalGrid = wigCart->horizontalGrid;
@@ -721,11 +716,11 @@ for (x1 = 0; x1 < width; ++x1)
 	    {
 	    double dataValue;
 	    int grayIndex;
-	    dataValue = preDraw[preDrawIndex].max - graphLowerLimit;
+	    dataValue = preDraw[preDrawIndex].smooth - graphLowerLimit;
 	    grayIndex = (dataValue/graphRange) * MAX_WIG_VALUE;
-			
+
 	    drawColor =
-		shadesOfPrimary[grayInRange(grayIndex, 0, MAX_WIG_VALUE)];
+		tg->colorShades[grayInRange(grayIndex, 0, MAX_WIG_VALUE)];
 
 	    boxHeight = tg->lineHeight;
 	    vgBox(vg, x1+xOff, yOff, 1,
@@ -894,7 +889,7 @@ else if (tg->visibility == tvFull)
 		if (i == 0)
 		    snprintf(lower, 128, "0 -");
 		else
-		    snprintf(lower, 128, "%g", lineValue);
+		    snprintf(lower, 128, "%g -", lineValue);
 		/*	only draw if it is far enough away from the
 		 *	upper and lower labels, and it won't overlap with
 		 *	the center label.
