@@ -9,7 +9,7 @@
 #include "binRange.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: bed.c,v 1.35 2004/11/23 00:12:59 hiram Exp $";
+static char const rcsid[] = "$Id: bed.c,v 1.36 2004/11/23 00:42:22 hiram Exp $";
 
 void bedStaticLoad(char **row, struct bed *ret)
 /* Load a row from bed table into ret.  The contents of ret will
@@ -1138,3 +1138,22 @@ lineFileClose(&lf);
 return hash;
 }
 
+int parseRgb(char *itemRgb)
+/*	parse a string: "r,g,b" into three unsigned char values
+	returned as 24 bit number, or -1 for failure */
+{
+char dupe[64];
+int wordCount;
+char *row[4];
+
+strncpy(dupe, itemRgb, sizeof(dupe));
+wordCount = chopString(dupe, ",", row, ArraySize(row));
+
+if ((wordCount != 3) || (!isdigit(row[0][0]) ||
+    !isdigit(row[1][0]) || !isdigit(row[2][0])))
+	return (-1);
+
+return ( ((atoi(row[0]) & 0xff) << 16) ||
+	((atoi(row[1]) & 0xff) << 8) ||
+	(atoi(row[2]) & 0xff) );
+}
