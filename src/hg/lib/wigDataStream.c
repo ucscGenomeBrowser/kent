@@ -7,7 +7,7 @@
 #include "portable.h"
 #include "hgColors.h"
 
-static char const rcsid[] = "$Id: wigDataStream.c,v 1.27 2004/08/26 17:30:41 hiram Exp $";
+static char const rcsid[] = "$Id: wigDataStream.c,v 1.28 2004/08/26 18:32:00 hiram Exp $";
 
 /*	PRIVATE	METHODS	************************************************/
 static void addConstraint(struct wiggleDataStream *wDS, char *left, char *right)
@@ -1646,7 +1646,7 @@ if (wDS->stats)
 	    fprintf(fh,"\t<TD ALIGN=RIGHT> %g </TD>\n", stats->mean);
 	    fprintf(fh,"\t<TD ALIGN=RIGHT> %g </TD>\n", stats->variance);
 	    fprintf(fh,"\t<TD ALIGN=RIGHT> %g </TD>\n", stats->stddev);
-	    fprintf(fh,"<TR>\n");
+	    fprintf(fh,"</TR>\n");
 	    }
 	else
 	    {
