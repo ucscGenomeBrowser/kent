@@ -2075,6 +2075,9 @@ TrEMBL-NEW and their corresponding mRNAs from GenBank
   href="#Snp">snp</A> 
   - SNP positions from various sources (hg17 human assemblies and later)</LI>
   <LI><A 
+  href="#SnpExceptions">snpExceptions</A> 
+  - Contains a set of queries to look for potentially problematic SNPs</LI>
+  <LI><A 
   href="#SnpMap">snpMap</A> 
   - SNP positions from various sources (hg13, hg15, and  hg16 human assemblies)</LI>
   <LI><A 
@@ -4860,6 +4863,18 @@ of finding simple tandem repeats than RepeatMasker does.
     string  locType;    "How the variant affects the reference sequence"
     string  source;     "Source of the data - dbSnp, Affymetrix, ..."
     string  exception;  "List of exceptionIds for 'invariant' conditions"
+    )
+</PRE>
+
+<H4><A name=SnpExceptions></A>SNP Exceptions</H4>
+<PRE>table snpExceptions
+"Set of queries to look for snps that appear problematic"
+    (
+    uint    exceptionId; "Unique ID for this exception"
+    string  query;       "SQL string to retrieve bad records"
+    uint    num;         "Count of SNPs that fail this condition"
+    string  description; "Text string for readability"
+    string  resultPath;  "Path for results file"
     )
 </PRE>
 
