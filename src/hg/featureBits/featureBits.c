@@ -14,7 +14,7 @@
 #include "agpGap.h"
 #include "chain.h"
 
-static char const rcsid[] = "$Id: featureBits.c,v 1.20 2003/08/04 17:28:46 kate Exp $";
+static char const rcsid[] = "$Id: featureBits.c,v 1.21 2004/03/13 05:25:28 markd Exp $";
 
 int minSize = 1;	/* Minimum size of feature. */
 char *clChrom = "all";	/* Which chromosome. */
@@ -293,6 +293,8 @@ else if (sameString(suffix, ".chain"))
     {
     fbOrChain(acc, track, chrom, chromSize);
     }
+else  
+    errAbort("can't determine file type of: %s", track);
 }
 
 void orTable(Bits *acc, char *track, char *chrom, 
