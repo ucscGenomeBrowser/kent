@@ -11,7 +11,7 @@
 #include "genbank.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: genePred.c,v 1.62 2005/03/16 02:27:21 sugnet Exp $";
+static char const rcsid[] = "$Id: genePred.c,v 1.63 2005/03/16 06:26:19 sugnet Exp $";
 
 /* SQL to create a genePred table */
 static char *createSql = 
@@ -381,18 +381,16 @@ return dif;
 }
 
 static boolean haveStartStopCodons(struct gffFile *gff)
-/* For GFFs, determine if any of the annotations use start_codon or
+/* For GFFs, determine if any of the annotations use start_codon or                                                                                                                 
  * stop_codon */
 {
-struct gffGroup *group;
-struct gffLine *gl;
-for (group = gff->groupList; group != NULL; group = group->next)
-    for (gl = group->lineList; gl != NULL; gl = gl->next)
-        {
-        if (sameWord(gl->feature, "start_codon")
-            || (sameWord(gl->feature, "stop_codon")))
-            return TRUE;
-        }
+struct gffFeature *feature;
+for(feature = gff->featureList; feature != NULL; feature = feature->next)
+    {
+    if(sameWord(feature->name, "start_codon") ||
+       sameWord(feature->name, "start_codon"))
+        return TRUE;
+    }
 return FALSE;
 }
 
@@ -495,14 +493,7 @@ boolean haveFrame = FALSE;
 int i;
 
 /* should we count on start/stop codon annotation in GFFs? */
-boolean useStartStops = FALSE;
-
-/* Use a static variable to only look once for start/stop codons. */
-static int lookForStartStopCodons = -1;
-if(lookForStartStopCodons == -1)
-    lookForStartStopCodons = haveStartStopCodons(gff);
-
-useStartStops = isGtf || lookForStartStopCodons;
+boolean useStartStops = isGtf || haveStartStopCodons(gff);// || gffFile->hasStartStopCodons;
 
 /* Count up exons and figure out cdsStart and cdsEnd. */
 for (gl = group->lineList; gl != NULL; gl = gl->next)
