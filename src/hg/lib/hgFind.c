@@ -40,7 +40,7 @@
 #include "minGeneInfo.h"
 #include <regex.h>
 
-static char const rcsid[] = "$Id: hgFind.c,v 1.115 2003/10/14 07:13:04 kate Exp $";
+static char const rcsid[] = "$Id: hgFind.c,v 1.116 2003/10/29 16:34:50 angie Exp $";
 
 /* alignment tables to check when looking for mrna alignments */
 static char *estTables[] = { "all_est", "xenoEst", NULL};
@@ -408,7 +408,7 @@ return(startsWith("FB", id) && (strlen(id) == 11) &&
        isdigit(id[10]));
 }
 
-static boolean isBDGPName(char *name)
+boolean isBDGPName(char *name)
 /* Return TRUE if name is from BDGP (matching {CG,TE,CR}0123{,4}{,-R?})  */
 {
 int len = strlen(name);

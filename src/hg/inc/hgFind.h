@@ -109,5 +109,8 @@ char *hgPosBrowserRange(struct hgPos *pos, char range[64]);
 /* Convert pos to chrN:123-456 format.  If range parameter is NULL it returns
  * static buffer, otherwise writes and returns range. */
 
+boolean isBDGPName(char *name);
+/* Return TRUE if name is from BDGP (matching {CG,TE,CR}0123{,4}{,-R?})  */
+
 #endif /* HGFIND_H */
 
