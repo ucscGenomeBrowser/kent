@@ -16,6 +16,7 @@ char *hostName = "kks00.cse.ucsc.edu";
 char *hostPort = "17777";
 char *nibDir = "/projects/cc/hg/oo.23/nib";
 char *database = "hg5";
+boolean tx = FALSE;
 
 void usage()
 /* Explain usage and exit. */
@@ -23,7 +24,7 @@ void usage()
 errAbort(
   "hgSeqSearch - CGI-script to manage fast human genome sequence searching\n"
   "usage:\n"
-  "   hgSeqSearch XXX\n");
+  "   hgBlat XXX\n");
 }
 
 int pslCmpMatches(const void *va, const void *vb)
@@ -39,7 +40,7 @@ return bScore - aScore;
 void showAliPlaces(char *pslName, char *faName)
 /* Show all the places that align. */
 {
-struct lineFile *lf = lineFileOpen(pslName, TRUE);
+struct lineFile *lf = pslFileOpen(pslName);
 struct psl *pslList = NULL, *psl;
 char *browserUrl = hgTracksName();
 char *extraCgi = "";
@@ -82,7 +83,16 @@ char *port = cgiOptionalString("port");
 char *host = cgiOptionalString("host");
 char *nib = cgiOptionalString("nib");
 char *db = cgiOptionalString("db");
+int conn;
 
+tx = cgiBoolean("tx");
+if (tx)
+    {
+    hostPort = "17778";
+    hostName = "cc.cse.ucsc.edu";
+    nibDir = "/projects/hg2/gs.6/oo.27/nib";
+    database = "hg6";
+    }
 if (port != NULL)
     hostPort = port;
 if (host != NULL)
@@ -91,9 +101,9 @@ if (nib != NULL)
     nibDir = nib;
 if (db != NULL)
     database = db;
-    
+
 /* Load up sequence from CGI. */
-seq = faFromMemText(cloneString(userSeq));
+seq = faSeqFromMemText(cloneString(userSeq), !tx);
 if (seq->name[0] == 0)
     seq->name = "YourSeq";
 
@@ -108,14 +118,30 @@ if (seq->size > maxSize)
 makeTempName(&faTn, "hgSs", ".fa");
 faWrite(faTn.forCgi, seq->name, seq->dna, seq->size);
 
-makeTempName(&pslTn, "hgSs", ".psl");
+makeTempName(&pslTn, "hgSs", ".pslx");
 f = mustOpen(pslTn.forCgi, "w");
 
 
 /* Create a temporary .psl file with the alignments against genome. */
-gfAlignStrand(hostName, hostPort, nibDir, seq, FALSE, ffCdna, 40, gfSavePsl, f);
-reverseComplement(seq->dna, seq->size);
-gfAlignStrand(hostName, hostPort, nibDir, seq, TRUE,  ffCdna, 40, gfSavePsl, f);
+conn = gfConnect(hostName, hostPort);
+if (tx)
+    {
+    static struct gfSavePslxData data;
+    data.f = f;
+    data.reportTargetStrand = TRUE;
+    pslxWriteHead(f, gftProt, gftDnaX);
+    gfAlignTrans(conn, nibDir, seq, 12, gfSavePslx, &data);
+    }
+else
+    {
+    pslxWriteHead(f, gftDna, gftDna);
+    gfAlignStrand(conn, nibDir, seq, FALSE, ffCdna, 36, gfSavePsl, f);
+    close(conn);
+    reverseComplement(seq->dna, seq->size);
+    conn = gfConnect(hostName, hostPort);
+    gfAlignStrand(conn, nibDir, seq, TRUE,  ffCdna, 36, gfSavePsl, f);
+    }
+close(conn);
 carefulClose(&f);
 
 showAliPlaces(pslTn.forCgi, faTn.forCgi);
@@ -167,6 +193,7 @@ printf("%s", "UCSC assembly\n"
 "<TEXTAREA NAME=userSeq ROWS=14 COLS=72></TEXTAREA>\n");
 
 
+cgiContinueHiddenVar("tx");
 if (db != NULL)
     {
     if (sameString(db, "hg5"))
@@ -177,9 +204,18 @@ if (db != NULL)
 	}
     else if (sameString(db, "hg6"))
         {
-	port = "17778";
-	nib = "/projects/hg2/gs.6/oo.27/nib";
-	host = "kks00.cse.ucsc.edu";
+	if (cgiVarExists("tx"))
+	    {
+	    port = "17778";
+	    nib = "/projects/hg2/gs.6/oo.27/nib";
+	    host = "cc.cse.ucsc.edu";
+	    }
+	else
+	    {
+	    port = "17779";
+	    nib = "/projects/hg2/gs.6/oo.27/nib";
+	    host = "kks00.cse.ucsc.edu";
+	    }
 	}
    else 
 	{
@@ -198,7 +234,6 @@ else
     cgiContinueHiddenVar("nib");
     cgiContinueHiddenVar("db");
     }
-
 printf("%s", 
 "<P>Only the first 20,000 bases of a sequence will be used.  BLAT is designed to\n"
 "quickly find sequences of 95% and greater similarity of length 40 bases or\n"
