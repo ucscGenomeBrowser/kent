@@ -1316,3 +1316,13 @@ type bed 6
 scoreMin 500
 scoreMax 1000
 url http://rulai.cshl.org/tools/FirstEF/Readme/README.html
+
+track ECgene
+shortLabel ECgene Genes
+longLabel ECgene Annotations 
+group genes
+priority 41.5
+visibility hide
+color 155, 0, 125
+type genePred ECgenePep
+
