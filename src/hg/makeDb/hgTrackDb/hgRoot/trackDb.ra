@@ -98,6 +98,12 @@ longLabel BAC End Pairs
 priority 10
 visibility hide
 
+track uPennBacEndPairs
+shortLabel UPenn BE Pairs
+longLabel Univ of Penn BAC End Pairs
+priority 10.1
+visibility hide
+
 track genomicDups
 priority 10.5
 shortLabel Duplications
