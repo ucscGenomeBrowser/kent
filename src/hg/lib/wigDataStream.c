@@ -8,7 +8,7 @@
 #include "hgColors.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: wigDataStream.c,v 1.71 2005/01/27 22:35:20 hiram Exp $";
+static char const rcsid[] = "$Id: wigDataStream.c,v 1.72 2005/02/25 23:45:25 hiram Exp $";
 
 /*	Routines that are not strictly part of the wigDataStream object,
 	but they are used to do things with the object.
@@ -1679,10 +1679,11 @@ if (bedList && *bedList)
 		wigAscii->span = 1;	/* span information has been lost */
 		wigAscii->count = 0;	/* will count up as values added */
 		wigAscii->dataRange = 0.0;	/* to be determined */
-		if (sizeof(size_t) > 4)
-		    setMaxAlloc((size_t)17179869184);  /*2^34  = 16 Gb */
-		else
-		    setMaxAlloc((size_t)2100000000);  /*2^31 = 2,147,483,648 */
+		setMaxAlloc((size_t)( 2100000000 *
+                 (((sizeof(size_t)/4)*(sizeof(size_t)/4)*(sizeof(size_t)/4)))));
+                /* produces: size_t is 4 == 2100000000 ~= 2^31 = 2Gb
+                 *      size_t is 8 = 16800000000 ~= 2^34 = 16 Gb
+                 */
 		verbose(VERBOSE_CHR_LEVEL,
 		    "#\tworst case ascii array needLargeMem (%u * %u = %u)\n",
 			sizeof(struct asciiDatum), dataArraySize,
@@ -1814,10 +1815,11 @@ if (bedList && *bedList)
 
 		if (newSize > 0)
 		    {
-		    if (sizeof(size_t) > 4)
-			setMaxAlloc((size_t)17179869184);  /*2^34  = 16 Gb */
-		    else
-			setMaxAlloc((size_t)2100000000);/*2^31=2,147,483,648*/
+		    setMaxAlloc((size_t)( 2100000000 *
+                 (((sizeof(size_t)/4)*(sizeof(size_t)/4)*(sizeof(size_t)/4)))));
+		    /* produces: size_t is 4 == 2100000000 ~= 2^31 = 2Gb
+		     *      size_t is 8 = 16800000000 ~= 2^34 = 16 Gb
+		     */
 		    verbose(VERBOSE_CHR_LEVEL,
 	    "#\tmoving to smaller ascii array needLargeMem( %u * %u = %u)\n",
 			sizeof(struct asciiDatum), wigAscii->count,
