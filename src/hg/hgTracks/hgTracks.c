@@ -1192,6 +1192,8 @@ for (i=0; i<blockCount; ++i)
 slReverse(&sfList);
 lf->components = sfList;
 finishLf(lf);
+lf->tallStart = bed->thickStart;
+lf->tallEnd = bed->thickEnd;
 return lf;
 }
 
