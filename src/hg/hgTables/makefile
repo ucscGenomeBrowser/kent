@@ -7,7 +7,7 @@ MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 A = hgTables
 
 O = $A.o asObj.o custom.o filterFields.o identifiers.o joining.o \
-    mainPage.o ranges.o schema.o usage.o
+    mainPage.o rangeHistogram.o schema.o usage.o
 
 include ../../inc/cgi_build_rules.mk
 

@@ -9,7 +9,7 @@
 #include "jksql.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: ranges.c,v 1.2 2004/07/14 07:20:30 kent Exp $";
+static char const rcsid[] = "$Id: rangeHistogram.c,v 1.1 2004/07/19 20:18:55 kent Exp $";
 
 static void printValueHistogram(char *db, char *table, char *field)
 /* Print very simple-minded text histogram. */
