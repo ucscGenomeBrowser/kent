@@ -700,11 +700,10 @@ else
     }
 }
 
-static struct gfClump *clumpHits(struct genoFind *gf, struct gfHit *hitList)
+static struct gfClump *clumpHits(struct genoFind *gf, struct gfHit *hitList, int minMatch)
 /* Clump together hits according to parameters in gf. */
 {
 struct gfClump *clumpList = NULL, *clump = NULL;
-int minMatch = gf->minMatch;
 int maxGap = gf->maxGap;
 struct gfHit *clumpStart = NULL, *hit, *nextHit, *lastHit = NULL;
 int clumpSize = 0;
@@ -757,7 +756,14 @@ bits32 bits = 0;
 bits32 bVal;
 int listSize;
 bits32 qStart, tStart, *tList;
+int minMatch = gf->minMatch;
 
+if (size < (minMatch+1) * (gf->tileSize+1))
+    {
+    minMatch = size/(gf->tileSize+1) - 1;
+    if (minMatch < 2)
+	minMatch = 2;
+    }
 for (i=0; i<tileSizeMinusOne; ++i)
     {
     bVal = ntValNoN[dna[i]];
@@ -785,6 +791,6 @@ for (i=tileSizeMinusOne; i<size; ++i)
 // uglyf("Got %d hits\n", slCount(hitList));
 cmpQuerySize = seq->size;
 slSort(&hitList, gfHitCmpDiagonal);
-return clumpHits(gf, hitList);
+return clumpHits(gf, hitList, minMatch);
 }
 
