@@ -236,7 +236,7 @@ done >> seq_contig.md
     # contig_overlaps.agp
     XXXX /cluster/bin/i386/agpToGl contig_overlaps.agp . -md=seq_contig.md
     # Create chromosome gl files
-    XXXX jkStuff/liftGl.sh contig.gl
+    XXXX jkStuff/liftGl.csh contig.gl
 
 # CREATING DATABASE  (DONE - 2004-05-20 - Hiram)
     #	RE-DONE for new NIBS - 2004-06-03
@@ -296,7 +296,17 @@ done >> seq_contig.md
     rm s0 s1
 
 # MAKE HGCENTRALTEST ENTRY AND TRACKDB TABLE (DONE - 2004-05-21 - Hiram)
+    #	dbDb orderKey updated 2004-06-08 - Hiram
     ssh hgwdev
+    #	reset dbDb orderKey - these have never been ordered properly
+    #	before, this will get them on the program.
+    hgsql -e 'update dbDb set orderKey=11 where name = "hg16";' \
+	-h genome-testdb hgcentraltest
+    hgsql -e 'update dbDb set orderKey=12 where name = "hg15";' \
+	-h genome-testdb hgcentraltest
+    hgsql -e 'update dbDb set orderKey=13 where name = "hg13";' \
+	-h genome-testdb hgcentraltest
+
     # Enter hg17 into hgcentraltest.dbDb so test browser knows about it:
     hgsql -e 'INSERT INTO dbDb (name, description, nibPath, organism, \
 	defaultPos, active, orderKey, genome, scientificName, \
@@ -845,6 +855,11 @@ rmdir --ignore-fail-on-non-empty /tmp/$outputFN
     hgGoldGapGl -noGl -chromLst=chrom.lst hg17 /cluster/data/hg17 .
     #	Disappointing to see this create so many tables ...
     #	_gap and _gold for each chrom
+
+# LOAD ctgPos table - Contig position track (DONE - 2004-06-08 - Hiram)
+    #	After fixing up hgCtgPos to accept the -chromLst argument, simply:
+    cd /cluster/data/hg17
+    hgCtgPos -chromLst=chrom.lst hg17 .
 
 XXX - Come back to this after contig_overlaps.agp has been created
 # O+O: ASSEMBLY [GOLD], GAP, COVERAGE, MAP CONTIGS TRACKS (WAIT - 2004-05-21)
