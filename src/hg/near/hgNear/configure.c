@@ -12,7 +12,7 @@
 #include "web.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: configure.c,v 1.26 2003/09/16 20:54:18 kent Exp $";
+static char const rcsid[] = "$Id: configure.c,v 1.27 2003/09/16 21:16:33 kent Exp $";
 
 static char *onOffString(boolean on)
 /* Return "on" or "off". */
@@ -226,13 +226,11 @@ hPrintf("</TD><TD>");
 hPrintf("&nbsp;");
 hPrintf("</TD><TD>");
 cgiMakeButton(saveCurrentConfName, "Save Settings");
-if (userSettingsAnySaved(us))
-    {
-    hPrintf(" ");
-    userSettingsDropDown(us);
-    hPrintf(" ");
-    cgiMakeButton(useSavedConfName, "Load Settings");
-    }
+hPrintf("<INPUT TYPE=SUBMIT NAME=\"%s\" VALUE=\"%s\"", useSavedConfName, 
+	"Load Settings");
+if (!userSettingsAnySaved(us))
+    hPrintf(" DISABLED");
+hPrintf(">");
 hPrintf("</TD><TD>");
 hPrintf("&nbsp;");
 hPrintf("</TD><TD>");
@@ -287,9 +285,9 @@ void doConfigUseSaved(struct sqlConnection *conn, struct column *colList)
 /* Respond to Use Saved Settings button in configuration page. */
 {
 struct userSettings *us = colUserSettings();
-userSettingsUseSelected(us);
-doConfigure(conn, colList, NULL);
+userSettingsLoadForm(us);
 }
+
 
 void doNameCurrentColumns()
 /* Put up page to save current column configuration. */
