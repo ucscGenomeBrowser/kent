@@ -231,13 +231,21 @@ void cartHtmlShellPB(char *title, void (*doMiddle)(struct cart *cart),
  * variables that you don't want to save in the cart between
  * invocations of the cgi-script. */
 
-struct cart *cartAndCookie(char *cookieName, char **exclude, struct hash *oldVars);
-/* Load cart from cookie and session cgi variable.  Write cookie and content-type part 
- * HTTP preamble to web page.  Don't write any HTML though. */
+struct cart *cartAndCookie(char *cookieName, char **exclude, 
+	struct hash *oldVars);
+/* Load cart from cookie and session cgi variable.  Write cookie and 
+ * content-type part HTTP preamble to web page.  Don't write any HTML though. */
 
-struct cart *cartAndCookieWithHtml(char *cookieName, char **exclude, struct hash *oldVars, boolean doContentType);
-/* Load cart from cookie and session cgi variable.  Write cookie and content-type part 
- * HTTP preamble to web page.  Don't write any HTML though. */
+struct cart *cartAndCookieNoContent(char *cookieName, char **exclude, 
+	struct hash *oldVars);
+/* Load cart from cookie and session cgi variable. Don't write out
+ * content type or any HTML. */
+
+struct cart *cartAndCookieWithHtml(char *cookieName, char **exclude, 
+	struct hash *oldVars, boolean doContentType);
+/* Load cart from cookie and session cgi variable.  Write cookie 
+ * and optionally content-type part HTTP preamble to web page.  Don't 
+ * write any HTML though. */
 
 void cartSetDbConnector(DbConnector connector);
 /* Set the connector that will be used by the cart to connect to the

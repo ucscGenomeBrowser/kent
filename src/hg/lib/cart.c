@@ -12,7 +12,7 @@
 #include "hdb.h"
 #include "jksql.h"
 
-static char const rcsid[] = "$Id: cart.c,v 1.41 2004/07/09 19:14:50 kent Exp $";
+static char const rcsid[] = "$Id: cart.c,v 1.42 2004/07/14 05:49:31 kent Exp $";
 
 static char *sessionVar = "hgsid";	/* Name of cgi variable session is stored in. */
 static char *positionCgiName = "position";
@@ -680,10 +680,11 @@ clearDbContents(conn, "sessionDb", hgsid);
 cartDefaultDisconnector(&conn);
 }
 
-struct cart *cartAndCookieWithHtml(char *cookieName, char **exclude, struct hash *oldVars, 
-                                   boolean doContentType)
-/* Load cart from cookie and session cgi variable.  Write cookie and content-type part 
- * HTTP preamble to web page.  Don't write any HTML though. */
+struct cart *cartAndCookieWithHtml(char *cookieName, char **exclude, 
+	struct hash *oldVars, boolean doContentType)
+/* Load cart from cookie and session cgi variable.  Write cookie 
+ * and optionally content-type part HTTP preamble to web page.  Don't 
+ * write any HTML though. */
 {
 /* Get the current cart from cookie and cgi session variable. */
 int hguid = getCookieId(cookieName);
@@ -701,18 +702,27 @@ if (doContentType)
     puts("Content-Type:text/html");
     puts("\n");
     }
-
 return cart;
 }
 
-struct cart *cartAndCookie(char *cookieName, char **exclude, struct hash *oldVars)
-/* Load cart from cookie and session cgi variable.  Write cookie and content-type part 
- * HTTP preamble to web page.  Don't write any HTML though. */
+struct cart *cartAndCookie(char *cookieName, char **exclude, 
+	struct hash *oldVars)
+/* Load cart from cookie and session cgi variable.  Write cookie and 
+ * content-type part HTTP preamble to web page.  Don't write any HTML though. */
 {
 return cartAndCookieWithHtml(cookieName, exclude, oldVars, TRUE);
 }
 
-static void cartErrorCatcher(void (*doMiddle)(struct cart *cart), struct cart *cart)
+struct cart *cartAndCookieNoContent(char *cookieName, char **exclude, 
+	struct hash *oldVars)
+/* Load cart from cookie and session cgi variable. Don't write out
+ * content type or any HTML. */
+{
+return cartAndCookieWithHtml(cookieName, exclude, oldVars, FALSE);
+}
+
+static void cartErrorCatcher(void (*doMiddle)(struct cart *cart), 
+	struct cart *cart)
 /* Wrap error catcher around call to do middle. */
 {
 int status = setjmp(htmlRecover);
