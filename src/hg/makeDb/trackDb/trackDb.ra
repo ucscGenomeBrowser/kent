@@ -1240,6 +1240,15 @@ autoScaleDefault Off
 speciesOrder chimp baboon marmoset galago mouse rat cow dog armadillo platypus chicken
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 
+track binMCS95_encode
+shortLabel MCSs (5%)
+longLabel Binomial-based MCSs from ENCODE TBA alignments (top 5%)
+group encode
+visibility dense
+color 0,60,120
+useScore 1
+type bed 5 +
+
 track encode_phyloHMM
 shortLabel ENCODE phyloHMM
 longLabel phylo-HMM-based conservation for ENCODE targets
