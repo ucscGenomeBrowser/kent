@@ -14,7 +14,7 @@
 #include "hgMaf.h"
 #include "mafTrack.h"
 
-static char const rcsid[] = "$Id: wigMafTrack.c,v 1.33 2004/08/31 22:49:41 kate Exp $";
+static char const rcsid[] = "$Id: wigMafTrack.c,v 1.34 2004/09/01 00:17:30 sugnet Exp $";
 
 struct wigMafItem
 /* A maf track item -- 
@@ -887,12 +887,11 @@ void wigMafMethods(struct track *track, struct trackDb *tdb,
                                         int wordCount, char *words[])
 /* Make track for maf multiple alignment. */
 {
-char *wigType = needMem(64);
 char *wigTable;
 struct track *wigTrack;
 int i;
 char *savedType;
-
+struct dyString *wigType = newDyString(64);
 track->loadItems = wigMafLoad;
 track->freeItems = wigMafFree;
 track->drawItems = wigMafDraw;
@@ -915,15 +914,14 @@ if ((wigTable = trackDbSetting(tdb, "wiggle")) != NULL)
            Also, both the main track and subtrack share the same tdb */
         // restore "type" line, but change type to "wig"
         savedType = tdb->type;
-        *wigType = 0;
-        strcat(wigType, "type wig ");
+	dyStringClear(wigType);
+        dyStringPrintf(wigType, "type wig ");
         for (i = 1; i < wordCount; i++)
             {
-            strcat(wigType, words[i]);
-            strcat(wigType, " ");
+            dyStringPrintf(wigType, "%s ", words[i]);
             }
-        strcat(wigType, "\n");
-        tdb->type = wigType;
+        dyStringPrintf(wigType, "\n");
+        tdb->type = cloneString(wigType->string);
         wigTrack = trackFromTrackDb(tdb);
         tdb->type = savedType;
 
@@ -938,5 +936,6 @@ if ((wigTable = trackDbSetting(tdb, "wiggle")) != NULL)
         track->subtracks = wigTrack;
         track->subtracks->next = NULL;
         }
+dyStringFree(&wigType);
 }
 
