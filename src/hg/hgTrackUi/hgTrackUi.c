@@ -23,7 +23,7 @@
 #define CDS_HELP_PAGE "../goldenPath/help/hgCodonColoring.html"
 #define CDS_MRNA_HELP_PAGE "../goldenPath/help/hgCodonColoringMrna.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.161 2004/12/23 21:50:54 galt Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.162 2004/12/25 21:13:09 daryl Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -89,13 +89,14 @@ radioButton(filterTypeVar, filterTypeVal, "exclude");
 void snpColorFilterButtons(char *filterTypeVar, char *filterTypeVal)
 /* Put up some filter buttons. */
 {
-radioButton(filterTypeVar, filterTypeVal, "Source");
-radioButton(filterTypeVar, filterTypeVal, "Molecule Type");
-radioButton(filterTypeVar, filterTypeVal, "Variant Class");
-radioButton(filterTypeVar, filterTypeVal, "Validation Status");
-radioButton(filterTypeVar, filterTypeVal, "Functional Class");
-radioButton(filterTypeVar, filterTypeVal, "Location Type");
-radioButton(filterTypeVar, filterTypeVal, "Black");
+int i;
+for (i=0; i<snpColorSourceLabelsSize; i++)
+    {
+    cgiMakeRadioButton(filterTypeVar, snpColorSourceStrings[i], 
+		       sameString(snpColorSourceStrings[i], filterTypeVal));
+    printf("%s &nbsp;", snpColorSourceLabels[i]);
+    }
+printf("<BR>\n");
 }
 
 void snpFilterButtons(char *filterTypeVar, char *filterTypeVal)
@@ -157,8 +158,8 @@ printf("<BR>Variants can optionally be excluded based on their values in each of
 printf("<BR>\n");
 
 printf("<BR><B>Color Specification:</B><BR>\n");
-snpColorSourceCart[0] = cartUsualString(cart, "snpColor", "Source" );
-snpColorFilterButtons("snpColor", snpColorSourceCart[0]);
+snpColorSourceCart[0] = cartUsualString(cart, snpColorSourceDataName[0], snpColorSourceDefault[0]);
+snpColorFilterButtons(snpColorSourceDataName[0], snpColorSourceCart[0]);
 
 snpAvHetCutoff = atof(cartUsualString(cart, "snpAvHetCutoff", "0"));
 printf("<BR><BR><B>Minimum <A HREF=\"#AvHet\">Average Heterozygosity</A>:</B>&nbsp;");

@@ -228,7 +228,7 @@ Color snpColor(struct track *tg, void *item, struct vGfx *vg)
 {
 struct snp *el = item;
 enum   snpColorEnum thisSnpColor = snpColorBlack;
-char  *snpColorSource = cartUsualString(cart, "snpColor", snpColorSourceCart[0]);
+char  *snpColorSource = cartUsualString(cart, snpColorSourceDataName[0], snpColorSourceDefault[0]);
 char  *validString = NULL;
 char  *funcString = NULL;
 int    snpValid = 0;
