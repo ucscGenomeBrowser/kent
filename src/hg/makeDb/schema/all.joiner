@@ -13,13 +13,12 @@ set ce ce1
 set cb cb1
 set dm dm1
 set dp dp1
-set sc sc1
 set sacCer sacCer1
 set panTro panTro1
 set galGal galGal2
 
 # Define all organism/assembly specific databases.
-set gbd $hg,$mm,$rn,$fr,$ce,$cb,$dm,$dp,$sc,$sacCer,$panTro,$galGal
+set gbd $hg,$mm,$rn,$fr,$ce,$cb,$dm,$dp,$sacCer,$panTro,$galGal
 
 # Only consider one of members of gbd at a time.
 exclusiveSet $gbd
@@ -37,7 +36,7 @@ set zooDb zooBaboon3,zooCat3,zooChicken3,zooChimp3,zooCow3,zooDog3,zooFugu3,zooH
 # Set up list of databases we ignore and those we check.  Program
 # will complain about other databases.
 databasesChecked $gbd,$otherDb
-databasesIgnored mysql,lost+found,$proteinDb,$zooDb,hgcentraltest,hgcentralbeta
+databasesIgnored mysql,lost+found,$proteinDb,$zooDb,sc1,hgcentraltest,hgcentralbeta
 
 # Define various non-self chains
 set chainDest Hg15,Hg16,Pt0,Mm2,Mm3,Mm4,Rn2,Rn3,Cb1,Dp1,PanTro1,GalGal2
@@ -286,8 +285,8 @@ identifier kimWormGeneId
 identifier nci60SampleId
 "Identifiers of NCI 60 Cell lines for expression experiments"
     hgFixed.nci60Exps.id
-    $hg.nci60.expIds comma 
-    $hg.nci60.expScores comma indexOf
+    $hg.nci60.expIds comma full 
+    $hg.nci60.expScores comma indexOf full
 
 identifier rosettaChr22SampleId
 "Identifiers for samples used in Rosetta chromosome 22 public experiments"
@@ -297,102 +296,102 @@ identifier rosettaChr22SampleId
 identifier gnfU95SampleIdV0
 "Identifiers of RNA samples used early version of GNF Human Expression Atlas 1"
      hgFixed.affyExps.id
-     $hg.affyRatio.expIds comma
-     $hg.affyRatio.expScores comma indexOf
+     $hg.affyRatio.expIds comma 
+     $hg.affyRatio.expScores comma indexOf 
 
 identifier gnfU95SampleIdV1
 "Identifiers of RNA samples used in GNF Human Expression Atlas 1"
      hgFixed.gnfHumanU95AllExps.id
-     hgFixed.gnfHumanU95All.expScores comma indexOf
-     hgFixed.gnfHumanU95AllRatio.expScores comma indexOf
+     hgFixed.gnfHumanU95All.expScores comma indexOf full
+     hgFixed.gnfHumanU95AllRatio.expScores comma indexOf full
 
 identifier gnfU95MedianSampleIdV1
 "Identifiers of pooled RNA samples used in GNF Human Expression Atlas 1"
      hgFixed.gnfHumanU95MedianExps.id
-     hgFixed.gnfHumanU95Median.expScores comma indexOf
-     hgFixed.gnfHumanU95MedianRatio.expScores comma indexOf
+     hgFixed.gnfHumanU95Median.expScores comma indexOf full
+     hgFixed.gnfHumanU95MedianRatio.expScores comma indexOf full
 
 identifier gnfU74aSampleId
 "Identifiers of RNA samples used in GNF Mouse Expression Atlas 1 on U74A Chip"
      hgFixed.gnfMouseU74aAllExps.id
-     hgFixed.gnfMouseU74aAll.expScores comma indexOf
-     hgFixed.gnfMouseU74aAllRatio.expScores comma indexOf
-     $mm.affyGnfU74A.expIds comma
-     $mm.affyGnfU74A.expScores comma indexOf
+     hgFixed.gnfMouseU74aAll.expScores comma indexOf full
+     hgFixed.gnfMouseU74aAllRatio.expScores comma indexOf full
+     $mm.affyGnfU74A.expIds comma full
+     $mm.affyGnfU74A.expScores comma indexOf full
 
 identifier gnfU74aMedianSampleId
 "Pooled RNA samples used in GNF Mouse Expression Atlas 1 on U74A Chip"
      hgFixed.gnfMouseU74aMedianExps.id
-     hgFixed.gnfMouseU74aMedian.expScores comma indexOf
-     hgFixed.gnfMouseU74aMedianRatio.expScores comma indexOf
+     hgFixed.gnfMouseU74aMedian.expScores comma indexOf full
+     hgFixed.gnfMouseU74aMedianRatio.expScores comma indexOf full
 
 identifier gnfU74bSampleId
 "Identifiers of RNA samples used in GNF Mouse Expression Atlas 1 on U74B Chip"
      hgFixed.gnfMouseU74bAllExps.id
-     hgFixed.gnfMouseU74bAll.expScores comma indexOf
-     hgFixed.gnfMouseU74bAllRatio.expScores comma indexOf
-     $mm.affyGnfU74B.expIds comma
-     $mm.affyGnfU74B.expScores comma indexOf
+     hgFixed.gnfMouseU74bAll.expScores comma indexOf full
+     hgFixed.gnfMouseU74bAllRatio.expScores comma indexOf full
+     $mm.affyGnfU74B.expIds comma full
+     $mm.affyGnfU74B.expScores comma indexOf full
 
 identifier gnfU74bMedianSampleId
 "Pooled RNA samples used in GNF Mouse Expression Atlas 1 on U74B Chip"
      hgFixed.gnfMouseU74bMedianExps.id
-     hgFixed.gnfMouseU74bMedian.expScores comma indexOf
-     hgFixed.gnfMouseU74bMedianRatio.expScores comma indexOf
+     hgFixed.gnfMouseU74bMedian.expScores comma indexOf full
+     hgFixed.gnfMouseU74bMedianRatio.expScores comma indexOf full
 
 identifier gnfU74cSampleId
 "Identifiers of RNA samples used in GNF Mouse Expression Atlas 1 on U74C Chip"
      hgFixed.gnfMouseU74cAllExps.id
-     hgFixed.gnfMouseU74cAll.expScores comma indexOf
-     hgFixed.gnfMouseU74cAllRatio.expScores comma indexOf
-     $mm.affyGnfU74C.expIds comma
-     $mm.affyGnfU74C.expScores comma indexOf
+     hgFixed.gnfMouseU74cAll.expScores comma indexOf full
+     hgFixed.gnfMouseU74cAllRatio.expScores comma indexOf full
+     $mm.affyGnfU74C.expIds comma full
+     $mm.affyGnfU74C.expScores comma indexOf full
 
 identifier gnfU74cMedianSampleId
 "Pooled RNA samples used in GNF Mouse Expression Atlas 1 on U74C Chip"
      hgFixed.gnfMouseU74cMedianExps.id
-     hgFixed.gnfMouseU74cMedian.expScores comma indexOf
-     hgFixed.gnfMouseU74cMedianRatio.expScores comma indexOf
+     hgFixed.gnfMouseU74cMedian.expScores comma indexOf full
+     hgFixed.gnfMouseU74cMedianRatio.expScores comma indexOf full
 
 identifier arbFlyLifeAllSampleId
 "Identifiers of RNA samples used in Arbeitman fly life cycle experiments"
      hgFixed.arbFlyLifeAllExps.id
-     hgFixed.arbFlyLifeAll.expScores comma indexOf
-     hgFixed.arbFlyLifeAllRatio.expScores comma indexOf
+     hgFixed.arbFlyLifeAll.expScores comma indexOf full
+     hgFixed.arbFlyLifeAllRatio.expScores comma indexOf full
      
 identifier arbFlyLifeMedianSampleId
 "Identifiers of pooled RNA samples used in Arbeitman fly life cycle experiments"
      hgFixed.arbFlyLifeMedianExps.id
-     hgFixed.arbFlyLifeMedian.expScores comma indexOf
-     hgFixed.arbFlyLifeMedianRatio.expScores comma indexOf
+     hgFixed.arbFlyLifeMedian.expScores comma indexOf full
+     hgFixed.arbFlyLifeMedianRatio.expScores comma indexOf full
 
 identifier kimWormLifeAllSampleId
 "Identifiers of RNA samples used in Kim worm life cycle experiments"
      hgFixed.kimWormLifeAllExps.id
-     hgFixed.kimWormLifeAllRatio.expScores comma indexOf
+     hgFixed.kimWormLifeAllRatio.expScores comma indexOf full
 
 identifier kimWormLifeMedianSampleId
 "Identifiers of pooled RNA samples used in Kim worm life cycle experiments"
      hgFixed.kimWormLifeMedianExps.id
-     hgFixed.kimWormLifeMedianRatio.expScores comma indexOf
+     hgFixed.kimWormLifeMedianRatio.expScores comma indexOf full
 
 identifier yeastChoCellCycleSampleId
 "Identifiers of RNA samples used in Cho yeast cell cycle experiments"
      hgFixed.yeastChoCellCycleExps.id
-     hgFixed.yeastChoCellCycle.expScores comma indexOf
-     hgFixed.yeastChoCellCycleRatio.expScores comma indexOf
+     hgFixed.yeastChoCellCycle.expScores comma indexOf full
+     hgFixed.yeastChoCellCycleRatio.expScores comma indexOf full
 
 identifier hgFixedSageExpId
 # I'd like to drop this table set. Check with Chuck.
 "Sage experiment (tissue type etc) ID in hgFixed"
     hgFixed.sageExp.num
-    hgFixed.sage.exps comma
-    hgFixed.sageCounts.expCounts comma indexOf
+    hgFixed.sage.exps comma full
+    hgFixed.sageCounts.expCounts comma indexOf full
 
 identifier sageExpId
 "Sage experiment (tissue type etc) ID"
     $gbd.sageExp.num 
-    $gbd.sage.exps comma
+    $gbd.sage.exps comma full
 
 
 # Stuff to link together alignment chains and nets
@@ -400,15 +399,15 @@ identifier sageExpId
 identifier chainSelf
 "Link together self chain info"
     $gbd.chainSelf.id $split
-    $gbd.chainSelfLink.chainId $split
+    $gbd.chainSelfLink.chainId $split full
     $gbd.netSelf.chainId exclude=0
 
 identifier chain[${chainDest}]Id
 "Link together chain info"
     $gbd.chain[].id $split
-    $gbd.chain[]Link.chainId $split
-    $gbd.net[].chainId
-    $gbd.allChain[].id
+    $gbd.chain[]Link.chainId $split full
+    $gbd.net[].chainId exclude=0
+    $gbd.allChain[].id full unique
     $gbd.netRxBest[].chainId exclude=0
     $gbd.net[]NonGap.chainId exclude=0
     $gbd.netSynteny[].chainId exclude=0
@@ -416,24 +415,24 @@ identifier chain[${chainDest}]Id
 identifier mouseChainId 
 "Link together chain/net on hg13,hg15 for mouse"
     hg13,hg15.mouseChain.id $split
-    hg13,hg15.mouseChainLink.chainId $split
+    hg13,hg15.mouseChainLink.chainId $split full 
     hg13,hg15.mouseNet.chainId exclude=0
 
 identifier humanChainId 
 "Link together chain/net on mm3 for human"
     mm3.humanChain.id $split
-    mm3.humanChainLink.chainId $split
+    mm3.humanChainLink.chainId $split full
     mm3.humanNet.chainId exclude=0
 
 identifier cb1ChainId 
 "Link together chain/net on ce1 for cb1"
     ce1.cb1Chain.id $split
-    ce1.cb1ChainLink.chainId $split
+    ce1.cb1ChainLink.chainId $split full
 
 identifier ce1ChainId 
 "Link together chain/net on cb1 for ce1"
     cb1.ce1Chain.id $split
-    cb1.ce1ChainLink.chainId $split
+    cb1.ce1ChainLink.chainId $split full
 
 # Genbank/trEMBL Accessions and meaningful subsets thereof
 identifier genbankAccession external=genbank
@@ -480,9 +479,10 @@ identifier proteinAccession typeOf=genbankAccession fuzzy
 identifier estOrMrnaAccession typeOf=genbankAccession
 "Genbank EST or mRNA accession."
     $gbd.gbSeq.acc 
-    $gbd.mrna.acc 
-    $gbd.gbStatus.acc
+    $gbd.mrna.acc full unique
+    $gbd.gbStatus.acc full unique
     $gbd.imageClone.acc
+    $gbd.altGraphX.mrnaRefs comma
 
 identifier estAccession typeOf=estOrMrnaAccession
 "Genbank EST accession"
@@ -490,9 +490,9 @@ identifier estAccession typeOf=estOrMrnaAccession
 identifier nativeEstAccession typeOf=estAccession
 "Genbank Native (same organism as database) EST accession"
     $gbd.all_est.qName dupeOk
-    $gbd.est.qName $split
+    $gbd.est.qName $split full 
     $gbd.intronEst.qName $split
-    $gbd.estOrientInfo.name
+    $gbd.estOrientInfo.name full 
 
 identifier xenoEstAccession typeOf=estAccession
 "Genbank xeno (different organism from database) EST accession"
@@ -500,20 +500,19 @@ identifier xenoEstAccession typeOf=estAccession
 
 identifier mrnaAccession typeOf=estOrMrnaAccession fuzzy
 "Genbank mRNA accession"
-    $gbd.altGraphX.mrnaRefs comma
 
 identifier xenoMrnaAccession typeOf=mrnaAccession
 "Genbank xeno (different organism from database) mRNA accession"
     $gbd.xenoMrna.qName dupeOk
 
-identifier nativeMrnaAccession typeOf=mrnaAccession fuzzy
+identifier nativeMrnaAccession typeOf=mrnaAccession 
 "Genbank Native (same organism as database) mRNA accession"
-    $gbd.all_mrna.qName 
-    $gbd.mrnaOrientInfo.name 
+    $gbd.all_mrna.qName dupeOk
+    $gbd.mrnaOrientInfo.name full minCheck=0.80
     $gbd.dupSpMrna.mrnaID minCheck=0.80
     $gbd.dupSpMrna.dupMrnaID minCheck=0.95
-    $gbd.mrnaRefseq.mrna
-    $gbd.spMrna.mrnaID
+    $gbd.mrnaRefseq.mrna minCheck=0.30
+    $gbd.spMrna.mrnaID minCheck=0.98
 
 identifier mgcAccession typeOf=nativeMrnaAccession
 "Mammalian Gene Collection Genbank mRNA accession."
@@ -527,11 +526,10 @@ identifier refSeqId typeOf=mrnaAccession
     $gbd.refSeqStatus.mrnaAcc minCheck=0.10
     $gbd.bioCycPathway.geneID
     $kgDb.kgXref.refseq exclude= minCheck=0.50
-    $kgDb.knownToRefSeq.value
+    $kgDb.knownToRefSeq.value minCheck=0.98
     $gbd.mrnaRefseq.refseq minCheck=0.10
     $gbd.refFlat.name
     $gbd.refGene.name
-    $gbd.refPep.name
     $gbd.refMrna.name
     $gbd.refSeqAli.qName
     $gbd.refSeqSummary.mrnaAcc minCheck=0.99
@@ -541,8 +539,8 @@ identifier refSeqId typeOf=mrnaAccession
 identifier xenoRefSeqId typeOf=xenoMrnaAccession
 "Other Species RefSeq mRNA accession"
     $gbd.xenoRefGene.name
-    $gbd.xenoRefSeqAli.qName
-    $gbd.xenoRefFlat.name
+    $gbd.xenoRefSeqAli.qName full
+    $gbd.xenoRefFlat.name full
 
 identifier knownGeneId typeOf=nativeMrnaAccession dependency
 "Known Gene ID - the genbank accession of the representative mRNA"
@@ -568,16 +566,16 @@ identifier knownGeneId typeOf=nativeMrnaAccession dependency
     $kgDb.keggPathway.kgID
     $kgDb.kgAlias.kgID
     $kgDb.kgProtAlias.kgID
-    $kgDb.kgXref.kgID
+    $kgDb.kgXref.kgID full
     $kgDb.knownBlastTab.query
     $kgDb.knownBlastTab.target
-    $kgDb.knownCanonical.transcript
-    $kgDb.knownGeneMrna.name
-    $kgDb.knownGenePep.name
+    $kgDb.knownCanonical.transcript 
+    $kgDb.knownGeneMrna.name full
+    $kgDb.knownGenePep.name full
     $kgDb.knownGeneLink.name
     $kgDb.knownGnfDistance.query
     $kgDb.knownGnfDistance.target
-    $kgDb.knownIsoforms.transcript
+    $kgDb.knownIsoforms.transcript full
     $kgDb.knownToCdsSnp.name
     $kgDb.knownToEnsembl.name
     $kgDb.knownToLocusLink.name
@@ -594,82 +592,82 @@ identifier knownAlignId
 identifier knownIsoformCluster
 "ID of a cluster of overlapping known genes"
     $kgDb.knownCanonical.clusterId
-    $kgDb.knownIsoforms.clusterId
+    $kgDb.knownIsoforms.clusterId full
 
 # Fields parsed out of a Genbank flat file, associated with mRNA records
 
 identifier genBankAuthor
 "Connects genBank mRNA/EST and it's author"
     $gbd.author.id
-    $gbd.mrna.author
+    $gbd.mrna.author full
 
 identifier genBankCds
 "Connects genBank mRNA/EST and it's coding region (CDS)"
     $gbd.cds.id
-    $gbd.mrna.cds
+    $gbd.mrna.cds full
 
 identifier genBankCell
 "Connects genBank mRNA/EST and the cell type it came from"
     $gbd.cell.id
-    $gbd.mrna.cell
+    $gbd.mrna.cell full
 
 identifier genBankDevelopment
 "Connects genBank mRNA/EST and development stage of the organism it came from"
     $gbd.development.id
-    $gbd.mrna.development
+    $gbd.mrna.development full
 
 identifier genBankDescription
 "Connects genBank mRNA/EST and descriptive text"
     $gbd.description.id
-    $gbd.mrna.description
+    $gbd.mrna.description full
     
 identifier genBankGeneName
 "Connects genBank mRNA/EST and gene name"
     $gbd.geneName.id
-    $gbd.mrna.geneName
+    $gbd.mrna.geneName full
     $gbd.refLink.geneName
 
 identifier genBankKeyword
 "Connects genBank mRNA/EST and keyword"
     $gbd.keyword.id
-    $gbd.mrna.keyword
+    $gbd.mrna.keyword full
 
 identifier genBankLibrary
 "Connects genBank mRNA/EST and cDNA library"
     $gbd.library.id
-    $gbd.mrna.library
+    $gbd.mrna.library full
     $gbd.altGraphX.mrnaLibs comma
 
 identifier genBankMrnaClone
 "Connects genBank mRNA/EST and cDNA clone name"
     $gbd.mrnaClone.id
-    $gbd.mrna.mrnaClone
+    $gbd.mrna.mrnaClone full
 
 identifier genBankOrganism
 "Connects genBank mRNA/EST and organism it came from"
     $gbd.organism.id
-    $gbd.mrna.organism
+    $gbd.mrna.organism full
 
 identifier genBankProductName
 "Connects genBank mRNA/EST and protein product name"
     $gbd.productName.id
-    $gbd.mrna.productName
+    $gbd.mrna.productName full
     $gbd.refLink.prodName
 
 identifier genBankSex
 "Connects genBank mRNA/EST and sex mRNA came from"
     $gbd.sex.id
-    $gbd.mrna.sex
+    $gbd.mrna.sex full
 
 identifier genBankSource
 "Connects genBank mRNA/EST and source of mRNA"
     $gbd.source.id
-    $gbd.mrna.source
+    $gbd.mrna.source full
 
 identifier genBankTissue
 "Connects genBank mRNA/EST and tissue mRNA isolated from"
     $gbd.tissue.id
-    $gbd.mrna.tissue
+    $gbd.mrna.tissue full
     $gbd.altGraphX.mrnaTissues comma
 
 
@@ -764,7 +762,7 @@ identifier jaxMgiId
 identifier wormBaseIsoformCluster
 "Overlapping (after splicing) WormBase transcripts"
     $ce.sangerCanonical.clusterId
-    $ce.sangerIsoforms.clusterId
+    $ce.sangerIsoforms.clusterId full
 
 identifier wormBaseId external=WormBase dependency
 "WormBase (C. elegans) ORF ID"
@@ -816,7 +814,7 @@ identifier flyBaseGeneId external=FlyBase
 identifier bdgpIsoformCluster
 "Overlapping (after splicing) BDGP Drosophila transcripts"
     $dm.bdgpCanonical.clusterId
-    $dm.bdgpIsoforms.clusterId
+    $dm.bdgpIsoforms.clusterId full
 
 identifier bdgpGeneId external=BDGP
 "Berkeley Drosophila Genome Project Gene ID"
@@ -856,7 +854,7 @@ identifier bdgpNonCodingId external=BDGP
 identifier sgdIsoformCluster
 "Overlapping (after splicing) SGD (Yeast) transcripts"
     $sacCer.sgdCanonical.clusterId
-    $sacCer.sgdIsoforms.clusterId
+    $sacCer.sgdIsoforms.clusterId full
 
 identifier sgdId external=SGD
 "Sacchromyces Genome Database ID - Coding or other"
@@ -1029,7 +1027,7 @@ identifier gbExtFileId
 identifier encodeRegion
 "ENCODE (extensive analysis of 1% of genome) Region"
     hgFixed.encodeRegionInfo.name
-    $hg.encodeRegions.name
+    $hg.encodeRegions.name 
 
 # Dependencies not already captured in identifiers
 
@@ -1146,15 +1144,6 @@ tablesIgnored $rn
 tablesIgnored $sacCer
     sgdClone
 
-tablesIgnored $sc
-    chr1_viralProt
-    gbProtAnn
-    otherSARS
-    protHomolog
-    protPredFile
-    pslTable
-    xenoBlastzMrna
-
 tablesIgnored mm3
     chr%_mm3Hg15L
     ensEst
@@ -1163,9 +1152,11 @@ tablesIgnored mm3
 tablesIgnored hg13
     chr%_humMusL
     mrnaGene
+    refPep
 
 tablesIgnored hg15
     chr%_hg15Mm3L
+    refPep
 
 tablesIgnored hg16
     humorMm3Rn3
