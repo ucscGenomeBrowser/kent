@@ -938,7 +938,7 @@ longLabel Top 5 % of Human/Chimp/Mouse/Rat/Chicken PhyloHMM Cons
 priority 100.1
 group compGeno
 visibility hide
-type bed 4
+type bed 5
 
 track leptin
 shortLabel Leptin TBA
