@@ -792,6 +792,10 @@ __attribute__((format(printf, 3, 4)))
 char *naForNull(char *s);
 /* Return 'n/a' if s is NULL, otherwise s. */
 
+void uglyTime(char *label);
+/* Print label and how long it's been since last call.  Call with 
+ * a NULL label to initialize. */
+
 /*	In case the development environment does not supply INFINITY	*/
 #if !defined(INFINITY)
 #define INFINITY (1.0/0.0)

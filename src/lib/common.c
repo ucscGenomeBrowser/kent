@@ -6,8 +6,9 @@
 
 #include "common.h"
 #include "errabort.h"
+#include "portable.h"
 
-static char const rcsid[] = "$Id: common.c,v 1.70 2004/10/01 07:10:32 daryl Exp $";
+static char const rcsid[] = "$Id: common.c,v 1.71 2004/11/04 22:05:57 kent Exp $";
 
 void *cloneMem(void *pt, size_t size)
 /* Allocate a new buffer of given size, and copy pt to it. */
@@ -1702,5 +1703,16 @@ static char *naStr = "n/a";
 if (s == NULL) 
    s = naStr;
 return s;
+}
+
+void uglyTime(char *label)
+/* Print label and how long it's been since last call.  Call with 
+ * a NULL label to initialize. */
+{
+static long lastTime = 0;
+long time = clock1000();
+if (label != NULL)
+    uglyf("%s: %ld millis<BR>\n", label, time - lastTime);
+lastTime = time;
 }
 
