@@ -1306,7 +1306,7 @@ DONE TO HERE - RUNNING...
 # Download the latest info from NCBI
         # point browser at http://www.ncbi.nlm.nih.gov/genome/cyto/cytobac.cgi?CHR=all&VERBOSE=ctg
         # change "Show details on sequence-tag" to "yes"
-        #change "Download or Display" to "Download table for UNIX"
+        # change "Download or Display" to "Download table for UNIX"
         # press Submit - save as /projects/hg2/booch/psl/fish/hbrc/hbrc.YYYYMMDD.table
 
 # Format file just downloaded.  
@@ -1328,11 +1328,26 @@ DONE TO HERE - RUNNING...
         mv /tmp/booch/clonePos.txt /projects/hg2/booch/psl/gs.16/build33/fish
 
 # Get current clone/accession information
+	ssh kks00
+        cd /projects/hg2/booch/psl/gs.16/build33/fish
 	wget http://www.ncbi.nlm.nih.gov/genome/clone/DATA/clac.out
 
+# Create initial placement file
+	make cyto.markers.bed
+
+# Get sequences for accessions not in genome
+	# goto http://www.ncbi.nlm.nih.gov/entrez/batchentrez.cgi?db=Nucleotide
+	# select file "/projects/hg2/booch/psl/gs.16/build33/fish/not.found.acc
+	# change output to FASTA format
+	# download results to "/projects/hg2/booch/psl/gs.16/build33/fish/not.found.fa"
+
+# Place sequences against genome
+	make blat
+
+# Try to incorporate new placements
+	make cyto.markers.bed2
 
 # Create bed file
-        cd /projects/hg2/booch/psl/gs.16/build33/fish
         make bed
 
 # Create database table
