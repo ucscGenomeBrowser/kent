@@ -38,7 +38,7 @@
 #include "binRange.h"
 
 
-static char const rcsid[] = "$Id: orthoSplice.c,v 1.17 2003/11/25 07:19:01 sugnet Exp $";
+static char const rcsid[] = "$Id: orthoSplice.c,v 1.18 2003/12/08 18:45:16 sugnet Exp $";
 static struct binKeeper *netBins = NULL;  /* Global bin keeper structure to find cnFills. */
 static struct rbTree *netTree = NULL;  /* Global red-black tree to store cnfills in for quick searching. */
 static struct rbTree *orthoAgxTree = NULL; /* Global red-black tree to store agx's so don't need db. */
@@ -1030,26 +1030,29 @@ for(i=0; i<vCount; i++)
 	/* Look for an edge with a vertex that is mapped. */
 	for(j=0; j<vCount; j++)
 	    {
-	    int orthoV = -1;
-	    int currentMap = -1;
-	    /* If there is an edge with one vertex already found. */
-	    if( vTypes[i] == ggSoftStart && em[i][j] && vMap[j] != -1 && isExon(ag, i, j) && orthoAgIx[j] == oIndex)
+	    if(em[i][j]) 
 		{
-		orthoV = findBestOrthoStartByOverlap(ag, em, orthoAg, orthoEm, chain, vMap, i, j, reverse);
+		int orthoV = -1;
+		int currentMap = -1;
+		/* If there is an edge with one vertex already found. */
+		if( vTypes[i] == ggSoftStart && vMap[j] != -1 && isExon(ag, i, j) && orthoAgIx[j] == oIndex)
+		    {
+		    orthoV = findBestOrthoStartByOverlap(ag, em, orthoAg, orthoEm, chain, vMap, i, j, reverse);
+		    }
+		else if(vTypes[i] == ggSoftEnd && vMap[j] != -1 && isExon(ag, j, i) && orthoAgIx[j] == oIndex)
+		    {
+		    orthoV = findBestOrthoEndByOverlap(ag, em, orthoAg, orthoEm, chain, vMap, j, i, reverse);
+		    }
+		/* Try to see if there is a consensus mapping with the most evidence, don't
+		   change a hard vertex though. */
+		currentMap = currentAssignment(vMap, vCount, orthoV);
+		if(orthoV != -1 && (currentMap == -1 || (!isHardVertex(ag,currentMap) && moreEvidence(ag, em,currentMap, i))))
+		    {
+		    vMap[i] = orthoV;
+		    orthoAgIx[i] = oIndex;
+		    }
+		orthoV = -1;
 		}
-	    else if(vTypes[i] == ggSoftEnd && em[j][i] && vMap[j] != -1 && isExon(ag, j, i) && orthoAgIx[j] == oIndex)
-		{
-		orthoV = findBestOrthoEndByOverlap(ag, em, orthoAg, orthoEm, chain, vMap, j, i, reverse);
-		}
-	    /* Try to see if there is a consensus mapping with the most evidence, don't
-	       change a hard vertex though. */
-	    currentMap = currentAssignment(vMap, vCount, orthoV);
-	    if(currentMap == -1 || (!isHardVertex(ag,currentMap) && moreEvidence(ag, em,currentMap, i)))
-		{
-		vMap[i] = orthoV;
-		orthoAgIx[i] = oIndex;
-		}
-	    orthoV = -1;
 	    }
 	}
     }
@@ -1224,6 +1227,42 @@ else
 return NULL;
 }
 
+void loadOrthoAgxList(struct altGraphX *ag, struct chain *chain, 
+				   boolean *revRet, struct altGraphX **orthoAgListRet)
+/** Return the altGraphX records in the orhtologous position on the other genome
+    as defined by ag and chain. */
+{
+int qs = 0, qe = 0;
+struct altGraphX *orthoAgList = NULL, *agxToFree = NULL; 
+struct chain *subChain = NULL, *toFree = NULL;
+boolean reverse = FALSE;
+char *strand = NULL;
+if(chain != NULL) 
+    {
+/* First find the orthologous splicing graph. */
+    chainSubsetOnT(chain, ag->tStart, ag->tEnd, &subChain, &toFree);    
+    if(subChain != NULL)
+	{
+	qChainRangePlusStrand(subChain, &qs, &qe);
+	if ((subChain->qStrand == '-'))
+	    reverse = TRUE;
+	if(reverse)
+	    { 
+	    if(ag->strand[0] == '+')
+		strand = "-";
+	    else
+		strand = "+";
+	    }
+	else
+	    strand = ag->strand;
+	orthoAgList = agxForCoordinates(subChain->qName, qs, qe, strand[0], altTable, &agxToFree);
+	chainFreeList(&toFree);
+	}
+    }
+*revRet = reverse;
+*orthoAgListRet = orthoAgList;
+}
+
 struct altGraphX *makeCommonAltGraphX(struct altGraphX *ag, struct chain *chain)
 /** For each edge in ag see if there is a similar edge in the
     orthologus altGraphX structure and output it if there. */
@@ -1236,69 +1275,57 @@ struct altGraphX *commonAg = NULL, *orthoAgList = NULL,
     *oAg = NULL, *agxToFree = NULL;
 struct orthoAgReport *agRep = NULL;
 struct orthoSpliceEdge *seList = NULL;
-char *strand = NULL;
 int *vertexMap = NULL; /* Map of ag's vertexes to agOrthos's vertexes. */
 int *orthoAgIx = NULL; /* Map of which orthoAg the vertexes in vertexMap belong to. */
-struct chain *subChain = NULL, *toFree = NULL;
 int i=0,j=0;
 int vCount = ag->vertexCount;
-int qs = 0, qe = 0;
 bool match = FALSE;
-bool reverse = FALSE;
+boolean reverse = FALSE;
 
-/* First find the orthologous splicing graph. */
-chainSubsetOnT(chain, ag->tStart, ag->tEnd, &subChain, &toFree);    
-if(subChain == NULL)
-    return NULL;
+/* Load up orthologous graphs. */
+loadOrthoAgxList(ag, chain, &reverse, &orthoAgList);
 
-qChainRangePlusStrand(subChain, &qs, &qe);
-if ((subChain->qStrand == '-'))
-    reverse = TRUE;
-if(reverse)
-    { 
-    if(ag->strand[0] == '+')
-	strand = "-";
-    else
-	strand = "+";
-    }
-else
-    strand = ag->strand;
-    
-orthoAgList = agxForCoordinates(subChain->qName, qs, qe, strand[0], altTable, &agxToFree);
-
-chainFreeList(&toFree);
-if(orthoAgList == NULL)
-    return NULL;
-
-/* Got at least one orhtologous graph. Do some analysis. */
 AllocVar(agRep);
 /* Init splice site array (vertexMap) to -1 as inidicative of not
    being found. */
 AllocArray((orthoAgIx), ag->vertexCount);
 AllocArray((vertexMap), ag->vertexCount);
-AllocArray((orthoEmP), slCount(orthoAgList));
 for(i=0;i<ag->vertexCount; i++)
     (vertexMap)[i] = -1;
-
 agRep->agName = cloneString(ag->name);
-agRep->orthoAgName = cloneString(orthoAgList->name);
 agRep->chrom = cloneString(ag->tName);
-/* Found at least one orhtologous graph, determine mapping between edges. */
-seList = altGraphXToOSEdges(ag);
+/* If can't find an orthologous graph, can still find stuff if trumpNum is 
+   used. */
+if(orthoAgList == NULL)
+    agRep->orthoAgName = cloneString("NA");
+else 
+    {
+    AllocArray((orthoEmP), slCount(orthoAgList));
+    agRep->orthoAgName = cloneString(orthoAgList->name);
+    }
+
+/* Report our ortholgous graphs if requested. */
 if(mappingFile)
     {
     fprintf(mappingFile, "%s\t", ag->name);
-    for(oAg = orthoAgList; oAg != NULL; oAg = oAg->next)
-	fprintf(mappingFile, "%s,", oAg->name);
+    if(orthoAgList == NULL)
+	fprintf(mappingFile, "NA");
+    else
+	for(oAg = orthoAgList; oAg != NULL; oAg = oAg->next)
+	    fprintf(mappingFile, "%s,", oAg->name);
     fprintf(mappingFile, "\n");
     }
+
+/* Map all the vertexes that can be done exactly. */
+seList = altGraphXToOSEdges(ag);
 for(oAg = orthoAgList; oAg != NULL; oAg = oAg->next)
     {
     int oIndex = slIxFromElement(orthoAgList, oAg);
     makeVertexMap(ag, oAg, chain, vertexMap, orthoAgIx, vCount, oIndex, seList, agRep, reverse);
     }
-agEm = altGraphXCreateEdgeMatrix(ag);
 
+/* Go back and try to map soft starts and ends that we missed before. */
+agEm = altGraphXCreateEdgeMatrix(ag);
 commonAg = commonAgInit(ag);
 for(oAg = orthoAgList; oAg != NULL; oAg = oAg->next)
     {
@@ -1307,6 +1334,8 @@ for(oAg = orthoAgList; oAg != NULL; oAg = oAg->next)
     orthoEmP[oIndex] = orthoEm;
     findSoftStartsEnds(ag, agEm, oAg, orthoEm, chain, vertexMap, orthoAgIx, vCount, oIndex, agRep, reverse);
     }
+
+/* Find the common subGraph. */
 for(i=0;i<vCount; i++) 
     {
     for(j=0; j<vCount; j++)
@@ -1325,7 +1354,7 @@ for(i=0;i<vCount; i++)
 		}
 	    else
 		match = FALSE;
-	    if(match || (oldEv->evCount >= trumpNum && isHardVertex(ag,i) && isHardVertex(ag,j)))
+	    if(match || oldEv->evCount >= trumpNum)
 		{
 		struct evidence *commonEv = NULL;
 		AllocVar(commonEv);
@@ -1385,9 +1414,6 @@ chain = chainForBlocks(db, netTable, ag->tName, ag->tStart, ag->tEnd,
 		       starts, sizes, blockCount);
 freez(&starts);
 freez(&sizes);
-if(chain == NULL)
-    return NULL;
-seList = altGraphXToOSEdges(ag);
 orthoAg = makeCommonAltGraphX(ag, chain);
 slFreeList(&seList);
 return orthoAg;
