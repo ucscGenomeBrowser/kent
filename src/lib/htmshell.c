@@ -135,7 +135,9 @@ void _htmStart(FILE *f, char *title)
 {
 fputs("<HTML>", f);
 fprintf(f,"<HEAD>\n<TITLE>%s</TITLE>\n", title);
+#ifdef ROBERTS_EXPERIMENT
 fprintf(f,"<script language=\"javascript\" src=\"/js/popUp.js\"></script>");
+#endif /* ROBERTS_EXPERIMENT */
 fputs("</HEAD>\n\n",f);
 fputs("<BODY",f);
 if (htmlBackground != NULL )
@@ -143,7 +145,9 @@ if (htmlBackground != NULL )
 if (htmlBgColor != NULL)
     fprintf(f, " BGCOLOR=\"%X\"", *htmlBgColor);
 fputs(">\n",f);
+#ifdef ROBERTS_EXPERIMENT
 fprintf(f,"<div id=\"jstooldiv\" style=\"position: absolute;visibility: hidden;\"></div>");
+#endif /* ROBERTS_EXPERIMENT */
 }
 
 /* Write the start of an html from CGI */
