@@ -9,7 +9,7 @@
 #include "portable.h"
 #include "rmskOut.h"
 
-static char const rcsid[] = "$Id: simpleGap.c,v 1.1 2004/06/21 20:12:44 braney Exp $";
+static char const rcsid[] = "$Id: simpleGap.c,v 1.2 2004/06/23 03:37:34 braney Exp $";
 
 char *chr = (char *)NULL;	/*	process the one chromosome listed */
 char *motif = (char *)NULL;	/*	specified motif string */
@@ -133,7 +133,7 @@ for (start=0; start<chromSize; start = end)
 	    case 'g':
 		if (inGap)
 		    {
-		    fprintf(gapIo, "%s\t%llu\t%llu\t%llu\tN\t%d\tfragment\tyes\n", chrom, enterGap, chromPosition, gapCount, 1000);
+		    fprintf(gapIo, "%s\t%llu\t%llu\t%llu\tN\t%lld\tfragment\tyes\n", chrom, enterGap, chromPosition, gapCount, chromPosition - enterGap);
 		    inGap = 0;
 		    }
 		if (!inRep)
@@ -149,7 +149,7 @@ for (start=0; start<chromSize; start = end)
 	    case 'G':
 		if (inGap)
 		    {
-		    fprintf(gapIo, "%s\t%llu\t%llu\t%llu\tN\t%d\tfragment\tyes\n", chrom, enterGap, chromPosition, gapCount, 1000);
+		    fprintf(gapIo, "%s\t%llu\t%llu\t%llu\tN\t%lld\tfragment\tyes\n", chrom, enterGap, chromPosition, gapCount, chromPosition - enterGap);
 		    inGap = 0;
 		    }
 
@@ -175,7 +175,7 @@ for (start=0; start<chromSize; start = end)
 
 if (inGap)
     {
-    fprintf(gapIo, "%s\t%llu\t%llu\t%llu\tN\t%d\tfragment\tyes\n", chrom, enterGap, chromPosition, gapCount, 1000);
+    fprintf(gapIo, "%s\t%llu\t%llu\t%llu\tN\t%lld\tfragment\tyes\n", chrom, enterGap, chromPosition, gapCount, chromPosition - enterGap);
     inGap = 0;
     }
 if (inRep)
