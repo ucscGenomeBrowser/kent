@@ -7,6 +7,7 @@
 #include "obscure.h"
 #include "dnautil.h"
 #include "dnaseq.h"
+#include "seqStats.h"
 #include "rbTree.h"
 #include "axt.h"
 #include "chain.h"

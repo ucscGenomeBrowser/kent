@@ -184,10 +184,6 @@ int dnaScoreMatch(DNA *a, DNA *b, int size);
  * subtracted from total matches and returned as score. 'N's 
  * neither hurt nor help score. */
 
-double dnaMatchEntropy(DNA *query, DNA *target, int baseCount);
-/* Return entropy of matching bases - a number between 0 and 1, with
- * higher numbers the more diverse the matching bases. */
-
 int aaScore2(AA a, AA b);
 /* Score match between two bases (relatively crudely). */
 

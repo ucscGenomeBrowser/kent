@@ -18,7 +18,7 @@ O = aliType.o asParse.o axt.o axtAffine.o bits.o binRange.o \
     portimpl.o pscmGfx.o psGfx.o psl.o pslShow.o \
     pthreadWrap.o qa.o ra.o rbTree.o \
     repMask.o rle.o rudp.o sailfnt.o scoreWindow.o \
-    seqOut.o servBrcMcw.o servcis.o \
+    seqOut.o seqStats.o servBrcMcw.o servcis.o \
     servCrunx.o servcl.o servmsII.o servpws.o shaRes.o \
     sixhi.o slog.o smallishfnt.o snof.o snofmake.o snofsig.o \
     spacedSeed.o spaceSaver.o \
