@@ -10904,8 +10904,6 @@ end
     ln -s  blat.hg17KG.2014-12-08 blat.hg17KG
     cd blat.hg17KG
     pepPredToFa hg17 knownGenePep known.fa
-    hgPepPred hg17 generic blastKGPep01 known.fa
-    grep ">" known.fa | sed "s/>//" > kgName.lst
     ssh kk
     cd /cluster/data/hg17/bed/blat.hg17KG
     cat << '_EOF_' > blatSome
@@ -10951,6 +10949,9 @@ blatSome $(path1) {check in line $(path2)} {check out line psl/$(root1)/$(root2)
     pslUniq cooked.psl hg17KG.psl
     pslxToFa hg17KG.psl hg17KG_ex.fa -liftTarget=genome.lft -liftQuery=protein.lft
     kgName hg17 hg17KG.psl blastKGRef01
+    cut -f 10 hg17KG.psl > kgName.lst
+    faSomeRecords known.fa kgName.lst hg17KG.fa
+    hgPepPred hg17 generic blastKGPep01 hg17KG.fa
 
     ssh hgwdev
     cd /cluster/data/hg17/bed/blat.hg17KG
