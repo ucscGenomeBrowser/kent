@@ -1205,7 +1205,7 @@ for (indel = iList; indel != NULL; indel=indel->next)
     fprintf(of, "\t%d human mRNAs support genomic: ", indel->hs->genMrna);
     slReverse(&(indel->hs->genMrnaAcc));
     for (acc = indel->hs->genMrnaAcc; acc != NULL; acc = acc->next)
-	fprintf(of, "%s(%s) ", acc->name, acc->organism);
+	fprintf(of, "%s ", acc->name);
     fprintf(of, "\n\t%d human ESTs support genomic: ",indel->hs->genEst);
     slReverse(&(indel->hs->genEstAcc));
     for (acc = indel->hs->genEstAcc; acc != NULL; acc = acc->next)
