@@ -10,7 +10,7 @@
 #include "filePath.h"
 #include "net.h"
 
-static char const rcsid[] = "$Id: htmlCheck.c,v 1.16 2004/03/01 03:59:07 kent Exp $";
+static char const rcsid[] = "$Id: htmlCheck.c,v 1.17 2004/03/01 04:24:38 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -726,7 +726,7 @@ contentType = hashFindVal(page->header, "Content-Type:");
 if (startsWith("text/html", contentType))
     {
     page->htmlText = fullText + (s - dupe);
-    page->tags = htmlTagScan(fullText, s);
+    page->tags = htmlTagScan(page->htmlText, s);
     page->forms = htmlParseForms(page, page->tags, NULL);
     }
 freez(&dupe);
