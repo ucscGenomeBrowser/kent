@@ -9,7 +9,7 @@
 #include "jksql.h"
 #include "joiner.h"
 
-static char const rcsid[] = "$Id: joinerCheck.c,v 1.23 2004/05/06 23:08:46 kent Exp $";
+static char const rcsid[] = "$Id: joinerCheck.c,v 1.24 2004/06/01 18:03:47 galt Exp $";
 
 /* Variable that are set from command line. */
 char *fieldListIn;
@@ -251,7 +251,7 @@ struct slName *db;
 
 for (js=joiner->jsList; js != NULL; js = js->next)
     {
-    if (oneIdentifier == NULL || sameString(oneIdentifier, js->name))
+    if (oneIdentifier == NULL || wildMatch(oneIdentifier, js->name))
 	{
 	for (jf = js->fieldList; jf != NULL; jf = jf->next)
 	    {
@@ -644,7 +644,7 @@ struct joinerSet *js;
 int validations = 0;
 for (js = joiner->jsList; js != NULL; js = js->next)
     {
-    if (oneIdentifier == NULL || sameString(oneIdentifier, js->name))
+    if (oneIdentifier == NULL || wildMatch(oneIdentifier, js->name))
 	{
         jsValidateKeys(joiner, js, oneDatabase);
 	++validations;
