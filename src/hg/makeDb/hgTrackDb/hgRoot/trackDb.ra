@@ -266,8 +266,8 @@ type bed 6
 chromosomes chr22,
 
 track mrna
-shortLabel $ORGANISM mRNAs
-longLabel $ORGANISM mRNAs from Genbank 
+shortLabel $Organism mRNAs
+longLabel $Organism mRNAs from Genbank 
 priority 18
 visibility full
 spectrum on
@@ -275,7 +275,7 @@ type psl .
 
 track tightMrna
 shortLabel Tight mRNAS
-longLabel Tightly Filtered $ORGANISM mRNAs from Genbank
+longLabel Tightly Filtered $Organism mRNAs from Genbank
 priority 18.1
 visibility hide
 spectrum on
@@ -291,15 +291,15 @@ type bed 12
 
 track intronEst
 shortLabel Spliced ESTs
-longLabel $ORGANISM ESTs That Have Been Spliced
+longLabel $Organism ESTs That Have Been Spliced
 priority 18.5
 visibility dense
 spectrum on
 type psl est
 
 track est
-shortLabel $ORGANISM ESTs
-longLabel $ORGANISM ESTs Including Unspliced
+shortLabel $Organism ESTs
+longLabel $Organism ESTs Including Unspliced
 priority 19
 visibility hide
 spectrum on
@@ -307,7 +307,7 @@ type psl est
 
 track tightEst
 shortLabel Tight ESTs
-longLabel Tightly Filtered $ORGANISM ESTs Including Unspliced
+longLabel Tightly Filtered $Organism ESTs Including Unspliced
 priority 19.1
 visibility hide
 spectrum on
@@ -324,7 +324,7 @@ private on
 
 track tigrGeneIndex
 shortLabel Tigr Gene Index
-longLabel Alignment of Tigr Gene Index TCs Against the $ORGANISM Genome
+longLabel Alignment of Tigr Gene Index TCs Against the $Organism Genome
 priority 20.2
 visibility dense
 color 100,0,0
