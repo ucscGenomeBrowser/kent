@@ -3,10 +3,12 @@
 #include "gbDefs.h"
 #include "localmem.h"
 
-static char const rcsid[] = "$Id: gbGenome.c,v 1.17 2004/08/20 13:40:34 hartera Exp $";
+static char const rcsid[] = "$Id: gbGenome.c,v 1.18 2004/08/22 21:23:46 markd Exp $";
 
 struct dbToSpecies
-/* structure mapping database prefix to species (e.g. hg -> "Homo sapiens") */
+/* structure mapping database prefix to species (e.g. hg -> "Homo sapiens").
+ * subSpeciesPrefix is check in a second pass, so it can also be used
+ * when genus was used instead of genus species. */
 {
     char *dbPrefix;           /* prefix of database (e.g. hg) */
     char **names;             /* list of species name, terminate by null.
@@ -59,7 +61,8 @@ static struct dbToSpecies dbToSpeciesMap[] = {
     {"droYak", droYakNames, NULL},
     {"anoGam", anoGamNames, NULL},
     {"dp", dpNames, NULL},
-    {"tetNig", tetNigNames, NULL},
+    /*  "Tetraodon" was onced used for "Tetraodon nigroviridis" */
+    {"tetNig", tetNigNames, "Tetraodon"},
     {"zooHuman", hgNames, NULL},
     {"zooCat", zooCatNames, NULL},
     {"zooChicken", galGalNames, NULL},
@@ -98,10 +101,40 @@ genome->dbMap = dbMap;
 return genome;
 }
 
+static struct dbToSpecies *speciesSearch(char* organism)
+/* search by species name */
+{
+int i, j;
+for (i = 0; dbToSpeciesMap[i].dbPrefix != NULL; i++)
+    {
+    struct dbToSpecies* dbMap = &(dbToSpeciesMap[i]);
+    for (j = 0; dbMap->names[j] != NULL; j++)
+        {
+        if (sameString(dbMap->names[j], organism))
+            return dbMap;
+        }
+    }
+return NULL;
+}
+
+static struct dbToSpecies *subSpeciesSearch(char* organism)
+/* search by sub-species name */
+{
+int i;
+for (i = 0; dbToSpeciesMap[i].dbPrefix != NULL; i++)
+    {
+    struct dbToSpecies* dbMap = &(dbToSpeciesMap[i]);
+    if ((dbMap->subSpeciesPrefix != NULL)
+        && startsWith(dbMap->subSpeciesPrefix, organism))
+        return dbMap;
+    }
+    return NULL;
+}
+
+
 char* gbGenomePreferedOrgName(char* organism)
 /* determine the prefered organism name, if this organism is known,
- * otherwise NULL.  Used for sanity checks. Names are in static table,
- * so ptrs can be compared. */
+ * otherwise NULL.  Used for sanity checks. */
 {
 /* caching last found helps speed search, since entries tend to be groups,
  * especially ESTs.  NULL is a valid cache entry, so need flag */
@@ -111,23 +144,11 @@ static char organismCache[256];
 
 if (cacheEmpty || !sameString(organism, organismCache))
     {
-    struct dbToSpecies* foundDbMap = NULL;
-    int i, j;
-    for (i = 0; (dbToSpeciesMap[i].dbPrefix != NULL) && (foundDbMap == NULL);
-         i++)
-        {
-        struct dbToSpecies* dbMap = &(dbToSpeciesMap[i]);
-        for (j = 0; dbMap->names[j] != NULL; j++)
-            {
-            if (sameString (dbMap->names[j], organism))
-                foundDbMap = dbMap;
-            }
-        if ((dbMap->subSpeciesPrefix != NULL)
-            && startsWith(dbMap->subSpeciesPrefix, organism))
-            foundDbMap = dbMap;
-        }
+    /* do search in two passes to allow handing genus-only names */
+    dbMapCache = speciesSearch(organism);
+    if (dbMapCache == NULL)
+        dbMapCache = subSpeciesSearch(organism);
     strcpy(organismCache, organism);
-    dbMapCache = foundDbMap;
     cacheEmpty = FALSE;
     }
 
