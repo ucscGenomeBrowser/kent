@@ -132,6 +132,11 @@ extern struct genePos *curGeneId;	  /* Identity of current gene. */
 #define colConfigPrefix "near.col."     /* Prefix for stuff set in configuration pages. */
 #define advSearchPrefix "near.as."      /* Prefix for advanced search variables. */
 #define advSearchPrefixI "near.asi."    /* Prefix for advanced search variables not forcing search. */
+#define keyWordUploadPrefix "near.keyUp." /* Prefix for keyword uploads. */
+#define keyWordPastePrefix "near.keyPaste." /* Prefix for keyword paste-ins. */
+#define keyWordPastedPrefix "near.keyPasted." /* Prefix for keyword paste-ins. */
+#define keyWordClearPrefix "near.keyClear." /* Prefix for keyword paste-ins. */
+#define keyWordClearedPrefix "near.keyCleared." /* Prefix for keyword paste-ins. */
 
 /* ---- General purpose helper routines. ---- */
 
@@ -176,11 +181,24 @@ int columnCmpPriority(const void *va, const void *vb);
 struct hash *hashColumns(struct column *colList);
 /* Return a hash of columns keyed by name. */
 
+struct column *findNamedColumn(struct column *colList, char *name);
+/* Return column of given name from list or NULL if none. */
 
 /* ---- Some helper routines for column methods. ---- */
 
 char *columnSetting(struct column *column, char *name, char *defaultVal);
 /* Return value of named setting in column, or default if it doesn't exist. */
+
+char *colVarName(struct column *col, char *prefix);
+/* Return variable name prefix.col->name. This is just a static
+ * variable, so don't nest these calls. */
+
+void colButton(struct column *col, char *prefix, char *label);
+/* Make a button named prefix.col->name with given label. */
+
+struct column *colButtonPressed(struct column *colList, char *prefix);
+/* See if a button named prefix.column is pressed for some
+ * column, and if so return the column, else NULL. */
 
 char *cellLookupVal(struct column *col, struct genePos *gp, struct sqlConnection *conn);
 /* Get a field in a table defined by col->table, col->keyField, col->valField. */
@@ -193,6 +211,9 @@ void labelSimplePrint(struct column *col);
 
 boolean simpleTableExists(struct column *col, struct sqlConnection *conn);
 /* This returns true if col->table exists. */
+
+void lookupSearchControls(struct column *col, struct sqlConnection *conn);
+/* Print out controls for advanced search. */
 
 void lookupTypeMethods(struct column *col, char *table, char *key, char *val);
 /* Set up the methods for a simple lookup column. */
@@ -227,7 +248,48 @@ void advSearchAnyAllMenu(struct column *col, char *varName,
 
 boolean advSearchOrLogic(struct column *col, char *varName, 
 	boolean defaultOr);
-/* Return TRUE if user has selected 'all' from any/all menu
+/* Return TRUE if user has selected 'all' from any/all menu */
+
+void advSearchKeyUploadButton(struct column *col);
+/* Make a button for uploading keywords. */
+
+struct column *advSearchKeyUploadPressed(struct column *colList);
+/* Return column where an key upload button was pressed, or
+ * NULL if none. */
+
+void doAdvSearchKeyUpload(struct sqlConnection *conn, struct column *colList, 
+    struct column *col);
+/* Handle upload keyword list button press in advanced search form. */
+
+void advSearchKeyPasteButton(struct column *col);
+/* Make a button for uploading keywords. */
+
+struct column *advSearchKeyPastePressed(struct column *colList);
+/* Return column where an key upload button was pressed, or
+ * NULL if none. */
+
+void doAdvSearchKeyPaste(struct sqlConnection *conn, struct column *colList, 
+    struct column *col);
+/* Handle search keyword list button press in advanced search form. */
+
+struct column *advSearchKeyPastedPressed(struct column *colList);
+/* Return column where an key upload button was pressed, or
+ * NULL if none. */
+
+void doAdvSearchKeyPasted(struct sqlConnection *conn, struct column *colList, 
+    struct column *col);
+/* Handle search keyword list button press in advanced search form. */
+
+void advSearchKeyClearButton(struct column *col);
+/* Make a button for uploading keywords. */
+
+struct column *advSearchKeyClearPressed(struct column *colList);
+/* Return column where an key upload button was pressed, or
+ * NULL if none. */
+
+void doAdvSearchKeyClear(struct sqlConnection *conn, struct column *colList, 
+    struct column *col);
+/* Handle clear keyword list button press in advanced search form. */
 
 struct genePos *weedUnlessInHash(struct genePos *inList, struct hash *hash);
 /* Return input list with stuff not in hash removed. */

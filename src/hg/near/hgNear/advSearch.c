@@ -3,13 +3,14 @@
 
 #include "common.h"
 #include "hash.h"
+#include "portable.h"
 #include "jksql.h"
 #include "cheapcgi.h"
 #include "htmshell.h"
 #include "hdb.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: advSearch.c,v 1.13 2003/08/02 00:00:38 kent Exp $";
+static char const rcsid[] = "$Id: advSearch.c,v 1.14 2003/08/21 01:57:43 kent Exp $";
 
 struct genePos *advancedSearchResults(struct column *colList, 
 	struct sqlConnection *conn)
@@ -76,7 +77,6 @@ safef(name, sizeof(name), "%s%s.%s", advSearchPrefix, col->name, varName);
 return name;
 }
 
-
 char *advSearchVal(struct column *col, char *varName)
 /* Return value for advanced search variable.  Return NULL if it
  * doesn't exist or if it is "" */
@@ -104,6 +104,127 @@ char *var = advSearchName(col, varName);
 char *val = cartOptionalString(cart, var);
 cgiMakeTextVar(var, val, 8);
 }
+
+void advSearchKeyUploadButton(struct column *col)
+/* Make a button for uploading keywords. */
+{
+colButton(col, keyWordUploadPrefix, "Upload List");
+}
+
+struct column *advSearchKeyUploadPressed(struct column *colList)
+/* Return column where an key upload button was pressed, or
+ * NULL if none. */
+{
+return colButtonPressed(colList, keyWordUploadPrefix);
+}
+
+void doAdvSearchKeyUpload(struct sqlConnection *conn, struct column *colList, 
+    struct column *col)
+/* Handle upload keyword list button press in advanced search form. */
+{
+char *varName = NULL;
+cartRemovePrefix(cart, keyWordUploadPrefix);
+hPrintf("<H2>Upload List : %s - %s</H2>\n", col->shortLabel, col->longLabel);
+hPrintf("<FORM ACTION=\"../cgi-bin/hgNear\" METHOD=POST ENCTYPE=\"multipart/form-data\">\n");
+cartSaveSession(cart);
+hPrintf("Please enter the name of a file in your computer containing a space");
+hPrintf("tab, or ");
+hPrintf("line separated list of the item want to include.<BR>");
+
+varName = colVarName(col, keyWordPastedPrefix);
+hPrintf("<INPUT TYPE=FILE NAME=\"%s\"> ", varName);
+cgiMakeButton("submit", "Submit");
+hPrintf("</FORM>");
+}
+
+void advSearchKeyPasteButton(struct column *col)
+/* Make a button for uploading keywords. */
+{
+colButton(col, keyWordPastePrefix, "Paste List");
+}
+
+struct column *advSearchKeyPastePressed(struct column *colList)
+/* Return column where an key upload button was pressed, or
+ * NULL if none. */
+{
+return colButtonPressed(colList, keyWordPastePrefix);
+}
+
+void doAdvSearchKeyPaste(struct sqlConnection *conn, struct column *colList, 
+    struct column *col)
+/* Handle upload keyword list button press in advanced search form. */
+{
+char *varName = NULL;
+cartRemovePrefix(cart, keyWordPastePrefix);
+hPrintf("<H2>Paste List : %s - %s</H2>\n", col->shortLabel, col->longLabel);
+hPrintf("<FORM ACTION=\"../cgi-bin/hgNear\" METHOD=POST>\n");
+cartSaveSession(cart);
+hPrintf("Paste in a list of items to match. ");
+cgiMakeButton("submit", "Submit");
+hPrintf("<BR>\n");
+varName = colVarName(col, keyWordPastedPrefix);
+cgiMakeTextArea(varName, "", 10, 60);
+hPrintf("</FORM>");
+}
+
+struct column *advSearchKeyPastedPressed(struct column *colList)
+/* Return column where an key upload button was pressed, or
+ * NULL if none. */
+{
+return colButtonPressed(colList, keyWordPastedPrefix);
+}
+
+void doAdvSearchKeyPasted(struct sqlConnection *conn, struct column *colList, 
+    struct column *col)
+/* Handle submission in key-paste in form. */
+{
+char *pasteVarName = colVarName(col, keyWordPastedPrefix);
+char *pasteVal = trimSpaces(cartString(cart, pasteVarName));
+char *keyVarName = advSearchName(col, "keyFile");
+
+if (pasteVal == NULL || pasteVal[0] == 0)
+    {
+    /* If string is empty then clear cart variable. */
+    cartRemove(cart, keyVarName);
+    }
+else
+    {
+    /* Else write variable to temp file and save temp
+     * file name. */
+    struct tempName tn;
+    FILE *f;
+    makeTempName(&tn, "near", ".key");
+    f = mustOpen(tn.forCgi, "w");
+    mustWrite(f, pasteVal, strlen(pasteVal));
+    carefulClose(&f);
+    cartSetString(cart, keyVarName, tn.forCgi);
+    }
+cartRemovePrefix(cart, keyWordPastedPrefix);
+doAdvancedSearch(conn, colList);
+}
+
+void advSearchKeyClearButton(struct column *col)
+/* Make a button for uploading keywords. */
+{
+colButton(col, keyWordClearPrefix, "Clear List");
+}
+
+struct column *advSearchKeyClearPressed(struct column *colList)
+/* Return column where an key upload button was pressed, or
+ * NULL if none. */
+{
+return colButtonPressed(colList, keyWordClearPrefix);
+}
+
+void doAdvSearchKeyClear(struct sqlConnection *conn, struct column *colList, 
+    struct column *col)
+/* Handle upload keyword list button press in advanced search form. */
+{
+cartRemovePrefix(cart, keyWordClearPrefix);
+cartRemove(cart, advSearchName(col, "keyFile"));
+doAdvancedSearch(conn, colList);
+}
+
 
 static char *anyAllMenu[] = {"all", "any"};
 
@@ -133,7 +254,7 @@ hPrintf("<TABLE><TR><TD>");
 hPrintf("Advanced search form: ");
 cgiMakeButton(advSearchClearVarName, "Clear All");
 hPrintf(" ");
-cgiMakeButton(advSearchListVarName, "List Matching IDs");
+cgiMakeButton(advSearchListVarName, "List Matching Names");
 hPrintf(" ");
 cgiMakeButton(advSearchBrowseVarName, "Browse Results");
 hPrintf("</TD></TR></TABLE>\n");
@@ -200,11 +321,8 @@ hPrintf("</FORM>\n");
 void doAdvancedSearchClear(struct sqlConnection *conn, struct column *colList)
 /* Clear variables in advanced search page. */
 {
-char like[64];
-safef(like, sizeof(like), "%s*", advSearchPrefix);
-cartRemoveLike(cart, like);
-safef(like, sizeof(like), "%s*", advSearchPrefixI);
-cartRemoveLike(cart, like);
+cartRemovePrefix(cart, advSearchPrefix);
+cartRemovePrefix(cart, advSearchPrefixI);
 doAdvancedSearch(conn, colList);
 }
 
@@ -224,6 +342,13 @@ void doAdvancedSearchList(struct sqlConnection *conn, struct column *colList)
 {
 struct genePos *gp, *list = NULL;
 struct hash *uniqHash = newHash(16);
+struct column *col = findNamedColumn(colList, "name");
+
+if (col == NULL)
+    {
+    warn("No name column");
+    internalErr();
+    }
 hPrintf("<TT><PRE>");
 if (gotAdvSearch())
     {
@@ -234,11 +359,23 @@ else
     hPrintf("#No search limits activated. List contains all genes.\n");
     list = knownPosAll(conn);
     }
-slSort(&list, genePosCmpName);
+
+/* Now lookup names and sort. */
 for (gp = list; gp != NULL; gp = gp->next)
+    {
+    gp->name = col->cellVal(col, gp, conn);
+    }
+slSort(&list, genePosCmpName);
+
+/* Display. */
+for (gp = list; gp != NULL; gp = gp->next)
+    {
     hPrintf("%s\n", gp->name);
+    }
+    
 hPrintf("</PRE></TT>");
 }
+
 
 static struct genePos *firstBitsOfList(struct genePos *inList, int maxCount, 
 	struct genePos **pRejects)

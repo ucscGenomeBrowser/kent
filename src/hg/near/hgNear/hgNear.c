@@ -14,7 +14,7 @@
 #include "ra.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: hgNear.c,v 1.39 2003/08/02 04:33:04 kent Exp $";
+static char const rcsid[] = "$Id: hgNear.c,v 1.40 2003/08/21 01:57:43 kent Exp $";
 
 char *excludeVars[] = { "submit", "Submit", confVarName, 
 	defaultConfName, hideAllConfName, 
@@ -109,6 +109,61 @@ char *result = hashFindVal(column->settings, name);
 if (result == NULL)
     result = defaultVal;
 return result;
+}
+
+char *colVarName(struct column *col, char *prefix)
+/* Return variable name prefix.col->name. This is just a static
+ * variable, so don't nest these calls*/
+{
+static char name[64];
+safef(name, sizeof(name), "%s%s", prefix, col->name);
+return name;
+}
+
+void colButton(struct column *col, char *prefix, char *label)
+/* Make a button named prefix.col->name with given label. */
+{
+static char name[64];
+safef(name, sizeof(name), "%s%s", prefix, col->name);
+cgiMakeButton(name, label);
+}
+
+struct column *colButtonPressed(struct column *colList, char *prefix)
+/* See if a button named prefix.column is pressed for some
+ * column, and if so return the column, else NULL. */
+{
+static char pattern[64];
+char colName[64];
+char *match;
+safef(pattern, sizeof(pattern), "%s*", prefix);
+match = cartFindFirstLike(cart, pattern);
+if (match == NULL)
+    return NULL;
+
+/* Construct column name.  If variable is from an file upload
+ * there __filename suffix attached that we need to remove. */
+safef(colName, sizeof(colName), "%s", match + strlen(prefix));
+if (endsWith(colName, "__filename"))
+    {
+    int newLen = strlen(colName) - strlen("__filename");
+    colName[newLen] = 0;
+    }
+return findNamedColumn(colList, colName);
+}
+
+struct hash *keyFileHash(struct column *col)
+/* Make up a hash from key file for this column. 
+ * Return NULL if no key file. */
+{
+char *fileName = advSearchVal(col, "keyFile");
+if (fileName == NULL)
+    return NULL;
+if (!fileExists(fileName))
+    {
+    cartRemove(cart, advSearchName(col, "keyFile"));
+    return NULL;
+    }
+return hashWordsInFile(fileName, 16);
 }
 
 char *cellLookupVal(struct column *col, struct genePos *gp, struct sqlConnection *conn);
@@ -235,11 +290,53 @@ static char *accVal(struct column *col, struct genePos *gp, struct sqlConnection
 return cloneString(gp->name);
 }
 
+struct genePos *accAdvancedSearch(struct column *col, 
+	struct sqlConnection *conn, struct genePos *list)
+/* Do advanced search on accession. */
+{
+char *wild = advSearchVal(col, "wild");
+struct hash *keyHash = keyFileHash(col);
+if (keyHash != NULL)
+    {
+    struct genePos *newList = NULL, *next, *gp;
+    for (gp = list; gp != NULL; gp = next)
+        {
+	next = gp->next;
+	if (hashLookup(keyHash, gp->name))
+	    {
+	    slAddHead(&newList, gp);
+	    }
+	}
+    slReverse(&newList);
+    list = newList;
+    }
+if (wild != NULL)
+    {
+    boolean orLogic = advSearchOrLogic(col, "logic", TRUE);
+    struct genePos *newList = NULL, *next, *gp;
+    struct slName *wildList = stringToSlNames(wild);
+    for (gp = list; gp != NULL; gp = next)
+        {
+	next = gp->next;
+	if (wildMatchList(gp->name, wildList, orLogic))
+	    {
+	    slAddHead(&newList, gp);
+	    }
+	}
+    slReverse(&newList);
+    list = newList;
+    }
+return list;
+}
+
+
 void setupColumnAcc(struct column *col, char *parameters)
 /* Set up a column that displays the geneId (accession) */
 {
 columnDefaultMethods(col);
 col->cellVal = accVal;
+col->searchControls = lookupSearchControls;
+col->advancedSearch = accAdvancedSearch;
 }
 
 /* ---- Number column ---- */
@@ -300,81 +397,44 @@ return resList;
 void lookupSearchControls(struct column *col, struct sqlConnection *conn)
 /* Print out controls for advanced search. */
 {
-char *oldFileName = advSearchVal(col, "keys__filename");
-if (oldFileName == NULL) oldFileName = "";
+char *fileName = advSearchVal(col, "keyFile");
 hPrintf("%s search (including * and ? wildcards):", col->shortLabel);
 advSearchRemakeTextVar(col, "wild", 18);
 hPrintf("<BR>\n");
 hPrintf("Include if ");
 advSearchAnyAllMenu(col, "logic", TRUE);
-hPrintf("words in search term match.");
-hPrintf("<BR>\nMust also match a word in file: ");
-#ifdef MAYBE_SOMEDAY
-oldFileName = "MY FAVORITE";
-hPrintf("<INPUT TYPE=FILE NAME=\"%s\" VALUE=\"%s\"><BR>\n", 
-// hPrintf("<INPUT TYPE=FILE NAME=\"%s\"><BR>\n", 
-	advSearchName(col, "keys"),
-	oldFileName);
-#endif /* MAYBE_SOMEDAY */
-}
-
-#ifdef MAYBE_SOMEDAY
-static char *skipToLineEnd(char *s)
-/* Return pointing to line end - either '\r', '\n', or 0. */
-{
-char c;
-for (;;)
+hPrintf("words in search term match.<BR>");
+if (!columnSetting(col, "noKeys", NULL))
     {
-    c = *s;
-    if (c == 0 || c == '\r' || c == '\n')
-        break;
-    s += 1;
+    hPrintf("Limit to items in list: ");
+    advSearchKeyPasteButton(col);
+    hPrintf(" ");
+    advSearchKeyUploadButton(col);
+    hPrintf(" ");
+    if (fileName != NULL)
+	{
+	if (fileExists(fileName))
+	    {
+	    advSearchKeyClearButton(col);
+	    hPrintf("<BR>\n");
+	    hPrintf("(There are currently %d items in list.)",
+		    countWordsInFile(fileName));
+	    }
+	else
+	    {
+	    cartRemove(cart, advSearchName(col, "keyFile"));
+	    }
+       }
     }
-return s;
 }
-
-static char *findNonSpaceBefore(char *s)
-/* Find first non-space character before s */
-{
-while (isspace(*s))
-    s -= 1;
-return s;
-}
-
-struct hash *hashLines(char *s)
-/* Return hash of all lines in file (trimming leading and
- * trailing white space). */
-{
-char *e, *trimE;
-struct hash *hash = NULL;
-s = skipLeadingSpaces(s);
-if (s == NULL || s[0] == 0)
-    return NULL;
-hash = hashNew(0);
-for (;;)
-    {
-    s = skipLeadingSpaces(s);
-    if (s == NULL || s[0] == 0)
-        break;
-    e = skipToLineEnd(s);
-    trimE = findNonSpaceBefore(e);
-    hashAddN(hash, s, trimE-s, NULL);
-        {
-	mustWrite(uglyOut, s, trimE - s);
-	uglyf("\n");
-	}
-    s = e;
-    }
-return hash;
-}
-#endif /* MAYBE_SOMEDAY */
 
 struct genePos *lookupAdvancedSearch(struct column *col, 
 	struct sqlConnection *conn, struct genePos *list)
 /* Do advanced search on position. */
 {
 char *wild = advSearchVal(col, "wild");
-if (wild != NULL)
+struct hash *keyHash = keyFileHash(col);
+if (wild != NULL || keyHash != NULL)
     {
     boolean orLogic = advSearchOrLogic(col, "logic", TRUE);
     struct hash *hash = newHash(17);
@@ -387,8 +447,11 @@ if (wild != NULL)
     sr = sqlGetResult(conn, query);
     while ((row = sqlNextRow(sr)) != NULL)
         {
-	if (wildMatchList(row[1], wildList, orLogic))
-	    hashAdd(hash, row[0], NULL);
+	if (keyHash == NULL || hashLookup(keyHash, row[1]))
+	    {
+	    if (wildList == NULL || wildMatchList(row[1], wildList, orLogic))
+		hashAdd(hash, row[0], NULL);
+	    }
 	}
     list = weedUnlessInHash(list, hash);
     sqlFreeResult(&sr);
@@ -994,6 +1057,18 @@ for (col = colList; col != NULL; col = col->next)
 return hash;
 }
 
+struct column *findNamedColumn(struct column *colList, char *name)
+/* Return column of given name from list or NULL if none. */
+{
+struct column *col;
+for (col = colList; col != NULL; col = col->next)
+    {
+    if (sameString(col->name, name))
+        return col;
+    }
+return NULL;
+}
+
 void bigTable(struct sqlConnection *conn, struct column *colList, 
 	struct genePos *geneList)
 /* Put up great big table. */
@@ -1145,7 +1220,7 @@ void doMiddle(struct cart *theCart)
 {
 char *var = NULL, *val;
 struct sqlConnection *conn;
-struct column *colList;
+struct column *colList, *col;
 cart = theCart;
 getDbAndGenome(cart, &database, &organism);
 hSetDb(database);
@@ -1162,9 +1237,15 @@ colList = getColumns(conn);
 if (cartVarExists(cart, confVarName))
     doConfigure(conn, colList, NULL);
 else if ((var = cartFindFirstLike(cart, "near.up.*")) != NULL)
+    {
     doConfigure(conn, colList, var);
+    cartRemovePrefix(cart, "near.up.");
+    }
 else if ((var = cartFindFirstLike(cart, "near.down.*")) != NULL)
+    {
     doConfigure(conn, colList, var);
+    cartRemovePrefix(cart, "near.down.");
+    }
 else if (cartVarExists(cart, defaultConfName))
     doDefaultConfigure(conn, colList);
 else if (cartVarExists(cart, hideAllConfName))
@@ -1179,10 +1260,16 @@ else if (cartVarExists(cart, advSearchListVarName))
     doAdvancedSearchList(conn, colList);
 else if (cartVarExists(cart, idVarName))
     doFixedId(conn, colList);
+else if ((col = advSearchKeyPastePressed(colList)) != NULL)
+    doAdvSearchKeyPaste(conn, colList, col);
+else if ((col = advSearchKeyPastedPressed(colList)) != NULL)
+    doAdvSearchKeyPasted(conn, colList, col);
+else if ((col = advSearchKeyUploadPressed(colList)) != NULL)
+    doAdvSearchKeyUpload(conn, colList, col);
+else if ((col = advSearchKeyClearPressed(colList)) != NULL)
+    doAdvSearchKeyClear(conn, colList, col);
 else
     doSearch(conn, colList);
-cartRemoveLike(cart, "near.up.*");
-cartRemoveLike(cart, "near.down.*");
 hFreeConn(&conn);
 }
 

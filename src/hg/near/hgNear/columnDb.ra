@@ -96,6 +96,7 @@ priority 8
 visibility on
 type knownDetails kgXref kgID description
 search fuzzy
+noKeys on
 searchLabel Known Gene Descriptions
 
 name domains
