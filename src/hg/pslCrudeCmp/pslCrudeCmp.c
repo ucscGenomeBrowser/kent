@@ -20,7 +20,7 @@ void usage()
 errAbort(
   "pslCrudeCmp - Crudely compare two psl files\n"
   "usage:\n"
-  "   pslCrudeCmp 1.psl 1.psl\n"
+  "   pslCrudeCmp 1.psl 2.psl\n"
   "options:\n"
   "   -verbose\n"
   "   -only1=file - Write PSLs occuring only in the 1.psl to this file.\n"
