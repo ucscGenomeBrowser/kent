@@ -33,6 +33,11 @@ shortLabel Protein Structure
 longLabel Protein Domain and Structure Information
 priority 70
 
+name aliWith
+shortLabel Protein Alignment
+longLabel Alignment Between this Gene and Selected Protein
+priority 75
+
 name otherOrgs
 shortLabel Other Species
 longLabel Homologous Genes in Other Species (BLASTP Best Hit)
