@@ -26,8 +26,8 @@ hPrintf("%s",
 hPrintf("%s", genomeSetting("examples"));
 
 hPrintf("%s", 
- "<LI>Choose the gene relationship that you would like to examine by "
- "selecting an option from the <em>sort by</em> pull-down menu." 
+ "<LI>Choose the gene relationship by which you would like to sort the list "
+ "by selecting an option from the <em>sort by</em> pull-down menu." 
  "<LI>Press the Go! button to display your results. " 
  "</OL>"
  "</P> "
