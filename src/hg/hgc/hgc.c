@@ -121,10 +121,11 @@
 #include "encodeErgeHssCellLines.h"
 #include "sgdDescription.h"
 #include "sgdClone.h"
+#include "tfbsCons.h"
 #include "simpleNucDiff.h"
 #include "hgFind.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.549 2004/01/17 20:07:41 braney Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.550 2004/01/21 23:13:03 braney Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -1894,6 +1895,62 @@ if (net->tEnd >= 0)
 if (net->qEnd >= 0)
     printf("<B>%s size:</B> %d<BR>\n", otherOrg, net->qEnd - net->qStart);
 netAlignFree(&net);
+}
+
+void tfbsCons(struct trackDb *tdb, char *item)
+{
+char *dupe, *type, *words[16];
+char title[256];
+int wordCount;
+int start = cartInt(cart, "o");
+struct sqlConnection *conn = hAllocConn();
+char table[64];
+boolean hasBin;
+struct bed *bed;
+char query[512];
+struct sqlResult *sr;
+char **row;
+struct tfbsCons tfbs;
+boolean firstTime = TRUE;
+
+//itemForUrl = item;
+dupe = cloneString(tdb->type);
+genericHeader(tdb, item);
+wordCount = chopLine(dupe, words);
+printCustomUrl(tdb, item, FALSE);
+//printCustomUrl(tdb, itemForUrl, item == itemForUrl);
+
+hFindSplitTable(seqName, tdb->tableName, table, &hasBin);
+sprintf(query, "select * from %s where name = '%s' and chrom = '%s' and chromStart = %d",
+	    table, item, seqName, start);
+sr = sqlGetResult(conn, query);
+if ((row = sqlNextRow(sr)) != NULL)
+    {
+    tfbsConsStaticLoadWBin(row, &tfbs);
+
+    printf("<B>Item:</B> %s<BR>\n", tfbs.name);
+    printf("<B>Score:</B> %d<BR>\n", tfbs.score );
+    printf("<B>Strand:</B> %s<BR>\n", tfbs.strand);
+    printPos(tfbs.chrom, tfbs.chromStart, tfbs.chromEnd, NULL, TRUE, tfbs.name);
+    }
+
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    if (firstTime)
+	firstTime = FALSE;
+    else
+	htmlHorizontalLine();
+
+    tfbsConsStaticLoadWBin(row, &tfbs);
+   
+    printf("<B>Factor:</B> %s<BR>\n", tfbs.factor);
+    printf("<B>Species:</B> %s<BR>\n", tfbs.species);
+    printf("<B>SwissProt ID:</B> %s<BR>\n", tfbs.id);
+    printf("<A HREF=\"http://hgwdev.cse.ucsc.edu/cgi-bin/pbTracks?proteinID=%s\" target=_blank><B>Protein Browser ID:</B> </A>",  tfbs.id);
+    }
+printTrackHtml(tdb);
+freez(&dupe);
+hFreeConn(&conn);
 }
 
 void firstEF(struct trackDb *tdb, char *item)
@@ -13007,6 +13064,10 @@ else if (sameWord(track, "htcGenePsl"))
 else if (sameWord(track, "htcPseudoGene"))
     {
     htcPseudoGene(track, item);
+    }
+else if (stringIn(track, "tfbsCons"))
+    {
+    tfbsCons(tdb, item);
     }
 else if (sameWord(track, "firstEF"))
     {
