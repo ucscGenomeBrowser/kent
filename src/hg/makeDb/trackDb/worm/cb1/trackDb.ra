@@ -1,6 +1,6 @@
 track blastzCe1
-shortLabel elegans Blastz
-longLabel Blastz C elegans
+shortLabel Elegans Blastz
+longLabel Blastz C. elegans
 group compGeno
 priority 159
 visibility dense
