@@ -1291,7 +1291,7 @@ type genePred
 
 searchTable rgdQtl
 searchType bed
-termRegex [BCPORU][A-Z]+[0-9]+(_H)?
+termRegex [A-Z]+[0-9]+(_H)?
 searchMethod prefix
 searchPriority 50
 
