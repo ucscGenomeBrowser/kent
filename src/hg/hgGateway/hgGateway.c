@@ -4,6 +4,7 @@
 #include "hash.h"
 #include "cheapcgi.h"
 #include "htmshell.h"
+#include "obscure.h"
 #include "web.h"
 #include "cart.h"
 #include "hdb.h"
@@ -12,7 +13,7 @@
 #include "hCommon.h"
 #include "hui.h"
 
-static char const rcsid[] = "$Id: hgGateway.c,v 1.65 2003/09/17 17:09:16 kent Exp $";
+static char const rcsid[] = "$Id: hgGateway.c,v 1.66 2003/10/20 21:50:06 braney Exp $";
 
 struct cart *cart = NULL;
 struct hash *oldVars = NULL;
@@ -123,7 +124,7 @@ puts("<select NAME=\"db\" onchange=\"document.orgForm.db.value = document.mainFo
 puts("</td>\n");
 
 puts("<td align=center>\n");
-cgiMakeTextVar("position", position, 30);
+cgiMakeTextVar("position", addCommasToPos(position), 30);
 printf("</td>\n");
 
 cartSetString(cart, "position",position);
