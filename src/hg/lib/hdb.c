@@ -544,6 +544,24 @@ return nList;
 }
 
 
+static boolean fitField(struct hash *hash, char *fieldName,
+	char retField[32])
+/* Return TRUE if fieldName is in hash.  
+ * If so copy it to retField.
+ * Helper routine for findMoreFields below. */
+{
+if (hashLookup(hash, fieldName))
+    {
+    strcpy(retField, fieldName);
+    return TRUE;
+    }
+else
+    {
+    retField[0] = 0;
+    return FALSE;
+    }
+}
+
 static boolean fitFields(struct hash *hash, char *chrom, char *start, char *end,
 	char retChrom[32], char retStart[32], char retEnd[32])
 /* Return TRUE if chrom/start/end are in hash.  
@@ -584,11 +602,12 @@ return binned;
 }
 
 
-boolean hFindFieldsAndBin(char *table, 
+boolean hFindMoreFieldsAndBin(char *table, 
 	char retChrom[32], char retStart[32], char retEnd[32],
+	char retName[32], char retStrand[32],
 	boolean *retBinned)
-/* Given a table return the fields for selecting chromosome, start, 
- * and whether it's binned . */
+/* Given a table return the fields for selecting chromosome, start, end,
+ * name, strand, and whether it's binned.  Name and strand may be "". */
 {
 char query[256];
 struct sqlResult *sr;
@@ -610,21 +629,35 @@ sqlFreeResult(&sr);
 
 /* Look for bed-style names. */
 if (fitFields(hash, "chrom", "chromStart", "chromEnd", retChrom, retStart, retEnd))
-    ;
+    {
+    fitField(hash, "name", retName);
+    fitField(hash, "strand", retStrand);
+    }
 /* Look for psl-style names. */
 else if (fitFields(hash, "tName", "tStart", "tEnd", retChrom, retStart, retEnd))
-    ;
+    {
+    fitField(hash, "qName", retName);
+    fitField(hash, "strand", retStrand);
+    }
 /* Look for gene prediction names. */
 else if (fitFields(hash, "chrom", "txStart", "txEnd", retChrom, retStart, retEnd))
-    ;
+    {
+    fitField(hash, "name", retName);
+    fitField(hash, "strand", retStrand);
+    }
 /* Look for repeatMasker names. */
 else if (fitFields(hash, "genoName", "genoStart", "genoEnd", retChrom, retStart, retEnd))
-    ;
+    {
+    fitField(hash, "repName", retName);
+    fitField(hash, "strand", retStrand);
+    }
 else if (startsWith("chr", table) && endsWith(table, "_gl") && hashLookup(hash, "start") && hashLookup(hash, "end"))
     {
     strcpy(retChrom, "");
     strcpy(retStart, "start");
     strcpy(retEnd, "end");
+    fitField(hash, "frag", retName);
+    fitField(hash, "strand", retStrand);
     }
 else
     gotIt = FALSE;
@@ -634,12 +667,36 @@ hFreeConn(&conn);
 return gotIt;
 }
 
+boolean hFindMoreFields(char *table, 
+	char retChrom[32], char retStart[32], char retEnd[32],
+	char retName[32], char retStrand[32])
+/* Given a table return the fields for selecting chromosome, start, end,
+ * name, strand.  Name and strand may be "". */
+{
+boolean isBinned;
+return hFindMoreFieldsAndBin(table, retChrom, retStart, retEnd, retName,
+			     retStrand, &isBinned);
+}
+
+boolean hFindFieldsAndBin(char *table, 
+	char retChrom[32], char retStart[32], char retEnd[32],
+	boolean *retBinned)
+/* Given a table return the fields for selecting chromosome, start, end,
+ * and whether it's binned . */
+{
+char retName[32], retStrand[32];
+return hFindMoreFieldsAndBin(table, retChrom, retStart, retEnd, retName,
+			     retStrand, retBinned);
+}
+
 boolean hFindChromStartEndFields(char *table, 
 	char retChrom[32], char retStart[32], char retEnd[32])
 /* Given a table return the fields for selecting chromosome, start, and end. */
 {
-int isBinned;
-return hFindFieldsAndBin(table, retChrom, retStart, retEnd, &isBinned);
+boolean isBinned;
+char retName[32], retStrand[32];
+return hFindMoreFieldsAndBin(table, retChrom, retStart, retEnd, retName,
+			     retStrand, &isBinned);
 }
 
 
@@ -1071,8 +1128,8 @@ return hgParseContigRange(spec, NULL, NULL, NULL);
 }  
 #endif /* UNUSED */
 
-struct trackDb *hTrackInfo(struct sqlConnection *conn, char *trackName)
-/* Look up track in database. */
+struct trackDb *hMaybeTrackInfo(struct sqlConnection *conn, char *trackName)
+/* Look up track in database, return NULL if it's not there. */
 {
 char query[256];
 struct sqlResult *sr;
@@ -1082,10 +1139,21 @@ struct trackDb *tdb;
 sprintf(query, "select * from %s where tableName = '%s'", hTrackDbName(), trackName);
 sr = sqlGetResult(conn, query);
 if ((row = sqlNextRow(sr)) == NULL)
-    errAbort("Track %s not found", trackName);
+    return NULL;
 tdb = trackDbLoad(row);
 hLookupStringsInTdb(tdb, hGetDb());
 sqlFreeResult(&sr);
+return tdb;
+}
+
+struct trackDb *hTrackInfo(struct sqlConnection *conn, char *trackName)
+/* Look up track in database, errAbort if it's not there. */
+{
+struct trackDb *tdb;
+
+tdb = hMaybeTrackInfo(conn, trackName);
+if (tdb == NULL)
+    errAbort("Track %s not found", trackName);
 return tdb;
 }
 

@@ -159,8 +159,21 @@ boolean hIsBinned(char *table);
 boolean hFindFieldsAndBin(char *table, 
 	char retChrom[32], char retStart[32], char retEnd[32],
 	boolean *retBinned);
-/* Given a table return the fields for selecting chromosome, start, 
+/* Given a table return the fields for selecting chromosome, start, end,
  * and whether it's binned . */
+
+boolean hFindMoreFields(char *table, 
+	char retChrom[32], char retStart[32], char retEnd[32],
+	char retName[32], char retStrand[32]);
+/* Given a table return the fields for selecting chromosome, start, end,
+ * name, strand.  Name and strand may be "". */
+
+boolean hFindMoreFieldsAndBin(char *table, 
+	char retChrom[32], char retStart[32], char retEnd[32],
+	char retName[32], char retStrand[32],
+	boolean *retBinned);
+/* Given a table return the fields for selecting chromosome, start, end,
+ * name, strand, and whether it's binned.  Name and strand may be "". */
 
 boolean hFindSplitTable(char *chrom, char *rootName, 
 	char retTableBuf[64], boolean *hasBin);
@@ -217,8 +230,11 @@ boolean hgIsChromRange(char *spec);
 /* Returns TRUE if spec is chrom:N-M for some human
  * chromosome chrom and some N and M. */
 
+struct trackDb *hMaybeTrackInfo(struct sqlConnection *conn, char *trackName);
+/* Look up track in database, return NULL if it's not there. */
+
 struct trackDb *hTrackInfo(struct sqlConnection *conn, char *trackName);
-/* Look up track in database. */
+/* Look up track in database, errAbort if it's not there. */
 
 struct dbDb *hGetIndexedDatabases();
 /* Get list of databases for which there is a nib dir. 
