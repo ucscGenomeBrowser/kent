@@ -86,7 +86,7 @@
 #include "versionInfo.h"
 #include "bedCart.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.856 2004/12/14 21:42:34 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.857 2004/12/16 18:50:38 fanhsu Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -5248,15 +5248,19 @@ Color wgRnaColor(struct track *tg, void *item, struct vGfx *vg)
 char condStr[255];
 char *rnaType;
 Color color = {MG_BLACK};  /* Set default to black.  But, if we got black, something is wrong. */
+Color hColor;
+struct rgbColor hAcaColor = {0, 128, 0}; /* darker green, per request by Weber */
 struct sqlConnection *conn;
-conn = hAllocConn();
 char *name;
+
+conn = hAllocConn();
+hColor = vgFindColorIx(vg, hAcaColor.r, hAcaColor.g, hAcaColor.b);
 
 name = tg->itemName(tg, item);
 sprintf(condStr, "name='%s'", name);
 rnaType = sqlGetField(conn, database, "wgRna", "type", condStr);
 if (sameWord(rnaType, "miRna"))   color = MG_RED;
-if (sameWord(rnaType, "HAcaBox")) color = MG_GREEN;
+if (sameWord(rnaType, "HAcaBox")) color = hColor;
 if (sameWord(rnaType, "CDBox"))   color = MG_BLUE;
 if (sameWord(rnaType, "scaRna"))  color = MG_MAGENTA;
 
