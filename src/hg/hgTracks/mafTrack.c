@@ -11,8 +11,9 @@
 #include "hgTracks.h"
 #include "maf.h"
 #include "scoredRef.h"
+#include "hgMaf.h"
 
-static char const rcsid[] = "$Id: mafTrack.c,v 1.13 2003/10/17 06:26:20 kate Exp $";
+static char const rcsid[] = "$Id: mafTrack.c,v 1.14 2003/10/25 08:22:07 kent Exp $";
 
 struct mafItem
 /* A maf track item. */

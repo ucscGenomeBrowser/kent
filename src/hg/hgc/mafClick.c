@@ -8,8 +8,9 @@
 #include "obscure.h"
 #include "cheapcgi.h"
 #include "genePred.h"
+#include "hgMaf.h"
 
-static char const rcsid[] = "$Id: mafClick.c,v 1.8 2003/10/17 06:25:43 kate Exp $";
+static char const rcsid[] = "$Id: mafClick.c,v 1.9 2003/10/25 08:22:08 kent Exp $";
 
 /* Javascript to help make a selection from a drop-down
  * go back to the server. */
