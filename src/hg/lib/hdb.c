@@ -32,7 +32,7 @@
 #include "twoBit.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.229 2004/12/17 21:44:43 angie Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.230 2004/12/25 03:05:56 jill Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
@@ -1021,9 +1021,15 @@ else
 struct dnaSeq *hDnaFromSeq(char *seqName, int start, int end, enum dnaCase dnaCase)
 /* Fetch DNA */
 {
-struct dnaSeq *seq = hChromSeq(seqName, start, end);
-if (dnaCase == dnaUpper)
-    touppers(seq->dna);
+struct dnaSeq *seq;
+if (dnaCase == dnaMixed)
+    seq = hChromSeqMixed(seqName, start, end);
+else
+    {
+    seq = hChromSeq(seqName, start, end);
+	if (dnaCase == dnaUpper)
+	  touppers(seq->dna);
+	}
 return seq;
 }
 
