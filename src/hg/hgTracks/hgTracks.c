@@ -76,7 +76,7 @@
 #include "web.h"
 #include "grp.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.567.2.4 2003/08/15 17:43:12 hiram Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.567.2.5 2003/08/15 17:54:50 hiram Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define EXPR_DATA_SHADES 16
@@ -10265,10 +10265,18 @@ if (!hideControls)
     if(freezeName == NULL)
 	freezeName = "Unknown";
     hPrintf("<FONT SIZE=5><B>");
-    if (hIsMgcServer())
+    if (hIsMgcServer()) {
         hPrintf("MGC Genome Browser on %s %s Freeze", organism, freezeName); 
-    else
-        hPrintf("UCSC Genome Browser on %s %s Freeze", organism, freezeName); 
+    } else {
+	if( startsWith("zoo",database) ) {
+/* HACK ALERT - same alert as in hgGateway - The Zoo needs its own
+ * mechanism of producing this title with its date and target.
+ */
+	    hPrintf("UCSC Genome Browser on %s June 2002 Freeze %s target1", organism, freezeName); 
+	} else {
+	    hPrintf("UCSC Genome Browser on %s %s %s Freeze", database, organism, freezeName); 
+	}
+    }
     hPrintf("</B></FONT><BR>\n");
 
     /* This is a clear submit button that browsers will use by default when enter is pressed in position box. */
