@@ -738,7 +738,7 @@ mrna is done against unmasked 041203
     # Sequence info should have already been loaded into database (PRELOAD)
 
 
-# SPLICED ESTS (INTRONEST) (IN PROGRESS)
+# SPLICED ESTS (INTRONEST) (DONE 4/12/03 JK)
     # Create subset of ESTs with introns and load into database.
     ssh eieio
     cd ~/hg15
@@ -746,8 +746,6 @@ mrna is done against unmasked 041203
     ssh hgwdev
     cd ~/hg15/bed/est/intronEst
     hgLoadPsl hg15 *.psl
->>> DONE TO HERE (waiting for all EST load to finish) -jk
-
 
 # ESTORIENTINFO, MRNAORIENTINFO, GENE BOUNDS (RNACLUSTER) (TO DO)
     # Put orientation info on ESTs and mRNAs into database:
