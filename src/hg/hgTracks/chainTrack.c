@@ -14,7 +14,7 @@
 #include "chainDb.h"
 #include "chainCart.h"
 
-static char const rcsid[] = "$Id: chainTrack.c,v 1.20 2004/07/26 18:59:18 hiram Exp $";
+static char const rcsid[] = "$Id: chainTrack.c,v 1.21 2004/07/26 19:27:18 hiram Exp $";
 
 
 struct cartOptions
@@ -299,10 +299,24 @@ static Color chainNoColor(struct track *tg, void *item, struct vGfx *vg)
 return(tg->ixColor);
 }
 
+static void setNoColor(struct track *tg)
+{
+tg->itemColor = chainNoColor;
+tg->color.r = 0;
+tg->color.g = 0;
+tg->color.b = 0;
+tg->altColor.r = 127;
+tg->altColor.g = 127;
+tg->altColor.b = 127;
+tg->ixColor = MG_BLACK;
+tg->ixAltColor = MG_GRAY;
+}
+
 void chainMethods(struct track *tg, struct trackDb *tdb, 
 	int wordCount, char *words[])
 /* Fill in custom parts of alignment chains. */
 {
+
 boolean normScoreAvailable = FALSE;
 struct cartOptions *chainCart;
 
@@ -326,15 +340,7 @@ if (normScoreAvailable)
 	    tg->colorShades = shadesOfGray;
 	    break;
 	case (chainColorNoColors):
-	    tg->itemColor = chainNoColor;
-	    tg->color.r = 0;
-	    tg->color.g = 0;
-	    tg->color.b = 0;
-	    tg->altColor.r = 127;
-	    tg->altColor.g = 127;
-	    tg->altColor.b = 127;
-	    tg->ixColor = MG_BLACK;
-	    tg->ixAltColor = MG_GRAY;
+	    setNoColor(tg);
 	    break;
 	default:
 	case (chainColorChromColors):
@@ -342,7 +348,20 @@ if (normScoreAvailable)
 	}
     }
 else
-    chainCart->chainColor = chainColorChromColors;
+    {
+    char option[128]; /* Option -  rainbow chromosome color */
+    char *optionStr;	/* this old option was broken before */
+
+    snprintf(option, sizeof(option), "%s.color", tg->mapName);
+    optionStr = cartUsualString(cart, option, "on");
+    if (differentWord("on",optionStr))
+	{
+	setNoColor(tg);
+	chainCart->chainColor = chainColorNoColors;
+	}
+    else
+	chainCart->chainColor = chainColorChromColors;
+    }
 
 tg->loadItems = chainLoadItems;
 tg->drawItems = chainDraw;
