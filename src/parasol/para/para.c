@@ -640,22 +640,10 @@ boolean isStatusOk(int status)
 return WIFEXITED(status) && (WEXITSTATUS(status) == 0);
 }
 
-double systemTickRate()
-/* Return number of seconds per system tick.
- * It used to be CLK_TCK would work for this, but
- * under recent Linux's it doesn't. */
-{
-#ifdef CLK_TCK
-    return 1.0/CLK_TCK
-#else
-    return 1.0/sysconf(_SC_CLK_TCK);
-#endif /* CLK_TCK */
-}
-
 double jrCpuTime(struct jobResult *jr)
 /* Get CPU time in seconds for job. */
 {
-return systemTickRate() * (jr->usrTicks + jr->sysTicks);
+return 0.01 * (jr->usrTicks + jr->sysTicks);
 }
 
 struct hash *markRunJobStatus(struct jobDb *db)
