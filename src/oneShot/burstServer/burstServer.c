@@ -7,6 +7,7 @@
 #include "hash.h"
 #include "options.h"
 #include "net.h"
+#include "portable.h"
 
 int burstPort = 12354;
 
@@ -43,65 +44,49 @@ struct countMessage
 
 struct countMessage messages[10000];   /* Array of messages. */
 int messageCount;	/* The number of messages we've received. */
+pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
+pthread_cond_t ready = PTHREAD_COND_INITIALIZER;
+
 struct timeval startTime;
 
-
-#ifdef OLD
-void burstServer(char *command)
-/* burstServer - A udp server that accepts a burst of data, queues it, and prints it out slowly. */
-{
-int port = burstPort;
-int ear, size;
-char buf[1024];
-int count = 0;
-struct timeval startTime, tv;
-struct countMessage sendMessage, receiveMessage;
-struct sockaddr_in sai;
-
-
-ZeroVar(&sai);
-sai.sin_family = AF_INET;
-sai.sin_port = htons(port);
-sai.sin_addr.s_addr = INADDR_ANY;
-ear = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
-if (bind(ear, (struct sockaddr *)&sai, sizeof(sai)) < 0)
-    errAbort("Couldn't bind ear");
-gettimeofday(&startTime, NULL);
-for (;;)
-    {
-    int err;
-    int saiSize = sizeof(sai);
-    ZeroVar(&sai);
-    sai.sin_family = AF_INET;
-    err = recvfrom(ear, &receiveMessage, sizeof(receiveMessage), 
-    	0, (struct sockaddr *)&sai, &saiSize);
-    if (err < 0)
-	{
-        warn("couldn't receive %s", strerror(errno));
-	continue;
-	}
-    if (err != sizeof(receiveMessage))
-        {
-	warn("Message truncated");
-	continue;
-	}
-    gettimeofday(&tv, NULL);
-    printf("#%d recieved at %f seconds. Payload '%s'\n", 
-    	receiveMessage.count, 0.000001 * timeDiff(&startTime, &tv), receiveMessage.payload);
-    gettimeofday(&tv, NULL);
-    if (!receiveMessage.message)
-         break;
-    }
-close(ear);
-printf("All done after %d\n", count);
-}
-#endif /* OLD */
 
 struct socketSuckerInput
 /* Input structure for socket sucker. */
      {
      int socket;
      };
+
+void mutexLock(pthread_mutex_t *mutex)
+/* Lock a mutex or die trying. */
+{
+int err = pthread_mutex_lock(mutex);
+if (err != 0)
+    errAbort("Couldn't lock mutex: %s", strerror(err));
+}
+
+void mutexUnlock(pthread_mutex_t *mutex)
+/* Lock a mutex or die trying. */
+{
+int err = pthread_mutex_unlock(mutex);
+if (err != 0)
+    errAbort("Couldn't lock mutex: %s", strerror(err));
+}
+
+void condSignal(pthread_cond_t *cond)
+/* Set conditional signal */
+{
+int err = pthread_cond_signal(cond);
+if (err != 0)
+    errAbort("Couldn't condSignal: %s", strerror(err));
+}
+
+void condWait(pthread_cond_t *cond, pthread_mutex_t *mutex)
+/* Wait for conditional signal. */
+{
+int err = pthread_cond_wait(cond, mutex);
+if (err != 0)
+    errAbort("Couldn't contWait: %s", strerror(err));
+}
 
 void *suckSocket(void *vptr)
 /* Suck down stuff from socket and add it to message list. */
@@ -129,7 +114,10 @@ for (i=0; i<ArraySize(messages); ++i)
 	warn("Message truncated");
 	continue;
 	}
+    mutexLock(&mutex);
     ++messageCount;
+    condSignal(&ready);
+    mutexUnlock(&mutex);
     }
 return NULL;
 }
@@ -162,8 +150,13 @@ err = pthread_create(&socketSucker, NULL, suckSocket, ssi);
 /* Go into loop that prints things out 50 per second max. */
 for (;;)
     {
-    sleep1000(20);
-    if (messageCount > outIx)
+    int inIx;
+    mutexLock(&mutex);
+    while (messageCount <= outIx)
+        condWait(&ready, &mutex);
+    inIx = messageCount;
+    mutexUnlock(&mutex);
+    if (inIx > outIx)
         {
 	printf("#%d sent at %f seconds. Payload '%s'\n", 
 	    messages[outIx].count, 0.000001 * messages[outIx].time, messages[outIx].payload);
