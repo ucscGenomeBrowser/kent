@@ -9,6 +9,7 @@
 #define KEYS_H
 
 struct keyVal
+/* A key/value pair of strings. */
     {
     char *key;
     char *val;
