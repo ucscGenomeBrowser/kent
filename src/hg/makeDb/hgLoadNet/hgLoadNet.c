@@ -108,7 +108,7 @@ for (fill = fillList; fill != NULL; fill = fill->next)
 	if (fill->type == NULL)
 	    errAbort("No type field, please run netSyntenic on input");
 	if (fill->tN < 0)
-	    errAbort("Missing fields.  Pleaser run netClassify on input");
+	    errAbort("Missing fields.  Please run netClassify on input");
 	}
     if (fill->score < 0)
         fill->score = 0;
