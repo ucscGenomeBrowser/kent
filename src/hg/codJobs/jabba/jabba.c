@@ -493,6 +493,8 @@ if (lineFileNext(lf, &line, NULL))	/* Empty is ok. */
 	    char *state = words[4];
 	    if (state[0] == 'E')
 		sub->queueError = TRUE;
+	    else if (state[0] == 'd')
+	        ;	/* Externally deleted? */
 	    else 
 	        {
 		if (sameString(state, "r"))
