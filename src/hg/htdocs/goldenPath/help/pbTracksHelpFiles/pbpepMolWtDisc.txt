@@ -43,7 +43,5 @@ enzyme (e.g. lysozyme), 3-5 domains should be expected for the
 average mammalian protein. 
 <P>
 <CENTER>
-<IMG src="mol_wt.gif"> 
+<IMG height=256 width=288 src="mw.jpg"> 
 </CENTER>
-
-[FIXME -- Replace with updated graph]

@@ -38,14 +38,16 @@ Tables of amino acid usage are available elsewhere for other species
 TARGET=_blank>SwissProt</A> as a 
 whole. 
 <P>
-<B>Amino acid abundances based on the knownGene table [FIXME - is this
-correct?] (July 2003 human assembly)</B>
+<B>Amino acid abundances based on the pepResDist table (July 2003 human assembly)</B>
 <BR>
+<CENTER>
+<IMG height=273 width=411 src="aa.jpg">
+</CENTER>
+<!--
+<BLOCKQUOTE>
 <TABLE cellSpacing=5 cellPadding=5>
     <TR>
-	<TD vAlign=top><IMG height=274 src="aa_abund2.gif" width=147>
        	<TD vAlign=top>
-<!--
 <PRE>
 Trp	1.29
 Met	2.23
@@ -68,9 +70,8 @@ Ala	7.08
 Ser	7.90
 Leu	9.71
 </PRE>
--->
     	</TD>
     </TD></TR>
 </TABLE>
-
-[FIXME -- Replace with updated graph]
+</BLOCKQUOTE>
+-->

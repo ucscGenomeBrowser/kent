@@ -24,16 +24,11 @@ mundane value. Unusual values may be apparent in the Hydrophobicity track, and
 will also surface as amino acid compositional anomalies. 
 <P>
 <P>
-<CENTER>
-<TABLE cellSpacing=2 cellPadding=1>
-    <TR>
-	<TD><IMG height=227 src="hydrophobic.gif" width=466></TD> 
-    </TR>
-    <BR><BR>
-    <TR>
-	<TD vAlign=top>
+<H4>Kyte-Doolittle hydrophobicity scale</H4>
 <BLOCKQUOTE>
-<PRE>Kyte-Doolittle hydrophobicity scale
+<TABLE cellSpacing=2 cellPadding=1>
+    <TR><TD vAlign=top>
+<PRE>
  J. Mol. Biol. 157:105-132(1982)
  Ile:	+4.5
  Val:	+4.2
@@ -56,11 +51,11 @@ will also surface as amino acid compositional anomalies.
  Lys:	-3.9
  Arg:	-4.5
 </PRE>
-</BLOCKQUOTE>
 	</TD>
     </TR>
 </TABLE>
+</BLOCKQUOTE>
+<CENTER>
+<IMG height=262 src="hydro.jpg" width=286></TD> 
 </CENTER>
-
-[FIXME -- Replace with updated graph & chart]
 

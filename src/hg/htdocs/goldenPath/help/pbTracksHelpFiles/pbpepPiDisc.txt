@@ -51,7 +51,5 @@ their isoelectric point. Proteins may be evolutionarily trapped on one side of
 the valley or the other. 
 <P>
 <CENTER>
-<IMG height=359 src="pI_large.gif" width=607>
+<IMG height=264 width=276 src="pi.jpg">
 </CENTER>
-
-[FIXME -- Replace with updated graph]

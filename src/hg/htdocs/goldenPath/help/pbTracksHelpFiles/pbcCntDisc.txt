@@ -58,10 +58,8 @@ external to the cell, they are likely in disulfides although the pairing is not
 always resolved and indeed may be intermolecular. 
 <P>
 <CENTER>
-<IMG height=216 src="cys_occur.gif" width=342>
+<IMG height=266 width=277 src="cys.jpg">
 </CENTER>
-
-[FIXME -- Replace with updated graph]
 
 <P>
 <A NAME=disulf_tools></A>

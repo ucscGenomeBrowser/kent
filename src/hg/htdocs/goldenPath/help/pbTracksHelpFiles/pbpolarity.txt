@@ -6,7 +6,7 @@ represented in blue above the line. The height of the block gives
 some indication of relative polarity for un-ionized amino acids. For example,
 serine is given a lower height than aspartic acid. 
 <P>
-The pI histogram in the <A HREF="#PiDisc">Polarity</A> discussion section 
+The pI histogram in the Polarity discussion section 
 shows the genome-wide statistical distribution of pI of human
 proteins from SwissProt and TrEMBL. For reasons of solubility, few
 proteins have a pI near intra-cellular pH, resulting in a bimodal peak about
