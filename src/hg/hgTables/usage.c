@@ -4,7 +4,7 @@
 #include "jksql.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: usage.c,v 1.5 2004/09/13 23:57:23 donnak Exp $";
+static char const rcsid[] = "$Id: usage.c,v 1.6 2004/09/25 05:16:07 kent Exp $";
 
 void printMainHelp()
 /* Put up main page help info. */
@@ -21,7 +21,9 @@ hPrintf("%s",
 "        \n"
 "        <LI><B>group: </B>Selects the type of tracks to be displayed in \n"
 "        the <em>track</em> list. The options correspond to the track groupings\n"
-"        shown in the Genome Browser.</LI>\n"
+"        shown in the Genome Browser. Select 'All Tracks' for an alphabetical list\n"
+"        of all available tracks in all groups.  Select 'All Tables' to see all tables\n"
+"        including those not associated with a track.</LI>\n"
 "        \n"
 "        <LI><B>track: </B>Selects the annotation track data to work with. This \n"
 "        list displays all tracks belonging to the group specified in the \n"
