@@ -12,7 +12,7 @@
 #include "hgNear.h"
 #include "cheapcgi.h"
 
-static char const rcsid[] = "$Id: expRatio.c,v 1.23 2003/10/08 20:40:25 kent Exp $";
+static char const rcsid[] = "$Id: expRatio.c,v 1.24 2003/10/08 21:03:08 kent Exp $";
 
 
 static boolean loadExpVals(struct sqlConnection *lookupConn,
@@ -716,6 +716,28 @@ slAddHead(pList, emd);
 return emd;
 }
 
+struct expMultiData *emdFind(struct expMultiData *list, char *name)
+/* Find named expMultiData, or NULL if not on list. */
+{
+struct expMultiData *emd;
+for (emd = list; emd != NULL; emd = emd->next)
+    if (sameString(name, emd->name))
+        return emd;
+return NULL;
+}
+
+struct expMultiData *getSelectedEmd(struct column *col, struct expMultiData *emdList)
+/* Get user selected column or default. */
+{
+struct expMultiData *emd = NULL;
+char *emdVal = configVarVal(col, "emd");
+if (emdVal != NULL)
+   emd = emdFind(emdList, emdVal);
+if (emd == NULL)
+   emd = emdList;
+return emd;
+}
+
 static boolean expMultiExists(struct column *col, struct sqlConnection *conn)
 /* Returns true if relevant tables exist. */
 {
@@ -791,26 +813,17 @@ expLabelPrint(col, emd->name, emd->representativeCount,
 	emd->representatives, emd->experimentTable);
 }
 
-struct expMultiData *emdFind(struct expMultiData *list, char *name)
-/* Find named expMultiData, or NULL if not on list. */
-{
-struct expMultiData *emd;
-for (emd = list; emd != NULL; emd = emd->next)
-    if (sameString(name, emd->name))
-        return emd;
-return NULL;
-}
-
 static void expEmdControl(struct column *col)
 /* Show selected/median/all control. */
 {
 struct expMultiData *emd;
+struct expMultiData *curEmd = getSelectedEmd(col, col->emdList);
 hPrintf("tissues: ");
 hPrintf("<SELECT NAME=\"%s\">", configVarName(col, "emd"));
 for (emd = col->emdList; emd != NULL; emd = emd->next)
     {
     hPrintf("<OPTION VALUE=\"%s\"", emd->name);
-    if (emd == col->emd)
+    if (emd == curEmd)
 	hPrintf(" SELECTED");
     hPrintf(">%s", emd->shortLabel);
     }
@@ -907,10 +920,8 @@ struct expMultiData *emdList = NULL;
 struct expMultiData *allEmd = makeEmd(col, "all", "all replicas", &emdList);
 struct expMultiData *medianEmd = makeEmd(col, "median", "median of replicas", &emdList);
 struct expMultiData *selectedEmd = makeEmd(col, "selected", "selected", &emdList);
-struct expMultiData *curEmd = NULL;
 char *ratioMax = columnSetting(col, "ratioMax", "3.0");
 char *absoluteMax = columnSetting(col, "absoluteMax", "30000");
-char *emdVal = configVarVal(col, "emd");
 
 col->table = cloneString(nextWord(&parameters));
 if (col->table == NULL)
@@ -920,12 +931,9 @@ if (col->table == NULL)
  * and set the current experiments. */
 if (emdList == NULL)
    errAbort("Need at least one of all/median/selected for %s", col->name);
-if (emdVal != NULL)
-   curEmd = emdFind(emdList, emdVal);
-if (curEmd == NULL)
-   curEmd = emdList;
 col->emdList = emdList;
-col->emd = curEmd;
+col->emd = getSelectedEmd(col, emdList);
+
 
 /* Figure out whether showing absolute or relative */
     {
