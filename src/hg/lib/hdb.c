@@ -30,7 +30,7 @@
 #include "liftOverChain.h"
 #include "grp.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.191 2004/07/13 12:44:13 baertsch Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.192 2004/07/13 14:35:05 baertsch Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
@@ -3105,7 +3105,7 @@ for (dbName = dbNames;  dbName != NULL;  dbName = dbName->next)
 	    dyStringPrintf(query, " or name = '%s'", dbName->name);
 	}
     }
-dyStringPrintf(query, ") order by orderKey ");
+dyStringPrintf(query, ") order by orderKey desc");
 if (count > 0)
     {
     sr = sqlGetResult(conn, query->string);
