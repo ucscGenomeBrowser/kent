@@ -19,7 +19,7 @@
 #include "bedCart.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: schema.c,v 1.27 2004/11/23 23:25:52 hiram Exp $";
+static char const rcsid[] = "$Id: schema.c,v 1.28 2004/11/24 22:41:55 hiram Exp $";
 
 static char *nbForNothing(char *val)
 /* substitute &nbsp; for empty strings to keep table formating sane */
@@ -369,6 +369,10 @@ static void showSchemaCtBed(char *table, struct customTrack *ct)
 {
 struct bed *bed;
 int count = 0;
+boolean showItemRgb = FALSE;
+
+showItemRgb=bedItemRgb(ct->tdb);	/* should we expect itemRgb */
+					/*	instead of "reserved" */
 
 /* Find named custom track. */
 hPrintf("<B>Custom Track ID:</B> %s ", table);
@@ -378,8 +382,16 @@ hPrintf("<A HREF=\"/goldenPath/help/customTrack.html#BED\">BED</A> ");
 hPrintf("format.");
 webNewSection("Sample Rows");
 hPrintf("<TT><PRE>");
-for (bed = ct->bedList; bed != NULL && count < 10; bed = bed->next, ++count)
-    bedTabOutN(bed, ct->fieldCount, stdout);
+if (showItemRgb)
+    {
+    for (bed = ct->bedList; bed != NULL && count < 10; bed = bed->next, ++count)
+	bedTabOutNitemRgb(bed, ct->fieldCount, stdout);
+    }
+else
+    {
+    for (bed = ct->bedList; bed != NULL && count < 10; bed = bed->next, ++count)
+	bedTabOutN(bed, ct->fieldCount, stdout);
+    }
 hPrintf("</PRE></TT>\n");
 }
 
