@@ -1,4 +1,4 @@
-# This contains C. elegans specific ordering info.
+# This contains Yeast specific ordering info.
 #
 name blastp
 type pair sgdBlastTab query target bitScore -1 

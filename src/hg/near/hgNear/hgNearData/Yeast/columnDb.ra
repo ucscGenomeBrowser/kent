@@ -1,4 +1,4 @@
-# This contains C. elegans specific column information.
+# This contains Yeast specific column information.
 #
 name name
 type lookup sgdToName name value
