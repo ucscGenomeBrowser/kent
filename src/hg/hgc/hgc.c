@@ -1678,7 +1678,7 @@ tolowers(oLetters);
     htmHorizontalLine(f);
     }
 
-fprintf(f, "<H4><A NAME=genomic></A>Genomic %s %s:</H4>\n", 
+fprintf(f, "<H4><A NAME=genomic></A>Human.%s %s:</H4>\n", 
     psl->tName, (tIsRc ? "(reverse strand)" : ""));
 /* Display DNA sequence. */
     {
