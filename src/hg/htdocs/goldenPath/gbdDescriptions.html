@@ -1141,7 +1141,10 @@
   - FlyBase acc to SwissProt acc, plus some other SwissProt info
   <LI><A 
   href="#FlyReg">flyreg</A> 
-  - FlyReg data (<em>D. melanogaster</em>)
+  - FlyReg data (<em>D. melanogaster</em> - dm1)
+  <LI><A 
+  href="#FlyReg2">flyreg2</A> 
+  - FlyReg data (<em>D. melanogaster</em> - dm2)
   <LI><A 
   href="#DnaMotif">flyregMotif</A> 
   - FlyReg gapless motif (<em>D. melanogaster</em>)
@@ -3413,6 +3416,20 @@ Last used Apr. 2001.
     string name;       "Factor"
     string target;     "Target"
     uint   pmid;       "PubMed ID"
+    )
+</PRE>
+
+<H4><A name=FlyReg2></A>FlyReg Data (version 2)</H4>
+<PRE>table flyreg
+"Flyreg data (version 2) from Casey Bergman"
+    (
+    string chrom;      "Chromosome"
+    uint   chromStart; "Start position in chromosome"
+    uint   chromEnd;   "End position in chromosome"
+    string name;       "Factor"
+    string target;     "Target"
+    uint   pmid;       "PubMed ID"
+    uint   fpid;       "Footprint ID -- stable ID across versions"
     )
 </PRE>
 
