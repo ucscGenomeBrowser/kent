@@ -22,7 +22,7 @@ url http://vega.sanger.ac.uk/Homo_sapiens/geneview?transcript=$$
 
 track slamMouse
 shortLabel SLAM Mouse
-longLabel SLAM gene predictions using human/mouse homology
+longLabel SLAM Gene Predictions Using Human/Mouse Homology
 group genes
 priority 45.5
 visibility hide
@@ -32,7 +32,7 @@ type genePred
 
 track slamRat
 shortLabel SLAM Rat
-longLabel SLAM gene predictions using human/rat homology
+longLabel SLAM Gene Predictions Using Human/Rat Homology
 group genes
 priority 45.6
 visibility hide
@@ -51,7 +51,7 @@ type genePred sgpPep
 
 track slamNonCodingMouse
 shortLabel SLAM Non Coding Mouse
-longLabel SLAM predictions of human/mouse conserved non-coding regions
+longLabel SLAM Predictions of Human/Mouse Conserved Non-Coding Regions
 group compGeno
 priority 120
 visibility hide
@@ -62,7 +62,7 @@ type bed 5
 
 track slamNonCodingRat
 shortLabel SLAM Non Coding Rat
-longLabel SLAM predictions of human/rat conserved non-coding regions
+longLabel SLAM Predictions of Human/Rat Conserved Non-Coding Regions
 group compGeno
 priority 121
 visibility hide
@@ -83,7 +83,7 @@ type sample 0 8
 
 track syntenyMouse
 shortLabel Mouse Synteny
-longLabel Human/Mouse Synteny using BLASTZ single coverage (100k window)
+longLabel Human/Mouse Synteny Using BLASTZ Single Coverage (100k window)
 group compGeno
 priority 138
 visibility hide
@@ -93,7 +93,7 @@ type bed 4 .
 
 track syntenyRat
 shortLabel Rat Synteny
-longLabel $Organism/Rat Synteny using BLASTZ single coverage (100k window)
+longLabel $Organism/Rat Synteny Using BLASTZ Single Coverage (100k window)
 group compGeno
 priority 140.5
 visibility hide
@@ -210,7 +210,7 @@ type chain hg13
 
 track humanChainNew
 shortLabel Human Chain 2
-longLabel Chained BLASTZ Human/Human Alignments new self alignment
+longLabel Chained BLASTZ Human/Human Alignments New Self Alignment
 group varRep
 priority 145.11
 visibility hide
@@ -221,7 +221,7 @@ type chain hg13
 
 track blastzHuman
 shortLabel BLASTZ Human
-longLabel Merged BLASTZ Human(Self) Alignments
+longLabel Merged BLASTZ Human (Self) Alignments
 group varRep
 priority 145.2
 visibility hide
@@ -232,7 +232,7 @@ type psl xeno hg13
 
 track blastzBestHuman_old
 shortLabel Best Human old
-longLabel Old BLASTZ Human(Self) Best in Genome Alignments
+longLabel Old BLASTZ Human (Self) Best in Genome Alignments
 group varRep
 priority 145.31
 visibility hide
@@ -243,7 +243,7 @@ type psl xeno hg13
 
 track blastzBestHuman
 shortLabel Best Human 
-longLabel BLASTZ Human(Self) Best in Genome Alignments
+longLabel BLASTZ Human (Self) Best in Genome Alignments
 group varRep
 priority 145.32
 visibility hide
@@ -254,7 +254,7 @@ type psl xeno hg13
 
 track blastzTightHuman
 shortLabel Tight Human 
-longLabel BLASTZ Human(Self), Tight Subset of Best Alignments
+longLabel BLASTZ Human (Self), Tight Subset of Best Alignments
 group varRep
 priority 145.4
 visibility hide
