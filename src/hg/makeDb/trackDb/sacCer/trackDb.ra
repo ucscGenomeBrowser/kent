@@ -60,7 +60,7 @@ intronGap 30
 
 track multizYeast 
 shortLabel Multiz Yeast
-longLabel S. cerevisiae/paradoxus/mikatae/kudriavzevii/bayanus/castelli/kluyveri Alignments
+longLabel Multiz Alignments of Seven Species of Saccharomyces
 group compGeno
 priority 146
 visibility full
