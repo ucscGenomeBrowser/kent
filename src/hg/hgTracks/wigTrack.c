@@ -11,7 +11,7 @@
 #include "wiggle.h"
 #include "scoredRef.h"
 
-static char const rcsid[] = "$Id: wigTrack.c,v 1.5 2003/09/25 07:11:37 hiram Exp $";
+static char const rcsid[] = "$Id: wigTrack.c,v 1.6 2003/09/25 23:49:08 hiram Exp $";
 
 struct wigItem
 /* A wig track item. */
@@ -249,6 +249,7 @@ if( ! trackSpans )
     trackSpans = newHash(0);
 /*	Each instance of this LoadItems will create a new spans hash
  *	It will be the value included in the trackSpans hash
+ *	use tg->mapName here instead of the lf->name
  */
 spans = newHash(0);
 while ((row = sqlNextRow(sr)) != NULL)
@@ -334,20 +335,23 @@ debugPrint("wigDrawItems");
 itemCount = 0;
 for (lf = tg->items; lf != NULL; lf = lf->next)
     {
-    struct simpleFeature *sf = lf->components;
-    struct wigItem *wi = lf->extra;
-    int usingDataSpan = 1;
-    unsigned char *ReadData;
-    int pixelsToDraw = 0;
-    unsigned char *dataPtr;
-    int dataStarts;	/*	chrom coords	*/
-    int dataEnds;	/*	chrom coords	*/
+    struct simpleFeature *sf = lf->components;	/* for each feature */
+    struct wigItem *wi = lf->extra;	/* the other wiggle fields */
+    int usingDataSpan = 1;	/* will become larger if possible */
+    unsigned char *ReadData;	/* the bytes read in from the file */
+    int pixelToDraw = 0;
+    unsigned char *dataStarts;	/* pointer into ReadData	*/
+    int dataViewStarts;	/*	chrom coords	*/
+    int dataViewEnds;	/*	chrom coords	*/
+    int dataOffsetStart;	/*	offset into data file	*/
+    int dataOffsetEnd;		/*	offset into data file	*/
     int dataSpan;	/*	chrom coords	*/
     int dataPointsInView;	/*	number of data points to use */
     double dataValuesPerPixel;	/*  values in the data file per pixel */
     int pixelsPerDataValue;	/*  to specify drawing box width */
     int x1 = 0;
-    int y1,w,h,x2,y2;
+    int w,h,x2,y2;
+    int loopTimeout = 0;	/*	to catch a runaway drawing loop */
 
     h = tg->lineHeight;
     /*	Take a look through the potential spans, and given what we have
@@ -399,7 +403,8 @@ for (lf = tg->items; lf != NULL; lf = lf->next)
  *	for each data point
  *
  *	The drawing window, in pixels:
- *	xOff = left margin, y1 = top margin, h = height
+ *	xOff = left margin, yOff = top margin, h = height of drawing
+ *	window
  *	drawing window in chrom coords: seqStart, seqEnd
  *	basesPerPixel is known, 'pixelsPerBase' is known
  */
@@ -407,73 +412,123 @@ for (lf = tg->items; lf != NULL; lf = lf->next)
 	ReadData = (unsigned char *) needMem((size_t) (wi->Count + 1));
 	fread(ReadData, (size_t) wi->Count, (size_t) sizeof(unsigned char), f);
 
-	dataStarts = max(sf->start,seqStart);
-	dataEnds = min(sf->end,seqEnd);
-	dataSpan = dataEnds - dataStarts;
+	dataViewStarts = max(sf->start,seqStart);
+	dataViewEnds = min(sf->end,seqEnd);
+	dataOffsetStart = (dataViewStarts - sf->start)/ usingDataSpan;
+	dataOffsetEnd = wi->Count - ((sf->end - dataViewEnds) / usingDataSpan);
+	dataSpan = dataViewEnds - dataViewStarts;
 	dataPointsInView = dataSpan / usingDataSpan;
 	if( dataPointsInView < 1 ) dataPointsInView = 1;
-	w = (dataEnds - dataStarts) * pixelsPerBase;
+	w = (dataViewEnds - dataViewStarts) * pixelsPerBase;
 	dataValuesPerPixel = (double) dataPointsInView / (double) w;
 	pixelsPerDataValue = 1.0 / dataValuesPerPixel;
 	if( pixelsPerDataValue < 1 ) pixelsPerDataValue = 1;
-	if( w < 0 ) w = 0;
-snprintf(dbgMsg, DBGMSGSZ, "seek to: %d, read: %d bytes, dataStarts: %d, dataEnds: %d, pixels: %d", wi->Offset, wi->Count, dataStarts, dataEnds, w );
+	if( w < 1 ) w = 1;
+snprintf(dbgMsg, DBGMSGSZ, "seek to: %d, read: %d bytes, dataViewStarts: %d, dataViewEnds: %d, pixels: %d", wi->Offset, wi->Count, dataViewStarts, dataViewEnds, w );
+debugPrint("wigDrawItems");
+snprintf(dbgMsg, DBGMSGSZ, "dataOffsetStart %d, dataOffsetEnd: %d, using Span: %d", dataOffsetStart, dataOffsetEnd, usingDataSpan );
 debugPrint("wigDrawItems");
 snprintf(dbgMsg, DBGMSGSZ, "pixelsPerBase %.4f / dataPointsInView: %d = dataValuesPerPixel: %.4f", pixelsPerBase, dataPointsInView, dataValuesPerPixel );
 debugPrint("wigDrawItems");
-snprintf(dbgMsg, DBGMSGSZ, "pixelsPerDataValue %d", pixelsPerDataValue );
+snprintf(dbgMsg, DBGMSGSZ, "pixelsPerDataValue %d, dataValuesPerPixel: %.4f", pixelsPerDataValue, dataValuesPerPixel );
 debugPrint("wigDrawItems");
-    	dataPtr = ReadData + (dataStarts - sf->start);;
-	if( usingDataSpan == 1 ) {
-		x1 = xOff + (dataStarts - seqStart)*pixelsPerBase;
-snprintf(dbgMsg, DBGMSGSZ, "Data Points: %d, Width: %d, start at x1: %d", wi->Count, w, x1 );
+    	dataStarts = ReadData + dataOffsetStart;
+snprintf(dbgMsg, DBGMSGSZ, "Total Data Points in this bin: %d, this window w = %d", wi->Count, w );
 debugPrint("wigDrawItems");
-	for ( pixelsToDraw = 0; pixelsToDraw < w; ++pixelsToDraw )
+	loopTimeout = 0;
+	for ( pixelToDraw = 0; pixelToDraw < w && loopTimeout < 5000;
+		pixelToDraw += pixelsPerDataValue )
 	    {
-		int boxHeight;
-		int dataValue;
-    		int skipDataPoints;
-    		skipDataPoints = dataValuesPerPixel * pixelsToDraw;
-		dataValue = *(dataPtr + pixelsToDraw + skipDataPoints);
-		if( ((int) dataValuesPerPixel > 1) &&
-			    (wiggleType == wiggleLinearInterpolation) )
-		    {		/* skipping data points, find maximum */
-			int j;	/*	in this area skipped	*/
-			int validData = 0;
-			unsigned char data;
-			dataValue = 0;
-			for( j = 0; j < (int) dataValuesPerPixel; ++j )
-			    {
-				data = *(dataPtr + pixelsToDraw + j);
-				if( data < WIG_NO_DATA )
-				    {
-				    dataValue = max(dataValue,data);
-				    ++validData;
-				    }
-			    }
-			/*	Is there actually any valid data here */
-			if( ! validData ) dataValue = WIG_NO_DATA;
-		    }
-		/*	Check for the NO_DATA situation	*/
-		if( dataValue < WIG_NO_DATA )
-		    {
-		    boxHeight = (h * dataValue) / 128;
-		    if( boxHeight < 1 ) boxHeight = 1;
-		    x1 = pixelsToDraw + xOff +
-			(dataStarts - seqStart)*pixelsPerBase;
-		    y1 = yOff - boxHeight + h;
-		    vgBox(vg, x1, y1, pixelsPerDataValue, boxHeight, black);
-		    }
-		if( pixelsToDraw == w ) {
-snprintf(dbgMsg, DBGMSGSZ, "finished at x1: %d, skipDataPoints: %d", x1, skipDataPoints );
+	    int boxHeight;
+	    int dataValue;
+	    int skipDataPoints;
+	    int lastPixel;
+
+	    ++loopTimeout;
+	    skipDataPoints = dataValuesPerPixel * pixelToDraw;
+	    /*dataValue = *(dataStarts + (pixelToDraw * pixelsPerDataValue) + skipDataPoints);*/
+if( (skipDataPoints + dataOffsetStart) > wi->Count )
+    dataValue = *(dataStarts);
+else
+    dataValue = *(dataStarts + skipDataPoints);
+/* debug print */
+if( (skipDataPoints + dataOffsetStart) > wi->Count ) {
+snprintf(dbgMsg, DBGMSGSZ, "ERROR: data offset is too large: %d > %d # of data points, at pixel %d", (skipDataPoints + dataOffsetStart), wi->Count, pixelToDraw );
 debugPrint("wigDrawItems");
+snprintf(dbgMsg, DBGMSGSZ, "ERROR: skipDataPoints: %d, pixelToDraw: %d, pixelsPerDataValue: %d", skipDataPoints, pixelToDraw, pixelsPerDataValue );
+debugPrint("wigDrawItems");
+}
+	    if( ((int) dataValuesPerPixel > 1) &&
+			(wiggleType == wiggleLinearInterpolation) )
+		{		/* skipping data points, find maximum */
+		int j;	/*	in this area skipped	*/
+		int validData = 0;
+		unsigned char data;
+		dataValue = 0;
+		for( j = 0; j < (int) dataValuesPerPixel; ++j )
+		    {
+			/*
+		    data = *(dataStarts + (pixelToDraw * pixelsPerDataValue) +
+			    j + skipDataPoints );
+			    */
+		    data = *(dataStarts + j + skipDataPoints );
+if( (skipDataPoints + dataOffsetStart + j) > wi->Count ) {
+snprintf(dbgMsg, DBGMSGSZ, "ERROR: interpolate data offset is too large: %d > %d # of data points, at j: %d", (skipDataPoints + dataOffsetStart + j), wi->Count, j );
+			data = *(dataStarts);
+debugPrint("wigDrawItems");
+}
+		    if( data < WIG_NO_DATA )
+			{
+			dataValue = max(dataValue,data);
+			++validData;
+			}
+		    }
+		/*	Is there actually any valid data here */
+		if( ! validData ) dataValue = WIG_NO_DATA;
+if( pixelToDraw >= (w - pixelsPerDataValue) ) {
+snprintf(dbgMsg, DBGMSGSZ, "*** end interpolate drawing last data offset: %d", (pixelToDraw * pixelsPerDataValue) + (j-1) + skipDataPoints );
+debugPrint("wigDrawItems");
+}
 		}
-	    }
-	} else {
-	y1 = yOff;
-	x1 = xOff + (sf->start - seqStart)*pixelsPerBase;
-	vgBox(vg, x1, y1, w, h, black);
-	}
+	    /*	Display on for valid data */
+	    if( dataValue < WIG_NO_DATA )
+		{
+		boxHeight = (h * dataValue) / 128;
+		if( boxHeight < 1 ) boxHeight = 1;
+		if( boxHeight > h ) boxHeight = h;
+		x1 = pixelToDraw + xOff +
+			(int)((dataViewStarts - seqStart)*pixelsPerBase);
+/* debug print */
+if( pixelToDraw < 1 ) {
+snprintf(dbgMsg, DBGMSGSZ, "*** start drawing at x1: %d, skipDataPoints: %d, dataValuesPerPixel: %.6f", x1, skipDataPoints, dataValuesPerPixel );
+debugPrint("wigDrawItems");
+snprintf(dbgMsg, DBGMSGSZ, "*** start dataViewStarts: %d - seqStart: %d = %d * pixelsPerBase: %.6f = %.6f", dataViewStarts, seqStart, dataViewStarts-seqStart, pixelsPerBase, (dataViewStarts - seqStart)*pixelsPerBase );
+debugPrint("wigDrawItems");
+snprintf(dbgMsg, DBGMSGSZ, "*** data offset at start:  %d, %d # of data points, at pixel %d", skipDataPoints, wi->Count, pixelToDraw );
+debugPrint("wigDrawItems");
+}
+		lastPixel = 0;
+/* debug print */
+if( pixelToDraw >= (w - pixelsPerDataValue) ) {
+    		lastPixel = 1;
+snprintf(dbgMsg, DBGMSGSZ, "*** end drawing at x1: %d, skipDataPoints: %d, dataValuesPerPixel: %.6f", x1, skipDataPoints, dataValuesPerPixel );
+debugPrint("wigDrawItems");
+snprintf(dbgMsg, DBGMSGSZ, "*** end dataViewStarts: %d - seqStart: %d = %d * pixelsPerBase: %.6f = %.6f", dataViewStarts, seqStart, dataViewStarts-seqStart, pixelsPerBase, (dataViewStarts - seqStart)*pixelsPerBase );
+debugPrint("wigDrawItems");
+snprintf(dbgMsg, DBGMSGSZ, "*** end drawing last data offset: %d, pixelToDraw: %d, xOff: %d", skipDataPoints, pixelToDraw, xOff );
+debugPrint("wigDrawItems");
+}
+if( (yOff+(h-boxHeight)) > yOff+h ) {
+snprintf(dbgMsg, DBGMSGSZ, "ERROR: x1 out of range: %d > %d, yOff: %d, h: %d, boxHeight: %d", yOff+(h-boxHeight), yOff+h, yOff, h, boxHeight);
+debugPrint("wigDrawItems");
+}
+		vgBox(vg, x1, yOff+(h-boxHeight), pixelsPerDataValue + lastPixel, boxHeight, tg->ixColor);
+		}
+	    }	/*	end of item drawing loop	*/
+if( loopTimeout > 4900 ) {
+snprintf(dbgMsg, DBGMSGSZ, "ERROR: drawing loop timeout: %d", loopTimeout);
+debugPrint("wigDrawItems");
+}
 
 snprintf(dbgMsg, DBGMSGSZ, "itemCount: %d, start: %d, end: %d, X: %d->%d, File: %s", itemCount, sf->start, sf->end, x1, x1+w, wi->File );
 debugPrint("wigDrawItems");
