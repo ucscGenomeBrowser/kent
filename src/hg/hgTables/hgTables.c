@@ -20,7 +20,7 @@
 #include "hgTables.h"
 #include "joiner.h"
 
-static char const rcsid[] = "$Id: hgTables.c,v 1.59 2004/09/10 18:08:04 hiram Exp $";
+static char const rcsid[] = "$Id: hgTables.c,v 1.60 2004/09/10 21:28:34 hiram Exp $";
 
 
 void usage()
@@ -209,7 +209,8 @@ struct sqlConnection *conn = sqlConnect(database);
 struct sqlResult *sr;
 char **row;
 struct region *list = NULL, *region;
-sr = sqlGetResult(conn, "select chrom,chromStart,chromEnd from encodeRegions");
+
+sr = sqlGetResult(conn, "select chrom,chromStart,chromEnd from encodeRegions order by name desc");
 while ((row = sqlNextRow(sr)) != NULL)
     {
     AllocVar(region);
@@ -220,7 +221,8 @@ while ((row = sqlNextRow(sr)) != NULL)
     }
 sqlFreeResult(&sr);
 sqlDisconnect(&conn);
-slSort(&list, regionCmp);
+/*	do not sort, leave them in order by their Encode names */
+/*slSort(&list, regionCmp);*/
 return list;
 }
 
