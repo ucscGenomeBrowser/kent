@@ -2185,6 +2185,13 @@ printf("<LINK REL=STYLESHEET TYPE=\"text/css\" href=\"http://genome-test.cse.ucs
 printf("<title>%s</title>\n</head><body bgcolor=\"#f3f3ff\">",title);
 }
 
+void chuckHtmlContactInfo()
+/* Writes out Chuck's email so people bother Chuck instead of Jim */
+{
+puts("<br><br><font size=-2><i>If you have comments and/or suggestions please email "
+     "<a href=\"mailto:sugnet@cse.ucsc.edu\">sugnet@cse.ucsc.edu</a>.\n");
+}
+
 struct rgbColor getColorForExprBed(float val, float max, boolean RG_COLOR_SCHEME)
 /* Return the correct color for a given score */
 {
@@ -2279,6 +2286,7 @@ for(i = 0; i < length; i++)
 	}
     }
 printf("</table>\n");
+freez(&header);
 }
 
 void printRosettaReference() 
@@ -2287,12 +2295,13 @@ puts(
      "<table border=0 width=600><tr><td>\n"
      "<p>Expression data from <a href=\"http://www.rii.com\">Rosetta Inpharmatics</a>. "
      "See the paper \"<a href=\"http://www.rii.com/tech/pubs/nature_shoemaker.htm\"> "
-     "Experimental Annotation of the Human Henome Using Microarray Technology</a>\" "
+     "Experimental Annotation of the Human Genome Using Microarray Technology</a>\" "
      "[<a href=\"http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?cmd=Retrieve&db=PubMed&list_uids=11237012&dopt=Abstract\">medline</a>] "
      "<i>Nature</i> vol 409 pp 922-7 for more information. Rosetta created DNA probes for "
      "each exon as described by the Sanger center for the October 2000 draft of the genome. "
      "Exons are labeled according whether they are predicted (pe) or true (te) exons, the "
-     "relative position in the genome, and the contig name. The exon probe selected is highlighted "
+     "relative position in the genome, and the contig name. The probes presented here correspond to those contained "
+     "in window range seen on the Genome Browser, the exon probe selected is highlighted "
      "in blue.</p><br></br>"
      "</td></tr></table>\n"
      );
@@ -2340,33 +2349,41 @@ printf("</table>");
 printf("</basefont>\n");
 }
 
-void doGetExprBed(char *itemName)
-/* Print out a colored table of the expression band track. */
+struct exprBed *selectExprBedFromDB(char *table, char *chrom, int start, int end)
+/* select all of the exprBed (expression data) from by chromosome name, position in 
+   chomosome and table name */
 {
+char query[256];
+struct exprBed *expList = NULL, *exp = NULL;
 struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr;
 char **row;
-char query[256];
-struct exprBed *expList=NULL, *exp=NULL;
-char *table = "exprBed";
-chuckHtmlStart("Rosetta Expression Data Requested");
-
-     
-printf("<h2>Rosetta Expression Data Requested</h2>\n");
-printRosettaReference();
 sprintf(query, 
 	"select * from %s where chrom = '%s' and chromStart<%u and chromEnd>%u order by chromStart",
-	table, seqName, winEnd, winStart);
+	table, chrom, end, start);
 sr = sqlGetResult(conn,query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     exp = exprBedLoad(row);
     slAddHead(&expList, exp);
     }
+
 slReverse(&expList);
 sqlFreeResult(&sr);
 hFreeConn(&conn);
+return expList;
+}
+
+void doGetExprBed(char *tableName, char *itemName)
+/* Print out a colored table of the expression band track. */
+{
+struct exprBed *expList=NULL;
+chuckHtmlStart("Rosetta Expression Data Requested");
+printf("<h2>Rosetta Expression Data Requested</h2>\n");
+printRosettaReference();
+expList = selectExprBedFromDB(tableName, seqName, winStart, winEnd);
 exprBedPrintTable(expList, itemName);
+chuckHtmlContactInfo();
 }
 
 #endif /*CHUCK_CODE*/
@@ -2528,9 +2545,18 @@ else if (sameWord(group, "htcDnaNearGene"))
    }
 #ifdef CHUCK_CODE
 else if (sameWord(group, "hgExprBed"))
-   {
-   doGetExprBed(item);
-   } 
+    {
+    doGetExprBed("exprBed", item);
+    } 
+else if (sameWord(group, "rosettaPe"))
+    {
+    doGetExprBed("rosettaPe", item);
+    }
+else if (sameWord(group, "rosettaTe"))
+    {
+    doGetExprBed("rosettaTe", item);
+    }
+
 #endif /*CHUCK_CODE*/
 else
    {
