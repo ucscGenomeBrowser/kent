@@ -1811,7 +1811,7 @@ shortLabel RT-PCR debug
 longLabel  RT-PCR debug
 group x
 priority 25
-visibility dense
+visibility hide
 type psl
 color 10,100,150
 exonArrows on
