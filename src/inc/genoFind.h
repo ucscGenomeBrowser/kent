@@ -339,7 +339,7 @@ void gfLongTransTransInMem(struct dnaSeq *query, struct genoFind *gfs[3],
 /* Chop up query into pieces, align each in translated space, and stitch back
  * together again as nucleotides. */
 
-#define gfVersion 23	/* Current BLAT version number */
+#define gfVersion 24	/* Current BLAT version number */
 
 #endif /* GENOFIND_H */
 
