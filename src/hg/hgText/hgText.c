@@ -34,7 +34,7 @@
 #include "wiggle.h"
 #include "hgText.h"
 
-static char const rcsid[] = "$Id: hgText.c,v 1.139 2004/04/19 20:43:52 hiram Exp $";
+static char const rcsid[] = "$Id: hgText.c,v 1.140 2004/04/21 22:49:18 angie Exp $";
 
 /* sources of tracks, other than the current database: */
 static char *hgFixed = "hgFixed";
@@ -2939,28 +2939,25 @@ return(gotInfo);
 void showItemCountFirstFew(struct sqlConnection *conn, int n)
 /* Show the item count and first n items of table. */
 {
-struct slName *chromPtr = NULL;
+char *track = getTrackName();
+struct slName *tableList = hSplitTableNames(track);
+struct slName *tPtr = NULL;
 struct sqlResult *sr = NULL;
 struct dyString *query = newDyString(256);
 char **row = NULL;
 char *table = getTableName();
-int count = sqlTableSize(conn, fullTableName);
+int count = 0;
 int numberColumns = 0;
 int i = 0;
 
-if (tableIsSplit)
+for (tPtr=tableList;  tPtr != NULL;  tPtr=tPtr->next)
     {
-    count = 0;
-    for (chromPtr=hAllChromNames();  chromPtr != NULL;  chromPtr=chromPtr->next)
-	{
-	getFullTableName(fullTableName, chromPtr->name, table);
-	count += sqlTableSize(conn, fullTableName);
-	}
+    count += sqlTableSize(conn, tPtr->name);
     }
 printf("<P>Table %s has %d rows total.<BR>\n", table, count);
 if (count > 0)
     {
-    dyStringPrintf(query, "select * from %s limit %d", fullTableName, n);
+    dyStringPrintf(query, "select * from %s limit %d", tableList->name, n);
     sr = sqlGetResult(conn, query->string);
     printf ("Example rows of table %s (not necessarily from current position!):<BR>\n",
 	    table);
