@@ -5,6 +5,7 @@
 
 #ENCODE experimental data from dbERGEII
 CREATE TABLE encodeErge (
+    bin int,
     chrom varchar(255) not null,	# Human chromosome
     chromStart int unsigned not null,	# Start position in chromosome
     chromEnd int unsigned not null,	# End position in chromosome
@@ -20,5 +21,7 @@ CREATE TABLE encodeErge (
     Id varchar(255) not null,	# dbERGEII Id
     color varchar(255) not null,	# RGB color values
               #Indices
-    PRIMARY KEY(chrom)
+#    PRIMARY KEY(chrom)
+    INDEX(chrom(8),bin)
+#    UNIQUE(id(10))
 );
