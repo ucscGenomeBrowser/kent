@@ -76,7 +76,7 @@
 #include "web.h"
 #include "grp.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.544 2003/06/27 17:34:32 braney Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.545 2003/06/30 23:26:43 braney Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define EXPR_DATA_SHADES 16
@@ -10457,16 +10457,6 @@ position = getPositionFromCustomTracks();
 if (NULL == position) 
     {
     position = cloneString(cartUsualString(cart, "position", NULL));
-    if ( position != NULL && ! isGenome(position))
-	position = searchPosition(position, &chrom, &start, &end);
-
-    if (position == NULL)
-	{
-	position = defaultPosition;
-	cartRemove(cart, "hgt.customText");
-	cartRemove(cart, "hgt.customFile");
-	cartRemove(cart, "ct");
-	}
     }
 
 if(sameString(position, ""))
