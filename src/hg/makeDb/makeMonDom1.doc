@@ -8,126 +8,127 @@ exit; # don't actually run this like a script :)
 
 # DOWNLOAD SEQUENCE (DONE - 2004-12-01 - Hiram)
 
-ssh kksilo
+    ssh kksilo
 
-mkdir -p /cluster/store8/monDom1/broad.mit.edu
-ln -s /cluster/store8/monDom1 /cluster/data/monDom1
-cd /cluster/data/monDom1/broad.mit.edu
-#	Set user name and password in your $HOME/.netrc
-wget --timestamping "ftp://ftp.broad.mit.edu/*"
-#	takes a couple hours
-#	What we have:
-ls -ogrt
-#	total 4071636
-#	-rw-rw-r--    1        3992 Oct 18 16:45 assembly.format
-#	-rw-rw-r--    1  1196876365 Oct 18 16:52 contigs.bases.gz
-#	-rw-rw-r--    1   539154819 Oct 18 17:24 contigs.quals.gz
-#	-rwxrwxr-x    1     4418102 Oct 18 17:52 supercontigs.summary
-#	-rwxrwxrwx    1     3910827 Oct 18 17:52 supercontigs
-#	-rw-rw-r--    1    23299859 Oct 18 17:52 reads.unplaced.gz
-#	-rw-rw-r--    1   645129395 Oct 18 17:52 reads.placed.gz
-#	-rw-rw-r--    1    10757748 Oct 18 17:52 assembly.agp
-#	-rw-rw-r--    1  1199683639 Oct 19 17:15 assembly.agp.fasta.gz
-#	-rw-rw-r--    1   541975023 Oct 19 17:34 assembly.agp.qual.gz
-time gunzip *.gz
-#	That took almost 2 hours on a busy kksilo
-ls -ogrt
-#	total 29983148
-#	-rw-rw-r--    1        3992 Oct 18 16:45 assembly.format
-#	-rw-rw-r--    1  3537338236 Oct 18 16:52 contigs.bases
-#	-rw-rw-r--    1 10472323694 Oct 18 17:24 contigs.quals
-#	-rwxrwxr-x    1     4418102 Oct 18 17:52 supercontigs.summary
-#	-rwxrwxrwx    1     3910827 Oct 18 17:52 supercontigs
-#	-rw-rw-r--    1   146964359 Oct 18 17:52 reads.unplaced
-#	-rw-rw-r--    1  2273830873 Oct 18 17:52 reads.placed
-#	-rw-rw-r--    1    10757748 Oct 18 17:52 assembly.agp
-#	-rw-rw-r--    1  3608989613 Oct 19 17:15 assembly.agp.fasta
-#	-rw-rw-r--    1 10614160078 Oct 19 17:34 assembly.agp.qual
+    mkdir -p /cluster/store8/monDom1/broad.mit.edu
+    ln -s /cluster/store8/monDom1 /cluster/data/monDom1
+    cd /cluster/data/monDom1/broad.mit.edu
+    #	Set user name and password in your $HOME/.netrc
+    wget --timestamping "ftp://ftp.broad.mit.edu/*"
+    #	takes a couple hours
+    #	What we have:
+    ls -ogrt
+    #	total 4071636
+    #	-rw-rw-r--    1        3992 Oct 18 16:45 assembly.format
+    #	-rw-rw-r--    1  1196876365 Oct 18 16:52 contigs.bases.gz
+    #	-rw-rw-r--    1   539154819 Oct 18 17:24 contigs.quals.gz
+    #	-rwxrwxr-x    1     4418102 Oct 18 17:52 supercontigs.summary
+    #	-rwxrwxrwx    1     3910827 Oct 18 17:52 supercontigs
+    #	-rw-rw-r--    1    23299859 Oct 18 17:52 reads.unplaced.gz
+    #	-rw-rw-r--    1   645129395 Oct 18 17:52 reads.placed.gz
+    #	-rw-rw-r--    1    10757748 Oct 18 17:52 assembly.agp
+    #	-rw-rw-r--    1  1199683639 Oct 19 17:15 assembly.agp.fasta.gz
+    #	-rw-rw-r--    1   541975023 Oct 19 17:34 assembly.agp.qual.gz
+    time gunzip *.gz
+    #	That took almost 2 hours on a busy kksilo
+    ls -ogrt
+    #	total 29983148
+    #	-rw-rw-r--    1        3992 Oct 18 16:45 assembly.format
+    #	-rw-rw-r--    1  3537338236 Oct 18 16:52 contigs.bases
+    #	-rw-rw-r--    1 10472323694 Oct 18 17:24 contigs.quals
+    #	-rwxrwxr-x    1     4418102 Oct 18 17:52 supercontigs.summary
+    #	-rwxrwxrwx    1     3910827 Oct 18 17:52 supercontigs
+    #	-rw-rw-r--    1   146964359 Oct 18 17:52 reads.unplaced
+    #	-rw-rw-r--    1  2273830873 Oct 18 17:52 reads.placed
+    #	-rw-rw-r--    1    10757748 Oct 18 17:52 assembly.agp
+    #	-rw-rw-r--    1  3608989613 Oct 19 17:15 assembly.agp.fasta
+    #	-rw-rw-r--    1 10614160078 Oct 19 17:34 assembly.agp.qual
 
-# DATA INTEGRITY VERIFICATION
-ssh kksilo
-mkdir /cluster/data/monDom1/dataCheck
-cd /cluster/data/monDom1/dataCheck
-grep "^>" ../broad.mit.edu/contigs.bases | sed -e "s/^>//" > contigs.names
-#	2 minutes
-#	Check for duplicates, should be same line count
-sort  contigs.names | wc
-#	109065  109065 1415800
-sort -u  contigs.names | wc
-#	109065  109065 1415800
+# DATA INTEGRITY VERIFICATION (DONE - Hiram - 2004-12-02)
+    ssh kksilo
+    mkdir /cluster/data/monDom1/dataCheck
+    cd /cluster/data/monDom1/dataCheck
+    grep "^>" ../broad.mit.edu/contigs.bases | sed -e "s/^>//" > contigs.names
+    #	2 minutes
+    #	Check for duplicates, should be same line count
+    sort  contigs.names | wc
+    #	109065  109065 1415800
+    sort -u  contigs.names | wc
+    #	109065  109065 1415800
 
-sort contigs.names | head -3
-#	contig_0
-#	contig_1
-#	contig_10
-sort contigs.names | tail -3
-#	contig_99997
-#	contig_99998
-#	contig_99999
-wc contigs.names
-#	109065  109065 1415800 contigs.names
-grep "^>" ../broad.mit.edu/contigs.quals \
-	| sed -e "s/^>//" > contigs.quals.names
-#	6 minutes
-sum -r contigs*
-#	35350  1383 contigs.names
-#	35350  1383 contigs.quals.names
-awk '{print $6}' ../broad.mit.edu/assembly.agp \
-	| grep contig_ > assembly.agp.contig.names
-#	The assembly agp contig list appears to be the same contig list
-sort -u  contigs.names | sum -r
-#	18868  1383
-sort -u  assembly.agp.contig.names | sum -r
-#	18868  1383
-awk '{print $1}' ../broad.mit.edu/assembly.agp \
-	| sort -u > assembly.agp.scaffold.names
-wc assembly.agp.scaffold.names
-#	19348   19348  279110 assembly.agp.scaffold.names
-head -3 assembly.agp.scaffold.names
-#	scaffold_0
-#	scaffold_1
-#	scaffold_10
-tail -3 assembly.agp.scaffold.names
-#	scaffold_9997
-#	scaffold_9998
-#	scaffold_9999
-grep "^>" ../broad.mit.edu/assembly.agp.fasta | sed -e "s/^>//; s/\..*//" > assembly.fasta.scaffold.names
-#	2 minutes
-#	There are some duplicates in this fasta file:
-sort -u  assembly.fasta.scaffold.names | wc
-#	19348   19348  279110
-wc  assembly.fasta.scaffold.names 
-#	19576   19576  282523 assembly.fasta.scaffold.names
-#	For example:
-grep "^>scaffold_13303" ../broad.mit.edu/assembly.agp.fasta
-#	>scaffold_13303.1-5000000 (MonodelphisPreliminaryAssemblyOct04)
-#	>scaffold_13303.5000001-10000000 (MonodelphisPreliminaryAssemblyOct04)
-#	>scaffold_13303.10000001-15000000 (MonodelphisPreliminaryAssemblyOct04)
-#	>scaffold_13303.15000001-20000000 (MonodelphisPreliminaryAssemblyOct04)
-#	>scaffold_13303.20000001-22286839 (MonodelphisPreliminaryAssemblyOct04)
-faCount ../broad.mit.edu/assembly.agp.fasta > faCount.assembly.agp.fasta
-#   seq          len               A              C               G
-# total   3563247205      1085390300      660684418       660336426
-#              T             N             cpg
-#     1085697086      71138975        16821709
-grep scaffold_ faCount.assembly.agp.fasta > scaffolds.faCount
-#	Taking a look at those counts, the smallest scaffold is 1000
-#	bases.  The largest ones are broken into 5,000,000 base chunks
-#	as evidenced by the duplicate example above.
-faCount ../broad.mit.edu/contigs.bases > faCount.contigs
-#   seq          len               A              C               G
-# total   3492108230      1085390300      660684418       660336426
-#              T             N             cpg
-#     1085697086             0        16821709
-grep contig_ faCount.contigs > contigs.faCount
-#	The contigs range in size from 85 bases to 658,080
-#	The bulk of them start at a size of 1000
+    sort contigs.names | head -3
+    #	contig_0
+    #	contig_1
+    #	contig_10
+    sort contigs.names | tail -3
+    #	contig_99997
+    #	contig_99998
+    #	contig_99999
+    wc contigs.names
+    #	109065  109065 1415800 contigs.names
+    grep "^>" ../broad.mit.edu/contigs.quals \
+	    | sed -e "s/^>//" > contigs.quals.names
+    #	6 minutes
+    sum -r contigs*
+    #	35350  1383 contigs.names
+    #	35350  1383 contigs.quals.names
+    awk '{print $6}' ../broad.mit.edu/assembly.agp \
+	    | grep contig_ > assembly.agp.contig.names
+    #	The assembly agp contig list appears to be the same contig list
+    sort -u  contigs.names | sum -r
+    #	18868  1383
+    sort -u  assembly.agp.contig.names | sum -r
+    #	18868  1383
+    awk '{print $1}' ../broad.mit.edu/assembly.agp \
+	    | sort -u > assembly.agp.scaffold.names
+    wc assembly.agp.scaffold.names
+    #	19348   19348  279110 assembly.agp.scaffold.names
+    head -3 assembly.agp.scaffold.names
+    #	scaffold_0
+    #	scaffold_1
+    #	scaffold_10
+    tail -3 assembly.agp.scaffold.names
+    #	scaffold_9997
+    #	scaffold_9998
+    #	scaffold_9999
+    grep "^>" ../broad.mit.edu/assembly.agp.fasta | \
+	sed -e "s/^>//; s/\..*//" > assembly.fasta.scaffold.names
+    #	2 minutes
+    #	There are some duplicates in this fasta file:
+    sort -u  assembly.fasta.scaffold.names | wc
+    #	19348   19348  279110
+    wc  assembly.fasta.scaffold.names 
+    #	19576   19576  282523 assembly.fasta.scaffold.names
+    #	For example:
+    grep "^>scaffold_13303" ../broad.mit.edu/assembly.agp.fasta
+    #	>scaffold_13303.1-5000000 (MonodelphisPreliminaryAssemblyOct04)
+    #	>scaffold_13303.5000001-10000000 (MonodelphisPreliminaryAssemblyOct04)
+    #	>scaffold_13303.10000001-15000000 (MonodelphisPreliminaryAssemblyOct04)
+    #	>scaffold_13303.15000001-20000000 (MonodelphisPreliminaryAssemblyOct04)
+    #	>scaffold_13303.20000001-22286839 (MonodelphisPreliminaryAssemblyOct04)
+    faCount ../broad.mit.edu/assembly.agp.fasta > faCount.assembly.agp.fasta
+    #   seq          len               A              C               G
+    # total   3563247205      1085390300      660684418       660336426
+    #              T             N             cpg
+    #     1085697086      71138975        16821709
+    grep scaffold_ faCount.assembly.agp.fasta > scaffolds.faCount
+    #	Taking a look at those counts, the smallest scaffold is 1000
+    #	bases.  The largest ones are broken into 5,000,000 base chunks
+    #	as evidenced by the duplicate example above.
+    faCount ../broad.mit.edu/contigs.bases > faCount.contigs
+    #   seq          len               A              C               G
+    # total   3492108230      1085390300      660684418       660336426
+    #              T             N             cpg
+    #     1085697086             0        16821709
+    grep contig_ faCount.contigs > contigs.faCount
+    #	The contigs range in size from 85 bases to 658,080
+    #	The bulk of them start at a size of 1000
 
 # COMBINE scaffold fasta pieces into single chunks, remove the extra
-#	base-range info from the names.
-ssh kksilo
-cd /cluster/data/monDom1/broad.mit.edu
-cat << '_EOF_' collapseScaffolds.sh
+#	base-range info from the names. (DONE - Hiram - 2004-12-02)
+    ssh kksilo
+    cd /cluster/data/monDom1/broad.mit.edu
+    cat << '_EOF_' collapseScaffolds.sh
 #!/bin/sh
 #
 awk '
@@ -146,19 +147,299 @@ BEGIN { name="" }
 '_EOF_'
     # << this line keeps emacs coloring happy
 
-chmod +x collapseScaffolds.sh
-time ./collapseScaffolds.sh > scaffolds.fa
-#	11 minutes
-# make sure we have not damaged the sequence:
-time faCount scaffolds.fa | tail -2
-#	4 minutes
-# total   3563247205      1085390300      660684418       660336426
-#      1085697086      71138975        16821709
-#	Those are the same numbers as above
+    chmod +x collapseScaffolds.sh
+    time ./collapseScaffolds.sh > scaffolds.fa
+    #	11 minutes
+    # make sure we have not damaged the sequence:
+    time faCount scaffolds.fa | tail -1
+    #	4 minutes
+    # total   3563247205      1085390300      660684418       660336426
+    #      1085697086      71138975        16821709
+    #	Those are the same numbers as above
 
-#  SPLIT SCAFFOLDS by name into a three level directory hierarchy
+# MAKE 2BIT NIB FILE (DONE - Hiram - 2004-12-02)
+    ssh kksilo
+    cd /cluster/data/monDom1
+    faToTwoBit broad.mit.edu/scaffolds.fa monDom1.2bit
+    #	check that the sequence hasn't been damaged
+    twoBitToFa monDom1.2bit stdout | faCount stdin | tail -1
+    # total   3563247205      1085390300      660684418       660336426
+    #      1085697086      71138975        16821709
+    #	still the same numbers
 
-ssh kksilo
-mkdir /cluster/data/monDom1/scaffolds
-cd /cluster/data/monDom1/scaffolds
-time faSplit byname ../broad.mit.edu/scaffolds.fa scaffolds -outDirDepth=3
+# CREATE DATABASE (DONE - Hiram - 2004-12-02)
+
+    ssh hgwdev
+    cd /cluster/data/monDom1
+    mkdir /gbdb/monDom1
+    ln -s /cluster/data/monDom1/monDom1.2bit /gbdb/monDom1
+    twoBitInfo monDom1.2bit stdout |
+	awk '{printf "%s\t%s\t/gbdb/monDom1/monDom1.2bit\n", $1,$2}' \
+	> chromInfo.tab
+
+    hgsql -e "create database monDom1;" mysql
+    hgsql -e "create table grp (PRIMARY KEY(NAME)) select * from hg17.grp;" \
+		monDom1
+    hgsql monDom1 < $HOME/kent/src/hg/lib/chromInfo.sql
+    hgsql -e 'load data local infile "chromInfo.tab" into table chromInfo;' \
+	monDom1
+    #	generate chrom.sizes list in order by size, biggest first
+    twoBitInfo monDom1.2bit stdout | sort -rn +1 > chrom.sizes
+
+    # Enter monDom1 into hgcentraltest.dbDb so test browser knows about it:
+    hgsql -e 'INSERT INTO dbDb (name, description, nibPath, organism, \
+	defaultPos, active, orderKey, genome, scientificName, \
+	htmlPath, hgNearOk, hgPbOk, sourceName) \
+	VALUES("monDom1", "Oct 2004", "/gbdb/monDom1/nib", "M. domestica", \
+	"scaffold_0:1-1048", 1, 33, "Opossum", "Monodelphis domestica", \
+	"/gbdb/monDom1/html/description.html", 0, 0, \
+	"Broad Inst. Prelim Oct04");' \
+	-h genome-testdb hgcentraltest
+
+    # Make trackDb table so browser knows what tracks to expect (DONE - Hiram)
+    cd $HOME/kent/src/hg/makeDb/trackDb
+    mkdir /cluster/data/monDom1/html
+    ln -s /cluster/data/monDom1/html /gbdb/monDom1/html 
+    mkdir opossum
+    cvs add opossum
+    cd opossum
+    mkdir monDom1
+    cvs add monDom1
+    cd monDom1
+    cat << '_EOF_' > description.html
+<HTML><HEAD> <TITLE> Monodelphis domestica </TITLE> </HEAD><BODY>
+
+<H1> Description page to be done for Monodelphis domestica </H1>
+
+</BODY></HTML>
+'_EOF_'
+    # << this line keeps emacs coloring happy
+    cvs add description.html
+    cvs commit
+    cd ../..
+    make DBS="monDom1" ZOO_DBS=""
+
+
+#  CHUNK up scaffolds for repeat masking (DONE - Hiram - 2004-12-03)
+#	See also: comments about this in: makeApiMel1.doc
+    ssh kksilo
+    cd /cluster/data/monDom1
+    mkdir -p jkStuff
+    faSplit size broad.mit.edu/scaffolds.fa 500000 -oneFile \
+	  scaffoldsSplit -lift=jkStuff/scaffoldsSplit.lft
+
+    time faSplit about scaffoldsSplit.fa 200000 chunks500k/chunk_
+    #	about 9 minutes for each of those two faSplits
+    mkdir -p /cluster/bluearc/monDom1
+    #	copy to bluearc for cluster run
+    cp -Rp ./chunks500k /cluster/bluearc/monDom1
+    #	and to iservers:
+    ssh kkr1u00
+    mkdir /iscratch/i/monDom1
+    cd /iscratch/i/monDom1
+    cp -Rp /cluster/bluearc/monDom1/chunks500k .
+    /cluster/bin/iSync
+
+# LOAD GAP & GOLD TABLES FROM AGP (DONE - 2004-12-03 - Hiram)
+    ssh hgwdev
+    cd /cluster/data/monDom1
+    hgGoldGapGl -noGl monDom1 broad.mit.edu/assembly.agp
+    #	Verify sanity of indexes
+    hgsql -e "show index from gold;" monDom1
+    hgsql -e "show index from gap;" monDom1
+    #	Look at the Cardinality column, it should have some healthy
+    #	numbers for all indices
+    # For some reason, the indices do not get built correctly --
+    # "show index from gap/gold" shows NULL cardinalities for chrom.  
+    # Rebuild indices with "analyze table".
+    hgsql -e "analyze table gold; analyze table gap;" monDom1
+
+
+# RUN REPEAT MASKER (WORKING - 2004-12-03 - Hiram)
+    #	Received a library from Michele Clamp who says Damian Keefe
+    #	at Ensembl created to use in addition to the generic mammal library.
+    #	Will run both -mammal and this one, and combine the results.
+    #	have placed the library in monDom1/jkStuff/monDom1.novel.RM.lib
+    #	DIFFERENT fileserver, new disk space
+    ssh kksilo
+    mkdir /cluster/store1/monDom1
+    mkdir /cluster/store1/monDom1/RMOut
+    ln -s /cluster/store1/monDom1/RMOut /cluster/store8/monDom1
+    ln -s /cluster/store8/monDom1/chunks500k /cluster/store1/monDom1
+    ln -s /cluster/store8/monDom1/jkStuff /cluster/store1/monDom1
+    #	
+    cd /cluster/data/monDom1
+    cat << '_EOF_' > jkStuff/RMOpossum
+#!/bin/csh -fe
+
+cd $1
+/bin/mkdir -p /tmp/monDom1/$2
+/bin/cp ../chunks500k/$2 /tmp/monDom1/$2/
+pushd /tmp/monDom1/$2
+/cluster/bluearc/RepeatMasker/RepeatMasker -s -lib /iscratch/i/monDom1/monDom1.novel.RM.lib $2
+mv $2.out $2.novel.out
+/cluster/bluearc/RepeatMasker/RepeatMasker -s -species "Monodelphis domestica" $2
+tail +4 $2.novel.out >> $2.out
+popd
+/bin/cp -p /tmp/monDom1/$2/$2.out ./
+/bin/rm -fr /tmp/monDom1/$2/*
+/bin/rmdir --ignore-fail-on-non-empty /tmp/monDom1/$2
+/bin/rmdir --ignore-fail-on-non-empty /tmp/monDom1
+'_EOF_'
+    # << this line keeps emacs coloring happy
+    chmod +x jkStuff/RMOpossum
+    mkdir RMRun
+    bash	#	if you are csh
+    ls chunks500k | while read chunk
+    do
+	echo ../jkStuff/RMOpossum /cluster/data/monDom1/RMOut $chunk \
+           '{'check in line+ /iscratch/i/monDom1/chunks500k/$chunk'}' \
+         '{'check out line+ /cluster/data/monDom1/RMOut/$chunk.out'}'
+    done > RMRun/RMJobs
+    exit	#	out of bash back to csh
+
+    # do the run
+    ssh kk
+    mkdir /cluster/data/monDom1/RMRun
+    cd /cluster/data/monDom1/RMRun
+    para create RMJobs
+    para try, check, push, check,...
+XXX - RUNNING - 2004-12-03 16:42
+
+#Completed: 682 of 682 jobs
+#Average job time:                5942s      99.03m     1.65h    0.07d
+#Longest job:                    14569s     242.82m     4.05h    0.17d
+#Submission to last job:         14569s     242.82m     4.05h    0.17d
+
+    # Lift up the split-scaffold .out's to scaffold .out's
+    ssh kksilo
+    cd /cluster/data/monDom1
+    foreach f (RMOut/*.fa.out)
+      liftUp $f:r:r.scaf.out jkStuff/scaffoldsSplit.lft warn $f > /dev/null
+    end
+    # Make a consolidated scaffold .out file too:
+    head -3 RMOut/chunk_00.fa.out > RMOut/scaffolds.fa.out
+    foreach f (RMOut/*.scaf.out)
+      tail +4 $f >> RMOut/scaffolds.fa.out 
+    end
+    # Load the .out files into the database with:
+    ssh hgwdev
+    hgLoadOut monDom1 /cluster/data/monDom1/RMOut/scaffolds.fa.out
+    # hgLoadOut made a "scaffolds_rmsk" table even with -table=rmsk, 
+    # but we want a non-split with no prefix table:
+    hgsql monDom1 -e 'rename table scaffolds_rmsk to rmsk'
+    # Fix up the indices too:
+    hgsql monDom1 -e 'drop index bin       on rmsk; \
+                  drop index genoStart on rmsk; \
+                  drop index genoEnd   on rmsk; \
+                  create index bin       on rmsk (genoName(11), bin); \
+                  create index genoStart on rmsk (genoName(11), genoStart); \
+                  create index genoEnd   on rmsk (genoName(11), genoEnd);'
+    # THIS APPLIES ONLY WHEN REPEATMASKER IS RUN MULTIPLE TIMES PER SEQUENCE:
+    # 11/29/04: Need to remove duplicate Simple/Low Complexity repeats 
+    # caused by the two separate RepeatMasker invocations.  Unfortunately 
+    # whitespace is different in the .out files, so sort & uniq the .tab:
+    ssh hgwdev
+    cd /cluster/data/monDom1/RMOut
+    hgLoadOut -tabFile=hgLoadOut.tab monDom1 -nosplit scaffolds.fa.out 
+    sort -k 6,6 -k7n,7n hgLoadOut.tab | uniq > hgLoadOutUniq.tab 
+    hgsql monDom1 -e 'delete from rmsk'
+    hgsql monDom1 -e 'load data local infile "hgLoadOutUniq.tab" into table rmsk'
+
+# SIMPLE REPEAT [TRF] TRACK (WORKING - 2004-12-03 - Hiram)
+    #	Run this on the rack 9 cluster
+    ssh kk9
+    mkdir /cluster/data/monDom1/bed/simpleRepeat
+    cd /cluster/data/monDom1/bed/simpleRepeat
+    mkdir trf
+    cat << '_EOF_' > runTrf
+#!/bin/csh -fe
+#
+set path1 = $1
+set inputFN = $1:t
+set outpath = $2
+set outputFN = $2:t
+mkdir -p /tmp/$outputFN
+cp $path1 /tmp/$outputFN
+pushd .
+cd /tmp/$outputFN
+/cluster/bin/i386/trfBig -trf=/cluster/bin/i386/trf $inputFN /dev/null -bedAt=$outputFN -tempDir=/tmp
+popd
+rm -f $outpath
+cp -p /tmp/$outputFN/$outputFN $outpath
+rm -fr /tmp/$outputFN/*
+rmdir --ignore-fail-on-non-empty /tmp/$outputFN
+'_EOF_'
+    # << this line makes emacs coloring happy
+    chmod +x runTrf
+
+    cat << '_EOF_' > gsub
+#LOOP
+./runTrf {check in line+ $(path1)}  {check out line trf/$(root1).bed}
+#ENDLOOP
+'_EOF_'
+    # << this line makes emacs coloring happy
+
+    ls -1S /iscratch/i/monDom1/chunks500k | sed -e "s#^#/iscratch/i/monDom1/chunks500k/#" > genome.lst
+    gensub2 genome.lst single gsub jobList
+    para create jobList
+    para try
+    para check
+    para push
+XXXX - RUNNING - 2004-12-03 16:55
+    para check
+# Completed: 380 of 380 jobs
+# CPU time in finished jobs:      13230s     220.49m     3.67h    0.15d  0.000 y
+# IO & Wait Time:                  2078s      34.64m     0.58h    0.02d  0.000 y
+# Average job time:                  40s       0.67m     0.01h    0.00d
+# Longest job:                     1590s      26.50m     0.44h    0.02d
+# Submission to last job:          2504s      41.73m     0.70h    0.03d
+
+    liftUp simpleRepeat.bed /cluster/data/monDom1/jkStuff/scaffoldsSplit.lft \
+	warn trf/*.bed  > lu.out 2>&1
+
+    # Load into the database:
+    ssh hgwdev
+    cd /cluster/data/monDom1/bed/simpleRepeat
+    /cluster/bin/i386/hgLoadBed monDom1 simpleRepeat simpleRepeat.bed \
+      -sqlTable=$HOME/kent/src/hg/lib/simpleRepeat.sql
+    #	Loaded 629076 elements of size 16
+    #	Compare with previous assembly
+    featureBits monDom1 simpleRepeat
+    #	54952425 bases of 2866216770 (1.917%) in intersection
+
+
+# PROCESS SIMPLE REPEATS INTO MASK (TBD)
+    # After the simpleRepeats track has been built, make a filtered version 
+    # of the trf output: keep trf's with period <= 12:
+    ssh eieio
+    cd /cluster/data/monDom1/bed/simpleRepeat
+    mkdir -p trfMask
+    foreach f (trf/*.bed)
+      awk '{if ($5 <= 12) print;}' $f > trfMask/$f:t
+    end
+
+    #	EXPERIMENT, at a filter of <= 12, we have coverage:
+    #	20904399 bases of 2867328468 (0.729%) in intersection
+    #	at a filter of <= 9, we have coverage:
+    #	19271270 bases of 2867328468 (0.672%) in intersection
+
+
+    # Lift up filtered trf output to chrom coords as well:
+    cd /cluster/data/monDom1
+    mkdir bed/simpleRepeat/trfMaskChrom
+    foreach c ( `cat chrom.lst` )
+      if (-e $c/lift/ordered.lst) then
+        perl -wpe 's@(\S+)@bed/simpleRepeat/trfMask/$1.bed@' \
+          $c/lift/ordered.lst > $c/lift/oTrf.lst
+        liftUp bed/simpleRepeat/trfMaskChrom/chr$c.bed \
+          jkStuff/scaffoldsSplit.lft warn `cat $c/lift/oTrf.lst`
+      endif
+      if (-e $c/lift/random.lst) then
+        perl -wpe 's@(\S+)@bed/simpleRepeat/trfMask/$1.bed@' \
+           $c/lift/random.lst > $c/lift/rTrf.lst
+        liftUp bed/simpleRepeat/trfMaskChrom/chr${c}_random.bed \
+          jkStuff/scaffoldsSplit.lft warn `cat $c/lift/rTrf.lst`
+      endif
+    end
+
