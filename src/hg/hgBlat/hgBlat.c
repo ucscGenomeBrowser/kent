@@ -435,32 +435,29 @@ for (seq = seqList; seq != NULL; seq = seq->next)
 	outForm.reportTargetStrand = TRUE;
 	if (isTxTx)
 	    {
-	    gfAlignTransTrans(conn, serve->nibDir, seq, FALSE, 5, gfSavePslx, &outForm, !txTxBoth);
+	    gfAlignTransTrans(&conn, serve->nibDir, seq, FALSE, 5, gfSavePslx, &outForm, !txTxBoth);
 	    if (txTxBoth)
 		{
-		close(conn);
 		reverseComplement(seq->dna, seq->size);
 		conn = gfConnect(serve->host, serve->port);
-		gfAlignTransTrans(conn, serve->nibDir, seq, TRUE, 5, gfSavePslx, &outForm, FALSE);
+		gfAlignTransTrans(&conn, serve->nibDir, seq, TRUE, 5, gfSavePslx, &outForm, FALSE);
 		}
 	    }
 	else
 	    {
 	    outForm.qIsProt = TRUE;
-	    gfAlignTrans(conn, serve->nibDir, seq, 5, gfSavePslx, &outForm);
+	    gfAlignTrans(&conn, serve->nibDir, seq, 5, gfSavePslx, &outForm);
 	    }
 	}
     else
 	{
 	static struct gfSavePslxData outForm;
 	outForm.f = f;
-	gfAlignStrand(conn, serve->nibDir, seq, FALSE, 20, gfSavePslx, &outForm);
-	close(conn);
+	gfAlignStrand(&conn, serve->nibDir, seq, FALSE, 20, gfSavePslx, &outForm);
 	reverseComplement(seq->dna, seq->size);
 	conn = gfConnect(serve->host, serve->port);
-	gfAlignStrand(conn, serve->nibDir, seq, TRUE, 20, gfSavePslx, &outForm);
+	gfAlignStrand(&conn, serve->nibDir, seq, TRUE, 20, gfSavePslx, &outForm);
 	}
-    close(conn);
     }
 carefulClose(&f);
 
