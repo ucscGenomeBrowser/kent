@@ -245,3 +245,15 @@ group compGeno
 priority 150.1
 visibility pack
 type bed 3
+
+track NIAGene
+shortLabel NIA Gene Index
+longLabel NIA Mouse Gene Index Version 3
+group genes
+priority 54
+visibility hide
+color 0,60,120
+altColor 200,220,255
+spectrum on
+type psl .
+url http://lgsun.grc.nia.nih.gov/geneindex3/bin/giT.cgi?genename=$$
