@@ -10,7 +10,7 @@
 #include "web.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: configure.c,v 1.6 2003/06/23 18:52:06 kent Exp $";
+static char const rcsid[] = "$Id: configure.c,v 1.7 2003/06/23 19:15:46 kent Exp $";
 
 static char *onOffString(boolean on)
 /* Return "on" or "off". */
@@ -158,7 +158,7 @@ hPrintf("<TR><TD ALIGN=LEFT>");
 cgiMakeButton(defaultConfName, "Default Configuration");
 hPrintf(" ");
 cgiMakeButton("submit", "Submit");
-hPrintf("</TD>");
+hPrintf("</TD></TR></TABLE>");
 configTable(colList, conn);
 hFreeConn(&conn);
 }
