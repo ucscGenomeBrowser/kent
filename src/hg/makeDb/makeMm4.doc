@@ -8,6 +8,15 @@
 #   Will have to beware of this NC_ contig in the processing since
 #	all previous builds had only NT_ contigs
 #
+# NOTE: The README_PREBUILD file for this assembly mentions several
+# differences from the previous release (build 30):
+# 1. seq_contig.md - new first line is a comment containing column name
+#       Also, last two columns (group label and weight, have been swapped)
+#       Also, some lines have id with CONTIG: prepended, and upper-case
+#               feature type (CONTIG)
+# 2. contig.idmap - has an additional column "contig label"
+# This required changing the jkStuff ncbi* utilities (7/1/03 KRR)
+#
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE 2003-10-16 - Hiram)
     ssh kksilo
     mkdir -p /cluster/store6/mm4/ncbi
@@ -34,7 +43,10 @@
    /cluster/bin/i386/faSize *.fa >> faSize.out
    grep "^>" *.fa > ../chrfasta.all.fa.headers
    gzip *.fa
-
+   cd ../contigfasta
+   gunzip *.fa.gz
+   grep "^>" *.fa > ../contigfasta.all.fa.headers
+   gzip *.fa
 
 
 # BREAK UP SEQUENCE INTO 5 MB CHUNKS AT NON-BRIDGED CONTIGS (DONE 2003-10-16 - Hc)
@@ -44,7 +56,7 @@
     # splitFaIntoContigs doesn't do right with agp lines arriving in a 
     # different order than fasta chrom sequences.  so split up the agp 
     # into one per chrom.
-    foreach c ( 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 X Y MT )
+    foreach c ( 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 X Y MT Un)
       mkdir $c
       perl -we "while(<>){if (/^chr$c\t/) {print;}}" \
         ./ncbi/allrefcontig.chr.agp \
@@ -56,23 +68,26 @@
     end
     gzip ncbi/chrfasta/chr*.fa
 
-# CREATE CHROM-LEVEL AGP AND FASTA FOR _RANDOMS (DONE 2003-10-17 Hiram)
+# CREATE CHROM-LEVEL AGP AND FASTA FOR _RANDOMS (DONE 2003-10-17 - Hiram)
     ssh kksilo
     cd /cluster/data/mm4/ncbi
 
     gunzip seq_contig.md.gz
 
-    mkdir ../Un
     # reorder random contigs in allrefcontig agp file to match seq_contig.md
     # this is required by the ncbiToRandomAgps scripts
+    # had to fixup ncbiToRandomAgps from previous use to match the
+    #	lines better, and to do the MT/NC_ mitochondrion thing
     ../jkStuff/ncbiFixAgp allrefcontig.chr.agp > \
                         allrefcontig.chr.ordered.agp
     ../jkStuff/ncbiToRandomAgps seq_contig.md allrefcontig.chr.ordered.agp \
                         contig.idmap ..
         # creating ../mm4/1/chr1_random.agp...
         # ... creating ../mm4/Un/chrUn_random.agp...
-    # had to fixup ncbiToRandomAgps to match the lines better, and to
-    #	do the MT/NC_ mitochondrion thing
+    #  The chrUn_random.agp created by this is too large with the 5000
+    #  gaps.  it will work with 1000 gaps, so fixup the chrUn_random agp:
+    ../jkStuff/ncbiToRandomAgps -gapLen 1000 -chrom Un \
+      seq_contig.md allrefcontig.chr.ordered.agp contig.idmap ..
 
     ssh kksilo
     cd /cluster/data/mm4
@@ -87,48 +102,24 @@
         rm tmp.fa
       endif
     end
-        # building 1/chr1_random.fa
-	# ... etc ...
+    # building 1/chr1_random.fa
+    # ... etc ...
+    # building Un/chrUn_random.fa
+    # Writing 85112544 bases to Un/chrUn_random.fa
 
-#	Program error: trying to allocate 1446087545 bytes in needLargeMem
-#	agpToFa: memalloc.c:82: needLargeMem: Assertion `0' failed.
-#	Abort
-#	The above breaks the chrUn build, try this on kolossus:
-    ssh kolossus
-    cd kent.x86_64/src/hg/agpToFa
-    make
 
-    cd /cluster/data/mm4
-    foreach c (Un)
-      if (-e $c/chr${c}_random.ctg.agp) then
-        echo building $c/chr${c}_random.fa
-        gunzip -c ./ncbi/contigfasta/chr$c.fa.gz \
-          | perl -wpe 's/^>lcl\|(Mm\w+)\s+.*$/>$1/' \
-          > ./tmp.fa
-        $HOME/bin/x86_64/agpToFa -simpleMulti \
-		$c/chr${c}_random.ctg.agp chr${c}_random \
-          $c/chr${c}_random.fa ./tmp.fa
-        rm tmp.fa
-      endif
-    end
-#	That worked on kolossus after adding:
-#if defined(MACHTYPE_x86_64)
-static size_t maxAlloc = 8LL*1024LL*1024LL*1024LL;
-#else
-static size_t maxAlloc = 128*4*1024*1024;
-#endif
-#	To src/lib/memalloc.c
+    # Clean these up to avoid confusion later... they're easily rebuilt
+    #	with the ncbiToRandomAgps script above
+    rm ?/*.ctg.agp ??/*.ctg.agp
 
-    # Clean these up to avoid confusion later... they're easily rebuilt.
-    rm ?{,?}/*.ctg.agp
-
-# BREAK UP _RANDOMS INTO 5 MB CHUNKS AT NON-BRIDGED CONTIGS (2003-07-02 Kate)
+# BREAK UP _RANDOMS INTO 5 MB CHUNKS AT NON-BRIDGED CONTIGS (2003-10-20 - Hiram)
     ssh kksilo
     cd /cluster/data/mm4
     foreach c (?{,?})
       if (-e $c/chr${c}_random.agp) then
         splitFaIntoContigs $c/chr${c}_random.agp $c/chr${c}_random.fa . \
           -nSize=5000000
+        mkdir -p $c/lift
         mv ${c}_random/lift/oOut.lst $c/lift/rOut.lst
         mv ${c}_random/lift/ordered.lft $c/lift/random.lft
         mv ${c}_random/lift/ordered.lst $c/lift/random.lst
@@ -139,107 +130,223 @@ static size_t maxAlloc = 128*4*1024*1024;
       endif
     end
     #  This has a lot of output.  It is difficult to see if anything
-    #	goes wrong.  It fails on the chrUn:
-Processing agpFile Un/chrUn_random.agp and fasta file Un/chrUn_random.fa, with nonbridged split boundaries of 5000000 bases, bridged split boundaries of 0 bases
-Out of memory - request size 1073741824 bytes
+    #	goes wrong.
 
-mv: can't stat source Un_random/lift/oOut.lst
-mv: can't stat source Un_random/lift/ordered.lft
-mv: can't stat source Un_random/lift/ordered.lst
-rmdir: `Un_random/lift': No such file or directory
-rm: cannot lstat `Un_random/chrUn_random.agp': No such file or directory
-rm: cannot lstat `Un_random/chrUn_random.fa': No such file or directory
-mv: No match.
-rmdir: `Un_random': No such file or directory
+#  Fixup chrMT name to be chrM (TBD)
+    ssh kksilo
+    cd /cluster/data/mm4
+    mv MT MT.ncbi
+    mkdir M
+    mkdir M/chrMT_1
+    mkdir M/lift
+    cd MT.ncbi
+    find . -type f | while read FN
+    do
+	sed -e "s/chrMT/chrM/g" $FN > ../M/$FN
+    done
 
-    #	This might not be a good idea.  I started this on kolossus and
-    #	it has been running for over an hour, consuming CPU time but
-    #	seemingly not getting anywhere.
-    #	try it on kolossus
-    ssh kolossus
-    cd kent.x86_64/src/hg/splitFaIntoContigs
-    make
+
+# MAKE LIFTALL.LFT (DONE 2003-10-20 - Hiram)
 
     cd /cluster/data/mm4
-    foreach c (Un)
-      if (-e $c/chr${c}_random.agp) then
-        $HOME/bin/x86_64/splitFaIntoContigs $c/chr${c}_random.agp \
-	$c/chr${c}_random.fa . -nSize=5000000
-        mv ${c}_random/lift/oOut.lst $c/lift/rOut.lst
-        mv ${c}_random/lift/ordered.lft $c/lift/random.lft
-        mv ${c}_random/lift/ordered.lst $c/lift/random.lst
-        rmdir ${c}_random/lift
-        rm ${c}_random/chr${c}_random.{agp,fa}
-        mv ${c}_random/* $c
-        rmdir ${c}_random
-      endif
-    end
+    cat ?{,?}/lift/{ordered,random}.lft > jkStuff/liftAll.lft
 
 
-XXXX  -----   all below is old data for reference only  XXXXXXXXXX
-XXXX	The sections below will be deleted as they are performed above
-
-# NOTE: The README_PREBUILD file for this assembly mentions several
-# differences from the previous release (build 30):
-# 1. seq_contig.md - new first line is a comment containing column name
-#       Also, last two columns (group label and weight, have been swapped)
-#       Also, some lines have id with CONTIG: prepended, and upper-case
-#               feature type (CONTIG)
-# 2. contig.idmap - has an additional column "contig label"
-# This required changing the jkStuff ncbi* utilities (7/1/03 KRR)
-#
-# NOTE: Y chrom was left out of original release at NCBI, and so was
-# added in later, and database reloads were performed to include Y. 7/8/03 KRR
-
-
-XXXXXX
-
-
-# BREAK UP _RANDOMS INTO 5 MB CHUNKS AT NON-BRIDGED CONTIGS (2003-07-02 Kate)
-    ssh eieio
-    cd /cluster/store5/mm.2003.06/mm4
-    foreach c (?{,?})
-      if (-e $c/chr${c}_random.agp) then
-        splitFaIntoContigs $c/chr${c}_random.agp $c/chr${c}_random.fa . \
-          -nSize=5000000
-        mv ${c}_random/lift/oOut.lst $c/lift/rOut.lst
-        mv ${c}_random/lift/ordered.lft $c/lift/random.lft
-        mv ${c}_random/lift/ordered.lst $c/lift/random.lst
-        rmdir ${c}_random/lift
-        rm ${c}_random/chr${c}_random.{agp,fa}
-        mv ${c}_random/* $c
-        rmdir ${c}_random
-      endif
-    end
-
-
-# MAKE LIFTALL.LFT (DONE 2003-07-04 kate)
-
-    # remove spurious files for chrUn (should only be chrUn_random)
-    cd /cluster/data/mm4
-    rm Un/lift/o*
-    cat ?{,?}/lift/{ordered,random}.lft > liftAll.lft
-
-
-# CREATING DATABASE (DONE - 2003-06-18 - Hiram)
+# CREATING DATABASE (DONE - 2003-10-20 - Hiram)
 
 o - Create the database.
     ssh hgwdev
-    echo 'create database mm4' | hgsql ''
+    hgsql -e 'create database mm4;' ''
     # if you need to delete this database:  !!! WILL DELETE EVERYTHING !!!
-    #	echo 'drop database mm4' | hgsql ce1
-        alias mm4 "mysql -u hguser -phguserstuff -A mm4"
+    #	hgsql -e "drop database mm4;" mm4
 o - Use df to make sure there is at least 5 gig free on hgwdev:/var/lib/mysql
     # [hiram@hgwdev /] df -h /var/lib/mysql
-    # Filesystem            Size  Used Avail Use% Mounted on
-    # /dev/sda1             472G  378G   69G  85% /var/lib/mysql
+    #	Filesystem            Size  Used Avail Use% Mounted on
+    #	/dev/sda1             472G  414G   34G  93% /var/lib/mysql
 
-
-# CREATING GRP TABLE FOR TRACK GROUPING (DONE - 2003-06-18 - Hiram)
+# CREATING GRP TABLE FOR TRACK GROUPING (DONE - 2003-10-20 - Hiram)
+    #	Use any of the newest databases to ensure that the organization
+    #	of the grp table is up to date
     ssh hgwdev
-    echo "create table grp (PRIMARY KEY(NAME)) select * from mm3.grp" \
-      | hgsql mm4
+    hgsql -e "create table grp (PRIMARY KEY(NAME)) select * from hg16.grp" mm4
 
+
+# STORING O+O SEQUENCE AND ASSEMBLY INFORMATION  (DONE - 2003-10-20 - Hiram)
+    # Create (unmasked) nib files 
+    ssh kksilo
+    cd /cluster/data/mm4
+    mkdir -p unmaskedNib
+    foreach f (?{,?}/chr?{,?}{,_random}.fa)
+      echo $f:t:r
+      faToNib $f unmaskedNib/$f:t:r.nib
+    end
+    # Create symbolic links from /gbdb/mm4/nib to real nib files
+    #	These unmasked Nib files are temporary just to get the browser
+    #	up an running immediately.  After the masking is done and masked
+    #	sequence is created, these nibs will be replaced with the masked
+    #	nibs
+    ssh hgwdev
+    mkdir -p /gbdb/mm4/nib
+    cd /gbdb/mm4/nib
+    ln -s /cluster/data/mm4/unmaskedNib/chr*.nib .
+
+    # Load /gbdb nib paths into database and save size info.
+    ssh hgwdev
+    cd /cluster/data/mm4
+    hgsql mm4  < ~/kent/src/hg/lib/chromInfo.sql
+    hgNibSeq -preMadeNib mm4 /gbdb/mm4/nib ?{,?}/chr?{,?}{,_random}.fa
+    #	2952612207 total bases
+    # NOTE: mm3 was 2708220133, an increase of 244 Mb (~9%)
+    hgsql -N -e "select chrom,size from chromInfo;" mm4 > chrom.sizes
+    # check the resulting file chrom.sizes
+
+    # Store o+o info in database.
+    cd /cluster/data/mm4/ncbi
+    gunzip sequence.inf
+    cd /cluster/data/mm4
+    ln -s ncbi fft
+    # remove so as not to confuse hgGoldGap -- they are easily regenerated
+    rm */chr*.ctg.agp
+    # to undo/redo: 
+    #     jkStuff/dropSplitTable.csh gap
+    #     jkStuff/dropSplitTable.csh gold
+    /cluster/bin/i386/hgGoldGapGl mm4 /cluster/data/mm4 .
+    featureBits mm4 gold
+    # 2819804865 bases of 2819804865 (100.000%) in intersection
+     featureBits mm3 gold
+       # 2505900260 bases of 2505900260 (100.000%) in intersection
+
+     featureBits mm4 gap
+        # 168934241 bases of 2819804865 (5.991%) in intersection
+     featureBits mm3 gap
+        # 202319873 bases of 2505900260 (8.074%) in intersection
+
+
+# Make and load GC percent table
+     ssh hgwdev
+     mkdir -p /cluster/data/mm4/bed/gcPercent
+     cd /cluster/data/mm4/bed/gcPercent
+     hgsql mm4  < ~/kent/src/hg/lib/gcPercent.sql
+     hgGcPercent mm4 ../../unmaskedNib
+
+
+# MAKE HGCENTRALTEST ENTRY AND TRACKDB TABLE FOR MM4 (DONE 2003-10-20 - Hiram)
+    # Enter mm4 into hgcentraltest.dbDb so test browser knows about it:
+    hgsql -e 'INSERT INTO dbDb \
+        (name, description, nibPath, organism, defaultPos, \
+         active, orderKey, genome, scientificName, htmlPath, hgNearOK) \
+      VALUES(
+        "mm4", "Oct. 2003", "/gbdb/mm4/nib", "Mouse", \
+	"chr6:135181700-135238301", \
+         1, 20, "Mouse", "Mus musculus", "/gbdb/mm4/html/description.html",
+	0);' \
+	-h genome-testdb hgcentraltest
+    #	If you need to delete that entry:
+    	hgsql -e 'delete from dbDb where name="mm4";' \
+	-h genome-testdb hgcentraltest
+
+    # Make trackDb table so browser knows what tracks to expect:
+    ssh hgwdev
+    cd ~kent/src/hg/makeDb/trackDb
+    cvs up -d -P
+    # Edit that makefile to add mm4 in all the right places and do
+    make update
+    make alpha
+    cvs commit makefile
+
+# REPEAT MASKING (RUNNING 2003-10-20 Hiram)
+   # Split contigs, run RepeatMasker, lift results
+   # * Contigs (*/chr*_*/chr*_*.fa) are split into 500kb chunks to make 
+   #   RepeatMasker runs manageable on the cluster ==> results need lifting.
+   # * For the NCBI assembly we repeat mask on the sensitive mode setting
+   #  (RepeatMasker -m -s -ali)
+
+    #- Split contigs into 500kb chunks:
+    ssh kksilo
+    cd /cluster/data/mm4
+    foreach d ( */chr?{,?}{,_random}_?{,?} )
+	cd $d
+	set contig = $d:t
+	faSplit size $contig.fa 500000 ${contig}_ -lift=$contig.lft \
+	    -maxN=500000
+	cd ../..
+    end
+    #	...
+    #	11 pieces of 11 written
+    #	1 pieces of 1 written
+    #	...
+
+    #- Make the run directory and job list:
+
+    cd /cluster/data/mm4
+    cat << '_EOF_' > jkStuff/RMMouse
+#!/bin/csh -fe
+
+cd $1
+pushd .
+/bin/mkdir -p /tmp/mm4/$2
+/bin/cp $2 /tmp/mm4/$2
+cd /tmp/mm4/$2
+/scratch/hg/RepeatMasker/RepeatMasker -ali -s -species mus $2   
+popd
+/bin/cp /tmp/mm4/$2/$2.out ./
+if (-e /tmp/mm4/$2/$2.align) /bin/cp /tmp/mm4/$2/$2.align ./
+if (-e /tmp/mm4/$2/$2.tbl) /bin/cp /tmp/mm4/$2/$2.tbl ./
+if (-e /tmp/mm4/$2/$2.cat) /bin/cp /tmp/mm4/$2/$2.cat ./
+/bin/rm -fr /tmp/mm4/$2/*
+/bin/rmdir --ignore-fail-on-non-empty /tmp/mm4/$2
+/bin/rmdir --ignore-fail-on-non-empty /tmp/mm4
+'_EOF_'
+    chmod +x jkStuff/RMMouse
+
+    mkdir -p RMRun
+    rm -f RMRun/RMJobs
+    foreach d ( ?{,?}/chr*_?{,?} )
+	foreach f ( $d/chr*_?{,?}_?{,?}.fa )
+	    set f = $f:t
+	    echo /cluster/data/mm4/jkStuff/RMMouse \
+		/cluster/data/mm4/$d $f \
+		'{'check out line+ /cluster/data/mm4/$d/$f.out'}' \
+		>> RMRun/RMJobs
+	end
+    end
+
+    #- Do the run
+    ssh kk
+    cd /cluster/data/mm4/RMRun
+    para create RMJobs
+    para try, para check, para check, para push, para check,...
+    # total elapsed time ~16 hours
+    # longest job ~5 hours
+
+
+# SIMPLE REPEAT TRACK (Running 2003-10-20 Hiram)
+    # TRF can be run in parallel with RepeatMasker on the file server
+    #	since it doesn't require masked input sequence.
+    ssh kksilo
+    mkdir /cluster/data/mm4/bed/simpleRepeat
+    cd /cluster/data/mm4/bed/simpleRepeat
+    mkdir trf
+    rm -f jobs.csh
+    echo '#\!/bin/csh -fe' > jobs.csh
+    # create job list of 5MB chunks
+    foreach f \
+       (/cluster/data/mm4/?{,?}/chr?{,?}_[0-9]*/chr?{,?}_?{,?}.fa \
+       /cluster/data/mm4/?{,?}/chr*_random_?{,?}/chr*_random_?{,?}.fa)
+      set fout = $f:t:r.bed
+      echo "/cluster/bin/i386/trfBig -trf=/cluster/bin/i386/trf $f /dev/null -bedAt=trf/$fout -tempDir=/tmp" \
+        >> jobs.csh
+    end
+    chmod +x jobs.csh
+    wc jobs.csh
+    #	600    3596   90543 jobs.csh
+
+    ./jobs.csh >&! jobs.log &
+    # in bash:  ./jobs.csh > jobs.log 2>&1 &
+    tail -f jobs.log
+
+XXXX  -----   all below is old data for reference only  XXXXXXXXXX
+XXXX	The sections below will be deleted as they are performed above
 
 # STORING O+O SEQUENCE AND ASSEMBLY INFORMATION  (DONE - 2003-06-18 - Hiram)
 # (RANDOMS ADDED, except chrUn 2003-07-01 - Kate)
@@ -256,9 +363,8 @@ o - Use df to make sure there is at least 5 gig free on hgwdev:/var/lib/mysql
     # Create symbolic links from /gbdb/mm4/nib to real nib files
     ssh hgwdev
     mkdir -p /gbdb/mm4/nib
-    foreach f (/cluster/store5/mm.2003.06/mm4/unmaskedNib/chr*.nib)
-      ln -s $f /gbdb/mm4/nib
-    end
+    cd /gbdb/mm4/nib
+    ln -s /cluster/data/mm4/unmaskedNib/chr*.nib .
 
     # Load /gbdb nib paths into database and save size info.
     ssh hgwdev
@@ -323,16 +429,18 @@ o - Use df to make sure there is at least 5 gig free on hgwdev:/var/lib/mysql
 
 # MAKE HGCENTRALTEST ENTRY AND TRACKDB TABLE FOR MM4 (DONE by Hiram)
     # Enter mm4 into hgcentraltest.dbDb so test browser knows about it:
-    echo 'INSERT INTO dbDb \
+    hgsql -e 'INSERT INTO dbDb \
         (name, description, nibPath, organism, defaultPos, \
-         active, orderKey, genome, scientificName) \
+         active, orderKey, genome, scientificName, htmlPath, hgNearOK) \
       VALUES(
-        "mm4", "June 2003", "/gbdb/mm4/nib", "Mouse", "USP18", \
-         1, 30, "Mouse", "Mus musculus");' \
-      | hgsql -h genome-testdb hgcentraltest
+        "mm4", "Oct. 2003", "/gbdb/mm4/nib", "Mouse", \
+	"chr6:135181700-135238301", \
+         1, 20, "Mouse", "Mus musculus", "/gbdb/mm4/html/description.html",
+	0);' \
+	-h genome-testdb hgcentraltest
     #	If you need to delete that entry:
-    	echo 'delete from dbDb where name="mm4";' \
-    		 hgsql -h genome-testdb hgcentraltest
+    	hgsql -e 'delete from dbDb where name="mm4";' \
+	-h genome-testdb hgcentraltest
 
     # Make trackDb table so browser knows what tracks to expect:
     ssh hgwdev
