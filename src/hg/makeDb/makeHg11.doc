@@ -590,7 +590,8 @@ Load into database as so:
        cd ~/oo/bed/xenoMrna
        hgLoadPsl hg11 xenoMrna.psl -tNameIx
        cd /cluster/store1/mrna.129
-       hgLoadRna add hg11 /cluster/store1/mrna.129/xenoRna.fa xenoRna.ra
+       hgLoadRna add hg11 /cluster/store1/mrna.129/xenoRna.fa /cluster/store1/hgLoadRna add hg11 /cluster/store1/mrna.129/xenoRna.fa xenoRna.ra
+xenoRna.ra
 DONE
 Similarly do xenoEst aligments:
    Prepare the est data:
@@ -614,7 +615,7 @@ When done, do:
        gensub2 human.lst mrna.lst gsub spec
        para create spec
        para push DONE
-IN PROGRESS
+
 Sort xenoEst alignments:
        ssh kkstore
        cd ~/oo/bed/xenoEst
@@ -624,6 +625,7 @@ Sort xenoEst alignments:
        pslSortAcc nohead chrom /cluster/store2/temp chrom.psl
        pslCat -dir chrom > xenoEst.psl
        rm -r chrom raw.psl cooked.psl chrom.psl
+IN PROGRESS
 
 Load into database as so:
        ssh hgwdev
