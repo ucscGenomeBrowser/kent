@@ -195,7 +195,7 @@ else
     {
     if (yValue <= (avg[iTarget] - 2.0*stddev[iTarget]))
 	{
-	vLineM(tx[iTarget]+0.4, 0, yPlotValue, 3, MG_BLUE);
+	vLineM(tx[iTarget]+0.4, 0, yPlotValue, 3, MG_GREEN);
 	}
     else
 	{
@@ -232,7 +232,6 @@ yScale = (double)(120)/8.0;
 calStampXY(stampPictPtr, (txmax-txmin)/2.0, tymax, &xx, &yy);
   
 yValue = (yValueIn - avg[iTarget])/stddev[iTarget];
-    
 if (yValue > tymax)
     {
     yPlotValue = tymax;
@@ -249,6 +248,15 @@ else
         }
     }
     
+if (yPlotValue > 0.0)
+    {
+    vLine(tx[iTarget]+0.4, 0.0, yPlotValue, 3, MG_BLUE);
+    }
+else
+    {
+    vLine(tx[iTarget]+0.4, 0.0+yPlotValue, -yPlotValue, 3, MG_BLUE);
+    }
+
 if (yPlotValue >= 2.0)
     {
     vLine(tx[iTarget]+0.4, 0.0, yPlotValue, 3, MG_RED);
@@ -257,7 +265,7 @@ else
     {
     if (yPlotValue <= -2.0)
   	{
-	vLine(tx[iTarget]+0.4, 0.0, yPlotValue, 3, MG_BLUE);
+	vLine(tx[iTarget]+0.4, 0.0+yPlotValue, -yPlotValue, 3, MG_GREEN);
 	}
     }
 }
@@ -706,7 +714,6 @@ if (answer != NULL)
 // draw AA residual anomolies stamp
 if (answer != NULL)
     {
-    exonCount      = (double)atof(answer);
     stampDataPtr = getStampData("pepRes");
     xPosition = xPosition + stampWidth + stampWidth/8;
     setPbStampPict(stampPictPtr, stampDataPtr, xPosition, yPosition, 3*stampWidth/2, stampHeight);
@@ -786,13 +793,19 @@ if (answer != NULL)
     stampDataPtr = getStampData("pepRes");
     xPosition = xPosition + stampWidth + stampWidth/8;
     setPbStampPict(stampPictPtr, stampDataPtr, xPosition, yPosition, 3*stampWidth/2, stampHeight);
-    drawPbStampB(stampDataPtr, stampPictPtr);
+    
     stampDataPtr->ymin = -4.0;
     stampDataPtr->ymax =  4.0;
     for (i=0; i<20; i++)
 	{
         markResStdvStamp(stampDataPtr, stampPictPtr, i, aaResFreqDouble[i], tx, ty, avg, stddev);
 	}
+
+    // draw background after bars drawn so that "... stddev" labels do not get covered by bars
+    stampDataPtr = getStampData("pepRes");
+    setPbStampPict(stampPictPtr, stampDataPtr, xPosition, yPosition, 3*stampWidth/2, stampHeight);
+    drawPbStampB(stampDataPtr, stampPictPtr);
+
     pbStampFree(&stampDataPtr);
     }
 
