@@ -10,10 +10,11 @@
 #include "hdb.h"
 #include "hgRelate.h"
 
-static char const rcsid[] = "$Id: hgLoadBed.c,v 1.20 2004/01/30 22:42:09 hartera Exp $";
+static char const rcsid[] = "$Id: hgLoadBed.c,v 1.21 2004/02/02 15:08:58 angie Exp $";
 
 /* Command line switches. */
 boolean noBin = FALSE;		/* Suppress bin field. */
+boolean hasBin = FALSE;		/* Input bed file includes bin. */
 boolean strictTab = FALSE;	/* Separate on tabs. */
 boolean oldTable = FALSE;	/* Don't redo table. */
 char *sqlTable = NULL;		/* Read table from this .sql if non-NULL. */
@@ -33,6 +34,7 @@ errAbort(
   "             the mysql server can access.\n"
   "   -sqlTable=table.sql Create table from .sql file\n"
   "   -tab  Separate by tabs rather than space\n"
+  "   -hasBin   Input bed file starts with a bin field.\n"
   );
 }
 
@@ -88,6 +90,8 @@ boolean tab =
 printf("Reading %s\n", fileName);
 while (lineFileNext(lf, &line, NULL))
     {
+    if (hasBin)
+	nextWord(&line);
     dupe = cloneString(line);
     if (strictTab)
 	wordCount = chopTabs(line, words);
@@ -217,6 +221,8 @@ int bedSize = findBedSize(bedFiles[0]);
 struct bedStub *bedList = NULL, *bed;
 int i;
 
+if (hasBin)
+    bedSize--;
 for (i=0; i<bedCount; ++i)
     loadOneBed(bedFiles[i], bedSize, &bedList);
 printf("Loaded %d elements of size %d\n", slCount(bedList), bedSize);
@@ -231,10 +237,11 @@ int main(int argc, char *argv[])
 cgiSpoof(&argc, argv);
 if (argc < 4)
     usage();
-noBin = cgiBoolean("noBin");
+noBin = cgiBoolean("noBin") || cgiBoolean("nobin");
 strictTab = cgiBoolean("tab");
 oldTable = cgiBoolean("oldTable");
 sqlTable = cgiOptionalString("sqlTable");
+hasBin = cgiBoolean("hasBin");
 hgLoadBed(argv[1], argv[2], argc-3, argv+3);
 return 0;
 }
