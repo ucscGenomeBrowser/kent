@@ -179,7 +179,13 @@ visibility dense
 altColor 128,128,255,
 type bed 5 +
 
-
+track affyMOE430
+shortLabel Affymetrix MOE430
+longLabel Alignments of Affymetrix Consensus Sequences from Mouse MOE430 (A and B)
+group regulation
+priority 87
+visibility hide
+type psl .
 
 searchTable ensGene
 searchType genePred
