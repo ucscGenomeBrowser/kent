@@ -15,7 +15,7 @@ priority 45.5
 visibility pack
 color 0,100,180
 type genePred sgdPep
-#hgGene on
+hgGene on
 
 track sgdOther
 shortLabel SGD Other
