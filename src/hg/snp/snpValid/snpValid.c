@@ -59,7 +59,87 @@ static struct optionSpec options[] = {
 // ==========================================================================
 
 
-struct snpMap *readSnps(char *chrom)
+/* --- save memory by defining just the fields needed from snp  ---- */
+
+struct snp
+/* Information from snp */
+    {
+    struct snp *next;  	        /* Next in singly linked list. */
+    char *chrom;		/* chrom */
+    int chromStart;             /* start */
+    int chromEnd;               /* end   */
+    char *name;		        /* name  */
+    char *strand;		/* strand*/
+    };
+
+struct snp *snpLoad(char **row)
+/* Load a snp from row fetched with select * from snp
+ * from database.  Dispose of this with snpFree(). */
+{
+struct snp *ret;
+int sizeOne,i;
+char *s;
+
+AllocVar(ret);
+ret->chrom      = cloneString(row[0]);
+ret->chromStart =        atoi(row[1]);
+ret->chromEnd   =        atoi(row[2]);
+ret->name       = cloneString(row[3]);
+ret->strand     = cloneString(row[4]);
+return ret;
+}
+
+void snpFree(struct snp **pEl)
+/* Free a single dynamically allocated snp such as created
+ * with snpLoad(). */
+{
+struct snp *el;
+
+if ((el = *pEl) == NULL) return;
+freeMem(el->chrom);
+freeMem(el->name);
+freeMem(el->strand);
+freez(pEl);
+}
+
+void snpFreeList(struct snp **pList)
+/* Free a list of dynamically allocated snp's */
+{
+struct snp *el, *next;
+
+for (el = *pList; el != NULL; el = next)
+    {
+    next = el->next;
+    snpFree(&el);
+    }
+*pList = NULL;
+}
+
+
+struct snp *readSnp(char *chrom)
+/* Slurp in the snp rows for one chrom */
+{
+struct snp *list=NULL, *el;
+char query[512];
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr;
+char **row;
+safef(query, sizeof(query), "select chrom, chromStart, chromEnd, name, strand "
+"from snpMap where chrom='%s' order by name", chrom);
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    el = snpLoad(&row[1]);
+    slAddHead(&list,el);
+    }
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+slReverse(&list);  /* could possibly skip if it made much difference in speed. */
+return list;
+}
+
+
+struct snpMap *readSnpMap(char *chrom)
 /* Slurp in the snpMap rows for one chrom */
 {
 struct snpMap *list=NULL, *el;
@@ -599,7 +679,7 @@ for (cn = cns; cn != NULL; cn = cn->next)
     chromSeq = hLoadChrom(cn->name);
     printf("testDb: chrom %s :  size (%u) \n",cn->name,chromSeq->size);
     
-    snps = readSnps(cn->name);
+    snps = readSnpMap(cn->name);
     printf("read %s.snpMap where chrom=%s \n",db,cn->name);
 
         
