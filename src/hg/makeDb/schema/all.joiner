@@ -1654,6 +1654,9 @@ tablesIgnored $rn
 tablesIgnored $sacCer
     sgdClone
 
+tablesIgnored $tetNig
+    gaze
+
 tablesIgnored mm3
     chr%_mm3Hg15L
     ensEst
@@ -1682,3 +1685,5 @@ tablesIgnored hg16
 tablesIgnored $danRer
     wz_ests
     rhMap
+
+    
