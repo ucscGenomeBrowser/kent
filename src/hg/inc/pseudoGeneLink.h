@@ -5,7 +5,7 @@
 #ifndef PSEUDOGENELINK_H
 #define PSEUDOGENELINK_H
 
-#define PSEUDOGENELINK_NUM_COLS 13
+#define PSEUDOGENELINK_NUM_COLS 18
 
 struct pseudoGeneLink
 /* links a gene/pseudogene prediction to an ortholog or paralog. */
@@ -24,6 +24,11 @@ struct pseudoGeneLink
     unsigned chainId;	/* chain id of gene/pseudogene alignment */
     char *strand;	/* strand of gene */
     unsigned polyA;	/* length of polyA */
+    unsigned polyAstart;	/* start f polyA */
+    char *pchrom;	/* Chromosome name for pseudogene */
+    unsigned pStart;	/* pseudogene alignment start position */
+    unsigned pEnd;	/* pseudogene alignment end position */
+    char *pStrand;	/* strand of pseudoegene */
     };
 
 void pseudoGeneLinkStaticLoad(char **row, struct pseudoGeneLink *ret);
