@@ -7,7 +7,7 @@
 #include "portable.h"
 #include "hgColors.h"
 
-static char const rcsid[] = "$Id: wigDataStream.c,v 1.44 2004/09/13 16:27:56 hiram Exp $";
+static char const rcsid[] = "$Id: wigDataStream.c,v 1.45 2004/09/14 00:06:02 hiram Exp $";
 
 /*	PRIVATE	METHODS	************************************************/
 static void addConstraint(struct wiggleDataStream *wds, char *left, char *right)
@@ -97,8 +97,8 @@ verbose(VERBOSE_HIGHEST, "#\twigSetCompareByte: [%g : %g] becomes [%d : %d]\n",
 	lower, lower+range, wds->ucLowerLimit, wds->ucUpperLimit);
 }
 
-static void resetStats(float *lowerLimit, float *upperLimit, float *sumData,
-	float *sumSquares, unsigned *statsCount, long int *chromStart,
+static void resetStats(float *lowerLimit, float *upperLimit, double *sumData,
+	double *sumSquares, unsigned *statsCount, long int *chromStart,
 	long int *chromEnd)
 {
 *lowerLimit = INFINITY;
@@ -111,7 +111,7 @@ static void resetStats(float *lowerLimit, float *upperLimit, float *sumData,
 }
 
 static void accumStats(struct wiggleDataStream *wds, float lowerLimit,
-	float upperLimit, float sumData, float sumSquares,
+	float upperLimit, double sumData, double sumSquares,
 	unsigned statsCount, long int chromStart,
 	long int chromEnd)
 {
@@ -642,8 +642,8 @@ boolean doNoOp = FALSE;
 boolean skipDataRead = FALSE;	/*	may need this later	*/
 float lowerLimit = INFINITY;
 float upperLimit = -1.0 * INFINITY;
-float sumData = 0.0;
-float sumSquares = 0.0;
+double sumData = 0.0;
+double sumSquares = 0.0;
 unsigned statsCount = 0;
 long int chromStart = -1;
 long int chromEnd = 0;
@@ -1292,8 +1292,8 @@ if (bedList && *bedList)
 	unsigned bedElCount = 0;
 	float lowerLimit = INFINITY;		/*	stats accumulators */
 	float upperLimit = -1.0 * INFINITY;	/*	stats accumulators */
-	float sumData = 0.0;			/*	stats accumulators */
-	float sumSquares = 0.0;			/*	stats accumulators */
+	double sumData = 0.0;			/*	stats accumulators */
+	double sumSquares = 0.0;		/*	stats accumulators */
 	unsigned statsCount = 0;		/*	stats accumulators */
 	long int chromStart = -1;		/*	stats accumulators */
 	long int chromEnd = 0;			/*	stats accumulators */
