@@ -9,7 +9,7 @@
 #include "jksql.h"
 #include "joiner.h"
 
-static char const rcsid[] = "$Id: joinerCheck.c,v 1.29 2004/11/19 19:26:35 fanhsu Exp $";
+static char const rcsid[] = "$Id: joinerCheck.c,v 1.30 2004/12/02 00:41:36 kent Exp $";
 
 /* Variable that are set from command line. */
 char *fieldListIn;
@@ -30,8 +30,6 @@ errAbort(
   "usage:\n"
   "   joinerCheck file.joiner\n"
   "options:\n"
-  "   -identifier=name - Just validate given identifier.\n"
-  "   -database=name - Just validate given database.\n"
   "   -fields - Check fields in joiner file exist, faster with -fieldListIn\n"
   "      -fieldListOut=file - List all fields in all databases to file.\n"
   "      -fieldListIn=file - Get list of fields from file rather than mysql.\n"
@@ -40,6 +38,10 @@ errAbort(
   "   -dbCoverage - Check that all databases are mentioned in joiner file\n"
   "   -times - Check update times of tables are after tables they depend on\n"
   "   -all - Do all tests: -fields -keys -tableCoverage -dbCoverage -times\n"
+  "   -identifier=name - Just validate given identifier.\n"
+  "                    Note only applies to keys and fields checks.\n"
+  "   -database=name - Just validate given database.\n"
+  "                    Note only applies to keys and times checks.\n"
   );
 }
 
@@ -57,6 +59,8 @@ static struct optionSpec options[] = {
    {NULL, 0},
 };
 
+/* Other globals */
+struct hash *allDbHash;
 
 static void printField(struct joinerField *jf, FILE *f)
 /* Print out field info to f. */
@@ -170,8 +174,10 @@ if (splitPrefix != NULL || splitSuffix != NULL)
     slReverse(&list);
     }
 if (list == NULL)
+    {
     if (sqlTableExists(conn, table))
 	list = slNameNew(table);
+    }
 return list;
 }
 
@@ -183,62 +189,40 @@ struct slName *db;
 boolean gotIt = FALSE;
 for (db = jf->dbList; db != NULL && !gotIt; db = db->next)
     {
-    struct sqlConnection *conn = sqlConnect(db->name);
-    struct slName *table, *tableList = getTablesForField(conn,
-    			jf->splitPrefix, jf->table, jf->splitSuffix);
-    char fieldName[512];
-    sqlDisconnect(&conn);
-    for (table = tableList; table != NULL; table = table->next)
+    if (hashLookup(allDbHash, db->name))
 	{
-	safef(fieldName, sizeof(fieldName), "%s.%s.%s", 
-	    db->name, table->name, jf->field);
-	if (hashLookup(fieldHash, fieldName))
+	struct sqlConnection *conn = sqlConnect(db->name);
+	struct slName *table, *tableList = getTablesForField(conn,
+			    jf->splitPrefix, jf->table, jf->splitSuffix);
+	char fieldName[512];
+	sqlDisconnect(&conn);
+	for (table = tableList; table != NULL; table = table->next)
 	    {
-	    gotIt = TRUE;
-	    break;
+	    safef(fieldName, sizeof(fieldName), "%s.%s.%s", 
+		db->name, table->name, jf->field);
+	    if (hashLookup(fieldHash, fieldName))
+		{
+		gotIt = TRUE;
+		break;
+		}
+	    }
+	slFreeList(&tableList);
+	}
+    else
+        {
+	/* Warn that database doesn't exist.  Just warn once per database. */
+	static struct hash *uniqHash;
+	if (uniqHash == NULL) 
+	    uniqHash = hashNew(8);
+	if (!hashLookup(uniqHash, db->name))
+	    {
+	    hashAdd(uniqHash, db->name, NULL);
+	    warn("Database %s doesn't exist", db->name);
 	    }
 	}
-    slFreeList(&tableList);
     }
 return gotIt;
 }
-
-#ifdef OLD
-static struct hash *getDbChromHash()
-/* Return hash with chromosome name list for each database
- * that has a chromInfo table. */
-{
-struct sqlConnection *conn = sqlConnect("mysql");
-struct slName *dbList = sqlGetAllDatabase(conn), *db;
-struct hash *dbHash = newHash(10);
-struct slName *chromList, *chrom;
-sqlDisconnect(&conn);
-
-for (db = dbList; db != NULL; db = db->next)
-     {
-     conn = sqlConnect(db->name);
-     if (sqlTableExists(conn, "chromInfo"))
-          {
-	  struct sqlResult *sr;
-	  char **row;
-	  struct slName *chromList = NULL, *chrom;
-	  sr = sqlGetResult(conn, "select chrom from chromInfo");
-	  while ((row = sqlNextRow(sr)) != NULL)
-	      {
-	      chrom = slNameNew(row[0]);
-	      slAddHead(&chromList, chrom);
-	      }
-	  sqlFreeResult(&sr);
-	  slReverse(&chromList);
-	  hashAdd(dbHash, db->name, chromList);
-	  }
-     sqlDisconnect(&conn);
-     }
-slFreeList(&dbList);
-return dbHash;
-}
-#endif /* OLD */
-
 
 void joinerValidateFields(struct joiner *joiner, struct hash *fieldHash,
 	char *oneIdentifier)
@@ -312,8 +296,9 @@ if (conn == NULL)
 return conn;
 }
 
-static char *doChops(struct joinerField *jf, char *id)
-/* Return chopped version of id.  (This may insert a zero into s) */
+static char *doChopsAndUpper(struct joinerField *jf, char *id)
+/* Return chopped version of id.  (This may insert a zero into s).
+ * Also upper case it. */
 {
 struct slName *chop;
 for (chop = jf->chopBefore; chop != NULL; chop = chop->next)
@@ -328,6 +313,7 @@ for (chop = jf->chopAfter; chop != NULL; chop = chop->next)
     if (s != NULL)
 	*s = 0;
     }
+touppers(id);
 return id;
 }
 
@@ -384,7 +370,7 @@ else
 	    sr = sqlGetResult(conn, query);
 	    while ((row = sqlNextRow(sr)) != NULL)
 		{
-		char *id = doChops(keyField, row[0]);
+		char *id = doChopsAndUpper(keyField, row[0]);
 		if (hashLookup(keyHash, id))
 		    {
 		    if (keyField->unique)
@@ -428,8 +414,7 @@ static void addHitMiss(struct hash *keyHash, char *id, struct joinerField *jf,
 	int *pHits, char **pMiss, int *pTotal)
 /* Record info about one hit or miss to keyHash */
 {
-id = doChops(jf, id);
-touppers(id);
+id = doChopsAndUpper(jf, id);
 if (jf->exclude == NULL || !slNameInList(jf->exclude, id))
     {
     struct keyHitInfo *khi;
@@ -509,7 +494,6 @@ if (conn != NULL)
 	sr = sqlGetResult(conn, query);
 	while ((row = sqlNextRow(sr)) != NULL)
 	    {
-	    touppers(row[0]);
 	    if (jf->separator == NULL)
 		{
 		addHitMiss(keyHash, row[0], jf, &hits, &miss, &total);
@@ -675,7 +659,7 @@ if (validations < 1 && oneIdentifier)
 struct hash *processFieldHash(char *inName, char *outName)
 /* Read in field hash from file if inName is non-NULL, 
  * else read from database.  If outName is non-NULL, 
- * save it to file. */
+ * save it to file.  */
 {
 struct hash *fieldHash;
 struct hashEl *el;
@@ -884,6 +868,7 @@ if (optionExists("all"))
     {
     checkFields = foreignKeys = dbCoverage = tableCoverage = checkTimes = TRUE;
     }
+allDbHash = sqlHashOfDatabases();
 joinerCheck(argv[1]);
 return 0;
 }

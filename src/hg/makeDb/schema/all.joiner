@@ -1,19 +1,19 @@
 # This contains linkage information between various fields
 # in various databases.
 #
-# So far have looked through hg13,hg15,hg16,mm4,mm3,rn3,ce1,dm1,sacCer1,
+# So far have looked through hg15,hg16,mm4,mm3,rn3,ce1,dm1,sacCer1,
 # panTro1,galGal2,fr1,cb1,hgFixed,go, and swissProt databases
 # Adding hg17 June 1, 2004 (heather)
 
 # Define databases used for various organisms
-set hg hg13,hg15,hg16,hg17
+set hg hg15,hg16,hg17
 set mm mm3,mm4,mm5
 set rn rn2,rn3
 set fr fr1
 set ce ce1,ce2
 set cb cb1
 set dm dm1
-set dp dp1,dp2,dp3
+set dp dp2,dp3
 set sacCer sacCer1
 set panTro panTro1
 set galGal galGal2
@@ -54,7 +54,7 @@ set zooDb zooBaboon3,zooCat3,zooChicken3,zooChimp3,zooCow3,zooDog3,zooFugu3,zooH
 # Set up list of databases we ignore and those we check.  Program
 # will complain about other databases.
 databasesChecked $gbd,$otherDb
-databasesIgnored mysql,lost+found,$proteinDb,$zooDb,sc1,hgcentraltest,hgcentralbeta
+databasesIgnored mysql,lost+found,$proteinDb,$zooDb,sc1,hgcentraltest,hgcentralbeta,test,sp040915,sp040515,sp040315,sp040115,proteins040915,proteins040515,proteins040315
 
 # Define various non-self chains
 set chainDest Hg15,Hg16,Hg17,Pt0,Mm2,Mm3,Mm4,Mm5,Rn2,Rn3,Cb1,Dm1,Dp1,Dp2,Dp3,PanTro1,GalGal2,Fr1,DanRer1,CanFam1,DroYak1,DroAna1,DroMoj1,DroVir1,DroEre1,AnoGam1,ApiMel1,TetNig1,XenTro1
@@ -229,8 +229,7 @@ identifier ncbiTaxon
 identifier acemblyName dependency
 "Link together Acembly gene model structure and peptide."
     $hg.acembly.name
-    $hg,!hg13.acemblyPep.name full unique
-    hg13.acemblyPep.name unique minCheck=0.90
+    $hg.acemblyPep.name full unique
 
 identifier ECgeneName dependency
 "Link together EC gene predicted gene structure and peptide"
@@ -569,10 +568,10 @@ identifier rBestChainPanTro1Id
     hg16.rBestNetPanTro1.chainId exclude=0
 
 identifier mouseChainId 
-"Link together chain/net on hg13,hg15 for mouse"
-    hg13,hg15.mouseChain.id $split
-    hg13,hg15.mouseChainLink.chainId $split full 
-    hg13,hg15.mouseNet.chainId exclude=0
+"Link together chain/net on hg15 for mouse"
+    hg15.mouseChain.id $split
+    hg15.mouseChainLink.chainId $split full 
+    hg15.mouseNet.chainId exclude=0
 
 identifier humanChainId 
 "Link together chain/net on mm3 for human"
@@ -683,8 +682,7 @@ identifier nativeMrnaAccession typeOf=mrnaAccession
     $gbd.mrnaOrientInfo.name minCheck=0.2
     $gbd.dupSpMrna.mrnaID minCheck=0.80
     $gbd.dupSpMrna.dupMrnaID minCheck=0.95
-    $gbd,!rn2,!rn3,!ce1.mrnaRefseq.mrna minCheck=0.25
-    ce1.mrnaRefseq.mrna minCheck=0.0
+    $gbd,!rn2,!rn3.mrnaRefseq.mrna minCheck=0.25
     rn2,rn3.mrnaRefseq.mrna minCheck=0.03
     $gbd.spMrna.mrnaID minCheck=0.98
 
@@ -701,16 +699,15 @@ identifier refSeqId typeOf=mrnaAccession
     $gbd.bioCycPathway.geneID minCheck=0.98
     $kgDb.kgXref.refseq exclude= minCheck=0.50
     $kgDb.knownToRefSeq.value minCheck=0.98
-    $gbd,!rn2,!rn3,!ce1.mrnaRefseq.refseq minCheck=0.25
+    $gbd,!rn2,!rn3.mrnaRefseq.refseq minCheck=0.25
     rn2,rn3.mrnaRefseq.refseq minCheck=0.03
-    ce1.mrnaRefseq.refseq minCheck=0.0
     $gbd.refFlat.name
     $gbd.refGene.name
     $gbd.refMrna.name
     $gbd.refSeqAli.qName
     $gbd.refSeqSummary.mrnaAcc minCheck=0.99
     $dm.bdgpToRefSeq.value minCheck=0.99
-    hg13,hg15.geneBands.mrnaAcc
+    hg15.geneBands.mrnaAcc
 
 identifier xenoRefSeqId typeOf=xenoMrnaAccession
 "Other Species RefSeq mRNA accession"
@@ -858,7 +855,6 @@ identifier bacCloneName fuzzy
 "A Roswell Park, Cal Tech or other clone ID"
     $gbd.fishClones.name
     $gbd.bacEndPairs.name
-    hg13.genMapDb.name
 
 identifier imageCloneId external=IMAGEConsortium fuzzy
 "An image cDNA clone ID"
@@ -933,7 +929,7 @@ identifier hugoName external=HUGO fuzzy
     $hg.kgXref.geneSymbol
     $hg.refFlat.geneName
     $hg.jaxOrtholog.humanSymbol
-    hg13,hg15.geneBands.name
+    hg15.geneBands.name
 
 identifier mouseGeneName fuzzy
 "Mouse gene name from Jackson Labs/RefSeq"
@@ -1019,7 +1015,6 @@ identifier bdgpTranscriptId external=BDGP dependency
     $dm.bdgpCanonical.transcript
     $dm.bdgpIsoforms.transcript
     $dm.bdgpGenePep.name
-    $dm.bdgpNear.name
     $dm.bdgpSwissProt.bdgpName
     $dm.bdgpToCanonical.name
     $dm.bdgpToLocusLink.name minCheck=0.80
@@ -1072,7 +1067,7 @@ identifier sgdCodingId typeOf=sgdId dependency
     $sacCer.sgdToName.name
     $sacCer.esRegGeneToModule.gene
     $sacCer.esRegGeneToMotif.gene
-    $sacCer.esRegGeneUpstreamRegion.name
+    $sacCer.esRegUpstreamRegion.name
 
 identifier sgdNoncodingId typeOf=sgdId
 "Sacchromyces Genome Database Noncoding/Dubious feature ID"
@@ -1109,7 +1104,7 @@ identifier ensemblGeneId external=Ensembl
     $gbd.ensTranscript.gene_name dupeOk
     $gbd.ensGtp.gene chopAfter=. 
     $gbd.ensGeneXref.gene_name
-    mm3,hg13.ensemblXref.gene_name
+    mm3.ensemblXref.gene_name
 
 identifier ensemblGeneId3 external=Ensembl
 "Ensemble Gene ID"
@@ -1134,7 +1129,7 @@ identifier ensemblTranscriptId external=Ensembl dependency
     $gbd.ensGene.name chopAfter=.
     $gbd.superfamily.name
     $gbd.ensGeneXref.transcript_name chopAfter=. minCheck=0.95
-    mm3,hg13.ensemblXref.transcript_name chopAfter=. minCheck=0.20
+    mm3.ensemblXref.transcript_name chopAfter=. minCheck=0.20
     mm3.ensemblXref2.transcript_name chopAfter=. minCheck=0.20
     $gbd,!mm4.ensGtp.transcript chopAfter=. minCheck=0.98
     mm4.ensGtp.transcript chopAfter=. minCheck=0.94
@@ -1153,11 +1148,11 @@ identifier ensemblTranscriptId3 external=Ensembl dependency
 
 # Ensembl EST
 
-identifier ensemblESTTranscriptId external=Ensembl dependency
+identifier ensemblEstTranscriptId external=Ensembl dependency
 "Ensembl EST Transcript ID"
-    $gbd.ensESTGene.name chopAfter=.
-    $gbd.ensESTGtp.transcript chopAfter=.
-    $gbd.ensESTPep.name chopAfter=.
+    $gbd.ensEstGene.name chopAfter=.
+    $gbd.ensEstGtp.transcript chopAfter=.
+    $gbd.ensEstPep.name chopAfter=.
 
 # H-Invitational Database Identifiers
 
@@ -1287,7 +1282,6 @@ identifier extFileId
     mm5.multiz5way.extFile
     hg17.multiz8way.extFile
     $sacCer.multizYeast.extFile
-    $dm.mzDy1Dp1Ag1_phast.extFile
     $dm.mzDy1Dp2Ag1_phast.extFile
     $dm.a_gambiae_mypa.extFile
     $dm.d_pseudoobscura_mypa.extFile
@@ -1511,7 +1505,7 @@ type expDistance
 type chain
     $gbd.chr%_chain%
     $gbd.chr%_chainSelf
-    hg13,hg15.chr%_mouseChain
+    hg15.chr%_mouseChain
     mm3.chr%_humanChain
     ce1.chr%_cb1Chain
     cb1.chr%_ce1Chain
@@ -1749,11 +1743,6 @@ tablesIgnored mm3
     recombRateMouse
 
 tablesIgnored rn2
-    refPep
-
-tablesIgnored hg13
-    chr%_humMusL
-    mrnaGene
     refPep
 
 tablesIgnored hg15
