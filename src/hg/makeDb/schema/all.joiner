@@ -359,17 +359,32 @@ identifier kimWormLifeAllSampleId
 "Identifiers of RNA samples used in Kim worm life cycle experiments"
      hgFixed.kimWormLifeAllExps.id
      hgFixed.kimWormLifeAllRatio.expScores comma indexOf
+     ce1.kimLifeCycle.expScores comma indexOf
 
 identifier kimWormLifeMedianSampleId
 "Identifiers of pooled RNA samples used in Kim worm life cycle experiments"
      hgFixed.kimWormLifeMedianExps.id
      hgFixed.kimWormLifeMedianRatio.expScores comma indexOf
+     ce1.kimLifeCycleMedian.expScores comma indexOf
 
 identifier yeastChoCellCycleSampleId
 "Identifiers of RNA samples used in Cho yeast cell cycle experiments"
      hgFixed.yeastChoCellCycleExps.id
      hgFixed.yeastChoCellCycle.expScores comma indexOf
      hgFixed.yeastChoCellCycleRatio.expScores comma indexOf
+
+identifier hgFixedSageExpId
+# I'd like to drop this table set. Check with Chuck.
+"Sage experiment (tissue type etc) ID in hgFixed"
+    hgFixed.sageExp.num
+    hgFixed.sage.exps comma
+    hgFixed.sageCounts.expCounts comma indexOf
+
+identifier sageExpId
+"Sage experiment (tissue type etc) ID"
+    $gbd.sageExp.num 
+    $gbd.sage.exps comma
+
 
 # Stuff to link together alignment chains and nets
 
@@ -567,6 +582,15 @@ identifier knownGeneId typeOf=nativeMrnaAccession
     $kgDb.knownToU133.name
     $kgDb.knownToU95.name
 
+identifier knownAlignId
+"Which (of sometimes multiple) mapping of a known gene"
+    $kgDb.knownGene.alignID
+
+identifier knownIsoformCluster
+"ID of a cluster of overlapping known genes"
+    $kgDb.knownCanonical.clusterId
+    $kgDb.knownIsoforms.clusterId
+
 # Fields parsed out of a Genbank flat file, associated with mRNA records
 
 identifier genBankAuthor
@@ -709,16 +733,7 @@ identifier ratStsTrueName typeOf=stsName
     $rn.stsInfoRat.name
     $rn.stsMapRat.name
 
-# Other Identifiers
-identifier extFileId
-"External file ID"
-    $gbd.extFile.id
-    $gbd.seq.extFile
-
-identifier gbExtFileId
-"External file ID for GenBank incremental update system"
-    $gbd.gbExtFile.id
-    $gbd.gbSeq.extFile
+# "Biological" Gene Names
 
 identifier hugoName external=HUGO fuzzy
 "International Human Gene Identifier"
@@ -730,52 +745,12 @@ identifier hugoName external=HUGO fuzzy
     $hg.jaxOrtholog.humanSymbol
     hg13,hg15.geneBands.name
 
-identifier bioCycMapId external=BioCyc
-"BioCyc Pathway Map ID"
-    $gbd.bioCycMapDesc.mapID
-    $gbd.bioCycPathway.mapID
-
-identifier keggMapId external=KEGG
-"KEGG Pathway Map ID"
-    $gbd.keggMapDesc.mapID
-    $gbd.keggPathway.mapID
-
-identifier locusLinkId external=LocusLink
-"NCBI LocusLink ID"
-    $gbd.refLink.locusLinkId dupeOk
-    $gbd.keggPathway.locusID minCheck=0.99
-    $kgDb.knownToLocusLink.value
-    $dm.bdgpToLocusLink.value minCheck=0.99
-
-identifier omimId external=OMIM
-"Online Mendelian Inheritance in Man (OMIM) ID"
-    $gbd.refLink.omimId dupeOk exclude=0
-
-identifier knownAlignId
-"Which (of sometimes multiple) mapping of a known gene"
-    $kgDb.knownGene.alignID
-
-identifier knownIsoformCluster
-"ID of a cluster of overlapping known genes"
-    $kgDb.knownCanonical.clusterId
-    $kgDb.knownIsoforms.clusterId
-
-identifier pfamId external=Pfam fuzzy
-"Pfam (Protein Family) ID"
-    $kgDb.knownToPfam.value
-    $dm.bdgpToPfam.value
-
-identifier superfamilyId external=SCOP
-"Protein SCOP/Superfamily ID"
-    hgFixed.scopDes.sunid    
-    $gbd.sfDes.id	# This table is redundant with hgFixed.scopDes
-    $kgDb.knownToSuper.superfamily
-    $gbd.sfAssign.sfID
-
 identifier mouseGeneName fuzzy
 "Mouse gene name from Jackson Labs/RefSeq"
     $hg.jaxOrtholog.mouseSymbol
     $mm.refLink.name
+
+# Model Organism Database Identifiers
 
 identifier jaxMgiId
 "Jackson Labs Mouse Gene Identifier"
@@ -792,6 +767,8 @@ identifier wormBaseId external=WormBase
     $gbd.ceBlastTab.target minCheck=0.95
     $ce.kimExpDistance.query
     $ce.kimExpDistance.target
+    $ce.kimLifeCycle.name
+    $ce.kimLifeCycleMedian.name
     $ce.orfToGene.name
     $ce.sangerBlastTab.query
     $ce.sangerBlastTab.target
@@ -910,6 +887,8 @@ identifier sgdNoncodingId typeOf=sgdId
     $sacCer.sgdOther.name
     $sacCer.sgdOtherDescription.name
 
+# The Ensembl Gmish
+
 identifier ensemblGeneId external=Ensembl
 "Ensemble Gene ID"
     $gbd.ensTranscript.gene_name dupeOk
@@ -939,6 +918,32 @@ identifier ensemblTranscriptId external=Ensembl
     $gbd.sfDescription.name chopAfter=.
     mm3.superfamily.name chopAfter=.
 
+# Protein Family Identifiers
+
+identifier pfamId external=Pfam fuzzy
+"Pfam (Protein Family) ID"
+    $kgDb.knownToPfam.value
+    $dm.bdgpToPfam.value
+
+identifier superfamilyId external=SCOP
+"Protein SCOP/Superfamily ID"
+    hgFixed.scopDes.sunid    
+    $gbd.sfDes.id	# This table is redundant with hgFixed.scopDes
+    $kgDb.knownToSuper.superfamily
+    $gbd.sfAssign.sfID
+
+# Pathway Identifiers
+
+identifier bioCycMapId external=BioCyc
+"BioCyc Pathway Map ID"
+    $gbd.bioCycMapDesc.mapID
+    $gbd.bioCycPathway.mapID
+
+identifier keggMapId external=KEGG
+"KEGG Pathway Map ID"
+    $gbd.keggMapDesc.mapID
+    $gbd.keggPathway.mapID
+
 identifier cgapId
 "NCI Cancer Genome Annotation Project Gene ID"
     $gbd.cgapAlias.cgapID dupeOk
@@ -948,6 +953,10 @@ identifier cgapMapId
 "NCI Cancer Genome Annotation Project Map ID"
     $gbd.cgapBiocDesc.mapID
     $gbd.cgapBiocPathway.mapID
+
+
+
+# SNP (Simple Nucleotide Polymorphism) Stuff
 
 identifier affySnp10KId external=Affymetrix
 "Affymetrix 10K SNP Identifier"
@@ -983,10 +992,18 @@ identifier dbSnpRnId typeOf=dbSnpId
     $rn.snpNih.name
     $rn.snpMap.name
 
-identifier encodeRegion
-"ENCODE (extensive analysis of 1% of genome) Region"
-    hgFixed.encodeRegionInfo.name
-    $hg.encodeRegions.name
+# Other NCBI Identifiers
+
+identifier locusLinkId external=LocusLink
+"NCBI LocusLink ID"
+    $gbd.refLink.locusLinkId dupeOk
+    $gbd.keggPathway.locusID minCheck=0.99
+    $kgDb.knownToLocusLink.value
+    $dm.bdgpToLocusLink.value minCheck=0.99
+
+identifier omimId external=OMIM
+"Online Mendelian Inheritance in Man (OMIM) ID"
+    $gbd.refLink.omimId dupeOk exclude=0
 
 identifier unigeneId fuzzy
 "NCBI UniGene Cluster ID"
@@ -994,17 +1011,23 @@ identifier unigeneId fuzzy
     $gbd.uniGene_2.name chopBefore=.
     $gbd.sage.uni
 
-identifier hgFixedSageExpId
-# I'd like to drop this table set. Check with Chuck.
-"Sage experiment (tissue type etc) ID in hgFixed"
-    hgFixed.sageExp.num
-    hgFixed.sage.exps comma
-    hgFixed.sageCounts.expCounts comma indexOf
 
-identifier sageExpId
-"Sage experiment (tissue type etc) ID"
-    $gbd.sageExp.num 
-    $gbd.sage.exps comma
+# Other Identifiers
+
+identifier extFileId
+"External file ID"
+    $gbd.extFile.id
+    $gbd.seq.extFile
+
+identifier gbExtFileId
+"External file ID for GenBank incremental update system"
+    $gbd.gbExtFile.id
+    $gbd.gbSeq.extFile
+
+identifier encodeRegion
+"ENCODE (extensive analysis of 1% of genome) Region"
+    hgFixed.encodeRegionInfo.name
+    $hg.encodeRegions.name
 
 # Ignored tables - no linkage here that we check at least.
 
