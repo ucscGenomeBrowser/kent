@@ -10,12 +10,12 @@
 #include "nib.h"
 #include "bed.h"
 
-static char const rcsid[] = "$Id: netToBedWithId.c,v 1.2 2003/08/13 04:43:08 kent Exp $";
+static char const rcsid[] = "$Id: netToBedWithId.c,v 1.3 2003/08/13 19:15:18 kent Exp $";
 
 boolean qChain = FALSE;  /* Do chain from query side. */
 int maxGap = 10000;
 int minSpan = 5000;
-double minAli = 50.0;
+double minAli = 0.40;
 
 void usage()
 /* Explain usage and exit. */
@@ -69,31 +69,36 @@ static struct bed *bedFromBlocks(
 	struct chain *chain,
 	struct boxIn *startB, struct boxIn *endB,
 	struct dnaSeq *qSeq, int qOffset,
-	struct dnaSeq *tSeq, int tOffset)
+	struct dnaSeq *tSeq, int tOffset, double minAli)
 /* Convert a list of blocks (guaranteed not to have inserts in both
  * strands between them) to a bed. */
 {
 struct boxIn *b, *lastB = startB;
 int size;
 struct bed *bed;
-int totalBases = 0, matchingBases = 0;
+int aliBases = 0, matchingBases = 0;
 double ratio;
+int coverBases;
 
 for (b = startB; b != endB; b = b->next)
     {
     size = b->tEnd - b->tStart;
-    totalBases += size;
+    aliBases += size;
     matchingBases += countMatch(qSeq->dna + b->qStart - qOffset, 
     	tSeq->dna + b->tStart - tOffset, size);
     lastB = b;
     }
+coverBases = lastB->tEnd - startB->tStart;
+ratio = (double)aliBases/(double)coverBases;
+if (ratio < minAli)
+    return NULL;
 AllocVar(bed);
 bed->chrom = cloneString(chain->tName);
 bed->chromStart = startB->tStart;
 bed->chromEnd = lastB->tEnd;
 bed->name = cloneString(chain->qName);
-if (totalBases > 0)
-    bed->score = round(1000 * (double)matchingBases/(double)totalBases);
+if (aliBases > 0)
+    bed->score = round(1000 * (double)matchingBases/(double)aliBases);
 bed->strand[0] = chain->qStrand;
 return bed;
 }
@@ -113,15 +118,19 @@ for (b = chain->blockList; b != NULL; b = b->next)
 	int dt = b->tStart - a->tEnd;
 	if (dt > maxGap || dq > maxGap)
 	    {
-	    bed = bedFromBlocks(chain, startB, b, qSeq, qOffset, tSeq, tOffset);
-	    slAddHead(&bedList, bed);
+	    bed = bedFromBlocks(chain, startB, b, 
+	    	qSeq, qOffset, tSeq, tOffset, minAli);
+	    if (bed != NULL)
+		slAddHead(&bedList, bed);
 	    startB = b;
 	    }
 	}
     a = b;
     }
-bed = bedFromBlocks(chain, startB, NULL, qSeq, qOffset, tSeq, tOffset);
-slAddHead(&bedList, bed);
+bed = bedFromBlocks(chain, startB, NULL, 
+	qSeq, qOffset, tSeq, tOffset, minAli);
+if (bed != NULL)
+    slAddHead(&bedList, bed);
 slReverse(&bedList);
 return bedList;
 }
@@ -247,7 +256,7 @@ optionInit(&argc, argv, options);
 qChain = optionExists("qChain");
 maxGap = optionInt("maxGap", maxGap);
 minSpan = optionInt("minSpan", minSpan);
-minAli = optionFloat("minAli", minAli);
+minAli = 0.01 * optionFloat("minAli", minAli*100);
 if (argc != 6)
     usage();
 netToBedWithId(argv[1], argv[2], argv[3], argv[4], argv[5]);
