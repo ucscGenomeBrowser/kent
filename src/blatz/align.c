@@ -445,7 +445,7 @@ tNew.dna = target->dna + tStart;
 tNew.size = tSize;
 tNew.name = target->name;
 
-index = blatzIndexOne(&tNew, tStart, target->size, bzp->weight);
+index = blatzIndexOne(&tNew, tStart, tEnd, target->size, bzp->weight);
 chainList = blatzChainAgainstIndex(bzp, index, &qNew, strand);
 blatzIndexFree(&index);
 

@@ -12,8 +12,14 @@ struct dnaLoad *dnaLoadOpen(char *fileName);
 struct dnaSeq *dnaLoadNext(struct dnaLoad *dl);
 /* Return next dna sequence. */
 
-int dnaLoadCurOffset(struct dnaLoad *dl);
-/* Returns the offset of current sequence within a larger
+int dnaLoadCurStart(struct dnaLoad *dl);
+/* Returns the start offset of current sequence within a larger
+ * sequence.  Useful for programs that want to auto-lift
+ * nib and 2bit fragments.  Please call only after a
+ * sucessful dnaLoadNext. */
+
+int dnaLoadCurEnd(struct dnaLoad *dl);
+/* Returns the end offset of current sequence within a larger
  * sequence.  Useful for programs that want to auto-lift
  * nib and 2bit fragments.  Please call only after a
  * sucessful dnaLoadNext. */

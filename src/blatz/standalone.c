@@ -64,9 +64,9 @@ while ((query = dnaLoadNext(queryDl)) != NULL)
 	}
     verbose(1, "%s (%d bases) score %2.0f\n", 
             query->name, query->size, bestScore);
-    blatzWriteChains(bzp, chainList, query, 
-    	dnaLoadCurOffset(queryDl), dnaLoadCurSize(queryDl), indexList, f);
-    chainFreeList(&chainList);
+    blatzWriteChains(bzp, &chainList, query, 
+    	dnaLoadCurStart(queryDl), dnaLoadCurEnd(queryDl),
+	dnaLoadCurSize(queryDl), indexList, f);
     dnaSeqFree(&query);
     }
 carefulClose(&f);

@@ -22,7 +22,49 @@ for (index = indexList; index != NULL; index = index->next)
 return hash;
 }
 
-void chainWriteAllAsPsl(struct chain *chainList, struct dnaSeq *query,
+static void pslOffset(struct psl *psl, int qStart, int qEnd, int qSize,
+	int tStart, int tSize)
+/* Add offsets to psl */
+{
+int i;
+int qOffset;
+if (psl->strand[0] == '-')
+    qOffset = qSize - qEnd;
+else
+    qOffset = qStart;
+psl->tStart += tStart;
+psl->tEnd += tStart;
+psl->tSize = tSize;
+psl->qStart += qStart;
+psl->qEnd += qStart;
+psl->qSize = qSize;
+for (i=0; i<psl->blockCount; ++i)
+    {
+    psl->qStarts[i] += qOffset;
+    psl->tStarts[i] += tStart;
+    }
+}
+
+static void axtOffset(struct axt *axt, int qStart, int qEnd, int qSize,
+	int tStart, int tSize)
+/* Add offsets to psl */
+{
+int i;
+int qOffset;
+if (axt->qStrand == '-')
+    qOffset = qSize - qEnd;
+else
+    qOffset = qStart;
+axt->tStart += tStart;
+axt->tEnd += tStart;
+axt->qStart += qOffset;
+axt->qEnd += qOffset;
+}
+
+
+
+static void chainWriteAllAsPsl(struct chain *chainList, struct dnaSeq *query,
+	int queryStart, int queryEnd, int querySize,
         struct hash *targetHash, FILE *f)
 /* Write out chain list to file in psl format. */
 {
@@ -34,6 +76,8 @@ for (chain = chainList; chain != NULL; chain = chain->next)
     struct blatzIndex *index = hashMustFindVal(targetHash, chain->tName);
     struct dnaSeq *target = index->target;
     struct psl *psl = chainToFullPsl(chain, query, rQuery, target);
+    pslOffset(psl, queryStart, queryEnd, querySize, 
+    	index->targetStart, index->targetParentSize);
 #ifdef NOREP /* Work around bug in blat for comparison */
     psl->match += psl->repMatch;
     psl->repMatch = 0;
@@ -45,7 +89,8 @@ dnaSeqFree(&rQuery);
 }
 
 void chainWriteAllAsAxtOrMaf(struct chain *chainList, char *format,
-    struct dnaSeq *query, struct hash *targetHash, char *mafQ, char *mafT,
+    struct dnaSeq *query, int queryStart, int queryEnd, int querySize,
+    struct hash *targetHash, char *mafQ, char *mafT,
     FILE *f)
 /* Write chainList to file in either axt or maf according to
  * format string. */
@@ -64,6 +109,8 @@ for (chain = chainList; chain != NULL; chain = chain->next)
     axtList = chainToAxt(chain, qSeq, 0, target, 0, 40, BIGNUM);
     for (axt = axtList; axt != NULL; axt = axt->next)
         {
+	axtOffset(axt, queryStart, queryEnd, querySize, 
+	    index->targetStart, index->targetParentSize);
         if (sameString(format, "maf"))
             {
             struct mafAli *maf = mafFromAxt(axt, target->size, mafT, query->size, mafQ);
@@ -93,7 +140,8 @@ return total;
 }
 
 void chainWriteAllAsBlast(struct chain *chainList, char *blastType, 
-        struct dnaSeq *query, struct hash *targetHash,  FILE *f)
+        struct dnaSeq *query,  int queryStart, int queryEnd, int querySize,
+	struct hash *targetHash,  FILE *f)
 /* Write chainList to file in a blat variant */
 {
 struct dnaSeq *rQuery = cloneDnaSeq(query);
@@ -111,6 +159,8 @@ for (chain = chainList; chain != NULL; chain = chain->next)
     bun->qSize = qSeq->size;
     bun->tSize = target->size;
     bun->axtList = chainToAxt(chain, qSeq, 0, target, 0, 40, BIGNUM);
+    axtOffset(bun->axtList, queryStart, queryEnd, querySize, 
+	index->targetStart, index->targetParentSize);
     axtBlastOut(bun, 0, FALSE, f, "database", targetHash->elCount, dbSize, blastType, "blatz");
     axtBundleFree(&bun);
     }
@@ -118,8 +168,8 @@ dnaSeqFree(&rQuery);
 }
 
 static void blatzOffsetChains(struct chain *chainList, 
-	int qOffset, int qSize,
-	struct hash *targetHash, boolean reverse)
+	int qStart, int qEnd, int qSize,
+	struct hash *targetHash)
 /* Add targetHash[tName]->targetOffset to chainList. */
 {
 struct chain *chain;
@@ -127,13 +177,13 @@ for (chain = chainList; chain != NULL; chain = chain->next)
     {
     struct blatzIndex *index = hashMustFindVal(targetHash, chain->tName);
     struct cBlock *block;
-    int tOffset = index->targetOffset;
+    int tOffset = index->targetStart;
     int tSize = index->targetParentSize;
-    if (reverse)
-	{
-        tOffset = -tOffset;
-	tSize = index->target->size;
-	}
+    int qOffset;
+    if (chain->qStrand == '-')
+        qOffset = qSize - qEnd;
+    else
+        qOffset = qStart;
     chain->qStart += qOffset;
     chain->qEnd += qOffset;
     chain->qSize = qSize;
@@ -150,28 +200,35 @@ for (chain = chainList; chain != NULL; chain = chain->next)
     }
 }
         
-void blatzWriteChains(struct bzp *bzp, struct chain *chainList,
-	struct dnaSeq *query, int queryOffset, int queryParentSize,
+void blatzWriteChains(struct bzp *bzp, struct chain **pChainList,
+	struct dnaSeq *query, int queryStart, int queryEnd, int queryParentSize,
 	struct blatzIndex *targetIndexList, FILE *f)
-/* Output chainList to file in format specified by bzp->out. */
+/* Output chainList to file in format specified by bzp->out. 
+ * This will free chainList as well. */
 {
 struct hash *targetHash = hashTargetsFromIndex(targetIndexList);
+struct chain *chainList = *pChainList;
 char *out = bzp->out;
 
-blatzOffsetChains(chainList, queryOffset, queryParentSize, targetHash, FALSE);
 if (sameString(out, "chain"))
+    {
+    blatzOffsetChains(chainList, queryStart, queryEnd, queryParentSize, targetHash);
     chainWriteAll(chainList, f);
+    }
 else if (sameString(out, "psl"))
-    chainWriteAllAsPsl(chainList, query, targetHash, f);
+    {
+    chainWriteAllAsPsl(chainList, query, queryStart, queryEnd, queryParentSize, targetHash, f);
+    }
 else if (sameString(out, "axt") || sameString(out, "maf"))
-    chainWriteAllAsAxtOrMaf(chainList, out, query, targetHash, 
-            bzp->mafQ, bzp->mafT, f);
+    chainWriteAllAsAxtOrMaf(chainList, out, query,  queryStart, queryEnd, queryParentSize, 
+	    targetHash, bzp->mafQ, bzp->mafT, f);
 else if (sameString(out, "wublast") || sameString(out, "blast") ||
          sameString(out, "blast8") || sameString(out, "blast9"))
-   chainWriteAllAsBlast(chainList, out, query, targetHash, f);
+   chainWriteAllAsBlast(chainList, out, query, queryStart, queryEnd, queryParentSize,
+   	targetHash, f);
 else 
     errAbort("blatzWriteChains doesn't recognize format %s", bzp->out);
-blatzOffsetChains(chainList, -queryOffset, query->size, targetHash, TRUE);
+chainFreeList(pChainList);
 hashFree(&targetHash);
 }
 

@@ -29,13 +29,14 @@ struct blatzIndex
     int seedSpan;		/* Total bases spanned by seed. */
     int *seedOffsets;		/* Offsets to bases seed cares about. */
     struct dnaSeq *target;	/* Target sequence.  Not allocated here. */
-    int targetOffset;		/* Offset of target in parent sequence. */
+    int targetStart;		/* Start of target in parent sequence. */
+    int targetEnd;		/* End of target in parent sequence. */
     int targetParentSize;	/* Size of parent sequence. */
     bits32 *posBuf;		/* This holds memory for positions in all slots. */
     };
 
-struct blatzIndex *blatzIndexOne(struct dnaSeq *seq, int offset, int parentSize, 
-	int weight);
+struct blatzIndex *blatzIndexOne(struct dnaSeq *seq, int parentStart, int parentEnd,
+	int parentSize, int weight);
 /* Create a new index of given seed weight populated by seq. */
 
 struct dnaLoad;
@@ -56,10 +57,11 @@ void blatzGaplessScan(struct bzp *bzp, struct blatzIndex *index,
  * scoring segment pairs (MSPs), and put MSPs over threshold
  * onto pBlockList. */
 
-void blatzWriteChains(struct bzp *bzp, struct chain *chainList,
-	struct dnaSeq *query, int queryOffset, int queryParentSize,
+void blatzWriteChains(struct bzp *bzp, struct chain **pChainList,
+	struct dnaSeq *query, int queryStart, int queryEnd, int queryParentSize,
 	struct blatzIndex *targetIndexList, FILE *f);
-/* Output chainList to file in format specified by bzp->outType. */
+/* Output chainList to file in format specified by bzp->out. 
+ * This will free chainList as well. */
 
 struct chain *blatzAlign(struct bzp *bzp, struct blatzIndex *indexList,
 	struct dnaSeq *query);

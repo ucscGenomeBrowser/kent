@@ -7,7 +7,7 @@
 #include "nib.h"
 #include "dnaLoad.h"
 
-static char const rcsid[] = "$Id: dnaLoad.c,v 1.6 2005/01/15 06:27:43 kent Exp $";
+static char const rcsid[] = "$Id: dnaLoad.c,v 1.7 2005/01/26 05:23:16 kent Exp $";
 
 struct dnaLoadStack
 /* Keep track of a single DNA containing file. */
@@ -27,7 +27,8 @@ struct dnaLoad
     char *topFileName;		/* Highest level file name. */
     boolean finished;		/* Set to TRUE at end. */
     struct dnaLoadStack *stack;	/* Stack of files we're working on. */
-    int curOffset;		/* Offset within current parent sequence. */
+    int curStart;		/* Start offset within current parent sequence. */
+    int curEnd;			/* End offset  within current parent sequence. */
     int curSize;		/* Size of current parent sequence. */
     };
 
@@ -103,20 +104,19 @@ dl->topFileName = cloneString(fileName);
 return dl;
 }
 
-struct dnaSeq *dnaLoadSingle(char *fileName, int *retOffset, int *retParentSize)
+struct dnaSeq *dnaLoadSingle(char *fileName, int *retStart, int *retEnd, int *retParentSize)
 /* Return sequence if it's a nib file or 2bit part, NULL otherwise. */
 {
 struct dnaSeq *seq = NULL;
-int offset = 0;
+unsigned start = 0, end = 0;
 int parentSize = 0;
 if (nibIsFile(fileName))
     {
     /* Save offset out of fileName for auto-lifting */
     char filePath[PATH_LEN];
     char name[PATH_LEN];
-    unsigned start, end;
+    char seqName[PATH_LEN];
     nibParseName(0, fileName, filePath, name, &start, &end);
-    offset = start;
 
     if (end != 0)	/* It's just a range. */
         {
@@ -125,8 +125,9 @@ if (nibIsFile(fileName))
 	nibOpenVerify(filePath, &f, &size);
 	parentSize = size;
 	}
-
     seq =  nibLoadAllMasked(NIB_MASK_MIXED, fileName);
+    if (end == 0)
+         parentSize = end = seq->size;
     freez(&seq->name);
     seq->name = cloneString(name);
     }
@@ -137,7 +138,6 @@ else if (twoBitIsRange(fileName))
     int start, end;
     char *file, *seqName;
     twoBitParseRange(rangeSpec, &file, &seqName, &start, &end);
-    offset = start;
 
     /* Load sequence. */
         {
@@ -146,10 +146,14 @@ else if (twoBitIsRange(fileName))
 	seq = twoBitReadSeqFrag(tbf, seqName, start, end);
 	twoBitClose(&tbf);
 	}
+    if (end == 0)
+        end = seq->size;
     freez(&rangeSpec);
     }
-if (retOffset != NULL)
-    *retOffset = offset;
+if (retStart != NULL)
+    *retStart = start;
+if (retEnd != NULL)
+    *retEnd = end;
 if (retParentSize != NULL)
     *retParentSize = parentSize;
 return seq;
@@ -188,6 +192,9 @@ while ((dls = dl->stack) != NULL)
 	    seq->dna = cloneStringZ(dna, size);
 	    seq->size = size;
 	    seq->name = cloneString(name);
+	    dl->curStart = 0;
+	    dl->curEnd = size;
+	    dl->curSize = size;
 	    return seq;
 	    }
 	else
@@ -202,7 +209,7 @@ while ((dls = dl->stack) != NULL)
 	if (lineFileNextReal(dls->textFile, &line))
 	    {
 	    line  = trimSpaces(line);
-	    if ((seq = dnaLoadSingle(line, &dl->curOffset, &dl->curSize)) != NULL)
+	    if ((seq = dnaLoadSingle(line, &dl->curStart, &dl->curEnd, &dl->curSize)) != NULL)
 	         return seq;
 	    else
 	         {
@@ -226,12 +233,11 @@ static struct dnaSeq *dnaLoadStackOrSingle(struct dnaLoad *dl)
 /* Return next dna sequence. */
 {
 struct dnaSeq *seq = NULL;
-dl->curOffset = 0;
 if (dl->finished)
     return NULL;
 if (dl->stack == NULL)
     {
-    if ((seq = dnaLoadSingle(dl->topFileName, &dl->curOffset, &dl->curSize)) != NULL)
+    if ((seq = dnaLoadSingle(dl->topFileName, &dl->curStart, &dl->curEnd, &dl->curSize)) != NULL)
 	{
 	dl->finished = TRUE;
 	return seq;
@@ -245,12 +251,8 @@ struct dnaSeq *dnaLoadNext(struct dnaLoad *dl)
 /* Return next dna sequence. */
 {
 struct dnaSeq *seq;
-dl->curSize = 0;
-dl->curOffset = 0;
+dl->curSize = dl->curStart = dl->curEnd = 0;
 seq = dnaLoadStackOrSingle(dl);
-if (seq != NULL)
-    if (dl->curSize == 0)
-        dl->curSize = seq->size;
 return seq;
 }
 
@@ -271,15 +273,23 @@ slReverse(seqList);
 return seqList;
 }
 
-int dnaLoadCurOffset(struct dnaLoad *dl)
-/* Returns the offset of current sequence within a larger
+int dnaLoadCurStart(struct dnaLoad *dl)
+/* Returns the start offset of current sequence within a larger
  * sequence.  Useful for programs that want to auto-lift
  * nib and 2bit fragments.  Please call only after a
  * sucessful dnaLoadNext. */
 {
-return dl->curOffset;
+return dl->curStart;
 }
 
+int dnaLoadCurEnd(struct dnaLoad *dl)
+/* Returns the end offset of current sequence within a larger
+ * sequence.  Useful for programs that want to auto-lift
+ * nib and 2bit fragments.  Please call only after a
+ * sucessful dnaLoadNext. */
+{
+return dl->curEnd;
+}
 
 int dnaLoadCurSize(struct dnaLoad *dl)
 /* Returns the size of the parent sequence.  Useful for

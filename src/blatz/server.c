@@ -147,9 +147,8 @@ for (;;)
     {
     FILE *f = netFileFromSocket(sd);
     struct chain *chainList = blatzAlign(&lbzp, indexList, seq);
-    blatzWriteChains(&lbzp, chainList, seq, 0, 0, indexList, f);
+    blatzWriteChains(&lbzp, &chainList, seq, 0, seq->size, seq->size, indexList, f);
     bzpTime("sent result - %d chains", slCount(chainList));
-    chainFreeList(&chainList);
     carefulClose(&f);
     }
 
