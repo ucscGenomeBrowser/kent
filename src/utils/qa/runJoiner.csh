@@ -62,11 +62,18 @@ set joinerFile=`echo ${joinerPath}/all.joiner | sed -e "s/\/\//\//"`
 
 # get identifiers
 
+# use chain identifier if table is netDb#
+echo $table | grep "^net" >& /dev/null
+if ( $status == 0 ) then
+  set table=`echo $table | sed -e "s/net/chain/"`
+endif
+
 # check for chain identifiers
 echo $table | grep "chain" >& /dev/null
 
 if ( $status == 0 ) then
   echo ${table}Id > xxIDxx
+  echo "\nchain and net use same identifier"
 else
   # set non-chain identifiers
   tac $joinerPath/all.joiner \
