@@ -2,8 +2,8 @@
 
 <p>
 This column contains protein similarity scores assigned by the
-Rankprop algorithm.  The scores reported in this column range from 0
-to 1, with 1 being the most significant.  Currently, Rankprop does not
+Rankprop algorithm.  The scores reported in this column range from zero
+to one, with one being the most significant.  Currently, Rankprop does not
 report an E-value statistic.</p>
 
 <p>
@@ -15,10 +15,10 @@ identification of remote protein homologs.  Thus, two proteins that do
 not have a significant pairwise PSI-BLAST E-value may still receive a
 good score from Rankprop if they are connected by many short paths in
 the protein similarity network.  The Rankprop algorithm is described
-in Weston J <EM>et al.</EM> (2004), 
-"<A HREF="http://www.pnas.org/cgi/content/full/101/17/6559">Protein 
+in Weston J <EM>et al.</EM>, 
+<A HREF="http://www.pnas.org/cgi/content/full/101/17/6559">Protein 
 ranking: From local to global structure in the protein similarity 
-network</A>" <EM> Proc. Natl. Acad. Sci</EM> 101:6559-6563. </P>
+network</A>, <EM> Proc. Natl. Acad. Sci</EM> <B>101</B>, 6559-6563 (2004).</P>
 
 <h3>Methods</h3>
 
@@ -37,10 +37,13 @@ PSI-BLAST Gene Sorter track.  Next, Rankprop was
 run on the resulting protein similarity network using a slightly
 modified algorithm, which will be described fully in a forthcoming
 manuscript.  The primary differences with respect to the published
-algorithm are as follows. (i) Activation scores are propagated from
+algorithm are as follows:
+<P>
+(i) Activation scores are propagated from
 multiple sources, not just from the query point itself. The
 pseudo-queries are chosen by <EM>pulling in</EM> close homologs using
-PSI-BLAST E-values. (ii) The network weights are adjusted adaptively
+PSI-BLAST E-values. 
+<P>(ii) The network weights are adjusted adaptively
 depending on local density in the similarity network. These two
 modifications result in improved performance while maintaining
 efficiency of the algorithm.
