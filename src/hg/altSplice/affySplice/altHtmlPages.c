@@ -89,6 +89,7 @@ static struct optionSpec optionSpecs[] =
     {"doSjRatios", OPTION_BOOLEAN},
     {"log2Ratio", OPTION_BOOLEAN},
     {"ratioFile", OPTION_STRING},
+    {"junctPsMap", OPTION_STRING},
     {NULL, 0}
 };
 
@@ -111,7 +112,8 @@ static char *optionDescripts[] =
     "File to output spreadsheet format picks to.",
     "[optional] Calculate ratios of sj to other sj in same junction set.",
     "[optional] Transform ratios with log base 2.",
-    "[optional] File to store sjRatios in."
+    "[optional] File to store sjRatios in.",
+    "[optional] Print out the probe sets in a junction set and quit."
 };
 
 double presThresh = 0;     /* Probability above which we consider
@@ -133,6 +135,28 @@ warn("altHtmlPages - Program to create a web based browser\n"
 for(i=0; i<ArraySize(optionSpecs) -1; i++)
     fprintf(stderr, "  -%s -- %s\n", optionSpecs[i].name, optionDescripts[i]);
 errAbort("\nusage:\n   ");
+}
+
+void printJunctSetProbes(struct junctSet *jsList)
+/* Print out a mapping from junctionSets to probe sets. */
+{
+char *fileName = optionVal("junctPsMap",NULL);
+FILE *out = NULL;
+int i = 0;
+struct junctSet *js = NULL;
+
+assert(fileName);
+out = mustOpen(fileName, "w");
+for(js = jsList; js != NULL; js = js->next)
+    {
+    for(i = 0; i < js->maxJunctCount; i++)
+	fprintf(out, "%s\t%s\n", js->name, js->junctPSets[i]);
+    for(i = 0; i < js->junctDupCount; i++)
+	fprintf(out, "%s\t%s\n", js->name, js->dupJunctPSets[i]);
+    for(i = 0; i < js->genePSetCount; i++)
+	fprintf(out, "%s\t%s\n", js->name, js->genePSets[i]);
+    }
+carefulClose(&out);
 }
 
 struct resultM *readResultMatrix(char *fileName)
@@ -996,10 +1020,13 @@ struct junctSet *js = NULL;
 int i = 0, j = 0, expIx = 0;
 int numIx = 0, denomIx = 0;
 FILE *out = NULL;
+FILE *redundant = NULL;
 double **mat = intenM->matrix;
 int colCount = intenM->colCount;
 double (*transform)(double d) = NULL;
 struct hash *nIndex = intenM->nameIndex;
+char buff[4096];
+
 
 if(outFile == NULL)
     errAbort("Must specify a ratioFile to print ratios to.");
@@ -1008,9 +1035,11 @@ if(doLog)
     transform = log2;
 else
     transform = identity;
-
+safef(buff, sizeof(buff), "%s.redundant", outFile);
+redundant = mustOpen(buff, "w");
 out = mustOpen(outFile, "w");
 /* Print the header. */
+fprintf(out, "YORF\tNAME\t");
 for(i = 0; i < colCount-1; i++)
     fprintf(out, "%s\t", intenM->colNames[i]);
 fprintf(out, "%s\n", intenM->colNames[i]);
@@ -1020,7 +1049,12 @@ for(js = jsList; js != NULL; js = js->next)
     char **djPSets = js->dupJunctPSets;
     int jCount = js->maxJunctCount;
     int dCount = js->junctDupCount;
-
+    char *gsName = NULL;
+    if(strstr(js->genePSets[0], "EX") && js->genePSetCount == 2)
+	gsName = js->genePSets[1];
+    else
+	gsName = js->genePSets[0];
+	    
     for(i = 0; i < jCount; i++)
 	{
 	numIx = hashIntValDefault(nIndex, jPSets[i], -1);
@@ -1033,7 +1067,7 @@ for(js = jsList; js != NULL; js = js->next)
 	    denomIx = hashIntValDefault(nIndex, jPSets[j], -1);
 	    if(numIx == -1)
 		errAbort("Can't find %s in hash.", jPSets[j]);
-	    fprintf(out, "%s|%s\t", jPSets[i], jPSets[j]);
+	    fprintf(out, "%s;%s\t%s\t", jPSets[i], jPSets[j], gsName);
 	    for(expIx = 0; expIx < colCount - 1; expIx++)
 		{
 		assert(pow(2,mat[denomIx][expIx]) != 0);
@@ -1042,19 +1076,25 @@ for(js = jsList; js != NULL; js = js->next)
 	    fprintf(out, "%f\n", transform(pow(2,mat[numIx][expIx]) / pow(2,mat[denomIx][expIx])) );
 	    }
 	/* Calc ratios for the dup probe sets. */
+	if(dCount > 1)
+	    fprintf(redundant, "%s", js->name);
 	for(j = 0; j < dCount; j++)
 	    {
 	    denomIx = hashIntValDefault(nIndex, djPSets[j], -1);
 	    if(numIx == -1)
 		errAbort("Can't find %s in hash.", djPSets[j]);
-	    fprintf(out, "%s|%s\t", jPSets[i], djPSets[j]);
+	    fprintf(out, "%s;%s\t%s\t", jPSets[i], djPSets[j], gsName);
+	    if(dCount > 1)
+		fprintf(redundant, "\t%s;%s", jPSets[i], djPSets[j]);
 	    for(expIx = 0; expIx < colCount - 1; expIx++)
 		{
 		assert(pow(2,mat[denomIx][expIx]) != 0);
 		fprintf(out, "%f\t", transform(pow(2,mat[numIx][expIx]) / pow(2,mat[denomIx][expIx])) );
 		}
-		fprintf(out, "%f\n", transform(pow(2,mat[numIx][expIx]) / pow(2,mat[denomIx][expIx])) );
+	    fprintf(out, "%f\n", transform(pow(2,mat[numIx][expIx]) / pow(2,mat[denomIx][expIx])) );
 	    }
+	if(dCount > 1)
+	    fprintf( redundant, "\n");
 	}
     
     /* Get the ratios of the duplicate probes to eachother. */
@@ -1070,7 +1110,7 @@ for(js = jsList; js != NULL; js = js->next)
 	    denomIx = hashIntValDefault(nIndex, djPSets[j], -1);
 	    if(numIx == -1)
 		errAbort("Can't find %s in hash.", djPSets[j]);
-	    fprintf(out, "%s|%s\t", djPSets[i], djPSets[j]);
+	    fprintf(out, "%s;%s\t%s\t", djPSets[i], djPSets[j], gsName);
 	    for(expIx = 0; expIx < colCount - 1; expIx++)
 		{
 		assert(pow(2,mat[denomIx][expIx]) != 0);
@@ -1080,6 +1120,8 @@ for(js = jsList; js != NULL; js = js->next)
 	    }
 	}
     }
+carefulClose(&out);
+carefulClose(&redundant);
 }
 
 
@@ -1146,10 +1188,17 @@ char nameBuff[2048];
 char *htmlPrefix = optionVal("htmlPrefix", "");
 struct hash *bedHash = NULL;
 char *db = "mm2";
+
 assert(junctFile);
-assert(intensityFile);
 jsList = junctSetLoadAll(junctFile);
 warn("Loaded %d records from %s", slCount(jsList), junctFile);
+if(optionExists("junctPsMap"))
+    {
+    printJunctSetProbes(jsList);
+    exit(0);
+    }
+assert(intensityFile);
+
 intenM = readResultMatrix(intensityFile);
 warn("Loaded %d rows and %d columns from %s", intenM->rowCount, intenM->colCount, intensityFile);
 if(optionExists("doSjRatios"))

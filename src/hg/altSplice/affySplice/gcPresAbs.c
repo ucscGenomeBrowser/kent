@@ -46,6 +46,7 @@ struct replicateMap
 };
 
 struct row1lq **gcBins = NULL;     /* Bins of lists of row1lqs for different amounts of GCs. */
+struct row1lq *badBin = NULL;
 struct hash *probeSetHash = NULL;  /* Hash of slRefs for each probe set where slRef->val is a row1lq. */
 struct hash *killHash = NULL;      /* Hash of probes to be ignored. */
 int minGcBin = 0;                  /* Minimum GC bin. */
@@ -139,7 +140,7 @@ return cCount + gCount;
 void initGcBins(int minGc, int maxGc)
 /* Intialize the gcBins structure for maxGc-minGc bins. */
 {
-int numBins = maxGc - minGc;
+int numBins = maxGc - minGc + 1;
 minGcBin = minGc;
 maxGcBin = maxGc;
 AllocArray(gcBins, numBins);
@@ -225,14 +226,15 @@ for(row = rowList; row != NULL; row = rowNext)
     /* Keep track of the row by its index in the file. */
     array1lq[count++] = row;
 
-    /* Ignore the probes with no sequence data. */
-    if(sameString(row->seq, "!")) 
-	continue;
-
     /* Skip things that are on the kill list. */
     tolowers(row->seq);
-    if(killHash != NULL && hashFindVal(killHash, row->seq) != NULL)
+/*     if(sameString(row->psName, "AFFX-18SRNAMur/X00686_3_at")) */
+/* 	{ */
+/* 	warn("AdFFX-18SRNAMur/X00686_3_at encountered. Here we go"); */
+/* 	} */
+    if(sameString(row->seq, "!") || (killHash != NULL && hashFindVal(killHash, row->seq) != NULL))
 	{
+	slAddHead(&badBin, row);
 	numBadProbes++;
 	continue;
 	}
@@ -319,42 +321,56 @@ int i = 0, j = 0;
 refList = val;
 probeCount = slCount(refList);
 
-/* If we don't have enough probes don't make an estimate. 
-   Might want to change this to set to zero instead... */
-if(probeCount < minProbeNum) 
-    return;
-assert(probeCount > 0);
+/* /\* If we don't have enough probes don't make an estimate.  */
+/*    Might want to change this to set to zero instead... *\/ */
+/* if(probeCount < minProbeNum)  */
+/*     return; */
+/* assert(probeCount > 0); */
 
 
 /* Allocate some memory. */
 AllocVar(ps);
 row = refList->val;
+ps->pVal = 0;
 safef(ps->psName, sizeof(ps->psName), "%s", row->psName);
-if(sameString(row->psName, "G6905332@J919098_RC@j_at") && debug)
-    {
-    warn("\nDoing probeSet G6905332@J919098_RC@j_at, %d probes", slCount(refList));
-    }
+/* if(sameString(row->psName, "G6905332@J919098_RC@j_at") && debug) */
+/*     { */
+/*     warn("\nDoing probeSet G6905332@J919098_RC@j_at, %d probes", slCount(refList)); */
+/*     } */
 /* For each probe in probe set look at all the replicates. */
-for(ref = refList; ref != NULL; ref = ref->next)
+if(probeCount < minProbeNum)
     {
-    row = ref->val;
-    if(sameString(row->psName, "G6905332@J919098_RC@j_at") && debug)
-	fprintf(stderr,"%s\t%d\t", row->seq,row->gcCount);
-    for(i = 0; i < row->repCount; i++)
-	{
-	if(sameString(row->psName, "G6905332@J919098_RC@j_at") && debug)
-	    fprintf(stderr, "%.2f,",row->pVal[i]);
-	probRepCount++;
-	probProduct = probProduct + log(row->pVal[i]);
-	}
-    if(sameString(row->psName, "G6905332@J919098_RC@j_at") && debug)
-	fprintf(stderr,"\n");
+    ps->pVal=0;
     }
+else 
+    {
 
+    for(ref = refList; ref != NULL; ref = ref->next)
+	{
+	row = ref->val;
+/*     if(sameString(row->psName, "G6905332@J919098_RC@j_at") && debug) */
+/* 	fprintf(stderr,"%s\t%d\t", row->seq,row->gcCount); */
+/* 	if(sameString(row->psName, "AFFX-18SRNAMur/X00686_3_at")) */
+/* 	    { */
+/* 	    warn("AdFFX-18SRNAMur/X00686_3_at encountered. Here we go"); */
+/* 	    } */
+	for(i = 0; i < row->repCount; i++)
+	    {
+/* 	if(sameString(row->psName, "G6905332@J919098_RC@j_at") && debug) */
+/* 	    fprintf(stderr, "%.2f,",row->pVal[i]); */
+	    probRepCount++;
+	    if(row->pVal[i] != 0)
+		probProduct = probProduct + log(row->pVal[i]);
+	    }
+/* 	if(sameString(row->psName, "G6905332@J919098_RC@j_at") && debug) */
+/* 	    fprintf(stderr,"\n"); */
+	}
+    
 /* Fisher's method for combining probabilities. */
-ps->pVal = gsl_cdf_chisq_P(-2*probProduct,2*probRepCount); 
-if(sameString(row->psName, "G6905332@J919098_RC@j_at") && debug)
-    fprintf(stderr, "Overall pval is: %.2f\n", ps->pVal);
+    ps->pVal = gsl_cdf_chisq_P(-2*probProduct,2*probRepCount); 
+/*     if(sameString(row->psName, "G6905332@J919098_RC@j_at") && debug) */
+/* 	fprintf(stderr, "Overall pval is: %.2f\n", ps->pVal); */
+    }
 if(ps->pVal > 1 || ps->pVal < 0) 
     warn("%s pVal is %.10f, wrong!");
 slAddHead(&probePVals, ps);
@@ -397,7 +413,7 @@ for(i = 0; i < rowCount; i++)
     }
 /* Sort the gc bins by their rank and fill 
    in the pVals as an empiracal rank. */
-for(i = minGcBin; i < maxGcBin; i++)
+for(i = minGcBin; i <= maxGcBin; i++)
     {
     /* Sort for each replicate. */
     for(j = 0; j < repCount; j++)
@@ -408,12 +424,23 @@ for(i = minGcBin; i < maxGcBin; i++)
 	binCount = slCount(gcBins[i-minGcBin]);
 	for(row = gcBins[i-minGcBin]; row != NULL; row = row->next)
 	    {
+/* 	    if(sameString(row->psName, "AFFX-18SRNAMur/X00686_3_at")) */
+/* 		{ */
+/* 		warn("AdFFX-18SRNAMur/X00686_3_at encountered. Here we go"); */
+/* 		} */
 	    row->pVal[j] = ((double)rank)/binCount;
 	    rank++;
 	    }
 	}
     }
-
+/* Do the bad bin. */
+for(row = badBin; row != NULL; row = row->next)
+    {
+    for(j = 0; j < repCount; j++)
+	{
+	row->pVal[j] = 0;
+	}
+    }
 hashTraverseVals(probeSetHash, probeSetCalcPval);
 slSort(&probePVals, psCmp);
 psCount = slCount(probePVals);
