@@ -17,6 +17,7 @@ errAbort(
   "   -notQ=chr1,chr2 - restrict query side sequence to those not named\n"
   "   -t=chr1,chr2 - restrict target side sequence to those named\n"
   "   -notT=chr1,chr2 - restrict target side sequence to those not named\n"
+  "   -id=N - only get one with ID number matching N\n"
   "   -minScore=N - restrict to those scoring at least N\n"
   "   -maxScore=N - restrict to those scoring less than N\n"
   "   -qStartMin=N - restrict to those with qStart at least N\n"
@@ -24,6 +25,7 @@ errAbort(
   "   -tStartMin=N - restrict to those with tStart at least N\n"
   "   -tStartMax=N - restrict to those with tStart less than N\n"
   "   -strand=?    -restrict strand (to + or -)\n"
+  "   -long        -output in long format\n"
   );
 }
 
@@ -68,6 +70,8 @@ int qStartMax = optionInt("qStartMax", BIGNUM);
 int tStartMin = optionInt("tStartMin", -BIGNUM);
 int tStartMax = optionInt("tStartMax", BIGNUM);
 char *strand = optionVal("strand", NULL);
+int id = optionInt("id", -1);
+boolean doLong = optionExists("long");
 int i;
 
 for (i=0; i<inCount; ++i)
@@ -94,8 +98,15 @@ for (i=0; i<inCount; ++i)
 	    writeIt = FALSE;
 	if (strand != NULL && strand[0] != chain->qStrand)
 	    writeIt = FALSE;
+	if (id >= 0 && id != chain->id)
+	    writeIt = FALSE;
 	if (writeIt)
-	    chainWrite(chain, stdout);
+	    {
+	    if (doLong)
+		chainWriteLong(chain, stdout);
+	    else
+		chainWrite(chain, stdout);
+	    }
 	chainFree(&chain);
 	}
     lineFileClose(&lf);
