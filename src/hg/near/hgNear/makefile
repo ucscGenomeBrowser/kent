@@ -14,7 +14,7 @@ my: compile
 
 alpha: compile
 	mv $X /usr/local/apache/cgi-bin/$X
-	cp columnDb.ra /usr/local/apache/cgi-bin
+	rsync -ar --delete hgNearData /usr/local/apache/cgi-bin-$(USER)/
 
 compile: $O $(MYLIBS)
 	gcc -ggdb -o $X $O $(MYLIBS) $L

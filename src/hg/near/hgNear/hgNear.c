@@ -8,6 +8,7 @@
 #include "cheapcgi.h"
 #include "jksql.h"
 #include "htmshell.h"
+#include "subText.h"
 #include "cart.h"
 #include "hdb.h"
 #include "hui.h"
@@ -15,7 +16,7 @@
 #include "ra.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: hgNear.c,v 1.53 2003/09/03 20:10:31 kent Exp $";
+static char const rcsid[] = "$Id: hgNear.c,v 1.54 2003/09/03 23:01:20 kent Exp $";
 
 char *excludeVars[] = { "submit", "Submit", confVarName, colInfoVarName,
 	defaultConfName, hideAllConfName, showAllConfName,
@@ -1404,10 +1405,15 @@ if (col == NULL)
 hPrintf("<H2>Column %s - %s</H2>\n", col->shortLabel, col->longLabel);
 if (fileExists(htmlFileName))
     {
-    char *html;
-    readInGulp(htmlFileName, &html, NULL);
-    hPrintf("%s", html);
-    freeMem(html);
+    char *raw, *cooked;
+    struct subText *subs = NULL;
+    hAddDbSubVars("", database, &subs);
+    readInGulp(htmlFileName, &raw, NULL);
+    cooked = subTextString(subs, raw);
+    hPrintf("%s", cooked);
+    freez(&cooked);
+    freez(&raw);
+    subTextFreeList(&subs);
     }
 else
     {
