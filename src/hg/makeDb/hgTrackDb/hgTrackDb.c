@@ -11,7 +11,7 @@
 #include "portable.h"
 #include "dystring.h"
 
-static char const rcsid[] = "$Id: hgTrackDb.c,v 1.16 2004/02/06 09:41:32 markd Exp $";
+static char const rcsid[] = "$Id: hgTrackDb.c,v 1.17 2004/04/01 02:26:13 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -24,7 +24,7 @@ errAbort(
   "either in your home directory as '.hg.conf' or in the web \n"
   "server's cgi-bin directory as 'hg.conf'.\n"
   "usage:\n"
-  "   hgTrackDb [options] database trackDb_$(USER) trackDb.sql hgRoot\n"
+  "   hgTrackDb [options] org database trackDb_$(USER) trackDb.sql hgRoot\n"
   "\n"
   "Options:\n"
   "  -visibility=vis.ra - A ra file used to override the initial visibility\n"
