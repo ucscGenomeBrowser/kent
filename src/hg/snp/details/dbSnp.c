@@ -10,8 +10,9 @@
 #include "memalloc.h"
 #include "hash.h"
 #include "jksql.h"
+#include "dystring.h"
 
-static char const rcsid[] = "$Id: dbSnp.c,v 1.9 2004/02/14 01:27:40 daryl Exp $";
+static char const rcsid[] = "$Id: dbSnp.c,v 1.10 2004/02/19 01:54:55 daryl Exp $";
 
 #define FLANK  20                 /* Amount of flanking sequence on each side */
 #define ALLELE 210                /* Maximum supported allele length */
@@ -24,7 +25,7 @@ errAbort("dbSnp - Get the top strand allele from the current assembly\n"
 	 "based on a specification file including the rs#s for the SNPs.\n"
 	 "Use getObsHet to parse dbSnp XML files into correct input format.\n"
 	 "Usage:\n  \tdbSnp database fileBase          >& logfile &\n"
-	 "Example:\n\tdbSnp hg16     dbSnpRsHg16Snp119 >& dnSnpLog &\n"
+	 "Example:\n\tdbSnp hg16     dbSnpRsHg16Snp119 >& dbSnpLog &\n"
 	 "\nwhere\tfileBase.obs is read as input, "
 	 "\n\tfileBase.out is output, and "
 	 "\n\tfileBase.err shows failures.\n");
@@ -121,21 +122,23 @@ long int addSnpsFromChrom(char *chromName, struct dnaSeq *seq,
 struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr;
 char **row = NULL;
-char   query[512];
+struct dyString *query = newDyString(256);
+char   rsId[20];
 unsigned long int snpCount = 0;
 
-sprintf(query, "select chromStart, "
+dyStringPrintf(query, "select chromStart, "
 	       "       name "
 	       "from   %s "
 	       "where  chrom = '%s'", 
-	snpTable, chromName);
-sr = sqlGetResult(conn, query);
+	       snpTable, chromName);
+sr = sqlGetResult(conn, query->string);
 while ((row=sqlNextRow(sr)))
     {
     struct dbInfo *db;
 
+    strcpy(rsId, row[1]);
     AllocVar(db);
-    hashAddSaveName(snpHash, row[1], db, &db->name+2);
+    hashAddSaveName(snpHash, rsId+2, db, &db->name+2);
     db->chromPos = atoi(row[0]);
     strncpy(db->baseInAsm, seq->dna+(db->chromPos),1);
     strncpy(db->region,seq->dna+(db->chromPos)-FLANK,REGION);
@@ -144,6 +147,7 @@ while ((row=sqlNextRow(sr)))
     }
 sqlFreeResult(&sr);
 hFreeConn(&conn);
+freeDyString(&query);
 return snpCount;
 }
 
@@ -153,32 +157,39 @@ struct hash *makeSnpInfoHash(char *database)
 struct slName    *chromList = getChromList();
 struct slName    *chrom;
 struct hash      *snpHash = newHash(24); /* Make hash 2^24 (16M) big */
-unsigned long int snpNihCount = 0;
-unsigned long int snpTscCount = 0;
-unsigned long int snpNihCumul = 0;
-unsigned long int snpTscCumul = 0;
+//unsigned long int snpNihCount = 0;
+//unsigned long int snpTscCount = 0;
+//unsigned long int snpNihCumul = 0;
+//unsigned long int snpTscCumul = 0;
+unsigned long int snpMapCount = 0;
+unsigned long int snpMapCumul = 0;
 struct dnaSeq *seq = NULL;
 /* walk through list of chromosomes, get seq, get snps, save in hash */
 for (chrom = chromList; chrom; chrom = chrom->next)
     {
     printf("Chrom %s:\tloading seq ... ",chrom->name);fflush(stdout);
     seq = hLoadChrom(chrom->name);
-    printf("and snpNih ");fflush(stdout);
-    snpNihCount = addSnpsFromChrom(chrom->name, seq, "snpNih", snpHash);
-    snpNihCumul += snpNihCount;
-    printf("(%ld) ... ",snpNihCount);fflush(stdout);
-    if (!strncmp(database, "hg", 2)) 
-	{
-	printf("and snpTsc ");fflush(stdout);
-	snpTscCount = addSnpsFromChrom(chrom->name, seq, "snpTsc", snpHash);
-	snpTscCumul += snpTscCount;
-	printf("(%ld) ",snpTscCount);fflush(stdout);
-	}
-    printf("done.\n");fflush(stdout);
+    printf("and SNPs ... ");fflush(stdout);
+    snpMapCount = addSnpsFromChrom(chrom->name, seq, "snpMap", snpHash);
+    snpMapCumul += snpMapCount;
+    printf("(%ld) ... done.\n",snpMapCount);fflush(stdout);
+//    printf("and snpNih ");fflush(stdout);
+//    snpNihCount = addSnpsFromChrom(chrom->name, seq, "snpNih", snpHash);
+//    snpNihCumul += snpNihCount;
+//    printf("(%ld) ... ",snpNihCount);fflush(stdout);
+//    if (!strncmp(database, "hg", 2)) 
+//	{
+//	printf("and snpTsc ");fflush(stdout);
+//	snpTscCount = addSnpsFromChrom(chrom->name, seq, "snpTsc", snpHash);
+//	snpTscCumul += snpTscCount;
+//	printf("(%ld) ",snpTscCount);fflush(stdout);
+//	}
+//    printf("done.\n");fflush(stdout);
     freeDnaSeq(&seq);
     }
-printf("Total SNPs loaded: %ld from snpNih and %ld from snpTsc for a total of %ld SNPs.\n",
-       snpNihCumul, snpTscCumul, snpNihCumul+snpTscCumul);
+//printf("Total SNPs loaded: %ld from snpNih and %ld from snpTsc for a total of %ld SNPs.\n",
+//       snpNihCumul, snpTscCumul, snpNihCumul+snpTscCumul);
+printf("Total SNPs loaded: %ld from snpMap.\n", snpMapCumul);
 return snpHash;
 }
 
@@ -239,15 +250,17 @@ void getWobbleBase(char *dna, char* wobble)
 /* return the first wobble base not found in the input string */
 {
 char iupac[]="nxbdhryumwskv";
-int  i;
+int  offset = strcspn(dna, iupac);
 
-for (i=0; i<sizeof(iupac); i++)
-    {
-    wobble = strndup(iupac+i,1);
-    if (strstr(dna, wobble))
-	return;
-    }
-wobble = 0;
+strncpy(wobble, dna+offset, 1);
+
+//for (i=0; i<sizeof(iupac); i++)
+//    {
+//    wobble = strndup(iupac+i,1);
+//    if (strstr(dna, wobble))
+//	return;
+//    }
+//wobble = 0;
 }
 
 int getGapLen(char *allele)
@@ -327,16 +340,20 @@ else  /* database sequence does not match file sequence */
 void printErr(struct fileInfo *fi, char *dna, FILE *e, char *database)
 /* print to the error file */
 {
-char   *extraTab = 0;
+char   *extraTab = " ";
 boolean noInDel = TRUE; /* Ignore named indels? (LARGEINSERTION and LARGEDELETION) */
-char   *wobbleBase = 0; /* What wobble base is present, if any */
+char   wobbleBase[2]; /* What wobble base is present, if any */
+int    allele1len = 0;
+int    allele2len = 0;
+int    regionPrintLen = 2*FLANK;
 
 /* find unsuported characters that led to failure to find a match */
 noInDel = checkForInDel(fi);
+ZeroVar(wobbleBase);
 getWobbleBase(fi->obsLow, wobbleBase);
 
 /* ignore the failures that we know about - indels and wobbles */
-if (wobbleBase && noInDel) /* true wobble base */
+if (strlen(wobbleBase)>0 && noInDel) /* true wobble base */
     fprintf(e,"%s has a wobble '%s': %s\n", fi->rsId, wobbleBase, fi->observed);
 else if (!noInDel) /* there is a large indel */
     fprintf(e,"%s has an large indel: %s\n", fi->rsId, fi->observed);
@@ -344,10 +361,16 @@ else /* print mismatch */
     {
     if (strlen(fi->rsId)<8)
 	extraTab = strdup("\t");
+    if( (allele1len=strlen(fi->allele1)) >= (allele2len=strlen(fi->allele2))) 
+	regionPrintLen += allele1len;
+    else
+	regionPrintLen += allele2len;
+    strncpy(dna+regionPrintLen,"\0",1);
+
     fprintf(e, "%s%s\t  obs:%s\t%s\t%s\n", 
 	    fi->rsId, extraTab, fi->observed, fi->allele1, fi->allele2);
     fprintf(e, "\t\t  alt:%s\n", fi->alternate);
-    fprintf(e, "\t\t %-4s:%s\n", database, dna);
+    fprintf(e, "\t\t %4s:%s\n", database, dna);
     fprintf(e, "\t\tobsrc:%s\n", fi->obsrc);
     fprintf(e, "\t\taltrc:%s\n", fi->altrc);
     }
@@ -448,15 +471,15 @@ while (lineFileRow(lf, row)) /* process one snp at a time */
     } /* while - reading lines of the file */
 
 /* print summary statistics */
-printf("Database:             %s\n",  database);
-printf("Input file:           %s\n",  input);
-printf("Output file:          %s\n",  output);
-printf("Error file:           %s\n",  errors);
-printf("\nTotal SNPs:         %ld\n", inputSnpCount);
-printf("SNPs not in database: %ld\n", notFoundInDb);
-printf("Flank Mismatches:     %ld\n", sequenceMismatch);
-printf("Large Alleles (>%dbp) %ld\n", ALLELE, largeAlleles);
-printf("SNPs with details:    %ld\n", inputSnpCount-notFoundInDb-sequenceMismatch-largeAlleles);
+printf("Database:              %s\n",   database);
+printf("Input file:            %s\n",   input);
+printf("Output file:           %s\n",   output);
+printf("Error file:            %s\n\n", errors);
+printf("Total SNPs:            %ld\n",  inputSnpCount);
+printf("SNPs not in database:  %ld\n",  notFoundInDb);
+printf("Flank Mismatches:      %ld\n",  sequenceMismatch);
+printf("Large Alleles (>%3dbp) %ld\n",  ALLELE, largeAlleles);
+printf("SNPs with details:     %ld\n",  inputSnpCount-notFoundInDb-sequenceMismatch-largeAlleles);
 }
 
 int main(int argc, char *argv[])
@@ -472,9 +495,9 @@ if (argc != 3)
     return 1;
     }
 database = argv[1];
-sprintf(input,  "%s.obs",argv[2]);
-sprintf(output, "%s.out",argv[2]);
-sprintf(errors, "%s.err",argv[2]);
+sprintf(input,  "%s.obs", argv[2]);
+sprintf(output, "%s.out", argv[2]);
+sprintf(errors, "%s.err", argv[2]);
 getSnpDetails(database, input, output, errors);
 return 0;
 }
