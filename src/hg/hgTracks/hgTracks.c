@@ -84,7 +84,7 @@
 #include "estOrientInfo.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.761 2004/07/09 22:30:51 braney Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.762 2004/07/14 05:51:33 kent Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
@@ -8948,27 +8948,6 @@ char *excludeVars[] = { "submit", "Submit", "hgt.reset",
 			"hgt.tui", "hgt.hideAll", "hgt.psOutput", "hideControls",
 			NULL };
 
-static void veryEarlyWarningHandler(char *format, va_list args)
-/* Write an error message so user can see it before page is really started. */
-{
-static boolean initted = FALSE;
-if (!initted)
-    {
-    htmlStart("Very Early Error");
-    initted = TRUE;
-    }
-printf("%s", htmlWarnStartPattern());
-htmlVaParagraph(format,args);
-printf("%s", htmlWarnEndPattern());
-}
-
-void veryEarlyAbortHandler()
-/* Exit close web page during early abort. */
-{
-printf("</BODY></HTML>");
-exit(0);
-}
-
 int main(int argc, char *argv[])
 {
 /* 'except' is for resetting the cart without affecting the db and position */
@@ -8976,8 +8955,7 @@ static char *except[] = {"db", "position", NULL};
 /* Push very early error handling - this is just
  * for the benefit of the cgiVarExists, which 
  * somehow can't be moved effectively into doMiddle. */
-pushWarnHandler(veryEarlyWarningHandler);
-pushAbortHandler(veryEarlyAbortHandler);
+htmlPushEarlyHandlers();
 cgiSpoof(&argc, argv);
 if (cgiVarExists("hgt.reset"))
     resetVars();
