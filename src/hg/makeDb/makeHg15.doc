@@ -2632,9 +2632,9 @@ MAKING PROMOTER FILES
     zip upstream5000.zip upstream5000.fa
     rm upstream*.fa
     
-# MAKING MOUSE AND RAT SYNTENY (MOUSE DONE 041403)
+# MAKING MOUSE AND RAT SYNTENY (MOUSE DONE 041403)(RAT DONE 2003-05-19)
 
-cd ~/hg15
+cd ~/hg15/bed
 mkdir syntenyMouse
 # Copy all the needed scripts from ~/hg14
 
@@ -2644,11 +2644,17 @@ mkdir syntenyMouse
 ./fillgap.pl -db=hg15 -table=blastzBestMm3
 ./synteny2bed.pl
 hgLoadBed hg15 syntenyMouse ucsc100k.bed
-DONE TO HERE - MATT
+# syntenicBest.pl will overwrite the genomeBest1phase created by the
+#	the previous run of this above.  It takes several hours to run.
 syntenicBest.pl -db=hg15 -table=blastzBestRn2
+#	smooth.pl overwrites genomeBest2phase created by the previous
+#	run of this above.  Runs quickly.
 smooth.pl
+# joinsmallgaps.pl overwrites genomeBest3phase created above. Runs quickly.
 joinsmallgaps.pl
+# fillgap.pl creates genomeBestFinal
 fillgap.pl -db=hg15 -table=blastzBestRn2
+# synteny2bed.pl creates ucsc100k.bed
 synteny2bed.pl
 hgLoadBed hg15 syntenyRat ucsc100k.bed
 
