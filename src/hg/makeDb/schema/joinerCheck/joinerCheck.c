@@ -7,7 +7,7 @@
 #include "obscure.h"
 #include "jksql.h"
 
-static char const rcsid[] = "$Id: joinerCheck.c,v 1.6 2004/03/11 23:35:54 kent Exp $";
+static char const rcsid[] = "$Id: joinerCheck.c,v 1.7 2004/03/11 23:40:13 kent Exp $";
 
 boolean parseOnly; 
 
@@ -49,6 +49,7 @@ struct joinerSet
     struct joinerField *fieldList;	/* List of fields. */
     char *fileName;		/* File parsed out of for error reporting */
     int lineIx;			/* Line index of start for error reporting */
+    boolean expanded;		/* True if an expanded set. */
     };
 
 static boolean nextSubTok(struct lineFile *lf,
@@ -441,6 +442,7 @@ for (js=jsList; js != NULL; js = nextJs)
 
 		slAddHead(&newJs->fieldList, newJf);
 		}
+	    newJs->expanded = TRUE;
 	    slReverse(&newJs->fieldList);
 	    slAddHead(&newList, newJs);
 
@@ -640,14 +642,17 @@ struct hash *dbChromHash = getDbChromHash();
 
 for (js=jsList; js != NULL; js = js->next)
     {
-    for (jf = js->fieldList; jf != NULL; jf = jf->next)
-        {
-	if (!fieldExists(fieldHash, dbChromHash, js, jf))
-	     {
-	     printField(jf, stderr);
-	     fprintf(stderr, " not found in %s after line %d of %s\n",
-	     	js->name, js->lineIx, js->fileName);
-	     }
+    if (!js->expanded)
+	{
+	for (jf = js->fieldList; jf != NULL; jf = jf->next)
+	    {
+	    if (!fieldExists(fieldHash, dbChromHash, js, jf))
+		 {
+		 printField(jf, stderr);
+		 fprintf(stderr, " not found in %s after line %d of %s\n",
+		    js->name, js->lineIx, js->fileName);
+		 }
+	    }
 	}
     }
 }
