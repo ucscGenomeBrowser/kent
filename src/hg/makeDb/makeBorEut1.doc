@@ -627,7 +627,7 @@ axtChain $1 \
     end
 
     mv all.chain all.chain.unfiltered
-    chainFilter -minScore=20000 all.chain.unfiltered > all.chain
+    chainFilter -minScore=50000 all.chain.unfiltered > all.chain
     rm chain/*
     chainSplit chain all.chain
     gzip all.chain.unfiltered
@@ -641,3 +641,91 @@ axtChain $1 \
     end
     featureBits borEut1 chainHg17Link
     # 54236215 bases of 70435997 (77.001%) in intersection
+
+# BLASTZ SWAP FOR canFam1 vs borEut1 BLASTZ TO CREATE borEut1 vs canFam1 BLASTZ
+    ssh kolossus
+    mkdir -p /cluster/data/borEut1/bed/blastz.canFam1
+    cd /cluster/data/borEut1/bed/blastz.canFam1
+    set aliDir = /cluster/data/canFam1/bed/blastz.borEut1
+    cp $aliDir/S1.len S2.len
+    cp $aliDir/S2.len S1.len
+    mkdir unsorted axtChrom
+    cat $aliDir/axtChrom/chr*.axt \
+    | axtSwap stdin $aliDir/S1.len $aliDir/S2.len stdout \
+    | axtSplitByTarget stdin unsorted
+    # Sort the shuffled .axt files.
+    foreach f (unsorted/*.axt)
+      echo sorting $f:t:r
+      axtSort $f axtChrom/$f:t
+    end
+    du -sh $aliDir/axtChrom unsorted axtChrom
+    # 409M    /cluster/data/canFam1/bed/blastz.borEut1/axtChrom
+    # 409M    unsorted
+    # 409M    axtChrom
+
+    rm -rf unsorted
+
+# CHAIN DOG BLASTZ 
+    # Run axtChain on little cluster
+    ssh kki
+    cd /cluster/data/borEut1/bed/blastz.canFam1
+    mkdir -p axtChain/run1
+    cd axtChain/run1
+    mkdir out chain
+    ls -1S /cluster/data/borEut1/bed/blastz.canFam1/axtChrom/*.axt  > input.lst
+    cat << '_EOF_' > gsub
+#LOOP
+doChain {check in line+ $(path1)} {check out line+ chain/$(root1).chain} {check out exists out/$(root1).out}
+#ENDLOOP
+'_EOF_'
+    # << this line makes emacs coloring happy
+
+    cat << '_EOF_' > doChain
+#!/bin/csh
+axtChain $1 \
+  /iscratch/i/borEut1/nib \
+  /iscratch/i/canFam1/nib $2 > $3
+'_EOF_'
+    # << this line makes emacs coloring happy
+    chmod a+x doChain
+    gensub2 input.lst single gsub jobList
+    para create jobList
+    para try, check, push, check...
+# Completed: 1 of 1 jobs
+# CPU time in finished jobs:        197s       3.28m     0.05h    0.00d  0.000 y
+# IO & Wait Time:                    88s       1.47m     0.02h    0.00d  0.000 y
+# Average job time:                 285s       4.75m     0.08h    0.00d
+# Longest job:                      285s       4.75m     0.08h    0.00d
+# Submission to last job:           285s       4.75m     0.08h    0.00d
+
+    # now on the cluster server, sort chains
+    ssh kksilo
+    cd /cluster/data/borEut1/bed/blastz.canFam1/axtChain
+    chainMergeSort run1/chain/*.chain > all.chain
+    chainSplit chain all.chain
+    rm run1/chain/*.chain
+
+    # take a look at score distr's
+    foreach f (chain/*.chain)
+      grep chain $f | awk '{print $2;}' | sort -nr > /tmp/score.$f:t:r
+      echo $f:t:r
+      textHistogram -binSize=4000 /tmp/score.$f:t:r
+      echo ""
+    end
+
+    mv all.chain all.chain.unfiltered
+    chainFilter -minScore=50000 all.chain.unfiltered > all.chain
+    rm chain/*
+    chainSplit chain all.chain
+    gzip all.chain.unfiltered &
+
+    # Load chains into database
+    ssh hgwdev
+    cd /cluster/data/borEut1/bed/blastz.canFam1/axtChain/chain
+    foreach i (*.chain)
+        set c = $i:r
+        hgLoadChain borEut1 ${c}_chainCanFam1 $i
+    end
+    featureBits borEut1 chainHg17Link
+    # 54236215 bases of 70435997 (77.001%) in intersection
+
