@@ -1,5 +1,6 @@
 #include "common.h"
 #include "portable.h"
+#include "linefile.h"
 #include "hash.h"
 
 struct clonePos
@@ -52,6 +53,20 @@ for (i=0; i<ArraySize(bigChromNames); ++i)
 errAbort("%s isn't a chromosome", bigName);
 }
 
+char *findSmallName(char *smallName)
+/* Return small name in array (so don't have to alloc it
+ * over and over) */
+{
+int i;
+for (i=0; i<ArraySize(smallChromNames); ++i)
+    {
+    if (sameString(smallChromNames[i], smallName))
+        return smallChromNames[i];
+    }
+errAbort("%s isn't a chromosome", smallName);
+}
+
+
 char *unquote(char *s)
 /* Remove opening and closing quotes from string s. */
 {
@@ -64,12 +79,39 @@ s[len-1] = 0;
 return s+1;
 }
 
+struct hash *readOldC2c(char *fileName)
+/* Read old c2c file. */
+{
+struct clonePos *pos;
+struct hash *hash = newHash(0);
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+char *row[3];
+char *parts[4];
+int partCount;
+int count = 0;
+
+while (lineFileRow(lf, row))
+     {
+     if ((partCount = chopString(row[0], ":-", parts, ArraySize(parts))) != 3)
+         errAbort("Bad line %d of %s", lf->lineIx, lf->fileName);
+     AllocVar(pos);
+     hashAddSaveName(hash, row[2], pos, &pos->cloneName);
+     pos->chromName = findSmallName(parts[0]);
+     pos->start = atoi(parts[1]);
+     pos->end = atoi(parts[2]);
+     ++count;
+     }
+printf("Read %d old clones in %s\n", count, fileName);
+return hash;
+}
+
 
 int main(int argc, char *argv[])
 {
 char *outName;
 char *gffDir;
 char *inName;
+char *oldC2c;
 int i;
 FILE *in, *c2c;
 char line[4*1024];
@@ -79,18 +121,22 @@ char *words[4*256];
 int wordCount;
 struct hash *cloneHash = newHash(0);
 struct clonePos *cloneList = NULL, *clone;
-char *gffSource;
-bool gotLeft, gotRight;
+char *gffType;
+bool gotBoth, gotLeft, gotRight;
+int cloneCount;
+struct hash *oldCloneHash = NULL;
 
-if (argc != 3)
+if (argc != 4)
     {
     errAbort("makec2c - creates a cosmid chromosome offset index file from Sanger .gffs\n"
            "usage:\n"
-           "      makec2c gffDir c2c\n"
-           "This will create the file c2c with the index.\n");
+           "      makec2c gffDir c2c oldC2c\n"
+           "This will create the file c2c with the index. You can use\n"
+	   "/dev/null for the oldC2c.  It's just used to fill in missing clone sizes\n");
     }
 gffDir = argv[1];
 outName = argv[2];
+oldCloneHash = readOldC2c(argv[3]);
 c2c = mustOpen(outName, "w");
 if (!setCurrentDir(gffDir))
     errAbort("Couldn't cd to %s", gffDir);
@@ -99,22 +145,29 @@ for (i=0; i<ArraySize(inNames); ++i)
     inName = inNames[i];
     printf("Processing %s\n", inName);
     in = mustOpen(inName, "r");
+    lineCount = 0;
     while (fgets(line, sizeof(line), in))
         {
         ++lineCount;
         if (strncmp(line, "CHROMOSOME", 10) == 0)
             {
             strcpy(origLine, line);
-            wordCount = chopLine(line, words);
-            if (wordCount < 8)
+            wordCount = chopTabs(line, words);
+            if (wordCount < 9)
 		continue;
-	    gffSource = words[1];
-	    gotLeft = sameString("Clone_left_end", gffSource);
-	    gotRight = sameString("Clone_right_end", gffSource);
-	    if (gotLeft || gotRight)
+	    gffType = words[2];
+	    gotLeft = sameString("Clone_left_end", gffType);
+	    gotRight = sameString("Clone_right_end", gffType);
+	    gotBoth = (sameString("Genomic_canonical", words[1]) && sameString("Sequence", gffType));
+	    if (gotLeft || gotRight || gotBoth)
 	        {
-		char *cloneName = words[7];
-		char *header = "Clone ";
+		char *cloneName = trimSpaces(words[8]);
+		char *header;
+		
+		if (gotBoth)
+		    header = "Sequence ";
+		else
+		    header = "Clone ";
 		if (!startsWith(header,  cloneName))
 		    errAbort("Clone end without %s line %d of %s", header, lineCount, inName);
                 cloneName = unquote(cloneName + strlen(header));
@@ -127,12 +180,19 @@ for (i=0; i<ArraySize(inNames); ++i)
 		    }
 		if (gotLeft)
 		    {
-		    clone->start = atoi(words[2]) - 1;
+		    clone->start = atoi(words[3]) - 1;
 		    clone->gotStart = TRUE;
 		    }
 		else if (gotRight)
 		    {
-		    clone->end = atoi(words[2]) - 1;
+		    clone->end = atoi(words[4]);
+		    clone->gotEnd = TRUE;
+		    }
+		else if (gotBoth)
+		    {
+		    clone->start = atoi(words[3]) - 1;
+		    clone->gotStart = TRUE;
+		    clone->end = atoi(words[4]);
 		    clone->gotEnd = TRUE;
 		    }
 		}
@@ -140,8 +200,32 @@ for (i=0; i<ArraySize(inNames); ++i)
         }
     fclose(in);
     slReverse(&cloneList);
+    cloneCount = slCount(cloneList);
+    if (cloneCount == 0)
+        errAbort("No clones in %s", inName);
+    printf("Got %d clones in %s\n", cloneCount, inName);
     for (clone = cloneList; clone != NULL; clone = clone->next)
         {
+	if (!clone->gotStart)
+	    {
+	    struct clonePos *old = hashFindVal(oldCloneHash, clone->cloneName);
+	    if (old != NULL)
+		{
+	        clone->gotStart = clone->gotEnd - (old->gotEnd - old->gotStart);
+		warn("Filling in %s start from old size", clone->cloneName);
+		clone->gotStart = TRUE;
+		}
+	    }
+	if (!clone->gotEnd)
+	    {
+	    struct clonePos *old = hashFindVal(oldCloneHash, clone->cloneName);
+	    if (old != NULL)
+		{
+	        clone->gotEnd = clone->gotStart + (old->gotEnd - old->gotStart);
+		warn("Filling in %s end from old size", clone->cloneName);
+		clone->gotEnd = TRUE;
+		}
+	    }
 	if (clone->gotStart && clone->gotEnd)
 	    {
 	    fprintf(c2c, "%s:%d-%d + %s\n", clone->chromName, clone->start, clone->end, clone->cloneName);

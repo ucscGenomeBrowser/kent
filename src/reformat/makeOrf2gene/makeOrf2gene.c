@@ -9,7 +9,8 @@ void usage()
 errAbort(
   "makeOrf2gene - Convert from Lincoln Stein's orf2gene dump to our simple format\n"
   "usage:\n"
-  "   makeOrf2gene in out\n");
+  "   makeOrf2gene in orf2gene syn\n"
+  "where orf2gene and syn are outputs in two formats\n");
 }
 
 struct orf2gene
@@ -21,23 +22,31 @@ struct orf2gene
     };
 
 int orf2geneCmpOrf(const void *va, const void *vb)
-/* Compare two orf2genes. */
+/* Compare two orf2genes by orf. */
 {
 const struct orf2gene *a = *((struct orf2gene **)va);
 const struct orf2gene *b = *((struct orf2gene **)vb);
 return strcmp(a->orf, b->orf);
 }
 
-void makeOrf2gene(char *inName, char *outName)
+int orf2geneCmpGene(const void *va, const void *vb)
+/* Compare two orf2genes by gene. */
+{
+const struct orf2gene *a = *((struct orf2gene **)va);
+const struct orf2gene *b = *((struct orf2gene **)vb);
+return strcmp(a->gene, b->gene);
+}
+
+void makeOrf2gene(char *inName, char *outName, char *synName)
 /* makeOrf2gene - Convert from Lincoln Stein's orf2gene dump to our simple format. */
 {
 struct lineFile *lf = lineFileOpen(inName, TRUE);
-FILE *f = mustOpen(outName, "w");
+FILE *f; 
 char *words[8], *s;
 int wordCount;
 char geneName[128], orfName[256];
 boolean gotLocus = FALSE;
-struct orf2gene *list = NULL, *el;
+struct orf2gene *list = NULL, *el, *lastEl = NULL;
 
 while ((wordCount = lineFileChop(lf, words)) != 0)
     {
@@ -77,17 +86,36 @@ while ((wordCount = lineFileChop(lf, words)) != 0)
 lineFileClose(&lf);
 printf("Read %d orf/gene pairs\n", slCount(list));
 
+/* Write orf2gene file. */
 slSort(&list, orf2geneCmpOrf);
+f  = mustOpen(outName, "w");
 for (el = list; el != NULL; el = el->next)
     fprintf(f, "%s %s\n", el->orf, el->gene);
-fclose(f);
+carefulClose(&f);
+
+/* Write syn file. */
+slSort(&list, orf2geneCmpGene);
+f = mustOpen(synName, "w");
+for (el = list; el != NULL; el = el->next)
+    {
+    if (lastEl == NULL || differentString(el->gene, lastEl->gene))
+        {
+	if (lastEl != NULL)
+	   fprintf(f, "\n");
+	fprintf(f, "%s", el->gene);
+	}
+    fprintf(f, " %s", el->orf);
+    lastEl = el;
+    }
+fprintf(f, "\n");
+carefulClose(&f);
 }
 
 int main(int argc, char *argv[])
 /* Process command line. */
 {
-if (argc != 3)
+if (argc != 4)
     usage();
-makeOrf2gene(argv[1], argv[2]);
+makeOrf2gene(argv[1], argv[2], argv[3]);
 return 0;
 }
