@@ -63,6 +63,15 @@ void htmlBadVar(char *varName);
 /* Display centered image file. */
 void htmlImage(char *fileName, int width, int height); 
 
+jmp_buf htmlRecover;  /* Error recovery jump. Exposed for cart's use. */
+
+void htmlVaWarn(char *format, va_list args);
+/* Write an error message.  (Generally you just call warn() or errAbort().
+ * This is exposed mostly for the benefit of the cart.) */
+
+void htmlAbort();
+/* Terminate HTML file.  Exposed for cart's use. */
+
 /* Wrap error recovery around call to doMiddle. */
 void htmErrOnlyShell(void (*doMiddle)());
 

@@ -132,7 +132,10 @@ void *needMoreMem(void *old, size_t copySize, size_t newSize)
 /* Allocate a new buffer, copy old buffer to it, free old buffer. */
 {
 void *newBuf = needLargeMem(newSize);
+if (copySize > newSize)
+    internalErr();
 memcpy(newBuf, old, copySize);
+memset(newBuf+copySize, 0, newSize - copySize);
 freeMem(old);
 return newBuf;
 }

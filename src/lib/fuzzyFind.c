@@ -1563,7 +1563,9 @@ while ((proto = lumpHits(&hitList, ns, hs)) != NULL)
     ++protoCount;
     }
 if (protoCount > 200)
+    {
     thinProtoList(&protoList, 200);
+    }
 protoList = (struct protoGene *)ffMakeRightLinks((struct ffAli*)protoList);
 
 
@@ -1750,7 +1752,7 @@ static struct ffAli *findWovenTiles(DNA *ns, DNA *ne, DNA *hs, DNA *he, enum ffS
 struct ffAli *bestAli;
 int haySize = he - hs;
 int needleSize = ne - ns;
-static double tileStrinProbMult[] = { 0.0001, 0.001, 0.001, 0.5, };
+static double tileStrinProbMult[] = { 0.0001, 0.0005, 0.0005, 0.5, };
                                     /* exact  cDNA        tight    loose */
 if (needleSize < 2 || haySize < 2)  /* Be serious man! */
     return NULL;

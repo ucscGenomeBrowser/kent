@@ -209,11 +209,11 @@ struct cgiVar *list = NULL, *el;
 if(haveCookiesHash == TRUE)
 	return;
 
-hash = newHash(6);
-
 str = getenv("HTTP_COOKIE");
 if(str == NULL) /* don't have a cookie */
 	return;
+
+hash = newHash(6);
 
 namePt = str;
 while (namePt != NULL)
@@ -233,9 +233,7 @@ while (namePt != NULL)
     el->val = dataPt;
     slAddHead(&list, el);
     hashAddSaveName(hash, namePt, el, &el->name);
-
     namePt = nextNamePt;
-
     }
 
 haveCookiesHash = TRUE;
@@ -252,7 +250,8 @@ struct cgiVar *var;
 
 /* make sure that the cookie hash table has been created */
 parseCookies(&cookieHash, &cookieList);
-
+if (cookieHash == NULL)
+    return NULL;
 if ((var = hashFindVal(cookieHash, varName)) == NULL)
     return NULL;
 return var->val;
@@ -319,9 +318,7 @@ while (namePt != NULL && namePt[0] != 0)
     el->val = dataPt;
     slAddHead(&list, el);
     hashAddSaveName(hash, namePt, el, &el->name);
-
     namePt = nextNamePt;
-
     }
 slReverse(&list);
 *retList = list;
