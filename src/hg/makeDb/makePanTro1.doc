@@ -877,28 +877,18 @@ zip -j zip/scaffolds.lft.zip jkStuff/scaffolds.lft
     # Convert these to chromosome level files as so:     
     ssh kksilo
     cd /cluster/data/panTro1/bed/genscan
-    liftUp genscan.gtf ../../jkStuff/liftAll.lft warn gtf/N{T,G}*.gtf
-    liftUp genscanSubopt.bed ../../jkStuff/liftAll.lft warn subopt/N{T,G}*.bed
+    liftUp genscan.gtf ../../jkStuff/liftAll.lft warn gtf/*.gtf
+    liftUp genscanSubopt.bed ../../jkStuff/liftAll.lft warn subopt/*.bed
     cat pep/*.pep > genscan.pep
 
     # Load into the database as so:
     ssh hgwdev
     cd /cluster/data/panTro1/bed/genscan
     ldHgGene panTro1 genscan genscan.gtf
-#	Reading genscan.gtf
-#	Read 42974 transcripts in 326300 lines in 1 files
-#	  42974 groups 41 seqs 1 sources 1 feature types
-#	42974 gene predictions
+        # Read 41471 transcripts in 303679 lines in 1 files
     hgPepPred panTro1 generic genscanPep genscan.pep
-#	Processing genscan.pep
     hgLoadBed panTro1 genscanSubopt genscanSubopt.bed
-#	stringTab = 0
-#	Reading genscanSubopt.bed
-#	Loaded 518038 elements
-#	Sorted
-#	Creating table definition for 
-#	Saving bed.tab
-#	Loading panTro1
+        # Loaded 535541 elements of size 6
 
 
 # CPGISLANDS (DONE - 2004-01-26 - kate)
@@ -1676,6 +1666,7 @@ cat > gsub << 'EOF'
 
                 
 # FUGU BLAT ALIGNMENTS (2004-04-27 kate)
+#       reloaded table w/ new index 2004-05-13 kate)
     ssh kk
     mkdir /cluster/data/panTro1/bed/blatFr1
     cd /cluster/data/panTro1/bed/blatFr1
@@ -1708,7 +1699,7 @@ blat -mask=lower -q=dnax -t=dnax {check in exists $(path1)} {check in line+ $(pa
     # load into database:
     ssh hgwdev
     cd /cluster/data/panTro1/bed/blatFr1
-    hgLoadPsl -fastLoad -table=blatFr1 panTro1 all.psl
+    hgLoadPsl -fastLoad -tNameIx -table=blatFr1 panTro1 all.psl
         # load problem with 2 rows -- qBaseInsert values were negative,
         # and were set to 0 when loaded.  Blat problem ?
     # add to trackDb as type xeno psl fr1, with colorChromDefault off
