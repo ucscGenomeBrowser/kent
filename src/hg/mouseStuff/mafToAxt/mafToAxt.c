@@ -87,6 +87,7 @@ while ((ali = mafNext(mp)) != NULL)
     }
     axtWrite(axt,f);
     axtFree(&axt);
+    mafAliFree(&ali);
    }
 
 fclose(f);
