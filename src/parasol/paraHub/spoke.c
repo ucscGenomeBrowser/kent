@@ -125,7 +125,7 @@ for (;;)
 	continue;
 	}
     line = buf = netGetLongString(conn);
-    uglyf("%s: %s\n", socketName, line);
+    logIt("%s: %s\n", socketName, line);
     machine = nextWord(&line);
     if (machine != NULL)
 	{

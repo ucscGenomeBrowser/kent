@@ -49,6 +49,15 @@ struct spoke
     int pingCount;		/* Number of times we've pinged spoke. */
     };
 
+struct resultQueue
+/* A place to write job results to. */
+    {
+    struct resultQueue *next;
+    char *name;		/* Name of queue (and file) */
+    FILE *f;		/* File handle */
+    time_t lastUsed;	/* Last time this was used. */
+    };
+
 struct spoke *spokeNew(int *closeList);
 /* Get a new spoke.  Close list is an optional, -1 terminated array of file
  * handles to close. This will fork and create a process for spoke and a 

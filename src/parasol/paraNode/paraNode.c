@@ -1,6 +1,7 @@
 /* paraNode - parasol node server. */
 #include <signal.h>
 #include <sys/wait.h>
+#include <sys/times.h>
 #include "common.h"
 #include "errabort.h"
 #include "dystring.h"
@@ -76,7 +77,7 @@ char *envPair(char *name, char *val)
 {
 int size = strlen(name) + strlen(val) + 2;  /* Include '=' and zero tag */
 char *pair = needMem(size);
-sprintf(pair, "%s=%s", name, val);
+snprintf(pair, size, "%s=%s", name, val);
 return pair;
 }
 
@@ -138,7 +139,12 @@ else
     if (sd > 0)
         {
 	char buf[256];
-	snprintf(buf, sizeof(buf), "jobDone %s %s %d", managingHost, jobIdString, status);
+	struct tms tms;
+
+	times(&tms);
+	snprintf(buf, sizeof(buf), 
+		"jobDone %s %s %d %lu %lu", managingHost, jobIdString, 
+		status, tms.tms_cutime, tms.tms_cstime);
 	write(sd, paraSig, strlen(paraSig));
 	netSendLongString(sd, buf);
 	close(sd);
@@ -163,10 +169,9 @@ void jobDone(char *line)
 {
 char *managingHost = nextWord(&line);
 char *jobIdString = nextWord(&line);
-char *status = nextWord(&line);
 
 clearZombies();
-if (status != NULL)
+if (line != NULL)
     {
     int sd;
 
@@ -184,7 +189,7 @@ if (status != NULL)
     if (sd > 0)
 	{
 	char buf[256];
-	sprintf(buf, "jobDone %s %s", jobIdString, status);
+	snprintf(buf, sizeof(buf), "jobDone %s %s", jobIdString, line);
 	write(sd, paraSig, strlen(paraSig));
 	netSendLongString(sd, buf);
 	}
@@ -205,7 +210,7 @@ if (jobIdString != NULL)
 	{
 	char *status = (job != NULL  ? "busy" : "free");
 	char buf[256];
-	sprintf(buf, "checkIn %s %s %s", hostName, jobIdString, status);
+	snprintf(buf, sizeof(buf), "checkIn %s %s %s", hostName, jobIdString, status);
 	write(sd, paraSig, strlen(paraSig));
 	netSendLongString(sd, buf);
 	close(sd);
@@ -221,7 +226,7 @@ if (managingHost != NULL)
     {
     int sd = netConnect(managingHost, paraPort);
     char buf[256];
-    sprintf(buf, "alive %s", hostName);
+    snprintf(buf, sizeof(buf), "alive %s", hostName);
     write(sd, paraSig, strlen(paraSig));
     netSendLongString(sd, buf);
     close(sd);

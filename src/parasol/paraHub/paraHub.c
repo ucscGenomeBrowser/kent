@@ -49,6 +49,10 @@ struct dlList *pendingJobs;     /* Jobs still to do. */
 struct dlList *runningJobs;     /* Jobs that are running. */
 int nextJobId = 0;		/* Next free job id. */
 
+struct resultQueue *resultQueues; /* Result files. */
+int finishedJobCount = 0;		/* Number of finished jobs. */
+int crashedJobCount = 0;		/* Number of crashed jobs. */
+
 char *hubHost;	/* Name of machine running this. */
 
 void removeJobId(int id);
@@ -296,7 +300,7 @@ exe[size] = 0;
 return exe;
 }
 
-struct job *jobNew(char *cmd, char *user, char *dir, char *in, char *out, char *err)
+struct job *jobNew(char *cmd, char *user, char *dir, char *in, char *out, char *results)
 /* Create a new job structure */
 {
 struct job *job;
@@ -310,7 +314,7 @@ job->user = cloneString(user);
 job->dir = cloneString(dir);
 job->in = cloneString(in);
 job->out = cloneString(out);
-job->err = cloneString(err);
+job->results = cloneString(results);
 return job;
 }
 
@@ -347,7 +351,7 @@ return TRUE;
 }
 
 void checkPeriodically(struct dlList *machList, int period, char *checkMessage,
-	int spokesToUse)
+	int spokesToUse, time_t now)
 /* Periodically send checkup messages to machines on list. */
 {
 struct dlNode *mNode;
@@ -364,16 +368,16 @@ for (i=0; i<spokesToUse; ++i)
     if (dlEmpty(freeSpokes) || dlEmpty(machList))
         break;
     machine = machList->head->val;
-    if (time(NULL) - machine->lastChecked < period)
+    if (now - machine->lastChecked < period)
         break;
-    machine->lastChecked = time(NULL);
+    machine->lastChecked = now;
     mNode = dlPopHead(machList);
     dlAddTail(machList, mNode);
     sendViaSpoke(machine, message);
     }
 }
 
-void hangman(int spokesToUse)
+void hangman(int spokesToUse, time_t now)
 /* Check that busy nodes aren't dead.  Also send message for 
  * busy nodes to check in, in case we missed one of their earlier
  * jobDone messages. */
@@ -388,9 +392,9 @@ for (i=0; i<spokesToUse; ++i)
     if (dlEmpty(freeSpokes) || dlEmpty(busyMachines))
         break;
     machine = busyMachines->head->val;
-    if (time(NULL) - machine->lastChecked < period)
+    if (now - machine->lastChecked < period)
         break;
-    machine->lastChecked = time(NULL);
+    machine->lastChecked = now;
     mNode = dlPopHead(busyMachines);
     dlAddTail(busyMachines, mNode);
     job = machine->job;
@@ -403,20 +407,20 @@ for (i=0; i<spokesToUse; ++i)
     }
 }
 
-void graveDigger(int spokesToUse)
+void graveDigger(int spokesToUse, time_t now)
 /* Check out dead nodes.  Try and resurrect them periodically. */
 {
-checkPeriodically(deadMachines, 60 * machineCheckPeriod, "resurrect", spokesToUse);
+checkPeriodically(deadMachines, 60 * machineCheckPeriod, "resurrect", 
+	spokesToUse, now);
 }
 
-void straightenSpokes()
+void straightenSpokes(time_t now)
 /* Move spokes that have been busy too long back to
  * free spoke list under the assumption that we
  * missed a recycleSpoke message. */
 {
 struct dlNode *node, *next;
 struct spoke *spoke;
-time_t now = time(NULL);
 
 for (node = busySpokes->head; !dlEnd(node); node = next)
     {
@@ -439,23 +443,92 @@ for (node = busySpokes->head; !dlEnd(node); node = next)
     }
 }
 
+void writeJobResults(struct job *job, time_t now, char *status,
+	char *uTime, char *sTime)
+/* Write out job results to output queue.  This
+ * will create the output queue if it doesn't yet
+ * exist. */
+{
+struct resultQueue *rq;
+for (rq = resultQueues; rq != NULL; rq = rq->next)
+    if (sameString(job->results, rq->name))
+        break;
+if (rq == NULL)
+    {
+    AllocVar(rq);
+    slAddHead(&resultQueues, rq);
+    rq->name = cloneString(job->results);
+    rq->f = fopen(rq->name, "a");
+    rq->lastUsed = now;
+    }
+if (rq->f != NULL)
+    {
+    fprintf(rq->f, "%s %s %d %s %s %s %lu %lu %lu %s %s '%s'\n",
+        status, job->machine->name, job->id, job->exe, 
+	uTime, sTime, 
+	job->submitTime, job->startTime, now,
+	job->user, job->err, job->cmd);
+    fflush(rq->f);
+    if (sameString(status, 0))
+        ++finishedJobCount;
+    else
+        ++crashedJobCount;
+    rq->lastUsed = now;
+    }
+}
+
+void resultQueueFree(struct resultQueue **pRq)
+/* Free up a results queue, closing file if open. */
+{
+struct resultQueue *rq = *pRq;
+if (rq != NULL)
+    {
+    carefulClose(&rq->f);
+    freeMem(rq->name);
+    freez(pRq);
+    }
+}
+
+void sweepResults(time_t now)
+/* Get rid of result queues that haven't been accessed for
+ * a while. */
+{
+struct resultQueue *newList = NULL, *rq, *next;
+for (rq = resultQueues; rq != NULL; rq = next)
+    {
+    next = rq->next;
+    if (now - rq->lastUsed > 5*60)
+	{
+	logIt("hub: closing results file %s\n", rq->name);
+        resultQueueFree(&rq);
+	}
+    else
+        {
+	slAddHead(&newList, rq);
+	}
+    }
+slReverse(&newList);
+resultQueues = newList;
+}
+
 void processHeartbeat()
 /* Check that system is ok.  See if we can do anything useful. */
 {
 int spokesToUse;
+time_t now = time(NULL);
 runner(50);
-straightenSpokes();
+straightenSpokes(now);
 spokesToUse = dlCount(freeSpokes);
 if (spokesToUse > 0)
     {
     spokesToUse >>= 1;
     spokesToUse -= 1;
     if (spokesToUse < 1) spokesToUse = 1;
-    graveDigger(spokesToUse);
-    hangman(spokesToUse);
+    graveDigger(spokesToUse, now);
+    hangman(spokesToUse, now);
+    sweepResults(now);
     }
 }
-
 
 void nodeAlive(char *name)
 /* Deal with message from node that says it's alive.
@@ -589,7 +662,6 @@ netSendLongString(connectionHandle, "ok");
 processHeartbeat();
 }
 
-
 void sendKillJobMessage(struct machine *machine, struct job *job)
 /* Send message to compute node to kill job there. */
 {
@@ -645,15 +717,19 @@ void jobDone(char *line)
 /* Handle job is done message. */
 {
 struct job *job;
-char *id, *status;
+char *id, *status, *uTime, *sTime, *tTime;
 id = nextWord(&line);
 status = nextWord(&line);
-if (status != NULL)
+uTime = nextWord(&line);
+sTime = nextWord(&line);
+if (sTime != NULL)
     {
     job = jobFind(runningJobs, atoi(id));
     if (job != NULL)
 	{
-	job->machine->lastChecked = time(NULL);
+	time_t now = time(NULL);
+	job->machine->lastChecked = now;
+	writeJobResults(job, now, status, uTime, sTime);
 	finishJob(job);
 	}
     }
@@ -800,10 +876,25 @@ void status(int fd)
  * followed by a blank line. */
 {
 char buf[256];
-sprintf(buf, "%d machines busy, %d free, %d dead, %d jobs running, %d waiting, %d spokes busy, %d free, %d dead", 
-	dlCount(busyMachines), dlCount(freeMachines),  dlCount(deadMachines), 
-	dlCount(runningJobs), dlCount(pendingJobs),
-	dlCount(busySpokes), dlCount(freeSpokes), dlCount(deadSpokes));
+sprintf(buf, "CPUs free: %d", dlCount(freeMachines));
+netSendLongString(fd, buf);
+sprintf(buf, "CPUs busy: %d", dlCount(busyMachines));
+netSendLongString(fd, buf);
+sprintf(buf, "CPUs dead: %d", dlCount(deadMachines));
+netSendLongString(fd, buf);
+sprintf(buf, "Jobs running:  %d", dlCount(runningJobs));
+netSendLongString(fd, buf);
+sprintf(buf, "Jobs waiting:  %d", dlCount(pendingJobs));
+netSendLongString(fd, buf);
+sprintf(buf, "Jobs finished: %d", finishedJobCount);
+netSendLongString(fd, buf);
+sprintf(buf, "Jobs crashed:  %d", crashedJobCount);
+netSendLongString(fd, buf);
+sprintf(buf, "Spokes free: %d", dlCount(freeSpokes));
+netSendLongString(fd, buf);
+sprintf(buf, "Spokes busy: %d", dlCount(busySpokes));
+netSendLongString(fd, buf);
+sprintf(buf, "Spokes dead: %d", dlCount(deadSpokes));
 netSendLongString(fd, buf);
 netSendLongString(fd, "");
 }
