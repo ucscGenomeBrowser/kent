@@ -5223,9 +5223,21 @@ void freeSyntenySanger(struct track *tg)
 syntenySangerFreeList((struct syntenySanger**)&tg->items);
 }
 
+void loadSyntenyMouse(struct track *tg)
+{
+bedLoadItem(tg, "syntenyMouse", (ItemLoader)synteny100000Load);
+slSort(&tg->items, bedCmp);
+}
+
 void loadSynteny100000(struct track *tg)
 {
 bedLoadItem(tg, "synteny100000", (ItemLoader)synteny100000Load);
+slSort(&tg->items, bedCmp);
+}
+
+void loadSyntenyRat(struct track *tg)
+{
+bedLoadItem(tg, "syntenyRat", (ItemLoader)synteny100000Load);
 slSort(&tg->items, bedCmp);
 }
 
@@ -5374,9 +5386,27 @@ void loadMouseSyn(struct track *tg)
 bedLoadItem(tg, "mouseSyn", (ItemLoader)mouseSynLoad);
 }
 
+void syntenyMouseMethods(struct track *tg)
+{
+tg->loadItems = loadSyntenyMouse;
+tg->freeItems = freeSynteny100000;
+tg->itemColor = syntenyItemColor;
+tg->drawName = FALSE;
+tg->subType = lfWithBarbs ;
+}
+
 void synteny100000Methods(struct track *tg)
 {
 tg->loadItems = loadSynteny100000;
+tg->freeItems = freeSynteny100000;
+tg->itemColor = syntenyItemColor;
+tg->drawName = FALSE;
+tg->subType = lfWithBarbs ;
+}
+
+void syntenyRatMethods(struct track *tg)
+{
+tg->loadItems = loadSyntenyRat;
 tg->freeItems = freeSynteny100000;
 tg->itemColor = syntenyItemColor;
 tg->drawName = FALSE;
@@ -9980,6 +10010,8 @@ registerTrackHandler("chr18deletions", chr18deletionsMethods);
 registerTrackHandler("mouseSyn", mouseSynMethods);
 registerTrackHandler("mouseSynWhd", mouseSynWhdMethods);
 registerTrackHandler("ensRatMusHom", ensPhusionBlastMethods);
+registerTrackHandler("syntenyMouse", syntenyMouseMethods);
+registerTrackHandler("syntenyRat", syntenyRatMethods);
 registerTrackHandler("synteny100000", synteny100000Methods);
 registerTrackHandler("syntenyBuild30", synteny100000Methods);
 registerTrackHandler("syntenyBerk", syntenyBerkMethods);
