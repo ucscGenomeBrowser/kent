@@ -193,6 +193,18 @@ visibility hide
 type bed 15 +
 canPack off
 
+track affyUclaNorm
+shortLabel UCLA GeneChip
+longLabel UCLA Affymetrix U133 GeneChip Normal Tissues
+group regulation
+priority 88
+expScale 3.0
+expStep 0.5
+expTable affyUclaNormExps
+chip U133
+visibility hide
+type bed 15 +
+
 track mgcIntrons
 shortLabel mgcIntronPicks
 longLabel Introns and Flanking Exons for RACE PCR
