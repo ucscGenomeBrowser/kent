@@ -495,7 +495,7 @@ altColor 255,240,200
 spectrum on
 type bed 5 +
 
-track blastzMm2XXX
+track blastzMm2
 shortLabel Blastz Mouse
 longLabel Merged Blastz Mouse Alignments
 priority 25.8
@@ -503,9 +503,9 @@ visibility dense
 color 100,50,0
 altColor 255,240,200
 spectrum on
-type psl .
+type psl xeno
 
-track blastzMm2ScXXX
+track blastzMm2Sc
 shortLabel Blastz Mouse SC
 longLabel Merged Blastz Mouse Single Coverage Alignments
 priority 25.81
@@ -513,7 +513,7 @@ visibility hide
 color 100,50,0
 altColor 255,240,200
 spectrum on
-type psl .
+type psl xeno
 
 track aarMm2
 shortLabel Ancient Repeats
@@ -523,7 +523,7 @@ visibility hide
 color 100,50,0
 altColor 255,255,255
 spectrum off
-type psl .
+type psl xeno
 
 track avidUnique
 shortLabel AVID Mouse
