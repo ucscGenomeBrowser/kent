@@ -11516,7 +11516,10 @@ axtChain -scoreScheme=/cluster/data/blastz/HoxD55.q \
     hgsql hg17
     analyze table netDanRer2
 
-# LOAD ACEMBLY TRACK (DONE, 2004-01-24, hartera)
+# LOAD ACEMBLY TRACK (DONE, 2005-01-24, hartera)
+# ACEMBLY TABLE RELOADED AND FINISHED COLOR CODING CODE IN 
+# hgTracks (2005-01-28, hartera)
+# FINISHED CODE FOR FILTERING BY GENE CLASS (2005-02-03, hartera)
     mkdir -p /cluster/data/hg17/bed/acembly
     cd /cluster/data/hg17/bed/acembly
     # Data is obtained from 
@@ -11585,6 +11588,7 @@ done
 # rah.acembly item RPL10A.sNov04 chr6:35544172-35546520: end of last block (35546519) is not the same as chromEnd (35546520).
 # rah.acembly has 1 records with blockEnd[n-1] != end.
 # rah.acembly has 1 records with end > chromSize.
+# chr6    acembly exon    35545934        35546101        .       +       0  
 # gene_id RPL10A; transcript_id RPL10A.sNov04; exon_number 5
 # chr6    acembly intron  35546102        35546520        .       +       0
 # gene_id RPL10A; transcript_id RPL10A.sNov04; intron_type fuzzy
@@ -11599,8 +11603,8 @@ done
            | hgsql hg17
 # for record where end > chromSize
       echo 'select * from acembly as a, chromInfo as c where c.chrom = a.chrom \            and c.size < a.txEnd;' | hgsql hg17
-      # KIR2DL5.bNov04 on chr19_random, size is 301858, txEnd is 305266
-      # delete this record
+      # KIR2DL5.bNov04 on chr19_random, chr19_random size is 301858, 
+      # txEnd is 305266 delete this record
       echo 'delete from acembly where name = "KIR2DL5.bNov04";' | hgsql hg17
 # from runGeneCheck:
 # 5780   inFrameStop
@@ -11700,6 +11704,12 @@ while (<STDIN>) {
     # as they did not find a single putative protein to describe so they 
     # were not added to the gffs. They will be added at a later date.
     # Remove these from the acemblyClass table (2005-01-21, hartera)
+    # Reload acemblyClass table as problems with the gene names
+    # the class table has gene IDs and the acembly table has transcript IDs
+    # it is hard to look up class in the class table since just removing the 
+    # transcript ID suffixes (e.g. "aNov04" after a ".") does not work as 
+    # some gene IDs have a "." in them anyway.
+
     ssh kksilo
     cd /cluster/data/hg17/bed/acembly/acembly_gene_lists
     comm -13 gffvsmain.out main_gene.list.IDsort > main_gene.list.filt
@@ -11707,9 +11717,17 @@ while (<STDIN>) {
     # 52455 main_gene.list.filt
     ssh hgwdev
     cd /cluster/data/hg17/bed/acembly/acembly_gene_lists
-    # drop acemblyClass table and recreate (2005-01-24, hartera)
+    # drop acemblyClass table and recreate (2005-01-27, hartera)
     echo 'drop table acemblyClass;' | hgsql hg17
     # prepare a file of genes and classification
+    # use transcript IDs - get these and corresponding gene IDs from gff files
+    # if Gene IDs used the difficult to parse transcript ID (name column) from 
+    # the acembly genePred table. e.g. notiri.aNov04 is a transcript ID so can
+    # remove suffix after "." to obtain gene ID, some gene names have "." in
+    # them and not all have the suffix.
+    # 260446 transcript IDs (use allFiltered.gff - see below) 
+    perl getClass.pl main_gene.list.filt putative_gene.list.IDsort \
+         ../acembly.ncbi_35.genes.gff/allFiltered.gff 
     foreach f (main_gene.list.filt putative_gene.list.IDsort)
        if ($f == "main_gene.list.filt") then
           set t = "main"
@@ -11719,14 +11737,18 @@ while (<STDIN>) {
        endif
        awk 'BEGIN {OFS="\t"} {print $1, "'$t'"}' $f >> class.txt
     end
-    wc -l class.txt
-    # 96433 class.txt
-    sort class.txt > acemblyClass.tab
+    sort classes.txt | uniq > geneIDtxID.class
+    # get transcript ID and class fields for acemblyClass table
+    awk 'BEGIN {OFS="\t"} {print $2,$3}' geneIDtxID.class > acemblyClass.tab
+    wc -l acemblyClass.tab
+    # 260446 acemblyClass.tab
+    # make change to acemblyClass.as and check in:
+    # change name to be transcript ID instead of gene ID
 cat << '_EOF_' > $HOME/kent/src/hg/lib/acemblyClass.as
 table acemblyClass
 "Class for Acembly genes"
    (
-    string name; "Gene ID for Acembly gene"
+    string name; "Transcript ID for Acembly gene"
     string class; "Class of gene"   
    )
 '_EOF_'
@@ -11735,7 +11757,9 @@ table acemblyClass
     mv acemblyClass.h $HOME/kent/src/hg/inc
     # do make to check it works and commit the .as, .sql, .c and .h files to CVS
     cd /cluster/data/hg17/bed/acembly/acembly_gene_lists
+    echo "drop table acemblyClass" | hgsql hg17
     hgsql hg17 < ~/kent/src/hg/lib/acemblyClass.sql
+    # reload table with transcript IDs 
     echo "load data local infile 'acemblyClass.tab' into table acemblyClass" \
          | hgsql hg17
     
@@ -11792,11 +11816,17 @@ while (<GFF>) {
     ssh hgwdev
     cd /cluster/data/hg17/bed/acembly
     echo 'drop table acembly;' | hgsql hg17
-    # Reloaded with filtered set 2005-01-23:
-    ldHgGene -gtf hg17 acembly acembly.ncbi_35.genes.gff/allFiltered.gff
+    # Reloaded with filtered set 2005-01-23, reload again 2005-01-28 with
+    # the genePredExt option to get gene ID in name 2 field
+    ldHgGene -gtf -genePredExt hg17 acembly \
+             acembly.ncbi_35.genes.gff/allFiltered.gff
     # Read 260446 transcripts in 3656676 lines in 1 files
-    #  260446 groups 42 seqs 1 sources 5 feature types
+    #  260446 groups 41 seqs 1 sources 5 feature types
     #  260446 gene predictions
+    # remove cdsStartStat, cdsEndStat and exonFrames fields
+    echo 'alter table acembly drop column cdsStartStat;' | hgsql hg17
+    echo 'alter table acembly drop column cdsEndStat;' | hgsql hg17
+    echo 'alter table acembly drop column exonFrames;' | hgsql hg17
 
     # fix problem data found by checkTableCoords
     # here the intron overlaps exon 6 so take 35546519 to be txEnd
@@ -11807,9 +11837,45 @@ while (<GFF>) {
     # KIR2DL5.bNov04 on chr19_random, size is 301858, txEnd is 305266
     # delete this record
     echo 'delete from acembly where name = "KIR2DL5.bNov04";' | hgsql hg17
+    # acembly peptide table
+    # need to just grab same sequences that are in acembly
+    cd ./acembly.ncbi_35.genes.proteins.fasta
+    echo 'select name from acembly;' | hgsql -N hg17 > acembly.name
+    cat *.fasta > allPep.fa
+    faSomeRecords allPep.fa acembly.name acemblyPep.fa
+    # PEPTIDE SEQUENCES NOT LOADED
+    # There are 236,554 peptide names that do not match transcript IDs in
+    # the acembly table and 110,278 transcript IDs in acembly that do not
+    # have a corresponding peptide. Waiting for repsonse about this from
+    # Jean and Danielle (2005-01-31)  
+    # hgPepPred hg17 generic acemblyPep \
+    #         acembly.ncbi_35.genes.proteins.fasta/*.fasta
 
     # Edit hgTracks.c to get colour coded tracks based on the gene class
     # for each gene as read from the acemblyClass table.
+    # Edits to hui.c, hgTrackUi.c and hgTracks.c to allow filtering of 
+    # genes based on class.
+# acembly trackDb entry:
+# track acembly
+# shortLabel Acembly Genes
+# longLabel AceView Gene Models With Alt-Splicing
+# group genes
+# priority 41
+# visibility dense
+# color 155,0,125
+# type genePred acemblyPep acemblyMrna
+# url http://www.ncbi.nih.gov/IEB/Research/Acembly/av.cgi?db=hg17&l=$$
+# itemClassTbl acemblyClass
+# geneClasses main putative
+# gClass_main 128,0,125
+# gClass_putative 200,0,125
+
+# search added:
+# searchTable acembly
+# searchType genePred
+# searchMethod prefix
+# termRegex [^[:space:]]+
+# searchPriority 50
 
 # BUILD WGRNA TRACK (DONE, 2004-12-13, Fan)
 
