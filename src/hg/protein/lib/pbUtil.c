@@ -960,9 +960,8 @@ if (protCntInSwissByGene > protCntInSupportedGenomeDb)
 	    if (!skipIt) 
 	    	{
     		safef(cond_str, sizeof(cond_str), "id=%s and nameType='genbank common name'", taxonId);
-    		answer = sqlGetField(conn, "proteins", "taxonNames", "name", cond_str);
+    		answer = sqlGetField(conn, PROTEOME_DB_NAME, "taxonNames", "name", cond_str);
 		hPrintf("<FONT SIZE=3><B>");
-		//%s (%s):</B></FONT>\n", protOrg, answer);
 		hPrintf("<A href=\"http://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?mode=Undef&name=%s&lvl=0&srchmode=1\" TARGET=_blank>%s</A>",
            		cgiEncode(protOrg), protOrg);
 		if (answer != NULL)
