@@ -43,9 +43,10 @@
 #include "refLink.h"
 #include "browserTable.h"
 #include "hgConfig.h"
+#include "estPair.h"
 
 #define CHUCK_CODE 0
-#define ROGIC_CODE 0
+#define ROGIC_CODE 1
 char *seqName;		/* Name of sequence we're working on. */
 int winStart, winEnd;   /* Bounds of sequence. */
 char *database;		/* Name of mySQL database. */
@@ -393,6 +394,46 @@ freeDyString(&dy);
 hgFreeConn(&conn);
 }
 
+
+
+#ifdef ROGIC_CODE
+
+void printEstPairInfo(char *name)
+/* print information about 5' - 3' EST pairs */
+{
+struct sqlConnection *conn = hgAllocConn();
+struct sqlResult *sr;
+char query[256]; 
+char **row;
+struct estPair *ep = NULL;
+
+char *s = cgiOptionalString("pix");
+
+sprintf(query, "select * from estPair where mrnaClone='%s'", name);
+sr = sqlGetResult(conn, query);
+ if((row = sqlNextRow(sr)) != NULL)
+   {
+     ep = estPairLoad(row);
+     printf("<H2>Information on 5' - 3' EST pair from the clone %s </H2>\n\n", name);
+     printf("<B>chromosome:</B> %s<BR>\n", ep->chrom); 
+     printf("<B>Start position in chromosome :</B> %u<BR>\n", ep->chromStart); 
+     printf("<B>End position in chromosome :</B> %u<BR>\n", ep->chromEnd);
+     printf("<B>5' accession:</B> <A HREF=\"http://genome-test.cse.ucsc.edu/cgi-bin/hgc?o=%u&t=%u&g=hgEst&i=%s&c=%s&l=%d&r=%d&db=%s&pix=%s\"> %s</A><BR>\n", ep->start5, ep->end5, ep->acc5, ep->chrom, winStart, winEnd, database, s, ep->acc5); 
+     printf("<B>Start position of 5' est in chromosome :</B> %u<BR>\n", ep->start5); 
+     printf("<B>End position of 5' est in chromosome :</B> %u<BR>\n", ep->end5); 
+     printf("<B>3' accession:</B> <A HREF=\"http://genome-test.cse.ucsc.edu/cgi-bin/hgc?o=%u&t=%u&g=hgEst&i=%s&c=%s&l=%d&r=%d&db=%s&pix=%s\"> %s</A><BR>\n", ep->start3, ep->end3, ep->acc3, ep->chrom, winStart, winEnd, database, s, ep->acc3);  
+     printf("<B>Start position of 3' est in chromosome :</B> %u<BR>\n", ep->start3); 
+     printf("<B>End position of 3' est in chromosome :</B> %u<BR>\n", ep->end3);
+   }
+ else
+   {
+     warn("Couldn't find %s in mrna table", name);
+   }   
+sqlFreeResult(&sr);
+hgFreeConn(&conn);
+}
+#endif /* ROGIC_CODE */
+
 void printAlignments(struct psl *pslList, 
 	int startFirst, char *hgcCommand, char *typeName, char *itemIn)
 /* Print list of mRNA alignments. */
@@ -427,6 +468,17 @@ for (same = 1; same >= 0; same -= 1)
     }
 printf("</TT></PRE>");
 }
+
+#ifdef ROGIC_CODE
+
+void doHgEstPair(char *name)
+/* Click on EST pair */
+{
+htmlStart(name);
+printEstPairInfo(name);
+}
+
+#endif /* ROGIC_CODE */
 
 void doHgRna(char *acc, boolean isEst)
 /* Click on an individual RNA. */
@@ -2837,6 +2889,7 @@ database = cgiOptionalString("db");
 if (database == NULL)
     database = "hg5";
 
+
 hDefaultConnect(); 	/* set up default connection settings */
 hSetDb(database);
 seqName = cgiString("c");
@@ -2855,6 +2908,12 @@ else if (sameWord(group, "hgEst") || sameWord(group, "hgIntronEst"))
     {
     doHgRna(item, TRUE);
     }
+#ifdef ROGIC_CODE
+else if (sameWord(group, "hgEstPairs"))
+    {
+    doHgEstPair(item);
+    }
+#endif /*ROGIC_CODE*/
 else if (sameWord(group, "hgContig"))
     {
     doHgContig(item);
@@ -3049,6 +3108,7 @@ htmlEnd();
 int main(int argc, char *argv[])
 {
 dnaUtilOpen();
+cgiSpoof(&argc,argv);
 htmEmptyShell(doMiddle, NULL);
 return 0;
 }

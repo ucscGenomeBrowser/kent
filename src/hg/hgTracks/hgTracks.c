@@ -13,7 +13,7 @@
 #include "htmshell.h"
 #include "hdb.h"
 #include "hgFind.h"
-#include "spaceSaver.h"
+#include "spaceSaver.h" 
 #include "wormdna.h"
 #include "aliType.h"
 #include "psl.h"
@@ -42,16 +42,14 @@
 #include "knownMore.h"
 #include "exprBed.h"
 #include "browserTable.h"
+#include "estPair.h"
 #include "customTrack.h"
 
-/* Will things still run without CHUCK_CODE? */
 #define CHUCK_CODE 1
 #define ROGIC_CODE 1
 #define FUREY_CODE 1
-
 #define MAX_CONTROL_COLUMNS 5
 #define CONTROL_TABLE_WIDTH 600
-
 #ifdef CHUCK_CODE
 /* begin Chuck code */
 #define EXPR_DATA_SHADES 16
@@ -233,6 +231,7 @@ struct trackGroup
     char *url;	/* Link to more information about track. */
     char *other;	/* Other track specific associated information. */
 };
+
 struct trackGroup *tGroupList = NULL;  /* List of all tracks. */
 
 static boolean tgLoadNothing(){return TRUE;}
@@ -336,8 +335,6 @@ struct trackGroup *tg;
 dyStringPrintf(dy, "&db=%s&pix=%d", database, tl.picWidth);
 if (eUserSeqString != NULL)
     dyStringPrintf(dy, "&ss=%s", eUserSeqString);
-if (ctFileName != NULL)
-    dyStringPrintf(dy, "&ct=%s", ctFileName);
 if (withLeftLabels)
     dyStringPrintf(dy, "&leftLabels=on");
 if (withCenterLabels)
@@ -502,6 +499,17 @@ struct linkedFeatures
     void *extra;			/* Extra info that varies with type. */
     };
 
+#ifdef ROGIC_CODE
+
+struct linkedFeaturesPair
+    {
+      struct linkedFeaturesPair *next;
+      char *cloneName;                /*clone name for est pair */
+      struct linkedFeatures *lf5prime;   /*linked features for 5 prime est */
+      struct linkedFeatures *lf3prime;   /*linked features for 5 prime est */
+    };
+
+#endif /* ROGIC_CODE */
 
 char *linkedFeaturesName(struct trackGroup *tg, void *item)
 /* Return name of item. */
@@ -925,6 +933,171 @@ else if (vis == tvDense)
     }
 }
 
+#ifdef ROGIC_CODE
+
+static void linkedFeaturesDrawPair(struct trackGroup *tg, int seqStart, int seqEnd,
+        struct memGfx *mg, int xOff, int yOff, int width, 
+        MgFont *font, Color color, enum trackVisibility vis)
+/* Draw linked features items for EST pairs. */
+{
+int baseWidth = seqEnd - seqStart;
+struct linkedFeaturesPair *lfPair;
+struct linkedFeatures *lf;
+struct simpleFeature *sf;
+int y = yOff;
+int heightPer = tg->heightPer;
+int lineHeight = tg->lineHeight;
+int x1,x2;
+int midLineOff = heightPer/2;
+int shortOff = 2, shortHeight = heightPer-4;
+int tallStart, tallEnd, s, e, e2, s2;
+int itemOff, itemHeight;
+boolean isFull = (vis == tvFull);
+Color *shades = tg->colorShades;
+Color bColor = tg->ixAltColor;
+double scale = width/(double)baseWidth;
+boolean isXeno = tg->subType == lfSubXeno;
+boolean hideLine = (vis == tvDense && tg->subType == lfSubXeno);
+ 
+struct rgbColor color5prime = tg->color;
+struct rgbColor color3prime = tg->altColor;
+shades = NULL;
+
+if (vis == tvDense)
+    sortByGray(tg, vis);
+for (lfPair = tg->items; lfPair != NULL; lfPair = lfPair->next)
+    {   
+    int midY = y + midLineOff;
+    int compCount = 0;
+    int w, i;
+    
+    for(i=1;i<=2;++i){/*  drawing has to be done twice for each pair */
+      if(i==1){
+	lf = lfPair->lf5prime;
+	color = mgFindColor(mg,color5prime.r,color5prime.g,color5prime.b);
+	bColor = color;
+      }
+      else{
+	lf = lfPair->lf3prime;
+	color = mgFindColor(mg,color3prime.r,color3prime.g,color3prime.b);
+	bColor = color;
+      } 
+      
+      if (tg->itemColor && shades == NULL)
+	color = tg->itemColor(tg, lf, mg);
+      tallStart = lf->tallStart;
+      tallEnd = lf->tallEnd;
+      if (lf->components != NULL && !hideLine)
+	{
+	  x1 = round((double)((int)lf->start-winStart)*scale) + xOff;
+	  x2 = round((double)((int)lf->end-winStart)*scale) + xOff;
+	  w = x2-x1;
+	  if (isFull)
+	    {
+	      if (shades) bColor =  shades[(lf->grayIx>>1)];
+	      mgBarbedHorizontalLine(mg, x1, midY, x2-x1, 2, 5, 
+				     lf->orientation, bColor);
+	    }
+	  if (shades) color =  shades[lf->grayIx+isXeno];
+	  mgDrawBox(mg, x1, midY, w, 1, color);
+	}
+      for (sf = lf->components; sf != NULL; sf = sf->next)
+	{
+	  if (shades) color =  shades[lf->grayIx+isXeno];
+	  s = sf->start;
+	  e = sf->end;
+	  if (s < tallStart)
+	    {
+	      e2 = e;
+	      if (e2 > tallStart) e2 = tallStart;
+	      drawScaledBox(mg, s, e2, scale, xOff, y+shortOff, shortHeight, color);
+	      s = e2;
+	    }
+	  if (e > tallEnd)
+	    {
+	      s2 = s;
+	      if (s2 < tallEnd) s2 = tallEnd;
+	      drawScaledBox(mg, s2, e, scale, xOff, y+shortOff, shortHeight, color);
+	      e = s2;
+	    }
+	  if (e > s)
+	    {
+	      drawScaledBox(mg, s, e, scale, xOff, y, heightPer, color);
+	      ++compCount;
+	    }
+	}
+    }
+    if (isFull)
+      y += lineHeight;
+    }
+}
+static void linkedFeaturesDrawAveragePair(struct trackGroup *tg, int seqStart, int seqEnd,
+        struct memGfx *mg, int xOff, int yOff, int width, 
+        MgFont *font, Color color, enum trackVisibility vis)
+/* Draw dense clone items for EST pairs. */
+{
+int baseWidth = seqEnd - seqStart;
+UBYTE *useCounts;
+int i, j;
+int lineHeight = mgFontLineHeight(font);
+struct simpleFeature *sf;
+struct linkedFeaturesPair *lfPair;
+struct linkedFeatures *lf;
+int x1, x2, w, allCount;
+ 
+AllocArray(useCounts, width);
+memset(useCounts, 0, width * sizeof(useCounts[0]));
+for (lfPair = tg->items; lfPair != NULL; lfPair = lfPair->next)
+    {
+     
+      for(j=1;j<=2;++j)
+	{  /* drawing has to be done twice for each pair */
+	  if(j==1){
+	    lf = lfPair->lf5prime;
+	  }
+	  else{
+	    lf = lfPair->lf3prime;
+	  }
+	  for (sf = lf->components; sf != NULL; sf = sf->next)
+	    {
+	      x1 = roundingScale(sf->start-winStart, width, baseWidth);
+	      if (x1 < 0)
+		x1 = 0;
+	      x2 = roundingScale(sf->end-winStart, width, baseWidth);
+	      if (x2 >= width)
+		x2 = width-1;
+	      w = x2-x1;
+	      if (w >= 0)
+		{
+		  if (w == 0)
+		    w = 1;
+		  incRange(useCounts+x1, w); 
+		}
+	    }
+	}
+    }
+ grayThreshold(useCounts, width);
+ for (i=0; i<lineHeight; ++i)
+	mgPutSegZeroClear(mg, xOff, yOff+i, width, useCounts);
+ freeMem(useCounts);
+}
+static void linkedFeaturesAverageDensePair(struct trackGroup *tg, int seqStart, int seqEnd,
+        struct memGfx *mg, int xOff, int yOff, int width, 
+        MgFont *font, Color color, enum trackVisibility vis)
+/* Draw dense linked features items. */
+{
+  if (vis == tvFull)
+    {
+      linkedFeaturesDrawPair(tg, seqStart, seqEnd, mg, xOff, yOff, width, font, color, vis);
+    }
+  else if (vis == tvDense)
+    {
+      linkedFeaturesDrawAveragePair(tg, seqStart, seqEnd, mg, xOff, yOff, width, font, color, vis);
+    }
+}
+
+#endif /* ROGIC_CODE */
+
 int lfCalcGrayIx(struct linkedFeatures *lf)
 /* Calculate gray level from components. */
 {
@@ -1144,6 +1317,108 @@ tg->items = lfFromPslsInRange("bacEnds", winStart, winEnd, NULL, FALSE);
 #endif /* FUREY_CODE */
 
 #ifdef ROGIC_CODE
+
+struct linkedFeaturesPair *lfFromPslsInRangeForEstPair(char *table, char *chrom, int start, int end, boolean isXeno)
+/* Return a linked list of structures that have a pair of linked features for 5' and 3' ESTs from range of table. */
+{
+  char query[256], query1[256], query2[256];
+  struct sqlConnection *conn = hAllocConn();
+  struct sqlConnection *conn1 = hAllocConn();
+  struct sqlResult *sr = NULL, *sr1 = NULL;
+  char **row, **row1, **row2;
+  struct linkedFeaturesPair *lfListPair = NULL, *lf=NULL;
+  struct estPair *ep = NULL;
+
+  sprintf(query, "select * from %s where chrom='%s' and chromStart<%u and chromEnd>%u",
+    table, chrom, winEnd, winStart);
+
+  sr = sqlGetResult(conn, query);
+  while ((row = sqlNextRow(sr)) != NULL)
+    {
+      AllocVar(lf);
+      ep = estPairLoad(row);
+      lf->cloneName = ep->mrnaClone;
+          sprintf(query1, "select * from all_est where qName='%s' and tStart=%u and tEnd=%u",
+	      ep->acc5, ep->start5, ep->end5);
+      sr1 = sqlGetResult(conn1, query1);
+      if((row1 = sqlNextRow(sr1)) != NULL)
+	{
+	  struct psl *psl = pslLoad(row1);
+	  lf->lf5prime = lfFromPsl(psl, isXeno);
+	  pslFree(&psl);
+	}
+	sqlFreeResult(&sr1);
+     
+        sprintf(query2, "select * from all_est where qName = '%s' and tStart=%u and tEnd=%u", 
+  	      ep->acc3, ep->start3, ep->end3); 
+        sr1 = sqlGetResult(conn1, query2); 
+        if((row2 = sqlNextRow(sr1)) != NULL) 
+  	{ 
+  	  struct psl *psl = pslLoad(row2); 
+  	  lf->lf3prime = lfFromPsl(psl, isXeno); 
+  	  pslFree(&psl); 
+	} 
+      sqlFreeResult(&sr1);
+      slSafeAddHead(&lfListPair, lf);
+    }
+  hFreeConn(&conn1);
+  slReverse(&lfListPair);
+  sqlFreeResult(&sr);
+  hFreeConn(&conn);
+  return lfListPair;
+}
+
+void loadEstPairAli(struct trackGroup *tg)
+/* Load up est pairs from table into trackGroup items. */
+{
+  tg->items = lfFromPslsInRangeForEstPair("estPair", chromName, winStart, winEnd, FALSE);
+}
+
+void freeLinkedFeaturesPair(struct linkedFeaturesPair **pList)
+/* Free up a linked features pair list. */
+{
+  struct linkedFeaturesPair *lf;
+  for (lf = *pList; lf != NULL; lf = lf->next){
+    slFreeList(&lf->lf5prime->components);
+    slFreeList(&lf->lf3prime->components);
+  }
+  slFreeList(pList);
+}
+
+void estFreePair(struct trackGroup *tg)
+/* Free up linkedFeaturesPairTrack items. */
+{
+  freeLinkedFeaturesPair((struct linkedFeaturesPair**)(&tg->items)); 
+}
+
+char *getEstPairName(struct trackGroup *tg, void *item)
+{
+  struct linkedFeaturesPair *lf = item;
+  return lf->cloneName;
+}
+
+struct trackGroup *estPairTg()
+/* Make track group of est pairs. */
+{
+struct trackGroup *tg = linkedFeaturesTg();
+tg->freeItems = estFreePair;
+tg->mapName = "hgEstPairs";
+tg->itemName = getEstPairName;
+tg->mapItemName = getEstPairName;
+tg->visibility = tvHide;
+tg->longLabel = "5'(blue) - 3'(red) EST pairs";
+tg->shortLabel = "EST pairs";
+tg->color.r = 67;
+tg->color.g = 57;
+tg->color.b = 206;
+tg->altColor.r = 204;
+tg->altColor.g = 20;
+tg->altColor.b = 35; 
+tg->loadItems = loadEstPairAli;
+tg->drawItems = linkedFeaturesAverageDensePair;
+ return tg;
+}
+
 struct linkedFeatures *lfFromPslsInRangeByChrom(char *table, char *chrom, int start, int end)
 /* Return linked features from range of table. */
 {
@@ -4973,6 +5248,7 @@ return tg;
 }
 #endif /* SOMEDAY */
 
+
 void ctLoadSimpleBed(struct trackGroup *tg)
 /* Load the items in one custom track - just move beds in
  * window... */
@@ -5387,7 +5663,6 @@ else
 }
 
 
-
 void doForm()
 /* Make the tracks display form with the zoom/scroll
  * buttons and the active image. */
@@ -5397,8 +5672,6 @@ struct browserTable *tableList = NULL, *table = NULL;
 char *freezeName = NULL;
 int controlColNum=0;
 
-
-printf("<FORM ACTION=\"%s\">\n\n", hgTracksName());
 
 /* See if want to include sequence search results. */
 userSeqString = cgiOptionalString("ss");
@@ -5418,11 +5691,7 @@ if (calledSelf)
     }
 if(hTableExists("browserTable"))
    tableList = checkDbForTables();
-
-/* Start tracks with any ones user pasted in. */
-loadCustomTracks(&tGroupList);
-    
-/* Make list of all database track groups. */
+/* Make list of all track groups. */
 if (hTableExists("cytoBand")) slSafeAddHead(&tGroupList, cytoBandTg());
 if (hTableExists("mapGenethon")) slSafeAddHead(&tGroupList, genethonTg());
 if (hTableExists("stsMarker")) slSafeAddHead(&tGroupList, stsMarkerTg());
@@ -5467,6 +5736,7 @@ if (chromTableExists("_rmsk")) slSafeAddHead(&tGroupList, repeatTg());
 if (hTableExists("simpleRepeat")) slSafeAddHead(&tGroupList, simpleRepeatTg());
 if (hTableExists("mgc_mrna")) slSafeAddHead(&tGroupList, fullMgcMrnaTg());
 if (hTableExists("bacEnds")) slSafeAddHead(&tGroupList, bacEndsTg());
+if (hTableExists("estPair")) slSafeAddHead(&tGroupList, estPairTg());
 #ifdef CHUCK_CODE
 if (sameString(chromName, "chr22") && hTableExists("rosettaTe")) slSafeAddHead(&tGroupList,rosettaTeTg());   
 if (sameString(chromName, "chr22") && hTableExists("rosettaPe")) slSafeAddHead(&tGroupList,rosettaPeTg()); 
@@ -5504,6 +5774,9 @@ for (group = tGroupList; group != NULL; group = group->next)
 	group->limitedVis = limitVisibility(group);
 	}
     }
+
+/* Tell browser where to go when they click on image. */
+printf("<FORM ACTION=\"%s\">\n\n", hgTracksName());
 
 /* Center everything from now on. */
 printf("<CENTER>\n");
@@ -5882,6 +6155,7 @@ int main(int argc, char *argv[])
 {
 cgiSpoof(&argc, argv);
 htmlSetBackground("../images/floret.jpg");
+ cgiSpoof(&argc,argv);
 htmShell("Working Draft Genome Browser v5", doMiddle, NULL);
 //htmShell("Browser Being Updated", doDown, NULL);
 return 0;
