@@ -14,7 +14,7 @@
 #include "agpGap.h"
 #include "chain.h"
 
-static char const rcsid[] = "$Id: featureBits.c,v 1.35 2005/03/17 04:41:34 daryl Exp $";
+static char const rcsid[] = "$Id: featureBits.c,v 1.36 2005/03/20 19:28:07 daryl Exp $";
 
 static struct optionSpec optionSpecs[] =
 /* command line option specifications */
@@ -610,22 +610,22 @@ if (!faIndependent)
 	pSecondTableBits = &secondTableBits;
 	}
     if (bedRegionInName)
-    {
-    struct lineFile *lf = lineFileOpen(bedRegionInName, TRUE);
-    struct bed *bed;
-    char *row[3];
-
-    bedRegionOutFile = mustOpen(bedRegionOutName, "w");
-    while (lineFileRow(lf, row))
 	{
-	if (startsWith(row[0],"#"))
-	    continue;
-	bed = bedLoad3(row);
-	slAddHead(&bedRegionList, bed);
+	struct lineFile *lf = lineFileOpen(bedRegionInName, TRUE);
+	struct bed *bed;
+	char *row[3];
+	
+	bedRegionOutFile = mustOpen(bedRegionOutName, "w");
+	while (lineFileRow(lf, row))
+	    {
+	    if (startsWith(row[0],"#"))
+		continue;
+	    bed = bedLoad3(row);
+	    slAddHead(&bedRegionList, bed);
+	    }
+	lineFileClose(&lf);
+	slReverse(bedRegionList);
 	}
-    lineFileClose(&lf);
-    slReverse(bedRegionList);
-    }
     for (chrom = allChroms; chrom != NULL; chrom = chrom->next)
 	{
 	if (inclChrom(chrom))
