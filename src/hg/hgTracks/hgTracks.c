@@ -56,7 +56,8 @@ Color shadesOfRed[EXPR_DATA_SHADES];
 Color shadesOfBlue[EXPR_DATA_SHADES];
 boolean exprBedColorsMade = FALSE; /* Have the shades of Green, Red, and Blue been allocated? */
 int maxRGBShade = EXPR_DATA_SHADES - 1;
-
+char *otherFrame = NULL;
+char *thisFrame = NULL;
 /* end Chuck code */
 #endif /*CHUCK_CODE*/
 
@@ -281,6 +282,10 @@ makeHiddenVar("old", chromName);    /* Variable set when calling ourselves. */
 makeHiddenBoolean("seqReverse", seqReverse);
 makeHiddenBoolean("hideControls", hideControls);
 makeHiddenVar("db", database);
+if(otherFrame != NULL)
+    cgiMakeHiddenVar("of",otherFrame);
+if(thisFrame != NULL)
+    cgiMakeHiddenVar("tf",thisFrame);
 cgiContinueHiddenVar("ss");
 }
 
@@ -327,6 +332,12 @@ for (tg = tGroupList; tg != NULL; tg = tg->next)
 	}
     printf("&%s=%s", tg->mapName, tvStrings[vis]);
     }
+/* Chuck code to sync with frames */
+if(otherFrame)
+    printf("&of=%s",otherFrame);
+if(thisFrame)
+    printf("&th=%s",thisFrame);
+
 if (toggleGroup)
     printf("\" ALT= \"Change between dense and full view of %s track\">\n", toggleGroup->shortLabel);
 else
@@ -4183,15 +4194,23 @@ else
     return 0;
 }
 
+char *abbrevExprBedName(char *name)
+{
+static char abbrev[32];
+char *ret;
+strncpy(abbrev, name, sizeof(abbrev));
+abbr(abbrev, "LINK_Em:");
+ret = strstr(abbrev, "_");
+ret++;
+return ret;
+}
+
 char *exprBedName(struct trackGroup *tg, void *item) 
-/* Return Name minus LINK_. */
+/* Return Name minus LINK_Em:_CloneName_. */
 {
 struct exprBed *exp = item;
 char *full = exp->name;
-static char abbrev[32];
-strncpy(abbrev, full, sizeof(abbrev));
-abbr(abbrev, "LINK_");
-return abbrev;
+return abbrevExprBedName(full);
 }
 
 char* exprBedItemName(struct trackGroup *tg, void *item)
@@ -4271,11 +4290,6 @@ Color getExprDataColor(float val, float maxDeviation, boolean RG_COLOR_SCHEME )
 float absVal = fabs(val);
 int colorIndex = 0;
 
-/* Rosetta has some crazy values and I've made -1,000,000.00 be the error code 
- * so I'm going to assume that no really has > 2^100 fold change in expression */  
-if(absVal > 100) 
-    return lightGrayIndex(); 
-
 /* cap the value to be less than or equal to maxDeviation */
 if(absVal > maxDeviation)
     absVal = maxDeviation;
@@ -4316,11 +4330,29 @@ int color = 1;
 y2 = 0;
 for (i=0; i<strips; ++i)
     {
-    Color color = getExprDataColor(exp->scores[i],2.0,TRUE);
+    Color color = getExprDataColor(exp->scores[i],0.7,TRUE);
     y1 = y2;
     y2 = (i+1)*height/strips;
     mgDrawBox(mg, xOff, yOff+y1, width, y2-y1, color);
     }
+}
+
+void mapBoxHcWTarget(int start, int end, int x, int y, int width, int height, 
+	char *group, char *item, char *statusLine, boolean target, char *otherFrame)
+/* Print out image map rectangle that would invoke the htc (human track click)
+ * program. */
+{
+char *encodedItem = cgiEncode(item);
+printf("<AREA SHAPE=RECT COORDS=\"%d,%d,%d,%d\" ", x, y, x+width, y+height);
+printf("HREF=\"%s?o=%d&t=%d&g=%s&i=%s&c=%s&l=%d&r=%d&db=%s&pix=%d\" ", 
+    hgcName(), start, end, group, encodedItem, chromName, winStart, winEnd, 
+    database, tl.picWidth);
+if(target) 
+    {
+    printf(" target=\"%s\" ", otherFrame);
+    } 
+printf("ALT= \"%s\" TITLE=\"%s\">\n", statusLine, statusLine); 
+freeMem(encodedItem);
 }
 
 
@@ -4335,6 +4367,7 @@ int baseWidth = seqEnd - seqStart;
 struct exprBed *item;
 int y = yOff;
 struct exprBed *exp;
+
 int lineHeight = tg->lineHeight;
 int x1,x2,w;
 boolean isFull = (vis == tvFull);
@@ -4344,6 +4377,7 @@ exp = tg->items;
 
 if(!exprBedColorsMade)
     makeRedGreenShades(mg);
+
 for (item = tg->items; item != NULL; item = item->next)
     {
     x1 = round((double)((int)item->chromStart-winStart)*scale) + xOff;
@@ -4354,9 +4388,12 @@ for (item = tg->items; item != NULL; item = item->next)
     if (w < 1)
 	w = 1;
     mgExprBedBox(mg, x1, y, w, lineHeight, item);
-    mapBoxHc(item->chromStart, item->chromEnd, x1, y, w, lineHeight, 
-	     tg->mapName, item->name, item->name); 
-    
+    if(otherFrame != NULL)
+	mapBoxHcWTarget(item->chromStart, item->chromEnd, x1, y, w, lineHeight, 
+			tg->mapName, item->name, abbrevExprBedName(item->name), TRUE, otherFrame); 
+    else
+	mapBoxHcWTarget(item->chromStart, item->chromEnd, x1, y, w, lineHeight, 
+			tg->mapName, item->name, abbrevExprBedName(item->name), FALSE, NULL); 
     }
 }
 
@@ -5299,6 +5336,10 @@ else if (cgiVarExists("out3"))
     sprintf(buf, "%s:%d-%d", chromName, winStart+1, winEnd);
     position = cloneString(buf);
     }
+/* Chuck code for synching with different frames */
+otherFrame = cgiOptionalString("of");
+thisFrame = cgiOptionalString("tf");
+
 doForm();
 }
 
