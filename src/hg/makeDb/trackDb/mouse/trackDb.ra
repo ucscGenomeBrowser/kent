@@ -351,3 +351,9 @@ shortCircuit 1
 termRegex mmu-(mir|let)-.+
 searchPriority 18.5
 
+searchPriority 50
+searchTable jaxQTL3
+searchType bed
+searchMethod fuzzy
+searchPriority 50
+
