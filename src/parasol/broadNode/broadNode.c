@@ -268,7 +268,8 @@ void pSectionQuery(struct bdMessage *m, struct fileTracker *ftList, bits32 ownIp
 {
 struct fileTracker *ft;
 bits32 fileId, sectionIx, blockCount;
-bdParseSectionQueryMessage(m, &fileId, &sectionIx, &blockCount);
+unsigned char *md5;
+bdParseSectionQueryMessage(m, &fileId, &sectionIx, &blockCount, &md5);
 ft = findTracker(ftList, fileId);
 if (ft == NULL)
     {

@@ -101,12 +101,12 @@ void bdParseFileCloseMessage(struct bdMessage *m, bits32 *retFileId, char **retF
 
 void bdMakeSectionQueryMessage(struct bdMessage *m, bits32 machine,
 	bits32 messageId, bits32 fileId,
-	bits32 sectionIx, bits32 blockCount);
+	bits32 sectionIx, bits32 blockCount, unsigned char md5[16]);
 /* Create a message to query about status of file section.  Block count should
  * be bdSectionSize or less, and firstBlock should start on a section boundary. */
 
 void bdParseSectionQueryMessage(struct bdMessage *m, bits32 *retFileId,
-	bits32 *retSectionIx, bits32 *retBlockCount);
+	bits32 *retSectionIx, bits32 *retBlockCount, unsigned char **retMd5);
 /* Parse out the specific parts of a section query message. */
 
 void bdMakeMissingBlocksMessage(struct bdMessage *m, bits32 machine,

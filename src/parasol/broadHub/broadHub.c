@@ -12,6 +12,7 @@
 #include "dlist.h"
 #include "net.h"
 #include "obscure.h"
+#include "md5.h"
 #include "broadData.h"
 
 char *broadIp = "10.1.255.255";
@@ -128,15 +129,6 @@ if (!initted)
 return (tv.tv_sec - origSec)*1000000 + tv.tv_usec;
 }
 
-struct missingSection
-/* Keep track of missing sections.  This will give us
- * a chance to fix them later when the effected machine
- * may not be so tied up. */
-    {
-    struct missingSection *next;
-    int sectionIx;		/* The section that is missing. */
-    };
-
 struct machine
 /* Keep track of one machine. */
     {
@@ -149,7 +141,6 @@ struct machine
     boolean didOpen;   /* Did open ok. */
     boolean didClose;  /* Did close ok. */
     boolean gotCleanStatus;	/* Did status ok. */
-    struct missingSection *missingSections;  /* List of sections we missed. */
     };
 
 struct dlList *getMachines(char *fileName)
@@ -256,8 +247,8 @@ for (i=0; i<count; ++i)
     }
 }
 
-void sendFile(struct dlList *machineList, struct dlList *deadList, struct bdMessage *m, 
-	int inSd, int outSd, char *fileName)
+void sendFile(struct dlList *machineList, struct dlList *deadList, 
+	struct bdMessage *m, int inSd, int outSd, char *fileName)
 /* Broadcast file. */
 {
 struct dlNode *mNode, *nextNode;
@@ -277,11 +268,10 @@ FILE *f;
 boolean allDone;
 int statBlocks = 0, statResent = 0;
 int totalTimeOuts = 0;
-int sendAhead = 0;
-int desiredSendAhead = 3;
+struct md5_context ctx;
+unsigned char md5sum[16];
 long t1,t2, openTime =0, closeTime = 0, sendTime = 0,
 	primaryTime = 0, checkTime = 0;
-struct missingSection *missingSection = NULL;
 
 /* Open up file. */
 f = mustOpen(fileName, "rb");
@@ -362,7 +352,6 @@ else
     /* Do each section. */
     t1 = microTime();
     allDone = FALSE;
-    sendAhead = 0;
     for (sectionIx = 0; !allDone;  ++sectionIx)
 	{
 	int subStart = 0;
@@ -375,6 +364,7 @@ else
 
 	/* Do primary broadcast for section. */
 	uglyf("Section %d\n", sectionIx);
+	md5_starts(&ctx);
 	t2 = microTime();
 	for (subIx=0,subStart=0; subIx < bdSubSectionCount && !allDone; ++subIx, subStart += bdSubSectionSize)
 	    {
@@ -390,6 +380,7 @@ else
 		++statBlocks;
 		if (readSize < 0)
 		    errAbort("Read error on %s", fileName, machine->name);
+		md5_update(&ctx, (uint8 *)fileDataArea, readSize);
 		bdMakeBlockMessage(m, machine->ip, ++messageIx, fileIx, sectionIx, 
 		    blockIx, readSize, fileDataArea);
 		broadcast(outSd, m);
@@ -405,6 +396,7 @@ else
 	    blockIx = subStart;
 	    receiveAndIgnore(inSd, m, subBlockCount);
 	    }
+	md5_finish(&ctx, md5sum);
 	primaryTime += microTime() - t2;
 
 	/* Check nodes one at a time for this section. */
@@ -424,7 +416,7 @@ else
 		    {
 		    boolean gotReply = FALSE;
 		    bdMakeSectionQueryMessage(m, machine->ip, ++messageIx, fileIx, 
-			sectionIx, blockCount);
+			sectionIx, blockCount, md5sum);
 		    bdSendTo(outSd, m, machine->ip, nodeInPort);
 		    /* Try to find reply to us, skipping any previous messages. */
 		    for (;;)
