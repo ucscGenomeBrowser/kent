@@ -912,21 +912,30 @@ LOAD GENEID GENES (todo)
      ldHgGene hg11 geneid download/*.gtf -exon=CDS
      hgPepPred hg11 generic geneidPep download/*.prot
 
-LOAD ACEMBLY
-    - Get acembly*gene.gff from Jean and Michelle Thierry-Miegs and
-      place in ~/oo/bed/acembly
-    - cd ~/oo/bed/acembly
-    - Replace c_chr with chr in acembly*.gff
-    - Use /cluster/store1/gs.12/build29/mattStuff/filterGff.pl to do the above
-        and to concat the results into the the aceChrom.gff gile. 
-      Read the script to see what it does. It's tiny and simple.
-    - Use /cluster/store1/gs.12/build29/mattStuff/filterProteins.pl to do the
-below steps.
-    - Remove G_t*_  and likewise G_t2_, etc., from acemblyproteins.*.fasta
-       and concatenate all the protein.fasta files into a single acembly.pep file
+LOAD ACEMBLY (done 05/31/02)
+    mkdir -p ~/oo/bed/acembly
+    cd ~/oo/bed/acembly
+    - Get acembly*gene.gff from Jean and Danielle Thierry-Mieg
+    wget ftp://ftp.ncbi.nih.gov/repository/acedb/ncbi_29.human.genes/acembly.ncbi_29.genes.gff.tar.gz
+    wget ftp://ftp.ncbi.nih.gov/repository/acedb/ncbi_29.human.genes/acembly.ncbi_29.genes.proteins.fasta.tar.gz
+    gunzip -c acembly.ncbi_29.genes.gff.tar.gz | tar xvf -
+    gunzip -c acembly.ncbi_29.genes.proteins.fasta.tar.gz | tar xvf -
+    cd acembly.ncbi_29.genes.gff
+    - Strip out floating-contig features (lines with *|NT_?????? as the chr ID),
+      and add 'chr' prefix to all chr nums:
+    foreach f (acemblygenes.*.gff)
+      egrep -v '^[a-zA-Z0-9]+\|NT_[0-9][0-9][0-9][0-9][0-9][0-9]' $f | \
+        perl -wpe 's/^(\w)/chr$1/' > $f:r-fixed.gff
+    end
+    cd ../acembly.ncbi_29.genes.proteins.fasta
+    - Remove G_t*_ prefixes from acemblyproteins.*.fasta:
+    foreach f (acemblyproteins.*.fasta)
+      perl -wpe 's/^\>G_t[\da-zA-Z]+_/\>/' $f > $f:r-fixed.fasta
+    end
     - Load into database as so:
-        ldHgGene hg11 acembly aceChrom.gff
-        hgPepPred hg11 generic acemblyPep acembly.pep
+    cd ..
+    ldHgGene hg11 acembly acembly.ncbi_29.genes.gff/*-fixed.gff
+    hgPepPred hg11 generic acemblyPep acembly.ncbi_29.genes.proteins.fasta/*-fixed.fasta
 
 LOAD GENOMIC DUPES (todo)
 o - Load genomic dupes
