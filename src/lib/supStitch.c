@@ -273,9 +273,11 @@ for (mid = ffList, midIx=1; mid != NULL; mid = mid->right, ++midIx)
     midNode->waysIn = e;
     for (ff = ffList,i=1; ff != mid; ff = ff->right,++i)
 	{
+	int mhStart = 0, mhEnd = 0;
 	if (t3List)
 	    {
 	    canFollow = tripleCanFollow(ff, mid, qSeq, t3List);
+	    trans3Offsets(t3List, mid->hStart, mid->hEnd, &mhStart, &mhEnd);
 	    }
 	else 
 	    {
@@ -286,9 +288,21 @@ for (mid = ffList, midIx=1; mid != NULL; mid = mid->right, ++midIx)
 	    {
 	    struct ssNode *ffNode = &nodes[i];
 	    int score;
-	    int hGap = mid->hStart - ff->hEnd;
-	    int nGap = mid->nStart - ff->nEnd;
+	    int hGap;
+	    int nGap;
 	    int crossover;
+
+	    nGap = mid->nStart - ff->nEnd;
+	    if (t3List)
+	        {
+		int fhStart, fhEnd;
+		trans3Offsets(t3List, ff->hStart, ff->hEnd, &fhStart, &fhEnd);
+		hGap = mhStart - fhEnd;
+		}
+	    else
+		{
+		hGap = mid->hStart - ff->hEnd;
+		}
 	    e = &edges[edgeCount++];
 	    assert(edgeCount <= maxEdgeCount);
 	    e->nodeIn = ffNode;
