@@ -9,7 +9,7 @@
 #include "nib.h"
 #include "psl.h"
 
-static char const rcsid[] = "$Id: pslSwap.c,v 1.5 2003/12/19 19:23:50 braney Exp $";
+static char const rcsid[] = "$Id: pslSwap.c,v 1.6 2004/12/30 20:01:21 braney Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -183,7 +183,7 @@ FILE *f = mustOpen(outName, "w");
 struct psl *psl;
 int dotMod = dot;
 
-printf("Converting %s\n", pslName);
+verbose(1,"Converting %s\n", pslName);
 while ((psl = pslNext(lf)) != NULL)
     {
     if (dot > 0)
