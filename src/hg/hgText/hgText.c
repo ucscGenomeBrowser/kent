@@ -1142,6 +1142,12 @@ if (*tok == NULL)
     webAbort("Error", "Parse error when reading number for field %s.",
 	     fieldName);
 
+if ((*tok)->type == kxtSub)
+    {
+    // unary '-': negative number, pass through to SQL.
+    dyStringAppend(q, (*tok)->string);
+    *tok = (*tok)->next;
+    }
 if ((*tok)->type == kxtString)
     {
     if (! isdigit((*tok)->string[0]))
@@ -1212,8 +1218,7 @@ else
 dyStringPrintf(clause, "((%s >= ", fieldName);
 parseNum(fieldName, &tokPtr, clause);
 dyStringPrintf(clause, ") && (%s <= ", fieldName);
-while (tokPtr != NULL && (tokPtr->type == kxtSub ||
-			  tokPtr->type == kxtPunct))
+while (tokPtr != NULL && tokPtr->type == kxtPunct)
     tokPtr = tokPtr->next;
 parseNum(fieldName, &tokPtr, clause);
 dyStringAppend(clause, "))");
