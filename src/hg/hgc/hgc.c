@@ -142,7 +142,7 @@
 #include "bed6FloatScore.h"
 #include "pscreen.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.734 2004/08/30 19:38:38 hiram Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.735 2004/09/01 16:06:20 braney Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -14611,7 +14611,7 @@ else if (sameWord(track, "firstEF"))
     }
 else if ( sameWord(track, "blastHg16KG") ||  sameWord(track, "blatHg16KG" ) ||
         sameWord(track, "tblastnHg16KGPep") || sameWord(track, "blastDm1FB") ||
-        sameWord(track, "blastHg17KG") )
+        sameWord(track, "blastSacCer1SG") || sameWord(track, "blastHg17KG") )
     {
     blastProtein(tdb, item);
     }
