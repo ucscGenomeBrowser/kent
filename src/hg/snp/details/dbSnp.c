@@ -12,7 +12,7 @@
 #include "jksql.h"
 #include "dystring.h"
 
-static char const rcsid[] = "$Id: dbSnp.c,v 1.10 2004/02/19 01:54:55 daryl Exp $";
+static char const rcsid[] = "$Id: dbSnp.c,v 1.11 2004/02/20 04:57:34 daryl Exp $";
 
 #define FLANK  20                 /* Amount of flanking sequence on each side */
 #define ALLELE 210                /* Maximum supported allele length */
@@ -157,10 +157,6 @@ struct hash *makeSnpInfoHash(char *database)
 struct slName    *chromList = getChromList();
 struct slName    *chrom;
 struct hash      *snpHash = newHash(24); /* Make hash 2^24 (16M) big */
-//unsigned long int snpNihCount = 0;
-//unsigned long int snpTscCount = 0;
-//unsigned long int snpNihCumul = 0;
-//unsigned long int snpTscCumul = 0;
 unsigned long int snpMapCount = 0;
 unsigned long int snpMapCumul = 0;
 struct dnaSeq *seq = NULL;
@@ -173,22 +169,8 @@ for (chrom = chromList; chrom; chrom = chrom->next)
     snpMapCount = addSnpsFromChrom(chrom->name, seq, "snpMap", snpHash);
     snpMapCumul += snpMapCount;
     printf("(%ld) ... done.\n",snpMapCount);fflush(stdout);
-//    printf("and snpNih ");fflush(stdout);
-//    snpNihCount = addSnpsFromChrom(chrom->name, seq, "snpNih", snpHash);
-//    snpNihCumul += snpNihCount;
-//    printf("(%ld) ... ",snpNihCount);fflush(stdout);
-//    if (!strncmp(database, "hg", 2)) 
-//	{
-//	printf("and snpTsc ");fflush(stdout);
-//	snpTscCount = addSnpsFromChrom(chrom->name, seq, "snpTsc", snpHash);
-//	snpTscCumul += snpTscCount;
-//	printf("(%ld) ",snpTscCount);fflush(stdout);
-//	}
-//    printf("done.\n");fflush(stdout);
     freeDnaSeq(&seq);
     }
-//printf("Total SNPs loaded: %ld from snpNih and %ld from snpTsc for a total of %ld SNPs.\n",
-//       snpNihCumul, snpTscCumul, snpNihCumul+snpTscCumul);
 printf("Total SNPs loaded: %ld from snpMap.\n", snpMapCumul);
 return snpHash;
 }
@@ -223,9 +205,9 @@ convertToLowercase(fi->seq5);
 convertToLowercase(fi->seq3);
 
 /* remove gap ('-') characters */
-if (!strncmp(fi->allele1,"-",1)) 
+if (startsWith(fi->allele1,"-")) 
     ZeroVar(fi->allele1);
-if (!strncmp(fi->allele2,"-",1)) 
+if (startsWith(fi->allele2,"-")) 
     ZeroVar(fi->allele2);
 
 /* combine alleles with flanking regions */
@@ -254,19 +236,12 @@ int  offset = strcspn(dna, iupac);
 
 strncpy(wobble, dna+offset, 1);
 
-//for (i=0; i<sizeof(iupac); i++)
-//    {
-//    wobble = strndup(iupac+i,1);
-//    if (strstr(dna, wobble))
-//	return;
-//    }
-//wobble = 0;
 }
 
 int getGapLen(char *allele)
 /* correction for the gap length on the observed strand */
 {
-if (strlen(allele)==0||!strncmp(allele,"-",1)) 
+if (strlen(allele)==0 || startsWith(allele,"-")) 
     return 1; 
 else
     return 0;
