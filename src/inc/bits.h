@@ -29,6 +29,12 @@ boolean bitReadOne(Bits *b, int bitIx);
 int bitCountRange(Bits *b, int startIx, int bitCount);
 /* Count number of bits set in range. */
 
+int bitFindSet(Bits *b, int startIx, int bitCount);
+/* Find the index of the the next set bit. */
+
+int bitFindClear(Bits *b, int startIx, int bitCount);
+/* Find the index of the the next clear bit. */
+
 void bitClear(Bits *b, int bitCount);
 /* Clear many bits. */
 

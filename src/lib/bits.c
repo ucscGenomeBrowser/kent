@@ -6,7 +6,7 @@
 #include "common.h"
 #include "bits.h"
 
-static char const rcsid[] = "$Id: bits.c,v 1.11 2003/09/09 18:44:20 markd Exp $";
+static char const rcsid[] = "$Id: bits.c,v 1.12 2003/12/22 19:49:33 markd Exp $";
 
 
 static Bits oneBit[8] = { 0x80, 0x40, 0x20, 0x10, 0x8, 0x4, 0x2, 0x1};
@@ -124,6 +124,50 @@ for (i = startByte+1; i<endByte; ++i)
     count += bitsInByte[b[i]];
 count += bitsInByte[b[endByte] & rightMask[endBits]];
 return count;
+}
+
+static int bitFind(Bits *b, int startIx, boolean val, int bitCount)
+/* Find the index of the the next set bit. */
+{
+unsigned char notByteVal = val ? 0 : 0xff;
+int iBit = startIx;
+int endByte = ((bitCount-1)>>3);
+int iByte;
+
+/* scan initial bits upto a byte boundry */
+while (((iBit & 7) != 0) && (iBit < bitCount))
+    {
+    if (bitReadOne(b, iBit) == val)
+        return iBit;
+    iBit++;
+    }
+
+/* scan byte at a time */
+iByte = (iBit >> 3);
+while ((iByte < endByte) && (b[iByte] == notByteVal))
+    iByte++;
+
+/* scan into current byte */
+iBit = iByte << 3;
+while (iBit < bitCount)
+    {
+    if (bitReadOne(b, iBit) == val)
+        return iBit;
+    iBit++;
+    }
+ return bitCount;  /* not found */
+}
+
+int bitFindSet(Bits *b, int startIx, int bitCount)
+/* Find the index of the the next set bit. */
+{
+return bitFind(b, startIx, TRUE, bitCount);
+}
+
+int bitFindClear(Bits *b, int startIx, int bitCount)
+/* Find the index of the the next clear bit. */
+{
+return bitFind(b, startIx, FALSE, bitCount);
 }
 
 void bitClear(Bits *b, int bitCount)
