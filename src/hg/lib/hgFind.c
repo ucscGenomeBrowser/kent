@@ -1610,6 +1610,35 @@ static void mrnaKeysHtmlOnePos(struct hgPosTable *table, struct hgPos *pos, FILE
 fprintf(f, "%s", pos->description);
 }
 
+static boolean mrnaAligns(struct sqlConnection *conn, char *acc)
+/* Return TRUE accession is in one of our mRNA 
+ * alignment tables. */
+{
+static char *estTables[] = { "all_est", "xenoEst", NULL};
+static char *mrnaTables[] = { "all_mrna", "xenoMrna", NULL};
+char **tables, *table;
+char query[256], buf[64], *type;
+safef(query, sizeof(query), "select type from mrna where acc = '%s'", acc);
+type = sqlQuickQuery(conn, query, buf, sizeof(buf));
+if (type == NULL)
+    internalErr();
+if (sameWord(type, "EST"))
+    tables = estTables;
+else
+    tables = mrnaTables;
+while ((table = *tables++) != NULL)
+    {
+    if (sqlTableExists(conn, table))
+	{
+	safef(query, sizeof(query), 
+	    "select qName from %s where qName = '%s'", table, acc);
+	if (sqlQuickQuery(conn, query, buf, sizeof(buf)) != NULL)
+	    return TRUE;
+	}
+    }
+return FALSE;
+}
+
 static void findMrnaKeys(char *keys, struct hgPositions *hgp,
 			 char *hgAppName, struct cart *cart)
 /* Find mRNA that has keyword in one of it's fields. */
@@ -1683,26 +1712,29 @@ table->htmlOnePos = mrnaKeysHtmlOnePos;
     char *ui = getUiUrl(cart);
     for (el = allKeysList; el != NULL; el = el->next)
         {
-        AllocVar(pos);
-        slAddHead(&table->posList, pos);
-        pos->name = cloneString(el->name);
-        dyStringClear(dy);
-        
-	dyStringPrintf(dy, "<A HREF=\"%s?position=%s", hgAppName, el->name);
-        
-        if (ui != NULL)
-            dyStringPrintf(dy, "&%s", ui);
-        dyStringPrintf(dy, "%s\">", 
-                       hgp->extraCgi);
-        dyStringPrintf(dy, "%s </A>", el->name);
-        sprintf(query, 
-                "select description.name from mrna,description"
-                " where mrna.acc = '%s' and mrna.description = description.id",
-                el->name);
-        if (sqlQuickQuery(conn, query, description, sizeof(description)))
-            dyStringPrintf(dy, "- %s", description);
-        dyStringPrintf(dy, "\n");
-        pos->description = cloneString(dy->string);
+	if (mrnaAligns(conn, el->name))
+	    {
+	    AllocVar(pos);
+	    slAddHead(&table->posList, pos);
+	    pos->name = cloneString(el->name);
+	    dyStringClear(dy);
+	    
+	    dyStringPrintf(dy, "<A HREF=\"%s?position=%s", hgAppName, el->name);
+	    
+	    if (ui != NULL)
+		dyStringPrintf(dy, "&%s", ui);
+	    dyStringPrintf(dy, "%s\">", 
+			   hgp->extraCgi);
+	    dyStringPrintf(dy, "%s </A>", el->name);
+	    sprintf(query, 
+		    "select description.name from mrna,description"
+		    " where mrna.acc = '%s' and mrna.description = description.id",
+		    el->name);
+	    if (sqlQuickQuery(conn, query, description, sizeof(description)))
+		dyStringPrintf(dy, "- %s", description);
+	    dyStringPrintf(dy, "\n");
+	    pos->description = cloneString(dy->string);
+	    }
         }
     slReverse(&table->posList);
     hFreeConn(&conn);
