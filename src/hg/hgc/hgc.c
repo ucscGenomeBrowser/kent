@@ -122,7 +122,7 @@
 #include "sgdDescription.h"
 #include "hgFind.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.537 2003/12/18 03:24:27 daryl Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.537.2.1 2003/12/24 02:14:35 daryl Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -2314,7 +2314,7 @@ if (sameString(casing, "upper"))
 if (*casing != 0)
     cartSetString(cart, "hgSeq.casing", casing);
 
-printf("<FORM ACTION=\"%s\" METHOD=\"GET\">\n\n", hgcPath());
+printf("<FORM ACTION=\"%s\" METHOD=\"POST\">\n\n", hgcPath());
 cartSaveSession(cart);
 cgiMakeHiddenVar("g", "htcGetDna3");
 
@@ -10344,6 +10344,18 @@ if ((descr = getEncodeRegionDescr(item)) != NULL)
 genericClickHandlerPlus(tdb, item, NULL, plus);
 }
 
+void separateIdAndName(char *item, char *encodeId, char *encodeName)
+/* return the id and name of an encode object */
+{
+/* the name is in the format 'ddddddd/nnn' where the first seven 'd' characters
+   are the digits of the identifier, and the variable-length 'n' chatacters
+   are the name of the object 
+*/
+strncpy(encodeId,item,7);
+encodeId[7]='\0';
+encodeName = item+8;
+}
+
 void doEncodeErge(struct trackDb *tdb, char *item)
 /* Print ENCODE data from dbERGE II */
 {
@@ -10355,11 +10367,11 @@ struct sqlResult *sr;
 char *dupe = cloneString(tdb->type);
 char *type, *words[16];
 int wordCount = chopLine(dupe, words);
-char *encodeName = item+8;
+char *newLabel = tdb->longLabel + 7; /* removes 'ENCODE ' from label */
+char *encodeName = NULL;
 char encodeId[8];
 
-strncpy(encodeId,item,7);
-encodeId[7]='\0';
+separateIdAndName(item, encodeName, encodeId);
 cartWebStart(cart, "ENCODE Region Data: %s", tdb->longLabel+7);
 printf("<H2>ENCODE Region <U>%s</U> Data for %s.</H2>\n", tdb->longLabel+7, encodeName);
 genericHeader(tdb, encodeName);
