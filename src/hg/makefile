@@ -26,7 +26,6 @@ BAD_DIRS = \
 	hgBatch \
 	makePai \
 	makeSeqs \
-	maskOutFa \
 	mouseStuff \
 	ooCloneOverlaps \
 	oneShot \
@@ -144,6 +143,7 @@ DIRS = \
 	liftOver \
 	liftUp \
 	makeDb \
+	maskOutFa \
 	mdToNcbiLift \
 	mendMap \
 	mrnaToGene \
