@@ -6,6 +6,7 @@
 #include "linefile.h"
 #include "jksql.h"
 #include "dnaMotif.h"
+#include "dnaMotifSql.h"
 #include "hui.h"
 #include "portable.h"
 #include "hgGene.h"
