@@ -1834,4 +1834,39 @@ axtChain -linearGap=../../chickenHumanTuned.gap $1 \
     ldHgGene -gtf -genePredExt tetNig1 geneid chr*.gtf
     hgPepPred tetNig1 generic geneidPep geneidPep.fa
 
+# Adding a photograph to the description
+#	Permission to use photos obtained from Hugues Roest Crollius:
+#	Email message attached below
+    ssh hgwdev
+    cd /cluster/data/tetNig1/html
+    wget \
+	'http://www.genoscope.cns.fr/externe/Francais/Projets/Projet_C/img/tetra23.jpg' \
+	-O photo_tetraodon.jpg
+    convert -crop 1320x600+280+40 -sharpen 0 -normalize \
+	-geometry 300x200 -quality 80 photo_tetraodon.jpg \
+	Tetraodon_nigroviridis.jpg
+    cp -p Tetraodon_nigroviridis.jpg /usr/local/apache/htdocs/images
+    #	add links to this image in the description.html page, request push
 
+# After checking with a couple of journals who have used our pictures for
+# their covers, it appears that none holds copyrights so you are free to use
+# any of the pictures on the followings pages:
+
+# http://www.genoscope.cns.fr/externe/English/Projets/Projet_C/album.html
+
+# For some of the images on the first page we can provide you with high
+# resolution versions if needed.
+
+# I hope this helps.
+
+# Best wishes,
+
+# Hugues Roest Crollius
+
+# -------------------------------------------------------------------------
+# Hugues Roest Crollius
+# Laboratoire Dynamique et Organisation des Genomes (Dyogen)
+# CNRS UMR8541
+# Departement de Biologie
+# Ecole Normale Superieure                        Tel: +33 (0)1 44 32 23 70
+# 46 rue d'Ulm, 75230 Paris Cedex 05              Email: hrc@ens.fr
