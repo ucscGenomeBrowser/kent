@@ -1,8 +1,8 @@
 all: cgi
 
-alpha: clean libs cgi-alpha
+alpha: clean cgi-alpha
 
-beta: clean libs cgi-beta
+beta: clean cgi-beta
 
 libs:
 	cd lib; make; cd ..
@@ -12,10 +12,10 @@ libs:
 cgi: libs
 	cd hg; make; cd ..
 
-cgi-alpha:
+cgi-alpha: libs
 	cd hg; make alpha; cd ..
 
-cgi-beta:
+cgi-beta: libs
 	cd hg; make beta; cd ..
 clean:
 	cd lib; make clean; cd .. 
