@@ -78,8 +78,8 @@ Color colorAndCodonFromGrayIx(struct vGfx *vg, char *codon, int grayIx,
  * are both encoded in the grayIx*/
 
 void drawGenomicCodons(struct vGfx *vg, struct simpleFeature *sfList,
-                double scale, int xOff, int y, int height,
-                MgFont *font, Color *cdsColor, int winStart, int maxPixels);
+                double scale, int xOff, int y, int height, MgFont *font, 
+                Color *cdsColor,int winStart, int maxPixels, bool zoomedToText);
 /* Draw amino acid translation of genomic sequence based on a list
    of codons. Used for browser ruler in full mode*/
 

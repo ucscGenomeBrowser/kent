@@ -84,7 +84,7 @@
 #include "estOrientInfo.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.748 2004/06/02 23:01:50 braney Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.749 2004/06/02 23:45:10 kate Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
@@ -6242,7 +6242,8 @@ if (rulerMode != RULER_MODE_OFF)
     yAfterBases = yAfterRuler;
     pixHeight += basePositionHeight;
 
-    if (rulerMode == RULER_MODE_FULL && zoomedToBaseLevel)
+    if (rulerMode == RULER_MODE_FULL && 
+            (zoomedToBaseLevel || zoomedToCdsColorLevel))
         {
         yAfterRuler += rulerTranslationHeight;
         pixHeight += rulerTranslationHeight;
@@ -6276,7 +6277,8 @@ makeBrownShades(vg);
 makeSeaShades(vg);
 orangeColor = makeOrangeColor(vg);
 
-if (rulerMode == RULER_MODE_FULL && !cdsColorsMade)
+if (rulerMode == RULER_MODE_FULL &&
+        (zoomedToBaseLevel || zoomedToCdsColorLevel) && !cdsColorsMade)
     {
     makeCdsShades(vg, cdsColor);
     cdsColorsMade = TRUE;
@@ -6308,7 +6310,8 @@ if (withLeftLabels && psOutput == NULL)
         {
         /* draw button for Base Position pseudo-track */
         int height = basePositionHeight;
-        if (rulerMode == RULER_MODE_FULL && zoomedToBaseLevel)
+        if (rulerMode == RULER_MODE_FULL && 
+                        (zoomedToBaseLevel || zoomedToCdsColorLevel))
             height += rulerTranslationHeight;
         drawGrayButtonBox(vg, trackTabX, y, trackTabWidth, height, TRUE);
         mapBoxUi(trackTabX, y, trackTabWidth, height, RULER_TRACK_NAME, 
@@ -6357,11 +6360,13 @@ if (withLeftLabels)
 	{
 	vgTextRight(vg, leftLabelX, y, leftLabelWidth-1, rulerHeight, 
 		    MG_BLACK, font, RULER_TRACK_LABEL);
-	if(zoomedToBaseLevel)
+	if(zoomedToBaseLevel || 
+                (zoomedToCdsColorLevel && rulerMode == RULER_MODE_FULL))
 	    drawComplementArrow(vg,leftLabelX, y+rulerHeight,
 				leftLabelWidth-1, baseHeight, font);
 	y += basePositionHeight;
-        if (rulerMode == RULER_MODE_FULL & zoomedToBaseLevel)
+        if (rulerMode == RULER_MODE_FULL & 
+                (zoomedToBaseLevel || zoomedToCdsColorLevel))
             y += rulerTranslationHeight;
 	}
     for (track = trackList; track != NULL; track = track->next)
@@ -6631,7 +6636,8 @@ if (rulerMode != RULER_MODE_OFF)
 		        chromName, ns, ne, message);
 	}
     }
-    if (zoomedToBaseLevel)
+    if (zoomedToBaseLevel || 
+            (zoomedToCdsColorLevel && rulerMode == RULER_MODE_FULL))
         {
         Color baseColor = MG_BLACK;
         int start, end, chromSize;
@@ -6676,7 +6682,8 @@ if (rulerMode != RULER_MODE_OFF)
             mapBoxReinvokeExtra(insideX, y+rulerHeight, insideWidth,baseHeight, 
                                 NULL, NULL, 0, 0, "", newRulerVis);
             }
-        if (rulerMode == RULER_MODE_FULL && zoomedToBaseLevel)
+        if (rulerMode == RULER_MODE_FULL && 
+                                (zoomedToBaseLevel || zoomedToCdsColorLevel))
             {
             /* display codons */
             char codon[4];
@@ -6713,7 +6720,8 @@ if (rulerMode != RULER_MODE_OFF)
                                              extraSeq, complementRulerBases); 
                 /* draw the codons in the list, with alternating colors */
                 drawGenomicCodons(vg, sfList, scale, insideX, y, codonHeight,
-                                    font, cdsColor, winStart, MAXPIXELS);
+                                    font, cdsColor, winStart, MAXPIXELS,
+                                    zoomedToBaseLevel || zoomedToCodonLevel);
                 }
             }
         }

@@ -1027,8 +1027,8 @@ return(drawOptionNum);
 }
 
 void drawGenomicCodons(struct vGfx *vg, struct simpleFeature *sfList,
-                double scale, int xOff, int y, int height,
-                MgFont *font, Color *cdsColor, int winStart, int maxPixels)
+                double scale, int xOff, int y, int height, MgFont *font, 
+                Color *cdsColor, int winStart, int maxPixels, bool zoomedToText)
 /* Draw amino acid translation of genomic sequence based on a list
    of codons. Used for browser ruler in full mode*/
 {
@@ -1039,8 +1039,13 @@ for (sf = sfList; sf != NULL; sf = sf->next)
     char codon[4];
     Color color = colorAndCodonFromGrayIx(vg, codon, sf->grayIx, 
                                                 cdsColor, MG_GRAY);
-    drawScaledBoxSampleWithText(vg, sf->start, sf->end, scale, insideX, y,
+    if (zoomedToText)
+        drawScaledBoxSampleWithText(vg, sf->start, sf->end, scale, insideX, y,
                                 height, color, 1.0, font, codon, TRUE,
                                 cdsColor, winStart, maxPixels);
+    else
+        /* zoomed in just enough to see colored boxes */
+        drawScaledBoxSample(vg, sf->start, sf->end, scale, xOff, y, height, 
+		                color, 1.0);
     }
 }
