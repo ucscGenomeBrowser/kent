@@ -154,7 +154,7 @@ switch (pp->type)
 	    errAt(pp->tok, "Use of undefined variable %s", pp->name);
 	pp->var = var;
 	pp->type = pptVarUse;
-	pp->ty = var->ty;
+	pp->ty = CloneVar(var->ty);
         break;
 	}
     }

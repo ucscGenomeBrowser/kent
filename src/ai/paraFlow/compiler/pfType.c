@@ -148,8 +148,107 @@ castType += baseTypeLogicalSize(pfc, newBase);
 insertCast(castType, newType, pPp);
 }
 
+void pfTypeOnTuple(struct pfCompile *pfc, struct pfParse *pp)
+/* Create tuple type and link in types of all children. */
+{
+pp->ty = pfTypeNew(pfc->tupleType);
+pp->ty->isTuple = TRUE;
+if (pp->children != NULL)
+    {
+    pp->ty->children = pp->children->ty;
+    pp = pp->children;
+    while (pp->next != NULL)
+	{
+	if (pp->ty == NULL)
+	    errAt(pp->tok, "void value in tuple");
+	pp->ty->next = pp->next->ty;
+	pp = pp->next;
+	}
+    }
+}
+
+
+static void coerceOne(struct pfCompile *pfc, struct pfParse **pPp,
+	struct pfType *type);
+/* Make sure that a single variable is of the required type. 
+ * Add casts if necessary */
+
+static void coerceToBit(struct pfCompile *pfc, struct pfParse **pPp)
+/* Make sure that pPp is a bit. */
+{
+struct pfParse *pp = *pPp;
+if (pp->ty == NULL && pp->type != pptConstUse)
+    expectingGot("logical value", pp->tok);
+if (pp->type == pptConstUse || pp->ty->base != pfc->bitType)
+    {
+    struct pfType *type = pfTypeNew(pfc->bitType);
+    coerceOne(pfc, pPp, type);
+    }
+}
+
 static void coerceTuple(struct pfCompile *pfc, struct pfParse *tuple,
-	struct pfType *types);
+	struct pfType *types)
+/* Make sure that tuple is of correct type. */
+{
+int tupSize = slCount(tuple->children);
+int typeSize = slCount(types->children);
+struct pfParse **pos;
+struct pfType *type;
+if (tupSize != typeSize)
+    {
+    errAt(tuple->tok, "Expecting tuple of %d, got tuple of %d", 
+    	typeSize, tupSize);
+    }
+if (tupSize == 0)
+    return;
+pos = &tuple->children;
+type = types->children;
+for (;;)
+     {
+     coerceOne(pfc, pos, type);
+     pos = &(*pos)->next;
+     type = type->next;
+     if (type == NULL)
+         break;
+     }
+tuple->ty = types;
+}
+
+static void coerceCall(struct pfCompile *pfc, struct pfParse *pp)
+/* Make sure that parameters to call are right.  Then
+ * set pp->type to call's return type. */
+{
+struct pfParse *function = pp->children;
+struct pfParse *paramTuple = function->next;
+struct pfVar *functionVar = function->var;
+struct pfType *functionType = functionVar->ty;
+struct pfType *inputType = functionType->children;
+struct pfType *outputType = inputType->next;
+coerceTuple(pfc, paramTuple, inputType);
+if (outputType->children != NULL && outputType->children->next == NULL)
+    pp->ty = CloneVar(outputType->children);
+else
+    pp->ty = CloneVar(outputType);
+}
+
+static void coerceTupleToCollection(struct pfCompile *pfc, 
+	struct pfParse **pPp, struct pfType *type)
+/* Given a type that is a collection, and a parse tree that
+ * is a tuple, do any casting required inside the tuple
+ * to get the members of the tuple to be of the same type
+ * as the collection elements.  Then put in a castTupleToCollection
+ * node in the tree. */
+{
+struct pfParse *tuple = *pPp;
+struct pfType *elType  = type->children;
+struct pfParse **pos;
+struct pfType *ty = CloneVar(type);
+uglyf("coerceTupleToCollection of %s\n", elType->base->name);
+for (pos = &tuple->children; *pos != NULL; pos = &(*pos)->next)
+     coerceOne(pfc, pos, elType);
+pfTypeOnTuple(pfc, tuple);
+tuple->type = pptUniformTuple;
+}
 
 static void coerceOne(struct pfCompile *pfc, struct pfParse **pPp,
 	struct pfType *type)
@@ -228,15 +327,7 @@ else
     else if (pt->base != type->base)
 	{
 	boolean ok = FALSE;
-	if (pt->isTuple)
-	    {
-	    if (pt->children == NULL)
-		errAt(pp->tok, "using void value");
-	    else
-		errAt(pp->tok, 
-		    "expecting single value, got %d values", slCount(pt->children));
-	    }
-	else if (type->base == pfc->bitType && pt->base == pfc->stringType)
+	if (type->base == pfc->bitType && pt->base == pfc->stringType)
 	    {
 	    struct pfType *tt = pfTypeNew(pfc->varType);
 	    insertCast(pptCastStringToBit, tt, pPp);
@@ -253,6 +344,26 @@ else
 	    struct pfType *tt = CloneVar(type);
 	    insertCast(pptCastVarToTyped, tt, pPp);
 	    ok = TRUE;
+	    }
+	else if (type->base->isCollection)
+	    {
+	    if (pt->isTuple)
+	        {
+		coerceTupleToCollection(pfc, pPp, type);
+		ok = TRUE;
+		}
+	    else
+	        {
+		expectingGot("collection", pp->tok);
+		}
+	    }
+	else if (pt->isTuple)
+	    {
+	    if (pt->children == NULL)
+		errAt(pp->tok, "using void value");
+	    else
+		errAt(pp->tok, 
+		    "expecting single value, got %d values", slCount(pt->children));
 	    }
 	else
 	    {
@@ -273,64 +384,6 @@ else
 	coerceTuple(pfc, pp, type);
 	}
     }
-}
-
-static void coerceToBit(struct pfCompile *pfc, struct pfParse **pPp)
-/* Make sure that pPp is a bit. */
-{
-struct pfParse *pp = *pPp;
-if (pp->ty == NULL && pp->type != pptConstUse)
-    expectingGot("logical value", pp->tok);
-if (pp->type == pptConstUse || pp->ty->base != pfc->bitType)
-    {
-    struct pfType *type = pfTypeNew(pfc->bitType);
-    coerceOne(pfc, pPp, type);
-    }
-}
-
-static void coerceTuple(struct pfCompile *pfc, struct pfParse *tuple,
-	struct pfType *types)
-/* Make sure that tuple is of correct type. */
-{
-int tupSize = slCount(tuple->children);
-int typeSize = slCount(types->children);
-struct pfParse **pos;
-struct pfType *type;
-if (tupSize != typeSize)
-    {
-    errAt(tuple->tok, "Expecting tuple of %d, got tuple of %d", 
-    	typeSize, tupSize);
-    }
-if (tupSize == 0)
-    return;
-pos = &tuple->children;
-type = types->children;
-for (;;)
-     {
-     coerceOne(pfc, pos, type);
-     pos = &(*pos)->next;
-     type = type->next;
-     if (type == NULL)
-         break;
-     }
-tuple->ty = types;
-}
-
-static void coerceCall(struct pfCompile *pfc, struct pfParse *pp)
-/* Make sure that parameters to call are right.  Then
- * set pp->type to call's return type. */
-{
-struct pfParse *function = pp->children;
-struct pfParse *paramTuple = function->next;
-struct pfVar *functionVar = function->var;
-struct pfType *functionType = functionVar->ty;
-struct pfType *inputType = functionType->children;
-struct pfType *outputType = inputType->next;
-coerceTuple(pfc, paramTuple, inputType);
-if (outputType->children != NULL && outputType->children->next == NULL)
-    pp->ty = CloneVar(outputType->children);
-else
-    pp->ty = CloneVar(outputType);
 }
 
 static void coerceWhile(struct pfCompile *pfc, struct pfParse *pp)
@@ -470,25 +523,6 @@ if (!stringOk)
     struct pfBaseType *base = pp->ty->base;
     if (base == pfc->stringType)
 	 errAt(pp->tok, "Strings not allowed here");
-    }
-}
-
-void pfTypeOnTuple(struct pfCompile *pfc, struct pfParse *pp)
-/* Create tuple type and link in types of all children. */
-{
-pp->ty = pfTypeNew(pfc->tupleType);
-pp->ty->isTuple = TRUE;
-if (pp->children != NULL)
-    {
-    pp->ty->children = pp->children->ty;
-    pp = pp->children;
-    while (pp->next != NULL)
-	{
-	if (pp->ty == NULL)
-	    errAt(pp->tok, "void value in tuple");
-	pp->ty->next = pp->next->ty;
-	pp = pp->next;
-	}
     }
 }
 
