@@ -2,7 +2,8 @@
 	gcc -ggdb -O -Wformat -Wimplicit -Wuninitialized -Wreturn-type -I../inc -I../../inc -c $*.c
 
 L = /projects/cc/hg/jk/outSrc/expat/lib/.libs/libexpat.a -lm
-MYLIBDIR = $(HOME)/src/lib/$(MACHTYPE)
+MYLIBDIR = ../../lib/$(MACHTYPE)
+#MYLIBDIR = $(HOME)/src/lib/$(MACHTYPE)
 MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 
 O = autoXml.o
