@@ -4849,7 +4849,7 @@ for(lf = tg->items; lf != NULL; lf = lf->next)
 	heightPer = tg->heightPer;
 	s = sf->start;
 	e = sf->end;
-	drawScaledBox(mg, s, s+1, scale, xOff, y-e+s+5, 1, blackIndex());
+	drawScaledBox(mg, s, s+1, scale, xOff, y-e+s+10, 1, blackIndex());
 	}
     if (isFull)
 	y += lineHeight;
