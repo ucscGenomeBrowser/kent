@@ -7,7 +7,7 @@
 #include "jksql.h"
 #include "mysqlTableStatus.h"
 
-static char const rcsid[] = "$Id: freen.c,v 1.44 2004/06/03 22:56:12 kent Exp $";
+static char const rcsid[] = "$Id: freen.c,v 1.45 2004/06/07 23:06:55 kent Exp $";
 
 void usage()
 /* Print usage and exit. */
@@ -23,6 +23,7 @@ char *buf = NULL;
 free(pt);
 free(pt);
 free(buf + 1024);
+buf = malloc(10);
 }
 
 
