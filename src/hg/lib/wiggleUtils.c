@@ -9,7 +9,7 @@
 #include "hCommon.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: wiggleUtils.c,v 1.36 2004/11/16 21:46:38 hiram Exp $";
+static char const rcsid[] = "$Id: wiggleUtils.c,v 1.37 2004/11/17 17:59:02 hiram Exp $";
 
 void printHistoGram(struct histoResult *histoResults, boolean html)
 {
@@ -324,6 +324,64 @@ while ((el = hashNext(&cookie)) != NULL)
 
 return spanInUse;
 }	/*	int spanInUse()	*/
+
+/******	spanList - fetch list of spans from trackDb *********************/
+/*	This is used to save time from trying to look it up in the
+ *	actual table which is an expensive MySQL operation
+ */
+/*	Return is an array of integers, last one of value zero to indicate the
+ *	end of the array.  In case of nothing found in trackDb, return
+ *	a NULL pointer indicating no results. */
+int *wiggleSpanList(struct trackDb *tdb)
+{
+char *tdbDefault = cloneString(trackDbSettingOrDefault(tdb, SPANLIST, "NONE"));
+int *ret = (int *)NULL;
+
+
+if (sameWord("NONE",tdbDefault))
+    {
+    struct hashEl *hel;
+    /*	if not found in trackDb, maybe it is in tdb->settings
+     *	(custom tracks keep settings here)
+     */
+    if ((tdb->settings != (char *)NULL) &&
+	(tdb->settingsHash != (struct hash *)NULL))
+	{
+	if ((hel = hashLookup(tdb->settingsHash, SPANLIST)) != NULL)
+	    {
+	    freeMem(tdbDefault);
+	    tdbDefault = cloneString((char *)hel->val);
+	    }
+	}
+    }
+
+/*	If something found, let's parse it	*/
+if (differentWord("NONE",tdbDefault))
+    {
+    int i;
+    char *words[MAX_SPAN_COUNT];
+    int wc;
+    wc = chopCommas(tdbDefault,words);
+    AllocArray(ret,wc+1);	/*	+ 1 for the extra zero	*/
+    for ( i = 0; i < wc; ++i )
+	ret[i] = sqlUnsigned(words[i]);
+    intSort(wc,ret);
+    ret[wc] = 0;	/*	end of list	*/
+    }
+
+freeMem(tdbDefault);
+return(ret);
+}	/*	int *wiggleSpanList(struct trackDb *tdb)	*/
+
+/************************************************************************
+ ************************************************************************
+ ************************************************************************
+ The following code to the end of this file will become obsolete and can
+ be removed when the hgText binary is retired.  That is the only place
+ this wigFetchData() business is used.
+ ************************************************************************
+ ************************************************************************
+ ************************************************************************/
 
 static char *currentFile = (char *) NULL;	/* the binary file name */
 static FILE *wibFH = (FILE *) NULL;		/* file handle to binary file */

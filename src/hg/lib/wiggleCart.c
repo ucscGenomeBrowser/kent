@@ -10,7 +10,7 @@
 #include "hui.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: wiggleCart.c,v 1.11 2004/11/16 21:44:33 hiram Exp $";
+static char const rcsid[] = "$Id: wiggleCart.c,v 1.12 2004/11/17 17:59:01 hiram Exp $";
 
 extern struct cart *cart;      /* defined in hgTracks.c or hgTrackUi */
 
@@ -654,51 +654,3 @@ if (tDbYMark)
 
 freeMem(tdbDefault);
 }	/*	void wigFetchYLineMarkValue()	*/
-
-/******	spanList - fetch list of spans from trackDb *********************/
-/*	This is used to save time from trying to look it up in the
- *	actual table which is an expensive MySQL operation
- */
-/*	Return is an array of integers, last one of value zero to indicate the
- *	end of the array.  In case of nothing found in trackDb, return
- *	a NULL pointer indicating no results. */
-int *wiggleSpanList(struct trackDb *tdb)
-{
-char *tdbDefault = cloneString(trackDbSettingOrDefault(tdb, SPANLIST, "NONE"));
-int *ret = (int *)NULL;
-
-
-if (sameWord("NONE",tdbDefault))
-    {
-    struct hashEl *hel;
-    /*	if not found in trackDb, maybe it is in tdb->settings
-     *	(custom tracks keep settings here)
-     */
-    if ((tdb->settings != (char *)NULL) &&
-	(tdb->settingsHash != (struct hash *)NULL))
-	{
-	if ((hel = hashLookup(tdb->settingsHash, SPANLIST)) != NULL)
-	    {
-	    freeMem(tdbDefault);
-	    tdbDefault = cloneString((char *)hel->val);
-	    }
-	}
-    }
-
-/*	If something found, let's parse it	*/
-if (differentWord("NONE",tdbDefault))
-    {
-    int i;
-    char *words[MAX_SPAN_COUNT];
-    int wc;
-    wc = chopCommas(tdbDefault,words);
-    AllocArray(ret,wc+1);	/*	+ 1 for the extra zero	*/
-    for ( i = 0; i < wc; ++i )
-	ret[i] = sqlUnsigned(words[i]);
-    intSort(wc,ret);
-    ret[wc] = 0;	/*	end of list	*/
-    }
-
-freeMem(tdbDefault);
-return(ret);
-}	/*	int *wiggleSpanList(struct trackDb *tdb)	*/
