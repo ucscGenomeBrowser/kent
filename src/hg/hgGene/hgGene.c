@@ -16,7 +16,7 @@
 #include "hgColors.h"
 #include "hgGene.h"
 
-static char const rcsid[] = "$Id: hgGene.c,v 1.37 2004/11/22 20:37:28 kent Exp $";
+static char const rcsid[] = "$Id: hgGene.c,v 1.38 2004/11/23 18:08:37 kent Exp $";
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
@@ -486,7 +486,7 @@ char *newChrom = cartOptionalString(cart, hggChrom);
 char *newStarts = cartOptionalString(cart, hggStart);
 char *newEnds = cartOptionalString(cart, hggEnd);
 
-if (newChrom != NULL && newStarts != NULL && newEnds != NULL)
+if (newChrom != NULL && !sameString(newChrom, "none") && newStarts != NULL && newEnds != NULL)
     {
     if (oldGene == NULL || oldStarts == NULL || oldEnds == NULL
     	|| sameString(oldGene, newGene))

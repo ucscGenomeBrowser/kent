@@ -1,5 +1,12 @@
 # Rat-specific link info.
 
+name rgd
+shortLabel RGD
+tables kgXref
+priority 25
+idSql select swissProt.extDbRef.extAcc1 from swissProt.extDbRef,swissProt.extDb,kgXref where swissProt.extDb.val = 'RGD' and swissProt.extDb.id = swissProt.extDbRef.extDb and swissProt.extDbRef.acc = kgXref.spID and kgXref.kgID = '%s' 
+url http://rgd.mcw.edu/tools/genes/genes_view.cgi?id=%s
+
 name cgap
 url http://cgap.nci.nih.gov/Genes/GeneInfo?ORG=Rn&CID=%s
 

@@ -7,7 +7,8 @@ tables hgBlastTab
 idSql select target from hgBlastTab where query = '%s'
 pepTable knownGenePep
 genomeUrl ../cgi-bin/hgTracks?org=Human&position=%s
-sorterUrl ../cgi-bin/hgNear?org=Human&near.oldOrg=Human&db=0&near_search=%s
+sorterUrl ../cgi-bin/hgNear?org=Human&near.oldOrg=Human&near_search=%s
+geneUrl ../cgi-bin/hgGene?org=Human&hgg_gene=%s&hgg_chrom=none
 otherUrl http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Search&db=Nucleotide&term=%s&doptcmdl=GenBank&tool=genome.ucsc.edu
 otherName GenBank
 priority 10
@@ -18,7 +19,8 @@ tables mmBlastTab
 idSql select target from mmBlastTab where query = '%s'
 pepTable knownGenePep
 genomeUrl ../cgi-bin/hgTracks?org=Mouse&position=%s
-sorterUrl ../cgi-bin/hgNear?org=Mouse&near.oldOrg=Mouse&db=0&near_search=%s
+sorterUrl ../cgi-bin/hgNear?org=Mouse&near.oldOrg=Mouse&near_search=%s
+geneUrl ../cgi-bin/hgGene?org=Mouse&hgg_gene=%s&hgg_chrom=none
 otherName Jackson Labs
 otherUrl http://www.informatics.jax.org/searches/accession_report.cgi?id=%s
 otherIdSql select swissProt.extDbRef.extAcc1 from swissProt.extDbRef,swissProt.extDb,kgXref where swissProt.extDb.val = 'MGD' and swissProt.extDb.id = swissProt.extDbRef.extDb and swissProt.extDbRef.acc = kgXref.spID and kgXref.kgID = '%s' 
@@ -30,7 +32,8 @@ tables rnBlastTab
 idSql select target from rnBlastTab where query = '%s'
 pepTable knownGenePep
 genomeUrl ../cgi-bin/hgTracks?org=Rat&position=%s
-sorterUrl ../cgi-bin/hgNear?org=Rat&near.oldOrg=Rat&db=0&near_search=%s
+sorterUrl ../cgi-bin/hgNear?org=Rat&near.oldOrg=Rat&near_search=%s
+geneUrl ../cgi-bin/hgGene?org=Rat&hgg_gene=%s&hgg_chrom=none
 otherName RGD
 otherUrl http://rgd.mcw.edu/tools/genes/genes_view.cgi?id=%s
 otherIdSql select swissProt.extDbRef.extAcc1 from swissProt.extDbRef,swissProt.extDb,kgXref where swissProt.extDb.val = 'RGD' and swissProt.extDb.id = swissProt.extDbRef.extDb and swissProt.extDbRef.acc = kgXref.spID and kgXref.kgID = '%s' 
@@ -50,12 +53,13 @@ priority 30
 name drosophila
 shortLabel D. melanogaster
 tables dmBlastTab
-idSql select target from dmBlastTab where query = '%s'
 pepTable bdgpGenePep
 genomeUrl ../cgi-bin/hgTracks?org=D.+melanogaster&position=%s
-sorterUrl ../cgi-bin/hgNear?org=D.+melanogaster&near.oldOrg=D.+melanogaster&db=0&near_search=%s
+sorterUrl ../cgi-bin/hgNear?org=D.+melanogaster&near.oldOrg=D.+melanogaster&near_search=%s
+geneUrl ../cgi-bin/hgGene?org=D.+melanogaster&hgg_gene=%s&hgg_chrom=none
 otherName FlyBase
 otherUrl http://flybase.bio.indiana.edu/cgi-bin/fbidq.html?%s
+otherIdSql select bdgpGeneInfo.flyBaseId from bdgpGeneInfo,bdgpToCanonical where bdgpToCanonical.name='%s' and bdgpToCanonical.value = dm1.bdgpGeneInfo.bdgpName
 priority 40
 
 name cElegans
@@ -64,7 +68,8 @@ tables ceBlastTab
 idSql select target from ceBlastTab where query = '%s'
 pepTable sangerPep
 genomeUrl ../cgi-bin/hgTracks?org=C.+elegans&position=%s
-sorterUrl ../cgi-bin/hgNear?org=C.+elegans&near.oldOrg=C.+elegans&db=0&near_search=%s
+sorterUrl ../cgi-bin/hgNear?org=C.+elegans&near.oldOrg=C.+elegans&near_search=%s
+geneUrl ../cgi-bin/hgGene?org=C.+elegans&hgg_gene=%s&hgg_chrom=none
 otherName WormBase
 otherUrl http://www.wormbase.org/db/gene/gene?name=%s
 priority 50
@@ -75,7 +80,8 @@ tables scBlastTab
 idSql select target from scBlastTab where query = '%s'
 pepTable sgdPep
 genomeUrl ../cgi-bin/hgTracks?org=S.+cerevisiae&position=%s
-sorterUrl ../cgi-bin/hgNear?org=S.+cerevisiae&near.oldOrg=S.+cerevisiae&db=0&near_search=%s
+sorterUrl ../cgi-bin/hgNear?org=S.+cerevisiae&near.oldOrg=S.+cerevisiae&near_search=%s
+geneUrl ../cgi-bin/hgGene?org=S.+cerevisiae&hgg_gene=%s&hgg_chrom=none
 otherName SGD
 otherUrl http://db.yeastgenome.org/cgi-bin/SGD/locus.pl?locus=%s
 priority 60

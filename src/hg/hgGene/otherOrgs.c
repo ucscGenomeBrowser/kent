@@ -9,7 +9,7 @@
 #include "axt.h"
 #include "hgGene.h"
 
-static char const rcsid[] = "$Id: otherOrgs.c,v 1.9 2004/11/23 07:36:09 kent Exp $";
+static char const rcsid[] = "$Id: otherOrgs.c,v 1.10 2004/11/23 18:08:37 kent Exp $";
 
 struct otherOrg
 /* Links involving another organism. */
@@ -22,7 +22,8 @@ struct otherOrg
     char *idToProtIdSql;/* Convert from id to protein ID. */
     char *otherIdSql;	/* Convert from our id to other database ID. */
     char *genomeUrl;	/* URL of genome browser link. */
-    char *sorterUrl;	/* URL of genome browser link. */
+    char *sorterUrl;	/* URL of gene sorter link. */
+    char *geneUrl;	/* URL of hgGene link */
     char *otherUrl;	/* URL of other link. */
     char *otherName;	/* Name of other link. */
     char *db;		/* Other organism specific database. */
@@ -82,9 +83,10 @@ for (ra = raList; ra != NULL; ra = ra->next)
 	    otherOrg->otherIdSql = otherOrgOptionalField(ra, "otherIdSql");
 	    otherOrg->genomeUrl = otherOrgOptionalField(ra, "genomeUrl");
 	    otherOrg->sorterUrl = otherOrgOptionalField(ra, "sorterUrl");
+	    otherOrg->geneUrl = otherOrgOptionalField(ra, "geneUrl");
 	    otherOrg->otherUrl = otherOrgOptionalField(ra, "otherUrl");
 	    otherOrg->otherName = otherOrgOptionalField(ra, "otherName");
-	    otherOrg->db = otherOrgOptionalField(ra, "db");
+	    otherOrg->db = otherOrgRequiredField(ra, "db");
 	    otherOrg->pepTable = otherOrgOptionalField(ra, "pepTable");
 	    slAddHead(&otherOrgList, otherOrg);
 	    }
@@ -177,7 +179,7 @@ return otherId;
 }
 
 static void otherOrgPrintLink(struct otherOrg *otherOrg,  
-	char *label,  char *missingLabel, boolean useHgsid, boolean isSorter,
+	char *label,  char *missingLabel, boolean useHgsid,
 	char *otherId, char *urlFormat)
 /* If label and urlFormat exist then print up a link.  Otherwise print n/a. */
 {
@@ -189,7 +191,7 @@ if (urlFormat != NULL && label != NULL)
 	hPrintf("<A HREF=\"");
 	hPrintf(urlFormat, otherId);
 	if (useHgsid)
-	    hPrintf("&%s", cartSidUrlString(cart));
+	    hPrintf("&%s&db=%s", cartSidUrlString(cart), otherOrg->db);
 	hPrintf("\"");
 	if (!useHgsid)
 	    hPrintf(" TARGET=_blank");
@@ -261,7 +263,7 @@ hPrintf("</TR>\n<TR>");
 for (otherOrg = otherOrgList; otherOrg != NULL; otherOrg = otherOrg->next)
     {
     char *id = otherOrgId(otherOrg, conn, geneId);
-    otherOrgPrintLink(otherOrg, "Genome Browser", "No homolog", TRUE, FALSE,
+    otherOrgPrintLink(otherOrg, "Genome Browser", "No homolog", TRUE, 
     	id, otherOrg->genomeUrl);
     freeMem(id);
     }
@@ -269,7 +271,15 @@ hPrintf("</TR>\n<TR>");
 for (otherOrg = otherOrgList; otherOrg != NULL; otherOrg = otherOrg->next)
     {
     char *id = otherOrgId(otherOrg, conn, geneId);
-    otherOrgPrintLink(otherOrg, "Gene Sorter", "&nbsp;", TRUE, TRUE,
+    otherOrgPrintLink(otherOrg, "Gene Details", "&nbsp", TRUE,
+    	id, otherOrg->geneUrl);
+    freeMem(id);
+    }
+hPrintf("</TR>\n<TR>");
+for (otherOrg = otherOrgList; otherOrg != NULL; otherOrg = otherOrg->next)
+    {
+    char *id = otherOrgId(otherOrg, conn, geneId);
+    otherOrgPrintLink(otherOrg, "Gene Sorter", "&nbsp;", TRUE, 
     	id, otherOrg->sorterUrl);
     freeMem(id);
     }
@@ -278,7 +288,7 @@ for (otherOrg = otherOrgList; otherOrg != NULL; otherOrg = otherOrg->next)
     {
     char *id = otherOrgId(otherOrg, conn, geneId);
     id = otherOrgExternalId(otherOrg, id);
-    otherOrgPrintLink(otherOrg, otherOrg->otherName, "&nbsp;", FALSE, FALSE,
+    otherOrgPrintLink(otherOrg, otherOrg->otherName, "&nbsp;", FALSE, 
     	id, otherOrg->otherUrl);
     freeMem(id);
     }
