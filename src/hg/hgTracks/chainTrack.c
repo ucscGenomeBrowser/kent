@@ -10,9 +10,8 @@
 #include "hdb.h"
 #include "hgTracks.h"
 #include "chainBlock.h"
-#include "chain.h"
 #include "chainLink.h"
-#include "chainView.h"
+#include "chainDb.h"
 
 
 static void chainDraw(struct trackGroup *tg, int seqStart, int seqEnd,
