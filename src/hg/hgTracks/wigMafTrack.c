@@ -14,7 +14,7 @@
 #include "hgMaf.h"
 #include "mafTrack.h"
 
-static char const rcsid[] = "$Id: wigMafTrack.c,v 1.13 2004/03/15 23:20:24 kate Exp $";
+static char const rcsid[] = "$Id: wigMafTrack.c,v 1.14 2004/03/16 00:19:10 kate Exp $";
 
 struct wigMafItem
 /* A maf track item -- 
@@ -473,6 +473,7 @@ else
     drawMafRegionDetails(mafList, height, seqStart, seqEnd, 
                              vg, xOff, yOff, width, font,
                              color, altColor, tvDense, FALSE);
+    hFreeConn(&conn);
     }
 }
 
