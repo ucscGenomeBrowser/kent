@@ -31,8 +31,9 @@
 #include "hgColors.h"
 #include "tableDescriptions.h"
 #include "botDelay.h"
+#include "wiggle.h"
 
-static char const rcsid[] = "$Id: hgText.c,v 1.112 2004/03/10 17:33:50 angie Exp $";
+static char const rcsid[] = "$Id: hgText.c,v 1.113 2004/03/17 23:02:16 hiram Exp $";
 
 /* sources of tracks, other than the current database: */
 static char *hgFixed = "hgFixed";
@@ -153,14 +154,14 @@ char *outputTypePosMenu[] =
     chooseFieldsPhase,
     statsPhase,
 };
-int outputTypePosMenuSize = 8;
+int outputTypePosMenuSize = sizeof(outputTypePosMenu)/sizeof(char *);
 char *outputTypeNonPosMenu[] =
 {
     allFieldsPhase,
     chooseFieldsPhase,
     statsPhase,
 };
-int outputTypeNonPosMenuSize = 3;
+int outputTypeNonPosMenuSize = sizeof(outputTypeNonPosMenu)/sizeof(char *);
 /* Other values that the "phase" var can take on: */
 #define chooseTablePhase    "table"
 #define pasteNamesPhase     "Paste in Names/Accessions"
@@ -174,6 +175,7 @@ int outputTypeNonPosMenuSize = 3;
 #define getCtBedPhase       "Get Custom Track File"
 #define intersectOptionsPhase "Intersect Results..."
 #define histPhase           "Get histogram"
+#define wigglePhase         "Get data points"
 #define descTablePhase      "Describe table"
 /* Old "phase" values handled for backwards compatibility: */
 #define oldAllFieldsPhase   "Get all fields"
@@ -2906,6 +2908,16 @@ struct sqlResult *sr;
 char **row;
 char button[64];
 char query[256];
+struct trackDb *tdb;
+char *track = getTrackName();
+int wordCount;
+char *words[128];
+char *trackType = (char *) NULL;
+
+tdb = hMaybeTrackInfo(conn, track);
+wordCount = chopLine(tdb->type,words);
+if (wordCount > 0)
+	trackType = words[0];
 
 safef(query, sizeof(query), "desc %s", fullTableName);
 sr = sqlGetResult(conn, query);
@@ -2927,8 +2939,17 @@ while ((row = sqlNextRow(sr)) != NULL)
 	if ((isSqlStringType(row[1]) || startsWith("enum", row[1])) &&
 	    ! sameString(row[1], "longblob"))
 	    {
-	    snprintf(button, sizeof(button), "%s for %s", histPhase, row[0]);
-	    cgiMakeButton("phase", button);
+	    if ((trackType != (char *) NULL) && sameString(trackType,"wig")
+			&& sameString(row[0],"file"))
+		{
+		snprintf(button, sizeof(button), "%s", wigglePhase);
+		cgiMakeButton("phase", button);
+		}
+	    else
+		{
+		snprintf(button, sizeof(button), "%s for %s",histPhase,row[0]);
+		cgiMakeButton("phase", button);
+		}
 	    }
 	else
 	    {
@@ -4547,6 +4568,100 @@ descForm();
 webEnd();
 }
 
+void doGetWiggleData()
+/* Find wiggle data and display it */
+{
+char *db = getTableDb();
+char *table = getTableName();
+struct wiggleData *wigData;
+struct wiggleData *wdPtr;
+struct trackDb *tdb;
+struct sqlConnection *conn = hAllocOrConnect(db);
+char *track = getTrackName();
+char *typeLine;
+char *longLabel;
+unsigned char visibility;
+unsigned char colorR, colorG, colorB;
+unsigned char altColorR, altColorG, altColorB;
+float priority;
+int wordCount;
+char *words[128];
+char *trackType = (char *) NULL;
+char *visibilities[] = {
+    "hide",
+    "dense",
+    "full",
+    "pack",
+    "squish",
+};
+
+tdb = hMaybeTrackInfo(conn, track);
+if (tdb->type)
+    {
+    typeLine = cloneString(tdb->type);
+    longLabel = cloneString(tdb->longLabel);
+    priority = tdb->priority;
+    wordCount = chopLine(typeLine,words);
+    if (wordCount > 0)
+	trackType = words[0];
+    colorR = tdb->colorR; colorG = tdb->colorG; colorB = tdb->colorB;
+    altColorR = tdb->altColorR; altColorG = tdb->altColorG;
+    altColorB = tdb->altColorB;
+    visibility = tdb->visibility;
+    }
+else
+    {
+    priority = 42;
+    longLabel = cloneString("wiggle data");
+    colorR = colorG = colorB = 255;
+    altColorR = altColorG = altColorB = 128;
+    visibility = 2;
+    }
+
+saveOutputOptionsState();
+saveIntersectOptionsState();
+
+printf("Content-Type: text/plain\n\n");
+webStartText();
+
+wigData = fetchWigData(database, table, chrom, winStart, winEnd);
+if (wigData)
+    {
+    unsigned span = 0;
+    char *chrom = (char *) NULL;
+printf("track type=wiggle_0 name=%s description=\"%s\" "
+	"visibility=%s color=%d,%d,%d altColor=%d,%d,%d "
+	"priority=%g\n", table, longLabel, visibilities[visibility],
+	colorR, colorG, colorB, altColorR, altColorG, altColorB, priority);
+    for (wdPtr = wigData; wdPtr != (struct wiggleData *) NULL;
+		wdPtr= wdPtr->next)
+	{
+	int i;
+	struct wiggleDatum *wd;
+	if ((chrom == (char *) NULL) || differentWord(chrom,wdPtr->chrom))
+	    {
+	    printf("variableStep chrom=%s span=%u\n",
+		wdPtr->chrom, wdPtr->span);
+	    chrom = wdPtr->chrom;
+	    span = wdPtr->span;
+	    }
+	if (span != wdPtr->span)
+	    {
+	    printf("variableStep chrom=%s span=%u\n",
+		wdPtr->chrom, wdPtr->span);
+	    span = wdPtr->span;
+	    }
+	wd = wdPtr->data;
+	for (i = 0; i < wdPtr->count; ++i)
+	    {
+	    printf("%u\t%g\n", wd->chromStart, wd->value);
+	    ++wd;
+	    }
+	}
+    }
+
+webEnd();
+}
 
 void doGetStats()
 /* Print out statistics about the query results. */
@@ -4864,6 +4979,8 @@ else
 	doIntersectOptions();
     else if (existsAndStartsWith("phase", histPhase))
 	doGetHistogram();
+    else if (existsAndEqual("phase", wigglePhase))
+	doGetWiggleData();
     else if (existsAndStartsWith("phase", descTablePhase))
 	doDescTable();
     else
