@@ -2716,13 +2716,16 @@ cat > template << 'EOF'
     # currently X52289 associated with D21S168 
     # and X53367 associated with D21S167 - these need to be switched as they
     # are causing incorrect positioning
-    # On Terry's advice, first update stsInfo2.bed so that the corrected
-    # version is carried through to the next version
+    # On Terry's advice, 
+    # first manually update the accession field stsInfo2.bed so that the 
+    # corrected version is carried through to the next version
     cd /cluster/data/hg17/bed/sts
     # manually change accessions in this file so now X52289 is associated
     # with D21S167 and X53367 is now associated with D21S168 
     # manually update the chromStart and chromEnd fields for these
     # records in stsMap.bed
+    # this change was not carried through after filtering to change stsMap.bed
+    # again and reload this table (DONE, 2005-02-18, hartera)
     chr21   39867340        39867513        D21S167 1000    7888    AF064860
     # becomes
     chr21   37117635        37117858        D21S167 1000    7888    AF064860
