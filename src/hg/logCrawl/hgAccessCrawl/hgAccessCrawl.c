@@ -6,9 +6,11 @@
 #include "obscure.h"
 #include "cheapcgi.h"
 
-static char const rcsid[] = "$Id: hgAccessCrawl.c,v 1.3 2003/12/24 04:52:02 kent Exp $";
+static char const rcsid[] = "$Id: hgAccessCrawl.c,v 1.4 2003/12/24 11:23:33 kent Exp $";
 
 int verbose = 0;
+FILE *errLog = NULL;
+int errCode = 0;
 
 void usage()
 /* Explain usage and exit. */
@@ -18,12 +20,16 @@ errAbort(
   "usage:\n"
   "   hgAccessCrawl access_log(s)\n"
   "options:\n"
+  "   -errLog=err.log - Put errors into err.log\n"
+  "   -errCode=NNN - Only write out to errLog when status code matches errCode\n"
   "   -verbose=N  - Set verbosity level.  0 for silent, 1 for input data warnings, \n"
   "                 2 for status.\n"
   );
 }
 
 static struct optionSpec options[] = {
+   {"errLog", OPTION_STRING},
+   {"errCode", OPTION_INT},
    {"verbose", OPTION_INT},
    {NULL, 0},
 };
@@ -319,6 +325,14 @@ for (i=0; i<logCount; ++i)
 	struct logLine *ll = logLineParse(line, lf->fileName, lf->lineIx);
 	if (ll != NULL)
 	    {
+	    if (errLog != NULL 
+	    	&& ll->status != 200 && ll->status != 304 
+		&& ll->status != 206 && ll->status != 301)
+	       {
+	       if (errCode == 0 || errCode == ll->status)
+		   if (!isRobot(ll->ip, ll->program))
+		       fprintf(errLog, "%s\n", line);
+	       }
 	    if (sameString(ll->method, "GET") && startsWith("/cgi-bin/", ll->url))
 		{
 		struct hash *cgiHash;
@@ -597,6 +611,9 @@ int main(int argc, char *argv[])
 {
 optionInit(&argc, argv, options);
 verbose = optionInt("verbose", verbose);
+if (optionExists("errLog"))
+    errLog = mustOpen(optionVal("errLog", NULL), "w");
+errCode = optionInt("errCode", 0);
 if (argc < 2)
     usage();
 hgAccessCrawl(argc-1, argv+1);
