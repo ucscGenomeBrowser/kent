@@ -20,7 +20,7 @@
 #include "cheapcgi.h"
 #include "trans3.h"
 
-static char const rcsid[] = "$Id: gfServer.c,v 1.41 2004/06/07 23:05:16 kent Exp $";
+static char const rcsid[] = "$Id: gfServer.c,v 1.42 2004/06/09 01:09:00 kent Exp $";
 
 int maxNtSize = 40000;
 int maxAaSize = 8000;
@@ -199,11 +199,11 @@ void dnaQuery(struct genoFind *gf, struct dnaSeq *seq,
 /* Handle a query for DNA/DNA match. */
 {
 struct gfClump *clumpList = NULL, *clump;
-int limit = 3000;
+int limit = 1000;
 int clumpCount = 0, hitCount = -1;
 struct lm *lm = lmInit(0);
 
-if (seq->size > 3*gf->tileSize)
+if (seq->size > gf->tileSize + gf->stepSize + gf->stepSize)
      limit = maxDnaHits;
 clumpList = gfFindClumps(gf, seq, lm, &hitCount);
 if (clumpList == NULL)
