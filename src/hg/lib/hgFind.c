@@ -36,27 +36,28 @@ char *MrnaIDforGeneName(char *geneName)
 {
 struct sqlConnection *conn;
 struct sqlResult *sr = NULL;
-struct dyString *query;
+char query[128];
 char **row;
 boolean ok = FALSE;
-char * result;
+char *result = NULL;
 
 conn = hAllocConn();
-query = newDyString(256);
-
-dyStringPrintf(query, "SELECT mrnaAcc FROM refLink WHERE name='%s'", geneName);
-sr = sqlGetResult(conn, query->string);
-if ((row = sqlNextRow(sr)) != NULL)
+if (hTableExists("refLink"))
     {
-    result = strdup(row[0]);
-    }
-else
-    {
-    result = NULL;
-    }
+    safef(query, sizeof(query), "SELECT mrnaAcc FROM refLink WHERE name='%s'",
+          geneName);
+    sr = sqlGetResult(conn, query);
+    if ((row = sqlNextRow(sr)) != NULL)
+        {
+        result = strdup(row[0]);
+        }
+    else
+        {
+        result = NULL;
+        }
 
-freeDyString(&query);
-sqlFreeResult(&sr);
+    sqlFreeResult(&sr);
+    }
 hFreeConn(&conn);
 return result;
 }
@@ -804,17 +805,33 @@ else
     }
 }
 
-static char *mrnaType(char *acc)
-/* Return "mrna" or "est" if acc is mRNA, otherwise NULL. */
+static boolean isRefSeqAcc(char *acc)
+/* determine if an acc looking like a refseq acc */
 {
-static char typeBuf[16];
-char *type;
-struct sqlConnection *conn = hAllocConn();
-char query[128];
-sprintf(query, "select type from mrna where acc = '%s'", acc);
-type = sqlQuickQuery(conn, query, typeBuf, sizeof(typeBuf));
-hFreeConn(&conn);
-return type;
+char a0 = toupper(acc[0]);
+return ((strlen(acc) > 3) && (acc[2] == '_') && ((a0 == 'N') || (a0 == 'X')));
+}
+
+static char *mrnaType(char *acc)
+/* Return "mrna" or "est" if acc is mRNA, otherwise NULL.  Returns
+ * NULL for refseq mRNAs */
+{
+/* for compat with older databases, just look at the seqId to
+ * determine if it's a refseq, don't use table */
+if (isRefSeqAcc(acc))
+    return NULL;
+else
+    {
+    static char typeBuf[16];
+    char *type;
+    struct sqlConnection *conn = hAllocConn();
+    char query[128];
+
+    sprintf(query, "select type from mrna where acc = '%s'", acc);
+    type = sqlQuickQuery(conn, query, typeBuf, sizeof(typeBuf));
+    hFreeConn(&conn);
+    return type;
+    }
 }
 
 static struct psl *findAllAli(char *acc, char *type)
@@ -1504,12 +1521,13 @@ for (i = 0; i<tableCount; ++i)
     sqlFreeResult(&sr);
     for (idEl = idList; idEl != NULL; idEl = idEl->next)
         {
+        /* don't check srcDb to exclude refseq for compat with other tables */
 	sprintf(query, "select acc from mrna where %s = %s and type = 'mRNA'", field, idEl->name);
 	sr = sqlGetResult(conn, query);
 	while ((row = sqlNextRow(sr)) != NULL)
 	    {
 	    char *acc = row[0];
-	    if (!hashLookup(hash, acc))
+	    if (!isRefSeqAcc(acc) && !hashLookup(hash, acc))
 		{
 		el = newSlName(acc);
 		slAddHead(&list, el);
@@ -2113,8 +2131,6 @@ if (extraCgi == NULL)
     extraCgi = "";
 hgp->extraCgi = cloneString(extraCgi);
 
-/* MarkE offset code */
-
 relativeFlag = FALSE;
 strncpy(buf, query, 256);
 startOffset = strchr(buf, ':');
@@ -2136,8 +2152,6 @@ if (startOffset != NULL)
 	    }
 	}
     }
-
-/* end MarkE offset code */
 
 if (hgIsChromRange(query))
     {
