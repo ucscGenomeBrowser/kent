@@ -9,6 +9,7 @@ struct trans3
      char *name;			/* Name (not allocated here) */
      struct dnaSeq *seq;		/* Untranslated sequence.  Not allocated here. */
      aaSeq *trans[3];			/* Translated sequences.  Allocated here*/
+     int start,end;			/* Start/end of sequence in a larger context. */
      };
 
 struct trans3 *trans3New(struct dnaSeq *seq);

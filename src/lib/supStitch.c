@@ -13,6 +13,7 @@
 #include "dnautil.h"
 #include "fuzzyFind.h"
 #include "patSpace.h"
+#include "trans3.h"
 #include "supStitch.h"
 
 struct ssNode
@@ -199,23 +200,45 @@ for (i=0; i<overlap; ++i)
 return bestPos;
 }
 
-boolean tripleCanFollow(struct ffAli *a, struct ffAli *b, aaSeq *qSeq, aaSeq **tripleSeq)
+static void trans3Offsets(struct trans3 *t3List, AA *startP, AA *endP,
+	int *retStart, int *retEnd)
+/* Figure out offset of peptide in context of larger sequences. */
+{
+struct trans3 *t3;
+int frame;
+aaSeq *seq;
+int startOff;
+
+uglyf("trans3Offsets(startP %x)\n", startP);
+for (t3 = t3List; t3 != NULL; t3 = t3->next)
+    {
+    uglyf(" t3:\n");
+    for (frame = 0; frame < 3; ++frame)
+        {
+	seq = t3->trans[frame];
+	uglyf(" seq %x to %x\n", seq->dna, seq->dna + seq->size);
+	if (seq->dna <= startP && startP < seq->dna + seq->size)
+	    {
+	    *retStart = startP - seq->dna + t3->start;
+	    *retEnd = endP - seq->dna + t3->start;
+	    return;
+	    }
+	}
+    }
+internalErr();
+}
+
+boolean tripleCanFollow(struct ffAli *a, struct ffAli *b, aaSeq *qSeq, struct trans3 *t3List)
 /* Figure out if a can follow b in any one of three reading frames of haystack. */
 {
 int ahStart, ahEnd, bhStart, bhEnd;
-aaSeq *seq;
-
-seq = whichSeqIn(tripleSeq, 3, a->hStart);
-ahStart = a->hStart - seq->dna;
-ahEnd = a->hEnd - seq->dna;
-seq = whichSeqIn(tripleSeq, 3, b->hStart);
-bhStart = b->hStart - seq->dna;
-bhEnd = b->hEnd - seq->dna;
+trans3Offsets(t3List, a->hStart, a->hEnd, &ahStart, &ahEnd);
+trans3Offsets(t3List, b->hStart, b->hEnd, &bhStart, &bhEnd);
 return  (a->nStart < b->nStart && a->nEnd < b->nEnd && ahStart < bhStart && ahEnd < bhEnd);
 }
 
 static struct ssGraph *ssGraphMake(struct ffAli *ffList, bioSeq *qSeq,
-	enum ffStringency stringency, boolean isProt, aaSeq **tripleSeq)
+	enum ffStringency stringency, boolean isProt, struct trans3 *t3List)
 /* Make a graph corresponding to ffList */
 {
 int nodeCount = ffAliCount(ffList);
@@ -253,8 +276,12 @@ for (mid = ffList, midIx=1; mid != NULL; mid = mid->right, ++midIx)
     midNode->waysIn = e;
     for (ff = ffList,i=1; ff != mid; ff = ff->right,++i)
 	{
-	if (tripleSeq)
-	    canFollow = tripleCanFollow(ff, mid, qSeq, tripleSeq);
+	if (t3List)
+	    {
+	    uglyf(" mid->hStart %p, mid->hEnd %p\n", mid->hStart, mid->hEnd);
+	    uglyf(" ff->hStart %p, ff->hEnd %p\n", ff->hStart, ff->hEnd);
+	    canFollow = tripleCanFollow(ff, mid, qSeq, t3List);
+	    }
 	else 
 	    {
 	    canFollow = (ff->nStart < mid->nStart && ff->nEnd < mid->nEnd 
@@ -528,7 +555,7 @@ ffList = ffMergeExactly(ffList);
 
 while (ffList != NULL)
     {
-    graph = ssGraphMake(ffList, qSeq, stringency, bundle->isProt, bundle->tripleSeq);
+    graph = ssGraphMake(ffList, qSeq, stringency, bundle->isProt, bundle->t3List);
     ssGraphFindBest(graph, &bestPath, &score, &ffList);
     bestPath = ffMergeNeedleAlis(bestPath, TRUE);
     bestPath = ffRemoveEmptyAlis(bestPath, TRUE);

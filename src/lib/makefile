@@ -4,7 +4,7 @@
 O = bits.o blastParse.o cda.o cheapcgi.o codebias.o common.o crudeali.o \
     dgRange.o diGraph.o dlist.o dnaseq.o dnautil.o dystring.o errabort.o \
     fa.o ffAli.o flydna.o fof.o fuzzyFind.o fuzzyShow.o gdf.o \
-    gemfont.o genoFind.o gfClientLib.o gff.o \
+    gemfont.o genoFind.o gfClientLib.o gfNet.o gff.o \
     gifcomp.o gifwrite.o hash.o \
     hmmstats.o htmshell.o hugefnt.o \
     keys.o largefnt.o linefile.o localmem.o \

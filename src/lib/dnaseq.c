@@ -87,9 +87,11 @@ bioSeq *whichSeqIn(bioSeq **seqs, int seqCount, char *letters)
 aaSeq *seq;
 int i;
 
+uglyf("whichSeqIn seqCount %d letters %x\n", seqCount, letters);
 for (i=0; i<seqCount; ++i)
     {
     seq = seqs[i];
+    uglyf("  seq %x to %x\n", seq->dna, seq->dna + seq->size);
     if (seq->dna <= letters && letters < seq->dna + seq->size)
         return seq;
     }
