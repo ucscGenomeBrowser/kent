@@ -84,7 +84,7 @@
 #include "estOrientInfo.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.785 2004/08/26 11:29:30 kent Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.786 2004/08/26 16:56:10 kent Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
@@ -3702,15 +3702,18 @@ char *dna = dnaInWindow();
 char *fOligo = oligoMatchSeq();
 int oligoSize = strlen(fOligo);
 char *rOligo = cloneString(fOligo);
-char *rMatch, *fMatch;
+char *rMatch = NULL, *fMatch = NULL;
 struct bed *bedList = NULL, *bed;
 char strand;
 
 if (oligoSize >= 2)
     {
-    reverseComplement(rOligo, oligoSize);
-    rMatch = stringIn(rOligo, dna);
     fMatch = stringIn(fOligo, dna);
+    reverseComplement(rOligo, oligoSize);
+    if (sameString(rOligo, fOligo))
+        rOligo = NULL;
+    else
+	rMatch = stringIn(rOligo, dna);
     for (;;)
         {
 	char *oneMatch = NULL;
