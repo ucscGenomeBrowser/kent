@@ -160,7 +160,7 @@ REPEAT MASKING (DONE 11/26/02)
         cd ~/rn1
         ./jkStuff/liftOut5.sh
 
-	# soft-mask contig .fa's with .out's
+        # soft-mask contig .fa's with .out's
         foreach i (?{,?})
             foreach j ($i/chr${i}_?{,?}/chr${i}_?{,?}.fa \
                        $i/chr${i}_random_?{,?}/chr${i}_random_?{,?}.fa)
@@ -573,81 +573,57 @@ MAKE DOWNLOADABLE SEQUENCE FILES (DONE 11/27/02)
     #- Take a look at bigZips/* and chromosomes/*, update their README.txt's
 
 
-PRODUCING GENSCAN PREDICTIONS (TODO)
+PRODUCING GENSCAN PREDICTIONS (DONE 12/3/02)
     
-o - Produce contig genscan.gtf genscan.pep and genscanExtra.bed files like so:
+    # Log into kkr1u00 (not kk!).  kkr1u00 is the driver node for the small
+    # cluster (kkr2u00 -kkr8u00. (genscan has problem running on the
+    # big cluster, due to limitation of memory and swap space on each
+    # processing node).
+    ssh kkr1u00
+    mkdir -p ~/rn1/bed/genscan
+    cd ~/rn1/bed/genscan
+    # Make 3 subdirectories for genscan to put their output files in
+    mkdir gtf pep subopt
+    # Generate a list file, genome.list, of all the hard-masked contigs that 
+    # *do not* consist of all-N's (which would cause genscan to blow up)
+    rm -f genome.list
+    touch genome.list
+    foreach f ( `ls -1S /cluster/store4/rn1/?{,?}/chr*/chr?{,?}{,_random}_?{,?}.fa.masked` )
+      egrep '[ACGT]' $f > /dev/null
+      if ($status == 0) echo $f >> genome.list
+    end
+    # Create template file, gsub, for gensub2.  For example (3-line file):
+#LOOP
+/cluster/home/kent/bin/i386/gsBig {check in line+ $(path1)} {check out line gtf/$(root1).gtf} -trans={check out line pep/$(root1).pep} -subopt={check out line subopt/$(root1).bed} -exe=/cluster/home/fanhsu/projects/compbio/bin/genscan-linux/genscan -par=/cluster/home/fanhsu/projects/compbio/bin/genscan-linux/HumanIso.smat -tmp=/tmp -window=2400000
+#ENDLOOP
+    echo "" > dummy.list
+    gensub2 genome.list dummy.list gsub jobList
+    para create jobList
+    para try
+    para check
+    para push
 
-        First make sure you have appropriate set up, permissions, etc.
-        and you have tried using Parasol to submit and finished a set 
-        of jobs successfully.
-        
-        Load up the cluster with hard-masked contigs in
-           /scratch/hg/rn1/mContigs
-             
-        Log into kkr1u00 (not kk!).  kkr1u00 is the driver node for the small
-        cluster (kkr2u00 -kkr8u00. (genscan has problem running on the
-        big cluster, due to limitation of memory and swap space on each
-        processing node).
-                     cd ~/rn1
-                     cd bed/genscan
-        Make 3 subdirectories for genscan to put their output files in
-                mkdir gtf pep subopt
-        Generate a list file, genome.list, of all the contigs
-                ls -1S /cluster/store4/rn1/mContigs/* >genome.list
-        Edit genome.list to remove jobs on all 20 files of chr??_1.fa.masked.
-        Those files have pure Ns due to heterochromatin (unsequencable
-        stuff) and will cause genscan to run forever.
-        
-        Create template file, gsub, for gensub2.  For example (3 lines file):
-                #LOOP
-                /cluster/home/fanhsu/bin/i386/gsBig {check in line+ $(path1)} {check out line gtf/$(root1).gtf} -trans={check out line pep/$(root1).pep} -subopt={check out line subopt/$(root1).bed} -exe=/cluster/home/fanhsu/projects/compbio/bin/genscan-linux/genscan -par=/cluster/home/fanhsu/projects/compbio/bin/genscan-linux/HumanIso.smat -tmp=/tmp -window=2400000
-                #ENDLOOP
-        Create a file containing a single line.
-                echo single > single
-        Generate job list file, jobList, for Parasol
-                gensub2 genome.list single gsub jobList
-        
-        Edit jobList to find the line containing "chr12_5.fa.masked"
-        and change "-window=2400000" into "-window=1200000", because
-        genscan has "not enough memory" problem with this particular
-        file.
-        
-        First issue the following Parasol command:
-                para create jobList
-        Run the following command, which will try first 10 jobs from jobList
-                para try
-        Check if these 10 jobs run OK by
-                para check
-        If they have problems, debug and fix your program, template file, 
-        commands, etc. and try again.  If they are OK, then issue the following 
-        command, which will ask Parasol to start all the remaining jobs (around
-        ~252 jobs).
-                para push
-        Issue either one of the following two commands to check the 
-        status of the cluster and your jobs, until they are done.
-                parasol status
-                para check
-        If any job fails to complete, study the problem and ask Jim to help
-        if necessary.
+    # If there are crashes, diagnose with "para problems".  
+    # If a job crashes due to genscan running out of memory, re-run it 
+    # manually with "-window=2400000" instead of "-window=1200000".
+    
+    # Convert these to chromosome level files as so:
+    liftUp genscan.gtf ../../jkStuff/liftAll.lft warn gtf/*.gtf
+    liftUp genscanSubopt.bed ../../jkStuff/liftAll.lft warn subopt/*.bed
+    cat pep/*.pep > genscan.pep
 
-o - Convert these to chromosome level files as so:
-     cd ~/rn1
-     cd bed/genscan
-     liftUp genscan.gtf ../../jkStuff/liftAll.lft warn gtf/*.gtf
-     liftUp genscanSubopt.bed ../../jkStuff/liftAll.lft warn subopt/*.bed
-     cat pep/*.pep > genscan.pep
-
-o - Load into the database as so:
-     ssh hgwdev
-     cd ~/rn1/bed/genscan
-     ldHgGene rn1 genscan genscan.gtf
-     hgPepPred rn1 generic genscanPep genscan.pep
-     hgLoadBed rn1 genscanSubopt genscanSubopt.bed
+    # Load into the database as so:
+    ssh hgwdev
+    cd ~/rn1/bed/genscan
+    ldHgGene rn1 genscan genscan.gtf
+    hgPepPred rn1 generic genscanPep genscan.pep
+    hgLoadBed rn1 genscanSubopt genscanSubopt.bed
 
 
-EXTRACT LINEAGE-SPECIFIC REPEATS (ARIAN SMIT''s scripts) (TODO)
+PREPARE CLUSTER FOR BLASTZ RUN (DONE 12/3/02)
 
     ssh eieio
+    # Extract lineage-specific repeats using Arian Smit's script:
     mkdir -p ~/rn1/bed/linSpecRep
     cd ~/rn1/bed/linSpecRep
     foreach f (~/rn1/*/*.out)
@@ -657,9 +633,21 @@ EXTRACT LINEAGE-SPECIFIC REPEATS (ARIAN SMIT''s scripts) (TODO)
     /cluster/bin/scripts/perl-rename 's/(\.fa|\.nib)//' *.out.*spec
     /cluster/bin/scripts/perl-rename 's/\.(rod|prim)spec/.spec/' *.out.*spec
     rm *.out
+    # Copy files to the kkstore:/scratch
+    ssh kkstore
+    # lineage-specific repeats:
+    cd ~/rn1/bed
     rm -rf /scratch/hg/rn1/linSpecRep
-    cd ..
-    cp -R linSpecRep /scratch/hg/rn1
+    cp -Rp linSpecRep /scratch/hg/rn1
+    # RepeatMasker .out:
+    cd ~/rn1
+    rm -rf /scratch/hg/rn1/rmsk
+    mkdir -p /scratch/hg/rn1/rmsk
+    cp -p ?{,?}/chr?{,?}{,_random}.fa.out /scratch/hg/rn1/rmsk
+    # Chrom-level mixed nibs that have been repeat- and trf-masked:
+    rm -rf /scratch/hg/rn1/chromTrfMixedNib
+    mkdir -p /scratch/hg/rn1/chromTrfMixedNib
+    cp -p mixedNib/chr*.nib /scratch/hg/rn1/chromTrfMixedNib
     # Ask cluster-admin@cse.ucsc.edu to binrsync /scratch/hg to clusters
 
 
@@ -735,78 +723,6 @@ MAKING THE BLASTZBESTRAT TRACK FROM PENN STATE AXT FILES (TODO)
      hgsql rn1 < ~/kent/src/hg/lib/axtInfoFillRn1.sql
      cvs add ~/kent/src/hg/lib/axtInfoFillRn1.sql
      cvs ci ~/kent/src/hg/lib/axtInfoFillRn1.sql
-
-PRODUCING GENSCAN PREDICTIONS (TODO)
-    
-o - Produce contig genscan.gtf genscan.pep and genscanExtra.bed files like so:
-
-        First make sure you have appropriate set up, permissions, etc.
-        and you have tried using Parasol to submit and finished a set 
-        of jobs successfully.
-        
-        Load up the cluster with hard-masked contigs in
-           /scratch/hg/rn1/mContigs
-             
-        Log into kkr1u00 (not kk!).  kkr1u00 is the driver node for the small
-        cluster (kkr2u00 -kkr8u00. (genscan has problem running on the
-        big cluster, due to limitation of memory and swap space on each
-        processing node).
-                     cd ~/rn1
-                     cd bed/genscan
-        Make 3 subdirectories for genscan to put their output files in
-                mkdir gtf pep subopt
-        Generate a list file, genome.list, of all the contigs
-                ls -1S /cluster/store4/rn1/mContigs/* >genome.list
-        Edit genome.list to remove jobs on all 20 files of chr??_1.fa.masked.
-        Those files have pure Ns due to heterochromatin (unsequencable
-        stuff) and will cause genscan to run forever.
-        
-        Create template file, gsub, for gensub2.  For example (3 lines file):
-                #LOOP
-                /cluster/home/fanhsu/bin/i386/gsBig {check in line+ $(path1)} {check out line gtf/$(root1).gtf} -trans={check out line pep/$(root1).pep} -subopt={check out line subopt/$(root1).bed} -exe=/cluster/home/fanhsu/projects/compbio/bin/genscan-linux/genscan -par=/cluster/home/fanhsu/projects/compbio/bin/genscan-linux/HumanIso.smat -tmp=/tmp -window=2400000
-                #ENDLOOP
-        Create a file containing a single line.
-                echo single > single
-        Generate job list file, jobList, for Parasol
-                gensub2 genome.list single gsub jobList
-        
-        Edit jobList to find the line containing "chr12_5.fa.masked"
-        and change "-window=2400000" into "-window=1200000", because
-        genscan has "not enough memory" problem with this particular
-        file.
-        
-        First issue the following Parasol command:
-                para create jobList
-        Run the following command, which will try first 10 jobs from jobList
-                para try
-        Check if these 10 jobs run OK by
-                para check
-        If they have problems, debug and fix your program, template file, 
-        commands, etc. and try again.  If they are OK, then issue the following 
-        command, which will ask Parasol to start all the remaining jobs (around
-        ~252 jobs).
-                para push
-        Issue either one of the following two commands to check the 
-        status of the cluster and your jobs, until they are done.
-                parasol status
-                para check
-        If any job fails to complete, study the problem and ask Jim to help
-        if necessary.
-
-o - Convert these to chromosome level files as so:
-     cd ~/rn1
-     cd bed/genscan
-     liftUp genscan.gtf ../../jkStuff/liftAll.lft warn gtf/*.gtf
-     liftUp genscanSubopt.bed ../../jkStuff/liftAll.lft warn subopt/*.bed
-     cat pep/*.pep > genscan.pep
-
-o - Load into the database as so:
-     ssh hgwdev
-     cd ~/rn1/bed/genscan
-     ldHgGene rn1 genscan genscan.gtf
-     hgPepPred rn1 generic genscanPep genscan.pep
-     hgLoadBed rn1 genscanSubopt genscanSubopt.bed
-
 
 TWINSCAN GENE PREDICTIONS (TODO)
 
@@ -1087,6 +1003,90 @@ PRODUCING FUGU FISH ALIGNMENTS (DONE 11/27/02)
     hgLoadRna addSeq rn1 /gbdb/rn1/fuguSeq/fugu_v3_mask.fasta
 
 
+MAKE LIFT FILE FOR AGPS (DONE 12/02/02)
+    ssh eieio
+    cd ~/rn1/jkStuff
+    ./jkStuff/agpToLift.pl chrom.sizes ?{,?}/chr?{,?}{,.random}.agp \
+      > jkStuff/liftRNOR.lft
+
+
+CONTIG POSITIONS (DONE 12/02/02)
+    # hgCtgPos creates a table of our macro-contigs (chr*_*), which are 
+    # not the contigs that people will be searching for in hgFind (RNOR*).
+    # So create ctgPos with RNOR coords from jkStuff/liftRNOR.lft.
+    ssh hgwdev
+    mkdir -p ~/rn1/bed/ctgPos
+    cd ~/rn1/bed/ctgPos
+    perl -wpe 'chop;  @words = split(/\s/); \
+               $start = $words[0]; \
+               $ctg = $words[1]; \
+               $size = $words[2]; \
+               $chr = $words[3]; \
+               $end = $start + $size; \
+               $_ = join("\t", $ctg, $size, $chr, $start, $end) . "\t\n"; \
+              ' ../../jkStuff/liftRNOR.lft \
+      > ctgPos.tab
+    # Drop just in case it's already there (this might give error if not):
+    echo 'drop table ctgPos' | hgsql rn1
+    hgsql rn1 < $HOME/kent/src/hg/lib/ctgPos.sql
+    echo 'LOAD data local infile "ctgPos.tab" into table ctgPos' | hgsql rn1
+
+
+LOAD CPGISSLANDS (DONE 12/3/02)
+    ssh eieio
+    mkdir -p ~/rn1/bed/cpgIsland
+    cd ~/rn1/bed/cpgIsland
+    # Build software emailed from Asif Chinwalla (achinwal@watson.wustl.edu)
+    # copy the tar file to the current directory
+    tar xvf cpg_dist.tar 
+    cd cpg_dist
+    gcc readseq.c cpg_lh.c -o cpglh.exe
+    cd ..
+    foreach f (../../?{,?}/chr?{,?}{,_random}.fa)
+      set fout=$f:t
+      tr '[a-z]' 'N' < $f | sed -e 's/^>NNN/>chr/' > $fout
+      echo masked $fout
+      ./cpg_dist/cpglh.exe $fout > $fout.cpg
+      echo Done with $fout
+    end
+    rm chr*.fa
+    # copy filter.awk from a previous release
+    cp ~/lastRn/bed/cpgIsland/filter.awk .
+    awk -f filter.awk chr*.cpg > cpgIsland.bed
+    # load into database:
+    ssh hgwdev
+    cd ~/rn1/bed/cpgIsland
+    hgLoadBed rn1 cpgIsland -tab -noBin \
+      -sqlTable=$HOME/kent/src/hg/lib/cpgIsland.sql cpgIsland.bed
+
+
+LOAD ENSEMBL PHUSIONBLAST RAT-MOUSE HOMOLOGY (DONE 12/03/02)
+    ssh eieio
+    mkdir -p ~/rn1/bed/ensRatMusHom
+    cd ~/rn1/bed/ensRatMusHom
+    wget ftp://ftp.ensembl.org/pub/repository/rat/PBratMouse.gz
+    gunzip -c PBratMouse.gz | tail +2 \
+      | perl -wpe 'chop; @words = split(/\s/); \
+                   if ($words[1] =~ /chr\S+\.(RNOR\d+):(\d+)-(\d+)/) { \
+                     $rCtg = $1;  $rStart = $2;  $rEnd = $3; \
+                   } else { die "Bad format for second word: $words[1]"; } \
+                   $mChr   = "mm2.chr" . $words[4]; \
+                   $mStart = $words[5]; \
+                   $mEnd   = $words[6]; \
+                   $strand = $words[7]; \
+                   $score  = $words[9]; \
+                   $_ = join("\t", $rCtg, $rStart-1, $rEnd, $mChr, $score, \
+                             $strand, $mStart-1, $mEnd) . "\n"; \
+                   ' \
+      | liftUp ensRatMusHom.bed ../../jkStuff/liftRNOR.lft warn stdin
+    sed -e 's/ensPhusionBlast/ensRatMusHom/g' \
+      $HOME/kent/src/hg/lib/ensPhusionBlast.sql \
+      > ensRatMusHom.sql
+    ssh hgwdev
+    cd ~/rn1/bed/ensRatMusHom
+    hgLoadBed rn1 ensRatMusHom ensRatMusHom.bed -sqlTable=ensRatMusHom.sql
+
+
 LOAD GENEID GENES (TODO)
      cd ~/rn1/bed
      mkdir geneid
@@ -1199,19 +1199,6 @@ LOAD SNPS (TODO)
       - Unpack.
         createBed < rat.b27.out > snpNih.bed
         hgLoadBed rn1 snpNih snpNih.bed
-
-LOAD CPGISSLANDS (todo)
-     login to hgwdev
-       cd /cluster/store4/rn1/bed
-       mkdir cpgIsland
-       cd cpgIsland
-     Get cpgisland tarball out of email from Asif (achinwal@watson.wustl.edu)
-     and unpack it.
-       awk -f filter.awk */ctg*/*.cpg > cpgIsland.bed
-       hgsql rn1 < ~/src/hg/lib/cpgIsland.sql
-       hgsql rn1 
-     At mysql> prompt type in:
-       load data local infile 'cpgIsland.bed' into table cpgIsland
 
 LOAD ENSEMBL ESTs (TODO)
      ln -s /cluster/store4/rn1 ~/rn1
