@@ -57,7 +57,7 @@
 		<P>
 	   	The multiple alignment format (MAF) stores a series of
 		multiple alignments in an ASCII text format that is easy to
-		parse and relatively easy to read.  MAF was created to 
+		parse and read.  MAF was created to 
 		store multiple alignments at the DNA level between entire 
 		genomes. It circumvents some of the problems inherent in other
 		multiple alignment formats, which are suitable for 
@@ -69,13 +69,13 @@
 		<B>General Structure</B>
    		<P> 
 		MAF files (*.maf) are line-oriented. A file consists
-		of a header line and a parameter line, followed by a series 
+		of header and parameter lines, followed by a series 
 		of alignment blocks (or paragraphs), 
 		each of which contains one set of multiple alignments. Each
 		block is separated from the next by a blank line. 
 		<P>
-		Blocks consist of two parts: an alignment line showing
-		the alignment parameters for the block, followed by 
+		Blocks consist of two parts: an alignment line 
+		showing the alignment parameters for the block, followed by 
 		a set of sequence lines showing each sequence in the multiple 
 		alignment at that location. In the current
 		implementation, parsers should ignore other types of 
