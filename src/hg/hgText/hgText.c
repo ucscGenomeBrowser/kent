@@ -1170,13 +1170,12 @@ if (row == NULL)
 if (! initialized)
     {
     initialized = TRUE;
+    /* print the columns names */
+    printf("#");
+    while((field = sqlFieldName(sr)) != NULL)
+	printf("%s\t", field);
+    printf("\n");
     }
-
-/* print the columns names */
-printf("#");
-while((field = sqlFieldName(sr)) != NULL)
-    printf("%s\t", field);
-printf("\n");
 
 /* print the data */
 do
