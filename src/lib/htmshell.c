@@ -100,7 +100,7 @@ void htmlSetCookie(char* name, char* value, char* expires, char* path, char* dom
 {
 char* encoded_name;
 char* encoded_value;
-char* encoded_path;
+char* encoded_path = NULL;
 
 encoded_name = cgiEncode(name);
 encoded_value = cgiEncode(value);
@@ -115,7 +115,7 @@ if(expires != NULL)
 if(path != NULL)
 	printf("path=%s; ", encoded_path);
 
-if(path != domain)
+if(domain != NULL)
 	printf("domain=%s; ", domain);
 
 if(isSecure == TRUE)
