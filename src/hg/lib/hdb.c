@@ -531,7 +531,7 @@ for (lsf = largeFileList; lsf != NULL; lsf = lsf->next)
     /* Save info on list. Check that file size is what we think it should be. */
     AllocVar(lsf);
     lsf->path = path = cloneString(row[0]);
-    size = sqlOffset(row[1]);
+    size = sqlLongLong(row[1]);
     if (fileSize(path) != size)
         errAbort("External file %s has changed, need to resync database.  Old size %lld, new size %lld", path, size, fileSize(path));
     lsf->seqTblSet = seqTblSet;
@@ -598,7 +598,7 @@ if (row == NULL)
 if (retId != NULL)
     *retId = sqlUnsigned(row[0]);
 extId = sqlUnsigned(row[1]);
-offset = sqlOffset(row[2]);
+offset = sqlLongLong(row[2]);
 size = sqlUnsigned(row[3]);
 
 lsf = largeFileHandle(extId, seqTblSet);

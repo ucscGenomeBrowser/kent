@@ -40,6 +40,7 @@ enum lowTypes
    t_ushort,   /* unsigned 16 bit integer */
    t_byte,     /* signed 8 bit integer */
    t_ubyte,    /* unsigned 8 bit integer */
+   t_off,      /* 64 bit integer. */
    t_string,   /* varchar/char * (variable size string up to 255 chars)  */
    t_lstring,     /* variable sized large string. */
    t_object,   /* composite object - object/table - forms lists. */
@@ -55,23 +56,26 @@ struct lowTypeInfo
     char *sqlName;                 /* SQL type name. */
     char *cName;                   /* C type name. */
     char *listyName;               /* What functions that load a list are called. */
+    char *nummyName;               /* What functions that load a number are called. */
+    char *outFormat;		   /* Output format for printf. %d, %u, etc. */
     };
 
 struct lowTypeInfo lowTypes[] = {
-    {t_double,  "double",  FALSE, FALSE, "double",           "double",        "Double"},
-    {t_float,   "float",   FALSE, FALSE, "float",            "float",         "Float"},
-    {t_char,    "char",    FALSE, FALSE, "char",             "char",          "Char"},
-    {t_int,     "int",     FALSE, FALSE, "int",              "int",           "Signed"},
-    {t_uint,    "uint",    TRUE,  FALSE, "int unsigned",     "unsigned",      "Unsigned"},
-    {t_short,   "short",   FALSE, FALSE, "smallint",         "short",         "Short"},
-    {t_ushort,  "ushort",  TRUE,  FALSE, "smallint unsigned","unsigned short","Ushort"},
-    {t_byte,    "byte",    FALSE, FALSE, "tinyint",          "signed char",   "Byte"},
-    {t_ubyte,   "ubyte",   TRUE,  FALSE, "tinyint unsigned", "unsigned char", "Ubyte"},
-    {t_string,  "string",  FALSE, TRUE,  "varchar(255)",     "char *",        "String"},
-    {t_lstring,    "lstring",    FALSE, TRUE,  "longblob",             "char *",        "String"},
-    {t_object,  "object",  FALSE, FALSE, "longblob",         "!error!",       "Object"},
-    {t_object,  "table",   FALSE, FALSE, "longblob",         "!error!",       "Object"},
-    {t_simple,  "simple",  FALSE, FALSE, "longblob",         "!error!",       "Simple"},
+    {t_double,  "double",  FALSE, FALSE, "double",           "double",        "Double", "Double", "%f"},
+    {t_float,   "float",   FALSE, FALSE, "float",            "float",         "Float",  "Float",  "%f"},
+    {t_char,    "char",    FALSE, FALSE, "char",             "char",          "Char",   "Char",   "%c"},
+    {t_int,     "int",     FALSE, FALSE, "int",              "int",           "Signed", "Signed", "%d"},
+    {t_uint,    "uint",    TRUE,  FALSE, "int unsigned",     "unsigned",      "Unsigned","Unsigned", "%u"},
+    {t_short,   "short",   FALSE, FALSE, "smallint",         "short",         "Short",  "Signed", "%d"},
+    {t_ushort,  "ushort",  TRUE,  FALSE, "smallint unsigned","unsigned short","Ushort", "Unsigned", "%u"},
+    {t_byte,    "byte",    FALSE, FALSE, "tinyint",          "signed char",   "Byte",   "Signed", "%d"},
+    {t_ubyte,   "ubyte",   TRUE,  FALSE, "tinyint unsigned", "unsigned char", "Ubyte",  "Unsigned", "%u"},
+    {t_off,     "bigint",  FALSE,  FALSE,"bigint",           "long long",     "LongLong", "LongLong", "%lld"},
+    {t_string,  "string",  FALSE, TRUE,  "varchar(255)",     "char *",        "String", "String", "%s"},
+    {t_lstring,    "lstring",    FALSE, TRUE,  "longblob",   "char *",        "String", "String", "%s"},
+    {t_object,  "object",  FALSE, FALSE, "longblob",         "!error!",       "Object", "Object", NULL},
+    {t_object,  "table",   FALSE, FALSE, "longblob",         "!error!",       "Object", "Object", NULL},
+    {t_simple,  "simple",  FALSE, FALSE, "longblob",         "!error!",       "Simple", "Simple", NULL},
 };
 
 struct column
@@ -546,10 +550,6 @@ else if (lt->stringy)
     fprintf(f, "%sret->%s%s = sqlStringComma(&s);\n", indent, col->name, arrayRef);
 else if (lt->isUnsigned)
     fprintf(f, "%sret->%s%s = sqlUnsignedComma(&s);\n", indent, col->name, arrayRef);
-else if (lt->type == t_float)
-    fprintf(f, "%sret->%s%s = sqlFloatComma(&s);\n", indent, col->name, arrayRef);
-else if (lt->type == t_double)
-    fprintf(f, "%sret->%s%s = sqlDoubleComma(&s);\n", indent, col->name, arrayRef);
 else if (lt->type == t_char)
     {
     if (col->fixedSize > 0)
@@ -560,7 +560,7 @@ else if (lt->type == t_char)
 		indent, col->name, col->name);
     }
 else
-    fprintf(f, "%sret->%s%s = sqlSignedComma(&s);\n", indent, col->name, arrayRef);
+    fprintf(f, "%sret->%s%s = sql%sComma(&s);\n", indent, col->name, arrayRef, lt->nummyName);
 }
 
 
@@ -645,18 +645,6 @@ if (col->isSizeLink == isSizeLink)
 	{
 	switch (type)
 	    {
-	    case t_uint:
-	    case t_ushort:
-	    case t_ubyte:
-		fprintf(f, "ret->%s = sqlUnsigned(row[%d]);\n", 
-		    col->name, colIx);
-		break;
-	    case t_int:
-	    case t_short:
-	    case t_byte:
-		fprintf(f, "ret->%s = sqlSigned(row[%d]);\n", 
-		    col->name, colIx);
-		break;
 	    case t_float:
 	    case t_double:
 		fprintf(f, "ret->%s = atof(row[%d]);\n",
@@ -689,6 +677,13 @@ if (col->isSizeLink == isSizeLink)
 		fprintf(f, "s = row[%d];\n", colIx);
 		fprintf(f, "if(s != NULL)\n");
 		fprintf(f, "   %sCommaIn(&s, &ret->%s);\n", obj->name, col->name);
+		break;
+		}
+	    default:
+	        {
+		fprintf(f, "ret->%s = sql%s(row[%d]);\n", 
+		    col->name, lt->nummyName, colIx);
+		break;
 		}
 	    }
 	}
@@ -1002,25 +997,9 @@ for (col = table->columnList; col != NULL; col = col->next)
 	case t_char:
 	    outString = (col->fixedSize > 0) ? "'%s'" : "'%c'";
 	    break;
-	case t_string:
-	case t_lstring:
-	    outString = "'%s'";
+	default:
+	    outString = lt->outFormat;
 	    break;
-	case t_float:
-	    outString = "%f";
-	    break;
-	case t_double:
-	    outString = "%f";
-	    break;
-	case t_int:
-	case t_short:
-	case t_byte:
-	    outString = "%d";
-	    break;
-	case t_uint:
-	case t_ushort:
-	case t_ubyte:
-	    outString = "%u";
 	}
     sprintf(colInsertBuff, " el->%s", colName);
 
@@ -1175,25 +1154,10 @@ for (col = table->columnList; col != NULL; col = col->next)
 		    dyStringPrintf(stringDeclarations, " *%s,", colName);
 		}
 	    break;
-	case t_float:
-	    outString = "%f";
+	default:
+	    outString = lt->outFormat;
 	    sprintf(colInsertBuff, "el->%s ", colName);
 	    break;
-	case t_double:
-	    outString = "%f";
-	    sprintf(colInsertBuff, "el->%s ", colName);
-	    break;
-	case t_int:
-	case t_short:
-	case t_byte:
-	    outString = "%d";
-	    sprintf(colInsertBuff, "el->%s ", colName);
-	    break;
-	case t_uint:
-	case t_ushort:
-	case t_ubyte:
-	    outString = "%u";
-	    sprintf(colInsertBuff, "el->%s ", colName);	
 	}
     if(col->isArray || col->isList)
 	{
@@ -1347,6 +1311,7 @@ void makeOutput(struct dbObject *table, FILE *f, FILE *hFile)
 {
 char *tableName = table->name;
 struct column *col;
+char *outString = NULL;
 
 fprintf(hFile, 
   "void %sOutput(struct %s *el, FILE *f, char sep, char lastSep);\n", tableName, tableName);
@@ -1386,29 +1351,17 @@ for (col = table->columnList; col != NULL; col = col->next)
     switch(type)
 	{
 	case t_char:
-	    outChar = (col->fixedSize > 0) ? 's' : 'c';
+	    outString = (col->fixedSize > 0) ? "%s" : "%c";
 	    mightNeedQuotes = TRUE;
 	    break;
 	case t_string:
 	case t_lstring:
-	    outChar = 's';
+	    outString = "%s";
 	    mightNeedQuotes = TRUE;
 	    break;
-	case t_float:
-	    outChar = 'f';
+	default:
+	    outString = lt->outFormat;
 	    break;
-	case t_double:
-	    outChar = 'f';
-	    break;
-	case t_int:
-	case t_short:
-	case t_byte:
-	    outChar = 'd';
-	    break;
-	case t_uint:
-	case t_ushort:
-	case t_ubyte:
-	    outChar = 'u';
 	}
 
     if (col->isList || col->isArray)
@@ -1446,7 +1399,7 @@ for (col = table->columnList; col != NULL; col = col->next)
 	    {
 	    if (mightNeedQuotes)
 		fprintf(f, "%s    if (sep == ',') fputc('\"',f);\n", indent);
-	    fprintf(f, "%s    fprintf(f, \"%%%c\", el->%s[i]);\n", indent, outChar, 
+	    fprintf(f, "%s    fprintf(f, \"%s\", el->%s[i]);\n", indent, outString, 
 		colName);
 	    if (mightNeedQuotes)
 		fprintf(f, "%s    if (sep == ',') fputc('\"',f);\n", indent);
@@ -1480,7 +1433,7 @@ for (col = table->columnList; col != NULL; col = col->next)
 	    {
 	    if (mightNeedQuotes)
 		fprintf(f, "if (sep == ',') fputc('\"',f);\n");
-	    fprintf(f, "fprintf(f, \"%%%c\", el->%s);\n", outChar, 
+	    fprintf(f, "fprintf(f, \"%s\", el->%s);\n", outString, 
 		colName);
 	    if (mightNeedQuotes)
 		fprintf(f, "if (sep == ',') fputc('\"',f);\n");

@@ -49,7 +49,7 @@ else
     return res;
 }
 
-off_t sqlOffset(char *s)
+long long sqlLongLong(char *s)
 /* Convert string to an off_t.  Unlike atol assumes all of string is
  * number. */
 {

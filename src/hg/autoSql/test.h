@@ -5,9 +5,7 @@
 #ifndef TEST_H
 #define TEST_H
 
-#ifndef JKSQL_H
-#include "jksql.h"
-#endif
+#define PT_NUM_COLS 2
 
 struct pt
 /* Two dimensional point */
@@ -29,6 +27,8 @@ void ptOutput(struct pt *el, FILE *f, char sep, char lastSep);
 
 #define ptCommaOut(el,f) ptOutput(el,f,',',',');
 /* Print out pt as a comma separated list including final comma. */
+
+#define POINT_NUM_COLS 5
 
 struct point
 /* Three dimensional point */
@@ -62,6 +62,8 @@ void pointOutput(struct point *el, FILE *f, char sep, char lastSep);
 #define pointCommaOut(el,f) pointOutput(el,f,',',',');
 /* Print out point as a comma separated list including final comma. */
 
+#define POLYGON_NUM_COLS 4
+
 struct polygon
 /* A face */
     {
@@ -77,33 +79,8 @@ struct polygon *polygonLoad(char **row);
  * from database.  Dispose of this with polygonFree(). */
 
 struct polygon *polygonLoadAll(char *fileName);
-/* Load all polygon from a tab-separated file.
+/* Load all polygon from whitespace-separated file.
  * Dispose of this with polygonFreeList(). */
-
-struct polygon *polygonLoadByQuery(struct sqlConnection *conn, char *query);
-/* Load all polygon from table that satisfy the query given.  
- * Where query is of the form 'select * from example where something=something'
- * or 'select example.* from example, anotherTable where example.something = 
- * anotherTable.something'.
- * Dispose of this with polygonFreeList(). */
-
-void polygonSaveToDb(struct sqlConnection *conn, struct polygon *el, char *tableName, int updateSize);
-/* Save polygon as a row to the table specified by tableName. 
- * As blob fields may be arbitrary size updateSize specifies the approx size
- * of a string that would contain the entire query. Arrays of native types are
- * converted to comma separated strings and loaded as such, User defined types are
- * inserted as NULL. Note that strings must be escaped to allow insertion into the database.
- * For example "autosql's features include" --> "autosql\'s features include" 
- * If worried about this use polygonSaveToDbEscaped() */
-
-void polygonSaveToDbEscaped(struct sqlConnection *conn, struct polygon *el, char *tableName, int updateSize);
-/* Save polygon as a row to the table specified by tableName. 
- * As blob fields may be arbitrary size updateSize specifies the approx size.
- * of a string that would contain the entire query. Automatically 
- * escapes all simple strings (not arrays of string) but may be slower than polygonSaveToDb().
- * For example automatically copies and converts: 
- * "autosql's features include" --> "autosql\'s features include" 
- * before inserting into database. */ 
 
 struct polygon *polygonCommaIn(char **pS, struct polygon *ret);
 /* Create a polygon out of a comma separated string. 
@@ -126,6 +103,8 @@ void polygonOutput(struct polygon *el, FILE *f, char sep, char lastSep);
 #define polygonCommaOut(el,f) polygonOutput(el,f,',',',');
 /* Print out polygon as a comma separated list including final comma. */
 
+#define POLYHEDRON_NUM_COLS 5
+
 struct polyhedron
 /* A 3-d object */
     {
@@ -142,33 +121,8 @@ struct polyhedron *polyhedronLoad(char **row);
  * from database.  Dispose of this with polyhedronFree(). */
 
 struct polyhedron *polyhedronLoadAll(char *fileName);
-/* Load all polyhedron from a tab-separated file.
+/* Load all polyhedron from whitespace-separated file.
  * Dispose of this with polyhedronFreeList(). */
-
-struct polyhedron *polyhedronLoadByQuery(struct sqlConnection *conn, char *query);
-/* Load all polyhedron from table that satisfy the query given.  
- * Where query is of the form 'select * from example where something=something'
- * or 'select example.* from example, anotherTable where example.something = 
- * anotherTable.something'.
- * Dispose of this with polyhedronFreeList(). */
-
-void polyhedronSaveToDb(struct sqlConnection *conn, struct polyhedron *el, char *tableName, int updateSize);
-/* Save polyhedron as a row to the table specified by tableName. 
- * As blob fields may be arbitrary size updateSize specifies the approx size
- * of a string that would contain the entire query. Arrays of native types are
- * converted to comma separated strings and loaded as such, User defined types are
- * inserted as NULL. Note that strings must be escaped to allow insertion into the database.
- * For example "autosql's features include" --> "autosql\'s features include" 
- * If worried about this use polyhedronSaveToDbEscaped() */
-
-void polyhedronSaveToDbEscaped(struct sqlConnection *conn, struct polyhedron *el, char *tableName, int updateSize);
-/* Save polyhedron as a row to the table specified by tableName. 
- * As blob fields may be arbitrary size updateSize specifies the approx size.
- * of a string that would contain the entire query. Automatically 
- * escapes all simple strings (not arrays of string) but may be slower than polyhedronSaveToDb().
- * For example automatically copies and converts: 
- * "autosql's features include" --> "autosql\'s features include" 
- * before inserting into database. */ 
 
 struct polyhedron *polyhedronCommaIn(char **pS, struct polyhedron *ret);
 /* Create a polyhedron out of a comma separated string. 
@@ -190,6 +144,8 @@ void polyhedronOutput(struct polyhedron *el, FILE *f, char sep, char lastSep);
 
 #define polyhedronCommaOut(el,f) polyhedronOutput(el,f,',',',');
 /* Print out polyhedron as a comma separated list including final comma. */
+
+#define TWOPOINT_NUM_COLS 4
 
 struct twoPoint
 /* Two points back to back */
@@ -214,6 +170,8 @@ void twoPointOutput(struct twoPoint *el, FILE *f, char sep, char lastSep);
 #define twoPointCommaOut(el,f) twoPointOutput(el,f,',',',');
 /* Print out twoPoint as a comma separated list including final comma. */
 
+#define STRINGARRAY_NUM_COLS 2
+
 struct stringArray
 /* An array of strings */
     {
@@ -227,33 +185,8 @@ struct stringArray *stringArrayLoad(char **row);
  * from database.  Dispose of this with stringArrayFree(). */
 
 struct stringArray *stringArrayLoadAll(char *fileName);
-/* Load all stringArray from a tab-separated file.
+/* Load all stringArray from whitespace-separated file.
  * Dispose of this with stringArrayFreeList(). */
-
-struct stringArray *stringArrayLoadByQuery(struct sqlConnection *conn, char *query);
-/* Load all stringArray from table that satisfy the query given.  
- * Where query is of the form 'select * from example where something=something'
- * or 'select example.* from example, anotherTable where example.something = 
- * anotherTable.something'.
- * Dispose of this with stringArrayFreeList(). */
-
-void stringArraySaveToDb(struct sqlConnection *conn, struct stringArray *el, char *tableName, int updateSize);
-/* Save stringArray as a row to the table specified by tableName. 
- * As blob fields may be arbitrary size updateSize specifies the approx size
- * of a string that would contain the entire query. Arrays of native types are
- * converted to comma separated strings and loaded as such, User defined types are
- * inserted as NULL. Note that strings must be escaped to allow insertion into the database.
- * For example "autosql's features include" --> "autosql\'s features include" 
- * If worried about this use stringArraySaveToDbEscaped() */
-
-void stringArraySaveToDbEscaped(struct sqlConnection *conn, struct stringArray *el, char *tableName, int updateSize);
-/* Save stringArray as a row to the table specified by tableName. 
- * As blob fields may be arbitrary size updateSize specifies the approx size.
- * of a string that would contain the entire query. Automatically 
- * escapes all simple strings (not arrays of string) but may be slower than stringArraySaveToDb().
- * For example automatically copies and converts: 
- * "autosql's features include" --> "autosql\'s features include" 
- * before inserting into database. */ 
 
 struct stringArray *stringArrayCommaIn(char **pS, struct stringArray *ret);
 /* Create a stringArray out of a comma separated string. 

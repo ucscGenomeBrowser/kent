@@ -64,9 +64,9 @@ for (;;)
     }
 }
 
-
-struct mafAli *mafNext(struct mafFile *mf)
-/* Return next alignment in FILE or NULL if at end. */
+struct mafAli *mafNextWithPos(struct mafFile *mf, off_t *retOffset)
+/* Return next alignment in FILE or NULL if at end.  If retOffset is
+ * nonNULL, return start offset of record in file. */
 {
 struct lineFile *lf = mf->lf;
 struct mafAli *ali;
@@ -89,6 +89,8 @@ for (;;)
 	
     if (sameString(word, "a"))
 	{
+	if (retOffset != NULL)
+	    *retOffset = lineFileTell(mf->lf);
 	AllocVar(ali);
 	while ((word = nextWord(&line)) != NULL)
 	    {
@@ -166,6 +168,14 @@ for (;;)
 	}
     }
 }
+
+
+struct mafAli *mafNext(struct mafFile *mf)
+/* Return next alignment in FILE or NULL if at end. */
+{
+return mafNextWithPos(mf, NULL);
+}
+
 
 struct mafFile *mafReadAll(char *fileName)
 /* Read all elements in a maf file */

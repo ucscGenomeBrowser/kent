@@ -67,6 +67,10 @@ struct mafAli *mafNext(struct mafFile *mafFile);
 /* Return next alignment in file or NULL if at end. 
  * This will close the open file handle at end as well. */
 
+struct mafAli *mafNextWithPos(struct mafFile *mf, off_t *retOffset);
+/* Return next alignment in FILE or NULL if at end.  If retOffset is
+ * nonNULL, return start offset of record in file. */
+
 struct mafFile *mafReadAll(char *fileName);
 /* Read in full maf file */
 

@@ -19,7 +19,7 @@ int sqlSigned(char *s);
 /* Convert string to signed integer.  Unlike atol assumes 
  * all of string is number. */
 
-off_t sqlOffset(char *s);
+off_t sqlLongLong(char *s);
 /* Convert string to an off_t.  Unlike atol assumes all of string is
  * number. */
 

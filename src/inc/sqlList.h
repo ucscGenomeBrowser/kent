@@ -14,6 +14,7 @@ int sqlShortArray(char *s, short *array, int arraySize);
 int sqlUshortArray(char *s, unsigned short *array, int arraySize);
 int sqlByteArray(char *s, signed char *array, int arraySize);
 int sqlUbyteArray(char *s, unsigned char *array, int arraySize);
+int sqlLongLongArray(char *s, long long *array, int arraySize);
 /* Convert comma separated list of numbers to an array.  Pass in 
  * array and max size of array.  Returns actual array size.*/
 
@@ -25,6 +26,7 @@ void sqlShortStaticArray(char *s, short **retArray, int *retSize);
 void sqlUshortStaticArray(char *s, unsigned short **retArray, int *retSize);
 void sqlByteStaticArray(char *s, signed char **retArray, int *retSize);
 void sqlUbyteStaticArray(char *s, unsigned char **retArray, int *retSize);
+void sqlLongLongStaticArray(char *s, long long **array, int *retSize);
 /* Convert comma separated list of numbers to an array which will be
  * overwritten next call to this function or to sqlXxxxxxDynamicArray,
  * but need not be freed. */
@@ -37,6 +39,7 @@ void sqlShortDynamicArray(char *s, short **retArray, int *retSize);
 void sqlUshortDynamicArray(char *s, unsigned short **retArray, int *retSize);
 void sqlByteDynamicArray(char *s, signed char **retArray, int *retSize);
 void sqlUbyteDynamicArray(char *s, unsigned char **retArray, int *retSize);
+void sqlLongLongDynamicArray(char *s, long long **retArray, int *retSize);
 /* Convert comma separated list of numbers to an dynamically allocated
  * array, which should be freeMem()'d when done. */
 
@@ -67,6 +70,7 @@ char *sqlShortArrayToString( short *array, int arraySize);
 char *sqlUshortArrayToString( unsigned short *array, int arraySize);
 char *sqlByteArrayToString( signed char *array, int arraySize);
 char *sqlUbyteArrayToString( unsigned char *array, int arraySize);
+char *sqlLongLongArrayToString( long long *array, int arraySize);
 char *sqlStringArrayToString( char **array, int arraySize);
 /* Convert arrays into comma separated strings. The char *'s returned
  * should be freeMem()'d when done */
@@ -86,6 +90,9 @@ int sqlUnsignedComma(char **pS);
 
 int sqlSignedComma(char **pS);
 /* Return signed number at *pS.  Advance *pS past comma at end */
+
+long long sqlLongLongComma(char **pS);
+/* Return long long number at *pS.  Advance *pS past comma at end */
 
 double sqlDoubleComma(char **pS);
 /* Return double floating number at *pS.  Advance *pS past comma at end */

@@ -560,6 +560,76 @@ if (size > 0)
 
 /*-------------------------*/
 
+int sqlLongLongArray(char *s, long long *array, int arraySize)
+/* Convert comma separated list of numbers to an array.  Pass in 
+ * array and max size of array. */
+{
+unsigned count = 0;
+for (;;)
+    {
+    char *e;
+    if (s == NULL || s[0] == 0 || count == arraySize)
+	break;
+    e = strchr(s, ',');
+    if (e != NULL)
+	*e++ = 0;
+    array[count++] = sqlLongLong(s);
+    s = e;
+    }
+return count;
+}
+
+void sqlLongLongStaticArray(char *s, long long **retArray, int *retSize)
+/* Convert comma separated list of numbers to an array which will be
+ * overwritten next call to this function, but need not be freed. */
+{
+static long long *array = NULL;
+static unsigned alloc = 0;
+unsigned count = 0;
+
+for (;;)
+    {
+    char *e;
+    if (s == NULL || s[0] == 0)
+	break;
+    e = strchr(s, ',');
+    if (e != NULL)
+	*e++ = 0;
+    if (count >= alloc)
+	{
+	if (alloc == 0)
+	    alloc = 64;
+	else
+	    alloc <<= 1;
+	ExpandArray(array, count, alloc);
+	}
+    array[count++] = sqlLongLong(s);
+    s = e;
+    }
+*retSize = count;
+*retArray = array;
+}
+
+void sqlLongLongDynamicArray(char *s, long long **retArray, int *retSize)
+/* Convert comma separated list of numbers to an dynamically allocated
+ * array, which should be freeMem()'d when done. */
+{
+long long *sArray, *dArray = NULL;
+int size;
+
+sqlLongLongStaticArray(s, &sArray, &size);
+if (size > 0)
+    {
+    AllocArray(dArray,size);
+    CopyArray(sArray, dArray, size);
+    }
+*retArray = dArray;
+*retSize = size;
+}
+
+/*-------------------------*/
+
+
 int sqlStringArray(char *s, char **array, int maxArraySize)
 /* Convert comma separated list of strings to an array.  Pass in 
  * array and max size of array.  Returns actual size*/
@@ -581,7 +651,7 @@ return count;
 
 void sqlStringStaticArray(char *s, char  ***retArray, int *retSize)
 /* Convert comma separated list of strings to an array which will be
- * overwritten next call to this function or to sqlUnsignedDynamicArray,
+ * overwritten next call to this function or to sqlStringDynamicArray,
  * but need not be freed. */
 {
 static char **array = NULL;
@@ -748,6 +818,20 @@ dyStringFree(&string);
 return toRet;
 }
 
+char *sqlLongLongArrayToString( long long *array, int arraySize)
+{
+int i;
+struct dyString *string = newDyString(256);
+char *toRet = NULL;
+for( i = 0 ; i < arraySize; i++ )
+    {
+    dyStringPrintf(string, "%lld,", array[i]);
+    }
+toRet = cloneString(string->string);
+dyStringFree(&string);
+return toRet;
+}
+
 char *sqlStringArrayToString( char **array, int arraySize)
 {
 int i;
@@ -791,6 +875,7 @@ ret = sqlUnsigned(s);
 return ret;
 }
 
+
 int sqlSignedComma(char **pS)
 /* Return signed number at *pS.  Advance *pS past comma at end */
 {
@@ -801,6 +886,20 @@ int ret;
 *e++ = 0;
 *pS = e;
 ret = sqlSigned(s);
+return ret;
+}
+
+long long sqlLongLongComma(char **pS)
+/* Return offset (often 64 bits) at *pS.  Advance *pS past comma at 
+ * end */
+{
+char *s = *pS;
+char *e = strchr(s, ',');
+long long ret;
+
+*e++ = 0;
+*pS = e;
+ret = sqlLongLong(s);
 return ret;
 }
 
