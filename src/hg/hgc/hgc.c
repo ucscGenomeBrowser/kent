@@ -4724,6 +4724,7 @@ dnaUtilOpen();
 doMiddle();
 }
 
+
 int main(int argc, char *argv[])
 {
 cgiSpoof(&argc,argv);
