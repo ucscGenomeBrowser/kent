@@ -78,7 +78,7 @@ while (faSomeSpeedReadNext(lf, &seq.dna, &seq.size, &seq.name, qType != gftProt)
 	gfAlignStrand(&conn, nibDir, &seq, FALSE, minScore, gfSavePslx, &outForm);
 	conn = gfConnect(hostName, portName);
 	reverseComplement(seq.dna, seq.size);
-	gfAlignStrand(&conn, nibDir, &seq, TRUE,  36, gfSavePslx, &outForm);
+	gfAlignStrand(&conn, nibDir, &seq, TRUE,  minScore, gfSavePslx, &outForm);
 	}
     else
         {
