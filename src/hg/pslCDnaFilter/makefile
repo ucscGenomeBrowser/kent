@@ -27,7 +27,7 @@ test:
 
 clean:
 	rm -f $O $B
-	#cd tests && ${MAKE} clean
+	cd tests && ${MAKE} clean
 
 savebak:
 	savebak pslCDnaFilter *.c *.h *.as makefile tests/input debug/bin

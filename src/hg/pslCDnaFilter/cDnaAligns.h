@@ -14,6 +14,7 @@ struct cDnaAlign
     float ident;         /* fraction ident */
     float cover;         /* fraction of cDNA aligned, excluding polyA if
                           * it is available */
+    float score;         /* weighted combination of cover and ident */
     boolean drop;         /* drop this psl if set */
     boolean weirdOverlap; /* weird overlap was detected */
 };
@@ -32,20 +33,25 @@ struct cDnaAligns
     char *id;                     /* id for this cDNA  (memory not owned) */
     struct cDnaAlign *alns;       /* alignment list */
     struct lineFile *pslLf;       /* object for reading psl rows */
+    float coverWeight;            /* weight used when computing score */
     struct psl *nextCDnaPsl;      /* if not null, psl for next cDNA */
     struct hash *polyASizes;      /* hash of polyASizes */
     struct cDnaCnts totalCnts;         /* number read */
     struct cDnaCnts keptCnts;          /* number of kept */
     struct cDnaCnts badCnts;           /* number bad that were dropped */ 
+    struct cDnaCnts minQSizeCnts;      /* number below min size dropped */ 
     struct cDnaCnts weirdOverCnts;     /* number of weird overlapping PSLs */
+    struct cDnaCnts weirdKeptCnts;     /* weird overlapping PSLs not dropped  */
     struct cDnaCnts overlapCnts;       /* number dropped due to overlap */
     struct cDnaCnts minIdCnts;         /* number dropped less that min id */
     struct cDnaCnts idTopCnts;         /* number dropped less that top id */
     struct cDnaCnts minCoverCnts;      /* number dropped less that min cover */
     struct cDnaCnts coverTopCnts;      /* number dropped less that top cover */
+    struct cDnaCnts maxAlignsCnts;     /* number dropped due to over max */
 };
 
-struct cDnaAligns *cDnaAlignsNew(char *pslFile, char *polyASizeFile);
+struct cDnaAligns *cDnaAlignsNew(char *pslFile, float coverWeight,
+                                 char *polyASizeFile);
 /* construct a new object, opening the psl file */
 
 void cDnaAlignsFree(struct cDnaAligns **cdAlnsPtr);
@@ -53,6 +59,9 @@ void cDnaAlignsFree(struct cDnaAligns **cdAlnsPtr);
 
 boolean cDnaAlignsNext(struct cDnaAligns *cdAlns);
 /* load the next set of cDNA alignments, return FALSE if no more */
+
+void cDnaAlignsSort(struct cDnaAligns *cdAlns);
+/* sort the alignments for this query by score */
 
 void cDnaAlignsWriteKept(struct cDnaAligns *cdAlns,
                          FILE *outFh);
@@ -65,9 +74,6 @@ void cDnaAlignsWriteDrop(struct cDnaAligns *cdAlns,
 void cDnaAlignsWriteWeird(struct cDnaAligns *cdAlns,
                           FILE *outFh);
 /* write the current set of psls that are flagged as weird overlap */
-
-void cDnaAlignVerbPsl(int level, struct psl *psl);
-/* write verbose info describing the location of a cDNA alignment */
 
 void cDnaAlignVerb(int level, struct psl *psl, char *msg, ...);
 /* write verbose messager followed by location of a cDNA alignment */

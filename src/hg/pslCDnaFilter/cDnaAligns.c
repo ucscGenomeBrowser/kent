@@ -124,9 +124,11 @@ AllocVar(cdAln);
 cdAln->psl = psl;
 cdAln->ident = calcIdent(psl);
 cdAln->cover = calcCover(cdAlns, psl);
+cdAln->score = (cdAlns->coverWeight*cdAln->cover)
+    + ((1.0-cdAlns->coverWeight)*cdAln->ident);
 
-if (verboseLevel() >= 4)
-    cDnaAlignVerb(4, psl, "align: id=%g cov=%g", cdAln->ident, cdAln->cover);
+if (verboseLevel() >= 5)
+    cDnaAlignVerb(5, psl, "align: id=%g cov=%g", cdAln->ident, cdAln->cover);
 return cdAln;
 }
 
@@ -197,11 +199,14 @@ static void updateCounters(struct cDnaAligns *cdAlns)
 updateCounter(&cdAlns->totalCnts);
 updateCounter(&cdAlns->keptCnts);
 updateCounter(&cdAlns->weirdOverCnts);
+updateCounter(&cdAlns->weirdKeptCnts);
+updateCounter(&cdAlns->minQSizeCnts);
 updateCounter(&cdAlns->overlapCnts);
 updateCounter(&cdAlns->minIdCnts);
 updateCounter(&cdAlns->idTopCnts);
 updateCounter(&cdAlns->minCoverCnts);
 updateCounter(&cdAlns->coverTopCnts);
+updateCounter(&cdAlns->maxAlignsCnts);
 }
 
 boolean cDnaAlignsNext(struct cDnaAligns *cdAlns)
@@ -228,6 +233,24 @@ cdAlns->nextCDnaPsl = psl;  /* save for next time (or NULL) */
 return TRUE;
 }
 
+static int scoreCmp(const void *va, const void *vb)
+/* Compare two alignments by score */
+{
+const struct cDnaAlign *a = *((struct cDnaAlign **)va);
+const struct cDnaAlign *b = *((struct cDnaAlign **)vb);
+if (a->score < b->score)
+    return -1;
+if (a->score > b->score)
+    return 1;
+return 0;
+}
+
+void cDnaAlignsSort(struct cDnaAligns *cdAlns)
+/* sort the alignments for this query by score */
+{
+slSort(&cdAlns->alns, scoreCmp);
+}
+
 void cDnaAlignsWriteKept(struct cDnaAligns *cdAlns,
                          FILE *outFh)
 /* write the current set of psls that are flagged to keep */
@@ -239,6 +262,10 @@ for (cdAln = cdAlns->alns; cdAln != NULL; cdAln = cdAln->next)
         {
         cdAlns->keptCnts.aligns++;
         pslTabOut(cdAln->psl, outFh);
+        if (cdAln->weirdOverlap)
+            cdAlns->weirdKeptCnts.aligns++;
+        if (verboseLevel() >= 4)
+            cDnaAlignVerb(4, cdAln->psl, "keep: id=%g cov=%g", cdAln->ident, cdAln->cover);
         }
     }
 }
@@ -267,12 +294,14 @@ for (cdAln = cdAlns->alns; cdAln != NULL; cdAln = cdAln->next)
     }
 }
 
-struct cDnaAligns *cDnaAlignsNew(char *pslFile, char *polyASizeFile)
+struct cDnaAligns *cDnaAlignsNew(char *pslFile, float coverWeight,
+                                 char *polyASizeFile)
 /* construct a new object, opening the psl file */
 {
 struct cDnaAligns *cdAlns;
 AllocVar(cdAlns);
 cdAlns->pslLf = pslFileOpen(pslFile);
+cdAlns->coverWeight = coverWeight;
 if (polyASizeFile != NULL)
     cdAlns->polyASizes = loadPolyASizes(polyASizeFile);
 return cdAlns;
@@ -291,14 +320,6 @@ if (cdAlns != NULL)
     }
 }
 
-/* FIXME: don't need both?? */
-void cDnaAlignVerbPsl(int level, struct psl *psl)
-/* write verbose info describing the location of a cDNA alignment */
-{
-verbose(level, "%s %s:%d-%d/%s", psl->qName, psl->tName,
-        psl->tStart, psl->tEnd, psl->strand);
-}
-
 void cDnaAlignVerb(int level, struct psl *psl, char *msg, ...)
 /* write verbose messager followed by location of a cDNA alignment */
 {
@@ -307,7 +328,8 @@ va_list ap;
 va_start(ap, msg);
 verboseVa(level, msg, ap);
 verbose(level, ": ");
-cDnaAlignVerbPsl(level, psl);
+verbose(level, "%s %s:%d-%d/%s", psl->qName, psl->tName,
+        psl->tStart, psl->tEnd, psl->strand);
 verbose(level, "\n");
 va_end(ap);
 }
