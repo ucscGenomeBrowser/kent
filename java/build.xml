@@ -146,6 +146,18 @@
            <param name="progPkg" value="edu.ucsc.genome.qa.monitor"/>
            <param name="progClass" value="DatabaseMonitor"/>
         </antcall>
+        <antcall target="generateWrapper" inheritAll="yes" inheritRefs="yes">
+           <param name="progPkg" value="edu.ucsc.genome.qa.monitor"/>
+           <param name="progClass" value="FileCheck"/>
+        </antcall>
+        <antcall target="generateWrapper" inheritAll="yes" inheritRefs="yes">
+           <param name="progPkg" value="edu.ucsc.genome.qa.filter"/>
+           <param name="progClass" value="ScoreFilter"/>
+        </antcall>
+        <antcall target="generateWrapper" inheritAll="yes" inheritRefs="yes">
+           <param name="progPkg" value="edu.ucsc.genome.util"/>
+           <param name="progClass" value="GetMaxCoord"/>
+        </antcall>
     </target>
 
     <target name="clean" depends="init">
