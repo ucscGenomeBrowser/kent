@@ -10,7 +10,6 @@
 #include "errabort.h"
 #include "nib.h"
 #include "trans3.h"
-#include "cheapcgi.h"	/* uglyf */
 
 struct gfRange
 /* A range of bases found by genoFind.  Recursive
@@ -1165,15 +1164,7 @@ struct ssBundle *bun;
 int hitCount;
 struct lm *lm = lmInit(0);
 
-boolean loadOnly = cgiBoolean("loadOnly");	/* uglyf */
-boolean skipStitch = cgiBoolean("skipStitch");	/* uglyf */
-boolean clumpOnly = cgiBoolean("clumpOnly");	/* uglyf */
-boolean rangesOnly = cgiBoolean("rangesOnly");  /* uglyf */
-
-
-if (loadOnly) goto OUT2;
 gfTransTransFindClumps(gfs, qTrans->trans, clumps, lm, &hitCount);
-if (clumpOnly) goto OUT;	/* uglyf */
 for (qFrame = 0; qFrame<3; ++qFrame)
     {
     for (tFrame=0; tFrame<3; ++tFrame)
@@ -1189,7 +1180,6 @@ for (qFrame = 0; qFrame<3; ++qFrame)
     }
 slSort(&rangeList, gfRangeCmpTarget);
 rangeList = gfRangesBundle(rangeList, 500000);
-if (rangesOnly) goto OUT;  /* uglyf */
 for (range = rangeList; range != NULL; range = range->next)
     {
     targetSeq = range->tSeq;
@@ -1198,17 +1188,14 @@ for (range = rangeList; range != NULL; range = range->next)
     bun->genoSeq = targetSeq;
     bun->data = range;
     bun->ffList = rangesToFfItem(range->components, qSeq);
-    if (skipStitch) continue;	/* uglyf */
     ssStitch(bun, ffLoose);
     saveAlignments(targetSeq->name, targetSeq->size, 0, 
 	bun, outData, isRc, ffLoose, minMatch, outFunction);
     ssBundleFree(&bun);
     }
-OUT:	/* uglyf */
 for (qFrame = 0; qFrame<3; ++qFrame)
     for (tFrame=0; tFrame<3; ++tFrame)
 	gfClumpFreeList(&clumps[qFrame][tFrame]);
-OUT2:	/* uglyf */
 trans3Free(&qTrans);
 lmCleanup(&lm);
 }
