@@ -15,7 +15,7 @@
 #include "pbStampPict.h"
 #include "pbTracks.h"
 
-static char const rcsid[] = "$Id: pbTracks.c,v 1.12 2004/01/13 23:20:34 fanhsu Exp $";
+static char const rcsid[] = "$Id: pbTracks.c,v 1.13 2004/01/16 17:49:06 fanhsu Exp $";
 
 boolean hgDebug = FALSE;      /* Activate debugging code. Set to true by hgDebug=on in command line*/
 
@@ -209,7 +209,7 @@ vgBox(vg2, 0, 0, insideWidth, pixHeight, bkgColor);
 
 /* Start up client side map. */
 mapName=strdup("pbStamps");
-hPrintf("<MAP Name=%s>\n", mapName);
+hPrintf("\n<MAP Name=%s>\n", mapName);
 
 vgSetClip(vg2, 0, gfxBorder, insideWidth, pixHeight - 2*gfxBorder);
 iypos = 15;
@@ -224,10 +224,9 @@ hPrintf("</MAP>\n");
 vgClose(&vg2);
 hPrintf("<P>");
 
-hPrintf("<IMG SRC=\"%s\" BORDER=1 WIDTH=%d HEIGHT=%d USEMAP=#%s onMouseOut=\"javascript:popupoff();\"><BR>",
+hPrintf("\n<IMG SRC=\"%s\" BORDER=1 WIDTH=%d HEIGHT=%d USEMAP=#%s><BR>",
             gifTn2.forCgi, pixWidth, pixHeight, mapName);
-//for (i=0; i<26; i++)hPrintf("&nbsp&nbsp&nbsp");
-hPrintf("<A HREF=\"../goldenPath/help/pbTracksHelp.html\" TARGET=_blank>");
+hPrintf("\n<A HREF=\"../goldenPath/help/pbTracksHelp.html\" TARGET=_blank>");
 hPrintf("Explanation of Protein Property Histograms</A><BR>");
 
 hPrintf("<P>");
