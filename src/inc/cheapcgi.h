@@ -33,7 +33,22 @@ boolean cgiIsOnWeb();
 char *cgiString(char *varName);
 int cgiInt(char *varName);
 double cgiDouble(char *varName);
+
 boolean cgiBoolean(char *varName);
+/* The cgiBoolean is a little problematic.  If the variable
+ * is TRUE it exists, but if it is false it is simply not
+ * defined.   cgiBoolean() thus returns FALSE if the CGI
+ * variable doesn't exist or if it is set to FALSE.  To
+ * work around this when need be use cgiBooleanDefined(),
+ * which relies on the fact that when we define a boolean
+ * variable we also define a hidden variable. */
+
+boolean cgiBooleanDefined(char *name);
+/* Return TRUE if boolean variable is defined (by
+ * checking for shadow). */
+
+char *cgiBooleanShadowPrefix();
+/* Prefix for shadow variable set with boolean variables. */
 
 int cgiIntExp(char *varName);
 /* Evaluate an integer expression in varName and

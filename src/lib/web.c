@@ -1,5 +1,7 @@
 #include "common.h"
 #include "dnautil.h"
+#include "errabort.h"
+#include "htmshell.h"
 #include "web.h"
 
 /* flag that tell if the CGI header has already been outputed */
@@ -18,12 +20,9 @@ webInTextMode = TRUE;
 }
 
 
-void webStart(char* format,...)
+void webStartWrapper(char *format, va_list args, boolean withHttpHeader)
 /* output a CGI and HTML header with the given title in printf format */
 {
-va_list args;
-va_start(args, format);
-
 /* don't output two headers */
 if(webHeadAlreadyOutputed)
     return;
@@ -31,7 +30,8 @@ if(webHeadAlreadyOutputed)
 /* Preamble. */
 dnaUtilOpen();
 
-puts("Content-type:text/html\n");
+if (withHttpHeader)
+    puts("Content-type:text/html\n");
 
 puts(
     "<HTML>" "\n"
@@ -99,11 +99,22 @@ puts(
     "	" "\n"
 );
 
+pushWarnHandler(webVaWarn);
+
 /* set the flag */
 webHeadAlreadyOutputed = TRUE;
+}
 
+void webStart(char *format, ...)
+/* Print out pretty wrapper around things when not
+ * from cart. */
+{
+va_list args;
+va_start(args, format);
+webStartWrapper(format, args, TRUE);
 va_end(args);
 }
+
 
 
 void webNewSection(char* format, ...)
@@ -145,6 +156,7 @@ void webEnd()
 /* output the footer of the HTML page */
 {
 if(!webInTextMode)
+	{
 	puts(
 	    "" "\n"
 	    "	</TD><TD WIDTH=15></TD></TR></TABLE>" "\n"
@@ -155,6 +167,16 @@ if(!webInTextMode)
 	    "</TD></TR></TABLE>" "\n"
 	    "</BODY></HTML>" "\n"
 	);
+	popWarnHandler();
+	}
+}
+
+void webVaWarn(char *format, va_list args)
+/* Warning handler that closes out page and stuff in
+ * the fancy form. */
+{
+htmlVaWarn(format, args);
+webEnd();
 }
 
 

@@ -165,6 +165,20 @@ int exonCount = 0;
 struct gffLine *gl;
 unsigned *eStarts, *eEnds;
 int i;
+boolean anyExon = FALSE;
+
+/* Look to see if any exons.  If not allow CDS to be
+ * used instead. */
+for (gl = group->lineList; gl != NULL; gl = gl->next)
+    {
+    if (sameWord(gl->feature, exonSelectWord))
+	{
+        anyExon = TRUE;
+	break;
+	}
+    }
+if (!anyExon)
+    exonSelectWord = "CDS";
 
 /* Count up exons and figure out cdsStart and cdsEnd. */
 for (gl = group->lineList; gl != NULL; gl = gl->next)
@@ -174,7 +188,7 @@ for (gl = group->lineList; gl != NULL; gl = gl->next)
         {
 	++exonCount;
 	}
-    else if (sameWord(feat, "CDS") || sameWord(feat, "start_codon") 
+    if (sameWord(feat, "CDS") || sameWord(feat, "start_codon") 
         || sameWord(feat, "stop_codon"))
 	{
 	if (gl->start < cdsStart) cdsStart = gl->start;

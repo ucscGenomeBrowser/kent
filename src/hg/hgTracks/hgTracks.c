@@ -75,7 +75,6 @@ char *thisFrame = NULL;
 int maxItemsInFullTrack = 300;
 
 struct cart *cart;	/* The cart where we keep persistent variables. */
-char *selfName = "hgTracks";	/* Symbolic name of program */
 
 /* These variables persist from one incarnation of this program to the
  * next - living mostly in the cart. */
@@ -433,6 +432,17 @@ mapBoxReinvoke(x, y, width, height, NULL, newChrom, newStart, newEnd, message);
 }
 
 
+char *hgcNameAndSettings()
+/* Return path to hgc with variables to store UI settings. */
+{
+static struct dyString *dy = NULL;
+if (dy == NULL)
+    {
+    dy = newDyString(128);
+    dyStringPrintf(dy, "%s?%s", hgcName(), cartSidUrlString(cart));
+    }
+return dy->string;
+}
 
 void mapBoxHc(int start, int end, int x, int y, int width, int height, 
 	char *group, char *item, char *statusLine)
@@ -441,8 +451,8 @@ void mapBoxHc(int start, int end, int x, int y, int width, int height,
 {
 char *encodedItem = cgiEncode(item);
 printf("<AREA SHAPE=RECT COORDS=\"%d,%d,%d,%d\" ", x, y, x+width, y+height);
-printf("HREF=\"%s?o=%d&t=%d&g=%s&i=%s&c=%s&l=%d&r=%d&db=%s&pix=%d\" ", 
-    hgcName(), start, end, group, encodedItem, chromName, winStart, winEnd, 
+printf("HREF=\"%s&o=%d&t=%d&g=%s&i=%s&c=%s&l=%d&r=%d&db=%s&pix=%d\" ", 
+    hgcNameAndSettings(), start, end, group, encodedItem, chromName, winStart, winEnd, 
     database, tl.picWidth);
 printf("ALT= \"%s\">\n", statusLine); 
 freeMem(encodedItem);
@@ -4890,8 +4900,8 @@ void mapBoxHcWTarget(int start, int end, int x, int y, int width, int height,
 {
 char *encodedItem = cgiEncode(item);
 printf("<AREA SHAPE=RECT COORDS=\"%d,%d,%d,%d\" ", x, y, x+width, y+height);
-printf("HREF=\"%s?o=%d&t=%d&g=%s&i=%s&c=%s&l=%d&r=%d&db=%s&pix=%d\" ", 
-    hgcName(), start, end, group, encodedItem, chromName, winStart, winEnd, 
+printf("HREF=\"%s&o=%d&t=%d&g=%s&i=%s&c=%s&l=%d&r=%d&db=%s&pix=%d\" ", 
+    hgcNameAndSettings(), start, end, group, encodedItem, chromName, winStart, winEnd, 
     database, tl.picWidth);
 if(target) 
     {
@@ -5864,22 +5874,23 @@ void hotLinks()
 {
 boolean gotBlat = sameString(database, "hg6") || 
 	sameString(database, "hg7") || sameString(database, "hg8");
+struct dyString *uiVars = uiStateUrlPart(NULL);
+
 printf("<TABLE WIDTH=\"100%%\" BGCOLOR=\"#000000\" BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"1\"><TR><TD>\n");
 printf("<TABLE WIDTH=\"100%%\" BGCOLOR=\"#536ED3\" BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"2\"><TR>\n");
 printf("<TD><P ALIGN=CENTER><A HREF=\"/index.html\">%s</A></TD>", wrapWhiteFont("Home"));
 if (gotBlat)
     {
-    struct dyString *uiVars = uiStateUrlPart(NULL);
     fprintf(stdout, "<TD><P ALIGN=CENTER><A HREF=\"../cgi-bin/hgBlat?%s\">%s</A></TD>", uiVars->string, wrapWhiteFont("BLAT"));
     }
-printf("<TD><P ALIGN=CENTER><A HREF=\"%s?o=%d&g=getDna&i=mixed&c=%s&l=%d&r=%d&db=%s\">"
-      " %s </A></TD>",  hgcName(),
-      winStart, chromName, winStart, winEnd, database, wrapWhiteFont(" DNA "));
+printf("<TD><P ALIGN=CENTER><A HREF=\"%s&o=%d&g=getDna&i=mixed&c=%s&l=%d&r=%d&db=%s&%s\">"
+      " %s </A></TD>",  hgcNameAndSettings(),
+      winStart, chromName, winStart, winEnd, database, uiVars->string, wrapWhiteFont(" DNA "));
 printf("<TD><P ALIGN=CENTER><A HREF=\"../cgi-bin/hgText?db=%s&position=%s:%d-%d&phase=table\">%s</A></TD>", database, chromName, winStart+1, winEnd, wrapWhiteFont("Tables"));
 
 if (gotBlat)
     {
-    printf("<TD><P ALIGN=CENTER><A HREF=\"../cgi-bin/hgCoordConv?origDb=%s&position=%s:%d-%d&phase=table\">%s</A></TD>", database, chromName, winStart+1, winEnd, wrapWhiteFont("Convert"));
+    printf("<TD><P ALIGN=CENTER><A HREF=\"../cgi-bin/hgCoordConv?origDb=%s&position=%s:%d-%d&phase=table&%s\">%s</A></TD>", database, chromName, winStart+1, winEnd, uiVars->string, wrapWhiteFont("Convert"));
     }
 if (sameString(database, "hg8"))
     {
@@ -5903,7 +5914,7 @@ char *s;
 
 /* Tell browser where to go when they click on image. */
 printf("<FORM ACTION=\"%s\">\n\n", hgTracksName());
-cartSaveSession(cart, selfName);
+cartSaveSession(cart);
 
 /* See if want to include sequence search results. */
 userSeqString = cartOptionalString(cart, "ss");
@@ -5913,10 +5924,10 @@ if (userSeqString && !ssFilesExist(userSeqString))
     cartRemove(cart, "ss");
     }
 
-hideControls = cartUsualBoolean(cart, "hideControls", FALSE, selfName);
-withLeftLabels = cartUsualBoolean(cart, "leftLabels", TRUE, selfName);
-withCenterLabels = cartUsualBoolean(cart, "centerLabels", TRUE, selfName);
-withGuidelines = cartUsualBoolean(cart, "guidelines", TRUE, selfName);
+hideControls = cartUsualBoolean(cart, "hideControls", FALSE);
+withLeftLabels = cartUsualBoolean(cart, "leftLabels", TRUE);
+withCenterLabels = cartUsualBoolean(cart, "centerLabels", TRUE);
+withGuidelines = cartUsualBoolean(cart, "guidelines", TRUE);
 s = cartUsualString(cart, "ruler", "on");
 withRuler = sameWord(s, "on");
 
@@ -6284,7 +6295,7 @@ printf("updating the database and the display software with a number of\n");
 printf("new tracks, including some gene predictions.  Please try again tomorrow.\n");
 }
 
-char *excludeVars[] = { "old", "submit", "in1", "in2", "in3", "out1", "out2", "out3",
+char *excludeVars[] = { "submit", "Submit", "in1", "in2", "in3", "out1", "out2", "out3",
 	"left1", "left2", "left3", "right1", "right2", "right3", "customText", "customFile",
 	NULL };
 

@@ -11,6 +11,7 @@
 #include "dystring.h"
 #include "cheapcgi.h"
 #include "htmshell.h"
+#include "cart.h"
 #include "jksql.h"
 #include "dnautil.h"
 #include "dnaseq.h"
@@ -66,6 +67,8 @@
 #define ROGIC_CODE 1
 #define FUREY_CODE 1
 
+struct cart *cart;	/* User's settings. */
+
 char *seqName;		/* Name of sequence we're working on. */
 int winStart, winEnd;   /* Bounds of sequence. */
 char *database;		/* Name of mySQL database. */
@@ -76,24 +79,11 @@ char *unistsScript = "http://www.ncbi.nlm.nih.gov/genome/sts/sts.cgi?uid=";
 char *gdbScript = "http://www.gdb.org/gdb-bin/genera/accno?accessionNum=";
 char *cloneRegScript = "http://www.ncbi.nlm.nih.gov/genome/clone/clname.cgi?stype=Name&list=";
 
-static void earlyWarning(char *format, va_list args)
-/* Write an error message so user can see it before page is really started. */
-{
-static boolean initted = FALSE;
-if (!initted)
-    {
-    htmlStart("HTC Error");
-    initted = TRUE;
-    }
-htmlVaParagraph(format,args);
-}
-
 static void hgcStart(char *title)
 /* Print out header of web page with title.  Set
  * error handler to normal html error handler. */
 {
-htmlStart(title);
-pushWarnHandler(htmlVaParagraph);
+cartHtmlStart(title);
 }
 
 void printEntrezNucleotideUrl(FILE *f, char *accession)
@@ -132,11 +122,23 @@ char *hgcPath()
 return "../cgi-bin/hgc";
 }
 
+char *hgcPathAndSettings()
+/* Return path with this CGI script and session state variable. */
+{
+static struct dyString *dy = NULL;
+if (dy == NULL)
+    {
+    dy = newDyString(128);
+    dyStringPrintf(dy, "%s?%s", hgcPath, cartSidUrlString(cart));
+    }
+return dy->string;
+}
+
 void hgcAnchorSomewhere(char *group, char *item, char *other, char *chrom)
 /* Generate an anchor that calls click processing program with item and other parameters. */
 {
-printf("<A HREF=\"%s?g=%s&i=%s&c=%s&l=%d&r=%d&db=%s&o=%s\">",
-	hgcPath(), group, item, chrom, winStart, winEnd, database, other);
+printf("<A HREF=\"%s&g=%s&i=%s&c=%s&l=%d&r=%d&o=%s\">",
+	hgcPathAndSettings(), group, item, chrom, winStart, winEnd, other);
 }
 
 void hgcAnchor(char *group, char *item, char *other)
@@ -222,9 +224,9 @@ else
     strand = "?";
 if (featDna)
     {
-    printf("<A HREF=\"%s?o=%d&g=getDna&i=mixed&c=%s&l=%d&r=%d&strand=%s&db=%s\">"
-	  "View DNA for this feature</A><BR>\n",  hgcPath(),
-	  start, chrom, start, end, strand, database);
+    printf("<A HREF=\"%s&o=%d&g=getDna&i=mixed&c=%s&l=%d&r=%d&strand=%s\">"
+	  "View DNA for this feature</A><BR>\n",  hgcPathAndSettings(),
+	  start, chrom, start, end, strand);
     }
 }
 
@@ -243,7 +245,7 @@ char buf[256];
    hgcStart(buf);
    printf("<H2>%s (%s)</H2>\n", tdb->longLabel, item);*/
 sprintf(buf, "%s (%s)\n", tdb->longLabel, item);
-webStart(buf);
+cartWebStart(buf);
 }
 
 void printCustomUrl(char *url, char *itemName, boolean encode)
@@ -399,7 +401,7 @@ void genericClickHandler(struct trackDb *tdb, char *item, char *itemForUrl)
 char *dupe, *type, *words[16];
  char title[256];
 int wordCount;
-int start = cgiInt("o");
+int start = cartInt(cart, "o");
 struct sqlConnection *conn = hAllocConn();
 
 if (itemForUrl == NULL)
@@ -458,26 +460,31 @@ cgiContinueHiddenVar("db");
 void doGetDna1()
 /* Do first get DNA dialog. */
 {
-webStart("Get DNA in Window");
+char *var = "hgc.dna.out1";
+char *oldVal = cartUsualString(cart, var, "lcRepeats");
+
+cartWebStart("Get DNA in Window");
 printf("<H2>Get DNA for %s:%d-%d</H2>\n", seqName, winStart+1, winEnd);
 printf("<FORM ACTION=\"%s\">\n\n", hgcPath());
+cartSaveSession(cart);
 cgiMakeHiddenVar("g", "htcGetDna2");
 savePosInHidden();
-cgiMakeRadioButton("out1", "lcRepeats", TRUE);
+cgiMakeRadioButton(var, "lcRepeats", sameString(oldVal, "lcRepeats"));
 printf(" lower case repeats<BR>\n");
-cgiMakeRadioButton("out1", "nRepeats", FALSE);
+cgiMakeRadioButton(var, "nRepeats", sameString(oldVal, "nRepeats"));
 printf(" mask repeats<BR>\n");
-cgiMakeRadioButton("out1", "lc", FALSE);
+cgiMakeRadioButton(var, "lc", sameString(oldVal, "lc"));
 printf(" all lower case<BR>\n");
-cgiMakeRadioButton("out1", "uc", FALSE);
+cgiMakeRadioButton(var, "uc", sameString(oldVal, "uc"));
 printf(" all upper case<BR>\n");
-cgiMakeRadioButton("out1", "extended", FALSE);
+cgiMakeRadioButton(var, "extended", sameString(oldVal, "extended"));
 printf(" extended case/color options<BR>\n");
 printf(" reverse complement ");
-cgiMakeCheckBox("rc", FALSE);
+cgiMakeCheckBox("hgc.dna.rc", FALSE);
 printf(" ");
 cgiMakeButton("Submit", "Submit");
 printf("</FORM>\n");
+
 webEnd();
 }
 
@@ -522,7 +529,7 @@ void doGetDnaExtended1()
 {
 struct trackDb *tdbList = hTrackDb(seqName), *tdb;
 
-webStart("Extended DNA Case/Color");
+cartWebStart("Extended DNA Case/Color");
 printf("<H1>Extended DNA Case/Color Options</H1>\n");
 puts(
 "Use this page to highlight features in genomic DNA text. "
@@ -531,6 +538,7 @@ puts(
 "details about color, and for examples.");
 
 printf("<FORM ACTION=\"%s\" METHOD=\"POST\">\n\n", hgcPath());
+cartSaveSession(cart);
 cgiMakeHiddenVar("g", "htcGetDna3");
 printf("Chromosome ");
 cgiMakeTextVar("c", seqName, 6);
@@ -540,7 +548,7 @@ printf(" End ");
 cgiMakeIntVar("r", winEnd, 9);
 cgiContinueHiddenVar("db");
 printf(" Reverse complement ");
-cgiMakeCheckBox("rc", cgiBoolean("rc"));
+cgiMakeCheckBox("hgc.dna.rc", cartUsualBoolean(cart, "hgc.dna.rc", FALSE));
 printf("<BR>\n");
 printf("Letters per line ");
 cgiMakeIntVar("lineWidth", 60, 3);
@@ -562,31 +570,31 @@ for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
 	printf("<TD>%s</TD>", tdb->shortLabel);
 	sprintf(buf, "%s_case", tdb->tableName);
 	printf("<TD>");
-	cgiMakeCheckBox(buf, FALSE);
+	cgiMakeCheckBox(buf, cartUsualBoolean(cart, buf, FALSE));
 	printf("</TD>");
 	sprintf(buf, "%s_u", tdb->tableName);
 	printf("<TD>");
-	cgiMakeCheckBox(buf, FALSE);
+	cgiMakeCheckBox(buf, cartUsualBoolean(cart, buf, FALSE));
 	printf("</TD>");
 	sprintf(buf, "%s_b", tdb->tableName);
 	printf("<TD>");
-	cgiMakeCheckBox(buf, FALSE);
+	cgiMakeCheckBox(buf, cartUsualBoolean(cart, buf, FALSE));
 	printf("</TD>");
 	sprintf(buf, "%s_i", tdb->tableName);
 	printf("<TD>");
-	cgiMakeCheckBox(buf, FALSE);
+	cgiMakeCheckBox(buf, cartUsualBoolean(cart, buf, FALSE));
 	printf("</TD>");
 	printf("<TD>");
 	sprintf(buf, "%s_red", tdb->tableName);
-	cgiMakeIntVar(buf, 0, 3);
+	cgiMakeIntVar(buf, cartUsualInt(cart, buf, 0), 3);
 	printf("</TD>");
 	printf("<TD>");
 	sprintf(buf, "%s_green", tdb->tableName);
-	cgiMakeIntVar(buf, 0, 3);
+	cgiMakeIntVar(buf, cartUsualInt(cart, buf, 0), 3);
 	printf("</TD>");
 	printf("<TD>");
 	sprintf(buf, "%s_blue", tdb->tableName);
-	cgiMakeIntVar(buf, 0, 3);
+	cgiMakeIntVar(buf, cartUsualInt(cart, buf, 0), 3);
 	printf("</TD>");
 	printf("</TR>\n");
 	}
@@ -641,7 +649,7 @@ webEnd();
 void doGetDna2()
 /* Do second DNA dialog (or just fetch DNA) */
 {
-char *outType = cgiString("out1");
+char *outType = cartString(cart, "hgc.dna.out1");
 if (sameString(outType, "extended"))
     {
     doGetDnaExtended1();
@@ -650,7 +658,7 @@ else
     {
     struct dnaSeq *seq;
     char name[256];
-    boolean isRc = cgiBoolean("rc");
+    boolean isRc = cartBoolean(cart, "hgc.dna.rc");
 
     sprintf(name, "%s:%d-%d %s", seqName, winStart+1, winEnd, 
     	(isRc ? "(reverse complement)" : ""));
@@ -717,15 +725,15 @@ if (cgiBoolean(buf))
 }
 
 void doGetDna3()
-/* Do third DNA dialog (or just fetch DNA) */
+/* Fetch DNA in extended color format */
 {
 struct dnaSeq *seq;
 struct cfm *cfm;
 int i;
-boolean isRc = cgiBoolean("rc");
-boolean defaultUpper = sameString(cgiString("case"), "upper");
+boolean isRc = cgiBoolean("hgc.dna.rc");
+boolean defaultUpper = sameString(cartString(cart, "case"), "upper");
 int winSize = winEnd - winStart;
-int lineWidth = cgiInt("lineWidth");
+int lineWidth = cartInt(cart, "lineWidth");
 struct rgbColor *colors;
 struct trackDb *tdbList = hTrackDb(seqName), *tdb;
 Bits *uBits = bitAlloc(winSize);	/* Underline bits. */
@@ -733,7 +741,7 @@ Bits *iBits = bitAlloc(winSize);	/* Italic bits. */
 Bits *bBits = bitAlloc(winSize);	/* Bold bits. */
 
 
-webStart("Extended DNA Output");
+cartWebStart("Extended DNA Output");
 printf("<TT><PRE>");
 printf(">%s:%d-%d %s\n", seqName, winStart+1, winEnd,
     	(isRc ? "(reverse complement)" : ""));
@@ -777,11 +785,11 @@ for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
 
 	/* Add in RGB values if necessary. */
 	sprintf(buf, "%s_red", track);
-	r = cgiInt(buf);
+	r = cartInt(cart, buf);
 	sprintf(buf, "%s_green", track);
-	g = cgiInt(buf);
+	g = cartInt(cart, buf);
 	sprintf(buf, "%s_blue", track);
-	b = cgiInt(buf);
+	b = cartInt(cart, buf);
 	if (r != 0 || g != 0 || b != 0)
 	    {
 	    if (fbList == NULL)
@@ -981,8 +989,6 @@ char query[256];
 char **row;
 struct estPair *ep = NULL;
 
-char *s = cgiOptionalString("pix");
-
 sprintf(query, "select * from %s where mrnaClone='%s'", track, name);
 sr = sqlGetResult(conn, query);
  if((row = sqlNextRow(sr)) != NULL)
@@ -992,10 +998,10 @@ sr = sqlGetResult(conn, query);
      printf("<B>chromosome:</B> %s<BR>\n", ep->chrom); 
      printf("<B>Start position in chromosome :</B> %u<BR>\n", ep->chromStart); 
      printf("<B>End position in chromosome :</B> %u<BR>\n", ep->chromEnd);
-     printf("<B>5' accession:</B> <A HREF=\"../cgi-bin/hgc?o=%u&t=%u&g=hgEst&i=%s&c=%s&l=%d&r=%d&db=%s&pix=%s\"> %s</A><BR>\n", ep->start5, ep->end5, ep->acc5, ep->chrom, winStart, winEnd, database, s, ep->acc5); 
+     printf("<B>5' accession:</B> <A HREF=\"../cgi-bin/hgc?o=%u&t=%u&g=hgEst&i=%s&c=%s&l=%d&r=%d&db=%s\"> %s</A><BR>\n", ep->start5, ep->end5, ep->acc5, ep->chrom, winStart, winEnd, database, ep->acc5); 
      printf("<B>Start position of 5' est in chromosome :</B> %u<BR>\n", ep->start5); 
      printf("<B>End position of 5' est in chromosome :</B> %u<BR>\n", ep->end5); 
-     printf("<B>3' accession:</B> <A HREF=\"../cgi-bin/hgc?o=%u&t=%u&g=hgEst&i=%s&c=%s&l=%d&r=%d&db=%s&pix=%s\"> %s</A><BR>\n", ep->start3, ep->end3, ep->acc3, ep->chrom, winStart, winEnd, database, s, ep->acc3);  
+     printf("<B>3' accession:</B> <A HREF=\"../cgi-bin/hgc?o=%u&t=%u&g=hgEst&i=%s&c=%s&l=%d&r=%d&db=%s\"> %s</A><BR>\n", ep->start3, ep->end3, ep->acc3, ep->chrom, winStart, winEnd, database, ep->acc3);  
      printf("<B>Start position of 3' est in chromosome :</B> %u<BR>\n", ep->start3); 
      printf("<B>End position of 3' est in chromosome :</B> %u<BR>\n", ep->end3);
    }
@@ -1029,7 +1035,7 @@ for (same = 1; same >= 0; same -= 1)
 	{
 	if (same ^ (psl->tStart != startFirst))
 	    {
-	    sprintf(otherString, "%d&type=%s", psl->tStart, typeName);
+	    sprintf(otherString, "%d&aliTrack=%s", psl->tStart, typeName);
 	    hgcAnchorSomewhere(hgcCommand, itemIn, otherString, psl->tName);
 	    printf("%5d  %5.1f%%  %9s     %s %9d %9d  %8s %5d %5d %5d</A>",
 		psl->match + psl->misMatch + psl->repMatch,
@@ -1048,7 +1054,7 @@ printf("</TT></PRE>");
 void doHgEstPair(char *track, char *name)
 /* Click on EST pair */
 {
-webStart(name);
+cartWebStart(name);
 printEstPairInfo(track, name);
 webEnd();
 }
@@ -1067,7 +1073,7 @@ char *type;
 boolean hasBin;
 char splitTable[64];
 char *table;
-int start = cgiInt("o");
+int start = cartInt(cart, "o");
 struct psl *pslList = NULL, *psl;
 
 if (sameString("xenoMrna", track) || sameString("xenoBestMrna", track) || sameString("xenoEst", track))
@@ -1092,7 +1098,7 @@ else
     }
 
 /* Print non-sequence info. */
-webStart(acc);
+cartWebStart(acc);
 
 printRnaSpecs(acc);
 
@@ -1139,7 +1145,7 @@ if (wordCount != 3)
 void doUserPsl(char *track, char *item)
 /* Process click on user-defined alignment. */
 {
-int start = cgiInt("o");
+int start = cartInt(cart, "o");
 struct lineFile *lf;
 struct psl *pslList = NULL, *psl;
 char *pslName, *faName, *qName;
@@ -1148,7 +1154,7 @@ enum gfType qt, tt;
 char *words[4];
 int wordCount;
 
-webStart("BLAT Search Alignments");
+cartWebStart("BLAT Search Alignments");
 printf("<H2>BLAT Search Alignments</H2>\n");
 printf("<H3>Click over a line to see detailed letter by letter display</H3>");
 parseSs(item, &pslName, &faName, &qName);
@@ -1181,11 +1187,11 @@ char **row;
 struct agpFrag frag;
 struct dnaSeq *seq;
 char dnaName[256];
-int start = cgiInt("o");
+int start = cartInt(cart, "o");
 boolean hasBin;
 char splitTable[64];
 
-webStart(fragName);
+cartWebStart(fragName);
 hFindSplitTable(seqName, track, splitTable, &hasBin);
 sprintf(query, "select * from %s where frag = '%s' and chromStart = %d", 
 	splitTable, fragName, start+1);
@@ -1216,7 +1222,7 @@ void doHgGap(char *table, char *gapType)
 char *words[2];
 int wordCount;
 
-webStart("Gap in Sequence");
+cartWebStart("Gap in Sequence");
 wordCount = chopByChar(gapType, '_', words, ArraySize(words));
 if (wordCount == 1)
     wordCount = chopByChar(gapType, ' ', words, ArraySize(words));
@@ -1301,7 +1307,7 @@ char **row;
 struct clonePos *clone;
 int fragCount;
 
-webStart(cloneName);
+cartWebStart(cloneName);
 sprintf(query, "select * from %s where name = '%s'", track, cloneName);
 selectOneRow(conn, track, query, &sr, &row);
 clone = clonePosLoad(row);
@@ -1664,13 +1670,12 @@ int start;
 boolean hasBin;
 
 /* Print start of HTML. */
-puts("Content-Type:text/html\n");
 printf("<HEAD>\n<TITLE>%s vs Genomic</TITLE>\n</HEAD>\n\n", acc);
 puts("<HTML>");
 
 /* Get some environment vars. */
-type = cgiString("type");
-start = cgiInt("o");
+type = cartString(cart, "aliTrack");
+start = cartInt(cart, "o");
 
 /* Look up alignments in database */
 conn = hAllocConn();
@@ -1707,7 +1712,7 @@ puts("Content-Type:text/html\n");
 printf("<HEAD>\n<TITLE>User Sequence vs Genomic</TITLE>\n</HEAD>\n\n");
 puts("<HTML>");
 
-start = cgiInt("o");
+start = cartInt(cart, "o");
 parseSs(fileNames, &pslName, &faName, &qName);
 pslxFileOpen(pslName, &qt, &tt, &lf);
 isProt = (qt == gftProt);
@@ -1752,7 +1757,7 @@ puts("Content-Type:text/html\n");
 printf("<HEAD>\n<TITLE>Mouse Read %s</TITLE>\n</HEAD>\n\n", readName);
 puts("<HTML>");
 
-start = cgiInt("o");
+start = cartInt(cart, "o");
 hFindSplitTable(seqName, table, fullTable, &hasBin);
 sprintf(query, "select * from %s where qName = '%s' and tName = '%s' and tStart=%d",
     fullTable, readName, seqName, start);
@@ -1787,7 +1792,7 @@ struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr;
 char **row;
 char query[256];
-int start = cgiInt("o");
+int start = cartInt(cart, "o");
 struct wabAli *wa = NULL;
 int qOffset;
 char strand = '+';
@@ -1817,7 +1822,7 @@ hFreeConn(&conn);
 void doHgTet(struct trackDb *tdb, char *name)
 /* Do thing with tet track. */
 {
-webStart("Tetraodon Alignment");
+cartWebStart("Tetraodon Alignment");
 printf("Alignment between tetraodon sequence %s (above) and human chromosome %s (below)\n",
     name, skipChr(seqName));
 fetchAndShowWaba("waba_tet", name);
@@ -1827,8 +1832,8 @@ webEnd();
 void doHgRepeat(char *track, char *repeat)
 /* Do click on a repeat track. */
 {
-int offset = cgiInt("o");
-webStart("Repeat");
+int offset = cartInt(cart, "o");
+cartWebStart("Repeat");
 if (offset >= 0)
     {
     struct sqlConnection *conn = hAllocConn();
@@ -1838,7 +1843,7 @@ if (offset >= 0)
     char query[256];
     char table[64];
     boolean hasBin;
-    int start = cgiInt("o");
+    int start = cartInt(cart, "o");
 
     hFindSplitTable(seqName, track, table, &hasBin);
     sprintf(query, "select * from %s where  repName = '%s' and genoName = '%s' and genoStart = %d",
@@ -1891,7 +1896,7 @@ void doHgIsochore(struct trackDb *tdb, char *item)
 /* do click on isochore track. */
 {
 char *track = tdb->tableName;
-webStart("Isochore Info");
+cartWebStart("Isochore Info");
 printf("<H2>Isochore Information</H2>\n");
 if (cgiVarExists("o"))
     {
@@ -1900,7 +1905,7 @@ if (cgiVarExists("o"))
     struct sqlResult *sr;
     char **row;
     char query[256];
-    int start = cgiInt("o");
+    int start = cartInt(cart, "o");
     sprintf(query, "select * from %s where  name = '%s' and chrom = '%s' and chromStart = %d",
 	    track, item, seqName, start);
     sr = sqlGetResult(conn, query);
@@ -1926,7 +1931,7 @@ webEnd();
 void doSimpleRepeat(char *track, char *item)
 /* Print info on simple repeat. */
 {
-webStart("Simple Repeat Info");
+cartWebStart("Simple Repeat Info");
 printf("<H2>Simple Tandem Repeat Information</H2>\n");
 if (cgiVarExists("o"))
     {
@@ -1935,7 +1940,7 @@ if (cgiVarExists("o"))
     struct sqlResult *sr;
     char **row;
     char query[256];
-    int start = cgiInt("o");
+    int start = cartInt(cart, "o");
     int rowOffset = hOffsetPastBin(seqName, track);
     sprintf(query, "select * from %s where  name = '%s' and chrom = '%s' and chromStart = %d",
 	    track, item, seqName, start);
@@ -1974,7 +1979,7 @@ webEnd();
 void hgSoftPromoter(char *track, char *item)
 /* Print info on Softberry promoter. */
 {
-webStart("Softberry TSSW Promoter");
+cartWebStart("Softberry TSSW Promoter");
 printf("<H2>Softberry TSSW Promoter Prediction %s</H2>", item);
 
 if (cgiVarExists("o"))
@@ -1984,7 +1989,7 @@ if (cgiVarExists("o"))
     struct sqlResult *sr;
     char **row;
     char query[256];
-    int start = cgiInt("o");
+    int start = cartInt(cart, "o");
     int rowOffset = hOffsetPastBin(seqName, track);
     sprintf(query, "select * from %s where  name = '%s' and chrom = '%s' and chromStart = %d",
 	    track, item, seqName, start);
@@ -2034,7 +2039,7 @@ webEnd();
 void doCpgIsland(char *table, char *item)
 /* Print info on CpG Island. */
 {
-webStart("CpG Island Info");
+cartWebStart("CpG Island Info");
 printf("<H2>CpG Island Info</H2>\n");
 puts("<P>CpG islands are associated with genes, particularly housekeeping genes, in vertebrates. "
  "CpG islands are particularly common near transcription start sites, and may be associated "
@@ -2061,7 +2066,7 @@ if (cgiVarExists("o"))
     struct sqlResult *sr;
     char **row;
     char query[256];
-    int start = cgiInt("o");
+    int start = cartInt(cart, "o");
     int rowOffset = hOffsetPastBin(seqName, table);
     sprintf(query, "select * from %s where  name = '%s' and chrom = '%s' and chromStart = %d",
 	    table, item, seqName, start);
@@ -2187,7 +2192,7 @@ void htcTranslatedProtein(char *geneName)
 /* Display translated protein. */
 {
 hgcStart("Protein Translation");
-showProteinPrediction(geneName, cgiString("o"));
+showProteinPrediction(geneName, cartString(cart, "o"));
 }
 
 void getCdsInMrna(struct genePred *gp, int *retCdsStart, int *retCdsEnd)
@@ -2251,7 +2256,7 @@ return cdnaSeq;
 void htcGeneMrna(char *geneName)
 /* Display associated cDNA. */
 {
-char *table = cgiString("o");
+char *table = cartString(cart, "o");
 char query[512];
 struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr;
@@ -2308,9 +2313,10 @@ void htcGeneInGenome(char *geneName)
 /* Put up page that lets user display genomic sequence
  * associated with gene. */
 {
-webStart("Genomic Sequence Near Gene");
+cartWebStart("Genomic Sequence Near Gene");
 printf("<H2>Get Genomic Sequence Near Gene</H2>");
 printf("<FORM ACTION=\"%s\">\n\n", hgcPath());
+cartSaveSession(cart);
 cgiMakeHiddenVar("g", "htcDnaNearGene");
 cgiContinueHiddenVar("i");
 printf("\n");
@@ -2367,14 +2373,14 @@ for (exonIx = 0; exonIx < gp->exonCount; ++exonIx)
 void htcDnaNearGene(char *geneName)
 /* Fetch DNA near a gene. */
 {
-char *table = cgiString("o");
+char *table = cartString(cart, "o");
 char query[512];
 struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr = NULL;
 char **row = NULL;
 struct genePred *gp = NULL;
 struct dnaSeq *seq = NULL;
-char *how = cgiString("how");
+char *how = cartString(cart, "how");
 int start, end, promoSize;
 boolean isRev;
 char faLine[256];
@@ -2389,7 +2395,7 @@ if ((row = sqlNextRow(sr)) != NULL)
     isRev = (gp->strand[0] == '-');
     start = gp->txStart;
     end = gp->txEnd;
-    promoSize = cgiInt("promoterSize");
+    promoSize = cartInt(cart, "promoterSize");
     if (sameString(how, "cds"))
         {
 	start = gp->cdsStart;
@@ -2447,7 +2453,7 @@ boolean upgraded = FALSE;
 char *knownTable = "knownInfo";
 boolean knownMoreExists = FALSE;
 
-webStart("Known Gene");
+cartWebStart("Known Gene");
 printf("<H2>Known Gene %s</H2>\n", geneName);
 if (hTableExists("knownMore"))
     {
@@ -2547,7 +2553,7 @@ char query[256];
 struct refLink *rl;
 struct genePred *gp;
 
-webStart("Known Gene");
+cartWebStart("Known Gene");
 sprintf(query, "select * from refLink where mrnaAcc = '%s'", rnaName);
 sr = sqlGetResult(conn, query);
 if ((row = sqlNextRow(sr)) == NULL)
@@ -2747,11 +2753,11 @@ char **row;
 char oChrom[64];
 int oStart;
 
-webStart("Genomic Duplications");
+cartWebStart("Genomic Duplications");
 printf("<H2>Genomic Duplication</H2>\n");
 if (cgiVarExists("o"))
     {
-    int start = cgiInt("o");
+    int start = cartInt(cart, "o");
     int rowOffset = hOffsetPastBin(seqName, track);
     parseChromPointPos(dupName, oChrom, &oStart);
 
@@ -2803,7 +2809,7 @@ char query[256];
 struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr = NULL;
 char **row;
-int start = cgiInt("o");
+int start = cartInt(cart, "o");
 struct psl *pslList = NULL, *psl;
 struct dnaSeq *seq;
 char *tiNum = strrchr(itemName, '|');
@@ -2813,7 +2819,7 @@ char table[64];
 /* Print heading info including link to NCBI. */
 if (tiNum != NULL) 
     ++tiNum;
-webStart(itemName);
+cartWebStart(itemName);
 printf("<H1>Information on Mouse %s %s</H1>", 
 	(tiNum == NULL ? "Contig" : "Read"), itemName);
 
@@ -2825,8 +2831,8 @@ if (tiNum != NULL)
     printf("NCBI Trace Repository for %s\n</A><BR>\n", itemName);
     }
 printf("Get ");
-printf("<A HREF=\"%s?g=htcExtSeq&c=%s&l=%d&r=%d&i=%s&db=%s\">",
-      hgcPath(), seqName, winStart, winEnd, itemName, database);
+printf("<A HREF=\"%s&g=htcExtSeq&c=%s&l=%d&r=%d&i=%s\">",
+      hgcPathAndSettings(), seqName, winStart, winEnd, itemName);
 printf("Mouse DNA</A><BR>\n");
 
 /* Print info about mate pair. */
@@ -2847,8 +2853,8 @@ if (tiNum != NULL && sqlTableExists(conn, "mouseTraceInfo"))
 	    if (!sameString(ti, itemName))
 	        {
 		printf("Get ");
-		printf("<A HREF=\"%s?g=htcExtSeq&c=%s&l=%d&r=%d&i=%s&db=%s\">",
-		      hgcPath(), seqName, winStart, winEnd, ti, database);
+		printf("<A HREF=\"%s&g=htcExtSeq&c=%s&l=%d&r=%d&i=%s\">",
+		      hgcPathAndSettings(), seqName, winStart, winEnd, ti);
 		printf("DNA for read on other end of plasmid</A><BR>\n");
 		gotMate = TRUE;
 		}
@@ -2884,14 +2890,14 @@ void doEst3(char *itemName)
 /* Handle click on EST 3' end track. */
 {
 struct est3 el;
-int start = cgiInt("o");
+int start = cartInt(cart, "o");
 struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr;
 char **row;
 char query[256];
 int rowOffset;
 
-webStart("EST 3' Ends");
+cartWebStart("EST 3' Ends");
 printf("<H2>EST 3' Ends</H2>\n");
 
 rowOffset = hOffsetPastBin(seqName, "est3");
@@ -2921,7 +2927,7 @@ void doRnaGene(struct trackDb *tdb, char *itemName)
 {
 char *track = tdb->tableName;
 struct rnaGene rna;
-int start = cgiInt("o");
+int start = cartInt(cart, "o");
 struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr;
 char **row;
@@ -2963,8 +2969,8 @@ boolean stsMapExists = sqlTableExists(conn, "stsMap");
 struct sqlConnection *conn1 = hAllocConn();
 struct sqlResult *sr = NULL, *sr1 = NULL;
 char **row, **row1;
-int start = cgiInt("o");
-int end = cgiInt("t");
+int start = cartInt(cart, "o");
+int end = cartInt(cart, "t");
 struct stsMap stsRow;
 struct stsInfo *infoRow;
 char band[32], stsid[20];
@@ -2974,7 +2980,7 @@ int pslStart;
 
 /* Print out non-sequence info */
 sprintf(title, "STS Marker %s", marker);
-webStart(title);
+cartWebStart(title);
 
 /* Find the instance of the object in the bed table */ 
 sprintf(query, "SELECT * FROM %s WHERE name = '%s' 
@@ -3291,14 +3297,14 @@ char query[256];
 struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr = NULL;
 char **row;
-int start = cgiInt("o");
-int end = cgiInt("t");
+int start = cartInt(cart, "o");
+int end = cartInt(cart, "t");
 struct fishClones *fc;
 char sband[32], eband[32];
 int i;
 
 /* Print out non-sequence info */
-webStart(clone);
+cartWebStart(clone);
 
 
 /* Find the instance of the object in the bed table */ 
@@ -3402,14 +3408,14 @@ void doMouseSyn(char *track, char *itemName)
 /* Handle click on mouse synteny track. */
 {
 struct mouseSyn el;
-int start = cgiInt("o");
+int start = cartInt(cart, "o");
 struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr;
 char **row;
 char query[256];
 int rowOffset;
 
-webStart("Mouse Synteny");
+cartWebStart("Mouse Synteny");
 printf("<H2>Mouse Synteny</H2>\n");
 
 sprintf(query, "select * from %s where chrom = '%s' and chromStart = %d",
@@ -3443,14 +3449,14 @@ void doSnp(char *group, char *itemName)
 /* Put up info on a SNP. */
 {
 struct snp snp;
-int start = cgiInt("o");
+int start = cartInt(cart, "o");
 struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr;
 char **row;
 char query[256];
 int rowOffset;
 
-webStart("Single Nucleotide Polymorphism (SNP)");
+cartWebStart("Single Nucleotide Polymorphism (SNP)");
 printf("<H2>Single Nucleotide Polymorphism (SNP) rs%s</H2>\n", itemName);
 
 sprintf(query, "select * from %s where chrom = '%s' and chromStart = %d and name = '%s'",
@@ -3536,8 +3542,8 @@ struct sqlResult *sr = NULL, *sr1 = NULL;
 char **row, **row1;
 char *type = NULL, *lfLabel = NULL;
 char *table = NULL;
-int start = cgiInt("o");
-int end = cgiInt("t");
+int start = cartInt(cart, "o");
+int end = cartInt(cart, "t");
 int i;
 struct lfs *lfs, *lfsList = NULL;
 struct psl *pslList = NULL, *psl;
@@ -3552,7 +3558,7 @@ if (sameString("bacEndPairs", track))
     }
 
 /* Print out non-sequence info */
-webStart(title);
+cartWebStart(title);
 
 /* Find the instance of the object in the bed table */ 
 sprintf(query, "SELECT * FROM %s WHERE name = '%s' 
@@ -3679,7 +3685,7 @@ struct sqlResult *sr = NULL;
 char **row;
 
 /* Print out non-sequence info */
-webStart(tissue);
+cartWebStart(tissue);
 
 /* Print general range info */
 printf("<H2>UCSF Comparative Genomic Hybridizations - %s</H2>\n", tissue);
@@ -3729,8 +3735,8 @@ char query[256];
 char title[256];
 struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr = NULL;
-int start = cgiInt("o");
-int end = cgiInt("t");
+int start = cartInt(cart, "o");
+int end = cartInt(cart, "t");
 char startBand[32]; 
 char endBand[32]; 
 char **row;
@@ -3739,7 +3745,7 @@ struct mcnBreakpoints *mcnRecord;
 
 /* Print out non-sequence info */
 sprintf(title, "MCN Breakpoints - %s",name);
-webStart(title);
+cartWebStart(title);
 
 /* Print general range info */
 /*printf("<H2>MCN Breakpoints - %s</H2>\n", name);
@@ -3798,7 +3804,7 @@ void perlegenDetails(struct trackDb *tdb, char *item)
 char *dupe, *type, *words[16];
 char title[256];
 int wordCount;
-int start = cgiInt("o");
+int start = cartInt(cart, "o");
 struct sqlConnection *conn = hAllocConn();
 char table[64];
 boolean hasBin;
@@ -4114,8 +4120,8 @@ struct exprBed *expList=NULL;
 char buff[64];
 char *type;
 char *maxIntensity[] = { "100", "20", "15", "10", "5" ,"4","3","2","1" };
-char *thisFrame = cgiOptionalString("tf");
-char *otherFrame = cgiOptionalString("of");
+char *thisFrame = cartOptionalString(cart, "tf");
+char *otherFrame = cartOptionalString(cart, "of");
 type = abbrevExprBedName(itemName);
 type = strstr(type, "_");
 type++;
@@ -4412,10 +4418,10 @@ char *fileName, *itemName;
 struct customTrack *ctList, *ct;
 struct customTrack *customTracksFromFile(char *text);
 struct bed *bed;
-int start = cgiInt("o");
+int start = cartInt(cart, "o");
 char *url;
 
-webStart("Custom Track");
+cartWebStart("Custom Track");
 fileName = nextWord(&fileItem);
 itemName = skipLeadingSpaces(fileItem);
 printf("<H2>Custom Track Item %s</H2>\n", itemName);
@@ -4470,21 +4476,19 @@ return trackHash;
 void doMiddle()
 /* Generate body of HTML. */
 {
-char *track = cgiString("g");
-char *item = cgiOptionalString("i");
+char *track = cartString(cart, "g");
+char *item = cartOptionalString(cart, "i");
 char title[256];
 struct hash *trackHash;
 struct trackDb *tdb;
 
-database = cgiOptionalString("db");
-if (database == NULL)
-    database = hGetDb();
+database = cartUsualString(cart, "db", hGetDb());
 
 hDefaultConnect(); 	/* set up default connection settings */
 hSetDb(database);
-seqName = cgiString("c");
-winStart = cgiIntExp("l");
-winEnd = cgiIntExp("r");
+seqName = cartString(cart, "c");
+winStart = cartIntExp(cart, "l");
+winEnd = cartIntExp(cart, "r");
 trackHash = makeTrackHash(seqName);
 tdb = hashFindVal(trackHash, track);
 if (sameWord(track, "getDna"))
@@ -4673,7 +4677,7 @@ else if (sameWord(track, "htcUserAli"))
    }
 else if (sameWord(track, "htcBlatMouse"))
    {
-   htcBlatMouse(item, cgiString("type"));
+   htcBlatMouse(item, cartString(cart, "aliTrack"));
    }
 else if (sameWord(track, "htcExtSeq"))
    {
@@ -4709,25 +4713,25 @@ else if (tdb != NULL)
    }
 else
    {
-   webStart(track);
+   cartWebStart(track);
    printf("Sorry, clicking there doesn't do anything yet (%s).", track);
    webEnd();
    }
-htmlEnd();
+cartHtmlEnd();
 }
 
-void errDoMiddle()
-/* Do middle with a nice early warning error handler. */
+void cartDoMiddle(struct cart *theCart)
+/* Save cart and do main middle handler. */
 {
-pushWarnHandler(earlyWarning);
-dnaUtilOpen();
+cart = theCart;
 doMiddle();
 }
 
+char *excludeVars[] = {"bool.hcg.dna.rc", "Submit", "submit", "g", "i", "aliTrack", NULL};
 
 int main(int argc, char *argv[])
 {
 cgiSpoof(&argc,argv);
-htmEmptyShell(errDoMiddle, NULL);
+cartEmptyShell(cartDoMiddle, "hguid", excludeVars);
 return 0;
 }

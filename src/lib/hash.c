@@ -189,6 +189,14 @@ for (i=0; i<hash->size; ++i)
     }
 }
 
+int hashElCmp(const void *va, const void *vb)
+/* Compare two hashEl by name. */
+{
+const struct hashEl *a = *((struct hashEl **)va);
+const struct hashEl *b = *((struct hashEl **)vb);
+return strcmp(a->name, b->name);
+}
+
 struct hashEl *hashElListHash(struct hash *hash)
 /* Return a list of all elements of hash.   Free return with hashElFreeList. */
 {

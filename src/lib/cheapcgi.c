@@ -596,11 +596,32 @@ printf("<INPUT TYPE=RADIO NAME=\"%s\" VALUE=\"%s\" %s>", name, value,
    (checked ? "CHECKED" : ""));
 }
 
-void cgiMakeCheckBox(char *name, boolean checked)
-/* Make check box. */
+char *cgiBooleanShadowPrefix()
+/* Prefix for shadow variable set with boolean variables. */
 {
+return "boolshad.";
+}
+
+boolean cgiBooleanDefined(char *name)
+/* Return TRUE if boolean variable is defined (by
+ * checking for shadow. */
+{
+char buf[256];
+sprintf(buf, "%s%s", cgiBooleanShadowPrefix(), name);
+return cgiVarExists(buf);
+}
+
+void cgiMakeCheckBox(char *name, boolean checked)
+/* Make check box. Also make a shadow hidden variable so we
+ * can distinguish between variable not present and
+ * variable set to false. */
+{
+char buf[256];
+
 printf("<INPUT TYPE=CHECKBOX NAME=\"%s\" VALUE=on%s>", name,
     (checked ? " CHECKED" : "") );
+sprintf(buf, "%s%s", cgiBooleanShadowPrefix(), name);
+cgiMakeHiddenVar(buf, "1");
 }
 
 void cgiMakeTextVar(char *varName, char *initialVal, int charSize)

@@ -73,6 +73,9 @@ void hashTraverseVals(struct hash *hash, void (*func)(void *val));
 struct hashEl *hashElListHash(struct hash *hash);
 /* Return a list of all elements of hash.   Free return with hashElFreeList. */
 
+int hashElCmp(const void *va, const void *vb);
+/* Compare two hashEl by name. */
+
 void hashElFree(struct hashEl **pEl);
 /* Free hash el list returned from hashListAll.  */
 

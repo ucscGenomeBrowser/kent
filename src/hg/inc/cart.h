@@ -30,6 +30,9 @@ char *cartSessionVarName();
 unsigned int cartSessionId(struct cart *cart);
 /* Return session id. */
 
+char *cartSidUrlString(struct cart *cart);
+/* Return session id string as in hgsid=N . */
+
 unsigned int cartUserId(struct cart *cart);
 /* Return session id. */
 
@@ -69,17 +72,11 @@ double cartUsualDouble(struct cart *cart, char *var, double usual);
 void cartSetDouble(struct cart *cart, char *var, double val);
 /* Set double value. */
 
-boolean cartBoolean(struct cart *cart, char *var, char *selfVal);
-/* Retrieve cart boolean.   Since CGI booleans simply
- * don't exist when they're false - which messes up
- * cart persistence,  we have to jump through some
- * hoops.   If we are calling self, then we assume that
- * the booleans are in cgi-variables,  otherwise we
- * look in the cart for them. */
+boolean cartBoolean(struct cart *cart, char *var);
+/* Retrieve cart boolean. */
 
-boolean cartUsualBoolean(struct cart *cart, char *var, boolean usual, char *selfVal);
-/* Return variable value if it exists or usual if not. 
- * See cartBoolean for explanation of selfVal. */
+boolean cartUsualBoolean(struct cart *cart, char *var, boolean usual);
+/* Return variable value if it exists or usual if not.  */
 
 void cartSetBoolean(struct cart *cart, char *var, boolean val);
 /* Set boolean value. */
@@ -88,12 +85,29 @@ boolean cartCgiBoolean(struct cart *cart, char *var);
 /* Return boolean variable from CGI.  Remove it from cart.
  * CGI booleans alas do not store cleanly in cart. */
 
-void cartSaveSession(struct cart *cart, char *selfName);
+void cartSaveSession(struct cart *cart);
 /* Save session in a hidden variable. This needs to be called
  * somewhere inside of form or bad things will happen. */
 
 void cartDump(struct cart *cart);
 /* Dump contents of cart. */
+
+void cartEmptyShell(void (*doMiddle)(struct cart *cart), char *cookieName, char **exclude);
+/* Get cart and cookies and set up error handling, but don't start writing any
+ * html yet. The doMiddleFunction has to call cartHtmlStart(title), and
+ * cartHtmlEnd(), as well as writing the body of the HTML. */
+
+void cartHtmlStart(char *title);
+/* Write HTML header and put in normal error handler. Needed with cartEmptyShell,
+ * but not cartHtmlShell. */
+
+void cartWebStart(char *format, ...);
+/* Print out pretty wrapper around things when working
+ * from cart. */
+
+void cartHtmlEnd();
+/* Write out HTML footer and get rid or error handler. Needed with cartEmptyShell,
+ * but not cartHtmlShell. */
 
 void cartHtmlShell(char *title, void (*doMiddle)(struct cart *cart), char *cookieName, char **exclude);
 /* Load cart from cookie and session cgi variable.  Write web-page preamble, call doMiddle

@@ -15,7 +15,6 @@
 
 struct cart *cart;	/* The user's ui state. */
 char *defaultDatabase;	/* Default database. */
-char *selfName = "hgBlat";	/* Symbolic id of this script. */
 
 struct serverTable
 /* Information on a server. */
@@ -448,7 +447,7 @@ printf("%s",
 "<P>\n"
 "<TABLE BORDER=0 WIDTH=\"96%\">\n"
 "<TR>\n");
-cartSaveSession(cart, selfName);
+cartSaveSession(cart);
 
 printf("%s", "<TD WIDTH=\"20%\"<CENTER>\n");
 printf("Freeze:<BR>");

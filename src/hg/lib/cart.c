@@ -1,15 +1,15 @@
 #include "common.h"
 #include "linefile.h"
+#include "errabort.h"
 #include "hash.h"
 #include "cheapcgi.h"
 #include "jksql.h"
 #include "cartDb.h"
 #include "htmshell.h"
-#include "errabort.h"
 #include "cart.h"
+#include "web.h"
 
 static char *sessionVar = "hgsid";	/* Name of cgi variable session is stored in. */
-static char *selfVar = "hgself";	/* Name of cgi variable script name is stored in. */
 
 static void hashUpdateDynamicVal(struct hash *hash, char *name, void *val)
 /* Val is a dynamically allocated (freeMem-able) entity to put
@@ -96,10 +96,13 @@ struct cart *cartNew(unsigned int userId, unsigned int sessionId, char **exclude
 /* Load up cart from user & session id's.  Exclude is a null-terminated list of
  * strings to not include */
 {
-struct cgiVar *cv;
+struct cgiVar *cv, *cvList = cgiVarList();
 struct cart *cart;
 struct sqlConnection *conn = sqlConnect("hgcentral");
 char *ex;
+char *booShadow = cgiBooleanShadowPrefix();
+int booSize = strlen(booShadow);
+struct hash *booHash = newHash(8);
 
 AllocVar(cart);
 cart->hash = newHash(8);
@@ -108,13 +111,33 @@ cart->userId = userId;
 cart->sessionId = sessionId;
 cart->userInfo = loadDbOverHash(conn, "userDb", userId, cart->hash);
 cart->sessionInfo = loadDbOverHash(conn, "sessionDb", sessionId, cart->hash);
+
+/* First handle boolean variables and store in hash. */
+for (cv = cvList; cv != NULL; cv = cv->next)
+    {
+    if (startsWith(booShadow, cv->name))
+        {
+	char *booVar = cv->name + booSize;
+	char *val = (cgiVarExists(booVar) ? "1" : "0");
+	cartSetString(cart, booVar, val);
+	hashAdd(booHash, booVar, NULL);
+	}
+    }
+
+/* Handle non-boolean vars. */
 for (cv = cgiVarList(); cv != NULL; cv = cv->next)
-    cartSetString(cart, cv->name, cv->val);
+    {
+    if (!startsWith(booShadow, cv->name) && !hashLookup(booHash, cv->name))
+	cartSetString(cart, cv->name, cv->val);
+    }
+
 if (exclude != NULL)
     {
     while (ex = *exclude++)
 	cartExclude(cart, ex);
     }
+
+hashFree(&booHash);
 sqlDisconnect(&conn);
 return cart;
 }
@@ -194,6 +217,14 @@ unsigned int cartSessionId(struct cart *cart)
 /* Return session id. */
 {
 return cart->sessionInfo->id;
+}
+
+char *cartSidUrlString(struct cart *cart)
+/* Return session id string as in hgsid=N . */
+{
+static char buf[64];
+sprintf(buf, "%s=%u", cartSessionVarName(), cartSessionId(cart));
+return buf;
 }
 
 unsigned int cartUserId(struct cart *cart)
@@ -295,86 +326,32 @@ sprintf(buf, "%f", val);
 cartSetString(cart, var, buf);
 }
 
-static char *boolName(char *name)
-/* Return name with "bool" prepended. */
+boolean cartBoolean(struct cart *cart, char *var)
+/* Retrieve cart boolean. */
 {
-static char buf[128];
-sprintf(buf, "bool.%s", name);
-return buf;
-}
-
-static boolean cartBoo(struct cart *cart, char *var)
-/* Retrieve cart boolean.   Since CGI booleans simply
- * don't exist when they're false - which messes up
- * cart persistence,  we have to jump through some
- * hoops.   We prepend 'bool.' to the cart representation
- * of the variable to separate it from the cgi
- * representation that may or may not be transiently
- * in the cart. */
-{
-var = boolName(var);
 return cartInt(cart, var);
 }
 
-static boolean cartUsualBoo(struct cart *cart, char *var, boolean usual)
+boolean cartUsualBoolean(struct cart *cart, char *var, boolean usual)
 /* Return variable value if it exists or usual if not. */
 {
-var = boolName(var);
 return cartUsualInt(cart, var, usual);
-}
-
-boolean cartCgiBoolean(struct cart *cart, char *var)
-/* Return boolean variable from CGI.  Remove it from cart.
- * CGI booleans alas do not store cleanly in cart. */
-{
-boolean val;
-cartRemove(cart, var);
-val = cgiBoolean(var);
-cartSetBoolean(cart, var, val);
-return val;
-}
-
-boolean cartBoolean(struct cart *cart, char *var, char *selfVal)
-/* Retrieve cart boolean.   Since CGI booleans simply
- * don't exist when they're false - which messes up
- * cart persistence,  we have to jump through some
- * hoops.   If we are calling self, then we assume that
- * the booleans are in cgi-variables,  otherwise we
- * look in the cart for them. */
-{
-char *s = cgiOptionalString(selfVar);
-if (s != NULL && sameString(s, selfVal))
-    return cartCgiBoolean(cart, var);
-else
-    return cartBoo(cart, var);
-}
-
-boolean cartUsualBoolean(struct cart *cart, char *var, boolean usual, char *selfVal)
-/* Return variable value if it exists or usual if not. 
- * See cartBoolean for explanation of selfVal. */
-{
-char *s = cgiOptionalString(selfVar);
-if (s != NULL && sameString(s, selfVal))
-    return cartCgiBoolean(cart, var);
-else
-    return cartUsualBoo(cart, var, usual);
 }
 
 void cartSetBoolean(struct cart *cart, char *var, boolean val)
 /* Set boolean value. */
 {
-var = boolName(var);
 cartSetInt(cart,var,val);
 }
 
-void cartSaveSession(struct cart *cart, char *selfName)
+void cartSaveSession(struct cart *cart)
 /* Save session in a hidden variable. This needs to be called
- * somewhere inside of form or bad things will happen. */
+ * somewhere inside of form or bad things will happen when user
+ * has multiple windows open. */
 {
 char buf[64];
 sprintf(buf, "%u", cart->sessionInfo->id);
 cgiMakeHiddenVar(sessionVar, buf);
-cgiMakeHiddenVar(selfVar, selfName);
 }
 
 static void cartDumpItem(struct hashEl *hel)
@@ -386,7 +363,11 @@ printf("%s %s\n", hel->name, (char*)(hel->val));
 void cartDump(struct cart *cart)
 /* Dump contents of cart. */
 {
-hashTraverseEls(cart->hash, cartDumpItem);
+struct hashEl *el, *elList = hashElListHash(cart->hash);
+slSort(&elList, hashElCmp);
+for (el = elList; el != NULL; el = el->next)
+    cartDumpItem(el);
+hashElFreeList(&el);
 }
 
 static char *cookieDate()
@@ -396,43 +377,108 @@ static char *cookieDate()
 return "Thu, 31-Dec-2037 23:59:59 GMT";
 }
 
+static struct cart *cartAndCookie(char *cookieName, char **exclude)
+/* Load cart from cookie and session cgi variable.  Write cookie and content-type part 
+ * HTTP preamble to web page.  Don't write any HTML though. */
+{
+/* Get the current cart from cookie and cgi session variable. */
+char *hguidString = findCookieData("hguid");
+int hguid = (hguidString == NULL ? 0 : atoi(hguidString));
+int hgsid = cgiUsualInt("hgsid", 0);
+struct cart *cart = cartNew(hguid, hgsid, exclude);
+
+/* Remove some internal variables from cart permanent storage. */
+cartExclude(cart, sessionVar);
+
+/* Write out cookie for next time. */
+printf("Set-Cookie: %s=%u; path=/; domain=.ucsc.edu; expires=%s\n",
+	cookieName, cart->userInfo->id, cookieDate());
+puts("Content-Type:text/html");
+puts("\n");
+
+return cart;
+}
+
+static void cartErrorCatcher(void (*doMiddle)(struct cart *cart), struct cart *cart)
+/* Wrap error catcher around call to do middle. */
+{
+int status = setjmp(htmlRecover);
+pushAbortHandler(htmlAbort);
+if (status == 0)
+    {
+    doMiddle(cart);
+    }
+popAbortHandler();
+}
+
+static void cartEarlyWarningHandler(char *format, va_list args)
+/* Write an error message so user can see it before page is really started. */
+{
+static boolean initted = FALSE;
+if (!initted)
+    {
+    htmStart(stdout, "Early Error");
+    initted = TRUE;
+    }
+htmlVaParagraph(format,args);
+}
+
+static void cartWarnCatcher(void (*doMiddle)(struct cart *cart), struct cart *cart, WarnHandler warner)
+/* Wrap error and warning handlers around doMiddl. */
+{
+pushWarnHandler(warner);
+cartErrorCatcher(doMiddle, cart);
+popWarnHandler();
+}
+
+void cartHtmlStart(char *title)
+/* Write HTML header and put in normal error handler. */
+{
+pushWarnHandler(htmlVaWarn);
+htmStart(stdout, title);
+}
+
+void cartWebStart(char *format, ...)
+/* Print out pretty wrapper around things when working
+ * from cart. */
+{
+va_list args;
+va_start(args, format);
+pushWarnHandler(htmlVaWarn);
+webStartWrapper(format, args, FALSE);
+va_end(args);
+}
+
+
+void cartHtmlEnd()
+/* Write out HTML footer and get rid or error handler. */
+{
+htmlEnd();
+popWarnHandler();
+}
+
+void cartEmptyShell(void (*doMiddle)(struct cart *cart), char *cookieName, char **exclude)
+/* Get cart and cookies and set up error handling, but don't start writing any
+ * html yet. The doMiddleFunction has to call cartHtmlStart(title), and
+ * cartHtmlEnd(), as well as writing the body of the HTML. */
+{
+struct cart *cart = cartAndCookie(cookieName, exclude);
+cartWarnCatcher(doMiddle, cart, cartEarlyWarningHandler);
+cartCheckout(&cart);
+}
+
 void cartHtmlShell(char *title, void (*doMiddle)(struct cart *cart), char *cookieName, char **exclude)
 /* Load cart from cookie and session cgi variable.  Write web-page preamble, call doMiddle
  * with cart, and write end of web-page.   Exclude may be NULL.  If it exists it's a
  * comma-separated list of variables that you don't want to save in the cart between
  * invocations of the cgi-script. */
 {
+struct cart *cart = cartAndCookie(cookieName, exclude);
 int status;
-char *hguidString = findCookieData("hguid");
-int hguid = (hguidString == NULL ? 0 : atoi(hguidString));
-int hgsid = cgiUsualInt("hgsid", 0);
-struct cart *cart = cartNew(hguid, hgsid, exclude);
-
-cartExclude(cart, sessionVar);
-cartExclude(cart, selfVar);
-
-printf("Set-Cookie: %s=%u; path=/; domain=.ucsc.edu; expires=%s\n",
-	cookieName, cart->userInfo->id, cookieDate());
-puts("Content-Type:text/html");
-puts("\n");
 
 htmStart(stdout, title);
-
-/* Set up error recovery (for out of memory and the like)
- * so that we finish web page regardless of problems. */
-pushAbortHandler(htmlAbort);
-pushWarnHandler(htmlVaWarn);
-status = setjmp(htmlRecover);
-
-/* Do your main thing. */
-if (status == 0)
-    {
-    doMiddle(cart);
-    cartCheckout(&cart);
-    }
-
-popWarnHandler();
-popAbortHandler();
+cartWarnCatcher(doMiddle, cart, htmlVaWarn);
+cartCheckout(&cart);
 htmlEnd();
 }
 
