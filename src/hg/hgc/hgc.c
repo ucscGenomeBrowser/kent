@@ -193,22 +193,26 @@ cfmFree(&cfm);
 printf("</PRE></TT>");
 }
 
-void chromBand(char *chrom, int pos, char *retBand)
-/* Return text string that says what band pos is on. */
+boolean chromBand(char *chrom, int pos, char *retBand)
+/* Return text string that says what band pos is on. 
+ * Return FALSE if not on any band, or table missing. */
 {
 struct sqlConnection *conn = hAllocConn();
 char query[256];
 char buf[64];
+char *s;
 /*static char band[64];*/
 
+if (!hTableExists("cytoBand"))
+    return FALSE;
 sprintf(query, 
 	"select name from cytoBand where chrom = '%s' and chromStart <= %d and chromEnd > %d", 
 	chrom, pos, pos);
 buf[0] = 0;
-sqlQuickQuery(conn, query, buf, sizeof(buf));
+s = sqlQuickQuery(conn, query, buf, sizeof(buf));
 sprintf(retBand, "%s%s", skipChr(chrom), buf);
 hFreeConn(&conn);
-/*return band;*/
+return s != NULL;
 }
 
 void printPos(char *chrom, int start, int end, char *strand, boolean featDna)
@@ -216,9 +220,8 @@ void printPos(char *chrom, int start, int end, char *strand, boolean featDna)
 {
 char band[64];
 
-chromBand(chrom, (start + end)/2, band);
 printf("<B>Chromosome:</B> %s<BR>\n", skipChr(chrom));
-if (hTableExists("cytoBand"))
+if (chromBand(chrom, (start + end)/2, band))
     printf("<B>Band:</B> %s<BR>\n", band);
 printf("<B>Begin in Chromosome:</B> %d<BR>\n", start+1);
 printf("<B>End in Chromosome:</B> %d<BR>\n", end);
@@ -750,12 +753,15 @@ for (i=start; i<end; ++i)
     }
 }
 
-void getDnaHandleBits(char *track, char *type, Bits *bits, int winStart, int winEnd, 
+void getDnaHandleBits(char *track, char *type, Bits *bits, 
+	int winStart, int winEnd, boolean isRc,
 	struct featureBits **pList)
 /* See if track_type variable exists, and if so set corresponding bits. */
 {
 char buf[256];
 struct featureBits *fb;
+int s,e;
+int winSize = winEnd - winStart;
 
 sprintf(buf, "%s_%s", track, type);
 if (cgiBoolean(buf))
@@ -763,7 +769,13 @@ if (cgiBoolean(buf))
     if (*pList == NULL)
 	*pList = fbGetRange(track, seqName, winStart, winEnd);
     for (fb = *pList; fb != NULL; fb = fb->next)
-	bitSetRange(bits, fb->start - winStart, fb->end - fb->start);
+	{
+	s = fb->start - winStart;
+	e = fb->end - winStart;
+	if (isRc)
+	    reverseIntRange(&s, &e, winSize);
+	bitSetRange(bits, s, e - s);
+	}
     }
 }
 
@@ -789,6 +801,8 @@ printf("<TT><PRE>");
 printf(">%s:%d-%d %s\n", seqName, winStart+1, winEnd,
     	(isRc ? "(reverse complement)" : ""));
 seq = hDnaFromSeq(seqName, winStart, winEnd, dnaLower);
+if (isRc)
+    reverseComplement(seq->dna, seq->size);
 if (defaultUpper)
     touppers(seq->dna);
 
@@ -803,9 +817,9 @@ for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
 	int r,g,b;
 
 	/* Flip underline/italic/bold bits. */
-	getDnaHandleBits(track, "u", uBits, winStart, winEnd, &fbList);
-	getDnaHandleBits(track, "b", bBits, winStart, winEnd, &fbList);
-	getDnaHandleBits(track, "i", iBits, winStart, winEnd, &fbList);
+	getDnaHandleBits(track, "u", uBits, winStart, winEnd, isRc, &fbList);
+	getDnaHandleBits(track, "b", bBits, winStart, winEnd, isRc, &fbList);
+	getDnaHandleBits(track, "i", iBits, winStart, winEnd, isRc, &fbList);
 
 	/* Toggle case if necessary. */
 	sprintf(buf, "%s_case", track);
@@ -815,14 +829,17 @@ for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
 		fbList = fbGetRange(track, seqName, winStart, winEnd);
 	    for (fb = fbList; fb != NULL; fb = fb->next)
 	        {
-		DNA *s;
-		int size;
-		s = seq->dna + fb->start - winStart;
-		size = fb->end - fb->start;
+		DNA *dna;
+		int start = fb->start - winStart;
+		int end  = fb->end - winStart;
+		int size = fb->end - fb->start;
+		if (isRc)
+		    reverseIntRange(&start, &end, seq->size);
+		dna = seq->dna + start;
 		if (defaultUpper)
-		    toLowerN(s, size);
+		    toLowerN(dna, size);
 		else
-		    toUpperN(s, size);
+		    toUpperN(dna, size);
 		}
 	    }
 
@@ -839,7 +856,11 @@ for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
 		fbList = fbGetRange(track, seqName, winStart, winEnd);
 	    for (fb = fbList; fb != NULL; fb = fb->next)
 	        {
-		addColorToRange(r, g, b, colors, fb->start - winStart, fb->end - winStart);
+		int s = fb->start - winStart;
+		int e = fb->end - winStart;
+		if (isRc)
+		    reverseIntRange(&s, &e, winEnd - winStart);
+		addColorToRange(r, g, b, colors, s, e);
 		}
 	    }
 	}
@@ -1923,9 +1944,6 @@ if (offset >= 0)
 	printf("<B>Begin in repeat:</B> %d<BR>\n", ro->repStart);
 	printf("<B>End in repeat:</B> %d<BR>\n", ro->repEnd);
 	printf("<B>Left in repeat:</B> %d<BR>\n", ro->repLeft);
-	printf("<B>Chromosome:</B> %s<BR>\n", skipChr(ro->genoName));
-	printf("<B>Begin in chromosome:</B> %d<BR>\n", ro->genoStart);
-	printf("<B>End in chromosome:</B> %d<BR>\n", ro->genoEnd);
 	printPos(seqName, ro->genoStart, ro->genoEnd, ro->strand, TRUE);
 	}
     hFreeConn(&conn);
@@ -3066,8 +3084,8 @@ if (row != NULL)
 	    printf("<TR><TH ALIGN=left>Chromosome:</TH><TD>%s</TD></TR>\n", seqName);
 	    printf("<TR><TH ALIGN=left>Start:</TH><TD>%d</TD></TR>\n",start);
 	    printf("<TR><TH ALIGN=left>End:</TH><TD>%d</TD></TR>\n",end);
-	    chromBand(seqName, start, band);
-	    printf("<TR><TH ALIGN=left>Band:</TH><TD>%s</TD></TR>\n",band);
+	    if (chromBand(seqName, start, band))
+		printf("<TR><TH ALIGN=left>Band:</TH><TD>%s</TD></TR>\n",band);
 	    printf("</TABLE>\n");
 	    htmlHorizontalLine();
 	    /* Print out marker name and links to UniSTS, Genebank, GDB */
@@ -3363,6 +3381,7 @@ sr = sqlMustGetResult(conn, query);
 row = sqlNextRow(sr);
 if (row != NULL)
     {
+    boolean gotS, gotB;
     fc = fishClonesLoad(row);
     /* Print out general sequence positional information */
     printf("<H2><A HREF=");
@@ -3373,15 +3392,18 @@ if (row != NULL)
     printf("<TR><TH ALIGN=left>Chromosome:</TH><TD>%s</TD></TR>\n", seqName);
     printf("<TR><TH ALIGN=left>Start:</TH><TD>%d</TD></TR>\n",start);
     printf("<TR><TH ALIGN=left>End:</TH><TD>%d</TD></TR>\n",end);
-    chromBand(seqName, start, sband);
-    chromBand(seqName, end, eband);
-    if (sameString(sband,eband)) 
-        {
-	printf("<TR><TH ALIGN=left>Band:</TH><TD>%s</TD></TR>\n",sband);
-	}
-    else
-        {
-	printf("<TR><TH ALIGN=left>Bands:</TH><TD>%s - %s</TD></TR>\n",sband, eband);
+    gotS = chromBand(seqName, start, sband);
+    gotB = chromBand(seqName, end, eband);
+    if (gotS && gotB)
+	{
+	if (sameString(sband,eband)) 
+	    {
+	    printf("<TR><TH ALIGN=left>Band:</TH><TD>%s</TD></TR>\n",sband);
+	    }
+	else
+	    {
+	    printf("<TR><TH ALIGN=left>Bands:</TH><TD>%s - %s</TD></TR>\n",sband, eband);
+	    }
 	}
     printf("</TABLE>\n");
     htmlHorizontalLine();
@@ -3800,10 +3822,9 @@ printf("<TABLE>\n");
 printf("<TR><TH ALIGN=left>Chromosome:</TH><TD>%s</TD></TR>\n",seqName);
 printf("<TR><TH ALIGN=left>Begin in Chromosome:</TH><TD>%d</TD></TR>\n",start);
 printf("<TR><TH ALIGN=left>End in Chromosome:</TH><TD>%d</TD></TR>\n",end);
-chromBand(seqName, start, startBand);
-chromBand(seqName, end - 1, endBand);
-printf("<TR><TH Align=left>Chromosome Band Range:</TH><TD>%s - %s<TD></TR>\n",
-       startBand, endBand);	
+if (chromBand(seqName, start, startBand) && chromBand(seqName, end - 1, endBand))
+    printf("<TR><TH Align=left>Chromosome Band Range:</TH><TD>%s - %s<TD></TR>\n",
+	   startBand, endBand);	
 printf("</TABLE>\n");
 
 /* Find all of the breakpoints in this range for this name*/
