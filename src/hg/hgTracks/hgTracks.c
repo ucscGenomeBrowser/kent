@@ -467,7 +467,7 @@ switch (vis)
 	break;
     case tvPack:
     case tvSquish:
-        errAbort("Sorry can't handle pack in sampleTotalHeight");
+        errAbort("Sorry can't handle pack in sampleTotalHeight (%s)", tg->mapName);
 	break;
     case tvDense:
 	tg->height = tg->lineHeight;
