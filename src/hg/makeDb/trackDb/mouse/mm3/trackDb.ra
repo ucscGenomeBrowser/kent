@@ -35,7 +35,7 @@ type genePred sgpPep
 
 track mouseChain
 shortLabel Self Chain 
-longLabel Chained Blastz Mouse/Mouse Alignments
+longLabel Mouse/Mouse Chained Blastz Alignments
 group varRep
 priority 132
 visibility hide
@@ -47,7 +47,7 @@ otherDb mm3
 
 track ratChain
 shortLabel Rat Chain 
-longLabel Chained Blastz Rat/$Organism Alignments
+longLabel $o_Organism ($o_date/$o_db) Chained Blastz Alignments
 group compGeno
 priority 133
 visibility hide
@@ -59,7 +59,7 @@ otherDb rn2
 
 track ratNet
 shortLabel Rat Net
-longLabel Rat/$Organism Alignment Net
+longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno
 priority 134.5
 visibility hide
@@ -69,7 +69,7 @@ otherDb rn2
 
 track mm3Rn2L
 shortLabel Rat Cons
-longLabel Mouse/Rat Conservation Score
+longLabel Mouse/$o_Organism ($o_date/$o_db) Conservation Score
 group compGeno
 priority 139
 visibility full
@@ -80,7 +80,7 @@ type sample 0 8
 
 track blastzTightRat
 shortLabel Rat Tight 
-longLabel Blastz Rat, Tight Subset of Best Alignments
+longLabel $o_Organism ($o_date/$o_db) Blastz Tight Subset of Best Alignments
 group compGeno
 priority 140
 visibility hide
@@ -92,7 +92,7 @@ otherDb rn2
 
 track blastzBestRat
 shortLabel Rat Best
-longLabel Blastz Rat Best-in-Genome Alignments
+longLabel $o_Organism ($o_date/$o_db) Blastz Best-in-Genome Alignments
 group compGeno
 priority 141
 visibility hide
@@ -104,7 +104,7 @@ otherDb rn2
 
 track blastzRat
 shortLabel Rat Blastz
-longLabel Merged Blastz Rat Alignments
+longLabel $o_Organism ($o_date/$o_db) Merged Blastz Alignments
 group compGeno
 priority 142
 visibility dense
@@ -116,7 +116,7 @@ otherDb rn2
 
 track blastzTightHuman
 shortLabel Human Tight
-longLabel Blastz Human (Apr 03/hg15), Tight Subset of Alignments
+longLabel $o_Organism ($o_date/$o_db) Blastz Tight Subset of Alignments
 group compGeno
 priority 124
 visibility hide
@@ -128,7 +128,7 @@ otherDb hg15
 
 track humanChain
 shortLabel Human Chain 
-longLabel Chained Human/$Organism Alignments
+longLabel $o_Organism ($o_date/$o_db) Chained Alignments
 group compGeno
 priority 125
 visibility hide
@@ -140,7 +140,7 @@ otherDb hg15
 
 track mm3Hg15L
 shortLabel Human Cons
-longLabel Mouse/Human (Apr. '03) Evolutionary Conservation Score
+longLabel Mouse/Human (Apr. 2003/hg15) Evolutionary Conservation Score
 group compGeno
 color 100,50,0
 altColor 175,150,128
@@ -150,7 +150,7 @@ type sample 0 8
 
 track mammalNotHumanSynt
 shortLabel Not Human Synteny
-longLabel Mammal Not Human Synteny (hg15)
+longLabel Mammal Not Human (Apr. 2003/hg15) Synteny 
 group compGeno
 priority 125.96
 visibility hide
@@ -161,7 +161,7 @@ otherDb hg15
 
 track lost
 shortLabel humanLost
-longLabel humanLost
+longLabel Human Lost
 group compGeno
 priority 125.97
 visibility full
@@ -172,7 +172,7 @@ type genePred
 
 track humanNet
 shortLabel Human Net
-longLabel Human/$Organism Alignment Net
+longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno
 priority 126
 visibility hide
@@ -182,17 +182,18 @@ otherDb hg15
 
 track syntenyHuman
 shortLabel Human Synteny
-longLabel Human/Mouse Synteny Using Blastz Single Coverage (100k window)
+longLabel Mouse/$o_Organism ($o_date/$o_db) Synteny Using Blastz Single Coverage (100k window)
 group compGeno
 priority 127
 visibility hide
 color 0,100,0
 altColor 255,240,200
 type bed 4 +
+otherDb hg15
 
 track blastzBestHuman
 shortLabel Human Best
-longLabel Blastz Human (Apr 03/hg15) Best-in-Genome Alignments
+longLabel $o_Organism ($o_date/$o_db) Blastz Best-in-Genome Alignments
 group compGeno
 priority 127.5
 visibility hide
@@ -204,7 +205,7 @@ otherDb hg15
 
 track blastzHuman
 shortLabel Human Blastz
-longLabel All Human (Apr 03/hg15) Blastz Alignments
+longLabel $o_Organism ($o_date/$o_db) All Blastz Alignments
 group compGeno
 priority 128
 visibility hide
@@ -216,13 +217,14 @@ otherDb hg15
 
 track syntenyRat
 shortLabel Rat Synteny
-longLabel $Organism/Rat Synteny Using Blastz Single Coverage (100k window)
+longLabel $Organism/$o_Organism ($o_date/$o_db) Synteny Using Blastz Single Coverage (100k window)
 group compGeno
 priority 140
 visibility hide
 color 0,100,0
 altColor 255,240,200
 type bed 4 +
+otherDb rn1
 
 track ecoresFr1
 shortLabel Fugu Ecores

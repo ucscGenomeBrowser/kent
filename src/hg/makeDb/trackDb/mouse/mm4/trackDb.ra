@@ -44,7 +44,7 @@ type genePred sgpPep
 
 track blastzHg16
 shortLabel Human blastz
-longLabel Human (Jul 03/Hg16) All Blastz Alignments
+longLabel $o_Organism ($o_date/$o_db) All Blastz Alignments
 group compGeno
 priority 114
 visibility hide
@@ -56,7 +56,7 @@ otherDb hg16
 
 track chainHg16
 shortLabel Human Chain
-longLabel Chained Blastz Human (Jul 03/Hg16)/$Organism Alignments
+longLabel $o_Organism ($o_date/$o_db) Chained Blastz Alignments
 group compGeno
 priority 115
 visibility hide
@@ -68,7 +68,7 @@ otherDb hg16
 
 track netHg16
 shortLabel Human Net
-longLabel Human (Jul 03/Hg16)/$Organism Alignment Net
+longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno
 priority 116
 visibility hide 
@@ -78,7 +78,7 @@ otherDb hg16
 
 track blastzBestHg16
 shortLabel Human Best
-longLabel Blastz Human (Jul 03/Hg16)/$Organism Best-in-Genome Alignments
+longLabel $o_Organism ($o_date/$o_db) Blastz Best-in-Genome Alignments
 group compGeno
 priority 117
 visibility hide
@@ -90,7 +90,7 @@ otherDb hg16
 
 track blastzTightHg16
 shortLabel Human Tight
-longLabel Human Blastz (Jul 03/Hg16), Tight Subset of Best Alignments
+longLabel $o_Organism ($o_date/$o_db) Blastz Tight Subset of Best Alignments
 group compGeno
 priority 117.5
 visibility hide
@@ -102,7 +102,7 @@ otherDb hg16
 
 track syntenyHg16
 shortLabel Human Synteny
-longLabel $Organism/Human (Jul 03/Hg16) Synteny Using Blastz Single Coverage (100k window)
+longLabel $Organism/$o_Organism ($o_date/$o_db) Synteny Using Blastz Single Coverage (100k window)
 group compGeno
 priority 117
 visibility hide
@@ -112,7 +112,7 @@ type bed 4 +
 
 track syntenyNetHg16
 shortLabel Human Syntenic Net
-longLabel Human (Jul 03/Hg16) Syntenic Alignment Net
+longLabel $o_Organism ($o_date/$o_db) Syntenic Alignment Net
 group compGeno
 priority 118
 visibility hide
@@ -122,7 +122,7 @@ otherDb hg16
 
 track blastzRn3
 shortLabel Rat blastz
-longLabel Rat (Jun 03/Rn3) All Blastz Alignments
+longLabel $o_Organism ($o_date/$o_db) All Blastz Alignments
 group compGeno
 priority 140
 visibility hide
@@ -134,7 +134,7 @@ otherDb rn3
 
 track chainRn3
 shortLabel Rat Chain 
-longLabel Chained Blastz Rat (Jun 03/Rn3)/$Organism Alignments
+longLabel $o_Organism ($o_date/$o_db) Chained Blastz Alignments
 group compGeno
 priority 141
 visibility hide
@@ -146,7 +146,7 @@ otherDb rn3
 
 track netRn3
 shortLabel Rat Net
-longLabel Rat (Jun 03/Rn3)/$Organism Alignment Net
+longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno
 priority 142
 visibility hide 
@@ -156,7 +156,7 @@ otherDb rn3
 
 track blastzBestRn3
 shortLabel Rat Best
-longLabel Blastz Rat (Jun 03/Rn3)/$Organism Best-in-Genome Alignments
+longLabel $o_Organism ($o_date/$o_db) Blastz Best-in-Genome Alignments
 group compGeno
 priority 143
 visibility hide
@@ -168,7 +168,7 @@ otherDb rn3
 
 track blastzTightRn3
 shortLabel Rat Tight
-longLabel Rat Blastz (Jun 03/Rn3), Tight Subset of Best Alignments
+longLabel $o_Organism ($o_date/$o_db) Blastz Tight Subset of Best Alignments
 group compGeno
 priority 143.5
 visibility hide
@@ -180,7 +180,7 @@ otherDb rn3
 
 track syntenyRn3
 shortLabel Rat Synteny
-longLabel $Organism/Rat (Jun 03/Rn3) Synteny Using Blastz Single Coverage (100k window)
+longLabel $Organism/$o_Organism ($o_date/$o_db) Synteny Using Blastz Single Coverage (100k window)
 group compGeno
 priority 144
 visibility hide
@@ -190,7 +190,7 @@ type bed 4 +
 
 track syntenyNetRn3
 shortLabel Rat Syntenic Net
-longLabel Rat (Jun 03/Rn3) Syntenic Alignment Net
+longLabel $o_Organism ($o_date/$o_db) Syntenic Alignment Net
 group compGeno
 priority 145
 visibility hide
