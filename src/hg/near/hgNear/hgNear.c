@@ -17,7 +17,7 @@
 #include "ra.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: hgNear.c,v 1.90 2003/09/25 03:14:14 kent Exp $";
+static char const rcsid[] = "$Id: hgNear.c,v 1.91 2003/09/25 07:49:15 kent Exp $";
 
 char *excludeVars[] = { "submit", "Submit", confVarName, colInfoVarName,
 	defaultConfName, hideAllConfName, showAllConfName,
@@ -1388,9 +1388,9 @@ makeTitle(buf, "hgNearHelp.html");
 hPrintf("<FORM ACTION=\"../cgi-bin/hgNear\" NAME=\"mainForm\" METHOD=GET>\n");
 cartSaveSession(cart);
 controlPanel(curGeneId, ord, ordList);
+hPrintf("</FORM>\n");
 if (geneList != NULL)
     bigTable(conn, colList,geneList);
-hPrintf("</FORM>\n");
 
 hPrintf("<FORM ACTION=\"../cgi-bin/hgNear\" METHOD=\"GET\" NAME=\"orgForm\">\n");
 hPrintf("<input type=\"hidden\" name=\"org\" value=\"%s\">\n", genome);
