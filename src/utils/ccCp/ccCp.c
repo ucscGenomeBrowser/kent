@@ -274,20 +274,21 @@ machineCount = slCount(machineList);
 if (!fileExists(source))
     errAbort("%s doesn't exist\n", source);
 size = fileSize(source);
-printf("Copying %s (%ld bytes) to %d machines\n", source, size, machineCount);
+printf("Copying %s (%lld bytes) to %d machines\n", source, size, machineCount);
 
 /* Add everything to the to-do list. */
 for (m = machineList; m != NULL; m = m->next)
     {
-    //uglyf("%s %s\n", m->name, m->netSwitch->name);
     dlAddValTail(toDoList, m);
     }
+
 
 /* Loop through to-do list trying to do first copy. */
 for (node = toDoList->head; node->next != NULL; node = node->next)
     {
     m = node->val;
     dyStringClear(cmd);
+    m = node->val;
     if (sameString(thisHost, m->name))
 	{
 	if (sameString(source, dest))
@@ -342,7 +343,7 @@ while (machinesFinished < machineCount)
     if (curTime - lastTime >= 3)
 	{
 	printf("%d finished in %d seconds, %d in progress, %d to start, %d errors, %d total\n",
-	    dlCount(finishedList) + dlCount(sourceList), curTime - startTime,
+	    dlCount(finishedList) + dlCount(sourceList), (int)(curTime - startTime),
 	    dlCount(workingList), dlCount(toDoList), dlCount(errList), machineCount);
 	lastTime = curTime;
 	}
@@ -410,7 +411,7 @@ if (!dlEmpty(errList))
 goodMachines = dlCount(finishedList);
 grandTotal = (double)goodMachines * (double)size;
 printf("Copied to %d of %d machines (grand total %e bytes) in %d seconds\n", 
-	goodMachines, machineCount, grandTotal, time(NULL) - startTime);
+	goodMachines, machineCount, grandTotal, (int)(time(NULL) - startTime));
 }
 
 int main(int argc, char *argv[])
