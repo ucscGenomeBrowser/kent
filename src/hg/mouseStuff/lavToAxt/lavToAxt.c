@@ -11,7 +11,7 @@
 #include "fa.h"
 
 struct dnaSeq *faList;
-static char const rcsid[] = "$Id: lavToAxt.c,v 1.10 2003/05/18 07:58:09 baertsch Exp $";
+static char const rcsid[] = "$Id: lavToAxt.c,v 1.11 2003/11/11 09:07:01 baertsch Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -144,7 +144,6 @@ if (isRc)
             AllocVar(qSeq);
             qSeq->size = qEnd - qStart;
             qSeq->name = cloneString(qName);
-            qSeq->mask = seq->mask;
             qSeq->dna = cloneMem((seq->dna)+qStart, qSeq->size);
             }
         else
