@@ -20,8 +20,12 @@ struct dyString
 struct dyString *newDyString(int initialBufSize);
 /* Allocate dynamic string with initial buffer size.  (Pass zero for default) */
 
+#define dyStringNew newDyString
+
 void freeDyString(struct dyString **pDs);
 /* Free up dynamic string. */
+
+#define dyStringFree(a) freeDyString(a);
 
 void dyStringAppend(struct dyString *ds, char *string);
 /* Append zero terminated string to end of dyString. */
