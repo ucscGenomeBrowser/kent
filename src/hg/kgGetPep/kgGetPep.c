@@ -10,7 +10,7 @@ errAbort(
   "kgGetPep - generate FASTA format protein sequence file to be used for Known Genes track build.\n"
   "usage:\n"
   "   kgGetPep xxxx\n"
-  "            xxxx is the release date of bioSql database\n");
+  "            xxxx is the release date of SWISS-PROT database, spxxxx\n");
 }
 
 int main(int argc, char *argv[])
@@ -69,14 +69,14 @@ while (fgets(line, 100, inf) != NULL)
         bioentryID= row3[5];
 	databaseID= row3[6];
 	
-    	sprintf(query2,"select * from biosql%s.biosequence where bioentry_id='%s';", 
-		proteinDataDate, bioentryID);
+    	sprintf(query2,"select val from sp%s.protein where acc='%s';", 
+		proteinDataDate, accession);
     	
 	sr2 = sqlMustGetResult(conn2, query2);
     	row2 = sqlNextRow(sr2);
     	while (row2 != NULL)
 	    {
- 	    seq_str = row2[4];
+ 	    seq_str = row2[0];
 	    	
 	    len = strlen(seq_str);
 	    if (maxlen < len) maxlen = len;
