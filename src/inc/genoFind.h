@@ -24,6 +24,10 @@
 #include "localmem.h"
 #endif 
 
+#ifndef BITS_H
+#include "bits.h"
+#endif
+
 enum gfConstants {
     gfMinMatch = 2,
     gfMaxGap = 2,
@@ -39,6 +43,7 @@ struct gfSeqSource
     char *fileName;	/* Name of file. */
     bioSeq *seq;	/* Sequences.  Usually either this or fileName is NULL. */
     bits32 start,end;	/* Position within merged sequence. */
+    Bits *maskedBits;	/* If non-null contains repeat-masking info. */
     };
 
 struct gfHit
@@ -109,14 +114,16 @@ void gfCheckTileSize(int tileSize, boolean isPep);
 
 struct genoFind *gfIndexSeq(bioSeq *seqList,
 	int minMatch, int maxGap, int tileSize, int maxPat, char *oocFile,
-	boolean isPep, boolean allowOneMismatch);
+	boolean isPep, boolean allowOneMismatch, boolean maskUpper);
 /* Make index for all seqs in list. 
  *      minMatch - minimum number of matching tiles to trigger alignments
  *      maxGap   - maximum deviation from diagonal of tiles
  *      tileSize - size of tile in nucleotides
  *      maxPat   - maximum use of tile to not be considered a repeat
  *      oocFile  - .ooc format file that lists repeat tiles.  May be NULL. 
- *      isPep    - TRUE if indexing proteins, FALSE for DNA. */
+ *      isPep    - TRUE if indexing proteins, FALSE for DNA. 
+ *      maskUpper - Mask out upper case sequence (currently only for nucleotides).
+ * For DNA sequences upper case bits will be unindexed. */
 
 struct genoFind *gfIndexNibs(int nibCount, char *nibNames[],
 	int minMatch, int maxGap, int tileSize, int maxPat, char *oocFile, 
@@ -220,6 +227,8 @@ struct gfSavePslxData
     struct hash *t3Hash;	/* Hash to associate names and frames. */
     boolean reportTargetStrand; /* Report target as well as query strand? */
     boolean targetRc;		/* Is target reverse complemented? */
+    struct hash *maskHash;	/* Hash to associate target sequence name and mask. */
+    int minGood;		/* Minimum sequence identity in parts per thousand. */
     };
 
 void gfSavePslx(char *chromName, int chromSize, int chromOffset,

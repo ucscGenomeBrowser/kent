@@ -68,9 +68,11 @@ void hashTraverseVals(struct hash *hash, void (*func)(void *val));
 
 struct hash *newHash(int powerOfTwoSize);
 /* Returns new hash table. */
+#define hashNew(a) newHash(a)	/* Synonym */
 
 void freeHash(struct hash **pHash);
 /* Free up hash table. */
+#define hashFree(a) freeHash(a)	/* Synonym */
 
 void freeHashAndVals(struct hash **pHash);
 /* Free up hash table and all values associated with it.

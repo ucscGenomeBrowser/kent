@@ -48,10 +48,6 @@
 #define uglyAbort errAbort /* debugging error abort. */
 #define uglyOut stdout /* debugging fprintf target. */
 
-/* removes the '\r' character from a string */
-/* the source and destination strings can be the same, if there are no threads */
-void removeReturns(char* dest, char* src);
-		
 void *needMem(size_t size);
 /* Need mem calls abort if the memory allocation fails. The memory
  * is initialized to zero. */
@@ -489,4 +485,9 @@ int  rangeIntersection(int start1, int end1, int start2, int end2);
 bits32 byteSwap32(bits32 a);
 /* Swap from intel to sparc order of a 32 bit quantity. */
 
+void removeReturns(char* dest, char* src);
+/* Removes the '\r' character from a string.
+ * the source and destination strings can be the same, 
+ * if there are no threads */
+		
 #endif /* COMMON_H */
