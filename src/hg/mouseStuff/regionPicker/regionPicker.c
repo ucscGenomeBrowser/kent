@@ -3,11 +3,13 @@
 #include "linefile.h"
 #include "hash.h"
 #include "options.h"
+#include "obscure.h"
 #include "bits.h"
 #include "dnautil.h"
 #include "hdb.h"
 #include "featureBits.h"
 #include "axt.h"
+#include "htmshell.h"
 
 struct region
 /* Part of the genome. */
@@ -18,12 +20,25 @@ struct region
     int start, end;		/* 0 based half open range */
     };
 
+struct scoredWindow
+/* A scored region. */
+    {
+    struct scoredWindow *next;
+    char *chrom;	/* Not allocated here. */
+    int start;		/* Start in genome. */
+    double geneRatio;	/* Gene density. */
+    double consRatio;   /* Conserved not transcribed density. */
+    };
+
 /* Command line overridable variables. */
 char *clRegion = "genome";
 int bigWinSize = 500000;
 int bigStepSize = 100000;
 int smallWinSize = 125;
 double threshold = 0.8;
+int picksPer = 5;
+char *htmlOutput = NULL;
+
 
 void usage()
 /* Explain usage and exit. */
@@ -35,15 +50,21 @@ errAbort(
   "usage:\n"
   "   regionPicker database axtBestDir output\n"
   "options:\n"
+  "   -html=output.html - where to write hyperlinks for region\n"
   "   -region=chrN - restrict to a single chromosome\n"
   "   -region=file - File has chrN:start-end on each line\n"
   "   -bigWinSize=N -default %d\n"
   "   -bigStepSize=N - default %d\n"
   "   -smallWinSize=N - default %d\n"
-  "   -theshold=0.N - minimum base identity in small window. default %2.1f\n",
-       bigWinSize, bigStepSize, smallWinSize, threshold
+  "   -theshold=0.N - minimum base identity in small window. default %2.1f\n"
+  "   -picksPer=N - number of picks per strata, default %d\n",
+       bigWinSize, bigStepSize, smallWinSize, threshold, picksPer
   );
 }
+
+/* This is the ratio of genome on which we make cuts. */
+#define strataCount 3
+double genoCuts[strataCount] = {0.5, 0.8, 1.0};
 
 #define histSize 1000
 #define geneScale 5  /* Spread gene density from 0-20% instead of 0-100% */
@@ -77,7 +98,8 @@ a->totalBothCount += b->totalBothCount;
 }
 
 void addToStats(struct stats *stats, Bits *aliBits, Bits *matchBits, 
-	Bits *geneBits, Bits *seqBits, struct region *r, FILE *f)
+	Bits *geneBits, Bits *seqBits, struct region *r, FILE *f,
+	struct scoredWindow **pWinList)
 /* Step big window through region adding to stats. */
 {
 char *chrom = r->chrom;
@@ -100,18 +122,20 @@ for (bigStart = chromStart; bigStart < chromEnd;  bigStart += bigStepSize)
     int smallGotData = 0;  /* Count of small windows with alignment data */
     int consIx = -1; /* Index into conservation histogram */
     int geneIx = -1; /* Index into gene density histogram */
+    int thisBigSize;
 
     /* Figure out boundaries of big window,  and based on
      * size how much to weigh it in histogram */
     bigEnd = bigStart + bigWinSize;
     if (bigEnd > chromEnd) bigEnd = chromEnd;
-    bigWeight = round(10.0 * (bigEnd - bigStart) / bigWinSize);
+    thisBigSize = bigEnd - bigStart;
+    bigWeight = round(10.0 * thisBigSize / bigWinSize);
 
 
     /* Figure out number of non-N bases, and skip this window
      * if they amount to less than half of it. */
-    seqCount = bitCountRange(seqBits, bigStart, bigEnd - bigStart);
-    if (seqCount < (bigEnd - bigStart)/2)
+    seqCount = bitCountRange(seqBits, bigStart, thisBigSize);
+    if (seqCount < thisBigSize/2)
         continue;
 
     /* Step through small windows inside big one to calculate
@@ -162,6 +186,18 @@ for (bigStart = chromStart; bigStart < chromEnd;  bigStart += bigStepSize)
 	fprintf(f, "gene %4.1f%% consNotTx %4.1f%%\n", 100*geneRatio, 100*consRatio);
 	stats->totalBothCount += bigWeight;
 	stats->bothCounts[consIx][geneIx] += bigWeight;
+
+	/* If no gaps add it to window list. */
+	if (seqCount == bigWinSize)
+	    {
+	    struct scoredWindow *win;
+	    AllocVar(win);
+	    win->chrom = chrom;
+	    win->start = bigStart;
+	    win->geneRatio = geneRatio;
+	    win->consRatio = consRatio;
+	    slAddHead(pWinList, win);
+	    }
 	}
     }
 }
@@ -228,7 +264,8 @@ lineFileClose(&lf);
 }
 
 void statsOnSpan(struct sqlConnection *conn, struct region *r,
-	char *axtBestDir, struct stats *stats, FILE *f)
+	char *axtBestDir, struct stats *stats, FILE *f, 
+	struct scoredWindow **pWinList)
 /* Gather region info on one chromosome/region. */
 {
 char *chrom = r->chrom;
@@ -257,7 +294,7 @@ fbOrTableBits(geneBits, "ensGene", chrom, chromSize, conn);
 fbOrTableBits(geneBits, "mrna", chrom, chromSize, conn);
 
 /* Calculate various stats on windows. */
-addToStats(stats, aliBits, matchBits, geneBits, maskBits, r, f);
+addToStats(stats, aliBits, matchBits, geneBits, maskBits, r, f, pWinList);
 
 /* Cleanup */
 bitFree(&geneBits);
@@ -300,6 +337,121 @@ for (i=0; i<histSize; ++i)
     }
 }
 
+void calcCuts(int *hist, int sizeHist, int total, double scale,
+	double *cuts, int cutCount)
+/* Figure out how to go from percent of genome covered to
+ * thresholds. */
+{
+int hIx = 0, cIx;
+int acc = 0;
+
+for (cIx = 0; cIx < cutCount;  ++cIx)
+    {
+    int threshold = round(genoCuts[cIx] * total);
+    for (; hIx < sizeHist; ++hIx)
+        {
+	acc += hist[hIx];
+	if (acc >= threshold)
+	    break;
+	}
+    cuts[cIx] = hIx * scale / sizeHist;
+    }
+}
+
+int cutIx(double *cuts, int cutCount, double val)
+/* Return index of cut this falls into. */
+{
+int i, ix = cutCount-1;
+for (i=0; i<cutCount; ++i)
+    {
+    if (val < cuts[i])
+	{
+	ix = i;
+        break;
+	}
+    }
+return ix;
+}
+
+void outputPicks(struct scoredWindow *winList,  char *database,
+	struct stats *stats, FILE *f)
+/* Output picked regions. */
+{
+struct scoredWindow *strata[strataCount][strataCount];
+double geneCuts[strataCount], consCuts[strataCount];
+struct scoredWindow *win, *next;
+int geneIx, consIx, pickIx;
+FILE *html = NULL;
+
+if (htmlOutput != NULL)
+    {
+    html = mustOpen(htmlOutput, "w");
+    htmStart(html, "Random Regions for 1% Project");
+    }
+calcCuts(stats->consCounts, histSize, 
+	stats->totalConsCount, 1.0, consCuts, strataCount);
+uglyf("cons %f %f %f\n", consCuts[0], consCuts[1], consCuts[2]);
+calcCuts(stats->geneCounts, histSize, 
+	stats->totalGeneCount, 1.0/geneScale, geneCuts, strataCount);
+uglyf("gene %f %f %f\n", geneCuts[0], geneCuts[1], geneCuts[2]);
+
+/* Move winList to strata. */
+zeroBytes(strata, sizeof(strata));
+for (win = winList; win != NULL; win = next)
+    {
+    next = win->next;
+    consIx = cutIx(consCuts, strataCount, win->consRatio);
+    geneIx = cutIx(geneCuts, strataCount, win->geneRatio);
+    slAddHead(&strata[consIx][geneIx], win);
+    }
+
+/* Shuffle strata and output first picks in each. */
+for (consIx=0; consIx<strataCount; ++consIx)
+    {
+    for (geneIx=0; geneIx<strataCount; ++geneIx)
+        {
+	int cs=0, gs=0;
+	if (geneIx>0)
+	    gs = round(100*genoCuts[geneIx-1]);
+	if (consIx>0)
+	    cs = round(100*genoCuts[consIx-1]);
+	fprintf(f, "consNonTx %d%%-%d%%, gene %d%%-%d%%\n", 
+		cs, round(100*genoCuts[consIx]),
+		gs, round(100*genoCuts[geneIx]));
+	if (html)
+	    {
+	    fprintf(html, "<H2>consNonTx %d%% - %d%%, gene %d%% - %d%%</H3>\n", 
+		cs, round(100*genoCuts[consIx]),
+		gs, round(100*genoCuts[geneIx]));
+	    }
+	shuffleList(&strata[consIx][geneIx]);
+	win = strata[consIx][geneIx];
+	for (pickIx=0; pickIx < picksPer && win != NULL; 
+		++pickIx, win = win->next)
+	    {
+	    int end = win->start + bigWinSize;
+	    fprintf(f, "%s:%d-%d\t", win->chrom, win->start+1, end);
+	    fprintf(f, "consNonTx %4.1f%%, gene %4.1f%%\n",
+		    100*win->consRatio, 100*win->geneRatio);
+	    if (html)
+		{
+		fprintf(html, "<A HREF=\"http://genome.ucsc.edu/cgi-bin/");
+		fprintf(html, "hgTracks?db=%s&position=%s:%d-%d\">",
+			database, win->chrom, win->start+1, end);
+		fprintf(html, "%s:%d-%d</A>", win->chrom, win->start+1, end);
+		fprintf(html, "\tconsNonTx %4.1f%%, gene %4.1f%%<BR>\n",
+			100*win->consRatio, 100*win->geneRatio);
+		}
+	    }
+	}
+    }
+if (html)
+    {
+    htmEnd(html);
+    carefulClose(&html);
+    }
+}
+
 void regionPicker(char *database, char *axtBestDir, char *output)
 /* regionPicker - Code to pick regions to annotate deeply.. */
 {
@@ -308,6 +460,7 @@ struct slName *allChroms = NULL, *chrom = NULL;
 struct region *regionList = NULL, *region;
 FILE *f = mustOpen(output, "w");
 struct stats *stats;
+struct scoredWindow *winList = NULL, *win;
 
 AllocVar(stats);
 hSetDb(database);
@@ -363,10 +516,13 @@ for (region = regionList; region != NULL; region = region->next)
      {
      printf("Processing %s %s:%d-%d\n", region->name,
      	region->chrom, region->start, region->end);
-     statsOnSpan(conn, region, axtBestDir, stats, f);
+     statsOnSpan(conn, region, axtBestDir, stats, f, &winList);
      }
 fprintf(f, "\n");
 reportStats(stats, f);
+
+uglyf("Got %d windows with no gaps\n", slCount(winList));
+outputPicks(winList, database, stats, f);
 }
 
 
@@ -378,6 +534,8 @@ bigWinSize = optionInt("bigWinSize", bigWinSize);
 bigStepSize = optionInt("bigStepSize", bigStepSize);
 smallWinSize = optionInt("smallWinSize", smallWinSize);
 threshold = optionFloat("threshold", threshold);
+picksPer = optionInt("picksPer", picksPer);
+htmlOutput = optionVal("html", htmlOutput);
 dnaUtilOpen();
 if (argc != 4)
     usage();
