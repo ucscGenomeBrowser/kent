@@ -1438,9 +1438,17 @@ printf("<B>%s position:</B> %s:%d-%d</a>  size: %d <BR>\n",
        thisOrg, chain->tName, chain->tStart+1, chain->tEnd, chain->tEnd-chain->tStart);
 printf("<B>strand:</B> %c<BR>\n", chain->qStrand);
 qChainRangePlusStrand(chain, &qs, &qe);
-printf("<B>%s position:</B> <A target=\"_blank\" href=\"/cgi-bin/hgTracks?db=%s&position=%s%%3A%d-%d\">%s:%d-%d</A>  size: %d<BR>\n",
-       otherOrg, otherDb, chain->qName, qs, qe, chain->qName, 
-       qs, qe, chain->qEnd - chain->qStart);
+if (sameWord(otherDb, database))
+    {
+    printf("<B>%s position:</B> %s:%d-%d  size: %d<BR>\n",
+	   chain->qName, chain->qName, qs, qe, chain->qEnd - chain->qStart);
+    }
+else
+    {
+    printf("<B>%s position:</B> <A target=\"_blank\" href=\"/cgi-bin/hgTracks?db=%s&position=%s%%3A%d-%d\">%s:%d-%d</A>  size: %d<BR>\n",
+	   otherOrg, otherDb, chain->qName, qs, qe, chain->qName, 
+	   qs, qe, chain->qEnd - chain->qStart);
+    }
 printf("<B>chain id:</B> %s<BR>\n", item);
 printf("<B>score:</B> %1.0f<BR>\n", chain->score);
 printf("<BR>\n");
@@ -3817,7 +3825,7 @@ char *track = cartString(cart, "o");
 char *type = trackTypeInfo(track);
 char *typeWords[2];
 char *otherDb, *org, *otherOrg;
-struct dnaSeq *qSeq;
+struct dnaSeq *qSeq = NULL;
 char name[128];
 
 /* Figure out other database. */
@@ -3842,10 +3850,18 @@ chainFree(&chain);
 psl = pslTrimToTargetRange(fatPsl, winStart, winEnd);
 pslFree(&fatPsl);
 
-qSeq = loadGenomePart(otherDb, psl->qName, psl->qStart, psl->qEnd);
+if (sameWord(otherDb, database))
+    {
+    qSeq = hExtSeq(psl->qName);
+    sprintf(name, "%s", psl->qName);
+    }
+else
+    {
+    qSeq = loadGenomePart(otherDb, psl->qName, psl->qStart, psl->qEnd);
+    sprintf(name, "%s.%s", otherOrg, psl->qName);
+    }
 writeFramesetType();
 puts("<HTML>");
-sprintf(name, "%s.%s", otherOrg, psl->qName);
 printf("<HEAD>\n<TITLE>%s %s vs %s %s </TITLE>\n</HEAD>\n\n", 
        otherOrg, psl->qName, org, psl->tName );
 showSomeAlignment(psl, qSeq, gftDnaX, psl->qStart, psl->qEnd, name);
