@@ -12,7 +12,7 @@
 #include "web.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: configure.c,v 1.27 2003/09/16 21:16:33 kent Exp $";
+static char const rcsid[] = "$Id: configure.c,v 1.28 2003/09/17 17:16:49 kent Exp $";
 
 static char *onOffString(boolean on)
 /* Return "on" or "off". */
@@ -208,11 +208,10 @@ hPrintf("<TR><TD ALIGN=LEFT>");
 hPrintf("Show all splicing varients: ");
 cgiMakeCheckBox(showAllSpliceVarName, 
 	cartUsualBoolean(cart, showAllSpliceVarName, FALSE));
-hPrintf("</TD><TD>");
+cgiMakeButton("submit", "Submit");
+hPrintf("</TD></TR><TR><TD>");
 hPrintf("Expression ratio colors: ");
 colorSchemeDropDown();
-hPrintf("</TD><TD>");
-cgiMakeButton("submit", "Submit");
 hPrintf("</TD></TR></TABLE>");
 
 hPrintf("<HR>");
