@@ -81,8 +81,13 @@ boolean sqlExists(struct sqlConnection *conn, char *query);
 /* Query database and return TRUE if it had a non-empty result. */
 
 /* Options to sqlLoadTabFile */
-#define SQL_SERVER_TAB_FILE 0x01  /* tab file is directly accessable
-                                   * by the sql server */
+#define SQL_TAB_FILE_ON_SERVER 0x01  /* tab file is directly accessable
+                                     * by the sql server */
+#define SQL_TAB_FILE_WARN_ON_WARN  0x02 /* warn on warnings being returned
+                                         * rather than abort */
+#define SQL_TAB_FILE_WARN_ON_ERROR 0x04 /* warn on errors and warnings being
+                                           returned rather than abort */
+
 
 void sqlLoadTabFile(struct sqlConnection *conn, char *path, char *table,
                     unsigned options);

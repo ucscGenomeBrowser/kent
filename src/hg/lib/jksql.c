@@ -346,7 +346,8 @@ return numChanged;
 void sqlLoadTabFile(struct sqlConnection *conn, char *path, char *table,
                     unsigned options)
 /* Load a tab-seperated file into a database table, checking for errors. 
- * Options are SQL_SERVER_TAB_FILE */
+ * Options are SQL_TAB_FILE_ON_SERVER, SQL_TAB_FILE_WARN_ON_WARN
+ * SQL_TAB_FILE_WARN_ON_ERROR */
 {
 char tabPath[PATH_LEN];
 char query[PATH_LEN+256];
@@ -354,7 +355,7 @@ int numScan, numRecs, numSkipped, numWarnings;
 char *localOpt, *info;
 struct sqlResult *sr;
 
-if (options & SQL_SERVER_TAB_FILE)
+if (options & SQL_TAB_FILE_ON_SERVER)
     {
     /* tab file on server requiries full path */
     strcpy(tabPath, "");
@@ -383,7 +384,7 @@ if (info == NULL)
 #else
 if (info == NULL)
     {
-    fprintf(stderr, "Warning: mysql_info returned null for query: %s\n", query);
+    warn("Warning: mysql_info returned null for query: %s\n", query);
     sqlFreeResult(&sr);
     return; /* can't check */
     }
@@ -392,11 +393,26 @@ numScan = sscanf(info, "Records: %d Deleted: %*d  Skipped: %d  Warnings: %d",
                  &numRecs, &numSkipped, &numWarnings);
 if (numScan != 3)
     errAbort("can't parse sql load info: %s", info);
+sqlFreeResult(&sr);
+
 if ((numSkipped > 0) || (numWarnings > 0))
-    uglyf("load of %s did not go as planned: %d record(s), "
+    {
+    boolean doAbort = TRUE;
+    if ((numSkipped > 0) && (options & SQL_TAB_FILE_WARN_ON_ERROR))
+        doAbort = FALSE;  /* don't abort on errors */
+    else if ((numWarnings > 0) &&
+             (options & (SQL_TAB_FILE_WARN_ON_ERROR|SQL_TAB_FILE_WARN_ON_WARN)))
+        doAbort = FALSE;  /* don't abort on warnings */
+
+    if (doAbort)
+        errAbort("load of %s did not go as planned: %d record(s), "
+                 "%d row(s) skipped, %d warning(s) loading %s",
+                 table, numRecs, numSkipped, numWarnings, path);
+    else
+        warn("Warning: load of %s did not go as planned: %d record(s), "
              "%d row(s) skipped, %d warning(s) loading %s",
              table, numRecs, numSkipped, numWarnings, path);
-sqlFreeResult(&sr);
+    }
 }
 
 boolean sqlExists(struct sqlConnection *conn, char *query)
