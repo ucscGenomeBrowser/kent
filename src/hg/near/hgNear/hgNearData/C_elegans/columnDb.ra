@@ -10,6 +10,12 @@ longLabel WormBase Gene ID
 visibility on
 itemUrl http://www.wormbase.org/db/gene/gene?name=%s
 
+name proteinName
+type lookup sangerLinks orfName protName
+search fuzzy
+itemUrl http://us.expasy.org/cgi-bin/niceprot.pl?%s
+
+
 name refSeq
 type lookup sangerToRefSeq name value
 
@@ -39,4 +45,7 @@ type distance sangerBlastTab query target eValue
 
 name percentId
 type distance sangerBlastTab query target identity
+
+name description
+type lookup sangerLinks orfName description
 
