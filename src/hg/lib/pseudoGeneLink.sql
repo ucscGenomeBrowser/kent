@@ -41,5 +41,5 @@ CREATE TABLE pseudoGeneLink (
     coverage int unsigned not null,	# bases on the diagonal to mouse
     chainId int unsigned not null,	# chain id of gene/pseudogene alignment
               #Indices
-    PRIMARY KEY(chrom(8),bin,chromStart,name(10))
+    PRIMARY KEY(chrom(8),bin)
 );
