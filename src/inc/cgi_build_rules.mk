@@ -1,35 +1,35 @@
 #	Common set of build rules for CGI binaries
 
-my: compile
+my:: compile
 	mv $A ${CGI_BIN}-${USER}/$A
 
-alpha: strip
+alpha:: strip
 	mv $A ${CGI_BIN}/$A
 
-beta: strip
+beta:: strip
 	mv $A ${CGI_BIN}-beta/$A
 
-strip:  compile
+strip::  compile
 	strip $A
 
-install:        compile
+install::        compile
 	strip $A
 	@if [ ! -d "${DESTDIR}${CGI_BIN}" ]; then \
 		${MKDIR} "${DESTDIR}${CGI_BIN}"; \
 	fi
 	mv $A ${DESTDIR}${CGI_BIN}/$A
 
-debug: $O
+debug:: $O
 	${CC} $O ${MYLIBS} ${L}
 	mv a.out $A
 
 
-lib:
+lib::
 	cd ../../lib; make
 
 clean::
 	rm -f $O $A
 
-tags:
+tags::
 	ctags *.h *.c ../lib/*.c ../inc/*.h ../../lib/*.c ../../inc/*.h
 
