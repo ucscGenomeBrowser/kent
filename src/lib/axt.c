@@ -20,7 +20,7 @@
 #include "dnautil.h"
 #include "axt.h"
 
-static char const rcsid[] = "$Id: axt.c,v 1.30 2004/03/03 16:19:41 angie Exp $";
+static char const rcsid[] = "$Id: axt.c,v 1.31 2004/04/04 04:30:58 baertsch Exp $";
 
 void axtFree(struct axt **pEl)
 /* Free an axt. */
@@ -215,6 +215,60 @@ for (i=0; i<symCount; ++i)
 	}
     }
 return score;
+}
+
+boolean gapNotMasked(char q, char t)
+/* return true if gap on one side and upper case on other side */
+{
+if (q=='-' && t=='-')
+    return FALSE;
+if (q=='-' && t<'a')
+    return TRUE;
+if (t=='-' && q<'a')
+    return TRUE;
+return FALSE;
+}
+
+
+int axtScoreSymFilterRepeats(struct axtScoreScheme *ss, int symCount, char *qSym, char *tSym)
+/* Return score without setting up an axt structure. Do not penalize gaps if repeat masked (lowercase)*/
+{
+int i;
+char q,t;
+int score = 0;
+boolean lastGap = FALSE;
+int gapStart = ss->gapOpen;
+int gapExt = ss->gapExtend;
+
+dnaUtilOpen();
+for (i=0; i<symCount; ++i)
+    {
+    q = qSym[i];
+    t = tSym[i];
+    if ((q == '-' || t == '-') && gapNotMasked(q,t))
+        {
+	if (lastGap)
+	    score -= gapExt;
+	else
+	    {
+	    /* Use gapStart+gapExt to be consistent with blastz: */
+	    score -= (gapStart + gapExt);
+	    lastGap = TRUE;
+	    }
+	}
+    else
+        {
+	score += ss->matrix[q][t];
+	lastGap = FALSE;
+	}
+    }
+return score;
+}
+
+int axtScoreFilterRepeats(struct axt *axt, struct axtScoreScheme *ss)
+/* Return calculated score of axt. */
+{
+return axtScoreSymFilterRepeats(ss, axt->symCount, axt->qSym, axt->tSym);
 }
 
 int axtScore(struct axt *axt, struct axtScoreScheme *ss)

@@ -121,6 +121,9 @@ int axtScoreSym(struct axtScoreScheme *ss, int symCount, char *qSym, char *tSym)
 int axtScore(struct axt *axt, struct axtScoreScheme *ss);
 /* Return calculated score of axt. */
 
+int axtScoreFilterRepeats(struct axt *axt, struct axtScoreScheme *ss);
+/* Return calculated score of axt. do not score gaps if they are repeat masked*/
+
 int axtScoreUngapped(struct axtScoreScheme *ss, char *q, char *t, int size);
 /* Score ungapped alignment. */
 
