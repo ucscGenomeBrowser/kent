@@ -21,12 +21,12 @@ sqlFreeResult(&sr);
 
 struct kgProtAlias *findKGProtAlias(char *dataBase, char *spec, char *mode)
 {
-/* findKGAlias Looks up aliases for Known Genes, given a seach spec 
+/* findKGProtAlias looks up protein aliases for Known Genes, given a seach spec 
 
 	mode "E" is for Exact match
  	mode "F" is for Fuzzy match
 
-   it returns a link list of kgProtAlias nodes, which contain kgID, displayID, and Alias 
+   it returns a link list of kgProtAlias nodes, which contain kgID, displayID, and alias 
 */
 struct sqlConnection *conn  = hAllocConn();
 struct sqlResult     *sr    = NULL;
