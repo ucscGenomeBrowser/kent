@@ -34,7 +34,7 @@
 #define NOTPSEUDO -1
 #define EXPRESSED -2
 
-static char const rcsid[] = "$Id: pslPseudo.c,v 1.29 2004/08/25 01:50:33 baertsch Exp $";
+static char const rcsid[] = "$Id: pslPseudo.c,v 1.30 2004/08/26 08:08:00 baertsch Exp $";
 
 char *db;
 char *nibDir;
@@ -574,7 +574,6 @@ if (pseudoScore > 0)
     pg->score = pseudoScore;
 else 
     pg->score = 0;
-pg->coverage = ((psl->match+psl->repMatch)*100)/psl->qSize;
 pg->oldScore = (pg->milliBad - (100-log(pg->polyAlen)*20) - (pg->overlapDiag*2) - (100-pg->coverage) 
         + log(psl->match+psl->repMatch)*100)/2 ;
 
@@ -656,8 +655,8 @@ void initWeights()
     8 = + coverage *((qSize-qEnd)/qSize)
     9 = - repeats
  */
-wt[0] = 0.3; wt[1] = 0.75; wt[2] = 0.9; wt[3] = 0.5; wt[4] = 2; 
-wt[5] = 0; wt[6] = 1  ; wt[7] = 0.5; wt[8] = 0.7; wt[9] = 1;
+wt[0] = 0.3; wt[1] = 0.75; wt[2] = 0.9; wt[3] = 0.5; wt[4] = 0.5; 
+wt[5] = 0; wt[6] = 1  ; wt[7] = 0.5; wt[8] = 1; wt[9] = 1;
 }
 void outputLink(struct psl *psl, struct pseudoGeneLink *pg , struct dyString *reason)
    /* char *type, char *bestqName, char *besttName, 
@@ -671,10 +670,10 @@ void outputLink(struct psl *psl, struct pseudoGeneLink *pg , struct dyString *re
 {
 struct axt *axt = NULL;
 int pseudoScore = 0;
+float maxOverlap = (float)pg->maxOverlap/(float)(psl->match+psl->misMatch+psl->repMatch)  ;
 pg->milliBad = calcMilliScore(psl);
 pg->axtScore = -1;
 pg->type = reason->string;
-float maxOverlap = (float)maxOverlap/(float)(psl->match+psl->misMatch+psl->repMatch)  ;
 
 
 if (pg->label == PSEUDO || pg->label == EXPRESSED)
@@ -698,11 +697,11 @@ pseudoScore = ( wt[0]*pg->milliBad
                 - wt[4]*(pg->overlapDiag*10)
                 + wt[5]*(12-log(psl->qSize-psl->qEnd))*80 
                 + wt[6]*pow(pg->intronCount,0.5)*2000 
-                - wt[7]*(maxOverlap*1000)
-                + wt[8]*(pg->coverage*((psl->qSize-psl->qEnd)/psl->qSize)*10)
+                - wt[7]*(maxOverlap*300)
+                + wt[8]*((pg->coverage/100.0)*(1.0-((float)(psl->qSize-psl->qEnd)/(float)psl->qSize))*300.0)
                 - wt[9]*(pg->tReps*10)
                 ) / ScoreNorm;
-verbose(1,"##score %d %4.1f %4.1f %4.1f %4.1f %4.1f %4.1f %4.1f %4.1f %4.1f %4.1f %s %d %s %s:%d-%d\n", 
+verbose(1,"##score %d mb %4.1f x %4.1f ax %4.1f pA %4.1f sy- %4.1f %4.1f ic %4.1f ov- %4.1f cv %d %d %d %4.1f r- %4.1f %s %d %s %s:%d-%d\n", 
                 pseudoScore, 
                 wt[0]*pg->milliBad, 
                 wt[1]*(log(pg->exonCover+1)/log(2))*200 , 
@@ -711,8 +710,9 @@ verbose(1,"##score %d %4.1f %4.1f %4.1f %4.1f %4.1f %4.1f %4.1f %4.1f %4.1f %4.1
                 wt[4]*(pg->overlapDiag*10) ,
                 wt[5]*(12-log(psl->qSize-psl->qEnd))*80 , 
                 wt[6]*pow(pg->intronCount,0.5)*2000 ,
-                wt[7]*(maxOverlap*1000),
-                wt[8]*(pg->coverage*((psl->qSize-psl->qEnd)/psl->qSize)*10),
+                wt[7]*(maxOverlap*300),
+                pg->coverage, psl->qEnd, psl->qSize ,
+                wt[8]*((pg->coverage/100.0)*(1.0-((float)(psl->qSize-psl->qEnd)/(float)psl->qSize))*300.0),
                 wt[9]*(pg->tReps*10), 
                 psl->qName, ScoreNorm, pg->type,psl->tName, psl->tStart, psl->tEnd
                 ) ;
@@ -898,10 +898,10 @@ for (i=*start ; i<=*end ; i++)
     if (toupper(s[i]) == toupper(c) )
         count++;
     }
-if (*end != 0 && *start != 0)
+if (*end != 0 )
     {
     if (count/(*end-*start) < threshold)
-        count = 0;
+        verbose(4,"below threshold count %d %d - %d %5.2f < %5.2f \n",count, *start, *end, (float)count/(float)(*end-*start), threshold);
     }
 else
     count = 0;
@@ -1562,6 +1562,7 @@ pg->gStart = bestStart;
 pg->gEnd = bestEnd;
 pg->overlapDiag= -1;
 pg->milliBad = calcMilliScore(psl);
+pg->coverage = ((psl->match+psl->misMatch+psl->repMatch)*100)/psl->qSize;
 pg->overStart = pg->overEnd = pg->kStart = pg->kEnd = pg->rStart = pg->rEnd = pg->mStart = pg->mEnd = -1;
 strncpy(pg->gStrand, psl->strand , sizeof(pg->gStrand));
 pg->polyA = polyACalc(psl->tStart, psl->tEnd, psl->strand, psl->tSize, psl->tName, 
