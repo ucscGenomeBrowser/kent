@@ -4272,6 +4272,113 @@ tg->loadItems = loadUniGeneAli;
 tg->colorShades = shadesOfGray;
 }
 
+char *perlegenName(struct trackGroup *tg, void *item)
+/* return the actual perlegen name, in form xx/yyyy cut off xx/ return yyyy */
+{
+char * name;
+struct linkedFeatures *lf = item;
+name = strstr(lf->name, "/");
+name ++;
+if(name != NULL)
+    return name;
+else
+    return "unknown";
+}
+
+Color perlegenColor(struct trackGroup *tg, struct linkedFeatures *lf, struct simpleFeature *sf, struct memGfx *mg)
+/* if it is the start or stop blocks make the color the shades
+ * otherwise use black */
+{
+if(lf->components == sf || (sf->next == NULL))
+    return tg->colorShades[lf->grayIx+tg->subType];
+else
+    return blackIndex();
+}
+
+int perlegenHeight(struct trackGroup *tg, struct linkedFeatures *lf, struct simpleFeature *sf) 
+/* if the item isn't the first or the last make it smaller */
+{
+if(sf == lf->components || sf->next == NULL)
+    return tg->heightPer;
+else 
+    return (tg->heightPer-4);
+}
+
+static void perlegenLinkedFeaturesDraw(struct trackGroup *tg, int seqStart, int seqEnd,
+        struct memGfx *mg, int xOff, int yOff, int width, 
+        MgFont *font, Color color, enum trackVisibility vis)
+/* currently this routine is adapted from Terry's linkedFeatureSeriesDraw() routine.
+ * it could be cleaned up some but more importantly it should be integrated back 
+ * into the main draw routine */
+{
+int baseWidth = seqEnd - seqStart;
+struct linkedFeatures *lf;
+struct simpleFeature *sf;
+int y = yOff;
+int heightPer = tg->heightPer;
+int lineHeight = tg->lineHeight;
+int x1,x2;
+int midLineOff = heightPer/2;
+int shortOff = 2, shortHeight = heightPer-4;
+int s, e, e2, s2;
+int itemOff, itemHeight;
+boolean isFull = (vis == tvFull);
+Color *shades = tg->colorShades;
+Color bColor = tg->ixAltColor;
+double scale = width/(double)baseWidth;
+boolean isXeno = tg->subType == lfSubXeno;
+boolean hideLine = (vis == tvDense && tg->subType == lfSubXeno);
+int midY = y + midLineOff;
+int compCount = 0;
+int w;
+int prevEnd = -1;
+
+lf=tg->items;    
+if (vis == tvDense)
+    sortByGray(tg, vis);
+for(lf = tg->items; lf != NULL; lf = lf->next) 
+    {
+    if (tg->itemColor && shades == NULL)
+	color = tg->itemColor(tg, lf, mg);
+    if (lf->components != NULL && !hideLine)
+	{
+	x1 = round((double)((int)lf->start-winStart)*scale) + xOff;
+	x2 = round((double)((int)lf->end-winStart)*scale) + xOff;
+	w = x2-x1;
+	if (shades) 
+	    color =  shades[lf->grayIx+isXeno];
+	/* draw perlgen thick line ... */
+	mgDrawBox(mg, x1, y+shortOff+1, w, shortHeight-2, color);
+	}
+    for (sf = lf->components; sf != NULL; sf = sf->next)
+	{
+	color = perlegenColor(tg, lf, sf, mg);
+	heightPer = perlegenHeight(tg, lf, sf);
+	s = sf->start;
+	e = sf->end;
+	drawScaledBox(mg, s, e, scale, xOff, y+((tg->heightPer - heightPer)/2), heightPer, color);
+	/* if we're at the stop or start of a linked feature add a black tick for the snp 
+	 * in addtion to the larger tic of shaded color */
+	if(heightPer == tg->heightPer)
+	    {
+	    heightPer -= 4;
+	    color = blackIndex();
+	    drawScaledBox(mg, s, e, scale, xOff, y+((tg->heightPer - heightPer)/2), heightPer, color);
+	    }
+	}
+    if (isFull)
+	y += lineHeight;
+    }
+}
+
+void perlegenMethods(struct trackGroup *tg)
+/* setup special methods for haplotype track */
+{
+tg->drawItems = perlegenLinkedFeaturesDraw;
+tg->itemName = perlegenName;
+tg->colorShades = shadesOfSea;
+}
+
 int calcExprBedFullSize(struct exprBed  *exp) 
 /* Because exprBedItemHeight and exprBedTotalHeight are also
 used to center the labels on the left hand side
@@ -5483,6 +5590,7 @@ registerTrackHandler("simpleRepeat", simpleRepeatMethods);
 registerTrackHandler("rosettaTe",rosettaTeMethods);   
 registerTrackHandler("rosettaPe",rosettaPeMethods); 
 registerTrackHandler("uniGene",uniGeneMethods);
+registerTrackHandler("perlegen",perlegenMethods);
 
 /* Load regular tracks, blatted tracks, and custom tracks. 
  * Best to load custom last. */
