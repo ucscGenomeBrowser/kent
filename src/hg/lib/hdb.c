@@ -30,7 +30,7 @@
 #include "liftOverChain.h"
 #include "grp.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.179 2004/04/20 19:23:34 kate Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.180 2004/04/30 05:44:55 kate Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
@@ -1101,6 +1101,9 @@ struct dnaSeq *hExtSeqPart(char *acc, int start, int end)
 {
 struct dnaSeq *seq = hExtSeq(acc);
 //FIXME: freeing this won't free up the entire DNA seq
+if (end > seq->size)
+    errAbort("Can't extract partial seq: acc=%s, end=%d, size=%d",
+                acc, end, seq->size);
 return newDnaSeq(seq->dna + start, end - start, acc);
 }
 
@@ -1827,7 +1830,7 @@ return nList;
 }
 
 char *hPreviousAssembly(char *database)
-/* Return previous assembly for the genome associated with database.
+/* Return previous assembly for the genome associated with database, or NULL.
  * Must free returned string */
 
 {
