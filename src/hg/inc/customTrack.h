@@ -18,6 +18,8 @@ struct customTrack
     struct bed *bedList;	/* List of beds. */
     int fieldCount;		/* Number of fields in bed. */
     boolean needsLift;		/* True if coordinates need lifting. */
+    boolean fromPsl;		/* Track was derived from psl file. */
+    struct gffFile *gffHelper;	/* Used while processing GFF files. */
     };
 
 struct customTrack *customTracksFromText(char *text);
