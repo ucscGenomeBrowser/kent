@@ -94,10 +94,10 @@ void sageCountsOutput(struct sageCounts *el, FILE *f, char sep, char lastSep)
 {
 int i;
 if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->tag, sep);
+fprintf(f, "%s%c", el->tag, sep);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
-fprintf(f, "%d", el->numExps, sep);
+fprintf(f, "%d%c", el->numExps, sep);
 fputc(sep,f);
 if (sep == ',') fputc('{',f);
 for (i=0; i<el->numExps; ++i)
