@@ -567,16 +567,21 @@ else
     dyStringPrintf(query, ",%s", hti->startField);  // keep the same #fields!
 // row[5], row[6] -> cdsStart, cdsEnd or placeholders
 if (hti->cdsStartField[0] != 0)
-    {
     dyStringPrintf(query, ",%s,%s", hti->cdsStartField, hti->cdsEndField);
-    }
 else
     dyStringPrintf(query, ",%s,%s", hti->startField, hti->startField);  // keep the same #fields!
 // row[7], row[8], row[9] -> count, starts, ends/sizes or empty.
 if (hti->countField[0] != 0)
-    {
-    dyStringPrintf(query, ",%s,%s,%s", hti->countField, hti->startsField, hti->endsSizesField);
-    }
+    dyStringPrintf(query, ",%s,%s,%s", hti->countField, hti->startsField,
+		   hti->endsSizesField);
+else
+    dyStringPrintf(query, ",%s,%s,%s", hti->startField, hti->startField,
+		   hti->startField);  // keep same #fields!
+// row[10] -> tSize for PSL '-' strand coord-swizzling only:
+if (sameString("tStarts", hti->startsField))
+    dyStringAppend(query, ",tSize");
+else
+    dyStringPrintf(query, ",%s", hti->startField);  // keep the same #fields!
 dyStringPrintf(query, " FROM %s WHERE %s < %d AND %s > %d",
 	       fullTableName,
 	       hti->startField, chromEnd, hti->endField, chromStart);
@@ -606,7 +611,11 @@ while ((row = sqlNextRow(sr)) != NULL)
     else
 	bedItem->score  = 0;
     if (hti->strandField[0] != 0)
-	strncpy(bedItem->strand, row[4], 2);
+	if (sameString("tStarts", hti->startsField))
+	    // psl: use target strand
+	    strncpy(bedItem->strand, row[4]+1, 2);
+	else
+	    strncpy(bedItem->strand, row[4], 2);
     else
 	strcpy(bedItem->strand, "?");
     if (canDoUTR)
@@ -644,6 +653,21 @@ while ((row = sqlNextRow(sr)) != NULL)
 		{
 		bedItem->blockSizes[i] -= bedItem->chromStarts[i];
 		}
+	    }
+	if (sameString("tStarts", hti->startsField) &&
+	    (bedItem->strand[0] == '-'))
+	    {
+	    // psl: if target strand is '-', flip the coords.
+	    // (this is the target part of pslRcBoth from src/lib/psl.c)
+	    int tSize = atoi(row[10]);
+	    for (i=0; i<bedItem->blockCount; ++i)
+		{
+		bedItem->chromStarts[i] = tSize - (bedItem->chromStarts[i] +
+						   bedItem->blockSizes[i]);
+		}
+	    reverseInts(bedItem->chromStarts, bedItem->blockCount);
+	    reverseInts(bedItem->blockSizes, bedItem->blockCount);
+	    assert(bedItem->chromStart == bedItem->chromStarts[0]);
 	    }
 	if (! (sameString("chromStarts", hti->startsField) ||
 	       sameString("blockStarts", hti->startsField)) )
