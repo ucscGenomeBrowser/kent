@@ -84,7 +84,7 @@
 #include "estOrientInfo.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.830 2004/11/02 10:07:19 daryl Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.831 2004/11/05 00:04:57 donnak Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
@@ -8952,7 +8952,7 @@ if (!hideControls)
     hPrintf("</TD><TD COLSPAN=15>");
     hWrites("Click on a feature for details. "
 	  "Click on base position to zoom in around cursor. "
-	  "Click on left mini-buttons for track-specific options" );
+	  "Click on left mini-buttons for track-specific options." );
     hPrintf("</TD><TD COLSPAN=6 ALIGN=CENTER NOWRAP>");
     hPrintf("move end<BR>");
     hButton("hgt.dinkRL", " < ");
