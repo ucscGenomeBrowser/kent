@@ -9,23 +9,22 @@ changes from one site to the next. </P>
 <H2>Methods</H2> <P> Best-in-genome pairwise alignments were generated for
 each species using blastz, followed by chaining and netting.  A multiple
 alignment was then constructed from these pairwise alignments using multiz.
-A phylogenetic model was fitted to the multiz alignments by maximum
-likelihood, using the general reversible (REV) substitution model and
-discrete gamma model for rate variation (Yang, 1994).  Predictions of
-conserved elements were then obtained by running phastCons on the multiple
-alignments with the --viterbi option and the globally estimated
-phylogenetic model.  PhastCons constructs a two-state phylo-HMM with a
-state for conserved regions and a state for non-conserved regions.  It
-"cuts" the estimated distribution of evolutionary rates at a designated
-quantile and creates a phylogenetic model for the conserved state based on
-the slower evolutionary rates and a phylogenetic model for the
-non-conserved state based on the faster evolutionary rates.  When run with
-the --viterbi option, phastCons identifies segments of the alignment that
-are likely to have been "generated" by the conserved state--i.e., maximal
-segments in which the maximum-likelihood (Viterbi) path through the
-phylo-HMM completely resides in the conserved state.  The transition
-probabilities between the states in the phylo-HMM are approximately
-estimated by maximum likelihood.</P>
+Predictions of conserved elements were then obtained by running phastCons
+on the multiple alignments with the --viterbi option.  PhastCons constructs
+a two-state phylo-HMM with a state for conserved regions and a state for
+non-conserved regions.  The two states share a single phylogenetic model,
+except that the branch lengths of the tree associated with the conserved
+state are multiplied by a constant scaling factor &rho (0 &le &rho &le 1).
+The phylogenetic model, the scaling factor &rho, and the transition
+probabilities of the HMM are all estimated from the data by maximum
+likelihood using an EM algorithm.  To ensure that the scores in different
+regions of the genome are directly comparable, we first obtain global
+estimates of all parameters and then, in a second pass, produce predictions
+across the genome using the same parameters everywhere.  The predicted
+elements are segments of the alignment that are likely to have been
+"generated" by the conserved state of the phylo-HMM--i.e., maximal segments
+in which the maximum-likelihood (Viterbi) path completely resides in the
+conserved state.  </P>
 
 <P>Each predicted conserved element is assigned a log-odds score equal to
 its log probability under the conserved model minus its log probability
