@@ -264,6 +264,9 @@ extern int maxRGBShade;
 void makeRedGreenShades(struct vGfx *vg);
 /* Allocate the  shades of Red, Green and Blue */
 
+/* used in MAF display */
+#define UNALIGNED_SEQ_BEFORE '^'
+#define UNALIGNED_SEQ_AFTER 'V'
 
 void hPrintf(char *format, ...);
 /* Printf that can be suppressed if not making html. 
@@ -468,14 +471,14 @@ char *lfMapNameFromExtra(struct track *tg, void *item);
 int getFilterColor(char *type, int colorIx);
 /* Get color corresponding to type - MG_RED for "red" etc. */
 
-void spreadString(struct vGfx *vg, int x, int y, int width, int height,
+void spreadBasesString(struct vGfx *vg, int x, int y, int width, int height,
 	Color color, MgFont *font, char *s, int count);
-/* Draw evenly spaced letters in string. */
+/* Draw evenly spaced base letters in string. */
 
-void spreadStringAlternateBackground(struct vGfx *vg, int x, int y, int width, int height,
-	Color color, MgFont *font, char *s, int count, Color backA, Color backB, 
-	int stripeWidth);
-/* Draw evenly spaced letters in string. */
+void spreadStringAlternateBackground(struct vGfx *vg, int x, int y, 
+        int width, int height, Color color, MgFont *font, char *s, 
+        int count, Color backA, Color backB, int stripeWidth);
+/* Draw evenly spaced base letters in string. */
 
 void spreadAlignString(struct vGfx *vg, int x, int y, int width, int height,
                         Color color, MgFont *font, char *s, 

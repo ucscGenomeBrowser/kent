@@ -84,7 +84,7 @@
 #include "estOrientInfo.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.820 2004/10/20 02:47:44 kate Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.821 2004/10/20 15:35:45 kate Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
@@ -6538,22 +6538,25 @@ if(motifString != NULL && strlen(motifString) != 0)
 
 for (i=0; i<count; i++, text++, textPos++)
     {
-    x1 = i * width / count;
-    x2 = (i+1) * width/count;
-    if (*text == '|')
+    x1 = i * width/count - 1;
+    x2 = (i+1) * width/count - 1;
+    if (match && *text == '|')
         {
         /* insert count follows -- replace with a colored vertical bar */
         text++;
 	textPos++;
         i--;
-        vgBox(vg, x1+x, y, 1, height, alignInsertsColor());
+        vgBox(vg, x+x1, y, 1, height, alignInsertsColor());
         continue;
         }
-    if (*text == '^')
+    if (match && 
+            (*text == UNALIGNED_SEQ_BEFORE || *text == UNALIGNED_SEQ_AFTER))
         {
-        /* indicates break in alignment - use alt colored vertical bar */
+        /* indicates sequence present for the region, but not aligned
+         * display gap char and colored vertical bar */
+        int xOff = (*text == UNALIGNED_SEQ_BEFORE ? x+x1 : x+x2);
         *text = '-';
-        vgBox(vg, x1+x, y, 1, height, alignBreakColor());
+        vgBox(vg, xOff, y, 1, height, alignBreakColor());
         }
     c[0] = *text;
     clr = color;
@@ -6584,7 +6587,7 @@ for (i=0; i<count; i++, text++, textPos++)
 freez(&inMotif);
 }
 
-void spreadString(struct vGfx *vg, int x, int y, int width, int height,
+void spreadBasesString(struct vGfx *vg, int x, int y, int width, int height,
 	                Color color, MgFont *font, char *s, int count)
 /* Draw evenly spaced letters in string. */
 {
@@ -6605,7 +6608,7 @@ else
 
 if (complementSeq)
     complement(seq->dna, seq->size);
-spreadString(vg, x, y, width, height, color, font, seq->dna, seq->size);
+spreadBasesString(vg, x, y, width, height, color, font, seq->dna, seq->size);
 
 if (thisSeq == NULL)
     freeDnaSeq(&seq);
