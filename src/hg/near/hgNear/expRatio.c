@@ -13,7 +13,7 @@
 #include "hgExp.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: expRatio.c,v 1.31 2003/10/23 03:42:27 angie Exp $";
+static char const rcsid[] = "$Id: expRatio.c,v 1.32 2003/10/24 17:39:22 kent Exp $";
 
 
 static char *expCellVal(struct genePos *gp,
@@ -527,19 +527,16 @@ void expMultiCellPrint(struct column *col, struct genePos *gp,
 {
 struct expMultiData *emd = col->emd;
 char *dataTable;
-char *format;
 float scale;
 
 if (col->expShowAbs)
     {
     dataTable = emd->absoluteTable;
-    format = "%2.1f";
     scale = col->expAbsScale;
     }
 else
     {
     dataTable = emd->ratioTable;
-    format = "%4.3f";
     scale = col->expRatioScale;
     }
 hgExpCellPrint(col->name, gp->name, conn, col->table, hgFixedConn(), dataTable, 
