@@ -2,10 +2,17 @@
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"
-#include "cheapcgi.h"
+#include "options.h"
 #include "psl.h"
 
 boolean verbose = FALSE;
+
+/* output files */
+FILE *only1Fh = NULL;
+FILE *only2Fh = NULL;
+FILE *better1Fh = NULL;
+FILE *better2Fh = NULL;
+FILE *sameFh = NULL;
 
 void usage()
 /* Explain usage and exit. */
@@ -13,9 +20,14 @@ void usage()
 errAbort(
   "pslCrudeCmp - Crudely compare two psl files\n"
   "usage:\n"
-  "   pslCrudeCmp a.psl b.psl\n"
+  "   pslCrudeCmp 1.psl 1.psl\n"
   "options:\n"
   "   -verbose\n"
+  "   -only1=file - Write PSLs occuring only in the 1.psl to this file.\n"
+  "   -only2=file - Write PSLs occuring only in the 2.psl to this file.\n"
+  "   -better1=file - Write PSLs that are better in 1.psl to this file.\n"
+  "   -better2=file - Write PSLs that are better in 2.psl to this file.\n"
+  "   -same=file - Write PSLs that are the same in both files to this file.\n"
   );
 }
 
@@ -104,7 +116,8 @@ slReverse(&list);
 *retHash = hash;
 }
 
-void crossCompare(struct queryList *list, char *listName, struct hash *hash, char *hashName)
+void crossCompare(struct queryList *list, char *listName, struct hash *hash, char *hashName,
+                  FILE *onlyFh, FILE *betterFh)
 /* Report things in list that aren't on hash, or are better than in hash. */
 {
 int uniqCount = 0, betterCount = 0;
@@ -121,12 +134,16 @@ for (q = list; q != NULL; q = q->next)
     if ((h = hashFindVal(hash, qName)) == NULL)
         {
 	++uniqCount;
+        if (onlyFh != NULL)
+            pslTabOut(q->psl, onlyFh);
 	if (verbose)
 	    printf(" %s only in %s\n", qName, listName);
 	}
     else if (!pslSame(q->psl, h->psl) && q->score > h->score)
         {
 	++betterCount;
+        if (betterFh != NULL)
+            pslTabOut(q->psl, betterFh);
 	if (verbose)
 	    printf(" %s better in %s\n", qName, listName);
 	}
@@ -153,8 +170,12 @@ for (el = list; el != NULL; el = el->next)
 	++total;
 	a = aEl->psl;
 	b = bEl->psl;
-	if (pslSame(a, b)) 
+	if (pslSame(a, b))
+            {
 	    ++same;
+            if (sameFh != NULL)
+                pslTabOut(b, sameFh);
+            }
 	else if (verbose)
 	    printf(" %s is different in two files.\n", name);
 	}
@@ -170,19 +191,30 @@ struct hash *aHash, *bHash;
 
 loadPsl(aFile, &aList, &aHash);
 loadPsl(bFile, &bList, &bHash);
-crossCompare(aList, aFile, bHash, bFile);
+crossCompare(aList, aFile, bHash, bFile, only1Fh, better1Fh);
 printf("\n");
-crossCompare(bList, bFile, aHash, aFile);
+crossCompare(bList, bFile, aHash, aFile, only2Fh, better2Fh);
+printf("\n");
 findIdentities(aList, aHash, bHash);
 }
 
 int main(int argc, char *argv[])
 /* Process command line. */
 {
-cgiSpoof(&argc, argv);
+optionHash(&argc, argv);
 if (argc != 3)
     usage();
-verbose = cgiBoolean("verbose");
+verbose = optionExists("verbose");
+if (optionExists("only1"))
+    only1Fh = mustOpen(optionVal("only1", NULL), "w");
+if (optionExists("only2"))
+    only2Fh = mustOpen(optionVal("only2", NULL), "w");
+if (optionExists("better1"))
+    better1Fh = mustOpen(optionVal("better1", NULL), "w");
+if (optionExists("better2"))
+    better2Fh = mustOpen(optionVal("better2", NULL), "w");
+if (optionExists("same"))
+    sameFh = mustOpen(optionVal("same", NULL), "w");
 pslCrudeCmp(argv[1], argv[2]);
 return 0;
 }
