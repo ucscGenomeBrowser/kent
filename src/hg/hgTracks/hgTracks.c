@@ -55,6 +55,9 @@
 #include "syntenySanger.h"
 #include "netAlign.h"
 #include "netGap.h"
+#include "chain.h"
+#include "chainGap.h"
+#include "chainBlock.h"
 #include "knownMore.h"
 #include "estPair.h"
 #include "customTrack.h"
@@ -554,7 +557,9 @@ printf("<AREA SHAPE=RECT COORDS=\"%d,%d,%d,%d\" ", x, y, x+width, y+height);
 printf("HREF=\"%s&o=%d&t=%d&g=%s&i=%s&c=%s&l=%d&r=%d&db=%s&pix=%d\" ", 
     hgcNameAndSettings(), start, end, group, encodedItem, chromName, winStart, winEnd, 
     database, tl.picWidth);
-printf("ALT=\"%s\">\n", statusLine); 
+if (start !=-1)
+    printf("onMouseOver=\"javascript:void(popup('%s'));\"",statusLine);
+/*printf("ALT=\"%s\">\n", statusLine); */
 freeMem(encodedItem);
 }
 
@@ -5112,6 +5117,165 @@ if( sameString( optionStr, "on" )) /*use chromosome coloring*/
 else
     tg->itemColor = NULL;
 tg->loadItems = loadXenoPslWithPos;
+}
+
+struct linkedFeatures *lfFromChainx(struct chain *chain, int sizeMul, boolean isXeno, boolean nameGetsPos)
+/* Create a linked feature item from chainx.  Pass in sizeMul=1 for DNA, 
+ * sizeMul=3 for protein. */
+{
+/*unsigned *starts = chain->tStarts;
+/*unsigned *sizes = chain->blockSizes;
+/*int i, blockCount = chain->blockCount;*/
+int grayIx = 1;
+struct simpleFeature *sfList = NULL, *sf;
+struct linkedFeatures *lf;
+struct boxIn *bl, *next = NULL;
+boolean rcTarget = (chain->qStrand == '-');
+
+AllocVar(lf);
+lf->score = chain->score;
+lf->grayIx = grayIx;
+if (nameGetsPos)
+    {
+    char buf[256];
+    snprintf(buf, sizeof(buf), "%s:%d-%d %s:%d-%d", chain->qName, chain->qStart, chain->qEnd,
+    	chain->tName, chain->tStart, chain->tEnd);
+    lf->extra = cloneString(buf);
+    snprintf(lf->name, sizeof(lf->name), "id %d %s %dk", chain->id, chain->qName, chain->qStart/1000);
+    }
+else
+    strncpy(lf->name, chain->qName, sizeof(lf->name));
+lf->orientation = '+';
+if (rcTarget)
+    lf->orientation = -lf->orientation;
+for (bl = chain->blockList; bl != NULL; bl = bl->next)
+    {
+    AllocVar(sf);
+    sf->start = sf->end = bl->tStart;
+    sf->end = bl->tEnd;
+    /*
+    if (rcTarget)
+        {
+	int s, e;
+	s = chain->tSize - sf->end;
+	e = chain->tSize - sf->start;
+	sf->start = s;
+	sf->end = e;
+	}
+    */
+    sf->grayIx = grayIx;
+    slAddHead(&sfList, sf);
+    }
+slReverse(&sfList);
+lf->components = sfList;
+finishLf(lf);
+lf->start = chain->tStart;	/* Correct for rounding errors... */
+lf->end = chain->tEnd;
+return lf;
+}
+
+void connectedLfFromChainsInRange(struct sqlConnection *conn, struct sqlConnection *conn2,
+    struct trackGroup *tg, int start, int end, char *chromName,
+    boolean isXeno, boolean nameGetsPos)
+/* Return linked features from range of table after have
+ * already connected to database.. */
+{
+char *track = tg->mapName;
+char trackGap[128];
+struct sqlResult *sr = NULL, *srGap = NULL;
+char **row, **rowGap;
+int rowOffset;
+char *optionChrStr;
+struct linkedFeatures *lfList = NULL, *lf;
+struct boxIn *bList = NULL;
+char optionChr[128]; /* Option -  chromosome filter */
+char extraWhere[128] , query[256];
+
+snprintf( trackGap, sizeof(trackGap), "%sGap", track);
+snprintf( optionChr, sizeof(optionChr), "%s.chromFilter", tg->mapName);
+optionChrStr = cartUsualString(cart, optionChr, "All");
+if (startsWith("chr",optionChrStr)) 
+	{
+	snprintf(extraWhere, sizeof(extraWhere), "qName = \"%s\"",optionChrStr);
+	sr = hRangeQuery(conn, track, chromName, start, end, extraWhere, &rowOffset);
+	}
+else
+	{
+	snprintf(extraWhere, sizeof(extraWhere), " ");
+	sr = hRangeQuery(conn, track, chromName, start, end, NULL, &rowOffset);
+	}
+
+if (sqlCountColumns(sr) < 11+rowOffset)
+    errAbort("trackDb has incorrect table type for table \"%s\"",
+	     tg->mapName);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    struct chain *chain = chainLoad(row+rowOffset);
+
+    sprintf(query, "SELECT tStart, tEnd, qGap from %s where chainId = %d and tStart < %d and tEnd > %d and tStart >= %d and tEnd <= %d",
+                trackGap, chain->id, chain->tEnd, chain->tStart, winStart, winEnd);
+    srGap = sqlGetResult(conn2, query);
+    while ((rowGap = sqlNextRow(srGap)) != NULL)
+        {
+        struct chainGap *cg = chainGapLoad(rowGap);
+
+        struct boxIn *b;
+        AllocVar(b);
+        b->tStart = cg->tStart;
+        b->tEnd = cg->tEnd;
+        b->qStart = cg->qGap;
+        slAddHead(&bList, b);
+        }
+    slReverse(&bList);
+    chain->blockList = bList;
+    lf = lfFromChainx(chain, 0, isXeno, nameGetsPos);
+    slAddHead(&lfList, lf);
+    bList = NULL;
+    chainFree(&chain);
+    }
+slReverse(&lfList);
+if (limitVisibility(tg, lfList) == tvFull)
+    slSort(&lfList, linkedFeaturesCmpStart);
+if (tg->extraUiData)
+    filterMrna(tg, &lfList);
+sqlFreeResult(&sr);
+sqlFreeResult(&srGap);
+tg->items = lfList;
+}
+
+void lfFromChainsInRange(struct trackGroup *tg, int start, int end, 
+	char *chromName, boolean isXeno, boolean nameGetsPos)
+/* Return linked features from range of table. */
+{
+struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn2 = hAllocConn();
+connectedLfFromChainsInRange(conn, conn2, tg, start, end, chromName, 
+	isXeno, nameGetsPos);
+hFreeConn(&conn);
+hFreeConn(&conn2);
+}
+
+void loadChainWithPos(struct trackGroup *tg)
+/* load up all of the chains from correct table into tg->items item list*/
+{
+lfFromChainsInRange(tg, winStart,winEnd, chromName, TRUE, TRUE);
+}
+
+void chainMethods(struct trackGroup *tg)
+/* Fill in custom parts of alignment chains */
+{
+char option[128]; /* Option -  rainbow chromosome color */
+char optionChr[128]; /* Option -  chromosome filter */
+char *optionChrStr; 
+char *optionStr ;
+snprintf( option, sizeof(option), "%s.color", tg->mapName);
+optionStr = cartUsualString(cart, option, "on");
+tg->mapItemName = mapNameFromLfExtra;
+if( sameString( optionStr, "on" )) /*use chromosome coloring*/
+    tg->itemColor = pslItemColor;
+else
+    tg->itemColor = NULL;
+tg->loadItems = loadChainWithPos;
 }
 
 void loadRnaGene(struct trackGroup *tg)
@@ -9700,6 +9864,15 @@ else if (sameWord(type, "psl"))
     if (sameString(subType, "est"))
 	group->drawItems = linkedFeaturesAverageDense;
     }
+else if (sameWord(type, "chain"))
+    {
+    char *subType = ".";
+    if (wordCount >= 2)
+       subType = words[1];
+    linkedFeaturesMethods(group);
+    if (!tdb->useScore)
+        group->colorShades = NULL;
+    }
 }
 
 struct trackGroup *trackGroupFromTrackDb(struct trackDb *tdb)
@@ -9749,8 +9922,10 @@ for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
     handler = lookupTrackHandler(tdb->tableName);
     if (handler != NULL)
 	handler(group);
-    if (group->drawItems == NULL || group->loadItems == NULL)
-	warn("No handler for %s", tdb->tableName);
+    if (group->loadItems == NULL)
+        warn("No load handler for %s", tdb->tableName);
+    else if (group->drawItems == NULL)
+        warn("No draw handler for %s", tdb->tableName);
     else
 	{
 	slAddHead(pTrackList, group);
@@ -10204,6 +10379,7 @@ registerTrackHandler("blastzBestHuman", longXenoPslMethods);
 registerTrackHandler("blastBestHuman_75", longXenoPslMethods);
 registerTrackHandler("blastBestHuman", longXenoPslMethods);
 registerTrackHandler("blastzAllHuman", longXenoPslMethods);
+registerTrackHandler("blastzChain", chainMethods);
 registerTrackHandler("xenoBestMrna", xenoMrnaMethods);
 registerTrackHandler("xenoMrna", xenoMrnaMethods);
 registerTrackHandler("xenoEst", xenoMrnaMethods);
