@@ -22,6 +22,7 @@ errAbort(
   "   -notT=chr1,chr2 - restrict target side sequence to those not named\n"
   "   -minScore=N - restrict to those scoring at least N\n"
   "   -maxScore=N - restrict to those scoring less than N\n"
+  "   -minGap=N  - restrict to those with gap size (tSize) >= minSize\n"
   "   -syn        - do filtering based on synteny.  \n"
   );
 }
@@ -60,14 +61,16 @@ double minScore, maxScore;	/* Min/max score. */
 boolean doSyn;		/* Do synteny based filtering. */
 double minSynScore = 200000;  /* Minimum score for block to be syntenic regardless. */
 double minSynSize = 20000;    /* Minimum size for syntenic block. */
+double minSynAli = 10000;     /* Minimum alignment size. */
 double maxFar = 200000;  /* Maximum distance to allow synteny. */
+int minGap = 0;		      /* Minimum gap size. */
 
 boolean synFilter(struct cnFill *fill)
 /* Filter based on synteny */
 {
 if (fill->type == NULL)
     errAbort("No type field, please run input net through netSyntenic");
-if (fill->score >= minSynScore && fill->tSize >= minSynSize)
+if (fill->score >= minSynScore && fill->tSize >= minSynSize && fill->ali >= minSynAli)
     return TRUE;
 if (sameString(fill->type, "top") || sameString(fill->type, "nonSyn"))
     return FALSE;
@@ -89,6 +92,11 @@ if (fill->chainId)
 	return FALSE;
     if (doSyn && !synFilter(fill))
 	return FALSE;
+    }
+else
+    {
+    if (fill->tSize < minGap)
+        return FALSE;
     }
 return TRUE;
 }
@@ -139,6 +147,7 @@ notQHash = hashCommaOption("notQ");
 minScore = optionInt("minScore", -BIGNUM);
 maxScore = optionInt("maxScore", BIGNUM);
 doSyn = optionExists("syn");
+minGap = optionInt("minGap", minGap);
 
 for (i=0; i<inCount; ++i)
     {
