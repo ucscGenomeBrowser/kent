@@ -2425,7 +2425,7 @@ if (strstrNoCase(organism, "human"))
 "</TD></TR>\n"
 "<TR><TD VALIGN=Top NOWRAP>D22S1037;D22S43</TD>\n"
 "	<TD WIDTH=14></TD>\n"
-"	<TD VALIGN=Top>Displays region between STS markers D22S586 and D22S43.\n"
+"	<TD VALIGN=Top>Displays region between STS markers D22S10376 and D22S43.\n"
 "Includes 100,000 bases on each side as well."
 "</TD></TR>\n"
 "<TR><TD VALIGN=Top><br></TD></TR>\n"
