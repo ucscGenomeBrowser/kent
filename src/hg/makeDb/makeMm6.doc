@@ -1,7 +1,7 @@
 # This file describes browser build for the mouse
 # genome, March 2005, ncbi mouse_34 - Mm6
 #
-#	"$Id: makeMm6.doc,v 1.5 2005/03/15 19:54:41 hiram Exp $"
+#	"$Id: makeMm6.doc,v 1.6 2005/03/15 20:04:50 hiram Exp $"
 #
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2005-03-09 - Hiram)
 #
@@ -280,9 +280,9 @@ done > contig500K.lst
     wc contig500K.lst
     #	6678   6678 176765 contig500K.lst
 
-    mkdir -p /cluster/panasas/home/store/mm6/contigs
+    mkdir -p /panasas/store/mm6/contigs
     rsync -a --progress --files-from=contig500K.lst . \
-        /cluster/panasas/home/store/mm6/contigs/
+        /panasas/store/mm6/contigs/
 
     ssh kkr1u00
     mkdir /iscratch/i/mm6
@@ -290,7 +290,7 @@ done > contig500K.lst
     cp -p /cluster/bluearc/mm6/chrom/* .
     /cluster/bin/iSync
     #	verify the contig copy above functioned OK
-    find /cluster/panasas/home/store/mm6/contigs -type f | wc
+    find /panasas/store/mm6/contigs -type f | wc
     #	6678    6678  443885
 
 # SIMPLE REPEAT TRACK (DONE - 2005-03-10 Hiram)
@@ -400,7 +400,7 @@ Submission to last job:          1934s      32.23m     0.54h    0.02d
 cd /cluster/data/mm6/$1
 pushd .
 /bin/mkdir -p /tmp/mm6/$2
-/bin/cp /cluster/panasas/home/store/mm6/contigs/$1/$2 /tmp/mm6/$2
+/bin/cp /panasas/store/mm6/contigs/$1/$2 /tmp/mm6/$2
 cd /tmp/mm6/$2
 /cluster/bluearc/RepeatMasker050112/RepeatMasker -ali -s -species mus $2
 popd
@@ -575,9 +575,9 @@ note: 394 records dropped due to repStart > repEnd
     #	check the browser, make sure it is functioning OK
 
     #	Copy to panasas unit for cluster runs
-    cp -p mm6.2bit /cluster/panasas/home/store/mm6/mm6.2bit
-    mkdir /cluster/panasas/home/store/mm6/fasta
-    time cp -p */*.fa */*.fa.masked /cluster/panasas/home/store/mm6/fasta
+    cp -p mm6.2bit /panasas/store/mm6/mm6.2bit
+    mkdir /panasas/store/mm6/fasta
+    time cp -p */*.fa */*.fa.masked /panasas/store/mm6/fasta
 
 # PREPARE "bigZips" files for public release
 #		(DONE through mrna.fa - 2005-03-15 - Hiram)
@@ -611,11 +611,11 @@ note: 394 records dropped due to repStart > repEnd
 # PREPARE LINEAGE SPECIFIC REPEAT FILES FOR BLASTZ (DONE - 2005-03-14 - Hiram)
 
     ssh kksilo
-    mkdir /cluster/panasas/home/store/mm6/rmsk
+    mkdir /panasas/store/mm6/rmsk
     cd /cluster/data/mm6
-    cp -p */chr*.fa.out /cluster/panasas/home/store/mm6/rmsk
-    mkdir /cluster/panasas/home/store/mm6/rmsk.spec
-    cd /cluster/panasas/home/store/mm6/rmsk.spec
+    cp -p */chr*.fa.out /panasas/store/mm6/rmsk
+    mkdir /panasas/store/mm6/rmsk.spec
+    cd /panasas/store/mm6/rmsk.spec
     ln -s ../rmsk/*.out .
 
     for FN in chr*.fa.out
@@ -626,7 +626,7 @@ note: 394 records dropped due to repStart > repEnd
     done
     #	takes about 30 minutes
 
-    cd /cluster/panasas/home/store/mm6
+    cd /panasas/store/mm6
     mkdir linSpecRep.notInHuman
     mkdir linSpecRep.notInRat
     mkdir linSpecRep.notInDog
@@ -660,7 +660,7 @@ note: 394 records dropped due to repStart > repEnd
     mkdir gtf pep subopt
     # Generate a list file, genome.list, of all the hard-masked contigs that 
     # *do not* consist of all-N's (which would cause genscan to blow up)
-    ls -1S /cluster/panasas/home/store/mm6/fasta/*.masked > genome.list
+    ls -1S /panasas/store/mm6/fasta/*.masked > genome.list
 
     # Create template file, gsub, for gensub2.  For example (3-line file):
     cat << '_EOF_' > gsub
@@ -687,8 +687,8 @@ note: 394 records dropped due to repStart > repEnd
     para problems > problems.0
     ssh kolossus
     cd /cluster/data/mm6/bed/genscan
-    /cluster/bin/x86_64/gsBig /cluster/panasas/home/store/mm6/fasta/chr2.fa.masked gtf/chr2.fa.gtf -trans=pep/chr2.fa.pep -subopt=subopt/chr2.fa.bed -exe=hg3rdParty/genscanlinux/genscan - par=hg3rdParty/genscanlinux/HumanIso.smat -tmp=/tmp -window=2400000
-    /cluster/bin/x86_64/gsBig /cluster/panasas/home/store/mm6/fasta/chr14.fa.masked gtf/chr14.fa.gtf -trans=pep/chr14.fa.pep -subopt=subopt/chr14.fa.bed -exe=hg3rdParty/genscanlinux/genscan - par=hg3rdParty/genscanlinux/HumanIso.smat -tmp=/tmp -window=2400000
+    /cluster/bin/x86_64/gsBig /panasas/store/mm6/fasta/chr2.fa.masked gtf/chr2.fa.gtf -trans=pep/chr2.fa.pep -subopt=subopt/chr2.fa.bed -exe=hg3rdParty/genscanlinux/genscan - par=hg3rdParty/genscanlinux/HumanIso.smat -tmp=/tmp -window=2400000
+    /cluster/bin/x86_64/gsBig /panasas/store/mm6/fasta/chr14.fa.masked gtf/chr14.fa.gtf -trans=pep/chr14.fa.pep -subopt=subopt/chr14.fa.bed -exe=hg3rdParty/genscanlinux/genscan - par=hg3rdParty/genscanlinux/HumanIso.smat -tmp=/tmp -window=2400000
 XXX - RUNNING - 2005-03-15 09:48
 
     # If a job crashes due to genscan running out of memory, re-run it 
@@ -730,12 +730,12 @@ BLASTZ_ABRIDGE_REPEATS=1
 
 # TARGET
 # Mouse
-SEQ1_DIR=/cluster/panasas/home/store/mm6/mm6.2bit
+SEQ1_DIR=/panasas/store/mm6/mm6.2bit
 # not used
-SEQ1_RMSK=/cluster/panasas/home/store/mm6/rmsk
+SEQ1_RMSK=/panasas/store/mm6/rmsk
 # not used
 SEQ1_FLAG=-rodent
-SEQ1_SMSK=/cluster/panasas/home/store/mm6/linSpecRep.notInHuman
+SEQ1_SMSK=/panasas/store/mm6/linSpecRep.notInHuman
 SEQ1_IN_CONTIGS=0
 SEQ1_CHUNK=10000000
 SEQ1_LAP=10000
@@ -772,7 +772,7 @@ SEQ2_LEN=$BASE/S2.len
     cd /cluster/data/genbank
     #	edit etc/genbank.conf, add the following section:
 # mm6
-mm6.genome = /cluster/panasas/home/store/mm6/mm6.2bit
+mm6.genome = /panasas/store/mm6/mm6.2bit
 mm6.lift = no
 mm6.downloadDir = mm6
 mm6.genbank.est.xeno.load = yes
