@@ -10,7 +10,7 @@
 #include "binRange.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: clusterGenes.c,v 1.16 2004/07/07 08:14:55 markd Exp $";
+static char const rcsid[] = "$Id: clusterGenes.c,v 1.17 2004/07/11 19:34:21 markd Exp $";
 
 /* Command line driven variables. */
 char *clChrom = NULL;
@@ -36,8 +36,8 @@ errAbort(
   "   -trackNames - If specified, input are pairs of track names and files.\n"
   "    This is useful when the file names don't reflact the desired track\n"
   "    names.\n"
-  "   -selectTrack=track - only output clusters that contain genes from this\n"
-  "    track\n"
+  "   -requiredTracks=tracks - only output clusters that contain genes from\n"
+  "    all of a whitespace or comma seperated list of tracks.\n"
   "\n"
   "The cdsConflicts and exonConflicts columns contains `y' if the cluster has\n"
   "conficts. A conflict is a cluster where all of the genes don't share exons. \n"
@@ -50,14 +50,16 @@ static struct optionSpec options[] = {
    {"chromFile", OPTION_STRING},
    {"cds", OPTION_BOOLEAN},
    {"trackNames", OPTION_BOOLEAN},
-   {"selectTrack", OPTION_STRING},
+   {"requiredTracks", OPTION_STRING},
    {NULL, 0},
 };
 
 /* from command line  */
 boolean gUseCds;
 boolean gTrackNames;
-char *gSelectTrack = NULL;
+struct track *gTracks = NULL;  /* all tracks */
+int gNumRequiredTracks = 0;
+char **gRequiredTracks = NULL;
 
 struct track
 /*  Object representing a track. */
@@ -66,6 +68,7 @@ struct track
     char *name;            /* name to use */
     char *table;           /* table or file */
     boolean isDb;          /* is this a database table or file? */
+    boolean required;      /* track is flagged required for output selection */
 };
 
 struct track* trackNew(char* name,
@@ -104,6 +107,9 @@ else
     track->name = cloneString(name);
 
 track->table = cloneString(table);
+
+if (gNumRequiredTracks > 0)
+    track->required = (stringArrayIx(track->name, gRequiredTracks, gNumRequiredTracks) > 0);
 return track;
 }
 
@@ -182,19 +188,33 @@ struct cluster
     boolean hasCdsConflicts;
     };
 
+boolean clusterHaveTrack(struct cluster *cluster,
+                         struct track *track)
+/* check if the cluster has a track */
+{
+struct clusterGene *gene;
+for (gene = cluster->genes; gene != NULL; gene = gene->next)
+    if (gene->track == track)
+        return TRUE;
+return FALSE;
+}
+
+boolean clusterHaveRequiredTracks(struct cluster *cluster)
+/* check if the cluster has all of the required tracks */
+{
+struct track *track;
+for (track = gTracks; track != NULL; track = track->next)
+    if (track->required && !clusterHaveTrack(cluster, track))
+        return FALSE;  /* missing required */
+return TRUE;
+}
+
 boolean clusterShouldSave(struct cluster *cluster)
 /* check if cluster should be saved */
 {
-if (gSelectTrack == NULL)
-    return TRUE;
-else
-    {
-    struct clusterGene *gene;
-    for (gene = cluster->genes; gene != NULL; gene = gene->next)
-        if (sameString(gene->track->name, gSelectTrack))
-            return TRUE;
-    return FALSE;
-    }
+if (gNumRequiredTracks > 0)
+    return clusterHaveRequiredTracks(cluster);
+return TRUE;  /* no restrictions */
 }
 
 void clusterDump(struct cluster *cluster)
@@ -614,8 +634,7 @@ fprintf(f, "\n");
 }
 
 void clusterGenesOnStrand(struct sqlConnection *conn,
-                          struct track* tracks, char *chrom, char strand, 
-                          FILE *f)
+                          char *chrom, char strand, FILE *f)
 /* Scan through genes on this strand, cluster, and write clusters to file. */
 {
 struct genePred *gpList = NULL;
@@ -623,7 +642,7 @@ struct cluster *clusterList = NULL, *cluster;
 struct track* track;
 struct clusterMaker *cm = clusterMakerStart(hChromSize(chrom));
 
-for (track = tracks; track != NULL; track = track->next)
+for (track = gTracks; track != NULL; track = track->next)
     loadGenes(cm, conn, track, chrom, strand, &gpList);
 
 clusterList = clusterMakerFinish(&cm);
@@ -681,7 +700,6 @@ void clusterGenes(char *outFile, char *database, int specCount, char *specs[])
 {
 struct slName *chromList, *chrom;
 struct sqlConnection *conn;
-struct track *tracks;
 FILE *f = mustOpen(outFile, "w");
 fputs("#"
       "cluster\t"
@@ -697,7 +715,7 @@ fputs("#"
       "cdsConflicts\n", f);
 
 hSetDb(database);
-tracks  = buildTrackList(specCount, specs);
+gTracks  = buildTrackList(specCount, specs);
 
 if (optionExists("chrom"))
     chromList = slNameNew(optionVal("chrom", NULL));
@@ -708,9 +726,19 @@ else
 conn = hAllocConn();
 for (chrom = chromList; chrom != NULL; chrom = chrom->next)
     {
-    clusterGenesOnStrand(conn, tracks, chrom->name, '+', f);
-    clusterGenesOnStrand(conn, tracks, chrom->name, '-', f);
+    clusterGenesOnStrand(conn, chrom->name, '+', f);
+    clusterGenesOnStrand(conn, chrom->name, '-', f);
     }
+}
+
+void parseRequiredTracks()
+/* parse the -requiredTracks option */
+{
+static char *separators = " \t\r,";
+char *trackSpec = optionVal("requiredTracks", NULL);
+gNumRequiredTracks = chopString(trackSpec, separators, NULL, 0);
+gRequiredTracks = needMem(gNumRequiredTracks * sizeof(char*));
+chopString(trackSpec, separators, gRequiredTracks, gNumRequiredTracks);
 }
 
 int main(int argc, char *argv[])
@@ -719,7 +747,9 @@ int main(int argc, char *argv[])
 optionInit(&argc, argv, options);
 gUseCds = optionExists("cds");
 gTrackNames = optionExists("trackNames");
-gSelectTrack = optionVal("selectTrack", NULL);
+if (optionExists("requiredTracks"))
+    parseRequiredTracks();
+
 if (!gTrackNames)
     {
     if (argc < 4)
