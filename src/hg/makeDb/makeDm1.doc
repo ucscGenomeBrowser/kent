@@ -2790,6 +2790,7 @@ rm $TMP/$root.ss.gz
     cd /cluster/data/dm1/bed
     mkdir blat.dm1FB
     pepPredToFa dm1 bdgpGenePep dm1FB.fa
+    hgPepPred dm1 generic blastFBPep00 dm1FB.fa
     grep ">" dm1FB.fa | sed "s/>//" > dm1FB.lst
     fbName dm1 dm1FB.lst dm1FB.mapNames
     ssh kk
