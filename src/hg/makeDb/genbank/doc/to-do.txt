@@ -663,6 +663,8 @@ Warning: NM_181796: malformed RefSeq CDS: join(76,77..708)
   xeno a synonym for medium.
 
   - allow multiple categories end up in a single track 
+  - also generalize splitting of data from a single track,
+     like intronEst
 
 - riken CDS is getting lost.
 
@@ -739,3 +741,8 @@ Error: danRer1: gene danRer1.refFlat:1854 NM_131267 chr7: NM_131267 geneName "ir
 
 - need to be able to have reload.acc local to a specify database
 
+- is all_mrna index (tName(8),tEnd) really useful?
+  NOTE: mysql will use first column of multicolumn index,
+  so one index of tName,tStart,tEnd maybe all that is needed
+
+- add smarter poly-As triming
