@@ -8,7 +8,7 @@
 #include "hdb.h"
 #include "hgRelate.h"
 
-static char const rcsid[] = "$Id: hgLoadPsl.c,v 1.29 2004/10/17 22:15:45 markd Exp $";
+static char const rcsid[] = "$Id: hgLoadPsl.c,v 1.30 2004/11/19 08:42:59 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -17,7 +17,8 @@ static struct optionSpec optionSpecs[] = {
     {"nobin", OPTION_BOOLEAN},
     {"xa", OPTION_BOOLEAN},
     {"fastLoad", OPTION_BOOLEAN},
-    {"onServer", OPTION_BOOLEAN},
+    {"onServer", OPTION_BOOLEAN},   /* this is now the default, leave in for compat */
+    {"clientLoad", OPTION_BOOLEAN},
     {"append", OPTION_BOOLEAN},
     {"keep", OPTION_BOOLEAN},
     {"table", OPTION_STRING},
@@ -207,6 +208,8 @@ if (optionExists("xa"))
     pslCreateOpts |= PSL_XA_FORMAT;
 if (!optionExists("fastLoad"))
     pslLoadOpts |= SQL_TAB_FILE_CONCURRENT;
+if (optionExists("clientLoad") && optionExists("onServer"))
+    errAbort("can't specify both -clientLoad and -onServer");
 if (!optionExists("clientLoad"))
     pslLoadOpts |= SQL_TAB_FILE_ON_SERVER;
 clTableName = optionVal("table", NULL);
