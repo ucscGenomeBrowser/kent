@@ -50,11 +50,3 @@ visibility dense
 color 150,0,0
 type genePred ensMergeTierDPep
 
-track genieAlt
-shortLabel AltGenie
-longLabel Genie Gene Predictions from Affymetrix
-priority 14
-visibility hide
-color 125,0,150
-type genePred genieAltPep
-
