@@ -314,6 +314,10 @@ struct gfRange *gfRangesBundle(struct gfRange *exonList, int maxIntron)
 {
 struct gfRange *geneList = NULL, *gene = NULL, *lastExon = NULL, *exon, *nextExon;
 
+#ifdef DEBUG 
+   printf("gfRangesBundle maxIntron=%d\n", maxIntron);
+#endif
+
 for (exon = exonList; exon != NULL; exon = nextExon)
     {
     nextExon = exon->next;
