@@ -27,7 +27,7 @@
 #include "minGeneInfo.h"
 #include <regex.h>
 
-static char const rcsid[] = "$Id: hgFind.c,v 1.160 2005/03/29 04:03:29 angie Exp $";
+static char const rcsid[] = "$Id: hgFind.c,v 1.161 2005/04/04 23:53:56 angie Exp $";
 
 extern struct cart *cart;
 char *hgAppName = "";
@@ -2135,7 +2135,6 @@ boolean hgFindUsingSpec(struct hgFindSpec *hfs, char *term,
  * in hgp and return TRUE.  (If not, don't modify hgp.) */
 {
 struct slPair *xrefList = NULL, *xrefPtr = NULL; 
-char *db = hGetDb();
 boolean found = FALSE;
 
 if (hfs == NULL || term == NULL || hgp == NULL)
@@ -2144,7 +2143,7 @@ if (hfs == NULL || term == NULL || hgp == NULL)
 if (isNotEmpty(hfs->termRegex) && ! matchRegex(term, hfs->termRegex))
     return(FALSE);
 
-if (! hTableOrSplitExistsDb(db, hfs->searchTable))
+if (! hTableOrSplitExists(hfs->searchTable))
     return(FALSE);
 
 if (isNotEmpty(hfs->searchType) && searchSpecial(hfs, term, hgp, relativeFlag,
@@ -2153,7 +2152,7 @@ if (isNotEmpty(hfs->searchType) && searchSpecial(hfs, term, hgp, relativeFlag,
 
 if (isNotEmpty(hfs->xrefTable))
     {
-    if (! hTableOrSplitExistsDb(db, hfs->xrefTable))
+    if (! hTableOrSplitExists(hfs->xrefTable))
 	return(FALSE);
     xrefList = getXrefTerms(hfs, term);
     }
