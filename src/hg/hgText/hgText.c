@@ -4029,6 +4029,7 @@ char *db = getTableDb();
 
 cart = theCart;
 getDbAndGenome(cart, &database, &organism);
+database = cloneString(database);
 hSetDb(database);
 hDefaultConnect();
 
