@@ -84,7 +84,7 @@
 #include "estOrientInfo.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.764 2004/07/16 18:43:38 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.765 2004/07/16 18:46:36 fanhsu Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
@@ -2638,10 +2638,11 @@ else
 	
 name = strdup(proteinName);
 hFreeConn(&conn);
-
+/*
 abbr(name, "000000");
 abbr(name, "00000");
 abbr(name, "0000");
+*/
 return(name);
 }
 
