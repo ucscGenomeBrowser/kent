@@ -11,7 +11,7 @@
 #include "wiggle.h"
 #include "scoredRef.h"
 
-static char const rcsid[] = "$Id: wigTrack.c,v 1.14 2003/10/10 21:49:00 hiram Exp $";
+static char const rcsid[] = "$Id: wigTrack.c,v 1.15 2003/10/14 22:21:41 hiram Exp $";
 
 /*	wigCartOptions structure - to carry cart options from wigMethods
  *	to all the other methods via the track->extraUiData pointer
@@ -367,7 +367,10 @@ for (wi = tg->items; wi != NULL; wi = wi->next)
     double dataPointsInView;	/*	number of data points to use */
     double dataValuesPerPixel;	/*  values in the data file per pixel */
     int pixelsPerDataValue;	/*  to specify drawing box width */
-    int x1 = 0;
+    int x1 = 0;			/*	screen coordinates	*/
+    int x1Starts = 0;		/*	drawing for this block starts */
+    int x1Ends = 0;		/*	drawing for this block ends */
+    int x1Span = 0;		/*	number of pixels to draw	*/
     int w,h,x2,y2;
     int loopCount = 0;	/*	to catch a runaway drawing loop */
     int dataOffset = 0;		/*	within data block during drawing */
@@ -444,6 +447,9 @@ for (wi = tg->items; wi != NULL; wi = wi->next)
 	dataOffsetStart = (dataViewStarts - wi->start)/ usingDataSpan;
 	dataOffsetEnd = wi->Count - ((wi->end - dataViewEnds) / usingDataSpan);
 	dataSpan = dataViewEnds - dataViewStarts;
+	x1Starts = xOff + ((dataViewStarts - seqStart) * pixelsPerBase);
+	x1Ends = xOff + ((dataViewEnds - seqStart) * pixelsPerBase);
+	x1Span = x1Ends - x1Starts;
 
 /* If this data block doesn't span any data (for some unknown reason)
  *	then move on to the next block of data.
@@ -463,14 +469,9 @@ for (wi = tg->items; wi != NULL; wi = wi->next)
 	prevDataOffset = -1;	/* -1 will cause the first one to be used */
 	OffsetIncrement = 1;
 
-	if (itemCount < 2) {
-snprintf(dbgMsg, DBGMSGSZ, "dataSpan: %d dataPointsInView: %.4f, dataValuesPerPixel: %.4f", dataSpan, dataPointsInView, dataValuesPerPixel);
-wigDebugPrint("DrawItems");
-	}
-
 	/*	Examine every point in this data block	*/
 	for (dataOffset = 0;
-		(dataOffset < dataPointsInView) && (loopCount < 1000000);
+		(dataOffset < (int) dataPointsInView) && (loopCount < 1000000);
 		dataOffset += OffsetIncrement)
 	    {
 	    int validData = 0;	/* count while scanning a bin	*/
@@ -500,12 +501,20 @@ wigDebugPrint("DrawItems");
 	     *	of x1, and (dataOffset+OffsetIncrement) in place of
 	     *	dataOffset.
 	     */
+	    if ((int) basesPerPixel >= dataSpan) {
+		dataOffset = dataPointsInView;
+		skippedDataPoints = dataPointsInView;
+		OffsetIncrement = dataPointsInView;
+	    } else {
 	    OffsetIncrement =
 	((x1 + 1 - xOff - ((dataViewStarts - seqStart) * pixelsPerBase)) /
 	(usingDataSpan*pixelsPerBase)) - dataOffset;
+	    }
 	    /*	Must be at least one to be moving on	*/
 	    if (OffsetIncrement < 1) OffsetIncrement = 1;
 
+	    if (OffsetIncrement > skippedDataPoints)
+		skippedDataPoints = OffsetIncrement;
 	    /*	Between the point previously checked and this one, look
 	     *	at all the points in between and find the max.  This is
 	     *	the zooming function.  Might want other functions here
@@ -514,15 +523,36 @@ wigDebugPrint("DrawItems");
 	     */
 	    dataValueMax = 0;
 	    dataValueMin = MAX_WIG_VALUE;
-	    for (j = 0; j < skippedDataPoints; ++j)
+	    if ((int) basesPerPixel >= dataSpan)
 		{
-		data = *(dataStarts + prevDataOffset + 1 + j);
-		if (data < WIG_NO_DATA)
+		if ((data = wi->Max) < WIG_NO_DATA)
 		    {
 		    dataValueMax = max(dataValueMax,data);
 		    dataValueMin = min(dataValueMin,data);
 		    ++validData;
 		    }
+		if ((data = wi->Min) < WIG_NO_DATA)
+		    {
+		    dataValueMax = max(dataValueMax,data);
+		    dataValueMin = min(dataValueMin,data);
+		    ++validData;
+		    }
+		} else {
+		    int LookedAt = 0;
+		for (j = 0; (j < skippedDataPoints) &&
+			((prevDataOffset + 1 + j) < dataOffsetEnd); ++j)
+		    {
+		    ++LookedAt;
+		    data = *(dataStarts + prevDataOffset + 1 + j);
+		    if (data < WIG_NO_DATA)
+			{
+			dataValueMax = max(dataValueMax,data);
+			dataValueMin = min(dataValueMin,data);
+			++validData;
+			}
+		    }
+		    if (skippedDataPoints > OffsetIncrement)
+			OffsetIncrement = skippedDataPoints;
 		}
 	    if (validData)
 		{
@@ -686,9 +716,6 @@ shadesOfPrimary[grayInRange(dataValue, 0, MAX_WIG_VALUE)];
 	freeMem(ReadData);
 	}	/*	Draw if span is correct	*/
     }	/*	for ( each item)	*/
-
-snprintf(dbgMsg, DBGMSGSZ, "worked through: %d items", itemCount);
-wigDebugPrint("DrawItems");
 
     /*	Do we need to draw a horizontalGrid ?	*/
     if ((vis == tvFull) && (horizontalGrid == wiggleHorizontalGridOn))
