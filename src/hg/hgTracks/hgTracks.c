@@ -84,7 +84,7 @@
 #include "estOrientInfo.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.800 2004/09/09 01:25:14 braney Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.801 2004/09/10 18:53:56 angie Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
@@ -9283,69 +9283,6 @@ puts("</FORM>");
 }
 
 
-int chromNameCmp(const void *el1, const void *el2)
-/* Compare chromosome names by number, then suffix.  el1 and el2 must be 
- * char *s that match the regex "chr([0-9]+|[A-Za-z0-9]+)(_[A-Za-z0-9_]+)". */
-{
-char *str1 = (char *)el1;
-char *str2 = (char *)el2;
-int num1 = 0, num2 = 0;
-int match1 = 0, match2 = 0;
-char suffix1[512], suffix2[512];
-
-/* get past "chr" prefix: */
-if (!startsWith("chr", str1))
-    return -1;
-if (!startsWith("chr", str2))
-    return 1;
-str1 += 3;
-str2 += 3;
-/* If only one is numeric, that one goes first. */
-/* If both are numeric, compare by number; if same number, look at suffix. */
-/* Otherwise go alph. but put M and U/Un/Un_random at end. */
-match1 = sscanf(str1, "%d%s", &num1, suffix1);
-match2 = sscanf(str2, "%d%s", &num2, suffix2);
-if (match1 && !match2)
-    return -1;
-else if (!match1 && match2)
-    return 1;
-else if (match1 && match2)
-    {
-    int diff = num1 - num2;
-    if (diff != 0)
-	return diff;
-    /* same chrom number... got suffix? */
-    if (match1 > 1 && match2 <= 1)
-	return 1;
-    else if (match1 <= 1 && match2 > 1)
-	return -1;
-    else if (match1 > 1 && match2 > 1)
-	return strcmp(suffix1, suffix2);
-    else
-	/* This shouldn't happen (duplicate chrom name passed in) */
-	return 0;
-    }
-else if (sameString(str1, "M") && !sameString(str2, "M"))
-    return 1;
-else if (!sameString(str1, "M") && sameString(str2, "M"))
-    return -1;
-else if (str1[0] == 'U' && str2[0] != 'U')
-    return 1;
-else if (str1[0] != 'U' && str2[0] == 'U')
-    return -1;
-else
-    return strcmp(str1, str2);
-}
-
-int chromSlNameCmp(const void *el1, const void *el2)
-/* Compare chromosome names by number, then suffix.  el1 and el2 must be 
- * slNames that match the regex "chr([0-9]+|[A-Za-z0-9]+)(_[A-Za-z0-9_]+)". */
-{
-struct slName *sln1 = *(struct slName **)el1;
-struct slName *sln2 = *(struct slName **)el2;
-return chromNameCmp((void *)(sln1->name), (void *)(sln2->name));
-}
-
 void chromInfoTotalRow(long long total)
 /* Make table row with total size from chromInfo. */
 {
@@ -9366,7 +9303,7 @@ struct slName *chromList = hAllChromNames();
 struct slName *chromPtr = NULL;
 long long total = 0;
 
-slSort(&chromList, chromSlNameCmp);
+slSort(&chromList, chrSlNameCmp);
 for (chromPtr = chromList;  chromPtr != NULL;  chromPtr = chromPtr->next)
     {
     unsigned size = hChromSize(chromPtr->name);
@@ -9454,6 +9391,7 @@ hgPositionsHelpHtml(organism, database);
 puts("</FORM>");
 dyStringFree(&title);
 }
+
 
 void resetVars()
 /* Reset vars except for position and database. */
