@@ -10,6 +10,7 @@ CREATE TABLE dbDb (
     nibPath longblob not null,	# Path to packed sequence files
     organism varchar(255) not null,	# Common name of organism - first letter capitalized
     defaultPos varchar(255) not null,	# Default starting position
+    active int(1) default 0 not null,   # Flag indicating whether the database is in active use
               #Indices
     PRIMARY KEY(name)
 );

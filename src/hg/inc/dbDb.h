@@ -14,6 +14,7 @@ struct dbDb
     char *nibPath;	/* Path to packed sequence files */
     char *organism;	/* Common name of organism - first letter capitalized */
     char *defaultPos;	/* Default starting position */
+        int active;     /* Flag indicating whether this db is actively used */
     };
 
 void dbDbStaticLoad(char **row, struct dbDb *ret);
