@@ -1186,10 +1186,9 @@ IN PROGRESS - MATT
 # Compile alignments and lift the files (takes a while)
 	ssh eieio
 	make bacEnds.psl.lifted
-
-# Copy files to final destination and remove
-        make copy.assembly
 DONE TO HERE - MATT FINISHING FOR TERRY
+# Copy files to final destination and remove
+        make copy.assembly - This step failed, I do not have write perms to Terry's dir
         make clean # DONT'T DO THIS (may want to wait until sure they're OK)
 
 
