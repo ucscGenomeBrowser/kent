@@ -7,6 +7,7 @@
 #include "bed.h"
 #include "psl.h"
 #include "codeBlast.h"
+#include "cogs.h"
 #include "rnaGenes.h"
 #include "hgTracks.h"
 #include "expRatioTracks.h"
@@ -78,16 +79,48 @@ tg->items = list;
 Color gbGeneColor(struct track *tg, void *item, struct vGfx *vg)
 /* Return color to draw gene in. */
 {
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr;
+char query[512];
 struct bed *bed = item;
-if (bed->strand[0] == '+')
-    return tg->ixColor;
-return tg->ixAltColor;
+struct COG *COG=NULL;
+char *temparray[160];
+char **row;
+
+if(hTableExists("COG")){
+    sprintf(query, "select * from COG where name = '%s'", bed->name);
+    sr = sqlGetResult(conn, query);
+    if ((row = sqlNextRow(sr)) != NULL)
+    	{
+   	    COG = COGLoad(row);
+  	}
+    sqlFreeResult(&sr);
+    hFreeConn(&conn);
+    initializeColors(vg);
+    if(COG!=NULL){
+        chopString(COG->code, "," , temparray, 9999);
+        return LLshadesOfCOGS[(temparray[0][0]-'A')];
+    }
+    else
+        {
+        if (bed->strand[0] == '+')
+            return tg->ixColor;
+        return tg->ixAltColor;
+        }
+    }
+else
+    {
+    if (bed->strand[0] == '+')
+            return tg->ixColor;
+        return tg->ixAltColor;
+    }
 }
 
 void gbGeneMethods(struct track *tg)
 /* Track group for genbank gene tracks */
 {
 tg->loadItems = loadBed6;
+
 tg->itemColor = gbGeneColor;
 }
 
@@ -226,6 +259,7 @@ struct codeBlast *cb, *list=NULL;
 struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr;
 char  *score;
+
 char **temparray3;
 char *temparray[16];
 char *temparray2;
@@ -238,13 +272,15 @@ int length, x, y, z;
 char codeList[16] = {'c','e','o','b','u','v','t','h','d','m','a','n','g', 'k', 'l', 'r'};
 char *codeNames[16] = 
 {"crenarchaea","euryarchaea","nanoarchaea","bacteria","eukarya","viral","thermophile","hyperthermophile","acidophile","methanogen","strict aerobe","strict anaerobe", "genus", "alkali", "halophile", "anerobe or aerobe"}; int i;
+ 
+ sprintf(query, "select * from %s where chromStart > %i AND chromEnd < %i", tg->mapName, winStart,winEnd);
+sr = sqlGetResult(conn, query);
 
-sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd, NULL, &rowOffset);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     char *thecode = NULL;
     struct slName *tmp = NULL;
-    cb = codeBlastLoad(row+rowOffset);
+    cb = codeBlastLoad(row);
     slAddHead(&list, cb);
     }
 sqlFreeResult(&sr);
@@ -295,9 +331,9 @@ if(tg->limitedVis != tvDense)
         codeLfs->noLine = TRUE;
 	for (lfs = originalLfs; lfs != NULL; lfs = lfs->next)
             {
-		lf = lfsToLf(lfs);
+	    lf = lfsToLf(lfs);
             temparray2=((char**)(lfs->features->extra))[i];
-            if (atoi(temparray2)!=-9999)
+	    if (atoi(temparray2)!=-9999)
                 {
 		lf->score=atoi(temparray2);
                 slAddHead(&lfList,lf);
@@ -318,7 +354,7 @@ slFreeList(&track);
 slFreeList(&scores);
 
 slFreeList(&codes);
-
+codeBlastFree(&list);
 }
 
 Color cbGeneColor(struct track *tg, void *item, struct vGfx *vg)
