@@ -4,14 +4,14 @@
 #include "memgfx.h"
 #include "gifLabel.h"
 
-static char const rcsid[] = "$Id: gifLabel.c,v 1.1 2003/10/13 19:27:48 kent Exp $";
+static char const rcsid[] = "$Id: gifLabel.c,v 1.2 2005/02/22 22:40:10 hiram Exp $";
 
 int gifLabelMaxWidth(char **labels, int labelCount)
 /* Return maximum pixel width of labels.  It's ok to have
  * NULLs in labels array. */
 {
 int width = 0, w, i;
-MgFont *font = mgSmallishFont();
+MgFont *font = mgMediumFont();
 for (i=0; i<labelCount; ++i)
     {
     char *label = labels[i];
@@ -31,7 +31,7 @@ static struct memGfx *altColorLabels(char **labels, int labelCount, int width)
 {
 struct memGfx *mg = NULL;
 Color c1,c2;
-MgFont *font = mgSmallishFont();
+MgFont *font = mgMediumFont();
 int lineHeight = mgFontLineHeight(font)-1;
 int height = lineHeight * labelCount, w, i;
 int y = 0;
