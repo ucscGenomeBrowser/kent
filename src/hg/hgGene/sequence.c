@@ -4,18 +4,22 @@
 #include "hash.h"
 #include "linefile.h"
 #include "dystring.h"
-#include "hgGene.h"
+#include "cheapcgi.h"
 #include "hui.h"
+#include "hdb.h"
 #include "dnautil.h"
+#include "dbDb.h"
+#include "axtInfo.h"
+#include "hgGene.h"
 
 static void printGenomicAnchor(char *table, char *itemName,
-	char *chrom, char *start, char *end)
+	char *chrom, int start, int end)
 /* Print genomic sequence anchor. */
 {
 hPrintf("<A HREF=\"http://hgwdev-kent.cse.ucsc.edu/cgi-bin/hgc?%s",
    cartSidUrlString(cart));
 hPrintf("&g=htcGeneInGenome&i=%s", itemName);
-hPrintf("&c=%s&l=%s&r=%s", chrom, start, end);
+hPrintf("&c=%s&l=%d&r=%d", chrom, start, end);
 hPrintf("&o=%s&table=%s", table, table);
 hPrintf("\" class=\"toc\">");
 }
@@ -24,23 +28,36 @@ static void genomicLink(struct sqlConnection *conn, char *geneId)
 /* Figure out known genes table, position of gene, link it. */
 {
 char *table = genomeSetting("knownGene");
-char query[512];
-struct sqlResult *sr;
-char **row;
+hPrintLinkCellStart();
+printGenomicAnchor(table, geneId, curGeneChrom, curGeneStart, curGeneEnd);
+hPrintf("Genomic</A>");
+hPrintLinkCellEnd();
+}
 
-safef(query, sizeof(query),
-	"select chrom,txStart,txEnd from %s where name='%s'",
-	table, geneId);
-sr = sqlGetResult(conn, query);
-row = sqlNextRow(sr);
-if (row != NULL)
+static void comparativeLink(struct sqlConnection *conn, char *geneId)
+/* Print comparative genomic link. */
+{
+char *table = genomeSetting("knownGene");
+if (sqlTableExists(conn, "axtInfo"))
     {
-    hPrintLinkCellStart();
-    printGenomicAnchor(table, geneId, row[0], row[1], row[2]);
-    hPrintf("Genomic</A>");
-    hPrintLinkCellEnd();
+    struct dbDb *dbList = hGetAxtInfoDbs();
+    if (dbList != NULL)
+        {
+	char *db2 = dbList->name;
+	struct axtInfo *aiList = hGetAxtAlignments(db2);
+	hPrintLinkCellStart();
+	hPrintf("<A HREF=\"../cgi-bin/hgc?%s", cartSidUrlString(cart) );
+	hPrintf("&g=htcGenePsl&i=%s&c=%s&l=%d&r=%d", 
+		geneId, curGeneChrom, curGeneStart, curGeneEnd);
+	hPrintf("&o=%s&alignment=%s&db2=%s\"",
+		table, cgiEncode(aiList->alignment), db2);
+	hPrintf(" class=\"toc\">");
+	hPrintf("Comparative</A>");
+	hPrintLinkCellEnd();
+	dbDbFreeList(&dbList);
+	}
     }
-sqlFreeResult(&sr);
+http://hgwdev-kent.cse.ucsc.edu/cgi-bin/hgc?hgsid=61332&g=htcGenePsl&i=D26481&c=chr1&l=46764895&r=46777037&o=knownGene&alignment=Blastz+Best+in+Genome&db2=mm3&xyzzy=xyzzy#startcodon
 }
 
 static void printSeqLink(struct sqlConnection *conn, char *geneId,
@@ -86,6 +103,7 @@ static void sequencePrint(struct section *section, struct sqlConnection *conn,
 {
 hPrintLinkTableStart();
 genomicLink(conn, geneId);
+comparativeLink(conn, geneId);
 printMrnaLink(conn,geneId);
 printProteinLink(conn,geneId);
 hPrintLinkTableEnd();

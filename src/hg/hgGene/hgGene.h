@@ -59,6 +59,9 @@ struct section *xyzOrgsSection(struct sqlConnection *conn,
 char *genomeSetting(char *name);
 /* Return genome setting value.   Aborts if setting not found. */
 
+char *genomeOptionalSetting(char *name);
+/* Returns genome setting value or NULL if not found. */
+
 void hPrintf(char *format, ...);
 /* Print out some html.  Check for write error so we can
  * terminate if http connection breaks. */
@@ -95,6 +98,17 @@ void doGetProteinSeq(struct sqlConnection *conn, char *geneId, char *geneName);
 #define hggOrg "org"		/* Organism we're working on. */
 #define hggDb "db"		/* Database we're working on. */
 #define hggGene "hgg_gene"	/* Main gene id. */
+#define hggChrom "hgg_chrom"	/* Chromosome gene is on. */
+#define hggStart "hgg_start"	/* Start position. */
+#define hggEnd	"hgg_end"	/* End position. */
 
 /* -------- Global Variables --------*/
-struct cart *cart;	/* This holds cgi and other variables between clicks. */
+extern struct cart *cart;	/* This holds cgi and other variables between clicks. */
+extern struct hash *oldCart;	/* Old cart hash. */
+extern char *database;		/* Name of genome database - hg15, mm3, or the like. */
+extern char *genome;		/* Name of genome - mouse, human, etc. */
+extern char *curGeneId;	/* Current Gene Id. */
+extern char *curGeneName;		/* Biological name of gene. */
+extern char *curGeneChrom;	/* Chromosome current gene is on. */
+extern int curGeneStart,curGeneEnd;	/* Position in chromosome. */
+

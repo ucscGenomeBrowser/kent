@@ -13,7 +13,7 @@
 #include "ra.h"
 #include "hgGene.h"
 
-static char const rcsid[] = "$Id: hgGene.c,v 1.5 2003/10/12 06:12:06 kent Exp $";
+static char const rcsid[] = "$Id: hgGene.c,v 1.6 2003/10/12 18:51:40 kent Exp $";
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
@@ -22,7 +22,9 @@ char *database;		/* Name of genome database - hg15, mm3, or the like. */
 char *genome;		/* Name of genome - mouse, human, etc. */
 char *curGeneId;	/* Current Gene Id. */
 char *curGeneName;		/* Biological name of gene. */
-struct hash *genomeSettings;  /* Genome-specific settings from settings.ra. */
+char *curGeneChrom;	/* Chromosome current gene is on. */
+int curGeneStart,curGeneEnd;	/* Position in chromosome. */
+
 
 void usage()
 /* Explain usage and exit. */
@@ -49,10 +51,18 @@ struct hash *readRa(char *rootName, struct hash **retHashOfHash)
 return hgReadRa(genome, database, rootDir, rootName, retHashOfHash);
 }
 
+static struct hash *genomeSettings;  /* Genome-specific settings from settings.ra. */
+
 char *genomeSetting(char *name)
 /* Return genome setting value.   Aborts if setting not found. */
 {
 return hashMustFindVal(genomeSettings, name);
+}
+
+char *genomeOptionalSetting(char *name)
+/* Returns genome setting value or NULL if not found. */
+{
+return hashFindVal(genomeSettings, name);
 }
 
 static void getGenomeSettings()
@@ -312,6 +322,55 @@ printIndex(sectionList);
 printSections(sectionList, conn, curGeneId);
 }
 
+static void getGenePosition(struct sqlConnection *conn)
+/* Get gene position - from cart if it looks valid,
+ * otherwise from database. */
+{
+char *oldGene = hashFindVal(oldCart, hggGene);
+char *oldChrom = hashFindVal(oldCart, hggChrom);
+char *oldStarts = hashFindVal(oldCart, hggStart);
+char *oldEnds = hashFindVal(oldCart, hggEnd);
+char *newGene = curGeneId;
+char *newChrom = cartOptionalString(cart, hggChrom);
+char *newStarts = cartOptionalString(cart, hggStart);
+char *newEnds = cartOptionalString(cart, hggEnd);
+
+if (newChrom != NULL && newStarts != NULL && newEnds != NULL)
+    {
+    if (oldGene == NULL || oldStarts == NULL || oldEnds == NULL
+    	|| sameString(oldGene, newGene))
+	{
+	curGeneChrom = newChrom;
+	curGeneStart = atoi(newStarts);
+	curGeneEnd = atoi(newEnds);
+	return;
+	}
+    }
+
+/* If we made it to here we can't find/don't trust the cart position
+ * info.  We'll look it up from the database instead. */
+    {
+    char *table = genomeSetting("knownGene");
+    char query[256];
+    struct sqlResult *sr;
+    char **row;
+    safef(query, sizeof(query), 
+    	"select chrom,txStart,txEnd from %s where name = '%s'"
+	, table, curGeneId);
+    sr = sqlGetResult(conn, query);
+    row = sqlNextRow(sr);
+    if (row != NULL)
+        {
+	curGeneChrom = cloneString(row[0]);
+	curGeneStart = atoi(row[1]);
+	curGeneEnd = atoi(row[2]);
+	}
+    else
+        errAbort("Couldn't find %s in %s.%s", curGeneId, database, table);
+    sqlFreeResult(&sr);
+    }
+}
+
 void cartMain(struct cart *theCart)
 /* We got the persistent/CGI variable cart.  Now
  * set up the globals and make a web page. */
@@ -323,6 +382,7 @@ hSetDb(database);
 conn = hAllocConn();
 curGeneId = cartString(cart, hggGene);
 getGenomeSettings();
+getGenePosition(conn);
 curGeneName = getGeneName(curGeneId, conn);
 
 /* Check command variables, and do the ones that
@@ -350,6 +410,7 @@ cgiSpoof(&argc, argv);
 htmlSetStyle(htmlStyleUndecoratedLink);
 if (argc != 1)
     usage();
+oldCart = hashNew(12);
 cartEmptyShell(cartMain, hUserCookie(), excludeVars, oldCart);
 return 0;
 }
