@@ -10,15 +10,16 @@ void usage()
 errAbort(
   "kgXref - create Known Gene cross reference table kgXref.tab file."
   "usage:\n"
-  "   kgXref xxxx yyyy\n"
-  "          xxxx is genome  database name\n"
-  "          yyyy is protein database name \n"
-  "example: kgXref hg15 proteins0405\n");
+  "   kgXref <db> <proteinsYYMMDD> <ro_db>\n"
+  "          <db> is known Genes database under construction\n"
+  "          <proteinsYYMMDD> is protein database name \n"
+  "          <ro_db> is target organism database\n"
+  "example: kgXref kgDB proteins040115 hg16\n");
 }
 
 int main(int argc, char *argv[])
     {
-    struct sqlConnection *conn, *conn2;
+    struct sqlConnection *conn, *conn2, *conn3;
     char query[256], query2[256];
     struct sqlResult *sr, *sr2;
     char **row, **row2;
@@ -32,6 +33,7 @@ int main(int argc, char *argv[])
     FILE *o1;
     char *database;
     char *proteinDB;
+    char *ro_DB;
     char *refSeqName;
     char *hugoID;
     char *protAcc;	// protein Accession number from NCBI
@@ -40,12 +42,14 @@ int main(int argc, char *argv[])
     int leg;		// marker for debugging
     char *mRNA, *spID, *spDisplayID, *geneSymbol, *refseqID, *desc;
 
-    if (argc != 3) usage();
+    if (argc != 4) usage();
     database  = cloneString(argv[1]);
     proteinDB = cloneString(argv[2]);
+    ro_DB = cloneString(argv[3]);
 
     conn = hAllocConn();
     conn2= hAllocConn();
+    conn3= hAllocConn();
 
     o1 = fopen("j.dat", "w");
 	
@@ -77,17 +81,17 @@ int main(int argc, char *argv[])
 	    leg = 1;
             // special processing for RefSeq DNA based genes
             sprintf(cond_str, "mrnaAcc = '%s'", kgID);
-            refSeqName = sqlGetField(conn, database, "refLink", "name", cond_str);
+            refSeqName = sqlGetField(conn3, ro_DB, "refLink", "name", cond_str);
             if (refSeqName != NULL)
                 {
 		//printf("leg 1\n");fflush(stdout);
                 geneSymbol = cloneString(refSeqName);
 		refseqID   = kgID;
             	sprintf(cond_str, "mrnaAcc = '%s'", kgID);
-            	desc = sqlGetField(conn, database, "refLink", "product", cond_str);
+            	desc = sqlGetField(conn3, ro_DB, "refLink", "product", cond_str);
 		
 		sprintf(cond_str, "mrnaAcc='%s'", refseqID);
-        	answer = sqlGetField(conn, database, "refLink", "protAcc", cond_str);
+        	answer = sqlGetField(conn3, ro_DB, "refLink", "protAcc", cond_str);
         	if (answer != NULL)
             	    {
 	    	    protAcc = strdup(answer);
@@ -116,7 +120,7 @@ int main(int argc, char *argv[])
 		refseqID = strdup(answer);
 		
 		sprintf(cond_str, "mrnaAcc='%s'", refseqID);
-        	answer = sqlGetField(conn, database, "refLink", "protAcc", cond_str);
+        	answer = sqlGetField(conn3, ro_DB, "refLink", "protAcc", cond_str);
         	if (answer != NULL)
             	    {
 	    	    protAcc = strdup(answer);
@@ -129,7 +133,7 @@ int main(int argc, char *argv[])
 		if (strlen(refseqID) != 0)
 			{
 			sprintf(cond_str, "mrnaAcc = '%s'", refseqID);
-			answer = sqlGetField(conn, database, "refLink", "name", cond_str);
+			answer = sqlGetField(conn3, ro_DB, "refLink", "name", cond_str);
 			if (answer != NULL) 
 				{
 				leg = 24;
