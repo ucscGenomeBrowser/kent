@@ -25,6 +25,9 @@ struct browserTable
     unsigned short private;	/* True(1) if private, false(0) otherwise. */
     unsigned short useScore;	/* If True(1) use score information in table, only shades of gray color supported. */
     unsigned short isSplit;	/* True(1) if table is split over different chromosomes. i.e. chrN_est */
+    unsigned short isPlaced;	/* True(1) if the table has positional information. */
+    char startName[33];		/* The name of the field with the start position. */
+    char endName[33];		/* The name of the field with the end position. */
     int priority;	/* Priority to load tracks in, i.e. order to load tracks in. */
     char *credit;	/* Who to credit/blame for information in table. */
     char *url;	/* Link to more information about track. */
