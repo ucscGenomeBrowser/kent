@@ -2431,8 +2431,13 @@ Submission to last job:        169197s    2819.95m    47.00h    1.96d
 	echo "done: ${I}"
     done
     # this is a 55 minute job
+    #	Check results
+    #	featureBits hg16 blastzRn3
+    #	1013603401 bases of 2865248791 (35.376%) in intersection
+    #	featureBits hg17 blastzRn3
+    #	1013003285 bases of 2866216770 (35.343%) in intersection
 
-# CHAIN Rn3 BLASTZ (DONE - 2004-06-14 - Hiram)
+# CHAIN RN3 BLASTZ (DONE - 2004-06-14 - Hiram)
 
 # The axtChain is best run on the small kluster, or the kk9 kluster
     ssh kki
@@ -2494,8 +2499,12 @@ doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain} out/$(
         hgLoadChain hg17 ${c}_chainRn3 $i
         echo done $c
     end
+    #	featureBits hg17 chainRn3
+    #	2826192649 bases of 2866216770 (98.604%) in intersection
+    #	featureBits hg16 chainRn3
+    #	2830563493 bases of 2865248791 (98.789%) in intersection
 
-# NET RN3 (WORKING - 2004-06-14 - Hiram)
+# NET RN3 (DONE - 2004-06-15 - Hiram)
 
     ssh eieio
     cd /cluster/data/hg17/bed/blastz.rn3/axtChain
@@ -2555,10 +2564,9 @@ doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain} out/$(
     # 2820958389 bases of 2865248791 (98.454%) in intersection
 
     # featureBits hg17 syntenyNetRn3
-XXXX - running 2004-06-14 14:10
-    # 2804467412 bases of 2865248791 (97.879%) in intersection
+    # 2780883450 bases of 2866216770 (97.023%) in intersection
     # featureBits hg16 syntenyNetRn3
-    # 2786960572 bases of 2865248791 (97.268%) in intersection
+    # 2784011730 bases of 2865248791 (97.165%) in intersection
 
     # Add entries for net and chain to rat/hg17 trackDb
 
@@ -2567,10 +2575,9 @@ XXXX - running 2004-06-14 14:10
     cd /cluster/data/hg17/bed/blastz.rn3/axtChain
     mkdir ratNet
     time netSplit rat.net ratNet
-XXXX - running 2004-06-14 14:00
-    # real    10m44.479s
-    # user    6m43.680s
-    # sys     1m20.860s
+    #	real    12m1.478s
+    #	user    8m35.050s
+    #	sys     1m7.230s
 
     mkdir ../axtNet
     foreach n (ratNet/chr*.net)
@@ -2596,7 +2603,7 @@ XXXX - running 2004-06-14 14:00
     cp -p *.axt /usr/local/apache/htdocs/goldenPath/hg17/vsRn3/axtNet
     cd /usr/local/apache/htdocs/goldenPath/hg17/vsRn3/axtNet
     gzip *.axt
-    # add README.txt file to dir, if needed
+    # add README.txt file to dir (use previous assembly's copy as template)
 
     #  Convert those axt files to psl
     ssh eieio
@@ -2613,24 +2620,25 @@ XXXX - running 2004-06-14 14:00
     # Load tables
     ssh hgwdev
     cd /cluster/data/hg17/bed/blastz.rn3/pslBest
-    time /cluster/bin/i386/hgLoadPsl hg17 chr*_blastzBestRn3.psl
-    # real    10m47.853s
-    # user    2m48.700s
-    # sys     0m24.250s
+    for I in chr*BestRn3.psl
+    do
+	/cluster/bin/i386/hgLoadPsl hg17 ${I}
+	echo "done ${I}"
+    done
 
      # check results
     # featureBits hg17 blastzBestRn3
-    # 996722004 bases of 2865248791 (34.787%) in intersection
-    # featureBits hg17 blastzBestMm3
-    # 1007362800 bases of 2865248791 (35.158%) in intersection
+    #	970005525 bases of 2866216770 (33.843%) in intersection
+    # featureBits hg16 blastzBestRn3
+    #	976121391 bases of 2865248791 (34.068%) in intersection
 
     # Make /gbdb links and add them to the axtInfo table:
-     mkdir -p /gbdb/hg17/axtBestRn3
-     cd /gbdb/hg17/axtBestRn3
+     mkdir -p /gbdb/hg17/axtBest/Rn3
+     cd /gbdb/hg17/axtBest/Rn3
      ln -s /cluster/data/hg17/bed/blastz.rn3/axtNet/chr*.axt .
      cd /cluster/data/hg17/bed/blastz.rn3/axtNet
      rm -f axtInfoInserts.sql
-     foreach f (/gbdb/hg17/axtBestRn3/chr*.axt)
+     foreach f (/gbdb/hg17/axtBest/Rn3/chr*.axt)
        set chr=$f:t:r
        echo "INSERT INTO axtInfo (species, alignment, chrom, fileName) \
                 VALUES ('rn3','Blastz Best in Genome','$chr','$f');" \
@@ -2641,7 +2649,6 @@ XXXX - running 2004-06-14 14:00
     hgsql hg17 < axtInfoInserts.sql
 
 # MAKING RAT SYNTENY (NOT YET - 2004-06-14 - Hiram)
-#	table blastzBestRn3 does not exist
 
 ssh hgwdev
 mkdir /cluster/data/hg17/bed/syntenyRn3
@@ -2651,12 +2658,52 @@ cd /cluster/data/hg17/bed/syntenyRn3
 cp -p /cluster/data/hg16/bed/syntenyMm3/*.pl .
 cp -p /cluster/data/hg16/bed/syntenyMm3/*.sh .
 
+XXXX - running - 2004-06-15 09:50
 ./syntenicBest.pl -db=hg17 -table=blastzBestRn3
 ./smooth.pl
 ./joinsmallgaps.pl
 ./fillgap.pl -db=hg17 -table=blastzBestRn3
 ./synteny2bed.pl
 hgLoadBed hg17 syntenyMm3 ucsc100k.bed
+
+
+# MAKING RAT AXTTIGHT FROM AXTBEST (DONE - 2004-06-15 - Hiram)
+    # After creating axtBest alignments above, use subsetAxt to get axtTight:
+    ssh eieio
+    cd /cluster/data/hg17/bed/blastz.rn3/axtNet
+    mkdir -p ../axtTight
+    foreach i (*.axt)
+      echo $i
+      subsetAxt  $i ../axtTight/$i \
+        ~kent/src/hg/mouseStuff/subsetAxt/coding.mat 3400
+    end
+
+    # translate to psl
+    cd ../axtTight
+    mkdir ../pslTight
+    foreach i (*.axt)
+      set c = $i:r
+      axtToPsl $i ../S1.len ../S2.len ../pslTight/${c}_blastzTightRn3.psl
+      echo "Done: $i"
+    end
+
+    # Load tables into database
+    ssh hgwdev
+    cd /cluster/data/hg17/bed/blastz.rn3/pslTight
+    for I in chr*TightRn3.psl
+    do
+	/cluster/bin/i386/hgLoadPsl hg17 ${I}
+	echo "done ${I}"
+    done
+
+    # copy  axt's to download area
+    ssh hgwdev
+    cd /cluster/data/hg17/bed/blastz.rn3/axtTight
+    mkdir -p /usr/local/apache/htdocs/goldenPath/hg17/vsRn3/axtTight
+    cp -p *.axt /usr/local/apache/htdocs/goldenPath/hg17/vsRn3/axtTight
+    cd /usr/local/apache/htdocs/goldenPath/hg17/vsRn3/axtTight
+    gzip *.axt
+    # add README.txt file to dir (use previous assembly's copy as template)
 
 # BLASTZ CHICKEN (GALGAL2) (WORKING - 2004-06-14 - Fan)
 
