@@ -16,7 +16,7 @@ boolean noIntrons = FALSE;
 boolean singleHit = FALSE;
 boolean noHead = FALSE;
 boolean quiet = FALSE;
-int minNearTopSize = 20;
+int minNearTopSize = 30;
 
 void usage()
 /* Print usage instructions and exit. */
@@ -41,7 +41,7 @@ errAbort(
     "    -nearTop=0.N how much can deviate from top and be taken\n"
     "               default is 0.01\n"
     "    -minNearTopSize=N  Minimum size of alignment that is near top\n"
-    "               for aligmnent to be kept.  Default 20.\n");
+    "               for aligmnent to be kept.  Default 30.\n");
 }
 
 int calcMilliScore(struct psl *psl)
@@ -73,6 +73,7 @@ for (i=1; i<blockCount; ++i)
     qe = qs + sz;
     te = ts + sz;
     }
+if (bonus > 10) bonus = 10;
 return bonus;
 }
 
@@ -94,6 +95,13 @@ int score = calcMilliScore(psl) + sizeFactor(psl);
 return score;
 }
 
+boolean uglyTarget(struct psl *psl)
+/* Return TRUE if it's the one we're snooping on. */
+{
+return sameString(psl->qName, "AF103731");
+}
+
+
 boolean closeToTop(struct psl *psl, int *scoreTrack)
 /* Returns TRUE if psl is near the top scorer for at least 20 bases. */
 {
@@ -102,12 +110,16 @@ int threshold = round(milliScore * (1.0+nearTop));
 int i, blockIx;
 int start, size, end;
 int topCount = 0;
+char strand = psl->strand[0];
 
+if (uglyTarget(psl)) uglyf("%s:%d milliScore %d, threshold %d\n", psl->tName, psl->tStart, milliScore, threshold);
 for (blockIx = 0; blockIx < psl->blockCount; ++blockIx)
     {
     start = psl->qStarts[blockIx];
     size = psl->blockSizes[blockIx];
     end = start+size;
+    if (strand == '-')
+	reverseIntRange(&start, &end, psl->qSize);
     for (i=start; i<end; ++i)
 	{
 	if (scoreTrack[i] <= threshold)
@@ -143,17 +155,21 @@ AllocArray(scoreTrack, qSize+1);
 for (psl = pslList; psl != NULL; psl = psl->next)
     {
     int blockIx;
+    char strand = psl->strand[0];
     milliScore = calcMilliScore(psl);
     if (milliScore >= milliMin)
 	{
 	++goodAliCount;
 	milliScore += sizeFactor(psl);
+if (uglyTarget(psl)) uglyf("@%s:%d milliScore %d\n", psl->tName, psl->tStart, milliScore);
 	for (blockIx = 0; blockIx < psl->blockCount; ++blockIx)
 	    {
 	    int start = psl->qStarts[blockIx];
 	    int size = psl->blockSizes[blockIx];
 	    int end = start+size;
 	    int i;
+	    if (strand == '-')
+	        reverseIntRange(&start, &end, psl->qSize);
 	    if (start < 0 || end > qSize)
 		{
 		warn("Odd: qName %s tName %s qSize %d psl->qSize %d start %d end %d",
@@ -172,12 +188,14 @@ for (psl = pslList; psl != NULL; psl = psl->next)
 	    }
 	}
     }
+if (uglyTarget(pslList)) uglyf("---finding best---\n");
 /* Print out any alignments that are within 2% of top score. */
 for (psl = pslList; psl != NULL; psl = psl->next)
     {
     if (calcMilliScore(psl) >= milliMin && closeToTop(psl, scoreTrack)
         && psl->match + psl->repMatch >= minCover * psl->qSize)
 	{
+if (uglyTarget(psl)) uglyf("accepted\n");
 	pslTabOut(psl, bestFile);
 	++bestAliCount;
 	}

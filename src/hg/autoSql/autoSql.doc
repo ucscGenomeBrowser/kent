@@ -253,7 +253,7 @@ fieldSize:
 	number
 	fieldName
 
-name:  A series of letters and digits, starting with a letter.
+name:  A series of letters, digits, or '_', starting with a letter.
 
 number: A series of digits
 

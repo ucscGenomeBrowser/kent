@@ -214,7 +214,7 @@ return gotRepeat;
 
 
 
-boolean ffFindGoodOligo(DNA *needle, int needleLength, double maxProb, double freq[4],
+static boolean ffFindGoodOligo(DNA *needle, int needleLength, double maxProb, double freq[4],
     DNA **rOligo, int *rOligoLength, double *rOligoProb)
 /* Find an oligo that's suitably improbable and doesn't contain 
  * short internal repeats. */
@@ -241,193 +241,6 @@ for (;;)
     else
         return TRUE;
     }
-}
-
-int ffScoreMatch(DNA *a, DNA *b, int size)
-/* Compare two pieces of DNA base by base. Total mismatches are
- * subtracted from total matches and returned as score. 'N's 
- * neither hurt nor help score. */
-{
-int i;
-int score = 0;
-for (i=0; i<size; ++i)
-    {
-    DNA aa = a[i];
-    DNA bb = b[i];
-    if (aa == 'n' || bb == 'n')
-        continue;
-    if (aa == bb)
-        ++score;
-    else
-        score -= 1;
-    }
-return score;
-}
-
-int ffCalcCdnaGapPenalty(int hGap, int nGap)
-/* Return gap penalty for given h and n gaps. */
-{
-int acc = 2;
-if (hGap > 100000)	/* Discourage really long introns. */
-    {
-    acc += (hGap - 100000)/3000;
-    if (hGap > ffIntronMax)
-        acc += (hGap - ffIntronMax)/2000;
-    }
-if (hGap < 0)   /* Discourage jumping back in haystack. */
-    {
-    hGap = -8*hGap;
-    if (hGap > 48)
-        hGap = (hGap*hGap);
-    }
-if (nGap < 0)   /* Jumping back in needle gets rid of previous alignment. */
-    {
-    acc += -nGap;
-    nGap = 0;
-    }
-return acc + digitsBaseTwo(hGap+nGap);
-}
-
-static int calcTightGap(int hGap, int nGap)
-/* Figure out gap penalty using tight model (gaps bad!) */
-{
-if (hGap == 0 && nGap == 0)
-    return 0;
-else
-    {
-    int overlap = min(hGap, nGap);
-    int penalty = 8;
-    if (overlap < 0)
-	overlap = 0;
-
-    if (hGap < 0)
-	hGap = -8*hGap;
-    if (nGap < 0)
-	nGap = -2*nGap;
-    penalty += (hGap-overlap + nGap-overlap) + overlap;
-    return penalty;
-    }
-}
-
-static int calcLooseGap(int hGap, int nGap)
-/* Figure out gap penalty using loose model (gaps not so bad) */
-{
-if (hGap == 0 && nGap == 0)
-    return 0;
-else
-    {
-    int overlap = min(hGap, nGap);
-    int penalty = 8;
-    if (overlap < 0)
-	overlap = 0;
-
-    if (hGap < 0)
-	hGap = -8*hGap;
-    if (nGap < 0)
-	nGap = -2*nGap;
-    penalty += log(hGap-overlap+1) + log(nGap-overlap+1);
-    return penalty;
-    }
-}
-
-
-int ffCalcGapPenalty(int hGap, int nGap, enum ffStringency stringency)
-/* Return gap penalty for given h and n gaps. */
-{
-switch (stringency)
-    {
-    case ffCdna:
-	return ffCalcCdnaGapPenalty(hGap, nGap);
-    case ffTight:
-	return calcTightGap(hGap,nGap);
-    case ffLoose:
-	return calcLooseGap(hGap,nGap);
-    default:
-        errAbort("Unknown stringency type %d", stringency);
-	return 0;
-    }
-}
-
-
-int ffCdnaGapPenalty(struct ffAli *left, struct ffAli *right)
-/* What is penalty for gap between two. */
-{
-int hGap = right->hStart - left->hEnd;
-int nGap = right->nStart - left->nEnd;
-return ffCalcCdnaGapPenalty(hGap, nGap);
-}
-
-int ffGapPenalty(struct ffAli *left, struct ffAli *right, enum ffStringency stringency)
-/* What is penalty for gap between two given stringency? */
-{
-int hGap = right->hStart - left->hEnd;
-int nGap = right->nStart - left->nEnd;
-return ffCalcGapPenalty(hGap, nGap, stringency);
-}
-
-int ffScoreSomeAlis(struct ffAli *ali, int count, enum ffStringency stringency)
-/* Figure out score of count alis. */
-{
-int score = 0;
-int oneScore;
-
-while (--count >= 0)
-    {
-    int len = ali->hEnd - ali->hStart;
-    struct ffAli *right = ali->right;
-    oneScore = dnaScoreMatch(ali->hStart, ali->nStart, len);
-    score += oneScore;
-    if (count > 0)  /* Calculate gap penalty */
-        score -= ffGapPenalty(ali, right,stringency);
-    ali = right;
-    }
-return score;
-}
-
-int ffScoreSomething(struct ffAli *ali, enum ffStringency stringency,
-   boolean isProt)
-/* Score alignment. */
-{
-int score = 0;
-int oneScore;
-int (*scoreMatch)(char *a, char *b, int size);
-
-if (ali == NULL)
-    return -0x7FFFFFFF;
-scoreMatch = (isProt ? aaScoreMatch : dnaScoreMatch );
-while (ali->left != NULL) ali = ali->left;
-while (ali != NULL)
-    {
-    int len = ali->hEnd - ali->hStart;
-    struct ffAli *right = ali->right;
-    oneScore = scoreMatch(ali->hStart, ali->nStart, len);
-    score += oneScore;
-    if (right)  /* Calculate gap penalty */
-        {
-        score -= ffGapPenalty(ali, right, stringency);
-        }
-    ali = right;
-    }
-return score;
-}
-
-int ffScore(struct ffAli *ali, enum ffStringency stringency)
-/* Score alignment. */
-{
-return ffScoreSomething(ali, stringency, FALSE);
-}
-
-int ffScoreCdna(struct ffAli *ali)
-/* Figure out overall score of this alignment. 
- * Perfect match is number of bases in needle. */
-{
-return ffScore(ali, ffCdna);
-}
-
-int ffScoreProtein(struct ffAli *ali, enum ffStringency stringency)
-/* Figure out overall score of protein alignment. */
-{
-return ffScoreSomething(ali, stringency, TRUE);
 }
 
 static boolean leftNextMatch(struct ffAli *ali, DNA *ns, DNA *ne, DNA *hs, DNA *he, 
@@ -704,41 +517,6 @@ for (i = 0; i<=endIx; ++i)
 return FALSE;
 }
 
-void ffExpandExactRight(struct ffAli *ali, DNA *needleEnd, DNA *hayEnd)
-/* Expand aligned segment to right as far as can exactly. */
-{
-DNA *nEnd = ali->nEnd;
-DNA *hEnd = ali->hEnd;
-while (nEnd < needleEnd && hEnd < hayEnd)
-    {
-    if (*nEnd != *hEnd)
-        break;
-    nEnd += 1;
-    hEnd += 1;
-    }
-ali->nEnd = nEnd;
-ali->hEnd = hEnd;
-return;
-}
-
-void ffExpandExactLeft(struct ffAli *ali, DNA *needleStart, DNA *hayStart)
-/* Expand aligned segment to left as far as can exactly. */
-{
-DNA *nStart = ali->nStart-1;
-DNA *hStart = ali->hStart-1;
-while (nStart >= needleStart && hStart >= hayStart)
-    {
-    if (*nStart != *hStart)
-        break;
-    nStart -= 1;
-    hStart -= 1;
-    }
-ali->nStart = nStart + 1;
-ali->hStart = hStart + 1;
-return;
-}
-
-
 static int countAlis(struct ffAli *ali)
 /* Count number of blocks in alignment. */
 {
@@ -755,52 +533,6 @@ while (ali)
 return count;
 }
 
-
-struct ffAli *ffRemoveEmptyAlis(struct ffAli *ali, boolean doFree)
-/* Remove empty blocks from list. Optionally free empties too. */
-{
-struct ffAli *leftAli;
-struct ffAli *startAli;
-struct ffAli *rightAli;
-
-/* Figure out left most non-empty ali. */
-while (ali->left)
-    ali = ali->left;
-while (ali)
-    {
-    /* If current ali is empty, chuck it out. */
-    if (ali->nEnd <= ali->nStart || ali->hEnd <= ali->hStart)
-	{
-	struct ffAli *empty = ali;
-        ali = ali->right;
-	if (doFree) freeMem(empty);
-	}
-    else
-        break;
-    }
-ali->left = NULL;
-
-/* Get rid of empty middle alis. */
-startAli = leftAli = ali;
-ali = ali->right;
-while (ali)
-    {
-    rightAli = ali->right;
-    if (ali->nEnd <= ali->nStart || ali->hEnd <= ali->hStart)
-        {
-        leftAli->right = rightAli;
-        if (rightAli != NULL)
-            rightAli->left = leftAli;
-	if (doFree) freeMem(ali);
-        }
-    else
-        {
-        leftAli = ali;
-        }
-    ali = rightAli;
-    }
-return startAli;
-}
 
 static struct ffAli *reconsiderAlignedGaps(struct ffAli *ali)
 /* If the gap between two blocks is the same in both needle and
@@ -835,105 +567,6 @@ for (;;)
              * care of empty shell of left later. */
             a->hStart = left->hEnd = left->hStart;
             a->nStart = left->nEnd = left->nStart;
-            }
-        }
-    }
-return ali;
-}
-
-struct ffAli *ffMergeHayOverlaps(struct ffAli *ali)
-/* Remove overlaps in haystack that perfectly abut in needle.
- * These are transformed into perfectly abutting haystacks
- * that have a gap in the needle. */
-{
-struct ffAli *a = NULL;
-struct ffAli *leftA = NULL;
-
-if (ali == NULL)
-    return NULL;
-a = ali;
-for (;;)
-    {
-    int nOverlap;
-    int hOverlap;
-    int aSize;
-
-    /* Advance to next ali */
-    leftA = a;
-    a = a->right;
-    if (a == NULL)
-        break;
-
-    nOverlap = leftA->nEnd - a->nStart;
-    hOverlap = leftA->hEnd - a->hStart;
-    aSize = a->nEnd - a->nStart;
-    if (hOverlap > 0 && hOverlap < aSize && nOverlap <= 0)
-        {
-        a->hStart += hOverlap;
-        a->nStart += hOverlap;
-        }
-    }
-return ali;
-}
-
-struct ffAli *ffMergeNeedleAlis(struct ffAli *ali, boolean doFree)
-/* Remove overlapping areas needle in alignment. Assumes ali is sorted on
- * ascending nStart field. Also merge perfectly abutting neighbors.*/
-{
-struct ffAli *a = NULL;
-struct ffAli *leftA = NULL;
-struct ffAli *rightA;
-
-if (ali == NULL)
-    return NULL;
-rightA = ali;
-for (;;)
-    {
-    /* Advance to next ali */
-    leftA = a;
-    a = rightA;
-    if (a == NULL)
-        break;
-    rightA = a->right;
-    
-
-    /* See if can merge current alignment into left one. */
-    if (leftA != NULL)
-        {
-        int overlap = leftA->nEnd - a->nStart;
-
-        /* Deal with overlaps in needle */
-        if (overlap > 0)
-            {
-            /* See if left encompasses current segment. */
-            if (leftA->nStart <= a->nStart && leftA->nEnd >= a->nEnd)
-                {
-                /* Eliminate current segment. */
-                leftA->right = rightA;
-                if (rightA != NULL)
-                    rightA->left = leftA;
-		if (doFree) freeMem(a);
-                a = leftA;
-                }
-            else
-                {
-                /* Remove overlapping area from current segment, leave
-                 * it in left segment. */
-                a->hStart += overlap;
-                a->nStart += overlap;
-                }
-            }
-        else if (overlap == 0 && leftA->hEnd == a->hStart)
-            {
-            /* Remove current segment from list. */
-            leftA->right = rightA;
-            if (rightA != NULL)
-                rightA->left = leftA;
-            /* Fold data from current segment into left segment */
-            leftA->nEnd = a->nEnd;
-            leftA->hEnd = a->hEnd;
-	    if (doFree) freeMem(a); 
-	    a = leftA;
             }
         }
     }
@@ -1199,25 +832,6 @@ for (;ali != NULL;ali=ali->right)
 return prob;
 }
 
-void ffAliSort(struct ffAli **pList, int (*compare )(const void *elem1,  const void *elem2))
-/* Sort a doubly linked list of ffAlis. */
-{
-/* Get head of list and handle easy special empty case. */
-struct ffAli *r = *pList;
-if (r == NULL) return;
-
-/* Since first pointer is "left", in order to reuse slSort, have
- * to jump through some minor hoops. First go to right end of list,
- * then sort it. */
-while (r->right) r = r->right;
-slSort(&r, compare);
-
-/* We're sorted, but our right links are all broken.  Fix this. */
-slReverse(&r);
-r = ffMakeRightLinks(r);
-*pList = r;
-}
-
 void ffUnlink(struct ffAli **pList, struct ffAli *el)
 /* Unlink element from doubly linked list. If leftmost
  * element update list pointer. */
@@ -1235,62 +849,10 @@ if (left != NULL)
 el->left = el->right = NULL;
 }
 
-void ffCat(struct ffAli **pA, struct ffAli **pB)
-/* Concatenate B to the end of A. Eat up second list
- * in process. */
-{
-struct ffAli *a = *pA;
-struct ffAli *b = *pB;
-
-/* If list to add is empty our job is real easy. */
-if (b == NULL)
-    return;
-
-/* If list to add into is empty, then just switch in the
- * second list. */
-if (a == NULL)
-    {
-    *pA = *pB;
-    *pB = NULL;
-    return;
-    }
-
-/* Neither list empty.  Find rightmost element of first list
- * and cross-link it with leftmost element of second list. */
-while (a->right != NULL) a = a->right;
-b->left = a;
-a->right = b;
-*pB = NULL;
-}
-
 void unlinkAli(struct ffAli **pList, struct ffAli *ali)
 /* Unlink ali from list. */
 {
 ffUnlink(pList, ali);
-}
-
-int ffCmpHitsHayFirst(const void *va, const void *vb)
-/* Compare function to sort hit array by ascending
- * target offset followed by ascending query offset. */
-{
-const struct ffAli *a = *((struct ffAli **)va);
-const struct ffAli *b = *((struct ffAli **)vb);
-int diff;
-if ((diff = a->hStart - b->hStart) != 0)
-    return diff;
-return a->nStart - b->nStart;
-}
-
-int ffCmpHitsNeedleFirst(const void *va, const void *vb)
-/* Compare function to sort hit array by ascending
- * query offset followed by ascending target offset. */
-{
-const struct ffAli *a = *((struct ffAli **)va);
-const struct ffAli *b = *((struct ffAli **)vb);
-int diff;
-if ((diff = a->nStart - b->nStart) != 0)
-    return diff;
-return a->hStart - b->hStart;
 }
 
 struct protoGene
@@ -1784,125 +1346,6 @@ bestAli = recursiveWeave(ns, ne, hs, he, stringency, tileStrinProbMult[stringenc
 return bestAli;
 }
 
-static int scoreIntron(DNA a, DNA b, DNA y, DNA z, int orientation)
-/* Return a better score the closer an intron is to
- * consensus. */
-{
-int score = 0;
-int revScore = 0;
-
-if (orientation >= 0)
-    {
-    if (a == 'g') ++score;
-    if (b == 't') ++score;
-    if (y == 'a') ++score;
-    if (z == 'g') ++score;
-    }
-
-if (orientation <= 0)
-    {
-    if (a == 'c') ++revScore;
-    if (b == 't') ++revScore;
-    if (y == 'a') ++revScore;
-    if (z == 'c') ++revScore;
-    }
-
-return score > revScore ? score : revScore;
-}
-
-
-static int slideIntron(struct ffAli *left, struct ffAli *right, int orientation)
-/* Slides space between alignments if possible to match
- * intron consensus better.  Returns how much it slid intron. */
-{
-DNA *nLeft = left->nEnd;
-DNA *hLeft = left->hEnd;
-DNA *nRight = right->nStart;
-DNA *hRight = right->hStart;
-DNA nl, nr, hl, hr;
-DNA *nLeftEnd = left->nStart;
-DNA *nRightEnd = right->nEnd;
-DNA *nBestLeft = NULL;
-int bestScore = -0x7fffffff;
-int curScore;
-int offset;
-
-if (hRight-hLeft < 4)   /* Too short to be an intron. */
-    return 0;
-if (nRight-nLeft > 2)   /* Too big of a gap to be an intron. */
-    return 0;
-
-/* Slide as far to the left as possible. */
-while (nLeft > nLeftEnd)
-    {
-    nl = nLeft[-1];
-    hl = hLeft[-1];
-    nr = nRight[-1];
-    hr = hRight[-1];
-    if (!(nl == 'n' && nr == 'n'))  /* N's in needle freely slide. */
-        {
-        if (nl != hl || nr != hr || hl != hr)
-            break;
-        }
-    nLeft -= 1;
-    hLeft -= 1;
-    nRight -= 1;
-    hRight -= 1;
-    }
-/* Slide as far to the right as possible computing
-   intron score as you go. */
-while (nRight < nRightEnd)
-    {
-    curScore = scoreIntron(hLeft[0], hLeft[1], hRight[-2], hRight[-1], orientation);
-    if (curScore > bestScore)
-        {
-        bestScore = curScore;
-        nBestLeft = nLeft;
-        }
-    nl = nLeft[0];
-    hl = hLeft[0];
-    if (nl != 'n' && nl != hl)
-        break;
-    nr = nRight[0];
-    hr = hRight[0];
-    if (nr != 'n' && nr != hr)
-        break;
-    if (hl != hr)
-        break;
-    nLeft += 1;
-    hLeft += 1;
-    nRight += 1;
-    hRight += 1;
-    }
-if (nBestLeft == NULL)
-    return 0;
-offset = nBestLeft - left->nEnd;
-if (offset == 0)
-    return offset;
-left->nEnd += offset;
-left->hEnd += offset;
-right->nStart += offset;
-right->hStart += offset;
-return offset;
-}
-
-
-void ffSlideIntrons(struct ffAli *ali)
-/* Slide introns (or spaces between aligned blocks)
- * to match consensus. */
-{
-struct ffAli *left = ali, *right;
-int slid;
-boolean orient = ffIntronOrientation(ali);
-
-if (left == NULL)
-    return;
-while((right = left->right) != NULL)
-    {
-    slid = slideIntron(left, right, orient);
-    left = right;
-    }
-}
 
 static struct ffAli *findBestAli(DNA *ns, DNA *ne, DNA *hs, DNA *he, enum ffStringency stringency)
 {
@@ -1969,52 +1412,6 @@ for (ali = leftList; ali != NULL; ali = ali->left)
     }
 return rightList;
 }
-
-void ffFreeAli(struct ffAli **pAli)
-/* Dispose of memory gotten from fuzzyFind(). */
-{
-struct ffAli *ali = *pAli;
-if (ali != NULL)
-    {
-    while (ali->right)
-        ali = ali->right;
-    slFreeList(&ali);
-    }
-*pAli = NULL;
-}
-
-struct ffAli *ffTrimFlakyEnds(struct ffAli *ali, int minMatchSize, 
-	boolean freeFlakes)
-/* Trim off ends of ffAli that aren't as solid as you'd like.  
- * If freeFlakes is true memory for flakes is freeMem'd. */
-{
-struct ffAli *left = ali;
-struct ffAli *right = ffRightmost(ali);
-int startN, endN;
-if (ffSolidMatch(&left, &right, left->nStart, minMatchSize, &startN, &endN))
-    {
-    if (freeFlakes)
-	{
-	struct ffAli *ali, *next;
-	ffFreeAli(&right->right);
-	for (ali = left->left; ali != NULL; ali = next)
-	    {
-	    next = ali->left;
-	    freeMem(ali);
-	    }
-	}
-    right->right = NULL;
-    left->left = NULL;
-    return left;
-    }
-else
-    {
-    if (freeFlakes)
-	ffFreeAli(&ali);
-    return NULL;
-    }
-}
-
 
 struct ffAli *ffFind(DNA *needleStart, DNA *needleEnd, DNA *hayStart, DNA *hayEnd,
      enum ffStringency stringency)

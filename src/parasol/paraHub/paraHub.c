@@ -66,7 +66,7 @@
 #include "paraHub.h"
 #include "machSpec.h"
 
-int version = 6;	/* Version number. */
+int version = 8;	/* Version number. */
 
 /* Some command-line configurable quantities and their defaults. */
 int jobCheckPeriod = 10;	/* Minutes between checking running jobs. */
@@ -768,7 +768,7 @@ void resultQueueFree(struct resultQueue **pRq)
 struct resultQueue *rq = *pRq;
 if (rq != NULL)
     {
-    carefulClose(&rq->f);
+    carefulCloseWarn(&rq->f);
     freez(pRq);
     }
 }
@@ -782,7 +782,7 @@ struct resultQueue *newList = NULL, *rq, *next;
 for (rq = resultQueues; rq != NULL; rq = next)
     {
     next = rq->next;
-    if (now - rq->lastUsed > 5*MINUTE)
+    if (now - rq->lastUsed > 1*MINUTE)
 	{
 	logIt("hub: closing results file %s\n", rq->name);
         resultQueueFree(&rq);

@@ -24,10 +24,12 @@ void nibFrag(int options, char *nibFile, int start, int end, char strand, char *
 /* nibFrag - Extract part of a nib file as .fa. */
 {
 struct dnaSeq *seq;
-if (strand != '+' && strand != '-')
+if (strand != '+' && strand != '-'&& strand != 'm')
    {
    usage();
    }
+if (strand == 'm')
+    strand = '-';
 if (start >= end)
    {
    usage();

@@ -1,0 +1,69 @@
+track gap
+shortLabel Gap
+longLabel Gap Locations
+priority 11
+group map
+visibility dense
+type bed 3 +
+
+track intronEst
+shortLabel Spliced ESTs
+longLabel $Organism ESTs That Have Been Spliced
+group rna
+priority 56
+visibility dense
+spectrum on
+type psl est
+
+track est
+shortLabel $Organism ESTs
+longLabel $Organism ESTs Including Unspliced
+group rna
+priority 57
+visibility hide
+spectrum on
+type psl est
+
+track blastzMm3
+shortLabel Blastz Mouse
+longLabel All Blastz Mouse(Feb03) Alignments
+group compGeno
+priority 130
+visibility hide
+color 100,50,0
+altColor 255,240,200
+spectrum on
+type psl xeno mm3
+
+track blastzBestMm3
+shortLabel Best Mouse
+longLabel Blastz Mouse(Feb03) Best in Genome Alignments
+group compGeno
+priority 126
+visibility dense
+color 100,50,0
+altColor 255,240,200
+spectrum on
+type psl xeno mm3
+
+track blastzTightMm3
+shortLabel Tight Mouse
+longLabel Blastz Mouse(Feb03), Tight Subset of Best Alignments
+group compGeno
+priority 123
+visibility hide
+color 100,50,0
+altColor 255,240,200
+spectrum on
+type psl xeno mm3
+
+t@hgwdev:~/makeDb/trackDb/human/hg15> more ../hg13/trackDb.ra 
+track syntenyMouse
+shortLabel Mouse Synteny
+longLabel Human/Mouse Synteny using blastz single coverage (100k window)
+group compGeno
+priority 138
+visibility hide
+color 0,100,0
+altColor 255,240,200
+type bed 4 .

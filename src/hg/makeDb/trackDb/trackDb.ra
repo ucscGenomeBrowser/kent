@@ -211,7 +211,7 @@ visibility hide
 type sample
 
 track genomicSuperDups
-shortLabel filtered WGAC
+shortLabel Segmental Dups
 longLabel Duplications of >1000 Bases of non-repeatMasked Sequence
 group map
 priority 27
@@ -291,11 +291,11 @@ color 12,12,120
 type genePred refPep refMrna
 
 track mgcGenes
-shortLabel MGC Clones
-longLabel Mammalian Gene Collection Clones
+shortLabel MGC Genes
+longLabel Mammalian Gene Collection Full ORF mRNAs
 group genes
 priority 36
-visibility dense
+visibility hide
 color 12,12,120
 type genePred
 
@@ -372,16 +372,6 @@ priority 45
 visibility hide
 color 0,100,100
 altColor 0,50,50
-type genePred 
-
-track slam
-shortLabel Slam
-longLabel SLAM gene predictions using human/mouse homology
-group genes
-priority 45.5
-visibility hide
-color 100,50,0
-altColor 175,150,128
 type genePred 
 
 track genomeScan
@@ -619,6 +609,42 @@ priority 74
 visibility hide
 type bed 3
 
+track mgcIncompleteMrna
+shortLabel MGC Incomplete
+longLabel Mammalian Gene Collection Incomplete mRNAs
+group rna
+priority 75
+visibility hide
+color 12,12,120
+type psl
+
+track mgcPickedEst
+shortLabel MGC In-progress
+longLabel Mammalian Gene Collection EST in Sequencing Pipeline
+group rna
+priority 75.1
+visibility hide
+color 12,12,120
+type psl est
+
+track mgcFailedEst
+shortLabel MGC Failed
+longLabel Mammalian Gene Collection Failed ESTs
+group rna
+priority 75.2
+visibility hide
+color 12,12,120
+type psl est
+
+track mgcUnpickedEst
+shortLabel MGC ESTs
+longLabel Mammalian Gene Collection EST Libraries
+group rna
+priority 75.3
+visibility hide
+color 12,12,120
+type psl est
+
 track cpgIsland
 shortLabel CpG Islands
 longLabel CpG Islands (Islands < 300 Bases are Light Green)
@@ -818,17 +844,6 @@ altColor 175,150,128
 priority 119
 visibility full
 type sample 0 8
-
-track slamNonCoding
-shortLabel Slam Non Coding 
-longLabel SLAM predictions of human/mouse conserved non-coding regions
-group compGeno
-priority 120
-visibility hide
-color 30,130,210
-altColor 200,220,255
-spectrum on
-type bed 5 
 
 track humanChain
 shortLabel Human Chain 
@@ -1263,14 +1278,6 @@ shortLabel TwinScan MGC
 longLabel TwinScan MGC candidates
 group x
 priority 159
-visibility hide
-type psl .
-
-track mgcUcscEst
-shortLabel UCSC MGC ESTs
-longLabel UCSC MGC Candidates
-group x
-priority 160
 visibility hide
 type psl .
 

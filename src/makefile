@@ -2,30 +2,34 @@ all: cgi
 
 alpha: clean cgi-alpha blat
 
-beta: clean cgi-beta
+beta: check-beta clean cgi-beta
 
 libs:
-	cd lib; make; cd ..
-	cd jkOwnLib; make; cd ..
-	cd hg/lib; make; cd ../..
+	cd lib && ${MAKE}
+	cd jkOwnLib && ${MAKE}
+	cd hg/lib && ${MAKE}
 
 cgi: libs
-	cd hg; make; cd ..
+	cd hg && ${MAKE}
 
 cgi-alpha: libs
-	cd hg; make alpha; cd ..
+	cd hg && ${MAKE} clean
 
-cgi-beta: libs
-	cd hg; make beta; cd ..
+cgi-beta: check-beta libs
+	cd hg && ${MAKE} beta
+
+check-beta:
+	# this will fail if we are not in a beta checkout:
+	cvs status makefile | egrep 'v[0-9]+_branch' > /dev/null	
 
 blat: libs
-	cd blat; make; make test; cd ..
-	cd gfClient; make; cd ..
-	cd gfServer; make; cd ..
+	cd blat && ${MAKE} && ${MAKE} test
+	cd gfClient && ${MAKE}
+	cd gfServer && ${MAKE}
 clean:
-	cd lib; make clean; cd .. 
-	cd hg; make clean; cd ..
-	cd jkOwnLib; make clean; cd ..
+	cd lib && ${MAKE} clean 
+	cd hg && ${MAKE} clean
+	cd jkOwnLib && ${MAKE} clean
 
 tags:
 	ctags $(HOME)/src/lib/*.c $(HOME)/src/inc/*.h $(HOME)/src/hg/lib/*.c $(HOME)/src/jkOwnLib/*.c
@@ -35,6 +39,7 @@ DIRS = aladdin ameme cdnaAli dnaDust fuzzyFind \
        scanIntrons tracks weblet wormAli xenoAli
 
 intronerator: 
-	cd lib; make; cd ..
-	for i in $(DIRS); do cd $$i; make; cd ..; done; cd hg; make; cd ..;
+	cd lib && ${MAKE}
+	for i in $(DIRS); do cd $$i && ${MAKE}; done;
+	cd hg && ${MAKE};
 

@@ -98,6 +98,7 @@
 #include "netAlign.h"
 #include "stsMapRat.h"
 #include "stsInfoRat.h"
+#include "vegaInfo.h"
 #include "hgc.h"
 
 
@@ -670,7 +671,7 @@ else if (gp->strand[0] == '-')
     nextStart = (gp->exonEnds[nextEndIndex]);
     nextEnd = (gp->exonStarts[nextEndIndex]);
     tStart =  gp->cdsEnd-1 ;
-    tEnd = gp->cdsStart+1 ;
+    tEnd = gp->cdsStart ;
     posStrand=FALSE;
     if (axtList != NULL)
         tPtr = axtList->tEnd;
@@ -2636,7 +2637,111 @@ else if(sameWord(type,"locusLink"))
     printf("<B>Stanford SOURCE Locus Link:</B> <A HREF=\"%soption=LLID&criteria=%s&choice=Gene\" TARGET=_blank>%s</A><BR>\n",stanSourceLink,acc,acc);
 }
 
-void printRnaSpecs(char *acc, boolean isMgcTrack)
+int getImageId(struct sqlConnection *conn, char *acc)
+/* get the image id for a clone, or 0 if none */
+{
+int imageId = 0;
+if (sqlTableExists(conn, "imageClone"))
+    {
+    struct sqlResult *sr;
+    char **row;
+    char query[128];
+    safef(query, sizeof(query),
+          "select imageId from imageClone where acc = '%s'", acc);
+    sr = sqlMustGetResult(conn, query);
+    row = sqlNextRow(sr);
+    if (row != NULL)
+        imageId = sqlUnsigned(row[0]);
+    sqlFreeResult(&sr);
+    }
+return imageId;
+}
+
+static char *mgcStatusDesc[][2] =
+/* Table of MGC status codes to descriptions.  This is essentially duplicated
+ * from MGC loading code, but we don't share the data to avoid creating some
+ * dependencies.  Might want to move these to a shared file or just put these
+ * in a table.  Although it is nice to be able to customize for the browser. */
+{
+    {"unpicked", "not picked"},
+    {"picked", "picked"},
+    {"notBack", "not back"},
+    {"noDecision", "no decision yet"},
+    {"fullLength", "full length"},
+    {"incomplete", "incomplete"},
+    {"chimeric", "chimeric"},
+    {"frameShift", "frame shifted"},
+    {"contaminated", "contaminated"},
+    {"retainedIntron", "retained intron"},
+    {"mixedWells", "mixed wells"},
+    {"noGrowth", "no growth"},
+    {"noInsert", "no insert"},
+    {"no5est", "no 5' EST match"},
+    {"microDel", "no cloning site / microdeletion"},
+    {"artifact", "library artifacts"},
+    {"noPloyATail", "no polyA-tail"},
+    {"cantSequence", "unable to sequence"},
+    {NULL, NULL}
+};
+
+char *getMgcStatusDesc(struct sqlConnection *conn, int imageId)
+/* get a description of the status of a MGC clone */
+{
+struct sqlResult *sr;
+char **row;
+char query[128];
+char *desc = NULL;
+
+safef(query, sizeof(query),
+      "SELECT status FROM mgcStatus WHERE (imageId = %d)", imageId);
+sr = sqlMustGetResult(conn, query);
+row = sqlNextRow(sr);
+if (row == NULL)
+    desc = "no MGC status available; please report to browser maintainers";
+else
+    {
+    int i;
+    for (i = 0; (mgcStatusDesc[i][0] != NULL) && (desc == NULL); i++)
+        {
+        if (sameString(row[0], mgcStatusDesc[i][0]))
+            desc = mgcStatusDesc[i][1];
+        }
+    if (desc == NULL)
+        desc = "unknown MGC status; please report to browser maintainers";
+    }
+
+sqlFreeResult(&sr);
+return desc;
+}                   
+
+void printMgcRnaSpecs(struct trackDb *tdb, char *acc, int imageId)
+/* print status information for MGC mRNA or EST; must have imageId */
+{
+struct sqlConnection *conn = hgAllocConn();
+char *mgcOrganism, *statusDesc;
+
+/* link to MGC site only for full-length mRNAs */
+if (sameString(tdb->tableName, "mgcGenes"))
+    {
+    if (startsWith("hg", database))
+        mgcOrganism = "Hs";
+    else if (startsWith("mm", database))
+        mgcOrganism = "Mm";
+    else
+        errAbort("can't map database \"%s\" to a MGC organism", database);
+    printf("<B>MGC clone information:</B> ");
+    printf("<A href=\"http://mgc.nci.nih.gov/Reagents/CloneInfo?ORG=%s&IMAGE=%d\" TARGET=_blank>IMAGE:%d</A><BR>", 
+           mgcOrganism, imageId, imageId);
+    }
+
+/* add status description */
+statusDesc = getMgcStatusDesc(conn, imageId);
+if (statusDesc != NULL)
+    printf("<B>MGC status:</B> %s<BR>", statusDesc);
+hFreeConn(&conn);
+}
+
+void printRnaSpecs(struct trackDb *tdb, char *acc)
 /* Print auxiliarry info on RNA. */
 {
 struct dyString *dy = newDyString(1024);
@@ -2646,8 +2751,8 @@ char **row;
 char *type,*direction,*source,*organism,*library,*clone,*sex,*tissue,
      *development,*cell,*cds,*description, *author,*geneName,
      *date,*productName;
-char mgcGeneName[64];
-int mgcImageId = 0;
+boolean isMgcTrack = startsWith("mgc", tdb->tableName);
+int imageId = (isMgcTrack ? getImageId(conn, acc) : 0);
 int seqSize,fileSize;
 long fileOffset;
 char *ext_file;	
@@ -2655,24 +2760,6 @@ boolean hasVersion = hHasField("mrna", "version");
 boolean haveGbSeq = sqlTableExists(conn, "gbSeq");
 char *seqTbl = haveGbSeq ? "gbSeq" : "seq";
 char *version = NULL;
-
-/* If this is an MGC mRNA table, we get some special info from
- * the mgcStatus table.*/
-strcpy(mgcGeneName, "");
-if (isMgcTrack)
-    {
-    char query[128];
-    safef(query, sizeof(query),
-          "select gene,imageId from mgcStatus where acc = '%s'", acc);
-    sr = sqlMustGetResult(conn, query);
-    row = sqlNextRow(sr);
-    if (row != NULL)
-        {
-        strcpy(mgcGeneName, row[0]);
-        mgcImageId = sqlUnsigned(row[1]);
-        }
-    sqlFreeResult(&sr);
-    }
 
 
 /* This sort of query and having to keep things in sync between
@@ -2740,33 +2827,15 @@ if (row != NULL)
     /* Now we have all the info out of the database and into nicely named
      * local variables.  There's still a few hoops to jump through to 
      * format this prettily on the web with hyperlinks to NCBI. */
-    if (isMgcTrack)
-        printf("<H2>Information on MGC Clone <A HREF=\"");
-    else
-        printf("<H2>Information on %s <A HREF=\"", type);
+    printf("<H2>Information on %s <A HREF=\"", type);
     printEntrezNucleotideUrl(stdout, acc);
     printf("\" TARGET=_blank>%s</A></H2>\n", acc);
 
-    if (isMgcTrack && (mgcImageId > 0))
-        {
-        char *mgcOrganism;
-        if (startsWith("hg", database))
-            mgcOrganism = "Hs";
-        else if (startsWith("mm", database))
-            mgcOrganism = "Mm";
-        else
-            errAbort("can't map database \"%s\" to a MGC organism", database);
-        
-        printf("<B>MGC clone information:</B> ");
-        printf("<A href=\"http://mgc.nci.nih.gov/Reagents/CloneInfo?ORG=%s&IMAGE=%d\" TARGET=_blank>IMAGE:%d</A><BR>", 
-               mgcOrganism, mgcImageId, mgcImageId);
-        }
+    if (isMgcTrack && (imageId > 0))
+        printMgcRnaSpecs(tdb, acc, imageId);
     printf("<B>description:</B> %s<BR>\n", description);
 
-    if (isMgcTrack && (strlen(mgcGeneName) > 0))
-        medlineLinkedLine("gene", mgcGeneName, mgcGeneName);
-    else
-        medlineLinkedLine("gene", geneName, geneName);
+    medlineLinkedLine("gene", geneName, geneName);
     medlineLinkedLine("product", productName, productName);
     dyStringClear(dy);
     gbToEntrezAuthor(author, dy);
@@ -2828,8 +2897,8 @@ if (aliCount > 1)
     printf("The alignment you clicked on is first in the table below.<BR>\n");
 
 printf("<PRE><TT>");
-printf(" SIZE IDENTITY CHROMOSOME STRAND  START     END       cDNA   START  END  TOTAL\n");
-printf("------------------------------------------------------------------------------\n");
+printf(" SIZE IDENTITY CHROMOSOME  STRAND    START     END            SWISS-PROT   START  END  TOTAL\n");
+printf("--------------------------------------------------------------------------------------------\n");
 for (same = 1; same >= 0; same -= 1)
     {
     for (psl = pslList; psl != NULL; psl = psl->next)
@@ -2914,7 +2983,7 @@ else
 /* Print non-sequence info. */
 cartWebStart(cart, acc);
 
-printRnaSpecs(acc, FALSE);
+printRnaSpecs(tdb, acc);
 
 /* Get alignment info. */
 pslList = getAlignments(conn, table, acc);
@@ -2989,13 +3058,27 @@ void doHgGold(struct trackDb *tdb, char *fragName)
 {
 char *track = tdb->tableName;
 struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn2 = hAllocConn();
+struct sqlConnection *conn3 = hAllocConn();
 char query[256];
 struct sqlResult *sr;
 char **row;
+char query2[256];
+struct sqlResult *sr2;
+char **row2;
+char query3[256];
+struct sqlResult *sr3;
+char **row3;
 struct agpFrag frag;
 int start = cartInt(cart, "o");
 boolean hasBin;
 char splitTable[64];
+char *chp;
+char *accession1, *accession2, *spanner, *evaluation, *variation, *varEvidence, 
+     *contact, *remark, *comment;
+char *secondAcc, *secondAccVer;
+char *tmpString;
+int first;
 
 cartWebStart(cart, fragName);
 hFindSplitTable(seqName, track, splitTable, &hasBin);
@@ -3005,13 +3088,98 @@ sr = sqlMustGetResult(conn, query);
 row = sqlNextRow(sr);
 agpFragStaticLoad(row+hasBin, &frag);
 
-printf("<B>Fragment ID:</B> %s<BR>\n", frag.frag);
-printf("<B>Bases:</B> %d-%d<BR>\n", frag.fragStart+1, frag.fragEnd);
+printf("<B>Clone Fragment ID:</B> %s<BR>\n", frag.frag);
+printf("<B>Clone Fragment Type:</B> %s<BR>\n", frag.type);
+printf("<B>Clone Bases:</B> %d-%d<BR>\n", frag.fragStart+1, frag.fragEnd);
 printPos(frag.chrom, frag.chromStart, frag.chromEnd, frag.strand, FALSE);
-printTrackHtml(tdb);
 
+if (hTableExists("certificate"))
+    {
+    first = 1;
+again:
+    tmpString = strdup(frag.frag);
+    chp = strstr(tmpString, ".");
+    if (chp != NULL) *chp = '\0';
+
+    if (first)
+	{
+    	sprintf(query2,"select * from certificate where accession1='%s';", tmpString);
+	}
+    else
+	{
+    	sprintf(query2,"select * from certificate where accession2='%s';", tmpString);
+	}
+    sr2 = sqlMustGetResult(conn2, query2);
+    row2 = sqlNextRow(sr2);
+    while (row2 != NULL)
+	{
+	printf("<HR>");
+        accession1 	= row2[0];
+        accession2 	= row2[1];
+        spanner		= row2[2];
+        evaluation      = row2[3];
+        variation 	= row2[4];
+        varEvidence 	= row2[5];
+        contact  	= row2[6];
+        remark 		= row2[7];
+        comment  	= row2[8];
+	
+	if (first)
+	    {
+	    secondAcc = accession2;
+	    }
+	else
+	    {
+	    secondAcc = accession1;
+	    }
+
+	sprintf(query3, "select frag from %s where frag like '%s.%c';",
+        	splitTable, secondAcc, '%');
+	sr3 = sqlMustGetResult(conn3, query3);
+	row3 = sqlNextRow(sr3);
+	if (row3 != NULL)
+	    {
+	    secondAccVer = row3[0]; 
+	    }
+	else
+	    {
+	    secondAccVer = secondAcc;
+	    }
+	
+	printf("<H3>Non-standard Join Certificate: </H3>\n");
+
+	printf("The join between %s and %s is not standard due to a ", frag.frag, secondAccVer);
+	printf("sub-optimal sequence alignment between the overlapping regions of the ");
+	printf("clones.  The following details are provided by the ");
+	printf("sequencing center to support the joining of these two clones:<BR><BR>");
+
+	printf("<B>Joined with Fragment: </B> %s<BR>\n", secondAccVer);
+
+	if (strcmp(spanner, "") != 0) printf("<B>Spanner: </B> %s<BR>\n", spanner);
+	//if (strcmp(evaluation, "") != 0) printf("<B>Evaluation: </B> %s<BR>\n", evaluation);
+	if (strcmp(variation, "") != 0) printf("<B>Variation: </B> %s<BR>\n", variation);
+	if (strcmp(varEvidence, "")!= 0) printf("<B>Variation Evidence: </B> %s<BR>\n", varEvidence);
+	if (strcmp(remark, "") != 0) printf("<B>Remark: </B> %s<BR>\n", remark);
+	if (strcmp(comment, "") != 0) printf("<B>Comment: </B> %s<BR>\n", comment);
+	if (strcmp(contact, "") != 0) 
+		printf("<B>Contact: </B> <A HREF=\"mailto:%s\">%s</A><BR>", contact, contact);
+
+	sqlFreeResult(&sr3);
+	row2 = sqlNextRow(sr2);
+	}
+    sqlFreeResult(&sr2);
+    
+    if (first)
+	{
+	first = 0;
+	goto again;
+	}
+    }
 sqlFreeResult(&sr);
 hFreeConn(&conn);
+hFreeConn(&conn2);
+hFreeConn(&conn3);
+printTrackHtml(tdb);
 }
 
 void doHgGap(struct trackDb *tdb, char *gapType)
@@ -3707,6 +3875,40 @@ for (oSeq = oSeqList; oSeq != NULL; oSeq = oSeq->next)
     }
 if (oSeq == NULL)  errAbort("%s is in %s but not in %s. Internal error.", qName, pslName, faName);
 showSomeAlignment(psl, oSeq, qt, 0, oSeq->size, NULL);
+}
+
+void htcProteinAli(char *readName, char *table)
+/* Show protein to translated dna alignment for accession. */
+{
+struct lineFile *lf;
+struct psl *psl;
+int start;
+enum gfType tt = gftDnaX, qt = gftProt;
+boolean isProt = 1;
+struct sqlResult *sr;
+struct sqlConnection *conn = hAllocConn();
+struct dnaSeq *seq;
+char query[256], **row;
+char fullTable[64];
+boolean hasBin;
+
+/* Print start of HTML. */
+writeFramesetType();
+puts("<HTML>");
+printf("<HEAD>\n<TITLE>Protein Sequence vs Genomic</TITLE>\n</HEAD>\n\n");
+
+start = cartInt(cart, "o");
+hFindSplitTable(seqName, table, fullTable, &hasBin);
+sprintf(query, "select * from %s where qName = '%s' and tName = '%s' and tStart=%d",
+    fullTable, readName, seqName, start);
+sr = sqlGetResult(conn, query);
+if ((row = sqlNextRow(sr)) == NULL)
+    errAbort("Couldn't find alignment for %s at %d", readName, start);
+psl = pslLoad(row+hasBin);
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+seq = hPepSeq(readName);
+showSomeAlignment(psl, seq, qt, 0, seq->size, NULL);
 }
 
 void htcBlatXeno(char *readName, char *table)
@@ -4660,6 +4862,98 @@ puts(
    "mRNA associated with this gene in the main browser window.</P>");
 }
 
+void doViralProt(struct trackDb *tdb, char *geneName)
+/* Handle click on known viral protein track. */
+{
+struct sqlConnection *conn = hAllocConn();
+int start = cartInt(cart, "o");
+char *track = tdb->tableName;
+char *transName = geneName;
+struct knownMore *km = NULL;
+boolean anyMore = FALSE;
+boolean upgraded = FALSE;
+char *knownTable = "knownInfo";
+boolean knownMoreExists = FALSE;
+struct psl *pslList = NULL;
+
+cartWebStart(cart, "Viral Gene");
+printf("<H2>Viral Gene %s</H2>\n", geneName);
+        printf("<A test HREF=");
+        printSwissProtProteinUrl(stdout, geneName);
+        printf(" TARGET=_blank>Jump to SwissProt / sptrembl</A> " );
+
+pslList = getAlignments(conn, "chr1_viralProt", geneName);
+htmlHorizontalLine();
+printf("<H3>Protein Alignments</H3>");
+printAlignments(pslList, start, "htcProteinAli", "chr1_viralProt", geneName);
+
+if (hTableExists("knownMore"))
+    {
+    knownMoreExists = TRUE;
+    knownTable = "knownMore";
+    }
+    
+if (knownMoreExists)
+    {
+    char query[256];
+    struct sqlResult *sr;
+    char **row;
+    struct sqlConnection *conn = hAllocConn();
+
+    upgraded = TRUE;
+    sprintf(query, "select * from knownMore where transId = '%s'", transName);
+    sr = sqlGetResult(conn, query);
+    if ((row = sqlNextRow(sr)) != NULL)
+       {
+       km = knownMoreLoad(row);
+       }
+    sqlFreeResult(&sr);
+
+    hFreeConn(&conn);
+    }
+
+if (km != NULL)
+    {
+    geneName = km->name;
+    if (km->hugoName != NULL && km->hugoName[0] != 0)
+	medlineLinkedLine("Name", km->hugoName, km->hugoName);
+    if (km->aliases[0] != 0)
+	printf("<B>Aliases:</B> %s<BR>\n", km->aliases);
+    if (km->omimId != 0)
+	{
+	printf("<B>OMIM:</B> <A HREF=\"");
+	printEntrezOMIMUrl(stdout, km->omimId);
+	printf("\" TARGET=_blank>%d</A><BR>\n", km->omimId);
+	}
+    if (km->locusLinkId != 0)
+        {
+	printf("<B>LocusLink:</B> ");
+	printf("<A HREF = \"http://www.ncbi.nlm.nih.gov/LocusLink/LocRpt.cgi?l=%d\" TARGET=_blank>",
+		km->locusLinkId);
+	printf("%d</A><BR>\n", km->locusLinkId);
+	}
+    anyMore = TRUE;
+    }
+/*
+if (geneName != NULL) 
+    {
+    medlineLinkedLine("Symbol", geneName, geneName);
+    printGeneLynxName(geneName);
+    printf("<B>GeneCards:</B> ");
+    printf("<A HREF = \"http://bioinfo.weizmann.ac.il/cards-bin/cardsearch.pl?search=%s\" TARGET=_blank>",
+	    geneName);
+    printf("%s</A><BR>\n", geneName);
+    anyMore = TRUE;
+    }
+*/
+if (anyMore)
+    htmlHorizontalLine();
+
+/*
+geneShowCommon(transName, tdb, "genieKnownPep");
+*/
+}
+
 void doSPGene(struct trackDb *tdb, char *mrnaName)
 /* Process click on a known gene. */
 {
@@ -5314,7 +5608,7 @@ struct psl *pslList = NULL;
 /* Print non-sequence info. */
 cartWebStart(cart, acc);
 
-printRnaSpecs(acc, TRUE);
+printRnaSpecs(tdb, acc);
 htmlHorizontalLine();
 geneShowPosAndLinks(acc, acc, tdb, NULL, NULL,
                     "htcGeneMrna", "htcGeneInGenome", "mRNA Sequence");
@@ -5422,7 +5716,7 @@ if (sqlTableExists(conn, table))
         printf("<A HREF=");
         sprintf(query, "%s", parts[1]);
         printSwissProtProteinUrl(stdout, query);
-        printf(" TARGET=_blank>Jump to SwissProt / sptrembl</A> " );
+        printf(" TARGET=_blank>Jump to SwissProt %s </A> " ,geneName);
         }
     printf(" %s <BR><BR>Alignment Information:<BR><BR>%s<BR>", clone, hom.description);
 	}
@@ -5563,6 +5857,43 @@ void doSangerGene(struct trackDb *tdb, char *geneName, char *pepTable, char *mrn
 genericHeader(tdb, geneName);
 showSangerExtra(geneName, extraTable);
 geneShowCommon(geneName, tdb, pepTable);
+printTrackHtml(tdb);
+}
+
+
+void doVegaGene(struct trackDb *tdb, char *geneName)
+/* Handle click on Vega gene track. */
+{
+struct vegaInfo *vi = NULL;
+
+if (hTableExists("vegaInfo"))
+    {
+    char query[256];
+    struct sqlConnection *conn = hAllocConn();
+    struct sqlResult *sr;
+    char **row;
+
+    safef(query, sizeof(query),
+	  "select * from vegaInfo where transcriptId = '%s'", geneName);
+    sr = sqlGetResult(conn, query);
+    if ((row = sqlNextRow(sr)) != NULL)
+        {
+	AllocVar(vi);
+	vegaInfoStaticLoad(row, vi);
+	}
+    sqlFreeResult(&sr);
+    hFreeConn(&conn);
+    }
+
+genericHeader(tdb, geneName);
+printCustomUrl(tdb, ((vi != NULL) ? vi->otterId : geneName), TRUE);
+if (vi != NULL)
+    {
+    printf("<B>VEGA Gene Name:</B> %s<BR>\n", vi->geneId);
+    printf("<B>VEGA Gene Type:</B> %s<BR>\n", vi->method);
+    printf("<B>VEGA Gene Description:</B> %s<BR>\n", vi->geneDesc);
+    }
+geneShowCommon(geneName, tdb, "vegaPep");
 printTrackHtml(tdb);
 }
 
@@ -7449,8 +7780,18 @@ void doDbSnpRS(char *name)
 struct sqlConnection *conn = sqlConnect("hgFixed");
 char query[256];
 struct dbSnpRS *snp=NULL;
-snprintf(query, sizeof(query),"select * from dbSnpRS where rsId = '%s'",name);
-snp=dbSnpRSLoadByQuery(conn, query);
+snprintf(query, sizeof(query),
+	 "select rsId, "
+	 "       avHet, "
+	 "       avHetSE, "
+	 "       valid, "
+	 "       base1, "
+	 "       base2, "
+	 "       assembly, "
+	 "       alternate "
+	 "from   dbSnpRS "
+	 "where  rsId = '%s'", name);
+snp = dbSnpRSLoadByQuery(conn, query);
 if (snp!=NULL)
     {
     printf("<BR>\n");
@@ -7465,13 +7806,12 @@ if (snp!=NULL)
 	printf("<B>Standard Error of Average Heterozygosity:</B> Not Known<BR>\n");
 	}
     printf("<B>Validation Status:</B> %s<BR>\n",snp->valid);
-    printf("<B>Base1:</B> %s<BR>\n",snp->base1);
-    printf("<B>Base2:</B> %s<BR>\n",snp->base2);
+    printf("<B>Allele1:          </B> %s<BR>\n",snp->allele1);
+    printf("<B>Allele2:          </B> %s<BR>\n",snp->allele2);
     printf("<font face=\"Courier New\">Sequence in Assembly:&nbsp;%s<BR></font>\n",snp->assembly);
     printf("<font face=\"Courier New\">Alternate Sequence:&nbsp;&nbsp;&nbsp;%s<BR></font>\n",snp->alternate);
     }
-else
-    printf("Could not find detail record for rsID %s<BR>\n",name);
+/* else printf("Could not find detail record for rsID %s<BR>\n",name); */
 dbSnpRSFree(&snp);
 sqlDisconnect(&conn);
 }
@@ -10439,11 +10779,13 @@ else if (sameWord(track, "htcGetDnaExtended1"))
 else if (sameWord(track, "mrna") || sameWord(track, "mrna2") || 
          sameWord(track, "est") || sameWord(track, "intronEst") || 
          sameWord(track, "xenoMrna") || sameWord(track, "xenoBestMrna") ||
+         sameWord(track, "xenoBlastzMrna") ||
          sameWord(track, "xenoEst") || sameWord(track, "psu") ||
          sameWord(track, "tightMrna") || sameWord(track, "tightEst") ||
-         sameWord(track, "mgcNcbiPicks") ||
-         sameWord(track, "mgcNcbiSplicedPicks") ||
-         sameWord(track, "mgcUcscPicks")
+         sameWord(track, "mgcIncompleteMrna") ||
+         sameWord(track, "mgcFailedEst") ||
+         sameWord(track, "mgcPickedEst") ||
+         sameWord(track, "mgcUnpickedEst")
          )
     {
     doHgRna(tdb, item);
@@ -10525,6 +10867,10 @@ else if (sameWord(track, "genieKnown"))
     {
     doKnownGene(tdb, item);
     }
+else if (startsWith("viralProt", track))
+    {
+    doViralProt(tdb, item);
+    }
 else if (sameWord(track, "softberryGene"))
     {
     doSoftberryPred(tdb, item);
@@ -10544,6 +10890,10 @@ else if (sameWord(track, "sanger22"))
 else if (sameWord(track, "sanger20"))
     {
     doSangerGene(tdb, item, "sanger20pep", "sanger20mrna", "sanger20extra");
+    }
+else if (sameWord(track, "vegaGene"))
+    {
+    doVegaGene(tdb, item);
     }
 else if (sameWord(track, "genomicDups"))
     {
@@ -10707,6 +11057,10 @@ else if (sameWord(track, "htcCdnaAli"))
 else if (sameWord(track, "htcUserAli"))
     {
     htcUserAli(item);
+    }
+else if (sameWord(track, "htcProteinAli"))
+    {
+    htcProteinAli(item, cartString(cart, "aliTrack"));
     }
 else if (sameWord(track, "htcBlatXeno"))
     {

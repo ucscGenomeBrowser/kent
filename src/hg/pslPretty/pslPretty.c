@@ -22,6 +22,7 @@ errAbort(
   "          output which not all axt readers will expect\n"
   "   -dot=N Put out a dot every N records\n"
   "   -long - Don't abbreviate long inserts\n"
+  "   -check=fileName - Output alignment checks to filename\n" 
   "It's a really good idea if the psl file is sorted by target\n"
   "if it contains multiple targets.  Otherwise this will be\n"
   "very very slow.   The target and query lists can either be\n"
@@ -240,9 +241,9 @@ int oneSize, sizeLeft = size;
 int i;
 char tStrand = (psl->strand[1] == '-' ? '-' : '+');
 
-fprintf(f, ">%s:%d%c%d %s:%d%c%d\n", 
-	psl->qName, psl->qStart, psl->strand[0], psl->qEnd,
-	psl->tName, psl->tStart, tStrand, psl->tEnd);
+fprintf(f, ">%s:%d%c%d of %d %s:%d%c%d of %d\n", 
+	psl->qName, psl->qStart, psl->strand[0], psl->qEnd, psl->qSize,
+	psl->tName, psl->tStart, tStrand, psl->tEnd, psl->tSize);
 while (sizeLeft > 0)
     {
     oneSize = sizeLeft;
@@ -341,8 +342,184 @@ fillShortGapString(abbrev, bGap, '.', 13);
 dyStringAppend(bRes, abbrev);
 }
 
+int smallSize = 8;	/* What our definition of 'small' is */
+int tinySize = 3;
+
+int boolify(int i)
+/* Convert 0 to 0 and nonzero to 1 */
+{
+return (i != 0 ? 1 : 0);
+}
+
+int total_rnaCount;
+int total_rnaPerfect;
+int total_missSmallStart = 0;
+int total_missLargeStart = 0;
+int total_missSmallEnd = 0;
+int total_missLargeEnd = 0;
+int total_missSmallMiddle = 0;
+int total_missLargeMiddle = 0;
+int total_weirdSplice = 0;
+int total_doubleGap = 0;
+int total_jumpBack = 0;
+
+boolean isIntron(char strand, char *start, char *end)
+/* See if it look like an intron. */
+{
+if (strand == '+')
+    {
+    if (start[0] != 'g' || end[-2] != 'a' || end[-1] != 'g')
+	return FALSE;
+    return (start[1] == 't' || start[1] == 'c');
+    }
+else
+    {
+    if (start[0] != 'c' || start[1] != 't' || end[-1] != 'c')
+	return FALSE;
+    return (end[-2] == 'a' || end[-2] == 'g');
+    }
+}
+
+void outputCheck(struct psl *psl, struct dnaSeq *qSeq, int qOffset,
+	struct dnaSeq *tSeq, int tOffset, FILE *f)
+/* Output quality check info to file */
+{
+int sizePolyA = 0;
+int qSize = psl->qSize;
+int i;
+int missSmallStart = 0;
+int missLargeStart = 0;
+int missSmallEnd = 0;
+int missLargeEnd = 0;
+int missSmallMiddle = 0;
+int missLargeMiddle = 0;
+int weirdSplice = 0;
+int doubleGap = 0;
+int jumpBack = 0;
+int diff;
+int totalProblems = 0;
+char strand = psl->strand[0];
+
+if (strand == '+')
+    {
+    for (i=1; i<=qSize; ++i)
+	{
+	if (qSeq->dna[qSize - i - qOffset] == 'a')
+	    ++sizePolyA;
+	else
+	    break;
+	}
+    }
+else
+    {
+    for (i=0; i<qSize; ++i)
+	{
+	if (qSeq->dna[i - qOffset] == 't')
+	    ++sizePolyA;
+	else
+	    break;
+	}
+    }
+if (psl->qStart > tinySize)
+    {
+    if (psl->qStart <= smallSize)
+	{
+	missSmallStart = psl->qStart;
+	++totalProblems;
+	}
+    else
+	{
+	missLargeStart = psl->qStart;
+	++totalProblems;
+	}
+    }
+diff = psl->qSize - psl->qEnd - sizePolyA;
+if (diff > tinySize)
+    {
+    if (diff <= smallSize)
+	{
+	missSmallEnd = diff;
+	++totalProblems;
+	}
+    else
+	{
+	missLargeEnd = diff;
+	++totalProblems;
+	}
+    }
+for (i=0; i<psl->blockCount-1; ++i)
+    {
+    int nextT = psl->tStarts[i+1];
+    int nextQ = psl->qStarts[i+1];
+    int sz = psl->blockSizes[i];
+    int t = psl->tStarts[i] + sz;
+    int q = psl->qStarts[i] + sz;
+    int dq = nextQ - q;
+    int dt = nextT - t;
+    if (dq < 0 || dt < 0)
+	{
+	++jumpBack;
+	++totalProblems;
+	}
+    else 
+	{
+	if (dq > 0 && dt > 0)
+	    {
+	    ++doubleGap;
+	    ++totalProblems;
+	    }
+	if (dq > tinySize)
+	    {
+	    if (dq > smallSize)
+		{
+		++missLargeMiddle;
+		++totalProblems;
+		}
+	    else
+		{
+		++missSmallMiddle;
+		++totalProblems;
+		}
+	    }
+	if (dq == 0 && dt >=30)
+	    {
+	    char *dna = tSeq->dna - tOffset;
+	    if (!isIntron(strand, dna + t, dna + nextT))
+		{
+		++weirdSplice;
+		++totalProblems;
+		}
+	    }
+	}
+    }
+fprintf(f, "%2d %9s %s ", totalProblems, psl->qName, psl->strand);
+fprintf(f, "%4dS ", missLargeStart);
+fprintf(f, "%2ds ", missSmallStart);
+fprintf(f, "%4dE ", missLargeEnd);
+fprintf(f, "%2de ", missSmallEnd);
+fprintf(f, "%2dM ", missLargeMiddle);
+fprintf(f, "%2dm ", missSmallMiddle);
+fprintf(f, "%2dW ", weirdSplice);
+fprintf(f, "%2dG ", doubleGap);
+fprintf(f, "%2dJ ", jumpBack);
+fprintf(f, "\n");
+
+total_missSmallStart += boolify(missSmallStart);
+total_missLargeStart += boolify(missLargeStart);
+total_missSmallEnd += boolify(missSmallEnd);
+total_missLargeEnd += boolify(missLargeEnd);
+total_missSmallMiddle += boolify(missSmallMiddle);
+total_missLargeMiddle += boolify(missLargeMiddle);
+total_weirdSplice += boolify(weirdSplice);
+total_doubleGap += boolify(doubleGap);
+total_jumpBack += boolify(jumpBack);
+++total_rnaCount;
+if (totalProblems == 0)
+    ++total_rnaPerfect;
+}
+
 void prettyOne(struct psl *psl, struct hash *qHash, struct hash *tHash,
-	struct dlList *fileCache, FILE *f, boolean axt)
+	struct dlList *fileCache, FILE *f, boolean axt, FILE *checkFile)
 /* Make pretty output for one psl.  Find target and query
  * sequence in hash.  Load them.  Output bases. */
 {
@@ -368,17 +545,16 @@ if (qName == NULL || !sameString(qName, psl->qName))
     if (qIsNib && psl->strand[0] == '-')
 	    qOffset = psl->qSize - psl->qEnd;
     }
-/* if (tName == NULL) || !sameString(tName, psl->tName))
-    {*/
+if (tName == NULL || !sameString(tName, psl->tName) || tIsNib)
+    {
     freeDnaSeq(&tSeq);
     freez(&tName);
     tName = cloneString(psl->tName);
-    //tSeq = readCachedSeq(tName, tHash, fileCache);
     readCachedSeqPart(tName, psl->tStart, psl->tEnd-psl->tStart, 
-    	tHash, fileCache, &tSeq, &tOffset, &tIsNib);
-    if (tIsNib && psl->strand[1] == '-')
-	    tOffset = psl->tSize - psl->tEnd;
-/*    }*/
+	tHash, fileCache, &tSeq, &tOffset, &tIsNib);
+    }
+if (tIsNib && psl->strand[1] == '-')
+    tOffset = psl->tSize - psl->tEnd;
 if (psl->strand[0] == '-')
     reverseComplement(qSeq->dna, qSeq->size);
 if (psl->strand[1] == '-')
@@ -408,7 +584,6 @@ for (blockIx=0; blockIx < psl->blockCount; ++blockIx)
 	    writeInsert(t, q, tSeq->dna + lastT, tGap);
 	    }
 	}
-/*    printf("BUild tStart %d qStart %d strand %s q size %d t size %d qs size %d ts size %d\n",psl->tStart,psl->qStart,psl->strand,q->stringSize, t->stringSize, qSeq->size, tSeq->size );*/
     /* Output sequence. */
     size = psl->blockSizes[blockIx];
     dyStringAppendN(q, qSeq->dna + qs, size);
@@ -417,10 +592,13 @@ for (blockIx=0; blockIx < psl->blockCount; ++blockIx)
     lastT = ts + size;
     }
 
-/*    printf("BF q size %d t size %d qs size %d ts size %d\n",q->stringSize, t->stringSize, qSeq->size, tSeq->size );*/
+if (checkFile != NULL)
+    {
+    outputCheck(psl, qSeq, qOffset, tSeq, tOffset, checkFile);
+    }
 if (psl->strand[0] == '-' && !qIsNib)
     reverseComplement(qSeq->dna, qSeq->size);
-if (psl->strand[1] == '-')
+if (psl->strand[1] == '-' && !tIsNib)
     reverseComplement(tSeq->dna, tSeq->size);
 
 if(q->stringSize != t->stringSize)
@@ -436,10 +614,12 @@ dyStringFree(&q);
 dyStringFree(&t);
 if (qIsNib)
     freez(&qName);
+if (tIsNib)
+    freez(&tName);
 }
 
 void pslPretty(char *pslName, char *targetList, char *queryList, 
-	char *prettyName, boolean axt)
+	char *prettyName, boolean axt, char *checkFileName)
 /* pslPretty - Convert PSL to human readable output. */
 {
 struct hash *fileHash = newHash(0);  /* No value. */
@@ -448,9 +628,12 @@ struct hash *qHash = newHash(20);  /* seqFilePos value. */
 struct dlList *fileCache = newDlList();
 struct lineFile *lf = pslFileOpen(pslName);
 FILE *f = mustOpen(prettyName, "w");
+FILE *checkFile = NULL;
 struct psl *psl;
 int dotMod = dot;
 
+if (checkFileName != NULL)
+    checkFile = mustOpen(checkFileName, "w");
 printf("Scanning %s\n", targetList);
 hashFileList(targetList, fileHash, tHash);
 printf("Scanning %s\n", queryList);
@@ -463,14 +646,30 @@ while ((psl = pslNext(lf)) != NULL)
 	if (--dotMod <= 0)
 	   {
 	   printf(".");
-       fflush(stdout);
+	   fflush(stdout);
 	   dotMod = dot;
 	   }
 	}
-    prettyOne(psl, qHash, tHash, fileCache, f, axt);
+    prettyOne(psl, qHash, tHash, fileCache, f, axt, checkFile);
     pslFree(&psl);
     }
+if (checkFile != NULL)
+    {
+    printf("missLargeStart: %d\n", total_missLargeStart);
+    printf("missSmallStart: %d\n", total_missSmallStart);
+    printf("missLargeEnd: %d\n", total_missLargeEnd);
+    printf("missSmallEnd: %d\n", total_missSmallEnd);
+    printf("missLargeMiddle: %d\n", total_missLargeMiddle);
+    printf("missSmallMiddle: %d\n", total_missSmallMiddle);
+    printf("weirdSplice: %d\n", total_weirdSplice);
+    printf("doubleGap: %d\n", total_doubleGap);
+    printf("jumpBack: %d\n", total_jumpBack);
+    printf("perfect: %d\n", total_rnaPerfect);
+    printf("total: %d\n", total_rnaCount);
+    }
 lineFileClose(&lf);
+carefulClose(&f);
+carefulClose(&checkFile);
 }
 
 int main(int argc, char *argv[])
@@ -483,6 +682,6 @@ dot = optionInt("dot", dot);
 doShort = !optionExists("long");
 if (argc != 5)
     usage();
-pslPretty(argv[1], argv[2], argv[3], argv[4], axt);
+pslPretty(argv[1], argv[2], argv[3], argv[4], axt, optionVal("check", NULL));
 return 0;
 }

@@ -189,12 +189,10 @@ for (i=0; i<size; ++i)
 return score;
 }
 
-
-int axtScore(struct axt *axt, struct axtScoreScheme *ss)
-/* Return calculated score of axt. */
+int axtScoreSym(struct axtScoreScheme *ss, int symCount, char *qSym, char *tSym)
+/* Return score without setting up an axt structure. */
 {
-int i, symCount = axt->symCount;
-char *qSym = axt->qSym, *tSym = axt->tSym;
+int i;
 char q,t;
 int score = 0;
 boolean lastGap = FALSE;
@@ -223,6 +221,12 @@ for (i=0; i<symCount; ++i)
 	}
     }
 return score;
+}
+
+int axtScore(struct axt *axt, struct axtScoreScheme *ss)
+/* Return calculated score of axt. */
+{
+return axtScoreSym(ss, axt->symCount, axt->qSym, axt->tSym);
 }
 
 int axtScoreDnaDefault(struct axt *axt)
@@ -352,41 +356,56 @@ ss->gapExtend = 30;
 return ss;
 }
 
-struct axtScoreScheme *axtScoreSchemeRnaDefault()
-/* Return default scoring scheme for RNA/DNA alignments
- * within the same species.  Do NOT axtScoreSchemeFree
- * this. */
+struct axtScoreScheme *axtScoreSchemeSimpleDna(int match, int misMatch, int gapOpen, int gapExtend)
+/* Return a relatively simple scoring scheme for DNA. */
 {
 static struct axtScoreScheme *ss;
-
-if (ss != NULL)
-    return ss;
 AllocVar(ss);
 
 /* Set up lower case elements of matrix. */
-ss->matrix['a']['a'] = 100;
-ss->matrix['a']['c'] = -200;
-ss->matrix['a']['g'] = -200;
-ss->matrix['a']['t'] = -200;
+ss->matrix['a']['a'] = match;
+ss->matrix['a']['c'] = -misMatch;
+ss->matrix['a']['g'] = -misMatch;
+ss->matrix['a']['t'] = -misMatch;
 
-ss->matrix['c']['a'] = -200;
-ss->matrix['c']['c'] = 100;
-ss->matrix['c']['g'] = -200;
-ss->matrix['c']['t'] = -200;
+ss->matrix['c']['a'] = -misMatch;
+ss->matrix['c']['c'] = match;
+ss->matrix['c']['g'] = -misMatch;
+ss->matrix['c']['t'] = -misMatch;
 
-ss->matrix['g']['a'] = -200;
-ss->matrix['g']['c'] = -200;
-ss->matrix['g']['g'] = 100;
-ss->matrix['g']['t'] = -200;
+ss->matrix['g']['a'] = -misMatch;
+ss->matrix['g']['c'] = -misMatch;
+ss->matrix['g']['g'] = match;
+ss->matrix['g']['t'] = -misMatch;
 
-ss->matrix['t']['a'] = -200;
-ss->matrix['t']['c'] = -200;
-ss->matrix['t']['g'] = -200;
-ss->matrix['t']['t'] = 100;
+ss->matrix['t']['a'] = -misMatch;
+ss->matrix['t']['c'] = -misMatch;
+ss->matrix['t']['g'] = -misMatch;
+ss->matrix['t']['t'] = match;
 
 propagateCase(ss);
-ss->gapOpen = 400;
-ss->gapExtend = 400;
+ss->gapOpen = gapOpen;
+ss->gapExtend = gapExtend;
+return ss;
+}
+
+struct axtScoreScheme *axtScoreSchemeRnaDefault()
+/* Return default scoring scheme for RNA/DNA alignments
+ * within the same species.  Do NOT axtScoreSchemeFree */
+{
+static struct axtScoreScheme *ss;
+if (ss == NULL)
+    ss = axtScoreSchemeSimpleDna(100, 200, 300, 300);
+return ss;
+}
+
+struct axtScoreScheme *axtScoreSchemeRnaFill()
+/* Return scoreing scheme a little more relaxed than 
+ * RNA/DNA defaults for filling in gaps. */
+{
+static struct axtScoreScheme *ss;
+if (ss == NULL)
+    ss = axtScoreSchemeSimpleDna(100, 100, 200, 200);
 return ss;
 }
 
@@ -563,6 +582,7 @@ if (!gotO || !gotE)
     errAbort("Expecting O = and E = in last line of %s", lf->fileName);
 if (ss->gapOpen <= 0 || ss->gapExtend <= 0)
     errAbort("Must have positive gap scores");
+propagateCase(ss);
 return ss;
 }
 

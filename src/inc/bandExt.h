@@ -8,13 +8,14 @@
 #ifndef BANDEXT_H
 #define BANDEXT_H
 
-boolean bandExt(struct axtScoreScheme *ss, int maxInsert,
+boolean bandExt(boolean global, struct axtScoreScheme *ss, int maxInsert,
 	char *aStart, int aSize, char *bStart, int bSize, int dir,
 	int symAlloc, int *retSymCount, char *retSymA, char *retSymB, 
 	int *retStartA, int *retStartB);
 /* Try to extend an alignment from aStart/bStart onwards.
- * Set maxInsert to the maximum gap size allowed.  3 is often
- * a good choice.  aStart/aSize bStart/bSize describe the
+ * If global is set it will always go to end (aStart+aSize-1,
+ * bStart+bSize-1).  Set maxInsert to the maximum gap size allowed.  
+ * 3 is often a good choice.  aStart/aSize bStart/bSize describe the
  * sequence to extend through (not including any of the existing
  * alignment. Set dir = 1 for forward extension, dir = -1 for backwards. 
  * retSymA and retSymB should point to arrays of characters of

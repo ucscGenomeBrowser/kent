@@ -135,6 +135,7 @@ return cloneList;
 
 void addStageInfo(char *gsDir, struct hash *cloneHash)
 /* Add info about which file and what stage clone is in. */
+/* TSF - This is no longer used due to unavailability of *.finf files - 4/7/2003 */
 {
 static char *finfFiles[] = {"ffa/finished.finf", "ffa/draft.finf",
 			    "ffa/predraft.finf", "ffa/extras.finf"};
@@ -189,6 +190,7 @@ for (i=0; i<numStages; ++i)
 
 void addSeqInfo(char *seqInfoName, struct hash *cloneHash)
 /* Add in information from sequence.info file. */
+/* TSF - stage info now being derived from here - 4/7/2003 */
 {
 struct lineFile *lf = lineFileOpen(seqInfoName, TRUE);
 char *line, *words[16];
@@ -196,6 +198,7 @@ int lineSize, wordCount;
 struct clonePos *clone;
 struct gsSeqInfo gs;
 int warnsLeft = 10;	/* Only give first 10 warnings about missing clones. */
+static char stages[] = "PPDF";
 
 printf("Processing %s\n", seqInfoName);
 while (lineFileNext(lf, &line, &lineSize))
@@ -227,6 +230,7 @@ while (lineFileNext(lf, &line, &lineSize))
 	    }
 	clone->seqSize = gs.size;
 	clone->phase = gs.phase;
+	clone->stage[0] = stages[atoi(words[3])];
 	}
     }
 lineFileClose(&lf);
@@ -298,7 +302,7 @@ struct hash *cloneHash = newHash(16);
 struct clonePos *cloneList = NULL;
 
 cloneList = readClonesFromOoDir(ooDir, cloneHash);
-addStageInfo(gsDir, cloneHash);
+/* addStageInfo(gsDir, cloneHash); */
 addSeqInfo(seqInfoName, cloneHash);
 checkClonePos(cloneList);
 saveClonePos(cloneList, database);

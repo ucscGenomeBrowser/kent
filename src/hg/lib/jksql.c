@@ -393,7 +393,7 @@ numScan = sscanf(info, "Records: %d Deleted: %*d  Skipped: %d  Warnings: %d",
 if (numScan != 3)
     errAbort("can't parse sql load info: %s", info);
 if ((numSkipped > 0) || (numWarnings > 0))
-    errAbort("load of %s did not go as planned: %d record(s), "
+    uglyf("load of %s did not go as planned: %d record(s), "
              "%d row(s) skipped, %d warning(s) loading %s",
              table, numRecs, numSkipped, numWarnings, path);
 sqlFreeResult(&sr);

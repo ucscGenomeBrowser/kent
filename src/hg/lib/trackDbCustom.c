@@ -7,6 +7,8 @@
 #include "trackDb.h"
 #include "hdb.h"
 #include "hui.h"
+#include "ra.h"
+#include "hash.h"
 
 /* ----------- End of AutoSQL generated code --------------------- */
 
@@ -116,6 +118,25 @@ if (wordCount != 3)
 *b = atoi(words[2]);
 }
 
+static unsigned char parseVisibility(char *value, struct lineFile *lf)
+/* Parse a visibility value */
+{
+if (sameString(value, "hide") || sameString(value, "0"))
+    return tvHide;
+else if (sameString(value, "dense") || sameString(value, "1"))
+    return tvDense;
+else if (sameString(value, "full") || sameString(value, "2"))
+    return tvFull;
+else if (sameString(value, "pack") || sameString(value, "3"))
+    return tvPack;
+else if (sameString(value, "squish") || sameString(value, "4"))
+    return tvSquish;
+else
+    errAbort("Unknown visibility %s line %d of %s", 
+             value, lf->lineIx, lf->fileName);
+return tvHide;  /* never reached */
+}
+
 void trackDbAddInfo(struct trackDb *bt, 
 	char *var, char *value, struct lineFile *lf)
 /* Add info from a variable/value pair to browser table. */
@@ -134,17 +155,7 @@ else if (sameWord(var, "url"))
     bt->url = cloneString(value);
 else if (sameString(var, "visibility"))
     {
-    if (sameString(value, "dense") || sameString(value, "1"))
-	bt->visibility = tvDense;
-    else if (sameString(value, "full") || sameString(value, "2"))
-	bt->visibility = tvFull;
-    else if (sameString(value, "hide") || sameString(value, "0"))
-	bt->visibility = tvHide;
-    else if (sameString(value, "pack") || sameString(value, "3"))
-        bt->visibility = tvPack;
-    else
-	errAbort("Unknown visibility %s line %d of %s", 
-		value, lf->lineIx, lf->fileName);
+    bt->visibility =  parseVisibility(value, lf);
     }
 else if (sameWord(var, "color"))
     {
@@ -212,5 +223,35 @@ if (bt->grp == NULL)
     bt->grp = cloneString("x");
 if (bt->canPack == 2)
     bt->canPack = packableType(bt->type);
+}
+
+void trackDbOverrideVisbility(struct hash *tdHash, char *visibilityRa)
+/* override visbility settings using a ra file */
+{
+struct hashEl *hel;
+struct hashCookie cookie;
+struct lineFile *lf;
+struct hash *raRecord;
+
+/* Set visibility to hide on all entries */
+cookie = hashFirst(tdHash);
+while ((hel = hashNext(&cookie)) != NULL)
+    ((struct trackDb *)hel->val)->visibility = tvHide;
+
+/* Parse the ra file, adjusting visibility accordingly */
+lf = lineFileOpen(visibilityRa, TRUE);
+while ((raRecord = raNextRecord(lf)) != NULL)
+    {
+    char *trackName = hashFindVal(raRecord, "track");
+    char *visibility = hashFindVal(raRecord, "visibility");
+    if ((trackName != NULL) && (visibility != NULL))
+        {
+        struct trackDb *td = hashFindVal(tdHash, trackName);
+        if (td != NULL)
+            td->visibility = parseVisibility(visibility, lf);
+        }
+    hashFree(&raRecord);
+    }
+lineFileClose(&lf);
 }
 

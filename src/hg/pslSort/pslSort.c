@@ -4,6 +4,7 @@
 #include "linefile.h"
 #include "memalloc.h"
 #include "localmem.h"
+#include "options.h"
 #include "psl.h"
 
 
@@ -24,9 +25,13 @@ errAbort(
    "\n"
    "Adding 1 or 2 after the dirs or g2g will limit the program to\n"
    "only the first or second pass repectively of the sort\n"
+   "\n"
+   "Options:\n"
+   "   -verbose=N Set verbosity level, higher for more output. Default 1\n"
    );
 }
 
+int verbose = 1;
 void makeMidName(char *tempDir, int ix, char *retName)
 /* Return name of temp file of given index. */
 {
@@ -118,7 +123,8 @@ for (tmp = tmpList; tmp != NULL; tmp = tmp->next)
     mid->lf = pslFileOpen(fileName);
     slAddHead(&midList, mid);
     }
-printf("writing %s", outFile);
+if (verbose >= 1)
+    printf("writing %s", outFile);
 fflush(stdout);
 /* Write out the lowest sorting line from mid list until done. */
 for (;;)
@@ -126,7 +132,8 @@ for (;;)
     struct midFile *bestMid = NULL;
     if ( (++aliCount & 0xffff) == 0)
 	{
-	printf(".");
+	if (verbose >= 1)
+	    printf(".");
 	fflush(stdout);
 	}
     for (mid = midList; mid != NULL; mid = mid->next)
@@ -293,7 +300,8 @@ if (!secondOnly)
 	dirDir = listDir(inDir, "*.psl");
 	if (slCount(dirDir) == 0)
 	    errAbort("No psl files in %s\n", inDir);
-	printf("%s with %d files\n", inDir, slCount(dirDir));
+	if (verbose >= 1)
+	    printf("%s with %d files\n", inDir, slCount(dirDir));
 	for (dirFile = dirDir; dirFile != NULL; dirFile = dirFile->next)
 	    {
 	    sprintf(fileName, "%s/%s", inDir, dirFile->name);
@@ -302,13 +310,15 @@ if (!secondOnly)
 	    }
 	slFreeList(&dirDir);
 	}
-    printf("%d files in %d dirs\n", slCount(fileList), inDirCount);
+    if (verbose >= 1)
+	printf("%d files in %d dirs\n", slCount(fileList), inDirCount);
     slReverse(&fileList);
     fileCount = slCount(fileList);
     filesPerMidFile = round(sqrt(fileCount));
     // if (filesPerMidFile > 20)
 	// filesPerMidFile = 20;  /* bandaide! Should keep track of mem usage. */
-    printf("Got %d files %d files per mid file\n", fileCount, filesPerMidFile);
+    if (verbose >= 1)
+	printf("Got %d files %d files per mid file\n", fileCount, filesPerMidFile);
 
     /* Read in files a group at a time, sort, and write merged, sorted
      * output of one group. */
@@ -329,7 +339,8 @@ if (!secondOnly)
 		{
 		reflectMe = !selfFile(name->name);
 		}
-	    printf("Reading %s (%d of %d)\n", name->name, totalFilesProcessed+1, fileCount);
+	    if (verbose >= 2)
+		printf("Reading %s (%d of %d)\n", name->name, totalFilesProcessed+1, fileCount);
 	    lf = pslFileOpen(name->name);
 	    while ((psl = nextLmPsl(lf, lm)) != NULL)
 		{
@@ -350,7 +361,8 @@ if (!secondOnly)
 	    }
 	slSort(&pslList, pslCmpQuery);
 	makeMidName(tempDir, midFileCount, fileName);
-	printf("Writing %s\n", fileName);
+	if (verbose >= 1)
+	    printf("Writing %s\n", fileName);
 	f = mustOpen(fileName, "w");
 	pslWriteHead(f);
 	for (psl = pslList; psl != NULL; psl = psl->next)
@@ -360,7 +372,8 @@ if (!secondOnly)
 	fclose(f);
 	pslList = NULL;
 	lmCleanup(&lm);
-	printf("lfileCount %d\n", lfileCount);
+	if (verbose >= 2)
+	    printf("lfileCount %d\n", lfileCount);
 	++midFileCount;
 	}
     }
@@ -371,8 +384,11 @@ if (!firstOnly)
 int main(int argc, char *argv[])
 /* Process command line. */
 {
+optionHash(&argc, argv);
 if (argc < 5)
     usage();
+verbose = optionInt("verbose", verbose);
 pslSort(argv[1], argv[2], argv[3], &argv[4], argc-4);
+return 0;
 }
    

@@ -81,10 +81,17 @@ struct axtScoreScheme *axtScoreSchemeDefault();
 /* Return default scoring scheme (after blastz).  Do NOT axtScoreSchemeFree
  * this. */
 
+struct axtScoreScheme *axtScoreSchemeSimpleDna(int match, int misMatch, int gapOpen, int gapExtend);
+/* Return a relatively simple scoring scheme for DNA. */
+
 struct axtScoreScheme *axtScoreSchemeRnaDefault();
 /* Return default scoring scheme for RNA/DNA alignments
  * within the same species.  Do NOT axtScoreSchemeFree
  * this. */
+
+struct axtScoreScheme *axtScoreSchemeRnaFill();
+/* Return scoreing scheme a little more relaxed than 
+ * RNA/DNA defaults for filling in gaps. */
 
 struct axtScoreScheme *axtScoreSchemeProteinDefault();
 /* Returns default protein scoring scheme.  This is
@@ -100,6 +107,9 @@ struct axtScoreScheme *axtScoreSchemeRead(char *fileName);
     -123  -31 -114   91
     O = 400, E = 30
  * axtScoreSchemeFree this when done. */
+
+int axtScoreSym(struct axtScoreScheme *ss, int symCount, char *qSym, char *tSym);
+/* Return score without setting up an axt structure. */
 
 int axtScore(struct axt *axt, struct axtScoreScheme *ss);
 /* Return calculated score of axt. */

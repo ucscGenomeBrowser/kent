@@ -15,6 +15,7 @@ now = time(NULL);
 
 char paraSig[17] = "0d2f070562685f29";  /* Mild security measure. */
 int paraSigSize = 16;
+
 int paraHubPort = 0x46DC;		      /* Our hub port */
 int paraNodePort = 0x46DD;		      /* Our node port */
 

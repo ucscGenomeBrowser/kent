@@ -521,6 +521,11 @@ boolean fastReadString(FILE *f, char buf[256]);
 void carefulClose(FILE **pFile);
 /* Close file if open and null out handle to it. */
 
+boolean carefulCloseWarn(FILE **pFile);
+/* Close file if open and null out handle to it. 
+ * Return FALSE and print a warning message if there
+ * is a problem.*/
+
 char *firstWordInFile(char *fileName, char *wordBuf, int wordBufSize);
 /* Read the first word in file into wordBuf. */
 

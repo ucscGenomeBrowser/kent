@@ -192,5 +192,14 @@ struct bed *bedFilterList(struct bed *bedListIn, struct bedFilter *bf);
 /* Given a bed list and a bedFilter which specifies constraints on bed 
  * fields, return the list of bed items that meet the constraints. */
 
+struct bed *bedFilterByNameHash(struct bed *bedList, struct hash *nameHash);
+/* Given a bed list and a hash of names to keep, return the list of bed 
+ * items whose name is in nameHash. */
+
+struct bed *bedFilterByWildNames(struct bed *bedList, struct slName *wildNames);
+/* Given a bed list and a list of names that may include wildcard characters,
+ * return the list of bed items whose name matches at least one wildName. */
+
+
 #endif /* BED_H */
 

@@ -187,43 +187,6 @@ for (t3 = t3List; t3 != NULL; t3 = t3->next)
 internalErr();
 }
 
-static struct ffAli *ffMergeExactly(struct ffAli *aliList)
-/* Remove overlapping areas needle in alignment. Assumes ali is sorted on
- * ascending nStart field. Also merge perfectly abutting neighbors.*/
-{
-struct ffAli *mid, *ali;
-
-for (mid = aliList->right; mid != NULL; mid = mid->right)
-    {
-    for (ali = aliList; ali != mid; ali = ali->right)
-	{
-	DNA *nStart, *nEnd;
-	int nOverlap, diag;
-	nStart = max(ali->nStart, mid->nStart);
-	nEnd = min(ali->nEnd, mid->nStart);
-	nOverlap = nEnd - nStart;
-	/* Overlap or perfectly abut in needle, and needle/hay
-	 * offset the same. */
-	if (nOverlap >= 0)
-	    {
-	    int diag = ali->nStart - ali->hStart;
-	    if (diag == mid->nStart - mid->hStart)
-		{
-		/* Make mid encompass both, and make ali empty. */
-		mid->nStart = min(ali->nStart, mid->nStart);
-		mid->nEnd = max(ali->nEnd, mid->nEnd);
-		mid->hStart = mid->nStart-diag;
-		mid->hEnd = mid->nEnd-diag;
-		ali->hEnd = mid->hStart;
-		ali->nEnd = mid->nStart;
-		}
-	    }
-	}
-    }
-aliList = ffRemoveEmptyAlis(aliList, TRUE);
-return aliList;
-}
-
 struct ffAli *smallMiddleExons(struct ffAli *aliList, 
 	struct ssBundle *bundle, 
 	enum ffStringency stringency)
@@ -536,11 +499,14 @@ static enum ffStringency ssStringency;
 static boolean ssIsProt;
 
 static int ssGapCost(int dq, int dt)
-/* Return gap penalty. */
+/* Return gap penalty.  This just need be a lower bound on 
+ * the penalty actually. */
 {
+int cost;
 if (dt < 0) dt = 0;
 if (dq < 0) dq = 0;
-return ffCalcGapPenalty(dt, dq, ssStringency);
+cost = ffCalcGapPenalty(dt, dq, ssStringency);
+return cost;
 }
 
 
@@ -709,7 +675,7 @@ else
 
 
 int ssStitch(struct ssBundle *bundle, enum ffStringency stringency, 
-	int minScore)
+	int minScore, int maxToReturn)
 /* Glue together mrnas in bundle as much as possible. Returns number of
  * alignments after stitching. Updates bundle->ffList with stitched
  * together version. */
@@ -722,12 +688,10 @@ struct ffAli *bestPath, *leftovers;
 int score;
 int newAliCount = 0;
 int totalFfCount = 0;
-int trimCount = qSeq->size/200 + genoSeq->size/1000 + 2000;
 boolean firstTime = TRUE;
 
 if (bundle->ffList == NULL)
     return 0;
-
 
 /* The score may improve when we stitch together more alignments,
  * so don't let minScore be too harsh at this stage. */
@@ -742,7 +706,7 @@ for (ffl = bundle->ffList; ffl != NULL; ffl = ffl->next)
 slFreeList(&bundle->ffList);
 
 ffAliSort(&ffList, ffCmpHitsNeedleFirst);
-ffList = ffMergeExactly(ffList);
+ffList = ffMergeClose(ffList);
 
 while (ffList != NULL)
     {
@@ -774,8 +738,15 @@ while (ffList != NULL)
     else
 	{
 	ffFreeAli(&bestPath);
+	ffFreeAli(&ffList);
+	break;
 	}
     firstTime = FALSE;
+    if (--maxToReturn <= 0)
+	{
+	ffFreeAli(&ffList);
+	break;
+	}
     }
 slReverse(&bundle->ffList);
 return newAliCount;
@@ -854,7 +825,7 @@ cdna = cSeq->dna;
 
 for (bun = bundleList; bun != NULL; bun = bun->next)
     {
-    ssStitch(bun, stringency, 20);
+    ssStitch(bun, stringency, 20, 16);
     }
 return bundleList;
 }

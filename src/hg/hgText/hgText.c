@@ -288,7 +288,14 @@ boolean isGenome(char *pos)
 /* Return TRUE if pos is genome. */
 {
 pos = trimSpaces(pos);
-return(sameWord(pos, "genome"));
+return(sameWord(pos, "genome") || sameWord(pos, "hgBatch"));
+}
+
+boolean isBatch(char *pos)
+/* Return TRUE if pos is genome. */
+{
+pos = trimSpaces(pos);
+return(sameWord(pos, "hgBatch"));
 }
 
 void positionLookup(char *phase)
@@ -306,19 +313,21 @@ cgiMakeHiddenVar("origPhase", phase);
 cgiMakeButton("submit", "Look up");
 }
 
-void positionLookupSamePhase()
-/* print the location and a jump button if the table is positional */
+void displayPosition()
+/* print the location if the table is positional. preserve batch-position. */
 {
+cgiMakeHiddenVar("position", position);
 if (tableIsPositional)
     {
-    puts("position: ");
-    positionLookup(cgiString("phase"));
-    puts("<P>");
+    if (isBatch(position))
+	printf("position: previously uploaded set of accessions/names<P>\n");
+    else
+	printf("position: %s<P>\n", position);
     }
-else
-    {
-    cgiMakeHiddenVar("position", position);
-    }
+cgiContinueHiddenVar("hgb.showPasteResults");
+cgiContinueHiddenVar("hgb.showUploadResults");
+//#*** Really need to save this off to a local file!
+cgiContinueHiddenVar("hgb.userKeys");
 }
 
 
@@ -381,6 +390,7 @@ puts(
 "<A HREF=\"http://www.soe.ucsc.edu/~haussler\">David Haussler</A>, "
 "<A HREF=\"mailto:matt@soe.ucsc.edu\">Matt Schwartz</A>, "
 "<A HREF=\"mailto:angie@soe.ucsc.edu\">Angie Hinrichs</A>, "
+"<A HREF=\"mailto:fanhsu@soe.ucsc.edu\">Fan Hsu</A>, "
 "<A HREF=\"mailto:donnak@soe.ucsc.edu\">Donna Karolchik</A>, "
 "<A HREF=\"mailto:heather@soe.ucsc.edu\">Heather Trumbower</A>, "
 "and the Genome Bioinformatics Group of UC Santa Cruz.<BR>\n"
@@ -825,7 +835,8 @@ struct hashEl *nonposTableList;
 webStart(cart, "Table Browser: %s: Choose a table", freezeName);
 handleDbChange();
 
-printf("<FORM ACTION=\"%s\" NAME=\"mainForm\">\n\n", hgTextName());
+printf("<FORM ACTION=\"%s\" NAME=\"mainForm\" METHOD=\"POST\">\n\n",
+       hgTextName());
 cartSaveSession(cart);
 cgiMakeHiddenVar("db", database);
 puts("<TABLE CELLPADDING=\"8\">");
@@ -1080,11 +1091,12 @@ saveChooseTableState();
 
 webStart(cart, "Table Browser: %s: %s", freezeName, outputOptionsPhase);
 checkTableExists(fullTableName);
-printf("<FORM ACTION=\"%s\" NAME=\"mainForm\">\n\n", hgTextName());
+printf("<FORM ACTION=\"%s\" NAME=\"mainForm\" METHOD=\"POST\">\n\n",
+       hgTextName());
 cartSaveSession(cart);
 cgiMakeHiddenVar("db", database);
 cgiMakeHiddenVar("table", getTableVar());
-positionLookupSamePhase();
+displayPosition();
 
 printf("<P><HR><H3> Select Output Format for %s </H3>\n", table);
 puts("<A HREF=\"/goldenPath/help/hgTextHelp.html#Formats\">"
@@ -1896,8 +1908,45 @@ if ((table2 != NULL) && (table2[0] != 0) && (op != NULL))
 return(hti);
 }
 
+
+void bedFilterBatch(struct bed **bedListPtr)
+/* If position is batch, filter by name. */
+{
+if (isBatch(position))
+    {
+    struct bed *bedListOut = NULL;
+//#*** instead of hgb.userKeys, should read these in from a file!
+    char *keyStr = cloneString(cgiString("hgb.userKeys")), *word;
+    if (cgiVarExists("hgb.showUploadResults"))
+	{
+	struct hash *nameHash = newHash(18);
+	while ((word = nextWord(&keyStr)) != NULL)
+	    {
+	    hashAdd(nameHash, word, NULL);
+	    }
+	bedListOut = bedFilterByNameHash(*bedListPtr, nameHash);
+	hashFree(&nameHash);
+	}
+    else
+	{
+	struct slName *wildNames = NULL, *wild=NULL;
+	while ((word = nextWord(&keyStr)) != NULL)
+	    {
+	    wild = slNameNew(word);
+	    slAddHead(&wildNames, wild);
+	    }
+	bedListOut = bedFilterByWildNames(*bedListPtr, wildNames);
+	slFreeList(&wildNames);
+	}
+    bedFreeList(bedListPtr);
+    *bedListPtr = bedListOut;;
+    }
+}
+
+
 struct bed *bitsToBed4List(Bits *bits, int bitSize, char *chrom, int minSize,
 			   int rangeStart, int rangeEnd)
+/* Translate ranges of set bits to bed 4 items. */
 {
 struct bed *bedList = NULL, *bed;
 int i;
@@ -2020,6 +2069,7 @@ for (chromPtr=chromList;  chromPtr != NULL;  chromPtr = chromPtr->next)
     else
 	bedListT1 = hGetBedRangeDb(db, fullTableName, chrom, winStart,
 				   winEnd, constraints);
+    bedFilterBatch(&bedListT1);
     /* If 2 tables are named, get their intersection. */
     if ((table2 != NULL) && (table2[0] != 0) && (op != NULL))
 	{
@@ -2535,11 +2585,12 @@ saveIntersectOptionsState();
 
 webStart(cart, "Table Browser: %s: Choose Fields of %s", freezeName, table);
 checkTableExists(fullTableName);
-printf("<FORM ACTION=\"%s\" NAME=\"mainForm\">\n\n", hgTextName());
+printf("<FORM ACTION=\"%s\" NAME=\"mainForm\" METHOD=\"POST\">\n\n",
+       hgTextName());
 cartSaveSession(cart);
 cgiMakeHiddenVar("db", database);
 cgiMakeHiddenVar("table", getTableVar());
-positionLookupSamePhase();
+displayPosition();
 cgiMakeHiddenVar("outputType", outputType);
 preserveConstraints(fullTableName, db, NULL);
 preserveTable2();
@@ -2582,11 +2633,12 @@ saveIntersectOptionsState();
 
 webStart(cart, "Table Browser: %s: %s", freezeName, seqOptionsPhase);
 checkTableExists(fullTableName);
-printf("<FORM ACTION=\"%s\" NAME=\"mainForm\">\n\n", hgTextName());
+printf("<FORM ACTION=\"%s\" NAME=\"mainForm\" METHOD=\"POST\">\n\n",
+       hgTextName());
 cartSaveSession(cart);
 cgiMakeHiddenVar("db", database);
 cgiMakeHiddenVar("table", getTableVar());
-positionLookupSamePhase();
+displayPosition();
 cgiMakeHiddenVar("outputType", outputType);
 preserveConstraints(fullTableName, getTableDb(), NULL);
 preserveTable2();
@@ -2685,7 +2737,7 @@ if ((i == startIndx) && (bed->strand[0] == '-'))
 
 
 struct gffLine *bedToGffLines(struct bed *bedList, struct hTableInfo *hti,
-			      char *source)
+			      char *source, boolean gtf2StopCodons)
 /* Translate a (list of) bed into list of gffLine elements. */
 {
 struct gffLine *gffList = NULL, *gff;
@@ -2738,23 +2790,23 @@ for (bed = bedList;  bed != NULL;  bed = bed->next)
 	    if ((s >= bed->thickStart) && (e <= bed->thickEnd))
 		{
 		addCdsStartStop(&gffList, bed, source, s, e, frames,
-				i, startIndx, stopIndx, FALSE);
+				i, startIndx, stopIndx, gtf2StopCodons);
 		}
 	    else if ((s < bed->thickStart) && (e > bed->thickEnd))
 		{
 		addCdsStartStop(&gffList, bed, source,
 				bed->thickStart, bed->thickEnd,
-				frames, i, startIndx, stopIndx, FALSE);
+				frames, i, startIndx, stopIndx, gtf2StopCodons);
 		}
 	    else if ((s < bed->thickStart) && (e > bed->thickStart))
 		{
 		addCdsStartStop(&gffList, bed, source, bed->thickStart, e,
-				frames, i, startIndx, stopIndx, FALSE);
+				frames, i, startIndx, stopIndx, gtf2StopCodons);
 		}
 	    else if ((s < bed->thickEnd) && (e > bed->thickEnd))
 		{
 		addCdsStartStop(&gffList, bed, source, s, bed->thickEnd,
-				frames, i, startIndx, stopIndx, FALSE);
+				frames, i, startIndx, stopIndx, gtf2StopCodons);
 		}
 	    addGffLineFromBed(&gffList, bed, source, "exon", s, e, '.');
 	    }
@@ -2803,6 +2855,10 @@ char source[64];
 char *db = getTableDb();
 char *track = getTrackName();
 int itemCount;
+// Would be nice to allow user to select this, but I don't want to 
+// make an options page for just one param... any others?  
+// ? exon / CDS ?
+boolean gtf2StopCodons = FALSE;
 
 saveOutputOptionsState();
 saveIntersectOptionsState();
@@ -2816,7 +2872,7 @@ if (sameString(customTrackPseudoDb, db))
 else
     snprintf(source, sizeof(source), "%s_%s", db, track);
 itemCount = 0;
-gffList = bedToGffLines(bedList, hti, source);
+gffList = bedToGffLines(bedList, hti, source, gtf2StopCodons);
 bedFreeList(&bedList);
 for (gffPtr = gffList;  gffPtr != NULL;  gffPtr = gffPtr->next)
     {
@@ -2846,11 +2902,12 @@ saveIntersectOptionsState();
 
 webStart(cart, "Table Browser: %s: %s", freezeName, bedOptionsPhase);
 checkTableExists(fullTableName);
-puts("<FORM ACTION=\"/cgi-bin/hgText\" NAME=\"mainForm\" METHOD=\"GET\">\n");
+printf("<FORM ACTION=\"%s\" NAME=\"mainForm\" METHOD=\"POST\">\n",
+       hgTextName());
 cartSaveSession(cart);
 cgiMakeHiddenVar("db", database);
 cgiMakeHiddenVar("table", getTableVar());
-positionLookupSamePhase();
+displayPosition();
 cgiMakeHiddenVar("outputType", outputType);
 preserveConstraints(fullTableName, db, NULL);
 preserveTable2();
@@ -3115,11 +3172,12 @@ if (! sameString(outputType, seqOptionsPhase) &&
 	     "(FASTA, BED, HyperLinks, GTF or Summary/Statistics) for "
 	     "intersection of tables.");
 
-puts("<FORM ACTION=\"/cgi-bin/hgText\" NAME=\"mainForm\" METHOD=\"GET\">\n");
+printf("<FORM ACTION=\"%s\" NAME=\"mainForm\" METHOD=\"POST\">\n",
+       hgTextName());
 cartSaveSession(cart);
 cgiMakeHiddenVar("db", database);
 cgiMakeHiddenVar("table", getTableVar());
-positionLookupSamePhase();
+displayPosition();
 cgiMakeHiddenVar("outputType", outputType);
 cgiMakeHiddenVar("table2", getTable2Var());
 preserveConstraints(fullTableName, db, NULL);
@@ -3205,7 +3263,8 @@ if (sameString(database, db))
 else
     conn = hAllocConn2();
 sr = sqlGetResult(conn, query->string);
-printf("<FORM ACTION=\"%s\" NAME=\"descForm\">\n\n", hgTextName());
+printf("<FORM ACTION=\"%s\" NAME=\"descForm\" METHOD=\"POST\">\n\n",
+       hgTextName());
 cartSaveSession(cart);
 cgiMakeHiddenVar("db", database);
 cgiMakeHiddenVar("table", getTableVar());
@@ -3249,7 +3308,8 @@ saveOutputOptionsState();
 
 webStart(cart, "Table Browser: %s: %s", freezeName, statsPhase);
 checkTableExists(fullTableName);
-printf("<FORM ACTION=\"%s\" NAME=\"mainForm\">\n\n", hgTextName());
+printf("<FORM ACTION=\"%s\" NAME=\"mainForm\" METHOD=\"POST\">\n\n",
+       hgTextName());
 cartSaveSession(cart);
 cgiMakeHiddenVar("db", database);
 cgiMakeHiddenVar("table", getTableVar());
@@ -3529,11 +3589,12 @@ blockSizeStats = needMem((numChroms+1) * sizeof(struct intStats));
 webStart(cart, "Table Browser: %s: %s", freezeName, statsPhase);
 checkTableExists(fullTableName);
 
-printf("<FORM ACTION=\"%s\" NAME=\"mainForm\">\n\n", hgTextName());
+printf("<FORM ACTION=\"%s\" NAME=\"mainForm\" METHOD=\"POST\">\n\n",
+       hgTextName());
 cartSaveSession(cart);
 cgiMakeHiddenVar("db", database);
 cgiMakeHiddenVar("table", getTableVar());
-positionLookupSamePhase();
+displayPosition();
 preserveConstraints(fullTableName, db, NULL);
 preserveTable2();
 

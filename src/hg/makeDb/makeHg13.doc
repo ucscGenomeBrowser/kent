@@ -1,3 +1,6 @@
+#!/bin/csh -f # set emacs mode
+exit; # don't actually run this like a script :)
+
 This file describes how we made the browser database on 
 NCBI build 31 (November, 2002 freeze)
 
@@ -1522,32 +1525,32 @@ LOAD AVID MOUSE TRACK (todo)
       hgLoadBed avidRepeat avidRepeat.bed
       hgLoadBed avidUnique avidUnique.bed
 
-LOAD SNPS (TODO)
+LOAD SNPS (done; D Thomas; build 111 on 3/4/03)
       ssh hgwdev
       cd ~/oo/bed
       mkdir snp
       cd snp
-      mkdir build110
-      cd build110
+      mkdir build111
+      cd build111
       ln -s ../../../seq_contig.md .
-      ln -s ~/lastOo/bed/cpgIsland/filter.awk .
+      ln -s ../build110/filter.awk .
 
-     -Download SNPs from ftp://ftp.ncbi.nlm.nih.gov/pub/sherry/gp.ncbi.b31.gz
+     -Download SNPs from ftp://ftp.ncbi.nlm.nih.gov/human/snp/human.b31.snp111
      -Unpack
-      calcFlipSnpPos seq_contig.md gp.ncbi.b31 gp.ncbi.b31.flipped
-      mv gp.ncbi.b31 gp.ncbi.b31.original
-      gzip gp.ncbi.b31.original
+      calcFlipSnpPos seq_contig.md human.b31.snp111 human.b31.snp111.flipped
+      mv human.b31.snp111 human.b31.snp111.original
+      gzip human.b31.snp111.original
 
-      grep RANDOM       gp.ncbi.b31.flipped >  snpTsc.txt
-      grep MIXED        gp.ncbi.b31.flipped >> snpTsc.txt
-      grep BAC_OVERLAP  gp.ncbi.b31.flipped >  snpNih.txt
-      grep OTHER        gp.ncbi.b31.flipped >> snpNih.txt
+      grep RANDOM       human.b31.snp111.flipped >  snpTsc.txt
+      grep MIXED        human.b31.snp111.flipped >> snpTsc.txt
+      grep BAC_OVERLAP  human.b31.snp111.flipped >  snpNih.txt
+      grep OTHER        human.b31.snp111.flipped >> snpNih.txt
 
       awk -f filter.awk snpTsc.txt > snpTsc.contig.bed
       awk -f filter.awk snpNih.txt > snpNih.contig.bed
 
-      liftUp snpTsc.bed ../../jkStuff/liftAll.lft warn snpTsc.contig.bed
-      liftUp snpNih.bed ../../jkStuff/liftAll.lft warn snpNih.contig.bed
+      liftUp snpTsc.bed ../../../jkStuff/liftAll.lft warn snpTsc.contig.bed
+      liftUp snpNih.bed ../../../jkStuff/liftAll.lft warn snpNih.contig.bed
 
       hgLoadBed hg13 snpTsc snpTsc.bed
       hgLoadBed hg13 snpNih snpNih.bed
@@ -1625,6 +1628,30 @@ LOAD SANGER22 GENES  TO DO
      # go to that directory while logged onto hgwdev.  Then:
         grep -v Pseudogene chr_20*.gtf | ldHgGene hg13 sanger20 stdin
 	hgSanger20 hg13 *.gtf *.info
+
+
+LOAD VEGA GENES (DONE 04/04/03)
+    mkdir ~/hg13/bed/vega
+    # Saved email attachment from Steve Searle <searle@sanger.ac.uk> to
+    # ~/hg13/bed/vega/vegagtf.tar.gz
+    gunzip -c vegagtf.tar.gz | tar xvf -
+    # Add "chr" to the beginning of each GTF line:
+    foreach f (chr*.gtf)
+      sed -e 's/^/chr/' $f > $f:r-fixed.gtf
+    end
+    # The pep files need their not-yet-stable otter ID's translated to 
+    # the transcript_id's used in the GTF.  
+    foreach f (chr*.fa)
+      set c = `echo $f:t:r | awk -F_ '{print $1;}'`
+      set g = ${c}_from_ev.gtf
+      ./fixOtterIds.pl $g $f > $f:r-fixed.fa
+    end
+    cat chr*.gtf.tab > vegaInfo.tab
+    ldHgGene hg13 vegaGene chr*-fixed.gtf
+    hgPepPred hg13 generic vegaPep chr*-fixed.fa
+    hgsql hg13 < ~/kent/src/hg/lib/vegaInfo.sql
+    echo "load data local infile 'vegaInfo.tab' into table vegaInfo" \
+    | hgsql hg13
 
 
 LOAD RNAGENES
@@ -2404,16 +2431,17 @@ cd /usr/local/apache/htdocs/goldenPath/14nov2002/database
 zip ../bigZips/database.zip *
 
 
-SGP GENE PREDICTIONS (DONE 01/28/03)
+SGP GENE PREDICTIONS (DONE 04/04/03)
     mkdir -p ~/oo/bed/sgp/download
     cd ~/oo/bed/sgp/download
+    set webroot = http://genome.imim.es/genepredictions/H.sapiens/golden_path_20021114/SGP_mm2003
     foreach f (~/oo/?{,?}/chr?{,?}{,_random}.fa)
       set chr = $f:t:r
-      wget http://genome.imim.es/genepredictions/H.sapiens/golden_path_20021114/SGP/$chr.gtf
-      wget http://genome.imim.es/genepredictions/H.sapiens/golden_path_20021114/SGP/$chr.prot
+      wget $webroot/$chr.gtf
+      wget $webroot/$chr.prot
     end
-    wget http://genome.imim.es/genepredictions/H.sapiens/golden_path_20021114/SGP/chrUn.gtf -O chrUn_random.gtf
-    wget http://genome.imim.es/genepredictions/H.sapiens/golden_path_20021114/SGP/chrUn.prot -O chrUn_random.prot
+    wget $webroot/chrUn.gtf -O chrUn_random.gtf
+    wget $webroot/chrUn.prot -O chrUn_random.prot
     # Add missing .1 to protein id's
     foreach f (*.prot)
       perl -wpe 's/^(>chr\w+)$/$1.1/' $f > $f:r-fixed.prot
@@ -2529,3 +2557,31 @@ MAKING PROMOTER FILES
     
     
     #- Take a look at bigZips/* and chromosomes/*, update their README.txt's
+
+SLAM
+
+#   Slam predictions for human originate from both mouse and rat
+
+    cd /cluster/store4/gs.14/build31/bed/slam
+
+    wget http://baboon.math.berkeley.edu/~cdewey/slam/hs_31_Nov2002_mm_3_Feb2002/gff/hsCDS.gff.gz
+    gunzip hsCDS.gff.gz
+    mv hsCDS.gff humanFromMouseCDS.gff
+    ldHgGene -exon=CDS hg13 slamMouse
+
+    wget http://baboon.math.berkeley.edu/~cdewey/slam/hs_31_Nov2002_rn_2_Nov2002/gff/hsCDS.gff.gz
+    gunzip hsCDS.gff.gz
+    mv hsCDS.gff humanFromRatCDS.gff
+    ldHgGene -exon=CDS hg13 slamRat
+
+    wget http://baboon.math.berkeley.edu/~scawley/slam/hs_31_Nov2002_mm_3_Feb2002/gff/hsCNS.bed.gz
+    gunzip hsCNS.bed.gz
+    mv hsCNS.bed humanFromMouseCNS.bed
+    expand.pl < humanFromMouseCNS.bed > humanFromMouseCNS.bed.expand
+    hgLoadBed -tab hg13 slamNonCodingMouse humanFromMouseCNS.bed.expand
+
+    wget http://baboon.math.berkeley.edu/~scawley/slam/hs_31_Nov2002_rn_2_Nov2002/gff/hsCNS.bed.gz
+    gunzip hsCNS.bed.gz
+    mv hsCNS.bed humanFromRatCNS.bed
+    expand.pl < humanFromRatCNS.bed > humanFromRatCNS.bed.expand
+    hgLoadBed -tab hg13 slamNonCodingRat humanFromRatCNS.bed.expand

@@ -1387,6 +1387,16 @@ PRODUCING FUGU FISH ALIGNMENTS (DONE 03/13/03)
     hgLoadRna addSeq mm3 /gbdb/mm3/fuguSeq/fugu_v3_mask.fasta
 
 
+LOAD SOFTBERRY GENES (DONE 02/04/03)
+     cd /cluster/store2/mm.2003.02/mm3/bed
+     mkdir softberry
+     cd softberry
+     wget ftp://www.softberry.com/pub/SC_MOU_FEB03/Softb_mouse_gff_f03.tar.gz
+     gunzip -c Softb_mouse_gff_f03.tar.gz | tar xvf -
+     ldHgGene mm3 softberryGene chr*.gff
+     hgPepPred mm3 softberry *.protein
+     hgSoftberryHom mm3 *.protein
+
 LOAD GENEID GENES (DONE 03/18/03)
     mkdir -p ~/mm3/bed/geneid/download
     cd ~/mm3/bed/geneid/download

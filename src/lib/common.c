@@ -5,6 +5,7 @@
  * granted for all use - public, private or commercial. */
 
 #include "common.h"
+#include "errabort.h"
 
 void *cloneMem(void *pt, size_t size)
 /* Allocate a new buffer of given size, and copy pt to it. */
@@ -1130,20 +1131,34 @@ if (e != NULL)
     *e = 0;
 }
     
-
-void carefulClose(FILE **pFile)
-/* Close file if open and null out handle to it. */
+boolean carefulCloseWarn(FILE **pFile)
+/* Close file if open and null out handle to it. 
+ * Return FALSE and print a warning message if there
+ * is a problem.*/
 {
 FILE *f;
+boolean ok = TRUE;
 if ((pFile != NULL) && ((f = *pFile) != NULL))
     {
     if (f != stdin && f != stdout)
         {
         if (fclose(f) != 0)
-            errnoAbort("fclose failed");
+	    {
+            errnoWarn("fclose failed");
+	    ok = FALSE;
+	    }
         }
     *pFile = NULL;
     }
+return ok;
+}
+
+void carefulClose(FILE **pFile)
+/* Close file if open and null out handle to it. 
+ * Warn and abort if there's a problem. */
+{
+if (!carefulCloseWarn(pFile))
+    noWarnAbort();
 }
 	
 char *firstWordInFile(char *fileName, char *wordBuf, int wordBufSize)

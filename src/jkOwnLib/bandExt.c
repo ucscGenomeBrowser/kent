@@ -21,7 +21,7 @@ enum parentPos
    ppLeft,	/* Parent is left in graph (corresponds to insert) */
    };
 
-boolean bandExt(struct axtScoreScheme *ss, int maxInsert,
+boolean bandExt(boolean global, struct axtScoreScheme *ss, int maxInsert,
 	char *aStart, int aSize, char *bStart, int bSize, int dir,
 	int symAlloc, int *retSymCount, char *retSymA, char *retSymB, 
 	int *retStartA, int *retStartB)
@@ -60,6 +60,13 @@ int midScoreOff;		 /* Offset to middle of scoring array. */
 struct lm *lm;			 /* Local memory pool. */
 boolean didExt = FALSE;
 
+#ifdef DEBUG
+uglyf("bandExt: aStart %d, aSize %d, symAlloc %d\n", aSize, bSize, symAlloc);
+mustWrite(uglyOut, aStart, aSize);
+uglyf("\n");
+mustWrite(uglyOut, bStart, bSize);
+uglyf("\n");
+#endif /* DEBUG */
 /* For reverse direction just reverse bytes here and there.  It's
  * a lot easier than the alternative and doesn't cost much time in
  * the global scheme of things. */
@@ -191,7 +198,8 @@ for (aPos=0; aPos < aSize; ++aPos)
 	}
     else if (bestColScore < maxDrop)
 	{
-	break;
+	if (!global)
+	    break;
 	}
     else
 	{
@@ -211,15 +219,30 @@ for (aPos=0; aPos < aSize; ++aPos)
 
 
 /* Trace back. */
-if (bestScore > 0)
+if (global || bestScore > 0)
     {
     didExt = TRUE;
-    aPos = aBestPos;
-    bPos = bBestPos;
+    if (global)
+        {
+	aPos = aSize-1;
+	bPos = bSize-1;
+	}
+    else
+	{
+	aPos = aBestPos;
+	bPos = bBestPos;
+	}
     for (;;)
 	{
-	int pOffset = bPos - bOffsets[aPos] + maxInsert;
-	UBYTE parent = parents[pOffset][aPos];
+	int pOffset;
+	UBYTE parent;
+	pOffset = bPos - bOffsets[aPos] + maxInsert;
+	if (pOffset < 0 || pOffset >= bandSize)
+	    {
+	    assert(global);
+	    return FALSE;
+	    }
+	parent = parents[pOffset][aPos];
 	switch (parent)
 	    {
 	    case ppDiag:
@@ -283,67 +306,10 @@ if (dir < 0)
 
 /* Clean up, set return values and go home */
 lmCleanup(&lm);
-*retStartA = aBestPos;
-*retStartB = bBestPos;
+if (retStartA != NULL) *retStartA = aBestPos;
+if (retStartB != NULL) *retStartB = bBestPos;
 *retSymCount = symCount;
 return didExt;
-}
-
-static struct ffAli *symToFfAli(int symCount, char *nSym, char *hSym,
-	struct lm *lm, char *nStart, char *hStart)
-/* Convert symbol representation of alignments (letters plus '-')
- * to ffAli representation.  If lm is nonNULL, ffAli result 
- * will be lmAlloced, else it will be needMemed. This routine
- * depends on nSym/hSym being zero terminated. */
-{
-struct ffAli *ffList = NULL, *ff = NULL;
-char n, h;
-int i;
-
-for (i=0; i<=symCount; ++i)
-    {
-    boolean isGap;
-    n = nSym[i];
-    h = hSym[i];
-    isGap = (n == '-' || n == 0 || h == '-' || h == 0);
-    if (isGap)
-	{
-	if (ff != NULL)
-	    {
-	    ff->nEnd = nStart;
-	    ff->hEnd = hStart;
-	    ff->left = ffList;
-	    ffList = ff;
-	    ff = NULL;
-	    }
-	}
-    else
-	{
-	if (ff == NULL)
-	    {
-	    if (lm != NULL)
-		{
-		lmAllocVar(lm, ff);
-		}
-	    else
-		{
-		AllocVar(ff);
-		}
-	    ff->nStart = nStart;
-	    ff->hStart = hStart;
-	    }
-	}
-    if (n != '-')
-	{
-	++nStart;
-	}
-    if (h != '-')
-	{
-	++hStart;
-	}
-    }
-ffList = ffMakeRightLinks(ffList);
-return ffList;
 }
 
 struct ffAli *bandExtFf(
@@ -387,7 +353,7 @@ else
     hs = origFf->hStart - hSize;
     }
 
-gotExt = bandExt(ss, maxInsert, ns, nSize, hs, hSize, dir,
+gotExt = bandExt(FALSE, ss, maxInsert, ns, nSize, hs, hSize, dir,
 	symAlloc, &symCount, nBuf, hBuf, &nExt, &hExt);
 if (gotExt)
     {
@@ -402,7 +368,7 @@ if (gotExt)
 	nExtStart = origFf->nStart - nExt - 1;
 	hExtStart = origFf->hStart - hExt - 1;
 	}
-    ffList = symToFfAli(symCount, nBuf, hBuf, lm,  nExtStart, hExtStart);
+    ffList = ffAliFromSym(symCount, nBuf, hBuf, lm,  nExtStart, hExtStart);
     }
 freeMem(symBuf);
 return ffList;
@@ -424,7 +390,7 @@ boolean gotExt;
 
 printf("%s %s %d\n", aFile, aSeq->name, aSeq->size);
 printf("%s %s %d\n", bFile, bSeq->name, bSeq->size);
-gotExt = bandExt(ss, clMaxInsert, aSeq->dna, aSeq->size, bSeq->dna, bSeq->size, clDir,
+gotExt = bandExt(FALSE, ss, clMaxInsert, aSeq->dna, aSeq->size, bSeq->dna, bSeq->size, clDir,
 	symAlloc, &symCount, aSym, bSym, &aExt, &bExt);
 printf("%sextended to %d %d\n", (gotExt ? "" : "not "), aExt, bExt);
 if (gotExt)

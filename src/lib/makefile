@@ -6,7 +6,7 @@ O = aliType.o axt.o bits.o binRange.o \
     codebias.o colHash.o common.o \
     dgRange.o diGraph.o dlist.o dnaMarkov.o \
     dnaseq.o dnautil.o dystring.o emblParse.o errabort.o \
-    fa.o ffAli.o fixColor.o flydna.o fof.o \
+    fa.o ffAli.o ffScore.o fixColor.o flydna.o fof.o \
     fuzzyShow.o gdf.o gemfont.o gfNet.o gff.o \
     gifcomp.o gifdecomp.o gifread.o gifwrite.o hash.o \
     hmmstats.o htmshell.o hugefnt.o internet.o intExp.o jointalign.o\

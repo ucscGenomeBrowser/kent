@@ -31,21 +31,6 @@ for (i=0; i<size; ++i)
 return count;
 }
 
-static int baseVal[256];
-/* Table to look up integer values for bases. */
-
-void initBaseVal()
-/* Init base val array */
-{
-int i;
-for (i=0; i<ArraySize(baseVal); ++i)
-    baseVal[i] = N_BASE_VAL;
-baseVal['a'] = baseVal['A'] = A_BASE_VAL;
-baseVal['c'] = baseVal['C'] = C_BASE_VAL;
-baseVal['g'] = baseVal['G'] = G_BASE_VAL;
-baseVal['t'] = baseVal['T'] = T_BASE_VAL;
-}
-
 boolean findHsp(char *as, char *bs, int size, 
 	struct axtScoreScheme *ss, int minScore,
 	int *retStart, int *retEnd, int *retScore)
@@ -74,7 +59,7 @@ for (end = 0; end < size; ++end)
 	}
     else
         {
-	score += ss->matrix[baseVal[a]][baseVal[b]];
+	score += ss->matrix[a][b];
 	lastGap = FALSE;
 	}
     if (score > bestScore)
@@ -142,7 +127,6 @@ struct lineFile *lf = lineFileOpen(inName, TRUE);
 FILE *f = mustOpen(outName, "w");
 struct axt *axt;
 
-initBaseVal();
 if (threshold <= 0)
     errAbort("Threshold must be a positive number");
 while ((axt = axtRead(lf)) != NULL)

@@ -173,15 +173,40 @@ void parseCds(char *gbCds, int start, int end, int *retStart, int *retEnd)
 char *s = gbCds;
 boolean gotStart = FALSE, gotEnd = TRUE;
 
+char *startP, *endP;
+
+endP = gbCds + strlen(gbCds) - 1;
+if (*endP == ',') printf("\n^^^%s\n", gbCds);fflush(stdout);
+
+while (!isdigit(*endP)) endP--;
+while (isdigit(*endP)) endP--;
+endP++;
+
+startP = gbCds;
+if (*s == '<') 
+	{
+	s++;
+	startP = s;
+	}
+else
+	{
+	if (*s == 'j')
+		{
+		while (!isdigit(*s)) s++;
+		startP = s;
+		}
+	}
 gotStart = isdigit(s[0]);
 s = strchr(s, '.');
 if (s == NULL || s[1] != '.')
-    errAbort("Malformed GenBank cds %s", gbCds);
-s[0] = 0;
-s += 2;
-gotEnd = isdigit(s[0]);
-if (gotStart) start = atoi(gbCds) - 1;
-if (gotEnd) end = atoi(s);
+    {
+    //errAbort("Malformed GenBank cds %s", gbCds);
+    goto skip;
+    }
+
+start = atoi(startP) - 1;
+end = atoi(endP);
+skip:
 *retStart = start;
 *retEnd = end;
 }

@@ -2,7 +2,7 @@
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"
-#include "cheapcgi.h"
+#include "options.h"
 #include "trackDb.h"
 #include "sqlList.h"
 #include "hdb.h"
@@ -22,7 +22,14 @@ errAbort(
   "either in your home directory as '.hg.conf' or in the web \n"
   "server's cgi-bin directory as 'hg.conf'.\n"
   "usage:\n"
-  "   hgTrackDb database trackDb_$(USER) trackDb.sql hgRoot\n"
+  "   hgTrackDb [options] database trackDb_$(USER) trackDb.sql hgRoot\n"
+  "\n"
+  "Options:\n"
+  "  -visibility=vis.ra - A ra file used to override the initial visibility\n"
+  "   settings in trackDb.ra.  This is used to configure the initial setting\n"
+  "   for special-purpose browsers.  All visibility will be set to hide and\n"
+  "   then specific track are modified using the track and visibility fields\n"
+  "   in this file.\n"
   );
 }
 
@@ -130,7 +137,8 @@ else
     }
 }
 
-void hgTrackDb(char *org, char *database, char *trackDbName, char *sqlFile, char *hgRoot)
+void hgTrackDb(char *org, char *database, char *trackDbName, char *sqlFile, char *hgRoot,
+               char *visibilityRa)
 /* hgTrackDb - Create trackDb table from text files. */
 {
 struct hash *uniqHash = newHash(8);
@@ -148,6 +156,8 @@ sprintf(asmDir, "%s/%s/%s", hgRoot, org, database);
 layerOn(asmDir, uniqHash, htmlHash, FALSE, &tdList);
 layerOn(orgDir, uniqHash, htmlHash, FALSE, &tdList);
 layerOn(rootDir,uniqHash, htmlHash, TRUE, &tdList);
+if (visibilityRa != NULL)
+    trackDbOverrideVisbility(uniqHash, visibilityRa);
 slSort(&tdList, trackDbCmp);
 printf("Loaded %d track descriptions total\n", slCount(tdList));
 
@@ -193,9 +203,10 @@ printf("Loaded %d track descriptions total\n", slCount(tdList));
 int main(int argc, char *argv[])
 /* Process command line. */
 {
-cgiSpoof(&argc, argv);
+optionHash(&argc, argv);
 if (argc != 6)
     usage();
-hgTrackDb(argv[1], argv[2], argv[3], argv[4], argv[5]);
+hgTrackDb(argv[1], argv[2], argv[3], argv[4], argv[5],
+          optionVal("visibility", NULL));
 return 0;
 }

@@ -7,6 +7,18 @@ visibility hide
 color 150,0,0
 type bed 4 +
 
+
+track slamHuman
+shortLabel Slam Human
+longLabel SLAM gene predictions using human/rat homology
+group genes
+priority 45.5
+visibility hide
+color 100,50,0
+altColor 175,150,128
+type genePred 
+
+
 track softberryGene
 shortLabel Fgenesh++ Genes
 longLabel Fgenesh++ Gene Predictions
@@ -27,18 +39,8 @@ color 150,100,30
 altColor 230,170,40
 type bed 3 +
 
-track slam
-shortLabel Slam
-longLabel SLAM gene predictions using human/rat homology
-group genes
-priority 45.5
-visibility hide
-color 100,50,0
-altColor 175,150,128
-type genePred
-
-track slamNonCoding
-shortLabel Slam Non Coding 
+track slamNonCodingHuman
+shortLabel Slam Non Coding Human
 longLabel SLAM predictions of human/rat conserved non-coding regions
 group compGeno
 priority 120

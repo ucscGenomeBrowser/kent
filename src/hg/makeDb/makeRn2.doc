@@ -1062,6 +1062,16 @@ LOAD CPGISSLANDS (DONE 03/06/03)
       -sqlTable=$HOME/kent/src/hg/lib/cpgIsland.sql cpgIsland.bed
 
 
+LOAD SOFTBERRY GENES (DONE 02/04/03)
+     cd /cluster/store4/rn2/bed
+     mkdir softberry
+     cd softberry
+     wget ftp://www.softberry.com/pub/SC_RAT_JAN03/Softb_rat_gff_j03.tar.gz
+     gunzip -c Softb_rat_gff_j03.tar.gz | tar xvf -
+     ldHgGene rn2 softberryGene chr*.gff
+     hgPepPred rn2 softberry *.protein
+     hgSoftberryHom rn2 *.protein
+
 LOAD GENEID GENES (DONE 04/01/03)
     mkdir -p ~/rn2/bed/geneid/download
     cd ~/rn2/bed/geneid/download

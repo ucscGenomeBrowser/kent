@@ -1635,7 +1635,7 @@ struct gfHit *hitList = NULL;
 if (gf->segSize == 0 && !gf->isPep && !gf->allowOneMismatch)
     {
     hitList = gfFastFindDnaHits(gf, seq, qMaskBits, qMaskOffset, lm, retHitCount,
-	NULL, 0, 0);
+	target, tMin, tMax);
     }
 else
     {
@@ -1696,10 +1696,11 @@ struct gfHit *gfFindHitsInRegion(struct genoFind *gf, bioSeq *seq,
  * coordinates rather than concatenated whole genome
  * coordinates as hits inside of clumps usually are.  */
 {
-int targetStart = target->start;
+int targetStart;
 struct gfHit *hitList, *hit;
 int hitCount;
 
+targetStart = target->start;
 hitList =  gfFindHitsWithQmask(gf, seq, qMaskBits, qMaskOffset, lm,
 	&hitCount, target, tMin + targetStart, tMax + targetStart);
 for (hit = hitList; hit != NULL; hit = hit->next)
@@ -1842,6 +1843,7 @@ else
 	{
 	if (sameString(source->seq->name, name))
 	    return source;
+	source += 1;
 	}
     }
 return NULL;

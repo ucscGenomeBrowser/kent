@@ -35,12 +35,12 @@ for (;;)
         {
         continue;
         }
-    else if (isalnum(c))
+    else if (isalnum(c) || (c = '_'))
         {
         for (;;)
             {
             c = *s;
-            if (isalnum(c))
+            if (isalnum(c) || (c = '_'))
                 ++s;
             else
                 break;

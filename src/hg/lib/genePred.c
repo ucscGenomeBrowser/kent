@@ -9,6 +9,25 @@
 #include "linefile.h"
 #include "genePred.h"
 
+/* SQL to create a genePred table */
+static char *createSql = 
+"CREATE TABLE %s ("
+"   name varchar(255) not null,"	/* mrna accession of gene */
+"   chrom varchar(255) not null,"	/* Chromosome name */
+"   strand char(1) not null,"		/* + or - for strand */
+"   txStart int unsigned not null,"	/* Transcription start position */
+"   txEnd int unsigned not null,"	/* Transcription end position */
+"   cdsStart int unsigned not null,"	/* Coding region start */
+"   cdsEnd int unsigned not null,"	/* Coding region end */
+"   exonCount int unsigned not null,"	/* Number of exons */
+"   exonStarts longblob not null,"	/* Exon start positions */
+"   exonEnds longblob not null,"	/* Exon end positions */
+"   INDEX(name(10)),"
+"   INDEX(chrom(12),txStart),"
+"   INDEX(chrom(12),txEnd)"
+")";
+
+
 struct genePred *genePredLoad(char **row)
 /* Load a genePred from row fetched with select * from genePred
  * from database.  Dispose of this with genePredFree(). */
@@ -349,7 +368,8 @@ struct genePred *genePredFromPsl(struct psl *psl, int cdsStart, int cdsEnd,
                                  int insertMergeSize)
 /* Convert a PSL of an RNA alignment to a genePred, converting a genbank CDS
  * specification string to genomic coordinates. Small inserts, no more
- * than insertMergeSize, will be dropped and the blocks merged. */
+ * than insertMergeSize, will be dropped and the blocks merged.  CDS start or
+ * end of -1 creates without CDS annotation*/
 {
 struct genePred *gene;
 AllocVar(gene);
@@ -359,9 +379,25 @@ gene->strand[0] = psl->strand[0];
 gene->txStart = psl->tStart;
 gene->txEnd = psl->tEnd;
 
-findCdsStartEndInGenome(psl, cdsStart, cdsEnd,
-                        &gene->cdsStart, &gene->cdsEnd);
+if ((cdsStart == -1) || (cdsEnd == -1))
+    {
+    gene->cdsStart = psl->tEnd;
+    gene->cdsEnd = psl->tEnd;
+    }
+else
+    findCdsStartEndInGenome(psl, cdsStart, cdsEnd,
+                            &gene->cdsStart, &gene->cdsEnd);
 pslToExons(psl, gene, insertMergeSize);
 return gene;
 }
 
+char* genePredGetCreateSql(char* table, unsigned options)
+/* Get SQL required to create a genePred table.  No options defined yet,
+ * specify 0. */
+{
+char sqlCmd[1024];
+
+safef(sqlCmd, sizeof(sqlCmd), createSql, table);
+
+return cloneString(sqlCmd);
+}

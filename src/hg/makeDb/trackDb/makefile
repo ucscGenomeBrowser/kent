@@ -18,11 +18,13 @@ update:
 	hgTrackDb human hg12 trackDb_$(USER) ../../lib/trackDb.sql .
 	hgTrackDb human hg13 trackDb_$(USER) ../../lib/trackDb.sql .
 	hgTrackDb human hg14 trackDb_$(USER) ../../lib/trackDb.sql .
+	hgTrackDb human hg15 trackDb_$(USER) ../../lib/trackDb.sql .
 	hgTrackDb mouse mm1 trackDb_$(USER) ../../lib/trackDb.sql .
 	hgTrackDb mouse mm2 trackDb_$(USER) ../../lib/trackDb.sql .
 	hgTrackDb mouse mm3 trackDb_$(USER) ../../lib/trackDb.sql .
 	hgTrackDb rat rn1 trackDb_$(USER) ../../lib/trackDb.sql .
 	hgTrackDb rat rn2 trackDb_$(USER) ../../lib/trackDb.sql .
+	hgTrackDb sars sc1 trackDb_$(USER) ../../lib/trackDb.sql .
 	cd zoo; make update; cd ..
 
 old_update:
@@ -37,11 +39,13 @@ alpha:
 	hgTrackDb human hg12 trackDb ../../lib/trackDb.sql .
 	hgTrackDb human hg13 trackDb ../../lib/trackDb.sql .
 	hgTrackDb human hg14 trackDb ../../lib/trackDb.sql .
+	hgTrackDb human hg15 trackDb ../../lib/trackDb.sql .
 	hgTrackDb mouse mm1 trackDb ../../lib/trackDb.sql .
 	hgTrackDb mouse mm2 trackDb ../../lib/trackDb.sql .
 	hgTrackDb mouse mm3 trackDb ../../lib/trackDb.sql .
 	hgTrackDb rat rn1 trackDb ../../lib/trackDb.sql .
 	hgTrackDb rat rn2 trackDb ../../lib/trackDb.sql .
+	hgTrackDb sars sc1 trackDb ../../lib/trackDb.sql .
 	cd zoo; make alpha; cd ..
 
 beta:
@@ -52,11 +56,13 @@ beta:
 	hgTrackDb human hg12 trackDb_beta ../../lib/trackDb.sql .
 	hgTrackDb human hg13 trackDb_beta ../../lib/trackDb.sql .
 	hgTrackDb human hg14 trackDb_beta ../../lib/trackDb.sql .
+	hgTrackDb human hg15 trackDb_beta ../../lib/trackDb.sql .
 	hgTrackDb mouse mm1 trackDb_beta ../../lib/trackDb.sql .
 	hgTrackDb mouse mm2 trackDb_beta ../../lib/trackDb.sql .
 	hgTrackDb mouse mm3 trackDb_beta ../../lib/trackDb.sql .
 	hgTrackDb rat rn1 trackDb_beta ../../lib/trackDb.sql .
 	hgTrackDb rat rn2 trackDb_beta ../../lib/trackDb.sql .
+	hgTrackDb sars sc1 trackDb_beta ../../lib/trackDb.sql .
 	cd zoo; make beta; cd ..
 
 old_alpha:
@@ -65,8 +71,10 @@ old_alpha:
 	hgTrackDb human hg8  trackDb ../../lib/trackDb.sql .
 	hgTrackDb human hg9  trackDb ../../lib/trackDb.sql .
 
+# This target initializes the MGC-browser database, overriding the default 
+# visibility settings
 mgc:
-	hgTrackDb human hg13 trackDb ../../lib/trackDb.sql .
-	hgTrackDb mouse mm2 trackDb ../../lib/trackDb.sql .
-	hgTrackDb rat rn1 trackDb ../../lib/trackDb.sql .
+	hgTrackDb -visibility=mgcView.ra human hg13 trackDb ../../lib/trackDb.sql .
+	hgTrackDb -visibility=mgcView.ra mouse mm3 trackDb ../../lib/trackDb.sql .
+	hgTrackDb -visibility=mgcView.ra rat rn1 trackDb ../../lib/trackDb.sql .
 

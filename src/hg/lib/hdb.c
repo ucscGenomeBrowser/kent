@@ -31,7 +31,7 @@ static struct sqlConnCache *centralCc = NULL;
 
 static char *hdbHost = NULL;
 static char *hdbName = NULL;
-static char *hdbName2 = NULL;
+static char *hdbName2 = "Mouse";
 static char *hdbUser = NULL;
 static char *hdbPassword = NULL;
 static char *hdbTrackDb = NULL;
@@ -272,7 +272,7 @@ boolean exists;
 
 if (sameString(db, hGetDb()))
     conn = hAllocConn();
-else if (sameString(db, hGetDb2()))
+else if ((hGetDb2() != NULL) && sameString(db, hGetDb2()))
     conn = hAllocConn2();
 else
     {
@@ -558,8 +558,7 @@ if (read(fd, buf, size) < size)
 return buf;
 }
 
-static char* getSeqAndId(struct sqlConnection *conn, char *acc, HGID *retId,
-                         char* gbDate)
+static char* getSeqAndId(struct sqlConnection *conn, char *acc, HGID *retId)
 /* Return sequence as a fasta record in a string and it's database ID. */
 {
 struct sqlResult *sr;
@@ -575,7 +574,7 @@ struct dnaSeq *seq;
 struct largeSeqFile *lsf;
 
 sprintf(query,
-   "select id,extFile,file_offset,file_size,gb_date from seq where seq.acc = '%s'",
+   "select id,extFile,file_offset,file_size from seq where seq.acc = '%s'",
    acc);
 sr = sqlMustGetResult(conn, query);
 row = sqlNextRow(sr);
@@ -584,7 +583,7 @@ if ((row == NULL) && sqlTableExists(conn, "gbSeq"))
     /* try gbSeq table */
     sqlFreeResult(&sr);
     sprintf(query,
-            "select id,gbExtFile,file_offset,file_size,gb_date from gbSeq where gbSeq.acc = '%s'",
+            "select id,gbExtFile,file_offset,file_size from gbSeq where gbSeq.acc = '%s'",
             acc);
     sr = sqlMustGetResult(conn, query);
     row = sqlNextRow(sr);
@@ -600,40 +599,29 @@ if (retId != NULL)
 extId = sqlUnsigned(row[1]);
 offset = sqlUnsigned(row[2]);
 size = sqlUnsigned(row[3]);
-if (gbDate != NULL)
-    strcpy(gbDate, row[4]);
 
 lsf = largeFileHandle(extId, seqTblSet);
 buf = readOpenFileSection(lsf->fd, offset, size, lsf->path);
 sqlFreeResult(&sr);
 return buf; 
 }
+
 static char* mustGetSeqAndId(struct sqlConnection *conn, char *acc,
-                             HGID *retId, char* gbDate)
+                             HGID *retId)
 /* Return sequence as a fasta record in a string and it's database ID,
  * abort if not found */
 {
-char *buf= getSeqAndId(conn, acc, retId, gbDate);
+char *buf= getSeqAndId(conn, acc, retId);
 if (buf == NULL)
     errAbort("No sequence for %s in database", acc);
 return buf;
-}
-
-int hRnaSeqAndIdx(char *acc, struct dnaSeq **retSeq, HGID *retId, char *gbdate, struct sqlConnection *conn)
-/* Return sequence for RNA and it's database ID. */
-{
-char *buf = getSeqAndId(conn, acc, retId, gbdate);
-if (buf == NULL)
-    return -1;
-*retSeq = faFromMemText(buf);
-return 0;
 }
 
 void hRnaSeqAndId(char *acc, struct dnaSeq **retSeq, HGID *retId)
 /* Return sequence for RNA and it's database ID. */
 {
 struct sqlConnection *conn = hAllocConn();
-char *buf = mustGetSeqAndId(conn, acc, retId, NULL);
+char *buf = mustGetSeqAndId(conn, acc, retId);
 *retSeq = faFromMemText(buf);
 hFreeConn(&conn);
 
@@ -658,7 +646,7 @@ aaSeq *hPepSeq(char *acc)
 /* Return sequence for a peptide. */
 {
 struct sqlConnection *conn = hAllocConn();
-char *buf = mustGetSeqAndId(conn, acc, NULL, NULL);
+char *buf = mustGetSeqAndId(conn, acc, NULL);
 hFreeConn(&conn);
 return faSeqFromMemText(buf, FALSE);
 }
@@ -699,7 +687,7 @@ canDoIntrons = hti->hasBlocks;
 
 if (sameString(db, hGetDb()))
     conn = hAllocConn();
-else if (sameString(db, hGetDb2()))
+else if ((hGetDb2() != NULL) && sameString(db, hGetDb2()))
     conn = hAllocConn2();
 else
     {
@@ -1208,7 +1196,7 @@ boolean gotIt = TRUE, binned = FALSE;
 
 if (sameString(db, hGetDb()))
     conn = hAllocConn();
-else if (sameString(db, hGetDb2()))
+else if ((hGetDb2() != NULL) && sameString(db, hGetDb2()))
     conn = hAllocConn2();
 else
     {

@@ -31,8 +31,8 @@ assert(sizeOne == ret->gdbCount);
 sqlStringDynamicArray(row[7], &ret->otherNames, &sizeOne);
 assert(sizeOne == ret->nameCount);
 ret->dbSTSid = sqlUnsigned(row[8]);
-/* sqlUnsignedDynamicArray(row[10], &ret->otherDbSTS, &sizeOne);
-   assert(sizeOne == ret->otherDbstsCount); */
+sqlUnsignedDynamicArray(row[10], &ret->otherDbSTS, &sizeOne);
+assert(sizeOne == ret->otherDbstsCount);
 ret->leftPrimer = cloneString(row[11]);
 ret->rightPrimer = cloneString(row[12]);
 ret->distance = cloneString(row[13]);

@@ -188,6 +188,40 @@ slReverse(&geneList);
 return geneList;
 }
 
+boolean hasRealExons(struct genScanGene *gene)
+/* Return TRUE if it has a real exon */
+{
+struct genScanFeature *gsf;
+for (gsf = gene->featureList; gsf != NULL; gsf = gsf->next)
+    {
+    if (sameString("Init", gsf->type))
+	return TRUE;
+    else if (sameString("Intr", gsf->type))
+	return TRUE;
+    else if (sameString("Term", gsf->type))
+	return TRUE;
+    else if (sameString("Sngl", gsf->type))
+	return TRUE;
+    }
+return FALSE;
+}
+
+struct genScanGene *filterEmptyGenes(struct genScanGene *geneList)
+/* Get rid of genes that have no real exons. */
+{
+struct genScanGene *newList = NULL, *gene, *next;
+for (gene = geneList; gene != NULL; gene = next)
+    {
+    next = gene->next;
+    if (hasRealExons(gene))
+        {
+	slAddHead(&newList, gene);
+	}
+    }
+slReverse(&newList);
+return newList;
+}
+
 struct segment *parseSegment(char *fileName, int start, int end, char *retSeqName)
 /* Read in a genscan file into segment. */
 {
@@ -235,6 +269,7 @@ for (;;)
 slReverse(&gsfList);
 printf("Got %d exons\n", slCount(gsfList));
 seg->geneList = bundleGenes(gsfList);
+seg->geneList = filterEmptyGenes(seg->geneList);
 gsfList = NULL;
 printf("Got %d genes\n", slCount(seg->geneList));
 

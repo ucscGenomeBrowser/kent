@@ -293,7 +293,7 @@ if ((grandChildId = fork()) == 0)
 	hashUpdate(hash, "USER", user);
 	hashUpdate(hash, "HOME", homeDir);
 	hashUpdate(hash, "HOST", hostName);
-	hashUpdate(hash, "PARASOL", "6");
+	hashUpdate(hash, "PARASOL", "7");
 	updatePath(hash, userPath, homeDir, sysPath);
 	environ = hashToEnviron(hash);
 	freeHashAndVals(&hash);
@@ -327,21 +327,26 @@ else
     {
     /* Wait on executed job and send jobID and status back to 
      * main process. */
-    int status;
+    int status = -1;
     int cid;
     int sd;
     struct paraMessage pm;
     struct rudp *ru = rudpOpen();
     struct tms tms;
+    unsigned long uTime = 0;
+    unsigned long sTime = 0;
 
     ru->maxRetries = 20;
-    signal(SIGTERM, termHandler);
-    cid = wait(&status);
-    times(&tms);
+    if (grandChildId >= 0)
+	{
+	signal(SIGTERM, termHandler);
+	cid = waitpid(grandChildId, &status, 0);
+	times(&tms);
+	uTime = ticksToHundreths*tms.tms_cutime;
+	sTime = ticksToHundreths*tms.tms_cstime;
+	}
     if (ru != NULL)
 	{
-	unsigned long uTime = ticksToHundreths*tms.tms_cutime;
-	unsigned long sTime = ticksToHundreths*tms.tms_cstime;
 	pmInit(&pm, localIp, paraNodePort);
 	pmPrintf(&pm, "jobDone %s %s %d %lu %lu", managingHost, 
 	    jobIdString, status, uTime, sTime);
@@ -412,13 +417,20 @@ void jobDone(char *line)
 char *managingHost = nextWord(&line);
 char *jobIdString = nextWord(&line);
 
-clearZombies();
+// clearZombies();
 if (jobIdString != NULL && line != NULL && line[0] != 0)
     {
     /* Remove job from list running list and put on recently finished list. */
     struct job *job = findRunningJob(atoi(jobIdString));
     if (job != NULL)
         {
+	int status, err;
+	err = waitpid(job->pid, &status, 0);
+	if (err == -1 || !WIFEXITED(status) || WEXITSTATUS(status) != 0)
+	    {
+	    logIt("paraNode sheparding %s pid %d status %d err %d errno %d\n", 
+	    		jobIdString, job->pid, status, err, errno);
+	    }
 	job->doneMessage = cloneString(line);
 	dlRemove(job->node);
 	if (dlCount(jobsFinished) >= 4*maxProcs)
@@ -701,7 +713,7 @@ mainRudp->maxRetries = 12;
 
 /* Event loop. */
 findNow();
-logIt("Node: starting\n");
+logIt("starting\n");
 for (;;)
     {
     /* Get next incoming message and optionally check to make
@@ -716,7 +728,7 @@ for (;;)
 	    /* Host and signature look ok,  read a string and
 	     * parse out first word as command. */
 	    line = pmIn.data;
-	    logIt("node  %s: %s\n", hostName, line);
+	    logIt("message: %s\n", line);
 	    command = nextWord(&line);
 	    if (command != NULL)
 		{
@@ -739,7 +751,7 @@ for (;;)
 		else if (sameString("fetch", command))
 		    doFetch(line);
 		}
-	    logIt("node  %s: done command\n", hostName);
+	    logIt("done command\n");
 	    }
 	else
 	    {
