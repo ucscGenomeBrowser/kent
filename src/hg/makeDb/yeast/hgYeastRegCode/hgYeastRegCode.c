@@ -10,7 +10,7 @@
 #include "obscure.h"
 #include "dnaMotif.h"
 
-static char const rcsid[] = "$Id: hgYeastRegCode.c,v 1.3 2004/09/22 00:05:43 kent Exp $";
+static char const rcsid[] = "$Id: hgYeastRegCode.c,v 1.4 2004/09/22 18:18:04 kent Exp $";
 
 char *tmpDir = ".";
 char *tableName = "transRegCode";
@@ -285,7 +285,7 @@ while (lineFileNextRowTab(lf, row, ArraySize(row)))
 	errAbort("Expecting %s in note line %d of %s", boundBy, 
 		lf->lineIx, lf->fileName);
 	}
-    fprintf(f, "chr%d\t%d\t%d\t", chromIx, start, end);
+    fprintf(f, "chr%d\t%d\t%d\t", chromIx+1, start, end);
     fprintf(f, "%s\t%d\t", orf, slCount(tfList));
     for (tf = tfList; tf != NULL; tf = tf->next)
 	fprintf(f, "%s,", tf->name);
