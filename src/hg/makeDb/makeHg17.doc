@@ -2712,23 +2712,23 @@ cat > template << 'EOF'
 	/cluster/data/hg17/bed/fishClones/fishClones.bed > fishClones.txt
 
 # Create bed file
+    ssh eieio
+    cd /cluster/data/hg17/bed/cytoband.kate
     /cluster/bin/scripts/runBander fishClones.txt \
 	ISCN800.txt setBands.txt /cluster/data/hg17
-# cat: chr[1,2,3,4,5,6,7,8,9].bed: No such file or directory
-# cat: chr1[0,1,2,3,4,5,6,7,8,9].bed: No such file or directory
-# cat: chr2[0,1,2].bed: No such file or directory
-# cat: chr[X,Y].bed: No such file or directory
-# rm: cannot lstat `chr*.bed': No such file or directory
-
-# GOT HERE
+    # NOTE: fails on kolossus (C++ compiler different ??)
 
     # Should be 862 bands
-    wc cytobands.bed
-    # 862    4310   30748 cytobands.bed
+    wc  -l cytobands.bed
+    # 862    cytobands.bed
+
+# NOTE - don't load tracks, as Terry has already sent his
+#       versions to NCBI
 
 # Load track
-    hgLoadBed -noBin -tab -sqlTable=/cluster/home/kent/src/hg/lib/cytoBand.sql \
-	hg17 cytoBand cytobands.bed
+    #hgLoadBed -noBin -tab \
+        # -sqlTable=/cluster/home/kent/src/hg/lib/cytoBand.sql \
+	# hg17 cytoBand cytobands.bed
 	    
 # Load ideogram table
     #hgLoadBed -noBin -tab \
