@@ -52,11 +52,20 @@ char *hTrackDbName();
 void hSetDbConnect(char* host, char *db, char *user, char *password);
 /* set the connection information for the database */
 
+void hSetDbConnect2(char* host, char *db, char *user, char *password);
+/* set the connection information for the database */
+
 void hSetDb(char *dbName);
+/* Set the database name. */
+
+void hSetDb2(char *dbName);
 /* Set the database name. */
 
 char *hGetDb();
 /* Return the current database name. */
+
+char *hGetDb2();
+/* Return the secondary database name. */
 
 char *hGetDbHost();
 /* Return the current database host. */
@@ -71,6 +80,9 @@ char *hGetDbPassword();
 /* Return the current database password. */
 
 struct sqlConnection *hAllocConn();
+/* Get free connection if possible. If not allocate a new one. */
+
+struct sqlConnection *hAllocConn2();
 /* Get free connection if possible. If not allocate a new one. */
 
 void hFreeConn(struct sqlConnection **pConn);
@@ -89,6 +101,9 @@ boolean hTableExists(char *table);
 
 int hChromSize(char *chromName);
 /* Return size of chromosome. */
+
+int hChromSize2(char *chromName);
+/* Return size of chromosome from secondary database. */
 
 struct dnaSeq *hChromSeq(char *chrom, int start, int end);
 /* Return lower case DNA from chromosome. */
