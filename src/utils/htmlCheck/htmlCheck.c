@@ -11,7 +11,7 @@
 #include "filePath.h"
 #include "net.h"
 
-static char const rcsid[] = "$Id: htmlCheck.c,v 1.24 2004/03/03 03:36:53 kent Exp $";
+static char const rcsid[] = "$Id: htmlCheck.c,v 1.25 2004/03/03 04:16:57 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -1032,26 +1032,58 @@ for (var = form->vars; var != NULL; var = var->next)
 return dyStringCannibalize(&dy);
 }
 
+static void sendCookies(int sd, struct htmlCookie *cookieList)
+/* Send out cookies (and final <CR><LF>) to sd */
+{
+struct dyString *dy = dyStringNew(0);
+struct htmlCookie *cookie;
+if (cookieList != NULL)
+    {
+    dyStringAppend(dy, "Cookie:");
+    for (cookie = cookieList; cookie != NULL; cookie = cookie->next)
+	{
+	dyStringAppendC(dy, ' ');
+	dyStringAppend(dy, cookie->name);
+	dyStringAppendC(dy, '=');
+	dyStringAppend(dy, cookie->value);
+	dyStringAppendC(dy, ';');
+	}
+    dyStringAppend(dy, "\r\n");
+    }
+dyStringAppend(dy, "\r\n");
+write(sd, dy->string, dy->stringSize);
+dyStringFree(&dy);
+}
+
 struct htmlPage *htmlPageFromForm(struct htmlPage *origPage, struct htmlForm *form, 
-	char *buttonName, char *buttonVal)
+	char *method, char *buttonName, char *buttonVal)
 /* Return a new htmlPage based on response to pressing indicated button
  * on indicated form in origPage. */
 {
-char *cgiVars = cgiVarsFromForm(origPage, form, buttonName, buttonVal);
-char *url = htmlExpandUrl(origPage->url, form->action);
 struct htmlPage *newPage = NULL;
-uglyf("GET %s%s\n", url, cgiVars);
-freez(&url);
-return newPage;
-}
+struct dyString *dyUrl = dyStringNew(0);
+struct dyString *dyText = NULL;
+char *url = htmlExpandUrl(origPage->url, form->action);
 
-void quickSubmit(struct htmlPage *page)
-/* Just press submit on first form. */
-{
-struct htmlPage *newPage;
-if (page->forms == NULL)
-    errAbort("No forms on %s", page->url);
-newPage = htmlPageFromForm(page, page->forms, "submit", "Submit");
+dyStringAppend(dyUrl, url);
+if (sameWord(method, "GET"))
+    {
+    char *cgiVars = cgiVarsFromForm(origPage, form, buttonName, buttonVal);
+    dyStringAppend(dyUrl, cgiVars);
+    int sd = netOpenHttpExt(dyUrl->string, method, FALSE);
+    sendCookies(sd, origPage->cookies);
+    dyText = netSlurpFile(sd);
+    close(sd);
+    }
+else
+    {
+    errAbort("Sorry, htmlPageFromForm does not yet handle %s method", method);
+    }
+newPage = htmlPageParseOk(url, dyText->string);
+freez(&url);
+dyStringFree(&dyUrl);
+dyStringFree(&dyText);
+return newPage;
 }
 
 struct slName *htmlPageScanAttribute(struct htmlPage *page, 
@@ -1528,6 +1560,16 @@ if (tag == NULL || !sameWord(tag->name, "/HTML"))
     errAbort("Missing </HTML>");
 validateCgiUrls(page);
 verbose(1, "ok\n");
+}
+
+void quickSubmit(struct htmlPage *page)
+/* Just press submit on first form. */
+{
+struct htmlPage *newPage;
+if (page->forms == NULL)
+    errAbort("No forms on %s", page->url);
+newPage = htmlPageFromForm(page, page->forms, "GET", "submit", "Submit");
+validate(newPage);
 }
 
 #ifdef TEST
