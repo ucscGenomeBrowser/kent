@@ -3,7 +3,7 @@
 
 #include "variation.h"
 
-static char const rcsid[] = "$Id: variation.c,v 1.25 2005/03/14 18:15:44 daryl Exp $";
+static char const rcsid[] = "$Id: variation.c,v 1.26 2005/03/17 04:38:34 daryl Exp $";
 
 void filterSnpMapItems(struct track *tg, boolean (*filter)
 		       (struct track *tg, void *item))
@@ -958,7 +958,14 @@ else if ( vis==tvDense || (tg->limitedVisSet && tg->limitedVis==tvDense) )
     for (i=0; i<itemCount; i++)
 	{
 	if (lds[i].n==0)
-	    printf("<BR>Empty bin: %d %d<BR>", (lds[i]).chromStart, (lds[i]).n);
+	    {
+	    lds[i].n=1;
+	    lds[i].sumValues=0;
+	    lds[i].sumLodValues=0;
+	    /*  come back and check on this later
+		printf("<BR>Empty bin: %d %d<BR>", (lds[i]).chromStart, (lds[i]).n);
+	    */
+	    }
 	if (lds[i].chromStart<winStart || lds[i].chromStart>winEnd)
 	    continue;
 	denseColor = ldDiamondColor(tg, vg, lds[i].sumValues/lds[i].n, 
