@@ -5,12 +5,14 @@ object submission
     string id;	"Submission ID from scheduler"
     lstring errFile;	"Error file associated with submission"
     lstring outFile;	"Output file associated with submission"
-    byte submitError;	"An error occurred submitting it"
-    byte inQueue;	"Currently in queuing system"
-    byte queueError;	"In error stat in queue"
-    byte running;	"Currently running"
-    byte crashed;	"Looks like it ran but crashed"
-    byte ranOk;		"Looks like it ran and finished ok"
+    ubyte submitError;	"An error occurred submitting it"
+    ubyte inQueue;	"Currently in queuing system"
+    ubyte queueError;	"In error stat in queue"
+    ubyte running;	"Currently running"
+    ubyte crashed;	"Looks like it ran but crashed"
+    ubyte slow;		"Run so long we warn user"
+    ubyte hung;		"Run so long we kill it"
+    ubyte ranOk;	"Looks like it ran and finished ok"
     )
 
 object check

@@ -21,12 +21,14 @@ if (ret == NULL)
 ret->id = sqlStringComma(&s);
 ret->errFile = sqlStringComma(&s);
 ret->outFile = sqlStringComma(&s);
-ret->submitError = sqlSignedComma(&s);
-ret->inQueue = sqlSignedComma(&s);
-ret->queueError = sqlSignedComma(&s);
-ret->running = sqlSignedComma(&s);
-ret->crashed = sqlSignedComma(&s);
-ret->ranOk = sqlSignedComma(&s);
+ret->submitError = sqlUnsignedComma(&s);
+ret->inQueue = sqlUnsignedComma(&s);
+ret->queueError = sqlUnsignedComma(&s);
+ret->running = sqlUnsignedComma(&s);
+ret->crashed = sqlUnsignedComma(&s);
+ret->slow = sqlUnsignedComma(&s);
+ret->hung = sqlUnsignedComma(&s);
+ret->ranOk = sqlUnsignedComma(&s);
 *pS = s;
 return ret;
 }
@@ -73,17 +75,21 @@ if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->outFile);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
-fprintf(f, "%d", el->submitError);
+fprintf(f, "%u", el->submitError);
 fputc(sep,f);
-fprintf(f, "%d", el->inQueue);
+fprintf(f, "%u", el->inQueue);
 fputc(sep,f);
-fprintf(f, "%d", el->queueError);
+fprintf(f, "%u", el->queueError);
 fputc(sep,f);
-fprintf(f, "%d", el->running);
+fprintf(f, "%u", el->running);
 fputc(sep,f);
-fprintf(f, "%d", el->crashed);
+fprintf(f, "%u", el->crashed);
 fputc(sep,f);
-fprintf(f, "%d", el->ranOk);
+fprintf(f, "%u", el->slow);
+fputc(sep,f);
+fprintf(f, "%u", el->hung);
+fputc(sep,f);
+fprintf(f, "%u", el->ranOk);
 fputc(lastSep,f);
 }
 

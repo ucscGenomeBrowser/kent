@@ -30,6 +30,8 @@ errAbort(
   "      -maxQueue=N  Number of jobs to allow on codine queue - default 10000\n"
   "      -minPush=N  Minimum number of jobs to queue - default 1.  Overrides maxQueue\n"
   "      -maxPush=N  Maximum numer of jobs to queue - default 10000\n"
+  "      -warnTime=N Number of minutes job can run before hang warning - default 4320 (3 days)\n"
+  "      -killTime=N Number of minutes job can run before push kills it - default 20160 (2 weeks)\n"
   "jabba stop batch.hut\n"
   "   This stops all the jobs in the batch\n"
   );
@@ -41,10 +43,13 @@ int retries = 3;
 int maxQueue = 10000;
 int minPush = 1;
 int maxPush = 10000;
+int warnTime = 3*24*60;
+int killTime = 14*24*60;
 
 /* Some variable we might want to move to a config file someday. */
 char *tempName = "jabba.tmp";	/* Name for temp files. */
 char *submitCommand = "/cluster/gridware/bin/glinux/qsub -cwd -o out -e err";
+char *statusCommand = "/cluster/gridware/bin/glinux/qstat";
 char *runJobCommand = "/cluster/bin/scripts/runJob";
 
 /* Places that can be checked. */
@@ -322,11 +327,8 @@ dyStringAppend(cmd, job->command);
 dyStringPrintf(cmd, " > %s", tempName);
 
 err = system(cmd->string);
-uglyf("cmd '%s'\n", cmd->string);
-uglyf("system result = %d\n", err);
-
 AllocVar(sub);
-slAddTail(&job->submissionList, sub);
+slAddHead(&job->submissionList, sub);
 job->submissionCount += 1;
 
 if (err != 0)
@@ -343,6 +345,81 @@ else
 dyStringFree(&cmd);
 }
 
+void statusOutputChanged()
+/* Complain about status output format change and die. */
+{
+errAbort("%s output format changed, please update markQueuedJobs in jabba.c", 
+	statusCommand);
+}
+
+int markQueuedJobs(struct jobDb *db)
+/* Mark jobs that are queued up. Return total number of jobs in queue. */
+{
+struct dyString *cmd = dyStringNew(1024);
+int err;
+struct lineFile *lf;
+struct hash *hash = newHash(0);
+struct job *job;
+struct submission *sub;
+char *line, *words[10];
+int wordCount;
+int queueSize = 0;
+
+/* Execute qstat system call. */
+dyStringAppend(cmd, statusCommand);
+dyStringPrintf(cmd, " > %s", tempName);
+err = system(cmd->string);
+if (err != 0)
+    errAbort("Couldn't execute '%s'", cmd->string);
+
+/* Make hash of submissions based on id. */
+for (job = db->jobList; job != NULL; job = job->next)
+    {
+    for (sub = job->submissionList; sub != NULL; sub = sub->next)
+        {
+	hashAdd(hash, sub->id, sub);
+	}
+    }
+
+/* Read status output. */
+lf = lineFileOpen(tempName, TRUE);
+if (lineFileNext(lf, &line, NULL))	/* Empty is ok. */
+    {
+    if (!startsWith("job-ID", line))
+	statusOutputChanged();
+    if (!lineFileNext(lf, &line, NULL) || !startsWith("-----", line))
+	statusOutputChanged();
+    while (lineFileNext(lf, &line, NULL))
+        {
+	wordCount = chopLine(line, words);
+	if (wordCount < 7)
+	    statusOutputChanged();
+	++queueSize;
+	if ((sub = hashFindVal(hash, words[0])) != NULL)
+	    {
+	    char *state = words[4];
+	    if (state[0] == 'E')
+		sub->queueError |= TRUE;
+	    else 
+	        {
+		if (sameString(state, "r") || sameString(state, "t"))
+		    {
+		    sub->running = TRUE;
+		    }
+		else
+		    {
+		    sub->inQueue = TRUE;
+		    }
+		}
+	    }
+	}
+    }
+lineFileClose(&lf);
+freeHash(&hash);
+dyStringFree(&cmd);
+return queueSize;
+}
+
 void jabbaCheck(char *batch)
 /* Check on progress of a batch. */
 {
@@ -352,16 +429,67 @@ printf("%d jobs in %s\n", db->jobCount, batch);
 writeBatch(db, batch);
 }
 
+void reportOnJobs(struct jobDb *db)
+/* Report on status of jobs. */
+{
+int submitError = 0, inQueue = 0, queueError = 0, running = 0, crashed = 0,
+    slow = 0, hung = 0, ranOk = 0, jobCount = 0, unsubmitted = 0, total = 0;
+struct job *job;
+struct submission *sub;
+
+for (job = db->jobList; job != NULL; job = job->next)
+    {
+    if ((sub = job->submissionList) != NULL)	/* Get most recent submission if any. */
+        {
+	if (sub->submitError) ++submitError;
+	if (sub->queueError) ++queueError;
+	if (sub->inQueue) ++inQueue;
+	if (sub->crashed) ++crashed;
+	if (sub->slow) ++slow;
+	if (sub->hung) ++hung;
+	if (sub->running) ++running;
+	if (sub->ranOk) ++ranOk;
+	}
+    else
+        ++unsubmitted;
+    ++total;
+    }
+if (unsubmitted > 0)
+   printf("unsubmitted jobs: %d\n", unsubmitted);
+if (submitError > 0)
+   printf("submission errors: %d\n", submitError);
+if (queueError > 0)
+   printf("queue errors: %d\n", queueError);
+if (inQueue > 0)
+   printf("in queue: %d\n", inQueue);
+if (crashed > 0)
+   printf("crashed: %d\n", crashed);
+if (slow > 0)
+   printf("slow (> %d minutes): %d\n", warnTime, slow);
+if (hung > 0)
+   printf("hung (> %d minutes): %d\n", killTime, hung);
+if (running > 0)
+   printf("running: %d\n", running);
+if (ranOk > 0)
+   printf("ranOk: %d\n", ranOk);
+printf("total jobs in batch: %d\n", total);
+}
+
 void jabbaPush(char *batch)
 /* Push a batch of jobs forward - submit jobs. */
 {
 struct jobDb *db = readBatch(batch);
 struct job *job;
+int queueSize;
 
 makeDir("err");
 makeDir("out");
 if ((job = db->jobList) != NULL)
     submitJob(job);    
+
+queueSize = markQueuedJobs(db);
+printf("%d jobs currently in queue\n", queueSize);
+reportOnJobs(db);
 
 writeBatch(db, batch);
 }

@@ -12,12 +12,14 @@ struct submission
     char *id;	/* Submission ID from scheduler */
     char *errFile;	/* Error file associated with submission */
     char *outFile;	/* Output file associated with submission */
-    signed char submitError;	/* An error occurred submitting it */
-    signed char inQueue;	/* Currently in queuing system */
-    signed char queueError;	/* In error stat in queue */
-    signed char running;	/* Currently running */
-    signed char crashed;	/* Looks like it ran but crashed */
-    signed char ranOk;	/* Looks like it ran and finished ok */
+    unsigned char submitError;	/* An error occurred submitting it */
+    unsigned char inQueue;	/* Currently in queuing system */
+    unsigned char queueError;	/* In error stat in queue */
+    unsigned char running;	/* Currently running */
+    unsigned char crashed;	/* Looks like it ran but crashed */
+    unsigned char slow;	/* Run so long we warn user */
+    unsigned char hung;	/* Run so long we kill it */
+    unsigned char ranOk;	/* Looks like it ran and finished ok */
     };
 
 struct submission *submissionCommaIn(char **pS, struct submission *ret);
