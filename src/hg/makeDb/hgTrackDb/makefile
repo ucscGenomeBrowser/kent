@@ -35,6 +35,7 @@ update:
 	hgTrackDb hg12 trackDb_$(USER) ../../lib/trackDb.sql hgRoot
 	hgTrackDb mm1 trackDb_$(USER) ../../lib/trackDb.sql hgRoot
 	hgTrackDb mm2 trackDb_$(USER) ../../lib/trackDb.sql hgRoot
+	hgTrackDb rn1 trackDb_$(USER) ../../lib/trackDb.sql hgRoot
 	cd zoo; make update; cd ..
 
 beta_old_update:
@@ -53,6 +54,7 @@ beta_update:
 	hgTrackDb hg12 trackDb ../../lib/trackDb.sql hgRoot
 	hgTrackDb mm1 trackDb ../../lib/trackDb.sql hgRoot
 	hgTrackDb mm2 trackDb ../../lib/trackDb.sql hgRoot
+	hgTrackDb rn1 trackDb ../../lib/trackDb.sql hgRoot
 	cd zoo; make beta_update; cd ..
 
 debug : $O
