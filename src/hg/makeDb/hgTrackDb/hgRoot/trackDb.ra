@@ -995,6 +995,16 @@ altColor 0,160,0
 visibility hide
 type sample 9
 
+track footPrinter
+shortLabel FootPrinter
+longlabel FootPrinter Conservation Scores
+priority 41.0022
+color 100,100,100
+altColor 0,0,160
+visibility hide
+type sample 9
+
+
 track zoo
 shortLabel ZooSeq
 longLabel ZooSeq Conservation Data 
