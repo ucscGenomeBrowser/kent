@@ -32,8 +32,8 @@ public class ApacheMonitor {
   public static void main(String[] args) {
 
     boolean debug = false;
+    int debugTime = 1087756000;
     String mode  = "";
-    int maxReferer = 10;  // set maximum number of records to print
 
     /* Process command line properties, and load them into machine and table. */
     if (args.length < 1 || args.length > 2)
@@ -88,8 +88,8 @@ public class ApacheMonitor {
       if (debug == true) {
         System.out.println(nullquery);
         System.out.println("setting new null query");
-        nullquery = "SELECT COUNT(*) AS cnt FROM access_log " +
-               "WHERE status = 500 AND time_stamp > 1091396000";
+        nullquery = "SELECT COUNT(*) AS cnt FROM " + target.sourceTable +
+                    " WHERE time_stamp > " + debugTime;
         System.out.println(nullquery);
       }
       //# System.out.println(nullquery);
@@ -112,6 +112,9 @@ public class ApacheMonitor {
 
       if (debug == true) {
         System.out.println("got past second COUNT query");
+        System.out.println("setting testquery to debugTime");
+        testquery = "SELECT COUNT(*) AS cnt FROM access_log " +
+                    "WHERE status = 500 AND time_stamp > " + debugTime;
       }
       if (!allMachines) {
         testquery = testquery + " and machine_id = " + target.targetMachine;
@@ -144,8 +147,20 @@ public class ApacheMonitor {
       if (!allMachines) {
         listquery = listquery + " AND machine_id = " + target.targetMachine;
       }
-      String details[] = new String[maxReferer];
+      if (debug = true) {
+        listquery = "SELECT machine_id, referer, remote_host," +
+          " request_uri, time_stamp FROM " + target.sourceTable + 
+          " WHERE status = " + target.errorCode +
+          " AND time_stamp > " + debugTime;
+      }
+      // set variables for formatting output into columns
+      String remHost[] = new String[cnt];
+      String refUser[] = new String[cnt];
+      String details[] = new String[cnt];
       int i = 0;
+      int refererSize = 0;
+      int remHostSize = 0;
+      // get results of query
       ResultSet listRS = stmt.executeQuery(listquery);
       while (listRS.next()) {
         String request_uri = listRS.getString("request_uri");
@@ -155,28 +170,52 @@ public class ApacheMonitor {
 	int time_stamp = listRS.getInt("time_stamp");
 	int deltaSeconds = secondsNow - time_stamp;
 	int deltaMinutes = deltaSeconds / 60;
-	System.out.print("Status " + target.errorCode + " from " + request_uri + " on ");
+	System.out.print("Status " + target.errorCode + " from " + 
+                          request_uri + " on ");
 	System.out.println(machine_id + "; " + deltaMinutes + " minutes ago");
-        if (i < maxReferer) {
-          details[i] = remote_host + " | " + referer;
-          i++;
+        // store details and set size variables to longest string each time
+        remHost[i] = remote_host;
+        refUser[i] = referer;
+        if (remote_host.length() > remHostSize) {
+          remHostSize = remote_host.length();
         }
+        if (referer.length() > refererSize) {
+          refererSize = referer.length();
+        }
+        i++;
       }
-      System.out.println("\n print first " + maxReferer + ":");
-      System.out.println(" \n remote_host        |      referer    ");
-      for (int j = 0; j < details.length; j++) {
-        if (details[j] != null) {
-	  System.out.println(details[j]);
+
+      // compute sizes and print header for details output 
+      String rem       = "remote_host";
+      String separator = "-----------";
+      int remHostDiff = remHostSize - rem.length(); 
+      for (int j = 0; j < remHostDiff; j++) {
+        rem       = rem + " ";
+        separator = separator+ "-";
+      }
+      separator = separator + "-|-";
+      for (int j = 0; j < refererSize; j++) {
+        separator = separator+ "-";
+      }
+      System.out.println(" \n" + rem + " | referer");
+      System.out.println(separator);
+
+      // print details of error
+      for (int j = 0; j < remHost.length - 1; j++) {
+        int remPrintSpaces = remHostSize - remHost[j].length();
+        for (int k = 0; k < remPrintSpaces; k++) {
+          remHost[j] = remHost[j] + " ";
         }
+	System.out.println(remHost[j] + " | " + refUser[j]);
       }
 
       stmt.close();
       conn.close();
 
     } catch (Exception e) {
+      // markd's suggestion to change this:
       // System.err.println(e.getMessage());
       throw new Error(e);
     }
-
   }
 }
