@@ -62,6 +62,10 @@ struct column
    boolean defaultOn;		/* On by default? */
    float priority;		/* Order displayed. */
    char *type;			/* Type - encodes which methods to used etc. */
+   char *itemUrl;		/* printf formatted URL string for linking.
+                                 * May be NULL.  Should contain one %s, which
+				 * get's filled in with whatever cellVal
+				 * return. */
    struct hash *settings;	/* Settings from ra file. */
 
    /* -- Methods -- */

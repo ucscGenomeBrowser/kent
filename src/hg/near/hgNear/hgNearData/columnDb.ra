@@ -15,17 +15,35 @@ search fuzzy
 searchLabel Known Gene Names
 
 name proteinName
-shortLabel Protein
+shortLabel SwissProt
 longLabel SwissProt protein display ID
 priority 2.1
 visibility off
-type swissProt kgXref kgID spDisplayID
+type lookup kgXref kgID spDisplayID
 search fuzzy
+itemUrl http://us.expasy.org/cgi-bin/niceprot.pl?%s
+
+name acc
+shortLabel GenBank
+longLabel GenBank mRNA accession
+priority 2.2
+visibility off
+type acc
+itemUrl http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Search&db=Nucleotide&term=%s&doptcmdl=GenBank&tool=genome.ucsc.edu
+
+name ensembl
+shortLabel Ensembl
+longLabel Ensembl transcript ID
+priority 2.5
+visibility off
+type lookup knownToEnsembl name value
+search exact
+itemUrl http://www.ensembl.org/Homo_sapiens/geneview?transcript=%s
 
 name expDense
 shortLabel Short Expression
 longLabel Selected UCLA expression data
-priority 2.5
+priority 2.7
 visibility on
 type expRatio knownToAffyUcla affyUcla hgFixed.affyUclaExps
 max 1.0
@@ -34,7 +52,7 @@ representatives 9,37,24,17,34,12,19,21,22,35,
 name expAll
 shortLabel Long Expression
 longLabel All UCLA expression data
-priority 2.6
+priority 2.8
 visibility off
 type expRatio knownToAffyUcla affyUcla hgFixed.affyUclaExps
 max 1.0
@@ -43,23 +61,16 @@ representatives 3,4,9,2,8,36,5,6,-1,37,1,33,23,25,20,-1,24,0,29,38,-1,17,7,31,41
 name expDistance
 shortLabel Exp Delta
 longLabel Normalized difference in expression from selected gene.
-priority 2.65
+priority 2.9
 visibility off
 type distance knownExpDistance query target distance
 
 name expId
 shortLabel Exp ID
 longLabel ID of Associated expression data
-priority 2.7
+priority 3.0
 visibility off
 type lookup knownToAffyUcla name value
-
-name acc
-shortLabel Accession
-longLabel mRNA accession
-priority 3
-visibility off
-type acc
 
 name bitScore
 shortLabel Bits

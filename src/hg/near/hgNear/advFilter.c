@@ -10,7 +10,7 @@
 #include "hdb.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: advFilter.c,v 1.7 2003/09/12 09:26:24 kent Exp $";
+static char const rcsid[] = "$Id: advFilter.c,v 1.8 2003/09/12 11:06:51 kent Exp $";
 
 struct genePos *advFilterResults(struct column *colList, 
 	struct sqlConnection *conn)
@@ -324,7 +324,7 @@ for (onOff = 1; onOff >= 0; --onOff)
     {
     if (passPresent[onOff])
 	{
-	hPrintf("<H2>Filter Controls for %s Tracks:</H2>", 
+	hPrintf("<H2>Filter Controls for %s Columns:</H2>", 
 		(onOff ? "Displayed" : "Hidden"));
 	hPrintf("<TABLE BORDER=2 CELLSPACING=1 CELLPADDING=1>\n");
 	for (col = colList; col != NULL; col = col->next)

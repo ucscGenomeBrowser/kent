@@ -16,7 +16,7 @@
 #include "ra.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: hgNear.c,v 1.69 2003/09/12 09:26:24 kent Exp $";
+static char const rcsid[] = "$Id: hgNear.c,v 1.70 2003/09/12 11:06:51 kent Exp $";
 
 char *excludeVars[] = { "submit", "Submit", confVarName, colInfoVarName,
 	defaultConfName, hideAllConfName, showAllConfName,
@@ -294,7 +294,15 @@ if (s == NULL)
     }
 else
     {
+    if (col->itemUrl != NULL)
+        {
+	hPrintf("<A HREF=\"");
+	hPrintf(col->itemUrl, s);
+	hPrintf("\" TARGET=_blank>");
+	}
     hPrintNonBreak(s);
+    if (col->itemUrl != NULL)
+        hPrintf("</A>");
     freeMem(s);
     }
 hPrintf("</TD>");
@@ -939,8 +947,6 @@ else if (sameString(type, "knownName"))
     setupColumnKnownName(col, s);
 else if (sameString(type, "expRatio"))
     setupColumnExpRatio(col, s);
-else if (sameString(type, "swissProt"))
-    setupColumnSwissProt(col, s);
 else if (sameString(type, "go"))
     setupColumnGo(col, s);
 else
@@ -965,6 +971,7 @@ while ((raHash = raNextRecord(lf)) != NULL)
     col->priority = atof(mustFindInRaHash(lf, raHash, "priority"));
     col->on = col->defaultOn = sameString(mustFindInRaHash(lf, raHash, "visibility"), "on");
     col->type = mustFindInRaHash(lf, raHash, "type");
+    col->itemUrl = hashFindVal(raHash, "itemUrl");
     col->settings = raHash;
     columnDefaultMethods(col);
     setupColumnType(col);
