@@ -1288,7 +1288,9 @@ done
     gzip *.fa
 
 
-# FOSMID END PAIRS TRACK (WORKING - 2004-06-09 kate)
+# FOSMID END PAIRS TRACK (2004-06-09 kate)
+# Corrected upper size limit to 50Kbp, reran pslPairs, 
+# and reloaded (2004-07-15 kate)
 
     # Use latest fosmid ends data prepared by Terry Furey.
     # He says there is no on-going work on fosmid ends, so this
@@ -1365,7 +1367,7 @@ cat > gsub << 'EOF'
         # 1693693 fosEnds.sorted.psl
  
     set ncbiDir = /cluster/data/ncbi/fosends/human/fosends.3
-    ~/bin/i386/pslPairs -tInsert=5000 -minId=0.94 -noBin -min=30000 -max=500000 -slop -short -long -orphan -mismatch -verbose fosEnds.sorted.psl $ncbiDir/fosEnds.pairs all_fosends fosEnds
+    ~/bin/i386/pslPairs -tInsert=5000 -minId=0.94 -noBin -min=30000 -max=50000 -slop -short -long -orphan -mismatch -verbose fosEnds.sorted.psl $ncbiDir/fosEnds.pairs all_fosends fosEnds
 
     # create header required by "rdb" tools
     # TODO: replace w/ awk & sort
@@ -1385,17 +1387,19 @@ cat > gsub << 'EOF'
     cd /cluster/data/hg17/bed/fosends
     hgLoadBed hg17 fosEndPairs fosEndPairs.bed \
                  -sqlTable=/cluster/home/kate/kent/src/hg/lib/fosEndPairs.sql 
-        # Loaded 387542 elements
+        # Loaded 384558 elements
+
     # note - this track isn't pushed to RR, just used for assembly QA
     hgLoadBed hg17 fosEndPairsBad fosEndPairsBad.bed \
                  -sqlTable=/cluster/home/kate/kent/src/hg/lib/fosEndPairsBad.sql
-        # Loaded  27919 elements
+        # Loaded  30830 elements
+
     #hgLoadPsl hg17 -nobin -table=all_fosends fosEnds.load.psl
     # NOTE: truncates file to 0 if -nobin is used
     hgLoadPsl hg17 -table=all_fosends fosEnds.load.psl
-        #load of all_fosends did not go as planned: 441072 record(s), 0 row(s) skipped, 30 warning(s) loading psl.tab
-    # load sequences
+        # load of all_fosends did not go as planned: 1526991 record(s), 0 row(s) skipped, 156 warning(s) loading psl.tab
 
+    # load sequences
     mkdir -p /gbdb/hg17/fosends
     ln -s /cluster/data/ncbi/fosends/human/fosends.3/fosEnds.fa \
                                 /gbdb/hg17/fosends/fosEnds.fa
@@ -2070,22 +2074,25 @@ exit ${RET}
     iSync
   
 
-# PREP FOR LIFTOVER CHAINS TO THIS ASSEMBLY (2004-06-10 kate)
+# PREP FOR LIFTOVER CHAINS TO hg17 (2004-06-10 kate)
 
     # split into 3K chunks
     ssh eieio
-    set tempDir = /cluster/data/hg17/bed/liftOver/liftSplit
-    mkdir -p $tempDir
-    cd $tempDir
+    set liftDir = /cluster/data/hg17/bed/liftOver/liftSplit
+    mkdir -p $liftDir
+    cd $liftDir
 cat > split.csh << 'EOF'
-    set split = /iscratch/i/hg17/liftOver/split
-    mkdir -p $split
-    set tempDir = /cluster/data/hg17/bed/liftOver/liftSplit
-    foreach i (`cat /cluster/data/hg17/chrom.lst`)
-        echo chr$i
-        faSplit -lift=$tempDir/chr$i.lft size /cluster/data/hg17/$i/chr$i.fa -oneFile 3000 $split/chr$i
+    set splitDir = /iscratch/i/hg17/liftOver/split
+    mkdir -p $splitDir
+    set liftDir = /cluster/data/hg17/bed/liftOver/liftSplit
+    foreach n (`ls /cluster/data/hg17/nib`)
+        set c = $n:r
+        echo $c
+        faSplit -lift=$liftDir/$c.lft size \
+            /cluster/data/hg17/$d/$c.fa -oneFile 3000 $splitDir/$c
     end
 'EOF'
+# << for emacs
     csh split.csh >&! split.log &
     tail -100f split.log
 
@@ -2093,13 +2100,17 @@ cat > split.csh << 'EOF'
     iSync
 
 
-# STS MARKERS (2004-06-09 kate)
+# STS MARKERS (WORKING 2004-07-13 kate)
+    # Terry's sts.9 dir is in /cluster/store5/sts.2004-07.old
+    # remove this after verifying the newer version
 
-   # update from NCBI
+   # update from NCBI (booch)
     ssh eieio
-    ln -s /cluster/store5/sts.2004-06 /cluster/data/ncbi
-    cd /cluster/data/ncbi/sts.2004-06
-    ln -s /cluster/data/ncbi/sts.2004-06 sts.9
+    # use store5 for space
+    mkdir -p /cluster/store5/sts.2004-07
+    ln -s /cluster/store5/sts.2004-07 /cluster/data/ncbi
+    ln -s /cluster/data/ncbi/sts.2004-07 sts.9
+    cd /cluster/data/ncbi/sts.2004-07
     wget ftp://ftp.ncbi.nih.gov/repository/dbSTS/dbSTS.sts
     wget ftp://ftp.ncbi.nih.gov/repository/dbSTS/dbSTS.aliases
     wget ftp://ftp.ncbi.nih.gov/blast/db/FASTA/sts.gz
@@ -2114,27 +2125,28 @@ cat > split.csh << 'EOF'
     cd /cluster/data/ncbi/sts.9
 
     # this time, snag from Terry's dir
-    cp ~booch/tracks/update/all.STS.fa.new /cluster/data/sts.9/all.STS.fa.prev
-    cp ~booch/tracks/update/stsInfo2.bed ./stsInfo2.bed.prev
-
-    # this time, also fix all.STS.fa.prev to have correct names of fa record
-    # also gets rid of non-human sequences
-    fixFa.pl stsInfo2.bed all.STS.fa.prev > all.STS.fa.prev.fix
-    mv all.STS.fa.prev all.STS.fa.prev.orig
-    mv all.STS.fa.prev.fix all.STS.fa.prev
+    cd /cluster/data/ncbi/sts.9
+    cp -p ~booch/tracks/update/all.STS.fa.prev .
+    cp -p ~booch/tracks/update/stsInfo2.bed stsInfo2.bed.prev
 
     # Convert dbSTS.fa file to easier reading format, and get accessions
     /cluster/bin/scripts/convertGbFaFile dbSTS.fa > dbSTS.convert.fa
     grep ">" dbSTS.convert.fa | cut -f 2 -d ">" > dbSTS.acc
 
-    # NOTE: updateStsInfo creates new stsInfo2.bed, all.primers, all.STS.fa files 
-    updateStsInfo -verbose=1 -gb=dbSTS.acc stsInfo2.bed.prev all.STS.fa.prev dbSTS.sts \
-	dbSTS.aliases dbSTS.convert.fa new
+    # NOTE: updateStsInfo creates new stsInfo2.bed, all.primers, 
+    #   all.STS.fa, stsAlias.bed files 
+    updateStsInfo -verbose=1 -gb=dbSTS.acc stsInfo2.bed.prev all.STS.fa.prev \
+                    dbSTS.sts dbSTS.aliases dbSTS.convert.fa new
+    # 129991  SWXD2599        99622   (0) not in dbSTS anymore
+    # 166473  D3S3812 154523  (0) not in dbSTS anymore
+    # 185776  RH83562 209614  (0) not in dbSTS anymore
+
     mv new.info stsInfo2.bed
     mv new.primers all.primers
     mv new.alias stsAlias.bed
-    /cluster/bin/scripts/convertPrimerToFA all.primers > all.primers.fa
     mv new.fa all.STS.fa
+    /cluster/bin/scripts/convertPrimerToFA all.primers > all.primers.fa
+
     # Copy stsInfo2.bed and stsAlias.bed to data directory becuase
     # these will be loaded into the database later
     mkdir -p /cluster/data/hg17/bed/sts
@@ -2142,57 +2154,80 @@ cat > split.csh << 'EOF'
     cp stsAlias.bed /cluster/data/hg17/bed/sts/
 
     # Create sts sequence alignments
-    mkdir -p /cluster/bluearc/sts.9/sts
-    faSplit sequence all.STS.fa 10 /cluster/bluearc/sts.9/sts/sts
+    mkdir -p /cluster/bluearc/sts.9/sts.split
+    faSplit sequence all.STS.fa 50 /cluster/bluearc/sts.9/sts.split/sts
+    cp /cluster/data/ncbi/sts.9/all.STS.fa /cluster/bluearc/sts.9
+
+    # create small ooc file to use with alignments (if not existing)
+    ssh kolossus
+    cd /cluster/data/hg17/bed/sts
+    ls /cluster/bluearc/hg17/bothMaskedNibs/chr*.nib > nib.lst
+    blat nib.lst /dev/null /dev/null \
+        -tileSize=11 -makeOoc=/cluster/bluearc/hg/h/11.4096.ooc -repMatch=4096
+    blat nib.lst /dev/null /dev/null \
+        -tileSize=11 -makeOoc=/cluster/bluearc/hg/h/11.16384.ooc -repMatch=16384
 
     ssh kk
     cd /cluster/data/hg17/bed/sts
     mkdir run
     cd run
-    cp /cluster/data/ncbi/sts.9/all.STS.fa /cluster/bluearc/sts.9
     ls -1S /scratch/hg/hg17/maskedContigs/*.fa > contigs.lst
-    ls -1S /cluster/bluearc/sts.9/sts/sts*.fa > sts.lst
+    ls -1S /cluster/bluearc/sts.9/sts.split/sts*.fa > sts.lst
     mkdir -p /cluster/bluearc/hg17/sts/sts/out
+    foreach f (`cat sts.lst`)
+        set d = $f:t:r
+        mkdir /cluster/bluearc/hg17/sts/sts/out/$d
+    end
+
 cat > template << 'EOF'
 #LOOP
-/cluster/bin/i386/blat $(path1) $(path2) -stepSize=5 {check out line+ /cluster/bluearc/hg17/sts/sts/out/$(root1).$(root2).psl}
+/cluster/bin/i386/blat $(path1) $(path2) -ooc=/cluster/bluearc/hg/h/11.4096.ooc -stepSize=5 {check out line+ /cluster/bluearc/hg17/sts/sts/out/$(root2)/$(root1).$(root2).psl}
 #ENDLOOP
 'EOF'
+# << for emacs
+
     gensub2 contigs.lst sts.lst template jobList
     para create jobList
-        # 3800 jobs
+        # 17860 jobs
     para try
     para check
     para push
-
-    #Completed: 3800 of 3800 jobs
-    #CPU time in finished jobs:      36531s     608.84m    10.15h    0.42d  0.001 y
-    #IO & Wait Time:                 24769s     412.82m     6.88h    0.29d  0.001 y
-    #Average job time:                  16s       0.27m     0.00h    0.00d
-    #Longest job:                      175s       2.92m     0.05h    0.00d
-    #Submission to last job:           233s       3.88m     0.06h    0.00d
+# CPU time in finished jobs:     774133s   12902.22m   215.04h    8.96d  0.025 y
+# IO & Wait Time:                 54294s     904.89m    15.08h    0.63d  0.002 y
+# Average job time:                  46s       0.77m     0.01h    0.00d
+# Longest job:                     2273s      37.88m     0.63h    0.03d
+# Submission to last job:          4284s      71.40m     1.19h    0.05d
 
     # Compile sts sequence results
-    ssh eieio
+    ssh kolossus
     cd /cluster/bluearc/hg17/sts/sts
-    pslSort dirs raw.psl temp out
+    pslSort dirs raw.psl temp out/*
     rm -rf temp
     pslReps -nearTop=0.0001 -minCover=0.6 -minAli=0.8 -noIntrons raw.psl \
 	stsMarkers.psl /dev/null
-    cp stsMarkers.psl /cluster/data/hg17/bed/sts/run
+    #cp stsMarkers.psl /cluster/data/hg17/bed/sts/run
 
     # Lift them and get them ready to combine with primer alignments
-    cd  /cluster/data/hg17/bed/sts/run
-    liftUp -nohead /cluster/data/hg17/bed/sts/run/stsMarkers.lifted.psl \
+    #cd  /cluster/data/hg17/bed/sts/run
+    #liftUp -nohead /cluster/data/hg17/bed/sts/run/stsMarkers.lifted.psl \
+    liftUp -nohead stsMarkers.lifted.psl \
         /cluster/data/hg17/jkStuff/liftAll.lft warn stsMarkers.psl
+
+    # missing some utilities for kolossus, so switch to fileserver
+    ssh kksilo
+    cd /cluster/bluearc/hg17/sts/sts
     /cluster/bin/scripts/extractPslInfo stsMarkers.lifted.psl
+        # creates <file>.initial
     /cluster/bin/scripts/findAccession -agp stsMarkers.lifted.psl.initial \
 	/cluster/data/hg17
-    rm stsMarkers.lifted.psl.initial
+            # creates <file>.acc
+    #rm stsMarkers.lifted.psl.initial
     sort -k 4n stsMarkers.lifted.psl.initial.acc > stsMarkers.final
-    rm stsMarkers.lifted.psl.initial.acc
+    #rm stsMarkers.lifted.psl.initial.acc
     wc stsMarkers.final
-    #  91508  640556 4851492 stsMarkers.final
+    # 92460  647220 4901668 stsMarkers.final
+    cp stsMarkers.final stsMarkers.lifted.psl.initial* \
+                /cluster/data/hg17/bed/sts
 
     # primers
     ssh eieio
@@ -5151,7 +5186,275 @@ axtChain -scoreScheme=/cluster/data/blastz/HoxD55.q \
     # Copy over & edit README.txt w/pointers to chain, net formats.
 
 
-# 7-WAY MULTIZ MULTIPLE ALIGNMENT
+# 8-WAY MULTIZ MULTIPLE ALIGNMENT WITH MM5 (WORKING 2004-07-13 kate)
+    ssh eieio
+    set multizDir = multiz.2004-07-13
+    set workingDir = /cluster/bluearc/hg17/$multizDir
+    ln -s $workingDir /cluster/bluearc/hg17/multiz8way.mm5
+    mkdir -p $workingDir
+    mkdir -p /cluster/data/hg17/bed/$multizDir
+    cd /cluster/data/hg17/bed/$multizDir
+
+# wrapper script for multiz
+    # NOTE: first arg is pairwise, 2nd arg is multiple (to add to) 
+    # NOTE: next time, modify script so it only needs one arg -- saves the
+    # multiple dirname in a file for use by the next run
+    cat << 'EOF' > doMultiz.csh
+#!/bin/csh -fe
+mkdir -p $3:h
+/cluster/bin/penn/multiz $1 $2 - > $3
+'EOF'
+# << for emacs
+    cat << 'EOF' > gsub
+#LOOP
+../doMultiz.csh {check in line /cluster/bluearc/hg17/multiz.2004-07-13/$(dir1)/$(root2).maf} {check in line /cluster/bluearc/hg17/multiz.2004-07-13/$(root1)/$(root2).maf} {check out line+ /cluster/bluearc/hg17/multiz.2004-07-13/$(root1)$(dir1)/$(root2).maf}
+#ENDLOOP
+'EOF'
+# << for emacs
+    chmod +x doMultiz.csh
+
+    # copy over first mafs
+    mkdir $workingDir/panTro1
+    cp /cluster/data/hg17/bed/blastz.panTro1/mafNet/*.maf \
+                $workingDir/panTro1
+    ls $workingDir/panTro1/*.maf > chrom.lst
+
+    # GOT HERE
+
+    # first multiz - add mm5 mouse in to human/chimp
+    mkdir $workingDir/mm5
+
+    cp /cluster/data/hg17/bed/blastz.mm5/mafNet/chr*.maf $workingDir/mm5
+
+    mkdir run.mm5
+    cd run.mm5
+    echo "mm5/panTro1" > species.lst
+    gensub2 species.lst ../chrom.lst ../gsub jobList
+    para create jobList
+        # 46 jobs
+    para try, check, push, check
+    cd ..
+
+    # rat
+    ssh eieio
+    set workingDir = /cluster/bluearc/hg17/multiz.2004-06-24
+    mkdir $workingDir/rn3
+    cp /cluster/data/hg17/bed/blastz.rn3/mafNet/chr*.maf $workingDir/rn3
+
+    ssh kki
+    cd /cluster/data/hg17/bed/multiz.2004-06-24
+    mkdir run.rn3
+    cd run.rn3
+    echo "rn3/panTro1mm5" > species.lst
+    gensub2 species.lst ../chrom.lst ../gsub jobList
+    para create jobList
+        # 46 jobs
+    para try, check, push, check
+    cd ..
+
+    # dog
+    mkdir $workingDir/canFam1
+    foreach f (/cluster/data/hg17/bed/blastz.canFam1.2004-07-08/mafNet/chr*.maf)
+        set c = $f:r:r:t
+        echo $c
+        cp $f $workingDir/canFam1/$c.maf
+    end
+
+    ssh kki
+    cd /cluster/data/hg17/bed/multiz.2004-07-13
+    mkdir run.canFam1
+    cd run.canFam1
+    echo "canFam1/panTro1mm5rn3" > species.lst
+    gensub2 species.lst ../chrom.lst ../gsub jobList
+    para create jobList
+        # 46 jobs
+    para try, check, push, check
+
+    # chicken
+    ssh eieio
+    set workingDir = /cluster/bluearc/hg17/multiz.2004-07-13
+    mkdir $workingDir/galGal2
+    foreach f (/cluster/data/hg17/bed/blastz.galGal2/mafNet/chr*.maf)
+        set c = $f:r:r:t
+        cp $f $workingDir/galGal2/$c.maf
+    end
+
+    ssh kki
+    set workingDir = /cluster/bluearc/hg17/multiz.2004-07-13
+    cd /cluster/data/hg17/bed/multiz.2004-07-13
+    mkdir run.galGal2
+    cd run.galGal2
+    echo "galGal2/panTro1mm5rn3canFam1" > species.lst
+    gensub2 species.lst ../chrom.lst ../gsub jobList
+    # no alignment file for chr18_random -- create one so we can create jobList
+    touch $workingDir/galGal2/chr18_random.maf
+    para create jobList
+        # 46 jobs
+    para try, check, push, check
+    # 1 crashed job for empty file chr18_random
+    cd ..
+
+    # fugu
+    ssh eieio
+    set workingDir = /cluster/bluearc/hg17/multiz.2004-07-13
+    mkdir $workingDir/fr1
+    cp /cluster/data/hg17/bed/blastz.fr1/mafNet/chr*.maf $workingDir/fr1
+
+    ssh kki
+    cd /cluster/data/hg17/bed/multiz.2004-07-13
+    mkdir run.fr1
+    cd run.fr1
+    echo "fr1/panTro1mm5rn3canFam1galGal2" > species.lst
+    gensub2 species.lst ../chrom.lst ../gsub jobList
+    # create empty alignment file for missing one (no alignments)
+    touch /cluster/bluearc/hg17/multiz.2004-07-13/fr1/chr6_hla_hap1.maf
+    para create jobList
+        # 46 jobs
+    para try, check, push, check
+    # 1 crashed job for empty file chr6_hla_hap1
+    cd ..
+
+    # zebrafish
+    ssh eieio
+    set workingDir = /cluster/bluearc/hg17/multiz.2004-07-13
+    mkdir $workingDir/danRer1
+    cp /cluster/data/hg17/bed/blastz.danRer1.swap/mafNet/chr*.maf $workingDir/danRer1
+
+    ssh kki
+    cd /cluster/data/hg17/bed/multiz.2004-07-13
+    mkdir run.danRer1
+    cd run.danRer1
+    echo "danRer1/panTro1mm5rn3canFam1galGal2fr1" > species.lst
+    gensub2 species.lst ../chrom.lst ../gsub jobList
+    # create empty alignment file for missing one (no alignments)
+    para create jobList
+        # 46 jobs
+    para try, check, push, check
+    cd ..
+
+    # 8-WAY mafs are now in $workingDir/panTro1mm5rn3canFam1galGal2fr1danRer1
+
+
+# 8-WAY MULTIZ MULTIPLE ALIGNMENT (WORKING 2004-07-12 kate)
+# NOTE: this will be replaced with MM5 8-WAY, above
+    ssh eieio
+    set multizDir = multiz.2004-07-12
+    set workingDir = /cluster/bluearc/hg17/$multizDir
+    ln -s $workingDir /cluster/bluearc/hg17/multiz8way
+    mkdir -p $workingDir
+    mkdir -p /cluster/data/hg17/bed/$multizDir
+    cd /cluster/data/hg17/bed/$multizDir
+
+# wrapper script for multiz
+    # NOTE: first arg is pairwise, 2nd arg is multiple (to add to) 
+    # NOTE: next time, modify script so it only needs one arg -- saves the
+    # multiple dirname in a file for use by the next run
+    cat << 'EOF' > doMultiz.csh
+#!/bin/csh -fe
+mkdir -p $3:h
+/cluster/bin/penn/multiz $1 $2 - > $3
+'EOF'
+# << for emacs
+    cat << 'EOF' > gsub
+#LOOP
+../doMultiz.csh {check in line /cluster/bluearc/hg17/multiz.2004-07-12/$(dir1)/$(root2).maf} {check in line /cluster/bluearc/hg17/multiz.2004-07-12/$(root1)/$(root2).maf} {check out line+ /cluster/bluearc/hg17/multiz.2004-07-12/$(root1)$(dir1)/$(root2).maf}
+#ENDLOOP
+'EOF'
+# << for emacs
+chmod +x doMultiz.csh
+ls /cluster/bluearc/hg17/multiz.2004-07-12/canFam1/*.maf > chrom.lst
+
+    # reuse chimp/mouse/rat alignments from previous (7way) multiz
+    ln -s /cluster/bluearc/hg17/multiz.2004-06-24/panTro1mm4rn3 $workingDir
+
+    # add in dog
+    mkdir $workingDir/canFam1
+    foreach f (/cluster/data/hg17/bed/blastz.canFam1.2004-07-08/mafNet/chr*.maf)
+        set c = $f:r:r:t
+        echo $c
+        cp $f $workingDir/canFam1/$c.maf
+    end
+
+    ssh kki
+    cd /cluster/data/hg17/bed/multiz.2004-07-12
+    mkdir run.canFam1
+    cd run.canFam1
+    echo "canFam1/panTro1mm4rn3" > species.lst
+    gensub2 species.lst ../chrom.lst ../gsub jobList
+    para create jobList
+        # 46 jobs
+    para try, check, push, check
+
+    # chicken
+    ssh eieio
+    set workingDir = /cluster/bluearc/hg17/multiz.2004-07-12
+    mkdir $workingDir/galGal2
+    foreach f (/cluster/data/hg17/bed/blastz.galGal2/mafNet/chr*.maf)
+        set c = $f:r:r:t
+        cp $f $workingDir/galGal2/$c.maf
+    end
+
+    ssh kki
+    set workingDir = /cluster/bluearc/hg17/multiz.2004-07-12
+    cd /cluster/data/hg17/bed/multiz.2004-07-12
+    mkdir run.galGal2
+    cd run.galGal2
+    echo "galGal2/panTro1mm4rn3canFam1" > species.lst
+    gensub2 species.lst ../chrom.lst ../gsub jobList
+    # no alignment file for chr18_random -- create one so we can create jobList
+    touch $workingDir/galGal2/chr18_random.maf
+    para create jobList
+        # 46 jobs
+    para try, check, push, check
+    # 1 crashed job for empty file chr18_random
+    cd ..
+
+    # fugu
+    ssh eieio
+    set workingDir = /cluster/bluearc/hg17/multiz.2004-07-12
+    mkdir $workingDir/fr1
+    cp /cluster/data/hg17/bed/blastz.fr1/mafNet/chr*.maf $workingDir/fr1
+
+    ssh kki
+    cd /cluster/data/hg17/bed/multiz.2004-07-12
+    mkdir run.fr1
+    cd run.fr1
+    echo "fr1/panTro1mm4rn3canFam1galGal2" > species.lst
+    gensub2 species.lst ../chrom.lst ../gsub jobList
+    # create empty alignment file for missing one (no alignments)
+    touch /cluster/bluearc/hg17/multiz.2004-07-12/fr1/chr6_hla_hap1.maf
+    para create jobList
+        # 46 jobs
+    para try, check, push, check
+    # 1 crashed job for empty file chr6_hla_hap1
+    cd ..
+
+    # zebrafish
+    ssh eieio
+    set workingDir = /cluster/bluearc/hg17/multiz.2004-07-12
+    mkdir $workingDir/danRer1
+    cp /cluster/data/hg17/bed/blastz.danRer1.swap/mafNet/chr*.maf $workingDir/danRer1
+
+    ssh kki
+    cd /cluster/data/hg17/bed/multiz.2004-07-12
+    mkdir run.danRer1
+    cd run.danRer1
+    echo "danRer1/panTro1mm4rn3canFam1galGal2fr1" > species.lst
+    gensub2 species.lst ../chrom.lst ../gsub jobList
+    # create empty alignment file for missing one (no alignments)
+    para create jobList
+        # 46 jobs
+    para try, check, push, check
+    cd ..
+
+    # 8-WAY mafs are now in $workingDir/panTro1mm4rn3canFam1galGal2fr1danRer1
+
+
+# PHYLO-HMM CONSERVATION FOR 8-WAY (WORKING kate)
+    # Need tree model (or model build guidance) from Adam
+
+    
+# 7-WAY MULTIZ MULTIPLE ALIGNMENT (2004-06-24 kate)
 
     ssh eieio
     set multizDir = multiz.2004-06-24
@@ -5160,17 +5463,6 @@ axtChain -scoreScheme=/cluster/data/blastz/HoxD55.q \
     mkdir -p /cluster/data/hg17/bed/$multizDir
     cd /cluster/data/hg17/bed/$multizDir
 
-    # copy over mafs
-    mkdir $workingDir/panTro1
-    cp /cluster/data/hg17/bed/blastz.panTro1/mafNet/*.maf \
-                $workingDir/panTro1
-
-    # first multiz - add mouse in to human/chimp
-    mkdir $workingDir/mm4
-    cp /cluster/data/hg17/bed/blastz.mm4/mafNet/chr*.maf $workingDir/mm4
-
-    ssh kki
-    cd /cluster/data/hg17/bed/multiz.2004-06-24
     # wrapper script for multiz
     # NOTE: first arg is pairwise, 2nd arg is multiple (to add to) 
     # NOTE: next time, modify script so it only needs one arg -- saves the
@@ -5180,15 +5472,27 @@ axtChain -scoreScheme=/cluster/data/blastz/HoxD55.q \
 mkdir -p $3:h
 /cluster/bin/penn/multiz $1 $2 - > $3
 'EOF'
+# << for emacs
     cat << 'EOF' > gsub
 #LOOP
 ../doMultiz.csh {check in line /cluster/bluearc/hg17/multiz.2004-06-24/$(dir1)/$(root2).maf} {check in line /cluster/bluearc/hg17/multiz.2004-06-24/$(root1)/$(root2).maf} {check out line+ /cluster/bluearc/hg17/multiz.2004-06-24/$(root1)$(dir1)/$(root2).maf}
 #ENDLOOP
 'EOF'
+# << for emacs
     chmod +x doMultiz.csh
+
+    # copy over first mafs
+    mkdir $workingDir/panTro1
+    cp /cluster/data/hg17/bed/blastz.panTro1/mafNet/*.maf \
+                $workingDir/panTro1
     ls /cluster/bluearc/hg17/multiz.2004-06-24/panTro1/*.maf > chrom.lst
 
-    # mouse
+    # first multiz - add mouse in to human/chimp
+    mkdir $workingDir/mm4
+    cp /cluster/data/hg17/bed/blastz.mm4/mafNet/chr*.maf $workingDir/mm4
+
+    ssh kki
+    cd /cluster/data/hg17/bed/multiz.2004-06-24
     mkdir run.mm4
     cd run.mm4
     echo "mm4/panTro1" > species.lst
@@ -5212,7 +5516,6 @@ mkdir -p $3:h
 
     ssh kki
     cd /cluster/data/hg17/bed/multiz.2004-06-24
-
     mkdir run.rn3
     cd run.rn3
     echo "rn3/panTro1mm4" > species.lst
@@ -5422,13 +5725,15 @@ rm $TMP/$root.pp
 	    -wibFile=PHASTCONS/wib/${chr}_phastCons stdin ;\
     done
 
+    # load data for track name "multiz7way"
     ssh hgwdev
     cd /cluster/data/hg17/bed/multiz/cons
     cd run.cons
-    hgLoadWiggle hg17 phastCons PHASTCONS/wib/chr*_phastCons.wig
-    mkdir -p /gbdb/hg17/wib
-    rm -f /gbdb/hg17/wib/chr*phastCons.wib
-    ln -s `pwd`/PHASTCONS/wib/*.wib /gbdb/hg17/wib
+    hgLoadWiggle hg17 phastCons -pathPrefix=/gbdb/hg17/multiz7way/wib \
+                PHASTCONS/wib/chr*_phastCons.wig
+    mkdir -p /gbdb/hg17/multiz7way/wib
+    rm -f /gbdb/hg17multiz7way/wib/chr*phastCons.wib
+    ln -s `pwd`/PHASTCONS/wib/*.wib /gbdb/hg17/multiz7way/wib
     chmod 775 . PHASTCONS PHASTCONS/wib
     chmod 664 PHASTCONS/wib/*.wib
     
@@ -5436,10 +5741,12 @@ rm $TMP/$root.pp
     # TODO: move mafs to /cluster/data (need to free up space on store5)
     ssh hgwdev
     cd /cluster/data/hg17/bed/multiz
-    mkdir -p /gbdb/hg17/multiz7way
-    ln -s /cluster/bluearc/hg17/multiz/7way/*.maf /gbdb/hg17/multiz7way
-    hgLoadMaf hg17 -warn multiz7way
-        # Indexing and tabulating /gbdb/hg17/multiz7way/chr14.maf
+    set mafDir = /gbdb/hg17/multiz7way/maf
+    set table = multiz7way
+    mkdir -p $mafDir/$table
+    ln -s /cluster/bluearc/hg17/multiz/7way/*.maf $mafDir/$table
+    hgLoadMaf hg17 -warn multiz7way -pathPrefix=$mafDir/$table
+        # Indexing and tabulating /gbdb/hg17/multiz7way/maf/chr14.maf
         # 11489 warnings
         # TODO: check this out
 
@@ -5452,13 +5759,18 @@ rm $TMP/$root.pp
     ln -s mm4 mouse
     ln -s rn3 rat
     ln -s galGal2 chicken
+    # remove empty file, disliked by hgLoadMaf
+    rm chicken/chr18_random.maf
     ln -s fr1 fugu
+    rm fugu/chr6_hla_hap1.maf
     ln -s danRer1 zebrafish
-    #foreach s (chimp mouse rat chicken fugu zebrafish)
-    foreach s (mouse rat chicken fugu zebrafish)
-        mkdir -p /gbdb/hg17/${s}_netBlastz
-        ln -s /cluster/bluearc/hg17/multiz/$s/*.maf /gbdb/hg17/${s}_netBlastz
-        hgLoadMaf hg17 -warn ${s}_netBlastz
+    foreach s (chimp mouse rat chicken fugu zebrafish)
+        set table = ${s}_netBlastz
+        #mkdir -p $mafDir/$table
+        #ln -s /cluster/bluearc/hg17/multiz/$s/*.maf $mafDir/$table
+        echo $s
+        ~kate/bin/i386/hgLoadMaf hg17 -warn \
+                ${s}_netBlastz -pathPrefix=$mafDir/$table
     end
 
     # trackDb entry:
@@ -6448,6 +6760,45 @@ SEQ2_LEN=$BASE/S2.len
     #	jobs the default push limit.  Also be aware of maxQueue limits
     #	on the KK, may need something more than the default of 200000 if
     #	the KK is busy.
+XXX - running 2004-07-01 11:26
+
+
+# LIFTOVER (DROP) CHAINS TO HG16 (IN PROGRESS 2004-07-07 kate)
+
+    # run alignment
+    # NOTE: split hg16 to /iscratch/i is doc'ed in makeHg16.doc
+    ssh kk
+    cd /cluster/data/hg17
+    makeLoChain-align hg17 /scratch/hg/gs.18/build35/bothMaskedNibs \
+                    hg16 /iscratch/i/gs.17/build34/liftOver/split
+    # Created parasol job in bed/blat.hg16.2004-07-07/run
+    # 1150 jobs
+    cd bed/blat.hg16.2004-07-07/run
+    para try
+    para check
+    para push
+
+    # GOT HERE
+
+    # lift results
+    ssh eieio
+    cd /cluster/data/hg17
+    mkdir -p bed/liftOver
+    cd bed/liftOver
+    # lift directory defined in makeHg17.doc when split was performed
+    makeLoChain-lift hg17 hg16 /cluster/bluearc/hg/gs.17/build34/liftOver/lift
+                        >&! lift.log &
+    tail -100f lift.log
+    # GOT HERE -- error messages in lift log
+
+    # chain alignments
+    makeLoChain-chain
+    ssh kk
+
+    makeLoChain-net
+    makeLoChain-load
+
+
 # Completed: 116281 of 116281 jobs
 # CPU time in finished jobs:   21807388s  363456.46m  6057.61h  252.40d  0.692 y
 # IO & Wait Time:               2319383s   38656.39m   644.27h   26.84d  0.074 y
@@ -6808,6 +7159,7 @@ axtChain $1 /iscratch/i/gs.18/build35/bothMaskedNibs \
 
 # MAKING HUMAN AXTTIGHT FROM AXTBEST (NOT TO BE DONE - 2004-07-13 - Hiram)
     #	XXXX - ! ! !  DO NOT NEED axtBest for Self alignments
+
 
 # BLASTZ SELF CLEAN UP (TO BE DONE - 2004-07-08 - Hiram)
     ssh eieio
