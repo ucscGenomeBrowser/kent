@@ -48,63 +48,90 @@
 <!--start of INSTALLING---------------------------------------------->
 
 <ol>
-<li>Create a directory named "jksrc" and go to it.
-<br><br>
-
-<li>Unzip jksrc.zip
-<br><br>
-
 <li>Check that the environment variable MACHTYPE exists on your system.&nbsp;
 It should on Unix. (And making this on non-Unix systems is beyond the scope
-of this README).&nbsp; For a Linux system MACHTYPE will probably be 'i386', for Alpha it
-will be 'alpha', for a Sun probably 'sparc'. If necessary set up this environment variable.
-<br><br>
-<li>Go to the kent/src/lib directory and type make. 
-<br> On Alphas there will be some warning messages about "crudeAli.c." 
-Otherwise it should compile cleanly under gcc.
-<br><br>
-
-<li>Go to the kent/src/jkOwnLib directory and type make. 
-<br> On Alphas there will be some warning messages about "crudeAli.c." 
-Otherwise it should compile cleanly under gcc.
-<br><br>
-
-<li> For Human Genome Browser, the most important directories are in order
-in kent/src:
-<ul>
-<li>hg/lib
-<li>hg/hgTracks
-<li>hg/hgc
-<li>hg/hgBlat
-</ul>
+of this README).&nbsp; For a Linux system MACHTYPE will probably be 'i686',
+for a Sun probably 'sparc'. If necessary set up this environment variable. <br>
+<PRE>
+MACHTYPE=i686
+</PRE>
 <br>
-<li>For each directory listed above do the following:
+
+<li> During the build, binaries are moved
+	to your home directory: <em> ~/bin/$MACHTYPE </em> <br>
+	Create this directory:
+<PRE>
+	$ mkdir ~/bin/$MACHTYPE
+</PRE>
+<li> Set MYSQLINC and MYSQLLIBS environment variables:
 <br>
 <ol type=a>
-<li> If you have MySQL installed make the environment variable MYSQLINC point to where its include files are. For example:
+<li> Set the environment variable MYSQLINC for mySQL include files.
+	For example:
 <PRE>
-setenv MYSQLINC /usr/local/mysql/include
+MYSQLINC=/usr/local/mysql/include
 --or---
-setenv MYSQLINC /usr/include
+MYSQLINC=/usr/include
 </PRE>
-Then set the MYSQLLIBS variable to point to the location of
+<li> Then set the MYSQLLIBS variable to point to the location of
 the libmysqlclient.a library and any other libraries needed on
 your platform to link network applications.
 <PRE>
-setenv MYSQLLIBS '/usr/local/mysql/lib/mysql/libmysqlclient.a'
+MYSQLLIBS='/usr/local/mysql/lib/mysql/libmysqlclient.a'
 
 ---Solaris for example often needs----
 
-setenv MYSQLLIBS '/usr/local/mysql/lib/mysql/libmysqlclient.a -lnsl -lsocket -lresolv' 
+MYSQLLIBS='/usr/local/mysql/lib/mysql/libmysqlclient.a -lz' 
 
 </PRE>
 
-<li> You may need to edit the makefile so that the executable files will be 
-moved to WEBROOT/cgi-bin and not our internal paths. This will be fixed in
-a future release.
-<li> cd into the directory listed.
-<li> Type make.&nbsp; It should compile with no warnings.
 </ol>
+
+<li>Create a directory named "jksrc" and go to it.
+<br><br>
+
+<li>Unzip jksrc.zip <br>
+	This creates the source hierarchy: <em> ./kent </em>
+<br><br>
+
+
+<li>Go to the kent/src directory and type 'make'. <br>
+	This builds the libraries in directories:
+	<ul>
+	<li> kent/src/lib
+	<li> kent/src/jkOwnLib
+	<li> kent/src/hg/lib
+	</ul>
+<br><br>
+
+<li>Go to the kent/src/hg directory and type 'make alpha'. <br>
+	This builds the cgi binaries from directories:
+	<ul>
+	<li> kent/src/hg/cartReset
+	<li> kent/src/hg/das
+	<li> kent/src/hg/hgBlat
+	<li> kent/src/hg/hgCoordConv
+	<li> kent/src/hg/hgGateway
+	<li> kent/src/hg/hgText
+	<li> kent/src/hg/hgTracks
+	<li> kent/src/hg/hgTracksUi
+	<li> kent/src/hg/hgc
+	<li> kent/src/hg/cartDump
+	</ul>
+	And the resulting binaries are moved to:
+	<em> /usr/local/apache/cgi-bin </em> <br>
+	If this isn't your location for your cgi binaries, make this
+	path a symlink to your cgi binary directory and thus the make
+	will send the binaries to the correct location.  We are working
+	on fixing the makefiles to allow specification of a destination
+	directory.
+<br><br>
+
+<li> Many other programs are available in the source tree.
+	For any particular program, go to its source directory
+	and type 'make'.  The resulting binary will
+	be moved to your home directory: <em> ~/bin/$MACHTYPE </em>
+
 </ol>
 <p>
 
@@ -114,7 +141,7 @@ a future release.
 <hr WIDTH="100%">
 <br><i>Should you have any comments, inquires or questions, please contact
 <a href="mailto:genome-mirror@cse.ucsc.edu">genome-mirror@cse.ucsc.edu</a></i>.
-<br><i>Last Modified: Jan 8, 2002</i>
+<br><i>Last Modified: 2003-06-30 - 30 June 2003</i>
 <br>
 
 	</TD><TD WIDTH=15></TD></TR></TABLE>
