@@ -217,5 +217,9 @@ void altGraphXDrawPack(struct altGraphX *agList, struct spaceSaver *ssList,
 enum ggEdgeType getSpliceEdgeType(struct altGraphX *ag, int edge);
 /* Return edge type. */
 
+void altGraphXReverseComplement(struct altGraphX *ag);
+/* Switch an altGraphX record around so it looks like the
+   chromosomal coordinates were reverse complemented. */
+
 #endif /* ALTGRAPHX_H */
 
