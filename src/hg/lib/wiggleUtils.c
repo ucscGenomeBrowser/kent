@@ -9,7 +9,7 @@
 #include "hCommon.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: wiggleUtils.c,v 1.35 2004/11/16 01:04:20 hiram Exp $";
+static char const rcsid[] = "$Id: wiggleUtils.c,v 1.36 2004/11/16 21:46:38 hiram Exp $";
 
 void printHistoGram(struct histoResult *histoResults, boolean html)
 {
@@ -133,183 +133,115 @@ if (html)
     }
 }
 
-void wigPrintDataConstraint(struct wiggleDataStream *wds, FILE * fh)
-/*	output string to file handle fh indicating current data constraint */
-{
-if (wds->useDataConstraint)
-    {
-    if ((wds->dataConstraint) &&
-	sameWord(wds->dataConstraint,"in range"))
-	    fprintf (fh, "#\tdata values in range [%g : %g)\n",
-		    wds->limit_0, wds->limit_1);
-    else
-	    fprintf (fh, "#\tdata values %s %g\n",
-		    wds->dataConstraint, wds->limit_0);
-    }
-}
-
-void statsPreamble(struct wiggleDataStream *wds, char *chrom,
-    int winStart, int winEnd, unsigned span, unsigned long long valuesMatched,
-	char *table2)
-{
-char num1Buf[64], num2Buf[64]; /* big enough for 2^64 (and then some) */
-
-sprintLongWithCommas(num1Buf, BASE_1(winStart));
-sprintLongWithCommas(num2Buf, winEnd);
-printf("<P><B> Position: </B> %s:%s-%s</P>\n", chrom, num1Buf, num2Buf );
-sprintLongWithCommas(num1Buf, winEnd - winStart);
-printf("<P><B> Total Bases in view: </B> %s </P>\n", num1Buf);
-
-if (wds->useDataConstraint)
-    {
-    if (sameWord(wds->dataConstraint,"in range"))
-	printf("<P><B> Filter: %g <= (data value) < %g </B></P>\n",
-		wds->limit_0, wds->limit_1);
-    else
-	printf("<P><B> Filter: (data value %s %g) </B> </P>\n",
-		wds->dataConstraint, wds->limit_0);
-    }
-if (table2)
-    printf("<P><B> Intersection with table: %s </B></P>\n", table2);
-
-if (table2 && (valuesMatched == 0))
-    {
-    printf("<P><B> No data found in this intersection. </B></P>\n");
-    }
-else
-    {
-    if (valuesMatched == 0)
-	{
-	if ( (span * 3) > (winEnd - winStart))
-	    {
-	    printf("<P><B> Viewpoint has too few bases to calculate statistics. </B></P>\n");
-	    printf("<P><B> Zoom out to at least %d bases to see statistics. </B></P>\n", 3 * span);
-	    }
-	else
-	    printf("<P><B> No data found in this region. </B></P>\n");
-	}
-    else
-	{
-	unsigned printSpan = wds->stats->span;
-
-	if ((span > 0) && (span < wds->stats->span))
-	    printSpan = span;
-
-	sprintLongWithCommas(num1Buf, wds->stats->count * printSpan);
-	printf(
-	    "<P><B> Statistics on: </B> %s <B> bases </B> (%% %.4f coverage)</P>\n",
-	    num1Buf,
-	    100.0*(wds->stats->count * printSpan)/(winEnd - winStart));
-	}
-    }
-}
-
-void wigStatsTableHeading(FILE * fh, boolean htmlOut)
-/*	Print the single html (or text) table row for statistics
-	column headings */
-{
-if (htmlOut)
-    {
-    fprintf(fh,"<TR><TH> Chrom </TH><TH> Data <BR> start </TH>");
-    fprintf(fh,"<TH> Data <BR> end </TH>");
-    fprintf(fh,"<TH> #&nbsp;of&nbsp;Data <BR> values </TH><TH> "
-	    "Each&nbsp;data <BR> value&nbsp;spans <BR> #&nbsp;bases </TH>");
-    fprintf(fh,"<TH> Bases <BR> covered </TH><TH> Minimum </TH>");
-    fprintf(fh,"<TH> Maximum </TH><TH> Range </TH><TH> Mean </TH>");
-    fprintf(fh,"<TH> Variance </TH><TH> Standard <BR> deviation </TH></TR>\n");
-    }
-else
-    {
-    fprintf(fh,"# Chrom\tData\tData");
-    fprintf(fh,"\t# Data\tData");
-    fprintf(fh,"\tBases\tMinimum");
-    fprintf(fh,"\tMaximum\tRange\tMean");
-    fprintf(fh,"\tVariance Standard\n");
-
-    fprintf(fh,"#\tstart\tend");
-    fprintf(fh,"\tvalues\tspan");
-    fprintf(fh,"\tcovered\t");
-    fprintf(fh,"\t\t\t");
-    fprintf(fh,"\t\tdeviation\n");
-    }
-}
-
-void wigStatsHeader(struct wiggleDataStream *wds, FILE * fh, boolean htmlOut)
-/*	begin wiggle stats table */
-{
-if (htmlOut)
-    {
-    /* For some reason BORDER=1 does not work in our web.c nested table
-     * scheme.  So use web.c's trick of using an enclosing table
-     *	to provide a border.  
-     */
-    fprintf(fh,"<P><!--outer table is for border purposes-->" "\n"
-	"<TABLE BGCOLOR=\"#" HG_COL_BORDER
-	"\" BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"1\"><TR><TD>");
-
-    fprintf (fh, "<TABLE COLS=12 BORDER=1 BGCOLOR=\"" HG_COL_INSIDE
-	"\" ALIGN=CENTER HSPACE=0><TR>");
-    if (wds->db)
-	fprintf(fh, "<TH COLSPAN=6 ALIGN=LEFT> Database: %s </TH><TH COLSPAN=6 ALIGN=RIGHT> Table: %s </TH></TR>\n", wds->db, wds->tblName);
-    if (wds->isFile)
-	{
-	if ( (stringIn("trash/ct_",wds->tblName)) ||
-		(stringIn("trash/hgtct_",wds->tblName)))
-	    fprintf(fh, "<TH COLSPAN=12 ALIGN=LEFT> custom track </TH></TR>\n" );
-	else
-	    fprintf(fh, "<TH COLSPAN=12 ALIGN=LEFT> from file %s </TH></TR>\n", wds->tblName);
-	}
-    wigStatsTableHeading(fh, htmlOut);
-    }
-else
-    {
-    if (wds->db)
-	fprintf(fh, "#\t Database: %s, Table: %s\n",
-		wds->db, wds->tblName);
-    if (wds->isFile)
-	fprintf(fh, "#\t from file, Table: %s\n", wds->tblName);
-
-    wigStatsTableHeading(fh, htmlOut);
-    }
-}	/*	void wigStatsHeader()	*/
-
 int minSpan(struct sqlConnection *conn, char *table, char *chrom,
-	int winStart, int winEnd, struct cart *cart)
+	int winStart, int winEnd, struct cart *cart, struct trackDb *tdb)
 /*	find minimum span in this area,
  *	winEnd == 0 means whole chrom	*/
 {
+/*	To save time due to multiple calls to this function, see
+ *	if everything is the same as before, and if so, return the
+ *	same answer
+ */
+static struct sqlConnection *prevConn = (struct sqlConnection *) NULL;
+static char *prevTable = (char *) NULL;
+static char *prevChrom = (char *) NULL;
+static int prevWinStart = -1;
+static int prevWinEnd = -1;
+static struct cart *prevCart = (struct cart *) NULL;
+static struct trackDb *prevTdb = (struct trackDb *) NULL;
+static boolean prevTdbSpanList = FALSE;
+static int prevMin = -1;
 struct sqlResult *sr;
 char query[256];
 char **row;
 int minSpan = BIGNUM;
 int maxSpan = 0;
 int spanCount = 0;
-struct hash *spans = newHash(0);	/*	list of spans in this table */
+struct hash *spans = newHash(0);	/* list of spans in this table */
 struct hashEl *el;
+int *tdbSpanList = (int *)NULL;
+	/* array of positive integers terminated by a value 0	*/
 
-/*	This is a time expensive query,
- *	~3 to 6 seconds on large chroms full of data	*/
-safef(query, ArraySize(query),
-    "SELECT span from %s where chrom = '%s' group by span", table, chrom);
-
-sr = sqlMustGetResult(conn,query);
-while ((row = sqlNextRow(sr)) != NULL)
-    {   
-    char spanName[128];
-    unsigned span = sqlUnsigned(row[0]);
-
-    safef(spanName, ArraySize(spanName), "%u", span);
-    el = hashLookup(spans, spanName);
-    if ( el == NULL)
-	{
-	if (span > maxSpan) maxSpan = span;
-	if (span < minSpan) minSpan = span;
-	++spanCount;
-	hashAddInt(spans, spanName, span);
-	}
+/*	Check if we have done this before via trackDb entry	*/
+if (tdb && (prevTdb == tdb) && prevTdbSpanList)
+    {
+    freeHash(&spans);
+    return(prevMin);
     }
-sqlFreeResult(&sr);
 
+/*	Check if we have done this before not via a trackDb entry */
+if  (	(prevConn == conn) &&
+	(prevTable == table) &&
+	(prevChrom == chrom) &&
+	(prevWinStart == winStart) &&
+	(prevWinEnd == winEnd) &&
+	(prevCart == cart)
+    )
+    {
+    freeHash(&spans);
+    return(prevMin);
+    }
+
+/*	Not here before with this one, seems to be new	*/
+prevConn = conn;
+prevTable = table;
+prevChrom = chrom;
+prevWinStart = winStart;
+prevWinEnd = winEnd;
+prevCart = cart;
+prevTdb = tdb;
+prevTdbSpanList = FALSE;
+
+if (tdb)
+    tdbSpanList = wiggleSpanList(tdb);
+
+if (tdbSpanList)
+    {
+    int *ip;
+    for (ip=tdbSpanList; *ip != 0; ++ip)
+	{
+	char spanName[128];
+	unsigned span = *ip;
+	safef(spanName, ArraySize(spanName), "%u", span);
+	el = hashLookup(spans, spanName);
+	if ( el == NULL)
+	    {
+	    if (span > maxSpan) maxSpan = span;
+	    if (span < minSpan) minSpan = span;
+	    ++spanCount;
+	    hashAddInt(spans, spanName, span);
+	    }
+	}
+    prevTdbSpanList = TRUE;
+    }
+else
+    {
+    /*	This is a time expensive query,
+     *	~3 to 6 seconds on large chroms full of data	*/
+    safef(query, ArraySize(query),
+	"SELECT span from %s where chrom = '%s' group by span", table, chrom);
+
+    sr = sqlMustGetResult(conn,query);
+    while ((row = sqlNextRow(sr)) != NULL)
+	{   
+	char spanName[128];
+	unsigned span = sqlUnsigned(row[0]);
+
+	safef(spanName, ArraySize(spanName), "%u", span);
+	el = hashLookup(spans, spanName);
+	if ( el == NULL)
+	    {
+	    if (span > maxSpan) maxSpan = span;
+	    if (span < minSpan) minSpan = span;
+	    ++spanCount;
+	    hashAddInt(spans, spanName, span);
+	    }
+	}
+    sqlFreeResult(&sr);
+    }
+
+freeHash(&spans);
+prevMin = minSpan;
 return minSpan;
 }	/*	int minSpan()	*/
 
