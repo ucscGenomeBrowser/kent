@@ -654,3 +654,8 @@
       newProg, which will cause it to add the new program to
       the cvs repository.  Small changes to exonAli and waba.
 398 - Added exoMouse track to browser.
+399 - Fixed BLAT memory leak and added status command.  Work associated
+      with Intronerator update.
+400 - gfServer takes tileSize and minMatch command line parameters.  Various
+      other Intronerator update stuff.  Made hgBlat produce big input
+      box.
