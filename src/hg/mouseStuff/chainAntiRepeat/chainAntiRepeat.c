@@ -9,7 +9,7 @@
 #include "nibTwo.h"
 #include "chain.h"
 
-static char const rcsid[] = "$Id: chainAntiRepeat.c,v 1.1 2004/10/26 03:55:03 kent Exp $";
+static char const rcsid[] = "$Id: chainAntiRepeat.c,v 1.2 2004/10/26 19:59:58 kent Exp $";
 
 int minScore = 5000;
 int noCheckScore = 200000;
@@ -73,7 +73,6 @@ sum2 = counts[1] + counts[3];
 if (best2 < sum2) best2 = sum2;
 sum2 = counts[2] + counts[3];
 if (best2 < sum2) best2 = sum2;
-uglyf("tot %d, sum2 %d, ", totalMatches, best2);
 
 /* We expect the best2 to sum to 60%.  If it sums to more than that
  * we start reducing the score proportionally, and return false if
@@ -86,7 +85,6 @@ else
     {
     double adjustFactor = 1.01 - overOk/maxOverOk;
     double adjustedScore = chain->score * adjustFactor;
-    uglyf("adjScore %d ", (int)adjustedScore);
     return adjustedScore >= minScore;
     }
 }
@@ -113,7 +111,6 @@ for (b = chain->blockList; b != NULL; b = b->next)
     total += size;
     }
 adjustedScore = (chain->score * 2.0 * (total - repCount) / total);
-uglyf("rep %d, tot %d, adjScore %d ", repCount, total, (int)adjustedScore);
 return adjustedScore >= minScore;
 }
 
@@ -135,12 +132,7 @@ qc = nibTwoCacheNew(qNibDir);
 while ((chain = chainRead(lf)) != NULL)
     {
     boolean pass = TRUE;
-    uglyf("chain score %d, t %s:%d-%d q %s:%d-%d ", (int)chain->score, chain->tName, chain->tStart, chain->tEnd, chain->qName, chain->qStart, chain->qEnd);
-    if (chain->score >= noCheckScore)
-	{
-	uglyf("better than %d ", noCheckScore);
-	}
-    else
+    if (chain->score < noCheckScore)
         {
 	struct dnaSeq *tSeq = nibTwoCacheSeqPart(tc, chain->tName,
 		chain->tStart, chain->tEnd - chain->tStart, NULL);
@@ -160,22 +152,13 @@ while ((chain = chainRead(lf)) != NULL)
 	    }
 	pass = degeneracyFilter(tSeq, qSeq, chain);
 	if (pass)
-	    {
 	    pass = repeatFilter(tSeq, qSeq, chain);
-	    if (!pass)
-	        uglyf("repeats\n");
-	    }
-	else
-	    {
-	    uglyf("degenerate\n");
-	    }
 	dnaSeqFree(&qSeq);
 	dnaSeqFree(&tSeq);
 	}
     if (pass)
 	{
         chainWrite(chain, f);
-	uglyf("passed\n");
 	}
     chainFree(&chain);
     }
