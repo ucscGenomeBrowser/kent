@@ -24,7 +24,7 @@
 #include "scoredRef.h"
 #include "maf.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.119 2003/07/08 06:15:45 kent Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.120 2003/07/09 22:56:05 markd Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
@@ -846,7 +846,6 @@ struct sqlConnection *conn = hAllocConn();
 char *buf = mustGetSeqAndId(conn, acc, retId);
 *retSeq = faFromMemText(buf);
 hFreeConn(&conn);
-
 }
 
 struct dnaSeq *hExtSeq(char *acc)
@@ -946,7 +945,11 @@ struct sqlConnection *conn = hAllocConn();
 struct dnaSeq *seq = NULL;
 
 if (sqlTableExists(conn, "gbSeq"))
-    seq = hRnaSeq(acc);
+    {
+    char *buf = getSeqAndId(conn, acc, NULL, NULL);
+    if (buf != NULL)
+        seq = faFromMemText(buf);
+    }
 
 /* If not found, and have compatTable, check it.  This is done
  * even if we have gbSeq to allow for partial migration of databases */
@@ -968,10 +971,14 @@ aaSeq *hGenBankGetPep(char *acc, char *compatTable)
  */
 {
 struct sqlConnection *conn = hAllocConn();
-struct dnaSeq *seq = NULL;
+aaSeq *seq = NULL;
 
 if (sqlTableExists(conn, "gbSeq"))
-    seq = hPepSeq(acc);
+    {
+    char *buf = getSeqAndId(conn, acc, NULL, NULL);
+    if (buf != NULL)
+        seq = faSeqFromMemText(buf, FALSE);
+    }
 
 /* If not found, and have compatTable, check it.  This is done
  * even if we have gbSeq to allow for partial migration of databases */
