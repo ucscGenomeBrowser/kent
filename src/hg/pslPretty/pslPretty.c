@@ -78,6 +78,7 @@ while (lineFileNext(lf, &line, NULL))
     if (line[0] == '>')
         {
 	struct seqFilePos *sfp;
+	uglyf("%s\n", line);
 	line += 1;
 	name = nextWord(&line);
 	if (name == NULL)
@@ -86,6 +87,7 @@ while (lineFileNext(lf, &line, NULL))
 	hashAddSaveName(seqHash, name, sfp, &sfp->name);
 	sfp->file = rFile;
 	sfp->pos = lineFileTell(lf);
+	uglyf("pos = %ld\n", sfp->pos);
 	}
     }
 }
