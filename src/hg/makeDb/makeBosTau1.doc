@@ -1064,16 +1064,30 @@ chainSome $(path1)
 
   # generate axts 
   ssh kksilo
-  cd /cluster/data/bosTau1/bed/zb.hg17/axtChain
+  cd /cluster/data/bosTau1/bed/zb.hg17
+  mkdir axtNet
+
+  # split first (not required?)
+  cd axtChain
   mkdir net
   /cluster/bin/i386/netSplit bosTau1.net.syn net
-  mkdir ../axtNet
   cd net
   foreach i (*.net)
     /cluster/bin/i386/netToAxt $i ../chain/$i:r.chain /cluster/data/hg17/nib /cluster/data/bosTau1/bosTau1.2bit ../../axtNet/$i:r.axt
   end
   gzip bosTau1.net.syn
   gzip bosTau1.net
+
+  # axtSort (takes about 5 minutes)
+  ssh kksilo
+  cd /cluster/data/bosTau1/bed/zb.hg17
+  mkdir axtNetSort
+  foreach f ( axtNet/*.axt )
+    set c = $f:t:r
+    echo "axtSort on $c"
+    /cluster/bin/i386/axtSort $f axtNetSort/$c.axt
+  end
+
 
 
 # MAKE 11.OOC FILE FOR BLAT (REDONE, Jan. 18, 2004, Heather)
