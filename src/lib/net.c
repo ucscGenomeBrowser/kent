@@ -26,29 +26,35 @@ sd = socket(AF_INET, SOCK_STREAM, 0);
 return sd;
 }
 
-int netConnect(char *hostName, char *portName)
-/* Start connection with server. */
+int netConnPort(char *hostName, int port)
+/* Start connection with a server. */
 {
-int sd, err, port;
-static struct sockaddr_in sai;		/* Some system socket info. */
+int sd, err;
+struct sockaddr_in sai;		/* Some system socket info. */
 
-/* Convert port to number. */
-if (!isdigit(portName[0]))
-    errAbort("Expecting a port number got %s", portName);
-port = atoi(portName);
 /* Connect to server. */
+ZeroVar(&sai);
 sd = netSetupSocket(hostName, port, &sai);
 if (sd < 0)
     {
-    warn("Couldn't setup socket %s %s", hostName, portName);
+    warn("Couldn't setup socket %s %d", hostName, port);
     return sd;
     }
 if ((err = connect(sd, (struct sockaddr*)&sai, sizeof(sai))) < 0)
    {
-   warn("Couldn't connect to %s %s", hostName, portName);
+   warn("Couldn't connect to %s %d", hostName, port);
    return err;
    }
 return sd;
+}
+
+int netConnect(char *hostName, char *portName)
+/* Start connection with server. */
+{
+/* Convert port to number. */
+if (!isdigit(portName[0]))
+    errAbort("Expecting a port number got %s", portName);
+return netConnPort(hostName, atoi(portName));
 }
 
 int netMustConnect(char *hostName, char *portName)

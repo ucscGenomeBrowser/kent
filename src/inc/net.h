@@ -17,6 +17,9 @@ int netSetupSocket(char *hostName, int port, struct sockaddr_in *sai);
 int netConnect(char *hostName, char *portName);
 /* Start connection with server. */
 
+int netConnPort(char *hostName, int port);
+/* Start connection with a server. */
+
 int netMustConnect(char *hostName, char *portName);
 /* Start connection with server or die. */
 
