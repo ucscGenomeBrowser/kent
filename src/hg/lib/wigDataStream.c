@@ -7,7 +7,7 @@
 #include "portable.h"
 #include "hgColors.h"
 
-static char const rcsid[] = "$Id: wigDataStream.c,v 1.45 2004/09/14 00:06:02 hiram Exp $";
+static char const rcsid[] = "$Id: wigDataStream.c,v 1.46 2004/09/16 20:17:53 hiram Exp $";
 
 /*	PRIVATE	METHODS	************************************************/
 static void addConstraint(struct wiggleDataStream *wds, char *left, char *right)
@@ -443,7 +443,7 @@ else
     wds->winStart = winStart;
     wds->winEnd = winEnd;
     }
-verbose(VERBOSE_CHR_LEVEL,"#\tsetPosition: %d - %d\n", wds->winStart, wds->winEnd);
+verbose(VERBOSE_SQL_ROW_LEVEL,"#\tsetPosition: %d - %d\n", wds->winStart, wds->winEnd);
 }
 
 static void setChromConstraint(struct wiggleDataStream *wds, char *chr)
