@@ -145,7 +145,7 @@ if(!skipSectionHeader)
 {
 	puts(
         "<!--Content Tables------------------------------------------------------->" "\n"
-        "<TR><TD COLSPAN=3 CELLPADDING=10>	" "\n"
+        "<TR><TD COLSPAN=3>	" "\n"
         "  	<!--outer table is for border purposes-->" "\n"
         "  	<TABLE WIDTH=\"100%\" BGCOLOR=\"#888888\" BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"1\"><TR><TD>	" "\n"
         "    <TABLE BGCOLOR=\"fffee8\" WIDTH=\"100%\"  BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"0\"><TR><TD>	" "\n"
