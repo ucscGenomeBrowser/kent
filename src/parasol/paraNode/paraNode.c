@@ -1,5 +1,12 @@
 /* paraNode - parasol node server. */
+
 #include "paraCommon.h"
+/* POSIX doesn't cover privileged, so we have to set _BSD_SOURCE to get
+* initgroups on linux */
+#ifndef _BSD_SOURCE
+#define _BSD_SOURCE
+#endif
+#include <grp.h>
 #include "errabort.h"
 #include "dystring.h"
 #include "dlist.h"
@@ -194,12 +201,13 @@ else
 }
 
 void changeUid(char *name, char **retDir)
-/* Try and change process user (and group) id to that of name. */
+/* Try and change process user (and groups) id to that of name. */
 {
 struct passwd *pw = getpwnam(name);
 if (pw == NULL)
     errnoAbort("can't obtain user passwd entry for user %s", name);
-
+if (initgroups(name, pw->pw_gid) < 0)
+    errnoAbort("initgroups failed");
 if (setgid(pw->pw_gid) < 0)
     errnoAbort("setgid failed");
 if (setuid(pw->pw_uid) < 0)
