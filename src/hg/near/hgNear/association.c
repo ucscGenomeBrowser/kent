@@ -267,15 +267,26 @@ boolean gotOne = FALSE;
 struct dyString *dy = newDyString(512);
 char *result = NULL;
 char *key = (col->protKey ? gp->protein : gp->name);
+struct hash *uniqHash = NULL;
 
+if (col->weedDupes) uniqHash = newHash(8);
 safef(query, sizeof(query), col->queryOne, key);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
-    boolean needQuote = hasWhiteSpace(row[0]);
+    char *s = row[0];
+    boolean needQuote;
+    if (uniqHash != NULL)
+        {
+	if (hashLookup(uniqHash, s))
+	    continue;
+	else
+	    hashAdd(uniqHash, s, NULL);
+	}
+    needQuote = hasWhiteSpace(s);
     if (needQuote)
     	dyStringAppendC(dy, '\'');
-    dyStringAppend(dy, row[0]);
+    dyStringAppend(dy, s);
     if (needQuote)
     	dyStringAppendC(dy, '\'');
     dyStringAppend(dy, ",");
@@ -285,6 +296,7 @@ sqlFreeResult(&sr);
 if (gotOne)
     result = cloneString(dy->string);
 dyStringFree(&dy);
+freeHash(&uniqHash);
 return result;
 }
 
@@ -297,14 +309,24 @@ struct sqlResult *sr;
 char **row;
 boolean gotOne = FALSE;
 char *key = (col->protKey ? gp->protein : gp->name);
+struct hash *uniqHash = NULL;
 
+if (col->weedDupes) uniqHash = newHash(8);
 hPrintf("<TD>");
 safef(query, sizeof(query), col->queryOne, key);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     char *s = row[0];
-    boolean needQuote = hasWhiteSpace(s);
+    boolean needQuote;
+    if (uniqHash != NULL)
+        {
+	if (hashLookup(uniqHash, s))
+	    continue;
+	else
+	    hashAdd(uniqHash, s, NULL);
+	}
+    needQuote = hasWhiteSpace(s);
     if (!gotOne)
         gotOne = TRUE;
     else
@@ -329,6 +351,7 @@ sqlFreeResult(&sr);
 if (!gotOne)
     hPrintf("n/a");
 hPrintf("</TD>");
+freeHash(&uniqHash);
 }
 
 static void associationFilterControls(struct column *col, 
@@ -391,6 +414,7 @@ if ((col->queryOne = columnSetting(col, "queryOne", NULL)) == NULL)
 if ((col->invQueryOne = columnSetting(col, "invQueryOne", NULL)) == NULL)
     errAbort("Missing required invQueryOne field in column %s", col->name);
 col->protKey = (columnSetting(col, "protKey", NULL) != NULL);
+col->weedDupes = (columnSetting(col, "weedDupes", NULL) != NULL);
 col->tablesUsed = cloneString(parameters);
 col->exists = associationExists;
 col->filterControls = associationFilterControls;
