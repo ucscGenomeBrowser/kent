@@ -108,8 +108,8 @@ exonArrows on
 cdsDrawDefault off
 
 track mgcTwinscanPcr
-shortLabel TwinScan PCR
-longLabel TwinScan MGC Picks
+shortLabel TWINSCAN predicted amplicons
+longLabel MGC TWINSCAN predicted amplicons - PCR in progress
 group mgc
 priority 22
 visibility pack
@@ -118,8 +118,8 @@ color 120,12,12
 exonArrows on
 
 track mgcExoniphyPcr
-shortLabel Exoniphy PCR
-longLabel Exoniphy MGC PCR Targets
+shortLabel Exoniphy predicted amplicons 
+longLabel MGC Exoniphy predicted amplicons - PCR in progress
 group mgc
 priority 23
 visibility pack
@@ -128,11 +128,11 @@ color 12,100,120
 exonArrows on
 
 track mgcBTransPcr
-shortLabel MGC-B PCR
-longLabel MGC-B Transcript PCR Targets
+shortLabel WUSTL test
+longLabel WUSTL Test Targets
 group mgc
 priority 24
-visibility pack
+visibility hide
 type psl
 2color 10,100,150
 exonArrows on
