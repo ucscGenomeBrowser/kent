@@ -297,7 +297,8 @@ gsBig {check in line+ $(path1)} {check out line gtf/$(root1).gtf} -trans={check 
     # Load into the database as so:
     ssh hgwdev
     cd /cluster/data/droEre1/bed/genscan
-    ldHgGene -gtf -genePredExt droEre1 genscan genscan.gtf
+    # Reloaded without -genePredExt 1/6/05:
+    ldHgGene -gtf droEre1 genscan genscan.gtf
     hgPepPred droEre1 generic genscanPep genscan.pep
     hgLoadBed droEre1 genscanSubopt genscanSubopt.bed
 
@@ -395,6 +396,7 @@ gsBig {check in line+ $(path1)} {check out line gtf/$(root1).gtf} -trans={check 
     cd /cluster/data/droEre1/bed/blastz.dm1/axtChain
     nice gzip *.{chain,net,axt}
     ssh hgwdev
+#TODO
     mkdir /usr/local/apache/htdocs/goldenPath/droEre1/vsDm1
     cd /usr/local/apache/htdocs/goldenPath/droEre1/vsDm1
     cp -p /cluster/data/droEre1/bed/blastz.dm1/axtChain/all.chain.gz \
@@ -467,7 +469,6 @@ droEre1.perChromTables = no
 #25095898 bases of 133575709 (18.788%) in intersection
 
     # Clean up:
-#TODO
     rm -rf work/initial.droEre1
 
     # This is an -initial run, mRNA only:
@@ -477,6 +478,7 @@ droEre1.perChromTables = no
     ssh hgwdev
     cd /cluster/data/genbank
     nice bin/gbDbLoadStep -verbose=1 -drop -initialLoad droEre1
+#TODO
     featureBits droEre1 all_mrna
 #245 bases of 189814987 (0.000%) in intersection
     featureBits droEre1 xenoMrna

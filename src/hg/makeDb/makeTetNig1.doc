@@ -1719,7 +1719,8 @@ axtChain -linearGap=../../chickenHumanTuned.gap $1 \
     # load database with gene predictions
     ssh hgwdev
     cd /cluster/data/tetNig1/bed/Genoscope/genscan
-    nice ldHgGene tetNig1 -genePredExt genscan chr*.gff
+    # Reloaded without -genePredExt 1/6/05:
+    nice ldHgGene tetNig1 genscan chr*.gff
     # Read 56120 transcripts in 227294 lines in 27 files
     # 56120 groups 27 seqs 1 sources 2 feature types
     # 28060 gene predictions
@@ -1749,7 +1750,8 @@ axtChain -linearGap=../../chickenHumanTuned.gap $1 \
     ssh hgwdev
     cd /cluster/data/tetNig1/bed/Genoscope/gaze
     # loaded chr1 only into rahseq first to check then load all chroms
-    nice ldHgGene -genePredExt tetNig1 gaze chr*.gff
+    # Reloaded without -genePredExt 1/6/05:
+    nice ldHgGene tetNig1 gaze chr*.gff
 
     # GALT 09-15-04 index on name(10) going to name(17) as all have long prefix
     echo "drop index name on gaze ;" | hgsql tetNig1
@@ -1784,7 +1786,8 @@ axtChain -linearGap=../../chickenHumanTuned.gap $1 \
     ssh hgwdev
     cd /cluster/data/tetNig1/bed/Genoscope/hoxGenes
     # loaded chr1 only into rahseq first to check then load all chroms
-    nice ldHgGene -genePredExt tetNig1 hoxGenes chr*.gff
+    # Reloaded without -genePredExt 1/6/05:
+    nice ldHgGene tetNig1 hoxGenes chr*.gff
 # Read 96 transcripts in 142 lines in 27 files
 # 96 groups 6 seqs 1 sources 2 feature types
 # 48 gene predictions
@@ -1813,7 +1816,8 @@ axtChain -linearGap=../../chickenHumanTuned.gap $1 \
     ssh hgwdev
     cd /cluster/data/tetNig1/bed/Genoscope/cytokines
     # loaded chr1 only into rahseq first to check then load all chroms
-    nice ldHgGene -genePredExt tetNig1 cytokines chr*.gff
+    # Reloaded without -genePredExt 1/6/05:
+    nice ldHgGene tetNig1 cytokines chr*.gff
 
 
 # GENEID GENES (DONE 9/22/04 angie)

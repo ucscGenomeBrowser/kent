@@ -11467,8 +11467,9 @@ done
     
     #- Load into database - use extended genePred
     ssh hgwdev
-    /cluster/data/hg17/bed/acembly
-    ldHgGene -genePredExt -gtf hg17 acembly acembly.ncbi_35.genes.gff/chr*.gff
+    cd /cluster/data/hg17/bed/acembly
+    # Reloaded without -genePredExt 1/6/05:
+    ldHgGene -gtf hg17 acembly acembly.ncbi_35.genes.gff/chr*.gff
 
     # checkTableCoords and runGeneCheck to check data
     # a number of errors so leave on hgwdev for the moment

@@ -1781,7 +1781,8 @@ axtFilter -notQ=chrUn $1 \
     # Load into the database as so:
     ssh hgwdev
     cd /cluster/data/canFam1/bed/genscan
-    ldHgGene -gtf -genePredExt canFam1 genscan genscan.gtf
+    # Reloaded without -genePredExt 1/6/05:
+    ldHgGene -gtf canFam1 genscan genscan.gtf
     hgPepPred canFam1 generic genscanPep genscan.pep
     hgLoadBed canFam1 genscanSubopt genscanSubopt.bed
 

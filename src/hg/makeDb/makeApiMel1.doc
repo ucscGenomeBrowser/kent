@@ -328,7 +328,8 @@ gsBig {check in line+ $(path1)} {check out line gtf/$(root1).gtf} -trans={check 
     # Load into the database as so:
     ssh hgwdev
     cd /cluster/data/apiMel1/bed/genscan
-    ldHgGene -gtf -genePredExt apiMel1 genscan genscan.gtf
+    # Reloaded without -genePredExt 1/6/05:
+    ldHgGene -gtf apiMel1 genscan genscan.gtf
     hgPepPred apiMel1 generic genscanPep genscan.pep
     hgLoadBed apiMel1 genscanSubopt genscanSubopt.bed
 

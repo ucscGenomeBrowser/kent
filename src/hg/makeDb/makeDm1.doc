@@ -1979,7 +1979,8 @@ axtFilter -notQ=chrUn_random $1 \
     # stuff that depends on bdgpGene* tables.
     ssh hgwdev
     cd /cluster/data/dm1/bed/bdgpAnnotations.3.2
-    ldHgGene -gtf -genePredExt dm1 bdgpGene2 bdgpGene.gtf
+    # Reloaded without -genePredExt 1/6/05:
+    ldHgGene -gtf dm1 bdgpGene2 bdgpGene.gtf
     featureBits dm1 bdgpGene
 #28262131 bases of 126527731 (22.337%) in intersection
     featureBits dm1 bdgpGene2
@@ -1993,7 +1994,8 @@ axtFilter -notQ=chrUn_random $1 \
     hgsql dm1 -e 'delete from bdgpGeneInfo'
     hgsql dm1 -e 'load data local infile "bdgpGeneInfo.tab" into table bdgpGeneInfo'
     # load bdgpNonCoding*
-    ldHgGene -gtf -genePredExt dm1 bdgpNonCoding bdgpNonCoding.gtf
+    # Reloaded without -genePredExt 1/6/05:
+    ldHgGene -gtf dm1 bdgpNonCoding bdgpNonCoding.gtf
     hgsql dm1 -e 'delete from bdgpNonCodingInfo'
     hgsql dm1 -e 'load data local infile "bdgpNonCodingInfo.tab" into table bdgpNonCodingInfo'
     # load proteins
