@@ -373,29 +373,6 @@ tg->itemColor=cbGeneColor;
 tg->mapsSelf = TRUE;
 }
 
-
-void loadRnaGenes(struct track *tg)
-/* Load the items in one custom track - just move beds in
- * window... */
-{
-struct bed *bed, *list = NULL;
-struct sqlConnection *conn = hAllocConn();
-struct sqlResult *sr;
-char **row;
-int rowOffset;
-
-sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd, NULL, &rowOffset);
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-    bed = bedLoadN(row+rowOffset,6);
-    slAddHead(&list, bed);
-    }
-sqlFreeResult(&sr);
-hFreeConn(&conn);
-slReverse(&list);
-tg->items = list;
-}
-
 Color rgGeneColor(struct track *tg, void *item, struct vGfx *vg)
 /* Return color to draw gene in. */
 {
@@ -404,11 +381,10 @@ makeRedGreenShades(vg);
 if (lf->score ==100) {return shadesOfGreen[15];}
 if (lf->score == 300) {return shadesOfRed[15];}
 if (lf->score == 200){return shadesOfBlue[15];}
-else {return shadesOfGray[1];}
+else {return shadesOfGray[9];}
 }
 void rnaGenesMethods(struct track *tg)
 {
-tg->loadItems = loadRnaGenes;
 tg->itemColor=rgGeneColor;
 }
 
