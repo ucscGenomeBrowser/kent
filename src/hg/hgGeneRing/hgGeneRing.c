@@ -16,7 +16,7 @@
 #include "interaction.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: hgGeneRing.c,v 1.1 2005/02/13 10:46:42 galt Exp $";
+static char const rcsid[] = "$Id: hgGeneRing.c,v 1.2 2005/02/14 08:12:31 galt Exp $";
 
 
 struct interaction *interactions = NULL;
@@ -229,6 +229,7 @@ char* s = ss;
 char* w = NULL;
 subChar(s, ',' ,' ');
 subChar(s, '\t',' ');
+subChar(s, '\n',' ');
 dyStringPrintf(query,"select * from %s",table);
 while(1)
     {
@@ -344,8 +345,6 @@ if (sameWord(geneList,""))
     }
 else
     {
-    //action = "getGeneList";
-    // cartSetString(cart, "ring_action", action);
 
     if (showAll)
 	{
@@ -484,47 +483,39 @@ freez(&geneList);
 }
 
 
-void drawCircle()
-/*
- just a test of drawing a circle .gif 
- and displaying it in a page.
-*/
+/* Count up elements in list that are outside ring. */
+int slCountOutside(void *list)
 {
-struct tempName filename;
-int width,height;
-char *mapName="ring_map";
+struct slList *pt = (struct slList *)list;
+int len = 0;
 
-ZeroVar(&filename);
-makeTempName(&filename, "ring_circleTest", ".gif");
-
-struct memGfx *mg = mgNew(800,800);
-int i;
-int xCen = 400, yCen = 400;
-Color color = MG_RED;
-for (i=800; i>= 400; i -= 40)
+while (pt != NULL)
     {
-    mgCircle(mg, xCen, yCen, i, color, TRUE);
-    if (color == MG_RED)
-	color = MG_BLUE;
-    else
-	color = MG_RED;
+    struct node *n = ((struct nodelist *)pt)->node;
+    if ((!n->ring) && (n->ringRank==1))
+	len += 1;
+    pt = pt->next;
     }
-for (i=360; i >= 0; i -= 20)
-    mgCircle(mg, xCen, yCen, i, MG_WHITE, FALSE);
+return len;
+}
 
-mgSaveGif(mg, filename.forCgi);
- 
-width=height=800;
-printf("<CENTER><TABLE BORDER=0 CELLPADDING=0>");
-printf("<TR><TD HEIGHT=5></TD></TR>");
-printf("<TR><TD><IMG SRC = \"%s\" BORDER=1 WIDTH=%d HEIGHT=%d USEMAP=#%s >",
-       filename.forHtml, width, height, mapName);
-printf("</TD></TR>");
-printf("<TR><TD HEIGHT=5></TD></TR>");
-printf("<TR><TD><a href = \"/cgi-bin/hgGeneRing?ring_action=saveGeneList\">back</a>");
-printf("</TD></TR>");
-printf("<TR><TD HEIGHT=5></TD></TR></TABLE></CENTER>");
-			    
+#define NODE_SIZE 10
+void addMap(struct nodelist *nl)
+{
+struct node *node = nl->node;
+int x=node->xpos;
+int y=node->ypos;
+int r=NODE_SIZE;
+printf(
+ "<AREA SHAPE=CIRCLE COORDS=\"%d,%d,%d\""
+ " HREF=\"/cgi-bin/hgGeneRing?ring_action=geneFrame&ring_gene=%s\""
+ " ALT=\"%s\""
+ " TITLE=\"%s\">",
+ x,y,r,
+ node->name,
+ node->name,
+ node->name
+);
 }
 
 void drawScreen()
@@ -533,6 +524,13 @@ void drawScreen()
  and display it in a page as a .gif
 */
 {
+
+#define SCREEN_SIZE 800
+#define RING_SIZE 200
+#define INRING_SIZE 140
+#define OUTRING_SIZE 340
+
+
 struct tempName filename;
 int width,height;
 char *mapName="ring_map";
@@ -540,26 +538,29 @@ char *mapName="ring_map";
 ZeroVar(&filename);
 makeTempName(&filename, "hgGeneRing_screen", ".gif");
 
-struct memGfx *mg = mgNew(800,800);
+printf("<MAP Name=%s>\n", mapName);
+
+struct memGfx *mg = mgNew(SCREEN_SIZE,SCREEN_SIZE);
 int i;
-double angle=0, subangle=0;
-int xCen = 400, yCen = 400;
+double angle=0;
+int xCen = SCREEN_SIZE/2, yCen = SCREEN_SIZE/2;
 int x=0,y=0;
-struct nodelist *nl;
+struct nodelist *nl, *saveNl;
 
 /* draw the main RING */
-mgCircle(mg, xCen, yCen, 200, MG_BLACK, FALSE);
+mgCircle(mg, xCen, yCen, SCREEN_SIZE/4, MG_BLACK, FALSE);
 
 /* draw the RING genes and assign position */
 angle=(M_PI*2)/ringCount;
 nl=allNodes;
 for(i=0;i<ringCount;i++)
     {
-    x = xCen + (int) 200*cos(i*angle);
-    y = yCen + (int) 200*sin(i*angle);
+    x = xCen + (int) RING_SIZE*cos(i*angle);
+    y = yCen + (int) RING_SIZE*sin(i*angle);
     nl->node->xpos = x;
     nl->node->ypos = y;
-    mgCircle(mg, x, y, 10, MG_BLACK, FALSE);
+    mgCircle(mg, x, y, NODE_SIZE, MG_BLACK, FALSE);
+    addMap(nl);
     nl=nl->next;
     }
 
@@ -567,21 +568,22 @@ for(i=0;i<ringCount;i++)
 angle=(M_PI*2)/insideCount;
 for(i=0;i<insideCount;i++)
     {
-    x = xCen + (int) 140*cos((i+.5)*angle);
-    y = yCen + (int) 140*sin((i+.5)*angle);
+    x = xCen + (int) INRING_SIZE*cos((i+.5)*angle);
+    y = yCen + (int) INRING_SIZE*sin((i+.5)*angle);
     nl->node->xpos = x;
     nl->node->ypos = y;
-    mgCircle(mg, x, y, 10, MG_BLACK, FALSE);
+    mgCircle(mg, x, y, NODE_SIZE, MG_BLACK, FALSE);
+    addMap(nl);
     
     /* draw connections to ring */
     { /*local*/
     struct nodelist *l;
     for(l=nl->node->xrays;l;l=l->next)
-	{
+	{ /* blue = inward = to-ring */
 	mgDrawLine(mg, x, y, l->node->xpos, l->node->ypos, MG_BLUE);
 	}
     for(l=nl->node->nrays;l;l=l->next)
-	{
+	{ /* red = outward = from-ring */
 	mgDrawLine(mg, x, y, l->node->xpos, l->node->ypos, MG_RED);
 	}
     }
@@ -590,37 +592,73 @@ for(i=0;i<insideCount;i++)
     }
 
 
-/* draw the Outside genes, assign position, draw rays */
+/* draw the Outside genes, assign position, draw rays
+    do 1 ring member at a time.
+*/
 angle=(M_PI*2)/ringCount;
-for(i=0;i<outsideCount;i++)
+nl=allNodes;
+for(i=0;i<ringCount;i++)
     {
-    x = xCen + (int) 140*cos((i+.5)*angle);
-    y = yCen + (int) 140*sin((i+.5)*angle);
-    nl->node->xpos = x;
-    nl->node->ypos = y;
-    mgCircle(mg, x, y, 10, MG_BLACK, FALSE);
+
+    double subAngle=0;
+    int numOutside=0, doneOutside=0;
+    numOutside += slCountOutside(nl->node->nrays); 
+    numOutside += slCountOutside(nl->node->xrays); 
+    subAngle = angle / (numOutside+1);  /* add 1 to give a little space between ring groups */
     
     /* draw connections to ring */
     { /*local*/
     struct nodelist *l;
-    for(l=nl->node->xrays;l;l=l->next)
+    int j = 0;
+    struct nodelist *rays;
+    Color color;
+    for (j=0;j<2;j++)
 	{
-	mgDrawLine(mg, x, y, l->node->xpos, l->node->ypos, MG_BLUE);
-	}
-    for(l=nl->node->nrays;l;l=l->next)
-	{
-	mgDrawLine(mg, x, y, l->node->xpos, l->node->ypos, MG_RED);
+	if (j==0)
+	    {
+    	    color = MG_BLUE;
+    	    rays = nl->node->xrays;
+	    }
+	else
+	    {
+    	    color = MG_RED;
+    	    rays = nl->node->nrays;
+	    }
+	for(l=rays;l;l=l->next)
+	    {
+	    if (l->node->ringRank==1)
+		{
+		if (l->node->ring)
+		    { /* this ring-ring line gets draw twice but that's ok */
+		    mgDrawLine(mg, x, y, nl->node->xpos, nl->node->ypos, color);
+		    }
+		else
+		    {
+		    doneOutside++;
+		    x = xCen + (int) OUTRING_SIZE*cos((i-.5)*angle+(doneOutside*subAngle));
+		    y = yCen + (int) OUTRING_SIZE*sin((i-.5)*angle+(doneOutside*subAngle));
+		    l->node->xpos = x;
+		    l->node->ypos = y;
+		    mgCircle(mg, x, y, NODE_SIZE, MG_BLACK, FALSE);
+		    addMap(l);
+		    mgDrawLine(mg, x, y, nl->node->xpos, nl->node->ypos, color);
+		    }
+		}
+	    }
 	}
     }
     
     nl=nl->next;
     }
+    
+printf("</MAP>\n");
+    
 
 
 
 mgSaveGif(mg, filename.forCgi);
  
-width=height=800;
+width=height=SCREEN_SIZE;
 printf("<CENTER><TABLE BORDER=0 CELLPADDING=0>");
 printf("<TR><TD HEIGHT=5></TD></TR>");
 printf("<TR><TD><IMG SRC = \"%s\" BORDER=1 WIDTH=%d HEIGHT=%d USEMAP=#%s >",
@@ -632,6 +670,35 @@ printf("</TD></TR>");
 printf("<TR><TD HEIGHT=5></TD></TR></TABLE></CENTER>");
 			    
 }
+
+
+void drawDetails()
+{
+char *gene = cartUsualString(cart, "ring_gene", "");
+struct hashEl *hel = hashStore(nodeHash,gene);
+struct node *n;
+if (hel->val) /* add X to hash for 1st time */
+    {
+    n = hel->val;
+    printf(
+	"Details page for gene %s "
+	"<A HREF=\"/cgi-bin/hgGeneRing?ring_action=%s&ring_gene=%s\" target=\"_parent\" >"
+	"%s Ring</A> "
+	" (rank=%d) "
+	"<A HREF=\"/cgi-bin/hgGeneRing?ring_action=drawScreen\" target=\"_parent\" > return </A>"
+	"\n",
+	gene,
+	n->ring?"removeFromRing":"addToRing",
+	gene,
+	n->ring?"Remove From ":"Add To ",
+	n->ringRank
+	);
+    }
+else
+    {
+    printf("Unknown gene %s",gene);
+    }
+}    
 
 
 void hgGeneRing()
@@ -657,6 +724,57 @@ else if (sameWord(action,"drawScreen"))
     saveGeneList(FALSE);
     drawScreen();
     }
+else if (sameWord(action,"drawDetails"))
+    {
+    saveGeneList(FALSE);
+    drawDetails();
+    }
+else if (sameWord(action,"addToRing"))
+    {
+    char *gene = cartUsualString(cart, "ring_gene", "");
+    char *geneList = cartUsualString(cart, "ring_geneList", "");
+    int l = strlen(geneList)+2+1;
+    char *newGeneList = needMem(l);
+    int lg = strlen(gene)+2+1;
+    char *newGene = needMem(lg);
+    safef(newGeneList,l," %s ",geneList);
+    safef(newGene,lg," %s ",gene);
+    subChar(newGeneList, ',' ,' ');
+    subChar(newGeneList, '\t',' ');
+    subChar(newGeneList, '\n',' ');
+    if (memMatch(newGene, strlen(newGene), newGeneList, strlen(newGeneList)))
+	gene = NULL; /* if gene already in ring, ignore */
+    freez(&newGeneList);
+    l = strlen(geneList)+1+strlen(gene)+1;
+    newGeneList = needMem(l);
+    safef(newGeneList,l,"%s %s",geneList,gene);
+    cartSetString(cart, "ring_geneList", newGeneList);
+    saveGeneList(FALSE);
+    drawScreen();
+    freez(&newGeneList);
+    freez(&newGene);
+    }
+else if (sameWord(action,"removeFromRing"))
+    {
+    char *gene = cartUsualString(cart, "ring_gene", "");
+    char *geneList = cartUsualString(cart, "ring_geneList", "");
+    int l = strlen(geneList)+2+1;
+    char *newGeneList = needMem(l);
+    int lg = strlen(gene)+2+1;
+    char *newGene = needMem(lg);
+    safef(newGeneList,l," %s ",geneList);
+    safef(newGene,lg," %s ",gene);
+    subChar(newGeneList, ',' ,' ');
+    subChar(newGeneList, '\t',' ');
+    subChar(newGeneList, '\n',' ');
+    geneList = replaceChars(newGeneList, newGene, " ");
+    cartSetString(cart, "ring_geneList", geneList);
+    saveGeneList(FALSE);
+    drawScreen();
+    freez(&newGeneList);
+    freez(&geneList);
+    freez(&newGene);
+    }
 else
     {
     getGeneList();
@@ -667,6 +785,7 @@ else
 void doMiddle(struct cart *theCart)
 /* Set up pretty web display and save cart in global. */
 {
+char *action = cgiUsualString("ring_action", "");
 cart = theCart;
 
 getDbGenomeClade(cart, &db, &organism, &clade);
@@ -687,12 +806,28 @@ cartSetString(cart, "clade", clade);
 
 hSetDb(db);
 
-cartWebStart(theCart, "%s Gene Network Browser \n", organism);
+if (sameWord(action,"geneFrame"))
+    { /* special handling for frameset - can't use cartWebStart etc. */
+    char *gene = cartUsualString(cart, "ring_gene", "");
+    printf(
+	"<frameset rows = \"18%%, *\">"
+    	"  <frame src =\"/cgi-bin/hgGeneRing?ring_action=drawDetails&ring_gene=%s\" />"
+	"  <frame src =\"/cgi-bin/hgTracks?position=%s&db=%s\" />"
+    	"</frameset>",
+	gene,
+	gene,
+	db
+	);
+    }
+else
+    {
+    cartWebStart(theCart, "%s Gene Network Browser \n", organism);
 
-hgGeneRing();
+    hgGeneRing();
 
-cartSaveSession(cart);
-cartWebEnd();
+    cartSaveSession(cart);
+    cartWebEnd();
+    }
 }
 
 char *excludeVars[] = {NULL};
