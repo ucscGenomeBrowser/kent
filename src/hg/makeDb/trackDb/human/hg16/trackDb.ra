@@ -293,9 +293,9 @@ color 100,0,0
 altColor 100,0,0
 type maf
 
-track multizMm3Rn3Gg0
-shortLabel HMRC
-longLabel Human/Mouse/Rat/Chicken Multiz Alignments (mm3-Feb03, rn3-Jun03, gg0)
+track multizMm3Rn3GalGal2
+shortLabel HMRG
+longLabel Human/Mouse/Rat/Chicken Multiz Al. (mm3-Feb03, rn3-Jun03, galGal2-Feb04)
 group compGeno
 priority 147
 visibility hide
