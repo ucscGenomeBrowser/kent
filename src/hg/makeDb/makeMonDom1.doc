@@ -2145,10 +2145,13 @@ Submission to last job:         13892s     231.53m     3.86h    0.16d
     # Do sort and near-besting on file server
     ssh eieio
     cd /cluster/data/monDom1/bed/blatz.hg17KG/run0
-    catDir psl | pslFilter -minScore=100 -minAli=255 | sort -k 10 > ../filtered.psl
+    catDir psl | pslFilter -minScore=100 -minAli=255 -noHead stdin stdout | sort -k 10 > ../filtered.psl
     cd ..
     pslReps filtered.psl nearBest.psl /dev/null -nohead -minAli=0.5 -nearTop=0.01 -minCover=0.255
     sort -k 14 nearBest.psl > blatzHg17KG.psl
+
+    # Clean up
+    rm -r run0/psl 
 
     # Load into database
     ssh hgwdev
