@@ -1102,7 +1102,7 @@ doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain} {check
     end
 
 
-# NET MOUSE BLASTZ (IN PROGRESS 2003-07-24 kate)
+# NET MOUSE BLASTZ (DONE 2003-07-24 kate)
 
     ssh kkstore
     cd /cluster/data/rn3/bed/blastz.mm3/axtChain
@@ -1145,6 +1145,15 @@ doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain} {check
     netFilter -minGap=10 mouseSyn.net | hgLoadNet rn3 syntenyMm3 stdin
 
     # Add entries for net and chain to rat/rn3 trackDb
+
+
+# MOUSE MM3 BLASTZ CLEANUP (DONE 2004-09-20 kate)
+    ssh eieio
+    cd /cluster/data/hg17/bed/blastz.mm3
+    nice rm -rf raw lav
+    nice rm axtChain/run1/chain/* axtChain/preNet axtChain/hNoClass.net
+    nice gzip {axt,psl}Chrom/* axtChain/{all.chain,*.net} axtChain/*Net/*.net
+    nice gzip axt*/*.axt psl*/*.psl
 
 
 # BLASTZ Self (DONE 2003-09-22 angie) 
@@ -2603,7 +2612,7 @@ end
         # 463 warnings
         # 4604 rows loaded
     
-# BLASTZ Mm4 (DONE - 2003-11-03 - Hiram)
+# BLASTZ MOUSE MM4 (DONE - 2003-11-03 - Hiram)
 
     ssh kk
     mkdir -p /cluster/data/rn3/bed/blastz.mm4.2003-10-29
@@ -2986,6 +2995,16 @@ doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain} {check
     cd /usr/local/apache/htdocs/goldenPath/rn3/vsMm4/axtTight
     gzip *.axt
     # add README.txt file to dir, if needed
+
+# MOUSE MM4 BLASTZ CLEANUP (WORKING 2004-09-20 kate)
+    ssh eieio
+    cd /cluster/data/hg17/bed/blastz.mm4
+    nice rm -rf raw lav
+    nice rm axtChain/run1/chain/* axtChain/preNet axtChain/hNoClass.net
+    # GOT HERE
+    nice gzip axtChrom/*.axt axtChain/{all.chain,*.net} axtChain/*Net/*.net
+    nice gzip pslChrom/*.psl axtBest/*.axt
+
 
 # LOAD ECgene tables (re-done with sort (braney, 2004-01-30))
     cd /cluster/data/rn3/bed
@@ -4059,6 +4078,10 @@ axtFilter -notQ_random $1 | axtChain stdin \
     cd /cluster/data/rn3/bed/blastz.hg17/axtBest
     ln -s ../axtNet/chr*.axt .
 
+    # NOTE: some of these axt files were corrupted (chr4, 8, and X), 
+    # (I noticed this while generating maf's from them)
+    # Remade below (kate)
+
     # copy net axt's to download area
     ssh hgwdev
     cd /cluster/data/rn3/bed/blastz.hg17/axtNet
@@ -4178,6 +4201,32 @@ hgLoadBed rn3 ensRatMusHom ucsc100k.bed -sqlTable=ensRatMusHom.sql
     gzip *.axt
 XXX - README file not done yet - 2004-06-15
     # add README.txt file to dir
+
+
+# HUMAN HG17 BLASTZ NET MAF FILES (WORKING 2004-09-21 kate)
+# NOTE: remade axt's  on chr4, chrX and chr8, as they contained some garbage
+# probably due to file corruption on store3, as copies in download
+# directory are fine
+    ssh eieio
+    cd /cluster/data/rn3/bed/blastz.hg17/axtChain
+    foreach f (humanNet/chr{4,8,X}.net)
+        set c = $f:t:r
+        echo "axt of $c"
+        netToAxt $f chain/$c.chain /cluster/data/rn3/nib \
+            /cluster/data/hg17/nib ../axtNet/$c.axt
+    end
+cat > makeMaf.csh << 'EOF'
+    foreach f (humanNet/chr*.net)
+        set c = $f:t:r
+        echo "$c"
+        axtSort ../axtNet/$c.axt stdout | axtToMaf stdin \
+            /cluster/data/rn3/chrom.sizes /cluster/data/hg17/chrom.sizes \
+            ../mafNet/$c.maf -tPrefix=rn3. -qPrefix=hg17.
+    end
+'EOF'
+    csh makeMaf.csh >&! makeMaf.log &
+    tail -100f makeMaf.log
+
 
 # ANDY LAW CPGISSLANDS (DONE 6/15/04 angie)
     # See notes about this in makeGalGal2.doc.
@@ -4468,6 +4517,35 @@ hgMapToGene rn3 refGene knownGene knownToLocusLink -lookup=refToLl.txt
     cd /cluster/data/rn3/bed/encodeRegions
     hgLoadBed rn3 encodeRegions encodeRegions.bed -noBin
 
+
+# ACCESSIONS FOR CONTIGS (DONE 2004-08-24 kate)
+#  Used for Assembly track details, and also ENCODE AGP's
+    cd /cluster/data/rn3/bed
+    mkdir -p contigAcc
+    cd contigAcc
+    
+    # extract WGS contig to accession mapping from Entrez Nucleotide summaries
+    # To get the summary file, access the Genbank page for the project 
+    # by searching:
+    #       genus[ORGN] AND WGS[KYWD]
+    # At the end of the page, click on the list of accessions for the contigs.
+    # Select summary format, and send to file.
+    # output to file <species>.acc
+
+    contigAccession rat.acc > contigAcc.tab
+    wc -l contigAcc.tab
+        # 137910 contigAcc.tab
+    # extract all records from chrN_gold, using table browser 
+    # (includes header line)
+    wc -l rat*
+        # 137911 ratcontigs.tab
+    hgsql rn3 < $HOME/kent/src/hg/lib/contigAcc.sql
+    echo "LOAD DATA LOCAL INFILE 'contigAcc.tab' INTO TABLE contigAcc" | \
+        hgsql rn3
+    hgsql rn3 -e "SELECT COUNT(*) FROM contigAcc"
+        # 137910
+
+
 # SWAP BLASTZ MOUSE-RAT TO RAT-MOUSE (MM5) (DONE 9/1/04 Fan)
     ssh eieio
     mkdir /cluster/data/rn3/bed/blastz.mm5.swap.2004-09-01
@@ -4657,4 +4735,73 @@ axtChain $1 \
     mv /cluster/data/rn3/bed/blastz.mm5/blastzECF .
     cd blastzECF
     md5sum *.gz > md5sum.txt
+
+
+# CONSERVATION TRACK - MULTIZ AND PHASTCONS (WORKING 2004-09-21 kate)
+
+    ssh eieio
+    set multizDir = multiz.2004-09-21
+    set workingDir = /cluster/bluearc/rn3/$multizDir
+    ln -s $workingDir /cluster/bluearc/rn3/multiz
+    mkdir -p $workingDir
+    mkdir -p /cluster/data/rn3/bed/$multizDir
+    cd /cluster/data/rn3/bed
+    ln -s multiz.2004-09-21 multiz
+    cd multiz
+    cut -f 1 /cluster/data/rn3/chrom.sizes > chrom.lst
+
+    # copy mafs to bluearc -- mouse
+    set workingDir = /cluster/bluearc/rn3/$multizDir
+    mkdir $workingDir/mm5
+    cp /cluster/data/rn3/bed/blastz.mm5/mafNet/chr*.maf $workingDir/mm5
+
+    # copy mafs to bluearc -- human
+    mkdir $workingDir/hg17
+    cp /cluster/data/rn3/bed/blastz.hg17/mafNet/chr*.maf $workingDir/hg17
+
+    # multiz - add in human to mouse/rat
+    # 
+    ssh kki
+    set multizDir = multiz.2004-09-21
+    set workingDir = /cluster/bluearc/rn3/$multizDir
+    cd /cluster/data/rn3/bed/$multizDir
+
+# wrapper script for multiz
+    # NOTE: first arg is pairwise, 2nd arg is multiple (to add to) 
+    cat << 'EOF' > doMultiz.csh
+#!/bin/csh -fe
+mkdir -p $3:h
+/cluster/bin/penn/multiz $1 $2 - > $3
+'EOF'
+# << for emacs
+
+    cat << 'EOF' > gsub
+#LOOP
+../doMultiz.csh {check in line /cluster/bluearc/rn3/multiz.2004-09-21/$(dir1)/$(root2).maf} {check in line /cluster/bluearc/rn3/multiz.2004-09-21/$(root1)/$(root2).maf} {check out line+ /cluster/bluearc/rn3/multiz.2004-09-21/$(root1)$(dir1)/$(root2).maf}
+#ENDLOOP
+'EOF'
+# << for emacs
+
+    chmod +x doMultiz.csh
+
+    # multiz - add in human to mouse/rat
+
+    mkdir run.hg17
+    cd run.hg17
+    echo "hg17/mm5" > species.lst
+    gensub2 species.lst ../chrom.lst ../gsub jobList
+    para create jobList
+        # 44 jobs
+    para try, check, push, check
+    cd ..
+
+    # copy 3-way mafs to build directory
+    ssh eieio
+    set multizDir = multiz.2004-09-21
+    set workingDir = /cluster/bluearc/rn3/$multizDir
+    ln -s $workingDir /cluster/bluearc/rn3/multiz
+    ln -s $workingDir/mm5hg17 $workingDir/maf
+    cd /cluster/data/rn3/bed/multiz.2004-09-21
+    mkdir maf
+    cp $workingDir/maf/*.maf maf
 
