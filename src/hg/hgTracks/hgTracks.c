@@ -1125,7 +1125,7 @@ interpolate = cartUsualString(cart, o1, "Only samples");
 wiggleType = wiggleStringToEnum(interpolate);
 aa = cartUsualString(cart, o2, "on");
 fill = atoi(cartUsualString(cart, o3, "1"));
-lineGapSize = atoi(cartUsualString(cart, o4, "10000"));
+lineGapSize = atoi(cartUsualString(cart, o4, "25000"));
 
 heightPer = tg->heightPer+1;
 hFactor = (double)heightPer/1000.0;
