@@ -33,3 +33,11 @@ priority 16
 visibility dense
 color 0,100,0
 type genePred softberryPep
+
+track genieAlt
+shortLabel AltGenie
+longLabel Genie Gene Predictions from Affymetrix
+priority 14
+visibility dense
+color 125,0,150
+type genePred genieAltPep
