@@ -21,6 +21,8 @@ struct customTrack
     int fieldCount;		/* Number of fields in bed. */
     boolean needsLift;		/* True if coordinates need lifting. */
     boolean fromPsl;		/* Track was derived from psl file. */
+    boolean wiggle;		/* This is a wiggle track */
+    char *wigData;		/* and this is the wiggle ascii data */
     struct gffFile *gffHelper;	/* Used while processing GFF files. */
     int offset;			/* Base offset. */
     char *groupName;		/* Group name if any. */
