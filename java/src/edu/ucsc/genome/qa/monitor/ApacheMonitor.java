@@ -103,7 +103,6 @@ public class ApacheMonitor {
       int cnt = testRS.getInt("cnt");
       //# System.out.println("Count of matching rows = " + cnt);
 
-      System.out.println("mode = " + mode);
       // set to print only if errors detected or if verbose mode
       if (cnt != 0 || mode.equals("verbose")) {
         System.out.println(nullquery);
