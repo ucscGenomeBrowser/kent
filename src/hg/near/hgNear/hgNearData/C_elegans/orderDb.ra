@@ -1,0 +1,8 @@
+# This contains C. elegans specific ordering info.
+#
+name blastp
+type pair sangerBlastTab query target bitScore -1 
+
+name nameSimilarity
+type nameSimilarity orfToGene name value
+
