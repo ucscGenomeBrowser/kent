@@ -22,7 +22,7 @@
 #include "hgTables.h"
 #include "joiner.h"
 
-static char const rcsid[] = "$Id: hgTables.c,v 1.79 2004/10/14 21:54:34 kent Exp $";
+static char const rcsid[] = "$Id: hgTables.c,v 1.80 2004/10/15 16:46:07 kent Exp $";
 
 
 void usage()
@@ -263,9 +263,9 @@ sqlDisconnect(&conn);
 return list;
 }
 
-void searchPosition(char *range, struct region *region)
+boolean searchPosition(char *range, struct region *region)
 /* Try and fill in region via call to hgFind. Return FALSE
- * if it has to put up a multiple line selection. */
+ * if it can't find a single position. */
 {
 struct hgPositions *hgp = NULL;
 char retAddr[512];
@@ -273,29 +273,40 @@ char position[512];
 safef(retAddr, sizeof(retAddr), "%s", "../cgi-bin/hgTables");
 hgp = findGenomePosWeb(range, &region->chrom, &region->start, &region->end,
 	cart, TRUE, retAddr);
-if (hgp == NULL || hgp->singlePos == NULL)
+if (hgp != NULL && hgp->singlePos != NULL)
     {
-    errAbort("Please go back and try another position");
+    safef(position, sizeof(position),
+	    "%s:%d-%d", region->chrom, region->start+1, region->end);
+    cartSetString(cart, hgtaRange, position);
+    return TRUE;
     }
-safef(position, sizeof(position),
-	"%s:%d-%d", region->chrom, region->start+1, region->end);
-cartSetString(cart, hgtaRange, position);
+else if (region->start == 0)	/* Confusing way findGenomePosWeb says pos not found. */
+    {
+    cartSetString(cart, hgtaRange, hDefaultPos(database));
+    return FALSE;
+    }
+else
+    return FALSE;
 }
 
-void lookupPosition()
-/* Look up position (aka range) if need be. */
+boolean lookupPosition()
+/* Look up position (aka range) if need be.  Return FALSE if it puts
+ * up multiple positions. */
 {
 char *regionType = cartUsualString(cart, hgtaRegionType, "genome");
-if (sameString(regionType, "range"))
+char *range = cartUsualString(cart, hgtaRange, "");
+boolean isSingle = TRUE;
+range = trimSpaces(range);
+if (range[0] != 0)
     {
-    char *range = cartUsualString(cart, hgtaRange, "");
-    range = trimSpaces(range);
-    if (range[0] != 0)
-	{
-	struct region r;
-	searchPosition(range, &r);
-	}
+    struct region r;
+    isSingle = searchPosition(range, &r);
     }
+else
+    {
+    cartSetString(cart, hgtaRange, hDefaultPos(database));
+    }
+return isSingle;
 }
 
 struct region *getRegions()
@@ -1153,12 +1164,12 @@ freezeName = hFreezeFromDb(database);
 hSetDb(database);
 conn = hAllocConn();
 
-lookupPosition();
-
-initGroupsTracksTables(conn);
-
-/* Go figure out what page to put up. */
-dispatch(conn);
+if (lookupPosition())
+    {
+    /* Init track and group lists and figure out what page to put up. */
+    initGroupsTracksTables(conn);
+    dispatch(conn);
+    }
 
 /* Save variables. */
 cartCheckout(&cart);

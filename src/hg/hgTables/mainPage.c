@@ -16,7 +16,7 @@
 #include "hgTables.h"
 #include "joiner.h"
 
-static char const rcsid[] = "$Id: mainPage.c,v 1.54 2004/10/14 21:54:34 kent Exp $";
+static char const rcsid[] = "$Id: mainPage.c,v 1.55 2004/10/15 16:46:07 kent Exp $";
 
 
 int trackDbCmpShortLabel(const void *va, const void *vb)
@@ -48,6 +48,7 @@ struct dyString *dy = onChangeStart();
 jsDropDownCarryOver(dy, "org");
 jsDropDownCarryOver(dy, hgtaTable);
 dyStringAppend(dy, " document.hiddenForm.db.value=0;");
+dyStringAppend(dy, " document.hiddenForm.position.value='';");
 return jsOnChangeEnd(&dy);
 }
 
@@ -57,6 +58,7 @@ static char *onChangeDb()
 struct dyString *dy = onChangeStart();
 jsDropDownCarryOver(dy, "db");
 jsDropDownCarryOver(dy, hgtaTable);
+dyStringAppend(dy, " document.hiddenForm.position.value='';");
 return jsOnChangeEnd(&dy);
 }
 
