@@ -12,7 +12,7 @@
 #include "cda.h"
 #include "seqOut.h"
 
-static char const rcsid[] = "$Id: fuzzyShow.c,v 1.14 2004/01/08 00:21:24 braney Exp $";
+static char const rcsid[] = "$Id: fuzzyShow.c,v 1.15 2004/08/12 22:18:11 angie Exp $";
 
 int ffShAliPart(FILE *f, struct ffAli *aliList, 
     char *needleName, DNA *needle, int needleSize, int needleNumOffset,
@@ -51,15 +51,15 @@ if (cdsE > 0)
 	    (upcMatch ? " and capitalized" : ""));
     fprintf(f, "Matching bases in UTR regions of cDNA and genomic sequences are colored red%s. ", 
 	    (upcMatch ? " and capitalized" : ""));
-    fputs("Light blue (coding) or orange (UTR) bases mark the boundaries of gaps in either side of "
-	  "the alignment (often splice sites). ", f);
+    fputs("Light blue (coding) or orange (UTR) bases mark the boundaries of gaps in either sequence "
+	  "(often splice sites). ", f);
     } 
 else 
     {
     fprintf(f, "Matching bases in cDNA and genomic sequences are colored blue%s. ", 
 	    (upcMatch ? " and capitalized" : ""));
-    fputs("Light blue bases mark the boundaries of gaps in either side of "
-	  "the alignment (often splice sites). ", f);
+    fputs("Light blue bases mark the boundaries of gaps in either sequence "
+	  "(often splice sites). ", f);
     } 
 if (showJumpTable)
     fputs("</P></CENTER>", f);
