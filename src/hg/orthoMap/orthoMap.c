@@ -15,7 +15,7 @@
 #include "bed.h"
 #include "rbTree.h"
 
-static char const rcsid[] = "$Id: orthoMap.c,v 1.9 2003/08/14 00:10:34 baertsch Exp $";
+static char const rcsid[] = "$Id: orthoMap.c,v 1.10 2003/08/14 17:53:02 weber Exp $";
 static boolean doHappyDots;   /* output activity dots? */
 static struct rbTree *netTree = NULL;
 static struct optionSpec optionSpecs[] = 
@@ -36,6 +36,7 @@ static struct optionSpec optionSpecs[] =
     {"chainFile", OPTION_STRING},
     {"outBed", OPTION_STRING},
     {"altGraphXOut", OPTION_STRING},
+    {"cdsErrorFile", OPTION_STRING},
     {NULL, 0}
 };
 
@@ -56,7 +57,8 @@ static char *optionDescripts[] =
     "File table containing net records, i.e. chr16.net.",
     "File containing the chains. Usually I do this on a chromosome basis.",
     "File to output beds to.",
-    "File to output altGraphX records to."
+    "File to output altGraphX records to.",
+    "File for gene predictions with CDS errors."
 };
 
 void usage()
@@ -411,6 +413,7 @@ else
 void fillInGene(struct chain *chain, struct genePred *gene, struct genePred **pGene)
 /** Fill in syntenic gene structure with initial information for gene. */
 {
+FILE *cdsErrorFp;
 struct genePred *synGene = NULL;
 int qs, qe;
 struct chain *subChain=NULL, *toFree=NULL;
@@ -441,6 +444,21 @@ else
     }
 chainFree(&toFree);
 chainSubsetOnT(chain, gene->cdsStart, gene->cdsEnd , &subChain, &toFree);    
+if(subChain == NULL )
+    {
+
+
+    if(optionExists("cdsErrorFile"))
+        {
+        cdsErrorFp = fopen( optionVal("cdsErrorFile",NULL), "a" );
+        fprintf( cdsErrorFp, "%s\t%s\t%u\t%u\t%u\t%u\t%s\t%d\n", gene->name, gene->chrom, gene->txStart, 
+		 gene->txEnd, gene->cdsStart, gene->cdsEnd, gene->strand, gene->exonCount );
+        fclose(cdsErrorFp);
+        }
+    *pGene = NULL;
+    genePredFree(&synGene); 
+    return;
+    }
 qChainRangePlusStrand(subChain, &qs, &qe);
 synGene->cdsStart = qs;
 synGene->cdsEnd = qe;
@@ -962,6 +980,7 @@ warn("Done");
 
 int main(int argc, char *argv[])
 {
+FILE *cdsErrorFp;
 char *db = NULL, *orthoDb = NULL;
 if(argc == 1)
     usage();
@@ -969,6 +988,15 @@ doHappyDots = isatty(1);  /* stdout */
 optionInit(&argc, argv, optionSpecs);
 if(optionExists("help"))
     usage();
+
+//init output files
+if(optionExists("cdsErrorFile"))
+{
+    cdsErrorFp = fopen( optionVal("cdsErrorFile", NULL), "w" );
+    fprintf( cdsErrorFp, "#name\tchrom\ttxStart\ttxEnd\tcdsStart\tcdsEnd\tstrand\texonCount\n" );
+    fclose(cdsErrorFp);
+}
+
 orthoMap();
 return 0;
 }

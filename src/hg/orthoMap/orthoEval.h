@@ -41,4 +41,6 @@ struct orthoEval *orthoEvalLoadAll(char *fileName);
 /* Load all orthoEval from a whitespace-separated file.
  * Dispose of this with orthoEvalFreeList(). */
 
+void orthoEvalFree(struct orthoEval **pEv);
+
 #endif /* ORTHOEVAL_H */
