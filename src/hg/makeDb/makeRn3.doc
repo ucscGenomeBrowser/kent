@@ -732,6 +732,7 @@ MAKE DOWNLOADABLE SEQUENCE FILES (DONE - 2003-07-03 - 2003-07-09 - Hiram)
 
     ssh kkstore
     mkdir -p /cluster/data/rn3/bed/blastz.mm3
+    mkdir -p /cluster/bluearc/hg/rn3/bed/blastz.mm3
     cd /cluster/data/rn3/bed/blastz.mm3
     cat << '_EOF_' > DEF
 # mouse vs. rat
@@ -740,11 +741,16 @@ export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/home/angie/s
 ALIGN=blastz-run
 BLASTZ=blastz
 BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=50000
+BLASTZ_T=2
+# scoring matrix
+BLASTZ_Q=/cluster/data/blastz/mus_rat.q
 BLASTZ_ABRIDGE_REPEATS=1
 
 # TARGET
 # Rat
-SEQ1_DIR=/iscratch/i/rn3/bothMaskedNibs/
+SEQ1_DIR=/scratch/rat/rn3/softNib/
 # not used
 SEQ1_RMSK=
 # not used
@@ -761,12 +767,12 @@ SEQ2_DIR=/iscratch/i/mm3.RM030619/mixedNib/
 SEQ2_RMSK=
 # not currently used
 SEQ2_FLAG=
-SEQ2_SMSK=/iscratch/i/mm3.RM030619/linSpecRep.notInRat/
+SEQ2_SMSK=/cluster/bluearc/mm3.RM030619/linSpecRep.notInRat/
 SEQ2_IN_CONTIGS=0
 SEQ2_CHUNK=30000000
 SEQ2_LAP=0
 
-BASE=/cluster/store3/rn3/bed/blastz.mm3
+BASE=/cluster/bluearc/hg/rn3/bed/blastz.mm3
 
 DEF=$BASE/DEF
 RAW=$BASE/raw
@@ -778,7 +784,7 @@ SEQ2_LEN=$BASE/S2.len
 
 # Save the DEF file in the current standard place
     chmod +x DEF
-    cp DEF ~angie/hummus/DEF.rn3-mm3.RM030619
+    cp DEF ~angie/hummus/DEF.rn3-mm3.RM030619 
 
     ssh kk
     cd /cluster/data/rn3/bed/blastz.mm3
@@ -786,18 +792,20 @@ SEQ2_LEN=$BASE/S2.len
     # source the DEF file
     bash
     . ./DEF
+    cp DEF $BASE
 
     # follow the next set of directions slavishly
-    mkdir -p $BASE/run
+    mkdir -p run
     # give up on avoiding angie's directories
     # tcl script
     # creates xdir.sh and joblist run/j
-    ~angie/hummus/make-joblist $DEF > $BASE/run/j
+    ~angie/hummus/make-joblist $DEF > run/j
 
     # xdir.sh makes a bunch of result directories in $BASE/raw/
     # based on chrom name and CHUNK size
-    sh $BASE/xdir.sh
-    cd $BASE/run
+    cp $BASE/xdir.sh .
+    sh xdir.sh
+    cd run
 
     # now edit j to prefix path to executable name
     # NOTE: we should have a controlled version of schwartz bin executables
@@ -815,9 +823,178 @@ SEQ2_LEN=$BASE/S2.len
     para check
     para push
     # ... etc ...
-       # 1.3 hr longest job
+       # 37 min longest job
+       # 2.3 hours elapsed
 
     # post-process blastz
+    ssh kkstore
+    cd /cluster/data/rn3/bed/blastz.mm3
+        #   source the DEF file again in case you are coming back to this
+    bash
+    . ./DEF
+    
+    # a new run directory
+    mkdir -p run.1
+    
+    mkdir -p $BASE/lav
+    
+    # create a new job list to convert out files to lav
+    /cluster/bin/scripts/blastz-make-out2lav $DEF $BASE \
+                        > run.1/jobList
+    cd run.1
+
+    # make sure the job list is OK
+    wc -l jobList
+       # 312 jobs 
+    head jobList
+
+    # run on cluster
+    #ssh kkr9u01
+    ssh kk
+    cd /cluster/data/rn3/bed/blastz.mm3/run.1
+    para create jobList
+    para try
+    para check
+    para push
+    # etc.
+    # 10 minutes total 
+
+    # convert lav files to axt
+    ssh kkstore
+    cd /cluster/data/rn3/bed/blastz.mm3
+    mkdir axtChrom
+    
+    # a new run directory
+    mkdir run.2
+    cd run.2
+
+    # create template file for gensub2
+    cat << '_EOF_' > gsub
+#LOOP
+/cluster/bin/scripts/blastz-chromlav2axt /cluster/bluearc/hg/rn3/bed/blastz.mm3/lav/$(root1) {check out line+ /cluster/data/rn3/bed/blastz.mm3/axtChrom/$(root1).axt} /cluster/bluearc/rat/rn3/softNib /iscratch/i/mm3.RM030619/mixedNib
+#ENDLOOP
+'_EOF_'
+    ls -1S /cluster/bluearc/hg/rn3/bed/blastz.mm3/lav > chrom.list
+    gensub2 chrom.list single gsub jobList
+    wc -l jobList
+        # 44 jobs
+    head jobList
+
+    ssh kk
+    # NOTE: would have run this on rack 9, but /iscratch/i/mm3.RM030619
+    # not available there
+    cd /cluster/data/rn3/bed/blastz.mm3
+    cd run.2
+    para create jobList
+    para try
+    para check
+    para push
+        # 10 minutes ?
+
+    # copy chrom axt's back to fileserver
+    cd /cluster/data/rn3/bed/blastz.mm3
+    mkdir -p axtChrom
+    cp $base/axtChrom/*.axt axtChrom
+    
+    # translate sorted axt files into psl
+    ssh kkstore
+    cd /cluster/data/rn3/bed/blastz.mm3
+    mkdir -p pslChrom
+    set tbl = "blastzMm3"
+    foreach f (axtChrom/chr*.axt)
+      set c=$f:t:r
+      /cluster/bin/i386/axtToPsl $f S1.len S2.len pslChrom/${c}_${tbl}.psl
+    end
+
+    # Load database tables
+    ssh hgwdev
+    set tbl = "blastzMm3"
+    cd /cluster/data/rn3/bed/blastz.mm3
+    cd pslChrom
+    /cluster/bin/i386/hgLoadPsl mm3 chr*_${tbl}.psl
+    # create trackDb/rat/rn3/trackDb.ra entry:
+# track blastzMm3
+# shortLabel BLASTZ Mouse
+# longLabel All BLASTZ Mouse alignments
+# group compGeno
+# priority 111
+# visibility hide
+# color 100,50,0
+# altColor 255,240,200
+# spectrum on
+# type psl xeno hg15
+
+
+# MAKE BLASTZ BEST MOUSE MM3 (IN PROGRESS 2003-07-22 kate)
+
+    # Consolidate AXT files to chrom level, sort, pick best, make psl.
+    ssh kkstore
+    cd /cluster/data/rn3/bed/blastz.mm3
+    
+    # copy chrom axt's to bluearc, to avoid hitting fileserver too hard
+    cp -r axtChrom /cluster/bluearc/hg/rn3/bed/blastz.mm3
+    mkdir -p axtBest pslBest
+    mkdir run.3
+    cd run.3
+
+    # create script to filter files 
+    cat << '_EOF_' > doBestAxt
+#!/bin/csh -f
+# usage: doBestAxt chr axt-file best-file psl-file
+/cluster/bin/i386/axtBest $2 $1 $3 -minScore-300
+sleep 1
+/cluster/bin/i386/axtToPsl $3 /cluster/data/rn3/bed/blastz.mm3/S1.len /cluster/data/rn3/bed/blastz.mm3/S2.len $4
+'_EOF_'
+    chmod +x doBestAxt
+    cd axtChrom
+    ls -1S | sed 's/.axt$//' > ../run.3/chrom.list
+    cd ../run.3
+
+    # create template for cluster job
+    cat << '_EOF_' > gsub
+#LOOP
+doBestAxt $(root1) /cluster/bluearc/hg/rn3/bed/blastz.mm3/axtChrom/$(root1).axt {check out line+ /cluster/data/rn3/bed/blastz.mm3/axtBest/$(root1).axt} {check out line+  /cluster/data/rn3/bed/blastz.mm3/pslBest/$(root1)_blastzBestMm3.psl}
+#ENDLOOP
+'_EOF_'
+    gensub2 chrom.list single gsub jobList
+    wc -l jobList
+        # 44 jobs
+    head jobList
+
+    ssh kk
+    cd /cluster/data/rn3/bed/blastz.mm3
+    cd run.3
+    para create jobList
+    para try
+    para check
+    para push
+        # 10 minutes ?
+
+    # Load tables
+     ssh hgwdev
+     set base="/cluster/data/rn3/bed/blastz.mm3"
+     set tbl="blastzBestMm3"
+     cd $base/pslBest
+     hgLoadPsl rn3 chr*_${tbl}.psl
+
+    # Make /gbdb links and add them to the axtInfo table:
+     mkdir -p /gbdb/rn3/axtBestMm3
+     cd /gbdb/rn3/axtBestMm3
+     foreach f ($base/axtBest/chr*.axt)
+       ln -s $f .
+     end
+     cd $base/axtBest
+     rm -f axtInfoInserts.sql
+     touch axtInfoInserts.sql
+     foreach f (/gbdb/rn3/axtBestMm3/chr*.axt)
+       set chr=$f:t:r
+       echo "INSERT INTO axtInfo (species, alignment, chrom, fileName) \
+                VALUES ('mm3','Blastz Best in Genome','$chr','$f');" \
+         >> axtInfoInserts.sql
+     end
+     hgsql rn3 < ~/kent/src/hg/lib/axtInfo.sql
+     hgsql rn3 < axtInfoInserts.sql
+
 
 # BLASTZ Self (IN PROGRESS 2003-07-18 kate) 
 
@@ -1171,7 +1348,7 @@ SEQ2_LEN=$BASE/S2.len
     # Add entries for net and chain to rat/rn3 trackDb
 
 
-# MAKE THE BLASTZBESTHUMAN TRACK FROM RN3 AXT FILES (IN PROGRESS 2003-07-15 kate)
+# MAKE THE BLASTZBESTHUMAN TRACK FROM RN3 AXT FILES (DONE 2003-07-16 baertsch, kate)
 
     # Consolidate AXT files to chrom level, sort, pick best, make psl.
     ssh kkstore
@@ -1236,6 +1413,50 @@ SEQ2_LEN=$BASE/S2.len
      hgsql rn3 < ~/kent/src/hg/lib/axtInfo.sql
      hgsql rn3 < axtInfoInserts.sql
 
+
+# MAKE AXTTIGHT FROM AXTBEST (DONE 2003-07-21 kate)
+    # After creating axtBest alignments above, use subsetAxt to get axtTight:
+    # NOTE: currently the axtBest's are the blastz.hg15.2003-07-09 directory
+    # since blastz.hg15 is in use for rerun of blastz with
+    # updated lineage-specific repeats for new RepeatMasker
+     
+    ssh kkstore
+    cd ~/rn3/bed/blastz.hg15.2003-07-09/axtBest
+    mkdir -p ../axtTight
+    foreach i (*.axt)
+      echo $i
+      subsetAxt  $i ../axtTight/$i \
+        /cluster/data/subsetAxt/coding.mat 3400
+    end
+
+    # translate to psl
+    cd ../axtTight
+    mkdir -p ../pslTight
+    foreach i (*.axt)
+      set c = $i:r
+      /cluster/bin/i386/axtToPsl $i \
+                ../S1.len ../S2.len ../pslTight/${c}_blastzTightHg15.psl
+    end
+
+    # Load tables into database
+    ssh hgwdev
+    cd /cluster/data/rn3/bed/blastz.hg15.2003-07-09
+    cd pslTight
+    hgLoadPsl rn3 chr*_blastzTightHg15.psl
+
+
+# MAKE MULTIPLE ALIGNMENT (MAF) FILES FROM BEST AXT'S (In Progress 2003-07-22 kate)
+
+    ssh kkstore
+    cd /cluster/data/rn3/bed/blastz.hg15.2003-07-09
+    mkdir maf
+    cd axtBest
+    foreach i (*.axt)
+      set c = $i:r
+      /cluster/bin/i386/axtToMaf $i \
+            /cluster/data/rn3/chrom.sizes /cluster/data/hg15/chrom.sizes  \
+                ../maf/${c}_rh.maf
+    end
 
 AUTO UPDATE GENBANK MRNA RUN  (DONE - 2003-07-07 - Hiram)
 
