@@ -129,13 +129,13 @@ webNewSection("Add Your Own Tracks");
 
 puts(
 "<P>You can add your own annotation tracks to the browser using \n"
-"the <A HREF=\"help/customTrack.html\"> \n"
+"the <A HREF=\"../goldenPath/help/customTrack.html\"> \n"
 "formats described here</A>.  Annotations can be stored in files or\n"
 "pasted in. You can also paste in a URL or list of URLs which refer to \n"
 "files in one of the supported formats.</P>\n"
 "\n"
-"	Annotation File: <INPUT TYPE=FILE NAME=\"customFile\"><BR>\n"
-"	<TEXTAREA NAME=\"customText\" ROWS=14 COLS=80></TEXTAREA>\n"
+"	Annotation File: <INPUT TYPE=FILE NAME=\"hgt.customFile\"><BR>\n"
+"	<TEXTAREA NAME=\"hgt.customText\" ROWS=14 COLS=80></TEXTAREA>\n"
 "	</FORM>\n"
 "	<BR></TD><TD WIDTH=15>&nbsp;</TD></TR></TABLE>\n"
 "	</TD></TR></TABLE>\n"
