@@ -61,6 +61,8 @@ for (snpType=0; snpType<snpTypeCount; snpType++)
  	cartUsualString(cart, snpTypeEnumToString((enum snpTypeEnum)snpType),
  			snpTypeStateEnumToString((enum snpTypeEnum)snpType) );
 bedLoadItem(tg, "snpMap", (ItemLoader)snpMapLoad);
+if (strncmp(database,"hg",2))
+    return;
 filterSnpItems(tg, snpSourceFilterItem);
 filterSnpItems(tg, snpTypeFilterItem);
 }
