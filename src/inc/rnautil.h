@@ -18,10 +18,10 @@ bool rnaPair(char a, char b);
 void reverseFold(char *s);
 /* Reverse the order of the parenthesis defining an RNA secondary structure annotation. */
 
-void fold2pairingList(char *fold, int *pairList);
-/* take a parenthesis string and return an array of pairing positions:
-   pairList[i] = j <=> i pair with j and pairList[i] = -1 <=> i does
-   not pair. PairList must be of size strlen(fold) */
+void fold2pairingList(char *fold, int len, int *pairList);
+/* take a parenthesis string, allocate and return an array of pairing
+   positions: pairList[i] = j <=> i pair with j and pairList[i] = -1
+   <=> i does not pair.*/
 
 void mkPairPartnerSymbols(int * pairList, char * pairSymbols, int size);
 /* Make a symbol string indicating pairing partner */
