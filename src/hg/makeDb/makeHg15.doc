@@ -1564,37 +1564,47 @@ LOAD AVID MOUSE TRACK (todo)
       hgLoadBed avidRepeat avidRepeat.bed
       hgLoadBed avidUnique avidUnique.bed
 
-LOAD SNPS (TODO)
-      ssh hgwdev
-      cd ~/hg15/bed
-      mkdir snp
-      cd snp
-      mkdir build110
-      cd build110
-      ln -s ../../../seq_contig.md .
-      ln -s ~/hg13/bed/cpgIsland/filter.awk .
+LOAD SNPS (Done.  Daryl Thomas; April 14, 2003)
+    cd    ~/oo/bed
+    mkdir snp
+    mkdir snp/build113
+    cd    snp/build113
+    # ftp.ncbi.nlm.nih.gov/snp/human/genome_reports/human.b33.snp113.gz
+    # user: anonymous 
+    # password: username@soe.ucsc.edu
+    ln -s ~/lib/calcFlipSnpPos .
+    ln -s ~/lib/filter.awk .
+    ln -s ../../../seq_contig.md .
+    ln -s ../../../jkStuff/liftAll.lft .
+    set humanBuild = b32
+    set snpBuild = snp113
 
-     -Download SNPs from ftp://ftp.ncbi.nlm.nih.gov/pub/sherry/gp.ncbi.b31.gz
-     -Unpack
-      calcFlipSnpPos seq_contig.md gp.ncbi.b31 gp.ncbi.b31.flipped
-      mv gp.ncbi.b31 gp.ncbi.b31.original
-      gzip gp.ncbi.b31.original
+    gunzip human.$humanBuild.$snpBuild.gz
+    mv     human.$humanBuild.$snpBuild    human.$humanBuild.$snpBuild.original
+    calcFlipSnpPos seq_contig.md human.$humanBuild.$snpBuild.original human.$humanBuild.$snpBuild.flipped
+    gzip   human.$humanBuild.$snpBuild.original
 
-      grep RANDOM       gp.ncbi.b31.flipped >  snpTsc.txt
-      grep MIXED        gp.ncbi.b31.flipped >> snpTsc.txt
-      grep BAC_OVERLAP  gp.ncbi.b31.flipped >  snpNih.txt
-      grep OTHER        gp.ncbi.b31.flipped >> snpNih.txt
+    grep RANDOM       human.$humanBuild.$snpBuild.flipped >  snpTsc.txt
+    grep MIXED        human.$humanBuild.$snpBuild.flipped >> snpTsc.txt
+    grep BAC_OVERLAP  human.$humanBuild.$snpBuild.flipped >  snpNih.txt
+    grep OTHER        human.$humanBuild.$snpBuild.flipped >> snpNih.txt
 
-      awk -f filter.awk snpTsc.txt > snpTsc.contig.bed
-      awk -f filter.awk snpNih.txt > snpNih.contig.bed
+    awk -f filter.awk snpTsc.txt > snpTsc.contig.bed
+    awk -f filter.awk snpNih.txt > snpNih.contig.bed
 
-      liftUp snpTsc.bed ../../jkStuff/liftAll.lft warn snpTsc.contig.bed
-      liftUp snpNih.bed ../../jkStuff/liftAll.lft warn snpNih.contig.bed
+    liftUp snpTsc.bed liftAll.lft warn snpTsc.contig.bed
+    liftUp snpNih.bed liftAll.lft warn snpNih.contig.bed
 
-      hgLoadBed hg15 snpTsc snpTsc.bed
-      hgLoadBed hg15 snpNih snpNih.bed
+    mysql> drop table snpTsc; # for new dbSnp builds between assemblies
+    mysql> drop table snpNih; # for new dbSnp builds between assemblies
 
-     -gzip all of the big files
+    hgLoadBed hg14 snpTsc snpTsc.bed
+    hgLoadBed hg14 snpNih snpNih.bed
+    gzip *.flipped snp*.txt *.bed 
+    rm bed.tab
+
+LOAD SNP DETAILS (TODO)
+    Daryl will add this.
 
 LOAD ENSEMBL GENES (TODO)
      cd ~/hg15/bed
