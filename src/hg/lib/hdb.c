@@ -26,7 +26,7 @@
 #include "maf.h"
 #include "ra.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.145 2003/10/11 09:28:09 kent Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.146 2003/10/13 01:45:43 kent Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
@@ -2103,6 +2103,12 @@ boolean hFindSplitTable(char *chrom, char *rootName,
  * Return FALSE if table doesn't exist.  */
 {
 return hFindSplitTableDb(hGetDb(), chrom, rootName, retTableBuf, hasBin);
+}
+
+boolean hTrackExists(char *track)
+/* Return TRUE if track exists. */
+{
+return hFindSplitTable(NULL, track, NULL, NULL);
 }
 
 boolean hIsMgscHost()

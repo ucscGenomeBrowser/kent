@@ -367,6 +367,9 @@ boolean hFindSplitTableDb(char *db, char *chrom, char *rootName,
 /* Find name of table in a given database that may or may not 
  * be split across chromosomes. Return FALSE if table doesn't exist.  */
 
+boolean hTrackExists(char *trackName);
+/* Return TRUE if track exists. */
+
 int hBinLevels();
 /* Return number of levels to bins. */
 
