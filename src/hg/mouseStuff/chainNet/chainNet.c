@@ -627,7 +627,7 @@ if (isQ)
     {
     if (chain->qStrand == '-')
         reverseIntRange(&start, &end, chain->qSize);
-    if (start <= chain->qStart && end >= chain->qStart)
+    if (start <= chain->qStart && end >= chain->qEnd)
         {
 	*retScore = chain->score;
 	*retSize = fullSize;
@@ -642,7 +642,7 @@ if (isQ)
     }
 else
     {
-    if (start <= chain->tStart && end >= chain->tStart)
+    if (start <= chain->tStart && end >= chain->tEnd)
         {
 	*retScore = chain->score;
 	*retSize = fullSize;
@@ -652,18 +652,17 @@ else
 	int subSize = chainBaseCountSubT(chain, start, end);
 	*retScore = chain->score * subSize / fullSize;
 	*retSize = subSize;
-	// uglyf("subchainInfo T %d,%d %d,%d ali %d, subSize %d, score %f, subScore %f\n", start, end, chain->tStart, chain->tEnd, fullSize, subSize, chain->score, *retScore);
+	if (chain->id == 7307)
+	    uglyf("subchainInfo T %d,%d %d,%d ali %d, subSize %d, score %f, subScore %f\n", start, end, chain->tStart, chain->tEnd, fullSize, subSize, chain->score, *retScore);
 	}
     }
 }
 
-void fillOut(FILE *f, struct fill *fill, char *oChrom, int depth)
+void fillOut(FILE *f, struct fill *fill, char *oChrom, int depth,
+	int subSize, double subScore)
 /* Output fill. */
 {
 struct chain *chain = fill->chain;
-int subSize;
-double subScore;
-subchainInfo(chain, fill->start, fill->end, rOutQ, &subSize, &subScore);
 spaceOut(f, depth);
 fprintf(f, "fill %d %d %s %c %d %d id %d score %1.0f ali %d\n", 
 	fill->start, fill->end - fill->start,
@@ -677,14 +676,21 @@ static void rOutputFill(struct fill *fill, FILE *f)
 {
 struct gap *gap;
 struct chain *chain = fill->chain;
-++rOutDepth;
-if (rOutQ)
-    fillOut(f, fill, fill->chain->tName, rOutDepth);
-else
-    fillOut(f, fill, fill->chain->qName, rOutDepth);
-for (gap = fill->gapList; gap != NULL; gap = gap->next)
-    rOutputGap(fill, gap, f);
---rOutDepth;
+int subSize;
+double subScore;
+
+subchainInfo(chain, fill->start, fill->end, rOutQ, &subSize, &subScore);
+if (subScore >= minScore && subSize >= minFill)
+    {
+    ++rOutDepth;
+    if (rOutQ)
+	fillOut(f, fill, fill->chain->tName, rOutDepth, subSize, subScore);
+    else
+	fillOut(f, fill, fill->chain->qName, rOutDepth, subSize, subScore);
+    for (gap = fill->gapList; gap != NULL; gap = gap->next)
+	rOutputGap(fill, gap, f);
+    --rOutDepth;
+    }
 }
 
 void outputNetSide(struct chrom *chromList, char *fileName, boolean isQ)
