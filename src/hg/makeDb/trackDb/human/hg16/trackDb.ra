@@ -894,7 +894,7 @@ longLabel Human/Chimp/Mouse/Rat/Chicken Multiz Alignments & PhyloHMM Cons
 group compGeno
 priority 100
 visibility hide
-color 0, 10, 100
+#color 0, 10, 100
 type wigMaf 0.0 1.0
 maxHeightPixels 100:40:11
 wiggle mzPt1Mm3Rn3Gg2_pHMM_wig
