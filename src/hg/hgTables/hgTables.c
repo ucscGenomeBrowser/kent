@@ -13,7 +13,7 @@
 #include "grp.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: hgTables.c,v 1.5 2004/07/13 09:41:45 kent Exp $";
+static char const rcsid[] = "$Id: hgTables.c,v 1.6 2004/07/13 11:51:22 kent Exp $";
 
 
 void usage()
@@ -106,6 +106,50 @@ printf("Content-Type: text/plain\n\n");
 pushWarnHandler(textWarnHandler);
 pushAbortHandler(textAbortHandler);
 }
+
+/* --------- Utility functions --------------------- */
+
+struct region *getRegionsFullGenome()
+/* Get a region list that covers all of each chromosome. */
+{
+struct slName *chrom, *chromList = hAllChromNames();
+struct region *region, *regionList = NULL;
+for (chrom = chromList; chrom != NULL; chrom = chrom->next)
+    {
+    AllocVar(region);
+    region->chrom = chrom->name;
+    slAddHead(&regionList, region);
+    }
+slReverse(&regionList);
+slFreeList(&chromList);
+return regionList;
+}
+
+struct region *getRegions(struct sqlConnection *conn)
+/* Get list of regions. */
+{
+char *regionType = cartUsualString(cart, hgtaRegionType, "genome");
+struct region *regionList = NULL, *region;
+if (sameString(regionType, "genome"))
+    {
+    regionList = getRegionsFullGenome();
+    }
+else if (sameString(regionType, "range"))
+    {
+    char *range = cartString(cart, hgtaRange);
+    regionList = AllocVar(region);
+    if (!hgParseChromRange(range, &region->chrom, &region->start, &region->end))
+        {
+	errAbort("%s is not a chromosome range.  "
+	         "Please go back and enter something like chrX:1000000-1100000 "
+		 "in the range control.", range);
+	}
+    }
+else
+    errAbort("Sorry, don't understand %s type region yet", regionType);
+return regionList;
+}
+
 
 /* --------- Test Page --------------------- */
 
@@ -213,6 +257,12 @@ for (track = trackList; track != NULL; track = track->next)
 return NULL;
 }
 
+struct trackDb *findTrack(char *name, struct trackDb *trackList)
+/* Find track, or return NULL if can't find it. */
+{
+return findTrackInGroup(name, trackList, NULL);
+}
+
 struct trackDb *findSelectedTrack(struct trackDb *trackList, 
     struct grp *group)
 /* Find selected track - from CGI variable if possible, else
@@ -308,7 +358,7 @@ void makeRegionButton(char *val, char *selVal)
 /* Make region radio button including a little Javascript
  * to save selection state. */
 {
-hPrintf("<INPUT TYPE=RADIO NAME=\"hgtaRegionType\"");
+hPrintf("<INPUT TYPE=RADIO NAME=\"%s\"", hgtaRegionType);
 hPrintf(" VALUE=\"%s\"", val);
 hPrintf(" onClick=\"regionType='%s';\"", val);
 if (sameString(val, selVal))
@@ -610,18 +660,54 @@ uglyf("Theoretically making filter.");
 htmlClose();
 }
 
-void doOutPrimaryTable(struct sqlConnection *conn)
+void doOutPrimaryTable(struct trackDb *track, 
+	struct sqlConnection *conn)
 /* Dump out primary table. */
 {
+struct hTableInfo *hti;
+struct region *region, *regionList = NULL;
 textOpen();
-uglyf("The primary table will be dumped in a text mode.");
+regionList = getRegions(conn);
+hti = hFindTableInfo(NULL, track->tableName);
+
+for (region = regionList; region != NULL; region = region->next)
+    {
+    struct sqlResult *sr;
+    char **row;
+    int colOffset, colIx, colCount, lastCol;
+    if (region->end == 0) /* Full chromosome. */
+        {
+	sr = hChromQuery(conn, track->tableName, region->chrom, NULL, &colOffset);
+	}
+    else 
+        {
+	sr = hRangeQuery(conn, track->tableName, region->chrom, 
+		region->start, region->end, NULL, &colOffset);
+	}
+    colCount = sqlCountColumns(sr);
+    lastCol = colCount - 1;
+
+    /* First time through print column names. */
+    if (region == regionList)
+        {
+	hPrintf("#");
+	for (colIx = 0; colIx < lastCol; ++colIx)
+	    hPrintf("%s\t", sqlFieldName(sr));
+	hPrintf("%s\n", sqlFieldName(sr));
+	}
+    while ((row = sqlNextRow(sr)) != NULL)
+	{
+	for (colIx = 0; colIx < lastCol; ++colIx)
+	    hPrintf("%s\t", row[colIx]);
+	hPrintf("%s\n", row[lastCol]);
+	}
+    }
 }
 
-void doOutSchema(struct sqlConnection *conn)
+void doOutSchema(struct trackDb *track, struct sqlConnection *conn)
 /* Dump schema. */
 {
-char *track = cartString(cart, hgtaTrack);
-htmlOpen("Local Schema for %s", track);
+htmlOpen("Local Schema for %s", track->shortLabel);
 uglyf("Not much here yet");
 htmlClose();
 }
@@ -631,10 +717,14 @@ void doTopSubmit(struct sqlConnection *conn)
  * This basically just dispatches based on output type. */
 {
 char *output = cartString(cart, hgtaOutputType);
+char *trackName = cartString(cart, hgtaTrack);
+struct trackDb *track = findTrack(trackName, fullTrackList);
+if (track == NULL)
+    errAbort("track %s doesn't exist in %s", trackName, database);
 if (sameString(output, outPrimaryTable))
-    doOutPrimaryTable(conn);
+    doOutPrimaryTable(track, conn);
 else if (sameString(output, outSchema))
-    doOutSchema(conn);
+    doOutSchema(track, conn);
 else
     errAbort("Don't know how to handle %s output yet", output);
 }
