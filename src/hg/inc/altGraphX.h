@@ -140,5 +140,13 @@ bool **altGraphXCreateEdgeMatrix(struct altGraphX *ag);
 void altGraphXFreeEdgeMatrix(bool ***pEm, int vertCount);
 /* Free an edge matrix. */
 
+float altGraphConfidenceForEdge(struct altGraphX *ag, int eIx, float prior);
+/* Return the score for this cassette exon. Want to have cassette exons
+that are present in multiple transcripts and that are not present in multiple
+exons. We want to see both forms of the cassette exon, we don't want to have
+one outlier be chosen. Thus we count the times that the exon is seen, we
+count the times that the exon isn't seen and we calculate a final score by:
+(seen + notseen + prior)/(abs(seen - notSeen+prior) + 1) . Thus larger scores are better. */
+
 #endif /* ALTGRAPHX_H */
 
