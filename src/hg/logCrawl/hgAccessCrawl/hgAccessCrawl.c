@@ -6,7 +6,7 @@
 #include "obscure.h"
 #include "cheapcgi.h"
 
-static char const rcsid[] = "$Id: hgAccessCrawl.c,v 1.6 2004/01/13 04:45:42 kent Exp $";
+static char const rcsid[] = "$Id: hgAccessCrawl.c,v 1.7 2004/02/02 23:53:01 kent Exp $";
 
 int verbose = 0;
 FILE *errLog = NULL;
@@ -548,7 +548,9 @@ for (i=0; i<logCount; ++i)
 		    struct nameCount *gEl;
 		    ++hgcTotal;
 		    if (isRobot(ll->ip, ll->program))
+			{
 			gRobot->count += 1;
+			}
 		    else if (cv == NULL)
 		        {
 		        gNone->count += 1;
