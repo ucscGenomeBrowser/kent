@@ -137,7 +137,7 @@
 #include "vntr.h"
 #include "zdobnovSynt.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.622 2004/05/03 19:18:30 sugnet Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.623 2004/05/03 19:39:01 sugnet Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -13138,14 +13138,14 @@ printPosOnChrom(ag->tName, ag->tStart, ag->tEnd, ag->strand, FALSE, NULL);
 /* Print a display of the Graph. */
 printf("<b>Plots of Alt-Splicing:</b>");
 printf("<center>\n");
-if(sameString(tdb->tableName, "altGraphXCon")) 
+if(sameString(tdb->tableName, "altGraphXPsb2004")) 
     printf("Common Splicing<br>");
 printf("Alt-Splicing drawn to scale.<br>");
 image = altGraphXMakeImage(tdb,ag);
 freez(&image);
 /* Normally just print graph with exons scaled up. For conserved
    track also display orthologous loci. */
-if(differentString(tdb->tableName, "altGraphXCon"))
+if(differentString(tdb->tableName, "altGraphXPsb2004"))
     {
     struct altGraphX *copy = altGraphXClone(ag);
     altGraphXEnlargeExons(copy);
