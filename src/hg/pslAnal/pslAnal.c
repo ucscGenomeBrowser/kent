@@ -480,6 +480,10 @@ struct dnaSeq *getDna(struct psl *psl, int gstart, int gend, int *start, int *en
 struct dnaSeq *ret;
 int gs, ge, off, i;
 
+/* Reverse complement xeno alignments if done on target - strand */
+if (psl->strand[1] == '-')
+    pslRcBoth(psl);
+
 /* Look in all blocks for the indel */
 for (i = 0; i < psl->blockCount; i++) 
     {
@@ -507,14 +511,19 @@ for (i = 0; i < psl->blockCount; i++)
 /*printf("Extracting %s:%d-%d of %d-%d\n",psl->tName, gstart, gend, gstart, gend);*/ 
 ret = hDnaFromSeq(psl->tName, gstart, gend, dnaLower);
 /* If opposite strand alignment, reverse the start and end positions in the mRNA */
-  if (psl->strand[0] == '-') 
+if (((psl->strand[0] == '-')  && (psl->strand[1] != '-')) 
+     || ((psl->strand[0] == '+') && (psl->strand[1] == '-')))
     {
-      int tmp = *start;
-      *start = psl->qSize - *end;
-      *end = psl->qSize - tmp;
-      reverseComplement(ret->dna, ret->size);
+    int tmp = *start;
+    *start = psl->qSize - *end;
+    *end = psl->qSize - tmp;
+    reverseComplement(ret->dna, ret->size);
+    sprintf(strand, "-");
     }
-strcpy(strand, psl->strand); 
+else
+    sprintf(strand, "+");
+   
+/*strcpy(strand, psl->strand); */
 return(ret);
 }
 
@@ -703,7 +712,7 @@ else
 
 /* Find all sequences that span this region */
 if (type == INDEL)
-    sr = hRangeQuery(conn, table, ni->chrom, ni->chromStart-2, ni->chromEnd+2, NULL, &offset);
+    sr = hRangeQuery(conn, table, ni->chrom, ni->chromStart-2, ni->chromEnd+1, NULL, &offset);
 else 
     sr = hRangeQuery(conn, table, ni->chrom, ni->chromStart-1, ni->chromEnd, NULL, &offset);
 while ((row = sqlNextRow(sr)) != NULL) 
