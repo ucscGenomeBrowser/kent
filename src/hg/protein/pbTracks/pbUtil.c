@@ -538,19 +538,19 @@ if (sqlTableExists(conn, "cgapBiocPathway"))
 	    {
 	    if (!hasPathway)
 	        {
-	        printf("<B>Pathways</B><UL>");
+	        hPrintf("<B>Pathways</B><UL>");
 	        hasPathway = TRUE;
 	    	}
 	    }
     	while (row != NULL)
 	    {
 	    biocMapID = row[0];
-	    printf("<LI><B>BioCarta:&nbsp</B>");
+	    hPrintf("<LI><B>BioCarta:&nbsp</B>");
 	    sprintf(cond_str, "mapID=%c%s%c", '\'', biocMapID, '\'');
 	    mapDescription = sqlGetField(conn2, database, "cgapBiocDesc", "description",cond_str);
-	    printf("<A HREF = \"");
-	    printf("http://cgap.nci.nih.gov/Pathways/BioCarta/%s", biocMapID);
-	    printf("\" TARGET=_blank>%s</A> %s </LI>\n", biocMapID, mapDescription);
+	    hPrintf("<A HREF = \"");
+	    hPrintf("http://cgap.nci.nih.gov/Pathways/BioCarta/%s", biocMapID);
+	    hPrintf("\" TARGET=_blank>%s</A> %s </LI>\n", biocMapID, mapDescription);
 	    row = sqlNextRow(sr);
 	    }
         sqlFreeResult(&sr);
@@ -567,19 +567,19 @@ if (sqlTableExists(conn, "keggPathway"))
 	{
 	if (!hasPathway)
 	    {
-	    printf("<B>Pathways</B><UL>");
+	    hPrintf("<B>Pathways</B><UL>");
 	    hasPathway = TRUE;
 	    }
         while (row != NULL)
             {
             locusID = row[1];
 	    mapID   = row[2];
-	    printf("<LI><B>KEGG:&nbsp</B>");
+	    hPrintf("<LI><B>KEGG:&nbsp</B>");
 	    sprintf(cond_str, "mapID=%c%s%c", '\'', mapID, '\'');
 	    mapDescription = sqlGetField(conn2, database, "keggMapDesc", "description", cond_str);
-	    printf("<A HREF = \"");
-	    printf("http://www.genome.ad.jp/dbget-bin/show_pathway?%s+%s", mapID, locusID);
-	    printf("\" TARGET=_blank>%s</A> %s </LI>\n",mapID, mapDescription);
+	    hPrintf("<A HREF = \"");
+	    hPrintf("http://www.genome.ad.jp/dbget-bin/show_pathway?%s+%s", mapID, locusID);
+	    hPrintf("\" TARGET=_blank>%s</A> %s </LI>\n",mapID, mapDescription);
             row = sqlNextRow(sr);
 	    }
 	}
@@ -596,20 +596,21 @@ if (sqlTableExists(conn, "bioCycPathway"))
 	{
 	if (!hasPathway)
 	    {
-	    printf("<BR><B>Pathways</B><UL>");
+	    hPrintf("<BR><B>Pathways</B><UL>");
 	    hasPathway = TRUE;
 	    }
         while (row != NULL)
             {
             geneID  = row[1];
 	    mapID   = row[2];
-	    printf("<LI><B>BioCyc:&nbsp</B>");
+	    hPrintf("<LI><B>BioCyc:&nbsp</B>");
 	    sprintf(cond_str, "mapID=%c%s%c", '\'', mapID, '\'');
 	    mapDescription = sqlGetField(conn2, database, "bioCycMapDesc", "description", cond_str);
-	    printf("<A HREF = \"");
-	    printf("http://biocyc.org:1555/HUMAN/new-image?type=PATHWAY&object=%s&detail-level=2",
+	    hPrintf("<A HREF = \"");
+
+	    hPrintf("http://biocyc.org:1555/HUMAN/new-image?type=PATHWAY&object=%s&detail-level=2",
 		   mapID);
-	    printf("\" TARGET=_blank>%s</A> %s </LI>\n",mapID, mapDescription);
+	    hPrintf("\" TARGET=_blank>%s</A> %s </LI>\n",mapID, mapDescription);
             row = sqlNextRow(sr);
 	    }
 	}
@@ -618,7 +619,7 @@ if (sqlTableExists(conn, "bioCycPathway"))
 
 if (hasPathway)
     {
-    printf("</UL>\n");
+    hPrintf("</UL>\n");
     }
 
 hFreeConn(&conn);
