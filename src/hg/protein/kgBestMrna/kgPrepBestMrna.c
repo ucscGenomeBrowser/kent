@@ -217,7 +217,7 @@ while (fgets(line, 1000, IN) != NULL)
     snprintf(outName, (size_t) sizeof(outName),"./%s/b%05d.out",
 	outDir, proteinCount);
     snprintf(blatCmd, (size_t) sizeof(blatCmd),
-    "blat {check in exists %s/%s} {check in exists %s/%s} (check out line+ %s} -out=blast -t=dnax -q=prot", \
+    "blat {check in exists %s/%s} {check in exists %s/%s} {check out line %s} -out=blast -t=dnax -q=prot", \
 	clusterDir, mrnaFile, clusterDir, protName, outName);
     fprintf(stderr, "%s\n", blatCmd);
     
