@@ -8,5 +8,5 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = mafFindZero.o
 
 mafFindZero: $O $(MYLIBS)
-	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/mafFindZero $O $(MYLIBS) $L
-	strip $(HOME)/bin/$(MACHTYPE)/mafFindZero
+	gcc -ggdb -o mafFindZero $O $(MYLIBS) $L
+	strip mafFindZero
