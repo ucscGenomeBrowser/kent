@@ -4553,7 +4553,14 @@ hgsql --skip-column-names -e "select mrnaAcc,locusLinkId from refLink" mm4 \
         > refToLl.txt
 hgMapToGene mm4 refGene knownGene knownToLocusLink -lookup=refToLl.txt
 #       row count is 30313
- 
+
+# Create table that maps between known genes and Pfam domains
+hgMapViaSwissProt mm4 knownGene name proteinID Pfam knownToPfam
+
+# Create table to map between known genes and GNF Atlas2
+# expression data.
+    hgMapToGene mm4 gnfAtlas2 knownGene knownToGnfAtlas2 '-type=bed 12'
+
 ######## PROTEOME BROWSER BUILD #######  (REBUILT - 2004-04-19 - Fan)
 # These are instructions for building or rebuilding tables 
 # needed for the Proteome Browser.  
