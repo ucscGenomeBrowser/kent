@@ -39,6 +39,7 @@ blatSuite: topLibs
 	cd utils/twoBitToFa && ${MAKE}
 	cd utils/twoBitInfo && ${MAKE}
 	cd isPcr && ${MAKE}
+	cd blatz && ${MAKE}
 
 clean:
 	cd lib && ${MAKE} clean 
