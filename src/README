@@ -30,7 +30,12 @@ GENERAL INSTALL INSTRUCTIONS
    system MACHTYPE will probably be 'i386', for
    and Alpha it will be 'alpha', for a Sun
    probably 'sparc'.  If necessary set up
-   this environment variable.
+   this environment variable.  Do this under the
+   bash shell as so:
+       MACHTYPE=something
+       export MACHTYPE
+   or under tcsh as so:
+       setenv MACHTYPE something
 3. Make the directory ~/bin/$MACHTYPE which is
    where the (non-web) executables will go.
    Add this directory to your path.
