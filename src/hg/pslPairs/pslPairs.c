@@ -51,8 +51,6 @@ int HARDMAX;
 
 FILE *of, *orf, *sf, *mf, *esf, *elf;
 
-struct sqlConnection *conn;
-
 struct cloneName
 {
   char name[32];
@@ -65,7 +63,6 @@ struct pslAli
   float id;
   float cov;
   struct psl *psl;
-  int gapDist;
 };
 
 struct pslPair
@@ -159,7 +156,6 @@ struct pslAli *createPslAli(struct psl *psl)
   pa->score = pslScore(psl);
   pa->id = (float)(psl->match + psl->repMatch + psl->nCount)/(psl->match + psl->misMatch + psl->repMatch + psl->nCount);
   pa->cov = (float)(psl->match + psl->misMatch + psl->repMatch + psl->nCount)/psl->qSize;
-  pa->gapDist = 0;
   return(pa);
 }
 
@@ -281,37 +277,6 @@ void readPslFile(struct lineFile *pf)
    }
 }
 
-int calcDistGap(struct psl *psl)
-{
-  struct sqlResult *sr;
-  char **row, query[128];
-  int max = 50000;
-  int end = 0, ret = -1;
-
-  if (strlen(psl->tName) > 7)
-    return(-1);
-
-  if (psl->strand[0] == '+')
-    {
-      end = psl->tEnd + max;
-      sprintf(query, "Select chromStart from %s_gap where chromStart > %d And chromStart < %d", psl->tName, psl->tEnd, end);
-    }
-  else 
-    {
-      end = psl->tStart - max;
-      sprintf(query, "Select chromEnd from %s_gap where chromEnd > %d And chromEnd < %d", psl->tName, end, psl->tStart);
-    }
-  sr = sqlGetResult(conn, query);
-  if ((row=sqlNextRow(sr)) != NULL)
-    if (psl->strand[0] == '+')
-      ret = atoi(row[0]) - psl->tEnd;
-    else
-      ret = psl->tStart - atoi(row[0]);
-
-  sqlFreeResult(&sr);
-  return (ret);
-}
-
 void pslPairs()
 {
   struct clone *clone;
@@ -354,10 +319,6 @@ void pslPairs()
       if (!(clone->pairs) && !(clone->pairsRandom) && !(clone->pairsSlop) 
 	  && !(clone->pairsExtremeS) && !(clone->pairsExtremeL) && !(clone->pairsMM))
 	{
-	  for (e1 = clone->end1; e1 != NULL; e1 = e1->next)
-	    e1->gapDist = calcDistGap(e1->psl);
-	  for (e2 = clone->end2; e2 != NULL; e2 = e2->next)
-	    e2->gapDist = calcDistGap(e2->psl);
 	  clone->orphan = TRUE;
 	}
     }
@@ -514,8 +475,6 @@ int main(int argc, char *argv[])
     }
   if (ORPHAN)
     {
-      hSetDb("hg16");
-      conn = hAllocConn();
       sprintf(filename, "%s.orphan", argv[3]);
       orf = mustOpen(filename, "w");
     }
