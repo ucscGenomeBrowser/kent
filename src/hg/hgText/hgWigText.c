@@ -499,9 +499,6 @@ if (doCt)
     cartSetBoolean(cart, "tbDoCustomTrack", TRUE);
     cgiMakeButton("phase", getCtWiggleTrackPhase);
     cgiMakeButton("phase", getCtWiggleFilePhase);
-    puts("<P>NOTE: Only BED format tracks are produced at this time.<BR>\n"
-	"This type of data custom track is under development.<BR>\n"
-	"Expected to be fully operational early May 2004<BR>\n");
     }
 else
     {
