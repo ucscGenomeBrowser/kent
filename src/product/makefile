@@ -42,6 +42,15 @@ README.mysql.setup.txt: README.mysql.setup INST_DIR
 	@unix2dos -n README.mysql.setup ${install_dir}/$@
 	@chmod 644 ${install_dir}/$@
 
+#
+#	To make this function with the anonymous CVS server,
+#	set CVSROOT in your environment:
+#	CVSROOT=:pserver:anonymous@genome-test.cse.ucsc.edu:/cbse
+#	and perform a 'cvs login' command and enter the password
+#	of: genome
+#	to that login.  This cvs checkout will then access the
+#	anonymous CVS server.
+#
 source_tar:	INST_DIR
 	if [ ! -d "${install_dir}/source_tree_clean" ]; then \
 		${MKDIR} "${install_dir}/source_tree_clean"; \
@@ -56,7 +65,7 @@ source_tar:	INST_DIR
 	rm -fr ${install_dir}/source_tree_clean
 	touch source_tar
 
-source_built: source_tar
+source_built:	INST_DIR source_tar
 	if [ -d "${install_dir}/source_tree_built" ]; then \
 		rm -fr "${install_dir}/source_tree_built"; \
 	fi
@@ -70,7 +79,7 @@ source_built: source_tar
 		${MAKE} install DESTDIR=$$DD CGI_BIN=/built_CGI-BIN)
 	touch source_built
 
-example: ex.hgcentral.sql ex.hg.conf ex.MySQLUserPerms.sh \
+example:	INST_DIR ex.hgcentral.sql ex.hg.conf ex.MySQLUserPerms.sh \
 	ex.InstallExample ex.CleanTrash.sh ex.cvsup.pl
 	@if [ ! -d ${install_dir}/example ]; then \
 		${MKDIR} "${install_dir}/example"; \
@@ -89,50 +98,38 @@ example: ex.hgcentral.sql ex.hg.conf ex.MySQLUserPerms.sh \
 	chmod 755 "${install_dir}/example/InstallExample.sh"
 	touch example
 
-gbdb:
+gbdb:	INST_DIR
 	@if [ ! -d ${install_dir}/gbdb ]; then \
 		${MKDIR} "${install_dir}/gbdb"; \
-		${MKDIR} "${install_dir}/gbdb/hgFixed"; \
+		${MKDIR} "${install_dir}/gbdb/cb1"; \
 	fi
-	cp -pLR /gbdb/cb1 "${install_dir}/gbdb"
-	rm -fr "${install_dir}/gbdb/cb1/wib"
-	cp -pLR /gbdb/hgFixed/dbSnpRS.txt.gz "${install_dir}/gbdb/hgFixed"
+	rsync -avzP \
+		rsync://hgdownload.cse.ucsc.edu/gbdb/cb1/ \
+		"${install_dir}/gbdb/"
 	touch gbdb
 
-goldenPath:
+goldenPath:	INST_DIR
 	@if [ ! -d ${install_dir}/goldenPath ]; then \
 		${MKDIR} "${install_dir}/goldenPath"; \
 		${MKDIR} "${install_dir}/goldenPath/cbJul2002"; \
+		${MKDIR} "${install_dir}/goldenPath/cbJul2002/database"; \
 		${MKDIR} "${install_dir}/goldenPath/hgFixed"; \
 	fi
-	cp -pLR /usr/local/apache/htdocs/goldenPath/cbJul2002 \
-		"${install_dir}/goldenPath/"
-	cp -pLR /usr/local/apache/htdocs/goldenPath/hgFixed \
-		"${install_dir}/goldenPath/"
-	rm -f "${install_dir}/goldenPath/cbJul2002/sanger/cb25.agp8.reads.placed.gz"
-	rm -f "${install_dir}/goldenPath/cbJul2002/sanger/cb25.agp8.supercontigs.fasta.gz"
-	rm -f "${install_dir}/goldenPath/cbJul2002/sanger/cb25.agp8.supercontigs.fasta.qual.gz"
-	rm -fr "${install_dir}/goldenPath/cbJul2002/chromosomes"
-	rm -fr "${install_dir}/goldenPath/cbJul2002/extFile"
-	rm -fr "${install_dir}/goldenPath/cbJul2002/database/trackDb_*"
-	cp -p /cluster/data/cb1/sanger/README "${install_dir}/goldenPath/cbJul2002/sanger/"
+	rsync -avzP \
+		rsync://hgdownload.cse.ucsc.edu/goldenPath/cbJul2002/database/ \
+		"${install_dir}/goldenPath/cbJul2002/database/"
+	rsync -avzP \
+		rsync://hgdownload.cse.ucsc.edu/goldenPath/hgFixed/kimWormLife* \
+		"${install_dir}/goldenPath/hgFixed/"
 	touch goldenPath
 
-webroot:
-	@for dirs in admin goldenPath/customTracks goldenPath/help \
-	icons images style; do \
-		echo "webrootHTML/$$dirs"; \
-		if [ ! -d ${install_dir}/webrootHTML/$$dirs ]; then \
-		${MKDIR} "${install_dir}/webrootHTML/$$dirs"; \
-		fi \
-	done
-	@for f in `cat webroot.filelist`; do \
-		echo "$$f"; \
-		cp -p "/usr/local/apache/htdocs/$$f" "${install_dir}/webrootHTML/$$f"; \
-	done
-	@cp -p "/usr/local/apache/icons/back.gif" "${install_dir}/webrootHTML/icons/back.gif"
-	@cp -p "/usr/local/apache/icons/blank.gif" "${install_dir}/webrootHTML/icons/blank.gif"
-	@cp -p "/usr/local/apache/icons/folder.gif" "${install_dir}/webrootHTML/icons/folder.gif"
+webroot:	INST_DIR
+	if [ ! -d ${install_dir}/webrootHTML ]; then \
+		${MKDIR} "${install_dir}/webrootHTML"; \
+		fi;
+	rsync -avzP --exclude="CVS" \
+		rsync://hgdownload.cse.ucsc.edu/htdocs/ \
+		"${install_dir}/webrootHTML/"
 	touch webroot
 
 clean:
