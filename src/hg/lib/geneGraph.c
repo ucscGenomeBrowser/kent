@@ -52,8 +52,11 @@ if ((gg = *pGg) != NULL)
     for (i=0; i<vcount; ++i)
 	{
 	freeMem(em[i]);
-	for(j=0; j<vcount; ++j)
-	    ggEvidenceFreeList(&gg->evidence[i][j]);
+	if(gg->evidence != NULL)
+	    {
+	    for(j=0; j<vcount; ++j)
+		ggEvidenceFreeList(&gg->evidence[i][j]);
+	    }
 	}
     freez(&gg->evidence);
     freeMem(em);
@@ -694,4 +697,15 @@ for(i=0; i<vCount; i++)
 	}
     }
 return edgeList;
+}
+
+struct ggEdge *ggCreateEdge(int v1, int v2, int type)
+/* create and return and graph edge, free with freez(). */
+{
+struct ggEdge *edge;
+AllocVar(edge);
+edge->vertex1 = v1;
+edge->vertex2 = v2;
+edge->type = type;
+return edge;
 }

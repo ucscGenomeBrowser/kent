@@ -197,5 +197,8 @@ void ggFillInTissuesAndLibraries(struct geneGraph *gg, struct sqlConnection *sc)
 struct ggEdge *ggFindCassetteExons(struct geneGraph *gg);
 /* return a list of edges that appear to be cassette exons */
 
+struct ggEdge *ggCreateEdge(int v1, int v2, int type);
+/* create and return and graph edge, free with freez(). */
+
 #endif /* GENEGRAPH_H */
 
