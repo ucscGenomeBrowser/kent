@@ -93,7 +93,6 @@ while (lineFileRow(lf, row))
     struct paraMessage pm;
     struct rudp *ru = rudpMustOpen();
 
-    ru->maxRetries = 6;
     pmInitFromName(&pm, name, paraNodePort);
     if (longFormat)
 	{
