@@ -8241,6 +8241,10 @@ CREATE TABLE mitopred (
     cd var_multiz_source
     make
 
+    # NOTE (8/14): this version of the source is already out of date!
+    # Source is now checked in under hg3rdParty and updated binaries
+    # are being kept under /cluster/bin/penn/var_multiz
+
     # script for creating the 5-way alignments for a given chromosome
     cat << '_EOF_' > doVarMultiz.csh
 #!/bin/csh -fe
@@ -8254,6 +8258,7 @@ set CHICKEN = /cluster/data/hg17/bed/blastz.galGal2/mafNet/$chr.hg.maf
 set FISH = /cluster/data/hg17/bed/blastz.fr1/mafNet/$chr.maf
 set DEST = /cluster/data/hg17/bed/var_multiz.2004-08-12/maf/$chr.maf
 
+# FIXME: now use versions in /cluster/bin/penn/var_multiz instead
 set VMZ = /cluster/data/hg17/bed/var_multiz.2004-08-12/var_multiz_source/var_multiz
 set PROJECT = /cluster/data/hg17/bed/var_multiz.2004-08-12/var_multiz_source/maf_project
 
