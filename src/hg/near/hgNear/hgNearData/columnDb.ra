@@ -93,8 +93,8 @@ queryOne select name,name from esRegGeneToMotif where gene = '%s'
 invQueryOne select gene from esRegGeneToMotif where name = '%s'
 
 name bitScore
-shortLabel Bits
-longLabel NCBI Blastp Bit Score
+shortLabel BLASTP<BR>Bits
+longLabel NCBI BLASTP Bit Score
 priority 4
 visibility off
 type distance knownBlastTab query target bitScore
@@ -103,8 +103,8 @@ urlOtherGeneVar near.do.affineAli
 hgsid on
 
 name eVal
-shortLabel E-Value
-longLabel NCBI Blastp E-Value
+shortLabel BLASTP<BR>E-Value
+longLabel NCBI BLASTP E-Value
 priority 5
 visibility on
 type distance knownBlastTab query target eValue
@@ -114,7 +114,7 @@ hgsid on
 
 name percentId
 shortLabel %ID
-longLabel NCBI Blastp Percent Identity
+longLabel NCBI BLASTP Percent Identity
 priority 6
 visibility off
 type distance knownBlastTab query target identity
@@ -123,8 +123,8 @@ urlOtherGeneVar near.do.affineAli
 hgsid on
 
 name rankProp
-shortLabel Rankprop
-longLabel Rankprop Score
+shortLabel Rankprop<BR>Score
+longLabel Rankprop Homology Score
 priority 6.2
 visibility on
 type distance rankProp qKgId tKgId score
@@ -133,7 +133,7 @@ urlOtherGeneVar near.do.affineAli
 hgsid on
 
 name spPsiBlast
-shortLabel PSI-BLAST
+shortLabel PSI-BLAST<BR>E-Value
 longLabel PSI-BLAST E-Value
 priority 6.3
 visibility off
