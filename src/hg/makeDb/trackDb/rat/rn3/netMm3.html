@@ -17,6 +17,17 @@ as a whole, while clicking on a line brings up information
 on the gap.  The detailed information is useful in determining
 the cause of the gap or, for lower level chains, the genomic
 rearrangement. </BR> 
+<P> 
+Individual items in the display are categorized as one of four types
+(other than gap):</P>
+<P><UL>
+<LI><B>Top</B> -  the best, longest match. Displayed on level 1.
+<LI><B>Syn</B> - lineups on the same chromosome as the gap in the level
+    above it.
+<LI><B>Inv</B> -   a lineup on the same chromosome as the gap above it, but in the
+    opposite orientation.
+<LI><B>NonSyn</B> - a match to a chromosome different than the gap in the level above.
+</UL></P>
 
 <H2>Methods</H2>
 First, chains are derived from blastz alignments as
