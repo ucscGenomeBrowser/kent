@@ -197,6 +197,9 @@ done >> seq_contig.md
     # Distribute contig .fa to appropriate directory (assumes all files
     # are in "contigs" directory).
 
+    # Create inserts file from agp and lift files (new - added by Terry, 2004-07-12)
+    /cluster/bin/scripts/createInserts /cluster/data/hg17 > /cluster/data/hg17/inserts
+
     # create global data link for everyone.  No more home directory
     # links required.
     ln -s /cluster/store5/gs.18/build35 /cluster/data/hg17
@@ -2323,7 +2326,7 @@ cat > template << 'EOF'
     hgLoadPsl -nobin -table=all_sts_primer hg17 primers/primers.psl
     hgLoadPsl -nobin -table=all_sts_seq hg17 run/stsMarkers.lifted.psl
     
-# RECOMBINATION RATES
+# RECOMBINATION RATES (2004-07-13 Terry)
 
 # The STS MArkers track must be completed prior to creating this track
 
@@ -2380,7 +2383,7 @@ cat > template << 'EOF'
 	    hg17 recombRate recombRate.bed
 	   
 
-# FISH CLONES
+# FISH CLONES (2004-07-13 Terry)
 
 # The STS Marker, Coverage, and BAC End Pairs tracks must be completed prior to 
 # creating this track
@@ -2439,6 +2442,39 @@ cat > template << 'EOF'
     hgLoadBed -noBin -tab -sqlTable=/cluster/home/kent/src/hg/lib/fishClones.sql \
 	hg17 fishClones fishClones.bed
 
+
+# CHROMOSOME BANDS TRACK (2004-07-13 Terry)
+
+# This must wait until the Fish Clones tracks is done
+    mkdir -p /cluster/data/hg17/bed/cytoband
+    cd /cluster/data/hg17/bed/cytoband
+
+# Copy in some necessary files (usually from previous version)
+    cp /projects/hg2/booch/psl/cytobands/pctSetBands.txt .
+    cp /projects/hg2/booch/psl/cytobands/ISCN800.txt .
+
+# Create some preliminary information files
+    /cluster/bin/scripts/createSetBands pctSetBands.txt \
+	/cluster/data/hg17/inserts /cluster/data/hg17  100 > setBands.txt
+    /cluster/bin/scripts/makeBands ISCN800.txt /cluster/data/hg17 > cytobands.pct.bed
+    /cluster/bin/scripts/makeBandRanges cytobands.pct.bed > cytobands.pct.ranges
+
+# Reformat fishClones file
+    /cluster/bin/scripts/createBanderMarkers \
+	/cluster/data/hg17/bed/fishClones/fishClones.bed > fishClones.txt
+
+# Create bed file
+    /cluster/bin/scripts/runBander fishClones.txt \
+	ISCN800.txt setBands.txt /cluster/data/hg17
+
+    # Should be 862 bands
+    wc cytobands.bed
+    # 862    4310   30748 cytobands.bed
+
+# Load track
+    hgLoadBed -noBin -tab -sqlTable=/cluster/home/kent/src/hg/lib/cytoBand.sql \
+	hg17 cytoBand cytobands.bed
+	    
 
 # LOAD AFFYRATIO (WORKING - 2004-06-09 - Hiram)
 #	Copied from Hg16 doc
