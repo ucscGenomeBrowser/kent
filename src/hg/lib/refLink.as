@@ -1,4 +1,4 @@
-table refSeqMrna
+table refLink
 "Link together a refseq mRNA and other stuff"
     (
     string name;        "Name displayed in UI"
@@ -8,4 +8,5 @@ table refSeqMrna
     uint geneId;	"pointer to geneName table"
     uint prodId;	"pointer to prodName table"
     uint locusLinkId;	"Locus Link ID"
+    uint omimId;	"OMIM ID"
     )

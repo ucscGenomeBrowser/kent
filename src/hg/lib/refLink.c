@@ -7,8 +7,8 @@
 #include "jksql.h"
 #include "refLink.h"
 
-void refSeqMrnaStaticLoad(char **row, struct refSeqMrna *ret)
-/* Load a row from refSeqMrna table into ret.  The contents of ret will
+void refLinkStaticLoad(char **row, struct refLink *ret)
+/* Load a row from refLink table into ret.  The contents of ret will
  * be replaced at the next call to this function. */
 {
 int sizeOne,i;
@@ -21,13 +21,14 @@ ret->protAcc = row[3];
 ret->geneId = sqlUnsigned(row[4]);
 ret->prodId = sqlUnsigned(row[5]);
 ret->locusLinkId = sqlUnsigned(row[6]);
+ret->omimId = sqlUnsigned(row[7]);
 }
 
-struct refSeqMrna *refSeqMrnaLoad(char **row)
-/* Load a refSeqMrna from row fetched with select * from refSeqMrna
- * from database.  Dispose of this with refSeqMrnaFree(). */
+struct refLink *refLinkLoad(char **row)
+/* Load a refLink from row fetched with select * from refLink
+ * from database.  Dispose of this with refLinkFree(). */
 {
-struct refSeqMrna *ret;
+struct refLink *ret;
 int sizeOne,i;
 char *s;
 
@@ -39,20 +40,21 @@ ret->protAcc = cloneString(row[3]);
 ret->geneId = sqlUnsigned(row[4]);
 ret->prodId = sqlUnsigned(row[5]);
 ret->locusLinkId = sqlUnsigned(row[6]);
+ret->omimId = sqlUnsigned(row[7]);
 return ret;
 }
 
-struct refSeqMrna *refSeqMrnaLoadAll(char *fileName) 
-/* Load all refSeqMrna from a tab-separated file.
- * Dispose of this with refSeqMrnaFreeList(). */
+struct refLink *refLinkLoadAll(char *fileName) 
+/* Load all refLink from a tab-separated file.
+ * Dispose of this with refLinkFreeList(). */
 {
-struct refSeqMrna *list = NULL, *el;
+struct refLink *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
 char *row[7];
 
 while (lineFileRow(lf, row))
     {
-    el = refSeqMrnaLoad(row);
+    el = refLinkLoad(row);
     slAddHead(&list, el);
     }
 lineFileClose(&lf);
@@ -60,10 +62,10 @@ slReverse(&list);
 return list;
 }
 
-struct refSeqMrna *refSeqMrnaCommaIn(char **pS, struct refSeqMrna *ret)
-/* Create a refSeqMrna out of a comma separated string. 
+struct refLink *refLinkCommaIn(char **pS, struct refLink *ret)
+/* Create a refLink out of a comma separated string. 
  * This will fill in ret if non-null, otherwise will
- * return a new refSeqMrna */
+ * return a new refLink */
 {
 char *s = *pS;
 int i;
@@ -77,15 +79,16 @@ ret->protAcc = sqlStringComma(&s);
 ret->geneId = sqlUnsignedComma(&s);
 ret->prodId = sqlUnsignedComma(&s);
 ret->locusLinkId = sqlUnsignedComma(&s);
+ret->omimId = sqlUnsignedComma(&s);
 *pS = s;
 return ret;
 }
 
-void refSeqMrnaFree(struct refSeqMrna **pEl)
-/* Free a single dynamically allocated refSeqMrna such as created
- * with refSeqMrnaLoad(). */
+void refLinkFree(struct refLink **pEl)
+/* Free a single dynamically allocated refLink such as created
+ * with refLinkLoad(). */
 {
-struct refSeqMrna *el;
+struct refLink *el;
 
 if ((el = *pEl) == NULL) return;
 freeMem(el->name);
@@ -95,21 +98,21 @@ freeMem(el->protAcc);
 freez(pEl);
 }
 
-void refSeqMrnaFreeList(struct refSeqMrna **pList)
-/* Free a list of dynamically allocated refSeqMrna's */
+void refLinkFreeList(struct refLink **pList)
+/* Free a list of dynamically allocated refLink's */
 {
-struct refSeqMrna *el, *next;
+struct refLink *el, *next;
 
 for (el = *pList; el != NULL; el = next)
     {
     next = el->next;
-    refSeqMrnaFree(&el);
+    refLinkFree(&el);
     }
 *pList = NULL;
 }
 
-void refSeqMrnaOutput(struct refSeqMrna *el, FILE *f, char sep, char lastSep) 
-/* Print out refSeqMrna.  Separate fields with sep. Follow last field with lastSep. */
+void refLinkOutput(struct refLink *el, FILE *f, char sep, char lastSep) 
+/* Print out refLink.  Separate fields with sep. Follow last field with lastSep. */
 {
 int i;
 if (sep == ',') fputc('"',f);
@@ -133,6 +136,8 @@ fputc(sep,f);
 fprintf(f, "%u", el->prodId, sep);
 fputc(sep,f);
 fprintf(f, "%u", el->locusLinkId, lastSep);
+fputc(sep,f);
+fprintf(f, "%u", el->omimId, lastSep);
 fputc(lastSep,f);
 }
 
