@@ -126,13 +126,15 @@ for (index=0; index < len; index++)
     abnormal = chkAnomaly(aaResFreqDouble[ia], avg[ia], stddev[ia]);
     if (abnormal > 0)
 	{
-	vgBox(g_vg, xx, yy-5, 1*pbScale, 5, MG_RED);
+	//vgBox(g_vg, xx, yy-5, 1*pbScale, 5, MG_RED);
+	vgBox(g_vg, xx, yy-5, 1*pbScale, 5, abnormalColor);
 	}
     else
 	{
 	if (abnormal < 0)
 	    {
-	    vgBox(g_vg, xx, yy, 1*pbScale, 5, MG_BLUE);
+	    //vgBox(g_vg, xx, yy, 1*pbScale, 5, MG_BLUE);
+	    vgBox(g_vg, xx, yy, 1*pbScale, 5, abnormalColor);
 	    }
 	}
     vgBox(g_vg, xx, yy, 1*pbScale, 1, MG_BLACK);
