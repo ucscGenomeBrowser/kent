@@ -40,6 +40,10 @@
 #include "dnautil.h"
 #endif
 
+#ifndef LOCALMEM_H
+#include "localmem.h"
+#endif
+
 #ifndef ALITYPE_H
 #include "aliType.h"
 #endif
@@ -216,6 +220,13 @@ int ffCmpHitsHayFirst(const void *va, const void *vb);
 int ffCmpHitsNeedleFirst(const void *va, const void *vb);
 /* Compare function to sort hit array by ascending
  * query offset followed by ascending target offset. */
+
+struct ffAli *ffAliFromSym(int symCount, char *nSym, char *hSym,
+	struct lm *lm, char *nStart, char *hStart);
+/* Convert symbol representation of alignments (letters plus '-')
+ * to ffAli representation.  If lm is nonNULL, ffAli result 
+ * will be lmAlloced, else it will be needMemed. This routine
+ * depends on nSym/hSym being zero terminated. */
 
 #endif /* FUZZYFIND_H */
 
