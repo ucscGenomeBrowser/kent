@@ -40,7 +40,7 @@
  * scanned for.
  */
 
-static char const rcsid[] = "$Id: fuzzyFind.c,v 1.13 2003/09/09 21:44:02 kent Exp $";
+static char const rcsid[] = "$Id: fuzzyFind.c,v 1.14 2003/10/21 22:06:34 kent Exp $";
 
 #include "common.h"
 #include "dnautil.h"
@@ -595,6 +595,14 @@ for (ali = aliList; ali != NULL; ali = ali->right)
 return aliList;
 }
 
+static int extendThroughN;  /* Can extend through blocks of N's? */
+
+void setFfExtendThroughN(boolean val)
+/* Set whether or not can extend through N's. */
+{
+extendThroughN = val;
+}
+
 boolean expandThroughNRight(struct ffAli *ali, DNA *needleStart, DNA *needleEnd,
     DNA *hayStart, DNA *hayEnd)
 /* Expand through up to three N's to the left. */
@@ -607,9 +615,11 @@ while (nEnd < needleEnd && hEnd < hayEnd)
     {
     n = *nEnd;
     h = *hEnd;
-    if ((n == h) ||
-	(n == 'n' && (nEnd + 3 >= needleEnd || nEnd[1] != 'n' || nEnd[2] != 'n' || nEnd[3] != 'n')) ||
-	(h == 'n' && (hEnd + 3 >= hayEnd || hEnd[1] != 'n' || hEnd[2] != 'n' || hEnd[3] != 'n')))
+    if ((n == h) || 
+    	(n == 'n' && 
+    	(extendThroughN || nEnd + 3 >= needleEnd || nEnd[1] != 'n' || nEnd[2] != 'n' || nEnd[3] != 'n')) ||
+	(h == 'n' && 
+	(extendThroughN || hEnd + 3 >= hayEnd || hEnd[1] != 'n' || hEnd[2] != 'n' || hEnd[3] != 'n')))
         {
         nEnd += 1;
         hEnd += 1;
@@ -636,8 +646,8 @@ while (nStart >= needleStart && hStart >= hayStart)
     n = *nStart;
     h = *hStart;
     if ((n == h) ||
-	(n == 'n' && (nStart - 3 < needleStart || nStart[-1] != 'n' || nStart[-2] != 'n' || nStart[-3] != 'n')) ||
-	(h == 'n' && (hStart - 3 < hayStart || hStart[-1] != 'n' || hStart[-2] != 'n' || hStart[-3] != 'n')))
+	(n == 'n' && (extendThroughN || nStart - 3 < needleStart || nStart[-1] != 'n' || nStart[-2] != 'n' || nStart[-3] != 'n')) ||
+	(h == 'n' && (extendThroughN || hStart - 3 < hayStart || hStart[-1] != 'n' || hStart[-2] != 'n' || hStart[-3] != 'n')))
         {
         nStart -= 1;
         hStart -= 1;

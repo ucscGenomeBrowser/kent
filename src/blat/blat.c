@@ -17,7 +17,7 @@
 #include "trans3.h"
 #include "repMask.h"
 
-static char const rcsid[] = "$Id: blat.c,v 1.84 2003/10/03 18:59:49 kent Exp $";
+static char const rcsid[] = "$Id: blat.c,v 1.85 2003/10/21 22:06:29 kent Exp $";
 
 /* Variables shared with other modules.  Set in this module, read only
  * elsewhere. */
@@ -58,7 +58,7 @@ void usage()
 /* Explain usage and exit. */
 {
 printf(
-  "blat - Standalone BLAT v. %d.x1 fast sequence search command line tool\n"
+  "blat - Standalone BLAT v. %d.x2 fast sequence search command line tool\n"
   "usage:\n"
   "   blat database query [-ooc=11.ooc] output.psl\n"
   "where:\n"
@@ -141,6 +141,7 @@ printf(
   "   -fine       For high quality mRNAs look harder for small initial and\n"
   "               terminal exons.  Not recommended for ESTs\n"
   "   -maxIntron=N  Sets maximum intron size. Default is %d\n"
+  "   -extendThroughN - Allows extension of alignment through large blocks of N's\n"
   , gfVersion, ffIntronMaxDefault
   );
 exit(-1);
@@ -909,6 +910,8 @@ dotEvery = optionInt("dots", 0);
 verbose = optionExists("verbose");
 /* set global for fuzzy find functions */
 setFfIntronMax(optionInt("maxIntron", ffIntronMaxDefault));
+setFfExtendThroughN(optionExists("extendThroughN"));
+
 
 /* Call routine that does the work. */
 blat(argv[1], argv[2], argv[3]);
