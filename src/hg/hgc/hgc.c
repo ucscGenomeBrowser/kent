@@ -126,7 +126,7 @@
 #include "hgFind.h"
 #include "botDelay.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.556 2004/01/31 02:56:29 kent Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.557 2004/02/01 21:39:09 kent Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -487,6 +487,7 @@ if (bedSize > 5)
    }
 printPos(bed->chrom, bed->chromStart, bed->chromEnd, strand, TRUE, bed->name);
 }
+
 
 void genericHeader(struct trackDb *tdb, char *item)
 /* Put up generic track info. */
@@ -13509,7 +13510,6 @@ void cartDoMiddle(struct cart *theCart)
 {
 initOrgDbHash();
 cart = theCart;
-hgBotDelay();
 doMiddle();
 }
 

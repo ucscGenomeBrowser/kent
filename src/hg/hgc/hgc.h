@@ -24,6 +24,7 @@ extern int winStart, winEnd;    /* Bounds of sequence. */
 extern char *database;		/* Name of mySQL database. */
 extern struct hash *trackHash;	/* A hash of all tracks - trackDb valued */
 
+
 void hgcStart(char *title);
 /* Print out header of web page with title.  Set
  * error handler to normal html error handler. */
