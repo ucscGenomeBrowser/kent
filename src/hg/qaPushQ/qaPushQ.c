@@ -29,7 +29,7 @@
 #include "dbDb.h"
 #include "htmlPage.h"
 
-static char const rcsid[] = "$Id: qaPushQ.c,v 1.54 2004/06/22 22:37:15 galt Exp $";
+static char const rcsid[] = "$Id: qaPushQ.c,v 1.55 2004/07/21 18:22:24 galt Exp $";
 
 char msg[2048] = "";
 char ** saveEnv;
@@ -3234,6 +3234,11 @@ org = cgiUsualString("org","");  /* get org, defaults to display of main push qu
 if (!sameString(org,""))
     {
     safef(pushQtbl,sizeof(pushQtbl),org);
+    }
+if (!sqlTableExists(conn, pushQtbl))  /* if pushQtbl no longer exists, switch to main "pushQ" and set action to "display" */
+    {
+    safef(pushQtbl,sizeof(pushQtbl),"pushQ");
+    action=cloneString("display");    /* do not need to free action because it just points to a cgi-var hash element */
     }
 
 newmonth = cgiUsualString("month","");  /* get month, if =current then resets to normal */
