@@ -5,9 +5,8 @@ L = -lm
 MYLIBDIR = $(HOME)/src/lib/$(MACHTYPE)
 MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 
-O = dsn.o
+O = das.o
 
-dsn: $O $(MYLIBS)
-	gcc -ggdb -o dsn $O $(MYLIBS) $L
-	strip dsn
-	mv dsn /usr/local/apache/cgi-bin/das
+das: $O $(MYLIBS)
+	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/das $O $(MYLIBS) $L
+	strip $(HOME)/bin/$(MACHTYPE)/das
