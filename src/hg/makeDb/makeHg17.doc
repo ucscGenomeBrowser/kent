@@ -9806,7 +9806,7 @@ line+ psl/$(root1)_$(root2).psl}
     rm j.tmp
 
     hgsql hg17 -e 'drop table kgSpAlias';
-    hgsql hg17 < ~/src/hg/lib/kgSpAlis.sql
+    hgsql hg17 < ~/src/hg/lib/kgSpAlias.sql
     hgsql hg17 -e 'load data local infile "hg17.kgSpAlias.tab" into table kgSpAlias'
 
 
@@ -10013,6 +10013,24 @@ hgsql kgHg17B -e 'load data local infile "chromInfo.tab" into table chromInfo ig
 
     delete from gdbPdb where genomeDb='hg17';
     insert into gdbPdb values('hg17', 'proteins041115');
+
+# UPDATE KGSPALIAS TABLE TO BE USED BY PB (Done 12/20/04)
+
+    cd /cluster/data/hg17/bed/pb
+    mkdir new
+    cd new
+    hgsql hg17 -e \
+    'select kgXref.kgID, spID, alias from kgXref, kgAlias where kgXref.kgID=kgAlias.kgID' >j.tmp
+    hgsql hg17 -e \
+    'select kgXref.kgID, spID, alias from kgXref, kgProtAlias where kgXref.kgID=kgProtAlias.kgID'\
+    >>j.tmp
+    cat j.tmp|sort -u |grep -v 'kgID' >hg17.kgSpAlias.tab
+    rm j.tmp
+
+    hgsql hg17 -e 'drop table kgSpAlias';
+    hgsql hg17 < ~/src/hg/lib/kgSpAlias.sql
+    hgsql hg17 -e 'load data local infile "hg17.kgSpAlias.tab" into table kgSpAlias'
+    gzip kgSpAlias.tab
 
 # Create hg17GeneList.html (to be used by Google).
 # This step was done 12/08/04.
