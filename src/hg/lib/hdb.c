@@ -24,7 +24,7 @@
 #include "scoredRef.h"
 #include "maf.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.109 2003/05/12 07:57:24 markd Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.110 2003/05/16 15:27:49 kent Exp $";
 
 #define DEFAULT_PROTEINS "proteins"
 #define DEFAULT_GENOME "Human"
@@ -430,7 +430,6 @@ int hChromSize(char *chromName)
 struct hashEl *hashEl;
 if ((hashEl = hashLookup(hdbChromInfoHash(),chromName))!= NULL)
     return ((struct chromInfoEntry *)hashEl->val)->size;
-
 errAbort("There is no chromosome %s in database %s.",chromName,hdbName);
 }
 
