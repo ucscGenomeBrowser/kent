@@ -18,7 +18,28 @@ errAbort(
 }
 
 struct hash *cloneHash, *fragHash;
+struct hash *contigHash, *chromHash;
 char *goldName;
+
+struct cloneLoc
+/* Location of a clone. */
+    {
+    struct cloneLoc *next;	/* Next in list. */
+    char *clone;		/* Clone name. */
+    char *contig;		/* Contig name. */
+    char *chrom;		/* Chromosome name. */
+    };
+
+struct cloneLoc *cloneLocNew(char *clone, char *contig, char *chrom)
+/* Make a new clone loc. */
+{
+struct cloneLoc *cl;
+AllocVar(cl);
+cl->clone = cloneString(clone);
+cl->contig = hashStoreName(contigHash, contig);
+cl->chrom = hashStoreName(chromHash, chrom);
+return cl;
+}
 
 int errCount = 0;
 
@@ -43,24 +64,29 @@ while ((wordCount = lineFileChop(lf, words)) != 0)
         {
 	char *frag = words[5];
 	char cloneName[256];
-	char *oldContig;
+	struct cloneLoc *cl;
 	strcpy(cloneName, frag);
 	chopSuffix(cloneName);
-	oldContig = hashFindVal(fragHash, frag);
-	if (oldContig != NULL)
+	cl = hashFindVal(fragHash, frag);
+	if (cl != NULL)
 	    {
-	    printf("%s duplicated in %s/%s and %s\n", frag, chrom, oldContig, contig);
+	    printf("%s duplicated in %s/%s and %s/%s\n", frag, cl->chrom, cl->contig, chrom, contig);
 	    ++errCount;
 	    }
 	else 
 	    {
-	    hashAdd(fragHash, frag, cloneString(contig));
-	    oldContig = hashFindVal(cloneHash, cloneName);
-	    if (oldContig != NULL && !sameString(contig, oldContig))
+	    cl = hashFindVal(cloneHash, cloneName);
+	    if (cl != NULL && !sameString(contig, cl->contig))
 	        {
-		printf("%s duplicated in %s/%s and %s\n", cloneName, chrom, oldContig, contig);
+		printf("%s duplicated in %s/%s and %s/%s\n", cloneName, cl->chrom, cl->contig, chrom, contig);
 		++errCount;
 		}
+	    if (cl == NULL)
+	        {
+		cl = cloneLocNew(cloneName, contig, chrom);
+		hashAdd(cloneHash, cloneName, cl);
+		}
+	    hashAdd(fragHash, frag, cl);
 	    }
 	}
     }
@@ -72,6 +98,8 @@ void checkGoldDupes(char *ooDir, char *goldFileName)
 {
 cloneHash = newHash(16);
 fragHash = newHash(18);
+contigHash = newHash(10);
+chromHash = newHash(5);
 goldName = goldFileName;
 ooToAllContigs(ooDir, doContig);
 if (errCount == 0)
