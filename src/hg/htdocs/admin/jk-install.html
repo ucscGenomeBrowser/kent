@@ -1,0 +1,53 @@
+<!doctype html public "-//w3c//dtd html 4.0 transitional//en">
+<html>
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+   <meta name="GENERATOR" content="Mozilla/4.72 [en] (X11; U; Linux 2.2.16-3 i686) [Netscape]">
+</head>
+<body background="floret.jpg">
+<i>This page is written with minor modification to <a href="http://www.cse.ucsc.edu/~kent/src/">Jim
+Kent's page</a></i>
+<h4>
+INSTALLING:</h4>
+1. Create a directory named "jksrc" and go to it.
+<p>2. Unzip jksrcXXX.zip, where XXX is the latest version, currently 411.
+<p>3. Check that the environment variable MACHTYPE exists on your system.&nbsp;
+It should on Unix.
+<br>&nbsp;&nbsp; (And making this on non-Unix systems is beyond the scope
+of this README).&nbsp; For a Linux
+<br>&nbsp;&nbsp; system MACHTYPE will probably be 'i386', for Alpha it
+will be 'alpha', for a Sun probably 'sparc'.
+<br>&nbsp;&nbsp; If necessary set up this environment variable.
+<p>4. Make the directory ~/bin/$MACHTYPE which is where the (non-web) executables
+will go.
+<br>&nbsp;&nbsp;&nbsp; Add this directory to your path.
+<p>5. Go to the jksrc/lib directory and type make.
+<br>&nbsp;&nbsp;&nbsp; On Alphas there will be some warning messages about
+"crudeAli.c" otherwise it should compile
+<br>&nbsp;&nbsp;&nbsp; cleanly under gcc.
+<p>6. If you need to make an application in the "hg" directory do the following:
+<p>&nbsp;&nbsp;&nbsp; a. If you have MySQL installed make the environment
+variable MYSQLINC point to where it's
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; include files are. (On my
+system they are at MYSQLDATA/include. Please refer to the
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a href="http://genome-test.cse.ucsc.edu/admin/mirror-beta.html">previous
+page</a> for the definition of MYSQLDATA.) While you're at it set the MYSQLLIBS
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; variable to point to "MYSQLDATA/lib/mysql/libmysqlclient.a&nbsp;
+/usr/lib/libz.a"
+<br>&nbsp;&nbsp;&nbsp; b. If you don't have mysql installed, edit the makefile
+to remove 'jksql.o' and -I$(MYSQLINC).
+<br>&nbsp;&nbsp;&nbsp; c.&nbsp; You may need to edit the makefile so that
+the executable files will be moved to WEBROOT/cgi-bin
+<br>&nbsp;&nbsp;&nbsp; d. Type make.&nbsp; It should compile with no warnings.
+<p>7. Go to the application you want to make and type make.
+<br>&nbsp;&nbsp;&nbsp; For Human Genome Browser, the most important directories
+that you need to compile are&nbsp; hg/lib,
+<br>&nbsp;&nbsp;&nbsp; hg/hgTracks, hg/hgc, and hg/hgBlat (in that order).
+<br>&nbsp;
+<p>
+<hr WIDTH="100%">
+<br><i>Should you have any comments, inquiries and questions, please contact
+<a href="mailto:genome-mirror@cse.ucsc.edu">genome-mirror@cse.ucsc.edu</a></i>
+<br><i>Last Modified: July 19, 2001</i>
+</body>
+</html>
