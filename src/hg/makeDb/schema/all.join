@@ -165,16 +165,34 @@ identifier gnfU74cMedianSampleId
      hgFixed.gnfMouseU74cMedianRatio.expScores comma indexOf
 
 identifier arbFlyLifeAllSampleId
-"Identifiers of RNA samples used in Arbeitman Fly Life Cycle experiments"
+"Identifiers of RNA samples used in Arbeitman fly life cycle experiments"
      hgFixed.arbFlyLifeAllExps.id
      hgFixed.arbFlyLifeAll.expScores comma indexOf
      hgFixed.arbFlyLifeAllRatio.expScores comma indexOf
      
 identifier arbFlyLifeMedianSampleId
-"Identifiers of pooled RNA samples used in Arbeitman Fly Life Cycle experiments"
+"Identifiers of pooled RNA samples used in Arbeitman fly life cycle experiments"
      hgFixed.arbFlyLifeMedianExps.id
      hgFixed.arbFlyLifeMedian.expScores comma indexOf
      hgFixed.arbFlyLifeMedianRatio.expScores comma indexOf
+
+identifier kimWormLifeAllSampleId
+"Identifiers of RNA samples used in Kim worm life cycle experiments"
+     hgFixed.kimWormLifeAllExps.id
+     hgFixed.kimWormLifeAll.expScores comma indexOf
+     hgFixed.kimWormLifeAllRatio.expScores comma indexOf
+
+identifier kimWormLifeMedianSampleId
+"Identifiers of pooled RNA samples used in Kim worm life cycle experiments"
+     hgFixed.kimWormLifeMedianExps.id
+     hgFixed.kimWormLifeMedian.expScores comma indexOf
+     hgFixed.kimWormLifeMedianRatio.expScores comma indexOf
+
+identifier yeastChoCellCycleSampleId
+"Identifiers of RNA samples used in Cho yeast cell cycle experiments"
+     hgFixed.yeastChoCellCycleExps.id
+     hgFixed.yeastChoCellCycle.expScores comma indexOf
+     hgFixed.yeastChoCellCycleRatio.expScores comma indexOf
 
 identifier chain${chainDb}Id
 "Link together chimp ${chainDb} chain info"
