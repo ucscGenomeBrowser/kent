@@ -16,7 +16,7 @@
 #include "hgSeq.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: seqOut.c,v 1.11 2004/09/25 05:09:02 kent Exp $";
+static char const rcsid[] = "$Id: seqOut.c,v 1.12 2004/11/08 18:28:28 kent Exp $";
 
 static char *genePredMenu[] = 
     {
@@ -151,7 +151,6 @@ void doGenePredNongenomic(struct sqlConnection *conn, int typeIx)
 /* Note this does do the whole genome at once rather than one
  * chromosome at a time, but that's ok because the gene prediction
  * tracks this serves are on the small side. */
-char *dupType = cloneString(curTrack->type);
 char *typeWords[3];
 char *table;
 struct lm *lm = lmInit(64*1024);
@@ -162,36 +161,7 @@ int typeWordCount;
 textOpen();
 
 /* Figure out which table to use. */
-typeWordCount = chopLine(dupType, typeWords);
-if (typeIx >= typeWordCount)
-    internalErr();
-table = typeWords[typeIx];
-if (sqlTableExists(conn, table))
-    {
-    struct sqlResult *sr;
-    char **row;
-    char query[256];
-    struct hash *hash = newHash(18);
-
-    /* Make hash of all id's passing filters. */
-    for (bed = bedList; bed != NULL; bed = bed->next)
-	hashAdd(hash, bed->name, NULL);
-
-    /* Scan through table, outputting ones that match. */
-    safef(query, sizeof(query), "select name, seq from %s", table);
-    sr = sqlGetResult(conn, query);
-    while ((row = sqlNextRow(sr)) != NULL)
-	{
-	if (hashLookup(hash, row[0]))
-	    {
-	    hPrintf(">%s\n", row[0]);
-	    writeSeqWithBreaks(stdout, row[1], strlen(row[1]), 60);
-	    }
-	}
-    sqlFreeResult(&sr);
-    hashFree(&hash);
-    }
-else if (isRefGeneTrack(curTable))
+if (isRefGeneTrack(curTable))
     {
     if (typeIx == 1) /* Protein */
         doRefGeneProteinSequence(conn, bedList);
@@ -200,9 +170,42 @@ else if (isRefGeneTrack(curTable))
     }
 else
     {
-    internalErr();
+    char *dupType = cloneString(curTrack->type);
+    typeWordCount = chopLine(dupType, typeWords);
+    if (typeIx >= typeWordCount)
+	internalErr();
+    table = typeWords[typeIx];
+    if (sqlTableExists(conn, table))
+	{
+	struct sqlResult *sr;
+	char **row;
+	char query[256];
+	struct hash *hash = newHash(18);
+
+	/* Make hash of all id's passing filters. */
+	for (bed = bedList; bed != NULL; bed = bed->next)
+	    hashAdd(hash, bed->name, NULL);
+
+	/* Scan through table, outputting ones that match. */
+	safef(query, sizeof(query), "select name, seq from %s", table);
+	sr = sqlGetResult(conn, query);
+	while ((row = sqlNextRow(sr)) != NULL)
+	    {
+	    if (hashLookup(hash, row[0]))
+		{
+		hPrintf(">%s\n", row[0]);
+		writeSeqWithBreaks(stdout, row[1], strlen(row[1]), 60);
+		}
+	    }
+	sqlFreeResult(&sr);
+	hashFree(&hash);
+	}
+    else
+	{
+	internalErr();
+	}
+    freez(&dupType);
     }
-freez(&dupType);
 lmCleanup(&lm);
 }
 
