@@ -6655,6 +6655,75 @@ axtChain -scoreScheme=/cluster/data/blastz/HoxD55.q \
     checkTableCoords mm5 tigrGeneIndex
     
     gzip *.gff *TCs
+<<<<<<< makeMm5.doc
+
+#### LOAD ENSEMBL GENES (DONE - 2004-12-17 Fan)
+#	needed for Gene Sorter procedure below
+#	Ensembl released Mouse build 33 the week of Dec 4 2004
+     mkdir /cluster/data/mm5/bed/ensembl
+     cd /cluster/data/mm5/bed/ensembl
+
+        Get the ensembl gene data from http://www.ensembl.org/
+        Go to the EnsMart link
+        Choose Mus musculus as the organism
+        Follow this sequence through the pages:
+        Page 1) Choose the Ensembl Genes choice. Hit next.
+        Page 2) Uncheck the "Limit to" box in the region choice. Then hit next.        
+        Page 3) Choose the "Structures" tab. 
+        Page 4) Choose GTF as the ouput, choose gzip compression , name the
+	output file ensGeneMm5.gtf.gz and then hit Export
+
+# Ensembl handles random chromosomes differently than us, so we
+# strip this data.  Fortunately it just loses a couple of genes.
+     zcat ensGene.gtf.gz | grep -v ^6_DR51 | grep -v _NT_ > unrandom.gtf
+#	Let's see how much it loses:
+#  	None.
+
+# Add "chr" to front of each line in the gene data gtf file to make 
+# it compatible with ldHgGene 
+    sed -e "s/^/chr/" unrandom.gtf > ensGene.gtf
+    ldHgGene mm5 ensGene ensGene.gtf
+# Read 31035 transcripts in 551352 lines in 1 files
+#   31035 groups 22 seqs 1 sources 4 feature types
+# 31035 gene predictions
+#	save space, gzip them:
+    gzip unrandom.gtf
+    gzip ensGene.gtf
+
+# Load Ensembl peptides:
+        Get the ensembl protein data from http://www.ensembl.org/
+        Go to the EnsMart link
+        Choose Mus musculus as the organism
+        Follow this sequence through the pages:
+        Page 1) Choose the Ensembl Genes choice. Hit next.
+        Page 2) Uncheck the "Limit to" box in the region choice. Then hit next.
+        Page 3) Choose the "Sequences" tab. 
+        Page 4) Choose Transcripts/Proteins and peptide Only as the output,
+		choose text/fasta and gzip compression,
+		name the file ensGeneMm5.pep.gz and then hit export.
+
+#delete * at end of each protein
+     bash
+     zcat ensGeneMm5.pep.gz | sed "s/\*$//" > ensembl.pep
+    ~matt/bin/fixPep.pl ensembl.pep fixPep_ensembl.pep
+     hgPepPred mm5 generic ensPep fixPep_ensembl.pep
+
+# Load ensGtp table.
+    # ensGtp associates geneId/transcriptId/proteinId for hgPepPred and 
+    # hgKnownToSuper.  Use ensMart to create it as above, except:
+    # Page 3) Choose the "Features" tab. In "Ensembl Attributes", check 
+    # Ensembl Gene ID, Ensembl Transcript ID, Ensembl Peptide ID.  
+    # Choose Text, tab-separated as the output format, gzip.
+    #  Result name file as ensGtpMm5.tab.gz
+    gunzip ensGtpMm5.tab.gz
+    hgsql mm5 < ~/kent/src/hg/lib/ensGtp.sql
+    hgsql -N -e 'load data local infile "ensGtpMm5.tab" into table ensGtp ignore 1 lines;' mm5
+
+# Create knownToEnsembl column
+    hgMapToGene mm5 ensGene knownGene knownToEnsembl
+# Compress everthing to save space
+    gzip *.tab
+    gzip *.pep
 
 # MAKE VSDANRER2 DOWNLOADABLES (DONE, 2004-12-14, hartera)
     ssh hgwdev
@@ -6681,4 +6750,3 @@ axtChain -scoreScheme=/cluster/data/blastz/HoxD55.q \
     nice rm axtChain/run1/chain/* &
     nice rm -fr axtChain/n1 axtChain/noClass.net &
     nice gzip axtChrom/* pslChrom/* axtChain/all.chain axtChain/all.chain.unfiltered axtChain/*.net &
-
