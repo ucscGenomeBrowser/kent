@@ -5,7 +5,7 @@
 #include "cheapcgi.h"
 #include "hdb.h"
 #include "jksql.h"
-#include "oldRefAlign.h"
+#include "refAlign.h"
 
 void usage()
 /* Explain usage and exit. */

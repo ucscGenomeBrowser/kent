@@ -5,7 +5,7 @@ L = -lm $(MYSQLLIBS)
 MYLIBDIR = $(HOME)/src/lib/$(MACHTYPE)
 MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 
-O = subsetRef.o oldRefAlign.o
+O = subsetRef.o
 
 subsetRef: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/subsetRef $O $(MYLIBS) $L
