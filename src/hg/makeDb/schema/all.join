@@ -1,5 +1,5 @@
-# So far have looked through hg16,mm4,rn3,ce1,dm1,sacCer1,
-# panTro1,galGal2 databases
+# So far have looked through hg13,hg15,hg16,mm4,mm3,rn3,ce1,dm1,sacCer1,
+# panTro1,galGal2,fr1,cb1 databases
 
 # Define databases used for various organisms
 set hg hg11,hg12,hg13,hg15,hg16
@@ -35,6 +35,10 @@ set familyDb $hg,$mm,$ce,$sacCer,$dm
 identifier goId external=GO
     $dm.bdgpInfo.go comma
     $dm.bdgpNonCodingInfo comma
+
+identifier acemblyName
+    $gbd.acembly.name
+    $gbd.acemblyPep.name
 
 identifier ECgeneName
 "Link together EC gene predicted gene structure and peptide"
@@ -114,6 +118,12 @@ identifier chainSelf
     $gbd.chainSelf.id
     $gbd.chainSelfLink.chainId
     $gbd.netSelf.chainId
+
+identifier mouseChainId
+"Link together chain/net on hg13,hg15 for mouse"
+    hg13,hg15.mouseChain.id
+    hg13,hg15.mouseChainLink.chainId
+    hg13,hg15.mouseNet.chainId
 
 identifier bacCloneName 
 "A Roswell Park, Cal Tech or other clone ID"
@@ -275,7 +285,7 @@ identifier $hg.osmidId
 
 identifier $hg.fosmidEndId
 "Identifier of read from one end of human formid."
-    $hg.all_fosend.qName
+    $hg.all_fosends.qName
     $hg.fosEndPairs.lfNames comma
 
 identifier dbStsId external=dbSts
@@ -315,6 +325,7 @@ identifier hugoName external=HUGO
     $hg.kgXref.geneSymbol
     $hg.refFlat.geneName
     $hg.refLink.name
+    $hg.jaxOrtholog.humanSymbol
 
 identifier genBankAuthor
 "Connects genBank mRNA/EST and it's author"
@@ -459,6 +470,15 @@ identifier superfamilyId external=Superfamily
     $gbd.sfAssign.sfID
     $gbd.sfDes.id
 
+identifier mouseGeneName
+"Mouse gene name from Jackson Labs/RefSeq"
+    $hg.jaxOrtholog.mouseSymbol
+    $mm.refLink.name
+
+identifier jaxMgiId
+"Jackson Labs Mouse Gene Identifier"
+    $hg.jaxOrtholog.mgiId
+
 identifier wormBaseIsoformCluster
 "Overlapping (after splicing) WormBase transcripts"
     $ce.sangerCanonical.clusterId
@@ -586,6 +606,7 @@ identifier sgdNoncodingId typeOf=sgdId
 identifier ensemblGeneId external=Ensembl
 "Ensemble Gene ID"
     $gbd.ensGeneXref.gene_name
+    mm3,hg13.ensemblXref.gene_name
     $gbd.ensGtp.gene chopAfter=.
     $gbd.ensTranscript.gene_name
 
@@ -593,6 +614,7 @@ identifier ensemblProteinId external=Ensembl
 "Ensemble Translated Protein ID"
     $gbd.ensGtp.protein chopAfter=.
     $gbd.ensTranscript.translation_name
+    mm3.ensemblXref2.translation_name
     $gbd.sfDescription.proteinID
     $gbd.sfAssign.seqID
 
@@ -600,11 +622,14 @@ identifier ensemblTranscriptId external=Ensembl
 "Ensembl Transcript ID"
     $gbd.ensGene.name
     $gbd.ensGeneXref.transcript_name
+    mm3,hg13.ensemblXref.transcript_name
+    mm3.ensemblXref2.transcript_name
     $gbd.ensGtp.transcript chopAfter=.
     $gbd.ensPep.name
     $gbd.ensTranscript.transcript_name
     $knownDb.knownToEnsembl.value
     $gbd.sfDescription.name
+    mm2,mm3.superfamily.name
 
 identifier cgapId
 "NCI Cancer Genome Annotation Project Gene ID"
