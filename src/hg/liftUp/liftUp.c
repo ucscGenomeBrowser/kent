@@ -11,7 +11,7 @@
 #include "chromInserts.h"
 #include "axt.h"
 
-static char const rcsid[] = "$Id: liftUp.c,v 1.18 2003/07/29 17:55:46 braney Exp $";
+static char const rcsid[] = "$Id: liftUp.c,v 1.19 2003/08/04 16:03:13 booch Exp $";
 
 boolean nohead = FALSE;	/* No header for psl files? */
 boolean nosort = FALSE;	/* Don't sort files */
@@ -869,7 +869,7 @@ for (i=0; i<sourceCount; ++i)
     source = sources[i];
     if (!pipeOut) printf("Processing %s\n", source);
     contig = contigInDir(source, dirBuf);
-    if (!startsWith("ctg", contig) && !startsWith("NT_", contig))
+    if (!startsWith("ctg", contig) && !startsWith("NT_", contig) && !startsWith("NG_", contig))
         {
 	sprintf(chromName, "chr%s", contig);
 	contig = chromName;
