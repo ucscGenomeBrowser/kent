@@ -10,7 +10,7 @@
 #include "hdb.h"
 #include "hgRelate.h"
 
-static char const rcsid[] = "$Id: hgLoadBed.c,v 1.27 2004/10/01 17:56:31 angie Exp $";
+static char const rcsid[] = "$Id: hgLoadBed.c,v 1.28 2004/10/21 18:13:53 angie Exp $";
 
 /* Command line switches. */
 boolean noSort = FALSE;		/* don't sort */
@@ -52,20 +52,31 @@ errAbort(
   );
 }
 
-int findBedSize(char *fileName)
+int findBedSize(char *fileName, struct lineFile **retLf)
 /* Read first line of file and figure out how many words in it. */
+/* Input file could be stdin, in which case we really don't want to open,
+ * read, and close it here.  So if retLf is non-NULL, return the open 
+ * linefile (having told it to reuse the line we just read). */
 {
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
 char *words[64], *line;
 int wordCount;
 lineFileNeedNext(lf, &line, NULL);
+line = cloneString(line);
 if (strictTab)
     wordCount = chopTabs(line, words);
 else
     wordCount = chopLine(line, words);
 if (wordCount == 0)
     errAbort("%s appears to be empty", fileName);
-lineFileClose(&lf);
+if (retLf != NULL)
+    {
+    lineFileReuse(lf);
+    *retLf = lf;
+    }
+else
+    lineFileClose(&lf);
+freeMem(line);
 return wordCount;
 }
 
@@ -91,16 +102,15 @@ if (dif == 0)
 return dif;
 }
 
-void loadOneBed(char *fileName, int bedSize, struct bedStub **pList)
+void loadOneBed(struct lineFile *lf, int bedSize, struct bedStub **pList)
 /* Load one bed file.  Make sure all lines have bedSize fields.
  * Put results in *pList. */
 {
-struct lineFile *lf = lineFileOpen(fileName, TRUE);
 char *words[64], *line, *dupe;
 int wordCount;
 struct bedStub *bed;
 
-verbose(1, "Reading %s\n", fileName);
+verbose(1, "Reading %s\n", lf->fileName);
 while (lineFileNext(lf, &line, NULL))
     {
     if (hasBin)
@@ -118,7 +128,6 @@ while (lineFileNext(lf, &line, NULL))
     bed->line = dupe;
     slAddHead(pList, bed);
     }
-lineFileClose(&lf);
 }
 
 void writeBedTab(char *fileName, struct bedStub *bedList, int bedSize)
@@ -235,14 +244,22 @@ sqlDisconnect(&conn);                                                           
 void hgLoadBed(char *database, char *track, int bedCount, char *bedFiles[])
 /* hgLoadBed - Load a generic bed file into database. */
 {
-int bedSize = findBedSize(bedFiles[0]);
+struct lineFile *lf = NULL;
+int bedSize = findBedSize(bedFiles[0], &lf);
 struct bedStub *bedList = NULL, *bed;
 int i;
 
 if (hasBin)
     bedSize--;
 for (i=0; i<bedCount; ++i)
-    loadOneBed(bedFiles[i], bedSize, &bedList);
+    {
+    /* bedFiles[0] was opened by findBedSize above -- since it might be stdin,
+     * it's left open and reused by loadOneBed.  After that, open here: */
+    if (i > 0)
+	lf = lineFileOpen(bedFiles[i], TRUE);
+    loadOneBed(lf, bedSize, &bedList);
+    lineFileClose(&lf);
+    }
 verbose(1, "Loaded %d elements of size %d\n", slCount(bedList), bedSize);
 if (!noSort)
     {
