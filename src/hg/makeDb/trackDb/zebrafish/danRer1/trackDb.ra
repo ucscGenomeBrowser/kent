@@ -93,7 +93,7 @@ type psl .
 searchTable ensGene
 searchType genePred
 shortCircuit 1
-termRegex ENSGALT[0-9]+\.[0-9]+
+termRegex ENSDARTT[0-9]+\.[0-9]+
 searchPriority 50
 
 searchName ensGeneNoSuffix
@@ -101,8 +101,8 @@ searchTable ensGene
 searchType genePred
 searchMethod prefix
 shortCircuit 1
-termRegex ENSGALT[0-9]+
-dontCheck ENSGALT[0-9]+\.[0-9]+
+termRegex ENSDART[0-9]+
+dontCheck ENSDART[0-9]+\.[0-9]+
 searchPriority 50
 
 searchName ensGeneGtpGene
@@ -112,7 +112,7 @@ searchMethod prefix
 shortCircuit 1
 xrefTable ensGtp
 xrefQuery select transcript,gene from %s where gene like '%s%%'
-termRegex ENSGALG[0-9]+(\.[0-9]+)?
+termRegex ENSDARG[0-9]+(\.[0-9]+)?
 searchPriority 50
 
 searchName ensGeneGtpProtein
@@ -122,6 +122,6 @@ searchMethod prefix
 shortCircuit 1
 xrefTable ensGtp
 xrefQuery select transcript,protein from %s where protein like '%s%%'
-termRegex ENSGALP[0-9]+(\.[0-9]+)?
+termRegex ENSDARP[0-9]+(\.[0-9]+)?
 searchPriority 50
 
