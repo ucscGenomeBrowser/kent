@@ -40,6 +40,7 @@ whole.
 <P>
 <B>Amino acid abundances based on the pepResDist table (July 2003 human assembly)</B>
 <BR>
+<BR>
 <CENTER>
 <IMG height=273 width=411 src="aa.jpg">
 </CENTER>
