@@ -1,6 +1,13 @@
 name ensembl
 itemUrl http://www.ensembl.org/Mus_musculus/geneview?transcript=%s
 
+name knownToMOE430
+shortLabel MOE430 ID
+longLabel Affymetrix MOE430 ID
+priority 2.614
+visibility off
+type lookup knownToMOE430 name value
+
 name gnf1mId
 shortLabel GNF1M ID
 longLabel ID of Associated Affymetrix GNF1M Expression Data 
@@ -79,6 +86,25 @@ all gnfMouseU74cAllExps gnfMouseU74cAllRatio gnfMouseU74cAll 0,1,4,5,16,17,2,3,1
 ratioMax 5.0
 absoluteMax 30000 
 
+name rinnSex
+shortLabel Rinn Sex Exp.
+longLabel Rinn et. al Sex Gene Expression Data on MOE430A Chip
+priority 3.10
+visibility off
+type expMulti knownToMOE430A
+median mouseRinnSexMedianExps mouseRinnSexMedianRatio mouseRinnSexMedian 0,1,2,3,4,5,6,7
+all mouseRinnSexExps mouseRinnSexRatio mouseRinnSex 0,1,2,3,4,5,-1,6,7,8,9,10,11,-1,12,13,14,15,16,17,-1,18,19,20,21,22,23,-1,24,25,26,27,28,29,-1,30,31,32,33,34,35,-1,36,37,38,39,40,41,-1,42,43,44,45,46,47
+ratioMax 8.0
+absoluteMax 25000
+
+name rinnSexMax
+shortLabel Max Rinn Sex
+longLabel Maximum Expression Value of Rinn Sex Expression Data 
+priority 3.11
+visibility off
+type expMax knownToMOE430A mouseRinnSexMedian
+
+
 #name gnfU74ADense
 #shortLabel Short GNF U74A 
 #longLabel Selected GNF Expression Atlas Data from U74A Chip
@@ -115,9 +141,3 @@ absoluteMax 30000
 #max 5.0
 #representatives 0,1,2,3,-1,16,17,4,5,-1,6,7,10,11,-1,18,19,8,9,-1,12,13,14,15,
 
-name knownToMOE430
-shortLabel MOE430
-longLabel Affymetrix MOE430
-priority 22
-visibility off
-type lookup knownToMOE430 name value
