@@ -12,7 +12,7 @@
 #include "hgFind.h"
 #include "hgFindSpec.h"
 
-static char const rcsid[] = "$Id: checkHgFindSpec.c,v 1.2 2004/04/06 07:05:23 angie Exp $";
+static char const rcsid[] = "$Id: checkHgFindSpec.c,v 1.3 2004/04/06 23:27:59 angie Exp $";
 
 /* Need to get a cart in order to use hgFind. */
 struct cart *cart = NULL;
@@ -45,11 +45,11 @@ errAbort(
 "                      expression for terms, make sure that all values of\n"
 "                      the table field to be searched match the regex.  (If\n"
 "                      not, some of them could be excluded from searches.)\n"
+"  -checkIndexes       Make sure that an index is defined on each field to\n"
+"                      be searched.\n"
 /**#*** IMPLEMENT ME!
 "  -exampleFor=search  Randomly choose a term for the specified search (from\n"
 "                      the target table for the search).  Search for it.\n"
-"  -checkIndexes       Make sure that an index is defined on each field to\n"
-"                      be searched.\n"
 "  -makeExamples       Print out an HTML table of example positions\n"
 "                      (suitable for a gateway description.html).\n"
 */
@@ -65,7 +65,6 @@ boolean reportSearch(char *termToSearch)
 struct hgFindSpec *shortList = NULL, *longList = NULL;
 struct hgFindSpec *hfs = NULL;
 struct hgPositions *hgp = NULL;
-char *db = hGetDb();
 int startMs = 0, endMs = 0;
 boolean gotError = FALSE;
 char *chrom = NULL;
@@ -77,7 +76,7 @@ startMs = clock1000();
 for (hfs = shortList;  hfs != NULL;  hfs = hfs->next)
     {
     boolean matches = TRUE;
-    boolean tablesExist = hTableOrSplitExistsDb(db, hfs->searchTable);
+    boolean tablesExist = hTableOrSplitExists(hfs->searchTable);
     if (isNotEmpty(termToSearch) && isNotEmpty(hfs->termRegex))
 	matches = matchRegex(termToSearch, hfs->termRegex);
     if (isNotEmpty(hfs->xrefTable))
@@ -105,7 +104,7 @@ startMs = clock1000();
 for (hfs = longList;  hfs != NULL;  hfs = hfs->next)
     {
     boolean matches = TRUE;
-    boolean tablesExist = hTableOrSplitExistsDb(db, hfs->searchTable);
+    boolean tablesExist = hTableOrSplitExists(hfs->searchTable);
     if (isNotEmpty(termToSearch) && isNotEmpty(hfs->termRegex))
 	matches = matchRegex(termToSearch, hfs->termRegex);
     if (isNotEmpty(hfs->xrefTable))
@@ -173,7 +172,7 @@ return(trimSpaces(field));
 }
 
 static boolean checkRegexOnTableField(char *exp, char *table, char *field)
-/* Return TRUE if all values of table.field match exp, else complain. */
+/* Return TRUE and complain if any values of table.field do not match exp. */
 {
 struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr = NULL;
@@ -203,16 +202,16 @@ boolean doCheckTermRegex()
  * target table field match the regex -- otherwise those values would be 
  * invisible to a search. */
 {
-struct hgFindSpec *shortList = NULL, *longList = NULL;
+struct hgFindSpec *shortList = NULL, *longList = NULL, *wholeList = NULL;
 struct hgFindSpec *hfs = NULL;
 struct slName *allChroms = hAllChromNames();
-char *db = hGetDb();
 boolean gotError = FALSE;
 
 hgFindSpecGetAllSpecs(&shortList, &longList);
+wholeList = slCat(shortList, longList);
 
 puts("\n");
-for (hfs = shortList;  hfs != NULL;  hfs = hfs->next)
+for (hfs = wholeList;  hfs != NULL;  hfs = hfs->next)
     {
     if (isNotEmpty(hfs->termRegex))
 	{
@@ -260,18 +259,54 @@ for (hfs = shortList;  hfs != NULL;  hfs = hfs->next)
     }
 
 slFreeList(&allChroms);
-hgFindSpecFreeList(&shortList);
-hgFindSpecFreeList(&longList);
+hgFindSpecFreeList(&wholeList);
 return(gotError);
 }
 
 boolean doCheckIndexes()
 /* For each search, make sure there's an index on the right table field(s). */
 {
+struct hgFindSpec *shortList = NULL, *longList = NULL, *wholeList = NULL;
+struct hgFindSpec *hfs = NULL;
+struct slName *allChroms = hAllChromNames();
 boolean gotError = FALSE;
 
-errAbort("Sorry, -checkIndexes not implemented yet.");
+hgFindSpecGetAllSpecs(&shortList, &longList);
+wholeList = slCat(shortList, longList);
 
+puts("\n");
+for (hfs = wholeList;  hfs != NULL;  hfs = hfs->next)
+    {
+    if (isNotEmpty(hfs->query) && hTableOrSplitExists(hfs->searchTable))
+	{
+	char *field = getFieldFromQuery(hfs->query, hfs->searchName);
+	if (! hFieldHasIndex(hfs->searchTable, field))
+	    {
+	    gotError = TRUE;
+	    printf("Error: No SQL index defined for %s.%s (search %s)\n",
+		   hfs->searchTable, field, hfs->searchName);
+	    }
+	else
+	    verbose(2, "Index exists for %s.%s (search %s)\n",
+		    hfs->searchTable, field, hfs->searchName);
+	}
+    if (isNotEmpty(hfs->xrefQuery) && hTableOrSplitExists(hfs->xrefTable))
+	{
+	char *field = getFieldFromQuery(hfs->xrefQuery, hfs->searchName);
+	if (! hFieldHasIndex(hfs->xrefTable, field))
+	    {
+	    gotError = TRUE;
+	    printf("Error: No SQL index defined for %s.%s (search %s)\n",
+		   hfs->xrefTable, field, hfs->searchName);
+	    }
+	else
+	    verbose(2, "Index exists for %s.%s (search %s)\n",
+		    hfs->xrefTable, field, hfs->searchName);
+	}
+    }
+
+slFreeList(&allChroms);
+hgFindSpecFreeList(&wholeList);
 return(gotError);
 }
 
