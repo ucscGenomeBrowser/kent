@@ -129,3 +129,12 @@ altColor 255,240,200
 spectrum on
 type psl xeno mm2
 
+track uniGene_2
+shortLabel UniGene
+longLabel UniGene Hs 157 Alignments and SAGEmap Info
+group rna
+priority 69
+visibility hide
+spectrum on
+type bed 12 
+
