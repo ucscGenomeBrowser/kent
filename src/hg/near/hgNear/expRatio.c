@@ -11,10 +11,10 @@
 #include "hgNear.h"
 #include "cheapcgi.h"
 
-static char const rcsid[] = "$Id: expRatio.c,v 1.6 2003/06/23 18:52:06 kent Exp $";
+static char const rcsid[] = "$Id: expRatio.c,v 1.7 2003/06/24 20:16:32 kent Exp $";
 
 
-static char *expRatioCellVal(struct column *col, char *geneId, 
+static char *expRatioCellVal(struct column *col, struct genePos *gp, 
 	struct sqlConnection *conn)
 /* Get comma separated list of values. */
 {
@@ -171,7 +171,7 @@ for (i=0; i<repCount; ++i)
 endExpCell();
 }
 
-void expRatioCellPrint(struct column *col, char *geneId, 
+void expRatioCellPrint(struct column *col, struct genePos *gp, 
 	struct sqlConnection *conn)
 /* Print out html for expRatio cell. */
 {
@@ -182,7 +182,7 @@ char **row, query[256];
 char expName[64];
 
 safef(query, sizeof(query), "select value from %s where name = '%s'", 
-	col->table, geneId);
+	col->table, gp->name);
 if (sqlQuickQuery(conn, query, expName, sizeof(expName)) == NULL)
     {
     replicate("n/a", col->representativeCount, col->representatives);

@@ -11,6 +11,16 @@
 #include "jksql.h"
 #endif
 
+struct genePos
+/* A gene and optionally a position */
+    {
+    struct genePos *next;
+    char *name;		/* Gene ID. */
+    char *chrom;	/* Optional chromosome location. NULL ok. */
+    int start;		/* Chromosome start. Disregarded if chrom == NULL. */
+    int end;		/* End in chromosome. Disregarded if chrom == NULL. */
+    };
+
 struct column
 /* A column in the big table. */
    {
@@ -29,10 +39,10 @@ struct column
    boolean (*exists)(struct column *col, struct sqlConnection *conn);
    /* Return TRUE if column exists in database. */
 
-   char *(*cellVal)(struct column *col, char *geneId, struct sqlConnection *conn);
+   char *(*cellVal)(struct column *col, struct genePos *gp, struct sqlConnection *conn);
    /* Get value of one cell as string.  FreeMem this when done. */
 
-   void (*cellPrint)(struct column *col, char *geneId, struct sqlConnection *conn);
+   void (*cellPrint)(struct column *col, struct genePos *gp, struct sqlConnection *conn);
    /* Print one cell of this column. */
 
    void (*labelPrint)(struct column *col);
@@ -47,7 +57,7 @@ struct column
    char *valField;		/* Value field in associated table. */
    char *curGeneField;		/* curGeneId field in associated table. */
    char *expTable;		/* Experiment table in hgFixed if any. */
-   char *posTable;		/* Positional table (bed12) for expression experiments. */
+   char *posTable;		/* Positional (bed12) for expression experiments. */
    double expScale;		/* What to scale by to get expression val from -1 to 1. */
    int representativeCount;	/* Count of representative experiments. */
    int *representatives;	/* Array (may be null) of representatives. */
@@ -59,16 +69,17 @@ struct column
 extern struct cart *cart; /* This holds variables between clicks. */
 extern char *database;	  /* Name of genome database - hg15, or the like. */
 extern char *organism;	  /* Name of organism - mouse, human, etc. */
-extern char *curGeneId;	  /* Identity of current gene. */
 extern char *sortOn;	  /* Current sort strategy. */
 extern int displayCount;  /* Number of items to display. */
+
+extern struct genePos *curGeneId;	  /* Identity of current gene. */
 
 /* ---- Cart Variables ---- */
 
 #define confVarName "near.configure"	/* Configuration button */
 #define countVarName "near.count"	/* How many items to display. */
 #define searchVarName "near.search"	/* Search term. */
-#define geneIdVarName "near.geneId"     /* Purely cart, not cgi. Last valid geneId */
+#define idVarName "near.id"         	/* Overrides searchVarName if it exists */
 #define groupVarName "near.group"	/* Grouping scheme. */
 #define colOrderVar "near.colOrder"     /* Order of columns. */
 #define defaultConfName "near.default"  /* Restore to default settings. */
@@ -105,16 +116,16 @@ void doDefaultConfigure();
 
 /* ---- Some helper routines for column methods. ---- */
 
-char *cellLookupVal(struct column *col, char *geneId, struct sqlConnection *conn);
+char *cellLookupVal(struct column *col, struct genePos *gp, struct sqlConnection *conn);
 /* Get a field in a table defined by col->table, col->keyField, col->valField. */
 
-void cellSimplePrint(struct column *col, char *geneId, struct sqlConnection *conn);
+void cellSimplePrint(struct column *col, struct genePos *gp, struct sqlConnection *conn);
 /* This just prints cellSimpleVal. */
 
 void labelSimplePrint(struct column *col);
 /* This just prints cell->shortLabel. */
 
-static void cellSelfLinkPrint(struct column *col, char *geneId,
+static void cellSelfLinkPrint(struct column *col, struct genePos *gp,
 	struct sqlConnection *conn);
 /* Print self and hyperlink to make this the search term. */
 
@@ -127,7 +138,7 @@ void columnDefaultMethods(struct column *col);
 void lookupTypeMethods(struct column *col, char *table, char *key, char *val);
 /* Set up the methods for a simple lookup column. */
 
-char *knownPosVal(struct column *col, char *geneId, 
+char *knownPosVal(struct column *col, struct genePos *gp, 
 	struct sqlConnection *conn);
 /* Get genome position of knownPos table.  Ok to have col NULL. */
 
