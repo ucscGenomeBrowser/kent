@@ -105,6 +105,7 @@ alpha:
 	    fi ; \
 	done
 	cd zoo; make alpha; cd ..
+	cmd="${HOME}/kent/src/hg/encode/encodeTrackDb.csh"; echo $$cmd; $$cmd
 
 strict:
 	cvs up -d -P .
