@@ -8,6 +8,4 @@ CREATE TABLE liftOverChain (
     fromDb varchar(255) not null,	# Short name of 'from' database.  'hg15' or the like
     toDb varchar(255) not null,	# Short name of 'to' database.  'hg16' or the like
     path longblob not null,	# Path to chain file
-              #Indices
-    PRIMARY KEY(fromDb)
 );
