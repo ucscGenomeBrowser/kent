@@ -84,7 +84,7 @@
 #include "estOrientInfo.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.755 2004/06/13 20:55:23 baertsch Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.756 2004/06/23 03:33:43 braney Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
@@ -2929,52 +2929,38 @@ void lookupProteinNames(struct track *tg)
 /* This converts the knownGene accession to a gene name where possible. */
 {
 struct linkedFeatures *lf;
-char query[256];
-struct sqlConnection *conn = hAllocConn();
-char *newName;
 char *refGeneLabel = cartUsualString(cart, "blastHg16KG.label", "gene");
 boolean useGeneName = sameString(refGeneLabel, "gene")
     || sameString(refGeneLabel, "both");
 boolean useAcc = sameString(refGeneLabel, "accession")
     || sameString(refGeneLabel, "both");
 
-if (hTableExists("kgMapName"))
+for (lf = tg->items; lf != NULL; lf = lf->next)
     {
-    struct knownMore *km;
-    struct sqlResult *sr;
-    char **row;
+    char *acc, *prot = NULL;
+    char *gene = NULL, *pos = NULL;
+    char *buffer;
 
-    for (lf = tg->items; lf != NULL; lf = lf->next)
+    lf->extra = needMem(strlen(lf->name));
+    acc = buffer = cloneString(lf->name);
+    if ((pos = strchr(acc, '.')) != NULL)
 	{
-	sprintf(query, "select geneName from kgMapName where kgPepId = '%s'", lf->name);
-	sr = sqlGetResult(conn, query);
-	if ((row = sqlNextRow(sr)) != NULL)
+	*pos++ = 0;
+	if ((gene = strchr(pos, '.')) != NULL)
 	    {
-            if (strlen(row[0]) > 0)
-                {
-                /* allow space for both */
-                int size = strlen(row[0]) + strlen(lf->name) + 2;
-                lf->extra = needMem(size);
-                if (useGeneName)
-                    strcat(lf->extra, row[0]);
-                if (useGeneName && useAcc)
-                    strcat(lf->extra, "/");
-                if (useAcc)
-                    strcat(lf->extra, lf->name);
-                }
-            else
-                {
-                /* no reflink, use name unless none is selected  */
-                if (useGeneName || useAcc)
-                    lf->extra = cloneString(lf->name);
-                else
-                    lf->extra = cloneString("");
-                }
+	    *gene++ = 0;
+	    if ((prot = strchr(gene, '.')) != NULL)
+		*prot++ = 0;
 	    }
-	sqlFreeResult(&sr);
 	}
+
+    if (useGeneName && (gene != NULL))
+	strcat(lf->extra, gene);
+    if (useGeneName && useAcc && (gene != NULL))
+	strcat(lf->extra, "/");
+    if (useAcc)
+	strcat(lf->extra, acc);
     }
-hFreeConn(&conn);
 }
 
 
@@ -2998,24 +2984,21 @@ Color blastColor(struct track *tg, void *item, struct vGfx *vg)
 {
 struct linkedFeatures *lf = item;
 int col = tg->ixColor;
-struct rgbColor *normal = &(tg->color);
-struct rgbColor lighter, lightest;
-struct sqlConnection *conn = hAllocConn();
-struct sqlResult *sr;
-char **row;
-char query[256];
+char *acc;
+char *colon, *pos;
+char *buffer;
 
-if (hTableExists("hg16KG"))
+acc = buffer = cloneString(lf->name);
+if ((pos = strchr(acc, '.')) != NULL)
     {
-    sprintf(query, "select tName from hg16KG where qName = '%s'",
-	    lf->name);
-    sr = sqlGetResult(conn, query);
-    if ((row = sqlNextRow(sr)) != NULL)
-	col = getChromColor(&row[0][3], vg);
-    sqlFreeResult(&sr);
+    pos +=4;
+    if ((colon = strchr(pos, ':')) != NULL)
+	{
+	*colon = 0;
+	col = getChromColor(pos, vg);
+	}
     }
-    
-hFreeConn(&conn);
+
 tg->ixAltColor = col;
 return(col);
 }
