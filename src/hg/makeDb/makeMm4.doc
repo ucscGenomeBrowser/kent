@@ -2282,35 +2282,23 @@ ftp://ftp.ncbi.nih.gov/repository/UniSTS/UniSTS_MapReports/Mus_musculus/*
 	downloads/MRK_Dump2.rpt downloads/PRB_PrimerSeq.rpt \
 	downloads/MRK_Sequence.rpt downloads/UniSTS_mouse.alias \
 	downloads/UniSTS_mouse.sts | sed -e "s/\t*$//" > newbedfile
-    cp -p newbedfile stsInfoMouse.bed
+    /cluster/store5/mouseMarker/code/cleanInfo.pl newbedfile > stsInfoMouse.bed
     # comparing to Mm3, this file was used there:
     # /projects/hg2/booch/psl/mm.2003.02/mm3/info/stsInfoMouseNew.bed
     # a wc of it shows:
     # 25341  339289 3572880 stsInfoMouseNew.bed
     # that is about half of what we have here:
-    # 57377  796754 6539945 stsInfoMouse.bed
-XXX I wonder if this is a problem ?  The old file is missing fields
-XXX	that are now present.  But I wonder about the line count.
-    # the first line from the Mm3 file:
-1^IU23883^I^I^I6674^I2^IU23883;MMU23883^IAATTGGCAGCTGCTTAGATG^ITGCACGCGTTAAGTTACTTC^I215^I^IMus musculus$
-    # and the first line from this new file:
-1^IU23883^I106145^ID16IUM41^I6674^I2^IU23883;MMU23883^IAATTGGCAGCTGCTTAGATG^ITGCACGCGTTAAGTTACTTC^I215^I0^IMUS MUSCULUS^I^I^I^IMGD^I16^I57.6$
-    # There is something wrong with the new file at 25278 where it
-    #	should be continuing from the old file.  It has a broken line:
-    # 25342^I^I^I^I^I0^I^I^I^I^I0^IMUS MUSCULUS$
-
+    # 56406  786036 6425721 stsInfoMouse.bed
 
     # and from that, create new primer fa, epcr, etc:
     /cluster/store5/mouseMarker/code/luConvertPrimerToFa \
 	stsInfoMouse.bed mouseP.fa mouseC.fa mouseP.info
     # the mouseC.fa file will be empty
-#	-rw-rw-r--    1        0 Dec 18 12:06 mouseC.fa
-#	-rw-rw-r--    1  1949198 Dec 18 12:06 mouseP.info
-#	-rw-rw-r--    1  6054456 Dec 18 12:06 mouseP.fa
     wc mouse?.*
-#	     0       0       0 mouseC.fa
-#	268733  268671 6054456 mouseP.fa
-#	 30876  154398 1949198 mouseP.info
+    #        0       0       0 mouseC.fa
+    #   258307  258245 5815248 mouseP.fa
+    #    29906  149545 1890926 mouseP.info
+
     # the equivalent Mm3 versions:
     #   243750  243721 5544726 musPrimer.fa == mouseP.fa
     #    25341  126705 1609168 mouse.primers == mouseP.info
@@ -2343,11 +2331,11 @@ XXX	that are now present.  But I wonder about the line count.
     para push
     ... etc ...
 # Completed: 599 of 599 jobs
-# CPU time in finished jobs:     324009s    5400.15m    90.00h    3.75d  0.010 y
-# IO & Wait Time:                 54296s     904.93m    15.08h    0.63d  0.002 y
-# Average job time:                 632s      10.53m     0.18h    0.01d
-# Longest job:                      748s      12.47m     0.21h    0.01d
-# Submission to last job:           811s      13.52m     0.23h    0.01d
+# CPU time in finished jobs:     315430s    5257.17m    87.62h    3.65d  0.010 y
+# IO & Wait Time:                 42867s     714.45m    11.91h    0.50d  0.001 y
+# Average job time:                 598s       9.97m     0.17h    0.01d
+# Longest job:                      709s      11.82m     0.20h    0.01d
+# Submission to last job:           729s      12.15m     0.20h    0.01d
 
     # on the file server
     ssh kksilo
@@ -2359,7 +2347,7 @@ XXX	that are now present.  But I wonder about the line count.
     # Mm3 wc primers.psl
     # 4263983 89543582 440456942 primers.psl
     # Mm4 wc primers.psl /cluster/data/mm4/bed/STSmarkers/primer/primers.psl
-    # 5933518 124603817 610451872 primers.psl
+    # 5745617 120657896 592135728 primers.psl
 XXX This is quite an increase, I wonder if it is reasonable ?
 
     # another kluster run
@@ -2381,11 +2369,11 @@ XXX This is quite an increase, I wonder if it is reasonable ?
     para push
     ... etc ...
 # Completed: 599 of 599 jobs
-# CPU time in finished jobs:     139338s    2322.30m    38.70h    1.61d  0.004 y
-# IO & Wait Time:                 41320s     688.67m    11.48h    0.48d  0.001 y
-# Average job time:                 302s       5.03m     0.08h    0.00d
-# Longest job:                      366s       6.10m     0.10h    0.00d
-# Submission to last job:           388s       6.47m     0.11h    0.00d
+# CPU time in finished jobs:     135807s    2263.45m    37.72h    1.57d  0.004 y
+# IO & Wait Time:                 32256s     537.60m     8.96h    0.37d  0.001 y
+# Average job time:                 281s       4.68m     0.08h    0.00d
+# Longest job:                      353s       5.88m     0.10h    0.00d
+# Submission to last job:           394s       6.57m     0.11h    0.00d
 
     ssh hgwdev
     # all those results become all.epcr
@@ -2395,8 +2383,8 @@ XXX This is quite an increase, I wonder if it is reasonable ?
     # Mm3 wc all.epcr
     #  24627   98508 1329559 all.epcr
     # Mm4 wc all.epcr	/cluster/data/mm4/bed/STSmarkers/ePCR/all.epcr
-    #  75381  301524 4005978 all.epcr
-XXX  This is an unusual increase
+    #  74705  298820 3971712 all.epcr
+XXX  This is an unusual increase ?
 
     cd /cluster/data/mm4/bed/STSmarkers/primer
 
@@ -2418,7 +2406,7 @@ XXX  This is an unusual increase
     #	Determining ePCR not found
     #
     # Mm4:  wc primers.psl.filter.blat
-    # 33531  704151 3412983 primers.psl.filter.blat
+    # 32729  687309 3331894 primers.psl.filter.blat
     # Checking vs. Mm3 on on kks00:
     # /projects/hg2/booch/psl/mm.2003.02/mm3/primers/primers.psl.filter.blat
     # wc of that shows:
@@ -2455,12 +2443,11 @@ XXX  This is an unusual increase
     # 205     820    7585 epcr.not.found
     #   1      12      95 epcr.not.found.nomatch
     # 204    4284   19817 epcr.not.found.psl
-    # 410    5116   27497 total
 
     # Mm4 wc epcr*
-    # 339    1356   12418 epcr.not.found
-    # 339    4068   29029 epcr.not.found.nomatch
-    #   0       0       0 epcr.not.found.psl
+    #  328    1312   12011 epcr.not.found
+    #  328    3936   28083 epcr.not.found.nomatch
+    #    0       0       0 epcr.not.found.psl
 
     # combine them to one, since epcr.not.found.psl is empty, this is a copy
     cat primers.psl.filter.blat epcr.not.found.psl > primers.psl.filter
@@ -2470,20 +2457,21 @@ XXX  This is an unusual increase
     /projects/compbio/usr/booch/booch/scripts/lifter -mouse -psl \
 	/cluster/data/mm4 primers.psl.filter
     # wc primers.psl.filter.lifted
-    # 33531  704151 3544644 primers.psl.filter.lifted
+    # 32729  687309 3460147 primers.psl.filter.lifted
 
     # create primers.psl.filter.lifted.initial
     PATH=/cluster/home/booch/bin:$PATH \
 	/projects/compbio/usr/booch/booch/scripts/extractPslInfo \
 	primers.psl.filter.lifted
     #	wc primers.psl.filter.lifted.initial
-    #	33528  201168 1787596 primers.psl.filter.lifted.initial
+    #	32726  196356 1746894 primers.psl.filter.lifted.initial
 
     # create primers.psl.filter.lifted.initial.acc
     /projects/compbio/usr/booch/booch/scripts/findAccession -agp \
 	-mouse primers.psl.filter.lifted.initial /cluster/data/mm4
     # wc primers.psl.filter.lifted.initial.acc
-    # 33528  234696 2117988 primers.psl.filter.lifted.initial.acc
+    # 32726  229082 2069372 primers.psl.filter.lifted.initial.acc
+
 
     # this needs to be -rat as that specifies how to scan the
     # stsInfoMouse.bed file and it does not work if you use -mouse
@@ -2491,8 +2479,7 @@ XXX  This is an unusual increase
 	../stsInfoMouse.bed  primers.psl.filter.lifted.initial.acc \
 	> primers.initial.acc.trans
     # wc primers.initial.acc.trans
-    # 33528  234696 1800800 primers.initial.acc.trans
-
+    # 32726  229082 1757417 primers.initial.acc.trans
 
     sort -k 4n primers.initial.acc.trans > primers.final
     rm primers.psl.filter.lifted.initial.acc primers.initial.acc.trans
@@ -2500,10 +2487,8 @@ XXX  This is an unusual increase
     # Mm3 wc primers.final
     # 26292  184044 1253365 primers.final
     # wc primers.final
-    # 33528  234696 1800800 primers.final
+    # 32726  229082 1757417 primers.final
 
-
-XXXX
     cd /cluster/data/mm4/bed/STSmarkers
     # stsMarkers.final is empty for mouse
     touch stsMarkers.final dummy
@@ -2514,7 +2499,7 @@ XXXX
     # Mm3 wc stsMarkers_pos.rdb
     # 25925  181475 1413458 stsMarkers_pos.rdb
     # Mm4 wc stsMarkers_pos.rdb
-    # 31815  222705 1891323 stsMarkers_pos.rdb
+    # 31013  217091 1854806 stsMarkers_pos.rdb
 
     /projects/compbio/usr/booch/booch/scripts/combineAllSeqPrimer \
 	-rat stsInfoMouse.bed \
@@ -2522,12 +2507,12 @@ XXXX
 
     # can not find this result for Mm3
     # Mm4 wc stsMarkers_pos_all.rdb
-    # 27570   61100  395472 stsMarkers_pos_all.rdb
+    # 26811   59539  385261 stsMarkers_pos_all.rdb
 
     /projects/cc/hg/ytlu/bin/script/perl/createStsBed \
 	stsInfoMouse.bed  stsMarkers_pos.rdb 500 > stsMapMouse.bed
     # wc stsMapMouse.bed
-    # 28593  312046 2235876 stsMapMouse.bed
+    # 27815  305820 2187428 stsMapMouse.bed
 
 #  loading STS markers tables
     ssh hgwdev
@@ -2550,8 +2535,9 @@ XXXX
     hgsql mm4 < /projects/hg2/booch/psl/tables/all_sts_primer.sql
     hgsql -e \
 	'load data local infile "primer/primers.psl.filter.lifted" into table all_sts_primer;' mm4
+XXXX 2002-12-23 This is missing something.  Can not click through to the
+	alignments
 
-XXXX 2003-12-18
 
 #  STS Markers plots - needs to wait until stsMarkers_pos_all.rdb
 #	is created correctly from above, also needs the three maps files
