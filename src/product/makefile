@@ -1,7 +1,7 @@
 #
 #	product/makefile - create image for product CD-ROM
 #
-#	$Id: makefile,v 1.18 2005/03/07 21:04:26 hiram Exp $
+#	$Id: makefile,v 1.19 2005/03/07 23:25:25 hiram Exp $
 #
 include ../inc/common.mk
 
@@ -78,13 +78,14 @@ source_built:	INST_DIR source_tar
 	touch source_built
 
 example:	INST_DIR ex.hgcentral.sql ex.hg.conf ex.MySQLUserPerms.sh \
-	ex.InstallExample ex.CleanTrash.sh ex.cvsup.pl
+	ex.InstallExample ex.CleanTrash.sh ex.fixupGbdb.sh ex.cvsup.pl
 	@if [ ! -d ${install_dir}/example ]; then \
 		${MKDIR} "${install_dir}/example"; \
 	fi
 	cp -p ex.InstallExample "${install_dir}/example/InstallExample.sh"
 	cp -p ex.hgcentral.sql "${install_dir}/example/hgcentral.sql"
 	cp -p ex.CleanTrash.sh "${install_dir}/example/CleanTrash.sh"
+	cp -p ex.fixupGbdb.sh "${install_dir}/example/fixupGbdb.sh"
 	cp -p ex.cvsup.pl "${install_dir}/example/cvsup.pl"
 	cp -p ex.hg.conf "${install_dir}/example/hg.conf"
 	VER=`cat ${install_dir}/Version_*`; \
