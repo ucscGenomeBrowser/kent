@@ -139,7 +139,7 @@
 #include "HInv.h"
 #include "bed6FloatScore.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.662 2004/06/10 22:02:12 kent Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.663 2004/06/13 21:39:53 braney Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -152,6 +152,8 @@ char *scientificName;	/* Scientific name of organism. */
 
 char *protDbName;	/* Name of proteome database */
 struct hash *trackHash;	/* A hash of all tracks - trackDb valued */
+
+void printLines(FILE *f, char *s, int lineSize);
 
 char mousedb[] = "mm3";
 
@@ -2640,6 +2642,64 @@ puts("<P>Be careful about requesting complex formatting for a very large "
 trackDbFreeList(&tdbList);
 }
 
+void doGetBlastPep(char *readName, char *table)
+/* get predicted protein */
+{
+struct lineFile *lf;
+struct psl *psl;
+int start, end;
+enum gfType tt = gftDnaX, qt = gftProt;
+boolean isProt = 1;
+struct sqlResult *sr;
+struct sqlConnection *conn = hAllocConn();
+struct dnaSeq *tSeq;
+char query[256], **row;
+char fullTable[64];
+boolean hasBin;
+char buffer[2048], *str = buffer;
+int i, j, c;
+
+start = cartInt(cart, "o");
+hFindSplitTable(seqName, table, fullTable, &hasBin);
+sprintf(query, "select * from %s where qName = '%s' and tName = '%s' and tStart=%d",
+	fullTable, readName, seqName, start);
+sr = sqlGetResult(conn, query);
+if ((row = sqlNextRow(sr)) == NULL)
+    errAbort("Couldn't find alignment for %s at %d", readName, start);
+psl = pslLoad(row+hasBin);
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+printf("<PRE><TT>");
+end = psl->tEnd;
+if (psl->strand[1] == '+')
+    end = psl->tStarts[psl->blockCount - 1] + psl->blockSizes[psl->blockCount - 1] *3;
+printf(">%s\n", readName);
+tSeq = hDnaFromSeq(psl->tName, start, end, dnaLower);
+
+if (psl->strand[1] == '-')
+    {
+    start = psl->tSize - end;
+    reverseComplement(tSeq->dna, tSeq->size);
+    }
+for (i=0; i<psl->blockCount; ++i)
+    {
+    int ts = psl->tStarts[i] - start;
+    int sz = psl->blockSizes[i];
+
+    for (j=0; j<sz; ++j)
+	{
+	int codonStart = ts + 3*j;
+	DNA *codon = &tSeq->dna[codonStart];
+	*str++ = lookupCodon(codon);
+	}
+    }
+
+*str = 0;
+printLines(stdout, buffer, 50);
+printf("</TT></PRE>");
+}
+
+
 void doGetDna2()
 /* Do second DNA dialog (or just fetch DNA) */
 {
@@ -4171,13 +4231,9 @@ char tName[256];
 struct dnaSeq *tSeq;
 
 /* protein psl's have a tEnd that isn't quite right */
-if (qType == gftProt)
-    {
-    if (psl->strand[1] == '-')
-	tEnd = psl->tSize - psl->tStarts[0];
-    else
-	tEnd = psl->tStarts[psl->blockCount - 1] + psl->blockSizes[psl->blockCount - 1] * 3;
-    }
+if ((psl->strand[1] == '+') && (qType == gftProt))
+    tEnd = psl->tStarts[psl->blockCount - 1] + psl->blockSizes[psl->blockCount - 1] * 3;
+
 tSeq = hDnaFromSeq(seqName, tStart, tEnd, dnaLower);
 
 freez(&tSeq->name);
@@ -13415,8 +13471,8 @@ if (slCount(pslList) > 1)
     printf("<P>The alignment you clicked on is first in the table below.<BR>\n");
 printf("<TT><PRE>");
 printf("                                   QUERY            TARGET\n");
-printf("ALIGNMENT COVERAGE IDENTITY  START END EXTENT  STRAND   LINK TO BROWSER \n");
-printf("----------------------------------------------------------------------------\n");
+printf("ALIGNMENT PEPTIDE COVERAGE IDENTITY  START END EXTENT  STRAND   LINK TO BROWSER \n");
+printf("--------------------------------------------------------------------------------\n");
 for (same = 1; same >= 0; same -= 1)
     {
     for (psl = pslList; psl != NULL; psl = psl->next)
@@ -13427,6 +13483,10 @@ for (same = 1; same >= 0; same -= 1)
 		hgcName(), psl->tStart, psl->qName,  psl->tName,
 		psl->tStart, psl->tEnd, database,tdb->tableName, uiState);
 	    printf("alignment</A> ");
+	    printf("<A HREF=\"%s?o=%d&g=htcGetBlastPep&i=%s&c=%s&l=%d&r=%d&db=%s&aliTrack=%s&%s\">", 
+		hgcName(), psl->tStart, psl->qName,  psl->tName,
+		psl->tStart, psl->tEnd, database,tdb->tableName, uiState);
+	    printf("peptide</A> ");
 	    printf("%5.1f%%    %5.1f%% %5d %5d %5.1f%%    %c   ",
 		100.0 * psl->match / psl->qSize,
 		100.0 - pslCalcMilliBad(psl, TRUE) * 0.1,
@@ -14177,6 +14237,10 @@ else if (sameWord(track, "htcCdnaAli"))
 else if (sameWord(track, "htcUserAli"))
     {
     htcUserAli(item);
+    }
+else if (sameWord(track, "htcGetBlastPep"))
+    {
+    doGetBlastPep(item, cartString(cart, "aliTrack"));
     }
 else if (sameWord(track, "htcProteinAli"))
     {
