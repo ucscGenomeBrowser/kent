@@ -128,10 +128,17 @@ track affyRAE230
 shortLabel Affymetrix RAE230
 longLabel Alignments of Affymetrix Consensus Sequences from RAE230
 group regulation
-priority 90
+priority 90.2
 visibility hide
 type psl .
 
+track affyU34A
+shortLabel Affymetrix RG-U34A
+longLabel Alignments of Affymetrix Exemplar Sequences from RG-U34A
+group regulation
+priority 90.1
+visibility hide
+type psl .
 
 
 searchTable gold

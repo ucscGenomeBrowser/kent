@@ -12,7 +12,7 @@
 #include "scoredRef.h"
 #include "customTrack.h"
 
-static char const rcsid[] = "$Id: wigTrack.c,v 1.49 2004/05/06 23:06:06 hiram Exp $";
+static char const rcsid[] = "$Id: wigTrack.c,v 1.50 2004/05/07 20:00:03 hiram Exp $";
 
 /*	wigCartOptions structure - to carry cart options from wigMethods
  *	to all the other methods via the track->extraUiData pointer
@@ -82,20 +82,22 @@ else if (sameWord(dataID, MAX_Y))
     wigCart->maxY = *((double *)dataValue);
 }
 
+/*	these two routines unused at this time	*/
+#if defined(NOT)
 static void wigItemFree(struct wigItem **pEl)
     /* Free up a wigItem. */
 {
 struct wigItem *el = *pEl;
 if (el != NULL)
     {
-    freeMem(el->name);
+    /* freeMem(el->name);	DO NOT - this belongs to tg->mapName */
     freeMem(el->db);
     freeMem(el->file);
     freez(pEl);
     }
 }
 
-void wigItemFreeList(struct wigItem **pList)
+static void wigItemFreeList(struct wigItem **pList)
     /* Free a list of dynamically allocated wigItem's */
 {
 struct wigItem *el, *next;
@@ -107,6 +109,7 @@ for (el = *pList; el != NULL; el = next)
     }
 *pList = NULL;
 }
+#endif
 
 /*	trackSpans - hash of hashes, first hash is via trackName
  *	the element for trackName is a hash itself where each element
@@ -128,12 +131,14 @@ struct wigItem *wi = item;
 return wi->name;
 }
 
+/*	NOT used at this time, maybe later	*/
+#if defined(NOT)
 /*	This is practically identical to sampleUpdateY in sampleTracks.c
  *	In fact is is functionally identical except jkLib functions are
  *	used instead of the actual string functions.  I will consult
  *	with Ryan to see if one of these copies can be removed.
  */
-boolean sameWigGroup(char *name, char *nextName, int lineHeight)
+static boolean sameWigGroup(char *name, char *nextName, int lineHeight)
 /* Only increment height when name root (extension removed)
  * is different from previous one.  Assumes entries are sorted by name.
  */
@@ -153,6 +158,7 @@ if (different)
 else
     return 0;
 }
+#endif
 
 int wigTotalHeight(struct track *tg, enum trackVisibility vis)
 /* Wiggle track will use this to figure out the height they use
@@ -186,6 +192,55 @@ tg->height = tg->lineHeight;
 return tg->height + 1;
 }
 
+static void wigSetItemData(struct track *tg, struct wigItem *wi,
+    struct wiggle *wiggle, struct hash *spans)
+/* copy values from *wiggle to *wi, maintain trackSpans hash	*/
+{
+static char *previousFileName = (char *)NULL;
+char spanName[128];
+struct hashEl *el;
+
+/*	Allocate trackSpans one time only, for all tracks	*/
+if (! trackSpans)
+    trackSpans = newHash(0);
+
+wi->start = wiggle->chromStart;
+wi->end = wiggle->chromEnd;
+/*	May need unique name here some day XXX	*/
+wi->name = tg->mapName;
+
+if ((previousFileName == (char *)NULL) ||
+	differentString(previousFileName,wiggle->file))
+    {
+    if (! fileExists(wiggle->file))
+	errAbort("wigSetItemData: file '%s' missing", wiggle->file);
+    freez(&previousFileName);
+    previousFileName = cloneString(wiggle->file);
+    }
+wi->file = cloneString(wiggle->file);
+
+wi->span = wiggle->span;
+wi->count = wiggle->count;
+wi->offset = wiggle->offset;
+wi->lowerLimit = wiggle->lowerLimit;
+wi->dataRange = wiggle->dataRange;
+wi->validCount = wiggle->validCount;
+wi->sumData = wiggle->sumData;
+wi->sumSquares = wiggle->sumSquares;
+
+/*	see if we have a spans hash for this track already */
+el = hashLookup(trackSpans, wi->name);
+/*	no, then let's start one	*/
+if ( el == NULL)
+	hashAdd(trackSpans, wi->name, spans);
+/*	see if this span is already in our hash for this track */
+snprintf(spanName, sizeof(spanName), "%d", wi->span);
+el = hashLookup(spans, spanName);
+/*	no, then add this span to the spans list for this track */
+if ( el == NULL)
+	hashAddInt(spans, spanName, wi->span);
+}
+
 void ctWigLoadItems(struct track *tg) {
 /*	load custom wiggle track data	*/
 struct customTrack *ct;
@@ -194,18 +249,12 @@ struct lineFile *lf = NULL;
 struct wiggle *wiggle;
 struct wigItem *wiList = NULL;
 int itemsLoaded = 0;
-char spanName[128];
-char *previousFileName;
-struct hashEl *el;
 struct hash *spans = NULL;	/* Spans encountered during load */
 
 /*	Verify this is a custom track	*/
 if (tg->customPt == (void *)NULL)
     errAbort("ctWigLoadItems: did not find a custom wiggle track: %s", tg->mapName);
 
-/*	Allocate trackSpans one time only	*/
-if (! trackSpans)
-    trackSpans = newHash(0);
 /*	Each instance of this LoadItems will create a new spans hash
  *	It will be the value included in the trackSpans hash
  */
@@ -213,7 +262,6 @@ spans = newHash(0);
 /*	Each row read will be turned into an instance of a wigItem
  *	A growing list of wigItems will be the items list to return
  */
-previousFileName = "";
 itemsLoaded = 0;
 
 ct = tg->customPt;
@@ -223,44 +271,24 @@ lf = lineFileOpen(ct->wigFile, TRUE);
 while (lineFileChopNextTab(lf, row, ArraySize(row)))
     {
     struct wigItem *wi;
-    size_t fileNameSize = 0;
 
-    ++itemsLoaded;
     wiggle = wiggleLoad(row);
-    AllocVar(wi);
-    wi->start = wiggle->chromStart;
-    wi->end = wiggle->chromEnd;
-    /*	May need unique name here some day XXX	*/
-    wi->name = tg->shortLabel;
-    fileNameSize = strlen(wiggle->file) + 1;
-
-    if (differentString(previousFileName,wiggle->file))
+    /*	we have to do hRangeQuery's job here since we are reading a
+     *	file.  We need to be on the correct chromosome, and the data
+     *	needs to be in the current view.
+     */
+    if (sameWord(chromName,wiggle->chrom))
 	{
-	if (! fileExists(wiggle->file))
-	    errAbort("wigLoadItems: file '%s' missing", wiggle->file);
-	previousFileName = cloneString(wiggle->file);
-	}
-    wi->file = cloneString(wiggle->file);
-
-    wi->span = wiggle->span;
-    wi->count = wiggle->count;
-    wi->offset = wiggle->offset;
-    wi->lowerLimit = wiggle->lowerLimit;
-    wi->dataRange = wiggle->dataRange;
-    wi->validCount = wiggle->validCount;
-    wi->sumData = wiggle->sumData;
-    wi->sumSquares = wiggle->sumSquares;
-
-    el = hashLookup(trackSpans, wi->name);
-    if ( el == NULL)
-	    hashAdd(trackSpans, wi->name, spans);
-    snprintf(spanName, sizeof(spanName), "%d", wi->span);
-    el = hashLookup(spans, spanName);
-    if ( el == NULL)
-	    hashAddInt(spans, spanName, wi->span);
-    slAddHead(&wiList, wi);
-    wiggleFree(&wiggle);
-    }
+	if ((winStart < wiggle->chromEnd) && (winEnd > wiggle->chromStart))
+	    {
+	    ++itemsLoaded;
+	    AllocVar(wi);
+	    wigSetItemData(tg, wi, wiggle, spans);
+	    slAddHead(&wiList, wi);
+	    wiggleFree(&wiggle);
+	    }	/*	if in viewing window	*/
+	}	/*	if in same chromosome	*/
+    }	/*	while reading lines	*/
 slReverse(&wiList);
 tg->items = wiList;
 
@@ -295,9 +323,7 @@ struct wiggle *wiggle;
 struct wigItem *wiList = NULL;
 char *whereNULL = NULL;
 int itemsLoaded = 0;
-char spanName[128];
 char *previousFileName;
-struct hashEl *el;
 struct hash *spans = NULL;	/* Spans encountered during load */
 /*	Check our scale from the global variables that exist in
  *	hgTracks.c - This can give us a guide about which rows to load.
@@ -353,41 +379,11 @@ itemsLoaded = 0;
 while ((row = sqlNextRow(sr)) != NULL)
     {
 	struct wigItem *wi;
-	size_t fileNameSize = 0;
 
 	++itemsLoaded;
 	wiggle = wiggleLoad(row + rowOffset);
 	AllocVar(wi);
-	wi->start = wiggle->chromStart;
-	wi->end = wiggle->chromEnd;
-	/*	May need unique name here some day XXX	*/
-	wi->name = tg->shortLabel;
-	fileNameSize = strlen(wiggle->file) + 1;
-
-	if (differentString(previousFileName,wiggle->file))
-	    {
-	    if (! fileExists(wiggle->file))
-		errAbort("wigLoadItems: file '%s' missing", wiggle->file);
-	    previousFileName = cloneString(wiggle->file);
-	    }
-	wi->file = cloneString(wiggle->file);
-
-	wi->span = wiggle->span;
-	wi->count = wiggle->count;
-	wi->offset = wiggle->offset;
-	wi->lowerLimit = wiggle->lowerLimit;
-	wi->dataRange = wiggle->dataRange;
-	wi->validCount = wiggle->validCount;
-	wi->sumData = wiggle->sumData;
-	wi->sumSquares = wiggle->sumSquares;
-
-	el = hashLookup(trackSpans, wi->name);
-	if ( el == NULL)
-	    	hashAdd(trackSpans, wi->name, spans);
-	snprintf(spanName, sizeof(spanName), "%d", wi->span);
-	el = hashLookup(spans, spanName);
-	if ( el == NULL)
-	    	hashAddInt(spans, spanName, wi->span);
+	wigSetItemData(tg, wi, wiggle, spans);
 	slAddHead(&wiList, wi);
 	wiggleFree(&wiggle);
     }

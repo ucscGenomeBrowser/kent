@@ -117,6 +117,7 @@ group map
 priority 15
 visibility hide
 type bed 6 +
+exonArrows off
 
 track bacEndPairsBad
 shortLabel Incorrect BAC End Pairs
@@ -125,6 +126,7 @@ group map
 priority 16
 visibility hide
 type bed 6 +
+exonArrows off
 
 track bacEndPairsLong
 shortLabel Long BAC End Pairs
@@ -133,6 +135,7 @@ group map
 priority 17
 visibility hide
 type bed 6 +
+exonArrows off
 
 track fosEndPairs
 shortLabel Fosmid End Pairs
@@ -141,6 +144,7 @@ group map
 priority 18
 visibility hide
 type bed 6 +
+exonArrows off
 
 track fosEndPairsBad
 shortLabel Bad Fosmid End Pairs
@@ -149,6 +153,7 @@ group map
 priority 19
 visibility hide
 type bed 6 +
+exonArrows off
 
 track fosEndPairsLong
 shortLabel Long Fosmid End Pairs
@@ -157,6 +162,7 @@ group map
 priority 20
 visibility hide
 type bed 6 +
+exonArrows off
 
 track chr18deletions
 shortLabel Chr18 Deletions

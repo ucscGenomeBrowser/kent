@@ -27,7 +27,7 @@
 #include "minGeneInfo.h"
 #include <regex.h>
 
-static char const rcsid[] = "$Id: hgFind.c,v 1.138 2004/04/30 01:41:38 sugnet Exp $";
+static char const rcsid[] = "$Id: hgFind.c,v 1.139 2004/05/08 03:11:12 kate Exp $";
 
 extern struct cart *cart;
 char *hgAppName = "";
@@ -2274,6 +2274,13 @@ char *canonicalRangeExp =
 		     "([0-9,]+)"
 		     "[[:space:]]*-[[:space:]]*"
 		     "([0-9,]+)$";
+char *lengthRangeExp = 
+		     "^([[:alnum:]._\\-]+)"
+		     "[[:space:]]*:[[:space:]]*"
+		     "([0-9,]+)"
+		     //"[[:space:]]*\\^[[:space:]]*"
+		     "[[:space:]]*\\+[[:space:]]*"
+		     "([0-9,]+)$";
 char *bedRangeExp = 
 		     "^([[:alnum:]._\\-]+)"
 		     "[[:space:]]+"
@@ -2293,7 +2300,8 @@ struct hgPositions *hgPositionsFind(char *term, char *extraCgi,
 {
 struct hgPositions *hgp = NULL, *hgpItem = NULL;
 regmatch_t substrs[4];
-boolean canonical = FALSE;
+boolean canonicalSpec = FALSE;
+boolean lengthSpec = FALSE;
 boolean relativeFlag = FALSE;
 int relStart = 0, relEnd = 0;
 
@@ -2315,8 +2323,12 @@ hgp->extraCgi = cloneString(extraCgi);
 /* Allow any search term to end with a :Start-End range -- also support stuff 
  * pasted in from BED (chrom start end) or SQL query (chrom | start | end).  
  * If found, strip it off and remember the start and end. */
-if ((canonical = matchRegexSubstr(term, canonicalRangeExp,
+if ((canonicalSpec = 
+        matchRegexSubstr(term, canonicalRangeExp,
 				  substrs, ArraySize(substrs))) ||
+    (lengthSpec = 
+        matchRegexSubstr(term, lengthRangeExp, 
+                                substrs, ArraySize(substrs))) ||
     matchRegexSubstr(term, bedRangeExp, substrs, ArraySize(substrs)) ||
     matchRegexSubstr(term, sqlRangeExp, substrs, ArraySize(substrs)))
     {
@@ -2328,6 +2340,10 @@ if ((canonical = matchRegexSubstr(term, canonicalRangeExp,
     relStart = atoi(stripCommas(term+substrs[2].rm_so));
     term[substrs[3].rm_eo] = 0;
     relEnd   = atoi(stripCommas(term+substrs[3].rm_so));
+    if (canonicalSpec || lengthSpec)
+	relStart--;
+    if (lengthSpec)
+        relEnd += relStart;
     if (relStart > relEnd)
 	{
 	int tmp  = relStart;
@@ -2335,10 +2351,7 @@ if ((canonical = matchRegexSubstr(term, canonicalRangeExp,
 	relEnd   = tmp;
 	}
     relativeFlag = TRUE;
-    if (canonical)
-	relStart--;
     }
-
 term = sqlEscapeString(term);
 
 if (hgOfficialChromName(term) != NULL)

@@ -36,12 +36,14 @@
 #include "geneGraph.h"
 #include "rbTree.h"
 #include "binRange.h"
+#include "chromKeeper.h"
 
 #define IS_MRNA 1
-static char const rcsid[] = "$Id: orthoSplice.c,v 1.22 2004/04/17 20:20:59 sugnet Exp $";
+static char const rcsid[] = "$Id: orthoSplice.c,v 1.23 2004/05/12 05:30:36 sugnet Exp $";
 static struct binKeeper *netBins = NULL;  /* Global bin keeper structure to find cnFills. */
 static struct rbTree *netTree = NULL;  /* Global red-black tree to store cnfills in for quick searching. */
 static struct rbTree *orthoAgxTree = NULL; /* Global red-black tree to store agx's so don't need db. */
+boolean usingChromKeeper = FALSE;      /* Are we using a chromosome keeper for agxs? database otherwise. */
 static char *workingChrom = NULL;      /* Chromosme we are working on. */
 static struct binKeeper *possibleExons = NULL; /* List of possible exons common to human and mouse. */
 static char *chainTable = NULL;        /* Table that contains chains, i.e. chainMm3. */
@@ -338,8 +340,8 @@ for(i=0; i<ag->edgeCount; i++)
     e->chromEnd = vPos[ends[i]];
     e->v1 = starts[i];
     e->v2 = ends[i];
-//    e->conf = ag->evidence[i].evCount;
-//    e->conf = altGraphConfidenceForEdge(ag, i);
+/*     e->conf = ag->evidence[i].evCount; */
+/*     e->conf = altGraphConfidenceForEdge(ag, i); */
     slAddHead(&eList, e);
     } 
 return eList;
@@ -387,6 +389,49 @@ else if (b->tEnd <= a->tStart)
     return 1;
 else
     return 0;
+}
+
+void findChromsAndMaxSizes(struct altGraphX *agxList, struct slName **pNameList, int *pMaxSize)
+/* Loop through the agxList and find chromosomes and the
+   max size. */
+{
+struct hash *hash = newHash(6);
+struct altGraphX *agx = NULL;
+int maxSize = 0;
+struct slName *nameList = NULL, *name = NULL;
+for(agx = agxList; agx != NULL; agx = agx->next)
+    {
+    if(hashIntValDefault(hash, agx->tName, 0) == 0)
+	{
+	name = newSlName(agx->tName);
+	slAddHead(&nameList, name);
+	hashAddInt(hash, agx->tName, 1);
+	}
+    if(agx->tEnd > maxSize)
+	maxSize = agx->tEnd;
+    }
+*pNameList = nameList;
+*pMaxSize = maxSize;
+hashFree(&hash);
+}
+
+void initAgxChromKeeper(char *fileName)
+/* Start up a chromkeeper for the agx files. */
+{
+struct altGraphX *agx = NULL, *agxList = NULL;
+struct slName *nameList = NULL;
+int maxSize = 0;
+agxList = altGraphXLoadAll(fileName);
+
+findChromsAndMaxSizes(agxList, &nameList, &maxSize);
+assert(nameList);
+chromKeeperInitChroms(nameList, maxSize);
+for(agx = agxList; agx != NULL; agx = agx->next)
+    {
+    chromKeeperAdd(agx->tName, agx->tStart, agx->tEnd, agx);
+    }
+slFreeList(&nameList);
+usingChromKeeper = TRUE;
 }
 
 struct rbTree *rbTreeFromAgxFile(char *fileName)
@@ -1315,38 +1360,34 @@ freez(&cEdgeSeen);
 struct altGraphX *agxForCoordinates(char *chrom, int chromStart, int chromEnd, char strand, 
 				    char *altTable, struct altGraphX **toFree)
 {
-struct slRef *refList=NULL, *ref = NULL;
-struct altGraphX *ag = NULL, *agList = NULL;
-struct altGraphX *range = NULL;
+struct binElement *beList = NULL, *be = NULL;
+struct altGraphX *agx = NULL, *agxList = NULL;
 
-if(orthoAgxTree == NULL)
+if(!usingChromKeeper)
     {
     char query[256];
     struct sqlConnection *orthoConn = NULL; 
     orthoConn = hAllocConn2();
     safef(query, sizeof(query), "select * from %s where tName='%s' and tStart<%d and tEnd>%d and strand like '%s'",
 	  altTable, chrom, chromEnd, chromStart, strand);
-    agList = altGraphXLoadByQuery(orthoConn, query);
+    agxList = altGraphXLoadByQuery(orthoConn, query);
     hFreeConn2(&orthoConn);
-    *toFree = agList;
-    return agList;
+    *toFree = agxList;
+    return agxList;
     }
 else 
     {
-    AllocVar(range);
-    range->tName = chrom;
-    range->tStart = chromStart;
-    range->tEnd = chromEnd;
-    safef(range->strand, sizeof(range->strand), "%c", strand);
-    refList = rbTreeItemsInRange(orthoAgxTree, range, range);
-    for(ref = refList; ref != NULL; ref = ref->next)
+    beList = chromKeeperFind(chrom, chromStart, chromEnd);
+    for(be = beList; be != NULL; be = be->next)
 	{
-	slSafeAddHead(&agList, ((struct slList *)ref->val));
+	agx = be->val;
+	if(*agx->strand ==  strand)
+	    slSafeAddHead(&agxList, agx);
 	}
-    slReverse(&agList);
-    freez(&range);
+    slReverse(&agxList);
     (*toFree) = NULL;
-    return agList;
+    slFreeList(&beList);
+    return agxList;
     }
 return NULL;
 }
@@ -1713,7 +1754,8 @@ if(netFile != NULL)
 if(orthoAgxFile != NULL)
     {
     warn("Loading orthoAltGraphX records from file", orthoAgxFile);
-    orthoAgxTree = rbTreeFromAgxFile(orthoAgxFile);
+    initAgxChromKeeper(orthoAgxFile);
+/*     orthoAgxTree = rbTreeFromAgxFile(orthoAgxFile); */
     }
 /* Want to read in and process each altGraphX record individually
    to save memory, so figure out how many columns in each row we have currently and
@@ -1739,14 +1781,12 @@ while(lineFileNextCharRow(lf, '\t', row, rowCount))
 	if(agOrtho != NULL)
 	    {
 	    foundOrtho++;
-//	    printf("FoundOne.\n");
 	    altGraphXTabOut(agOrtho,cFile);
 	    freeCommonAg(&agOrtho);
 	    }
 	else
 	    {
 	    noOrtho++;
-//	    printf("NoOrtho\n");
 	    }
 	}
     altGraphXFree(&ag);

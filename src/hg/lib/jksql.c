@@ -14,7 +14,7 @@
 #include "sqlNum.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: jksql.c,v 1.57 2004/03/29 01:17:23 markd Exp $";
+static char const rcsid[] = "$Id: jksql.c,v 1.59 2004/05/12 22:03:20 angie Exp $";
 
 /* flags controlling sql monitoring facility */
 static unsigned monitorInited = FALSE;      /* initialized yet? */
@@ -864,7 +864,7 @@ return mysql_num_fields(sr->result);
 }
 
 int sqlCountRows(struct sqlConnection *sc, char *table)
-/* Return the number of fields in a table */
+/* Return the number of rows in a table */
 {
 char query[256];
 struct sqlResult *sr;
@@ -1090,8 +1090,10 @@ if ((cache = *pCache) != NULL)
     }
 }
 
-struct sqlConnection *sqlAllocConnection(struct sqlConnCache *cache)
-/* Allocate a cached connection. */
+struct sqlConnection *sqlMayAllocConnection(struct sqlConnCache *cache,
+					    boolean mustConnect)
+/* Allocate a cached connection. errAbort if too many open connections.  
+ * errAbort if mustConnect and connection fails. */
 {
 int i;
 int connAlloced = cache->connAlloced;
@@ -1106,11 +1108,21 @@ for (i=0; i<connAlloced; ++i)
     }
 if (connAlloced >= maxConn)
    errAbort("Too many open sqlConnections to %s for cache", cache->database);
-cache->connArray[connAlloced] = sqlConnectRemote(cache->host, 
-	cache->user, cache->password, cache->database);
-connUsed[connAlloced] = TRUE;
-++cache->connAlloced;
+cache->connArray[connAlloced] = sqlConnRemote(cache->host, cache->user,
+					      cache->password, cache->database,
+					      mustConnect);
+if (cache->connArray[connAlloced] != NULL)
+    {
+    connUsed[connAlloced] = TRUE;
+    ++cache->connAlloced;
+    }
 return cache->connArray[connAlloced];
+}
+
+struct sqlConnection *sqlAllocConnection(struct sqlConnCache *cache)
+/* Allocate a cached connection. */
+{
+return sqlMayAllocConnection(cache, TRUE);
 }
 
 void sqlFreeConnection(struct sqlConnCache *cache, struct sqlConnection **pConn)

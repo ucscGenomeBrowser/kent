@@ -14,7 +14,7 @@
 #include "netAlign.h"
 #include "chainNetDbLoad.h"
 
-static char const rcsid[] = "$Id: chainNetDbLoad.c,v 1.6 2004/05/05 22:56:22 baertsch Exp $";
+static char const rcsid[] = "$Id: chainNetDbLoad.c,v 1.7 2004/05/06 23:48:51 baertsch Exp $";
 
 struct cnFill *cnFillFromNetAlign(struct netAlign *na, struct hash *nameHash)
 /* Convert netAlign to cnFill. Name hash is a place to store
@@ -254,9 +254,8 @@ else
     {
     dyStringPrintf(dy, 
 	 "select * from %sLink where ",table );
-    hAddBinToQuery(end, start, dy);
-    dyStringPrintf(dy," chainId = %d and tStart < %d and tEnd > %d", 
-	 id, end, start);
+    hAddBinToQuery(start, end, dy);
+    dyStringPrintf(dy," chainId = %d and tStart < %d and tEnd > %d", id, end, start);
     }
 sr = sqlGetResult(conn, dy->string);
 chainLinkAddResult(sr, hasBin, chain);

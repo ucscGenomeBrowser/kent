@@ -1691,5 +1691,55 @@ blat -mask=lower -q=dnax -t=dnax {check in exists $(path1)} {check in line+ $(pa
     gensub2 chimp.lst fugu.lst gsub spec
     para create spec
     para try, check, push, check, ...
+#CPU time in finished jobs:    6324220s  105403.66m  1756.73h   73.20d  0.201 y
+#IO & Wait Time:               2344146s   39069.11m   651.15h   27.13d  0.074 y
+#Average job time:                 288s       4.81m     0.08h    0.00d
+#Longest job:                    14817s     246.95m     4.12h    0.17d
+#Submission to last job:         51381s     856.35m    14.27h    0.59d
 
+    # Sort alignments:
+    ssh kksilo
+    cd /cluster/data/panTro1/bed/blatFr1
+    pslCat -dir psl | pslSortAcc nohead chrom temp stdin
+        # Processed 782670 lines into 4 temp files
+    # lift query side to Fugu browser chrUn coordinates
+    liftUp -pslQ all.psl /cluster/data/fr1/fugu_v3.masked.lft warn chrom/*.psl
+
+    # load into database:
+    ssh hgwdev
+    cd /cluster/data/panTro1/bed/blatFr1
+    hgLoadPsl -fastLoad -table=blatFr1 panTro1 all.psl
+        # load problem with 2 rows -- qBaseInsert values were negative,
+        # and were set to 0 when loaded.  Blat problem ?
+    # add to trackDb as type xeno psl fr1, with colorChromDefault off
+
+    
+# Reciprocal Best chain files for download
+    # just swap the human-reference file generated in makeHg16.doc
+    ssh kksilo
+    cd /cluster/data/panTro1/bed/blastz-blatHg16.pt0.swap
+    chainSwap /cluster/data/hg16/bed/blastz-blat.panTro1.lifted/rBest.chain \
+                stdout | chainMergeSort stdin > rBest.chain
+    ssh hgwdev
+    cd /cluster/data/panTro1/bed/blastz-blatHg16.pt0.swap
+    set dir = /usr/local/apache/htdocs/goldenPath/panTro1/vsHg16
+    mkdir -p $dir
+    cp -p rBest.chain $dir/chimp.best.chain
+    cd $dir
+    gzip *.chain
+    # create md5sum.txt and README's
+
+    # split and load into table for QA purposes
+    ssh kksilo
+    cd /cluster/data/panTro1/bed/blastz-blatHg16.pt0.swap
+    chainSplit rBest rBest.chain
+
+    ssh hgwdev
+    cd /cluster/data/panTro1/bed/blastz-blatHg16.pt0.swap
+    cd rBest
+    foreach i (*.chain)
+        set c = $i:r
+        hgLoadChain panTro1 ${c}_rBestChainHg16 $i
+        echo done $c
+    end
     

@@ -71,7 +71,7 @@ calStampXY(stampPictPtr, fx, fy, &x, &y);
 
 w = (int)(fw * xScale);
 h = ih;
-// 1 pixel more to the width
+/* 1 pixel more to the width */
 vgBox(g_vg, x, y-h, w+1+1, h, color);
 }
 
@@ -97,6 +97,28 @@ h = (int)(fh * yScale);
 vgBox(g_vg, x, y-h-1, w, h-1, color);
 }
 
+void drawXScaleNonInt(struct pbStamp *pbStampPtr, struct pbStampPict *stampPictPtr, int increment)
+/* mark the X axis scale for non-Integer data */
+{
+int i;
+double txmin, tymin, txmax, tymax;
+int xx,  yy;
+char labelStr[20];
+   
+txmin	= pbStampPtr->xmin;
+txmax	= pbStampPtr->xmax;
+tymin   = pbStampPtr->ymin;
+tymax   = pbStampPtr->ymax;
+ 
+for (i=(int)txmin; i<(int)txmax; i=i+increment)
+    {
+    vLineM((double)i, 0.0, (tymax-tymin)*0.05, 2, boundaryColor);
+    calStampXY(stampPictPtr, (double)i, 0, &xx, &yy);
+    safef(labelStr, sizeof(labelStr), "%d", i);
+    vgTextCentered(g_vg, xx-5, yy+5, 10, 10, MG_BLACK, g_font, labelStr);
+    }
+}
+
 void drawXScale(struct pbStamp *pbStampPtr, struct pbStampPict *stampPictPtr, int increment)
 /* mark the X axis scale */
 {
@@ -112,9 +134,9 @@ tymax       = pbStampPtr->ymax;
  
 for (i=(int)txmin; i<(int)txmax; i=i+increment)
     {
-    vLineM((double)i+0.5, 0.0, (tymax-tymin)*0.05, 1, boundaryColor);
+    vLineM((double)i+0.5, 0.0, (tymax-tymin)*0.05, 2, boundaryColor);
     calStampXY(stampPictPtr, (double)i+0.5, 0, &xx, &yy);
-    sprintf(labelStr, "%d", i);
+    safef(labelStr, sizeof(labelStr), "%d", i);
     vgTextCentered(g_vg, xx-5, yy+5, 10, 10, MG_BLACK, g_font, labelStr);
     }
 }
@@ -136,7 +158,7 @@ for (i=(int)txmin; i<=(int)txmax; i=i+increment)
     {
     vLineM((double)i+0.5, 0.0, (tymax-tymin)*0.05, 1, boundaryColor);
     calStampXY(stampPictPtr, (double)i+0.5, 0, &xx, &yy);
-    sprintf(labelStr, "%dK", i/1000);
+    safef(labelStr, sizeof(labelStr), "%dK", i/1000);
     vgTextCentered(g_vg, xx-5, yy+5, 10, 10, MG_BLACK, g_font, labelStr);
     }
 }
@@ -164,7 +186,7 @@ for (i=0; i<=i9; i++)
     vLineM((double)i*increment+txmin, 0.0, (tymax-tymin)*0.05, 1, boundaryColor);
     xValue = txmin + increment*(double)i;
     calStampXY(stampPictPtr, xValue, 0, &xx, &yy);
-    sprintf(labelStr, "%.1f", xValue);
+    safef(labelStr, sizeof(labelStr), "%.1f", xValue);
     vgTextCentered(g_vg, xx-5, yy+5, 10, 10, MG_BLACK, g_font, labelStr);
     }
 }
@@ -194,7 +216,7 @@ tymax	= pbStampPtr->ymax;
 ix	= stampPictPtr->xOrig;
 iy	= stampPictPtr->yOrig;
 
-sprintf(cond_str, "AA='%c'", aaChar);
+safef(cond_str, sizeof(cond_str), "AA='%c'", aaChar);
 answer = sqlGetField(NULL, database, "pbAnomLimit", "pctLow", cond_str);
 pctLow    = (double)(atof(answer));
 answer = sqlGetField(NULL, database, "pbAnomLimit", "pctHi", cond_str);
@@ -249,7 +271,7 @@ len	= pbStampPtr->len;
 txmin	= pbStampPtr->xmin;
 txmax	= pbStampPtr->xmax;
 
-// force fit for the stddev stamp plot
+/* force fit for the stddev stamp plot */
 tymin	= -4.0;
 tymax	=  4.0;
    
@@ -257,7 +279,7 @@ ix	= stampPictPtr->xOrig;
 iy	= stampPictPtr->yOrig;
 
 aaChar = aaAlphabet[iTarget];
-sprintf(cond_str, "AA='%c'", aaChar);
+safef(cond_str, sizeof(cond_str), "AA='%c'", aaChar);
 answer = sqlGetField(NULL, database, "pbAnomLimit", "pctLow", cond_str);
 pctLow    = (double)(atof(answer));
 answer = sqlGetField(NULL, database, "pbAnomLimit", "pctHi", cond_str);
@@ -295,7 +317,7 @@ else
 	}
     else
   	{
-	// normal range
+	/* normal range */
 	if ((yValueIn - avg[iTarget]) >= 0.0)
     	    {
     	    vLine(tx[iTarget]+0.4, 0.0, yPlotValue, 2, normalColor);
@@ -393,7 +415,7 @@ char *stampTable, *stampTitle, *stampDesc;
 int i, n, index;
 
 conn2= hAllocConn();
-sprintf(query2,"select * from %s.pbStamp where stampName ='%s'", database, stampName);
+safef(query2, sizeof(query2), "select * from %s.pbStamp where stampName ='%s'", database, stampName);
     	
 sr2 = sqlMustGetResult(conn2, query2);
 row2 = sqlNextRow(sr2);
@@ -405,7 +427,7 @@ if (row2 == NULL)
     }
 sqlFreeResult(&sr2);
     
-sprintf(query2,"select * from %s.%s;", database, pbStampPtr->stampTable);
+safef(query2, sizeof(query2), "select * from %s.%s;", database, pbStampPtr->stampTable);
 sr2 = sqlMustGetResult(conn2, query2);
 row2 = sqlNextRow(sr2);
     	
@@ -498,7 +520,7 @@ for (index=0; index < (n-1); index++)
     }
     
 hLine(txmin, tymin, txmax-txmin, 2, boundaryColor);
-// this line needs to call hLine2 for fine tuning at the right hand side ending 
+/* this line needs to call hLine2 for fine tuning at the right hand side ending */
 hLine2(txmin, tymax, txmax-txmin, 2, boundaryColor);
 vLine(txmin, tymin, tymax-tymin, 2, boundaryColor);
 vLine(txmax, tymin, tymax-tymin, 2, boundaryColor);
@@ -508,7 +530,7 @@ if (strcmp(pbStampPtr->stampName, "pepRes") == 0)
     for (i=0; i<20; i++)
 	{
     	calStampXY(stampPictPtr, tx[i], tymin, &xx, &yy);
-	sprintf(charStr, "%c", aaAlphabet[i]);
+	safef(charStr, sizeof(charStr), "%c", aaAlphabet[i]);
 	vgTextCentered(g_vg, xx+1, yy+5, 10, 10, MG_BLACK, g_font, charStr);
 	}
     } 
@@ -569,15 +591,13 @@ hLine(tx[index], (tymax-tymin)/8.0*7.0, (tx[index+1]-tx[index])/2.0, 1, MG_GRAY)
 
 for (index=0; index < (n-1); index++)
     {
-    //hLine(tx[index], (tymax-tymin)/4.0,     (tx[index+1]-tx[index])/2.0, 1, MG_BLACK);
     hLine(tx[index], (tymax-tymin)/2.0,     tx[index+1]-tx[index], 1, MG_BLACK);
-    //hLine(tx[index], (tymax-tymin)/4.0*3.0, (tx[index+1]-tx[index])/2.0, 1, MG_BLACK);
     }
    
 vLine(tx[0], 0, ty[0], 1,  pbBlue);
     
 hLine(txmin, tymin, txmax-txmin, 2, boundaryColor);
-// this line needs to call hLine2 for fine tuning at the right hand side ending 
+/* this line needs to call hLine2 for fine tuning at the right hand side ending */ 
 hLine2(txmin, tymax, txmax-txmin, 2, boundaryColor);
 vLine(txmin, tymin, tymax-tymin, 2, boundaryColor);
 vLine(txmax, tymin, tymax-tymin, 2, boundaryColor);
@@ -587,7 +607,7 @@ if (strcmp(pbStampPtr->stampName, "pepRes") == 0)
     for (i=0; i<20; i++)
     	{
     	calStampXY(stampPictPtr, tx[i], tymin, &xx, &yy);
-	sprintf(charStr, "%c", aaAlphabet[i]);
+	safef(charStr, sizeof(charStr), "%c", aaAlphabet[i]);
 	vgTextCentered(g_vg, xx+1, yy+5, 10, 10, MG_BLACK, g_font, charStr);
 	}
     } 
@@ -672,12 +692,12 @@ if (pbScale >= 6) yPosition = yPosition + 20;
 
 boundaryColor = vgFindColorIx(g_vg, 170, 170, 170);
 
-// draw pI stamp
+/* draw pI stamp */
 
-sprintf(cond_str, "accession='%s'", proteinID);
+safef(cond_str, sizeof(cond_str), "accession='%s'", proteinID);
 answer = sqlGetField(NULL, database, "pepPi", "count(*)", cond_str);
 
-// either 0 or multiple rows are not valid
+/* either 0 or multiple rows are not valid */
 if (strcmp(answer, "1") == 0)
     {
     answer = sqlGetField(NULL, database, "pepPi", "pI", cond_str);
@@ -685,8 +705,8 @@ if (strcmp(answer, "1") == 0)
     stampDataPtr = getStampData("pepPi");
     setPbStampPict(stampPictPtr, stampDataPtr, xPosition, yPosition, stampWidth, stampHeight);
     drawPbStamp(stampDataPtr, stampPictPtr);
-    drawXScale(stampDataPtr, stampPictPtr, 2);
-    sprintf(valStr2, "%.1f", pI);
+    drawXScaleNonInt(stampDataPtr, stampPictPtr, 2);
+    safef(valStr2, sizeof(valStr2), "%.1f", pI);
     markStamp(stampDataPtr, stampPictPtr, pI, valStr2, tx, ty);
     pbStampFree(&stampDataPtr);
     }
@@ -696,17 +716,17 @@ else
     setPbStampPict(stampPictPtr, stampDataPtr, xPosition, yPosition, stampWidth, stampHeight);
     drawPbStamp(stampDataPtr, stampPictPtr);
     drawXScale(stampDataPtr, stampPictPtr, 2);
-    sprintf(valStr2, "N/A");
+    safef(valStr2, sizeof(valStr2), "N/A");
     markStamp0(stampDataPtr, stampPictPtr, pI, valStr2, tx, ty);
     pbStampFree(&stampDataPtr);
     }
 
-// draw Mol Wt stamp
-sprintf(cond_str, "accession='%s'", proteinID);
+/* draw Mol Wt stamp */
+safef(cond_str, sizeof(cond_str), "accession='%s'", proteinID);
 answer = sqlGetField(NULL, database, "pepMwAa", "MolWeight", cond_str);
 if (answer != NULL)
     {
-    sprintf(valStr2, "%s Da", answer);
+    safef(valStr2, sizeof(valStr2), "%s Da", answer);
     molWeight  = (double)atof(answer);
     stampDataPtr = getStampData("pepMolWt");
     xPosition = xPosition + stampWidth + stampWidth/8;
@@ -718,7 +738,7 @@ if (answer != NULL)
     }
 else
     {
-    sprintf(valStr2, "N/A");
+    safef(valStr2, sizeof(valStr2), "N/A");
     stampDataPtr = getStampData("pepMolWt");
     xPosition = xPosition + stampWidth + stampWidth/8;
     setPbStampPict(stampPictPtr, stampDataPtr, xPosition, yPosition, stampWidth, stampHeight);
@@ -728,8 +748,8 @@ else
     pbStampFree(&stampDataPtr);
     }
 
-// draw exon count stamp
-sprintf(cond_str, "qName='%s'", proteinID);
+/* draw exon count stamp */
+safef(cond_str, sizeof(cond_str), "qName='%s'", proteinID);
 answer = sqlGetField(NULL, database, kgProtMapTableName, "blockCount", cond_str);
 if (answer != NULL)
     {
@@ -744,7 +764,7 @@ if (answer != NULL)
     pbStampFree(&stampDataPtr);
     }
 
-// draw AA residual anomolies stamp
+/* draw AA residual anomolies stamp */
 if (answer != NULL)
     {
     stampDataPtr = getStampData("pepRes");
@@ -762,8 +782,8 @@ if (answer != NULL)
 xPosition = 15;
 yPosition = yPosition + 170;
 
-// draw family size stamp
-sprintf(cond_str, "accession='%s'", proteinID);
+/* draw family size stamp */
+safef(cond_str, sizeof(cond_str), "accession='%s'", proteinID);
 answer = sqlGetField(NULL, protDbName, "swInterPro", "count(*)", cond_str);
 if (answer != NULL)
     {
@@ -786,7 +806,7 @@ else
     pbStampFree(&stampDataPtr);
     }
 
-// draw hydrophobicity stamp
+/* draw hydrophobicity stamp */
 chp      = protSeq;
 hydroSum = 0;
 for (i=0; i<protSeqLen; i++)
@@ -799,11 +819,11 @@ xPosition = xPosition + stampWidth + stampWidth/8;
 setPbStampPict(stampPictPtr, stampDataPtr, xPosition, yPosition, stampWidth, stampHeight);
 drawPbStamp(stampDataPtr, stampPictPtr);
 drawXScaleHydro(stampDataPtr, stampPictPtr, 1.0);
-sprintf(valStr2, "%.1f", hydroSum/(double)len);
+safef(valStr2, sizeof(valStr2), "%.1f", hydroSum/(double)len);
 markStamp(stampDataPtr, stampPictPtr, hydroSum/(double)len, valStr2, tx, ty);
 pbStampFree(&stampDataPtr);
 
-// draw Cystein Count stamp
+/* draw Cystein Count stamp */
 chp  = protSeq;
 cCnt = 0;
 for (i=0; i<len; i++)
@@ -816,11 +836,11 @@ xPosition = xPosition + stampWidth + stampWidth/8;
 setPbStampPict(stampPictPtr, stampDataPtr, xPosition, yPosition, stampWidth, stampHeight);
 drawPbStamp(stampDataPtr, stampPictPtr);
 drawXScale(stampDataPtr, stampPictPtr, 10);
-sprintf(valStr2, "%d", cCnt);
+safef(valStr2, sizeof(valStr2), "%d", cCnt);
 markStamp(stampDataPtr, stampPictPtr, (double)cCnt, valStr2, tx, ty);
 pbStampFree(&stampDataPtr);
 
-// draw AA residual anomolies stddev stamp
+/* draw AA residual anomolies stddev stamp */
 if (answer != NULL)
     {
     exonCount    = (double)atof(answer);
@@ -835,7 +855,7 @@ if (answer != NULL)
         markResStdvStamp(stampDataPtr, stampPictPtr, i, aaResFreqDouble[i], tx, ty, avg, stddev);
 	}
 
-    // draw background after bars drawn so that "... stddev" labels do not get covered by bars
+    /* draw background after bars drawn so that "... stddev" labels do not get covered by bars */
     stampDataPtr = getStampData("pepRes");
     setPbStampPict(stampPictPtr, stampDataPtr, xPosition, yPosition, 3*stampWidth/2, stampHeight);
     drawPbStampB(stampDataPtr, stampPictPtr);
@@ -843,9 +863,9 @@ if (answer != NULL)
     pbStampFree(&stampDataPtr);
     }
 
-// This section was used to plot freq distribution for each AA so that we can view than to decide on
-// whether +/- 2 stddev is applicable and what cutoff thresholds to use.  Keep it here for possible
-// future reuse.
+/* The follwing section was used to plot freq distribution for each AA so that we can view than to decide on 
+   whether +/- 2 stddev is applicable and what cutoff thresholds to use.  Keep it here for possible 
+   future reuse. */
 /*
 vertLabel = cloneString("Frequency");
 for (i=strlen(vertLabel)-1; i>=0; i--)
@@ -856,17 +876,16 @@ for (i=strlen(vertLabel)-1; i>=0; i--)
     }
 
 xPosition = xPosition + 80;
-// draw individual AA distribution
 for (j=0; j<20; j++)
     {
-    sprintf(tempStr, "%c", aaAlphabet[j]);
+    safef(tempStr, sizeof(tempStr), "%c", aaAlphabet[j]);
     stampDataPtr = getStampData(tempStr);
 
     xPosition = xPosition + stampWidth + stampWidth/8;
     setPbStampPict(stampPictPtr, stampDataPtr, xPosition, yPosition, stampWidth, stampHeight);
     drawPbStamp(stampDataPtr, stampPictPtr);
     drawXScale(stampDataPtr, stampPictPtr, 10);
-    sprintf(valStr2, "%c", aaAlphabet[j]);
+    safef(valStr2, sizeof(valStr2), "%c", aaAlphabet[j]);
     markStamp(stampDataPtr, stampPictPtr, 0.0, valStr2, tx, ty);
     pbStampFree(&stampDataPtr);
     }

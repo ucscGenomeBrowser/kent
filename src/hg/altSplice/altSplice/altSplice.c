@@ -70,10 +70,11 @@
 //#include "cheapcgi.h"
 #include "bed.h"
 #include "options.h"
+#include "chromKeeper.h"
 
 #define USUAL
-// #define AFFYSPLICE
-static char const rcsid[] = "$Id: altSplice.c,v 1.11 2003/12/09 04:12:12 sugnet Exp $";
+//#define AFFYSPLICE
+static char const rcsid[] = "$Id: altSplice.c,v 1.12 2004/05/06 18:05:33 hartera Exp $";
 
 int cassetteCount = 0; /* Number of cassette exons counted. */
 int misSense = 0;      /* Number of cassette exons that would introduce a missense mutation. */
@@ -82,6 +83,10 @@ struct hash *uniqPos = NULL; /* Hash to make sure we're not outputting doubles. 
 double minCover = 0.0; /* Minimum percent of transcript aligning. */
 double minAli = 0.0;   /* Minimum percent identity of alignments to keep. */
 boolean weightMrna = FALSE; /* Add more weight to alignments of mRNAs? */
+boolean useChromKeeper = FALSE; /* Load all of the info from the database once and store in local memory. */
+int numDbTables =0;     /* Number of tables we're going to load psls from. */
+char **dbTables = NULL; /* Tables that psls will be loaded from. */
+struct hash *tissLibHash = NULL; /* Hash of slInts by accession where first slInt is lib, second is tissue. */
 static struct optionSpec optionSpecs[] = 
 /* Our acceptable options to be called with. */
 {
@@ -95,6 +100,7 @@ static struct optionSpec optionSpecs[] =
     {"minAli", OPTION_FLOAT},
     {"skipTissues", OPTION_BOOLEAN},
     {"weightMrna", OPTION_BOOLEAN},
+    {"localMem", OPTION_BOOLEAN},
     {NULL, 0}
 };
 
@@ -110,7 +116,8 @@ static char *optionDescripts[] =
     "Minimum percent of a sequence that an alignment can contain and be included.",
     "Minimum percent id of alignment to keep.",
     "Skip loading the tissues and libraries.",
-    "Add more weight to mRNAs and RefGenes."
+    "Add more weight to mRNAs and RefGenes.",
+    "Load all of the psls and associated information once from from db and cache in memory."
 };
 
 void usage()
@@ -157,6 +164,32 @@ CopyArray(psl->tStarts, c->tStarts, c->blockCount);
 return c;
 }
 
+struct psl *filterPsls(struct psl *pslList, int chromStart, int chromEnd)
+/** Filter pslList to get only "good" ones. */
+{
+struct psl *goodList = NULL, *psl = NULL, *pslNext = NULL;
+for(psl = pslList; psl != NULL; psl = pslNext)
+    {
+    boolean notTooBig = FALSE;
+    pslNext = psl->next;
+    notTooBig = ((psl->tStarts[0] + psl->blockSizes[0] >= chromStart) && 
+		     (psl->tStarts[psl->blockCount -1] <= chromEnd));
+#ifdef AFFYSPLICE
+    notTooBig = TRUE;
+#endif
+    if(passFilters(psl) && notTooBig)
+	{
+	slSafeAddHead(&goodList, psl);
+	}
+    else
+	{
+	if(!useChromKeeper)
+	    pslFree(&psl);
+	}
+    }
+slReverse(&goodList);
+return goodList;
+}
 
 struct psl *loadPslsFromDb(struct sqlConnection *conn, int numTables, char **tables, 
 			   char *chrom, unsigned int chromStart, unsigned int chromEnd)
@@ -175,22 +208,13 @@ for(i = 0; i < numTables; i++)
     while ((row = sqlNextRow(sr)) != NULL)
 	{
 	psl = pslLoad(row+rowOffset);
-	if( passFilters(psl) &&
-	    (psl->tStarts[0] + psl->blockSizes[0] >= chromStart) && 
-	    (psl->tStarts[psl->blockCount -1] <= chromEnd) )
+	slSafeAddHead(&pslList, psl);
+	if(weightMrna && (stringIn("refSeqAli",tables[i]) || stringIn("mrna", tables[i])))
 	    {
+	    psl = clonePsl(psl);
 	    slSafeAddHead(&pslList, psl);
-	    if(weightMrna && (stringIn("refSeqAli",tables[i]) || stringIn("mrna", tables[i])))
-		{
-		psl = clonePsl(psl);
-		slSafeAddHead(&pslList, psl);
-		}
 	    }
-	else
-	    {
-	    pslFree(&psl);
-	    }
-	}
+	}    
     sqlFreeResult(&sr);
     }
 slReverse(&pslList);
@@ -277,11 +301,11 @@ if(mcList == NULL)
 //slSort(&mcList, mcLargestFirstCmp);
 mc = mcList;
 clusterCount++;
-for(mc != mcList; mc != NULL; mc = mc->next)
+for(mc = mcList; mc != NULL; mc = mc->next)
     {
     if(optionExists("consensus"))
 	{
-	gg = ggGraphConsensusCluster(mc, ci, !optionExists("skipTissues"));
+	gg = ggGraphConsensusCluster(mc, ci, tissLibHash, !optionExists("skipTissues"));
 	}
     else
 	gg = ggGraphCluster(mc,ci);
@@ -311,13 +335,23 @@ freeGeneGraph(&gg);
 return ag;
 }
 
-struct altGraphX *agFromGp(struct genePred *gp, struct sqlConnection *conn, 
-			   int maxGap, FILE *out)
-/** Create an altGraphX record by clustering psl records within coordinates
-    specified by genePred record. */
+struct psl *getPslsFromCache(struct genePred *gp)
+/** Get all of the psls for a given gp of interest. */
 {
-struct altGraphX *ag = NULL;
-struct dnaSeq *genoSeq = NULL;
+struct psl *pslList = NULL, *psl = NULL;
+struct binElement *beList = NULL, *be = NULL;
+beList = chromKeeperFind(gp->chrom, gp->txStart, gp->txEnd);
+for(be = beList; be != NULL; be = be->next)
+    {
+    psl = be->val;
+    slAddHead(&pslList, psl);
+    }
+slFreeList(&beList);
+return pslList;
+}
+
+void setupTables(char *chrom)
+{
 #ifdef AFFYSPLICE
 char *tablePrefixes[] = {}; //{"_mrna", "_intronEst"};
 char *wholeTables[] = {"splicesTmp"}; // {"refSeqAli"};
@@ -326,8 +360,137 @@ char *wholeTables[] = {"splicesTmp"}; // {"refSeqAli"};
 char *tablePrefixes[] = {"_mrna", "_intronEst"};
 char *wholeTables[] = {"refSeqAli"};
 #endif
-int numTables =0;
-char **tables = NULL;
+int i;
+char buff[256];
+
+numDbTables = (ArraySize(tablePrefixes) + ArraySize(wholeTables));
+dbTables = needMem(sizeof(char*) * numDbTables);
+for(i=0; i< ArraySize(tablePrefixes); i++)
+    {
+    snprintf(buff, sizeof(buff),"%s%s", chrom, tablePrefixes[i]);
+    dbTables[i] = cloneString(buff);
+    }
+for(i = ArraySize(tablePrefixes); i < numDbTables; i++)
+    {
+    dbTables[i] = cloneString(wholeTables[i-ArraySize(tablePrefixes)]);
+    }
+}
+
+
+struct psl *getPslsFromDatabase(struct genePred *gp, struct sqlConnection *conn)
+/** Load the psls for a given table directly from the database. */
+{
+int i,j,k,l;
+char buff[256];
+struct psl *pslList = NULL, *psl = NULL, *pslCluster = NULL, *pslNext = NULL;
+char *chrom = gp->chrom;
+int chromStart = gp->txStart;
+int chromEnd = gp->txEnd;
+/* load the psls */
+pslList = loadPslsFromDb(conn, numDbTables, dbTables, gp->chrom, chromStart, chromEnd);
+return pslList;
+}
+
+void setupTissueLibraryCache(struct sqlConnection *conn)
+/* Hash all of the library and organism ids for this organism from
+   the mrna table. The key to the hash is the accession and the
+   value is a list of integers where the first is the library and
+   the second is the tissue. */
+{
+struct sqlResult *sr = NULL;
+char query[256];
+int organismId = -1;
+struct slInt *tissue = NULL, *library = NULL;
+char **row = NULL;
+int i = 0;
+tissLibHash = newHash(12);
+
+/* Now load up all of the accessions for this organism. */
+for(i = 0; i < numDbTables; i++)
+    {
+    safef(query, sizeof(query), "select library, tissue, acc from %s inner join mrna on qName = acc",
+	  dbTables[i]);
+    warn("%s", query);
+    sr = sqlGetResult(conn, query);
+    while((row = sqlNextRow(sr)) != NULL)
+	{
+	library = newSlInt(sqlSigned(row[0]));
+	tissue = newSlInt(sqlSigned(row[1]));
+	slAddTail(&library, tissue);
+	hashAdd(tissLibHash, row[2], library);
+	}
+    sqlFreeResult(&sr);
+    }
+
+}
+
+void setupChromKeeper(struct sqlConnection *conn, char *db, char *chrom) 
+/** Load all of the desired alignments into the chromkeeper structure
+    from the desired pslTables. */
+{
+int i = 0;
+int chromSize = hdbChromSize(db, chrom);
+struct sqlResult *sr = NULL;
+char **row = NULL;
+int rowOffset = 0;
+struct psl *pslList = NULL, *psl = NULL;
+chromKeeperInit(db);
+for(i = 0; i < numDbTables; i++)
+    {
+    sr = hRangeQuery(conn, dbTables[i], chrom, 0, chromSize, NULL, &rowOffset);
+    while((row = sqlNextRow(sr)) != NULL)
+	{
+	psl = pslLoad(row+rowOffset);
+	chromKeeperAdd(psl->tName, psl->tStart, psl->tEnd, psl);
+	/* This just adds the mrna twice to the list, cheat way to add more
+	   weight to certain tables. */
+	if(weightMrna && (stringIn("refSeqAli", dbTables[i]) || stringIn("mrna", dbTables[i])))
+	    {
+	    psl = clonePsl(psl);
+	    chromKeeperAdd(psl->tName, psl->tStart, psl->tEnd, psl);
+	    }
+	}
+    sqlFreeResult(&sr);
+    }
+}
+
+
+int pslCmpTargetQuery(const void *va, const void *vb)
+/* Compare to sort based on target start. */
+{
+const struct psl *a = *((struct psl **)va);
+const struct psl *b = *((struct psl **)vb);
+int dif;
+dif = strcmp(a->tName, b->tName);
+if (dif == 0)
+    dif = a->tStart - b->tStart;
+if(dif == 0)
+    dif = a->tEnd - b->tEnd;
+if(dif == 0)
+    dif = strcmp(a->qName, b->qName);
+return dif;
+}
+struct psl *getPsls(struct genePred *gp, struct sqlConnection *conn)
+/** Load psls from local chromKeeper structure or from database 
+    depending on useChromKeeper flag. */
+{
+struct psl *pslList = NULL, *goodList = NULL;
+if(useChromKeeper)
+    pslList = getPslsFromCache(gp);
+else
+    pslList = getPslsFromDatabase(gp, conn);
+goodList = filterPsls(pslList, gp->txStart, gp->txEnd);
+slSort(&goodList, pslCmpTargetQuery);
+return goodList;
+}
+
+struct altGraphX *agFromGp(struct genePred *gp, struct sqlConnection *conn, 
+			   int maxGap, FILE *out)
+/** Create an altGraphX record by clustering psl records within coordinates
+    specified by genePred record. */
+{
+struct altGraphX *ag = NULL;
+struct dnaSeq *genoSeq = NULL;
 int i,j,k,l;
 char buff[256];
 struct ggMrnaAli *maList=NULL, *ma=NULL, *maNext=NULL, *maSameStrand=NULL;
@@ -335,26 +498,8 @@ struct psl *pslList = NULL, *psl = NULL, *pslCluster = NULL, *pslNext = NULL;
 char *chrom = gp->chrom;
 int chromStart = gp->txStart;
 int chromEnd = gp->txEnd;
-/* make the tables */
-numTables = (ArraySize(tablePrefixes) + ArraySize(wholeTables));
-tables = needMem(sizeof(char*) * numTables);
-for(i=0; i< ArraySize(tablePrefixes); i++)
-    {
-    snprintf(buff, sizeof(buff),"%s%s", gp->chrom, tablePrefixes[i]);
-    tables[i] = cloneString(buff);
-    }
-for(i = ArraySize(tablePrefixes); i < numTables; i++)
-    {
-    tables[i] = cloneString(wholeTables[i-ArraySize(tablePrefixes)]);
-    }
 
-/* load the psls */
-pslList = loadPslsFromDb(conn, numTables, tables, gp->chrom, chromStart, chromEnd);
-
-for(i=0; i < numTables; i++)
-    freez(&tables[i]);
-freez(&tables);
-
+pslList = getPsls(gp, conn);
 /* expand to find the furthest boundaries of alignments */
 expandToMaxAlignment(pslList, chrom, &chromStart, &chromEnd);
 
@@ -369,12 +514,14 @@ for(psl = pslList; psl != NULL; psl = pslNext)
 	slAddHead(&pslCluster, psl);
 	}
     else 
-	pslFree(&psl);
+	{
+	if(!useChromKeeper)
+	    pslFree(&psl);
+	}
     }
 /* load and check the alignments */
 maList = pslListToGgMrnaAliList(pslCluster, gp->chrom, chromStart, chromEnd, genoSeq, maxGap);
 
-/* BAD_CODE: Not sure if this step is necessary... */
 for(ma = maList; ma != NULL; ma = maNext)
     {
     maNext = ma->next;
@@ -397,7 +544,10 @@ else
     dnaSeqFree(&genoSeq);
     ggMrnaAliFreeList(&maSameStrand);
     }
-pslFreeList(&pslCluster);
+
+/* Only free psls if not using cache... */
+if(!useChromKeeper)
+    pslFreeList(&pslCluster);
 return ag;
 }
 
@@ -454,8 +604,8 @@ for(bed=bedList; bed!=NULL; bed=bed->next)
     {
     AllocVar(gp);
     gp->chrom = cloneString(bed->chrom);
-    gp->txStart = bed->chromStart;
-    gp->txEnd = bed->chromEnd;
+    gp->txStart = gp->cdsStart = bed->chromStart;
+    gp->txEnd = gp->cdsEnd = bed->chromEnd;
     gp->name = cloneString(bed->name);
     safef(gp->strand, sizeof(gp->strand), "%s", bed->strand);
     slAddHead(&gpList, gp);
@@ -503,7 +653,16 @@ else
     usage();
     }
 slSort(&gpList, genePredCmp);
-
+setupTables(gpList->chrom);
+if(optionExists("localMem")) 
+    {
+    warn("Using local memory. Setting up caches...");
+    useChromKeeper = TRUE;
+    setupChromKeeper(conn, optionVal("db", NULL), gpList->chrom);
+    if(!optionExists("skipTissues"))
+	setupTissueLibraryCache(conn);
+    warn("Done setting up local caches.");
+    }
 out = mustOpen(outFile, "w");
 for(gp = gpList; gp != NULL & count < 5; )
     {

@@ -5,7 +5,7 @@ table pushQ
     char [6]  pqid;       "Parent Queue Id if split off another"
     char [1]  priority;   "Priority"
     uint      rank;       "Rank for display sort"
-    char [10] qadate;     "QA start date"
+    char [10] qadate;     "QA (re)-submission date"
     char [1]  newYN;      "new (track)?"
     string    track;      "Track"
     string    dbs;        "Databases"
@@ -26,6 +26,7 @@ table pushQ
     lstring   notes;      "Notes"
     char [10] reqdate;    "Push-request Date"
     char [1]  pushedYN;   "Push done?"
+    char [10] initdate;    "Initial Submission Date"
     )
 
 table users

@@ -23,6 +23,7 @@ struct clusterMember
 /* Member of the cluster of interest. */
 {
     struct clusterMember *next; /* Next in list. */
+    char *geneId;               /* Gene id in cluster. */
     char *psName;               /* Name of the probe set. */
     char *desc;                 /* Description of the probe set. */
 };
@@ -85,8 +86,9 @@ return correlation;
 
 double calcDistanceFromCluster(struct rnaBinder *rb, struct clusterMember *cmList,
 			       struct dMatrix *sjIndex, struct dMatrix *psInten)
-/* Calculate the distance from the rnaBinder intensity measurement
-   to the sjIndexes of the cluster members. */
+/* Calculate the distance from the rnaBinder intensity measurement to
+   the sjIndexes of the cluster members. If no intensity present use
+   0 as it will fall in the middle of [-1,1]. */
 {
 double sum = 0;
 int count = 0;
@@ -99,7 +101,10 @@ if(sjIndex->colCount != psInten->colCount)
 /* Get the index of the gene set in the intensity file. */
 gsIx = hashIntValDefault(psInten->nameIndex, rb->psName, -1);
 if(gsIx == -1)
-    errAbort("Probe Set %s not found in intensitiy file.");
+    {
+/*     warn("Probe Set %s not found in intensitiy file."); */
+    return 0;
+    }
 for(cm = cmList; cm != NULL; cm = cm->next)
     {
     /* For each member get the index in the splice junction file. */
@@ -126,7 +131,7 @@ return a->corr < b->corr;
 
 struct rnaBinder *loadRnaBinders()
 /* Load the probe sets that encode genes thought to 
-   bind rnas. */
+   bind rnas. Expected order is probeSet, geneName, pfamAcc, pfamName */
 {
 struct rnaBinder *rbList = NULL, *rb = NULL;
 char *words[4];
@@ -153,17 +158,28 @@ struct clusterMember *loadClusterMembers()
 /* Load the probe sets that are in our cluster of interest. */
 {
 struct clusterMember *cmList = NULL, *cm = NULL;
-char *words[2];
+char *words[3];
 struct lineFile *lf = NULL;
 char *inputFile = optionVal("clusterFile", NULL);
-
+int wordCount = 0;
 assert(inputFile);
 lf = lineFileOpen(inputFile, TRUE);
-while(lineFileChopCharNext(lf, '\t', words, ArraySize(words)))
+while((wordCount = lineFileChopCharNext(lf, '\t', words, ArraySize(words))) != 0)
     {
     AllocVar(cm);
-    cm->psName = cloneString(words[0]);
-    cm->desc = cloneString(words[1]);
+    if(wordCount == 3) 
+	{
+	cm->geneId = cloneString(words[0]);
+	cm->psName = cloneString(words[1]);
+	cm->desc = cloneString(words[2]);
+	}
+    else if(wordCount == 2)
+	{
+	cm->psName = cloneString(words[0]);
+	cm->desc = cloneString(words[1]);
+	}
+    else
+	errAbort("Got %d words at line %d", wordCount, lf->lineIx);
     slAddHead(&cmList, cm);
     }
 lineFileClose(&lf);

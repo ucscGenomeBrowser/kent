@@ -9,7 +9,7 @@ set hg hg13,hg15,hg16
 set mm mm3,mm4
 set rn rn2,rn3
 set fr fr1
-set ce ce1
+set ce ce1,ce2
 set cb cb1
 set dm dm1
 set dp dp1
@@ -260,6 +260,11 @@ identifier pseudoGeneName
 "Link together pseudo predicted gene structure and peptide"
     hg16.pseudoMrna.qName dupeOk
     hg16.pseudoGeneLink.name
+
+identifier mrnaBlastzName
+"Link together mrnaBlastz and pseudoMrna"
+    hg16.mrnaBlastz.qName
+    hg16.pseudoMrna.qName
 
 # Microarray stuff.
 
@@ -592,7 +597,7 @@ identifier refSeqId typeOf=mrnaAccession
 
 identifier xenoRefSeqId typeOf=xenoMrnaAccession
 "Other Species RefSeq mRNA accession"
-    $panTro.xenoRefGene.name
+    $panTro.xenoRefGene.name dupeOk
     $panTro.xenoRefSeqAli.qName full
     $panTro.xenoRefFlat.name full
 
@@ -655,75 +660,75 @@ identifier knownIsoformCluster
 identifier genBankAuthor
 "Connects genBank mRNA/EST and it's author"
     $gbd.author.id
-    $gbd.mrna.author full
+    $gbd.mrna.author 
 
 identifier genBankCds
 "Connects genBank mRNA/EST and it's coding region (CDS)"
     $gbd.cds.id
-    $gbd.mrna.cds full
+    $gbd.mrna.cds 
 
 identifier genBankCell
 "Connects genBank mRNA/EST and the cell type it came from"
     $gbd.cell.id
-    $gbd.mrna.cell full
+    $gbd.mrna.cell 
 
 identifier genBankDevelopment
 "Connects genBank mRNA/EST and development stage of the organism it came from"
     $gbd.development.id
-    $gbd.mrna.development full
+    $gbd.mrna.development 
 
 identifier genBankDescription
 "Connects genBank mRNA/EST and descriptive text"
     $gbd.description.id
-    $gbd.mrna.description full
+    $gbd.mrna.description 
     
 identifier genBankGeneName
 "Connects genBank mRNA/EST and gene name"
     $gbd.geneName.id
-    $gbd.mrna.geneName full
+    $gbd.mrna.geneName 
     $gbd.refLink.geneName
 
 identifier genBankKeyword
 "Connects genBank mRNA/EST and keyword"
     $gbd.keyword.id
-    $gbd.mrna.keyword full
+    $gbd.mrna.keyword 
 
 identifier genBankLibrary
 "Connects genBank mRNA/EST and cDNA library"
     $gbd.library.id
-    $gbd.mrna.library full
+    $gbd.mrna.library 
     $gbd.altGraphX.mrnaLibs comma
 
 identifier genBankMrnaClone
 "Connects genBank mRNA/EST and cDNA clone name"
     $gbd.mrnaClone.id
-    $gbd.mrna.mrnaClone full
+    $gbd.mrna.mrnaClone 
 
 identifier genBankOrganism
 "Connects genBank mRNA/EST and organism it came from"
     $gbd.organism.id
-    $gbd.mrna.organism full
+    $gbd.mrna.organism 
 
 identifier genBankProductName
 "Connects genBank mRNA/EST and protein product name"
     $gbd.productName.id
-    $gbd.mrna.productName full
+    $gbd.mrna.productName 
     $gbd.refLink.prodName
 
 identifier genBankSex
 "Connects genBank mRNA/EST and sex mRNA came from"
     $gbd.sex.id
-    $gbd.mrna.sex full
+    $gbd.mrna.sex 
 
 identifier genBankSource
 "Connects genBank mRNA/EST and source of mRNA"
     $gbd.source.id
-    $gbd.mrna.source full
+    $gbd.mrna.source 
 
 identifier genBankTissue
 "Connects genBank mRNA/EST and tissue mRNA isolated from"
     $gbd.tissue.id
-    $gbd.mrna.tissue full
+    $gbd.mrna.tissue 
     $gbd.altGraphX.mrnaTissues comma
 
 
@@ -905,7 +910,7 @@ identifier bdgpTranscriptId external=BDGP dependency
 
 identifier bdgpNonCodingId external=BDGP
 "Berkeley Drosophila Genome Project Noncoding Gene ID"
-    $dm.bdgpNonCoding.name chopAfter=-
+    $dm.bdgpNonCoding.name chopAfter=- dupeOk
     $dm.bdgpNonCodingInfo.bdgpName
 
 identifier sgdIsoformCluster
@@ -1363,6 +1368,7 @@ tablesIgnored $gbd
     rnaCluster
     rnaGene
     regPotential%
+    sangerGenefinder
     simpleRepeat
     tableDescriptions
     tigrGeneIndex

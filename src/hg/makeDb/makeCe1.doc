@@ -1018,15 +1018,25 @@ Longest job:                     1006s      16.77m     0.28h    0.01d
     cd ~/ce1/bed/refSeq
     hgLoadRna add -type=refSeq ce1 /gbdb/ce1/mrna.134/refSeq.fa \
  /cluster/store5/mrna.134/refSeq/041003/org/Caenorhabditis_elegans/refSeq.ra
+    # Reload refLink table as LocusLink ID column is all 0 and protein
+    # accessions missing. (DONE, 2004-05-12, hartera)
+    # RefSeq accessions for ce1 appear not to be in 
+    # /cluster/store5/mrna.134/refSeq/041003/loc2ref so could not also
+    # map the LocusLink ID to OMIM ID through mim2loc
+    # Dowload the latest loc2ref and mim2loc from NCBI and put in
+    # /cluster/store5/mrna.134/refSeq/051204/
+    # Previous error in loading refPep was because there were duplicate
+    # accessions in hs.faa once the suffix of .1 and .2 were removed
+    # A search in GenBank showed that NP_002900.1 has been replaced 
+    # by NP_002900.2 so removed the former from hs.faa
     hgRefSeqMrna ce1 /gbdb/ce1/mrna.134/refSeq.fa \
  /cluster/store5/mrna.134/refSeq/041003/org/Caenorhabditis_elegans/refSeq.ra \
       all_refSeq.psl \
-      /cluster/store5/mrna.134/refSeq/041003/loc2ref \
+      /cluster/store5/mrna.134/refSeq/051204/loc2ref \
       /cluster/store5/mrna.134/refSeq/041003/hs.faa \
-      /cluster/store5/mrna.134/refSeq/041003/mim2loc
-    # curious error from this hgRefSeqMrna:
-#  Warning: load of refPep did not go as planned: 18692 record(s), 1 row(s)
-#  skipped, 0 warning(s) loading ./refPep.tab
+      /cluster/store5/mrna.134/refSeq/051204/mim2loc
+    # Missing locusLinkIds for 184 of 20661
+    # Missing protein accessions for 184 of 20661 
     # Add RefSeq status info
     hgRefSeqStatus ce1 /cluster/store5/mrna.134/refSeq/041003/loc2ref
 

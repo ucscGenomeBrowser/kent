@@ -32,7 +32,7 @@
 #define NOTPSEUDO -1
 #define BETTER -2
 
-static char const rcsid[] = "$Id: pslPseudo.c,v 1.17 2004/05/01 23:36:20 baertsch Exp $";
+static char const rcsid[] = "$Id: pslPseudo.c,v 1.19 2004/05/06 05:11:27 baertsch Exp $";
 
 char *db;
 char *nibDir;
@@ -583,6 +583,8 @@ if (pg->type == NULL)
     pg->type = cloneString("NONE");
 if (strlen(pg->type)<=1)
     pg->type = cloneString("NONE");
+if (pg->gChrom==NULL)
+    pg->gChrom = cloneString("NONE");
 if (pg->gStrand[0] != '+' && pg->gStrand[0] == '-') 
     {
     pg->gStrand[0] = '0'; 
@@ -595,6 +597,11 @@ if (pg->intronScores == NULL)
     pg->intronScores = cloneString("0,0");
 if (pg->overName == NULL)
     pg->overName = cloneString("none");
+if (strlen(pg->overStrand) < 1)
+    {
+    pg->overStrand[0] = '0'; 
+    pg->overStrand[1] = '\0'; 
+    }
 pseudoGeneLinkOutput(pg, linkFile, '\t','\n');
 //fprintf(linkFile,"%s\t%s\t%s\t%s\t%d\t%d\t%s\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%s\t",
         /* 13        14   15        16         17           18  */
@@ -1624,15 +1631,15 @@ if (pslList != NULL)
         pg->bestAliCount = bestAliCount;
         printf("checking %s:%d-%d \n",psl->tName,psl->tStart, psl->tEnd);
         pg->oldIntronCount = intronFactor(psl, bkHash, trfHash);
-        pg->overlapDiag= -1;
+        pg->gChrom = cloneString(bestChrom);
         pg->gStart = bestStart;
         pg->gEnd = bestEnd;
-        pg->overStart = -1;
-        pg->overEnd = -1;
-        pg->gChrom = cloneString(bestChrom);
+        pg->overlapDiag= -1;
+        pg->overStart = pg->overEnd = pg->kStart = pg->kEnd = pg->rStart = pg->rEnd = pg->mStart = pg->mEnd = -1;
         strncpy(pg->gStrand, psl->strand , sizeof(pg->gStrand));
         pg->polyA = polyACalc(psl->tStart, psl->tEnd, psl->strand, psl->tSize, psl->tName, 
                         POLYASLIDINGWINDOW, POLYAREGION, &polyAstart, &polyAend);
+        pg->polyAstart = polyAstart;
         /* count # of alignments that span introns */
         pg->exonCover = pslCountExonSpan(bestPsl, psl, maxBlockGap, bkHash, &tReps, &qReps) ;
         pg->intronCount = pslCountIntrons(bestPsl, psl, maxBlockGap, bkHash, &tReps, &qReps,intronSlop, iString, &conservedIntrons) ;
@@ -1660,37 +1667,37 @@ if (pslList != NULL)
             else
                 {
                 pg->kgName = cloneString("noKg");
-                pg->kStart = -1;
-                pg->kEnd = -1;
                 }
             gp = getOverlappingGene(&gpList1, "refGene", bestPsl->tName, bestPsl->tStart, 
                                 bestPsl->tEnd , bestPsl->qName, &geneOverlap);
             if (gp != NULL)
                 {
-                pg->refSeq = cloneString(gp->chrom);
+                pg->refSeq = cloneString(gp->name);
                 pg->rStart = gp->txStart;
                 pg->rEnd = gp->txEnd;
                 }
             else
                 {
                 pg->refSeq = cloneString("noRefSeq");
-                pg->rStart = -1;
-                pg->rEnd = -1;
                 }
             mgc = getOverlappingGene(&gpList2, "mgcGenes", bestPsl->tName, bestPsl->tStart, 
                                 bestPsl->tEnd , bestPsl->qName, &geneOverlap);
             if (mgc != NULL)
                 {
-                pg->mgc = cloneString(gp->name);
-                pg->mStart = gp->txStart;
-                pg->mEnd = gp->txEnd;
+                pg->mgc = cloneString(mgc->name);
+                pg->mStart = mgc->txStart;
+                pg->mEnd = mgc->txEnd;
                 }
             else
                 {
                 pg->mgc = cloneString("noMgc");
-                pg->mStart = -1;
-                pg->mEnd = -1;
                 }
+            }
+        else
+            {
+            pg->refSeq = cloneString("noRefSeq");
+            pg->kgName = cloneString("noKg");
+            pg->mgc = cloneString("noMgc");
             }
         /* calculate if pseudogene overlaps the syntenic diagonal with another species */
         if (synHash != NULL)
@@ -1746,6 +1753,7 @@ if (pslList != NULL)
             if (!quiet)
                 printf("NO %s reps %.3f %.3f\n",psl->tName,(float)rep/(float)(psl->match+(psl->misMatch)) , maxRep);
             dyStringAppend(reason,"maxRep ");
+            pg->label = NOTPSEUDO;
             keepChecking = FALSE;
             }
 
@@ -1862,6 +1870,7 @@ if (pslList != NULL)
                 }
         dyStringFree(&iString);
         dyStringFree(&reason);
+        //pseudoGeneLinkFree(&pg);
         }
     }
 freeMem(scoreTrack);

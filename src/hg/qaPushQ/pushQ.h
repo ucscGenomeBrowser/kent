@@ -9,7 +9,7 @@
 #include "jksql.h"
 #endif
 
-#define PUSHQ_NUM_COLS 25
+#define PUSHQ_NUM_COLS 26
 
 struct pushQ
 /* Push Queue */
@@ -19,7 +19,7 @@ struct pushQ
     char pqid[7];	/* Parent Queue Id if split off another */
     char priority[2];	/* Priority */
     unsigned rank;	/* Rank for display sort */
-    char qadate[11];	/* QA start date */
+    char qadate[11];	/* QA (re)-submission date */
     char newYN[2];	/* new (track)? */
     char *track;	/* Track */
     char *dbs;	/* Databases */
@@ -40,6 +40,7 @@ struct pushQ
     char *notes;	/* Notes */
     char reqdate[11];	/* Push-request Date */
     char pushedYN[2];	/* Push done? */
+    char initdate[11];	/* Initial Submission Date */
     };
 
 void pushQStaticLoad(char **row, struct pushQ *ret);

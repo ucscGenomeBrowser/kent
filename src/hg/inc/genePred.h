@@ -190,5 +190,8 @@ boolean genePredCdsExon(struct genePred *gp, int iExon, int *startPtr, int *endP
 /* Get the CDS range in an exon.  If there is no CDS, return FALSE and then
  * set start == end */
 
+boolean genePredCdsIntersect(struct genePred *gp, int start, int end);
+/* Check if a reage intersects the CDS */
+
 #endif /* GENEPRED_H */
 

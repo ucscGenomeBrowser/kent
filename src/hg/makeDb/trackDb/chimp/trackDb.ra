@@ -6,3 +6,11 @@ priority 35
 visibility pack
 color 12,12,120
 type genePred
+
+track bacEndPairs
+shortLabel BAC End Pairs
+longLabel BAC End Pairs
+group map
+priority 15
+visibility hide
+type bed 6 +

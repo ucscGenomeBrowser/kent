@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "pseudoGeneLink.h"
 
-static char const rcsid[] = "$Id: pseudoGeneLink.c,v 1.16 2004/04/23 06:33:44 baertsch Exp $";
+static char const rcsid[] = "$Id: pseudoGeneLink.c,v 1.17 2004/05/07 22:11:56 baertsch Exp $";
 
 struct pseudoGeneLink *pseudoGeneLinkLoad(char **row)
 /* Load a pseudoGeneLink from row fetched with select * from pseudoGeneLink
@@ -25,7 +25,7 @@ ret->chromStart = sqlUnsigned(row[1]);
 ret->chromEnd = sqlUnsigned(row[2]);
 ret->name = cloneString(row[3]);
 ret->score = sqlUnsigned(row[4]);
-ret->strand = cloneString(row[5]);
+strcpy(ret->strand, row[5]);
 ret->thickStart = sqlUnsigned(row[6]);
 ret->thickEnd = sqlUnsigned(row[7]);
 ret->reserved = sqlUnsigned(row[8]);
@@ -33,13 +33,13 @@ sqlSignedDynamicArray(row[10], &ret->blockSizes, &sizeOne);
 assert(sizeOne == ret->blockCount);
 sqlSignedDynamicArray(row[11], &ret->chromStarts, &sizeOne);
 assert(sizeOne == ret->blockCount);
-ret->assembly = cloneString(row[12]);
-ret->geneTable = cloneString(row[13]);
-ret->gene = cloneString(row[14]);
+ret->trfRatio = atof(row[12]);
+ret->type = cloneString(row[13]);
+ret->axtScore = sqlSigned(row[14]);
 ret->gChrom = cloneString(row[15]);
-ret->gStart = sqlUnsigned(row[16]);
-ret->gEnd = sqlUnsigned(row[17]);
-ret->gStrand = cloneString(row[18]);
+ret->gStart = sqlSigned(row[16]);
+ret->gEnd = sqlSigned(row[17]);
+strcpy(ret->gStrand, row[18]);
 ret->exonCount = sqlUnsigned(row[19]);
 ret->geneOverlap = sqlUnsigned(row[20]);
 ret->polyA = sqlUnsigned(row[21]);
@@ -54,26 +54,29 @@ ret->tReps = sqlUnsigned(row[29]);
 ret->qReps = sqlUnsigned(row[30]);
 ret->overlapDiag = sqlUnsigned(row[31]);
 ret->coverage = sqlUnsigned(row[32]);
-ret->label = sqlUnsigned(row[33]);
+ret->label = sqlSigned(row[33]);
 ret->milliBad = sqlUnsigned(row[34]);
 ret->oldScore = sqlUnsigned(row[35]);
 ret->oldIntronCount = sqlSigned(row[36]);
 ret->conservedIntrons = sqlSigned(row[37]);
 ret->intronScores = cloneString(row[38]);
-ret->chainId = sqlSigned(row[39]);
-ret->axtScore = sqlSigned(row[40]);
-ret->refSeq = cloneString(row[41]);
-ret->rStart = sqlSigned(row[42]);
-ret->rEnd = sqlSigned(row[43]);
-ret->mgc = cloneString(row[44]);
-ret->mStart = sqlSigned(row[45]);
-ret->mEnd = sqlSigned(row[46]);
-ret->kgName = cloneString(row[47]);
-ret->kStart = sqlSigned(row[48]);
-ret->kEnd = sqlSigned(row[49]);
-ret->adaBoost = sqlSigned(row[50]);
-ret->posConf = atof(row[51]);
-ret->negConf = atof(row[52]);
+ret->maxOverlap = sqlSigned(row[39]);
+ret->refSeq = cloneString(row[40]);
+ret->rStart = sqlSigned(row[41]);
+ret->rEnd = sqlSigned(row[42]);
+ret->mgc = cloneString(row[43]);
+ret->mStart = sqlSigned(row[44]);
+ret->mEnd = sqlSigned(row[45]);
+ret->kgName = cloneString(row[46]);
+ret->kStart = sqlSigned(row[47]);
+ret->kEnd = sqlSigned(row[48]);
+ret->overName = cloneString(row[49]);
+ret->overStart = sqlSigned(row[50]);
+ret->overEnd = sqlSigned(row[51]);
+strcpy(ret->overStrand, row[52]);
+ret->adaBoost = sqlSigned(row[53]);
+ret->posConf = atof(row[54]);
+ret->negConf = atof(row[55]);
 return ret;
 }
 
@@ -83,7 +86,7 @@ struct pseudoGeneLink *pseudoGeneLinkLoadAll(char *fileName)
 {
 struct pseudoGeneLink *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[53];
+char *row[56];
 
 while (lineFileRow(lf, row))
     {
@@ -101,7 +104,7 @@ struct pseudoGeneLink *pseudoGeneLinkLoadAllByChar(char *fileName, char chopper)
 {
 struct pseudoGeneLink *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[53];
+char *row[56];
 
 while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
     {
@@ -128,7 +131,7 @@ ret->chromStart = sqlUnsignedComma(&s);
 ret->chromEnd = sqlUnsignedComma(&s);
 ret->name = sqlStringComma(&s);
 ret->score = sqlUnsignedComma(&s);
-ret->strand = sqlStringComma(&s);
+sqlFixedStringComma(&s, ret->strand, sizeof(ret->strand));
 ret->thickStart = sqlUnsignedComma(&s);
 ret->thickEnd = sqlUnsignedComma(&s);
 ret->reserved = sqlUnsignedComma(&s);
@@ -149,13 +152,13 @@ for (i=0; i<ret->blockCount; ++i)
     }
 s = sqlEatChar(s, '}');
 s = sqlEatChar(s, ',');
-ret->assembly = sqlStringComma(&s);
-ret->geneTable = sqlStringComma(&s);
-ret->gene = sqlStringComma(&s);
+ret->trfRatio = sqlFloatComma(&s);
+ret->type = sqlStringComma(&s);
+ret->axtScore = sqlSignedComma(&s);
 ret->gChrom = sqlStringComma(&s);
-ret->gStart = sqlUnsignedComma(&s);
-ret->gEnd = sqlUnsignedComma(&s);
-ret->gStrand = sqlStringComma(&s);
+ret->gStart = sqlSignedComma(&s);
+ret->gEnd = sqlSignedComma(&s);
+sqlFixedStringComma(&s, ret->gStrand, sizeof(ret->gStrand));
 ret->exonCount = sqlUnsignedComma(&s);
 ret->geneOverlap = sqlUnsignedComma(&s);
 ret->polyA = sqlUnsignedComma(&s);
@@ -170,14 +173,13 @@ ret->tReps = sqlUnsignedComma(&s);
 ret->qReps = sqlUnsignedComma(&s);
 ret->overlapDiag = sqlUnsignedComma(&s);
 ret->coverage = sqlUnsignedComma(&s);
-ret->label = sqlUnsignedComma(&s);
+ret->label = sqlSignedComma(&s);
 ret->milliBad = sqlUnsignedComma(&s);
 ret->oldScore = sqlUnsignedComma(&s);
 ret->oldIntronCount = sqlSignedComma(&s);
 ret->conservedIntrons = sqlSignedComma(&s);
 ret->intronScores = sqlStringComma(&s);
-ret->chainId = sqlSignedComma(&s);
-ret->axtScore = sqlSignedComma(&s);
+ret->maxOverlap = sqlSignedComma(&s);
 ret->refSeq = sqlStringComma(&s);
 ret->rStart = sqlSignedComma(&s);
 ret->rEnd = sqlSignedComma(&s);
@@ -187,6 +189,10 @@ ret->mEnd = sqlSignedComma(&s);
 ret->kgName = sqlStringComma(&s);
 ret->kStart = sqlSignedComma(&s);
 ret->kEnd = sqlSignedComma(&s);
+ret->overName = sqlStringComma(&s);
+ret->overStart = sqlSignedComma(&s);
+ret->overEnd = sqlSignedComma(&s);
+sqlFixedStringComma(&s, ret->overStrand, sizeof(ret->overStrand));
 ret->adaBoost = sqlSignedComma(&s);
 ret->posConf = sqlFloatComma(&s);
 ret->negConf = sqlFloatComma(&s);
@@ -203,18 +209,15 @@ struct pseudoGeneLink *el;
 if ((el = *pEl) == NULL) return;
 freeMem(el->chrom);
 freeMem(el->name);
-freeMem(el->strand);
 freeMem(el->blockSizes);
 freeMem(el->chromStarts);
-freeMem(el->assembly);
-freeMem(el->geneTable);
-freeMem(el->gene);
+freeMem(el->type);
 freeMem(el->gChrom);
-freeMem(el->gStrand);
 freeMem(el->intronScores);
 freeMem(el->refSeq);
 freeMem(el->mgc);
 freeMem(el->kgName);
+freeMem(el->overName);
 freez(pEl);
 }
 
@@ -277,25 +280,21 @@ for (i=0; i<el->blockCount; ++i)
     }
 if (sep == ',') fputc('}',f);
 fputc(sep,f);
-if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->assembly);
-if (sep == ',') fputc('"',f);
+fprintf(f, "%f", el->trfRatio);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->geneTable);
+fprintf(f, "%s", el->type);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
-if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->gene);
-if (sep == ',') fputc('"',f);
+fprintf(f, "%d", el->axtScore);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->gChrom);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
-fprintf(f, "%u", el->gStart);
+fprintf(f, "%d", el->gStart);
 fputc(sep,f);
-fprintf(f, "%u", el->gEnd);
+fprintf(f, "%d", el->gEnd);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->gStrand);
@@ -329,7 +328,7 @@ fprintf(f, "%u", el->overlapDiag);
 fputc(sep,f);
 fprintf(f, "%u", el->coverage);
 fputc(sep,f);
-fprintf(f, "%u", el->label);
+fprintf(f, "%d", el->label);
 fputc(sep,f);
 fprintf(f, "%u", el->milliBad);
 fputc(sep,f);
@@ -343,9 +342,7 @@ if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->intronScores);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
-fprintf(f, "%d", el->chainId);
-fputc(sep,f);
-fprintf(f, "%d", el->axtScore);
+fprintf(f, "%d", el->maxOverlap);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->refSeq);
@@ -370,6 +367,18 @@ fputc(sep,f);
 fprintf(f, "%d", el->kStart);
 fputc(sep,f);
 fprintf(f, "%d", el->kEnd);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->overName);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+fprintf(f, "%d", el->overStart);
+fputc(sep,f);
+fprintf(f, "%d", el->overEnd);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->overStrand);
+if (sep == ',') fputc('"',f);
 fputc(sep,f);
 fprintf(f, "%d", el->adaBoost);
 fputc(sep,f);

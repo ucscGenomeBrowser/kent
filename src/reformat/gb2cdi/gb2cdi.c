@@ -38,6 +38,9 @@ int herCount = 0;
 
 int variedCount = 0;
 int embryoCount = 0;
+int L1Count = 0;
+int L2Count = 0;
+int L4Count = 0;
 int adultCount = 0;
 int otherStageCount = 0;
 
@@ -62,12 +65,28 @@ if (cdi->stage != NULL)
         cdi->stage = "varied";
     else if (strstr(cdi->stage, "Mix"))
         cdi->stage = "varied";
+    else if (strstr(cdi->stage, "dauer larva"))
+        cdi->stage = "varied";
+    else if (strstr(cdi->stage, "stage L3"))
+        cdi->stage = "varied";
+    else if (strstr(cdi->stage, "L1"))
+        cdi->stage = "L1";
+    else if (strstr(cdi->stage, "L2"))
+        cdi->stage = "L2";
+    else if (strstr(cdi->stage, "L4"))
+        cdi->stage = "L4";
     else if (strstr(cdi->stage, "mbryo"))
         cdi->stage = "embryo";
     else if (strstr(cdi->stage, "dult"))
         cdi->stage = "adult";
     if (sameString(cdi->stage, "adult"))
         ++adultCount;
+    else if (sameString(cdi->stage, "L1"))
+        ++L1Count;
+    else if (sameString(cdi->stage, "L2"))
+        ++L2Count;
+    else if (sameString(cdi->stage, "L4"))
+        ++L4Count;
     else if (sameString(cdi->stage, "embryo"))
         ++embryoCount;
     else if (sameString(cdi->stage, "varied"))
@@ -75,7 +94,7 @@ if (cdi->stage != NULL)
     else
         {
         ++otherStageCount;
-        printf("Unusual stage %s in %s (%s) (%s) %s\n",
+        printf("Unusual stage '%s' in %s (%s) (%s) %s\n",
             cdi->stage, cdi->name, safes(cdi->gene), safes(cdi->product), safes(cdi->description));
         }
     }
@@ -329,7 +348,6 @@ while (lineFileNext(lf, &line, &lineSize))
                 }
             else if (sameString(words[4], "Stratagene") && sameString(words[5], "(cat.") )
                 {
-                char *catNo = words[6] + 1;
                 int len;
                 ++stratageneCount;
                 isStratagene = TRUE;
@@ -338,7 +356,7 @@ while (lineFileNext(lf, &line, &lineSize))
                 else if (sameString(words[3], "embryo,"))
                     cdi->stage = "embryo";
                 else
-                    errAbort("Unusual Stratagene stage in line %d of %s", lf->lineIx, lf->fileName);
+                    errAbort("Unusual Stratagene stage '%s' or '%s' in line %d of %s", words[2], words[3], lf->lineIx, lf->fileName);
                 line = lfNextLine(lf);
                 wordCount = chopLine(line, words);
                 if (wordCount < 6 || differentString(words[2], "clone") )
@@ -553,7 +571,7 @@ while (lineFileNext(lf, &line, &lineSize))
                     /* Add in this line's worth of DNA. */
                     while ((c = *line++) != 0)
                         {
-                        if ((base = ntChars[c]) != 0)
+                        if ((base = ntChars[(int)c]) != 0)
                             {
                             if (dnaCount >= dnaAllocated)
                                 {
@@ -629,7 +647,7 @@ for (i=1; i<faIx; ++i)
 printf("%d by Kohara, %d by Martin, %d by Stratagene, %d Univ Ariz/U Wash, %d full cDNAs\n",
     koharaCount, martinCount, stratageneCount, uaWuEstCount, fullCount);
 printf("%d male %d hermaphrodite %d mixed\n", maleCount, herCount, mixedCount);
-printf("%d adult %d embryo %d varied %d other\n", adultCount, embryoCount, variedCount, otherStageCount);
+printf("%d adult %d embryo %d varied %d L1 %d L2 %d L4 %d other\n", adultCount, embryoCount, variedCount, L1Count, L2Count, L4Count,  otherStageCount);
 printf("%d cDNAs in all\n", totalCount);
 
 fclose(faFile);

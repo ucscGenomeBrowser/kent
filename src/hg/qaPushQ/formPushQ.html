@@ -1,5 +1,5 @@
 
-<h1> Push Queue Form
+<h1> Push Queue Form </h1>
 
 <form ACTION=\"/cgi-bin/qaPushQ\" NAME=\"mainForm\" METHOD=\"POST\">
 
@@ -20,6 +20,9 @@ Priority:
 <option <!sel-priority-D> value=\"D\">D</option>
 <option <!sel-priority-L> value=\"L\">L</option>
 </select>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Queue Id: <!qid> 
+&nbsp;&nbsp;<a href=\"/cgi-bin/qaPushQ\">CANCEL</a>
+&nbsp;&nbsp;<a href=\"/cgi-bin/qaPushQ?action=showEditHelp&qid=<!qid>\">HELP</a>
 </td></tr>
 
 <tr><td align=\"right\">
@@ -27,6 +30,7 @@ Date Opened:
 </td>
 <td>
 <input TYPE=\"text\" NAME=\"qadate\" SIZE=\"10\" VALUE=\"<!qadate>\">
+&nbsp;&nbsp;&nbsp;&nbsp;Initial submission: <!initdate>
 </td></tr>
 
 <tr><td align=\"right\">
@@ -79,6 +83,12 @@ Size(MB):
 </td>
 <td>
 <input TYPE=\"text\" NAME=\"sizeMB\" SIZE=\"40\" VALUE=\"<!sizeMB>\">
+&nbsp;
+&nbsp;
+&nbsp;
+&nbsp;
+&nbsp;
+<input TYPE=SUBMIT NAME=\"showSizes\" VALUE=\"Show Sizes\">
 </td></tr>
 
 <tr><td align=\"right\">

@@ -1,16 +1,13 @@
 /* wigAsciiToBinary - convert ascii Wiggle data to binary file
- *	plus, produces file read for load into database
+ *	plus, produces file to read for load into database
  *
- *	The ascii data file is simply two columns, white space separated:
- *	first column: offset within chromosome, 1 relative closed end
- *	second column: any real data value
+ *	The format of the incoming data is described at:
+ *	http://hgwdev.cse.ucsc.edu/encode/submission.html#WIG
  *
- *	Each data block will have its own specific scale computed
- *
- *	This first pass will assume the scores are specified for
- *	a single nucleotide base.  If the offset sequence has
- *	missing data in it, the missing data will be set to the
- *	"WIG_NO_DATA" indication.  (WIG_NO_DATA == 128)
+ *	Incoming data points are chunked up into blocks.
+ *	Each block of data is described by an SQL row in the .wig file
+ *	output.  The data values are converted to single bytes in a
+ *	binning scheme.  These binary bytes are written to the .wib file.
  *
  *	The binary data file is simply one unsigned char value per byte.
  *	The suffix for this binary data file is: .wib - wiggle binary
@@ -18,21 +15,24 @@
  *	The second file produced is a bed-like format file, with chrom,
  *	chromStart, chromEnd, etc.  See hg/inc/wiggle.h for structure
  *	definition.  The important thing about this file is that it will
- *	have the pointers into the binary data file and definitions of
- *	where the bytes belong.  This file extension is: .wig - wiggle
+ *	have the pointers into the binary data file and statistical
+ *	summaries of the data values in this block.
+ *	This file extension is: .wig - wiggle
  *
- *	Holes in the data are allowed.  A command line argument can
- *	specify the actual span of a data point == how many nucleotide
+ *	Holes in the data are allowed.   Incoming data specifications
+ *	set the span of a data point == how many nucleotide
  *	bases the value is representative of.
  *
  *	There is a concept of a "bin" size which means how many values
- *	should be maintained in a single table row entry.  This can be
- *	controlled by command line argument.  Holes in the input data
- *	will be filled with NO_DATA values up to the size of the current
- *	"bin".  If the missing data continues past the next "bin" size
+ *	should be maintained in a single table row entry. Holes in the input
+ *	data will be filled with WIG_NO_DATA values up to the size of the
+ *	current "bin".  If the missing data continues past the next "bin" size
  *	number of data points, that table row will be skipped.  Thus, it
  *	is only necessary to have table rows which contain valid data.
- *	The "bin" size is under control with a command line argument.
+ *	binsize is currently 1024, however it will need to be an input
+ *	parameter for the command line version of this function.
+ *	(there are several parameters that need to come in from the
+ *	command line version -- to be done).
  */
 #include	"common.h"
 #include	"options.h"
@@ -40,8 +40,26 @@
 #include	"wiggle.h"
 
 
-static char const rcsid[] = "$Id: wigAsciiToBinary.c,v 1.3 2004/05/06 00:05:46 hiram Exp $";
+static char const rcsid[] = "$Id: wigAsciiToBinary.c,v 1.6 2004/05/13 17:31:50 hiram Exp $";
 
+/*	This list of static variables is here because the several
+ *	subroutines in this source file need access to all this business
+ *	and since there are so many it is not convenient to pass them
+ *	around in a structure.  Just make sure they are initialized
+ *	properly upon entry to this function.  This used to be a static
+ *	command line program and thus these did not need to be set
+ *	except for this declaration, now they are all re-initialized
+ *	upon entry to the function.
+ *	Functions in this source file:
+ *	static void output_row();
+ *	static void setDataSpan(char *spec);
+ *	static void setStepSize(char *spec);
+ *	static void setFixedStart(char *spec);
+ *	static void setChromName(char *spec);
+ *	static void setDataValue(double val);
+ *	void wigAsciiToBinary( char *wigAscii, char *wigFile, char *wibFile,
+ *		double *upperLimit, double *lowerLimit );
+ */
 static unsigned long lineCount = 0;	/* counting all input lines	*/
 static long long add_offset = 0;	/* to allow "lifting" of the data */
 static long long binsize = 1024;	/* # of data points per table row */
@@ -77,6 +95,8 @@ static char *wibFileName = (char *)NULL;	/* for use in output_row() */
  *	places in the code.
  *	Definition of this row format can be found in hg/inc/wiggle.h
  *	and hg/lib/wiggle.as, etc ...
+ *	output_row() is called each time a block of data values are
+ *	complete, this produces one SQL line definition of a data block.
  */
 static void output_row()
 {
@@ -148,6 +168,7 @@ fileOffsetBegin = fileOffset;
 }	/*	static void output_row()	*/
 
 static void setDataSpan(char *spec)
+/*	given *spec: "dataSpan=N",  set parse and dataSpan to N	*/
 {
 char *wordPairs[2];
 int wc;
@@ -163,7 +184,7 @@ freeMem(clone);
 }
 
 static void setStepSize(char *spec)
-/*	given "step=<position>", parse and set stepSize and dataSpan */
+/*	given *spec: "step=<position>", parse and set stepSize and dataSpan */
 {
 char *wordPairs[2];
 int wc;
@@ -178,9 +199,8 @@ stepSize=sqlLongLong(wordPairs[1]);
 freeMem(clone);
 }
 
-
 static void setFixedStart(char *spec)
-/*	given "start=<position>", parse and set fixedStart */
+/*	given *spec: "start=<position>", parse and set fixedStart */
 {
 char *wordPairs[2];
 int wc;
@@ -201,7 +221,7 @@ freeMem(clone);
 }
 
 static void setChromName(char *spec)
-/*	given "chrom=<name>", parse and set chromName, featureName */
+/*	given *spec: "chrom=<name>", parse and set chromName, featureName */
 {
 char *wordPairs[2];
 int wc;
@@ -219,8 +239,8 @@ featureName=cloneString(wordPairs[1]);
 freeMem(clone);
 }
 
-/*	add a data value to the accumulating pile of data */
 static void setDataValue(double val)
+/*	add a data value to the accumulating block of data */
 {
 data_values[bincount] = val;
 validData[bincount] = TRUE;
@@ -231,6 +251,11 @@ if (bincount >= binsize)
     output_row();
 }
 
+/*	The single externally visible routine.
+ *	Future improvements will need to add a couple more arguments to
+ *	satisify the needs of the command line version and its options.
+ *	Currently, this is used only in customTrack input parsing.
+ */
 void wigAsciiToBinary( char *wigAscii, char *wigFile, char *wibFile,
    double *upperLimit, double *lowerLimit )
 /*	given the three file names, read the ascii wigAscii file and produce
@@ -246,11 +271,13 @@ double dataValue = 0.0;			/* from data input	*/
 boolean bedData = FALSE;		/* in bed format data */
 boolean variableStep = FALSE;		/* in variableStep data */
 boolean fixedStep = FALSE;		/* in fixedStep data */
+char *prevChromName = (char *)NULL;	/* to watch for chrom name changes */
 
 if ((wigAscii == (char *)NULL) || (wigFile == (char *)NULL) ||
     (wibFile == (char *)NULL))
 	errAbort("wigAsciiToBinary: missing data file names, ascii: %s, wig: %s, wib: %s", wigAscii, wigFile, wibFile);
 
+/*	need to be careful here and initialize all the global variables */
 freez(&wibFileName);			/* send this name to the global */
 wibFileName = cloneString(wibFile);	/* variable for use in output_row() */
 lineCount = 0;	/* to count all lines	*/
@@ -273,9 +300,9 @@ overallLowerLimit = 1.0e+300;	/* for the complete set of data */
 overallUpperLimit = -1.0e+300;	/* for the complete set of data */
 binout = mustOpen(wibFile,"w");	/*	binary data file	*/
 wigout = mustOpen(wigFile,"w");	/*	table row definition file */
-#if defined(DEBUG)
-chmod(wibFile, 0666);	/*	dbg	*/
-chmod(wigFile, 0666);	/*	dbg	*/
+#if defined(DEBUG)	/*	dbg	*/
+chmod(wibFile, 0666);
+chmod(wigFile, 0666);
 #endif
 lf = lineFileOpen(wigAscii, TRUE);	/*	input file	*/
 while (lineFileNext(lf, &line, NULL))
@@ -284,7 +311,8 @@ while (lineFileNext(lf, &line, NULL))
 
     ++lineCount;
     line = skipLeadingSpaces(line);
-    if (line[1] == '#')		/*	ignore comment lines	*/
+    /*	ignore blank or comment lines	*/
+    if ((line == (char *)NULL) || (line[1] == (char)NULL) || (line[1] == '#'))
 	continue;		/*	!!! go to next line of input */
 
     wordCount = chopByWhite(line, words, 10);
@@ -292,10 +320,20 @@ while (lineFileNext(lf, &line, NULL))
 	{
 	int i;
 	boolean foundChrom = FALSE;
-	if (variableStep | bedData | fixedStep)
+	/*	safest thing to do if we were processing anything is to
+	 *	output that previous block and start anew
+	 *	Future improvement could get fancy here and decide if it
+	 *	is really necessary to start over, although the concept
+	 *	of a line between data points on one item may use this
+	 *	block behavior later to define line segments, so don't
+	 *	get too quick to be fancy here.  This line behavior
+	 *	implies that feature names will need to be specified to
+	 *	identify the line segments that belong together.
+	 */
+	if (variableStep || bedData || fixedStep)
 	    {
 	    output_row();
-	    validLines = 0;	/*	reset for first offset	*/
+	    validLines = 0;	/*	to cause reset for first offset	*/
 	    }
 	dataSpan = 1;	/* default bases spanned per data point */
 	for(i = 1; i < wordCount; ++i)
@@ -324,10 +362,11 @@ while (lineFileNext(lf, &line, NULL))
 	boolean foundStart = FALSE;
 	int i;
 
-	if (variableStep | bedData | fixedStep)
+	/*	same comment as above	*/
+	if (variableStep || bedData || fixedStep)
 	    {
 	    output_row();
-	    validLines = 0;	/*	reset for first offset	*/
+	    validLines = 0;	/*	to cause reset for first offset	*/
 	    }
 	stepSize = 1;	/*	default step size	*/
 	dataSpan = 1;	/* default bases spanned per data point */
@@ -358,14 +397,23 @@ while (lineFileNext(lf, &line, NULL))
 	variableStep = FALSE;
 	bedData = FALSE;
 	fixedStep = TRUE;
+	freez(&prevChromName);
 	continue;		/*	!!!  go to next input line	*/
 	}
     else if (wordCount == 4)
 	{
-	if (variableStep | fixedStep)
+	/*	while in bedData, we do not necessarily need to start a new
+	 *	batch unless the chrom name is changing, since dataSpan
+	 *	is always 1 for bedData.  As above, this may change in
+	 *	the future if each bed line specification is talking
+	 *	about a different feature.
+	 */
+	if (variableStep || fixedStep ||
+		(bedData && ((prevChromName != (char *)NULL) &&
+			differentWord(prevChromName,words[0]))))
 	    {
 	    output_row();
-	    validLines = 0;	/*	reset for first offset	*/
+	    validLines = 0;	/*	to cause reset for first offset	*/
 	    }
 	dataSpan = 1;	/* default bases spanned per data point */
 	variableStep = FALSE;
@@ -385,25 +433,32 @@ while (lineFileNext(lf, &line, NULL))
 	    bedChromStart -= 1;	/* zero relative half-open */
 	if (bedChromStart > bedChromEnd)
 	    errAbort("Found chromStart > chromEnd at line %lu (%llu > %llu)",
-		lineCount, bedChromStart, bedChromEnd);
+		lineCount, bedChromStart+1, bedChromEnd);
 	if (bedChromEnd > (bedChromStart + 10000000))
 	    errAbort("Limit of 10,000,000 length specification for bed format at line %lu, found: %llu)",
 		lineCount, bedChromEnd-bedChromStart);
+	if ((validLines > 0) && (bedChromStart < previousOffset))
+	    errAbort("chrom positions not in numerical order at line %lu. previous: %llu > %llu <-current", lineCount, previousOffset+1, bedChromStart+1);
+	freez(&prevChromName);
+	prevChromName = cloneString(chromName);
 	}
 
     if (variableStep && (wordCount != 2))
-	errAbort("Expecting two words at line %lu, found %d",
+	errAbort("Expecting two words for variableStep data at line %lu, found %d",
 	    lineCount, wordCount);
     if (fixedStep && (wordCount != 1))
-	errAbort("Expecting one word at line %lu, found %d",
+	errAbort("Expecting one word for fixedStep data at line %lu, found %d",
 	    lineCount, wordCount);
     if (bedData && (wordCount != 4))
-	errAbort("Expecting four words at line %lu, found %d",
+	errAbort("Expecting four words for bed format data at line %lu, found %d",
 	    lineCount, wordCount);
 
     ++validLines;		/*	counting good lines of data input */
 
-    /*	Offset is the incoming specified position for this value */
+    /*	Offset is the incoming specified position for this value,
+     *	fixedStart and bedChromStart have already been converted to zero
+     *	relative half open
+     */
     if (variableStep)
 	{
 	Offset = sqlLongLong(words[0]);
@@ -439,7 +494,7 @@ while (lineFileNext(lf, &line, NULL))
 	int skippedBases;
 	int spansSkipped;
 	if (Offset < previousOffset)
-	    errAbort("chrom positions not in numerical order at line %lu. previous: %llu > %llu <-current", lineCount, previousOffset, Offset);
+	    errAbort("chrom positions not in numerical order at line %lu. previous: %llu > %llu <-current", lineCount, previousOffset+1, Offset+1);
 	skippedBases = Offset - previousOffset;
 	spansSkipped = skippedBases / dataSpan;
 	if ((spansSkipped * dataSpan) != skippedBases)
@@ -538,5 +593,4 @@ if (upperLimit)
     *upperLimit = overallUpperLimit;
 if (lowerLimit)
     *lowerLimit = overallLowerLimit;
-return;
 }

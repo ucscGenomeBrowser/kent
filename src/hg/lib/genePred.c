@@ -11,7 +11,7 @@
 #include "genbank.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: genePred.c,v 1.47 2004/05/02 06:11:00 markd Exp $";
+static char const rcsid[] = "$Id: genePred.c,v 1.50 2004/05/11 23:10:51 markd Exp $";
 
 /* SQL to create a genePred table */
 static char *createSql = 
@@ -380,6 +380,22 @@ if (dif == 0)
 return dif;
 }
 
+static boolean haveStartStopCodons(struct gffFile *gff)
+/* For GFFs, determine if any of the annotations use start_codon or
+ * stop_codon */
+{
+struct gffGroup *group;
+struct gffLine *gl;
+for (group = gff->groupList; group != NULL; group = group->next)
+    for (gl = group->lineList; gl != NULL; gl = gl->next)
+        {
+        if (sameWord(gl->feature, "start_codon")
+            || (sameWord(gl->feature, "stop_codon")))
+            return TRUE;
+        }
+return FALSE;
+}
+
 static boolean isExon(char *feat, boolean isGtf, char *exonSelectWord)
 /* determine if a feature is an exon; different criteria for GFF ane GTF */
 {
@@ -472,10 +488,14 @@ struct genePred *gp;
 int stopCodonStart = -1, stopCodonEnd = -1;
 int cdsStart = BIGNUM, cdsEnd = -BIGNUM;
 int exonCount = 0;
-boolean haveCds = FALSE, haveStartCodon = FALSE, haveStopCodon = FALSE;
+boolean haveStartCodon = FALSE, haveStopCodon = FALSE;
 struct gffLine *gl;
 unsigned *eStarts, *eEnds, *eFrames;
+boolean haveFrame = FALSE;
 int i;
+
+/* should we count on start/stop codon annotation in GFFs? */
+boolean useStartStops = isGtf || haveStartStopCodons(gff);
 
 /* Count up exons and figure out cdsStart and cdsEnd. */
 for (gl = group->lineList; gl != NULL; gl = gl->next)
@@ -489,7 +509,6 @@ for (gl = group->lineList; gl != NULL; gl = gl->next)
             cdsStart = gl->start;
 	if (gl->end > cdsEnd)
             cdsEnd = gl->end;
-        haveCds = TRUE;
 	}
     if (sameWord(feat, "start_codon"))
         haveStartCodon = TRUE;
@@ -548,9 +567,15 @@ if (optFields & genePredName2Fld)
     }
 if (optFields & genePredCdsStatFld)
     {
-    if (haveCds)
+    if (cdsStart < cdsEnd)
         {
-        if (group->strand == '+')
+        if (!useStartStops)
+            {
+            /* GFF doesn't require start or stop, if not used, assume complete */
+            gp->cdsStartStat = cdsComplete;
+            gp->cdsEndStat = cdsComplete;
+            }
+        else if (group->strand == '+')
             {
             gp->cdsStartStat = (haveStartCodon ? cdsComplete : cdsIncomplete);
             gp->cdsEndStat = (haveStopCodon ? cdsComplete : cdsIncomplete);;
@@ -586,7 +611,7 @@ i = -1; /* before first exon */
 /* fill in exons, merging overlaping and adjacent exons */
 for (gl = group->lineList; gl != NULL; gl = gl->next)
     {
-    if (isExon(gl->feature, isGtf, exonSelectWord) || isCds(gl->feature))
+    if (isExon(gl->feature, isGtf, exonSelectWord) || (isGtf && isCds(gl->feature)))
         {
         chkGroupLine(group, gl, gp);
         if ((i < 0) || (gl->start > eEnds[i]))
@@ -607,20 +632,29 @@ for (gl = group->lineList; gl != NULL; gl = gl->next)
             }
         }
     /* frame: don't include start/stop_codon check here, only CDS. This is
-     * outside of the isExon test to handle GFF */
-    if ((optFields & genePredExonFramesFld) && sameWord(gl->feature, "CDS"))
+     * outside of the isExon test to handle GFF.  Here we check for being in
+     * CDS range og the gp, since some GFFs (ce sangerGene) have a feature
+     * just for the full CDS range.
+     */
+    if ((optFields & genePredExonFramesFld)
+        && genePredCdsIntersect(gp, eStarts[i], eEnds[i])
+        && !sameWord(gl->feature, "stop_codon"))
         {
         /* set frame if this is a CDS, convert from GFF/GTF definition.
          * Leave unchanged if no frame so as not to overwrite frame from
          * other feature of the same exon */
         int frame = phaseToFrame(gl->frame);
         if (frame >= 0)
+            {
             eFrames[i] = frame;
+            haveFrame = TRUE;
+            }
         }
     }
 gp->exonCount = i+1;
 
-if (optFields & genePredExonFramesFld)
+/* only fix frame if some entries in the gene had frame */
+if (haveFrame)
     fixStopFrame(gp);
 
 return gp;
@@ -1116,3 +1150,8 @@ if (end > gp->cdsEnd)
 return (start < end);
 }
 
+boolean genePredCdsIntersect(struct genePred *gp, int start, int end)
+/* Check if a reage intersects the CDS */
+{
+return (rangeIntersection(gp->cdsStart, gp->cdsEnd, start, end) > 0);
+}
