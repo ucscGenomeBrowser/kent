@@ -11,9 +11,9 @@
 
 set db=""
 set dbTrunc=""
+set metatables="dbDb blatServers defaultDb gdbPdb genomeClade"
 
-
-if ($#argv == 1 || $#argv == 3) then
+if ( $#argv == 1 || $#argv == 3 ) then
   set db=$argv[1]
   set dbTrunc=`echo $db | sed -e "s/[0-9]*//"`
 else
@@ -22,72 +22,107 @@ else
   echo "  checks the metadata for a new assembly."
   echo
   echo "    usage:  database, [machine1], [machine2]"
-  echo '        (defaults to dev and beta, use "RR" for production machines, not hgw#)'
+  echo '        (defaults to dev and beta)'
   echo
   exit
 endif
 
-# echo "db = $db"
-# echo "dbTrunc = $dbTrunc"
-
 # set defaults
+set mach1="hgwdev"
+set mach2="hgwbeta"
 set centdb1="hgcentraltest"
 set centdb2="hgcentralbeta"
-set mach1=""
-set mach2="-h hgwbeta"
+set host1=""
+set host2="-h hgwbeta"
 
-if ($#argv == 3) then
-  set centdb1=$argv[2]
-  set centdb2=$argv[3]
+# check if asssembly database exits on dev.
+set orgCheck=`hgsql -N -e 'SELECT COUNT(*) FROM dbDb WHERE name = "'$db'"' \
+  hgcentraltest`
+if ( $orgCheck == 0 ) then
+  echo
+  echo "  $db is not a valid genome database."
+  echo
+endif
+
+# set machines, if given on command line.
+if ( $#argv == 3 ) then
+  set mach1=$argv[2]
+  set mach2=$argv[3]
 endif
 
 # set machines to dev where needed
-if ($centdb1 == "dev" || $centdb1 == "hgwdev") then
+if ( $mach1 == "hgwdev" ) then
   set centdb1="hgcentraltest"
-  set mach1=""
+  set host1=""
 endif
 
-if ($centdb2 == "dev" || $centdb2 == "hgwdev") then
+if ( $mach2 == "hgwdev" ) then
   set centdb2="hgcentraltest"
-  set mach2=""
+  set host2=""
 endif
 
 # set machines to beta where needed
-if ($centdb1 == "beta" || $centdb1 == "hgwbeta") then
+if ( $mach1 == "hgwbeta" ) then
   set centdb1="hgcentralbeta"
+  set host1="-h hgwbeta"
 endif
 
-if ($centdb2 == "beta" || $centdb2 == "hgwbeta") then
+if ( $mach2 == "hgwbeta" ) then
   set centdb2="hgcentralbeta"
+  set host2="-h hgwbeta"
 endif
 
-# set machines to RR where needed
-if ($centdb1 == "RR" || $centdb1 == "rr") then
+
+if ( $mach1 == "RR" || $mach1 == "rr" ) then
   set centdb1="hgcentral"
-  set mach1="-h genome-centdb"
+  set host1="-h genome-centdb"
 endif
 
-if ($centdb2 == "RR" || $centdb2 == "rr") then
+if ( $mach2 == "RR" || $mach2 == "rr" ) then
   set centdb2="hgcentral"
-  set mach2="-h genome-centdb"
+  set host2="-h genome-centdb"
+endif
+
+# set machines to RR where needed if hgw# format used
+set covered="hgwdev hgwbeta rr RR"
+
+echo $covered | grep -w "$mach1" > /dev/null
+if ( $status ) then
+  checkMachineName.csh $mach1
+  if ( $status ) then
+    exit 1
+  else
+    set centdb1="hgcentral"
+    set host1="-h genome-centdb"
+  endif
+endif
+ 
+echo $covered | grep -w "$mach2" > /dev/null
+if ( $status ) then
+  checkMachineName.csh $mach2
+  if ( $status ) then
+    exit 1
+  else
+    set centdb2="hgcentral"
+    set host2="-h genome-centdb"
+  endif
 endif
 
 
 # echo
-# echo "mach1 = $mach1"
+# echo "host1 = $host1"
 # echo "centdb1= $centdb1"
 # echo
-# echo "mach2 = $mach2"
+# echo "host2 = $host2"
 # echo "centdb2= $centdb2"
 echo
 
-set out1=`echo $centdb1 | sed -e "s/-h //"i`
-set out2=`echo $centdb2 | sed -e "s/-h //"i`
+# make file extention for output
+set out1=`echo $centdb1 | sed -e "s/-h //"`
+set out2=`echo $centdb2 | sed -e "s/-h //"`
 
 # echo "out1 = $out1"
 # echo "out2 = $out2"
-
-
 
 # ----------------------------------------------------
 # compare metadata
@@ -95,40 +130,74 @@ set out2=`echo $centdb2 | sed -e "s/-h //"i`
 echo "database = $db"
 echo
 
-hgsql $mach1 -e 'SELECT * FROM dbDb WHERE name = "'$db'"' $centdb1 > dbDb.$out1 
-hgsql $mach2 -e 'SELECT * FROM dbDb WHERE name = "'$db'"' $centdb2  > dbDb.$out2
-comm -23 dbDb.$out1 dbDb.$out2 > dbDb.${out1}Only
-comm -13 dbDb.$out1 dbDb.$out2 > dbDb.${out2}Only
-comm -12 dbDb.$out1 dbDb.$out2 > dbDb.common
-wc -l dbDb.${out1}Only dbDb.${out2}Only dbDb.common | grep -v "total"
-echo
+
+# check blatServers
+set metatable="dbDb"
+
+hgsql $host1 -e 'SELECT * FROM dbDb WHERE name = "'$db'"' $centdb1 \
+  > $metatable.$db.$out1 
+hgsql $host2 -e 'SELECT * FROM dbDb WHERE name = "'$db'"' $centdb2  \
+  > $metatable.$db.$out2
 
 
-hgsql $mach1 -e 'SELECT * FROM blatServers WHERE db = "'$db'"' $centdb1 | sort > blat.$out1 
-hgsql $mach2 -e 'SELECT * FROM blatServers WHERE db = "'$db'"' $centdb2 | sort > blat.$out2
-comm -23 blat.$out1 blat.$out2 > blat.${out1}Only
-comm -13 blat.$out1 blat.$out2 > blat.${out2}Only
-comm -12 blat.$out1 blat.$out2 > blat.common
-wc -l blat.${out1}Only blat.${out2}Only blat.common | grep -v "total"
-echo
+# check blatServers
+set metatable="blatServers"
+
+hgsql $host1 -e 'SELECT * FROM blatServers WHERE db = "'$db'"' $centdb1 | sort \
+  > $metatable.$db.$out1 
+hgsql $host2 -e 'SELECT * FROM blatServers WHERE db = "'$db'"' $centdb2 | sort \
+  > $metatable.$db.$out2 
 
 
-hgsql $mach1 -e 'SELECT * FROM defaultDb WHERE name LIKE "'$dbTrunc'%"' \
-   $centdb1 > defaultDb.$out1 
-hgsql $mach2 -e 'SELECT * FROM defaultDb WHERE name LIKE "'$dbTrunc'%"' \
-   $centdb2 > defaultDb.$out2
-comm -23 defaultDb.$out1 defaultDb.$out2 > defaultDb.${out1}Only
-comm -13 defaultDb.$out1 defaultDb.$out2 > defaultDb.${out2}Only
-comm -12 defaultDb.$out1 defaultDb.$out2 > defaultDb.common
-wc -l defaultDb.${out1}Only defaultDb.${out2}Only defaultDb.common | grep -v "total"
-echo
+# check defaultDb 
+set metatable="defaultDb"
+
+hgsql $host1 -e 'SELECT * FROM defaultDb WHERE name LIKE "'$dbTrunc'%"' \
+   $centdb1 > $metatable.$db.$out1 
+hgsql $host2 -e 'SELECT * FROM defaultDb WHERE name LIKE "'$dbTrunc'%"' \
+   $centdb2 > $metatable.$db.$out2 
 
 
-hgsql $mach1 -e 'SELECT * FROM gdbPdb WHERE genomeDb = "'$db'"' $centdb1 > gdbPdb.$out1 
-hgsql $mach2 -e 'SELECT * FROM gdbPdb WHERE genomeDb = "'$db'"' $centdb2 > gdbPdb.$out2
-comm -23 gdbPdb.$out1 gdbPdb.$out2 > gdbPdb.${out1}Only
-comm -13 gdbPdb.$out1 gdbPdb.$out2 > gdbPdb.${out2}Only
-comm -12 gdbPdb.$out1 gdbPdb.$out2 > gdbPdb.common
-wc -l gdbPdb.${out1}Only gdbPdb.${out2}Only gdbPdb.common | grep -v "total"
-echo
+# check gdbPdb
+set metatable="gdbPdb"
+
+hgsql $host1 -e 'SELECT * FROM gdbPdb WHERE genomeDb = "'$db'"' $centdb1 \
+  > $metatable.$db.$out1 
+hgsql $host2 -e 'SELECT * FROM gdbPdb WHERE genomeDb = "'$db'"' $centdb2 \
+  > $metatable.$db.$out2 
+
+
+# check genomeClade
+# get genome name for the assembly to query genomeClade table.
+
+set genome=`hgsql -N -e 'SELECT genome FROM dbDb WHERE name = "'$db'"' \
+  hgcentraltest`
+
+
+# pull out last word of the find, if in the format "G. species" 
+#    and use LIKE to query genomeClade.
+set secondWord=`echo $genome | gawk -F" " '{print $2}'`
+if ( $secondWord != "" ) then
+  set genome=$secondWord
+endif
+
+set metatable="genomeClade"
+
+# get lookup for clade check
+hgsql $host1 -e 'SELECT * FROM genomeClade WHERE genome LIKE "%'$genome'"' \
+  $centdb1 > $metatable.$db.$out1 
+hgsql $host2 -e 'SELECT * FROM genomeClade WHERE genome LIKE  "%'$genome'"' \
+  $centdb2 > $metatable.$db.$out2
+ 
+set metatable=""
+
+# compare and  print results
+foreach metatable ( `echo $metatables` )
+  comm -23 $metatable.$db.$out1 $metatable.$db.$out2 > $metatable.$db.${out1}Only
+  comm -13 $metatable.$db.$out1 $metatable.$db.$out2 > $metatable.$db.${out2}Only
+  comm -12 $metatable.$db.$out1 $metatable.$db.$out2 > $metatable.$db.common
+  wc -l $metatable.$db.${out1}Only $metatable.$db.${out2}Only \
+    $metatable.$db.common | grep -v "total"
+  echo
+end
 
