@@ -33,7 +33,7 @@
 #include "botDelay.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: hgText.c,v 1.117 2004/03/22 22:16:07 hiram Exp $";
+static char const rcsid[] = "$Id: hgText.c,v 1.118 2004/03/23 00:16:32 hiram Exp $";
 
 /* sources of tracks, other than the current database: */
 static char *hgFixed = "hgFixed";
@@ -228,6 +228,18 @@ char *ctVisMenu[] =
 };
 int ctVisMenuSize = 5;
 
+char *wigConstraint[2] = {
+	(char *)NULL,
+	(char *)NULL,
+};
+double wigDataConstraint[2] = {
+	0.0,
+	0.0,
+};
+int wigDataCompare[2] = {
+	0,
+	0,
+};
 
 void storeStringIfSet(char *var)
 /* If var is in CGI, store it in cart. */
@@ -1294,7 +1306,8 @@ if (ct->fieldCount >= 8)
 puts("</TABLE>");
 }
 
-void filterOptionsTableDb(char *fullTblName, char *db, char *tableId)
+void filterOptionsTableDb(char *fullTblName, char *db, char *tableId,
+    boolean typeWiggle)
 /* Print out an HTML table with form inputs for constraints on table fields */
 {
 struct sqlConnection *conn = hAllocOrConnect(db);
@@ -1351,7 +1364,21 @@ cgiMakeDropList(name, logOpMenu, logOpMenuSize,
 puts("Free-form query: ");
 snprintf(name, sizeof(name), "rawQuery%s", tableId);
 cgiMakeTextVar(name, cgiUsualString(name, ""), 50);
-puts("</TD></TR></TABLE>");
+puts("</TD></TR>");
+if (typeWiggle)
+    {
+    printf("<TR VALIGN=BOTTOM><TD><TABLE><TR VALIGN=BOTTOM><TD> data value </TD><TD>\n");
+    puts(" is \n");
+    snprintf(name, sizeof(name), "cmp%s_wigDataValue", tableId);
+    cgiMakeDropList(name, cmpOpMenu, cmpOpMenuSize,
+			    cgiUsualString(name, cmpOpMenu[0]));
+    puts("</TD><TD>\n");
+    newVal = "";
+    snprintf(name, sizeof(name), "pat%s_wigDataValue", tableId);
+    cgiMakeTextVar(name, cgiUsualString(name, newVal), 20);
+    puts("</TD></TR></TABLE></TD></TR>\n");
+    }
+puts("</TABLE>");
 }
 
 
@@ -1363,6 +1390,24 @@ struct hashEl *posTableList = NULL;
 struct hashEl *nonposTableList = NULL;
 char *table = getTableName();
 char *db = getTableDb();
+struct sqlConnection *conn = hAllocOrConnect(db);
+struct trackDb *tdb;
+char *track = getTrackName();
+int wordCount = 0;
+char *words[128];
+char *trackType = (char *) NULL;
+boolean typeWiggle = FALSE;
+
+tdb = hMaybeTrackInfo(conn, track);
+if (tdb)
+    {
+    if (tdb->type)
+	wordCount = chopLine(tdb->type,words);
+    if (wordCount > 0)
+	trackType = words[0];
+    }
+if ((trackType != (char *) NULL) && sameString(trackType,"wig"))
+    typeWiggle = TRUE;
 
 saveChooseTableState();
 
@@ -1396,7 +1441,7 @@ puts("<A HREF=\"/goldenPath/help/hgTextHelp.html#Constraints\">"
 if (sameString(customTrackPseudoDb, db))
     filterOptionsCustomTrack(table, "");
 else
-    filterOptionsTableDb(fullTableName, db, "");
+    filterOptionsTableDb(fullTableName, db, "", typeWiggle);
 cgiMakeButton("phase", getOutputPhase);
 
 if (tableIsPositional)
@@ -1730,9 +1775,15 @@ char *rQLogOp;
 char *dd, *cmp, *pat;
 char varName[128];
 char *ret;
+int tableIndex = 0;
 
 if (tableId == NULL)
+    {
     tableId = "";
+    tableIndex = 0;
+    }
+if (sameString(tableId,"2"))
+    tableIndex = 1;
 
 dyStringClear(andClause);
 for (current = cgiVarList();  current != NULL;  current = current->next)
@@ -1749,11 +1800,19 @@ for (current = cgiVarList();  current != NULL;  current = current->next)
 	dd = cgiOptionalString(varName);
 	snprintf(varName, sizeof(varName), "cmp%s_%s", tableId, fieldName);
 	cmp = cgiOptionalString(varName);
+	if (sameString(fieldName,"wigDataValue"))
+	    {
+	    if (cmp)
+		wigConstraint[tableIndex] = cmp;
+	    if (pat)
+		wigDataConstraint[tableIndex] = sqlDouble(pat);
+	    }
 	/* If it's a null constraint, skip it. */
 	if ( (dd != NULL &&
 	      (pat == NULL || pat[0] == 0 ||
 	       sameString(trimSpaces(pat), "*"))) ||
-	     (cmp != NULL && sameString(cmp, "ignored")) )
+	     (cmp != NULL && sameString(cmp, "ignored")) ||
+		sameString(fieldName,"wigDataValue") )
 	    continue;
 	/* Otherwise, expect it to be a well-formed constraint and tack 
 	 * it on to the clause. */
@@ -3814,6 +3873,29 @@ char fullTableName2[256];
 char query[256];
 char name[128];
 boolean gotFirst;
+boolean typeWiggle = FALSE;
+struct sqlConnection *conn2;
+struct trackDb *tdb2;
+char *track2 = getTrack2Name();
+char *typeLine2;
+int wordCount = 0;
+char *words[128];
+char *trackType2 = (char *) NULL;
+
+if ((table2 != (char *)NULL) && (db2 != (char *)NULL))
+    {
+    conn2 = hAllocOrConnect(db2);
+    tdb2 = hMaybeTrackInfo(conn2, track2);
+    if (tdb2->type)
+	{
+	typeLine2 = cloneString(tdb2->type);
+	wordCount = chopLine(typeLine2,words);
+	if (wordCount > 0)
+	    trackType2 = words[0];
+	}
+    }
+if ((trackType2 != (char *) NULL) && sameString(trackType2,"wig"))
+    typeWiggle = TRUE;
 
 saveOutputOptionsState();
 
@@ -3897,7 +3979,7 @@ puts("<A HREF=\"/goldenPath/help/hgTextHelp.html#Constraints\">"
 if (sameString(customTrackPseudoDb, db2))
     filterOptionsCustomTrack(table2, "2");
 else
-    filterOptionsTableDb(fullTableName2, db2, "2");
+    filterOptionsTableDb(fullTableName2, db2, "2", typeWiggle);
 cgiMakeButton("phase", outputType);
 puts("</FORM>");
 webEnd();
@@ -4201,9 +4283,9 @@ struct wiggleData *wigData;
 struct slName *chromPtr;
 char *db = getTableDb();
 struct sqlConnection *conn = hAllocOrConnect(db);
-struct sqlResult *sr;
+struct sqlResult *sr = (struct sqlResult *)NULL;
 char query[256];
-char **row;
+char **row = (char **)NULL;
 int numChroms = slCount(chromList);
 
 snprintf(query, sizeof(query), "show table status like '%s'", table);
@@ -4229,6 +4311,8 @@ else
     printf("<TR><TH COLSPAN=6 ALIGN=LEFT> Database: %s </TH><TH COLSPAN=6 ALIGN=RIGHT> Table: %s </TH></TR>\n", database,
 	table);
     }
+
+sqlFreeResult(&sr);
 
 printf("<TR><TH> Chrom </TH><TH> Data <BR> start </TH>");
 printf("<TH> Data <BR> end </TH>");
@@ -4357,7 +4441,6 @@ boolean wiggleDone = FALSE;
 saveOutputOptionsState();
 saveIntersectOptionsState();
 
-
 tdb = hMaybeTrackInfo(conn, track);
 if (tdb->type)
     {
@@ -4374,7 +4457,7 @@ if ((table2 != (char *)NULL) && (db2 != (char *)NULL))
     {
     conn2 = hAllocOrConnect(db2);
     tdb2 = hMaybeTrackInfo(conn2, track2);
-    if (tdb->type)
+    if (tdb2->type)
 	{
 	typeLine2 = cloneString(tdb2->type);
 	wordCount = chopLine(typeLine2,words);
@@ -4460,6 +4543,11 @@ else
 if (trackType != (char *) NULL)
     {
     if (sameWord(trackType,"wig"))
+	if (wigConstraint[0])
+	    {
+	    printf("<P> wiggle data value constraint: %s %g\n",
+		wigConstraint[0], wigDataConstraint[0]);
+	    }
 	wigDoStats(database, table, chromList, winStart, winEnd);
 	wiggleDone = TRUE;
     }
@@ -4467,6 +4555,11 @@ if (trackType != (char *) NULL)
 if (trackType2 != (char *) NULL)
     {
     if (sameWord(trackType2,"wig"))
+	if (wigConstraint[1])
+	    {
+	    printf("<P> wiggle data value constraint: %s %g\n",
+		wigConstraint[1], wigDataConstraint[1]);
+	    }
 	wigDoStats(db2, table2, chromList, winStart, winEnd);
     }
 
