@@ -77,6 +77,7 @@ boolean withLeftLabels = TRUE;		/* Display left labels? */
 boolean withCenterLabels = TRUE;	/* Display center labels? */
 boolean withGuidelines = TRUE;		/* Display guidelines? */
 boolean withRuler = TRUE;		/* Display ruler? */
+boolean hideControls = FALSE;		/* Hide all controls? */
 
 boolean calledSelf;			/* True if program called by page it generated. */
 
@@ -139,6 +140,18 @@ char *offOn[] =
 int seqBaseCount;	/* Number of bases in sequence. */
 int winBaseCount;	/* Number of bases in window. */
 
+int maxShade = 9;	/* Highest shade in a color gradient. */
+Color shadesOfGray[10+1];	/* 10 shades of gray from white to black
+                                 * Red is put at end to alert overflow. */
+Color shadesOfBrown[10+1];	/* 10 shades of brown from tan to tar. */
+static struct rgbColor brownColor = {100, 50, 0};
+static struct rgbColor tanColor = {255, 240, 200};
+
+
+Color shadesOfSea[10+1];       /* Ten sea shades. */
+static struct rgbColor darkSeaColor = {0, 60, 120};
+static struct rgbColor lightSeaColor = {200, 220, 255};
+
 struct trackGroup
 /* Structure that displays a group of tracks. */
     {
@@ -150,10 +163,10 @@ struct trackGroup
     char *longLabel;           /* Long label to put in center. */
     char *shortLabel;          /* Short label to put on side. */
 
-    bool ignoresColor;      /* True if doesn't use colors below. */
     bool mapsSelf;          /* True if system doesn't need to do map box. */
     bool drawName;          /* True if BED wants name drawn in box. */
 
+    Color *colorShades;	       /* Color scale (if any) to use. */
     struct rgbColor color;     /* Main color. */
     Color ixColor;             /* Index of main color. */
     struct rgbColor altColor;  /* Secondary color. */
@@ -266,6 +279,7 @@ char buf[16];
 putchar('\n');
 makeHiddenVar("old", chromName);    /* Variable set when calling ourselves. */
 makeHiddenBoolean("seqReverse", seqReverse);
+makeHiddenBoolean("hideControls", hideControls);
 makeHiddenVar("db", database);
 cgiContinueHiddenVar("ss");
 }
@@ -394,6 +408,8 @@ struct simpleFeature
     int grayIx;                         /* Level of gray usually. */
     };
 
+enum {lfSubXeno = 1};
+
 struct linkedFeatures
     {
     struct linkedFeatures *next;
@@ -429,9 +445,6 @@ void freeLinkedFeaturesItems(struct trackGroup *tg)
 freeLinkedFeatures((struct linkedFeatures**)(&tg->items));
 }
 
-Color shadesOfGray[10];		/* 10 shades of gray from white to black. */
-int maxShade = 9;
-
 enum {blackShadeIx=9,whiteShadeIx=0};
 
 Color whiteIndex()
@@ -462,7 +475,6 @@ void makeGrayShades(struct memGfx *mg)
 /* Make eight shades of gray in display. */
 {
 int i;
-int maxShade = ArraySize(shadesOfGray)-1;
 for (i=0; i<=maxShade; ++i)
     {
     struct rgbColor rgb;
@@ -471,7 +483,48 @@ for (i=0; i<=maxShade; ++i)
     rgb.r = rgb.g = rgb.b = level;
     shadesOfGray[i] = mgFindColor(mg, rgb.r, rgb.g, rgb.b);
     }
+shadesOfGray[maxShade+1] = MG_RED;
 }
+
+void mgMakeColorGradient(struct memGfx *mg, 
+    struct rgbColor *start, struct rgbColor *end,
+    int steps, Color *colorIxs)
+/* Make a color gradient that goes smoothly from start
+ * to end colors in given number of steps.  Put indices
+ * in color table in colorIxs */
+{
+double scale = 0, invScale;
+double invStep;
+int i;
+int r,g,b;
+
+steps -= 1;	/* Easier to do the calculation in an inclusive way. */
+invStep = 1.0/steps;
+for (i=0; i<=steps; ++i)
+    {
+    invScale = 1.0 - scale;
+    r = invScale * start->r + scale * end->r;
+    g = invScale * start->g + scale * end->g;
+    b = invScale * start->b + scale * end->b;
+    colorIxs[i] = mgFindColor(mg, r, g, b);
+    scale += invStep;
+    }
+}
+
+void makeBrownShades(struct memGfx *mg)
+/* Make some shades of brown in display. */
+{
+int i;
+mgMakeColorGradient(mg, &tanColor, &brownColor, maxShade+1, shadesOfBrown);
+}
+
+void makeSeaShades(struct memGfx *mg)
+/* Make some shades of brown in display. */
+{
+int i;
+mgMakeColorGradient(mg, &lightSeaColor, &darkSeaColor, maxShade+1, shadesOfSea);
+}
+
 
 int percentGrayIx(int percent)
 /* Return gray shade corresponding to a number from 50 - 100 */
@@ -505,7 +558,7 @@ int res;
 
 if (isXeno)
     {
-    misFactor = (psl->misMatch + psl->qNumInsert + psl->tNumInsert)*1.2;
+    misFactor = (psl->misMatch + psl->qNumInsert + psl->tNumInsert)*2.5;
     }
 else
     {
@@ -563,9 +616,11 @@ int shortOff = 2, shortHeight = heightPer-4;
 int tallStart, tallEnd, s, e, e2, s2;
 int itemOff, itemHeight;
 boolean isFull = (vis == tvFull);
-boolean grayScale = tg->ignoresColor;
+Color *shades = tg->colorShades;
 Color bColor = tg->ixAltColor;
 double scale = width/(double)baseWidth;
+boolean isXeno = tg->subType == lfSubXeno;
+boolean hideLine = (vis == tvDense && tg->subType == lfSubXeno);
 
 if (vis == tvDense)
     sortByGray(tg, vis);
@@ -574,27 +629,27 @@ for (lf = tg->items; lf != NULL; lf = lf->next)
     int midY = y + midLineOff;
     int compCount = 0;
     int w;
-    if (tg->itemColor && !grayScale)
+    if (tg->itemColor && shades == NULL)
 	color = tg->itemColor(tg, lf, mg);
     tallStart = lf->tallStart;
     tallEnd = lf->tallEnd;
-    if (lf->components != NULL)
+    if (lf->components != NULL && !hideLine)
 	{
 	x1 = round((double)((int)lf->start-winStart)*scale) + xOff;
 	x2 = round((double)((int)lf->end-winStart)*scale) + xOff;
 	w = x2-x1;
 	if (isFull)
 	    {
-	    if (grayScale) bColor =  shadesOfGray[(lf->grayIx>>1)];
+	    if (shades) bColor =  shades[(lf->grayIx>>1)];
 	    mgBarbedHorizontalLine(mg, x1, midY, x2-x1, 2, 5, 
 		    lf->orientation, bColor);
 	    }
-	if (grayScale) color =  shadesOfGray[lf->grayIx];
+	if (shades) color =  shades[lf->grayIx+isXeno];
 	mgDrawBox(mg, x1, midY, w, 1, color);
 	}
     for (sf = lf->components; sf != NULL; sf = sf->next)
 	{
-	if (grayScale) color =  shadesOfGray[lf->grayIx];
+	if (shades) color =  shades[lf->grayIx+isXeno];
 	s = sf->start;
 	e = sf->end;
 	if (s < tallStart)
@@ -854,7 +909,7 @@ struct trackGroup *tg = NULL;
 AllocVar(tg);
 tg->freeItems = freeLinkedFeaturesItems;
 tg->drawItems = linkedFeaturesDraw;
-tg->ignoresColor = TRUE;
+tg->colorShades = shadesOfGray;
 tg->itemName = linkedFeaturesName;
 tg->mapItemName = linkedFeaturesName;
 tg->totalHeight = tgFixedTotalHeight;
@@ -880,6 +935,19 @@ if (orient < 0)
     return '-';
 else
     return '+';
+}
+
+void setTgDarkLightColors(struct trackGroup *tg, int r, int g, int b)
+/* Set track group color to r,g,b.  Set altColor to a lighter version
+ * of the same. */
+{
+tg->colorShades = NULL;
+tg->color.r = r;
+tg->color.g = g;
+tg->color.b = b;
+tg->altColor.r = (r+255)/2;
+tg->altColor.g = (g+255)/2;
+tg->altColor.b = (b+255)/2;
 }
 
 
@@ -1032,19 +1100,6 @@ tg->loadItems = loadMrnaAli;
 return tg;
 }
 
-void setTgDarkLightColors(struct trackGroup *tg, int r, int g, int b)
-/* Set track group color to r,g,b.  Set altColor to a lighter version
- * of the same. */
-{
-tg->ignoresColor = FALSE;
-tg->color.r = r;
-tg->color.g = g;
-tg->color.b = b;
-tg->altColor.r = (r+255)/2;
-tg->altColor.g = (g+255)/2;
-tg->altColor.b = (b+255)/2;
-}
-
 char *usrPslMapName(struct trackGroup *tg, void *item)
 /* Return name of item. */
 {
@@ -1079,7 +1134,7 @@ pslxFileOpen(pslFileName, &qt, &tt, &f);
 if (qt == gftProt)
     {
     setTgDarkLightColors(tg, 0, 80, 150);
-    tg->ignoresColor = FALSE;
+    tg->colorShades = NULL;
     sizeMul = 3;
     }
 tg->itemName = linkedFeaturesName;
@@ -1166,11 +1221,10 @@ struct trackGroup *musTest1Tg()
 {
 struct trackGroup *tg = linkedFeaturesTg();
 tg->mapName = "hgMusTest1";
-tg->visibility = tvDense;
+tg->visibility = tvHide;
 tg->longLabel = "Mouse Translated Blat Alignments Score > 40";
 tg->shortLabel = "Mouse Test 40";
 tg->loadItems = loadMusTest1;
-tg->drawItems = linkedFeaturesAverageDense;
 return tg;
 }
 
@@ -1185,11 +1239,10 @@ struct trackGroup *musTest2Tg()
 {
 struct trackGroup *tg = linkedFeaturesTg();
 tg->mapName = "hgMusTest2";
-tg->visibility = tvDense;
+tg->visibility = tvHide;
 tg->longLabel = "Mouse Translated Blat Alignments Score > 6";
 tg->shortLabel = "Mouse Test 6";
 tg->loadItems = loadMusTest2;
-tg->drawItems = linkedFeaturesAverageDense;
 return tg;
 }
 
@@ -1205,10 +1258,14 @@ struct trackGroup *blatMouseTg()
 struct trackGroup *tg = linkedFeaturesTg();
 tg->mapName = "hgBlatMouse";
 tg->visibility = tvDense;
-tg->longLabel = "Mouse Translated Blat Alignments Score > 30";
-tg->shortLabel = "Blat Mouse";
+tg->longLabel = "Mouse Translated Blat Alignments";
+tg->shortLabel = "Mouse Blat";
 tg->loadItems = loadBlatMouse;
-tg->drawItems = linkedFeaturesAverageDense;
+tg->subType = lfSubXeno;
+tg->colorShades = shadesOfBrown;
+tg->color.r = brownColor.r;
+tg->color.g = brownColor.g;
+tg->color.b = brownColor.b;
 return tg;
 }
 
@@ -1498,8 +1555,8 @@ struct trackGroup *sanger22Tg()
 struct trackGroup *tg = linkedFeaturesTg();
 tg->mapName = "hgSanger22";
 tg->visibility = tvHide;
-tg->longLabel = "Victoria Haghighi's Test Track";
-tg->shortLabel = "Victoria Test";
+tg->longLabel = "Sanger Centre Chromosome 22 Annotations";
+tg->shortLabel = "Sanger 22";
 tg->loadItems = loadSanger22Gene;
 tg->itemName = sanger22Name;
 setTgDarkLightColors(tg, 0, 100, 180);
@@ -1834,7 +1891,7 @@ tg->shortLabel = "RepeatMasker";
 tg->loadItems = repeatLoad;
 tg->freeItems = repeatFree;
 tg->drawItems = repeatDraw;
-tg->ignoresColor = TRUE;
+tg->colorShades = shadesOfGray;
 tg->itemName = repeatName;
 tg->mapItemName = repeatName;
 tg->totalHeight = tgFixedTotalHeight;
@@ -1899,7 +1956,7 @@ int x1,x2,w;
 boolean isFull = (vis == tvFull);
 double scale = width/(double)baseWidth;
 int invPpt;
-boolean grayScale = (tg->ignoresColor);
+Color *shades = tg->colorShades;
 
 for (item = tg->items; item != NULL; item = item->next)
     {
@@ -1910,8 +1967,8 @@ for (item = tg->items; item != NULL; item = item->next)
         color = tg->itemColor(tg, item, mg);
     else
 	{
-	if (grayScale)
-	    color = shadesOfGray[grayInRange(item->score, 0, 1000)];
+	if (shades)
+	    color = shades[grayInRange(item->score, 0, 1000)];
 	}
     if (w < 1)
 	w = 1;
@@ -2049,7 +2106,7 @@ tg->shortLabel = "isochores";
 tg->loadItems = isochoreLoad;
 tg->freeItems = isochoreFree;
 tg->drawItems = isochoreDraw;
-tg->ignoresColor = TRUE;
+tg->colorShades = shadesOfGray;
 tg->itemName = isochoreName;
 return tg;
 }
@@ -2437,7 +2494,7 @@ tg->shortLabel = "GC Percent";
 tg->loadItems = loadGcPercent;
 tg->freeItems = freeGcPercent;
 tg->itemName = gcPercentName;
-tg->ignoresColor = TRUE;
+tg->colorShades = shadesOfGray;
 tg->itemColor = gcPercentColor;
 return tg;
 }
@@ -2630,7 +2687,7 @@ int ppt = el->score;
 int grayLevel;
 
 grayLevel = grayInRange(ppt, -500, 1000);
-return shadesOfGray[grayLevel];
+return shadesOfSea[grayLevel];
 }
 
 
@@ -2646,8 +2703,11 @@ tg->shortLabel = "Exofish ecores";
 tg->loadItems = loadExoFish;
 tg->freeItems = freeExoFish;
 tg->itemName = exoFishName;
-tg->ignoresColor = TRUE;
+tg->colorShades = shadesOfGray;
 tg->itemColor = exoFishColor;
+tg->color.r = darkSeaColor.r;
+tg->color.g = darkSeaColor.g;
+tg->color.b = darkSeaColor.b;
 return tg;
 }
 
@@ -2686,7 +2746,7 @@ int ppt = el->score;
 int grayLevel;
 
 grayLevel = grayInRange(ppt, -100, 1000);
-return shadesOfGray[grayLevel];
+return shadesOfBrown[grayLevel];
 }
 
 
@@ -2702,8 +2762,11 @@ tg->shortLabel = "Exonerate Mouse";
 tg->loadItems = loadExoMouse;
 tg->freeItems = freeExoMouse;
 tg->itemName = exoMouseName;
-tg->ignoresColor = TRUE;
+tg->colorShades = shadesOfBrown;
 tg->itemColor = exoMouseColor;
+tg->color.r = brownColor.r;
+tg->color.g = brownColor.g;
+tg->color.b = brownColor.b;
 return tg;
 }
 
@@ -4475,6 +4538,8 @@ for (group = groupList; group != NULL; group = group->next)
 mg = mgNew(pixWidth, pixHeight);
 mgClearPixels(mg);
 makeGrayShades(mg);
+makeBrownShades(mg);
+makeSeaShades(mg);
 
 /* Start up client side map. */
 printf("<MAP Name=%s>\n", mapName);
@@ -4499,7 +4564,7 @@ if (withLeftLabels)
     y = border;
     if (withRuler)
 	{
-	mgTextCentered(mg, border, y, inWid, rulerHeight, 
+	mgTextRight(mg, border, y, inWid-1, rulerHeight, 
 	    MG_BLACK, font, "Base Position");
 	y += rulerHeight;
 	}
@@ -4517,14 +4582,14 @@ if (withLeftLabels)
 		    {
 		    char *name = group->itemName(group, item);
 		    int itemHeight = group->itemHeight(group, item);
-		    mgTextCentered(mg, border, y, inWid, itemHeight, group->ixColor, font, name);
+		    mgTextRight(mg, border, y, inWid-1, itemHeight, group->ixColor, font, name);
 		    y += itemHeight;
 		    }
 		break;
 	    case tvDense:
 		if (withCenterLabels)
 		    y += fontHeight;
-		mgTextCentered(mg, border, y, inWid, group->lineHeight, group->ixColor, font, group->shortLabel);
+		mgTextRight(mg, border, y, inWid-1, group->lineHeight, group->ixColor, font, group->shortLabel);
 		y += group->lineHeight;
 		break;
 	    }
@@ -4539,12 +4604,17 @@ if (withGuidelines)
     int height = pixHeight - 2*border;
     int x;
     Color color = mgFindColor(mg, 220, 220, 255);
+    int lineHeight = mgFontLineHeight(tl.font)+1;
 
     mgSetClip(mg, xOff, border, insideWidth, height);
     y = border;
 
     for (x = xOff+9; x<pixWidth; x += 10)
 	mgDrawBox(mg, x, y, 1, height, color);
+#ifdef SOMETIMES
+    for (y= yAfterRuler + lineHeight/2 - 1; y<pixHeight; y += lineHeight)
+        mgDrawBox(mg, xOff, y, insideWidth, 1, color);
+#endif /* SOMETIMES */
     }
 
 /* Show ruler at top. */
@@ -4718,6 +4788,7 @@ userSeqString = cgiOptionalString("ss");
 if (userSeqString != NULL)
     eUserSeqString = cgiEncode(userSeqString);
 
+hideControls = cgiBoolean("hideControls");
 if (calledSelf)
     {
     char *s;
@@ -4753,8 +4824,8 @@ if (chromTableExists("_est")) slSafeAddHead(&tGroupList, estTg());
 if (hTableExists("est3")) slSafeAddHead(&tGroupList, est3Tg());
 if (hTableExists("cpgIsland")) slSafeAddHead(&tGroupList, cpgIslandTg());
 if (hTableExists("cpgIsland2")) slSafeAddHead(&tGroupList, cpgIsland2Tg());
-if (hTableExists("exoMouse")) slSafeAddHead(&tGroupList, exoMouseTg());
 if (hTableExists("blatMouse")) slSafeAddHead(&tGroupList, blatMouseTg());
+if (hTableExists("exoMouse")) slSafeAddHead(&tGroupList, exoMouseTg());
 if (hTableExists("musTest1")) slSafeAddHead(&tGroupList, musTest1Tg());
 if (hTableExists("musTest2")) slSafeAddHead(&tGroupList, musTest2Tg());
 if (hTableExists("exoFish")) slSafeAddHead(&tGroupList, exoFishTg());
@@ -4806,116 +4877,123 @@ printf("<FORM ACTION=\"%s\">\n\n", hgTracksName());
 /* Center everything from now on. */
 printf("<CENTER>\n");
 
-/* Show title . */
-printf("<H2>Chromosome %s, Bases %d-%d, Size %d</H2>", skipChr(chromName), 
-	winStart+1, winEnd, winEnd - winStart);
-
-/* Put up scroll and zoom controls. */
-fputs("move ", stdout);
-cgiMakeButton("left3", "<<<");
-cgiMakeButton("left2", " <<");
-cgiMakeButton("left1", " < ");
-cgiMakeButton("right1", " > ");
-cgiMakeButton("right2", ">> ");
-cgiMakeButton("right3", ">>>");
-fputs(" zoom in ", stdout);
-cgiMakeButton("in1", "1.5x");
-cgiMakeButton("in2", " 3x ");
-cgiMakeButton("in3", "10x");
-fputs(" zoom out ", stdout);
-cgiMakeButton("out1", "1.5x");
-cgiMakeButton("out2", " 3x ");
-cgiMakeButton("out3", "10x");
-fputs("<BR>\n", stdout);
-
-/* Make line that says position. */
+if (!hideControls)
     {
-    fputs("position ", stdout);
-    cgiMakeTextVar("position", position, 30);
-    fputs(" pixel width ", stdout);
-    cgiMakeIntVar("pix", tl.picWidth, 4);
-    fputs(" ", stdout);
-    cgiMakeButton("submit", "jump");
-    printf(" <A HREF=\"../goldenPath/help/hgTracksHelp.html\" TARGET=_blank>User's Guide</A>");
+    /* Show title . */
+    printf("<H2>Chromosome %s, Bases %d-%d, Size %d</H2>", skipChr(chromName), 
+	    winStart+1, winEnd, winEnd - winStart);
+
+    /* Put up scroll and zoom controls. */
+    fputs("move ", stdout);
+    cgiMakeButton("left3", "<<<");
+    cgiMakeButton("left2", " <<");
+    cgiMakeButton("left1", " < ");
+    cgiMakeButton("right1", " > ");
+    cgiMakeButton("right2", ">> ");
+    cgiMakeButton("right3", ">>>");
+    fputs(" zoom in ", stdout);
+    cgiMakeButton("in1", "1.5x");
+    cgiMakeButton("in2", " 3x ");
+    cgiMakeButton("in3", "10x");
+    fputs(" zoom out ", stdout);
+    cgiMakeButton("out1", "1.5x");
+    cgiMakeButton("out2", " 3x ");
+    cgiMakeButton("out3", "10x");
     fputs("<BR>\n", stdout);
+
+    /* Make line that says position. */
+	{
+	fputs("position ", stdout);
+	cgiMakeTextVar("position", position, 30);
+	fputs(" pixel width ", stdout);
+	cgiMakeIntVar("pix", tl.picWidth, 4);
+	fputs(" ", stdout);
+	cgiMakeButton("submit", "jump");
+	printf(" <A HREF=\"../goldenPath/help/hgTracksHelp.html\" TARGET=_blank>User's Guide</A>");
+	fputs("<BR>\n", stdout);
+	}
     }
 
 /* Make clickable image and map. */
 makeActiveImage(tGroupList);
-fputs("</CENTER>", stdout);
-fputs("Click on an item in a track to view more information on that item. "
-      "Click center label to toggle between full and dense display of "
-      "that track.  Tracks with more than 300 items are always displayed "
-      "densely.  Click on base position to zoom in by 3x around where you "
-      "clicked.<BR>",
-      stdout);
-fputs("<TABLE BORDER=\"1\" WIDTH=\"100%\"><TR><TD><P ALIGN=CENTER>", stdout);
-printf("<A HREF=\"%s?o=%d&g=getDna&i=mixed&c=%s&l=%d&r=%d&db=%s\">"
-      "View DNA</A></TD>",  hgcName(),
-      winStart, chromName, winStart, winEnd, database);
-if (sameString(database, "hg6"))
+
+if (!hideControls)
     {
-    fputs("<TD><P ALIGN=CENTER>", stdout);
-    printEnsemblAnchor();
-    fputs("Visit Ensembl</A></TD>", stdout);
-    }
-fprintf(stdout, "<TD><P ALIGN=CENTER><A HREF=\"../cgi-bin/hgBlat?db=%s\">BLAT Search</A></TD>", database);
-fprintf(stdout, "<TD><P ALIGN=CENTER><A HREF=\"/index.html\">Genome Home</A></TD>");
-fputs("</TR>", stdout);
-fputs("</TABLE><CENTER>\n", stdout);
-
-/* Display bottom control panel. */
-fputs("Chromosome ", stdout);
-cgiMakeDropList("seqName", hgChromNames, 24, chromName);
-fputs(" bases ",stdout);
-cgiMakeIntVar("winStart", winStart, 12);
-fputs(" - ", stdout);
-cgiMakeIntVar("winEnd", winEnd, 12);
-printf(" Guidelines ");
-makeCheckBox("guidelines", withGuidelines);
-printf(" <B>Labels:</B> ");
-printf("left ");
-makeCheckBox("leftLabels", withLeftLabels);
-printf("center ");
-makeCheckBox("centerLabels", withCenterLabels);
-printf(" ");
-cgiMakeButton("submit", "refresh");
-printf("<BR>\n");
-
-
-/* Display viewing options for each group. */
-/* Chuck: This is going to be wrapped in a table so that
- * the controls don't wrap around randomly
- */
-printf("<table border=0 cellspacing=1 cellpadding=1 width=%d>\n", CONTROL_TABLE_WIDTH);
-printf("<tr><th colspan=%d>\n", MAX_CONTROL_COLUMNS);
-printf("<BR><B>Track Controls:</B><BR> ");
-printf("</th></tr>\n");
-printf("<tr><td align=left>\n");
-printf(" Base Position <BR>");
-cgiMakeDropList("ruler", offOn, 2, offOn[withRuler]);
-printf("</td>");
-controlColNum=1;
-for (group = tGroupList; group != NULL; group = group->next)
-    {
-    if(controlColNum >= MAX_CONTROL_COLUMNS) 
+    fputs("</CENTER>", stdout);
+    fputs("Click on an item in a track to view more information on that item. "
+	  "Click center label to toggle between full and dense display of "
+	  "that track.  Tracks with more than 300 items are always displayed "
+	  "densely.  Click on base position to zoom in by 3x around where you "
+	  "clicked.<BR>",
+	  stdout);
+    fputs("<TABLE BORDER=\"1\" WIDTH=\"100%\"><TR><TD><P ALIGN=CENTER>", stdout);
+    printf("<A HREF=\"%s?o=%d&g=getDna&i=mixed&c=%s&l=%d&r=%d&db=%s\">"
+	  "View DNA</A></TD>",  hgcName(),
+	  winStart, chromName, winStart, winEnd, database);
+    if (sameString(database, "hg6"))
 	{
-	printf("</tr><tr><td align=left>\n");
-	controlColNum =1;
+	fputs("<TD><P ALIGN=CENTER>", stdout);
+	printEnsemblAnchor();
+	fputs("Visit Ensembl</A></TD>", stdout);
 	}
-    else 
+    fprintf(stdout, "<TD><P ALIGN=CENTER><A HREF=\"../cgi-bin/hgBlat?db=%s\">BLAT Search</A></TD>", database);
+    fprintf(stdout, "<TD><P ALIGN=CENTER><A HREF=\"/index.html\">Genome Home</A></TD>");
+    fputs("</TR>", stdout);
+    fputs("</TABLE><CENTER>\n", stdout);
+
+    /* Display bottom control panel. */
+    fputs("Chromosome ", stdout);
+    cgiMakeDropList("seqName", hgChromNames, 24, chromName);
+    fputs(" bases ",stdout);
+    cgiMakeIntVar("winStart", winStart, 12);
+    fputs(" - ", stdout);
+    cgiMakeIntVar("winEnd", winEnd, 12);
+    printf(" Guidelines ");
+    makeCheckBox("guidelines", withGuidelines);
+    printf(" <B>Labels:</B> ");
+    printf("left ");
+    makeCheckBox("leftLabels", withLeftLabels);
+    printf("center ");
+    makeCheckBox("centerLabels", withCenterLabels);
+    printf(" ");
+    cgiMakeButton("submit", "refresh");
+    printf("<BR>\n");
+
+
+    /* Display viewing options for each group. */
+    /* Chuck: This is going to be wrapped in a table so that
+     * the controls don't wrap around randomly
+     */
+    printf("<table border=0 cellspacing=1 cellpadding=1 width=%d>\n", CONTROL_TABLE_WIDTH);
+    printf("<tr><th colspan=%d>\n", MAX_CONTROL_COLUMNS);
+    printf("<BR><B>Track Controls:</B><BR> ");
+    printf("</th></tr>\n");
+    printf("<tr><td align=left>\n");
+    printf(" Base Position <BR>");
+    cgiMakeDropList("ruler", offOn, 2, offOn[withRuler]);
+    printf("</td>");
+    controlColNum=1;
+    for (group = tGroupList; group != NULL; group = group->next)
 	{
-	printf("<td align=left>\n");
-	controlColNum++;
+	if(controlColNum >= MAX_CONTROL_COLUMNS) 
+	    {
+	    printf("</tr><tr><td align=left>\n");
+	    controlColNum =1;
+	    }
+	else 
+	    {
+	    printf("<td align=left>\n");
+	    controlColNum++;
+	    }
+	printf(" %s<BR> ", group->shortLabel);
+	cgiMakeDropList(group->mapName, tvStrings, ArraySize(tvStrings), tvStrings[group->visibility]);
+	printf("</td>\n");
 	}
-    printf(" %s<BR> ", group->shortLabel);
-    cgiMakeDropList(group->mapName, tvStrings, ArraySize(tvStrings), tvStrings[group->visibility]);
-    printf("</td>\n");
+    /* now finish out the table */
+    for( ; controlColNum < MAX_CONTROL_COLUMNS; controlColNum++)
+	printf("<td>&nbsp</td>\n");
+    printf("</tr>\n</table>\n");
     }
-/* now finish out the table */
-for( ; controlColNum < MAX_CONTROL_COLUMNS; controlColNum++)
-    printf("<td>&nbsp</td>\n");
-printf("</tr>\n</table>\n");
 saveHiddenVars();
 
 /* Clean up. */
