@@ -87,8 +87,10 @@ return hdbPassword;
 struct sqlConnection *hAllocConn()
 /* Get free connection if possible. If not allocate a new one. */
 {
+if (hdbHost == NULL)
+    hDefaultConnect();
 if (hdbCc == NULL)
-    hdbCc = sqlNewConnCache(hdbName);
+    hdbCc = sqlNewRemoteConnCache(hdbName, hdbHost, hdbUser, hdbPassword);
 return sqlAllocConnection(hdbCc);
 }
 
@@ -504,20 +506,7 @@ return hFindFieldsAndBin(table, retChrom, retStart, retEnd, &isBinned);
 }
 
 
-struct hTableInfo
-/* Some info to track table. */
-    {
-    struct hTableInfo *next;	/* Next in list. */
-    char *rootName;		/* Name without chrN_. */
-    boolean isPos;		/* True if table is positional. */
-    boolean isSplit;		/* True if table is split. */
-    boolean hasBin;		/* True if table starts with field. */
-    char chromField[32];		/* Name of chromosome field. */
-    char startField[32];		/* Name of chromosome start field. */
-    char endField[32];		/* Name of chromosome end field. */
-    };
-
-static struct hTableInfo *hFindTableInfo(char *chrom, char *rootName)
+struct hTableInfo *hFindTableInfo(char *chrom, char *rootName)
 /* Find table information.  Return NULL if no table. */
 {
 static struct hash *hash;

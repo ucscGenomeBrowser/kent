@@ -19,6 +19,19 @@
 #include "trackDb.h"
 #endif
 
+struct hTableInfo
+/* Some info to track table. */
+    {
+    struct hTableInfo *next;	/* Next in list. */
+    char *rootName;		/* Name without chrN_. */
+    boolean isPos;		/* True if table is positional. */
+    boolean isSplit;		/* True if table is split. */
+    boolean hasBin;		/* True if table starts with field. */
+    char chromField[32];		/* Name of chromosome field. */
+    char startField[32];		/* Name of chromosome start field. */
+    char endField[32];		/* Name of chromosome end field. */
+    };
+
 void hDefaultConnect();
 /* read the default settings from the config file */
 
@@ -111,6 +124,9 @@ boolean hTrackOnChrom(struct trackDb *tdb, char *chrom);
 struct trackDb *hTrackDb(char *chrom);
 /* Load tracks associated with current chromosome (which may
  * be NULL */
+
+struct hTableInfo *hFindTableInfo(char *chrom, char *rootName);
+/* Find table information.  Return NULL if no table. */
 
 boolean hFindChromStartEndFields(char *table, 
 	char retChrom[32], char retStart[32], char retEnd[32]);
