@@ -11,7 +11,7 @@
 #include "wiggle.h"
 #include "scoredRef.h"
 
-static char const rcsid[] = "$Id: wigTrack.c,v 1.18 2003/11/07 23:49:30 hiram Exp $";
+static char const rcsid[] = "$Id: wigTrack.c,v 1.19 2003/11/08 00:26:14 hiram Exp $";
 
 /*	wigCartOptions structure - to carry cart options from wigMethods
  *	to all the other methods via the track->extraUiData pointer
@@ -25,6 +25,7 @@ struct wigCartOptions
 				 */
     enum wiggleGridOptEnum horizontalGrid;	/*  grid lines, ON/OFF */
     enum wiggleGraphOptEnum lineBar;		/*  Line or Bar chart */
+    enum wiggleScaleOptEnum autoScale;		/*  autoScale on */
     double minY;	/*	from trackDb.ra words, the absolute minimum */
     double maxY;	/*	from trackDb.ra words, the absolute maximum */
     int heightFromCart;	/*	requested height from cart	*/
@@ -351,6 +352,7 @@ struct wigCartOptions *wigCart;
 enum wiggleOptEnum wiggleType;
 enum wiggleGridOptEnum horizontalGrid;
 enum wiggleGraphOptEnum lineBar;
+enum wiggleScaleOptEnum autoScale;
 Color shadesOfPrimary[EXPR_DATA_SHADES];
 Color shadesOfAlt[EXPR_DATA_SHADES];
 Color black = vgFindColorIx(vg, 0, 0, 0);
@@ -360,9 +362,12 @@ struct preDrawElement *preDraw;	/* to accumulate everything in prep for draw */
 int preDrawZero;		/* location in preDraw where screen starts */
 int preDrawSize;		/* size of preDraw array */
 int i;				/* an integer loop counter	*/
-double overallUpperLimit = -1.0e+300;
-double overallLowerLimit = 1.0e+300;
-double overallRange;
+double overallUpperLimit = -1.0e+300;	/*	determined from data	*/
+double overallLowerLimit = 1.0e+300;	/*	determined from data	*/
+double overallRange;		/*	determined from data	*/
+double graphUpperLimit;		/*	scaling choice will set these	*/
+double graphLowerLimit;		/*	scaling choice will set these	*/
+double graphRange;		/*	scaling choice will set these	*/
 int x1 = 0;			/*	screen coordinates	*/
 int x2 = 0;			/*	screen coordinates	*/
 
@@ -377,6 +382,7 @@ wigCart = (struct wigCartOptions *) tg->extraUiData;
 wiggleType = wigCart->wiggleType;
 horizontalGrid = wigCart->horizontalGrid;
 lineBar = wigCart->lineBar;
+autoScale = wigCart->autoScale;
 
 if (pixelsPerBase > 0.0)
     basesPerPixel = 1.0 / pixelsPerBase;
@@ -562,6 +568,20 @@ wigDebugPrint("wigDrawItems");
  *	cooresponds to a single pixel on the screen
  */
 
+if (autoScale == wiggleScaleAuto)
+    {
+	graphUpperLimit = overallUpperLimit + (overallRange * 0.1);
+	graphLowerLimit = overallLowerLimit - (overallRange * 0.1);
+	graphRange = overallRange * 1.2;
+snprintf(dbgMsg, DBGMSGSZ, "autoScale requested");
+    } else {
+	graphUpperLimit = overallUpperLimit + (overallRange * 0.1);
+	graphLowerLimit = overallLowerLimit - (overallRange * 0.1);
+	graphRange = graphUpperLimit - graphLowerLimit;
+snprintf(dbgMsg, DBGMSGSZ, "manualScale requested");
+    }
+wigDebugPrint("wigDrawItems");
+
 /*	right now this is a simple pixel by pixel loop.  Future
  *	enhancements will smooth this data and draw boxes where pixels
  *	are all the same height in a run.
@@ -598,6 +618,7 @@ for (x1 = 0; x1 < width; ++x1)
 	/*	Assume .max is the data value to draw,  if the .min is
  	 *	farther away from zero, then it is the one to draw
 	 */
+
 	dataValue = preDraw[preDrawIndex].max;
 	if (fabs(0.0 - preDraw[preDrawIndex].min) >
 		fabs(0.0 - preDraw[preDrawIndex].max) ) {
@@ -728,9 +749,11 @@ char o4[128];	/*	Option 4 - minimum Y axis value: .minY	*/
 char o5[128];	/*	Option 5 - maximum Y axis value: .minY	*/
 char o7[128];	/*	Option 7 - horizontal grid lines: horizGrid */
 char o8[128];	/*	Option 8 - type of graph, lineBar */
+char o9[128];	/*	Option 9 - type of graph, autoScale */
 char *interpolate = NULL;	/*	samples only, or interpolate */
 char *horizontalGrid = NULL;	/*	Grid lines, ON/OFF - off default */
 char *lineBar = NULL;	/*	Line or Bar chart - Bar by default */
+char *autoScale = NULL;	/*	autoScale on/off - On by default */
 char *minY_str = NULL;	/*	string from cart	*/
 char *maxY_str = NULL;	/*	string from cart	*/
 char *heightPer = NULL;	/*	string from cart	*/
@@ -740,6 +763,7 @@ double maxYc;	/*	from cart */
 enum wiggleOptEnum wiggleType;
 enum wiggleGridOptEnum wiggleHorizGrid;
 enum wiggleGraphOptEnum wiggleLineBar;
+enum wiggleScaleOptEnum wiggleAutoScale;
 double minY;	/*	from trackDb.ra words, the absolute minimum */
 double maxY;	/*	from trackDb.ra words, the absolute maximum */
 char cartStr[64];	/*	to set cart strings	*/
@@ -777,12 +801,14 @@ snprintf( o4, sizeof(o4), "%s.minY", track->mapName);
 snprintf( o5, sizeof(o5), "%s.maxY", track->mapName);
 snprintf( o7, sizeof(o7), "%s.horizGrid", track->mapName);
 snprintf( o8, sizeof(o8), "%s.lineBar", track->mapName);
+snprintf( o9, sizeof(o9), "%s.autoScale", track->mapName);
 heightPer = cartOptionalString(cart, o1);
 interpolate = cartOptionalString(cart, o2);
 minY_str = cartOptionalString(cart, o4);
 maxY_str = cartOptionalString(cart, o5);
 horizontalGrid = cartOptionalString(cart, o7);
 lineBar = cartOptionalString(cart, o8);
+autoScale = cartOptionalString(cart, o9);
 
 if (minY_str) minYc = atof(minY_str);
 else minYc = minY;
@@ -849,6 +875,19 @@ else
     cartSetString( cart, o8, cartStr);
     }
 wigCart->lineBar = wiggleLineBar;
+
+/*	If autoScale is a string, it came from the cart, otherwise set
+ *	the default for this option and stuff it into the cart
+ */
+if (autoScale)
+    wiggleAutoScale = wiggleScaleStringToEnum(autoScale);
+else 
+    {
+    wiggleAutoScale = wiggleScaleStringToEnum("Auto-Scale to data view");
+    snprintf( cartStr, sizeof(cartStr), "%s", "Auto-Scale to data view");
+    cartSetString( cart, o9, cartStr);
+    }
+wigCart->autoScale = wiggleAutoScale;
 
 /*	And set the other values back into the cart for hgTrackUi	*/
 if( track->visibility == tvFull )
