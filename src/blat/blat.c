@@ -31,6 +31,7 @@ enum gfType qType = gftDna;
 enum gfType tType = gftDna;
 char *mask = NULL;
 double minRepDivergence = 15;
+double minIdentity = 90;
 
 
 void usage()
@@ -56,7 +57,9 @@ errAbort(
   "   -minMatch=N sets the number of tile matches.  Usually set from 2 to 4\n"
   "               Default is 2\n"
   "   -minScore=N sets minimum score.  This is twice the matches minus the mismatches\n"
-  "               minus some sort of gap penalty.  Default is 40\n"
+  "               minus some sort of gap penalty.  Default is 30\n"
+  "   -minIdentity=N Sets minimum sequence identity (in percent).  Default is 90 for\n"
+  "               nucleotide searches, 25 for protein or translated protein searches.\n"
   "   -maxGap=N   sets the size of maximum gap between tiles in a clump.  Usually set\n"
   "               from 0 to 3.  Default is 2.\n"
   "   -repMatch=N sets the number of repetitions of a tile allowed before\n"
@@ -315,13 +318,19 @@ slReverse(&seqList);
 return seqList;
 }
 
-void searchOneStrand(struct dnaSeq *seq, struct genoFind *gf, FILE *psl, boolean isRc)
+void searchOneStrand(struct dnaSeq *seq, struct genoFind *gf, FILE *psl, 
+	boolean isRc, struct hash *maskHash)
 /* Search for seq in index, align it, and write results to psl. */
 {
 int hitCount;
+static struct gfSavePslxData data;
 struct lm *lm = lmInit(0);
 struct gfClump *clumpList = gfFindClumps(gf, seq, lm, &hitCount);
-gfAlignDnaClumps(clumpList, seq, isRc, minScore, gfSavePsl, psl);
+
+data.f = psl;
+data.maskHash = maskHash;
+data.minGood = round(10*minIdentity);
+gfAlignDnaClumps(clumpList, seq, isRc, minScore, gfSavePslx, &data);
 gfClumpFreeList(&clumpList);
 lmCleanup(&lm);
 }
@@ -352,7 +361,7 @@ if (dotEvery > 0)
     }
 }
 
-void searchOne(bioSeq *seq, struct genoFind *gf, FILE *psl, boolean isProt)
+void searchOne(bioSeq *seq, struct genoFind *gf, FILE *psl, boolean isProt, struct hash *maskHash)
 /* Search for seq on either strand in index. */
 {
 dotOut();
@@ -362,14 +371,15 @@ if (isProt)
     }
 else
     {
-    searchOneStrand(seq, gf, psl, FALSE);
+    searchOneStrand(seq, gf, psl, FALSE, maskHash);
     reverseComplement(seq->dna, seq->size);
-    searchOneStrand(seq, gf, psl, TRUE);
+    searchOneStrand(seq, gf, psl, TRUE, maskHash);
     reverseComplement(seq->dna, seq->size);
     }
 }
 
-void searchOneIndex(int fileCount, char *files[], struct genoFind *gf, char *pslOut, boolean isProt)
+void searchOneIndex(int fileCount, char *files[], struct genoFind *gf, char *pslOut, 
+	boolean isProt, struct hash *maskHash)
 /* Search all sequences in all files against single genoFind index. */
 {
 int i;
@@ -395,7 +405,7 @@ for (i=0; i<fileCount; ++i)
 	freez(&seq->name);
 	seq->name = cloneString(fileName);
 	carefulClose(&f);
-	searchOne(seq, gf, psl, isProt);
+	searchOne(seq, gf, psl, isProt, maskHash);
 	totalSize += seq->size;
 	freeDnaSeq(&seq);
 	count += 1;
@@ -412,7 +422,7 @@ for (i=0; i<fileCount; ++i)
 		seq.size = qSizeMax;
 		seq.dna[qSizeMax] = 0;
 		}
-	    searchOne(&seq, gf, psl, isProt);
+	    searchOne(&seq, gf, psl, isProt, maskHash);
 	    totalSize += seq.size;
 	    count += 1;
 	    }
@@ -458,6 +468,7 @@ data.f = f;
 data.t3Hash = t3Hash;
 data.targetRc = dbIsRc;
 data.reportTargetStrand = TRUE;
+data.minGood = round(10*minIdentity);
 gfFindAlignAaTrans(gfs, qSeq, t3Hash, minScore, gfSavePslx, &data);
 }
 
@@ -471,6 +482,7 @@ data.f = f;
 data.t3Hash = NULL;
 data.reportTargetStrand = TRUE;
 data.targetRc = dbIsRc;
+data.minGood = round(10*minIdentity);
 
 for (qIsRc = 0; qIsRc <= rcQueryToo; qIsRc += 1)
     {
@@ -511,7 +523,7 @@ for (isRc = FALSE; isRc <= 1; ++isRc)
     for (frame = 0; frame < 3; ++frame)
 	{
 	gfs[frame] = gfIndexSeq(dbSeqLists[frame], minMatch, maxGap, tileSize, 
-		repMatch, ooc, TRUE, oneOff);
+		repMatch, ooc, TRUE, oneOff, FALSE);
 	}
 
     for (i=0; i<queryCount; ++i)
@@ -575,12 +587,22 @@ dbSeqList = getSeqList(dbCount, dbFiles, dbHash, dbIsProt, bothSimpleNuc, mask);
 
 if (bothSimpleNuc || (tType == gftProt && qType == gftProt))
     {
+    struct hash *maskHash = NULL;
     /* Build index, possibly upper-case masked. */
     gf = gfIndexSeq(dbSeqList, minMatch, maxGap, tileSize, repMatch, ooc, 
-    	dbIsProt, oneOff);
+    	dbIsProt, oneOff, mask != NULL);
     if (mask != NULL)
+	{
+	int i;
+	struct gfSeqSource *source = gf->sources;
+	maskHash = newHash(0);
+	for (i=0; i<gf->sourceCount; ++i)
+	    if (source[i].maskedBits)
+		hashAdd(maskHash, source[i].seq->name, source[i].maskedBits);
         unmaskNucSeqList(dbSeqList);
-    searchOneIndex(queryCount, queryFiles, gf, pslOut, dbIsProt);
+	}
+    searchOneIndex(queryCount, queryFiles, gf, pslOut, dbIsProt, maskHash);
+    freeHash(&maskHash);
     }
 else if (tType == gftDnaX && qType == gftProt)
     {
@@ -635,6 +657,7 @@ switch (qType)
     case gftProt:
     case gftDnaX:
     case gftRnaX:
+	minIdentity = 25;
         qIsProtLike = TRUE;
 	break;
     default:
@@ -717,6 +740,7 @@ ooc = cgiOptionalString("ooc");
 makeOoc = cgiOptionalString("makeOoc");
 mask = cgiOptionalString("mask");
 minRepDivergence = cgiUsualDouble("minRepDivergence", minRepDivergence);
+minIdentity = cgiUsualDouble("minIdentity", minIdentity);
 
 /* Call routine that does the work. */
 blat(argv[1], argv[2], argv[3]);
