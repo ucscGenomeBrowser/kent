@@ -23,4 +23,7 @@ struct pfCollectedType
     struct pfBaseType *base;		/* Base type. */
     };
 
+void pfCollectedTypeDump(struct pfCollectedType *ct, FILE *f);
+/* Write out info on ct to file. */
+
 #endif /* PFTYPE_H */
