@@ -2939,3 +2939,286 @@ hgMapToGene mm4 ensGene knownGene knownToEnsembl
 # having to merge data form the snpTsc and the snpNih tracks.
 hgMapToGene mm4 snpNih knownGene knownToCdsSnp -all -cds
 
+# Make C. elegans ortholog column using blastp on wormpep.
+# First make C. elegans protein database and copy it to cluster/bluearc
+# if it doesn't exist already
+#	This is already done, see makeMm3.doc for procedure
+#	the directory: /cluster/bluearc/ce1/blastp should have data
+
+# Create the ceBlastTab  (the blastall binary only works on kk9 for now ...)
+ssh kk9
+mkdir /cluster/data/mm4/bed/blastp/ce1
+cd /cluster/data/mm4/bed/blastp/ce1
+mkdir run
+cd run
+mkdir out
+
+# Make blast script
+cat  << '_EOF_' > blastSome
+#!/bin/sh
+BLASTMAT=/cluster/bluearc/blast/data /cluster/bluearc/blast/blastall \
+	-p blastp -d /cluster/bluearc/ce1/blastp/wormPep \
+	-i $1 -o $2 -e 0.01 -m 8 -b 1
+'_EOF_'
+chmod a+x blastSome
+
+# Make gensub2 file
+cat << '_EOF_' > gsub
+#LOOP
+blastSome {check in line+ $(path1)} {check out line out/$(root1).tab}
+#ENDLOOP
+'_EOF_'
+
+# Create parasol batch
+echo ../../split/*.fa | wordLine stdin > split.lst
+gensub2 split.lst single gsub jobList
+para create jobList
+para try
+
+# Wait a couple of minutes, and do a para check,  if all is good
+# then do a
+para push
+
+# This should finish in ~10 minutes if the cluster is free.
+# Here's the para time results
+# Completed: 7737 of 7737 jobs
+# CPU time in finished jobs:      24219s     403.64m     6.73h    0.28d  0.001 y
+# IO & Wait Time:                 20227s     337.12m     5.62h    0.23d  0.001 y
+# Average job time:                   6s       0.10m     0.00h    0.00d
+# Longest job:                       20s       0.33m     0.01h    0.00d
+# Submission to last job:           494s       8.23m     0.14h    0.01d
+
+
+# Load into database.  
+ssh hgwdev
+cd /cluster/data/mm4/bed/blastp/ce1/run/out
+hgLoadBlastTab mm4 ceBlastTab -maxPer=1 *.tab
+
+# Make human ortholog column using blastp on human known genes.
+# First make human protein database and copy it to cluster/bluearc
+# if it doesn't exist already
+#	This already exists.  See makeMm3.doc for procedure
+#	the directory: /cluster/bluearc/hg16/blastp should have data
+
+# Make parasol run directory 
+ssh kk9
+mkdir /cluster/data/mm4/bed/blastp/hg16
+cd /cluster/data/mm4/bed/blastp/hg16
+mkdir run
+cd run
+mkdir out
+
+# Make blast script
+cat  << '_EOF_' > blastSome
+#!/bin/sh
+BLASTMAT=/cluster/bluearc/blast/data /cluster/bluearc/blast/blastall \
+	-p blastp -d /cluster/bluearc/hg16/blastp/known \
+	-i $1 -o $2 -e 0.001 -m 8 -b 1
+'_EOF_'
+chmod a+x blastSome
+
+# Make gensub2 file
+cat << '_EOF_' > gsub
+#LOOP
+blastSome {check in line+ $(path1)} {check out line out/$(root1).tab}
+#ENDLOOP
+'_EOF_'
+
+# Create parasol batch
+# (wordLine wouldn't run on kk9:
+#	wordLine: /lib/i686/libc.so.6: version `GLIBC_2.3' not found
+#	run this echo statement on hgwdev
+#	this echo trick is used because otherwise the command line is
+#	too long and you can not do a simple ls
+
+echo ../../split/*.fa | wordLine stdin > split.lst
+gensub2 split.lst single gsub jobList
+para create jobList
+para try
+
+# Wait a couple of minutes, and do a para check,  if all is good
+# then do a
+para push
+
+#	takes about 15 minutes:
+# Completed: 7737 of 7737 jobs
+# CPU time in finished jobs:      53172s     886.21m    14.77h    0.62d  0.002 y
+# IO & Wait Time:                 20181s     336.34m     5.61h    0.23d  0.001 y
+# Average job time:                   9s       0.16m     0.00h    0.00d
+# Longest job:                       52s       0.87m     0.01h    0.00d
+# Submission to last job:           809s      13.48m     0.22h    0.01d
+
+# Load into database.  
+ssh hgwdev
+cd /cluster/data/mm4/bed/blastp/hg16/run/out
+hgLoadBlastTab mm4 hgBlastTab -maxPer=1 *.tab
+
+XXXX
+
+# Make Danio rerio (zebrafish) ortholog column using blastp on Ensembl.
+# First make protein database and copy it to cluster/bluearc
+# if it doesn't exist already
+#	This is already done, see makeMm3.doc for procedure
+#	the directory: /cluster/bluearc/dr1/blastp should have data
+
+# Make parasol run directory 
+ssh kk9
+mkdir /cluster/data/mm4/bed/blastp/dr1
+cd /cluster/data/mm4/bed/blastp/dr1
+mkdir run
+cd run
+mkdir out
+
+# Make blast script
+cat  << '_EOF_' > blastSome
+#!/bin/sh
+BLASTMAT=/cluster/bluearc/blast/data /cluster/bluearc/blast/blastall \
+	-p blastp -d /cluster/bluearc/dr1/blastp/ensembl \
+	-i $1 -o $2 -e 0.005 -m 8 -b 1
+'_EOF_'
+chmod a+x blastSome
+
+# Make gensub2 file
+cat << '_EOF_' > gsub
+#LOOP
+blastSome {check in line+ $(path1)} {check out line out/$(root1).tab}
+#ENDLOOP
+'_EOF_'
+
+# Create parasol batch
+echo ../../split/*.fa | wordLine stdin > split.lst
+gensub2 split.lst single gsub jobList
+para create jobList
+para try
+
+# Wait a couple of minutes, and do a para check,  if all is good
+# then do a
+para push
+
+# Completed: 7737 of 7737 jobs
+# CPU time in finished jobs:      33916s     565.26m     9.42h    0.39d  0.001 y
+# IO & Wait Time:                 20370s     339.50m     5.66h    0.24d  0.001 y
+# Average job time:                   7s       0.12m     0.00h    0.00d
+# Longest job:                       29s       0.48m     0.01h    0.00d
+# Submission to last job:           655s      10.92m     0.18h    0.01d
+
+# Load into database.  
+ssh hgwdev
+cd /cluster/data/mm4/bed/blastp/dr1/run/out
+hgLoadBlastTab mm4 drBlastTab -maxPer=1 *.tab
+
+# Make Saccharomyces cerevisiae (yeast) ortholog column using blastp on RefSeq.
+# First make protein database and copy it to cluster/bluearc
+# if it doesn't exist already
+#	This is already done, see makeMm3.doc for procedure
+#	the directory: /cluster/bluearc/sc1/blastp should have data
+
+# Make parasol run directory 
+ssh kk9
+mkdir /cluster/data/mm4/bed/blastp/sc1
+cd /cluster/data/mm4/bed/blastp/sc1
+mkdir run
+cd run
+mkdir out
+
+# Make blast script
+cat  << '_EOF_' > blastSome
+#!/bin/sh
+BLASTMAT=/cluster/bluearc/blast/data /cluster/bluearc/blast/blastall \
+	-p blastp -d /cluster/bluearc/sc1/blastp/sgd \
+	-i $1 -o $2 -e 0.01 -m 8 -b 1
+'_EOF_'
+chmod a+x blastSome
+
+# Make gensub2 file
+cat << '_EOF_' > gsub
+#LOOP
+blastSome {check in line+ $(path1)} {check out line out/$(root1).tab}
+#ENDLOOP
+'_EOF_'
+
+# Create parasol batch
+echo ../../split/*.fa | wordLine stdin > split.lst
+gensub2 split.lst single gsub jobList
+para create jobList
+para try
+
+# Wait a couple of minutes, and do a para check,  if all is good
+# then do a
+para push
+
+# Completed: 7737 of 7737 jobs
+# CPU time in finished jobs:       6732s     112.19m     1.87h    0.08d  0.000 y
+# IO & Wait Time:                 21851s     364.19m     6.07h    0.25d  0.001 y
+# Average job time:                   4s       0.06m     0.00h    0.00d
+# Longest job:                        9s       0.15m     0.00h    0.00d
+# Submission to last job:           324s       5.40m     0.09h    0.00d
+
+# Load into database.  
+ssh hgwdev
+cd /cluster/data/mm4/bed/blastp/sc1/run/out
+hgLoadBlastTab mm4 scBlastTab -maxPer=1 *.tab
+
+# Make Drosophila melanagaster ortholog column using blastp on FlyBase.
+# First make SwissProt protein database and copy it to cluster/bluearc
+# if it doesn't exist already
+#	This is already done, see makeMm3.doc for procedure
+#	the directory: /cluster/bluearc/dm1/blastp should have data
+
+# Make parasol run directory 
+ssh kk9
+mkdir /cluster/data/mm4/bed/blastp/dm1
+cd /cluster/data/mm4/bed/blastp/dm1
+mkdir run
+cd run
+mkdir out
+
+# Make blast script
+cat  << '_EOF_' > blastSome
+#!/bin/sh
+BLASTMAT=/cluster/bluearc/blast/data /cluster/bluearc/blast/blastall \
+	-p blastp -d /cluster/bluearc/dm1/blastp/flyBase \
+	-i $1 -o $2 -e 0.01 -m 8 -b 1
+'_EOF_'
+chmod a+x blastSome
+
+# Make gensub2 file
+cat << '_EOF_' > gsub
+#LOOP
+blastSome {check in line+ $(path1)} {check out line out/$(root1).tab}
+#ENDLOOP
+'_EOF_'
+
+# Create parasol batch
+echo ../../split/*.fa | wordLine stdin > split.lst
+gensub2 split.lst single gsub jobList
+para create jobList
+para try
+
+# Wait a couple of minutes, and do a para check,  if all is good
+# then do a
+para push
+
+# Completed: 7737 of 7737 jobs
+# CPU time in finished jobs:      27801s     463.35m     7.72h    0.32d  0.001 y
+# IO & Wait Time:                 19866s     331.10m     5.52h    0.23d  0.001 y
+# Average job time:                   6s       0.10m     0.00h    0.00d
+# Longest job:                       23s       0.38m     0.01h    0.00d
+# Submission to last job:           526s       8.77m     0.15h    0.01d
+
+# Load into database.  
+ssh hgwdev
+cd /cluster/data/mm4/bed/blastp/dm1/run/out
+hgLoadBlastTab mm4 dmBlastTab -maxPer=1 *.tab
+
+# CREATING KNOWNtOsUPER (which enables superFamily stuff in hgNear/hgGene)
+# First see if need to update superfamily data from 
+# ftp server at supfam.mrc-lmb.cam.ac.uk following instructions
+# in /cluster/store1/superFamily/genomes/README.ucsc.  Then
+# make sure that knownToEnsembl and ensGtp tables are created, then:
+ssh hgwdev
+#	Until we get an Ensmart update for Mm4, we need an empty table
+#	here so kgKnownToSuper will function
+hgsql mm4 < ~/kent/src/hg/lib/ensGtp.sql
+zcat /cluster/store1/superFamily/genomes/ass_11-Jan-2004.tab.gz | \
+	hgKnownToSuper mm4 mm stdin
