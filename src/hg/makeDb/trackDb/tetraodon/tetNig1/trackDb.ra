@@ -16,6 +16,15 @@ group map
 visibility hide
 type bed 3 +
 
+track gaze
+shortLabel Genoscope GAZE 
+longLabel Genoscope Annotatiosn Using GAZE
+group genes
+priority 48
+visibility dense
+color 170,100,0
+type genePred
+
 track genscan
 shortLabel Genscan Genes
 longLabel Genscan Gene Predictions
