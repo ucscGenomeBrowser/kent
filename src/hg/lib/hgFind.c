@@ -2215,33 +2215,6 @@ else if (hgFindClonePos(query, &chrom, &start, &end))
 else if (findMrnaPos(query, hgp, hgAppName, cart))
     {
     }
-else if (findSnpPos(query, hgp, "snpTsc"))
-    {
-    }
-else if (findSnpPos(query, hgp, "snpNih"))
-    {
-    }
-else if (findGenePred(query, hgp, "sanger22"))
-    {
-    }
-else if (findGenePred(query, hgp, "sanger20"))
-    {
-    }
-else if (findGenePred(query, hgp, "ensGene"))
-    {
-    }
-else if (findGenePred(query, hgp, "genieAlt"))
-    {
-    }
-else if (findGenePred(query, hgp, "softberryGene"))
-    {
-    }
-else if (findGenePred(query, hgp, "acembly"))
-    {
-    }
-else if (findGenePred(query, hgp, "genscan"))
-    {
-    }
 else if (findGenethonPos(query, &chrom, &start, &end))	/* HG3 only. */
     {
     singlePos(hgp, "STS Position", NULL, "mapGenethon", query, chrom, start, end);
@@ -2278,6 +2251,15 @@ else
     findMrnaKeys(query, hgp, hgAppName, cart);
     findZooGenes(query, hgp);
     findRgdGenes(query, hgp);
+    findSnpPos(query, hgp, "snpTsc");
+    findSnpPos(query, hgp, "snpNih");
+    findGenePred(query, hgp, "sanger22");
+    findGenePred(query, hgp, "sanger20");
+    findGenePred(query, hgp, "ensGene");
+    findGenePred(query, hgp, "genieAlt");
+    findGenePred(query, hgp, "softberryGene");
+    findGenePred(query, hgp, "acembly");
+    findGenePred(query, hgp, "genscan");
     }
 
 slReverse(&hgp->tableList);
