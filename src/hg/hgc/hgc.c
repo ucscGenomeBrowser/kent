@@ -3647,16 +3647,16 @@ char *thisOrg = hOrganism(database);
 cartWebStart(cart, tdb->longLabel);
 psl = loadPslFromRangePair(tdb->tableName, item);
 printf("<B>%s position:</B> %s:%d-%d<BR>\n", otherOrg,
-	psl->qName, psl->qStart, psl->qEnd);
+	psl->qName, psl->qStart+1, psl->qEnd);
 printf("<B>%s size:</B> %d<BR>\n", otherOrg, psl->qEnd - psl->qStart);
 printf("<B>%s position:</B> %s:%d-%d<BR>\n", thisOrg,
-	psl->tName, psl->tStart, psl->tEnd);
+	psl->tName, psl->tStart+1, psl->tEnd);
 printf("<B>%s size:</B> %d<BR>\n", thisOrg,
 	psl->tEnd - psl->tStart);
 printf("<B>Bases in aligning blocks:</B> %d<BR>\n", psl->match + psl->repMatch);
 printf("<B>Number of Aligning Blocks:</B> %d<BR>\n", psl->blockCount );
 printf("<B>Percent identity within aligning blocks:</B> %3.1f%%<BR>\n", 0.1*(1000 - pslCalcMilliBad(psl, FALSE)));
-printf("<B>Browser window position:</B> %s:%d-%d<BR>\n", seqName, winStart, winEnd);
+printf("<B>Browser window position:</B> %s:%d-%d<BR>\n", seqName, winStart+1, winEnd);
 printf("<B>Browser window size:</B> %d<BR>\n", winEnd - winStart);
 sprintf(otherString, "%d&pslTable=%s&otherOrg=%s&otherChromTable=%s", psl->tStart, 
 	tdb->tableName, otherOrg, otherChromTable);
@@ -3684,10 +3684,10 @@ char *thisOrg = hOrganism(database);
 cartWebStart(cart, tdb->longLabel);
 psl = loadPslFromRangePair(tdb->tableName, item);
 printf("<B>%s position:</B> %s:%d-%d<BR>\n", otherOrg,
-	psl->qName, psl->qStart, psl->qEnd);
+	psl->qName, psl->qStart+1, psl->qEnd);
 printf("<B>%s size:</B> %d<BR>\n", otherOrg, psl->qEnd - psl->qStart);
 printf("<B>%s position:</B> %s:%d-%d<BR>\n", thisOrg,
-	psl->tName, psl->tStart, psl->tEnd);
+	psl->tName, psl->tStart+1, psl->tEnd);
 printf("<B>%s size:</B> %d<BR>\n", thisOrg,
 	psl->tEnd - psl->tStart);
 printf("<B>Bases in aligning blocks:</B> %d<BR>\n", psl->match + psl->repMatch);
