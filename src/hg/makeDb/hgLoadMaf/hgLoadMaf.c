@@ -12,7 +12,7 @@
 #include "scoredRef.h"
 #include "dystring.h"
 
-static char const rcsid[] = "$Id: hgLoadMaf.c,v 1.10 2003/10/12 15:41:59 daryl Exp $";
+static char const rcsid[] = "$Id: hgLoadMaf.c,v 1.11 2003/10/21 03:09:11 kate Exp $";
 
 /* Command line options */
 
@@ -108,11 +108,10 @@ for (fileEl = fileList; fileEl != NULL; fileEl = fileEl->next)
     while ((maf = mafNextWithPos(mf, &offset)) != NULL)
         {
 	double maxScore, minScore;
-	++mafCount;
 	mc = findComponent(maf, database);
 	if (mc == NULL) 
             {
-            char msg[100];
+            char msg[256];
             safef(msg, sizeof(msg),
                             "Couldn't find %s. sequence line %d of %s\n", 
 	    	                database, mf->lf->lineIx, fileName);
@@ -183,6 +182,7 @@ for (fileEl = fileList; fileEl != NULL; fileEl = fileEl->next)
             continue;
             }
 	if (mr.score > 1.0) mr.score = 1.0;
+	mafCount++;
 	fprintf(f, "%u\t", hFindBin(mr.chromStart, mr.chromEnd));
 	scoredRefTabOut(&mr, f);
 	mafAliFree(&maf);
@@ -195,7 +195,8 @@ if (test)
     return;
 printf("Loading %s into database\n", table);
 hgLoadTabFile(conn, ".", table, &f);
-hgEndUpdate(&conn, "Add %ld mafs in %d files from %s", mafCount, slCount(fileList), extFileDir);
+printf("Loaded %ld mafs in %d files from %s", mafCount, slCount(fileList), extFileDir);
+hgEndUpdate(&conn, "Add %ld mafs in %d files from %s\n", mafCount, slCount(fileList), extFileDir);
 }
 
 int main(int argc, char *argv[])
