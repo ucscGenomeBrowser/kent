@@ -34,6 +34,45 @@ char *hgGenePixCgiName()
 return "hgGenePix";
 }
 
+char *shortOrgName(char *binomial)
+/* Return short name for taxon - scientific or common whatever is
+ * shorter */
+{
+static struct hash *hash = NULL;
+char *name;
+
+if (hash == NULL)
+    hash = hashNew(0);
+name = hashFindVal(hash, binomial);
+if (name == NULL)
+    {
+    struct sqlConnection *conn = sqlConnect("uniProt");
+    char query[256], **row;
+    struct sqlResult *sr;
+    int nameSize = strlen(binomial);
+    name = cloneString(binomial);
+    safef(query, sizeof(query), 
+    	"select commonName.val from commonName,taxon "
+	"where taxon.binomial = '%s' and taxon.id = commonName.taxon"
+	, binomial);
+    sr = sqlGetResult(conn, query);
+    while ((row = sqlNextRow(sr)) != NULL)
+        {
+	int len = strlen(row[0]);
+	if (len < nameSize)
+	    {
+	    freeMem(name);
+	    name = cloneString(row[0]);
+	    nameSize = len;
+	    }
+	}
+    sqlFreeResult(&sr);
+    sqlDisconnect(&conn);
+    hashAdd(hash, binomial, name);
+    }
+return name;
+}
+
 char *genomeDbForImage(struct sqlConnection *conn, int imageId)
 /* Return the genome database to associate with image or NULL if none. */
 {
@@ -53,6 +92,25 @@ hDisconnectCentral(&cConn);
 return db;
 }
 
+void smallCaption(struct sqlConnection *conn, int imageId)
+/* Write out small format caption. */
+{
+struct slName *nameList, *name;
+nameList = genePixGeneName(conn, imageId);
+printf("<B>");
+for (name = nameList; name != NULL; name = name->next)
+    {
+    printf("%s", name->name);
+    if (name->next != NULL)
+	printf(",");
+    }
+printf("</B>");
+slFreeList(&nameList);
+printf(" %s %s",
+    shortOrgName(genePixOrganism(conn, imageId)),
+    genePixStage(conn, imageId, FALSE) );
+}
+
 void doThumbnails(struct sqlConnection *conn)
 /* Write out list of thumbnail images. */
 {
@@ -65,7 +123,6 @@ htmStart(stdout, "do image");
 printf("<TABLE>\n");
 for (image = imageList; image != NULL; image = image->next)
     {
-    struct slName *nameList, *name;
     int id = image->val;
     char *imageFile = genePixThumbSizePath(conn, image->val);
     printf("<TR>");
@@ -74,17 +131,8 @@ for (image = imageList; image != NULL; image = image->next)
     	sidUrl, hgpId, image->val, hgpDoImage);
     printf("<IMG SRC=\"/%s\"></A><BR>\n", imageFile);
     
-    nameList = genePixGeneName(conn, id);
-    for (name = nameList; name != NULL; name = name->next)
-        {
-	printf("%s", name->name);
-	if (name->next != NULL)
-	    printf(",");
-	}
-    slFreeList(&nameList);
-    printf(" %s %s<BR>\n",
-	genePixOrganism(conn, id),
-	genePixStage(conn, id, FALSE) );
+    smallCaption(conn, id);
+    printf("<BR>\n");
     printf("</TD>");
     printf("</TR>");
     }
@@ -162,11 +210,15 @@ int imageId = cartInt(cart, hgpId);
 struct slName *geneList = genePixGeneName(conn, imageId);
 htmlSetBgColor(0xE0E0E0);
 htmStart(stdout, "do image");
+
+smallCaption(conn, imageId);
+printf(" - see also <A HREF=\"#caption\">full caption</A> below<BR>\n");
 printf("<A HREF=\"");
 printf("../cgi-bin/%s?%s=%d&%s=on", hgGenePixCgiName(), hgpId, imageId, hgpDoFullSized);
 printf("\" target=_PARENT>");
 printf("<IMG SRC=\"/%s\"></A><BR>\n", genePixScreenSizePath(conn, imageId));
 printf("\n");
+printf("<A NAME=\"caption\"></A>");
 printCaption(conn, imageId, geneList);
 htmlEnd();
 }
@@ -226,7 +278,7 @@ for (gene = geneList; gene != NULL; gene = gene->next)
     }
 printf(" %s %s",
 	genePixStage(conn, imageId, FALSE),
-	genePixOrganism(conn, imageId) );
+	shortOrgName(genePixOrganism(conn, imageId)));
 printf("</TITLE>\n");
 printf("</HEAD>\n");
 
