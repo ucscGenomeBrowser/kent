@@ -67,7 +67,12 @@ else
 	    else if (strand == '-')
 		strand = '+';
 	    }
-	if (strand == '+')
+	if (cut->palindromic)
+	    {
+	    vgBox(vg, cuts[0], y - tickHeight, tickWidth, tickHeight * 2 + 2, color);
+	    vgBox(vg, cuts[1], y - tickHeight, tickWidth, tickHeight * 2 + 2, color);	    
+	    }
+	else if (strand == '+')
 	    {
 	    vgBox(vg, cuts[0], y - tickHeight, tickWidth, tickHeight, color);
 	    vgBox(vg, cuts[1], y + 2, tickWidth, tickHeight, color);	    
@@ -76,11 +81,6 @@ else
 	    {
 	    vgBox(vg, cuts[2], y - tickHeight, tickWidth, tickHeight, color);
 	    vgBox(vg, cuts[3], y + 2, tickWidth, tickHeight, color);	    	    
-	    }
-	if (cut->palindromic)
-	    {
-	    vgBox(vg, cuts[0], y - tickHeight, tickWidth, tickHeight * 2 + 2, color);
-	    vgBox(vg, cuts[1], y - tickHeight, tickWidth, tickHeight * 2 + 2, color);	    
 	    }
 	vgBox(vg, x1, y, w, 2, color);
 	if (tg->drawName && vis != tvSquish)
@@ -105,30 +105,28 @@ void cuttersLoad(struct track *tg)
 {
 struct sqlConnection *conn;
 struct cutter *cutters;
-struct slName *includes, *excludes;
 struct dnaSeq *windowDna = NULL;
 struct bed *plus = NULL, *minus = NULL, *bedList = NULL;
+int winSize = winEnd - winStart;
+
+hSetDb2("hgFixed");
+conn = hAllocConn2();
+cutters = cutterLoadByQuery(conn, "select * from cutters");
+windowDna = hDnaFromSeq(chromName, winStart, winEnd, dnaUpper);
 
 /* Do different things based on window size. */
-if (winEnd - winStart < 1000)
-    {
-    windowDna = hDnaFromSeq(chromName, winStart, winEnd, dnaUpper);
-    hSetDb2("hgFixed");
-    conn = hAllocConn2();
-    cutters = cutterLoadByQuery(conn, "select * from cutters");
-    includes = sqlQuickList(conn, "select name from cuttersIncluded");
-    excludes = sqlQuickList(conn, "select name from cuttersExcluded");
-    /* Make the FALSE for the semicolon an hui.h default.  */ 
-    cullCutters(cutters, FALSE, includes, excludes, 6);
-    plus = matchEnzymes(cutters, windowDna, '+', TRUE, winStart);
-    reverseComplement(windowDna->dna, windowDna->size);
-    minus = matchEnzymes(cutters, windowDna, '-', FALSE, winStart);
-    bedList = slCat(plus, minus);
-    tg->items = bedList;
-    hFreeConn2(&conn);
-    slFreeList(&includes);
-    slFreeList(&excludes);
-    }
+if (winSize < 50000)
+    cullCutters(cutters, FALSE, NULL, NULL, 6);
+else if (winSize >= 5000 && winSize < 50000)
+    cullCutters(cutters, FALSE, NULL, NULL, 8);
+else 
+    cullCutters(cutters, FALSE, NULL, NULL, 1000000);
+plus = matchEnzymes(cutters, windowDna, '+', TRUE, winStart);
+reverseComplement(windowDna->dna, windowDna->size);
+minus = matchEnzymes(cutters, windowDna, '-', FALSE, winStart);
+bedList = slCat(plus, minus);
+tg->items = bedList;
+hFreeConn2(&conn);
 }
 
 struct track *cuttersTg()
