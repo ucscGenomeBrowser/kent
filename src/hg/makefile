@@ -150,9 +150,16 @@ UTIL_DIRS = \
 	mdToNcbiLift \
 	mouseStuff \
 	mrnaToGene \
+	near/hgCeOrfToGene \
 	near/hgClusterGenes \
+	near/hgEmblProtLinks \
 	near/hgExpDistance \
+	near/hgGoAssociation \
+	near/hgKnownToSuper \
+	near/hgMapToGene \
 	near/hgMapViaSwissProt \
+	near/hgProtIdToGenePred \
+	near/hgWormLinks \
 	near/pepPredToFa \
 	nci60 \
 	orthoMap \
