@@ -31,7 +31,6 @@ struct genePred *gp;
 char query[512];
 int count = 0;
 struct dyString *bands = newDyString(0);
-struct dyString *pos = newDyString(0);
 char band[64];
 
 sprintf(query, "select * from refGene where name = '%s'", rl->mrnaAcc);
@@ -44,14 +43,12 @@ while ((row = sqlNextRow(sr)) != NULL)
         dyStringPrintf(bands, "%s,", band);
     else
         dyStringPrintf(bands, "n/a,");
-    dyStringPrintf(pos, "%s:%d-%d,", gp->chrom, gp->txStart+1, gp->txEnd);
     }
 if (count > 0)
-    fprintf(f, "%s\t%s\t%d\t%s\t%s\n", rl->name, rl->mrnaAcc, count, 
+    fprintf(f, "%s\t%s\t%d\t%s\n", rl->name, rl->mrnaAcc, count, 
     	bands->string, pos->string);
 
 dyStringFree(&bands);
-dyStringFree(&pos);
 sqlFreeResult(&sr);
 hFreeConn(&conn);
 }
