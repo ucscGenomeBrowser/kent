@@ -4739,6 +4739,13 @@ axtChain $1 \
     cd /usr/local/apache/htdocs/goldenPath/rn3/vsMm5
     mv /cluster/data/rn3/bed/blastz.mm5/axtChain/mouse*.gz .
     md5sum *.gz > md5sum.txt
+
+    cd /cluster/data/rn3/bed/blastz.mm5/axtNet
+    mkdir -p /usr/local/apache/htdocs/goldenPath/rn3/vsmm5/axtNet
+    cp -p *.axt /usr/local/apache/htdocs/goldenPath/rn3/vsmm5/axtNet
+    cd /usr/local/apache/htdocs/goldenPath/rn3/vsmm5/axtNet
+    md5sum * > md5sum.txt
+   
     # Copy over & edit README.txt w/pointers to chain, net formats.
     # Not for pushing -- handle separately.
     mv /cluster/data/rn3/bed/blastz.mm5/blastzECF .
