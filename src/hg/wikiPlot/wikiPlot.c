@@ -218,7 +218,7 @@ double magnify = 2.0;
 double newZoom = zoom*magnify;
 double invNewZoom = 1.0/newZoom;
 int xCount = slCount(xList);
-plotName = (xCount/zoom < 40);
+plotName = (xCount/zoom < 50);
 
 if (xList == NULL || yList == NULL)
     return;
@@ -273,10 +273,37 @@ printf("X has %d elements ranging from %d to %d<BR>\n", slCount(xList), xStart, 
 printf("Y has %d elements ranging from %d to %d<BR>\n", slCount(yList), yStart, yEnd);
 }
 
+void printBox()
+/* Make little navigation box. */
+{
+puts(
+"<TABLE BORDER=\"0\" WIDTH=\"100%\">\n"
+"  <TR>\n"
+"    <TD WIDTH=\"33%\"><INPUT TYPE=\"SUBMIT\" NAME=\"boxUpLeft\" VALUE=\" \\ \"></TD>\n"
+"    <TD WIDTH=\"33%\"><INPUT TYPE=\"SUBMIT\" NAME=\"boxUp\" VALUE=\" ^ \"></TD>\n"
+"    <TD WIDTH=\"34%\"><INPUT TYPE=\"SUBMIT\" NAME=\"boxUpRight\" VALUE=\" / \"></TD>\n"
+"  </TR>\n"
+"  <TR>\n"
+"    <TD WIDTH=\"33%\"><INPUT TYPE=\"SUBMIT\" NAME=\"boxLeft\" VALUE=\" < \"></TD>\n"
+"    <TD WIDTH=\"33%\"><INPUT TYPE=\"SUBMIT\" NAME=\"boxOut\" VALUE=\" Z \"></TD>\n"
+"    <TD WIDTH=\"34%\"><INPUT TYPE=\"SUBMIT\" NAME=\"boxRight\" VALUE=\" > \"></TD>\n"
+"  </TR>\n"
+"  <TR>\n"
+"    <TD WIDTH=\"33%\"><INPUT TYPE=\"SUBMIT\" NAME=\"boxDownLeft\" VALUE=\" / \"></TD>\n"
+"    <TD WIDTH=\"33%\"><INPUT TYPE=\"SUBMIT\" NAME=\"boxDown\" VALUE=\" v \"></TD>\n"
+"    <TD WIDTH=\"34%\"><INPUT TYPE=\"SUBMIT\" NAME=\"boxDownRight\" VALUE=\" \\ \"></TD>\n"
+"  </TR>\n"
+"</TABLE>\n"
+"\n");
+}
+
+
 void wikiPlot()
 /* wikiPlot - Quick plots of maps vs. each other. */
 {
 boolean gotDir = cgiVarExists("contigDir");
+double step;
+
 contigDir = cgiUsualString("contigDir", contigDir);
 mapX = cgiUsualString("mapX", mapX);
 mapY = cgiUsualString("mapY", mapY);
@@ -284,23 +311,72 @@ pix = cgiUsualInt("pix", pix);
 xOff = cgiUsualDouble("xOff", xOff);
 yOff = cgiUsualDouble("yOff", yOff);
 zoom = cgiUsualDouble("zoom", zoom);
+step = 0.2 * 1/zoom;
 
-printf("<H3>Wiki Map Plot</H3>\n");
+if (cgiVarExists("boxOut"))
+    {
+    double invZoom = 1.0/zoom;
+    double xCen = xOff + invZoom*0.5;
+    double yCen = yOff + invZoom*0.5;
+    zoom /= 2;
+    invZoom = 1.0/zoom;
+    xOff = xCen - invZoom*0.5;
+    yOff = yCen - invZoom*0.5;
+    }
+else if (cgiVarExists("boxUp"))
+    yOff -= step;
+else if (cgiVarExists("boxDown"))
+    yOff += step;
+else if (cgiVarExists("boxLeft"))
+    xOff -= step;
+else if (cgiVarExists("boxRight"))
+    xOff += step;
+else if (cgiVarExists("boxUpLeft"))
+    {
+    yOff -= step;
+    xOff -= step;
+    }
+else if (cgiVarExists("boxUpRight"))
+    {
+    yOff -= step;
+    xOff += step;
+    }
+else if (cgiVarExists("boxDownLeft"))
+    {
+    yOff += step;
+    xOff -= step;
+    }
+else if (cgiVarExists("boxDownRight"))
+    {
+    yOff += step;
+    xOff += step;
+    }
+
 printf("<FORM ACTION=\"../cgi-bin/wikiPlot\" METHOD=\"GET\">\n");
+printf("<TABLE BORDER=0 WIDTH=\"100%%\">\n");
+printf("<TR>\n");
+printf("<TD WIDTH=\"78%%\">\n");
 printf("<B>Contig: </B>");
 cgiMakeTextVar("contigDir", contigDir, 0);
-printf("<B>Pixels: </B>");
-cgiMakeIntVar("pix", pix, 4);
 if (gotDir)
     cgiMakeButton("refresh", "refresh");
 else
     cgiMakeButton("submit", "submit");
 printf("<BR>\n");
-printf("<B>Map X (horizontal): </B>");
+printf("<B>Map X: </B>");
 cgiMakeTextVar("mapX", mapX, 12);
-printf("<B>Map Y (vertical): </B>");
+printf("<B>Map Y: </B>");
 cgiMakeTextVar("mapY", mapY, 12);
-printf("<BR>\n");
+printf("<B>Pixels: </B>");
+cgiMakeIntVar("pix", pix, 4);
+printf("</TD>\n");
+printf("<TD WIDTH=\"22%%\">\n");
+if (gotDir)
+    printBox();
+printf("</TD>\n");
+printf("</TR>\n");
+printf("</TABLE>\n");
+
 if (gotDir)
     {
     char xFile[512], yFile[512];
@@ -311,6 +387,17 @@ if (gotDir)
     loadMap(xFile, &xList, &xHash);
     loadMap(yFile, &yList, &yHash);
     makePlot(xList, yList, yHash);
+    }
+
+/* Save hidden vars. */
+    {
+    char buf[256];
+    sprintf(buf, "%f", zoom);
+    cgiMakeHiddenVar("zoom", buf);
+    sprintf(buf, "%f", xOff);
+    cgiMakeHiddenVar("xOff", buf);
+    sprintf(buf, "%f", yOff);
+    cgiMakeHiddenVar("yOff", buf);
     }
 printf("</FORM>\n");
 }
