@@ -8,14 +8,15 @@
 #  Checks all fields (except html) in trackDb
 ###############################################
 
-if ($#argv < 1 || $#argv > 5) then
+if ($#argv < 1 || $#argv > 4) then
   echo ""
   echo "  checks all fields in trackDb"
   echo "  this will break when hgText is replaced by hgTables."
   echo
   echo "    usage: database, [machine1], [machine2] (defaults to hgw1 and hgwbeta)"
-  echo "             [mode] (terse|verbose for html field - defaults to terse),"
-  echo "             [mode2] (fast|realTime for mysql or WGET - defaults to realTime)"
+  echo "             [mode] (fast|verbose|fastVerbose) "
+  echo "               - verbose is for html field - defaults to terse"
+  echo "               - fast = (mysql-genome) - defaults to realTime (WGET)"
   echo ""
   exit 1
 endif
@@ -23,6 +24,7 @@ endif
 #set machine1 = "hgwdev"
 set machine1 = "hgw1"
 set machine2 = "hgwbeta"
+set inputMode=""
 set mode="terse"
 set mode2="realTime"
 
@@ -33,25 +35,32 @@ if ( $#argv > 2 ) then
 endif
 
 if ( $#argv == 2 ) then
-  set mode = $argv[2]
+  set inputMode = $argv[2]
 endif
 
 if ( $#argv == 4 ) then
-  set mode = $argv[4]
+  set inputMode = $argv[4]
 endif
 
-if ( $#argv == 5 ) then
-  set mode2 = $argv[5]
-endif
+# if ( $inputMode != "fast" && $inputMode != "fastVerbose" \
+#   && $inputMode != "verbose" && $inputMode != "" ) then
 
-if ( $mode != "verbose" && $mode != "terse" ) then
-  if ( $mode2 != "fast" && $mode2 != "realTime" ) then
+if (! ( $inputMode == "fast" || $inputMode == "fastVerbose" \
+     || $inputMode == "verbose" || $inputMode == "" )) then
     echo
-    echo "  mode not acceptable.\n"
+    echo "  mode ($inputMode) not acceptable.\n"
     echo "${0}:"
     $0
     exit 1
   endif
+endif
+
+if ( $inputMode == "verbose" || $inputMode == "fastVerbose" ) then
+  set mode = "verbose" 
+endif
+
+if ( $inputMode == "fast" || $inputMode == "fastVerbose" ) then
+  set mode2 = "fast" 
 endif
 
 foreach mach ( $machine1 $machine2 )
@@ -65,6 +74,13 @@ end
 
 set table = "trackDb"
 set fields=`hgsql -N -e "DESC $table" $db | gawk '{print $1}' | grep -vw "html"`
+if ( $status ) then
+  echo  
+  echo "  query failed.  check database name."
+  echo  
+  exit 1
+endif
+
 
 foreach field ( $fields )
   if ( $mode2 == "fast" || $field == "settings" ) then
