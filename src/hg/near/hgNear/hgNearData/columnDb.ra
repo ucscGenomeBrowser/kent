@@ -120,7 +120,7 @@ longLabel 5' UTR Fold Energy (Estimated kcal/mol)
 priority 6.5
 visibility off
 type float foldUtr5 name energy
-itemUrl ../cgi-bin/hgGene?hgg_gene=%s&hgg_mrnaFoldRegion=foldUtr3&hgg_do_rnaFoldDisplay=text
+itemUrl ../cgi-bin/hgGene?hgg_gene=%s&hgg_mrnaFoldRegion=foldUtr5&hgg_do_rnaFoldDisplay=text
 urlChromVar hgg_chrom
 urlStartVar hgg_start
 urlEndVar hgg_end
