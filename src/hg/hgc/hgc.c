@@ -140,7 +140,7 @@
 #include "HInv.h"
 #include "bed6FloatScore.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.690 2004/07/15 19:20:30 baertsch Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.691 2004/07/18 21:59:40 baertsch Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -819,7 +819,8 @@ DNA qCodon[4];
 DNA tCodon[4];
 AA qProt, tProt = 0;
 int tPtr = 0;
-/* char nibFile[128]; */
+int prevEnd = 500000000;
+int intronTruncated=FALSE;
 
 if (gp->strand[0] == '+')
     {
@@ -896,9 +897,9 @@ for (axt = axtList; axt != NULL; axt = axt->next)
         qStart = qSize - axt->qEnd;
         qEnd = qSize - axt->qStart;
         }
-    fprintf(f, ">%s:%d-%d %s:%d-%d (%c) score %d coding %d-%d utr/coding %d-%d gene %c alignment %c\n", 
-	    axt->tName, axt->tStart+1, axt->tEnd,
-	    axt->qName, qStart+1, qEnd, qStrand, axt->score,  tStart+1, tEnd, gp->txStart+1, gp->txEnd, gp->strand[0], axt->qStrand);
+//    fprintf(f, ">%s:%d-%d %s:%d-%d (%c) score %d coding %d-%d utr/coding %d-%d gene %c alignment %c\n", 
+//	    axt->tName, axt->tStart+1, axt->tEnd,
+//	    axt->qName, qStart+1, qEnd, qStrand, axt->score,  tStart+1, tEnd, gp->txStart+1, gp->txEnd, gp->strand[0], axt->qStrand);
 
     qPtr = qStart;
     if (gp->exonFrames == NULL)
@@ -910,6 +911,7 @@ for (axt = axtList; axt != NULL; axt = axt->next)
         while ((tPtr < nextEnd) && (nextEndIndex > 0))
             {
             nextEndIndex--;
+            prevEnd = nextEnd;
             nextStart = (gp->exonEnds[nextEndIndex]);
             nextEnd = (gp->exonStarts[nextEndIndex]);
             if (nextStart > tStart)
@@ -922,6 +924,7 @@ for (axt = axtList; axt != NULL; axt = axt->next)
         while ((tPtr > nextEnd) && (nextEndIndex < gp->exonCount-2))
             {
             nextEndIndex++;
+            prevEnd = nextEnd;
             nextStart = gp->exonStarts[nextEndIndex];
             nextEnd = gp->exonEnds[nextEndIndex];
             if (nextStart > tStart)
@@ -1007,6 +1010,7 @@ for (axt = axtList; axt != NULL; axt = axt->next)
                     qClass=INTRON;
                     nextEndIndex++;
                     nextStart = gp->exonStarts[nextEndIndex];
+                    prevEnd = nextEnd;
                     nextEnd = gp->exonEnds[nextEndIndex];
                     if (gp->exonFrames != NULL && gp->exonFrames[nextEndIndex] != -1)
                         tCodonPos = gp->exonFrames[nextEndIndex]+1;
@@ -1023,6 +1027,7 @@ for (axt = axtList; axt != NULL; axt = axt->next)
                     qClass=INTRON;
                     nextEndIndex--;
                     nextStart = (gp->exonEnds[nextEndIndex]);
+                    prevEnd = nextEnd;
                     nextEnd = (gp->exonStarts[nextEndIndex]);
                     }
                 }
@@ -1245,20 +1250,22 @@ for (axt = axtList; axt != NULL; axt = axt->next)
             dyStringPrintf(dyQ, " %d ",qPtr);
         else
             dyStringPrintf(dyQ, " %d ",qPtr);
-        /* debug version
-	   if (posStrand)
-	   dyStringPrintf(dyQ, " %d nextExon=%d-%d xon %d",qPtr, nextStart+1,nextEnd,nextEndIndex+1);
-	   else
-	   dyStringPrintf(dyQ, " %d nextExon=%d-%d xon %d",qPtr, nextStart+1,nextEnd,nextEndIndex);
-	*/
+	
         dyStringAppendC(dyQ,'\n');
         resetClassStr(dyQ,1);
         dyStringAppendC(dyQprot,'\n');
         dyStringAppendC(dyTprot,'\n');
 
-        /* skip regions with no alignment and no colored coding regions */
-        //if ( numberOfGaps(q,oneSize) < oneSize /*|| isBlue(dyT->string)*/) 
+        // debug version
+        /*   if (posStrand)
+           printf(" %d nextExon=%d-%d xon %d t %d prevEnd %d diffs %d %d<br>",qPtr, nextStart+1,nextEnd,nextEndIndex+1, tPtr,prevEnd, tPtr-nextStart-70, tPtr-(prevEnd+70));
+           else
+           printf(" %d nextExon=%d-%d xon %d t %d prevEnd %d diffs %d %d<br>",qPtr, nextStart+1,nextEnd,nextEndIndex, tPtr, prevEnd, tPtr-nextStart-70, tPtr-(prevEnd+70));
+           */
+        /* write out alignment, unless we are deep inside an intron */
+        if (tClass != INTRON || (tClass == INTRON && tPtr < nextStart-LINESIZE && tPtr< (prevEnd + LINESIZE)))
             {
+            intronTruncated = 0;
             fputs(dyTprot->string,f);
             fputs(dyT->string,f);
 
@@ -1274,6 +1281,14 @@ for (axt = axtList; axt != NULL; axt = axt->next)
             fputs(dyQ->string,f);
             fputs(dyQprot->string,f);
             fputc('\n', f);
+            }
+        else
+            {
+            if (!intronTruncated == TRUE)
+                {
+                printf("...intron truncated...<br>");
+                intronTruncated = TRUE;
+                }
             }
         /* look for end of line */
         if (oneSize > lineSize)
@@ -1448,7 +1463,7 @@ gpList = genePredReaderLoadQuery(conn, table, query);
 for (gp = gpList; gp != NULL; gp = gp->next)
     {
     printPos(gp->chrom, gp->txStart, gp->txEnd, gp->strand, FALSE, NULL);
-    if (gp->name2 != NULL)
+    if (gp->name2 != NULL && strlen(trimSpaces(gp->name2))> 0)
         {
         printf("<b>Alternate Name:</b> %s<br>\n",gp->name2);
         }
