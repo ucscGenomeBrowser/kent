@@ -11,7 +11,7 @@
 #include "hdb.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: hgWiggle.c,v 1.11 2004/08/06 22:47:16 hiram Exp $";
+static char const rcsid[] = "$Id: hgWiggle.c,v 1.12 2004/08/09 21:42:41 hiram Exp $";
 
 /* Command line switches. */
 static boolean silent = FALSE;	/*	no data points output */
@@ -60,199 +60,6 @@ errAbort(
   );
 }
 
-/*	between hgWiggle() and getData()	*/
-static unsigned long long totalValidData = 0;
-static unsigned long fileNoDataBytes = 0;
-static long fileEt = 0;
-static unsigned long long totalRows = 0;
-static unsigned long long valuesMatched = 0;
-static unsigned long long bytesRead = 0;
-static unsigned long long bytesSkipped = 0;
-
-/*	between getData() and hgWiggle()	*/
-
-static unsigned long long rowCount = 0;
-static long chrStartClock;
-static unsigned long chrBytesRead = 0;
-static unsigned long chrNoDataBytes = 0;
-
-#define	ASCII_DATA	0
-#define	BED_DATA	1
-#define	STATS_DATA	2
-
-static void getData(struct wiggleDataStream *wDS, int type)
-/* getData - read and return wiggle data	*/
-{
-char *row[WIGGLE_NUM_COLS];
-unsigned long long chrRowCount = 0;
-unsigned long long validData = 0;
-unsigned long noDataBytes = 0;
-boolean doStats = FALSE;
-boolean doBed = FALSE;
-boolean doAscii = FALSE;
-
-
-switch (type)
-    {
-    case ASCII_DATA:
-	doAscii = TRUE;
-	break;
-    case BED_DATA:
-	doBed = TRUE;
-	break;
-    case STATS_DATA:
-	doStats = TRUE;
-	break;
-    default:
-	verbose(2, "wigGetData: no type of data fetch requested ?\n");
-	return;	/*	NOTHING ASKED FOR	*/
-    }
-
-rowCount = 0;
-chrStartClock = clock1000();
-chrBytesRead = 0;
-chrNoDataBytes = 0;
-
-while (wDS->nextRow(wDS, row, WIGGLE_NUM_COLS))
-    {
-    struct wiggle *wiggle;
-    ++rowCount;
-    ++chrRowCount;
-    wiggle = wiggleLoad(row);
-    if (wDS->isFile)
-	{
-	if (wDS->chrName)
-	    if (differentString(wDS->chrName,wiggle->chrom))
-		continue;
-	if (wDS->spanLimit)
-	    if (wDS->spanLimit != wiggle->span)
-		continue;
-	}
-
-    if ( (wDS->currentSpan != wiggle->span) || 
-	    (wDS->currentChrom && differentString(wDS->currentChrom, wiggle->chrom)))
-	{
-	if (wDS->currentChrom && differentString(wDS->currentChrom, wiggle->chrom))
-	    {
-	    long et;
-	    long chrEndClock;
-	    chrEndClock = clock1000();
-	    et = chrEndClock - chrStartClock;
-	    if (timing)
-verbose(1,"#\t%s.%s %lu data bytes, %lu no-data bytes, %ld ms, %llu rows\n",
-		wDS->tblName, wDS->currentChrom, chrBytesRead,
-		chrNoDataBytes, et, chrRowCount);
-	    chrRowCount = chrNoDataBytes = chrBytesRead = 0;
-	    chrStartClock = clock1000();
-	    }
-	freeMem(wDS->currentChrom);
-	wDS->currentChrom=cloneString(wiggle->chrom);
-	if (!silent)
-	    printf ("variableStep chrom=%s", wDS->currentChrom);
-	wDS->currentSpan = wiggle->span;
-	if (!silent && (wDS->currentSpan > 1))
-	    printf (" span=%u\n", wDS->currentSpan);
-	else if (!silent)
-	    printf ("\n");
-	}
-
-    verbose(3, "#\trow: %llu, start: %u, data range: %g: [%g:%g]\n",
-	    rowCount, wiggle->chromStart, wiggle->dataRange,
-	    wiggle->lowerLimit, wiggle->lowerLimit+wiggle->dataRange);
-    verbose(3, "#\tresolution: %g per bin\n",
-	    wiggle->dataRange/(double)MAX_WIG_VALUE);
-    if (wDS->useDataConstraint)
-	{
-	if (!wDS->cmpDouble(wDS, wiggle->lowerLimit,
-		(wiggle->lowerLimit + wiggle->dataRange)))
-	    {
-	    bytesSkipped += wiggle->count;
-	    continue;
-	    }
-	wDS->setCompareByte(wDS, wiggle->lowerLimit, wiggle->dataRange);
-	}
-    if (!skipDataRead)
-	{
-	int j;	/*	loop counter through ReadData	*/
-	unsigned char *datum;    /* to walk through ReadData bytes */
-	unsigned char *ReadData;    /* the bytes read in from the file */
-	wDS->openWibFile(wDS, wiggle->file);
-		    /* possibly open a new wib file */
-	ReadData = (unsigned char *) needMem((size_t) (wiggle->count + 1));
-	bytesRead += wiggle->count;
-	lseek(wDS->wibFH, wiggle->offset, SEEK_SET);
-	read(wDS->wibFH, ReadData,
-	    (size_t) wiggle->count * (size_t) sizeof(unsigned char));
-
-verbose(3, "#\trow: %llu, reading: %u bytes\n", rowCount, wiggle->count);
-
-	datum = ReadData;
-	for (j = 0; j < wiggle->count; ++j)
-	    {
-	    if (*datum != WIG_NO_DATA)
-		{
-		++validData;
-		++chrBytesRead;
-		if (wDS->useDataConstraint)
-		    {
-		    if (wDS->cmpByte(wDS, datum))
-			{
-			++valuesMatched;
-			if (!silent)
-			    {
-			    double datumOut =
-wiggle->lowerLimit+(((double)*datum/(double)MAX_WIG_VALUE)*wiggle->dataRange);
-			    if (verboseLevel() > 2)
-				printf("%d\t%g\t%d\n", 1 +
-				    wiggle->chromStart + (j * wiggle->span),
-					    datumOut, *datum);
-			    else
-				printf("%d\t%g\n", 1 +
-				    wiggle->chromStart + (j * wiggle->span),
-					    datumOut);
-			    }
-			}
-		    }
-		else
-		    {
-		    if (!silent)
-			{
-			double datumOut =
-wiggle->lowerLimit+(((double)*datum/(double)MAX_WIG_VALUE)*wiggle->dataRange);
-			if (verboseLevel() > 2)
-			    printf("%d\t%g\t%d\n",
-			      1 + wiggle->chromStart + (j * wiggle->span),
-					datumOut, *datum);
-			else
-			    printf("%d\t%g\n",
-			      1 + wiggle->chromStart + (j * wiggle->span),
-					datumOut);
-			}
-		    }
-		}
-	    else
-		{
-		++noDataBytes;
-		++chrNoDataBytes;
-		}
-	    ++datum;
-	    }
-	freeMem(ReadData);
-	}	/*	if (!skipDataRead)	*/
-    wiggleFree(&wiggle);
-    }	/*	while (nextRow())	*/
-
-totalRows += rowCount;
-totalValidData += validData;
-fileNoDataBytes += noDataBytes;
-
-}	/*	void getData()	*/
-
-static void getAscii(struct wiggleDataStream *wDS)
-{
-getData(wDS, ASCII_DATA);
-}
-
 static void hgWiggle(struct wiggleDataStream *wDS, int trackCount,
 	char *tracks[])
 /* hgWiggle - dump wiggle data from database or .wig file */
@@ -289,14 +96,6 @@ else
 	verbose(2, "#\tno chrom specified for file read, do them all\n");
     }
 
-totalValidData = 0;
-fileNoDataBytes = 0;
-fileEt = 0;
-totalRows = 0;
-valuesMatched = 0;
-bytesRead = 0;
-bytesSkipped = 0;
-
 verbose(2, "#\texamining tracks:");
 for (i=0; i<trackCount; ++i)
     verbose(2, " %s", tracks[i]);
@@ -307,9 +106,15 @@ for (i=0; i<trackCount; ++i)
     {
     int once = 1;	/*	at least once through even on null chromList */
     struct slName *chromPtr;
+    unsigned long long chrBytesStart = 0;
+    unsigned long long chrNoDataBytesStart = 0;
+    unsigned long long chrRowsStart = 0;
+    unsigned long long chrValuesMatchedStart = 0;
 
     for (chromPtr=chromList;  (once == 1) || (chromPtr != NULL); )
 	{
+	long chrStartClock = clock1000();
+
 	if (chromPtr)
 	    {
 	    wDS->setChromConstraint(wDS, chromPtr->name);
@@ -317,21 +122,32 @@ for (i=0; i<trackCount; ++i)
 	    }
 
 	wDS->openWigConn(wDS, tracks[i]);
-	getAscii(wDS);
+	wDS->getData(wDS, wigFetchAscii);
 	wDS->closeWigConn(wDS);
+	if (!silent)
+	    wDS->asciiOut(wDS, "stdout");
+	wDS->freeAscii(wDS);
 	if (timing)
 	    {
 	    long et;
 	    long chrEndClock;
+	    unsigned long long chrBytesRead = wDS->validPoints - chrBytesStart;
+	    unsigned long long chrNoDataBytes =
+		wDS->noDataPoints - chrNoDataBytesStart;
+	    unsigned long long chrRowsRead = wDS->rowsRead - chrRowsStart;
+	    unsigned long long chrValuesMatched =
+		wDS->valuesMatched - chrValuesMatchedStart;
+
 	    chrEndClock = clock1000();
 	    et = chrEndClock - chrStartClock;
-	    /*	file per chrom output already happened above except for
-	     *	the last one */
-	    if (!wDS->isFile || (wDS->isFile && ((i+1)==trackCount)))
-	verbose(1,"#\t%s.%s %lu data bytes, %lu no-data bytes, %ld ms, %llu rows, %llu matched\n",
-			tracks[i], wDS->currentChrom, chrBytesRead, chrNoDataBytes, et,
-			    rowCount, valuesMatched);
+	    verbose(1,"#\t%s.%s %llu data bytes, %llu no-data bytes, %ld ms, %llu rows, %llu matched\n",
+			tracks[i], wDS->currentChrom, chrBytesRead,
+			chrNoDataBytes, et, chrRowsRead, chrValuesMatched);
 	    chrNoDataBytes = chrBytesRead = 0;
+	    chrBytesStart = wDS->validPoints;
+	    chrNoDataBytesStart = wDS->noDataPoints;
+	    chrRowsStart = wDS->rowsRead;
+	    chrValuesMatchedStart = wDS->valuesMatched;
 	    chrStartClock = clock1000();
 	    }
 	if (chromPtr)
@@ -345,10 +161,20 @@ if (timing)
     {
     long et;
     et = endClock - startClock;
-    verbose(1,"#\ttotal %llu valid bytes, %lu no-data bytes, %ld ms, %llu rows\n#\t%llu matched = %% %.2f, wib bytes: %llu, bytes skipped: %llu\n",
-	totalValidData, fileNoDataBytes, et, totalRows, valuesMatched,
-	100.0 * (float)valuesMatched / (float)totalValidData,
-	bytesRead, bytesSkipped);
+    if (wDS->validPoints > 0 )
+	{
+    verbose(1,"#\ttotal %llu valid bytes, %llu no-data bytes, %ld ms, %llu rows\n#\t%llu matched = %% %.2f, %llu wib bytes, %llu bytes skipped\n",
+	wDS->validPoints, wDS->noDataPoints, et, wDS->rowsRead,
+	wDS->valuesMatched,
+	100.0 * (float)wDS->valuesMatched / (float)wDS->validPoints,
+	wDS->bytesRead, wDS->bytesSkipped);
+	}
+    else
+	{
+    verbose(1,"#\ttotal %llu valid bytes, %lu no-data bytes, %ld ms, %llu rows\n#\t%llu matched = %% 0.00, %llu wib bytes, %llu bytes skipped\n",
+	wDS->validPoints, wDS->noDataPoints, et, wDS->rowsRead,
+	wDS->valuesMatched, wDS->bytesRead, wDS->bytesSkipped);
+	}
     }
 }	/*	void hgWiggle()	*/
 

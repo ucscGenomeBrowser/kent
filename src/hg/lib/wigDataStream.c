@@ -4,9 +4,9 @@
 #include "common.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: wigDataStream.c,v 1.4 2004/08/06 22:47:55 hiram Exp $";
+static char const rcsid[] = "$Id: wigDataStream.c,v 1.5 2004/08/09 21:42:06 hiram Exp $";
 
-/*	PRIVATE	METHODS	*/
+/*	PRIVATE	METHODS	************************************************/
 static void addConstraint(struct wiggleDataStream *wDS, char *left, char *right)
 {
 struct dyString *constrain = dyStringNew(256);
@@ -20,7 +20,76 @@ wDS->sqlConstraint = cloneString(constrain->string);
 dyStringFree(&constrain);
 }
 
-/*	PUBLIC	METHODS	*/
+static boolean nextRow(struct wiggleDataStream *wDS, char *row[], int maxRow)
+/*	read next wig row from sql query or lineFile
+ *	FALSE return on no more data	*/
+{
+int numCols;
+
+if (wDS->isFile)
+    {
+    numCols = lineFileChopNextTab(wDS->lf, row, maxRow);
+    if (numCols != maxRow) return FALSE;
+    verbose(3, "#\tnumCols = %d, row[0]: %s, row[1]: %s, row[%d]: %s\n",
+	numCols, row[0], row[1], maxRow-1, row[maxRow-1]);
+    }
+else
+    {
+    int i;
+    char **sqlRow;
+    sqlRow = sqlNextRow(wDS->sr);
+    if (sqlRow == NULL)
+	return FALSE;
+    /*	skip the bin column sqlRow[0]	*/
+    for (i=1; i <= maxRow; ++i)
+	{
+	row[i-1] = sqlRow[i];
+	}
+    }
+return TRUE;
+}
+
+static void openWibFile(struct wiggleDataStream *wDS, char *file)
+{
+if (wDS->wibFile)
+    {		/*	close and open only if different */
+    if (differentString(wDS->wibFile,file))
+	{
+	if (wDS->wibFH > 0)
+	    close(wDS->wibFH);
+	freeMem(wDS->wibFile);
+	wDS->wibFile = cloneString(file);
+	wDS->wibFH = open(wDS->wibFile, O_RDONLY);
+	if (wDS->wibFH == -1)
+	    errAbort("openWibFile: failed to open %s", wDS->wibFile);
+	}
+    }
+else
+    {
+    wDS->wibFile = cloneString(file);	/* first time */
+    wDS->wibFH = open(wDS->wibFile, O_RDONLY);
+    if (wDS->wibFH == -1)
+	errAbort("openWibFile: failed to open %s", wDS->wibFile);
+    }
+}
+
+static void setCompareByte(struct wiggleDataStream *wDS,
+	double lower, double range)
+{
+if (wDS->limit_0 < lower)
+    wDS->ucLowerLimit = 0;
+else
+    wDS->ucLowerLimit = MAX_WIG_VALUE * ((wDS->limit_0 - lower)/range);
+if (wDS->limit_1 > (lower+range))
+    wDS->ucUpperLimit = MAX_WIG_VALUE;
+else
+    wDS->ucUpperLimit = MAX_WIG_VALUE * ((wDS->limit_1 - lower)/range);
+verbose(2, "#\twigSetCompareByte: [%g : %g] becomes [%d : %d]\n",
+	lower, lower+range, wDS->ucLowerLimit, wDS->ucUpperLimit);
+}
+
+/*	PUBLIC	METHODS   **************************************************/
+
 static void setPositionConstraint(struct wiggleDataStream *wDS,
 	int winStart, int winEnd)
 /*	both 0 means no constraint	*/
@@ -273,50 +342,232 @@ wigSetCompareFunctions(wDS);
 wDS->useDataConstraint = TRUE;
 }
 
-static void setCompareByte(struct wiggleDataStream *wDS,
-	double lower, double range)
+static void getData(struct wiggleDataStream *wDS, enum wigDataFetchType type)
+/* getData - read and return wiggle data	*/
 {
-if (wDS->limit_0 < lower)
-    wDS->ucLowerLimit = 0;
-else
-    wDS->ucLowerLimit = MAX_WIG_VALUE * ((wDS->limit_0 - lower)/range);
-if (wDS->limit_1 > (lower+range))
-    wDS->ucUpperLimit = MAX_WIG_VALUE;
-else
-    wDS->ucUpperLimit = MAX_WIG_VALUE * ((wDS->limit_1 - lower)/range);
-verbose(2, "#\twigSetCompareByte: [%g : %g] becomes [%d : %d]\n",
-	lower, lower+range, wDS->ucLowerLimit, wDS->ucUpperLimit);
-}
+char *row[WIGGLE_NUM_COLS];
+unsigned long rowCount = 0;
+unsigned long long validData = 0;
+unsigned long long valuesMatched = 0;
+unsigned long long noDataBytes = 0;
+unsigned long long bytesSkipped = 0;
+boolean doStats = FALSE;
+boolean doBed = FALSE;
+boolean doAscii = FALSE;
+boolean skipDataRead = FALSE;	/*	may need this later	*/
 
-static boolean nextRow(struct wiggleDataStream *wDS, char *row[], int maxRow)
-/*	read next wig row from sql query or lineFile
- *	FALSE return on no more data	*/
-{
-int numCols;
+doAscii = type & wigFetchAscii;
+doBed = type & wigFetchBed;
+doStats = type & wigFetchStats;
 
-if (wDS->isFile)
+if (! (doAscii || doBed || doStats) )
     {
-    numCols = lineFileChopNextTab(wDS->lf, row, maxRow);
-    if (numCols != maxRow) return FALSE;
-    verbose(3, "#\tnumCols = %d, row[0]: %s, row[1]: %s, row[%d]: %s\n",
-	numCols, row[0], row[1], maxRow-1, row[maxRow-1]);
+	verbose(2, "wigGetData: no type of data fetch requested ?\n");
+	return;	/*	NOTHING ASKED FOR	*/
     }
-else
+
+while (nextRow(wDS, row, WIGGLE_NUM_COLS))
     {
-    int i;
-    char **sqlRow;
-    sqlRow = sqlNextRow(wDS->sr);
-    if (sqlRow == NULL)
-	return FALSE;
-    /*	skip the bin column sqlRow[0]	*/
-    for (i=1; i <= maxRow; ++i)
+    struct wigAsciiData *wigAscii;
+    struct wiggle *wiggle;
+    struct asciiDatum *asciiOut;	/* to address data[] in wigAsciiData */
+    unsigned chromPosition;
+
+    ++rowCount;
+    wiggle = wiggleLoad(row);
+    /*	constraints have to be done manually for files	*/
+    if (wDS->isFile)
 	{
-	row[i-1] = sqlRow[i];
+	if (wDS->chrName)
+	    if (differentString(wDS->chrName,wiggle->chrom))
+		continue;
+	if (wDS->spanLimit)
+	    if (wDS->spanLimit != wiggle->span)
+		continue;
+	if (wDS->winEnd)	/* non-zero means a range is in effect */
+	    if ( (wiggle->chromStart > wDS->winEnd) ||
+		(wiggle->chromEnd < wDS->winStart) )
+		continue;	/* entire block is out of range */
 	}
-    }
-return TRUE;
-}
 
+    chromPosition = wiggle->chromStart;
+
+    /*	this will be true the very first time for both reasons	*/
+    if ( (wDS->currentSpan != wiggle->span) || 
+	    (wDS->currentChrom &&
+		differentString(wDS->currentChrom, wiggle->chrom)))
+	{
+	freeMem(wDS->currentChrom);
+	wDS->currentChrom = cloneString(wiggle->chrom);
+	wDS->currentSpan = wiggle->span;
+	}
+
+    /*	it is a bit inefficient to make one of these for each SQL row,
+     *	but the alternative would require expanding the data area for
+     *	each row and thus a re-alloc - probably more expensive than
+     *	just making one of these for each row.
+     */
+    if (doAscii)
+	{
+	AllocVar(wigAscii);
+	wigAscii->chrom = cloneString(wiggle->chrom);
+	wigAscii->span = wiggle->span;
+	wigAscii->count = 0;	/* will count up as values added */
+	wigAscii->data = (struct asciiDatum *) needMem((size_t)
+	    (sizeof(struct asciiDatum) * wiggle->validCount));
+	asciiOut = wigAscii->data;
+	slAddHead(&wDS->ascii,wigAscii);
+	}
+
+    verbose(3, "#\trow: %llu, start: %u, data range: %g: [%g:%g]\n",
+	    rowCount, wiggle->chromStart, wiggle->dataRange,
+	    wiggle->lowerLimit, wiggle->lowerLimit+wiggle->dataRange);
+    verbose(3, "#\tresolution: %g per bin\n",
+	    wiggle->dataRange/(double)MAX_WIG_VALUE);
+    if (wDS->useDataConstraint)
+	{
+	if (!wDS->cmpDouble(wDS, wiggle->lowerLimit,
+		(wiggle->lowerLimit + wiggle->dataRange)))
+	    {
+	    bytesSkipped += wiggle->count;
+	    continue;
+	    }
+	setCompareByte(wDS, wiggle->lowerLimit, wiggle->dataRange);
+	}
+    if (!skipDataRead)
+	{
+	int j;	/*	loop counter through ReadData	*/
+	unsigned char *datum;    /* to walk through ReadData bytes */
+	unsigned char *ReadData;    /* the bytes read in from the file */
+
+	openWibFile(wDS, wiggle->file);
+		    /* possibly open a new wib file */
+	ReadData = (unsigned char *) needMem((size_t) (wiggle->count + 1));
+	wDS->bytesRead += wiggle->count;
+	lseek(wDS->wibFH, wiggle->offset, SEEK_SET);
+	read(wDS->wibFH, ReadData,
+	    (size_t) wiggle->count * (size_t) sizeof(unsigned char));
+
+verbose(3, "#\trow: %llu, reading: %u bytes\n", rowCount, wiggle->count);
+
+	datum = ReadData;
+	for (j = 0; j < wiggle->count; ++j)
+	    {
+	    if (*datum != WIG_NO_DATA)
+		{
+		if (wDS->winEnd)  /* non-zero means a range is in effect */
+		    {
+		    if ( (chromPosition < wDS->winStart) ||
+			(chromPosition >= wDS->winEnd))
+			continue;
+		    }
+		++validData;
+		if (wDS->useDataConstraint)
+		    {
+		    if (wDS->cmpByte(wDS, datum))
+			{
+			++valuesMatched;
+			if (doAscii)
+			    {
+			    asciiOut->value =
+                    BIN_TO_VALUE(*datum,wiggle->lowerLimit,wiggle->dataRange);
+			    asciiOut->chromStart = chromPosition;
+			    ++asciiOut;
+			    ++wigAscii->count;
+			    }
+			}
+		    }
+		else
+		    {
+		    if (doAscii)
+			{
+			asciiOut->value =
+		    BIN_TO_VALUE(*datum,wiggle->lowerLimit,wiggle->dataRange);
+			asciiOut->chromStart = chromPosition;
+			++asciiOut;
+			++wigAscii->count;
+			}
+		    }
+		}
+	    else
+		{
+		++noDataBytes;
+		}
+	    ++datum;
+	    chromPosition += wiggle->span;
+	    }
+	freeMem(ReadData);
+	}	/*	if (!skipDataRead)	*/
+    wiggleFree(&wiggle);
+    }	/*	while (nextRow())	*/
+
+if (doAscii)
+    slReverse(&wDS->ascii);
+
+wDS->rowsRead += rowCount;
+wDS->validPoints += validData;
+wDS->valuesMatched += valuesMatched;
+wDS->noDataPoints += noDataBytes;
+wDS->bytesSkipped += bytesSkipped;
+
+}	/*	void getData()	*/
+
+static void asciiOut(struct wiggleDataStream *wDS, char *fileName)
+/*	print to fileName the ascii data values	*/
+{
+FILE * fh;
+fh = mustOpen(fileName, "w");
+if (wDS->ascii)
+    {
+    struct wigAsciiData *asciiData;
+    struct wigAsciiData *next;
+    char *chrom = NULL;
+    unsigned span = 0;
+
+    for (asciiData = wDS->ascii; asciiData; asciiData = next )
+	{
+	unsigned i;
+	struct asciiDatum *data;
+
+	/*	will be true the first time for both reasons	*/
+	if ( (span != asciiData->span) ||
+	    (chrom && differentString(asciiData->chrom, chrom)) )
+	    {
+	    freeMem(chrom);
+	    chrom = cloneString(asciiData->chrom);
+	    span = asciiData->span;
+	    if (wDS->useDataConstraint)
+		{
+		fprintf (fh, "#\tdata constraint in use: %s\n",
+			wDS->dataConstraint );
+		if ((wDS->dataConstraint) &&
+		    sameWord(wDS->dataConstraint,"in range"))
+			fprintf (fh, "#\tdata values in range [%g : %g]\n",
+				wDS->limit_0, wDS->limit_1);
+		else
+			fprintf (fh, "#\tdata values %s %g\n",
+				wDS->dataConstraint, wDS->limit_0);
+		}
+	    fprintf (fh, "variableStep chrom=%s span=%u\n",
+		chrom, span);
+	    }
+	data = asciiData->data;
+	for (i = 0; i < asciiData->count; ++i)
+	    {
+	    /*	user visible coordinates are 1 relative	*/
+	    fprintf (fh, "%u\t%g\n", data->chromStart + 1, data->value);
+	    ++data;
+	    }
+	next = asciiData->next;
+	}
+
+    }
+else
+    {
+    fprintf(fh, "#\tno data points found\n");
+    }
+carefulClose(&fh);
+}
 
 static void closeWibFile(struct wiggleDataStream *wDS)
 /*	if there is a Wib file open, close it	*/
@@ -325,30 +576,6 @@ if (wDS->wibFH > 0)
     close(wDS->wibFH);
 wDS->wibFH = -1;
 freez(&wDS->wibFile);
-}
-
-static void openWibFile(struct wiggleDataStream *wDS, char *file)
-{
-if (wDS->wibFile)
-    {		/*	close and open only if different */
-    if (differentString(wDS->wibFile,file))
-	{
-	if (wDS->wibFH > 0)
-	    close(wDS->wibFH);
-	freeMem(wDS->wibFile);
-	wDS->wibFile = cloneString(file);
-	wDS->wibFH = open(wDS->wibFile, O_RDONLY);
-	if (wDS->wibFH == -1)
-	    errAbort("openWibFile: failed to open %s", wDS->wibFile);
-	}
-    }
-else
-    {
-    wDS->wibFile = cloneString(file);	/* first time */
-    wDS->wibFH = open(wDS->wibFile, O_RDONLY);
-    if (wDS->wibFH == -1)
-	errAbort("openWibFile: failed to open %s", wDS->wibFile);
-    }
 }
 
 static void closeWigConn(struct wiggleDataStream *wDS)
@@ -441,9 +668,8 @@ wds->setPositionConstraint = setPositionConstraint;
 wds->setChromConstraint = setChromConstraint;
 wds->setSpanConstraint = setSpanConstraint;
 wds->setDataConstraint = setDataConstraint;
-wds->setCompareByte = setCompareByte;
-wds->openWibFile = openWibFile;
-wds->nextRow = nextRow;
+wds->asciiOut = asciiOut;
+wds->getData = getData;
 wds->closeWigConn = closeWigConn;
 wds->openWigConn = openWigConn;
 return wds;
