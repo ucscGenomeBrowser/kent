@@ -401,7 +401,7 @@ char *snpFuncDefault[] = {
     "red",
     "blue",
     "blue",
-    "blue",
+    "red",
     "black",
     "black",
 };
