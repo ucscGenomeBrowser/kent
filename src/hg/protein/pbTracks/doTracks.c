@@ -436,7 +436,6 @@ int x;
 x = xIn;
 if (x < 120) x = 120;
 
-printf("<br>%d %d\n", exonNum, x);fflush(stdout);
 hPrintf("<AREA SHAPE=RECT COORDS=\"%d,%d,%d,%d\" ", x-1, y-1, x+width+1, y+height+1);
 hPrintf("HREF=\"../cgi-bin/hgTracks?db=%s&position=%s:%d-%d\"" 
 	,database, chrom, exonGenomeStartPos-1, exonGenomeEndPos+3);
