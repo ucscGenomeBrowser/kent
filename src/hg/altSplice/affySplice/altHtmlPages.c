@@ -13,7 +13,6 @@
 #include "dystring.h"
 #include "altGraphX.h"
 #include "altSpliceSite.h"
-
 #include <gsl/gsl_math.h>
 #include <gsl/gsl_statistics_double.h>
 
@@ -97,6 +96,8 @@ static struct optionSpec optionSpecs[] =
     {"agxFile", OPTION_STRING},
     {"db", OPTION_STRING},
     {"spliceTypes", OPTION_STRING},
+    {"tissueSpecific", OPTION_STRING},
+    {"brainSpecific", OPTION_STRING},
     {NULL, 0}
 };
 
@@ -123,7 +124,9 @@ static char *optionDescripts[] =
     "[optional] Print out the probe sets in a junction set and quit.",
     "[optional] File with graphs to determine types.",
     "[optional] Database that graphs are from.",
-    "[optional] Try to determine types of splicing in junction sets."
+    "[optional] Try to determine types of splicing in junction sets.",
+    "[optional] Output tissues specific isoforms to file specified."
+    "[optional] Output tissues that are specific to the brain or excluded from the brain.",
 };
 
 double presThresh = 0;     /* Probability above which we consider
@@ -1510,6 +1513,47 @@ for(js = jsList; js != NULL; js = js->next)
     }
 }
 
+void outputTissueSpecific(struct junctSet *jsList, struct resultM *probM)
+/* Output alternatively spliced isoforms that are tissue specific. */
+{
+struct junctSet *js = NULL;
+char *tissueSpecific = optionVal("tissueSpecific", NULL);
+FILE *tsOut = NULL;
+int tsCount = 0;
+assert(tissueSpecific);
+tsOut = mustOpen(tissueSpecific, "w");
+for(js = jsList; js != NULL; js = js->next)
+    {
+    int junctIx = 0;
+    if(js->altExpressed != TRUE)
+	continue;
+    for(junctIx = 0; junctIx < js->junctUsedCount; junctIx++)
+	{
+	int count = 0;
+	int tissueIx = 0;
+	int colIx = 0, rowIx = 0;
+	int junctIx = 0;
+	for(colIx = 0; colIx < probM->colCount; colIx++)
+	    {
+	    if(junctionExpressed(js, colIx, junctIx) == TRUE)
+		{
+		tissueIx = colIx;
+		count++;
+		if(count > 1)
+		    break;
+		}
+	    }
+	if(count == 1)
+	    {
+	    fprintf(tsOut, "%s\t%s\t%d\n", js->junctUsed[junctIx], probM->colNames[tissueIx], js->spliceType);
+	    tsCount++;
+	    }
+	}
+    }
+warn("%d junctions are tissue specific", tsCount);
+carefulClose(&tsOut);
+}
+
 void altHtmlPages(char *junctFile, char *probFile, char *intensityFile, char *bedFile)
 /* Do a top level summary. */
 {
@@ -1567,9 +1611,11 @@ if(doJunctionTypes)
     }
 warn("Calculating expression");
 calcExpressed(jsList, probM);
-
-
 calcExonCorrelation(jsList, bedHash, intenM, probM);
+if(optionExists("tissueSpecific"))
+    {
+    outputTissueSpecific(jsList, probM);
+    }
 
 /* Write out the lists. */
 warn("Writing out links.");
