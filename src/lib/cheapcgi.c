@@ -586,6 +586,14 @@ for (cv = inputList; cv != NULL; cv = cv->next)
 return dy;
 }
 
+void cgiContinueAllVars()
+/* Write back all CGI vars as hidden input for next time around. */
+{
+struct cgiVar *cv;
+for (cv = inputList; cv != NULL; cv = cv->next)
+    cgiMakeHiddenVar(cv->name, cv->val);
+}
+
 
 boolean cgiSpoof(int *pArgc, char *argv[])
 /* Use the command line to set up things as if we were a CGI program. 
