@@ -15,9 +15,10 @@ void axtInfoStaticLoad(char **row, struct axtInfo *ret)
 int sizeOne,i;
 char *s;
 
-ret->chrom = row[0];
-ret->size = sqlUnsigned(row[1]);
-ret->fileName = row[2];
+ret->species = row[0];
+ret->alignment = row[1];
+ret->chrom = row[2];
+ret->fileName = row[3];
 }
 
 struct axtInfo *axtInfoLoad(char **row)
@@ -29,9 +30,10 @@ int sizeOne,i;
 char *s;
 
 AllocVar(ret);
-ret->chrom = cloneString(row[0]);
-ret->size = sqlUnsigned(row[1]);
-ret->fileName = cloneString(row[2]);
+ret->species = cloneString(row[0]);
+ret->alignment = cloneString(row[1]);
+ret->chrom = cloneString(row[2]);
+ret->fileName = cloneString(row[3]);
 return ret;
 }
 
@@ -41,7 +43,7 @@ struct axtInfo *axtInfoLoadAll(char *fileName)
 {
 struct axtInfo *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[3];
+char *row[4];
 
 while (lineFileRow(lf, row))
     {
@@ -88,8 +90,9 @@ int i;
 
 if (ret == NULL)
     AllocVar(ret);
+ret->species = sqlStringComma(&s);
+ret->alignment = sqlStringComma(&s);
 ret->chrom = sqlStringComma(&s);
-ret->size = sqlUnsignedComma(&s);
 ret->fileName = sqlStringComma(&s);
 *pS = s;
 return ret;
@@ -102,6 +105,8 @@ void axtInfoFree(struct axtInfo **pEl)
 struct axtInfo *el;
 
 if ((el = *pEl) == NULL) return;
+freeMem(el->species);
+freeMem(el->alignment);
 freeMem(el->chrom);
 freeMem(el->fileName);
 freez(pEl);
@@ -125,10 +130,16 @@ void axtInfoOutput(struct axtInfo *el, FILE *f, char sep, char lastSep)
 {
 int i;
 if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->chrom);
+fprintf(f, "%s", el->species);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
-fprintf(f, "%u", el->size);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->alignment);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->chrom);
+if (sep == ',') fputc('"',f);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->fileName);

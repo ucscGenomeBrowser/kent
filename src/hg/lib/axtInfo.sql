@@ -5,9 +5,10 @@
 
 #Axt alignment names and sizes
 CREATE TABLE axtInfo (
+    species varchar(255) not null,	# long name of species
+    alignment varchar(255) not null,	# name of alignment
     chrom varchar(255) not null,	# chromosome name
-    size int unsigned not null,	# Chromosome size
     fileName varchar(255) not null,	# axt  file name 
               #Indices
-    PRIMARY KEY(chrom)
+    PRIMARY KEY(species)
 );
