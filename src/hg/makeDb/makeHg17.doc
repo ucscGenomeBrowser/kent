@@ -1918,7 +1918,8 @@ cat > template << 'EOF'
     # strip out N's and wobbles (KS) from primers, as isPcr
     # can't currently handle them
     # strip out primers < 10 as isPcr can't handle them
-    awk '$0 !~ /[^ACGT0-9\t]/ && (length($2) > 10) && (length($3) > 10) {printf "dbSTS_%s\t%s\t%s\n", $1,$2,$3}' \
+    #awk '$0 !~ /[^ACGT0-9\t]/ && (length($2) > 10) && (length($3) > 10) {printf "dbSTS_%s\t%s\t%s\n", $1,$2,$3}' \
+    awk '$0 !~ /[^ACGT0-9\-\t]/ && (length($2) > 10) && (length($3) > 10) {printf "dbSTS_%s\t%s\t%s\n", $1,$2,$3}' \
                 all.primers > all.primers.ispcr
     mkdir -p /cluster/bluearc/sts.9/primers
     cd /cluster/bluearc/sts.9/primers
@@ -1933,6 +1934,7 @@ cat > template << 'EOF'
     ls -1S /scratch/hg/gs.18/build35/maskedContigs/*.fa > contigs.lst
     ls -1S /cluster/bluearc/sts.9/primers/primers_* > primers.lst
     mkdir -p /cluster/bluearc/hg17/sts/primers/out
+    # try with minPerfect=0
 cat > template << 'EOF'
 #LOOP
 /cluster/home/kate/bin/i386/isPcr -out=psl -minPerfect=5 -maxSize=5000 -tileSize=10 -ooc=/scratch/hg/h/10.ooc  $(path1) $(path2) {check out line+ /cluster/bluearc/hg17/sts/primers/out/$(root1)_$(root2).psl}
@@ -4596,6 +4598,183 @@ mkdir -p $3:h
 
     # 7-WAY mafs are now in $workingDir/panTro1mm4rn3galGal2fr1/danRer1
 
+
+# PHYLO-HMM CONSERVATION FOR 7-WAY (2004-06-25 kate)
+
+    ssh eieio
+    set path = ($path /cluster/bin/phast)
+
+    #Create "sufficient statistics" (SS) file from maf
+    cd /cluster/data/hg17/bed/multiz
+    mkdir cons
+    cd cons
+
+    # Model provided by Adam, based on 25-way plus HMR
+cat > hg17panTro1mm4rn3galGal2fr1danRer1.mod << 'EOF'
+ALPHABET: A C G T 
+ORDER: 0
+SUBST_MOD: REV
+NRATECATS: 10
+ALPHA: 4.43
+BACKGROUND: 0.286083 0.213573 0.213691 0.286652 
+RATE_MAT:
+  -0.891523    0.166770    0.574850    0.149902 
+   0.223389   -1.146311    0.153784    0.769137 
+   0.769591    0.153699   -1.147159    0.223869 
+   0.149605    0.573055    0.166888   -0.889548 
+TREE: ((((1:0.0056,2:0.0057):0.1043,(3:0.076303,4:0.083043):0.2753):0.4099,5:0.5293):0.5557,(6:0.9558,7:0.9375):0.5557);
+'EOF'
+
+    #break up the genome-wide MAFs into pieces
+    mkdir /cluster/bluearc/hg17/chrom
+    cd /cluster/data/hg17
+    foreach f (`cat chrom.lst`)
+        echo $f
+        cp $f/*.fa /cluster/bluearc/hg17/chrom
+    end
+
+    cd /cluster/data/hg17/bed/multiz/cons
+    # NOTE: next time, split to WINDOWS dir directly on bluearc
+    cat << 'EOF' > doSplit.sh
+#!/bin/sh
+
+PHAST=/cluster/bin/phast
+# hg17 chrom fasta files
+FA_SRC=/cluster/bluearc/hg17/chrom
+WINDOWS=/cluster/data/hg17/bed/multiz/cons/WINDOWS
+
+maf=$1
+c=`basename $maf .maf`
+echo $c
+mkdir -p /scratch/msa_split
+${PHAST}/msa_split $maf -i MAF -M ${FA_SRC}/$c.fa -O hg17,panTro1,mm4,rn3,galGal2,fr1,danRer1 -w 1000000,0 -r /scratch/msa_split/$c -o SS -I 1000 -B 5000
+echo "Copying..."
+cd /scratch/msa_split
+for file in $c.*.ss ; do gzip -c $file > ${WINDOWS}/$file.gz ; done
+rm -f /scratch/msa_split/$c.*.ss
+echo "Done copying"
+'EOF'
+    chmod +x doSplit.sh
+    mkdir -p WINDOWS
+    rm -f WINDOWS/* jobList
+    foreach file (/cluster/bluearc/hg17/multiz/7way/*.maf) 
+	echo "doSplit.sh $file" >> jobList
+    end
+    
+    #run on kki
+    ssh kki
+    cd /cluster/data/hg17/bed/multiz/cons
+    para create jobList
+        # 46 jobs
+    para try
+    para check
+    para push
+
+    ## PHASTCONS CONSERVATION FOR 7-WAY (IN PROGRESS 2004-06-25 kate)
+
+    ssh hgwdev
+    cd /cluster/data/hg17/bed/multiz/cons
+    mkdir run.cons
+    cd run.cons
+    
+    # set up wrapper for phastCons
+    cat << '_EOF_' > doPhastCons
+#!/bin/sh
+
+PHAST=/cluster/bin/phast
+TMP=/tmp/phastCons
+
+file=$1
+root=`basename $file .ss.gz`
+chrom=`echo $root | awk -F\. '{print $1}'`
+
+mkdir -p $TMP 
+zcat $file | $PHAST/phastCons - hg17panTro1mm4rn3galGal2fr1danRer1.mod --rates-cut 1 --nrates 40 --suppress-missing --cut-params 0.080,0.008 --quiet > $TMP/$root.pp
+mkdir -p PHASTCONS/$chrom
+gzip -c $TMP/$root.pp > PHASTCONS/$chrom/$root.pp.gz
+rm $TMP/$root.pp
+'_EOF_'
+    chmod u+x doPhastCons
+
+    # the --cut-params arguments are approximate maximum likelihood
+    # estimates obtained by running the program *without* --cut-params
+    # (causes estimation by EM) on five randomly selected 1M bp
+    # windows.  All estimates were in the same ballpark (took a rough average)
+
+    # set up cluster job
+    ssh eieio
+    cd /cluster/data/hg17/bed/multiz/cons
+    mkdir -p /cluster/bluearc/hg17/multiz/cons/WINDOWS
+    cp WINDOWS/*.ss.gz /cluster/bluearc/hg17/multiz/cons/WINDOWS
+    # TODO cleanup
+    rm -fr WINDOWS
+
+    ssh kk
+    cd /cluster/data/hg17/bed/multiz/cons
+    cd run.cons
+    rm -f jobList
+    foreach f (/cluster/bluearc/hg17/multiz/cons/WINDOWS/*.ss.gz)
+        echo $f
+        echo doPhastCons $f >> jobList
+    end
+    para create jobList
+        # 2932 jobs
+    para try ; para push ... etc.
+    
+    # now create tracks
+    mkdir -p PHASTCONS/wib
+    for dir in PHASTCONS/chr* ; do \
+	echo $dir ;\
+	chr=`basename $dir` ;\
+	zcat `ls $dir/*.pp.gz | sort -t\. -k2,2n` | \
+	    wigAsciiToBinary -chrom=$chr \
+	    -wibFile=PHASTCONS/wib/${chr}_phastCons stdin ;\
+    done
+    hgLoadWiggle hg17 phastCons PHASTCONS/wib/chr*_phastCons.wig
+    mkdir -p /gbdb/hg17/wib
+    rm -f /gbdb/hg17/wib/chr*phastCons.wib
+    ln -s `pwd`/PHASTCONS/wib/*.wib /gbdb/hg17/wib
+    chmod 775 . PHASTCONS PHASTCONS/wib
+    chmod 664 PHASTCONS/wib/*.wib
+    
+    # tweak scores and names of predictions
+    cat PREDICTIONS/*/*.bed | sed 's/id //' | \
+	awk '{printf "%s\t%s\t%s\tlod=%d\t%d\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n", \
+	    $1, $2, $3, $5, 147.49 * log($5) - 240.34, $6, $7, $8, $9, \
+	    $10, $11, $12}' > all.bed
+    hgLoadBed hg17 phastConsElements all.bed
+
+    # Scores are transformed as follows, for a reasonable-looking 
+    # "spectrum".  Let x_max be the maximum score (here
+    # x_max  = 4490) and let x_med be the median score (here x_med =
+    # 39).  The  scores are transformed via the function f(x) = a *
+    # log x + b, s.t. f(x_med) = 300 and f(x_max) = 1000.  Solving
+    # for a and b, you get b = (300 log x_max - 1000 log x_med) /
+    # (log x_max - log x_med), a = (1000 - b) / log x_max.  Here a =
+    # 147.49, b = -240.34
+
+#track phastCons
+#shortLabel phastCons 
+#longLabel phastCons Conservation Score, Human/Chimp/Mouse/Rat/Chicken
+#group compGeno
+#priority 103
+#visibility hide
+#color 0,10,100
+#maxHeightPixels 40
+#type wig 0.0 1.0
+#autoScaleDefault off
+
+#track phastConsElements
+#shortLabel phastConsElements
+#longLabel phastCons Conserved Elements, Human/Chimp/Mouse/Rat/Chicken
+#group compGeno
+#priority 104
+#visibility hide
+#spectrum on
+#color 0,60,120
+#altColor 200,220,255
+#exonArrows off
+#type bed 12 .
 
 
 
