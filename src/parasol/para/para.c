@@ -1,5 +1,5 @@
 /* para - para - manage a batch of jobs in parallel on a compute cluster.. */
-#include <bits/time.h>
+#include <time.h>
 #include <sys/wait.h>
 #include <signal.h>
 #include "common.h"
@@ -524,7 +524,7 @@ struct dyString *cmd = dyStringNew(1024);
 struct submission *sub;
 char *jobId = NULL;
 
-dyStringPrintf(cmd, "addJob %s %s /dev/null /dev/null %s/para.results %s", cuserid(NULL), curDir, curDir, job->command);
+dyStringPrintf(cmd, "addJob %s %s /dev/null /dev/null %s/para.results %s", getUser(), curDir, curDir, job->command);
 jobId = hubSingleLineQuery(cmd->string);
 if (jobId != NULL)
     {
@@ -957,7 +957,7 @@ struct dyString *dy = newDyString(1024);
 int sd = netConnect(host, paraPort);
 if (sd >= 0)
     {
-    dyStringPrintf(dy, "fetch %s %s", cuserid(NULL), sourceName);
+    dyStringPrintf(dy, "fetch %s %s", getUser(), sourceName);
     if (sendWithSig(sd, dy->string))
 	fetchOpenFile(sd, destName);
     close(sd);
@@ -1105,7 +1105,7 @@ char curDir[512];
 char *result;
 if (getcwd(curDir, sizeof(curDir)) == NULL)
     errAbort("Couldn't get current directory");
-dyStringPrintf(dy, "chill %s %s/para.results", cuserid(NULL), curDir);
+dyStringPrintf(dy, "chill %s %s/para.results", getUser(), curDir);
 result = hubSingleLineQuery(dy->string);
 dyStringFree(&dy);
 if (result == NULL || !sameString(result, "ok"))

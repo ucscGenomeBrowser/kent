@@ -1,4 +1,5 @@
 /* parasol - Parasol program - for launching programs in parallel on a computer cluster. */
+#include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <netdb.h>
@@ -14,7 +15,7 @@
 #include "paraLib.h"
 
 int hubFd;	/* Network connection to paraHub. */
-char userName[128];	/* Name of user. */
+char *userName;	/* Name of user. */
 
 void mustBeRoot()
 /* Abort if we're not root. */
@@ -392,7 +393,7 @@ closeHubFd();
 int main(int argc, char *argv[])
 /* Process command line. */
 {
-cuserid(userName);
+userName = cloneString(getUser());
 optionHashSome(&argc, argv, TRUE);
 if (argc < 2)
     usage();
