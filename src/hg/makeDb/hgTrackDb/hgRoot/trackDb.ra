@@ -54,6 +54,16 @@ color 120,70,30
 altColor 0,0,0
 type bed 4+
 
+track mouseOrtho
+shortLabel UCSC Mouse Syn.
+longLabel Mouse Synteny using Fgenesh++ Gene Predictions
+priority 4.1
+visibility hide
+spectrum on
+color 0,100,0
+altColor 255,240,200
+type bed 5+
+
 track isochores
 shortLabel Isochores
 longLabel GC-rich (dark) and AT-rich (light) Isochores
@@ -246,15 +256,13 @@ color 150,0,0
 type genePred ensPep
 url http://www.ensembl.org/perl/transview?transcript=$$
 
-track mouseOrtho
-shortLabel UCSC Mouse Syn.
-longLabel Mouse Synteny using Fgenesh++ Gene Predictions
-priority 4.1
-visibility hide
-spectrum on
-color 0,100,0
-altColor 255,240,200
-type bed 5+
+track sgpGene
+shortLabel SGP Genes
+longLabel SGP Gene Predictions Using Mouse Genome Homology
+priority 15.5
+visibility dense
+color 0,90,100
+type genePred sgpPep
 
 track softberryGene
 shortLabel Fgenesh++ Genes
