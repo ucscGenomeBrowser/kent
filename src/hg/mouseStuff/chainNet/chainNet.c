@@ -624,6 +624,60 @@ else
     return "gap";
 }
 
+boolean chromHasData(struct chrom *chrom)
+/* Return TRUE if chrom is non-empty */
+{
+return chrom != NULL && chrom->root != NULL && chrom->root->fillList != NULL;
+}
+
+void sortNet(struct gap *gap)
+/* Recursively sort lists. */
+{
+struct fill *fill;
+struct gap *g;
+slSort(&gap->fillList, fillCmpStart);
+for (fill = gap->fillList; fill != NULL; fill = fill->next)
+    {
+    slSort(&fill->gapList, gapCmpStart);
+    for (gap = fill->gapList; gap != NULL; gap = gap->next)
+        sortNet(gap);
+    }
+}
+
+
+void rCalcOtherFill(struct gap *gap, boolean isQ)
+/* Recursively fill in oStart/oEnd fields of fill
+ * structures. */
+{
+struct fill *fill;
+for (fill = gap->fillList; fill != NULL; fill = fill->next)
+    {
+    struct gap *g;
+    if (isQ)
+	qFillOtherRange(fill);
+    else
+        tFillOtherRange(fill);
+    for (g = fill->gapList; g != NULL; g = g->next)
+        rCalcOtherFill(g, isQ);
+    }
+}
+
+void finishNet(struct chrom *chromList, boolean isQ)
+/* Fill in oStart/oEnd fields of fill structures attatched
+ * to chromosomes, sort, and generally spiff up net. */
+{
+struct chrom *chrom;
+for (chrom = chromList; chrom != NULL; chrom = chrom->next)
+    {
+    if (chromHasData(chrom))
+	{
+	sortNet(chrom->root);
+	rCalcOtherFill(chrom->root, isQ);
+	}
+    }
+}
+
+
 int rOutDepth = 0;
 boolean rOutQ = FALSE;
 
@@ -662,38 +716,12 @@ struct gap *gap;
 struct chain *chain = fill->chain;
 ++rOutDepth;
 if (rOutQ)
-    {
-    qFillOtherRange(fill);
     fillOut(f, fill, fill->chain->tName, rOutDepth);
-    }
 else
-    {
-    tFillOtherRange(fill);
     fillOut(f, fill, fill->chain->qName, rOutDepth);
-    }
 for (gap = fill->gapList; gap != NULL; gap = gap->next)
     rOutputGap(gap, f);
 --rOutDepth;
-}
-
-void sortNet(struct gap *gap)
-/* Recursively sort lists. */
-{
-struct fill *fill;
-struct gap *g;
-slSort(&gap->fillList, fillCmpStart);
-for (fill = gap->fillList; fill != NULL; fill = fill->next)
-    {
-    slSort(&fill->gapList, gapCmpStart);
-    for (gap = fill->gapList; gap != NULL; gap = gap->next)
-        sortNet(gap);
-    }
-}
-
-boolean chromHasData(struct chrom *chrom)
-/* Return TRUE if chrom is non-empty */
-{
-return chrom != NULL && chrom->root != NULL && chrom->root->fillList != NULL;
 }
 
 void outputNetSide(struct chrom *chromList, char *fileName, boolean isQ)
@@ -854,6 +882,12 @@ while ((chain = chainRead(lf)) != NULL)
 	printf("%s has %d inserts, %s has %d\n", tChrom->name, 
 		tChrom->spaces->n, qChrom->name, qChrom->spaces->n);
     }
+/* Build up other side of fills.  It's just for historical 
+ * reasons this is not done during the main build up.   
+ * It's a little less */
+finishNet(qChromList, TRUE);
+finishNet(tChromList, FALSE);
+
 
 /* Free up some stuff no longer needed. */
 printf("Compacting memory\n");
