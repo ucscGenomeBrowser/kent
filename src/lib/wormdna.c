@@ -13,6 +13,7 @@
 #include "wormdna.h"
 #include "cda.h"
 #include "sig.h"
+#include "dystring.h"
 
 static char *jkwebDir = NULL;
 
@@ -694,6 +695,56 @@ if (upcExons)
         toUpperN(dna + pt[i].start, pt[i+1].start - pt[i].start);
         }
     }
+gdfFreeGene(g);
+return TRUE;
+}
+
+boolean getWormGeneExonDna(char *name, DNA **retDna)
+/* Get the DNA associated with a gene, without introns.  */
+{
+struct gdfGene *g;
+struct slName *syn = NULL;
+long lstart, lend;
+int start, end;
+int dnaSize;
+DNA *dna;
+int i;
+struct gdfDataPoint *pt = NULL;
+struct wormGdfCache *gdfCache;
+struct dyString *dy = newDyString(1000);
+/* Translate biologist type name to cosmid.N name */
+if (wormIsGeneName(name))
+    {
+    syn = wormGeneToOrfNames(name);
+    if (syn != NULL)
+        name = syn->name;
+    }
+if (strncmp(name, "g-", 2) == 0)
+    gdfCache = &wormGenieGdfCache;
+else
+    gdfCache = &wormSangerGdfCache;
+if ((g = wormGetSomeGdfGene(name, gdfCache)) == NULL)
+    return FALSE;
+gdfGeneExtents(g, &lstart, &lend);
+start = lstart;
+end = lend;
+/*wormClipRangeToChrom(chromIds[g->chromIx], &start, &end);*/
+dnaSize = end-start;
+dna = wormChromPart(chromIds[g->chromIx], start, dnaSize);
+
+gdfOffsetGene(g, -start);
+if (g->strand == '-')
+    {
+    reverseComplement(dna, dnaSize);
+    gdfRcGene(g, dnaSize);
+    }
+pt = g->dataPoints;
+for (i=0; i<g->dataCount; i += 2)
+    {
+    dyStringAppendN(dy, (dna+pt[i].start), (pt[i+1].start - pt[i].start));
+    }
+*retDna = cloneString(dy->string);
+dyStringFree(&dy);
 gdfFreeGene(g);
 return TRUE;
 }
