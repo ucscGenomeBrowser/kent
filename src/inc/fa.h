@@ -49,6 +49,12 @@ boolean faSpeedReadNext(struct lineFile *lf, DNA **retDna, int *retSize, char **
  * The returned DNA and name will be overwritten by the next call
  * to this function. */
 
+boolean faPepSpeedReadNext(struct lineFile *lf, DNA **retDna, int *retSize, char **retName);
+/* Read in next peptide FA entry as fast as we can.  */
+
+boolean faSomeSpeedReadNext(struct lineFile *lf, DNA **retDna, int *retSize, char **retName, boolean isDna);
+/* Read in DNA or Peptide FA record. */
+
 void faFreeFastBuf();
 /* Free up buffers used in fa fast and speedreading. */
 

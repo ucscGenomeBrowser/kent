@@ -88,7 +88,14 @@ struct genoFind *gfIndexNibs(int nibCount, char *nibNames[],
 	int minMatch, int maxGap, int tileSize, int maxPat, char *oocFile);
 /* Make index for all nib files. */
 
+struct genoFind *gfPepIndexNibs(int nibCount, char *nibNames[],
+	int minMatch, int maxGap, int tileSize, int maxPat);
+/* Make index for all nib files. */
+
 struct gfClump *gfFindClumps(struct genoFind *gf, struct dnaSeq *seq);
+/* Find clumps associated with one sequence. */
+
+struct gfClump *gfPepFindClumps(struct genoFind *gf, struct dnaSeq *seq);
 /* Find clumps associated with one sequence. */
 
 void gfClumpDump(struct genoFind *gf, struct gfClump *clump, FILE *f);
