@@ -5,9 +5,19 @@
 
 #ifndef OPTIONS_H
 
-#ifndef HASH_H
-#include "hash.h"
-#endif
+/* Types for options */
+#define OPTION_BOOLEAN  0x01
+#define OPTION_STRING   0x02
+#define OPTION_INT      0x04
+#define OPTION_FLOAT    0x10
+
+struct optionSpec
+/* Specification of a single option.  An array of these are passed
+ * to optionInit() to validate options. */
+{
+    char *name;      /* option name */
+    unsigned flags;  /* Flags for option, specifies types */
+};
 
 char *optionVal(char *name, char *defaultVal);
 /* Return named option if in options hash, otherwise default. */
@@ -22,6 +32,24 @@ float optionFloat(char *name, float defaultVal);
 boolean optionExists(char *name);
 /* Return TRUE if option has been set. */
 
+void optionInit(int *pArgc, char *argv[], struct optionSpec *optionSpecs);
+/* Read options in command line into options hash.
+ * Options come in three forms:
+ *      -option         words starting with dash
+ *      option=val      words with = in the middle
+ *      -option=val     combining the two.
+ * The resulting hash will be keyed by the option name with the val
+ * string for value.  For '-option' types the value is 'on'.
+ * The words in argv are parsed in assending order.  If a word of
+ * "--" is encountered, argument parsing stops.
+ * If optionSpecs is not NULL, it is an array of optionSpec that are
+ * used to validate the options.  An option must exist in the array
+ * and the value must be convertable to the type specified in flags.
+ * Boolean options must no value, all other options must have one.
+ * Array is terminated by a optionSpec with a NULL name.
+ * If array NULL, no validation is done.
+ */
+
 void optionHash(int *pArgc, char *argv[]);
 /* Read options in command line into options hash.   
  * Options come in three forms:
@@ -29,7 +57,9 @@ void optionHash(int *pArgc, char *argv[]);
  *      option=val      words with = in the middle
  *      -option=val     combining the two.
  * The resulting hash will be keyed by the option name with the val
- * string for value.  For '-option' types the value is 'on'. */
+ * string for value.  For '-option' types the value is 'on'.
+ * The words in argv are parsed in assending order.  If a word of
+ * "--" is encountered, argument parsing stops. */
 
 void optionHashSome(int *pArgc, char *argv[], boolean justFirst);
 /* Set up option hash from command line, optionally only adding
