@@ -618,7 +618,8 @@ mgDrawRulerBumpText(mg, xOff, yOff, height, width, color, font,
 
 
 void mgBarbedHorizontalLine(struct memGfx *mg, int x, int y, 
-	int width, int barbHeight, int barbSpacing, int barbDir, Color color)
+	int width, int barbHeight, int barbSpacing, int barbDir, Color color,
+	boolean drawMiddle)
 /* Draw a horizontal line starting at xOff, yOff of given width.  Will
  * put barbs (successive arrowheads) to indicate direction of line.  
  * BarbDir of 1 points barbs to right, of -1 points them to left. */
@@ -646,9 +647,25 @@ maxY = mg->clipMaxY;
 homePt = pt = _mgPixAdr(mg,x,y);
 
 
+/* Draw barbs in middle */
+if (drawMiddle)
+    {
+    if (barbDir < 0)
+	offset = 0;
+    else
+        offset = barbHeight;
+    if (minY <= y && y < maxY)
+        {
+	for (j=offset; j<width; j += barbSpacing)
+	    {
+	    pt[j] = color;
+	    }
+	}
+    }
+
 /* Draw barbs below */
 if (barbDir > 0)
-    startOffset = offset = barbHeight;
+    startOffset = offset = barbHeight-1;
 else if (barbDir < 0)
     startOffset = offset = 1;
 else

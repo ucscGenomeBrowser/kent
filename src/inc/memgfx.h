@@ -176,7 +176,8 @@ void mgDrawRulerBumpText(struct memGfx *mg, int xOff, int yOff,
  * startNum and span range.  Bump text positions slightly. */
 
 void mgBarbedHorizontalLine(struct memGfx *mg, int x, int y, 
-	int width, int barbHeight, int barbSpacing, int barbDir, Color color);
+	int width, int barbHeight, int barbSpacing, int barbDir, Color color,
+	boolean drawMiddle);
 /* Draw a horizontal line starting at xOff, yOff of given width.  Will
  * put barbs (successive arrowheads) to indicate direction of line.  
  * BarbDir of 1 points barbs to right, of -1 points them to left. */
