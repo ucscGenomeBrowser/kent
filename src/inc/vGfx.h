@@ -90,7 +90,7 @@ void vgClose(struct vGfx **pVg);
 #define vgLine(v,x1,y1,x2,y2,color) v->line(v->data,x1,y1,x2,y2,color)
 /* Draw a line from one point to another. */
 
-#define vgText(v,x,y,color,font,string) v->text(v->data,x,y,color,string)
+#define vgText(v,x,y,color,font,string) v->text(v->data,x,y,color,font,string)
 /* Draw a line of text with upper left corner x,y. */
 
 #define vgTextRight(v,x,y,width,height,color,font,string) \
