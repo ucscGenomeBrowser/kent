@@ -15,7 +15,7 @@
 #include "pbStampPict.h"
 #include "pbTracks.h"
 
-static char const rcsid[] = "$Id: pbTracks.c,v 1.3 2003/12/15 17:48:22 fanhsu Exp $";
+static char const rcsid[] = "$Id: pbTracks.c,v 1.4 2003/12/15 17:59:05 fanhsu Exp $";
 
 boolean hgDebug = FALSE;      /* Activate debugging code. Set to true by hgDebug=on in command line*/
 
@@ -256,7 +256,7 @@ vgSetClip(vg2, 0, gfxBorder, insideWidth, pixHeight - 2*gfxBorder);
 iypos = 15;
 
 /* Draw stamps. */
-//doStamps(proteinID, mrnaID, protSeq, vg2, &iypos);
+doStamps(proteinID, mrnaID, protSeq, vg2, &iypos);
 
 /* Finish map. */
 hPrintf("</MAP>\n");
