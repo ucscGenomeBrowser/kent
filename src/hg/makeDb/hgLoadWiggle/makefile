@@ -29,7 +29,10 @@ compile:	${O} hgWiggle.o ${MYLIBS}
 	${CC} -o hgWiggle hgWiggle.o ${MYLIBS} $L
 
 test:
-	cd test_data && ./runtest
+	cd tests && ./RunTest.sh
+
+test_verbose:
+	cd tests && ./RunTest.sh -verbose
 
 clean:
 	rm -f test_data/chr1_0.wib test_data/chr1_0.wig test_data/chr1_1.wib \
