@@ -5045,6 +5045,13 @@ void doBlatMus(struct trackDb *tdb, char *item)
 longXenoPsl1(tdb, item, "Mouse", "chromInfo", "mm2");
 }
 
+void doBlastzRn1(struct trackDb *tdb, char *item)
+/* Put up cross-species alignment when the second species
+ * sequence is in a nib file. */
+{
+longXenoPsl1(tdb, item, "Rat", "chromInfo", "rn1");
+}
+
 #ifdef UNUSED
 void netAlignClick(struct trackDb *tdb, char *item, 
 	char *otherOrg, char *otherChromTable, char *otherDb)
@@ -9433,6 +9440,11 @@ else if (sameWord(track, "blatMus")
 	 )
     {
     doBlatMus(tdb, item);
+    }
+else if (startsWith("blastz", track) &&
+	 (stringIn("Rn", track) || stringIn("Rat", track)))
+    {
+    doBlastzRn1(tdb, item);
     }
 else if (stringIn(track, "blastzChain"))
     {
