@@ -24,7 +24,7 @@
 #include "keys.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: gbToFaRa.c,v 1.21 2003/06/18 17:49:02 kate Exp $";
+static char const rcsid[] = "$Id: gbToFaRa.c,v 1.22 2003/06/30 20:32:15 kate Exp $";
 
 enum formatType
 /* Are we working on genomic sequence or mRNA?  Need to write
@@ -1564,8 +1564,7 @@ errAbort("gbToFaRa - Convert GenBank flat format file to an fa file containing\n
          "usage:\n"
          "   gbToFaRa filterFile faFile raFile taFile genBankFile(s)\n"
          "where filterFile is definition of which records and fields\n"
-         // NOTE: this doesn't work -- seg faults
-         //"to use or the word null if you want no filtering."
+         "use /dev/null if you want no filtering.\n"
 	 "options:\n"
 	 "    -byOrganism=outputDir - Make separate files for each organism\n");
 }
@@ -1573,7 +1572,7 @@ errAbort("gbToFaRa - Convert GenBank flat format file to an fa file containing\n
 struct filter *makeFilter(char *fileName)
 /* Create filter from filter specification file. */
 {
-struct filter *filt;
+struct filter *filt = (struct filter *)NULL;
 FILE *f;
 char line[1024];
 int lineCount=0;
@@ -1582,8 +1581,6 @@ int wordCount;
 int i;
 
 AllocVar(filt);
-if (sameString(fileName, "null"))
-    return filt;
 f = mustOpen(fileName, "r");
 while (fgets(line, sizeof(line), f))
     {
