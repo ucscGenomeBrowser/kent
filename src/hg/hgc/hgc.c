@@ -1217,10 +1217,24 @@ printf("<UL>\n");
 
 if (pepTable != NULL && hTableExists(pepTable))
     {
-    puts("<LI>\n");
-    hgcAnchorSomewhere(pepClick, pepName, pepTable, seqName);
-    printf("Predicted Protein</A> \n"); 
-    puts("</LI>\n");
+    struct sqlConnection *conn;
+    char query[256];
+    struct sqlResult *sr;
+    char **row;
+    conn = hAllocConn();
+    // simple query to see if pepName has a record in pepTable:
+    safef(query, sizeof(query), "select 0 from %s where name = '%s'",
+	  pepTable, pepName);
+    sr = sqlGetResult(conn, query);
+    if ((row = sqlNextRow(sr)) != NULL)
+	{
+	puts("<LI>\n");
+	hgcAnchorSomewhere(pepClick, pepName, pepTable, seqName);
+	printf("Predicted Protein</A> \n"); 
+	puts("</LI>\n");
+	}
+    sqlFreeResult(&sr);
+    hFreeConn(&conn);
     }
 
 puts("<LI>\n");
@@ -1255,20 +1269,6 @@ char other[256];
 showGenePos(geneName, tdb);
 printf("<H3>Links to sequence:</H3>\n");
 printf("<UL>\n");
-/*
-if (pepTable != NULL && hTableExists(pepTable))
-    {
-    puts("<LI>\n");
-    hgcAnchorSomewhere(pepClick, pepName, pepTable, seqName);
-    printf("Predicted Protein</A> \n");
-    puts("</LI>\n");
-    }
-puts("<LI>\n");
-hgcAnchorSomewhere(mrnaClick, geneName, geneTable, seqName);
-printf("%s</A> may be different from the genomic sequence.\n",
-       mrnaDescription);
-puts("</LI>\n");
-*/
 puts("<LI>\n");
 hgcAnchorSomewhere(genomicClick, geneName, geneTable, seqName);
 printf("Genomic Sequence</A> from assembly\n");
@@ -10891,7 +10891,7 @@ else if (sameWord(track, "sanger20"))
     {
     doSangerGene(tdb, item, "sanger20pep", "sanger20mrna", "sanger20extra");
     }
-else if (sameWord(track, "vegaGene"))
+else if (sameWord(track, "vegaGene") || sameWord(track, "vegaPseudoGene"))
     {
     doVegaGene(tdb, item);
     }
