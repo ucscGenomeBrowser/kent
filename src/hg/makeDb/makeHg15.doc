@@ -1769,7 +1769,102 @@ IN PROGRESS
 # spectrum on
 # type psl xeno ce1
 
-END OF BLASTZ C elegans
+    # Consolidate AXT files to chrom level, sort, pick best, make psl.
+    ssh eieio
+    tcsh
+    set base="/cluster/store5/gs.16/build33/bed/blastzCe1"
+    set tbl="blastzBestCe1"
+    cd $base
+    mkdir -p axtBest pslBest
+    foreach chrdir (lav/chr*)
+      set chr=$chrdir:t
+      echo axtBesting $chr
+      axtBest axtChrom/$chr.axt $chr axtBest/$chr.axt -minScore=300
+      echo translating axtBest to psl for $chr
+      axtToPsl axtBest/$chr.axt S1.len S2.len pslBest/${chr}_${tbl}.psl
+    end
+
+    # Load tables
+    ssh hgwdev
+    set base="/cluster/store5/gs.16/build33/bed/blastzCe1"
+    set tbl="blastzBestCe1"
+    cd $base/pslBest
+    hgLoadPsl hg15 chr*_${tbl}.psl
+
+    # Make /gbdb links and add them to the axtInfo table:
+# Not done for build 32:
+     mkdir -p /gbdb/hg15/axtBestCe1
+     cd /gbdb/hg15/axtBestCe1
+     foreach f ($base/axtBest/chr*.axt)
+       ln -s $f .
+     end
+     cd $base/axtBest
+     rm -f axtInfoInserts.sql
+     touch axtInfoInserts.sql
+     foreach f (/gbdb/hg15/axtBestCe1/chr*.axt)
+       set chr=$f:t:r
+       echo "INSERT INTO axtInfo VALUES ('ce1','Blastz Best in Genome','$chr','$f');" \
+         >> axtInfoInserts.sql
+     end
+     #  only perform the following if the axtInfo table does not yet
+     #		exist in hg15:
+     #  hgsql hg15 < ~/kent/src/hg/lib/axtInfo.sql
+     hgsql hg15 < axtInfoInserts.sql
+
+
+# CHAINING elegans blastz
+    # next machine
+    ssh kk
+    cd /cluster/store5/worm/hg15/bed/blastzSelf
+    mkdir -p axtChain/run1
+    cd /cluster/store5/worm/ce1/bed/blastzSelf/axtChain/run1
+    ls -1S /cluster/store5/gs.16/build33/bed/blastzCe1/axtBest/*.axt > input.lst
+    cat << '_EOF_' > gsub
+#LOOP
+doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain} {check out line+ out/$(root1).out}
+#ENDLOOP
+'_EOF_'
+    #  worm nibs are on /cluster/bluearc now
+    cat << '_EOF_' > doChain
+#!/bin/csh
+    axtChain $1 /cluster/store5/gs.16/build33/nib /cluster/bluearc/iscratch/i/worms/Celegans/bothMasksNib $2 > $3
+'_EOF_'
+    chmod a+x doChain
+
+    mkdir out chain
+    gensub2 input.lst single gsub spec
+    para create spec
+    para try
+    para push ... etc ...
+Average job time:                 502s       8.37m     0.14h    0.01d
+Longest job:                      874s      14.57m     0.24h    0.01d
+
+    # now on the cluster server, sort chains
+    # next machine
+    ssh eieio
+    cd ~/ce1/bed/blastzSelf/axtChain
+    chainMergeSort run1/chain/*.chain > all.chain
+    chainSplit chain all.chain
+    # optionally: rm run1/chain/*.chain
+
+    # Load chains into database
+    # next machine
+    ssh hgwdev
+    cd ~/ce1/bed/blastzSelf/axtChain/chain
+    foreach i (*.chain)
+        set c = $i:r
+        hgLoadChain ce1 ${c}_chainSelf $i
+        echo done $c
+    end
+#  Loading 845504 chains into ce1.chrI_chainSelf
+#  Loading 845307 chains into ce1.chrII_chainSelf
+#  Loading 1152790 chains into ce1.chrIII_chainSelf
+#  Loading 859566 chains into ce1.chrIV_chainSelf
+#  Loading 2 chains into ce1.chrM_chainSelf
+#  Loading 1114939 chains into ce1.chrV_chainSelf
+#  Loading 604293 chains into ce1.chrX_chainSelf
+
+END OF BLASTZ C elegans ####################################################
 
 TIGR GENE INDEX (TODO)
   o mkdir -p ~/hg15/bed/tigr    
