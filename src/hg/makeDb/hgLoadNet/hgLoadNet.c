@@ -76,14 +76,16 @@ int findLevel(char *line, char *type)
 {
     int i;
     char *lp = line;
-    for (i=0; i <= sizeof(line); i++)
+    for (i=0; line[i] != 0; i++)
         {
         if (*lp == type[0])
             break;
         lp++;
         }
     if (sameString(type, "fill"))
+        {
         return (i+1)/2;
+        }
     if (sameString(type, "gap"))
         {
         return (i-1)/2;
