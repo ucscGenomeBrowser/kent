@@ -29,7 +29,7 @@
 #include "dbDb.h"
 #include "htmlPage.h"
 
-static char const rcsid[] = "$Id: qaPushQ.c,v 1.58 2004/08/12 17:23:10 galt Exp $";
+static char const rcsid[] = "$Id: qaPushQ.c,v 1.59 2004/08/19 00:38:16 galt Exp $";
 
 char msg[2048] = "";
 char ** saveEnv;
@@ -914,6 +914,7 @@ char query[256];
 char lastP = ' ';
 int c = 0;
 char monthsql[256];
+char comment[256];
 
 /* initialize column display order */
 initColsFromString();
@@ -1022,7 +1023,24 @@ for (ki = kiList; ki != NULL; ki = ki->next)
 	{
     lastP = ki->priority[0];
 	printf("<tr>");
-	printf("<td><h1>%s</h1></td>\n", ki->priority );
+	safef(comment,sizeof(comment),"%s","");
+	switch (ki->priority[0])
+	    {
+	    case 'A': 
+		safef(comment,sizeof(comment),"%s"," active ");
+		break;
+	    case 'B': 
+		safef(comment,sizeof(comment),"%s"," on short hold ");
+		break;
+	    case 'C': 
+		safef(comment,sizeof(comment),"%s"," on long hold ");
+		break;
+	    case 'L': 
+		safef(comment,sizeof(comment),"%s"," log ");
+		break;
+	    
+	    }
+	printf("<td><h1>%s</h1></td><td><h1>%s<h1></td>\n", ki->priority, comment);
 	printf("</tr>");
     
     }
