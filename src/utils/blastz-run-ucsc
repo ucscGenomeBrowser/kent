@@ -7,7 +7,7 @@
 # rewritten in perl and extended to handle .2bit inputs and 
 # multi-record fasta for target as well as query by Angie Hinrichs.
 
-# $Id: blastz-run-ucsc,v 1.6 2005/02/03 05:03:59 angie Exp $
+# $Id: blastz-run-ucsc,v 1.7 2005/02/17 01:21:45 angie Exp $
 
 use Getopt::Long;
 use strict;
@@ -44,6 +44,29 @@ options:
     consistent with output format and compression options.
 \n";
   exit $status;
+}
+
+sub checkOptions {
+  # Make sure command line options are valid/supported.
+  my $ok = GetOptions("outFormat=s",
+		      "gz",
+		      "dropSelf",
+		      "help");
+  &usage(1) if (!$ok);
+  &usage(0) if ($opt_help);
+  if ($opt_outFormat) {
+    $opt_outFormat =~ tr/A-Z/a-z/;
+    if ($opt_outFormat eq 'lav') {
+      $opt_outFormat = undef;
+    } elsif ($opt_outFormat !~ /^(psl|axt)$/) {
+      print STDERR "\nUnsupported -outFormat $opt_outFormat.\n";
+      &usage(1);
+    }
+  }
+  if ($opt_dropSelf && !($opt_outFormat && $opt_outFormat =~ /^(psl|axt)$/)) {
+    print STDERR "\n-dropSelf is only supported for -outFormat axt or psl.\n";
+    &usage(1);
+  }
 }
 
 # This hash will contain the params defined in the Scott-style DEF script:
@@ -402,21 +425,8 @@ sub convertOutput {
 #
 # -- main --
 
-my $ok = GetOptions("outFormat=s",
-		    "gz",
-		    "dropSelf",
-		    "help");
-&usage(1) if (!$ok);
-&usage(0) if ($opt_help);
-if ($opt_outFormat) {
-  $opt_outFormat =~ tr/A-Z/a-z/;
-  if ($opt_outFormat eq 'lav') {
-    $opt_outFormat = undef;
-  } elsif ($opt_outFormat !~ /^(psl|axt)$/) {
-    print STDERR "\nUnsupported -outFormat $opt_outFormat.\n";
-    &usage(1);
-  }
-}
+&checkOptions();
+
 &usage(1) if (scalar(@ARGV) != 4);
 my ($target, $query, $DEF, $out) = @ARGV;
 
@@ -425,12 +435,6 @@ die "$out already exists\n" if (-f "$out");
 &loadDef($DEF);
 &loadSeqSizes($defVars{'SEQ1_LEN'}, \%tSizes);
 &loadSeqSizes($defVars{'SEQ2_LEN'}, \%qSizes);
-
-my $doAbridge = $defVars{'BLASTZ_ABRIDGE_REPEATS'} || 0;
-if ($doAbridge && $defVars{'SEQ2_IN_CONTIGS'}) {
-  die "Sorry, DEF can't have BLASTZ_ABRIDGE_REPEATS set if SEQ2_IN_CONTIGS --" .
-       "not supported.\n";
-}
 
 # Make a temporary directory for intermediate files:
 $TMP = `mktemp -d /tmp/blastz.XXXXXX` || die "Can't mktemp";
@@ -446,7 +450,7 @@ my $blastzOptions = &getBlastzParams(%defVars);
 
 my @tFileSpecs = &enumerateFileSpecs($target, $defVars{'SEQ1_DIR'});
 my @qFileSpecs = &enumerateFileSpecs($query, $defVars{'SEQ2_DIR'});
-if ($doAbridge && scalar(@qFileSpecs) > 1) {
+if ($defVars{'BLASTZ_ABRIDGE_REPEATS'} && scalar(@qFileSpecs) > 1) {
   die "Sorry, DEF can't have BLASTZ_ABRIDGE_REPEATS set if a list of query " .
       "sequences is passed in -- not supported.\n";
 }
@@ -466,7 +470,7 @@ foreach my $tSpec (@tFileSpecs) {
   my ($tSeq, $tLocal) = &unpackForBlastz($tSpec, $defVars{'SEQ1_DIR'}, 't');
   foreach my $qSpec (@qFileSpecs) {
     my ($qSeq, $qLocal) = &unpackForBlastz($qSpec, $defVars{'SEQ2_DIR'}, 'q');
-    if ($doAbridge) {
+    if ($$defVars{'BLASTZ_ABRIDGE_REPEATS'}) {
       &abridgeLinSpecReps($tLocal, $qLocal, $blastzOptions, $littleRaw);
     } else {
       &plainBlastz($tLocal, $qLocal, $blastzOptions, $littleRaw);
