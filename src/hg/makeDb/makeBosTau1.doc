@@ -859,6 +859,107 @@ chainSome $(path1)
   md5sum *.gz > md5sum.txt
 
 
+# SELF BLASTZ / BLASTZ-RUN-UCSC EXPERIMENT (DONE 1/27/05 angie)
+    # Put chrom.sizes in /iscratch/ since blastz-run-ucsc reads it when 
+    # lifting, and bosTau1 chrom.sizes is large.
+    ssh kkr1u00
+    cp /cluster/data/bosTau1/chrom.sizes /iscratch/i/bosTau1/
+    iSync
+    ssh kk
+    mkdir /cluster/data/bosTau1/bed/blastz.bosTau1.2005-01-26
+    cd /cluster/data/bosTau1/bed/blastz.bosTau1.2005-01-26
+    ln -s blastz.bosTau1.2005-01-26 /cluster/data/bosTau1/bed/blastz.bosTau1
+    # 10M chunks led to hour-long average job time, so try 5M chunks:
+    cat << '_EOF_' > DEF
+# Cow vs. self
+export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/bin/i386:/cluster/home/angie/schwartzbin
+
+ALIGN=blastz-run
+BLASTZ=blastz
+BLASTZ_H=2000
+BLASTZ_ABRIDGE_REPEATS=0
+
+# TARGET - Cow
+SEQ1_DIR=/iscratch/i/bosTau1/nib/bosTau1.2bit
+SEQ1_IN_CONTIGS=0
+SEQ1_CHUNK=5000000
+SEQ1_LAP=10000
+
+# QUERY - Cow
+SEQ2_DIR=/iscratch/i/bosTau1/nib/bosTau1.2bit
+SEQ2_IN_CONTIGS=0
+SEQ2_CHUNK=5000000
+SEQ2_LAP=10000
+
+BASE=/cluster/data/bosTau1/bed/blastz.bosTau1.2005-01-26
+
+DEF=$BASE/DEF
+RAW=$BASE/raw
+CDBDIR=$BASE
+SEQ1_LEN=/iscratch/i/bosTau1/chrom.sizes
+SEQ2_LEN=/iscratch/i/bosTau1/chrom.sizes
+
+'_EOF_'
+    # << this line keeps emacs coloring happy
+
+    mkdir run
+    cd run
+    mkdir lstFiles
+    partitionSequence.pl 5000000 10000 /iscratch/i/bosTau1/nib/bosTau1.2bit \
+      /iscratch/i/bosTau1/chrom.sizes \
+      -xdir xdir.sh -rawDir ../axtParts -lstDir lstFiles \
+    > bosTau1.lst
+    csh -ef xdir.sh
+    cat << '_EOF_' > gsub
+#LOOP
+/cluster/home/angie/kent/src/utils/blastz-run-ucsc -outFormat axt -dropSelf  $(path1) $(path2) ../DEF {check out exists ../axtParts/$(file1)/$(file1)_$(file2).axt}
+#ENDLOOP
+'_EOF_'
+    # << this line keeps emacs coloring happy
+    gensub2 bosTau1.lst bosTau1.lst gsub jobList
+    para create jobList
+    para try, check, push, check, ...
+    # Here's the time for the first 10 jobs, to .axt:
+#Completed: 10 of 220900 jobs
+#CPU time in finished jobs:       9177s     152.95m     2.55h    0.11d  0.000 y
+#IO & Wait Time:                    85s       1.41m     0.02h    0.00d  0.000 y
+#Average job time:                 926s      15.44m     0.26h    0.01d
+#Longest job:                     1047s      17.45m     0.29h    0.01d
+#Submission to last job:          1047s      17.45m     0.29h    0.01d
+    # Here's the time for the first 10 jobs, to .psl.gz (should we believe the I/O?):
+#Completed: 10 of 220900 jobs
+#CPU time in finished jobs:      10709s     178.48m     2.97h    0.12d  0.000 y
+#IO & Wait Time:                     0s       0.00m     0.00h    0.00d  0.000 y
+#Average job time:                1008s      16.79m     0.28h    0.01d
+#Longest job:                     1238s      20.63m     0.34h    0.01d
+#Submission to last job:          1238s      20.63m     0.34h    0.01d
+    # And from a previous run of the first 10 jobs, to lav:
+#Completed: 10 of 220900 jobs
+#CPU time in finished jobs:       9273s     154.55m     2.58h    0.11d  0.000 y
+#IO & Wait Time:                    84s       1.40m     0.02h    0.00d  0.000 y
+#Average job time:                 936s      15.60m     0.26h    0.01d
+#Longest job:                     1060s      17.67m     0.29h    0.01d
+#Submission to last job:          1062s      17.70m     0.29h    0.01d
+    # Jim said we don't really want this track, so no need to carry through 
+    # with the whole thing.  But I did go through the steps below with 
+    # partial results to make sure that they work.
+
+    # Combine the many small .psl.gz files into per-target-partition files 
+    # for chaining.
+#NOT DONE
+    ssh kksilo
+    cd /cluster/data/bosTau1/bed/blastz.bosTau1
+    mkdir psl
+    foreach t (pslParts/*)
+      zcat $t/*.psl.gz \
+      | sort -k 14,14 -k 16n,17n \
+      | gzip -c \
+      > psl/$t:t:r.psl.gz
+    end
+
+    # chain psl/*.psl.gz
+
+
 # LOAD CPGISSLANDS (DONE, Nov. 27, 2004, Heather)
     ssh hgwdev
     mkdir -p /cluster/data/bosTau1/bed/cpgIsland
@@ -903,3 +1004,19 @@ printf("%s\t%d\t%s\t%s %s\t%s\t%s\t%0.0f\t%0.1f\t%s\t%s\n",
     wc -l cpgIsland.bed 
 #  44091 cpgIsland.bed
     featureBits bosTau1 cpgIslandExt
+
+
+# LOAD GENEID PREDICTIONS (DONE 2/25/05)
+    ssh kksilo
+    mkdir /cluster/data/bosTau1/bed/geneid
+    cd /cluster/data/bosTau1/bed/geneid
+    wget http://genome.imim.es/genepredictions/B.taurus/golden_path_200409/geneidv1.2/bosTau1.gtf
+    wget http://genome.imim.es/genepredictions/B.taurus/golden_path_200409/geneidv1.2/bosTau1.prot
+    # Add ".1" suffix to each item in .prot's, to match transcript_id's in gtf
+    perl -wpe 's/^(>SCAFFOLD\S+)/$1.1/' bosTau1.prot > geneid.fa
+    ssh hgwdev
+    cd /cluster/data/bosTau1/bed/geneid
+    ldHgGene -gtf -genePredExt bosTau1 geneid bosTau1.gtf 
+    hgPepPred bosTau1 generic geneidPep geneid.fa
+
+
