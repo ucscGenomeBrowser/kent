@@ -113,7 +113,7 @@
 #include "flyBaseSwissProt.h"
 #include "affyGenoDetails.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.498 2003/10/13 19:03:36 kent Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.499 2003/10/13 23:55:02 braney Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -3459,7 +3459,7 @@ int first;
 cartWebStart(cart, fragName);
 hFindSplitTable(seqName, track, splitTable, &hasBin);
 sprintf(query, "select * from %s where frag = '%s' and chromStart = %d", 
-	splitTable, fragName, start+1);
+	splitTable, fragName, start);
 sr = sqlMustGetResult(conn, query);
 row = sqlNextRow(sr);
 agpFragStaticLoad(row+hasBin, &frag);
