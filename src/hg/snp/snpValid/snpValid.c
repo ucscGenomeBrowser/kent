@@ -120,10 +120,14 @@ char fileName[256]="";
 struct lineFile *lf=NULL;
 struct flank *list=NULL, *el;
 char *row[4];
-int rowCount=0;
-safef(fileName,sizeof(fileName),"/cluster/bluearc/snp/hg16/build122/seq/ds_ch%s.xml.contig.seq",chrom);
+int rowCount=4;
+char *ch = &chrom[3];
+
+safef(fileName,sizeof(fileName),"/cluster/bluearc/snp/hg16/build122/seq/ds_ch%s.xml.contig.seq.gz",ch);
+
 lf=lineFileMayOpen(fileName, TRUE);
-while (lineFileNextRow(lf, row, rowCount))
+
+while (lineFileNextRowTab(lf, row, rowCount))
     {
     el = flankLoad(row);
     slAddHead(&list,el);
@@ -761,7 +765,7 @@ for (cn = cns; cn != NULL; cn = cn->next)
 	if (!sameWord(chr,cn->name))
 	    continue;
 
-    uglyf("testDb: beginning chrom %s \n",cn->name);
+    //uglyf("testDb: beginning chrom %s \n",cn->name);
    
     chromSeq = hLoadChrom(cn->name);
     printf("testDb: chrom %s :  size (%u) \n",cn->name,chromSeq->size);
@@ -769,13 +773,14 @@ for (cn = cns; cn != NULL; cn = cn->next)
     //debug: removed
     //snps = readSnpMap(cn->name);
     //printf("read %s.snpMap where chrom=%s \n",db,cn->name);
+    
     snps = readSnp(cn->name);
     printf("read %s.snp where chrom=%s \n",db,cn->name);
-
         
-    flank = readFlank(cn->name);
+    flanks = readFlank(cn->name);
     printf("readFlanks: chrom %s \n",cn->name);
     
+    flank   = flanks; 
     //dbSnp   = dbSnps; 
     affy10  = affy10s;
     affy120 = affy120s;
@@ -811,7 +816,8 @@ for (cn = cns; cn != NULL; cn = cn->next)
 		    case 1:
 			next = affy120; break;
 		    case 2:
-			next = dbSnp; break;
+			//next = dbSnp; break;
+			next = flank; break;
 		    case 3:
 			next = affy10; break;
 		    }
@@ -843,7 +849,8 @@ for (cn = cns; cn != NULL; cn = cn->next)
 			id = affy120id;
 			break;
 		    case 2:
-			id = dbSnp->rsId; break;
+			//id = dbSnp->rsId; break;
+			id = flank->rsId; break;
 		    case 3:
 			id = affy10->affyId; break;
 		    }
@@ -857,7 +864,8 @@ for (cn = cns; cn != NULL; cn = cn->next)
 		    case 1:
 			affy120 = affy120->next; break;
 		    case 2:
-			dbSnp = dbSnp->next; break;
+			//dbSnp = dbSnp->next; break;
+			flank = flank->next; break;
 		    case 3:
 			affy10 = affy10->next; break;
 		    }
@@ -874,13 +882,18 @@ for (cn = cns; cn != NULL; cn = cn->next)
 	    int rf = 0;  /* size of right flank context (lower case dna) */
 	    int ls = 0;  /* total size of assembly dna context plus actual region in dbSnpRs/affy */
 	    char *origSeq = NULL; /* use to display the original dnSnpRs.assembly seq */
+	    int flankSize = 0;
 	    
 	    switch (mode)
 		{
 		case 1:
 		    seq = affy120->sequenceA; break;
 		case 2:
-		    seq = dbSnp->assembly; break;
+		    //seq = dbSnp->assembly; break;
+		    flankSize = strlen(flank->leftFlank)+1+strlen(flank->rightFlank);
+		    seq = needMem(flankSize+1);
+		    safef(seq,flankSize+1,"%s-%s",flank->leftFlank,flank->rightFlank);
+		    break;
 		case 3:
 		    seq = affy10->sequenceA; break; 
 		}
@@ -1052,6 +1065,10 @@ for (cn = cns; cn != NULL; cn = cn->next)
 		
 	    freez(&rc);
 	    freez(&seq);
+	    
+	    if (mode==2)
+		freez(&origSeq);
+	    
 	
 	    }
 	else
@@ -1064,12 +1081,14 @@ for (cn = cns; cn != NULL; cn = cn->next)
 		case 1:
 		    safef(snpLkup,sizeof(snpLkup),"%s","affy120"); break;
 		case 2:
-		    safef(snpLkup,sizeof(snpLkup),"%s",dbSnpTbl); break;
+		    //safef(snpLkup,sizeof(snpLkup),"%s",dbSnpTbl); break;
+		    safef(snpLkup,sizeof(snpLkup),"flanks for %s",snp->chrom); break;
 		case 3:
 		    safef(snpLkup,sizeof(snpLkup),"%s","affy10"); break;
 		}
 	    if (Verbose)		    
-    		printf("snpMap.name=%s is missing from %s (now at %s) \n\n",snp->name,snpLkup,id);
+    		//printf("snpMap.name=%s is missing from %s (now at %s) \n\n",snp->name,snpLkup,id);
+    		printf("snp.name=%s is missing from %s (now at %s) \n\n",snp->name,snpLkup,id);
 	    }
 	
 	
@@ -1082,6 +1101,8 @@ for (cn = cns; cn != NULL; cn = cn->next)
     //debug: removed	    
     //snpMapFreeList(&snps);
     snpFreeList(&snps);
+    
+    flankFreeList(&flanks);
 
     dnaSeqFree(&chromSeq);  
 
