@@ -7,8 +7,9 @@
 #include "options.h"
 #include "psl.h"
 
-static char const rcsid[] = "$Id: pslSort.c,v 1.5 2004/02/23 09:07:23 kent Exp $";
+static char const rcsid[] = "$Id: pslSort.c,v 1.6 2004/07/16 22:19:34 hiram Exp $";
 
+boolean nohead = FALSE; /* No header for psl files?  Command line option. */
 
 void usage()
 /* Explain usage and exit. */
@@ -29,6 +30,7 @@ errAbort(
    "only the first or second pass repectively of the sort\n"
    "\n"
    "Options:\n"
+   "   -nohead - do not write psl header:\n"
    "   -verbose=N Set verbosity level, higher for more output. Default 1\n"
    );
 }
@@ -121,7 +123,8 @@ int aliCount = 0;
 FILE *f = mustOpen(outFile, "w");
 
 
-pslWriteHead(f);
+if (!nohead)
+    pslWriteHead(f);
 tmpList = listDir(tempDir, "tmp*.psl");
 if (tmpList == NULL)
     errAbort("No tmp*.psl files in %s\n", tempDir);
@@ -366,7 +369,8 @@ if (!secondOnly)
 	makeMidName(tempDir, midFileCount, fileName);
 	verbose(1, "Writing %s\n", fileName);
 	f = mustOpen(fileName, "w");
-	pslWriteHead(f);
+	if (!nohead)
+	    pslWriteHead(f);
 	for (psl = pslList; psl != NULL; psl = psl->next)
 	    {
 	    pslTabOut(psl, f);
@@ -386,9 +390,11 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 optionHash(&argc, argv);
+
+nohead = optionExists("nohead");
+
 if (argc < 5)
     usage();
 pslSort(argv[1], argv[2], argv[3], &argv[4], argc-4);
 return 0;
 }
-   
