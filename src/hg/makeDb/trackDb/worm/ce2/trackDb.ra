@@ -1,0 +1,8 @@
+track wabaCbr
+shortLabel Briggsae Waba
+longLabel C. briggsae Waba Alignments
+group compGeno
+priority 120
+visibility dense
+color 140,0,200
+altColor 210,140,250
