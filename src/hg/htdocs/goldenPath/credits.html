@@ -66,6 +66,8 @@
 	        	    <LI><A HREF="#dros_credits">Fruitfly Genome</A>
 	        	    <LI><A HREF="#ce_credits"><em>C. elegans</em> Genome</A>
 	        	    <LI><A HREF="#cb_credits"><em>C. briggsae</em> Genome</A>
+	        	    <LI><A HREF="#sars_credits">SARS Genome</A>
+	        	    <LI><A HREF="#nisc_credits">NISC Comparative Sequencing Program Data</A>
 	        	    <LI><A HREF="#ucsc_credits">UCSC team</A>
 	        	    <LI><A HREF="#other_credits">Other scientists featured on this site</A>
 	        	    <LI><A HREF="#early_credits">Acknowledgements of early support</A>
@@ -475,7 +477,7 @@
 		Mouse Sequencing Consortium and the Mouse Genome Sequencing
 		Consortium.
 		<P>The first 3X coverage of the mouse genome was produced by the Mouse 
-		Sequencing Consortium, with the following acknowledgments: 
+		Sequencing Consortium, with the following acknowledgements: 
 		<UL>
 		    <LI><B>Project Oversight</B> - Arthur Holden and Francis Collins
 		    <BR>
@@ -500,7 +502,7 @@
 			TARGET=_blank>Sanger Institute</A> in the U.K. 
 	    	</UL></P>
 		<P>The remaining portion of the coverage, the map, and the assembly were produced 
-		by the Mouse Genome Sequencing Consortium, with these acknowledgments: 
+		by the Mouse Genome Sequencing Consortium, with these acknowledgements: 
 		<UL>  
 	    	    <LI><B>Assembly</B> - <A HREF="http://www-genome.wi.mit.edu" TARGET = _blank>Whitehead's  
 			Arachne Group</A>; <A HREF="http://www.sanger.ac.uk"
@@ -577,7 +579,7 @@
 		    with the Rat Genome Sequencing Consortium.
 		    <P>
 		    The Rat genome sequence was produced with the following 
-		    acknowledgments:
+		    acknowledgements:
 		    <UL>
 			<LI><B>Project Coordination</B> - <A HREF="http://www.hgsc.bcm.tmc.edu/" 
 				TARGET=_blank>Baylor College of Medicine Human Genome Sequencing Center</A>, 
@@ -781,6 +783,68 @@
     </TABLE>
     <BR>
 
+<!--SARS Credits---------------------------------------------------------->
+<A NAME="sars_credits"></A>
+<A NAME="sars_use"></A>
+    <TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDERCOLOR="888888" BORDER=1>
+  	<TR><TD>
+	    <TABLE BGCOLOR="D9E4F8" BACKGROUND="../images/hr.gif" WIDTH=100%>
+		<TR><TD><FONT SIZE="4"><B>&nbsp; Sources of the SARS Genome Data</B></FONT>
+		</TD></TR>
+	    </TABLE>
+	    <TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0><TH HEIGHT=10></TH>
+		<TR><TD WIDTH=10></TD><TD>
+		    <P>
+		    The SARS draft genome assembly is based on publicly-available sequence 
+		    deposited into GenBank as of 14 April 2003. Annotations showing gene predictions, 
+		    locations of putative proteins, and viral mRNA and protein alignments were generated
+		    at UCSC, with the exception of the Fgenesv+ annotation contributed by Victor Solovyev of
+		    Softberry, Inc.  Protein structure analysis and predictions were determined by using the 
+		    <A HREF="http://www.cse.ucsc.edu/research/compbio/sam.html" TARGET=_blank>Sequence Alignment 
+		    and Modeling</A> (SAM) T02 tool.
+		</TD><TD WIDTH=15></TD></TR>
+	     </TABLE>
+	<BR>
+	</TD></TR>
+    </TABLE>
+    <BR>
+
+<!--NISC Credits---------------------------------------------------------->
+<A NAME="nisc_credits"></A>
+<A NAME="nisc_use"></A>
+    <TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDERCOLOR="888888" BORDER=1>
+  	<TR><TD>
+	    <TABLE BGCOLOR="D9E4F8" BACKGROUND="../images/hr.gif" WIDTH=100%>
+		<TR><TD><FONT SIZE="4"><B>&nbsp; Sources of the NISC Comparative Sequencing Program Data and 
+			Conditions for Use</B></FONT>
+		</TD></TR>
+	    </TABLE>
+	    <TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0><TH HEIGHT=10></TH>
+		<TR><TD WIDTH=10></TD><TD>
+		    <P>
+		    The NISC sequence data were compiled from existing GenBank records. In addition 
+		    to long-range assembly and standard feature annotation, the results of several analyses 
+		    are available, including pair-wise sequence alignments, intrinsic sequence properties, 
+		    and sequence comparisons that reveal regions highly conserved across multiple species. 
+		    Flat files of the assembled sequence and annotations can be obtained from 
+		    <A HREF="http://www.nisc.nih.gov/data/" TARGET=_blank> http://www.nisc.nih.gov/data/</A>. 
+		    <P>
+		    These data are made available for public use with specific 
+		    <A HREF="http://www.nisc.nih.gov/projects/NISC_DataUsePolicy.html" TARGET=_blank>data release 
+		    and use restrictions</A>. 
+		    <P>
+		    We'd like to thank the NISC Comparative Sequencing Program team for providing the 
+		    data and comparative analyses for this Genome Browser release. Special thanks go to 
+	 	    Elliott Margulies at NHGRI for serving as the main liaison between NHGRI and UCSC and 
+		    for contributing several annotation tracks to the browser. 
+		    </P>
+		</TD><TD WIDTH=15></TD></TR>
+	     </TABLE>
+	<BR>
+	</TD></TR>
+    </TABLE>
+    <BR>
+
 <!--UCSC Credits-------------------------------------------------------->
 <A NAME="ucsc_credits"></A>
     <TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDERCOLOR="888888" BORDER=1>
@@ -947,8 +1011,9 @@ Littlestone, Sanja Rogic, Matt Schwartz, Aaron Tomb, Wei Wu, Matt Xia, Degui Zhi
 		    <UL>
 			<LI>
 			<A HREF="http://www.affymetrix.com" TARGET=_blank>Affymetrix</A> (David Kulp, 
-			Alan Williams, and Ray Wheeler): Development of genotyping array and genotype data for Affymetrix 
-			120K SNP annotation track, Genie gene prediction track, design and analysis support in 
+			Alan Williams, Ray Wheeler, Tom Gingeras): Development of genotyping array and genotype 
+			data for Affymetrix 120K SNP annotation track, Affymetrix transcriptome data for chr 21 
+			and 22, Genie gene prediction track, design and analysis support in 
 			the early stages of the UCSC Human Genome project, including software for the synthetic 
 			chromosome 22 data we used to test our assembly methods.
 			<LI>
@@ -956,8 +1021,12 @@ Littlestone, Sanja Rogic, Matt Schwartz, Aaron Tomb, Wei Wu, Matt Xia, Degui Zhi
 			Consortium</A>: Cytogenetic markers (FISH-mapped clones annotation track).
 			<LI>
 			<A HREF="http://www.hgsc.bcm.tmc.edu/" TARGET=_blank>Baylor College of Medicine</A>
-			(Richard Gibbs, John Bouck, Kim Worley and James Durbin): Mouse Genome sequence, CpG Islands 
-			annotation track, Simple Repeats annotation track.
+			(Richard Gibbs, John Bouck, Kim Worley and James Durbin): Rat Genome sequence data, CpG 
+			Islands, <em>D. pseudoobscura</em> sequence for alignment tracks
+			with <em>D. melanogaster</em> genome. 
+			<LI>
+			<A HREF="http://www.fruitfly.org/" TARGET=_blank>Berkeley Drosophila Genome 
+			Project</A> (BDGP): Data for <em>D. melanogaster</em> gene annotations.
 			<LI>
 			<A HREF="http://www.bioinformaticssolutions.com/" TARGET=_blank>Bioinformatics Solutions, Inc.</A>
 			(Ming Li and colleagues): Pattern Hunter mouse homology track.
@@ -968,31 +1037,75 @@ Littlestone, Sanja Rogic, Matt Schwartz, Aaron Tomb, Wei Wu, Matt Xia, Degui Zhi
 			<A HREF="http://www.csmc.edu/csri/korenberg/int-bac-sts.html" TARGET=_blank>Cedars-Sinai Medical Center</A> (CSMC):
 			FISH-mapped clones annotation track. 
 			<LI>
+			<A HREF="http://www.ups-tlse.fr/RECHERCHE/le_laboratoire.php3?codeLabo=3301" TARGET=blank>CNRS 
+			Université Paul Sabatier</A>, Laboratoire de Biologie Moléculaire Eucaryote, Toulouse, 
+			France (Michel Weber): miRNA Data custom annotation track (in collaboration with Sam 
+			Griffiths-Jones of The Wellcome Trust Sanger Institute).
+			<LI>
 			<A HREF="http://www.cshl.org/" TARGET=blank>Cold Spring Harbor Laboratory</A>
-			(<A HREF="http://stein.cshl.org/~lstein/" TARGET=_blank>Lincoln Stein</A>): SNP tracks.
+			<BR>--(<A HREF="http://stein.cshl.org/~lstein/" TARGET=_blank>Lincoln Stein</A>): SNP tracks.
+			<BR>--(<A HREF=http://rulai.cshl.org/" TARGET=_blank>Ivo Grosse and Michael Q. Zhang</A>): 
+			Predictions for <A HREF="http://rulai.cshl.org/tools/FirstEF/" TARGET=_blank>First Exon
+			Finder</A> annotation track.
 			<LI>
 			<A HREF="http://www.columbia.edu" TARGET=_blank>Columbia University</A> (Bill Grundy and 
 			Victoria Haghighi): Experimentally verified gene annotations for chromosome 22 (Sanger 22 track).
 			<LI>
 			<A HREF="http://www.ensembl.org/" TARGET=_blank>Ensembl</A> (Ewan Birney, Guy Slater, 
-			Imre Vastrik, Arek Kasprzyk, Michele Clamp): Gene predictions, data exchange formats, 
+			Imre Vastrik, Arek Kasprzyk, Michele Clamp): Ensembl Gene predictions annotation track, 
+			data exchange formats, 
 			TPF clone map coordination, integration with the Washington University. fingerprint map,  
 			exonerate mouse homology track, early help placing FISH-mapped clones. 
+		    	<LI>
+			<A HREF=" http://www.ebi.ac.uk/embl/" TARGET=_blank>EMBL</A> (Peter Bork): Mouse pseudogene
+			predictions used for Bork Pseudogenes custom annotation track.
 			<LI>
 			<A HREF="http://www.fhcrc.org/" TARGET=_blank>Fred Hutchison Cancer Resource Center</A> (FHCRC)
 			(Barbara Trask): FISH-mapped clones annotation track.
 			<LI>
+			<A HREF="http://www.genoscope.cns.fr/" TARGET=_blank>Genome Informatics Research Lab</A> 
+			(GIRL) within Grup de Recerca en Informàtica Mèdica (GRIB) (Francisco Câmara Ferreira, 
+			Roderic Guigó): Geneid and SGP gene prediction annotation tracks. 
+			<LI>
+			<A HREF="http://web.gnf.org/index.shtml" TARGET=_blank>Genomics Institute of the Novartis
+			Research Foundation</A> (GNF): Expression data using Affymetrix chips for GNF Expression
+			Atlas annotation tracks.
+			<LI>
 			<A HREF="http://www.genoscope.cns.fr/" TARGET=_blank>Genoscope</A>
-			(Jean Weissenbach and Olivier Jaillon): Exofish track.
+			(Jean Weissenbach and Olivier Jaillon): Exofish program, <em>Tetraodon nigroviridis</em> 
+			sequence for Tetraodon Blat alignments annotation tracks, data for Anopheles
+			Evolutionary Conserved Regions annotation track.
+			<LI>
+			<A HREF="http://www.tigr.org" TARGET=_blank>The Institute for Genomic Research</A>
+			(TIGR): TIGR Gene Index annotation track. 
 			<LI>
 			<A HREF="http://www.systemsbiology.org" TARGET=_blank>Institute for Systems Biology</A>
-			(Arian Smit): RepeatMasker repeat identification and masking software and libraries.
+			(Arian Smit): <A HREF="http://repeatmasker.genome.washington.edu/cgi-bin/RepeatMasker" 
+			TARGET=_blank>RepeatMasker</A> repeat identification and masking software and libraries.
 			<LI>
-			<A HREF="http://www.jax.org/" TARGET=_blank>Jackson Labs</A> (Carol Bult): Mouse ortholog links 
+			<A HREF="http://www.jax.org/" TARGET=_blank>The Jackson Laboratory</A> (Carol Bult): Mouse ortholog links 
 			from known genes track. 
 			<LI>
 			<A HREF="http://www.lanl.gov/" TARGET=_blank>Los Alamos National Laboratory</A> (LANL):
 			FISH-mapped clones annotation track. 
+			<LI>
+			<A HREF="http://mgc.nci.nih.gov" TARGET=_blank>Mammalian Gene Collection</A> (MGC): Data
+			used in MGC Genes annotation track.
+		 	<LI>
+			<A HREF="http://genes.mit.edu/chris" TARGET=_blank>Massachusetts Institute of Technology
+			(MIT)</A> (Chris Burge): Genscan gene prediction program. 
+		 	<LI>
+			<A HREF="http://www2.mrc-lmb.cam.ac.uk/" TARGET=_blank>Medical Research Council Laboratory 
+			of Molecular Biology (Julian Gough - now at Stanford School of Medicine): 
+			<A HREF="http://supfam.mrc-lmb.cam.ac.uk/SUPERFAMILY/" TARGET=_blank>Superfamily</A> 
+			database.
+			<LI>
+			<A HREF="http://www.mssm.edu/biomath/benson.html" TARGET=_blank>Mount Sinai School of 
+			Medicine</A> (Gary Benson): Tandem Repeats Finder.
+			<LI>
+			<A HREF="http://cancer.gov/" TARGET=_blank>National Cancer Institute</A> (NCI): 
+			<A HREF="http://cgap.nci.nih.gov/" TARGET=_blank>The Cancer
+			Genome Anatomy Project</A> (CGAP) - FISH-mapped clones annotation track.
 		 	<LI>
 			<A HREF="http://www.ncbi.nlm.nih.gov/index.html" TARGET=_blank>National Center for Biotechnology
 			Information</A> (NCBI) 
@@ -1005,11 +1118,29 @@ Littlestone, Sanja Rogic, Matt Schwartz, Aaron Tomb, Wei Wu, Matt Xia, Degui Zhi
 			<BR>--(Wonhee Jang): FISH-mapped clones annotation track.
 			<BR>--(Danielle and Jean Thierry-Mieg): Acembly Genes annotation track.
 			<BR>--(Lukas Wagner): 3' EST track in the July 2000 browser.
-			<BR>--<A HREF="http://www.ncbi.nlm.nih.gov/SNP/" TARGET=_blank>dbSNP</A>.
+			<BR>--<A HREF="http://www.ncbi.nlm.nih.gov/SNP/" TARGET=_blank>dbSNP</A> database.
+			<BR>--<A HREF="http://www.ncbi.nlm.nih.gov/RefSeq/" TARGET=_blank>RefSeq</A> database.
+			<BR>--<A HREF="http://www.ncbi.nlm.nih.gov/SAGE/" TARGET=_blank>Serial Analysis of
+			Gene Expression Tag to Gene Mapping</A> (SAGEmap) data resource.
 			<LI>
-			<A HREF="http://cancer.gov/" TARGET=_blank>National Cancer Institute</A> (NCI): 
-			<A HREF="http://cgap.nci.nih.gov/" TARGET=_blank>The Cancer
-			Genome Anatomy Project</A> (CGAP) - FISH-mapped clones annotation track.
+			<A HREF="http://www.genome.gov" TARGET=_blank>National Human Genome Research Institute</A> 
+			(NHGRI)
+			<BR>--(Elliott Margulies, Pamela Jacques Thomas, Eric Green): Collaboration and annotations
+			for <A HREF="http://www.nisc.nih.gov/index.html" TARGET=_blank>NISC</A> browser, including 
+			curated gene annotations, DNAse I Hypersensitive Sites 
+			annotation, Multi-species Conserved Sequences (MCS) tracks, Binomial_25 Conservation Scores,
+			ZooSeq Blastz alignments tracks. 
+			<BR>--Data for ENCyclopedia Of DNA Elements (ENCODE) annotation track.
+			<LI>
+			<A HREF="http://bioinformatics.med.ohio-state.edu/" TARGET=_blank>Ohio State 
+			University Bioinformatics & Computational Biology Group</A> (Ramana V. Davuluri): 
+			Predictions for <A HREF="http://rulai.cshl.org/tools/FirstEF/" TARGET=_blank>First Exon
+			Finder</A> annotation track.
+			<LI>
+			<A HREF="http://bio.cse.psu.edu/" TARGET=_blank>Pennsylvania State University Bioinformatics
+			Group</A> (Scott Schwartz, Webb Miller, Zheng Zhang, Ross Hardison, Francesca Chiaromonte, 
+			Laura Elnitski): Blastz alignment program, multiz alignment protram, Genome Alignment and
+			Annotation Database (GALA), collaboration on multiple alignment annotation tracks.
 			<LI>
 			<A HREF="http://www.perlegen.com" TARGET=_blank>Perlegen Sciences</A> (David Hinds, 
 			Kelly Frazer, and David Cox): STS markers for the         
@@ -1022,7 +1153,7 @@ Littlestone, Sanja Rogic, Matt Schwartz, Aaron Tomb, Wei Wu, Matt Xia, Degui Zhi
 			<A HREF="http://snp.cshl.org/" TARGET=_blank>SNP Consortium</A>: Data for SNP annotation tracks.
 			<LI>
 			<A HREF="http://www.softberry.com/" TARGET=_blank>Softberry Inc.</A> (Victor Solovyev):
-			Fgenesh++ gene predictions and TSSW promoters tracks.
+			Fgenesh++ and Fgenesv+ gene predictions, TSSW promoters tracks.
 			<LI>
 			<A HREF="http://www.mad-cow.org/" TARGET=_blank>Sperling Biomedical 
 			Foundation</A> (Thomas Pringle): Avid Genome Browser user and the 
@@ -1030,8 +1161,25 @@ Littlestone, Sanja Rogic, Matt Schwartz, Aaron Tomb, Wei Wu, Matt Xia, Degui Zhi
 			assistance and support with user's guides, email moderation, web links, 
 			and testing.
 			<LI>
-			<A HREF="http://cc.ucsf.edu/" TARGET=_blank>UC San Francisco Cancer Center</A>:
+			<A HREF="http://www-shgc.stanford.edu/myerslab/" TARGET=_blank>Stanford University School 
+			of Medicine (Richard Myers Lab)</A>: Data set for Human Promoters custom annotation track.
+			<LI>
+			<A HREF="http://us.expasy.org/sprot/" TARGET=_blank>Swiss-Prot</A>: Protein data from the
+			Swiss-Prot protein knowledgebase, TrEMBL, and TrEMBL-NEW.
+			<LI>
+			<A HREF="http://bioinfo2.ugr.es/isochores/" TARGET=_blank>Universidad de Granada</A>, 
+			Grupo de Bioinformática, Spain (Jose L. Oliver): Isochore custom annotation track.</A>
+			<LI>
+			<A HREF="http://bio.math.berkeley.edu/" TARGET=_blank>University of CA, Berkeley</A> (Lior
+			Pachter, Simon Cawley, Marina Alexandersson): 
+			<A HREF="http://baboon.math.berkeley.edu/~syntenic/about.html" TARGET=_blank>SLAM</A> Gene
+			prediction annotation tracks.
+			<LI>
+			<A HREF="http://cc.ucsf.edu/" TARGET=_blank>University of CA, San Francisco Cancer Center</A>:
 			FISH-mapped clones annotation track.
+			<LI>
+			<A HREF="http://cc.ucsf.edu/" TARGET=_blank>University of Pennsylvania</A> (Y. Thomas Gan):
+			Database of Transcribed Sequences (DoTS) Genes custom annotation track.
 			<LI>
 			<A HREF="http://www.viaken.com/" TARGET=_blank>Viaken</A> (Victor Pollara): Repeat 
 			identification and masking.
@@ -1041,20 +1189,27 @@ Littlestone, Sanja Rogic, Matt Schwartz, Aaron Tomb, Wei Wu, Matt Xia, Degui Zhi
 			<BR>--(Robert Waterston, John McPhearson, Asif Chinwalla, Shiaw-Pyng Yang, John Wallis and 
 			LaDeana Hillier): Fingerprint-based map of BAC clones from the human genome and a 
 			corresponding layout of sequenced clones, plasmid end reads, BACend analysis,
-			CpG islands track.
-			<BR>--(<A HREF="http://www.genetics.wustl.edu/eddy/" TARGET=_blank>Sean Eddy</A>)
+			CpG islands.
+			<BR>--(<A HREF="http://www.genetics.wustl.edu/eddy/" TARGET=_blank>Sean Eddy</A>
 			and Todd Lowe (now at UCSC)): RNA Genes track.
+			<BR>--(<A HREF="http://genes.cs.wustl.edu/MB-Lab-index.html" TARGET=_blank>Michael 
+			Brent's Computational Genomics Group</A>): Twinscan Gene prediction annotation track.
 			<LI>
 			<A HREF="http://www.sanger.ac.uk/HGP/" TARGET=_blank>Wellcome Trust Sanger Institute</A>
-			<BR>--(Jennifer Ashurst, James Gilbert, Ian Dunham and all the annotation teams) The following
-			annotation tracks: Vega Genes and Pseudogenes, Sanger 20 and Sanger 22 Genes and Pseudogenes.
-			<BR>--(John Sulston, Jane Rogers, Jim Mullikin, and Richard Durbin): Gene predictions, plasmid 
+			<BR>--(Jennifer Ashurst, James Gilbert, John Sulston, Jane Rogers, Jim Mullikin, Richard 
+			Durbin, Steve Searle, Ian Dunham and the annotation teams): Vega Genes and Pseudogenes, 
+			Sanger 20 and Sanger 22 Genes and Pseudogenes. Plasmid 
 			end reads, processing of whole genome shotgun mouse reads.
+			<BR>--(Sam Griffiths-Jones): miRNA Data custom annotation track (in collaboration with 
+			Michel Weber of CNRS Université Paul Sabatier).
 			<LI>
 			<A HREF="http://www-genome.wi.mit.edu/" TARGET=_blank>Whitehead Institute for Biomedical 
 			Research</A> (Eric Lander, Mike Zody, Chad Nusbaum): Plasmid end reads. Special thanks to Eric 
 			for inviting us to join the Hardcore Analysis Group for the draft sequence project and for 
 			his direction of that group. 
+			<LI>
+			<A HREF="http://www.wormbase.org/" TARGET=_blank>WormBase</A> (Lincoln Stein): Wormbase 
+			gene prediction annotations for <em>C. elegans</em> genome.
 		</UL></TD><TD WIDTH=15></TD></TR></TABLE>
 	<BR></TD></TR></TABLE>
 
@@ -1066,7 +1221,7 @@ Littlestone, Sanja Rogic, Matt Schwartz, Aaron Tomb, Wei Wu, Matt Xia, Degui Zhi
 	<TR><TD>
 	<TABLE BGCOLOR="D9E4F8" BACKGROUND="../images/hr.gif" WIDTH=100%>
 	    <TR><TD>
- 	    <FONT SIZE="4"><A NAME="TOC"></A><B>&nbsp; Acknowledgments of Early Support</B></FONT>
+ 	    <FONT SIZE="4"><A NAME="TOC"></A><B>&nbsp; Acknowledgements of Early Support</B></FONT>
 	    </TD></TR>
 	</TABLE>
 	<TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0>
