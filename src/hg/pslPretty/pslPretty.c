@@ -201,7 +201,7 @@ if (sfp->isNib)
     }
 else
     {
-    *retSeq = nibLdPart(sfp->file, f, sfp->pos, start, size);
+    *retSeq = readSeqFromFaPos(sfp, f);
     *retOffset = 0;
     *retIsNib = FALSE;
     }
@@ -273,8 +273,8 @@ struct dyString *t = newDyString(16*1024);
 int blockIx, diff;
 int qs, ts;
 int lastQ = 0, lastT = 0, size;
-int qOffset;
-boolean qIsNib;
+int qOffset = 0;
+boolean qIsNib = FALSE;
 
 if (qName == NULL || !sameString(qName, psl->qName))
     {
@@ -312,7 +312,9 @@ for (blockIx=0; blockIx < psl->blockCount; ++blockIx)
 	tGap = ts - lastT;
 	minGap = min(qGap, tGap);
 	if (minGap > 0)
-	   errAbort("minGap = %d", minGap);
+	   {
+	   errAbort("Block %d, minGap = %d, qGap %d, tGap %d, qs %d, ts %d", blockIx, minGap, qGap, tGap, qs, ts);
+	   }
 	if (qGap > 0)
 	    {
 	    dyStringAppendN(q, qSeq->dna + lastQ, qGap);
