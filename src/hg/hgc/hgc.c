@@ -5680,6 +5680,7 @@ void showSAM_T02(char *itemName)
     float  eValue;
     char *chp;
     int homologCount;
+    int gotPDBFile;
 
     printf("<B>Protein Structure Analysis and Prediction by ");
     printf("<A HREF=\"http://www.soe.ucsc.edu/research/compbio/SAM_T02/sam-t02-faq.html\"");
@@ -5698,19 +5699,25 @@ void showSAM_T02(char *itemName)
     printf("\" TARGET=_blank>%s</A><BR>\n", itemName);
 
     printf("<B>3D Structure Prediction (PDB file):</B> ");
-
-    sprintf(cond_str, "proteinID='%s'", itemName);
-    predFN = sqlGetField(conn2, database, "protPredFile", "proteinID", cond_str);
-    if (predFN != NULL)
+    gotPDBFile = 0;    
+    sprintf(cond_str, "proteinID='%s' and evalue <1.0e-5;", itemName);
+    if (sqlGetField(conn2, database, "protHomolog", "proteinID", cond_str) != NULL)
 	{
-        printf("<A HREF=\"/SARS/%s/", itemName);
-        printf("%s.t2k.undertaker-align.pdb\">%s</A><BR>\n", itemName,itemName);
-        }
-    else
-	{
-	printf("No high confidence level structure prediction available for this sequence.<BR>\n");
+	sprintf(cond_str, "proteinID='%s'", itemName);
+	predFN = sqlGetField(conn2, database, "protPredFile", "predFileName", cond_str);
+    	if (predFN != NULL)
+	    {
+            printf("<A HREF=\"/SARS/%s/", itemName);
+            //printf("%s.t2k.undertaker-align.pdb\">%s</A><BR>\n", itemName,itemName);
+            printf("%s\">%s</A><BR>\n", predFN,itemName);
+            gotPDBFile = 1;
+	    }
 	}
-
+    if (!gotPDBFile)
+	{
+	printf("No high confidence level structure prediction available for this sequence.");
+	printf("<BR>\n");
+	}
     printf("<B>3D Structure of Close Homologs:</B> ");
     homologCount = 0;
     strcpy(goodSCOPdomain, "dummy");
