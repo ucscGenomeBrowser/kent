@@ -1,4 +1,4 @@
-#!/bin/csh
+#!/bin/csh -ef
 # Name:         makeLoChain-lift
 #
 # Function:     Lift alignments for liftOver chain.
@@ -6,7 +6,7 @@
 #
 # Author:       kate
 #
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/makeLoChain/makeLoChain-lift.csh,v 1.2 2004/07/14 19:52:28 kate Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/makeLoChain/makeLoChain-lift.csh,v 1.3 2004/09/18 00:18:57 angie Exp $
 
 if ( $#argv != 3 ) then
     echo "usage: $0 <old-assembly> <new-assembly> <new-liftdir>"
@@ -17,28 +17,34 @@ set oldAssembly = $1
 set newAssembly = $2
 set newLiftDir = $3
 
-set blatDir = /cluster/data/$oldAssembly/bed/blat.$newAssembly
+set blatDir = /cluster/data/$oldAssembly/bed/blat.$newAssembly.`date +%Y-%m-%d`
 
 if ( ! -e $blatDir/raw ) then
     echo "Can't find $blatDir/raw"
 endif
-if ( ! -e $newLiftDir/chr1.lft ) then
-    echo "Can't find $newLiftDir/chr1.lft"
+
+if (`ls -1 $newLiftDir/*.lft | wc -l` < 1) then
+    echo "Can't find any .lft files in $newLiftDir"
+    exit 1
 endif
 
 cd $blatDir/raw
-set fs = `fileServer`
-if ( $fs != "" && $fs != $HOST ) then
+set fs = `fileServer $blatDir`
+if ( $HOST != $fs ) then
     echo "Run this on $fs"
     exit 1
 endif
 
-foreach i (`cat /cluster/data/$newAssembly/chrom.lst`)
-    echo chr$i
-    liftUp -pslQ ../psl/chr$i.psl $newLiftDir/chr$i.lft warn chr*_chr$i.psl
-    echo done $i
+foreach chr (`awk '{print $1;}' /cluster/data/$newAssembly/chrom.sizes`)
+    echo $chr
+    liftUp -pslQ ../psl/$chr.psl $newLiftDir/$chr.lft warn chr*_$chr.psl
 end
 
-echo "Finished lifting alignments to $blatDir/psl"
+set execDir = $0:h
+echo ""
+echo "DO THIS NEXT:"
+echo "    ssh kki"
+echo "    $execDir/makeLoChain-chain.csh $oldAssembly <$oldAssembly-nibdir> $newAssembly <$newAssembly-nibdir>"
+echo ""
 exit 0
 
