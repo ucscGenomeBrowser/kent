@@ -876,11 +876,12 @@ PRODUCING GENSCAN PREDICTIONS (TO DO)
       if ($status == 0) echo $f >> genome.list
     end
     # Create template file, gsub, for gensub2.  For example (3-line file):
+    cat << '_EOF_' > gsub
 #LOOP
-/cluster/home/kent/bin/i386/gsBig {check in line+ $(path1)} {check out line gtf/$(root1).gtf} -trans={check out line pep/$(root1).pep} -subopt={check out line subopt/$(root1).bed} -exe=/cluster/home/fanhsu/projects/compbio/bin/genscan-linux/genscan -par=/cluster/home/fanhsu/projects/compbio/bin/genscan-linux/HumanIso.smat -tmp=/tmp -window=2400000
+/cluster/home/hiram/bin/i386/gsBig {check in line+ $(path1)} {check out line gtf/$(root1).gtf} -trans={check out line pep/$(root1).pep} -subopt={check out line subopt/$(root1).bed} -exe=/cluster/home/fanhsu/projects/compbio/bin/genscan-linux/genscan -par=/cluster/home/fanhsu/projects/compbio/bin/genscan-linux/HumanIso.smat -tmp=/tmp -window=2400000
 #ENDLOOP
-    echo "" > dummy.list
-    gensub2 genome.list dummy.list gsub jobList
+'_EOF_'
+    gensub2 genome.list single gsub jobList
     para create jobList
     para try
     para check
