@@ -20,7 +20,7 @@
 #include "hash.h"
 #include "botDelay.h"
 
-static char const rcsid[] = "$Id: hgBlat.c,v 1.84 2004/10/01 19:11:01 kent Exp $";
+static char const rcsid[] = "$Id: hgBlat.c,v 1.85 2004/10/20 16:27:26 kent Exp $";
 
 struct cart *cart;	/* The user's ui state. */
 struct hash *oldVars = NULL;
@@ -386,7 +386,7 @@ if (seqList != NULL && seqList->name[0] == 0)
 trimUniq(seqList);
 
 /* Figure out size allowed. */
-maxSingleSize = (isTx ? 5000 : 25000);
+maxSingleSize = (isTx ? 10000 : 25000);
 maxTotalSize = maxSingleSize * 2.5;
 maxSeqCount = 25;
 
