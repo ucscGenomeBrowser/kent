@@ -37,6 +37,8 @@ void chromKeeperInitChroms(struct slName *nameList, int maxChromSize)
 struct slName *name = NULL;
 int count=0;
 chromCount = slCount(nameList);
+if(chromCount == 0)
+    return;
 assert(chromNames == NULL && chromRanges == NULL);
 AllocArray(chromNames, chromCount);
 AllocArray(chromRanges, chromCount);
@@ -71,6 +73,7 @@ struct binElement *chromKeeperFind(char *chrom, int chromStart, int chromEnd)
    Free this list with slFreeList. */
 {
 int i;
+static boolean warned = FALSE;
 struct binElement *be = NULL;
 boolean found = FALSE;
 for(i=0; i<chromCount; i++)
@@ -82,8 +85,11 @@ for(i=0; i<chromCount; i++)
 	break;
 	}
     }
-if(!found)
-    errAbort("chromKeeper::chromKeeperFind() - Don't recognize chrom %s", chrom);
+if(!found && !warned)
+    {
+    warn("chromKeeper::chromKeeperFind() - Don't recognize chrom %s", chrom);
+    warned = TRUE;
+    }
 return be;
 }
 
