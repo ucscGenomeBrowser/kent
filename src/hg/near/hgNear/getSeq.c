@@ -14,7 +14,7 @@
 #include "genePred.h"
 #include "bed.h"
 
-static char const rcsid[] = "$Id: getSeq.c,v 1.4 2003/08/21 16:58:40 kent Exp $";
+static char const rcsid[] = "$Id: getSeq.c,v 1.5 2003/08/25 23:52:49 kent Exp $";
 
 static void printNameAndDescription(struct sqlConnection *conn, char *id)
 /* Look up name and description and print. */
@@ -156,7 +156,7 @@ hPrintf("<FORM ACTION=\"../cgi-bin/hgNear\" METHOD=GET>\n");
 cartSaveSession(cart);
 hgSeqOptionsHtiCart(hti, cart);
 hPrintf("<BR>\n");
-cgiMakeButton(getGenomicSeqVarName, "Get DNA");
+cgiMakeButton(getGenomicSeqVarName, "Get Sequence");
 hPrintf("</FORM>");
 }
 
@@ -237,7 +237,7 @@ cgiMakeCheckBox(proIncludeFiveOnly,
 hPrintf("Include only those with annotated 5' UTRs<BR>");
 howRadioButton("genomic");
 hPrintf("Genomic<BR>\n");
-cgiMakeButton(getSeqVarName, "Get DNA");
+cgiMakeButton(getSeqVarName, "Get Sequence");
 hPrintf("</FORM>\n");
 }
 

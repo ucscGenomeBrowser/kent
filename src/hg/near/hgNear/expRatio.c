@@ -11,7 +11,7 @@
 #include "hgNear.h"
 #include "cheapcgi.h"
 
-static char const rcsid[] = "$Id: expRatio.c,v 1.12 2003/07/31 02:51:43 kent Exp $";
+static char const rcsid[] = "$Id: expRatio.c,v 1.13 2003/08/25 23:52:49 kent Exp $";
 
 
 static boolean loadExpVals(struct sqlConnection *conn,
@@ -549,6 +549,18 @@ if (advSearchColAnySet(col))
 return list;
 }
 
+int expRatioTableColumns(struct column *col)
+/* Return number of html columns this uses. */
+{
+int *reps = col->representatives;
+int repCount = col->representativeCount;
+int i, count = 1;
+
+for (i=0; i<repCount; ++i)
+    if (reps[i] == -1)
+        ++count;
+return count;
+}
 
 
 void setupColumnExpRatio(struct column *col, char *parameters)

@@ -70,6 +70,9 @@ struct column
    void (*labelPrint)(struct column *col);
    /* Print the label in the label row. */
 
+   int (*tableColumns)(struct column *col);
+   /* How many html columns this uses. */
+
    void (*configControls)(struct column *col);
    /* Print out configuration controls. */
 

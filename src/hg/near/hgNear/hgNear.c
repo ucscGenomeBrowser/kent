@@ -14,7 +14,7 @@
 #include "ra.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: hgNear.c,v 1.42 2003/08/21 07:32:00 kent Exp $";
+static char const rcsid[] = "$Id: hgNear.c,v 1.43 2003/08/25 23:52:49 kent Exp $";
 
 char *excludeVars[] = { "submit", "Submit", confVarName, 
 	defaultConfName, hideAllConfName, 
@@ -273,6 +273,12 @@ static char *noVal(struct column *col, struct genePos *gp, struct sqlConnection 
 return cloneString("n/a");
 }
 
+static int oneColumn(struct column *col)
+/* Return that we have single column. */
+{
+return 1;
+}
+
 void columnDefaultMethods(struct column *col)
 /* Set up default methods. */
 {
@@ -280,6 +286,7 @@ col->exists = alwaysExists;
 col->cellVal = noVal;
 col->cellPrint = cellSimplePrint;
 col->labelPrint = labelSimplePrint;
+col->tableColumns = oneColumn;
 }
 
 /* ---- Accession column ---- */
@@ -1069,6 +1076,20 @@ for (col = colList; col != NULL; col = col->next)
 return NULL;
 }
 
+int totalHtmlColumns(struct column *colList)
+/* Count up columns in big-table html. */
+{
+int count = 0;
+struct column *col;
+
+for (col = colList; col != NULL; col = col->next)
+    {
+    if (col->on)
+         count += col->tableColumns(col);
+    }
+return count;
+}
+
 void bigTable(struct sqlConnection *conn, struct column *colList, 
 	struct genePos *geneList)
 /* Put up great big table. */
@@ -1078,7 +1099,8 @@ struct genePos *gene;
 
 if (geneList == NULL)
     return;
-hPrintf("<TABLE BORDER=1 CELLSPACING=1 CELLPADDING=1>\n");
+hPrintf("<TABLE BORDER=1 CELLSPACING=1 CELLPADDING=1 COLS=%d>\n", 
+	totalHtmlColumns(colList));
 
 /* Print label row. */
 hPrintf("<TR BGCOLOR=\"#E0E0FF\">");
