@@ -1,0 +1,54 @@
+
+P	{	line-height: 1.1;
+		text-align: justify;
+		font-family: times new roman, arial, helvetica, verdana, serif;
+		color: black;
+		margin-left: 0px;
+	}
+P.two	{	line-height: 1.6;
+		text-align: justify;
+		font-family: times new roman, arial, helvetica, verdana, serif;
+		color: black;
+		margin-left: 15px;
+
+
+	}
+TABLE{	cellpadding: 0;
+		cellspacing: 0;
+		border: 0;
+	}
+IMG {  	border-width: 0px; 
+		padding: 0px; 
+		margin: 0px;}
+
+LI {		line-height: 1.5;
+	}
+
+A:link.leftbar { text-decoration: none; font-family: arial; color: "#FDFCEA"; font-size: 10pt; font-weight: 600; }
+A:visited.leftbar { text-decoration: none; font-family: arial; color: "#FDFCEA"; font-size: 10pt; font-weight: 600; }                         
+A:active.leftbar { text-decoration: none; font-family: arial; color: "#FFFF00"; font-size: 10pt; font-weight: 600; }                         
+A:hover.leftbar { text-decoration: none; font-family: arial; color: "#FFFF00"; font-size: 10pt; font-weight: 600; }
+
+A:link.leftbar2 { text-decoration: none; font-family: arial; color: "#FDFCEA"; font-size: 10pt; }
+A:visited.leftbar2 { text-decoration: none; font-family: arial; color: "#FDFCEA"; font-size: 10pt; }                         
+A:active.leftbar2 { text-decoration: none; font-family: arial; color: "#FFFF00"; font-size: 10pt; }                         
+A:hover.leftbar2 { text-decoration: none; font-family: arial; color: "#FFFF00"; font-size: 10pt; }
+
+A:link.leftbar3 { text-decoration: none; font-family: arial; color: "#FFFF99"; font-size: 10pt; font-weight: 600; }
+A:visited.leftbar3 { text-decoration: none; font-family: arial; color: "#FFFF99"; font-size: 10pt; font-weight: 600; }                         
+A:active.leftbar3 { text-decoration: none; font-family: arial; color: "#FFFF00"; font-size: 10pt; font-weight: 600; }                        
+A:hover.leftbar3 { text-decoration: none; font-family: arial; color: "#FFFF00"; font-size: 10pt; font-weight: 600; }
+
+A:link.ug { text-decoration: none; font-family: arial; color: "#888888"; font-size: 11pt; font-weight: 600; }
+A:visited.ug { text-decoration: none; font-family: arial; color: "#888888"; font-size: 11pt; font-weight: 600; }                         
+A:active.ug { text-decoration: none; font-family: arial; color: "#888888"; font-size: 11pt; font-weight: 600; }                         
+A:hover.ug { text-decoration: none; font-family: arial; color: "#888888"; font-size: 11pt; font-weight: 600; }
+
+A:link.toc { text-decoration: none; color: "#0000CC";  }
+A:visited.toc { text-decoration: none; color: "#0000CC";  }                         
+A:active.toc { text-decoration: none; color: "#6666FF";  }                         
+A:hover.toc { text-decoration: none; color: "#6666FF"; }
+
+A:link IMG { border-width: 0px; padding: 0px; margin: 0px;}
+A:visited IMG { border-width: 0px; padding: 0px; margin: 0px;}
+A:active IMG {  border-width: 0px; padding: 0px; margin: 0px;}
