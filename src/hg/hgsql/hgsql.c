@@ -4,7 +4,7 @@
 #include "options.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: hgsql.c,v 1.4 2003/05/06 07:22:20 kate Exp $";
+static char const rcsid[] = "$Id: hgsql.c,v 1.5 2004/02/24 18:47:09 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -41,7 +41,8 @@ int i;
 struct dyString *command = newDyString(1024);
 char *password = cfgOption("db.password");
 char *user = cfgOption("db.user");
-dyStringPrintf(command, "mysql -A -u %s -p%s", user, password);
+char *host = cfgOption("db.host");
+dyStringPrintf(command, "mysql -A -u %s -p%s -h%s", user, password, host);
 for (i=0; i<argc; ++i)
     {
     boolean hasSpace = stringHasSpace(argv[i]);
