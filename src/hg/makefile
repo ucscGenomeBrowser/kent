@@ -1,3 +1,34 @@
+# Build all directories in utils
+
+all:    cgi utils
+
+utils:  lib
+	@for D in $(USE_DIRS) x; do \
+            if test "$$D" != "x" ; then \
+                ( cd $$D && echo $$D && $(MAKE) ) ;\
+                x=$$? ; if [ $$x -ne 0 ]; then exit $$x ; fi \
+            fi ;\
+	done
+
+lib:
+	cd lib && ${MAKE}
+
+# List of directories to build
+USE_DIRS = $(DIRS)
+
+BAD_DIRS = \
+	altGraph \
+	geneBounds \
+	geneOverlap \
+	makePai \
+	makeSeqs \
+	mouseStuff \
+	ooCloneOverlaps \
+	orthoMap \
+	synMap \
+	wikiPlot 
+
+# Build cgi's
 
 cgi:
 	cd lib && ${MAKE}
@@ -40,3 +71,125 @@ beta:
 
 clean: 
 	cd lib && ${MAKE} clean;
+
+
+DIRS = \
+	affyTransciptome \
+	agpCloneCheck \
+	agpCloneList \
+	agpToFa \
+	agpToGl \
+	autoSql \
+	autoXml \
+	barger \
+	bedIntersect \
+	bedSort \
+	blast2psl \
+	borfBig \
+	cartDump \
+	cartReset \
+	cgiExample \
+	checkAgpAndFa \
+	checkDbSync \
+	checkGoldDupes \
+	checkN \
+	checkNt \
+	checkOut \
+	checkPsl \
+	checkQa \
+	checkYbr \
+	cmParse \
+	cmpMap \
+	ctgFaToFa \
+	ctgToChromFa \
+	das \
+	fakeFinContigs \
+	fakeOut \
+	featureBits \
+	ffaToFa \
+	foldDb \
+	foldGfx \
+	fqToQa \
+	fqToQac \
+	fragPart \
+	g2gOverlap \
+	g2gSeqOverlap \
+	gapper \
+	gbOneAcc \
+	gbToFaRa \
+	getFeatDna \
+	getRna \
+	getRnaPred \
+	goldToAgp \
+	gpStats \
+	gpToGtf \
+	gpcrParser \
+	gsBig \
+	hgBatch \
+	hgBlat \
+	hgCoordConv \
+	hgGateway \
+	hgText \
+	hgTrackUi \
+	hgTracks \
+	hgc \
+	hgsql \
+	intronEnds \
+	lib \
+	liftAgp \
+	liftFrags \
+	liftOver \
+	liftUp \
+	makeDb \
+	maskOutFa \
+	mdToNcbiLift \
+	mendMap \
+	mrnaToGene \
+	nci60 \
+	ntGoldGl \
+	oneShot \
+	ooChains \
+	ooCloneEnds \
+	ooCloneInfo \
+	ooCloneSizes \
+	ooCloneSpan \
+	ooGreedy \
+	ooLiftSpec \
+	ooNtInput \
+	ooSplitFins \
+	ooTester \
+	ooWeedZero \
+	patCount \
+	psLayout \
+	pslCat \
+	pslCheck \
+	pslCoverage \
+	pslCrudeCmp \
+	pslDropOverlap \
+	pslFilter \
+	pslGlue \
+	pslHitPercent \
+	pslIntronsOnly \
+	pslPretty \
+	pslReps \
+	pslSimp \
+	pslSort \
+	pslSortAcc \
+	pslSwap \
+	pslUnpile \
+	qaGold \
+	qaToQac \
+	qacToQa \
+	relPairs \
+	reviewSanity \
+	sage \
+	scanRa \
+	secure \
+	semiNorm \
+	sim4big \
+	splitFa \
+	splitFaIntoContigs \
+	test \
+	trfBig \
+	uniqSize
+
