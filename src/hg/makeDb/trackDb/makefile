@@ -39,7 +39,9 @@ DBS = 	hg13 hg15 hg16 \
 	theAci1 \
 	sulTok1 \
 	pyrHor1 \
-	geoSul1
+	geoSul1 \
+	deiRad1 \
+	haloSp1
 
 MGC_DBS = \
 	hg15 hg16 \
