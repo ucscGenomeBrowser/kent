@@ -12,7 +12,7 @@
 # or in the cgi-bin-$(USER)/hg.conf file. Something like: 
 # db.trackDb=trackDb_YourUserName
 
-DBS = 	hg13 hg15 hg16 \
+DBS = 	hg13 hg15 hg16 hg17 \
 	panTro1 \
 	mm2 mm3 mm4 \
 	rn2 rn3 \
@@ -46,7 +46,7 @@ DBS = 	hg13 hg15 hg16 \
 	vibCho1
 
 MGC_DBS = \
-	hg15 hg16 \
+	hg15 hg16 hg17 \
 	mm3 mm4
 
 update:
@@ -69,6 +69,7 @@ update:
 	    fi ; \
 	done
 	cd zoo; make update; cd ..
+
 
 alpha:
 	cvs up -d -P .
