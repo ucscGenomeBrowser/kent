@@ -8,7 +8,7 @@
 #include "nib.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: findMotif.c,v 1.6 2004/04/12 22:42:57 hiram Exp $";
+static char const rcsid[] = "$Id: findMotif.c,v 1.7 2004/04/12 22:49:46 hiram Exp $";
 
 char *chr = (char *)NULL;	/*	process the one chromosome listed */
 char *motif = (char *)NULL;	/*	specified motif string */
@@ -106,8 +106,8 @@ for (start=0; start<chromSize; start = end)
 			    "#\treturn from gap at %llu, gap length: %llu\n",
 			    chromPosition, chromPosition - enterGap);
 			verbose(4, "#GAP %s\t%llu\t%llu\t%llu\t%llu\t%s\n",
-			    chrom, enterGap, chromPosition-1, gapCount,
-			    chromPosition - 1 - enterGap, "+");
+			    chrom, enterGap-1, chromPosition-1, gapCount,
+			    chromPosition - enterGap, "+");
 			}
 		    }
 		++incomingLength;
