@@ -12,7 +12,7 @@
 #include "../hgNear/hgNear.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: hgNearTest.c,v 1.14 2004/04/26 21:15:59 kent Exp $";
+static char const rcsid[] = "$Id: hgNearTest.c,v 1.15 2004/05/03 19:33:49 galt Exp $";
 
 /* Command line variables. */
 char *dataDir = "/usr/local/apache/cgi-bin/hgNearData";
@@ -615,6 +615,7 @@ if (page == NULL)
     for (gene = geneList; gene != NULL; gene = gene->next)
 	dyStringPrintf(dy, "%s ", gene->name);
     htmlPageSetVar(page, NULL, accFilter, dy->string);
+    htmlPageSetVar(page, NULL, countVarName, "all");  /* despite 3 genes requested, must see all if many dupes */
     serialSubmit(&page, NULL, org, db, accColumn, dy->string,
 	    "accMultiFilterSubmit", "Submit", "on");
     dyStringFree(&dy);
