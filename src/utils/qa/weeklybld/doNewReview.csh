@@ -50,7 +50,7 @@ echo "tagReview.csh done on $HOST"
 echo "tag review moved to HEAD."
 
 #echo debug: disabled buildCvsReports
-./buildCvsReports.csh real
+./buildCvsReports.csh review real
 
 if ( $status ) then
  echo "buildCvsReports.csh  failed on $HOST"
