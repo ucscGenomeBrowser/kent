@@ -51,13 +51,24 @@ if ((gg = *pGg) != NULL)
     vcount = gg->vertexCount;
     for (i=0; i<vcount; ++i)
 	{
-	freeMem(em[i]);
+	freez(&em[i]);
 	if(gg->evidence != NULL)
 	    {
 	    for(j=0; j<vcount; ++j)
 		ggEvidenceFreeList(&gg->evidence[i][j]);
+	    freez(&gg->evidence[i]);
 	    }
 	}
+    if(gg->evidence != NULL)
+	freez(&gg->evidence);
+    for(i=0; i<gg->mrnaRefCount; i++)
+	{
+	freez(&gg->mrnaRefs[i]);
+	}
+    freez(&gg->mrnaRefs);
+    freez(&gg->tName);
+    freez(&gg->mrnaTissues);
+    freez(&gg->mrnaLibs);
     freez(&gg->evidence);
     freeMem(em);
     freeMem(gg->vertices);
@@ -369,7 +380,8 @@ void ggFillInTissuesAndLibraries(struct geneGraph *gg, struct sqlConnection *sc)
 int i;
 int mrnaCount = gg->mrnaRefCount;
 gg->mrnaTissues = AllocArray(gg->mrnaTissues, mrnaCount);
-gg->mrnaLibs = AllocArray(gg->mrnaLibs, mrnaCount);
+gg->mrnaLibs = needMem(sizeof(int)*mrnaCount);
+//gg->mrnaLibs = AllocArray(gg->mrnaLibs, mrnaCount);
 for(i=0; i< mrnaCount; ++i)
     {
     struct sqlResult *sr = NULL;
