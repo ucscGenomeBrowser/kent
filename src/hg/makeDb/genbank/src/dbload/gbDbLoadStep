@@ -197,7 +197,7 @@ while (($#ARGV >= 0) && ($ARGV[0] =~ /^-.*/)) {
         $gbCommon::verbose = 1;
     } elsif ($opt eq "-initialLoad") {
         $initialLoad = 1;
-    } elsif ($opt eq "^-downloadDump(=|$)") {
+    } elsif ($opt =~ /^-downloadDump(=|$)/) {
         $downloadDumpDays = parseOptEq($opt);
     } elsif ($opt eq "-allowLargeDeletes") {
         $allowLargeDeletes = 1;
