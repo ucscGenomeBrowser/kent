@@ -6,17 +6,32 @@
 #include "hash.h"
 #include "dystring.h"
 #include "hdb.h"
+#include "portable.h"
 
-static char const rcsid[] = "$Id: checkTableCoords.c,v 1.1 2003/12/18 06:22:07 angie Exp $";
-/* Default values for options */
-char *theTable = NULL;
-boolean debug = FALSE;
-boolean allowThickZero = TRUE;
+static char const rcsid[] = "$Id: checkTableCoords.c,v 1.2 2003/12/19 00:51:49 angie Exp $";
+
+/* Default parameter values */
+char *theTable = NULL;                  /* -table option */
+int hoursOld = 0;                       /* -daysOld, -hoursOld options */
+char *alwaysExclude = "trackDb*,all_mrna,all_est";
+                                        /* always exclude these patterns */
+struct slName *excludePatterns = NULL;  /* -exclude option + alwaysExclude */
+boolean ignoreBlocks = FALSE;           /* skip block checks to save time */
+boolean verboseBlocks = FALSE;          /* more details about block problems */
+boolean debug = FALSE;                  /* print out debug info */
+boolean justList = FALSE;               /* list tables to check, then exit */
+boolean allowThickZero = TRUE;          /* OK for thickStart==thickEnd==0 */
 
 /* Command line option specifications */
 static struct optionSpec optionSpecs[] = {
-    {"table", OPTION_STRING},
-    {"debug", OPTION_BOOLEAN},
+    {"table",         OPTION_STRING},
+    {"daysOld",       OPTION_INT},
+    {"hoursOld",      OPTION_INT},
+    {"exclude",       OPTION_STRING},
+    {"ignoreBlocks",  OPTION_BOOLEAN},
+    {"verboseBlocks", OPTION_BOOLEAN},
+    {"debug",         OPTION_BOOLEAN},
+    {"justList",      OPTION_BOOLEAN},
     {NULL, 0}
 };
 
@@ -48,23 +63,85 @@ errAbort("checkTableCoords - check invariants on genomic coords in table(s).\n"
 	 "target coords only.\n"
 	 "options:\n"
 	 "  -table=tableName  Check this table only.  (Default: all tables)\n"
-	 "\n"
+	 "  -daysOld=N        Check tables that have been modified at most N days ago.\n"
+	 "  -hoursOld=N       Check tables that have been modified at most N hours ago.\n"
+	 "                    (days and hours are additive)\n"
+	 "  -exclude=patList  Exclude tables matching any pattern in comma-separated\n"
+	 "                    patList.  patList can contain wildcards (*?) but should\n"
+	 "                    be escaped or single-quoted if it does.\n"
+	 "  -ignoreBlocks     To save time (but lose coverage), skip block coord checks.\n"
+	 "  -verboseBlocks    Print out more details about illegal block coords, since \n"
+	 "                    they can't be found by simple SQL queries.\n"
 	 );
 }
 
 
-struct slName *getTableNames(struct sqlConnection *conn)
-/* return a list of all table names. */
+int sqlDateToClockTime(char *sqlDate)
+/* Convert a SQL date such as "2003-12-09 11:18:43" to clock time 
+ * (seconds since midnight 1/1/1970 in UNIX). */
 {
+struct tm *tm = NULL;
+long clockTime = 0;
+
+if (sqlDate == NULL)
+    errAbort("Null string passed to sqlDateToClockTime()");
+AllocVar(tm);
+if (sscanf(sqlDate, "%4d-%2d-%2d %2d:%2d:%2d",
+	   &(tm->tm_year), &(tm->tm_mon), &(tm->tm_mday),
+	   &(tm->tm_hour), &(tm->tm_min), &(tm->tm_sec))  != 6)
+    errAbort("Couldn't parse sql date \"%s\"", sqlDate);
+tm->tm_year -= 1900;
+tm->tm_mon  -= 1;
+clockTime = mktime(tm);
+if (clockTime < 0)
+    errAbort("mktime failed (%d-%d-%d %d:%d:%d).",
+	     tm->tm_year, tm->tm_mon, tm->tm_mday,
+	     tm->tm_hour, tm->tm_min, tm->tm_sec);
+freez(&tm);
+return clockTime;
+}
+
+
+struct slName *getTableNames(struct sqlConnection *conn)
+/* Return a list of names of tables that have not been excluded by 
+ * command line options. */
+{
+char *query = hoursOld ? "show table status" : "show tables";
+struct sqlResult *sr = sqlGetResult(conn, query);
 struct slName *tableList = NULL;
-struct sqlResult *sr = sqlGetResult(conn, "show tables");
 char **row = NULL;
+int startTime = clock1();
+int ageThresh = hoursOld * 3600;
+
 while((row = sqlNextRow(sr)) != NULL)
     {
-    struct slName *tN = newSlName(row[0]);
-    slAddHead(&tableList, tN);
+    struct slName *tableName = NULL;
+    struct slName *pat = NULL;
+    boolean gotMatch = FALSE;
+    if (hoursOld)
+	{
+	int tableUpdateTime = sqlDateToClockTime(row[11]);
+	int ageInSeconds = startTime - tableUpdateTime;
+	if (ageInSeconds > ageThresh)
+	    continue;
+	}
+    for (pat = excludePatterns;  pat != NULL;  pat=pat->next)
+	{
+	if (wildMatch(pat->name, row[0]))
+	    {
+	    gotMatch = TRUE;
+	    break;
+	    }
+	}
+    if (gotMatch)
+	continue;
+    if (debug) uglyf("Adding %s\n", row[0]);
+    tableName = newSlName(row[0]);
+    slAddHead(&tableList, tableName);
     }
 sqlFreeResult(&sr);
+if (justList)
+    exit(0);
 slReverse(&tableList);
 return tableList;
 }
@@ -94,8 +171,12 @@ hSetDb(db);
 allChroms = hAllChromNames();
 if (theTable == NULL)
     tableList = getTableNames(conn);
-else
+else if (sqlTableExists(conn, theTable))
     tableList = newSlName(theTable);
+else
+    errAbort("Error: specified table \"%s\" does not exist in database %s.",
+	     theTable, db);
+
 for (curTable = tableList;  curTable != NULL;  curTable = curTable->next)
     {
     struct hTableInfo *hti = NULL;
@@ -210,7 +291,7 @@ for (curTable = tableList;  curTable != NULL;  curTable = curTable->next)
 					 table, sqlQuickNum(conn, query));
 		}
 	    }
-	if (hti->hasBlocks)
+	if (hti->hasBlocks && !ignoreBlocks)
 	    {
 	    /* Maybe there's a more efficient way to do this, but in order 
 	     * to avoid duplicating a bunch of code, I'll just pull it all 
@@ -230,24 +311,59 @@ for (curTable = tableList;  curTable != NULL;  curTable = curTable->next)
 		    int i=0, lastStart=0, lastEnd=0;
 		    /* invariant: blockStarts[0] == start */
 		    if (bed->chromStarts[0] != 0)
+			{
+			if (verboseBlocks)
+			    printf("%s item %s %s:%d-%d: blockStarts[0] (relative) should be 0, but is %d\n",
+				   table, bed->name, bed->chrom,
+				   bed->chromStart, bed->chromEnd,
+				   bed->chromStarts[0]);
 			bSNotStart++;
+			}
 		    /* invariant:
 		       blockEnd[i-1] <= blockStart[i] <= blockEnd[i] ... */
 		    lastStart = lastEnd = 0;
 		    for (i=0;  i < bed->blockCount;  i++)
 			{
 			if (bed->chromStarts[i] < lastStart)
+			    {
+			    if (verboseBlocks)
+				printf("%s item %s %s:%d-%d: starts of blocks %d and %d not in ascending order.\n",
+				       table, bed->name, bed->chrom,
+				       bed->chromStart, bed->chromEnd,
+				       i-1, i);
 			    bNotAscend++;
+			    }
 			if (bed->chromStarts[i] < lastEnd)
+			    {
+			    if (verboseBlocks)
+				printf("%s item %s %s:%d-%d: blocks %d and %d overlap.\n",
+				       table, bed->name, bed->chrom,
+				       bed->chromStart, bed->chromEnd,
+				       i-1, i);
 			    bOverlap++;
+			    }
 			if (bed->blockSizes[i] < 0)
+			    {
+			    if (verboseBlocks)
+				printf("%s item %s %s:%d-%d: blockSize[%d] is %d.\n",
+				       table, bed->name, bed->chrom,
+				       bed->chromStart, bed->chromEnd,
+				       i, bed->blockSizes[i]);
 			    bELTBS++;
+			    }
 			lastStart = bed->chromStarts[i];
 			lastEnd = bed->chromStarts[i] + bed->blockSizes[i];
 			}
 		    /* invariant: blockEnds[n-1] == end */
 		    if ((bed->chromStart + lastEnd) != bed->chromEnd)
+			{
+			if (verboseBlocks)
+			    printf("%s item %s %s:%d-%d: end of last block (%d) is not the same as chromEnd (%d).\n",
+				   table, bed->name, bed->chrom,
+				   bed->chromStart, bed->chromEnd,
+				   (bed->chromStart + lastEnd), bed->chromEnd);
 			bENotEnd++;
+			}
 		    }
 		bedFreeList(&bedList);
 		}
@@ -265,10 +381,40 @@ return gotError;
 
 int main(int argc, char *argv[])
 {
+struct dyString *allExcludes = newDyString(512);
+int daysOld = 0;
+char *exclude = NULL;
+char *patterns[128];
+int numPats = 0, i = 0;
+
 optionInit(&argc, argv, optionSpecs);
+theTable     = optionVal("table", theTable);
+daysOld      = optionInt("daysOld", daysOld);
+hoursOld     = optionInt("hoursOld", hoursOld) + (24 * daysOld);
+exclude      = optionVal("exclude", exclude);
+ignoreBlocks = optionExists("ignoreBlocks");
+verboseBlocks= optionExists("verboseBlocks");
+justList     = optionExists("justList");
+debug        = optionExists("debug") || justList;
+
+dyStringAppend(allExcludes, alwaysExclude);
+if (exclude != NULL)
+    dyStringPrintf(allExcludes, ",%s", exclude);
+numPats = chopCommas(allExcludes->string, patterns);
+for (i=0;  i < numPats;  i++)
+    {
+    struct slName *pat = newSlName(patterns[i]);
+    slAddHead(&excludePatterns, pat);
+    }
+dyStringFree(&allExcludes);
+
+/* Allow "checkTableCoords db table" usage too: */
+if (theTable == NULL && argc == 3)
+    {
+    theTable = argv[2];
+    argc = 2;
+    }
 if (argc != 2)
     usage();
-theTable = optionVal("table", theTable);
-debug = optionExists("debug");
 return checkTableCoords(argv[1]);
 }
