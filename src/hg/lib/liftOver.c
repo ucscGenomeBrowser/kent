@@ -13,7 +13,7 @@
 #include "portable.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: liftOver.c,v 1.11 2004/04/22 02:28:15 kate Exp $";
+static char const rcsid[] = "$Id: liftOver.c,v 1.12 2004/09/01 00:02:02 sugnet Exp $";
 
 struct chromMap
 /* Remapping information for one (old) chromosome */
@@ -120,9 +120,9 @@ chainFree(&freeChain);
 return ok;
 }
 
-static char *remapRange(struct hash *chainHash, double minRatio,
-                char *chrom, int s, int e, char strand, double minMatch,
-                char **retChrom, int *retStart, int *retEnd, char *retStrand)
+char *liftOverRemapRange(struct hash *chainHash, double minRatio,
+			char *chrom, int s, int e, char strand, double minMatch,
+			char **retChrom, int *retStart, int *retEnd, char *retStrand)
 /* Remap a range through chain hash.  If all is well return NULL
  * and results in retChrom, retStart, retEnd.  Otherwise
  * return a string describing the problem. */
@@ -211,7 +211,7 @@ while ((wordCount = lineFileChop(lf, words)) != 0)
 	errAbort("Start after end line %d of %s", lf->lineIx, lf->fileName);
     if (wordCount >= 6)
 	strand = words[5][0];
-    whyNot = remapRange(chainHash, minMatch, chrom, s, e, strand, minMatch,
+    whyNot = liftOverRemapRange(chainHash, minMatch, chrom, s, e, strand, minMatch,
                                 &chrom, &s, &e, &strand);
     strandString[0] = strand;
     strandString[1] = 0;
@@ -294,7 +294,7 @@ while (lineFileNext(lf, &line, NULL))
     s = skipLeadingSpaces(s);
 
     /* Convert seq/start/end/strand. */
-    error = remapRange(chainHash, minMatch, seq, start, end, *strand,
+    error = liftOverRemapRange(chainHash, minMatch, seq, start, end, *strand,
 	                minBlocks, &seq, &start, &end, strand);
 
     f = mapped;
@@ -755,8 +755,8 @@ return ct;
 }
 
 int liftOverBed(char *fileName, struct hash *chainHash, 
-                        double minMatch,  double minBlocks, bool fudgeThick,
-                                FILE *f, FILE *unmapped, int *errCt)
+		double minMatch,  double minBlocks, bool fudgeThick,
+		FILE *f, FILE *unmapped, int *errCt)
 /* Open up file, decide what type of bed it is, and lift it. 
  * Return the number of records successfully converted */
 {

@@ -24,6 +24,13 @@ int liftOverPositions(char *fileName, struct hash *chainHash,
 /* Create bed file from positions (chrom:start-end) and lift.
  * Return the number of records successfully converted */
 
+char *liftOverRemapRange(struct hash *chainHash, double minRatio,
+			char *chrom, int s, int e, char strand, double minMatch,
+			 char **retChrom, int *retStart, int *retEnd, char *retStrand);
+/* Remap a range through chain hash.  If all is well return NULL
+ * and results in retChrom, retStart, retEnd.  Otherwise
+ * return a string describing the problem. */
+
 void liftOverGff(char *fileName, struct hash *chainHash, 
                     double minMatch, double minBlocks, 
                     FILE *mapped, FILE *unmapped);
@@ -49,6 +56,7 @@ void readLiftOverMap(char *fileName, struct hash *chainHash);
 
 char *liftOverErrHelp();
 /* Help message explaining liftOver failures */
+
 
 #endif
 
