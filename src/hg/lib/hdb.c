@@ -32,7 +32,7 @@
 #include "twoBit.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.230 2004/12/25 03:05:56 jill Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.231 2005/01/26 11:51:47 aamp Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
@@ -1844,22 +1844,43 @@ hDisconnectCentral(&conn);
 return ok;
 }
 
-char *hDbDbOptionalField(char *database, char *field)
-/* Look up field in dbDb table keyed by database.
+
+
+char *hArchiveOrCentralDbDbOptionalField(char *database, char *field, boolean archive)
+/* Look up field in dbDb table keyed by database,
  * Return NULL if database doesn't exist. 
- * Free this string when you are done. */
+ * Free this string when you are done. Look in 
+ * either the regular or the archive database. 
+ * The name for this function may be a little silly. */
 {
-struct sqlConnection *conn = hConnectCentral();
+struct sqlConnection *conn;
 char buf[128];
 char query[256];
 char *res = NULL;
+conn = (archive) ? hConnectArchiveCentral() : hConnectCentral();
 sprintf(query, "select %s from dbDb where name = '%s'", field, database);
 if (sqlQuickQuery(conn, query, buf, sizeof(buf)) != NULL)
     res = cloneString(buf);
-hDisconnectCentral(&conn);
+if (archive)
+    hDisconnectArchiveCentral(&conn);
+else 
+    hDisconnectCentral(&conn);
 return res;
 }
 
+char *hArchiveDbDbOptionalField(char *database, char *field)
+/* Wrapper for hArchiveOrCentralDbDbOptionalField to 
+ * look up in the archive database. */
+{
+return hArchiveOrCentralDbDbOptionalField(database, field, TRUE);
+}
+
+char *hDbDbOptionalField(char *database, char *field)
+/* Wrapper for hArchiveOrCentralDbDbOptionalField to 
+ * look up in the regular central database. */
+{
+return hArchiveOrCentralDbDbOptionalField(database, field, FALSE);
+}
 
 char *hDbDbField(char *database, char *field)
 /* Look up field in dbDb table keyed by database.
@@ -1886,6 +1907,15 @@ char *hOrganism(char *database)
 if (sameString(database, "rep"))    /* bypass dbDb if repeat */
     return cloneString("Repeat");
 return hDbDbOptionalField(database, "organism");
+}
+
+char *hArchiveOrganism(char *database)
+/* Return organism name from the archive database.  E.g. "hg12". */
+{
+char *organism = hOrganism(database);
+if (!organism)
+    organism = hArchiveDbDbOptionalField(database, "organism");
+return organism;
 }
 
 char *hGenome(char *database)
@@ -3354,6 +3384,65 @@ struct dbDb *hGetIndexedDatabasesForClade(char *db)
 return hGetIndexedDbsMaybeClade(db);
 }
 
+struct slName *hLiftOverFromDbs() 
+/* Return a list of names of the DBs in the 
+ * fromDb column of the liftOverChain.*/
+{
+struct slName *names = NULL;
+struct liftOverChain *chainList = liftOverChainList(), *chain;
+for (chain = chainList; chain != NULL; chain = chain->next)
+    slNameStore(&names, chain->fromDb);
+liftOverChainFreeList(&chainList);
+return names;
+}
+
+struct slName *hLiftOverToDbs(char *fromDb) 
+/* Return a list of names of the DBs in the 
+ * toDb column of the liftOverChain.
+ * If fromDb!=NULL, return only those with that
+ * fromDb. */
+{
+struct slName *names = NULL;
+struct liftOverChain *chainList = liftOverChainList(), *chain;
+for (chain = chainList; chain != NULL; chain = chain->next)
+    {
+    if (!fromDb || (fromDb && sameString(fromDb,chain->fromDb)))
+	slNameStore(&names,chain->toDb);
+    }
+liftOverChainFreeList(&chainList);
+return names;
+}
+
+struct slName *hLiftOverOrgs(boolean from, char *fromDb)
+/* Just a function hLiftOverFromOrgs and
+ * hLiftOverToOrgs call. */
+{
+struct slName *dbs = (from) ? hLiftOverFromDbs() : hLiftOverToDbs(fromDb);
+struct slName *names = NULL, *org;
+for (org = dbs; org != NULL; org=org->next)
+    slNameStore(&names, hArchiveOrganism(org->name));
+slReverse(&names);
+slFreeList(&dbs);
+return names;
+}
+
+struct slName *hLiftOverFromOrgs()
+/* Return a list of names of organisms that 
+ * have databases in the fromDb column of
+ * liftOverChain.*/
+{
+return hLiftOverOrgs(TRUE,NULL);
+}
+
+struct slName *hLiftOverToOrgs(char *fromDb)
+/* Return a list of names of the organisms with
+ * databases in the toDb column of the liftOverChain.
+ * If fromDb!=NULL, return only those with that
+ * fromDb. */
+{
+return hLiftOverOrgs(FALSE,fromDb);
+}
+
 struct dbDb *hGetLiftOverFromDatabases()
 /* Get list of databases for which there is at least one liftOver chain file
  * from this assembly to another.
@@ -3362,7 +3451,7 @@ struct dbDb *hGetLiftOverFromDatabases()
 struct dbDb *currentDbList = NULL, *archiveDbList = NULL;
 struct dbDb *liftOverDbList = NULL, *dbDb, *nextDbDb;
 struct liftOverChain *chainList = NULL, *chain;
-struct hash *hash = newHash(0);
+struct hash *hash = newHash(0), *dbNameHash = newHash(3);
 
 /* Get list of all liftOver chains in central database */
 chainList = liftOverChainList();
@@ -3384,8 +3473,11 @@ for (dbDb = currentDbList; dbDb != NULL; dbDb = nextDbDb)
     {
     /* current dbDb entries */
     nextDbDb = dbDb->next;
-    if (hashFindVal(hash, dbDb->name))
+    if (hashFindVal(hash, dbDb->name) && !hashFindVal(dbNameHash, dbDb->name))
+	{
         slAddHead(&liftOverDbList, dbDb);
+	hashAdd(dbNameHash, dbDb->name, dbDb->name);
+	}
     else
         dbDbFree(&dbDb);
     }
@@ -3393,13 +3485,17 @@ for (dbDb = archiveDbList; dbDb != NULL; dbDb = nextDbDb)
     {
     /* archived dbDb entries */
     nextDbDb = dbDb->next;
-    if (hashFindVal(hash, dbDb->name))
+    if (hashFindVal(hash, dbDb->name) && !hashFindVal(dbNameHash, dbDb->name))
+	{
         slAddHead(&liftOverDbList, dbDb);
+	hashAdd(dbNameHash, dbDb->name, dbDb->name);	
+	}
     else
         dbDbFree(&dbDb);
     }
 
 hashFree(&hash);
+hashFree(&dbNameHash);
 liftOverChainFreeList(&chainList);
 slReverse(&liftOverDbList);
 return liftOverDbList;
@@ -3419,10 +3515,9 @@ chainList = liftOverChainList();
 
 /* Create hash of databases having liftOver chains from the fromDb */
 for (chain = chainList; chain != NULL; chain = chain->next)
-    {
-    if (sameString(fromDb, chain->fromDb))
-        hashAdd(hash, chain->toDb, chain->toDb);
-    }
+    if (sameString(chain->fromDb,fromDb))
+	hashAdd(hash, chain->toDb, chain->toDb);
+
 /* Get list of all current databases */
 allDbList = hDbDbList();
 

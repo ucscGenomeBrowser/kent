@@ -558,6 +558,27 @@ struct dbDb *hGetIndexedDatabasesForClade(char *db);
 /* Get list of active databases in db's clade.
  * Dispose of this with dbDbFreeList. */
 
+struct slName *hLiftOverFromDbs();
+/* Return a list of names of the DBs in the 
+ * fromDb column of the liftOverChain.*/
+
+struct slName *hLiftOverToDbs(char *fromDb);
+/* Return a list of names of the DBs in the 
+ * toDb column of the liftOverChain.
+ * If fromDb!=NULL, return only those with that
+ * fromDb. */
+
+struct slName *hLiftOverFromOrgs();
+/* Return a list of names of organisms that 
+ * have databases in the fromDb column of
+ * liftOverChain.*/
+
+struct slName *hLiftOverToOrgs(char *fromDb);
+/* Return a list of names of the organisms with
+ * databases in the toDb column of the liftOverChain.
+ * If fromDb!=NULL, return only those with that
+ * fromDb. */
+
 struct dbDb *hGetLiftOverFromDatabases();
 /* Get list of databases for which there is at least one liftOver chain file
  * Dispose of this with dbDbFreeList. */
@@ -601,6 +622,11 @@ char *hDefaultPos(char *database);
 char *hOrganism(char *database);
 /* Return organism associated with database.   Use freeMem on
  * return value when done. */
+
+char *hArchiveOrganism(char *database);
+/* Return organism associated with database.   Use freeMem on
+ * return value when done. This one checks the normal central
+ * DB first, then the archive dbDb. */
 
 int hOrganismID(char *database);
 /* Get organism ID from relational organism table */
