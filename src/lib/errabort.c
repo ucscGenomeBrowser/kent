@@ -44,6 +44,18 @@ vaWarn(format, args);
 va_end(args);
 }
 
+void errnoWarn(char *format, ...)
+/* Prints error message from UNIX errno first, then does rest of warning. */
+{
+char fbuf[512];
+va_list args;
+va_start(args, format);
+sprintf(fbuf, "%s\n%s", strerror(errno), format);
+vaWarn(fbuf, args);
+va_end(args);
+}
+
+
 void pushWarnHandler(WarnHandler handler)
 /* Set abort handler */
 {
