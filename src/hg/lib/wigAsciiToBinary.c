@@ -40,7 +40,7 @@
 #include	"wiggle.h"
 
 
-static char const rcsid[] = "$Id: wigAsciiToBinary.c,v 1.8 2004/05/19 08:33:28 hiram Exp $";
+static char const rcsid[] = "$Id: wigAsciiToBinary.c,v 1.9 2004/08/04 21:30:46 hiram Exp $";
 
 /*	This list of static variables is here because the several
  *	subroutines in this source file need access to all this business
@@ -484,6 +484,14 @@ while (lineFileNext(lf, &line, NULL))
 	chromStart = Offset;
 	verbose(2, "first offset: %llu\n", chromStart);
     }
+    /* see if this is the first time through, establish chromStart 	*/
+    if (validLines == 1)
+	{
+	chromStart = Offset;
+	verbose(2, "first offset: %llu\n", chromStart);
+	}
+    else if ((validLines > 1) && (Offset <= previousOffset))
+	errAbort("chrom positions not in numerical order at line %lu. previous: %llu > %llu <-current", lineCount, previousOffset+1, Offset+1);
 
     /* if we are working on a zoom level and the data is not exactly
      * spaced according to the span, then we need to put each value
@@ -496,8 +504,6 @@ while (lineFileNext(lf, &line, NULL))
 	{
 	int skippedBases;
 	int spansSkipped;
-	if (Offset < previousOffset)
-	    errAbort("chrom positions not in numerical order at line %lu. previous: %llu > %llu <-current", lineCount, previousOffset+1, Offset+1);
 	skippedBases = Offset - previousOffset;
 	spansSkipped = skippedBases / dataSpan;
 	if ((spansSkipped * dataSpan) != skippedBases)

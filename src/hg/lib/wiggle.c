@@ -8,15 +8,12 @@
 #include "jksql.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: wiggle.c,v 1.6 2004/01/13 21:38:19 hiram Exp $";
+static char const rcsid[] = "$Id: wiggle.c,v 1.7 2004/08/04 21:30:46 hiram Exp $";
 
 void wiggleStaticLoad(char **row, struct wiggle *ret)
 /* Load a row from wiggle table into ret.  The contents of ret will
  * be replaced at the next call to this function. */
 {
-int sizeOne,i;
-char *s;
-
 ret->chrom = row[0];
 ret->chromStart = sqlUnsigned(row[1]);
 ret->chromEnd = sqlUnsigned(row[2]);
@@ -37,8 +34,6 @@ struct wiggle *wiggleLoad(char **row)
  * from database.  Dispose of this with wiggleFree(). */
 {
 struct wiggle *ret;
-int sizeOne,i;
-char *s;
 
 AllocVar(ret);
 ret->chrom = cloneString(row[0]);
@@ -99,7 +94,6 @@ struct wiggle *wiggleCommaIn(char **pS, struct wiggle *ret)
  * return a new wiggle */
 {
 char *s = *pS;
-int i;
 
 if (ret == NULL)
     AllocVar(ret);
@@ -149,7 +143,6 @@ for (el = *pList; el != NULL; el = next)
 void wiggleOutput(struct wiggle *el, FILE *f, char sep, char lastSep) 
 /* Print out wiggle.  Separate fields with sep. Follow last field with lastSep. */
 {
-int i;
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->chrom);
 if (sep == ',') fputc('"',f);
