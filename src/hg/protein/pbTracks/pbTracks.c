@@ -15,7 +15,7 @@
 #include "pbStampPict.h"
 #include "pbTracks.h"
 
-static char const rcsid[] = "$Id: pbTracks.c,v 1.9 2003/12/30 00:15:37 fanhsu Exp $";
+static char const rcsid[] = "$Id: pbTracks.c,v 1.10 2003/12/30 15:03:54 fanhsu Exp $";
 
 boolean hgDebug = FALSE;      /* Activate debugging code. Set to true by hgDebug=on in command line*/
 
@@ -89,6 +89,8 @@ int blockGenomeEnd[500], blockGenomeEndPositive[500];
 int trackOrigOffset = 0;	//current track display origin offset
 boolean initialWindow = TRUE;
 struct vGfx *vg, *vg2;
+Color bkgColor;
+
 
 void hvPrintf(char *format, va_list args)
 /* Suppressable variable args hPrintf. */
@@ -158,8 +160,6 @@ void makeActiveImagePB(char *psOutput)
 struct tempName gifTn, gifTn2;
 char *mapName = "map";
 int pixWidth, pixHeight;
-
-Color bkgColor;
 
 char cond_str[255];
 struct sqlConnection *conn   = hAllocConn();
