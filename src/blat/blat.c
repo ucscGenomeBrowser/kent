@@ -18,7 +18,7 @@
 #include "trans3.h"
 #include "gfClientLib.h"
 
-static char const rcsid[] = "$Id: blat.c,v 1.99 2004/11/06 02:10:38 kent Exp $";
+static char const rcsid[] = "$Id: blat.c,v 1.100 2005/01/10 00:28:27 kent Exp $";
 
 /* Variables shared with other modules.  Set in this module, read only
  * elsewhere. */
@@ -247,38 +247,14 @@ DNA *dna = seq->dna;
 int i, size = seq->size;
 *trimmed = *seq;
 if (trimT)
-    {
-    int tSize = 0;
-    for (i=0; i<size; ++i)
-        {
-	DNA b = dna[i];
-	if (b == 't' || b == 'T')
-	    ++tSize;
-	else
-	    break;
-	}
-    if (tSize >= 4)
-	memset(dna, 'n', tSize);
-    }
+    maskHeadPolyT(dna, size);
 if (trimA)
     {
-    int aSize = 0;
-    for (i=size-1; i>=0; --i)
-        {
-	DNA b = dna[i];
-	if (b == 'a' || b == 'A')
-	    ++aSize;
-	else
-	    break;
-	}
-    if (aSize >= 4)
+    int trimSize = maskTailPolyA(dna, size);
+    if (trimHardA)
 	{
-	memset(dna + size - aSize, 'n', aSize);
-	if (trimHardA)
-	    {
-	    trimmed->size -= aSize;
-	    dna[size-aSize] = 0;
-	    }
+	trimmed->size -= trimSize;
+	dna[size-trimSize] = 0;
 	}
     }
 }
