@@ -27,10 +27,6 @@ static char const rcsid[] = "";
 /* Command line variables. */
 char *db  = NULL;	/* DB from command line */
 char *chr = NULL;	/* chr name from command line e.g "chr1" */
-char *dataDir = "./";
-
-char *raName = "snpValid.ra";
-struct hash *raList = NULL;
 
 int threshold = 8;  /* number of mismatched bases tolerated as a match */
 
@@ -44,15 +40,13 @@ errAbort(
   "options:\n"
   "   -chr=name - Use chrom name (e.g chr1) to limit validation, default all chromosomes.\n"
   "   -threshold=number - Use threshold number of tolerated mismatches for snp context, default %u.\n"
-  "   -dataDir=dataDir - Use selected data dir (e.g location of snpValid.ra), default %s.\n"
-  , threshold, dataDir);
+  , threshold);
 }
 
 
 static struct optionSpec options[] = {
    { "threshold", OPTION_INT    },
    { "chr"      , OPTION_STRING },
-   { "dataDir"  , OPTION_STRING },
    { NULL       , 0             },
 };
 
@@ -392,10 +386,7 @@ void snpValid()
 {
 
 
-struct hash *genomeRa=NULL;
 char *dbSnpTbl = NULL;
-char *useAffy = NULL;
-
 
 struct dbSnpRs *dbSnps = NULL;
 struct dbSnpRs *dbSnp = NULL;
@@ -430,41 +421,27 @@ char affy120id[12];
    currently affys are human only
 */
 
-genomeRa=findRaSection(raList,"global");
-if (!genomeRa)
-    {
-    errAbort("testDb: .ra has no global section \n");
-    }
-inheritRa(&dbSnpTbl,  genomeRa, "dbSnp");
-inheritRa(&useAffy ,  genomeRa, "affy" );
+char *Org = hOrganism(db);
 
-genomeRa=findRaSection(raList,db);   
-if (!genomeRa)
-    {
-    uglyf("testDb: skipping db=%s, has no .ra section \n",db);
-    return;   /* if there's no section for the db, assume it should be skipped. */
-    }
-inheritRa(&dbSnpTbl,  genomeRa, "dbSnp");
-inheritRa(&useAffy ,  genomeRa, "affy" );
-
-uglyf("dbSnp Table=%s \n",dbSnpTbl);
-if (!dbSnpTbl)
-    {
-    uglyf("testDb: dbSnp table missing in .ra for db=%s line\n",db);
-    return;  
-    }
-
-uglyf("useAffy=%s \n",useAffy);
-if (!useAffy)
-    {
-    uglyf("testDb: affy setting missing in .ra for db=%s line\n",db);
-    return;  
-    }
-
-if (sameWord(useAffy,"true"))
-    {
+if (sameWord(Org,"Human"))
     affy = TRUE;
+
+
+if (sameWord(Org,"Human"))
+    dbSnpTbl = "dbSnpRsHg";
+else if (sameWord(Org,"Mouse"))
+    dbSnpTbl = "dbSnpRsMm";
+else if (sameWord(Org,"Rat"))
+    dbSnpTbl = "dbSnpRsRn";
+else 
+    {
+    printf("Currently no support for Org %s\n",Org);
+    return;
     }
+    
+uglyf("dbSnp Table=%s \n",dbSnpTbl);
+
+uglyf("Affy=%s \n", affy ? "TRUE" : "FALSE" );
 
 hSetDb(db);
 
@@ -785,15 +762,9 @@ if (argc != 2)
 db = argv[1];
 chr       = optionVal("chr"      , chr );
 threshold = optionInt("threshold", threshold);
-dataDir   = optionVal("dataDir"  , dataDir  );
-
-raList = hgReadRa("org", "db", dataDir, raName, NULL);
-if (raList == NULL)
-    errAbort("Couldn't find anything from %s", raName);
 
 snpValid();
 
-hashFreeList(&raList);
 carefulCheckHeap();
 return 0;
 }
