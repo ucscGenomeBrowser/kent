@@ -30,7 +30,7 @@ $(EXE).o: formPushQ.h
 
 O = $(EXE).o
 
-$(EXE): $O pushQ.o 
+$(EXE): pushQ.o $O 
 	gcc $O pushQ.o $(MYLIBS) $L
 	mv a.out $(EXE)
 	strip $(EXE)
@@ -38,7 +38,7 @@ $(EXE): $O pushQ.o
 	cp $(EXE) /usr/local/apache/cgi-bin
 
 backup:
-	date +%Y-%m-%d-%k-%M | gawk '{printf("zip -r $(EXE)%s.zip *\n",$$1);}' > tempX
+	date +%Y-%m-%d-%H-%M | gawk '{printf("zip -r $(EXE)%s.zip *\n",$$1);}' > tempX
 	chmod 755 tempX
 	./tempX
 	rm tempX 

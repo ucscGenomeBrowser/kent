@@ -9,7 +9,7 @@ CREATE TABLE pushQ (
     pqid char(6) not null,	# Parent Queue Id if split off another
     priority char(1) not null,	# Priority
     rank int unsigned not null,	# Rank for display sort
-    qadate char(10) not null,	# QA start date
+    qadate char(10) not null,	# QA (re)-submission date
     newYN char(1) not null,	# new (track)?
     track varchar(255) not null,	# Track
     dbs varchar(255) not null,	# Databases
@@ -30,6 +30,7 @@ CREATE TABLE pushQ (
     notes longblob not null,	# Notes
     reqdate char(10) not null,	# Push-request Date
     pushedYN char(1) not null,	# Push done?
+    initdate char(10) not null,	# Initial Submission Date
               #Indices
     PRIMARY KEY(qid)
 );

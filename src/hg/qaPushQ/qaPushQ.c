@@ -20,7 +20,7 @@
 
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: qaPushQ.c,v 1.7 2004/05/05 19:06:56 galt Exp $";
+static char const rcsid[] = "$Id: qaPushQ.c,v 1.8 2004/05/06 08:21:31 galt Exp $";
 
 char msg[2048] = "";
 char ** saveEnv;
@@ -42,7 +42,7 @@ char *qaUser = NULL;
 #define SSSZ 256  /* MySql String Size 255 + 1 */
 #define MAXBLOBSHOW 128
 
-#define MAXCOLS 25
+#define MAXCOLS 26
 
 #define TITLE "Push Queue v"VERSION
 
@@ -58,7 +58,9 @@ char *showColumns = NULL;
 char *defaultColumns =
     "pqid,qid,priority,qadate,track,dbs,tbls,cgis,files,currLoc,makeDocYN,onlineHelp,ndxYN,stat,sponsor,reviewer,extSource,notes";
 /*
-"qid,pqid,priority,rank,qadate,newYN,track,dbs,tbls,cgis,files,sizeMB,currLoc,makeDocYN,onlineHelp,ndxYN,joinerYN,stat,sponsor,reviewer,extSource,openIssues,notes,reqdate,pushYN";
+"qid,pqid,priority,rank,qadate,newYN,track,dbs,tbls,cgis,files,sizeMB,currLoc,"
+"makeDocYN,onlineHelp,ndxYN,joinerYN,stat,sponsor,reviewer,extSource,openIssues,notes,"
+"reqdate,pushYN,initdate";
 */
 
 /* structural improvements suggested by MarkD:
@@ -104,7 +106,8 @@ static char const *colName[] = {
  "openIssues",
  "notes"     ,
  "reqdate"   ,
- "pushYN"    
+ "pushYN"    ,
+ "initdate"    
 };
 
 
@@ -133,7 +136,8 @@ e_extSource ,
 e_openIssues,
 e_notes     ,
 e_reqdate   ,
-e_pushedYN    
+e_pushedYN  ,
+e_initdate
 };
 
 char *colHdr[] = {
@@ -161,7 +165,8 @@ char *colHdr[] = {
 "Open Issues",
 "Notes",
 "Req&nbsp;Date",
-"Pushed?"
+"Pushed?",
+"Initial &nbsp;&nbsp;Submission&nbsp;&nbsp; Date"
 };
 
 
@@ -472,9 +477,10 @@ replaceInStr(html, sizeof(html) , "<!reviewer>"    , ki->reviewer  );
 replaceInStr(html, sizeof(html) , "<!extSource>"   , ki->extSource ); 
 replaceInStr(html, sizeof(html) , "<!openIssues>"  , ki->openIssues); 
 replaceInStr(html, sizeof(html) , "<!notes>"       , ki->notes     );
+replaceInStr(html, sizeof(html) , "<!initdate>"    , ki->initdate  ); 
 /*
-replaceInStr(html, sizeof(html), "<!reqdate>"   , ki->reqdate); 
-replaceSelectOptions("pushedYN", "Y,N",  ki->pushedYN);
+replaceInStr(html, sizeof(html) , "<!reqdate>"     , ki->reqdate   ); 
+replaceSelectOptions("pushedYN" , "Y,N"            , ki->pushedYN  );
 */
 }
 
@@ -508,6 +514,7 @@ strcpy(q.reviewer  ,qaUser);   /* default to this user */
 strcpy(q.extSource ,"");
 q.openIssues   = "";
 q.notes   = "";
+strftime (q.initdate, sizeof(q.initdate), "%Y-%m-%d", loctime); /* automatically use today date */
  
 safef(html,BUFMAX,formQ); 
 replacePushQFields(&q);
@@ -669,6 +676,10 @@ switch(col)
 	printf("<td>%s</td>\n", url);
 	break;
 
+    case e_initdate:
+	printf("<td>%s</td>\n", ki->initdate  );
+	break;
+	
     default:
 	errAbort("drawDisplayLine: unexpected case enum %d.",col);
 	
@@ -707,7 +718,7 @@ safef(query, sizeof(query), "%s%s%s",
     "order by priority,rank,qid desc limit 100"
     );
 
-//debug printf("query=%s",query);
+// debug printf("query=%s",query); 
 
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
@@ -992,7 +1003,7 @@ void pushQUpdateEscaped(struct sqlConnection *conn, struct pushQ *el, char *tabl
  * before inserting into database. */ 
 {
 struct dyString *update = newDyString(updateSize);
-char  *qid, *pqid, *priority, *qadate, *newYN, *track, *dbs, *tbls, *cgis, *files, *currLoc, *makeDocYN, *onlineHelp, *ndxYN, *joinerYN, *stat, *sponsor, *reviewer, *extSource, *openIssues, *notes, *reqdate, *pushedYN;
+char  *qid, *pqid, *priority, *qadate, *newYN, *track, *dbs, *tbls, *cgis, *files, *currLoc, *makeDocYN, *onlineHelp, *ndxYN, *joinerYN, *stat, *sponsor, *reviewer, *extSource, *openIssues, *notes, *reqdate, *pushedYN, *initdate;
 qid = sqlEscapeString(el->qid);
 pqid = sqlEscapeString(el->pqid);
 priority = sqlEscapeString(el->priority);
@@ -1016,6 +1027,7 @@ openIssues = sqlEscapeString(el->openIssues);
 notes = sqlEscapeString(el->notes);
 reqdate = sqlEscapeString(el->reqdate);
 pushedYN = sqlEscapeString(el->pushedYN);
+initdate = sqlEscapeString(el->initdate);
 
 dyStringPrintf(update, 
 "update %s set "
@@ -1023,14 +1035,14 @@ dyStringPrintf(update,
 "track='%s',dbs='%s',tbls='%s',cgis='%s',files='%s',sizeMB=%u,currLoc='%s',"
 "makeDocYN='%s',onlineHelp='%s',ndxYN='%s',joinerYN='%s',stat='%s',"
 "sponsor='%s',reviewer='%s',extSource='%s',"
-"openIssues='%s',notes='%s',reqdate='%s',pushedYN='%s' "
+"openIssues='%s',notes='%s',reqdate='%s',pushedYN='%s',initdate='%s' "
 "where qid='%s'", 
 	tableName,  
 	pqid,  priority, el->rank,  qadate, newYN, track, dbs, 
 	tbls,  cgis,  files, el->sizeMB ,  currLoc,  makeDocYN,  
 	onlineHelp,  ndxYN,  joinerYN,  stat,  
 	sponsor,  reviewer,  extSource,  
-	openIssues,  notes,  reqdate,  pushedYN,
+	openIssues,  notes,  reqdate,  pushedYN, initdate,
 	qid
 	);
 
@@ -1718,8 +1730,6 @@ freeDyString(&s);
 
 showColumns[strlen(showColumns)-1]=0;  /* chop off trailing comma */
 
-//saveMyUser();
-
 safef(msg,sizeof(msg),"Column changed = %s.<br>\n",target);
 htmShellWithHead(TITLE, meta, doMsg, NULL);
 
@@ -1755,8 +1765,6 @@ showColumns = needMem(2048);
 safef(showColumns, 2048, "%s", s->string);
 freeDyString(&s);
 
-//saveMyUser();
-
 safef(msg,sizeof(msg),"All Columns now visible.<br>\n");
 htmShellWithHead(TITLE, meta, doMsg, NULL);
 
@@ -1782,8 +1790,6 @@ dyStringAppend(s, defaultColumns);
 showColumns = needMem(2048);
 safef(showColumns, 2048, "%s", s->string);
 freeDyString(&s);
-
-//saveMyUser();
 
 safef(msg,sizeof(msg),"Default columns now visible.<br>\n");
 htmShellWithHead(TITLE, meta, doMsg, NULL);
