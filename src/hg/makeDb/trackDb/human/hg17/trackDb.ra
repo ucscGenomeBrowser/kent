@@ -187,6 +187,23 @@ autoScaleDefault Off
 pairwise netBlastz
 speciesOrder panTro1 canFam1 mm5 rn3 galGal2 fr1 danRer1
 
+track varMultizMm5Rn3GalGal2Fr1
+shortLabel Conservation (Std.)
+longLabel Human/Mouse/Rat/Chicken/Fugu Multiz Alignments & Standardized Conservation 
+group compGeno
+priority 109.21
+visibility pack
+#color 0, 10, 100
+altColor 50,50,50
+#altColor 255,128,0
+type wigMaf 0.0 1.0
+maxHeightPixels 100:40:11
+wiggle phastConsVarMultiz
+yLineOnOff Off
+autoScaleDefault Off
+pairwise netBlastz
+speciesOrder canFam1 mm5 rn3 galGal2 fr1
+
 track multizOldWorld
 shortLabel Old World Cons
 longLabel Hu/Chimp/Rhesus Macaque Multiz Alignments & Conservation 
@@ -267,7 +284,7 @@ type bed 4 .
 track cns
 shortLabel CNS
 longLabel Conserved Non-Coding (Most Conserved Minus Predicted Coding)
-priority 109.11
+priority 109.3
 group compGeno
 visibility hide
 spectrum on
@@ -305,7 +322,7 @@ track phastConsElementsPaper
 shortLabel Most Cons. (Std)
 longLabel PhastCons Conserved Elements, Standardized Across Species
 group compGeno
-priority 109.6
+priority 109.22
 visibility hide
 exonArrows off
 useScore 1
