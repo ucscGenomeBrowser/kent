@@ -47,7 +47,11 @@ use lib "$FindBin::Bin/../lib";
 use gbCommon;
 
 # Maximum size of an individual fasta file, in bytes.
-$main::maxFaSize = 64*1024*1024; # 64mb
+my $maxFaSize = 64*1024*1024; # 64mb
+
+# global table to make sure we don't generate output file more than
+# once
+my %gOutPsls;
 
 # split unaligned string into it's component names
 sub splitUnaligned($) {
@@ -110,8 +114,8 @@ sub extractMRnaFastas($) {
 
     # run program to extract fasta files, get back count and number.
     my $cmd = "gbAlignGet";
-    if ($main::maxFaSize > 0) {
-        $cmd .= " -fasize=$main::maxFaSize";
+    if ($maxFaSize > 0) {
+        $cmd .= " -fasize=$maxFaSize";
     }
     if ($gbCommon::verbose) {
         $cmd .= " -verbose=$gbCommon::verbose";
@@ -233,12 +237,14 @@ sub partitionNibFile($$) {
 # requests to blat.
 sub getGenomeFileSpecs($) {
     my($db) = @_;
-
+    
     my $genomeGlob = $main::dbGenomGlobs{$db};
     my @gfiles = glob($genomeGlob);
     if ($#gfiles < 0) {
         gbError("no files matching genomeGlob: $genomeGlob");
     }
+
+    # genrate specs, validating that node are generated twice.
     my @fileSpecs;
     foreach my $gfile (@gfiles) {
         # partation if a nib and we have a lift file, otherwise use the entire file
@@ -255,6 +261,14 @@ sub getGenomeFileSpecs($) {
 sub writeBlatJob($$$$$$) {
     my($jobFh, $expectedFh, $db, $genomeFile, $mrnaFa, $pslBaseDir) = @_;
     my $outPsl = getOutPslPath($genomeFile, $mrnaFa, $pslBaseDir);
+
+    # make sure we don't overwrite output files
+    if (defined($gOutPsls{$outPsl})) {
+        gbError("BUG: multiple output files named $outPsl");
+    }
+    $gOutPsls{$outPsl} = 1;
+
+    # add to list of expected
     print($expectedFh $outPsl . "\n");
     if (-e "$main::workDir/$outPsl") {
         if ($gbCommon::verbose) {

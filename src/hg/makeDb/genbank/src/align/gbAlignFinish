@@ -89,7 +89,7 @@ sub getPslRepsArgs($$) {
         if ($orgCat eq "native") {
             return "-minCover=0.15 -sizeMatters -minAli=0.96 -nearTop=0.001";
         } elsif ($orgCat eq "xeno") {
-            return "-minCover=0.15 -sizeMatters -minAli=0.96 -nearTop=0.05";
+            return "-minCover=0.15 -sizeMatters -minAli=0.96 -nearTop=0.005";
         }
     } else {
         # GenBank:

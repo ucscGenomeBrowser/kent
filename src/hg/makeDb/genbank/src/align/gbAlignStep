@@ -126,13 +126,14 @@ while ($#ARGV >= 0) {
     shift @ARGV;
     my $liftFile = $ARGV[0];
     shift @ARGV;
-    # setup, must protect glob from shell expansion
+    # setup, must protect glob from shell expansion, and allow life to be
+    # empty
     push(@setupArgs, $db);
     push(@setupArgs, "'" . $genomeGlob . "'");
-    push(@setupArgs, $liftFile);
-    # finish
+    push(@setupArgs, "'" . $liftFile .  "'");
+    # finish, protect
     push(@finishArgs, $db);
-    push(@finishArgs, $liftFile);
+    push(@finishArgs, "'" . $liftFile .  "'");
 }
 
 # defaults for initial alignment
@@ -252,9 +253,13 @@ if (inList("finish", @tasks) && !-e $alignNone) {
     # finish, installing alignments
     runProg("gbAlignFinish $workDirArg $verbArg " . join(" ", @finishArgs));
 }
-if (!$keep) {
+if (!$keep && !$initialBuild) {
     runProg("rm -rf $workDir");
     my $workParent = dirname($workDir);
     rmdir($workParent);  # don't complain if can't remove
+}
+if ($initialBuild) {
+    print STDERR "*** Note: -initial doesn't remove working directory:\n";
+    print STDERR "***       $workDir\n";
 }
 endTask();
