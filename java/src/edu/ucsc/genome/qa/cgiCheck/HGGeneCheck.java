@@ -6,8 +6,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Properties;
 
-import lib.*;
-
 /** 
  *  For all rows in knownGene, view details page.
  *  Loops over all assemblies.
@@ -25,7 +23,7 @@ public class HGGeneCheck {
 
     boolean debug = false;
 
-    String machine = "hgwbeta.cse..ucsc.edu";
+    String machine = "hgwbeta.cse.ucsc.edu";
     String table = "knownGene";
 
     // make sure CLASSPATH has been set for JDBC driver

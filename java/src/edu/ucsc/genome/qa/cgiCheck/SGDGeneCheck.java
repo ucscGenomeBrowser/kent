@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Properties;
 
-import lib.*;
 
 /** 
  *  For all rows in sgdGene, view details page.

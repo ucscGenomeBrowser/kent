@@ -33,7 +33,7 @@ public class MGCCheck {
     // make these command line arguments!
     // or read from .hg.conf!!
     String user = "hgcat";
-    String password = "XXXXXXX";
+    String password = "XXXXXX";
 
     if (!QADBLibrary.checkDriver()) return;
     

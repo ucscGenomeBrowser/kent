@@ -6,34 +6,34 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Properties;
 
-import lib.*;
 
- // modified from SGDGeneCheck to print to files
- // 01-21-04 -- kuhn
+ // Heather Trumbower & Robert Kuhn
+ // Modified from SGDGeneCheck.java
+ // 01-09-04
 
 /** 
+ *  Works out Proteome Browser.
  *  For all rows in knownGene, view details page.
- *  For all pages viewed, check for non-200 return code
- *    and for any message, msgError.
+ *  For all pages viewed, check for non-200 return code.
  *  Doesn't click into any links.
  *  Doesn't check for HGERROR.  
- *  Prints to .ok, .error, .msg files 
- *                  via QAWebLibrary.hggene.
+ *  Prints to .ok, .error files via QAWebLibrary.pbgene.
  */
-public class KGGeneCheck {
+public class PBGeneCheck {
 
  /** 
-  *  Runs the program to check all Known Genes for good return code.
-  *    
-  *  Loop over all assemblies.
+  * Checks all Known Genes for successful links in Proteome Browser.
+  *
   */
   public static void main(String[] args) {
 
     boolean debug = false;
 
-    String machine = "hgwbeta.cse.ucsc.edu";
+    String machine  = "hgwdev.cse.ucsc.edu";
     String assembly = "hg16";
-    String table = "knownGene";
+    String table    = "knownGene";
+    String errMsg   = "Sorry, cannot display";  // not used yet.  
+                                         // want to pass to QAWebLibraray.pbgene
 
     // make sure CLASSPATH has been set for JDBC driver
     if (!QADBLibrary.checkDriver()) return;
@@ -60,6 +60,9 @@ public class KGGeneCheck {
       return;
     }
 
+    QAWebLibrary.pbgene(dbinfo, machine, assembly, table);
+
+/*
     try {
       // get tracks for this assembly (read track controls from web)
       String hgtracksURL = "http://" + machine + "/cgi-bin/hgTracks?db=";
@@ -75,12 +78,18 @@ public class KGGeneCheck {
       Iterator trackIter = trackList.iterator();
       while (trackIter.hasNext()) {
         String track = (String) trackIter.next();
+        if (debug) {
+          System.out.println("track = " + track);
+          System.out.println("table = " + table + "\n");
+        }
         if (!track.equals(table)) continue;
-        QAWebLibrary.hggene(dbinfo, machine, assembly, table);
         System.out.println();
       }
     } catch (Exception e) {
       System.out.println(e.getMessage());
     }
+ */
+
+
   }
 }
