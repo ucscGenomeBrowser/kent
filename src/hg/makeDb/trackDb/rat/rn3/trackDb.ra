@@ -167,7 +167,7 @@ track multizHg15Mm3
 shortLabel Rat/Mouse/Human
 longLabel Human/Mouse/Rat Alignments
 group compGeno
-priority 300 
+priority 100
 visibility full
 type maf
 

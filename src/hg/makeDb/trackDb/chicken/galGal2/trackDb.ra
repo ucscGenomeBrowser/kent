@@ -104,7 +104,7 @@ track blatFr1
 shortLabel Fugu Blat
 longLabel Takifugu rubripes (fr1) Translated Blat Alignments
 group compGeno
-priority 130
+priority 110
 visibility dense
 color 0,60,120
 altColor 200,220,255
