@@ -15,5 +15,3 @@ MKDIR=mkdir -p
 .c.o:
 	${CC} ${COPT} ${CFLAGS} ${HG_DEFS} ${HG_WARN} ${HG_INC} ${XINC} -c $*.c
 
-clean:
-	- rm -f *.o
