@@ -501,9 +501,9 @@ else
 hPrintf(" TARGET=_BLANK>%s</A></LI>\n", mrnaID);
 }
 
-void doFamilyBrowserLink(char *protDisplayID, char *mrnaID, char *hgsidStr)
+void doGeneSorterLink(char *protDisplayID, char *mrnaID, char *hgsidStr)
 {
-hPrintf("\n<LI>Family Browser - ");
+hPrintf("\n<LI>Gene Sorter - ");
 if (mrnaID != NULL)
     {
     /* hPrintf("<A HREF=\"../cgi-bin/hgNear?near_search=%s&hgsid=%s\"", mrnaID, hgsid); */

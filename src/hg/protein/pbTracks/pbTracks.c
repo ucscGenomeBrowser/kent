@@ -15,7 +15,7 @@
 #include "pbStampPict.h"
 #include "pbTracks.h"
 
-static char const rcsid[] = "$Id: pbTracks.c,v 1.27 2004/05/06 23:18:15 fanhsu Exp $";
+static char const rcsid[] = "$Id: pbTracks.c,v 1.28 2004/06/01 23:10:12 fanhsu Exp $";
 
 boolean hgDebug = FALSE;      /* Activate debugging code. Set to true by hgDebug=on in command line*/
 
@@ -273,10 +273,10 @@ hPrintf("<P>");
 doGenomeBrowserLink(protDisplayID, mrnaID, hgsidStr);
 doGeneDetailsLink(protDisplayID, mrnaID, hgsidStr);
 
-/* show Family Browser link only if it is valid for this genome */
+/* show Gene Sorter link only if it is valid for this genome */
 if (hgNearOk(database))
     {
-    doFamilyBrowserLink(protDisplayID, mrnaID, hgsidStr);
+    doGeneSorterLink(protDisplayID, mrnaID, hgsidStr);
     }
 
 hPrintf("<P>");

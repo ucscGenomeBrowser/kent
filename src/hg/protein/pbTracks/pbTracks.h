@@ -126,7 +126,7 @@ void printExonAA(char *proteinID, char *aa, int exonNum);
 void doPathwayLinks(char *protDisplayID, char *mrnaID);
 void doGenomeBrowserLink(char *protDisplayID, char *mrnaID, char *hgsidStr);
 void doGeneDetailsLink(char *protDisplayID, char *mrnaID, char *hgsidStr);
-void doFamilyBrowserLink(char *protDisplayID, char *mrnaID, char *hgsidStr);
+void doGeneSorterLink(char *protDisplayID, char *mrnaID, char *hgsidStr);
 
 void doTracks(char *proteinID, char *mrnaID, char *aa, int *yOffp, char *psOutput);
 void doStamps(char *proteinID, char *mrnaID, char *aa, struct vGfx *vg, int *yOffp);
