@@ -5,9 +5,10 @@
 #include "dystring.h"
 #include "options.h"
 #include "dnaMotif.h"
+#include "dnaMotifSql.h"
 #include "transRegCode.h"
 
-static char const rcsid[] = "$Id: fixHarbisonMotifs.c,v 1.1 2004/10/04 20:11:28 kent Exp $";
+static char const rcsid[] = "$Id: fixHarbisonMotifs.c,v 1.2 2005/01/27 21:19:21 baertsch Exp $";
 
 void usage()
 /* Explain usage and exit. */

@@ -6,8 +6,9 @@
 #include "jksql.h"
 #include "improbRunInfo.h"
 #include "dnaMotif.h"
+#include "dnaMotifSql.h"
 
-static char const rcsid[] = "$Id: iriToDnaMotif.c,v 1.3 2003/05/06 07:22:18 kate Exp $";
+static char const rcsid[] = "$Id: iriToDnaMotif.c,v 1.4 2005/01/27 21:01:44 baertsch Exp $";
 
 void usage()
 /* Explain usage and exit. */

@@ -10,8 +10,9 @@
 #include "binRange.h"
 #include "esMotif.h"
 #include "dnaMotif.h"
+#include "dnaMotifSql.h"
 
-static char const rcsid[] = "$Id: hgLoadEranModules.c,v 1.7 2004/03/30 06:50:26 kent Exp $";
+static char const rcsid[] = "$Id: hgLoadEranModules.c,v 1.8 2005/01/27 21:18:42 baertsch Exp $";
 
 
 void usage()

@@ -87,7 +87,7 @@
 #include "versionInfo.h"
 #include "bedCart.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.869 2005/01/26 03:26:47 kate Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.872 2005/01/29 00:34:38 hartera Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -8370,7 +8370,7 @@ struct sqlResult *sr;
 char **row = NULL;
 char query[256];
 boolean found = FALSE;
-char *colorString = NULL, *colorClone = NULL, *name = NULL;
+char *colorString = NULL, *colorClone = NULL;
 struct rgbColor gClassColor;
 int color = tg->ixColor; /* default color in trackDb */
 int size = 3;
@@ -8387,10 +8387,7 @@ if (geneClasses)
    }
 if (hTableExists(classTable))
    {
-   /* need to chop down name so remove the part after the "." */
-   name = cloneString(lf->name);
-   chopSuffix(name);
-   sprintf(query, "select class from %s where name like '%s'", classTable,name);   
+   sprintf(query, "select class from %s where name = '%s'", classTable, lf->name);   
    sr = sqlGetResult(conn, query);
    if ((row = sqlNextRow(sr)) != NULL)
         {
@@ -8401,7 +8398,7 @@ if (hTableExists(classTable))
            /* get color from trackDb settings hash */
               {
               found = TRUE;
-              safef(gClass, sizeof gClass, "%s%s", GENEPRED_CLASS_PREFIX, classes[class]);
+              safef(gClass, sizeof(gClass), "%s%s", GENEPRED_CLASS_PREFIX, classes[class]);
               colorString = trackDbSetting(tg->tdb, gClass);
               break;
               }
