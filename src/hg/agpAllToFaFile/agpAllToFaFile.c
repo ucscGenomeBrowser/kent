@@ -7,7 +7,7 @@
 #include "agpFrag.h"
 #include "agpGap.h"
 
-static char const rcsid[] = "$Id: agpAllToFaFile.c,v 1.4 2004/07/21 23:44:11 angie Exp $";
+static char const rcsid[] = "$Id: agpAllToFaFile.c,v 1.5 2004/09/15 16:20:45 braney Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -47,7 +47,7 @@ struct hashEl *hel;
 int gap;                /* count of gap bases for a chrom */
 
 /* read in AGP file, constructing hash of chrom agp lists */
-fprintf(stderr, "Reading %s\n", agpFile);
+verbose(1, "Reading %s\n", agpFile);
 while (lineFileNext(lf, &line, &lineSize))
     {
     if (line[0] == '#' || line[0] == '\n')
@@ -100,17 +100,17 @@ while (lineFileNext(lf, &line, &lineSize))
     hashAddInt(chromSizeHash, seqName, lastPos);
     }
 /* read in input fasta file */
-fprintf(stderr, "Reading %s\n", faIn);
+verbose(1, "Reading %s\n", faIn);
 fIn = mustOpen(faIn, "r");
 while (faReadMixedNext(fIn, TRUE, "bogus", TRUE, NULL, &seq))
     hashAdd(fragHash, seq->name, seq);
 
 /* set up output files */
-fprintf(stderr, "Writing %s\n", faOut);
+verbose(1, "Writing %s\n", faOut);
 fOut = mustOpen(faOut, "w");
 if (chromSizeFile != NULL)
     {
-    fprintf(stderr, "Writing %s\n", chromSizeFile);
+    verbose(1, "Writing %s\n", chromSizeFile);
     fSizes = mustOpen(chromSizeFile, "w");
     fGapSizes = mustOpen(chromGapSizeFile, "w");
     }
@@ -139,7 +139,7 @@ while ((hel = hashNext(&cookie)) != NULL)
     for (agp = agpList->next; agp != NULL; agp = agp->next)
         {
         int size;
-        printf("%s\n", agp->frag);
+        verbose(2,"%s\n", agp->frag);
         seq = hashFindVal(fragHash, agp->frag);
         if (seq == NULL)
             errAbort("Couldn't find %s in %s", agp->frag, faIn);
@@ -148,7 +148,7 @@ while ((hel = hashNext(&cookie)) != NULL)
         if (agp->strand[0] == '-')
             reverseComplement(dna + agp->chromStart, size);
         }
-    printf("Writing sequence %s, %d bases to %s\n", seqName, lastPos, faOut);
+    verbose(2,"Writing sequence %s, %d bases to %s\n", seqName, lastPos, faOut);
     faWriteNext(fOut, seqName, dna, lastPos);
     freeMem(dna);
     }
