@@ -97,6 +97,21 @@ altColor 255,128,0
 defaultViewLimits 0.0:0.01
 type wig -0.285 0.53
 
+track tfbsCons
+shortLabel TFBS Conserved
+longLabel HMR Conserved Transcription Factor Binding Sites
+priority 94
+group regulation
+visibility hide
+type bed 6+
+spectrum on
+scoreMin 830
+scoreMax 1000
+zScoreBreak 2.0
+zScoreTop 5.0
+urlLabel Transfac matrix link:
+url http://www.gene-regulation.com/cgi-bin/pub/databases/transfac/getTF.cgi?AC=$$
+
 track multiz8way
 shortLabel Conservation
 longLabel Hu/Chimp/Mouse/Rat/Dog/Chick/Fugu/Zfish Multiz Alignments & Conservation 
@@ -961,25 +976,40 @@ priority 203
 visibility hide
 type bed 4 .
 
+track redMm3X
+shortLabel Mm3X Red
+longLabel Mm3X Red
+group x
+priority 200.9
+visibility hide
+type bed 14 .
+
+track redMm2X
+shortLabel  Mm2X Red
+longLabel  Mm2X Red
+group x
+priority 201.9
+visibility hide
+type bed 14 .
+
 track scoreMm3X
-shortLabel scoreMm3X
-longLabel scoreMm3X 
+shortLabel Mm3X Scored
+longLabel Mm3X Scored (black=correct,gray=base not mapped,red=base mapped elsewhere)
 group x
 priority 200.9
 visibility hide
 type bed 14 .
 
 track scoreMm2X
-shortLabel scoreMm2X
-longLabel scoreMm2X 
+shortLabel  Mm2X Scored
+longLabel  Mm2X Scored (black=correct,gray=base not mapped,red=base mapped elsewhere)
 group x
 priority 201.9
 visibility hide
 type bed 14 .
 
-
 track mapMm3X
-shortLabel Mapped 3X
+shortLabel Mm3X Mapped
 longLabel  Mm3X alignments mapped through mm5 net
 group x
 priority 203
@@ -988,7 +1018,7 @@ type psl xeno mm3X
 otherDb mm3X
 
 track mapMm2X
-shortLabel Mapped 2X
+shortLabel Mm2X Mapped
 longLabel   Mm2X alignments mapped through mm5 net
 group x
 priority 202
@@ -999,6 +1029,28 @@ otherDb mm2X
 track blastzBestElephant
 shortLabel Elephant Best
 longLabel Elephant Blastz Best-in-Genome Alignments
+group compGeno
+priority 165
+visibility hide
+color 100,50,0
+altColor 255,240,200
+spectrum on
+type psl xeno 
+
+track blastzBestLoxAfr0
+shortLabel LoxAfr0 Best
+longLabel LoxAfr0 Blastz Best-in-Genome Alignments
+group compGeno
+priority 165.1
+visibility hide
+color 100,50,0
+altColor 255,240,200
+spectrum on
+type psl xeno 
+
+track blastzBestMonDom0
+shortLabel Possum Best
+longLabel Possum Blastz Best-in-Genome Alignments
 group compGeno
 priority 165
 visibility hide
