@@ -20,7 +20,7 @@
 #define CDS_HELP_PAGE "../goldenPath/help/hgCodonColoring.html"
 #define CDS_MRNA_HELP_PAGE "../goldenPath/help/hgCodonColoringMrna.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.108 2004/06/02 22:55:10 braney Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.109 2004/06/03 00:02:41 kate Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -560,7 +560,7 @@ void rulerUi(struct trackDb *tdb)
 {
 /* Configure zoom when click occurs */
 char *currentZoom = cartCgiUsualString(cart, RULER_BASE_ZOOM_VAR, ZOOM_3X);
-puts("<P><B>Zoom:</B>");
+puts("<P><B>Zoom:&nbsp;</B>");
 zoomRadioButtons(RULER_BASE_ZOOM_VAR, currentZoom);
 }
 
