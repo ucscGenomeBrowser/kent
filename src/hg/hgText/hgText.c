@@ -33,7 +33,7 @@
 #include "botDelay.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: hgText.c,v 1.120 2004/03/24 00:58:48 hiram Exp $";
+static char const rcsid[] = "$Id: hgText.c,v 1.121 2004/03/24 16:23:56 hiram Exp $";
 
 /* sources of tracks, other than the current database: */
 static char *hgFixed = "hgFixed";
@@ -5063,9 +5063,12 @@ saveIntersectOptionsState();
 printf("Content-Type: text/plain\n\n");
 webStartText();
 
+/* temporarily disabled until a method is determined to not kill a
+ *	browser with a massive amount of output
 if (! allGenome)
     wigData = wigFetchData(database, table, chrom, winStart, winEnd, FALSE,
 	WIG_TABLE_1, wiggleCompare[WIG_TABLE_1]);
+*/
 
 if (wigData)
     {
@@ -5102,7 +5105,7 @@ if (wigData)
 	}
     }
 else
-    printf("#\tfor test purposes only, wiggle data is available only one chrom at a time\n");
+    printf("#\tthis data fetch function is under development, expected early April 2004\n");
 
 webEnd();
 }
