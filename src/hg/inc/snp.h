@@ -15,19 +15,19 @@ struct snp
 /* SNP positions from various sources */
     {
     struct snp *next;  /* Next in singly linked list. */
-    char *chrom;	/* Chromosome or 'unknown' */
+    char *chrom;	/* Chromosome */
     unsigned chromStart;	/* Start position in chrom */
     unsigned chromEnd;	/* End position in chrom */
-    char *name;	/* Name of SNP - rsId or Affy name */
-    float score;	/* certainty of variation */
-    char strand[2];	/* + or - */
-    char *alleles;	/* the sequence of the observed alleles */
-    char *source;	/* BAC_OVERLAP | MIXED | RANDOM | OTHER | Affy10K | Affy120K */
-    char *class;	/* SNP | INDEL | SEGMENTAL */
-    char *valid;	/* the validation status of the SNP */
-    float avHet;	/* the average heterozygosity from all observations */
-    float avHetSE;	/* the Standard Error for the average heterozygosity */
-    char *func;	/* the functional category of the SNP, if any */
+    char *name;	/* Name of SNP: rsId or Affy name */
+    float score;	/* Certainty of variation */
+    char strand[2];	/* Which DNA strand contains the observed alleles */
+    char *alleles;	/* The sequence of the observed alleles */
+    char *source;	/* How the variant was discovered */
+    char *class;	/* The class of variant */
+    char *valid;	/* The validation status of the SNP */
+    float avHet;	/* The average heterozygosity from all observations */
+    float avHetSE;	/* The Standard Error for the average heterozygosity */
+    char *func;	/* The functional category of the SNP, if any */
     };
 
 void snpStaticLoad(char **row, struct snp *ret);

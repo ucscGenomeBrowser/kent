@@ -8,14 +8,12 @@
 #include "jksql.h"
 #include "snp.h"
 
-static char const rcsid[] = "$Id: snp.c,v 1.6 2004/04/09 02:31:58 daryl Exp $";
+static char const rcsid[] = "$Id: snp.c,v 1.7 2004/08/29 04:37:14 daryl Exp $";
 
 void snpStaticLoad(char **row, struct snp *ret)
 /* Load a row from snp table into ret.  The contents of ret will
  * be replaced at the next call to this function. */
 {
-int sizeOne,i;
-char *s;
 
 ret->chrom = row[0];
 ret->chromStart = sqlUnsigned(row[1]);
@@ -37,8 +35,6 @@ struct snp *snpLoad(char **row)
  * from database.  Dispose of this with snpFree(). */
 {
 struct snp *ret;
-int sizeOne,i;
-char *s;
 
 AllocVar(ret);
 ret->chrom = cloneString(row[0]);
@@ -171,7 +167,6 @@ struct snp *snpCommaIn(char **pS, struct snp *ret)
  * return a new snp */
 {
 char *s = *pS;
-int i;
 
 if (ret == NULL)
     AllocVar(ret);
@@ -225,7 +220,6 @@ for (el = *pList; el != NULL; el = next)
 void snpOutput(struct snp *el, FILE *f, char sep, char lastSep) 
 /* Print out snp.  Separate fields with sep. Follow last field with lastSep. */
 {
-int i;
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->chrom);
 if (sep == ',') fputc('"',f);
