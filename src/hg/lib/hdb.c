@@ -31,7 +31,7 @@
 #include "grp.h"
 #include "twoBit.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.213 2004/10/20 21:05:18 sugnet Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.214 2004/10/25 01:55:46 kent Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
@@ -803,6 +803,7 @@ if (twoBitIsFile(fileName))
     struct dnaSeq *seq;
     tbf = twoBitOpen(fileName);
     seq = twoBitReadSeqFrag(tbf, seqName, start, end);
+    tolowers(seq->dna);
     twoBitClose(&tbf);
     return seq;
     }
