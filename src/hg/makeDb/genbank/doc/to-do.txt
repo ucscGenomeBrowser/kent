@@ -605,3 +605,12 @@ without refseq:
    ftp://ftp.ncbi.nih.gov/genbank/livelists
 
 - TPA records are not in downloads, where are they?  e.g. BK000688
+
+- make download file of xeno sequences, run on download server
+
+- *** bin and start indices are not build for all_mrna, all_est when
+  chr* tables are not build.  Also, verify refSeq tables.
+
+Warning: NM_012577: malformed RefSeq CDS: join(1,2..633)
+
+- create all mrna_* tables upfront.

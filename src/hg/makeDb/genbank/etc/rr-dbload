@@ -1,61 +1,20 @@
 #!/bin/bash -e
-
-# dbload for rr server.
-
-# errors terminate with message
-set -e
-trap "echo Error: `hostname` dbload failed >&2; exit 1" ERR
-exec </dev/null
+#
+# rr-dbload [-inclEsts]
+#
+# dbload for rr servers.
+opts="$*"
 
 # databases to update
 databases="rn3 hg16"
 
 # gbRoot on hgnfs1
 gbRoot=/genbank
-cd $gbRoot
-. $gbRoot/lib/gbCommon.sh
-
-# use our own .hg.conf for genbank db user
-HGDB_CONF=$gbRoot/etc/.hg.conf
-export HGDB_CONF
-
-verb=""
-verb="-verbose=1"
-
-# allow 250mb core dumps
-ulimit -c 256000
 
 # workdir is a local dir
 workdir=/var/tmp/genbank
 
-# data files and dirs
-dbloadVar=var/dbload/`hostname`
+# wait for copy to hgwnfs1
 copyTime=var/copy/copy.time
-lastCopyTime=$dbloadVar/copy.time
-lastCopyTimeTmp=$lastCopyTime.tmp
-dbloadTime=$dbloadVar/dbload.time
 
-mkdir -p $dbloadVar
-
-# Checking for an existing lock file, Silently exits if lock file exists
-# and is less than one day old,  error if older.
-gbCheckLock $dbloadVar/run/dbload.lock
-
-# check if the build is newer that what was last loaded
-if ! gbCmpTimeFiles $copyTime $lastCopyTime ; then
-    exit 0
-fi
-
-# save build time before load
-cp -f $copyTime $lastCopyTimeTmp
-
-# update databases
-# -downloadUpdate
-gbDbLoadStep $verb -workdir=$workdir $databases
-
-# on success, save time load completely and build time we started with
-mv -f $lastCopyTimeTmp $lastCopyTime
-gbMkTimeFile $dbloadTime
-
-echo "`hostname`: dbload completed"
-
+exec $gbRoot/etc/dbload $opts $gbRoot $databases $copyTime $workdir
