@@ -1278,8 +1278,8 @@ liftOver ../../../bedOverHg16/refGene2/hg16.refGene.gtf ../../humanTarget.chain 
 ldHgGene panTro1 mappedRefSeq new.gtf
 
 
-#Make a track from Tarjei's human deletions file
-#  80-12000 bp indels in human/chimp alignments
+# HUMAN DELETIONS (kpollard, 2/19/04)
+#  80-12000 bp indels in human/chimp alignments (from Tarjei's files)
 
     #data
     mkdir -p /cluster/data/panTro1/bed/indels
@@ -1289,6 +1289,8 @@ ldHgGene panTro1 mappedRefSeq new.gtf
     tar -xvf indels.human.chimp.tar
     mkdir arachne
     mv indels_arachne.* arachne
+    gzip arachne/indels_arachne.chimp.fa
+    gzip arachne/indels_arachne.human.fa
     
     #make .bed files from Tarjei's .fa files
     cluster/bin/i386/faSize detailed=on indels.chimp.fa > chimp.all.txt
@@ -1313,12 +1315,12 @@ ldHgGene panTro1 mappedRefSeq new.gtf
 	out[strand=="+","stop"]<-start[strand=="+"]+size[strand=="+"]
 	out[strand=="-","stop"]<-start[strand=="-"]-size[strand=="-"]
 	out[strand=="-",]<-out[strand=="-",c(1,2,4,3,5)]
-	out<-out[,c(1,3,4)]
-	write(t(out),"indels.chimp.new.bed",ncol=3)
+	out<-out[,c(1,3,4,2)]
+	write(t(out),"indels.chimp.new.bed",ncol=4)
         q()
     #back in shell: map to chromosomes
-    cat indels.chimp.new.bed | gawk '{print $1"\t"$2"\t"$3}' > temp.bed
-    /cluster/bin/i386/liftUp -type=.bed indels.chimp.chr.bed /cluster/data/panTro1/jkStuff/scaffolds.lft warn temp.bed
+    cat indels.chimp.new.bed | gawk '{print $1"\t"$2"\t"$3"\t"$4}' > indels.chimp.tab.bed
+    /cluster/bin/i386/liftUp -type=.bed indels.chimp.chr.bed /cluster/data/panTro1/jkStuff/scaffolds.lft warn indels.chimp.tab.bed
 
     #load track into chimp browser
     mkdir -p /gbdb/panTro1/humanDels
