@@ -85,7 +85,7 @@
 
 
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.712 2004/04/20 22:06:13 markd Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.713 2004/04/20 23:05:00 angie Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
@@ -3196,7 +3196,7 @@ if (color)
 		tg->mapName, tg->mapItemName(tg, bed), NULL);
 	}
     }
-if (tg->subType == lfWithBarbs)
+if (tg->subType == lfWithBarbs || tg->exonArrows)
     {
     int dir = 0;
     if (bed->strand[0] == '+')
@@ -6567,8 +6567,10 @@ if (tg->bedSize <= 3)
     loader = bedLoad3;
 else if (tg->bedSize == 4)
     loader = bedLoad;
-else
+else if (tg->bedSize == 5)
     loader = bedLoad5;
+else
+    loader = bedLoad6;
 sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd, NULL, &rowOffset);
 while ((row = sqlNextRow(sr)) != NULL)
     {
