@@ -8775,3 +8775,30 @@ axtChain -linearGap=../../chickenHumanTuned.gap $1 \
     ldHgGene hg17 twinscan chr_gtf/chr*.gtf -gtf -genePredExt
     hgPepPred hg17 generic twinscanPep chr_ptx/chr*-fixed.fa
 
+# MAKE VSTETNIG1 DOWNLOADABLES (DONE, 2004-09-08, hartera)
+    ssh kksilo
+    # zip chains and nets
+    cd /cluster/data/hg17/bed/blastz.tetNig1/axtChain
+    cp all.chain tetNig1.chain
+    zip -j /cluster/data/hg17/zip/tetNig1.chain.zip tetNig1.chain
+    rm tetNig1.chain
+    zip -j /cluster/data/hg17/zip/tetNig1.net.zip tetNig1.net
+   
+    ssh hgwdev
+    # copy chains and nets to downloads area
+    set gp = /usr/local/apache/htdocs/goldenPath/hg17
+    mkdir -p $gp/vsTetNig1
+    cd $gp/vsTetNig1
+    mv /cluster/data/hg17/zip/tetNig1*.zip .
+    md5sum *.zip > md5sum.txt
+
+    # move axt files to downloads area and zip
+    cd /cluster/data/hg17/bed/blastz.tetNig1/axtChrom
+    mkdir -p $gp/vsTetNig1/axtChrom
+    cp -p *.axt $gp/vsTetNig1/axtChrom
+    cd $gp/vsTetNig1/axtChrom
+    gzip *.axt
+    md5sum *.gz > md5sum.txt
+
+    # Copy over & edit README.txt w/pointers to chain, net formats.
+
