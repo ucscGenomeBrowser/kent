@@ -77,6 +77,8 @@ void wiggleOutput(struct wiggle *el, FILE *f, char sep, char lastSep);
 #define MAX_WIG_VALUE	127
 #define MAX_OPT_STRLEN	128
 
+#include "hdb.h"
+
 extern void wigFetchMinMaxY(struct trackDb *tdb, double *min,
     double *max, double *tDbMin, double *tDbMax, int wordCount, char *words[]);
 /* return min,max Y ranges from trackDb or cart, in lib/wiggleCart.c */
