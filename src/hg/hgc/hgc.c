@@ -155,7 +155,7 @@
 #include "pscreen.h"
 #include "jalview.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.808 2005/01/05 23:40:24 hartera Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.809 2005/01/06 22:03:25 daryl Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -11161,6 +11161,9 @@ char *id;
 
 if (sameString(exceptionList,"0"))
     return;
+if (!hTableExists("snpExceptions"))
+    return;
+
 tokens=cloneString(exceptionList);
 lf=lineFileOnString("snpExceptions", TRUE, tokens);
 tkz=tokenizerOnLineFile(lf);
