@@ -94,6 +94,7 @@ exit; # don't actually run this like a script :)
     # This creates 577 files, size range ~51000 to ~1.2Mb
     rm -fr superscaffolds
     mkdir superscaffolds
+
     faSplit about $ordered_file 500000 superscaffolds/ss_
     
 
@@ -266,6 +267,7 @@ exit; # don't actually run this like a script :)
     cd ~/fr1/bed/simpleRepeat
     hgLoadBed fr1 simpleRepeat simpleRepeat.bed \
       -sqlTable=$HOME/src/hg/lib/simpleRepeat.sql
+
 
 
 # MAKE GCPERCENT (6/3/03 KRR)
@@ -999,5 +1001,100 @@ SEQ2_LEN=$BASE/S2.len
         # Sorted
         # Saving bed.tab
         # Loading fr1
+
+# LOAD ENSEMBL GENE PREDICTIONS (IN PROGRESS 2003-08-11 kate)
+# The downloads were provided by Shawn Hoon (shawnh@fugu-sg.org)
+# of the Singapore Institute of Molecular and Cell Biology (IMCB)
+# Fugu genome project, part of the international Fugu Genome Consortium
+# Other contact is: Venkatesh Byrappa (mcbbv@imcb.a-star.edu.sg)
+# In future releases, these annotations will need to be downloaded from Ensembl,
+# using Ensmart
+
+    ssh hgwdev
+    cd /cluster/data/fr1
+    mkdir -p bed/ensembl
+    cd bed/ensembl
+
+    # download and load gene predictions
+    wget http://www.fugu-sg.org/~shawnh/fugu_download/fugu_rubripes_15_2_gtf.tar.gz
+    tar xvfz fugu_rubripes_15_2_gtf.tar.gz
+    cd fugu_rubripes_core_15_2
+    foreach f (*.gtf)
+        echo $f
+        sed 's/^Chr_scaffold/scaffold/' $f >> ../ensGene.scaffold.gtf
+    end
+    cd ..
+    /cluster/bin/i386/liftUp ensGene.gtf /cluster/data/fr1/Un/chrUn.lft warn ensGene.scaffold.gtf
+    /cluster/bin/i386/ldHgGene fr1 ensGene ensGene.gtf
+      # 38510 gene predictions
+
+    # download and load predicted peptides
+    wget http://www.fugu-sg.org/~shawnh/fugu_download/Fugu_rubripes.FUGU2.pep.fa.gz
+    gunzip Fugu_rubripes.FUGU2.pep.fa.gz
+    hgPepPred hg15 generic ensPep *.fa
+
+
+# MAKE DOWNLOADABLE SEQUENCE FILES (IN PROGRESS 2003-08-29 kate)
+    ssh eieio
+    cd /cluster/data/fr1
+
+    # Build the .zip files
+    mkdir jkStuff
+    cp /cluster/data/hg15/jkStuff/zipAll.sh jkStuff
+
+    # Edit jkStuff/zipAll.sh to point to the correct paths.
+
+    ./jkStuff/zipAll.sh >&! zipAll.log
+    tail -f zipAll.log
+
+    # Look at zipAll.log to make sure all file lists look reasonable.  
+    # Check zip file integrity:
+
+    mkdir zip
+    mv *.zip* zip
+    cd zip
+    foreach f (*.zip)
+      unzip -t $f > $f.test
+      tail -1 $f.test
+    end
+    wc -l *.zip.test
+      # 3 chromAgp.zip.test
+      # 3 chromFa.zip.test
+      # 3 chromFaMasked.zip.test
+      # 3 chromOut.zip.test
+      # 3 chromTrf.zip.test
+      # 580 contigFa.zip.test
+      # 580 contigFaMasked.zip.test
+      # 580 contigTrf.zip.test
+      # 3 liftAll.zip.test
+      # 3 mrna.zip.test
+
+    # Copy the .zip files to hgwdev:/usr/local/apache/...  
+    ssh hgwdev
+    cd /cluster/data/fr1/zip
+    set webDir = /usr/local/apache/htdocs/goldenPath/fr1
+    mkdir -p $webDir/bigZips
+    cp -p *.zip $webDir/bigZips
+
+    # Create rmsk database table dump for early users (Victor Solovyev)
+    cd $webDir
+    chmod o+w .
+    mysqldump --user=SECRET --password=SECRET --all --tab=. \
+                                                        fr1 chrUn_rmsk
+    # change ownership (was mysql)
+    mkdir database
+    cp chrUn_rmsk.* database
+    rm chrUn_rmsk.*
+
+    # restore dir permission
+    chmod o-w .
+    unset webDir
+
+    # No RefSeqs for Fugu, so no upstream files.
+
+    # create checksum file
+    md5sum *.zip > md5sum.txt
+
+    # Take a look at bigZips/* update the README.txt
 
 
