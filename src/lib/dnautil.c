@@ -15,7 +15,7 @@
 #include "common.h"
 #include "dnautil.h"
 
-static char const rcsid[] = "$Id: dnautil.c,v 1.28 2004/03/25 07:18:44 baertsch Exp $";
+static char const rcsid[] = "$Id: dnautil.c,v 1.29 2004/04/02 06:34:14 daryl Exp $";
 
 struct codonTable
 /* The dread codon table. */
@@ -326,10 +326,10 @@ ntCompTable['M'] = 'K';
 ntCompTable['K'] = 'M';
 ntCompTable['S'] = 'W';
 ntCompTable['W'] = 'S';
-ntCompTable['V'] = 'N';
-ntCompTable['H'] = 'N';
-ntCompTable['D'] = 'N';
-ntCompTable['B'] = 'N';
+ntCompTable['V'] = 'B';
+ntCompTable['H'] = 'D';
+ntCompTable['D'] = 'H';
+ntCompTable['B'] = 'V';
 ntCompTable['X'] = 'N';
 ntCompTable['r'] = 'y';
 ntCompTable['y'] = 'r';
@@ -337,11 +337,11 @@ ntCompTable['s'] = 'w';
 ntCompTable['w'] = 's';
 ntCompTable['m'] = 'k';
 ntCompTable['k'] = 'm';
-ntCompTable['v'] = 'N';
-ntCompTable['h'] = 'N';
-ntCompTable['d'] = 'N';
-ntCompTable['b'] = 'N';
-ntCompTable['x'] = 'N';
+ntCompTable['v'] = 'b';
+ntCompTable['h'] = 'd';
+ntCompTable['d'] = 'h';
+ntCompTable['b'] = 'v';
+ntCompTable['x'] = 'n';
 ntCompTable['('] = ')';
 ntCompTable[')'] = '(';
 inittedCompTable = TRUE;
