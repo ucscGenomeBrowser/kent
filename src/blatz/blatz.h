@@ -8,6 +8,10 @@
 #include "bzp.h"
 #endif
 
+#ifndef CHAIN_H
+#include "chain.h"
+#endif
+
 struct blatzIndexPos
 /* An array of places where indexed word occurs. */
     {
