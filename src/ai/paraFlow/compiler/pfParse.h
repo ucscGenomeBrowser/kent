@@ -74,13 +74,20 @@ struct pfParse
     {
     struct pfParse *next;	/* Next in list */
     enum pfParseType type;	/* Node type */
+    char *name;			/* Node name - not allocated here */
     struct pfToken *tok;	/* Token associated with node. */
     struct pfParse *parent;	/* Parent statement if any. */
     struct pfParse *children;	/* subparts. */
     struct pfVar *var;		/* Associated variable if any. */
     };
 
-struct pfParse *pfParseFile(char *fileName, struct pfTokenizer *tkz);
+struct pfParse *pfParseNew(enum pfParseType type,
+	struct pfToken *tok, struct pfParse *parent);
+/* Return new parse node.  It's up to caller to fill in
+ * children later. */
+
+struct pfParse *pfParseFile(char *fileName, struct pfTokenizer *tkz, 
+	struct pfParse *parent);
 /* Convert file to parse tree using tkz. */
 
 void pfParseDump(struct pfParse *pp, int level, FILE *f);

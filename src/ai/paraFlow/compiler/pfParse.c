@@ -230,7 +230,7 @@ errAt(tok, "Syntax error #%d", code);
 struct pfParse *pfParseNew(enum pfParseType type,
 	struct pfToken *tok, struct pfParse *parent)
 /* Return new parse node.  It's up to caller to fill in
- * children later, and to make symbol table if needed. */
+ * children later. */
 {
 struct pfParse *pp;
 AllocVar(pp);
@@ -1186,11 +1186,12 @@ while (tok->type == ';')
 return statement;
 }
 
-struct pfParse *pfParseProgram(struct pfToken *tokList, struct pfScope *scope)
+static struct pfParse *pfParseProgram(struct pfToken *tokList, struct pfScope *scope,
+	struct pfParse *parent)
 /* Convert token list to parsed program. */
 {
 struct pfToken *tok = tokList;
-struct pfParse *program = pfParseNew(pptProgram, tokList, NULL);
+struct pfParse *program = pfParseNew(pptModule, tok, parent);
 
 while (tok->type != pftEnd)
     {
@@ -1223,7 +1224,8 @@ for (tok = tokList; tok->type != pftEnd; tok = tok->next)
     }
 }
 
-struct pfParse *pfParseFile(char *fileName, struct pfTokenizer *tkz)
+struct pfParse *pfParseFile(char *fileName, struct pfTokenizer *tkz, 
+	struct pfParse *parent)
 /* Convert file to parse tree using tkz. */
 {
 struct pfToken *tokList = NULL, *tok;
@@ -1260,7 +1262,7 @@ while (--endCount >= 0)
 slReverse(&tokList);
 
 addClasses(tokList, scope);
-program = pfParseProgram(tokList, scope);
+program = pfParseProgram(tokList, scope, parent);
 return program;
 }
 

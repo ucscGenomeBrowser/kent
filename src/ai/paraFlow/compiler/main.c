@@ -50,8 +50,10 @@ void paraFlow(char *fileName)
 {
 struct hash *reservedWords = createReservedWords();
 struct pfTokenizer *tkz = pfTokenizerNew(fileName, reservedWords);
-struct pfParse *pp = pfParseFile(fileName, tkz);
-pfParseDump(pp, 0, stdout);
+struct pfParse *program = pfParseNew(pptProgram, NULL, NULL);
+struct pfParse *pp = pfParseFile(fileName, tkz, program);
+program->children = pp;
+pfParseDump(program, 0, stdout);
 }
 
 int main(int argc, char *argv[])
