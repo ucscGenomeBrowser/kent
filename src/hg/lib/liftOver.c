@@ -11,7 +11,7 @@
 #include "hdb.h"
 #include "liftOverChain.h"
 
-static char const rcsid[] = "$Id: liftOver.c,v 1.5 2004/04/12 23:42:52 kate Exp $";
+static char const rcsid[] = "$Id: liftOver.c,v 1.6 2004/04/14 05:24:42 kate Exp $";
 
 struct chromMap
 /* Remapping information for one (old) chromosome */
@@ -1188,4 +1188,28 @@ if (conn)
     hDisconnectCentral(&conn);
     }
 return list;
+}
+
+char *liftOverChainFile(char *fromDb, char *toDb)
+/* Get filename of liftOver chain */
+{
+struct sqlConnection *conn = hConnectCentral();
+struct liftOverChain *chain = NULL;
+char query[1024];
+char *path = NULL;
+
+if (conn)
+    {
+    safef(query, sizeof(query), 
+            "select * from liftOverChain where fromDb='%s' and toDb='%s'",
+                        fromDb, toDb);
+    chain = liftOverChainLoadByQuery(conn, query);
+    if (chain != NULL)
+        {
+        path = cloneString(chain->path);
+        liftOverChainFree(&chain);
+        }
+    hDisconnectCentral(&conn);
+    }
+return path;
 }
