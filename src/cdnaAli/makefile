@@ -10,3 +10,5 @@ all:
 	cd introns;make
 	cd refineAli;make
 	cd stitchea;make
+	cd sortFilt;make
+	cd aliGlue;make

@@ -50,6 +50,10 @@ struct axt *axtRead(struct lineFile *lf);
 /* Read in next record from .axt file and return it.
  * Returns NULL at EOF. */
 
+struct axt *axtReadWithPos(struct lineFile *lf, off_t *retOffset);
+/* Read next axt, and if retOffset is not-NULL, fill it with
+ * offset of start of axt. */
+
 boolean axtCheck(struct axt *axt, struct lineFile *lf);
 /* Return FALSE if there's a problem with axt. */
 
@@ -97,6 +101,9 @@ struct axtScoreScheme *axtScoreSchemeProteinDefault();
 /* Returns default protein scoring scheme.  This is
  * scaled to be compatible with the blastz one.  Don't
  * axtScoreSchemeFree this. */
+
+struct axtScoreScheme *axtScoreSchemeProteinRead(char *fileName);
+/* read in blosum-like matrix */
 
 struct axtScoreScheme *axtScoreSchemeRead(char *fileName);
 /* Read in scoring scheme from file. Looks like
@@ -152,15 +159,14 @@ void axtBundleFreeList(struct axtBundle **pList);
 void axtBlastOut(struct axtBundle *abList, 
 	int queryIx, boolean isProt, FILE *f, 
 	char *databaseName, int databaseSeqCount, double databaseLetterCount, 
-	boolean isWu, boolean isXml, char *ourId);
+	char *blastType, char *ourId);
 /* Output a bundle of axt's on the same query sequence in blast format.
  * The parameters in detail are:
  *   ab - the list of bundles of axt's. 
  *   f  - output file handle
  *   databaseSeqCount - number of sequences in database
  *   databaseLetterCount - number of bases or aa's in database
- *   isWu - TRUE if want wu-blast rather than blastall format
- *   isXml - TRUE if want xml format
+ *   blastType - blast/wublast/blast8/blast9/xml
  *   ourId - optional (may be NULL) thing to put in header
  */
 

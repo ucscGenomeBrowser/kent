@@ -3,7 +3,7 @@
 #include "hash.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: cmpMap.c,v 1.2 2003/05/06 07:22:15 kate Exp $";
+static char const rcsid[] = "$Id: cmpMap.c,v 1.3 2003/09/05 21:30:42 kent Exp $";
 
 struct clone
 /* A single clone. */
@@ -556,4 +556,5 @@ int main(int argc, char *argv[])
 if (argc != 4)
     usage();
 cmpMap(argv[1], argv[2], argv[3]);
+return 0;
 }

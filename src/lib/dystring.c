@@ -6,13 +6,15 @@
 #include "common.h"
 #include "dystring.h"
 
-static char const rcsid[] = "$Id: dystring.c,v 1.13 2003/06/26 15:06:21 braney Exp $";
+static char const rcsid[] = "$Id: dystring.c,v 1.14 2003/09/06 23:12:11 kent Exp $";
 
 struct dyString *newDyString(int initialBufSize)
 /* Allocate dynamic string with initial buffer size.  (Pass zero for default) */
 {
 struct dyString *ds;
 AllocVar(ds);
+if (initialBufSize == 0)
+    initialBufSize = 512;
 ds->string = needMem(initialBufSize+1);
 ds->bufSize = initialBufSize;
 return ds;

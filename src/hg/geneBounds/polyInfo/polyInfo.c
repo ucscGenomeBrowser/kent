@@ -2,14 +2,19 @@
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"
-#include "cheapcgi.h"
+#include "options.h"
 #include "psl.h"
 #include "fa.h"
 #include "nib.h"
 #include "jksql.h"
 #include "estOrientInfo.h"
 
-static char const rcsid[] = "$Id: polyInfo.c,v 1.9 2003/08/29 00:22:49 markd Exp $";
+static char const rcsid[] = "$Id: polyInfo.c,v 1.10 2003/09/04 23:56:13 markd Exp $";
+
+/* command line option specifications */
+static struct optionSpec optionSpecs[] = {
+    {NULL, 0}
+};
 
 void usage()
 /* Explain usage and exit. */
@@ -187,12 +192,8 @@ ei->signalPos = findSignalPos(psl, est, ei->sizePolyA, signals[0]);
 ei->revSignalPos = findSignalPos(psl, revEst, ei->revSizePolyA, signals[0]);
 if (ei->signalPos == 0 && ei->revSignalPos == 0)
     {
+    ei->signalPos = findSignalPos(psl, est, ei->sizePolyA, signals[1]);
     ei->revSignalPos = findSignalPos(psl, revEst, ei->revSizePolyA, signals[1]);
-    if (ei->revSignalPos == 0)
-	{
-	reverseComplement(est->dna, est->size);
-	ei->signalPos = findSignalPos(psl, est, ei->sizePolyA, signals[1]);
-	}
     }
 dnaSeqFree(&revEst);
 }
@@ -236,7 +237,7 @@ while (faSpeedReadNext(lf, &est.dna, &est.size, &est.name))
 int main(int argc, char *argv[])
 /* Process command line. */
 {
-cgiSpoof(&argc, argv);
+optionInit(&argc, argv, optionSpecs);
 if (argc != 5)
     usage();
 polyInfo(argv[1], argv[2], argv[3], argv[4]);

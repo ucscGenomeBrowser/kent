@@ -1,9 +1,11 @@
 /* ooc.c - Stuff to handle overused N-mers (tiles) in genome
  * indexing schemes. */
-/* Copyright 2001-2002 Jim Kent.  All rights reserved. */
+/* Copyright 2001-2003 Jim Kent.  All rights reserved. */
 #include "common.h"
 #include "ooc.h"
 #include "sig.h"
+
+static char const rcsid[] = "$Id: ooc.c,v 1.2 2003/09/09 21:44:02 kent Exp $";
 
 void oocMaskCounts(char *oocFile, bits32 *tileCounts, int tileSize, bits32 maxPat)
 /* Set items of tileCounts to maxPat if they are in oocFile. 

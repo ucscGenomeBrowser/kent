@@ -11,7 +11,7 @@
 #include "binRange.h"
 #include "rbTree.h"
 
-static char const rcsid[] = "$Id: hgClusterGenes.c,v 1.3 2003/08/28 04:29:11 kent Exp $";
+static char const rcsid[] = "$Id: hgClusterGenes.c,v 1.4 2003/09/08 09:02:56 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -285,8 +285,10 @@ dyStringPrintf(dy,
     " chromEnd int not null,\n"
     " clusterId int unsigned not null,\n"
     " transcript varchar(255) not null,\n"
+    " protein varchar(255) not null,\n"
     " UNIQUE(clusterId),\n"
-    " INDEX(transcript(%d)))\n"
+    " INDEX(transcript(%d)),\n"
+    " INDEX(protein(8)))\n"
     , tableName, longestName);
 sqlRemakeTable(conn, tableName, dy->string);
 dyStringFree(&dy);
@@ -304,9 +306,10 @@ struct sqlResult *sr;
 char **row;
 int rowOffset;
 struct genePred *gp, *gpList = NULL;
-char extraWhere[64];
+char extraWhere[64], query[256];
 struct cluster *clusterList = NULL, *cluster;
 int nameLen;
+struct hash *protHash = newHash(16);
 
 if (verbose >= 1)
     printf("%s %c\n", chrom, strand);
@@ -321,6 +324,15 @@ while ((row = sqlNextRow(sr)) != NULL)
         longestName = nameLen;
     ++totalGeneCount;
     }
+sqlFreeResult(&sr);
+
+/* Build hash to map between transcript names and protein IDs. */
+safef(query, sizeof(query), "select name, proteinId from %s", geneTable);
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    hashAdd(protHash, row[0], cloneString(row[1]));
+sqlFreeResult(&sr);
+
 slReverse(&gpList);
 clusterList = makeCluster(gpList, hChromSize(chrom));
 for (cluster = clusterList; cluster != NULL; cluster = cluster->next)
@@ -341,11 +353,13 @@ for (cluster = clusterList; cluster != NULL; cluster = cluster->next)
 	    cannonicalSize = size;
 	    }
 	}
-    fprintf(canFile, "%s\t%d\t%d\t%d\t%s\n", 
-    	chrom, cluster->start, cluster->end, clusterId, cannonical->name);
+    fprintf(canFile, "%s\t%d\t%d\t%d\t%s\t%s\n", 
+    	chrom, cluster->start, cluster->end, clusterId, cannonical->name,
+	(char *)hashMustFindVal(protHash, cannonical->name));
     ++totalClusterCount;
     }
 genePredFreeList(&gpList);
+freeHashAndVals(&protHash);
 }
 
 void hgClusterGenes(char *database, char *geneTable, char *clusterTable,

@@ -5,7 +5,7 @@
 #include "hCommon.h"
 #include "psl.h"
 
-static char const rcsid[] = "$Id: g2gOverlap.c,v 1.3 2003/05/06 07:22:17 kate Exp $";
+static char const rcsid[] = "$Id: g2gOverlap.c,v 1.4 2003/09/05 21:30:42 kent Exp $";
 
 int maxTail = 200;	/* Maximum length of tail. */
 float maxBad = 0.01;	/* Maximum bad ratio. */
@@ -178,7 +178,7 @@ struct cloneCenter *cc;
 struct lineFile *lf = pslFileOpen(sourceName);
 FILE *longFile = NULL, *shortFile = NULL;
 struct hash *cloneHash = newHash(16);
-int i;
+int i = 0;
 
 longFile = mustOpen(longName, "w");
 while ((cc = nextCloneCenter(lf, cloneHash)) != NULL)

@@ -12,7 +12,7 @@
 #include "hui.h"
 #include "sample.h"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.65 2003/07/18 23:00:40 weber Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.66 2003/09/09 00:39:04 markd Exp $";
 
 struct cart *cart;	/* Cookie cart with UI settings */
 char *database;		/* Current database. */
@@ -145,6 +145,17 @@ cgiMakeRadioButton("exprssn.color", "rg", sameString(col, "rg"));
 printf(" red/green ");
 cgiMakeRadioButton("exprssn.color", "rb", sameString(col, "rb"));
 printf(" red/blue ");
+}
+
+void refGeneUI(struct trackDb *tdb)
+/* Put up refGene-specifc controls */
+{
+char *refGeneLabel = cartUsualString(cart, "refGene.label", "gene");
+printf("<B>Label:</B> ");
+radioButton("refGene.label", refGeneLabel, "gene");
+radioButton("refGene.label", refGeneLabel, "accession");
+radioButton("refGene.label", refGeneLabel, "both");
+radioButton("refGene.label", refGeneLabel, "none");
 }
 
 void oneMrnaFilterUi(struct controlGrid *cg, char *text, char *var)
@@ -442,6 +453,8 @@ void specificUi(struct trackDb *tdb)
 		nci60Ui(tdb);
 	else if (sameString(track, "cghNci60"))
 		cghNci60Ui(tdb);
+	else if (sameString(track, "refGene"))
+		refGeneUI(tdb);
 	else if (sameString(track, "mrna"))
 		mrnaUi(tdb, FALSE);
 	else if (sameString(track, "est"))

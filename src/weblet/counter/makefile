@@ -8,4 +8,4 @@ counter: $(O)
 	mv a.out counter.exe
 	chmod a+rx counter.exe
 	strip counter.exe
-	mv counter.exe ../../cgi-bin
+	mv counter.exe ${CGI_BIN}-${USER}

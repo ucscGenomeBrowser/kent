@@ -129,9 +129,26 @@ boolean cartCgiUsualBoolean(struct cart *cart, char *var, boolean usual);
 void cartSetBoolean(struct cart *cart, char *var, boolean val);
 /* Set boolean value. */
 
-boolean cartCgiBoolean(struct cart *cart, char *var);
-/* Return boolean variable from CGI.  Remove it from cart.
- * CGI booleans alas do not store cleanly in cart. */
+void cartMakeTextVar(struct cart *cart, char *var, char *defaultVal, int charSize);
+/* Make a text control filled with value from cart if it exists or
+ * default value otherwise.  If charSize is zero it's calculated to fit
+ * current value.  Default value may be NULL. */
+
+void cartMakeIntVar(struct cart *cart, char *var, int defaultVal, int maxDigits);
+/* Make a text control filled with integer value - from cart if available
+ * otherwise default.  */
+
+void cartMakeDoubleVar(struct cart *cart, char *var, double defaultVal, int maxDigits);
+/* Make a text control filled with integer value - from cart if available
+ * otherwise default.  */
+
+void cartMakeCheckBox(struct cart *cart, char *var, boolean defaultVal);
+/* Make a check box filled with value from cart if it exists or
+ * default value otherwise.  */
+
+void cartMakeRadioButton(struct cart *cart, char *var, char *val, char *defaultVal);
+/* Make a radio button that is selected if cart variable exists and matches
+ * value (or value matches default val if cart var doesn't exist). */
 
 void cartSaveSession(struct cart *cart);
 /* Save session in a hidden variable. This needs to be called
@@ -139,6 +156,10 @@ void cartSaveSession(struct cart *cart);
 
 void cartDump(struct cart *cart);
 /* Dump contents of cart. */
+
+struct hashEl *cartFindPrefix(struct cart *cart, char *prefix);
+/* Return list of name/val pairs from cart where name starts with 
+ * prefix.  Free when done with hashElFreeList. */
 
 struct hashEl *cartFindLike(struct cart *cart, char *wildCard);
 /* Return list of name/val pairs from cart where name matches 

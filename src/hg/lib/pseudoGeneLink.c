@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "pseudoGeneLink.h"
 
-static char const rcsid[] = "$Id: pseudoGeneLink.c,v 1.2 2003/08/04 10:20:36 baertsch Exp $";
+static char const rcsid[] = "$Id: pseudoGeneLink.c,v 1.3 2003/09/06 19:46:39 baertsch Exp $";
 
 void pseudoGeneLinkStaticLoad(char **row, struct pseudoGeneLink *ret)
 /* Load a row from pseudoGeneLink table into ret.  The contents of ret will
@@ -29,6 +29,7 @@ ret->score2 = sqlUnsigned(row[8]);
 ret->score3 = sqlUnsigned(row[9]);
 ret->chainId = sqlUnsigned(row[10]);
 ret->strand = row[11];
+ret->polyA = sqlUnsigned(row[12]);
 }
 
 struct pseudoGeneLink *pseudoGeneLinkLoad(char **row)
@@ -52,6 +53,7 @@ ret->score2 = sqlUnsigned(row[8]);
 ret->score3 = sqlUnsigned(row[9]);
 ret->chainId = sqlUnsigned(row[10]);
 ret->strand = cloneString(row[11]);
+ret->polyA = sqlUnsigned(row[12]);
 return ret;
 }
 
@@ -61,7 +63,7 @@ struct pseudoGeneLink *pseudoGeneLinkLoadAll(char *fileName)
 {
 struct pseudoGeneLink *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[12];
+char *row[13];
 
 while (lineFileRow(lf, row))
     {
@@ -79,7 +81,7 @@ struct pseudoGeneLink *pseudoGeneLinkLoadAllByChar(char *fileName, char chopper)
 {
 struct pseudoGeneLink *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[12];
+char *row[13];
 
 while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
     {
@@ -113,6 +115,7 @@ ret->score2 = sqlUnsignedComma(&s);
 ret->score3 = sqlUnsignedComma(&s);
 ret->chainId = sqlUnsignedComma(&s);
 ret->strand = sqlStringComma(&s);
+ret->polyA = sqlUnsignedComma(&s);
 *pS = s;
 return ret;
 }
@@ -185,6 +188,8 @@ fputc(sep,f);
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->strand);
 if (sep == ',') fputc('"',f);
+fputc(sep,f);
+fprintf(f, "%u", el->polyA);
 fputc(lastSep,f);
 }
 

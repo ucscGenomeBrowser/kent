@@ -1,8 +1,3 @@
-/*****************************************************************************
- * Copyright (C) 2000 Jim Kent.  This source code may be freely used         *
- * for personal, academic, and non-profit purposes.  Commercial use          *
- * permitted only by explicit agreement with Jim Kent (jim_kent@pacbell.net) *
- *****************************************************************************/
 /* crudeali.c - Files for doing fast blast-style crude alignment. 
  * This has two modes - a 16-base at a time and a 6 base at a time
  * which basically is for cDNA alignments and genomic/genomic 
@@ -11,12 +6,15 @@
  * positions" masked out.  It ends up making things more
  * sensitive, and, fortunately, the whole thing still fits in
  * a single 16 bit word. */
+/* Copyright 2000-2003 Jim Kent.  All rights reserved. */
 
 #include "common.h"
 #include "dnautil.h"
 #include "nt4.h"
 #include "dnaseq.h"
 #include "crudeali.h"
+
+static char const rcsid[] = "$Id: crudeali.c,v 1.2 2003/09/09 21:44:02 kent Exp $";
 
 #define maxTileSize 16
 

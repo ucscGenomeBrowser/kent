@@ -6,7 +6,7 @@ s mm3.chr4    1408172 3 - 152921959 TTT
 s rn3.chr5    1428804 3 - 173106704 TTT
 
 a score=5860.0
-s hg15.chr22 14436992 29 +  49476972 ttccttgctgtgtaaccctgcgtgagctt
+s hg15.chr21 14436992 29 +  49476972 ttccttgctgtgtaaccctgcgtgagctt
 s mm3.chr4    1408172 29 - 152921959 TTCCCTGCTGTGTGAC-CTGCCAGAGCCT
 s rn3.chr5    1428804 29 - 173106704 TTCCCTGCTGTGCGACCCTGTAAGAGCTT
 #                                    .... .......  .. ...   .... .

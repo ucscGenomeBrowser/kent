@@ -11,7 +11,7 @@
 #include "hgNear.h"
 #include "cheapcgi.h"
 
-static char const rcsid[] = "$Id: expRatio.c,v 1.16 2003/09/03 23:17:28 kent Exp $";
+static char const rcsid[] = "$Id: expRatio.c,v 1.18 2003/09/06 18:55:09 kent Exp $";
 
 
 static boolean loadExpVals(struct sqlConnection *conn,
@@ -339,8 +339,8 @@ hPrintf("<TD>");
 hPrintf("</TD>");
 }
 
-void expRatioSearchControls(struct column *col, struct sqlConnection *conn)
-/* Print out controls for advanced search. */
+void expRatioFilterControls(struct column *col, struct sqlConnection *conn)
+/* Print out controls for advanced filter. */
 {
 char lVarName[16];
 int i, numExpts = col->representativeCount;
@@ -360,18 +360,18 @@ for (i=0; i<numExpts; ++i)
 	hPrintf("<TD>%s</TD>", experiments[i]);
 	safef(lVarName, sizeof(lVarName), "min%d", ix);
 	hPrintf("<TD>");
-	advSearchRemakeTextVar(col, lVarName, 8);
+	advFilterRemakeTextVar(col, lVarName, 8);
 	hPrintf("</TD>");
 	safef(lVarName, sizeof(lVarName), "max%d", ix);
 	hPrintf("<TD>");
-	advSearchRemakeTextVar(col, lVarName, 8);
+	advFilterRemakeTextVar(col, lVarName, 8);
 	hPrintf("</TD>");
 	}
     hPrintf("</TR>");
     }
 hPrintf("</TABLE>\n");
 hPrintf("Include if ");
-advSearchAnyAllMenu(col, "logic", FALSE);
+advFilterAnyAllMenu(col, "logic", FALSE);
 hPrintf(" tissues meet minimum/maximum criteria.");
 }
 
@@ -429,19 +429,19 @@ static char *expLimitString(struct column *col, int repIx, boolean isMax)
 char varName[16];
 static char *varType[2] = {"min", "max"};
 safef(varName, sizeof(varName), "%s%d", varType[isMax], col->representatives[repIx]);
-return advSearchVal(col, varName);
+return advFilterVal(col, varName);
 }
 
-struct genePos *expRatioAdvancedSearch(struct column *col, 
+struct genePos *expRatioAdvFilter(struct column *col, 
 	struct sqlConnection *conn, struct genePos *list)
-/* Do advanced search on position. */
+/* Do advanced filter on position. */
 {
-if (advSearchColAnySet(col))
+if (advFilterColAnySet(col))
     {
     struct hash *expHash = expValHash(conn, col->posTable);
     struct hash *nameExpHash = getNameExpHash(conn, col->table, "name", "value", expHash);
     int i, numExpts = col->representativeCount;
-    boolean orLogic = advSearchOrLogic(col, "logic", FALSE);
+    boolean orLogic = advFilterOrLogic(col, "logic", FALSE);
     int isMax;
     int repIx;
     char *varValString;
@@ -598,6 +598,6 @@ col->cellVal = expRatioCellVal;
 col->cellPrint = expRatioCellPrint;
 col->labelPrint = expRatioLabelPrint;
 col->configControls = expRatioConfigControls;
-col->searchControls = expRatioSearchControls;
-col->advancedSearch = expRatioAdvancedSearch;
+col->filterControls = expRatioFilterControls;
+col->advFilter = expRatioAdvFilter;
 }

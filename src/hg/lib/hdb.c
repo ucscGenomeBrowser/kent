@@ -25,7 +25,7 @@
 #include "scoredRef.h"
 #include "maf.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.135 2003/09/03 23:00:11 kent Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.136 2003/09/10 19:20:10 braney Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
@@ -1212,18 +1212,41 @@ while ((row = sqlNextRow(sr)) != NULL)
 		bedItem->blockSizes[i] -= bedItem->chromStarts[i];
 		}
 	    }
-	if (sameString("tStarts", hti->startsField) && (tStrand == '-'))
+	if (sameString("tStarts", hti->startsField)) // psls
 	    {
-	    // psl: if target strand is '-', flip the coords.
-	    // (this is the target part of pslRcBoth from src/lib/psl.c)
-	    int tSize = atoi(row[10]);
-	    for (i=0; i<bedItem->blockCount; ++i)
+	    if (tStrand == '-')
 		{
-		bedItem->chromStarts[i] = tSize - (bedItem->chromStarts[i] +
-						   bedItem->blockSizes[i]);
+		int tSize = atoi(row[10]);
+		// if protein then blockSizes are in protein space
+		if (bedItem->chromStart == 
+			tSize - (3*bedItem->blockSizes[bedItem->blockCount - 1]  + 
+			bedItem->chromStarts[bedItem->blockCount - 1]))
+		    {
+		    for (i=0; i<bedItem->blockCount; ++i)
+			bedItem->blockSizes[i] *= 3;
+		    }
+
+		// psl: if target strand is '-', flip the coords.
+		// (this is the target part of pslRcBoth from src/lib/psl.c)
+		for (i=0; i<bedItem->blockCount; ++i)
+		    {
+		    bedItem->chromStarts[i] = tSize - (bedItem->chromStarts[i] +
+						       bedItem->blockSizes[i]);
+		    }
+		reverseInts(bedItem->chromStarts, bedItem->blockCount);
+		reverseInts(bedItem->blockSizes, bedItem->blockCount);
 		}
-	    reverseInts(bedItem->chromStarts, bedItem->blockCount);
-	    reverseInts(bedItem->blockSizes, bedItem->blockCount);
+	    else
+		{
+		// if protein then blockSizes are in protein space
+		if (bedItem->chromEnd == 
+			3*bedItem->blockSizes[bedItem->blockCount - 1]  + 
+			bedItem->chromStarts[bedItem->blockCount - 1])
+		    {
+		    for (i=0; i<bedItem->blockCount; ++i)
+			bedItem->blockSizes[i] *= 3;
+		    }
+		}
 	    assert(bedItem->chromStart == bedItem->chromStarts[0]);
 	    }
 	if (! (sameString("chromStarts", hti->startsField) ||

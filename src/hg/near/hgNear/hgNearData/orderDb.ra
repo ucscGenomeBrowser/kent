@@ -1,0 +1,34 @@
+name knownExp
+shortLabel Expression
+longLabel Difference in expression with selected gene
+type pair knownExpDistance query target distance 1
+
+name blastp
+shortLabel Protein Homology
+longLabel blastp E value with selected gene
+type pair knownBlastTab query target bitScore -1 
+
+name geneDistance
+shortLabel Gene Distance
+longLabel Distance in base pairs from selected gene
+type geneDistance
+
+name nameSimilarity
+shortLabel Name Similarity
+longLabel How many characters at start of name match selected gene name
+type nameSimilarity kgXref kgID geneSymbol
+
+name goSimilarity
+shortLabel GO Similarity
+longLabel Number of shared Gene Ontology terms
+type goSimilarity
+
+name abc
+shortLabel Name
+longLabel Alphabetical order of name
+type abc kgXref kgID geneSymbol
+
+name genomePos
+shortLabel Chromosome
+longLabel Ordered by chromosome position
+type genomePos

@@ -1,8 +1,4 @@
-/*****************************************************************************
- * Copyright (C) 2000 Jim Kent.  This source code may be freely used         *
- * for personal, academic, and non-profit purposes.  Commercial use          *
- * permitted only by explicit agreement with Jim Kent (jim_kent@pacbell.net) *
- *****************************************************************************/
+/* Copyright 1999-2003 Jim Kent.  All rights reserved. */
 /* fuzzyFind - searches a large DNA sequence (the haystack) for 
  * a smaller DNA sequence (the needle).  What makes this tricky
  * is that the match need not be exact.
@@ -44,6 +40,8 @@
  * scanned for.
  */
 
+static char const rcsid[] = "$Id: fuzzyFind.c,v 1.13 2003/09/09 21:44:02 kent Exp $";
+
 #include "common.h"
 #include "dnautil.h"
 #include "localmem.h"
@@ -71,13 +69,6 @@
  */
 
 /* settable parameter, defaults to constant value */
-int ffIntronMax = ffIntronMaxDefault;
-
-void setFfIntronMax(int value)
-{
-    ffIntronMax = value;
-}
-
 static jmp_buf ffRecover;
 
 static void ffAbort()

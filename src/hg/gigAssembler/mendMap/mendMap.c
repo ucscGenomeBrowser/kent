@@ -15,7 +15,7 @@
 #include "psl.h"
 #include "qaSeq.h"
 
-static char const rcsid[] = "$Id: mendMap.c,v 1.9 2003/05/06 07:22:26 kate Exp $";
+static char const rcsid[] = "$Id: mendMap.c,v 1.10 2003/09/05 21:30:43 kent Exp $";
 
 int version = 23;       /* Current version number. */
 int maxMapDeviation = 700000;   /* No map deviations further than this allowed. */
@@ -2684,7 +2684,7 @@ errAbort("Internal error. Couldn't find end of %s", clone->name);
 void setEnclosedPos(struct dlList *bargeList, struct hash *ocpHash, struct hash *bepHash)
 /* Set mmPos field of all enclosed clones. */
 {
-struct dlNode *bNode, *eNode, *nextEnode;
+struct dlNode *bNode, *eNode, *nextEnode = NULL;
 int lastPos = 0;
 struct barge *barge;
 struct cloneEnd *ce, *nextKnownCe, *endCe;
@@ -3016,12 +3016,12 @@ status("ordered barges\n");
 sprintf(fileName, "%s/mmEnds.%d", contigDir, version);
 status("Writing barges to %s\n", fileName);
 writeEndsFile(fileName, bargeList);
-sprintf(fileName, "%s/mmEnds", contigDir, version);
+sprintf(fileName, "%s/mmEnds", contigDir);
 writeEndsFile(fileName, bargeList);
 
 sprintf(fileName, "%s/mmBarge.%d", contigDir, version);
 saveBargeFile(fileName, contigName, bargeList, ocpHash, cloneHash, bepHash);
-sprintf(fileName, "%s/mmBarge", contigDir, version);
+sprintf(fileName, "%s/mmBarge", contigDir);
 saveBargeFile(fileName, contigName, bargeList, ocpHash, cloneHash, bepHash);
 
 sprintf(fileName, "%s/info.mm", contigDir);

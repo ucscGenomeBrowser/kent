@@ -1,5 +1,5 @@
 /* blat - Standalone BLAT fast sequence search command line tool. */
-/* Copyright 2001-2002 Jim Kent.  All rights reserved. */
+/* Copyright 2001-2003 Jim Kent.  All rights reserved. */
 #include "common.h"
 #include "memalloc.h"
 #include "linefile.h"
@@ -16,6 +16,8 @@
 #include "genoFind.h"
 #include "trans3.h"
 #include "repMask.h"
+
+static char const rcsid[] = "$Id: blat.c,v 1.83 2003/09/09 21:44:02 kent Exp $";
 
 /* Variables shared with other modules.  Set in this module, read only
  * elsewhere. */
@@ -131,8 +133,11 @@ printf(
   "                   pslx - Tab separated format with sequence\n"
   "                   axt - blastz-associated axt format\n"
   "                   maf - multiz-associated maf format\n"
+  "                   sim4 - similar to sim4 format\n"
   "                   wublast - similar to wublast format\n"
   "                   blast - similar to NCBI blast format\n"
+  "                   blast8- NCBI blast tabular format\n"
+  "                   blast9 - NCBI blast tabular format with comments\n"
   "   -fine       For high quality mRNAs look harder for small initial and\n"
   "               terminal exons.  Not recommended for ESTs\n"
   "   -maxIntron=N  Sets maximum intron size. Default is %d\n"

@@ -2821,17 +2821,18 @@ SEQ2_LEN=$BASE/S2.len
     cp -r $base/axtChrom .
 
     # translate sorted axt files into psl
+    # (just for featureBits alignment quality check)
+    # 2003-09-04 kate
+    ssh eieio
+    cd /cluster/data/hg15/bed/blastz.rn3
     mkdir -p pslChrom
+    set tbl="blastzRn3"
     foreach f (axtChrom/chr*.axt)
+      echo $c
       set c=$f:t:r
       /cluster/bin/i386/axtToPsl $f S1.len S2.len pslChrom/${c}_${tbl}.psl
     end
-    
-    # load these blastz results
-    # NOTE: skipped this step -- do Best and/or Chain before loading
-    # ssh hgwdev
-    # cd /cluster/data/hg15/bed/blastz.rn3/pslChrom
-    # /cluster/bin/i386/hgLoadPsl hg15 chr*_*.psl
+    #   Takes about 20 minutes
 
 
 # BEST RAT RN3 ALIGNMENTS (DONE 2003-07-26 kate)
@@ -3435,9 +3436,13 @@ rm -rf out
     mkdir $multizDir
     cd /cluster/data/hg15
     forEachChrom
+        axtSort blastz.mm3/axtNet300/ tmp
+        mv tmp blastz.mm3/axtNet300
         axtToMaf blastz.mm3/axtNet300 /cluster/data/hg15/chrom.sizes /cluster/data/mm3/chrom.sizes axtNet300/$i.mm3.maf -tPrefix=hg15. -qPrefix=mm3. 
-        axtToMaf blastz.rn3/axtNet300 /cluster/data/hg15/chrom.sizes /cluster/data/mm3/chrom.sizes axtNet300/$i.rn3.maf -tPrefix=hg15. -qPrefix=rn3. 
-        /cluster/bin/penn/humor.v4 axtNet300/$i.mm3.maf axtNet300/$i.rn3.maf $multizDir/$i.hmr.axtNet300.maf
+        axtSort blastz.rn3/axtNet300/ tmp
+        mv tmp blastz.rn3/axtNet300
+        axtToMaf blastz.rn3/axtNet300 /cluster/data/hg15/chrom.sizes /cluster/data/rn3/chrom.sizes axtNet300/$i.rn3.maf -tPrefix=hg15. -qPrefix=rn3. 
+        /cluster/bin/penn/humor.v4 axtNet300/$i.mm3.maf axtNet300/$i.rn3.maf > $multizDir/$i.hmr.axtNet300.maf
     end
 run on kkr9 cluster:
 CPU time in finished jobs:      18977s     316.28m     5.27h    0.22d  0.001 y

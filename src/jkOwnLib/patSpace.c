@@ -1,15 +1,13 @@
-/*****************************************************************************
- * Copyright (C) 2000 Jim Kent.  This source code may be freely used         *
- * for personal, academic, and non-profit purposes.  Commercial use          *
- * permitted only by explicit agreement with Jim Kent (jim_kent@pacbell.net) *
- *****************************************************************************/
 /* patSpace - a homology finding algorithm that occurs mostly in 
  * pattern space (as opposed to offset space). */
+/* Copyright 1999-2003 Jim Kent.  All rights reserved. */
 #include "common.h"
 #include "portable.h"
 #include "dnaseq.h"
 #include "ooc.h"
 #include "patSpace.h"
+
+static char const rcsid[] = "$Id: patSpace.c,v 1.2 2003/09/09 21:44:02 kent Exp $";
 
 #define blockSize (256)
 

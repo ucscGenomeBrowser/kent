@@ -1229,8 +1229,10 @@ SEQ2_LEN=$BASE/S2.len
 
     ssh kk
     cd ~hg16/bed/blastz.mm3
+    cd /cluster/data/hg16/bed/blastz.mm3
 
     # source the DEF file to establish environment for following commands
+    bash
     . ./DEF
 
     # follow the next set of directions slavishly
@@ -1411,6 +1413,233 @@ SEQ2_LEN=$BASE/S2.len
 #	type psl xeno mm3
 #	otherDb mm3
     # remake trackDb tables
+
+    # redo chr1 (featureBits shows 7% lower aligments than hg16)
+    # (DONE 2003-09-09 kate)
+    # blastz run ended prematurely -- .tmp files leftover, not moved to .out's 
+    ssh kk
+    cd /cluster/data/hg16/bed/blastz.mm3
+    bash
+    . ./DEF
+    cd $BASE
+    mkdir run.chr1
+    # create job list for human chr1, with parasol output file validation
+    ~angie/hummus/make-joblist $DEF | \
+        /cluster/bin/scripts/blastz-clusterjob.pl $BASE | \
+            grep 'run chr1.nib' | \
+            sed -e 's#^#/cluster/bin/penn/#'  \
+                > $BASE/run.chr1/spec
+    grep 'chr1/' $BASE/xdir.sh > $BASE/xdir.chr1.sh
+    mv raw/chr1 raw/chr1.old
+    mkdir raw/chr1
+    sh xdir.chr1.sh
+    cd run.chr1
+    para create spec
+	# 2925 jobs
+    para try
+    para check
+    para push
+    # ... etc ...
+    ssh eieio
+    bash
+    cd /cluster/data/hg16/bed/blastz.mm3
+    . DEF
+    mv lav/chr1 lav/chr1.old
+    mkdir run.chr1.lav
+    /cluster/bin/scripts/blastz-make-out2lav $DEF $BASE \
+        | grep 'lav chr1 ' > run.chr1.lav/jobList
+    cd run.chr1.lav
+    wc -l jobList
+       # 25 jobs 
+    head jobList
+    # run on cluster
+    ssh kk
+    cd /cluster/data/hg16/bed/blastz.mm3/run.chr1.lav
+    para create jobList
+    para try
+    para check
+    para push
+    # etc.
+    
+    # convert lav files to chrom axt
+    /cluster/bin/scripts/blastz-chromlav2axt /cluster/data/hg16/bed/blastz.mm3/lav/chr1 /cluster/data/hg16/bed/blastz.mm3/axtChrom/chr1.axt /cluster/data/hg16/nib /cluster/data/mm3.RM030619/mixedNib
+
+    # translate sorted axt files into psl
+    ssh eieio
+    cd /cluster/data/hg16/bed/blastz.mm3
+    mv pslChrom/chr1_blastzMm3.psl pslChrom/chr1_blastzMm3.psl.old
+    /cluster/bin/i386/axtToPsl axtChrom/chr1.axt S1.len S2.len \
+                pslChrom/chr1_blastzMm3.psl
+    # reload database table
+    hgsql hg16 -e "drop table chr1_blastzMm3"
+    ssh hgwdev
+    cd /cluster/data/hg16/bed/blastz.mm3/pslChrom
+    /cluster/bin/i386/hgLoadPsl hg16 chr1_blastzMm3.psl
+
+    # make chain
+    cd /cluster/data/hg16/bed/blastz.mm3/axtChain/run1
+    mv chain/chr1.chain chain/chr1.chain.old
+    mv out/chr1.out out/chr1.out.old
+    axtFilter -notQ=chrUn_random /cluster/data/hg16/bed/blastz.mm3/axtChrom/chr1.axt | axtChain stdin \
+	/cluster/data/hg16/nib \
+	/cluster/data/mm3/mixedNib chain/chr1.chain > out/chr1.out 
+
+    # sort chains
+    ssh eieio
+    cd /cluster/data/hg16/bed/blastz.mm3/axtChain
+    mv all.chain all.chain.old
+    chainMergeSort run1/chain/*.chain > all.chain
+    mv chain chain.old
+    mkdir chain
+    chainSplit chain all.chain
+
+    # reload chr1 chain into database
+    ssh hgwdev
+    cd /cluster/data/hg16/bed/blastz.mm3/axtChain/chain
+    hgLoadChain hg16 chr1_chainMm3 chr1.chain 
+        # Loading 510456 chains into hg16.chr1_chainMm3
+
+    # make net
+    ssh eieio
+    cd /cluster/data/hg16/bed/blastz.mm3/axtChain
+    cd chain
+    /cluster/bin/i386/chainPreNet chr1.chain /cluster/data/hg16/chrom.sizes \
+                        /cluster/data/mm3/chrom.sizes ../preNet/chr1.chain
+    cd ..
+    cd preNet
+    mv ../n1/chr1.net ../n1/chr1.net.old
+    /cluster/bin/i386/chainNet chr1.chain -minSpace=1 \
+                /cluster/data/hg16/chrom.sizes \
+                /cluster/data/mm3/chrom.sizes ../n1/chr1.net /dev/null
+    cd ..
+    cp hNoClass.net hNoClass.net.old
+    cat n1/*.net | /cluster/bin/i386/netSyntenic stdin hNoClass.net
+
+    ssh hgwdev
+    cd /cluster/data/hg16/bed/blastz.mm3/axtChain
+    netClass hNoClass.net hg16 mm3 mouse.net \
+	-tNewR=/cluster/bluearc/scratch/hg/gs.17/build34/linSpecRep.notInMouse \
+	-qNewR=/cluster/bluearc/mm3.RM030619/linSpecRep.notInHuman
+
+    ssh eieio
+    cd /cluster/data/hg16/bed/blastz.mm3/axtChain
+    # rm -r n1 hNoClass.net
+
+    # Make a 'syntenic' subset of these with
+    mv mouseSyn.net mouseSyn.net.old
+    netFilter -syn mouse.net > mouseSyn.net
+
+    # Load the nets into database
+    ssh hgwdev
+    cd /cluster/data/hg16/bed/blastz.mm3/axtChain
+    netFilter -minGap=10 mouse.net |  hgLoadNet hg16 netMm3 stdin
+    netFilter -minGap=10 mouseSyn.net | hgLoadNet hg16 syntenyNetMm3 stdin
+
+    # make tight subset of net
+    ssh eieio
+    cd /cluster/data/hg16/bed/blastz.mm3/axtChain
+    mv ../axtNet/chr1.axt ../axtNet/chr1.old.axt
+    netToAxt mouseNet/chr1.net chain/chr1.chain /cluster/data/hg16/nib \
+                /cluster/data/mm3.RM030619/mixedNib ../axtNet/chr1.axt
+    mv ../axtTight/chr1.axt ../axtTight/chr1.axt.old
+    cd ../axtNet
+    subsetAxt chr1.axt ../axtTight/chr1.axt \
+                /cluster/data/subsetAxt/coding.mat 3400
+
+    # translate to psl
+    cd ../axtTight
+    axtToPsl chr1.axt ../S1.len ../S2.len ../pslTight/chr1_blastzTightMm3.psl
+
+    # Load table into database
+    ssh hgwdev
+    cd /cluster/data/hg16/bed/blastz.mm3/pslTight
+    hgLoadPsl hg16 chr1_blastzTightMm3.psl
+        # $ featureBits -chrom=chr1 hg16 chr1_blastzTightMm3.psl
+        # 14052627 bases of 221562941 (6.342%) in intersection
+        # hg15: 13990547 bases of 218713898 (6.397%) in intersection
+
+    # make axtNet300
+    ssh eieio
+    cd /cluster/data/hg16/bed/blastz.mm3/axtChain
+    netSplit mouse.net mouseNet
+    mv ../axtNet300/chr1.axt ../axtNet300/chr1.axt.old
+    netToAxt -maxGap=300 mouseNet/chr1.net chain/chr1.chain /cluster/data/hg16/nib /cluster/data/mm3.RM030619/mixedNib ../axtNet300/chr1.axt
+
+    # create 2-way maf file for humor alignment
+    set multizDir = /cluster/data/hg16/bed/humor.2003-09-02
+    cd /cluster/data/hg16
+    set mouseDir = bed/blastz.mm3/axtNet300
+    axtSort $mouseDir/chr1.axt $mouseDir/chr1.axt.sorted
+    mv $mouseDir/chr1.axt.sorted $mouseDir/chr1.axt 
+    axtToMaf $mouseDir/chr1.axt \
+            /cluster/data/hg16/chrom.sizes /cluster/data/mm3/chrom.sizes \
+            $multizDir/maf/chr1.mm3.maf.unfixed -tPrefix=hg16. -qPrefix=mm3.
+    /cluster/bin/scripts/fixmaf.pl \
+            < $multizDir/maf/chr1.mm3.maf.unfixed > $multizDir/maf/chr1.mm3.maf
+    rm $multizDir/maf/chr1.mm3.maf.unfixed
+
+
+# NET MOUSE BLASTZ (DONE - 2003-08-22 - Hiram)
+
+    ssh eieio
+    cd /cluster/data/hg16/bed/blastz.mm3/axtChain
+    mkdir preNet
+    cd chain
+    foreach i (*.chain)
+      echo preNetting $i
+      /cluster/bin/i386/chainPreNet $i /cluster/data/hg16/chrom.sizes \
+                        /cluster/data/mm3/chrom.sizes ../preNet/$i
+    end
+    # This foreach loop will take about 15 min to execute.
+
+    cd ..
+    mkdir n1 
+    cd preNet
+    foreach i (*.chain)
+      set n = $i:r.net
+      echo primary netting $i
+      /cluster/bin/i386/chainNet $i -minSpace=1 /cluster/data/hg16/chrom.sizes \
+                            /cluster/data/mm3/chrom.sizes ../n1/$n /dev/null
+    end
+
+    cd ..
+    cat n1/*.net | /cluster/bin/i386/netSyntenic stdin hNoClass.net
+    # memory usage 2490523648, utime 15421 s/100, stime 3665
+
+    ssh hgwdev
+    cd /cluster/data/hg16/bed/blastz.mm3/axtChain
+    ~/bin/i386/netClass hNoClass.net hg16 mm3 mouse.net \
+	-tNewR=/cluster/bluearc/scratch/hg/gs.17/build34/linSpecRep.notInMouse \
+	-qNewR=/cluster/bluearc/mm3.RM030619/linSpecRep.notInHuman
+
+    # If things look good do
+    ssh eieio
+    cd /cluster/data/hg16/bed/blastz.mm3/axtChain
+    rm -r n1 hNoClass.net
+    # Make a 'syntenic' subset of these with
+    netFilter -syn mouse.net > mouseSyn.net
+
+    # Load the nets into database 
+    ssh hgwdev
+    cd /cluster/data/hg16/bed/blastz.mm3/axtChain
+    netFilter -minGap=10 mouse.net |  hgLoadNet hg16 netMm3 stdin
+    netFilter -minGap=10 mouseSyn.net | hgLoadNet hg16 syntenyNetMm3 stdin
+    # make net
+    ssh eieio
+    cd /cluster/data/hg16/bed/blastz.mm3/axtChain
+    mkdir mouseNet
+    netSplit mouse.net mouseNet
+    foreach n (mouseNet/chr*.net)
+	set c=$n:t:r
+	echo "netToAxt: $c.net -> $c.axt"
+	rm -f ../axtNet/$c.axt
+	netToAxt mouseNet/$c.net chain/$c.chain \
+		/cluster/bluearc/scratch/hg/gs.17/build34/bothMaskedNibs \
+		/cluster/data/mm3.RM030619/mixedNib \
+		../axtNet/$c.axt
+	echo "Complete: $c.net -> $c.axt"
+    end
+
 
 # MAKE BLASTZ BEST MOUSE MM3 (DONE - 2003-08-26 - Hiram)
 
@@ -1685,6 +1914,7 @@ Submission to last job:         10327s     172.12m     2.87h    0.12d
     netFilter -minGap=10 mouseSyn.net | hgLoadNet hg16 syntenyNetMm3 stdin
 
     # Add entries for net and chain to human/hg16 trackDb
+
 
 #  BLASTZ RAT  (DONE - 2003-08-07 - Hiram)
 
@@ -2285,13 +2515,171 @@ foreach chr (?{,?})
 end
 
 
-#  BLASTZ SELF (Working - 2003-08-08 - Hiram)
+# TWINSCAN GENE PREDICTIONS (9/2/03 KRR)
+
+    cd /cluster/data/hg16/bed
+    rm -fr twinscan
+    mkdir twinscan
+    cd twinscan
+    set dir = genome.cs.wustl.edu/predictions/human/NCBI34 
+    set tarFile = NCBI34_Hs_09_01_03.tgz
+    wget http://$dir/$tarFile
+    wget http://$dir/md5sum.txt
+
+    # check file transferred correctly
+    #md5sum $tarFile | diff - md5sum.txt
+    # sum file has header line, so excise it
+    sed '1d' md5sum.txt > md5sum.txt.fixed
+    md5sum $tarFile | diff - md5sum.txt.fixed
+    tar xvfz $tarFile
+    unset tarFile dir
+
+    foreach c (1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 X Y)
+      # pare down protein FASTA header to id and add missing .a:
+      echo chr$c
+      perl -wpe 's/^(\>\S+)\s.*$/$1.a/' \
+                    < chr_ptx/chr$c.ptx > chr_ptx/chr$c-fixed.fa
+    end
+    ldHgGene hg16 twinscan chr_gtf/chr*.gtf -gtf
+    hgPepPred hg16 generic twinscanPep chr_ptx/chr*-fixed.fa
+
+
+# LOAD GENEID GENES (TBD)
+    mkdir -p /cluster/data/hg16/bed/geneid/download
+    cd /cluster/data/hg16/bed/geneid/download
+
+    # Now download *.gtf and *.prot from 
+    set dir = genome.imim.es/genepredictions/H.sapiens/golden_path_200307/geneid_v1.1/
+    foreach c (1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 X Y Un)
+      wget http://$dir/chr$c.gtf
+      wget http://$dir/chr${c}_random.gtf
+      wget http://$dir/chr$c.prot
+      wget http://$dir/chr${c}_random.prot
+    end
+    wget http://$dir/readme
+    # Add missing .1 to protein id's
+    foreach f (*.prot)
+      perl -wpe 's/^(>chr\w+)$/$1.1/' $f > $f:r-fixed.prot
+      echo "done $f"
+    end
+    cd ..
+    ldHgGene hg16 geneid download/*.gtf -exon=CDS
+#	Read 32255 transcripts in 281180 lines in 40 files
+#	  32255 groups 40 seqs 1 sources 3 feature types
+#	32255 gene predictions
+    hgPepPred hg16 generic geneidPep download/*-fixed.prot
+
+
+# HUMAN/MOUSE/RAT ALIGMNMENT USING HUMOR(MULTIZ) (IN PROGRESS 2003-0829 kate)
+# Multiple alignment with Mm3, Rn3
+
+    ssh eieio
+
+    # make mouse axtNet300
+    cd /cluster/data/hg16/bed/blastz.mm3/axtChain/mouseNet
+    mkdir -p ../../axtNet300
+    foreach f (chr*.net)
+        set c = $f:r
+        echo "mouse axtNet300 on $c"
+        netToAxt -maxGap=300 $c.net ../chain/$c.chain /cluster/data/hg16/nib /cluster/data/mm3.RM030619/mixedNib ../../axtNet300/$c.axt
+    end
+
+    # make rat axtNet300
+    cd /cluster/data/hg16/bed/blastz.rn3/axtChain/ratNet
+    mkdir -p ../../axtNet300
+    foreach f (chr*.net)
+        set c = $f:r
+        echo "rat axtNet300 on $c"
+        netToAxt -maxGap=300 $c.net ../chain/$c.chain /cluster/data/hg16/nib /cluster/data/rn3/nib ../../axtNet300/$c.axt
+    end
+
+    # create 2-way maf files
+    #set multizDir = /cluster/data/hg16/bed/humor.2003-09-02
+    set multizDir = /cluster/data/hg16/bed/humor.2003-09-08
+    mkdir -p $multizDir/maf
+    cd /cluster/data/hg16
+    set mouseDir = bed/blastz.mm3/axtNet300
+    set ratDir = bed/blastz.rn3/axtNet300
+    foreach c (`cut -f 1 chrom.sizes`)
+        echo "making mouse mafs on $c"
+        # NOTE: this sort should probably be earlier in the pipeline
+        axtSort $mouseDir/$c.axt $mouseDir/$c.axt.sorted
+        mv $mouseDir/$c.axt.sorted $mouseDir/$c.axt 
+        axtToMaf $mouseDir/$c.axt /cluster/data/hg16/chrom.sizes /cluster/data/mm3/chrom.sizes $multizDir/maf/$c.mm3.maf.unfixed -tPrefix=hg16. -qPrefix=mm3.
+        /cluster/bin/scripts/fixmaf.pl \
+                < $multizDir/maf/$c.mm3.maf.unfixed > $multizDir/maf/$c.mm3.maf
+
+        echo "making rat mafs on $c"
+        axtSort $ratDir/$c.axt $ratDir/$c.axt.sorted
+        mv $ratDir/$c.axt.sorted $ratDir/$c.axt
+        axtToMaf $ratDir/$c.axt /cluster/data/hg16/chrom.sizes /cluster/data/rn3/chrom.sizes $multizDir/maf/$c.rn3.maf.unfixed -tPrefix=hg16. -qPrefix=rn3.
+        /cluster/bin/scripts/fixmaf.pl \
+                < $multizDir/maf/$c.rn3.maf.unfixed > $multizDir/maf/$c.rn3.maf
+        rm $multizDir/maf/*.unfixed
+    end
+
+
+    # copy maf files to bluearc for cluster run
+    set clusterDir = /cluster/bluearc/hg16/bed
+    mkdir $clusterDir/blastz.mm3/mafNet300
+    cp $multizDir/maf/*.mm3.maf $clusterDir/blastz.mm3/mafNet300
+    mkdir /cluster/bluearc/hg16/bed/blastz.rn3/mafNet300
+    cp $multizDir/maf/*.rn3.maf $clusterDir/blastz.rn3/mafNet300
+
+    # create scripts to run on cluster
+    # run "humor"
+    cd $multizDir
+    mkdir hmr
+    mkdir run
+    cd run
+cat << EOF > doHumor.kk
+/cluster/bin/penn/humor.v4 $clusterDir/blastz.mm3/mafNet300/\$1.mm3.maf $clusterDir/blastz.rn3/mafNet300/\$1.rn3.maf > $multizDir/hmr/\$1.hmr.maf
+EOF
+    chmod +x doHumor.kk
+    
+cat << EOF > gsub 
+#LOOP
+doHumor.kk \$(root1) {check out line+ $multizDir/hmr/\$(root1).hmr.maf}
+#ENDLOOP
+EOF
+    cd $clusterDir/blastz.mm3/mafNet300
+    # NOTE: probably want a better way to make the chrom list 
+    ls *.maf | awk -F. '{print $1}' > $multizDir/run/chrom.list
+    cd $multizDir/run
+    gensub2 chrom.list single gsub jobList
+
+    # run jobs
+    ssh kkr9u01
+    #set multizDir = /cluster/data/hg16/bed/humor.2003-09-02
+    set multizDir = /cluster/data/hg16/bed/humor.2003-09-08
+    cd $multizDir/run
+    para create jobList
+    para try
+    para check
+    para push
+    # longest job 27 minutes
+
+    # setup external files for database reference
+    ssh hgwdev
+    mkdir -p /gbdb/hg16/humorMm3Rn3
+    cd /gbdb/hg16/humorMm3Rn3
+    foreach f ($multizDir/hmr/*.maf)
+        ln -s $f .
+    end
+
+    # load into database
+    /cluster/bin/i386/hgLoadMaf -warn hg16 humorMm3Rn3
+
+
+#  MAKING BLASTZ SELF (DONE - 2003-08-08 - Hiram)
 
     # The procedure for lineage spec business with self is to simply
     # use the actual repeat masker output for this human assembly as
     # the lineage specific repeats for itself.  Thus, merely make
     # symlinks to the repeat masker out files and name them as expected
-    # for blastz
+    # for blastz.  In this case they are called notInHuman but they
+    # really mean InHuman.  Yes, it is confusing, but that's just the
+    # nature of the game in this case.
 
     ssh eieio
     mkdir -p /cluster/bluearc/scratch/hg/gs.17/build34/linSpecRep.notInHuman
@@ -2498,18 +2886,28 @@ Submission to last job:          8029s     133.82m     2.23h    0.09d
     #	DropOverlap seems to drop more than axtDropSelf above
     foreach f (axtChrom/chr*.axt)
       set c=$f:t:r
-	mv axtChrom/$c.axt axtChrom/$c.axt.preDrop
-	/cluster/bin/i386/axtDropOverlap axtChrom/$c.axt.preDrop \
+	mv axtChrom/$c.axt axtChrom/$c.axt
+	/cluster/bin/i386/axtDropOverlap axtChrom/$c.axt \
 		/cluster/bluearc/hg16/bed/blastzSelf/axtChromDropped/$c.axt
 	echo "Done: $c"
     end
-XXXX - DropOverlap above proceeding 2003-09-02 - Hiram
-    mkdir -p pslChrom
+    cd /cluster/bluearc/hg16/bed/blastzSelf/axtChromDropped
+    gzip *.axt
+    #  Needed a deliver of these right away:
+    ssh hgwdev
+    mkdir -p /usr/local/apache/htdocs/goldenPath/hg16/vsSelf
+    cd /usr/local/apache/htdocs/goldenPath/hg16/vsSelf
+    cp -p /cluster/bluearc/hg16/bed/blastzSelf/axtChromDropped/*.axt.gz .
+	
+    ssh eieio
+    mkdir -p /cluster/data/hg16/bed/blastzSelf/pslChrom
+    cd /cluster/data/hg16/bed/blastzSelf
     set tbl = "blastzSelf"
     foreach f (axtChrom/chr*.axt)
       set c=$f:t:r
       echo "Processing chr $c"
-      /cluster/bin/i386/axtToPsl $f S1.len S2.len pslChrom/${c}_${tbl}.psl
+      zcat /cluster/bluearc/hg16/bed/blastzSelf/axtChromDropped/${c}.axt.gz | \
+	/cluster/bin/i386/axtToPsl stdin S1.len S2.len pslChrom/${c}_${tbl}.psl
     end
     #	That takes about 20 minutes
 
@@ -2517,7 +2915,7 @@ XXXX - DropOverlap above proceeding 2003-09-02 - Hiram
     ssh hgwdev
     set tbl = "blastzSelf"
     cd /cluster/data/hg16/bed/blastzSelf/pslChrom
-    /cluster/bin/i386/hgLoadPsl hg16 chr*_${tbl}.psl
+    /cluster/bin/i386/hgLoadPsl hg16 chr*_blastzSelf.psl
     # This takes 30 minutes to an hour
     # create trackDb/human/hg16 and get a trackDb.ra file started with:
 
@@ -2531,9 +2929,10 @@ XXXX - DropOverlap above proceeding 2003-09-02 - Hiram
 
     # NOTE: can't access /iscratch/i from fileserver
     ssh kk
-    mkdir /cluster/data/hg16/bed/blatFugu
-    cd /cluster/data/hg16/bed/blatFugu
+    mkdir /cluster/data/hg16/bed/blatFr1
+    cd /cluster/data/hg16/bed/blatFr1
     mkdir psl 
+    # next time, use N?_?????? (to pick up NG_ contigs)
     foreach f (/cluster/data/hg16/?{,?}/NT_??????/NT_??????.fa)
       set c=$f:t:r
       echo $c
@@ -2542,11 +2941,13 @@ XXXX - DropOverlap above proceeding 2003-09-02 - Hiram
     # special case for NG_002432
     mkdir -p psl/NG_002432
 
+    # create cluster job
+    cd run
     ls -1S /iscratch/i/fugu/trfFa/*.fa > fugu.lst
     ls -1S /scratch/hg/gs.17/build34/trfFa/*.fa > human.lst
 cat << 'EOF' > gsub
 #LOOP
-/cluster/bin/i386/blat -mask=lower -q=dnax -t=dnax {check in line+ $(path1)} {check in line+ $(path2)} {check out line+ psl/$(root1)/$(root1)_$(root2).psl}
+/cluster/bin/i386/blat -mask=lower -qMask=lower -q=dnax -t=dnax {check in line+ $(path1)} {check in line+ $(path2)} {check out line+ /cluster/data/hg16/bed/blatFr1/psl/$(root1)/$(root1)_$(root2).psl}
 #ENDLOOP
 'EOF'
     gensub2 human.lst fugu.lst gsub spec
@@ -2556,6 +2957,47 @@ cat << 'EOF' > gsub
     para check
     para push
     para check
+        # cd psl
+        # count files with aligments
+        # find . -not -size 427c | wc -l
+        # 89878
+        # count files with no aligments
+        # find . -size 427c | wc -l
+        # 195265
+
+   # When cluster run is done, sort alignments
+   # into chrom directory
+    ssh eieio
+    cd /cluster/data/hg16/bed/blatFr1
+    pslCat -dir psl/N?_?????? | \
+      liftUp -type=.psl stdout \
+        /cluster/data/hg16/jkStuff/liftAll.lft warn stdin | \
+      pslSortAcc nohead chrom temp stdin
+        # 15 minutes ?
+        # Processed 855648 lines into 4 temp files
+
+    # Rename to correspond with tables and load into database:
+    ssh hgwdev
+    cd /cluster/data/hg16/bed/blatFr1/chrom
+    rm -f chr*_blatFr1.psl
+    foreach i (chr?{,?}{,_random}.psl)
+        set r = $i:r
+        echo $r
+        mv $i ${r}_blatFr1.psl
+    end
+    hgLoadPsl hg16 *.psl
+
+    # Edit trackDb.ra to include blatFr1
+
+    # Make fugu /gbdb/ symlink and load Fugu sequence data.
+    # Necessary ?
+    mkdir /gbdb/hg16/fuguSeq
+    cd /gbdb/hg16/fuguSeq
+    ln -s /cluster/data/fr1/fugu_v3.masked.fa
+    # hide .tab file
+    cd /cluster/store2/tmp
+    hgLoadSeq hg16 /gbdb/hg16/fuguSeq/fugu_v3.masked.fa
+
 
 
 # MAKE BLASTZ BEST SELF (RE-DONE - 2003-08-28 - Hiram)
@@ -2703,7 +3145,12 @@ Out of memory - request size 973662824 bytes
      # hgsql hg16 < ~/kent/src/hg/lib/axtInfo.sql
      hgsql hg16 < axtInfoInserts.sql
 
+=======
+# MAKE BLASTZ BEST SELF (NOT NECESSARY - NOT USEFUL - NOT NEEDED - NOT DONE)
+
 # MAKING CHAIN SELF BLASTZ (DONE - 2003-08-27 - Hiram)
+# MAKING CHAIN SELF BLASTZ (RE-DONE - 2003-09-04 - Hiram)
+#				2003-09-04 - with dropped overlap axtChrom
 
 # Run axtChain on little cluster
     ssh kkr1u00
@@ -2711,18 +3158,19 @@ Out of memory - request size 973662824 bytes
     cd /cluster/data/hg16/bed/blastzSelf/axtChain/run1
     mkdir out chain
 
-    ls -1S /cluster/data/hg16/bed/blastzSelf/axtChrom/*.axt > input.lst
+  ls -1S /cluster/bluearc/hg16/bed/blastzSelf/axtChromDropped/*.axt > input.lst
     cat << '_EOF_' > gsub
 #LOOP
 doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain} {check out line+ out/$(root1).out}
 #ENDLOOP
 '_EOF_'
 
-#    axtFilter -notQ=chrUn_random $1 | axtChain stdin
+#	The -notQ_random (new argument to axtFilter) will omit any
+#	*_random from the query.
 
     cat << '_EOF_' > doChain
 #!/bin/csh
-    axtFilter -notQ=chrUn_random $1 | axtChain stdin \
+~/bin/i386/axtFilter -notQ_random $1 | axtChain stdin \
 	/iscratch/i/gs.17/build34/bothMaskedNibs \
 	/iscratch/i/gs.17/build34/bothMaskedNibs $2 > $3
 '_EOF_'
@@ -2730,22 +3178,24 @@ doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain} {check
     mkdir out chain
 
     gensub2 input.lst single gsub jobList
+	# edit jobList and remove the first one that does chr19
+	#	It is a job that would fail anyway after more than an
+	#	hour of run time.  It will be done separately below
     para create jobList
-    # 42 jobs
+    # 41 jobs
     para try
     para push # ... etc ...
-    #  The chr19 job failed, out of memory.  This is a current roadblock
-# Completed: 41 of 42 jobs
-# Crashed: 1 jobs
-# CPU time in finished jobs:      39851s     664.19m    11.07h    0.46d  0.001 y
-# IO & Wait Time:                 25735s     428.91m     7.15h    0.30d  0.001 y
-# Average job time:                1600s      26.66m     0.44h    0.02d
-# Longest job:                     7146s     119.10m     1.99h    0.08d
-# Submission to last job:          7146s     119.10m     1.99h    0.08d
+# Completed: 41 of 41 jobs
+# CPU time in finished jobs:      27107s     451.78m     7.53h    0.31d  0.001 y
+# IO & Wait Time:                 16236s     270.60m     4.51h    0.19d  0.001 y
+# Average job time:                1057s      17.62m     0.29h    0.01d
+# Longest job:                     4989s      83.15m     1.39h    0.06d
+# Submission to last job:        240988s    4016.47m    66.94h    2.79d
 
     #  The chr19 recovery process:
-    ssh kkr1u00
-    cd /cluster/data/hg16/bed/blastzSelf/axtChain/run1
+    ssh kk
+    mkdir -p /cluster/data/hg16/bed/blastzSelf/axtChain/run1.19
+    cd /cluster/data/hg16/bed/blastzSelf/axtChain/run1.19
     cat << '_EOF_' > gsubQ
 #LOOP
 doChainQ.sh $(path2) $(path1) {check out line+ chain/$(root1).$(path2).chain} {check out line+ out/$(root1).$(path2).out}
@@ -2754,18 +3204,37 @@ doChainQ.sh $(path2) $(path1) {check out line+ chain/$(root1).$(path2).chain} {c
 
     cat << '_EOF_' > doChainQ.sh
 #!/bin/sh
-axtFilter -q=$1 $2 | axtChain stdin \
+~/bin/i386/axtFilter -notQ_random -q=$1 $2 | axtChain stdin \
 	/cluster/store4/gs.17/build34/nib \
 	/cluster/store4/gs.17/build34/nib $3 > $4
 '_EOF_'
     chmod +x doChainQ.sh
-    ls ../../axtChrom/*.axt > chr19Axt.lst
+    #  This is a mistake, this should have been chr19.axt only
+  ls -1S /cluster/bluearc/hg16/bed/blastzSelf/axtChromDropped/*.axt > input.lst
     pushd /cluster/data/hg16
     ls -d ?{,?} | sed -e "s/^/chr/" | grep -v chr19 \
-	> /cluster/data/hg16/bed/blastzSelf/axtChain/run1/chrom19.lst
+	> /cluster/data/hg16/bed/blastzSelf/axtChain/run1.19/chrom19.lst
     popd
 
-    gensub2 chr19.lst chrom19.lst gsubQ spec19
+    mkdir out chain
+    gensub2 input.lst chrom19.lst gsubQ spec19
+    para create spec19
+    para try
+    para check
+    para push
+    ... etc ...
+Completed: 948 of 1050 jobs
+Crashed: 102 jobs
+CPU time in finished jobs:      45918s     765.30m    12.75h    0.53d  0.001 y
+IO & Wait Time:               1700328s   28338.80m   472.31h   19.68d  0.054 y
+Average job time:                1842s      30.70m     0.51h    0.02d
+Longest job:                    13247s     220.78m     3.68h    0.15d
+Submission to last job:         13268s     221.13m     3.69h    0.15d
+    # the "crashed 102" jobs are empty chains.
+    # This mistakenly did them all, the input.lst should have been
+    #	chr19 only.
+# So, copy the chr19 results to the ../run1/chain result location
+cp -p chain/chr19*.chain ../run1/chain
 
     # now on the cluster server, sort chains
     ssh eieio
@@ -2786,7 +3255,8 @@ axtFilter -q=$1 $2 | axtChain stdin \
         echo done $c
     end
 
-# NET SELF BLASTZ (DONE - 2003-08-27 - Hiram)
+
+# NET SELF BLASTZ (RE-DONE 2003-09-09 - DONE - 2003-08-27 - Hiram)
 
     ssh eieio
     cd /cluster/data/hg16/bed/blastzSelf/axtChain
@@ -2803,17 +3273,19 @@ axtFilter -q=$1 $2 | axtChain stdin \
     cd ..
     mkdir n1 
     cd preNet
+#	Probably OK to make this minSpace=10, used to be 1
     foreach i (*.chain)
       set n = $i:r.net
       echo primary netting $i
-      /cluster/bin/i386/chainNet $i -minSpace=1 /cluster/data/hg16/chrom.sizes \
-                            /cluster/data/hg16/chrom.sizes ../n1/$n /dev/null
+      /cluster/bin/i386/chainNet $i -minSpace=10 \
+			/cluster/data/hg16/chrom.sizes \
+                        /cluster/data/hg16/chrom.sizes ../n1/$n /dev/null
     end
     #  The above takes about 5 minutes
 
     cd ..
     cat n1/*.net | /cluster/bin/i386/netSyntenic stdin hNoClass.net
-    # memory usage 531062784, utime 4416 s/100, stime 542
+    #	memory usage 200167424, utime 2489 s/100, stime 161
 
     ssh hgwdev
     cd /cluster/data/hg16/bed/blastzSelf/axtChain
@@ -2836,17 +3308,17 @@ axtFilter -q=$1 $2 | axtChain stdin \
 
     # Add entries for net and chain to human/hg16 trackDb
 
-# MAKING SELF AXTTIGHT FROM AXTBEST (DONE - 2003-08-26 - Hiram)
-    # After creating axtBest alignments above, use subsetAxt to get axtTight:
+# MAKING SELF AXTTIGHT FROM AXTCHROM (DONE - 2003-09-09 - Hiram)
 
     ssh eieio
-    cd /cluster/data/hg16/bed/blastzSelf/axtNet
-    mkdir -p ../axtTight
+    cd /cluster/data/hg16/bed/blastzSelf/axtChrom
+    mkdir -p /cluster/data/hg16/bed/blastzSelf/axtTight
     tcsh
+
     foreach i (*.axt)
       echo $i
-      subsetAxt  $i ../axtTight/$i \
-        ~kent/src/hg/mouseStuff/subsetAxt/coding.mat 3400
+      subsetAxt  $i /cluster/data/hg16/bed/blastzSelf/axtTight/$i \
+        ~kent/src/hg/mouseStuff/subsetAxt/90.mat 5000
     end
 
     # translate to psl
@@ -2863,7 +3335,7 @@ axtFilter -q=$1 $2 | axtChain stdin \
     cd /cluster/data/hg16/bed/blastzSelf/pslTight
     hgLoadPsl hg16 chr*_blastzTightSelf.psl
 
-# MAKING SELF SYNTENY - Can be done after Best
+# MAKING SELF SYNTENY - Can be done after Best (NEEDS TO BE REDONE 2003-09-09)
 
 ssh hgwdev
 mkdir -p /cluster/data/hg16/bed/syntenySelf
@@ -2880,149 +3352,4 @@ XXXX - Running 2003-08-27 21:32
 ../syntenyMm3/synteny2bed.pl
 #    Load results
 hgLoadBed hg16 syntenySelf ucsc100k.bed
-
-
-# TWINSCAN GENE PREDICTIONS (9/2/03 KRR)
-
-    cd /cluster/data/hg16/bed
-    rm -fr twinscan
-    mkdir twinscan
-    cd twinscan
-    set dir = genome.cs.wustl.edu/predictions/human/NCBI34 
-    set tarFile = NCBI34_Hs_09_01_03.tgz
-    wget http://$dir/$tarFile
-    wget http://$dir/md5sum.txt
-
-    # check file transferred correctly
-    #md5sum $tarFile | diff - md5sum.txt
-    # sum file has header line, so excise it
-    sed '1d' md5sum.txt > md5sum.txt.fixed
-    md5sum $tarFile | diff - md5sum.txt.fixed
-    tar xvfz $tarFile
-    unset tarFile dir
-
-    foreach c (1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 X Y)
-      # pare down protein FASTA header to id and add missing .a:
-      echo chr$c
-      perl -wpe 's/^(\>\S+)\s.*$/$1.a/' \
-                    < chr_ptx/chr$c.ptx > chr_ptx/chr$c-fixed.fa
-    end
-    ldHgGene hg16 twinscan chr_gtf/chr*.gtf -gtf
-    hgPepPred hg16 generic twinscanPep chr_ptx/chr*-fixed.fa
-
-
-# LOAD GENEID GENES (TBD)
-    mkdir -p /cluster/data/hg16/bed/geneid/download
-    cd /cluster/data/hg16/bed/geneid/download
-
-    # Now download *.gtf and *.prot from 
-    set dir = genome.imim.es/genepredictions/H.sapiens/golden_path_200307/geneid_v1.1/
-    foreach c (1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 X Y Un)
-      wget http://$dir/chr$c.gtf
-      wget http://$dir/chr${c}_random.gtf
-      wget http://$dir/chr$c.prot
-      wget http://$dir/chr${c}_random.prot
-    end
-    wget http://$dir/readme
-    # Add missing .1 to protein id's
-    foreach f (*.prot)
-      perl -wpe 's/^(>chr\w+)$/$1.1/' $f > $f:r-fixed.prot
-      echo "done $f"
-    end
-    cd ..
-    ldHgGene hg16 geneid download/*.gtf -exon=CDS
-#	Read 32255 transcripts in 281180 lines in 40 files
-#	  32255 groups 40 seqs 1 sources 3 feature types
-#	32255 gene predictions
-    hgPepPred hg16 generic geneidPep download/*-fixed.prot
-
-
-# HUMAN/MOUSE/RAT ALIGMNMENT USING HUMOR(MULTIZ) (IN PROGRESS 2003-0829 kate)
-# Multiple alignment with Mm3, Rn3
-
-    ssh eieio
-
-    # make mouse axtNet300
-    cd /cluster/data/hg16/bed/blastz.mm3/axtChain/mouseNet
-    mkdir -p ../../axtNet300
-    foreach f (chr*.net)
-        set c = $f:r
-        echo "mouse axtNet300 on $c"
-        netToAxt -maxGap=300 $c.net ../chain/$c.chain /cluster/data/hg16/nib /cluster/data/mm3.RM030619/mixedNib ../../axtNet300/$c.axt
-    end
-
-    # make rat axtNet300
-    cd /cluster/data/hg16/bed/blastz.rn3/axtChain/ratNet
-    mkdir -p ../../axtNet300
-    foreach f (chr*.net)
-        set c = $f:r
-        echo "rat axtNet300 on $c"
-        netToAxt -maxGap=300 $c.net ../chain/$c.chain /cluster/data/hg16/nib /cluster/data/rn3/nib ../../axtNet300/$c.axt
-    end
-
-    # create 2-way maf files
-    set multizDir = /cluster/data/hg16/bed/humor.2003-09-02
-    mkdir -p $multizDir/maf
-    cd /cluster/data/hg16
-    foreach c (`cut -f 1 chrom.sizes`)
-        echo "making mafs on $c"
-        axtToMaf bed/blastz.mm3/axtNet300/$c.axt /cluster/data/hg16/chrom.sizes /cluster/data/mm3/chrom.sizes $multizDir/maf/$c.mm3.maf.unfixed -tPrefix=hg16. -qPrefix=mm3.
-        /cluster/bin/scripts/fixmaf.pl \
-                < $multizDir/maf/$c.mm3.maf.unfixed > $multiDir/maf/$c.mm3.maf
-        axtToMaf bed/blastz.rn3/axtNet300/$c.axt /cluster/data/hg16/chrom.sizes /cluster/data/rn3/chrom.sizes $multizDir/maf/$c.rn3.maf.unfixed -tPrefix=hg16. -qPrefix=rn3.
-        /cluster/bin/scripts/fixmaf.pl \
-                < $multizDir/maf/$c.rn3.maf.unfixed > $multiDir/maf/$c.rn3.maf
-        rm $multizDir/maf/*.unfixed
-    end
-
-
-    # copy maf files to bluearc for cluster run
-    set clusterDir = /cluster/bluearc/hg16/bed
-    mkdir $clusterDir/blastz.mm3/mafNet300
-    cp $multizDir/maf/*.mm3.maf $clusterDir/blastz.mm3/mafNet300
-    mkdir /cluster/bluearc/hg16/bed/blastz.rn3/mafNet300
-    cp $multizDir/maf/*.rn3.maf $clusterDir/blastz.rn3/mafNet300
-
-    # create scripts to run on cluster
-    # run "humor"
-    cd $multizDir
-    mkdir hmr
-    mkdir run
-    cd run
-cat << EOF > doHumor.kk
-/cluster/bin/penn/humor.v4 $clusterDir/blastz.mm3/mafNet300/\$1.mm3.maf $clusterDir/blastz.rn3/mafNet300/\$1.rn3.maf > $multizDir/hmr/\$1.hmr.maf
-EOF
-    chmod +x doHumor.kk
-    
-cat << EOF > gsub 
-#LOOP
-doHumor.kk \$(root1) {check out line+ $multizDir/hmr/\$(root1).hmr.maf}
-#ENDLOOP
-EOF
-    cd $clusterDir/blastz.mm3/mafNet300
-    # NOTE: probably want a better way to make the chrom list 
-    ls *.maf | awk -F. '{print $1}' > $multizDir/run/chrom.list
-    cd $multizDir/run
-    gensub2 chrom.list single gsub jobList
-
-    # run jobs
-    ssh kkr9u01
-    set multizDir = /cluster/data/hg16/bed/humor.2003-09-02
-    cd $multizDir/run
-    para create jobList
-    para try
-    para check
-    para push
-    # longest job 27 minutes
-
-    # setup external files for database reference
-    ssh hgwdev
-    mkdir -p /gbdb/hg16/humorMm3Rn3
-    cd /gbdb/hg16/humorMm3Rn3
-    foreach f ($multizDir/hmr/*.maf)
-        ln -s $f .
-    end
-
-    # load into database
-    /cluster/bin/i386/hgLoadMaf -warn hg16 humorMm3Rn3
 

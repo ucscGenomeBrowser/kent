@@ -1,0 +1,214 @@
+
+Installing the UCSC Genome browser
+
+The instructions here are similar to the Mirror site instructions at:
+	http://genome.ucsc.edu/admin/mirror.html
+	with the exception of downloading the databases.
+
+The example setup here will install a single-organism database
+to get the browser started.  Additional organism databases can
+be added after the browser is installed and functioning.
+The example mysql user here is: "browser" with a password of: "genome"
+
+1.  Confirm the following:
+	a. Apache WEB server is installed and working
+		http://localhost/
+	    Provides the Apache default home page from your machine
+	b. MySQL database is installed and working
+		$ echo 'show tables;' | mysql -pgenome mysql
+	    MySQL can be run from the command line, and
+	    the tables from the database mysql can be displayed.
+        c. MySQL development package is installed (mysql-devel)
+	    The directory: /usr/include/mysql/ has the mysql .h files
+	    And the library: /usr/lib/mysql/libmysqlclient.a exists
+	    (your exact pathnames may vary depending upon your installation)
+
+2.  Set MySQL database access permissions.  The examples mentioned
+	in the README.mysql.setup.txt instructions will allow this
+	setup to function as described here.
+
+3.  Find the location of your Apache WEB server DocumentRoot
+	and cgi-bin directory.
+	Typical locations are:
+		/var/www/html
+		/var/www/cgi-bin
+	The directory where these are located is referred to as
+	WEBROOT in this documentation:
+		WEBROOT=/var/www
+		export WEBROOT
+	The browser WEB pages and cgi-bin binaries expect these
+	two directories to be next to each other in ${WEBROOT}
+	since referrals in html are often: "../cgi-bin"
+
+	Please note, at this time there are several hard-coded root
+	pathways in the browser CGI binaries that require them
+	to reside in Apache's WEBROOT hierarchy in order to function.
+	Until these path names are corrected, the browser will
+	only function in this location.
+
+4.  Create a 'trash' directory in WEBROOT for use by the
+	browser's cgi-bin binaries and set its write permission
+	to allow the Apache WEB server to write files:
+	mkdir ${WEBROOT}/trash
+	chmod 777 ${WEBROOT}/trash
+
+	If the directories html and cgi-bin do not exist:
+	mkdir ${WEBROOT}/html
+	mkdir ${WEBROOT}/cgi-bin
+	chmod 755 ${WEBROOT}/cgi-bin
+	(this chmod 755 will prevent suexec failures that are indicated
+	    by "Premature end of script headers" errors in the Apache
+	    error_log.  Your cgi binaries should also be 755 permissions.)
+
+	ln -s ${WEBROOT}/trash  ${WEBROOT}/html/trash
+	(There seems to be a requirement for both of these ?)
+
+	A cron job should be set to periodically clean the files in trash.
+
+5.  Mount the CD-ROM:
+	mount /mnt/cdrom
+
+6.  Copy static WEB page content:
+	cp -Rp /mnt/cdrom/webrootHTML/* ${WEBROOT}/html
+
+7.  Copy CGI binaries:
+	cp -p /mnt/cdrom/built_CGI-BIN/* ${WEBROOT}/cgi-bin
+
+	These binaries were built on a Red Hat Linux release 7.3
+	with gcc version 2.96
+	If they do not function on your Red Hat system you may need
+	to rebuild them from the source tree.
+
+8.  Create hgcentral database and tables.  This is the primary gateway
+	database that allows the browser to find specific organism
+	databases.
+
+	echo "create database hgcentral;" | mysql -pgenome
+	mysql -pgenome hgcentral < /mnt/cdrom/example/hgcentral.sql
+
+	Please note, it is possible to create alternative hgcentral
+	databases.  For example, for test purposes.  In this
+	case use a unique name for the hgcentral database, such
+	as "hgcentraltest", and it can be specified in the hg.conf
+	file as mentioned in the next step.
+
+9.  Create the hg.conf file in ${WEBROOT}/cgi-bin/hg.conf
+	to allow the CGI binaries to find the hgcentral database
+	(or specifically named hgcentraltest for example)
+
+	Copy the sample hg.conf:
+	cp /mnt/cdrom/example/hg.conf ${WEBROOT}/cgi-bin
+
+	Adjust the db.user,db.password, central.user and
+	central.password entries.
+	The central.db entry specifies the hgcentral database.
+	Adjust this name if you are using a different name
+	for hgcentral.  Set the central.domain to your machine's
+	network domain name.  This will allow the browser
+	cookie-cart function to work.
+
+	Browser developers will want a copy of this file in
+	their home directory with mode 600 and named:
+		~/.hg.conf
+	These copies may have different db.user specification
+	to allow developers write access to the database.
+
+10.  Copy the sample C. briggsae organism database and generic
+	hgFixed database text files:
+	
+	cp -Rp /mnt/cdrom/goldenPath ${WEBROOT}/html
+
+11.  Load the hgFixed database (a database common to all organisms)
+	echo "create database hgFixed;" | mysql -pgenome
+	cd ${WEBROOT}/html/goldenPath/hgFixed/database
+	# Create tables in hgFixed:
+	for file in *.sql
+	do
+		mysql -pgenome hgFixed < $file
+	done
+	# Load the data into the tables:
+	for file in *.txt.gz
+	do
+		FN=`echo $file | sed -e "s/.gz//"`
+		echo "working on $file"
+		gunzip $file
+		mysqlimport -pgenome hgFixed $FN
+		echo "imported $FN"
+		gzip $FN &
+	done
+
+	Note that last gzip is in the background to allow processing
+	of the next file to proceed while previous files are gzipped
+	back to their original state.  This process consumes quite
+	a bit of time.
+
+12.  Load the example C. briggsae organism database.
+
+	echo "create database cb1;" | mysql -pgenome
+	cd ${WEBROOT}/html/goldenPath/cbJul2002/database
+	# Create tables in cb1:
+	for file in *.sql
+	do
+		mysql -pgenome cb1 < $file
+	done
+	# Load the data into the tables:
+	for file in *.txt.gz
+	do
+		FN=`echo $file | sed -e "s/.gz//"`
+		echo "working on $file"
+		gunzip $file
+		mysqlimport -pgenome cb1 $FN
+		echo "imported $FN"
+		gzip $FN &
+	done
+
+	Note that last gzip is in the background to allow processing
+	of the next file to proceed while previous files are gzipped
+	back to their original state.  This process consumes quite
+	a bit of time.
+
+13.  The browser code has some assumptions expecting the Human
+	database to be existing.  To make it work with just the
+	sample C. briggsae organism, we need to create an empty
+	hg15 database:
+
+	echo "create database hg15;" | mysql -pgenome
+
+	Please note, the Human genome will appear on the pulldown
+	menu of the gateway page but it will be nonfunctional.
+	You should select the C. briggsae genome to see the browser
+	function properly.
+
+14.  The browser should now appear at the URL:
+	http://localhost/
+
+	Check your Apache error_log file for hints to solving problems.
+
+15.  Known problems:
+
+	Since there is no C. elegans database loaded, the chained
+	tracks from this C. briggsae example browser will not
+	click through to the C. elegans browser.
+
+	The "Convert" function link in the blue bar at the top
+	of the browser will not work because of missing genomes
+	for the Convert to work with.
+
+	The "Downloads" page: /downloads.html lists all the
+	genomes available at genome.ucsc.edu
+	Only the cb1 genome is available in this sample installation.
+
+	A cron job mechanism to keep the trash directory clean over
+	time has not been described.  Users should implement a
+	cron job to periodically remove files from trash.
+
+16.  Useful links:
+
+	Links to various documentation related to the browser software:
+
+		http://www.soe.ucsc.edu/~donnak/eng/intro.html
+
+	A presentation on creating tracks for the browser:
+
+		http://www.soe.ucsc.edu/~sugnet/doc/trackHowto/
+

@@ -16,18 +16,25 @@ struct genePos
 /* A gene and optionally a position. */
     {
     struct genePos *next;
-    char *name;		/* Gene ID. */
+    char *name;		/* Gene (transcript) ID. */
     char *chrom;	/* Optional chromosome location. NULL ok. */
     int start;		/* Chromosome start. Disregarded if chrom == NULL. */
     int end;		/* End in chromosome. Disregarded if chrom == NULL. */
+    char *protein;	/* Protein ID. */
+    float distance;	/* Something to help sort on. */
+    int count;		/* Something to count with. Not always set. */
     };
+#define genePosTooFar 1000000000	/* Definitely not in neighborhood. */
 
 int genePosCmpName(const void *va, const void *vb);
 /* Sort function to compare two genePos by name. */
 
-void genePosFillFrom4(struct genePos *gp, char **row);
+int genePosCmpPos(const void *va, const void *vb);
+/* Sort function to compare two genePos by chrom,start. */
+
+void genePosFillFrom5(struct genePos *gp, char **row);
 /* Fill in genePos from row containing ascii version of
- * name/chrom/start/end. */
+ * name/chrom/start/end/protein. */
 
 struct searchResult
 /* A result from simple search - includes short and long names as well
@@ -84,14 +91,14 @@ struct column
    	struct sqlConnection *conn, char *search);
    /* Return list of genes with descriptions that match search. */
 
-   void (*searchControls)(struct column *col, struct sqlConnection *conn);
-   /* Print out controls for advanced search. */
+   void (*filterControls)(struct column *col, struct sqlConnection *conn);
+   /* Print out controls for advanced filter. */
 
-   struct genePos *(*advancedSearch)(struct column *col, struct sqlConnection *conn,
+   struct genePos *(*advFilter)(struct column *col, struct sqlConnection *conn,
    	struct genePos *inputList);
-   /* Return list of positions for advanced search. */
+   /* Return list of positions for advanced filter. */
 
-   /* -- Data that may be track-specific. -- */
+   /* -- Data that may be column-specific. -- */
       /* Most columns that need any data at all use the next few fields. */
    char *table;			/* Name of associated table. */
    char *keyField;		/* GeneId field in associated table. */
@@ -106,7 +113,49 @@ struct column
    int representativeCount;	/* Count of representative experiments. */
    int *representatives;	/* Array (may be null) of representatives. */
    boolean expRatioUseBlue;	/* Use blue rather than red in expRatio. */
+
+      /* The GO column uses this. */
+   struct sqlConnection *goConn;  /* Connection to go database. */
+
+   /* Association tables use this. */
+   char *tablesUsed;	/* Space delimited list of tables. */
+   char *queryFull;	/* Query that returns 2 columns key/value. */
+   char *queryOne;	/* Query that returns value given key. */
+   char *invQueryOne;	/* Query that returns key given value. */
+   boolean protKey;	/* Use protein rather than geneId for key. */
    };
+
+struct order
+/* An row order of the big table. */
+    {
+    struct order *next;	/* Next in list. */
+    char *name;			/* Symbolic name, not allocated here. */
+    char *shortLabel;		/* Short readable label. */
+    char *longLabel;		/* Longer description. */
+    char *type;			/* Type - encodes which methods to used etc. */
+    struct hash *settings;	/* Settings from ra file. */
+
+    boolean (*exists)(struct order *ord, struct sqlConnection *conn);
+    /* Return TRUE if this ordering can be computed from available data. */
+
+    void (*calcDistances)(struct order *ord, struct sqlConnection *conn, 
+    	struct genePos **pGeneList, struct hash *geneHash, int maxCount);
+    /* Fill in distance fields of first maxCount members of *pGeneList.
+     * GeneHash and *pGeneList contain the same genes.  GeneHash is
+     * keyed by gene->name. This function may reorder *pGeneList, 
+     * though it will ultimately be sorted by distance. */
+
+    /* -- Data that may be order-specific. -- */
+    char *table;			/* Name of associated table. */
+    char *keyField;		/* GeneId field in associated table. */
+    char *valField;		/* Value field in associated table. */
+    char *curGeneField;		/* curGeneId field in associated table. */
+    float distanceMultiplier;	/* What to multiply valField by for distance. */
+    };
+
+struct order *orderGetAll(struct sqlConnection *conn);
+/* Return list of row orders available. */
+
 
 /* ---- global variables ---- */
 
@@ -129,6 +178,7 @@ extern struct genePos *curGeneId;	  /* Identity of current gene. */
 #define idPosVarName "near.idPos"      	
 	/* chrN:X-Y position of id, may be empty. */
 #define groupVarName "near.group"	/* Grouping scheme. */
+#define orderVarName "near.order"	/* Ordering scheme. */
 #define getSeqVarName "near.getSeq"	/* Button to get sequence. */
 #define getGenomicSeqVarName "near.getGenomicSeq"	
 	/* Button to fetch genomic sequence. */
@@ -139,32 +189,42 @@ extern struct genePos *curGeneId;	  /* Identity of current gene. */
 #define proIncludeFiveOnly "near.proIncludeFiveOnly" 
 	/* Include without 5' UTR? */
 #define getTextVarName "near.getText"	/* Button to get as text. */
-#define advSearchVarName "near.advSearch"      /* Advanced search */
-#define advSearchClearVarName "near.advSearchClear" 
-	/* Advanced search clear all button. */
-#define advSearchBrowseVarName "near.advSearchBrowse" 
-	/* Advanced search browse  button. */
-#define advSearchListVarName "near.advSearchList" 
-	/* Advanced search submit list. */
+
+#define advFilterPrefix "near.as."      
+	/* Prefix for advanced filter variables. */
+#define advFilterPrefixI "near.asi."    
+	/* Prefix for advanced filter variables not forcing search. */
+#define advFilterVarName "near.do.advFilter"      /* Advanced filter */
+#define advFilterClearVarName "near.do.advFilterClear" 
+	/* Advanced filter clear all button. */
+#define advFilterBrowseVarName "near.do.advFilterBrowse" 
+	/* Advanced filter browse  button. */
+#define advFilterListVarName "near.do.advFilterList" 
+	/* Advanced filter submit list. */
+
+#define filSaveSettingsPrefix "near_filUserSet_" /* Prefix for filter sets. */
+    /* Underbars on this one for sake of javascript. */
+#define filSaveCurrentVarName "near.do.filUserSet.save"   /* Save filter set. */
+#define filSavedCurrentVarName "near.do.filUserSet.saved" /* Saved filter set. */
+#define filUseSavedVarName "near.do.filUserSet.used"      /* Use filter set. */
+
+#define colConfigPrefix "near.col."     
+	/* Prefix for stuff set in configuration pages. */
 #define colOrderVar "near.colOrder"     /* Order of columns. */
-#define defaultConfName "near.default"  /* Restore to default settings. */
-#define hideAllConfName "near.hideAll"  /* Hide all columns. */
-#define showAllConfName "near.showAll"  /* Show all columns. */
-#define saveCurrentConfName "near.saveCurrent"  /* Save current columns. */
-#define useSavedConfName "near.useSaved"  /* Use saved columns. */
-#define savedColSettingsVarName "near.savedColSettings" 
-	/* Variable that stores saved column settings. */
+#define defaultConfName "near.do.colDefault"  /* Restore to default settings. */
+#define hideAllConfName "near.do.colHideAll"  /* Hide all columns. */
+#define showAllConfName "near.do.colShowAll"  /* Show all columns. */
+
+#define colSaveSettingsPrefix "near_colUserSet_"  /* Prefix for column sets. */
+    /* Underbars on this one for sake of javascript. */
+#define saveCurrentConfName "near.do.colUserSet.save"   /* Save column set. */
+#define savedCurrentConfName "near.do.colUserSet.saved" /* Saved column set. */
+#define useSavedConfName "near.do.colUserSet.used"      /* Use column set. */
+
 #define showAllSpliceVarName "near.showAllSplice" 
 	/* Show all splice varients. */
 #define expRatioColorVarName "near.expRatioColors" 
 	/* Color scheme for expression ratios. */
-#define resetConfName "near.reset"      /* Restore default column settings. */
-#define colConfigPrefix "near.col."     
-	/* Prefix for stuff set in configuration pages. */
-#define advSearchPrefix "near.as."      
-	/* Prefix for advanced search variables. */
-#define advSearchPrefixI "near.asi."    
-	/* Prefix for advanced search variables not forcing search. */
 #define keyWordUploadPrefix "near.keyUp." /* Prefix for keyword uploads. */
 #define keyWordPastePrefix "near.keyPaste." /* Prefix for keyword paste-ins. */
 #define keyWordPastedPrefix "near.keyPasted." 
@@ -187,6 +247,9 @@ boolean wildMatchAll(char *word, struct slName *wildList);
 boolean wildMatchList(char *word, struct slName *wildList, boolean orLogic);
 /* Return TRUE if word matches things in wildList. */
 
+char *mustFindInRaHash(struct lineFile *lf, struct hash *raHash, char *name);
+/* Look up in ra hash or die trying. */
+
 /* ---- Some html helper routines. ---- */
 
 void hvPrintf(char *format, va_list args);
@@ -194,6 +257,9 @@ void hvPrintf(char *format, va_list args);
 
 void hPrintf(char *format, ...);
 /* Print out some html. */
+
+void hPrintNonBreak(char *s);
+/* Print out string but replace spaces with &nbsp; */
 
 void makeTitle(char *title, char *helpName);
 /* Make title bar. */
@@ -256,11 +322,12 @@ void labelSimplePrint(struct column *col);
 boolean simpleTableExists(struct column *col, struct sqlConnection *conn);
 /* This returns true if col->table exists. */
 
-void lookupSearchControls(struct column *col, struct sqlConnection *conn);
-/* Print out controls for advanced search. */
+void lookupAdvFilterControls(struct column *col, struct sqlConnection *conn);
+/* Print out controls for advanced filter. */
 
-void lookupTypeMethods(struct column *col, char *table, char *key, char *val);
-/* Set up the methods for a simple lookup column. */
+struct searchResult *lookupTypeSimpleSearch(struct column *col, 
+    struct sqlConnection *conn, char *search);
+/* Search lookup type column. */
 
 struct searchResult *knownGeneSearchResult(struct sqlConnection *conn, 
 	char *kgID, char *alias);
@@ -269,81 +336,114 @@ struct searchResult *knownGeneSearchResult(struct sqlConnection *conn,
 struct genePos *knownPosAll(struct sqlConnection *conn);
 /* Get all positions in knownGene table. */
 
+#ifdef OLD 
 struct hash *knownCannonicalHash(struct sqlConnection *conn);
 /* Get all cannonical gene names in hash. */
+#endif /* OLD */
 
 void fillInKnownPos(struct genePos *gp, struct sqlConnection *conn);
 /* If gp->chrom is not filled in go look it up. */
 
-char *advSearchName(struct column *col, char *varName);
-/* Return variable name for advanced search. */
+struct hash *keyFileHash(struct column *col);
+/* Make up a hash from key file for this column. 
+ * Return NULL if no key file. */
 
-char *advSearchVal(struct column *col, char *varName);
-/* Return value for advanced search variable.  Return NULL if it
+struct slName *keyFileList(struct column *col);
+/* Make up list from key file for this column.
+ * return NULL if no key file. */
+
+struct genePos *advFilterResults(struct column *colList, 
+	struct sqlConnection *conn);
+/* Get list of genes that pass all advanced filter filters.  
+ * If no filters are on this returns all genes. */
+
+char *advFilterName(struct column *col, char *varName);
+/* Return variable name for advanced filter. */
+
+char *advFilterVal(struct column *col, char *varName);
+/* Return value for advanced filter variable.  Return NULL if it
  * doesn't exist or if it is "" */
 
-char *advSearchNameI(struct column *col, char *varName);
-/* Return name for advanced search that doesn't force search. */
+char *advFilterNameI(struct column *col, char *varName);
+/* Return name for advanced filter that doesn't force search. */
 
-void advSearchRemakeTextVar(struct column *col, char *varName, int size);
+void advFilterRemakeTextVar(struct column *col, char *varName, int size);
 /* Make a text field of given name and size filling it in with
  * the existing value if any. */
 
-void advSearchAnyAllMenu(struct column *col, char *varName, 
+void advFilterAnyAllMenu(struct column *col, char *varName, 
 	boolean defaultAny);
 /* Make a drop-down menu with value all/any. */
 
-boolean advSearchOrLogic(struct column *col, char *varName, 
+boolean advFilterOrLogic(struct column *col, char *varName, 
 	boolean defaultOr);
 /* Return TRUE if user has selected 'all' from any/all menu */
 
-void advSearchKeyUploadButton(struct column *col);
+boolean gotAdvFilter();
+/* Return TRUE if advanced filter variables are set. */
+
+boolean advFilterColAnySet(struct column *col);
+/* Return TRUE if any of the advanced filter variables
+ * for this col are set. */
+
+void advFilterKeyUploadButton(struct column *col);
 /* Make a button for uploading keywords. */
 
-struct column *advSearchKeyUploadPressed(struct column *colList);
+struct column *advFilterKeyUploadPressed(struct column *colList);
 /* Return column where an key upload button was pressed, or
  * NULL if none. */
 
-void doAdvSearchKeyUpload(struct sqlConnection *conn, struct column *colList, 
+void doAdvFilterKeyUpload(struct sqlConnection *conn, struct column *colList, 
     struct column *col);
-/* Handle upload keyword list button press in advanced search form. */
+/* Handle upload keyword list button press in advanced filter form. */
 
-void advSearchKeyPasteButton(struct column *col);
+void advFilterKeyPasteButton(struct column *col);
 /* Make a button for uploading keywords. */
 
-struct column *advSearchKeyPastePressed(struct column *colList);
+struct column *advFilterKeyPastePressed(struct column *colList);
 /* Return column where an key upload button was pressed, or
  * NULL if none. */
 
-void doAdvSearchKeyPaste(struct sqlConnection *conn, struct column *colList, 
+void doAdvFilterKeyPaste(struct sqlConnection *conn, struct column *colList, 
     struct column *col);
-/* Handle search keyword list button press in advanced search form. */
+/* Handle search keyword list button press in advanced filter form. */
 
-struct column *advSearchKeyPastedPressed(struct column *colList);
+struct column *advFilterKeyPastedPressed(struct column *colList);
 /* Return column where an key upload button was pressed, or
  * NULL if none. */
 
-void doAdvSearchKeyPasted(struct sqlConnection *conn, struct column *colList, 
+void doAdvFilterKeyPasted(struct sqlConnection *conn, struct column *colList, 
     struct column *col);
-/* Handle search keyword list button press in advanced search form. */
+/* Handle search keyword list button press in advanced filter form. */
 
-void advSearchKeyClearButton(struct column *col);
+void advFilterKeyClearButton(struct column *col);
 /* Make a button for uploading keywords. */
 
-struct column *advSearchKeyClearPressed(struct column *colList);
+struct column *advFilterKeyClearPressed(struct column *colList);
 /* Return column where an key upload button was pressed, or
  * NULL if none. */
 
-void doAdvSearchKeyClear(struct sqlConnection *conn, struct column *colList, 
+void doAdvFilterKeyClear(struct sqlConnection *conn, struct column *colList, 
     struct column *col);
-/* Handle clear keyword list button press in advanced search form. */
+/* Handle clear keyword list button press in advanced filter form. */
+
+void doNameCurrentFilters();
+/* Put up page to save current filter settings. */
+
+void doSaveCurrentFilters(struct sqlConnection *conn, struct column *colList);
+/* Handle save current filters form result. */
+
+void doUseSavedFilters(struct sqlConnection *conn, struct column *colList);
+/* Use indicated filter settings. */
 
 struct genePos *weedUnlessInHash(struct genePos *inList, struct hash *hash);
 /* Return input list with stuff not in hash removed. */
 
+#ifdef OLD
 struct genePos *getSearchNeighbors(struct column *colList, 
 	struct sqlConnection *conn, struct hash *goodHash, int maxCount);
 /* Get neighbors by search. */
+#endif /* OLD */
 
 void gifLabelVerticalText(char *fileName, char **labels, int labelCount,
 	int height);
@@ -363,6 +463,10 @@ void setupColumnNum(struct column *col, char *parameters);
 
 void setupColumnLookup(struct column *col, char *parameters);
 /* Set up column that just looks up one field in a table
+ * keyed by the geneId. */
+
+void setupColumnAssociation(struct column *col, char *parameters);
+/* Set up a column that looks for an association table 
  * keyed by the geneId. */
 
 void setupColumnAcc(struct column *col, char *parameters);
@@ -388,12 +492,11 @@ void setupColumnSwissProt(struct column *col, char *parameters);
 void setupColumnExpRatio(struct column *col, char *parameters);
 /* Set up expression ration type column. */
 
-boolean gotAdvSearch();
-/* Return TRUE if advanced search variables are set. */
+void setupColumnGo(struct column *col, char *parameters);
+/* Set up gene ontology column. */
 
-boolean advSearchColAnySet(struct column *col);
-/* Return TRUE if any of the advanced search variables
- * for this col are set. */
+void goSimilarityMethods(struct order *ord, char *parameters);
+/* Set up go similarity ordering. */
 
 /* ---- Get config options ---- */
 boolean showOnlyCannonical();
@@ -414,17 +517,17 @@ void doSearch(struct sqlConnection *conn, struct column *colList);
 /* Search.  If result is unambiguous call doMain, otherwise
  * put up a page of choices. */
 
-void doAdvancedSearch(struct sqlConnection *conn, struct column *colList);
-/* Put up advanced search page. */
+void doAdvFilter(struct sqlConnection *conn, struct column *colList);
+/* Put up advanced filter page. */
 
-void doAdvancedSearchClear(struct sqlConnection *conn, struct column *colList);
-/* Clear variables in advanced search page. */
+void doAdvFilterClear(struct sqlConnection *conn, struct column *colList);
+/* Clear variables in advanced filter page. */
 
-void doAdvancedSearchBrowse(struct sqlConnection *conn, struct column *colList);
-/* Put up family browser with advanced search group by. */
+void doAdvFilterBrowse(struct sqlConnection *conn, struct column *colList);
+/* Put up family browser with advanced filter group by. */
 
-void doAdvancedSearchList(struct sqlConnection *conn, struct column *colList);
-/* List gene names matching advanced search. */
+void doAdvFilterList(struct sqlConnection *conn, struct column *colList);
+/* List gene names matching advanced filter. */
 
 void doConfigure(struct sqlConnection *conn, struct column *colList, 
 	char *bumpVar);
@@ -439,8 +542,16 @@ void doConfigHideAll(struct sqlConnection *conn, struct column *colList);
 void doConfigShowAll(struct sqlConnection *conn, struct column *colList);
 /* Respond to show all button in configuration page. */
 
+void doNameCurrentColumns();
+/* Put up page to save current column configuration. */
+
+void doSaveCurrentColumns(struct sqlConnection *conn, struct column *colList);
+/* Save the current columns, and then go on. */
+
+#ifdef OLD
 void doConfigSaveCurrent(struct sqlConnection *conn, struct column *colList);
 /* Respond to Save Current Settings buttin in configuration page. */
+#endif /* OLD */
 
 void doConfigUseSaved(struct sqlConnection *conn, struct column *colList);
 /* Respond to Use Saved Settings buttin in configuration page. */
@@ -455,6 +566,60 @@ void doGetSeq(struct sqlConnection *conn, struct column *colList,
 void doGetGenomicSeq(struct sqlConnection *conn, struct column *colList,
 	struct genePos *geneList);
 /* Retrieve genomic sequence sequence according to options. */
+
+/* ---- User settings stuff - soon to be moved to library I hope. */
+
+struct userSettings 
+/* This helps us the user a set of cart variables, defined
+ * by settingsPrefix.  It allows the user to save different
+ * sets of settings under different names. */
+     {
+     struct userSettings *next;	/* Next in list. */
+     struct cart *cart;		/* Associated cart. */
+     char *formTitle;		/* Heading of settings save form. */
+     char *nameVar;		/* Variable for name on give-it-a-name page. */
+     char *savePrefix;		/* Prefix for where we store settings.
+                                 * We store at savePrefix.name where name
+				 * is taken from listVar above. */
+     char *formVar;		/* Submit button on give-it-a-name page. */
+     char *listDisplayVar;	/* Variable name for list display control. */
+     struct slName *saveList;	/* List of variables to save. */
+     };
+
+struct userSettings *userSettingsNew(
+	struct cart *cart,	/* Persistent variable cart. */
+	char *formTitle,	/* Heading of settings save form. */
+	char *formVar,		/* Name of button variable on save form. */
+	char *localVarPrefix);  /* Prefix to use for internal cart variables. 
+		                 * No periods allowed because of javascript. */
+/* Make new object to help manage sets of user settings. */
+
+void userSettingsCaptureVar(struct userSettings *us, char *varName);
+/* Add a single variable to list of variables to capture. */
+
+void userSettingsCapturePrefix(struct userSettings *us, char *prefix);
+/* Capture all variables that start with prefix. */
+
+boolean userSettingsAnySaved(struct userSettings *us);
+/* Return TRUE if any user settings are saved. */
+
+void userSettingsUseNamed(struct userSettings *us, char *setName);
+/* Use named collection of settings. */
+
+void userSettingsUseSelected(struct userSettings *us);
+/* Use currently selected user settings. */
+
+void userSettingsSaveForm(struct userSettings *us);
+/* Put up controls that let user name and save the current
+ * set. */
+
+boolean userSettingsProcessForm(struct userSettings *us);
+/* Handle button press in userSettings form. 
+ * If this returns TRUE then form is finished processing
+ * and you can call something to make the next page. */
+
+void userSettingsDropDown(struct userSettings *us);
+/* Display list of available saved settings . */
 
 #endif /* HGNEAR_H */
 

@@ -6,7 +6,7 @@
 #include "obscure.h"
 #include "genoFind.h"
 
-static char const rcsid[] = "$Id: blastOut.c,v 1.7 2003/05/06 07:33:41 kate Exp $";
+static char const rcsid[] = "$Id: blastOut.c,v 1.9 2003/09/09 00:05:45 kent Exp $";
 
 struct axtRef
 /* A reference to an axt. */
@@ -154,6 +154,30 @@ for (i=0; i<size; ++i)
    }
 return count;
 }
+
+static int countGapOpens(char *a, char *b, int size)
+/* Count number of inserts in either strand. */
+{
+int i, count = 0;
+boolean inGap = FALSE;
+for (i=0; i<size; ++i)
+    {
+    if (a[i] == '-' || b[i] == '-')
+        {
+	if (!inGap)
+	    {
+	    ++count;
+	    inGap = TRUE;
+	    }
+	}
+    else
+        {
+	inGap = FALSE;
+	}
+    }
+return count;
+}
+
 
 static int countPositives(char *a, char *b, int size)
 /* Count positive (not necessarily identical) protein matches. */
@@ -545,7 +569,9 @@ targetHitsFreeList(&targetList);
 static void xmlBlastOut(struct axtBundle *abList, int queryIx, boolean isProt, 
 	FILE *f, char *databaseName, int databaseSeqCount, 
 	double databaseLetterCount, char *ourId)
-/* Do ncbi blast xml-like output at end of processing query. */
+/* Do ncbi blast xml-like output at end of processing query. 
+ * WARNING - still not completely baked.  Format at NCBI seems
+ * to be missing some end tags actually when I checked. -jk */
 {
 char *queryName = abList->axtList->qName;
 int querySize = abList->qSize;
@@ -621,36 +647,107 @@ for (target = targetList; target != NULL; target = target->next)
 fprintf(f, "      </Iteration_hits>\n");
 fprintf(f, "    </Iteration>\n");
 fprintf(f, "  </BlastOutput_iterations>\n");
-
-
-
 fprintf(f, "</BlastOutput>\n");
+}
+
+static void tabBlastOut(struct axtBundle *abList, int queryIx, boolean isProt, 
+	FILE *f, char *databaseName, int databaseSeqCount, 
+	double databaseLetterCount, char *ourId, boolean withComment)
+/* Do NCBI tabular blast output. */
+{
+char *queryName = abList->axtList->qName;
+int querySize = abList->qSize;
+struct targetHits *targetList = NULL, *target;
+
+if (withComment)
+    {
+    char * rcsDate = "$Date: 2003/09/09 00:05:45 $";
+    char dateStamp[11];
+    strncpy (dateStamp, rcsDate+7, 10);
+    dateStamp[10] = 0;
+    fprintf(f, "# BLAT %d [%s]\n", gfVersion, dateStamp);
+    fprintf(f, "# Query: %s\n", queryName);
+    fprintf(f, "# Database: %s\n", databaseName);
+    fprintf(f, "%s\n", 
+    	"# Fields: Query id, Subject id, % identity, alignment length, "
+	"mismatches, gap openings, q. start, q. end, s. start, s. end, "
+	"e-value, bit score");
+    }
+
+/* Print out details on each target. */
+targetList = bundleIntoTargets(abList);
+for (target = targetList; target != NULL; target = target->next)
+    {
+    struct axtRef *ref;
+    for (ref = target->axtList; ref != NULL; ref = ref->next)
+        {
+	struct axt *axt = ref->axt;
+	int matches = countMatches(axt->qSym, axt->tSym, axt->symCount);
+	int gaps = countGaps(axt->qSym, axt->tSym, axt->symCount);
+	int gapOpens = countGapOpens(axt->qSym, axt->tSym, axt->symCount);
+	fprintf(f, "%s\t", axt->qName);
+	fprintf(f, "%s\t", axt->tName);
+	fprintf(f, "%.2f\t", 100.0 * matches/axt->symCount);
+	fprintf(f, "%d\t", axt->symCount);
+	fprintf(f, "%d\t", axt->symCount - matches - gaps);
+	fprintf(f, "%d\t", gapOpens);
+	if (axt->qStrand == '-')
+	    {
+	    int s = axt->qStart, e = axt->qEnd;
+	    reverseIntRange(&s, &e, querySize);
+	    fprintf(f, "%d\t", s+1);
+	    fprintf(f, "%d\t", e);
+	    fprintf(f, "%d\t", axt->tEnd);
+	    fprintf(f, "%d\t", axt->tStart + 1);
+	    }
+	else
+	    {
+	    fprintf(f, "%d\t", axt->qStart + 1);
+	    fprintf(f, "%d\t", axt->qEnd);
+	    fprintf(f, "%d\t", axt->tStart + 1);
+	    fprintf(f, "%d\t", axt->tEnd);
+	    }
+	fprintf(f, "%3.1f\t", blastzScoreToNcbiExpectation(axt->score));
+	fprintf(f, "%d.0\n", blastzScoreToNcbiBits(axt->score));
+	}
+    }
+
+/* Cleanup time. */
+targetHitsFreeList(&targetList);
 }
 
 void axtBlastOut(struct axtBundle *abList, 
 	int queryIx, boolean isProt, FILE *f, 
 	char *databaseName, int databaseSeqCount, double databaseLetterCount, 
-	boolean isWu, boolean isXml, char *ourId)
+	char *blastType, char *ourId)
 /* Output a bundle of axt's on the same query sequence in blast format.
  * The parameters in detail are:
  *   ab - the list of bundles of axt's. 
  *   f  - output file handle
  *   databaseSeqCount - number of sequences in database
  *   databaseLetterCount - number of bases or aa's in database
- *   isWu - TRUE if want wu-blast rather than blastall format
+ *   blastType - blast/wublast/blast8/blast9/xml
  *   ourId - optional (may be NULL) thing to put in header
  */
 {
 if (abList == NULL)
     return;
-if (isWu)
+if (sameWord(blastType, "wublast"))
     wuBlastOut(abList, queryIx, isProt, f, databaseName,
    	databaseSeqCount, databaseLetterCount, ourId);
-else if (isXml)
+else if (sameWord(blastType, "xml"))
     xmlBlastOut(abList, queryIx, isProt, f, databaseName,
         databaseSeqCount, databaseLetterCount, ourId);
-else
+else if (sameWord(blastType, "blast"))
     ncbiBlastOut(abList, queryIx, isProt, f, databaseName,
         databaseSeqCount, databaseLetterCount, ourId);
+else if (sameWord(blastType, "blast8"))
+    tabBlastOut(abList, queryIx, isProt, f, databaseName,
+    	databaseSeqCount, databaseLetterCount, ourId, FALSE);
+else if (sameWord(blastType, "blast9"))
+    tabBlastOut(abList, queryIx, isProt, f, databaseName,
+    	databaseSeqCount, databaseLetterCount, ourId, TRUE);
+else
+    errAbort("Unrecognized blastType %s in axtBlastOut", blastType);
 }
 

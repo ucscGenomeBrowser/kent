@@ -11,7 +11,7 @@
 #include "hdb.h"
 #include "jksql.h"
 
-static char const rcsid[] = "$Id: cart.c,v 1.27 2003/08/26 18:08:49 kent Exp $";
+static char const rcsid[] = "$Id: cart.c,v 1.28 2003/09/06 23:15:04 kent Exp $";
 
 static char *sessionVar = "hgsid";	/* Name of cgi variable session is stored in. */
 static char *positionCgiName = "position";
@@ -483,6 +483,43 @@ void cartSetBoolean(struct cart *cart, char *var, boolean val)
 cartSetInt(cart,var,val);
 }
 
+void cartMakeTextVar(struct cart *cart, char *var, char *defaultVal, int charSize)
+/* Make a text control filled with value from cart if it exists or
+ * default value otherwise.  If charSize is zero it's calculated to fit
+ * current value.  Default value may be NULL. */
+{
+cgiMakeTextVar(var, cartUsualString(cart, var, defaultVal), charSize);
+}
+
+void cartMakeIntVar(struct cart *cart, char *var, int defaultVal, int maxDigits)
+/* Make a text control filled with integer value - from cart if available
+ * otherwise default.  */
+{
+cgiMakeIntVar(var, cartUsualInt(cart, var, defaultVal), maxDigits);
+}
+
+void cartMakeDoubleVar(struct cart *cart, char *var, double defaultVal, int maxDigits)
+/* Make a text control filled with integer value - from cart if available
+ * otherwise default.  */
+{
+cgiMakeDoubleVar(var, cartUsualDouble(cart, var, defaultVal), maxDigits);
+}
+
+void cartMakeCheckBox(struct cart *cart, char *var, boolean defaultVal)
+/* Make a check box filled with value from cart if it exists or
+ * default value otherwise.  */
+{
+cgiMakeCheckBox(var, cartUsualBoolean(cart, var, defaultVal));
+}
+
+void cartMakeRadioButton(struct cart *cart, char *var, char *val, char *defaultVal)
+/* Make a radio button that is selected if cart variable exists and matches
+ * value (or value matches default val if cart var doesn't exist). */
+{
+boolean matches = sameString(val, cartUsualString(cart, var, defaultVal));
+cgiMakeRadioButton(var, val, matches);
+}
+
 void cartSaveSession(struct cart *cart)
 /* Save session in a hidden variable. This needs to be called
  * somewhere inside of form or bad things will happen when user
@@ -528,9 +565,10 @@ hashElFreeList(&el);
 return name;
 }
 
-struct hashEl *cartFindLike(struct cart *cart, char *wildCard)
+static struct hashEl *cartFindSome(struct cart *cart, char *pattern,
+	boolean (*match)(char *a, char *b))
 /* Return list of name/val pairs from cart where name matches 
- * wildcard.  Free when done with hashElFreeList. */
+ * pattern.  Free when done with hashElFreeList. */
 {
 struct hashEl *el, *next, *elList = hashElListHash(cart->hash);
 struct hashEl *outList = NULL;
@@ -538,7 +576,7 @@ struct hashEl *outList = NULL;
 for (el = elList; el != NULL; el = next)
     {
     next = el->next;
-    if (wildMatch(wildCard, el->name))
+    if (match(pattern, el->name))
 	{
 	slAddHead(&outList, el);
 	}
@@ -548,6 +586,20 @@ for (el = elList; el != NULL; el = next)
 	}
     }
 return outList;
+}
+	
+struct hashEl *cartFindLike(struct cart *cart, char *wildCard)
+/* Return list of name/val pairs from cart where name matches 
+ * wildcard.  Free when done with hashElFreeList. */
+{
+return cartFindSome(cart, wildCard, wildMatch);
+}
+
+struct hashEl *cartFindPrefix(struct cart *cart, char *prefix)
+/* Return list of name/val pairs from cart where name starts with 
+ * prefix.  Free when done with hashElFreeList. */
+{
+return cartFindSome(cart, prefix, startsWith);
 }
 
 

@@ -14,7 +14,7 @@
 
 #define MAXALIGN 30  /* max number of species to align */
 #define DEFCOUNT 3   /* require 3 species to match before counting as covered */
-static char const rcsid[] = "$Id: mafCoverage.c,v 1.2 2003/08/28 09:07:27 baertsch Exp $";
+static char const rcsid[] = "$Id: mafCoverage.c,v 1.3 2003/09/06 18:15:16 baertsch Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -24,8 +24,8 @@ errAbort(
   "chromosome and genome-wide.\n"
   "usage:\n"
   "   mafCoverage database mafFile\n"
-  "Note maf file must be sorted by chromosome\n"
-  "   -restrict=restrict.maf Restrict to parts in restrict.maf\n"
+  "Note maf file must be sorted by chromosome,tStart\n"
+  "   -restrict=restrict.bed Restrict to parts in restrict.bed\n"
   "   -count=N Number of matching species to count coverage. Default = 3 \n"
   );
 }
@@ -57,7 +57,7 @@ slReverse(&ciList);
 return ciList;
 }
 
-#define maxCover 100    /* Maximum coverage we track. */
+#define maxDepth 100    /* Maximum depth we track, if change this showStats and shortStats need updating. */
 #define restricted 255	/* Special value for masked out. */
 
 struct range
@@ -81,8 +81,8 @@ struct chromSizes
    double totalAlign;    /* Sum of aligning bases covered at least once. */
    double totalId;    /* Sum of aligning exact match bases covered at least once. */
 
-   double histogram[maxCover+1]; /* Coverage histogram. */
-   double histogramAlign[maxCover+1]; /* Coverage histogram. */
+   double histogram[maxDepth+1]; /* Coverage histogram. */
+   double histogramAlign[maxDepth+1]; /* Coverage histogram. */
    boolean completed;   /* True if completed. */
    struct range *restrictList;	/* List of ranges to restrict to. */
    };
@@ -175,7 +175,8 @@ if (totalCov > 0 || cs->totalAlign > 0 || tenOrMore > 0 || hundredOrMore > 0)
 
 void getChromSizes(struct hash **retHash, 
 	struct chromSizes **retList)
-/* Return hash of chromSizes. */
+/* Return hash of chromSizes.  Also calculates size without
+ * gaps. */
 {
 //struct sqlConnection *conn = hAllocConn();
 struct sqlConnection *conn = sqlConnectReadOnly(hGetDb());
@@ -211,13 +212,13 @@ slReverse(&csList);
 
 void incNoOverflow(UBYTE *cov, int size)
 /* Add one to each member of cov, so long as it's
- * not over maxCover. */
+ * not over maxDepth. */
 {
 UBYTE c;
 while (--size >= 0)
    {
    c = *cov;
-   if (c < maxCover)
+   if (c < maxDepth)
        {
        ++c;
        *cov = c;
@@ -337,13 +338,13 @@ while (ali = mafNext(mf))
     
     comp = ali->components; 
     tPtr[0] = comp->text;
-    chrom = strstr(comp->src,".")+1;
+    chrom = strchr(comp->src,'.')+1;
+    if (chrom == NULL)
+         chrom = comp->src;
     start = comp->start;
     idStart = comp->start;
     nextStart = idNextStart = start;
     cs = hashMustFindVal(chromHash, chrom);
-    if (cs == NULL)
-        errAbort("cannot find chrom %s\n",chrom);
     if (cs != lastCs)
         {
 	if (lastCs != NULL)
@@ -379,11 +380,13 @@ while (ali = mafNext(mf))
         }
     size = 0;
     assert(cs != NULL);
+    /* count gapless columns */
     for (j = 0 ; j<=ali->textSize ; j++)
         {
+        /* look for aligning bases in query seqs , abort if any is a gap */
         for (i = 1 ; i < cCount ; i++)
             {
-            if (toupper(tPtr[i][j]) == '-' || tPtr[0][j] == '-')
+            if (tPtr[i][j] == '-' || tPtr[0][j] == '-')
                 {
      //   printf("align %d, size %d\n", start, size);
                 incNoOverflow(align+start, size);
@@ -400,7 +403,7 @@ while (ali = mafNext(mf))
             }
         if (hit)
             size++;
-        /* skip over gaps */
+        /* if there is a gap in the target, start a new alignment block*/
         if (tPtr[0][j] != '-')
             nextStart++;
         }
@@ -424,10 +427,10 @@ while (ali = mafNext(mf))
     assert(cs != NULL);
     for (k = 0 ; k<=ali->textSize ; k++)
         {
+        char tc = toupper(tPtr[0][k]);
         for (i = 1 ; i < cCount ; i++)
             {
-            if (toupper(tPtr[i][k]) != toupper(tPtr[0][k]) || 
-                    tPtr[0][k] == '-' || tPtr[0][k] == 'N')
+            if (toupper(tPtr[i][k]) != tc || tc == '-' || tc == 'N')
                 {
                 incNoOverflow(id+idStart, idSize);
                 idStart = idNextStart;
@@ -443,7 +446,7 @@ while (ali = mafNext(mf))
         if (hit)
             idSize++;
         /* skip over gaps */
-        if (tPtr[0][k] != '-')
+        if (tc != '-')
             idNextStart++;
         }
     assert(cs!=NULL);
@@ -480,7 +483,7 @@ for (cs = chromSizes; cs != NULL; cs = cs->next)
     g->totalCov += cs->totalCov;
     g->totalAlign += cs->totalAlign;
     g->totalId += cs->totalId;
-    for (i=0; i<=maxCover; ++i)
+    for (i=0; i<=maxDepth; ++i)
         g->histogram[i] += cs->histogram[i];
     }
 return g;

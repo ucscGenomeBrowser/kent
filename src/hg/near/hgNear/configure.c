@@ -12,7 +12,7 @@
 #include "web.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: configure.c,v 1.19 2003/09/03 18:33:21 kent Exp $";
+static char const rcsid[] = "$Id: configure.c,v 1.24 2003/09/11 05:31:19 kent Exp $";
 
 static char *onOffString(boolean on)
 /* Return "on" or "off". */
@@ -174,9 +174,21 @@ boolean showOnlyCannonical()
 return !cartUsualBoolean(cart, showAllSpliceVarName, FALSE);
 }
 
+struct userSettings *colUserSettings()
+/* Return userSettings object for columns. */
+{
+struct userSettings *us = userSettingsNew(cart, 
+	"Save Current Column Configuration",
+	savedCurrentConfName, colSaveSettingsPrefix);
+userSettingsCapturePrefix(us, colConfigPrefix);
+userSettingsCaptureVar(us, colOrderVar);
+return us;
+}
+
 void doConfigure(struct sqlConnection *conn, struct column *colList, char *bumpVar)
 /* Generate configuration page. */
 {
+struct userSettings *us = colUserSettings();
 if (bumpVar)
     bumpColList(bumpVar, &colList);
 makeTitle("Configure Gene Family Browser", "hgNearConfigure.html");
@@ -203,14 +215,20 @@ cgiMakeButton(hideAllConfName, "Hide All");
 hPrintf("</TD><TD>");
 cgiMakeButton(showAllConfName, "Show All");
 hPrintf("</TD><TD>");
-cgiMakeButton(saveCurrentConfName, "Save Current Settings");
+hPrintf("&nbsp;");
 hPrintf("</TD><TD>");
-if (cartVarExists(cart, savedColSettingsVarName))
+cgiMakeButton(saveCurrentConfName, "Save Settings");
+if (userSettingsAnySaved(us))
     {
-    cgiMakeButton(useSavedConfName, "Use Saved Settings");
-    hPrintf("</TD><TD>");
+    hPrintf(" ");
+    userSettingsDropDown(us);
+    hPrintf(" ");
+    cgiMakeButton(useSavedConfName, "Load Settings");
     }
-cgiMakeButton(defaultConfName, "Default Columns");
+hPrintf("</TD><TD>");
+hPrintf("&nbsp;");
+hPrintf("</TD><TD>");
+cgiMakeButton(defaultConfName, "Default Settings");
 hPrintf("</TD></TR></TABLE>");
 configTable(colList, conn);
 hPrintf("</FORM>");
@@ -254,59 +272,25 @@ void doConfigShowAll(struct sqlConnection *conn, struct column *colList)
 configAllVis(conn, colList, "on");
 }
 
-struct dyString *hashElsToSettings(struct hashEl *list)
-/* Convert string valued hash elements to settings string. 
- * That is a string of var="val" pairs. */
-{
-struct dyString *dy = dyStringNew(1024);
-struct hashEl *el;
-char *s, c;
-
-for (el = list; el != NULL; el = el->next)
-    {
-    dyStringPrintf(dy, "%s=", el->name);
-    dyStringAppendC(dy, '"');
-    s = el->val;
-    while ((c = *s++) != 0)
-        {
-	if (c == '"')
-	   dyStringAppendC(dy, '\\');
-	dyStringAppendC(dy, c);
-	}
-    dyStringAppendC(dy, '"');
-    dyStringAppendC(dy, ' ');
-    }
-return dy;
-}
-
-void doConfigSaveCurrent(struct sqlConnection *conn, struct column *colList)
-/* Respond to Save Current Settings buttin in configuration page. */
-{
-struct hashEl *colVars;
-char wild[64];
-struct dyString *dy;
-
-safef(wild, sizeof(wild), "%s*", colConfigPrefix);
-colVars = cartFindLike(cart, wild);
-dy = hashElsToSettings(colVars);
-cartSetString(cart, savedColSettingsVarName, dy->string);
-doConfigure(conn, colList, NULL);
-}
-
 void doConfigUseSaved(struct sqlConnection *conn, struct column *colList)
-/* Respond to Use Saved Settings buttin in configuration page. */
+/* Respond to Use Saved Settings button in configuration page. */
 {
-char *settings = cartOptionalString(cart, savedColSettingsVarName);
-if (settings != NULL)
-    {
-    struct hash *hash = hashVarLine(settings, 1);
-    struct hashEl *list = hashElListHash(hash);
-    struct hashEl *el;
-    for (el = list; el != NULL; el = el->next)
-        {
-	cartSetString(cart, el->name, el->val);
-	}
-    }
+struct userSettings *us = colUserSettings();
+userSettingsUseSelected(us);
 doConfigure(conn, colList, NULL);
 }
 
+void doNameCurrentColumns()
+/* Put up page to save current column configuration. */
+{
+struct userSettings *us = colUserSettings();
+userSettingsSaveForm(us);
+}
+
+void doSaveCurrentColumns(struct sqlConnection *conn, struct column *colList)
+/* Save the current columns, and then go on. */
+{
+struct userSettings *us = colUserSettings();
+if (userSettingsProcessForm(us))
+    doConfigure(conn, colList, NULL);
+}

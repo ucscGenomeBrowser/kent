@@ -12,6 +12,7 @@ mafCoverage: $O $(MYLIBS)
 
 test:	test1 test2
 %:	input/%.maf
+	mkdir -p output
 	mafCoverage hg15 input/$@.maf > output/$@.txt
 	diff output/$@.txt expected/$@.txt
 	rm output/$@.txt

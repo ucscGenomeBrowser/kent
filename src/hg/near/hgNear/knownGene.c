@@ -14,7 +14,7 @@
 #include "kgAlias.h"
 #include "findKGAlias.h"
 
-static char const rcsid[] = "$Id: knownGene.c,v 1.14 2003/09/03 20:10:31 kent Exp $";
+static char const rcsid[] = "$Id: knownGene.c,v 1.19 2003/09/09 00:50:05 kent Exp $";
 
 static char *posFromRow3(char **row)
 /* Convert chrom/start/end row to position. */
@@ -90,24 +90,24 @@ else
 hPrintf("</TD>");
 }
 
-static void genePredPosSearchControls(struct column *col, struct sqlConnection *conn)
-/* Print out controls for advanced search. */
+static void genePredPosFilterControls(struct column *col, struct sqlConnection *conn)
+/* Print out controls for advanced filter. */
 {
 hPrintf("chromosome: ");
-advSearchRemakeTextVar(col, "chr", 8);
+advFilterRemakeTextVar(col, "chr", 8);
 hPrintf(" start: ");
-advSearchRemakeTextVar(col, "start", 8);
+advFilterRemakeTextVar(col, "start", 8);
 hPrintf(" end: ");
-advSearchRemakeTextVar(col, "end", 8);
+advFilterRemakeTextVar(col, "end", 8);
 }
 
-static struct genePos *genePredPosAdvancedSearch(struct column *col, 
+static struct genePos *genePredPosAdvFilter(struct column *col, 
 	struct sqlConnection *conn, struct genePos *list)
-/* Do advanced search on position. */
+/* Do advanced filter on position. */
 {
-char *chrom = advSearchVal(col, "chr");
-char *startString = advSearchVal(col, "start");
-char *endString = advSearchVal(col, "end");
+char *chrom = advFilterVal(col, "chr");
+char *startString = advFilterVal(col, "start");
+char *endString = advFilterVal(col, "end");
 if (chrom != NULL)
     {
     struct genePos *newList = NULL, *gp, *next;
@@ -162,8 +162,8 @@ col->table = table;
 col->exists = simpleTableExists;
 col->cellVal = genePredPosVal;
 col->cellPrint = genePredPosPrint;
-col->searchControls = genePredPosSearchControls;
-col->advancedSearch = genePredPosAdvancedSearch;
+col->filterControls = genePredPosFilterControls;
+col->advFilter = genePredPosAdvFilter;
 }
 
 static char *knownPosCellVal(struct column *col, struct genePos *gp, 
@@ -188,7 +188,7 @@ return pos;
 }
 
 static struct genePos *genePosFromQuery(struct sqlConnection *conn, char *query)
-/* Get all positions from a query that returns 4 columns. */
+/* Get all positions from a query that returns 5 columns. */
 {
 struct sqlResult *sr;
 char **row;
@@ -198,7 +198,7 @@ sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     AllocVar(gp);
-    genePosFillFrom4(gp, row);
+    genePosFillFrom5(gp, row);
     slAddHead(&gpList, gp);
     }
 sqlFreeResult(&sr);
@@ -210,27 +210,11 @@ struct genePos *knownPosAll(struct sqlConnection *conn)
 {
 if (showOnlyCannonical())
     return genePosFromQuery(conn, 
-    	"select transcript,chrom,chromStart,chromEnd from knownCannonical");
+    	"select transcript,chrom,chromStart,chromEnd,protein from knownCannonical");
 else
     return genePosFromQuery(conn,
-    	"select name,chrom,txStart,txEnd from knownGene");
+    	"select name,chrom,txStart,txEnd,proteinId from knownGene");
 }
-
-struct hash *knownCannonicalHash(struct sqlConnection *conn)
-/* Get all cannonical gene names in hash. */
-{
-struct hash *hash = newHash(16);
-struct sqlResult *sr;
-char **row;
-sr = sqlGetResult(conn, "select transcript from knownCannonical");
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-    hashAdd(hash, row[0], NULL);
-    }
-sqlFreeResult(&sr);
-return hash;
-}
-
 
 void setupColumnKnownPos(struct column *col, char *parameters)
 /* Set up column that links to genome browser based on known gene
@@ -255,7 +239,8 @@ else
     fillInKnownPos(gp, conn);
     hPrintf("<A HREF=\"../cgi-bin/hgc?%s&g=knownGene&i=%s&c=%s&l=%d&r=%d\">",
 	    cartSidUrlString(cart), gp->name, gp->chrom, gp->start, gp->end);
-    hPrintf("%s</A></TD>", s);
+    hPrintNonBreak(s);
+    hPrintf("</A></TD>", s);
     freeMem(s);
     }
 }

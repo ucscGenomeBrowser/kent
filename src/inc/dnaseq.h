@@ -41,7 +41,11 @@ void freeDnaSeqList(struct dnaSeq **pSeqList);
 /* Free up list of DNA sequences. */
 #define dnaSeqFreeList freeDnaSeqList
 
-aaSeq *translateSeq(struct dnaSeq *inSeq, int offset, boolean stop);
+aaSeq *translateSeqN(struct dnaSeq *inSeq, unsigned offset, unsigned size, boolean stop);
+/* Return a translated sequence.  Offset is position of first base to
+ * translate. If size is 0 then use length of inSeq. */
+
+aaSeq *translateSeq(struct dnaSeq *inSeq, unsigned offset, boolean stop);
 /* Return a translated sequence.  Offset is position of first base to
  * translate. If stop is TRUE then stop at first stop codon.  (Otherwise 
  * represent stop codons as 'Z'). */

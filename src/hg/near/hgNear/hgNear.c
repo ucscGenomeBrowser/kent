@@ -16,14 +16,15 @@
 #include "ra.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: hgNear.c,v 1.54 2003/09/03 23:01:20 kent Exp $";
+static char const rcsid[] = "$Id: hgNear.c,v 1.67 2003/09/11 06:39:07 kent Exp $";
 
 char *excludeVars[] = { "submit", "Submit", confVarName, colInfoVarName,
 	defaultConfName, hideAllConfName, showAllConfName,
-	saveCurrentConfName, useSavedConfName,
+	saveCurrentConfName, useSavedConfName, 
+	filSaveCurrentVarName, filUseSavedVarName,
 	getSeqVarName, getSeqPageVarName, getGenomicSeqVarName, getTextVarName, 
-	advSearchVarName, advSearchClearVarName, advSearchBrowseVarName,
-	advSearchListVarName, resetConfName, idVarName, idPosVarName, NULL }; 
+	advFilterVarName, advFilterClearVarName, advFilterBrowseVarName,
+	advFilterListVarName, idVarName, idPosVarName, NULL }; 
 /* The excludeVars are not saved to the cart. */
 
 /* ---- Global variables. ---- */
@@ -32,6 +33,7 @@ char *database;		/* Name of genome database - hg15, mm3, or the like. */
 char *organism;		/* Name of organism - mouse, human, etc. */
 char *groupOn;		/* Current grouping strategy. */
 int displayCount;	/* Number of items to display. */
+char *displayCountString; /* Ascii version of display count, including 'all'. */
 
 struct genePos *curGeneId;	  /* Identity of current gene. */
 
@@ -45,14 +47,42 @@ const struct genePos *b = *((struct genePos **)vb);
 return strcmp(a->name, b->name);
 }
 
-void genePosFillFrom4(struct genePos *gp, char **row)
+int genePosCmpPos(const void *va, const void *vb)
+/* Sort function to compare two genePos by chrom,start. */
+{
+const struct genePos *a = *((struct genePos **)va);
+const struct genePos *b = *((struct genePos **)vb);
+int diff =  strcmp(a->chrom, b->chrom);
+if (diff == 0)
+    diff = a->start - b->start;
+return diff;
+}
+
+
+void genePosFillFrom5(struct genePos *gp, char **row)
 /* Fill in genePos from row containing ascii version of
- * name/chrom/start/end. */
+ * name/chrom/start/end/protein. */
 {
 gp->name = cloneString(row[0]);
 gp->chrom = cloneString(row[1]);
 gp->start = sqlUnsigned(row[2]);
 gp->end = sqlUnsigned(row[3]);
+gp->protein = cloneString(row[4]);
+gp->distance = genePosTooFar;
+}
+
+int genePosCmpDistance(const void *va, const void *vb)
+/* Compare to sort based on distance. */
+{
+const struct genePos *a = *((struct genePos **)va);
+const struct genePos *b = *((struct genePos **)vb);
+float diff = a->distance - b->distance;
+if (diff > 0)
+    return 1;
+else if (diff < 0)
+    return -1;
+else
+    return 0;
 }
 
 boolean wildMatchAny(char *word, struct slName *wildList)
@@ -99,6 +129,19 @@ va_list(args);
 va_start(args, format);
 hvPrintf(format, args);
 va_end(args);
+}
+
+void hPrintNonBreak(char *s)
+/* Print out string but replace spaces with &nbsp; */
+{
+char c;
+while (c = *s++)
+    {
+    if (c == ' ')
+	fputs("&nbsp;", stdout);
+    else
+        putchar(c);
+    }
 }
 
 void makeTitle(char *title, char *helpName)
@@ -179,23 +222,46 @@ if (endsWith(colName, "__filename"))
 return findNamedColumn(colList, colName);
 }
 
-struct hash *keyFileHash(struct column *col)
-/* Make up a hash from key file for this column. 
- * Return NULL if no key file. */
+static char *keyFileName(struct column *col)
+/* Return key file name for this column.  Return
+ * NULL if no key file. */
 {
-char *fileName = advSearchVal(col, "keyFile");
+char *fileName = advFilterVal(col, "keyFile");
 if (fileName == NULL)
     return NULL;
 if (!fileExists(fileName))
     {
-    cartRemove(cart, advSearchName(col, "keyFile"));
+    cartRemove(cart, advFilterName(col, "keyFile"));
     return NULL;
     }
-return hashWordsInFile(fileName, 16);
+return fileName;
 }
 
-char *cellLookupVal(struct column *col, struct genePos *gp, struct sqlConnection *conn);
-/* Get a field in a table defined by col->table, col->keyField, col->valField. */
+struct slName *keyFileList(struct column *col)
+/* Make up list from key file for this column.
+ * return NULL if no key file. */
+{
+char *fileName = keyFileName(col);
+char *buf;
+struct slName *list;
+
+if (fileName == NULL)
+    return NULL;
+readInGulp(fileName, &buf, NULL);
+list = stringToSlNames(buf);
+freez(&buf);
+return list;
+}
+
+struct hash *keyFileHash(struct column *col)
+/* Make up a hash from key file for this column. 
+ * Return NULL if no key file. */
+{
+char *fileName = keyFileName(col);
+if (fileName == NULL)
+    return NULL;
+return hashWordsInFile(fileName, 16);
+}
 
 char *cellLookupVal(struct column *col, struct genePos *gp, 
 	struct sqlConnection *conn)
@@ -220,15 +286,17 @@ void cellSimplePrint(struct column *col, struct genePos *gp,
 /* This just prints one field from table. */
 {
 char *s = col->cellVal(col, gp, conn);
+hPrintf("<TD>");
 if (s == NULL) 
     {
-    hPrintf("<TD>n/a</TD>", s);
+    hPrintf("n/a");
     }
 else
     {
-    hPrintf("<TD>%s</TD>", s);
+    hPrintNonBreak(s);
     freeMem(s);
     }
+hPrintf("</TD>");
 }
 
 static void hPrintSpaces(int count)
@@ -368,11 +436,11 @@ static char *accVal(struct column *col, struct genePos *gp, struct sqlConnection
 return cloneString(gp->name);
 }
 
-struct genePos *accAdvancedSearch(struct column *col, 
+struct genePos *accAdvFilter(struct column *col, 
 	struct sqlConnection *conn, struct genePos *list)
-/* Do advanced search on accession. */
+/* Do advanced filter on accession. */
 {
-char *wild = advSearchVal(col, "wild");
+char *wild = advFilterVal(col, "wild");
 struct hash *keyHash = keyFileHash(col);
 if (keyHash != NULL)
     {
@@ -390,7 +458,7 @@ if (keyHash != NULL)
     }
 if (wild != NULL)
     {
-    boolean orLogic = advSearchOrLogic(col, "logic", TRUE);
+    boolean orLogic = advFilterOrLogic(col, "logic", TRUE);
     struct genePos *newList = NULL, *next, *gp;
     struct slName *wildList = stringToSlNames(wild);
     for (gp = list; gp != NULL; gp = next)
@@ -404,6 +472,7 @@ if (wild != NULL)
     slReverse(&newList);
     list = newList;
     }
+hashFree(&keyHash);
 return list;
 }
 
@@ -413,8 +482,8 @@ void setupColumnAcc(struct column *col, char *parameters)
 {
 columnDefaultMethods(col);
 col->cellVal = accVal;
-col->searchControls = lookupSearchControls;
-col->advancedSearch = accAdvancedSearch;
+col->filterControls = lookupAdvFilterControls;
+col->advFilter = accAdvFilter;
 }
 
 /* ---- Number column ---- */
@@ -440,7 +509,7 @@ col->cellPrint = cellSelfLinkPrint;
 
 /* ---- Simple table lookup type columns ---- */
 
-static struct searchResult *lookupTypeSimpleSearch(struct column *col, 
+struct searchResult *lookupTypeSimpleSearch(struct column *col, 
     struct sqlConnection *conn, char *search)
 /* Search lookup type column. */
 {
@@ -472,49 +541,49 @@ slReverse(&resList);
 return resList;
 }
 
-void lookupSearchControls(struct column *col, struct sqlConnection *conn)
-/* Print out controls for advanced search. */
+void lookupAdvFilterControls(struct column *col, struct sqlConnection *conn)
+/* Print out controls for advanced filter. */
 {
-char *fileName = advSearchVal(col, "keyFile");
+char *fileName = advFilterVal(col, "keyFile");
 hPrintf("%s search (including * and ? wildcards):", col->shortLabel);
-advSearchRemakeTextVar(col, "wild", 18);
+advFilterRemakeTextVar(col, "wild", 18);
 hPrintf("<BR>\n");
 hPrintf("Include if ");
-advSearchAnyAllMenu(col, "logic", TRUE);
+advFilterAnyAllMenu(col, "logic", TRUE);
 hPrintf("words in search term match.<BR>");
 if (!columnSetting(col, "noKeys", NULL))
     {
     hPrintf("Limit to items in list: ");
-    advSearchKeyPasteButton(col);
+    advFilterKeyPasteButton(col);
     hPrintf(" ");
-    advSearchKeyUploadButton(col);
+    advFilterKeyUploadButton(col);
     hPrintf(" ");
     if (fileName != NULL)
 	{
 	if (fileExists(fileName))
 	    {
-	    advSearchKeyClearButton(col);
+	    advFilterKeyClearButton(col);
 	    hPrintf("<BR>\n");
 	    hPrintf("(There are currently %d items in list.)",
 		    countWordsInFile(fileName));
 	    }
 	else
 	    {
-	    cartRemove(cart, advSearchName(col, "keyFile"));
+	    cartRemove(cart, advFilterName(col, "keyFile"));
 	    }
        }
     }
 }
 
-struct genePos *lookupAdvancedSearch(struct column *col, 
+struct genePos *lookupAdvFilter(struct column *col, 
 	struct sqlConnection *conn, struct genePos *list)
-/* Do advanced search on position. */
+/* Do advanced filter on position. */
 {
-char *wild = advSearchVal(col, "wild");
+char *wild = advFilterVal(col, "wild");
 struct hash *keyHash = keyFileHash(col);
 if (wild != NULL || keyHash != NULL)
     {
-    boolean orLogic = advSearchOrLogic(col, "logic", TRUE);
+    boolean orLogic = advFilterOrLogic(col, "logic", TRUE);
     struct hash *hash = newHash(17);
     char query[256];
     struct sqlResult *sr;
@@ -535,35 +604,25 @@ if (wild != NULL || keyHash != NULL)
     sqlFreeResult(&sr);
     hashFree(&hash);
     }
+hashFree(&keyHash);
 return list;
-}
-
-void lookupTypeMethods(struct column *col, char *table, char *key, char *val)
-/* Set up the methods for a simple lookup column. */
-{
-col->table = cloneString(table);
-col->keyField = cloneString(key);
-col->valField = cloneString(val);
-col->exists = simpleTableExists;
-col->cellVal = cellLookupVal;
-if (columnSetting(col, "search", NULL))
-    {
-    col->simpleSearch = lookupTypeSimpleSearch;
-    }
-col->searchControls = lookupSearchControls;
-col->advancedSearch = lookupAdvancedSearch;
 }
 
 void setupColumnLookup(struct column *col, char *parameters)
 /* Set up column that just looks up one field in a table
  * keyed by the geneId. */
 {
-char *table = nextWord(&parameters);
-char *keyField = nextWord(&parameters);
-char *valField = nextWord(&parameters);
-if (valField == NULL)
+col->table = cloneString(nextWord(&parameters));
+col->keyField = cloneString(nextWord(&parameters));
+col->valField = cloneString(nextWord(&parameters));
+if (col->valField == NULL)
     errAbort("Not enough fields in type lookup for %s", col->name);
-lookupTypeMethods(col, table, keyField, valField);
+col->exists = simpleTableExists;
+col->cellVal = cellLookupVal;
+if (columnSetting(col, "search", NULL))
+    col->simpleSearch = lookupTypeSimpleSearch;
+col->filterControls = lookupAdvFilterControls;
+col->advFilter = lookupAdvFilter;
 }
 
 /* ---- Distance table type columns ---- */
@@ -584,21 +643,21 @@ sqlFreeResult(&sr);
 return res;
 }
 
-void distanceSearchControls(struct column *col, struct sqlConnection *conn)
-/* Print out controls for advanced search. */
+void distanceFilterControls(struct column *col, struct sqlConnection *conn)
+/* Print out controls for advanced filter. */
 {
 hPrintf("minimum: ");
-advSearchRemakeTextVar(col, "min", 8);
+advFilterRemakeTextVar(col, "min", 8);
 hPrintf(" maximum: ");
-advSearchRemakeTextVar(col, "max", 8);
+advFilterRemakeTextVar(col, "max", 8);
 }
 
-struct genePos *distanceAdvancedSearch(struct column *col, 
+struct genePos *distanceAdvFilter(struct column *col, 
 	struct sqlConnection *conn, struct genePos *list)
-/* Do advanced search on distance type. */
+/* Do advanced filter on distance type. */
 {
-char *minString = advSearchVal(col, "min");
-char *maxString = advSearchVal(col, "max");
+char *minString = advFilterVal(col, "min");
+char *maxString = advFilterVal(col, "max");
 if (minString != NULL || maxString != NULL)
     {
     struct hash *passHash = newHash(16);  /* Hash of genes that pass. */
@@ -637,8 +696,8 @@ col->valField = cloneString(valField);
 col->curGeneField = cloneString(curGene);
 col->exists = simpleTableExists;
 col->cellVal = cellDistanceVal;
-col->searchControls = distanceSearchControls;
-col->advancedSearch = distanceAdvancedSearch;
+col->filterControls = distanceFilterControls;
+col->advFilter = distanceAdvFilter;
 }
 
 void setupColumnDistance(struct column *col, char *parameters)
@@ -656,7 +715,7 @@ distanceTypeMethods(col, table, curGene, otherGene, valField);
 
 /* ---- Page/Form Making stuff ---- */
 
-void controlPanel(struct genePos *gp)
+void controlPanel(struct genePos *gp, struct order *curOrd, struct order *ordList)
 /* Make control panel. */
 {
 hPrintf("<TABLE WIDTH=\"100%%\" BORDER=0 CELLSPACING=1 CELLPADDING=1>\n");
@@ -670,21 +729,25 @@ hPrintf("<TR><TD ALIGN=CENTER>");
 
 /* Do sort by drop-down */
     {
-    static char *menu[] = {"expression", "homology", "name", "position", "advanced search"};
-    int menuSize = ArraySize(menu);
-    if (!gotAdvSearch())
-	menuSize -= 1;
-    hPrintf("group by ");
-    cgiMakeDropList(groupVarName, menu, menuSize, groupOn);
+    struct order *ord;
+
+    hPrintf("sort by ");
+    hPrintf("<SELECT NAME=\"%s\">\n", orderVarName);
+    for (ord = ordList; ord != NULL; ord = ord->next)
+        {
+	hPrintf("<OPTION VALUE=\"%s\"", ord->name);
+	if (ord == curOrd)
+	    hPrintf(" SELECTED");
+	hPrintf(">%s\n", ord->shortLabel);
+	}
+    hPrintf("</SELECT>\n");
     }
 
 /* Do items to display drop-down */
     {
-    char buf[16];
-    static char *menu[] = {"25", "50", "100", "200", "500", "1000"};
-    safef(buf, sizeof(buf), "%d", displayCount);
+    static char *menu[] = {"25", "50", "100", "200", "500", "1000", "all"};
     hPrintf(" display ");
-    cgiMakeDropList(countVarName, menu, ArraySize(menu), buf);
+    cgiMakeDropList(countVarName, menu, ArraySize(menu), displayCountString);
     }
 
 /* Do search box. */
@@ -698,7 +761,7 @@ hPrintf("<TR><TD ALIGN=CENTER>");
 /* Do go button. */
     {
     hPrintf(" ");
-    cgiMakeButton("submit", "Go!");
+    printf("<INPUT TYPE=SUBMIT NAME=\"%s\" VALUE=\"%s\" TABINDEX=0>", "submit", "Go!");
     }
 
 hPrintf("</TD></TR>\n<TR><TD ALIGN=CENTER>");
@@ -717,304 +780,67 @@ hPrintf("</TD></TR>\n<TR><TD ALIGN=CENTER>");
     cgiMakeDropList("near.assembly", menu, ArraySize(menu), menu[0]);
     }
 
-/* Make getDna, getText, advancedSearch buttons */
+/* Make getDna, getText, advFilter buttons */
     {
     hPrintf(" ");
     cgiMakeButton(getSeqPageVarName, "as sequence");
     hPrintf(" ");
     cgiMakeButton(getTextVarName, "as text");
     hPrintf(" ");
-    cgiMakeButton(advSearchVarName, "advanced search");
+    if (gotAdvFilter())
+	cgiMakeButton(advFilterVarName, "filter (now on)");
+     else
+	cgiMakeButton(advFilterVarName, "filter (now off)");
     }
 
 
 hPrintf("</TD></TR></TABLE>");
 }
 
-struct genePos *genePosSimple(char *name)
-/* Return a simple gene pos - with no chrom info. */
+static void trimFarGenes(struct genePos **pList)
+/* Remove genes that are genePosTooFar or farther from list. */
 {
-struct genePos *gp;
-AllocVar(gp);
-gp->name = cloneString(name);
-return gp;
-}
-
-struct genePos *genePosFull(char *name, char *chrom, int start, int end)
-/* Return full gene position */
-{
-struct genePos *gp = genePosSimple(name);
-gp->chrom = cloneString(chrom);
-gp->start = start;
-gp->end = end;
-return gp;
-}
-
-static struct genePos *neighborhoodList(struct sqlConnection *conn, 
-	char *query, struct hash *goodHash, int maxCount)
-/* Get list of up to maxCount from query. */
-{
-struct sqlResult *sr;
-char **row;
-struct genePos *list = NULL, *name;
-struct hash *dupeHash = newHash(0);
-int count = 0;
-sr = sqlGetResult(conn, query);
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-    if (!hashLookup(dupeHash, row[0]))
-	{
-	if (goodHash == NULL || hashLookup(goodHash, row[0]))
-	    {
-	    hashAdd(dupeHash, row[0], NULL);
-	    name = genePosSimple(row[0]);
-	    slAddHead(&list, name);
-	    if (++count >= maxCount)
-		break;
-	    }
-	}
-    }
-freeHash(&dupeHash);
-sqlFreeResult(&sr);
-slReverse(&list);
-return list;
-}
-
-struct genePos *getExpressionNeighbors(struct sqlConnection *conn,
-	struct hash *goodHash, int maxCount)
-/* Get expression neighborhood. */
-{
-struct dyString *query = dyStringNew(1024);
-struct genePos *list;
-
-/* Look for matchers.  Look for a few more than they ask for to
- * account for dupes. */
-dyStringPrintf(query, 
-	"select target from knownExpDistance where query='%s'", 
-	curGeneId->name);
-dyStringPrintf(query, " order by distance limit %d", maxCount*2);
-list = neighborhoodList(conn, query->string, goodHash, maxCount);
-dyStringFree(&query);
-if (list == NULL)
-    warn("There is no expression data associated with %s.", curGeneId->name);
-return list;
-}
-
-struct genePos *getHomologyNeighbors(struct sqlConnection *conn,
-	struct hash *goodHash, int maxCount)
-/* Get homology neighborhood. */
-{
-struct dyString *query = dyStringNew(1024);
-struct genePos *list;
-
-/* Look for matchers.  Look for a few more than they ask for to
- * account for dupes. */
-dyStringPrintf(query, 
-	"select target from knownBlastTab where query='%s'", 
-	curGeneId->name);
-dyStringPrintf(query, " order by bitScore desc limit %d", (int)(maxCount*2));
-list = neighborhoodList(conn, query->string, goodHash, maxCount);
-dyStringFree(&query);
-if (list == NULL)
-    warn("There is no protein associated with %s. "
-            "Therefore group by homology is empty.", curGeneId->name);
-return list;
-}
-
-
-struct genePos *getGenomicNeighbors(struct sqlConnection *conn, 
-	struct genePos *curGp, struct hash *goodHash, int maxCount)
-/* Get neighbors in genome. */
-{
-struct genePos *gpList = NULL, *gp, *next;
-char query[256];
-struct sqlResult *sr;
-char **row;
-int i, ix = 0, chosenIx = -1;
-int startIx, endIx, listSize;
-int geneCount = 0;
-struct genePos *geneList = NULL, *gene;
-
-/* Get list of all genes in chromosome */
-safef(query, sizeof(query), 
-	"select name,txStart,txEnd from knownGene where chrom='%s'", curGp->chrom);
-sr = sqlGetResult(conn, query);
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-    gp = genePosFull(row[0], curGp->chrom, 
-    	sqlUnsigned(row[1]), sqlUnsigned(row[2]));
-    if (goodHash == NULL || hashLookup(goodHash, row[0]))
-	{
-	slAddHead(&gpList, gp);
-	if (curGp->start == gp->start && curGp->end == gp->end 
-	    && sameString(curGp->name, gp->name) )
-	    chosenIx = ix;
-	++ix;
-	++geneCount;
-	}
-    }
-sqlFreeResult(&sr);
-slReverse(&gpList);
-
-if (chosenIx < 0)
-    errAbort("%s is not mapped", curGp->name);
-
-/* Figure out start and ending index of genes we want. */
-startIx = chosenIx - maxCount/2;
-endIx = startIx + maxCount;
-if (startIx < 0) startIx = 0;
-if (endIx > geneCount) endIx = geneCount;
-listSize = endIx - startIx;
-
-gp = slElementFromIx(gpList, startIx);
-for (i=0; i<listSize; ++i, gp=next)
+struct genePos *newList = NULL, *gp, *next;
+for (gp = *pList; gp != NULL; gp = next)
     {
     next = gp->next;
-    slAddHead(&geneList, gp);
-    }
-slReverse(&geneList);
-
-return geneList;
-}
-
-
-struct genePos *getPositionNeighbors(struct sqlConnection *conn, 
-	struct hash *goodHash, int maxCount)
-/* Get genes in genomic neighborhood. */
-{
-return getGenomicNeighbors(conn, curGeneId, goodHash, maxCount);
-}
-
-struct scoredIdName
-/* A structure that stores a key, a name, and a score. */
-    {
-    struct scoredIdName *next;
-    char *id;		/* GeneID */
-    char *name;		/* Gene name. */
-    int score;		/* Big is better. */
-    };
-
-int scoredIdNameCmpScore(const void *va, const void *vb)
-/* Compare to sort based on score. */
-{
-const struct scoredIdName *a = *((struct scoredIdName **)va);
-const struct scoredIdName *b = *((struct scoredIdName **)vb);
-int diff = b->score - a->score;
-if (diff == 0)
-    diff = strcmp(a->name, b->name);
-return diff;
-}
-
-int countStartSame(char *prefix, char *name)
-/* Return how many letters of prefix match first characters of name. */
-{
-int i;
-char c;
-for (i=0; ;++i)
-    {
-    c = prefix[i];
-    if (c == 0 || c != name[i])
-        break;
-    }
-return i;
-}
-
-struct scoredIdName *scorePrefixMatch(char *prefix, char *id, char *name)
-/* Return scoredIdName structure based on name and how many
- * characters match prefix. */
-{
-struct scoredIdName *sin;
-AllocVar(sin);
-sin->id = cloneString(id);
-sin->name = cloneString(name);
-sin->score = countStartSame(prefix, name);
-return sin;
-}
-
-struct genePos *getNameborhood(struct sqlConnection *conn,
-	char *curName, char *table, char *idField, char *nameField,
-	struct hash *goodHash, int maxCount)
-/* Get list of all genes that are similarly prefixed. */
-{
-struct sqlResult *sr;
-char **row;
-char query[512];
-struct scoredIdName *sinList = NULL, *sin;
-int i;
-struct genePos *gpList = NULL, *gp;
-
-/* Scan table for names and sort by similarity. */
-safef(query, sizeof(query), "select %s,%s from %s", idField, nameField, table);
-sr = sqlGetResult(conn, query);
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-    sin = scorePrefixMatch(curName, row[0], row[1]);
-    if (goodHash == NULL || hashLookup(goodHash, row[0]))
-	{
-	slAddHead(&sinList, sin);
+    if (gp->distance < genePosTooFar)
+        {
+	slAddHead(&newList, gp);
 	}
     }
-sqlFreeResult(&sr);
-slSort(&sinList, scoredIdNameCmpScore);
-
-/* Make list of top ones. */
-for (i=0, sin=sinList; i<maxCount && sin != NULL; ++i, sin = sin->next)
-    {
-    AllocVar(gp);
-    gp->name = sin->id;
-    sin->id = NULL;
-    slAddHead(&gpList, gp);
-    }
-slReverse(&gpList);
-return gpList;
+slReverse(&newList);
+*pList = newList;
 }
 
-struct genePos *getNameNeighbors(struct sqlConnection *conn,
-	struct hash *goodHash, int maxCount)
-/* Get genes in genomic neighborhood. */
+struct genePos *getOrderedList(struct order *ord,
+	struct column *colList, struct sqlConnection *conn)
+/* Return sorted list of gene neighbors. */
 {
-char query[256];
-char name[128];
-safef(query, sizeof(query), 
-	"select geneSymbol from kgXref where kgID = '%s'", curGeneId->name);
-if (sqlQuickQuery(conn, query, name, sizeof(name)))
-    return getNameborhood(conn, name, "kgXref", "kgID", "geneSymbol", 
-    	goodHash, maxCount);
-else
-    {
-    warn("Couldn't find name for %s", curGeneId->name);
-    return NULL;
-    }
-}
+struct genePos *geneList = advFilterResults(colList, conn);
+struct hash *geneHash = newHash(16);
+struct genePos *gp;
 
-struct hash *cannonicalHash(struct sqlConnection *conn)
-/* Get cannonicalHash if necessary, otherwise return NULL. */
-{
-if (showOnlyCannonical())
-    return knownCannonicalHash(conn);
-else
-    return NULL;
-}
-
-struct genePos *getNeighbors(struct column *colList, struct sqlConnection *conn)
-/* Return gene neighbors. */
-{
-struct hash *goodHash = cannonicalHash(conn);
-if (sameString(groupOn, "expression"))
-    return getExpressionNeighbors(conn, goodHash, displayCount);
-else if (sameString(groupOn, "homology"))
-    return getHomologyNeighbors(conn, goodHash, displayCount);
-else if (sameString(groupOn, "position"))
-    return getPositionNeighbors(conn, goodHash, displayCount);
-else if (sameString(groupOn, "name"))
-    return getNameNeighbors(conn, goodHash, displayCount);
-else if (sameString(groupOn, "advanced search"))
-    return getSearchNeighbors(colList, conn, goodHash, displayCount);
-else
+/* Make hash of all genes. */
+for (gp = geneList; gp != NULL; gp = gp->next)
     {
-    errAbort("Unknown sort value %s", groupOn);
-    return NULL;
+    hashAdd(geneHash, gp->name, gp);
     }
+
+/* Calculate distances, trim unset distances, and sort. */
+if (ord->calcDistances)
+    ord->calcDistances(ord, conn, &geneList, geneHash, displayCount);
+if (!gotAdvFilter())
+    trimFarGenes(&geneList);
+slSort(&geneList, genePosCmpDistance);
+
+/* Trim list to max number. */
+gp = slElementFromIx(geneList, displayCount-1);
+if (gp != NULL)
+    gp->next = NULL;
+
+// for (gp = geneList; gp !=NULL; gp = gp->next) uglyf("%s %f<BR>\n", gp->name, gp->distance);
+return geneList;
 }
 
 int columnCmpPriority(const void *va, const void *vb)
@@ -1098,6 +924,8 @@ if (sameString(type, "num"))
     setupColumnNum(col, s);
 else if (sameString(type, "lookup"))
     setupColumnLookup(col, s);
+else if (sameString(type, "association"))
+    setupColumnAssociation(col, s);
 else if (sameString(type, "acc"))
     setupColumnAcc(col, s);
 else if (sameString(type, "distance"))
@@ -1112,11 +940,12 @@ else if (sameString(type, "expRatio"))
     setupColumnExpRatio(col, s);
 else if (sameString(type, "swissProt"))
     setupColumnSwissProt(col, s);
+else if (sameString(type, "go"))
+    setupColumnGo(col, s);
 else
     errAbort("Unrecognized type %s for %s", col->type, col->name);
 freez(&dupe);
 }
-
 
 struct column *getColumns(struct sqlConnection *conn)
 /* Return list of columns for big table. */
@@ -1230,7 +1059,7 @@ for (gene = geneList; gene != NULL; gene = gene->next)
 		col->cellPrint(col,gene,conn);
 	    }
 	}
-    hPrintf("</TR>");
+    hPrintf("</TR>\n");
     }
 
 hPrintf("</TABLE>");
@@ -1287,8 +1116,9 @@ for (gene = geneList; gene != NULL; gene = gene->next)
 hPrintf("</PRE></TT>");
 }
 
-void doMainDisplay(struct sqlConnection *conn, struct column *colList, 
-	struct genePos *geneList)
+void doMainDisplay(struct sqlConnection *conn, 
+	struct order *ord, struct order *ordList,
+	struct column *colList, struct genePos *geneList)
 /* Put up the main family browser display - a control panel followed by 
  * a big table. */
 {
@@ -1297,10 +1127,39 @@ safef(buf, sizeof(buf), "UCSC %s Gene Family Browser", organism);
 makeTitle(buf, "hgNear.html");
 hPrintf("<FORM ACTION=\"../cgi-bin/hgNear\" METHOD=GET>\n");
 cartSaveSession(cart);
-controlPanel(curGeneId);
+controlPanel(curGeneId, ord, ordList);
 if (geneList != NULL)
     bigTable(conn, colList,geneList);
 hPrintf("</FORM>");
+}
+
+struct order *curOrder(struct order *ordList)
+/* Get ordering currently selected by user, or default
+ * (first in list) if none selected. */
+{
+char *selName;
+struct order *ord;
+if (ordList == NULL)
+    errAbort("No orderings available");
+selName = cartUsualString(cart, orderVarName, ordList->name);
+for (ord = ordList; ord != NULL; ord = ord->next)
+    {
+    if (sameString(ord->name, selName))
+        return ord;
+    }
+return ordList;
+}
+
+static char *lookupProtein(struct sqlConnection *conn, char *mrnaName)
+/* Given mrna name look up protein.  FreeMem result when done. */
+{
+char query[256];
+char buf[64];
+safef(query, sizeof(query), 
+	"select protein from knownCannonical where transcript='%s'", mrnaName);
+if (!sqlQuickQuery(conn, query, buf, sizeof(buf)))
+    return NULL;
+return cloneString(buf);
 }
 
 void displayData(struct sqlConnection *conn, struct column *colList, 
@@ -1308,9 +1167,13 @@ void displayData(struct sqlConnection *conn, struct column *colList,
 /* Display data in neighborhood of gene. */
 {
 struct genePos *geneList = NULL;
+struct order *ordList = orderGetAll(conn);
+struct order *ord = curOrder(ordList);
+if (gp->protein == NULL)
+    gp->protein = lookupProtein(conn, gp->name);
 curGeneId = gp;
 if (gp)
-    geneList = getNeighbors(colList, conn);
+    geneList = getOrderedList(ord, colList, conn);
 if (cartVarExists(cart, getTextVarName))
     doGetText(conn, colList, geneList);
 else if (cartVarExists(cart, getSeqVarName))
@@ -1318,10 +1181,10 @@ else if (cartVarExists(cart, getSeqVarName))
 else if (cartVarExists(cart, getGenomicSeqVarName))
     doGetGenomicSeq(conn, colList, geneList);
 else
-    doMainDisplay(conn, colList, geneList);
+    doMainDisplay(conn, ord, ordList, colList, geneList);
 }
 
-struct genePos *curGenePos()
+static struct genePos *curGenePos()
 /* Return current gene pos from cart variables. */
 {
 struct genePos *gp;
@@ -1375,7 +1238,7 @@ hPrintf("%s",
  "down. The 'as sequence' button will fetch protein, mRNA, promoter, or "
  "genomic sequence associated with the genes in the table.  The 'as text' "
  "button fetches the table in a simple tab-delimited format suitable for "
- "import into a spreadsheet or relational database. The advanced search "
+ "import into a spreadsheet or relational database. The advanced filter "
  "button allows you to select which genes are displayed in the table "
  "in a very detailed and flexible fashion.</P>"
  "<P>The UCSC Gene Family Browser was designed and implemented by Jim Kent, "
@@ -1428,7 +1291,7 @@ void doMiddle(struct cart *theCart)
  * This routine sets up some globals and then
  * dispatches to the appropriate page-maker. */
 {
-char *var = NULL, *val;
+char *var = NULL;
 struct sqlConnection *conn;
 struct column *colList, *col;
 cart = theCart;
@@ -1443,13 +1306,14 @@ organism = "Human";
 hSetDb(database);
 conn = hAllocConn();
 
-/* Get groupOn.  Revert to default if no advanced search. */
+/* Get groupOn.  Revert to default if no advanced filter. */
 groupOn = cartUsualString(cart, groupVarName, "expression");
-if (!gotAdvSearch() && sameString(groupOn, "search"))
-    groupOn = "expression";
 
-val = cartUsualString(cart, countVarName, "50");
-displayCount = atoi(val);
+displayCountString = cartUsualString(cart, countVarName, "50");
+if (sameString(displayCountString, "all")) 
+    displayCount = BIGNUM;
+else
+    displayCount = atoi(displayCountString);
 colList = getColumns(conn);
 if (cartVarExists(cart, confVarName))
     doConfigure(conn, colList, NULL);
@@ -1471,30 +1335,41 @@ else if (cartVarExists(cart, hideAllConfName))
     doConfigHideAll(conn, colList);
 else if (cartVarExists(cart, showAllConfName))
     doConfigShowAll(conn, colList);
+
 else if (cartVarExists(cart, saveCurrentConfName))
-    doConfigSaveCurrent(conn, colList);
+    doNameCurrentColumns();
+else if (cartVarExists(cart, savedCurrentConfName))
+    doSaveCurrentColumns(conn, colList);
 else if (cartVarExists(cart, useSavedConfName))
     doConfigUseSaved(conn, colList);
-else if (cartVarExists(cart, advSearchVarName))
-    doAdvancedSearch(conn, colList);
-else if (cartVarExists(cart, advSearchClearVarName))
-    doAdvancedSearchClear(conn, colList);
-else if (cartVarExists(cart, advSearchBrowseVarName))
-    doAdvancedSearchBrowse(conn, colList);
-else if (cartVarExists(cart, advSearchListVarName))
-    doAdvancedSearchList(conn, colList);
+
+else if (cartVarExists(cart, filSaveCurrentVarName))
+    doNameCurrentFilters();
+else if (cartVarExists(cart, filSavedCurrentVarName))
+    doSaveCurrentFilters(conn, colList);
+else if (cartVarExists(cart, filUseSavedVarName))
+    doUseSavedFilters(conn, colList);
+
+else if (cartVarExists(cart, advFilterVarName))
+    doAdvFilter(conn, colList);
+else if (cartVarExists(cart, advFilterClearVarName))
+    doAdvFilterClear(conn, colList);
+else if (cartVarExists(cart, advFilterBrowseVarName))
+    doAdvFilterBrowse(conn, colList);
+else if (cartVarExists(cart, advFilterListVarName))
+    doAdvFilterList(conn, colList);
 else if (cartVarExists(cart, getSeqPageVarName))
     doGetSeqPage(conn, colList);
 else if (cartVarExists(cart, idVarName))
     doFixedId(conn, colList);
-else if ((col = advSearchKeyPastePressed(colList)) != NULL)
-    doAdvSearchKeyPaste(conn, colList, col);
-else if ((col = advSearchKeyPastedPressed(colList)) != NULL)
-    doAdvSearchKeyPasted(conn, colList, col);
-else if ((col = advSearchKeyUploadPressed(colList)) != NULL)
-    doAdvSearchKeyUpload(conn, colList, col);
-else if ((col = advSearchKeyClearPressed(colList)) != NULL)
-    doAdvSearchKeyClear(conn, colList, col);
+else if ((col = advFilterKeyPastePressed(colList)) != NULL)
+    doAdvFilterKeyPaste(conn, colList, col);
+else if ((col = advFilterKeyPastedPressed(colList)) != NULL)
+    doAdvFilterKeyPasted(conn, colList, col);
+else if ((col = advFilterKeyUploadPressed(colList)) != NULL)
+    doAdvFilterKeyUpload(conn, colList, col);
+else if ((col = advFilterKeyClearPressed(colList)) != NULL)
+    doAdvFilterKeyClear(conn, colList, col);
 else if (cartNonemptyString(cart, searchVarName))
     doSearch(conn, colList);
 else

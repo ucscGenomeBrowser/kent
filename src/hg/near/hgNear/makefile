@@ -5,8 +5,8 @@ MYLIBDIR = ../../../lib/$(MACHTYPE)
 MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 X = hgNear
 
-O = $X.o advSearch.o configure.o expRatio.o getSeq.o \
-	gifLabel.o knownGene.o search.o
+O = $X.o advFilter.o association.o configure.o expRatio.o getSeq.o \
+	go.o gifLabel.o knownGene.o order.o search.o userSettings.o
 
 my: compile
 	mv $X /usr/local/apache/cgi-bin-$(USER)/$X
@@ -14,9 +14,9 @@ my: compile
 
 alpha: compile
 	mv $X /usr/local/apache/cgi-bin/$X
-	rsync -ar --delete hgNearData /usr/local/apache/cgi-bin-$(USER)/
+	rsync -ar --delete hgNearData /usr/local/apache/cgi-bin/
 
 compile: $O $(MYLIBS)
 	gcc -ggdb -o $X $O $(MYLIBS) $L
-	strip $X
+#	strip $X
 	chmod a+rx $X

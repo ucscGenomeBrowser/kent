@@ -7,7 +7,7 @@
 #include "dnaseq.h"
 #include "bits.h"
 
-static char const rcsid[] = "$Id: dnaseq.c,v 1.13 2003/05/06 07:33:42 kate Exp $";
+static char const rcsid[] = "$Id: dnaseq.c,v 1.14 2003/09/08 17:52:41 braney Exp $";
 
 
 struct dnaSeq *newDnaSeq(DNA *dna, int size, char *name)
@@ -80,22 +80,24 @@ return TRUE;
 }
 
 
-aaSeq *translateSeq(struct dnaSeq *inSeq, int offset, boolean stop)
+aaSeq *translateSeqN(struct dnaSeq *inSeq, unsigned offset, unsigned inSize, boolean stop)
 /* Return a translated sequence.  Offset is position of first base to
- * translate. If stop is TRUE then stop at first stop codon.  (Otherwise 
- * represent stop codons as 'Z'). */
+ * translate. If size is 0 then use length of inSeq. */
 {
 aaSeq *seq;
 DNA *dna = inSeq->dna;
 AA *pep, aa;
-int inSize = inSeq->size;
-int i, lastCodon = inSize - 3;
-int txSize = (inSize-offset)/3;
+int i, lastCodon;
 int actualSize = 0;
 char buf[256];
 
+assert(offset <= inSeq->size);
+if ((inSize == 0) || (inSize > (inSeq->size - offset)))
+    inSize = inSeq->size - offset;
+lastCodon = offset + inSize - 3;
+
 AllocVar(seq);
-seq->dna = pep = needLargeMem(txSize+1);
+seq->dna = pep = needLargeMem(inSize/3+1);
 for (i=offset; i <= lastCodon; i += 3)
     {
     aa = lookupCodon(dna+i);
@@ -110,10 +112,18 @@ for (i=offset; i <= lastCodon; i += 3)
     ++actualSize;
     }
 *pep = 0;
-assert(actualSize <= txSize);
+assert(actualSize <= inSize/3+1);
 seq->size = actualSize;
 seq->name = cloneString(inSeq->name);
 return seq;
+}
+
+aaSeq *translateSeq(struct dnaSeq *inSeq, unsigned offset, boolean stop)
+/* Return a translated sequence.  Offset is position of first base to
+ * translate. If stop is TRUE then stop at first stop codon.  (Otherwise 
+ * represent stop codons as 'Z'). */
+{
+return translateSeqN(inSeq, offset, 0, stop);
 }
 
 bioSeq *whichSeqIn(bioSeq **seqs, int seqCount, char *letters)

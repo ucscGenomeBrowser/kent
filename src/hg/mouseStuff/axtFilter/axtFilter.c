@@ -5,7 +5,7 @@
 #include "options.h"
 #include "axt.h"
 
-static char const rcsid[] = "$Id: axtFilter.c,v 1.5 2003/05/06 07:22:27 kate Exp $";
+static char const rcsid[] = "$Id: axtFilter.c,v 1.6 2003/09/09 16:20:29 hiram Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -17,6 +17,7 @@ errAbort(
   "options:\n"
   "   -q=chr1,chr2 - restrict query side sequence to those named\n"
   "   -notQ=chr1,chr2 - restrict query side sequence to those not named\n"
+  "   -notQ_random - restrict query side sequence, no *_random to be used\n"
   "   -t=chr1,chr2 - restrict target side sequence to those named\n"
   "   -notT=chr1,chr2 - restrict target side sequence to those not named\n"
   "   -minScore=N - restrict to those scoring at least N\n"
@@ -70,6 +71,7 @@ int qStartMax = optionInt("qStartMax", BIGNUM);
 int tStartMin = optionInt("tStartMin", -BIGNUM);
 int tStartMax = optionInt("tStartMax", BIGNUM);
 char *strand = optionVal("strand", NULL);
+boolean notQ_random = optionExists("notQ_random");
 int i;
 
 for (i=0; i<inCount; ++i)
@@ -83,6 +85,8 @@ for (i=0; i<inCount; ++i)
 	if (qHash != NULL && !hashLookup(qHash, axt->qName))
 	    writeIt = FALSE;
 	if (notQHash != NULL && hashLookup(notQHash, axt->qName))
+	    writeIt = FALSE;
+	if (notQ_random && endsWith(axt->qName, "_random"))
 	    writeIt = FALSE;
 	if (tHash != NULL && !hashLookup(tHash, axt->tName))
 	    writeIt = FALSE;

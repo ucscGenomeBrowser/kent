@@ -1,6 +1,6 @@
 /* gfServer - set up an index of the genome in memory and
  * respond to search requests. */
-/* Copyright 2001-2002 Jim Kent.  All rights reserved. */
+/* Copyright 2001-2003 Jim Kent.  All rights reserved. */
 #include "common.h"
 #include <signal.h>
 #include <sys/socket.h>
@@ -17,6 +17,8 @@
 #include "genoFind.h"
 #include "cheapcgi.h"
 #include "trans3.h"
+
+static char const rcsid[] = "$Id: gfServer.c,v 1.35 2003/09/09 21:44:02 kent Exp $";
 
 int maxNtSize = 40000;
 int maxAaSize = 8000;

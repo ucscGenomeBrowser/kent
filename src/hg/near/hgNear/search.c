@@ -6,7 +6,7 @@
 #include "hdb.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: search.c,v 1.6 2003/08/29 22:14:28 kent Exp $";
+static char const rcsid[] = "$Id: search.c,v 1.7 2003/09/08 09:04:21 kent Exp $";
 
 int searchResultCmpShortLabel(const void *va, const void *vb)
 /* Compare to sort based on short label. */
@@ -66,14 +66,15 @@ for (el = list; el != NULL; el = el->next)
     {
     safef(query, sizeof(query),
     	"select knownCannonical.transcript,knownCannonical.chrom,"
-	          "knownCannonical.chromStart,knownCannonical.chromEnd "
+	          "knownCannonical.chromStart,knownCannonical.chromEnd,"
+		  "knownCannonical.protein "
 	"from knownIsoforms,knownCannonical "
 	"where knownIsoforms.transcript = '%s' "
 	"and knownIsoforms.clusterId = knownCannonical.clusterId"
 	, el->gp.name);
     sr = sqlGetResult(conn, query);
     if ((row = sqlNextRow(sr)) != NULL)
-	genePosFillFrom4(&el->gp, row);
+	genePosFillFrom5(&el->gp, row);
     sqlFreeResult(&sr);
     }
 }

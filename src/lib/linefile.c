@@ -11,7 +11,7 @@
 #include "linefile.h"
 //#include <sys/vfs.h>
 
-static char const rcsid[] = "$Id: linefile.c,v 1.21 2003/06/23 19:16:41 baertsch Exp $";
+static char const rcsid[] = "$Id: linefile.c,v 1.24 2003/09/09 00:02:41 kent Exp $";
 
 struct lineFile *lineFileAttatch(char *fileName, bool zTerm, int fd)
 /* Wrap a line file around an open'd file. */
@@ -69,17 +69,20 @@ void lineFileReuse(struct lineFile *lf)
 lf->reuse = TRUE;
 }
 
+
 void lineFileSeek(struct lineFile *lf, off_t offset, int whence)
 /* Seek to read next line from given position. */
 {
 lf->reuse = FALSE;
 if (whence == SEEK_SET && offset >= lf->bufOffsetInFile 
 	&& offset < lf->bufOffsetInFile + lf->bytesInBuf)
-    lf->lineStart = offset - lf->bufOffsetInFile;
+    {
+    lf->lineStart = lf->lineEnd = offset - lf->bufOffsetInFile;
+    }
 else
     {
-    lf->lineStart = lf->lineEnd = lf->bytesInBuf;
-    if (lseek(lf->fd, offset, whence) == -1)
+    lf->lineStart = lf->lineEnd = lf->bytesInBuf = 0;
+    if ((lf->bufOffsetInFile = lseek(lf->fd, offset, whence)) == -1)
 	errnoAbort("Couldn't lineFileSeek %s", lf->fileName);
     }
 }

@@ -8,7 +8,7 @@
 #include "linefile.h"
 #include "hCommon.h"
 
-static char const rcsid[] = "$Id: fqToQa.c,v 1.3 2003/05/06 07:22:17 kate Exp $";
+static char const rcsid[] = "$Id: fqToQa.c,v 1.4 2003/09/05 21:30:42 kent Exp $";
 
 FILE *errLog;
 
@@ -140,4 +140,5 @@ int main(int argc, char *argv[])
 if (argc != 4)
     usage();
 fqToQa(argv[1], argv[2], argv[3]);
+return 0;
 }

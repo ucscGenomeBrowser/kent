@@ -1,3 +1,6 @@
+/* ffSeedExtend - extend alignment out from ungapped seeds. */
+/* Copyright 2003 Jim Kent.  All rights reserved. */
+
 #include "common.h"
 #include "dnaseq.h"
 #include "localmem.h"
@@ -8,6 +11,8 @@
 #include "supStitch.h"
 #include "bandExt.h"
 #include "gfInternal.h"
+
+static char const rcsid[] = "$Id: ffSeedExtend.c,v 1.19 2003/09/09 21:44:02 kent Exp $";
 
 static void extendExactRight(int qMax, int tMax, char **pEndQ, char **pEndT)
 /* Extend endQ/endT as much to the right as possible. */
@@ -1135,6 +1140,25 @@ else
     return 0;
 }
 
+static int trimGapPenalty(int hGap, int nGap, char *iStart, char *iEnd, int orientation)
+/* Calculate gap penalty for routine below. */
+{
+int penalty =  ffCalcGapPenalty(hGap, nGap, ffCdna);
+if (hGap > 2 || nGap > 2)	/* Not just a local extension. */
+				/* Score gap to favor introns. */
+    {
+    penalty <<= 1;
+    if (nGap > 0)	/* Intron gaps are not in n side at all. */
+	 penalty += 3;
+    			/* Good splice sites give you bonus 2,
+			 * bad give you penalty of six. */
+    penalty += 6 - 2*ffScoreIntron(iStart[0], iStart[1], 
+    	iEnd[-2], iEnd[-1], orientation);
+    }
+return penalty;
+}
+
+
 static struct ffAli *trimFlakyEnds(struct dnaSeq *qSeq, struct dnaSeq *tSeq,
 	struct ffAli *ffList)
 /* Get rid of small initial and terminal exons that seem to just
@@ -1161,10 +1185,8 @@ while (right != NULL)
     blockScore -= aPenalty(left->nStart, left->nEnd - left->nStart);
     iStart = left->hEnd;
     iEnd = right->hStart;
-    gapPenalty = ffCalcCdnaGapPenalty(iEnd-iStart, 
-    	right->nStart - left->nEnd) + 4;
-    gapPenalty -= ffScoreIntron(iStart[0], iStart[1], 
-    	iEnd[-2], iEnd[-1], orientation);
+    gapPenalty = trimGapPenalty(iEnd-iStart, 
+    	right->nStart - left->nEnd, iStart, iEnd, orientation);
     if (gapPenalty >= blockScore)
         {
 	freeMem(left);
@@ -1188,10 +1210,8 @@ while (left != NULL)
     blockScore -= aPenalty(right->nStart, right->nEnd - right->nStart);
     iStart = left->hEnd;
     iEnd = right->hStart;
-    gapPenalty = ffCalcCdnaGapPenalty(iEnd-iStart, 
-    	right->nStart - left->nEnd) + 4;
-    gapPenalty -= ffScoreIntron(iStart[0], iStart[1], 
-    	iEnd[-2], iEnd[-1], orientation);
+    gapPenalty = trimGapPenalty(iEnd-iStart, 
+    	right->nStart - left->nEnd, iStart, iEnd, orientation);
     if (gapPenalty >= blockScore)
         {
 	freeMem(right);

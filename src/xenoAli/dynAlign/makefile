@@ -7,4 +7,4 @@ dynAlign: $(O)
 	gcc $O ../../lib/$(MACHTYPE)/jkOwnLib.a ../../lib/$(MACHTYPE)/jkweb.a -lm
 	chmod a+x a.out
 	chmod g-w a.out
-	mv a.out ../../cgi-bin/dynAlign.exe
+	mv a.out ${CGI_BIN}-${USER}/dynAlign.exe

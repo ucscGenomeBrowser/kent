@@ -1,5 +1,5 @@
 /* gfClient - A client for the genomic finding program that produces a .psl file. */
-/* Copyright 2001-2002 Jim Kent.  All rights reserved. */
+/* Copyright 2001-2003 Jim Kent.  All rights reserved. */
 #include "common.h"
 #include "linefile.h"
 #include "aliType.h"
@@ -8,6 +8,8 @@
 #include "psl.h"
 #include "cheapcgi.h"
 #include "fuzzyFind.h"
+
+static char const rcsid[] = "$Id: gfClient.c,v 1.26 2003/09/09 21:44:02 kent Exp $";
 
 /* Variables that can be overridden by command line. */
 int dots = 0;
@@ -56,8 +58,11 @@ printf(
   "                   pslx - Tab separated format with sequence\n"
   "                   axt - blastz-associated axt format\n"
   "                   maf - multiz-associated maf format\n"
+  "                   sim4 - similar to sim4 format\n"
   "                   wublast - similar to wublast format\n"
   "                   blast - similar to NCBI blast format\n"
+  "                   blast8- NCBI blast tabular format\n"
+  "                   blast9 - NCBI blast tabular format with comments\n"
   "   -maxIntron=N  Sets maximum intron size. Default is %d\n",
                         gfVersion, ffIntronMaxDefault);
 exit(-1);

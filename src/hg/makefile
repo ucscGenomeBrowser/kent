@@ -25,12 +25,10 @@ BAD_DIRS = \
 	geneBounds \
 	geneOverlap \
 	hgBatch \
-	makePai \
 	makeSeqs \
 	ooCloneOverlaps \
 	oneShot \
 	orthoMap \
-	pslCrudeCmp \
 	synMap \
 	wikiPlot 
 
@@ -93,6 +91,7 @@ DIRS = \
 	barger \
 	bedIntersect \
 	bedSort \
+	blastToPsl \
 	borfBig \
 	cartDump \
 	cartReset \
@@ -162,6 +161,7 @@ DIRS = \
 	ooSplitFins \
 	ooTester \
 	ooWeedZero \
+	pairedReads \
 	patCount \
 	psLayout \
 	pslCat \
@@ -182,7 +182,9 @@ DIRS = \
 	qaGold \
 	qaToQac \
 	qacToQa \
+	ratStuff \
 	relPairs \
+	recycleDb \
 	reviewSanity \
 	sage \
 	scanRa \

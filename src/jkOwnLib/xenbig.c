@@ -1,11 +1,7 @@
-/*****************************************************************************
- * Copyright (C) 2000 Jim Kent.  This source code may be freely used         *
- * for personal, academic, and non-profit purposes.  Commercial use          *
- * permitted only by explicit agreement with Jim Kent (jim_kent@pacbell.net) *
- *****************************************************************************/
 /* xenbig.c - Routines to do big xeno alignments by breaking them into
  * pieces, calling the small aligner, and then stitching them back
  * together again. */
+/* Copyright 2000-2003 Jim Kent.  All rights reserved. */
 
 #include "common.h"
 #include "dlist.h"
@@ -16,6 +12,8 @@
 #include "crudeali.h"
 #include "wormdna.h"
 #include "xenalign.h"
+
+static char const rcsid[] = "$Id: xenbig.c,v 1.2 2003/09/09 21:44:03 kent Exp $";
 
 struct contig
 /* A contiguously aligned sequence pair. */

@@ -1,7 +1,7 @@
 /* gfOut - stuff to manage output for genoFind system -
  * currently supports psl, axt, blast, and wu-blast. 
  *
- * Copyright 2001-2002 Jim Kent.  All rights reserved. */
+ * Copyright 2001-2003 Jim Kent.  All rights reserved. */
 
 #include "common.h"
 #include "linefile.h"
@@ -13,6 +13,8 @@
 #include "trans3.h"
 #include "psl.h"
 #include "genoFind.h"
+
+static char const rcsid[] = "$Id: gfOut.c,v 1.7 2003/09/09 21:44:02 kent Exp $";
 
 struct pslxData
 /* This is the data structure put in gfOutput.data for psl/pslx output. */
@@ -28,8 +30,7 @@ struct axtData
     char *databaseName;		/* Just used for blast. */
     int databaseSeqCount;	/* Just used for blast. */
     double databaseLetters; /* Just used for blast. */
-    boolean isWu;		/* Is wuBlast? */
-    boolean isXml;		/* Is xml output? */
+    char *blastType;	/* 'blast' or 'wublast' or 'xml' or 'blast8' or 'blast9' */
     };
 
 static void savePslx(char *chromName, int chromSize, int chromOffset,
@@ -364,14 +365,57 @@ for (gab = aod->bundleList; gab != NULL; gab = gab->next)
 axtBundleFreeList(&aod->bundleList);
 }
 
+static double axtIdRatio(struct axt *axt)
+/* Return matches/total. */
+{
+int matchCount = 0;
+int i;
+for (i=0; i<axt->symCount; ++i)
+    {
+    if (axt->qSym[i] == axt->tSym[i])
+        ++matchCount;
+    }
+return (double)matchCount/(double)axt->symCount;
+}
+
+static void sim4QueryOut(struct gfOutput *out, FILE *f)
+/* Do sim4-like output - at end of processing query. */
+{
+struct axtData *aod = out->data;
+struct axtBundle *gab;
+char *qName = NULL, *tName = NULL;
+char stand = 0;
+
+for (gab = aod->bundleList; gab != NULL; gab = gab->next)
+    {
+    struct axt *axt = gab->axtList;
+    fprintf(f, "\n");
+    fprintf(f, "seq1 = %s, %d bp\n", axt->qName, gab->qSize);
+    fprintf(f, "seq2 = %s, %d bp\n", axt->tName, gab->tSize);
+    fprintf(f, "\n");
+    if (axt->qStrand == '-')
+	fprintf(f, "(complement)\n");
+    for (axt = gab->axtList; axt != NULL; axt = axt->next)
+	{
+	fprintf(f, "%d-%d  ", axt->qStart+1, axt->qEnd);
+	fprintf(f, "(%d-%d)   ", axt->tStart+1, axt->tEnd);
+	fprintf(f, "%1.0f%% ", 100.0 * axtIdRatio(axt));
+	if (axt->qStrand == '-')
+	     fprintf(f, "<-\n");
+	else
+	     fprintf(f, "->\n");
+	}
+    }
+axtBundleFreeList(&aod->bundleList);
+}
 
 static void blastQueryOut(struct gfOutput *out, FILE *f)
-/* Output wublast on query. */
+/* Output blast on query. */
 {
 struct axtData *aod = out->data;
 axtBlastOut(aod->bundleList, out->queryIx, out->qIsProt, f,
 	aod->databaseName, aod->databaseSeqCount, aod->databaseLetters,
-	aod->isWu, aod->isXml, "blat");
+	aod->blastType, "blat");
 axtBundleFreeList(&aod->bundleList);
 }
 
@@ -443,10 +487,23 @@ out->fileHead = mafHead;
 return out;
 }
 
+struct gfOutput *gfOutputSim4(int goodPpt, boolean qIsProt, boolean tIsProt, 
+	char *databaseName)
+/* Set up to output in sim4 format. */
+{
+struct gfOutput *out = gfOutputAxtMem(goodPpt, qIsProt, tIsProt);
+struct axtData *ad = out->data;
+if (qIsProt || tIsProt)
+    errAbort("sim4 output is not available for protein query sequences.");
+ad->databaseName = databaseName;
+out->queryOut = sim4QueryOut;
+return out;
+}
+
 struct gfOutput *gfOutputBlast(int goodPpt, 
 	boolean qIsProt, boolean tIsProt, 
 	char *databaseName, int databaseSeqCount, double databaseLetters,
-	boolean isWu, boolean isXml, FILE *f)
+	char *blastType, FILE *f)
 /* Setup output for blast format. */
 {
 struct gfOutput *out = gfOutputAxtMem(goodPpt, qIsProt, tIsProt);
@@ -454,8 +511,7 @@ struct axtData *ad = out->data;
 ad->databaseName = databaseName;
 ad->databaseSeqCount = databaseSeqCount;
 ad->databaseLetters = databaseLetters;
-ad->isWu = isWu;
-ad->isXml = isXml;
+ad->blastType = blastType;
 out->queryOut = blastQueryOut;
 return out;
 }
@@ -467,7 +523,7 @@ struct gfOutput *gfOutputAny(char *format,
 	FILE *f)
 /* Initialize output in a variety of formats in file or memory. 
  * Parameters:
- *    format - either 'psl', 'pslx', 'blast', 'wublast', 'axt', 'xml'
+ *    format - either 'psl', 'pslx', 'sim4', 'blast', 'wublast', 'axt', 'xml'
  *    goodPpt - minimum identity of alignments to output in parts per thousand
  *    qIsProt - true if query side is a protein.
  *    tIsProt - true if target (database) side is a protein.
@@ -479,21 +535,19 @@ struct gfOutput *gfOutputAny(char *format,
  */
 {
 struct gfOutput *out = NULL;
+static char *blastTypes[] = {"blast", "wublast", "blast8", "blast9", "xml"};
+
 if (format == NULL)
     format = "psl";
 if (sameWord(format, "psl"))
     out = gfOutputPsl(goodPpt, qIsProt, tIsProt, f, FALSE, noHead);
 else if (sameWord(format, "pslx"))
     out = gfOutputPsl(goodPpt, qIsProt, tIsProt, f, TRUE, noHead);
-else if (sameWord(format, "blast"))
+else if (sameWord(format, "sim4"))
+    out = gfOutputSim4(goodPpt, qIsProt, tIsProt, databaseName);
+else if (stringArrayIx(format, blastTypes, ArraySize(blastTypes)) >= 0)
     out = gfOutputBlast(goodPpt, qIsProt, tIsProt, 
-	    databaseName, databaseSeqCount, databaseLetters, FALSE, FALSE, f);
-else if (sameWord(format, "wublast"))
-    out = gfOutputBlast(goodPpt, qIsProt, tIsProt, 
-	    databaseName, databaseSeqCount, databaseLetters, TRUE, FALSE, f);
-else if (sameWord(format, "xml"))
-    out = gfOutputBlast(goodPpt, qIsProt, tIsProt, 
-	    databaseName, databaseSeqCount, databaseLetters, FALSE, TRUE, f);
+	    databaseName, databaseSeqCount, databaseLetters, format, f);
 else if (sameWord(format, "axt"))
     out = gfOutputAxt(goodPpt, qIsProt, tIsProt, f);
 else if (sameWord(format, "maf"))

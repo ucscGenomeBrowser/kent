@@ -234,12 +234,14 @@ void slReverse(void *listPt);
  *    slReverse(&list);
  */
 
-void slSort(void *pList, int (*compare )(const void *elem1,  const void *elem2));
+typedef int CmpFunction(const void *elem1, const void *elem2);
+
+void slSort(void *pList, CmpFunction *compare);
 /* Sort a singly linked list with Qsort and a temporary array. 
  * The arguments to the compare function in real, non-void, life
  * are pointers to pointers. */
 
-void slUniqify(void *pList, int (*compare )(const void *elem1,  const void *elem2), void (*free)());
+void slUniqify(void *pList, CmpFunction *compare, void (*free)());
 /* Return sorted list with duplicates removed. 
  * Compare should be same type of function as slSort's compare (taking
  * pointers to pointers to elements.  Free should take a simple

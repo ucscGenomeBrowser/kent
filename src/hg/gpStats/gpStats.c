@@ -3,7 +3,7 @@
 #include "linefile.h"
 #include "hash.h"
 
-static char const rcsid[] = "$Id: gpStats.c,v 1.2 2003/05/06 07:22:19 kate Exp $";
+static char const rcsid[] = "$Id: gpStats.c,v 1.3 2003/09/05 21:30:42 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -56,6 +56,8 @@ for (sl = slList; sl != NULL; sl = sl->next)
     if (acc >= halfTotal)
         return sl->size;
     }
+assert(FALSE);
+return 0;
 }
 
 void outputFlotilla(int size, int winSize)
