@@ -1,0 +1,19 @@
+   SW  perc perc perc  query     position in query    matching repeat         position in  repeat
+score  div. del. ins.  sequence  begin  end (left)   repeat   class/family   begin  end (left)  ID
+
+  828  32.1  7.4  1.2  dna         828 1164 (8836) C  MLT1D    LTR/MaLR        (15)  490    133   1  
+  463  37.1  2.3  0.6  dna        1290 1465 (8535) C  B4A      SINE/B4          (7)  285    107   2  
+  260  26.9  4.1  4.1  dna        1502 1598 (8402) C  B4       SINE/B4        (190)  101      5   2  
+  664   8.9  2.4  1.6  dna        2185 2309 (7691) +  (TC)n    Simple_repeat      2  127    (0)   3  
+  261   0.0  0.0  0.0  dna        2847 2875 (7125) +  (CAAA)n  Simple_repeat      3   31    (0)   4  
+  320   6.4  0.0  2.1  dna        3060 3107 (6893) +  (CAAA)n  Simple_repeat      2   48    (0)   5  
+  311  30.9  7.5  5.6  dna        3513 3673 (6327) C  MIR      SINE/MIR        (91)  171      8   6  
+  474  15.7  0.0  0.0  dna        3682 3764 (6236) +  T-rich   Low_complexity     1   83    (0)   7  
+ 1208   5.5  0.0  0.7  dna        3765 3912 (6088) C  B1_MM    SINE/Alu         (0)  147      1   8  
+   29   6.0  0.0  0.0  dna        5420 5469 (4531) +  AT_rich  Low_complexity     1   50    (0)   9  
+  966  24.3  1.9  0.0  dna        5914 6127 (3873) +  B3       SINE/B2            1  218    (3)  10  
+  274  29.8  6.4  4.6  dna        6226 6334 (3666) C  MLT1J1   LTR/MaLR       (333)  113      3   1  
+  542  34.1  1.8  0.6  dna        7383 7550 (2450) +  MLT1H    LTR/MaLR          43  212  (337)  11  
+  337  26.5 11.7  7.4  dna        7581 7743 (2257) +  L1M4b    LINE/L1           32  201 (7133)  12  
+  195  10.0  0.0  0.0  dna        8171 8200 (1800) +  (ATG)n   Simple_repeat      1   30    (0)  13  
+  345  28.0 11.2  0.0  dna        9349 9473  (527) +  B1F      SINE/Alu           2  140   (11)  14  

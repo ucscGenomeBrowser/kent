@@ -1,0 +1,27 @@
+   SW  perc perc perc  query     position in query    matching repeat         position in  repeat
+score  div. del. ins.  sequence  begin  end (left)   repeat   class/family    begin  end (left)  ID
+
+  266  29.4  6.6 10.5  dna           1   91 (9910) +  L2       LINE/L2          3158 3243   (70)   1  
+ 1888  14.1  0.0  3.7  dna          92  432 (9569) C  AluSx    SINE/Alu          (0)  330      1   2  
+  266  29.4  6.6 10.5  dna         433  491 (9510) +  L2       LINE/L2          3243 3303   (10)   1  
+  217  25.4  4.8  0.0  dna         522  584 (9417) C  MIR      SINE/MIR         (71)  191    126   3  
+  189  31.0  7.0  0.0  dna         706  776 (9225) +  L2       LINE/L2          3101 3176   (96)   4  
+ 1613  19.1  2.8  5.4  dna        1284 1380 (8621) C  MLT1D    LTR/MaLR          (0)  505    407   5  
+ 2607  13.2  2.8  1.6  dna        1381 1803 (8198) +  MSTA     LTR/MaLR            1  428    (0)   6  
+ 1613  19.1  2.8  5.4  dna        1804 2085 (7916) C  MLT1D    LTR/MaLR         (98)  407    136   5  
+ 1477  25.6  2.0  2.1  dna        2086 2476 (7525) +  MLT2D    LTR/ERVL            4  525   (31)   7  
+  297   0.0  0.0  0.0  dna        2477 2509 (7492) +  (CA)n    Simple_repeat       2   34    (0)   8  
+ 1477  25.6  2.0  2.1  dna        2510 2541 (7460) +  MLT2D    LTR/ERVL          525  556    (0)   7  
+  693  21.9  0.7  0.0  dna        2542 2678 (7323) C  MLT1D    LTR/MaLR        (367)  138      1   5  
+  568  33.5  3.0  2.6  dna        3930 4047 (5954) C  MIR      SINE/MIR         (17)  245    124   9  
+ 4708  11.9  0.3  1.1  dna        4048 4744 (5257) C  LTR8     LTR/ERV1          (0)  691      1  10  
+  568  33.5  3.0  2.6  dna        4745 4855 (5146) C  MIR      SINE/MIR        (138)  124     15   9  
+  183  21.4  8.3  6.7  dna        6767 6826 (3175) C  L2       LINE/L2          (35) 3237   3177  11  
+  355  28.7  5.4  2.2  dna        8272 8456 (1545) C  MLT1L    LTR/MaLR         (24)  591    401  12  
+  570  22.5  3.1  8.7  dna        8482 8518 (1483) C  L1M4b    LINE/L1        (7132)  202    164  13  
+ 2191  11.5  0.0  0.7  dna        8519 8815 (1186) C  AluSq    SINE/Alu         (18)  295      1  14  
+  570  22.5  3.1  8.7  dna        8816 8972 (1029) C  L1M4b    LINE/L1        (7170)  164     19  13  
+  623  28.1 10.2  0.0  dna        8982 9148  (853) C  MLT1H    LTR/MaLR        (337)  212     29  12  
+  213  14.1 14.1  0.0  dna        9462 9546  (455) +  (TTAA)n  Simple_repeat       2   98    (0)  15  
+   44   7.0  0.0  0.0  dna        9547 9632  (369) +  AT_rich  Low_complexity      1   86    (0)  16  
+  206  22.5  0.0  0.0  dna        9948 9987   (14) C  MIR      SINE/MIR         (30)  232    193  17  
