@@ -7,7 +7,7 @@
 #include "axt.h"
 #include "maf.h"
 
-static char const rcsid[] = "$Id: maf.c,v 1.13 2003/11/03 16:26:45 angie Exp $";
+static char const rcsid[] = "$Id: maf.c,v 1.14 2004/08/04 01:07:28 krish Exp $";
 
 struct mafFile *mafMayOpen(char *fileName)
 /* Open up a maf file and verify header. */
@@ -360,6 +360,28 @@ if (mc == NULL)
     errAbort("Couldn't find %s in maf", src);
 return mc;
 }
+
+struct mafComp *mafMayFindCompPrefix(struct mafAli *maf, char *prefix)
+/* Find component with source name with given prefix. Return NULL if not found. */
+{
+struct mafComp *mc;
+for (mc = maf->components; mc != NULL; mc = mc->next)
+    {
+    if (startsWith(prefix, mc->src))
+        return mc;
+    }
+return NULL;
+}
+
+struct mafComp *mafFindCompPrefix(struct mafAli *maf, char *prefix)
+/* Find component with source name with given prefix or die trying. */
+{
+struct mafComp *mc = mafMayFindCompPrefix(maf, prefix);
+if (mc == NULL)
+    errAbort("Couldn't find %s in maf", prefix);
+return mc;
+}
+
 
 struct mafAli *mafSubset(struct mafAli *maf, char *componentSource,
 	int newStart, int newEnd)
