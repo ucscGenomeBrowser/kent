@@ -9042,11 +9042,11 @@ if (withLeftLabels)
 			beforeFirstPeriod( rootName );
 			if( sameString( track->mapName, "humMusL" ))
 			    vgTextRight(vg, leftLabelX, y, leftLabelWidth - 1, itemHeight,
-					track->ixColor, font, "Mouse Cons    ");
+					track->ixColor, font, "Mouse Cons");
 			else if( sameString( track->mapName, "musHumL" ))
 			    vgTextRight(vg, leftLabelX, y, leftLabelWidth - 1, itemHeight,
-					track->ixColor, font, "Human Cons    ");
-			else
+					track->ixColor, font, "Human Cons");
+                        else
 			    vgTextRight(vg, leftLabelX, y, leftLabelWidth - 1, itemHeight,
 					track->ixColor, font, rootName );
 
