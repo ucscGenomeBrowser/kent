@@ -4842,3 +4842,10 @@ mkdir -p $3:h
     hgPepPred rn3 tab ECgenePep v1.2_rn3_low_pep.txt
     rm *.tab
     nice gzip *.txt
+
+# ENABLE AUTO BUILD MGC GENES TRACK (DONE markd)
+   - add the following lines to rn3 entry in /cluster/data/genbank/etc/genbank.conf
+      rn3.mgcTables.default = full
+      rn3.mgcTables.mgc = all
+   - wait one day for nightly build to align and load them into the db
+   - rebuild trackDb
