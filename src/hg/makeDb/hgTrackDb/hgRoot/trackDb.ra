@@ -169,8 +169,18 @@ longLabel Acembly Gene Predictions
 priority 14.5
 visibility full
 color 155,0,125
+type genePred acemblyPep acemblyMrna
+url http://www.ncbi.nlm.nih.gov/AceView/av.cgi?db=GPE&l=$$
+
+track aceTest
+shortLabel Acembly Test
+longLabel Acembly Test Predictions
+priority 14.51
+visibility full
+color 195,50,165
 type genePred
 url http://www.ncbi.nlm.nih.gov/AceView/av.cgi?db=GP&l=$$
+private on
 
 track ensGene
 shortLabel Ensembl Genes
@@ -246,6 +256,15 @@ visibility hide
 color 67,57,206
 altColor 204,20,35
 private on
+
+track tigrGeneIndex
+shortLabel Tigr Gene Index
+longLabel Alignment of Tigr Gene Index TCs Against the Human Genome
+priority 20.2
+visibility dense
+color 100,0,0
+type genePred
+url http://www.tigr.org/tigr-scripts/nhgi_scripts/tc_report.pl?$$
 
 track uniGene
 shortLabel UniGene
