@@ -19,6 +19,7 @@
 #include "web.h"
 #include "dbDb.h"
 #include "kxTok.h"
+#include "featureBits.h"
 
 /* Variables used by getFeatDna code */
 char *database = NULL;		/* Which database? */
@@ -1635,7 +1636,7 @@ else
 }
 
 
-void chromFeatDna(char *table, char *chrom, FILE *f)
+void chromFeatDna(char *table, char *chrom, FILE *f, char *fbSpec)
 /* chromFeatDna - Get dna for a type of feature on one chromosome. */
 {
 /* Get chromosome in lower case case.  If merging set bits that 
@@ -1741,6 +1742,49 @@ if (breakUp)
         webAbort("Error", "Can only use breakUp parameter with psl or genePred formatted tables");
 	}
     }
+else if (fbSpec != NULL && fbSpec[0] != 0)
+    {
+	struct featureBits *fbList, *fbPtr;
+	char fbTQ[256];
+	char table2[128], trash[16];
+	char *ptr;
+
+	strcpy(table2, table);
+	/* Make sure this table will be recognized by hTrackInfo: */
+	if (startsWith("chr", table))
+	    {
+	    if ((ptr = strchr(table, '_')) != NULL)
+	        {
+		ptr++;
+		if (startsWith("random", ptr))
+		    {
+		    if ((ptr = strchr(ptr, '_')) != NULL)
+		        {
+			ptr++;
+			strcpy(table2, ptr);
+			}
+		    }
+		else
+		    strcpy(table2, ptr);
+		}
+	    }
+	snprintf(fbTQ, sizeof(fbTQ), "%s:%s", table2, fbSpec);
+	fbList = fbGetRange(fbTQ, chrom, chromStart, chromEnd);
+	if (fbList == NULL)
+	  printf("# Your query produced no results.\n");
+	for (fbPtr = fbList;  fbPtr != NULL;  fbPtr = fbPtr->next)
+	    {
+		s = fbPtr->start;
+		e = fbPtr->end;
+		sz = e - s;
+		if (seq != NULL && (sz < 0 || e >= size))
+		    webAbort("Out of range", "Coordinates out of range %d %d (%s size is %d)",
+					 s, e, chrom, size);
+		outputDna(f, chrom, table, s, sz, dna, nibFileName, nibFile, nibSize,
+				  fbPtr->strand, firstWordInLine(fbPtr->name));
+		}
+	featureBitsFreeList(&fbList);
+	}
 else
     {
 	char strand;
@@ -1815,7 +1859,7 @@ carefulClose(&nibFile);
 }
 
 
-void getFeatDna(char *table, char *chrom, char *outName)
+void getFeatDna(char *table, char *chrom, char *outName, char *fbSpec)
 /* getFeatDna - Get dna for a type of feature an all relevant chromosomes. */
 {
 char chrTableBuf[256];
@@ -1842,7 +1886,7 @@ for (chromEl = chromList; chromEl != NULL; chromEl = chromEl->next)
 	}
     if (!toStdout)
         printf("Processing %s %s\n", chrTable, chrom);
-    chromFeatDna(chrTable, chrom, f);
+    chromFeatDna(chrTable, chrom, f, fbSpec);
     }
 carefulClose(&f);
 if (!toStdout)
@@ -1860,6 +1904,8 @@ int winStart;				/* Start of window in sequence. */
 int winEnd;					/* End of window in sequence. */
 char parsedTableName[256];
 int c;
+char *fbQual;
+char fbSpec[64];
 
 /* if they haven't choosen a positional table, tell them */
 if(existsAndEqual("table0", "Choose table"))
@@ -1896,6 +1942,104 @@ if(strcmp(position, "genome"))
 if(!allLetters(table))
 	webAbort("Error", "Malformated table name.");
 
+/* If this table is something featureBits-able, then offer the user 
+ * featureBits options (unless we already did). */
+fbQual  = cgiOptionalString("fbQual");
+/* Make sure we can find this in trackDb: */
+if (startsWith("chrN_", table))
+    strcpy(parsedTableName, table+strlen("chrN_"));
+else
+    strcpy(parsedTableName, table);
+if (fbQual == NULL && fbUnderstandTrack(parsedTableName))
+    {
+	struct trackDb *tdb;
+	boolean doAll=FALSE, doIntron=FALSE;
+	struct sqlConnection *conn = hAllocConn();
+    /* Figure out what type of table we have so we know what to offer: */
+	tdb = hTrackInfo(conn, parsedTableName);
+	hFreeConn(&conn);
+	if (startsWith("genePred", tdb->type))
+	    doAll = TRUE;
+	else if (startsWith("bed", tdb->type) &&
+			 (atoi(tdb->type + strlen("bed ")) >= 12))
+	    doIntron = TRUE;
+	webStart(cart, "Table Browser: Select Gene Regions for %s", table);
+	puts("<FORM ACTION=\"/cgi-bin/hgText\" METHOD=\"GET\">\n");
+	puts("<H3> Select Gene Regions: </H3>\n");
+	puts("<TABLE><TR><TD>\n");
+	cgiMakeRadioButton("fbQual", "whole", TRUE);
+	puts(" Whole Gene </TD><TD> ");
+	puts(" </TD></TR><TR><TD>\n");
+	cgiMakeRadioButton("fbQual", "exon", FALSE);
+	puts(" Exons plus </TD><TD> ");
+	cgiMakeTextVar("fbExonBases", "0", 8);
+	puts(" bases at each end </TD></TR><TR><TD>\n");
+  	if (doIntron || doAll)
+	    {
+		cgiMakeRadioButton("fbQual", "intron", FALSE);
+		puts(" Introns plus </TD><TD> ");
+		cgiMakeTextVar("fbIntronBases", "0", 8);
+		puts(" bases at each end </TD></TR><TR><TD>\n");
+		}
+	if (doAll)
+	    {
+		cgiMakeRadioButton("fbQual", "cds", FALSE);
+		puts(" Coding Exons </TD><TD> ");
+		puts(" </TD></TR><TR><TD>\n");
+		cgiMakeRadioButton("fbQual", "utr3", FALSE);
+		puts(" 3' UTR </TD><TD> ");
+		puts(" </TD></TR><TR><TD>\n");
+		cgiMakeRadioButton("fbQual", "utr5", FALSE);
+		puts(" 5' UTR </TD><TD> ");
+		puts(" </TD></TR><TR><TD>\n");
+		}
+	cgiMakeRadioButton("fbQual", "upstream", FALSE);
+	puts(" Upstream by </TD><TD> ");
+	cgiMakeTextVar("fbUpBases", "200", 8);
+	puts(" bases </TD></TR><TR><TD>\n");
+	cgiMakeRadioButton("fbQual", "end", FALSE);
+	puts(" Downstream by </TD><TD> ");
+	cgiMakeTextVar("fbDownBases", "200", 8);
+	puts(" bases </TD></TR></TABLE>");
+	cgiMakeHiddenVar("db", database);
+	cgiMakeHiddenVar("phase", "Get DNA");
+	cgiMakeHiddenVar("position", position);
+	cgiMakeHiddenVar("table", getTableVar());
+	cgiMakeButton("submit", "Submit");
+	puts("</FORM>\n");
+	puts("<P>");
+	puts("One of the above options may be chosen to restrict the ");
+	puts("regions for which DNA will be retrieved.  For exon");
+	if (doIntron || doAll)
+	    puts(" and intron");
+	puts(", positive numbers extend the exon");
+	if (doIntron || doAll)
+	    puts("/intron ");
+	puts("range at ");
+	puts("both ends and negative numbers cut in at both ends. ");
+	puts("For upstream and downstream, genes that are not complete ");
+	puts("are excluded. ");
+	puts("</P>");
+	webEnd();
+	return;
+	}
+
+/* If featureBits options have been specified, lump them into a string 
+ * that featureBits will parse. */
+if (fbQual == NULL || sameString(fbQual, "whole"))
+    fbSpec[0] = 0;
+else if (sameString(fbQual, "exon"))
+    snprintf(fbSpec, sizeof(fbSpec), "%s:%s", fbQual, cgiString("fbExonBases"));
+else if (sameString(fbQual, "intron"))
+    snprintf(fbSpec, sizeof(fbSpec), "%s:%s", fbQual,
+			 cgiString("fbIntronBases"));
+else if (sameString(fbQual, "upstream"))
+    snprintf(fbSpec, sizeof(fbSpec), "%s:%s", fbQual, cgiString("fbUpBases"));
+else if (sameString(fbQual, "end"))
+    snprintf(fbSpec, sizeof(fbSpec), "%s:%s", fbQual, cgiString("fbDownBases"));
+else
+    strcpy(fbSpec, fbQual);
+
 printf("Content-Type: text/plain\n\n");
 webStartText();
 
@@ -1911,33 +2055,33 @@ if(existsAndEqual("position", "genome"))
 		for(c  = 1; c <= 22; c++)
 			{
 			snprintf(parsedTableName, 256, "chr%d_%s", c, post); 
-			getFeatDna(parsedTableName, "all", "stdout");
+			getFeatDna(parsedTableName, "all", "stdout", fbSpec);
 			snprintf(parsedTableName, 256, "chr%d_random_%s", c, post); 
-			getFeatDna(parsedTableName, "all", "stdout");
+			getFeatDna(parsedTableName, "all", "stdout", fbSpec);
 			}
 
 		snprintf(parsedTableName, 256, "chr_%s_%s", "X", post);
-		getFeatDna(parsedTableName, "all", "stdout");
+		getFeatDna(parsedTableName, "all", "stdout", fbSpec);
 		snprintf(parsedTableName, 256, "chr%s_random_%s", "X", post);
-		getFeatDna(parsedTableName, "all", "stdout");
+		getFeatDna(parsedTableName, "all", "stdout", fbSpec);
 
 		snprintf(parsedTableName, 256, "chr%s_%s", "Y", post);
-		getFeatDna(parsedTableName, "all", "stdout");
+		getFeatDna(parsedTableName, "all", "stdout", fbSpec);
 		snprintf(parsedTableName, 256, "chr%s_random_%s", "Y", post);
-		getFeatDna(parsedTableName, "all", "stdout");
+		getFeatDna(parsedTableName, "all", "stdout", fbSpec);
 
 		snprintf(parsedTableName, 256, "chr%s_%s", "NA", post);
-		getFeatDna(parsedTableName, "all", "stdout");
+		getFeatDna(parsedTableName, "all", "stdout", fbSpec);
 		snprintf(parsedTableName, 256, "chr%s_random_%s", "NA", post);
-		getFeatDna(parsedTableName, "all", "stdout");
+		getFeatDna(parsedTableName, "all", "stdout", fbSpec);
 
 		snprintf(parsedTableName, 256, "chr%s_%s", "UL", post);
-		getFeatDna(parsedTableName, "all", "stdout");
+		getFeatDna(parsedTableName, "all", "stdout", fbSpec);
 		snprintf(parsedTableName, 256, "chr%s_random_%s", "UL", post);
-		getFeatDna(parsedTableName, "all", "stdout");
+		getFeatDna(parsedTableName, "all", "stdout", fbSpec);
 		}
 	else
-		getFeatDna(table, "all", "stdout");
+		getFeatDna(table, "all", "stdout", fbSpec);
 	}
 else
 	{
@@ -1947,7 +2091,7 @@ else
 	chromStart = winStart;
 	chromEnd = winEnd;
 
-	getFeatDna(parsedTableName, choosenChromName, "stdout");
+	getFeatDna(parsedTableName, choosenChromName, "stdout", fbSpec);
 	}
 }
 
