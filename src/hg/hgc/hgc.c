@@ -1363,7 +1363,7 @@ struct sqlResult *sr;
 char **row;
 char query[256];
 int start = cgiInt("o");
-struct wabAli *wa;
+struct wabAli *wa = NULL;
 int qOffset;
 char strand = '+';
 
@@ -1392,13 +1392,10 @@ hFreeConn(&conn);
 void doHgTet(struct trackDb *tdb, char *name)
 /* Do thing with tet track. */
 {
-char table[64];
-int hasBin;
 hgcStart("Tetraodon Alignment");
-hFindSplitTable(seqName, tdb->tableName, table, &hasBin);
 printf("Alignment between tetraodon sequence %s (above) and human chromosome %s (below)\n",
     name, skipChr(seqName));
-fetchAndShowWaba(table, name);
+fetchAndShowWaba("waba_tet", name);
 }
 
 void doHgRepeat(char *track, char *repeat)
