@@ -74,7 +74,7 @@
 #include "web.h"
 #include "grp.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.518 2003/05/17 06:26:57 kent Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.519 2003/05/19 23:40:59 blanchem Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define EXPR_DATA_SHADES 16
@@ -8754,7 +8754,8 @@ if (withLeftLabels)
     	if( sameString( track->mapName, "humMusL" ) ||
 	    sameString( track->mapName, "musHumL" ) ||
 	    sameString( track->mapName, "mm3Rn2L" ) ||		
-	    sameString( track->mapName, "regpotent" ) )
+	    sameString( track->mapName, "regpotent" ) ||
+	    sameString( track->mapName, "HMRConservation" )  )
 	    {
 	    int binCount = round(1.0/track->scaleRange);
 	    minRange = whichSampleBin( minRangeCutoff, track->minRange, track->maxRange, binCount );
@@ -10183,6 +10184,7 @@ registerTrackHandler("mgcFailedEst", estMethods);
 registerTrackHandler("mgcPickedEst", estMethods);
 registerTrackHandler("mgcUnpickedEst", estMethods);
 
+registerTrackHandler("HMRConservation", humMusLMethods);
 registerTrackHandler("humMusL", humMusLMethods);
 registerTrackHandler("regpotent", humMusLMethods);
 registerTrackHandler("mm3Rn2L", humMusLMethods);
