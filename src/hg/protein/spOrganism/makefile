@@ -8,7 +8,7 @@
 	gcc -ggdb -Wformat -Wimplicit  -Wreturn-type -I../inc -I../../inc -I../../../inc -c $*.c
 
 L = -lm $(MYSQLLIBS)
-MYLIBDIR = ../../lib/$(MACHTYPE)
+MYLIBDIR = ../../../lib/$(MACHTYPE)
 MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 
 A = spOrganism
