@@ -4745,7 +4745,8 @@ axtChain $1 \
     cp -p *.axt /usr/local/apache/htdocs/goldenPath/rn3/vsmm5/axtNet
     cd /usr/local/apache/htdocs/goldenPath/rn3/vsmm5/axtNet
     md5sum * > md5sum.txt
-   
+    gzip *.axt
+  
     # Copy over & edit README.txt w/pointers to chain, net formats.
     # Not for pushing -- handle separately.
     mv /cluster/data/rn3/bed/blastz.mm5/blastzECF .
