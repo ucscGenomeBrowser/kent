@@ -55,6 +55,7 @@ foreach db ( $dbs testDummmy)
   compareTrackDbAll.csh $db hgwbeta $machine >& $outfile
   if ( $status ) then
     echo "$db err" | gawk '{printf "%7s %3s", $1, $2}'
+    echo 
     echo '<A HREF ="'$db.$machine.trackDbAll'">'$db'</A> error      \n\n     ' \
         >> $summaryFile
     # echo "${db}: error detected from compareTrackDbAll.csh"  >> $summaryFile
