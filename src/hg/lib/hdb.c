@@ -13,6 +13,7 @@
 #include "ctgPos.h"
 #include "trackDb.h"
 #include "hCommon.h"
+#include "hgFind.h"
 
 static struct sqlConnCache *hdbCc = NULL;
 static struct sqlConnCache *centralCc = NULL;
