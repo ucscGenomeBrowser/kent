@@ -1068,9 +1068,11 @@ freeMem(encoded);
 
 void appendAuthor(struct dyString *dy, char *gbAuthor, int len)
 /* Convert from  Kent,W.J. to Kent WJ and append to dy.
- * gbAuthor gets eaten in the process. */
+ * gbAuthor gets eaten in the process. 
+ * Also strip web URLs since Entrez doesn't like those. */
 {
 char buf[2048];
+char *ptr;
 
 if (len >= sizeof(buf))
     warn("author %s too long to process", gbAuthor);
@@ -1080,6 +1082,8 @@ else
     buf[len] = 0;
     stripChar(buf, '.');
     subChar(buf, ',' , ' ');
+    if ((ptr = strstr(buf, " http://")) != NULL)
+        *ptr = 0;
     dyStringAppend(dy, buf);
     dyStringAppend(dy, " ");
     }
