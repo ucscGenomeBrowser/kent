@@ -12,7 +12,7 @@
 #include "gbGenome.h"
 #include "psl.h"
 
-static char const rcsid[] = "$Id: chkAlignTbls.c,v 1.3 2004/02/07 17:39:09 markd Exp $";
+static char const rcsid[] = "$Id: chkAlignTbls.c,v 1.4 2004/02/23 07:38:56 markd Exp $";
 
 /* FIXME: check native vs xeno, flag in metaData. */
 /* FIXME: check OI tables */
@@ -176,7 +176,7 @@ static void chkGenePred(struct genePred* gene, char *geneName, unsigned iRow,
 /* Validate a genePred of a refSeq to genome alignment against the metadata.
  * Also count the number of alignments, and check the geneName, if available */
 {
-char geneDesc[128];
+char geneDesc[512];
 unsigned chromSize = getChromSize(gene->chrom);
 unsigned iExon;
 struct metaData* md = metaDataTblsFind(metaDataTbls, gene->name);
@@ -184,7 +184,8 @@ struct metaData* md = metaDataTblsFind(metaDataTbls, gene->name);
 if (verbose >= 3)
     gbVerbMsg(3, "chkGenePred %s:%d %s %s",  table, iRow, 
               gene->name, gene->chrom);
-safef(geneDesc, sizeof(geneDesc), "gene %s.%s row %u", database, table, iRow);
+safef(geneDesc, sizeof(geneDesc), "gene %s.%s:%u %s %s", database, table,
+      iRow, gene->name, gene->chrom);
 
 if (!(sameString(gene->strand, "+") || sameString(gene->strand, "-")))
     gbError("%s: invalid strand: \"%s\"", geneDesc, gene->strand);
@@ -215,18 +216,8 @@ else
 if (gene->txStart >= gene->txEnd)
     gbError("%s: %s txStart %u >= txEnd %u", geneDesc, gene->name,
             gene->txStart, gene->txEnd);
-/* no CDS is indicated by cdsStart == cdsEnd == txEnd */
-if (gene->cdsStart == gene->cdsEnd)
-    {
-    /* warn if cdsStart is not txEnd or 0 */
-    if ((gene->cdsStart != gene->txEnd) && (gene->cdsStart != 0))
-#if WARN_BLAT_BUGS
-        fprintf(stderr, "Warning: %s: cdsStart == cdsEnd, but cdsStart != txEnd and cdsStart != 0 \n", geneDesc);
-#else
-        gbError("%s: cdsStart == cdsEnd, but cdsStart != txEnd and cdsStart != 0", geneDesc);
-#endif
-    }
-else
+/* no CDS is indicated by cdsStart == cdsEnd */
+if (gene->cdsStart != gene->cdsEnd)
     {
     if (gene->cdsStart > gene->cdsEnd)
         gbError("%s: %s cdsStart %u > cdsEnd %u", geneDesc, gene->name,
@@ -289,7 +280,8 @@ static void chkGenePredTable(struct gbSelect* select,
                              struct metaDataTbls* metaDataTbls,
                              unsigned typeFlags)
 /* Validate a genePred table.  Also count the number of genePreds for a
- * mrna.  If this is refFlat, also check the geneName */
+ * mrna.  If this is refFlat, also check the geneName.  Return numbner of
+ * rows. */
 {
 unsigned iRow = 0;
 char query[512];

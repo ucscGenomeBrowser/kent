@@ -7,7 +7,7 @@
 #include "localmem.h"
 #include "errabort.h"
 
-static char const rcsid[] = "$Id: metaData.c,v 1.1 2003/06/03 01:27:44 markd Exp $";
+static char const rcsid[] = "$Id: metaData.c,v 1.2 2004/02/23 07:38:56 markd Exp $";
 
 struct metaDataTbls
 /* Object with metadata collect from various tables */
@@ -50,15 +50,13 @@ return mdt;
 
 struct metaData* metaDataTblsFind(struct metaDataTbls* mdt,
                                   char* acc)
-/* Find metadata by acc or NULL if not found.  Record is buffered and will be
- * replaced on the next access. */
+/* Find metadata by acc or NULL if not found.*/
 {
 return hashFindVal(mdt->accHash, acc);
 }
 
 struct metaData* metaDataTblsGet(struct metaDataTbls* mdt, char* acc)
-/* Get or create metadata table entry for an acc.  Record is buffered and will
- * be replaced on the next access. */
+/* Get or create metadata table entry for an acc. */
 {
 struct hashEl* hel = hashLookup(mdt->accHash, acc);
 if (hel == NULL)

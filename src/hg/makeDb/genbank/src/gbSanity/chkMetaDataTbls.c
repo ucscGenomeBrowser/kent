@@ -17,8 +17,7 @@
 #include "hdb.h"
 #include "fa.h"
 
-static char const rcsid[] = "$Id: chkMetaDataTbls.c,v 1.5 2004/02/07 17:39:09 markd Exp $";
-
+static char const rcsid[] = "$Id: chkMetaDataTbls.c,v 1.6 2004/02/23 07:38:56 markd Exp $";
 
 static char* validRefSeqStatus[] = {
     "Unknown", "Reviewed", "Validated", "Provisional", "Predicted", "Inferred", NULL
@@ -561,42 +560,12 @@ void chkMetaDataGbEntry(struct metaDataTbls* metaDataTbls,
                         struct gbSelect* select, struct gbEntry* entry)
 /* Check metadata against a gbEntry object */
 {
-struct metaData* md;
-/* RefSeq non-native are optional */
-boolean excluded = ((entry->orgCat & select->orgCats) == 0);
-
-md = metaDataTblsFind(metaDataTbls, entry->acc);  /* null if not found */
-
-/* should only be in metadata if an aligned record exists */
-if (entry->aligned != NULL)
-    {
-    if (md == NULL)
-        {
-        if (!excluded)
-            gbError("%s: aligned gbIndex entry is not in the mrna, seq, or gbStatus tables",
-                    entry->acc);
-        }
-    else if (!md->inGbStatus && !excluded)
-        {
-        gbError("%s: aligned gbIndex entry is not in the gbStatus table",
-                entry->acc);
-        }
-    }
-else
-    {
-    if (metaDataTblsFind(metaDataTbls, entry->acc) != NULL)
-        gbError("%s: has no aligned gbIndex entries, however it in one "
-                "or more metadata tables", entry->acc);
-    }
-
-/* create a metaData object if we don't have one */
-if (md == NULL)
-    md = metaDataTblsGet(metaDataTbls, entry->acc);
-
+struct metaData* md = metaDataTblsGet(metaDataTbls, entry->acc);
 md->inGbIndex = TRUE;
+md->inGbAlign = (entry->aligned != NULL);
 md->isNative = (entry->orgCat == GB_NATIVE);  /* FIXME: dup field */
 md->typeFlags |= ((entry->orgCat == GB_NATIVE) ? GB_NATIVE : GB_XENO);
-md->excluded = excluded;
+md->excluded = ((entry->orgCat & select->orgCats) == 0);
 
 if (md->inGbStatus)
     {
@@ -628,9 +597,11 @@ if (md->inGbIndex)
 return tbls+1;  /* skip first comma */
 }
 
-static void metaDataCheckXRef(struct metaData* md)
+static void checkXRef(struct metaData* md)
 /* check sanity of collected metadata */
 {
+if (!md->inGbAlign)
+    return;  /* can't check anything else */
 if (!md->inMrna)
     gbError("%s: not in mrna table, referenced in %s", md->acc,
             getTablesDesc(md));
@@ -706,7 +677,7 @@ gbVerbEnter(1, "cross check metadata");
 
 metaDataTblsFirst(metaDataTbls);
 while ((md = metaDataTblsNext(metaDataTbls)) != NULL)
-    metaDataCheckXRef(md);
+    checkXRef(md);
 gbVerbLeave(1, "cross check metadata");
 }
 

@@ -38,7 +38,7 @@
 #include "../dbload/dbLoadOptions.h"
 #include <stdarg.h>
 
-static char const rcsid[] = "$Id: gbSanity.c,v 1.6 2004/02/07 17:39:09 markd Exp $";
+static char const rcsid[] = "$Id: gbSanity.c,v 1.7 2004/02/23 07:38:56 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -147,6 +147,7 @@ unsigned descOrgCats = shouldHaveDesc(select);
 metaDataTbls= chkMetaDataTbls(select, conn, gCheckExtSeqRecs, descOrgCats,
                               gGbdbMapToCurrent);
 chkGbRelease(select, metaDataTbls);
+chkMetaDataXRef(metaDataTbls);
 
 /* check the alignment tables */
 chkAlignTables(select, conn, metaDataTbls,

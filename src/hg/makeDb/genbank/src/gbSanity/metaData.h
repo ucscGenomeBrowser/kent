@@ -23,6 +23,7 @@ struct metaData
     boolean inRefLink;
     boolean inGbStatus;
     boolean inGbIndex;     /* genbank flat-file indices */
+    boolean inGbAlign;     /* has aligned entry */
 
     /* set from gbIndex */
     boolean isNative;
@@ -78,13 +79,11 @@ struct metaDataTbls* metaDataTblsNew();
 
 struct metaData* metaDataTblsFind(struct metaDataTbls* mdt,
                                   char* acc);
-/* Find metadata by acc or NULL if not found.  Record is buffered and will be
- * replaced on the next access. */
+/* Find metadata by acc or NULL if not found. */
 
 struct metaData* metaDataTblsGet(struct metaDataTbls* mdt,
                                  char* acc);
-/* Get or create metadata table entry for an acc.  Record is buffered and will
- * be replaced on the next access. */
+/* Get or create metadata table entry for an acc. */
 
 void metaDataTblsFirst(struct metaDataTbls* mdt);
 /* Set the pointer so the next call to metaDataTblsNext returns the first
