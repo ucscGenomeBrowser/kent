@@ -58,19 +58,6 @@ errAbort("can't determine file format of %s", path);
 return UNKNOWN_FMT;
 }
 
-static void outputRow(char** row, int numCols, FILE* outFh)
-/* output a row */
-{
-int iCol;
-for (iCol = 0; iCol < numCols; iCol++)
-    {
-    if (iCol > 0)
-        fputc('\t', outFh);
-    fputs(row[iCol], outFh);
-    }
-fputc('\n', outFh);
-}
-
 static boolean pslSelected(struct psl* psl)
 /* Check if a PSL should be selected for output */
 {
@@ -108,7 +95,7 @@ while (lineFileNextRowTab(lf, row, PSL_NUM_COLS))
     {
     struct psl* psl = pslLoad(row);
     if (pslSelected(psl))
-        outputRow(row, PSL_NUM_COLS, outFh);
+        pslTabOut(psl, outFh);
     pslFree(&psl);
     }
 carefulClose(&outFh);
@@ -142,7 +129,7 @@ while (lineFileNextRowTab(lf, row, GENEPRED_NUM_COLS))
     {
     struct genePred *gp = genePredLoad(row);
     if (genePredSelected(gp))
-        outputRow(row, GENEPRED_NUM_COLS, outFh);
+        genePredTabOut(gp, outFh);
     genePredFree(&gp);
     }
 carefulClose(&outFh);
@@ -188,7 +175,7 @@ while ((numCols = lineFileChopNextTab(lf, row, ArraySize(row))) > 0)
     {
     struct bed *bed = bedLoadN(row, numCols);
     if (bedSelected(bed))
-        outputRow(row, numCols, outFh);
+        bedTabOutN(bed, numCols, outFh);
     bedFree(&bed);
     }
 carefulClose(&outFh);
@@ -254,7 +241,7 @@ errAbort("%s:\n"
          "  -inFmt=fmt - specify inFile format, same values as -selectFmt.\n"
          "  -nonOverlaping - select non-overlaping instead of overlaping records\n"
          "  -strand - must be on the same strand to be considered overlaping\n"
-         "  -excludeSelf - don't compare alignments with the same id.\n"
+         "  -excludeSelf - don't compare alignments with the same id.\n",
          msg);
 }
 
