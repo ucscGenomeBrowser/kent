@@ -11,7 +11,7 @@
 #include "genePred.h"
 #include "hgRelate.h"
 
-static char const rcsid[] = "$Id: ldHgGene.c,v 1.24 2004/02/24 18:48:30 baertsch Exp $";
+static char const rcsid[] = "$Id: ldHgGene.c,v 1.25 2004/02/24 23:02:43 markd Exp $";
 
 char *exonType = "exon";	/* Type field that signifies exons. */
 boolean requireCDS = FALSE;     /* should genes with CDS be dropped */
@@ -156,7 +156,6 @@ for (group = gff->groupList; group != NULL; group = group->next)
         {
 	name = convertSoftberryName(name);
 	}
-    printf("is gtf %d opt %x\n",isGtf,gOptFields);
     if (isGtf)
         gp = genePredFromGroupedGtf(gff, group, name, gOptFields);
     else
