@@ -136,8 +136,9 @@
 #include "botDelay.h"
 #include "vntr.h"
 #include "zdobnovSynt.h"
+#include "HInv.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.623 2004/05/03 19:39:01 sugnet Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.624 2004/05/05 18:45:15 kate Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -4825,7 +4826,7 @@ if (sqlTableExists(conn, "mrna"))
     sr = sqlGetResult(conn, query); 
     if ((row = sqlNextRow(sr)) != NULL)
 	{
-	sprintf(query, "select name from cds where id = '%d'", atoi(row[0]));
+        sprintf(query, "select name from cds where id = '%d'", atoi(row[0]));
 	sqlFreeResult(&sr);
 	sr = sqlGetResult(conn, query);
 	if ((row = sqlNextRow(sr)) != NULL)
@@ -4843,13 +4844,18 @@ if ((row = sqlNextRow(sr)) == NULL)
     errAbort("Couldn't find alignment for %s at %d", acc, start);
 psl = pslLoad(row+hasBin);
 sqlFreeResult(&sr);
-hFreeConn(&conn);
 
 /* get bz rna snapshot for blastz alignments */
 if (sameString("mrnaBlastz", type))
     {
     sprintf(accTmp,"bz-%s",acc);
     rnaSeq = hRnaSeq(accTmp);
+    }
+else if (sameString("HInvGeneMrna", type))
+    {
+    /* get RNA accession for the gene id in the alignment */
+    sprintf(query, "select mrnaAcc from HInv where geneId='%s'", acc);
+    rnaSeq = hRnaSeq(sqlQuickString(conn, query));
     }
 else
     rnaSeq = hRnaSeq(acc);
@@ -4858,6 +4864,7 @@ if (startsWith("xeno", type))
     showSomeAlignment(psl, rnaSeq, gftDnaX, 0, rnaSeq->size, NULL, cdsStart, cdsEnd);
 else
     showSomeAlignment(psl, rnaSeq, gftDna, 0, rnaSeq->size, NULL, cdsStart, cdsEnd);
+hFreeConn(&conn);
 }
 
 void htcChainAli(char *item)
@@ -7212,6 +7219,47 @@ printTrackHtml(tdb);
 hFreeConn(&conn);
 }
 
+void doHInvGenes(struct trackDb *tdb, char *item)
+/* Process click on H-Invitational genes track. */
+{
+char *track = tdb->tableName;
+struct sqlConnection *conn = hAllocConn();
+char query[256];
+struct sqlResult *sr;
+char **row;
+int start = cartInt(cart, "o");
+struct psl *pslList = NULL;
+struct HInv *hinv;
+
+/* Print non-sequence info. */
+genericHeader(tdb, item);
+
+safef(query, sizeof(query), "select * from HInv where geneId = '%s'", item);
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    hinv = HInvLoad(row);
+    if (hinv != NULL)
+	{
+        printf("<B> Gene ID: </B> <A HREF=\"http://www.jbirc.aist.go.jp/hinv/soup/pub_Detail.pl?acc_id=%s\" TARGET=_blank> %s <BR></A>", 
+                hinv->mrnaAcc, hinv->geneId );
+        printf("<B> Cluster ID: </B> <A HREF=\"http://www.jbirc.aist.go.jp/hinv/soup/pub_Locus.pl?locus_id=%s\" TARGET=_blank> %s <BR></A>", 
+                hinv->clusterId, hinv->clusterId );
+        printf("<B> CDNA Accession: </B> <A HREF=\"http://getentry.ddbj.nig.ac.jp/cgi-bin/get_entry.pl?%s\" TARGET=_blank> %s <BR></A>", 
+                hinv->mrnaAcc, hinv->mrnaAcc );
+        }
+    }
+htmlHorizontalLine();
+
+/* print alignments that track was based on */
+pslList = getAlignments(conn, "HInvGeneMrna", item);
+puts("<H3>mRNA/Genomic Alignments</H3>");
+printAlignments(pslList, start, "htcCdnaAli", "HInvGeneMrna", item);
+
+printTrackHtml(tdb);
+hFreeConn(&conn);
+}
+
 char *getGi(char *ncbiFaHead)
 /* Get GI number from NCBI FA format header. */
 {
@@ -8819,7 +8867,6 @@ boolean alignmentOK;
 cartWebStart(cart, "Alignment of %s in %s to %s using %s.",
 	     name, hOrganism(database), hOrganism(db2), alignment);
 hSetDb2(db2);
-
 
 // get gp
 hFindSplitTable(chrom, track, table, &hasBin);
@@ -14494,6 +14541,10 @@ else if (sameWord(track, "encodeErge5race")   || sameWord(track, "encodeErgeInVi
 	 sameWord(track, "encodeErgeSummary"))
     {
     doEncodeErge(tdb, item);
+    }
+else if(sameWord(track, "HInvGeneMrna"))
+    {
+    doHInvGenes(tdb, item);
     }
 else if(sameWord(track, "sgdClone"))
     {
