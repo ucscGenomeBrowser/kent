@@ -63,6 +63,7 @@
 #include "fishClones.h"
 #include "featureBits.h"
 #include "web.h"
+#include "dbDb.h"
 #include "jaxOrtholog.h"
 #include "expRecord.h"
 #include "dnaProbe.h"
@@ -89,13 +90,22 @@
 
 char mousedb[] = "mm1";
 
+static char * const orgCgiName = "org";
+static char * const dbCgiName = "db";
+char *organism = NULL;
+
 struct cart *cart;	/* User's settings. */
 
 char *seqName;		/* Name of sequence we're working on. */
 int winStart, winEnd;   /* Bounds of sequence. */
 char *database;		/* Name of mySQL database. */
 char *database2;		/* Name of secondary mySQL database. (for comparision/ orthology)*/
+char *db = NULL;
 
+/* JavaScript to copy input data on the change genome button to a hidden form
+This was done in order to be able to flexibly arrange the UI HTML
+*/
+//char *onChangeText = "onchange=\"document.orgForm.org.value = document.compareForm.org.options[document.compareForm.org.selectedIndex].value; document.orgForm.submit();\"";
 #define NUMTRACKS 9
 int prevColor[NUMTRACKS]; /* used to opetimize color change html commands */
 int currentColor[NUMTRACKS]; /* used to opetimize color change html commands */
@@ -647,6 +657,7 @@ for (axt = axtList; axt != NULL; axt = axt->next)
         axt->qName, axt->qStart+1, axt->qEnd, axt->qStrand, axt->score,  tStart+1, tEnd, gp->txStart+1, gp->txEnd);
 
     qPtr = axt->qStart;
+    qCodonPos = tCodonPos; /* put translation back in sync */
     if (!posStrand)
         {
         qPtr = axt->qEnd;
@@ -4516,6 +4527,10 @@ void htcGenePsl(char *htcCommand, char *item)
 char *chromTable = "chromInfo";
 char *track = cartString(cart, "o");
 char *chrom = cartString(cart, "c");
+char *hgsid = cartString(cart, "hgsid");
+char *left = cartString(cart, "l");
+char *right = cartString(cart, "r");
+char *trackName = cartString(cart, "g");
 char *seqName = cartOptionalString(cart, "i");
 char table[64];
 char title[256];
@@ -4529,11 +4544,15 @@ char **row;
 struct genePred *gp = NULL;
 int white = WHITE;
 boolean hasBin; 
+char *oldDb = NULL;
+char *alignment = "Blastz";
 
 
 database = cartUsualString(cart, "db", hGetDb());
 database2 = cartUsualString(cart, "db2", hGetDb2());
 
+db = "hg10";// cartUsualString(cart, "db", hGetDb());
+organism = hOrganism(database);
 ///hDefaultConnect(); 	/* set up default connection settings */
 //hSetDb(database);
 //
@@ -4554,9 +4573,73 @@ while ((row = sqlNextRow(sr)) != NULL)
     htmlSetBgColor(&white);
     htmStart(stdout, "alignment");
     fprintf(stdout, "<TT><PRE>");
-    fprintf(stdout, "<H3>Alignment of %s in %s</H3>", seqName, database);
+    fprintf(stdout, "<H3>Alignment of %s in %s </H3>", seqName, database);
+//puts(
+//"<TABLE bgcolor=\"FFFEF3\" border=0>\n"
+//"<tr>\n"
+//"<td>\n"
+//"<FORM ACTION=\"/cgi-bin/hgc\" NAME=\"compareForm\" METHOD=\"POST\" ENCTYPE=\"multipart/form-data\">\n"
+//"<input TYPE=\"IMAGE\" BORDER=\"0\" NAME=\"hgt.dummyEnterButton\" src=\"/images/DOT.gif\">\n"
+//"<TABLE><tr>\n"
+//"<td align=center valign=baseline>genome</td>\n"
+//"<td align=center valign=baseline>assembly</td>\n"
+//"<td align=center valign=baseline>alignment</td>\n"
+//"<td align=center valign=baseline>exon</td>\n"
+//);
+
+//cgiMakeTextVar("i", seqName, 30);
+//cgiMakeTextVar("hgsid", hgsid, 30);
+//cgiMakeTextVar("g", trackName, 30);
+//cgiMakeTextVar("o", track, 30);
+//cgiMakeTextVar("c", chrom, 30);
+//puts("<tr><td align=center>\n");
+//printOrgListHtml(db, onChangeText);
+//puts("</td>\n");
+
+//puts("<td align=center>\n");
+//printAssemblyListHtml(db);
+//puts("</td>\n");
+
+//puts("<td align=center>\n");
+//cgiMakeTextVar("alignment", alignment, 30);
+//printf("</td>\n");
+
+freez(&alignment);
+alignment = NULL;
+
+//puts("<td align=center>\n");
+//cgiMakeIntVar("exon", cartUsualInt(cart, "exon", 1), 4);
+//printf("</td>\n");
+//printf("<td align=center>");
+//cgiMakeButton("Submit", "Submit");
+//printf("</td>\n");
+
+//puts(
+//"</tr></TABLE>\n"
+//"</td></tr><tr><td><center>\n"
+//"</td></tr></TABLE>\n"
+//"</center>\n"
+//);
+    fprintf(stdout, "<TT><PRE>");
+    fprintf(stdout, "<TABLE>");
     axtGenePrettyHtml( gp ,"axtInfo", nibFile);
-    htmEnd(stdout);
+    fprintf(stdout, "</TABLE>");
+//fprintf(stdout,"</FORM>\n");
+//printf("<FORM ACTION=\"/cgi-bin/hgc\" METHOD=\"GET\" NAME=\"orgForm\"><input type=\"hidden\" name=\"%s\" value=\"%s\">\n", orgCgiName, organism);
+//printf("<input type=\"hidden\" name=\"g\" value=\"htcGenePsl\">\n");
+//printf("<input type=\"hidden\" name=\"i\" value=\"%s\">\n",seqName);
+//printf("<input type=\"hidden\" name=\"c\" value=\"%s\">\n",chrom);
+//printf("<input type=\"hidden\" name=\"l\" value=\"%s\">\n",left);
+//printf("<input type=\"hidden\" name=\"r\" value=\"%s\">\n",right);
+//printf("<input type=\"hidden\" name=\"o\" value=\"%s\">\n",track);
+//printf("<input type=\"hidden\" name=\"hgsid\" value=\"%s\">\n",hgsid);
+////cartSaveSession(cart);
+//puts("</FORM>"
+        //"\n");
+////"	<BR></TD><TD WIDTH=15>&nbsp;</TD></TR></TABLE>\n"
+////"	</TD></TR></TABLE>\n"
+////"			\n"
+////"</TD></TR></TABLE>
 }
 
 void htcLongXenoPsl2(char *htcCommand, char *item)
