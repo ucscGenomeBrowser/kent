@@ -6193,7 +6193,8 @@ axtChain -linearGap=../../chickenHumanTuned.gap $1 \
     hgsql mm5 -e 'drop table kgSpAlias';
     hgsql mm5 < ~/src/hg/lib/kgSpAlis.sql
     hgsql mm5 -e 'load data local infile "mm5.kgSpAlias.tab" into table kgSpAlias'
-	
+
+
 # ECGENE TRACK (DONE, 2004-10-29, hartera)
     ssh kksilo
     mkdir -p /cluster/data/mm5/bed/ECgene.2004-10-29
@@ -6213,6 +6214,7 @@ axtChain -linearGap=../../chickenHumanTuned.gap $1 \
     hgPepPred mm5 tab ECgenePep v1.2_mm5_low_pep.txt
     rm *.tab
     nice gzip *.txt
+
 
 ## NIA Mouse Gene Index - (DONE - 2004-11-16 Fan)
 #       requested by: Dudekula, Dawood (NIH/NIA/IRP) DudekulaDB@grc.nia.nih.gov
@@ -6238,6 +6240,7 @@ axtChain -linearGap=../../chickenHumanTuned.gap $1 \
     
         kent/src/hg/makeDb/trackDb/mouse/mm5
 
+
 # CREATE jaxQTL3 (MOUSE QTL) TRACK (DONE - 2004-11-18 Fan)
 
     cd /cluster/data/mm5/bed
@@ -6260,3 +6263,22 @@ axtChain -linearGap=../../chickenHumanTuned.gap $1 \
     hgLoadBed -nobin -tab -sqlTable=$HOME/src/hg/lib/jaxQTL3.sql mm5 jaxQTL3 jaxQTL3.tab
 
 	
+# TWINSCAN (DONE 11/29/04 angie)
+    ssh kksilo
+    mkdir /cluster/data/mm5/bed/twinscan
+    cd /cluster/data/mm5/bed/twinscan
+    foreach chr (`awk '{print $1;}' ../../chrom.sizes`)
+      wget http://genes.cs.wustl.edu/predictions/mouse/mm5_11-24-04/chr_gtf/$chr.gtf
+      wget http://genes.cs.wustl.edu/predictions/mouse/mm5_11-24-04/chr_ptx/$chr.ptx
+    end
+    # Add '.a' to end of protein fasta id's, to match gtf transcript_id's:
+    perl -wpe 's/^(>\S+).*/$1.a/' *.ptx > twinscanPep.fa
+    # load.
+    ssh hgwdev
+    cd /cluster/data/mm5/bed/twinscan
+    ldHgGene -gtf -genePredExt mm5 twinscan chr*.gtf
+    hgPepPred mm5 generic twinscanPep twinscanPep.fa
+    featureBits -enrichment mm5 refGene twinscan
+#refGene 1.551%, twinscan 1.245%, both 0.783%, cover 50.46%, enrich 40.52x
+
+
