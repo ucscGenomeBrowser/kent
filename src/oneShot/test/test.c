@@ -20,10 +20,15 @@ errAbort(
 void test(char *s)
 /* test - Test something. */
 {
-printf("%s\n", s);
-s = makeQuotedString(s, '"');
-printf("%s\n", s);
-freez(&s);
+double a1[3] = {1, 2, 3, };
+double a2[4] = {1, 2, 3, 4};
+double a3[5] = {5, 1, 2, 3, 4};
+
+printf("%f %f %f\n",
+	doubleMedian(3, a1),
+	doubleMedian(4, a2),
+	doubleMedian(5, a3)
+	);
 }
 
 int main(int argc, char *argv[])
