@@ -5384,7 +5384,7 @@ if (!hideControls)
 	{
 	fputs("position ", stdout);
 	cgiMakeTextVar("position", position, 30);
-	printf("  Size %d ", winEnd-winStart);
+	printf("  size %d, ", winEnd-winStart);
 	fputs(" pixel width ", stdout);
 	cgiMakeIntVar("pix", tl.picWidth, 4);
 	fputs(" ", stdout);
