@@ -13,7 +13,7 @@ struct kdBranch
     struct kdBranch *hi;      /* Pointer to children with higher coordinates. */
     struct kdLeaf *leaf;      /* Extra info for leaves on tree. */
     int cutCoord;	      /* Coordinate (in some dimension) to cut on */
-    int maxScore;	      /* Max score of any leaf below us. */
+    double maxScore;	      /* Max score of any leaf below us. */
     int maxQ;		      /* Maximum qEnd of any leaf below us. */
     int maxT;		      /* Maximum tEnd of any leaf below us. */
     };
@@ -24,7 +24,7 @@ struct kdLeaf
     struct kdLeaf *next;	/* Next in list. */
     struct boxIn *cb;	        /* Start position and score from user. */
     struct kdBranch *bestPred;	/* Best predecessor. */
-    int totalScore;		/* Total score of chain up to here. */
+    double totalScore;		/* Total score of chain up to here. */
     bool hit;			/* This hit? Used by system internally. */
     };
 
@@ -81,7 +81,10 @@ static int kdLeafCmpTotal(const void *va, const void *vb)
 {
 const struct kdLeaf *a = *((struct kdLeaf **)va);
 const struct kdLeaf *b = *((struct kdLeaf **)vb);
-return b->totalScore - a->totalScore;
+double diff = b->totalScore - a->totalScore;
+if (diff < 0) return -1;
+else if (diff > 0) return 1;
+else return 0;
 }
 
 int chainCmpScore(const void *va, const void *vb)
@@ -90,12 +93,9 @@ int chainCmpScore(const void *va, const void *vb)
 const struct chain *a = *((struct chain **)va);
 const struct chain *b = *((struct chain **)vb);
 double diff = b->score - a->score;
-if (diff < 0)
-   return -1;
-else if (diff > 0)
-   return 1;
-else
-   return 0;
+if (diff < 0) return -1;
+else if (diff > 0) return 1;
+else return 0;
 }
 
 static int medianVal(struct dlList *list, int medianIx, int dim)
@@ -226,7 +226,7 @@ struct predScore
 /* Predecessor and score we get merging with it. */
     {
     struct kdBranch *pred;	/* Predecessor. */
-    int score;			/* Score of us plus predecessor. */
+    double score;		/* Score of us plus predecessor. */
     };
 
 static struct predScore bestPredecessor(
@@ -238,15 +238,13 @@ static struct predScore bestPredecessor(
 	struct predScore bestSoFar) /* Best predecessor so far. */
 {
 struct kdLeaf *leaf;
-int maxScore = branch->maxScore + lonely->cb->score;
+double maxScore = branch->maxScore + lonely->cb->score;
 
 /* If best score in this branch of tree wouldn't be enough
  * don't bother exploring it. First try without calculating
  * gap score in case gap score is a little expensive to calculate. */
 if (maxScore < bestSoFar.score)
     return bestSoFar;
-#ifdef SOON
-#endif /* SOON */
 maxScore -= gapCost(lonely->cb->qStart - branch->maxQ, 
 	lonely->cb->tStart - branch->maxT);
 if (maxScore < bestSoFar.score)
@@ -289,7 +287,8 @@ else
     }
 }
 
-static void updateScoresOnWay(struct kdBranch *branch, int dim, struct kdLeaf *leaf)
+static void updateScoresOnWay(struct kdBranch *branch, 
+	int dim, struct kdLeaf *leaf)
 /* Traverse kd-tree to find block.  Update all maxScores on the way
  * to reflect leaf->totalScore. */
 {
@@ -312,7 +311,7 @@ static void findBestPredecessors(struct kdTree *tree, struct kdLeaf *leafList,
 static struct predScore noBest;
 struct kdLeaf *leaf;
 struct kdLeaf *bestLeaf = NULL;
-int bestScore = 0;
+double bestScore = 0;
 
 for (leaf = leafList; leaf != NULL; leaf = leaf->next)
     {
@@ -458,21 +457,46 @@ void chainIdNext(struct chain *chain)
 chain->id = nextId++;
 }
 
-void chainWrite(struct chain *chain, FILE *f)
-/* Write out chain to file. */
+void chainWriteHead(struct chain *chain, FILE *f)
+/* Write chain before block/insert list. */
 {
-struct boxIn *b, *nextB;
 static int id = 1;
-
 if (chain->id == 0)
     chainIdNext(chain);
 fprintf(f, "chain %1.0f %s %d + %d %d %s %d %c %d %d %d\n", chain->score,
     chain->tName, chain->tSize, chain->tStart, chain->tEnd,
     chain->qName, chain->qSize, chain->qStrand, chain->qStart, chain->qEnd,
     chain->id);
+}
+
+void chainWrite(struct chain *chain, FILE *f)
+/* Write out chain to file in usual format*/
+{
+struct boxIn *b, *nextB;
+
+chainWriteHead(chain, f);
 for (b = chain->blockList; b != NULL; b = nextB)
     {
     nextB = b->next;
+    fprintf(f, "%d", b->qEnd - b->qStart);
+    if (nextB != NULL)
+	fprintf(f, "\t%d\t%d", 
+		nextB->tStart - b->tEnd, nextB->qStart - b->qEnd);
+    fputc('\n', f);
+    }
+fputc('\n', f);
+}
+
+void chainWriteLong(struct chain *chain, FILE *f)
+/* Write out chain to file in longer format*/
+{
+struct boxIn *b, *nextB;
+
+chainWriteHead(chain, f);
+for (b = chain->blockList; b != NULL; b = nextB)
+    {
+    nextB = b->next;
+    fprintf(f, "%d\t%d\t", b->tStart, b->qStart);
     fprintf(f, "%d", b->qEnd - b->qStart);
     if (nextB != NULL)
 	fprintf(f, "\t%d\t%d", 
