@@ -17,7 +17,9 @@ errAbort(
   "usage:\n"
   "   pslPretty in.psl target.lst query.lst pretty.out\n"
   "options:\n"
-  "   -axt - save in Scott Schwartz's axt format\n"
+  "   -axt - save in something like Scott Schwartz's axt format\n"
+  "          Note gaps in both sequences are still allowed in the\n"
+  "          output which not all axt readers will expect\n"
   "   -dot=N Put out a dot every N records\n"
   "   -long - Don't abbreviate long inserts\n"
   "It's a really good idea if the psl file is sorted by target\n"
@@ -222,8 +224,9 @@ int qs = psl->qStart, qe = psl->qEnd;
 if (psl->strand[0] == '-')
     reverseIntRange(&qs, &qe, psl->qSize);
 
-if (psl->strand[1] != '-')
-    psl->strand[1] = '+';
+if (psl->strand[1] == '-')
+    errAbort("axt option can't handle two character strands in psl");
+if (psl->strand[1] == 0)
 fprintf(f, "%d %s %d %d %s %d %d %c%c 0\n", ++ix, psl->tName, psl->tStart+1, 
 	psl->tEnd, psl->qName, qs+1, qe, psl->strand[1], psl->strand[0]);
 fprintf(f, "%s\n%s\n\n", t, q);
