@@ -24,11 +24,66 @@ exit; # don't actually run this like a script :)
 
     ln -s /cluster/store5/gs.18/build35 ~/oo
 
-# NCBI download site:
+# NCBI download site, fetch everything into this one directory:
 
     #	with the machine and password in your $HOME/.netrc file, this
     #	wget command will require no login.  Your $HOME/.netrc file
     #	is set to 'chmod 600 .netrc' to prevent anyone from finding
     #	the data.
-    cd /cluster/store5/gs.18/agp
+    mkdir /cluster/store5/gs.18/ncbi
+    cd /cluster/store5/gs.18/ncbi
     wget --timestamping ftp://ftp.ncbi.nlm.nih.gov/build_35/*
+
+    # the chr agp's and sequences belong in the agp directory
+    cd /cluster/store5/gs.18/agp
+    ln -s ../ncbi/chr*.agp ../ncbi/chr*.fa.gz .
+
+    # a few of the agp's belong in the build35 directory, and they
+    #	make the overall agp
+    cd /cluster/store5/gs.18/build35
+    ln -s ../ncbi/ref*.agp .
+    ln -s ../ncbi/DR*.agp .
+    #	I don't see this PAR.agp used anywhere in previous instructions
+    ln -s ../ncbi/PAR.agp .
+    cat ref_placed.agp ref_unplaced.agp DR*.agp > ncbi_build34.agp
+
+    #	and into ffa
+    cd /cluster/store5/gs.18/ffa
+    ln -s ../ncbi/ref*.fa.gz ../ncbi/DR*.fa.gz ../ncbi/sequence.inf .
+    #	I don't see this PAR.fa.gz used anywhere in previous instructions
+    ln -s ../ncbi/PAR.fa.gz .
+    time zcat ref_placed.fa.gz ref_unplaced.fa.gz DR*.fa.gz | gzip > \
+	ncbi_build35.fa.gz
+    #	real    37m42.208s
+    #	user    37m3.490s
+    #	sys     0m31.430s
+
+    #	New to this build is the sequence: NC_001807 which is the
+    #	mitochondria sequence.  This prefix NC_ is new to the process
+    #	and will have to be accounted for below.  The other two special
+    #	prefixes are similar to what was seen before:
+    #	from DR52.agp NG_002392
+    #	Homo sapiens major histocompatibility complex, class II,
+    #		DR52 haplotype (DR52) on chromosome 6
+    #	and from DR53.agp NG_002433
+    #	Homo sapiens major histocompatibility complex, class II,
+    #		DR53 haplotype (DR53) on chromosome 6
+
+XXX - waiting on seq_contig.md
+    # Sanity check
+    /cluster/bin/i386/checkYbr build34/ncbi_build34.agp ffa/ncbi_build34.fa \
+      build34/seq_contig.md
+
+    # Convert fa files into UCSC style fa files and place in "contigs"
+    # directory inside the gs.18/build35 directory 
+
+    cd /cluster/store5/gs.18/build35
+    mkdir contigs
+    time zcat ../ffa/ncbi_build35.fa.gz | /cluster/bin/i386/faNcbiToUcsc \
+	-split -ntLast stdin contigs
+XXX - error here:
+Expecting NT_ in >ref|NC_001807|NC_001807.4 Homo sapiens ref_placed genomic contig
+    #	real    5m10.938s
+    #	user    2m20.070s
+    #	sys     0m51.020s
+
