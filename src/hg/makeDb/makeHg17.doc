@@ -10908,3 +10908,359 @@ end
     checkTableCoords hg17 tigrGeneIndex
 
     gzip *.gff *TCs
+
+# BLASTZ FOR ZEBRAFISH (danRer2) (DONE, 2004-12-09, hartera)
+    ssh kkr1u00
+    # blastz requires lineage-specific repeats
+    # Treat all repeats as lineage-specific.
+ # /iscratch/i/gs.18/build35/linSpecRep.notInZebrafish exists (makeDanRer1.doc)
+    mkdir -p /iscratch/i/danRer2/linSpecRep.notInHuman
+    foreach f (/iscratch/i/danRer2/rmsk/chr*.fa.out)
+      cp -p $f /iscratch/i/danRer2/linSpecRep.notInHuman/$f:t:r:r.out.spec
+    end
+    iSync
+
+    ssh kk
+    mkdir -p /cluster/data/hg17/bed/blastz.danRer2.2004-12-08
+    ln -s /cluster/data/hg17/bed/blastz.danRer2.2004-12-08 \
+          /cluster/data/hg17/bed/blastz.danRer2
+    cd /cluster/data/hg17/bed/blastz.danRer2
+    # Set L=6000 and abridge repeats - these are the same parameters used
+    # for hg16 and Fugu and similar to those for hg16-galgal2
+                                                                                
+    cat << '_EOF_' > DEF
+# human (hg17) vs zebrafish (danRer2)
+export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/bin/i386:/cluster/home/angie/schwartzbin
+                                                                                
+ALIGN=blastz-run
+BLASTZ=blastz
+                                                                                
+# Reuse parameters from hg16-fr1.
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=6000
+BLASTZ_K=2200
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+BLASTZ_ABRIDGE_REPEATS=1
+                                                                                
+# TARGET: Human (hg17)
+SEQ1_DIR=/iscratch/i/gs.18/build35/bothMaskedNibs
+SEQ1_RMSK=
+SEQ1_FLAG=
+SEQ1_SMSK=/iscratch/i/gs.18/build35/linSpecRep.notInZebrafish
+SEQ1_IN_CONTIGS=0
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+                                                                                
+# QUERY: zebrafish (danRer2)
+SEQ2_DIR=/iscratch/i/danRer2/nib/
+SEQ2_RMSK=
+SEQ2_FLAG=
+SEQ2_SMSK=/iscratch/i/danRer2/linSpecRep.notInHuman
+SEQ2_IN_CONTIGS=0
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+                                                                                
+BASE=/cluster/data/hg17/bed/blastz.danRer2
+                                                                                
+DEF=$BASE/DEF
+RAW=$BASE/raw
+CDBDIR=$BASE
+SEQ1_LEN=$BASE/S1.len
+SEQ2_LEN=$BASE/S2.len
+
+#DEBUG=1
+'_EOF_'
+    # << this line keeps emacs coloring happy
+    chmod +x DEF
+    # Save the DEF file in the current standard place
+    cp DEF ~angie/hummus/DEF.hg17-danRer2.2004-12-08
+    # prepare first cluster run
+    ssh kk
+    cd /cluster/data/hg17/bed/blastz.danRer2
+    bash # if a csh/tcsh user
+    . ./DEF
+    /cluster/data/hg17/jkStuff/BlastZ_run0.sh
+    cd run.0
+    para try, check, push, check ...etc.
+# para time
+# Completed: 58993 of 58993 jobs
+# CPU time in finished jobs:   19583036s  326383.93m  5439.73h  226.66d  0.621 y
+# IO & Wait Time:                471090s    7851.50m   130.86h    5.45d  0.015 y
+# Average job time:                 340s       5.67m     0.09h    0.00d
+# Longest job:                      885s      14.75m     0.25h    0.01d
+# Submission to last job:         78245s    1304.08m    21.73h    0.91d
+
+    ssh kki
+    cd /cluster/data/hg17/bed/blastz.danRer2
+    bash # if a csh/tcsh user
+    . ./DEF
+    /cluster/data/hg17/jkStuff/BlastZ_run1.sh
+    cd run.1
+    para try, check, push, etc ...
+# para time
+# Completed: 341 of 341 jobs
+# CPU time in finished jobs:        789s      13.14m     0.22h    0.01d  0.000 y
+# IO & Wait Time:                  2992s      49.87m     0.83h    0.03d  0.000 y
+# Average job time:                  11s       0.18m     0.00h    0.00d
+# Longest job:                       34s       0.57m     0.01h    0.00d
+# Submission to last job:           391s       6.52m     0.11h    0.00d
+
+    #   Third cluster run to convert lav's to axt's
+    ssh kki
+    cd /cluster/data/hg17/bed/blastz.danRer2
+    mkdir axtChrom
+    # a new run directory
+    mkdir run.2
+    cd run.2
+cat << '_EOF_' > do.csh
+#!/bin/csh
+cd $1
+cat `ls -1 *.lav | sort -g` \
+| lavToAxt stdin /iscratch/i/gs.18/build35/bothMaskedNibs \
+ /iscratch/i/danRer2/nib stdout \
+| axtSort stdin $2
+'_EOF_'
+    # << this line makes emacs coloring happy
+    chmod a+x do.csh
+    cat << '_EOF_' > gsub
+#LOOP
+./do.csh {check in exists $(path1)} {check out line+ /cluster/data/hg17/bed/blastz.danRer2/axtChrom/$(root1).axt}
+#ENDLOOP
+'_EOF_'
+    # << this line makes emacs coloring happy
+    \ls -1Sd ../lav/chr* > chrom.list
+    gensub2 chrom.list single gsub jobList
+    wc -l jobList
+    head jobList
+    para create jobList
+    para try, check, push, check,...
+# para time
+# Completed: 45 of 46 jobs
+# Crashed: 1 jobs
+# CPU time in finished jobs:         99s       1.64m     0.03h    0.00d  0.000 y
+# IO & Wait Time:                   862s      14.37m     0.24h    0.01d  0.000 y
+# Average job time:                  21s       0.36m     0.01h    0.00d
+# Longest job:                       92s       1.53m     0.03h    0.00d
+# Submission to last job:           456s       7.60m     0.13h    0.01d
+    # crashed job: chr6_hla_hap1.axt is empty - has no alignments
+    # translate sorted axt files into psl
+    ssh kolossus
+    cd /cluster/data/hg17/bed/blastz.danRer2
+    mkdir -p pslChrom
+    set tbl = "blastzDanRer2"
+    foreach f (axtChrom/chr*.axt)
+      set c=$f:t:r
+      echo "Processing chr $c"
+      /cluster/bin/i386/axtToPsl $f S1.len S2.len pslChrom/${c}_${tbl}.psl
+    end
+                                                                               
+    # Load database tables
+    ssh hgwdev
+    cd /cluster/data/hg17/bed/blastz.danRer2/pslChrom
+                                                                               
+    foreach f (./*.psl)
+      /cluster/bin/i386/hgLoadPsl -noTNameIx hg17 $f
+      echo "$f Done"
+    end
+# try different parameters for blastz with chr1 of hg17
+# featureBits -chrom=chr1 hg17 refGene:cds blastzDanRer1 -enrichment
+# refGene:cds 1.301%, blastzDanRer1 3.934%, both 0.874%, cover 67.23%, 
+# enrich 17.09x
+# H=2000, Y=3400, L=6000, K=2200 and HoxD55.q scoring matrix
+# featureBits -chrom=chr1 hg17 refGene:cds blastzDanRer2 -enrichment
+# refGene:cds 1.301%, blastzDanRer2 3.845%, both 0.879%, cover 67.55%, 
+# enrich 17.57x
+# same parameters as above but L=8000
+# featureBits -chrom=chr1 hg17 refGene:cds blastzDanRer2L8k -enrichment
+# refGene:cds 1.301%, blastzDanRer2L8k 2.309%, both 0.778%, cover 59.81%, 
+# enrich 25.91x
+# enrichment went up but coverage dropped quite a bit.
+# Default parameters with H=2000
+# featureBits -chrom=chr1 hg17 refGene:cds blastzDanRer2Default -enrichment
+# refGene:cds 1.301%, blastzDanRer2Default 1.701%, both 0.846%, cover 65.04%, 
+# enrich 38.24x
+# featureBits -chrom=chr1 hg17 refGene:cds blastzDanRer2NoY -enrichment
+# refGene:cds 1.301%, blastzDanRer2NoY 3.980%, both 0.877%, cover 67.47%, 
+# enrich 16.95x
+
+# row count:
+# danRer2  122160
+# danRer2L8k 62815
+# can be pruned at the chaining step.
+# trackDb - change Zebrafish Blastz to danRer1 Blastz and display this track
+# for danRer2 as Zebrafish Blastz
+
+# RESCORE DANRER2 BLASTZ (DONE, 2004-12-09, hartera)
+    # Low scores can occur with repeats abridged and using the
+    # HoxD55.q matrix. PSU's restore_rpts program rescored alignments
+    # with the default matrix instead of the BLASTZ_Q matrix.
+    # Rescore them here so the chainer sees the higher scores:
+                                                                                
+    ssh kolossus
+    cd /cluster/data/hg17/bed/blastz.danRer2
+    mkdir axtChrom.rescore
+    foreach f (axtChrom/chr*.axt)
+        axtRescore -scoreScheme=/cluster/data/blastz/HoxD55.q \
+        $f axtChrom.rescore/$f:t
+    end
+    mv axtChrom axtChrom.orig
+    mv axtChrom.rescore axtChrom
+                                                                                
+#   psl files and blastz tables will be the same regardless of score so
+#   no need to reload
+
+# CHAIN DANRER2 BLASTZ (DONE, 2004-12-09, hartera)
+    # Run axtChain on little cluster
+    ssh kki
+    cd /cluster/data/hg17/bed/blastz.danRer2
+    mkdir -p axtChain/run1
+    cd axtChain/run1
+    mkdir out chain
+    # create input list
+    ls -1S /cluster/data/hg17/bed/blastz.danRer2/axtChrom/*.axt \
+        > input.lst
+    cat << '_EOF_' > gsub
+#LOOP
+doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain} {check out line+ out/$(root1).out}
+#ENDLOOP
+'_EOF_'
+    # << this line makes emacs coloring happy
+                                                                                
+    # Reuse gap penalties from hg16 vs chicken run.
+    cat << '_EOF_' > ../../chickenHumanTuned.gap
+tablesize^V     11
+smallSize^V     111
+position^V      1^V     2^V     3^V     11^V    111^V   2111^V  12111^V 32111^V
+72111^V 152111^V        252111
+qGap^V  325^V   360^V   400^V   450^V   600^V   1100^V  3600^V  7600^V  15600^V
+31600^V 56600
+bothGap^V       625^V   660^V   700^V   750^V   900^V   1400^V  4000^V  8000^V
+16000^V 32000^V 57000
+'_EOF_'
+    # << this line makes emacs coloring happy
+    cat << '_EOF_' > gsub
+#LOOP
+doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain} {check out line+ out/$(root1).out}
+#ENDLOOP
+'_EOF_'
+    # << this line makes emacs coloring happy
+cat << '_EOF_' > doChain
+#!/bin/csh
+axtChain -scoreScheme=/cluster/data/blastz/HoxD55.q \
+    -linearGap=../../chickenHumanTuned.gap $1 \
+    /iscratch/i/gs.18/build35/bothMaskedNibs \ 
+    /iscratch/i/danRer2/nib $2 >& $3
+'_EOF_'
+    # << this line makes emacs coloring happy
+    chmod a+x doChain
+    gensub2 input.lst single gsub jobList
+    para create jobList
+    para try, check, push, check...
+# para time
+# Completed: 45 of 46 jobs
+# Crashed: 1 jobs
+# CPU time in finished jobs:       1837s      30.62m     0.51h    0.02d  0.000 y
+# IO & Wait Time:                   441s       7.35m     0.12h    0.01d  0.000 y
+# Average job time:                  51s       0.84m     0.01h    0.00d
+# Longest job:                      106s       1.77m     0.03h    0.00d
+# Submission to last job:           419s       6.98m     0.12h    0.00d
+
+    # crashed job is chr6_hla_hap1 which has no alignments
+    # now on the cluster server, sort chains
+    ssh kksilo
+    cd /cluster/data/hg17/bed/blastz.danRer2/axtChain
+    chainMergeSort run1/chain/*.chain > all.chain
+    chainSplit chain all.chain
+                                                                                
+    # take a look at score distr's
+    foreach f (chain/*.chain)
+      grep chain $f | awk '{print $2;}' | sort -nr > /tmp/score.$f:t:r
+      echo $f:t:r >> hist5000.out
+      textHistogram -binSize=5000 /tmp/score.$f:t:r >> hist5000.out
+      echo ""
+    end
+
+    # apart from chr19 not too many with chains with scores < 5000
+    # load chr1 chain into table and check
+    ssh hgwdev
+    cd /cluster/data/hg17/bed/blastz.danRer2/axtChain/chain
+    hgLoadChain hg17 chr1_chainDanRer2 chr1.chain
+# featureBits -chrom=chr1 hg17 refGene:cds chainDanRer2Link -enrichment
+# refGene:cds 1.301%, chainDanRer2Link 3.676%, both 0.877%, cover 67.42%,
+# enrich 18.34x
+# featureBits -chrom=chr1 hg17 refGene:cds chainDanRer2 -enrichment
+# refGene:cds 1.301%, chainDanRer2 32.611%, both 1.034%, cover 79.52%, 
+# enrich 2.44x
+    ssh kksilo
+    cd /cluster/data/hg17/bed/blastz.danRer2/axtChain
+    mv all.chain all.chain.unfiltered
+    chainFilter -minScore=5000 all.chain.unfiltered > all.chain
+    chainSplit chainFilt5k all.chain
+    # load chr1 filtered chains and check
+    ssh hgwdev
+    cd /cluster/data/hg17/bed/blastz.danRer2/axtChain/chainFilt5k
+    hgLoadChain hg17 chr1_chainDanRer2Filt5k chr1.chain
+# featureBits -chrom=chr1 hg17 refGene:cds chainDanRer2Filt5kLink -enrichment
+# refGene:cds 1.301%, chainDanRer2Filt5kLink 2.907%, both 0.870%, cover 66.86%,
+# enrich 23.00x
+# featureBits -chrom=chr1 hg17 refGene:cds chainDanRer2Filt5k -enrichment
+# refGene:cds 1.301%, chainDanRer2Filt5k 31.343%, both 1.028%, cover 79.02%, 
+# enrich 2.52x
+# checked browser - when filtered on minScore=5000, the low scoring 
+# alignments removed are small and/or poor alignments so use this version.
+
+    ssh hgwdev
+    echo 'drop table chr1_chainDanRer2Filt5k;' | hgsql hg17
+    echo 'drop table chr1_chainDanRer2Filt5kLink;' | hgsql hg17
+    cd /cluster/data/hg17/bed/blastz.danRer2/axtChain/chain
+    foreach i (*.chain)
+        set c = $i:r
+        hgLoadChain hg17 ${c}_chainDanRer2 $i
+        echo done $c
+    end
+# trackDb - change Zebrafish Chain to danRer1 Chain and display this track
+# for danRer2 as Zebrafish Chain.
+
+# NET DANRER2 BLASTZ (DONE, 2004-12-09, hartera)
+    ssh kksilo
+    cd /cluster/data/hg17/bed/blastz.danRer2/axtChain
+    mkdir preNet
+    cd chain
+    foreach i (*.chain)
+       echo preNetting $i
+       /cluster/bin/i386/chainPreNet $i ../../S1.len ../../S2.len \
+                                     ../preNet/$i
+    end
+    cd ..
+    mkdir n1
+    cd preNet
+    foreach i (*.chain)
+      set n = $i:r.net
+      echo primary netting $i
+      /cluster/bin/i386/chainNet $i -minSpace=1 ../../S1.len ../../S2.len \
+                                 ../n1/$n /dev/null
+    end
+    cd ..
+    cat n1/*.net | /cluster/bin/i386/netSyntenic stdin noClass.net
+    # memory usage 194842624, utime 2801 s/100, stime 194 
+                                                                                
+    # Add classification info using db tables:
+    # netClass looks for ancient repeats in one of the databases
+    # hg17 has this table - hand-curated by Arian but this is for
+    # human-rodent comparisons so do not use here, use -noAr option
+    mkdir -p /cluster/bluearc/danRer2/linSpecRep.notInHuman
+    # linSpecRep.notInZebrafish exists for hg17 
+    cp /iscratch/i/danRer2/linSpecRep.notInHuman/* \
+       /cluster/bluearc/danRer2/linSpecRep.notInHuman
+    ssh hgwdev
+    cd /cluster/data/hg17/bed/blastz.danRer2/axtChain
+    time netClass noClass.net hg17 danRer2 zfishdanRer2.net \
+         -tNewR=/cluster/bluearc/hg17/linSpecRep.notInZebrafish \
+         -qNewR=/cluster/bluearc/danRer2/linSpecRep.notInHuman -noAr
+    # load net into database
+    cd /cluster/data/hg17/bed/blastz.danRer2/axtChain
+    netFilter -minGap=10 zfishdanRer2.net |  hgLoadNet hg17 netDanRer2 stdin
+    106.770u 63.770s 34:44.31 8.1%  0+0k 0+0io 206pf+0w
+# trackDb - change Zebrafish Net to danRer1 Net and display this track
+# for danRer2 as Zebrafish Net.
