@@ -160,8 +160,11 @@
 #include "bed6FloatScore.h"
 #include "pscreen.h"
 #include "jalview.h"
+#include "flyreg.h"
+#include "putaInfo.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.848 2005/03/15 01:18:40 markd Exp $";
+
+static char const rcsid[] = "$Id: hgc.c,v 1.849 2005/03/15 20:43:22 ytlu Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -2282,6 +2285,7 @@ netAlignFree(&net);
 void tfbsConsSites(struct trackDb *tdb, char *item)
 /* detail page for tfbsConsSites track */
 {
+boolean printFactors = FALSE;
 boolean printedPlus = FALSE;
 boolean printedMinus = FALSE;
 char *dupe, *words[16];
@@ -14541,6 +14545,354 @@ readInGulp(helpName, &helpBuf, NULL);
 puts(helpBuf);
 }
 
+
+void showSomeAlignment2(struct psl *psl, bioSeq *qSeq, enum gfType qType, int qStart, 
+			int qEnd, char *entryName, char *geneName, char *geneTable, int cdsS, int cdsE)
+/* Display protein or DNA alignment in a frame. */
+{
+int blockCount = 0, i = 0, j= 0, *exnStarts = NULL, *exnEnds = NULL;;
+struct tempName indexTn, bodyTn;
+FILE *index, *body;
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr = NULL;
+struct genePred *gene = NULL;
+char **row, query[256];
+int tStart = psl->tStart;
+int tEnd = psl->tEnd;
+char tName[256];
+struct dnaSeq *tSeq;
+char *tables[4] = {"ncbiGeneSet", "hinxtonGeneSet", "refGene", "mgcGenes"};
+
+/* open file to write to */
+makeTempName(&indexTn, "index", ".html");
+makeTempName(&bodyTn, "body", ".html");
+body = mustOpen(bodyTn.forCgi, "w");
+
+/* get query genes struct info*/
+for(i = 0; i < 4; i++)
+    {
+    sprintf(query, "SELECT * FROM %s WHERE name = '%s'"
+	    "AND chrom = '%s' AND txStart <= %d "
+	    "AND txEnd >= %d",
+	    tables[i], geneName, psl->qName, qStart, qEnd);
+
+    sr = sqlMustGetResult(conn, query);
+    if((row = sqlNextRow(sr)) != NULL)
+	{
+	gene = genePredLoad(row);
+	break;
+	}
+    else
+	sqlFreeResult(&sr);
+    }
+if(i == 4)
+    errAbort("Can't find query for %s in %s. This entry may no longer exist\n", gene, geneTable);
+
+
+AllocArray(exnStarts, gene->exonCount);
+AllocArray(exnEnds, gene->exonCount);
+for(i = 0; i < gene->exonCount; i++)
+    {
+    if(gene->exonStarts[i] < qEnd && gene->exonEnds[i] > qStart)
+	{
+	exnStarts[j] = gene->exonStarts[i] > qStart ? gene->exonStarts[i] : qStart;
+	exnEnds[j] = gene->exonEnds[i] < qEnd ? gene->exonEnds[i] : qEnd;
+	j++;
+	}
+    }
+genePredFree(&gene);
+       
+/* Writing body of alignment. */
+body = mustOpen(bodyTn.forCgi, "w");
+htmStart(body, psl->qName);
+
+/* protein psl's have a tEnd that isn't quite right */
+if ((psl->strand[1] == '+') && (qType == gftProt))
+    tEnd = psl->tStarts[psl->blockCount - 1] + psl->blockSizes[psl->blockCount - 1] * 3;
+
+tSeq = hDnaFromSeq(seqName, psl->tStart, psl->tEnd, dnaLower);
+
+freez(&tSeq->name);
+tSeq->name = cloneString(psl->tName);
+safef(tName, sizeof(tName), "%s.%s", organism, psl->tName);
+if (psl->qName == NULL)
+    fprintf(body, "<H2>Alignment of %s and %s:%d-%d</H2>\n",
+	    entryName, psl->tName, psl->tStart+1, psl->tEnd);
+else
+    fprintf(body, "<H2>Alignment of %s and %s:%d-%d</H2>\n",
+	    entryName, psl->tName, psl->tStart+1, psl->tEnd);
+
+fputs("Click on links in the frame to the left to navigate through "
+      "the alignment.\n", body);
+
+safef(tName, sizeof(tName), "%s.%s", organism, psl->tName);
+blockCount = pslGenoShowAlignment(psl, qType == gftProt, 
+	entryName, qSeq, qStart, qEnd, 
+	tName, tSeq, tStart, tEnd, exnStarts, exnEnds, j, body);
+freez(&exnStarts);
+freez(&exnEnds);
+freeDnaSeq(&tSeq);
+
+htmEnd(body);
+fclose(body);
+chmod(bodyTn.forCgi, 0666);
+
+/* Write index. */
+index = mustOpen(indexTn.forCgi, "w");
+if (entryName == NULL)
+    entryName = psl->qName;
+htmStart(index, entryName);
+fprintf(index, "<H3>Alignment of %s</H3>", entryName);
+fprintf(index, "<A HREF=\"%s#cDNA\" TARGET=\"body\">%s</A><BR>\n", bodyTn.forCgi, entryName);
+fprintf(index, "<A HREF=\"%s#genomic\" TARGET=\"body\">%s.%s</A><BR>\n", bodyTn.forCgi, hOrganism(hGetDb()), psl->tName);
+for (i=1; i<=blockCount; ++i)
+    {
+    fprintf(index, "<A HREF=\"%s#%d\" TARGET=\"body\">block%d</A><BR>\n",
+	    bodyTn.forCgi, i, i);
+    }
+fprintf(index, "<A HREF=\"%s#ali\" TARGET=\"body\">together</A><BR>\n", bodyTn.forCgi);
+fclose(index);
+chmod(indexTn.forCgi, 0666);
+
+/* Write (to stdout) the main html page containing just the frame info. */
+puts("<FRAMESET COLS = \"13%,87% \" >");
+printf("  <FRAME SRC=\"%s\" NAME=\"index\">\n", indexTn.forCgi);
+printf("  <FRAME SRC=\"%s\" NAME=\"body\">\n", bodyTn.forCgi);
+puts("<NOFRAMES><BODY></BODY></NOFRAMES>");
+puts("</FRAMESET>");
+puts("</HTML>\n");
+exit(0);	/* Avoid cartHtmlEnd. */
+}
+
+
+void potentPslAlign(char *htcCommand, char *item)
+{// show the detail psl alignment between genome
+char *pslTable = cgiString("pslTable");
+char *chrom = cgiString("chrom");
+int start = cgiInt("cStart");
+int end = cgiInt("cEnd");
+struct psl *psl = NULL;
+struct dnaSeq *qSeq = NULL;
+char *db = cgiString("db");
+char name[64];
+char query[256], fullTable[64];
+char **row;
+boolean hasBin;
+struct sqlResult *sr = NULL;
+struct sqlConnection *conn = hAllocConn();
+
+
+hFindSplitTable(chrom, pslTable, fullTable, &hasBin);
+
+sprintf(query, "SELECT * FROM %s WHERE "
+        "tName = '%s' AND tStart = %d "
+	"AND tEnd = %d",
+        pslTable, chrom, start, end);
+sr = sqlMustGetResult(conn, query);
+row = sqlNextRow(sr);
+if(row != NULL)
+    {
+    psl = pslLoad(row+hasBin);
+    }
+else
+    {
+    errAbort("No alignment infomation\n");
+    }
+qSeq = loadGenomePart(db, psl->qName, psl->qStart, psl->qEnd);
+sprintf(name, "%s in %s(%d-%d)", item,psl->qName, psl->qStart, psl->qEnd);
+writeFramesetType();
+puts("<HTML>");
+printf("<HEAD>\n<TITLE>%s %dk</TITLE>\n</HEAD>\n\n", name, psl->qStart/1000);
+showSomeAlignment2(psl, qSeq, gftDnaX, psl->qStart, psl->qEnd, name, item, "", psl->qStart, psl->qEnd);
+}
+
+
+
+void doPutaFrag(struct trackDb *tdb, char *item)
+{ // display the potential pseudo and coding track
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr = NULL;
+char **row, table[256], query[256], *parts[6];
+struct putaInfo *info = NULL;
+struct psl *psl = NULL;
+int start = cartInt(cart, "o"),  end = cartInt(cart, "t");
+char *name = cartString(cart, "i"),  *chr = cartString(cart, "c");
+char pslTable[256];
+char otherString[256], *tempName = NULL;
+int partCount;
+boolean isRcnt = FALSE;
+
+// check which track to display and set parameters
+if(sameWord(tdb->tableName, "rcntDupGenes"))
+    {
+    isRcnt = TRUE;
+    sprintf(table,"rcntDupGeneInfo");
+    sprintf(pslTable,"rcntPsl");
+    cartWebStart(cart, "Recent Duplicating Gene");
+    }
+else
+    {
+    sprintf(table, "putaInfo");
+    sprintf(pslTable,"potentPsl");
+    cartWebStart(cart, "Putative Coding or Pseudo Fragments");
+    }
+
+
+sprintf(query, "SELECT * FROM %s WHERE name = '%s' "
+        "AND chrom = '%s' AND chromStart = %d "
+        "AND chromEnd = %d",
+         table, name, chr, start, end);
+
+sr = sqlMustGetResult(conn, query);
+row = sqlNextRow(sr);
+
+if(row != NULL)
+    {
+    info = putaInfoLoad(row);
+    }
+else
+    {
+    errAbort("Can't find information for %s in data base\n", name);
+    }
+sqlFreeResult(&sr);
+
+tempName = cloneString(name);
+partCount = chopByChar(tempName, '|',parts, 4);
+
+// print the first line for recent dup or putative element
+if(isRcnt)
+    printf("<B>%s</B> may be a duplicate of the known gene: <A HREF=\"", name);
+else
+    printf("<B>%s</B> is homologous to the known gene: <A HREF=\"", name);
+printEntrezNucleotideUrl(stdout, parts[0]);
+printf("\" TARGET=_blank>%s</A><BR>\n", parts[0]);
+printf("<B>%s </B>is aligned here with score : %d<BR><BR>\n", parts[0], info->score);
+
+// print the info about the stamper gene
+printf("<B> %s</B><BR>\n", parts[0]);
+printf("<B>Genomic location of the mapped part of %s</B>: <A HREF=\""
+	   "http://hgwdev-ytlu.cse.ucsc.edu/cgi-bin/hgTracks?org=Human&position=%s:"
+	   "%d-%d&knownGene=full&refGene=full&mgcGenes=full&vegaGene=full\" TARGET=_blank>%s(%s):%d-%d </A> <BR>\n",
+       parts[0], info->oChrom, info->oChromStart, info->oChromEnd, info->oChrom, parts[2],info->oChromStart+1, info->oChromEnd); 
+printf("<B>Mapped %s Exons</B>: %d of %d. <BR> <B>Mapped %s CDS exons</B>: %d of %d <BR>\n", parts[0], info->qExons[0], info->qExons[1], parts[0], info->qExons[2], info->qExons[3]);
+
+printf("<b>Aligned %s bases</B>:%d of %d with %f identity. <BR> <B>Aligned %s CDS bases</B>:  %d of %d with %f identity.<BR><BR>\n", parts[0],info->qBases[0], info->qBases[1], info->id[0], parts[0], info->qBases[2], info->qBases[3], info->id[1]);
+
+
+// print info about the stamp putative element
+printf("<B>%s </B><BR> <B>Genomic location: </B>"
+       " <A HREF=\"http://hgwdev-ytlu.cse.ucsc.edu/cgi-bin/hgTracks?org=Human&position=%s:%d-%d\" >%s(%s): %d - %d.</A> <BR> <B> Element Structure: </B> %d putative exons and %d putative cds exons<BR><BR>\n", 
+       name,info->chrom, info->chromStart, info->chromEnd, info->chrom, info->strand, info->chromStart, info->chromEnd, info->tExons[0], info->tExons[1]);
+if(info->repeats[0] > 0)
+    {
+    printf("Repeats elements inserted into %s <BR>\n", name);
+    }
+if(info->stop >0)
+    {
+    int k = 0;
+    printf("Premature stops in block ");
+    for(k = 0; k < info->blockCount; k++)
+	{
+	if(info->stops[k] > 0)
+	    {
+	    if(info->strand[0] == '+')
+		printf("%d ",k+1);
+	    else
+		printf("%d ", info->blockCount - k);
+	    }
+	}
+    printf("<BR>\n");
+    }
+
+
+// for recent dup provide other locations of the same stamper gene 
+if(isRcnt)
+    {  // for Rcnt, list all other dups 
+    printf("<BR><BR>Other locations %s might be duplicated to:<BR>\n", parts[0]);
+    sprintf(query, "SELECT * FROM %s WHERE name like '%s%%' ", table, parts[0]);
+    sr = sqlMustGetResult(conn, query);
+    while((row = sqlNextRow(sr)) != NULL)
+	{
+	struct putaInfo *info1 = NULL;
+	info1 = putaInfoLoad(row);
+	printf(" <A HREF=\"http://hgwdev-ytlu.cse.ucsc.edu/cgi-bin/hgTracks?org=Human&position=%s:%d-%d\" >%s(%s): %d - %d.</A> <BR>\n",
+	       info1->chrom, info1->chromStart, info1->chromEnd, info1->chrom, info1->strand, info1->chromStart, info1->chromEnd);
+	putaInfoFree(&info1);
+	}
+    printf("<BR><BR>\n");
+    sqlFreeResult(&sr);
+    }
+
+
+// show genome sequence
+hgcAnchorSomewhere("htcGeneInGenome", cgiEncode(info->name), tdb->tableName, seqName);
+printf("View DNA for this putative fragment</A><BR>\n");
+
+// show the detail alignment
+sprintf(query, "SELECT * FROM %s WHERE "
+	"tName = '%s' AND tStart = %d "
+	"AND tEnd = %d AND strand = '%c%c'",
+	pslTable, info->chrom, info->chromStart, info->chromEnd, parts[2][0], info->strand[0]);
+sr = sqlMustGetResult(conn, query);
+row = sqlNextRow(sr);
+if(row != NULL)
+    {
+    psl = pslLoad(row+1);
+    sprintf(otherString, "&db=%s&pslTable=%s&chrom=%s&cStart=%d&cEnd=%d&strand=%s&qStrand=%s",
+	    database, pslTable, info->chrom,info->chromStart, info->chromEnd, info->strand, parts[2]);
+    hgcAnchorSomewhere("potentPsl", cgiEncode(parts[0]), otherString, info->chrom);
+    printf("<BR>View details of parts of alignment </A>.</BR>\n");
+    }
+sqlFreeResult(&sr);
+putaInfoFree(&info);
+hFreeConn(&conn);
+}
+
+
+static void doFlyreg(struct trackDb *tdb, char *item)
+/* flyreg.org: Drosophila DNase I Footprint db. */
+{
+struct dyString *query = newDyString(256);
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr = NULL;
+char **row;
+int start = cartInt(cart, "o");
+int end   = cartInt(cart, "t");
+char fullTable[64];
+boolean hasBin = FALSE;
+int i = 0;
+
+genericHeader(tdb, item);
+hFindSplitTable(seqName, tdb->tableName, fullTable, &hasBin);
+dyStringPrintf(query, "select * from %s where chrom = '%s' and ",
+	       fullTable, seqName);
+hAddBinToQuery(start, end, query);
+dyStringPrintf(query, "chromStart = %d and name = '%s'", start, item);
+sr = sqlGetResult(conn, query->string);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    struct flyreg fr;
+    flyregStaticLoad(row+hasBin, &fr);
+    if (i++ > 0)
+	htmlHorizontalLine();
+    printf("<B>Factor:</B> %s<BR>\n", fr.name);
+    printf("<B>Target:</B> %s<BR>\n", fr.target);
+    printf("<B>PubMed ID:</B> <A HREF=\"");
+    printEntrezPubMedUidUrl(stdout, fr.pmid);
+    printf("\" TARGET=_BLANK>%d</A><BR>\n", fr.pmid);
+    bedPrintPos((struct bed *)(&fr), 3);
+    }
+if (i == 0)
+    errAbort("query returned no results: \"%s\"", query);
+dyStringFree(&query);
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+printTrackHtml(tdb);
+}
+
+
+
+
 void doMiddle()
 /* Generate body of HTML. */
 {
@@ -15160,7 +15512,6 @@ else if (sameWord(track,"easyGene"))
     {
     doEasyGenes(tdb, item);
     }
-
 /*Evan's stuff*/
 else if (sameWord(track, "genomicSuperDups"))
     {
@@ -15277,6 +15628,14 @@ else if (sameWord(track, "sgdOther"))
 else if (sameWord(track, "vntr"))
     {
     doVntr(tdb, item);
+    }
+else if (sameWord(track, "luNega") || sameWord (track, "luPosi"))
+    {
+    doPutaFrag(tdb, item);
+    }
+else if (sameWord(track, "potentPsl") || sameWord(track, "rcntPsl") )
+    {
+    potentPslAlign(track, item);
     }
 else if (startsWith("zdobnov", track))
     {
