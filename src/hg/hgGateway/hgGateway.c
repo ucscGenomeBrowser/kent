@@ -12,7 +12,7 @@
 #include "hCommon.h"
 #include "hui.h"
 
-static char const rcsid[] = "$Id: hgGateway.c,v 1.59 2003/07/25 16:34:13 donnak Exp $";
+static char const rcsid[] = "$Id: hgGateway.c,v 1.60 2003/08/08 17:09:07 donnak Exp $";
 
 struct cart *cart = NULL;
 struct hash *oldVars = NULL;
@@ -78,6 +78,7 @@ puts(
 "<A HREF=\"mailto:hiram@soe.ucsc.edu\">Hiram Clawson</A>,\n"
 "<A HREF=\"mailto:kate@soe.ucsc.edu\">Kate Rosenbloom</A>,\n"
 "<A HREF=\"mailto:braney@soe.ucsc.edu\">Brian Raney</A>,\n"
+"<A HREF=\"mailto:kuhn@soe.ucsc.edu\">Robert Kuhn</A>,\n"
 "<A HREF=\"mailto:donnak@soe.ucsc.edu\">Donna Karolchik</A>,\n"
 "<A HREF=\"http://www.soe.ucsc.edu/~haussler\">David Haussler</A>,\n"
 "and the\n" 
