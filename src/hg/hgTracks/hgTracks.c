@@ -8620,7 +8620,7 @@ if (!hideControls)
     if( chromosomeColorsMade )
         {
         printf("<B>Chromosome Color Key:</B><BR> ");
-        printf("<IMG SRC = \"../images/colorchrom.gif\" BORDER=1 WIDTH=375 HEIGHT=65 ><BR>\n");
+        printf("<IMG SRC = \"../images/colorchrom.gif\" BORDER=1 WIDTH=610 HEIGHT=19 ><BR>\n");
         }
     printf("<table border=0 cellspacing=1 cellpadding=1 width=%d>\n", CONTROL_TABLE_WIDTH);
     printf("<tr><th colspan=%d>\n", MAX_CONTROL_COLUMNS);
