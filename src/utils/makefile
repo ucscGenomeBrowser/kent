@@ -65,6 +65,7 @@ DIRS = \
 	rmFaDups \
 	scaffoldFaToAgp \
 	scrambleFa \
+	spacedToTab \
 	splitFile \
 	stringify \
 	subChar \
