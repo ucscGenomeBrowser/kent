@@ -14,7 +14,7 @@
 #include "qa.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: hgTablesTest.c,v 1.10 2004/11/08 01:04:09 kent Exp $";
+static char const rcsid[] = "$Id: hgTablesTest.c,v 1.11 2004/11/08 04:09:58 kent Exp $";
 
 /* Command line variables. */
 char *clOrg = NULL;	/* Organism from command line. */
@@ -36,6 +36,7 @@ errAbort(
   "   -groups=N - Number of groups to test (default all)\n"
   "   -tracks=N - Number of tracks per group to test (default %d)\n"
   "   -tables=N - Number of tables per track to test (deault %d)\n"
+  "   -verbose=N - Set to 0 for silent operation, 2 for debugging\n"
   , clTracks, clTables);
 }
 
@@ -108,6 +109,8 @@ struct htmlPage *quickSubmit(struct htmlPage *basePage,
 struct tablesTest *test;
 struct qaStatus *qs;
 struct htmlPage *page;
+verbose(2, "quickSubmit(%p, %s, %s, %s, %s, %s, %s, %s, %s)\n",
+	basePage, org, db, group, track, table, testName, button, buttonVal);
 if (basePage != NULL)
     {
     if (db != NULL)
@@ -453,11 +456,13 @@ if (outTypeAvailable(mainForm, "primaryTable"))
 	testOutBed(tablePage, mainForm, org, db, group, track, table, rowCount);
 	testOutHyperlink(tablePage, mainForm, org, db, group, track, table, rowCount);
 	testOutGff(tablePage, mainForm, org, db, group, track, table);
-	testOutCustomTrack(tablePage, mainForm, org, db, group, track, table);
+	if (rowCount > 0)
+	    testOutCustomTrack(tablePage, mainForm, org, db, group, track, table);
 	}
     }
 verbose(1, "Tested %s %s %s %s %s\n", org, db, group, track, table);
 htmlPageFree(&tablePage);
+carefulCheckHeap();
 }
 
 void testOneTrack(struct htmlPage *groupPage, char *org, char *db,
