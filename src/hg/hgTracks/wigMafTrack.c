@@ -14,7 +14,7 @@
 #include "hgMaf.h"
 #include "mafTrack.h"
 
-static char const rcsid[] = "$Id: wigMafTrack.c,v 1.4 2004/03/02 05:00:01 kate Exp $";
+static char const rcsid[] = "$Id: wigMafTrack.c,v 1.5 2004/03/04 00:31:11 kate Exp $";
 
 struct wigMafItem
 /* A maf track item -- 
@@ -86,7 +86,7 @@ static struct wigMafItem *scoreItem(scoreHeight)
 struct wigMafItem *mi;
 
 AllocVar(mi);
-mi->name = cloneString("");
+mi->name = cloneString("Conservation");
 mi->height = scoreHeight;
 return mi;
 }
@@ -96,9 +96,10 @@ static struct wigMafItem *loadBaseByBaseItems(struct track *track)
 {
 struct wigMafItem *miList = NULL, *mi;
 struct mafAli *maf;
-char *myOrg = hOrganism(database);
 char buf[64];
 char *otherOrganism;
+char *myOrg = hOrganism(database);
+tolowers(myOrg);
 
 /* Make up item that will show inserts in this organism. */
 AllocVar(mi);
@@ -113,11 +114,19 @@ mi->height = tl.fontHeight;
 mi->db = cloneString(database);
 slAddHead(&miList, mi);
 
+
 /* Make up items for other organisms by scanning through
  * all mafs and looking at database prefix to source. */
     {
+    /* get species order from trackDb setting */
+    char *speciesOrder = trackDbRequiredSetting(track->tdb, "speciesOrder");
+    char *species[100];
+    int speciesCt = chopLine(speciesOrder, species);
     struct hash *hash = newHash(8);	/* keyed by database. */
-    hashAdd(hash, mi->db, mi);		/* Add in current organism. */
+    struct hashEl *el;
+    int i;
+
+    hashAdd(hash, mi->name, mi);	/* Add in current organism. */
     for (maf = track->customPt; maf != NULL; maf = maf->next)
         {
 	struct mafComp *mc;
@@ -131,12 +140,18 @@ slAddHead(&miList, mi);
                 otherOrganism = hOrganism(mi->db);
                 mi->name = 
                     (otherOrganism == NULL ? cloneString(buf) : otherOrganism);
+                tolowers(mi->name);
 		mi->height = tl.fontHeight;
-		slAddHead(&miList, mi);
-		hashAdd(hash, mi->db, mi);
+		hashAdd(hash, mi->name, mi);
 		}
 	    }
 	}
+    /* build item list in species order */
+    for (i = 0; i < speciesCt; i++)
+        {
+        if ((el = hashLookup(hash, species[i])) != NULL)
+            slAddHead(&miList, (struct wigMafItem *)el->val);
+        }
     hashFree(&hash);
     }
 /* Add item for score wiggle after base alignment */
@@ -149,6 +164,12 @@ slReverse(&miList);
 return miList;
 }
 
+static int pairwiseWigHeight(struct track *wigTrack)
+/* Return the height of a pairwise wiggle for this track */
+{
+    return max(wigHeight(wigTrack, tvFull)/2, tl.fontHeight);
+}
+
 static struct wigMafItem *loadPairwiseItems(struct track *track)
 /* Make up items for modes where pairwise data are shown.
    First an item for the score wiggle, then a pairwise item
@@ -159,10 +180,12 @@ struct wigMafItem *miList = NULL, *mi;
 struct mafAli *maf;
 char buf[64];
 char *otherOrganism;
+struct track *wigTrack = track->subtracks;
+int smallWigHeight = pairwiseWigHeight(wigTrack);
 
-if (track->subtracks != NULL)
+if (wigTrack != NULL)
     {
-    mi = scoreItem(wigHeight(track->subtracks, tvFull));
+    mi = scoreItem(wigHeight(wigTrack, tvFull));
     slAddHead(&miList, mi);
     }
 if (trackDbSetting(track->tdb, "pairwise") != NULL)
@@ -171,7 +194,13 @@ if (trackDbSetting(track->tdb, "pairwise") != NULL)
  * all mafs and looking at database prefix to source. */
     {
     // TODO: share code with baseByBaseItems
+    char *speciesOrder = trackDbRequiredSetting(track->tdb, "speciesOrder");
+    char *species[100];
+    int speciesCt = chopLine(speciesOrder, species);
     struct hash *hash = newHash(8);	/* keyed by database. */
+    struct hashEl *el;
+    int i;
+
     for (maf = track->customPt; maf != NULL; maf = maf->next)
         {
 	struct mafComp *mc;
@@ -192,12 +221,21 @@ if (trackDbSetting(track->tdb, "pairwise") != NULL)
                 otherOrganism = hOrganism(mi->db);
                 mi->name = 
                     (otherOrganism == NULL ? cloneString(buf) : otherOrganism);
-		mi->height = tl.fontHeight;
-		slAddHead(&miList, mi);
-		hashAdd(hash, mi->db, mi);
+                tolowers(mi->name);
+                if (track->visibility == tvFull)
+                    mi->height = smallWigHeight;
+                else
+                    mi->height = tl.fontHeight;
+		hashAdd(hash, mi->name, mi);
 		}
 	    }
 	}
+    /* build item list in species order */
+    for (i = 0; i < speciesCt; i++)
+        {
+        if ((el = hashLookup(hash, species[i])) != NULL)
+            slAddHead(&miList, (struct wigMafItem *)el->val);
+        }
     hashFree(&hash);
     }
 slReverse(&miList);
@@ -285,6 +323,7 @@ static int wigMafItemHeight(struct track *track, void *item)
 struct wigMafItem *mi = item;
 return mi->height;
 }
+
 
 static void wigMafFree(struct track *track)
 /* Free up maf items. */
@@ -395,43 +434,74 @@ static boolean wigMafDrawPairwise(struct track *track, int seqStart, int seqEnd,
         Color color, enum trackVisibility vis)
 /* Draw pairwise tables for this multiple alignment, 
  *  if "pairwise" setting is on.  For full mode, display wiggles,
- *  for squish mode, display density plot of mafs.
+ *  for pack mode, display density plot of mafs.
  */
 {
-int seqSize = seqEnd - seqStart;
 struct mafAli *mafList;
 struct sqlConnection *conn;
-struct wigMafItem *miList = track->items, *mi = miList;
-char buf[64];
 boolean ret = FALSE;
+char *suffix;
+char table[64];
+Color newColor;
+struct track *wigTrack = track->subtracks;
+int wigTrackHeight = pairwiseWigHeight(wigTrack);
+struct wigMafItem *miList = track->items, *mi = miList;
+int seqSize = seqEnd - seqStart;
 
 if (miList == NULL)
-    return ret;
+    return FALSE;
 conn = hAllocConn();
+
+/* obtain suffix for pairwise wiggle tables */
+suffix = trackDbSetting(track->tdb, "pairwise");
+if (vis == tvFull)
+    {
+    if (suffix == NULL || wigTrack == NULL)
+        return FALSE;
+    /* swap colors for pairwise wiggles */
+    newColor = wigTrack->ixColor;
+    wigTrack->ixColor = wigTrack->ixAltColor;
+    wigTrack->ixAltColor = newColor;
+    }
+
+/* display all loaded pairwise items */
 for (mi = miList; mi != NULL; mi = mi->next)
     {
-    if (vis == tvPack || vis == tvFull)
+    if (vis == tvFull)
         {
-        /* construct pairwise table name for this organism */
-        /* NOTE: might want a "pairwise" trackDb setting for this */
-        char bzTable[64];
-        safef(bzTable, sizeof(bzTable), "%s_%s", mi->name, track->mapName);
-        if (!hTableExistsDb(database, bzTable))
+        /* get wiggle table, containing percent identity of pairwise */
+        safef(table, sizeof(table), "%s_%s", mi->name, suffix);
+        if (!hTableExistsDb(database, table))
             continue;
-        mafList = wigMafLoadInRegion(conn, bzTable, chromName, 
+        /* reuse the wigTrack for pairwise tables */
+        wigTrack->mapName = table;
+        wigTrack->loadItems(wigTrack);
+        wigTrack->height = wigTrack->lineHeight = wigTrack->heightPer =
+                                                            wigTrackHeight;
+        wigTrack->drawItems(wigTrack, seqStart, seqEnd, vg, xOff, yOff,
+                             width, font, color, tvFull);
+        //mi->height = wigHeight(wigTrack, tvFull);
+        mi->height = wigTrackHeight;
+        ret = TRUE;
+        }
+    else 
+        {
+        /* pack */
+        /* get maf table, containing pairwise alignments for this organism */
+        /* NOTE: might want to use the "pairwise" trackDb setting for this */
+        safef(table, sizeof(table), "%s_%s", mi->name, track->mapName);
+        if (!hTableExistsDb(database, table))
+            continue;
+        mafList = wigMafLoadInRegion(conn, table, chromName, 
                                     seqStart, seqEnd);
         /* display pairwise alignments in this region in dense format */
         drawDenseMaf(mafList, mi->height, seqStart, seqEnd, 
                                  vg, xOff, yOff, width, font,
                                  color, track->ixAltColor);
         ret = TRUE;
-        }
-    else
-        {
-        /* full - display pairwise wiggles */
+        mafAliFreeList(&mafList);
         }
     yOff += mi->height + 1;
-    mafAliFreeList(&mafList);
     }
 hFreeConn(&conn);
 return ret;
@@ -537,6 +607,10 @@ y += mi->height;
 for (mi = miList->next, i=1; mi != NULL, mi->db != NULL; mi = mi->next, ++i)
     {
     char *line = lines[i];
+    /* TODO: leave lower case in to indicate masking ?
+       * NOTE: want to make sure that all sequences are soft-masked
+       * if we do this */
+    toUpperN(line, winBaseCount);
     /* draw sequence letters for alignment */
     spreadAlignString(vg, x, y, width, mi->height-1, color,
                             font, line, selfLine, winBaseCount);
@@ -687,6 +761,7 @@ if ((wigTable = trackDbSetting(tdb, "wiggle")) != NULL)
         // setup wiggle methods in subtrack
         wigMethods(wigTrack, tdb, wordCount, words);
 
+        wigTrack->drawLeftLabels = NULL;
         track->subtracks = wigTrack;
         track->subtracks->next = NULL;
         }
