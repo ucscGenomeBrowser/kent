@@ -50,6 +50,7 @@ group genes
 priority 30
 visibility pack
 color 12,120,12
+hgGene on
 type genePred
 cdsDrawDefault genomic\ codons
 
