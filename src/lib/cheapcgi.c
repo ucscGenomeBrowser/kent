@@ -246,13 +246,15 @@ struct hash *hash = newHash(6);
 struct cgiVar *list = NULL, *el;
 
 namePt = input;
-while (namePt != NULL)
+while (namePt != NULL && namePt[0] != 0)
     {
     dataPt = strchr(namePt, '=');
     if (dataPt == NULL)
 	errAbort("Mangled CGI input string %s", namePt);
     *dataPt++ = 0;
     nextNamePt = strchr(dataPt, '&');
+    if (nextNamePt == NULL)
+	nextNamePt = strchr(dataPt, ';');	/* Accomodate DAS. */
     if (nextNamePt != NULL)
          *nextNamePt++ = 0;
     cgiDecode(dataPt,dataPt,strlen(dataPt));
@@ -291,11 +293,11 @@ else
 parseCookies(&cookieHash, &cookieList);
 }
 
+struct cgiVar *cgiVarList() 
 /* return the list of cgiVar's */
-struct cgiVar *cgiVarList() {
-	initCgiInput();
-	
-	return inputList;
+{
+initCgiInput();
+return inputList;
 }
 
 static char *findVarData(char *varName)
@@ -419,7 +421,26 @@ pt = findVarData(varName);
 if (pt == NULL)
     pt = usual;
 return pt;
+}
 
+struct slName *cgiStringList(char *varName)
+/* Find list of cgi variables with given name.  This
+ * may be empty.  Free result with slFreeList(). */
+{
+struct hashEl *hel;
+struct slName *stringList = NULL, *string;
+
+initCgiInput();
+for (hel = hashLookup(inputHash, varName); hel != NULL; hel = hel->next)
+    {
+    if (sameString(hel->name, varName))
+        {
+	struct cgiVar *var = hel->val;
+	string = newSlName(var->val);
+	slAddHead(&stringList, string);
+	}
+    }
+return stringList;
 }
 
 
