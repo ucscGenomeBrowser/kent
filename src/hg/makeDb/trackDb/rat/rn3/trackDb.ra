@@ -10,7 +10,7 @@ type genePred twinscanPep
 
 track blastzTightHg15
 shortLabel Tight Human
-longLabel Blastz Human (Jun. 03) Tight Subset of Best Alignments
+longLabel Blastz Human (Apr. 03) Tight Subset of Best Alignments
 group compGeno
 priority 112
 visibility hide
@@ -21,7 +21,7 @@ type psl xeno hg15
 
 track blastzBestHg15
 shortLabel Best Human
-longLabel Blastz Human (Jun. 03) Best in Genome Alignments
+longLabel Blastz Human (Apr. 03) Best in Genome Alignments
 group compGeno
 priority 113
 visibility hide
@@ -32,7 +32,7 @@ type psl xeno hg15
 
 track blastzHg15
 shortLabel Human Blastz
-longLabel All BLASTZ Human alignments
+longLabel All BLASTZ Human (Apr. 03) alignments
 group compGeno
 priority 114
 visibility hide
