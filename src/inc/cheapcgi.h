@@ -132,7 +132,8 @@ void cgiMakeDropListClass(char *name, char *menu[], int menuSize, char *checked,
 /* Make a drop-down list with names and style sheet class. */
 
 void cgiMakeDropList(char *name, char *menu[], int menuSize, char *checked);
-/* Make a drop-down list with names. */
+/* Make a drop-down list with names. 
+ * uses style "normalText" */
 
 void cgiMakeDropListFull(char *name, char *menu[], char *values[], int menuSize, char *checked, char *extraAttribs);
 /* Make a drop-down list with names and values. */
