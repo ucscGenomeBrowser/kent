@@ -87,7 +87,6 @@ DIRS = \
 	autoXml \
 	bedIntersect \
 	bedSort \
-	blastToPsl \
 	borfBig \
 	cartDump \
 	cartReset \
