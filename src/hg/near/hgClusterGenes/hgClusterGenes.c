@@ -10,7 +10,7 @@
 #include "hgRelate.h"
 #include "binRange.h"
 
-static char const rcsid[] = "$Id: hgClusterGenes.c,v 1.1 2003/08/27 21:58:03 kent Exp $";
+static char const rcsid[] = "$Id: hgClusterGenes.c,v 1.2 2003/08/27 22:07:45 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -253,6 +253,8 @@ dlListFree(&clusters);
 return clusterList;
 }
 
+int clusterId = 0;	/* Assign a unique id to each cluster. */
+
 void clusterGenesOnStrand(struct sqlConnection *conn,
 	char *geneTable, char *chrom, char strand, FILE *f)
 /* Scan through genes on this strand, cluster, and write clusters to file. */
@@ -276,7 +278,18 @@ while ((row = sqlNextRow(sr)) != NULL)
     }
 slReverse(&gpList);
 clusterList = makeCluster(gpList, hChromSize(chrom));
-totalClusterCount += slCount(clusterList);
+for (cluster = clusterList; cluster != NULL; cluster = cluster->next)
+    {
+    struct hashEl *helList = hashElListHash(cluster->geneHash);
+    struct hashEl *hel;
+    ++clusterId;
+    for (hel = helList; hel != NULL; hel = hel->next)
+        {
+	struct genePred *gp = hel->val;
+	fprintf(f, "%d\t%s\n", clusterId, gp->name);
+	}
+    ++totalClusterCount;
+    }
 genePredFreeList(&gpList);
 }
 
