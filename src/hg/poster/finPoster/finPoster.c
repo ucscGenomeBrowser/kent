@@ -26,7 +26,7 @@
 #include "hCommon.h"
 #include "axt.h"
 
-static char const rcsid[] = "$Id: finPoster.c,v 1.2 2003/08/12 17:40:35 kent Exp $";
+static char const rcsid[] = "$Id: finPoster.c,v 1.3 2003/08/13 04:49:14 kent Exp $";
 
 /* Which database to use */
 char *database = "hg15";
@@ -42,6 +42,9 @@ char *diseaseFile = "hugo_with_disease.txt";
 
 /* File with synteny info */
 char *syntenyFile = "/cluster/store2/mm.2002.02/mm2/bed/synteny/synteny.bed";
+
+/* File with stuff to remove. */
+char *weedFile = "chimera.txt";
 
 /* Resolved duplications file. */
 char *bestDupFile = "/cluster/store2/mm.2002.02/mm2/bed/poster/dupe.rpt";
@@ -289,7 +292,8 @@ return TRUE;
 void getKnownGenes(struct chromGaps *cg, char *chrom, 
 	struct sqlConnection *conn, FILE *f, 
 	struct hash *dupHash, struct hash *resolvedDupHash, 
-        struct hash *diseaseHash, struct hash *orthoHash) 
+        struct hash *diseaseHash, struct hash *orthoHash,
+	struct hash *weedHash) 
 /* Get info on known genes. */
 {
 int rowOffset;
@@ -315,7 +319,10 @@ sr = hChromQuery(conn, "refGene", chrom, NULL, &rowOffset);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     gp = genePredLoad(row + rowOffset);
-    slAddHead(&gpList, gp);
+    if (!hashLookup(weedHash, gp->name))
+	{
+	slAddHead(&gpList, gp);
+	}
     }
 sqlFreeResult(&sr);
 slSort(&gpList, cmpGenePred);
@@ -1101,6 +1108,7 @@ sqlFreeResult(&sr);
 void oneChrom(char *chrom, struct sqlConnection *conn, 
 	struct hash *dupHash, struct hash *resolvedDupHash, 
 	struct hash *diseaseHash, struct hash *orthoHash,
+	struct hash *weedHash,
 	FILE *f)
 /* Get info for one chromosome.  */
 {
@@ -1132,7 +1140,7 @@ getEstTicks(cg, chrom, conn, f);
 getPredGenes(cg, chrom, conn, f, "ensGene", 160, 10, 0);
 getPredGenes(cg, chrom, conn, f, "refGene", blueGene.r, blueGene.g, blueGene.b);
 getKnownGenes(cg, chrom, conn, f, dupHash, resolvedDupHash, 
-	diseaseHash, orthoHash);
+	diseaseHash, orthoHash, weedHash);
 }
 
 void printDupes(struct hash *dupHash, FILE *f)
@@ -1177,6 +1185,7 @@ struct hash *resolvedDupHash = newHash(8);
 struct resolvedDup *rdList = NULL;
 struct hash *diseaseHash = hashFromTwoColumn(diseaseFile, 1);
 struct hash *orthoHash = hashFromTwoColumn(orthoFile, 0);
+struct hash *weedHash = hashFromTwoColumn(weedFile, 0);
 
 dupeFile = mustOpen(dupeFileName, "w");
 hSetDb(database);
@@ -1188,7 +1197,7 @@ for (i=0; i<chromCount; ++i)
     sprintf(fileName, "%s.tab", chromNames[i]);
     f = mustOpen(fileName, "w");
     oneChrom(chromNames[i], conn, dupHash, resolvedDupHash, 
-    	diseaseHash, orthoHash, f);
+    	diseaseHash, orthoHash, weedHash, f);
     fclose(f);
     }
 printDupes(dupHash, dupeFile);
