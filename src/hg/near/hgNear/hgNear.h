@@ -565,6 +565,9 @@ void setupColumnGo(struct column *col, char *parameters);
 void setupColumnPfam(struct column *col, char *parameters);
 /* Setup Pfam column. */
 
+void setupColumnFlyBdgp(struct column *col, char *parameters);
+/* Set up Bdgp gene column. */
+
 void goSimilarityMethods(struct order *ord, char *parameters);
 /* Set up go similarity ordering. */
 

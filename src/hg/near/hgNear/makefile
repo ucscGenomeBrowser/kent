@@ -6,7 +6,7 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 A = hgNear
 
 O = $A.o advFilter.o association.o configure.o \
-	examples.o expRatio.o getSeq.o \
+	examples.o expRatio.o flyBase.o getSeq.o \
 	go.o knownGene.o order.o pfam.o search.o userSettings.o
 
 include ../../../inc/cgi_build_rules.mk

@@ -17,7 +17,7 @@
 #include "ra.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: hgNear.c,v 1.111 2003/10/25 23:27:27 kent Exp $";
+static char const rcsid[] = "$Id: hgNear.c,v 1.112 2003/10/29 06:37:05 kent Exp $";
 
 char *excludeVars[] = { "submit", "Submit", confVarName, 
 	detailsVarName, colInfoVarName,
@@ -1153,6 +1153,8 @@ else if (sameString(type, "go"))
     setupColumnGo(col, s);
 else if (sameString(type, "pfam"))
     setupColumnPfam(col, s);
+else if (sameString(type, "flyBdgp"))
+    setupColumnFlyBdgp(col, s); 
 else
     errAbort("Unrecognized type %s for %s", col->type, col->name);
 freez(&dupe);
@@ -1228,8 +1230,9 @@ for (raHash = raList; raHash != NULL; raHash = raHash->next)
     col->settings = raHash;
     columnDefaultMethods(col);
     setupColumnType(col);
-    if (col->exists(col, conn))
-	slAddHead(&colList, col);
+    if (!hashFindVal(raHash, "hide"))
+	if (col->exists(col, conn))
+	    slAddHead(&colList, col);
     }
 refinePriorities(colList);
 refineVisibility(colList);

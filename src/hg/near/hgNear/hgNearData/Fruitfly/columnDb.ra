@@ -4,13 +4,6 @@ name name
 type lookup bdgpSwissProt bdgpName symbol
 selfLink on
 
-name acc
-shortLabel BDGP
-longLabel BDGP Gene ID
-visibility on
-itemUrl http://www.fruitfly.org/cgi-bin/annot/gene?%s
-colWidth 11
-
 name proteinName
 type lookup bdgpGene name proteinID
 search fuzzy
@@ -18,6 +11,38 @@ itemUrl http://us.expasy.org/cgi-bin/niceprot.pl?%s
 
 name refSeq
 type lookup bdgpToRefSeq name value
+
+name acc
+hide
+
+name flyBdgp
+type flyBdgp
+shortLabel BDGP
+longLabel BDGP Transcript ID
+visibility hide
+priority 2.3
+itemUrl http://www.fruitfly.org/cgi-bin/annot/gene?%s
+colWidth 11
+
+name flyBaseId
+shortLabel FlyBase
+longLabel FlyBase Gene ID
+visibility hide
+priority 2.4
+itemUrl http://www.fruitfly.org/cgi-bin/annot/gene?%s
+type lookup fbTranscript transcriptId geneId
+search exact
+
+name flyBaseSynonym
+shortLabel Synonyms
+longLabel FlyBase Gene and Allele Synonyms
+visibility hide
+priority 2.41
+type association fbSynonym fbTranscript
+queryFull select fbTranscript.transcriptId,fbSynonym.name from fbTranscript,fbSynonym where fbTranscript.geneId=fbSynonym.geneId
+queryOne select fbSynonym.name,fbSynonym.name from fbTranscript,fbSynonym where fbTranscript.transcriptId='%s' and fbTranscript.geneId=fbSynonym.geneId
+invQueryOne select fbTranscript.transcriptId from fbTranscript,fbSynonym where fbSynonym.name='%s' and fbTranscript.geneId=fbSynonym.geneId
+search exact
 
 name arbLifeCycle
 shortLabel Expression
