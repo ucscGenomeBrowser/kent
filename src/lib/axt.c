@@ -219,7 +219,6 @@ else
     a.qSym = qSymStart;
     a.tSym = tSymStart;
     a.score = axtScore(&a, ss);
-    /* uglyf("subsetting %s %d %d %s %d %d to %s %d %d, score %d\n", axt->qName, axt->qStart, axt->qEnd, axt->tName, axt->tStart, axt->tEnd, axt->tName, newStart, newEnd, a.score); */
     axtWrite(&a, f);
     }
 }

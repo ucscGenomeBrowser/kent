@@ -119,7 +119,7 @@ while (!gotLf)
 	memmove(buf, buf+oldEnd, sizeLeft);
     lf->bufOffsetInFile += oldEnd;
     readSize = lineFileLongNetRead(lf->fd, buf+sizeLeft, readSize);
-    if (readSize + sizeLeft <= 0)
+    if (readSize <= 0)
 	{
 	lf->bytesInBuf = lf->lineStart = lf->lineEnd = 0;
 	return FALSE;
