@@ -11,12 +11,14 @@
 #include "psl.h"
 #include "portable.h"
 #include "featureBits.h"
+#include "agpGap.h"
 #include "chain.h"
 
 int minSize = 1;	/* Minimum size of feature. */
 char *clChrom = "all";	/* Which chromosome. */
 boolean orLogic = FALSE;  /* Do ors instead of ands? */
 char *where = NULL;		/* Extra selection info. */
+boolean countGaps = FALSE;	/* Count gaps in denominator? */
 
 void usage()
 /* Explain usage and exit. */
@@ -33,6 +35,7 @@ errAbort(
   "   -minSize=N        Minimum size to output (default 1)\n"
   "   -chrom=chrN       Restrict to one chromosome\n"
   "   -or               Or tables together instead of anding them\n"
+  "   -countGaps        Count gaps in denominator\n"
   "   '-where=some sql pattern'  restrict to features matching some sql pattern\n"
   "You can include a '!' before a table name to negate it.\n"
   "Some table names can be followed by modifiers such as:\n"
@@ -398,6 +401,27 @@ for (fb = fbList; fb != NULL; fb = fb->next)
 featureBitsFreeList(&fbList);
 }
 
+int countBases(struct sqlConnection *conn, char *chrom, int chromSize)
+/* Count bases, generally not including gaps, in chromosome. */
+{
+int size, totalGaps = 0;
+struct sqlResult *sr;
+char **row;
+int rowOffset;
+
+if (countGaps)
+    return chromSize;
+sr = hChromQuery(conn, "gap", chrom, NULL, &rowOffset);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    struct agpGap gap;
+    agpGapStaticLoad(row+rowOffset, &gap);
+    size = gap.chromEnd - gap.chromStart;
+    totalGaps += size;
+    }
+sqlFreeResult(&sr);
+return chromSize - totalGaps;
+}
 
 void featureBits(char *database, int tableCount, char *tables[])
 /* featureBits - Correlate tables via bitmap projections and booleans. */
@@ -437,7 +461,7 @@ if (!faIndependent)
 	int chromSize, chromBitSize;
 	chromFeatureBits(conn, chrom->name, tableCount, tables,
 	    bedFile, faFile, &chromSize, &chromBitSize);
-	totalBases += chromSize;
+	totalBases += countBases(conn, chrom->name, chromSize);
 	totalBits += chromBitSize;
 	}
     printf("%1.0f bases of %1.0f (%4.3f%%) in intersection\n",
@@ -466,6 +490,7 @@ int main(int argc, char *argv[])
 optionHash(&argc, argv);
 clChrom = optionVal("chrom", clChrom);
 orLogic = optionExists("or");
+countGaps = optionExists("countGaps");
 if (argc < 3)
     usage();
 where = optionVal("where", NULL);
