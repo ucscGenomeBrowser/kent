@@ -84,7 +84,7 @@
 #include "estOrientInfo.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.728 2004/05/10 23:09:36 kate Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.729 2004/05/11 00:01:18 kate Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
@@ -1178,7 +1178,6 @@ int midY2 = midY + (heightPer>>2);
 int w;
 boolean exonArrows = tg->exonArrows;
 
-
 //variables for genePred cds coloring
 struct psl *psl = NULL;
 struct dnaSeq *mrnaSeq = NULL;
@@ -1266,7 +1265,6 @@ for (sf = lf->components; sf != NULL; sf = sf->next)
                 (sf->start <= winStart || sf->start == lf->start) &&
                 (sf->end >= winEnd || sf->end == lf->end))
                     {
-                    //x1 = round((double)((int)s-winStart)*scale) + xOff;
                     x1 = round((double)((int)s-winStart)*scale) + xOff;
                     x2 = round((double)((int)e-winStart)*scale) + xOff;
                     w = x2-x1;
@@ -1275,6 +1273,7 @@ for (sf = lf->components; sf != NULL; sf = sf->next)
                     }
             }
 	}
+
 
     if ((intronGap || chainLines) && sf->next != NULL)
 	{
