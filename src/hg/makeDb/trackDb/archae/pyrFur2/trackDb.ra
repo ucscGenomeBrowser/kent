@@ -11,7 +11,7 @@ type bed 12 .
 #shortLabel LL microarray A
 #longLabel Lowe lab and DiRuggiero lab full-genome P. furiosus microarray experiments
 #group regulation
-#priority 85.0
+#priority 9.0
 #visibility hide
 #type expRatio
 #expScale 4.0
@@ -24,7 +24,7 @@ track llaPfuPrintC
 shortLabel HS Microarray
 longLabel Heat Shock full-genome P. furiosus microarray experiments
 group regulation
-priority 9.0
+priority 9.1
 visibility dense
 type expRatio
 expScale 4.0

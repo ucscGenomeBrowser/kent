@@ -29,7 +29,7 @@ track llaPaePrintA
 shortLabel LL microarray A
 longLabel Lowe lab full-genome P. aerophilum microarray experiments
 group regulation
-priority 85.0
+priority 9.0
 visibility dense
 type expRatio
 expScale 4.0
