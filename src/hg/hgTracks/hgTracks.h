@@ -407,6 +407,9 @@ void spreadString(struct vGfx *vg, int x, int y, int width, int height,
 	Color color, MgFont *font, char *s, int count);
 /* Draw evenly spaced letters in string. */
 
+void contigMethods(struct track *tg);
+/* Make track for contig */
+
 void goldMethods(struct track *tg);
 /* Make track for golden path (assembly track). */
 

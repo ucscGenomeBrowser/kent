@@ -25,7 +25,6 @@
 #include "psl.h"
 #include "agpGap.h"
 #include "cgh.h"
-#include "ctgPos.h"
 #include "bactigPos.h"
 #include "genePred.h"
 #include "bed.h"
@@ -69,7 +68,7 @@
 #include "web.h"
 #include "grp.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.575 2003/08/03 02:36:00 kent Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.576 2003/08/03 02:45:26 kent Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROMOSOME_SHADES 4
@@ -4217,6 +4216,22 @@ else
 return ((Color)getChromColor(chromStr, vg));
 }
 
+void mouseOrthoMethods(struct track *tg)
+{
+char option[128];
+char *optionStr ;
+tg->loadItems = loadMouseOrtho;
+tg->freeItems = freeMouseOrtho;
+
+snprintf( option, sizeof(option), "%s.color", tg->mapName);
+optionStr = cartUsualString(cart, option, "on");
+if( sameString( optionStr, "on" )) /*use anti-aliasing*/
+    tg->itemColor = mouseOrthoItemColor;
+else
+    tg->itemColor = NULL;
+tg->drawName = TRUE;
+}
+
 void loadHumanParalog(struct track *tg)
 {
 bedLoadItem(tg, "humanParalog", (ItemLoader)humanParalogLoad);
@@ -4248,6 +4263,22 @@ else
 return ((Color)getChromColor(chromStr, vg));
 }
 
+void humanParalogMethods(struct track *tg)
+{
+char option[128];
+char *optionStr ;
+tg->loadItems = loadHumanParalog;
+tg->freeItems = freeHumanParalog;
+
+snprintf( option, sizeof(option), "%s.color", tg->mapName);
+optionStr = cartUsualString(cart, option, "on");
+if( sameString( optionStr, "on" )) /*use anti-aliasing*/
+    tg->itemColor = humanParalogItemColor;
+else
+    tg->itemColor = NULL;
+tg->drawName = TRUE;
+}
+
 Color syntenyItemColor(struct track *tg, void *item, struct vGfx *vg)
 /* Return color of psl track item based on chromsome. */
 {
@@ -4271,13 +4302,6 @@ else
 return ((Color)getChromColor(chromStr, vg));
 }
 
-
-void loadMouseSyn(struct track *tg)
-/* Load up mouseSyn from database table to track items. */
-{
-bedLoadItem(tg, "mouseSyn", (ItemLoader)mouseSynLoad);
-}
-
 void syntenyMethods(struct track *tg)
 {
 tg->loadItems = loadSynteny;
@@ -4287,37 +4311,12 @@ tg->drawName = FALSE;
 tg->subType = lfWithBarbs ;
 }
 
-void mouseOrthoMethods(struct track *tg)
+void loadMouseSyn(struct track *tg)
+/* Load up mouseSyn from database table to track items. */
 {
-char option[128];
-char *optionStr ;
-tg->loadItems = loadMouseOrtho;
-tg->freeItems = freeMouseOrtho;
-
-snprintf( option, sizeof(option), "%s.color", tg->mapName);
-optionStr = cartUsualString(cart, option, "on");
-if( sameString( optionStr, "on" )) /*use anti-aliasing*/
-    tg->itemColor = mouseOrthoItemColor;
-else
-    tg->itemColor = NULL;
-tg->drawName = TRUE;
+bedLoadItem(tg, "mouseSyn", (ItemLoader)mouseSynLoad);
 }
 
-void humanParalogMethods(struct track *tg)
-{
-char option[128];
-char *optionStr ;
-tg->loadItems = loadHumanParalog;
-tg->freeItems = freeHumanParalog;
-
-snprintf( option, sizeof(option), "%s.color", tg->mapName);
-optionStr = cartUsualString(cart, option, "on");
-if( sameString( optionStr, "on" )) /*use anti-aliasing*/
-    tg->itemColor = humanParalogItemColor;
-else
-    tg->itemColor = NULL;
-tg->drawName = TRUE;
-}
 
 void freeMouseSyn(struct track *tg)
 /* Free up mouseSyn items. */
@@ -4454,136 +4453,6 @@ wabaMethods(tg);
 tg->customPt = "_wabaCbr";
 cartSetInt(cart, "cbrWaba.start", winStart);
 cartSetInt(cart, "cbrWaba.end", winEnd);
-}
-
-void contigLoad(struct track *tg)
-/* Load up contigs from database table to track items. */
-{
-char query[256];
-struct sqlConnection *conn = hAllocConn();
-struct sqlResult *sr = NULL;
-char **row;
-struct ctgPos *ctgList = NULL, *ctg;
-
-/* Get the contigs and load into tg->items. */
-sprintf(query, "select * from ctgPos where chrom = '%s' and chromStart<%u and chromEnd>%u",
-    chromName, winEnd, winStart);
-sr = sqlGetResult(conn, query);
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-    ctg = ctgPosLoad(row);
-    slAddHead(&ctgList, ctg);
-    }
-slReverse(&ctgList);
-sqlFreeResult(&sr);
-hFreeConn(&conn);
-tg->items = ctgList;
-}
-
-char *abbreviateContig(char *string, MgFont *font, int width)
-/* Return a string abbreviated enough to fit into space. */
-{
-int textWidth;
-
-/* If have enough space, return original unabbreviated string. */
-textWidth = mgFontStringWidth(font, string);
-if (textWidth <= width)
-    return string;
-
-/* Try skipping over 'ctg' */
-string += 3;
-textWidth = mgFontStringWidth(font, string);
-if (textWidth <= width)
-    return string;
-return NULL;
-}
-
-static void contigDraw(struct track *tg, int seqStart, int seqEnd,
-        struct vGfx *vg, int xOff, int yOff, int width, 
-        MgFont *font, Color color, enum trackVisibility vis)
-/* Draw contig items. */
-{
-int baseWidth = seqEnd - seqStart;
-struct ctgPos *ctg;
-int y = yOff;
-int heightPer = tg->heightPer;
-int lineHeight = tg->lineHeight;
-int x1,x2,w;
-int midLineOff = heightPer/2;
-boolean isFull = (vis == tvFull);
-Color col;
-int ix = 0;
-char *s;
-double scale = scaleForPixels(width);
-for (ctg = tg->items; ctg != NULL; ctg = ctg->next)
-    {
-    x1 = round((double)((int)ctg->chromStart-winStart)*scale) + xOff;
-    x2 = round((double)((int)ctg->chromEnd-winStart)*scale) + xOff;
-    /* Clip here so that text will tend to be more visible... */
-    if (x1 < xOff)
-	x1 = xOff;
-    if (x2 > xOff + width)
-	x2 = xOff + width;
-    w = x2-x1;
-    if (w < 1)
-	w = 1;
-    vgBox(vg, x1, y, w, heightPer, color);
-    s = abbreviateContig(ctg->contig, tl.font, w);
-    if (s != NULL)
-	vgTextCentered(vg, x1, y, w, heightPer, MG_WHITE, tl.font, s);
-    if (isFull)
-	y += lineHeight;
-    else 
-	{
-	mapBoxHc(ctg->chromStart, ctg->chromEnd, x1,y,w,heightPer, tg->mapName, 
-	    tg->mapItemName(tg, ctg), 
-	    tg->itemName(tg, ctg));
-	}
-    ++ix;
-    }
-}
-
-
-void contigFree(struct track *tg)
-/* Free up contigTrackGroup items. */
-{
-ctgPosFreeList((struct ctgPos**)&tg->items);
-}
-
-
-char *contigName(struct track *tg, void *item)
-/* Return name of contig track item. */
-{
-struct ctgPos *ctg = item;
-return ctg->contig;
-}
-
-int contigItemStart(struct track *tg, void *item)
-/* Return start of contig track item. */
-{
-struct ctgPos *ctg = item;
-return ctg->chromStart;
-}
-
-int contigItemEnd(struct track *tg, void *item)
-/* Return end of contig track item. */
-{
-struct ctgPos *ctg = item;
-return ctg->chromEnd;
-}
-
-void contigMethods(struct track *tg)
-/* Make track for contig */
-{
-tg->loadItems = contigLoad;
-tg->freeItems = contigFree;
-tg->drawItems = contigDraw;
-tg->itemName = contigName;
-tg->mapItemName = contigName;
-tg->totalHeight = tgFixedTotalHeight;
-tg->itemHeight = tgFixedItemHeight;
-tg->itemStart = contigItemStart;
-tg->itemEnd = contigItemEnd;
 }
 
 void bactigLoad(struct track *tg)
@@ -6531,72 +6400,6 @@ registerTrackHandler("tightMrna", mrnaMethods);
 registerTrackHandler("tightEst", mrnaMethods);
 registerTrackHandler("cpgIsland", cpgIslandMethods);
 registerTrackHandler("exoMouse", exoMouseMethods);
-// registerTrackHandler("blatHuman", pslChromMethods);
-// registerTrackHandler("blatMus", pslChromMethods);
-//- registerTrackHandler("multAlignWebbcat", pslChromMethods);
-//- registerTrackHandler("multAlignWebbchicken", pslChromMethods);
-//- registerTrackHandler("multAlignWebbbaboon", pslChromMethods);
-//- registerTrackHandler("multAlignWebbchimp", pslChromMethods);
-//- registerTrackHandler("multAlignWebbcow", pslChromMethods);
-//- registerTrackHandler("multAlignWebbdog", pslChromMethods);
-//- registerTrackHandler("multAlignWebbfugu", pslChromMethods);
-//- registerTrackHandler("multAlignWebbhuman", pslChromMethods);
-//- registerTrackHandler("multAlignWebbmouse", pslChromMethods);
-//- registerTrackHandler("multAlignWebbpig", pslChromMethods);
-//- registerTrackHandler("multAlignWebbrat", pslChromMethods);
-//- registerTrackHandler("multAlignWebbzebrafish", pslChromMethods);
-//- registerTrackHandler("aarMm2", pslChromMethods);
-//- registerTrackHandler("blastzRn", pslChromMethods);
-// registerTrackHandler("blastzRn1", pslChromMethods);
-// registerTrackHandler("blastzRn2", pslChromMethods);
-// registerTrackHandler("blastzBestRn2", pslChromMethods);
-// registerTrackHandler("blastzTightRn2", pslChromMethods);
-// registerTrackHandler("blastzRat", pslChromMethods);
-// registerTrackHandler("blastzBestRat", pslChromMethods);
-// registerTrackHandler("blastzTightRat", pslChromMethods);
-// registerTrackHandler("blastzMm", pslChromMethods);
-// registerTrackHandler("blastzMm2", pslChromMethods);
-// registerTrackHandler("blastzMm3", pslChromMethods);
-// registerTrackHandler("blastzMm2Sc", pslChromMethods);
-// registerTrackHandler("blastzMm2Ref", pslChromMethods);
-// registerTrackHandler("blastzRecipBest", pslChromMethods);
-// registerTrackHandler("blastzStrictChainBaboon", pslChromMethods);
-// registerTrackHandler("blastzStrictChainCat", pslChromMethods);
-// registerTrackHandler("blastzStrictChainChimp", pslChromMethods);
-// registerTrackHandler("blastzStrictChainChicken", pslChromMethods);
-// registerTrackHandler("blastzStrictChainCow", pslChromMethods);
-// registerTrackHandler("blastzStrictChainDog", pslChromMethods);
-// registerTrackHandler("blastzStrictChainFugu", pslChromMethods);
-// registerTrackHandler("blastzStrictChainHuman", pslChromMethods);
-// registerTrackHandler("blastzStrictChainMouse", pslChromMethods);
-// registerTrackHandler("blastzStrictChainPig", pslChromMethods);
-// registerTrackHandler("blastzStrictChainRat", pslChromMethods);
-// registerTrackHandler("blastzStrictChainTetra", pslChromMethods);
-// registerTrackHandler("blastzStrictChainZebrafish", pslChromMethods);
-//- registerTrackHandler("blastzMouse", pslChromMethods);
-// registerTrackHandler("blastzBestMouse", pslChromMethods);
-// registerTrackHandler("blastzTightMouse", pslChromMethods);
-// registerTrackHandler("blastzBestMm3", pslChromMethods);
-// registerTrackHandler("blastzTightMm3", pslChromMethods);
-//- registerTrackHandler("blastzHg", pslChromMethods);
-//- registerTrackHandler("blastzHgRef", pslChromMethods);
-//- registerTrackHandler("blastzHgTop", pslChromMethods);
-// registerTrackHandler("blastzMmHg", pslChromMethods);
-// registerTrackHandler("blastzMmHgRef", pslChromMethods);
-// registerTrackHandler("blastzMmHg12", pslChromMethods);
-// registerTrackHandler("blastzMmHg12Best", pslChromMethods);
-// registerTrackHandler("blastzHuman", pslChromMethods);
-// registerTrackHandler("blastzHg15", pslChromMethods);
-// registerTrackHandler("blastzBestHg15", pslChromMethods);
-// registerTrackHandler("blastzTightHg15", pslChromMethods);
-// registerTrackHandler("blastzBestHuman", pslChromMethods);
-//- registerTrackHandler("blastBestHuman", pslChromMethods);
-//- registerTrackHandler("blastzAllHuman", pslChromMethods);
-//- registerTrackHandler("blastzTightHuman", pslChromMethods);
-//- registerTrackHandler("blastzMouseSyn", pslChromMethods);
-// registerTrackHandler("blastzCb1", pslChromMethods);
-// registerTrackHandler("blastzCe1", pslChromMethods);
-// registerTrackHandler("blastzSelf", pslChromMethods);
 registerTrackHandler("pseudoMrna", xenoMrnaMethods);
 registerTrackHandler("mrnaBlastz", xenoMrnaMethods);
 registerTrackHandler("xenoBlastzMrna", xenoMrnaMethods);
