@@ -20,7 +20,7 @@
 #include "hash.h"
 #include "botDelay.h"
 
-static char const rcsid[] = "$Id: hgBlat.c,v 1.86 2004/10/20 17:03:59 kent Exp $";
+static char const rcsid[] = "$Id: hgBlat.c,v 1.87 2004/11/30 23:18:01 hiram Exp $";
 
 struct cart *cart;	/* The user's ui state. */
 struct hash *oldVars = NULL;
@@ -130,7 +130,6 @@ int cmpChrom(char *a, char *b)
 /* Compare two chromosomes. */
 {
 int cSame = countSameNonDigit(a, b);
-int diff;
 
 a += cSame;
 b += cSame;
@@ -268,6 +267,42 @@ bioSeq *seq;
 
 for (seq = seqList; seq != NULL; seq = seq->next)
     {
+    char *saferString = needMem(strlen(seq->name)+1);
+    char *c, *s;
+
+    /*	Some chars are safe to allow through, other chars cause
+     *	problems.  It isn't necessarily a URL safe string that is
+     *	being calculated here.  The original problem was a user had
+     *	the fasta header line of:
+     *	chr8|59823648:59825047|+
+     *	The plus sign was being taken as the query name and this
+     *	created problems as that name was passed on to hgc via
+     *	the ss cart variable.  The + sign became part of a URL
+     *	eventually.  This loop allows only isalnum and =_/.:;_|
+     *	to get through as part of the header name.  These characters
+     *	all proved to be safe as single character names, or all
+     *	together.
+     */
+    s = saferString;
+    for (c = seq->name; *c != (char)NULL; ++c)
+	{
+	if (c && (*c != (char)NULL))
+	    {
+	    if ( isalnum(*c) || (*c == '=') || (*c == '-') || (*c == '/') ||
+		(*c == '.') || (*c == ':') || (*c == ';') || (*c == '_') ||
+		    (*c == '|') )
+		*s++ = *c;
+	    }
+	}
+    *s = (char) NULL;
+    freeMem(seq->name);
+    if (*saferString == (char)NULL)
+	{
+	freeMem(saferString);
+	saferString = cloneString("YourSeq");
+	}
+    seq->name = saferString;
+
     if (strlen(seq->name) > 14)	/* Try and get rid of long NCBI .fa cruft. */
         {
 	char *nameClone = NULL;
@@ -490,15 +525,7 @@ void askForSeq()
 {
 char *db = NULL; 
 struct serverTable *serve = NULL; //findServer(db, FALSE);
-char **genomeList;
-int genomeCount;
 char *organism = NULL; 
-char *assemblyList[128];
-char *values[128];
-int numAssemblies = 0;
-struct dbDb *dbList = NULL; // hGetBlatIndexedDatabases();
-struct dbDb *cur = NULL;
-char *assembly = NULL;
 
 /* JavaScript to copy input data on the change genome button to a hidden form
 This was done in order to be able to flexibly arrange the UI HTML
