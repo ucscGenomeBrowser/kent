@@ -1554,10 +1554,9 @@ chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr2
 visibility hide
 type bed 4 .
 
-track encode_UCSD_ChIP_RNAP
-compositeTrack on
-shortLabel ChIP/LI Pol2
-longLabel Ludwig Institute, UCSD ChIP/Chip Pol II in ENCODE Regions
+track encode_UCSD_ChIP_RNAP_HELA
+shortLabel ChIP/LI Pol2 HeLa
+longLabel Ludwig Institute, UCSD ChIP/Chip (Pol II HeLa) in ENCODE Regions
 group encode
 priority 30.1
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
@@ -1566,36 +1565,44 @@ type wig 0.0 16.0
 maxHeightPixels 128:16:16
 autoScaleDefault Off
 
-track encode_UCSD_ChIP_RNAP_HELA
-subTrack encode_UCSD_ChIP_RNAP
-shortLabel Pol2 HELA
-longLabel Ludwig Institute, UCSD ChIP/Chip (Pol II HELA) in ENCODE Regions
-priority 1
-
 track encode_UCSD_ChIP_RNAP_THP1
-subTrack encode_UCSD_ChIP_RNAP
-shortLabel Pol2 THP1
+shortLabel ChIP/LI Pol2 THP1
 longLabel Ludwig Institute, UCSD ChIP/Chip (Pol II THP1) in ENCODE Regions
-priority 2
+group encode
+priority 30.2
+chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
+visibility hide
 color 12,12,125
+type wig 0.0 16.0
+maxHeightPixels 128:16:16
+autoScaleDefault Off
 
 track encode_UCSD_ChIP_RNAP_IMR90
-subTrack encode_UCSD_ChIP_RNAP
-shortLabel Pol2 IMR90
+shortLabel ChIP/LI Pol2 IMR90
 longLabel Ludwig Institute,UCSD ChIP/Chip (Pol II IMR90) in ENCODE Regions
-priority 3
+group encode
+priority 30.3
+chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
+visibility hide
 color 125,12,12
+type wig 0.0 16.0
+maxHeightPixels 128:16:16
+autoScaleDefault Off
 
 track encode_UCSD_ChIP_RNAP_HCT116
-subTrack encode_UCSD_ChIP_RNAP
-shortLabel Pol2 HCT116
+shortLabel ChIP/LI Pol2 HCT116
 longLabel Ludwig Institute, UCSD ChIP/Chip (Pol II HCT116) in ENCODE Regions
-priority 4
+group encode
+priority 30.4
+chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
+visibility hide
 color 12,125,12
+type wig 0.0 16.0
+maxHeightPixels 128:16:16
+autoScaleDefault Off
 
-track encode_UCSD_ChIP_TAF250
-compositeTrack on
-shortLabel ChIP/LI TAF1
+track encode_UCSD_ChIP_TAF250_HELA
+shortLabel ChIP/LI TAF1 HeLa
 longLabel Ludwig Institute, UCSD ChIP/Chip (TAF1 HeLa) in ENCODE Regions
 group encode
 priority 30.5
@@ -1605,32 +1612,41 @@ type wig 0.0 16.0
 maxHeightPixels 128:16:16
 autoScaleDefault Off
 
-track encode_UCSD_ChIP_TAF250_HELA
-subTrack encode_UCSD_ChIP_TAF250
-shortLabel TAF1 HELA
-longLabel Ludwig Institute, UCSD ChIP/Chip (TAF1 HELA) in ENCODE Regions
-priority 1
-
 track encode_UCSD_ChIP_TAF250_THP1
-subTrack encode_UCSD_ChIP_TAF250
-shortLabel TAF1 THP1
+shortLabel ChIP/LI TAF1 THP1
 longLabel Ludwig Institute, UCSD ChIP/Chip (TAF1 THP1) in ENCODE Regions
-priority 2
+group encode
+priority 30.6
+chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
+visibility hide
 color 12,12,125
+type wig 0.0 16.0
+maxHeightPixels 128:16:16
+autoScaleDefault Off
 
 track encode_UCSD_ChIP_TAF250_IMR90
-subTrack encode_UCSD_ChIP_TAF250
-shortLabel TAF1 IMR90
+shortLabel ChIP/LI TAF1 IMR90
 longLabel Ludwig Institute, UCSD ChIP/Chip (TAF1 IMR90) in ENCODE Regions
-priority 3
+group encode
+priority 30.7
+chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
+visibility hide
 color 125,12,12
+type wig 0.0 16.0
+maxHeightPixels 128:16:16
+autoScaleDefault Off
 
 track encode_UCSD_ChIP_TAF250_HCT116
-subTrack encode_UCSD_ChIP_TAF250
-shortLabel TAF1 HCT116
+shortLabel ChIP/LI TAF1 HCT116
 longLabel Ludwig Institute, UCSD ChIP/Chip (TAF1 HCT116) in ENCODE Regions
-priority 4
+group encode
+priority 30.8
+chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
+visibility hide
 color 12,125,12
+type wig 0.0 16.0
+maxHeightPixels 128:16:16
+autoScaleDefault Off
 
 track encodeAffyChIpRnapHl60Pval
 compositeTrack on
@@ -1640,7 +1656,7 @@ group encode
 color 10,10,130
 altColor 50,50,50
 priority 47.1
-chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr5,chr6,chr7,chr8,chr9,chrX
+chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 visibility hide
 type wig -3.4 750
 maxHeightPixels 128:16:16
@@ -1677,7 +1693,7 @@ shortLabel ChIp/Affy Pol2 Sites
 longLabel Affymetrix ChIp/Chip (Pol2 RA-stim HL60) Sites in ENCODE Regions
 group encode
 priority 47.2
-chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr5,chr6,chr7,chr8,chr9,chrX
+chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22, chr4,chr5,chr6,chr7,chr8,chr9,chrX
 visibility hide
 color 10,10,130
 altColor 50,50,50
@@ -1715,7 +1731,7 @@ group encode
 color 130,10,10
 altColor 50,50,50
 priority 48.1
-chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr5,chr6,chr7,chr8,chr9,chrX
+chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22, chr4,chr5,chr6,chr7,chr8,chr9,chrX
 visibility hide
 type wig -3.4 750
 maxHeightPixels 128:16:16
@@ -1752,7 +1768,7 @@ shortLabel RNA/Affy Sites
 longLabel Affymetrix PolyA+ RNA (RA-stim HL60 cells) Sites in ENCODE Regions
 group encode
 priority 48.2
-chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr5,chr6,chr7,chr8,chr9,chrX
+chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22, chr4,chr5,chr6,chr7,chr8,chr9,chrX
 visibility hide
 color 130,10,10
 altColor 50,50,50
@@ -1782,47 +1798,55 @@ shortLabel RNA 32hr
 longLabel Affymetrix PolyA+ RNA (RA-stim HL60, 32hrs) Sites in ENCODE Regions
 priority 4
 
-track encode_UVA_DNARep
-compositeTrack On
-shortLabel DNA Rep/UVA
-longLabel Univ. Virginia Temporal Profiling of DNA Replication in ENCODE Regions
+track encode_UVA_DNARep_0_2
+shortLabel DNA Rep/UVA 0-2hr
+longLabel Univ. Virginia Temporal Profiling of DNA Replication (0-2 hrs) in ENCODE Regions
 group encode
 priority 50.1
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 visibility hide
-color 10,130,10
-altColor 50,50,50
+color 60,75,60
 type bed 3 .
 
-track encode_UVA_DNARep_0_2
-subTrack encode_UVA_DNARep
-shortLabel DNA Rep 0-2hr
-longLabel Univ. Virginia Temporal Profiling of DNA Replication (0-2 hrs) in ENCODE Regions
-priority 1
-
 track encode_UVA_DNARep_2_4
-subTrack encode_UVA_DNARep
-shortLabel DNA Rep 2-4hr
+shortLabel DNA Rep/UVA 2-4hr
 longLabel Univ. Virginia Temporal Profiling of DNA Replication (2-4 hrs) in ENCODE Regions
-priority 2
+group encode
+priority 50.2
+color 45,80,45
+chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
+visibility hide
+type bed 3 .
 
 track encode_UVA_DNARep_4_6
-subTrack encode_UVA_DNARep
-shortLabel DNA Rep 4-6hr
+shortLabel DNA Rep/UVA 4-6hr
 longLabel Univ. Virginia Temporal Profiling of DNA Replication (4-6 hrs) in ENCODE Regions
-priority 3
+group encode
+priority 50.3
+chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
+visibility hide
+color 30,90,30
+type bed 3 .
 
 track encode_UVA_DNARep_6_8
-subTrack encode_UVA_DNARep
-shortLabel DNA Rep 6-8hr
+shortLabel DNA Rep/UVA 6-8hr
 longLabel Univ. Virginia Temporal Profiling of DNA Replication (6-8 hrs) in ENCODE Regions
-priority 4
+group encode
+priority 50.4
+chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
+visibility hide
+color 20,110,20
+type bed 3 .
 
 track encode_UVA_DNARep_8_10
-subTrack encode_UVA_DNARep
-shortLabel DNA Rep 8-10hr
+shortLabel DNA Rep/UVA 8-10hr
 longLabel Univ. Virginia Temporal Profiling of DNA Replication (8-10 hrs) in ENCODE Regions
-priority 5
+group encode
+priority 50.5
+chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
+visibility hide
+color 10,130,10
+type bed 3 .
 
 searchTable encode_NHGRI_DNaseHS
 searchType bed
