@@ -760,3 +760,5 @@
 448 - New version (V16) of the genome browser.
 449 - Blat v. 18.  Alpha version of browser with PostScript and
       some other stuff.
+450 - Still blat v. 18. Alpha version of browser with mouse nets
+      and chains, squished and packed display modes, and grouping.
