@@ -1,3 +1,7 @@
+/*	convolve - read in a set of probabilities from a histogram
+ *	calculate convolutions of those probabilities for higher order
+ *	histograms
+ */
 #include	"common.h"
 #include	"hash.h"
 #include	"options.h"
@@ -5,21 +9,24 @@
 #include	<math.h>
 
 
-static char const rcsid[] = "$Id: convolve.c,v 1.3 2003/10/08 18:35:29 hiram Exp $";
+static char const rcsid[] = "$Id: convolve.c,v 1.4 2003/10/08 20:21:27 hiram Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
+    {"count", OPTION_INT},
     {"verbose", OPTION_BOOLEAN},
     {NULL, 0}
 };
 
+static int convolve_count = 4;		/* # of times to convolve	*/
 static boolean verbose = FALSE;		/* describe what happens	*/
 
 static void usage()
 {
 errAbort(
     "convolve - perform convolution of probabilities\n"
-    "usage: convolve <file with initial set of probabilities>\n"
+    "usage: convolve [-count=N] <file with initial set of probabilities>\n"
+    "\t-count=N - number of times to run convolution\n"
 );
 }
 
@@ -61,7 +68,7 @@ for( el = elList; el != NULL; el = el->next )
 probabilities = (double *) needMem( (size_t) (sizeof(double) * elCount) );
 log_2 = (double *) needMem( (size_t) (sizeof(double) * elCount) );
 
-/*	Traverse the list again, this type placing all values in the
+/*	Traverse the list again, this time placing all values in the
  *	arrays
  */
 for( el = elList; el != NULL; el = el->next )
@@ -86,7 +93,9 @@ for( i = 0; i < elCount; ++i )
 
 /*	Working in log space for probabilities and need to add
  *	two probabilities together.  This case is for logs base
- *	two, but the formula works for any base.
+ *	two, but the formula works for any base.  The trick is that if
+ *	one of the probabilities is much smaller than the other it is
+ *	negligible to the sum.
  *
  *	have: l0 = log(p0) and l1 = log(p1)
  *	want: l = log(p0 + p1) = log(2^l0 + 2^l1)
@@ -98,7 +107,7 @@ for( i = 0; i < elCount; ++i )
  *	let m = max(l0, l1)
  *	d = max(l0, l1) - min(l0, l1)
  *	then l = log(2^m + 2^(m-d))	(if m is l0, (m-d) = l1, etc...)
- *	= log(2^m + 2^m*2^(-d))
+ *	= log(2^m + 2^m*2^(-d))		(x^(a+b) = x^a*x^b)
  *	= log(2^m * (1 + 2^(-d)))	(factor out 2^m)
  *	= m + log(1 + 2^(-d))		(log(a*b) = log(a) + log(b))
  */
@@ -190,9 +199,11 @@ for( i = 1; i < argc; ++i )
     int wordCount = 0;			/* result of split	*/
     struct hash * histo0;	/*	first histogram	*/
     struct hash * histo1;	/*	second histogram	*/
-    int medianBin0 = 0;	/*	bin at median for histo0	*/
-    int medianBin1 = 0;	/*	bin at median for histo1	*/
+    int medianBin0 = 0;		/*	bin at median for histo0	*/
+    int medianBin1 = 0;		/*	bin at median for histo1	*/
     double medianProb = 0.0;	/*	probability at median	*/
+    int bin = 0;		/*	0 to N-1 for N bins	*/
+    int convolutions = 0;	/*	loop counter for # of convolutions */
 
     if( verbose ) printf("translating file: %s\n", argv[i]);
 
@@ -201,7 +212,7 @@ for( i = 1; i < argc; ++i )
     lf = lineFileOpen(argv[i], TRUE);	/*	input file	*/
     while (lineFileNext(lf, &line, NULL))
 	{
-	int j;			/*	loop counter over bins	*/
+	int j;			/*	loop counter over words	*/
 	int inputValuesCount = 0;
 	struct histoGram * hg;	/*	an allocated hash element	*/
 
@@ -229,7 +240,7 @@ warn("May have more than 128 values at line %d, file: %s", lineCount, argv[i]);
 		    if( probInput > medianProb )
 			{
 			medianProb = probInput;
-			medianBin0 = j;
+			medianBin0 = bin;
 			}
 		} else {
 		    log_2 = -32.0;
@@ -238,12 +249,13 @@ warn("May have more than 128 values at line %d, file: %s", lineCount, argv[i]);
 		    inputValuesCount-1, probInput, log_2);
 
 	    AllocVar(hg);	/*	the histogram element	*/
-	    hg->bin = j;
+	    hg->bin = bin;
 	    hg->prob = probInput;
 	    hg->log_2 = log_2;
 	    snprintf(binName, sizeof(binName), "%d", hg->bin );
 	    hashAdd(histo0, binName, hg );
 
+	    ++bin;
 	    }	/*	for each word on an input line	*/
 	}	/*	for each line in a file	*/
 
@@ -251,33 +263,21 @@ warn("May have more than 128 values at line %d, file: %s", lineCount, argv[i]);
 	if( verbose )
 	    printHistogram(histo0, medianBin0);
 
-	/*	OK, let's try a first convolution	*/
-	/*	The convolution is histo0 with itself to produce histo1 */
-	histo1 = newHash(0);
-	medianBin1 = iteration( histo0, histo1 );
-	if( verbose )
-	    printHistogram(histo1, medianBin1);
-
-	/*	And a second, histo1 with itself into histo0	*/
-	freeHashAndVals(&histo0);
-	histo0 = newHash(0);
-	medianBin0 = iteration( histo1, histo0 );
-	if( verbose )
-	    printHistogram(histo0, medianBin0);
-
-	/*	And a third, histo0 with itself into histo1	*/
-	freeHashAndVals(&histo1);
-	histo1 = newHash(0);
-	medianBin1 = iteration( histo0, histo1 );
-	if( verbose )
-	    printHistogram(histo1, medianBin1);
-
-	/*	And a fourth, histo1 with itself into histo0	*/
-	freeHashAndVals(&histo0);
-	histo0 = newHash(0);
-	medianBin0 = iteration( histo1, histo0 );
-	if( verbose )
-	    printHistogram(histo0, medianBin0);
+	/*	perform convolutions to specified count
+	 *	the iteration does histo0 with itself to produce histo1
+	 *	Then histo0 is freed and histo1 copied to it for the
+	 *	next loop.
+	 */
+	for( convolutions = 0; convolutions < convolve_count; ++convolutions )
+	    {
+	    int medianBin;
+	    histo1 = newHash(0);
+	    medianBin = iteration( histo0, histo1 );
+	    if( verbose )
+		printHistogram(histo1, medianBin);
+	    freeHashAndVals(&histo0);
+	    histo0 = histo1;
+	    }
 
     }		/*	for each input file	*/
 
@@ -294,15 +294,13 @@ optionInit(&argc, argv, optionSpecs);
 if(argc < 2)
     usage();
 
+convolve_count = optionInt("count", 4);
 verbose = optionExists("verbose");
 
 if( verbose )
     {
     printf("options: -verbose, input file(s):\n" );
-    for( i = 1; i < argc; ++i )
-	{
-	    printf("\t%s\n", argv[i] );
-	}
+    printf("-count=%d\n", convolve_count );
     }
 
 convolve(argc, argv);
