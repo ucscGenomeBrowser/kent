@@ -98,6 +98,7 @@
 #include "netAlign.h"
 #include "stsMapRat.h"
 #include "stsInfoRat.h"
+#include "vegaInfo.h"
 #include "hgc.h"
 
 
@@ -5567,6 +5568,43 @@ printTrackHtml(tdb);
 }
 
 
+void doVegaGene(struct trackDb *tdb, char *geneName)
+/* Handle click on Vega gene track. */
+{
+struct vegaInfo *vi = NULL;
+
+if (hTableExists("vegaInfo"))
+    {
+    char query[256];
+    struct sqlConnection *conn = hAllocConn();
+    struct sqlResult *sr;
+    char **row;
+
+    safef(query, sizeof(query),
+	  "select * from vegaInfo where transcriptId = '%s'", geneName);
+    sr = sqlGetResult(conn, query);
+    if ((row = sqlNextRow(sr)) != NULL)
+        {
+	AllocVar(vi);
+	vegaInfoStaticLoad(row, vi);
+	}
+    sqlFreeResult(&sr);
+    hFreeConn(&conn);
+    }
+
+genericHeader(tdb, geneName);
+printCustomUrl(tdb, ((vi != NULL) ? vi->otterId : geneName), TRUE);
+if (vi != NULL)
+    {
+    printf("<B>VEGA Gene Name:</B> %s<BR>\n", vi->geneId);
+    printf("<B>VEGA Gene Type:</B> %s<BR>\n", vi->method);
+    printf("<B>VEGA Gene Description:</B> %s<BR>\n", vi->geneDesc);
+    }
+geneShowCommon(geneName, tdb, "vegaPep");
+printTrackHtml(tdb);
+}
+
+
 void parseChromPointPos(char *pos, char *retChrom, int *retPos)
 /* Parse out chrN:123 into chrN and 123. */
 {
@@ -10544,6 +10582,10 @@ else if (sameWord(track, "sanger22"))
 else if (sameWord(track, "sanger20"))
     {
     doSangerGene(tdb, item, "sanger20pep", "sanger20mrna", "sanger20extra");
+    }
+else if (sameWord(track, "vegaGene"))
+    {
+    doVegaGene(tdb, item);
     }
 else if (sameWord(track, "genomicDups"))
     {
