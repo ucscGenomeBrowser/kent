@@ -84,7 +84,7 @@
 #include "estOrientInfo.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.746 2004/06/02 19:23:03 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.747 2004/06/02 20:18:08 angie Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
@@ -381,15 +381,19 @@ for (item = tg->items; item != NULL; item = item->next)
     {
     int baseStart = tg->itemStart(tg, item);
     int baseEnd = tg->itemEnd(tg, item);
-    start = round((double)(baseStart - winStart)*scale);
-    if (!tg->drawName && withLabels)
-	start -= mgFontStringWidth(font, tg->itemName(tg, item)) + extraWidth;
-    if (baseEnd >= winEnd)
-	end = insideWidth;
-    else
-	end = round((baseEnd - winStart)*scale);
     if (baseStart < winEnd && baseEnd > winStart)
         {
+	if (baseStart <= winStart)
+	    start = 0;
+	else
+	    start = round((double)(baseStart - winStart)*scale);
+	if (!tg->drawName && withLabels)
+	    start -= mgFontStringWidth(font,
+				       tg->itemName(tg, item)) + extraWidth;
+	if (baseEnd >= winEnd)
+	    end = insideWidth;
+	else
+	    end = round((baseEnd - winStart)*scale);
 	if (start < 0) start = 0;
 	if (spaceSaverAdd(ss, start, end, item) == NULL)
 	    break;
@@ -1484,8 +1488,10 @@ if (vis == tvPack || vis == tvSquish)
 	struct slList *item = sn->val;
 	int s = tg->itemStart(tg, item);
 	int e = tg->itemEnd(tg, item);
-	int x1 = round((s - winStart)*scale) + xOff;
-	int x2 = round((e - winStart)*scale) + xOff;
+	int sClp = (s < winStart) ? winStart : s;
+	int eClp = (e > winEnd)   ? winEnd   : e;
+	int x1 = round((sClp - winStart)*scale) + xOff;
+	int x2 = round((eClp - winStart)*scale) + xOff;
 	int textX = x1;
 	char *name = tg->itemName(tg, item);
 	boolean drawNameInverted = FALSE;
