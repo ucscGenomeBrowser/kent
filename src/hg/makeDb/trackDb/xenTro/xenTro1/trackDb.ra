@@ -1,3 +1,22 @@
+track all_mrna
+shortLabel $Organism mRNAs
+longLabel $Organism mRNAs from GenBank
+group rna
+priority 54
+visibility pack
+spectrum on
+type psl .
+cdsDrawOptions enabled
+
+track all_est
+shortLabel $Organism ESTs
+longLabel $Organism ESTs Including Unspliced
+group rna
+priority 57
+visibility hide
+spectrum on
+type psl est
+
 track multiz5way
 shortLabel Conservation
 longLabel Conservation in Frog/Chicken/Human/Mouse/Zebrafish
@@ -108,4 +127,18 @@ visibility hide
 spectrum on
 type netAlign danRer1 chainDanRer1
 otherDb danRer1
+
+searchName mrnaAcc2
+searchTable all_mrna
+searchMethod prefix
+searchType mrnaAcc
+shortCircuit 1
+termRegex [a-z][a-z0-9][0-9]+
+searchPriority 10
+
+searchName mrnaKeyword2
+searchTable all_mrna
+searchType mrnaKeyword
+searchPriority 30
+
 
