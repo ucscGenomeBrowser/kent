@@ -84,7 +84,7 @@
 #include "estOrientInfo.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.767 2004/07/20 23:16:16 hiram Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.768 2004/07/21 19:48:41 sugnet Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
@@ -8214,6 +8214,7 @@ registerTrackHandler("jkDuplicon", jkDupliconMethods);
 registerTrackHandler("altGraphXPsb2004", altGraphXMethods ); 
 /* registerTrackHandler("altGraphXOrtho", altGraphXMethods ); */
 /* registerTrackHandler("altGraphXT6Con", altGraphXMethods ); */
+registerTrackHandler("affyTransfrags", affyTransfragsMethods);
 registerTrackHandler("chimpSimpleDiff", chimpSimpleDiffMethods);
 registerTrackHandler("tfbsCons", tfbsConsMethods);
 registerTrackHandler("pscreen", simpleBedTriangleMethods);
