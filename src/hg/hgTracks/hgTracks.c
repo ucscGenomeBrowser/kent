@@ -74,7 +74,7 @@
 #include "web.h"
 #include "grp.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.513 2003/05/09 01:11:00 kent Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.513.2.1 2003/05/15 18:47:27 heather Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define EXPR_DATA_SHADES 16
@@ -2843,7 +2843,7 @@ char *proteinID;
 char *hugoID;
 char cond_str[256];
 
-if (hTableExists("refLink"))
+if (hTableExists("refLink") && hTableExists("knownGeneLink"))
     {
     struct sqlResult *sr;
     char **row;
@@ -9903,7 +9903,7 @@ if (sameString(database, "hg13"))
     hPrintf("%s</A></TD>", wrapWhiteFont("Ensembl"));
     }
 
-if (sameString(database, "hg13"))
+if (sameString(database, "hg15"))
     {
     hPrintf("<TD ALIGN=CENTER><A HREF=\"http://www.ncbi.nlm.nih.gov/mapview/maps.cgi?CHR=%s&BEG=%d&END=%d\" TARGET=_blank>",
     	skipChr(chromName), winStart+1, winEnd);
@@ -10770,6 +10770,6 @@ htmlSetBackground("../images/floret.jpg");
 if (cgiVarExists("hgt.reset"))
     resetVars();
 zooSpeciesHashInit();
-cartHtmlShell("UCSC Genome Browser v20-alpha", doMiddle, hUserCookie(), excludeVars, NULL);
+cartHtmlShell("UCSC Genome Browser v21", doMiddle, hUserCookie(), excludeVars, NULL);
 return 0;
 }
