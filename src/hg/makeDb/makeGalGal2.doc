@@ -1814,7 +1814,7 @@ http://genome.imim.es/genepredictions/G.gallus/golden_path_200402/geneid_v1.1/$c
     hgLoadWiggle -oldTable galGal2 quality *.wig
 
 
-# MAKE UNIGENE ALIGNMENTS (IN PROGRESS 2/29/04 angie)
+# MAKE UNIGENE ALIGNMENTS (DONE 2/29/04 angie)
     ssh kksilo
     mkdir /cluster/data/galGal2/bed/unigene
     cd /cluster/data/galGal2/bed/unigene
@@ -2048,5 +2048,171 @@ http://genome.imim.es/genepredictions/G.gallus/golden_path_200402/geneid_v1.1/$c
     | awk '{printf "%s\t%d\t%d\t%s:%d-%d\t%d\t%c\n", $5, $6 - 1, $7, $2, $3, $4, $9, $8;}' \
     > webbNonExonic.bed
     hgLoadBed galGal2 webbNonExonic webbNonExonic.bed
+
+
+# UN-ANNOTATED (EXCEPT FOR CROSS-SPECIES) REGIONS (DONE 4/9/04 angie)
+    # Anton Nekrutenko asked the chickenanalysis list for this... sounds 
+    # like a job for featureBits.  :)
+    ssh hgwdev
+    mkdir /cluster/data/galGal2/bed/unAnnotated
+    cd /cluster/data/galGal2/bed/unAnnotated
+    nice featureBits galGal2 -minSize=12 \
+      \!gap \!bgiGene \!ensGene \!geneid \!genscan \
+      \!mrna \!intronEst \!est \!xenoMrna \
+      \!uniGene_gg \!cpgIslandExt \!rmsk \!simpleRepeat \
+      -bed=unAnnotated.bed
+#832258833 bases of 1054197620 (78.947%) in intersection
+    hgLoadBed galGal2 unAnnotated unAnnotated.bed
+    # not much of a drop in coverage with the -minSize:
+    nice featureBits galGal2 unAnnotated
+#831761096 bases of 1054197620 (78.900%) in intersection
+
+
+# SYNTENY BY HOMOLOGY FROM EVGENY ZDOBNOV (DONE 4/15/04 angie)
+    ssh kksilo
+    mkdir /cluster/data/galGal2/bed/zdobnov
+    cd /cluster/data/galGal2/bed/zdobnov
+    wget --timestamping \
+      http://azra.embl-heidelberg.de/~zdobnov/Chicken/homo_chicken_synteny.txt
+    wget --timestamping \
+      http://azra.embl-heidelberg.de/~zdobnov/Chicken/mouse_chicken_synteny.txt
+    wget --timestamping \
+      http://azra.embl-heidelberg.de/~zdobnov/Chicken/rat_chicken_synteny.txt
+    # This is a one-shot, so I'm writing a perl script...
+    transZdobnov.pl hg16 homo_chicken_synteny.txt  > zdobnovHg16.bed
+    transZdobnov.pl mm3  mouse_chicken_synteny.txt > zdobnovMm3.bed
+    transZdobnov.pl rn3  rat_chicken_synteny.txt   > zdobnovRn3.bed
+    ssh hgwdev
+    cd /cluster/data/galGal2/bed/zdobnov
+    sed -e 's/zdobnovSynt/zdobnovHg16/' $HOME/kent/src/hg/lib/zdobnovSynt.sql \
+      > zd.sql
+    hgLoadBed -sqlTable=zd.sql galGal2 zdobnovHg16 zdobnovHg16.bed
+    sed -e 's/zdobnovSynt/zdobnovMm3/' $HOME/kent/src/hg/lib/zdobnovSynt.sql \
+      > zd.sql
+    hgLoadBed -sqlTable=zd.sql galGal2 zdobnovMm3 zdobnovMm3.bed
+    sed -e 's/zdobnovSynt/zdobnovRn3/' $HOME/kent/src/hg/lib/zdobnovSynt.sql \
+      > zd.sql
+    hgLoadBed -sqlTable=zd.sql galGal2 zdobnovRn3 zdobnovRn3.bed
+
+
+# FILTER MRNAS FOR CHECKING ENSEMBL GENES (DONE 4/12/04 angie)
+    # Use the TB to generate BED for mRNA alignments with no overlap w/ensGene.
+    # saved as galGal2.mrnaNotEnsGene.bed (Sent to Ewan 4/6/04 -- needed filt)
+    ssh hgwdev
+    mkdir /cluster/data/galGal2/bed/tightMrna
+    cd /cluster/data/galGal2/bed/tightMrna
+    # Get list of mRNA accs from the chEST project, which may be a little 
+    # more shaky than others (?).
+    echo 'select mrna.acc from mrna,description \
+          where mrna.description = description.id and \
+          description.name like "Gallus gallus finished cDNA, clone ChEST%.";' \
+    | use galGal2 -N > chESTaccs.txt
+    ssh kksilo
+    cd /cluster/data/galGal2/bed/tightMrna
+    # Make a uniq'd list of accs that didn't overlap ensGene:
+    awk '{print $4;}' galGal2.mrnaNotEnsGene.bed | sort | uniq > mNotE.txt
+    # Separate those into chEST and non-chEST:
+    cp /dev/null mNotEChEST.txt
+    cp /dev/null mNotEOther.txt
+    foreach a (`cat mNotE.txt`)
+      if (`grep $a chESTaccs.txt` != "") then
+        echo $a >> mNotEChEST.txt
+      else
+        echo $a >> mNotEOther.txt
+      endif
+    end
+    wc -l mNot*.txt
+#   2987 mNotE.txt
+#   2484 mNotEChEST.txt
+#    503 mNotEOther.txt
+    # Get psl for those alignments using the TB (paste in those files as 
+    # keyword lists).  (All fields but bin.)  Save as mNotEChEST.psl, 
+    # mNotEOther.psl.  Edit the #chrom ... comments out of them.
+    # Dang, extra tab at end causes trouble for pslReps, edit out:
+    perl -wpe 's/\t$//' mNotEChEST.psl > tmp; mv tmp mNotEChEST.psl
+    perl -wpe 's/\t$//' mNotEOther.psl > tmp; mv tmp mNotEOther.psl
+    # Run pslReps with more stringent parameters than used for genbank:
+    pslReps -minCover=0.50 -minAli=0.97 -nearTop=0.001 \
+      mNotEChEST.psl mNotEChEST.filt.psl /dev/null
+    pslReps -minCover=0.50 -minAli=0.97 -nearTop=0.001 \
+      mNotEOther.psl mNotEOther.filt.psl /dev/null
+
+    # Get overlap with human net
+    netToBed -maxGap=1000 -minFill=12 \
+      /cluster/data/galGal2/bed/blastz.hg16.swap.2004-02-25/axtChain/human.net \
+      netHg16Cov.bed
+
+    ssh hgwdev
+    cd /cluster/data/galGal2/bed/tightMrna
+    # Load these tables temporarily for TB usage...
+    hgLoadBed galGal2 netHg16Cov netHg16Cov.bed
+    hgLoadPsl galGal2 -table=mNotEChEST mNotEChEST.filt.psl
+    hgLoadPsl galGal2 -table=mNotEOther mNotEOther.filt.psl
+    featureBits galGal2 -or genscan geneid -bed=lotsaExons.bed
+    hgLoadBed galGal2 lotsaExons lotsaExons.bed 
+
+    # Use TB to keep mrna's with overlap w/netHg16Cov but no overlap w/ensGene.
+    # Saved as mNotE{ChEST,Other}_pslReps_netHg16Cov_noEnsGene.bed
+    # Use TB to overlap above w/lotsaExons (genscan | geneid).
+    # Saved as mNotE{ChEST,Other}_pslReps_netHg16Cov_noEnsGene_abinit.bed
+    # Made /usr/local/apache/htdocs/angie/ensPrelim/ w/index.html linking 
+    # to custom track files and to browser w/custom tracks.
+
+    # clean up.
+    hgsql galGal2 -e 'drop table netHg16Cov; drop table lotsaExons'
+    hgsql galGal2 -e 'drop table mNotEChEST; drop table mNotEOther'
+
+
+# 5-SPECIES ORTHOLOGY FROM DEWEY/PACHTER (DONE 4/20/04 angie)
+    ssh kksilo
+    mkdir /cluster/data/galGal2/bed/deweySynt
+    cd /cluster/data/galGal2/bed/deweySynt
+    # Saved email attachment from Colin Dewey <cdewey@eecs.berkeley.edu>
+    # as gg-hs-mm-pt-rn.map.gz
+    gunzip gg-hs-mm-pt-rn.map.gz 
+# format of the map file is:
+# segment# chrom start end strand chrom start end strand ...
+# where the columns chrom, start, end, strand are repeated for each 
+# genome in the map (in this case we have 5*4 + 1 = 21 columns).  If a 
+# segment is not found in one of the genomes, the columns for that genome 
+# are set to "NA" for that segment.  The order of the genomes in the file is:
+#   galGal2 hg16 mm3 panTro1 rn3
+# and all intervals are 0-based, half-open.
+    # Make a bed6 track for each xenoDb.
+    ./deweyMap2Bed6.pl 1 5  gg-hs-mm-pt-rn.map > deweySyntHg16.bed
+    ./deweyMap2Bed6.pl 1 9  gg-hs-mm-pt-rn.map > deweySyntMm3.bed
+    ./deweyMap2Bed6.pl 1 13 gg-hs-mm-pt-rn.map > deweySyntPanTro1.bed
+    ./deweyMap2Bed6.pl 1 17 gg-hs-mm-pt-rn.map > deweySyntRn3.bed
+    ssh hgwdev
+    cd /cluster/data/galGal2/bed/deweySynt
+    hgLoadBed galGal2 deweySyntHg16 deweySyntHg16.bed
+    hgLoadBed galGal2 deweySyntMm3 deweySyntMm3.bed
+    hgLoadBed galGal2 deweySyntPanTro1 deweySyntPanTro1.bed
+    hgLoadBed galGal2 deweySyntRn3 deweySyntRn3.bed
+
+
+# CHICKEN NCRNA FROM SAM GRIFFITHS-JONES (DONE 4/20/04 angie)
+    ssh hgwdev
+    mkdir /cluster/data/galGal2/bed/ncRNA
+    cd /cluster/data/galGal2/bed/ncRNA
+    # saved email attachment from Sam Griffiths-Jones <sgj@sanger.ac.uk>
+    # as gallus_gallus_ncrna_sgj_v1.gff
+    # That's not GTF with exons/CDS/codons the way that ldHgGene expects,
+    # so translate it into the rnaGene.as format:
+    perl -wpe 'if (/^#/) { $_ = ""; next } chomp; \
+               ($chr,$source,$type,$start,$end,undef,$strand,undef,$other) = split(/\t/); \
+               $start--; \
+               $fullScore = 0; \
+               if ($other =~ /SCORE=([^;]+);/) { $fullScore = $1; } \
+               $score = int($fullScore); \
+               $source = "miRNA_Registry" if ($source eq "SGJ"); \
+               if ($other =~ /ACC=([^;]+); ID=([^;]+);/) { $name = "$1:$2";} \
+               elsif ($other =~ /ID=([^;]+);/) { $name = $1; } \
+               elsif ($other =~ /TYPE=([^;]+);/) { $name = $1; } \
+               else { $name = $type; } \
+               $_ = "$chr\t$start\t$end\t$name\t$score\t$strand\t$source\t$type\t$fullScore\t0\n";' \
+      gallus_gallus_ncrna_sgj_v1.gff > rnaGene.bed
+    hgLoadBed galGal2 rnaGene -sqlTable=$HOME/kent/src/hg/lib/rnaGene.sql \
+      -noBin rnaGene.bed
 
 
