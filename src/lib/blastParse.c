@@ -5,9 +5,10 @@
 #include "linefile.h"
 #include "dnautil.h"
 #include "blastParse.h"
+#include "verbose.h"
 
-/* enable to print lines as they are read */
-#define DEBUG_TRACE FALSE
+#define TRACE_LEVEL 3  /* verbose level to enable tracing of files */
+#define DUMP_LEVEL 4    /* verbose level to enable dumping of parsed */
 
 struct blastFile *blastFileReadAll(char *fileName)
 /* Read all blast alignment in file. */
@@ -50,14 +51,12 @@ static char *bfNextLine(struct blastFile *bf)
 char *line = NULL;
 if (lineFileNext(bf->lf, &line, NULL))
     {
-    if (DEBUG_TRACE)
-        fprintf(stderr, "\t%s\n", line);
+    verbose(TRACE_LEVEL, "=> %s\n", line);
     return line;
     }
 else
     {
-    if (DEBUG_TRACE)
-        fprintf(stderr, "\tEOF\n");
+    verbose(TRACE_LEVEL, "=> EOF\n");
     return NULL;
     }
 }
@@ -235,8 +234,7 @@ char *s, *e;
 struct blastGappedAli *bga;
 AllocVar(bq);
 
-if (DEBUG_TRACE)
-    fprintf(stderr, "blastFileNextQuery\n");
+verbose(TRACE_LEVEL, "blastFileNextQuery\n");
 
 /* find and parse Query= */
 line = bfSearchForLine(bf, "Query=");
@@ -269,6 +267,11 @@ while ((bga = blastFileNextGapped(bf, bq)) != NULL)
     slAddHead(&bq->gapped, bga);
     }
 slReverse(&bq->gapped);
+if (verboseLevel() >= DUMP_LEVEL)
+    {
+    verbose(DUMP_LEVEL, "blastFileNextQuery result:\n");
+    blastQueryPrint(bq, stderr);
+    }
 return bq;
 }
 
@@ -283,8 +286,7 @@ struct blastGappedAli *bga;
 struct blastBlock *bb;
 int lenSearch;
 
-if (DEBUG_TRACE)
-    fprintf(stderr, "blastFileNextGapped\n");
+verbose(TRACE_LEVEL, "blastFileNextGapped\n");
 AllocVar(bga);
 bga->query = bq;
 
@@ -429,8 +431,7 @@ char *parts[3];
 int partCount;
 static struct dyString *qString = NULL, *tString = NULL;
 
-if (DEBUG_TRACE)
-    fprintf(stderr, "blastFileNextBlock\n");
+verbose(TRACE_LEVEL,  "blastFileNextBlock\n");
 *skipRet = FALSE;
 
 /* Seek until get something like:

@@ -6,7 +6,7 @@
 #include "blastParse.h"
 #include "dnautil.h"
 
-static char const rcsid[] = "$Id: blastToPsl.c,v 1.11 2003/12/01 22:25:52 markd Exp $";
+static char const rcsid[] = "$Id: blastToPsl.c,v 1.12 2004/05/05 21:35:44 markd Exp $";
 
 struct block
 /* coordinates of a block */
@@ -42,6 +42,8 @@ errAbort(
   "Options:\n"
   "  -scores=file - Write score information to this file.  Format is:\n"
   "       strands qName qStart qEnd tName tStart tEnd bitscore eVal\n"
+  "  -verbose=n - n >= 3 prints each line of file after parsing.\n"
+  "               n >= 4 dumps the result of each query\n"
   );
 }
 
