@@ -48,6 +48,7 @@ struct asNode
     struct asBlock *block;	/* Input node. */
     struct asEdge *bestWayIn;   /* Dynamic programming best edge in. */
     int cumScore;               /* Dynamic programming score of edge. */
+    struct dlNode *unchained;   /* Pointer to node in unchained list. */
     };
 
 struct asEdge
@@ -223,7 +224,11 @@ for (i=1; i<=nodeCount; ++i)
 /* Make list of unchained nodes. */
 dlListInit(&graph->unchained);
 for (i=1; i<=nodeCount; ++i)
+    {
+    nodes[i].unchained = &builderNodes[i];
     dlAddTail(&graph->unchained, &builderNodes[i]);
+    }
+nodes[0].unchained = &builderNodes[0]; /* This helps end conditions. */
 
 return graph;
 }
@@ -256,24 +261,28 @@ static struct asNode *asDynamicProgram(struct asGraph *graph)
 {
 int veryBestScore = -0x3fffffff;
 struct asNode *veryBestNode = NULL;
-int nodeIx;
+struct dlNode *el;
 
-for (nodeIx = 1; nodeIx <= graph->nodeCount; ++nodeIx)
+for (el = graph->unchained.head; !dlEnd(el); el = el->next)
     {
     int bestScore = -0x3fffffff;
     int score;
     struct asEdge *bestEdge = NULL;
-    struct asNode *curNode = &graph->nodes[nodeIx];
+    struct asNode *curNode = el->val;
     struct asNode *prevNode;
     struct asEdge *edge;
 
     for (edge = curNode->waysIn; edge != NULL; edge = edge->next)
 	{
-	score = edge->score + edge->nodeIn->cumScore;
-	if (score > bestScore)
+	prevNode = edge->nodeIn;
+	if (prevNode->unchained != NULL)
 	    {
-	    bestScore = score;
-	    bestEdge = edge;
+	    score = edge->score + prevNode->cumScore;
+	    if (score > bestScore)
+		{
+		bestScore = score;
+		bestEdge = edge;
+		}
 	    }
 	}
     curNode->bestWayIn = bestEdge;
@@ -298,6 +307,7 @@ struct asNode *n, *nList = NULL;
 struct axt *axt, *first, *last;
 struct dlList *axtList = newDlList();
 struct dlNode *axtNode;
+struct asBlock *blockList = NULL, *block;
 
 /* Make initial list containing all axt's. */
 uglyf("ChainPair - %d axt's initially\n", slCount(sp->axtList));
@@ -306,48 +316,53 @@ for (axt = sp->axtList; axt != NULL; axt = axt->next)
     axtNode = dlAddValTail(axtList, axt);
     }
 
-/* Call chainer as long as there are axt's left unchained. */
-while (!dlEmpty(axtList))
+/* Make block list */
+for (axtNode = axtList->head; !dlEnd(axtNode); axtNode = axtNode->next)
     {
-    struct asBlock *blockList = NULL, *block;
+    axt = axtNode->val;
+    AllocVar(block);
+    block->qStart = axt->qStart;
+    block->qEnd = axt->qEnd;
+    block->tStart = axt->tStart;
+    block->tEnd = axt->tEnd;
+    block->score = axt->score;
+    block->ali = axtNode;
+    slAddHead(&blockList, block);
+    }
+slReverse(&blockList);
+
+/* Make up graph. */
+/* Make up graph and time and dump it for debugging. */
+startTime = clock1000();
+graph = asGraphMake(blockList, defaultGapPenalty);
+dt = clock1000() - startTime;
+fullSize = (graph->nodeCount + 1)*(graph->nodeCount)/2;
+uglyf("%d edges (%d in full graph) %4.1f%% of full in %5.3f seconds (%ld)\n",
+    graph->edgeCount, fullSize, 100.0*graph->edgeCount/fullSize, 0.001*dt, startTime);
+fprintf(f, 
+    "%s %d edges (%d in full graph) %4.1f%% of full in %ld seconds\n",
+    sp->name, graph->edgeCount, fullSize, 
+    100.0*graph->edgeCount/fullSize, dt);
+// asGraphDump(graph, f);
+// fprintf(f, "\n");
+
+/* Call chainer as long as there are axt's left unchained. */
+while (!dlEmpty(&graph->unchained))
+    {
     struct dlList *axtChain = newDlList();
-
-    /* Make block list */
-    for (axtNode = axtList->head; !dlEnd(axtNode); axtNode = axtNode->next)
-        {
-	axt = axtNode->val;
-	AllocVar(block);
-	block->qStart = axt->qStart;
-	block->qEnd = axt->qEnd;
-	block->tStart = axt->tStart;
-	block->tEnd = axt->tEnd;
-	block->score = axt->score;
-	block->ali = axtNode;
-	slAddHead(&blockList, block);
-	}
-    slReverse(&blockList);
-
-    /* Make up graph and time and dump it for debugging. */
-    startTime = clock1000();
-    graph = asGraphMake(blockList, defaultGapPenalty);
-    dt = clock1000() - startTime;
-    fullSize = (graph->nodeCount + 1)*(graph->nodeCount)/2;
-    uglyf("%d edges (%d in full graph) %4.1f%% of full in %5.3f seconds (%ld)\n",
-	graph->edgeCount, fullSize, 100.0*graph->edgeCount/fullSize, 0.001*dt, startTime);
-    fprintf(f, 
-	"%s %d edges (%d in full graph) %4.1f%% of full in %ld seconds\n",
-	sp->name, graph->edgeCount, fullSize, 
-	100.0*graph->edgeCount/fullSize, dt);
-    // asGraphDump(graph, f);
-    // fprintf(f, "\n");
 
     /* Run dynamic program on graph and move chain to axtChain. */
     nList = asDynamicProgram(graph);
-    for (n = nList; n->block->ali != NULL; n = n->bestWayIn->nodeIn)
+    for (n = nList; n != graph->nodes; n = n->bestWayIn->nodeIn)
 	{
 	axtNode = n->block->ali;
 	dlRemove(axtNode);
 	dlAddHead(axtChain, axtNode);
+	if (n != graph->nodes)
+	    {
+	    dlRemove(n->unchained);	
+	    n->unchained = NULL;
+	    }
 	}
 
     /* Print out axtChain. */
@@ -365,11 +380,11 @@ while (!dlEmpty(axtList))
 		axt->score);
 	}
     fprintf(f, "\n");
-    asGraphFree(&graph);
     freeDlList(&axtChain);
-    slFreeList(&blockList);
     }
+asGraphFree(&graph);
 fprintf(f, "\n");
+slFreeList(&blockList);
 freeDlList(&axtList);
 }
 
