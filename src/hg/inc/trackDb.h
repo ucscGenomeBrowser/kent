@@ -5,14 +5,7 @@
 #ifndef TRACKDB_H
 #define TRACKDB_H
 
-#ifndef LINEFILE_H
-#include "linefile.h"
-#endif
-
-#ifndef JKSQL_H
-#include "jksql.h"
-#endif
-
+#define TRACKDB_NUM_COLS 21
 
 struct trackDb
 /* This describes an annotation track. */
@@ -22,7 +15,7 @@ struct trackDb
     char *shortLabel;	/* Short label displayed on left */
     char *type;	/* Track type: bed, psl, genePred, etc. */
     char *longLabel;	/* Long label displayed in middle */
-    unsigned char visibility;	/* 0=hide, 1=dense, 2=full, 3=pack*/
+    unsigned char visibility;	/* 0=hide, 1=dense, 2=full, 3=pack */
     float priority;	/* 0-100 - where to position.  0 is top */
     unsigned char colorR;	/* Color red component 0-255 */
     unsigned char colorG;	/* Color green component 0-255 */
@@ -37,7 +30,11 @@ struct trackDb
     char *url;	/* URL to link to when they click on an item */
     char *html;	/* Some html to display when they click on an item */
     char *grp;	/* Which group track belongs to */
-    unsigned char canPack;      /* 1 if can pack track display, 0 otherwise */
+    unsigned char canPack;	/* 1 if can pack track display, 0 otherwise */
+    char *settings;	/* Name/value pairs for track-specific stuff */
+    struct hash *settingsHash;  /* Hash for settings. Not saved in database.
+                                 * Don't use directly, rely on trackDbSetting
+				 * to access. */
     };
 
 struct trackDb *trackDbLoad(char **row);
@@ -45,13 +42,22 @@ struct trackDb *trackDbLoad(char **row);
  * from database.  Dispose of this with trackDbFree(). */
 
 struct trackDb *trackDbLoadAll(char *fileName);
-/* Load all trackDb from a tab-separated file.
+/* Load all trackDb from whitespace-separated file.
  * Dispose of this with trackDbFreeList(). */
 
-struct trackDb *trackDbLoadWhere(struct sqlConnection *conn, char *table, char *where);
+struct trackDb *trackDbLoadWhere(struct sqlConnection *conn, char *table, 
+	char *where);
 /* Load all trackDb from table that satisfy where clause. The
  * where clause may be NULL in which case whole table is loaded
  * Dispose of this with cartDbFreeList(). */
+
+struct trackDb *trackDbLoadAllByChar(char *fileName, char chopper);
+/* Load all trackDb from chopper separated file.
+ * Dispose of this with trackDbFreeList(). */
+
+#define trackDbLoadAllByTab(a) trackDbLoadAllByChar(a, '\t');
+/* Load all trackDb from tab separated file.
+ * Dispose of this with trackDbFreeList(). */
 
 struct trackDb *trackDbCommaIn(char **pS, struct trackDb *ret);
 /* Create a trackDb out of a comma separated string. 
@@ -85,12 +91,11 @@ void trackDbOverrideVisbility(struct hash *tdHash, char *visibilityRa);
 struct trackDb *trackDbFromRa(char *raFile);
 /* Load track info from ra file into list. */
 
-void trackDbAddInfo(struct trackDb *bt, 
-	char *var, char *value, struct lineFile *lf);
-/* Add info from a variable/value pair to browser table. */
-
 void trackDbPolish(struct trackDb *bt);
 /* Fill in missing values with defaults. */
+
+char *trackDbSetting(struct trackDb *tdb, char *name);
+/* Return setting string or NULL if none exists. */
 
 #endif /* TRACKDB_H */
 

@@ -4,11 +4,11 @@
 
 #include "common.h"
 #include "linefile.h"
-#include "jksql.h"
 #include "dystring.h"
+#include "jksql.h"
 #include "trackDb.h"
 
-static char const rcsid[] = "$Id: trackDb.c,v 1.6 2003/05/06 07:22:23 kate Exp $";
+static char const rcsid[] = "$Id: trackDb.c,v 1.7 2003/08/01 23:57:52 kent Exp $";
 
 struct trackDb *trackDbLoad(char **row)
 /* Load a trackDb from row fetched with select * from trackDb
@@ -40,16 +40,17 @@ ret->url = cloneString(row[16]);
 ret->html = cloneString(row[17]);
 ret->grp = cloneString(row[18]);
 ret->canPack = sqlUnsigned(row[19]);
+ret->settings = cloneString(row[20]);
 return ret;
 }
 
 struct trackDb *trackDbLoadAll(char *fileName) 
-/* Load all trackDb from a tab-separated file.
+/* Load all trackDb from a whitespace-separated file.
  * Dispose of this with trackDbFreeList(). */
 {
 struct trackDb *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[18];
+char *row[21];
 
 while (lineFileRow(lf, row))
     {
@@ -61,7 +62,8 @@ slReverse(&list);
 return list;
 }
 
-struct trackDb *trackDbLoadWhere(struct sqlConnection *conn, char *table, char *where)
+struct trackDb *trackDbLoadWhere(struct sqlConnection *conn, char *table, 
+	char *where)
 /* Load all trackDb from table that satisfy where clause. The
  * where clause may be NULL in which case whole table is loaded
  * Dispose of this with cartDbFreeList(). */
@@ -86,6 +88,23 @@ dyStringFree(&query);
 return list;
 }
 
+struct trackDb *trackDbLoadAllByChar(char *fileName, char chopper) 
+/* Load all trackDb from a chopper separated file.
+ * Dispose of this with trackDbFreeList(). */
+{
+struct trackDb *list = NULL, *el;
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+char *row[21];
+
+while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
+    {
+    el = trackDbLoad(row);
+    slAddHead(&list, el);
+    }
+lineFileClose(&lf);
+slReverse(&list);
+return list;
+}
 
 struct trackDb *trackDbCommaIn(char **pS, struct trackDb *ret)
 /* Create a trackDb out of a comma separated string. 
@@ -102,7 +121,7 @@ ret->shortLabel = sqlStringComma(&s);
 ret->type = sqlStringComma(&s);
 ret->longLabel = sqlStringComma(&s);
 ret->visibility = sqlUnsignedComma(&s);
-ret->priority = sqlSignedComma(&s);
+ret->priority = sqlFloatComma(&s);
 ret->colorR = sqlUnsignedComma(&s);
 ret->colorG = sqlUnsignedComma(&s);
 ret->colorB = sqlUnsignedComma(&s);
@@ -124,6 +143,7 @@ ret->url = sqlStringComma(&s);
 ret->html = sqlStringComma(&s);
 ret->grp = sqlStringComma(&s);
 ret->canPack = sqlUnsignedComma(&s);
+ret->settings = sqlStringComma(&s);
 *pS = s;
 return ret;
 }
@@ -146,6 +166,7 @@ freeMem(el->restrictList);
 freeMem(el->url);
 freeMem(el->html);
 freeMem(el->grp);
+freeMem(el->settings);
 freez(pEl);
 }
 
@@ -227,6 +248,12 @@ fprintf(f, "%s", el->grp);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
 fprintf(f, "%u", el->canPack);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->settings);
+if (sep == ',') fputc('"',f);
 fputc(lastSep,f);
 }
+
+/* -------------------------------- End autoSql Generated Code -------------------------------- */
 

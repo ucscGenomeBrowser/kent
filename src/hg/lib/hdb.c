@@ -1,7 +1,8 @@
 /* hdb - human genome browser database. */
 #include "common.h"
-#include "portable.h"
 #include "hash.h"
+#include "portable.h"
+#include "linefile.h"
 #include "binRange.h"
 #include "jksql.h"
 #include "dnautil.h"
@@ -24,7 +25,7 @@
 #include "scoredRef.h"
 #include "maf.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.124 2003/07/24 23:29:54 krish Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.125 2003/08/01 23:57:52 kent Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
@@ -1272,61 +1273,54 @@ char *hDbFromFreeze(char *freeze)
 return hFreezeDbConversion(NULL, freeze);
 }
 
-char *hDefaultPos(char *database)
-/* Return default chromosome position for the 
-  organism associated with database.   use freeMem on
- * this when done. */
+char *hDbDbOptionalField(char *database, char *field)
+/* Look up field in dbDb table keyed by database.
+ * Return NULL if database doesn't exist. 
+ * Free this string when you are done. */
 {
 struct sqlConnection *conn = hConnectCentral();
 char buf[128];
 char query[256];
 char *res = NULL;
-sprintf(query, "select defaultPos from dbDb where name = '%s'", database);
+sprintf(query, "select %s from dbDb where name = '%s'", field, database);
 if (sqlQuickQuery(conn, query, buf, sizeof(buf)) != NULL)
     res = cloneString(buf);
-else
-    errAbort("Can't find default position for %s", database);
 hDisconnectCentral(&conn);
 return res;
+}
+
+char *hDbDbField(char *database, char *field)
+/* Look up field in dbDb table keyed by database.
+ * Free this string when you are done. */
+{
+char *res = hDbDbOptionalField(database, field);
+if (res == NULL)
+    errAbort("Can't find %s for %s", field, database);
+return res;
+}
+
+char *hDefaultPos(char *database)
+/* Return default chromosome position for the 
+  organism associated with database.   use freeMem on
+ * this when done. */
+{
+return hDbDbField(database, "defaultPos");
 }
 
 char *hOrganism(char *database)
 /* Return organism associated with database.   use freeMem on
  * this when done. */
 {
-struct sqlConnection *conn = hConnectCentral();
-char buf[128];
-char query[256];
-char *res = NULL;
-
 if (sameString(database, "rep"))    /* bypass dbDb if repeat */
     return cloneString("Repeat");
-
-sprintf(query, "select organism from dbDb where name = '%s'", database);
-if (sqlQuickQuery(conn, query, buf, sizeof(buf)) != NULL)
-    res = cloneString(buf);
-else
-    errAbort("Can't find organism for %s", database);
-hDisconnectCentral(&conn);
-return res;
+return hDbDbField(database, "organism");
 }
 
 char *hGenome(char *database)
 /* Return genome associated with database.   
-use freeMem on this when done. */
+ * use freeMem on this when done. */
 {
-struct sqlConnection *conn = hConnectCentral();
-char buf[128];
-char query[256];
-char *res = NULL;
-sprintf(query, "select genome from dbDb where name = '%s'", database);
-if (sqlQuickQuery(conn, query, buf, sizeof(buf)) != NULL)
-    {
-    res = cloneString(buf);
-    }
-
-hDisconnectCentral(&conn);
-return res;
+return hDbDbOptionalField(database, "genome");
 }
 
 char *hScientificName(char *database)
@@ -1334,38 +1328,81 @@ char *hScientificName(char *database)
 /* Return NULL if unknown database */
 /* NOTE: must free returned string after use */
 {
-struct sqlConnection *conn = hConnectCentral();
-char buf[128];
-char query[256];
-char *res = NULL;
-sprintf(query, "select scientificName from dbDb where name = '%s'", database);
-if (sqlQuickQuery(conn, query, buf, sizeof(buf)) != NULL)
-    {
-    res = cloneString(buf);
-    }
-hDisconnectCentral(&conn);
-return res;
+return hDbDbOptionalField(database, "scientificName");
+}
+
+char *hFreezeDate(char *database)
+/* Return freeze date of database. Use freeMem when done. */
+{
+return hDbDbField(database, "description");
 }
 
 int hOrganismID(char *database)
 /* Get organism ID from relational organism table */
 /* Return -1 if not found */
 {
-    char query[256];
-    char buf[64];
-    struct sqlConnection *conn = hAllocConn();
-    int organismID;
-    int ret;
+char query[256];
+char buf[64];
+struct sqlConnection *conn = hAllocConn();
+int organismID;
+int ret;
 
-    sprintf(query, "select id from organism where name = '%s'",
-                                        hScientificName(database));
-    ret = sqlQuickNum(conn, query);
-    hFreeConn(&conn);
-    return ret;
+sprintf(query, "select id from organism where name = '%s'",
+				    hScientificName(database));
+ret = sqlQuickNum(conn, query);
+hFreeConn(&conn);
+return ret;
 }
 
-char *hLookupStringVars(char *in, char *database)
-/* Expand $ORGANISM and other variables in input. */
+static void addSubVar(char *prefix, char *name, 
+	char *value, struct subText **pList)
+/* Add substitution to list. */
+{
+struct subText *sub;
+char fullName[64];
+safef(fullName, sizeof(fullName), "$%s%s", prefix, name);
+sub = subTextNew(fullName, value);
+slAddHead(pList, sub);
+}
+
+static void addDbSubVars(char *prefix, char *database, struct subText **pList)
+/* Add substitution variables associated with database to list. */
+{
+char *organism = hOrganism(database);
+char *lcOrg = cloneString(organism);
+char *ucOrg = cloneString(organism);
+char *date = hFreezeDate(database);
+tolowers(lcOrg);
+touppers(ucOrg);
+addSubVar(prefix, "Organism", organism, pList);
+addSubVar(prefix, "ORGANISM", ucOrg, pList);
+addSubVar(prefix, "organism", lcOrg, pList);
+addSubVar(prefix, "db", database, pList);
+addSubVar(prefix, "date", date, pList);
+freez(&date);
+freez(&ucOrg);
+freez(&lcOrg);
+freez(&organism);
+}
+
+static void subOut(struct trackDb *tdb, char **pString, struct subText *subList)
+/* Substitute one string. */
+{
+char *old = *pString;
+*pString = subTextString(subList, old);
+freeMem(old);
+}
+
+static void subOutAll(struct trackDb *tdb, struct subText *subList)
+/* Substitute all strings that need substitution. */
+{
+subOut(tdb, &tdb->shortLabel, subList);
+subOut(tdb, &tdb->longLabel, subList);
+subOut(tdb, &tdb->html, subList);
+}
+
+void hLookupStringsInTdb(struct trackDb *tdb, char *database)
+/* Lookup strings in track database. */
 {
 static struct subText *subList = NULL;
 static char *oldDatabase = NULL;
@@ -1377,40 +1414,21 @@ if (oldDatabase != NULL && !sameString(database, oldDatabase))
     oldDatabase = cloneString(database);
     }
 if (subList == NULL)
+    addDbSubVars("", database, &subList);
+subOutAll(tdb, subList);
+
+if (tdb->settings != NULL && tdb->settings[0] != 0)
     {
-    struct subText *sub;
-    char *organism = hOrganism(database);
-    char *lcOrg = cloneString(organism);
-    char *ucOrg = cloneString(organism);
-    tolowers(lcOrg);
-    touppers(ucOrg);
-    sub = subTextNew("$Organism", organism);
-    slAddHead(&subList, sub);
-    sub = subTextNew("$ORGANISM", ucOrg);
-    slAddHead(&subList, sub);
-    sub = subTextNew("$organism", lcOrg);
-    slAddHead(&subList, sub);
-    freez(&ucOrg);
-    freez(&lcOrg);
-    freez(&organism);
+    struct subText *subList = NULL;
+    char *otherDb = trackDbSetting(tdb, "otherDb");
+    char *blurb = trackDbSetting(tdb, "blurb");
+    if (blurb != NULL)
+	addSubVar("", "blurb", blurb, &subList);
+    if (otherDb != NULL)
+	addDbSubVars("o_", otherDb, &subList);
+    subOutAll(tdb, subList);
+    subTextFreeList(&subList);
     }
-return subTextString(subList, in);
-}
-
-static void subOut(char **pString, char *database)
-/* Substitute one string. */
-{
-char *old = *pString;
-*pString = hLookupStringVars(old, database);
-freeMem(old);
-}
-
-void hLookupStringsInTdb(struct trackDb *tdb, char *database)
-/* Lookup strings in track database. */
-{
-subOut(&tdb->shortLabel, database);
-subOut(&tdb->longLabel, database);
-subOut(&tdb->html, database);
 }
 
 

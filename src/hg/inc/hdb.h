@@ -455,12 +455,12 @@ char *hScientificName(char *database);
 /* Return NULL if unknown database */
 /* NOTE: must free returned string after use */
 
+char *hFreezeDate(char *database);
+/* Return freeze date of database. Use freeMem when done. */
+
 char *hGenome(char *database);
 /* Return genome associated with database.   Use freeMem on
  * return value when done. */
-
-char *hLookupStringVars(char *in, char *database);
-/* Expand $ORGANISM and other variables in input. */
 
 void hLookupStringsInTdb(struct trackDb *tdb, char *database);
 /* Lookup strings in track database. */

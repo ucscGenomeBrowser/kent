@@ -21,4 +21,5 @@ lstring url;	"URL to link to when they click on an item"
 lstring html;   "Some html to display when they click on an item"
 string grp;   "Which group track belongs to"
 ubyte canPack; "1 if can pack track display, 0 otherwise"
+lstring settings; "Name/value pairs for track-specific stuff"
 )

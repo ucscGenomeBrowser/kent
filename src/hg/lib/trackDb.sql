@@ -24,7 +24,8 @@ CREATE TABLE trackDb (
     url longblob not null,	# URL to link to when they click on an item
     html longblob not null,	# Some html to display when they click on an item
     grp varchar(255) not null,	# Which group track belongs to
-    canPack tinyint unsigned not null, # 1 if can pack track display, 0 otherwise
+    canPack tinyint unsigned not null,	# 1 if can pack track display, 0 otherwise
+    settings longblob not null,	# Name/value pairs for track-specific stuff
               #Indices
     PRIMARY KEY(tableName)
 );
