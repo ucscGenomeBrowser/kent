@@ -12,7 +12,7 @@
 #include "web.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: configure.c,v 1.32 2003/09/25 08:39:39 kent Exp $";
+static char const rcsid[] = "$Id: configure.c,v 1.33 2003/09/26 02:12:33 kent Exp $";
 
 static char *onOffString(boolean on)
 /* Return "on" or "off". */
@@ -240,6 +240,19 @@ configTable(colList, conn);
 hPrintf("</FORM>");
 }
 
+static void restoreDefaultOrder(struct column **pColList)
+/* Restore order of columns to default using priority settings. */
+{
+struct column *col;
+for (col = *pColList; col != NULL; col = col->next)
+    {
+    char *priority = columnSetting(col, "priority", NULL);
+    if (priority != NULL)
+        col->priority = atof(priority);
+    }
+slSort(pColList, columnCmpPriority);
+}
+
 void doDefaultConfigure(struct sqlConnection *conn, struct column *colList)
 /* Do configuration starting with defaults. */
 {
@@ -249,6 +262,7 @@ for (col=colList; col != NULL; col = col->next)
     col->on = col->defaultOn;
 cartRemovePrefix(cart, colConfigPrefix);
 cartRemove(cart, colOrderVar);
+restoreDefaultOrder(&colList);
 doConfigure(conn, colList, NULL);
 }
 
@@ -298,5 +312,9 @@ void doSaveCurrentColumns(struct sqlConnection *conn, struct column *colList)
 {
 struct userSettings *us = colUserSettings();
 if (userSettingsProcessForm(us))
+    {
+    refinePriorities(colList);
+    slSort(&colList, columnCmpPriority);
     doConfigure(conn, colList, NULL);
+    }
 }

@@ -17,7 +17,7 @@
 #include "ra.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: hgNear.c,v 1.92 2003/09/25 08:45:33 kent Exp $";
+static char const rcsid[] = "$Id: hgNear.c,v 1.93 2003/09/26 02:12:33 kent Exp $";
 
 char *excludeVars[] = { "submit", "Submit", confVarName, colInfoVarName,
 	defaultConfName, hideAllConfName, showAllConfName,
@@ -977,7 +977,7 @@ else
     return 0;
 }
 
-static void refinePriorities(struct column *colList)
+void refinePriorities(struct column *colList)
 /* Consult colOrderVar if it exists to reorder priorities. */
 {
 char *orig = cartOptionalString(cart, colOrderVar);

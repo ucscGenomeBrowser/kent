@@ -305,6 +305,9 @@ void selfAnchorSearch(struct genePos *gp);
 int columnCmpPriority(const void *va, const void *vb);
 /* Compare to sort columns based on priority. */
 
+void refinePriorities(struct column *colList);
+/* Consult colOrderVar if it exists to reorder priorities. */
+
 struct hash *hashColumns(struct column *colList);
 /* Return a hash of columns keyed by name. */
 
