@@ -32,7 +32,7 @@ public class ApacheMonitor {
   public static void main(String[] args) {
 
     boolean debug = false;
-    int debugTime = 1087756000;
+    int debugTime = 1087840000;  // works 06-21-04 11:30
     String mode  = "";
 
     /* Process command line properties, and load them into machine and table. */
@@ -87,19 +87,17 @@ public class ApacheMonitor {
 
       if (debug == true) {
         System.out.println(nullquery);
-        System.out.println("setting new null query");
+        System.out.println("setting new nullquery");
         nullquery = "SELECT COUNT(*) AS cnt FROM " + target.sourceTable +
                     " WHERE time_stamp > " + debugTime;
         System.out.println(nullquery);
       }
-      //# System.out.println(nullquery);
       ResultSet nullRS = stmt.executeQuery(nullquery);
       if (debug == true) {
-        System.out.println("created ResultSet object");
+        System.out.println("created nullquery ResultSet object");
       }
       nullRS.next();
       int nullcnt = nullRS.getInt("cnt");
-      //# System.out.println("Count of rows with any status code = " + nullcnt);
 
       if (debug == true) {
         System.out.println("got past first COUNT query");
@@ -113,18 +111,16 @@ public class ApacheMonitor {
       if (debug == true) {
         System.out.println("got past second COUNT query");
         System.out.println("setting testquery to debugTime");
-        testquery = "SELECT COUNT(*) AS cnt FROM access_log " +
+        testquery = "SELECT COUNT(*) AS cnt FROM " + target.sourceTable +
                     "WHERE status = 500 AND time_stamp > " + debugTime;
       }
       if (!allMachines) {
         testquery = testquery + " and machine_id = " + target.targetMachine;
       }
 
-      //# System.out.println(testquery);
       ResultSet testRS = stmt.executeQuery(testquery);
       testRS.next();
       int cnt = testRS.getInt("cnt");
-      //# System.out.println("Count of matching rows = " + cnt);
 
       // set to print only if errors detected or if verbose mode
       if (cnt != 0 || mode.equals("verbose")) {
@@ -147,21 +143,25 @@ public class ApacheMonitor {
       if (!allMachines) {
         listquery = listquery + " AND machine_id = " + target.targetMachine;
       }
-      if (debug = true) {
+      if (debug == true) {
         listquery = "SELECT machine_id, referer, remote_host," +
           " request_uri, time_stamp FROM " + target.sourceTable + 
           " WHERE status = " + target.errorCode +
           " AND time_stamp > " + debugTime;
       }
+
       // set variables for formatting output into columns
-      String remHost[] = new String[cnt];
-      String refUser[] = new String[cnt];
-      String details[] = new String[cnt];
       int i = 0;
       int refererSize = 0;
       int remHostSize = 0;
+
       // get results of query
       ResultSet listRS = stmt.executeQuery(listquery);
+      listRS.last();
+      int arraySize = listRS.getRow();
+      listRS.beforeFirst();
+      String remHost[] = new String[arraySize];
+      String refUser[] = new String[arraySize];
       while (listRS.next()) {
         String request_uri = listRS.getString("request_uri");
         String referer     = listRS.getString("referer");
@@ -195,19 +195,21 @@ public class ApacheMonitor {
       }
       separator = separator + "-|-";
       for (int j = 0; j < refererSize; j++) {
-        separator = separator+ "-";
+        separator = separator + "-";
       }
+      separator = separator + "-|";
       System.out.println(" \n" + rem + " | referer");
       System.out.println(separator);
 
       // print details of error
-      for (int j = 0; j < remHost.length - 1; j++) {
+      for (int j = 0; j < remHost.length; j++) {
         int remPrintSpaces = remHostSize - remHost[j].length();
         for (int k = 0; k < remPrintSpaces; k++) {
           remHost[j] = remHost[j] + " ";
         }
-	System.out.println(remHost[j] + " | " + refUser[j]);
+        System.out.println(remHost[j] + " | " + refUser[j] + " |");
       }
+      System.out.println(separator);
 
       stmt.close();
       conn.close();
