@@ -1361,6 +1361,8 @@ if (mrnaID != NULL)
 	trackOrigOffset = prevGBOffsetSav;
     	if (trackOrigOffset > (protSeqLen*pbScale - 600))
 	    trackOrigOffset = protSeqLen*pbScale - 600;
+	// prevent negative value
+	if (trackOrigOffset < 0) trackOrigOffset = 0;
 	}
 
     // if this if for PDF/Postscript, the trackOrigOffset is already calculated previously,
