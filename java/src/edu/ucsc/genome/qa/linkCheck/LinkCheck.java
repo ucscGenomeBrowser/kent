@@ -1,3 +1,5 @@
+package edu.ucsc.genome.qa.linkCheck;
+import edu.ucsc.genome.qa.lib.*;
 import java.io.*;
 import java.net.*;
 import com.meterware.httpunit.*;
@@ -136,7 +138,7 @@ class LinkCheck {
 
           // skip "mailto" and other protocols
           if (myProtocol.equals("http") | myProtocol.equals("https")) {
-          int code = HGTestLibrary.getResponseCode(wc, linkarray[i]);
+          int code = HgTracks.getResponseCode(wc, linkarray[i]);
              if (code == 200) {
                 countok++;
 	        ok.println("\n----------------------------------");
