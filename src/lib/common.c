@@ -7,7 +7,7 @@
 #include "common.h"
 #include "errabort.h"
 
-static char const rcsid[] = "$Id: common.c,v 1.44 2003/06/05 01:16:50 kent Exp $";
+static char const rcsid[] = "$Id: common.c,v 1.45 2003/09/13 04:14:03 kent Exp $";
 
 void *cloneMem(void *pt, size_t size)
 /* Allocate a new buffer of given size, and copy pt to it. */
@@ -874,6 +874,16 @@ void spaceOut(FILE *f, int count)
 {
 while (--count >= 0)
     fputc(' ', f);
+}
+
+boolean hasWhiteSpace(char *s)
+/* Return TRUE if there is white space in string. */
+{
+char c;
+while ((c = *s++) != 0)
+    if (isspace(c))
+        return TRUE;
+return FALSE;
 }
 
 char *firstWordInLine(char *line)
