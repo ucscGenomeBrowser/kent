@@ -269,7 +269,7 @@ visibility hide
 type bed 3+
 
 
-track affyGeno
+track affy120K
 shortLabel Affy 120K SNPs
 longLabel Affymetrix 120K SNP Release Oct 2003
 group varRep
