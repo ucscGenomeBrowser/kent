@@ -230,29 +230,34 @@ Load chromosome sequence info into database and save chrom sizes
      cd ~/oo
      hgNibSeq -preMadeNib hg13 /cluster/store4/gs.14/build31/nib ?{,?}/chr*.fa
      echo "select chrom,size from chromInfo" | hgsql -N hg13 > chrom.sizes
-DONE TO HERE???
+DONE TO HERE
+TODO BELOW - WAITING for contig.gl and the fin,fa,draft,predraft,extras files.
 Store o+o info in database.
-Note: for build30, Terry specially requested these files from NCBI:
+Note: for build31, Terry specially requested these files from NCBI:
   finished.finf
   draft.finf
   predraft.finf
   extras.finf
+
   finished.ffa.gz
   draft.ffa.gz
   predraft.ffa.gz
   extras.ffa.gz
 For future builds, we should try to modify hgClonePos to just use *.finf 
 and not the *.ffa files.
-Patrick unpacked the *.ffa.gz into gs.14/{fin,draft,predraft,extras}/fa/*
+Terry unpacked the *.ffa.gz into gs.14/ffa/{fin,draft,predraft,extras}/fa/*
 using /cluster/bin/scripts/unPackffa .
      cd /cluster/store4/gs.14/build31
      jkStuff/liftGl.sh contig.gl
+DONE BELOW HERE - ABOVE IS TODO
      hgGoldGapGl hg13 /cluster/store4/gs.14 build31 
+TODO BELOW
      cd /cluster/store4/gs.14
      hgClonePos hg13 build31 ffa/sequence.inf /cluster/store4/gs.14 -maxErr=3
 #(Ignore warnings about missing clones - these are in chromosomes 21 and 22)
      hgCtgPos hg13 build31 
 
+DONE BELOW
 Make and load GC percent table
      ssh hgwdev
      cd ~/oo
