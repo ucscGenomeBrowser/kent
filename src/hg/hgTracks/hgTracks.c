@@ -87,7 +87,7 @@
 #include "versionInfo.h"
 #include "bedCart.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.877 2005/02/02 02:20:02 kent Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.878 2005/02/02 19:09:29 heather Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -10218,6 +10218,19 @@ puts("</FORM>");
 }
 
 
+void chromInfoPartialTotalRow(long long total)
+/* Make table row with total size from chromInfo. */
+{
+cgiSimpleTableRowStart();
+cgiSimpleTableFieldStart();
+printf("Partial Total (Row limit reached)");
+cgiTableFieldEnd();
+cgiSimpleTableFieldStart();
+printLongWithCommas(stdout, total);
+cgiTableFieldEnd();
+cgiTableRowEnd();
+}
+
 void chromInfoTotalRow(long long total)
 /* Make table row with total size from chromInfo. */
 {
@@ -10258,15 +10271,25 @@ chromInfoTotalRow(total);
 slFreeList(&chromList);
 }
 
-void chromInfoRowsNonChrom()
+void chromInfoRowsNonChrom(int limit)
 /* Make table rows of non-chromosomal chromInfo name & size, sorted by size. */
 {
 struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr = NULL;
 char **row = NULL;
 long long total = 0;
+char query[512];
 
-sr = sqlGetResult(conn, "select chrom,size from chromInfo order by size desc");
+if (limit == 0)
+    {
+    sr = sqlGetResult(conn, "select chrom,size from chromInfo order by size desc");
+    }
+else
+    {
+    sprintf(query, "select chrom,size from chromInfo order by size desc limit %d", limit);
+    sr = sqlGetResult(conn, query);
+    }
+
 while ((row = sqlNextRow(sr)) != NULL)
     {
     unsigned size = sqlUnsigned(row[1]);
@@ -10282,7 +10305,14 @@ while ((row = sqlNextRow(sr)) != NULL)
     cgiTableRowEnd();
     total += size;
     }
-chromInfoTotalRow(total);
+if (limit == 0)
+    {
+    chromInfoTotalRow(total);
+    }
+else
+    {
+    chromInfoPartialTotalRow(total);
+    }
 sqlFreeResult(&sr);
 hFreeConn(&conn);
 }
@@ -10318,7 +10348,7 @@ cgiTableRowEnd();
 if (startsWith("chr", hDefaultChrom()))
     chromInfoRowsChrom();
 else
-    chromInfoRowsNonChrom();
+    chromInfoRowsNonChrom(1000);
 
 hTableEnd();
 
