@@ -11,6 +11,7 @@
 #include "options.h"
 #include "paraLib.h"
 #include "broadData.h"
+#include "md5.h"
 
 char *broadIp = "10.1.255.255";
 
@@ -134,8 +135,11 @@ struct fileTracker
    int fh;		/* Open file handle. */
    time_t openTime;	/* Time file opened. */
    off_t pos;		/* Position in file. */
-   int sectionAlloc;	/* Size of sections array. */
-   struct fileSection **sections;	/* Array of sections. */
+   int curSectionIx;	/* Which section are we working on? */
+   int curSectionSize;	/* Which section are we working on? */
+   struct fileSection section; /* Keep track of blocks in this section. */
+   char sectionData[bdSectionBytes]; /* Data for this section. */
+   boolean sectionClosed;	/* True if this section is closed. */
    };
 
 void fileTrackerFree(struct fileTracker **pFt)
@@ -145,9 +149,6 @@ struct fileTracker *ft = *pFt;
 if (ft != NULL)
     {
     int i;
-    for (i=0; i<ft->sectionAlloc; ++i)
-	freeMem(ft->sections[i]);
-    freeMem(ft->sections);
     freeMem(ft->fileName);
     freez(pFt);
     }
@@ -186,8 +187,8 @@ if (ft == NULL)
     ft->fileName = cloneString(fileName);
     ft->fh = fh;
     ft->openTime = time(NULL);
-    ft->sectionAlloc = 1;
-    AllocArray(ft->sections, ft->sectionAlloc);
+    ft->sectionClosed = TRUE;
+    ft->curSectionIx = -1;
     slAddHead(pList, ft);
     }
 return 0;
@@ -207,22 +208,22 @@ if (size == 0)
 ft = findTracker(list, fileId);
 if (ft != NULL)
     {
-    struct fileSection *section;
+    struct fileSection *section = &ft->section;
     off_t startOffset;
-    if (sectionIx >= ft->sectionAlloc)
+    if (ft->curSectionIx != sectionIx)
 	{
-	int newAlloc = ft->sectionAlloc*2;
-	ExpandArray(ft->sections, ft->sectionAlloc, newAlloc);
-	ft->sectionAlloc = newAlloc;
-	}
-    section = ft->sections[sectionIx];
-    if (section == NULL)
-	{
-	AllocVar(section);
-	ft->sections[sectionIx] = section;
+	if (!ft->sectionClosed)
+	    {
+	    logIt("Moving on with an unclosed section %d in %s", 
+	    	ft->curSectionIx, ft->fileName);
+	    return -222;
+	    }
+	ft->curSectionIx = sectionIx;
+	memset(section->blockTracker, 0, sizeof(section->blockTracker));
 	}
     if (section->blockTracker[blockIx] == FALSE)
 	{
+	int dataOffset = blockIx * bdBlockSize;
 	startOffset = bdBlockOffset(sectionIx, blockIx);
 	if (ft->pos != startOffset)
 	    {
@@ -230,6 +231,7 @@ if (ft != NULL)
 		return errno;
 	    ft->pos = startOffset;
 	    }
+	memcpy(ft->sectionData + dataOffset, data, size);
 	size = write(ft->fh, data, size);
 	if (size == -1)
 	    return errno;
@@ -283,7 +285,7 @@ else
     bits32 *missingList = ((bits32 *)m->data) + 2;
     bits32 *ml = missingList;
     int i, missingCount = 0;
-    if (sectionIx >= ft->sectionAlloc || ft->sections[sectionIx] == NULL)
+    if (sectionIx > ft->curSectionIx)
 	{
 	/* We haven't even seen anything from this section.  Return it all
 	 * as missing. */
@@ -295,7 +297,7 @@ else
 	}
     else
 	{
-	struct fileSection *section = ft->sections[sectionIx];
+	struct fileSection *section = &ft->section;
 	for (i=0; i<blockCount; ++i)
 	    {
 	    if (!section->blockTracker[i])
@@ -306,6 +308,8 @@ else
 	    }
 	}
     logIt("%d missing %d of %d\n", sectionIx, missingCount, blockCount);
+    if (missingCount == 0)
+	ft->sectionClosed = TRUE;
     bdMakeMissingBlocksMessage(m, ownIp, m->id, fileId, missingCount, missingList);
     }
 }
@@ -328,6 +332,7 @@ outSd = openOutputSocket(hubInPort);
 AllocVar(m);
 while (alive)
     {
+    findNow();
     if ((err = bdReceive(inSd, m, &sourceIp)) < 0)
 	warn("bdReceive error %s", strerror(err));
     else
