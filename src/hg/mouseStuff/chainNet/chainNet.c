@@ -6,10 +6,6 @@
 #include "dnautil.h"
 #include "rbTree.h"
 #include "chainBlock.h"
-#include "jksql.h"
-#include "hdb.h"
-#include "localmem.h"
-#include "agpGap.h"
 
 int minSpace = 25;	/* Minimum gap size to fill. */
 int minFill;		/* Minimum fill to record. */
@@ -36,12 +32,6 @@ errAbort(
   "   -verbose - make copious output\n"
   , minSpace, minScore);
 }
-
-struct range
-/* A part of a chromosome. */
-    {
-    int start, end;	/* Half open zero based coordinates. */
-    };
 
 struct gap
 /* A gap in sequence alignments. */
@@ -114,20 +104,6 @@ else
     return 0;
 }
 
-int rangeCmp(void *va, void *vb)
-/* Return -1 if a before b,  0 if a and b overlap,
- * and 1 if a after b. */
-{
-struct range *a = va;
-struct range *b = vb;
-if (a->end <= b->start)
-    return -1;
-else if (b->end <= a->start)
-    return 1;
-else
-    return 0;
-}
-
 void dumpSpace(void *item, FILE *f)
 /* Print out range info. */
 {
@@ -173,59 +149,6 @@ boolean strictlyInside(int minStart, int maxEnd, int start, int end)
 return (minStart < start && start + minSpace <= end && end < maxEnd);
 }
 
-struct rbTree *getSeqGaps(char *db, char *chrom)
-/* Return a tree of ranges for sequence gaps in chromosome */
-{
-struct sqlConnection *conn = sqlConnect(db);
-struct rbTree *tree = rbTreeNew(rangeCmp);
-int rowOffset;
-struct sqlResult *sr = hChromQuery(conn, "gap", chrom, NULL, &rowOffset);
-char **row;
-
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-    struct agpGap gap;
-    struct range *range;
-    agpGapStaticLoad(row+rowOffset, &gap);
-    lmAllocVar(tree->lm, range);
-    range->start = gap.chromStart;
-    range->end = gap.chromEnd;
-    rbTreeAdd(tree, range);
-    }
-sqlFreeResult(&sr);
-sqlDisconnect(&conn);
-return tree;
-}
-
-struct rbTree *getRepeats(char *db, char *chrom)
-/* Return a tree of ranges for sequence gaps in chromosome */
-{
-struct sqlConnection *conn = sqlConnect(db);
-struct rbTree *tree = rbTreeNew(rangeCmp);
-char tableName[64];
-char query[256];
-boolean hasBin;
-struct sqlResult *sr;
-char **row;
-
-if (!hFindSplitTable(chrom, "rmsk", tableName, &hasBin))
-    errAbort("Can't find rmsk table for %s\n", chrom);
-sprintf(query, "select genoStart,genoEnd from %s", tableName);
-sr = sqlGetResult(conn, query);
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-    struct range *range;
-    lmAllocVar(tree->lm, range);
-    range->start = sqlUnsigned(row[0]);
-    range->end = sqlUnsigned(row[1]);
-    rbTreeAdd(tree, range);
-    }
-sqlFreeResult(&sr);
-sqlDisconnect(&conn);
-return tree;
-}
-
-
 void makeChroms(char *fileName, struct hash **retHash, struct chrom **retList)
 /* Read size file and make chromosome structure for each  element. */
 {
@@ -242,7 +165,7 @@ while (lineFileRow(lf, row))
     AllocVar(chrom);
     slAddHead(&chromList, chrom);
     hashAddSaveName(hash, name, chrom, &chrom->name);
-    chrom->size = sqlUnsigned(row[1]);
+    chrom->size = lineFileNeedNum(lf, row, 1);
     chrom->spaces = rbTreeNew(spaceCmp);
     chrom->root = gapNew(0, chrom->size, 0, 0);
     addSpaceForGap(chrom, chrom->root);
@@ -443,12 +366,6 @@ slReverse(&fsList);
 return fsList;
 }
 
-struct slRef *findRanges(struct rbTree *tree, int start, int end)
-/* Return list of ranges that intersect interval. */
-{
-return findSpaces(tree, start, end);
-}
-
 
 void reverseBlocksQ(struct boxIn **pList, int qSize)
 /* Reverse qside of blocks. */
@@ -457,24 +374,6 @@ struct boxIn *b;
 slReverse(pList);
 for (b = *pList; b != NULL; b = b->next)
     reverseIntRange(&b->qStart, &b->qEnd, qSize);
-}
-
-int intersectionSize(struct rbTree *tree, int start, int end)
-/* Return total size of gaps intersecting ranges start-end. */
-{
-struct slRef *refList = findRanges(tree, start, end);
-struct slRef *ref;
-int size, totalSize = 0;
-
-for (ref = refList; ref != NULL; ref = ref->next)
-    {
-    struct range *range = ref->val;
-    size = rangeIntersection(start, end, range->start, range->end);
-    assert(size > 0);
-    totalSize += size;
-    }
-slFreeList(&refList);
-return totalSize;
 }
 
 
