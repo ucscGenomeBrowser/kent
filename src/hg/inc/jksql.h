@@ -36,6 +36,10 @@ extern int sqlTraceIndent;    /* number of spaces to indent traces */
 struct sqlConnection *sqlConnect(char *database);
 /* Connect to database on default host as default user. */
 
+struct sqlConnection *sqlMayConnect(char *database);
+/* Connect to database on default host as default user. 
+ * Return NULL (don't abort) on failure. */
+
 struct sqlConnection *sqlConnectReadOnly(char *database);
 /* Connect to database using ro profile in .hg.conf */ 
 

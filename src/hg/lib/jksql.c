@@ -12,7 +12,7 @@
 #include "jksql.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: jksql.c,v 1.35 2003/08/28 18:45:22 baertsch Exp $";
+static char const rcsid[] = "$Id: jksql.c,v 1.36 2003/09/08 09:00:44 kent Exp $";
 
 boolean sqlTrace = FALSE;  /* setting to true prints each query */
 int sqlTraceIndent = 0;    /* number of spaces to indent traces */
@@ -143,9 +143,10 @@ if (sqlOpenConnections == NULL)
     }
 }
 
-struct sqlConnection *sqlConnectRemote(char *host, 
-	char *user, char *password, char *database)
-/* Connect to database somewhere as somebody. */
+struct sqlConnection *sqlConnRemote(char *host, 
+	char *user, char *password, char *database, boolean abort)
+/* Connect to database somewhere as somebody.  
+ * If abort is set display error message and abort on error. */
 {
 struct sqlConnection *sc;
 MYSQL *conn;
@@ -168,14 +169,26 @@ if (mysql_real_connect(
 	NULL,	/* socket */
 	0)	/* flags */  == NULL)
     {
-    errAbort("Couldn't connect to database %s on %s as %s.\n%s", 
-	database, host, user, mysql_error(conn));
+    if (abort)
+	{
+	errAbort("Couldn't connect to database %s on %s as %s.\n%s", 
+	    database, host, user, mysql_error(conn));
+        }
+    return NULL;
     }
 return sc;
 }
 
-struct sqlConnection *sqlConnect(char *database)
-/* Connect to database on default host as default user. */
+struct sqlConnection *sqlConnectRemote(char *host, 
+	char *user, char *password, char *database)
+/* Connect to database somewhere as somebody. */
+{
+return sqlConnRemote(host, user, password, database, TRUE);
+}
+
+struct sqlConnection *sqlConn(char *database, boolean abort)
+/* Connect to database on default host as default user. 
+ * Optionally abort on failure. */
 {
 char* host = getCfgValue("HGDB_HOST", "db.host");
 char* user = getCfgValue("HGDB_USER", "db.user");
@@ -189,7 +202,20 @@ if(host == 0 || user == 0 || password == 0)
     if (host == 0 || user == 0 || password == 0)
         errAbort("Could not read hostname, user, or password to the database from configuration file.");
     }
-return sqlConnectRemote(host, user, password, database);
+return sqlConnRemote(host, user, password, database, abort);
+}
+
+struct sqlConnection *sqlMayConnect(char *database)
+/* Connect to database on default host as default user. 
+ * Return NULL (don't abort) on failure. */
+{
+return sqlConn(database, FALSE);
+}
+
+struct sqlConnection *sqlConnect(char *database)
+/* Connect to database on default host as default user. */
+{
+return sqlConn(database, TRUE);
 }
 
 struct sqlConnection *sqlConnectReadOnly(char *database)
