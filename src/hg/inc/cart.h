@@ -219,15 +219,12 @@ struct cart *cartAndCookieWithHtml(char *cookieName, char **exclude, struct hash
  * HTTP preamble to web page.  Don't write any HTML though. */
 
 void cartSetDbConnector(DbConnector connector);
-/* Set the connector that will be used by the cart to connect
- * to the database. Due to the module's legacy the default connector
- * is hConnectCentral */
+/* Set the connector that will be used by the cart to connect to the
+ * database. Default connector is hConnectCart */
 
 void cartSetDbDisconnector(DbDisconnect disconnector);
-/* Set the connector that will be used by the cart to disconnect
- * from the database. Due to the module's legacy the default connector
- * is hDisconnectCentral */
-
+/* Set the connector that will be used by the cart to disconnect from the
+ * database. Default disconnector is hDisconnectCart */
 
 
 #endif /* CART_H */
