@@ -14,8 +14,6 @@
 int minSpace = 25;	/* Minimum gap size to fill. */
 int minFill;		/* Minimum fill to record. */
 int minScore = 2000;	/* Minimum chain score to look at. */
-double oGapRatio = 0.5; /* Minimum ratio of coverage by N's in other
-                         * sequence for a gap to be considered an oGap. */
 boolean verbose = FALSE;/* Verbose output. */
 
 void usage()
@@ -24,21 +22,19 @@ void usage()
 errAbort(
   "chainNet - Make alignment nets out of chains\n"
   "usage:\n"
-  "   chainNet targetDb queryDb in.chain target.net query.net\n"
+  "   chainNet in.chain target.sizes query.sizes target.net query.net\n"
   "where:\n"
-  "   targetDb is the target genome database (example hg12)\n"
-  "   queryDb is the query genome database (example mm2)\n"
   "   in.chain is the chain file sorted by score\n"
+  "   target.sizes contains the size of the target sequences\n"
+  "   query.sizes contains the size of the query sequences\n"
   "   target.net is the output over the target genome\n"
   "   query.net is the output over the query genome\n"
   "options:\n"
   "   -minSpace=N - minimum gap size to fill, default %d\n"
   "   -minFill=N  - default half of minSpace\n"
   "   -minScore=N - minimum chain score to consider, default %d\n"
-  "   -oGapRatio=0.N - minimum coverage by N's in other sequence for\n"
-  "                    a gap to be classified an 'oGap'. Default %3.1f\n"
   "   -verbose - make copious output\n"
-  , minSpace, minScore, oGapRatio);
+  , minSpace, minScore);
 }
 
 struct range
@@ -230,20 +226,19 @@ return tree;
 }
 
 
-void makeChroms(char *db, struct hash **retHash, struct chrom **retList)
+void makeChroms(char *fileName, struct hash **retHash, struct chrom **retList)
 /* Read size file and make chromosome structure for each  element. */
 {
-char **row;
+char *row[2];
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
 struct hash *hash = newHash(0);
 struct chrom *chrom, *chromList = NULL;
-struct sqlConnection *conn = sqlConnect(db);
-struct sqlResult *sr = sqlGetResult(conn, "select chrom,size from chromInfo");
 
-while ((row = sqlNextRow(sr)) != NULL)
+while (lineFileRow(lf, row))
     {
     char *name = row[0];
     if (hashLookup(hash, name) != NULL)
-        errAbort("Duplicate %s in %s.chromInfo", name, db);
+        errAbort("Duplicate %s in %s", name, fileName);
     AllocVar(chrom);
     slAddHead(&chromList, chrom);
     hashAddSaveName(hash, name, chrom, &chrom->name);
@@ -252,8 +247,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     chrom->root = gapNew(0, chrom->size, 0, 0);
     addSpaceForGap(chrom, chrom->root);
     }
-sqlFreeResult(&sr);
-sqlDisconnect(&conn);
+lineFileClose(&lf);
 slReverse(&chromList);
 *retHash = hash;
 *retList = chromList;
@@ -757,7 +751,8 @@ lineFileClose(&lf);
 
 
 
-void chainNet(char *tDb, char *qDb, char *chainFile, char *tNet, char *qNet)
+void chainNet(char *chainFile, char *tSizes, char *qSizes, 
+	char *tNet, char *qNet)
 /* chainNet - Make alignment nets out of chains. */
 {
 struct lineFile *lf = lineFileOpen(chainFile, TRUE);
@@ -765,10 +760,10 @@ struct hash *qHash, *tHash;
 struct chrom *qChromList, *tChromList, *tChrom, *qChrom;
 struct chain *chain;
 
-makeChroms(qDb, &qHash, &qChromList);
-makeChroms(tDb, &tHash, &tChromList);
-printf("Got %d chroms in %s, %d in %s\n", slCount(tChromList), tDb,
-	slCount(qChromList), qDb);
+makeChroms(qSizes, &qHash, &qChromList);
+makeChroms(tSizes, &tHash, &tChromList);
+printf("Got %d chroms in %s, %d in %s\n", slCount(tChromList), tSizes,
+	slCount(qChromList), qSizes);
 
 /* Loop through chain file building up net. */
 while ((chain = chainRead(lf)) != NULL)
@@ -786,12 +781,12 @@ while ((chain = chainRead(lf)) != NULL)
     if (qChrom->size != chain->qSize)
         errAbort("%s is %d in %s but %d in %s", chain->qName, 
 		chain->qSize, chainFile,
-		qChrom->size, qDb);
+		qChrom->size, qSizes);
     tChrom = hashMustFindVal(tHash, chain->tName);
     if (tChrom->size != chain->tSize)
         errAbort("%s is %d in %s but %d in %s", chain->tName, 
 		chain->tSize, chainFile,
-		tChrom->size, tDb);
+		tChrom->size, tSizes);
     addChain(qChrom, tChrom, chain);
     if (verbose)
 	printf("%s has %d inserts, %s has %d\n", tChrom->name, 
@@ -823,7 +818,6 @@ if (argc != 6)
 minSpace = optionInt("minSpace", minSpace);
 minFill = optionInt("minFill", minSpace/2);
 minScore = optionInt("minScore", minScore);
-oGapRatio = optionFloat("oGapRatio", oGapRatio);
 verbose = optionExists("verbose");
 chainNet(argv[1], argv[2], argv[3], argv[4], argv[5]);
 return 0;
