@@ -294,8 +294,8 @@ tg->heightPer = tg->lineHeight - 1;
 switch (vis)
     {
     case tvFull:
-	/*tg->height = slCount(tg->items) * tg->lineHeight;*/
-	tg->height = tg->lineHeight; /*NO FULL FOR THESE TRACKS*/
+	tg->height = slCount(tg->items) * tg->lineHeight;
+	//tg->height = tg->lineHeight; /*NO FULL FOR THESE TRACKS*/
 	break;
     case tvDense:
 	tg->height = tg->lineHeight;
@@ -1075,14 +1075,15 @@ for(lf = tg->items; lf != NULL; lf = lf->next)
         //mgDrawPointAntiAlias( mg, x1, y1, shadesOfGray );
 	    drawScaledBox(mg, s, s+1, scale, xOff, (int)y1-1, 3, bColor);
         if( fill )
-	        drawScaledBox(mg, s, s+1, scale, xOff, (int)y1+2, ybase, shades[3]);
+	        drawScaledBox(mg, s, s+1, scale, xOff, (int)y1+2,
+            ybase-y1-2, shades[3]);
 
         prevEnd = s;
         prevY = y1;
 
 
 	    }
-    /*if (isFull) y += lineHeight; CURRENTLY NO FULL MODE*/
+    if (isFull) y += lineHeight; /*not true: CURRENTLY NO FULL MODE*/
     }
 }
 
