@@ -745,24 +745,28 @@ LOAD AVID MOUSE TRACK (todo)
       hgLoadBed avidRepeat avidRepeat.bed
       hgLoadBed avidUnique avidUnique.bed
 
-
-LOAD SNPS (todo)
-      - ssh hgwdev
-      - cd ~/oo/bed
-      - mkdir snp
-      - cd snp
-      - Download SNPs from ftp://ftp.ncbi.nlm.nih.gov/pub/sherry/gp.oo33.gz
-      - Unpack.
-        grep RANDOM gp.oo33 > snpTsc.txt
-        grep MIXED  gp.oo33 >> snpTsc.txt
-        grep BAC_OVERLAP  gp.oo33 > snpNih.txt
-        grep OTHER  gp.oo33 >> snpNih.txt
-        awk -f filter.awk snpTsc.txt > snpTsc.contig.bed
-        awk -f filter.awk snpNih.txt > snpNih.contig.bed
-        liftUp snpTsc.bed ../../jkStuff/liftAll.lft warn snpTsc.contig.bed
-        liftUp snpNih.bed ../../jkStuff/liftAll.lft warn snpNih.contig.bed
-	hgLoadBed hg11 snpTsc snpTsc.bed
-	hgLoadBed hg11 snpNih snpNih.bed
+LOAD SNPS (Done; Daryl Thomas May 28, 2002)
+      ssh hgwdev
+      cd ~/oo/bed
+      mkdir snp
+      cd snp
+     -Download SNPs from ftp://ftp.ncbi.nlm.nih.gov/pub/sherry/gp.ncbi.b29.gz
+     -Unpack.
+      ln -s ../../seq_contig.md .
+      calcFlipSnpPos seq_contig.md gp.ncbi.b29 gp.ncbi.b29.flipped
+      mv gp.ncbi.b29 gp.ncbi.b29.original
+      gzip gp.ncbi.b29.original
+      grep RANDOM       gp.ncbi.b29.flipped >  snpTsc.txt
+      grep MIXED        gp.ncbi.b29.flipped >> snpTsc.txt
+      grep BAC_OVERLAP  gp.ncbi.b29.flipped >  snpNih.txt
+      grep OTHER        gp.ncbi.b29.flipped >> snpNih.txt
+      awk -f filter.awk snpTsc.txt > snpTsc.contig.bed
+      awk -f filter.awk snpNih.txt > snpNih.contig.bed
+      liftUp snpTsc.bed ../../jkStuff/liftAll.lft warn snpTsc.contig.bed
+      liftUp snpNih.bed ../../jkStuff/liftAll.lft warn snpNih.contig.bed
+      hgLoadBed hg11 snpTsc snpTsc.bed
+      hgLoadBed hg11 snpNih snpNih.bed
+     -gzip all of the big files
 
 LOAD CPGISLANDS (todo)
      - login to hgwdev
