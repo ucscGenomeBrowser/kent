@@ -4239,7 +4239,7 @@ Expecting 7 words line 156272 of /cluster/bluearc/scratch/mus/mm4/linSpecRep.not
         #245154 gene predictions
     gzip *.gff *TCs
 
-LOAD VEGA GENES AND PSEUDOGENES (DONE except peptides   2003-11-03 braney )
+# LOAD VEGA GENES AND PSEUDOGENES (DONE except peptides   2003-11-03 braney )
     mkdir ~/hg16/bed/vega
     cd ~/hg16/bed/vega
     
@@ -4279,3 +4279,12 @@ LOAD VEGA GENES AND PSEUDOGENES (DONE except peptides   2003-11-03 braney )
       echo "update vegaGene set cdsEnd = 0 where name = '$ntname'" \
       | hgsql hg16
     end
+
+# LOAD FIRSTEF TRACK  Done 2003-07-31 braney
+# Create firstEF track from Zhang lab at CSHL
+# contacts
+# Gengxin Chen <cheng@cshl.edu>
+# Ivo Grosse <grosse@ipk-gatersleben.de>
+# Michael Zhang <mzhang@cshl.edu>
+# Got firstEF.txt from Gengzin 7/30/03
+	hgLoadBed hg16 firstEF firstEF.txt
