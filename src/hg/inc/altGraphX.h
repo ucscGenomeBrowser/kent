@@ -139,7 +139,7 @@ struct spliceEdge
    a splicing graph. */
 {
     struct spliceEdge *next;    /* Next in list. */
-    enum ggEdgeType type;       /* Type of edge: ggExon, ggIntron, ggSJ, ggCassette. */
+    int type;                   /* Type of edge: ggExon, ggIntron, ggSJ, ggCassette. */
     int start;                  /* Chrom start. */
     int end;                    /* End. */
     int v1;                     /* Vertex 1 in graph. */
