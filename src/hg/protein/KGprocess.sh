@@ -10,7 +10,7 @@
 #	are created.  See also, scripts:
 #	mkSwissProtDB.sh and mkProteinsDB.sh
 #
-#	"$Id: KGprocess.sh,v 1.6 2004/02/04 19:04:59 hiram Exp $"
+#	"$Id: KGprocess.sh,v 1.7 2004/02/07 00:22:35 hiram Exp $"
 #
 #	Thu Nov 20 11:16:16 PST 2003 - Created - Hiram
 #		Initial version is a translation of makeKgMm3.doc
@@ -391,6 +391,7 @@ cd ${TOP}/kgBestMrna
 TablePopulated "spMrna" ${DB} || { \
     hgsql -e "drop table spMrna;" ${DB} 2> /dev/null; \
     hgsql ${DB} < ~/kent/src/hg/lib/spMrna.sql; \
+    hgsql -e "ALTER TABLE spMrna ADD INDEX im2 (mrnaID);" ${DB}
     echo "`date` loading best.lis into ${DB}.spMrna"; \
     hgsql -e 'LOAD DATA local INFILE "best.lis" into table spMrna;' ${DB}; \
 }
@@ -448,7 +449,7 @@ TablePopulated "knownGene" ${DB} || {
     echo "`date` loading knownGene.tab into ${DB}.knownGene"; \
     hgsql -e 'LOAD DATA local INFILE "knownGene.tab" into table knownGene;' \
 	${DB}; \
-    rm -f loadedKnownDnaGene
+    rm -f sortedKnownGene.tab
 }
 
 #	dnaGne reads from ${DB}Temp.locus2Acc0, ${DB}Temp.locus2Ref0 and
@@ -457,7 +458,7 @@ TablePopulated "knownGene" ${DB} || {
 if [ ! -s dnaLink.tab ]; then
     echo "`date` running dnaGene ${DB} ${PDB} ${RO_DB}"
     dnaGene ${DB} ${PDB} ${RO_DB}
-    rm -f loadedKnownDnaGene
+    rm -f sortedKnownGene.tab
 fi
 
 if [ ! -s dnaGene.tab ]; then
@@ -482,19 +483,16 @@ TablePopulated "knownGeneLink" ${DB} || { \
 
 #	We need to add dnaGene.tab to knownGene
 #	to make sure this is all done correctly, reload the entire
-#	table
-if [ ! -f loadedKnownDnaGene ]; then
+#	table with both, now sorted
+if [ ! -s sortedKnownGene ]; then
     hgsql -e "drop table knownGene;" ${DB} 2> /dev/null
     hgsql ${DB} < ~/kent/src/hg/lib/knownGene.sql
-    echo "`date` loading knownGene.tab into ${DB}.knownGene"
-    hgsql -e 'LOAD DATA local INFILE "knownGene.tab" into table knownGene;' \
+    ~/kent/src/hg/protein/sortKg.pl knownGene.tab dnaGene.tab > \
+	sortedKnownGene.tab
+    echo "`date` loading knownGene and dnaGene into ${DB}.knownGene"
+    hgsql -e \
+	'LOAD DATA local INFILE "sortedKnownGene.tab" into table knownGene;' \
 	${DB}
-    hgsql -e "select count(*) from knownGene;" ${DB}
-    echo "`date` loading dnaGene.tab into ${DB}.knownGene"
-    hgsql -e 'LOAD DATA local INFILE "dnaGene.tab" into table knownGene;' \
-	${DB}
-    hgsql -e "select count(*) from knownGene;" ${DB}
-    touch loadedKnownDnaGene
 fi
 
 cd ${TOP}
@@ -734,16 +732,27 @@ TablePopulated "keggMapDesc" ${DB} || { \
     'LOAD DATA local INFILE "keggMapDesc.tab" into table keggMapDesc;' ${DB}; \
 }
 
-if [ ! -f Mm_GeneData.dat ]; then
-    echo "`date` fetching Mm_GeneData.dat from nci.nih.gov"
-    wget --timestamping -O Mm_GeneData.dat \
-	"ftp://ftp1.nci.nih.gov/pub/CGAP/Mm_GeneData.dat"
+SPECIES=Hs
+case ${RO_DB} in
+    mm*) SPECIES=Mm
+	;;
+    rn*) echo "ERROR: can not load CGAP data for Rat"
+	exit 255
+	;;
+    hg*) SPECIES=Hs
+	;;
+esac
+
+if [ ! -f ${SPECIES}_GeneData.dat ]; then
+    echo "`date` fetching ${SPECIES}_GeneData.dat from nci.nih.gov"
+    wget --timestamping -O ${SPECIES}_GeneData.dat \
+	"ftp://ftp1.nci.nih.gov/pub/CGAP/${SPECIES}_GeneData.dat"
 fi
 
-#	hgCGAP reads Mm_GeneData.dat and creates a bunch of cgap*.tab files
+#	hgCGAP reads GeneData.dat and creates a bunch of cgap*.tab files
 if [ ! -f cgapAlias.tab ]; then
-    echo "`date` running hgCGAP Mm_GeneData.dat"
-    hgCGAP Mm_GeneData.dat
+    echo "`date` running hgCGAP ${SPECIES}_GeneData.dat"
+    hgCGAP ${SPECIES}_GeneData.dat
     cat cgapSEQUENCE.tab cgapSYMBOL.tab cgapALIAS.tab > cgapAlias.tab
 fi
 
