@@ -38,6 +38,7 @@ struct memGfx
     int colorsUsed;
     int clipMinX, clipMaxX;
     int clipMinY, clipMaxY;
+    struct colHash *colorHash;	/* Hash for fast look up of color. */
     };
 
 struct memGfx *mgNew(int width, int height);
