@@ -13,7 +13,7 @@ set fr fr1
 set ce ce1,ce2
 set cb cb1
 set dm dm1
-set dp dp1 dp2
+set dp dp1,dp2
 set sacCer sacCer1
 set panTro panTro1
 set galGal galGal2
