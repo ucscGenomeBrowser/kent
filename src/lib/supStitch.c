@@ -569,8 +569,8 @@ for (ffl = bundle->ffList; ffl != NULL; ffl = ffl->next)
 /* In certain repeat situations the number of blocks can explode.  If so
  * try to recover by taking only a fairly large section of the best looking
  * blocks. */
-if (trimCount > 8000)	/* This is all the memory we can spare, sorry. */
-    trimCount = 8000;
+if (trimCount > 7000)	/* This is all the memory we can spare, sorry. */
+    trimCount = 7000;
 if (totalFfCount > trimCount)
     {
     if (totalFfCount > trimCount)
@@ -594,6 +594,8 @@ ffList = ffMergeExactly(ffList);
 while (ffList != NULL)
     {
     graph = ssGraphMake(ffList, qSeq, stringency, bundle->isProt, bundle->t3List);
+    if (graph == NULL)
+        continue;
     ssGraphFindBest(graph, &bestPath, &score, &ffList);
     bestPath = ffMergeNeedleAlis(bestPath, TRUE);
     bestPath = ffRemoveEmptyAlis(bestPath, TRUE);
