@@ -373,3 +373,51 @@ ci1.perChromTables = no
 
     hgLoadPsl ci1 blatCioSav1.psl
 ### end blat
+
+# MAKE DOWNLOADABLE SEQUENCE FILES 
+    ssh kksilo
+    cd /cluster/data/ci1
+    #- Build the .zip files
+    cat << '_EOF_' > jkStuff/zipAll.csh
+rm -rf zip
+mkdir zip
+cd bed/RM
+zip -j ../../zip/ScaffoldOut.zip out/Scaffold*.out
+cd ../../
+zip -j zip/ScaffoldFa.zip scaffolds/*.fa
+zip -j zip/ScaffoldFaMasked.zip maskedScaffolds/*.fa
+cd bed/simpleRepeat
+zip ../../zip/ScaffoldTrf.zip trfMask/*.bed
+cd ../..
+cd /cluster/data/genbank
+./bin/i386/gbGetSeqs -db=ci1 -native GenBank mrna /cluster/data/ci1/zip/mrna.fa
+cd /cluster/data/ci1/zip
+zip -j mrna.zip mrna.fa
+'_EOF_'
+    # << this line makes emacs coloring happy
+    csh ./jkStuff/zipAll.csh |& tee zipAll.log
+    cd zip
+    #- Look at zipAll.log to make sure all file lists look reasonable.  
+    #- Check zip file integrity:
+    foreach f (*.zip)
+      unzip -t $f > $f.test
+      tail -1 $f.test
+    end
+    wc -l *.zip.test
+
+    #- Copy the .zip files to hgwdev:/usr/local/apache/...
+    ssh hgwdev
+    cd /cluster/data/ci1/zip
+    set gp = /usr/local/apache/htdocs/goldenPath/ci1
+    mkdir -p $gp/bigZips
+    cp -p *.zip $gp/bigZips
+    # mkdir -p $gp/scaffolds
+    # foreach f ( ../*/chr*.fa )
+      # zip -j $gp/chromosomes/$f:t.zip $f
+    # end
+
+    cd $gp/bigZips
+    md5sum *.zip > md5sum.txt
+    # cd $gp/chromosomes
+    # md5sum *.zip > md5sum.txt
+    # Take a look at bigZips/* and chromosomes/*, update their README.txt's
