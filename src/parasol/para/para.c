@@ -22,6 +22,7 @@ static struct optionSpec optionSpecs[] = {
     {"maxPush", OPTION_INT},
     {"warnTime", OPTION_INT},
     {"killTime", OPTION_INT},
+    {"delayTime", OPTION_INT},
     {NULL, 0}
 };
 
@@ -52,6 +53,7 @@ errAbort(
   "      -maxPush=N  Maximum number of jobs to queue - default 100000\n"
   "      -warnTime=N Number of minutes job runs before hang warning - default 4320 (3 days)\n"
   "      -killTime=N Number of minutes job runs before push kills it - default 20160 (2 weeks)\n"
+  "      -delayTime=N Number of seconds to delay before submitting next job to minimize i/o load at startup - default 0 \n"
   "para try \n"
   "   This is like para push, but only submits up to 10 jobs\n"
   "para shove\n"
@@ -96,6 +98,7 @@ int maxPush = 100000;
 int warnTime = 3*24*60;
 int killTime = 14*24*60;
 int sleepTime = 5*60;
+int delayTime = 0;
 
 /* Some variable we might want to move to a config file someday. */
 char *tempName = "para.tmp";	/* Name for temp files. */
@@ -811,6 +814,10 @@ for (tryCount=1; tryCount<=retries && !finished; ++tryCount)
 		}
 	    occassionalDot();
 	    // occassionalSleep();
+            if (delayTime > 0)
+                {
+                sleep(delayTime);
+                }
 	    ++pushCount;
 	    if (tryCount > 1)
 	        ++retryCount;
@@ -1471,6 +1478,7 @@ minPush = optionInt("minPush",  minPush);
 maxPush = optionInt("maxPush",  maxPush);
 warnTime = optionInt("warnTime", warnTime);
 killTime = optionInt("killTime", killTime);
+delayTime = optionInt("delayTime", delayTime);
 command = argv[1];
 batch = "batch";
 if (strchr(batch, '/') != NULL)
