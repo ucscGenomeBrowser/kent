@@ -13,14 +13,6 @@ typedef struct bgPoint {
     long radius;
 } bgPoint;
 
-bgPoint background[] = {
-    { -10, 1.0, 10,  1},
-    {  10, 1.0, 10, 10},
-    {  35, 4.0, 10, 15},
-    { 666, 4.0, 10,  1}
-};
-
-
 /* finds the smallest point between the first and last iterators whoes position 
  * is grather than or equal to position */
 bgPoint* findUpperBound(long position, bgPoint* first, int length) {
@@ -84,8 +76,9 @@ bgPoint* loadBackground(char* filename, long* numberOfWindows) {
     
     /* read the first data file, and store the chrom to make sure that they
      * are the same for all windows */
-    fscanf(backgroundFile, "%10s\t%ld\t%ld\t%f\t%ld\t%ld",
-            chrom, &chromStart, &chromEnd, &percentId, &number, &invalid);
+    assert(fscanf(backgroundFile, "%10s\t%ld\t%ld\t%f\t%ld\t%ld",
+            chrom, &chromStart, &chromEnd, &percentId, &number, &invalid)
+            == 6);
     backgroundData[0].position = (chromStart + chromEnd) / 2;
     backgroundData[0].score = percentId;
     backgroundData[0].number = number;
@@ -136,7 +129,7 @@ bgPoint* getNearestEnclosing(long position, bgPoint* backgroundData, long number
 
     current = findUpperBound(position + maxRadius, backgroundData, numberOfWindows);
 
-    while(current->position > position - maxRadius && current != backgroundData - 1) {
+    while(current->position >= position - maxRadius && current != backgroundData - 1) {
         /* if the current window contains the point */
         if(current->position - current->radius <= position &&
                 position <= current->position + current->radius) {
@@ -152,6 +145,15 @@ bgPoint* getNearestEnclosing(long position, bgPoint* backgroundData, long number
     }
 
     return minWindow;
+}
+
+int bgPointCompar(const void* left, const void* right) {
+    if(((bgPoint*)left)->position < ((bgPoint*)right)->position)
+        return -1;
+    else if(((bgPoint*)left)->position < ((bgPoint*)right)->position)
+        return 0;
+    else
+        return 1;
 }
 
 int main(int argc, char* argv[]) {
@@ -181,6 +183,7 @@ int main(int argc, char* argv[]) {
     /* load the data and get the number of windows */
     backgroundData = loadBackground(argv[1], &numberOfWindows);
     maxRadius = 200 * getMaxRadius(backgroundData, numberOfWindows);
+    qsort(backgroundData, numberOfWindows, sizeof(bgPoint), bgPointCompar);
 
     fprintf(stderr, "maxRadius: %ld\n", maxRadius);
 
