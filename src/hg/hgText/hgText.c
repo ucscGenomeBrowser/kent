@@ -366,7 +366,7 @@ puts("<P>This tool allows you to download portions of the Genome Browser
         search all chromosomes), then press the Submit button.\n");
 
 printf("Use <A HREF=\"/cgi-bin/hgBlat?db=%s&hgsid=%d\">BLAT Search</A> to 
-        locate a particular sequence in the genome.",
+        locate a particular sequence in the genome.\n",
        database, cartSessionId(cart));
 puts("See the <A HREF=\"/goldenPath/help/hgTextHelp.html\">Table Browser "
      "User Guide</A> for more information.<P>\n");
@@ -3177,7 +3177,7 @@ cgiMakeHiddenVar("table", getTableVar());
 preserveConstraints(fullTableName, db, NULL);
 cgiContinueHiddenVar("position");
 printf("<H4> Fields of %s: </H4>\n", table);
-puts("<TABLE BORDER=1> <TR> <TH>name</TH> <TH>type</TH> <TH>&nbsp;</TH> </TR>");
+puts("<TABLE BORDER=1> <TR> <TH>name</TH> <TH>type</TH> <TH></TH> </TR>");
 while ((row = sqlNextRow(sr)) != NULL)
     {
     printf("<TR> <TD>%s</TD> <TD>%s</TD> <TD>", row[0], row[1]);
