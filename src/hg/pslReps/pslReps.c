@@ -44,8 +44,8 @@ int sizeFactor(struct psl *psl)
 {
 int score;
 if (!sizeMatters) return 0;
-score = round(sqrt(psl->match + psl->repMatch/4));
-if (psl->qNumInsert == 0) score -= 10 + psl->match/100;
+score = 6*round(sqrt(psl->match + psl->repMatch/4));
+if (psl->tNumInsert == 0) score -= 10 + psl->match/100;
 return score;
 }
 
@@ -248,6 +248,7 @@ cgiSpoof(&argc, argv);
 if (argc != 4)
     usage();
 minAli = cgiOptionalDouble("minAli", minAli);
+uglyf("minAli = %f\n", minAli);
 nearTop = cgiOptionalDouble("nearTop", nearTop);
 minCover = cgiOptionalDouble("minCover", minCover);
 sizeMatters = cgiBoolean("sizeMatters");
