@@ -18,20 +18,3 @@ getTracks.pl:
    several databases (hg7, hg8, hg10).  This is intended just as 
    a simple test for perllib/TrackDb.pm.  
 
-
-
-
-
-Test Strategy
--------------
-- connect to trackDb, get trackName column (list of trackNames)
-- exercise features on each trackName in each CGI "script".  
-
-Parameters
-----------
-Useful parameters for testing:
-- host: web server (database server??)
-- database (hg10, mm1 etc)  [doh -- mm1's trackDb has tableName not trackName!]
-- cookies & session id?
-- randomize?  how many queries?
-- sleep delay between requests?
