@@ -12,7 +12,7 @@
 #include "jksql.h"
 #include "binRange.h"
 
-static char const rcsid[] = "$Id: genePredTester.c,v 1.5 2004/05/10 23:15:27 markd Exp $";
+static char const rcsid[] = "$Id: genePredTester.c,v 1.6 2005/04/06 22:00:26 markd Exp $";
 
 void usage(char *msg)
 /* Explain usage and exit. */
@@ -169,7 +169,7 @@ void loadTableTask(char *db, char *table, char* gpFile)
 /* Implements the loadTable task */
 {
 struct genePredReader* gpr = genePredReaderFile(gpFile, gChrom);
-char* sqlCmd = genePredGetCreateSql(table, gOptFields, gCreateOpts);
+char* sqlCmd = genePredGetCreateSql(table, gOptFields, gCreateOpts, 0);
 struct sqlConnection *conn;
 struct genePred* gp;
 int numRows = 0;

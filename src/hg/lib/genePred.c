@@ -11,7 +11,7 @@
 #include "genbank.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: genePred.c,v 1.63 2005/03/16 06:26:19 sugnet Exp $";
+static char const rcsid[] = "$Id: genePred.c,v 1.64 2005/04/06 22:00:26 markd Exp $";
 
 /* SQL to create a genePred table */
 static char *createSql = 
@@ -29,8 +29,8 @@ static char *createSql =
 "   exonEnds longblob not null,"	/* Exon end positions */
 "   %s %s %s %s"                        /* Optional fields */
 "   INDEX(name(10)),"
-"   INDEX(chrom(12),txStart),"
-"   INDEX(chrom(12),txEnd)"
+"   INDEX(chrom(%d),txStart),"
+"   INDEX(chrom(%d),txEnd)"
 ")";
 
 static char *binFieldSql = 
@@ -1011,12 +1011,14 @@ cds.end = cdsEnd;
 return genePredFromPsl2(psl, 0, &cds, insertMergeSize);
 }
 
-char* genePredGetCreateSql(char* table, unsigned optFields, unsigned options)
+char* genePredGetCreateSql(char* table, unsigned optFields, unsigned options,
+                           int chromIndexLen)
 /* Get SQL required to create a genePred table. optFields is a bit set
  * consisting of the genePredFields values. Options are a bit set of
- * genePredCreateOpts. Returned string should be freed.
- * This will create all optional fields that preceed the highest optFields
- * column. */
+ * genePredCreateOpts. Returned string should be freed.  This will create all
+ * optional fields that preceed the highest optFields column.  chromIndexLen
+ * is the number of characters in target name to index.  If zero is specified,
+ * it will default to 12. */
 {
 /* the >= is used so that we create preceeding fields. */
 char sqlCmd[1024];
@@ -1026,8 +1028,12 @@ char *name2Fld = (optFields >= genePredName2Fld) ? name2FieldSql : "";
 char *cdsStatFld = (optFields >= genePredCdsStatFld) ? cdsStatFieldSql : "";
 char *exonFramesFld = (optFields >= genePredExonFramesFld) ? exonFramesFieldSql : "";
 
+if (chromIndexLen == 0)
+    chromIndexLen = 12;
+
 safef(sqlCmd, sizeof(sqlCmd), createSql, table,
-      binFld, idFld, name2Fld, cdsStatFld, exonFramesFld);
+      binFld, idFld, name2Fld, cdsStatFld, exonFramesFld,
+      chromIndexLen, chromIndexLen);
 
 return cloneString(sqlCmd);
 }

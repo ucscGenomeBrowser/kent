@@ -177,10 +177,14 @@ struct genePred *genePredFromPsl(struct psl *psl, int cdsStart, int cdsEnd,
  * documentation for details.This calls genePredFromPsl2 with no options.
  */
 
-char* genePredGetCreateSql(char* table, unsigned extFields, unsigned options);
-/* Get SQL required to create a genePred table. extFields is a bit set
- * consisting of the genePredFields values. Options are beit set of
- * genePredCreateOpts. Returned string should be freed. */
+char* genePredGetCreateSql(char* table, unsigned optFields, unsigned options,
+                           int chromIndexLen);
+/* Get SQL required to create a genePred table. optFields is a bit set
+ * consisting of the genePredFields values. Options are a bit set of
+ * genePredCreateOpts. Returned string should be freed.  This will create all
+ * optional fields that preceed the highest optFields column.  chromIndexLen
+ * is the number of characters in target name to index.  If zero is specified,
+ * it will default to 12. */
 
 struct genePred *getOverlappingGene(struct genePred **list,  char *table, char *chrom, int cStart, int cEnd, char *name, int *retOverlap);
 /* read all genes from a table find the gene with the biggest overlap. 

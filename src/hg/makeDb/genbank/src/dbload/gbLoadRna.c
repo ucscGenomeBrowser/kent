@@ -30,7 +30,7 @@
 #include "extFileTbl.h"
 #include <signal.h>
 
-static char const rcsid[] = "$Id: gbLoadRna.c,v 1.21 2005/03/26 17:16:17 markd Exp $";
+static char const rcsid[] = "$Id: gbLoadRna.c,v 1.22 2005/04/06 22:00:26 markd Exp $";
 
 /* FIXME: add optimize subcommand to sort all alignment tables */
 
@@ -881,6 +881,7 @@ else
     gWorkDir = optionVal("workdir", "work/load");
 
     hgSetDb(gDatabase);
+    hSetDb(gDatabase);
     if (gOptions.flags & DBLOAD_DRY_RUN)
         printf("*** using dry run mode ***\n");
     gbLoadRna(reloadList);

@@ -5,12 +5,13 @@
 #include "genePred.h"
 #include "jksql.h"
 #include "hgRelate.h"
+#include "hdb.h"
 #include "ccdsInfo.h"
 #include "linefile.h"
 #include "verbose.h"
 #include "ccdsLocationsJoin.h"
 
-static char const rcsid[] = "$Id: ccdsMkTables.c,v 1.2 2005/03/18 07:20:02 markd Exp $";
+static char const rcsid[] = "$Id: ccdsMkTables.c,v 1.3 2005/04/06 22:00:26 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -111,13 +112,13 @@ safef(ci.ccds, sizeof(ci.ccds), "CCDS%s.%s", row[0], row[1]);
 if (sameString(row[2], "NCBI"))
     {
     /* NCBI has separate version numbers */
-    strcpy(ci.srcDb, "N");
+    ci.srcDb = ccdsInfoNcbi;
     safef(ci.mrnaAcc, sizeof(ci.mrnaAcc), "%s.%s", row[3], row[4]);
     safef(ci.protAcc, sizeof(ci.protAcc), "%s.%s", row[5], row[6]);
     }
 else
     {
-    strcpy(ci.srcDb, "H");
+    ci.srcDb = (startsWith("OTT", ci.mrnaAcc) ? ccdsInfoVega : ccdsInfoEnsembl);
     safef(ci.mrnaAcc, sizeof(ci.mrnaAcc), "%s", row[3]);
     safef(ci.protAcc, sizeof(ci.protAcc), "%s", row[5]);
     }
@@ -369,7 +370,7 @@ hgLoadTabFileOpts(conn, ".", ccdsInfoTmpTbl, SQL_TAB_FILE_ON_SERVER, NULL);
 
 safef(ccdsGeneTmpTbl, sizeof(ccdsGeneTmpTbl), "%s_tmp", ccdsGeneTbl);
 ccdsGeneSql = genePredGetCreateSql(ccdsGeneTmpTbl, genePredAllFlds,
-                                   genePredBasicSql);
+                                   genePredBasicSql, hGetMinIndexLength());
 sqlRemakeTable(conn, ccdsGeneTmpTbl, ccdsGeneSql);
 freeMem(ccdsGeneSql);
 hgLoadTabFileOpts(conn, ".", ccdsGeneTmpTbl, SQL_TAB_FILE_ON_SERVER, NULL);
@@ -423,6 +424,7 @@ if (argc != 5)
     usage();
 keep = optionExists("keep");
 loadDb = optionExists("loadDb");
+hSetDb(argv[1]);
 ccdsMkTables(argv[1], argv[2], argv[3], argv[4]);
 return 0;
 }

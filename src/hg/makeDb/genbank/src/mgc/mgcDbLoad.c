@@ -9,12 +9,13 @@
 #include "psl.h"
 #include "genePred.h"
 #include "hgRelate.h"
+#include "hdb.h"
 #include "jksql.h"
 #include "gbVerb.h"
 #include "gbFileOps.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: mgcDbLoad.c,v 1.12 2004/09/18 00:38:45 markd Exp $";
+static char const rcsid[] = "$Id: mgcDbLoad.c,v 1.13 2005/04/06 22:00:26 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -72,6 +73,7 @@ errAbort(
   "\n"
   "Usage:\n"
   "   mgcDbLoad [options] database mgcStatusTab\n"
+  "   mgcDbLoad -drop database\n"
   "\n"
   "   o database - database to load\n"
   "   o mgcStatusTab - status table to use, if all tables are being loaded\n"
@@ -266,7 +268,7 @@ FILE *tabFh;
 gbVerbEnter(2, "loading %s", MGC_GENES_TMP);
 
 /* create the tmp table */
-sql = genePredGetCreateSql(MGC_GENES_TMP, genePredAllFlds, 0);
+sql = genePredGetCreateSql(MGC_GENES_TMP, genePredAllFlds, 0, hGetMinIndexLength());
 sqlRemakeTable(conn, MGC_GENES_TMP, sql);
 freez(&sql);
 
@@ -500,6 +502,8 @@ if (gbVerbose >= 5)
     sqlMonitorEnable(JKSQL_TRACE);
 if (drop)
     {
+    if (argc != 2)
+        usage();
     database = argv[1];
     mgcDropTables(database);
     }
@@ -513,6 +517,7 @@ else
     
     database = argv[1];
     mgcStatusTabFile = argv[2];
+    hSetDb(database);
 
     mgcDbLoad(database, mgcStatusTabFile);
     }

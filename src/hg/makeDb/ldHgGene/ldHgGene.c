@@ -6,12 +6,13 @@
 #include "hash.h"
 #include "dystring.h"
 #include "linefile.h"
+#include "hdb.h"
 #include "gff.h"
 #include "jksql.h"
 #include "genePred.h"
 #include "hgRelate.h"
 
-static char const rcsid[] = "$Id: ldHgGene.c,v 1.32 2004/10/01 17:09:20 angie Exp $";
+static char const rcsid[] = "$Id: ldHgGene.c,v 1.33 2005/04/06 22:00:27 markd Exp $";
 
 char *exonType = "exon";	/* Type field that signifies exons. */
 boolean requireCDS = FALSE;     /* should genes with CDS be dropped */
@@ -57,10 +58,12 @@ void loadIntoDatabase(char *database, char *table, char *tabName,
 /* Load tabbed file into database table. Drop and create table. */
 {
 struct sqlConnection *conn = sqlConnect(database);
+hSetDb(database);
 
 if (!appendTbl)
     {
-    char *createSql = genePredGetCreateSql(table,  gOptFields, 0);
+    char *createSql = genePredGetCreateSql(table,  gOptFields, 0,
+                                           hGetMinIndexLength());
     sqlRemakeTable(conn, table, createSql);
     freeMem(createSql);
     }
