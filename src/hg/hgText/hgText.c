@@ -27,8 +27,10 @@
 #include "bed.h"
 #include "portable.h"
 #include "customTrack.h"
+#include "hgColors.h"
+#include "tableDescriptions.h"
 
-static char const rcsid[] = "$Id: hgText.c,v 1.102 2003/10/22 23:11:14 angie Exp $";
+static char const rcsid[] = "$Id: hgText.c,v 1.103 2003/11/05 22:55:30 angie Exp $";
 
 /* sources of tracks, other than the current database: */
 static char *hgFixed = "hgFixed";
@@ -36,6 +38,7 @@ static char *customTrackPseudoDb = "customTrack";
 
 /* getCustomTracks() initializes this only once: */
 struct customTrack *theCtList = NULL;
+struct slName *browserLines = NULL;
 
 /* can change this to "GET" for debugging, "POST" for production */
 char *httpFormMethod = "POST";
@@ -166,6 +169,7 @@ int outputTypeNonPosMenuSize = 3;
 #define getCtBedPhase       "Get Custom Track File"
 #define intersectOptionsPhase "Intersect Results..."
 #define histPhase           "Get histogram"
+#define descTablePhase      "Describe table"
 /* Old "phase" values handled for backwards compatibility: */
 #define oldAllFieldsPhase   "Get all fields"
 #define oldSeqOptionsPhase  "Get sequence..."
@@ -775,7 +779,7 @@ else
 struct customTrack *getCustomTracks()
 {
 if (theCtList == NULL)
-    theCtList = customTracksParseCart(cart, NULL, NULL);
+    theCtList = customTracksParseCart(cart, &browserLines, NULL);
 return(theCtList);
 }
 
@@ -1107,6 +1111,7 @@ puts("<P> Choose an action: <BR>");
 cgiMakeButton("phase", oldAllFieldsPhase);
 cgiMakeButton("phase", oldSeqOptionsPhase);
 cgiMakeButton("phase", outputOptionsPhase);
+cgiMakeButton("phase", descTablePhase);
 
 puts("</FORM>");
 hgPositionsHelpHtml(organism, database);
@@ -1248,7 +1253,7 @@ puts("</TABLE>");
 void filterOptionsTableDb(char *fullTblName, char *db, char *tableId)
 /* Print out an HTML table with form inputs for constraints on table fields */
 {
-struct sqlConnection *conn;
+struct sqlConnection *conn = hAllocOrConnect(db);
 struct sqlResult *sr;
 char **row;
 boolean gotFirst;
@@ -1257,10 +1262,6 @@ char name[128];
 char *newVal;
 
 snprintf(query, sizeof(query), "DESCRIBE %s", fullTblName);
-if (sameString(database, db))
-    conn = hAllocConn();
-else
-    conn = hAllocConn2();
 sr = sqlGetResult(conn, query);
 
 puts("<TABLE><TR><TD>\n");
@@ -1297,10 +1298,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 	}
     }
 sqlFreeResult(&sr);
-if (sameString(database, db))
-    hFreeConn(&conn);
-else
-    hFreeConn2(&conn);
+hFreeOrDisconnect(&conn);
 puts("</TD></TR></TABLE>\n");
 puts(" </TD></TR><TR VALIGN=BOTTOM><TD>");
 snprintf(name, sizeof(name), "log_rawQuery%s", tableId);
@@ -1954,10 +1952,7 @@ void preserveConstraints(char *fullTblName, char *db, char *tableId)
  * the next page.  Also parse the constraints and do a null query with them 
  * in order to catch any syntax errors sooner rather than later. */
 {
-struct sqlConnection *conn;
-struct sqlResult *sr;
 struct cgiVar *current;
-struct dyString *query = newDyString(512);
 struct bedFilter *bf = constrainBedFields(tableId);
 char *constraints = constrainFields(tableId);
 char varName[128];
@@ -1965,20 +1960,16 @@ char varName[128];
 if ((constraints != NULL) && (constraints[0] != 0) &&
     (! sameString(customTrackPseudoDb, db)))
     {
+    struct sqlConnection *conn = hAllocOrConnect(db);
+    struct sqlResult *sr;
+    struct dyString *query = newDyString(512);
     // Null query will cause errAbort if there's a syntax error, no-op if OK.
     dyStringPrintf(query, "SELECT 1 FROM %s WHERE 0 AND %s",
 		   fullTblName, constraints);
-    if (sameString(database, db))
-	conn = hAllocConn();
-    else
-	conn = hAllocConn2();
     sr = sqlGetResult(conn, query->string);
     dyStringFree(&query);
     sqlFreeResult(&sr);
-    if (sameString(database, db))
-	hFreeConn(&conn);
-    else
-	hFreeConn2(&conn);
+    hFreeOrDisconnect(&conn);
     }
 
 if (tableId == NULL)
@@ -2484,14 +2475,10 @@ if (sameString(customTrackPseudoDb, db))
     }
 else
     {
-    struct sqlConnection *conn;
+    struct sqlConnection *conn = hAllocOrConnect(db);
     struct sqlResult *sr;
     char **row;
     char query[256];
-    if (sameString(database, db))
-	conn = hAllocConn();
-    else
-	conn = hAllocConn2();
     snprintf(query, sizeof(query), "DESCRIBE %s", fullTableName);
     sr = sqlGetResult(conn, query);
     while ((row = sqlNextRow(sr)) != NULL)
@@ -2500,10 +2487,7 @@ else
 	slAddHead(&fieldList, field);
 	}
     sqlFreeResult(&sr);
-    if (sameString(database, getTableDb()))
-	hFreeConn(&conn);
-    else
-	hFreeConn2(&conn);
+    hFreeOrDisconnect(&conn);
     }
 slReverse(&fieldList);
 return(fieldList);
@@ -2685,6 +2669,268 @@ for (bed=bedList;  bed != NULL;  bed=bed->next)
 return(initialized);
 }
 
+
+void showTdbInfo(struct trackDb *tdb)
+/* Show interesting stuff from tdb. */
+{
+if (tdb != NULL)
+    {
+    puts("<HR>");
+    printf("<H4>Track information for %s (%s):</H4>\n",
+	   tdb->shortLabel, tdb->longLabel);
+    printf("<B>Track type:</B> %s<BR>\n", tdb->type);
+    if (tdb->settings != NULL && tdb->settings[0] != 0)
+	printf("<B>Additional settings:</B> %s<BR>\n", tdb->settings);
+    printf("<B>Track group:</B> %s<BR>\n", tdb->grp);
+    if (tdb->url != NULL && tdb->url[0] != 0)
+	printf("<B>Feature URL:</B> %s<BR>\n", tdb->url);
+    if (tdb->html != NULL && tdb->html[0] != 0)
+	puts(tdb->html);
+    }
+}
+
+
+void describeCustomTrack (char *ctName)
+/* Describe the contents of a custom track as well as we can. */
+{
+char *db = getTableDb();
+char *table = getTableName();
+struct hTableInfo *hti = getHti(db, table);
+struct customTrack *ct = lookupCt(table);
+struct slName *chosenFields;
+struct bed *firstFewBed = NULL, *bed = NULL;
+int i;
+
+printf("<BR> Custom track %s is stored locally as a bed %d file.\n",
+       table, ct->fieldCount);
+puts("(Note: custom tracks may initially be loaded into the browser \n"
+     "from files in other formats such as PSL or GFF, \n"
+     "but upon loading they are translated to BED for local processing \n"
+     "and temporary storage.");
+
+printf("<P>Custom track %s has %d rows total.<BR>\n",
+       hti->rootName, slCount(ct->bedList));
+if (ct->bedList != 0)
+    {
+    firstFewBed = NULL;
+    for (i=0,bed=ct->bedList;  i < 3, bed != NULL;  i++,bed=bed->next)
+	slAddHead(&firstFewBed, cloneBed(bed));
+    slReverse(&firstFewBed);
+    printf ("Example rows of custom track %s (not necessarily from current position!):<BR>\n",
+	    hti->rootName);
+    puts("<TT><PRE>");
+    printTabbedBed(firstFewBed, getChosenFields(TRUE), FALSE);
+    puts("</PRE></TT>");
+    }
+
+showTdbInfo(ct->tdb);
+if (browserLines != NULL)
+    {
+    struct slName *l = NULL;
+    puts("<H4>Custom track browser lines:</H4>");
+    puts("<TT><PRE>");
+    for (l = browserLines;  l != NULL;  l = l->next)
+	{
+	puts(l->name);
+	}
+    puts("</PRE></TT>");
+    puts("<P>");
+    }
+}
+
+
+boolean showTableDescriptions(struct sqlConnection *conn, char *table)
+/* Display autoSql definition and gbdDescriptions link for table, 
+ * if available. */
+{
+boolean gotInfo = FALSE;
+static char *asTableName = "tableDescriptions";
+
+if (sqlTableExists(conn, asTableName))
+    {
+    struct sqlResult *sr = NULL;
+    struct tableDescriptions *asi = NULL;
+    char query[512];
+    char **row = NULL;
+    safef(query, sizeof(query), "select * from %s where tableName = '%s'",
+	  asTableName, table);
+    sr = sqlGetResult(conn, query);
+    if ((row = sqlNextRow(sr)) != NULL)
+	{
+	asi = tableDescriptionsLoad(row);
+	gotInfo = TRUE;
+	if (asi->autoSqlDef != NULL && asi->autoSqlDef[0] != 0)
+	    {
+	    puts("<H4><A HREF=\"http://www.linuxjournal.com/article.php?sid=5949\" TARGET=_BLANK>");
+	    printf("AutoSql</A> definition of %s:</H4>\n", table);
+	    puts("<PRE><TT>");
+	    puts(asi->autoSqlDef);
+	    puts("</TT></PRE>");
+	    }
+	if (asi->gbdAnchor != NULL && asi->gbdAnchor[0] != 0)
+	    {
+	    puts("<P>");
+	    printf("<A HREF=\"/goldenPath/gbdDescriptions.html#%s\" TARGET=_BLANK>",
+		   asi->gbdAnchor);
+	    printf("Genome Browser Database Description for %s</A>", table);
+	    }
+	}
+    sqlFreeResult(&sr);
+    }
+return(gotInfo);
+}
+
+
+void showItemCountFirstFew(struct sqlConnection *conn, int n)
+/* Show the item count and first n items of table. */
+{
+struct slName *chromPtr = NULL;
+struct sqlResult *sr = NULL;
+struct dyString *query = newDyString(256);
+char **row = NULL;
+char *table = getTableName();
+int count = sqlTableSize(conn, fullTableName);
+int numberColumns = 0;
+int i = 0;
+
+if (tableIsSplit)
+    {
+    count = 0;
+    for (chromPtr=hAllChromNames();  chromPtr != NULL;  chromPtr=chromPtr->next)
+	{
+	getFullTableName(fullTableName, chromPtr->name, table);
+	count += sqlTableSize(conn, fullTableName);
+	}
+    }
+printf("<P>Table %s has %d rows total.<BR>\n", table, count);
+if (count > 0)
+    {
+    dyStringPrintf(query, "select * from %s limit %d", fullTableName, n);
+    sr = sqlGetResult(conn, query->string);
+    printf ("Example rows of table %s (not necessarily from current position!):<BR>\n",
+	    table);
+    puts("<TT><PRE>");
+    numberColumns = sqlCountColumns(sr);
+    printf("#");
+    for (i = 0; i < numberColumns; i++)
+	{
+	printf("%s\t", sqlFieldName(sr));
+	}
+    printf("\n");
+    while ((row = sqlNextRow(sr)) != NULL)
+	{
+	for (i = 0; i < numberColumns; i++)
+	    printf("%s\t", row[i]);
+	printf("\n");
+	}
+    puts("</PRE></TT><P>");
+    }
+}
+
+
+void descTable(boolean histButtons)
+/* Print out an HTML table showing table fields and types, and optionally 
+ * offering histograms for the text/enum fields. */
+{
+char *db = getTableDb();
+char *table = getTableName();
+struct sqlConnection *conn = hAllocOrConnect(db);
+struct sqlResult *sr;
+char **row;
+char button[64];
+char query[256];
+
+safef(query, sizeof(query), "desc %s", fullTableName);
+sr = sqlGetResult(conn, query);
+// For some reason BORDER=1 does not work in our web.c nested table scheme.
+// So use web.c's trick of using an enclosing table to provide a border.  
+puts("<!--outer table is for border purposes-->" "\n"
+     "<TABLE BGCOLOR=\"#"HG_COL_BORDER"\" BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"1\"><TR><TD>");
+puts("<TABLE BORDER=\"1\" BGCOLOR=\""HG_COL_INSIDE"\" CELLSPACING=\"0\">");
+printf("<TR> <TH>name</TH> <TH>SQL type</TH> ");
+if (histButtons)
+    printf("<TH>text value histogram</TH> ");
+puts("</TR>");
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    printf("<TR> <TD><TT>%s</TT></TD> <TD><TT>%s</TT></TD>", row[0], row[1]);
+    if (histButtons)
+	{
+	printf(" <TD>");
+	if ((isSqlStringType(row[1]) || startsWith("enum", row[1])) &&
+	    ! sameString(row[1], "longblob"))
+	    {
+	    snprintf(button, sizeof(button), "%s for %s", histPhase, row[0]);
+	    cgiMakeButton("phase", button);
+	    }
+	else
+	    {
+	    printf("&nbsp;");
+	    }
+	printf("</TD>");
+	}
+    puts("</TR>");
+    }
+puts("</TABLE>");
+puts("</TR></TD></TABLE>");
+sqlFreeResult(&sr);
+hFreeOrDisconnect(&conn);
+}
+
+
+void doDescTable ()
+/* Describe the contents of the primary table/custom track as well as we can. */
+{
+char *table = getTableName();
+char *db = getTableDb();
+
+saveChooseTableState();
+
+webStart(cart, "Table Browser: %s %s: %s %s.%s",
+	 hOrganism(database), freezeName, descTablePhase, db, table);
+checkTableExists(fullTableName);
+printf("<FORM ACTION=\"%s\" NAME=\"mainForm\" METHOD=\"%s\">\n\n",
+       hgTextName(), httpFormMethod);
+cartSaveSession(cart);
+cgiMakeHiddenVar("db", database);
+cgiMakeHiddenVar("table", getTableVar());
+displayPosition();
+puts("<A HREF=\"/goldenPath/help/hgTextHelp.html#DescTable\">"
+     "<B>Help</B></A><P>");
+puts("<HR>");
+cgiMakeButton("phase", oldAllFieldsPhase);
+cgiMakeButton("phase", oldSeqOptionsPhase);
+cgiMakeButton("phase", outputOptionsPhase);
+
+if (sameString(customTrackPseudoDb, db))
+    describeCustomTrack(table);
+else
+    {
+    struct sqlConnection *conn = hAllocOrConnect(db);
+    char *track = getTrackName();
+    showTableDescriptions(conn, table);
+    printf("<H4> Fields of %s: </H4>\n", table);
+    descTable(TRUE);
+    showItemCountFirstFew(conn, 3);
+    // "show table status" is a SLOW query (~30s!), but it would be kinda cool 
+    // to tell the creation & last-update dates and times.  
+    if (tableIsPositional && sqlTableExists(conn, hTrackDbName()))
+	{
+	struct trackDb *tdb = hMaybeTrackInfo(conn, track);
+	showTdbInfo(tdb);
+	}
+    hFreeOrDisconnect(&conn);
+    }
+
+puts("<P>");
+cgiMakeButton("phase", oldAllFieldsPhase);
+cgiMakeButton("phase", oldSeqOptionsPhase);
+cgiMakeButton("phase", outputOptionsPhase);
+printf("</FORM>\n");
+webEnd();
+}
+
+
 void doTabSeparatedCT(boolean allFields)
 {
 struct bed *bedList, *bed;
@@ -2754,11 +3000,6 @@ if (allGenome)
 else
     chromList = newSlName(chrom);
 
-if (sameString(database, db))
-    conn = hAllocConn();
-else
-    conn = hAllocConn2();
-
 dyStringClear(fieldSpec);
 if (allFields)
     dyStringAppend(fieldSpec, "*");
@@ -2787,6 +3028,7 @@ if (isBatch() && hti->nameField[0] != 0)
     dyStringAppend(fieldSpec, hti->nameField);
     }
 
+conn = hAllocOrConnect(db);
 gotResults = FALSE;
 if (tableIsSplit)
     {
@@ -2835,10 +3077,7 @@ if (! gotResults)
     printf("\n# No results returned from query.\n\n");
 
 dyStringFree(&query);
-if (sameString(database, db))
-    hFreeConn(&conn);
-else
-    hFreeConn2(&conn);
+hFreeOrDisconnect(&conn);
 }
 
 void doChooseFields()
@@ -3572,11 +3811,6 @@ void descForm()
 /* Print out an HTML FORM showing table fields and types, and offering 
  * histograms for the text/enum fields. */
 {
-struct sqlConnection *conn;
-struct sqlResult *sr;
-struct dyString *query = newDyString(256);
-char **row;
-char *table = getTableName();
 char *db = getTableDb();
 char button[64];
 
@@ -3584,13 +3818,6 @@ char button[64];
 if (sameString(customTrackPseudoDb, db))
     return;
 
-dyStringClear(query);
-dyStringPrintf(query, "desc %s", fullTableName);
-if (sameString(database, db))
-    conn = hAllocConn();
-else
-    conn = hAllocConn2();
-sr = sqlGetResult(conn, query->string);
 printf("<FORM ACTION=\"%s\" NAME=\"descForm\" METHOD=\"%s\">\n\n",
        hgTextName(), httpFormMethod);
 cartSaveSession(cart);
@@ -3600,27 +3827,9 @@ preserveConstraints(fullTableName, db, NULL);
 cgiContinueHiddenVar("position");
 //#*** Really need to save this off to a local file!
 cgiContinueHiddenVar("tbUserKeys");
-printf("<H4> Fields of %s: </H4>\n", table);
-puts("<TABLE BORDER=1> <TR> <TH>name</TH> <TH>type</TH> <TH></TH> </TR>");
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-    printf("<TR> <TD>%s</TD> <TD>%s</TD> <TD>", row[0], row[1]);
-    if ((isSqlStringType(row[1]) || startsWith("enum", row[1])) &&
-	! sameString(row[1], "longblob"))
-	{
-	snprintf(button, sizeof(button), "%s for %s", histPhase, row[0]);
-	cgiMakeButton("phase", button);
-	}
-    puts("</TD> </TR>\n");
-    }
-puts("</TABLE>");
+printf("<H4> Fields of %s: </H4>\n", getTableName());
+descTable(TRUE);
 puts("</FORM>");
-sqlFreeResult(&sr);
-
-if (sameString(database, db))
-    hFreeConn(&conn);
-else
-    hFreeConn2(&conn);
 }
 
 void doGetStatsNonpositional()
@@ -3643,6 +3852,7 @@ printf("<FORM ACTION=\"%s\" NAME=\"mainForm\" METHOD=\"%s\">\n\n",
 cartSaveSession(cart);
 cgiMakeHiddenVar("db", database);
 cgiMakeHiddenVar("table", getTableVar());
+displayPosition();
 preserveConstraints(fullTableName, db, NULL);
 cgiContinueHiddenVar("position");
 
@@ -3671,15 +3881,9 @@ dyStringClear(query);
 dyStringPrintf(query, "select count(*) from %s%s%s", table,
 	       (constraints ? " where "   : ""),
 	       (constraints ? constraints : ""));
-if (sameString(database, db))
-    conn = hAllocConn();
-else
-    conn = hAllocConn2();
+conn = hAllocOrConnect(db);
 numRows = sqlQuickNum(conn, query->string);
-if (sameString(database, db))
-    hFreeConn(&conn);
-else
-    hFreeConn2(&conn);
+hFreeOrDisconnect(&conn);
 printf("Number of rows in %s%s: %d<P>\n", table,
        constraints ? " matching constraints" : "", numRows);
 
@@ -4130,8 +4334,12 @@ if (hti->hasBlocks)
     getCumulativeStats(blockSizeArrs, itemCounts, numChroms, blockSizeStats);
     }
 
-/* Use fixed-font for decimal point/integer alignment: */
-puts("<TABLE BORDER=\"1\">");
+// For some reason BORDER=1 does not work in our web.c nested table scheme.
+// So use web.c's trick of using an enclosing table to provide a border.  
+puts("<!--outer table is for border purposes-->" "\n"
+     "<TABLE BGCOLOR=\"#"HG_COL_BORDER"\" BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"1\"><TR><TD>");
+puts("<TABLE BORDER=\"1\" BGCOLOR=\""HG_COL_INSIDE"\" CELLSPACING=\"0\">");
+/* Use fixed-font for decimal point/integer alignment. */
 /* All these non-blocking spaces are to widen the first column so that some 
  * row descriptions below do not get wrapped (which would mess up the <br> 
  * formatting of row contents). */
@@ -4230,6 +4438,7 @@ if (itemCounts[0] > 0)
 	}
     }
 puts("</TABLE>");
+puts("</TD></TR></TABLE>");
 freez(&(chromLengthArrs[0]));
 freez(&chromLengthArrs);
 freez(&chromLengthStats);
@@ -4361,10 +4570,7 @@ if (isBatch() && hti->nameField[0] != 0)
 	}
     }
 
-if (sameString(database, db))
-    conn = hAllocConn();
-else
-    conn = hAllocConn2();
+conn = hAllocOrConnect(db);
 for (chromPtr=chromList;  chromPtr != NULL;  chromPtr=chromPtr->next)
     {
     getFullTableName(fullTableName, chromPtr->name, table);
@@ -4411,10 +4617,7 @@ for (chromPtr=chromList;  chromPtr != NULL;  chromPtr=chromPtr->next)
 	}
     sqlFreeResult(&sr);
     }
-if (sameString(database, db))
-    hFreeConn(&conn);
-else
-    hFreeConn2(&conn);
+hFreeOrDisconnect(&conn);
 hashFree(&nameHash);
 slFreeList(&wildNames);
 
@@ -4590,6 +4793,8 @@ else
 	doIntersectOptions();
     else if (existsAndStartsWith("phase", histPhase))
 	doGetHistogram();
+    else if (existsAndStartsWith("phase", descTablePhase))
+	doDescTable();
     else
 	webAbort("Table Browser: CGI option error",
 		 "Error: unrecognized value of CGI var phase: %s",
