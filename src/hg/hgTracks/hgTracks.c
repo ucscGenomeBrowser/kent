@@ -3022,7 +3022,8 @@ tg->itemColor = rnaGeneColor;
 }
 
 
-Color stsColor(int altColor, char *genethonChrom, char *marshfieldChrom, 
+Color stsColor(struct memGfx *mg, int altColor, 
+	char *genethonChrom, char *marshfieldChrom, 
 	char *fishChrom, int ppt)
 /* Return color given info about marker. */
 {
@@ -3035,7 +3036,10 @@ if (genethonChrom[0] != '0' || marshfieldChrom[0] != '0')
     }
 else if (fishChrom[0] != '0')
     {
-    return MG_GREEN;
+    static int greenIx = -1;
+    if (greenIx < 0)
+        greenIx = mgFindColor(mg, 0, 200, 0);
+    return greenIx;
     }
 else
     {
@@ -3063,7 +3067,7 @@ Color stsMarkerColor(struct trackGroup *tg, void *item, struct memGfx *mg)
 /* Return color of stsMarker track item. */
 {
 struct stsMarker *el = item;
-return stsColor(tg->ixAltColor, el->genethonChrom, el->marshfieldChrom,
+return stsColor(mg, tg->ixAltColor, el->genethonChrom, el->marshfieldChrom,
     el->fishChrom, el->score);
 }
 
@@ -3093,7 +3097,7 @@ Color stsMapColor(struct trackGroup *tg, void *item, struct memGfx *mg)
 /* Return color of stsMap track item. */
 {
 struct stsMap *el = item;
-return stsColor(tg->ixAltColor, el->genethonChrom, el->marshfieldChrom,
+return stsColor(mg, tg->ixAltColor, el->genethonChrom, el->marshfieldChrom,
     el->fishChrom, el->score);
 }
 
