@@ -52,3 +52,11 @@ table fbPhenotype
     int fbRef;		"ID in fbRef table"
     lstring text;	"Descriptive text"
     )
+
+table fbGo
+"Links FlyBase gene IDs and GO IDs/aspects"
+    (
+    string geneId;      "Flybase Gene ID"
+    string goId;        "GO ID"
+    string aspect;      "P (process), F (function) or C (cellular component)"
+    )

@@ -368,6 +368,58 @@ void fbPhenotypeOutput(struct fbPhenotype *el, FILE *f, char sep, char lastSep);
 #define fbPhenotypeCommaOut(el,f) fbPhenotypeOutput(el,f,',',',');
 /* Print out fbPhenotype as a comma separated list including final comma. */
 
+#define FBGO_NUM_COLS 3
+
+struct fbGo
+/* Links FlyBase gene IDs and GO IDs/aspects */
+    {
+    struct fbGo *next;  /* Next in singly linked list. */
+    char *geneId;	/* Flybase Gene ID */
+    char *goId;	/* GO ID */
+    char *aspect;	/* P (process), F (function) or C (cellular component) */
+    };
+
+void fbGoStaticLoad(char **row, struct fbGo *ret);
+/* Load a row from fbGo table into ret.  The contents of ret will
+ * be replaced at the next call to this function. */
+
+struct fbGo *fbGoLoad(char **row);
+/* Load a fbGo from row fetched with select * from fbGo
+ * from database.  Dispose of this with fbGoFree(). */
+
+struct fbGo *fbGoLoadAll(char *fileName);
+/* Load all fbGo from whitespace-separated file.
+ * Dispose of this with fbGoFreeList(). */
+
+struct fbGo *fbGoLoadAllByChar(char *fileName, char chopper);
+/* Load all fbGo from chopper separated file.
+ * Dispose of this with fbGoFreeList(). */
+
+#define fbGoLoadAllByTab(a) fbGoLoadAllByChar(a, '\t');
+/* Load all fbGo from tab separated file.
+ * Dispose of this with fbGoFreeList(). */
+
+struct fbGo *fbGoCommaIn(char **pS, struct fbGo *ret);
+/* Create a fbGo out of a comma separated string. 
+ * This will fill in ret if non-null, otherwise will
+ * return a new fbGo */
+
+void fbGoFree(struct fbGo **pEl);
+/* Free a single dynamically allocated fbGo such as created
+ * with fbGoLoad(). */
+
+void fbGoFreeList(struct fbGo **pList);
+/* Free a list of dynamically allocated fbGo's */
+
+void fbGoOutput(struct fbGo *el, FILE *f, char sep, char lastSep);
+/* Print out fbGo.  Separate fields with sep. Follow last field with lastSep. */
+
+#define fbGoTabOut(el,f) fbGoOutput(el,f,'\t','\n');
+/* Print out fbGo as a line in a tab-separated file. */
+
+#define fbGoCommaOut(el,f) fbGoOutput(el,f,',',',');
+/* Print out fbGo as a comma separated list including final comma. */
+
 /* -------------------------------- End autoSql Generated Code -------------------------------- */
 
 #endif /* FBTABLES_H */
