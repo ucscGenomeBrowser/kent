@@ -4954,3 +4954,27 @@ o Perform preliminary review of Proteom Browser for mm4, then
         # Finished loading mm4ToHg17.over.chain
         # Now, add download link for /usr/local/apache/htdocs/goldenPath/mm4/liftOver/mm4ToHg17.over.chain.gz
 
+## NIA Mouse Gene Index - (DONE - 2004-10-08 Fan)
+#	requested by: Dudekula, Dawood (NIH/NIA/IRP) DudekulaDB@grc.nia.nih.gov
+
+#	pick up data
+    ssh hgwdev
+    mkdir -p /cluster/data/mm4/bed/NIAGene
+    cd /cluster/data/mm4/bed/NIAGene
+    wget --timestamp http://lgsun.grc.nia.nih.gov/temp/NIA-Mouse-GeneIndex3-Transcript-to-Genome.psl
+
+    wget --timestamping \
+    http://lgsun.grc.nia.nih.gov/temp/NIA-Mouse-GeneIndex3-Transcripts.fasta
+    
+    hgLoadPsl mm4 -table=NIAGene NIA-Mouse-GeneIndex3-Transcript-to-Genome.psl
+
+    mkdir /gbdb/mm4/NIAGene
+    ln -s /cluster/data/mm4/bed/NIAGene/NIA-Mouse-GeneIndex3-Transcripts.fasta \
+	/gbdb/mm4/NIAGene/NIA-Mouse-GeneIndex3-Transcripts.fasta
+    
+    hgLoadSeq mm4 /gbdb/mm4/NIAGene/NIA-Mouse-GeneIndex3-Transcripts.fasta
+
+    Added and edited NIAGene.html and trackDb.ra under
+    
+        kent/src/hg/makeDb/trackDb/mouse/mm4
+
