@@ -22,7 +22,7 @@
 #define CDS_HELP_PAGE "../goldenPath/help/hgCodonColoring.html"
 #define CDS_MRNA_HELP_PAGE "../goldenPath/help/hgCodonColoringMrna.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.149 2004/11/23 17:19:31 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.150 2004/11/24 22:45:35 baertsch Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -569,11 +569,12 @@ char tempScore[256];
  * overridden by the scoreFilter setting in the track */
 if (scoreValString != NULL)
     scoreVal = atoi(scoreValString);
-printf("<p><b>Only Show items that score at or above </b>: ");
+printf("<p><b>Only show items with unnormalized score at or above </b>: ");
 snprintf(scoreVar, sizeof(scoreVar), "%s.scoreFilter", tdb->tableName);
 scoreSetting = cartUsualInt(cart,  scoreVar,  scoreVal);
 safef(tempScore, sizeof(tempScore), "%d",scoreSetting);
-cgiMakeTextVar( scoreVar, tempScore, 8);
+cgiMakeTextVar( scoreVar, tempScore, 11);
+printf(" Data Range (1-20000000000)");
 }
 
 void crossSpeciesUi(struct trackDb *tdb)
