@@ -136,7 +136,7 @@
 #include "botDelay.h"
 #include "zdobnovSynt.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.612 2004/04/21 20:35:44 angie Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.613 2004/04/22 19:42:34 angie Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -5610,9 +5610,9 @@ void htcTranslatedProtein(char *pepName)
 /* Display translated protein. */
 {
 char *table = cartString(cart, "o");
-hgcStart("Protein Translation");
 /* checks both gbSeq and table */
 aaSeq *seq = hGenBankGetPep(pepName, table);
+hgcStart("Protein Translation");
 if (seq == NULL)
     {
     warn("Predicted peptide %s is not avaliable", pepName);
