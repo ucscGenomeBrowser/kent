@@ -1,1 +1,5 @@
-machine hgwdev.cse.ucsc.edu
+machine hgwbeta.cse.ucsc.edu
+quick off
+dbSpec all
+table all
+zoomCount 3
