@@ -50,121 +50,12 @@
 	<FONT SIZE="4"><B> &nbsp;Human Genome Browser </B></FONT>
 	</TD></TR></TABLE>
 	<TABLE BGCOLOR="fffee8" WIDTH=100% CELLPADDING=0><TR><TH HEIGHT=10></TH></TR><TR><TD WIDTH=10>&nbsp;</TD><TD>
-
-<FORM ACTION="../cgi-bin/hgTracks" METHOD="POST" ENCTYPE="multipart/form-data">
-
-<CENTER><H2>Human Genome Browser</H2>
-<PRE>Web tool created by <A HREF="http://www.cse.ucsc.edu/~kent">Jim Kent</A>, Charles Sugnet, and <A HREF="http://www.cse.ucsc.edu/~booch">Terry Furey</A> of UC Santa Cruz.
-6 August 2001 preliminary <A HREF="http://genome.cse.ucsc.edu/index.html">draft assembly</A> of the human genome
-</PRE></CENTER>
-<P>
-Please enter a position in the genome, set your preferred window width, and press the submit button:
-(Use <A HREF="../cgi-bin/hgBlat?db=hg8">BLAT Search</A> to locate a particular sequence in the genome.)
-You can also <A HREF="#custom">add your own tracks</A>.
-
-<CENTER><P>genome position: 
-<INPUT TYPE="TEX" NAME="position" SIZE="34" VALUE="chr3:212340692-212346763"> 
- pixel width 
-<INPUT TYPE="TEXT" NAME="pix" SIZE="4" VALUE="610"> 
-<INPUT TYPE="SUBMIT" NAME="Submit" VALUE="Submit"> 
-<INPUT TYPE="HIDDEN" NAME="db" VALUE="hg8">
-
-</P></CENTER>
-
-<P>A genome position can be specified by the accession number of a sequenced human genomic clone, an mRNA or EST or STS marker, or 
-a cytological band, a chromosomal coordinate range, or keywords from the Genbank description of an mRNA. See the <A HREF="http://genome.cse.ucsc.edu/goldenPath/help/hgTracksHelp.html" TARGET=_blank>User Guide</A> for more help. 
-<P>
-
-<P>
-<CENTER> <TABLE  border=0 CELLPADDING=0 CELLSPACING=0>
-<TR><TD VALIGN=Top NOWRAP><B>Request:</B><br></TD>
-	<TD VALIGN=Top COLSPAN=2><B>&nbsp;&nbsp; Genome Browser Response:</B><br></TD></TR>
 	
-<TR><TD VALIGN=Top><br></TD></TR>
+<script>location.replace("http://genome.ucsc.edu/cgi-bin/hgGateway?db=hg10");</script>
+<noscript>No javascript support click <b><a href="http://genome.ucsc.edu/cgi-bin/hgGateway?db=hg10">here</a> for the example.
+</noscript>
+
 	
-<TR><TD VALIGN=Top NOWRAP>chr19</TD>
-	<TD WIDTH=14></TD>
-	<TD VALIGN=Top>Displays all of chromosome 19</TD></TR>
-<TR><TD VALIGN=Top NOWRAP>20p13</TD>
-	<TD WIDTH=14></TD>
-	<TD VALIGN=Top>Displays region for band p13 on chr 20</TD></TR>
-<TR><TD VALIGN=Top NOWRAP>4q28</TD>
-	<TD WIDTH=14></TD>
-	<TD VALIGN=Top>Displays band q28 on chr 4, gene region determining red hair color</TD></TR>
-<TR><TD VALIGN=Top NOWRAP>chr3:1-1000000</TD>
-	<TD WIDTH=14></TD>
-	<TD VALIGN=Top>Displays first million bases of chr 3, counting from p arm telomere</TD></TR>
-
-<TR><TD VALIGN=Top><br></TD></TR>
-
-<TR><TD VALIGN=Top NOWRAP>D16S3046</TD>
-	<TD WIDTH=14></TD>
-	<TD VALIGN=Top>Displays region around STS marker D16S3046 from the Genethon/Marshfield maps
-	(open "STS Markers" track by clicking to see this marker)</TD></TR>
-<TR><TD VALIGN=Top NOWRAP>AA205474</TD>
-	<TD WIDTH=14></TD>
-	<TD VALIGN=Top>Displays region of EST with GenBank acc. AA205474 in BRCA1 cancer gene on chr 17
-	(open "spliced ESTs" track by clicking to see this EST)</TD></TR>
-<TR><TD VALIGN=Top NOWRAP>ctg13698</TD>
-	<TD WIDTH=14></TD>
-	<TD VALIGN=Top>Displays region of the fingerprint clone contig ctg13698 from the Wash. U. map
-	(set "FPC contigs" track to "dense" and refresh to see FPC contigs)</TD></TR>
-<TR><TD VALIGN=Top NOWRAP>AP001670</TD>
-	<TD WIDTH=14></TD>
-	<TD VALIGN=Top>Displays region of clone with GenBank accession AP001670
-	(open "coverage" track by clicking to see this clone)</TD></TR>
-
-<TR><TD VALIGN=Top><br></TD></TR>
-
-<TR><TD VALIGN=Top NOWRAP>AF083811</TD>
-	<TD WIDTH=14></TD>
-	<TD VALIGN=Top>Offers 2 coordinate choices on chr 7 and chr 22 for this mitotic checkpoint mRNA</TD></TR>
-<TR><TD VALIGN=Top NOWRAP>PRNP</TD>
-	<TD WIDTH=14></TD>
-	<TD>Offers coordinates choices for nested mRNAs for prion gene, chr 20p</TD></TR>
-
-<TR><TD VALIGN=Top><br></TD></TR>
-
-<TR><TD VALIGN=Top NOWRAP>pseudogene mRNA</TD>
-	<TD WIDTH=14></TD>
-	<TD VALIGN=Top>Lists transcribed pseudogenes but not cDNAs</TD></TR>
-<TR><TD VALIGN=Top NOWRAP>homeobox caudal</TD>
-	<TD WIDTH=14></TD>
-	<TD VALIGN=Top>Lists mRNAs for caudal homeobox genes</TD></TR>
-<TR><TD VALIGN=Top NOWRAP>valyl-tRNA</TD>
-	<TD WIDTH=14></TD>
-	<TD VALIGN=Top>Lists mRNAs for valyl tRNA synthetases but not unsubmitted tRNA</TD></TR>
-<TR><TD VALIGN=Top NOWRAP>zinc finger</TD>
-	<TD WIDTH=14></TD>
-	<TD VALIGN=Top>Lists many zinc finger mRNAs</TD></TR>
-<TR><TD VALIGN=Top NOWRAP>kruppel zinc finger</TD>
-	<TD WIDTH=14></TD>
-	<TD VALIGN=Top>Lists only kruppel-like zinc fingers</TD></TR>
-<TR><TD VALIGN=Top NOWRAP>huntington</TD>
-	<TD WIDTH=14></TD>
-	<TD VALIGN=Top>Lists candidate genes associated with Huntington's disease</TD></TR>
-<TR><TD VALIGN=Top NOWRAP>zahler</TD>
-	<TD WIDTH=14></TD>
-	<TD VALIGN=Top>Lists mRNAs deposited by scientist named Zahler</TD></TR>
-<TR><TD VALIGN=Top NOWRAP>Evans,J.E.</TD>
-	<TD WIDTH=14></TD>
-	<TD VALIGN=Top>Lists mRNAs deposited by co-author J.E. Evans</TD></TR>
-
-<TR><TD VALIGN=Top><br></TD></TR>
-	
-<TR><TD COLSPAN="3" > Use this last format for entry authors -- even though Genbank searches require Evans JE format, GenBank entries themselves use Evans,J.E. internally.
-</TABLE></CENTER>
-
-<H2><A NAME="custom"></A>Add Your Own Tracks </H2>
-<P>You can add your own annotation tracks to the browser by uploading in
-annotations in <A HREF="help/customTrack.html"> 
-formats described here</A>.  Annotations can be stored in files or
-pasted in. You can also paste in a URL or list of URLs which refer to 
-files in one of the supported formats.</P>
-
-	Annotation File: <INPUT TYPE=FILE NAME="hgt.customFile"><BR>
-	<TEXTAREA NAME="hgt.customText" ROWS=14 COLS=80></TEXTAREA>
-	</FORM>
 	<BR></TD><TD WIDTH=15>&nbsp;</TD></TR></TABLE>
 	</TD></TR></TABLE>
 			
