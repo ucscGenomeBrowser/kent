@@ -12,7 +12,7 @@
 #include "ra.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: hgNear.c,v 1.16 2003/06/23 17:21:44 kent Exp $";
+static char const rcsid[] = "$Id: hgNear.c,v 1.17 2003/06/24 07:09:23 kent Exp $";
 
 char *excludeVars[] = { "submit", "Submit", confVarName, defaultConfName,
 	resetConfName, NULL }; 
@@ -256,9 +256,9 @@ hPrintf("<TR><TD ALIGN=CENTER>");
     }
 
 /* Do sort by drop-down */
-groupOn = cartUsualString(cart, groupVarName, "homology");
+groupOn = cartUsualString(cart, groupVarName, "expression");
     {
-    static char *menu[] = {"homology", "position"};
+    static char *menu[] = {"expression", "homology", "position"};
     hPrintf("group by ");
     cgiMakeDropList(groupVarName, menu, ArraySize(menu), groupOn);
     }
@@ -312,23 +312,16 @@ if (search != NULL)
 return result;
 }
 
-struct slName *getHomologyNeighbors(struct sqlConnection *conn)
-/* Get homology neighborhood. */
+static struct slName *neighborhoodList(struct sqlConnection *conn, char *query, 
+	int maxCount)
+/* Get list of up to maxCount from query. */
 {
 struct sqlResult *sr;
 char **row;
-struct dyString *query = dyStringNew(1024);
 struct slName *list = NULL, *name;
 struct hash *dupeHash = newHash(0);
 int count = 0;
-
-/* Look for matchers.  Look for a few more than they ask for to
- * account for dupes. */
-dyStringPrintf(query, 
-	"select target from knownBlastTab where query='%s'", 
-	curGeneId);
-dyStringPrintf(query, " order by bitScore desc limit %d", (int)(displayCount*1.5));
-sr = sqlGetResult(conn, query->string);
+sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     if (!hashLookup(dupeHash, row[0]))
@@ -336,16 +329,50 @@ while ((row = sqlNextRow(sr)) != NULL)
 	hashAdd(dupeHash, row[0], NULL);
 	name = slNameNew(row[0]);
 	slAddHead(&list, name);
-	if (++count >= displayCount)
+	if (++count >= maxCount)
 	    break;
 	}
     }
-sqlFreeResult(&sr);
-dyStringFree(&query);
 freeHash(&dupeHash);
+sqlFreeResult(&sr);
 slReverse(&list);
 return list;
 }
+
+struct slName *getExpressionNeighbors(struct sqlConnection *conn)
+/* Get expression neighborhood. */
+{
+struct dyString *query = dyStringNew(1024);
+struct slName *list;
+
+/* Look for matchers.  Look for a few more than they ask for to
+ * account for dupes. */
+dyStringPrintf(query, 
+	"select target from knownExpDistance where query='%s'", 
+	curGeneId);
+dyStringPrintf(query, " order by distance limit %d", displayCount);
+list = neighborhoodList(conn, query->string, displayCount);
+dyStringFree(&query);
+return list;
+}
+
+struct slName *getHomologyNeighbors(struct sqlConnection *conn)
+/* Get homology neighborhood. */
+{
+struct dyString *query = dyStringNew(1024);
+struct slName *list;
+
+/* Look for matchers.  Look for a few more than they ask for to
+ * account for dupes. */
+dyStringPrintf(query, 
+	"select target from knownBlastTab where query='%s'", 
+	curGeneId);
+dyStringPrintf(query, " order by bitScore desc limit %d", (int)(displayCount*1.5));
+list = neighborhoodList(conn, query->string, displayCount);
+dyStringFree(&query);
+return list;
+}
+
 
 struct slName *getGenomicNeighbors(struct sqlConnection *conn, char *geneId,
 	char *chrom, int start, int end)
@@ -451,7 +478,9 @@ else
 struct slName *getNeighbors(struct sqlConnection *conn)
 /* Return gene neighbors. */
 {
-if (sameString(groupOn, "homology"))
+if (sameString(groupOn, "expression"))
+    return getExpressionNeighbors(conn);
+else if (sameString(groupOn, "homology"))
     return getHomologyNeighbors(conn);
 else if (sameString(groupOn, "position"))
     return getPositionNeighbors(conn);
