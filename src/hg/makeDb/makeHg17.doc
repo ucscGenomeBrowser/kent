@@ -2154,7 +2154,7 @@ done
     iSync
 
 
-# BLASTZ FUGU (FR1) (WORKING 2004-06-10 kate)
+# BLASTZ FUGU (FR1) (DONE 2004-06-24 kate)
     ssh kk
     mkdir -p /cluster/data/hg17/bed/blastz.fr1.2004-06-10
     ln -s /cluster/data/hg17/bed/blastz.fr1.2004-06-10 \
@@ -2682,35 +2682,36 @@ doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain} out/$(
     #	user    8m35.050s
     #	sys     1m7.230s
 
-    mkdir ../axtNet
+    # extract axts from net 
+    mkdir ../axtNet 
     foreach n (ratNet/chr*.net)
 	set c=$n:t:r
 	echo "netToAxt: $c.net -> $c.axt"
 	rm -f ../axtNet/$c.axt
 	netToAxt ratNet/$c.net chain/$c.chain \
 		/cluster/data/hg17/nib \
-		/cluster/data/rn3/nib \
-		../axtNet/$c.axt
+		/cluster/data/rn3/nib stdout ../axtNet/$c.axt
 	echo "Complete: $c.net -> axtNet/$c.axt"
     end
-
-    #	convert axt to maf
-    ssh eieio
-    cd /cluster/data/hg17/bed/blastz.rn3/axtNet
+    # sort axt's and convert to maf format
     mkdir ../mafNet
-
-    foreach f (chr*.axt)
-      set maf = $f:t:r.rn3.maf
-      echo translating $f to $maf
-      axtToMaf $f \
+cat << 'EOF' > makeMaf.csh
+    foreach f (../axtNet/chr*.axt)
+        set c=$f:t:r
+        echo $c.axt
+        mv ../axtNet/$c.axt ../axtNet/$c.unsorted.axt
+        axtSort ../axtNet/$c.unsorted.axt ../axtNet/$c.axt
+        rm ../axtNet/$c.unsorted.axt
+        axtToMaf ../axtNet/$c.axt \
             /cluster/data/hg17/chrom.sizes /cluster/data/rn3/chrom.sizes \
-            ../mafNet/$maf -tPrefix=hg17. -qPrefix=rn3.
-     /cluster/bin/scripts/fixmaf.pl < maf.ord/${root}.maf.unfixed > maf.ord/${root}.maf
+                ../mafNet/$c.maf -tPrefix=hg17. -qPrefix=rn3.
     end
+'EOF'
+    csh makeMaf.csh >&! makeMaf.log &
+    tail -100f makeMaf.log
 
-    ssh hgwdev
-    mkdir -p /cluster/data/hg17/bed/blastz.rn3/axtBest
-    cd /cluster/data/hg17/bed/blastz.rn3/axtBest
+    # TODO: redo copy to download area
+
     ln -s ../axtNet/chr*.axt .
 
     # copy net axt's to download area
@@ -4464,13 +4465,12 @@ axtChain -scoreScheme=/cluster/data/blastz/HoxD55.q \
 
     # copy over mafs
     mkdir $workingDir/panTro1
-    cp /cluster/data/hg17/bed/blastz.panTro1/mafNet/chr1.maf \
-                $workingDir/panTro1/
+    cp /cluster/data/hg17/bed/blastz.panTro1/mafNet/*.maf \
+                $workingDir/panTro1
 
     # first multiz - add mouse in to human/chimp
     mkdir $workingDir/mm4
-    cp /cluster/data/hg17/bed/blastz.mm4/mafNet/chr1.mm4.maf \
-                $workingDir/mm4/chr1.maf
+    cp /cluster/data/hg17/bed/blastz.mm4/mafNet/chr*.maf $workingDir/mm4
 
     ssh kki
     cd /cluster/data/hg17/bed/multiz.2004-06-24
@@ -4483,16 +4483,90 @@ mkdir -p $3:h
 'EOF'
     cat << 'EOF' > gsub
 #LOOP
-../doMultiz.csh {check in line /cluster/bluearc/hg17/multiz.2004-06-24/$(dir1)/$(root2).maf} {check in line /cluster/bluearc/hg17/multiz.2004-06-24/$(root1)/$(root2).maf} {check out line+ /cluster/data/hg17/multiz.2004-06-24/$(root1)$(dir1)/$(root2).maf}
+../doMultiz.csh {check in line /cluster/bluearc/hg17/multiz.2004-06-24/$(dir1)/$(root2).maf} {check in line /cluster/bluearc/hg17/multiz.2004-06-24/$(root1)/$(root2).maf} {check out line+ /cluster/bluearc/hg17/multiz.2004-06-24/$(root1)$(dir1)/$(root2).maf}
 #ENDLOOP
 'EOF'
     chmod +x doMultiz.csh
     ls /cluster/bluearc/hg17/multiz.2004-06-24/panTro1/*.maf > chrom.lst
 
+    # mouse
     mkdir run.mm4
     cd run.mm4
     echo "mm4/panTro1" > species.lst
     gensub2 species.lst ../chrom.lst ../gsub jobList
     para create jobList
+        # 46 jobs
     para try, check, push, check
+    cd ..
+# Completed: 46 of 46 jobs
+# CPU time in finished jobs:       6637s     110.62m     1.84h    0.08d  0.000 y
+# IO & Wait Time:                  3788s      63.13m     1.05h    0.04d  0.000 y
+# Average job time:                 227s       3.78m     0.06h    0.00d
+# Longest job:                      950s      15.83m     0.26h    0.01d
+# Submission to last job:          3058s      50.97m     0.85h    0.04d
+
+    # rat
+    ssh eieio
+    set workingDir = /cluster/bluearc/hg17/multiz.2004-06-24
+    mkdir $workingDir/rn3
+    cp /cluster/data/hg17/bed/blastz.rn3/mafNet/chr*.maf $workingDir/rn3
+
+    ssh kki
+    cd /cluster/data/hg17/bed/multiz.2004-06-24
+
+    mkdir run.rn3
+    cd run.rn3
+    echo "rn3/panTro1mm4" > species.lst
+    gensub2 species.lst ../chrom.lst ../gsub jobList
+    para create jobList
+        # 46 jobs
+    para try, check, push, check
+    cd ..
+
+    # chicken
+    ssh eieio
+    set workingDir = /cluster/bluearc/hg17/multiz.2004-06-24
+    mkdir $workingDir/galGal2
+    foreach f (/cluster/data/hg17/bed/blastz.galGal2/mafNet/chr*.maf)
+        set c = $f:r:r:t
+        cp $f $workingDir/galGal2/$c.maf
+    end
+
+    ssh kki
+    set workingDir = /cluster/bluearc/hg17/multiz.2004-06-24
+    cd /cluster/data/hg17/bed/multiz.2004-06-24
+    mkdir run.galGal2
+    cd run.galGal2
+    echo "galGal2/panTro1mm4rn3" > species.lst
+    gensub2 species.lst ../chrom.lst ../gsub jobList
+    # no alignment file for chr18_random -- create one so we can create jobList
+    touch $workingDir/galGal2/chr18_random
+    para create jobList
+        # 46 jobs
+    para try, check, push, check
+    cd ..
+
+    # fugu
+    ssh eieio
+    set workingDir = /cluster/bluearc/hg17/multiz.2004-06-24
+    mkdir $workingDir/fr1
+    cp /cluster/data/hg17/bed/blastz.fr1/mafNet/chr*.maf $workingDir/fr1
+
+    # GOT HERE
+
+    ssh kki
+    cd /cluster/data/hg17/bed/multiz.2004-06-24
+    mkdir run.fr1
+    cd run.fr1
+    echo "fr1/panTro1mm4rn3galGal2" > species.lst
+    gensub2 species.lst ../chrom.lst ../gsub jobList
+    # no alignment file for chr18_random -- create one so we can create jobList
+    para create jobList
+        # 46 jobs
+    para try, check, push, check
+    cd ..
+
+
+
+
 
