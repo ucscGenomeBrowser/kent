@@ -84,7 +84,7 @@
 #include "estOrientInfo.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.742 2004/05/25 18:55:09 donnak Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.743 2004/05/28 01:32:38 kate Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
@@ -101,6 +101,7 @@ int colorBin[MAXPIXELS][256]; /* count of colors for each pixel for each color *
 Color shadesOfGreen[EXPR_DATA_SHADES];
 Color shadesOfRed[EXPR_DATA_SHADES];
 Color shadesOfBlue[EXPR_DATA_SHADES];
+Color orangeColor = 0;
 boolean exprBedColorsMade = FALSE; /* Have the shades of Green, Red, and Blue been allocated? */
 int maxRGBShade = EXPR_DATA_SHADES - 1;
 
@@ -331,7 +332,6 @@ void loadSampleIntoLinkedFeature(struct track *tg);
 
 struct track *trackList = NULL;    /* List of all tracks. */
 struct group *groupList = NULL;    /* List of all tracks. */
-
 
 
 /* Some little functional stubs to fill in track group
@@ -1012,7 +1012,10 @@ vgMakeColorGradient(vg, &black, &green, EXPR_DATA_SHADES, shadesOfGreen);
 exprBedColorsMade = TRUE;
 }
 
-
+Color  makeOrangeColor(struct vGfx *vg)
+{
+return vgFindColorIx(vg, 230, 130, 0);
+}
 
 /*	See inc/chromColors.h for color defines	*/
 void makeChromosomeShades(struct vGfx *vg) 
@@ -5932,36 +5935,54 @@ rgbColor.b = (rgbColor.b+255)/2;
 return vgFindColorIx(vg, rgbColor.r, rgbColor.g, rgbColor.b);
 }
 
+Color alignInsertsColor()
+/* Return color used for insert indicators in multiple alignments */
+{
+    return orangeColor;
+}
+
 int spreadStringCharWidth(int width, int count)
 {
     return width/count;
 }
 
 void spreadAlignString(struct vGfx *vg, int x, int y, int width, int height,
-                        Color color, MgFont *font, char *s, char *match,
-                        int count)
+                        Color color, MgFont *font, char *text, 
+                        char *match, int count)
 /* Draw evenly spaced letters in string.  For multiple alignments,
  * supply a non-NULL match string, and then matching letters will be colored
- * with the main color, mismatched letters will have alt color. */
+ * with the main color, mismatched letters will have alt color. 
+ * Draw a vertical bar in orange where sequence lacks gaps that
+ * are in reference sequence (possible insertion) -- this is indicated
+ * by an escaped insert count in the sequence.  The escape char is backslash.
+ * The count param is the number of bases to print, not length of
+ * the input line (text) */
 {
-char c[2];
+char c[2] = "";
 int i;
-int x1,x2;
+int x1, x2;
 
 Color noMatchColor = lighterColor(vg, color);
 Color clr;
 
-c[1] = 0;	/* Put zero tag on string. */
-for (i=0; i<count; ++i)
+for (i=0; i<count; i++, text++)
     {
     x1 = i * width / count;
     x2 = (i+1) * width/count;
-    c[0] = s[i];
+    if (*text == '|')
+        {
+        /* insert count follows -- replace with a colored vertical bar */
+        text++;
+        i--;
+        vgBox(vg, x1+x, y, 1, height, alignInsertsColor());
+        continue;
+        }
+    c[0] = *text;
     clr = color;
     if (match != NULL && match[i])
-        if (s[i] != match[i])
+        if (*text != match[i])
             clr = noMatchColor;
-    vgTextCentered(vg,x1+x,y,x2-x1,height,clr,font,c);
+    vgTextCentered(vg, x1+x, y, x2-x1, height, clr, font, c);
     }
 }
 
@@ -6179,6 +6200,8 @@ else
 makeGrayShades(vg);
 makeBrownShades(vg);
 makeSeaShades(vg);
+orangeColor = makeOrangeColor(vg);
+
 if (rulerMode == RULER_MODE_FULL && !cdsColorsMade)
     {
     makeCdsShades(vg, cdsColor);
@@ -7704,7 +7727,6 @@ boolean showedRuler = FALSE;
 zoomedToBaseLevel = (winBaseCount * tl.mWidth) <= insideWidth;
 zoomedToCodonLevel = (ceil(winBaseCount/3) * tl.mWidth) <= insideWidth;
 zoomedToCdsColorLevel = (winBaseCount <= insideWidth*3);
-
 
 if (psOutput != NULL)
    {

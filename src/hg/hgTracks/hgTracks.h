@@ -464,11 +464,14 @@ void spreadStringAlternateBackground(struct vGfx *vg, int x, int y, int width, i
 /* Draw evenly spaced letters in string. */
 
 void spreadAlignString(struct vGfx *vg, int x, int y, int width, int height,
-                        Color color, MgFont *font, char *s, char *match, 
-			int count);
+                        Color color, MgFont *font, char *s, 
+                        char *match, int count);
 /* Draw evenly spaced letters in string.  For multiple alignments,
  * supply a non-NULL match string, and then matching letters will be colored
- * with the main color, mismatched letters will have alt color. */
+ * with the main color, mismatched letters will have alt color. 
+ * Draw a vertical bar in light yellow where sequence lacks gaps that
+ * are in reference sequence (possible insertion) -- this is indicated
+ * by an escaped ('/') insert count in the sequence */
 
 void contigMethods(struct track *tg);
 /* Make track for contig */
@@ -657,6 +660,9 @@ void mapBoxHgcOrHgGene(int start, int end, int x, int y, int width, int height,
  * program. */
 
 int spreadStringCharWidth(int width, int count);
+
+Color alignInsertsColor();
+/* Return color used for insert indicators in multiple alignments */
 
 #endif /* HGTRACKS_H */
 
