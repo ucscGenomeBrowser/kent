@@ -104,6 +104,14 @@ altColor 200,220,255
 spectrum on
 type psl xeno
 
+track dhs
+shortLabel DHS
+longLabel DNAase I hypersensitive sites
+priority 200
+visibility hide
+color 120,0,120
+type bed 3 .
+
 track rmsk
 shortLabel RepeatMasker
 longLabel Repeating Elements by RepeatMasker
@@ -340,10 +348,3 @@ visibility hide
 color 0,60,120
 type bed 3 .
 
-track dhs
-shortLabel DHS
-longLabel DNAase I hypersensitive sites
-priority 520
-visibility hide
-color 120,0,120
-type bed 3 .
