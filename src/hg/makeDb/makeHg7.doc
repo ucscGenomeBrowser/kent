@@ -432,6 +432,28 @@ o - Rename to correspond with tables as so and load into database:
        hgLoadPsl hg7 *.psl
 
 
+PRODUCING GENSCAN PREDICTIONS
+    
+o - Produce contig genscan.gtf genscan.pep and genscanExtra.bed files like so:
+     ssh roar
+     cd ~/oo.29
+     source jkStuff/gsBig.sh &
+    Wait about 4 days 1 hours for these to finish.
+
+o - Convert these to chromosome level files as so:
+     cd ~/oo.29
+     mkdir bed/genscan
+     liftUp bed/genscan/genscan.gtf jkStuff/liftAll.lft warn ?/ctg*/genscan.gtf ??/ctg*/genscan.gtf
+     liftUp bed/genscan/genscanSubopt.bed jkStuff/liftAll.lft warn ?/ctg*/genscanSub.bed ??/ctg*/genscanSub.bed
+     cat ?/ctg*/genscan.pep ??/ctg*/genscan.pep > bed/genscan/genscan.pep
+
+o - Load into the database as so:
+     ssh cc94
+     cd ~/oo.29/bed/genscan
+     ldHgGene hg7 genscan genscan.gtf
+     hgPepPred hg7 generic genscanPep genscan.pep
+     hgLoadBed hg7 genscanSubopt genscanSubopt.bed
+
 
       
 LOADING IN EXTERNAL FILES
@@ -645,3 +667,23 @@ PATTERN HUNTER MOUSE ALIGNMENTS
   o Load phMouseAli track
      - cd /projects/hg3/mouse/patternHunter
      - zcat chr22.ph.gz | hgRefAlign -n tab hg7 phMouseAli -
+
+PRODUCING PSUEDO_GENE INFO
+
+o - Align with translated blat all human and non-human mRNAs into
+    jkStuff/post.xenoRna and jkStuff/post.transRna.  
+o - ssh kks00
+    cd ~/oo.29/jkStuff/post.transRna/psl
+    liftUp ../chrom.psl ../../liftAll.lft warn *.psl
+    cd ../../post.xenoRna/psl
+    liftUp ../chrom.psl ../../liftAll.lft warn *.psl
+    cd ~/oo.29/psl
+    pslSortAcc nohead psuedo /projects/hg2/temp ../jkStuff/post.transRna/chrom.psl ../jkStuff/post.xenoRna/chrom.psl
+    cd psuedo
+    foreach i (*.psl)
+        mv $i $i:r_psl.psl
+    end
+    ssh cc94
+    cd /projects/hg3/gs.7/oo.39/psl/psuedo
+    hgLoadPsl hg7 *.psl
+
