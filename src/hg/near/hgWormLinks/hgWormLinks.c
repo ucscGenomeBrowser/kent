@@ -6,7 +6,7 @@
 #include "dystring.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: hgWormLinks.c,v 1.4 2004/04/28 21:55:00 hartera Exp $";
+static char const rcsid[] = "$Id: hgWormLinks.c,v 1.5 2004/10/27 22:25:43 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -58,10 +58,10 @@ while (lineFileNextReal(lf, &line))
     char *val = skipLeadingSpaces(line);
     if (val != NULL && val[0] != 0)
         {
+        char *desc = hashFindVal(hash, key);
 	subChar(val, '\t', ' ');
 	stripChar(val, '\r');
         /* if gene exists in hash */
-        char *desc = hashFindVal(hash, key);
 	if (desc != NULL) 
             {
 	    struct dyString *dy = dyStringNew(1024);
