@@ -25,6 +25,7 @@ struct serverTable
 
 char *genomeList[] = {"Oct. 7, 2000", "Dec. 12, 2000"};
 char *typeList[] = {"BLAT's guess", "DNA", "protein", "translated RNA", "translated DNA"};
+char *sortList[] = {"query,score", "query,start", "chrom,score", "chrom,start", "score"};
 
 struct serverTable serverTable[] =  {
 {"hg5", "Oct. 7, 2000", TRUE, "kks00.cse.ucsc.edu", "17776", "/projects/cc/hg/oo.23/nib"},
@@ -64,12 +65,21 @@ errAbort(
 int pslScore(const struct psl *psl)
 /* Return score for psl. */
 {
-int aScore = psl->match + (psl->repMatch>>1) - psl->misMatch - psl->qNumInsert
+return psl->match + (psl->repMatch>>1) - psl->misMatch - psl->qNumInsert
   - psl->tNumInsert;
 }
 
-int pslCmpMatches(const void *va, const void *vb)
-/* Compare to sort based on query. */
+int pslCmpScore(const void *va, const void *vb)
+/* Compare to sort based on query then score. */
+{
+const struct psl *a = *((struct psl **)va);
+const struct psl *b = *((struct psl **)vb);
+return pslScore(b) - pslScore(a);
+}
+
+
+int pslCmpQueryScore(const void *va, const void *vb)
+/* Compare to sort based on query then score. */
 {
 const struct psl *a = *((struct psl **)va);
 const struct psl *b = *((struct psl **)vb);
@@ -79,6 +89,40 @@ if (diff == 0)
 return diff;
 }
 
+int pslCmpQueryStart(const void *va, const void *vb)
+/* Compare to sort based on query start. */
+{
+const struct psl *a = *((struct psl **)va);
+const struct psl *b = *((struct psl **)vb);
+int diff = strcmp(a->qName, b->qName);
+if (diff == 0)
+    diff = a->qStart - b->qStart;
+return diff;
+}
+
+int pslCmpTargetScore(const void *va, const void *vb)
+/* Compare to sort based on target then score. */
+{
+const struct psl *a = *((struct psl **)va);
+const struct psl *b = *((struct psl **)vb);
+int diff = strcmp(a->tName, b->tName);
+if (diff == 0)
+    diff = pslScore(b) - pslScore(a);
+return diff;
+}
+
+int pslCmpTargetStart(const void *va, const void *vb)
+/* Compare to sort based on target start. */
+{
+const struct psl *a = *((struct psl **)va);
+const struct psl *b = *((struct psl **)vb);
+int diff = strcmp(a->tName, b->tName);
+if (diff == 0)
+    diff = a->tStart - b->tStart;
+return diff;
+}
+
+
 void showAliPlaces(char *pslName, char *faName, char *database)
 /* Show all the places that align. */
 {
@@ -86,6 +130,7 @@ struct lineFile *lf = pslFileOpen(pslName);
 struct psl *pslList = NULL, *psl;
 char *browserUrl = hgTracksName();
 char *extraCgi = "";
+char *sort = cgiUsualString("sort", sortList[0]);
 
 while ((psl = pslNext(lf)) != NULL)
     {
@@ -95,7 +140,31 @@ lineFileClose(&lf);
 if (pslList == NULL)
     errAbort("Sorry, no matches found");
 
-slSort(&pslList, pslCmpMatches);
+if (sameString(sort, "query,start"))
+    {
+    slSort(&pslList, pslCmpQueryStart);
+    }
+else if (sameString(sort, "query,score"))
+    {
+    slSort(&pslList, pslCmpQueryScore);
+    }
+else if (sameString(sort, "score"))
+    {
+    slSort(&pslList, pslCmpScore);
+    }
+else if (sameString(sort, "chrom,start"))
+    {
+    slSort(&pslList, pslCmpTargetStart);
+    }
+else if (sameString(sort, "chrom,score"))
+    {
+    slSort(&pslList, pslCmpTargetScore);
+    }
+else
+    {
+    uglyf("DEFAULT<BR>\n");
+    slSort(&pslList, pslCmpQueryScore);
+    }
 printf("<TT><PRE>");
 printf(" QUERY       SCORE START END  TOTAL IDENTITY CHROMOSOME STRAND  START    END  \n");
 printf("--------------------------------------------------------------------------------\n");
@@ -183,11 +252,16 @@ else
 	    }
 	}
     }
+if (seqList != NULL && seqList->name[0] == 0)
+    {
+    freeMem(seqList->name);
+    seqList->name = cloneString("YourSeq");
+    }
 checkSeqNamesUniq(seqList);
 
 /* Figure out size allowed. */
 maxSingleSize = (isTx ? 4000 : 20000);
-maxTotalSize = maxSingleSize * 2;
+maxTotalSize = maxSingleSize * 2.5;
 
 /* Create temporary file to store sequence. */
 makeTempName(&faTn, "hgSs", ".fa");
@@ -216,8 +290,6 @@ else
 /* Loop through each sequence. */
 for (seq = seqList; seq != NULL; seq = seq->next)
     {
-    if (seq->name[0] == 0)
-	seq->name = cloneString("YourSeq");
     oneSize = realSeqSize(seq, !isTx);
     if (oneSize > maxSingleSize)
 	{
@@ -281,38 +353,44 @@ printf("%s",
 "<H1 ALIGN=CENTER>BLAT Search Human Genome</H1>\n"
 "<P>\n"
 "<TABLE BORDER=0 WIDTH=\"96%\">\n"
-"<TR>\n"
-"<TD WIDTH=\"50%\">Please paste in a query sequence to see where it is located in the ");
-printf("%s", "UCSC assembly\n"
-"of the human genome.</TD>\n");
-printf("%s", "<TD WIDTH=\"4%\"</TD>\n");
-printf("%s", "<TD WIDTH=\"16%\"<CENTER>\n");
+"<TR>\n");
+
+printf("%s", "<TD WIDTH=\"25%\"<CENTER>\n");
 printf("Freeze:<BR>");
 cgiMakeDropList("genome", genomeList, ArraySize(genomeList), serve->genome);
-printf("%s", "</TD><TD WIDTH=\"20%\"<CENTER>\n");
-printf("Query type<BR>");
+printf("%s", "</TD><TD WIDTH=\"25%\"<CENTER>\n");
+printf("Query type:<BR>");
 cgiMakeDropList("type", typeList, ArraySize(typeList), NULL);
+printf("%s", "</TD><TD WIDTH=\"25%\"<CENTER>\n");
+printf("Sort output:<BR>");
+cgiMakeDropList("sort", sortList, ArraySize(sortList), NULL);
 printf("%s", "</TD>\n");
+printf("%s", "<TD WIDTH=\"25%\">\n"
+    "<CENTER>\n"
+    "<P><INPUT TYPE=SUBMIT NAME=Submit VALUE=Submit>\n"
+    "</CENTER>\n"
+    "</TD>\n"
+    "</TR>\n"
+    "</TABLE>\n");
 
-printf("%s",
-"<TD WIDTH=\"10%\">\n"
-"<CENTER>\n"
-"<P><INPUT TYPE=SUBMIT NAME=Submit VALUE=Submit>\n"
-"</CENTER>\n"
-"</TD>\n"
-"</TR>\n"
-"</TABLE>\n"
-"<TEXTAREA NAME=userSeq ROWS=14 COLS=80></TEXTAREA>\n");
+puts("Please paste in a query sequence to see where it is located in the ");
+puts("UCSC assembly of the human genome.  Multiple sequences can be searched\n");
+puts("at once if separated by a line starting with > and the sequence name.\n");
+
+puts("<TEXTAREA NAME=userSeq ROWS=14 COLS=80></TEXTAREA>\n");
 
 
 cgiMakeHiddenVar("db", serve->db);
 
 printf("%s", 
-"<P>Only the first 20,000 bases of DNA sequence and the first 4000 bases of\n"
-"a protein sequence or translated DNA sequence will be used.  BLAT on DNA is designed to\n"
+"<P>Only DNA sequences less than 20,000 bases and protein or translated \n"
+"sequence of less than 4000 letters will be processed.  If multiple sequences\n"
+"are submitted at the same time, the total limit is 50,000 bases or 10,000\n"
+"letters.\n</P>"
+"BLAT on DNA is designed to\n"
 "quickly find sequences of 95% and greater similarity of length 40 bases or\n"
 "more.  It may miss more divergent or shorter sequence alignments.  It will find\n"
-"perfect sequence matches of 36 bases, and sometimes find them down to 24 bases.\n"
+"perfect sequence matches of 33 bases, and sometimes find them down to 22 bases.\n"
 "BLAT on proteins finds sequences of 80% and greater similarity of length 20 amino\n"
 "acids or more.  In practice DNA BLAT works well on primates, and protein\n"
 "blat on land vertebrates\n</P>"
