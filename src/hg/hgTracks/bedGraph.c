@@ -13,7 +13,7 @@
 #include "scoredRef.h"
 #include "customTrack.h"
 
-static char const rcsid[] = "$Id: bedGraph.c,v 1.3 2005/02/09 19:52:16 hiram Exp $";
+static char const rcsid[] = "$Id: bedGraph.c,v 1.4 2005/02/09 19:57:40 hiram Exp $";
 
 /*	bedGraphCartOptions structure - to carry cart options from
  *	bedGraphMethods to all the other methods via the
@@ -251,7 +251,6 @@ int graphColumn = 5;
 
 bedGraphCart = (struct bedGraphCartOptions *) tg->extraUiData;
 graphColumn = bedGraphCart->graphColumn;
-fprintf(stderr, "graphColumn: %d\n", graphColumn);
 
 /*	Verify this is NOT a custom track	*/
 if (tg->customPt != (void *)NULL)
@@ -271,7 +270,6 @@ if (colCount < graphColumn)
 
 /*	before loop, determine actual row[graphColumn] index */
 graphColumn += (rowOffset - 1);
-fprintf(stderr, "graphColumn: %d, colCount: %d\n", graphColumn, colCount);
 
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -295,7 +293,6 @@ while ((row = sqlNextRow(sr)) != NULL)
 	bg->name = cloneString(name);
 	}
     bg->dataValue = sqlFloat(row[graphColumn]);
-fprintf(stderr, "load Items: %d: %f\n", itemsLoaded, bg->dataValue);
     bg->graphUpperLimit = -1.0e+300; /* filled in by DrawItems	*/
     bg->graphLowerLimit = 1.0e+300; /* filled in by DrawItems	*/
     slAddHead(&bgList, bg);
