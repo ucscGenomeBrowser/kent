@@ -103,6 +103,7 @@ errAbort("paraHub - parasol hub server version %d\n"
 	 "    nextJobId=N  Starting job ID number\n"
 	 "    log=logFile Write a log to logFile. Use 'stdout' here for console\n"
 	 "    logFlush Flush log with every write\n"
+	 "    noResume  Don't try to reconnect with jobs running on nodes\n"
 	               ,
 	 version, initialSpokes, jobCheckPeriod, machineCheckPeriod
 	 );
@@ -690,21 +691,24 @@ for (rq = resultQueues; rq != NULL; rq = rq->next)
     }
 }
 
-void writeJobResults(struct job *job, time_t now, char *status,
-	char *uTime, char *sTime)
+
+void writeResults(char *fileName, char *userName, char *machineName,
+	int jobId, char *exe, time_t submitTime, time_t startTime,
+	char *errFile, char *cmd,
+	time_t now, char *status, char *uTime, char *sTime)
 /* Write out job results to output queue.  This
  * will create the output queue if it doesn't yet
  * exist. */
 {
 struct resultQueue *rq;
 for (rq = resultQueues; rq != NULL; rq = rq->next)
-    if (sameString(job->batch->name, rq->name))
+    if (sameString(fileName, rq->name))
         break;
 if (rq == NULL)
     {
     AllocVar(rq);
     slAddHead(&resultQueues, rq);
-    rq->name = job->batch->name;
+    rq->name = fileName;
     rq->f = fopen(rq->name, "a");
     if (rq->f == NULL)
         warn("hub: couldn't open results file %s", rq->name);
@@ -712,28 +716,35 @@ if (rq == NULL)
     }
 if (rq->f != NULL)
     {
-    char *machName;
-    if (job->machine != NULL)
-        machName = job->machine->name;
-    else
-        machName = "ghost";
     fprintf(rq->f, "%s %s %d %s %s %s %lu %lu %lu %s %s '%s'\n",
-        status, machName, job->id, job->exe, 
+        status, machineName, jobId, exe, 
 	uTime, sTime, 
-	job->submitTime, job->startTime, now,
-	job->batch->user->name, job->err, job->cmd);
-    if (sameString(status, "0"))
-	{
-        ++finishedJobCount;
-	++job->batch->doneCount;
-	}
-    else
-	{
-        ++crashedJobCount;
-	++job->batch->crashCount;
-	}
+	submitTime, startTime, now,
+	userName, errFile, cmd);
     rq->lastUsed = now;
     }
+}
+
+void writeJobResults(struct job *job, time_t now, char *status,
+	char *uTime, char *sTime)
+/* Write out job results to output queue.  This
+ * will create the output queue if it doesn't yet
+ * exist. */
+{
+if (sameString(status, "0"))
+    {
+    ++finishedJobCount;
+    ++job->batch->doneCount;
+    }
+else
+    {
+    ++crashedJobCount;
+    ++job->batch->crashCount;
+    }
+writeResults(job->batch->name, job->batch->user->name, job->machine->name,
+	job->id, job->exe, job->submitTime, 
+	job->startTime, job->err, job->cmd,
+	now, status, uTime, sTime);
 }
 
 void resultQueueFree(struct resultQueue **pRq)
@@ -1100,11 +1111,11 @@ void jobDone(char *line)
 /* Handle job is done message. */
 {
 struct job *job;
-char *id, *status, *uTime, *sTime, *tTime;
-id = nextWord(&line);
-status = nextWord(&line);
-uTime = nextWord(&line);
-sTime = nextWord(&line);
+char *id = nextWord(&line);
+char *status = nextWord(&line);
+char *uTime = nextWord(&line);
+char *sTime = nextWord(&line);
+
 if (sTime != NULL)
     {
     job = jobFind(runningJobs, atoi(id));
@@ -1614,7 +1625,8 @@ while (lineFileNext(lf, &line, NULL))
 lineFileClose(&lf);
 }
 
-struct existingResults *getExistingResults(char *fileName, struct hash *erHash)
+struct existingResults *getExistingResults(char *fileName, struct hash *erHash,
+	struct existingResults **pErList)
 /* Get results from hash if we've seen them before, otherwise
  * read them in, save in hash, and return them. */
 {
@@ -1622,6 +1634,7 @@ struct existingResults *er = hashFindVal(erHash, fileName);
 if (er == NULL)
     {
     AllocVar(er);
+    slAddHead(pErList, er);
     hashAddSaveName(erHash, fileName, er, &er->fileName);
     er->hash = newHash(18);
     readResults(fileName, er->hash);
@@ -1675,6 +1688,45 @@ void pljErr(struct multiMachine *mm, int no)
 warn("%s: truncated listJobs response %d\n", mm->name, no);
 }
 
+void getExeOnly(char *command, char exe[256])
+/* Extract executable file (not including path) from command line. */
+{
+/* Extract name of executable file with no path. */
+char *dupeCommand = cloneString(command);
+char *exePath = firstWordInLine(dupeCommand);
+char exeFile[128], exeExt[64];
+splitPath(exePath, NULL, exeFile, exeExt);
+sprintf(exe, "%s%s", exeFile, exeExt);
+freez(&dupeCommand);
+}
+
+void writeExistingResults(char *fileName, char *line, struct machine *mach, 
+	struct runJobMessage *rjm)
+{
+char err[512], exe[256];
+int jobId = atoi(rjm->jobIdString);
+time_t now = time(NULL);
+char *status = nextWord(&line);
+char *uTime = nextWord(&line);
+char *sTime = nextWord(&line);
+
+if (sTime == NULL)
+    {
+    warn("Bad line format in writeExistingResults for %s", mach->name);
+    return;
+    }
+
+
+getExeOnly(rjm->command, exe);
+fillInErrFile(err, jobId, mach->tempDir);
+fileName = hashStoreName(stringHash, fileName);
+
+writeResults(fileName, rjm->user, mach->name, 
+	jobId, exe, now, now,
+	err, rjm->command, 
+	now, status, uTime, sTime);
+}
+
 boolean processListJobs(struct multiMachine *mm,
 	int sd, struct hash *erHash, struct existingResults **pErList,
 	int *pRunning, int *pFinished)
@@ -1692,9 +1744,8 @@ boolean processListJobs(struct multiMachine *mm,
 char *line;
 int running, recent, i, finCount = 0;
 struct runJobMessage rjm;
-char resultsFile[512];
+char resultsFile[512], *resultsFileString;
 
-uglyf("ProcessListJobs %s\n", mm->name);
 if ((line = netGetLongString(sd)) == NULL)
     {
     warn("%s: no listJobs response", mm->name);
@@ -1730,27 +1781,37 @@ recent = atoi(line);
 freez(&line);
 for (i=0; i<recent; ++i)
     {
-    line = netGetLongString(sd);
-    if (line == NULL)
+    struct existingResults *er;
+    char *startLine = NULL, *doneLine = NULL;
+    startLine = netGetLongString(sd);
+    if (startLine == NULL)
         {
 	pljErr(mm, 3);
 	return FALSE;
 	}
-    if (!parseRunJobMessage(line, &rjm))
+    if (!parseRunJobMessage(startLine, &rjm))
         {
 	pljErr(mm, 6);
-	freez(&line);
+	freez(&startLine);
 	return FALSE;
 	}
-    freez(&line);
-    line = netGetLongString(sd);
-    if (line == NULL)
+    doneLine = netGetLongString(sd);
+    if (doneLine == NULL)
         {
 	pljErr(mm, 4);
+	freez(&startLine);
 	return FALSE;
 	}
-    /* ~~~ Cope with finished jobs here */
-    freez(&line);
+    snprintf(resultsFile, sizeof(resultsFile), "%s/%s", rjm.dir, "para.results");
+    er = getExistingResults(resultsFile, erHash, pErList);
+    if (!hashLookup(er->hash, rjm.jobIdString))
+        {
+	struct machine *mach = mm->cpuList->val;
+	writeExistingResults(resultsFile, doneLine, mach, &rjm);
+	++finCount;
+	}
+    freez(&startLine);
+    freez(&doneLine);
     }
 *pFinished += finCount;
 return TRUE;
@@ -1772,6 +1833,7 @@ printf("Checking for jobs already running on nodes\n");
 for (mach = machineList; mach != NULL; mach = mach->next)
     {
     mm = hashFindVal(mmHash, mach->name);
+    mach->lastChecked = now;
     if (mm == NULL)
         {
 	AllocVar(mm);
@@ -1838,7 +1900,8 @@ if (socketHandle < 0)
 openJobId();
 printf("Starting paraHub. Next job ID is %d.\n", nextJobId);
 
-checkForJobsOnNodes();
+if (!optionExists("noResume"))
+    checkForJobsOnNodes();
 
 /* Bump up our priority to just shy of real-time. */
 nice(-40);

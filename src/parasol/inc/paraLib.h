@@ -51,5 +51,8 @@ struct runJobMessage
 boolean parseRunJobMessage(char *line, struct runJobMessage *rjm);
 /* Parse runJobMessage as paraNodes sees it. */
 
+void fillInErrFile(char errFile[512], int jobId, char *tempDir);
+/* Fill in error file name */
+
 #endif /* PARALIB_H */
 

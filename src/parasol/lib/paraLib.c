@@ -69,6 +69,13 @@ if (!ret)
 return ret;
 }
 
+void fillInErrFile(char errFile[512], int jobId, char *tempDir )
+/* Fill in error file name */
+{
+sprintf(errFile, "%s/para%d.err", tempDir, jobId);
+}
+
+
 static FILE *logFile = NULL;  /* Log file - if NULL no logging. */
 static boolean logFlush;
 
