@@ -24,7 +24,7 @@
 #define CDS_HELP_PAGE "../goldenPath/help/hgCodonColoring.html"
 #define CDS_MRNA_HELP_PAGE "../goldenPath/help/hgCodonColoringMrna.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.169 2005/01/31 23:33:16 angie Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.170 2005/02/01 20:22:01 angie Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -920,10 +920,14 @@ puts("<TABLE>");
 slSort(&(tdb->subtracks), trackDbCmp);
 for (subtrack = tdb->subtracks; subtrack != NULL; subtrack = subtrack->next)
     {
+    boolean alreadySet = FALSE;
     puts("<TR>");
     puts("<TD>");
     safef(option, sizeof(option), "%s", subtrack->tableName);
-    cgiMakeCheckBox(option, cartUsualBoolean(cart, option, TRUE));
+    alreadySet = cartUsualBoolean(cart, option,
+				  (subtrack->visibility != tvHide));
+    cgiMakeCheckBox(option, alreadySet);
+		    
     printf ("%s", subtrack->longLabel);
     puts("</TD>");
     puts("</TR>");
