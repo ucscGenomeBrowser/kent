@@ -10,9 +10,11 @@
 #include "jksql.h"
 #include "genePred.h"
 
-static char const rcsid[] = "$Id: ldHgGene.c,v 1.13 2003/12/19 19:12:39 braney Exp $";
+static char const rcsid[] = "$Id: ldHgGene.c,v 1.15 2004/01/16 01:36:59 markd Exp $";
 
 char *exonType = "exon";	/* Type field that signifies exons. */
+boolean requireCDS = FALSE;     /* should genes with CDS be dropped */
+char *outFile = NULL;	        /* Output file as alternative to database. */
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -22,6 +24,8 @@ static struct optionSpec optionSpecs[] = {
     {"nonCoding", OPTION_BOOLEAN},
     {"gtf", OPTION_BOOLEAN},
     {"predTab", OPTION_BOOLEAN},
+    {"requireCDS", OPTION_BOOLEAN},
+    {"out", OPTION_STRING},
     {NULL, 0}
 };
 
@@ -36,7 +40,10 @@ errAbort(
     "     -oldTable    Don't overwrite what's already in table\n"
     "     -noncoding   Forces whole prediction to be UTR\n"
     "     -gtf         input is GTF, stop codon is not in CDS\n"
-    "     -predTab     input is already in genePredTab format (one file only)\n");
+    "     -predTab     input is already in genePredTab format (one file only)\n"
+    "     -requireCDS  discard genes that don't have CDS annotation\n"
+    "     -out=gpfile  write output, in genePred format, instead of loading\n"
+    "                  table. Database is ignored.\n");
 }
 
 char *createString = 
@@ -141,20 +148,27 @@ for (group = gff->groupList; group != NULL; group = group->next)
 	{
 	if (nonCoding)
 	    gp->cdsStart = gp->cdsEnd = 0;
-	slAddHead(&gpList, gp);
+        if (requireCDS && (gp->cdsStart == gp->cdsEnd))
+            genePredFree(&gp);
+        else
+            slAddHead(&gpList, gp);
 	}
     }
 printf("%d gene predictions\n", slCount(gpList));
 slSort(&gpList, genePredCmp);
 
 /* Create tab-delimited file. */
-f = mustOpen(tabName, "w");
+if (outFile != NULL)
+    f = mustOpen(outFile, "w");
+else
+    f = mustOpen(tabName, "w");
 for (gp = gpList; gp != NULL; gp = gp->next)
     {
     genePredTabOut(gp, f);
     }
-fclose(f);
-loadIntoDatabase(database, table, tabName);
+carefulClose(&f);
+if (outFile == NULL)
+    loadIntoDatabase(database, table, tabName);
 }
 
 int main(int argc, char *argv[])
@@ -166,6 +180,8 @@ if (argc < 3)
 if (optionExists("exon") && optionExists("gtf"))
     errAbort("can't specify -exon= with -gtf");
 exonType = optionVal("exon", exonType);
+outFile = optionVal("out", NULL);
+requireCDS = optionExists("requireCDS");
 if (optionExists("predTab"))
     loadIntoDatabase(argv[1], argv[2], argv[3]);
 else

@@ -150,7 +150,7 @@ sr  = sqlMustGetResult(conn, query);
 row = sqlNextRow(sr);
 if (row != NULL)
     {
-    seq	= strdup(row[0]);
+    seq	= cloneString(row[0]);
     len = strlen(seq);
     chp = seq;
     for (i=0; i<len; i++)
@@ -237,20 +237,20 @@ if (row == NULL)
     errAbort("%s does not have Exon info\n", proteinID);
     }
 
-qNameStr        = strdup(row[0]);
-qSizeStr        = strdup(row[1]);
-qStartStr       = strdup(row[2]);
-qEndStr         = strdup(row[3]);
-tNameStr        = strdup(row[4]);
-tSizeStr        = strdup(row[5]);
-tStartStr       = strdup(row[6]);
-tEndStr         = strdup(row[7]);
-blockCountStr   = strdup(row[8]);
-blockSizesStr   = strdup(row[9]);
-qStartsStr      = strdup(row[10]);
-tStartsStr      = strdup(row[11]);
+qNameStr        = cloneString(row[0]);
+qSizeStr        = cloneString(row[1]);
+qStartStr       = cloneString(row[2]);
+qEndStr         = cloneString(row[3]);
+tNameStr        = cloneString(row[4]);
+tSizeStr        = cloneString(row[5]);
+tStartStr       = cloneString(row[6]);
+tEndStr         = cloneString(row[7]);
+blockCountStr   = cloneString(row[8]);
+blockSizesStr   = cloneString(row[9]);
+qStartsStr      = cloneString(row[10]);
+tStartsStr      = cloneString(row[11]);
 
-strand          = strdup(row[12]);
+strand          = cloneString(row[12]);
 
 if (!((strand[0] == '+') || (strand[0] == '-')) || (strand[1] != '\0') ) 
    errAbort("wrong strand '%s' encountered in getExon(), aborting ...", strand);
@@ -338,6 +338,8 @@ l =strlen(aa);
 
 hPrintf("<pre>");
 
+hPrintf("Total amino acids: %d\n", strlen(aa));
+hPrintf("\n");
 hPrintf(">%s|%s|%s", proteinID, protDisplayID, description);
 
 chp = aa;
@@ -348,9 +350,7 @@ for (i=0; i<l; i++)
     hPrintf("%c", *chp);
     chp++;
     }
-hPrintf("\n\n");
 
-hPrintf("Total amino acids: %d\n", strlen(aa));
 hPrintf("</pre>");
 }
 
@@ -442,7 +442,6 @@ for (i=istart; i<=iend; i++)
     il++;
     if (il == 50) 
 	{
-	//hPrintf("<br>");
 	il = 0;
 	}
     }
@@ -457,36 +456,36 @@ void doGenomeBrowserLink(char *protDisplayID, char *mrnaID)
 hPrintf("\n<B>UCSC Genome Browser: </B> ");
 if (mrnaID != NULL)
     {
-    hPrintf("<A HREF=\"../cgi-bin/hgTracks?position=%s&db=%s\"", mrnaID, database);
+    hPrintf("<A HREF=\"../cgi-bin/hgTracks?position=%s&db=%s&hgsid=%s\"", mrnaID, database, hgsid);
     }
 else
     {
-    hPrintf("<A HREF=\"../cgi-bin/hgTracks?position=%s&db=%s\"", protDisplayID, database);
+    hPrintf("<A HREF=\"../cgi-bin/hgTracks?position=%s&db=%s&hgsid=%s\"", protDisplayID, database, hgsid);
     }
-hPrintf("TARGET=_BLANK>%s</A>&nbsp<BR>\n", mrnaID);
+hPrintf(" TARGET=_BLANK>%s</A>&nbsp\n", mrnaID);
 }
 
 void doFamilyBrowserLink(char *protDisplayID, char *mrnaID)
 {
-hPrintf("\n<B>UCSC Gene Family Browser: </B> ");
+hPrintf("\n<B>Family Browser: </B> ");
 if (mrnaID != NULL)
     {
-    hPrintf("<A HREF=\"../cgi-bin/hgNear?near_search=%s\"", mrnaID);
+    hPrintf("<A HREF=\"../cgi-bin/hgNear?near_search=%s&hgsid=%s\"", mrnaID, hgsid);
     }
 else
     {
-    hPrintf("<A HREF=\"../cgi-bin/hgNear?near_search=%s\"", protDisplayID);
+    hPrintf("<A HREF=\"../cgi-bin/hgNear?near_search=%s&hgsid=%s\"", protDisplayID, hgsid);
     }
-hPrintf("TARGET=_BLANK>%s</A>&nbsp<BR>\n", mrnaID);
+hPrintf(" TARGET=_BLANK>%s</A>&nbsp<BR>\n", mrnaID);
 }
 
 void doGeneDetailsLink(char *protDisplayID, char *mrnaID)
 {
 if (mrnaID != NULL)
     {
-    hPrintf("\n<B>UCSC Gene Details Page: </B> ");
-    hPrintf("<A HREF=\"../cgi-bin/hgGene?hgg_gene=%s\"", mrnaID);
-    hPrintf("TARGET=_BLANK>%s</A>&nbsp<BR>\n", mrnaID);
+    hPrintf("\n<B>Gene Details Page: </B> ");
+    hPrintf("<A HREF=\"../cgi-bin/hgGene?hgg_gene=%s&hgsid=%s\"", mrnaID, hgsid);
+    hPrintf(" TARGET=_BLANK>%s</A>&nbsp\n", mrnaID);
     }
 }
 
@@ -538,19 +537,19 @@ if (sqlTableExists(conn, "cgapBiocPathway"))
 	    {
 	    if (!hasPathway)
 	        {
-	        printf("<B>Pathways</B><UL>");
+	        hPrintf("<B>Pathways</B><UL>");
 	        hasPathway = TRUE;
 	    	}
 	    }
     	while (row != NULL)
 	    {
 	    biocMapID = row[0];
-	    printf("<LI><B>BioCarta:&nbsp</B>");
+	    hPrintf("<LI><B>BioCarta:&nbsp</B>");
 	    sprintf(cond_str, "mapID=%c%s%c", '\'', biocMapID, '\'');
 	    mapDescription = sqlGetField(conn2, database, "cgapBiocDesc", "description",cond_str);
-	    printf("<A HREF = \"");
-	    printf("http://cgap.nci.nih.gov/Pathways/BioCarta/%s", biocMapID);
-	    printf("\" TARGET=_blank>%s</A> %s </LI>\n", biocMapID, mapDescription);
+	    hPrintf("<A HREF = \"");
+	    hPrintf("http://cgap.nci.nih.gov/Pathways/BioCarta/%s", biocMapID);
+	    hPrintf("\" TARGET=_blank>%s</A> %s </LI>\n", biocMapID, mapDescription);
 	    row = sqlNextRow(sr);
 	    }
         sqlFreeResult(&sr);
@@ -567,19 +566,19 @@ if (sqlTableExists(conn, "keggPathway"))
 	{
 	if (!hasPathway)
 	    {
-	    printf("<B>Pathways</B><UL>");
+	    hPrintf("<B>Pathways</B><UL>");
 	    hasPathway = TRUE;
 	    }
         while (row != NULL)
             {
             locusID = row[1];
 	    mapID   = row[2];
-	    printf("<LI><B>KEGG:&nbsp</B>");
+	    hPrintf("<LI><B>KEGG:&nbsp</B>");
 	    sprintf(cond_str, "mapID=%c%s%c", '\'', mapID, '\'');
 	    mapDescription = sqlGetField(conn2, database, "keggMapDesc", "description", cond_str);
-	    printf("<A HREF = \"");
-	    printf("http://www.genome.ad.jp/dbget-bin/show_pathway?%s+%s", mapID, locusID);
-	    printf("\" TARGET=_blank>%s</A> %s </LI>\n",mapID, mapDescription);
+	    hPrintf("<A HREF = \"");
+	    hPrintf("http://www.genome.ad.jp/dbget-bin/show_pathway?%s+%s", mapID, locusID);
+	    hPrintf("\" TARGET=_blank>%s</A> %s </LI>\n",mapID, mapDescription);
             row = sqlNextRow(sr);
 	    }
 	}
@@ -596,20 +595,21 @@ if (sqlTableExists(conn, "bioCycPathway"))
 	{
 	if (!hasPathway)
 	    {
-	    printf("<BR><B>Pathways</B><UL>");
+	    hPrintf("<BR><B>Pathways</B><UL>");
 	    hasPathway = TRUE;
 	    }
         while (row != NULL)
             {
             geneID  = row[1];
 	    mapID   = row[2];
-	    printf("<LI><B>BioCyc:&nbsp</B>");
+	    hPrintf("<LI><B>BioCyc:&nbsp</B>");
 	    sprintf(cond_str, "mapID=%c%s%c", '\'', mapID, '\'');
 	    mapDescription = sqlGetField(conn2, database, "bioCycMapDesc", "description", cond_str);
-	    printf("<A HREF = \"");
-	    printf("http://biocyc.org:1555/HUMAN/new-image?type=PATHWAY&object=%s&detail-level=2",
+	    hPrintf("<A HREF = \"");
+
+	    hPrintf("http://biocyc.org:1555/HUMAN/new-image?type=PATHWAY&object=%s&detail-level=2",
 		   mapID);
-	    printf("\" TARGET=_blank>%s</A> %s </LI>\n",mapID, mapDescription);
+	    hPrintf("\" TARGET=_blank>%s</A> %s </LI>\n",mapID, mapDescription);
             row = sqlNextRow(sr);
 	    }
 	}
@@ -618,7 +618,7 @@ if (sqlTableExists(conn, "bioCycPathway"))
 
 if (hasPathway)
     {
-    printf("</UL>\n");
+    hPrintf("</UL>\n");
     }
 
 hFreeConn(&conn);

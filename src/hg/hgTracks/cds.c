@@ -27,7 +27,7 @@ static void drawScaledBoxSampleWithText(struct vGfx *vg,
 drawScaledBoxSample(vg, chromStart, chromEnd, scale, xOff, y, height, color, score);
 
 /*draw text in box if space, and align properly for codons or DNA*/
-if(zoomed)
+if (zoomed)
     {
     int i;
     int x1, x2, w;
@@ -43,17 +43,17 @@ if(zoomed)
         w = 1;
 
 
-    if(chromEnd - chromStart < 3)
+    if (chromEnd - chromStart < 3)
         spreadString(vg,x1,y,w,height,cdsColor[CDS_PARTIAL_CODON],font,text,strlen(text));
-    else if(chromEnd - chromStart == 3)
-    {
+    else if (chromEnd - chromStart == 3)
+        {
         spreadString(vg,x1,y,w,height,textColor,font,text,strlen(text));
-    }
+        }
     else
         {
         int thisX,thisX2;
         char c[2];
-        for(i=0; i<strlen(text); i++)
+        for (i=0; i<strlen(text); i++)
             {
             sprintf(c,"%c",text[i]);
             thisX = round((double)(chromStart+i-winStart)*scale) + xOff;
@@ -66,7 +66,7 @@ if(zoomed)
 //now draw the box itself
 }
 
-int convertCoordUsingPsl( int s, struct psl *psl )
+static int convertCoordUsingPsl( int s, struct psl *psl )
 /*return query position corresponding to target position in one 
  * of the coding blocks of a psl file, or return -1 if target position
  * is not in a coding exon of this psl entry or if the psl entry is
@@ -79,31 +79,31 @@ int convertCoordUsingPsl( int s, struct psl *psl )
     unsigned *blockSizes = psl->blockSizes;
 
 
-    if(psl == NULL)
+    if (psl == NULL)
         errAbort("Cannot find psl entry associated with refGene %s<br>\n",psl->qName);
 
-    if( s < psl->tStart || s >= psl->tEnd )
+    if (s < psl->tStart || s >= psl->tEnd)
         errAbort("Position %d is outside of this psl entry (%d-%d).<br>\n",s,psl->qStart,psl->qEnd);
 
-    for( i=0; i<psl->blockCount; i++ )
-    {
-        if(s < tStarts[i] + blockSizes[i] && s >= tStarts[i])
+    for ( i=0; i<psl->blockCount; i++ )
         {
+        if (s < tStarts[i] + blockSizes[i] && s >= tStarts[i])
+            {
             idx = i;
             break;
+            }
         }
-    }
 
-    if(idx < 0)
-    {
-       // errAbort("Position %d is not in coding exon of psl entry for %s.<br>\n",s,psl->qName);
-       return(-1);
-    }
+    if (idx < 0)
+        {
+        // errAbort("Position %d is not in coding exon of psl entry for %s.<br>\n",s,psl->qName);
+        return(-1);
+        }
 
     return(qStarts[idx] + (s - tStarts[idx]));
 }
 
-void getCodonDna(char *retStr, char *chrom, int n, unsigned *exonStarts, unsigned *exonEnds, 
+static void getCodonDna(char *retStr, char *chrom, int n, unsigned *exonStarts, unsigned *exonEnds, 
         int exonCount, unsigned cdsStart, unsigned cdsEnd, int startI, boolean reverse, 
         struct dnaSeq *mrnaSeq)
 //get n bases from coding exons only.
@@ -116,92 +116,94 @@ void getCodonDna(char *retStr, char *chrom, int n, unsigned *exonStarts, unsigne
 
    //uglyf("n = %d, startI = %d<br>\n", n, startI );
 
-   if(!reverse)
-   {
+   if (!reverse)
+       {
    
-     thisN = 0;
-     //move to next block start
-     i = startI+1;
-     while( thisN < n )
-     {
+       thisN = 0;
+       //move to next block start
+       i = startI+1;
+       while (thisN < n)
+           {
 
-        if( i >= exonCount )
-        {
-            //uglyf("Already on last block\n");
-            return;
-        }
+           if (i >= exonCount)
+               {
+               //uglyf("Already on last block\n");
+               break;
+               }
 
-        theStart = exonStarts[i];
-        theEnd = exonEnds[i];
-        if( cdsStart > 0 && theStart < cdsStart )
-           theStart = cdsStart;
+           theStart = exonStarts[i];
+           theEnd = exonEnds[i];
+           if (cdsStart > 0 && theStart < cdsStart)
+               theStart = cdsStart;
 
-        if( cdsEnd > 0 && theEnd > cdsEnd )
-           theEnd = cdsEnd;
+           if (cdsEnd > 0 && theEnd > cdsEnd)
+               theEnd = cdsEnd;
            
-        for(j=0; j<(theEnd - theStart); j++ )
-        {
-            if(mrnaSeq != NULL)
-                retStr[thisN] = mrnaSeq->dna[theStart+j];
-            else
-                retStr[thisN] = hDnaFromSeq( chrom, theStart+j, theStart+j+1, dnaUpper)->dna[0];
-            thisN++;
-            if(thisN >= n) 
-                break;
-        }
-        i++;
-     }
-   }
+           for (j=0; j<(theEnd - theStart); j++)
+               {
+               if (mrnaSeq != NULL)
+                   retStr[thisN] = mrnaSeq->dna[theStart+j];
+               else
+                   retStr[thisN] = hDnaFromSeq( chrom, 
+                           theStart+j, theStart+j+1, dnaUpper)->dna[0];
+               thisN++;
+               if (thisN >= n) 
+                   break;
+               }
+           i++;
+           }
+           retStr[thisN] = '\0';
+       
+       }
    else
-   {
-     
-     thisN = n;
-     //move to previous block end
-     i = startI-1;
-     while(thisN > 0)
-     {
+       {
+       retStr[n] = '\0';
+       thisN = n-1;
+       //move to previous block end
+       i = startI-1;
+       while(thisN >= 0)
+           {
 
-        if( i < 0 )
-        {
-            //uglyf("Neg. Strand: Already on first block\n");
-            return;
-        }
+           if (i < 0)
+               {
+               //uglyf("Neg. Strand: Already on first block\n");
+               break;
+               }
 
-        theStart = exonStarts[i];
-        theEnd = exonEnds[i];
-        if( theStart < cdsStart )
-           theStart = cdsStart;
+           theStart = exonStarts[i];
+           theEnd = exonEnds[i];
+           if (theStart < cdsStart)
+               theStart = cdsStart;
 
-        if( theEnd > cdsEnd )
-           theEnd = cdsEnd;
+           if (theEnd > cdsEnd)
+               theEnd = cdsEnd;
            
-        for(j=0; j<(theEnd - theStart); j++ )
-        {
-            if(mrnaSeq != NULL)
-                retStr[thisN] = mrnaSeq->dna[theEnd-j-1];
-            else
-                retStr[thisN] = hDnaFromSeq( chrom, theEnd-j-1, theEnd-j, dnaUpper)->dna[0];
-            thisN--;
-            if(thisN <= 0) 
-                break;
-        }
-        i--;
-     }
-
-   }
-
+           for (j=0; j<(theEnd - theStart); j++)
+               {
+               if (mrnaSeq != NULL)
+                   retStr[thisN] = mrnaSeq->dna[theEnd-j-1];
+               else
+                   retStr[thisN] = hDnaFromSeq( chrom, 
+                          theEnd-j-1, theEnd-j, dnaUpper)->dna[0];
+               thisN--;
+               if (thisN < 0) 
+                   break;
+               }
+               i--;
+           }
+       }
 }
 
 
 
-void maskDiffString( char *retStr, char *s1, char *s2, char mask )
+static void maskDiffString( char *retStr, char *s1, char *s2, char mask )
 /*copies s1, masking off similar characters, and returns result into retStr.
  *if strings are of different size it stops after s1 is done.*/
 {
     int i;
-    for(i=0; i<strlen(s1); i++)
+    for (i=0; i<strlen(s1); i++)
     {
-        if( s1[i] == s2[i] )
+        if (s1[i] == s2[i])
             retStr[i] = mask;
         else 
             retStr[i] = s1[i];
@@ -212,34 +214,34 @@ void maskDiffString( char *retStr, char *s1, char *s2, char mask )
 }
 
 
-Color colorFromGrayIx(char *codon, int grayIx, Color *cdsColor)
+static Color colorFromGrayIx(char *codon, int grayIx, Color *cdsColor)
 /*convert grayIx value to color and codon which
  * are both encoded in the grayIx*/
 {
     Color color = cdsColor[CDS_ERROR];
     sprintf(codon,"X");
-    if( grayIx == -2 )
+    if (grayIx == -2)
     {
         color = cdsColor[CDS_ERROR];
         sprintf(codon,"X");
     }
-    else if( grayIx == -1 )
+    else if (grayIx == -1)
     {
         color = cdsColor[CDS_START];
         sprintf(codon,"M");
     }
-    else if( grayIx == -3 )
+    else if (grayIx == -3)
     {
         color = cdsColor[CDS_STOP];
         sprintf(codon,"*");
         //uglyf("%c, %d: codon = %s<br>\n", lookupCodonByPosition(chromName,s,e),grayIx, codon );
     }
-    else if( grayIx <= 26 )
+    else if (grayIx <= 26)
     {
         color = cdsColor[CDS_ODD];
         sprintf(codon,"%c",grayIx + 'A' - 1);
     }
-    else if( grayIx > 26 )
+    else if (grayIx > 26)
     {
         color = cdsColor[CDS_EVEN];
         sprintf(codon,"%c",grayIx - 26 + 'A' - 1);
@@ -247,31 +249,31 @@ Color colorFromGrayIx(char *codon, int grayIx, Color *cdsColor)
 return color;
 }
 
-int setColorByCds(DNA *dna, int codon, boolean *foundStart, boolean reverse)
+static int setColorByCds(DNA *dna, int codon, boolean *foundStart, boolean reverse)
 {
  char codonChar;
 
  //uglyf("        [%s]<br>\n",dna);
- if(reverse)
+ if (reverse)
      reverseComplement(dna,strlen(dna));
  codonChar = lookupCodon(dna);
- if( codonChar == 0 )
+ if (codonChar == 0)
      return(-3);    //stop codon
- else if( codonChar == 'X' )
+ else if (codonChar == 'X')
      return(-2);     //bad input to lookupCodon
- else if(codonChar == 'M' && !(*foundStart) )
- {
+ else if (codonChar == 'M' && !(*foundStart))
+     {
      *foundStart = TRUE;
      return(-1);     //start codon
- }
- else if( codon == 0 )
+     }
+ else if (codon == 0)
      return(codonChar - 'A' + 1);       //odd color
  else
      return(codonChar - 'A' + 1 + 26);  //even color
 }
 
 
-void mustGetMrnaStartStop( char *acc, unsigned *cdsStart, unsigned *cdsEnd )
+static void mustGetMrnaStartStop( char *acc, unsigned *cdsStart, unsigned *cdsEnd )
 {
 	char query[256];
 	struct sqlConnection *conn;
@@ -283,25 +285,25 @@ void mustGetMrnaStartStop( char *acc, unsigned *cdsStart, unsigned *cdsEnd )
 	sprintf(query, "select cds from mrna where acc = '%s'", acc);
 	sr = sqlGetResult(conn, query);
 	assert((row = sqlNextRow(sr)) != NULL);
-       	sprintf(query, "select name from cds where id = '%d'", atoi(row[0]));
-    	sqlFreeResult(&sr);
-       	sr = sqlGetResult(conn, query);
-    	assert((row = sqlNextRow(sr)) != NULL);
-        genbankParseCds(row[0], cdsStart, cdsEnd);
+   	sprintf(query, "select name from cds where id = '%d'", atoi(row[0]));
+   	sqlFreeResult(&sr);
+    sr = sqlGetResult(conn, query);
+   	assert((row = sqlNextRow(sr)) != NULL);
+    genbankParseCds(row[0], cdsStart, cdsEnd);
 	sqlFreeResult(&sr);
     hFreeConn(&conn);
 }
 
-void getHiddenGaps(struct psl *psl, unsigned *gaps)
+static void getHiddenGaps(struct psl *psl, unsigned *gaps)
     /*only for positive strand right now*/
 {
     int i;
     gaps[0] = psl->qStarts[0] - psl->qStart;
-    for(i=1; i<psl->blockCount; i++)
-    {
+    for (i=1; i<psl->blockCount; i++)
+        {
         gaps[i] = psl->qStarts[i] - 
             (psl->qStarts[i-1] + psl->blockSizes[i-1]);
-    }
+        }
     gaps[psl->blockCount] = psl->qSize - 
         (psl->qStarts[psl->blockCount-1] + psl->blockSizes[psl->blockCount-1]);
 }
@@ -309,7 +311,7 @@ void getHiddenGaps(struct psl *psl, unsigned *gaps)
 
 
 
-struct simpleFeature *splitPslByCodon(char *chrom, struct linkedFeatures *lf, 
+static struct simpleFeature *splitPslByCodon(char *chrom, struct linkedFeatures *lf, 
         struct psl *psl, int sizeMul, boolean isXeno, int maxShade)
 {
 unsigned  *starts = psl->tStarts;
@@ -327,7 +329,7 @@ mustGetMrnaStartStop(psl->qName, &cdsStart, &cdsEnd);
 gp = genePredFromPsl( psl, cdsStart, cdsEnd, -1);
 
 //make CDS beginning and end of genePred if not in Genbank
-if(gp->cdsStart == gp->cdsEnd)
+if (gp->cdsStart == gp->cdsEnd)
     {
     gp->cdsStart = gp->txStart;
     gp->cdsEnd = gp->txEnd;
@@ -357,6 +359,12 @@ return(sfList);
 
 void lfSplitByCodonFromPslX(char *chromName, struct linkedFeatures *lf, 
         struct psl *psl, int sizeMul, boolean isXeno, int maxShade)
+/*divide a pslX record into a linkedFeature, where each simple feature
+ * is a 3-base codon (or a partial codon if on a boundary). Uses
+ * GenBank to get the CDS start/stop of the psl record and also grabs
+ * the sequence. This takes care of hidden gaps in the alignment, that
+ * alter the frame. Therefore this function relies on the mRNA
+ * sequence (rather than the genomic) to determine the frame.*/
 {
     unsigned tallStart, tallEnd;
     struct simpleFeature *sfList = NULL;
@@ -373,17 +381,19 @@ void lfSplitByCodonFromPslX(char *chromName, struct linkedFeatures *lf,
 
 
 int getCdsDrawOptionNum(char *mapName)
+/*query the cart for the current track's CDS coloring option. See
+ * cdsColors.h for return value meanings*/
 {
     char *drawOption = NULL;
     char optionStr[128];
-    snprintf( optionStr, 128,"%s.cds.draw", mapName);
+    safef(optionStr, 128,"%s.cds.draw", mapName);
     drawOption = cartUsualString(cart, optionStr, CDS_DRAW_DEFAULT);
     return(cdsColorStringToEnum(drawOption));
 }
 
 
 
-char lookupCodonByPosition(char *chrom, int start, int end )
+static char lookupCodonByPosition(char *chrom, int start, int end )
         /*Simple wrapper for lookupCodon based on genomic position in
          *      * current database rather that given DNA*/
 {
@@ -391,7 +401,8 @@ char lookupCodonByPosition(char *chrom, int start, int end )
 }
 
 
-struct psl *genePredLookupPsl(char *db, char *chrom, struct linkedFeatures* lf, char *pslTable )
+static struct psl *genePredLookupPsl(char *db, char *chrom, struct linkedFeatures* lf, 
+        char *pslTable ) 
 /*get the psl entry associated with this genePred entry (NOT a
 conversion, must be in pslTable.*/
 {
@@ -403,30 +414,30 @@ struct psl *psl = NULL;
 struct sqlResult *sr = NULL;
 struct sqlConnection *conn2 = sqlConnect(db);
 
-snprintf(rest, 64, "qName='%s'", lf->name );
+safef(rest, 64, "qName='%s'", lf->name );
 sr = hRangeQuery(conn2, pslTable, chromName, lf->start, lf->end, rest, &rowOffset);
 if ((row = sqlNextRow(sr)) != NULL)
     psl = pslLoad(row+rowOffset);
 sqlFreeResult(&sr);
 sqlDisconnect(&conn2);
 
-if(psl == NULL)
-{
+if (psl == NULL)
+    {
     uglyf("Cannot Find psl for %s\n<br>", lf->name );
-}
+    }
 
 return psl;
 }
 
-struct dnaSeq *mustGetSeqUpper(char *name, char *tableName)
+static struct dnaSeq *mustGetSeqUpper(char *name, char *tableName)
 {
     struct dnaSeq *mrnaSeq = NULL;
-    if(sameString(tableName,"refGene"))
+    if (sameString(tableName,"refGene"))
         mrnaSeq = hGenBankGetMrna(name, "refMrna");
     else
         mrnaSeq = hGenBankGetMrna(name, NULL);
 
-    if( mrnaSeq == NULL )
+    if (mrnaSeq == NULL)
         uglyf("Cannot find refGene mRNA sequence for %s<br>\n", name );
     touppers(mrnaSeq->dna);
     return mrnaSeq;
@@ -435,7 +446,7 @@ struct dnaSeq *mustGetSeqUpper(char *name, char *tableName)
 
 
 
-void makeCdsShades(struct vGfx *vg, Color *cdsColor )
+static void makeCdsShades(struct vGfx *vg, Color *cdsColor )
 {
     cdsColor[CDS_ERROR] = vgFindColorIx(vg,0,0,0); 
     cdsColor[CDS_ODD] = vgFindColorIx(vg,CDS_ODD_R,CDS_ODD_G,CDS_ODD_B);
@@ -446,25 +457,20 @@ void makeCdsShades(struct vGfx *vg, Color *cdsColor )
     cdsColor[CDS_PARTIAL_CODON] = vgFindColorIx(vg,CDS_PARTIAL_CODON_R,CDS_PARTIAL_CODON_G, CDS_PARTIAL_CODON_B);
 }
 
-
-
-
-
-
-void updatePartialCodon(char *retStr, char *chrom, int start, int end, boolean reverse)
+static void updatePartialCodon(char *retStr, char *chrom, int start, int end, boolean reverse)
 {
     char tmpStr[4];
-    if(!reverse)
-        snprintf(tmpStr, 4, "%s%s", retStr, 
+    if (!reverse)
+        safef(tmpStr, 4, "%s%s", retStr, 
           (char*)(hDnaFromSeq(chrom, start, end,dnaUpper)->dna));
     else
-        snprintf(tmpStr, 4, "%s%s",  
+        safef(tmpStr, 4, "%s%s",  
           (char*)(hDnaFromSeq(chrom, start, end,dnaUpper)->dna), retStr);
     strncpy( retStr, tmpStr, 4 );
 }
 
 
-struct simpleFeature *splitByCodon( char *chrom, struct linkedFeatures *lf, 
+static struct simpleFeature *splitByCodon( char *chrom, struct linkedFeatures *lf, 
         unsigned *starts, unsigned *ends, int blockCount, unsigned
         cdsStart, unsigned cdsEnd, unsigned *gaps )
 {
@@ -489,14 +495,14 @@ partialCodonSeq[0] = '\0';
 //    uglyf( "     %d-%d<br>\n", starts[i], ends[i]);
 
 
-if(lf->orientation > 0 ) //positive strand
-{
+if (lf->orientation > 0 ) //positive strand
+    {
     
     for (i=0; i<blockCount; ++i)
 	{
 
         // 3' block
-        if( starts[i] < cdsStart && ends[i] <= cdsStart )
+        if (starts[i] < cdsStart && ends[i] <= cdsStart)
         {
             AllocVar(sf);
 	        sf->start = starts[i];
@@ -505,7 +511,7 @@ if(lf->orientation > 0 ) //positive strand
             continue;
         }
         //3' to coding block
-        else if( starts[i] < cdsStart && ends[i] > cdsStart )
+        else if (starts[i] < cdsStart && ends[i] > cdsStart)
         {
             AllocVar(sf);
             sf->start = starts[i];
@@ -518,9 +524,9 @@ if(lf->orientation > 0 ) //positive strand
             currentStart = starts[i];
 
         //break each block by codon and set color code to denote codon
-        while(1)
+        while (TRUE)
         {
-            if( frame == 0 ) 
+            if (frame == 0) 
                 { codon++; codon %= 2; currentEnd = currentStart + 3; }
             else
                 currentEnd = currentStart + frame;
@@ -530,23 +536,26 @@ if(lf->orientation > 0 ) //positive strand
 	        sf->end = currentEnd;
 
             //we've gone off the end of the current block
-            if( currentEnd >= ends[i] )
+            if (currentEnd >= ends[i])
             {
                 frame = currentEnd - ends[i];
                 sf->end = currentEnd = ends[i];
 
-                if( frame != 0 )
-                    updatePartialCodon(partialCodonSeq,chrom,sf->start,sf->end,FALSE);
+                if (frame != 0)
+                    updatePartialCodon(partialCodonSeq, chrom, sf->start,
+                            sf->end, FALSE);
                 else
-                    snprintf( partialCodonSeq, 4, "%s", 
-                            (char*)(hDnaFromSeq(chrom, sf->start, sf->end, dnaUpper)->dna));
+                    safef(partialCodonSeq, 4, "%s", (char*)(hDnaFromSeq(chrom, 
+                                    sf->start, sf->end, dnaUpper)->dna));
 
                 //get next 'frame' nt's to see what codon will be (skipping intron sequence)
                 getCodonDna(theRestOfCodon, chrom, frame, starts, ends, 
                         blockCount, cdsStart, cdsEnd, i, FALSE, NULL);
-                snprintf( tempCodonSeq, 4, "%s%s", partialCodonSeq, theRestOfCodon);
 
-                sf->grayIx = (currentEnd <= cdsEnd)?setColorByCds( tempCodonSeq,codon,&foundStart, FALSE):-2;
+                safef(tempCodonSeq, 4, "%s%s", partialCodonSeq, theRestOfCodon);
+
+                sf->grayIx = (currentEnd <= cdsEnd)?
+                    setColorByCds( tempCodonSeq,codon,&foundStart, FALSE):-2;
                 slAddHead(&sfList, sf);
                 break;
             }
@@ -554,25 +563,31 @@ if(lf->orientation > 0 ) //positive strand
             codonDna = hDnaFromSeq( chrom, sf->start, sf->end, dnaUpper );
 
             //inside a coding block (with 3 bases)
-            if(frame == 0 && codonDna->size == 3)
+            if (frame == 0 && codonDna->size == 3)
             {
-                sf->grayIx = (currentEnd <= cdsEnd)?setColorByCds(codonDna->dna,codon,&foundStart, FALSE):-2;
-                strcpy(partialCodonSeq,"" ); //clear partalCodon we've been making
+                sf->grayIx = (currentEnd <= cdsEnd)?
+                    setColorByCds(codonDna->dna,codon,&foundStart, FALSE):-2;
+                strcpy(partialCodonSeq,"" ); 
+                //clear partalCodon we've been making
             }
-            else if( codonDna->size < 3 )
+            else if (codonDna->size < 3)
             {
                 //get the rest of the bases to set color.
-                updatePartialCodon(partialCodonSeq,chrom,sf->start,sf->end,FALSE);
+                updatePartialCodon(partialCodonSeq,chrom,sf->start,
+                        sf->end,FALSE);
 
-                if(strlen(partialCodonSeq) == 3)    //now see if we have a codon 
+                if (strlen(partialCodonSeq) == 3)  //now see if we have a codon 
                 {
-                    sf->grayIx = setColorByCds(partialCodonSeq,codon,&foundStart, FALSE);
+                    sf->grayIx = setColorByCds(partialCodonSeq,codon,
+                            &foundStart, FALSE);
                     strcpy(partialCodonSeq,"" );
                 }
-                frame -= (sf->end - sf->start);     //update frame based on bases appended
+                frame -= (sf->end - sf->start);     
+                //update frame based on bases appended
             }
             else
-                errAbort("%s: Too much dna (%d,%s)<br>\n", lf->name, codonDna->size, codonDna->dna );
+                errAbort("%s: Too much dna (%d,%s)<br>\n", lf->name, 
+                        codonDna->size, codonDna->dna );
 
             slAddHead(&sfList, sf);
             currentStart = currentEnd;
@@ -591,15 +606,15 @@ if(lf->orientation > 0 ) //positive strand
 
     
     return(sfList);
-}
+    }
 else  //negative strand
-{
+    {
 
     for (i=blockCount-1; i>=0; --i) 
-	{
+	    {
 
         // 3' block
-        if( ends[i] > cdsEnd && starts[i] >= cdsEnd )
+        if (ends[i] > cdsEnd && starts[i] >= cdsEnd)
         {
             AllocVar(sf);
 	        sf->start = starts[i];
@@ -608,7 +623,7 @@ else  //negative strand
             continue;
         }
         //3' to coding block
-        else if( ends[i] > cdsEnd && starts[i] < cdsEnd )
+        else if (ends[i] > cdsEnd && starts[i] < cdsEnd)
         {
             AllocVar(sf);
             sf->start = cdsEnd;
@@ -621,9 +636,9 @@ else  //negative strand
             currentEnd = ends[i];
 
         //break each block by codon and set color code to denote codon
-        while(1)
-        {
-            if( frame == 0 ) 
+        while (1)
+            {
+            if (frame == 0) 
                 { codon++; codon %= 2; currentStart = currentEnd - 3; }
             else
                 currentStart = currentEnd - frame;
@@ -634,73 +649,86 @@ else  //negative strand
 
             //we've gone off the end of the current block
             if( currentStart <= starts[i] )
-            {
+                {
                 frame = starts[i] - currentStart;
                 sf->start = currentStart = starts[i];
 
                 if( frame != 0 )
-                    updatePartialCodon(partialCodonSeq,chrom,sf->start,sf->end,TRUE);
+                    updatePartialCodon(partialCodonSeq,chrom,sf->start,
+                            sf->end,TRUE);
                 else
-                    snprintf( partialCodonSeq, 4, "%s", 
-                            (char*)(hDnaFromSeq(chrom, sf->start, sf->end, dnaUpper)->dna));
+                    safef(partialCodonSeq, 4, "%s", (char*)(hDnaFromSeq(chrom, 
+                                    sf->start, sf->end, dnaUpper)->dna));
 
-                //get prev 'frame' nt's to see what codon will be (skipping intron sequence)
-                getCodonDna(theRestOfCodon, chrom, frame, starts, ends, blockCount, 
-                        cdsStart, cdsEnd, i, TRUE, NULL );
-                snprintf( tempCodonSeq, 4, "%s%s", trimSpaces(theRestOfCodon), partialCodonSeq );
+                /*get prev 'frame' nt's to see what codon will be 
+                 * (skipping intron sequence)*/
+                getCodonDna(theRestOfCodon, chrom, frame, starts, ends, 
+                        blockCount, cdsStart, cdsEnd, i, TRUE, NULL );
+
+                safef(tempCodonSeq, 4, "%s%s", trimSpaces(theRestOfCodon), 
+                        partialCodonSeq );
 
                 //uglyf("(%s,%s,%s) %d-%d<br>\n", theRestOfCodon, partialCodonSeq, tempCodonSeq, sf->start, sf->end );
 
-                sf->grayIx = (currentStart >= cdsStart)?setColorByCds( tempCodonSeq,codon,&foundStart, TRUE ):-2;
+                sf->grayIx = (currentStart >= cdsStart)?
+                    setColorByCds( tempCodonSeq,codon,&foundStart, TRUE ):-2;
                 slAddHead(&sfList, sf);
                 break;
-            }
+                }
 
             codonDna = hDnaFromSeq( chrom, sf->start, sf->end, dnaUpper );
 
             //inside a coding block (with 3 bases)
-            if(frame == 0 && codonDna->size == 3)
-            {
-                sf->grayIx = (currentStart >= cdsStart)?setColorByCds(codonDna->dna,codon,&foundStart, TRUE):-2;
-                strcpy(partialCodonSeq,"" ); //clear partalCodon we've been making
-            }
-            else if( codonDna->size < 3 )
-            {
-                //get the rest of the bases to set color.
-                updatePartialCodon(partialCodonSeq,chrom,sf->start,sf->end,TRUE);
-
-                if(strlen(partialCodonSeq) == 3)    //now see if we have a codon 
+            if (frame == 0 && codonDna->size == 3)
                 {
-                    sf->grayIx = setColorByCds(partialCodonSeq,codon,&foundStart, TRUE);
-                    strcpy(partialCodonSeq,"" );
+                sf->grayIx = (currentStart >= cdsStart)?
+                    setColorByCds(codonDna->dna,codon,&foundStart, TRUE):-2;
+                strcpy(partialCodonSeq,"" ); 
+                //clear partalCodon we've been making
                 }
-                frame -= (sf->end - sf->start);     //update frame based on bases appended
-            }
-            else
-                errAbort("%s(-): Too much dna (%d,%s) %d-%d, %d<br>\n", lf->name, codonDna->size, codonDna->dna, sf->start, sf->end, frame );
+            else if (codonDna->size < 3)
+                {
+                //get the rest of the bases to set color.
+                updatePartialCodon(partialCodonSeq,chrom,sf->start,
+                        sf->end,TRUE);
 
+                if(strlen(partialCodonSeq) == 3) //now see if we have a codon 
+                    {
+                    sf->grayIx = setColorByCds(partialCodonSeq,codon,
+                            &foundStart, TRUE);
+                    strcpy(partialCodonSeq,"" );
+                    }
+                frame -= (sf->end - sf->start);     
+                //update frame based on bases appended
+                }
+            else
+                errAbort("%s(-): Too much dna (%d,%s) %d-%d, %d<br>\n", 
+                        lf->name, codonDna->size, codonDna->dna, 
+                        sf->start, sf->end, frame );
             slAddHead(&sfList, sf);
             currentEnd = currentStart;
-
-        }
-	}
+            }
+	    }
     //slReverse(&sfList);
     return(sfList);
 
-    
+    }
 }
 
-
-}
-
-struct simpleFeature *splitGenePredByCodon( char *chrom, struct linkedFeatures *lf, 
-        struct genePred *gp, unsigned *gaps )
+struct simpleFeature *splitGenePredByCodon( char *chrom,
+        struct linkedFeatures *lf, struct genePred *gp, unsigned *gaps )
+/*divide a genePred record into a linkedFeature, where each simple
+  feature is a 3-base codon (or a partial codon if on a gap boundary).
+  It starts at the cdsStarts position on the genome and goes to 
+  cdsEnd. It only relies on the genomic sequence to determine the
+  frame so it works with any gene prediction track*/
 {
     return(splitByCodon(chrom,lf,gp->exonStarts,gp->exonEnds,gp->exonCount,
                 gp->cdsStart,gp->cdsEnd,gaps));
 }
 
-void convertStartStopToGenomic(struct psl *psl, unsigned *cdsStart, unsigned *cdsEnd)
+static void convertStartStopToGenomic(struct psl *psl, unsigned *cdsStart, 
+        unsigned *cdsEnd)
 {
     int thickStart = -1, thickEnd =-1;
     int baseCount = -0;
@@ -709,9 +737,11 @@ void convertStartStopToGenomic(struct psl *psl, unsigned *cdsStart, unsigned *cd
     {
         baseCount += psl->blockSizes[i];
        if(baseCount >= *cdsStart && thickStart == -1)
-           thickStart = psl->tStart + psl->tStarts[i] + psl->blockSizes[i] - (baseCount - *cdsStart);
+           thickStart = psl->tStart + psl->tStarts[i] + psl->blockSizes[i] 
+               - (baseCount - *cdsStart);
        if(baseCount >= *cdsEnd && thickEnd == -1)
-           thickEnd = psl->tStart + psl->tStarts[i] + psl->blockSizes[i] - (baseCount - *cdsEnd);
+           thickEnd = psl->tStart + psl->tStarts[i] + psl->blockSizes[i] 
+               - (baseCount - *cdsEnd);
     }
     *cdsStart = thickStart;
     *cdsEnd = thickEnd;
@@ -747,7 +777,7 @@ static void drawDiffTextBox(struct vGfx *vg, int xOff, int y,
     mrnaS = convertCoordUsingPsl( s, psl ); 
     
     if(mrnaS >= 0)
-    {
+        {
         dyStringAppendN( ds2, (char*)&mrnaSeq->dna[mrnaS], e-s );
         retStrDy = needMem(sizeof(char)*(ds->stringSize+1));
 
@@ -755,104 +785,107 @@ static void drawDiffTextBox(struct vGfx *vg, int xOff, int y,
         //so we can determine if codons are different
         size = strlen(ds->string);
         if(size < 3)
-        {
-
-            for(i=0; i<psl->blockCount; i++)
             {
-                if( s >= psl->tStarts[i] && s < psl->tStarts[i] + psl->blockSizes[i] )
+
+            for (i=0; i<psl->blockCount; i++)
+                {
+                if (s >= psl->tStarts[i] && 
+                    s < psl->tStarts[i] + psl->blockSizes[i])
                     startI = i;
                 ends[i] = psl->qStarts[i] + psl->blockSizes[i];
-            }
+                }
             
-            if( psl->tStarts[startI] + psl->blockSizes[startI] == e)
-            {
+            if (psl->tStarts[startI] + psl->blockSizes[startI] == e)
+                {
                 getCodonDna( retStr, chrom, 3-size, psl->qStarts, ends, 
-                    psl->blockCount, -1, -1, startI, (lf->orientation == -1), mrnaSeq);
-                snprintf(saveStr,4,"%s%s", ds2->string,retStr);
-            }
+                    psl->blockCount, -1, -1, startI, (lf->orientation == -1), 
+                    mrnaSeq);
+                safef(saveStr,4,"%s%s", ds2->string,retStr);
+                }
 
             strncpy(tempStr,saveStr,4);
         }
         else
             strncpy(tempStr,ds2->string,4);
 
-        maskDiffString( retStrDy, ds2->string, ds->string,  ' ' );
+        maskDiffString(retStrDy, ds2->string, ds->string,  ' ' );
 
-        if( e <= lf->tallEnd )
-        {
+        if (e <= lf->tallEnd)
+            {
 
             int mrnaGrayIx;
             //compute mrna codon and get genomic codon
             //by decoding grayIx.
-            if(lf->orientation == -1)
+            if (lf->orientation == -1)
                 reverseComplement(tempStr,strlen(tempStr));
             mrnaCodon = lookupCodon(tempStr);
-            if(mrnaCodon == 0) mrnaCodon = '*';
+            if (mrnaCodon == 0) mrnaCodon = '*';
             genomicColor = colorFromGrayIx( codon, grayIx, cdsColor );
 
 
             //re-set color of this block based on mrna seq rather tha
             //than genomic, but keep the odd/even cycle of dark/light
             //blue.
-            if(colorOption == CDS_COLOR_BY_MRNA)
-            {
-                mrnaGrayIx = setColorByCds(tempStr,(grayIx > 26),foundStart,FALSE);
+            if (colorOption == CDS_COLOR_BY_MRNA)
+                {
+                mrnaGrayIx = setColorByCds(tempStr,(grayIx > 26),foundStart
+                        ,FALSE);
                 color = colorFromGrayIx(codon, mrnaGrayIx, cdsColor);
-            }
+                }
             //otherwise we are already colored by genomic 
             //from the split by codon into simple features.
 
             //make amino acid text yellow when codon would change
-            if(mrnaCodon != codon[0])
+            if (mrnaCodon != codon[0])
                 textColor = MG_YELLOW;
-        }
+            }
 
 
-        if(displayOption == CDS_DRAW_DIFF_BASES)
+        if (displayOption == CDS_DRAW_DIFF_BASES)
             drawScaledBoxSampleWithText(vg, s, e, scale, xOff, y, heightPer, 
                 color, lf->score, font, retStrDy, zoomedToBaseLevel,
                 TRUE, cdsColor, textColor, winStart, maxPixels );
-        else if(displayOption == CDS_DRAW_GENOMIC_BASES)
+        else if (displayOption == CDS_DRAW_GENOMIC_BASES)
             drawScaledBoxSampleWithText(vg, s, e, scale, xOff, y, heightPer, 
                 color, lf->score, font, ds->string, zoomedToBaseLevel,
                 TRUE, cdsColor, textColor, winStart, maxPixels );
-        else if(displayOption == CDS_DRAW_MRNA_BASES)
+        else if (displayOption == CDS_DRAW_MRNA_BASES)
             drawScaledBoxSampleWithText(vg, s, e, scale, xOff, y, heightPer, 
                 color, lf->score, font, ds2->string,
                 zoomedToBaseLevel, TRUE, cdsColor, textColor,
                 winStart, maxPixels );
-        else if(displayOption == CDS_DRAW_GENOMIC_CODONS)
+        else if (displayOption == CDS_DRAW_GENOMIC_CODONS)
             drawScaledBoxSampleWithText(vg, s, e, scale, xOff, y, heightPer, 
                 color, lf->score, font, codon, zoomedToCodonLevel,
                 TRUE, cdsColor, textColor, winStart, maxPixels );
-        else if(displayOption == CDS_DRAW_MRNA_CODONS)
-        {
+        else if (displayOption == CDS_DRAW_MRNA_CODONS)
+            {
             char mrnaCodonStr[2];
-            snprintf(mrnaCodonStr, 2, "%c", mrnaCodon);
+            safef(mrnaCodonStr, 2, "%c", mrnaCodon);
             drawScaledBoxSampleWithText(vg, s, e, scale, xOff, y, heightPer, 
                 color, lf->score, font, mrnaCodonStr,
                 zoomedToCodonLevel, TRUE, cdsColor, textColor,
                 winStart, maxPixels );
-        }
-        else if(displayOption == CDS_DRAW_DIFF_CODONS)
-        {
-            if( textColor == MG_YELLOW )
-            {
-                char mrnaCodonStr[2];
-                snprintf(mrnaCodonStr, 2, "%c", mrnaCodon);
-                drawScaledBoxSampleWithText(vg, s, e, scale, xOff, y, heightPer, 
-                    color, lf->score, font, mrnaCodonStr,
-                    zoomedToCodonLevel, TRUE, cdsColor, textColor,
-                    winStart, maxPixels );
             }
+        else if (displayOption == CDS_DRAW_DIFF_CODONS)
+            {
+                if (textColor == MG_YELLOW)
+                {
+                    char mrnaCodonStr[2];
+                    safef(mrnaCodonStr, 2, "%c", mrnaCodon);
+                    drawScaledBoxSampleWithText(vg, s, e, scale, xOff, y, 
+                        heightPer, color, lf->score, font, mrnaCodonStr,
+                    zoomedToCodonLevel, TRUE, cdsColor, textColor,
+                        winStart, maxPixels );
+                }
             else
                 drawScaledBoxSample(vg, s, e, scale, xOff, y, heightPer, 
                     color, lf->score );
-        }
+            }
             
         freeMem(retStrDy);
         freeMem(ends);
-    }
+        }
     else
         drawScaledBoxSample(vg, s, e, scale, xOff, y, heightPer, 
                MG_YELLOW, lf->score );
@@ -861,32 +894,36 @@ static void drawDiffTextBox(struct vGfx *vg, int xOff, int y,
     dyStringFree(&ds2);
 }
 
-void drawCdsColoredBox(struct track *tg,  struct linkedFeatures *lf, int grayIx, 
-        Color *cdsColor, struct vGfx *vg, int xOff, int y, double scale, 
-	    MgFont *font, int s, int e, int heightPer, boolean zoomedToCodonLevel, 
-        struct dnaSeq *mrnaSeq, struct psl *psl, int drawOptionNum,
-        boolean errorColor, boolean *foundStart, int maxPixels,
-        int winStart)
+void drawCdsColoredBox(struct track *tg,  struct linkedFeatures *lf, 
+        int grayIx, Color *cdsColor, struct vGfx *vg, int xOff, int y, 
+        double scale, MgFont *font, int s, int e, int heightPer, 
+        boolean zoomedToCodonLevel, struct dnaSeq *mrnaSeq, struct psl *psl, 
+        int drawOptionNum, boolean errorColor, boolean *foundStart, 
+        int maxPixels, int winStart)
+/*draw a box that is colored by the bases inside it and its
+ * orientation. Stop codons are red, start are green, otherwise they
+ * alternate light/dark blue colors. These are defined in
+ * cdsColors.h*/
 {
         char codon[2] = " ";
         Color color = colorFromGrayIx(codon, grayIx, cdsColor);
 
-        if(sameString(tg->groupName,"genes"))
+        if (sameString(tg->groupName,"genes"))
             /*any track in the genes category, with the genomic
              * coloring turned on in the options menu*/
 	        drawScaledBoxSampleWithText(vg, s, e, scale, xOff, y, heightPer, 
                 color, lf->score, font, codon, zoomedToCodonLevel, FALSE,
                 cdsColor, whiteIndex(), winStart, maxPixels );
-        else if(sameString(tg->mapName,"mrna") || 
-                sameString(tg->mapName,"est") || 
-                sameString(tg->mapName,"xenoMrna"))
+        else if (sameString(tg->mapName,"mrna") || 
+                 sameString(tg->mapName,"est") || 
+                 sameString(tg->mapName,"xenoMrna"))
                 /*one of the chosen psl tracks with associated
                  * sequences in a database*/
-                if(mrnaSeq != NULL && psl != NULL)
-                    drawDiffTextBox(vg, xOff, y, scale, heightPer, font, color, chromName, 
-                        s, e, psl, mrnaSeq, lf, cdsColor, grayIx, foundStart, 
-                        drawOptionNum, maxPixels);
-                else if(errorColor == TRUE)
+                if (mrnaSeq != NULL && psl != NULL)
+                    drawDiffTextBox(vg, xOff, y, scale, heightPer, font, 
+                            color, chromName, s, e, psl, mrnaSeq, lf, cdsColor,
+                            grayIx, foundStart, drawOptionNum, maxPixels);
+                else if (errorColor == TRUE)
                     /*make it yellow to show we have a problem*/
 	                drawScaledBoxSample(vg, s, e, scale, xOff, y, 
                             heightPer, MG_YELLOW, lf->score );
@@ -896,46 +933,50 @@ void drawCdsColoredBox(struct track *tg,  struct linkedFeatures *lf, int grayIx,
                             heightPer, color, lf->score );
        else
            /*again revert to normal coloring*/
-	       drawScaledBoxSample(vg, s, e, scale, xOff, y, heightPer, color, lf->score );
+	       drawScaledBoxSample(vg, s, e, scale, xOff, y, heightPer, 
+                   color, lf->score );
 }
 
 
 int cdsColorSetup(struct vGfx *vg, struct track *tg, Color *cdsColor, 
-        struct dnaSeq *mrnaSeq, struct psl *psl, boolean *errorColor, 
+        struct dnaSeq **mrnaSeq, struct psl **psl, boolean *errorColor, 
         struct linkedFeatures *lf, boolean cdsColorsMade)
-/*returns drawOptionNum, mrnaSeq, psl, errorColor*/
+/*gets the CDS coloring option, allocates colors, and returns the
+ * sequence and psl record for the given lf->name (only returns
+ * sequence and psl for mRNA, EST, or xenoMrna.
+ * returns drawOptionNum, mrnaSeq, psl, errorColor*/
 {
     //get coloring options
     int drawOptionNum = getCdsDrawOptionNum(tg->mapName);
 
     //allocate colors for coding coloring 
-    if(!cdsColorsMade)
+    if (!cdsColorsMade)
        { 
        makeCdsShades(vg,cdsColor);
        cdsColorsMade = TRUE;
        }
    
-/*
     if(drawOptionNum>0 && zoomedToCodonLevel)
        {
        char *database = cartUsualString(cart, "db", hGetDb());
 
-       if(sameString(tg->mapName,"mrna")   ||
+       if (sameString(tg->mapName,"mrna")   ||
        sameString(tg->mapName,"est")    ||
        sameString(tg->mapName,"xenoMrna"))
             {
 
-            mrnaSeq = mustGetSeqUpper(lf->name,tg->mapName);
-            psl = genePredLookupPsl(database, chromName, lf, tg->mapName);
+            *mrnaSeq = mustGetSeqUpper(lf->name,tg->mapName);
+            *psl = genePredLookupPsl(database, chromName, lf, tg->mapName);
 
-            if(mrnaSeq != NULL && psl != NULL && psl->strand[0] == '-')
-                reverseComplement(mrnaSeq->dna,strlen(mrnaSeq->dna));
+            if(*mrnaSeq != NULL && *psl != NULL && (*psl)->strand[0] == '-')
+                reverseComplement((*mrnaSeq)->dna,strlen((*mrnaSeq)->dna));
             else
                 *errorColor = TRUE;
             }
 
        }
-       */
+
+
     return(drawOptionNum);
 }
 

@@ -7,7 +7,7 @@
 #include "spDb.h"
 #include "hgGene.h"
 
-static char const rcsid[] = "$Id: domains.c,v 1.8 2003/11/12 18:47:21 kent Exp $";
+static char const rcsid[] = "$Id: domains.c,v 1.9 2004/01/09 15:35:17 fanhsu Exp $";
 
 static boolean domainsExists(struct section *section, 
 	struct sqlConnection *conn, char *geneId)
@@ -33,7 +33,7 @@ if (list != NULL)
     {
     char query[256], **row;
     struct sqlResult *sr;
-    hPrintf("<B>Interpro Domains</B> - ");
+    hPrintf("<B>InterPro Domains</B> - ");
     hPrintf("<A HREF=\"http://www.ebi.ac.uk/interpro/ISpy?mode=single&ac=%s\" TARGET=_blank>",
     	swissProtAcc);
     hPrintf("Graphical view of domain structure.</A><BR>");

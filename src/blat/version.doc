@@ -1,10 +1,16 @@
 26:
+     o fixed pslPretty to allow '--' strands in axt output format
+     o fixed bug that was causing blat to drop an exon in around
+       1% of genes.
+
+25:
      o Made it so that gfServer does not abort when it runs out
        of memory.
      o Fixed bug in pslPretty in case where there is a small
        gap in both query and target sides of alignment.
-
-25:
+     o Fixed bug in out=blast or out=wublast where in some
+       cases negative strand alignments did not line up
+       properly.
      o Fixed crash when aligning translated sequences of less than 3 bases.
      o Added extendThroughN flag.
 

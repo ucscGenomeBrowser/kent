@@ -120,9 +120,12 @@
 #include "encodeErge.h"
 #include "encodeErgeHssCellLines.h"
 #include "sgdDescription.h"
+#include "sgdClone.h"
+#include "tfbsCons.h"
+#include "simpleNucDiff.h"
 #include "hgFind.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.545 2004/01/08 18:44:27 heather Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.550 2004/01/21 23:13:03 braney Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -1894,6 +1897,62 @@ if (net->qEnd >= 0)
 netAlignFree(&net);
 }
 
+void tfbsCons(struct trackDb *tdb, char *item)
+{
+char *dupe, *type, *words[16];
+char title[256];
+int wordCount;
+int start = cartInt(cart, "o");
+struct sqlConnection *conn = hAllocConn();
+char table[64];
+boolean hasBin;
+struct bed *bed;
+char query[512];
+struct sqlResult *sr;
+char **row;
+struct tfbsCons tfbs;
+boolean firstTime = TRUE;
+
+//itemForUrl = item;
+dupe = cloneString(tdb->type);
+genericHeader(tdb, item);
+wordCount = chopLine(dupe, words);
+printCustomUrl(tdb, item, FALSE);
+//printCustomUrl(tdb, itemForUrl, item == itemForUrl);
+
+hFindSplitTable(seqName, tdb->tableName, table, &hasBin);
+sprintf(query, "select * from %s where name = '%s' and chrom = '%s' and chromStart = %d",
+	    table, item, seqName, start);
+sr = sqlGetResult(conn, query);
+if ((row = sqlNextRow(sr)) != NULL)
+    {
+    tfbsConsStaticLoadWBin(row, &tfbs);
+
+    printf("<B>Item:</B> %s<BR>\n", tfbs.name);
+    printf("<B>Score:</B> %d<BR>\n", tfbs.score );
+    printf("<B>Strand:</B> %s<BR>\n", tfbs.strand);
+    printPos(tfbs.chrom, tfbs.chromStart, tfbs.chromEnd, NULL, TRUE, tfbs.name);
+    }
+
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    if (firstTime)
+	firstTime = FALSE;
+    else
+	htmlHorizontalLine();
+
+    tfbsConsStaticLoadWBin(row, &tfbs);
+   
+    printf("<B>Factor:</B> %s<BR>\n", tfbs.factor);
+    printf("<B>Species:</B> %s<BR>\n", tfbs.species);
+    printf("<B>SwissProt ID:</B> %s<BR>\n", tfbs.id);
+    printf("<A HREF=\"http://hgwdev.cse.ucsc.edu/cgi-bin/pbTracks?proteinID=%s\" target=_blank><B>Protein Browser ID:</B> </A>",  tfbs.id);
+    }
+printTrackHtml(tdb);
+freez(&dupe);
+hFreeConn(&conn);
+}
+
 void firstEF(struct trackDb *tdb, char *item)
 {
 char *dupe, *type, *words[16];
@@ -3460,6 +3519,73 @@ printf("<H3>%s/Genomic Alignments</H3>", type);
 printAlignments(pslList, start, "htcCdnaAli", table, acc);
 
 printTrackHtml(tdb);
+hFreeConn(&conn);
+}
+
+void printPslFormat(struct sqlConnection *conn, struct trackDb *tdb, char *item, int start, char *subType) 
+/* Handles click in affyU95 or affyU133 tracks */
+{
+struct psl* pslList = getAlignments(conn, tdb->tableName, item);
+struct psl* psl;
+char sep = '\n';
+char lastSep = '\n';
+char *face = "Times"; /* specifies font face to use */
+char *fsize = "+1"; /* specifies font size */
+
+/* check if there is an alignment available for this sequence.  This checks
+ * both genbank sequences and other sequences in the seq table.  If so,
+ * set it up so they can click through to the alignment. */
+if (hGenBankHaveSeq(item, NULL))
+    {
+    printf("<H3>%s/Genomic Alignments</H3>", item);
+    printAlignments(pslList, start, "htcCdnaAli", tdb->tableName, item);
+    }
+else
+    {
+    /* print out the psls */
+    printf("<PRE><TT>");
+    printf("<FONT FACE = \"%s\" SIZE = \"%s\">\n", face, fsize);
+
+    for (psl = pslList;  psl != NULL; psl = psl->next)
+       {
+       pslOutFormat(psl, stdout, '\n', '\n');
+       }
+    printf("</FONT></TT></PRE>\n");
+    }
+pslFreeList(&pslList);
+}
+
+void doAffy(struct trackDb *tdb, char *item, char *itemForUrl) 
+/* Display information for Affy tracks*/
+
+{
+char *dupe, *type, *words[16];
+char title[256];
+int wordCount;
+int start = cartInt(cart, "o");
+struct sqlConnection *conn = hAllocConn();
+
+if (itemForUrl == NULL)
+    itemForUrl = item;
+dupe = cloneString(tdb->type);
+genericHeader(tdb, item);
+wordCount = chopLine(dupe, words);
+printCustomUrl(tdb, itemForUrl, item == itemForUrl);
+
+if (wordCount > 0)
+    {
+    type = words[0];
+
+    if (sameString(type, "psl"))
+        {
+	char *subType = ".";
+	if (wordCount > 1)
+	    subType = words[1];
+        printPslFormat(conn, tdb, item, start, subType);
+	}
+    }
+printTrackHtml(tdb);
+freez(&dupe);
 hFreeConn(&conn);
 }
 
@@ -11726,7 +11852,6 @@ struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr = NULL;
 struct bed *bedWS, *bedWSList = NULL;
 char **row;
-int rowOffset;
 char query[256];
 struct hTableInfo *hti = hFindTableInfo(seqName, table);
 if(hti == NULL)
@@ -11739,11 +11864,9 @@ else if(hti && sameString(hti->startField, "chromStart"))
 	     table, seqName, winEnd, winStart);
 else
     errAbort("%s doesn't have tStart or chromStart");
-//sr = hRangeQuery(conn,table,seqName,winStart,winEnd,NULL, &rowOffset);
 sr = sqlGetResult(conn, query);
 while((row = sqlNextRow(sr)) != NULL)
     {
-    // bedWS = bedLoad12(row+rowOffset);
     AllocVar(bedWS);
     bedWS->name = cloneString(row[0]);
     bedWS->chromStart = sqlUnsigned(row[1]);
@@ -12650,6 +12773,65 @@ genericClickHandlerPlus(tdb, item, NULL, dy->string);
 dyStringFree(&dy);
 }
 
+static void doSgdClone(struct trackDb *tdb, char *item)
+/* Display information about other Sacchromyces Genome Database
+ * other (not-coding gene) info. */
+{
+struct sqlConnection *conn = hAllocConn();
+struct dyString *dy = dyStringNew(1024);
+
+if (sqlTableExists(conn, "sgdClone"))
+    {
+    /* print out url with ATCC number */
+    struct sgdClone sgd;
+    struct sqlResult *sr;
+    char query[256], **row;
+    safef(query, sizeof(query),
+    	"select * from sgdClone where name = '%s'", item);
+    sr = sqlGetResult(conn, query);
+    while ((row = sqlNextRow(sr)) != NULL)
+	{
+	sgdCloneStaticLoadWBin(row, &sgd);
+	dyStringPrintf(dy, "<B>ATCC catalog number:</B> %s <BR>\n", sgd.atccName);
+	}
+    sqlFreeResult(&sr);
+    }
+hFreeConn(&conn);
+genericClickHandlerPlus(tdb, item,  NULL, dy->string);
+dyStringFree(&dy);
+}
+
+static void doSimpleDiff(struct trackDb *tdb, char *otherOrg)
+/* Print out simpleDiff info. */
+{
+struct simpleNucDiff snd;
+struct sqlConnection *conn = hAllocConn();
+char fullTable[64];
+char query[256], **row;
+struct sqlResult *sr;
+int rowOffset;
+int start = cartInt(cart, "o");
+
+genericHeader(tdb, NULL);
+if (!hFindSplitTable(seqName, tdb->tableName, fullTable, &rowOffset))
+    errAbort("No %s track in database %s", tdb->tableName, database);
+safef(query, sizeof(query),
+    "select * from %s where chrom = '%s' and chromStart=%d", 
+    fullTable, seqName, start);
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    simpleNucDiffStaticLoad(row + rowOffset, &snd);
+    printf("<B>%s sequence:</B> %s<BR>\n", hOrganism(database), snd.tSeq);
+    printf("<B>%s sequence:</B> %s<BR>\n", otherOrg, snd.qSeq);
+    bedPrintPos((struct bed*)&snd, 3);
+    printf("<BR>\n");
+    }
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+printTrackHtml(tdb);
+}
+
 void doMiddle()
 /* Generate body of HTML. */
 {
@@ -12704,6 +12886,10 @@ else if (sameWord(track, "mrna") || sameWord(track, "mrna2") ||
          )
     {
     doHgRna(tdb, item);
+    }
+else if (sameWord(track, "affyU95") || sameWord(track, "affyU133") || sameWord(track, "affyU74") )
+    {
+    doAffy(tdb, item, NULL);
     }
 else if (sameWord(track, "refFullAli"))
     {
@@ -12879,6 +13065,10 @@ else if (sameWord(track, "htcPseudoGene"))
     {
     htcPseudoGene(track, item);
     }
+else if (stringIn(track, "tfbsCons"))
+    {
+    tfbsCons(tdb, item);
+    }
 else if (sameWord(track, "firstEF"))
     {
     firstEF(tdb, item);
@@ -12911,6 +13101,10 @@ else if (sameWord(track, "hg15PepPsl") )
 else if (sameWord(track, "hg15repeats") )
     {
     doAlignCompGeno(tdb, item, "Human");
+    }
+else if (sameWord(track, "chimpSimpleDiff"))
+    {
+    doSimpleDiff(tdb, "Chimp");
     }
 /* This is a catch-all for blastz/blat tracks -- any special cases must be 
  * above this point! */
@@ -13257,6 +13451,10 @@ else if (sameWord(track, "encodeErge5race")   || sameWord(track, "encodeErgeInVi
 	 sameWord(track, "encodeErgeSummary"))
     {
     doEncodeErge(tdb, item);
+    }
+else if(sameWord(track, "sgdClone"))
+    {
+    doSgdClone(tdb, item);
     }
 else if (sameWord(track, "sgdOther"))
     {

@@ -216,7 +216,7 @@ struct linkedFeatures *lf;
 boolean rcTarget = (psl->strand[1] == '-');
 
 int drawOptionNum = 0; //off
-if(mapName != NULL)
+if (mapName != NULL)
     drawOptionNum = getCdsDrawOptionNum(mapName);
 
 
@@ -226,11 +226,11 @@ lf->grayIx = grayIx;
 if (nameGetsPos)
     {
     char buf[256];
-    snprintf(buf, sizeof(buf), "%s:%d-%d %s:%d-%d", psl->qName, psl->qStart, psl->qEnd,
+    safef(buf, sizeof(buf), "%s:%d-%d %s:%d-%d", psl->qName, psl->qStart, psl->qEnd,
     	psl->tName, psl->tStart, psl->tEnd);
     lf->extra = cloneString(buf);
-    snprintf(lf->name, sizeof(lf->name), "%s %s %dk", psl->qName, psl->strand, psl->qStart/1000);
-    snprintf(lf->popUp, sizeof(lf->popUp), "%s:%d-%d score %9.0f", psl->qName, psl->qStart, psl->qEnd, lf->score);
+    safef(lf->name, sizeof(lf->name), "%s %s %dk", psl->qName, psl->strand, psl->qStart/1000);
+    safef(lf->popUp, sizeof(lf->popUp), "%s:%d-%d score %9.0f", psl->qName, psl->qStart, psl->qEnd, lf->score);
     }
 else
     strncpy(lf->name, psl->qName, sizeof(lf->name));
@@ -242,7 +242,7 @@ if (rcTarget)
   enough, then split simple feature by the psl record
   and the mRNA sequence. Otherwise do the default conversion
   from psl to simple feature.*/
-if(drawOptionNum>0 && zoomedToCdsColorLevel)
+if (drawOptionNum>0 && zoomedToCdsColorLevel)
         lfSplitByCodonFromPslX(chromName, lf, psl, sizeMul, isXeno, maxShade);
     else
         {
@@ -298,16 +298,16 @@ struct linkedFeatures *lfList = NULL, *lf;
 char optionChr[128]; /* Option -  chromosome filter */
 char extraWhere[128] ;
 
-snprintf( optionChr, sizeof(optionChr), "%s.chromFilter", tg->mapName);
+safef( optionChr, sizeof(optionChr), "%s.chromFilter", tg->mapName);
 optionChrStr = cartUsualString(cart, optionChr, "All");
 if (startsWith("chr",optionChrStr)) 
     {
-    snprintf(extraWhere, sizeof(extraWhere), "qName = \"%s\"",optionChrStr);
+    safef(extraWhere, sizeof(extraWhere), "qName = \"%s\"",optionChrStr);
     sr = hRangeQuery(conn, track, chromName, start, end, extraWhere, &rowOffset);
     }
 else
     {
-    snprintf(extraWhere, sizeof(extraWhere), " ");
+    safef(extraWhere, sizeof(extraWhere), " ");
     sr = hRangeQuery(conn, track, chromName, start, end, NULL, &rowOffset);
     }
 
@@ -365,7 +365,7 @@ char option[128]; /* Option -  rainbow chromosome color */
 char optionChr[128]; /* Option -  chromosome filter */
 char *optionChrStr; 
 char *optionStr ;
-snprintf( option, sizeof(option), "%s.color", tg->mapName);
+safef( option, sizeof(option), "%s.color", tg->mapName);
 optionStr = cartUsualString(cart, option, colorChromDefault);
 tg->mapItemName = lfMapNameFromExtra;
 if( sameString( optionStr, "on" )) /*use chromosome coloring*/

@@ -30,11 +30,15 @@ extern struct cart *cart;	/* The cart where we keep persistent variables. */
  * next - living mostly in the cart. */
 extern char *database;			/* Name of database we're using. */
 extern char *organism;			/* Name of organism we're working on. */
+extern char *hgsid;
 
 extern int gfxBorder;		/* Width of graphics border. */
 extern int insideWidth;		/* Width of area to draw tracks in in pixels. */
 
 extern char *protDbName;               /* Name of proteome database for this genome. */
+
+extern struct tempName gifTn, gifTn2;  /* gifTn for tracks image and gifTn2 for stamps image */
+extern boolean hideControls;    /* Hide all controls? */
 extern boolean suppressHtml;	/* If doing PostScript output we'll suppress most
          			 * of HTML output. */
 extern char *protDbName;
@@ -119,7 +123,7 @@ void doGenomeBrowserLink(char *protDisplayID, char *mrnaID);
 void doGeneDetailsLink(char *protDisplayID, char *mrnaID);
 void doFamilyBrowserLink(char *protDisplayID, char *mrnaID);
 
-void doTracks(char *proteinID, char *mrnaID, char *aa, int *yOffp);
+void doTracks(char *proteinID, char *mrnaID, char *aa, int *yOffp, char *psOutput);
 void doStamps(char *proteinID, char *mrnaID, char *aa, struct vGfx *vg, int *yOffp);
 
 void domainsPrint(struct sqlConnection *conn, char *swissProtAcc);

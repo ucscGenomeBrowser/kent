@@ -112,3 +112,11 @@ void nci60Details(struct trackDb *tdb, char *item);
 
 void getMsBedExpDetails(struct trackDb *tdb, char *expName, boolean all);
 /* Create tab-delimited output to download */
+ 
+void printPslFormat(struct sqlConnection *conn, struct trackDb *tdb, char *item, int start, char *subType);
+/*Handles click in Affy tracks and prints out alignment details with link*/
+/* to sequences if available in the database */
+ 
+void doAffy(struct trackDb *tdb, char *item, char *itemForUrl);
+/* Display alignment information for Affy tracks */
+

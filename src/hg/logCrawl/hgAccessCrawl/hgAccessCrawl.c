@@ -6,7 +6,7 @@
 #include "obscure.h"
 #include "cheapcgi.h"
 
-static char const rcsid[] = "$Id: hgAccessCrawl.c,v 1.5 2004/01/02 19:35:53 kent Exp $";
+static char const rcsid[] = "$Id: hgAccessCrawl.c,v 1.6 2004/01/13 04:45:42 kent Exp $";
 
 int verbose = 0;
 FILE *errLog = NULL;
@@ -43,7 +43,7 @@ struct logLine
     char *dash1;	/* Unknown, usually a dash */
     char *dash2;	/* Unknown, usually a dash */
     char *timeStamp;	/* Time stamp like 23/Nov/2003:04:21:08 */
-    char *tsExtra;	/* Extra number after timeStamp, usually -0800 */
+    char *timeZone;	/* Extra number after timeStamp, usually -0800 */
     char *method;	/* GET/POST etc. */
     char *url;		/* Requested URL */
     char *httpVersion;  /* Something like HTTP/1.1 */
@@ -139,7 +139,7 @@ if (!isdigit(ll->timeStamp[0]))
     badTimeStamp(&ll, line, fileName, lineIx);
     return NULL;
     }
-ll->tsExtra = nextWord(&s);
+ll->timeZone = nextWord(&s);
 buf = e+2;
 if (buf[0] != '"')
     {
@@ -256,6 +256,75 @@ const struct nameCount *b = *((struct nameCount **)vb);
 return b->count - a->count;
 }
 
+struct visCount
+/* Keep track of visibility settings observed. */
+    {
+    struct visCount *next;
+    char *track;		/* Name of track.  Not allocated here. */
+    int hideCount;
+    int denseCount;
+    int squishCount;
+    int packCount;
+    int fullCount;
+    int visCount;	/* Sum of all but hide. */
+    };
+
+int visCountCmp(const void *va, const void *vb)
+/* Compare to sort based on visCount - biggest first. */
+{
+const struct visCount *a = *((struct visCount **)va);
+const struct visCount *b = *((struct visCount **)vb);
+return b->visCount - a->visCount;
+}
+
+boolean isTrackVal(char *val)
+/* Return TRUE if this is a value we expect in a track name */
+{
+return sameString(val, "hide") || sameString(val, "dense")
+	|| sameString(val, "squish") || sameString(val, "pack")
+	|| sameString(val, "full");
+}
+
+void recordTrackVis(struct cgiVar *cv, struct hash *trackHash, 
+	struct visCount **pVcList)
+/* If var looks like it is a track, update trackHash with visibility
+ * value. */
+{
+char *val = cv->val;
+if (isTrackVal(val))
+    {
+    struct visCount *vc = hashFindVal(trackHash, cv->name);
+    if (vc == NULL)
+	{
+	AllocVar(vc);
+	hashAddSaveName(trackHash, cv->name, vc, &vc->track);
+	slAddHead(pVcList, vc);
+	}
+    if (sameString(val, "hide"))
+        vc->hideCount += 1;
+    else if (sameString(val, "dense"))
+	{
+        vc->denseCount += 1;
+	vc->visCount += 1;
+	}
+    else if (sameString(val, "squish"))
+	{
+        vc->squishCount += 1;
+	vc->visCount += 1;
+	}
+    else if (sameString(val, "pack"))
+	{
+        vc->packCount += 1;
+	vc->visCount += 1;
+	}
+    else if (sameString(val, "full"))
+	{
+        vc->fullCount += 1;
+	vc->visCount += 1;
+	}
+    }
+}
+
 void hgAccessCrawl(int logCount, char *logFiles[])
 /* hgAccessCrawl - Go through Apache access log collecting stats on hgXXX programs. */
 {
@@ -297,10 +366,12 @@ int resetAll = 0;
 int hideAll = 0;
 int postScriptOutput = 0;
 int addYourOwn = 0;
-struct hash *gHash = hashNew(0);
+struct hash *gHash = hashNew(0);	/* g (track) var for hgc */
 struct nameCount *gList = NULL, *gEl, *gNone, *gPost, *gRobot;
-struct hash *dbHash = hashNew(8);
+struct hash *dbHash = hashNew(8);       /* db var in hgTracks after hgGateway */
 struct nameCount *dbList = NULL, *dbEl;
+struct hash *trackHash = hashNew(10);
+struct visCount *vcList = NULL, *vc;
 
 /* Allocate dummy group for POSTed htc's. */
 AllocVar(gPost);
@@ -338,7 +409,7 @@ for (i=0; i<logCount; ++i)
 	    if (sameString(ll->method, "GET") && startsWith("/cgi-bin/", ll->url))
 		{
 		struct hash *cgiHash;
-		struct cgiVar *cgiList;
+		struct cgiVar *cgiList, *cv;
 		char *cgiString = strchr(ll->url, '?');
 		int cgiCount;
 		if (cgiString == NULL)
@@ -355,10 +426,15 @@ for (i=0; i<logCount; ++i)
 		cgiCount = slCount(cgiList);
 		if (startsWith("/cgi-bin/hgTracks", ll->url))
 		    {
+		    boolean thisIsRobot = isRobot(ll->ip, ll->program);
 		    ++hgTracksTotal;
+
+		    /* Here we try to determine the popularity of each 
+		     * database (organism+assembly) by looking at
+		     * initial entries from hgGateway into hgTracks. */
 		    if (ll->referrer != NULL && stringIn("hgGateway", ll->referrer))
 		        {
-			struct cgiVar *cv = hashFindVal(cgiHash, "db");
+			cv = hashFindVal(cgiHash, "db");
 			if (cv != NULL)
 			    {
 			    char *db = cv->val;
@@ -373,7 +449,17 @@ for (i=0; i<logCount; ++i)
 			    dbTotal += 1;
 			    }
 			}
-		    if (isRobot(ll->ip, ll->program))
+
+		    /* Count up dense/squished/packed/full track usage */
+		    if (!thisIsRobot)
+		        {
+			for (cv = cgiList; cv != NULL; cv = cv->next)
+			    recordTrackVis(cv, trackHash, &vcList);
+			}
+
+		    /* Count up hits in a bunch of mutually exclusive
+		     * categories. */
+		    if (thisIsRobot)
 			++hgTracksRobot;
 		    else if (cgiHashVal(cgiHash, "Submit", "Submit"))
 			++fromGateway;
@@ -601,11 +687,25 @@ printf("hgNear total %d, robot %d (%4.2f%%)\n",
 	hgNearTotal, hgGeneRobot, 100.0*hgNearRobot/hgNearTotal);
 
 printf("\n");
+slSort(&vcList, visCountCmp);
+printf("Count of track visibility\n");
+for (vc = vcList; vc != NULL; vc = vc->next)
+    {
+    int total = vc->visCount + vc->hideCount;
+    double scale = 100.0/total;
+    printf("%s: %d visible, %4.2f%% hidden, %4.2f%% dense, "
+    	   "%4.2f%% squish, %4.2f%% pack, %4.2f%% full\n",
+	   vc->track, vc->visCount, scale*vc->hideCount,
+	   scale*vc->denseCount, scale*vc->squishCount,
+	   scale*vc->packCount, scale*vc->fullCount);
+    }
+
 slSort(&gList, nameCountCmp);
 printf("total hgc clicks: %d\n", hgcTotal);
 for (gEl = gList; gEl != NULL; gEl = gEl->next)
     printf("%4.2f%% hgc %s: %d\n", 100.0 * gEl->count/hgcTotal, 
     	gEl->name, gEl->count);
+printf("\n");
 }
 
 int main(int argc, char *argv[])

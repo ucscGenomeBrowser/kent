@@ -8,7 +8,7 @@
 #include "spDb.h"
 #include "pbTracks.h"
 
-static char const rcsid[] = "$Id: domains.c,v 1.1 2003/11/27 01:33:41 fanhsu Exp $";
+static char const rcsid[] = "$Id: domains.c,v 1.2 2004/01/09 15:34:07 fanhsu Exp $";
 
 void modBaseAnchor(char *swissProtAcc)
 /* Print out anchor to modBase. */
@@ -25,7 +25,7 @@ if (list != NULL)
     {
     char query[256], **row;
     struct sqlResult *sr;
-    hPrintf("<B>Interpro Domains</B> - ");
+    hPrintf("<B>InterPro Domains</B> - ");
     hPrintf("<A HREF=\"http://www.ebi.ac.uk/interpro/ISpy?mode=single&ac=%s\" TARGET=_blank>",
     	swissProtAcc);
     hPrintf("Graphical view of domain structure.</A><BR>");fflush(stdout);

@@ -10,7 +10,7 @@
 #include "wiggle.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: hgLoadWiggle.c,v 1.4 2003/11/10 16:40:31 hiram Exp $";
+static char const rcsid[] = "$Id: hgLoadWiggle.c,v 1.6 2004/01/13 21:39:18 hiram Exp $";
 
 /* Command line switches. */
 boolean noBin = FALSE;		/* Suppress bin field. */
@@ -116,7 +116,8 @@ if( verbose )
     printf("Read %d lines from %s\n", lineCount, fileName);
 }
 
-void writeWiggleTab(char *fileName, struct wiggleStub *wiggleList, int wiggleSize)
+void writeWiggleTab(char *fileName, struct wiggleStub *wiggleList,
+	int wiggleSize, char *database)
 /* Write out wiggle list to tab-separated file. */
 {
 struct wiggleStub *wiggle;
@@ -137,6 +138,8 @@ for (wiggle = wiggleList; wiggle != NULL; wiggle = wiggle->next)
 	wordCount = chopLine(wiggle->line, words);
     for (i=0; i<wordCount; ++i)
         {
+	if (i==7)
+		fprintf(f,"/gbdb/%s/wib/", database );
 	fputs(words[i], f);
 	if (i == wordCount-1)
 	    fputc('\n', f);
@@ -183,13 +186,10 @@ else if (!oldTable)
     dyStringAppend(dy, "  chromStart int unsigned not null,\n");
     dyStringAppend(dy, "  chromEnd int unsigned not null,\n");
     dyStringAppend(dy, "  name varchar(255) not null,\n");
-    dyStringAppend(dy, "  score int unsigned not null,\n");
-    dyStringAppend(dy, "  strand char(1) not null,\n");
-    dyStringAppend(dy, "  Min int unsigned not null,\n");
-    dyStringAppend(dy, "  Span int unsigned not null,\n");
-    dyStringAppend(dy, "  Count int unsigned not null,\n");
-    dyStringAppend(dy, "  Offset int unsigned not null,\n");
-    dyStringAppend(dy, "  File varchar(255) not null,\n");
+    dyStringAppend(dy, "  span int unsigned not null,\n");
+    dyStringAppend(dy, "  count int unsigned not null,\n");
+    dyStringAppend(dy, "  offset int unsigned not null,\n");
+    dyStringAppend(dy, "  file varchar(255) not null,\n");
     dyStringAppend(dy, "  lowerLimit double not null,\n");
     dyStringAppend(dy, "  dataRange double not null,\n");
     dyStringAppend(dy, "  validCount int unsigned not null,\n");
@@ -206,7 +206,7 @@ else if (!oldTable)
     }
 
 printf("Saving %s\n", tab);
-writeWiggleTab(tab, wiggleList, wiggleSize);
+writeWiggleTab(tab, wiggleList, wiggleSize, database);
 
 printf("Loading %s\n", database);
 dyStringClear(dy);

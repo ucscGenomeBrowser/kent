@@ -228,6 +228,10 @@ o Build gene aliases
 
 	kgAliasM hg16 proteins072003
 
+  Generate aliases from kgXref
+
+	kgAliasKgXref hg16
+
   Generate gene aliases from SWISS-PROT data 
 
     kgAliasP hg16 /cluster/store5/swissprot/072003/sprot.dat      sp.lis
@@ -242,7 +246,7 @@ o Build gene aliases
 
   Concatenate all 3 files
 
-	cat kgAliasM.tab kgAliasRefseq.tab kgAliasP.tab|sort|uniq > kgAlias.tab
+	cat kgAliasM.tab kgAliasRefseq.tab  kgAliasKgXref.tab kgAliasP.tab|sort|uniq > kgAlias.tab
 
   Load it into mySQL table
 
@@ -265,4 +269,32 @@ o Build protein aliases
   Load it into mySQL tables
 
 	load data local infile "kgProtAliasBoth.tab" into table hg16.kgProtAlias;
+
+o Build tables for BioCyc
+
+  Create bioCycMapDesc table.
+
+	CREATE TABLE bioCycMapDesc (
+  	mapID varchar(40) NOT NULL default '',
+  	description varchar(255) NOT NULL default '',
+  	KEY mapID (mapID)
+	) TYPE=MyISAM;
+
+  Crate bioCycPathway table.
+
+	CREATE TABLE bioCycPathway (
+  	kgID varchar(40) NOT NULL default '',
+  	geneID varchar(40) NOT NULL default '',
+  	mapID varchar(40) NOT NULL default '',
+  	KEY kgID (kgID),
+ 	KEY geneID (geneID),
+  	KEY mapID (mapID)
+	) TYPE=MyISAM;
+
+  Save the BioCyc Pathway name and description table as names.txt, 
+  make sure there is no extra ^M at end of the line.
+
+	LOAD DATA local INFILE 'names.txt' into table hg16.bioCycMapDesc;
+
+
 

@@ -212,80 +212,6 @@ skip:
 *retEnd = end;
 }
 
-void findCdsStartEndInGenome(struct refSeqInfo *rsi, struct psl *psl, 
-	int *retCdsStart, int *retCdsEnd)
-/* Convert cdsStart/End from mrna to genomic coordinates. */
-{
-int startOffset, endOffset;
-int cdsStart = -1, cdsEnd = -1;
-int i;
-boolean fuglyf = (sameString(psl->qName, "XX_006440"));
-
-if (psl->strand[0] == '-')
-    {
-    endOffset = rsi->cdsStart - psl->qStart;
-    startOffset =  psl->qEnd - rsi->cdsEnd;
-    }
-else
-    {
-    startOffset = rsi->cdsStart - psl->qStart;
-    endOffset =  psl->qEnd - rsi->cdsEnd;
-    }
-
-if (fuglyf) uglyf("%s qStart %d, rsi->cdsStart %d, startOffset %d\n", psl->qName, psl->qStart, rsi->cdsStart, startOffset);
-if (fuglyf) uglyf("   qEnd %d, rsi->cdsEnd %d, endOffset %d\n", psl->qEnd, rsi->cdsEnd, endOffset);
-
-/* Adjust starting pos. */
-for (i=0; i<psl->blockCount; ++i)
-    {
-    int blockSize = psl->blockSizes[i];
-    if (startOffset < 0) startOffset = 0;
-    if (startOffset < blockSize)
-	{
-        cdsStart = psl->tStarts[i] + startOffset;
-	if (fuglyf)uglyf("cdsStart calculated = %d\n", cdsStart);
-	break;
-	}
-    /* Adjust start offset for this block.  Also adjust for
-     * query sequence between blocks that doesn't align. */
-    startOffset -= blockSize;
-    if (fuglyf)uglyf("blockSize = %d\n", blockSize);
-    if (i != psl->blockCount - 1)
-	{
-	int skip =  psl->qStarts[i+1] - (psl->qStarts[i] + blockSize);
-	if (fuglyf)uglyf("skip = %d\n", skip);
-	startOffset -= skip;
-	}
-    }
-
-/* Adjust end pos. */
-for (i=psl->blockCount-1; i >= 0; --i)
-    {
-    int blockSize = psl->blockSizes[i];
-    if (endOffset < 0) endOffset = 0;
-    if (endOffset < blockSize)
-        {
-	cdsEnd = psl->tStarts[i] + blockSize - endOffset;
-	break;
-	}
-    /* Adjust start offset for this block.  Also adjust for
-     * query sequence between blocks that doesn't align. */
-    endOffset -= blockSize;
-    if (i != 0)
-        {
-	int skip =  psl->qStarts[i] - (psl->qStarts[i-1] + psl->blockSizes[i-1]);
-	endOffset -= skip;
-	}
-    }
-
-if (cdsStart == -1 || cdsEnd == -1)
-    {
-    cdsEnd = cdsStart = psl->tEnd;
-    }
-*retCdsStart = cdsStart;
-*retCdsEnd = cdsEnd;
-}
-
 char *unburyAcc(struct lineFile *lf, char *longNcbiName)
 /* Return accession given a long style NCBI name.  
  * Cannibalizes the longNcbiName. */
@@ -565,12 +491,17 @@ while ((psl = pslNext(lf)) != NULL)
 
     if (answer != NULL)
     	{	
+        struct genePred *gp = NULL;
     	exonList = pslToExonList(psl);
     	fprintf(kgTab, "%s\t%s\t%c\t%d\t%d\t",
 	psl->qName, psl->tName, psl->strand[0], psl->tStart, psl->tEnd);
     	rsi = hashMustFindVal(rsiHash, psl->qName);
-    	findCdsStartEndInGenome(rsi, psl, &cdsStart, &cdsEnd);
-    	fprintf(kgTab, "%d\t%d\t", cdsStart, cdsEnd);
+
+        gp = genePredFromPsl(psl, rsi->cdsStart, rsi->cdsEnd, -1);
+        if (!gp)
+            errAbort("Cannot convert psl (%s) to genePred.\n", psl->qName);
+
+    	fprintf(kgTab, "%d\t%d\t", gp->cdsStart, gp->cdsEnd);
     	fprintf(kgTab, "%d\t", slCount(exonList));
     
     	fflush(kgTab);

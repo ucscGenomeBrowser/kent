@@ -6,7 +6,7 @@ MYLIBDIR = ../../lib/$(MACHTYPE)
 MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a 
 
 O = affyAtlas.o affyGenoDetails.o affy10KDetails.o affyOffset.o affyPairs.o \
-    agpFrag.o agpGap.o altGraph.o altGraphX.o ancientRref.o axtInfo.o \
+    agpFrag.o agpGap.o alignSeqSizes.o altGraph.o altGraphX.o ancientRref.o axtInfo.o \
     axtLib.o bactigPos.o bbRepMask.o bdgpExprLink.o bdgpGeneInfo.o bed.o \
     blastTab.o blastzNet.o blatServers.o borf.o borkPseudoHom.o \
     cart.o cartDb.o celeraCoverage.o celeraDupPositive.o cgh.o \
@@ -32,7 +32,7 @@ O = affyAtlas.o affyGenoDetails.o affy10KDetails.o affyOffset.o affyPairs.o \
     pbStamp.o pepPred.o plasEndPairs.o pseudoGeneLink.o pslWScore.o qaSeq.o \
     recombRate.o recombRateRat.o recombRateMouse.o refLink.o refSeqStatus.o \
     riken.o rikenBest.o rikenCluster.o rmskOut.o rnaFold.o rnaGene.o rnaGroup.o \
-    roughAli.o sage.o sageCounts.o sageExp.o sample.o \
+    roughAli.o sage.o sageCounts.o sageExp.o sample.o tfbsCons.o \
     sanger22extra.o scopDes.o scoredRef.o sgdAbundance.o sgdClone.o \
     sgdDescription.o sgdOther.o simpleNucDiff.o simpleRepeat.o snp.o \
     softPromoter.o softberryHom.o spDb.o stanMad.o stsAlias.o \
@@ -40,7 +40,7 @@ O = affyAtlas.o affyGenoDetails.o affy10KDetails.o affyOffset.o affyPairs.o \
     stsMap.o stsMapMouse.o stsMapMouseNew.o stsMapRat.o stsMarker.o \
     synMap.o synteny100000.o syntenyBerk.o syntenySanger.o tableDescriptions.o \
     tigrCmrGene.o tilingPath.o traceInfo.o trackDb.o trackDbCustom.o \
-    trackTable.o vegaInfo.o wabAli.o web.o wiggle.o 
+    trackTable.o vegaInfo.o wabAli.o web.o wiggle.o wiggleCart.o
 
 
 ../../lib/$(MACHTYPE)/jkhgap.a: $(O) 

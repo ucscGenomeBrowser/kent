@@ -5,7 +5,9 @@
 #include "selectTable.h"
 #include "psl.h"
 #include "bed.h"
+#include "coordCols.h"
 #include "genePred.h"
+#include "dystring.h"
 #include "options.h"
 
 /* FIXME: would be nice to be able to specify ranges in the same manner
@@ -13,7 +15,9 @@
 
 static struct optionSpec optionSpecs[] = {
     {"selectFmt", OPTION_STRING},
+    {"selectCoordCols", OPTION_STRING},
     {"inFmt", OPTION_STRING},
+    {"inCoordCols", OPTION_STRING},
     {"nonOverlaping", OPTION_BOOLEAN},
     {"strand", OPTION_BOOLEAN},
     {"excludeSelf", OPTION_BOOLEAN},
@@ -21,14 +25,17 @@ static struct optionSpec optionSpecs[] = {
 };
 
 /* file format constants */
-#define UNKNOWN_FMT   0
-#define PSL_FMT       1
-#define GENEPRED_FMT  2
-#define BED_FMT       3
+#define UNKNOWN_FMT    0
+#define PSL_FMT        1
+#define GENEPRED_FMT   2
+#define BED_FMT        3
+#define COORD_COLS_FMT 4
 
 /* Options parsed from the command line */
 unsigned selectFmt = UNKNOWN_FMT;
 unsigned inFmt = UNKNOWN_FMT;
+struct coordCols selectCoordCols;
+struct coordCols inCoordCols;
 boolean nonOverlaping = FALSE;
 unsigned selectOptions = 0;
 
@@ -182,6 +189,59 @@ carefulClose(&outFh);
 lineFileClose(&lf);
 }
 
+boolean coordColsSelected(char *line, struct lineFile *lf)
+/* parse line and determine if it is selected; don't corrupt line */
+{
+static struct dyString *lineBuf = NULL;
+static int rowBufSize = 0;
+static char** rowBuf = NULL;
+int numCols;
+boolean overlaps;
+struct coordColVals colVals;
+
+/* setup local buffers */
+if (lineBuf == NULL)
+    lineBuf = dyStringNew(512);
+if (inCoordCols.minNumCols > rowBufSize)
+    {
+    rowBuf = needMoreMem(rowBuf, rowBufSize*sizeof(char*), inCoordCols.minNumCols*sizeof(char*));
+    rowBufSize = inCoordCols.minNumCols;
+    }
+if (line[0] == '#')
+    return TRUE;  /* keep header line */
+
+dyStringClear(lineBuf);
+dyStringAppend(lineBuf, line);
+numCols = chopByChar(lineBuf->string, '\t', rowBuf, rowBufSize);
+if (numCols == 0)
+    return FALSE;  /* skip empty lines */
+lineFileExpectAtLeast(lf, inCoordCols.minNumCols, numCols);
+colVals = coordColParseRow(&inCoordCols, lf, rowBuf, numCols);
+overlaps = selectIsOverlapped(selectOptions, NULL, colVals.chrom,
+                              colVals.start, colVals.end, colVals.strand);
+
+if (nonOverlaping)
+    return !overlaps;
+else
+    return overlaps;
+}
+
+void coordColsSelect(char* inFile, char* outFile)
+/* copy records that matches the selection criteria when the coordinates are
+ * specified by start column. */
+{
+struct lineFile *lf = lineFileOpen(inFile, TRUE);
+FILE* outFh = mustOpen(outFile, "w");
+char *line;
+
+while (lineFileNextReal(lf, &line))
+    {
+    if (coordColsSelected(line, lf))
+        fprintf(outFh, "%s\n", line);
+    }
+carefulClose(&outFh);
+lineFileClose(&lf);
+}
 
 void loadSelectTable(char *selectFile)
 /* load the select table from a file */
@@ -196,6 +256,9 @@ switch (selectFmt)
         break;
     case BED_FMT:
         selectAddBeds(selectFile);
+        break;
+    case COORD_COLS_FMT:
+        selectAddCoordCols(selectFile, &selectCoordCols);
         break;
     }
 }
@@ -215,6 +278,9 @@ switch (inFmt)
         break;
     case BED_FMT:
         bedSelect(inFile, outFile);
+        break;
+    case COORD_COLS_FMT:
+        coordColsSelect(inFile, outFile);
         break;
     }
 }
@@ -239,6 +305,15 @@ errAbort("%s:\n"
          "          bed - BED format (default for *.bed files).\n"
          "                If BED doesn't have blocks, the bed range is used.\n" 
          "  -inFmt=fmt - specify inFile format, same values as -selectFmt.\n"
+         "  -selectCoordCols=spec - Select file is tab-separate with coordinates\n"
+         "          as described by spec, which is one of:\n"
+         "            o chromCol - chrom in this column followed by start and end.\n"
+         "            o chromCol,startCol,endCol - chrom, start, and end in specified\n"
+         "              columns.\n"
+         "            o chromCol,startCol,endCol,strandCol - chrom, start,, end, and\n"
+         "              strand in specified columns.\n"
+         "  -inCoordCols=spec - in file is tab-separate with coordinates specified by\n"
+         "          spec, in format described above.\n"
          "  -nonOverlaping - select non-overlaping instead of overlaping records\n"
          "  -strand - must be on the same strand to be considered overlaping\n"
          "  -excludeSelf - don't compare alignments with the same id.\n",
@@ -255,12 +330,30 @@ selectFile = argv[1];
 inFile = argv[2];
 outFile = argv[3];
 
+if (optionExists("selectFmt") && optionExists("selectCoordCols"))
+    errAbort("can't specify both -selectFmt and -selectCoordCols");
+if (optionExists("intFmt") && optionExists("intCoordCols"))
+    errAbort("can't specify both -intFmt and -intCoordCols");
+
+
 if (optionExists("selectFmt"))
     selectFmt = parseFormatSpec(optionVal("selectFmt", NULL));
+else if (optionExists("selectCoordCols"))
+    {
+    selectCoordCols = coordColsParseSpec("selectCoordCols",
+                                         optionVal("selectCoordCols", NULL));
+    selectFmt = COORD_COLS_FMT;
+    }
 else
     selectFmt = getFileFormat(selectFile);
 if (optionExists("inFmt"))
     inFmt = parseFormatSpec(optionVal("inFmt", NULL));
+else if (optionExists("inCoordCols"))
+    {
+    inCoordCols = coordColsParseSpec("inCoordCols",
+                                     optionVal("inCoordCols", NULL));
+    inFmt = COORD_COLS_FMT;
+    }
 else
     inFmt = getFileFormat(inFile);
 

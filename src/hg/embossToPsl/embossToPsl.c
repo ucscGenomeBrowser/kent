@@ -1,15 +1,15 @@
-/* embossToPsl - Convert axt to psl format. 
+/* embossToPsl - Convert EMBOSS pair alignments to psl format. 
  * This file is copyright 2002 Jim Kent, but license is hereby
  * granted for all use - public, private or commercial. */
 #include "common.h"
 #include "linefile.h"
-#include "hash.h"
+#include "alignSeqSizes.h"
 #include "options.h"
 #include "dystring.h"
 #include "psl.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: embossToPsl.c,v 1.1 2004/01/04 10:30:10 markd Exp $";
+static char const rcsid[] = "$Id: embossToPsl.c,v 1.3 2004/01/17 09:01:13 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -21,32 +21,22 @@ errAbort(
   "\n"
   "where in.pair is an EMBOSS pair format alignment file\n"
   "\n"
-  "options:\n"
-  "   -qSizes=szfile - read query sizes from tab file of <seqName> <size>\n"
-  "   -tSizes=szfile - read target sizes from tab file of <seqName> <size>\n"
-  "   -qSize=size - set query size, there can be only one query\n"
-  "   -tSize=size - set targetx size, there can be only one target\n"
+  "Options:\n"
+  "   -qSizesFile=szfile - read query sizes from tab file of <seqName> <size>\n"
+  "   -qSizes='id1 size1 ..' - set query sizes, value is white-space separated pairs of sequence and size\n"
+  "   -tSizesFile=szfile - read target sizes from tab file of <seqName> <size>\n"
+  "   -tSizes='id1 size1 ..' - set target sizes, value is white-space separated pairs of sequence and size\n"
   );
 }
 
 /* command line */
 static struct optionSpec optionSpec[] = {
+    {"qSizesFile", OPTION_STRING},
     {"qSizes", OPTION_STRING},
+    {"tSizesFile", OPTION_STRING},
     {"tSizes", OPTION_STRING},
-    {"qSize", OPTION_INT},
-    {"tSize", OPTION_INT},
     {NULL, 0}
 };
-
-struct sizes
-{
-    struct hash* tbl;    /* table of multiple sequences */    
-    char* singleSeq;     /* single seq name, after first access */
-    int singleSize;      /* size for single sequence */
-};
-
-static struct sizes qSizes = {NULL, NULL, 0};
-static struct sizes tSizes = {NULL, NULL, 0};
 
 struct seqParser
 /* containes current record for query or target */
@@ -61,64 +51,12 @@ struct parser
 /* data used during parsing */
 {
     struct lineFile* lf;  /* alignment file */
+    struct alignSeqSizes* ass;  /* sequence sizes */
 
     /* current record */
     struct seqParser query;
     struct seqParser target;
 };
-
-struct hash *readSizes(char *fileName)
-/* Read tab-separated file into hash with
- * name key size value. */
-{
-struct lineFile *lf = lineFileOpen(fileName, TRUE);
-struct hash *hash = newHash(0);
-char *row[2];
-while (lineFileRow(lf, row))
-    {
-    char *name = row[0];
-    int size = lineFileNeedNum(lf, row, 1);
-    if (hashLookup(hash, name) != NULL)
-        warn("Duplicate %s, ignoring all but first\n", name);
-    else
-	hashAdd(hash, name, intToPt(size));
-    }
-lineFileClose(&lf);
-return hash;
-}
-
-void loadSizes(char* fileOpt, char* sizeOpt, struct sizes* sizes)
-/* set query or target size info */
-{
-if (optionExists(fileOpt) && optionExists(sizeOpt))
-    errAbort("can't specify both -%s and -%s", fileOpt, sizeOpt);
-if (optionExists(fileOpt))
-    sizes->tbl = readSizes(optionVal(fileOpt, NULL));
-else if (optionExists(sizeOpt))
-    sizes->singleSize = optionInt(sizeOpt, 0);
-else
-    errAbort("must specify one of -%s or -%s", fileOpt, sizeOpt);
-}
-
-
-int getSize(struct sizes* sizes, char *name)
-/* Find size of a sequence. */
-{
-if (sizes->tbl != NULL)
-    return ptToInt(hashMustFindVal(sizes->tbl, name));
-else 
-    {
-    if (sizes->singleSeq != NULL)
-        {
-        if (!sameString(name, sizes->singleSeq))
-            errAbort("onle one size specified, however have multipled seqs: %s and %s",
-                     sizes->singleSeq, name);
-        }
-    else
-        sizes->singleSeq = cloneString(name);
-    return sizes->singleSize;
-    }
-}
 
 char* skipToPrefix(struct lineFile *inLf, char *prefix)
 /* skip to a line starting with prefix, or NULL on EOF */
@@ -236,13 +174,13 @@ void processAlign(struct parser *parser, FILE *outFh)
 if (parseAlign(parser))
     {
     char *qName = parser->query.name->string;
+    unsigned qSize = alignSeqSizesMustGetQuery(parser->ass, qName);
     char *tName = parser->target.name->string;
-    struct psl *psl = pslFromAlign(qName, getSize(&qSizes, qName),
-                                   parser->query.start, parser->query.end,
-                                   parser->query.str->string,
-                                   tName, getSize(&tSizes, tName),
-                                   parser->target.start, parser->target.end,
-                                   parser->target.str->string,
+    unsigned tSize = alignSeqSizesMustGetTarget(parser->ass, tName);
+    struct psl *psl = pslFromAlign(qName, qSize, parser->query.start,
+                                   parser->query.end, parser->query.str->string,
+                                   tName, tSize, parser->target.start,
+                                   parser->target.end, parser->target.str->string,
                                    "+", 0);
     if (psl != NULL)
         pslTabOut(psl, outFh);
@@ -250,13 +188,14 @@ if (parseAlign(parser))
     }
 }
 
-void embossToPsl(char *inName, char *outName)
-/* embossToPsl - Convert axt to psl format. */
+void embossToPsl(struct alignSeqSizes *ass, char *inName, char *outName)
+/* embossToPsl - Convert emboss to psl format. */
 {
 struct parser parser;
 FILE *outFh;
 ZeroVar(&parser);
 parser.lf = lineFileOpen(inName, TRUE);
+parser.ass = ass;
 initSeqParser(&parser.query);
 initSeqParser(&parser.target);
 
@@ -273,12 +212,15 @@ carefulClose(&outFh);
 int main(int argc, char *argv[])
 /* Process command line. */
 {
+struct alignSeqSizes* ass;
 optionInit(&argc, argv, optionSpec);
 if (argc != 3)
     usage();
-loadSizes("qSizes", "qSize", &qSizes);
-loadSizes("tSizes", "tSize", &tSizes);
-
-embossToPsl(argv[1], argv[2]);
+ass = alignSeqSizesNew(optionVal("qSizesFile", NULL),
+                       optionVal("qSizes", NULL),
+                       optionVal("tSizesFile", NULL),
+                       optionVal("tSizes", NULL));
+embossToPsl(ass, argv[1], argv[2]);
+alignSeqSizesFree(&ass);
 return 0;
 }

@@ -5,7 +5,7 @@
 #ifndef WIGGLE_H
 #define WIGGLE_H
 
-#define WIGGLE_NUM_COLS 16
+#define WIGGLE_NUM_COLS 13
 
 struct wiggle
 /* Wiggle track values to display as y-values (first 6 fields are bed6) */
@@ -15,13 +15,10 @@ struct wiggle
     unsigned chromStart;	/* Start position in chromosome */
     unsigned chromEnd;	/* End position in chromosome */
     char *name;	/* Name of item */
-    unsigned score;	/* range [0:127] == maximum in this block */
-    char strand[2];	/* + or - (may not be needed for wiggle) */
-    unsigned Min;	/* range [0:126] == minimum in this block */
-    unsigned Span;	/* each value spans this many bases */
-    unsigned Count;	/* number of values in this block */
-    unsigned Offset;	/* offset in File to fetch data */
-    char *File;	/* path name to data file, one byte per value */
+    unsigned span;	/* each value spans this many bases */
+    unsigned count;	/* number of values in this block */
+    unsigned offset;	/* offset in File to fetch data */
+    char *file;	/* path name to data file, one byte per value */
     double lowerLimit;	/* lowest data value in this block */
     double dataRange;	/* lowerLimit + dataRange = upperLimit */
     unsigned validCount;	/* number of valid data values in this block */
@@ -79,5 +76,29 @@ void wiggleOutput(struct wiggle *el, FILE *f, char sep, char lastSep);
 #define WIG_NO_DATA	128
 #define MAX_WIG_VALUE	127
 #define MAX_OPT_STRLEN	128
+
+#include "hdb.h"
+
+extern void wigFetchMinMaxY(struct trackDb *tdb, double *min,
+    double *max, double *tDbMin, double *tDbMax, int wordCount, char *words[]);
+/* return min,max Y ranges from trackDb or cart, in lib/wiggleCart.c */
+extern void wigFetchMinMaxPixels(struct trackDb *tdb, int *Min, int *Max,
+    int *Default);
+/* return pixels heights allowable from trackDb or cart in lib/wiggleCart.c */
+extern enum wiggleGridOptEnum wigFetchHorizontalGrid(struct trackDb *tdb,
+    char **optString);
+/* return horizontalGrid setting	*/
+extern enum wiggleScaleOptEnum wigFetchAutoScale(struct trackDb *tdb,
+    char **optString);
+/* return autoScale setting	*/
+extern enum wiggleGraphOptEnum wigFetchGraphType(struct trackDb *tdb,
+	char **optString);
+/* return graph type, line(points) or bar graph	*/
+
+#if defined(DEBUG)
+#define DBGMSGSZ	1023
+extern char dbgMsg[DBGMSGSZ+1];
+extern void wigDebugPrint(char * name);
+#endif
 
 #endif /* WIGGLE_H */

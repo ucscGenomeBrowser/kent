@@ -7,6 +7,7 @@
 #include "psl.h"
 #include "bed.h"
 #include "genePred.h"
+#include "coordCols.h"
 
 #define SELTBL_DEBUG 0
 
@@ -54,13 +55,14 @@ struct binKeeper* bins = selectGetChromBins(chrom, TRUE, &chromKey);
 struct selectRange* range;
 AllocVar(range);
 if (SELTBL_DEBUG)
-    fprintf(stderr, "selectAddRange: %s: %s %d-%d, %c\n", name, chrom, start, end, strand);
+    fprintf(stderr, "selectAddRange: %s: %s %d-%d, %c\n", name, chrom, start, end, (strand == 0) ? '?' : strand);
 
 range->chrom = chromKey;
 range->start = start;
 range->end = end;
 range->strand = strand;
-range->name = cloneString(name);
+if (name != NULL)
+    range->name = cloneString(name);
 
 binKeeperAdd(bins, start, end, range);
 }
@@ -158,6 +160,39 @@ while ((numCols = lineFileChopNextTab(lf, row, ArraySize(row))) > 0)
 lineFileClose(&lf);
 }
 
+void selectAddCoordCols(char* tabFile, struct coordCols* cols)
+/* add records with coordiates at a specified column */
+{
+struct lineFile *lf = lineFileOpen(tabFile, TRUE);
+char** row;
+int numCols;
+struct coordColVals colVals;
+
+row = needMem(cols->minNumCols*sizeof(char*));
+
+while ((numCols = lineFileChopNextTab(lf, row, cols->minNumCols)) > 0)
+    {
+    colVals = coordColParseRow(cols, lf, row, numCols);
+    selectAddRange(colVals.chrom, colVals.start, colVals.end, colVals.strand,
+                   NULL);
+    }
+lineFileClose(&lf);
+freez(&row);
+}
+
+static boolean allowedOverlap(unsigned options, char *name, char strand, struct selectRange* range)
+/* see if range attributes other than chrom,start, end pass */
+{
+if ((options & SEL_USE_STRAND) && (range->strand != '\0')
+    && (strand != range->strand))
+    return FALSE;
+
+if ((options & SEL_EXCLUDE_SELF) && (range->name != NULL) && (name != NULL)
+    && sameString(name, range->name))
+    return FALSE;
+return TRUE;
+}
+
 boolean selectIsOverlapped(unsigned options, char *name, char* chrom, int start, int end, char strand)
 /* determine if a range is overlapped */
 {
@@ -171,15 +206,13 @@ if (bins != NULL)
     for (o = overlapping; (o != NULL) && !isOverlapped; o = o->next)
         {
         struct selectRange* range = o->val;
-        if ((!(options & SEL_USE_STRAND) || ((strand == range->strand)))
-            && (!(options & SEL_EXCLUDE_SELF) || !sameString(name, range->name)))
-            isOverlapped = TRUE;
+        isOverlapped = allowedOverlap(options, name, strand, range);
         }
     slFreeList(&overlapping);
     }
 if (SELTBL_DEBUG)
-    fprintf(stderr, "selectIsOverlapping: %s: %s %d-%d, %c => %s\n", name, chrom, start, end, strand,
-            (isOverlapped ? "yes" : "no"));
+    fprintf(stderr, "selectIsOverlapping: %s: %s %d-%d, %c => %s\n", name, chrom, start, end, 
+            ((strand == '\0') ? '?' : strand), (isOverlapped ? "yes" : "no"));
 return isOverlapped;
 }
 

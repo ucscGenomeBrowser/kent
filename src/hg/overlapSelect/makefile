@@ -6,8 +6,8 @@ MYLIBDIR = ../../lib/$(MACHTYPE)
 MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 
 
-H = selectTable.h
-O = selectTable.o overlapSelect.o
+H = selectTable.h coordCols.h
+O = selectTable.o coordCols.o overlapSelect.o
 B =  $(HOME)/bin/$(MACHTYPE)/overlapSelect
 
 $B: overlapSelect

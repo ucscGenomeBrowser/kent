@@ -11,7 +11,7 @@
 #include "fa.h"
 
 struct dnaSeq *faList;
-static char const rcsid[] = "$Id: lavToAxt.c,v 1.14 2003/12/04 03:29:25 kent Exp $";
+static char const rcsid[] = "$Id: lavToAxt.c,v 1.16 2004/01/22 03:15:11 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -22,10 +22,12 @@ errAbort(
   "   lavToAxt in.lav tNibDir qNibDir out.axt\n"
   "options:\n"
   "   -fa  qNibDir is interpreted as a fasta file of multiple dna seq instead of directory of nibs\n"
+  "   -dropSelf  drops alignments on the diagonal for self alignments\n"
   );
 }
 
 boolean qIsFa = FALSE;	/* Corresponds to -fa flag. */
+boolean dropSelf = FALSE;	/* Corresponds to -dropSelf flag. */
 
 struct block
 /* A block of an alignment. */
@@ -101,6 +103,9 @@ struct cachedNib *cn = openFromCache(cache, dirName, seqName);
 if (seqSize != cn->size)
     errAbort("%s/%s is %d bases in .lav file and %d in .nib file\n",
        dirName, seqName, seqSize, cn->size); 
+if ((start+size) > 1000000000 )
+    printf("%s/%s is %d bases in .lav file and %d in .nib file start %d size %d end %d\n",
+       dirName, seqName, seqSize, cn->size, start, size, start+size); 
 return nibLdPartMasked(NIB_MASK_MIXED, cn->fileName, cn->f, cn->size, start, size);
 }
 
@@ -422,6 +427,39 @@ blockList = removeFrayedEnds(blockList);
 *retScore = score;
 }
 
+struct block *removeDiagonal(struct block *blockList, boolean isRc,
+	char *qName, char *tName, int qSize, int tSize) 
+/* remove blocks that are on the diagonal of a self alignment */
+{
+struct block *block = NULL, *prevBlock = NULL;
+
+if (blockList == NULL)
+    return NULL;
+if (!sameString(qName,tName))
+    return blockList;
+for (block = blockList; block != NULL; block = block->next)
+    {
+    int qStart = (block == NULL) ? -1 : block->qStart;
+    int qEnd   = (block == NULL) ? -1 : block->qEnd;
+    assert (block!= NULL);
+    if (isRc)
+        reverseIntRange(&qStart, &qEnd, qSize);
+    if (rangeIntersection(block->tStart, block->tEnd,  qStart, qEnd)> 0)
+        {
+        if (prevBlock != NULL)
+            {
+            prevBlock->next = block->next;
+            freeMem(block);
+            block = prevBlock;
+            }
+        else
+            {
+            blockList = blockList->next;
+            }
+        }
+    }
+return blockList;
+}
 void parseIntoAxt(char *lavFile, FILE *f, 
 	char *tNibDir, struct dlList *tCache, 
 	char *qNibDir, struct dlList *qCache)
@@ -454,6 +492,8 @@ while (lineFileNext(lf, &line, NULL))
     else if (startsWith("a {", line))
         {
 	parseA(lf, &blockList, &score);
+        if (optionExists("dropSelf"))
+            blockList = removeDiagonal(blockList, isRc, qName, tName, qSize, tSize);
 	outputBlocks(lf, blockList, score, f, isRc, 
 		qName, qSize, qNibDir, qCache,
 		tName, tSize, tNibDir, tCache);

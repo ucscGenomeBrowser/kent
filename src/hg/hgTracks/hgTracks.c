@@ -74,8 +74,9 @@
 #include "chromColors.h"
 #include "cdsColors.h"
 #include "cds.h"
+#include "simpleNucDiff.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.652 2004/01/08 19:37:39 kent Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.659 2004/01/26 18:07:45 hiram Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
@@ -586,7 +587,7 @@ void mapBoxToggleVis(int x, int y, int width, int height,
  * program with the current track expanded. */
 {
 char buf[256];
-snprintf(buf, sizeof(buf), 
+safef(buf, sizeof(buf), 
 	"Toggle the display density of %s", curGroup->shortLabel);
 mapBoxReinvoke(x, y, width, height, curGroup, NULL, 0, 0, buf);
 }
@@ -1161,33 +1162,9 @@ boolean errorColor = FALSE;
 
 /*if we are zoomed in far enough, look to see if we are coloring
   by codon, and setup if so.*/
-if(zoomedToCdsColorLevel)
-{
-    drawOptionNum = cdsColorSetup(vg, tg, cdsColor, mrnaSeq, psl,
+if (zoomedToCdsColorLevel)
+    drawOptionNum = cdsColorSetup(vg, tg, cdsColor, &mrnaSeq, &psl,
             &errorColor, lf, cdsColorsMade);
-
-    if(drawOptionNum>0 && zoomedToCodonLevel)
-       {
-       char *database = cartUsualString(cart, "db", hGetDb());
-
-       if(sameString(tg->mapName,"mrna")   ||
-       sameString(tg->mapName,"est")    ||
-       sameString(tg->mapName,"xenoMrna"))
-            {
-
-            mrnaSeq = mustGetSeqUpper(lf->name,tg->mapName);
-            psl = genePredLookupPsl(database, chromName, lf, tg->mapName);
-
-            if(mrnaSeq != NULL && psl != NULL && psl->strand[0] == '-')
-                reverseComplement(mrnaSeq->dna,strlen(mrnaSeq->dna));
-            else
-                errorColor = TRUE;
-            }
-
-       }
- 
-
-}
 
 if ((tg->tdb != NULL) && (vis != tvDense))
     intronGap = atoi(trackDbSettingOrDefault(tg->tdb, "intronGap", "0"));
@@ -1227,26 +1204,29 @@ for (sf = lf->components; sf != NULL; sf = sf->next)
 	{
 	e2 = e;
 	if (e2 > tallStart) e2 = tallStart;
-	drawScaledBoxSample(vg, s, e2, scale, xOff, y+shortOff, shortHeight, color , lf->score);
+	drawScaledBoxSample(vg, s, e2, scale, xOff, y+shortOff, shortHeight, 
+            color, lf->score);
 	s = e2;
 	}
     if (e > tallEnd)
 	{
 	s2 = s;
 	if (s2 < tallEnd) s2 = tallEnd; 
-	drawScaledBoxSample(vg, s2, e, scale, xOff, y+shortOff, shortHeight, color , lf->score);
+	drawScaledBoxSample(vg, s2, e, scale, xOff, y+shortOff, shortHeight, 
+            color, lf->score);
 	e = s2;
 	}
     if (e > s)
 	{
-        if(drawOptionNum>0 && zoomedToCdsColorLevel)
+        if (drawOptionNum>0 && zoomedToCdsColorLevel)
             drawCdsColoredBox(tg, lf, sf->grayIx, cdsColor, vg, xOff, y, scale, 
 	            font, s, e, heightPer, zoomedToCodonLevel, mrnaSeq,
                 psl, drawOptionNum, errorColor, &foundStart,
                 MAXPIXELS, winStart);
         else
             {
-	        drawScaledBoxSample(vg, s, e, scale, xOff, y, heightPer, color, lf->score );
+	        drawScaledBoxSample(vg, s, e, scale, xOff, y, heightPer, 
+                    color, lf->score );
 
 	        if (exonArrows)
 	            {
@@ -1334,9 +1314,9 @@ if (start != -1 && !lfs->noLine)
 }
 	
 
-static void linkedFeaturesSeriesDrawAt(struct track *tg, void *item, struct vGfx *vg, 
-	int xOff, int y, double scale,
-	MgFont *font, Color color, enum trackVisibility vis)
+static void linkedFeaturesSeriesDrawAt(struct track *tg, void *item, 
+        struct vGfx *vg, int xOff, int y, double scale,
+	    MgFont *font, Color color, enum trackVisibility vis)
 /* Draw a linked features series item at position. */
 {
 struct linkedFeaturesSeries *lfs = item;
@@ -2088,7 +2068,7 @@ int grayIx = maxShade;
 int rowOffset;
 
 int drawOptionNum = 0; //off
-if(table != NULL)
+if (table != NULL)
     drawOptionNum = getCdsDrawOptionNum(table);
 
 sr = hRangeQuery(conn, table, chrom, start, end, NULL, &rowOffset);
@@ -2102,7 +2082,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     strncpy(lf->name, gp->name, sizeof(lf->name));
     lf->orientation = orientFromChar(gp->strand[0]);
 
-    if(drawOptionNum>0 && zoomedToCdsColorLevel)
+    if (drawOptionNum>0 && zoomedToCdsColorLevel)
         sfList = splitGenePredByCodon(chrom, lf, gp,NULL);
     else
         {
@@ -2123,8 +2103,17 @@ while ((row = sqlNextRow(sr)) != NULL)
 
     lf->components = sfList;
     linkedFeaturesBoundsAndGrays(lf);
-    lf->tallStart = gp->cdsStart;
-    lf->tallEnd = gp->cdsEnd;
+
+    if (gp->cdsStart >= gp->cdsEnd)
+        {
+        lf->tallStart = gp->txEnd;
+        lf->tallEnd = gp->txEnd;
+        }
+    else
+        {
+        lf->tallStart = gp->cdsStart;
+        lf->tallEnd = gp->cdsEnd;
+        }
     
     slAddHead(&lfList, lf);
     genePredFree(&gp);
@@ -2875,7 +2864,7 @@ int estOrient = 0;
 
 if(hTableExists("estOrientInfo"))
     {
-    snprintf(query, sizeof(query), 
+    safef(query, sizeof(query), 
 	     "select intronOrientation from estOrientInfo where name='%s' and chromStart=%d and chromEnd=%d and chrom='%s'", 
 	     lf->name, lf->start, lf->end, chromName);
     estOrient = sqlQuickNum(conn, query);
@@ -3473,7 +3462,7 @@ tg->itemColor = genomicSuperDupsColor;
 /* Make track for Genomic Dups. */
 
 void loadGenomicDups(struct track *tg)
-/* Load up simpleRepeats from database table to track items. */
+/* Load up genomicDups from database table to track items. */
 {
 bedLoadItem(tg, "genomicDups", (ItemLoader)genomicDupsLoad);
 if (limitVisibility(tg) == tvFull)
@@ -3529,6 +3518,29 @@ void jkDupliconMethods(struct track *tg)
 /* Load up custom methods for duplicon. */
 {
 tg->itemColor = jkDupliconColor;
+}
+
+
+static void loadSimpleNucDiff(struct track *tg)
+/* Load up simple diffs from database table to track items. */
+{
+bedLoadItem(tg, tg->mapName, (ItemLoader)simpleNucDiffLoad);
+}
+
+static char *simpleNucDiffName(struct track *tg, void *item)
+/* Return name of simpleDiff item. */
+{
+static char buf[32];
+struct simpleNucDiff *snd = item;
+safef(buf, sizeof(buf), "%s<->%s", snd->tSeq, snd->qSeq);
+return buf;
+}
+
+static void chimpSimpleDiffMethods(struct track *tg)
+/* Load up custom methods for simple diff */
+{
+tg->loadItems = loadSimpleNucDiff;
+tg->itemName = simpleNucDiffName;
 }
 
 char *simpleRepeatName(struct track *tg, void *item)
@@ -4818,7 +4830,7 @@ char *optionStr ;
 tg->loadItems = loadMouseOrtho;
 tg->freeItems = freeMouseOrtho;
 
-snprintf( option, sizeof(option), "%s.color", tg->mapName);
+safef( option, sizeof(option), "%s.color", tg->mapName);
 optionStr = cartUsualString(cart, option, "on");
 if( sameString( optionStr, "on" )) /*use anti-aliasing*/
     tg->itemColor = mouseOrthoItemColor;
@@ -4865,7 +4877,7 @@ char *optionStr ;
 tg->loadItems = loadHumanParalog;
 tg->freeItems = freeHumanParalog;
 
-snprintf( option, sizeof(option), "%s.color", tg->mapName);
+safef( option, sizeof(option), "%s.color", tg->mapName);
 optionStr = cartUsualString(cart, option, "on");
 if( sameString( optionStr, "on" )) /*use anti-aliasing*/
     tg->itemColor = humanParalogItemColor;
@@ -4994,7 +5006,7 @@ for (epb=tg->items;  epb != NULL;  epb=epb->next)
 	ptr = epb->name;
     else
 	ptr++;
-    snprintf(buf, sizeof(buf), "%s %dk", ptr, (int)(epb->xenoStart/1000));
+    safef(buf, sizeof(buf), "%s %dk", ptr, (int)(epb->xenoStart/1000));
     free(epb->name);
     epb->name = cloneString(buf);
     }
@@ -5932,11 +5944,20 @@ if (withLeftLabels)
 	vgSetClip(vg, leftLabelX, y, leftLabelWidth, tHeight);
 
 	minRange = 0.0;
-	snprintf( o4, sizeof(o4),"%s.min.cutoff", track->mapName);
-	snprintf( o5, sizeof(o5),"%s.max.cutoff", track->mapName);
+	safef( o4, sizeof(o4),"%s.min.cutoff", track->mapName);
+	safef( o5, sizeof(o5),"%s.max.cutoff", track->mapName);
         minRangeCutoff = max( atof(cartUsualString(cart,o4,"0.0"))-0.1, track->minRange );
    	maxRangeCutoff = min( atof(cartUsualString(cart,o5,"1000.0"))+0.1, track->maxRange);
 	
+	/*  if a track can do its own left labels, do them after drawItems */
+	if (track->drawLeftLabels != NULL)
+	    {
+	    if (withCenterLabels)
+		y += fontHeight;
+	    y += track->height;
+	    vgUnclip(vg);
+	    continue;
+	    }
     	if( sameString( track->mapName, "humMusL" ) ||
 	    sameString( track->mapName, "musHumL" ) ||
 	    sameString( track->mapName, "mm3Rn2L" ) ||		
@@ -6194,6 +6215,46 @@ if (withCenterLabels)
 			     vg, insideX, y, insideWidth, 
 			     font, track->ixColor, track->limitedVis);
 	    vgUnclip(vg);
+	    y += track->height;
+	    }
+	}
+    }
+
+/* if a track can draw its left labels, now is the time since it
+ *	knows what exactly happened during drawItems
+ */
+if (withLeftLabels)
+    {
+    y = yAfterRuler;
+    for (track = trackList; track != NULL; track = track->next)
+	{
+	if (track->limitedVis != tvHide)
+	    {
+	    if (track->drawLeftLabels != NULL)
+		{
+		int tHeight = track->height;
+		if (withCenterLabels)
+		    tHeight += fontHeight;
+		if (track->limitedVis == tvPack)
+		    { /*XXX This needs to be looked at, no example yet*/
+		    vgSetClip(vg, gfxBorder+trackTabWidth+1, y, 
+		    pixWidth-2*gfxBorder-trackTabWidth-1, track->height);
+		    }
+		else
+		    {
+		    vgSetClip(vg, leftLabelX, y, leftLabelWidth, tHeight);
+
+		/* when the limitedVis == tvPack is correct above,
+		 *	this should be outside this else clause
+		 */
+		track->drawLeftLabels(track, winStart, winEnd,
+		    vg, leftLabelX, y, leftLabelWidth, tHeight,
+		    withCenterLabels, font, track->ixColor, track->limitedVis);
+		    }
+		vgUnclip(vg);
+		}
+	    if (withCenterLabels)
+		y += fontHeight;
 	    y += track->height;
 	    }
 	}
@@ -6472,7 +6533,7 @@ char option[128]; /* Option -  rainbow chromosome color */
 char optionChr[128]; /* Option -  chromosome filter */
 char *optionChrStr; 
 char *optionStr ;
-snprintf( option, sizeof(option), "%s.color", tg->mapName);
+safef( option, sizeof(option), "%s.color", tg->mapName);
 optionStr = cartUsualString(cart, option, "off");
 tg->mapItemName = lfMapNameFromExtra;
 if( sameString( optionStr, "on" )) /*use chromosome coloring*/
@@ -6836,7 +6897,7 @@ char **row;
 char *trackDb = hTrackDbName();
 char query[256];
 assert(trackDb);
-snprintf(query, sizeof(query), "select tableName from %s", trackDb);
+safef(query, sizeof(query), "select tableName from %s", trackDb);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -6859,6 +6920,8 @@ char *orgEnc = cgiEncode(organism);
 hPrintf("<TABLE WIDTH=\"100%%\" BGCOLOR=\"#000000\" BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"1\"><TR><TD>\n");
 hPrintf("<TABLE WIDTH=\"100%%\" BGCOLOR=\"#536ED3\" BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"2\"><TR>\n");
 hPrintf("<TD ALIGN=CENTER><A HREF=\"/index.html?org=%s\">%s</A></TD>", orgEnc, wrapWhiteFont("Home"));
+
+hPrintf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/hgGateway?org=%s&db=%s&%s\">%s</A></TD>", orgEnc, database, uiVars->string, wrapWhiteFont("Genomes"));
 
 if (gotBlat)
     {
@@ -7161,6 +7224,7 @@ registerTrackHandler("genomicSuperDups", genomicSuperDupsMethods);
 registerTrackHandler("celeraDupPositive", celeraDupPositiveMethods);
 registerTrackHandler("celeraCoverage", celeraCoverageMethods);
 registerTrackHandler("jkDuplicon", jkDupliconMethods);
+registerTrackHandler("chimpSimpleDiff", chimpSimpleDiffMethods);
 
 /* Load regular tracks, blatted tracks, and custom tracks. 
  * Best to load custom last. */
@@ -7870,6 +7934,6 @@ cgiSpoof(&argc, argv);
 if (cgiVarExists("hgt.reset"))
     resetVars();
 htmlSetBackground("../images/floret.jpg");
-cartHtmlShell("UCSC Genome Browser v47", doMiddle, hUserCookie(), excludeVars, NULL);
+cartHtmlShell("UCSC Genome Browser v48", doMiddle, hUserCookie(), excludeVars, NULL);
 return 0;
 }

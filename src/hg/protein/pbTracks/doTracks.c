@@ -19,12 +19,13 @@ char trackOffset[20];
 int pixWidth, pixHeight;
 struct tempName gifTn;
 char *mapName = "map";
+char *trackTitle;
+int trackTitleLen;
 
 void calxy(int xin, int yin, int *outxp, int *outyp)
 /* calxy() converts a logical drawing coordinate into an actual
    drawing coordinate with scaling and minor adjustments */
 {
-//*outxp = xin*pbScale + 120;
 *outxp = xin*pbScale + 120 - trackOrigOffset;
 *outyp = yin         + currentYoffset;
 }
@@ -47,21 +48,19 @@ int newStart, newEnd;
 trackOrigOffset = trackOrigOffset + (int)(amount*MAX_PB_PIXWIDTH);
 
 /* Make sure don't scroll of ends. */
-//if (trackOrigOffset > ((pbScale* protSeqLen) - MAX_PB_PIXWIDTH))
-//    trackOrigOffset = pbScale*protSeqLen - MAX_PB_PIXWIDTH + 150;
 if (trackOrigOffset > ((pbScale* protSeqLen) - 600))
     trackOrigOffset = pbScale*protSeqLen - 700;
 if (trackOrigOffset < 0) trackOrigOffset = 0;
-//printf("<br>pbScale=%d\n", pbScale);
-//printf("<br>amount=%f offset=%d\n", amount, trackOrigOffset);fflush(stdout);
-//printf("<br>protSeqLen=%d\n", protSeqLen*pbScale);fflush(stdout);
-
-//sprintf(trackOffset, "%d", trackOrigOffset);
-//printf("<br>marking Hiden var trackOffset %d\n", trackOrigOffset);fflush(stdout);
-//cgiMakeHiddenVar("trackOffset", trackOffset);
 
 sprintf(pbScaleStr, "%d", pbScale);
 cgiMakeHiddenVar("pbScaleStr", pbScaleStr);
+}
+
+void mapBoxTrackTitle(int x, int y, int width, int height, char *title, char *tagName)
+{
+hPrintf("<AREA SHAPE=RECT COORDS=\"%d,%d,%d,%d\" ", x-1, y-1, x+width+1, y+height+1);
+hPrintf("HREF=\"../goldenPath/help/pb%s.shtml\"", tagName);
+hPrintf(" target=_blank ALT=\"Click here for explanation of %c%s%c\">\n", '\'', title, '\'');
 }
 
 void doAnomalies(char *aa, int len, int *yOffp)
@@ -141,7 +140,11 @@ for (index=0; index < len; index++)
 
 calxy0(0, *yOffp, &xx, &yy);
 vgBox(g_vg, 0, yy-10, xx, 20, bkgColor);
-vgTextRight(g_vg, xx-25, yy-4, 10, 10, MG_BLACK, g_font, "AA Anomalies");
+
+trackTitle = cloneString("AA Anomalies");
+vgTextRight(g_vg, xx-25, yy-4, 10, 10, MG_BLACK, g_font, trackTitle);
+trackTitleLen = strlen(trackTitle);
+mapBoxTrackTitle(xx-25-trackTitleLen*6, yy-6, trackTitleLen*6+12, 14, trackTitle, "pepAnom");
 
 // update y offset
 *yOffp = *yOffp + 15;
@@ -185,7 +188,11 @@ for (index=0; index < len; index++)
 
 calxy0(0, *yOffp, &xx, &yy);
 vgBox(g_vg, 0, yy-10, xx, 30, bkgColor);
-vgTextRight(g_vg, xx-25, yy-4, 10, 10, MG_BLACK, g_font, "Polarity");
+trackTitle = cloneString("Polarity");
+vgTextRight(g_vg, xx-25, yy-4, 10, 10, MG_BLACK, g_font, trackTitle);
+trackTitleLen = strlen(trackTitle);
+mapBoxTrackTitle(xx-25-trackTitleLen*6, yy-6, trackTitleLen*6+12, 14, trackTitle, "polarity");
+
 vgTextRight(g_vg, xx-14, yy-10, 10, 10, MG_RED,  g_font, "+");
 vgTextRight(g_vg, xx-14, yy, 10, 10, MG_BLUE, g_font, "-");
 
@@ -244,7 +251,12 @@ for (index=0; index < len; index++)
     }
 calxy0(0, *yOffp, &xx, &yy);
 vgBox(g_vg, 0, yy-17, xx, 40, bkgColor);
-vgTextRight(g_vg, xx-25, yy-7, 10, 10, MG_BLACK, g_font, "Hydrophobicity");
+
+trackTitle = cloneString("Hydrophobicity");
+vgTextRight(g_vg, xx-25, yy-4, 10, 10, MG_BLACK, g_font, trackTitle);
+trackTitleLen = strlen(trackTitle);
+mapBoxTrackTitle(xx-25-trackTitleLen*6, yy-6, trackTitleLen*6+12, 14, trackTitle, "hydroTr");
+
 *yOffp = *yOffp + 15;
 }
 
@@ -275,14 +287,14 @@ for (index=0; index < len; index++)
 	}
     }
 
-for (index=1; index < (len-1); index++)
+for (index=1; index < (len-2); index++)
     {
-    calxy(index, *yOffp, &xx, &yy);
+    calxy(index-1, *yOffp, &xx, &yy);
     if (aa[index-1] == 'N')
 	{
 	if ( (aa[index+1] == 'T') || (aa[index+1] == 'S') )
 	    {
-	    if (aa[index] != 'P')
+	    if ((aa[index+1] != 'C') && (aa[index+2] != 'P'))
 		{
 		vgBox(g_vg, xx-1, yy, 3*pbScale, 9, MG_BLUE);
 		}
@@ -292,8 +304,17 @@ for (index=1; index < (len-1); index++)
 
 calxy0(0, *yOffp, &xx, &yy);
 vgBox(g_vg, 0, yy-15, xx, 33, bkgColor);
-vgTextRight(g_vg, xx-25, yy-8, 10, 10, MG_RED, g_font, "Cysteines");
-vgTextRight(g_vg, xx-25, yy, 10, 10, MG_BLUE, g_font, "Glycosylation");
+
+trackTitle = cloneString("Cysteines");
+vgTextRight(g_vg, xx-25, yy-8, 10, 10, MG_RED, g_font, trackTitle);
+trackTitleLen = strlen(trackTitle);
+mapBoxTrackTitle(xx-25-trackTitleLen*6, yy-6, trackTitleLen*6+12, 14, trackTitle, "cCntTr");
+
+trackTitle = cloneString("Glycosylation");
+vgTextRight(g_vg, xx-25, yy, 10, 10, MG_BLUE, g_font, trackTitle);
+trackTitleLen = strlen(trackTitle);
+mapBoxTrackTitle(xx-25-trackTitleLen*6, yy-2, trackTitleLen*6+12, 14, trackTitle, "glycosylation");
+
 vgTextRight(g_vg, xx-25, yy+10, 10, 10, MG_BLUE, g_font, "(potential)");
     
 *yOffp = *yOffp + 15;
@@ -316,6 +337,7 @@ int interval;
 char scale_str[20];
 int iw = 5;
 float sum;
+int markedIndex = -1;
 
 tb = 0;
 if (top_bottom < 0) tb = 1;
@@ -326,7 +348,7 @@ imax = len/100 * 100;
 if ((len % 100) != 0) imax = imax + 100;
     
 calxy(1, *yOffp, &xx, &yy);
-vgBox(g_vg, xx-pbScale/2, yy-tb, (len-1)*pbScale+pbScale/2, 1, MG_BLACK);
+vgBox(g_vg, xx-pbScale/2, yy-tb, (len-1)*pbScale, 1, MG_BLACK);
 
 interval = 50;
 if (pbScale >= 18) interval = 10;    
@@ -335,6 +357,7 @@ for (i=0; i<len; i++)
     index = i+1;
     if ((index % interval) == 1)
 	{
+        markedIndex = index;
 	if (((index % (interval*2)) == 1) || (index == len)) 
 	    {
 	    calxy(index, *yOffp, &xx, &yy);
@@ -351,11 +374,27 @@ for (i=0; i<len; i++)
 	}
     }
 
+if (markedIndex != len)
+    {
+    calxy(len, *yOffp, &xx, &yy);
+    
+    // make the end tick a little taller than regular tick
+    vgBox(g_vg, xx-pbScale/2, yy-14*tb, 1, 14, MG_BLACK);
+    sprintf(scale_str, "%d", len);
+
+    // label the end tick with a vertical offset so that it won't overlap with regular ticks
+    vgText(g_vg, xx-pbScale/2+4, yy+12-28*tb, MG_BLACK, g_font, scale_str);
+    }
+
 calxy0(0, *yOffp, &xx, &yy);
 vgBox(g_vg, 0, yy-tb*9-1, xx, 20, bkgColor);
-vgTextRight(g_vg, xx-25, yy-9*tb, 10, 10, MG_BLACK, g_font, "AA Scale");
 
-*yOffp = *yOffp + 12;
+trackTitle = cloneString("AA Scale");
+vgTextRight(g_vg, xx-25, yy-9*tb, 10, 10, MG_BLACK, g_font, trackTitle);
+trackTitleLen = strlen(trackTitle);
+mapBoxTrackTitle(xx-25-trackTitleLen*6, yy-9*tb-2, trackTitleLen*6+12, 14, trackTitle, "aaScale");
+
+*yOffp = *yOffp + 15;
 }
 
 void mapBoxExon(int x, int y, int width, int height, char *mrnaID, 
@@ -364,9 +403,6 @@ void mapBoxExon(int x, int y, int width, int height, char *mrnaID,
 hPrintf("<AREA SHAPE=RECT COORDS=\"%d,%d,%d,%d\" ", x-1, y-1, x+width+1, y+height+1);
 hPrintf("HREF=\"../cgi-bin/hgTracks?db=%s&position=%s:%d-%d\"" 
 	,database, chrom, exonGenomeStartPos-1, exonGenomeEndPos+3);
-//hPrintf("HREF=\"http://hgwdev-markd.cse.ucsc.edu/cgi-bin/hgTracks?db=%s&position=%s:%d-%d&%s=full" 
-//	,database, chrom, exonGenomeStartPos-1, exonGenomeEndPos+3, kgProtMapTableName);
-//hPrintf("&knownGene=full&mrna=full\"");
 hPrintf(" target=_blank ALT=\"Exon %d\">\n", exonNum);
 }
 
@@ -380,9 +416,8 @@ hPrintf(" target=_blank ALT=\"UCSC Genome Browser %s\">\n", posStr);
 int calPrevGB(int exonCount, char *chrom, char strand, int aaLen, int *yOffp, char *proteinID, char *mrnaID)
 // calculate the appropriate X offset for the previous Genome Browser position range
 {
-int xx, yy, xx0, xxSave;
+int xx, yy, xx0;
 int i, j;
-char prevPosMessage[200];
 char exonNumStr[10];
 int mrnaLen;
 
@@ -417,14 +452,12 @@ if (strand == '-')
     {
     for (i=0; i<(exonCount-2); i++)
     	{
-    	//printf("<br>%d %d %d\n", i, prevGBStartPos, blockGenomeStartPositive[exonCount-1]);fflush(stdout); 
     	if ((prevGBStartPos < blockGenomeStartPositive[i]) &&
             (prevGBStartPos > blockGenomeEndPositive[i+1]) )
 	    {
 	    iPrevExon = i;
 	    jPrevExonPos = blockStartPositive[i+1];
 	    }
-    	//printf("<br>%d %d %d\n", i, iPrevExon, jPrevExonPos); fflush(stdout);
     	}
 
     // handle special cases at both ends when previous GB position is outside CDS
@@ -484,7 +517,6 @@ for (j = 0; j < mrnaLen; j++)
 	{
     	currentPos = blockGenomeStartPositive[exonNumber-1]+(j - blockStartPositive[exonNumber-1])+1;
     	}
-    //printf("<br>currentPos=%d\n", currentPos);fflush(stdout);
     if ((currentPos >= prevGBStartPos) && (currentPos <= prevGBEndPos))
 	{
         jcnt++;
@@ -506,9 +538,9 @@ return(prevGBOffset);
 void doPrevGB(int exonCount, char *chrom, char strand, int aaLen, int *yOffp, char *proteinID, char *mrnaID)
 // draw the previous Genome Browser position range
 {
-int xx, yy, xx0, xxSave;
+int xx, yy, xx0;
 int i, j;
-char prevPosMessage[200];
+char prevPosMessage[300];
 char exonNumStr[10];
 int mrnaLen;
 Color color;
@@ -558,8 +590,6 @@ if (strand == '-')
     	    //printf("<br>*%d %d %d %d\n",i,blockGenomeEndPositive[i], 
 	    //prevGBStartPos, blockGenomeStartPositive[i]);fflush(stdout);
 	    }
-    	//printf("<br>%d %d %d",i,blockGenomeStartPositive[i],
-	//	blockGenomeEndPositive[i]);fflush(stdout);
     	}
 
     // handle special cases at both ends when previous GB position is outside CDS
@@ -567,8 +597,6 @@ if (strand == '-')
     	jPrevExonPos = blockEndPositive[exonCount-1] + 3;
     if (prevGBEndPos > blockGenomeStartPositive[0]) 
     	jPrevExonPos = blockStartPositive[0];
-
-    //printf("<br>jPrevExonPos = %d\n", jPrevExonPos);fflush(stdout);
     }
 else
     {
@@ -635,7 +663,7 @@ for (j = 0; j < mrnaLen; j++)
 	}
     }
 
-positionStr = strdup(cartOptionalString(cart, "position"));
+positionStr = cloneString(cartOptionalString(cart, "position"));
 if (jcnt > 0)
     {
     calxy(jPrevStart/3, *yOffp, &xx, &yy);
@@ -649,18 +677,9 @@ if (jcnt > 0)
     	}
 
     mapBoxPrevGB(xx+(jPrevStart%3)*6, yy-2, (jPrevEnd-jPrevStart+1)*pbScale/3, 2, positionStr);
-    sprintf(prevPosMessage, "You were at: %s", positionStr);
+    sprintf(prevPosMessage, "Previous position in UCSC Genome Browser: %s", positionStr);
+    if (strand == '-') sprintf(prevPosMessage, "%s (negative strand)", prevPosMessage);
     vgText(g_vg, xx+(jPrevStart%3)*pbScale/3, yy-10, MG_BLACK, g_font, prevPosMessage);
-    /*if (jPrevStart < (mrnaLen/2))
-   	{
-   	vgText(g_vg, xx+(jPrevStart%3)*pbScale/3, yy-10, MG_BLACK, g_font, prevPosMessage);
-   	}
-    else
-   	{
-   	calxy(jPrevEnd/3, *yOffp, &xx, &yy);
-   	vgTextRight(g_vg, xx-6, yy-10, 10, 10, MG_BLACK, g_font, prevPosMessage);
-   	}
-    */
     }
 else
     {
@@ -678,24 +697,33 @@ else
 
     mapBoxPrevGB(xx-1, yy-1, 2, 6, positionStr);
     
-    sprintf(prevPosMessage, "You were at: %s (not in a CDS)", positionStr);
+    sprintf(prevPosMessage,"Previous position in UCSC Genome Browser: %s (not in a CDS)",positionStr);
+    if (strand == '-') sprintf(prevPosMessage, "%s (negative strand)", prevPosMessage);
     calxy(0, *yOffp, &xx0, &yy);
     calxy(jPrevExonPos/3, *yOffp, &xx, &yy);
-    xxSave = xx - 6*strlen(prevPosMessage);
-    if (xxSave < xx0) 
+    if (xx < xx0)
 	{
     	vgText(g_vg, xx0, yy-8, MG_BLACK, g_font, prevPosMessage);
 	}
     else
 	{
-    	//vgTextCentered(g_vg, xx, yy-8, 10, 10, MG_BLACK, g_font, prevPosMessage);
-    	vgTextRight(g_vg, xx, yy-8, 10, 10, MG_BLACK, g_font, prevPosMessage);
-    	}
+ 	if (jPrevExonPos/3 < aaLen/2)
+	    {
+    	    vgText(g_vg, xx, yy-8, MG_BLACK, g_font, prevPosMessage);
+    	    }
+	else
+	    {
+    	    vgTextRight(g_vg, xx, yy-8, 10, 10, MG_BLACK, g_font, prevPosMessage);
+    	    }
+	}
     }
 
 calxy0(0, *yOffp, &xx, &yy);
 vgBox(g_vg, 0, yy-10, xx, 20, bkgColor);
-vgTextRight(g_vg, xx-25, yy-8, 10, 10, MG_BLACK, g_font, "Genome Browser");
+trackTitle = cloneString("Genome Browser");
+vgTextRight(g_vg, xx-25, yy-8, 10, 10, MG_BLACK, g_font, trackTitle);
+trackTitleLen = strlen(trackTitle);
+mapBoxTrackTitle(xx-25-trackTitleLen*6, yy-6, trackTitleLen*6+12, 14, trackTitle, "gb");
 
 *yOffp = *yOffp + 7;
 }
@@ -787,7 +815,11 @@ mapBoxExon(xx - (exonEndPos - exonStartPos)*pbScale/3, yy-9,
 
 calxy0(0, *yOffp, &xx, &yy);
 vgBox(g_vg, 0, yy-10, xx, 12, bkgColor);
-vgTextRight(g_vg, xx-25, yy-9, 10, 10, MG_BLACK, g_font, "Exons");
+
+trackTitle = cloneString("Exons");
+vgTextRight(g_vg, xx-25, yy-9, 10, 10, MG_BLACK, g_font, trackTitle);
+trackTitleLen = strlen(trackTitle);
+mapBoxTrackTitle(xx-25-trackTitleLen*6, yy-12, trackTitleLen*6+12, 14, trackTitle, "exon");
 
 *yOffp = *yOffp + 10;
 }
@@ -917,7 +949,6 @@ return(ii);
 void mapBoxSuperfamily(int x, int y, int width, int height, char *sf_name, int sfID)
 {
 hPrintf("<AREA SHAPE=RECT COORDS=\"%d,%d,%d,%d\" ", x-1, y-1, x+width+1, y+height+1);
-
 hPrintf("HREF=\"%s?sunid=%d\"",
 	"http://supfam.org/SUPERFAMILY/cgi-bin/scop.cgi", sfID);
 hPrintf(" target=_blank ALT=\"%s\">\n", sf_name);
@@ -984,7 +1015,11 @@ for (ii=0; ii<sf_cnt; ii++)
     }
 calxy0(0, *yOffp, &xx, &yy);
 vgBox(g_vg, 0, yy-10, xx, 20, bkgColor);
-vgTextRight(g_vg, xx-25, yy-9, 10, 10, MG_BLACK, g_font, "Superfamily/SCOP");
+
+trackTitle = cloneString("Superfamily/SCOP");
+vgTextRight(g_vg, xx-25, yy, 10, 10, MG_BLACK, g_font, trackTitle);
+trackTitleLen = strlen(trackTitle);
+mapBoxTrackTitle(xx-25-trackTitleLen*6, yy-2, trackTitleLen*6+12, 14, trackTitle, "superfam");
 
 *yOffp = *yOffp + 20;
 }
@@ -1028,7 +1063,11 @@ for (index=0; index < len; index++)
 
 calxy0(0, *yOffp, &xx, &yy);
 vgBox(g_vg, 0, yy-10, xx, 20, bkgColor);
-vgTextRight(g_vg, xx-25, yy, 10, 10, MG_BLACK, g_font, "Protein Sequence");
+
+trackTitle = cloneString("AA Sequence");
+vgTextRight(g_vg, xx-25, yy, 10, 10, MG_BLACK, g_font, trackTitle);
+trackTitleLen = strlen(trackTitle);
+mapBoxTrackTitle(xx-25-trackTitleLen*6, yy-2, trackTitleLen*6+12, 14, trackTitle, "aaSeq");
  
 *yOffp = *yOffp + 12;
 }
@@ -1124,17 +1163,31 @@ for (j = 0; j < mrnaLen; j++)
 	k++;
         color = exonColor[(exonNumber-1) % 2];
         calxy(j/3, *yOffp, &xx, &yy);
-        vgTextRight(g_vg, xx-3+(j%3)*6, yy, 10, 10, color, g_font, base);
-        if (strand == '-') vgTextRight(g_vg, xx-3+(j%3)*6, yy+9, 10, 10, color, g_font, baseComp);
+
+	if (strand == '-') 
+	    {
+            vgTextRight(g_vg, xx-3+(j%3)*6, yy-3, 10, 10, MG_GRAY, g_font, base);
+	    vgTextRight(g_vg, xx-3+(j%3)*6, yy+9, 10, 10, color, g_font, baseComp);
+       	    }
+	else
+	    {
+	    //vgTextRight(g_vg, xx-3+(j%3)*6, yy, 10, 10, color, g_font, base);
+	    vgTextRight(g_vg, xx-3+(j%3)*6, yy-3, 10, 10, color, g_font, base);
+            }
         }
     color = MG_BLUE;
     }
    
 calxy0(0, *yOffp, &xx, &yy);
 vgBox(g_vg, 0, yy-10, xx, 30, bkgColor);
-vgTextRight(g_vg, xx-25, yy, 10, 10, MG_BLACK, g_font, "DNA Sequence");
-if (strand == '-') vgTextRight(g_vg, xx-25, yy+9, 10, 10, MG_BLACK, g_font, "& complement");
- 
+
+trackTitle = cloneString("DNA Sequence");
+vgTextRight(g_vg, xx-25, yy-4, 10, 10, MG_BLACK, g_font, trackTitle);
+trackTitleLen = strlen(trackTitle);
+mapBoxTrackTitle(xx-25-trackTitleLen*6, yy-6, trackTitleLen*6+12, 14, trackTitle, "dna");
+
+if (strand == '-') vgTextRight(g_vg, xx-25, yy+9, 10, 10, MG_GRAY, g_font, "& Complement");
+
 if (strand == '-')
     {
     *yOffp = *yOffp + 20;
@@ -1145,7 +1198,7 @@ else
     }
 }
 
-void doTracks(char *proteinID, char *mrnaID, char *aa, int *yOffp)
+void doTracks(char *proteinID, char *mrnaID, char *aa, int *yOffp, char *psOutput)
 /* draw various protein tracks */
 {
 int i,j,l;
@@ -1175,6 +1228,12 @@ char *chrom;
 char strand;
 
 g_font = mgSmallFont();
+sprintf(pbScaleStr, "%d", pbScale);
+
+if (psOutput != NULL)
+    {
+    pbScale         = atoi(cartOptionalString(cart, "pbt.pbScaleStr"));
+    }
 
 if (cgiOptionalString("trackOffset") != NULL)
 	{
@@ -1201,38 +1260,39 @@ else
     scaleButtonPushed = FALSE;
     }
 
-if (cgiVarExists("hgt.left3"))
+if (psOutput == NULL)
+{
+if (cgiVarExists("pbt.left3"))
     {
     relativeScroll(-0.95);
     initialWindow = FALSE;
     }
-else if (cgiVarExists("hgt.left2"))
+else if (cgiVarExists("pbt.left2"))
     {
     relativeScroll(-0.475);
     initialWindow = FALSE;
     }
-else if (cgiVarExists("hgt.left1"))
+else if (cgiVarExists("pbt.left1"))
     {
-    //relativeScroll(-0.1);
     relativeScroll(-0.02);
     initialWindow = FALSE;
     }
-else if (cgiVarExists("hgt.right1"))
+else if (cgiVarExists("pbt.right1"))
     {
-    //relativeScroll(0.1);
     relativeScroll(0.02);
     initialWindow = FALSE;
     }
-else if (cgiVarExists("hgt.right2"))
+else if (cgiVarExists("pbt.right2"))
     {
     relativeScroll(0.475);
     initialWindow = FALSE;
     }
-else if (cgiVarExists("hgt.right3"))
+else if (cgiVarExists("pbt.right3"))
     {
     relativeScroll(0.95);
     initialWindow = FALSE;
     }
+}
 
 dnaUtilOpen();
 
@@ -1253,6 +1313,13 @@ if (mrnaID != NULL)
     	if (trackOrigOffset > (protSeqLen*pbScale - 600))
 	    trackOrigOffset = protSeqLen*pbScale - 600;
 	}
+
+    // if this if for PDF/Postscript, the trackOrigOffset is already calculated previously,
+    // use the saved value
+    if (psOutput != NULL)
+    	{
+    	trackOrigOffset = atoi(cartOptionalString(cart, "pbt.trackOffset"));
+    	}
     }
 
 if ((cgiOptionalString("aaOrigOffset") != NULL) && scaleButtonPushed)
@@ -1283,8 +1350,43 @@ if (sfCount > 0) pixHeight = pixHeight + 20;
 if (pbScale >=6)  pixHeight = pixHeight + 20;
 if (pbScale >=18) pixHeight = pixHeight + 30;
 
-makeTempName(&gifTn, "hgt", ".gif");
-vg = vgOpenGif(pixWidth, pixHeight, gifTn.forCgi);
+if (psOutput)
+    {
+    vg = vgOpenPostScript(pixWidth, pixHeight, psOutput);
+    suppressHtml = TRUE;
+    hideControls = TRUE;
+    }
+else
+    {
+    makeTempName(&gifTn, "pbt", ".gif");
+    vg = vgOpenGif(pixWidth, pixHeight, gifTn.forCgi);
+    }
+
+/* Put up horizontal scroll controls. */
+hWrites("Move ");
+hButton("pbt.left3", "<<<");
+hButton("pbt.left2", " <<");
+hButton("pbt.left1", " < ");
+hButton("pbt.right1", " > ");
+hButton("pbt.right2", ">> ");
+hButton("pbt.right3", ">>>");
+
+hPrintf(" &nbsp &nbsp ");
+
+/* Put up scaling controls. */
+hPrintf("Current scale: ");
+if (pbScale == 1)  hPrintf("1/6 ");
+if (pbScale == 3)  hPrintf("1/2 ");
+if (pbScale == 6)  hPrintf("FULL ");
+if (pbScale == 22) hPrintf("DNA ");
+
+hPrintf(" &nbsp&nbsp Rescale to ");
+hPrintf("<INPUT TYPE=SUBMIT NAME=\"pbScale\" VALUE=\"1/6\">\n");
+hPrintf("<INPUT TYPE=SUBMIT NAME=\"pbScale\" VALUE=\"1/2\">\n");
+hPrintf("<INPUT TYPE=SUBMIT NAME=\"pbScale\" VALUE=\"FULL\">\n");
+hPrintf("<INPUT TYPE=SUBMIT NAME=\"pbScale\" VALUE=\"DNA\">\n");
+hPrintf("<FONT SIZE=1><BR><BR></FONT>\n");
+
 g_vg = vg;
 
 bkgColor = vgFindColorIx(vg, 255, 254, 232);
@@ -1308,9 +1410,6 @@ if (mrnaID != NULL)
     doPrevGB(exCount, chrom, strand, l, yOffp, proteinID, mrnaID);
     }
 
-sprintf(trackOffset, "%d", trackOrigOffset);
-cgiMakeHiddenVar("trackOffset", trackOffset);
-
 if (mrnaID != NULL)
     {
     doExon(exCount, chrom, l, yOffp, proteinID, mrnaID);
@@ -1328,48 +1427,31 @@ if (hasResFreq) doAnomalies(aa, l, yOffp);
 
 doAAScale(l, yOffp, -1);
 
-/* Finish map and save out picture and tell html file about it. */
-hPrintf("</MAP>\n");
 vgClose(&vg);
 
-/* Put up horizontal scroll controls. */
-hWrites("Move ");
-hButton("hgt.left3", "<<<");
-hButton("hgt.left2", " <<");
-hButton("hgt.left1", " < ");
-hButton("hgt.right1", " > ");
-hButton("hgt.right2", ">> ");
-hButton("hgt.right3", ">>>");
-
-hPrintf(" &nbsp &nbsp &nbsp &nbsp ");
-
-/* Put up scaling controls. */
-hPrintf("Current scale: ");
-if (pbScale == 1)  hPrintf("1/6 ");
-if (pbScale == 3)  hPrintf("1/2 ");
-if (pbScale == 6)  hPrintf("FULL ");
-if (pbScale == 22) hPrintf("DNA ");
-
-hPrintf("&nbsp&nbsp&nbsp Rescale to ");
-hPrintf("<INPUT TYPE=SUBMIT NAME=\"pbScale\" VALUE=\"1/6\">\n");
-hPrintf("<INPUT TYPE=SUBMIT NAME=\"pbScale\" VALUE=\"1/2\">\n");
-hPrintf("<INPUT TYPE=SUBMIT NAME=\"pbScale\" VALUE=\"FULL\">\n");
-hPrintf("<INPUT TYPE=SUBMIT NAME=\"pbScale\" VALUE=\"DNA\">\n");
-hPrintf("<FONT SIZE=1><BR><BR></FONT>\n");
+/* Finish map and save out picture and tell html file about it. */
+hPrintf("</MAP>\n");
 
 // put tracks image here
+
 hPrintf(
-"<IMG SRC=\"%s\" BORDER=1 WIDTH=%d HEIGHT=%d USEMAP=#%s onMouseOut=\"javascript:popupoff();\"><BR>",
-//hPrintf("<IMG SRC=\"%s\" BORDER=1 WIDTH=%d HEIGHT=%d USEMAP=#%s><BR>",
+"\n<IMG SRC=\"%s\" BORDER=1 WIDTH=%d HEIGHT=%d USEMAP=#%s><BR>",
         gifTn.forCgi, pixWidth, pixHeight, mapName);
 
-hPrintf("<A HREF=\"../goldenPath/help/pbTracksHelp.html\" TARGET=_blank>");
-hPrintf("Explanation of Tracks</A><br>");
-//printf("<br>trackOrigOffset=%d<br>", trackOrigOffset);fflush(stdout);
+hPrintf("<A HREF=\"../goldenPath/help/pbTracksHelp.shtml#tracks\" TARGET=_blank>");
+hPrintf("Explanation of Protein Tracks</A><br>");
+
+sprintf(trackOffset, "%d", trackOrigOffset);
+cgiMakeHiddenVar("trackOffset", trackOffset);
 
 //remember where the AA base origin is so that it can be passed to next PB page
 aaOrigOffset = trackOrigOffset/pbScale;
 sprintf(aaOrigOffsetStr, "%d", aaOrigOffset);
 cgiMakeHiddenVar("aaOrigOffset", aaOrigOffsetStr);
+
+// save the following state variables, to be used by PDF/Postcript processing
+cartSetString(cart,"pbt.pbScaleStr", pbScaleStr);
+cartSetString(cart,"pbt.trackOffset", trackOffset);
+cartSaveSession(cart);
 }
 

@@ -19,3 +19,10 @@ $O: makefile $A.c
 lib:
 	cd ../lib; make
 	cd ../../lib; make
+
+test::
+	(cd tests && ${MAKE} test)
+
+clean::
+	rm -f $O
+	(cd tests && ${MAKE} clean)

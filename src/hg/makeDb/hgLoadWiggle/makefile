@@ -12,6 +12,11 @@ hgLoadWiggle: $O ${MYLIBS}
 	${CC} -o ${HOME}/bin/${MACHTYPE}/${A} $O ${MYLIBS} $L
 	strip ${HOME}/bin/${MACHTYPE}/${A}
 
+hgDumpWiggle:	hgDumpWiggle.o ${MYLIBS}
+	${CC} -o ${HOME}/bin/${MACHTYPE}/hgDumpWiggle hgDumpWiggle.o \
+		${MYLIBS} $L
+	strip ${HOME}/bin/${MACHTYPE}/hgDumpWiggle
+
 test:
 	cd test_data && ./runtest
 

@@ -121,6 +121,12 @@ struct track
     char *expTable;	/* Expression table in hgFixed. */
 
     boolean exonArrows;	/* Draw arrows on exons? */
+
+    void (*drawLeftLabels)(struct track *tg, int seqStart, int seqEnd,
+	struct vGfx *vg, int xOff, int yOff, int width, int height, 
+	boolean withCenterLabels, MgFont *font,
+	Color color, enum trackVisibility vis);
+    /* fill in left label drawing area */
     };
 
 struct trackRef 

@@ -1,3 +1,12 @@
+track gcPercent
+shortLabel GC Percent
+longLabel Percentage GC in 2,000 Base Windows
+group map
+priority 23
+visibility hide
+spectrum on
+type bed 4 +
+
 track gbProtCode
 shortLabel Genbank CDS
 longLabel Genbank protein-coding genes

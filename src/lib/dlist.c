@@ -5,7 +5,7 @@
 #include "common.h"
 #include "dlist.h"
 
-static char const rcsid[] = "$Id: dlist.c,v 1.8 2003/12/22 19:51:20 markd Exp $";
+static char const rcsid[] = "$Id: dlist.c,v 1.9 2004/01/10 05:43:50 markd Exp $";
 
 void dlListInit(struct dlList *dl)
 /* Initialize list to be empty */
@@ -238,8 +238,8 @@ boolean dlEmpty(struct dlList *list)
 return (list->head->next == NULL);
 }
 
-struct dlNode *dlGetStart(struct dlList *list)
-/* The the node before the start of the list */
+struct dlNode *dlGetBeforeHead(struct dlList *list)
+/* Get the node before the head of the list */
 {
 if (dlEmpty(list))
     return list->head;
@@ -247,8 +247,8 @@ else
     return list->head->prev;
 }
 
-struct dlNode *dlGetEnd(struct dlList *list)
-/* The the node after the end of the list */
+struct dlNode *dlGetAfterTail(struct dlList *list)
+/* Get the node after the tail of the list */
 {
 if (dlEmpty(list))
     return list->tail;

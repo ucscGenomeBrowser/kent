@@ -38,11 +38,13 @@
 #include "binRange.h"
 
 
-static char const rcsid[] = "$Id: orthoSplice.c,v 1.19 2003/12/10 04:05:13 sugnet Exp $";
+static char const rcsid[] = "$Id: orthoSplice.c,v 1.20 2004/01/16 17:00:31 sugnet Exp $";
 static struct binKeeper *netBins = NULL;  /* Global bin keeper structure to find cnFills. */
 static struct rbTree *netTree = NULL;  /* Global red-black tree to store cnfills in for quick searching. */
 static struct rbTree *orthoAgxTree = NULL; /* Global red-black tree to store agx's so don't need db. */
 static char *workingChrom = NULL;      /* Chromosme we are working on. */
+static struct binKeeper *possibleExons = NULL; /* List of possible exons common to human and mouse. */
+static char *chainTable = NULL;        /* Table that contains chains, i.e. chainMm3. */
 
 struct orthoSpliceEdge 
 /* Structure to hold information about one edge in 
@@ -89,10 +91,19 @@ struct orthoAgReport
 static boolean doHappyDots;   /* output activity dots? */
 static char *altTable = "altGraphX";  /* Name of table to load splice graphs from. */
 static struct orthoAgReport *agReportList = NULL; /* List of reports. */
-static int trumpNum = BIGNUM; /* If we seen an edge trumpNum times, keep it even if it isn't conserved.*/
-FILE *rFile = NULL;       /* Loci report file. */
-FILE *edgeFile = NULL;    /* Edge report file. */
-FILE *mappingFile = NULL; /* Which loci are ortholgous to which. */
+static unsigned int chromSize = 0; /* Size of chromosome. */
+static int trumpNum = BIGNUM;      /* If we seen an edge trumpNum times,
+			            * keep it even if it isn't conserved.*/
+static int minEdgeNum = 0;         /* We have to see an edge minEdgeNum
+				    * times before including it for
+				    * species specific splicing.*/
+static boolean speciesSpecific;    /* Look for species specific
+				    * alt-splicing instead of conserved
+				    * alt splicing. */
+FILE *rFile = NULL;                /* Loci report file. */
+FILE *edgeFile = NULL;             /* Edge report file. */
+FILE *mappingFile = NULL;          /* Which loci are ortholgous to which. */
+FILE *speciesSpecificExons = NULL; /* File for species specific exons. */
 static struct optionSpec optionSpecs[] = 
 /* Our acceptable options to be called with. */
 {
@@ -103,13 +114,18 @@ static struct optionSpec optionSpecs[] =
     {"altInFile", OPTION_STRING},
     {"netTable", OPTION_STRING},
     {"netFile", OPTION_STRING},
+    {"chainTable", OPTION_STRING},
     {"chainFile", OPTION_STRING},
     {"reportFile", OPTION_STRING},
     {"commonFile", OPTION_STRING},
     {"edgeFile", OPTION_STRING},
     {"trumpNum", OPTION_INT},
+    {"minEdgeNum", OPTION_INT},
+    {"speciesSpecific", OPTION_BOOLEAN},
     {"orthoAgxFile", OPTION_STRING},
     {"mappingFile", OPTION_STRING},
+    {"chromSize" , OPTION_INT},
+    {"exonFile", OPTION_STRING},
     {NULL, 0}
 };
 
@@ -121,15 +137,20 @@ static char *optionDescripts[] =
     "Database (i.e. mm3) to look for orthologous splicing in.",
     "Chromosome to map (i.e. chr1).",
     "File containing altGraphX records to look for.",
-    "Datbase table containing net records, i.e. mouseNet.",
+    "Datbase table containing net records, i.e. netMm3.",
     "File containing net records.",
+    "Datbase table containing net records, i.e. chainMm3.",
     "File containing the chains. Usually I do this on a chromosome basis.",
     "File name to print individual reports to.",
     "File name to print common altGraphX records to.",
     "File name to print individual edge reports to.",
     "[optional: default infinite] Number of mRNAs required to keep edge even if not conserved.",
+    "[optional: default 0] Number of mRNA/EST required for inclusion in species specific splicing.",
+    "[optional: default off] Instead of conservation look for species specific.",
     "[optional] Don't use database, read in possible orthologous altGraphX records from file.",
-    "[optional] Output a file of mapping to orthologous loci",
+    "[optional] Output a file of mapping to orthologous loci.",
+    "[optional] Size of chromsome, required for exonFile.",
+    "[optional] exonFile, exons (bed format) that should be common to both genomes."
 };
 
 void usage()
@@ -145,6 +166,24 @@ errAbort("\nusage:\n   "
 	 "orthoSplice -altInFile=ranbp1.tab -db=hg15 -orthoDb=mm3 -netTable=mouseNet \\\n"
 	 "\t   -chainFile=chains/chr22.chain -commonFile=out.agx -reportFile=out.report -edgeFile=out.edge.report\n");
 }
+
+
+
+void initPossibleExons(char *fileName)
+/* Load all of the beds from fileName into possibleExons. */
+{
+struct bed *bed = NULL, *bedList = NULL;
+chromSize = optionInt("chromSize", 0);
+if(chromSize == 0)
+    errAbort("If specifying exonFile must specify chromSize (or maxSize)");
+bedList = bedLoadAll(fileName);
+assert(possibleExons == NULL);
+possibleExons = binKeeperNew(0, chromSize);
+for(bed = bedList; bed != NULL; bed = bed->next)
+    binKeeperAdd(possibleExons, bed->chromStart, bed->chromEnd, bed);
+}
+
+
 
 boolean isUnique(struct altGraphX *ag)
 /* return true if we have seen and altGraphX with same chrom, chromStart, chromEnd, strand before. */
@@ -259,6 +298,19 @@ else if( (ag->vTypes[v1] == ggHardEnd || ag->vTypes[v1] == ggSoftEnd)
     return ggSJ;
 else
     return ggIntron;
+}
+
+boolean isPossibleExon(struct altGraphX *ag, int v1, int v2)
+/* Return TRUE if this edge is supported by a possible exon from
+   the possibleExon track. */
+{
+struct binElement *be = NULL, *beList = NULL;
+if(getEdgeType(ag, v1, v2) != ggExon) 
+    return FALSE;
+beList = binKeeperFind(possibleExons, ag->vPositions[v1], ag->vPositions[v2]);
+if(beList != NULL)
+    return TRUE;
+return FALSE;
 }
 
 struct orthoSpliceEdge *altGraphXToOSEdges(struct altGraphX *ag)
@@ -414,28 +466,6 @@ lineFileClose(&lf);
 return hash;
 }
 
-struct chain *chainFromId(int id)
-/** Return a chain given the id. */
-{
-static struct hash *chainHash = NULL;
-char key[128];
-struct chain *chain = NULL;
-if(chainHash == NULL)
-    {
-    char *chainFile = optionVal("chainFile", NULL);
-    if(chainFile == NULL)
-	errAbort("orthoSplice::chainFromId() - Can't find file for 'chainFile' parameter");
-    chainHash = allChainsHash(chainFile);
-    }
-if(id == 0)
-    return NULL;
-safef(key, sizeof(key), "%d", id);
-chain =  hashFindVal(chainHash, key);
-if(chain == NULL)
-    warn("Chain not found for id: %d", id);
-return chain;
-}
-
 struct chain *chainDbLoad(struct sqlConnection *conn, char *track,
 			  char *chrom, int id)
 /** Load chain. Not using this anymore as it is much faster to do chrom
@@ -461,6 +491,37 @@ sqlFreeResult(&sr);
 chainDbAddBlocks(chain, track, conn);
 return chain;
 }
+
+struct chain *chainFromId(int id)
+/** Return a chain given the id. */
+{
+static struct hash *chainHash = NULL;
+char key[128];
+struct chain *chain = NULL;
+if(id == 0)
+    return NULL;
+if(chainTable != NULL)
+    {
+    struct sqlConnection *conn = hAllocConn();
+    chain = chainDbLoad(conn, chainTable, workingChrom, id);
+    hFreeConn(&conn);
+    return chain;
+    }
+if(chainHash == NULL)
+    {
+    char *chainFile = optionVal("chainFile", NULL);
+    if(chainFile == NULL)
+	errAbort("orthoSplice::chainFromId() - Can't find file for 'chainFile' parameter");
+    chainHash = allChainsHash(chainFile);
+    }
+safef(key, sizeof(key), "%d", id);
+chain =  hashMustFindVal(chainHash, key);
+if(chain == NULL)
+    warn("Chain not found for id: %d", id);
+return chain;
+}
+
+
 
 int chainBlockCoverage(struct chain *chain, int start, int end,
 		       int* blockStarts, int *blockSizes, int blockCount)
@@ -758,7 +819,7 @@ fflush(stdout);
 }
 
 void makeVertexMap(struct altGraphX *ag, struct altGraphX *orthoAg, struct chain *chain,
-		   int *vertexMap, int *orthoAgIx, int vCount, int oIndex, 
+		   int *vertexMap, int *orthoAgIx, int *vertexOrthoPos, int vCount, int oIndex,
 		   struct orthoSpliceEdge *seList, struct orthoAgReport *agRep, bool reverse)
 /** Make a mapping from the vertexes in ag to the vertexes in orthoAg. */
 {
@@ -773,6 +834,8 @@ for(se = seList; se != NULL; se = se->next)
 	{
 	int v1 =-1, v2 = -1;
 	qChainRangePlusStrand(subChain, &qs, &qe);
+	vertexOrthoPos[se->v1] = qs;
+	vertexOrthoPos[se->v2] = qe;
 	v1 = vertexForPosition(orthoAg, qs, agRep);
 	if(reverse)
 	    assignVertex(vertexMap, orthoAgIx, vCount, oIndex, se->v2, v1, agRep);
@@ -791,6 +854,26 @@ for(se = seList; se != NULL; se = se->next)
 boolean isHardVertex(struct altGraphX *ag, int vertex)
 {
 return (ag->vTypes[vertex] == ggHardStart || ag->vTypes[vertex] == ggHardEnd);
+}
+
+void outputSpeciesExon(struct altGraphX *ag, int v1, int v2)
+/* Write out a simple bed with a species specific exon. */
+{
+struct bed bed;
+static char name[256];
+int *vPos = ag->vPositions;
+if(isHardVertex(ag, v1) && isHardVertex(ag,v2)) 
+    {
+    safef(name, sizeof(name), "%s.%d.%d", ag->name, v1, v2);
+    bed.name = name;
+    bed.chromStart = vPos[v1];
+    bed.chromEnd = vPos[v2];
+    bed.chrom = ag->tName;
+    safef(bed.strand, 2, "%s", ag->strand);
+    bed.score = 0;
+    assert(speciesSpecificExons);
+    bedTabOutN(&bed, 6, speciesSpecificExons);
+    }
 }
 
 int findBestOrthoStartByOverlap(struct altGraphX *ag, bool **em, struct altGraphX *orthoAg, bool **orthoEm,
@@ -881,6 +964,37 @@ for(i=0; i<oVCount; i++)
     }
 chainFree(&toFree);
 return bestVertex;
+}
+
+boolean overlappingExon(struct altGraphX *orthoAgList, bool ***orthoEmP, int pos1, int pos2)
+/* Check to see if another exon overlaps this one. */
+{
+int i,j;
+struct altGraphX *orthoAg = NULL;
+int start = min(pos1,pos2);
+int end = max(pos1,pos2);
+int count = 0;
+for(orthoAg = orthoAgList; orthoAg != NULL; orthoAg = orthoAg->next)
+    {
+    bool **orthoEm = orthoEmP[count];
+    int *vPos = orthoAg->vPositions;
+    int vC = orthoAg->vertexCount;
+    for(i=0; i<vC; i++)
+	{
+	for(j=0; j<vC; j++)
+	    {
+	    if(orthoEm[i][j] && ggExon == getEdgeType(orthoAg, i, j)) 
+		{
+		if(rangeIntersection(vPos[i], vPos[j], start, end) > 0)
+		    {
+		    return TRUE;
+		    }
+		}
+	    }
+	}
+    count++;
+    }
+return FALSE;
 }
 	
 struct altGraphX *commonAgInit(struct altGraphX *ag)
@@ -1313,6 +1427,7 @@ struct altGraphX *commonAg = NULL, *orthoAgList = NULL,
 struct orthoAgReport *agRep = NULL;
 struct orthoSpliceEdge *seList = NULL;
 int *vertexMap = NULL; /* Map of ag's vertexes to agOrthos's vertexes. */
+int *vertexOrthoPos = NULL; /* Coordinates of vertices on ortho genome. */
 int *orthoAgIx = NULL; /* Map of which orthoAg the vertexes in vertexMap belong to. */
 int i=0,j=0;
 int vCount = ag->vertexCount;
@@ -1327,8 +1442,12 @@ AllocVar(agRep);
    being found. */
 AllocArray((orthoAgIx), ag->vertexCount);
 AllocArray((vertexMap), ag->vertexCount);
+AllocArray((vertexOrthoPos), ag->vertexCount);
 for(i=0;i<ag->vertexCount; i++)
+    {
     (vertexMap)[i] = -1;
+    (vertexOrthoPos)[i] = -1;
+    }
 agRep->agName = cloneString(ag->name);
 agRep->chrom = cloneString(ag->tName);
 
@@ -1359,7 +1478,7 @@ seList = altGraphXToOSEdges(ag);
 for(oAg = orthoAgList; oAg != NULL; oAg = oAg->next)
     {
     int oIndex = slIxFromElement(orthoAgList, oAg);
-    makeVertexMap(ag, oAg, chain, vertexMap, orthoAgIx, vCount, oIndex, seList, agRep, reverse);
+    makeVertexMap(ag, oAg, chain, vertexMap, orthoAgIx, vertexOrthoPos, vCount, oIndex, seList, agRep, reverse);
     }
 
 /* Go back and try to map soft starts and ends that we missed before. */
@@ -1392,9 +1511,28 @@ for(i=0;i<vCount; i++)
 		}
 	    else
 		match = FALSE;
-	    if(match || oldEv->evCount >= trumpNum)
+
+	    /* We include differently depending on whether we are looking
+	       for conserved splicing or species-specific splicing. */
+	    if(speciesSpecific) 
+		{
+		match = !match;
+		if(speciesSpecific && oldEv->evCount <= minEdgeNum)
+		    match = FALSE;
+		if(match == TRUE) 
+		    match = !overlappingExon(orthoAgList, orthoEmP, vertexOrthoPos[i], vertexOrthoPos[j]);
+		if(match == TRUE && possibleExons != NULL)
+		    match = (!isPossibleExon(ag, i, j));
+		}
+	    else if(oldEv->evCount >= trumpNum)
+		match = TRUE;
+	    else if(possibleExons != NULL)
+		match |= isPossibleExon(ag, i, j);
+	    if(match)
 		{
 		struct evidence *commonEv = NULL;
+		if(speciesSpecific && getEdgeType(ag, i, j) == ggExon)
+		    outputSpeciesExon(ag, i, j);
 		AllocVar(commonEv);
 		commonEv->evCount = oldEv->evCount;
 		commonEv->mrnaIds = CloneArray(oldEv->mrnaIds, oldEv->evCount);
@@ -1425,10 +1563,10 @@ for(i = 0; i < commonAg->edgeCount; i++)
     commonAg->tStart = min(commonAg->vPositions[commonAg->edgeStarts[i]], commonAg->tStart);
     commonAg->tEnd = max(commonAg->vPositions[commonAg->edgeEnds[i]], commonAg->tEnd);
     }
-
 if(commonAg->edgeCount == 0)
     freeCommonAg(&commonAg);
 freez(&vertexMap);
+freez(&vertexOrthoPos);
 altGraphXFreeList(&agxToFree);
 slFreeList(&seList);
 
@@ -1490,13 +1628,14 @@ char *chrom = optionVal("chrom", NULL);
 char *orthoAgxFile = optionVal("orthoAgxFile", NULL);
 int foundOrtho=0, noOrtho=0;
 
+chainTable = optionVal("chainTable", NULL);
 trumpNum = optionInt("trumpNum", BIGNUM); 
 if(altIn == NULL)
     errAbort("orthoSplice - must specify altInFile.");
 if(netTable == NULL && netFile == NULL)
     errAbort("orthoSplice - must specify netTable or netFile.");
-if(chainFile == NULL)
-    errAbort("orthoSplice - must specify chainFile.");
+if(chainFile == NULL && chainTable == NULL)
+    errAbort("orthoSplice - must specify chainFile or chainTable.");
 if(commonFileName == NULL)
     errAbort("orthoSplice - must specify commonFile.");
 if(reportFileName == NULL)
@@ -1505,6 +1644,15 @@ if(edgeFileName == NULL)
     errAbort("orthoSplice - must specify edgeFile.");
 if(chrom == NULL)
     errAbort("Must specify -chrom");
+if((minEdgeNum = optionInt("minEdgeNum", 0)) > 0) 
+    warn("minEdgeNum is: %d", minEdgeNum);
+if(speciesSpecific = optionExists("speciesSpecific")) 
+    {
+    warn("Doing species specific splicing.");
+    speciesSpecificExons = mustOpen("speciesSpecificExon.tab", "w");
+    }
+if(optionExists("exonFile"))
+    initPossibleExons(optionVal("exonFile", NULL));
 
 workingChrom = chrom;
 if(netFile != NULL)
@@ -1557,6 +1705,8 @@ while(lineFileNextCharRow(lf, '\t', row, rowCount))
 warn("%d graphs, %d orthos found %d no ortho splice graph",
      (noOrtho+foundOrtho), foundOrtho, noOrtho);
 freez(&row);
+if(speciesSpecific) 
+    carefulClose(&speciesSpecificExons);
 lineFileClose(&lf);
 carefulClose(&cFile);
 carefulClose(&rFile);

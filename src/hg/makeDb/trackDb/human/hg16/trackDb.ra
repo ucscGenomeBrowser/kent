@@ -109,7 +109,7 @@ spectrum on
 type psl xeno mm3
 
 track blastzTightMm3
-shortLabel Mouse Tight
+shortLabel Mm3 Tight
 longLabel Blastz Mouse (mm3-Feb 03), Tight Subset of Best Alignments
 group compGeno
 priority 127.5
@@ -121,7 +121,7 @@ type psl xeno mm3
 otherDb mm3
 
 track chainMm3
-shortLabel Mouse Chain 
+shortLabel Mm3 Chain 
 longLabel Chained Blastz Mouse (mm3-Feb 03)/$Organism Alignments
 group compGeno
 priority 128
@@ -133,11 +133,11 @@ type chain mm3
 otherDb mm3
 
 track netMm3
-shortLabel Mouse Net
+shortLabel Mm3 Net
 longLabel Mouse (mm3-Feb 03)/$Organism Alignment Net
 group compGeno
 priority 129
-visibility dense
+visibility hide
 spectrum on
 type netAlign mm3 chainMm3
 otherDb mm3
@@ -249,18 +249,6 @@ priority 145.7
 visibility dense
 spectrum on
 type netAlign seq chainPt0
-
-track hetChimp
-shortLabel Chimp Heterozygosity
-longLabel Chimp/Human single nucleotide mutation rate %, 10Kb bins
-group compGeno
-priority 145.8
-visibility hide
-autoScaleDefault Off
-maxHeightPixels 128
-color 0,128,255
-altColor 255,128,0
-type wig 0.0 7.3
 
 track humorMm3Rn3 
 shortLabel Human/Mouse/Rat
@@ -937,7 +925,7 @@ spectrum on
 type psl xeno mm4
 
 track blastzTightMm4
-shortLabel Mm4 Tight
+shortLabel Mouse Tight
 longLabel Blastz Mouse (Oct 03/Mm4), Tight Subset of Best Alignments
 group compGeno
 priority 127.6
@@ -949,7 +937,7 @@ type psl xeno mm4
 otherDb mm4
 
 track chainMm4
-shortLabel Mm4 Chain 
+shortLabel Mouse Chain 
 longLabel Chained Blastz Mouse (Oct 03/Mm4)/$Organism Alignments
 group compGeno
 priority 128.1
@@ -961,7 +949,7 @@ type chain mm4
 otherDb mm4
 
 track netMm4
-shortLabel Mm4 Net
+shortLabel Mouse Net
 longLabel Mouse (Oct 03/Mm4)/$Organism Alignment Net
 group compGeno
 priority 129.1
@@ -971,7 +959,7 @@ type netAlign mm4 chainMm4
 otherDb mm4
 
 track syntenyMm4
-shortLabel Mm4 Synteny
+shortLabel Mouse Synteny
 longLabel Human/Mouse (Oct 03/Mm4) Synteny Using Blastz Single Coverage (100k window)
 group compGeno
 priority 129.6
@@ -998,6 +986,14 @@ priority 1101
 visibility hide
 type psl protein
 
+track tblastGg0
+shortLabel Chicken Best Exon
+longLabel best gg0 blast hit/hg16 knownGene exon
+group compGeno
+priority 145.98
+visibility hide
+type psl xeno
+
 track phyloHMMcons_CFTR
 shortLabel phyloHMMcons CFTR
 longLabel phylo-HMM-based conservation, CFTR (post. prob. of slowest of 10 rates)
@@ -1019,14 +1015,6 @@ color 175,150,128
 altColor 255,128,0
 type wig 0.0 1.0
 autoScaleDefault Off
-
-track tblastGg0
-shortLabel Chicken Best Exon
-longLabel best gg0 blast hit/hg16 knownGene exon
-group compGeno
-priority 145.98
-visibility hide
-type psl xeno
 
 track transcriptomeJurkat
 shortLabel Jurkat
@@ -1052,3 +1040,44 @@ color 0,128,255
 altColor 255,128,0
 type wig -600 2000
 
+track hetChimp
+shortLabel Chimp Heterozygosity
+longLabel Chimp/Human single nucleotide mutation rate %, 10Kb bins
+group compGeno
+priority 145.8
+visibility hide
+autoScaleDefault Off
+maxHeightPixels 128
+color 0,128,255
+altColor 255,128,0
+type wig 0.0 7.3
+
+track regPotential3X
+shortLabel 3x Reg Potential
+longLabel 3-Way Regulatory Potential - Human (hg16), Mouse (mm3), Rat (rn3)
+group compGeno
+priority 146.2
+visibility hide
+autoScaleDefault Off
+maxHeightPixels 128:36:16
+graphTypeDefault Bar
+gridDefault OFF
+color 0,128,255
+altColor 255,128,0
+defaultViewLimits 0.0:0.01
+type wig -0.0983 0.210
+
+track regPotential2X
+shortLabel 2x Reg Potential
+longLabel 2-Way Regulatory Potential - Human (hg16), Mouse (mm4)
+group compGeno
+priority 146.25
+visibility hide
+autoScaleDefault Off
+maxHeightPixels 128:36:16
+graphTypeDefault Bar
+gridDefault OFF
+color 0,128,255
+altColor 255,128,0
+defaultViewLimits 0.0:0.01
+type wig -0.0732 0.153

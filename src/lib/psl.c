@@ -18,7 +18,7 @@
 #include "aliType.h"
 #include "binRange.h"
 
-static char const rcsid[] = "$Id: psl.c,v 1.35 2004/01/04 05:42:14 markd Exp $";
+static char const rcsid[] = "$Id: psl.c,v 1.41 2004/01/17 09:36:09 markd Exp $";
 
 static char *createString = 
 "CREATE TABLE %s (\n"
@@ -112,7 +112,6 @@ if (sizeOne != ret->blockCount)
 assert(sizeOne == ret->blockCount);
 return ret;
 }
-
 
 struct psl *pslCommaIn(char **pS, struct psl *ret)
 /* Create a psl out of a comma separated string. 
@@ -354,6 +353,62 @@ if (ferror(f))
     perror("Error writing psl file\n");
     errAbort("\n");
     }
+}
+
+void pslOutFormat(struct psl *el, FILE *f, char sep, char lastSep) 
+/* Print out selected psl values.  Separate fields with sep. Follow last field with lastSep. */
+/* Prints out a better format with bold field headings followed by value */
+/* Requires further upstream work to ensure that only the field headers */
+/* declared here are printed if replacing an existing psl print function*/
+{
+const char *headers[] = {"Matches", "Mismatches", "Matches in repeats", "Number of N bases", "Query name", "Size", "Start", "End", "Chromosome", "Strand", "Start", "End"};
+char *hformat = "<B>%s:</B> "; /* string for formatted print for headers */
+char *uformat = "<B>%s:</B> %u%c"; /* string for formatted print for unsigned variable */
+char *targName;
+
+fprintf(f, uformat, headers[0], el->match, sep);
+fprintf(f, uformat, headers[1], el->misMatch, sep);
+fprintf(f, uformat, headers[2], el->repMatch, sep);
+fprintf(f, uformat, headers[3], el->nCount, sep);
+
+fprintf(f, hformat, headers[4]);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->qName);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+
+fprintf(f, uformat, headers[5], el->qSize, sep);
+fprintf(f, uformat, headers[6], el->qStart, sep);
+fprintf(f, uformat, headers[7], el->qEnd, sep);
+
+fprintf(f, hformat, headers[8]);
+if (sep == ',') fputc('"',f);
+/* skip leading 'chr' in string to get only chromosome part */
+targName = el->tName;
+if (startsWith("chr", el->tName))
+   targName += 3;
+fprintf(f, "%s", targName);
+
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+
+fprintf(f, hformat, headers[9]);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->strand);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+
+fprintf(f, uformat, headers[10], el->tStart, sep);
+fprintf(f, uformat, headers[11], el->tEnd, sep);
+
+fputc(lastSep,f);
+
+if (ferror(f))
+    {
+    perror("Error writing psl file\n");
+    errAbort("\n");
+    }
+
 }
 
 struct psl *pslLoadAll(char *fileName)
@@ -901,6 +956,25 @@ reverseUnsigned(qStarts, blockCount);
 reverseUnsigned(blockSizes, blockCount);
 }
 
+void pslRc(struct psl *psl)
+/* reverse-complement a PSL alignment.  This makes target strand explicit. */
+{
+int i;
+
+/* swap strand, forcing target to have an explict strand */
+psl->strand[0] = (psl->strand[0] != '-') ? '-' : '+';
+psl->strand[1] = (psl->strand[1] != '-') ? '-' : '+';
+
+for (i = 0; i < psl->blockCount; i++)
+    {
+    psl->qStarts[i] = psl->qSize - (psl->qStarts[i] + psl->blockSizes[i]);
+    psl->tStarts[i] = psl->tSize - (psl->tStarts[i] + psl->blockSizes[i]);
+    }
+reverseUnsigned(psl->tStarts, psl->blockCount);
+reverseUnsigned(psl->qStarts, psl->blockCount);
+reverseUnsigned(psl->blockSizes, psl->blockCount);
+}
+
 void pslTargetOffset(struct psl *psl, int offset)
 /* Add offset to target positions in psl. */
 {
@@ -1097,13 +1171,6 @@ for (iBlk = 0; iBlk < blockCount; iBlk++)
     unsigned gBlkStart = (pStrand == '+') ? blkStart : (pSize - blkEnd);
     unsigned gBlkEnd = (pStrand == '+') ? blkEnd : (pSize - blkStart);
 
-    if (blockSizes[iBlk] == 0)
-        {
-        if (errCount == 0)
-            printPslDesc(pslDesc, out, psl);
-        fprintf(out, "\t%s %s block %u size is 0\n", pName, pLabel, iBlk);
-        errCount++;
-        }
     if ((pSize > 0) && (blkEnd > pSize))
         {
         if (errCount == 0)
@@ -1347,8 +1414,7 @@ struct psl* pslFromAlign(char *qName, int qSize, int qStart, int qEnd, char *qSt
  * bases indicate repeat masking.  Returns NULL if alignment is empty after
  * triming leading and trailing indels.*/
 {
-struct psl* psl;
-AllocVar(psl);
+struct psl* psl = NULL;
 int aliSize = strlen(qString);
 boolean qInInsert = FALSE; /* True if in insert state on query. */
 boolean tInInsert = FALSE; /* True if in insert state on target. */
@@ -1356,6 +1422,8 @@ boolean eitherInsert = FALSE;	/* True if either in insert state. */
 int blockIx=0;
 boolean qIsRc = FALSE;
 int i, qs,qe,ts,te;
+AllocVar(psl);
+
 if (strlen(tString) != aliSize)
     errAbort("query and target alignment strings are different lengths");
 
@@ -1422,6 +1490,10 @@ assert(qs < qe);
 ts = psl->tStart;
 te = ts + psl->match + psl->misMatch + psl->repMatch + psl->qBaseInsert
     + psl->nCount;
+if (te != psl->tEnd)
+    errAbort("mismatch te %d tEnd %d %s tStart %d match %d misMatch %d repmatch %d gaps %d qBaseIns %d",
+             qe, psl->tEnd, psl->tName, psl->tStart, psl->match, psl->misMatch, psl->repMatch,
+             psl->nCount, psl->qBaseInsert);
 assert(te == psl->tEnd);
 assert(psl->tStart < te);
 
@@ -1445,6 +1517,7 @@ for (i=0; i<aliSize; ++i)
     char t = tString[i];
     if (q == '-' || t == '-')
         {
+        assert(!((q == '-') && (t == '-')));  /* not supported */
 	if (!eitherInsert)
 	    {
 	    psl->blockSizes[blockIx] = qe - qs;

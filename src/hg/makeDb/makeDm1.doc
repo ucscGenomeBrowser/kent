@@ -489,20 +489,20 @@ exit; # don't actually run this like a script :)
     hgFlyBase dm1 genes.txt
 
 
-# FLYBASE TRANSPOSON INSERTIONS (SUSPENDED 11/25/03 angie)
+# BAYLOR PSCREEN TRANSPOSON INSERTIONS (IN PROGRESS 1/16/04 angie)
     ssh hgwdev
-    cd /cluster/data/dm1/bed/flyBase
-    # well, let's see, they've got ti's mapped to genes:
-    wget ftp://flybase.bio.indiana.edu/flybase-data/acode/data/FBti.acode
-    # and sequences; maybe we can blat these?? if they have flanking seq?:
-    wget http://www.fruitfly.org/sequence/sequence_db/na_pe.dros.Z
-    wget http://www.fruitfly.org/sequence/sequence_db/na_dbP.dros
-    uncompress na_pe.dros.Z 
-    # they list all P insertion elements, but localized only to cytomap, here:
-    # ftp://flybase.net/flybase/maps/by-cytoloc/insertions/*
-    # OK, the real answer is that they'll be available when published.  
-    # Check back with bdgp@fruitfly.org Feb/Mar 04.  Meanwhile, a searchable 
-    # db is available: http://flypush.imgen.bcm.tmc.edu/pscreen/
+    mkdir /cluster/data/dm1/bed/pscreen
+    cd /cluster/data/dm1/bed/pscreen
+    wget http://flypush.imgen.bcm.tmc.edu/pscreen/primarycollection1.xls.gz
+    gunzip primarycollection1.xls.gz
+    # Use ooffice  or similar tool to translate MS Excel format to 
+    # tab-separated text file.
+    ssh yall
+    ooffice /cluster/data/dm1/bed/pscreen/primarycolllection1.xls
+    # save as CSV -- select tab as delimiter, no quotes.
+    # Well, inserts are mapped to genes/cytobands, but no genomic coords.
+    # A note from last time around: 
+    # Check back with bdgp@fruitfly.org Feb/Mar 04.
 
 
 # FLYBASE IN SITU IMAGES / EXPRESSION (DONE 11/24/03 angie)
@@ -1663,5 +1663,38 @@ end
     hgLoadPsl dm1 xenoMrnaMasked.psl -tNameIx
     # Looks like no need to hgLoadSeq -- seqs are already loaded by Mark's 
     # stuff.
+
+
+# BLAT HONEYBEE (apiMel0) (DONE 1/13/04 angie)
+    ssh kk
+    mkdir /cluster/data/dm1/bed/blatApiMel0
+    cd /cluster/data/dm1/bed/blatApiMel0
+    mkdir psl
+    ls -1S /iscratch/i/dm1/nib/*.nib > fly.lst
+    ls -1S /iscratch/i/apiMel0/chunks/*.fa > bee.lst
+cat << 'EOF' > gsub
+#LOOP
+/cluster/bin/i386/blat -mask=lower -qMask=lower -q=dnax -t=dnax {check in exists+ $(path1)} {check in line+ $(path2)} {check out line+ /cluster/data/dm1/bed/blatApiMel0/psl/$(root1)_$(root2).psl}
+#ENDLOOP
+'EOF'
+    # << this line makes emacs coloring happy
+    gensub2 fly.lst bee.lst gsub spec
+    para create spec
+    para try, check, push, check, ...
+#Completed: 495 of 495 jobs
+#Average job time:                 802s      13.37m     0.22h    0.01d
+#Longest job:                    26590s     443.17m     7.39h    0.31d
+#Submission to last job:         27028s     450.47m     7.51h    0.31d
+    # postprocess
+    pslCat -dir psl > blatApiMel0.psl
+    # load
+    ssh hgwdev
+    cd /cluster/data/dm1/bed/blatApiMel0
+    hgLoadPsl dm1 blatApiMel0.psl
+    mkdir /gbdb/dm1/apiMel0
+    foreach f (/cluster/data/apiMel0/groups/*.fa)
+      ln -s $f /gbdb/dm1/apiMel0/$f:t
+    end
+    hgLoadSeq dm1 /gbdb/dm1/apiMel0/*.fa
 
 

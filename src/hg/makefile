@@ -1,7 +1,7 @@
 # Build all directories in utils
 
 BROWSER_BINS=cartReset das hgBlat hgCoordConv hgGateway hgGene hgText hgTracks \
-	hgTrackUi hgc cartDump near/hgNear
+	hgTrackUi hgc cartDump near/hgNear protein/pbTracks
 
 all::    cgi utils
 
@@ -109,6 +109,7 @@ UTIL_DIRS = \
 	gpToGtf \
 	gpcrParser \
 	gsBig \
+	hgChroms \
 	hgsql \
 	hgsqldump \
 	intronEnds \
@@ -124,6 +125,7 @@ UTIL_DIRS = \
 	mrnaToGene \
 	nci60 \
 	patCount \
+	spideyToPsl \
 	pslCat \
 	pslCheck \
 	pslCoverage \
