@@ -32,7 +32,7 @@
 #include "twoBit.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.220 2004/11/24 00:55:02 heather Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.221 2004/11/25 01:22:39 baertsch Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
@@ -885,7 +885,7 @@ else
     for(i=0; i<bed->blockCount; i++)
 	{
 	block = hFetchSeq(fileName, bed->chrom,
-			  offSet+bed->chromStarts[i], offSet+bed->blockSizes[i]);
+			  offSet+bed->chromStarts[i], offSet+bed->chromStarts[i]+bed->blockSizes[i]);
 	dyStringAppendN(currentSeq, block->dna, block->size);
 	dnaSeqFree(&block);
 	}
