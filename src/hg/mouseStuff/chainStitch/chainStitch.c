@@ -7,6 +7,8 @@
 #include "chain.h"
 #include "dystring.h"
 
+int fudge=50000;
+ 
 void usage()
 /* Explain usage and exit. */
 {
@@ -100,36 +102,13 @@ if ((te < chain->tStart) && (qe < chain->qStart))
 for(chainBlock = chain->blockList; chainBlock; prevChainBlock = chainBlock, chainBlock = nextChainBlock)
     {
     nextChainBlock = chainBlock->next;
-    //printf("chainBlock %d %d %d %d psl %d %d %d %d\n",chainBlock->tStart,chainBlock->tEnd,chainBlock->qStart,chainBlock->qEnd,ts,te,qs,qe);
     if (((ts <= chainBlock->tEnd) && (te > chainBlock->tStart)) &&
 	 (qs <= chainBlock->qEnd) && (qe > chainBlock->qStart))
-	{
-	/*
-	if (prevChainBlock && !((prevChainBlock->tStart <= ts) && (prevChainBlock->qStart <= qs)))
-	    {
-	    printf("prevChainBlock %d %d %d %d psl %d %d %d %d\n",prevChainBlock->tStart,prevChainBlock->tEnd,prevChainBlock->qStart,prevChainBlock->qEnd,ts,te,qs,qe);
-	    errAbort("bad del\n");
-	    }
-	/*
-	while(chainBlock && ((chainBlock->tStart < te) || (chainBlock->qStart < qe)))
-	    {
-	    nextChainBlock = chainBlock->next;
-	    *deletedBases += chainBlock->tEnd - chainBlock->tStart;
-	    if (prevChainBlock == NULL)
-		chain->blockList = nextChainBlock;
-	    else
-		prevChainBlock->next = nextChainBlock;
-	    freez(&chainBlock);
-	    chainBlock = nextChainBlock;
-	    }
-	    */
-	    //printf("acc chainBlock %d %d %d %d psl %d %d %d %d\n",chainBlock->tStart,chainBlock->tEnd,chainBlock->qStart,chainBlock->qEnd,ts,te,qs,qe);
-
 	return TRUE;
-	}
     }
     return FALSE;
 }
+
 boolean deleteChainRange(struct chain *chain, int qs, int qe, int ts, int te, int *deletedBases)
 {
 struct boxIn *chainBlock , *nextChainBlock = NULL, *prevChainBlock = NULL;
@@ -138,12 +117,9 @@ prevChainBlock = NULL;
 for(chainBlock = chain->blockList; chainBlock; prevChainBlock = chainBlock, chainBlock = nextChainBlock)
     {
     nextChainBlock = chainBlock->next;
-    //if ((chainBlock->tEnd > ts) || (chainBlock->qEnd > qs))
     if (((ts <= chainBlock->tEnd) && (te > chainBlock->tStart)) &&
 	 (qs <= chainBlock->qEnd) && (qe > chainBlock->qStart))
 	{
-//	if (prevChainBlock && !((prevChainBlock->tStart <= ts) && (prevChainBlock->qStart <= qs)))
-//	    errAbort("bad del\n");
 	while(chainBlock && ((chainBlock->tStart < te) || (chainBlock->qStart < qe)))
 	    {
 	    nextChainBlock = chainBlock->next;
@@ -212,11 +188,137 @@ for(chainBlock = chain->blockList; chainBlock; prevChainBlock = chainBlock, chai
     bList->next = chainBlock;
 }
 
+void checkInChains(struct psl **pslList, struct chain **chainList, FILE *outFound, int *addedBases)
+{
+struct chain *nextChain, *prevChain;
+struct chain *chain;
+struct psl *psl;
+struct psl *prevPsl, *nextPsl;
+
+prevPsl = NULL;
+for(psl = *pslList; psl ;  psl = nextPsl)
+    {
+    nextPsl = psl->next;
+    int qStart = psl->qStarts[0];
+    int qEnd = psl->qStarts[psl->blockCount - 1] + psl->blockSizes[psl->blockCount - 1];
+    int tStart = psl->tStarts[0];
+    int tEnd = psl->tStarts[psl->blockCount - 1] + psl->blockSizes[psl->blockCount - 1];
+
+    prevChain = 0;
+    for(chain = *chainList; chain ; prevChain = chain , chain = nextChain)
+	{
+	nextChain = chain->next;
+	if (((tStart <= chain->tEnd) && (tEnd > chain->tStart)) &&
+	     (qStart <= chain->qEnd) && (qEnd > chain->qStart))
+	    {
+	    if (!checkChainRange(chain, qStart, qEnd, tStart, tEnd))
+		{
+		pslTabOut(psl, outFound);
+		addPslToChain(chain, psl, addedBases);
+		}
+
+	    if (prevPsl != NULL)
+		prevPsl->next = nextPsl;
+	    else
+		*pslList = nextPsl;
+		
+	    freez(&psl);
+	    break;
+	    }
+	}
+    if (chain == NULL)
+	prevPsl = psl;
+    
+    }
+}
+
+void checkAfterChains(struct psl **pslList, struct chain **chainList, FILE *outFound, int *addedBases)
+{
+struct chain *nextChain, *prevChain;
+struct chain *chain;
+struct psl *psl;
+struct psl *prevPsl, *nextPsl;
+prevPsl = NULL;
+for(psl = *pslList; psl ;  psl = nextPsl)
+    {
+    nextPsl = psl->next;
+    int qStart = psl->qStarts[0];
+    int qEnd = psl->qStarts[psl->blockCount - 1] + psl->blockSizes[psl->blockCount - 1];
+    int tStart = psl->tStarts[0];
+    int tEnd = psl->tStarts[psl->blockCount - 1] + psl->blockSizes[psl->blockCount - 1];
+
+    prevChain = 0;
+    for(chain = *chainList; chain ; prevChain = chain , chain = nextChain)
+	{
+	nextChain = chain->next;
+	if (((tStart <= chain->tEnd + fudge) && (tStart > chain->tEnd)) &&
+	     (qStart <= chain->qEnd + fudge) && (qStart > chain->qEnd))
+	    {
+	    addPslToChain(chain, psl, addedBases);
+
+	    if (prevPsl != NULL)
+		prevPsl->next = nextPsl;
+	    else
+		*pslList = nextPsl;
+		
+	    pslTabOut(psl, outFound);
+	    freez(&psl);
+	    break;
+	    }
+	}
+    if (chain == NULL)
+	prevPsl = psl;
+    
+    }
+}
+
+void checkBeforeChains(struct psl **pslList, struct chain **chainList, FILE *outFound, int *addedBases)
+{
+struct chain *nextChain, *prevChain;
+struct chain *chain;
+struct psl *psl;
+struct psl *prevPsl, *nextPsl;
+prevPsl = NULL;
+for(psl = *pslList; psl ;  psl = nextPsl)
+    {
+    nextPsl = psl->next;
+    int qStart = psl->qStarts[0];
+    int qEnd = psl->qStarts[psl->blockCount - 1] + psl->blockSizes[psl->blockCount - 1];
+    int tStart = psl->tStarts[0];
+    int tEnd = psl->tStarts[psl->blockCount - 1] + psl->blockSizes[psl->blockCount - 1];
+
+    prevChain = 0;
+    for(chain = *chainList; chain ; prevChain = chain , chain = nextChain)
+	{
+	nextChain = chain->next;
+	if (((tStart > chain->tStart - fudge) && (tEnd < chain->tStart)) &&
+	     (qStart > chain->qStart - fudge) && (qEnd < chain->qStart))
+	    {
+	    addPslToChain(chain, psl, addedBases);
+
+	    if (prevPsl != NULL)
+		prevPsl->next = nextPsl;
+	    else
+		*pslList = nextPsl;
+		
+	    pslTabOut(psl, outFound);
+	    freez(&psl);
+	    break;
+	    }
+	}
+    if (chain == NULL)
+	prevPsl = psl;
+    
+    }
+}
+
 void chainStitch(char *psls, char *chains, char *outChainName, char *outFoundName, char *outNotFoundName)
 /* chainStitch - Stitch psls into chains. */
 {
+int lastChainId = -1;
+struct psl *prevPsl, *nextPsl;
+struct psl *fakePslList;
 int jj;
-struct chain *nextChain, *prevChain;
 int deletedBases, addedBases;
 FILE *outFound = mustOpen(outFoundName, "w");
 FILE *outNotFound = mustOpen(outNotFoundName, "w");
@@ -231,7 +333,6 @@ struct hash *pslHash = newHash(0);  /* Hash keyed by qSeq<strand>tSeq */
 struct hash *chainHash = newHash(0);  /* Hash keyed by qSeq<strand>tSeq */
 struct chain *chain, *chainList = NULL;
 struct boxIn *block , *nextBlock = NULL, *prevBlock = NULL;
-struct psl *prevPsl, *nextPsl;
 int count;
 
 count = 0;
@@ -263,6 +364,8 @@ for(sp = spList; sp; sp = sp->next)
 count = 0;
 while ((chain = chainRead(chainsLf)) != NULL)
     {
+    if (chain->id > lastChainId)
+	lastChainId = chain->id;
     dyStringClear(dy);
     dyStringPrintf(dy, "%s%c%s", chain->qName, chain->qStrand, chain->tName);
     csp = hashFindVal(chainHash, dy->string);
@@ -279,7 +382,7 @@ while ((chain = chainRead(chainsLf)) != NULL)
     count++;
     }
 lineFileClose(&chainsLf);
-printf("added %d chains\n",count);
+printf("read in %d chains\n",count);
 
 for(csp = cspList; csp; csp = csp->next)
     slSort(&csp->chain, chainCmpTarget);
@@ -287,121 +390,76 @@ for(csp = cspList; csp; csp = csp->next)
 addedBases = deletedBases = 0;
 for(sp = spList; sp; sp = sp->next)
     {
-    //printf("checking %s\n",sp->name);
     /* find the chains associated with this strand */
-    if ((csp = hashFindVal(chainHash, sp->name)) == NULL)
+    if ((csp = hashFindVal(chainHash, sp->name)) != NULL)
 	{
-	/* report these blocks as not found */
-	continue;
+	/* first check to see if psl blocks are in any chains */
+	checkInChains(&sp->psl, &csp->chain, outFound, &addedBases);
+
+	/* now extend chains to the right */
+	checkAfterChains(&sp->psl, &csp->chain, outFound, &addedBases);
+
+	/* now extend chains to the left */
+	slReverse(&sp->psl);
+	checkBeforeChains(&sp->psl, &csp->chain, outFound, &addedBases);
 	}
 
-#define FUDGE 50000
-
-    /* first check to see if psl blocks are in any chains */
-    prevPsl = NULL;
-    for(psl = sp->psl; psl ;  psl = nextPsl)
+    /* do we still have psl's */
+    if (sp->psl != NULL)
 	{
-	nextPsl = psl->next;
-	int qStart = psl->qStarts[0];
-	int qEnd = psl->qStarts[psl->blockCount - 1] + psl->blockSizes[psl->blockCount - 1];
-	int tStart = psl->tStarts[0];
-	int tEnd = psl->tStarts[psl->blockCount - 1] + psl->blockSizes[psl->blockCount - 1];
-
-	prevChain = 0;
-	for(chain = csp->chain ; chain ; prevChain = chain , chain = nextChain)
+	/* make sure we have a chainList */
+	if (csp == NULL)
 	    {
-	    nextChain = chain->next;
-	    if (((tStart <= chain->tEnd) && (tEnd > chain->tStart)) &&
-	         (qStart <= chain->qEnd) && (qEnd > chain->qStart))
-		{
-
-	//	    deleteChainRange(chain, qStart, qEnd, tStart, tEnd, &deletedBases);
-		if (!checkChainRange(chain, qStart, qEnd, tStart, tEnd))
-		    {
-		    pslTabOut(psl, outFound);
-		    addPslToChain(chain, psl, &addedBases);
-		    }
-
-		if (prevPsl != NULL)
-		    prevPsl->next = nextPsl;
-		else
-		    sp->psl = nextPsl;
-		    
-		freez(&psl);
-		break;
-		}
+	    AllocVar(csp);
+	    slAddHead(&cspList, csp);
+	    hashAddSaveName(chainHash, dy->string, csp, &csp->name);
+	    csp->qName = cloneString(sp->psl->qName);
+	    csp->tName = cloneString(sp->psl->tName);
+	    csp->qStrand = sp->psl->strand[0];
 	    }
-	if (chain == NULL)
-	    prevPsl = psl;
-	
-	}
 
-    /* now extend chains to the right */
-    prevPsl = NULL;
-    for(psl = sp->psl; psl ;  psl = nextPsl)
-	{
-	nextPsl = psl->next;
-	int qStart = psl->qStarts[0];
-	int qEnd = psl->qStarts[psl->blockCount - 1] + psl->blockSizes[psl->blockCount - 1];
-	int tStart = psl->tStarts[0];
-	int tEnd = psl->tStarts[psl->blockCount - 1] + psl->blockSizes[psl->blockCount - 1];
-
-	prevChain = 0;
-	for(chain = csp->chain ; chain ; prevChain = chain , chain = nextChain)
+	for(psl = sp->psl; psl ;  psl = nextPsl)
 	    {
-	    nextChain = chain->next;
-	    if (((tStart <= chain->tEnd + FUDGE) && (tStart > chain->tEnd)) &&
-	         (qStart <= chain->qEnd + FUDGE) && (qStart > chain->qEnd))
+	    /* this psl will either fit a chain or make a new one */
+
+	    nextPsl = psl->next;
+	    sp->psl  = nextPsl;
+
+	    psl->next = NULL;
+	    fakePslList = psl;
+	    checkInChains(&fakePslList, &csp->chain, outFound, &addedBases);
+	    if (fakePslList == NULL)
 		{
-		addPslToChain(chain, psl, &addedBases);
-
-		if (prevPsl != NULL)
-		    prevPsl->next = nextPsl;
-		else
-		    sp->psl = nextPsl;
-		    
-		pslTabOut(psl, outFound);
-		freez(&psl);
-		break;
+		//freez(&psl);
+		continue;
 		}
-	    }
-	if (chain == NULL)
-	    prevPsl = psl;
-	
-	}
-    /* now extend chains to the left */
-    slReverse(&sp->psl);
-    prevPsl = NULL;
-    for(psl = sp->psl; psl ;  psl = nextPsl)
-	{
-	nextPsl = psl->next;
-	int qStart = psl->qStarts[0];
-	int qEnd = psl->qStarts[psl->blockCount - 1] + psl->blockSizes[psl->blockCount - 1];
-	int tStart = psl->tStarts[0];
-	int tEnd = psl->tStarts[psl->blockCount - 1] + psl->blockSizes[psl->blockCount - 1];
-
-	prevChain = 0;
-	for(chain = csp->chain ; chain ; prevChain = chain , chain = nextChain)
-	    {
-	    nextChain = chain->next;
-	    if (((tStart > chain->tStart - FUDGE) && (tEnd < chain->tStart)) &&
-	         (qStart > chain->qStart - FUDGE) && (qEnd < chain->qStart))
+	    checkAfterChains(&fakePslList, &csp->chain, outFound, &addedBases);
+	    if (fakePslList == NULL)
 		{
-		addPslToChain(chain, psl, &addedBases);
-
-		if (prevPsl != NULL)
-		    prevPsl->next = nextPsl;
-		else
-		    sp->psl = nextPsl;
-		    
-		pslTabOut(psl, outFound);
-		freez(&psl);
-		break;
+		//freez(&psl);
+		continue;
 		}
+	    checkBeforeChains(&fakePslList, &csp->chain, outFound, &addedBases);
+	    if (fakePslList == NULL)
+		{
+		//freez(&psl);
+		continue;
+		}
+
+	    AllocVar(chain);
+	    chain->tSize = psl->tSize;
+	    chain->qSize = psl->qSize;
+	    chain->qName = cloneString(psl->qName);
+	    chain->tName = cloneString(psl->tName);
+	    chain->qStrand = psl->strand[0];
+	    chain->id = ++lastChainId;
+
+	    addPslToChain(chain, psl, &addedBases);
+	    slAddHead(&csp->chain, chain);
+
+	    pslTabOut(psl, outFound);
+	    freez(&psl);
 	    }
-	if (chain == NULL)
-	    prevPsl = psl;
-	
 	}
     }
 fclose(outFound);
