@@ -63,13 +63,6 @@ for(bed = bedList; bed != NULL; bed = bed->next)
 return lfs;
 }
 
-
-struct slInt {
-    /* list of ints, should probably switch to slRef but harder to debug */
-    struct slInt *next;
-    int val;
-};
-
 void expRecordMapTypes(struct hash *expIndexesToNames, struct hash *indexes, int *numIndexes, 
 		       struct expRecord *erList,  int index, char *filter, int filterIndex)
 /* creates two hashes which contain a mapping from 
