@@ -6,8 +6,9 @@
 #include "dnautil.h"
 #include "axt.h"
 #include "maf.h"
+#include <fcntl.h>
 
-static char const rcsid[] = "$Id: maf.c,v 1.16 2004/08/10 22:07:17 krish Exp $";
+static char const rcsid[] = "$Id: maf.c,v 1.17 2005/03/10 00:15:51 kate Exp $";
 
 struct mafFile *mafMayOpen(char *fileName)
 /* Open up a maf file and verify header. */
@@ -23,8 +24,11 @@ AllocVar(mf);
 mf->lf = lf;
 
 lineFileNeedNext(lf, &line, NULL);
+fprintf(stderr, "line: %s\n", line);
 if (!startsWith(sig, line))
+    {
     errAbort("%s does not start with %s", fileName, sig);
+    }
 line += strlen(sig);
 
 while ((word = nextWord(&line)) != NULL)
@@ -53,6 +57,14 @@ struct mafFile *mf = mafMayOpen(fileName);
 if (mf == NULL)
     errnoAbort("Couldn't open %s\n", fileName);
 return mf;
+}
+
+void mafRewind(struct mafFile *mf)
+/* Seek to beginning of open maf file */
+{
+if (mf == NULL)
+    errAbort("maf file rewind failed -- file not open");
+lineFileSeek(mf->lf, 0, SEEK_SET);
 }
 
 static boolean nextLine(struct lineFile *lf, char **pLine)
@@ -352,6 +364,27 @@ for (mc = maf->components; mc != NULL; mc = mc->next)
 return NULL;
 }
 
+struct mafComp *mafMayFindComponentDb(struct mafAli *maf, char *db)
+/* Find component of given database, allowing component to be 
+ * labeled "db", or "db.chrom" . Return NULL if not found. */
+{
+struct mafComp *mc;
+char *p, *q;
+for (mc = maf->components; mc != NULL; mc = mc->next)
+    {
+    for (p = mc->src, q = db; *p && *q; p++, q++)
+        {
+        if (*p != *q)
+            break;
+        }
+    if (*p == '.' && *q == 0)
+        return mc;
+    if (*p == *q)
+        return mc;
+    }
+return NULL;
+}
+
 struct mafComp *mafFindComponent(struct mafAli *maf, char *src)
 /* Find component of given source or die trying. */
 {
@@ -490,3 +523,16 @@ for (mc = maf->components; mc != NULL; mc = mc->next)
     }
 }
 
+void mafSrcDb(char *name, char *retDb, int retDbSize)
+/* Parse out just database part of name (up to but not including
+ * first dot). If dot found, return entire name */
+{
+int len;
+char *e = strchr(name, '.');
+/* Put prefix up to dot into buf. */
+len = (e == NULL ? strlen(name) : e - name);
+if (len >= retDbSize)
+     len = retDbSize-1;
+memcpy(retDb, name, len);
+retDb[len] = 0;
+}

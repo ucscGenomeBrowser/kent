@@ -13,7 +13,7 @@
 #include "scoredRef.h"
 #include "hgMaf.h"
 
-static char const rcsid[] = "$Id: mafTrack.c,v 1.28 2005/02/24 18:55:25 kate Exp $";
+static char const rcsid[] = "$Id: mafTrack.c,v 1.29 2005/03/10 00:15:51 kate Exp $";
 
 struct mafItem
 /* A maf track item. */
@@ -68,21 +68,6 @@ else
     return mafLoadInRegion(conn, tg->mapName, chrom, start, end);
 }
 
-static boolean dbPartOfName(char *name, char *retDb, int retDbSize)
-/* Parse out just database part of name (up to but not including
- * first dot). If dot found, return entire name */
-{
-int len;
-char *e = strchr(name, '.');
-/* Put prefix up to dot into buf. */
-len = (e == NULL ? strlen(name) : e - name);
-if (len >= retDbSize)
-     len = retDbSize-1;
-memcpy(retDb, name, len);
-retDb[len] = 0;
-return TRUE;
-}
-
 static struct mafItem *baseByBaseItems(struct track *tg, int scoreHeight)
 /* Make up base-by-base track items. */
 {
@@ -115,7 +100,7 @@ slAddHead(&miList, mi);
 	struct mafComp *mc;
 	for (mc = maf->components; mc != NULL; mc = mc->next)
 	    {
-	    dbPartOfName(mc->src, buf, sizeof(buf));
+	    mafSrcDb(mc->src, buf, sizeof(buf));
 	    if (hashLookup(hash, buf) == NULL)
 	        {
 		AllocVar(mi);
@@ -175,7 +160,7 @@ if (trackDbSetting(tg->tdb, "pairwise") != NULL)
                 isMyOrg = FALSE;
                 continue;
                 }
-	    dbPartOfName(mc->src, buf, sizeof(buf));
+	    mafSrcDb(mc->src, buf, sizeof(buf));
 	    if (hashLookup(hash, buf) == NULL)
 	        {
 		AllocVar(mi);
@@ -428,9 +413,16 @@ if (numScores >= masterSize)	 /* More pixels than bases */
 	    }
 	}
     }
-else	/* More bases than pixels. */
+else	
+    /* More bases than pixels. */
+    /* This handles the case where you're
+      fitting  M bases of alignment into N pixels, and
+      M is not a perfect multiple of N.  That is it
+      handles the case where you want to average over
+      2 bases, then 3 bases, then 2 bases, then 3 bases
+      (which would be the case where N = 4 and M = 10). */
     {
-    int b1=0, b2;       /* start and end in the rerence (master) genome */
+    int b1=0, b2;       /* start and end in the reference (master) genome */
     int deltaB;
     int t1=0, t2;       /* start and end in the maf text.  The spacing between
                          * them may be larger than b1,b2 due to '-' chars in 
@@ -705,7 +697,7 @@ for (maf = mafList; maf != NULL; maf = maf->next)
 	lineOffset = subStart - seqStart;
 	for (mc = sub->components; mc != NULL; mc = mc->next)
 	    {
-            dbPartOfName(mc->src, db, sizeof(db));
+            mafSrcDb(mc->src, db, sizeof(db));
 	    if (mc == mcMaster)
 		{
 		processInserts(mc->text, sub->textSize, 

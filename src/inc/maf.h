@@ -71,6 +71,9 @@ struct mafFile *mafMayOpen(char *fileName);
 /* Like mafOpen above, but returns NULL rather than aborting 
  * if file does not exist. */
 
+void mafRewind(struct mafFile *mf);
+/* Seek to beginning of open maf file */
+
 struct mafAli *mafNext(struct mafFile *mafFile);
 /* Return next alignment in file or NULL if at end. 
  * This will close the open file handle at end as well. */
@@ -96,6 +99,9 @@ void mafWriteAll(struct mafFile *mf, char *fileName);
 
 struct mafComp *mafMayFindComponent(struct mafAli *maf, char *src);
 /* Find component of given source. Return NULL if not found. */
+
+struct mafComp *mafMayFindComponentDb(struct mafAli *maf, char *db);
+/* Find component of given database or source. Return NULL if not found. */
 
 struct mafComp *mafFindComponent(struct mafAli *maf, char *src);
 /* Find component of given source or die trying. */
@@ -163,6 +169,10 @@ void mafColMinMaxScore(struct mafAli *maf,
 
 void mafFlipStrand(struct mafAli *maf);
 /* Reverse complement maf. */
+
+void mafSrcDb(char *name, char *retDb, int retDbSize);
+/* Parse out just database part of name (up to but not including
+ * first dot). If dot found, return entire name */
 
 #endif /* MAF_H */
 
