@@ -96,13 +96,13 @@ skippedKgId   = strdup("");
 lastValidKgId = strdup("");
 
 isDuplicate   = 0;
-oldMrnaStr    = NULL;
-oldAlignStr   = NULL;
-oldProteinStr = NULL;
+oldMrnaStr    = strdup("");
+oldAlignStr   = strdup("");
+oldProteinStr = strdup("");
 
-mrnaStr       = NULL;
-proteinStr    = NULL;
-alignStr      = NULL;
+mrnaStr       = strdup("");
+proteinStr    = strdup("");
+alignStr      = strdup("");
 
 while (fgets(line_in, 10000, inf) != NULL)
     {
