@@ -194,7 +194,7 @@ type bed 15 +
 canPack off
 
 track affyUclaNorm
-shortLabel UCLA GeneChip
+shortLabel UCLA Tissues
 longLabel UCLA Affymetrix U133 GeneChip Normal Tissues
 group regulation
 priority 88
