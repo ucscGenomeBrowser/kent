@@ -14,12 +14,13 @@
 #include "portable.h"
 #include "blastTab.h"
 
-static char const rcsid[] = "$Id: blastToPsl.c,v 1.8 2003/09/10 23:31:02 braney Exp $";
+static char const rcsid[] = "$Id: blastToPsl.c,v 1.9 2003/09/15 16:20:32 braney Exp $";
 
 
 int minScore = -1000000;
 char *detailsName = NULL;
 char *gapFileName = NULL;
+boolean nohead = FALSE;
 
 void usage()
 /* Explain usage and exit. */
@@ -27,7 +28,7 @@ void usage()
 errAbort(
   "blastToPsl - Chain together tblastn alignments.\n"
   "usage:\n"
-  "   blastToPsl in.tab tNibDir qNibDir scoreMatrix out.psl\n"
+  "   blastToPsl in.tab tNibDir qNibDir scoreMatrix out.psl scores\n"
   "options:\n"
   "   -minScore=N  Minimum score for chain, default %d\n"
   "   -details=fileName Output some additional chain details\n"
@@ -781,67 +782,12 @@ return spList;
 unsigned blockSizes[20000];
 unsigned qStarts[20000];
 unsigned tStarts[20000];
-
-void blastToPsl(char *tabIn, char *tNibDir, char *qNibDir, char *matrixName, char *chainOut)
-/* blastToPsl - Chain together axt alignments.. */
+void chainToPsl( struct chain *chainList, FILE *f, FILE *scores)
 {
-struct hash *pairHash = newHash(0);  /* Hash keyed by qSeq<strand>tSeq */
-struct seqPair *spList = NULL, *sp;
-FILE *f = mustOpen(chainOut, "w");
-char *qName = "",  *tName = "";
-struct dnaSeq *qSeq = NULL, *tSeq = NULL;
-char qStrand = 0, tStrand = 0;
-struct chain *chainList = NULL, *chain;
-FILE *details = NULL;
-struct lineFile *lf = NULL;
-struct dnaSeq *seq, *seqList = NULL;
-struct hash *faHash = newHash(0);
-char comment[1024];
-struct lineFile *faF;
-struct axtScoreScheme *ss;  /* Scoring scheme. */
-int size;
-char *name;
-DNA *dna;
+struct chain *chain;
 
-if (detailsName != NULL)
-    details = mustOpen(detailsName, "w");
-/* Read input file and divide alignments into various parts. */
-spList = readBlastBlocks(tabIn, pairHash);
-
-faF = lineFileOpen(qNibDir, 0);
-while ( faMixedSpeedReadNext(faF, &dna, &size, &name))
-    {
-    seq = newDnaSeq(cloneString(dna), size, name);
-    hashAdd(faHash, seq->name, seq);
-    slAddHead(&seqList, seq);
-    }
-lineFileClose(&faF);
-
-ss = axtScoreSchemeProteinRead(matrixName);
-for (sp = spList; sp != NULL; sp = sp->next)
-    {
-    slReverse(&sp->blockList);
-    removeExactOverlaps(&sp->blockList);
-    uglyf("%d blocks after duplicate removal\n", slCount(sp->blockList));
-    assert (faHash != NULL);
-    loadIfNewSeq(tNibDir, sp->tName, sp->qStrand, &tName, &tSeq, &tStrand);
-    loadFaSeq(faHash, sp->qName, tSeq->size, &qName, &qSeq);
-
-    /* since we don't have the target segment size at read in */
-    if (sp->qStrand == '-')
-	{
-	struct boxIn *b;
-	for (b = sp->blockList; b != NULL; b = b->next)
-	    {
-		b->tStart = tSeq->size - b->tStart - 1;
-		b->tEnd = tSeq->size - b->tEnd - 1;
-	    }
-	}
-
-    chainPair(sp, qSeq, tSeq, &chainList, details, ss);
-    }
-slSort(&chainList, chainCmpScore);
-pslxWriteHead( f, gftProt, gftDnaX);
+if (!nohead)
+    pslxWriteHead( f, gftProt, gftDnaX);
 for (chain = chainList; chain != NULL; chain = chain->next)
     {
     struct psl psl;
@@ -908,8 +854,76 @@ for (chain = chainList; chain != NULL; chain = chain->next)
     psl.blockCount = count;	/* Number of blocks in alignment */
     psl.match = totalSize - psl.misMatch;	/* Number of bases that match that aren't repeats */
     pslTabOut(&psl, f);
+    fprintf(scores, "%s\t%c\t%d\t%d\t%s\t%d\t%d\t%g\n", psl.tName,
+	    psl.strand[1], psl.tStart, psl.tEnd,
+	    psl.qName, psl.qStart, psl.qEnd,
+	    chain->score);
     }
+}
 
+void blastToPsl(char *tabIn, char *tNibDir, char *qNibDir, char *matrixName, char *chainOut, char *scoreOut)
+/* blastToPsl - Chain together axt alignments.. */
+{
+struct hash *pairHash = newHash(0);  /* Hash keyed by qSeq<strand>tSeq */
+struct seqPair *spList = NULL, *sp;
+FILE *f = mustOpen(chainOut, "w");
+FILE *scoreFile = mustOpen(scoreOut, "w");
+char *qName = "",  *tName = "";
+struct dnaSeq *qSeq = NULL, *tSeq = NULL;
+char qStrand = 0, tStrand = 0;
+struct chain *chainList = NULL, *chain;
+FILE *details = NULL;
+struct lineFile *lf = NULL;
+struct dnaSeq *seq, *seqList = NULL;
+struct hash *faHash = newHash(0);
+char comment[1024];
+struct lineFile *faF;
+struct axtScoreScheme *ss;  /* Scoring scheme. */
+int size;
+char *name;
+DNA *dna;
+
+if (detailsName != NULL)
+    details = mustOpen(detailsName, "w");
+/* Read input file and divide alignments into various parts. */
+spList = readBlastBlocks(tabIn, pairHash);
+
+faF = lineFileOpen(qNibDir, 0);
+while ( faMixedSpeedReadNext(faF, &dna, &size, &name))
+    {
+    seq = newDnaSeq(cloneString(dna), size, name);
+    hashAdd(faHash, seq->name, seq);
+    slAddHead(&seqList, seq);
+    }
+lineFileClose(&faF);
+
+ss = axtScoreSchemeProteinRead(matrixName);
+for (sp = spList; sp != NULL; sp = sp->next)
+    {
+    slReverse(&sp->blockList);
+    removeExactOverlaps(&sp->blockList);
+    uglyf("%d blocks after duplicate removal\n", slCount(sp->blockList));
+    assert (faHash != NULL);
+    loadIfNewSeq(tNibDir, sp->tName, sp->qStrand, &tName, &tSeq, &tStrand);
+    loadFaSeq(faHash, sp->qName, tSeq->size, &qName, &qSeq);
+
+    /* since we don't have the target segment size at read in */
+    if (sp->qStrand == '-')
+	{
+	struct boxIn *b;
+	for (b = sp->blockList; b != NULL; b = b->next)
+	    {
+		b->tStart = tSeq->size - b->tStart - 1;
+		b->tEnd = tSeq->size - b->tEnd - 1;
+	    }
+	}
+
+    chainPair(sp, qSeq, tSeq, &chainList, details, ss);
+    }
+slSort(&chainList, chainCmpScore);
+chainToPsl( chainList, f, scoreFile);
+
+carefulClose(&scoreFile);
 carefulClose(&f);
 }
 
@@ -939,11 +953,12 @@ optionHash(&argc, argv);
 minScore = optionInt("minScore", minScore);
 detailsName = optionVal("details", NULL);
 gapFileName = optionVal("linearGap", NULL);
+nohead = optionExists("nohead");
 dnaUtilOpen();
 initGapAid(gapFileName);
 // testGaps();
-if (argc != 6)
+if (argc != 7)
     usage();
-blastToPsl(argv[1], argv[2], argv[3], argv[4], argv[5]);
+blastToPsl(argv[1], argv[2], argv[3], argv[4], argv[5], argv[6]);
 return 0;
 }
