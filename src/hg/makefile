@@ -135,6 +135,7 @@ UTIL_DIRS = \
 	pslMap \
 	pslPretty \
 	pslReps \
+	pslSelect \
 	pslSimp \
 	pslSort \
 	pslSortAcc \
