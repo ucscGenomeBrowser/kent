@@ -11305,6 +11305,60 @@ axtChain -scoreScheme=/cluster/data/blastz/HoxD55.q \
     hgLoadBed -sqlTable=/cluster/home/fanhsu/hg/lib/wgRna.sql hg17 wgRna wgRna.tab
 # create and edit wgRna.html under src/hg/makeDb/trackDb/human/hg17.
 
+# UPDATED WGRNA DATA PER EMAIL FROM WEBER (2004-12-14, Fan).
+
+# Added the following 3 lines to j1
+chr3 161715396 161715726 U90 480 -
+chr11 93104316 93104387 Z40 480 -
+chr11 93106041 93106114 mgh28S-2410 480 -
+    
+# Regenerated wgRna table
+    cat miRNA.out  | awk {'print $2"\t"$3"\t"$4"\t"$5"\t"$6"\t"$7"\t"$8"\t"$9"\t""miRna"'} >wgRna.tab
+    cat j1 | awk {'print $1"\t"$2"\t"$3"\t"$4"\t"$5"\t"$6"\t"0"\t"0"\t""CDBox"'} >>wgRna.tab
+    cat j2 | awk {'print $1"\t"$2"\t"$3"\t"$4"\t"$5"\t"$6"\t"0"\t"0"\t""HAcaBox"'} >>wgRna.tab
+    hgLoadBed -sqlTable=/cluster/home/fanhsu/hg/lib/wgRna.sql hg17 wgRna wgRna.tab
+
+# Changed the following records to RNA type scaRna.
+
+hgsql hg17 -e 'update wgRna set type = "scaRna" where name ="U85"'
+hgsql hg17 -e 'update wgRna set type = "scaRna" where name ="U87"'
+hgsql hg17 -e 'update wgRna set type = "scaRna" where name ="U88"'
+hgsql hg17 -e 'update wgRna set type = "scaRna" where name ="U89"'
+hgsql hg17 -e 'update wgRna set type = "scaRna" where name ="U90"'
+hgsql hg17 -e 'update wgRna set type = "scaRna" where name ="U91"'
+hgsql hg17 -e 'update wgRna set type = "scaRna" where name ="U92"'
+hgsql hg17 -e 'update wgRna set type = "scaRna" where name ="U93"'
+hgsql hg17 -e 'update wgRna set type = "scaRna" where name ="U100"'
+hgsql hg17 -e 'update wgRna set type = "scaRna" where name ="ACA26"'
+hgsql hg17 -e 'update wgRna set type = "scaRna" where name ="ACA35"'
+hgsql hg17 -e 'update wgRna set type = "scaRna" where name ="ACA45"'
+hgsql hg17 -e 'update wgRna set type = "scaRna" where name ="ACA47"'
+hgsql hg17 -e 'update wgRna set type = "scaRna" where name ="ACA57"'
+hgsql hg17 -e 'update wgRna set type = "scaRna" where name ="HBII-382"'
+hgsql hg17 -e 'update wgRna set type = "scaRna" where name ="mgU2-19/30"'
+hgsql hg17 -e 'update wgRna set type = "scaRna" where name ="mgU2-25/61"'
+hgsql hg17 -e 'update wgRna set type = "scaRna" where name ="mgU2-22/U4-8"'
+hgsql hg17 -e 'update wgRna set type = "scaRna" where name ="U85"'
+hgsql hg17 -e 'update wgRna set type = "scaRna" where name ="U87"'
+hgsql hg17 -e 'update wgRna set type = "scaRna" where name ="U88"'
+hgsql hg17 -e 'update wgRna set type = "scaRna" where name ="U89"'
+hgsql hg17 -e 'update wgRna set type = "scaRna" where name ="U90"'
+hgsql hg17 -e 'update wgRna set type = "scaRna" where name ="U91"'
+hgsql hg17 -e 'update wgRna set type = "scaRna" where name ="U92"'
+hgsql hg17 -e 'update wgRna set type = "scaRna" where name ="U93"'
+hgsql hg17 -e 'update wgRna set type = "scaRna" where name ="U100"'
+hgsql hg17 -e 'update wgRna set type = "scaRna" where name ="ACA26"'
+hgsql hg17 -e 'update wgRna set type = "scaRna" where name ="ACA35"'
+hgsql hg17 -e 'update wgRna set type = "scaRna" where name ="ACA45"'
+hgsql hg17 -e 'update wgRna set type = "scaRna" where name ="ACA47"'
+hgsql hg17 -e 'update wgRna set type = "scaRna" where name ="ACA57"'
+hgsql hg17 -e 'update wgRna set type = "scaRna" where name ="HBII-382"'
+hgsql hg17 -e 'update wgRna set type = "scaRna" where name ="mgU2-19/30"'
+hgsql hg17 -e 'update wgRna set type = "scaRna" where name ="mgU2-25/61"'
+hgsql hg17 -e 'update wgRna set type = "scaRna" where name ="mgU2-22/U4-8"'
+
+# Updated .../trackDb/human/hg17/wgRna.html.
+
 # MAKE VSDANRER2 DOWNLOADABLES (DONE, 2004-12-14, hartera)
     ssh hgwdev
     cd /cluster/data/hg17/bed/blastz.danRer2/axtChrom
@@ -11330,4 +11384,3 @@ axtChain -scoreScheme=/cluster/data/blastz/HoxD55.q \
     nice rm axtChain/run1/chain/* &
     nice rm -fr axtChain/n1 axtChain/noClass.net &
     nice gzip axtChrom/* pslChrom/* axtChain/all.chain axtChain/*.net &
-
