@@ -18,7 +18,7 @@
 #include "trans3.h"
 #include "repMask.h"
 
-static char const rcsid[] = "$Id: blat.c,v 1.91 2004/02/24 22:04:11 kent Exp $";
+static char const rcsid[] = "$Id: blat.c,v 1.92 2004/03/04 20:26:52 angie Exp $";
 
 /* Variables shared with other modules.  Set in this module, read only
  * elsewhere. */
@@ -311,8 +311,10 @@ for (i=0; i<fileCount; ++i)
 	list = nibLoadAllMasked(NIB_MASK_MIXED|NIB_BASE_NAME, fileName);
     else if (twoBitIsFileOrRange(fileName))
 	list = twoBitLoadAll(fileName);
+    else if (isProt)
+      list = faReadAllPep(fileName);
     else
-	list = faReadAllSeq(fileName, !isProt);
+      list = faReadAllMixed(fileName);
 
     /* If necessary mask sequence from file. */
     if (doMask)
