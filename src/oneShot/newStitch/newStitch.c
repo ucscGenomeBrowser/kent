@@ -3,6 +3,7 @@
 #include "linefile.h"
 #include "hash.h"
 #include "dystring.h"
+#include "dlist.h"
 #include "options.h"
 #include "localmem.h"
 #include "dlist.h"
@@ -78,27 +79,40 @@ for (i=1; i<=graph->nodeCount; ++i)
     struct asNode *node = graph->nodes + i;
     struct asBlock *block = node->block;
     struct asEdge *e;
-    fprintf(f, "  %d@(%d,%d):", i, block->qStart, block->qEnd);
+    fprintf(f, "  %d@(%d,%d)$%d:", i, block->qStart, block->tStart, 
+    	block->score);
     for (e = node->waysIn; e != NULL; e = e->next)
 	{
-	fprintf(f, " %d", e->nodeIn - graph->nodes );
+	fprintf(f, " %d($%d)", e->nodeIn - graph->nodes, e->score);
 	}
     fprintf(f, "\n");
     }
 }
 
-void addFollowingNodes(struct asGraph *graph, int nodeIx)
+
+int defaultGapPenalty(int qSize, int tSize)
+/* A logarithmic gap penalty scaled to axt defaults. */
+{
+int total = qSize + tSize;
+if (total <= 0)
+    return 0;
+return 400 * pow(total, 1.0/3.3);
+}
+
+
+
+void addFollowingNodes(struct asGraph *graph, int nodeIx,
+	int (*gapPenalty)(int qSize, int tSize))
 /* Connect current node to all nodes that could _immediately_
  * follow it. */
 {
 struct dlList scratchList;
 struct asNode *prev = &graph->nodes[nodeIx];
 struct asBlock *prevBlock = prev->block;
-struct asNode *cur, *asNode;
-struct asBlock *curBlock, *block;
+struct asNode  *asNode;
+struct asBlock *block;
 struct dlNode *dlHead, *dlNode, *dlNext;
 int qPrev = prevBlock->qStart, tPrev = prevBlock->tStart;
-int qCur, tCur;
 int i;
 
 /* Build up list of nodes that might possibly follow this one. */
@@ -115,18 +129,32 @@ for (i=nodeIx+1; i<graph->nodeCount+1; ++i)
  * they could no longer be _immediate_ followers. */
 while ((dlHead = dlPopHead(&scratchList)) != NULL)
     {
-    cur = dlHead->val;
-    curBlock = cur->block;
-    qCur = curBlock->qStart;
-    tCur = curBlock->tStart;
-    if (qCur >= qPrev && tCur >= tPrev)
+    struct asNode *cur = dlHead->val;
+    struct asBlock *curBlock = cur->block;
+    int qCur = curBlock->qStart;
+    int tCur = curBlock->tStart;
+    if (qCur > qPrev && tCur > tPrev)
 	{
-	/* Add edge between node passed in and this one. */
+	int gap;
+	int eScore;
 	struct asEdge *e;
+
+	/* Calculate score get by taking this edge. */
+	int dq = qCur - prevBlock->qEnd;
+	int dt = tCur - prevBlock->tEnd;
+	if (dq < 0) dq = 0;
+	if (dt < 0) dt = 0;
+	gap = (*gapPenalty)(dq, dt);
+	eScore = curBlock->score - gap;
+
+	/* Add edge between node passed in and this one. */
 	lmAllocVar(graph->lm, e);
 	e->nodeIn = prev;
 	slAddHead(&cur->waysIn, e);
 	graph->edgeCount += 1;
+	if (dq < 0) dq = 0;
+	if (dt < 0) dt = 0;
+	e->score = eScore;
 
 	/* Remove from consideration nodes that could come
 	 * after this one. */
@@ -142,14 +170,15 @@ while ((dlHead = dlPopHead(&scratchList)) != NULL)
     }
 }
 
-static struct asGraph *asGraphMake(struct asBlock *blockList)
+static struct asGraph *asGraphMake(struct asBlock *blockList,
+	int (*gapPenalty)(int qSize, int tSize))
 /* Make a graph corresponding to blockList */
 {
 int nodeCount = slCount(blockList);
 int maxEdgeCount = (nodeCount+1)*(nodeCount)/2;
 int edgeCount = 0;
 struct asEdge *e;
-struct asNode *nodes, *n;
+struct asNode *nodes, *n, *z;
 struct dlNode *builderNodes;
 struct asGraph *graph;
 struct asBlock *block;
@@ -172,12 +201,21 @@ for (i=1, block = blockList; i<=nodeCount; ++i, block = block->next)
     builderNodes[i].val = n;
     }
 
-/* Fake a node 0 at 0,0 */
-n = &nodes[0];
-lmAllocVar(graph->lm, n->block);
+/* Fake a node 0 at 0,0 and connect all nodes to it... */
+z = &nodes[0];
+lmAllocVar(graph->lm, z->block);
+for (i=1; i<=nodeCount; ++i)
+    {
+    n = &nodes[i];
+    lmAllocVar(graph->lm, e);
+    e->nodeIn = z;
+    e->score = n->block->score;
+    slAddHead(&n->waysIn, e);
+    graph->edgeCount += 1;
+    }
 
-for (i=0; i<=nodeCount; ++i)
-    addFollowingNodes(graph, i);
+for (i=1; i<=nodeCount; ++i)
+    addFollowingNodes(graph, i, gapPenalty);
 
 freez(&graph->builderNodes);
 return graph;
@@ -202,6 +240,45 @@ struct seqPair
     char *name;	/* Allocated in hash */
     struct asBlock *blockList; /* List of alignment blocks. */
     };
+
+static struct asNode *asDynamicProgram(struct asGraph *graph)
+/* Do dynamic programming to find optimal path though
+ * graph.  Return best ending node (with back-trace
+ * pointers and score set). */
+{
+int veryBestScore = -0x3fffffff;
+struct asNode *veryBestNode = NULL;
+int nodeIx;
+
+for (nodeIx = 1; nodeIx <= graph->nodeCount; ++nodeIx)
+    {
+    int bestScore = -0x3fffffff;
+    int score;
+    struct asEdge *bestEdge = NULL;
+    struct asNode *curNode = &graph->nodes[nodeIx];
+    struct asNode *prevNode;
+    struct asEdge *edge;
+
+    for (edge = curNode->waysIn; edge != NULL; edge = edge->next)
+	{
+	score = edge->score + edge->nodeIn->cumScore;
+	if (score > bestScore)
+	    {
+	    bestScore = score;
+	    bestEdge = edge;
+	    }
+	}
+    curNode->bestWayIn = bestEdge;
+    curNode->cumScore = bestScore;
+    if (bestScore >= veryBestScore)
+	{
+	veryBestScore = bestScore;
+	veryBestNode = curNode;
+	}
+    }
+return veryBestNode;
+}
+
 
 void newStitch(char *axtFile, char *output)
 /* newStitch - Experiments with new ways of stitching together alignments. */
@@ -240,10 +317,11 @@ for (sp = spList; sp != NULL; sp = sp->next)
     {
     time_t startTime, dt;
     int fullSize; 
+    struct asNode *n, *nList = NULL;
     slReverse(&sp->blockList);
     uglyf("%s\t%d blocks\n", sp->name, slCount(sp->blockList));
     startTime = time(NULL);
-    graph = asGraphMake(sp->blockList);
+    graph = asGraphMake(sp->blockList, defaultGapPenalty);
     dt = time(NULL) - startTime;
     fullSize = (graph->nodeCount + 1)*(graph->nodeCount)/2;
     uglyf("%d edges (%d in full graph) %4.1f%% of full in %ld seconds\n",
@@ -253,6 +331,36 @@ for (sp = spList; sp != NULL; sp = sp->next)
 	sp->name, graph->edgeCount, fullSize, 
 	100.0*graph->edgeCount/fullSize, dt);
     asGraphDump(graph, f);
+    fprintf(f, "\n");
+    fprintf(f, "Best subset:");
+    nList = asDynamicProgram(graph);
+    for (n = nList; n != NULL; )
+        {
+	struct asEdge *e = n->bestWayIn;
+	fprintf(f, " %d", n - graph->nodes);
+	if (e != NULL)
+	    n = e->nodeIn;
+	else
+	    break;
+	}
+    fprintf(f, "\n\n");
+    fprintf(f, "Ordered\n");
+    for (n = nList; n != NULL; )
+        {
+	struct asEdge *e = n->bestWayIn;
+	int nodeIx = n - graph->nodes;
+	if (nodeIx != 0)
+	    {
+	    struct asBlock *block = n->block;
+	    fprintf(f, "  %d@( %d %d , %d %d) $core %d ( %d)\n", nodeIx, block->qStart, block->qEnd, block->tStart, block->tEnd, block->score, e->score);
+	    }
+	if (e != NULL)
+	    n = e->nodeIn;
+	else
+	    break;
+	}
+    fprintf(f, "\n");
+
     asGraphFree(&graph);
     }
 }
