@@ -26,6 +26,7 @@ errAbort(
   "   -tStartMax=N - restrict to those with tStart less than N\n"
   "   -strand=?    -restrict strand (to + or -)\n"
   "   -long        -output in long format\n"
+  "   -zeroGap     -get rid of gaps of length zero\n"
   );
 }
 
@@ -56,6 +57,32 @@ if (s == NULL)
 return hashCommaString(s);
 }
 
+int mergeCount = 0;
+
+void mergeAdjacentBlocks(struct chain *chain)
+/* Get rid of zero length gaps. */
+{
+struct boxIn *b, *lastB = NULL, *nextB, *bList = NULL;      /* List of blocks. */
+
+for (b = chain->blockList; b != NULL; b = nextB)
+    {
+    nextB = b->next;
+    if (lastB == NULL || lastB->qEnd != b->qStart || lastB->tEnd != b->tStart)
+        {
+	slAddHead(&bList, b);
+	}
+    else
+        {
+	lastB->qEnd = b->qEnd;
+	lastB->tEnd = b->tEnd;
+	++mergeCount;
+	}
+    lastB = b;
+    }
+slReverse(&bList);
+chain->blockList = bList;
+}
+
 void chainFilter(int inCount, char *inNames[])
 /* chainFilter - Filter chain files. */
 {
@@ -70,6 +97,7 @@ int qStartMax = optionInt("qStartMax", BIGNUM);
 int tStartMin = optionInt("tStartMin", -BIGNUM);
 int tStartMax = optionInt("tStartMax", BIGNUM);
 char *strand = optionVal("strand", NULL);
+boolean zeroGap = optionExists("zeroGap");
 int id = optionInt("id", -1);
 boolean doLong = optionExists("long");
 int i;
@@ -82,6 +110,8 @@ for (i=0; i<inCount; ++i)
     while ((chain = chainRead(lf)) != NULL)
         {
 	boolean writeIt = TRUE;
+	if (zeroGap)
+	    mergeAdjacentBlocks(chain);
 	if (qHash != NULL && !hashLookup(qHash, chain->qName))
 	    writeIt = FALSE;
 	if (notQHash != NULL && hashLookup(notQHash, chain->qName))
@@ -111,6 +141,8 @@ for (i=0; i<inCount; ++i)
 	}
     lineFileClose(&lf);
     }
+if (zeroGap)
+   fprintf(stderr, "%d zero length gaps eliminated\n", mergeCount);
 }
 
 int main(int argc, char *argv[])
