@@ -116,7 +116,7 @@
 #include "encodeRegionInfo.h"
 #include "hgFind.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.521 2003/11/20 22:25:12 heather Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.522 2003/11/24 11:48:03 baertsch Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -7145,7 +7145,7 @@ char **row;
 boolean isFirst = TRUE, gotAny = FALSE;
 char *gi;
 struct bed *bed = NULL;
-struct pseudoGeneLink pg;
+struct pseudoGeneLink *pg;
 struct sqlConnection *conn = hAllocConn();
 char *tbl = cgiUsualString("table", cgiString("g"));
 char *start = cartString(cart, "o");
@@ -7164,10 +7164,10 @@ if (sqlTableExists(conn, tdb->tableName))
     sr = sqlGetResult(conn, query);
     while ((row = sqlNextRow(sr)) != NULL)
 	{
-        pseudoGeneLinkStaticLoad(row, &pg);
+        pg = pseudoGeneLinkLoad(row);
         if (hTableExists("axtInfo") && bed != NULL)
             {
-            pseudoPrintPos(bed->chrom, bed->chromStart, bed->chromEnd, &pg, "mrnaBlat");
+            pseudoPrintPos(bed->chrom, bed->chromStart, bed->chromEnd, pg, "mrnaBlat");
             }
         }
     }
