@@ -719,3 +719,12 @@ group x
 priority 170
 visibility hide
 type bed 4 .
+
+track uniGene_2
+shortLabel UniGene
+longLabel UniGene Hs 162 Alignments and SAGEmap Info
+group rna
+priority 69
+visibility hide
+spectrum on
+type bed 12 
