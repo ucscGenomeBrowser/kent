@@ -10,7 +10,7 @@
 #include "hdb.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: advSearch.c,v 1.17 2003/08/29 22:14:28 kent Exp $";
+static char const rcsid[] = "$Id: advSearch.c,v 1.18 2003/08/30 05:57:46 kent Exp $";
 
 static struct genePos *advancedSearchResults(struct column *colList, 
 	struct sqlConnection *conn)
@@ -272,6 +272,8 @@ cartSaveSession(cart);
 
 /* Put up little table with clear all/submit */
 bigButtons();
+hPrintf("Hint: you can combine searches by copying the results of 'List Matching Names' "
+        "and then doing a 'Paste List' in the Name controls.");
 
 /* See if have any to do in either first (displayed columns)
  * or second (hidden columns) pass. */

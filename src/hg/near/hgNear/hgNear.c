@@ -15,7 +15,7 @@
 #include "ra.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: hgNear.c,v 1.50 2003/08/30 00:22:22 kent Exp $";
+static char const rcsid[] = "$Id: hgNear.c,v 1.51 2003/08/30 05:57:46 kent Exp $";
 
 char *excludeVars[] = { "submit", "Submit", confVarName, 
 	defaultConfName, hideAllConfName, showAllConfName,
@@ -1230,7 +1230,7 @@ if (geneList == NULL)
     hPrintf("empty table");
     return;
     }
-hPrintf("<TT>");
+hPrintf("<TT><PRE>");
 /* Print labels. */
 hPrintf("#");
 for (col = colList; col != NULL; col = col->next)
@@ -1264,7 +1264,7 @@ for (gene = geneList; gene != NULL; gene = gene->next)
 	}
     hPrintf("\n");
     }
-hPrintf("</TT>");
+hPrintf("</PRE></TT>");
 }
 
 void doMainDisplay(struct sqlConnection *conn, struct column *colList, 
@@ -1380,6 +1380,7 @@ cart = theCart;
 getDbAndGenome(cart, &database, &organism);
 #else
 database = "hg15";
+cartSetString(cart, "db", database);
 organism = "Human";
 #endif /* SOON */
 hSetDb(database);
