@@ -122,7 +122,7 @@
 #include "sgdDescription.h"
 #include "hgFind.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.544 2004/01/07 22:15:42 kent Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.545 2004/01/08 18:44:27 heather Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -3289,7 +3289,7 @@ if (row != NULL)
     }
 
     if (!startsWith("Worm", organism) && !startsWith("Fugu", organism) &&
-	!startsWith("dm", database))
+	!startsWith("dm", database) && !startsWith("Yeast", organism))
     {
 	/* Put up Stanford Source link. */
 	printStanSource(acc, type);
@@ -6735,7 +6735,8 @@ if (startsWith("hg", hGetDb()))
 	   rl->name);
     printf("%s</A><BR>\n", rl->name);
     }
-if (!startsWith("Worm", organism) && !startsWith("dm", database))
+if (!startsWith("Worm", organism) && !startsWith("dm", database) && 
+    !startsWith("Fugu", organism) && !startsWith("Yeast", organism))
 {
     printStanSource(rl->mrnaAcc, "mrna");
 }
