@@ -3101,12 +3101,16 @@ _EOF_
     # Make a README.txt which explains the files & formats.
 
 
-# MULTIZ.V10 8WAY (6 FLIES, MOSQUITO, HONEYBEE) (DONE 2/1/05 angie)
+# MULTIZ.V10 8WAY (6 FLIES, MOSQUITO, HONEYBEE) (REDONE 3/7/05 angie)
+# originally done 2/1/05
+# REDONE 3/7/05 angie -- User found that yakuba was missing (due to 
+# pairwise maf files having different .suffixes, and the script tolerating 
+# missing files... yikes!!!).  :(
     # Tree (8-way):
     # ((((((dm2 droYak1) droAna1) dp2) (droVir1 droMoj1)) anoGam1) apiMel1)
     ssh kksilo
-    mkdir /cluster/data/dm2/bed/multiz8way.2005-02-01
-    ln -s /cluster/data/dm2/bed/multiz8way.2005-02-01 \
+    mkdir /cluster/data/dm2/bed/multiz8way.2005-03-07
+    ln -s /cluster/data/dm2/bed/multiz8way.2005-03-07 \
       /cluster/data/dm2/bed/multiz8way
     cd /cluster/data/dm2/bed/multiz8way
     # Setup: Copy pairwise MAF to /cluster/bluearc:
@@ -3218,9 +3222,9 @@ rmdir $tmp
     para create jobs.lst
     para try, check, push, check, ...
 #Completed: 13 of 13 jobs
-#Average job time:                1040s      17.33m     0.29h    0.01d
-#Longest job:                     3928s      65.47m     1.09h    0.05d
-#Submission to last job:          3928s      65.47m     1.09h    0.05d
+#Average job time:                 924s      15.40m     0.26h    0.01d
+#Longest job:                     3148s      52.47m     0.87h    0.04d
+#Submission to last job:          3148s      52.47m     0.87h    0.04d
 
     # make /gbdb/ links to 8way and pairwise maf files:
     ssh hgwdev
@@ -3258,23 +3262,25 @@ rmdir $tmp
     # put 8way MAF out for download
     ssh kksilo
     cd /cluster/data/dm2/bed/multiz8way
-    mkdir ../../zips/mzMafs
+    mkdir mafDownload
     foreach f (maf/*.maf)
-      gzip -c $f > ../../zips/mzMafs/$f:t.gz
+      nice gzip -c $f > mafDownload/$f:t.gz
     end
+    cd mafDownload
+    md5sum *.maf.gz > md5sum.txt
     ssh hgwdev
     mkdir /usr/local/apache/htdocs/goldenPath/dm2/multiz8way
-    cd /usr/local/apache/htdocs/goldenPath/dm2/multiz8way
-    mv /cluster/data/dm2/zips/mzMafs/* .
-    rmdir /cluster/data/dm2/zips/mzMafs
-    md5sum *.gz > md5sum.txt
+    ln -s /cluster/data/dm2/bed/multiz8way/mafDownload/{*.maf.gz,md5sum.txt} \
+      /usr/local/apache/htdocs/goldenPath/dm2/multiz8way
     # make a README.txt
 
     # Cleanup
     rm -rf /cluster/bluearc/flyMultiz8way/
 
 
-# PHASTCONS 8WAY WITH METHODS FROM PAPER (DONE 2/2/05 angie)
+# PHASTCONS 8WAY WITH METHODS FROM PAPER (DONE 3/8/05 angie)
+# originally done 2/2/05
+# REDONE 3/8/05 angie -- after regenerating multiz alignments above.
     # Same procedure as for latest dm1 8way -- using the param estimation 
     # methods described in Adam's Genome Research paper.
     ssh kksilo
@@ -3296,12 +3302,12 @@ set FA_SRC=/cluster/bluearc/dm2/chrom
 set WINDOWS=/cluster/bluearc/dm2/phastCons/WINDOWS
 
 set maf=$1
-set c = $maf:t:r
+set c = $maf:t:r:r
 set tmpDir = /scratch/msa_split/$c
 rm -rf $tmpDir
 mkdir -p $tmpDir
 # apiMel1-specific tweak for msa_split:
-perl -wpe 's/(apiMel1\.Group\w+)\.(\d+)/$1_$2/' $1 > $tmpDir/$c.maf
+zcat $1 | perl -wpe 's/(apiMel1\.Group\w+)\.(\d+)/$1_$2/' > $tmpDir/$c.maf
 ${PHAST}/msa_split $tmpDir/$c.maf -i MAF -M ${FA_SRC}/$c.fa \
    -O dm2,droYak1,droAna1,dp2,droVir1,droMoj1,anoGam1,apiMel1 \
    -w 1000000,0 -r $tmpDir/$c -o SS -I 1000 -B 5000
@@ -3316,17 +3322,17 @@ rmdir $tmpDir
 # << for emacs
     chmod a+x doSplit.sh
     rm -f jobList
-    foreach file (/cluster/data/dm2/bed/multiz8way/maf/*.maf) 
+    foreach file (/cluster/data/dm2/bed/multiz8way/maf/*.maf.gz) 
       if (-s $file) then
-        echo "doSplit.sh {check in line+ $file}" >> jobList
+        echo "doSplit.sh {check in exists+ $file}" >> jobList
       endif
     end
     para create jobList
     para try,  check, push, check...
 #Completed: 13 of 13 jobs
-#Average job time:                  59s       0.99m     0.02h    0.00d
-#Longest job:                      272s       4.53m     0.08h    0.00d
-#Submission to last job:           272s       4.53m     0.08h    0.00d
+#Average job time:                  34s       0.56m     0.01h    0.00d
+#Longest job:                       89s       1.48m     0.02h    0.00d
+#Submission to last job:            89s       1.48m     0.02h    0.00d
 
     ssh kolossus
     cd /cluster/data/dm2/bed/multiz8way/phastCons/
@@ -3350,8 +3356,8 @@ rmdir $tmpDir
       >> gcs.txt
     end
     ave gcs.txt
-#average 0.433063
-    # OK, so use 0.433 as the --gc parameter below.
+#average 0.431152
+    # OK, so use 0.431 as the --gc parameter below.
     rm /tmp/dm2.sample.ss
 
     ############### FIRST ITERATION OF PARAMETER ESTIMATION ONLY #############
@@ -3385,17 +3391,13 @@ rmdir $tmpDir
     # in order to also hit the total entropy target.
     cd /cluster/data/dm2/bed/multiz8way/phastCons/run.estimate
     # SECOND ITERATION:
-    /cluster/bin/phast/consEntropy --NH 9.7834 0.58 36 ave.{cons,noncons}.mod
-#Recommended expected length: omega=37.496983 sites (for NH=9.783400)
-    # OK, --expected-lengths 37.5
+    /cluster/bin/phast/consEntropy --NH 9.7834 0.57 36.1 ave.{cons,noncons}.mod
+#Recommended expected length: omega=36.534136 sites (for NH=9.783400)
+    # OK, --expected-lengths 36.5
     # THIRD ITERATION:
-    /cluster/bin/phast/consEntropy --NH 9.7834 0.595 37.5 ave.{cons,noncons}.mod
-#Recommended expected length: omega=38.968143 sites (for NH=9.783400)
-    # ==> 39
-    # FOURTH ITERATION:
-    /cluster/bin/phast/consEntropy --NH 9.7834 0.59 39 ave.{cons,noncons}.mod
-#Recommended expected length: omega=38.475459 sites (for NH=9.783400)
-    # ==> 38.5
+    /cluster/bin/phast/consEntropy --NH 9.7834 0.573 36.5 ave.{cons,noncons}.mod
+#Recommended expected length: omega=36.812685 sites (for NH=9.783400)
+    # ==> 36.8
 
     # Now set up cluster job to estimate model parameters given free params 
     # --target-coverage and --expected-lengths and the data.  
@@ -3406,7 +3408,7 @@ rmdir $tmpDir
     cat << '_EOF_' > doEstimate.sh
 #!/bin/csh -ef
 zcat $1 \
-| /cluster/bin/phast/phastCons - ../starting-tree.mod --gc 0.433 --nrates 1,1 \
+| /cluster/bin/phast/phastCons - ../starting-tree.mod --gc 0.431 --nrates 1,1 \
     --no-post-probs --ignore-missing \
     --expected-lengths 36 --target-coverage 0.565 \
     --quiet --log $2 --estimate-trees $3
@@ -3416,9 +3418,9 @@ zcat $1 \
     cat << '_EOF_' > doEstimate.sh
 #!/bin/csh -ef
 zcat $1 \
-| /cluster/bin/phast/phastCons - ave.noncons.mod --gc 0.433 --nrates 1,1 \
+| /cluster/bin/phast/phastCons - ave.noncons.mod --gc 0.431 --nrates 1,1 \
     --no-post-probs --ignore-missing \
-    --expected-lengths 38.5 --target-coverage 0.59 \
+    --expected-lengths 36.8 --target-coverage 0.573 \
     --quiet --log $2 --estimate-trees $3
 '_EOF_'
 # << for emacs
@@ -3432,11 +3434,11 @@ zcat $1 \
     end
     # run cluster job
     para create jobList
-    para try, check, push, check, ...
+    para try, check, push, check, ...#
 #Completed: 139 of 139 jobs
-#Average job time:                 443s       7.39m     0.12h    0.01d
-#Longest job:                      927s      15.45m     0.26h    0.01d
-#Submission to last job:          1299s      21.65m     0.36h    0.02d
+#Average job time:                 708s      11.80m     0.20h    0.01d
+#Longest finished job:            1458s      24.30m     0.41h    0.02d
+#Submission to last job:          1771s      29.52m     0.49h    0.02d
 
     # Now combine parameter estimates.  We can average the .mod files
     # using phyloBoot.  This must be done separately for the conserved
@@ -3451,17 +3453,14 @@ zcat $1 \
       --output-average ave.noncons.mod > noncons_summary.txt
     grep TREE ave*.mod
     # FIRST ITERATION:
-#ave.cons.mod:TREE: (((((droYak1:0.081017,droAna1:0.078875):0.013508,dp2:0.084108):0.031956,(droVir1:0.054944,droMoj1:0.059829):0.061926):0.092149,anoGam1:0.196691):0.160687,apiMel1:0.160687);
-#ave.noncons.mod:TREE: (((((droYak1:0.285338,droAna1:0.277361):0.046047,dp2:0.292218):0.117088,(droVir1:0.187822,droMoj1:0.205982):0.225464):0.341000,anoGam1:0.694012):0.580825,apiMel1:0.580825);
+#ave.cons.mod:TREE: (((((droYak1:0.068799,droAna1:0.086121):0.025199,dp2:0.089389):0.025318,(droVir1:0.054838,droMoj1:0.061144):0.071262):0.086015,anoGam1:0.200622):0.155212,apiMel1:0.155212);
+#ave.noncons.mod:TREE: (((((droYak1:0.237449,droAna1:0.302849):0.090002,dp2:0.313915):0.093683,(droVir1:0.189785,droMoj1:0.211406):0.262607):0.320424,anoGam1:0.710433):0.563275,apiMel1:0.563275);
     # SECOND ITERATION:
-#ave.cons.mod:TREE: (((((droYak1:0.079869,droAna1:0.078005):0.015073,dp2:0.084724):0.032222,(droVir1:0.055336,droMoj1:0.060244):0.062355):0.092937,anoGam1:0.197929):0.161566,apiMel1:0.161566);
-#ave.noncons.mod:TREE: (((((droYak1:0.278173,droAna1:0.273236):0.051744,dp2:0.293577):0.117723,(droVir1:0.188639,droMoj1:0.206845):0.226363):0.342942,anoGam1:0.696383):0.582225,apiMel1:0.582225);
+#ave.cons.mod:TREE: (((((droYak1:0.068940,droAna1:0.086293):0.025242,dp2:0.089550):0.025379,(droVir1:0.054937,droMoj1:0.061251):0.071378):0.086201,anoGam1:0.200916):0.155457,apiMel1:0.155457);
+#ave.noncons.mod:TREE: (((((droYak1:0.237657,droAna1:0.303096):0.090034,dp2:0.314116):0.093804,(droVir1:0.189905,droMoj1:0.211526):0.262729):0.320771,anoGam1:0.710597):0.563469,apiMel1:0.563469);
     # THIRD ITERATION:
-#ave.cons.mod:TREE: (((((droYak1:0.077179,droAna1:0.077483):0.016414,dp2:0.085457):0.032555,(droVir1:0.055810,droMoj1:0.060756):0.062857):0.093906,anoGam1:0.199597):0.162824,apiMel1:0.162824);
-#ave.noncons.mod:TREE: (((((droYak1:0.269443,droAna1:0.270448):0.056684,dp2:0.295454):0.118665,(droVir1:0.189819,droMoj1:0.208129):0.227635):0.345740,anoGam1:0.700600):0.585331,apiMel1:0.585331);
-    # FOURTH ITERATION:
-#ave.cons.mod:TREE: (((((droYak1:0.074029,droAna1:0.075810):0.017819,dp2:0.085215):0.032438,(droVir1:0.055656,droMoj1:0.060591):0.062702):0.093616,anoGam1:0.199101):0.162437,apiMel1:0.162437);
-#ave.noncons.mod:TREE: (((((droYak1:0.258525,droAna1:0.264993):0.061489,dp2:0.294882):0.118348,(droVir1:0.189468,droMoj1:0.207753):0.227292):0.344992,anoGam1:0.699533):0.584508,apiMel1:0.584508);
+#ave.cons.mod:TREE: (((((droYak1:0.069060,droAna1:0.086433):0.025290,dp2:0.089694):0.025440,(droVir1:0.055027,droMoj1:0.061352):0.071482):0.086374,anoGam1:0.201201):0.155686,apiMel1:0.155686);
+#ave.noncons.mod:TREE: (((((droYak1:0.237909,droAna1:0.303387):0.090149,dp2:0.314413):0.093960,(droVir1:0.190094,droMoj1:0.211733):0.262926):0.321185,anoGam1:0.711122):0.563897,apiMel1:0.563897);
 
     cat cons_summary.txt 
     # look over the files cons_summary.txt and noncons_summary.txt.
@@ -3486,20 +3485,16 @@ zcat $1 \
     # if not the same as what we used above, but it only takes a second.
     # FIRST ITERATION:
     /cluster/bin/phast/consEntropy --NH 9.7834 0.565 35.6 ave.{cons,noncons}.mod
-#Recommended expected length: omega=35.649096 sites (for NH=9.783400)
-    # OK, tweak --expected-lengths to 35.6 below (and for next iteration).
+#Recommended expected length: omega=36.077755 sites (for NH=9.783400)
+    # OK, tweak --expected-lengths to 36.1 below (and for next iteration).
     # SECOND ITERATION:
-    /cluster/bin/phast/consEntropy --NH 9.7834 0.58 37.5 ave.{cons,noncons}.mod
-#Recommended expected length: omega=37.503282 sites (for NH=9.783400)
-    # ==> keep at 37.5.
+    /cluster/bin/phast/consEntropy --NH 9.7834 0.57 36.5 ave.{cons,noncons}.mod
+#Recommended expected length: omega=36.535491 sites (for NH=9.783400)
+    # ==> keep at 36.5.
     # THIRD ITERATION:
-    /cluster/bin/phast/consEntropy --NH 9.7834 0.595 39 ave.{cons,noncons}.mod
-#Recommended expected length: omega=38.971878 sites (for NH=9.783400)
-    # ==> keep at 39.
-    # FOURTH ITERATION:
-    /cluster/bin/phast/consEntropy --NH 9.7834 0.59 38.5 ave.{cons,noncons}.mod
-#Recommended expected length: omega=38.479846 sites (for NH=9.783400)
-    # ==> keep at 38.5.
+    /cluster/bin/phast/consEntropy --NH 9.7834 0.573 36.8 ave.{cons,noncons}.mod
+#Recommended expected length: omega=36.813127 sites (for NH=9.783400)
+    # ==> keep at 36.8.
 
     # Now we are ready to set up the cluster job for computing the
     # conservation scores and predicted elements.  The we measure the 
@@ -3516,7 +3511,7 @@ set tmpfile = /scratch/phastCons.$$
 zcat $1 \
 | /cluster/bin/phast/phastCons - \
     ../run.estimate/ave.cons.mod,../run.estimate/ave.noncons.mod \
-    --expected-lengths 38.5 --target-coverage 0.59 \
+    --expected-lengths 36.8 --target-coverage 0.573 \
     --quiet --seqname $chr --idpref $pref \
     --viterbi /cluster/bluearc/dm2/phastCons/ELEMENTS/$pref.bed --score \
     --require-informative 0 \
@@ -3535,9 +3530,9 @@ rm $tmpfile
     para create jobList
     para try, check, push, check, ...
 #Completed: 139 of 139 jobs
-#Average job time:                  15s       0.25m     0.00h    0.00d
-#Longest job:                       22s       0.37m     0.01h    0.00d
-#Submission to last job:            32s       0.53m     0.01h    0.00d
+#Average job time:                  17s       0.28m     0.00h    0.00d
+#Longest finished job:              26s       0.43m     0.01h    0.00d
+#Submission to last job:            37s       0.62m     0.01h    0.00d
 
     # back on kksilo:
     # combine predictions and transform scores to be in 0-1000 interval
@@ -3552,13 +3547,11 @@ rm $tmpfile
     cd /cluster/data/dm2/bed/multiz8way/phastCons
     featureBits -enrichment dm2 flyBaseGene:cds all.bed
     # FIRST ITERATION: a bit too low; increase --target-coverage, re-estimate.
-#flyBaseGene:cds 16.551%, all.bed 41.159%, both 11.236%, cover 67.89%, enrich 1.65x
-    # SECOND ITERATION: Close but no cigar... one more try for 68.9%:
-#flyBaseGene:cds 16.551%, all.bed 42.287%, both 11.335%, cover 68.48%, enrich 1.62x
-    # THIRD ITERATION: Oops, I overshot.
-#flyBaseGene:cds 16.551%, all.bed 43.485%, both 11.449%, cover 69.17%, enrich 1.59x
-    # FOURTH ITERATION: Close enough to target of 68.9%:
-#flyBaseGene:cds 16.551%, all.bed 43.094%, both 11.414%, cover 68.96%, enrich 1.60x
+#flyBaseGene:cds 16.567%, all.bed 42.507%, both 11.375%, cover 68.66%, enrich 1.62x
+#    # SECOND ITERATION: Close but no cigar... one more try for 68.9%:
+#flyBaseGene:cds 16.567%, all.bed 42.794%, both 11.398%, cover 68.80%, enrich 1.61x
+    # THIRD ITERATION: Sweet.
+#flyBaseGene:cds 16.567%, all.bed 42.997%, both 11.417%, cover 68.92%, enrich 1.60x
 
     # Having met the CDS coverage target, load up the results.
     hgLoadBed dm2 phastConsElements8way all.bed
@@ -3586,8 +3579,10 @@ zcat `ls -1 /cluster/bluearc/dm2/phastCons/POSTPROBS/$chr.*.pp.gz \
     end
     para create jobList
     para try, check, push, check, ...
-    # little cluster was full up, so I did "csh -ef jobList" on kolossus,
-    # only takes a few minutes for fly.
+#Completed: 13 of 13 jobs
+#Average job time:                   9s       0.15m     0.00h    0.00d
+#Longest job:                       24s       0.40m     0.01h    0.00d
+#Submission to last job:            24s       0.40m     0.01h    0.00d
 
     # back on kksilo, copy wibs, wigs and POSTPROBS (people sometimes want 
     # the raw scores) from bluearc
@@ -3605,12 +3600,12 @@ zcat `ls -1 /cluster/bluearc/dm2/phastCons/POSTPROBS/$chr.*.pp.gz \
     ln -s `pwd`/wib/*.wib /gbdb/dm2/multiz8way/wib/
     hgLoadWiggle dm2 phastCons8way \
       -pathPrefix=/gbdb/dm2/multiz8way/wib wib/*.wig
+    rm wiggle.tab
 
     # make top-5000 list and launcher on Adam's home page:
     sed -e 's/lod=//' all.bed | sort -k4,4nr | head -5000 \
     | awk '{printf "%s\t%d\t%d\tlod=%d\t%d\n", $1, $2, $3, $4, $4}' \
     > top5000.bed
-# NOT DONE (dm2 hasn't been released yet -- leave launcher for dm1):
     /cluster/home/acs/bin/make-launcher-with-scores.sh top5000.bed \
       /cse/grads/acs/public_html/dm-top5000-8way \
       "top 5000 conserved elements (8way)" dm2
@@ -3765,6 +3760,8 @@ zcat `ls -1 /cluster/bluearc/dm2/phastCons/POSTPROBS/$chr.*.pp.gz \
     # Protein-coding genes:
     ldHgGene -gtf dm2 flyBaseGene flybase.gtf
     hgPepPred dm2 generic flyBasePep flybasePep.fa
+    # Fix typo caught by Galt & all.joiner:
+    hgsql dm2 -e 'update flyBasePep set name = "CG6207-RC" where name = "GLCAT-P-PC"'
     # Noncoding genes:
     hgLoadBed dm2 flyBaseNoncoding flyBaseNoncoding.bed
     # Cross-referencing info for both coding and noncoding:
