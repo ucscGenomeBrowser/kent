@@ -2282,7 +2282,7 @@ ftp://ftp.ncbi.nih.gov/repository/UniSTS/UniSTS_MapReports/Mus_musculus/*
 	downloads/MRK_Dump2.rpt downloads/PRB_PrimerSeq.rpt \
 	downloads/MRK_Sequence.rpt downloads/UniSTS_mouse.alias \
 	downloads/UniSTS_mouse.sts | sed -e "s/\t*$//" > newbedfile
-    cp -p newbedfile stsMouseInfo.bed
+    cp -p newbedfile stsInfoMouse.bed
     # comparing to Mm3, this file was used there:
     # /projects/hg2/booch/psl/mm.2003.02/mm3/info/stsInfoMouseNew.bed
     # a wc of it shows:
@@ -2403,7 +2403,7 @@ XXX  This is an unusual increase
     # create primers.psl.filter.blat and epcr.not.found
     # must use -rat here, not the -mouse
     /projects/compbio/usr/booch/booch/scripts/filterPrimers -rat \
-	../stsInfoMouse.bed primers.psl ../mouseP.fa \
+	../stsInfoMouse.bed primers.psl ../mouseP.info \
 	../ePCR/all.epcr > primers.psl.filter.blat 2> filterPrimers.err
     #  The filterPrimers.err file should show an increasing count:
     #	Reading name info
@@ -2418,12 +2418,11 @@ XXX  This is an unusual increase
     #	Determining ePCR not found
     #
     # Mm4:  wc primers.psl.filter.blat
-    # 1505909 31624089 158065611 primers.psl.filter.blat
+    # 33531  704151 3412983 primers.psl.filter.blat
     # Checking vs. Mm3 on on kks00:
     # /projects/hg2/booch/psl/mm.2003.02/mm3/primers/primers.psl.filter.blat
     # wc of that shows:
     # 26088  547848 2612720 primers.psl.filter.blat
-XXXX We have a problem here.  This is too much for Mm4
 
     # create accession_info.rdb  (chrM added to Terry's script for mouse)
     touch empty_sequence.inf
@@ -2459,10 +2458,9 @@ XXXX We have a problem here.  This is too much for Mm4
     # 410    5116   27497 total
 
     # Mm4 wc epcr*
-    # 222     888    8489 epcr.not.found
-    # 222    2664   19367 epcr.not.found.nomatch
+    # 339    1356   12418 epcr.not.found
+    # 339    4068   29029 epcr.not.found.nomatch
     #   0       0       0 epcr.not.found.psl
-    # 444    3552   27856 total
 
     # combine them to one, since epcr.not.found.psl is empty, this is a copy
     cat primers.psl.filter.blat epcr.not.found.psl > primers.psl.filter
@@ -2472,21 +2470,20 @@ XXXX We have a problem here.  This is too much for Mm4
     /projects/compbio/usr/booch/booch/scripts/lifter -mouse -psl \
 	/cluster/data/mm4 primers.psl.filter
     # wc primers.psl.filter.lifted
-    # 1505909 31624089 164589663 primers.psl.filter.lifted
+    # 33531  704151 3544644 primers.psl.filter.lifted
 
     # create primers.psl.filter.lifted.initial
     PATH=/cluster/home/booch/bin:$PATH \
 	/projects/compbio/usr/booch/booch/scripts/extractPslInfo \
 	primers.psl.filter.lifted
     #	wc primers.psl.filter.lifted.initial
-    #	1505726 9034356 80151134 primers.psl.filter.lifted.initial
+    #	33528  201168 1787596 primers.psl.filter.lifted.initial
 
-XXXX
     # create primers.psl.filter.lifted.initial.acc
     /projects/compbio/usr/booch/booch/scripts/findAccession -agp \
 	-mouse primers.psl.filter.lifted.initial /cluster/data/mm4
     # wc primers.psl.filter.lifted.initial.acc
-    # 1505726 10540082 95018744 primers.psl.filter.lifted.initial.acc
+    # 33528  234696 2117988 primers.psl.filter.lifted.initial.acc
 
     # this needs to be -rat as that specifies how to scan the
     # stsInfoMouse.bed file and it does not work if you use -mouse
@@ -2494,7 +2491,8 @@ XXXX
 	../stsInfoMouse.bed  primers.psl.filter.lifted.initial.acc \
 	> primers.initial.acc.trans
     # wc primers.initial.acc.trans
-    # 1505726 10540082 80634404 primers.initial.acc.trans
+    # 33528  234696 1800800 primers.initial.acc.trans
+
 
     sort -k 4n primers.initial.acc.trans > primers.final
     rm primers.psl.filter.lifted.initial.acc primers.initial.acc.trans
@@ -2502,8 +2500,10 @@ XXXX
     # Mm3 wc primers.final
     # 26292  184044 1253365 primers.final
     # wc primers.final
-    # 1505726 10540082 80634404 primers.final
+    # 33528  234696 1800800 primers.final
 
+
+XXXX
     cd /cluster/data/mm4/bed/STSmarkers
     # stsMarkers.final is empty for mouse
     touch stsMarkers.final dummy
@@ -2514,7 +2514,7 @@ XXXX
     # Mm3 wc stsMarkers_pos.rdb
     # 25925  181475 1413458 stsMarkers_pos.rdb
     # Mm4 wc stsMarkers_pos.rdb
-    # 437134 3059938 164481733 stsMarkers_pos.rdb
+    # 31815  222705 1891323 stsMarkers_pos.rdb
 
     /projects/compbio/usr/booch/booch/scripts/combineAllSeqPrimer \
 	-rat stsInfoMouse.bed \
@@ -2522,28 +2522,26 @@ XXXX
 
     # can not find this result for Mm3
     # Mm4 wc stsMarkers_pos_all.rdb
-    # 28159 1533887 12176792 stsMarkers_pos_all.rdb
+    # 27570   61100  395472 stsMarkers_pos_all.rdb
 
     /projects/cc/hg/ytlu/bin/script/perl/createStsBed \
 	stsInfoMouse.bed  stsMarkers_pos.rdb 500 > stsMapMouse.bed
     # wc stsMapMouse.bed
-    # 477    4309   33977 stsMapMouse.bed
-XXXX This is a failure here.  Something is wrong.  Almost all the scores
-XXXX computed in createStsBed are zero.  Also this command fails on
-XXXX the 2 Gb machines.  It needs to be run on kolossus.
+    # 28593  312046 2235876 stsMapMouse.bed
 
 #  loading STS markers tables
     ssh hgwdev
     cd /cluster/data/mm4/bed/STSmarkers
     ./ucscAlias.pl stsInfoMouse.bed > ucscStsAlias.tab 2> ucscStsAlias.warnings
+    # 117971  353913 2822579 ucscStsAlias.tab
     hgsql -e "drop table stsAlias;" mm4
     hgsql mm4 < ~/kent/src/hg/lib/stsAlias.sql
     hgsql -e \
 	'load data local infile "ucscStsAlias.tab" into table stsAlias;' mm4
-    hgsql -e "drop table stsMap;" mm4
-    hgsql mm4 < ~/kent/src/hg/lib/stsMap.sql
+    hgsql -e "drop table stsMapMouseNew;" mm4
+    hgsql mm4 < ~/kent/src/hg/lib/stsMapMouseNew.sql
     hgsql -e \
-	'load data local infile "stsMapMouse.bed" into table stsMap;' mm4
+'load data local infile "stsMapMouse.bed" into table stsMapMouseNew;' mm4
     hgsql -e "drop table stsInfoMouseNew;" mm4
     hgsql mm4 < ~/kent/src/hg/lib/stsInfoMouseNew.sql
     hgsql -e \
