@@ -15,6 +15,7 @@
 #include "broadData.h"
 
 char *broadIp = "10.1.255.255";
+int initTimeOut = 20000;
 bits32 broadAddr;
 
 void usage()
@@ -109,13 +110,29 @@ setBroadcast(sd, TRUE);
 return sd;
 }
 
+long microTime()
+/* Return time in microseconds. */
+{
+static boolean initted = FALSE;
+static int origSec;
+struct timeval tv;
+gettimeofday(&tv, NULL);
+if (!initted)
+    {
+    initted = TRUE;
+    origSec = tv.tv_sec;
+    }
+return (tv.tv_sec - origSec)*1000000 + tv.tv_usec;
+}
+
 struct machine
 /* Keep track of one machine. */
     {
     char *name;	  /* Machine name. */
     bits32 ip;    /* IP Address. */
     int blockErrCount; /* Number of block errors. */
-    int timeOuts;      /* Number of time outs. */
+    int timeOutCount;  /* Number of time outs. */
+    int timeOutTime;   /* Time out time. */
     boolean isDead;    /* Set if machine looks dead. */
     boolean didOpen;   /* Did open ok. */
     boolean didClose;  /* Did close ok. */
@@ -201,6 +218,17 @@ while ((mNode = dlPopHead(machineList)) != NULL)
 return NULL;
 }
 
+void trackTimeOuts(int err, struct machine *machine, int *pTimeOutCount)
+/* Adjust time outs downwards on success and upwards on error.
+ * Update time out count if need be on machine. */
+{
+if (err < 0)
+    {
+    machine->timeOutCount += 1;
+    *pTimeOutCount += 1;
+    }
+}
+
 void sendFile(struct dlList *machineList, struct dlList *deadList, struct bdMessage *m, 
 	int inSd, int outSd, char *fileName)
 /* Broadcast file. */
@@ -211,7 +239,6 @@ int tryIx, maxTry = 3, maxBroadTry = maxTry*10;
 int fileIx = 0;
 int messageIx = 0, lastReceivedMessageIx = 0;
 int firstOpenMessage = messageIx + 1;
-int firstStatusMessage;
 int firstCloseMessage;
 bits32 ip;
 char *fileDataArea = m->data + 3 * sizeof(bits32);
@@ -220,13 +247,16 @@ int sectionIx, blockIx, blockCount, lastBlockSize;
 int fd, err;
 boolean allDone;
 int statBlocks = 0, statResent = 0;
+int totalTimeOuts = 0;
+int sendAhead = 0;
+int desiredSendAhead = 3;
 
 /* Open up file. */
 fd = open(fileName, O_RDONLY);
 if (fd < 0)
     errnoAbort("Can't open %s", fileName);
 
-/* Tell nodes one at a time that things are coming. */
+/* Tell nodes things are coming one at a time. */
 for (tryIx = 0; tryIx < maxTry; ++tryIx)
     {
     for (mNode = machineList->head; !dlEnd(mNode); mNode = mNode->next)
@@ -262,6 +292,7 @@ for (tryIx = 0; tryIx < maxTry; ++tryIx)
 			}
 		    }
 		}
+	    trackTimeOuts(err, machine, &totalTimeOuts);
 	    }
 	}
     }
@@ -291,6 +322,7 @@ else
     {
     /* Do each section. */
     allDone = FALSE;
+    sendAhead = 0;
     for (sectionIx = 0; !allDone;  ++sectionIx)
 	{
 	/* Seek to section start (error recovery might have moved us) */
@@ -312,8 +344,16 @@ else
 		errAbort("Read error on %s", fileName);
 	    bdMakeBlockMessage(m, machine->ip, ++messageIx, fileIx, sectionIx, 
 		blockIx, readSize, fileDataArea);
-	    err = broadcast(outSd, m);
-	    bdReceive(inSd, m, &ip);	/* This recieve is just to control flow. */
+	    broadcast(outSd, m);
+	    if (sendAhead < desiredSendAhead)
+	        ++sendAhead;
+	    else
+		{
+		err = bdReceive(inSd, m, &ip);	/* This recieve is just to control flow. */
+		if (err < 0)
+		   sendAhead = 0;
+		trackTimeOuts(err, machine, &totalTimeOuts);
+		}
 	    if (readSize < bdBlockSize)
 		{
 		blockCount = blockIx + 1;
@@ -329,7 +369,6 @@ else
 	    machine = mNode->val;
 	    machine->gotCleanStatus = FALSE;
 	    }
-	firstStatusMessage = messageIx+1;
 	// setReceiveTimeOut(inSd, 1000000);
 	for (tryIx = 0; tryIx < maxBroadTry; ++tryIx)
 	    {
@@ -345,8 +384,11 @@ else
 		    /* Try to find reply to us, skipping any previous messages. */
 		    for (;;)
 			{
-			if (bdReceive(inSd, m, &ip) < 0)
+			if ((err = bdReceive(inSd, m, &ip)) < 0)
+			    {
+			    trackTimeOuts(err, machine, &totalTimeOuts);
 			    break;
+			    }
 			if (m->id == messageIx)
 			    {
 			    gotReply = TRUE;
@@ -377,7 +419,8 @@ else
 				bdMakeBlockMessage(m2, ip, ++messageIx, fileIx, sectionIx, 
 					blockIx, readSize, dataArea2);
 				broadcast(outSd, m2);
-				bdReceive(inSd, m2, &ip);
+				err = bdReceive(inSd, m2, &ip);
+				trackTimeOuts(err, machine, &totalTimeOuts);
 				++statResent;
 				}
 			    freez(&m2);
@@ -386,7 +429,6 @@ else
 		    }
 		}
 	    }
-	// setReceiveTimeOut(inSd, 100000);
 
 	/* Mark nodes that did not come through clean as dead. */
 	for (mNode = machineList->head; !dlEnd(mNode); mNode = nextNode)
@@ -467,72 +509,70 @@ else
 	    dlAddTail(deadList, mNode);
 	    }
 	}
-    uglyf("%d blocks, %d (%4.2f%%) resent\n", statBlocks, statResent, 100.0 * statResent/statBlocks);
+    uglyf("%d blocks, %d (%4.2f%%) resent, %d time outs\n", statBlocks, statResent, 100.0 * statResent/statBlocks, totalTimeOuts);
     }
 }
 
 
-int testSendTo(int sd, struct bdMessage *m, struct sockaddr_in *sai)
-/* Send message out socket.  Returns error code if any or 0 for success. */
+void busyWait(int micros)
+/* Tight loop that does nothing. */
 {
-int err;
-bits32 machine;
-bits32 id;		/* Message id. */
-bits16 type;	/* One of the bdMessageTypes above. */
-bits16 size;	/* Size of the data part of this message */
-
-/* Save binary non-byte parts of message and convert them
- * to network format. */
-machine = m->machine;
-m->machine = htonl(machine);
-id = m->id;
-m->id = htonl(id);
-type = m->type;
-m->type = htons(type);
-size = m->size;
-m->size = htons(size);
-
-/* Send message */
-uglyf("testSendTo size %d\n", size);
-err =  sendto(sd, m, bdHeaderSize + size, 0, (struct sockaddr *)sai, sizeof(*sai));
-if (err < 0) warn(" sendto err %d, errno %d %s", err, errno, strerror(errno));
-
-/* Restore message to host format. */
-m->machine = machine;
-m->id = id;
-m->type = type;
-m->size = size;
-return err;
+long destTime = microTime() + micros;
+while (microTime() < destTime)
+    ;
 }
 
 void test(char *machineFile, char *transferFile)
 /* do a little testing. */
 {
-int inSd, outSd, err;
 int i;
+int timeCount = 3;
+struct timeval tv;
+long t1,t2;
+int inSd, outSd, err;
+int messageIx = 0;
 bits32 ip;
 struct bdMessage *m = NULL;
 struct dlList *machineList = getMachines(machineFile);
 struct dlList *deadList = newDlList();
 struct machine *machine;
+int *times;
+int errCount = 0;
+char *text = "This is a test of some text.  it's not really super long text, but "
+             "it is still some text, enough text to perhaps effect the timing "
+	     "noticeably.  Or maybe not.";
+int textSize = strlen(text)+1;
+
 inSd = openHubInSocket(hubInPort, 500000);
 outSd = openBroadcastSocket(nodeInPort);
+AllocArray(times, timeCount);
 AllocVar(m);
-for (i=0; i<10; ++i)
+machine = nextLivingMachine(machineList, deadList);
+for (i=0; i<timeCount; ++i)
     {
     machine = nextLivingMachine(machineList, deadList);
-    printf("%d to %s\n", i, machine->name);
-    strcpy(m->data, "ding-dong");
-//    if ((i%3) == 0)
-	{
-	uglyf(" pinging %x message %u\n", machine->ip, i);
-	bdInitMessage(m, machine->ip, i, bdmPing, strlen(m->data) + 1);
-	if ((err = broadcast(outSd, m)) < 0)
-	    printf(" err on broadcast %d\n", err);
-	}
-    err = bdReceive(inSd, m, &ip);
-    printf(" err %d, errno %d (%s), id %u, ip %x\n", err, errno, strerror(errno), m->id, m->machine);
+    bdInitMessage(m, machine->ip, ++messageIx, bdmPing, 0);
+    strcpy(m->data, text);
+    bdSendTo(outSd, m, machine->ip, nodeInPort);
+    t1 = microTime();
+    broadcast(outSd, m);
+    t2 = microTime();
+    uglyf("broadcasting %d to %x\n", m->id, machine->ip);
+    while ((err = bdReceive(inSd, m, &ip)) >= 0)
+	uglyf("err %d, ip %x, m->ip %x, type %d, id %d\n", err, ip, m->machine, m->type, m->id);
+    if (err < 0)
+       ++errCount;
+    times[i] = t2-t1;
+    busyWait(100000);
     }
+for (i=0; i<timeCount; ++i)
+    {
+    printf("%d\n", times[i]);
+    }
+fprintf(stderr, "%d errors in %d\n", errCount, timeCount);
+bdInitMessage(m, 0, -1, bdmQuit, 0);	/* Send quit for the moment. */
+broadcast(outSd, m);
+broadcast(outSd, m);
 }
 
 void broadHub(char *machineFile, char *transferFile)
