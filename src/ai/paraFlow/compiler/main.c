@@ -34,6 +34,7 @@ enum pfParseType
     pptClass,
     pptVarDec,
     pptVarUse,
+    pptConstUse,
     pptToDec,
     pptFlowDec,
     pptParaDec,
@@ -84,6 +85,8 @@ switch (type)
 	return "pptVarDec";
     case pptVarUse:
 	return "pptVarUse";
+    case pptConstUse:
+	return "pptConstUse";
     case pptToDec:
 	return "pptToDec";
     case pptFlowDec:
@@ -221,6 +224,28 @@ while (scope != NULL)
 return NULL;
 }
 
+struct pfVar *pfScopeFindVar(struct pfScope *scope, char *name)
+/* Find variable associated with name in scope and it's parents. */
+{
+while (scope != NULL)
+    {
+    struct pfVar *var = hashFindVal(scope->vars, name);
+    if (var != NULL)
+        return var;
+    scope = scope->parent;
+    }
+return NULL;
+}
+
+struct pfVar *pfScopeFindOrCreateVar(struct pfScope *scope, char *name)
+/* Find variable.  If it doesn't exist create it in innermost scope. */
+{
+struct pfVar *var = pfScopeFindVar(scope, name);
+if (var == NULL)
+    var = pfScopeAddVar(scope, name, NULL);
+return var;
+}
+
 struct pfParse
 /* The para parse tree. */
     {
@@ -242,13 +267,20 @@ if (pp->var != NULL)
     {
     struct pfVar *var = pp->var;
     struct pfCollectedType *ct = var->type;
-    while (ct != NULL)
+    if (ct == NULL)
         {
-	if (ct->base != NULL)
-	    fprintf(f, " %s", ct->base->name);
-	if (ct->next != NULL)
-	    fprintf(f, " of");
-	ct = ct->next;
+	fprintf(f, " noType");
+	}
+    else
+	{
+	while (ct != NULL)
+	    {
+	    if (ct->base != NULL)
+		fprintf(f, " %s", ct->base->name);
+	    if (ct->next != NULL)
+		fprintf(f, " of");
+	    ct = ct->next;
+	    }
 	}
     fprintf(f, " %s", var->name);
     }
@@ -259,6 +291,9 @@ for (child = pp->children; child != NULL; child = child->next)
 
 
 void pfParseStatement(struct pfParse *parent, 
+	struct pfToken **pTokList, struct pfScope *scope);
+
+struct pfParse *pfParseExpression(struct pfParse *parent, 
 	struct pfToken **pTokList, struct pfScope *scope);
 
 static void syntaxError(struct pfToken *tok)
@@ -344,9 +379,20 @@ struct pfParse *pp = pfParseNew(pptVarUse, tok, parent);
 if (tok->type != pftName)
     errAbort("Expecting variable name line %d of %s",
     	tok->startLine, tok->source->name);
+pp->var = pfScopeFindOrCreateVar(scope, tok->val.s);
 *pTokList = tok->next;
 return pp;
 }
+
+struct pfParse *constUse(struct pfParse *parent, struct pfToken **pTokList, struct pfScope *scope)
+/* Create constant use */
+{
+struct pfToken *tok = *pTokList;
+struct pfParse *pp = pfParseNew(pptConstUse, tok, parent);
+*pTokList = tok->next;
+return pp;
+}
+
 
 static void parseForeach(struct pfParse *parent,
 	struct pfToken **pTokList, struct pfScope *scope)
@@ -449,6 +495,63 @@ for (;;)
 *pTokList = tok;
 }
 
+struct pfParse *pfParseExpression(struct pfParse *parent,
+	struct pfToken **pTokList, struct pfScope *scope)
+/* Parse expression. */
+{
+struct pfToken *tok = *pTokList;
+struct pfParse *pp = NULL;
+switch (tok->type)
+    {
+    case pftName:
+	pp = varUse(parent, &tok, scope);
+	break;
+    case pftString:
+    case pftInt:
+    case pftFloat:
+        pp = constUse(parent, &tok, scope);
+	break;
+    default:
+        syntaxError(tok);
+	break;
+    }
+*pTokList = tok;
+return pp;
+}
+
+static void parseAssign(struct pfParse *parent, char *varName,
+	struct pfToken **pTokList, struct pfScope *scope)
+/* Parse assignment statement. */
+{
+struct pfToken *tok = *pTokList;
+struct pfParse *pp = pfParseNew(pptAssignment, tok, parent);
+tok = tok->next;	/* Skip over var name */
+pp->var = pfScopeFindOrCreateVar(scope, varName);
+tok = tok->next;	/* Skip over '=' */
+pp->children = pfParseExpression(pp, &tok, scope);
+slAddHead(&parent->children, pp);
+*pTokList = tok;
+}
+
+
+static void parseAssignOrCall(struct pfParse *parent,
+	struct pfToken **pTokList, struct pfScope *scope)
+/* Parse assignment or call statements. */
+{
+struct pfToken *tok = *pTokList, *opTok;
+char *varName = tok->val.s;
+int op;
+tok = tok->next;
+op = tok->type;
+if (op == '=')
+    parseAssign(parent, varName, pTokList, scope);
+#ifdef SOON
+else if (op == '(')
+    parseCall(parent, varName, pTokList, scope);
+#endif /* SOON */
+else
+    syntaxError(tok);
+}
 
 void pfParseStatement(struct pfParse *parent, 
 	struct pfToken **pTokList, struct pfScope *scope)
@@ -470,9 +573,9 @@ else if (tok->type == pftName)
     else if (sameString(s, "class"))
         parseClass(parent, pTokList, scope);
     else if (baseType != NULL)
-	{
         parseVarDeclaration(parent, baseType, pTokList, scope);
-	}
+    else
+        parseAssignOrCall(parent, pTokList, scope);
 #ifdef SOON
     else if (sameString(s, "to"))
         parseTo(parent, pTokList, scope);
@@ -484,13 +587,7 @@ else if (tok->type == pftName)
         parseFlow(parent, pTokList);
     else if (sameString(s, "para"))
         parsePara(parent, pTokList, scope);
-    else
-        parseAssignOrCall(parent, pTokList, scope);
 #endif /* SOON */
-    else
-	{
-	syntaxError(tok);
-	}
     }
 else
     {
