@@ -971,8 +971,7 @@ hgGcPercent -chr=${chr} -doGaps -file=stdout -win=5 hg17 \
     mkdir -p /gbdb/hg17/wib/gc5Base
     ln -s `pwd`/wigData5_1K/*.wib /gbdb/hg17/wib/gc5Base
 
-# AUTO UPDATE GENBANK MRNA RUN  (WORKING - 2004-05-25 - Hiram)
-    #	re-done with reloaded DB - 2004-06-04 - Hiram
+# AUTO UPDATE GENBANK MRNA RUN  (DONE - 2004-06-08 - Hiram)
     ssh eieio
     cd /cluster/data/genbank
     # This is a new organism, edit the etc/genbank.conf file and add:
@@ -1031,30 +1030,29 @@ hgGcPercent -chr=${chr} -doGaps -file=stdout -win=5 hg17 \
     #	get this to proceed  (this same thing happened again the second
     #	time around)
     nice bin/gbDbLoadStep -verbose=1 -drop -initialLoad hg17
-XXXX This doesn't work 2004-06-04:
-->Loading MGC tables: sec=0.01 vm=2.36m
-Can't start query:
-describe all_mrna
-
-mySQL error 1146: Table 'hg17.all_mrna' doesn't exist
-command failed: mgcDbLoad -workdir=work/hgwdev/dbload/hg17/mgc -verbose=1 hg17 data/processed/mgc/2004.06.01/mgcFullStatus.tab.gz at /cluster/store5/genbank/bin/../lib/gbCommon.pm line 197. at /cluster/store5/genbank/bin/../lib/gbCommon.pm line 197.
-
 
     ssh eieio
     cd /cluster/data/genbank/work
-    mv initial.hg17 initial.hg17.refseq.mrna
+    mv initial.hg17 initial.hg17.genbank.mrna
     cd /cluster/data/genbank
     nice bin/gbAlignStep -srcDb=genbank -type=est -verbose=1 -initial hg17
-# Completed: 183379 of 183379 jobs
-# CPU time in finished jobs:   95983777s 1599729.61m 26662.16h 1110.92d  3.044 y
-# IO & Wait Time:               5504882s   91748.04m  1529.13h   63.71d  0.175 y
-# Average job time:                 553s       9.22m     0.15h    0.01d
-# Longest job:                    61303s    1021.72m    17.03h    0.71d
-# Submission to last job:        123183s    2053.05m    34.22h    1.43d
+# Completed: 189240 of 189240 jobs
+# CPU time in finished jobs:   97172120s 1619535.33m 26992.26h 1124.68d  3.081 y
+# IO & Wait Time:               1507789s   25129.82m   418.83h   17.45d  0.048 y
+# Average job time:                 521s       8.69m     0.14h    0.01d
+# Longest job:                    33165s     552.75m     9.21h    0.38d
+# Submission to last job:        126988s    2116.47m    35.27h    1.47d
 
     ssh hgwdev
     cd /cluster/data/genbank
-    nice bin/gbDbLoadStep -verbose=1 -drop -initialLoad hg17
+    time nice bin/gbDbLoadStep -verbose=1 -drop -initialLoad hg17
+    #	real    440m42.750s
+    #	user    69m7.810s
+    #	sys     23m18.640s
+    #	This is ~7.5 hours
+
+    #	If the above is all OK, ask Mark to put this assembly on
+    #	the daily updates.
 
 # CPGISLANDS (DONE - 2004-05-25 - Hiram)
     #	Re-DONE with new randoms - 2004-06-04 - Hiram
@@ -1229,6 +1227,19 @@ AL163540.11
     mkdir fasta
     time ./fetchGenbank.pl terrys.list > fetchResult.out 2>&1
 
+    #	There is a bit of behind the scenes hocus pocus going on here.
+    #	This is a tedious task of comparing various lists with each
+    #	other and making sure everything matches.  Manual fixups are
+    #	done for the newly named 6_hla_hap* items, copies of the PAR
+    #	business were duplicated so that X and Y both have the same set
+    #	of clones for that.  The end result should be a directory hierarchy
+    #	here with a directory for each chrom, each random, the 6_hla_hap?
+    #	items and each directory contains the clones that belong to that
+    #	chromosome.  The leftovers are the unplaced clones which end up
+    #	in the directory called: unPlaced.  The instructions here are
+    #	merely a guideline of possibilities.  Care should be taken to
+    #	make sure all listings are correct and everything gets in the
+    #	right place.
     ssh eieio
     #	And then make a list of all clones considered for assembly:
     sed -e "/^#.*/d" /cluster/store5/gs.18/ncbi/sequence.inf | \
@@ -1257,3 +1268,127 @@ AL163540.11
     #	Using that list, sort the downloaded clones into their
     #	respective chrom directories:
     ./disburse.sh
+    #	Check the number of sequences obtained:
+    find ./? ./?? ./*_random ./6_hla* -type f | wc -l
+    #	26872
+    #	So, why is this number one more than the inBoth list ?
+    #	Because, the official NCBI sequence.inf file is missing one of
+    #	the clones that Terry added: AC018743.27
+    #	And it shows up in our check list above as inAssemblyNotSequence
+    #	It isn't exactly missing, it just isn't marked "for_assembly"
+
+    #	OK, with everything in place, we are ready to try and find
+    #	all these items in the assembly.  To run a Kluster job on one of
+    #	the chroms, matching the items that are supposed to be included
+    #	in that chrom.  We need to get things set up on the Iservers,
+    #	psLayout is heavy into disk I/O and it brings everything down if
+    #	allowed to work on any NFS filesystems for input.
+
+    #	It appears that psLayout wants an ooc file of tile size 10
+    #	I tried making one for the whole assembly but it seemed to
+    #	include too much for some contigs and it caused a lot of
+    #	alignments to be missed.  Thus, create an ooc file for each
+    #	contig
+
+    ssh eieio
+    mkdir /cluster/bluearc/scratch/hg/gs.18/build35/contigOoc10
+    cd /cluster/bluearc/scratch/hg/gs.18/build35/contigOoc10
+    ls ../maskedContigs | sed -e "s/.fa//" | while read CONTIG
+    do
+	blat -repMatch=256 -makeOoc=${CONTIG}.10.ooc -tileSize=10 \
+	    ../maskedContigs/${CONTIG}.fa \
+	    ../maskedContigs/${CONTIG}.fa /dev/null
+	echo "done: ${CONTIG}"
+    done
+
+    #	Copy that result to the Iservers:
+    ssh kkr1u00
+    mkdir /iscratch/i/gs.18/build35/contigOoc10
+    cd /iscratch/i/gs.18/build35/contigOoc10
+    rsync -arlv /cluster/bluearc/scratch/hg/gs.18/build35/contigOoc10/ .
+    #	And, copy the clone sequences:
+    mkdir /iscratch/i/gs.18/build35/clones
+    cd /cluster/store5/gs.18/build35/bed/contig_overlaps
+    for D in ? ?? *_random 6_hla_hap?
+    do
+	rsync -arlv `pwd`/${D} /iscratch/i/gs.18/build35/clones
+    done
+    
+    /cluster/bin/iSync
+
+    ssh kk
+    cd /cluster/data/hg17/bed/contig_overlaps
+    mkdir psl
+    cat << '_EOF_' > runPsLayout.sh
+#!/bin/sh
+#       kkiPsLayout.sh <chrom> <clone> <contig>
+#       where <chrom> is the chrom this contig is on
+#       <clone> is one of the .fa.gz files in
+#               /cluster/data/hg17/bed/contig_overlaps/*/<clone>.fa.gz
+#               without the .fa.gz extension
+#               This stuff has been mirrored to:
+#               /iscratch/i/gs.18/clones/*/<clone>.fa.gz
+#       <contig> is one of the contigs found in:
+#               /cluster/store5/gs.18/build35/<chrom>/<contig>/<contig>.fa
+#
+CHROM=$1
+CLONE=$2
+CONTIG=$3
+TARGET=/iscratch/i/gs.18/build35/maskedContigs/${CONTIG}.fa
+FAZ=/iscratch/i/gs.18/build35/clones/${CHROM}/${CLONE}.fa.gz
+OOC=/iscratch/i/gs.18/build35/contigOoc10/${CONTIG}.10.ooc
+mkdir -p psl/${CONTIG}
+if [ ! -s ${FAZ} ]; then
+        echo "Can not find: ${FAZ}"
+        exit 255
+fi
+if [ ! -s ${TARGET} ]; then
+        echo "Can not find: ${TARGET}"
+        exit 255
+fi
+if [ ! -s ${OOC} ]; then
+        echo "Can not find: ${OOC}"
+        exit 255
+fi
+zcat ${FAZ} > /tmp/${CLONE}.fa
+$HOME/bin/i386/psLayout ${TARGET} \
+        /tmp/${CLONE}.fa genomic ${OOC} psl/${CONTIG}/${CLONE}.psl
+RET=$?
+rm -f /tmp/${CLONE}.fa
+exit ${RET}
+'_EOF_'
+    # << this line makes emacs coloring happy
+    chmod +x runPsLayout.sh
+
+    #	make up a listing of chrom, clone, contig from:
+    grep -v "^#" disburseEm.list | sed -e "s/.fa.gz//" > chr.clone.contig.list
+    wc -l chr.clone.contig.list
+    #	26872 chr.clone.contig.list
+    awk '{
+printf "./runPsLayout.sh %s %s %s {check out line+ psl/%s/%s.psl}\n",
+        $1, $2, $3, $3, $2
+}' chr.clone.contig.list > jobList
+    # << this line makes emacs coloring happy
+    #	To do a quick test, run just chr22:
+    grep -v "^22" chr.clone.contig.list | awk '{
+printf "./runPsLayout.sh %s %s %s {check out line+ psl/%s/%s.psl}\n",
+        $1, $2, $3, $3, $2
+}' > jobList
+    para create jobList
+    para try ... check ... etc ...
+    #	One run on chr22 took:
+# Completed: 561 of 561 jobs
+# CPU time in finished jobs:     927068s   15451.14m   257.52h   10.73d  0.029 y
+# IO & Wait Time:                  6295s     104.91m     1.75h    0.07d  0.000 y
+# Average job time:                1664s      27.73m     0.46h    0.02d
+# Longest job:                    69745s    1162.42m    19.37h    0.81d
+# Submission to last job:         69780s    1163.00m    19.38h    0.81d
+
+
+    #	put the results together, filter, lift and load:
+    cd /cluster/data/hg17/bed/contig_overlaps/psl
+    pslSort dirs raw.psl tmp N*
+    pslReps -singleHit raw.psl repsSingle.psl /dev/null
+    liftUp chr22.psl /cluster/data/hg17/jkStuff/liftAll.lft \
+	warn repsSingle.psl
+    hgLoadPsl -table=cloneTest hg17 chr22.psl
