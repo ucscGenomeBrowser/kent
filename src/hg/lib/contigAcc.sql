@@ -9,5 +9,5 @@ CREATE TABLE contigAcc (
     acc varchar(255) not null,	# Genbank accession
               #Indices
     PRIMARY KEY(contig),
-    INDEX (name(16))
+    INDEX (contig(16))
 );
