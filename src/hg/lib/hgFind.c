@@ -36,9 +36,11 @@
 #include "kgProtAlias.h"
 #include "findKGAlias.h"
 #include "findKGProtAlias.h"
+#include "tigrCmrGene.h"
+#include "minGeneInfo.h"
 #include <regex.h>
 
-static char const rcsid[] = "$Id: hgFind.c,v 1.91 2003/06/30 21:25:05 kate Exp $";
+static char const rcsid[] = "$Id: hgFind.c,v 1.92 2003/07/09 21:51:32 aamp Exp $";
 
 /* alignment tables to check when looking for mrna alignments */
 static char *estTables[] = { "all_est", "xenoEst", NULL};
@@ -978,6 +980,8 @@ char *type;
 char *extraCgi = hgp->extraCgi;
 char *ui = getUiUrl(cart);
 char tableName [64];
+if (!hTableExists("mrna"))
+    return FALSE;
 if ((type = mrnaType(acc)) == NULL || type[0] == 0)
     /* this excludes refseq mrna's, and accessions with
      * invalid column type in mrna table (refseq's and ests) */
@@ -1619,6 +1623,8 @@ for (i = 0; i<tableCount; ++i)
      * in one step in SQL just because it somehow is much
      * faster this way (like 100x faster) when using mySQL. */
     field = tables[i];
+    if (!hTableExists(field))
+	continue;
     sprintf(query, "select id from %s where name like '%%%s%%'", field, key);
     sr = sqlGetResult(conn, query);
     while ((row = sqlNextRow(sr)) != NULL)
@@ -2302,6 +2308,174 @@ if (sqlTableExists(conn, "rgdGene"))
 freeDyString(&ds);
 hFreeConn(&conn);
 }
+/* Lowe lab additions */
+
+static void addTigrCmrGenes(struct sqlConnection *conn, struct dyString *query,
+	struct tigrCmrGene **pList)
+/* Query database and add returned tigrCmrGenes to head of list. */
+{
+struct sqlResult *sr = sqlGetResult(conn, query->string);
+char **row;
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    struct tigrCmrGene *rl = tigrCmrGeneLoad(row);
+    slAddHead(pList, rl);
+    }
+sqlFreeResult(&sr);
+}
+
+static void addGbGenes(struct sqlConnection *conn, struct dyString *query,
+		       struct minGeneInfo **pList)
+/* Query database and add returned genbank genes to head of list. */
+{
+struct sqlResult *sr = sqlGetResult(conn, query->string);
+char **row;
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    struct minGeneInfo *rl = minGeneInfoLoad(row);
+    slAddHead(pList, rl);
+    }
+sqlFreeResult(&sr);
+}
+
+static void findGenbankGenes(char *spec, struct hgPositions *hgp)
+{
+/* Look up Genbank genes from keyword */
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr = NULL;
+struct dyString *ds = newDyString(256);
+char **row;
+boolean gotOne = FALSE;
+struct hgPosTable *table = NULL;
+struct hgPos *pos;
+struct bed *bed;
+struct minGeneInfo *gbList = NULL, *gb;
+boolean gotGBkeys = sqlTableExists(conn, "gbProtCodeXra");
+
+if (gotGBkeys)
+    {
+    dyStringPrintf(ds, "select * from gbProtCodeXra where name like '%%%s%%'", spec);
+    addGbGenes(conn, ds, &gbList);
+    dyStringClear(ds);
+    dyStringPrintf(ds, "select * from gbProtCodeXra where note like '%%%s%%'", spec);
+    addGbGenes(conn, ds, &gbList);
+    dyStringClear(ds);
+    dyStringPrintf(ds, "select * from gbProtCodeXra where product like '%%%s%%'", spec);
+    addGbGenes(conn, ds, &gbList);
+    dyStringClear(ds);
+    }
+if (gbList != NULL)
+    {
+    struct hash *hash = newHash(8);
+    AllocVar(table);
+    slAddHead(&hgp->tableList, table);
+    table->description = cloneString("Genbank Protein-coding Genes");
+    table->name = cloneString("gbExtraInfo");
+    for (gb = gbList; gb != NULL; gb = gb->next)
+        {
+        /* Don't return duplicate genbank accessions */
+        if (hashFindVal(hash, gb->name))
+            {
+            hashAdd(hash, gb->name, gb);
+            continue;
+            }
+        hashAdd(hash, gb->name, gb);
+	dyStringClear(ds);
+	dyStringPrintf(ds, "select * from gbProtCode where name = '%s'", gb->name);
+	sr = sqlGetResult(conn, ds->string);
+	while ((row = sqlNextRow(sr)) != NULL)
+	    {
+	    bed = bedLoadN(row+1,6);
+	    AllocVar(pos);
+	    slAddHead(&table->posList, pos);
+	    pos->name = cloneString(gb->name);
+	    dyStringClear(ds);
+	    dyStringPrintf(ds, "%s; %s; %s", gb->name, gb->product, gb->note);
+	    pos->description = cloneString(ds->string);
+	    pos->chrom = hgOfficialChromName(bed->chrom);
+	    pos->chromStart = bed->chromStart;
+	    pos->chromEnd = bed->chromEnd;
+	    bedFree(&bed);
+	    }
+	sqlFreeResult(&sr);
+	}
+    minGeneInfoFreeList(&gbList);
+    freeHash(&hash);
+    }
+freeDyString(&ds);
+hFreeConn(&conn);
+}
+
+static void findTigrGenes(char *spec, struct hgPositions *hgp)
+/* Look up TIGR and Genbank genes from keyword */
+{
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr = NULL;
+struct dyString *ds = newDyString(256);
+char **row;
+boolean gotOne = FALSE;
+struct hgPosTable *table = NULL;
+struct hgPos *pos;
+struct bed *bed, *TRNAgbList = NULL;
+struct tigrCmrGene *tigrList = NULL, *tigr;
+/* struct minGeneInfo *gbList = NULL, *gb; */
+boolean gotTIGRkeys = sqlTableExists(conn, "tigrCmrORFsInfo");
+
+if (gotTIGRkeys)
+    {
+    dyStringPrintf(ds, "select * from tigrCmrORFsInfo where tigrCommon like '%%%s%%'", spec);
+    addTigrCmrGenes(conn, ds, &tigrList);
+    dyStringClear(ds);
+    dyStringPrintf(ds, "select * from tigrCmrORFsInfo where tigrMainRole like '%%%s%%'", spec);
+    addTigrCmrGenes(conn, ds, &tigrList);
+    dyStringClear(ds);
+    dyStringPrintf(ds, "select * from tigrCmrORFsInfo where tigrSubRole like '%%%s%%'", spec);
+    addTigrCmrGenes(conn, ds, &tigrList);
+    dyStringClear(ds);
+    }
+if (tigrList != NULL)
+    {
+    struct hash *hash = newHash(8);
+    AllocVar(table);
+    slAddHead(&hgp->tableList, table);
+    table->description = cloneString("TIGR CMR Genes");
+    table->name = cloneString("tigrORFsCmr");
+    for (tigr = tigrList; tigr != NULL; tigr = tigr->next)
+        {
+        /* Don't return duplicate TIGR CMR accessions */
+        if (hashFindVal(hash, tigr->tigrLocus))
+            {
+            hashAdd(hash, tigr->tigrLocus, tigr);
+            continue;
+            }
+        hashAdd(hash, tigr->tigrLocus, tigr);
+	dyStringClear(ds);
+	dyStringPrintf(ds, "select * from tigrCmrORFs where name = '%s'", tigr->tigrLocus);
+	sr = sqlGetResult(conn, ds->string);
+	while ((row = sqlNextRow(sr)) != NULL)
+	    {
+	    bed = bedLoadN(row+1,6);
+	    AllocVar(pos);
+	    slAddHead(&table->posList, pos);
+	    pos->name = cloneString(tigr->tigrLocus);
+	    dyStringClear(ds);
+	    dyStringPrintf(ds, "%s; %s; %s", tigr->tigrCommon, tigr->tigrMainRole, tigr->tigrSubRole);
+	    pos->description = cloneString(ds->string);
+	    pos->chrom = hgOfficialChromName(bed->chrom);
+	    pos->chromStart = bed->chromStart;
+	    pos->chromEnd = bed->chromEnd;
+	    bedFree(&bed);
+	    }
+	sqlFreeResult(&sr);
+	}
+    tigrCmrGeneFreeList(&tigrList);
+    freeHash(&hash);
+    }
+freeDyString(&ds);
+hFreeConn(&conn);
+}
+
+/* End of Lowe Lab stuff */
 
 static void findBedPos(char *name, struct hgPositions *hgp, char *tableName)
 /* Look for positions in bed table. */
@@ -2646,6 +2820,11 @@ else
     findGenePred(query, hgp, "sangerGene");
     findBedTablePos(query, "HG-U95:", hgp, "affyGnf");
     findBedTablePos(query, "HG-U133:", hgp, "affyUcla");
+    findBedPos(query,hgp,"gbRRNA");
+    findBedPos(query,hgp,"gbTRNA");
+    findBedPos(query,hgp,"gbMiscRNA");
+    findGenbankGenes(query, hgp);
+    findTigrGenes(query, hgp);
     }
 
 slReverse(&hgp->tableList);
