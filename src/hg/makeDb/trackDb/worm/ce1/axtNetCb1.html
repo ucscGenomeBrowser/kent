@@ -1,9 +1,11 @@
 <H2>Description</H2>
+<P>
 This track shows best-in-genome  
 <em>$organism</em>/<em>$o_organism</em> alignments based on the 
 <em>$organism</em>/<em>$o_organism</em> alignment net; i.e., the best chain 
-for every part of the <em>$organism</em> genome.  This track displays alignment 
-scores, and when zoomed in to the base level, the alignment itself is displayed. 
+for every part of the <em>$organism</em> genome.  This track displays 
+alignment scores and, when zoomed in to the base level, the alignment 
+itself. 
 The <em>$o_organism</em> sequence is from 
 <A HREF="http://www.wormbase.org/" TARGET=_blank>WormBase</A>
 Version cb25.agp8 ($o_date ) assembly.
@@ -16,8 +18,8 @@ blastz alignments (taken from the axt-formatted output) in the
 currently displayed range of positions.  
 
 <H2>Methods</H2>
-First, chains are derived from 
-<A HREF="http://bio.cse.psu.edu/dist/blastz.pdf" TARGET=_blank>blastz</A> 
+<P>
+First, chains are derived from blastz
 alignments as described in the details pages of the chain tracks
 and sorted so that the highest scoring chain in the
 genome is first. The program <em>chainNet</em> then places
@@ -32,7 +34,7 @@ and lower level chains, including whether a lower level
 chain is syntenic with the higher level chain,  whether
 it is inverted with respect to the higher level chain,
 and so forth.  The program <em>netClass</em> then fills in 
-how much of the gaps and chains are filled with N's
+how much of the gaps and chains are filled with Ns
 (sequencing gaps) in one or both species,  how much
 is filled with transposons inserted before and after
 <em>$organism</em> and <em>$o_organism</em> diverged, and so forth.
@@ -40,16 +42,16 @@ The program <em>netToAxt</em> translates the net back
 to axt.  <em>netToAxt</em> is run with -maxGap=300.  
 
 <H2>Credits</H2>
-<P>The chainNet, netSyntenic, netClass and netToAxt programs were
-developed at the University of California
-at Santa Cruz by Jim Kent.
+<P>
+The chainNet, netSyntenic, netClass and netToAxt programs were
+developed at the University of California at Santa Cruz by Jim Kent.
 For more information, see 
-Kent WJ, Baertsch R, Hinrichs A, Miller W, and Haussler D (2003). 
+Kent, W.J., Baertsch, R., Hinrichs, A., Miller, W., and Haussler, D.
 <A HREF="http://www.pnas.org/cgi/content/abstract/1932072100v1" 
 TARGET=_blank>Evolution's cauldron: 
 Duplication, deletion, and rearrangement in the mouse and human genomes</A>. 
-<I>Proc Natl Acad Sci USA</I> 100(20):11484-11489 Sep 30 2003.
-
-<P>Lineage-specific repeats were identified by Arian Smit and his
+<I>Proc Natl Acad Sci USA</I> <B>100</B>(20), 11484-11489 (2003).</P>
+<P>
+Lineage-specific repeats were identified by Arian Smit and his
 program <A HREF="http://repeatmasker.org/" TARGET=_blank>RepeatMasker</A>.</P>
 
