@@ -440,6 +440,8 @@ else
     fprintf(f, "%1.0e", e);
 }
 
+/* special global variable needed for Known Genes track building.  Fan 1/21/03 */
+int answer_for_kg;
 
 static void ncbiBlastOut(struct axtBundle *abList, int queryIx, boolean isProt, 
 	FILE *f, char *databaseName, int databaseSeqCount, 
@@ -516,6 +518,9 @@ for (target = targetList; target != NULL; target = target->next)
 		 gaps, axt->symCount, round(100.0 * gaps / axt->symCount));
 	    if (axt->frame != 0) 
 		fprintf(f, " Frame = %c%d\n", axt->tStrand, axt->frame);
+	    /* set the special global variable, answer_for_kg.  
+   	       This is needed for Known Genes track building.  Fan 1/21/03 */
+            answer_for_kg=axt->symCount - matches;
 	    }
 	else
 	    {
