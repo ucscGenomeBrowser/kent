@@ -27,7 +27,7 @@
 #include "maf.h"
 #include "ra.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.160 2003/12/20 19:17:19 angie Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.161 2004/01/13 20:05:29 angie Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
@@ -80,7 +80,7 @@ struct hash *hash = newHash(6);
 sr = sqlGetResult(conn, "select chrom,size,fileName from chromInfo");
 while ((row = sqlNextRow(sr)) != NULL)
     {
-    if(*defaultChrom == NULL)
+    if(defaultChrom != NULL && *defaultChrom == NULL)
     	*defaultChrom = cloneString(row[0]);
 
     AllocVar(cEntry);
@@ -136,12 +136,18 @@ char *getDefaultChrom()
 }
 
 char *hgOfficialChromName(char *name)
-/* Returns "cannonical" name of chromosome or NULL
- * if not a chromosome. */
+/* Returns "canonical" name of chromosome or NULL
+ * if not a chromosome. (Case-insensitive search w/sameWord()) */
 {
+struct hashCookie cookie;
 struct hashEl *hashEl;
-if ((hashEl = hashLookup(hdbChromInfoHash(),name))!= NULL)
-    return hashEl->name;
+
+cookie = hashFirst(hdbChromInfoHash());
+while ((hashEl = hashNext(&cookie)) != NULL)
+    {
+    if (sameWord(name, hashEl->name))
+	return hashEl->name;
+    }
 return NULL;
 }
 
