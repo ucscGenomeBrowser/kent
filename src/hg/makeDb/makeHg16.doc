@@ -9040,13 +9040,13 @@ java -jar ./eponine-scan.jar -threshold 0.999 -seq $1 > $2
 
 ####  Blat knownGene proteins to determine exons (braney 2004-06-02)
     ssh kk
-    mkdir blat.hg16KG.2004-05-27
+    mkdir -p /cluster/data/hg16/bed/blat.hg16KG.2004-05-27
+    cd /cluster/data/hg16/bed
     rm blat.hg16KG
     ln -s  blat.hg16KG.2004-05-27 blat.hg16KG
+    cd blat.hg16KG
     pepPredToFa hg16 knownGenePep known.fa
     hgPepPred hg16 generic blastKGPep00 known.fa
-    grep ">" known.fa | sed "s/>//" > kgName.lst
-    kgName hg16 kgName.lst kg.mapNames
     cat << '_EOF_' > blatSome
 #!/bin/csh -fe
 /cluster/bin/i386/blat -t=dnax -q=prot -out=pslx $1 $2 $3
@@ -9078,7 +9078,14 @@ blatSome $(path1) {check in line $(path2)} {check out line psl/$(root1)/$(root2)
 
     pslSort dirs raw.psl /tmp psl/*
     pslReps -nohead -minCover=0.9 -minAli=0.9 raw.psl cooked.psl /dev/null
-    pslxToFa uniq.psl uniq_ex.fa -liftTarget=genome.lft -liftQuery=protein.lft
+    sort -rn cooked.psl | pslUniq stdin hg16KG.psl
+    pslxToFa hg16KG.psl hg16KG_ex.fa -liftTarget=genome.lft -liftQuery=protein.lft
+    kgName hg16 hg16KG.psl blastKGRef00
+    ssh hgwdev
+    cd /cluster/data/hg16/bed/blat.hg16KG
+    hgsql hg16 < ~/kent/src/lib/hg/blastRef.sql
+    echo "rename table blastRef to blastKGRef00" | hgsql hg16
+    echo "load data local infile 'blastKGRef00' into table blastKGRef00" | hgsql hg16
 
 ### RUN BLASTZ VS. MACACA MULATTA
 
