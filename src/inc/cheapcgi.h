@@ -128,6 +128,9 @@ void cgiMakeIntVar(char *varName, int initialVal, int maxDigits);
 void cgiMakeDoubleVar(char *varName, double initialVal, int maxDigits);
 /* Make a text control filled with initial floating-point value.  */
 
+void cgiMakeDropListClass(char *name, char *menu[], int menuSize, char *checked, char *class);
+/* Make a drop-down list with names and style sheet class. */
+
 void cgiMakeDropList(char *name, char *menu[], int menuSize, char *checked);
 /* Make a drop-down list with names. */
 
