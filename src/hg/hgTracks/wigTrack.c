@@ -11,7 +11,7 @@
 #include "wiggle.h"
 #include "scoredRef.h"
 
-static char const rcsid[] = "$Id: wigTrack.c,v 1.36 2004/02/02 23:36:19 hiram Exp $";
+static char const rcsid[] = "$Id: wigTrack.c,v 1.37 2004/02/03 19:33:54 hiram Exp $";
 
 /*	wigCartOptions structure - to carry cart options from wigMethods
  *	to all the other methods via the track->extraUiData pointer
@@ -556,8 +556,10 @@ for (i = 0; i < preDrawSize; ++i)
  *	to enum funny business in inc/hui.h and lib/hui.c 	*/
 if (wigCart->smoothingWindow > 0)
     {
+    int winSize = wigCart->smoothingWindow + 1; /* enum funny business */
     int winBegin = 0;
-    int winEnd = -wigCart->smoothingWindow - 1;	/* enum funny business */
+    int winMiddle = -(winSize/2);
+    int winEnd = -winSize;
     double sum = 0.0;
     unsigned long long points = 0LL;
 
@@ -576,11 +578,10 @@ if (wigCart->smoothingWindow > 0)
 	    points += preDraw[winBegin].count;
 	    sum += preDraw[winBegin].plotValue * preDraw[winBegin].count;
 	    }
-	if (points && preDraw[winBegin].count)
-	    preDraw[winBegin].smooth = sum / points;
-	else
-	    preDraw[winBegin].smooth = 38.0;
+	if ((winMiddle >= 0) && points && preDraw[winMiddle].count)
+		preDraw[winMiddle].smooth = sum / points;
 	++winEnd;
+	++winMiddle;
 	}
     }
 
