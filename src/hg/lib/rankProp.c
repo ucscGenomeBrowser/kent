@@ -8,20 +8,18 @@
 #include "jksql.h"
 #include "rankProp.h"
 
-static char const rcsid[] = "$Id: rankProp.c,v 1.1 2004/04/09 18:31:19 markd Exp $";
+static char const rcsid[] = "$Id: rankProp.c,v 1.3 2004/10/05 08:04:27 markd Exp $";
 
 void rankPropStaticLoad(char **row, struct rankProp *ret)
 /* Load a row from rankProp table into ret.  The contents of ret will
  * be replaced at the next call to this function. */
 {
-int sizeOne,i;
-char *s;
 
-ret->prot1Acc = row[0];
-ret->prot2Acc = row[1];
-ret->ranking = atof(row[2]);
-ret->eVal12 = atof(row[3]);
-ret->eVal21 = atof(row[4]);
+ret->qKgId = row[0];
+ret->tKgId = row[1];
+ret->score = atof(row[2]);
+ret->qtEVal = atof(row[3]);
+ret->tqEVal = atof(row[4]);
 }
 
 struct rankProp *rankPropLoad(char **row)
@@ -29,15 +27,13 @@ struct rankProp *rankPropLoad(char **row)
  * from database.  Dispose of this with rankPropFree(). */
 {
 struct rankProp *ret;
-int sizeOne,i;
-char *s;
 
 AllocVar(ret);
-ret->prot1Acc = cloneString(row[0]);
-ret->prot2Acc = cloneString(row[1]);
-ret->ranking = atof(row[2]);
-ret->eVal12 = atof(row[3]);
-ret->eVal21 = atof(row[4]);
+ret->qKgId = cloneString(row[0]);
+ret->tKgId = cloneString(row[1]);
+ret->score = atof(row[2]);
+ret->qtEVal = atof(row[3]);
+ret->tqEVal = atof(row[4]);
 return ret;
 }
 
@@ -83,15 +79,14 @@ struct rankProp *rankPropCommaIn(char **pS, struct rankProp *ret)
  * return a new rankProp */
 {
 char *s = *pS;
-int i;
 
 if (ret == NULL)
     AllocVar(ret);
-ret->prot1Acc = sqlStringComma(&s);
-ret->prot2Acc = sqlStringComma(&s);
-ret->ranking = sqlFloatComma(&s);
-ret->eVal12 = sqlFloatComma(&s);
-ret->eVal21 = sqlFloatComma(&s);
+ret->qKgId = sqlStringComma(&s);
+ret->tKgId = sqlStringComma(&s);
+ret->score = sqlFloatComma(&s);
+ret->qtEVal = sqlDoubleComma(&s);
+ret->tqEVal = sqlDoubleComma(&s);
 *pS = s;
 return ret;
 }
@@ -103,8 +98,8 @@ void rankPropFree(struct rankProp **pEl)
 struct rankProp *el;
 
 if ((el = *pEl) == NULL) return;
-freeMem(el->prot1Acc);
-freeMem(el->prot2Acc);
+freeMem(el->qKgId);
+freeMem(el->tKgId);
 freez(pEl);
 }
 
@@ -124,20 +119,19 @@ for (el = *pList; el != NULL; el = next)
 void rankPropOutput(struct rankProp *el, FILE *f, char sep, char lastSep) 
 /* Print out rankProp.  Separate fields with sep. Follow last field with lastSep. */
 {
-int i;
 if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->prot1Acc);
-if (sep == ',') fputc('"',f);
-fputc(sep,f);
-if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->prot2Acc);
+fprintf(f, "%s", el->qKgId);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
-fprintf(f, "%f", el->ranking);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->tKgId);
+if (sep == ',') fputc('"',f);
 fputc(sep,f);
-fprintf(f, "%f", el->eVal12);
+fprintf(f, "%g", el->score);
 fputc(sep,f);
-fprintf(f, "%f", el->eVal21);
+fprintf(f, "%g", el->qtEVal);
+fputc(sep,f);
+fprintf(f, "%g", el->tqEVal);
 fputc(lastSep,f);
 }
 
