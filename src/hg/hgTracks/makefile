@@ -27,6 +27,7 @@ compile: $O
 	chmod a+rx $A
 
 install:	compile
+	mkdir -p ${DESTDIR}/usr/local/apache/cgi-bin
 	mv $A ${DESTDIR}/usr/local/apache/cgi-bin/$A
 
 debug: $O
