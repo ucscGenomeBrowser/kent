@@ -134,9 +134,11 @@ for (mc = maf->components; mc != NULL; mc = mc->next)
     chrom = chopPrefix(dbOnly);
     if (mc->strand == '-')
         reverseIntRange(&s, &e, mc->srcSize);
+    fprintf(f, "%s %s (%s) ", 
+    	hOrganism(dbOnly), hFreezeFromDb(dbOnly), dbOnly);
     linkToOtherBrowser(dbOnly, chrom, s, e);
     fprintf(f, "%s:%d-%d</A>, strand %c, size %d\n",
-    	mc->src, s+1, e, mc->strand, mc->size);
+    	chrom, s+1, e, mc->strand, mc->size);
     }
 }
 
@@ -212,7 +214,7 @@ for (i=0; i<aliSize; ++i)
 
 static void capAliTextOnTrack(char *ali, int aliSize, 
 	char *db, char *chrom, int start, int end, 
-	char *track)
+	char *track, boolean onlyCds)
 /* Capitalize exons in alignment. */
 {
 int rowOffset;
@@ -229,6 +231,11 @@ while ((row = sqlNextRow(sr)) != NULL)
         {
 	int s = gp->exonStarts[i];
 	int e = gp->exonEnds[i];
+	if (onlyCds)
+	    {
+	    if (s < gp->cdsStart) s = gp->cdsStart;
+	    if (e > gp->cdsEnd) e = gp->cdsEnd;
+	    }
 	if (s < start) s = start;
 	if (e > end) e = end;
 	capAliRange(ali, aliSize, s - start, e - start);
@@ -239,7 +246,7 @@ sqlFreeResult(&sr);
 sqlDisconnect(&conn);
 }
 
-static void capMafOnTrack(struct mafAli *maf, char *track)
+static void capMafOnTrack(struct mafAli *maf, char *track, boolean onlyCds)
 /* Capitalize parts of maf that correspond to exons according
  * to given gene prediction track.  */
 {
@@ -260,7 +267,7 @@ for (mc = maf->components; mc != NULL; mc = mc->next)
 	    reverseComplement(mc->text, maf->textSize);
 	    }
 	capAliTextOnTrack(mc->text, maf->textSize, dbOnly, 
-		chrom, start, end, track);
+		chrom, start, end, track, onlyCds);
 	if (mc->strand == '-')
 	    {
 	    reverseComplement(mc->text, maf->textSize);
@@ -287,6 +294,10 @@ else
     return mafLoadInRegion(conn, tdb->tableName, chrom, start, end);
 }
 
+static char *codeAll[] = {
+	"coding",
+	"all",
+};
 
 static void mafOrAxtClick(struct sqlConnection *conn, struct trackDb *tdb, char *axtOtherDb)
 /* Display details for MAF or AXT tracks. */
@@ -300,7 +311,6 @@ else
     struct mafAli *mafList, *maf, *subList = NULL;
     int aliIx = 0, realCount = 0;
     char dbChrom[64];
-    struct slName *dbList = NULL, *dbEl;
     char *capTrack;
 
     mafList = mafOrAxtLoadInRegion(conn, tdb, seqName, winStart, winEnd, 
@@ -315,54 +325,23 @@ else
 	    subset->score = mafScoreMultiz(subset);
 	    mafMoveComponentToTop(subset, dbChrom);
 	    slAddHead(&subList, subset);
-
-	    /* Get a list of all databases used in any maf. */
-	    for (mc = subset->components; mc != NULL; mc = mc->next)
-	        {
-		char dbOnly[64];
-		strncpy(dbOnly, mc->src, sizeof(dbOnly));
-		chopPrefix(dbOnly);
-		slNameStore(&dbList, dbOnly);
-		}
 	    ++realCount;
 	    }
 	}
     slReverse(&subList);
-    slReverse(&dbList);
     mafAliFreeList(&mafList);
     if (subList != NULL)
 	{
-	printf("Alignments between");
-	for (dbEl = dbList; dbEl != NULL; dbEl = dbEl->next)
-	    {
-	    char *org = hOrganism(dbEl->name);
-	    tolowers(org);
-	    if (dbEl != dbList)
-	       {
-	       if (dbEl->next == NULL)
-		   printf(" and");
-	       else
-		   printf(",");
-	       }
-	    printf(" %s", org);
-	    freez(&org);
-	    }
-	printf(".  The versions of each genome used are:");
-	printf("<UL>\n");
-	for (dbEl = dbList; dbEl != NULL; dbEl = dbEl->next)
-	    {
-	    char *db = dbEl->name;
-	    char *org = hOrganism(db);
-	    char *freeze = hFreezeFromDb(db);
-	    printf("<LI><B>%s</B> - %s (%s)", org, freeze, db);
-	    freez(&org);
-	    freez(&freeze);
-	    }
-	printf("</UL>\n");
+	char *codeVarName = "hgc.multiCapCoding";
+	char *codeVarVal = cartUsualString(cart, codeVarName, "coding");
+	boolean onlyCds = sameWord(codeVarVal, "coding");
 	puts("<FORM ACTION=\"/cgi-bin/hgc\" NAME=\"gpForm\" METHOD=\"GET\">");
 	cartSaveSession(cart);
 	cgiContinueHiddenVar("g");
-	printf("Capitalize exons based on: ");
+	printf("Capitalize ");
+	cgiMakeDropListFull(codeVarName, codeAll, codeAll, 
+	    ArraySize(codeAll), codeVarVal, autoSubmit);
+	printf("exons based on: ");
 	capTrack = genePredDropDown("hgc.multiCapTrack");
 	printf("<BR>\n");
 	printf("</FORM>\n");
@@ -371,7 +350,7 @@ else
 	    {
 	    mafLowerCase(maf);
 	    if (capTrack != NULL)
-	    	capMafOnTrack(maf, capTrack);
+	    	capMafOnTrack(maf, capTrack, onlyCds);
 	    printf("<B>Alignment %d of %d in window, score %0.1f</B>\n",
 		    ++aliIx, realCount, maf->score);
 	    mafPrettyOut(stdout, maf, 70);
