@@ -20,7 +20,7 @@
 
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: qaPushQ.c,v 1.4 2004/05/05 08:35:28 galt Exp $";
+static char const rcsid[] = "$Id: qaPushQ.c,v 1.5 2004/05/05 10:05:44 galt Exp $";
 
 char msg[2048] = "";
 char ** saveEnv;
@@ -1103,6 +1103,40 @@ freez(&q);
 */
 
 q.next = NULL;
+
+
+/* check for things too big- this could be improved  */
+if (strlen(cgiString("track"))>255)
+    {
+    safef(msg,sizeof(msg),"Track: too long for field, 255 char max. <br>\n");
+    htmShell(TITLE, doMsg, NULL);
+    return;
+    }
+if (strlen(cgiString("dbs"))>255)
+    {
+    safef(msg,sizeof(msg),"Database: too long for field, 255 char max. <br>\n");
+    htmShell(TITLE, doMsg, NULL);
+    return;
+    }
+if (strlen(cgiString("cgis"))>255)
+    {
+    safef(msg,sizeof(msg),"CGIs: too long for field, 255 char max. <br>\n");
+    htmShell(TITLE, doMsg, NULL);
+    return;
+    }
+if (strlen(cgiString("files"))>255)
+    {
+    safef(msg,sizeof(msg),"Files: too long for field, 255 char max. <br>\n");
+    htmShell(TITLE, doMsg, NULL);
+    return;
+    }
+if (strlen(cgiString("stat"))>255)
+    {
+    safef(msg,sizeof(msg),"Status: too long for field, 255 char max. <br>\n");
+    htmShell(TITLE, doMsg, NULL);
+    return;
+    }
+
 
 safef(newQid,      sizeof(newQid)     , cgiString("qid"));
 
