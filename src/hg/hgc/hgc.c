@@ -8446,7 +8446,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     smp = sampleLoad(row+hasBin);
 
     sscanf(smp->name,"footPrinter.%d.%d",&offset,&motifid);
-    sprintf(filename,"../zoo_blanchem/raw_new2_offset%d.fa.main.html?motifID=%d",offset,motifid);
+    sprintf(filename,"../zoo_blanchem/new_raw2_offset%d.fa.main.html?motifID=%d",offset,motifid);
    
  
   //printf("<HEAD><META HTTP-EQUIV=\"REFRESH\"\nCONTENT=\"2;URL=%s\"><TITLE>Reset Cart</TITLE>\n</HEAD>",filename);
