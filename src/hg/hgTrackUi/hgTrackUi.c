@@ -165,13 +165,14 @@ for (fil = mud->filterList; fil != NULL; fil = fil->next)
 endControlGrid(&cg);
 }
 
-
 void colorCrossSpeciesUi(struct trackDb *tdb, boolean colorDefaultOn)
 /* Put up UI for selecting rainbow chromosome color or intensity score. */
 {
 char colorVar[256];
-char *aa;
+char filterVar[256];
+char *aa, *bb;
 char *colorVal = (colorDefaultOn ? "on" : "off");
+char *filterVal = "";
 
 printf("<p><b>Color track based on chromosome</b>: ");
 snprintf(colorVar, sizeof(colorVar), "%s.color", tdb->tableName);
@@ -181,6 +182,10 @@ printf(" on ");
 cgiMakeRadioButton(colorVar, "off", sameString(aa, "off"));
 printf(" off ");
 printf("<br><br>");
+printf("<p><b>Filter by chromosome (eg. chr10) </b>: ");
+snprintf(filterVar, sizeof(filterVar), "%s.chromFilter", tdb->tableName);
+bb = cartUsualString(cart, filterVar, filterVal);
+cgiMakeTextVar(filterVar, cartUsualString(cart, filterVar, ""), 5);
 }
 
 void genericWiggleUi(struct trackDb *tdb, int optionNum )
