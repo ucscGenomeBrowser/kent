@@ -7,8 +7,6 @@
 #include "jksql.h"
 #include "dystring.h"
 
-
-
 void usage()
 {
 errAbort("spliceWalk - uses altGraphX files to construct a splicing graph\n"
@@ -19,6 +17,8 @@ errAbort("spliceWalk - uses altGraphX files to construct a splicing graph\n"
 	 "usage:\n\t"
 	 "spliceWalk <infile.altGraphX.tab> <outFile.bed>\n");
 }
+
+struct spliceGraph *currentGraph = NULL;
 
 void nodeSanityCheck(struct spliceGraph *sg)
 /* Loop through and make sure all the nodes have legit ids. */
@@ -74,7 +74,7 @@ spliceGraphAddNode(sg, e2);
 /* Connect nodes to form path. */
 if(sp->nodes == NULL)
     {
-    spliceNodeConnect(tail, e1);
+//    spliceNodeConnect(tail, e1);
     spliceNodeConnect(e1, e2);
     
 /* Add nodes to splicePath. */
@@ -116,7 +116,6 @@ for(sn=sp->nodes; sn->next != NULL; sn = sn->next)
 return count;
 }
 
-
 void splicePathBedOut(struct splicePath *sp, FILE *out)
 /* Print out a splice path in the form of a bed file, for viewing in the browser. */    
 {
@@ -154,8 +153,6 @@ sg->classStarts = CloneArray(agx->vPositions,  sg->classCount);
 sg->classEnds  = CloneArray(agx->vPositions,  sg->classCount);
 sg->classTypes = CloneArray(agx->vTypes, sg->classCount);
 }
-
-
 
 struct spliceGraph *spliceGraphFromAgx(struct altGraphX *agx)
 /* Construct a list of splice paths, one for every mrnaRef in the altGraphX, and return it. */
@@ -203,26 +200,73 @@ void splicePathCreateStringRep(struct splicePath *sp)
 {
 struct dyString *dy = newDyString(256);
 struct spliceNode *sn = NULL;
-for(sn = sp->nodes; sn->next != NULL; sn = sn->next)
+for(sn = sp->nodes; sn != NULL; sn = sn->next)
     {
-    if(isExon(sn,sn->next))
-	dyStringPrintf(dy, "%d-%d-", sn->class, sn->next->class);
+//    if(isExon(sn,sn->next))
+	dyStringPrintf(dy, "%d-", sn->class);
 //	printf("%s\t%d\t%d\t%d-%d\n", sn->tName, sn->tStart, sn->tEnd, sn->class, sn->next->class);
     }
 sp->path = cloneString(dy->string);
 freeDyString(&dy);
 }
 
-boolean extendsToEnd(struct spliceNode *sn1, struct spliceNode *sn2)
-/* See if the list of nodes starting at sn1 and sn2 are of identical
-   classes until the end. */
+char *getRefForNode(struct spliceGraph *sg, int id)
+/* Return the mrna accession that generated the node id by
+   looking it up in the spliceGraph. */
 {
+struct splicePath *sp = NULL;
+struct spliceNode *sn = NULL;
+for(sp = sg->paths; sp != NULL; sp = sp->next)
+    {
+    for(sn = sp->nodes; sn != NULL; sn = sn->next)
+	if(sn->id == id)
+	    return sp->qName;
+    }
+}
+
+boolean restHardEnds(struct spliceNode *sn)
+/* Return true if this node and all the nodes after it
+   are hard ends. If possible partial exons are extended to
+   meet potential potential splice sites. */
+{
+for(; sn != NULL; sn=sn->next)
+    if(sn->type != ggHardEnd && sn->type != ggSoftEnd)
+	return FALSE;
+return TRUE;
+}
+
+
+boolean matchInHardEnds(struct spliceNode *sn1, struct spliceNode *sn2)
+/* Try to find a match in sn1 list to sn2 node. */
+{
+for(; sn1 != NULL; sn1 = sn1->next)
+    for(; sn2 != NULL; sn2 = sn2->next)
+	if(sn1->class == sn2->class)
+	    return TRUE;
+return FALSE;
+}
+
+boolean extendsToEnd(struct spliceNode *sn1, struct spliceNode *sn2, boolean allSn2)
+/* See if the list of nodes starting at sn1 and sn2 are of identical
+   classes until the end. If allSn2 then all of sn2 must be present
+   in sn1 to return TRUE.*/
+{
+boolean extends = TRUE;
 for(; sn1 != NULL && sn2 != NULL; sn1=sn1->next, sn2=sn2->next)
     {
-    if(sn1->class != sn2->class)
-	return FALSE;
+    if(sn1->class != sn2->class) 
+	{
+	struct spliceNode *test = NULL;
+	if(restHardEnds(sn1) || restHardEnds(sn2))
+	    extends = matchInHardEnds(sn1, sn2);
+	else
+	    extends = FALSE;
+	}
+
     }
-return TRUE;
+if(extends && allSn2)
+    extends = restHardEnds(sn2);
+return extends;
 }
 
 void connectNodeList(struct spliceNode *sn1, struct spliceNode *sn2)
@@ -230,10 +274,45 @@ void connectNodeList(struct spliceNode *sn1, struct spliceNode *sn2)
 {
 for(; sn1 != NULL && sn2 != NULL; sn1=sn1->next, sn2=sn2->next)
     {
-    assert(sn1->class == sn2->class);
-    spliceNodeConnect(sn1,sn2);
+    if(sn1->class == sn2->class)
+	spliceNodeConnect(sn1,sn2);
+    else if(restHardEnds(sn1) || restHardEnds(sn2))
+	{
+	struct spliceNode *fuzzy1 = sn1;
+	struct spliceNode *fuzzy2 = sn2;
+	boolean problem = FALSE;
+	for(; fuzzy1 != NULL; fuzzy1 = fuzzy1->next)
+	    {
+	    for(; fuzzy2 != NULL; fuzzy2 = fuzzy2->next)
+		{
+		if(fuzzy1->class == fuzzy2->class)
+		    {
+		    spliceNodeConnect(fuzzy1,fuzzy2);
+		    problem = FALSE;
+		    }
+		}
+	    }
+	if(problem)
+	    {
+	    char *mRna1 = NULL, *mRna2 = NULL;
+	    mRna1 = getRefForNode(currentGraph, sn1->id);
+	    mRna2 = getRefForNode(currentGraph, sn2->id);
+	    errAbort("spliceWalk::connectNodeList() - Having trouble finding match in mRna1: %s node %d and mRna2: %s node %d",
+		     mRna1, sn1->id, mRna2, sn2->id);
+	    }
+	}
+    else
+	{
+	char *mRna1 = NULL, *mRna2 = NULL;
+	mRna1 = getRefForNode(currentGraph, sn1->id);
+	mRna2 = getRefForNode(currentGraph, sn2->id);
+	errAbort("spliceWalk::connectNodeList() - Can't connect mRna1: %s node %d and mRna2: %s node %d",
+		 mRna1, sn1->id, mRna2, sn2->id);
+	}
     }
 }
+
+
 
 void splicePathConnectEquivalentNodes(struct splicePath *hayStack, struct splicePath *needle)
 /* Try to align one path to another and connect nodes that
@@ -242,17 +321,40 @@ void splicePathConnectEquivalentNodes(struct splicePath *hayStack, struct splice
 struct spliceNode *sn = NULL;
 struct spliceNode *mark = NULL;
 boolean keepGoing = TRUE;
+if(strstr(hayStack->qName, "AI635570") && strstr(needle->qName,"BI910851"))
+    uglyf("watchout...\n");
 for(sn = hayStack->nodes; sn != NULL && keepGoing; sn = sn->next)
     {
     if(needle->nodes->class == sn->class)
 	{
-	if(extendsToEnd(sn, needle->nodes))
+	if(extendsToEnd(sn, needle->nodes, FALSE))
 	    {
 	    connectNodeList(sn, needle->nodes);
 	    }
 	keepGoing = FALSE;
 	}
     }
+}
+
+boolean isSubPath(struct splicePath *hayStack, struct splicePath *needle)
+/* Return TRUE if the needle is a subpath of the haystack, FALSE otherwise. */
+{
+struct spliceNode *sn = NULL;
+boolean subPath = FALSE;
+boolean keepGoing = TRUE;
+if(sameString(hayStack->path, "0-1-2-3-4-5-6-7-8-10-11-") && sameString(needle->path,"4-5-6-7-8-9-10-11-"))
+    warn("Why isn't this working");
+for(sn = hayStack->nodes; sn != NULL && keepGoing; sn = sn->next)
+    {
+    if(needle->nodes->class == sn->class)
+	{
+	if(extendsToEnd(sn, needle->nodes, TRUE))
+	    subPath = TRUE;
+	keepGoing = FALSE;
+	}
+
+    }
+return subPath;
 }
 
 
@@ -270,7 +372,7 @@ for(path1 = sg->paths; path1 != NULL; path1 = path1->next)
     {
     if(sameString(path1->qName,"BE738125"))
 	warn("Get ready");
-    for(path2 = sg->paths; path2 != NULL; path2 = path2->next)
+    for(path2 = path1->next; path2 != NULL; path2 = path2->next)
 	{
 	if(path1 != path2)
 	    splicePathConnectEquivalentNodes(path1, path2);
@@ -308,6 +410,7 @@ slReverse(&sp->nodes);
 return sp;
 }
 
+
 void checkForMaximalPath(struct spliceGraph *sg, struct splicePath **maximalPaths, struct splicePath *history)
 /* Look to see if the history path is a subpath of any of the 
    maximalPaths or vice versa. */
@@ -316,15 +419,17 @@ struct splicePath *sp = NULL, *spNext = NULL;
 boolean maximal = TRUE;
 slReverse(&history->nodes);
 splicePathCreateStringRep(history);
+if(history->nodes != NULL && strstr(history->path, "-1-"))
+    uglyf("Checking path %s\n', history->path");
 for(sp = *maximalPaths; sp != NULL; sp = spNext)
     {
     spNext = sp->next;
-    if(strstr(sp->path, history->path))
+    if(isSubPath(sp, history))
 	{
 	maximal = FALSE;
 	break;
 	}
-    else if(strstr(history->path, sp->path))
+    else if(isSubPath(history, sp))
 	{
 	slRemoveEl(maximalPaths, sp);
 //	splicePathFree(&sp);
@@ -339,6 +444,8 @@ if(maximal)
 freez(&history->path);
 slReverse(&history->nodes);
 }
+
+
 
 void spliceGraphPathDfs(struct spliceGraph *sg, struct spliceNode *sn, int nodeIndex, 
 			struct splicePath **maximalPaths, struct splicePath *history)
@@ -384,6 +491,14 @@ freez(&copy);
 sn->color = snBlack;
 }
 
+int nodeStartCmp(const void *va, const void *vb)
+/* Compart to sort based on tStart of node. */
+{
+const struct spliceNode *a = *((struct spliceNode **)va);
+const struct spliceNode *b = *((struct spliceNode **)vb);
+return a->tStart - b->tStart;
+}
+
 struct splicePath *spliceGraphMaximalPaths(struct spliceGraph *sg)
 /* Construct maximal paths through the spliceGraph. Maximal paths
    are those which are not subpaths of any other path. */
@@ -391,13 +506,15 @@ struct splicePath *spliceGraphMaximalPaths(struct spliceGraph *sg)
 int i=0;
 int index = 0;
 struct splicePath *maximalPaths = NULL, *sp = NULL;
+struct spliceNode **orderedNodes = CloneArray(sg->nodes, sg->nodeCount);
+qsort(orderedNodes, sg->nodeCount, sizeof(struct spliceNode *), nodeStartCmp);
 for(i=0; i<sg->nodeCount; i++)
     {
-    if(sg->nodes[i]->color == snWhite)
+    if(orderedNodes[i]->color == snWhite)
 	{
 	struct splicePath *history = NULL;
 	AllocVar(history);
-	spliceGraphPathDfs(sg, sg->nodes[i], i, &maximalPaths, history);
+	spliceGraphPathDfs(sg, orderedNodes[i], i, &maximalPaths, history);
 	freez(&history);
 	}
     }
@@ -440,6 +557,7 @@ for(agx = agxList; agx != NULL; agx = agx->next)
     fprintf(f, "track\n");
     writeOutNodes(agx, f);
     sg = spliceGraphFromAgx(agx);
+    currentGraph = sg;
     fprintf(f, "track\n");
     for(sp = sg->paths; sp != NULL; sp = sp->next)
 	splicePathBedOut(sp,f);
@@ -452,6 +570,7 @@ for(agx = agxList; agx != NULL; agx = agx->next)
     for(sp = spList; sp != NULL; sp = sp->next)
 	splicePathBedOut(sp,f);
     slAddHead(&sgList, sg);
+    currentGraph = NULL;
     }
 warn("Done.");
 carefulClose(&f);
