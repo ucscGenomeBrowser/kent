@@ -2010,6 +2010,10 @@ if (row != NULL)
     if (direction[0] != '0') printf("<B>read direction:</B> %s'<BR>\n", direction);
     printf("<B>cds:</B> %s<BR>\n", cds);
     printf("<B>date:</B> %s<BR>\n", date);
+    if (hasVersion) 
+        {
+        printf("<B>version:</B> %s<BR>\n", version);
+        }
 
     /* Put up Gene Lynx */
     if (sameWord(type, "mrna"))
