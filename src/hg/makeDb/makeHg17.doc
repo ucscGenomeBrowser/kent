@@ -5486,10 +5486,9 @@ cat > makeMaf.csh << '_EOF_'
     csh makeMaf.csh >&! makeMaf.log &
     tail -100f makeMaf.log
 
-XXX - DONE 2004-07-02 15:37
 
     ssh hgwdev
-    mkdir -p /cluster/data/hg17/bed/blastz.mm5/axtBest
+    mkdir /cluster/data/hg17/bed/blastz.mm5/axtBest
     cd /cluster/data/hg17/bed/blastz.mm5/axtBest
     ln -s ../axtNet/chr*.axt .
 
@@ -5501,6 +5500,7 @@ XXX - DONE 2004-07-02 15:37
     cd /usr/local/apache/htdocs/goldenPath/hg17/vsMm5/axtNet
     gzip *.axt
     # add README.txt file to dir (use previous assembly's copy as template)
+    #	32 minute gzip
 
     #  Convert those axt files to psl
     ssh eieio
@@ -5508,10 +5508,10 @@ XXX - DONE 2004-07-02 15:37
     mkdir pslBest
     foreach a (axtBest/chr*.axt)
 	set c=$a:t:r
-	echo "processing $c.axt -> ${c}_blastzBestMm5.psl"
+	echo -n "processing $c.axt -> ${c}_blastzBestMm5.psl ..."
     /cluster/bin/i386/axtToPsl axtBest/${c}.axt \
 	S1.len S2.len pslBest/${c}_blastzBestMm5.psl
-	echo "Done: ${c}_blastzBestMm5.psl"
+	echo "Done"
     end
 
     # Load tables
@@ -5525,6 +5525,8 @@ XXX - DONE 2004-07-02 15:37
 
      # check results
     # featureBits hg17 blastzBestMm5
+    #	1013348528 bases of 2866216770 (35.355%) in intersection
+    # featureBits hg17 blastzBestMm4
     #	1017319919 bases of 2866216770 (35.493%) in intersection
     # featureBits hg16 blastzBestMm5
     #	996722004 bases of 2865248791 (34.787%) in intersection
@@ -5539,13 +5541,13 @@ XXX - DONE 2004-07-02 15:37
        set chr=$f:t:r
        echo "INSERT INTO axtInfo (species, alignment, chrom, fileName) \
                 VALUES ('mm5','Blastz Best in Genome','$chr','$f');" \
-         >> axtInfoInserts.sql
+         >>! axtInfoInserts.sql
      end
     hgsql hg17 < ~/kent/src/hg/lib/axtInfo.sql
     #	table axtInfo may already exist, ignore create error.
     hgsql hg17 < axtInfoInserts.sql
 
-# MAKING MOUSE SYNTENY (DONE - 2004-06-29 - Hiram)
+# MAKING MOUSE SYNTENY (WORKING - 2004-07-02 - Hiram)
 
 ssh hgwdev
 mkdir /cluster/data/hg17/bed/syntenyMm5
@@ -5559,6 +5561,7 @@ cp -p /cluster/data/hg17/bed/syntenyRn3/*.pl .
 ./joinsmallgaps.pl
 ./fillgap.pl -db=hg17 -table=blastzBestMm5
 ./synteny2bed.pl
+XXX - running 2004-07-02 23:20
 #	The five commands above
 #	real    220m16.227s
 #	user    0m22.940s
@@ -5577,25 +5580,32 @@ hgLoadBed hg17 ensRatMm5Hom ucsc100k.bed -sqlTable=ensRatMm5Hom.sql
     #	featureBits hg16 syntenyMm5
     #	2560252977 bases of 2865248791 (89.355%) in intersection
 
-# MAKING MOUSE AXTTIGHT FROM AXTBEST (DONE - 2004-06-29 - Hiram)
+# MAKING MOUSE AXTTIGHT FROM AXTBEST (DONE - 2004-07-02 - Hiram)
     # After creating axtBest alignments above, use subsetAxt to get axtTight:
     ssh eieio
     cd /cluster/data/hg17/bed/blastz.mm5/axtNet
     mkdir -p ../axtTight
-    foreach i (*.axt)
+    bash	#	for tcsh users
+    for i in *.axt
+    do
       echo $i
       subsetAxt  $i ../axtTight/$i \
-        ~kent/src/hg/mouseStuff/subsetAxt/coding.mat 3400
-    end
+	~kent/src/hg/mouseStuff/subsetAxt/coding.mat 3400
+    done
+    # exit bash if you are tcsh
+    #	An 8 minute job
 
     # translate to psl
     cd ../axtTight
     mkdir ../pslTight
-    foreach i (*.axt)
-      set c = $i:r
+    bash	#	for tcsh users
+    for i in *.axt
+    do
+      c=${i/.axt/}
       axtToPsl $i ../S1.len ../S2.len ../pslTight/${c}_blastzTightMm5.psl
-      echo "Done: $i"
-    end
+      echo "Done: $i -> ${c}_blastzTightMm5.psl"
+    done
+    # exit bash if you are tcsh
 
     # Load tables into database
     ssh hgwdev
@@ -5608,6 +5618,8 @@ hgLoadBed hg17 ensRatMm5Hom ucsc100k.bed -sqlTable=ensRatMm5Hom.sql
 
     #	Compare results with previous assembly:
     #	featureBits hg17 blastzTightMm5
+    #	165862935 bases of 2866216770 (5.787%) in intersection
+    #	featureBits hg17 blastzTightMm4
     #	166569246 bases of 2866216770 (5.811%) in intersection
     #	featureBits hg16 blastzTightMm5
     #	162641577 bases of 2865248791 (5.676%) in intersection
@@ -5620,6 +5632,15 @@ hgLoadBed hg17 ensRatMm5Hom ucsc100k.bed -sqlTable=ensRatMm5Hom.sql
     cd /usr/local/apache/htdocs/goldenPath/hg17/vsMm5/axtTight
     gzip *.axt
     # add README.txt file to dir (use previous assembly's copy as template)
+    #	4 minute gzip
+
+# BLASTZ MM5 CLEAN UP (RUNNING 2004-07-02 23:25 - Hiram)
+    ssh eieio
+    cd /cluster/data/hg17/bed/blastz.mm5
+    nice rm -rf raw &
+    nice rm -fr axtChain/n1 axtChain/hNoClass.net &
+    nice rm axtChain/run1/chain/* &
+    nice gzip axtChrom/* pslChrom/* lav/*/* axtChain/all.chain axtChain/*.net &
 
 #  MAKING BLASTZ SELF (WORKING - 2004-07-01 - Hiram)
 
