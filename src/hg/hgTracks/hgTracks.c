@@ -75,7 +75,7 @@
 #include "cdsColors.h"
 #include "cds.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.652 2004/01/08 19:37:39 kent Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.653 2004/01/09 22:13:11 hiram Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
@@ -5937,6 +5937,14 @@ if (withLeftLabels)
         minRangeCutoff = max( atof(cartUsualString(cart,o4,"0.0"))-0.1, track->minRange );
    	maxRangeCutoff = min( atof(cartUsualString(cart,o5,"1000.0"))+0.1, track->maxRange);
 	
+	/*  if a track can do its own left labels, do them after drawItems */
+	if (track->drawLeftLabels != NULL)
+	    {
+	    if (withCenterLabels)
+		y += fontHeight;
+	    y += track->height;
+	    continue;
+	    }
     	if( sameString( track->mapName, "humMusL" ) ||
 	    sameString( track->mapName, "musHumL" ) ||
 	    sameString( track->mapName, "mm3Rn2L" ) ||		
@@ -6197,6 +6205,46 @@ if (withCenterLabels)
 	    y += track->height;
 	    }
 	}
+    }
+
+/* if a track can draw its left labels, now is the time since it
+ *	knows what exactly happened during drawItems
+ */
+if (withLeftLabels)
+    {
+    y = yAfterRuler;
+    for (track = trackList; track != NULL; track = track->next)
+	{
+	if (track->limitedVis != tvHide)
+	    {
+	    if (track->drawLeftLabels != NULL)
+		{
+		int tHeight = track->height;
+		if (withCenterLabels)
+		    tHeight += fontHeight;
+		if (track->limitedVis == tvPack)
+		    { /*XXX This needs to be looked at, no example yet*/
+		    vgSetClip(vg, gfxBorder+trackTabWidth+1, y, 
+		    pixWidth-2*gfxBorder-trackTabWidth-1, track->height);
+		    }
+		else
+		    {
+		    vgSetClip(vg, leftLabelX, y, leftLabelWidth, tHeight);
+
+		/* when the limitedVis == tvPack is correct above,
+		 *	this should be outside this else clause
+		 */
+		track->drawLeftLabels(track, winStart, winEnd,
+		    vg, leftLabelX, y, leftLabelWidth, tHeight,
+		    withCenterLabels, font, track->ixColor, track->limitedVis);
+		    }
+		}
+	    if (withCenterLabels)
+		y += fontHeight;
+	    y += track->height;
+	    }
+	}
+    vgUnclip(vg);
     }
 
 /* Make map background. */
