@@ -28,8 +28,8 @@ char *createString =
     "otherStart int unsigned not null,	# Start in other sequence\n"
     "otherEnd int unsigned not null,	# End in other sequence\n"
               "#Indices\n"
-    "INDEX(chrom(12),chromStart),\n"
-    "INDEX(chrom(12),chromEnd),\n"
+    "INDEX(chrom(8),chromStart),\n"
+    "INDEX(chrom(8),chromEnd),\n"
     "INDEX(name(12))\n"
 ")\n";
 
