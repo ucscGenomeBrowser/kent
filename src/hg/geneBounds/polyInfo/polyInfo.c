@@ -9,7 +9,7 @@
 #include "jksql.h"
 #include "estOrientInfo.h"
 
-static char const rcsid[] = "$Id: polyInfo.c,v 1.5 2003/05/06 07:22:18 kate Exp $";
+static char const rcsid[] = "$Id: polyInfo.c,v 1.6 2003/06/10 17:28:07 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -70,8 +70,16 @@ unsigned *sizes = psl->blockSizes, *starts = psl->tStarts;
 
 for (i=1; i<blockCount; ++i)
     {
-    s = starts[i-1] + sizes[i-1];
-    e = starts[i];
+    if (psl->strand[1] == '-')
+        {
+        s = (psl->tSize - starts[i-1]);
+        e = (psl->tSize - starts[i]) + sizes[i-1];
+        }
+    else
+        {
+        s = starts[i-1] + sizes[i-1];
+        e = starts[i];
+        }
     sumSplice += intronOrientation(dna+s,dna+e);
     }
 if (psl->strand[0] == '-')
@@ -104,8 +112,6 @@ for (i=0; i<size; ++i)
     }
 return count;
 }
-
-
 
 void correctEst(struct psl *psl, struct dnaSeq *est, struct dnaSeq *geno)
 /* Correct bases in EST to match genome where they align. */
