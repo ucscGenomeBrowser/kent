@@ -17,7 +17,7 @@
 #include "joiner.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: filterFields.c,v 1.11 2004/09/25 05:09:02 kent Exp $";
+static char const rcsid[] = "$Id: filterFields.c,v 1.12 2004/10/01 21:26:43 kent Exp $";
 
 /* ------- Stuff shared by Select Fields and Filters Pages ----------*/
 
@@ -929,7 +929,7 @@ slFreeList(&tokList);
 }
 
 
-char *filterClause(char *db, char *table)
+char *filterClause(char *db, char *table, char *chrom)
 /* Get filter clause (something to put after 'where')
  * for table */
 {
@@ -938,6 +938,16 @@ int varPrefixSize, fieldNameSize;
 struct hashEl *varList, *var;
 struct dyString *dy = NULL;
 boolean needAnd = FALSE;
+char splitTable[256];
+
+/* Cope with split table. */
+    {
+    struct sqlConnection *conn = sqlConnect(db);
+    safef(splitTable, sizeof(splitTable), "%s_%s", chrom, table);
+    if (!sqlTableExists(conn, splitTable))
+	safef(splitTable, sizeof(splitTable), "%s", table);
+    sqlDisconnect(&conn);
+    }
 
 /* Get list of filter variables for this table.  Return
  * NULL if no filter on us. */
@@ -986,7 +996,7 @@ for (var = varList; var != NULL; var = var->next)
 		if (needOr)
 		    dyStringAppend(dy, " OR ");
 		needOr = TRUE;
-		dyStringPrintf(dy, "%s.%s.%s ", db, table, field);
+		dyStringPrintf(dy, "%s.%s.%s ", db, splitTable, field);
 		if (sqlWildcardIn(sqlPat))
 		    {
 		    if (neg)
@@ -1030,19 +1040,19 @@ for (var = varList; var != NULL; var = var->next)
 		    {
 		    double a = atof(words[0]), b = atof(words[1]);
 		    dyStringPrintf(dy, "%s.%s.%s >= %f && %s.%s.%s < %f",
-		    	db, table, field, a, db, table, field, b);
+		    	db, splitTable, field, a, db, splitTable, field, b);
 		    }
 		else
 		    {
 		    int a = atoi(words[0]), b = atoi(words[1]);
 		    dyStringPrintf(dy, "%s.%s.%s >= %d && %s.%s.%s < %d",
-		    	db, table, field, a, db, table, field, b);
+		    	db, splitTable, field, a, db, splitTable, field, b);
 		    }
 		freez(&dupe);
 		}
 	    else
 	        {
-		dyStringPrintf(dy, "%s.%s.%s %s ", db, table, field, cmpVal);
+		dyStringPrintf(dy, "%s.%s.%s %s ", db, splitTable, field, cmpVal);
 		if (strchr(pat, '.'))	/* Assume floating point. */
 		    dyStringPrintf(dy, "%f", atof(pat));
 		else
@@ -1085,7 +1095,7 @@ void doTest(struct sqlConnection *conn)
 char *s = NULL;
 textOpen();
 hPrintf("Doing test!\n");
-s = filterClause("hg16", "knownGene");
+s = filterClause("hg16", "knownGene", "chrX");
 if (s != NULL)
     hPrintf("%s\n", s);
 else

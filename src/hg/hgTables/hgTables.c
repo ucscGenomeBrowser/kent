@@ -22,7 +22,7 @@
 #include "hgTables.h"
 #include "joiner.h"
 
-static char const rcsid[] = "$Id: hgTables.c,v 1.75 2004/10/01 19:27:44 kent Exp $";
+static char const rcsid[] = "$Id: hgTables.c,v 1.76 2004/10/01 21:26:43 kent Exp $";
 
 
 void usage()
@@ -428,11 +428,6 @@ char *chromTable(struct sqlConnection *conn, char *table)
  * You can freeMem this when done. */
 {
 char *chrom = hDefaultChrom();
-#ifdef NEEDED_UNTIL_GB_CDNA_INFO_CHANGE
-if (sameString("mrna", table))
-    return cloneString(table);
-else 
-#endif /* NEEDED_UNTIL_GB_CDNA_INFO_CHANGE */
 if (sqlTableExists(conn, table))
     return cloneString(table);
 else
@@ -844,7 +839,6 @@ struct hash *idHash = NULL;
 int outCount = 0;
 boolean isPositional;
 boolean doIntersection;
-char *filter = filterClause(db, table);
 int fieldCount;
 int bedFieldsOffset, bedFieldCount;
 char *idField;
@@ -897,6 +891,7 @@ for (region = regionList; region != NULL; region = region->next)
     struct sqlResult *sr;
     char **row;
     int colIx, lastCol = fieldCount-1;
+    char *filter = filterClause(db, table, region->chrom);
 
     sr = regionQuery(conn, table, fieldSpec->string, 
     	region, isPositional, filter);
@@ -924,12 +919,12 @@ for (region = regionList; region != NULL; region = region->next)
     sqlFreeResult(&sr);
     if (!isPositional)
         break;	/* No need to iterate across regions in this case. */
+    freez(&filter);
     }
 
 /* Do some error diagnostics for user. */
 if (outCount == 0)
     explainWhyNoResults();
-freez(&filter);
 hashFree(&idHash);
 }
 

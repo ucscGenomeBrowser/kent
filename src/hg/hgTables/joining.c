@@ -14,7 +14,7 @@
 #include "hdb.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: joining.c,v 1.27 2004/09/17 17:57:12 kent Exp $";
+static char const rcsid[] = "$Id: joining.c,v 1.28 2004/10/01 21:26:43 kent Exp $";
 
 struct joinedRow
 /* A row that is joinable.  Allocated in joinableResult->lm. */
@@ -504,7 +504,8 @@ struct joinerPair *jp;
 int fieldCount = 0, keyCount = 0;
 int idFieldIx = -1;
 struct sqlConnection *conn = sqlConnect(tj->database);
-char *filter = filterClause(tj->database, tj->table);
+char *filter = filterClause(tj->database, tj->table, regionList->chrom);
+     /* Note this will have problems on split tables.  Argh... messy to resolve. */
 
 if (filter != NULL)
     {

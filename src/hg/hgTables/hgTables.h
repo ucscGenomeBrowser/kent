@@ -294,7 +294,7 @@ void tabOutSelectedFields(
 boolean anyFilter();
 /* Return TRUE if any filter set. */
 
-char *filterClause(char *db, char *table);
+char *filterClause(char *db, char *table, char *chrom);
 /* Get filter clause (something to put after 'where')
  * for table */
 
