@@ -126,11 +126,12 @@ Create packed chromosome sequence files
      cd ~/mm
      tcsh jkStuff/makeNib.sh
 
-Load chromosome sequence info into database 
+Load chromosome sequence info into database and save size info.
      ssh hgwdev
      hgsql mm2  < ~/src/hg/lib/chromInfo.sql
      cd ~/mm
      hgNibSeq -preMadeNib mm2 /cluster/store2/mm.2002.02/mm2/nib ?/chr*.fa ??/chr*.fa 
+     mysql -u hguser -phguserstuff -N -e "select chrom,size from chromInfo" hg12 > chrom.sizes
 
 Store o+o info in database.
      cd /cluster/store2/mm.2002.02/mm2
