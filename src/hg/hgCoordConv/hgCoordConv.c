@@ -406,7 +406,6 @@ int main(int argc, char *argv[])
 {
 onWeb = cgiIsOnWeb();
 cgiSpoof(&argc, argv);
-puts("Content-type:text/html\n\n");
 checkArguments();
 /* do our thing  */
 if(calledSelf)
