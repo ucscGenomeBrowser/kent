@@ -1,0 +1,498 @@
+# Chimp pre-assembly
+
+# Downloaded files from Whitehead:
+
+#ftp-genome.wi.mit.edu
+#Dir: Assembly.Nov1.2003
+
+#unzip
+#The scaffold count is 37927.
+
+#% faSize contigs.bases
+#2733948177 bases (0 N's 2733948177 real) in 361864 sequences in 1 files
+#Total size: mean 7555.2 sd 9652.7 min 19 (contig_358805) max 160254 (contig_301167) median 3470
+#N count: mean 0.0 sd 0.0
+
+# Split into 500KB chunks for RepeatMasking
+    ssh kksilo
+    cd /cluster/data/pt0
+    mkdir -p split500K
+    faSplit sequence contigs.bases 10 split500K/
+    cd split500K
+    foreach f (*.fa)
+        set d = $f:t:r
+        mkdir -p $d
+        faSplit about $f 500000 $d/
+        rm $f
+    end
+
+# Create RM script and cluster job
+    cd /cluster/data/pt0
+    mkdir -p jkStuff
+    mkdir -p RMRun
+    rm -f RMRun/RMJobs
+
+    cat << '_EOF_' > jkStuff/RMChimp
+#!/bin/csh -fe
+cd $1
+pushd .
+/bin/mkdir -p /tmp/pt0/$2
+/bin/cp $2 /tmp/pt0/$2
+cd /tmp/pt0/$2
+/scratch/hg/RepeatMasker/RepeatMasker $2
+popd
+/bin/cp /tmp/pt0/$2/$2.out ./
+/bin/rm -fr /tmp/pt0/$2/*
+/bin/rmdir --ignore-fail-on-non-empty /tmp/pt0/$2
+/bin/rmdir --ignore-fail-on-non-empty /tmp/pt0
+'_EOF_'
+
+    chmod +x jkStuff/RMChimp
+
+    mkdir -p RMRun
+    rm -f RMRun/RMJobs
+    foreach d ( split500K/?? )
+        foreach f ( $d/*.fa )
+            set f = $f:t
+            echo /cluster/data/pt0/jkStuff/RMChimp \
+                /cluster/data/pt0/$d $f \
+            '{'check out line+ /cluster/data/pt0/$d/$f.out'}' \
+            >> RMRun/RMJobs
+        end
+    end
+    #5367 RMJobs
+
+# Run cluster job
+
+    sh kk
+    cd /cluster/data/pt0/RMRun
+    para create RMJobs
+    para try, para check, para check, para push, para check,...
+    #Completed: 5367 of 5367 jobs
+#CPU time in finished jobs:   14066571s  234442.85m  3907.38h  162.81d  0.446 y
+#IO & Wait Time:                 72512s    1208.53m    20.14h    0.84d  0.002 y
+#Average job time:                2634s      43.91m     0.73h    0.03d
+#Longest job:                     5696s      94.93m     1.58h    0.07d
+#Submission to last job:         41294s     688.23m    11.47h    0.48d
+
+
+# TRF: Tandem Repeat Finder
+    # create job list of 5MB chunks
+    ssh kksilo
+    cd /cluster/data/pt0
+    mkdir -p split5M
+    faSplit about contigs.bases 5000000 split5M/
+
+    cd /cluster/data/pt0
+    mkdir -p bed/simpleRepeat
+    cd bed/simpleRepeat
+    mkdir trf
+    rm -f jobs.csh
+    echo '#\!/bin/csh -fe' > jobs.csh
+
+    foreach f (/cluster/data/pt0/split5M/*.fa)
+      set fout = $f:t:r.bed
+      echo "/cluster/bin/i386/trfBig -trf=/cluster/bin/i386/trf $f /dev/null -bedAt=trf/$fout -tempDir=/tmp" \
+        >> jobs.csh
+    end
+    chmod +x jobs.csh
+    wc -l jobs.csh
+    #   546 jobs.csh
+
+    ./jobs.csh >&! jobs.log &
+    # in bash:  ./jobs.csh > jobs.log 2>&1 &
+    tail -f jobs.log
+
+# FILTER SIMPLE REPEATS INTO MASK
+    # make a filtered version # of the trf output: 
+    # keep trf's with period <= 12:
+    ssh kksilo
+    cd /cluster/data/pt0/bed/simpleRepeat
+    mkdir -p trfMask
+    foreach f (trf/*.bed)
+        echo "filtering $f"
+        awk '{if ($5 <= 12) print;}' $f > trfMask/$f:t
+    end
+
+# MASK CONTIGS WITH REPEATMASKER
+    ssh kksilo
+    cd /cluster/data/pt0
+    cd split500K
+    foreach d (??)
+        foreach f ($d/*.fa)
+            echo "Masking $f"
+            maskOutFa $f $f.out $f -soft
+        end
+    end
+#WARNING: negative rEnd: -92 contig_143568:1128-1159 MER46B
+#WARNING: negative rEnd: -155 contig_143869:5374-5508 AluJb
+# etc.
+# Comment in rn3 doc (Hiram) indicates these are OK...
+
+    # Merge 500K masked chunks into single file, then split into 5Mb chunks 
+    # to prepare for TRF masking
+    foreach d (??)
+        echo "Contig dir $d"
+        foreach f ($d/?.fa $d/??.fa $d/???.fa)
+            set g = $f:h
+            cat $f >> $g.fa
+        end
+    end
+    # check the split500K/??.fa  masked files, then
+    cd /cluster/data/pt0
+    cat split500K/??.fa > contigs.bases.rmsk
+    # check the rmsk file, then
+    rm split500K/??.fa
+    mkdir -p split5M.rmsk
+    faSplit about contigs.bases.rmsk 5000000 split5M.rmsk/
+    foreach f (split5M.rmsk/*.fa)
+        echo "TRF Masking $f"
+        set b = $f:t:r
+        maskOutFa $f bed/simpleRepeat/trfMask/$b.bed $f -softAdd
+    end
+    cat split5M.rmsk/*.fa > contigs.bases.msk
+
+
+# RUN BLASTZ VS. HUMAN
+# NOTE: This would normally be doc'ed in the hg16 make doc,
+# however this is just preliminary until the real assembly arrives
+
+# distribute contigs to bluearc and /iscratch/i for cluster run
+    ssh kksilo
+    mkdir -p /cluster/bluearc/pt0/split100
+    faSplit sequence /cluster/data/pt0/contigs.bases.msk 100 /cluster/bluearc/pt0/split100/
+    ssh kkr1u00
+    mkdir -p /iscratch/i/pt0/trfFa
+    df /iscratch/i
+    faSplit sequence /cluster/data/pt0/contigs.bases.msk 100 /iscratch/i/pt0/trfFa/
+    /cluster/bin/scripts/iSync
+
+# make DEF file for blastz
+    ssh kksilo
+    cd /cluster/data/pt0
+    mkdir -p bed/blastz.hg16
+    cd bed/blastz.hg16
+
+# NOTE: need schwartzbin below for utils still not in penn bin
+
+cat << '_EOF_' > DEF
+# human vs. chimp
+export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/home/angie/schwartzbin:/cluster/home/kent/bin/i386
+    
+ALIGN=blastz-run
+BLASTZ=blastz
+BLASTZ_H=2000
+BLASTZ_ABRIDGE_REPEATS=0
+
+# Specific settings for chimp
+BLASTZ_Y=3400
+BLASTZ_T=2
+BLASTZ_K=4500
+BLASTZ_Q=/cluster/data/penn/human_chimp.q
+
+# TARGET
+# Human
+SEQ1_DIR=/iscratch/i/gs.17/build34/bothMaskedNibs
+# not used
+SEQ1_RMSK=
+# not used
+SEQ1_FLAG=
+SEQ1_SMSK=
+SEQ1_IN_CONTIGS=0
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY
+# Chimp
+SEQ2_DIR=/iscratch/i/pt0/trfFa
+# not currently used
+SEQ2_RMSK=
+# not currently used
+SEQ2_FLAG=
+SEQ2_SMSK=
+SEQ2_IN_CONTIGS=1
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+
+BASE=/cluster/store6/pt0/bed/blastz.hg16
+
+DEF=$BASE/DEF
+RAW=$BASE/raw
+CDBDIR=$BASE
+SEQ1_LEN=$BASE/S1.len
+SEQ2_LEN=$BASE/S2.len
+'_EOF_'
+
+    # << this line makes emacs coloring happy
+
+# Save the DEF file in the current standard place
+    cp DEF ~angie/hummus/DEF.hg16-pt0.`date -I`
+
+    ssh kk
+    cd /cluster/data/pt0/bed/blastz.hg16
+    # source the DEF file to establish environment for following commands
+    bash
+    source ./DEF
+    cp /cluster/data/mm4/jkStuff/BlastZ_run0.sh ../../jkStuff
+    ../../jkStuff/BlastZ_run0.sh
+    cd run.0
+    para try
+    para check
+    para push
+# Completed: 33561 of 33561 jobs
+# CPU time in finished jobs:    2748604s   45810.06m   763.50h   31.81d  0.087 y
+# IO & Wait Time:                468757s    7812.62m   130.21h    5.43d  0.015 y
+# Average job time:                  96s       1.60m     0.03h    0.00d
+# Longest job:                     3289s      54.82m     0.91h    0.04d
+# Submission to last job:          6757s     112.62m     1.88h    0.08d
+
+    #   Second cluster run to convert the .out's to .lav's
+    cp /cluster/data/mm4/jkStuff/BlastZ_run1.sh /cluster/data/pt0/jkStuff
+    ssh kk
+    cd /cluster/data/pt0/bed/blastz.hg16
+    bash
+    source DEF
+    ../../jkStuff/BlastZ_run1.sh
+    cd run.1
+    para try
+    para check
+    para push
+
+    #   Prepare third cluster run script to convert lav's to axt's
+    cd /cluster/data/pt0/bed/blastz.hg16
+cat << '_EOF_' > ../../jkStuff/BlastZ_run2.sh
+#!/bin/sh
+#       prepare third cluster run for blastz processing
+# NOTE: should run this on iservers (4G), 
+# with chr19 and chr1 on kolossus (8G)
+M=`uname -n`
+if [ "$M" != "kk" ]; then
+    echo "ERROR: you are on machine: '$M'"
+    echo -e "\tthis script expects machine kk"
+    exit 255
+fi
+source DEF
+mkdir axtChrom
+mkdir run.2
+cd run.2
+# usage:  blastz-contiglav2axt lav-dir axt-file seq1-dir seq2-file
+echo '#LOOP' > gsub
+echo '/cluster/bin/scripts/blastz-contiglav2axt '${BASE}'/lav/$(root1) {check out line+ '${BASE}'/axtChrom/$(root1).axt} '${SEQ1_DIR} /cluster/bluearc/pt0/contigs.bases.msk >> gsub
+echo '#ENDLOOP' >> gsub
+ls -1S ${BASE}/lav > chrom.list
+gensub2 chrom.list single gsub jobList
+wc -l jobList
+echo "running 'para create'"
+para create jobList
+echo "Ready for cluster run.  para try, check, push, etc ..."
+'_EOF_'
+    chmod +x ../../jkStuff/BlastZ_run2.sh
+    #   Third cluster run to convert lav's to axt's
+    source DEF
+    ../../jkStuff/BlastZ_run2.sh
+    cd run.2
+    para try, check, push, etc ...
+    # NOTE: ran this on kolossus and mini-cluster
+    # 30 min. to 2 hrs. per chrom
+
+# Lift Contig (query side) AXT files to Scaffold coordinates
+
+    ssh kksilo
+    cd /cluster/data/pt0
+    agpToLift < assembly.agp > jkStuff/assembly.lft
+    cd bed/blastz.hg16
+    cp -r axtChrom axtChrom.contig
+    cd axtChrom
+cat << 'EOF' > doLift.csh
+#!/bin/csh
+    foreach f (*.axt)
+        echo "Lifting $f"
+        liftUp -axtQ $f.lft /cluster/data/pt0/jkStuff/assembly.lft warn $f
+        mv $f.lft $f
+    end
+'EOF'
+    # << this line makes emacs coloring happy
+    chmod +x doLift.csh
+    csh doLift.csh >&! doLift.log &
+    tail -100f doLift.log
+
+    # create scaffold fasta file from contig file and agp
+    agpAllToFaFile assembly.agp contigs.bases.msk scaffolds.msk.fa -sizes=scaffold.sizes
+        # takes 20 minutes
+    
+
+# CHAIN HG16 BLASTZ
+
+# The axtChain is usually run on the small cluster,
+# as follows, however for this run, with large fasta file
+# instead of nibs, required kolossus.
+    #ssh kkr1u00
+    #cd /cluster/data/pt0/bed/blastz.hg16
+    #mkdir -p axtChain/run1
+    #cd axtChain/run1
+    #mkdir out chain
+
+    #ls -1S /cluster/data/pt0/bed/blastz.hg16/axtChrom/*.axt > input.lst
+    #cat << '_EOF_' > gsub
+#LOOP
+#doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain} {check out line+ out/$(root1).out}
+#ENDLOOP
+#'_EOF_'
+    # << this line makes emacs coloring happy
+
+    #cat << '_EOF_' > doChain
+#!/bin/csh
+    #axtFilter -notQ_random $1 | axtChain stdin \
+        #/iscratch/i/gs.17/build34/bothMaskedNibs \
+        #-faQ /cluster/bluearc/pt0/scaffolds.msk.fa $2 > $3
+#'_EOF_'
+    # << this line makes emacs coloring happy
+    #chmod a+x doChain
+    
+    # 42 jobs 
+    #gensub2 input.lst single gsub jobList
+    #grep random jobList > jobList2
+    #mv jobList2 jobList
+    #para create jobList
+    #para try, para check, para push...
+    
+    ssh kolossus
+    cd /cluster/data/pt0/bed/blastz.hg16/axtChain/run1
+    cat << '_EOF_' > doChain.kol
+#!/bin/csh
+    ~/bin/x86_64/axtFilter -notQ_random $1 | ~/bin/x86_64/axtChain stdin \
+        /cluster/data/hg16/nib \
+        -faQ /cluster/bluearc/pt0/scaffolds.msk.fa $2 > $3
+'_EOF_'
+    # << this line makes emacs coloring happy
+    chmod a+x doChain.kol
+
+cat << 'EOF' > runChain.csh
+    set path = (~/bin/x86_64 $path); rehash
+    foreach c (1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 M X Y)
+        echo "chaining chr$c"
+        which axtChain
+        doChain.kol /cluster/data/pt0/bed/blastz.hg16/axtChrom/chr${c}.axt chain/chr${c}.chain out/chr${c}.out
+    end
+'EOF'
+    csh runChain.csh >&! runChain.log &
+    tail -100f runChain.log
+
+cat << 'EOF' > runChainRandom.csh
+    set path = (~/bin/x86_64 $path); rehash
+    foreach c (1 2 3 4 5 6 7 8 9 Un X 10 13 15 17 18 19)
+        echo "chaining chr${c}_random"
+        doChain.kol /cluster/data/pt0/bed/blastz.hg16/axtChrom/chr${c}_random.axt chain/chr${c}_random.chain out/chr${c}_random.out
+    end
+'EOF'
+    csh runChainRandom.csh >&! runChainRandom.log &
+    tail -100f runChainRandom.log
+
+    # 7 minutes per chrom -- ~4.5 hrs
+
+    # now on the server, sort chains
+    ssh kksilo
+    cd /cluster/data/pt0/bed/blastz.hg16/axtChain
+    time chainMergeSort run1/chain/*.chain > all.chain
+        #94.050u 10.830s 1:54.09 91.9% 
+    time chainSplit chain all.chain
+        #85.530u 10.690s 1:46.58
+
+    ssh hgwdev
+    cd /cluster/data/pt0/bed/blastz.hg16/axtChain/chain
+    foreach i (*.chain)
+        set c = $i:r
+        hgLoadChain hg16 ${c}_chainPt0 $i
+        echo done $c
+    end
+    
+    # optionally: rm run1/chain/*.chain
+
+
+
+# NET HUMAN BLASTZ
+
+    ssh kksilo
+    cd /cluster/data/pt0/bed/blastz.hg16/axtChain
+    mkdir preNet
+    cd chain
+    foreach i (*.chain)
+      echo preNetting $i
+      /cluster/bin/i386/chainPreNet $i /cluster/data/hg16/chrom.sizes \
+                        /cluster/data/pt0/scaffold.sizes ../preNet/$i
+    end
+
+    cd ..
+    mkdir n1
+    cd preNet
+    foreach i (*.chain)
+      set n = $i:r.net
+      echo primary netting $i
+      /cluster/bin/i386/chainNet $i -minSpace=1 /cluster/data/hg16/chrom.sizes \
+                            /cluster/data/pt0/scaffold.sizes ../n1/$n /dev/null
+    end
+
+    cd ..
+    cat n1/*.net | /cluster/bin/i386/netSyntenic stdin hNoClass.net
+    # memory usage 611950592, utime 1586 s/100, stime 298
+
+    # skipping netClass for this preliminary work -- needs database
+    #ssh hgwdev
+    #cd /cluster/data/pt0/bed/blastz.hg16/axtChain
+    #time netClass hNoClass.net pt0 hg16 human.net \
+	#-tNewR=/cluster/bluearc/scratch/mus/pt0/linSpecRep.notInHuman \
+	#-qNewR=/cluster/bluearc/scratch/hg/gs.17/build34/linSpecRep.notInMouse
+    mv hNoClass.net chimp.net
+
+    # Make a 'syntenic' subset of these with
+    cd /cluster/data/pt0/bed/blastz.hg16/axtChain
+    netFilter -syn chimp.net > chimpSyn.net
+        # takes a few minutes
+
+    # make net
+    ssh kksilo
+    cd /cluster/data/pt0/bed/blastz.hg16/axtChain
+    mkdir chimpNet
+    time netSplit chimp.net chimpNet
+
+    # Load the nets into database 
+    ssh hgwdev
+    cd /cluster/data/pt0/bed/blastz.hg16/axtChain
+    netFilter -minGap=10 chimp.net |  hgLoadNet hg16 netPt0 stdin
+    netFilter -minGap=10 chimpSyn.net | hgLoadNet hg16 syntenyNetPt0 stdin
+
+    # package files for LaDeana
+    cd chimpNet
+    mkdir -p /usr/local/apache/htdocs/kate/chimp
+    tar cvfz humanChimpNet.gz *.chain
+    mv humanChimpNet.gz /usr/local/apache/htdocs/kate/chimp
+    cd ..
+
+    # make chain subset from net (for Tarjei Mikkelson at MIT)
+    cd chimpNet
+    mkdir ../chainSubset
+    foreach f (*.net)
+        set c = $f:r
+        netChainSubset $f ../chain/$c.chain ../chainSubset/$c.chain
+    end
+    cd ../chainSubset
+    tar cvfz humanChimpChain.gz *.chain
+    mv humanChimpChain.gz /usr/local/apache/htdocs/kate/chimp
+    cd ..
+
+# AXT BEST FOR WEBB
+
+    cd /cluster/data/pt0/bed/blastz.hg16/axtChrom
+    mkdir -p ../axtBest
+    foreach f (*.axt)
+      set c = $f:r
+      echo axtBesting $c
+      axtBest $c.axt $c ../axtBest/$c.axt -minScore=300
+    end
+    cd ../axtBest
+    tar cvfz humanChimpAxtBest.gz *.ax
+    mv humanChimpAxtBest.gz /usr/local/apache/htdocs/kate/chimp
+
+
+
+    
