@@ -23,11 +23,12 @@ va_list ap;
 va_start(ap, msg);
 vfprintf(stderr, msg, ap);
 errAbort("\n%s",
-         "pslHisto [options] psl1 psl2 ...\n"
-         "pslHisto [options] -setNames setName1 pslFile1 setName2 pslFile2 ...\n"
+         "pslDiff [options] psl1 psl2 ...\n"
+         "pslDiff [options] -setNames setName1 pslFile1 setName2 pslFile2 ...\n"
          "\n"
          "Compare queries in two or more psl files.\n"
          "Default criteria is to compare the number of alignments,\n"
+         "more criteria will be added in the future.\n"
          "\n"
          "Options:\n"
          "   -details=file - write details of psls that differ to this file\n"
