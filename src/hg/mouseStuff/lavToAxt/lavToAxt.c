@@ -116,8 +116,6 @@ struct axt axt;
 if (blockList == NULL)
     return;
 
-uglyf("outputBlocks isRc %d\n", isRc);
-
 /* Figure overall dimensions. */
 for (block = blockList; block != NULL; block = block->next)
     {
@@ -152,18 +150,21 @@ for (block = blockList; block != NULL; block = block->next)
 	    	lf->lineIx, lf->fileName);
 	    }
 	if (qGap > 0)
+	    {
 	    dyStringAppendMultiC(qSym, '-', qGap);
+	    dyStringAppendN(tSym, tSeq->dna + lastBlock->tEnd - tStart, tGap);
+	    }
 	if (tGap > 0)
+	    {
 	    dyStringAppendMultiC(tSym, '-', tGap);
+	    dyStringAppendN(qSym, qSeq->dna + lastBlock->qEnd - qStart, qGap);
+	    }
 	}
-    uglyf("query: relStart %d, size %d, relSize %d\n", block->qStart - qStart,
-    	qEnd - qStart, qSeq->size);
-    uglyf("target: relStart %d, size %d, relSize %d\n", block->tStart - tStart,
-    	tEnd - tStart, tSeq->size);
     dyStringAppendN(qSym, qSeq->dna + block->qStart - qStart,
     	block->qEnd - block->qStart);
     dyStringAppendN(tSym, tSeq->dna + block->tStart - tStart,
     	block->tEnd - block->tStart);
+    lastBlock = block;
     }
 if (qSym->stringSize != tSym->stringSize)
     errAbort("qSize and tSize don't agree in alignment ending line %d of %s",
