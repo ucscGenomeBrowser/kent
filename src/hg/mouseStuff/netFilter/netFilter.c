@@ -5,7 +5,7 @@
 #include "options.h"
 #include "chainNet.h"
 
-static char const rcsid[] = "$Id: netFilter.c,v 1.10 2003/05/06 07:22:28 kate Exp $";
+static char const rcsid[] = "$Id: netFilter.c,v 1.11 2003/06/21 18:41:23 baertsch Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -27,6 +27,7 @@ errAbort(
   "   -minGap=N  - restrict to those with gap size (tSize) >= minSize\n"
   "   -minAli=N - restrict to those with at least given bases aligning\n"
   "   -syn        - do filtering based on synteny.  \n"
+  "   -nonsyn     - do inverse filtering based on synteny.  \n"
   "   -type=XXX - restrict to given type\n"
   "   -fill - Only pass fills, not gaps. Only useful with -line.\n"
   "   -gap  - Only pass gaps, not fills. Only useful with -line.\n"
@@ -66,7 +67,9 @@ struct hash *tHash, *notTHash;	/* Target chromosomes. */
 struct hash *qHash, *notQHash;	/* Query chromosomes. */
 double minScore, maxScore;	/* Min/max score. */
 boolean doSyn;		/* Do synteny based filtering. */
-double minTopScore = 100000;  /* Minimum score for top level alignments. */
+boolean doNonSyn;		/* Do synteny based filtering. */
+double minTopScore = 300000;  /* Minimum score for top level alignments. */
+/* changed to 300000 from 100000 to cut down on pseudogenes - Robert*/
 double minSynScore = 200000;  /* Minimum score for block to be syntenic 
                                * regardless.  On average in the human/mouse
 			       * net a score of 200,000 will cover 27000 
@@ -121,6 +124,8 @@ if (fill->chainId)
     if (fill->ali < minAli)
         return FALSE;
     if (doSyn && !synFilter(fill))
+	return FALSE;
+    if (doNonSyn && synFilter(fill))
 	return FALSE;
     }
 else
@@ -207,6 +212,7 @@ notQHash = hashCommaOption("notQ");
 minScore = optionInt("minScore", -BIGNUM);
 maxScore = optionFloat("maxScore", 9e99);
 doSyn = optionExists("syn");
+doNonSyn = optionExists("nonsyn");
 minGap = optionInt("minGap", minGap);
 minAli = optionInt("minAli", minAli);
 fillOnly = optionExists("fill");
