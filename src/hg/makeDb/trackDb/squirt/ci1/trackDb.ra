@@ -68,7 +68,7 @@ priority 49
 visibility dense
 type genePred
 
-track blatSavignyi
+track blatCioSav1
 shortLabel C. savignyi Blat
 longLabel Ciona savignyi Translated Blat Alignments
 group compGeno
@@ -105,3 +105,23 @@ searchType bed
 shortCircuit 1
 query select tName,tStart,tEnd,qName from %s where qName like '%%%s%%'
 searchPriority 1
+
+searchTable blatCioSav1
+termRegex paired_scaffold_[0-9]+?
+query select tName,tStart,tEnd,qName from %s where qName like '%s'
+searchMethod prefix
+searchType bed
+shortCircuit 1
+searchPriority 60
+
+searchTable jgiGene
+termRegex ci[0-9]+?
+searchMethod prefix
+searchType genePred
+shortCircuit 1
+searchPriority 49
+
+searchTable snapGene
+searchType genePred
+shortCircuit 1
+searchPriority 50
