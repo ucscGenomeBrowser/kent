@@ -24,11 +24,10 @@ longLabel WormBase Genefinder Gene Predictions
 group genes
 priority 50
 visibility pack
-color 0,0,200
+color 178,34,34
 chromosomes chrI,chrII,chrIII,chrIV,chrV,chrX,chrM
-type genePred sangerPep
+type genePred 
 url http://www.wormbase.org/db/gene/gene?name=$$
-hgGene on
 
 track wabaCbr
 shortLabel Briggsae Waba
