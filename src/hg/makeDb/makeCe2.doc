@@ -535,6 +535,9 @@ done
     cvs commit description.html
   
 # MAKE SANGER GENE (WORM BASE GENES) TRACK (DONE, 2004-04-09, hartera)
+# ADD MISSING ORFS AND PROTEIN NAMES TO sangerLinks TABLE AND 
+# ADD proteinID COLUMN TO SANGERGENE TABLE FOR USE BY THE 
+# FAMILY BROWSER (DONE, 2004-05-20, hartera)
                                                                                 
    # next machine
    ssh eieio
@@ -574,6 +577,9 @@ done
     # next machine
     ssh hgwdev
     cd /cluster/data/ce2/bed/sangerGene
+    # 2004-05-10, hartera, Reload sangerGene table using extended GenePred
+    # format. 2004-05-11, hartera. Extended format frame information does not
+    # look correct. Reload without the extended fields.
     ldHgGene ce2 sangerGene *.gff
 # Read 41259 transcripts in 423845 lines in 7 files
 #  41259 groups 7 seqs 11 sources 6 feature types
@@ -594,12 +600,91 @@ done
 # type genePred sangerPep
 # url http://www.wormbase.org/db/gene/gene?name=$$
 # hgGene on
+    
+    # Add proteinID field to sangerGene table, used by Gene Sorter
+    ssh hgwdev
+    cd /cluster/data/ce2/bed/sangerGene
+    hgsql -e 'alter table sangerGene add proteinID varchar(40) NOT NULL;' ce2
+    # To add index on this column
+    hgsql -e 'alter table sangerGene add index(proteinID);' ce2
+    # Add Swiss-Prot protein IDs to this column
+    # There are 23076 entries in sangerGene and 21780 of the names 
+    # are in sangerLinks as orfName
+    hgsql -N -e 'select count(*) from sangerGene as g,sangerLinks as l \
+           where g.name = l.orfName;' ce2
+    # 21780
+    # get names from sangerGene and sangerLinks tables
+    hgsql -N -e "select name from sangerGene;" ce2 | sort > name.sangerGene
+    hgsql -N -e "select orfName from sangerLinks;" ce2 | sort > orfName.sangerLinks
+    # get list of names in sangerGene not in sangerLinks
+    comm -23 name.sangerGene orfName.sangerLinks > geneNames.notin.sangerLinks
+    # Go to the WS120 WormBase mirror site and check SwissProt IDs
+    # http://http://ws120.wormbase.org/db/searches/info_dump
+    # Some of these genes are non coding RNAs or have no SwissProt ID BUT
+    # others in the geneNames.notin.sangerLinks list do have a Swiss-Prot ID 
+    # Download IDs in using batches of about 400 for gene names from 
+    # geneNames.notin.sangerLinks and add to file, SPIds.wormPep.WS120
+    # Create a perl script to parse out Swiss-Prot IDs for those genes that 
+    # have them and create the sql statements to insert them into sangerLinks
+
+cat << '_EOF_' > getSPIDsandLoad.pl
+#!/usr/bin/perl -w
+use strict;
+my %SPhash;
+my $found = "false";
+my $gene = "";
+my $SP = "";
+
+open(SP, ">addSPIds.sql") || die "Can not create addSPIds.sql: $!";
+while(<STDIN>) {
+    chomp;
+                                                                                    
+    my @fields = split(/\t/);
+    if ($fields[0] =~ /^Gene:/) {
+       $gene = $fields[1];
+    }
+    elsif (($fields[0] =~ /^GenPep:/) && ($gene ne "n/a") ){
+       # if there are 2 fields then store second as Swiss-Prot ID
+       if ($#fields == 1) {
+          $SP = $fields[1];
+       }
+                                                                                    
+       # add gene and Swiss-Prot ID to hash
+       $SPhash{$gene} = $SP;
+       $gene = "";
+       $SP = "";
+    }
+}
+foreach my $g (keys(%SPhash) ) {
+   my $s = $SPhash{$g};
+   # print if there is a Swiss-Prot ID
+   if ($s =~ /^[A-Z]{1}[0-9]+/) {
+       print "Gene: $g\tSP ID: $s\n";
+       # create mySQL to add this to the sangerLinks table;
+       print SP "INSERT into sangerLinks (orfName, protName, description) VALUES(\"$g\",\"$s\",\"\");\n"
+   }
+}
+close SP;
+'_EOF_'
+
+      # run perl script
+      perl getSPIDsandLoad.pl < SPIds.wormPep.WS120 > orfsandSPIds.out
+      # There are 111 of these genes with SwissProt IDs
+      # To insert new orfNames and SwissProt IDs into table:
+      hgsql ce2 < addSPIds.sql 
+      # Now 21891 names in sangerGene that match orfNames in sangerLinks
+
+      # Use SwissProt IDs in sangerLinks table to fill proteinID 
+      # column in the sangerGene table
+      hgsql -e 'update sangerGene as g, sangerLinks as l \
+          set g.proteinID = l.protName where g.name = l.orfName;' ce2
+      # check there are 21891 rows with the protName field filled
 
 # MAKE WORMBASE GENEFINDER TRACKS (DONE, 2004-04-12, hartera)
-   # next machine
-   ssh eieio
-   mkdir -p /cluster/data/ce2/bed/sangerGenefinder
-   cd /cluster/data/ce2/bed/sangerGenefinder
+    # next machine
+    ssh eieio
+    mkdir -p /cluster/data/ce2/bed/sangerGenefinder
+    cd /cluster/data/ce2/bed/sangerGenefinder
     # the perl trims these files down to a reasonable size.  As they are
     #   they cause ldHgGene to hangup due to memory size.
     foreach f (I II III IV V X M)
@@ -635,6 +720,9 @@ done
     # next machine
     ssh hgwdev
     cd /cluster/data/ce2/bed/sangerGenefinder
+    # 2004-05-10, hartera, Reload sangerGene table using extended GenePred 
+    # format. 2004-05-11, hartera. Extended format frame information does not
+    # look correct. Reload without the extended fields.
     ldHgGene ce2 sangerGenefinder *.gff
 # Read 36976 transcripts in 401688 lines in 7 files
 #   36976 groups 6 seqs 1 sources 4 feature types
@@ -757,8 +845,6 @@ exit 0
 #   visibility dense
 #   color 140,0,200
 #   altColor 210,140,250
-
-# NEED TO GET BLAT SERVERS SET UP
 
 # MAKE 2BIT FILE FOR BLAT (DONE, 2004-04-07, hartera)  
     # Make one big 2bit file as well, and make a link to it in
@@ -1077,7 +1163,7 @@ SEQ2_LEN=$BASE/S2.len
         /cluster/bin/i386/hgLoadPsl ce2 chr${d}_blastzCb1.psl
     end
 
-# CHAIN Cb1 BLASTZ (DONE, 2004-04-28, hartera)
+# CHAIN Cb1 BLASTZ (DONE, 2004-04-30, hartera)
 # CHAINS ARE RE-DONE DUE TO BUG IN axtChain which has now been fixed by Jim
     ssh kk
     mkdir -p /cluster/data/ce2/bed/blastz.cb1/axtChain.2004-04-29/run1
@@ -1178,7 +1264,7 @@ doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain} {check
     cd /cluster/data/ce2/bed/blastz.cb1/axtChain.2004-04-29
     netFilter -minGap=10 cb1.net |  hgLoadNet ce2 netCb1 stdin
 
-# MAKE axtNet TRACK (DONE, 2004-04-29, hartera)
+# MAKE axtNet TRACK (DONE, 2004-04-30, hartera)
 # TRACK REMADE WITH NEW CHAINS 
     # Move back to the file server to create axt files corresponding to the net
     ssh kksilo
@@ -1338,13 +1424,18 @@ while (<STDIN>) {
         'load data local infile "sangerLinks.txt" into table sangerLinks' \
         ce2
 
-# CREATE SANGERPEP TABLE (DONE, 2004-04-29)
+# CREATE SANGERPEP TABLE (DONE, 2004-04-29, hartera)
+# RECREATED SANGERPEP TABLE SO AS all.joiner EXPECTS THE CREATE TIME TO
+# BE LATER THAN THAT FOR THE SANGERGENE TABLE (DONE, 2004-05-21, hartera)
     mkdir -p /cluster/data/ce2/bed/sangerPep
     cd /cluster/data/ce2/bed/sangerPep
     # Download peptide sequences from the Sanger Centre ftp site:
     wget -o ce2.fetch.log -r -l1 --no-directories --timestamping \
         ftp://ftp.sanger.ac.uk/pub/databases/wormpep/old_wormpep120/wormpep120
     # Load into database
+    # 2004-05-10 and 2004-05-11 hartera dropped sangerPep table and recreated it
+    # all.joiner expects sangerGene table to have an earlier
+    # load time than sangerPep so recreate sangerPep after sangerGene
     hgPepPred ce2 generic sangerPep wormpep120
     # the sangerPep table is used by the sangerGene track
 
@@ -1384,7 +1475,11 @@ while (<STDIN>) {
     # Read 20990 transcripts in 147535 lines in 6 files
     # 20990 groups 6 seqs 1 sources 3 feature types
     # 20990 gene predictions
-
+    
+    # 2004-05-10, hartera dropped twinscanPep table and re-created it.
+    # twinscan table was reloaded using extended options after loading 
+    # twinscanPep. all.joiner expects twinscan table to have an earlier
+    # load time than twinscanPep
     hgPepPred ce2 generic twinscanPep chr_ptx/chr*-fixed.fa
   
 #  MAKING BLASTZ SELF (DONE, 2004-04-20, hartera)
@@ -1635,7 +1730,7 @@ axtFilter $1 | /cluster/home/hartera/bin/i386/axtChain stdin \
     # Load chains into database 
     # next machine
     ssh hgwdev
-    cd /cluster/data/ce2/bed/blastzSelf/axtChai.2004-04-30/chainFilt
+    cd /cluster/data/ce2/bed/blastzSelf/axtChain.2004-04-30/chainFilt
     foreach i (*.chain)
         set c = $i:r
         echo loading $c
@@ -1720,34 +1815,41 @@ zip -j est.zip est.fa
     md5sum *.zip > md5sum.txt
     # Take a look at bigZips/* and chromosomes/*, update their README.txt's
 
-# MAKE VSCB1 DOWNLOADS (in progress, 2004-04-21, hartera)
+# MAKE VSCB1 DOWNLOADS (DONE, 2004-05-11, hartera)
     # DO THIS LATER
     ssh kksilo
     cd /cluster/data/ce2/bed/blastz.cb1
-    zip /cluster/data/ce2/zip/Cb1axtChrom.zip axtChrom/chr*.axt
-    cd /cluster/data/ce2/bed/blastz.Cb1/axtChain
+    zip -j /cluster/data/ce2/zip/Cb1axtChrom.zip axtChrom/chr*.axt
+    cd /cluster/data/ce2/bed/blastz.cb1/axtChain.2004-04-29
     cp all.chain cb1.chain
-    zip /cluster/data/ce2/zip/cb1.chain.zip cb1.chain
+    zip -j /cluster/data/ce2/zip/cb1.chain.zip cb1.chain
     rm cb1.chain
-    zip /cluster/data/ce2/zip/cb1.net.zip cb1Filt.net
-    # add add axtNets when done 
+    zip -j /cluster/data/ce2/zip/cb1.net.zip cb1.net
+    # add axtNets
+    cd /cluster/data/ce2/bed/blastz.cb1/axtNet.2004-04-29/sortedaxtNet
+    foreach f (I II III IV V X M)
+        cp chr${f}.axt chr{$f}.axtNet.axt
+    end
+    zip -j /cluster/data/ce2/zip/axtNetCb1.zip chr*.axtNet.axt
+    rm *.axtNet.axt
+
     ssh hgwdev
-    mkdir /usr/local/apache/htdocs/goldenPath/ce2/vsCb1
+    mkdir -p /usr/local/apache/htdocs/goldenPath/ce2/vsCb1
     cd /usr/local/apache/htdocs/goldenPath/ce2/vsCb1
     mv /cluster/data/ce2/zip/Cb1axtChrom.zip axtChrom.zip
     mv /cluster/data/ce2/zip/cb1*.zip .
+    mv /cluster/data/ce2/zip/axtNetCb1.zip .
     md5sum *.zip > md5sum.txt
 
     # Copy over & edit README.txt w/pointers to chain, net formats.
 
-# MAKE VSSELF DOWNLOADS (in progress, 2004-04-21, hartera)
-    # DO THIS LATER
+# MAKE VSSELF DOWNLOADS (DONE, 2004-05-11, hartera)
     ssh kksilo
-    cd /cluster/data/galGal2/bed/blastSelf
-    zip /cluster/data/galGal2/zip/SelfaxtChrom.zip axtChrom/chr*.axt
-    cd /cluster/data/ce2/bed/blastzSelf/axtChain
+    cd /cluster/data/ce2/bed/blastSelf
+    zip -j /cluster/data/ce2/zip/SelfaxtChrom.zip axtChrom/chr*.axt
+    cd /cluster/data/ce2/bed/blastzSelf/axtChain.2004-04-30
     cp all.chain self.chain
-    zip /cluster/data/galGal2/zip/self.chain.zip self.chain
+    zip -j /cluster/data/ce2/zip/self.chain.zip self.chain
     rm self.chain
    
     ssh hgwdev
@@ -1756,7 +1858,7 @@ zip -j est.zip est.fa
     mv /cluster/data/ce2/zip/SelfaxtChrom.zip axtChrom.zip
     mv /cluster/data/ce2/zip/self.chain.zip .
     md5sum *.zip > md5sum.txt
-    # Copy over & edit README.txt w/pointers to chain, net formats. 
+    # Copy over & edit README.txt w/pointers to chain formats. 
 
 #  miRNA track (DONE - 2004-05-04 - Hiram)
     #	data from: Sam Griffiths-Jones <sgj@sanger.ac.uk>
@@ -1776,7 +1878,7 @@ zip -j est.zip est.fa
     #	featureBits ce2 miRNA
     #	11382 bases of 100291761 (0.011%) in intersection
 
-# MAKE ALT. SPLICING TRACK (in progress, 2004-04-30, hartera)
+# MAKE ALT. SPLICING TRACK (DONE, 2004-05-13, hartera)
     # create rnaCluster table and Gene Bounds track
     ssh hgwdev
     mkdir /cluster/data/ce2/bed/rnaCluster
@@ -1791,13 +1893,59 @@ zip -j est.zip est.fa
     (perl -e 'print "#\!/bin/sh\n"; while(<>) {chomp($_); printf "hgsql -A -e =select * from rnaCluster where chrom like \"$_\" order by chromStart, name= ce2 | egrep -v chromStart | cut -f2\-13 > $_.ce2.rnaCluster.bed\n";}' | sed -e "s/=/'/g") < chrom.tab > rnaCluster.sh
 
     chmod a+x rnaCluster.sh
+    rnaCluster.sh
     mkdir -p /cluster/data/ce2/bed/altSplice/agx
-cd /cluster/data/ce2/bed/altSplice
+    cd /cluster/data/ce2/bed/altSplice
 
     hgsql -A -e "select chrom from chromInfo" ce2 | egrep -v chrom > chrom.tab
     perl -e 'while(<>) {chomp($_); print "~/bin/i386/altSplice -db=ce2 -beds=../rnaCluster/$_.ce2.rnaCluster.bed -agxOut=agx/$_.ce2.rnaCluster.agx -consensus -weightMrna\n";}' < chrom.tab > altSplice.para.spec
     # these jobs are no big deal on the worm, just run this file:
     chmod +x altSplice.para.spec
+    mkdir agx
+    ./altSplice.para.spec
+# 0 genePredictions with 2610 clusters, 0 cassette exons, 0 of are not mod 3.
+    cat agx/*.agx > altSplice.agx
+    # UP TO HERE, make agxToBed and use local copy 
+    ~/bin/i386/agxToBed altSplice.agx altSplice.bed
+
+    cat << '_EOF_' >> altGraphX.sql
+CREATE TABLE altGraphX (
+  bin smallint unsigned not null,
+  tName varchar(255) NOT NULL default '',
+  tStart int(11) NOT NULL default '0',
+  tEnd int(11) NOT NULL default '0',
+  name varchar(255) NOT NULL default '',
+  id int(10) unsigned NOT NULL auto_increment,
+  strand char(2) NOT NULL default '',
+  vertexCount int(10) unsigned NOT NULL default '0',
+  vTypes longblob NOT NULL,
+  vPositions longblob NOT NULL,
+  edgeCount int(10) unsigned NOT NULL default '0',
+  edgeStarts longblob NOT NULL,
+  edgeEnds longblob NOT NULL,
+  evidence longblob NOT NULL,
+  edgeTypes longblob NOT NULL,
+  mrnaRefCount int(11) NOT NULL default '0',
+  mrnaRefs longblob NOT NULL,
+  mrnaTissues longblob NOT NULL,
+  mrnaLibs longblob NOT NULL,
+  PRIMARY KEY  (id),
+  KEY tName (tName(16),tStart,tEnd)
+);
+'_EOF_'
+
+    hgLoadBed -sqlTable=altGraphX.sql ce2 altGraphX altSplice.agx
+
+    # trackDb entry:
+        track altGraphX
+        shortLabel Alt-Splice
+        longLabel Alternative Splicing
+        group rna
+        priority 74.1
+        visibility pack
+        type bed 3
+        canPack off
+
 
 # Create frames based page views of alt splice areas of interest
 #	(DONE - 2004-05-16 - Hiram)
@@ -1979,3 +2127,23 @@ rmdir --ignore-fail-on-non-empty /tmp/pHMMCe1
 	wib/*_phyloHMMcons.wig 
     mkdir /gbdb/ce2/wib/pHMMCb1
     ln -s `pwd`/wib/chr*_phyloHMMcons.wib /gbdb/ce2/wib/pHMMCb1
+
+
+######## MAKING FAMILY BROWSER TABLES #### (in progress - 2004-05-21 - hartera)
+# These are instructions for building the
+# neighborhood browser.  Don't start these until
+# there is a sangerGene table with a proteinID column containing Swiss-Prot
+# protein IDs, and also Kim lab expression data is required (in hgFixed).
+
+    # Cluster together various alt-splicing isoforms.
+    #       Creates the sangerIsoforms and sangerCanonical tables
+    ssh hgwdev
+    hgClusterGenes ce2 sangerGene sangerIsoforms sangerCanonical
+    # You may need to build this binary in src/hg/near/hgClusterGenes
+    # Got 20713 clusters, from 23076 genes in 7 chromosomes
+    # featureBits ce2 sangerCanonical
+    # 54156601 bases of 100291761 (53.999%) in intersection
+    # featureBits ce1 sangerCanonical 
+    # 53654286 bases of 100277784 (53.506%) in intersection
+
+

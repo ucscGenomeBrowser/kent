@@ -11,7 +11,7 @@
 #include "portable.h"
 #include "dystring.h"
 
-static char const rcsid[] = "$Id: hgTrackDb.c,v 1.19 2004/04/03 01:27:00 angie Exp $";
+static char const rcsid[] = "$Id: hgTrackDb.c,v 1.20 2004/05/25 22:46:23 galt Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -263,9 +263,18 @@ printf("Loaded %d track descriptions total\n", slCount(tdList));
     for (td = tdList; td != NULL; td = td->next)
 	{
 	char *html = hashFindVal(htmlHash, td->tableName);
-        if (html != NULL)
+        if (html == NULL)
+	    {
+	    if (strict != NULL)
+		{
+		printf("html missing for %s %s %s '%s'\n",org, database, td->tableName, td->shortLabel);
+		}
+	    }
+	else
+	    {
 	    updateBigTextField(conn,  trackDbName, "tableName", td->tableName, 
 	    	"html", html);
+	    }
 	if (td->settingsHash != NULL)
 	    {
 	    char *settings = settingsFromHash(td->settingsHash);

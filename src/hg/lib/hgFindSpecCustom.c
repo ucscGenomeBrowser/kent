@@ -13,7 +13,7 @@
 #include "obscure.h"
 #include <regex.h>
 
-static char const rcsid[] = "$Id: hgFindSpecCustom.c,v 1.6 2004/04/13 17:53:58 angie Exp $";
+static char const rcsid[] = "$Id: hgFindSpecCustom.c,v 1.7 2004/05/24 20:31:54 angie Exp $";
 
 /* ----------- End of AutoSQL generated code --------------------- */
 
@@ -161,9 +161,9 @@ return(queryFormat);
 }
 
 static char *queryFormatRegex =
-    "select [[:alnum:]]+, ?[[:alnum:]]+, ?[[:alnum:]]+, ?[[:alnum:]]+ from %s "
-    "where [[:alnum:]]+ (like|=) ['\"]?[%s]+['\"]?";
-static char *exactTermFormatRegex = "['\"]?%s[^%]*['\"]?$";
+    "^select [[:alnum:]]+, ?[[:alnum:]]+, ?[[:alnum:]]+, ?[[:alnum:]]+ "
+    "from %s where [[:alnum:]]+ (like|=) ['\"]?.*%s.*['\"]?$";
+static char *exactTermFormatRegex = "['\"]?.*%s.*['\"]?$";
 static char *prefixTermFormatRegex = "['\"]?%s.*%%['\"]?$";
 
 static void checkQueryFormat(struct hgFindSpec *hfs)
@@ -175,7 +175,7 @@ if (isNotEmpty(hfs->query))
 	errAbort("hfsPolish: search %s: query needs to be of the format "
 		 "\"select field1,field2,field3,field4 from %%s "
 		 "where field4 like '%%s'\" "
-		 "(for prefix, '%%s%%%%'; for exact, '%%%%%%s%%%%'), "
+		 "(for prefix, '%%s%%%%'; for fuzzy, '%%%%%%s%%%%'), "
 		 "but instead is this:\n%s",
 		 hfs->searchName, hfs->query);
     if (isNotEmpty(hfs->xrefQuery))

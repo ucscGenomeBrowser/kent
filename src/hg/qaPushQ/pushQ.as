@@ -29,6 +29,7 @@ table pushQ
     uint      bounces;    "Bounce-count (num times bounced back to developer)"
     char[8]   lockUser;   "User who has locked record, or empty string"
     char[16]  lockDateTime; "When user placed lock, or empty string"
+    lstring   releaseLog;  "Release Log entry"
     )
 
 table users

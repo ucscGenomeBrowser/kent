@@ -2680,7 +2680,7 @@ http://genome.imim.es/genepredictions/M.musculus/mmOct2003/SGP/humangp200307/rea
     hgPepPred mm4 generic twinscanPep chr_ptx/chr*-fixed.fa
 
 #### LOAD ENSEMBL GENES (DONE - 2004-02-19 - Hiram)
-#	needed for Family Browser procedure below
+#	needed for Gene Sorter procedure below
 #	Ensembl released Mouse build 32 the week of Feb 16 2004
      mkdir /cluster/data/mm4/bed/ensembl
      cd /cluster/data/mm4/bed/ensembl
@@ -2747,7 +2747,7 @@ o - Load ensGtp table.
     hgsql mm4 < ~/kent/src/hg/lib/ensGtp.sql
     hgsql -N -e 'load data local infile "ensGtpMm4.tab" into table ensGtp;' mm4
 
-### MAKE THE affyU74 TRACK - needed for the Family browser
+### MAKE THE affyU74 TRACK - needed for the Gene Sorter 
 #                              (DONE - 2003-01-06 - Hiram)
 # MAKE THE affyU74 TRACK using Affy consensus sequences instead of 
 # target sequences. Recalculate alignments and load data
@@ -3015,6 +3015,16 @@ hgMapToGene mm4 refGene knownGene knownToRefSeq
 # Create a table that maps between known genes and 
 # the nice affy expression data.
 hgMapToGene mm4 affyU74  knownGene knownToU74
+hgMapToGene mm4 affyMOE430 knownGene knownToMOE430
+hgMapToGene mm4 affyMOE430 -prefix=A: knownGene knownToMOE430A
+
+# Format and load Rinn et al sex expression data
+mkdir /cluster/data/mm4/bed/rinnSex
+cd !$
+hgMapMicroarray rinnSex.bed hgFixed.mouseRinnSexMedianRatio \
+    ../affyMOE430/affyMOE430.psl
+hgLoadBed mm4 rinnSex rinnSex.bed
+
 
 # Format and load the GNF data
 mkdir /cluster/data/mm4/bed/affyGnf95
@@ -4535,8 +4545,14 @@ hgsql \
  -e 'update gdbPdb set proteomeDb = "proteins040315" where genomeDb = "mm4";' \
         -h genome-testdb hgcentraltest
 
-# Perform preliminary review, using the Genome Browser and Family Browser for mm4.
+# Perform preliminary review, using the Genome Browser and Gene Sorter for mm4.
 # After successful review, notify QA to start formal review. 
+
+# Create table that maps between known genes and LocusLink (DONE 5/25/04 Fan)
+hgsql --skip-column-names -e "select mrnaAcc,locusLinkId from refLink" mm4 \
+        > refToLl.txt
+hgMapToGene mm4 refGene knownGene knownToLocusLink -lookup=refToLl.txt
+#       row count is 30313
  
 ######## PROTEOME BROWSER BUILD #######  (REBUILT - 2004-04-19 - Fan)
 # These are instructions for building or rebuilding tables 
@@ -4816,4 +4832,42 @@ o Adjust drawing parameters for Proteome Browser stamps
 o Perform preliminary review of Proteom Browser for mm4, then
   notify QA for formal review.
 
+
+# TIGR GENE INDEX (DONE 2004-05020 Fan)
+    mkdir -p /cluster/data/mm4/bed/tigr
+    cd /cluster/data/mm4/bed/tigr
+    wget ftp://ftp.tigr.org/pub/data/tgi/Mus_musculus/TGI_track_MouseGenome_mm4_05-2004.tgz
+    
+    tar xvzf TGI*.tgz
+    foreach f (*cattle*)
+      set f1 = `echo $f | sed -e 's/cattle/cow/g'`
+      mv $f $f1
+    end
+
+    foreach o (mouse cow human pig rat)
+      echo $o
+      setenv O $o
+      foreach f (chr*_$o*s)
+        tail +2 $f | perl -wpe 's /THC/TC/; s/(TH?C\d+)/$ENV{O}_$1/;' > $f.gff
+      end
+    end
+
+    ssh hgwdev
+    cd /cluster/data/mm4/bed/tigr
+    hgsql mm4 -e "drop table tigrGeneIndex"
+    hgsql mm4 < ~/kent/src/hg/lib/tigrGeneIndex.sql
+
+    foreach f (*.gff)
+        echo Processing $f ...
+        /cluster/home/fanhsu/bin/i386/ldHgGene -oldTable -exon=TC mm4 tigrGeneIndex $f
+        hgsql mm4 -e "select count(*) from tigrGeneIndex"
+    end
+    # Total of 354491 entries created in tigrGeneIndex table.
+
+    hgsql mm4 -e "update tigrGeneIndex set cdsStart = txStart;"
+    hgsql mm4 -e "update tigrGeneIndex set cdsEnd = txEnd;"
+
+    checkTableCoords mm4 tigrGeneIndex
+    
+    gzip *.gff *TCs
 

@@ -10,7 +10,7 @@
 #include "hdb.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: hgMapToGene.c,v 1.10 2004/04/28 17:56:21 kent Exp $";
+static char const rcsid[] = "$Id: hgMapToGene.c,v 1.11 2004/05/21 21:25:26 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -35,6 +35,7 @@ errAbort(
   "                       rather than look it up in trackDb table.\n" 
   "   -all - Put all elements of track that intersect with geneTrack\n"
   "          into mapTable, not just the best for each gene.\n"
+  "   -prefix=XXX - Only consider elements of track that begin with prefix\n"
   "   -cds - Only consider coding portions of gene.\n"
   "   -noLoad - Don't load database, just create mapTable.tab file\n"
   "   -verbose=N - Print intermediate status info if N > 0\n"
@@ -49,10 +50,12 @@ errAbort(
 boolean cdsOnly = FALSE;
 boolean intronsToo = FALSE;
 boolean createOnly = FALSE;
+char *prefix = NULL;
 
 static struct optionSpec options[] = {
    {"type", OPTION_STRING},
    {"all", OPTION_BOOLEAN},
+   {"prefix", OPTION_STRING},
    {"cds", OPTION_BOOLEAN},
    {"intronsToo", OPTION_BOOLEAN},
    {"noLoad", OPTION_BOOLEAN},
@@ -204,8 +207,11 @@ if (startsWith("bed", otherType))
     while ((row = sqlNextRow(sr)) != NULL)
 	{
 	bed = bedLoadN(row+rowOffset, bedNum);
-	slAddHead(&bedList, bed);
-	binKeeperAdd(bk, bed->chromStart, bed->chromEnd, bed);
+	if (prefix == NULL || startsWith(prefix, bed->name))
+	    {
+	    slAddHead(&bedList, bed);
+	    binKeeperAdd(bk, bed->chromStart, bed->chromEnd, bed);
+	    }
 	}
     }
 else if (startsWith("genePred", otherType))
@@ -218,10 +224,13 @@ else if (startsWith("genePred", otherType))
     while ((row = sqlNextRow(sr)) != NULL)
 	{
 	gp = genePredLoad(row + rowOffset);
-	bed = bedFromGenePred(gp);
-	genePredFree(&gp);
-	slAddHead(&bedList, bed);
-	binKeeperAdd(bk, bed->chromStart, bed->chromEnd, bed);
+	if (prefix == NULL || startsWith(prefix, gp->name))
+	    {
+	    bed = bedFromGenePred(gp);
+	    genePredFree(&gp);
+	    slAddHead(&bedList, bed);
+	    binKeeperAdd(bk, bed->chromStart, bed->chromEnd, bed);
+	    }
 	}
     }
 else if (startsWith("psl", otherType))
@@ -234,10 +243,13 @@ else if (startsWith("psl", otherType))
     while ((row = sqlNextRow(sr)) != NULL)
 	{
 	psl = pslLoad(row + rowOffset);
-	bed = bedFromPsl(psl);
-	pslFree(&psl);
-	slAddHead(&bedList, bed);
-	binKeeperAdd(bk, bed->chromStart, bed->chromEnd, bed);
+	if (prefix == NULL || startsWith(prefix, psl->qName))
+	    {
+	    bed = bedFromPsl(psl);
+	    pslFree(&psl);
+	    slAddHead(&bedList, bed);
+	    binKeeperAdd(bk, bed->chromStart, bed->chromEnd, bed);
+	    }
 	}
     }
 else
@@ -410,6 +422,7 @@ optionInit(&argc, argv, options);
 cdsOnly = optionExists("cds");
 intronsToo = optionExists("intronsToo");
 createOnly = optionExists("createOnly");
+prefix = optionVal("prefix", NULL);
 
 if (argc != 5)
     usage();

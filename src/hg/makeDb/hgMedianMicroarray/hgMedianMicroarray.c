@@ -11,7 +11,7 @@
 #include "expRecord.h"
 #include "expData.h"
 
-static char const rcsid[] = "$Id: hgMedianMicroarray.c,v 1.3 2003/10/06 23:16:29 kent Exp $";
+static char const rcsid[] = "$Id: hgMedianMicroarray.c,v 1.4 2004/05/21 21:24:36 kent Exp $";
 
 char *tabDir = ".";
 boolean doLoad;
@@ -149,7 +149,7 @@ if (doLoad)
 sqlDisconnect(&conn);
 }
 
-#define missingData -10000
+#define missingData -10000.0
 
 void makeNewDataTable(char *database, char *oldTable, struct medSpec *medList, char *newTable)
 /* Create new table in database based on medians of data

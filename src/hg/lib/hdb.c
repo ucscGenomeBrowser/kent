@@ -30,7 +30,7 @@
 #include "liftOverChain.h"
 #include "grp.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.181 2004/05/12 22:04:53 angie Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.182 2004/05/25 18:05:51 fanhsu Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
@@ -1581,6 +1581,37 @@ char query[256];
 boolean ok;
 safef(query, sizeof(query), 
 	"select hgNearOk from dbDb where name = '%s'", database);
+ok = sqlQuickNum(conn, query);
+hDisconnectCentral(&conn);
+return ok;
+}
+
+boolean hgPbOk(char *database)
+/* Return TRUE if ok to put up Proteome Browser (pbTracks)
+ * on this database. */
+{
+struct sqlConnection *conn = hConnectCentral();
+char query[256];
+char **row;
+struct sqlResult *sr = NULL;
+boolean ok;
+boolean dbDbHasPbOk;
+
+dbDbHasPbOk = FALSE;
+safef(query, sizeof(query), "describe dbDb");
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    if (sameWord(row[0], "hgPbOk"))
+        {
+        dbDbHasPbOk = TRUE;
+        }
+    }
+sqlFreeResult(&sr);
+if (!dbDbHasPbOk) return(FALSE);
+
+safef(query, sizeof(query),
+        "select hgPbOk from dbDb where name = '%s'", database);
 ok = sqlQuickNum(conn, query);
 hDisconnectCentral(&conn);
 return ok;

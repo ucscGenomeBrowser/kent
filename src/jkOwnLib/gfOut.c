@@ -14,7 +14,7 @@
 #include "psl.h"
 #include "genoFind.h"
 
-static char const rcsid[] = "$Id: gfOut.c,v 1.8 2004/03/19 20:10:44 kent Exp $";
+static char const rcsid[] = "$Id: gfOut.c,v 1.9 2004/05/25 20:03:49 kent Exp $";
 
 struct pslxData
 /* This is the data structure put in gfOutput.data for psl/pslx output. */
@@ -301,7 +301,7 @@ for (sAli = ali; sAli != NULL; sAli = eAli)
     axt->qStart = sAli->nStart - qSeq->dna;
     axt->qEnd = eFf->nEnd - qSeq->dna;
     axt->qStrand = (qIsRc ? '-' : '+');
-    axt->tName = cloneString(tSeq->name);
+    axt->tName = cloneString(chromName);
     axt->tStart = trans3GenoPos(sAli->hStart, tSeq, t3List, FALSE) + chromOffset;
     axt->tEnd = trans3GenoPos(eFf->hEnd, tSeq, t3List, TRUE) + chromOffset;
     axt->tStrand = (tIsRc ? '-' : '+');

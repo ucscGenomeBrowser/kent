@@ -42,14 +42,14 @@ void doCustomPage(struct sqlConnection *conn, struct column *colList)
 {
 hPrintf("<FORM ACTION=\"../cgi-bin/hgNear\">\n");
 cartSaveSession(cart);
-makeTitle("Setup Custom Columns for Gene Family Browser", 
+makeTitle("Setup Custom Columns for Gene Sorter", 
 	"hgNearHelp.html#Custom");
 
 
 /* Put up descriptive text. */
 controlPanelStart();
 hPrintf(
-"You can add your own custom columns to the family browser in the "
+"Add your own custom columns to the Gene Sorter using the "
 "<A HREF=\"../goldenPath/help/customColumn.html\">"
 "format described here</A>.");
 controlPanelEnd();
@@ -96,7 +96,7 @@ makeTitle("Upload Custom Columns", "hgNearHelp.html#Custom");
 
 controlPanelStart();
 hPrintf(
-"Please upload a file with custom columns in the "
+"Upload a file with custom columns in the "
 "<A HREF=\"../goldenPath/help/customColumn.html\">"
 "format described here</A>.");
 hPrintf("<BR>");
@@ -117,7 +117,7 @@ makeTitle("Paste in Custom Columns", "hgNearHelp.html#Custom");
 
 controlPanelStart();
 hPrintf(
-"Please paste in custom columns in the "
+"Paste in custom columns in the "
 "<A HREF=\"../goldenPath/help/customColumn.html\">"
 "format described here</A>.");
 hPrintf("<BR>");
@@ -137,7 +137,7 @@ makeTitle("Paste in Custom Columns", "hgNearHelp.html#Custom");
 
 controlPanelStart();
 hPrintf(
-"Please paste in URL or list of URLs that refer to files in the "
+"Paste in URL or list of URLs that refer to files in the "
 "<A HREF=\"../goldenPath/help/customColumn.html\">"
 "format described here</A>.");
 hPrintf("<BR>");

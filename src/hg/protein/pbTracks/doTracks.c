@@ -903,22 +903,37 @@ if (!hTableExists("sfAssign")) return(0);
 conn  = hAllocConn();
 conn2 = hAllocConn();
 
-/* two steps query needed because the recent Ensembl gene_xref 11/2003 table does not have 
-   valid translation_name */
-safef(cond_str, sizeof(cond_str), "external_name='%s'", protDisplayID);
-transcriptName = sqlGetField(conn, database, "ensGeneXref", "transcript_name", cond_str);
-if (transcriptName == NULL)
-    {
-    return(0); 
+if (hTableExists("ensemblXref3")) 
+    {	
+    /* use ensemblXref3 for Ensembl data release after ensembl34d */
+    safef(cond_str, sizeof(cond_str), "tremblAcc='%s'", proteinID);
+    ensPep = sqlGetField(conn, database, "ensemblXref3", "protein", cond_str);
+    if (ensPep == NULL)
+	{
+   	safef(cond_str, sizeof(cond_str), "swissAcc='%s'", proteinID);
+   	ensPep = sqlGetField(conn, database, "ensemblXref3", "protein", cond_str);
+	if (ensPep == NULL) return(0);
+	}
     }
 else
     {
-    safef(cond_str, sizeof(cond_str), "transcript_name='%s';", transcriptName);
-    ensPep = sqlGetField(conn, database, "ensTranscript", "translation_name", cond_str);
-    if (ensPep == NULL) 
-	{
-	hFreeConn(&conn);
-    	return(0); 
+    /* two steps query needed because the recent Ensembl gene_xref 11/2003 table does not have 
+       valid translation_name */
+    safef(cond_str, sizeof(cond_str), "external_name='%s'", protDisplayID);
+    transcriptName = sqlGetField(conn, database, "ensGeneXref", "transcript_name", cond_str);
+    if (transcriptName == NULL)
+        {
+        return(0); 
+        }
+    else
+        {
+        safef(cond_str, sizeof(cond_str), "transcript_name='%s';", transcriptName);
+        ensPep = sqlGetField(conn, database, "ensTranscript", "translation_name", cond_str);
+        if (ensPep == NULL) 
+	    {
+	    hFreeConn(&conn);
+    	    return(0); 
+    	    }
     	}
     }
 
@@ -989,7 +1004,7 @@ void mapBoxSuperfamily(int x, int y, int width, int height, char *sf_name, int s
 {
 hPrintf("<AREA SHAPE=RECT COORDS=\"%d,%d,%d,%d\" ", x-1, y-1, x+width+1, y+height+1);
 hPrintf("HREF=\"%s?sunid=%d\"",
-	"http://supfam.org/SUPERFAMILY/cgi-bin/scop.cgi", sfID);
+	"http://supfam.mrc-lmb.cam.ac.uk/SUPERFAMILY/cgi-bin/scop.cgi", sfID);
 hPrintf(" target=_blank ALT=\"%s\">\n", sf_name);
 }
 

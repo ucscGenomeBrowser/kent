@@ -3,7 +3,7 @@ pepPi	pepPiDist	pI	55	3.0	14.0	0	600	Isoelectric Point
 exonCnt	pepExonCntDist	Number of Exons	31	0	30	0	700	Exon Count
 intPCnt	pepIPCntDist	InterPro Domains	11	0.0	11.0	0	2000	InterPro Domains
 pepRes	pepResDist	Amino Acid Frequencies	21	1.0	21	0	0.11	AA Residue Frequency
-cCnt	pepCCntDist	Number of Cysteines	51	0	50	0	1000	Cystein Count
+cCnt	pepCCntDist	Number of Cysteines	51	0	50	0	1000	Cysteine Count
 hydro	pepHydroDist	Hydrophobicity	41	-2.0	2.0	0	1300	Average Hydrophobicity
 W	pbAaDistW	AA Frequency	51	0.0	0.20	0	2500.0	AA Residue Frequency
 C	pbAaDistC	AA Frequency	51	0.0	0.20	0	2500.0	AA Residue Frequency

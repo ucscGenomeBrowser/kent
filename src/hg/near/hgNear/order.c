@@ -394,7 +394,7 @@ struct order *ordList, *ord;
 
 hPrintf("<FORM ACTION=\"../cgi-bin/hgNear\">\n");
 cartSaveSession(cart);
-makeTitle("Info Sorting Types for Family Browser", 
+makeTitle("Info Sorting Types for Gene Sorter", 
 	"hgNearHelp.html");
 controlPanelStart();
 

@@ -10,7 +10,7 @@
 #include "obscure.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: go.c,v 1.12 2003/11/12 18:51:10 kent Exp $";
+static char const rcsid[] = "$Id: go.c,v 1.13 2004/05/25 18:15:58 donnak Exp $";
 
 static boolean goExists(struct column *col, struct sqlConnection *conn)
 /* This returns true if go database and goaPart table exists. */
@@ -120,7 +120,7 @@ if (searchString != NULL )
     char **row;
     boolean orLogic = advFilterOrLogic(col, "logic", FALSE);
     struct slName *term, *termList = stringToSlNames(searchString);
-    struct hash *proteinHash = newHash(16); /* protein ID's of matching terms. */
+    struct hash *proteinHash = newHash(16); /* protein IDs of matching terms. */
     struct hash *prevHash = NULL;
     struct genePos *newList = NULL, *gp, *next;
 
@@ -182,7 +182,7 @@ static void goFilterControls(struct column *col, struct sqlConnection *conn)
 {
 hPrintf("<A HREF=\"%s\">", "http://www.geneontology.org");
 hPrintf("Gene Ontology</A> search.  Please enclose term in single quotes if it "
-        "contains multiple words.<BR>You can search with ID's (such as "
+        "contains multiple words.<BR>You can search with IDs (such as "
 	"GO:0005884) as well as terms (such as 'actin filament').<BR>");
 hPrintf("Term(s): ");
 advFilterRemakeTextVar(col, "terms", 35);

@@ -11,7 +11,7 @@
 #include "hgColors.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: advFilter.c,v 1.22 2004/04/15 07:29:50 kent Exp $";
+static char const rcsid[] = "$Id: advFilter.c,v 1.24 2004/05/25 18:19:52 donnak Exp $";
 
 struct genePos *advFilterResults(struct column *colList, 
 	struct sqlConnection *conn)
@@ -256,17 +256,17 @@ int onOff = 0;
 boolean anyForSecondPass = FALSE;
 struct userSettings *us = filUserSettings();
 
-makeTitle("Gene Family Filter", "hgNearHelp.html#Filter");
+makeTitle("Gene Sorter Filter", "hgNearHelp.html#Filter");
 hPrintf("<FORM ACTION=\"../cgi-bin/hgNear\" METHOD=POST>\n");
 cartSaveSession(cart);
 
 controlPanelStart();
-hPrintf("With this page you can restrict which genes appear in the main table<BR>");
-hPrintf("based on the values in any column. Submit will take you back to the<BR>");
-hPrintf("main page with the current filter.");
+hPrintf("On this page you can restrict which genes appear in the main table<BR>");
+hPrintf("based on the values in any column. Click the Submit button to return<BR>");
+hPrintf("to the main Gene Sorter page with the current filter settings applied.");
 bigButtons();
-hPrintf("To quickly get a list of gene "
- "names that pass the filter push ");
+hPrintf("Quickly obtain a list of gene "
+ "names that pass the filter: ");
 cgiMakeButton(advFilterListVarName, "List Names");
 controlPanelEnd();
 

@@ -142,3 +142,17 @@ hgGnfMicroarray yeastChoCellCycleExps yeastChoCellCycle  \
 cd ~/src/hg/makeDb/hgRatioMicroarray
 hgRatioMicroarray yeastChoCellCycle yeastChoCellCycleRatio
 
+# Mouse expression data by sex on Affy MOE430A arrays from
+# John Rinn (john.rinn@yale.edu) et al.
+cd /projects/compbio/data/microarray/rinnEtAl
+hgGnfMicroarray mouseRinnSexExps mouseRinnSex rinnEtAlSpots.txt \
+    -chip=MOE430A \
+    -url=n/a \
+    -ref=n/a \
+    -credit=n/a
+cd ~/kent/src/hg/makeDb/hgRatioMicroarray 
+hgRatioMicroarray mouseRinnSex mouseRinnSexRatio
+cd ~/kent/src/hg/makeDb/hgMedianMicroarray 
+hgMedianMicroarray hgFixed mouseRinnSex mouseRinnSexExps mouseRinnSex.ra mouseRinnSexMedian mouseRinnSexMedianExps
+hgMedianMicroarray hgFixed mouseRinnSexRatio mouseRinnSexExps mouseRinnSex.ra mouseRinnSexMedianRatio mouseRinnSexMedianExps
+

@@ -5078,7 +5078,8 @@ doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain} {check
     # hgTracks.c needed to be updated to recognize syntenyMm4 so it
     # would color properly.
 
-# TIGR GENE INDEX (DONE 2004-05017 Fan)
+
+# TIGR GENE INDEX (DONE 2004-05020 Fan)
     mkdir -p /cluster/data/hg16/bed/tigr
     cd /cluster/data/hg16/bed/tigr
     wget ftp://ftp.tigr.org/pub/data/tgi/Homo_sapiens/TGI_track_HumanGenome_hg16_05-2004.tgz
@@ -5108,7 +5109,12 @@ doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain} {check
         hgsql hg16 -e "select count(*) from tigrGeneIndex"
     end
     # Total of 354491 entries created in tigrGeneIndex table.
-    
+
+    hgsql hg16 -e "update tigrGeneIndex set cdsStart = txStart;"
+    hgsql hg16 -e "update tigrGeneIndex set cdsEnd = txEnd;"
+
+    checkTableCoords hg16 tigrGeneIndex
+
     gzip *.gff *TCs
 
 # LOAD VEGA GENES AND PSEUDOGENES (DONE 2003-11-11 braney )
@@ -6200,7 +6206,7 @@ sys     16m13.770s
     mkdir -p /gbdb/hg16/wib/gc5Base
     ln -s `pwd`/wigData5_1K/*.wib /gbdb/hg16/wib/gc5Base
 
-# KNOWN GENES TRACK (STARTED - 2004-01-15 - with Family browser complete
+# KNOWN GENES TRACK (STARTED - 2004-01-15 - with Gene Sorter complete
 #				1004-02-17 Hiram)
 
     # you will probably need to make the programs in kent/src/hg/protein
@@ -8732,3 +8738,147 @@ axtChain -scoreScheme=/cluster/data/blastz/HoxD55.q \
 
 
 
+# RELOAD ENSEMBL GENES WITH VERSION 34d (DONE 2004/05/20 baertsch)
+    # save current tables, just in case.
+    rename table  ensGene to ensGene_old;
+    rename table  ensGtp  to ensGtp_old;  
+    rename table  ensPep  to ensPep_old;  
+
+    mkdir /cluster/data/hg16/bed/ensembl34d
+    cd /cluster/data/hg16/bed/ensembl34d
+    # Get the ensembl protein data from 
+    # http://www.ensembl.org/Homo_sapiens/martview
+    # Follow this sequence through the pages:
+    # Page 1) Make sure that the Homo_sapiens choice is selected. Hit next.
+    # Page 2) Uncheck the "Limit to" box in the region choice. Then hit next.
+    # Page 3) Choose the "Structures" box. 
+    # Page 4) Choose GTF as the ouput.  choose gzip compression.  hit export.
+    # Save as ensemblGene.gtf.gz
+
+    # Ensembl handles random chromosomes differently than us, so we
+    # strip this data.  Fortunately it just loses a couple of genes.
+    # Add "chr" to front of each line in the gene data gtf file to make 
+    # it compatible with our software.
+    # Finally, get rid of the ".1" or ".2" after the name
+    zcat ensbuild34d.gff.gz \
+    | grep -v ^6_DR51 \
+    | grep -v ^DR51 \
+    | grep -v _NT_ \
+    | perl -wpe 's/^([0-9]|X|Y|Un)/chr$1/ \
+                 || die "Line $. doesnt start with human chrom:\n$_"' \
+    | sed -e 's/\..\"/\"/g' \
+    > ensGene.gtf
+    ssh hgwdev
+    /cluster/bin/i386/ldHgGene hg16 ensGene \
+      /cluster/data/hg16/bed/ensembl34d/ensGene.gtf
+
+    # ensGtp associates geneId/transcriptId/proteinId for hgPepPred and 
+    # hgKnownToSuper.  Use ensMart to create it as above, except:
+    # Page 3) Choose the "Features" box. In "Ensembl Attributes", check 
+    # Ensembl Gene ID, Ensembl Transcript ID, Ensembl Peptide ID.  
+    # Choose Text, tab-separated as the output format.  Result name ensGtp.
+    # Save file as ensGtp.txt.gz
+    gunzip ensGtp.txt.gz
+    hgsql hg16 < ~/kent/src/hg/lib/ensGtp.sql
+    echo "load data local infile 'ensGtp.txt' into table ensGtp" | hgsql -N hg16
+    gzip ensGtp.txt
+
+    # Load Ensembl peptides:
+    # Get them from ensembl as above in the gene section except for
+    # Page 3) Choose the "Sequences" box. 
+    # Page 4) Transcripts/Proteins.  Peptide.  Format = FASTA.
+    # Save file as ensemblPep.fa.gz
+    zcat ensemblPep.fa.gz | hgPepPred hg16 ensembl stdin
+
+    # compare size of old and new tables as a sanity check
+    drop table ensGene_old;
+    drop table ensGtp_old;  
+    drop table ensPep_old;  
+
+    # Create knownToEnsembl column 
+    hgMapToGene hg16 ensGene knownGene knownToEnsembl
+
+#### BUILD Ensembl cross-reference table, ensemblXref3 (DONE - 2004-05-24 - Fan)
+
+    # Get the ensembl gene/protein cross-reference data from
+    # http://www.ensembl.org/Homo_sapiens/martview
+    # Follow this sequence through the pages:
+    # Page 1) Make sure that the Homo_sapiens choice is selected. Hit next.
+    # Page 2) Uncheck the "Limit to" box in the region choice. Then hit next.
+    # Page 3) Choose the "Feature" box, select gene, transcript, protein, 
+	      SPTrEMBL ID, SWISSPROT ID, and SWISSPROT AC 
+    # Page 4) Choose "Text, tab separated".  choose gzip compression.  hit export.
+    # Save as ensXref.txt
+
+    sed ensXref.txt -e 's/\./\t/g' > ensemblXref3.tab
+
+    hgsql hg16 -e "drop table ensemblXref3"
+    hgsql hg16 < ~/src/hg/lib/ensemblXref3.sql
+
+    hgsql hg16 -e 'load data local infile "ensemblXref3.tab" into table ensemblXref3 ignore 1 lines'
+
+
+#### REBUILD SUPERFAMILY RELATED TABLES (DONE - 2004-05-21 - Fan)
+
+# Download Superfamily data files and build the Superfamily DB
+# from supfam.mrc-lmb.cam.ac.uk
+
+        mkdir /cluster/store1/superFamily/040516
+        cd /cluster/store1/superFamily/040516
+
+# ftp over the following two files:
+
+        ass_16-May-2004.tab.gz
+        supfam_16-May-2004.sql.gz
+
+# This may take about an hour.
+
+     hgsql hg16 -e "create database superfam040516"
+     hgsql superfam040516 < supfam_16-May-2004.sql
+
+# Make sure to add an index on id of the des table of superfam040516.
+
+     hgsql superfam040516 < ~/src/hg/lib/sfAssign.sql
+     hgsql superfam040516 -e 'load data local infile "ass_16-May-2004.tab" into table superfam040516.sfAssign;'
+
+# Build or rebuild Superfamily track and create sf tables needed for PB
+
+   hgsql hg16 < ~/src/hg/lib/sfAssign.sql
+
+   cd /cluster/store1/superFamily/040516
+  
+   hgsql hg16 -e 'load data local infile "ass_16-May-2004.tab" into table hg16.sfAssign;'
+
+# If hg16.sfDes already exists, drop it.
+
+   hgsql superfam040516 -e "select * from des" >sfDes.tab
+
+   hgsql hg16 < ~/src/hg/lib/sfDes.sql
+
+   hgsql hg16 -e 'load data local infile "sfDes.tab" into table hg16.sfDes ignore 1 lines;'
+
+# If hg16.superfamily already exists, drop it.
+
+   hgSuperfam hg16 > sf.log
+
+# It is normal that many proteins does not have corresponding Superfamily entries.
+
+# If hg16.sfDescription exists, drop it.
+
+   hgsql hg16 < ~/src/hg/lib/sfDescription.sql
+   hgsql hg16 -e 'LOAD DATA local INFILE "sfDescription.tab"  into table hg16.sfDescription;'
+
+# Finally, load the superfamily table.
+
+   hgLoadBed hg16 superfamily superfamily.tab -tab
+
+# Create knownToSuperfamily table
+   
+   cat /cluster/store1/superFamily/040516/ass_16-May-2004.tab| hgKnownToSuper hg16 hs stdin
+# creates 32542 rows in knownToSuper
+
+
+# seq table acc field is too small; up the max to match new hgLoadSeq 
+# schema (2004/05/22 markd)
+
+    alter table modify column `acc` varchar(128) NOT NULL default '';

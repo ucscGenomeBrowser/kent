@@ -7,7 +7,7 @@
 #include "hdb.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: wiggleUtils.c,v 1.16 2004/04/28 22:39:58 hiram Exp $";
+static char const rcsid[] = "$Id: wiggleUtils.c,v 1.17 2004/05/28 23:16:38 hiram Exp $";
 
 static char *currentFile = (char *) NULL;	/* the binary file name */
 static FILE *wibFH = (FILE *) NULL;		/* file handle to binary file */
@@ -101,14 +101,18 @@ else
     openWibFile(wiggle->file);
     fseek(wibFH, wiggle->offset, SEEK_SET);
     readData = (unsigned char *) needMem((size_t) (wiggle->count + 1));
+
+
     itemsRead = fread(readData, (size_t) wiggle->count,
 	    (size_t) sizeof(unsigned char), wibFH);
     if (itemsRead != sizeof(unsigned char))
 	errAbort("wigReadDataRow: can not read %u bytes from %s at offset %u",
 	    wiggle->count, wiggle->file, wiggle->offset);
 
-    /*	need at most this amount, perhaps less	*/
-    /*	this data area goes with the result, must be freed by wigFreeData */
+    /*	need at most this amount, perhaps less
+     *	this data area goes with the result, this is freed by wigFreeData,
+     *	as well as the rest of the business that goes with it in the
+     *	returned structure */
     data = (struct wiggleDatum *) needMem((size_t)
 	(sizeof(struct wiggleDatum)*wiggle->validCount));
 
@@ -162,6 +166,8 @@ if (validCount)
     {
     double dataRange = upperLimit - lowerLimit;
     AllocVar(ret);
+
+     /*	this ret structure is freed by wigFreeData */
     ret->next = (struct wiggleData *) NULL;
     ret->chrom = wiggle->chrom;
     ret->chromStart = chromStart;
@@ -173,6 +179,10 @@ if (validCount)
     ret->sumData = sumData;
     ret->sumSquares = sumSquares;
     ret->data = data;
+    }
+else
+    {
+    freeMem(data);
     }
 
 return (ret);	/* may be null if validCount < 1	*/
@@ -531,5 +541,6 @@ hFreeConn(&conn);
 
 if (wdList != (struct wiggleData *)NULL)
 	slReverse(&wdList);
+/*	this wdList can be freed by wigFreeData */
 return(wdList);
 }	/*	struct wiggleData *wigFetchData()	*/

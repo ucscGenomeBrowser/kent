@@ -9,7 +9,7 @@
 #include "jksql.h"
 #endif
 
-#define PUSHQ_NUM_COLS 28
+#define PUSHQ_NUM_COLS 29
 
 struct pushQ
 /* Push Queue */
@@ -43,6 +43,7 @@ struct pushQ
     unsigned bounces;	/* Bounce-count (num times bounced back to developer) */
     char lockUser[9];	/* User who has locked record, or empty string */
     char lockDateTime[17];	/* When user placed lock, or empty string */
+    char *releaseLog;	/* Release Log entry */
     };
 
 void pushQStaticLoad(char **row, struct pushQ *ret);

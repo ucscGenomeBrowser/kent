@@ -137,8 +137,9 @@
 #include "vntr.h"
 #include "zdobnovSynt.h"
 #include "HInv.h"
+#include "bed6FloatScore.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.635 2004/05/20 18:51:07 angie Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.643 2004/05/26 22:37:47 angie Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -595,8 +596,8 @@ hFindSplitTable(seqName, tdb->tableName, table, &hasBin);
 sprintf(query, "select * from %s where name = '%s' and chrom = '%s' and chromStart = %d",
         table, item, seqName, start);
 
-//errAbort( "select * from %s where name = '%s' and chrom = '%s' and chromStart = %d",
-//        table, item, seqName, start);
+/*errAbort( "select * from %s where name = '%s' and chrom = '%s' and chromStart = %d",
+          table, item, seqName, start);*/
 
 
 sr = sqlGetResult(conn, query);
@@ -815,7 +816,7 @@ DNA qCodon[4];
 DNA tCodon[4];
 AA qProt, tProt = 0;
 int tPtr = 0;
-//char nibFile[128];
+/* char nibFile[128]; */
 
 if (gp->strand[0] == '+')
     {
@@ -845,7 +846,7 @@ else
     exit(0);
     }
 
-//safef(nibFile, sizeof(nibFile), "%s/%s.nib",nibDir,gp->chrom);
+/* safef(nibFile, sizeof(nibFile), "%s/%s.nib",nibDir,gp->chrom); */
 /* if no alignment , make a bad one */
 if (axtList == NULL)
     if (gp->strand[0] == '+')
@@ -3409,6 +3410,7 @@ boolean hasVersion = hHasField("mrna", "version");
 boolean haveGbSeq = sqlTableExists(conn, "gbSeq");
 char *seqTbl = haveGbSeq ? "gbSeq" : "seq";
 char *version = NULL;
+struct trackDb *tdbRgdEst;
 
 /* This sort of query and having to keep things in sync between
  * the first clause of the select, the from clause, the where
@@ -3522,8 +3524,9 @@ if (row != NULL)
             	"select id from %s.rgdEstLink where name = '%s';",  database, acc);
 	    if (sqlQuickQuery(conn2, query, rgdEstId, sizeof(rgdEstId)) != NULL)
 		{
+		tdbRgdEst = hashFindVal(trackHash, "rgdEst");
         	printf("<B>RGD EST Report: ");
-	        printf("<A HREF=\"%s%s\" target=_blank>", tdb->url, rgdEstId);
+	        printf("<A HREF=\"%s%s\" target=_blank>", tdbRgdEst->url, rgdEstId);
         	printf("RGD:%s</B></A><BR>\n", rgdEstId);
 		}
 	    }
@@ -6376,10 +6379,10 @@ sqlFreeResult(&sr);
 skipPB:
 printf("</UL>");
 
-// Display Gene Family Browser link
+// Display Gene Sorter link
 if (sqlTableExists(conn, "knownCanonical"))
     {
-    printf("<B>UCSC Gene Family Browser:</B> ");
+    printf("<B>UCSC Gene Sorter:</B> ");
     printf("<A HREF=\"/cgi-bin/hgNear?near_search=%s\"", mrnaName);
     printf("TARGET=_blank>%s</A>&nbsp\n", geneSymbol);fflush(stdout);
     printf("<BR><BR>");
@@ -6821,10 +6824,11 @@ if (url != NULL && url[0] != 0)
     char *proteinID;
     char *geneID;
     char *ans;
+    char *ensPep;
 
     char *chp;
 
-    // shortItemName is the name without the "." + version 
+    /* shortItemName is the name without the "." + version */ 
     shortItemName = strdup(itemName);
     chp = strstr(shortItemName, ".");
     if (chp != NULL) *chp = '\0';
@@ -6845,9 +6849,18 @@ if (url != NULL && url[0] != 0)
 	{
     	sprintf(cond_str, "transcript_name='%s'", shortItemName);    
 	
-        //This is necessary, Ensembl kept changing their gene_xref table definition and content.
+        /* This is necessary, Ensembl kept changing their gene_xref table definition and content.*/
     	proteinID = NULL;
-	if (hTableExists("ensTranscript"))
+
+	if (hTableExists("ensemblXref3"))
+    	    {
+    	    /* use ensemblXref3 for Ensembl data release after ensembl34d */
+    	    safef(cond_str, sizeof(cond_str), "transcript='%s'", shortItemName);
+    	    ensPep = sqlGetField(conn, database, "ensemblXref3", "protein", cond_str);
+	    if (ensPep != NULL) proteinID = ensPep;
+	    }
+
+	if (hTableExists("ensTranscript") && (proteinID == NULL))
 	    {
 	    proteinID = sqlGetField(conn, database, "ensTranscript", "translation_name", cond_str);
   	    }
@@ -7222,94 +7235,7 @@ if (rl->locusLinkId != 0)
     printf("<A HREF = \"http://www.ncbi.nlm.nih.gov/LocusLink/LocRpt.cgi?l=%d\" TARGET=_blank>",
 	   rl->locusLinkId);
     printf("%d</A><BR>\n", rl->locusLinkId);
-
-    if ( (strstr(hgGetDb(), "mm") != NULL) && hTableExists("MGIid"))
-    	{
-	sprintf(query, "select MGIid from MGIid where LLid = '%d';",
-		rl->locusLinkId);
-
-	sr = sqlGetResult(conn, query);
-	if ((row = sqlNextRow(sr)) != NULL)
-	    {
-	    printf("<B>Mouse Genome Informatics:</B> ");
-	    mgiID = strdup(row[0]);
-		
-	    printf("<A HREF=\"http://www.informatics.jax.org/searches/accession_report.cgi?id=%s\" TARGET=_BLANK>%s</A><BR>\n",mgiID, mgiID);
-	    }
-	else
-	    {
-	    // per Carol from Jackson Lab 4/12/02, JAX do not always agree
-	    // with Locuslink on seq to gene association.
-	    // Thus, not finding a MGIid even if a LocusLink ID
-	    // exists is always a possibility.
-	    }
-	sqlFreeResult(&sr);
-	}
     } 
-if (!startsWith("Worm", organism))
-    {
-    if (startsWith("dm", database))
-	{
-	// PubMed never seems to have BDGP gene IDs... so if that's all 
-	// that's given for a name/product, ignore name / truncate product.
-	char *cgp = strstr(rl->product, "CG");
-	if (cgp != NULL)
-	    {
-	    char *cgWord = firstWordInLine(cloneString(cgp));
-	    char *dashp = strchr(cgWord, '-');
-	    if (dashp != NULL)
-		*dashp = 0;
-	    if (isBDGPName(cgWord))
-		*cgp = 0;
-	    }
-	if (! isBDGPName(rl->name))
-	    medlineLinkedLine("PubMed on Gene", rl->name, rl->name);
-	if (rl->product[0] != 0)
-	    medlineProductLinkedLine("PubMed on Product", rl->product);
-	}
-    else
-	{
-	medlineLinkedLine("PubMed on Gene", rl->name, rl->name);
-	if (rl->product[0] != 0)
-	    medlineProductLinkedLine("PubMed on Product", rl->product);
-	}
-    printf("\n");
-    if (startsWith("Human", organism)) 
-        {
-        printGeneLynxName(rl->name);
-	printf("\n");
-        }
-    printGeneCards(rl->name);
-    }
-if (hTableExists("jaxOrtholog"))
-    {
-    struct jaxOrtholog jo;
-    char * sqlRlName = rl->name;
-
-    /* Make sure to escape single quotes for DB parseability */
-    if (strchr(rl->name, '\''))
-        {
-        sqlRlName = replaceChars(rl->name, "'", "''");
-        }
-    sprintf(query, "select * from jaxOrtholog where humanSymbol='%s'", sqlRlName);
-    sr = sqlGetResult(conn, query);
-    while ((row = sqlNextRow(sr)) != NULL)
-        {
-	jaxOrthologStaticLoad(row, &jo);
-	printf("<B>MGI Mouse Ortholog:</B> ");
-	printf("<A HREF=\"http://www.informatics.jax.org/searches/accession_report.cgi?id=%s\" target=_BLANK>", jo.mgiId);
-	printf("%s</A><BR>\n", jo.mouseSymbol);
-	}
-    sqlFreeResult(&sr);
-    }
-if (startsWith("hg", hGetDb()))
-    {
-    printf("\n");
-    printf("<B>AceView:</B> ");
-    printf("<A HREF = \"http://www.ncbi.nih.gov/IEB/Research/Acembly/av.cgi?db=human&l=%s\" TARGET=_blank>",
-	   rl->name);
-    printf("%s</A><BR>\n", rl->name);
-    }
 printStanSource(rl->mrnaAcc, "mrna");
 
 htmlHorizontalLine();
@@ -12737,6 +12663,7 @@ void chuckHtmlStart(char *title)
  * easier maintaince 
  */
 {
+printf("<HTML>\n<HEAD>\n");
 printf("<LINK REL=STYLESHEET TYPE=\"text/css\" href=\"http://genome-test.cse.ucsc.edu/style/blueStyle.css\" title=\"Chuck Style\">\n");
 printf("<title>%s</title>\n</head><body bgcolor=\"#f3f3ff\">",title);
 }
@@ -13499,7 +13426,6 @@ if(differentString(tdb->tableName, "altGraphXPsb2004"))
     struct altGraphX *copy = altGraphXClone(ag);
     altGraphXEnlargeExons(copy);
     printf("<br>Alt-Splicing drawn with exons enlarged.<br>\n");
-    printf("(scaled by the ratio of the biggest intron to smallest exon).<br>");
     image = altGraphXMakeImage(tdb,copy);
     freez(&image);
     altGraphXFree(&copy);
@@ -14180,6 +14106,44 @@ if ((row = sqlNextRow(sr)) != NULL)
     }
 else
     errAbort("query returned no results: \"%s\"", query);
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+printTrackHtml(tdb);
+}
+
+
+void doBed6FloatScore(struct trackDb *tdb, char *item)
+/* Handle click in BED 4+ track that's like BED 6 but with floating pt score */
+{
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr = NULL;
+char table[64];
+boolean hasBin;
+struct bed6FloatScore *b6;
+struct dyString *query = newDyString(512);
+char **row;
+boolean firstTime = TRUE;
+int start = cartInt(cart, "o");
+
+genericHeader(tdb, item);
+printCustomUrl(tdb, item, TRUE);
+hFindSplitTable(seqName, tdb->tableName, table, &hasBin);
+dyStringPrintf(query, "select * from %s where chrom = '%s' and ",
+	       table, seqName);
+hAddBinToQuery(winStart, winEnd, query);
+dyStringPrintf(query, "name = '%s' and chromStart = %d", item, start);
+sr = sqlGetResult(conn, query->string);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    if (firstTime)
+	firstTime = FALSE;
+    else
+	htmlHorizontalLine();
+    b6 = bed6FloatScoreLoad(row+hasBin);
+    bedPrintPos((struct bed *)b6, 4);
+    printf("<B>Score:</B> %f<BR>\n", b6->score);
+    printf("<B>Strand:</B> %s<BR>\n", b6->strand);
+    }
 sqlFreeResult(&sr);
 hFreeConn(&conn);
 printTrackHtml(tdb);
@@ -14884,6 +14848,10 @@ else if (startsWith("zdobnov", track))
 else if (startsWith("deweySynt", track))
     {
     doDeweySynt(tdb, item);
+    }
+else if (startsWith("eponine", track))
+    {
+    doBed6FloatScore(tdb, item);
     }
 else if (tdb != NULL)
     {

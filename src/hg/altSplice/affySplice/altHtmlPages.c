@@ -13,6 +13,8 @@
 #include "dystring.h"
 #include "altGraphX.h"
 #include "altSpliceSite.h"
+#include "hdb.h"
+#include "dnaseq.h"
 #include <gsl/gsl_math.h>
 #include <gsl/gsl_statistics_double.h>
 
@@ -48,7 +50,9 @@ struct junctSet
     boolean altExpressed;       /* TRUE if more than one form of this junction set is expressed. */
     double score;               /* Score of being expressed overall. */
     double exonCorr;            /* Correlation of exon probe set with include junction if appropriate. */
+    double exonSkipCorr;        /* Correlation of exon probe set with skip junction if appropriate. */
     double probCorr;            /* Correlation of exon probe set prob and include probs. */
+    double probSkipCorr;        /* Correlation of exon probe set prob skip junction if appropriate. */
     double exonSjPercent;       /* Percentage of includes confirmed by exon probe set. */
     double sjExonPercent;       /* Percentage of exons confirmed by sj probe set. */
     int exonAgree;              /* Number of times exon agrees with matched splice junction */
@@ -97,7 +101,8 @@ static struct optionSpec optionSpecs[] =
     {"db", OPTION_STRING},
     {"spliceTypes", OPTION_STRING},
     {"tissueSpecific", OPTION_STRING},
-    {"brainSpecific", OPTION_STRING},
+    {"outputDna", OPTION_STRING},
+    {"cassetteBed", OPTION_STRING},
     {NULL, 0}
 };
 
@@ -125,8 +130,9 @@ static char *optionDescripts[] =
     "[optional] File with graphs to determine types.",
     "[optional] Database that graphs are from.",
     "[optional] Try to determine types of splicing in junction sets.",
-    "[optional] Output tissues specific isoforms to file specified."
-    "[optional] Output tissues that are specific to the brain or excluded from the brain.",
+    "[optional] Output tissues specific isoforms to file specified.",
+    "[optional] Output dna associated with a junction to this file.",
+    "[optional] Output splice sites for cassette exons.",
 };
 
 double presThresh = 0;     /* Probability above which we consider
@@ -140,7 +146,7 @@ FILE *exonPsStats = NULL;  /* File to output exon probe set
 boolean doJunctionTypes = FALSE;  /* Should we try to determine what type of splice type is out there? */ 
 FILE *bedJunctTypeOut =   NULL;   /* File to write out bed types to. */
 struct hash *junctBedHash = NULL;
-
+FILE *cassetteBedOut = NULL;      /* File to write cassette bed records to. */
 /* Counts of different alternative splicing 
    events. */
 int alt3Count = 0;
@@ -159,6 +165,8 @@ int alt5SoftExpCount = 0;
 int altCassetteExpCount = 0;
 int otherExpCount = 0;
 
+int noDna = 0;
+int withDna = 0;
 void usage()
 /** Print usage and quit. */
 {
@@ -516,6 +524,24 @@ else
 return includeIx;
 }
 
+int skipJsIx(struct junctSet *js, struct hash *bedHash)
+/* Return the index of the skip junction for a cassette exon. */
+{
+int skipIx = 0;
+struct bed *bed1 = NULL, *bed2 = NULL;
+
+assert(js->cassette);
+assert(js->junctUsedCount == 2);
+
+bed1 = hashMustFindVal(bedHash, js->junctUsed[0]);
+bed2 = hashMustFindVal(bedHash, js->junctUsed[1]);
+if(bed1->chromEnd - bed1->chromStart > bed2->chromEnd - bed2->chromStart)
+    skipIx = 0;
+else
+    skipIx = 1;
+return skipIx;
+}
+
 boolean junctionExpressed(struct junctSet *js, int colIx, int junctIx)
 /* Is the junction at junctIx expressed above the 
    threshold in colIx? */
@@ -625,6 +651,16 @@ corr = correlation(js->junctIntens[includeIx], js->exonPsIntens, intenM->colCoun
 return corr;
 }
 
+double calcExonSjSkipCorrelation(struct junctSet *js, struct hash *bedHash, struct resultM *intenM)
+/* Calcualate the correltation between the exon probe
+   set and the appropriate skip splice junction set. */
+{
+double corr = -2;
+int skipIx = skipJsIx(js, bedHash);
+corr = correlation(js->junctIntens[skipIx], js->exonPsIntens, intenM->colCount);
+return corr;
+}
+
 double calcExonSjProbCorrelation(struct junctSet *js, struct hash *bedHash, struct resultM *probM)
 /* Calcualate the correltation between the exon probe
    set and the appropriate splice junction set. */
@@ -632,6 +668,16 @@ double calcExonSjProbCorrelation(struct junctSet *js, struct hash *bedHash, stru
 double corr = -2;
 int includeIx = includeJsIx(js, bedHash);
 corr = correlation(js->junctProbs[includeIx], js->exonPsProbs, probM->colCount);
+return corr;
+}
+
+double calcExonSjSkipProbCorrelation(struct junctSet *js, struct hash *bedHash, struct resultM *probM)
+/* Calcualate the correltation between the exon probe
+   set and the appropriate splice junction set. */
+{
+double corr = -2;
+int skipIx = skipJsIx(js, bedHash);
+corr = correlation(js->junctProbs[skipIx], js->exonPsProbs, probM->colCount);
 return corr;
 }
 
@@ -647,13 +693,16 @@ for(js = jsList; js != NULL; js = js->next)
        js->exonPsIntens != NULL && js->exonPsProbs != NULL) 
 	{
 	js->exonCorr = calcExonSjCorrelation(js, bedHash, intenM);
+	js->exonSkipCorr = calcExonSjSkipCorrelation(js, bedHash, intenM);
 	js->probCorr = calcExonSjProbCorrelation(js, bedHash, probM);
+	js->probSkipCorr = calcExonSjSkipProbCorrelation(js, bedHash, probM);
 	js->exonSjPercent = calcExonPercent(js, bedHash, probM);
 	js->sjExonPercent = calcSjPercent(js, bedHash, probM);
 	if(js->altExpressed && exonPsStats)
-	    fprintf(exonPsStats, "%s\t%.2f\t%.2f\t%.2f\t%d\t%d\t%d\t%d\t%.2f\n", 
+	    fprintf(exonPsStats, "%s\t%.2f\t%.2f\t%.2f\t%d\t%d\t%d\t%d\t%.2f\t%.2f\t%.2f\n", 
 		    js->exonPsName, js->exonCorr, js->exonSjPercent, js->sjExonPercent, 
-		    js->exonAgree, js->exonDisagree, js->sjAgree, js->sjDisagree, js->probCorr);
+		    js->exonAgree, js->exonDisagree, js->sjAgree, js->sjDisagree, js->probCorr,
+		    js->exonSkipCorr, js->probSkipCorr);
 	}
     }
 }
@@ -757,9 +806,9 @@ for(js = jsList; js != NULL; js = js->next)
 
 warn("%d junctions expressed above p-val %.2f, %d alternative (%.2f%%)",
      junctOneExp, presThresh, junctTwoExp, 100*((double)junctTwoExp/junctOneExp));
-warn("%d altCassette, %d alt3, %d alt5, %d altTranStart %d altTranEnd, %d other of expressed",
-	 altCassetteExpCount, alt3ExpCount, alt5SoftExpCount, 
-	 alt5ExpCount, alt3SoftExpCount, otherExpCount);
+/* warn("%d altCassette, %d alt3, %d alt5, %d altTranStart %d altTranEnd, %d other of expressed", */
+/* 	 altCassetteExpCount, alt3ExpCount, alt5SoftExpCount,  */
+/* 	 alt5ExpCount, alt3SoftExpCount, otherExpCount); */
 }
 
 int junctSetScoreCmp(const void *va, const void *vb)
@@ -1339,6 +1388,147 @@ else if(type == alt5PrimeSoft && isNeg)
 return type;
 }
 
+void outputJunctDna(char *bedName, struct altGraphX *ag, FILE *dnaOut)
+/* Write out the dna for a given junction in the
+   sense orientation. */
+{
+struct bed *bed = NULL;
+bool **em = NULL;
+unsigned char *vTypes = NULL;
+int *vPos = NULL;
+int start1 = -1, end1 = -1, start2 = -1, end2 = -1;
+struct dnaSeq *upSeq1 = NULL, *downSeq1 = NULL, *exonSeq1 = NULL;
+struct dnaSeq *upSeq2 = NULL, *downSeq2 = NULL, *exonSeq2 = NULL;
+bed = hashMustFindVal(junctBedHash, bedName);
+em = altGraphXCreateEdgeMatrix(ag);
+end1 = agxVertexByPos(ag, bedSpliceStart(bed));
+start2 = agxVertexByPos(ag, bedSpliceEnd(bed));
+
+if(end1 == -1 || start2 == -1)
+    {
+    altGraphXFreeEdgeMatrix(&em, ag->vertexCount);
+    noDna++;
+    return;
+    }
+    
+end2 = agxFindClosestDownstreamVertex(ag, em, start2);
+start1 = agxFindClosestUpstreamVertex(ag, em, end1);
+if(end2 == -1 || start1 == -1)
+    {
+    altGraphXFreeEdgeMatrix(&em, ag->vertexCount);
+    noDna++;
+    return;
+    }
+vPos = ag->vPositions;
+upSeq1 = hChromSeq(bed->chrom, vPos[start1]-200, vPos[start1]);
+exonSeq1 = hChromSeq(bed->chrom, vPos[start1], vPos[end1]);
+downSeq1 = hChromSeq(bed->chrom, vPos[end1], vPos[end1]+200);
+upSeq2 = hChromSeq(bed->chrom, vPos[start2]-200, vPos[start2]);
+exonSeq2 = hChromSeq(bed->chrom, vPos[start2], vPos[end2]);
+downSeq2 = hChromSeq(bed->chrom, vPos[end2], vPos[end2]+200);
+
+if(bed->strand[0] == '-')
+    {
+    reverseComplement(upSeq1->dna, upSeq1->size);
+    reverseComplement(exonSeq1->dna, exonSeq1->size);
+    reverseComplement(downSeq1->dna, downSeq1->size);
+    reverseComplement(upSeq2->dna, upSeq2->size);
+    reverseComplement(exonSeq2->dna, exonSeq2->size);
+    reverseComplement(downSeq2->dna, downSeq2->size);
+    fprintf(dnaOut, "%s\t%s\t%s\t%s\t%s\t%s\t%s\n",
+	    bedName, downSeq2->dna, exonSeq2->dna, upSeq2->dna, 
+	    downSeq1->dna, exonSeq1->dna, upSeq1->dna);
+    }
+else
+    {
+    fprintf(dnaOut, "%s\t%s\t%s\t%s\t%s\t%s\t%s\n",
+	    bedName, upSeq1->dna, exonSeq1->dna, upSeq2->dna, 
+	    upSeq2->dna, exonSeq2->dna, downSeq2->dna);
+    }
+dnaSeqFree(&upSeq1);
+dnaSeqFree(&exonSeq1);
+dnaSeqFree(&downSeq1);
+dnaSeqFree(&upSeq2);
+dnaSeqFree(&exonSeq2);
+dnaSeqFree(&downSeq2);
+altGraphXFreeEdgeMatrix(&em, ag->vertexCount);
+withDna++;
+}
+
+void outputDnaForJunctSet(struct junctSet *js, FILE *dnaOut)
+/* For each junction in a junction set. Cut out the dna for the exon
+   associated with it.  Format is junctName 3'intron exon '5intron
+*/
+{
+bool **em = NULL;
+int type = -1;
+struct binElement *be = NULL, *beList = NULL, *beStrand = NULL;
+unsigned char *vTypes = NULL;
+struct altGraphX *ag = NULL, *agList = NULL;
+int i = 0;
+beList = chromKeeperFind(js->chrom, js->chromStart, js->chromEnd);
+for(be = beList; be != NULL; be = be->next)
+    {
+    ag = be->val;
+    if(ag->strand[0] == js->strand[0])
+	slSafeAddHead(&agList, ag);
+    }
+slFreeList(&beList);
+
+/* Can't do much with no graphs or too many graphs. */
+if(agList == NULL || slCount(agList) != 1)
+    return;
+ag = agList;
+
+/* Do the individual junctions. */
+for(i = 0; i < js->maxJunctCount; i++)
+    {
+    outputJunctDna(js->junctPSets[i], ag, dnaOut);
+    }
+for(i = 0; i < js->junctDupCount; i++)
+    {
+    outputJunctDna(js->dupJunctPSets[i], ag, dnaOut);
+    }
+
+}
+void outputDnaForAllJuctSets(struct junctSet *jsList)
+/* Loop through and output dna for all of the junctions. */
+{
+char *db = optionVal("db", NULL);
+char *dnaFile = optionVal("outputDna", NULL);
+FILE *dnaOut = NULL;
+struct junctSet *js = NULL;
+if(db == NULL)
+    errAbort("Must specify db when specifying outputDna.");
+assert(dnaFile);
+hSetDb(db);
+dnaOut = mustOpen(dnaFile, "w");
+for(js = jsList; js != NULL; js = js->next)
+    {
+    outputDnaForJunctSet(js, dnaOut);
+    }
+warn("%d with dna, %d without dna", withDna, noDna);
+carefulClose(&dnaOut);
+}
+
+void outputCassetteBed(struct junctSet *js, struct bed *bedUp, struct bed *bedDown,
+		   struct altGraphX *ag, bool **em, int start, int ve1, int ve2,
+		   int altBpStart, int altBpEnd)
+/* Write out a cassette bed to a file. */
+{
+struct bed bed; 
+if(js->altExpressed && cassetteBedOut)
+    {
+    bed.chrom = bedUp->chrom;
+    bed.chromStart = ag->vPositions[altBpStart];
+    bed.chromEnd = ag->vPositions[altBpEnd];
+    bed.name = bedUp->name;
+    bed.strand[0] = bedUp->strand[0];
+    bed.score = altCassette;
+    bedTabOutN(&bed,6,cassetteBedOut);
+    }
+}
+
 int spliceTypeForJunctSet(struct junctSet *js)
 /* Determine the alternative splicing type for a junction set.  This
  function is a little long as I have to convert into altGraphX and do
@@ -1411,6 +1601,9 @@ if(bedUp->chromStart == bedDown->chromStart)
     else if(agxIsCassette(ag, em, start, ve1, ve2, 
 			  &altBpStart,  &altBpEnd, &firstVertex, &lastVertex))
 	type = altCassette;
+/*     outputAlt3Dna(js, bedUp, bedDown, ag, em, start, ve1, ve2, altBpStart, altBpEnd) */
+    if(type == altCassette)
+	outputCassetteBed(js, bedUp, bedDown, ag, em, start, ve1, ve2, altBpStart, altBpEnd);
     type = translateStrand(type, ag->strand[0]);
     }
 /* If same end then check for an alternative 5' splice site. */
@@ -1443,7 +1636,10 @@ else if(bedUp->chromEnd == bedDown->chromEnd)
 	if(agxIsCassette(ag, em, start, start2, end,
 			 &altBpStart, &altBpEnd, &firstVertex, &lastVertex)) 
 	    type = altCassette;
+	if(type == altCassette)
+	    outputCassetteBed(js, bedUp, bedDown, ag, em, start, ve1, ve2, altBpStart, altBpEnd);
 	}
+
     type = translateStrand(type, ag->strand[0]);
     }
 if(js->cassette && type != altCassette)
@@ -1602,6 +1798,8 @@ fillInProbs(jsList, probM);
 fillInIntens(jsList, intenM);
 bedHash = hashBeds(bedFile);
 junctBedHash = bedHash;
+calcExpressed(jsList, probM);
+
 if(doJunctionTypes)
     {
     determineSpliceTypes(jsList);
@@ -1609,13 +1807,16 @@ if(doJunctionTypes)
 	 altCassetteCount, alt3Count, alt5SoftCount, 
 	 alt5Count, alt3SoftCount, otherCount);
     }
-warn("Calculating expression");
-calcExpressed(jsList, probM);
 calcExonCorrelation(jsList, bedHash, intenM, probM);
+warn("Calculating expression");
+
 if(optionExists("tissueSpecific"))
     {
     outputTissueSpecific(jsList, probM);
     }
+
+if(optionExists("outputDna"))
+    outputDnaForAllJuctSets(jsList);
 
 /* Write out the lists. */
 warn("Writing out links.");
@@ -1690,6 +1891,8 @@ int main(int argc, char *argv[])
 char *exonPsFile = NULL;
 FILE *agxFile = NULL;
 char *agxFileName = NULL;
+char *cassetteBedOutName = NULL;
+
 if(argc == 1)
     usage();
 optionInit(&argc, argv, optionSpecs);
@@ -1707,13 +1910,18 @@ if(agxFileName != NULL)
     bedJunctTypeOut = mustOpen(spliceTypeFile, "w");
     agxLoadChromKeeper(agxFileName);
     }
+cassetteBedOutName = optionVal("cassetteBed", NULL);
+if(cassetteBedOutName != NULL)
+    {
+    cassetteBedOut = mustOpen(cassetteBedOutName, "w");
+    }
 
 if((exonPsFile = optionVal("exonStats", NULL)) != NULL)
     {
     exonPsStats = mustOpen(exonPsFile, "w");
     fprintf(exonPsStats, 
 	    "#name\tcorrelation\texonSjPercent\tsjExonPercent\t"
-	    "exonAgree\texonDisagree\tsjAgree\tsjDisagree\n");
+	    "exonAgree\texonDisagree\tsjAgree\tsjDisagree\tprobCorr\tskipCorr\tskipProbCorr\n");
     }
 if(optionExists("strictDisagree"))
     disagreeThresh = absThresh;
@@ -1723,5 +1931,6 @@ altHtmlPages(optionVal("junctFile", NULL), optionVal("probFile", NULL),
 	     optionVal("intensityFile", NULL), optionVal("bedFile", NULL));
 carefulClose(&exonPsStats);
 carefulClose(&bedJunctTypeOut);
+carefulClose(&cassetteBedOut);
 return 0;
 }

@@ -33,6 +33,7 @@ CREATE TABLE pushQ (
     bounces int unsigned not null,	# Bounce-count (num times bounced back to developer)
     lockUser char(8) not null,	# User who has locked record, or empty string
     lockDateTime char(16) not null,	# When user placed lock, or empty string
+    releaseLog longblob not null,	# Release Log entry
               #Indices
     PRIMARY KEY(qid)
 );

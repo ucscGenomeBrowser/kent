@@ -1,5 +1,5 @@
 This document describes the configuration system
-for the hgNear (Family Browser) cgi-script.
+for the hgNear (Gene Sorter) cgi-script.
 The configurations are stored in the hgNearData directory.  
 This directory contains subdirectories for each organism,
 and sub-subdirectories for each assembly of the

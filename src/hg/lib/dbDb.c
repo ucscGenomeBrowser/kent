@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "dbDb.h"
 
-static char const rcsid[] = "$Id: dbDb.c,v 1.11 2003/09/17 17:09:58 kent Exp $";
+static char const rcsid[] = "$Id: dbDb.c,v 1.12 2004/05/26 00:31:34 galt Exp $";
 
 void dbDbStaticLoad(char **row, struct dbDb *ret)
 /* Load a row from dbDb table into ret.  The contents of ret will
@@ -27,7 +27,9 @@ ret->orderKey = sqlSigned(row[6]);
 ret->genome = row[7];
 ret->scientificName = row[8];
 ret->htmlPath = row[9];
-ret->hgNearOk = sqlUnsigned(row[10]);
+ret->hgNearOk = sqlSigned(row[10]);
+ret->hgPbOk = sqlSigned(row[11]);
+ret->sourceName = row[12];
 }
 
 struct dbDb *dbDbLoad(char **row)
@@ -49,7 +51,9 @@ ret->orderKey = sqlSigned(row[6]);
 ret->genome = cloneString(row[7]);
 ret->scientificName = cloneString(row[8]);
 ret->htmlPath = cloneString(row[9]);
-ret->hgNearOk = sqlUnsigned(row[10]);
+ret->hgNearOk = sqlSigned(row[10]);
+ret->hgPbOk = sqlSigned(row[11]);
+ret->sourceName = cloneString(row[12]);
 return ret;
 }
 
@@ -59,7 +63,7 @@ struct dbDb *dbDbLoadAll(char *fileName)
 {
 struct dbDb *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[10];
+char *row[13];
 
 while (lineFileRow(lf, row))
     {
@@ -77,7 +81,7 @@ struct dbDb *dbDbLoadAllByChar(char *fileName, char chopper)
 {
 struct dbDb *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[10];
+char *row[13];
 
 while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
     {
@@ -109,7 +113,9 @@ ret->orderKey = sqlSignedComma(&s);
 ret->genome = sqlStringComma(&s);
 ret->scientificName = sqlStringComma(&s);
 ret->htmlPath = sqlStringComma(&s);
-ret->hgNearOk = sqlUnsignedComma(&s);
+ret->hgNearOk = sqlSignedComma(&s);
+ret->hgPbOk = sqlSignedComma(&s);
+ret->sourceName = sqlStringComma(&s);
 *pS = s;
 return ret;
 }
@@ -129,6 +135,7 @@ freeMem(el->defaultPos);
 freeMem(el->genome);
 freeMem(el->scientificName);
 freeMem(el->htmlPath);
+freeMem(el->sourceName);
 freez(pEl);
 }
 
@@ -185,7 +192,13 @@ if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->htmlPath);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
-fprintf(f, "%d", el->active);
+fprintf(f, "%d", el->hgNearOk);
+fputc(sep,f);
+fprintf(f, "%d", el->hgPbOk);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->sourceName);
+if (sep == ',') fputc('"',f);
 fputc(lastSep,f);
 }
 

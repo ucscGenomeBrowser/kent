@@ -1,6 +1,15 @@
+track cytoBandIdeo
+shortLabel Chromosome 
+longLabel Chromosome Bands Based On ISCN Lengths
+group map
+priority .1
+visibility dense
+altColor 150,50,50
+type bed 4 +
+
 track cytoBand
 shortLabel Chromosome Band
-longLabel Chromosome Bands Based On ISCN Lengths
+longLabel 
 group map
 priority 1
 visibility dense
@@ -55,17 +64,32 @@ color 100,50,0
 altColor 175,150,128
 type genePred 
 
+
+
 track gnfAtlas2
 shortLabel GNF Atlas 2
 longLabel GNF Expression Atlas 2
 group regulation
-priority 81
+priority 81.0
 visibility hide
 type expRatio
 expScale 4.0
 expStep 0.5
 expTable gnfMouseAtlas2MedianExps
 chip GNF1M
+
+
+track rinnSex
+shortLabel Rinn Sex Exp.
+longLabel Rinn et. al Sex Gene Expression Data on MOE430A Chip
+group regulation
+priority 81.1
+visibility hide
+type expRatio
+expScale 8.0
+expStep 1.0
+expTable mouseRinnSexMedianExps
+chip MOE430A
 
 track affyGnfU74A
 shortLabel GNF U74A

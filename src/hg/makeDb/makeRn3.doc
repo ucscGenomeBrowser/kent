@@ -2209,7 +2209,8 @@ SGP GENE PREDICTIONS (DONE - 2003-07-30 - Hiram)
     ldHgGene rn3 sgpGene download/*.gtf -exon=CDS
     hgPepPred rn3 generic sgpPep download/*-fixed.prot
 
-# TIGR GENE INDEX (RE-DONE 2004-05018 Fan)
+
+# TIGR GENE INDEX (DONE 2004-05020 Fan)
     mkdir -p /cluster/data/rn3/bed/tigr
     cd /cluster/data/rn3/bed/tigr
     wget ftp://ftp.tigr.org/pub/data/tgi/Rattus_norvegicus/TGI_track_RatGenome_rn3_05-2004.tgz
@@ -2239,6 +2240,9 @@ SGP GENE PREDICTIONS (DONE - 2003-07-30 - Hiram)
         hgsql rn3 -e "select count(*) from tigrGeneIndex"
     end
     # Total of 308616 entries created in tigrGeneIndex table.
+
+    hgsql rn3 -e "update tigrGeneIndex set cdsStart = txStart;"
+    hgsql rn3 -e "update tigrGeneIndex set cdsEnd = txEnd;"
     
     # Perform some coordinate checking
     checkTableCoords rn3 tigrGeneIndex
@@ -2316,7 +2320,7 @@ LOAD ENSEMBL ESTs (TO DO)
      hgPepPred rn3 generic ensEstPep rat-est-fixed.pep
 
 #### LOAD ENSEMBL GENES (DONE - 2004-04-29 - Fan)
-#	ensGene is needed for Superfamily track, Family Browser, and Proteome Browser
+#	ensGene is needed for Superfamily track, Gene Sorter, and Proteome Browser
 #	Ensembl released Rat build 3.1 the week of Feb 9th, 2004
      mkdir /cluster/data/rn3/bed/ensembl
      cd /cluster/data/rn3/bed/ensembl
@@ -2452,20 +2456,6 @@ o - Load genomic dupes
     hgsql rn3 < ~/src/hg/lib/genomicDups.sql
     hgLoadBed rn3 -oldTable genomicDups genomicDupes.bed
 
-LOAD RGD CURATED GENES TRACK
-    - cd rn3
-    - cd bed
-    - mkdir rgdGene
-    - Browse to http://zephyrus.brc.mcw.edu/cgi-bin/pub/viewcvs.cgi/pub_gbrowse/gff_files/RGD_curated_genes.gff
-        This is a web-based CVS page. Click the download link and save the file to ~/rn3/bed/RGD_curated_genes.gff
-     - Now massage the data format using:
-         rn3/bed/rgdGene/massage.pl
-     - Load the data:
-        ldHgGene rn3 rgdGene Fixed_RGD_Curated_genes.gff
-     - Create the link table for searching
-        In mysql for the rn3 database do:
-        create table rgdLink (id int primary key, name varchar(32) not null);
-        LOAD DATA LOCAL INFILE 'RGD.links' into table rgdLink; 
 TWINSCAN GENE PREDICTIONS (DONE 07/14/03)
 
     mkdir -p ~/rn3/bed/twinscan
@@ -3284,7 +3274,6 @@ sys     16m13.770s
 # Affymetrix RG-U34A GeneChip track - affyRGU34A 
 # RG-U34A is the chip used for the GNF Atlas 2 expression data for Rat
 # (DONE, 2004-05-11, hartera)
-
     mkdir -p /projects/compbio/data/microarray/affyRat
     # Download RG-U34A exemplar sequences from Affymetrix web site
     # http://www.affymetrix.com/support/technical/byproduct.affx?product=rgu34
@@ -3367,6 +3356,17 @@ sys     16m13.770s
     # create and load knownToRAE230
     hgMapToGene rn3 affyU34A knownGene knownToU34A
 
+# ADD EXPRESSION DATA TRACK BY MERGING EXPRESSION AND ALIGNMNET DATA
+# GNF ATLAS 2 TRACK (DONE, 2004-05-25, hartera)
+
+    ssh hgwdev
+    cd /cluster/data/rn3/bed/affyU34A
+    hgMapMicroarray gnfRatAtlas2.bed hgFixed.gnfRatAtlas2MedianRatio \
+        affyU34A.psl
+    # Loaded 8022 rows of expression data from hgFixed.gnfRatAtlas2MedianRatio
+    # Mapped 7442,  multiply-mapped 239, missed 694, unmapped 580
+ 
+    hgLoadBed rn3 gnfAtlas2 gnfRatAtlas2.bed
 
 ######## PROTEOME BROWSER BUILD #######  (PARTIALLY DONE - 2004-04-14 - Fan)
 
@@ -3652,3 +3652,102 @@ o Adjust drawing parameters for Proteome Browser stamps
 o Perform preliminary review of Proteome Browser for rn3
 
 o Notify QA for formal review, when all PB build steps done.
+
+
+####### BUILD/REBUILD RGD TRACKS (DONE 5/26/04 Fan) ##############
+
+# download data files from RGD
+
+wget ftp://rgd.mcw.edu:21/pub/RGD_genome_annotations/V3.1/GFF_files/RGD_EST.gff
+wget ftp://rgd.mcw.edu:21/pub/RGD_genome_annotations/V3.1/GFF_files/RGD_QTL.gff
+wget ftp://rgd.mcw.edu:21/pub/RGD_genome_annotations/V3.1/GFF_files/RGD_QTL.gff
+wget ftp://rgd.mcw.edu:21/pub/RGD_genome_annotations/V3.1/GFF_files/RGD_RH3.4_Markers.gff
+wget ftp://rgd.mcw.edu:21/pub/RGD_genome_annotations/V3.1/GFF_files/RGD_SSLP.gff
+wget ftp://rgd.mcw.edu:21/pub/RGD_genome_annotations/V3.1/GFF_files/RGD_curated_genes.gff
+wget ftp://rgd.mcw.edu:21/pub/RGD_genome_annotations/V3.1/GFF_files/chr_coordinates.gff
+
+# create rgdGeneLink.tab
+echo "Processing RGD_curated_genes.gff ..."
+
+awk '{print $12"\t"$10"\t"$14}'  RGD_curated_genes.gff | sed -e 's/"//g' | sed -e 's/RGD://g'|sed -e 's/;//g' |sort -u > rgdGeneLink.tab
+
+# load rgdGeneLink table
+hgsql rn3 -e "drop table rn3.rgdGeneLink"
+hgsql rn3 < ~/kent/src/hg/lib/rgdGeneLink.sql
+hgsql rn3 -e 'load data local infile "rgdGeneLink.tab" into table rn3.rgdGeneLink;'
+
+# create rgdGene.tab
+hgsql rn3 -e "select refGene.name,chrom,strand,txStart,txEnd,cdsStart,cdsEnd,exonCount,exonStarts,exonEnds from refGene,rgdGeneLink where refGene.name=rgdGeneLink.refSeq;" >rgdGene.tab
+
+# load rgdGene table
+hgsql rn3 -e "drop table rn3.rgdGene"
+hgsql rn3 < ~/kent/src/hg/lib/rgdGene.sql
+hgsql rn3 -e 'load data local infile "rgdGene.tab" into table rn3.rgdGene ignore 1 lines;'
+
+# check rgdGene table
+echo "Performing checkTableCoords rn3 rgdGene ..."
+checkTableCoords rn3 rgdGene
+
+
+# create rgdEstLink.tab
+echo "Processing RGD_EST.gff ..."
+
+awk '{print $12"\t"$10"\t"$14}'  RGD_EST.gff | sed -e 's/"//g' | sed -e 's/RGD://g'|sed -e 's/;//g' |sort -u > rgdEstLink.tab
+
+# load rgdEstLink table
+hgsql rn3 -e "drop table rn3.rgdEstLink"
+hgsql rn3 < ~/kent/src/hg/lib/rgdEstLink.sql
+hgsql rn3 -e 'load data local infile "rgdEstLink.tab" into table rn3.rgdEstLink;'
+
+# create rgdEst.tab
+hgsql rn3 -e "select all_est.* from all_est,rgdEstLink where all_est.qName=rgdEstLink.name;" >rgdEst.tab
+
+# load rgdEst table
+hgsql rn3 -e "drop table rn3.rgdEst"
+hgsql rn3 < ~/kent/src/hg/lib/rgdEst.sql
+hgsql rn3 -e 'load data local infile "rgdEst.tab" into table rn3.rgdEst ignore 1 lines;'
+
+# check rgdEst table
+echo "Performing checkTableCoords rn3 rgdEst ..."
+checkTableCoords rn3 rgdEst
+
+
+# create rgdQtl.tab
+echo "Processing RGD_QTL.gff ..."
+awk '{print $1"\t"$4-1"\t"$5"\t"$10}'  RGD_QTL.gff |sed -e 's/Chr/chr/g'| sed -e 's/"//g' | sed -e 's/RGD://g' | sed -e 's/;//g' > rgdQtl.tab
+
+# create rgdQtlLink.tab
+awk '{printf "%s\t%s\t", $12, $10; for (i = 14;i <= NF; ++i ) {printf "%s ", $i} printf "\n"} ' RGD_QTL.gff | sed -e 's/"//g' | sed -e 's/RGD://g' | sed -e 's/;//g' > rgdQtlLink.tab
+
+# load rgdQtl table
+hgLoadBed rn3 rgdQtl rgdQtl.tab
+
+# check rgdQtl table
+echo "Performing checkTableCoords rn3 rgdQtl ..."
+checkTableCoords rn3 rgdQtl
+
+# load rgdQtlLink table
+hgsql rn3 -e "drop table rn3.rgdQtlLink;"
+hgsql rn3 <~/kent/src/hg/lib/rgdQtlLink.sql
+hgsql rn3 -e 'load data local infile "rgdQtlLink.tab" into table rn3.rgdQtlLink;'
+
+
+# create rgdSslp.tab 
+echo "Processing RGD_SSLP.gff ..."
+awk '{print $1"\t"$4-1"\t"$5"\t"$10}' RGD_SSLP.gff|sed -e 's/Chr/chr/g'| sed -e 's/;//g'|sed -e 's/"//g'|sed -e 's/RGD://g' >rgdSslp.tab
+
+# create rgdSslpLink.tab
+awk '{print $12"\t"$10}' RGD_SSLP.gff|sed -e 's/"//g'|sed -e 's/RGD://g'|sed -e 's/;//g' >rgdSslpLink.tab
+
+# load rgdSslp table
+hgLoadBed rn3 rgdSslp rgdSslp.tab
+
+# check rgdSslp table
+echo "Performing checkTableCoords rn3 rgdSslp ..."
+checkTableCoords rn3 rgdSslp
+
+# load rgdSslpLink table
+hgsql rn3 -e "drop table rn3.rgdSslpLink"
+hgsql rn3 < ~/kent/src/hg/lib/rgdSslpLink.sql
+hgsql rn3 -e 'load data local infile "rgdSslpLink.tab" into table rn3.rgdSslpLink;'
+

@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "pushQ.h"
 
-static char const rcsid[] = "$Id: pushQ.c,v 1.6 2004/05/21 18:56:57 galt Exp $";
+static char const rcsid[] = "$Id: pushQ.c,v 1.7 2004/05/24 08:24:10 galt Exp $";
 
 void pushQStaticLoad(char **row, struct pushQ *ret)
 /* Load a row from pushQ table into ret.  The contents of ret will
@@ -45,6 +45,7 @@ strcpy(ret->initdate, row[24]);
 ret->bounces = sqlUnsigned(row[25]);
 strcpy(ret->lockUser, row[26]);
 strcpy(ret->lockDateTime, row[27]);
+ret->releaseLog = row[28];
 }
 
 struct pushQ *pushQLoad(char **row)
@@ -84,6 +85,7 @@ strcpy(ret->initdate, row[24]);
 ret->bounces = sqlUnsigned(row[25]);
 strcpy(ret->lockUser, row[26]);
 strcpy(ret->lockDateTime, row[27]);
+ret->releaseLog = cloneString(row[28]);
 return ret;
 }
 
@@ -93,7 +95,7 @@ struct pushQ *pushQLoadAll(char *fileName)
 {
 struct pushQ *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[28];
+char *row[29];
 
 while (lineFileRow(lf, row))
     {
@@ -111,7 +113,7 @@ struct pushQ *pushQLoadAllByChar(char *fileName, char chopper)
 {
 struct pushQ *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[28];
+char *row[29];
 
 while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
     {
@@ -155,8 +157,8 @@ void pushQSaveToDb(struct sqlConnection *conn, struct pushQ *el, char *tableName
  * If worried about this use pushQSaveToDbEscaped() */
 {
 struct dyString *update = newDyString(updateSize);
-dyStringPrintf(update, "insert into %s values ( '%s','%s','%s',%u,'%s','%s','%s','%s',%s,'%s','%s',%u,'%s','%s','%s','%s','%s','%s','%s','%s','%s',%s,%s,'%s','%s',%u,'%s','%s')", 
-	tableName,  el->qid,  el->pqid,  el->priority,  el->rank,  el->qadate,  el->newYN,  el->track,  el->dbs,  el->tbls,  el->cgis,  el->files,  el->sizeMB,  el->currLoc,  el->makeDocYN,  el->onlineHelp,  el->ndxYN,  el->joinerYN,  el->stat,  el->sponsor,  el->reviewer,  el->extSource,  el->openIssues,  el->notes,  el->pushState,  el->initdate,  el->bounces,  el->lockUser,  el->lockDateTime);
+dyStringPrintf(update, "insert into %s values ( '%s','%s','%s',%u,'%s','%s','%s','%s',%s,'%s','%s',%u,'%s','%s','%s','%s','%s','%s','%s','%s','%s',%s,%s,'%s','%s',%u,'%s','%s',%s)", 
+	tableName,  el->qid,  el->pqid,  el->priority,  el->rank,  el->qadate,  el->newYN,  el->track,  el->dbs,  el->tbls,  el->cgis,  el->files,  el->sizeMB,  el->currLoc,  el->makeDocYN,  el->onlineHelp,  el->ndxYN,  el->joinerYN,  el->stat,  el->sponsor,  el->reviewer,  el->extSource,  el->openIssues,  el->notes,  el->pushState,  el->initdate,  el->bounces,  el->lockUser,  el->lockDateTime,  el->releaseLog);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 }
@@ -171,7 +173,7 @@ void pushQSaveToDbEscaped(struct sqlConnection *conn, struct pushQ *el, char *ta
  * before inserting into database. */ 
 {
 struct dyString *update = newDyString(updateSize);
-char  *qid, *pqid, *priority, *qadate, *newYN, *track, *dbs, *tbls, *cgis, *files, *currLoc, *makeDocYN, *onlineHelp, *ndxYN, *joinerYN, *stat, *sponsor, *reviewer, *extSource, *openIssues, *notes, *pushState, *initdate, *lockUser, *lockDateTime;
+char  *qid, *pqid, *priority, *qadate, *newYN, *track, *dbs, *tbls, *cgis, *files, *currLoc, *makeDocYN, *onlineHelp, *ndxYN, *joinerYN, *stat, *sponsor, *reviewer, *extSource, *openIssues, *notes, *pushState, *initdate, *lockUser, *lockDateTime, *releaseLog;
 qid = sqlEscapeString(el->qid);
 pqid = sqlEscapeString(el->pqid);
 priority = sqlEscapeString(el->priority);
@@ -197,9 +199,10 @@ pushState = sqlEscapeString(el->pushState);
 initdate = sqlEscapeString(el->initdate);
 lockUser = sqlEscapeString(el->lockUser);
 lockDateTime = sqlEscapeString(el->lockDateTime);
+releaseLog = sqlEscapeString(el->releaseLog);
 
-dyStringPrintf(update, "insert into %s values ( '%s','%s','%s',%u,'%s','%s','%s','%s','%s','%s','%s',%u,'%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s',%u,'%s','%s')", 
-	tableName,  qid,  pqid,  priority, el->rank ,  qadate,  newYN,  track,  dbs,  tbls,  cgis,  files, el->sizeMB ,  currLoc,  makeDocYN,  onlineHelp,  ndxYN,  joinerYN,  stat,  sponsor,  reviewer,  extSource,  openIssues,  notes,  pushState,  initdate, el->bounces ,  lockUser,  lockDateTime);
+dyStringPrintf(update, "insert into %s values ( '%s','%s','%s',%u,'%s','%s','%s','%s','%s','%s','%s',%u,'%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s',%u,'%s','%s','%s')", 
+	tableName,  qid,  pqid,  priority, el->rank ,  qadate,  newYN,  track,  dbs,  tbls,  cgis,  files, el->sizeMB ,  currLoc,  makeDocYN,  onlineHelp,  ndxYN,  joinerYN,  stat,  sponsor,  reviewer,  extSource,  openIssues,  notes,  pushState,  initdate, el->bounces ,  lockUser,  lockDateTime,  releaseLog);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 freez(&qid);
@@ -227,6 +230,7 @@ freez(&pushState);
 freez(&initdate);
 freez(&lockUser);
 freez(&lockDateTime);
+freez(&releaseLog);
 }
 
 struct pushQ *pushQCommaIn(char **pS, struct pushQ *ret)
@@ -267,6 +271,7 @@ sqlFixedStringComma(&s, ret->initdate, sizeof(ret->initdate));
 ret->bounces = sqlUnsignedComma(&s);
 sqlFixedStringComma(&s, ret->lockUser, sizeof(ret->lockUser));
 sqlFixedStringComma(&s, ret->lockDateTime, sizeof(ret->lockDateTime));
+ret->releaseLog = sqlStringComma(&s);
 *pS = s;
 return ret;
 }
@@ -286,6 +291,7 @@ freeMem(el->files);
 freeMem(el->stat);
 freeMem(el->openIssues);
 freeMem(el->notes);
+freeMem(el->releaseLog);
 freez(pEl);
 }
 
@@ -410,6 +416,10 @@ if (sep == ',') fputc('"',f);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->lockDateTime);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->releaseLog);
 if (sep == ',') fputc('"',f);
 fputc(lastSep,f);
 }
