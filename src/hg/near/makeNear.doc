@@ -73,4 +73,7 @@ ssh hgwdev
 mkdir $dbDir/bed/near/run/out
 hgLoadBlastTab $db knownBlastTab *.tab
 
+# Create a table that maps between known genes and 
+# the nice affyUcla expression data.
+hgMapBedToGene $db knownGene affyUcla knownToAffyUcla
 
