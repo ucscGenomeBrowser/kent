@@ -7,7 +7,7 @@ public class HGDBInfo {
 
   // data
   String machine;
-  String metadatabase;
+  String database;
   String user;
   String password;
 
@@ -17,15 +17,15 @@ public class HGDBInfo {
   * Constructor for database query parameters.
   * 
   * @param machineVar      The machine
-  * @param metadatabaseVar The name of the metadatabase
+  * @param databaseVar 	   The name of the database
   * @param userVar         The username
   * @param passwordVar     The password
   */
-  public HGDBInfo(String machineVar, String metadatabaseVar, 
+  public HGDBInfo(String machineVar, String databaseVar, 
          String userVar, String passwordVar) {
 
     machine = machineVar;
-    metadatabase = metadatabaseVar;
+    database = databaseVar;
     user = userVar;
     password = passwordVar;
   }
@@ -38,7 +38,7 @@ public class HGDBInfo {
   public boolean validate() {
 
     String dbURL = "jdbc:mysql://" + machine;
-    dbURL = dbURL + "/" + metadatabase;
+    dbURL = dbURL + "/" + database;
     dbURL = dbURL + "?user=" + user;
     dbURL = dbURL + "&password=" + password;
 

@@ -15,7 +15,7 @@ public class QADBLibrary {
   */
   public static String jdbcURL(HGDBInfo dbinfo) {
     String dbURL = "jdbc:mysql://" + dbinfo.machine;
-    dbURL = dbURL + "/" + dbinfo.metadatabase;
+    dbURL = dbURL + "/" + dbinfo.database;
     dbURL = dbURL + "?user=" + dbinfo.user;
     dbURL = dbURL + "&password=" + dbinfo.password;
     return dbURL;
@@ -29,7 +29,7 @@ public class QADBLibrary {
  /** 
   *  Get number of rows in the input table that match the condition
   * 
-  *  @param  dbinfo     The machine, metadatabase, user and password.
+  *  @param  dbinfo     The machine, database, user and password.
   *  @param  tablename  The table to query 
   *  @param  condition  The criterion for the serach 
   *
@@ -60,7 +60,7 @@ public class QADBLibrary {
   /* Query database for a single field in a single table. */
 
  /**
-  *  @param  dbinfo    The machine, metadatabase, user and password.
+  *  @param  dbinfo    The machine, database, user and password.
   *  @param  query     The query string.  
   *     Must be fully formed and return single item.
   * 
@@ -86,7 +86,7 @@ public class QADBLibrary {
  /**
   *  Get default position for database.
   *
-  *  @param  dbinfo    The machine, metadatabase, user and password.
+  *  @param  dbinfo    The machine, database, user and password.
   *  @param  assembly  The genome assembly for which the default postion is needed.
   *
   *  @return  The default position for the database.
@@ -106,7 +106,7 @@ public class QADBLibrary {
   *  Get a row in the trackDb table that matches tablename
   *
   *  @param  extension  Developer "sandbox" name
-  *  @param  dbinfo     The machine, metadatabase, user and password.
+  *  @param  dbinfo     The machine, database, user and password.
   *  @param  tablename  The table for which the trackDb entry is needed.
   *
   *  @return  The trackDb row for the table
@@ -176,7 +176,7 @@ public class QADBLibrary {
   *  Insert a row in the trackDb table for new track
   *
   *  @param  extension  Developer "sandbox" name.
-  *  @param  dbinfo     The machine, metadatabase, user and password.
+  *  @param  dbinfo     The machine, database, user and password.
   *  @param  newTrack   The name of the track to add.
   *
   *  @throws  SQLException
@@ -263,7 +263,7 @@ public class QADBLibrary {
  /**
   *  Get a list of chromosome sizes.
   *
-  *  @param  dbinfo     The machine, metadatabase, user and password.
+  *  @param  dbinfo     The machine, database, user and password.
   *
   *  @return list of ChromInfo objects containing chrom and size fields.
   */
@@ -299,7 +299,7 @@ public class QADBLibrary {
  /** 
   *  Get gene names from kgProtMap table
   * 
-  *  @param  dbinfo   The machine, metadatabase, user and password.
+  *  @param  dbinfo   The machine, database, user and password.
   *  @param  table    Table with gene names.
   *
   *  @return       List of all Proteome Gene qName entries.
@@ -332,7 +332,7 @@ public class QADBLibrary {
  /** 
   *  Get genes from Known Genes (or equivalent) table
   * 
-  *  @param  dbinfo   The machine, metadatabase, user and password.
+  *  @param  dbinfo   The machine, database, user and password.
   *  @param  table    Table with gene names.
   *  @param  pb       True if proteome browser query (needs proteinID).
   *
@@ -376,7 +376,7 @@ public class QADBLibrary {
  /** 
   *  Get genes from Known Genes (or equivalent) table
   * 
-  *  @param  dbinfo   The machine, metadatabase, user and password.
+  *  @param  dbinfo   The machine, database, user and password.
   *  @param  table    Table with gene names
   *
   *  @return       List of all Known Genes.
@@ -417,7 +417,7 @@ public class QADBLibrary {
  /** 
   *  Gets entire column from a table.
   * 
-  *  @param  dbinfo   The machine, metadatabase, user and password.
+  *  @param  dbinfo   The machine, database, user and password.
   *  @param  table    The table to query.
   *  @param  column   The column to retrieve.
   *  @param  debug    Runs debugging if set to true.
