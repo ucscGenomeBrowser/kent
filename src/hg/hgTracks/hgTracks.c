@@ -78,7 +78,7 @@
 #include "simpleNucDiff.h"
 #include "tfbsCons.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.675 2004/02/26 19:10:13 heather Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.676 2004/02/27 06:43:31 kent Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
@@ -7638,7 +7638,9 @@ if (!hideControls)
 	hWrites("position ");
 	hTextVar("position", addCommasToPos(position), 30);
 	sprintLongWithCommas(buf, winEnd - winStart);
+#ifdef SORRY_GILL_I_HIT_INSTEAD_OF_SUBMIT_TOO_MANY_TIMES
 	hOnClickButton("document.TrackForm.position.value=''","clear");
+#endif /* SORRY_GILL_I_HIT_INSTEAD_OF_SUBMIT_TOO_MANY_TIMES */
 	hPrintf(" size %s ", buf);
 	hWrites(" bp. &nbsp;image width: ");
 	hIntVar("pix", tl.picWidth, 4);

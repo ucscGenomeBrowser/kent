@@ -13,7 +13,7 @@
 #include "hCommon.h"
 #include "hui.h"
 
-static char const rcsid[] = "$Id: hgGateway.c,v 1.70 2004/02/17 23:59:53 donnak Exp $";
+static char const rcsid[] = "$Id: hgGateway.c,v 1.71 2004/02/27 06:43:34 kent Exp $";
 
 struct cart *cart = NULL;
 struct hash *oldVars = NULL;
@@ -115,9 +115,11 @@ puts("<td align=center>\n");
 cgiMakeTextVar("position", addCommasToPos(position), 30);
 printf("</td>\n");
 
+#ifdef SORRY_GILL_I_HIT_INSTEAD_OF_SUBMIT_TOO_MANY_TIMES
 puts("<td align=center>\n");
 cgiMakeOnClickButton("document.mainForm.position.value=''","clear");
 printf("</td>\n");
+#endif /* SORRY_GILL_I_HIT_INSTEAD_OF_SUBMIT_TOO_MANY_TIMES */
 
 
 cartSetString(cart, "position",position);
