@@ -50,6 +50,7 @@
 #include "synteny100000.h"
 #include "mouseSyn.h"
 #include "mouseSynWhd.h"
+#include "ensPhusionBlast.h"
 #include "syntenyBerk.h"
 #include "syntenySanger.h"
 #include "netAlign.h"
@@ -5712,9 +5713,16 @@ Color mouseSynWhdItemColor(struct trackGroup *tg, void *item, struct memGfx *mg)
 char chromStr[20];
 struct mouseSynWhd *ms = item;
 
-strncpy(chromStr, ms->name+strlen("chr"), 2);
-chromStr[2] = '\0';
-return ((Color)getChromColor(chromStr, mg));
+if (startsWith("chr", ms->name))
+    {
+    strncpy(chromStr, ms->name+strlen("chr"), 2);
+    chromStr[2] = '\0';
+    return((Color)getChromColor(chromStr, mg));
+    }
+else
+    {
+    return(tg->ixColor);
+    }
 }
 
 void mouseSynWhdMethods(struct trackGroup *tg)
@@ -5723,6 +5731,56 @@ void mouseSynWhdMethods(struct trackGroup *tg)
 tg->loadItems = loadMouseSynWhd;
 tg->freeItems = freeMouseSynWhd;
 tg->itemColor = mouseSynWhdItemColor;
+tg->subType = lfWithBarbs;
+}
+
+void loadEnsPhusionBlast(struct trackGroup *tg)
+/* Load up ensPhusionBlast from database table to trackGroup items. */
+{
+struct ensPhusionBlast *epb;
+char buf[16];
+
+bedLoadItem(tg, tg->mapName, (ItemLoader)ensPhusionBlastLoad);
+// for name, append abbreviated starting position to the xeno chrom:
+for (epb=tg->items;  epb != NULL;  epb=epb->next)
+    {
+    snprintf(buf, sizeof(buf), "%s %dk", epb->name, (int)(epb->xenoStart/1000));
+    free(epb->name);
+    epb->name = cloneString(buf);
+    }
+}
+
+void freeEnsPhusionBlast(struct trackGroup *tg)
+/* Free up ensPhusionBlast items. */
+{
+ensPhusionBlastFreeList((struct ensPhusionBlast**)&tg->items);
+}
+
+Color ensPhusionBlastItemColor(struct trackGroup *tg, void *item, struct memGfx *mg)
+/* Return color of ensPhusionBlast track item. */
+{
+struct ensPhusionBlast *epb = item;
+char *ptr;
+char chromStr[20];
+
+if ((ptr = strstr(epb->name, "chr")) != NULL)
+    {
+    strncpy(chromStr, ptr+strlen("chr"), 2);
+    chromStr[2] = '\0';
+    return((Color)getChromColor(chromStr, mg));
+    }
+else
+    {
+    return(tg->ixColor);
+    }
+}
+
+void ensPhusionBlastMethods(struct trackGroup *tg)
+/* Make track group for mouseSyn. */
+{
+tg->loadItems = loadEnsPhusionBlast;
+tg->freeItems = freeEnsPhusionBlast;
+tg->itemColor = ensPhusionBlastItemColor;
 tg->subType = lfWithBarbs;
 }
 
@@ -9159,7 +9217,6 @@ if (withRuler)
     }
     }
 
-
 /* Draw center labels. */
 if (withCenterLabels)
     {
@@ -10054,6 +10111,7 @@ registerTrackHandler("recombRate", recombRateMethods);
 registerTrackHandler("chr18deletions", chr18deletionsMethods);
 registerTrackHandler("mouseSyn", mouseSynMethods);
 registerTrackHandler("mouseSynWhd", mouseSynWhdMethods);
+registerTrackHandler("ensRatMusHom", ensPhusionBlastMethods);
 registerTrackHandler("synteny100000", synteny100000Methods);
 registerTrackHandler("syntenyBuild30", synteny100000Methods);
 registerTrackHandler("syntenyBerk", syntenyBerkMethods);
@@ -10474,7 +10532,7 @@ hgp = findGenomePos(position, &chromName, &winStart, &winEnd, cart);
 if (NULL != hgp && NULL != hgp->tableList && NULL != hgp->tableList->name)
     {
     cartSetString(cart, hgp->tableList->name, "full");
-    fprintf(stderr, "XXXXXXXXXX TABLE NAME: %s\n", hgp->tableList->name);
+    // fprintf(stderr, "XXXXXXXXXX TABLE NAME: %s\n", hgp->tableList->name);
     }
 
 /* This means that no single result was found 

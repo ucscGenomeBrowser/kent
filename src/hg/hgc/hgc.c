@@ -47,6 +47,7 @@
 #include "stsInfo2.h"
 #include "mouseSyn.h"
 #include "mouseSynWhd.h"
+#include "ensPhusionBlast.h"
 #include "cytoBand.h"
 #include "knownMore.h"
 #include "snp.h"
@@ -5833,6 +5834,75 @@ sqlFreeResult(&sr);
 hFreeConn(&conn);
 }  
 
+void doEnsPhusionBlast(struct trackDb *tdb, char *itemName)
+/* Handle click on Ensembl Phusion Blast synteny track. */
+{
+char *track = tdb->tableName;
+struct ensPhusionBlast el;
+int start = cartInt(cart, "o");
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr;
+char **row;
+char *org = hOrganism(database);
+char *tbl = cgiUsualString("table", cgiString("g"));
+char *elname, *ptr, *xenoDb, *xenoOrg, *xenoChrom;
+char query[256];
+int rowOffset;
+
+cartWebStart(cart, "%s", tdb->longLabel);
+printf("<H2>%s</H2>\n", tdb->longLabel);
+
+sprintf(query, "select * from %s where chrom = '%s' and chromStart = %d",
+    track, seqName, start);
+rowOffset = hOffsetPastBin(seqName, track);
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    htmlHorizontalLine();
+    ensPhusionBlastStaticLoad(row+rowOffset, &el);
+    elname = cloneString(el.name);
+    if ((ptr = strchr(elname, '.')) != NULL)
+	{
+	*ptr = 0;
+	xenoChrom = ptr+1;
+	xenoDb = elname;
+	xenoOrg = hOrganism(xenoDb);
+	}
+    else
+	{
+	xenoChrom = elname;
+	xenoDb = NULL;
+	xenoOrg = "Other Organism";
+	}
+    printf("<B>%s chromosome:</B> %s<BR>\n", xenoOrg, xenoChrom);
+    printf("<B>%s starting base:</B> %d<BR>\n", xenoOrg, el.xenoStart+1);
+    printf("<B>%s ending base:</B> %d<BR>\n", xenoOrg, el.xenoEnd);
+    printf("<B>%s chromosome:</B> %s<BR>\n", org, skipChr(el.chrom));
+    printf("<B>%s starting base:</B> %d<BR>\n", org, el.chromStart+1);
+    printf("<B>%s ending base:</B> %d<BR>\n", org, el.chromEnd);
+    printf("<B>score:</B> %d<BR>\n", el.score);
+    printf("<B>strand:</B> %s<BR>\n", el.strand);
+    printf("<B>size:</B> %d (%s), %d (%s)<BR>\n",
+	   (el.xenoEnd - el.xenoStart), xenoOrg,
+	   (el.chromEnd - el.chromStart), org);
+    if (xenoDb != NULL)
+	{
+	printf("<A HREF=%s?%s&db=%s&position=%s:%d-%d TARGET=_BLANK>%s Genome Browser</A> at %s:%d-%d <BR>\n",
+	       hgTracksName(), cartSidUrlString(cart),
+	       xenoDb, xenoChrom, el.xenoStart, el.xenoEnd,
+	       xenoOrg, xenoChrom, el.xenoStart, el.xenoEnd);
+
+	}
+    printf("<A HREF=\"%s&o=%d&g=getDna&i=mixed&c=%s&l=%d&r=%d&strand=%s&table=%s\">"
+	  "View DNA for this feature</A><BR>\n",  hgcPathAndSettings(),
+	  el.chromStart, el.chrom, el.chromStart, el.chromEnd, el.strand, tbl);
+    freez(&elname);
+    }
+printTrackHtml(tdb);
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+}
+
 void doDbSnpRS(char *name)
 /* print additional SNP details */
 {
@@ -8872,7 +8942,7 @@ else if (sameWord(track, "blatMouse") || sameWord(track, "bestMouse")
     doBlatMouse(tdb, item);
     }
 else if (sameWord(track, "blatMus")
-	 || (startsWith("blastz", track) &&
+	 || (startsWith("blastz", track) && (! stringIn("ynMask", track)) &&
 	     (stringIn("Mm", track) || stringIn("Mouse", track)))
          || sameWord("aarMm2", track)
 	 )
@@ -8985,6 +9055,10 @@ else if (sameWord(track, "genMapDb"))
 else if (sameWord(track, "mouseSynWhd"))
     {
     doMouseSynWhd(tdb, item);
+    }
+else if (sameWord(track, "ensRatMusHom"))
+    {
+    doEnsPhusionBlast(tdb, item);
     }
 else if (sameWord(track, "mouseSyn"))
     {
