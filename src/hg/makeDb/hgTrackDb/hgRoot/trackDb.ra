@@ -727,11 +727,10 @@ visibility hide
 private 1
 type psl .
 
-track blatMus0202_500_97
-shortLabel blatMus0202_500_97
-longLabel Blocks from blatMus0202 where aligned>=500 and id>=0.97
-priority 50.1
+track blatMus0202Contam
+shortLabel blatMus0202Contam
+longLabel Known contamination of blatMus0202
+priority 50.0
 visibility hide
 private 1
 type psl .
-
