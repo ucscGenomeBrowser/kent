@@ -463,7 +463,7 @@ return t3List;
 void tripleSearch(aaSeq *qSeq, struct genoFind *gfs[3], struct hash *t3Hash, boolean dbIsRc, FILE *f)
 /* Look for qSeq in indices for three frames.  Then do rest of alignment. */
 {
-struct gfSavePslxData data;
+static struct gfSavePslxData data;
 data.f = f;
 data.t3Hash = t3Hash;
 data.targetRc = dbIsRc;
@@ -473,26 +473,26 @@ gfFindAlignAaTrans(gfs, qSeq, t3Hash, minScore, gfSavePslx, &data);
 }
 
 void transTripleSearch(struct dnaSeq *qSeq, struct genoFind *gfs[3], struct hash *t3Hash, 
-	boolean dbIsRc, boolean rcQueryToo, FILE *f)
+	boolean dbIsRc, boolean qIsDna, FILE *f)
 /* Translate qSeq three ways and look for each in three frames of index. */
 {
 int qIsRc;
-struct gfSavePslxData data;
+static struct gfSavePslxData data;
 data.f = f;
 data.t3Hash = NULL;
 data.reportTargetStrand = TRUE;
 data.targetRc = dbIsRc;
 data.minGood = round(10*minIdentity);
 
-for (qIsRc = 0; qIsRc <= rcQueryToo; qIsRc += 1)
+for (qIsRc = 0; qIsRc <= qIsDna; qIsRc += 1)
     {
-    gfFindAlignTransTrans(gfs, qSeq, t3Hash, qIsRc, minScore, gfSavePslx, &data);
-    if (rcQueryToo)
+    gfFindAlignTransTrans(gfs, qSeq, t3Hash, qIsRc, minScore, gfSavePslx, &data, !qIsDna);
+    if (qIsDna)
         reverseComplement(qSeq->dna, qSeq->size);
     }
 }
 
-void bigBlat(struct dnaSeq *untransList, int queryCount, char *queryFiles[], char *outFile, boolean transQuery, boolean rcQueryToo)
+void bigBlat(struct dnaSeq *untransList, int queryCount, char *queryFiles[], char *outFile, boolean transQuery, boolean qIsDna)
 /* Run query against translated DNA database (3 frames on each strand). */
 {
 int frame, i;
@@ -541,7 +541,7 @@ for (isRc = FALSE; isRc <= 1; ++isRc)
 		qSeq.dna[qSizeMax] = 0;
 		}
 	    if (transQuery)
-	        transTripleSearch(&qSeq, gfs, t3Hash, isRc, rcQueryToo, pslOut);
+	        transTripleSearch(&qSeq, gfs, t3Hash, isRc, qIsDna, pslOut);
 	    else
 		tripleSearch(&qSeq, gfs, t3Hash, isRc, pslOut);
 	    }
@@ -625,6 +625,18 @@ int main(int argc, char *argv[])
 {
 boolean cmpIsProt;	/* True if comparison takes place in protein space. */
 boolean dIsProtLike, qIsProtLike;
+
+#ifdef DEBUG
+{
+char *cmd = "blat hCrea.geno hCrea.mrna foo.psl -t=dnax -q=rnax";
+char *words[16];
+
+uglyf("Debugging parameters\n");
+cmd = cloneString(cmd);
+argc = chopLine(cmd, words);
+argv = words;
+}
+#endif /* DEBUG */
 
 cgiSpoof(&argc, argv);
 if (argc != 4)
