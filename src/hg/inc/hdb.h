@@ -84,6 +84,12 @@ boolean hFindChromStartEndFields(char *table,
 	char retChrom[32], char retStart[32], char retEnd[32]);
 /* Given a table return the fields for selecting chromosome, start, and end. */
 
+boolean hFindFieldsAndBin(char *table, 
+	char retChrom[32], char retStart[32], char retEnd[32],
+	boolean *retBinned);
+/* Given a table return the fields for selecting chromosome, start, 
+ * and whether it's binned . */
+
 boolean hFindSplitTable(char *chrom, char *rootName, 
 	char retTableBuf[64], boolean *hasBin);
 /* Find name of table that may or may not be split across chromosomes. 
@@ -112,6 +118,13 @@ struct sqlResult *hRangeQuery(struct sqlConnection *conn,
 	char *rootTable, char *chrom,
 	int start, int end, char *extraWhere, int *retRowOffset);
 /* Construct and make a query to tables that may be split and/or
+ * binned. */
+
+struct sqlResult *hChromQuery(struct sqlConnection *conn,
+	char *rootTable, char *chrom,
+	char *extraWhere, int *retRowOffset);
+/* Construct and make a query across whole chromosome to tables 
+ * that may be split and/or
  * binned. */
 
 #endif /* HDB_H */

@@ -450,18 +450,22 @@ static struct hTableInfo *hFindTableInfo(char *chrom, char *rootName)
 static struct hash *hash;
 struct hTableInfo *hti;
 char fullName[64];
-boolean isSplit;
+boolean isSplit = FALSE;
 
 if (hash == NULL)
     hash = newHash(7);
 if ((hti = hashFindVal(hash, rootName)) == NULL)
     {
-    sprintf(fullName, "%s_%s", chrom, rootName);
-    if (hTableExists(fullName))
-	isSplit = TRUE;
-    else
+    if (chrom != NULL)
+	{
+	sprintf(fullName, "%s_%s", chrom, rootName);
+	if (hTableExists(fullName))
+	    {
+	    isSplit = TRUE;
+	    }
+        }
+    if (!isSplit)
         {
-	isSplit = FALSE;
 	strcpy(fullName, rootName);
 	if (!hTableExists(fullName))
 	    return NULL;
@@ -618,6 +622,38 @@ if (table != NULL)
     	hti->startField, end, hti->endField, start);
     if (extraWhere)
         dyStringPrintf(query, " and %s", extraWhere);
+    sr = sqlGetResult(conn, query->string);
+    }
+freeDyString(&query);
+*retRowOffset = rowOffset;
+return sr;
+}
+
+struct sqlResult *hChromQuery(struct sqlConnection *conn,
+	char *rootTable, char *chrom,
+	char *extraWhere, int *retRowOffset)
+/* Construct and make a query across whole chromosome to tables 
+ * that may be split and/or
+ * binned. */
+{
+struct hTableInfo *hti = hFindTableInfo(chrom, rootTable);
+struct sqlResult *sr = NULL;
+struct dyString *query = newDyString(1024);
+char fullTable[64], *table = NULL;
+int rowOffset = 0;
+
+if (hti == NULL)
+    {
+    warn("table %s doesn't exist", rootTable);
+    }
+else
+    {
+    int rowOffset = hti->hasBin;
+    if (hti->isSplit)
+        dyStringPrintf(query, "select * from %s_%s", chrom, rootTable);
+    else
+        dyStringPrintf(query, "select * from %s where %s='%s'", rootTable,
+		hti->chromField, chrom);
     sr = sqlGetResult(conn, query->string);
     }
 freeDyString(&query);
