@@ -181,3 +181,9 @@ visibility full
 spectrum on
 type netAlign tetNig1 chainSelf
 otherDb tetNig1
+
+searchTable ecoresHg17
+searchType genePred
+shortcircuit 1
+termRegex EG3THT[0-9]+
+searchPriority 50
