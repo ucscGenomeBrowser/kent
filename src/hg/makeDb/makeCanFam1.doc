@@ -2490,6 +2490,90 @@ chainSome $(path1)
     rm -rf blastOut
 # End tblastn
 
+# BLASTZ BOREOEUTHERIAN (BOREUT1) (DONE 1/29/05 braney)
+    ssh kk
+    mkdir /cluster/data/borEut1/bed/zb.canFam1 
+    ln -s /cluster/data/borEut1/bed/zb.canFam1 /cluster/data/canFam1/bed/blastz.borEut1
+    cd /cluster/data/canFam1/bed/blastz.borEut1
+    # Use default (Human-Mouse) settings for starters.
+    cat << '_EOF_' > DEF
+# dog vs. borEut
+export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/bin/i386:/cluster/home/angie/schwartzbin
+
+ALIGN=blastz-run
+BLASTZ=blastz
+
+# Default
+BLASTZ_H=2000
+BLASTZ_ABRIDGE_REPEATS=1
+
+# TARGET: Dog
+SEQ1_DIR=/iscratch/i/canFam1/nib
+SEQ1_RMSK=
+SEQ1_FLAG=
+# SEQ1_SMSK=/scratch/hg/gs.18/build35/linSpecRep.notInDog
+SEQ1_SMSK=
+SEQ1_IN_CONTIGS=0
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: BorEut
+SEQ2_DIR=/iscratch/i/borEut1/nib
+SEQ2_RMSK=
+SEQ2_FLAG=
+#SEQ2_SMSK=/scratch/hg/canFam1/linSpecRep.notInHuman
+SEQ2_SMSK=
+SEQ2_IN_CONTIGS=0
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+
+BASE=/cluster/data/canFam1/bed/blastz.borEut1
+
+DEF=$BASE/DEF
+RAW=$BASE/raw
+CDBDIR=$BASE
+SEQ1_LEN=$BASE/S1.len
+SEQ2_LEN=$BASE/S2.len
+'_EOF_'
+    # << this line keeps emacs coloring happy
+
+    /cluster/data/hg17/jkStuff/BlastZ_run0.sh
+    cd run.0
+    para push
+# Completed: 2200 of 2200 jobs
+# CPU time in finished jobs:     720384s   12006.40m   200.11h    8.34d  0.023 y
+# IO & Wait Time:                 21690s     361.50m     6.03h    0.25d  0.001 y
+# Average job time:                 337s       5.62m     0.09h    0.00d
+# Longest job:                     2099s      34.98m     0.58h    0.02d
+# Submission to last job:          2267s      37.78m     0.63h    0.03d
+
+    ssh kki
+    cd /cluster/data/canFam1/bed/blastz.borEut1
+    /cluster/data/hg17/jkStuff/BlastZ_run1.sh
+
+    cd run.1
+    para push
+# Completed: 275 of 275 jobs
+# CPU time in finished jobs:        243s       4.06m     0.07h    0.00d  0.000 y
+# IO & Wait Time:                   774s      12.89m     0.21h    0.01d  0.000 y
+# Average job time:                   4s       0.06m     0.00h    0.00d
+# Longest job:                        8s       0.13m     0.00h    0.00d
+# Submission to last job:            78s       1.30m     0.02h    0.00d
+
+    ssh kk
+    cd /cluster/data/canFam1/bed/blastz.borEut1
+    /cluster/data/hg17/jkStuff/BlastZ_run2.sh
+    cd run.2
+    para push
+
+# Completed: 41 of 41 jobs
+# CPU time in finished jobs:        266s       4.43m     0.07h    0.00d  0.000 y
+# IO & Wait Time:                   822s      13.70m     0.23h    0.01d  0.000 y
+# Average job time:                  27s       0.44m     0.01h    0.00d
+# Longest job:                       54s       0.90m     0.01h    0.00d
+# Submission to last job:            58s       0.97m     0.02h    0.00d
+
+# END BLASTZ BOREOEUTHERIAN
 
 # NEW NEW REPEATMASKER (DONE 1/27/05 angie)
     # Use the new version of RepeatMasker w/new dog lib, load up as rmskNew, 
