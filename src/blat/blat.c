@@ -15,7 +15,7 @@
 #include "trans3.h"
 #include "repMask.h"
 
-int version = 7;	/* Blat version number. */
+int version = 8;	/* Blat version number. */
 
 enum constants {
 	qWarnSize = 5000000,	/* Warn if more than this many bases in one query. */
