@@ -135,18 +135,36 @@ if (offerRevComp)
     }
 }
 
+void hgSeqOptionsHti(struct hTableInfo *hti)
+/* Print out HTML FORM entries for gene region and sequence display options. */
+{
+boolean canDoUTR, canDoIntrons, offerRevComp;
+
+if (hti == NULL)
+    {
+    canDoUTR = canDoIntrons = FALSE;
+    offerRevComp = TRUE;
+    }
+else
+    {
+    canDoUTR = hti->hasCDS;
+    canDoIntrons = hti->hasBlocks;
+    offerRevComp = FALSE;
+    }
+hgSeqFeatureRegionOptions(canDoUTR, canDoIntrons);
+hgSeqDisplayOptions(canDoUTR, canDoIntrons, offerRevComp);
+}
+
 void hgSeqOptionsDb(char *db, char *table)
 /* Print out HTML FORM entries for gene region and sequence display options. */
 {
 struct hTableInfo *hti;
 char chrom[32];
 char rootName[256];
-boolean canDoUTR, canDoIntrons, offerRevComp;
 
 if ((table == NULL) || (table[0] == 0))
     {
-    canDoUTR = canDoIntrons = FALSE;
-    offerRevComp = TRUE;
+    hti = NULL;
     }
 else
     {
@@ -155,12 +173,8 @@ else
     if (hti == NULL)
 	webAbort("Error", "Could not find table info for table %s (%s)",
 		 rootName, table);
-    canDoUTR = hti->hasCDS;
-    canDoIntrons = hti->hasBlocks;
-    offerRevComp = FALSE;
     }
-hgSeqFeatureRegionOptions(canDoUTR, canDoIntrons);
-hgSeqDisplayOptions(canDoUTR, canDoIntrons, offerRevComp);
+hgSeqOptionsHti(hti);
 }
 
 
@@ -368,16 +382,13 @@ hgSeqRegions(chrom, strand, name, FALSE, count, starts, sizes, exonFlags,
 }
 
 
-int hgSeqItemsInRangeDb(char *db, char *table, char *chrom, int chromStart,
-			int chromEnd, char *sqlConstraints)
-/* Print out dna sequence of all items (that match sqlConstraints, if nonNULL) 
-   in the given range in table.  Return number of items. */
+int hgSeqBedDb(char *db, struct hTableInfo *hti, struct bed *bedList)
+/* Print out dna sequence from the given database of all items in bedList.  
+ * hti describes the bed-compatibility level of bedList items.  
+ * Returns number of FASTA records printed out. */
 {
-struct hTableInfo *hti;
-struct bed *bedList, *bedItem;
+struct bed *bedItem;
 char itemName[128];
-char parsedChrom[32];
-char rootName[256];
 boolean isRc;
 int count;
 unsigned *starts = NULL;
@@ -402,16 +413,8 @@ boolean isCDS, doIntron;
 boolean foundFields;
 boolean canDoUTR, canDoIntrons;
 
-hParseTableName(table, rootName, parsedChrom);
-hti = hFindTableInfoDb(db, chrom, rootName);
-if (hti == NULL)
-    webAbort("Error", "Could not find table info for table %s (%s)",
-	     rootName, table);
 canDoUTR = hti->hasCDS;
 canDoIntrons = hti->hasBlocks;
-
-bedList = hGetBedRangeDb(db, table, chrom, chromStart, chromEnd,
-			 sqlConstraints);
 
 rowCount = totalCount = 0;
 for (bedItem = bedList;  bedItem != NULL;  bedItem = bedItem->next)
@@ -619,20 +622,50 @@ for (bedItem = bedList;  bedItem != NULL;  bedItem = bedItem->next)
 	addFeature(&count, starts, sizes, exonFlags, cdsFlags,
 		   bedItem->chromEnd, promoterSize, FALSE, FALSE);
 	}
-    if (hti->nameField[0] != 0)
-	snprintf(itemName, sizeof(itemName), "%s_%s", table, bedItem->name);
-    else
-	strncpy(itemName, table, sizeof(itemName));
-    hgSeqRegionsDb(db, chrom, bedItem->strand[0], itemName, concatRegions,
-		   count, starts, sizes, exonFlags, cdsFlags);
+    snprintf(itemName, sizeof(itemName), "%s_%s", hti->rootName, bedItem->name);
+    hgSeqRegionsDb(db, bedItem->chrom, bedItem->strand[0], itemName,
+		   concatRegions, count, starts, sizes, exonFlags, cdsFlags);
     totalCount += count;
     freeMem(starts);
     freeMem(sizes);
     freeMem(exonFlags);
     freeMem(cdsFlags);
     }
-bedFreeList(&bedList);
 return totalCount;
+}
+
+
+int hgSeqBed(struct hTableInfo *hti, struct bed *bedList)
+/* Print out dna sequence from the current database of all items in bedList.  
+ * hti describes the bed-compatibility level of bedList items.  
+ * Returns number of FASTA records printed out. */
+{
+return hgSeqBedDb(hGetDb(), hti, bedList);
+}
+
+
+int hgSeqItemsInRangeDb(char *db, char *table, char *chrom, int chromStart,
+			int chromEnd, char *sqlConstraints)
+/* Print out dna sequence of all items (that match sqlConstraints, if nonNULL) 
+   in the given range in table.  Return number of items. */
+{
+struct hTableInfo *hti;
+struct bed *bedList;
+char rootName[256];
+char parsedChrom[32];
+int itemCount;
+
+hParseTableName(table, rootName, parsedChrom);
+hti = hFindTableInfoDb(db, chrom, rootName);
+if (hti == NULL)
+    webAbort("Error", "Could not find table info for table %s (%s)",
+	     rootName, table);
+bedList = hGetBedRangeDb(db, table, chrom, chromStart, chromEnd,
+			 sqlConstraints);
+
+itemCount = hgSeqBedDb(db, hti, bedList);
+bedFreeList(&bedList);
+return itemCount;
 }
 
 
@@ -644,3 +677,5 @@ int hgSeqItemsInRange(char *table, char *chrom, int chromStart, int chromEnd,
 return hgSeqItemsInRangeDb(hGetDb(), table, chrom, chromStart, chromEnd,
 			   sqlConstraints);
 }
+
+
