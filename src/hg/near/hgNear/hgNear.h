@@ -119,13 +119,13 @@ void hPrintf(char *format, ...);
 void makeTitle(char *title, char *helpName);
 /* Make title bar. */
 
-void selfAnchor(struct genePos *gp);
-/* Print self anchor to given position. */
+void selfAnchorId(struct genePos *gp);
+/* Print self anchor to given id. */
+
+void selfAnchorSearch(struct genePos *gp);
+/* Print self anchor to given search term. */
 
 /* -- Other helper routines. -- */
-
-struct column *getColumns(struct sqlConnection *conn);
-/* Return list of columns for big table. */
 
 int columnCmpPriority(const void *va, const void *vb);
 /* Compare to sort columns based on priority. */
@@ -135,6 +135,9 @@ struct hash *hashColumns(struct column *colList);
 
 
 /* ---- Some helper routines for column methods. ---- */
+
+char *columnSetting(struct column *column, char *name, char *defaultVal);
+/* Return value of named setting in column, or default if it doesn't exist. */
 
 char *cellLookupVal(struct column *col, struct genePos *gp, struct sqlConnection *conn);
 /* Get a field in a table defined by col->table, col->keyField, col->valField. */
@@ -158,9 +161,12 @@ void columnDefaultMethods(struct column *col);
 void lookupTypeMethods(struct column *col, char *table, char *key, char *val);
 /* Set up the methods for a simple lookup column. */
 
-char *knownPosVal(struct column *col, struct genePos *gp, 
-	struct sqlConnection *conn);
-/* Get genome position of knownPos table.  Ok to have col NULL. */
+struct searchResult *knownGeneSearchResult(struct sqlConnection *conn, 
+	char *kgID, char *alias);
+/* Return a searchResult for a known gene. */
+
+void fillInKnownPos(struct genePos *gp, struct sqlConnection *conn);
+/* If gp->chrom is not filled in go look it up. */
 
 /* ---- Column method setters. ---- */
 

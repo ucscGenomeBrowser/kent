@@ -2,6 +2,7 @@
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"
+#include "dystring.h"
 #include "cheapcgi.h"
 #include "jksql.h"
 #include "htmshell.h"
@@ -12,7 +13,7 @@
 #include "ra.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: hgNear.c,v 1.20 2003/06/25 01:01:41 kent Exp $";
+static char const rcsid[] = "$Id: hgNear.c,v 1.21 2003/06/25 02:47:31 kent Exp $";
 
 char *excludeVars[] = { "submit", "Submit", confVarName, defaultConfName,
         resetConfName, idVarName, idPosVarName, NULL }; 
@@ -58,6 +59,34 @@ hPrintf("</TR></TABLE>");
 
 /* ---- Some helper routines for column methods. ---- */
 
+char *columnSetting(struct column *column, char *name, char *defaultVal)
+/* Return value of named setting in column, or default if it doesn't exist. */
+{
+char *result = hashFindVal(column->settings, name);
+if (result == NULL)
+    result = defaultVal;
+return result;
+}
+
+char *cellLookupVal(struct column *col, struct genePos *gp, struct sqlConnection *conn);
+/* Get a field in a table defined by col->table, col->keyField, col->valField. */
+
+void cellSimplePrint(struct column *col, struct genePos *gp, struct sqlConnection *conn);
+/* This just prints cellSimpleVal. */
+
+void labelSimplePrint(struct column *col);
+/* This just prints cell->shortLabel. */
+
+static void cellSelfLinkPrint(struct column *col, struct genePos *gp,
+	struct sqlConnection *conn);
+/* Print self and hyperlink to make this the search term. */
+
+boolean simpleTableExists(struct column *col, struct sqlConnection *conn);
+/* This returns true if col->table exists. */
+
+void columnDefaultMethods(struct column *col);
+/* Set up default methods. */
+
 char *cellLookupVal(struct column *col, struct genePos *gp, 
 	struct sqlConnection *conn)
 /* Get a field in a table defined by col->table, col->keyField, col->valField. */
@@ -97,8 +126,15 @@ void labelSimplePrint(struct column *col)
 hPrintf("<TH VALIGN=BOTTOM><B>%s</B></TH>", col->shortLabel);
 }
 
-void selfAnchor(struct genePos *gp)
-/* Print self anchor to given position. */
+void selfAnchorSearch(struct genePos *gp)
+/* Print self anchor to given search term. */
+{
+hPrintf("<A HREF=\"../cgi-bin/hgNear?%s&%s=%s\">", 
+	cartSidUrlString(cart), searchVarName, gp->name);
+}
+
+void selfAnchorId(struct genePos *gp)
+/* Print self anchor to given id. */
 {
 hPrintf("<A HREF=\"../cgi-bin/hgNear?%s&%s=%s", 
 	cartSidUrlString(cart), idVarName, gp->name);
@@ -115,7 +151,7 @@ char *s = col->cellVal(col, gp, conn);
 if (s == NULL) 
     s = cloneString("n/a");
 hPrintf("<TD>");
-selfAnchor(gp);
+selfAnchorId(gp);
 hPrintf("%s</A></TD>", s);
 freeMem(s);
 }
@@ -185,6 +221,38 @@ col->cellPrint = cellSelfLinkPrint;
 
 /* ---- Simple table lookup type columns ---- */
 
+static struct searchResult *lookupTypeSimpleSearch(struct column *col, 
+    struct sqlConnection *conn, char *search)
+/* Search lookup type column. */
+{
+struct dyString *query = dyStringNew(512);
+char *searchHow = columnSetting(col, "search", "exact");
+struct sqlConnection *searchConn = hAllocConn();
+struct sqlResult *sr;
+char **row;
+struct searchResult *resList = NULL, *res;
+
+dyStringPrintf(query, "select %s from %s where %s ", 
+	col->keyField, col->table, col->valField);
+if (sameString(searchHow, "fuzzy"))
+    dyStringPrintf(query, "like '%%%s%%'", search);
+else
+    dyStringPrintf(query, " = '%s'", search);
+sr = sqlGetResult(searchConn, query->string);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    res = knownGeneSearchResult(conn, row[0], NULL);
+    slAddHead(&resList, res);
+    }
+
+/* Clean up and go home. */
+sqlFreeResult(&sr);
+hFreeConn(&searchConn);
+dyStringFree(&query);
+slReverse(&resList);
+return resList;
+}
+
 void lookupTypeMethods(struct column *col, char *table, char *key, char *val)
 /* Set up the methods for a simple lookup column. */
 {
@@ -193,6 +261,10 @@ col->keyField = cloneString(key);
 col->valField = cloneString(val);
 col->exists = simpleTableExists;
 col->cellVal = cellLookupVal;
+if (columnSetting(col, "search", NULL))
+    {
+    col->simpleSearch = lookupTypeSimpleSearch;
+    }
 }
 
 void setupColumnLookup(struct column *col, char *parameters)

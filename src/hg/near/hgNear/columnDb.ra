@@ -11,6 +11,8 @@ longLabel gene name/link to details page
 priority 2
 visibility on
 type lookupKnown kgXref kgID geneSymbol
+search fuzzy
+searchLabel Known Gene Names
 
 name expDense
 shortLabel Short Expression
@@ -85,3 +87,5 @@ longLabel short description line
 priority 8
 visibility on
 type lookup kgXref kgID description
+search fuzzy
+searchLabel Known Gene Descriptions

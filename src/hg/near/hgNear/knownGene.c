@@ -4,6 +4,7 @@
 #include "linefile.h"
 #include "hash.h"
 #include "obscure.h"
+#include "dystring.h"
 #include "jksql.h"
 #include "cart.h"
 #include "hdb.h"
@@ -12,7 +13,7 @@
 #include "kgAlias.h"
 #include "findKGAlias.h"
 
-static char const rcsid[] = "$Id: knownGene.c,v 1.4 2003/06/25 01:01:41 kent Exp $";
+static char const rcsid[] = "$Id: knownGene.c,v 1.5 2003/06/25 02:47:31 kent Exp $";
 
 static char *posFromRow3(char **row)
 /* Convert chrom/start/end row to position. */
@@ -27,6 +28,7 @@ end = sqlUnsigned(row[2]);
 safef(buf, sizeof(buf), "%s:%d-%d", chrom, start+1, end);
 return cloneString(buf);
 }
+
 
 static char *genePredPosFromTable(char *table, struct genePos *gp, 
 	struct sqlConnection *conn)
@@ -149,27 +151,66 @@ else
     }
 }
 
+struct searchResult *knownGeneSearchResult(struct sqlConnection *conn, 
+	char *kgID, char *alias)
+/* Return a searchResult for a known gene. */
+{
+struct searchResult *sr;
+struct dyString *dy = dyStringNew(1024);
+char description[512];
+char query[256];
+char name[64];
+
+/* Allocate and fill in with geneID. */
+AllocVar(sr);
+sr->gp.name = cloneString(kgID);
+
+/* Get gene symbol into short label if possible. */
+safef(query, sizeof(query),
+	"select geneSymbol from kgXref where kgID = '%s'", kgID);
+if (sqlQuickQuery(conn, query, name, sizeof(name)))
+    sr->shortLabel = cloneString(name);
+else
+    sr->shortLabel = cloneString(kgID);
+
+/* Add alias to long label if need be */
+if (alias != NULL && !sameWord(name, alias))
+    dyStringPrintf(dy, "(aka %s) ", alias);
+
+/* Add description to long label. */
+safef(query, sizeof(query), 
+    "select description from kgXref where kgID = '%s'", kgID);
+if (sqlQuickQuery(conn, query, description, sizeof(description)))
+    dyStringAppend(dy, description);
+sr->longLabel = cloneString(dy->string);
+
+/* Cleanup and go home. */
+dyStringFree(&dy);
+return sr;
+}
+
+void fillInKnownPos(struct genePos *gp, struct sqlConnection *conn)
+/* If gp->chrom is not filled in go look it up. */
+{
+if (gp->chrom == NULL)
+    {
+    char *pos = knownPosVal(NULL, gp, conn);
+    char *chrom;
+    hgParseChromRange(pos, &chrom, &gp->start, &gp->end);
+    gp->chrom = cloneString(chrom);
+    }
+}
+
 struct searchResult *knownGeneSimpleSearch(struct column *col, 
     struct sqlConnection *conn, char *search)
 /* Look for matches to known genes. */
 {
-char description[512];
-char query[256];
-
 struct kgAlias *ka, *kaList;
 struct searchResult *srList = NULL, *sr;
 kaList = findKGAlias(database, search, "F");
 for (ka = kaList; ka != NULL; ka = ka->next)
     {
-    AllocVar(sr);
-    sr->gp.name = cloneString(ka->kgID);
-    sr->shortLabel = cloneString(ka->alias);
-    safef(query, sizeof(query), 
-    	"select description from kgXref where kgID = '%s'", ka->kgID);
-    if (sqlQuickQuery(conn, query, description, sizeof(description)))
-        sr->longLabel = cloneString(description);
-    else
-	sr->longLabel = cloneString("");
+    sr = knownGeneSearchResult(conn, ka->kgID, ka->alias);
     slAddHead(&srList, sr);
     }
 slSort(&srList, searchResultCmpShortLabel);
