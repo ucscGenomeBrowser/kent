@@ -20,7 +20,7 @@ DIRS = \
 	hgCtgPos \
 	hgDeleteChrom \
 	hgExonerate \
-	hgExperiment 
+	hgExperiment \
 	hgExtFileCheck \
 	hgFiberglass \
 	hgFindSpec \
