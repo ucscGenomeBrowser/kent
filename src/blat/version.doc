@@ -1,3 +1,9 @@
+31:
+     o Fixed bug where blat of protein vs. translated DNA
+       -q=prot -t=dnax would drop exons in some situations.  This
+       was a side effect of the last change in version 29.  
+       Slippery stuff this!
+
 30:
      o Fixed bug in webBlat when using "Blat's Guess" and no
        sequence name.
