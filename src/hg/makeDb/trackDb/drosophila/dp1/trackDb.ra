@@ -1,0 +1,8 @@
+track ctgPos
+shortLabel Scaffolds
+longLabel Scaffolds
+group map
+priority 9
+visibility pack
+color 150,0,0
+
