@@ -23,7 +23,7 @@
 
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: qaPushQ.c,v 1.26 2004/05/18 16:58:09 galt Exp $";
+static char const rcsid[] = "$Id: qaPushQ.c,v 1.27 2004/05/18 17:34:31 galt Exp $";
 
 char msg[2048] = "";
 char ** saveEnv;
@@ -1857,12 +1857,13 @@ while(TRUE)
     i++;
     }
 
-safef(showColumns, 2048, "%s", s->string);
+showColumns = cloneString(s->string);
 freeDyString(&s);
 
 showColumns[strlen(showColumns)-1]=0;  /* chop off trailing comma */
 
 doDisplay();
+
 }
 
 
@@ -1890,6 +1891,8 @@ void doShowAllColumns()
 int c = 0;
 
 printf("<h4>Show Hidden Columns</h4>\n");
+printf("<br>\n");
+printf("<a href=\"/cgi-bin/qaPushQ?cb=%s\">RETURN</a><br>", newRandState); 
 printf("<br>\n");
 printf("Click on any column below to un-hide it.<br>\n");
 printf("<br>\n");
@@ -1962,6 +1965,8 @@ while ((row = sqlNextRow(sr)) != NULL)
     printf("<A href=qaPushQ?action=display&month=%s&cb=%s>%s</A><br>\n",row[0],newRandState,row[0]);
     }
 sqlFreeResult(&sr);
+printf("<br>\n");
+printf("<a href=\"/cgi-bin/qaPushQ?cb=%s\">RETURN</a><br>", newRandState); 
 }
 
 

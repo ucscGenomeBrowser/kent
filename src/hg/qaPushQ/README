@@ -3,8 +3,6 @@ when the new org/assembly has been finished and the separate queue is
 no longer needed, make a way to quickly append its records
 to the end of the main queue and clear out or delete the separate queue tbl.
 
-add &cacheDefeat=random to URL and db to suppress back-button problems if any.
-
 give in and use the cart?
 
 add ability to query old logs more fully (later)
