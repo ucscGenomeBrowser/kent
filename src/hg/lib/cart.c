@@ -12,7 +12,7 @@
 #include "hdb.h"
 #include "jksql.h"
 
-static char const rcsid[] = "$Id: cart.c,v 1.34 2004/01/31 02:57:34 kent Exp $";
+static char const rcsid[] = "$Id: cart.c,v 1.35 2004/02/01 12:49:57 kent Exp $";
 
 static char *sessionVar = "hgsid";	/* Name of cgi variable session is stored in. */
 static char *positionCgiName = "position";
@@ -719,16 +719,23 @@ pushWarnHandler(htmlVaWarn);
 htmStart(stdout, title);
 }
 
-void cartWebStart(struct cart *theCart, char *format, ...)
+void cartVaWebStart(struct cart *cart, char *format, va_list args)
+/* Print out pretty wrapper around things when working
+ * from cart. */
+{
+pushWarnHandler(htmlVaWarn);
+webStartWrapper(cart, format, args, FALSE, FALSE);
+inWeb = TRUE;
+}
+
+void cartWebStart(struct cart *cart, char *format, ...)
 /* Print out pretty wrapper around things when working
  * from cart. */
 {
 va_list args;
 va_start(args, format);
-pushWarnHandler(htmlVaWarn);
-webStartWrapper(theCart, format, args, FALSE, FALSE);
+cartVaWebStart(cart, format, args);
 va_end(args);
-inWeb = TRUE;
 }
 
 void cartWebEnd()
