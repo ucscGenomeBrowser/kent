@@ -11,7 +11,7 @@
 #include "wiggle.h"
 #include "scoredRef.h"
 
-static char const rcsid[] = "$Id: wigTrack.c,v 1.22 2003/11/11 18:31:48 hiram Exp $";
+static char const rcsid[] = "$Id: wigTrack.c,v 1.23 2003/11/11 23:43:49 hiram Exp $";
 
 /*	wigCartOptions structure - to carry cart options from wigMethods
  *	to all the other methods via the track->extraUiData pointer
@@ -885,8 +885,17 @@ if (autoScale)
     wiggleAutoScale = wiggleScaleStringToEnum(autoScale);
 else 
     {
+    char * autoScaleDefault = 
+	trackDbSettingOrDefault(track->tdb, "autoScaleDefault", "On");
+    if (differentWord("Off",autoScaleDefault)) {
     wiggleAutoScale = wiggleScaleStringToEnum("Auto-Scale to data view");
     snprintf( cartStr, sizeof(cartStr), "%s", "Auto-Scale to data view");
+    } else {
+    wiggleAutoScale =
+	wiggleScaleStringToEnum("Use Vertical Viewing Range Setting");
+    snprintf( cartStr, sizeof(cartStr), "%s",
+		"Use Vertical Viewing Range Setting");
+    }
     cartSetString( cart, o9, cartStr);
     }
 wigCart->autoScale = wiggleAutoScale;
