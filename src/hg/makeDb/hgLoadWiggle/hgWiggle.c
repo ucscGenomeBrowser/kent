@@ -11,10 +11,10 @@
 #include "hdb.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: hgWiggle.c,v 1.29 2004/09/14 23:45:07 hiram Exp $";
+static char const rcsid[] = "$Id: hgWiggle.c,v 1.30 2004/09/15 17:15:21 hiram Exp $";
 
 /* Command line switches. */
-static boolean noAscii = FALSE;	/*	do not output ascii data */
+static boolean doAscii = TRUE;	/*	do not output ascii data */
 static boolean doStats = FALSE;	/*	perform stats measurement */
 static boolean doBed = FALSE;	/*	output bed format */
 static boolean doHistogram = FALSE;	/*	output histogram of the data */
@@ -23,7 +23,7 @@ static boolean fetchNothing = FALSE;	/*  no ascii, bed, or stats returned */
 static boolean timing = FALSE;	/*	turn timing on	*/
 static boolean skipDataRead = FALSE;	/*	do not read the wib data */
 static boolean rawDataOut = FALSE;	/*	just the values, no positions */
-static boolean statsHTML = FALSE;	/*	stats output in HTML */
+static boolean htmlOut = FALSE;	/*	stats and histogram output in HTML */
 static boolean help = FALSE;	/*	extended help message */
 static char *db = NULL;			/* database specification	*/
 static char *chr = NULL;		/* work on this chromosome only */
@@ -46,7 +46,7 @@ static struct optionSpec optionSpecs[] = {
     {"position", OPTION_STRING},
     {"bedFile", OPTION_STRING},
     {"dataConstraint", OPTION_STRING},
-    {"noAscii", OPTION_BOOLEAN},
+    {"doAscii", OPTION_BOOLEAN},
     {"doStats", OPTION_BOOLEAN},
     {"doBed", OPTION_BOOLEAN},
     {"doHistogram", OPTION_BOOLEAN},
@@ -55,7 +55,7 @@ static struct optionSpec optionSpecs[] = {
     {"timing", OPTION_BOOLEAN},
     {"skipDataRead", OPTION_BOOLEAN},
     {"rawDataOut", OPTION_BOOLEAN},
-    {"statsHTML", OPTION_BOOLEAN},
+    {"htmlOut", OPTION_BOOLEAN},
     {"help", OPTION_BOOLEAN},
     {"span", OPTION_INT},
     {"ll", OPTION_FLOAT},
@@ -79,10 +79,11 @@ verbose(VERBOSE_ALWAYS_ON,
   "   -position=[chrN:]start-end - examine data in window start-end (1-relative)\n"
   "             (the chrN: is optional)\n"
   "   -chromLst=<file> - file with list of chroms to examine\n"
-  "   -noAscii - do *not* perform the default ascii output\n"
+  "   -doAscii - perform the default ascii output, in addition to other outputs\n"
+  "            - Any of the other -do outputs turn off the default ascii output\n"
   "   -rawDataOut - output just the data values, nothing else\n"
-  "   -statsHTML - output stats in HTML instead of plain text (sets doStats too)\n"
-  "   -doStats - perform stats measurement, default output text, see -statsHTML\n"
+  "   -htmlOut - output stats or histogram in HTML instead of plain text\n"
+  "   -doStats - perform stats measurement, default output text, see -htmlOut\n"
   "   -doBed - output bed format\n"
   "   -bedFile=<file> - constrain output to ranges specified in bed <file>\n"
   "   -dataConstraint='DC' - where DC is one of < = >= <= == != 'in range'\n"
@@ -101,7 +102,7 @@ verbose(VERBOSE_ALWAYS_ON,
 if (moreHelp)
   verbose(VERBOSE_ALWAYS_ON,
   "   example, stats on all .wig files in this directory:\n"
-  "\thgWiggle -span=5 -noAscii -doStats `ls *.wig | sed -e 's/.wig//'`\n"
+  "\thgWiggle -span=5 -doStats `ls *.wig | sed -e 's/.wig//'`\n"
   "   example using dataCompare limits, show values over 35.0:\n"
   "\thgWiggle -span=5 -dataConstraint='>' -ll=35.0 -chr=chrM -db=hg17 gc5Base\n"
   "   example, show values in range [ 50.0 : 80.0 ]\n"
@@ -117,6 +118,7 @@ if (moreHelp)
   "\t\ttextHistogram -real -binSize=20 -maxBinCount=13 -pValues stdin\n"
 /*"   -skipDataRead - do not read the .wib data (for no-read speed check)\n"*/
   "   -doHistogram - perform histogram on data, turns off all other outputs\n"
+  "                - see also -htmlOut to output the histogram in html\n"
   "   -hBinSize=<F> - sets histogram bin size to <F> (float, default 1.0)\n"
   "   -hBinCount=<D> - sets histogram bin count to <D> (int, default 26)\n"
   "   -hMinVal=<F> - sets histogram minimum value to <F> (float, default 0.0)\n"
@@ -199,7 +201,7 @@ for (i=0; i<trackCount; ++i)
 	    verbose(VERBOSE_CHR_LEVEL,"#\tchrom: %s\n", chromPtr->name);
 	    }
 
-	if (noAscii)
+	if (!rawDataOut && !doAscii)
 		operations &= ~wigFetchAscii;
 	if (doStats)
 		operations |= wigFetchStats;
@@ -249,10 +251,10 @@ for (i=0; i<trackCount; ++i)
 	     *	no need to print stats until all done.
 	     */
 	    if (doStats && (!chromPtr) && (trackCount == 1))
-		wds->statsOut(wds, "stdout", TRUE, statsHTML, TRUE, FALSE);
+		wds->statsOut(wds, "stdout", TRUE, htmlOut, TRUE, FALSE);
 	    if (doBed)
 		wds->bedOut(wds, "stdout", TRUE);
-	    if (!noAscii)
+	    if (rawDataOut || doAscii)
 		wds->asciiOut(wds, "stdout", TRUE, rawDataOut);
 	    }
 	wds->freeBed(wds);
@@ -289,14 +291,14 @@ for (i=0; i<trackCount; ++i)
 
 if (doHistogram)
     {
-    printHistoGram(histoGramResult);
+    printHistoGram(histoGramResult, htmlOut);
     freeHistoGram(&histoGramResult);
     }
 
 /* when working through a chrom list, or track list, stats only at the end */
 if (doStats && (chromList || (trackCount > 1)))
     {
-    wds->statsOut(wds, "stdout", TRUE, statsHTML, TRUE, FALSE);
+    wds->statsOut(wds, "stdout", TRUE, htmlOut, TRUE, FALSE);
     wds->freeStats(wds);
     }
 endClock = clock1000();
@@ -343,7 +345,6 @@ chromLst = optionVal("chromLst", NULL);
 position = optionVal("position", NULL);
 bedFile = optionVal("bedFile", NULL);
 dataConstraint = optionVal("dataConstraint", NULL);
-noAscii = optionExists("noAscii");
 doStats = optionExists("doStats");
 doBed = optionExists("doBed");
 doHistogram = optionExists("doHistogram");
@@ -352,7 +353,7 @@ fetchNothing = optionExists("fetchNothing");
 timing = optionExists("timing");
 skipDataRead = optionExists("skipDataRead");
 rawDataOut = optionExists("rawDataOut");
-statsHTML = optionExists("statsHTML");
+htmlOut = optionExists("htmlOut");
 help = optionExists("help");
 span = optionInt("span", 0);
 lowerLimit = optionFloat("ll", -1 * INFINITY);
@@ -364,21 +365,20 @@ hBinCount = optionInt("hBinCount", 26);
 if (help)
     usage(TRUE);
 
+if (doStats || doBed)
+    doAscii = optionExists("doAscii");
+
 if (doHistogram)	/*	histogram turns off everything else */
     {
-    noAscii = TRUE;
+    doAscii = FALSE;
     doBed = FALSE;
     doStats = FALSE;
     rawDataOut = FALSE;
-    statsHTML = FALSE;
     hRange = hBinSize * (hBinCount - 1);
     if ( !(hRange > 0.0))
 	errAbort("ERROR: histogram range is not > 0.0. binSize: %g, binCount: %u, range: %g", hBinSize, hBinCount, hRange);
     hMax = hMinVal + hRange;
     }
-
-if (statsHTML)
-    doStats = TRUE;
 
 if (db)
     verbose(VERBOSE_CHR_LEVEL, "#\tdatabase: %s\n", db);
@@ -431,8 +431,8 @@ if (position)
     wds->setPositionConstraint(wds, winStart, winEnd);
     verbose(VERBOSE_CHR_LEVEL, "#\tposition specified: %u-%u\n", wds->winStart+1, wds->winEnd);
     }
-if (noAscii)
-    verbose(VERBOSE_CHR_LEVEL, "#\tnoAscii option on, do not perform the default ascii output\n");
+if (doAscii)
+    verbose(VERBOSE_CHR_LEVEL, "#\tdoAscii option on, perform the default ascii output\n");
 if (doHistogram)
     verbose(VERBOSE_CHR_LEVEL, "#\tdoHistogram: min,max: %g:%g, range: %g, binCount: %u, binSize: %g\n", hMinVal, hMax, hRange, hBinCount, hBinSize);
 
@@ -450,8 +450,8 @@ if (skipDataRead)
     verbose(VERBOSE_CHR_LEVEL, "#\tskipDataRead option on, do not read .wib data\n");
 if (rawDataOut)
     verbose(VERBOSE_CHR_LEVEL, "#\trawDataOut option on, only data values are output\n");
-if (statsHTML)
-    verbose(VERBOSE_CHR_LEVEL, "#\tstatsHTML option on, output stats in HTML format\n");
+if (htmlOut)
+    verbose(VERBOSE_CHR_LEVEL, "#\thtmlOut option on, output stats or histogram in HTML format\n");
 if (span)
     {
     wds->setSpanConstraint(wds, span);
