@@ -23,7 +23,7 @@ CREATE TABLE simpleRepeat (
     entropy float not null,	# Entropy
     sequence longblob not null,	# Sequence of repeat unit element
               #Indices
-    INDEX(chrom(8),bin),
-    INDEX(chrom(8),chromStart),
-    INDEX(chrom(8),chromEnd)
+    INDEX(chrom(16),bin),
+    INDEX(chrom(16),chromStart),
+    INDEX(chrom(16),chromEnd)
 );
