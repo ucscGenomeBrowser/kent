@@ -102,6 +102,7 @@ UTIL_DIRS = \
 	borfBig \
 	ctgFaToFa \
 	ctgToChromFa \
+	embossToPsl \
 	fakeFinContigs \
 	fakeOut \
 	featureBits \
