@@ -30,7 +30,7 @@
 #include "liftOverChain.h"
 #include "grp.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.193 2004/07/13 18:08:09 baertsch Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.194 2004/07/14 05:50:18 kent Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
@@ -2783,6 +2783,7 @@ char buf[256];
 int iStart, iEnd;
 
 strncpy(buf, spec, 256);
+stripChar(buf, ',');
 chrom = buf;
 start = strchr(chrom, ':');
 
