@@ -16,7 +16,7 @@ idSql select name from sangerGene where name = '%s'
 url http://www.wormbase.org/db/gene/gene?name=%s
 priority 25
 
-name swissProt
+name uniProt
 tables sangerLinks
 idSql select protName from sangerLinks where orfName = '%s'
 nameSql select protName from sangerLinks where orfName = '%s'

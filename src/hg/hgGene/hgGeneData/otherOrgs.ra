@@ -23,7 +23,7 @@ sorterUrl ../cgi-bin/hgNear?org=Mouse&near.oldOrg=Mouse&near_search=%s
 geneUrl ../cgi-bin/hgGene?org=Mouse&hgg_gene=%s&hgg_chrom=none
 otherName Jackson Labs
 otherUrl http://www.informatics.jax.org/searches/accession_report.cgi?id=%s
-otherIdSql select swissProt.extDbRef.extAcc1 from swissProt.extDbRef,swissProt.extDb,kgXref where swissProt.extDb.val = 'MGD' and swissProt.extDb.id = swissProt.extDbRef.extDb and swissProt.extDbRef.acc = kgXref.spID and kgXref.kgID = '%s' 
+otherIdSql select uniProt.extDbRef.extAcc1 from uniProt.extDbRef,uniProt.extDb,kgXref where uniProt.extDb.val = 'MGD' and uniProt.extDb.id = uniProt.extDbRef.extDb and uniProt.extDbRef.acc = kgXref.spID and kgXref.kgID = '%s' 
 priority 20
 
 name rat
@@ -36,7 +36,7 @@ sorterUrl ../cgi-bin/hgNear?org=Rat&near.oldOrg=Rat&near_search=%s
 geneUrl ../cgi-bin/hgGene?org=Rat&hgg_gene=%s&hgg_chrom=none
 otherName RGD
 otherUrl http://rgd.mcw.edu/tools/genes/genes_view.cgi?id=%s
-otherIdSql select swissProt.extDbRef.extAcc1 from swissProt.extDbRef,swissProt.extDb,kgXref where swissProt.extDb.val = 'RGD' and swissProt.extDb.id = swissProt.extDbRef.extDb and swissProt.extDbRef.acc = kgXref.spID and kgXref.kgID = '%s' 
+otherIdSql select uniProt.extDbRef.extAcc1 from uniProt.extDbRef,uniProt.extDb,kgXref where uniProt.extDb.val = 'RGD' and uniProt.extDb.id = uniProt.extDbRef.extDb and uniProt.extDbRef.acc = kgXref.spID and kgXref.kgID = '%s' 
 priority 25
 
 name zebrafish

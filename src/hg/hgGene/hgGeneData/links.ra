@@ -19,8 +19,8 @@ hgsid on
 dbInUrl on
 priority 20
 
-name swissProt
-shortLabel SwissProt
+name uniProt
+shortLabel UniProt
 tables kgXref
 idSql select spId from kgXref where kgID = '%s'
 nameSql select spDisplayId from kgXref where kgID = '%s'
