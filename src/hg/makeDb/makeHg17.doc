@@ -10706,3 +10706,161 @@ superfam041128.sfAssign;'
    | hgKnownToSuper hg17 hs stdin
 # created 25287 rows in knownToSuper
 
+### HG17 PROTEOME BROWSER TABLES RE-BUILD ####  (DONE - 2004-12-01 - Fan)
+# These are instructions for rebuilding tables 
+# needed for the Proteome Browser.  
+# DON'T START THESE UNTIL TABLES FOR KNOWN GENES AND kgProtMap table
+# ARE REBUILT.  
+# This update is based on proteins DBs dated 041115.
+
+# Create the working directory
+
+    ssh hgwdev
+    mv /cluster/data/hg17/bed/pb /cluster/data/hg17/bed/pb.2004-06-11
+    mkdir /cluster/data/hg17/bed/pb.2004-12-01
+    cd /cluster/data/hg17/bed
+    ln –s /cluster/data/hg17/bed/pb.2004-12-01 pb
+
+# Move the existing PB tables by:
+
+hgsql hg17
+create database hg17Sav2;
+
+alter table hg17.pepCCntDist rename as hg17Sav2.pepCCntDist;
+alter table hg17.pepExonCntDist rename as hg17Sav2.pepExonCntDist;
+alter table hg17.pepHydroDist rename as hg17Sav2.pepHydroDist;
+alter table hg17.pepIPCntDist rename as hg17Sav2.pepIPCntDist;
+alter table hg17.pepMolWtDist rename as hg17Sav2.pepMolWtDist;
+alter table hg17.pepMwAa rename as hg17Sav2.pepMwAa;
+alter table hg17.pepPi rename as hg17Sav2.pepPi;
+alter table hg17.pepPiDist rename as hg17Sav2.pepPiDist;
+alter table hg17.pepResDist rename as hg17Sav2.pepResDist;
+
+alter table hg17.pbAaDistA rename as hg17Sav2.pbAaDistA;
+alter table hg17.pbAaDistC rename as hg17Sav2.pbAaDistC;
+alter table hg17.pbAaDistD rename as hg17Sav2.pbAaDistD;
+alter table hg17.pbAaDistE rename as hg17Sav2.pbAaDistE;
+alter table hg17.pbAaDistF rename as hg17Sav2.pbAaDistF;
+alter table hg17.pbAaDistG rename as hg17Sav2.pbAaDistG;
+alter table hg17.pbAaDistH rename as hg17Sav2.pbAaDistH;
+alter table hg17.pbAaDistI rename as hg17Sav2.pbAaDistI;
+alter table hg17.pbAaDistK rename as hg17Sav2.pbAaDistK;
+alter table hg17.pbAaDistL rename as hg17Sav2.pbAaDistL;
+alter table hg17.pbAaDistM rename as hg17Sav2.pbAaDistM;
+alter table hg17.pbAaDistN rename as hg17Sav2.pbAaDistN;
+alter table hg17.pbAaDistP rename as hg17Sav2.pbAaDistP;
+alter table hg17.pbAaDistQ rename as hg17Sav2.pbAaDistQ;
+alter table hg17.pbAaDistR rename as hg17Sav2.pbAaDistR;
+alter table hg17.pbAaDistS rename as hg17Sav2.pbAaDistS;
+alter table hg17.pbAaDistT rename as hg17Sav2.pbAaDistT;
+alter table hg17.pbAaDistV rename as hg17Sav2.pbAaDistV;
+alter table hg17.pbAaDistW rename as hg17Sav2.pbAaDistW;
+alter table hg17.pbAaDistY rename as hg17Sav2.pbAaDistY;
+alter table hg17.pbAnomLimit rename as hg17Sav2.pbAnomLimit;
+alter table hg17.pbResAvgStd rename as hg17Sav2.pbResAvgStd;
+alter table hg17.pbStamp rename as hg17Sav2.pbStamp;
+
+quit
+
+# Define pep* tables in hg17 DB
+
+	cat ~/kent/src/hg/lib/pep*.sql > pepAll.sql
+
+#  First edit out pepPred table definition, then
+
+	hgsql hg17 < pepAll.sql
+
+# Build the pepMwAa table
+
+  hgsql proteins041115 -e "select info.acc, molWeight, aaSize from sp041115.info, sp041115.accToTaxon where 
+accToTaxon.taxon=9606 and accToTaxon.acc = info.acc" > pepMwAa.tab
+
+hgsql hg17 <<end
+load data local infile "pepMwAa.tab" into table hg17.pepMwAa ignore 1 lines;
+end
+
+o Build the pepPi table
+
+  hgsql proteins041115 -e "select info.acc from sp041115.info, sp041115.accToTaxon where 
+accToTaxon.taxon=9606 and accToTaxon.acc = info.acc" > protAcc.lis
+
+  pbCalPi protAcc.lis sp041115 pepPi.tab
+
+hgsql hg17 <<end
+load data local infile "pepPi.tab" into table hg17.pepPi;
+end
+
+# Calculate and load pep distributions
+
+  pbCalDist sp041115 proteins041115 9606 hg17 >pbCalDist.out
+
+    cat pbCalDist.out
+    wc  pbCalDist.out
+
+    hgsql hg17
+
+    load data local infile "pepExonCntDist.tab" into table hg17.pepExonCntDist;
+    load data local infile "pepCCntDist.tab" into table hg17.pepCCntDist;
+    load data local infile "pepHydroDist.tab" into table hg17.pepHydroDist;
+    load data local infile "pepMolWtDist.tab" into table hg17.pepMolWtDist;
+    load data local infile "pepResDist.tab" into table hg17.pepResDist;
+    load data local infile "pepIPCntDist.tab" into table hg17.pepIPCntDist;
+    load data local infile "pepPiDist.tab" into table hg17.pepPiDist;
+    quit
+
+# Calculate frequency distributions
+
+    pbCalResStd 041115 9606 hg17
+
+# Create pbAaDistX tables
+
+    cat  ~/kent/src/hg/lib/pbAaDist*.sql >pbAaAll.sql
+    hgsql hg17 < pbAaAll.sql
+
+    hgsql hg17
+
+load data local infile "pbAaDistW.tab" into table hg17.pbAaDistW;
+load data local infile "pbAaDistC.tab" into table hg17.pbAaDistC;
+load data local infile "pbAaDistM.tab" into table hg17.pbAaDistM;
+load data local infile "pbAaDistH.tab" into table hg17.pbAaDistH;
+load data local infile "pbAaDistY.tab" into table hg17.pbAaDistY;
+load data local infile "pbAaDistN.tab" into table hg17.pbAaDistN;
+load data local infile "pbAaDistF.tab" into table hg17.pbAaDistF;
+load data local infile "pbAaDistI.tab" into table hg17.pbAaDistI;
+load data local infile "pbAaDistD.tab" into table hg17.pbAaDistD;
+load data local infile "pbAaDistQ.tab" into table hg17.pbAaDistQ;
+load data local infile "pbAaDistK.tab" into table hg17.pbAaDistK;
+load data local infile "pbAaDistR.tab" into table hg17.pbAaDistR;
+load data local infile "pbAaDistT.tab" into table hg17.pbAaDistT;
+load data local infile "pbAaDistV.tab" into table hg17.pbAaDistV;
+load data local infile "pbAaDistP.tab" into table hg17.pbAaDistP;
+load data local infile "pbAaDistG.tab" into table hg17.pbAaDistG;
+load data local infile "pbAaDistE.tab" into table hg17.pbAaDistE;
+load data local infile "pbAaDistA.tab" into table hg17.pbAaDistA;
+load data local infile "pbAaDistL.tab" into table hg17.pbAaDistL;
+load data local infile "pbAaDistS.tab" into table hg17.pbAaDistS;
+quit
+
+# Create pbAnomLimit and pbResAvgStd tables
+
+   hgsql hg17 < ~/src/hg/lib/pbAnomLimit.sql
+   hgsql hg17 < ~/src/hg/lib/pbResAvgStd.sql
+
+   hgsql hg17 -e 'load data local infile "pbResAvgStd.tab" into table hg17.pbResAvgStd;'
+   hgsql hg17 -e 'load data local infile "pbAnomLimit.tab" into table hg17.pbAnomLimit;'
+
+# Create pbStamp table for PB
+   
+  hgsql hg17 < ~/src/hg/lib/pbStamp.sql
+  hgsql hg17Sav2 -e 'select * from pbStamp' > pbStamp.tab
+
+  hgsql hg17 -e 'load data local infile "pbStamp.tab" into table hg17.pbStamp;'
+
+# Adjust drawing parameters for Proteome Browser stamps
+
+  Now invoke Proteome Browser and adjust various drawing parameters
+  (mostly the ymax of each stamp) if necessary, by updating the 
+  pbStamp.tab file and then delete and reload the pbStamp table. 
+
+# Perform preliminary review of Proteome Browser for hg17, then
+  notify QA for formal review.
