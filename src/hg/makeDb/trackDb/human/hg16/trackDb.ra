@@ -633,16 +633,6 @@ priority 159
 visibility hide
 type psl .
 
-track firstEF
-shortLabel FirstEF 
-longLabel FirstEF: first-exon and promoter prediction
-group genes
-priority 50
-visibility hide
-spectrum on
-type bed 6
-url http://rulai.cshl.org/tools/FirstEF/Readme/README.html
-
 track blastzSelf
 shortLabel Self Blastz
 longLabel Merged Blastz Human Alignments
