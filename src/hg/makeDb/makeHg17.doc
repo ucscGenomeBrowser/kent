@@ -4219,6 +4219,13 @@ hgsql \
 	hg17
 #	row count went from 87273 to 106199
 
+# Make knownToCdsSnp table (DONE Nov 11, 2004, Heather)
+  ssh hgwdev
+  nice hgMapToGene hg17 snp knownGene knownToCdsSnp -all -cds
+# row count 165728
+# unique 34013
+# approx. 5 minutes running time
+
 # Make C. elegans ortholog column using blastp on wormpep.
 # First make C. elegans protein database and copy it to cluster/bluearc
 # if it doesn't exist already
@@ -6897,6 +6904,16 @@ cat > makeMaf.csh << '_EOF_'
       /usr/local/apache/htdocs/goldenPath/hg17/vsRn3/rat.chain.gz
     cp -p /cluster/data/hg17/bed/blastz.rn3/axtChain/rat.net.gz \
       /usr/local/apache/htdocs/goldenPath/hg17/vsRn3/rat.net.gz
+    cd /usr/local/apache/htdocs/goldenPath/hg17/vsRn3
+    md5sum *.gz */*.gz > md5sum.txt
+    # Update the README.txt
+
+# ADD CHAIN AND NET TO VSHG17 DOWNLOAD AREAS (DONE Sept. 8th, 2004, heather)
+    ssh hgwdev
+    cp -p /cluster/data/mm5/bed/blastz.hg17/axtChain/all.chain.gz \
+      /usr/local/apache/htdocs/goldenPath/mm5/vsHg17/human.chain.gz
+    cp -p /cluster/data/mm5/bed/blastz.hg17/axtChain/human.net.gz \
+      /usr/local/apache/htdocs/goldenPath/mm5/vsHg17/human.net.gz
     cd /usr/local/apache/htdocs/goldenPath/hg17/vsRn3
     md5sum *.gz */*.gz > md5sum.txt
     # Update the README.txt
