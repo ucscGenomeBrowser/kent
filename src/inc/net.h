@@ -146,7 +146,7 @@ void netHttpGet(struct lineFile *lf, struct netParsedUrl *npu,
 
 int netOpenHttpExt(char *url, char *method, boolean end);
 /* Return a file handle that will read the url.  If end is not
- * set then can send cookies and other info to returned file 
+ * set then can send cookies and other info to returned file  */
 
 int netHttpGetMultiple(char *url, struct slName *queries, void *userData,
 		       void (*responseCB)(void *userData, char *req,
