@@ -25,31 +25,31 @@ INST_DIR:
 	fi
 
 version:
-	rm -f ${install_dir}/Version_*
+	@rm -f ${install_dir}/Version_*
 	touch ${install_dir}/Version_${VER}.`date -I`
 
 COPYRIGHT.txt:	COPYRIGHT INST_DIR
 	sed -e "s/DATE_STAMP/`date -I`/" COPYRIGHT | \
 	unix2dos > ${install_dir}/$@
-	chmod 644 ${install_dir}/$@
+	@chmod 644 ${install_dir}/$@
 
 README.building.source.txt:	README.building.source INST_DIR
-	unix2dos -n README.building.source ${install_dir}/$@
-	chmod 644 ${install_dir}/$@
+	@unix2dos -n README.building.source ${install_dir}/$@
+	@chmod 644 ${install_dir}/$@
 
 README.cvs.access.txt:	README.cvs.access INST_DIR
-	unix2dos -n README.cvs.access ${install_dir}/$@
-	chmod 644 ${install_dir}/$@
+	@unix2dos -n README.cvs.access ${install_dir}/$@
+	@chmod 644 ${install_dir}/$@
 
 README.install.txt:	README.install INST_DIR
-	unix2dos -n README.install ${install_dir}/$@
-	chmod 644 ${install_dir}/$@
+	@unix2dos -n README.install ${install_dir}/$@
+	@chmod 644 ${install_dir}/$@
 
 README.mysql.setup.txt: README.mysql.setup INST_DIR
-	unix2dos -n README.mysql.setup ${install_dir}/$@
-	chmod 644 ${install_dir}/$@
+	@unix2dos -n README.mysql.setup ${install_dir}/$@
+	@chmod 644 ${install_dir}/$@
 
-source_tar: ${install_dir}/source_tree_clean.tgz
+source_tar:
 	if [ ! -d "${install_dir}/source_tree_clean" ]; then \
 		${MKDIR} "${install_dir}/source_tree_clean"; \
 		(cd "${install_dir}/source_tree_clean"; \
