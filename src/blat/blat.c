@@ -1,5 +1,6 @@
 /* blat - Standalone BLAT fast sequence search command line tool. */
 #include "common.h"
+#include "memalloc.h"
 #include "linefile.h"
 #include "bits.h"
 #include "hash.h"
@@ -242,7 +243,8 @@ freeHash(&hash);
 lineFileClose(&lf);
 }
 
-void maskNucSeqList(struct dnaSeq *seqList, char *seqFileName, char *maskType)
+void maskNucSeqList(struct dnaSeq *seqList, char *seqFileName, char *maskType,
+	boolean hardMask)
 /* Apply masking to simple nucleotide sequence by making masked nucleotides
  * upper case (since normal DNA sequence is lower case for us. */
 {
@@ -253,29 +255,37 @@ char *outFile = NULL, outNameBuf[512];
 
 if (sameWord(maskType, "upper"))
     {
-    /* This is easy - user has done it for us. */
-    return;
+    /* Already has dna to be masked in upper case. */
     }
 else if (sameWord(maskType, "lower"))
     {
     for (seq = seqList; seq != NULL; seq = seq->next)
 	toggleCase(seq->dna, seq->size);
-    return;
-    }
-if (sameWord(maskType, "out"))
-    {
-    sprintf(outNameBuf, "%s.out", seqFileName);
-    outFile = outNameBuf;
     }
 else
     {
-    outFile = maskType;
+    /* Masking from a RepeatMasker .out file. */
+    if (sameWord(maskType, "out"))
+	{
+	sprintf(outNameBuf, "%s.out", seqFileName);
+	outFile = outNameBuf;
+	}
+    else
+	{
+	outFile = maskType;
+	}
+    unmaskNucSeqList(seqList);
+    maskFromOut(seqList, outFile);
     }
-unmaskNucSeqList(seqList);
-maskFromOut(seqList, outFile);
+if (hardMask)
+    {
+    for (seq = seqList; seq != NULL; seq = seq->next)
+	upperToN(seq->dna, seq->size);
+    }
 }
 
-bioSeq *getSeqList(int fileCount, char *files[], struct hash *hash, boolean isProt, boolean simpleNuc, char *maskType)
+bioSeq *getSeqList(int fileCount, char *files[], struct hash *hash, 
+	boolean isProt, boolean isTransDna, char *maskType)
 /* From an array of .fa and .nib file names, create a
  * list of dnaSeqs. */
 {
@@ -285,7 +295,7 @@ bioSeq *seqList = NULL, *seq;
 int count = 0; 
 unsigned long totalSize = 0;
 boolean maskWarned = FALSE;
-boolean softMask = (simpleNuc && maskType != NULL);
+boolean doMask = (maskType != NULL);
 
 for (i=0; i<fileCount; ++i)
     {
@@ -316,7 +326,7 @@ for (i=0; i<fileCount; ++i)
 	while (faMixedSpeedReadNext(lf, &sseq.dna, &sseq.size, &sseq.name))
 	    {
 	    seq = cloneDnaSeq(&sseq);
-	    if (!softMask)
+	    if (!doMask)
 	        {
 		if (isProt)
 		    faToProtein(seq->dna, seq->size);
@@ -330,11 +340,12 @@ for (i=0; i<fileCount; ++i)
 	    }
 	faFreeFastBuf();
 	}
+
     /* If necessary mask sequence from file. */
-    if (softMask)
+    if (doMask)
 	{
 	slReverse(&list);
-	maskNucSeqList(list, fileName, maskType);
+	maskNucSeqList(list, fileName, maskType, isTransDna);
 	slReverse(&list);
 	}
 
@@ -659,7 +670,7 @@ if (makeOoc != NULL)
     exit(0);
     }
 getFileArray(queryFile, &queryFiles, &queryCount);
-dbSeqList = getSeqList(dbCount, dbFiles, dbHash, dbIsProt, bothSimpleNuc, mask);
+dbSeqList = getSeqList(dbCount, dbFiles, dbHash, dbIsProt, tType == gftDnaX, mask);
 
 if (bothSimpleNuc || (tType == gftProt && qType == gftProt))
     {
@@ -694,6 +705,8 @@ else
     }
 if (dotEvery > 0)
     printf("\n");
+freeDnaSeqList(&dbSeqList);
+hashFree(&dbHash);
 }
 
 int main(int argc, char *argv[])
