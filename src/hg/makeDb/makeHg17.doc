@@ -11137,7 +11137,8 @@ cat `ls -1 *.lav | sort -g` \
 
 # CHAIN DANRER2 BLASTZ (DONE, 2004-12-09, hartera)
 # RELOAD CHAINS WIH FILTERING (DONE, 2004-12-10, hartera)
-
+# APPLY chainAntiRepeat TO REMOVE CHAINS THAT ARE THE RESULTS OF REPEATS
+# AND DEGENERATE DNA (DONE, 2004-12-22, hartera)
     # Run axtChain on little cluster
     ssh kki
     cd /cluster/data/hg17/bed/blastz.danRer2
@@ -11224,6 +11225,7 @@ axtChain -scoreScheme=/cluster/data/blastz/HoxD55.q \
     mv all.chain all.chain.unfiltered
     chainFilter -minScore=5000 all.chain.unfiltered > all.chain
     chainSplit chainFilt5k all.chain
+
     # load chr1 filtered chains and check
     ssh hgwdev
     cd /cluster/data/hg17/bed/blastz.danRer2/axtChain/chainFilt5k
@@ -11236,14 +11238,32 @@ axtChain -scoreScheme=/cluster/data/blastz/HoxD55.q \
 # enrich 2.52x
 # checked browser - when filtered on minScore=5000, the low scoring 
 # alignments removed are small and/or poor alignments so use this version.
-
+    
+    # remove repeats from filtered chains and reload into database
+    # (2004-12-22, hartera)
+    ssh kksilo
+    cd /cluster/data/hg17/bed/blastz.danRer2/axtChain
+    mv chainFilt5k chainRaw
+    mkdir chain
+    cd chainRaw
+    foreach f (*.chain)
+       set c = $f:r
+       echo $c
+       nice chainAntiRepeat /cluster/bluearc/hg17/bothMaskedNibs \
+                       /cluster/bluearc/danRer2/nib $f \
+                       ../chain/$c.chain
+    end
+    cd ..
+    chainMergeSort ./chain/*.chain > all.chain.antirepeat
+    chainSplit chainAR all.chain.antirepeat
+    # load filtered chains and check
     ssh hgwdev
     echo 'drop table chr1_chainDanRer2Filt5k;' | hgsql hg17
     echo 'drop table chr1_chainDanRer2Filt5kLink;' | hgsql hg17
     # reload filtered chains instead of unfiltered (2004-12-10, hartera)
+    # reload filtered chains with repeats removed (2004-12-22, hartera)
     cd /cluster/data/hg17/bed/blastz.danRer2/axtChain/
-    mv chainFilt5k chain
-    cd chain
+    cd chainAR
     foreach i (*.chain)
         set c = $i:r
         hgLoadChain hg17 ${c}_chainDanRer2 $i
@@ -11251,13 +11271,19 @@ axtChain -scoreScheme=/cluster/data/blastz/HoxD55.q \
     end
 # trackDb - change Zebrafish Chain to danRer1 Chain and display this track
 # for danRer2 as Zebrafish Chain.
+# after chainAntiRepeat
+# featureBits -chrom=chr1 hg17 refGene:cds chainDanRer2Link -enrichment
+# refGene:cds 1.304%, chainDanRer2Link 2.742%, both 0.872%, cover 66.81%, 
+# enrich 24.36x 
 
 # NET DANRER2 BLASTZ (DONE, 2004-12-09, hartera)
 # RE-CREATE NET WITH FILTERED CHAINS (DONE, 2004-12-10, hartera)
+# RE-DO NET WITH CHAINS FILTERED BY chainAntiRepeat (DONE, 2004-12-22, hartera) 
     ssh kksilo
     cd /cluster/data/hg17/bed/blastz.danRer2/axtChain
+    rm -r preNet
     mkdir preNet
-    cd chain
+    cd chainAR
     foreach i (*.chain)
        echo preNetting $i
        /cluster/bin/i386/chainPreNet $i ../../S1.len ../../S2.len \
@@ -11274,7 +11300,7 @@ axtChain -scoreScheme=/cluster/data/blastz/HoxD55.q \
     end
     cd ..
     cat n1/*.net | /cluster/bin/i386/netSyntenic stdin noClass.net
-    # memory usage 145051648, utime 1650 s/100, stime 142
+    # memory usage 133443584, utime 905 s/100, stime 139
                                                                                 
     # Add classification info using db tables:
     # netClass looks for ancient repeats in one of the databases
@@ -11289,12 +11315,16 @@ axtChain -scoreScheme=/cluster/data/blastz/HoxD55.q \
     time netClass noClass.net hg17 danRer2 zfishdanRer2.net \
          -tNewR=/cluster/bluearc/hg17/linSpecRep.notInZebrafish \
          -qNewR=/cluster/bluearc/danRer2/linSpecRep.notInHuman -noAr
-    # 90.250u 52.170s 4:39.47 50.9%   0+0k 0+0io 201pf+0w
+    # 97.230u 54.290s 5:37.50 44.8%   0+0k 0+0io 217pf+0w
     # load net into database
     cd /cluster/data/hg17/bed/blastz.danRer2/axtChain
     netFilter -minGap=10 zfishdanRer2.net |  hgLoadNet hg17 netDanRer2 stdin
 # trackDb - change Zebrafish Net to danRer1 Net and display this track
 # for danRer2 as Zebrafish Net.
+# after chainAntiRepeat:
+# featureBits hg17 refGene:cds netDanRer2 -enrichment
+# refGene:cds 1.015%, netDanRer2 22.898%, both 0.783%, cover 77.15%, 
+# enrich 3.37x
 
 # LOAD ACEMBLY TRACK (in progress, 2004-12-09, hartera)
     mkdir -p /cluster/data/hg17/bed/acembly
@@ -11822,6 +11852,8 @@ hgsql hg17 -e 'update wgRna set type = "scaRna" where name ="mgU2-22/U4-8"'
 # Updated .../trackDb/human/hg17/wgRna.html.
 
 # MAKE VSDANRER2 DOWNLOADABLES (DONE, 2004-12-14, hartera)
+# REMAKE FOR CHAINS AND NET AFTER USING chainAntiRepeat
+# (DONE, 2004-12-22, hartera)
     ssh hgwdev
     cd /cluster/data/hg17/bed/blastz.danRer2/axtChrom
     set gp = /usr/local/apache/htdocs/goldenPath/hg17
@@ -11832,21 +11864,26 @@ hgsql hg17 -e 'update wgRna set type = "scaRna" where name ="mgU2-22/U4-8"'
     md5sum *.gz > md5sum.txt
                                                                                 
     # copy chains and nets to downloads area
+    # re-make chains and net downloadables (2004-12-22, hartera)
+    rm $gp/vsDanRer2/zebrafish*.gz $gp/vsDanRer2/md5sum.txt
     cd /cluster/data/hg17/bed/blastz.danRer2/axtChain
-    gzip -c all.chain > /cluster/data/hg17/zip/zebrafish.chain.gz
-    gzip -c zfishdanRer2.net > /cluster/data/hg17/zip/zebrafish.net.gz
+    gzip -c all.chain.antirepeat > \
+            /cluster/data/hg17/zip/zebrafishDanRer2.chain.gz
+    gzip -c zfishdanRer2.net > /cluster/data/hg17/zip/zebrafishDanRer2.net.gz
     cd $gp/vsDanRer2
     mv /cluster/data/hg17/zip/zebrafish*.gz .
     md5sum *.gz > md5sum.txt
     # Copy over & edit README.txt w/pointers to chain, net formats.
                                                                                 
 # CLEANUP DANRER2 BLASTZ (DONE, 2004-12-14, hartera)
+# RE-DONE (DONE, 2004-12-22, hartera)
     ssh kksilo
     cd /cluster/data/hg17/bed/blastz.danRer2
     nice rm axtChain/run1/chain/* &
     nice rm -fr axtChain/n1 axtChain/noClass.net &
-<<<<<<< makeHg17.doc
     nice gzip axtChrom/* pslChrom/* axtChain/all.chain axtChain/all.chain.unfiltered axtChain/*.net &
+    nice gzip axtChain/all.chain.antirepeat axtChain/chainAR/*.chain &
+    nice rm -fr axtChain/chain axtChain/chainRaw axtChain/preNet &
 
 # EXTRACT AXT'S AND MAF'S FROM TETRAODON (tetNig1) NET 
 # (DONE, 2004-12-15, hartera) 
