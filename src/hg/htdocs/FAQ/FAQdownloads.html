@@ -5,12 +5,12 @@
         <META name="description" content="UCSC Genome Browser FAQ">
         <META name="keywords" content="genome, genome browser, genome assembly, UCSC, bioinformatics, sequence, gene prediction, SNP, EST, mRNA">
 	<TITLE>UCSC Genome Browser: FAQ</TITLE>
-	<LINK REL="STYLESHEET" HREF="/style/HGStyle.css">
+	<LINK REL="STYLESHEET" HREF="../style/HGStyle.css">
 </HEAD>
 <BODY BGCOLOR="FFF9D2" LINK="0000CC" VLINK="#330066" ALINK="#330066">
 <A NAME="TOP"></A>
 
-<TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0 WIDTH="100%"><TR><TH COLSPAN=2 ALIGN="left"><IMG SRC="/images/title.jpg" ALT="UCSC Genome Bioinformatics"></TH></TR>
+<TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0 WIDTH="100%"><TR><TH COLSPAN=2 ALIGN="left"><IMG SRC="../images/title.jpg" ALT="UCSC Genome Bioinformatics"></TH></TR>
 
 <TR><TD COLSPAN=2 HEIGHT=40><!--#include virtual="../inc/FAQ.topbar.html"--></TD></TR>
 <!--Content Tables------------------------------------------------------->
@@ -18,7 +18,7 @@
     <!--outer table is for border purposes-->
     <TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1"><TR><TD>
         <TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0"><TR><TD>
-            <TABLE BGCOLOR="D9E4F8" BACKGROUND="/images/hr.gif" WIDTH=100%>
+            <TABLE BGCOLOR="D9E4F8" BACKGROUND="../images/hr.gif" WIDTH=100%>
                 <TR><TD> <FONT SIZE="4"><b>&nbsp;   Frequently Asked Questions: Data and Downloads</b></FONT>
                 </TD></TR></TABLE>
             <TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0><TR><TH HEIGHT=10></TH></TR>
@@ -68,13 +68,13 @@
         <TR><TD>            
         <TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0">
 	    <TR><TD>                
-  	    <TABLE BGCOLOR="D9E4F8" BACKGROUND="/images/hr.gif" WIDTH=100%>
+  	    <TABLE BGCOLOR="D9E4F8" BACKGROUND="../images/hr.gif" WIDTH=100%>
 	        <TR><TD>                
 	        <!--cheap trick to get background on row to be continuous-->
 	   	<TABLE CELLPADDING=0 CELLSPACING=0 MARGIN=0 WIDTH="100%">
 		    <TR><TD ALIGN="left">
 	   	    <FONT SIZE="4"><b>&nbsp; Downloading sequence and annotation data</b></FONT></TD> 
-		    <TD ALIGN="right"><A HREF="#TOP"><IMG SRC="/images/index.gif" ALT="" ALIGN="right" BORDER=0></A>
+		    <TD ALIGN="right"><A HREF="#TOP"><IMG SRC="../images/index.gif" ALT="" ALIGN="right" BORDER=0></A>
 	            </TD></TR>
   	        </TABLE>                
 	        </TD></TR>
@@ -98,9 +98,9 @@
 			particularly if you plan to download multiple files or files of large size. 
 			You can also download data from our 
 			<A HREF="http://hgdownload.cse.ucsc.edu/downloads.html">Downloads</A>
-			page or our <A HREF="http://genome.ucsc.edu/cgi-bin/das/dsn" TARGET=_blank>DAS 
+			page or our <A HREF="../cgi-bin/das/dsn" TARGET=_blank>DAS 
 		 	server</A>. To download a specific subset of the data or to configure the output
-			format of the data, use the <A HREF="http://genome.ucsc.edu/cgi-bin/hgTables">Table 
+			format of the data, use the <A HREF="../../cgi-bin/hgTables">Table 
 			Browser</A>.
 			<P>
 			For more information on using the UCSC DAS server, see 
@@ -121,13 +121,13 @@
         <TR><TD>            
         <TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0">
 	    <TR><TD>                
-  	    <TABLE BGCOLOR="D9E4F8" BACKGROUND="/images/hr.gif" WIDTH=100%>
+  	    <TABLE BGCOLOR="D9E4F8" BACKGROUND="../images/hr.gif" WIDTH=100%>
 	        <TR><TD>                
 	        <!--cheap trick to get background on row to be continuous-->
 	   	<TABLE CELLPADDING=0 CELLSPACING=0 MARGIN=0 WIDTH="100%">
 		    <TR><TD ALIGN="left">
 	   	    <FONT SIZE="4"><b>&nbsp; Downloading data from the UCSC DAS server</b></FONT></TD> 
-		    <TD ALIGN="right"><A HREF="#TOP"><IMG SRC="/images/index.gif" ALT="" ALIGN="right" BORDER=0></A>
+		    <TD ALIGN="right"><A HREF="#TOP"><IMG SRC="../images/index.gif" ALT="" ALIGN="right" BORDER=0></A>
 	            </TD></TR>
   	        </TABLE>                
 	        </TD></TR>
@@ -144,7 +144,7 @@
 			The UCSC DAS server provides access to genome annotation data for all current assemblies
 			featured in the Genome Browser. To view a list of the assemblies available from the
 			DAS server and their base URLs, see 
-			<A HREF="http://genome.ucsc.edu/cgi-bin/das/dsn">http://genome.ucsc.edu/cgi-bin/das/dsn</A>.
+			<A HREF="../../cgi-bin/das/dsn">http://genome.ucsc.edu/cgi-bin/das/dsn</A>.
 			<P>
 			To construct a DAS query, combine an assembly's base URL with the 
 			sequence entry point and type specifiers available for that assembly. The entry point 
@@ -160,7 +160,7 @@
 			For example, here is a query that returns all the records in the refGene table for the
 			chromosome position chr1:1-100000 on the hg16 assembly:
 <PRE>
-	<A HREF="http://genome.ucsc.edu/cgi-bin/das/hg16/features?segment=1:1,100000;type=refGene">http://genome.ucsc.edu/cgi-bin/das/hg16/features?segment=1:1,100000;type=refGene</A>
+	<A HREF="../../cgi-bin/das/hg16/features?segment=1:1,100000;type=refGene">http://genome.ucsc.edu/cgi-bin/das/hg16/features?segment=1:1,100000;type=refGene</A>
 </PRE>
 			For more information on DAS, see the 
 			<A HREF="http://www.biodas.org" TARGET=_blank>Biodas website</A> and the
@@ -181,13 +181,13 @@
         <TR><TD>            
         <TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0">
 	    <TR><TD>                
-  	    <TABLE BGCOLOR="D9E4F8" BACKGROUND="/images/hr.gif" WIDTH=100%>
+  	    <TABLE BGCOLOR="D9E4F8" BACKGROUND="../images/hr.gif" WIDTH=100%>
 	        <TR><TD>                
 	        <!--cheap trick to get background on row to be continuous-->
 	   	<TABLE CELLPADDING=0 CELLSPACING=0 MARGIN=0 WIDTH="100%">
 		    <TR><TD ALIGN="left">
 	   	    <FONT SIZE="4"><b>&nbsp; Downloading the UCSC Genome Browser source</b></FONT></TD> 
-		    <TD ALIGN="right"><A HREF="#TOP"><IMG SRC="/images/index.gif" ALT="" ALIGN="right" BORDER=0></A>
+		    <TD ALIGN="right"><A HREF="#TOP"><IMG SRC="../images/index.gif" ALT="" ALIGN="right" BORDER=0></A>
 	            </TD></TR>
   	        </TABLE>                
 	        </TD></TR>
@@ -228,13 +228,13 @@
         <TR><TD>            
         <TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0">
 	    <TR><TD>                
-  	    <TABLE BGCOLOR="D9E4F8" BACKGROUND="/images/hr.gif" WIDTH=100%>
+  	    <TABLE BGCOLOR="D9E4F8" BACKGROUND="../images/hr.gif" WIDTH=100%>
 	        <TR><TD>                
 	        <!--cheap trick to get background on row to be continuous-->
 	   	<TABLE CELLPADDING=0 CELLSPACING=0 MARGIN=0 WIDTH="100%">
 		    <TR><TD ALIGN="left">
 	   	    <FONT SIZE="4"><b>&nbsp;Download restrictions</b></FONT></TD> 
-		    <TD ALIGN="right"><A HREF="#TOP"><IMG SRC="/images/index.gif" ALT="" ALIGN="right" BORDER=0></A>
+		    <TD ALIGN="right"><A HREF="#TOP"><IMG SRC="../images/index.gif" ALT="" ALIGN="right" BORDER=0></A>
 	            </TD></TR>
   	        </TABLE>                
 	        </TD></TR>
@@ -273,13 +273,13 @@
         <TR><TD>            
         <TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0">
 	    <TR><TD>                
-  	    <TABLE BGCOLOR="D9E4F8" BACKGROUND="/images/hr.gif" WIDTH=100%>
+  	    <TABLE BGCOLOR="D9E4F8" BACKGROUND="../images/hr.gif" WIDTH=100%>
 	        <TR><TD>                
 	        <!--cheap trick to get background on row to be continuous-->
 	   	<TABLE CELLPADDING=0 CELLSPACING=0 MARGIN=0 WIDTH="100%">
 		    <TR><TD ALIGN="left">
 	   	    <FONT SIZE="4"><b>&nbsp; Opening .fa files</b></FONT></TD> 
-		    <TD ALIGN="right"><A HREF="#TOP"><IMG SRC="/images/index.gif" ALT="" ALIGN="right" BORDER=0></A>
+		    <TD ALIGN="right"><A HREF="#TOP"><IMG SRC="../images/index.gif" ALT="" ALIGN="right" BORDER=0></A>
 	            </TD></TR>
   	        </TABLE>                
 	        </TD></TR>
@@ -302,7 +302,7 @@
 			to view or use the raw data files, you might find it more interesting to 
 			look at the data using the Genome Browser. Type the name of a gene in which
 			you're interested into the position box (or use the default position), 
-			then click the Submit button. In the resulting Genome Browser  
+			then click the submit button. In the resulting Genome Browser  
 			display, click the DNA link on the menu bar at the top of the page. 
 			Select the Extended case/color options button at the bottom of the 
 			next page. Now you can color the DNA sequence to display which portions are 
@@ -323,13 +323,13 @@
         <TR><TD>            
         <TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0">
 	    <TR><TD>                
-  	    <TABLE BGCOLOR="D9E4F8" BACKGROUND="/images/hr.gif" WIDTH=100%>
+  	    <TABLE BGCOLOR="D9E4F8" BACKGROUND="../images/hr.gif" WIDTH=100%>
 	        <TR><TD>                
 	        <!--cheap trick to get background on row to be continuous-->
 	   	<TABLE CELLPADDING=0 CELLSPACING=0 MARGIN=0 WIDTH="100%">
 		    <TR><TD ALIGN="left">
 	   	    <FONT SIZE="4"><b>&nbsp; Data differences between downloaded data and browser display</b></FONT></TD> 
-		    <TD ALIGN="right"><A HREF="#TOP"><IMG SRC="/images/index.gif" ALT="" ALIGN="right" BORDER=0></A>
+		    <TD ALIGN="right"><A HREF="#TOP"><IMG SRC="../images/index.gif" ALT="" ALIGN="right" BORDER=0></A>
 	            </TD></TR>
   	        </TABLE>                
 	        </TD></TR>
@@ -370,13 +370,13 @@
         <TR><TD>            
         <TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0">
 	    <TR><TD>                
-  	    <TABLE BGCOLOR="D9E4F8" BACKGROUND="/images/hr.gif" WIDTH=100%>
+  	    <TABLE BGCOLOR="D9E4F8" BACKGROUND="../images/hr.gif" WIDTH=100%>
 	        <TR><TD>                
 	        <!--cheap trick to get background on row to be continuous-->
 	   	<TABLE CELLPADDING=0 CELLSPACING=0 MARGIN=0 WIDTH="100%">
 		    <TR><TD ALIGN="left">
 	   	    <FONT SIZE="4"><b>&nbsp; Strange characters in FASTA file</b></FONT></TD> 
-		    <TD ALIGN="right"><A HREF="#TOP"><IMG SRC="/images/index.gif" ALT="" ALIGN="right" BORDER=0></A>
+		    <TD ALIGN="right"><A HREF="#TOP"><IMG SRC="../images/index.gif" ALT="" ALIGN="right" BORDER=0></A>
 	            </TD></TR>
   	        </TABLE>                
 	        </TD></TR>
@@ -438,13 +438,13 @@
         <TR><TD>            
         <TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0">
 	    <TR><TD>                
-  	    <TABLE BGCOLOR="D9E4F8" BACKGROUND="/images/hr.gif" WIDTH=100%>
+  	    <TABLE BGCOLOR="D9E4F8" BACKGROUND="../images/hr.gif" WIDTH=100%>
 	        <TR><TD>                
 	        <!--cheap trick to get background on row to be continuous-->
 	   	<TABLE CELLPADDING=0 CELLSPACING=0 MARGIN=0 WIDTH="100%">
 		    <TR><TD ALIGN="left">
 	   	    <FONT SIZE="4"><b>&nbsp; Selection of GenBank ESTs</b></FONT></TD> 
-		    <TD ALIGN="right"><A HREF="#TOP"><IMG SRC="/images/index.gif" ALT="" ALIGN="right" BORDER=0></A>
+		    <TD ALIGN="right"><A HREF="#TOP"><IMG SRC="../images/index.gif" ALT="" ALIGN="right" BORDER=0></A>
 	            </TD></TR>
   	        </TABLE>                
 	        </TD></TR>
@@ -477,7 +477,7 @@
 			for the Spliced EST track, provided it meets various quality controls for intron and 
 			exon length and match quality.  Start and stop coordinates of each alignment block are 
 			available from the appropriate positional table within the 
-			<A HREF="http://genome.ucsc.edu/cgi-bin/hgTables">Table Browser</A>.</P>
+			<A HREF="../../cgi-bin/hgTables">Table Browser</A>.</P>
 			<P>
 			Note that only 250 EST tracks can be viewed at a time within the browser. If more 
 			than 250 tracks exist for the selected region, the display defaults to a denser display
@@ -505,13 +505,13 @@
         <TR><TD>            
         <TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0">
 	    <TR><TD>                
-  	    <TABLE BGCOLOR="D9E4F8" BACKGROUND="/images/hr.gif" WIDTH=100%>
+  	    <TABLE BGCOLOR="D9E4F8" BACKGROUND="../images/hr.gif" WIDTH=100%>
 	        <TR><TD>                
 	        <!--cheap trick to get background on row to be continuous-->
 	   	<TABLE CELLPADDING=0 CELLSPACING=0 MARGIN=0 WIDTH="100%">
 		    <TR><TD ALIGN="left">
 	   	    <FONT SIZE="4"><b>&nbsp; EST strand direction</b></FONT></TD> 
-		    <TD ALIGN="right"><A HREF="#TOP"><IMG SRC="/images/index.gif" ALT="" ALIGN="right" BORDER=0></A>
+		    <TD ALIGN="right"><A HREF="#TOP"><IMG SRC="../images/index.gif" ALT="" ALIGN="right" BORDER=0></A>
 	            </TD></TR>
   	        </TABLE>                
 	        </TD></TR>
@@ -574,13 +574,13 @@
         <TR><TD>            
         <TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0">
 	    <TR><TD>                
-  	    <TABLE BGCOLOR="D9E4F8" BACKGROUND="/images/hr.gif" WIDTH=100%>
+  	    <TABLE BGCOLOR="D9E4F8" BACKGROUND="../images/hr.gif" WIDTH=100%>
 	        <TR><TD>                
 	        <!--cheap trick to get background on row to be continuous-->
 	   	<TABLE CELLPADDING=0 CELLSPACING=0 MARGIN=0 WIDTH="100%">
 		    <TR><TD ALIGN="left">
 	   	    <FONT SIZE="4"><b>&nbsp; Missing RefSeq ID</b></FONT></TD> 
-		    <TD ALIGN="right"><A HREF="#TOP"><IMG SRC="/images/index.gif" ALT="" ALIGN="right" BORDER=0></A>
+		    <TD ALIGN="right"><A HREF="#TOP"><IMG SRC="../images/index.gif" ALT="" ALIGN="right" BORDER=0></A>
 	            </TD></TR>
   	        </TABLE>                
 	        </TD></TR>
@@ -615,13 +615,13 @@
         <TR><TD>            
         <TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0">
 	    <TR><TD>                
-  	    <TABLE BGCOLOR="D9E4F8" BACKGROUND="/images/hr.gif" WIDTH=100%>
+  	    <TABLE BGCOLOR="D9E4F8" BACKGROUND="../images/hr.gif" WIDTH=100%>
 	        <TR><TD>                
 	        <!--cheap trick to get background on row to be continuous-->
 	   	<TABLE CELLPADDING=0 CELLSPACING=0 MARGIN=0 WIDTH="100%">
 		    <TR><TD ALIGN="left">
 	   	    <FONT SIZE="4"><b>&nbsp; Finished vs. draft segments</b></FONT></TD> 
-		    <TD ALIGN="right"><A HREF="#TOP"><IMG SRC="/images/index.gif" ALT="" ALIGN="right" BORDER=0></A>
+		    <TD ALIGN="right"><A HREF="#TOP"><IMG SRC="../images/index.gif" ALT="" ALIGN="right" BORDER=0></A>
 	            </TD></TR>
   	        </TABLE>                
 	        </TD></TR>
@@ -665,13 +665,13 @@
         <TR><TD>            
         <TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0">
 	    <TR><TD>                
-  	    <TABLE BGCOLOR="D9E4F8" BACKGROUND="/images/hr.gif" WIDTH=100%>
+  	    <TABLE BGCOLOR="D9E4F8" BACKGROUND="../images/hr.gif" WIDTH=100%>
 	        <TR><TD>                
 	        <!--cheap trick to get background on row to be continuous-->
 	   	<TABLE CELLPADDING=0 CELLSPACING=0 MARGIN=0 WIDTH="100%">
 		    <TR><TD ALIGN="left">
 	   	    <FONT SIZE="4"><b>&nbsp; chrN_random tables</b></FONT></TD> 
-		    <TD ALIGN="right"><A HREF="#TOP"><IMG SRC="/images/index.gif" ALT="" ALIGN="right" BORDER=0></A>
+		    <TD ALIGN="right"><A HREF="#TOP"><IMG SRC="../images/index.gif" ALT="" ALIGN="right" BORDER=0></A>
 	            </TD></TR>
   	        </TABLE>                
 	        </TD></TR>
@@ -722,13 +722,13 @@
         <TR><TD>            
         <TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0">
 	    <TR><TD>                
-  	    <TABLE BGCOLOR="D9E4F8" BACKGROUND="/images/hr.gif" WIDTH=100%>
+  	    <TABLE BGCOLOR="D9E4F8" BACKGROUND="../images/hr.gif" WIDTH=100%>
 	        <TR><TD>                
 	        <!--cheap trick to get background on row to be continuous-->
 	   	<TABLE CELLPADDING=0 CELLSPACING=0 MARGIN=0 WIDTH="100%">
 		    <TR><TD ALIGN="left">
 	   	    <FONT SIZE="4"><b>&nbsp; Chromosome Un</b></FONT></TD> 
-		    <TD ALIGN="right"><A HREF="#TOP"><IMG SRC="/images/index.gif" ALT="" ALIGN="right" BORDER=0></A>
+		    <TD ALIGN="right"><A HREF="#TOP"><IMG SRC="../images/index.gif" ALT="" ALIGN="right" BORDER=0></A>
 	            </TD></TR>
   	        </TABLE>                
 	        </TD></TR>
@@ -748,7 +748,7 @@
 			pseudo-chromosomes. The coordinates of these are fairly arbitrary, 
 			although the relative positions of the coordinates 
 			are good within a contig. You can find more information about the data organization 
-			and format on the <A HREF="http://genome.ucsc.edu/goldenPath/datorg.html">Data
+			and format on the <A HREF="../goldenPath/datorg.html">Data
 			Organization and Format</A> page.
 		    </TD><TD WIDTH=15></TD>
 		</TR>
@@ -766,13 +766,13 @@
         <TR><TD>            
         <TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0">
 	    <TR><TD>                
-  	    <TABLE BGCOLOR="D9E4F8" BACKGROUND="/images/hr.gif" WIDTH=100%>
+  	    <TABLE BGCOLOR="D9E4F8" BACKGROUND="../images/hr.gif" WIDTH=100%>
 	        <TR><TD>                
 	        <!--cheap trick to get background on row to be continuous-->
 	   	<TABLE CELLPADDING=0 CELLSPACING=0 MARGIN=0 WIDTH="100%">
 		    <TR><TD ALIGN="left">
 	   	    <FONT SIZE="4"><b>&nbsp; Chromosome M </b></FONT></TD> 
-		    <TD ALIGN="right"><A HREF="#TOP"><IMG SRC="/images/index.gif" ALT="" ALIGN="right" BORDER=0></A>
+		    <TD ALIGN="right"><A HREF="#TOP"><IMG SRC="../images/index.gif" ALT="" ALIGN="right" BORDER=0></A>
 	            </TD></TR>
   	        </TABLE>                
 	        </TD></TR>
@@ -803,13 +803,13 @@
         <TR><TD>            
         <TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0">
 	    <TR><TD>                
-  	    <TABLE BGCOLOR="D9E4F8" BACKGROUND="/images/hr.gif" WIDTH=100%>
+  	    <TABLE BGCOLOR="D9E4F8" BACKGROUND="../images/hr.gif" WIDTH=100%>
 	        <TR><TD>                
 	        <!--cheap trick to get background on row to be continuous-->
 	   	<TABLE CELLPADDING=0 CELLSPACING=0 MARGIN=0 WIDTH="100%">
 		    <TR><TD ALIGN="left">
 	   	    <FONT SIZE="4"><b>&nbsp; N characters at beginning of human chr22</b></FONT></TD> 
-		    <TD ALIGN="right"><A HREF="#TOP"><IMG SRC="/images/index.gif" ALT="" ALIGN="right" BORDER=0></A>
+		    <TD ALIGN="right"><A HREF="#TOP"><IMG SRC="../images/index.gif" ALT="" ALIGN="right" BORDER=0></A>
 	            </TD></TR>
   	        </TABLE>                
 	        </TD></TR>
@@ -842,13 +842,13 @@
         <TR><TD>            
         <TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0">
 	    <TR><TD>                
-  	    <TABLE BGCOLOR="D9E4F8" BACKGROUND="/images/hr.gif" WIDTH=100%>
+  	    <TABLE BGCOLOR="D9E4F8" BACKGROUND="../images/hr.gif" WIDTH=100%>
 	        <TR><TD>                
 	        <!--cheap trick to get background on row to be continuous-->
 	   	<TABLE CELLPADDING=0 CELLSPACING=0 MARGIN=0 WIDTH="100%">
 		    <TR><TD ALIGN="left">
 	   	    <FONT SIZE="4"><b>&nbsp; 100K bp discrepancy in human Build 31 chr22</b></FONT></TD> 
-		    <TD ALIGN="right"><A HREF="#TOP"><IMG SRC="/images/index.gif" ALT="" ALIGN="right" BORDER=0></A>
+		    <TD ALIGN="right"><A HREF="#TOP"><IMG SRC="../images/index.gif" ALT="" ALIGN="right" BORDER=0></A>
 	            </TD></TR>
   	        </TABLE>                
 	        </TD></TR>
@@ -897,13 +897,13 @@
         <TR><TD>            
         <TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0">
 	    <TR><TD>                
-  	    <TABLE BGCOLOR="D9E4F8" BACKGROUND="/images/hr.gif" WIDTH=100%>
+  	    <TABLE BGCOLOR="D9E4F8" BACKGROUND="../images/hr.gif" WIDTH=100%>
 	        <TR><TD>                
 	        <!--cheap trick to get background on row to be continuous-->
 	   	<TABLE CELLPADDING=0 CELLSPACING=0 MARGIN=0 WIDTH="100%">
 		    <TR><TD ALIGN="left">
 	   	    <FONT SIZE="4"><b>&nbsp; Problems with Mouse Build 32 (mm4)</b></FONT></TD> 
-		    <TD ALIGN="right"><A HREF="#TOP"><IMG SRC="/images/index.gif" ALT="" ALIGN="right" BORDER=0></A>
+		    <TD ALIGN="right"><A HREF="#TOP"><IMG SRC="../images/index.gif" ALT="" ALIGN="right" BORDER=0></A>
 	            </TD></TR>
   	        </TABLE>                
 	        </TD></TR>
@@ -945,13 +945,13 @@
         <TR><TD>            
         <TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0">
 	    <TR><TD>                
-  	    <TABLE BGCOLOR="D9E4F8" BACKGROUND="/images/hr.gif" WIDTH=100%>
+  	    <TABLE BGCOLOR="D9E4F8" BACKGROUND="../images/hr.gif" WIDTH=100%>
 	        <TR><TD>                
 	        <!--cheap trick to get background on row to be continuous-->
 	   	<TABLE CELLPADDING=0 CELLSPACING=0 MARGIN=0 WIDTH="100%">
 		    <TR><TD ALIGN="left">
 	   	    <FONT SIZE="4"><b>&nbsp; Mapping chimp chromosome numbers to human chromsomes numbers</b></FONT></TD> 
-		    <TD ALIGN="right"><A HREF="#TOP"><IMG SRC="/images/index.gif" ALT="" ALIGN="right" BORDER=0></A>
+		    <TD ALIGN="right"><A HREF="#TOP"><IMG SRC="../images/index.gif" ALT="" ALIGN="right" BORDER=0></A>
 	            </TD></TR>
   	        </TABLE>                
 	        </TD></TR>
@@ -1019,13 +1019,13 @@
         <TR><TD>            
         <TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0">
 	    <TR><TD>                
-  	    <TABLE BGCOLOR="D9E4F8" BACKGROUND="/images/hr.gif" WIDTH=100%>
+  	    <TABLE BGCOLOR="D9E4F8" BACKGROUND="../images/hr.gif" WIDTH=100%>
 	        <TR><TD>                
 	        <!--cheap trick to get background on row to be continuous-->
 	   	<TABLE CELLPADDING=0 CELLSPACING=0 MARGIN=0 WIDTH="100%">
 		    <TR><TD ALIGN="left">
 	   	    <FONT SIZE="4"><b>&nbsp; Converting genome coordinates between assemblies</b></FONT></TD> 
-		    <TD ALIGN="right"><A HREF="#TOP"><IMG SRC="/images/index.gif" ALT="" ALIGN="right" BORDER=0></A>
+		    <TD ALIGN="right"><A HREF="#TOP"><IMG SRC="../images/index.gif" ALT="" ALIGN="right" BORDER=0></A>
 	            </TD></TR>
   	        </TABLE>                
 	        </TD></TR>
@@ -1042,14 +1042,14 @@
 			<P>
 			<B><FONT COLOR="#006666">Response:</FONT></B><BR> 
 			You can migrate data from one assembly to another by using the 
-			<A HREF="http://genome.ucsc.edu/cgi-bin/hgBlat">blat</A> alignment tool 
+			<A HREF="../../cgi-bin/hgBlat">blat</A> alignment tool 
 			or by converting assembly coordinates</A>.  There are 2 coordinate conversion 
 			tools available on the Genome Browser web site.
-			The <A HREF="http://genome.ucsc.edu/cgi-bin/hgLiftOver">hgLiftOver</A> utility,
+			The <A HREF="../../cgi-bin/hgLiftOver">hgLiftOver</A> utility,
 			accessed via the Utilities link on the Genome Browser home page, 
 			may be used to do forward conversions of the data from one assembly to a later
 			assembly. It also handles batch conversions. The 
-			<A HREF="http://genome.ucsc.edu/cgi-bin/hgCoordConv">Convert</A> tool, which
+			<A HREF="../../cgi-bin/hgCoordConv">Convert</A> tool, which
 			is accessed from the menu on the Genome Browser annotation tracks page, supports
 			both forward and reverse conversions, but does not accept batch input. At the
 			current time, these tools may be used only on the human genome assembly.
@@ -1085,13 +1085,13 @@
         <TR><TD>            
         <TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0">
 	    <TR><TD>                
-  	    <TABLE BGCOLOR="D9E4F8" BACKGROUND="/images/hr.gif" WIDTH=100%>
+  	    <TABLE BGCOLOR="D9E4F8" BACKGROUND="../images/hr.gif" WIDTH=100%>
 	        <TR><TD>                
 	        <!--cheap trick to get background on row to be continuous-->
 	   	<TABLE CELLPADDING=0 CELLSPACING=0 MARGIN=0 WIDTH="100%">
 		    <TR><TD ALIGN="left">
 	   	    <FONT SIZE="4"><b>&nbsp; Linking gene name with accession number</b></FONT></TD> 
-		    <TD ALIGN="right"><A HREF="#TOP"><IMG SRC="/images/index.gif" ALT="" ALIGN="right" BORDER=0></A>
+		    <TD ALIGN="right"><A HREF="#TOP"><IMG SRC="../images/index.gif" ALT="" ALIGN="right" BORDER=0></A>
 	            </TD></TR>
   	        </TABLE>                
 	        </TD></TR>
@@ -1128,13 +1128,13 @@
         <TR><TD>            
         <TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0">
 	    <TR><TD>                
-  	    <TABLE BGCOLOR="D9E4F8" BACKGROUND="/images/hr.gif" WIDTH=100%>
+  	    <TABLE BGCOLOR="D9E4F8" BACKGROUND="../images/hr.gif" WIDTH=100%>
 	        <TR><TD>                
 	        <!--cheap trick to get background on row to be continuous-->
 	   	<TABLE CELLPADDING=0 CELLSPACING=0 MARGIN=0 WIDTH="100%">
 		    <TR><TD ALIGN="left">
 	   	    <FONT SIZE="4"><b>&nbsp; Repeat-masking data</b></FONT></TD> 
-		    <TD ALIGN="right"><A HREF="#TOP"><IMG SRC="/images/index.gif" ALT="" ALIGN="right" BORDER=0></A>
+		    <TD ALIGN="right"><A HREF="#TOP"><IMG SRC="../images/index.gif" ALT="" ALIGN="right" BORDER=0></A>
 	            </TD></TR>
   	        </TABLE>                
 	        </TD></TR>
@@ -1178,13 +1178,13 @@
         <TR><TD>            
         <TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0">
 	    <TR><TD>                
-  	    <TABLE BGCOLOR="D9E4F8" BACKGROUND="/images/hr.gif" WIDTH=100%>
+  	    <TABLE BGCOLOR="D9E4F8" BACKGROUND="../images/hr.gif" WIDTH=100%>
 	        <TR><TD>                
 	        <!--cheap trick to get background on row to be continuous-->
 	   	<TABLE CELLPADDING=0 CELLSPACING=0 MARGIN=0 WIDTH="100%">
 		    <TR><TD ALIGN="left">
 	   	    <FONT SIZE="4"><b>&nbsp; Availability of repeat-masked data</b></FONT></TD> 
-		    <TD ALIGN="right"><A HREF="#TOP"><IMG SRC="/images/index.gif" ALT="" ALIGN="right" BORDER=0></A>
+		    <TD ALIGN="right"><A HREF="#TOP"><IMG SRC="../images/index.gif" ALT="" ALIGN="right" BORDER=0></A>
 	            </TD></TR>
   	        </TABLE>                
 	        </TD></TR>
@@ -1219,13 +1219,13 @@
         <TR><TD>            
         <TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0">
 	    <TR><TD>                
-  	    <TABLE BGCOLOR="D9E4F8" BACKGROUND="/images/hr.gif" WIDTH=100%>
+  	    <TABLE BGCOLOR="D9E4F8" BACKGROUND="../images/hr.gif" WIDTH=100%>
 	        <TR><TD>                
 	        <!--cheap trick to get background on row to be continuous-->
 	   	<TABLE CELLPADDING=0 CELLSPACING=0 MARGIN=0 WIDTH="100%">
 		    <TR><TD ALIGN="left">
 	   	    <FONT SIZE="4"><b>&nbsp; RepeatMasker version differences - UCSC vs. U. of Washington website</b></FONT></TD> 
-		    <TD ALIGN="right"><A HREF="#TOP"><IMG SRC="/images/index.gif" ALT="" ALIGN="right" BORDER=0></A>
+		    <TD ALIGN="right"><A HREF="#TOP"><IMG SRC="../images/index.gif" ALT="" ALIGN="right" BORDER=0></A>
 	            </TD></TR>
   	        </TABLE>                
 	        </TD></TR>
@@ -1261,13 +1261,13 @@
         <TR><TD>            
         <TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0">
 	    <TR><TD>                
-  	    <TABLE BGCOLOR="D9E4F8" BACKGROUND="/images/hr.gif" WIDTH=100%>
+  	    <TABLE BGCOLOR="D9E4F8" BACKGROUND="../images/hr.gif" WIDTH=100%>
 	        <TR><TD>                
 	        <!--cheap trick to get background on row to be continuous-->
 	   	<TABLE CELLPADDING=0 CELLSPACING=0 MARGIN=0 WIDTH="100%">
 		    <TR><TD ALIGN="left">
 	   	    <FONT SIZE="4"><b>&nbsp; Obtaining promoter sequence</b></FONT></TD> 
-		    <TD ALIGN="right"><A HREF="#TOP"><IMG SRC="/images/index.gif" ALT="" ALIGN="right" BORDER=0></A>
+		    <TD ALIGN="right"><A HREF="#TOP"><IMG SRC="../images/index.gif" ALT="" ALIGN="right" BORDER=0></A>
 	            </TD></TR>
   	        </TABLE>                
 	        </TD></TR>
@@ -1290,7 +1290,7 @@
 			directory for the assembly of interest. 
 			<P>
 			To fetch the upstream sequence for a specific gene, use the 
-			<A HREF="http://genome.ucsc.edu/cgi-bin/hgTables">Table Browser</A>. 
+			<A HREF="../../cgi-bin/hgTables">Table Browser</A>. 
 			Enter the genome, assembly, and gene in which you're interested, 
 			select the refGene positional table, then click the Advanced query button. 
 			On the next page, select the output type &quot;FASTA&quot; and click the Get Results 
@@ -1306,7 +1306,7 @@
 			the sequence. 
 			<P>
 			The Stanford Human Promoters track on the 
-			<A HREF="http://genome.ucsc.edu/goldenPath/customTracks/custTracks.html">UCSC 
+			<A HREF="../goldenPath/customTracks/custTracks.html">UCSC 
 			Custom Annotation Tracks page</A> shows promoters for the hg13 human assembly.
 		    </TD><TD WIDTH=15></TD>
 		</TR>
@@ -1324,13 +1324,13 @@
         <TR><TD>            
         <TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0">
 	    <TR><TD>                
-  	    <TABLE BGCOLOR="D9E4F8" BACKGROUND="/images/hr.gif" WIDTH=100%>
+  	    <TABLE BGCOLOR="D9E4F8" BACKGROUND="../images/hr.gif" WIDTH=100%>
 	        <TR><TD>                
 	        <!--cheap trick to get background on row to be continuous-->
 	   	<TABLE CELLPADDING=0 CELLSPACING=0 MARGIN=0 WIDTH="100%">
 		    <TR><TD ALIGN="left">
 	   	    <FONT SIZE="4"><b>&nbsp; Data from Evolutionary Conservation Score tracks</b></FONT></TD> 
-		    <TD ALIGN="right"><A HREF="#TOP"><IMG SRC="/images/index.gif" ALT="" ALIGN="right" BORDER=0></A>
+		    <TD ALIGN="right"><A HREF="#TOP"><IMG SRC="../images/index.gif" ALT="" ALIGN="right" BORDER=0></A>
 	            </TD></TR>
   	        </TABLE>                
 	        </TD></TR>
@@ -1369,13 +1369,13 @@
         <TR><TD>            
         <TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0">
 	    <TR><TD>                
-  	    <TABLE BGCOLOR="D9E4F8" BACKGROUND="/images/hr.gif" WIDTH=100%>
+  	    <TABLE BGCOLOR="D9E4F8" BACKGROUND="../images/hr.gif" WIDTH=100%>
 	        <TR><TD>                
 	        <!--cheap trick to get background on row to be continuous-->
 	   	<TABLE CELLPADDING=0 CELLSPACING=0 MARGIN=0 WIDTH="100%">
 		    <TR><TD ALIGN="left">
 	   	    <FONT SIZE="4"><b>&nbsp; Minus strand coordinates - axtBest files</b></FONT></TD> 
-		    <TD ALIGN="right"><A HREF="#TOP"><IMG SRC="/images/index.gif" ALT="" ALIGN="right" BORDER=0></A>
+		    <TD ALIGN="right"><A HREF="#TOP"><IMG SRC="../images/index.gif" ALT="" ALIGN="right" BORDER=0></A>
 	            </TD></TR>
   	        </TABLE>                
 	        </TD></TR>
@@ -1414,13 +1414,13 @@
         <TR><TD>            
         <TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0">
 	    <TR><TD>                
-  	    <TABLE BGCOLOR="D9E4F8" BACKGROUND="/images/hr.gif" WIDTH=100%>
+  	    <TABLE BGCOLOR="D9E4F8" BACKGROUND="../images/hr.gif" WIDTH=100%>
 	        <TR><TD>                
 	        <!--cheap trick to get background on row to be continuous-->
 	   	<TABLE CELLPADDING=0 CELLSPACING=0 MARGIN=0 WIDTH="100%">
 		    <TR><TD ALIGN="left">
 	   	    <FONT SIZE="4"><b>&nbsp; Mapping UCSC STS marker IDs to those of other groups</b></FONT></TD> 
-		    <TD ALIGN="right"><A HREF="#TOP"><IMG SRC="/images/index.gif" ALT="" ALIGN="right" BORDER=0></A>
+		    <TD ALIGN="right"><A HREF="#TOP"><IMG SRC="../images/index.gif" ALT="" ALIGN="right" BORDER=0></A>
 	            </TD></TR>
   	        </TABLE>                
 	        </TD></TR>
@@ -1457,13 +1457,13 @@
         <TR><TD>            
         <TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0">
 	    <TR><TD>                
-  	    <TABLE BGCOLOR="D9E4F8" BACKGROUND="/images/hr.gif" WIDTH=100%>
+  	    <TABLE BGCOLOR="D9E4F8" BACKGROUND="../images/hr.gif" WIDTH=100%>
 	        <TR><TD>                
 	        <!--cheap trick to get background on row to be continuous-->
 	   	<TABLE CELLPADDING=0 CELLSPACING=0 MARGIN=0 WIDTH="100%">
 		    <TR><TD ALIGN="left">
 	   	    <FONT SIZE="4"><b>&nbsp; deCODE map data</b></FONT></TD> 
-		    <TD ALIGN="right"><A HREF="#TOP"><IMG SRC="/images/index.gif" ALT="" ALIGN="right" BORDER=0></A>
+		    <TD ALIGN="right"><A HREF="#TOP"><IMG SRC="../images/index.gif" ALT="" ALIGN="right" BORDER=0></A>
 	            </TD></TR>
   	        </TABLE>                
 	        </TD></TR>
@@ -1500,13 +1500,13 @@
         <TR><TD>            
         <TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0">
 	    <TR><TD>                
-  	    <TABLE BGCOLOR="D9E4F8" BACKGROUND="/images/hr.gif" WIDTH=100%>
+  	    <TABLE BGCOLOR="D9E4F8" BACKGROUND="../images/hr.gif" WIDTH=100%>
 	        <TR><TD>                
 	        <!--cheap trick to get background on row to be continuous-->
 	   	<TABLE CELLPADDING=0 CELLSPACING=0 MARGIN=0 WIDTH="100%">
 		    <TR><TD ALIGN="left">
 	   	    <FONT SIZE="4"><b>&nbsp; Direct MySQL access to data</b></FONT></TD> 
-		    <TD ALIGN="right"><A HREF="#TOP"><IMG SRC="/images/index.gif" ALT="" ALIGN="right" BORDER=0></A>
+		    <TD ALIGN="right"><A HREF="#TOP"><IMG SRC="../images/index.gif" ALT="" ALIGN="right" BORDER=0></A>
 	            </TD></TR>
   	        </TABLE>                
 	        </TD></TR>
@@ -1557,7 +1557,7 @@
 			</UL>
 			If you prefer a more structured graphical interface to the UCSC database
 			tables, use the 
-			<A HREF="http://genome.ucsc.edu/cgi-bin/hgTables">Table Browser</A>.
+			<A HREF="../../cgi-bin/hgTables">Table Browser</A>.
 			<P>
 			System problems should be reported to 
 			<A HREF="mailto:genome-www@soe.ucsc.edu">genome-www@soe.ucsc.edu</A>.  
