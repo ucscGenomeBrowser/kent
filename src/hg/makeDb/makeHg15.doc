@@ -105,7 +105,7 @@ exit; # don't actually run this like a script :)
     /cluster/bin/scripts/revCompNcbiCtgFa seq_contig.md .
 
 
-# GET FRESH MRNA/EST AND REFSEQ SEQUENCE FROM GENBANK (DONE ALREADY - VERIFIED 4/9/03)
+# GET FRESH MRNA/EST AND REFSEQ SEQUENCE FROM GENBANK (DONE 4/10/03)
     # Run this just before the sequence gets here!  It's OK to work on 
     # this in parallel with Terry's steps above, or in parallel with 
     # RepeatMasker below, but DO NOT let this hold up RepeatMasker.  
@@ -136,8 +136,8 @@ exit; # don't actually run this like a script :)
 
     # Make the refSeq subdir and download files:
     ssh eieio
-    mkdir -p /cluster/store5/mrna.134/refSeq
-    cd /cluster/store5/mrna.134/refSeq
+    mkdir -p /cluster/store5/mrna.134/refSeq/041003
+    cd /cluster/store5/mrna.134/refSeq/041003
     ncftp ftp.ncbi.nih.gov
       cd refseq/cumulative
       mget *.Z
@@ -148,10 +148,10 @@ exit; # don't actually run this like a script :)
     wget ftp://ftp.ncbi.nih.gov/refseq/H_sapiens/mRNA_Prot/hs.faa.gz
     gunzip hs.faa.gz
     # Unpack this into species-specific fa files and get extra info with:
-    cd /cluster/store5/mrna.134/refSeq
+    cd /cluster/store5/mrna.134/refSeq/041003
     cp /cluster/store2/mrna.133/*.fil ..
     gunzip -c rscu.gbff.Z \
-    | gbToFaRa -byOrganism=org ../anyRna.fil refSeq.{fa,ra,ta} stdin
+    | gbToFaRa -byOrganism=org ../../anyRna.fil refSeq.{fa,ra,ta} stdin
 
     # Now unpack and organize the larger genbank mrna/est sequences...
     ssh eieio
@@ -189,7 +189,7 @@ exit; # don't actually run this like a script :)
     # Distribute the files to /iscratch/i/ so they're all ready to be aligned.
     ssh kkr1u00
     mkdir -p /iscratch/i/mrna.134/Homo_sapiens
-    cp -p /cluster/store5/mrna.134/refSeq/org/Homo_sapiens/refSeq.fa \
+    cp -p /cluster/store5/mrna.134/refSeq/041003/org/Homo_sapiens/refSeq.fa \
       /iscratch/i/mrna.134/Homo_sapiens/
     cp -p /cluster/store5/mrna.134/org/Homo_sapiens/mrna.fa \
       /iscratch/i/mrna.134/Homo_sapiens/
@@ -199,7 +199,7 @@ exit; # don't actually run this like a script :)
       /iscratch/i/mrna.134/Homo_sapiens/
     cp -p /cluster/store5/mrna.134/humanXenoEstSplit/*.fa \
       /iscratch/i/mrna.134/Homo_sapiens/
-    ~kent/bin/iSync
+-   ~kent/bin/iSync
 
 
 # REPEAT MASKING (TO DO)
@@ -215,12 +215,12 @@ exit; # don't actually run this like a script :)
     #- Split contigs into 500kb chunks:
     ssh eieio
     cd ~/hg15
-    foreach d ( ?{,?}/NT_* )
-      cd $d
+    mkdir contigOut
+    cd contigOut
+    foreach d (../contigs/NT_* )
       set contig = $d:t
-      faSplit size $contig.fa 500000 ${contig}_ -lift=$contig.lft \
+      faSplit size ../contigs/$contig 500000 split/${contig}_ -lift=split/$contig.lft \
         -maxN=500000
-      cd ../..
     end
 
     #- Make the run directory and job list:
@@ -228,14 +228,12 @@ exit; # don't actually run this like a script :)
     mkdir RMRun
     rm -f RMRun/RMJobs
     touch RMRun/RMJobs
-    foreach d ( ?{,?}/NT_* )
-      foreach f ( /cluster/store5/gs.16/build33/$d/NT_*_*.fa )
+   foreach f ( /cluster/store5/gs.16/build33/contigOut/split/NT_*.fa )
         set f = $f:t
         echo /cluster/bin/scripts/RMLocalSens \
-             /cluster/store5/gs.16/build33/$d $f \
-            '{'check out line+ /cluster/store5/gs.16/build33/$d/$f.out'}' \
+             /cluster/store5/gs.16/build33/contigOut/split $f \
+            '{'check out line+ /cluster/store5/gs.16/build33/contigOut/split/$f.out'}' \
           >> RMRun/RMJobs
-      end
     end
 
     #- Do the run
@@ -246,7 +244,7 @@ exit; # don't actually run this like a script :)
     #- Now while that's running, run TRF (simpleRepeat), and RefSeq 
     #- alignments, in parallel.  Also, create the database and the 
     #- tracks that don't rely on cluster runs or on masked sequence.  
-
+DONE TO HERE
     #- Lift up the split-contig .out's to contig-level .out's
     ssh eieio
     cd ~/hg15
@@ -308,26 +306,25 @@ exit; # don't actually run this like a script :)
     rm -rf /iscratch/i/gs.16/build33/contigs
     mkdir -p /iscratch/i/gs.16/build33/contigs
     cd ~/hg15
-    foreach c (?{,?})
-      echo copying contigs of chr$c
-      cp -p $c/NT_*/NT_??????.fa /iscratch/i/gs.16/build33/contigs
-    end
+    cp contigs/*.fa /iscratch/i/gs.16/build33/contigs
     # Make sure the total size looks like what you'd expect:
     du -sh /iscratch/i/gs.16/build33/contigs
     ~kent/bin/iSync
 
     # Create cluster parasol job like so:
-    ssh kk
     mkdir -p ~/hg15/bed/simpleRepeat
     cd ~/hg15/bed/simpleRepeat
-    cp ~/hg13/bed/simpleRepeat/gsub .
+    cp ~/hg14/bed/simpleRepeat/gsub .
     mkdir trf
     ls -1S /iscratch/i/gs.16/build33/contigs/*.fa > genome.lst
     echo "" > dummy.lst
+    ssh kk
+    cd ~/hg15/bed/simpleRepeat
     gensub2 genome.lst dummy.lst gsub spec
     para create spec
     para try
     para check
+DONE TO HERE
     para push
     para check
     # When cluster run is done
@@ -585,11 +582,11 @@ exit; # don't actually run this like a script :)
     # Make /gbdb symlinks for refSeq.fa (not .ra)
     mkdir -p /gbdb/hg15/mrna.134
     cd /gbdb/hg15/mrna.134
-    ln -s /cluster/store5/mrna.134/refSeq/org/Homo_sapiens/refSeq.fa
+    ln -s /cluster/store5/mrna.134/refSeq/041003/org/Homo_sapiens/refSeq.fa
     # Load the refSeq mRNA
     cd /cluster/store2/tmp
-    hgLoadRna add -type=refSeq hg15 /gbdb/hg15/mrna.134/refSeq.fa \
-      /cluster/store5/mrna.134/refSeq/org/Homo_sapiens/refSeq.ra
+DONE ->    ~kent/bin/i386/hgLoadRna add -type=refSeq hg15 /gbdb/hg15/mrna.134/refSeq.fa \
+      /cluster/store5/mrna.134/refSeq/041003/org/Homo_sapiens/refSeq.ra
     cd ~/hg15/bed/refSeq
     hgRefSeqMrna hg15 /gbdb/hg15/mrna.134/refSeq.fa \
       /cluster/store5/mrna.134/refSeq/org/Homo_sapiens/refSeq.ra \
@@ -642,13 +639,13 @@ exit; # don't actually run this like a script :)
     ln -s /cluster/store5/mrna.134/humanXenoEst.fa
     # Store the sequence (non-alignment) info in database.
     cd /cluster/store2/tmp
-    hgLoadRna add -type=mRNA hg15 /gbdb/hg15/mrna.134/mrna.fa \
+    ~kent/bin/i386/hgLoadRna add -type=mRNA hg15 /gbdb/hg15/mrna.134/mrna.fa \
       /cluster/store5/mrna.134/org/Homo_sapiens/mrna.ra
-    hgLoadRna add -type=EST hg15 /gbdb/hg15/mrna.134/est.fa \
+    ~kent/bin/i386/hgLoadRna add -type=EST hg15 /gbdb/hg15/mrna.134/est.fa \
       /cluster/store5/mrna.134/org/Homo_sapiens/est.ra
-    hgLoadRna add -type=xenoRna hg15 /gbdb/hg15/mrna.134/humanXenoRna.fa \
+    ~kent/bin/i386/hgLoadRna add -type=xenoRna hg15 /gbdb/hg15/mrna.134/humanXenoRna.fa \
       /cluster/store5/mrna.134/humanXenoRna.ra
-    hgLoadRna add -type=xenoEst hg15 /gbdb/hg15/mrna.134/humanXenoEst.fa \
+    ~kent/bin/i386/hgLoadRna add -type=xenoEst hg15 /gbdb/hg15/mrna.134/humanXenoEst.fa \
       /cluster/store5/mrna.134/humanXenoEst.ra
 
 
