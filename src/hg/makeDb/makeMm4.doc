@@ -55,8 +55,8 @@
     ssh kksilo
     cd /cluster/data/mm4
     gunzip ncbi/allrefcontig.chr.agp.gz
-    # splitFaIntoContigs doesn't do right with agp lines arriving in a 
-    # different order than fasta chrom sequences.  so split up the agp 
+    # splitFaIntoContigs doesn't do right with agp lines arriving in a
+    # different order than fasta chrom sequences.  so split up the agp
     # into one per chrom.
     foreach c ( 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 X Y MT Un)
       mkdir $c
@@ -176,7 +176,7 @@ o - Use df to make sure there is at least 5 gig free on hgwdev:/var/lib/mysql
 
 
 # STORING O+O SEQUENCE AND ASSEMBLY INFORMATION  (DONE - 2003-10-20 - Hiram)
-    # Create (unmasked) nib files 
+    # Create (unmasked) nib files
     ssh kksilo
     cd /cluster/data/mm4
     mkdir -p unmaskedNib
@@ -211,7 +211,7 @@ o - Use df to make sure there is at least 5 gig free on hgwdev:/var/lib/mysql
     ln -s ncbi fft
     # remove so as not to confuse hgGoldGap -- they are easily regenerated
     rm */chr*.ctg.agp
-    # to undo/redo: 
+    # to undo/redo:
     #     jkStuff/dropSplitTable.csh gap
     #     jkStuff/dropSplitTable.csh gold
     /cluster/bin/i386/hgGoldGapGl mm4 /cluster/data/mm4 .
@@ -266,10 +266,10 @@ o - Use df to make sure there is at least 5 gig free on hgwdev:/var/lib/mysql
 	    VALUES ("mm4", "blat10", "17779", "0");' \
 	-h genome-testdb hgcentraltest
 
-# REPEAT MASKING (DONE 2003-10-21 Hiram)  
+# REPEAT MASKING (DONE 2003-10-21 Hiram)
     #	TRF simpleRepeat below can be run at the same time
     # Split contigs, run RepeatMasker, lift results
-    # * Contigs (*/chr*_*/chr*_*.fa) are split into 500kb chunks to make 
+    # * Contigs (*/chr*_*/chr*_*.fa) are split into 500kb chunks to make
     #   RepeatMasker runs manageable on the cluster ==> results need lifting.
     # * For the NCBI assembly we repeat mask on the sensitive mode setting
     #  (RepeatMasker -m -s -ali)
@@ -300,7 +300,7 @@ pushd .
 /bin/mkdir -p /tmp/mm4/$2
 /bin/cp $2 /tmp/mm4/$2
 cd /tmp/mm4/$2
-/scratch/hg/RepeatMasker/RepeatMasker -ali -s -species mus $2   
+/scratch/hg/RepeatMasker/RepeatMasker -ali -s -species mus $2
 popd
 /bin/cp /tmp/mm4/$2/$2.out ./
 if (-e /tmp/mm4/$2/$2.align) /bin/cp /tmp/mm4/$2/$2.align ./
@@ -357,7 +357,7 @@ if (-e /tmp/mm4/$2/$2.cat) /bin/cp /tmp/mm4/$2/$2.cat ./
     ssh hgwdev
     cd /cluster/data/mm4
     # to redo:
-    #    ./jkStuff/dropSplitTable.csh rmsk  
+    #    ./jkStuff/dropSplitTable.csh rmsk
     # make sure there's no chrUn -- rm Un/chrUn.fa.out
     hgLoadOut mm4 ?/*.fa.out ??/*.fa.out
 
@@ -413,7 +413,7 @@ if (-e /tmp/mm4/$2/$2.cat) /bin/cp /tmp/mm4/$2/$2.cat ./
 
 # PROCESS SIMPLE REPEATS INTO MASK (DONE - 2003-10-21 - Hiram)
 
-    # After the simpleRepeats track has been built, make a filtered version 
+    # After the simpleRepeats track has been built, make a filtered version
     # of the trf output: keep trf's with period <= 12:
     ssh kksilo
     cd /cluster/data/mm4/bed/simpleRepeat
@@ -460,7 +460,7 @@ if (-e /tmp/mm4/$2/$2.cat) /bin/cp /tmp/mm4/$2/$2.cat ./
     ./jkStuff/makeNib.csh
     # ignore complaints about missing chrUn
 
-    # Redo symbolic links from /gbdb/mm4/nib to 
+    # Redo symbolic links from /gbdb/mm4/nib to
     #   mixed (RM and TRF) soft-masked nib files
     ssh hgwdev
     rm -fr /gbdb/mm4/nib/*
@@ -626,9 +626,9 @@ done
      ssh kksilo
      mkdir -p /cluster/data/mm4/bed/cpgIsland
      cd /cluster/data/mm4/bed/cpgIsland
-     # cpglh requires hard-masked (N) .fa's.  
-     # There may be warnings about "bad character" for IUPAC ambiguous 
-     # characters like R, S, etc.  Ignore the warnings.  
+     # cpglh requires hard-masked (N) .fa's.
+     # There may be warnings about "bad character" for IUPAC ambiguous
+     # characters like R, S, etc.  Ignore the warnings.
      foreach f (../../?{,?}/chr?{,?}{,_random}.fa.masked)
        set fout=$f:t:r:r.cpg
        /cluster/bin/cpglh $f > $fout
@@ -653,7 +653,7 @@ printf("%s\t%s\t%s\t%s %s\t%s\t%s\t%0.0f\t%0.1f\t%s\n",
      /cluster/bin/i386/hgLoadBed mm4 cpgIsland -tab -noBin \
        -sqlTable=$HOME/kent/src/hg/lib/cpgIsland.sql cpgIsland.bed
 
-# BLASTZ Human	(IN PROGRESS - 2003-10-21 - Hiram)
+# BLASTZ Human	(DONE - 2003-10-28 - Hiram)
 
     ssh kk
     mkdir -p /cluster/data/mm4/bed/blastz.hg16
@@ -739,7 +739,6 @@ echo "Ready for cluster run.  para try, check, push, etc ..."
     ../../jkStuff/BlastZ_run0.sh
     cd run.0
     para try, check, push, check, ....
-XXXXX - running 2003-10-24 14:06
 # CPU time in finished jobs:   15818152s  263635.86m  4393.93h  183.08d  0.502 y
 # IO & Wait Time:               6171331s  102855.52m  1714.26h   71.43d  0.196 y
 # Average job time:                 507s       8.45m     0.14h    0.01d
@@ -819,31 +818,12 @@ echo "Ready for cluster run.  para try, check, push, etc ..."
     ../../jkStuff/BlastZ_run2.sh
     cd run.2
     para try, check, push, etc ...
-# Completed: 40 of 42 jobs
-# Crashed: 2 jobs
-# CPU time in finished jobs:       2141s      35.69m     0.59h    0.02d  0.000 y
-# IO & Wait Time:                 36142s     602.36m    10.04h    0.42d  0.001 y
-# Average job time:                 957s      15.95m     0.27h    0.01d
-# Longest job:                     3273s      54.55m     0.91h    0.04d
-# Submission to last job:          3478s      57.97m     0.97h    0.04d
-    #	This failed on chr19, (and chr19_random.axt is empty ?)
-    # turn to snort (ia64) to run the job
-    #  It took about two hours and created a 5 Gb file:
-    # 5,357,211,785 Oct 23 16:59 chr19.axt
-    # Take the /cluster/bin/scripts/blastz-chromlav2axt script and
-    # specify ia64 binaries on the last lines:
-    # cat `ls -1 *.lav | sort -g` \
-    #	| $HOME/bin/ia64/lavToAxt stdin $seq1Dir $seq2Dir stdout \
-    #	| $HOME/bin/ia64/axtSort stdin $axtFile
-    # those are built on a source tree you build on snort
-    #	on the Itanium:
-    #	real    153m42.207s
-    #	user    7m47.921s
-    #	sys     0m42.938s
-
-
-    #	Remove the empty axtChrom/chr19_random.axt file to avoid future
-    #	processing errors
+# Completed: 44 of 44 jobs
+# CPU time in finished jobs:       3981s      66.35m     1.11h    0.05d  0.000 y
+# IO & Wait Time:                 49397s     823.28m    13.72h    0.57d  0.002 y
+# Average job time:                1213s      20.22m     0.34h    0.01d
+# Longest job:                     7584s     126.40m     2.11h    0.09d
+# Submission to last job:          7597s     126.62m     2.11h    0.09d
 
     # translate sorted axt files into psl
     ssh kksilo
@@ -863,10 +843,11 @@ echo "Ready for cluster run.  para try, check, push, etc ..."
     /cluster/bin/i386/hgLoadPsl mm4 chr*_${tbl}.psl
     # this is a 55 minute job
 
-# CHAIN HG16 BLASTZ (WORKING - 2003-10-24 - Hiram)
+# CHAIN HG16 BLASTZ (DONE - 2003-10-24 - Hiram)
 
-# Run axtChain on the '9' cluster
-    ssh kk9
+# The axtChain is best run on the small kluster, or the kk9 kluster
+#	in this case, it was run on the kk kluster
+    ssh kk
     mkdir -p /cluster/data/mm4/bed/blastz.hg16/axtChain/run1
     cd /cluster/data/mm4/bed/blastz.hg16/axtChain/run1
     mkdir out chain
@@ -882,30 +863,35 @@ doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain} {check
     cat << '_EOF_' > doChain
 #!/bin/csh
     axtFilter -notQ_random $1 | axtChain stdin \
-	/cluster/store4/gs.17/build34/nib \
-	/scratch/mus/mm4/softNib $2 > $3
+	/scratch/mus/mm4/softNib \
+	/iscratch/i/gs.17/build34/bothMaskedNibs $2 > $3
 '_EOF_'
     # << this line makes emacs coloring happy
     chmod a+x doChain
-    mkdir out chain
 
     # 41 jobs
     gensub2 input.lst single gsub jobList
     para create jobList
     para try
     para push # ... etc ...
-# Completed: 41 of 41 jobs
-# CPU time in finished jobs:       9805s     163.41m     2.72h    0.11d  0.000 y
-# IO & Wait Time:                 13115s     218.59m     3.64h    0.15d  0.000 y
-# Average job time:                 559s       9.32m     0.16h    0.01d
-# Longest job:                     8543s     142.38m     2.37h    0.10d
-# Submission to last job:          8562s     142.70m     2.38h    0.10d
+# Completed: 44 of 44 jobs
+# CPU time in finished jobs:      27109s     451.82m     7.53h    0.31d  0.001 y
+# IO & Wait Time:                 29921s     498.68m     8.31h    0.35d  0.001 y
+# Average job time:                1296s      21.60m     0.36h    0.02d
+# Longest job:                    12356s     205.93m     3.43h    0.14d
+# Submission to last job:         12356s     205.93m     3.43h    0.14d
 
     # now on the cluster server, sort chains
-    ssh eieio
+    ssh kksilo
     cd /cluster/data/mm4/bed/blastz.hg16/axtChain
-    chainMergeSort run1/chain/*.chain > all.chain
-    chainSplit chain all.chain
+    time chainMergeSort run1/chain/*.chain > all.chain
+    # real    8m55.100s
+    # user    6m46.680s
+    # sys     0m58.250s
+    time chainSplit chain all.chain
+    # real    8m36.259s
+    # user    5m46.920s
+    # sys     0m59.700s
 
     # these steps take ~20 minutes
     # optionally: rm run1/chain/*.chain
@@ -916,7 +902,7 @@ doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain} {check
     cd /cluster/data/mm4/bed/blastz.hg16/axtChain/chain
     foreach i (*.chain)
         set c = $i:r
-        hgLoadChain mm4 ${c}_chainMm3 $i
+        hgLoadChain mm4 ${c}_chainHg16 $i
         echo done $c
     end
 
@@ -931,10 +917,12 @@ doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain} {check
       /cluster/bin/i386/chainPreNet $i /cluster/data/mm4/chrom.sizes \
                         /cluster/data/hg16/chrom.sizes ../preNet/$i
     end
-    # This foreach loop will take about 15 min to execute.
+    # real    11m58.018s
+    # user    4m10.390s
+    # sys     2m10.780s
 
     cd ..
-    mkdir n1 
+    mkdir n1
     cd preNet
     foreach i (*.chain)
       set n = $i:r.net
@@ -945,26 +933,40 @@ doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain} {check
 
     cd ..
     cat n1/*.net | /cluster/bin/i386/netSyntenic stdin hNoClass.net
-    # memory usage 2490523648, utime 15421 s/100, stime 3665
+    # memory usage 1591906304, utime 6877 s/100, stime 1977
 
     ssh hgwdev
     cd /cluster/data/mm4/bed/blastz.hg16/axtChain
-    ~/bin/i386/netClass hNoClass.net mm4 hg16 mouse.net \
-	-tNewR=/scratch/mus/mm4/linSpecRep.notInHuman \
-	-qNewR=/iscratch/i/gs.17/build34/linSpecRep.notInMouse
+    time netClass hNoClass.net mm4 hg16 human.net \
+	-tNewR=/cluster/bluearc/scratch/mus/mm4/linSpecRep.notInHuman \
+	-qNewR=/cluster/bluearc/scratch/hg/gs.17/build34/linSpecRep.notInMouse
+XXXX running 2003-10-28 15:20
+    # real    11m35.367s
+    # user    7m20.880s
+    # sys     1m33.360s
+
+    # manually fixup one line in the linSpecRep.notInHuman/chr3.out.spec file
+    #	RepeatMasker or the post-processing script is making an error
+    #	Remove the line that is missing the rest of the fields
+    # the line : 2860   6.4  0.0  1   0  0
+Expecting 7 words line 156272 of /cluster/bluearc/scratch/mus/mm4/linSpecRep.notInHuman/chr3.out.spec got 6
+2860   6.4  0.0  1.1  chr3      164080732 164081087  (231854) +  L1Md_F2        LINE/L1               6208 6561   (21)      1   0  0
+ 2860   6.4  0.0  1   0  0
+ 1420   8.1  0.0  0.0  chr3      164081159 164081355  (231586) C  ORR1A0-int     LTR/MaLR            (1593)  199      3      3   0  0
+
 
     # If things look good do
-    ssh eieio
-    cd /cluster/data/mm4/bed/blastz.mm3/axtChain
+    ssh kksilo
+    cd /cluster/data/mm4/bed/blastz.hg16/axtChain
     rm -r n1 hNoClass.net
     # Make a 'syntenic' subset of these with
-    netFilter -syn mouse.net > mouseSyn.net
+    netFilter -syn human.net > humanSyn.net
 
-    # Load the nets into database 
+    # Load the nets into database
     ssh hgwdev
-    cd /cluster/data/mm4/bed/blastz.mm3/axtChain
-    netFilter -minGap=10 mouse.net |  hgLoadNet mm4 netMm3 stdin
-    netFilter -minGap=10 mouseSyn.net | hgLoadNet mm4 syntenyNetMm3 stdin
+    cd /cluster/data/mm4/bed/blastz.hg16/axtChain
+    netFilter -minGap=10 human.net |  hgLoadNet mm4 netHg16 stdin
+    netFilter -minGap=10 humanSyn.net | hgLoadNet mm4 syntenyNetHg16 stdin
 
     # Add entries for net and chain to mouse/mm4 trackDb
 
@@ -1023,7 +1025,6 @@ SEQ2_LEN=$BASE/S2.len
     ../../jkStuff/BlastZ_run0.sh
     cd run.0
     para try, check, push, check, ....
-XXXXX - running 2003-10-4 14:10
 # Completed: 39728 of 39729 jobs
 # Crashed: 1 jobs
 # CPU time in finished jobs:   16243094s  270718.23m  4511.97h  188.00d  0.515 y
@@ -1055,33 +1056,12 @@ XXXXX - running 2003-10-4 14:10
     ../../jkStuff/BlastZ_run2.sh
     cd run.2
     para try, check, push, etc ...
-# Completed: 43 of 44 jobs
-# Crashed: 1 jobs
-# CPU time in finished jobs:      10777s     179.61m     2.99h    0.12d  0.000 y
-# IO & Wait Time:                182778s    3046.31m    50.77h    2.12d  0.006 y
-# Average job time:                4501s      75.02m     1.25h    0.05d
-# Longest job:                    24347s     405.78m     6.76h    0.28d
-# Submission to last job:         24385s     406.42m     6.77h    0.28d
-    # the failure appears to be on chr1.
-    # run it on kolossus
-    ssh kolossus
-    #	build the kent source tree on kolossus so you have binaries in
-    #	your $HOME/bin/x86_64/ directory - you will need only lavToAxt
-    #	and axtSort
-    cd /cluster/data/mm4/bed/blastz.rn3
-    mkdir axtChrom.x86_64
-    cd run.2
-    time ../../../jkStuff/x86_64-chromlav2axt /cluster/data/mm4/bed/blastz.rn3/lav/chr1 /cluster/data/mm4/bed/blastz.rn3/axtChrom.x86_64/chr1.axt /cluster/store3/rn3/softNib /cluster/store6/mm4/mixedNib
-    #	real    22m44.899s
-    #	user    4m42.770s
-    #	sys     0m59.690s
-
-    # where ../../../jkStuff/x86_64-chromlav2axt is the regular
-    # chromlab2axt script with the last lines changed to specify the
-    # x86_64 binaries:
-    #	cat `ls -1 *.lav | sort -g` \
-    #		| $HOME/bin/x86_64/lavToAxt stdin $seq1Dir $seq2Dir stdout \
-    #		| $HOME/bin/x86_64/axtSort stdin $axtFile
+# Completed: 44 of 44 jobs
+# CPU time in finished jobs:      10649s     177.48m     2.96h    0.12d  0.000 y
+# IO & Wait Time:                129039s    2150.65m    35.84h    1.49d  0.004 y
+# Average job time:                3175s      52.91m     0.88h    0.04d
+# Longest job:                    18946s     315.77m     5.26h    0.22d
+# Submission to last job:         19121s     318.68m     5.31h    0.22d
 
     # translate sorted axt files into psl
     ssh kksilo
@@ -1093,6 +1073,7 @@ XXXXX - running 2003-10-4 14:10
       echo "Processing chr $c"
       /cluster/bin/i386/axtToPsl $f S1.len S2.len pslChrom/${c}_${tbl}.psl
     end
+XXXX running 2003-10-27 21:00
     #	That takes about 20 minutes
     # Load database tables
     ssh hgwdev
@@ -1103,8 +1084,12 @@ XXXXX - running 2003-10-4 14:10
 
 # CHAIN Rn3 BLASTZ (WORKING - 2003-10-24 - Hiram)
 
-# Run axtChain on the '9' cluster
-    ssh kk9
+#	Experiment, run this on kolossus
+    ssh kolossus
+    cd ~/kent.$MACHTYPE/src/hg/mouseStuff/axtChain
+    make
+    cd ../axtFilter
+    make
     mkdir -p /cluster/data/mm4/bed/blastz.rn3/axtChain/run1
     cd /cluster/data/mm4/bed/blastz.rn3/axtChain/run1
     mkdir out chain
@@ -1112,26 +1097,28 @@ XXXXX - running 2003-10-4 14:10
     ls -1S /cluster/data/mm4/bed/blastz.rn3/axtChrom/*.axt > input.lst
     cat << '_EOF_' > gsub
 #LOOP
-doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain} {check out line+ out/$(root1).out}
+./doChain $(path1) chain/$(root1).chain out/$(root1).out
 #ENDLOOP
 '_EOF_'
     # << this line makes emacs coloring happy
 
     cat << '_EOF_' > doChain
 #!/bin/csh
-    axtFilter -notQ_random $1 | axtChain stdin \
-	/cluster/store3/rn3/softNib \
-	/scratch/mus/mm4/softNib $2 > $3
+    $HOME/bin/$MACHTYPE/axtFilter -notQ_random $1 | \
+        $HOME/bin/$MACHTYPE/axtChain stdin \
+        /cluster/store6/mm4/nib \
+        /cluster/store3/rn3/softNib $2 > $3
 '_EOF_'
     # << this line makes emacs coloring happy
     chmod a+x doChain
     mkdir out chain
 
     gensub2 input.lst single gsub jobList
-    para create jobList
-    # 44 jobs written to batch
-    para try
-    para push # ... etc ...
+    # copy the jobList to runJobs.sh
+    echo "#!/bin/sh" > runJobs.sh
+    cat jobList >> runJobs.sh
+    chmod +x runJobs.sh
+    nohup ./runJobs.sh &
 
     # now on the cluster server, sort chains
     ssh kksilo
@@ -1166,7 +1153,7 @@ doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain} {check
     #	It depends on what you want to do with the results.
     #	If you don't mind never having any RepeatMasker stuff
     #	align, then it should be fine.   But one could imagine
-    #	other cases.  
+    #	other cases.
 
     cd /cluster/bluearc/scratch/mus/mm4
     mkdir linSpecRep.notInMouse
@@ -1255,7 +1242,7 @@ XXXX working 2003-10-27
     para try, check, push, etc ...
 
 # PRODUCING GENSCAN PREDICTIONS (DONE - 2003-10-27 - Hiram)
-    
+
     #	Must run this on the small cluster since this
     #	process requires more memory than is found in the KK nodes
     ssh kkr1u00
@@ -1263,7 +1250,7 @@ XXXX working 2003-10-27
     cd /cluster/data/mm4/bed/genscan
     # Make subdirectories for genscan to put their output files in
     mkdir gtf pep subopt
-       
+
     ls -1S /cluster/data/mm4/?{,?}/chr*_*/chr*_*.fa.masked \
       > genome.list
     # Create template file, gsub, for gensub2.
@@ -1402,11 +1389,11 @@ XXXX	The sections below will be deleted as they are performed above
     ssh hgwdev
     mkdir -p ~/mm4/bed/ctgPos
     cd ~/mm4/bed/ctgPos
-    # hgCtgPos uses the lift files... but mouse lift files are for the 
-    # 5MB contigs from splitFaIntoContigs, not for the real NT_ contigs 
-    # from the assembly.  (In the future, we should go with the NT's!)  
-    # So... just for this release, go straight from the seq_contig.md 
-    # to the table def'n: contig, size, chrom, chromStart, chromEnd 
+    # hgCtgPos uses the lift files... but mouse lift files are for the
+    # 5MB contigs from splitFaIntoContigs, not for the real NT_ contigs
+    # from the assembly.  (In the future, we should go with the NT's!)
+    # So... just for this release, go straight from the seq_contig.md
+    # to the table def'n: contig, size, chrom, chromStart, chromEnd
     perl -we \
      'while (<>) { \
         if (/^\d+\s+(\w+)\s+(\d+)\s+(\d+)\s+\S+\s+(NT_\d+)\s+.*ref_strain/) { \
@@ -1417,9 +1404,9 @@ XXXX	The sections below will be deleted as they are performed above
     > ctgPos.tab
     hgsql mm4 < ~/kent/src/hg/lib/ctgPos.sql
     echo "load data local infile 'ctgPos.tab' into table ctgPos" | hgsql mm4
-    # Note: the info is there in seq_contig.md to also do the _random's, 
-    # but we'd have to do some more work: duplicate the gaps of 50000 between 
-    # contigs for all _random's except chrUn_random (1000 between).  
+    # Note: the info is there in seq_contig.md to also do the _random's,
+    # but we'd have to do some more work: duplicate the gaps of 50000 between
+    # contigs for all _random's except chrUn_random (1000 between).
 
 # AUTO UPDATE GENBANK MRNA RUN  (IN PROGRESS - 2003-07-07 - kate)
 
@@ -1429,7 +1416,7 @@ XXXX	The sections below will be deleted as they are performed above
     # set nibGlob = '/cluster/bluearc/mm4/mixedNib/chr*.nib'
     # set liftFile = /cluster/bluearc/$db/liftAll.lft
     # make sure 'ssh localhost' works before running this:
-    # Add mm4 entries for lift file and nib dir to 
+    # Add mm4 entries for lift file and nib dir to
     # /cluster/data/genbank/etc/genbank.conf
     # NOTE: initially just align RefSeq, for speed
     # nice bin/gbAlignStep -verbose=1 -initial -iserver=localhost \
@@ -1505,7 +1492,7 @@ XXXX	The sections below will be deleted as they are performed above
     #NOTE: jobs overdosed the bluearc
     # Recovered by moving mm4 nibs to /scratch, and restarting
     # with directions from markd:
-    
+
     cd /cluster/bluearc/genbank/work/initial.mm4/align/
     rm -rf batch* err pararesults
     sed -e 's|/cluster/bluearc/mm4/mixedNib/|/scratch/hg/mm4/nib/|' align.jobs
@@ -1583,7 +1570,7 @@ while (my $line = <>) {
     #Updating seq table
     #All done
 
-# BACEND SEQUENCE ALIGNMENTS (DONE)
+# BACEND SEQUENCE ALIGNMENTS (DONE - 2003-10-28 - Hiram)
     # (alignments done without RepeatMasking)
     #	We need an ooc file for this genome
     ssh kksilo
@@ -1598,66 +1585,89 @@ while (my $line = <>) {
     cd /cluster/data/mm4/bed/bacends
 
     mkdir bacEnds.out
-    /cluster/bin/scripts/splitContigList -scratch /scratch/mus/mm4/trfFa 1
+    /cluster/bin/scripts/splitContigList -scratch /iscratch/i/mm4/trfFa 1
     cat << '_EOF_' > template
 #LOOP
 /cluster/bin/i386/blat $(path1) $(path2) -ooc=/cluster/data/mm4/ooc/11.ooc {check out line+ bacEnds.out/$(root1).$(root2).psl}
 #ENDLOOP
 '_EOF_'
-    ls -1S /scratch/mus/mm4/bacEnds/BACends???.fa > bacEnds.lst
+    ls -1S /iscratch/i/mm4/bacEnds/BACends???.fa > bacEnds.lst
     gensub2 contig.lst bacEnds.lst template jobList
     para create jobList
     # 58702 jobs written to batch
     para try, check, push, etc ...
-XXXX read to run as soon as the rsync /scratch is done 2003-10-27
+# Completed: 58702 of 58702 jobs
+# CPU time in finished jobs:     141703s    2361.72m    39.36h    1.64d  0.004 y
+# IO & Wait Time:                539654s    8994.23m   149.90h    6.25d  0.017 y
+# Average job time:                  12s       0.19m     0.00h    0.00d
+# Longest job:                      126s       2.10m     0.04h    0.00d
+# Submission to last job:          6449s     107.48m     1.79h    0.07d
 
 # Compile alignments and lift the files (takes a while)
-	ssh eieio
-	make bacEnds.psl.lifted
-# Copy files to final destination and remove
-        make copy.assembly
-        make clean # DONT'T DO THIS (may want to wait until sure they're OK)
+    ssh kksilo
+    cd /cluster/data/mm4/bed/bacends
+    time pslSort dirs raw.psl temp bacEnds.out
+    # real    2m44.166s
+    time pslReps -nearTop=0.02 -minCover=0.60 -minAli=0.85 -noIntrons raw.psl  bacEnds.psl /dev/null
+    # Processed 35753 alignments
+    # real    0m1.442s
+    rmdir temp
+    rm raw.psl
 
+    time /cluster/bin/scripts/lifter -psl -mouse /cluster/data/mm4 bacEnds.psl
+    cp -p ~booch/bacends/split.pl .
+    cp -p ~booch/bacends/header .
+    ./split.pl header < bacEnds.psl.lifted
 
-# BACEND PAIRS TRACK (DONE 041703 - TERRY)
+    mv bacEnds.psl.lifted bacEnds.psl.lifted.save
+    pslSort dirs bacEnds.psl.lifted temp split
+    rmdir temp
+    rm -r split
 
-# Add /projects/compbiousr/booch/booch/scripts to your path
+    # Copy files to final destination and remove
+    mkdir /cluster/data/mm4/bacends
+    cp -p bacEnds.psl.lifted /cluster/data/mm4/bacends
 
-# Update Makefile with new location of pairs/singles 
-# files, if necessary (DONE)
-        cd /projects/hg2/booch/psl/gs.16/build33/bacends
+# BACEND PAIRS TRACK (WORKING - 2003-10-28 - Hiram)
 
-# Make initial file of alignments
-	make bacEnds.rdb
- 
-# Try to fish out more pairs
-	make bacEndsMiss.psl
+    ssh kksilo
+    cd /cluster/data/mm4/bacends
+    cp -p /projects/hg2/booch/psl/gs.16/build33/bacends/Makefile .
+    # edit this Makefile to add this executable path to the scripts:
+    #	/projects/compbiousr/booch/booch/scripts/
 
-# Re-make bacEnds.rdb with new info
-	make bacEnds.rdb
- 
-# Create bacEndPairs track file
-        make bacEndPairs.bed
+    # Update Makefile with new location of pairs/singles
+    # files, if necessary (DONE)
 
-# Create bacEndPairsBad and bacEndPairsLong files
-	make bacEndPairsBad.bed
+    # Make initial file of alignments
+    make bacEnds.rdb
 
-# Create psl file to load
-	make bacEnds.load.psl
+    # Try to fish out more pairs
+    make bacEndsMiss.psl
 
-# Create database tables
-        ssh hgwdev
-        cd /projects/hg2/booch/psl/tables
-        hgsql hg15 < all_bacends.sql
-        hgsql hg15 < bacEndPairs.sql
-        hgsql hg15 < bacEndPairsBad.sql
-        hgsql hg15 < bacEndPairsLong.sql
+    # Re-make bacEnds.rdb with new info
+    make bacEnds.rdb
 
-# Load the tables
-	cd /projects/hg2/booch/psl/gs.16/build33/bacends/
-        echo 'load data local infile "bacEnds.load.psl" into table all_bacends;' | hgsql hg15        
-        echo 'load data local infile "bacEndPairs.bed" into table bacEndPairs;' | hgsql hg15
-        echo 'load data local infile "bacEndPairsBad.bed" into table bacEndPairsBad;' | hgsql hg15
-        echo 'load data local infile "bacEndPairsLong.bed" into table bacEndPairsLong;' | hgsql hg15
+    # Create bacEndPairs track file
+    make bacEndPairs.bed
 
+    # Create bacEndPairsBad and bacEndPairsLong files
+    make bacEndPairsBad.bed
 
+    # Create psl file to load
+    make bacEnds.load.psl
+
+    # Create database tables
+    ssh hgwdev
+    cd /projects/hg2/booch/psl/tables
+    hgsql mm4 < all_bacends.sql
+    hgsql mm4 < bacEndPairs.sql
+    hgsql mm4 < bacEndPairsBad.sql
+    hgsql mm4 < bacEndPairsLong.sql
+
+    # Load the tables
+    cd /cluster/data/mm4/bacends
+    hgsql -e 'load data local infile "bacEnds.load.psl" into table all_bacends;' mm4
+    hgsql -e 'load data local infile "bacEndPairs.bed" into table bacEndPairs;' mm4
+    hgsql -e 'load data local infile "bacEndPairsBad.bed" into table bacEndPairsBad;' mm4
+    hgsql -e 'load data local infile "bacEndPairsLong.bed" into table bacEndPairsLong;' mm4
