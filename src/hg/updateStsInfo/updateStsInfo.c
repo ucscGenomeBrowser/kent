@@ -205,8 +205,8 @@ void addElementInt(unsigned el, unsigned **array, int *count)
       sprintf(arrayNew, "%s%d,", arrayCurr, el);
       size++;
       dArray = array;
-      if (*count > 0)
-	freeMem(dArray);
+      /* if (*count > 0)
+	 freeMem(dArray); */
       sqlUnsignedDynamicArray(arrayNew, &uArray, &sizeOne);
       assert(sizeOne == size);
       *count = size;
@@ -644,6 +644,7 @@ void readAllSts(FILE *asf)
 	  s = hashMustFindVal(stsHash, ds->name);
 	  s->fa = ds;
 	  s->faAcc = acc;
+	  s->si->sequence = 1;
 	}
       else 
 	{
@@ -721,6 +722,10 @@ void writeOut(FILE *of, FILE *opf, FILE *oaf, FILE *off)
   slReverse(&sList);
   for (s = sList; s != NULL; s = s->next)
     {
+      if (s->fa != NULL)
+	s->si->sequence = 1;
+      else
+	s->si->sequence = 0;	
       si = s->si;
       if ((s->dbstsIdExists) || (si->dbSTSid == 0) || (si->dbSTSid >= 1000000))
 	{
