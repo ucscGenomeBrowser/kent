@@ -401,12 +401,38 @@
 		    <TD>
 	            <P>
 			<B><FONT COLOR="#006666">Question: </FONT></B><BR>
-			"Why doesn't UCSC have the latest data from GenBank?" 
+			"How frequently does UCSC update its databases with new 
+			data from GenBank?" 
 			<P>
 			<B><FONT COLOR="#006666">Response:</FONT></B><BR> 
-			For most assemblies, we have only a snapshot of the data deposited into 
-			GenBank on that specific day. We are working on an automated nightly 
-			update utility, although it is not yet available for most genomes.
+			Daily and weekly incremental updates of mRNA, RefSeq, 
+			and EST data are in place for several of the 
+			Genome Browser assemblies. Data sets that are 
+			updated incrementally from GenBank include 
+			Human (hg16 and later), Mouse (mm3 and later), Rat (rn3
+			and later), and Fugu (fr1 and later). Others 
+			will be added to the list as time permits. Genome 
+			assemblies that are not on an incremental update 
+			schedule are updated whenever we load a new assembly or
+			make a major revision to a table.
+			<P>
+			Data are updated on the following schedule:
+			<UL>
+			<LI>
+			Native and xeno mRNA and refSeq tracks: updated 
+			daily at 4:30 p.m. Pacific Time (weekdays), early 
+			Saturday morning (weekends)
+			<LI>
+			EST data: updated once per week on Saturday morning
+			<LI>
+			Downloadable data files: updated weekly on Sunday 
+			morning
+			<LI>
+			Outdated sequences - removed once per quarter
+			</UL>
+			<P>Mirror sites are not required to use an 
+			incremental update process, and should not experience 
+			problems as a result of these updates. 
 		    </TD><TD WIDTH=15></TD>
 		</TR>
 	    </TABLE>
