@@ -164,7 +164,7 @@ void mainPageAfterOpen(struct sqlConnection *conn);
 /* Put up main page assuming htmlOpen()/htmlClose()
  * will happen in calling routine. */
 
-void doTest(struct sqlConnection *conn);
+void doTest();
 /* Put up a page to see what happens. */
 
 void doTableSchema(char *db, char *table, struct sqlConnection *conn);

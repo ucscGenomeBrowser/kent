@@ -12,7 +12,7 @@
 #include "joiner.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: joining.c,v 1.3 2004/07/17 00:57:08 kent Exp $";
+static char const rcsid[] = "$Id: joining.c,v 1.4 2004/07/17 02:25:14 kent Exp $";
 
 struct joinableRow
 /* A row that is joinable.  Allocated in joinableResult->lm. */
@@ -200,13 +200,12 @@ if (ix < 0)
 for (jr = jt->rowList; jr != NULL; jr = jr->next)
     {
     char *key = chopKey(chopPrefix, chopSuffix, jr->keys[ix]);
-    uglyf("Adding %s to hash\n", key);
     hashAdd(hash, key, jr);
     }
 return hash;
 }
 
-void doTest(struct sqlConnection *conn)
+void oldDoTest(struct sqlConnection *conn)
 /* Put up a page to see what happens. */
 {
 struct slName *keysOut = NULL, *key;
@@ -243,4 +242,219 @@ jt2 = fetchKeyedFields(regionList, conn, "ensGtp",
 uglyf("Fetched %d rows from %s\n", slCount(jt2->rowList), jt2->tableName);
 dumpJt(jt2);
 }
+
+struct joinerDtf *fieldsToDtfs(struct slName *fieldList)
+/* Convert list from dotted triple to dtf format. */
+{
+struct joinerDtf *dtfList = NULL, *dtf;
+struct slName *field;
+for (field = fieldList; field != NULL; field = field->next)
+    {
+    dtf = joinerDtfFromDottedTriple(field->name);
+    slAddHead(&dtfList, dtf);
+    }
+slReverse(&dtfList);
+return dtfList;
+}
+
+struct dyString *makeOrderedCommaFieldList(struct sqlConnection *conn, char *table, 
+	struct joinerDtf *dtfList)
+/* Assumes that dtfList all points to same table.  This will return a comma-separated
+ * field list in the same order as the fields are in database. */
+{
+struct joinerDtf *dtf;
+struct slName *dbField, *dbFieldList = sqlListFields(conn, table);
+boolean first = TRUE;
+struct dyString *dy = dyStringNew(0);
+struct hash *dtfHash = newHash(8);
+
+/* Build up hash of field names. */
+for (dtf = dtfList; dtf != NULL; dtf = dtf->next)
+    hashAdd(dtfHash, dtf->field, NULL);
+for (dbField = dbFieldList; dbField != NULL; dbField = dbField->next)
+    {
+    if (hashLookup(dtfHash, dbField->name))
+        {
+	if (first)
+	    first = FALSE;
+	else
+	    dyStringAppendC(dy, ',');
+	dyStringAppend(dy, dbField->name);
+	}
+    }
+hashFree(&dtfHash);
+slFreeList(&dbFieldList);
+return dy;
+}
+
+struct tableFields
+/* List of fields in a single table. */
+    {
+    struct tableFields *next;	/* Next in list. */
+    char *database;		/* Database we're in.  Not alloced here. */
+    char *table;		/* Table we're in.  Not alloced here. */
+    struct joinerDtf *fieldList;	/* Fields. */
+    };
+
+void tableFieldsFree(struct tableFields **pTf)
+/* Free up memory associated with tableFields. */
+{
+struct tableFields *tf = *pTf;
+if (tf != NULL)
+    {
+    joinerDtfFreeList(&tf->fieldList);
+    freez(pTf);
+    }
+}
+
+void tableFieldsFreeList(struct tableFields **pList)
+/* Free a list of dynamically allocated tableFields's */
+{
+struct tableFields *el, *next;
+
+for (el = *pList; el != NULL; el = next)
+    {
+    next = el->next;
+    tableFieldsFree(&el);
+    }
+*pList = NULL;
+}
+
+
+struct tableFields *bundleFieldsIntoTables(struct joinerDtf **pDtfList)
+/* Convert list of fields to list of tables.  This will eat up the
+ * input list and transfer it to the fieldList element of the tables. */
+{
+struct hash *hash = newHash(0);
+char fullName[256];
+struct joinerDtf *dtf, *next;
+struct tableFields *tfList = NULL, *tf;
+
+for (dtf = *pDtfList; dtf != NULL; dtf = next)
+    {
+    next = dtf->next;
+    safef(fullName, sizeof(fullName), "%s.%s", dtf->database, dtf->table);
+    tf = hashFindVal(hash, fullName);
+    if (tf == NULL)
+        {
+	AllocVar(tf);
+	tf->database = dtf->database;
+	tf->table = dtf->table;
+	slAddHead(&tfList, tf);
+	}
+    slAddHead(&tf->fieldList, dtf);
+    }
+slReverse(&tfList);
+return tfList;
+}
+
+struct joinerDtf *tableFirstFieldList(struct tableFields *tfList)
+/* Make dtfList that is just the first one in each table's field list. */
+{
+struct joinerDtf *list = NULL, *dtf;
+struct tableFields *tf;
+
+for (tf = tfList; tf != NULL; tf = tf->next)
+    {
+    struct joinerDtf *dtf = tf->fieldList;
+    struct joinerDtf *dupe = joinerDtfNew(dtf->database, dtf->table, dtf->field);
+    slAddHead(&list, dupe);
+    }
+slReverse(&list);
+return list;
+}
+
+static struct tableFields *findTable(struct tableFields *tfList, char *db, char *table)
+/* Find table that matches. */
+{
+struct tableFields *tf;
+for (tf = tfList; tf != NULL; tf = tf->next)
+    if (sameString(tf->database,db) && sameString(tf->table, table))
+        return tf;
+return NULL;
+}
+
+int tableFieldsCmp(const void *va, const void *vb)
+/* Compare two tableFields. */
+{
+const struct tableFields *a = *((struct tableFields **)va);
+const struct tableFields *b = *((struct tableFields **)vb);
+int diff;
+diff = strcmp(a->database, b->database);
+if (diff == 0)
+    diff = strcmp(a->table, b->table);
+return diff;
+}
+
+void orderTables(struct tableFields **pTfList, char *primaryDb, char *primaryTable)
+/* Order table list so that primary table is first and the rest are
+ * alphabetical.  This is the order they are listed in the UI.
+ * (However we get them scrambled since the CGI variables are not
+ * ordered.)*/
+{
+struct tableFields *tfList = *pTfList;
+struct tableFields *primaryTf = findTable(tfList, primaryDb, primaryTable);
+if (primaryTf != NULL)
+    slRemoveEl(tfList, primaryTf);
+slSort(&tfList, tableFieldsCmp);
+if (primaryTf != NULL)
+    {
+    slAddHead(&tfList, primaryTf);
+    }
+*pTfList = tfList;
+}
+
+
+void tabOutFields(
+	char *primaryDb,		/* The primary database. */
+	char *primaryTable, 		/* The primary table. */
+	struct slName *fieldList)	/* List of db.table.field */
+/* Do tab-separated output. */
+{
+struct joinerDtf *dtfList = NULL;
+struct tableFields *tfList = NULL, *tf;
+
+dtfList = fieldsToDtfs(fieldList);
+tfList = bundleFieldsIntoTables(&dtfList);
+
+if (slCount(tfList) == 1)
+    {
+    tf = tfList;
+    struct sqlConnection *conn = sqlConnect(tf->database);
+    struct dyString *dy = makeOrderedCommaFieldList(conn, tf->table, tf->fieldList);
+    doTabOutTable(tf->table, conn, dy->string);
+    }
+else
+    {
+    struct joiner *joiner = joinerRead("all.joiner");
+    struct joinerPair *routeList, *route;
+    struct joinerDtf *tableDtfs;
+
+    orderTables(&tfList, primaryDb, primaryTable);
+    tableDtfs = tableFirstFieldList(tfList);
+    routeList = joinerFindRouteThroughAll(joiner, tableDtfs);
+    uglyf("Got %d hops in route\n", slCount(routeList));
+    for (route = routeList; route != NULL; route = route->next)
+        uglyf("%s.%s.%s -> %s.%s.%s\n", route->a->database, route->a->table, route->a->field, route->b->database, route->b->table, route->b->field);
+    uglyAbort("All for now");
+    joinerDtfFreeList(&tableDtfs);
+    }
+tableFieldsFreeList(&tfList);
+}
+
+void doTest(struct sqlConnection *conn)
+/* Put up a page to see what happens. */
+{
+struct slName *fieldList = NULL, *field;
+field = slNameNew("hg16.ensGtp.protein");
+slAddTail(&fieldList, field);
+field = slNameNew("hg16.ensGene.exonCount");
+slAddTail(&fieldList, field);
+field = slNameNew("hg16.ensGene.name");
+slAddTail(&fieldList, field);
+
+textOpen();
+tabOutFields("hg16", "ensGene", fieldList);
+}
+
 

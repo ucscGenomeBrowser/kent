@@ -16,7 +16,7 @@
 #include "customTrack.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: hgTables.c,v 1.20 2004/07/16 20:28:27 kent Exp $";
+static char const rcsid[] = "$Id: hgTables.c,v 1.21 2004/07/17 02:25:14 kent Exp $";
 
 
 void usage()
@@ -580,7 +580,7 @@ void dispatch(struct sqlConnection *conn)
  * By default head to the main page. */
 {
 if (cartVarExists(cart, hgtaDoTest))
-    doTest(conn);
+    doTest();
 else if (cartVarExists(cart, hgtaDoTopSubmit))
     doTopSubmit(conn);
 else if (cartVarExists(cart, hgtaDoIntersect))
