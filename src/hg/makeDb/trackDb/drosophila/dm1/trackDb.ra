@@ -17,7 +17,7 @@ group compGeno
 priority 134
 visibility hide
 spectrum on
-type netAlign dp1 dpseudoChain
+type netAlign dp1 chainDp1
 otherDb dp1
 
 track axtNetDp1
