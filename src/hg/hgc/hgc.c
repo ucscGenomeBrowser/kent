@@ -116,7 +116,7 @@
 #include "encodeRegionInfo.h"
 #include "hgFind.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.525 2003/12/04 08:03:33 baertsch Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.525.2.1 2003/12/07 21:24:44 heather Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -1652,7 +1652,7 @@ void chainToOtherBrowser(struct chain *chain, char *otherDb, char *otherOrg)
 struct chain *subChain = NULL, *toFree = NULL;
 int qs,qe;
 chainSubsetOnT(chain, winStart, winEnd, &subChain, &toFree);
-if (subChain != NULL)
+if (subChain != NULL && otherOrg != NULL)
     {
     qChainRangePlusStrand(subChain, &qs, &qe);
     linkToOtherBrowser(otherDb, subChain->qName, qs-1, qe);
@@ -6943,6 +6943,7 @@ struct borkPseudoHom hom;
 char *parts[10];
 int partCount;
 char *clone;
+char *organism;
 
 
 if (sqlTableExists(conn, table))
@@ -7121,7 +7122,6 @@ if (hTableExists(chainTable_chrom) )
         }
     }
 puts("<LI>\n");
-linkToOtherBrowser(pg->assembly, pg->gChrom, pg->gStart, pg->gEnd);
 printf("Open %s browser</A> at position corresponding to the Gene.<BR>\n",hOrganism(pg->assembly) );
 puts("</LI>\n");
 }
