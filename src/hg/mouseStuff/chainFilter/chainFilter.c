@@ -5,7 +5,7 @@
 #include "options.h"
 #include "chainBlock.h"
 
-static char const rcsid[] = "$Id: chainFilter.c,v 1.7 2003/05/06 07:22:27 kate Exp $";
+static char const rcsid[] = "$Id: chainFilter.c,v 1.8 2003/06/14 06:15:57 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -32,8 +32,32 @@ errAbort(
   "   -minGapless=N - pass those with minimum gapless block of at least N\n"
   "   -qMinGap=N     - pass those with minimum gap size of at least N\n"
   "   -tMinGap=N     - pass those with minimum gap size of at least N\n"
+  "   -qMinSize=N    - minimum size of spanned query region\n"
+  "   -tMinSize=N    - minimum size of spanned target region\n"
   );
 }
+
+struct optionSpec options[] = {
+   {"q", OPTION_STRING},
+   {"notQ", OPTION_STRING},
+   {"t", OPTION_STRING},
+   {"notT", OPTION_STRING},
+   {"id", OPTION_INT},
+   {"minScore", OPTION_FLOAT},
+   {"maxScore", OPTION_FLOAT},
+   {"qStartMin", OPTION_INT},
+   {"qStartMax", OPTION_INT},
+   {"tStartMin", OPTION_INT},
+   {"tStartMax", OPTION_INT},
+   {"strand", OPTION_STRING},
+   {"long", OPTION_BOOLEAN},
+   {"zeroGap", OPTION_BOOLEAN},
+   {"minGapless", OPTION_INT},
+   {"qMinGap", OPTION_INT},
+   {"qMinSize", OPTION_INT},
+   {"tMinSize", OPTION_INT},
+   {NULL, 0},
+};
 
 struct hash *hashCommaString(char *s)
 /* Make hash out of comma separated string. */
@@ -150,6 +174,8 @@ int tStartMax = optionInt("tStartMax", BIGNUM);
 int minGapless = optionInt("minGapless", 0);
 int qMinGap = optionInt("qMinGap", 0);
 int tMinGap = optionInt("tMinGap", 0);
+int qMinSize = optionInt("qMinSize", 0);
+int tMinSize = optionInt("tMinSize", 0);
 char *strand = optionVal("strand", NULL);
 boolean zeroGap = optionExists("zeroGap");
 int id = optionInt("id", -1);
@@ -180,6 +206,8 @@ for (i=0; i<inCount; ++i)
 	    writeIt = FALSE;
 	if (chain->tStart < tStartMin || chain->tStart >= tStartMax)
 	    writeIt = FALSE;
+	if (chain->qSize < qMinSize || chain->tSize < tMinSize)
+	    writeIt = FALSE;
 	if (strand != NULL && strand[0] != chain->qStrand)
 	    writeIt = FALSE;
 	if (id >= 0 && id != chain->id)
@@ -190,6 +218,7 @@ for (i=0; i<inCount; ++i)
 	    writeIt = (qCalcMaxGap(chain) >= qMinGap);
 	if (tMinGap != 0)
 	    writeIt = (tCalcMaxGap(chain) >= tMinGap);
+	
 	if (writeIt)
 	    {
 	    if (doLong)
@@ -208,7 +237,7 @@ if (zeroGap)
 int main(int argc, char *argv[])
 /* Process command line. */
 {
-optionHash(&argc, argv);
+optionInit(&argc, argv, options);
 if (argc < 2)
     usage();
 chainFilter(argc-1, argv+1);
