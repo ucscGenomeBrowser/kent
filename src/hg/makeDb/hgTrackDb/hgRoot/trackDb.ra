@@ -328,8 +328,8 @@ color 0,0,180
 altColor 170,0,0
 
 track tigrGeneIndex
-shortLabel Tigr Gene Index
-longLabel Alignment of Tigr Gene Index TCs Against the $Organism Genome
+shortLabel TIGR Gene Index
+longLabel Alignment of TIGR Gene Index TCs Against the $Organism Genome
 priority 20.2
 visibility dense
 color 100,0,0
