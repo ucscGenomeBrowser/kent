@@ -83,6 +83,7 @@ int jobCheckPeriod = 10;	/* Minutes between checking running jobs. */
 int machineCheckPeriod = 20;	/* Minutes between checking dead machines. */
 int initialSpokes = 30;		/* Number of spokes to start with. */
 unsigned char subnet[4] = {255,255,255,255};   /* Subnet to check. */
+int nextJobId = 0;		/* Next free job id. */
 
 unsigned char localHost[4] = {127,0,0,1};	   /* Address for local host */
 
@@ -99,6 +100,7 @@ errAbort("paraHub - parasol hub server version %d\n"
 	 "    jobCheckPeriod=N  Minutes between checking on job - default %d\n"
 	 "    machineCheckPeriod=N Seconds between checking on machine - default %d\n"
 	 "    subnet=XXX.YYY.ZZZ Only accept connections from subnet (example 192.168)\n"
+	 "    nextJobId=N  Starting job ID number\n"
 	 "    log=logFile Write a log to logFile. Use 'stdout' here for console\n"
 	               ,
 	 version, initialSpokes, jobCheckPeriod, machineCheckPeriod
@@ -116,7 +118,6 @@ struct dlList *busyMachines;     /* List of machines running jobs. */
 struct dlList *deadMachines;     /* List of machines that aren't running. */
 
 struct dlList *runningJobs;     /* Jobs that are running. */
-int nextJobId = 0;		/* Next free job id. */
 
 struct hash *userHash;		/* Hash of all users. */
 struct user *userList;		/* List of all users. */
@@ -709,12 +710,14 @@ int jobId = atoi(jobIdString);
 if (status != NULL && sameString(status, "free"))
     {
     struct job *job = jobFind(runningJobs, jobId);
+    struct user *user = job->user;
     if (job != NULL)
          {
 	 struct machine *mach = job->machine;
 	 if (mach != NULL)
 	     recycleMachine(mach);
 	 recycleJob(job);
+	 user->runningCount -= 1;
 	 logIt("hub:  >>>RECYCLING MACHINE IN NODE CHECK IN<<<<\n");
 	 }
     }
@@ -1204,11 +1207,12 @@ startSpokes();
 startHeartbeat();
 
 /* Set up socket. */
-socketHandle = netAcceptingSocket(paraPort, 100);
+socketHandle = netAcceptingSocket(paraPort, 500);
 if (socketHandle < 0)
     errAbort("Can't set up socket.  Urk!  I'm dead.");
 
-
+/* Bump up our priority to just shy of real-time. */
+nice(-40);
 
 /* Main event loop. */
 for (;;)
@@ -1329,6 +1333,7 @@ int main(int argc, char *argv[])
 optionHash(&argc, argv);
 if (argc < 2)
     usage();
+nextJobId = optionInt("nextJobId", nextJobId);
 jobCheckPeriod = optionInt("jobCheckPeriod", jobCheckPeriod);
 machineCheckPeriod = optionInt("machineCheckPeriod", machineCheckPeriod);
 initialSpokes = optionInt("spokes",  initialSpokes);
