@@ -1,0 +1,191 @@
+#!/bin/csh
+exit;
+
+$dir = /cluster/data/encode/ortho3/mercatorInput
+mkdir -p $dir
+cd $dir
+
+# start with Mercator data from Colin Dewey, and copy it to working directory: 
+#    /cluster/data/encode/ortho3/mercatorInput/encodeMaps20050304.tar.gz
+#
+#-----Original Message-----
+#From: Colin Dewey [mailto:cdewey@eecs.berkeley.edu] 
+#Sent: Friday, March 04, 2005 1:09 PM
+#To: Daryl Thomas
+#Subject: Re: hg17 ENCODE region coordinates
+#
+#Hi Daryl,
+#
+#Thanks for the coordinates.  I should have realized that I could grab 
+#these from the table browser, sorry!  The table browser is very nice 
+#now... I was happily surprised that I could do table joins!
+#
+#Here are our new orthology mappings.  Everything is in the same form as 
+#last time, so hopefully there will be no problems.  But do let me know 
+#if you run into anything.
+#
+#Also, it seems that our group has yet to get alignments to you in MAF 
+#format.  So I've decided to take on this task.  When I'm done, perhaps 
+#I can send you our alignments from the last freeze just to make sure 
+#that I have the formats right?
+#
+#Thanks,
+#
+#Colin
+
+chmod g+w $dir/*
+
+# ${HOME}/kent/src/hg/lib/encodeRegionMercator.sql
+create table encodeRegionsMercator (
+    bin        smallint(5)  unsigned not null,
+    chrom      varchar(255)          not null,
+    chromStart int(10)      unsigned not null,
+    chromEnd   int(10)      unsigned not null,
+    name       varchar(255)          not null,
+    score      int(10)      unsigned not null,
+    strand     char(1)               not null
+)
+
+#!/bin/csh -f
+foreach db (bosTau1 canFam1 danRer2 galGal2 mm5 monDom1 panTro1 rn3 tetNig1)
+    echo $db
+    hgsql $db -e "drop table encodeRegionsMercator"
+    rm -f $db.log
+    hgLoadBed -tab -sqlTable=${HOME}/kent/src/hg/lib/encodeRegionsMercator.sql $db encodeRegionsMercator $db.bed >& $db.log
+end
+rm -f bed.tab
+
+$dir = /cluster/data/encode/ortho3/liftOverRegions
+mkdir -p $dir
+cd $dir
+hgsql hg17 -e "SELECT * FROM encodeRegions ORDER BY name" | tail +2 > hg17.bed
+hgsql -h genome-testdb hgcentraltest -e "select toDb, path from liftOverChain " | grep /gbdb/hg17 | grep -v hg16 > hg17.over.chain.files
+
+# CHIMP
+    # THESE NOTES ARE FROM ORTHO2
+    # used chains from reciprocal best net -- these were more
+    # chopped up, but regions in these don't span unbridged gaps
+    # minMatch .7 leaves ENr324 and ENm011 unmapped
+    # Lowered match threshold until region coverage looked good (to .4)
+    # (except m11, for some reason),  with minimum of fragmentation
+    # Same at .3 and .2 -- at the point where regions look reasonable,
+    # lowering the threshold in this way doesn't change them.
+    # NOTE: reducing minSizeQ to 10000, due to fragmented panTro1 assembly
+liftOver -minMatch=.01 -minSizeT=4000 \
+    -minSizeQ=10000 -multiple -chainTable=hg17.chainPanTro1 \
+    hg17.bed /cluster/data/hg17/bed/liftOver/hg17ToPanTro1.chain \
+    panTro1.unmerged.bed5 panTro1.unmapped.bed -verbose=2 >& panTro1.log
+liftOverMerge -mergeGap=20000 -verbose=2 panTro1.unmerged.bed5 panTro1.bed5 >>& panTro1.log
+wc -l panTro1.*bed*
+    #     81 panTro1.bed5
+    #      0 panTro1.unmapped.bed
+    #    107 panTro1.unmerged.bed5
+awk '{printf "%s\t%s\t%s\t%s_%s\n", $1, $2, $3, $4, $5}' panTro1.bed5 > panTro1.bed
+hgLoadBed -noBin panTro1 encodeRegionsLiftOver panTro1.bed >>& panTro1.log
+
+# RAT
+liftOver -minMatch=.01 -minSizeT=4000 \
+    -minSizeQ=20000 -multiple -chainTable=hg17.chainRn3 \
+    hg17.bed /cluster/data/hg17/bed/liftOver/hg17ToRn3.over.chain \
+    rn3.unmerged.bed5 rn3.unmapped.bed -verbose=2 >& rn3.log
+liftOverMerge -mergeGap=20000 -verbose=2 rn3.unmerged.bed5 rn3.bed5 >>& rn3.log
+wc -l rn3.*bed*
+    #     53 rn3.bed5
+    #      0 rn3.unmapped.bed
+    #     65 rn3.unmerged.bed5
+awk '{printf "%s\t%s\t%s\t%s_%s\n", $1, $2, $3, $4, $5}' rn3.bed5 > rn3.bed
+hgLoadBed -noBin rn3 encodeRegionsLiftOver rn3.bed >>& rn3.log
+
+# CHICKEN
+    # allow smaller chain sizes in query (only 1K, vs. 20K in close species)
+liftOver -minMatch=.01 minSizeT=4000 \
+    -multiple -minSizeQ=1000 -chainTable=hg17.chainGalGal2 \
+    hg17.bed /cluster/data/hg17/bed/liftOver/hg17ToGalGal2.over.chain \
+    galGal2.unmerged.bed5 galGal2.unmapped.bed -verbose=2 >& galGal2.log
+liftOverMerge -mergeGap=20000 -verbose=2 galGal2.unmerged.bed5 galGal2.bed5 >>& galGal2.log
+wc -l galGal2.*bed*
+    #     94 galGal2.bed5
+    #      4 galGal2.unmapped.bed
+    #    131 galGal2.unmerged.bed5
+    ##Partially deleted in new
+    #chr13   29418015        29918015        ENr111
+    #chr5    141880150       142380150       ENr212
+awk '{printf "%s\t%s\t%s\t%s_%s\n", $1, $2, $3, $4, $5}' galGal2.bed5 > galGal2.bed
+hgLoadBed -noBin galGal2 encodeRegionsLiftOver galGal2.bed >>& galGal2.log
+
+# MOUSE MM5
+liftOver -minMatch=.01 -minSizeT=4000 -minSizeQ=20000 -multiple \
+    hg17.bed /cluster/data/hg17/bed/liftOver/hg17ToMm5.chain \
+    mm5.unmerged.bed5 mm5.unmapped.bed -verbose=2 >& mm5.log
+liftOverMerge -mergeGap=20000 -verbose=2 mm5.unmerged.bed5 mm5.bed5 >>& mm5.log
+wc -l mm5.*bed*
+    #     54 mm5.bed5
+    #      0 mm5.unmapped.bed
+    #     60 mm5.unmerged.bed5
+awk '{printf "%s\t%s\t%s\t%s_%s\n", $1, $2, $3, $4, $5}' mm5.bed5 > mm5.bed
+hgLoadBed -noBin mm5 encodeRegionsLiftOver mm5.bed >>& mm5.log
+
+# DOG
+liftOver -minMatch=.01 -minSizeT=4000 \
+    -minSizeQ=20000 -multiple -chainTable=hg17.chainCanFam1 \
+    hg17.bed /cluster/data/hg17/bed/liftOver/hg17ToCanFam1.chain \
+    canFam1.unmerged.bed5 canFam1.unmapped.bed -verbose=2 >& canFam1.log
+liftOverMerge -mergeGap=20000 -verbose=2 canFam1.unmerged.bed5 canFam1.bed5 >>& canFam1.log
+wc -l canFam1.*bed*
+    #     51 canFam1.bed5
+    #      0 canFam1.unmapped.bed
+    #     58 canFam1.unmerged.bed5
+awk '{printf "%s\t%s\t%s\t%s_%s\n", $1, $2, $3, $4, $5}' canFam1.bed5 > canFam1.bed
+hgLoadBed -noBin canFam1 encodeRegionsLiftOver canFam1.bed >>& canFam1.log
+
+# OPOSSUM
+liftOver -minMatch=.01 -minSizeT=4000 \
+    -minSizeQ=5000 -multiple -chainTable=hg17.chainMonDom1 \
+    hg17.bed /cluster/data/hg17/bed/liftOver/hg17ToMonDom1.chain \
+    monDom1.unmerged.bed5 monDom1.unmapped.bed -verbose=2 >& monDom1.log
+liftOverMerge -mergeGap=20000 -verbose=2 monDom1.unmerged.bed5 monDom1.bed5 >>& monDom1.log
+wc -l monDom1.*bed*
+    #    143 monDom1.bed5
+    #      0 monDom1.unmapped.bed
+    #    191 monDom1.unmerged.bed5
+awk '{printf "%s\t%s\t%s\t%s_%s\n", $1, $2, $3, $4, $5}' monDom1.bed5 > monDom1.bed
+hgLoadBed -noBin monDom1 encodeRegionsLiftOver monDom1.bed >>& monDom1.log
+
+# TETRA
+rm -f tetNig1.log tetNig1.*bed*
+liftOver -minMatch=.01 -minSizeT=4000 \
+    -minSizeQ=1000 -multiple -chainTable=hg17.chainTetNig1 \
+    hg17.bed /cluster/data/hg17/bed/liftOver/hg17ToTetNig1.chain \
+    tetNig1.unmerged.bed5 tetNig1.unmapped.bed -verbose=2 >& tetNig1.log
+liftOverMerge -mergeGap=20000 -verbose=2 tetNig1.unmerged.bed5 tetNig1.bed5 >>& tetNig1.log
+wc -l tetNig1.*bed*
+    #    197 tetNig1.bed5
+    #     12 tetNig1.unmapped.bed
+    #    225 tetNig1.unmerged.bed5
+awk '{printf "%s\t%s\t%s\t%s_%s\n", $1, $2, $3, $4, $5}' tetNig1.bed5 > tetNig1.bed
+hgLoadBed -noBin tetNig1 encodeRegionsLiftOver tetNig1.bed >>& tetNig1.log
+
+# ZEBRAFISH
+rm -f danRer2.log danRer2.*bed*
+liftOver -minMatch=.01 -minSizeT=4000 \
+    -minSizeQ=1000 -multiple -chainTable=hg17.chainDanRer2 \
+    hg17.bed /cluster/data/hg17/bed/liftOver/hg17ToDanRer2.chain \
+    danRer2.unmerged.bed5 danRer2.unmapped.bed -verbose=2 >& danRer2.log
+liftOverMerge -mergeGap=20000 -verbose=2 danRer2.unmerged.bed5 danRer2.bed5 >>& danRer2.log
+wc -l danRer2.*bed*
+    #    238 danRer2.bed5
+    #      2 danRer2.unmapped.bed
+    #    278 danRer2.unmerged.bed5
+awk '{printf "%s\t%s\t%s\t%s_%s\n", $1, $2, $3, $4, $5}' danRer2.bed5 > danRer2.bed
+hgLoadBed -noBin danRer2 encodeRegionsLiftOver danRer2.bed >>& danRer2.log
+
+rm -f bed.tab
+
+
+hgsql -e "select chrom, chromStart+1, chromEnd, name from encodeRegions order by name" hg17 | tail +2 | awk '{printf "%s:%d-%d\t%s\n",$1,$2,$3,$4}' > positionFile
+
+#./mkOrthologAllFrame.pl descriptionFile positionFile headerFile hg17 consensus/panTro1.bed liftOverRegions/panTro1.bed mercatorInput/panTro1.bed
+foreach db (panTro1 rn3 galGal2 mm5 canFam1 monDom1 tetNig1 danRer2)
+    ./mkOrthologAllFrame.pl descriptionFile positionFile headerFile hg17 consensus/$db.bed liftOverRegions/$db.bed mercatorInput/$db.bed > $db.html
+end
+
