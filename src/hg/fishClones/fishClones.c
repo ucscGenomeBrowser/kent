@@ -33,7 +33,7 @@ static struct optionSpec optionSpecs[] = {
   {NULL, 0}
 };
 
-int VERBOSE = 0;
+int verb = 0;
 boolean NORANDOM = FALSE;
 boolean NOBIN = FALSE;
 
@@ -67,6 +67,7 @@ struct place
   int numSts;
   struct name *sts;
   int numBacEndPair;
+  struct name *bePair;
   int numBacEnd;
   struct name *bacEnd;
   int score;
@@ -181,6 +182,7 @@ void placeFree(struct place **place)
   free(p->chrom);
   free(p->type);
   nameFreeList(&p->acc);
+  nameFreeList(&p->bePair);
   nameFreeList(&p->sts);
   nameFreeList(&p->bacEnd);
   freez(place);
@@ -243,10 +245,22 @@ struct map *createMap(char *mapInfo, char *center, char *chr)
   char *bands[16], band[16];
   int wordCount;
   char chrom[16];
+  char *mi, *words[10];
 
   AllocVar(ret);
   ret->next = NULL;
-  safef(chrom, sizeof(chrom), "chr%s", chr);
+  /* Determine chromosome */
+  mi = cloneString(mapInfo);
+  if (stringIn("p", mapInfo))
+    wordCount = chopByChar(mi, 'p', words, ArraySize(words));      
+  else if (stringIn("q", mapInfo))
+    wordCount = chopByChar(mi, 'q', words, ArraySize(words));      
+  else if (stringIn("cen", mapInfo))
+    wordCount = chopByChar(mi, 'c', words, ArraySize(words));
+  else
+    errAbort("Couldn't determine chrom for %s\n", mapInfo);
+  safef(chrom, sizeof(chrom), "chr%s", words[0]);
+  verbose(3, "\tchromosome for %s is %s\n", mapInfo, chrom);
   ret->chrom = cloneString(chrom);
 
   if (stringIn("~\0", mapInfo))
@@ -310,7 +324,10 @@ struct place *createPlace(struct position *pos)
 /* Create a place record */
 {
   struct place *ret;
-  
+  char *names, *words[2];
+  struct name *n;
+  int wordCount;
+
   AllocVar(ret);
   ret->next = NULL;
   ret->chrom = cloneString(pos->chrom);
@@ -332,7 +349,13 @@ struct place *createPlace(struct position *pos)
     } 
   if (sameString(ret->type, "BAC End Pair"))
     {
+      names = cloneString(pos->name);
+      wordCount = chopString(names, ",",words,2);
+      ret->bePair = createName(words[0]);
+      n = createName(words[1]);
+      slAddHead(&ret->bePair, n);
       ret->numBacEndPair++;
+
     } 
   if (sameString(ret->type, "STS Marker"))
     {
@@ -715,7 +738,7 @@ void findStsPosition(struct sqlConnection *conn, struct position *pos, struct fi
 void findBacEndPairPosition(struct sqlConnection *conn, struct fishClone *fc)
 /* Determine the positions of bac end pairs for a clone */
 {
-  char query[256];
+  char query[256], names[256];
   struct sqlResult *sr;
   char **row;
   struct lfs *be;
@@ -725,8 +748,9 @@ void findBacEndPairPosition(struct sqlConnection *conn, struct fishClone *fc)
   sr = sqlGetResult(conn, query);
   while ((row = sqlNextRow(sr)) != NULL)
     {
-      newPos = createPosition(fc->cloneName, "BAC End Pair");
       be = lfsLoad(row+1);
+      safef(names, sizeof(names), "%s,%s", be->lfNames[0], be->lfNames[1]);
+      newPos = createPosition(names, "BAC End Pair");
       newPos->chrom = cloneString(be->chrom);
       newPos->start = be->chromStart;
       newPos->end = be->chromEnd;
@@ -743,6 +767,8 @@ int combinePos(struct place *p, struct position *pos)
   int d1 = abs(p->start - pos->start);
   int d2 = abs(p->end - pos->end);
   struct name *n;
+  char *words[2], *names;
+  int wordCount;
 
   if ((sameString(p->chrom, pos->chrom)) && 
       ((d1 < 200000) || ((pos->start >= p->start) && (pos->start <= p->end))) && 
@@ -758,22 +784,39 @@ int combinePos(struct place *p, struct position *pos)
 	  n = createName(pos->name);
 	  n->phase = pos->phase;
 	  slAddHead(&p->acc, n);
+	  /* p->type = pos->type; */	  
 	} 
       if (sameString(pos->type, "BAC End Pair"))
 	{
+	  names = cloneString(pos->name);
+	  wordCount = chopString(names, ",",words,2);
+	  n = createName(words[0]);
+	  slAddHead(&p->bePair, n);
+	  n = createName(words[1]);
+	  slAddHead(&p->bePair, n);
 	  p->numBacEndPair++;
+	  /* if (!sameString(p->type, "Accession"))
+	     p->type = pos->type; */
 	} 
       if (sameString(pos->type, "STS Marker"))
 	{
 	  p->numSts++;
 	  n = createName(pos->name);
 	  slAddHead(&p->sts, n);
+	  /* if (sameString(p->type, "BAC End"))
+	     p->type = pos->type; */
 	} 
       if (sameString(pos->type, "BAC End"))
 	{
-	  p->numBacEnd++;
+	  /* Check if used for end pair */
 	  n = createName(pos->name);
-	  slAddHead(&p->bacEnd, n);
+	  if (!inNameList(n, p->bePair))
+	    {
+	      p->numBacEnd++;
+	      slAddHead(&p->bacEnd, n);
+	    }
+	  else
+	    nameFree(&n);
 	} 
       ret = 1;
     }
@@ -784,18 +827,28 @@ int combinePos(struct place *p, struct position *pos)
 int scorePlace(struct place *p, struct map *m)
 /* Score a placement */
 {
-  int ret = 0;
+  int ret = 0, wordCount;
   struct map *m1;
-  struct name *n, *nList=NULL, *new;
+  struct name *n, *nList=NULL, *new;  
+  char *chrom, *words[2];
   
-  /* Check if chromosome agress with any fish mapping */
-  verbose(3, "\tdetermining if in fish chrom");
+  /* Check if chromosome agress with any fish mapping */  
+  verbose(3, "\tdetermining if in fish chrom\n");
+  chrom = cloneString(p->chrom);
+  /* Get rid of "random" */
+  wordCount = chopString(chrom, "_",words, 2);
   for (m1 = m; m1 != NULL; m1 = m1->next)
-    if (sameString(m1->chrom, p->chrom))
-      {
-      ret += 1;
-      break;
-      }
+    {
+      verbose(3, "\tchecking %s vs. %s\n", m1->chrom, words[0]);
+      if (sameString(m1->chrom, words[0]))
+	{
+	  if (wordCount == 1)
+	    ret += 2;
+	  else
+	    ret += 1;
+	  break;
+	}
+    }
 
   /* Score accessions based on phase of sequencing */
   verbose(3, "\tscoring accessions\n");
@@ -923,8 +976,10 @@ void findGoodPlace(struct fishClone *fc)
   /* Score each of the placements */
   verbose(3, "\tscoring placements for %s\n", fc->cloneName);
   for (p = fc->good; p != NULL; p = p->next)
-    p->score = scorePlace(p, fc->cyto);
-
+    {
+      p->score = scorePlace(p, fc->cyto);
+      verbose(3, "\tscore on %s is %d\n", p->chrom,p->score);
+    }
   /* Filter to retain only best placements */
   filterGoodPlace(fc);
   
@@ -1025,7 +1080,13 @@ void writeOut(FILE *of, FILE *af)
 		fprintf(of, ",%s", n->name);
 	    }
 	  fprintf(of, "\t");
-	  fprintf(of, "%d\t", p->numBacEnd);
+	  fprintf(of, "%d\t", p->numBacEnd + p->numBacEndPair*2);
+	  if (p->numBacEndPair) 
+	    {
+	      fprintf(of, "%s", p->bePair->name);
+	      for (n = p->bePair->next; n != NULL; n=n->next)
+		fprintf(of, ",%s", n->name);
+	    }
 	  if (p->numBacEnd) 
 	    {
 	      fprintf(of, "%s", p->bacEnd->name);
@@ -1052,8 +1113,6 @@ int main(int argc, char *argv[])
   if (password == NULL)
     password = cfgOption("db.password");
   
-  verboseSetLevel(0);
-  
   optionInit(&argc, argv, optionSpecs);
   if (argc < 4)
     {
@@ -1074,8 +1133,8 @@ int main(int argc, char *argv[])
   safef(filename, sizeof(filename), "%s.acc", argv[6]);
   af = mustOpen(filename, "w");
 
-  VERBOSE = optionExists("verbose");
-  verboseSetLevel(VERBOSE);
+  verb = optionInt("verbose", 0);
+  verboseSetLevel(verb);
   NORANDOM = optionExists("noRandom");
   NOBIN = optionExists("noBin");
   stsName = optionVal("fhcrc", NULL);
