@@ -5,7 +5,7 @@
 #include "options.h"
 #include "dlist.h"
 
-static char const rcsid[] = "$Id: randomLines.c,v 1.3 2003/05/06 07:41:08 kate Exp $";
+static char const rcsid[] = "$Id: randomLines.c,v 1.4 2004/03/15 00:02:26 sugnet Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -15,6 +15,7 @@ errAbort(
   "usage:\n"
   "   randomLines inFile count outFile\n"
   "options:\n"
+  "   -seed - Set seed used for randomizing, useful for debugging.\n"
   "   -decomment - remove blank lines and those starting with \n"
   );
 }
@@ -61,9 +62,14 @@ void randomLines(char *inName, int count, char *outName)
 FILE *f = mustOpen(outName, "w");
 struct dlList *list = readLines(inName);
 struct dlNode *node;
+char *seed = optionVal("seed", NULL);
 char *s;
 int lineCount = dlCount(list);
 int ix, randomIx;
+if(seed == NULL)
+    srand(time(NULL));
+else
+    srand(atoi(seed));
 if (lineCount < count)
     {
     warn("Only %d lines in %s", lineCount, inName);
