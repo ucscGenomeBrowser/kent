@@ -6,7 +6,7 @@
 #include "portable.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: hCommon.c,v 1.21 2004/03/05 15:11:01 baertsch Exp $";
+static char const rcsid[] = "$Id: hCommon.c,v 1.22 2004/07/07 18:41:25 braney Exp $";
 
 static char *_hgcName = "../cgi-bin/hgc";	/* Path to click processing program. */
 static char *_hgTracksName = "../cgi-bin/hgTracks"; /* Path back to self. */
@@ -173,6 +173,10 @@ char *skipChr(char *s)
 {
 if (startsWith("chr", s))
     s += 3;
+else if (startsWith("scaffold_", s))
+    s += 9;
+else if (startsWith("Scaffold_", s))
+    s += 9;
 return s;
 }
 
