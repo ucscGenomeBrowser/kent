@@ -7,7 +7,7 @@ visibility dense
 type bed 3 +
 
 track all_est
-shortLabel $Organism ESTs
+shortLabel A. mel. ESTs
 longLabel $Organism ESTs Including Unspliced
 group rna
 priority 57
