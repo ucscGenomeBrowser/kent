@@ -1303,8 +1303,8 @@ return hitList;
 
 static struct gfHit *gfStraightFindHits(struct genoFind *gf, aaSeq *seq, struct lm *lm,
 	int *retHitCount)
-/* Find hits associated with one sequence in general case in a non-segmented
- * index. */
+/* Find hits associated with one sequence in a non-segmented
+ * index where hits match exactly. */
 {
 struct gfHit *hitList = NULL, *hit;
 int size = seq->size;
@@ -1339,6 +1339,79 @@ for (i=0; i<=lastStart; ++i)
 *retHitCount = hitCount;
 return hitList;
 }
+
+static struct gfHit *gfStraightFindNearHits(struct genoFind *gf, aaSeq *seq, 
+	struct lm *lm, int *retHitCount)
+/* Find hits associated with one sequence in a non-segmented
+ * index where hits can mismatch in one letter. */
+{
+struct gfHit *hitList = NULL, *hit;
+int size = seq->size;
+int tileSize = gf->tileSize;
+int lastStart = size - tileSize;
+char *poly = seq->dna;
+int i, j;
+int tile;
+int listSize;
+bits32 qStart, tStart, *tList;
+int hitCount = 0;
+int varPos, varVal;	/* Variable position. */
+int (*makeTile)(char *poly, int n); 
+int alphabetSize;
+char oldChar, zeroChar, badChar;
+int posMul;
+
+uglyf("gfStraightFindNearHits\n");
+if (gf->isPep)
+    {
+    makeTile = gfPepTile;
+    alphabetSize = 20;
+    zeroChar = 'A';
+    }
+else
+    {
+    makeTile = gfDnaTile;
+    alphabetSize = 4;
+    zeroChar = 't';
+    }
+
+for (i=0; i<=lastStart; ++i)
+    {
+    posMul = 1;
+    for (varPos = tileSize-1; varPos >=0; --varPos)
+	{
+	/* Make a tile that has zero value at variable position. */
+	oldChar = poly[i+varPos];
+	poly[i+varPos] = zeroChar;
+	tile = makeTile(poly+i, tileSize);
+	poly[i+varPos] = oldChar;
+	if (tile < 0)
+	    continue;
+
+	/* Look up all possible values of variable position. */
+	for (varVal=0; varVal<alphabetSize; ++varVal)
+	    {
+	    listSize = gf->listSizes[tile];
+	    qStart = i;
+	    tList = gf->lists[tile];
+	    for (j=0; j<listSize; ++j)
+		{
+		lmAllocVar(lm,hit);
+		hit->qStart = qStart;
+		hit->tStart = tList[j];
+		hit->diagonal = hit->tStart + size - qStart;
+		slAddHead(&hitList, hit);
+		++hitCount;
+		}
+	    tile += posMul;
+	    }
+	posMul *= alphabetSize;
+	}
+    }
+*retHitCount = hitCount;
+return hitList;
+}
+
 
 static struct gfHit *gfSegmentedFindHits(struct genoFind *gf, aaSeq *seq, struct lm *lm,
 	int *retHitCount)
@@ -1395,14 +1468,26 @@ struct gfClump *gfFindClumps(struct genoFind *gf, bioSeq *seq, struct lm *lm, in
 {
 struct gfHit *hitList = NULL;
 
-if (gf->segSize == 0 && !gf->isPep && !gf->allowOneMismatch == 0)
+if (gf->segSize == 0 && !gf->isPep && !gf->allowOneMismatch)
     hitList = gfFastFindDnaHits(gf, seq, lm, retHitCount);
 else
     {
     if (gf->segSize == 0)
-        hitList = gfStraightFindHits(gf, seq, lm, retHitCount);
+	{
+	if (gf->allowOneMismatch)
+	    hitList = gfStraightFindNearHits(gf, seq, lm, retHitCount);
+	else
+	    hitList = gfStraightFindHits(gf, seq, lm, retHitCount);
+	}
     else
-	hitList = gfSegmentedFindHits(gf, seq, lm, retHitCount);
+	{
+#ifdef SOON
+	if (gf->allowOneMismatch)
+	    hitList = gfSegmentedFindNearHits(gf, seq, lm, retHitCount);
+	else
+#endif
+	    hitList = gfSegmentedFindHits(gf, seq, lm, retHitCount);
+	}
     }
 cmpQuerySize = seq->size;
 if (gf->minMatch == 1)
