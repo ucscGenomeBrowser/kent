@@ -89,7 +89,7 @@
 #include "bedCart.h"
 #include "cytoBand.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.916 2005/02/25 00:12:48 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.917 2005/03/01 00:11:02 hiram Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -8127,6 +8127,9 @@ struct linkedFeatures *lfList = NULL, *lf;
 struct trackDb *tdb = tg->tdb;
 int scoreMin = atoi(trackDbSettingOrDefault(tdb, "scoreMin", "0"));
 int scoreMax = atoi(trackDbSettingOrDefault(tdb, "scoreMax", "1000"));
+boolean useItemRgb = FALSE;
+
+useItemRgb = bedItemRgb(tdb);
 
 sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd, NULL, &rowOffset);
 while ((row = sqlNextRow(sr)) != NULL)
@@ -8134,6 +8137,11 @@ while ((row = sqlNextRow(sr)) != NULL)
     bed = bedLoadN(row+rowOffset, 8);
     bed8To12(bed);
     lf = lfFromBedExtra(bed, scoreMin, scoreMax);
+    if (useItemRgb)
+	{
+	lf->extra = (void *)USE_ITEM_RGB;       /* signal for coloring */
+	lf->filterColor=bed->itemRgb;
+	}
     slAddHead(&lfList, lf);
     bedFree(&bed);
     }
@@ -8308,6 +8316,9 @@ int scoreMax = atoi(trackDbSettingOrDefault(tdb, "scoreMax", "1000"));
 char optionScoreStr[128]; /* Option -  score filter */
 int optionScore;
 char extraWhere[128] ;
+boolean useItemRgb = FALSE;
+
+useItemRgb = bedItemRgb(tdb);
 
 safef( optionScoreStr, sizeof(optionScoreStr), "%s.scoreFilter", tg->mapName);
 optionScore = cartUsualInt(cart, optionScoreStr, 0);
@@ -8324,6 +8335,11 @@ while ((row = sqlNextRow(sr)) != NULL)
     {
     bed = bedLoad12(row+rowOffset);
     lf = lfFromBedExtra(bed, scoreMin, scoreMax);
+    if (useItemRgb)
+	{
+	lf->extra = (void *)USE_ITEM_RGB;       /* signal for coloring */
+	lf->filterColor=bed->itemRgb;
+	}
     slAddHead(&lfList, lf);
     bedFree(&bed);
     }
