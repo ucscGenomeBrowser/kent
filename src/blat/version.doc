@@ -63,6 +63,8 @@
 
 26:
      o fixed pslPretty to allow '--' strands in axt output format
+     o fixed -long flag in pslPretty which was swapping target and
+       query sequence on long inserts
      o fixed bug that was causing blat to drop an exon in around
        1% of genes.
      o put in error message when faToNib is used on fa files with
