@@ -32,7 +32,7 @@
 #include "twoBit.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.235 2005/02/03 00:56:29 aamp Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.236 2005/02/11 23:33:48 hartera Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
@@ -1320,7 +1320,7 @@ boolean inTable = FALSE;
 char query[256];
 struct sqlResult *sr;
 char **row;
-safef(query, sizeof(query), "select 0 from %s where %s = '%s'",
+safef(query, sizeof(query), "select 0 from %s where %s = \"%s\"",
       table, column, acc);
 sr = sqlGetResult(conn, query);
 inTable = ((row = sqlNextRow(sr)) != NULL);
