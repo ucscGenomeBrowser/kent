@@ -23,7 +23,7 @@
 #define CDS_HELP_PAGE "../goldenPath/help/hgCodonColoring.html"
 #define CDS_MRNA_HELP_PAGE "../goldenPath/help/hgCodonColoringMrna.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.164 2005/01/12 01:25:46 donnak Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.165 2005/01/12 03:29:48 donnak Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -153,8 +153,8 @@ int   snpLocType = 0;
  * page, as the page is very tall and scrolling is tedious. */
 
 printf("<BR><B>Colors and Filters:</B>\n");
-printf("<BR>Use the \"Color Specification\" buttons to specify a group to direct coloring for the track display.\n");
-printf("<BR>Variants can optionally be excluded based on their values in each of the subsequent categories by choosing \"exclude\".\n");
+printf("<BR>Use the &quot;Color Specification&quot; buttons to specify a group to direct coloring for the track display.\n");
+printf("<BR>Variants can optionally be excluded based on their values in each of the subsequent categories by choosing &quot;exclude&quot;.\n");
 printf("<BR>\n");
 
 printf("<BR><B>Color Specification:</B><BR>\n");
@@ -162,7 +162,7 @@ snpColorSourceCart[0] = cartUsualString(cart, snpColorSourceDataName[0], snpColo
 snpColorFilterButtons(snpColorSourceDataName[0], snpColorSourceCart[0]);
 
 snpAvHetCutoff = atof(cartUsualString(cart, "snpAvHetCutoff", "0"));
-printf("<BR><BR><B>Minimum <A HREF=\"#AvHet\">Average Heterozygosity</A>:</B>&nbsp;");
+printf("<BR><B>Minimum <A HREF=\"#AvHet\">Average Heterozygosity</A>:</B>&nbsp;");
 cgiMakeDoubleVar("snpAvHetCutoff",snpAvHetCutoff,6);
 
 printf("<BR><BR><B>Exclude&nbsp;&nbsp;|&nbsp;&nbsp;<A HREF=\"#Source\">Sources</A>:</B><BR>\n");
@@ -344,15 +344,15 @@ void cdsColorOptions(struct trackDb *tdb, int value)
                   "cdsDrawOptions", drawOptionsDefault), "disabled"))
         return;
     
-    printf("<p>Color track by codons:</b>");
+    printf("<p><b>Color track by codons: </b>");
     safef(cdsColorVar, 128, "%s.cds.draw", tdb->tableName );
     cdsDrawDefault = trackDbSettingOrDefault(tdb, "cdsDrawDefault", CDS_DRAW_DEFAULT);
     drawOption = cartUsualString(cart, cdsColorVar, cdsDrawDefault);
     cdsColorDropDown(cdsColorVar, drawOption, value);
     if(value>0)
-        printf("(<a href=%s>Codon coloring help</a>)<br>",CDS_HELP_PAGE);
+        printf("<BR><a href=%s>Help on codon coloring</a><br>",CDS_HELP_PAGE);
     else
-        printf("(<a href=%s>mRNA coloring help</a>)<br>",CDS_MRNA_HELP_PAGE);
+        printf("<BR><a href=%s>Help on mRNA coloring</a><br>",CDS_MRNA_HELP_PAGE);
 }
 
 void blastSGUi(struct trackDb *tdb)
@@ -565,7 +565,7 @@ char *filterSetting;
 char filterVar[256];
 char *filterVal = "";
 
-printf("<p><b>Filter by chromosome (eg. chr10) </b>: ");
+printf("<p><b>Filter by chromosome (eg. chr10):</b> ");
 snprintf(filterVar, sizeof(filterVar), "%s.chromFilter", tdb->tableName);
 filterSetting = cartUsualString(cart, filterVar, filterVal);
 cgiMakeTextVar(filterVar, cartUsualString(cart, filterVar, ""), 5);
@@ -589,7 +589,7 @@ snprintf(scoreVar, sizeof(scoreVar), "%s.scoreFilter", tdb->tableName);
 scoreSetting = cartUsualInt(cart,  scoreVar,  scoreVal);
 safef(tempScore, sizeof(tempScore), "%d",scoreSetting);
 cgiMakeTextVar( scoreVar, tempScore, 11);
-printf("  Data Range (0-2000000000)");
+printf("&nbsp;&nbsp;(range: 0&nbsp;to&nbsp;2000000000)");
 }
 
 void crossSpeciesUi(struct trackDb *tdb)
@@ -601,7 +601,7 @@ char *colorSetting;
  * overridden by the colorChromDefault setting in the track */
 char *colorDefault = trackDbSettingOrDefault(tdb, "colorChromDefault", "on");
 
-printf("<p><b>Color track based on chromosome</b>: ");
+printf("<p><b>Color track based on chromosome:</b> ");
 snprintf(colorVar, sizeof(colorVar), "%s.color", tdb->tableName);
 colorSetting = cartUsualString(cart, colorVar, colorDefault);
 cgiMakeRadioButton(colorVar, "on", sameString(colorSetting, "on"));
@@ -784,13 +784,11 @@ wigFetchMinMaxY(tdb, &minY, &maxY, &tDbMinY, &tDbMaxY, wordCount, words);
 (void) wigFetchYLineMark(tdb, &yLineMarkOnOff);
 wigFetchYLineMarkValue(tdb, &yLineMark);
 
-puts("<A HREF=\"/goldenPath/help/hgWiggleTrackHelp.html\" TARGET=_blank>"
-     "Graph configuration help</A>");
 printf("<TABLE BORDER=0><TR><TD ALIGN=LEFT>\n");
 
 printf("<b>Type of graph:&nbsp;</b>");
 wiggleGraphDropDown(&options[8][0], lineBar);
-printf("</TD><TD ALIGN=LEFT>\n");
+printf("</TD></TR><TR><TD ALIGN=LEFT COLSPAN=2>\n");
 
 printf("<b>y&nbsp;=&nbsp;0.0 line:&nbsp;</b>");
 wiggleGridDropDown(&options[7][0], horizontalGrid);
@@ -798,7 +796,7 @@ printf(" </TD></TR><TR><TD ALIGN=LEFT COLSPAN=2>\n");
 
 printf("<b>Track height:&nbsp;</b>");
 cgiMakeIntVar(&options[0][0], defaultHeight, 5);
-printf("&nbsp;pixels&nbsp;(range:&nbsp;%d-%d)",
+printf("&nbsp;pixels&nbsp;&nbsp;(range:&nbsp;%d&nbsp;to&nbsp;%d)",
 	minHeightPixels, maxHeightPixels);
 printf("</TD></TR><TR><TD ALIGN=LEFT COLSPAN=2>\n");
 
@@ -806,20 +804,30 @@ printf("<b>Vertical viewing range</b>:&nbsp;&nbsp;\n<b>min:&nbsp;</b>");
 cgiMakeDoubleVar(&options[4][0], minY, 6);
 printf("&nbsp;&nbsp;&nbsp;&nbsp;<b>max:&nbsp;</b>");
 cgiMakeDoubleVar(&options[5][0], maxY, 6);
-printf("<BR>\n&nbsp; &nbsp;(viewing range limits:&nbsp;min:&nbsp;%g&nbsp;&nbsp;max:&nbsp;%g)",
+printf("\n&nbsp; &nbsp;(range: &nbsp;%g&nbsp;to&nbsp;%g)",
     tDbMinY, tDbMaxY);
-printf("<BR>\n<b>Data view scaling:&nbsp;</b>");
+printf("</TD></TR><TR><TD ALIGN=LEFT COLSPAN=2>\n");
+
+printf("<b>Data view scaling:&nbsp;</b>");
 wiggleScaleDropDown(&options[9][0], autoScale);
-printf("<BR>\n<b>Windowing function:&nbsp;</b>");
+printf("</TD></TR><TR><TD ALIGN=LEFT COLSPAN=2>\n");
+
+printf("<b>Windowing function:&nbsp;</b>");
 wiggleWindowingDropDown(&options[10][0], windowingFunction);
-printf("<BR>\n<b>Smoothing window:&nbsp;</b>");
+printf("</TD></TR><TR><TD ALIGN=LEFT COLSPAN=2>\n");
+
+printf("<b>Smoothing window:&nbsp;</b>");
 wiggleSmoothingDropDown(&options[11][0], smoothingWindow);
 printf("&nbsp;pixels");
-printf("<BR>\n<b>Draw indicator line at y&nbsp;=&nbsp;</b>&nbsp;\n");
+printf("</TD></TR><TR><TD ALIGN=LEFT COLSPAN=2>\n");
+
+printf("<b>Draw indicator line at y&nbsp;=&nbsp;</b>&nbsp;\n");
 cgiMakeDoubleVar(&options[12][0], yLineMark, 6);
 printf("&nbsp;&nbsp;");
 wiggleYLineMarkDropDown(&options[13][0], yLineMarkOnOff);
 printf("</TD></TR></TABLE>\n");
+puts("<BR><A HREF=\"/goldenPath/help/hgWiggleTrackHelp.html\" TARGET=_blank>"
+     "Graph configuration help</A>");
 
 freeMem(typeLine);
 
@@ -966,7 +974,7 @@ safef(option, sizeof option, "%s.%s", tdb->tableName, MAF_CHAIN_VAR);
 cgiMakeCheckBox(option, cartCgiUsualBoolean(cart, option, FALSE));
 puts("Display unaligned bases with spanning chain as o's" );
 
-puts("<P><B>Codon highlighting:</B></P>" );
+puts("<P><B>Codon highlighting:</B><BR>" );
 
 #ifdef GENE_FRAMING
 
@@ -1305,7 +1313,7 @@ void trackUi(struct trackDb *tdb)
 {
 char *vis = hStringFromTv(tdb->visibility);
 printf("<H1>%s</H1>\n", tdb->longLabel);
-printf("<B>Display mode:</B>");
+printf("<B>Display mode: </B>");
 hTvDropDown(tdb->tableName, 
     hTvFromString(cartUsualString(cart,tdb->tableName, vis)), tdb->canPack);
 printf(" ");
