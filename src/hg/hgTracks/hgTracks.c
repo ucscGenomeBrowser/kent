@@ -10225,10 +10225,22 @@ else if (winStart == winEnd)
     winStart -= 1000;
     winEnd += 1000;
     }
+
 if (winStart < 0)
+    {
     winStart = 0;
-if (winEnd > seqBaseCount)
+    }
+
+if (winEnd > seqBaseCount) 
+    {
     winEnd = seqBaseCount;
+    }
+
+if (winStart > seqBaseCount)
+    {
+    winStart = seqBaseCount - 1000;
+    }
+
 winBaseCount = winEnd - winStart;
 if (winBaseCount <= 0)
     errAbort("Window out of range on %s", chromName);
