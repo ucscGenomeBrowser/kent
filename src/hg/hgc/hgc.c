@@ -3986,7 +3986,7 @@ genericHeader(tdb, item);
 wordCount = chopLine(dupe, words);
 printCustomUrl(tdb, item, TRUE);
 hFindSplitTable(seqName, tdb->tableName, table, &hasBin);
-sprintf(query, "select * from %s where name = '%s' and chrom = '%s'", table, item, seqName);
+sprintf(query, "select * from %s where name = '%s' and chrom = '%s' and chromStart = %d", table, item, seqName, start);
 sr = sqlGetResult(conn, query);
 
 while ((row = sqlNextRow(sr)) != NULL)
@@ -4020,12 +4020,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 
     }
 
-
-if( firstTime )
-    errAbort( "No database entry for: %s\n<br>", item );
-
 htmlHorizontalLine();
-
 printf("<i>human sequence on top, mouse on bottom</i><br><br>" );
 /* look in associated table 'ancientRref' to get human/mouse alignment*/
 sprintf(query, "select * from %sref where id = '%s'", table, item );
@@ -4152,6 +4147,42 @@ else
 return color;
 }
 
+struct rgbColor getColorForAffyBed(float val, float max)
+/* Return the correct color for a given score */
+{
+struct rgbColor color; 
+int colorIndex = 0;
+val = fabs(val);
+/* take the log for visualization */
+if(val > 0)
+    val = logBase2(val);
+else
+    val = 0;
+
+/* scale 4 down to 0 */
+if(val > 4) 
+    val -= 4;
+else
+    val = 0;
+
+if (max <= 0) 
+    errAbort("ERROR: hgc::getColorForAffyBed() maxDeviation can't be zero\n"); 
+max = logBase2(max);
+max -= 4;
+if(max < 0)
+    errAbort("hgc::getColorForAffyBed() - Max val should be greater than 0 but it is: %g", max);
+    
+if(val > max) 
+    val = max;
+
+colorIndex = (int)(val * 255/max);
+color.r = 0;
+color.g = 0;
+color.b = colorIndex;
+return color;
+}
+
+
 void abbr(char *s, char *fluff)
 /* Cut out fluff from s. */
 {
@@ -4213,7 +4244,7 @@ for(i = 0; i < length; i++)
 	    {
 	    printf("</font>");
 	    }
-	printf("</tr></td>");
+	printf("</td></tr>");
 	}
     printf("\n");
     }
@@ -4270,26 +4301,52 @@ char *scoresHeader ="CGH Log Ratio";
 msBedPrintTableHeader(bedList, erHash, itemName, headerNames, ArraySize(headerNames), scoresHeader);
 }
 
-void printExprssnColorKey(float maxVal,
+void printExprssnColorKey(float minVal, float maxVal, float stepSize,
 			  struct rgbColor(*getColor)(float val, float maxVal))
 /* print out a little table which provides a color->score key */
 {
 float currentVal = -1 * maxVal;
 int square = 15;
 int numColumns;
-float stepSize = .2;
-assert(stepSize > 0);
+assert(stepSize != 0);
 
 numColumns = maxVal/stepSize *2+1;
 printf("<TABLE  BGCOLOR=\"#000000\" BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"1\"><TR><TD>");
 printf("<TABLE  BGCOLOR=\"#fffee8\" BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"1\"><TR>");
 printf("<th colspan=%d>False Color Key, all values log base 2</th></tr><tr>\n",numColumns);
-for(currentVal = -1 * maxVal; currentVal <= maxVal + stepSize; currentVal += stepSize)
+for(currentVal = minVal; currentVal <= maxVal + stepSize; currentVal += stepSize)
     {
     printf("<th><b>%.2f</b></th>", currentVal);
     }
 printf("</tr><tr>\n");
-for(currentVal = -1 * maxVal; currentVal <= maxVal + stepSize; currentVal += stepSize)
+for(currentVal = minVal; currentVal <= maxVal + stepSize; currentVal += stepSize)
+    {
+    struct rgbColor rgb = getColor(currentVal, maxVal);
+    printf("<td bgcolor=\"#%.2X%.2X%.2X\">&nbsp</td>\n", rgb.r, rgb.g, rgb.b);
+    }
+printf("</tr></table>\n");
+printf("</td></tr></table>\n");
+}
+
+void printAffyExprssnColorKey(float minVal, float maxVal, float stepSize,
+			  struct rgbColor(*getColor)(float val, float maxVal))
+/* print out a little table which provides a color->score key */
+{
+float currentVal = -1 * maxVal;
+int square = 15;
+int numColumns;
+
+assert(maxVal && minVal);
+numColumns = logBase2(maxVal) - logBase2(minVal);
+printf("<TABLE  BGCOLOR=\"#000000\" BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"1\"><TR><TD>\n");
+printf("<TABLE  BGCOLOR=\"#fffee8\" BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"1\">\n<tr>");
+printf("<th colspan=%d>False Color Key</th></tr>\n<tr>",numColumns);
+for(currentVal = minVal; (currentVal < maxVal && maxVal >= 2*currentVal); currentVal = (2*currentVal))
+    {
+    printf("<th><b> %7.2g </b></th>", currentVal);
+    }
+printf("</tr>\n<tr>");
+for(currentVal = minVal; (currentVal <= maxVal && maxVal >= 2*currentVal); currentVal = (2*currentVal))
     {
     struct rgbColor rgb = getColor(currentVal, maxVal);
     printf("<td bgcolor=\"#%.2X%.2X%.2X\">&nbsp</td>\n", rgb.r, rgb.g, rgb.b);
@@ -4325,10 +4382,39 @@ for(bed = bedList;bed != NULL; bed = bed->next)
 printf("</tr>\n");
 }
 
-void msBedPrintTable(struct bed *bedList, struct hash *erHash, char *itemName, char *expName, float maxScore,
+void msBedAffyPrintRow(struct bed *bedList, struct hash *erHash, int expIndex, char *expName, float maxScore)
+/* print the name of the experiment and color the 
+   background of individual cells using the score to 
+   create false two color display */
+{
+char buff[32];
+struct bed *bed = bedList;
+struct expRecord *er = NULL;
+int square = 10;
+snprintf(buff, sizeof(buff), "%d", expIndex);
+er = hashMustFindVal(erHash, buff);
+
+printf("<tr>\n");
+if(strstr(er->name, expName))
+    printf("<td align=left bgcolor=\"D9E4F8\"> %s</td>\n",er->name);
+else
+    printf("<td align=left> %s</td>\n", er->name);
+
+for(bed = bedList;bed != NULL; bed = bed->next)
+    {
+	/* use the background colors to creat patterns */
+	struct rgbColor rgb = getColorForAffyBed(bed->expScores[expIndex], maxScore);
+	printf("<td height=%d width=%d bgcolor=\"#%.2X%.2X%.2X\">&nbsp</td>\n", square, square, rgb.r, rgb.g, rgb.b);
+	}
+printf("</tr>\n");
+}
+
+
+void msBedPrintTable(struct bed *bedList, struct hash *erHash, char *itemName, 
+		     char *expName, float minScore, float maxScore, float stepSize,
 		     void(*printHeader)(struct bed *bedList, struct hash *erHash, char *item),
 		     void(*printRow)(struct bed *bedList,struct hash *erHash, int expIndex, char *expName, float maxScore),
-		     void(*printKey)(float maxVal, struct rgbColor(*getColor)(float val, float max)),
+		     void(*printKey)(float minVal, float maxVal, float size, struct rgbColor(*getColor)(float val, float max)),
 		     struct rgbColor(*getColor)(float val, float max))
 /* prints out a table from the data present in the bedList */
 {
@@ -4341,11 +4427,11 @@ if(bedList == NULL)
 featureCount = slCount(bedList);
 /* time to write out some html, first the table and header */
 if(printKey != NULL)
-    printKey(maxScore, getColor);
+    printKey(minScore, maxScore, stepSize, getColor);
 printf("<p>\n");
 printf("<basefont size=-1>\n");
 printf("<table  bgcolor=\"#000000\" border=\"0\" cellspacing=\"0\" cellpadding=\"1\"><tr><td>");
-printf("<table  bgcolor=\"#fffee8\" border=\"0\" cellspacing=\"0\" cellpadding=\"1\"><tr>");
+printf("<table  bgcolor=\"#fffee8\" border=\"0\" cellspacing=\"0\" cellpadding=\"1\">");
 printHeader(bedList, erHash, itemName);
 for(i=0; i<bedList->expCount; i++)
     {
@@ -4537,6 +4623,7 @@ void rosettaPrintDataTable(struct bed *bedList, char *itemName, char *expName, f
 {
 struct expRecord *erList = NULL, *er;
 struct hash *erHash;
+float stepSize = 0.2;
 char buff[32];
 if(bedList == NULL)
     printf("<b>No Expression Data in this Range.</b>\n");
@@ -4549,7 +4636,8 @@ else
 	snprintf(buff, sizeof(buff), "%d", er->id);
 	hashAddUnique(erHash, buff, er);
 	}
-    msBedPrintTable(bedList, erHash, itemName, expName, maxScore, rosettaPrintHeader, rosettaPrintRow, printExprssnColorKey, getColorForExprBed);
+    msBedPrintTable(bedList, erHash, itemName, expName, -1*maxScore, maxScore, stepSize, 
+		    rosettaPrintHeader, rosettaPrintRow, printExprssnColorKey, getColorForExprBed);
     expRecordFreeList(&erList);
     hashFree(&erHash);
     bedFreeList(&bedList);
@@ -4631,6 +4719,7 @@ char *itemName = cgiUsualString("i2","none");
 struct expRecord *erList = NULL, *er;
 char buff[32];
 struct hash *erHash;
+float stepSize = 0.2;
 float maxScore = 1.6;
 bedList = loadMsBed(tdb->tableName, seqName, winStart, winEnd);
 genericHeader(tdb, itemName);
@@ -4648,13 +4737,53 @@ else
 	snprintf(buff, sizeof(buff), "%d", er->id);
 	hashAddUnique(erHash, buff, er);
 	}
-    msBedPrintTable(bedList, erHash, itemName, expName, maxScore, msBedDefaultPrintHeader, msBedExpressionPrintRow, printExprssnColorKey, getColorForExprBed);
+    msBedPrintTable(bedList, erHash, itemName, expName, -1*maxScore, maxScore, stepSize,
+		    msBedDefaultPrintHeader, msBedExpressionPrintRow, printExprssnColorKey, getColorForExprBed);
     expRecordFreeList(&erList);
     hashFree(&erHash);
     bedFreeList(&bedList);
     }
 webEnd();
 }
+
+void affyDetails(struct trackDb *tdb, char *expName) 
+/* print out a page for the affy data from stanford */
+{
+struct bed *bedList;
+char *tableName = "affyExps";
+char *itemName = cgiUsualString("i2","none");
+int stepSize = 1;
+struct expRecord *erList = NULL, *er;
+char buff[32];
+struct hash *erHash;
+float maxScore = 262144; /* 2^18 */
+float minScore = 16; /* 2^4 */
+bedList = loadMsBed(tdb->tableName, seqName, winStart, winEnd);
+genericHeader(tdb, itemName);
+printf("<h2></h2><p>\n");
+printf("%s", tdb->html);
+printf("<br><br>");
+if(bedList == NULL)
+    printf("<b>No Expression Data in this Range.</b>\n");
+else 
+    {
+    erHash = newHash(2);
+    erList = loadExpRecord(tableName, "hgFixed");
+    for(er = erList; er != NULL; er=er->next)
+	{
+	snprintf(buff, sizeof(buff), "%d", er->id);
+	hashAddUnique(erHash, buff, er);
+	}
+    printf("<h2></h2><p>\n");
+    msBedPrintTable(bedList, erHash, itemName, expName, minScore, maxScore, stepSize,
+		    msBedDefaultPrintHeader, msBedAffyPrintRow, printAffyExprssnColorKey, getColorForAffyBed);
+    expRecordFreeList(&erList);
+    hashFree(&erHash);
+    bedFreeList(&bedList);
+    }
+webEnd();
+}
+
 
 void oligoSelectionDetails(struct trackDb *tdb, char *oligoName)
 {}
@@ -4764,6 +4893,7 @@ char *itemName = cgiUsualString("i2","none");
 struct expRecord *erList = NULL, *er;
 char buff[32];
 struct hash *erHash;
+float stepSize = 0.2;
 float maxScore = 1.6;
 bedList = loadMsBed(tdb->tableName, seqName, winStart, winEnd);
 genericHeader(tdb, itemName);
@@ -4783,7 +4913,8 @@ else
 	snprintf(buff, sizeof(buff), "%d", er->id);
 	hashAddUnique(erHash, buff, er);
 	}
-    msBedPrintTable(bedList, erHash, itemName, expName, maxScore, cghNci60PrintHeader, msBedCghPrintRow, printExprssnColorKey, getColorForCghBed);
+    msBedPrintTable(bedList, erHash, itemName, expName, -1 * maxScore,  maxScore, stepSize,
+		    cghNci60PrintHeader, msBedCghPrintRow, printExprssnColorKey, getColorForCghBed);
     expRecordFreeList(&erList);
     hashFree(&erHash);
     bedFreeList(&bedList);
@@ -5033,8 +5164,6 @@ cgiMakeHiddenVar("db",database);
 printf("<br>\n");*/
 chuckHtmlContactInfo();
 }
-
-
 
 #endif /*CHUCK_CODE*/
 
@@ -5342,6 +5471,10 @@ else if (sameWord(track, "perlegen"))
 else if(sameWord(track, "rosetta"))
     {
     rosettaDetails(tdb, item);
+    }
+else if(sameWord(track, "affy"))
+    {
+    affyDetails(tdb, item);
     }
 else if(sameWord(track, "loweProbes"))
     {
