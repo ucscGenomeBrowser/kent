@@ -42,7 +42,6 @@ if (strictTab)
     wordCount = chopTabs(line, words);
 else
     wordCount = chopLine(line, words);
-wordCount = lineFileChop(lf, words);
 if (wordCount == 0)
     errAbort("%s appears to be empty", fileName);
 lineFileClose(&lf);
