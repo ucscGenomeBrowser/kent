@@ -14,7 +14,7 @@
 #include "hgMaf.h"
 #include "mafTrack.h"
 
-static char const rcsid[] = "$Id: wigMafTrack.c,v 1.54 2005/02/11 18:40:52 kate Exp $";
+static char const rcsid[] = "$Id: wigMafTrack.c,v 1.55 2005/02/11 23:02:12 kate Exp $";
 
 struct wigMafItem
 /* A maf track item -- 
@@ -510,7 +510,7 @@ static void drawMafScore(char *tableName, int height,
 struct mafAli *mafList;
 struct sqlConnection *conn;
 
-if (seqEnd - seqStart > 200000)
+if (seqEnd - seqStart > 300000)
     drawScoreOverview(tableName, height, seqStart, seqEnd, vg, xOff, yOff,
                           width, font, color, color, vis);
 else
