@@ -20,7 +20,7 @@
 #include "cheapcgi.h"
 #include "trans3.h"
 
-static char const rcsid[] = "$Id: gfServer.c,v 1.44 2004/08/03 22:20:33 galt Exp $";
+static char const rcsid[] = "$Id: gfServer.c,v 1.45 2004/08/24 17:49:24 kent Exp $";
 
 int maxNtSize = 40000;
 int maxAaSize = 8000;
@@ -43,7 +43,7 @@ void usage()
 /* Explain usage and exit. */
 {
 errAbort(
-  "gfServer v %d - Make a server to quickly find where DNA occurs in genome.\n"
+  "gfServer v %dx1 - Make a server to quickly find where DNA occurs in genome.\n"
   "To set up a server:\n"
   "   gfServer start host port file(s)\n"
   "   Where the files are in .nib or .2bit format\n"
@@ -593,56 +593,59 @@ for (;;)
 		++warnCount;
 		queryIsProt = FALSE;
 		}
-	    buf[0] = 'Y';
-	    if (write(connectionHandle, buf, 1) == 1)
+	    else
 		{
-		seq.size = atoi(s);
-		seq.name = NULL;
-		if (seq.size > 0)
+		buf[0] = 'Y';
+		if (write(connectionHandle, buf, 1) == 1)
 		    {
-		    ++blatCount;
-		    seq.dna = needLargeMem(seq.size+1);
-		    if (gfReadMulti(connectionHandle, seq.dna, seq.size) != seq.size)
+		    seq.size = atoi(s);
+		    seq.name = NULL;
+		    if (seq.size > 0)
 			{
-			warn("Didn't sockRecieveString all %d bytes of query sequence", seq.size);
-			++warnCount;
-			}
-		    else
-			{
-			int maxSize = (doTrans ? maxAaSize : maxNtSize);
+			++blatCount;
+			seq.dna = needLargeMem(seq.size+1);
+			if (gfReadMulti(connectionHandle, seq.dna, seq.size) != seq.size)
+			    {
+			    warn("Didn't sockRecieveString all %d bytes of query sequence", seq.size);
+			    ++warnCount;
+			    }
+			else
+			    {
+			    int maxSize = (doTrans ? maxAaSize : maxNtSize);
 
-			seq.dna[seq.size] = 0;
-			if (queryIsProt)
-			    {
-			    seq.size = aaFilteredSize(seq.dna);
-			    aaFilter(seq.dna, seq.dna);
+			    seq.dna[seq.size] = 0;
+			    if (queryIsProt)
+				{
+				seq.size = aaFilteredSize(seq.dna);
+				aaFilter(seq.dna, seq.dna);
+				}
+			    else
+				{
+				seq.size = dnaFilteredSize(seq.dna);
+				dnaFilter(seq.dna, seq.dna);
+				}
+			    if (seq.size > maxSize)
+				{
+				++trimCount;
+				seq.size = maxSize;
+				seq.dna[maxSize] = 0;
+				}
+			    if (queryIsProt)
+				aaCount += seq.size;
+			    else
+				baseCount += seq.size;
+			    if (seqLog && logFile != NULL)
+				{
+				faWriteNext(logFile, "query", seq.dna, seq.size);
+				fflush(logFile);
+				}
+			    errorSafeQuery(doTrans, queryIsProt, &seq, gf, 
+				    transGf, connectionHandle, buf);
 			    }
-			else
-			    {
-			    seq.size = dnaFilteredSize(seq.dna);
-			    dnaFilter(seq.dna, seq.dna);
-			    }
-			if (seq.size > maxSize)
-			    {
-			    ++trimCount;
-			    seq.size = maxSize;
-			    seq.dna[maxSize] = 0;
-			    }
-			if (queryIsProt)
-			    aaCount += seq.size;
-			else
-			    baseCount += seq.size;
-			if (seqLog && logFile != NULL)
-			    {
-			    faWriteNext(logFile, "query", seq.dna, seq.size);
-			    fflush(logFile);
-			    }
-			errorSafeQuery(doTrans, queryIsProt, &seq, gf, 
-				transGf, connectionHandle, buf);
+			freez(&seq.dna);
 			}
-		    freez(&seq.dna);
+		    netSendString(connectionHandle, "end");
 		    }
-		netSendString(connectionHandle, "end");
 		}
 	    }
 	}
