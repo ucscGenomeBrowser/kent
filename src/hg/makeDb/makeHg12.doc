@@ -1413,7 +1413,10 @@ o - # ssh hgwdev
     stanToBedAndExpRecs  hg12.image.good.psl hg12.nci60.exp hg12.nci60.bed `cat epo.txt`
     hg12S -A < ../../scripts/nci60.sql
     echo "load data local infile 'hg12.nci60.bed' into table nci60" | hg12S -A
-    
+    mkdir /cluster/store3/gs.13/build30/bed/nci60
+    mv hg12.nci60.bed /cluster/store3/gs.13/build30/bed/nci60
+    rm *.psl 
+
 LOAD AFFYRATIO [GNF] (Done: Chuck Sugnet 7/24/02)
 o - # ssh hgwdev
     cd /cluster/store1/sugnet/
@@ -1438,6 +1441,7 @@ o - # ssh hgwdev
     affyPslAndAtlasToBed hg12.affy.pAffySelect.95.95.psl  /projects/compbiodata/microarray/affyGnf/human_atlas_U95_gnf.noquotes.txt affyRatio.bed affyRatio.exr >& affyPslAndAtlasToBed.log 
     hg12S -A </projects/compbiodata/microarray/affyGnf/browserFiles/affyRatio.sql 
     echo "load data local infile 'affyRatio.bed' into table affyRatio" | hg12S -A
+    mkdir /cluster/store3/gs.13/build30/bed/affyGnf
     rm -rf psl tmp err *.psl *.bed HG-U95Av2_target 
 
 
