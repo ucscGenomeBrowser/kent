@@ -1477,6 +1477,64 @@ the short p arm. The coordinates differ between assemblies.
 	None.</TD></TR>
 </TABLE></P>
 
+<P><B>Best Mouse</B><BR>
+<P>This track displays <I>Blastz</I> alignments of the Feb. 2002 mouse draft
+assembly to the human genome filtered to display only the best alignment for any
+given region of the human genome.  See the track's description page for more 
+details. 
+
+<TABLE CELLPADDING=0 CELLSPACING=0>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Display conventions:</I></B>
+	This track uses the display conventions for cross-species synteny 
+	tracks.</TD></TR>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Track details:</I></B> 
+	Clicking on an entry in full display mode will show human and 
+	mouse position information, alignment details, and link to a detailed
+	view of parts of the alignment.
+	links.</TD></TR>
+	<B><I>Track filter:</I></B> 
+	The track description page contains a filter that can be used to turn 
+	on the chromosome color track or to filter the display output by 
+	chromosome.
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Table details:</I></B> 
+	To view a text version of the data set, select the 
+	<I>blastzBestMouse</I> position table in the Table Browser. To view the table
+	definition, click <A
+	HREF="http://genome.ucsc.edu/goldenPath/gbdDescriptions.html#PslInfo"
+	TARGET=_blank>here</A>.</TD></TR>
+</TABLE></P>
+
+<P><B>Blastz Mouse</B><BR>
+This track displays <EM>blastz</EM> alignments of the Feb. 2002 mouse draft
+assembly to the human genome.
+
+<TABLE CELLPADDING=0 CELLSPACING=0>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Display conventions:</I></B>
+	This track uses the display conventions for cross-species synteny 
+	tracks.</TD></TR>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Track details:</I></B> 
+	Clicking on an entry in full display mode will show human and 
+	mouse position information, alignment details, and link to a detailed
+	view of parts of the alignment.
+	links.</TD></TR>
+	<B><I>Track filter:</I></B> 
+	The track description page contains a filter that can be used to turn 
+	on the chromosome color track or to filter the display output by 
+	chromosome.
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Table details:</I></B> 
+	To view a text version of the data set, select the 
+	<I>blastzMm2</I> position table in the Table Browser. To view the table
+	definition, click <A
+	HREF="http://genome.ucsc.edu/goldenPath/gbdDescriptions.html#PslInfo"
+	TARGET=_blank>here</A>.</TD></TR>
+</TABLE></P>
+
 <P><B>Chimp BAC Ends </B><BR>
 This track displays BAC alignments of the chimp genome (Pan troglodytes) to human, based on Blat alignments from Ingo Ebersberger, Joshua Bacher, and Svante Pääbo at the <A HREF="http://www.eva.mpg.de" TARGET=_blank>MPI for Evolutionary Anthropology</A>. 
 
@@ -1765,6 +1823,31 @@ the draft assembly sequence.
 	<I>fishClones</I> position table in the Table Browser. To view the table
 	definition, click <A
 	HREF="http://genome.ucsc.edu/goldenPath/gbdDescriptions.html#FishClones"
+	TARGET=_blank>here</A>.</TD></TR>
+</TABLE></P>
+
+<P><B>Fosmid End Pairs</B><BR>
+A valid pair of fosmid end sequences must be at least 32Kb but no more than 47Kb 
+away from each other. The orientation of the first fosmid end sequence must be 
+"+" and the orientation of the second fosmid end sequence must be "-". End 
+sequences were trimmed at the NCBI using ssahaCLIP written by Jim Mullikan. 
+The trimmed end sequences were placed on the assembled sequence using Jim 
+Kent's BLAT program. 
+
+<TABLE CELLPADDING=0 CELLSPACING=0>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Display conventions:</I></B>
+	This track uses the display conventions for mRNA tracks.</TD></TR>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Track details:</I></B>
+	Clicking on an entry in full display mode will show position information 
+	and provide links to genomic alignments of the Fosmid ends.</TD></TR>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Table details:</I></B> 
+	To view a text version of the data set, select the 
+	<I>fosEndPairs</I> position table in the Table Browser. To view the table
+	definition, click <A
+	HREF="../gbdDescriptions.html#FosEndPairs"
 	TARGET=_blank>here</A>.</TD></TR>
 </TABLE></P>
 
@@ -2748,6 +2831,32 @@ These tracks contain the Sanger Centre annotations of chromosome 22.
 	TARGET=_blank>here</A>.</TD></TR>
 </TABLE></P>
 
+<P><B>SGP Genes </B><BR>
+This track shows gene predictions from the SGP program, which is being developed 
+at the Grup de Recerca en Informàtica Biomèdica (GRIB) at Institut Municipal 
+d'Investigació Mèdica (IMIM) in Barcelona. To predict genes in a genomic query, 
+SGP combines geneid predictions with tblastx comparisons of the genomic query 
+against other genomic sequences.
+
+<TABLE CELLPADDING=0 CELLSPACING=0>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Display conventions:</I></B>
+	This track uses the display conventions for known genes and gene 
+	predictions tracks.  </TD></TR> 
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Track details:</I></B> 
+	Clicking on an entry in full display mode provides position information
+	as well as links to the corresponding protein, mRNA, genomic, and 
+	comparative sequences.</TD></TR>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Table details:</I></B> 
+	To view a text version of the data set, select the 
+	<I>sgpGene</I> position table in the Table Browser. To view the table
+	definition, click <A
+	HREF="http://genome.ucsc.edu/goldenPath/gbdDescriptions.html#GenePredictions"
+	TARGET=_blank>here</A>.</TD></TR>
+</TABLE></P>
+
 <P><B>Simple Repeats</B><BR>
 This track displays simple tandem repeats (possibly imperfect) located by 
 <A HREF="http://tandem.biomath.mssm.edu/trf/trf.html">Tandem Repeat Finder</A>, which 
@@ -2864,6 +2973,62 @@ Laboratory.
 	<I>stsMapMouse</I> position table in the Table Browser. To view the table
 	definition, click <A
 	HREF="http://genome.ucsc.edu/goldenPath/gbdDescriptions.html#STSMap"
+	TARGET=_blank>here</A>.</TD></TR>
+</TABLE></P>
+
+<P><B>Superfamily </B><BR>
+The Superfamily track shows proteins having homologs with known structures or 
+functions. Each entry in the track shows the coding region of a gene (based on 
+Ensembl gene prediction). The label, shown in Full mode at the left
+hand side of each entry, consists of the names of all known protein domains 
+coded by this gene. This usually contains structural and/or function descriptions
+that provide valuable information for getting a quick grasp of the biological 
+significance for the gene. 
+
+<TABLE CELLPADDING=0 CELLSPACING=0>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Display conventions:</I></B>
+	Coding regions are indicated by red blocks.</TD></TR>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Track details:</I></B> 
+	Clicking on an entry in full display mode will show the Superfamily 
+	domains of the corresponding protein and provide a link to the Superfamily	  database entry.</TD></TR>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Table details:</I></B> 
+	To view a text version of the data set, select the 
+	<I>superfamily</I> position table in the Table Browser. To view the table
+	definition, click <A
+	HREF="http://genome.ucsc.edu/goldenPath/gbdDescriptions.html#Superfamily"
+	TARGET=_blank>here</A>.</TD></TR>
+</TABLE></P>
+
+<P><B>Tight Mouse</B><BR>
+This track displays <I>Blastz</I> alignments of the Feb. 2002 mouse
+draft assembly to the human genome, filtered by <I>axtBest</I> and
+<I>subsetAxt</I> with very stringent constraints. See the track's description
+page for more details. 
+
+<TABLE CELLPADDING=0 CELLSPACING=0>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Display conventions:</I></B>
+	This track uses the display conventions for cross-species synteny 
+	tracks.</TD></TR>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Track details:</I></B> 
+	Clicking on an entry in full display mode will show human and 
+	mouse position information, alignment details, and link to a detailed
+	view of parts of the alignment.
+	links.</TD></TR>
+	<B><I>Track filter:</I></B> 
+	The track description page contains a filter that can be used to turn 
+	on the chromosome color track or to filter the display output by 
+	chromosome.</TD></TR>
+		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
+	<B><I>Table details:</I></B> 
+	To view a text version of the data set, select the 
+	<I>blastzTightMouse</I> position table in the Table Browser. To view the table
+	definition, click <A
+	HREF="http://genome.ucsc.edu/goldenPath/gbdDescriptions.html#PslInfo"
 	TARGET=_blank>here</A>.</TD></TR>
 </TABLE></P>
 
