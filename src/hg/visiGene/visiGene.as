@@ -10,6 +10,7 @@ table strain
 "Name of strain (eg C56BL for a mouse)"
     (
     int id;	"ID of strain"
+    int taxon;	"NCBI taxon of organism"
     string name;	"Name of strain"
     )
 
