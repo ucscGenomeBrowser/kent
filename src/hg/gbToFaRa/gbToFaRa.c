@@ -633,8 +633,8 @@ DNA b;
 int nCount = 0;
 boolean isN, lastIsN = TRUE;
 boolean open = FALSE;
-int nFirstIx;
-int firstIx;
+int nFirstIx = 0;
+int firstIx = 0;
 
 for (i=0; i<dnaSize; ++i)
     {
@@ -955,7 +955,9 @@ else
     warn("Unexpected %s style on %s", styleName, accession);
     return FALSE;
     }
+return FALSE;
 }
+
 void bacWrite(char *faDir, char *accession, int version, DNA *dna, int dnaSize)
 /* Write all the contigs of one BAC to a file. */
 {
@@ -1065,6 +1067,11 @@ while (readGbInfo(lf))
         flatten(gbStruct);
                 
         /* Get additional keys. */
+	if (com != NULL)
+	    {
+	    if (startsWith("REVIEWED", com))
+	        kvtAdd(kvt, "cur", "yes");
+	    }
 	sprintf(verNum, "%d", version);
 	kvtAdd(kvt, "ver", verNum);
 	if (gi != NULL)
