@@ -139,7 +139,7 @@
 #include "HInv.h"
 #include "bed6FloatScore.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.643 2004/05/26 22:37:47 angie Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.644 2004/05/28 01:09:42 angie Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -6840,10 +6840,16 @@ if (url != NULL && url[0] != 0)
 	return;
 	}
 
-    printf("<B>Ensembl Gene Link: </B>");
-    printf("<A HREF=\"http://www.ensembl.org/%s/geneview?transcript=%s\" target=_blank>", 
-	   genomeStrEnsembl,shortItemName);
-    printf("%s</A><br>", itemName);
+    if (stringIn("pre.ensembl.org", url))
+	printCustomUrl(tdb, itemName, TRUE);
+    else
+	{
+	printf("<B>Ensembl Gene Link: </B>");
+	printf("<A HREF=\"http://www.ensembl.org/%s/geneview?transcript=%s\" "
+	       "target=_blank>", 
+	       genomeStrEnsembl,shortItemName);
+	printf("%s</A><br>", itemName);
+	}
 
     if (hTableExists("superfamily"))
 	{
