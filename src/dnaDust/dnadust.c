@@ -1,10 +1,13 @@
+/* dnaDust - A little web utility that reformats
+ * DNA sequence in some simple but useful ways. */
+
 #include "common.h"
 #include "htmshell.h"
 #include "cheapcgi.h"
 #include "dnautil.h"
 
-/* Return first non-alpha char */
 char *skipAlNum(char *s)
+/* Return first non-alphanumeric char */
 {
 for (;;)
     {
@@ -13,8 +16,8 @@ for (;;)
     }
 }
 
-/* return first alpha char */
 char *skipToAlNum(char *s)
+/* Return first alphanumeric char */
 {
 char c;
 for (;;)
@@ -26,8 +29,8 @@ for (;;)
     }
 }
 
-/* Return TRUE if all chars are DNA type */
 boolean allNt(char *s,int size)
+/* Return TRUE if all chars are DNA type */
 {
 while (--size >= 0)
     if (ntChars[*s++] == 0) return FALSE;
@@ -35,6 +38,8 @@ return TRUE;
 }
 
 void dustDna(char *in,char *out)
+/* Remove non-dna looking words from input as it
+ * is copied to output. */
 {
 char *wordEnd;
 int wordLen;
@@ -54,17 +59,20 @@ while (*in != 0)
 }
 
 int noneOrNumber(char *s)
+/* Return binary representation of ascii number, or 0 if
+ * it is not a number. */
 {
 return atoi(s);
 }
 
 void formatOutput(char *output, int spacer, int liner, 
 	boolean showNumbers, char *caseChoice)
-{
-int countSpace = 0;
-int countLine = 0;
-int baseCount = 0;
-char c;
+/* Write out output with line breaks and optional numbering. */
+{ 
+int countSpace = 0; 
+int countLine = 0; 
+int baseCount = 0; 
+char c; 
 
 if (differentWord(caseChoice, "upper") == 0)
     touppers(output);
@@ -101,6 +109,7 @@ printf("</TT>\n");
 }
 
 void eraseLowerCase(char *s)
+/* Get rid of all but upper case characters in string. */
 {
 char *in, *out;
 char c;
@@ -118,6 +127,8 @@ for (;;)
 }
 
 char *customTranslate(char *dna, boolean searchAug)
+/* Translate DNA into protein, possibly searching for
+ * start codon before beginning translation. */
 {
 int dnaLength;
 int protLength;
@@ -149,6 +160,8 @@ return protein;
 }
 
 void complementDna(DNA *dna)
+/* Complement (but don't reverse) DNA.  Convert
+ * A<->G and C<->T */
 {
 DNA b;
 while ((b = *dna) != 0)
@@ -156,6 +169,7 @@ while ((b = *dna) != 0)
 }
 
 void doMiddle()
+/* Write out middle part of web page. */
 {
 char *input, *dustedDna;
 long len;
@@ -213,6 +227,7 @@ else
 }
 
 int main(int argc, char *argv[])
+/* Main entry point.  Wrap html shell around doMiddle. */
 {
 dnaUtilOpen();
 htmShell("DNA Duster Output", doMiddle, "POST");
