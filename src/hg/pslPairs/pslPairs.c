@@ -225,7 +225,7 @@ void readPairFile(struct lineFile *prf)
       wordCount = chopTabs(line,words);
       if (wordCount != 3)
 	errAbort("Bad line %d of %s\n", prf->lineIx, prf->fileName);
-      if (!hashLookup(clones, words[0])) 
+      if (!hashLookup(clones, words[2])) 
 	{
 	  char *test;
 	  AllocVar(cloneName);
