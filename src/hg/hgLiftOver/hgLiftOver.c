@@ -21,7 +21,7 @@
 #include "botDelay.h"
 #include "liftOver.h"
 
-static char const rcsid[] = "$Id: hgLiftOver.c,v 1.17 2004/04/14 23:47:58 kate Exp $";
+static char const rcsid[] = "$Id: hgLiftOver.c,v 1.18 2004/04/15 01:01:58 kate Exp $";
 
 /* CGI Variables */
 #define HGLFT_USERDATA_VAR "hglft.userData"     /* typed/pasted in data */
@@ -40,8 +40,7 @@ struct hash *oldCart = NULL;
 #define WIGGLE_FORMAT   "Wiggle"
 
 char *formatList[] = 
-        //{BED_FORMAT, POSITION_FORMAT, 0};
-        {BED_FORMAT, 0};
+        {BED_FORMAT, POSITION_FORMAT, 0};
 
 #define DEFAULT_FORMAT  "BED"
 
@@ -181,15 +180,16 @@ cgiParagraph("Results will appear below.");
 void webDataFormats()
 {
 webNewSection("Data Formats");
-/*
-printf("<LI>");
-printf("For <B>Position</B> format, enter the <I>chromosome</I>, <I>start</I>, and <I>end</I> positions, in the format <B>chrN:S-E</B>\n");
-*/
-printf("<LI>");
-printf(
+puts("<LI>");
+puts(
     "<A HREF=\"/goldenPath/help/customTrack.html#BED\" TARGET=_blank>"
     //"<A HREF=\"http://genome.ucsc.edu/goldenPath/help/customTrack.html#BED\" TARGET=_blank>"
     "Browser Extensible Data (BED)</A>\n");
+puts("</LI>");
+puts("<LI>");
+puts("Genomic Coordinate Position<BR>");
+puts("&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; chrN<B>:</B>start<B>-</B>end");
+puts("</LI>");
 }
 
 void webDownloads()
@@ -287,11 +287,9 @@ if (userData != NULL && userData[0] != '\0')
             {}
     else if (sameString(dataFormat, POSITION_FORMAT))
         {
-        /*
         ct = liftOverPositions(oldTn.forCgi, chainHash, 
                         LIFTOVER_MINMATCH, LIFTOVER_MINBLOCKS,
                         FALSE, mapped, unmapped, &errCt);
-                        */
         }
     else if (sameString(dataFormat, BED_FORMAT))
         {
@@ -322,14 +320,14 @@ if (userData != NULL && userData[0] != '\0')
                          unmappedTn.forCgi);
         fclose(unmapped);
         errFile = lineFileOpen(unmappedTn.forCgi, TRUE);
-        printf("<BLOCKQUOTE>\n");
-        printf("<PRE>\n");
+        puts("<BLOCKQUOTE>\n");
+        puts("<PRE>\n");
         while (lineFileNext(errFile, &line, &lineSize))
             {
             puts(line);
             }
-        printf("</PRE>\n");
-        printf("</BLOCKQUOTE>\n");
+        puts("</PRE>\n");
+        puts("</BLOCKQUOTE>\n");
         }
     }
 webDataFormats();
