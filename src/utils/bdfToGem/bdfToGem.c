@@ -7,7 +7,7 @@
 #include	"linefile.h"
 #include	"gemfont.h"
 
-static char const rcsid[] = "$Id: bdfToGem.c,v 1.10 2005/02/23 00:38:52 hiram Exp $";
+static char const rcsid[] = "$Id: bdfToGem.c,v 1.11 2005/02/23 01:02:12 hiram Exp $";
 
 static char *name = (char *)NULL;	/* to name the font in the .c file */
 static boolean noHeader = FALSE;  /* do not output the C header, data only */
@@ -136,47 +136,23 @@ int startRow = maxYextent -
 		(((glyph->h + glyph->yOff) - 1) - minYoff) - 1;
 int destRow = startRow;
 int srcRow = 0;
-boolean debug = FALSE;
-int bitsOnLeft = (offset & 0x7);	/* range: [0-7]	*/
-int bitsOnRight = 8 - bitsOnLeft;
-unsigned char maskLeft = leftMasks[bitsOnLeft];
-unsigned char maskRight = ~maskLeft;
-
-if (((int)'a' == glyph->encoding) || ((int)'b' == glyph->encoding))
-	debug = TRUE;
 
 for (destRow = startRow; (srcRow < glyph->h) && (destRow < maxYextent);
 	++destRow, ++srcRow)
 {
-    int destColumn = (offset >> 3);
+    int destColumn = (offset + glyph->xOff) >> 3;
+    int bitsOnLeft = (offset + glyph->xOff) & 0x7;	/* range: [0-7]	*/
     int col;
     if (0 == bitsOnLeft)
 	{
-if (destRow==startRow)
-    verbose(3,"bitsOnLeft are zero for character %d '%c'\n", glyph->encoding,
-	(char)glyph->encoding);
-if (debug && (destRow==startRow))
-    verbose(3,"offset: %d, destCol: %d, bitsOnLeft are zero\n", offset, destColumn);
-if (debug)
-    verbose(3,"row %d,%d x %d(%d) %d(%d): '",
-	destRow, srcRow, glyph->w, BYTEWIDTH(glyph->w), glyph->dWidth, BYTEWIDTH(glyph->dWidth));
 	for (col = 0; col < BYTEWIDTH(glyph->w); ++col, ++destColumn)
-		{
 	    bitmap[destRow][destColumn] = glyph->bitmap[srcRow][col];
-if (debug)
-    verbose(3,"%02x", bitmap[destRow][destColumn]);
-		}
-if (debug)
-    verbose(3,"'\n");
 	}
     else
 	{
-if (debug && (destRow==startRow))
-    verbose(3,"offset: %d, destCol: %d, bitsOnLeft,Right: %d,%d, masksLR: %#x,%#x\n",
-	offset, destColumn, bitsOnLeft, bitsOnRight, maskLeft, maskRight);
-if (debug)
-    verbose(3,"row %d,%d x %d(%d) %d(%d): '",
-	destRow, srcRow, glyph->w, BYTEWIDTH(glyph->w), glyph->dWidth, BYTEWIDTH(glyph->dWidth));
+	int bitsOnRight = 8 - bitsOnLeft;
+	unsigned char maskLeft = leftMasks[bitsOnLeft];
+	unsigned char maskRight = ~maskLeft;
 	for (col = 0; col < BYTEWIDTH(glyph->w); ++col, ++destColumn)
 	    {
 	    unsigned char dest;
@@ -185,43 +161,10 @@ if (debug)
 	    bitmap[destRow][destColumn] =
 		(dest & maskLeft) | ((src >> bitsOnLeft) & maskRight);
 	    bitmap[destRow][destColumn+1] = ((src << bitsOnRight) & maskLeft);
-if (debug)
-    verbose(3,"%02x(%02x)", bitmap[destRow][destColumn], src);
 	    }
-if (debug)
-    {
-    verbose(3,"%02x last %d, rtn: %d\n", bitmap[destRow][destColumn],
-	destColumn, glyph->dWidth);
-    }
 	}
 }
 return(glyph->dWidth);
-
-#ifdef NOT
-int columnsCopied = 0;
-int bitmapColumn = offset >> 3;
-int row = startRow;
-int byteWidth = BYTEWIDTH(glyph->dWidth);
-int col = 0;
-
-bitmapColumn = BYTEWIDTH(offset);
-for (col = 0; col < byteWidth; ++col)
-    {
-    int j;
-    row = startRow;
-    for (j = 0; j < glyph->h && (row<maxYextent); ++j)
-	{
-	bitmap[row][bitmapColumn] = glyph->bitmap[j][col];
-	++row;
-	}
-    bitmapColumn += 1;
-    columnsCopied++;
-    }
-if (columnsCopied != byteWidth)
-    errAbort("columnsCopied %d != %d byteWidth", columnsCopied, byteWidth);
-
-return (columnsCopied * 8);
-#endif
 }
 
 static void outputGem(char *out, struct font_hdr *font,
