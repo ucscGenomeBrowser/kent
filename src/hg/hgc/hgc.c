@@ -142,7 +142,7 @@
 #include "bed6FloatScore.h"
 #include "pscreen.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.726 2004/08/25 23:38:33 angie Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.727 2004/08/26 00:12:24 baertsch Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -7683,14 +7683,22 @@ if (!hTableExists(chainTable) )
 //    }
 printf("<B>Description:</B> Retrogenes are processed mRNAs that are inserted back into the genome. Most are pseudogenes, and some are functional genes or anti-sense transcripts that may impede mRNA translation.<p>\n");
 printf("<B>Syntenic&nbsp;in&nbsp;mouse: </B>%d&nbsp;%%<br>\n",pg->overlapDiag);
-printf("<B>PolyA&nbsp;tail:</B>&nbsp;%d&nbsp;bp \n",pg->polyA);
+printf("<B>PolyA&nbsp;tail:</B>&nbsp;%d As&nbsp;out&nbsp;of&nbsp;%d&nbsp;bp <B>Divergence:&nbsp;</B>%5.1f&nbsp;%%\n",pg->polyA,pg->polyAlen, (float)pg->polyA*100/(float)pg->polyAlen);
 printf("&nbsp;(%d&nbsp;bp&nbsp;from&nbsp;end&nbsp;of&nbsp;retrogene)<br>\n",pg->polyAstart);
 printf("<B>Exons&nbsp;Inserted:</B>&nbsp;%d&nbsp;out&nbsp;of&nbsp;%d&nbsp;<br>\n",pg->exonCover,pg->exonCount);
 printf("<B>Bases&nbsp;matching:</B>&nbsp;%d&nbsp;\n", pg->matches);
 printf("(%d&nbsp;%% of gene)<br>\n",pg->coverage);
+if (!sameString(pg->overName, "none"))
+    printf("<B>Bases&nbsp;overlapping mRNA:</B>&nbsp;%s&nbsp;(%d&nbsp;bp)<br>\n", pg->overName, pg->maxOverlap);
+else
+    printf("<B>No&nbsp;overlapping mRNA</B><br>");
 if (sameString(pg->type, "expressed"))
     {
     printf("<b>Type of RetroGene:&nbsp;</b>%s<p>\n",pg->type);
+    }
+else if (sameString(pg->type, "singleExon"))
+    {
+    printf("<b>Overlap with Parent:&nbsp;</b>%s<p>\n",pg->type);
     }
 else
     {
