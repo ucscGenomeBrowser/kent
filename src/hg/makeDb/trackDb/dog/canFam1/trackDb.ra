@@ -13,7 +13,7 @@ pairwise chm
 speciesOrder human mouse
 
 track phastConsElements
-shortLabel PhastConsElements
+shortLabel Cons Elements
 longLabel PhastCons Conserved Elements, Dog/Human/Mouse 
 group compGeno
 priority 101
