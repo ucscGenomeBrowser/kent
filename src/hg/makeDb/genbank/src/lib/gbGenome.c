@@ -3,7 +3,7 @@
 #include "gbDefs.h"
 #include "localmem.h"
 
-static char const rcsid[] = "$Id: gbGenome.c,v 1.29 2005/01/30 15:34:18 hiram Exp $";
+static char const rcsid[] = "$Id: gbGenome.c,v 1.30 2005/02/01 01:00:10 markd Exp $";
 
 struct dbToSpecies
 /* structure mapping database prefix to species (e.g. hg -> "Homo sapiens").
@@ -44,15 +44,8 @@ static char *apiMelNames[] = {"Apis mellifera", NULL};
 static char *tetNigNames[] = {"Tetraodon nigroviridis", NULL};
 static char *bosTauNames[] = {"Bos taurus", NULL};
 static char *xenTroNames[] = {"Xenopus tropicalis", NULL};
-
-/* species currently unique to zoo */
-static char *zooCatNames[] = {"Felis catus", "Felis sp.", NULL};
-static char *zooBaboonNames[] = {"Papio hamadryas", "Papio sp.", NULL};
-static char *zooCowNames[] = {"Bos taurus", "Bos sp.", NULL};
-static char *zooFrogNames[] = {"Xenopus tropicalis", "Xen sp.", NULL};
-static char *zooPigNames[] = {"Sus scrofa", "Sus sp.", NULL};
-static char *zooTetraNames[] = {"Tetraodon nigroviridis", NULL};
-static char *zooZebrafishNames[] = {"Danio rerio", NULL};
+/* hypothetical ancestor, will never match native */
+static char *bosEutNames[] = {"BoreoEutherian ancestor", NULL};
 
 static char *endNames[] = {NULL};
 
@@ -85,20 +78,7 @@ static struct dbToSpecies dbToSpeciesMap[] = {
     {"tetNig", tetNigNames, "Tetraodon"},
     {"bosTau", bosTauNames, "Bos taurus "},
     {"xenTro", xenTroNames, "Xenopus tropicalis "},
-    {"zooHuman", hgNames, NULL},
-    {"zooCat", zooCatNames, NULL},
-    {"zooChicken", galGalNames, NULL},
-    {"zooBaboon", zooBaboonNames, NULL},
-    {"zooChimp", panTroNames, "Pan troglodytes "},
-    {"zooCow", zooCowNames, NULL},
-    {"zooFrog", zooFrogNames, NULL},
-    {"zooDog", canFamNames, NULL},
-    {"zooFugu", frNames, NULL},
-    {"zooMouse", mmNames, "Mus musculus "},
-    {"zooPig", zooPigNames, "Sus scrofa "},
-    {"zooRat", rnNames, NULL},
-    {"zooTetra", zooTetraNames, NULL},
-    {"zooZebrafish", zooZebrafishNames, NULL},
+    {"bosEut", bosEutNames, NULL},
     {NULL, endNames, NULL}
 };
 
