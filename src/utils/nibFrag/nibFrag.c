@@ -5,8 +5,15 @@
 #include "options.h"
 #include "fa.h"
 
-static char const rcsid[] = "$Id: nibFrag.c,v 1.10 2003/05/20 20:39:28 matt Exp $";
+static char const rcsid[] = "$Id: nibFrag.c,v 1.11 2003/05/21 05:19:17 baertsch Exp $";
 
+static struct optionSpec optionSpecs[] = {
+    {"masked", OPTION_BOOLEAN},
+    {"hardMasked", OPTION_BOOLEAN},
+    {"upper", OPTION_BOOLEAN},
+    {"name", OPTION_STRING},
+    {NULL, 0}
+};
 void usage()
 /* Explain usage and exit. */
 {
@@ -52,7 +59,7 @@ int main(int argc, char *argv[])
 int options = 0;
 int optUpper = 0;
 boolean hardMask = FALSE;
-optionHash(&argc, argv);
+optionInit(&argc, argv, optionSpecs);
 if(optionExists("masked") && optionExists("hardMasked"))
     {
     warn("\nError: Must choose 'masked' or 'hardMasked' but not both.\n");
