@@ -188,6 +188,39 @@ printf("&nbsp;pixels");
 
 }
 
+
+void humMusUi(struct trackDb *tdb)
+/* put up UI for the human/mouse mutual information (a sample track)*/
+{
+int humMusHeightPer = atoi(cartUsualString(cart, "humMus.heightPer", "100"));
+char *interpolate = cartUsualString(cart, "humMus.linear.interp", "Linear Interpolation");
+char *aa = cartUsualString(cart, "humMus.anti.alias", "on");
+char *fill = cartUsualString(cart, "humMus.fill", "1");
+
+printf("<p><b>Interpolation: </b> ");
+wiggleDropDown("humMus.linear.interp", interpolate );
+printf(" ");
+printf(" <b>Anti-Aliasing</b>: ");
+cgiMakeRadioButton("humMus.anti.alias", "on", sameString(aa, "on"));
+printf(" on ");
+cgiMakeRadioButton("humMus.anti.alias", "off", sameString(aa, "off"));
+printf(" off ");
+
+printf("<br><br>");
+printf(" <b>Fill Blocks</b>: ");
+cgiMakeRadioButton("humMus.fill", "1", sameString(fill, "1"));
+printf(" on ");
+
+cgiMakeRadioButton("humMus.fill", "0", sameString(fill, "0"));
+printf(" off ");
+
+printf("<p><b>Track Height</b>:&nbsp;&nbsp;");
+cgiMakeIntVar("humMus.heightPer", humMusHeightPer, 5 );
+printf("&nbsp;pixels");
+
+}
+
+
 void zooUi(struct trackDb *tdb)
 /* put up UI for the GC percent track (a sample track)*/
 {
@@ -336,6 +369,8 @@ else if (sameString(track, "zoo"))
     zooUi(tdb);
 else if (sameString(track, "ancientR"))
     ancientRUi(tdb);
+else if (sameString(track, "humMus"))
+    humMusUi(tdb);
 }
 
 void trackUi(struct trackDb *tdb)
