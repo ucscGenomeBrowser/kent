@@ -24,8 +24,9 @@
   block that spans two or more bases.
 </P>
 <P>
-  When chromStart=chromEnd, this is generally not an error; 
-  rather, it indicates that the variant is an insertion at this genomic 
+  When chromStart = chromEnd+1 in the graphical display (or chromStart = 
+  chromEnd in the zero-based database records), this is generally not an 
+  error; rather, it indicates that the variant is an insertion at this genomic
   position.  In these instances, the location type will be set to 
   &quot;between&quot;.
 </P>
@@ -72,7 +73,7 @@
       <UL>
         <LI><B>Unknown</B> - no classification provided by data contributor
         <LI><B>Single Nucleotide Polymorphism</B> - single nucleotide 
-	variation: alleles of length=1 and from set of {A,T,C,G}
+	variation: alleles of length = 1 and from set of {A,T,C,G}
         <LI><B>Insertion/deletion</B> - insertion/deletion variation: alleles 
 	of different length or include '-' character
         <LI><B>Heterozygous</B> - heterozygous (undetermined) variation: 
