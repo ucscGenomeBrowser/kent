@@ -954,8 +954,8 @@ chromosomes chr22,chr21
 type sample 9
 
 track multAlignWebbcat
-shortLabel Multiple species alignments
-longLabel Multiple species alignments
+shortLabel Cat alignment
+longLabel Cat alignment from Webb's Multiple Alignment
 priority 51
 visibility hide
 type psl xeno
