@@ -1307,7 +1307,7 @@ type psl .
 
 track firstEF
 shortLabel FirstEF 
-longLabel FirstEF: first-exon and promoter prediction
+longLabel FirstEF: First-Exon and Promoter Prediction
 group genes
 priority 50
 visibility hide
