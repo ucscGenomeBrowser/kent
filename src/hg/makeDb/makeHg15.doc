@@ -2198,9 +2198,9 @@ o - [hgwdev:hg15> cd /cluster/store1/sugnet/hg15/build33
 # LOADING RAT RN2 BLASTZ ALIGNMENTS FROM PENN STATE: (TO DO)
     # Translate Penn State .lav files into sorted axt:
     ssh eieio
-    set base="/cluster/store5/gs.16/build33/bed/blastz.rn2.2003-03-18-ASH"
-    set seq1_dir="/cluster/store5/gs.16/build33/mixedNib/"
-    set seq2_dir="/cluster/store4/rn2/mixedNib/"
+    set base="/cluster/store5/gs.16/build33/bed/blastz.rn2.2003-05-06"
+    set seq1_dir="/cluster/store5/gs.16/build33/nib/"
+    set seq2_dir="/cluster/store4/rn2/nib/"
     set tbl="blastzRn2"
     cd $base
     mkdir -p axtChrom
@@ -2214,6 +2214,8 @@ o - [hgwdev:hg15> cd /cluster/store1/sugnet/hg15/build33
         | axtSort stdin $out
       popd
     end
+
+#  LOOP Running Hiram 2003-05-06 15:49
 
 # STOPPED HERE -- big data, low demand.
     # Translate the sorted axt files into psl:
