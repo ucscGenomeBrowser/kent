@@ -27,8 +27,8 @@
      set rn = rn2
 
 #Set the pairwise alignment directories
-     set hm = $h/bed/blastz.mm3.2003-04-12-03-MS/axtNet
-     set mr = $m/bed/blastz.rn2.2003-03-07-ASH/axtNet
+     set hm = $h/bed/blastz.mm3.2003-04-12-03-MS/axtBest
+     set mr = $m/bed/blastz.rn2.2003-03-07-ASH/axtBest
 
 #Set the output directory
      set hmr = /cluster/store5/multiz.hmr.3
