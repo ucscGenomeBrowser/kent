@@ -16,7 +16,7 @@
 #include "ra.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: hgNear.c,v 1.71 2003/09/12 11:37:45 kent Exp $";
+static char const rcsid[] = "$Id: hgNear.c,v 1.72 2003/09/12 21:22:37 kent Exp $";
 
 char *excludeVars[] = { "submit", "Submit", confVarName, colInfoVarName,
 	defaultConfName, hideAllConfName, showAllConfName,
@@ -732,12 +732,6 @@ void controlPanel(struct genePos *gp, struct order *curOrd, struct order *ordLis
 hPrintf("<TABLE WIDTH=\"100%%\" BORDER=0 CELLSPACING=1 CELLPADDING=1>\n");
 hPrintf("<TR><TD ALIGN=CENTER>");
 
-/* Do configure button. */
-    {
-    cgiMakeButton(confVarName, "configure");
-    hPrintf(" ");
-    }
-
 /* Do sort by drop-down */
     {
     struct order *ord;
@@ -791,7 +785,7 @@ hPrintf("</TD></TR>\n<TR><TD ALIGN=CENTER>");
     cgiMakeDropList("near.assembly", menu, ArraySize(menu), menu[0]);
     }
 
-/* Make getDna, getText, advFilter buttons */
+/* Make getDna, getText, advFilter, configure buttons */
     {
     hPrintf(" ");
     cgiMakeButton(getSeqPageVarName, "as sequence");
@@ -802,6 +796,8 @@ hPrintf("</TD></TR>\n<TR><TD ALIGN=CENTER>");
 	cgiMakeButton(advFilterVarName, "filter (now on)");
      else
 	cgiMakeButton(advFilterVarName, "filter (now off)");
+    hPrintf(" ");
+    cgiMakeButton(confVarName, "configure");
     }
 
 
