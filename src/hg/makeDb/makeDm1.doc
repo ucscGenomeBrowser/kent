@@ -5648,7 +5648,8 @@ zcat `ls -1 /cluster/bluearc/dm1/phastCons/POSTPROBS/$chr.*.pp.gz \
     rm -r /cluster/bluearc/dm1/chrom
 
 
-# FLYREG (DONE 11/22/04 angie)
+# FLYREG (DONE 12/13/04 angie)
+    # Flyreg loaded 11/22/04; MEME motifs added 12/13/04
     ssh kksilo
     mkdir /cluster/data/dm1/bed/flyreg
     cd /cluster/data/dm1/bed/flyreg
@@ -5662,6 +5663,13 @@ zcat `ls -1 /cluster/bluearc/dm1/phastCons/POSTPROBS/$chr.*.pp.gz \
     ssh hgwdev
     hgLoadBed -sqlTable=$HOME/kent/src/hg/lib/flyreg.sql \
       dm1 flyreg /cluster/data/dm1/bed/flyreg/flyreg.bed
+    # 12/13/04: Add Dan Pollard's MEME motif data for the footprints:
+    ssh kksilo
+    cd /cluster/data/dm1/bed/flyreg
+    wget http://rana.lbl.gov/~dan/matrices/bergman2004/footprint_matrices.txt
+    ./extractMatrices.pl footprint_matrices.txt > flyregMotif.tab
+    ssh hgwdev
+    # Load it....
 
 
 # BLASTZ D.ERECTA (DONE 11/24/04 angie)
