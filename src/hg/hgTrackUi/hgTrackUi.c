@@ -323,6 +323,7 @@ int zooHeightPer = atoi(cartUsualString(cart, "zoo.heightPer", "100"));
 char *interpolate = cartUsualString(cart, "zoo.linear.interp", "Linear Interpolation");
 char *aa = cartUsualString(cart, "zoo.anti.alias", "on");
 char *fill = cartUsualString(cart, "zoo.fill", "1");
+int zooLineGap = atoi(cartUsualString(cart, "zoo.interp.gap", "25000"));
 
 printf("<p><b>Interpolation: </b> ");
 wiggleDropDown("zoo.linear.interp", interpolate );
@@ -344,6 +345,11 @@ printf(" off ");
 printf("<p><b>Track Height</b>:&nbsp;&nbsp;");
 cgiMakeIntVar("zoo.heightPer", zooHeightPer, 5 );
 printf("&nbsp;pixels");
+
+printf("<p><b>Maximum Interval to Interpolate Across</b>:&nbsp;&nbsp;");
+cgiMakeIntVar("zoo.interp.gap", zooLineGap, 10 );
+printf("&nbsp;bases");
+
 
 }
 
