@@ -1,7 +1,7 @@
 # This file describes browser build for the mouse
 # genome, March 2005, ncbi mouse_34 - Mm6
 #
-#	"$Id: makeMm6.doc,v 1.12 2005/03/25 00:32:37 hiram Exp $"
+#	"$Id: makeMm6.doc,v 1.13 2005/03/26 17:13:59 hiram Exp $"
 #
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2005-03-09 - Hiram)
 #
@@ -744,31 +744,30 @@ mm6.mgcTables.mgc = all
 
     #	Do the refseq's first, they are the quick ones
     nice bin/gbAlignStep -srcDb=refseq -type=mrna -verbose=1 -initial mm6
-    #	RUNNING - 2005-03-24 16:22
-
-# Completed: 1384 of 1384 jobs
-# CPU time in finished jobs:       2751s      45.85m     0.76h    0.03d  0.000 y
-# IO & Wait Time:                  5028s      83.80m     1.40h    0.06d  0.000 y
-# Average job time:                   6s       0.09m     0.00h    0.00d
+    #	var/build/logs/2005.03.25-12:18:01.mm6.initalign.log
+    #	real    109m23.547s
+    #	user    4m8.057s
+    #	sys     1m18.459s
+# Completed: 5190 of 5190 jobs
+# CPU time in finished jobs:      44385s     739.76m    12.33h    0.51d  0.001 y
+# IO & Wait Time:                 20723s     345.38m     5.76h    0.24d  0.001 y
+# Average job time:                  13s       0.21m     0.00h    0.00d
 # Longest running job:                0s       0.00m     0.00h    0.00d
-# Longest finished job:              12s       0.20m     0.00h    0.00d
-# Submission to last job:            68s       1.13m     0.02h    0.00d
-
-# Completed: 200 of 200 jobs
-# CPU time in finished jobs:      31586s     526.43m     8.77h    0.37d  0.001 y
-# IO & Wait Time:                  6911s     115.18m     1.92h    0.08d  0.000 y
-# Average job time:                 192s       3.21m     0.05h    0.00d
-# Longest running job:                0s       0.00m     0.00h    0.00d
-# Longest finished job:            2239s      37.32m     0.62h    0.03d
-# Submission to last job:          2239s      37.32m     0.62h    0.03d
+# Longest finished job:             278s       4.63m     0.08h    0.00d
+# Submission to last job:          6017s     100.28m     1.67h    0.07d
 
     # Load the results from the above
     ssh hgwdev
     cd /cluster/data/genbank
     nice bin/gbDbLoadStep -verbose=1 -drop -initialLoad mm6
+    #	var/dbload/hgwdev/logs/2005.03.25-15:31:22.dbload.log
+    #	real    2m28.355s
+    #	user    0m19.830s
+    #	sys     0m10.180s
+
     #	check the RefSeq Genes track shows up in the browser
     #	table browser query on RefSeq Genes whole genome, summary stats
-    #	indicates 18,305 items covering 716,635,654 (%27.59) bases
+    #	indicates 18,397 items covering 713,077,002 (%27.46) bases
 
     #	To get the genbank started, the above results need to be
     #	moved out of the way.  These things can be removed if there are
@@ -776,18 +775,23 @@ mm6.mgcTables.mgc = all
     ssh eieio
     cd /cluster/data/genbank/work
     mv initial.mm6 initial.mm6.refseq.mrna
+    # or: rm -fr initial.mm6
 
     cd /cluster/data/genbank
     nice bin/gbAlignStep -srcDb=genbank -type=mrna -verbose=1 -initial mm6
-    #	logFile: var/build/logs/2005.03.15-10:18:30.mm6.initalign.log
-# Completed: 2400 of 2400 jobs
-# CPU time in finished jobs:    5777428s   96290.47m  1604.84h   66.87d  0.183 y
-# IO & Wait Time:                261508s    4358.47m    72.64h    3.03d  0.008 y
-# Average job time:                2516s      41.94m     0.70h    0.03d
+    #	logFile: var/build/logs/2005.03.25-17:13:13.mm6.initalign.log
+    #	RUNNING - 2005-03-25 17:30
+    #	There was one incredibly long job that occupied most of the time
+    #	real    741m1.285s
+    #	user    88m31.751s
+    #	sys     25m6.943s
+# Completed: 27680 of 27680 jobs
+# CPU time in finished jobs:    5495665s   91594.42m  1526.57h   63.61d  0.174 y
+# IO & Wait Time:                114623s    1910.38m    31.84h    1.33d  0.004 y
+# Average job time:                 203s       3.38m     0.06h    0.00d
 # Longest running job:                0s       0.00m     0.00h    0.00d
-# Longest finished job:           47756s     795.93m    13.27h    0.55d
-# Submission to last job:         48256s     804.27m    13.40h    0.56d
-
+# Longest finished job:           13544s     225.73m     3.76h    0.16d
+# Submission to last job:         37663s     627.72m    10.46h    0.44d
 
     # Load the results from the above
     ssh hgwdev
@@ -800,6 +804,7 @@ mm6.mgcTables.mgc = all
     rm var/dbload/hgwdev/run/dbload.lock
 
     time nice bin/gbDbLoadStep -verbose=1 -drop -initialLoad mm6
+    #	var/dbload/hgwdev/logs/2005.03.26-08:47:42.dbload.log
     #	22 minute load time
 
     #	And finally, the big est run - expect several days on this one
@@ -813,7 +818,9 @@ mm6.mgcTables.mgc = all
     cd /cluster/data/genbank
     screen
     nice bin/gbAlignStep -srcDb=genbank -type=est -verbose=1 -initial mm6
-    #	logFile: var/build/logs/2005.03.16-10:26:46.mm6.initalign.log
+    #	var/build/logs/2005.03.26-09:00:22.mm6.initalign.log
+XXX - STARTED 2005-03-26 09:13
+
     #	detach from screen session: Ctrl-a Ctrl-d
     #	to reattach to this screen session:
     ssh eieio
