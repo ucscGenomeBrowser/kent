@@ -1064,9 +1064,8 @@ void paraCheck(char *batch)
 /* Check on progress of a batch. */
 {
 struct jobDb *db = readBatch(batch);
-int queueSize;
 
-queueSize = markQueuedJobs(db);
+markQueuedJobs(db);
 markRunJobStatus(db);
 reportOnJobs(db);
 
