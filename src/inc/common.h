@@ -342,6 +342,9 @@ void subChar(char *s, char oldChar, char newChar);
 void stripChar(char *s, char c);
 /* Remove all occurences of c from s. */
 
+int countChars(char *s, char c);
+/* Return number of characters c in string s. */
+
 int chopString(char *in, char *sep, char *outArray[], int outSize);
 /* int chopString(in, sep, outArray, outSize); */
 /* This chops up the input string (cannabilizing it)

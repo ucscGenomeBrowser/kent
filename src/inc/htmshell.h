@@ -23,6 +23,9 @@ void htmlSetCookie(char* name, char* value, char* expires, char* path, char* dom
 /* Print a line in it's own paragraph. */
 void htmlParagraph(char *line, ...);
 
+void htmlVaParagraph(char *line, va_list args);
+/* Print a line in it's own paragraph. */
+
 /* Center a line in it's own paragraph. */
 void htmlCenterParagraph(char *line, ...);
 
