@@ -2,7 +2,7 @@ include ../../../inc/common.mk
 
 
 L = $(MYSQLLIBS) -lm
-MYLIBDIR = ../../lib/$(MACHTYPE)
+MYLIBDIR = ../../../lib/$(MACHTYPE)
 MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 
 O = hgExtFileCheck.o
