@@ -43,9 +43,9 @@ visibility pack
 spectrum on
 type bed 6 .
 
-track BlastPProk
-shortLabel BLASTP Prok
-longLabel  BLASTP of Prokaryotic Proteins
+track BlastPBac
+shortLabel BLASTP Bac
+longLabel  BLASTP of Bacterial Proteins
 group compGeno
 priority 4.2
 visibility pack
