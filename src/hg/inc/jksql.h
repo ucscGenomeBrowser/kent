@@ -81,6 +81,11 @@ struct sqlConnCache *sqlNewRemoteConnCache(char *database,
 void sqlFreeConnCache(struct sqlConnCache **pCache);
 /* Dispose of a connection cache. */
 
+struct sqlConnection *sqlMayAllocConnection(struct sqlConnCache *cache,
+					    boolean mustConnect);
+/* Allocate a cached connection. errAbort if too many open connections.  
+ * errAbort if mustConnect and connection fails. */
+
 struct sqlConnection *sqlAllocConnection(struct sqlConnCache *cache);
 /* Allocate a cached connection. */
 
