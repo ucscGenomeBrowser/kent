@@ -3,15 +3,14 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit ~/kent/src/utils/doBlastzChainNet.pl instead.
 
-# $Id: doBlastzChainNet.pl,v 1.10 2005/03/08 23:47:23 angie Exp $
+# $Id: doBlastzChainNet.pl,v 1.11 2005/03/11 18:23:32 angie Exp $
 
 # to-do items:
 # - lots of testing
-# - handle .2bit for target
 # - better logging: right now it just passes stdout and stderr,
 #   leaving redirection to a logfile up to the user
 # - reciprocal best?
-# - more options: -bigClusterHub, -smallClusterHub, -buildDir ...?  
+# - hgLoadSeq of query instead of assuming there's a $qDb database?
 
 use Getopt::Long;
 use warnings;
@@ -23,9 +22,6 @@ my $blastzRunUcsc = '/cluster/bin/scripts/blastz-run-ucsc';
 my $partition = '/cluster/bin/scripts/partitionSequence.pl';
 my $gensub2 = '/parasol/bin/gensub2';
 my $para = '/parasol/bin/para';
-my $bigClusterHub = 'kk';
-my $smallClusterHub = 'kki';
-my $workhorse = 'kolossus';
 my $paraRun = ("$para make jobList\n" .
 	       "$para check\n" .
 	       "$para time > run.time\n" .
@@ -51,6 +47,8 @@ use vars qw/
     $opt_blastzOutRoot
     $opt_swap
     $opt_workhorse
+    $opt_bigClusterHub
+    $opt_smallClusterHub
     $opt_debug
     $opt_verbose
     $opt_readmeOnly
@@ -68,6 +66,9 @@ my %stepVal = ( 'cat' => 1,
 	      );
 
 # Option defaults:
+my $bigClusterHub = 'kk';
+my $smallClusterHub = 'kki';
+my $workhorse = 'kolossus';
 my $defaultVerbose = 1;
 
 sub usage {
@@ -100,6 +101,10 @@ options:
                           $clusterData/\$qDb/$trackBuild/blastz.\$tDb.swap/
     -workhorse machine    Use machine (default: $workhorse) for compute or
                           memory-intensive steps.
+    -bigClusterHub mach   Use mach (default: $bigClusterHub) as parasol hub for blastz
+                          cluster run.
+    -smallClusterHub mach Use mach (default: $smallClusterHub) as parasol hub for cat &
+                          chain cluster runs.
     -debug                Don't actually run commands, just display them.
     -verbose num          Set verbose level to num (default $defaultVerbose).
     -help                 Show detailed help and exit.
@@ -228,6 +233,8 @@ sub checkOptions {
 		      "blastzOutRoot=s",
 		      "swap",
 		      "workhorse=s",
+		      "bigClusterHub=s",
+		      "smallClusterHub=s",
 		      "verbose=n",
 		      "debug",
 		      "readmeOnly",
@@ -281,6 +288,8 @@ sub checkOptions {
     }
   }
   $workhorse = $opt_workhorse if ($opt_workhorse);
+  $bigClusterHub = $opt_bigClusterHub if ($opt_bigClusterHub);
+  $smallClusterHub = $opt_smallClusterHub if ($opt_smallClusterHub);
 }
 
 #########################################################################
@@ -447,8 +456,8 @@ sub doBlastzClusterRun {
   }
   my $targetList = "$tDb.lst";
   my $queryList = $isSelf ? $targetList : "$qDb.lst";
-  my $tPartDir = ($defVars{'SEQ1_DIR'} =~ /\.2bit$/) ? "-lstDir tParts" : '';
-  my $qPartDir = ($defVars{'SEQ2_DIR'} =~ /\.2bit$/) ? "-lstDir qParts" : '';
+  my $tPartDir = '-lstDir tParts';
+  my $qPartDir = '-lstDir qParts';
   my $outRoot = $opt_blastzOutRoot ? "$opt_blastzOutRoot/psl" : '../psl';
   my $mkOutRoot = $opt_blastzOutRoot ? "mkdir -p $opt_blastzOutRoot" : "";
   my $partitionTargetCmd = 
@@ -574,6 +583,47 @@ _EOF_
   &run("ssh -x $paraHub $bossScript");
 }
 
+
+sub makePslPartsLst {
+  # Create a pslParts.lst file the subdirectories of pslParts; if some
+  # are for subsequences of the same sequence, make a single .lst line
+  # for the sequence (single chaining job with subseqs' alignments
+  # catted together).  Otherwise (i.e. subdirs that contain small
+  # target seqs glommed together by partitionSequences) make one .lst
+  # line per partition.
+  return if ($opt_debug);
+  opendir(P, "$buildDir/pslParts")
+    || die "Couldn't open directory $buildDir/pslParts for reading: $!\n";
+  my @parts = readdir(P);
+  closedir(P);
+  my $partsLst = "$buildDir/axtChain/run/pslParts.lst";
+  open(L, ">$partsLst") || die "Couldn't open $partsLst for writing: $!\n";
+  my %seqs = ();
+  my $count = 0;
+  foreach my $p (@parts) {
+    $p =~ s@^/.*/@@;  $p =~ s@/$@@;
+    $p =~ s/\.psl\.gz//;
+    next if ($p eq '.' || $p eq '..');
+    if ($p =~ m@^(\S+:\S+):\d+-\d+$@) {
+      # Collapse subsequences (subranges of a sequence) down to one entry
+      # per sequence:
+      $seqs{$1} = 1;
+    } else {
+      print L "$p\n";
+      $count++;
+    }
+  }
+  foreach my $p (keys %seqs) {
+    print L "$p:\n";
+    $count++;
+  }
+  close(L);
+  if ($count < 1) {
+    die "makePslPartsLst: didn't find any pslParts/ items.";
+  }
+}
+
+
 sub doChainRun {
   # Do a small cluster run to chain alignments to each target sequence.
   my ($paraHub) = @_;
@@ -599,7 +649,7 @@ sub doChainRun {
     || die "Couldn't open $runDir/gsub for writing: $!\n";
   print GSUB  <<_EOF_
 #LOOP
-chain.csh \$(root1) {check out line+ chain/\$(root1).chain}
+chain.csh \$(file1) {check out line+ chain/\$(file1).chain}
 #ENDLOOP
 _EOF_
   ;
@@ -610,7 +660,7 @@ _EOF_
     || die "Couldn't open $runDir/chain.csh for writing: $!\n";
   print CHAIN  <<_EOF_
 #!/bin/csh -ef
-zcat ../../pslParts/\$1.*.psl.gz \\
+zcat ../../pslParts/\$1*.psl.gz \\
 | axtChain -psl -verbose=0 $matrix stdin \\
     $defVars{SEQ1_DIR} \\
     $defVars{SEQ2_DIR} \\
@@ -621,6 +671,8 @@ zcat ../../pslParts/\$1.*.psl.gz \\
 _EOF_
     ;
   close(CHAIN);
+
+  &makePslPartsLst();
 
   my $bossScript = "$runDir/doChainRun.csh";
   open(SCRIPT, ">$bossScript")
@@ -635,9 +687,8 @@ _EOF_
 # This script will fail if any of its commands fail.
 
 cd $runDir
-awk '{print \$1;}' $defVars{'SEQ1_LEN'} > chrom.lst
 chmod a+x chain.csh
-gensub2 chrom.lst single gsub jobList
+gensub2 pslParts.lst single gsub jobList
 mkdir chain
 $paraRun
 _EOF_
