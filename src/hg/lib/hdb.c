@@ -24,7 +24,7 @@
 #include "scoredRef.h"
 #include "maf.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.120 2003/07/09 22:56:05 markd Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.121 2003/07/14 19:35:24 hiram Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
@@ -2345,7 +2345,7 @@ char **row;
 struct dbDb *dbList = NULL, *db;
 
 /* Scan through dbDb table, loading into list */
-sr = sqlGetResult(conn, "select * from dbDb where active = 1 order by orderKey");
+sr = sqlGetResult(conn, "select * from dbDb where active = 1 order by orderKey,name desc");
 while ((row = sqlNextRow(sr)) != NULL)
     {
     db = dbDbLoad(row);
