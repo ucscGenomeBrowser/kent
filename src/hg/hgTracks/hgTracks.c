@@ -86,7 +86,7 @@
 #include "versionInfo.h"
 #include "bedCart.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.853 2004/12/13 02:26:32 sugnet Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.854 2004/12/14 00:55:13 fanhsu Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -5242,6 +5242,32 @@ tg->itemColor = rnaGeneColor;
 }
 
 
+Color wgRnaColor(struct track *tg, void *item, struct vGfx *vg)
+/* Return color of wgRna track item. */
+{
+char condStr[255];
+char *rnaType;
+Color color={MG_BLACK};
+struct sqlConnection *conn;
+conn = hAllocConn();
+char *name = tg->itemName(tg, item);
+        
+sprintf(condStr, "name='%s'", name);
+rnaType = sqlGetField(conn, database, "wgRna", "type", condStr);
+if (sameWord(rnaType, "miRna"))   color = MG_RED;
+if (sameWord(rnaType, "HAcaBox")) color = MG_GREEN;
+if (sameWord(rnaType, "CDBox"))   color = MG_BLUE;
+
+hFreeConn(&conn);
+return(color);
+}
+
+void wgRnaMethods(struct track *tg)
+/* Make track for wgRna. */
+{
+tg->itemColor = wgRnaColor;
+}
+
 Color stsColor(struct vGfx *vg, int altColor, 
 	char *genethonChrom, char *marshfieldChrom, 
 	char *fishChrom, int ppt)
@@ -9225,6 +9251,7 @@ registerTrackHandler("exoFish", exoFishMethods);
 registerTrackHandler("tet_waba", tetWabaMethods);
 registerTrackHandler("wabaCbr", cbrWabaMethods);
 registerTrackHandler("rnaGene", rnaGeneMethods);
+registerTrackHandler("wgRna", wgRnaMethods);
 registerTrackHandler("rmskLinSpec", repeatMethods);
 registerTrackHandler("rmsk", repeatMethods);
 registerTrackHandler("rmskNew", repeatMethods);
