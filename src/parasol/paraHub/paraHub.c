@@ -1195,8 +1195,15 @@ if (sTime != NULL)
     job = jobFind(runningJobs, atoi(id));
     if (job != NULL)
 	{
-	if (job->machine != NULL)
-	    job->machine->lastChecked = now;
+	struct machine *machine = job->machine;
+	if (machine != NULL)
+	    {
+	    machine->lastChecked = now;
+	    if (sameString(status, "0"))
+	        machine->goodCount += 1;
+	    else
+		machine->errCount += 1;
+	    }
 	writeJobResults(job, status, uTime, sTime);
 	finishJob(job);
 	runner(1);
@@ -1213,10 +1220,10 @@ struct job *job;
 for (mach = machineList; mach != NULL; mach = mach->next)
     {
     pmClear(pm);
-    pmPrintf(pm, "%-10s ", mach->name);
+    pmPrintf(pm, "%-10s good %d, err %d, ", mach->name, mach->goodCount, mach->errCount);
     job = mach->job;
     if (job != NULL)
-        pmPrintf(pm, "%-10s %s", job->batch->user->name, job->cmd);
+        pmPrintf(pm, "running %-10s %s", job->batch->user->name, job->cmd);
     else
 	{
 	if (mach->isDead)

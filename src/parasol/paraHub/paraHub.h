@@ -37,6 +37,7 @@ struct machine
     char *name;                 /* Name.  Not alloced here. */
     struct job *job;		/* Current job if any. */
     int errCount;               /* Number of errors. */
+    int goodCount;		/* Number of good runs. */
     time_t lastChecked;		/* Last time we checked machine in seconds past 1972 */
     boolean isDead;		/* True if machine dead. */
     char *tempDir;		/* Name of local temp dir. */
