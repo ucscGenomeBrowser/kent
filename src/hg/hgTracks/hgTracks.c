@@ -86,7 +86,7 @@
 #include "versionInfo.h"
 #include "bedCart.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.860 2005/01/13 03:10:03 kate Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.861 2005/01/17 19:29:35 braney Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -8230,6 +8230,18 @@ tg->drawItemAt = valAlDrawAt;
 }
 
 
+void loadBlatz(struct track *tg)
+{
+enum trackVisibility vis = tg->visibility;
+loadXenoPsl(tg);
+if (vis != tvDense)
+    {
+    lookupProteinNames(tg);
+    slSort(&tg->items, linkedFeaturesCmpStart);
+    }
+vis = limitVisibility(tg);
+}
+
 void loadBlast(struct track *tg)
 {
 enum trackVisibility vis = tg->visibility;
@@ -8245,6 +8257,16 @@ vis = limitVisibility(tg);
 Color blastNameColor(struct track *tg, void *item, struct vGfx *vg)
 {
 return 1;
+}
+
+void blatzMethods(struct track *tg)
+/* blatz track methods */
+{
+tg->loadItems = loadBlatz;
+tg->itemName = refGeneName;
+tg->mapItemName = refGeneMapName;
+tg->itemColor = blastColor;
+tg->itemNameColor = blastNameColor;
 }
 
 void blastMethods(struct track *tg)
@@ -9174,6 +9196,7 @@ registerTrackHandler("blastDm1FB", blastMethods);
 registerTrackHandler("blastHg16KG", blastMethods);
 registerTrackHandler("blastHg17KG", blastMethods);
 registerTrackHandler("blatHg16KG", blastMethods);
+registerTrackHandler("blatzHg17KG", blatzMethods);
 registerTrackHandler("blastSacCer1SG", blastMethods);
 registerTrackHandler("tblastnHg16KGPep", blastMethods);
 registerTrackHandler("xenoRefGene", xenoRefGeneMethods);
