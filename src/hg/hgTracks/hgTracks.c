@@ -84,7 +84,7 @@
 #include "estOrientInfo.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.833 2004/11/06 02:32:41 kate Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.834 2004/11/06 23:43:26 daryl Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
@@ -9009,6 +9009,7 @@ if (!hideControls)
 	hPrintf("<th colspan=%d BGCOLOR=#536ED3>", 
 		MAX_CONTROL_COLUMNS);
 	hPrintf("<B>%s</B>", wrapWhiteFont(group->label));
+	hPrintf("\n<A NAME=\"#%s\">\n",group->name);
 	hPrintf("</th>\n", MAX_CONTROL_COLUMNS);
 	controlGridEndRow(cg);
 
@@ -9023,7 +9024,7 @@ if (!hideControls)
 	    hPrintf(" %s<BR> ", RULER_TRACK_LABEL);
             hPrintf("</A>");
 	    hDropList("ruler", rulerMenu, sizeof(rulerMenu)/sizeof(char *), 
-                                                        rulerMenu[rulerMode]);
+		      rulerMenu[rulerMode]);
 	    controlGridEndCell(cg);
 	    }
 
