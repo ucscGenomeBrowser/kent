@@ -76,7 +76,7 @@
 #include "web.h"
 #include "grp.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.562 2003/07/18 22:57:31 weber Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.563 2003/07/23 23:54:20 kate Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define EXPR_DATA_SHADES 16
@@ -9868,7 +9868,7 @@ if (gotBlat)
     {
     hPrintf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/hgCoordConv?origDb=%s&position=%s:%d-%d&phase=table&%s\">%s</A></TD>", database, chromName, winStart+1, winEnd, uiVars->string, wrapWhiteFont("Convert"));
     }
-if (sameString(database, "hg13") || sameString(database, "hg15")
+if (sameString(database, "hg15")
             || sameString(database, "mm3"))
     {
     hPuts("<TD ALIGN=CENTER>");
@@ -10120,6 +10120,7 @@ registerTrackHandler("blastzMmHg12Best", longXenoPslMethods);
 registerTrackHandler("blastzHuman", longXenoPslMethods);
 registerTrackHandler("blastzHg15", longXenoPslMethods);
 registerTrackHandler("blastzBestHg15", longXenoPslMethods);
+registerTrackHandler("blastzTightHg15", longXenoPslMethods);
 registerTrackHandler("blastzBestHuman", longXenoPslMethods);
 registerTrackHandler("blastBestHuman", longXenoPslMethods);
 registerTrackHandler("blastzAllHuman", longXenoPslMethods);
