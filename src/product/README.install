@@ -212,6 +212,15 @@ done
         may not have the vsyslog() function.  If you have compile
 	errors, add -DNO_SYSLOG to the HG_DEFS line in inc/common.mk.
 
+	To remove the browser dependence on the required location
+	of the /gbdb filesystem, there is a fixup script: fixupGbdb.sh
+	which can be used on tables to fix filenames that are referenced
+	to this location.  For example:
+		./fixupGbdb.sh hgcentral.dbDb htmlPath "/scratch/local/gbdb"
+		./fixupGbdb.sh hgcentral.dbDb nibPath "/scratch/local/gbdb"
+		./fixupGbdb.sh cb1.extFile path "/scratch/local/gbdb"
+		./fixupGbdb.sh ce2.phastCons file "/scratch/local/gbdb"
+
 16.  Useful links:
 
 	Links to various documentation related to the browser software:
@@ -227,4 +236,4 @@ done
 
 
 ====================================================================
-This file last updated: $Date: 2005/03/07 18:31:56 $
+This file last updated: $Date: 2005/03/07 23:31:37 $
