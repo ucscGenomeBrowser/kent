@@ -5,7 +5,7 @@
 #include "memalloc.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: wigDataStream.c,v 1.17 2004/08/17 18:15:20 hiram Exp $";
+static char const rcsid[] = "$Id: wigDataStream.c,v 1.18 2004/08/17 19:36:14 hiram Exp $";
 
 /*	PRIVATE	METHODS	************************************************/
 static void addConstraint(struct wiggleDataStream *wDS, char *left, char *right)
@@ -86,7 +86,7 @@ if (wDS->limit_1 > (lower+range))
 else
     wDS->ucUpperLimit = MAX_WIG_VALUE * ((wDS->limit_1 - lower)/range);
 
-verbose(5, "#\twigSetCompareByte: [%g : %g] becomes [%d : %d]\n",
+verbose(VERBOSE_HIGHEST, "#\twigSetCompareByte: [%g : %g] becomes [%d : %d]\n",
 	lower, lower+range, wDS->ucLowerLimit, wDS->ucUpperLimit);
 }
 
@@ -809,6 +809,8 @@ while (nextRow(wDS, row, WIGGLE_NUM_COLS))
 	    {
 	    bytesSkipped += wiggle->count;
 	    wiggleFree(&wiggle);
+	    verbose(VERBOSE_HIGHEST,
+		"#\tthis row fails compare, next SQL row\n");
 	    continue;	/*	next SQL row	*/
 	    }
 	}
@@ -844,7 +846,8 @@ while (nextRow(wDS, row, WIGGLE_NUM_COLS))
 	read(wDS->wibFH, readData,
 	    (size_t) wiggle->count * (size_t) sizeof(unsigned char));
 
-    verbose(VERBOSE_PER_VALUE_LEVEL, "#\trow: %llu, reading: %u bytes\n", rowCount, wiggle->count);
+	verbose(VERBOSE_PER_VALUE_LEVEL,
+		"#\trow: %llu, reading: %u bytes\n", rowCount, wiggle->count);
 
 	datum = readData;
 	for (j = 0; j < wiggle->count; ++j)
@@ -855,8 +858,14 @@ while (nextRow(wDS, row, WIGGLE_NUM_COLS))
 
 		if (wDS->winEnd)  /* non-zero means a range is in effect */
 		    {	/*	do not allow item (+span) to run over winEnd */
+		    unsigned span = wiggle->span;
+
+			/*	if only doing data array, span is 1 	*/
+		    if (doDataArray && !(doStats || doBed || doStats))
+			span = 1;
+
 		    if ( (chromPosition < wDS->winStart) ||
-			((chromPosition+wiggle->span) > wDS->winEnd) )
+			((chromPosition+span) > wDS->winEnd) )
 			{
 			++datum;	/*	out of range	*/
 			chromPosition += wiggle->span;
@@ -912,17 +921,24 @@ while (nextRow(wDS, row, WIGGLE_NUM_COLS))
 			}
 		    if (!firstSpanDone && doDataArray)
 			{
+			unsigned span = wiggle->span;
 			unsigned inx;
 			unsigned gap = chromPosition - dataArrayPosition;
+
+			dataArrayPosition += gap;
+
+			/*	special case squeezing into the end	*/
+			if ((dataArrayPosition + span) > wDS->winEnd)
+				span = wDS->winEnd - dataArrayPosition;
+				
 			dataArrayPtr += gap;	/* move up, leave NaN's */
 			verbose(VERBOSE_PER_VALUE_LEVEL, "#\t%u-%u <- %g\n",
-				dataArrayPosition + gap,
-				dataArrayPosition + gap + wiggle->span,
-				value);
+				dataArrayPosition,
+				dataArrayPosition + span, value);
 			/*	fill all chrom positions for this element */
-			for (inx = 0; inx < wiggle->span; ++inx)
+			for (inx = 0; inx < span; ++inx)
 				*dataArrayPtr++ = value;
-			dataArrayPosition += gap + wiggle->span;
+			dataArrayPosition += span;
 			}
 		    /*	beware, coords must come in sequence for this to
 		     *	work.  The original SQL query should be ordering
