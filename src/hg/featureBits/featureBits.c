@@ -14,7 +14,7 @@
 #include "agpGap.h"
 #include "chain.h"
 
-static char const rcsid[] = "$Id: featureBits.c,v 1.31 2005/02/16 08:34:05 markd Exp $";
+static char const rcsid[] = "$Id: featureBits.c,v 1.32 2005/02/27 02:25:40 daryl Exp $";
 
 static struct optionSpec optionSpecs[] =
 /* command line option specifications */
@@ -32,6 +32,8 @@ static struct optionSpec optionSpecs[] =
     {"minFeatureSize", OPTION_INT},
     {"enrichment", OPTION_BOOLEAN},
     {"where", OPTION_STRING},
+    {"bin", OPTION_STRING},
+    {"binSize", OPTION_INT},
     {NULL, 0}
 };
 
@@ -44,6 +46,7 @@ boolean countGaps = FALSE;	/* Count gaps in denominator? */
 boolean noRandom = FALSE;	/* Exclude _random chromosomes? */
 boolean noHap = FALSE;	/* Exclude _hap chromosomes? */
 boolean calcEnrichment = FALSE;	/* Calculate coverage/enrichment? */
+int binSize = 500000;	/* Default bin size. */
 
 void usage()
 /* Explain usage and exit. */
@@ -67,6 +70,8 @@ errAbort(
   "   -minFeatureSize=n Don't include bits of the track that are smaller than\n"
   "                     minFeatureSize, useful for differentiating between\n"
   "                     alignment gaps and introns.\n"
+  "   -bin=output.bin   Put bin counts in output file\n"
+  "   -binSize=N        Bin size for generating counts in bin file (default 500000)\n"
   "   -enrichment       Calculates coverage and enrichment assuming first table\n"
   "                     is reference gene track and second track something else\n"
   "   '-where=some sql pattern'  restrict to features matching some sql pattern\n"
@@ -160,6 +165,27 @@ if (lastBit && i-start >= minSize)
 	freeDnaSeq(&seq);
 	}
     }
+}
+
+void bitsToBins(Bits *bits, char *chrom, int chromSize, FILE *bin, int binSize)
+/* Write out binned counts of bits. */
+{
+int i, count=0;
+
+if (!bin)
+    return;
+for (i=0; i<chromSize; ++i)
+    {
+    if (bitReadOne(bits, i))
+	count++;
+    if ( (i%binSize)==0 && i>0 )
+	{
+	fprintf(bin, "%s\t%d\t%d\t%d\t%s.%d\n", chrom, i-binSize, i, count, chrom, i/binSize);
+	count=0;
+	}
+    }
+if ( (i%binSize)>0 && i>0 )
+    fprintf(bin, "%s\t%d\t%d\t%d\t%s.%d\n", chrom, (chromSize/binSize)*binSize, i, count, chrom, i/binSize);
 }
 
 void check(struct sqlConnection *conn, char *table)
@@ -374,7 +400,7 @@ else
 
 void chromFeatureBits(struct sqlConnection *conn,
 	char *chrom, int tableCount, char *tables[],
-	FILE *bedFile, FILE *faFile,
+	FILE *bedFile, FILE *faFile, FILE *binFile,
 	int *retChromSize, int *retChromBits,
 	int *retFirstTableBits, int *retSecondTableBits)
 /* featureBits - Correlate tables via bitmap projections and booleans
@@ -427,6 +453,11 @@ if (bedFile != NULL || faFile != NULL)
     {
     minSize = optionInt("minSize", minSize);
     bitsToBed(acc, chrom, chromSize, bedFile, faFile, minSize);
+    }
+if (binFile != NULL)
+    {
+    binSize = optionInt("binSize", binSize);
+    bitsToBins(acc, chrom, chromSize, binFile, binSize);
     }
 bitFree(&acc);
 bitFree(&bits);
@@ -506,13 +537,16 @@ void featureBits(char *database, int tableCount, char *tables[])
 {
 struct sqlConnection *conn = NULL;
 char *bedName = optionVal("bed", NULL), *faName = optionVal("fa", NULL);
-FILE *bedFile = NULL, *faFile = NULL;
+char *binName = optionVal("bin", NULL);
+FILE *bedFile = NULL, *faFile = NULL, *binFile = NULL;
 struct slName *allChroms = NULL, *chrom = NULL;
 boolean faIndependent = FALSE;
 
 hSetDb(database);
 if (bedName)
     bedFile = mustOpen(bedName, "w");
+if (binName)
+    binFile = mustOpen(binName, "w");
 if (faName)
     {
     boolean faMerge = optionExists("faMerge");
@@ -549,7 +583,7 @@ if (!faIndependent)
 	    {
 	    int chromSize, chromBitSize;
 	    chromFeatureBits(conn, chrom->name, tableCount, tables,
-		bedFile, faFile, &chromSize, &chromBitSize,
+		bedFile, faFile, binFile, &chromSize, &chromBitSize,
 		pFirstTableBits, pSecondTableBits
 		);
 	    totalBases += countBases(conn, chrom->name, chromSize);
