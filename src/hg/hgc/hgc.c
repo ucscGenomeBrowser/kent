@@ -111,7 +111,7 @@
 #include "axtLib.h"
 #include "ensFace.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.474 2003/09/17 00:23:51 kate Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.475 2003/09/19 19:15:44 baertsch Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -829,15 +829,26 @@ for (axt = axtList; axt != NULL; axt = axt->next)
     int size = axt->symCount;
     int sizeLeft = size;
     int qPtr ;
-    fprintf(f, ">%s:%d-%d %s:%d-%d (%c) score %d coding %d-%d xscript %d-%d \n", 
+    char qStrand = (axt->qStrand == gp->strand[0] ? '+' : '-');
+    int qStart = axt->qStart;
+    int qEnd = axt->qEnd;
+    int qSize = 0;
+    if (!sameString(axt->qName, "gap"))
+        qSize = hChromSize2(axt->qName);
+    if (qStrand == '-')
+        {
+        qStart = qSize - axt->qEnd;
+        qEnd = qSize - axt->qStart;
+        }
+    fprintf(f, ">%s:%d-%d %s:%d-%d (%c) score %d coding %d-%d utr/coding %d-%d gene %c alignment %c\n", 
 	    axt->tName, axt->tStart+1, axt->tEnd,
-	    axt->qName, axt->qStart+1, axt->qEnd, axt->qStrand, axt->score,  tStart+1, tEnd, gp->txStart+1, gp->txEnd);
+	    axt->qName, qStart+1, qEnd, qStrand, axt->score,  tStart+1, tEnd, gp->txStart+1, gp->txEnd, gp->strand[0], axt->qStrand);
 
-    qPtr = axt->qStart;
+    qPtr = qStart;
     qCodonPos = tCodonPos; /* put translation back in sync */
     if (!posStrand)
         {
-        qPtr = axt->qEnd;
+        qPtr = qEnd;
         /* skip to next exon fi we are starting in the middle of a gene  - should not happen */
         while ((tPtr < nextEnd) && (nextEndIndex > 0))
             {
@@ -6574,12 +6585,13 @@ else
     org[0] = tolower(org[0]);
     safef(chainTable,sizeof(chainTable), "%sChain", org);
     }
+printf("<B>Score:</B> %d Gap Ratio: %d Intron Ratio: %d <B>PolyA tail length:</B> %d <B>Start:</B> %d <BR>\n", pg->score, pg->score2, pg->score3, pg->polyA, pg->polyAstart);
+htmlHorizontalLine();
 printf("<p>");
-printf("<B>%s Gene:</B> %s %s in %s <p>\n", hOrganism(pg->assembly), pg->gene, pg->geneTable, pg->assembly);
+printf("<B>%s Gene:</B> %s %s in %s\n", hOrganism(pg->assembly), pg->gene, pg->geneTable, pg->assembly);
 linkToOtherBrowser(pg->assembly, pg->chrom, pg->gStart, pg->gEnd);
 printf("%s:%d-%d \n", pg->chrom, pg->gStart, pg->gEnd);
 printf("</A>");
-printf("<B>Score:</B> %d Gap Ratio: %d Intron Ratio: %d<BR>\n", pg->score, pg->score2, pg->score3);
 
 pslList = loadPslRangeT("mrnaBlastz", pg->name, pg->chrom, pg->gStart, pg->gEnd);
 if (pslList != NULL)
@@ -6685,7 +6697,6 @@ while ((row = sqlNextRow(sr)) != NULL)
     pg = pseudoGeneLinkLoad(row);
     if (hTableExists("axtInfo") && pslList != NULL)
         {
-        htmlHorizontalLine();
         pseudoPrintPos(pslList->tName, pslList->tStart, pslList->tEnd, pg);
         }
     }
