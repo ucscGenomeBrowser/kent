@@ -1,6 +1,5 @@
 package edu.ucsc.genome.qa.lib;
 import com.meterware.httpunit.*;
-import com.meterware.httpunit.parsing.*;
 
 /**
  *  This container holds the data for a robot
