@@ -120,7 +120,8 @@ printf(
   "   -out=type   Controls output file format.  Type is one of:\n"
   "                   psl - Default.  Tab separated format without actual sequence\n"
   "                   pslx - Tab separated format with sequence\n"
-  "                   axt - blastz-like axt format (only for nucleotides)\n"
+  "                   axt - blastz-associated axt format\n"
+  "                   maf - multiz-associated maf format\n"
   "                   wublast - similar to wublast format\n"
   "                   blast - similar to NCBI blast format\n"
   , version

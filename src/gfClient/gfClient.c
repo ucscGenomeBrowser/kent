@@ -8,93 +8,19 @@
 #include "psl.h"
 #include "cheapcgi.h"
 
+int version = 15;	/* Synchronize this with blat version. */
+
 /* Variables that can be overridden by command line. */
 int dots = 0;
 int minScore = 30;
 double minIdentity = 90;
 char *outputFormat = "psl";
 
-void outputOptions(struct gfSavePslxData *outForm, FILE *f)
-/* Set up main output data structure. */
-{
-ZeroVar(outForm);
-outForm->f =f;
-outForm->minGood = round(10*minIdentity);
-outForm->saveSeq = sameWord(outputFormat, "pslx");
-}
-
-void gfClient(char *hostName, char *portName, char *nibDir, char *inName, 
-	char *outName, char *tTypeName, char *qTypeName)
-/* gfClient - A client for the genomic finding program that produces a .psl file. */
-{
-struct lineFile *lf = lineFileOpen(inName, TRUE);
-static bioSeq seq;
-struct ssBundle *bundleList;
-FILE *out = mustOpen(outName, "w");
-enum gfType qType = gfTypeFromName(qTypeName);
-enum gfType tType = gfTypeFromName(tTypeName);
-int dotMod = 0;
-
-if (!cgiVarExists("nohead"))
-    pslWriteHead(out);
-while (faSomeSpeedReadNext(lf, &seq.dna, &seq.size, &seq.name, qType != gftProt))
-    {
-    int conn = gfConnect(hostName, portName);
-    if (dots != 0)
-        {
-	if (++dotMod >= dots)
-	    {
-	    dotMod = 0;
-	    fputc('.', stdout);
-	    fflush(stdout);
-	    }
-	}
-    if (qType == gftProt && (tType == gftDnaX || tType == gftRnaX))
-        {
-	static struct gfSavePslxData outForm;
-	outputOptions(&outForm, out);
-	outForm.reportTargetStrand = TRUE;
-	outForm.qIsProt = TRUE;
-	gfAlignTrans(&conn, nibDir, &seq, minScore, gfSavePslx, &outForm);
-	}
-    else if ((qType == gftRnaX || qType == gftDnaX) && (tType == gftDnaX || tType == gftRnaX))
-        {
-	static struct gfSavePslxData outForm;
-	outputOptions(&outForm, out);
-	outForm.reportTargetStrand = TRUE;
-	gfAlignTransTrans(&conn, nibDir, &seq, FALSE, minScore, gfSavePslx, &outForm, qType == gftRnaX);
-	if (qType == gftDnaX)
-	    {
-	    reverseComplement(seq.dna, seq.size);
-	    close(conn);
-	    conn = gfConnect(hostName, portName);
-	    gfAlignTransTrans(&conn, nibDir, &seq, TRUE, minScore, gfSavePslx, &outForm, FALSE);
-	    }
-	}
-    else if ((tType == gftDna || tType == gftRna) && (qType == gftDna || qType == gftRna))
-	{
-	static struct gfSavePslxData outForm;
-	outputOptions(&outForm, out);
-	gfAlignStrand(&conn, nibDir, &seq, FALSE, minScore, gfSavePslx, &outForm);
-	conn = gfConnect(hostName, portName);
-	reverseComplement(seq.dna, seq.size);
-	gfAlignStrand(&conn, nibDir, &seq, TRUE,  minScore, gfSavePslx, &outForm);
-	}
-    else
-        {
-	errAbort("Comparisons between %s queries and %s databases not yet supported",
-		qTypeName, tTypeName);
-	}
-    }
-if (out != stdout)
-    printf("Output is in %s\n", outName);
-}
-
 void usage()
 /* Explain usage and exit. */
 {
-errAbort(
-  "gfClient - A client for the genomic finding program that produces a .psl file\n"
+printf(
+  "gfClient v. %d - A client for the genomic finding program that produces a .psl file\n"
   "usage:\n"
   "   gfClient host port nibDir in.fa out.psl\n"
   "where\n"
@@ -117,7 +43,82 @@ errAbort(
   "                 dnax - DNA sequence translated in six frames to protein\n"
   "                 rnax - DNA sequence translated in three frames to protein\n"
   "   -dots=N   Output a dot every N query sequences\n"
-  "   -nohead   Suppresses psl five line header");
+  "   -nohead   Suppresses psl five line header\n"
+  "   -out=type   Controls output file format.  Type is one of:\n"
+  "                   psl - Default.  Tab separated format without actual sequence\n"
+  "                   pslx - Tab separated format with sequence\n"
+  "                   axt - blastz-associated axt format\n"
+  "                   maf - multiz-associated maf format\n"
+  "                   wublast - similar to wublast format\n"
+  "                   blast - similar to NCBI blast format\n", version);
+}
+
+
+struct gfOutput *gvo;
+
+void gfClient(char *hostName, char *portName, char *nibDir, char *inName, 
+	char *outName, char *tTypeName, char *qTypeName)
+/* gfClient - A client for the genomic finding program that produces a .psl file. */
+{
+struct lineFile *lf = lineFileOpen(inName, TRUE);
+static bioSeq seq;
+struct ssBundle *bundleList;
+FILE *out = mustOpen(outName, "w");
+enum gfType qType = gfTypeFromName(qTypeName);
+enum gfType tType = gfTypeFromName(tTypeName);
+int dotMod = 0;
+char databaseName[256];
+
+snprintf(databaseName, sizeof(databaseName), "%s:%s", hostName, portName);
+
+gvo = gfOutputAny(outputFormat,  round(minIdentity*10), qType == gftProt, tType == gftProt,
+	cgiVarExists("nohead"), databaseName, 23, 3.0e9, out);
+gfOutputHead(gvo, out);
+while (faSomeSpeedReadNext(lf, &seq.dna, &seq.size, &seq.name, qType != gftProt))
+    {
+    int conn = gfConnect(hostName, portName);
+    if (dots != 0)
+        {
+	if (++dotMod >= dots)
+	    {
+	    dotMod = 0;
+	    fputc('.', stdout);
+	    fflush(stdout);
+	    }
+	}
+    if (qType == gftProt && (tType == gftDnaX || tType == gftRnaX))
+        {
+	gvo->reportTargetStrand = TRUE;
+	gfAlignTrans(&conn, nibDir, &seq, minScore, gvo);
+	}
+    else if ((qType == gftRnaX || qType == gftDnaX) && (tType == gftDnaX || tType == gftRnaX))
+        {
+	gvo->reportTargetStrand = TRUE;
+	gfAlignTransTrans(&conn, nibDir, &seq, FALSE, minScore, gvo, qType == gftRnaX);
+	if (qType == gftDnaX)
+	    {
+	    reverseComplement(seq.dna, seq.size);
+	    close(conn);
+	    conn = gfConnect(hostName, portName);
+	    gfAlignTransTrans(&conn, nibDir, &seq, TRUE, minScore, gvo, FALSE);
+	    }
+	}
+    else if ((tType == gftDna || tType == gftRna) && (qType == gftDna || qType == gftRna))
+	{
+	gfAlignStrand(&conn, nibDir, &seq, FALSE, minScore, gvo);
+	conn = gfConnect(hostName, portName);
+	reverseComplement(seq.dna, seq.size);
+	gfAlignStrand(&conn, nibDir, &seq, TRUE,  minScore, gvo);
+	}
+    else
+        {
+	errAbort("Comparisons between %s queries and %s databases not yet supported",
+		qTypeName, tTypeName);
+	}
+    gfOutputQuery(gvo, out);
+    }
+if (out != stdout)
+    printf("Output is in %s\n", outName);
 }
 
 int main(int argc, char *argv[])
