@@ -74,5 +74,10 @@ gbCmpTimeFiles() {
 # databases must be copied to the rr nfs server, as they must be
 # there for hgwbeta or the rr.
 gbGetDatabases() {
-    sed -r -e 's/#.*$//' -e '/^[[:space:]]*$/d' $* | sort -u
+    # gnu and FreeBSD have different sed options for extended regular expressions
+    local reOpt="-r"
+    if [ "`uname`" = "FreeBSD" ] ; then
+        reOpt="-E"
+    fi
+    sed $reOpt -e 's/#.*$//' -e '/^[[:space:]]*$/d' $* | sort -u
 }
