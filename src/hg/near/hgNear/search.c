@@ -4,9 +4,10 @@
 #include "hash.h"
 #include "jksql.h"
 #include "hdb.h"
+#include "obscure.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: search.c,v 1.15 2003/11/09 02:26:45 kent Exp $";
+static char const rcsid[] = "$Id: search.c,v 1.16 2004/02/13 09:22:20 kent Exp $";
 
 int searchResultCmpShortLabel(const void *va, const void *vb)
 /* Compare to sort based on short label. */
@@ -257,9 +258,9 @@ void doSearch(struct sqlConnection *conn, struct column *colList)
  * put up a page of choices. */
 {
 char *search = cartString(cart, searchVarName);
+char *escSearch = makeEscapedString(trimSpaces(search), '\'');
 struct genePos *accList;
-search = trimSpaces(search);
-accList = findKnownAccessions(conn, search);
+accList = findKnownAccessions(conn, escSearch);
 if (accList != NULL)
     {
     if (slCount(accList) == 1 || !sameString(groupOn, "position"))
@@ -280,7 +281,8 @@ if (accList != NULL)
     }
 else
     {
-    searchAllColumns(conn, colList, search);
+    searchAllColumns(conn, colList, escSearch);
     }
+freez(&escSearch);
 }
 
