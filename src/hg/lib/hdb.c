@@ -378,22 +378,26 @@ else
     return FALSE;
 }
 
-boolean hFindChromStartEndFields(char *table, 
-	char retChrom[32], char retStart[32], char retEnd[32])
-/* Given a table return the fields for selecting chromosome, start, and end. */
+boolean hFindFieldsAndBin(char *table, 
+	char retChrom[32], char retStart[32], char retEnd[32],
+	boolean *retBinned)
+/* Given a table return the fields for selecting chromosome, start, 
+ * and whether it's binned . */
 {
 char query[256];
 struct sqlResult *sr;
 char **row;
 struct hash *hash = newHash(5);
 struct sqlConnection *conn = hAllocConn();
-boolean gotIt = TRUE;
+boolean gotIt = TRUE, binned = FALSE;
 
 /* Read table description into hash. */
 sprintf(query, "describe %s", table);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
+    if (sameString(row[0], "bin"))
+        binned = TRUE;
     hashAdd(hash, row[0], NULL);
     }
 sqlFreeResult(&sr);
@@ -414,6 +418,207 @@ else
     gotIt = FALSE;
 freeHash(&hash);
 hFreeConn(&conn);
+*retBinned = binned;
 return gotIt;
+}
+
+boolean hFindChromStartEndFields(char *table, 
+	char retChrom[32], char retStart[32], char retEnd[32])
+/* Given a table return the fields for selecting chromosome, start, and end. */
+{
+int isBinned;
+return hFindFieldsAndBin(table, retChrom, retStart, retEnd, &isBinned);
+}
+
+
+struct hTableInfo
+/* Some info to track table. */
+    {
+    struct hTableInfo *next;	/* Next in list. */
+    char *rootName;		/* Name without chrN_. */
+    boolean isPos;		/* True if table is positional. */
+    boolean isSplit;		/* True if table is split. */
+    boolean hasBin;		/* True if table starts with field. */
+    char chromField[32];		/* Name of chromosome field. */
+    char startField[32];		/* Name of chromosome start field. */
+    char endField[32];		/* Name of chromosome end field. */
+    };
+
+static struct hTableInfo *hFindTableInfo(char *chrom, char *rootName)
+/* Find table information.  Return NULL if no table. */
+{
+static struct hash *hash;
+struct hTableInfo *hti;
+char fullName[64];
+boolean isSplit;
+
+if (hash == NULL)
+    hash = newHash(7);
+if ((hti = hashFindVal(hash, rootName)) == NULL)
+    {
+    sprintf(fullName, "%s_%s", chrom, rootName);
+    if (hTableExists(fullName))
+	isSplit = TRUE;
+    else
+        {
+	isSplit = FALSE;
+	strcpy(fullName, rootName);
+	if (!hTableExists(fullName))
+	    return NULL;
+	}
+    AllocVar(hti);
+    hashAddSaveName(hash, rootName, hti, &hti->rootName);
+    hti->isSplit = isSplit;
+    hti->isPos = hFindFieldsAndBin(fullName, hti->chromField,
+        hti->startField, hti->endField, &hti->hasBin);
+    }
+return hti;
+}
+
+
+boolean hFindSplitTable(char *chrom, char *rootName, 
+	char retTableBuf[64], boolean *hasBin)
+/* Find name of table that may or may not be split across chromosomes. 
+ * Return FALSE if table doesn't exist.  */
+{
+struct hTableInfo *hti = hFindTableInfo(chrom, rootName);
+if (hti == NULL)
+    return FALSE;
+if (hti->isSplit)
+    sprintf(retTableBuf, "%s_%s", chrom, rootName);
+else
+    strcpy(retTableBuf, rootName);
+*hasBin = hti->hasBin;
+return TRUE;
+}
+
+
+/* Stuff to handle binning - which helps us restrict our
+ * attention to the parts of database that contain info
+ * about a particular window on a chromosome. This scheme
+ * will work without modification for chromosome sizes up
+ * to half a gigaBase.  The finest sized bin is 128k (1<<17).
+ * The next coarsest is 8x as big (1<<3).  There's a hierarchy
+ * of bins with the chromosome itself being the final bin.
+ * Features are put in the finest bin they'll fit in. */
+
+static int binOffsets[] = {512+64+8+1, 64+8+1, 8+1, 1, 0};
+#define binFirstShift 17
+#define binNextShift 3
+
+
+int hBinLevels()
+/* Return number of levels to bins. */
+{
+return ArraySize(binOffsets);
+}
+
+int hBinFirstShift()
+/* Return amount to shift a number to get to finest bin. */
+{
+return binFirstShift;
+}
+
+int hBinNextShift()
+/* Return amount to shift a numbe to get to next coarser bin. */
+{
+return binNextShift;
+}
+
+int hFindBin(int start, int end)
+/* Given start,end in chromosome coordinates assign it
+ * a bin.   There's a bin for each 128k segment, for each
+ * 1M segment, for each 8M segment, for each 64M segment,
+ * and for each chromosome (which is assumed to be less than
+ * 512M.)  A range goes into the smallest bin it will fit in. */
+{
+int startBin = start, endBin = end-1, i;
+startBin >>= binFirstShift;
+endBin >>= binFirstShift;
+for (i=0; i<ArraySize(binOffsets); ++i)
+    {
+    if (startBin == endBin)
+        return binOffsets[i] + startBin;
+    startBin >>= binNextShift;
+    endBin >>= binNextShift;
+    }
+errAbort("start %d, end %d out of range in findBin (max is 512M)", start, end);
+return 0;
+}
+
+void hAddBinToQuery(int start, int end, struct dyString *query)
+/* Add clause that will restrict to relevant bins to query. */
+{
+int startBin = (start>>binFirstShift), endBin = ((end-1)>>binFirstShift);
+int i;
+
+for (i=0; i<ArraySize(binOffsets); ++i)
+    {
+    if (i != 0)
+        dyStringAppend(query, " and ");
+    if (startBin == endBin)
+        dyStringPrintf(query, "bin=%u", startBin);
+    else
+        dyStringPrintf(query, "bin>=%u and bin<=%u", startBin, endBin);
+    startBin >>= 3;
+    endBin >>= 3;
+    }
+dyStringAppend(query, " and ");
+}
+
+struct sqlResult *hRangeQuery(struct sqlConnection *conn,
+	char *rootTable, char *chrom,
+	int start, int end, char *extraWhere, int *retRowOffset)
+/* Construct and make a query to tables that may be split and/or
+ * binned. */
+{
+struct hTableInfo *hti = hFindTableInfo(chrom, rootTable);
+struct sqlResult *sr = NULL;
+struct dyString *query = newDyString(1024);
+char fullTable[64], *table = NULL;
+int rowOffset = 0;
+
+if (hti == NULL)
+    {
+    warn("table %s doesn't exist", rootTable);
+    }
+else
+    {
+    dyStringAppend(query, "select * from ");
+    if (hti->isSplit)
+	{
+	char fullTable[64];
+	sprintf(fullTable, "%s_%s", chrom, rootTable);
+	if (!sqlTableExists(conn, fullTable))
+	     warn("%s doesn't exist", fullTable);
+	else
+	    {
+	    table = fullTable;
+	    dyStringPrintf(query, "%s where %s='%s' and ", 
+	    	table, hti->chromField, chrom);
+	    }
+	}
+    else
+        {
+	table = rootTable;
+	dyStringPrintf(query, "%s where ", table);
+	}
+    }
+if (table != NULL)
+    {
+    if (hti->hasBin)
+        {
+	hAddBinToQuery(start, end, query);
+	rowOffset = 1;
+	}
+    dyStringPrintf(query, "%s<%u and %s>%u", 
+    	hti->startField, end, hti->endField, start);
+    if (extraWhere)
+        dyStringPrintf(query, " and %s", extraWhere);
+    sr = sqlGetResult(conn, query->string);
+    }
+freeDyString(&query);
+*retRowOffset = rowOffset;
+return sr;
 }
 

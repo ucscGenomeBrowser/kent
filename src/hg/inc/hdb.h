@@ -7,6 +7,10 @@
 #include "dnautil.h"
 #endif
 
+#ifndef DYSTRING_H
+#include "dystring.h"
+#endif
+
 void hDefaultConnect();
 /* read the default settings from the config file */
 
@@ -43,7 +47,8 @@ boolean hTableExists(char *table);
 int hChromSize(char *chromName);
 /* Return size of chromosome. */
 
-struct dnaSeq *hDnaFromSeq(char *seqName, int start, int end, enum dnaCase dnaCase);
+struct dnaSeq *hDnaFromSeq(char *seqName, 
+	int start, int end, enum dnaCase dnaCase);
 /* Fetch DNA */
 
 struct dnaSeq *hLoadChrom(char *chromName);
@@ -78,5 +83,35 @@ struct slName *hDbList();
 boolean hFindChromStartEndFields(char *table, 
 	char retChrom[32], char retStart[32], char retEnd[32]);
 /* Given a table return the fields for selecting chromosome, start, and end. */
+
+boolean hFindSplitTable(char *chrom, char *rootName, 
+	char retTableBuf[64], boolean *hasBin);
+/* Find name of table that may or may not be split across chromosomes. 
+ * Return FALSE if table doesn't exist.  */
+
+int hBinLevels();
+/* Return number of levels to bins. */
+
+int hBinFirstShift();
+/* Return amount to shift a number to get to finest bin. */
+
+int hBinNextShift();
+/* Return amount to shift a numbe to get to next coarser bin. */
+
+int hFindBin(int start, int end);
+/* Given start,end in chromosome coordinates assign it
+ * a bin.   There's a bin for each 128k segment, for each
+ * 1M segment, for each 8M segment, for each 64M segment,
+ * and for each chromosome (which is assumed to be less than
+ * 512M.)  A range goes into the smallest bin it will fit in. */
+
+void hAddBinToQuery(int start, int end, struct dyString *query);
+/* Add clause that will restrict to relevant bins to query. */
+
+struct sqlResult *hRangeQuery(struct sqlConnection *conn,
+	char *rootTable, char *chrom,
+	int start, int end, char *extraWhere, int *retRowOffset);
+/* Construct and make a query to tables that may be split and/or
+ * binned. */
 
 #endif /* HDB_H */
