@@ -15,17 +15,30 @@ void netAlignStaticLoad(char **row, struct netAlign *ret)
 int sizeOne,i;
 char *s;
 
-ret->tName = row[0];
-ret->level = sqlUnsigned(row[1]);
-ret->tStart = sqlUnsigned(row[2]);
-ret->tEnd = sqlUnsigned(row[3]);
-ret->tSize = sqlUnsigned(row[4]);
+ret->type = row[0];
+ret->tName = row[1];
+ret->level = sqlUnsigned(row[2]);
+ret->tStart = sqlUnsigned(row[3]);
+ret->tEnd = sqlUnsigned(row[4]);
 ret->qName = row[5];
 strcpy(ret->strand, row[6]);
 ret->qStart = sqlUnsigned(row[7]);
 ret->qEnd = sqlUnsigned(row[8]);
-ret->qSize = sqlUnsigned(row[9]);
-ret->score = sqlUnsigned(row[10]);
+ret->score = sqlUnsigned(row[9]);
+ret->chainId = sqlUnsigned(row[10]);
+ret->qOver = sqlUnsigned(row[11]);
+ret->qFar = sqlUnsigned(row[12]);
+ret->qDup = sqlUnsigned(row[13]);
+ret->tN = sqlUnsigned(row[14]);
+ret->qN = sqlUnsigned(row[15]);
+ret->tR = sqlUnsigned(row[16]);
+ret->qR = sqlUnsigned(row[17]);
+ret->tNewR = sqlUnsigned(row[18]);
+ret->qNewR = sqlUnsigned(row[19]);
+ret->tOldR = sqlUnsigned(row[20]);
+ret->qOldR = sqlUnsigned(row[21]);
+ret->tTrf = sqlUnsigned(row[22]);
+ret->qTrf = sqlUnsigned(row[23]);
 }
 
 struct netAlign *netAlignLoad(char **row)
@@ -37,17 +50,30 @@ int sizeOne,i;
 char *s;
 
 AllocVar(ret);
-ret->tName = cloneString(row[0]);
-ret->level = sqlUnsigned(row[1]);
-ret->tStart = sqlUnsigned(row[2]);
-ret->tEnd = sqlUnsigned(row[3]);
-ret->tSize = sqlUnsigned(row[4]);
+ret->type = cloneString(row[0]);
+ret->tName = cloneString(row[1]);
+ret->level = sqlUnsigned(row[2]);
+ret->tStart = sqlUnsigned(row[3]);
+ret->tEnd = sqlUnsigned(row[4]);
 ret->qName = cloneString(row[5]);
 strcpy(ret->strand, row[6]);
 ret->qStart = sqlUnsigned(row[7]);
 ret->qEnd = sqlUnsigned(row[8]);
-ret->qSize = sqlUnsigned(row[9]);
-ret->score = sqlUnsigned(row[10]);
+ret->score = sqlUnsigned(row[9]);
+ret->chainId = sqlUnsigned(row[10]);
+ret->qOver = sqlUnsigned(row[11]);
+ret->qFar = sqlUnsigned(row[12]);
+ret->qDup = sqlUnsigned(row[13]);
+ret->tN = sqlUnsigned(row[14]);
+ret->qN = sqlUnsigned(row[15]);
+ret->tR = sqlUnsigned(row[16]);
+ret->qR = sqlUnsigned(row[17]);
+ret->tNewR = sqlUnsigned(row[18]);
+ret->qNewR = sqlUnsigned(row[19]);
+ret->tOldR = sqlUnsigned(row[20]);
+ret->qOldR = sqlUnsigned(row[21]);
+ret->tTrf = sqlUnsigned(row[22]);
+ret->qTrf = sqlUnsigned(row[23]);
 return ret;
 }
 
@@ -57,7 +83,7 @@ struct netAlign *netAlignLoadAll(char *fileName)
 {
 struct netAlign *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[11];
+char *row[24];
 
 while (lineFileRow(lf, row))
     {
@@ -104,17 +130,30 @@ int i;
 
 if (ret == NULL)
     AllocVar(ret);
+ret->type = sqlStringComma(&s);
 ret->tName = sqlStringComma(&s);
 ret->level = sqlUnsignedComma(&s);
 ret->tStart = sqlUnsignedComma(&s);
 ret->tEnd = sqlUnsignedComma(&s);
-ret->tSize = sqlUnsignedComma(&s);
 ret->qName = sqlStringComma(&s);
 sqlFixedStringComma(&s, ret->strand, sizeof(ret->strand));
 ret->qStart = sqlUnsignedComma(&s);
 ret->qEnd = sqlUnsignedComma(&s);
-ret->qSize = sqlUnsignedComma(&s);
 ret->score = sqlUnsignedComma(&s);
+ret->chainId = sqlUnsignedComma(&s);
+ret->qOver = sqlUnsignedComma(&s);
+ret->qFar = sqlUnsignedComma(&s);
+ret->qDup = sqlUnsignedComma(&s);
+ret->tN = sqlUnsignedComma(&s);
+ret->qN = sqlUnsignedComma(&s);
+ret->tR = sqlUnsignedComma(&s);
+ret->qR = sqlUnsignedComma(&s);
+ret->tNewR = sqlUnsignedComma(&s);
+ret->qNewR = sqlUnsignedComma(&s);
+ret->tOldR = sqlUnsignedComma(&s);
+ret->qOldR = sqlUnsignedComma(&s);
+ret->tTrf = sqlUnsignedComma(&s);
+ret->qTrf = sqlUnsignedComma(&s);
 *pS = s;
 return ret;
 }
@@ -126,6 +165,7 @@ void netAlignFree(struct netAlign **pEl)
 struct netAlign *el;
 
 if ((el = *pEl) == NULL) return;
+freeMem(el->type);
 freeMem(el->tName);
 freeMem(el->qName);
 freez(pEl);
@@ -149,6 +189,10 @@ void netAlignOutput(struct netAlign *el, FILE *f, char sep, char lastSep)
 {
 int i;
 if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->type);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->tName);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
@@ -157,8 +201,6 @@ fputc(sep,f);
 fprintf(f, "%u", el->tStart);
 fputc(sep,f);
 fprintf(f, "%u", el->tEnd);
-fputc(sep,f);
-fprintf(f, "%u", el->tSize);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->qName);
@@ -172,9 +214,35 @@ fprintf(f, "%u", el->qStart);
 fputc(sep,f);
 fprintf(f, "%u", el->qEnd);
 fputc(sep,f);
-fprintf(f, "%u", el->qSize);
-fputc(sep,f);
 fprintf(f, "%u", el->score);
+fputc(sep,f);
+fprintf(f, "%u", el->chainId);
+fputc(sep,f);
+fprintf(f, "%u", el->qOver);
+fputc(sep,f);
+fprintf(f, "%u", el->qFar);
+fputc(sep,f);
+fprintf(f, "%u", el->qDup);
+fputc(sep,f);
+fprintf(f, "%u", el->tN);
+fputc(sep,f);
+fprintf(f, "%u", el->qN);
+fputc(sep,f);
+fprintf(f, "%u", el->tR);
+fputc(sep,f);
+fprintf(f, "%u", el->qR);
+fputc(sep,f);
+fprintf(f, "%u", el->tNewR);
+fputc(sep,f);
+fprintf(f, "%u", el->qNewR);
+fputc(sep,f);
+fprintf(f, "%u", el->tOldR);
+fputc(sep,f);
+fprintf(f, "%u", el->qOldR);
+fputc(sep,f);
+fprintf(f, "%u", el->tTrf);
+fputc(sep,f);
+fprintf(f, "%u", el->qTrf);
 fputc(lastSep,f);
 }
 
