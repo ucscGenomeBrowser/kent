@@ -17,7 +17,7 @@
 #include "joiner.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: filterFields.c,v 1.8 2004/09/02 19:26:49 hiram Exp $";
+static char const rcsid[] = "$Id: filterFields.c,v 1.9 2004/09/10 03:44:44 hiram Exp $";
 
 /* ------- Stuff shared by Select Fields and Filters Pages ----------*/
 
@@ -614,7 +614,7 @@ else
     }
 
 /* Printf free-form query row. */
-    {
+    if (!isWiggle(db, table)) {
     char *name;
     hPrintf("<TABLE BORDER=0><TR><TD>\n");
     name = filterFieldVarName(db, rootTable, "", filterRawLogicVar);
@@ -634,7 +634,7 @@ if (isWiggle(db, table))
 	filterMaxOutputVar);
     cgiMakeDropList(name, maxOutMenu, maxOutMenuSize,
 		cartUsualString(cart, name, maxOutMenu[0]));
-    hPrintf("&nbsp lines</TD></TR></TABLE>\n");
+    hPrintf("&nbsp;lines</TD></TR></TABLE>\n");
     }
 
 freez(&table);
@@ -649,11 +649,12 @@ static void filterControlsForTableCt(char *db, char *table)
 /* Put up filter controls for a custom track. */
 {
 struct customTrack *ct = lookupCt(table);
+
 puts("<TABLE BORDER=0>");
 
 if (ct->wiggle)
     {
-    numericFilterOption(db, table, filterDataValueVar, filterDataValueVar, "");
+    numericFilterOption("ct", table, filterDataValueVar, filterDataValueVar,"");
     }
 else
     {
@@ -699,7 +700,20 @@ else
 	eqFilterOption(db, table, "compareEnds", "chromEnd", "thickEnd", "");
 	}
     }
+
 puts("</TABLE>");
+
+if (ct->wiggle)
+    {
+    char *name;
+    hPrintf("<TABLE BORDER=0><TR><TD> Limit data output to:&nbsp\n");
+    name = filterFieldVarName("ct", table, "",
+	filterMaxOutputVar);
+    cgiMakeDropList(name, maxOutMenu, maxOutMenuSize,
+		cartUsualString(cart, name, maxOutMenu[0]));
+    hPrintf("&nbsp;lines</TD></TR></TABLE>\n");
+    }
+
 hPrintf("<BR>\n");
 cgiMakeButton(hgtaDoFilterSubmit, "Submit");
 hPrintf(" ");
