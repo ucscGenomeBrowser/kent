@@ -1,0 +1,10 @@
+# Mouse-specific link info.
+
+name cgap
+hide
+
+name ensembl
+url http://www.ensembl.org/Caenorhabditis_elegans/geneview?transcript=%s
+
+name aceView
+url http://www.ncbi.nih.gov/IEB/Research/Acembly/av.cgi?db=worm&l=%s

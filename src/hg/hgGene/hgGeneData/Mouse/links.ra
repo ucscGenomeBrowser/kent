@@ -1,0 +1,10 @@
+# Mouse-specific link info.
+
+name cgap
+url http://cgap.nci.nih.gov/Genes/GeneInfo?ORG=Mm&CID=%s
+
+name ensembl
+url http://www.ensembl.org/Mus_musculus/geneview?transcript=%s
+
+name aceView
+hide

@@ -53,13 +53,6 @@ idSql select geneSymbol from kgXref where kgID = '%s'
 url http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Search&db=PubMed&term=%s&doptcmdl=DocSum&tool=genome.ucsc.edu
 priority 60
 
-name omim
-shortLabel OMIM
-tables refLink kgXref
-idSql select refLink.omimId from kgXref,refLink where kgID = '%s' and kgXref.refseq = refLink.mrnaAcc
-url http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Search&db=OMIM&term=%s&doptcmdl=Detailed&tool=genome.ucsc.edu
-priority 65
-
 name geneLynx
 shortLabel GeneLynx
 tables kgXref
@@ -78,7 +71,6 @@ name cgap
 shortLabel CGAP
 tables cgapAlias kgXref
 idSql select cgapID from cgapAlias,kgXref where kgID = '%s' and geneSymbol = alias;
-url http://cgap.nci.nih.gov/Genes/GeneInfo?ORG=Hs&CID=%s
 priority 85
 
 name stanfordSource
@@ -92,13 +84,11 @@ name ensembl
 shortLabel Ensembl
 tables knownToEnsembl
 idSql select value from knownToEnsembl where name = '%s'
-url http://www.ensembl.org/Homo_sapiens/geneview?transcript=%s
 priority 100
 
 name aceView
 shortLabel AceView
 tables kgXref
 idSql select geneSymbol from kgXref where kgID = '%s'
-url http://www.ncbi.nih.gov/IEB/Research/Acembly/av.cgi?db=human&l=%s
 priority 110
 
