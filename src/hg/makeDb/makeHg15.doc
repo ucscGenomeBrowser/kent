@@ -1836,33 +1836,54 @@ o - # ssh hgwdev
     mv hg15.nci60.bed /cluster/store5/gs.16/build33/bed/nci60
     rm *.psl 
 
-LOAD AFFYRATIO [GNF] (TODO)
-o - # ssh hgwdev
-    cd /cluster/store1/sugnet/
-    mkdir gs.16
-    mkdir gs.16/build33
-    mkdi20r gs.16/build33/affyGnf
-    cd gs.16/build33/affyGnf
-    cp /projects/compbiodata/microarray/affyGnf/sequences/HG-U95Av2_target ./
-    ls -1 /cluster/store5/gs.16/build33/trfFa.1204/ > allctg.lst
-    echo "/cluster/store1/sugnet/gs.16/build33/affyGnf/HG-U95Av2_target" > affy.lst
-    echo '#LOOP\n/cluster/bin/i386/blat -mask=lower -minIdentity=95 -ooc=/cluster/store5/gs.16/build33/jkStuff/post.refCheck.old/11.ooc /cluster/store5/gs.16/build33/trfFa.1204/$(path1) $(path2) {check out line+ psl/$(root1)_$(root2).psl}\n#ENDLOOP' > template.sub
-    gensub2 allctg.lst affy.lst template.sub para.spec
-    # ssh kkr1u00
-    para create para.spec
-    para try
-    para check
-    para push
-    # exit kkr1u00
-    pslSort dirs hg15.affy.psl tmp psl >& pslSort.log
-    liftUp hg15.affy.lifted.psl /cluster/store5/gs.16/build33/jkStuff/liftAll.lft warn hg15.affy.psl
-    pslAffySelect seqIdent=.95 basePct=.95 in=hg15.affy.lifted.psl out=hg15.affy.pAffySelect.95.95.psl
-    affyPslAndAtlasToBed hg15.affy.pAffySelect.95.95.psl  /projects/compbiodata/microarray/affyGnf/human_atlas_U95_gnf.noquotes.txt affyRatio.bed affyRatio.exr >& affyPslAndAtlasToBed.log 
-    hg15S -A </projects/compbiodata/microarray/affyGnf/browserFiles/affyRatio.sql 
-    echo "load data local infile 'affyRatio.bed' into table affyRatio" | hg15S -A
-    mkdir /cluster/store5/gs.16/build33/bed/affyGnf
-    rm -rf psl tmp err *.psl *.bed HG-U95Av2_target 
-
+LOAD AFFYRATIO [GNF] (DONE: sugnet - Mon Apr 28 13:49:30 PDT 2003)
+o - [hgwdev:hg15> cd /cluster/store1/sugnet/hg15/build33
+    [hgwdev:build33> rm -rf affyGnf/
+    [hgwdev:build33> mkdir affyGnf
+    [hgwdev:build33> cd affyGnf/
+    [hgwdev:affyGnf> cp /projects/compbio/data/microarray/affyGnf/sequences/HG-U95/HG-U95Av2_target ./
+    [hgwdev:affyGnf> ssh kk
+    [kk:~> cd store1/hg15/build33/affyGnf/
+    [kk:affyGnf> ls -1 /scratch/hg/gs.16/build33/trfFa/ > allctg.lst
+    [kk:affyGnf> echo '#LOOP\n/cluster/bin/i386/blat -fine -mask=lower -minIdentity=95 -ooc=/scratch/hg/h/11.ooc  /scratch/hg/gs.16/build33/trfFa/$(path1) $(path2) {check out line+ psl/$(root1)_$(root2).psl}\n#ENDLOOP' > template.sub
+    [kk:affyGnf> gensub2 allctg.lst affy.lst template.sub para.spec
+    [kk:affyGnf> mkdir psl
+    [kk:affyGnf> para create para.spec
+    Checking input files
+    546 jobs written to batch
+    [kk:affyGnf> para try
+    546 jobs in batch
+    3477 jobs (including everybody's) in Parasol queue.
+    Checking finished jobs
+    updated job database on disk
+    Pushed Jobs: 10
+    [kk:affyGnf> para check
+    546 jobs in batch
+    2098 jobs (including everybody's) in Parasol queue.
+    Checking finished jobs
+    unsubmitted jobs: 536
+    ranOk: 10
+    total jobs in batch: 546
+    [kk:affyGnf> para push
+    [kk:affyGnf> para check
+    546 jobs in batch
+    901 jobs (including everybody's) in Parasol queue.
+    Checking finished jobs...
+    ranOk: 546
+    total jobs in batch: 546
+    [kk:affyGnf> liftUp hg15.affy.lifted.psl  /cluster/store5/gs.16/build33/jkStuff/liftAll.lft warn hg15.affy.psl
+    Got 546 lifts in /cluster/store5/gs.16/build33/jkStuff/liftAll.lft
+    Lifting hg15.affy.psl
+    [kk:affyGnf> pslReps -minCover=.85 -minAli=.95 hg15.affy.lifted.psl hg15.affy.pslReps.psl out.psr
+    Processing hg15.affy.lifted.psl to hg15.affy.pslReps.psl and out.psr
+    Processed 15351 alignments
+    [kk:affyGnf> exit
+    [hgwdev:affyGnf> /cse/grads/sugnet/bin/i386/affyPslAndAtlasToBed hg15.affy.pslReps.psl   /projects/compbiodata/microarray/affyGnf/human_atlas_U95_gnf.noquotes.txt affyRatio.bed affyRatio.exr >& affyPslAndAtlasToBed.log 
+    [hgwdev:affyGnf> hg15S -A < /projects/compbio/data/microarray/affyGnf/browserFiles/affyRatio.sql 
+    [hgwdev:affyGnf> mkdir /cluster/store5/gs.16/build33/bed/affyRatio
+    [hgwdev:affyGnf> cp affyRatio.bed  /cluster/store5/gs.16/build33/bed/affyRatio
+    [hgwdev:affyGnf> rm rm -rf psl tmp err *.psl *.bed HG-U95Av2_target 
+    
 # LOAD SAGE DATA (TODO)
     ssh hgwdev
     cd ~/kent/src/hg/sage
