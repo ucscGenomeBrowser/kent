@@ -24,7 +24,7 @@
 #define CDS_HELP_PAGE "../goldenPath/help/hgCodonColoring.html"
 #define CDS_MRNA_HELP_PAGE "../goldenPath/help/hgCodonColoringMrna.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.175 2005/02/08 21:22:57 kate Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.176 2005/02/09 19:50:59 hiram Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -829,9 +829,13 @@ char *yLineMarkOnOff;	/*	user defined Y marker line to draw */
 double yLineMark;		/*	from trackDb or cart	*/
 int maxHeightPixels = atoi(DEFAULT_HEIGHT_PER);
 int minHeightPixels = MIN_HEIGHT_PER;
+boolean bedGraph = FALSE;	/*	working on bedGraph type ? */
 
 typeLine = cloneString(tdb->type);
 wordCount = chopLine(typeLine,words);
+
+if (sameString(words[0],"bedGraph"))
+    bedGraph = TRUE;
 
 snprintf( &options[0][0], 256, "%s.%s", tdb->tableName, HEIGHTPER );
 snprintf( &options[4][0], 256, "%s.%s", tdb->tableName, MIN_Y );
@@ -845,7 +849,10 @@ snprintf( &options[12][0], 256, "%s.%s", tdb->tableName, YLINEMARK );
 snprintf( &options[13][0], 256, "%s.%s", tdb->tableName, YLINEONOFF );
 
 wigFetchMinMaxPixels(tdb, &minHeightPixels, &maxHeightPixels, &defaultHeight);
-wigFetchMinMaxY(tdb, &minY, &maxY, &tDbMinY, &tDbMaxY, wordCount, words);
+if (bedGraph)
+    wigFetchMinMaxLimits(tdb, &minY, &maxY, &tDbMinY, &tDbMaxY);
+else
+    wigFetchMinMaxY(tdb, &minY, &maxY, &tDbMinY, &tDbMaxY, wordCount, words);
 (void) wigFetchHorizontalGrid(tdb, &horizontalGrid);
 (void) wigFetchAutoScale(tdb, &autoScale);
 (void) wigFetchGraphType(tdb, &lineBar);
@@ -856,6 +863,9 @@ wigFetchYLineMarkValue(tdb, &yLineMark);
 
 printf("<TABLE BORDER=0><TR><TD ALIGN=LEFT>\n");
 
+if (bedGraph)
+printf("<b>bedGraph Type of graph:&nbsp;</b>");
+else
 printf("<b>Type of graph:&nbsp;</b>");
 wiggleGraphDropDown(&options[8][0], lineBar);
 printf("</TD></TR><TR><TD ALIGN=LEFT COLSPAN=2>\n");
@@ -1316,6 +1326,8 @@ else if (sameString(track, "blastSacCer1SG"))
         blastSGUi(tdb);
 else if (sameString(track, "blastHg17KG") || sameString(track, "blastHg16KG") || sameString(track, "blatzHg17KG"))
         blastUi(tdb);
+else if (startsWith("bedGraph", tdb->type))
+	wigUi(tdb);
 else if (startsWith("wig", tdb->type))
         {
         if (startsWith("wigMaf", tdb->type))

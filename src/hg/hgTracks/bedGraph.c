@@ -13,7 +13,7 @@
 #include "scoredRef.h"
 #include "customTrack.h"
 
-static char const rcsid[] = "$Id: bedGraph.c,v 1.2 2005/02/09 01:06:23 hiram Exp $";
+static char const rcsid[] = "$Id: bedGraph.c,v 1.3 2005/02/09 19:52:16 hiram Exp $";
 
 /*	bedGraphCartOptions structure - to carry cart options from
  *	bedGraphMethods to all the other methods via the
@@ -574,8 +574,6 @@ if (autoScale == wiggleScaleAuto)
 graphRange = graphUpperLimit - graphLowerLimit;
 epsilon = graphRange / tg->lineHeight;
 
-warn("DrawItems: u,l,range: %g - %g, %g", graphUpperLimit, graphLowerLimit, graphRange);
-
 /*
  *	We need to put the graphing limits back into the items
  *	so the LeftLabels routine can find these numbers.
@@ -938,8 +936,8 @@ void bedGraphMethods(struct track *track, struct trackDb *tdb,
 	int wordCount, char *words[])
 {
 int defaultHeight = atoi(DEFAULT_HEIGHT_PER);  /* truncated by limits	*/
-double minY;	/*	from trackDb or cart, requested minimum */
-double maxY;	/*	from trackDb or cart, requested maximum */
+double minY = 0.0;	/*	from trackDb or cart, requested minimum */
+double maxY = 1000.0;	/*	from trackDb or cart, requested maximum */
 double yLineMark;	/*	from trackDb or cart */
 struct bedGraphCartOptions *bedGraphCart;
 int maxHeight = atoi(DEFAULT_HEIGHT_PER);
@@ -957,7 +955,7 @@ bedGraphCart->autoScale = wigFetchAutoScale(tdb, (char **) NULL);
 bedGraphCart->windowingFunction = wigFetchWindowingFunction(tdb, (char **) NULL);
 bedGraphCart->smoothingWindow = wigFetchSmoothingWindow(tdb, (char **) NULL);
 
-/*wigFetchMinMaxPixels(tdb, &minHeight, &maxHeight, &defaultHeight);*/
+wigFetchMinMaxPixels(tdb, &minHeight, &maxHeight, &defaultHeight);
 wigFetchYLineMarkValue(tdb, &yLineMark);
 bedGraphCart->yLineMark = yLineMark;
 bedGraphCart->yLineOnOff = wigFetchYLineMark(tdb, (char **) NULL);
@@ -966,13 +964,8 @@ bedGraphCart->maxHeight = maxHeight;
 bedGraphCart->defaultHeight = defaultHeight;
 bedGraphCart->minHeight = minHeight;
 
-minY = 0.0;
-maxY = 100.0;
-
 /*wigFetchMinMaxY(tdb, &minY, &maxY, &tDbMinY, &tDbMaxY, wordCount, words);*/
-fprintf(stderr, "wordCount: %d\n", wordCount);
-fprintf(stderr, "words 0: %s\n", words[0]);
-fprintf(stderr, "words 1: %s\n", words[1]);
+wigFetchMinMaxLimits(tdb, &minY, &maxY, (double *)NULL, (double *)NULL);
 
 switch (wordCount)
     {

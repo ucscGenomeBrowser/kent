@@ -87,7 +87,10 @@
 #include "versionInfo.h"
 #include "bedCart.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.897 2005/02/09 19:09:26 jill Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.898 2005/02/09 19:53:06 hiram Exp $";
+
+extern void bedGraphMethods(struct track *track, struct trackDb *tdb, 
+	int wordCount, char *words[]);
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -8630,6 +8633,10 @@ if (sameWord(type, "bed"))
 	track->extraUiData = newBedUiData(track->mapName);
 	track->loadItems = loadGappedBed;
 	}
+    }
+else if (sameWord(type, "bedGraph"))
+    {
+    bedGraphMethods(track, tdb, wordCount, words);
     }
 else if (sameWord(type, "wig"))
     {
