@@ -110,6 +110,14 @@ spectrum on
 type netAlign galGal2 chainGalGal2
 otherDb galGal2
 
+track elephant
+shortLabel Elephant Blastz
+longLabel Human/Elephant Blastz (Loxodonta Africana trimmed reads) Reciprocal Best
+group compGeno
+priority 165
+visibility hide
+type maf
+
 track blastzRn3
 shortLabel Rat Blastz
 longLabel $o_Organism ($o_date/$o_db) Blastz Alignments
