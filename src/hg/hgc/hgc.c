@@ -122,7 +122,7 @@
 #include "sgdDescription.h"
 #include "hgFind.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.545 2004/01/08 18:44:27 heather Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.546 2004/01/09 20:33:18 hartera Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -3460,6 +3460,73 @@ printf("<H3>%s/Genomic Alignments</H3>", type);
 printAlignments(pslList, start, "htcCdnaAli", table, acc);
 
 printTrackHtml(tdb);
+hFreeConn(&conn);
+}
+
+void printPslFormat(struct sqlConnection *conn, struct trackDb *tdb, char *item, int start, char *subType) 
+/* Handles click in affyU95 or affyU133 tracks */
+{
+struct psl* pslList = getAlignments(conn, tdb->tableName, item);
+struct psl* psl;
+char sep = '\n';
+char lastSep = '\n';
+char *face = "Times"; /* specifies font face to use */
+char *fsize = "+1"; /* specifies font size */
+
+/* check if there is an alignment available for this sequence.  This checks
+ * both genbank sequences and other sequences in the seq table.  If so,
+ * set it up so they can click through to the alignment. */
+if (hGenBankHaveSeq(item, NULL))
+    {
+    printf("<H3>%s/Genomic Alignments</H3>", item);
+    printAlignments(pslList, start, "htcCdnaAli", tdb->tableName, item);
+    }
+else
+    {
+    /* print out the psls */
+    printf("<PRE><TT>");
+    printf("<FONT FACE = \"%s\" SIZE = \"%s\">\n", face, fsize);
+
+    for (psl = pslList;  psl != NULL; psl = psl->next)
+       {
+       pslOutFormat(psl, stdout, '\n', '\n');
+       }
+    printf("</FONT></TT></PRE>\n");
+    }
+pslFreeList(&pslList);
+}
+
+void doAffy(struct trackDb *tdb, char *item, char *itemForUrl) 
+/* Display information for Affy tracks*/
+
+{
+char *dupe, *type, *words[16];
+char title[256];
+int wordCount;
+int start = cartInt(cart, "o");
+struct sqlConnection *conn = hAllocConn();
+
+if (itemForUrl == NULL)
+    itemForUrl = item;
+dupe = cloneString(tdb->type);
+genericHeader(tdb, item);
+wordCount = chopLine(dupe, words);
+printCustomUrl(tdb, itemForUrl, item == itemForUrl);
+
+if (wordCount > 0)
+    {
+    type = words[0];
+
+    if (sameString(type, "psl"))
+        {
+	char *subType = ".";
+	if (wordCount > 1)
+	    subType = words[1];
+        printPslFormat(conn, tdb, item, start, subType);
+	}
+    }
+printTrackHtml(tdb);
+freez(&dupe);
 hFreeConn(&conn);
 }
 
@@ -12704,6 +12771,10 @@ else if (sameWord(track, "mrna") || sameWord(track, "mrna2") ||
          )
     {
     doHgRna(tdb, item);
+    }
+else if (sameWord(track, "affyU95") || sameWord(track, "affyU133") )
+    {
+    doAffy(tdb, item, NULL);
     }
 else if (sameWord(track, "refFullAli"))
     {
