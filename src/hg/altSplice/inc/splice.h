@@ -10,7 +10,7 @@
 #endif
 
 #ifndef GENEGRAPH_H
-#include "genegraph.h"
+#include "geneGraph.h"
 #endif
 
 #define PATH_NUM_COLS 10
