@@ -1146,6 +1146,8 @@ while (readGbInfo(lf))
 
             hashAdd(raHash, org, raFile);   
             hashAdd(faHash, org, faFile);   
+
+            freez(&orgDir);
             }
 
         if (NULL == raFile) 
