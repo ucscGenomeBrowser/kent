@@ -18,6 +18,8 @@ boolean imreFormat = FALSE;
 char *checkImre = NULL;
 char *imreCheck = NULL;
 char *imreVsNa = NULL;
+char *imreMerge = NULL;
+char *fpcChrom = NULL;
 
 void usage()
 /* Describe usage and exit. */
@@ -32,6 +34,8 @@ errAbort(
    "    -checkImre=dir - Cross check Imre formatted dir vs WashU\n"
    "    -imreCheck=dir - Cross check WashU formatted dir vs Imre\n"
    "    -imreVsNa=dir - Cross check NA and UL vs Imre\n"
+   "    -imreMerge=dir - Merge WashU and TPF maps.  You need to also specify fpcChrom\n"
+   "    -fpcChrom=M,N - List of chromosomes where the WashU map should predominate.\n"
    );
 }
 
@@ -59,6 +63,7 @@ struct cloneInfo
     int pos;
     bool inMap;
     bool inFfa;
+    bool suppress;		/* Don't write if this is set. */
     struct cmContig *contig;	/* Back pointer to contig. May be NULL. */
     };
 
@@ -490,7 +495,20 @@ for (nt = contig->ntList; nt != NULL; nt = nt->next)
 fclose(f);
 }
 
-void makeCmDir(struct cmChrom *chromList, char *outDir)
+boolean suppressMinority(struct hash *minorityHash, struct cloneInfo *ci, struct cmContig *contig)
+/* Help suppress clones that are mapped to this contig, but are also minority
+ * elements of an NT contig which is mapped to another contig. */
+{
+struct cmContig *majority;
+if (minorityHash == NULL) return FALSE;
+majority = hashFindVal(minorityHash, ci->acc);
+if (majority == NULL) return FALSE;
+if (contig == majority) return FALSE;
+uglyf("Suppressing %s in minority contig %s\n", ci->acc, contig->name);
+return TRUE;
+}
+
+void makeCmDir(struct cmChrom *chromList, char *outDir, struct hash *minorityHash)
 /* Make directory full of goodies corresponding to chromList. */
 {
 struct cmChrom *chrom;
@@ -543,9 +561,12 @@ for (chrom = chromList; chrom != NULL; chrom = chrom->next)
 		for (cl = contig->cloneList; cl != NULL; cl = cl->next)
 		    {
 		    ci = cl->clone;
-		    fprintf(info, "%s %d %d\n", ci->acc, ci->pos, ci->phase);
-		    if (ci->dir != NULL)
-			fprintf(geno, "%s/%s.fa\n", ci->dir, ci->acc);
+		    if (!ci->suppress && !suppressMinority(minorityHash, ci, contig))
+			{
+			fprintf(info, "%s %d %d\n", ci->acc, ci->pos, ci->phase);
+			if (ci->dir != NULL)
+			    fprintf(geno, "%s/%s.fa\n", ci->dir, ci->acc);
+			}
 		    }
 		fclose(info);
 		fclose(geno);
@@ -1008,8 +1029,20 @@ slFreeList(&ctList);
 return popCtg;
 }
 
+void hashMinorityClones(struct ntInfo *nt, struct cmContig *majority, struct hash *minorityHash)
+/* Add clones in contig that aren't placed in the majority contig to contig list. */
+{
+struct ntClonePos *ncp;
+for (ncp = nt->cloneList; ncp != NULL; ncp = ncp->next)
+    {
+    if (ncp->clone->contig != majority)
+	hashAdd(minorityHash, ncp->clone->acc, majority);
+    }
+}
+
 void addNtsToImre(struct cmChrom *chromList, 
-	struct hash *basicHash, struct hash *cloneHash, char *gsDir)
+	struct hash *basicHash, struct hash *cloneHash, char *gsDir,
+	struct hash *minorityHash)
 /* Add NT contig info to Imre-based map. */
 {
 struct hash *ntHash = newHash(0);
@@ -1032,6 +1065,7 @@ for (nt = ntList; nt != NULL; nt = nextNt)
     if (contig != NULL) 
         {
 	nt->ctg = contig->name; 
+	hashMinorityClones(nt, contig, minorityHash);
 	slAddHead(&contig->ntList, nt);
 	}
     }
@@ -1075,7 +1109,7 @@ hashFree(&ntCloneHash);
 }
 
 struct cmChrom *imParse(char *gsDir, char *imreDir, struct hash *cloneHash, 
-	struct cloneInfo **pCloneList, struct hash *ctgHash)
+	struct cloneInfo **pCloneList, struct hash *ctgHash, struct hash *minorityHash)
 /* Parse tpf.txt files in imreDir. */
 {
 struct fileInfo *fiList1 = listDirX(imreDir, "*", TRUE), *fi1;
@@ -1100,7 +1134,7 @@ for (fi1 = fiList1; fi1 != NULL; fi1 = fi1->next)
 slFreeList(&fiList1);
 slReverse(&chromList);
 checkDupes(chromList);
-addNtsToImre(chromList, basicHash, cloneHash, gsDir);
+addNtsToImre(chromList, basicHash, cloneHash, gsDir, minorityHash);
 hashFree(&basicHash);
 return chromList;
 }
@@ -1111,18 +1145,19 @@ void ooDirsFromMap(char *inName, char *gsDir, char *outDir, boolean imreMap)
 {
 struct hash *cloneHash = newHash(0);
 struct hash *ctgHash = newHash(0);
+struct hash *minorityHash = newHash(8);
 struct cloneInfo *cloneList = NULL;
 struct cmChrom *chromList;
 
 if (imreMap)
-    chromList = imParse(gsDir, inName, cloneHash, &cloneList, ctgHash);
+    chromList = imParse(gsDir, inName, cloneHash, &cloneList, ctgHash, minorityHash);
 else
     chromList = wuParse(inName, cloneHash, &cloneList, ctgHash);
 if (chromList == NULL)
     errAbort("Nothing to do in %s\n", inName);
 readGsClones(gsDir, cloneHash, &cloneList);
 slReverse(&cloneList);
-makeCmDir(chromList, outDir);
+makeCmDir(chromList, outDir, minorityHash);
 listMissing(cloneList, badHash);
 }
 
@@ -1218,10 +1253,11 @@ struct cmChrom *wuChromList = NULL, *imreChromList = NULL;
 struct hash *wuCloneHash = newHash(0), *imreCloneHash = newHash(0);
 struct cloneInfo *wuCloneList = NULL, *imreCloneList = NULL;
 struct hash *wuCtgHash = newHash(0), *imreCtgHash = newHash(0);
+struct hash *minorityHash = newHash(8);
 
 wuChromList = wuParse(wuFile, wuCloneHash, &wuCloneList, wuCtgHash);
 slReverse(&wuCloneList);
-imreChromList = imParse(gsDir, imreDir, imreCloneHash, &imreCloneList, imreCtgHash);
+imreChromList = imParse(gsDir, imreDir, imreCloneHash, &imreCloneList, imreCtgHash, minorityHash);
 slReverse(&imreCloneList);
 if (checkNa)
     {
@@ -1234,6 +1270,32 @@ else
     else
 	flagMissing(imreCloneHash, wuCloneList);
     }
+}
+
+struct hash *commaListToHash(char *commaList)
+/* Convert a comma separated list to hash. */
+{
+char *dup = cloneString(commaList), *s;
+char *words[128];
+int wordCount, i;
+struct hash *hash = newHash(5);
+
+wordCount = chopCommas(dup, words);
+for (i=0; i<wordCount; ++i)
+    {
+    s = words[i];
+    if (s[0] != 0)
+	hashAdd(hash, s, NULL);
+    }
+freeMem(dup);
+return hash;
+}
+
+void doImreMerge(char *gsDir, char *imreDir, char *wuFile)
+/* Merge WashU and Imre Map.  Use Imre map except for chromosomes
+ * in fpcChrom. */
+{
+struct hash *useWuHash = commaListToHash(fpcChrom);
 }
 
 void cmProcess(char *inName, char *badClones, char *finLst, char *gsDir, 
@@ -1258,6 +1320,10 @@ else if (imreVsNa != NULL)
     {
     checkImreVsWu(gsDir, imreVsNa, inName, FALSE, TRUE);
     }
+else if (imreMerge != NULL)
+    {
+    doImreMerge(gsDir, imreMerge, inName);
+    }
 else if (imreFormat)
     {
     ooDirsFromMap(inName, gsDir, outDir, TRUE);
@@ -1277,6 +1343,8 @@ imreFormat = cgiBoolean("imre");
 checkImre = cgiOptionalString("checkImre");
 imreCheck = cgiOptionalString("imreCheck");
 imreVsNa = cgiOptionalString("imreVsNa");
+imreMerge = cgiOptionalString("imreMerge");
+fpcChrom = cgiOptionalString("fpcChrom");
 if (argc != 6)
     usage();
 errLog = mustOpen("err.log", "w");
