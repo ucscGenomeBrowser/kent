@@ -17,6 +17,11 @@ struct tokenizer
     char *string;        /* String value of token */
     int sSize;           /* Size of string. */
     int sAlloc;          /* Allocated string size. */
+      /* Some variables set after tokenizerNew to control details of
+       * parsing. */
+    bool leaveQuotes;	 /* Leave quotes in string. */
+    bool uncommentC;	 /* Take out C (and C++) style comments. */
+    bool uncommentShell; /* Take out # style comments. */
     };
 
 struct tokenizer *tokenizerNew(char *fileName);

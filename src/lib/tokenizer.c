@@ -8,7 +8,7 @@
 #include "linefile.h"
 #include "tokenizer.h"
 
-static char const rcsid[] = "$Id: tokenizer.c,v 1.1 2004/03/22 14:17:09 kent Exp $";
+static char const rcsid[] = "$Id: tokenizer.c,v 1.2 2004/04/09 05:20:55 kent Exp $";
 
 struct tokenizer *tokenizerNew(char *fileName)
 /* Return a new tokenizer. */
@@ -64,12 +64,41 @@ if (tkz->reuse)
     tkz->reuse = FALSE;
     return tkz->string;
     }
-for (;;)	/* Skip over white space. */
+for (;;)	/* Skip over white space and comments. */
     {
     int lineSize;
     s = start = skipLeadingSpaces(tkz->linePt);
     if ((c = start[0]) != 0)
-	break;
+	{
+	if (tkz->uncommentC && c == '/')
+	     {
+	     if (start[1] == '/')
+		 ;  /* Keep going in loop effectively ignoring rest of line. */
+	     else if (start[1] == '*')
+		 {
+		 start += 2;
+		 for (;;)
+		     {
+		     char *end = stringIn("*/", start);
+		     if (end != NULL)
+			  {
+			  tkz->linePt = end+2;
+			  break;
+			  }
+		     if (!lineFileNext(tkz->lf, &tkz->curLine, &lineSize))
+			  errAbort("End of file (%s) in comment", tokenizerFileName(tkz));
+		     start = tkz->curLine;
+		     }
+		 continue;
+		 }
+	     else
+		 break;
+	     }
+	else if (tkz->uncommentShell && c == '#')
+	     ;  /* Keep going in loop effectively ignoring rest of line. */
+	else
+	    break;	/* Got something real. */
+	}
     if (!lineFileNext(tkz->lf, &tkz->curLine, &lineSize))
 	{
 	tkz->eof = TRUE;
@@ -87,17 +116,37 @@ if (isalnum(c) || (c == '_'))
 	}
     end = s;
     }
-else if (c == '"')
+else if (c == '"' || c == '\'')
     {
-    start = s+1;
+    char quot = c;
+    if (tkz->leaveQuotes)
+	start = s++;
+    else
+	start = ++s;
     for (;;)
 	{
-	c = *(++s);
-	if (c == '"')
+	c = *s;
+	if (c == quot)
+	    {
+	    if (s[-1] == '\\')
+		{
+		if (s >= start+2 && s[-2] == '\\')
+		    break;
+		}
+	    else
+		break;
+	    }
+	else if (c == 0)
+	    {
 	    break;
+	    }
+	++s;
 	}
     end = s;
-    ++s;
+    if (c != 0)
+	++s;
+    if (tkz->leaveQuotes)
+	end += 1;
     }
 else
     {
@@ -114,6 +163,7 @@ memcpy(tkz->string, start, size);
 tkz->string[size] = 0;
 return tkz->string;
 }
+
 
 void tokenizerErrAbort(struct tokenizer *tkz, char *format, ...)
 /* Print error message followed by file and line number and
