@@ -4,9 +4,9 @@
 #include "hash.h"
 #include "options.h"
 #include "chainBlock.h"
-#include "chainNet.h"
 #include "dnautil.h"
 #include "dnaseq.h"
+#include "chainNet.h"
 #include "nib.h"
 #include "axt.h"
 #include "axtLib.h"
@@ -15,6 +15,7 @@
 #include "hdb.h"
 
 
+#ifdef DUPE
 struct hash *chainReadAll(char *fileName)
 /* Read chains into a hash keyed by id. */
 {
@@ -49,7 +50,6 @@ sprintf(nameBuf, "%x", id);
 return hashMustFindVal(hash, nameBuf);
 }
 
-#ifdef DUPE
 struct nibInfo
 /* Info on a nib file. */
     {
@@ -168,7 +168,6 @@ slAddHead(&axtList, axt);
 slReverse(&axtList);
 return axtList;
 }
-#endif /* DUPE */
 
 void writeGaps(struct chain *chain, FILE *f)
 /* Write gaps to simple two column file. */
@@ -182,20 +181,22 @@ for (b = a->next; b != NULL; b = b->next)
     }
 }
 
-struct axt *convertFill(struct cnFill *fill, struct dnaSeq *tChrom,
+#endif /* DUPE*/
+
+struct axt *netFillToAxt(struct cnFill *fill, struct dnaSeq *tChrom , int tSize,
 	struct hash *qChromHash, char *nibDir,
-	struct chain *chain, FILE *gapFile)
-/* Convert subset of chain as defined by fill to axt. */
+	struct chain *chain, boolean swap)
+/* Convert subset of chain as defined by fill to axt. swap query and target if swap is true*/
 {
 struct dnaSeq *qSeq;
 boolean isRev = (chain->qStrand == '-');
 struct chain *subChain, *chainToFree;
 int qOffset;
-struct axt *axtList ;
+struct axt *axtList = NULL , *axt;
+struct nibInfo *nib = hashFindVal(qChromHash, fill->qName);
 
 /* Get query sequence fragment. */
     {
-    struct nibInfo *nib = hashFindVal(qChromHash, fill->qName);
     if (nib == NULL)
         {
 	char path[512];
@@ -217,9 +218,15 @@ struct axt *axtList ;
     }
 chainSubsetOnT(chain, fill->tStart, fill->tStart + fill->tSize, 
 	&subChain, &chainToFree);
-if (subChain == NULL)
-    subChain = chain;
-axtList = chainToAxt(subChain, qSeq, qOffset, tChrom, fill->tStart, 100);
+if (subChain != NULL)
+    {
+    axtList = chainToAxt(subChain, qSeq, qOffset, tChrom, fill->tStart, 100);
+    if (swap)
+        {
+        for (axt = axtList ; axt != NULL ; axt = axt->next)
+            axtSwap(axt, tSize, nib->size);
+        }
+    }
 chainFree(&chainToFree);
 freeDnaSeq(&qSeq);
 return axtList;
@@ -278,12 +285,13 @@ axt->qSym = cloneMem(gapPt, size+1);
 return axt;
 }
 
-void axtFillGap(struct axt **aList, char *nib)
+void axtFillGap(struct axt **aList, char *nibDir)
 /* fill gaps between blocks with null axts with seq on t and q seq all gaps*/
 {
 struct axt *axt, *next, *axtGap, *tmp, *prevAxt = NULL;
 int prevEnd = 0;
 int prevStart = 0;
+char nib[128];
 
 for (axt = *aList; axt != NULL; axt = next)
     {
@@ -291,6 +299,7 @@ for (axt = *aList; axt != NULL; axt = next)
         {
         assert(prevAxt != NULL);
         tmp = prevAxt->next;
+        safef(nib, sizeof(nib), "%s/%s.nib",nibDir,axt->tName);
         axtGap = createAxtGap(nib,axt->tName,prevEnd,(axt->tStart)-1,axt->qStrand);
         axtGap->next = tmp;
         prevAxt->next = axtGap;
