@@ -3,7 +3,7 @@
 #include "common.h"
 #include "histogram.h"
 
-static char const rcsid[] = "$Id: histogram.c,v 1.1 2004/08/24 20:32:06 hiram Exp $";
+static char const rcsid[] = "$Id: histogram.c,v 1.2 2004/08/26 19:29:56 hiram Exp $";
 
 static unsigned autoScale(float *values, size_t N, float *binSize,
 	unsigned *binCount, float *minValue, float *min, float *max)
@@ -125,7 +125,8 @@ if (histoResults && *histoResults)
 }
 
 struct histoResult *histoGram(float *values, size_t N, float binSize,
-	unsigned binCount, float minValue, float min, float max)
+	unsigned binCount, float minValue, float min, float max,
+	struct histoResult *accumHisto)
 /*	construct histogram of data in values[N] array.  The extra
  *	options of binSize, binCount, minValue, min, max are optional.
  *	Run autoScaling when min == max == 0.0
@@ -137,6 +138,8 @@ struct histoResult *histoGram(float *values, size_t N, float binSize,
  *	known, pass those in on min,max to aid the calculation of auto
  *	scaled values.  NAN's can be in the values[N] array and will be
  *	ignored.
+ *	When given a pointer to accumHisto, use that existing histo gram
+ *	and continue accumulations in it.
  */
 {
 float autoBinSize = NAN;	/*	pass NAN's to cause auto scaling */
