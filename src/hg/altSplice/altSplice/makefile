@@ -13,7 +13,7 @@ MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a ../lib/${MACHTYPE}/libSpliceG
 	${CC} ${COPT}  -I../../inc -I../../../inc  -o $@ ${addsuffix .c,$@} ${MYLIBS} ${L}
 
 
-O =  altAnalysis altSplice orthoSplice agxToBed altSummary # spliceStats spliceVis
+O =  genePredToBed genePredToPsl altAnalysis altSplice orthoSplice agxToBed altSummary # spliceStats spliceVis
 
 TESTO = test_geneGraph.o
 
