@@ -20,7 +20,7 @@ cdsDrawOptions enabled
 
 track ecoresHg17
 shortLabel Human Ecores
-longLabel Fugu/$o_Organism ($o_date/$o_db) Evolutionary Conserved Regions
+longLabel Tetraodon/$o_Organism ($o_date/$o_db) Evolutionary Conserved Regions
 group compGeno
 priority 120.1
 visibility hide
