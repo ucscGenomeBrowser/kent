@@ -62,7 +62,7 @@ mkdir -p $dirPath/$today
 set summaryFile=$dirPath/$today/$today.trackDb.html
 set summaryUrl=$urlPath/$today/$today.trackDb.html
 rm -f $summaryFile
-echo "<HTML><HEAD><TITLE>trackDb Diffs $today</TITLLE></HEAD><BODY>\n<PRE> \
+echo "<HTML><HEAD><TITLE>trackDb Diffs $today</TITLE></HEAD><BODY>\n<PRE> \
       \n" >! $summaryFile
 
 echo "db      diffs"
