@@ -1,5 +1,5 @@
 
-table location
+table fileLocation
 "Location of image, typically a file directory"
     (
     int id;	"ID of location"
@@ -25,13 +25,6 @@ table treatment
     (
     int id;	"ID of treatment"
     string conditions;	"Text string describing conditions"
-    )
-
-table imageType
-"Type of image - RNA in situ, fluorescent antibody, etc."
-    (
-    int id;		"ID of image type"
-    string name;	"Name of image type"
     )
 
 table contributor
@@ -95,36 +88,73 @@ table gene
     int taxon;		"NCBI taxon ID of organism"
     )
 
+table geneSynonym
+"A synonym for a gene"
+    (
+    int gene;	"ID in gene table"
+    string name;	"Synonymous name for gene"
+    )
+
+table probeType
+"Type of probe - RNA, antibody, etc."
+    (
+    int id;		"ID of probe type"
+    string name;	"Name of probe type"
+    )
+
 table probe
 "Info on a probe"
     (
     int id;		"ID of probe"
     int gene;		"Associated gene if any"
     int antibody;	"Associated antibody if any"
+    int probeType;	"Type of probe - antibody, RNA, etc.."
     string fPrimer;	"Forward PCR primer if any"
     string rPrimer;	"Reverse PCR primer if any"
     lString seq;	"Associated sequence if any"
     )
 
-table image
-"A single biological image"
+table probeColor
+"Color - what color probe is in"
     (
-    int id;		"ID of image"
+    int id;		"Id of color"
+    string name;	"Color name"
+    )
+
+table imageFile
+"A biological image file"
+    (
+    int id;		"ID of imageFile"
     string fileName;	"Image file name not including directory"
+    float priority;	"Lower priorities are displayed first"
     int fullLocation;	"Location of full-size image"
     int screenLocation;	"Location of screen-sized image"
     int thumbLocation;	"Location of thumbnail-sized image"
     int submissionSet;	"Submission set this is part of"
+    string submitId;	"ID within submission set"
+    )
+
+table image
+"An image.  There may be multiple images within an imageFile"
+    (
+    int id;		"ID of image"
+    int imageFile;	"ID of image file"
+    int imagePos;	"Position in image file, starting with 0"
     int sectionSet;	"Set of sections this is part of or 0 if none"
     int sectionIx;	"Position (0 based) within set of sections"
-    string submitId;	"ID within submission set"
-    int gene;		"ID within gene table"
-    int probe;		"ID within probe table"
     int taxon;		"NCBI taxon ID of organism"
     byte isEmbryo;	"TRUE if embryonic.  Age will be relative to conception"
     float age;		"Age in days since birth or conception depending on isEmbryo"
     int bodyPart;	"Part of body image comes from"
     int sliceType;	"How section is sliced"
-    int imageType;	"Type of image - in situ, etc."
     int treatment;	"How section is treated"
     )
+
+table imageProbe
+"Associate probe and image"
+    (
+    int image;	"ID of image"
+    int probe;	"ID of probe"
+    int probeColor;	"ID of probeColor"
+    )
+

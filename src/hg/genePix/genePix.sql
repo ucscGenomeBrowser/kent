@@ -4,8 +4,8 @@
 # automatic way.
 
 #Location of image, typically a file directory
-CREATE TABLE location (
-    id int not null,	# ID of location
+CREATE TABLE fileLocation (
+    id int auto_increment not null,	# ID of fileLocation
     name longblob not null,	# Directory path usually
               #Indices
     PRIMARY KEY(id)
@@ -13,7 +13,7 @@ CREATE TABLE location (
 
 #Brain, eye, kidney, etc.  Use 'whole' for whole body
 CREATE TABLE bodyPart (
-    id int not null,	# ID of body part
+    id int auto_increment not null,	# ID of body part
     name varchar(255) not null,	# Name of body part
               #Indices
     PRIMARY KEY(id),
@@ -22,7 +22,7 @@ CREATE TABLE bodyPart (
 
 #Horizontal, coronal, whole mount, etc.
 CREATE TABLE sliceType (
-    id int not null,	# ID of section
+    id int auto_increment not null,	# ID of section
     name varchar(255) not null,	# Name transverse/sagittal/whole mount, etc
               #Indices
     PRIMARY KEY(id),
@@ -31,15 +31,15 @@ CREATE TABLE sliceType (
 
 #Fixation and other treatment conditions
 CREATE TABLE treatment (
-    id int not null,	# ID of treatment
+    id int auto_increment not null,	# ID of treatment
     conditions varchar(255) not null,	# Text string describing conditions
               #Indices
     PRIMARY KEY(id)
 );
 
 #Type of image - RNA in situ, fluorescent antibody, etc.
-CREATE TABLE imageType (
-    id int not null,	# ID of image type
+CREATE TABLE probeType (
+    id int auto_increment not null,	# ID of image type
     name varchar(255) not null,	# Name of image type
               #Indices
     PRIMARY KEY(id)
@@ -47,7 +47,7 @@ CREATE TABLE imageType (
 
 #Info on contributor
 CREATE TABLE contributor (
-    id int not null,	# ID of contributor
+    id int auto_increment not null,	# ID of contributor
     name varchar(255) not null,	# Name in format like Kent W.J.
               #Indices
     PRIMARY KEY(id),
@@ -56,7 +56,7 @@ CREATE TABLE contributor (
 
 #Information on a journal
 CREATE TABLE journal (
-    id int not null,	# ID of journal
+    id int auto_increment not null,	# ID of journal
     name varchar(255) not null,	# Name of journal
     url varchar(255) not null,	# Journal's main url
               #Indices
@@ -65,7 +65,7 @@ CREATE TABLE journal (
 
 #Info on a batch of images submitted at once
 CREATE TABLE submissionSet (
-    id int not null,	# ID of submission set
+    id int auto_increment not null,	# ID of submission set
     contributors longblob not null,	# Comma separated list of contributors in format Kent W.J., Wu F.Y.
     publication longblob not null,	# Name of publication
     pubUrl longblob not null,	# Publication URL
@@ -82,20 +82,20 @@ CREATE TABLE submissionContributor (
     submissionSet int not null,	# ID in submissionSet table
     contributor int not null,	# ID in contributor table
               #Indices
-    PRIMARY KEY(submissionSet),
+    INDEX(submissionSet),
     INDEX(contributor)
 );
 
 #Info on a bunch of sections through same sample
 CREATE TABLE sectionSet (
-    id int not null,	# Section id
+    id int auto_increment not null,	# Section id
               #Indices
     PRIMARY KEY(id)
 );
 
 #Information on an antibody
 CREATE TABLE antibody (
-    id int not null,	# Antibody ID
+    id int auto_increment not null,	# Antibody ID
     name varchar(255) not null,	# Name of antibody
     description longblob not null,	# Description of antibody
     taxon int not null,	# Taxon of animal antibody is from
@@ -105,7 +105,7 @@ CREATE TABLE antibody (
 
 #Info on a gene
 CREATE TABLE gene (
-    id int not null,	# ID of gene
+    id int auto_increment not null,	# ID of gene
     name varchar(255) not null,	# Gene symbol (HUGO if available)
     locusLink varchar(255) not null,	# NCBI locus link ID or blank if none
     refSeq varchar(255) not null,	# RefSeq ID or blank if none
@@ -120,48 +120,85 @@ CREATE TABLE gene (
     INDEX(uniProt(12))
 );
 
+# A synonym for a gene
+CREATE TABLE geneSynonym (
+    gene int not null,	#ID in gene table
+    name varchar(255) not null, #Synonymous name for gene
+              #Indices
+    INDEX(gene),
+    INDEX(name(16))
+);
+
+
 #Info on a probe
 CREATE TABLE probe (
-    id int not null,	# ID of probe
+    id int auto_increment not null,	# ID of probe
     gene int not null,	# Associated gene if any
     antibody int not null,	# Associated antibody if any
     fPrimer varchar(255) not null,	# Forward PCR primer if any
     rPrimer varchar(255) not null,	# Reverse PCR primer if any
     seq longblob not null,	# Associated sequence if any
+    probeType int not null,	# Type of probe
               #Indices
     PRIMARY KEY(id),
     INDEX(gene)
 );
 
-#A single biological image
-CREATE TABLE image (
-    id int not null,	# ID of image
+#What color probe is in
+CREATE TABLE probeColor (
+    id int auto_increment not null,	# ID of probeColor
+    name varchar(255) not null,	# Name of probeColor
+              #Indices
+    PRIMARY KEY(id),
+    UNIQUE(name(16))
+);
+
+
+#A file of biological images
+CREATE TABLE imageFile (
+    id int auto_increment not null,  # ID of image file
     fileName varchar(255) not null,	# Image file name not including directory
+    priority float not null,    # Lower priorities are displayed first
     fullLocation int not null,	# Location of full-size image
     screenLocation int not null,	# Location of screen-sized image
     thumbLocation int not null,	# Location of thumbnail-sized image
     submissionSet int not null,	# Submission set this is part of
+    submitId varchar(255) not null,	# ID within submission set
+              #Indices
+    PRIMARY KEY(id),
+    INDEX(submitId),
+    INDEX(submissionSet)
+);
+
+#An image.  There may be multiple images within an imageFile
+CREATE TABLE image (
+    id int auto_increment not null,	# ID of image
+    imageFile int not null,     # ID of image file
+    imagePos int not null,	# Position in image file, starting with 0
     sectionSet int not null,	# Set of sections this is part of or 0 if none
     sectionIx int not null,	# Position (0 based) within set of sections
-    submitId varchar(255) not null,	# ID within submission set
-    gene int not null,	# ID within gene table
-    probe int not null,	# ID within probe table
     taxon int not null,	# NCBI taxon ID of organism
     isEmbryo tinyint not null,	# TRUE if embryonic.  Age will be relative to conception
     age float not null,	# Age in days since birth or conception depending on isEmbryo
     bodyPart int not null,	# Part of body image comes from
     sliceType int not null,	# How section is sliced
-    imageType int not null,	# Type of image - in situ, etc.
     treatment int not null,	# How section is treated
               #Indices
     PRIMARY KEY(id),
-    INDEX(submissionSet),
+    INDEX(imageFile),
     INDEX(bodyPart),
     INDEX(sectionSet),
-    INDEX(submitId),
-    INDEX(probe),
-    INDEX(gene),
     INDEX(taxon),
-    INDEX(age),
-    INDEX(imageType)
+    INDEX(age)
 );
+
+# Associate probe and image
+CREATE TABLE imageProbe (
+    image int not null,	# ID of image
+    probe int not null, # ID of probe
+    probeColor int not null, # ID of probeColor
+         #indices
+    INDEX(image),
+    INDEX(probe),
+    INDEX(probeColor)
+); 
