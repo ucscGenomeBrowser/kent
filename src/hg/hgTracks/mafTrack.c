@@ -10,7 +10,7 @@
 #include "maf.h"
 #include "scoredRef.h"
 
-static char const rcsid[] = "$Id: mafTrack.c,v 1.7 2003/05/09 16:20:25 kent Exp $";
+static char const rcsid[] = "$Id: mafTrack.c,v 1.8 2003/05/11 22:21:54 kent Exp $";
 
 struct mafItem
 /* A maf track item. */
@@ -81,8 +81,8 @@ tg->customPt = mafList;
 
 /* Make up item that will show inserts in this organism. */
 AllocVar(mi);
-snprintf(buf, sizeof(buf), "%s Inserts", myOrg);
-mi->name = cloneString(buf);
+// snprintf(buf, sizeof(buf), "%s Inserts", myOrg);
+mi->name = cloneString("Hidden");
 mi->height = tl.fontHeight;
 slAddHead(&miList, mi);
 
@@ -197,9 +197,31 @@ for (i=0; i<textSize && baseIx < baseCount; ++i)
     {
     c = text[i];
     if (c == '-')
-        insertLine[baseIx] = '-';
+	{
+	unsigned char b = insertLine[baseIx];
+	if (b < 255)
+	    insertLine[baseIx] = b+1;
+	}
     else
         baseIx += 1;
+    }
+}
+
+static void charifyInserts(char *insertLine, int size)
+/* Convert insert line from counts to characters. */
+{
+int i;
+char c;
+for (i=0; i<size; ++i)
+    {
+    c = insertLine[i];
+    if (c == 0)
+       c = ' ';
+    else if (c <= 9)
+       c += '0';
+    else
+       c = '+';
+    insertLine[i] = c;
     }
 }
 
@@ -447,7 +469,8 @@ char dbChrom[64];
 
 /* Allocate a line of characters for each item. */
 AllocArray(lines, lineCount-1);
-for (i=0; i<lineCount-1; ++i)
+lines[0] = needMem(winBaseCount+1);
+for (i=1; i<lineCount-1; ++i)
     {
     lines[i] = needMem(winBaseCount+1);
     memset(lines[i], ' ', winBaseCount);
@@ -512,6 +535,8 @@ for (maf = mafList; maf != NULL; maf = maf->next)
     }
 
 /* Draw lines with letters . */
+charifyInserts(insertLine, winBaseCount);
+/* Convert insert line from counts to characters. */
 for (mi = miList, i=0; mi->next != NULL; mi = mi->next, ++i)
     {
     char *line = lines[i];
