@@ -3,6 +3,7 @@
 #include "common.h"
 #include "hash.h"
 #include "obscure.h"
+#include "memalloc.h"
 #include "portable.h"
 #include "errabort.h"
 #include "linefile.h"
@@ -321,7 +322,7 @@ return TRUE;
 static boolean lineIsGff(char *line)
 /* Return TRUE if format of this row is consistent with being a GFF */
 {
-char *dupe = strdup(line);
+char *dupe = cloneString(line);
 char *words[10], *strand;
 int wordCount;
 boolean isGff = FALSE;
