@@ -10,7 +10,7 @@
 #include "nib.h"
 #include "sig.h"
 
-static char const rcsid[] = "$Id: nib.c,v 1.17 2004/02/29 00:23:14 daryl Exp $";
+static char const rcsid[] = "$Id: nib.c,v 1.18 2004/09/16 19:25:52 braney Exp $";
 
 static char *findNibSubrange(char *fileName)
 /* find the colon starting a nib seq name/subrange in a nib file name, or NULL
@@ -85,8 +85,60 @@ void nibOpenVerify(char *fileName, FILE **retFile, int *retSize)
 {
 bits32 size;
 bits32 sig;
-FILE *f = mustOpen(fileName, "rb");
+FILE *f = fopen(fileName, "rb");
+char buffer[512];
+char buffer2[512];
+char buffer3[512];
 
+if (f == NULL)
+    {
+    /* see if nib is down a few directories ala faSplit -outDirDepth */
+    char *ptr = NULL;
+    char *dir, *file;
+    struct stat statBuf;
+
+    /* divide fileName into file and directory components */
+    safef(buffer, sizeof(buffer), "%s", fileName);
+    if ((ptr = strrchr(buffer, '/')) != NULL)
+	{
+	*ptr++ = 0;
+	dir = buffer;
+	file = ptr;
+	}
+    else
+	{
+	dir = "";
+	file = buffer;
+	}
+    
+    buffer3[0] = 0;
+    /* start at the end of the fileName (minus .nib) */
+    for(ptr = &file[strlen(file) - 5]; ; )
+	{
+	strcpy(buffer2, buffer3);
+	if (isdigit(*ptr))
+	    {
+	    /* if we have a digit in the fileName, see if there is a directory with this name */
+	    safef(buffer3, sizeof(buffer3), "%c/%s",*ptr,buffer2);
+	    ptr--;
+	    }
+	else
+	    /* we've run out of digits in the fileName, just add 0's */
+	    safef(buffer3, sizeof(buffer3), "0/%s",buffer2);
+
+	/* check to see if this directory exists */
+	safef(buffer2, sizeof(buffer2), "%s/%s", dir, buffer3);
+	if (stat(buffer2, &statBuf) < 0)
+	    break;
+
+	/* directory exists, see if our file is down there */
+	safef(buffer2, sizeof(buffer2), "%s/%s/%s", dir, buffer3, file);
+	if  ((f = fopen(buffer2, "rb")) != NULL)
+	    break;
+	}
+    if (f == NULL)
+	errAbort("Can't open %s to read: %s", fileName,  strerror(errno));
+    }
 dnaUtilOpen();
 mustReadOne(f, sig);
 mustReadOne(f, size);
