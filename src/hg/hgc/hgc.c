@@ -121,7 +121,7 @@
 #include "sgdDescription.h"
 #include "hgFind.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.535 2003/12/12 21:59:57 angie Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.536 2003/12/17 19:55:30 braney Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -12819,9 +12819,11 @@ else if (sameWord(track, "hg15repeats") )
     }
 /* This is a catch-all for blastz/blat tracks -- any special cases must be 
  * above this point! */
-else if (startsWith("blastz", track) || startsWith("blat", track) || endsWith(track, "Blastz"))
+else if (startsWith("blastz", track) || startsWith("blat", track) || startsWith("tblast", track) || endsWith(track, "Blastz"))
     {
     char *genome = "Unknown";
+    if (startsWith("tblast", track))
+        genome = &track[6];
     if (startsWith("blat", track))
         genome = &track[4];
     if (startsWith("blastz", track))
