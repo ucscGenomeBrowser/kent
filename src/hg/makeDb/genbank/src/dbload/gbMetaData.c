@@ -31,7 +31,7 @@
 #include "genbank.h"
 #include "gbSql.h"
 
-static char const rcsid[] = "$Id: gbMetaData.c,v 1.11 2003/08/25 03:32:59 genbank Exp $";
+static char const rcsid[] = "$Id: gbMetaData.c,v 1.12 2003/08/25 05:12:59 genbank Exp $";
 
 // FIXME: move mrna, otherse to objects.
 
@@ -887,7 +887,7 @@ sqlDeleterFree(&deleter);
 
 /* if we are cleaning out the ext table, we need to get rid of any
  * refseq peptides in gbSeq that are no longer referenced.  We don't
- * do it other times as these are not reachable
+ * do it other times as these are not reachable directly.
  */
 if ((select->release->srcDb == GB_REFSEQ)
     && (gOptions->flags & DBLOAD_EXT_FILE_UPDATE))

@@ -30,7 +30,7 @@
 #include "extFileTbl.h"
 #include <signal.h>
 
-static char const rcsid[] = "$Id: gbLoadRna.c,v 1.12 2003/08/25 03:32:59 genbank Exp $";
+static char const rcsid[] = "$Id: gbLoadRna.c,v 1.13 2003/08/25 05:12:59 genbank Exp $";
 
 /* FIXME: add optimize subcommand to sort all alignment tables */
 
@@ -556,8 +556,13 @@ if ((gOptions.flags & DBLOAD_INITIAL)
     loadDelayedTables();
 
 /* clean up extFile table if we change references for any seq */
+#if 0 /*FIXME: hak to force update of refseq pep */
 if ((gTotalExtChgCnt > 0) && ((gOptions.flags & DBLOAD_DRY_RUN) == 0))
     cleanExtFileTable();
+#else
+if ((gOptions.flags & DBLOAD_EXT_FILE_UPDATE) && ((gOptions.flags & DBLOAD_DRY_RUN) == 0))
+    cleanExtFileTable();
+#endif
 
 /* clean up */
 slFreeList(&selectList);
