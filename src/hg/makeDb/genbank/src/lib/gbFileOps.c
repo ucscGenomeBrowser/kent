@@ -8,7 +8,7 @@
 #include <unistd.h>
 #include <sys/time.h>
 
-static char const rcsid[] = "$Id: gbFileOps.c,v 1.7 2004/01/18 17:46:30 markd Exp $";
+static char const rcsid[] = "$Id: gbFileOps.c,v 1.8 2004/07/20 16:18:48 markd Exp $";
 
 /* Table of RNA bases that are allowed.  Lower-case only, plus some special
  * meta characters. Call allowedRNABasesInit before using directly.*/
@@ -244,7 +244,7 @@ else
 inline
 #endif
 static unsigned parseUnsigned(char *buf, unsigned iStart, unsigned len,
-                              int* isOk)
+                              boolean* isOk)
 /* parse a number in a string that is not delimited by a newline, only
  * looking at the specified range.  Sets isOk to FALSE if the number is
  * invalid. */
@@ -279,7 +279,7 @@ ZeroVar(&tm);
 *isOk = TRUE;
 
 if (!((strlen(dateStr) == 10) && (dateStr[4] == '-') && (dateStr[7] == '-')))
-    isOk = FALSE;
+    *isOk = FALSE;
 tm.tm_year = parseUnsigned(dateStr, 0, 4, isOk)-1900;  /* since 1900 */
 tm.tm_mon = parseUnsigned(dateStr, 5, 2, isOk)-1;      /* since jan */
 tm.tm_mday = parseUnsigned(dateStr, 8, 2, isOk);       /* 1-31 */
