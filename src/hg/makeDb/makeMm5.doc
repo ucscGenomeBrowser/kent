@@ -5963,7 +5963,7 @@ axtChain -linearGap=../../chickenHumanTuned.gap $1 \
 
 
 # SGP GENES (DONE 9/17/04 angie)
-    ssh eieio
+    ssh kksilo
     mkdir /cluster/data/mm5/bed/sgp
     cd /cluster/data/mm5/bed/sgp
     foreach chr (`awk '{print $1;}' ../../chrom.sizes`)
