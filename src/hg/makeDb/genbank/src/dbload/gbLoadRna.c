@@ -23,17 +23,16 @@
 #include "gbMetaData.h"
 #include "gbAlignData.h"
 #include "gbLoadedTbl.h"
-#include "gbIgnore.h"
+#include "gbIgnoreDelete.h"
 #include "gbSql.h"
 #include "sqlUpdater.h"
 #include "sqlDeleter.h"
 #include "extFileTbl.h"
 #include <signal.h>
 
-static char const rcsid[] = "$Id: gbLoadRna.c,v 1.8 2003/07/25 18:25:33 markd Exp $";
+static char const rcsid[] = "$Id: gbLoadRna.c,v 1.9 2003/08/04 07:48:11 markd Exp $";
 
 /* FIXME: add optimize subcommand to sort all alignment tables */
-/* FIXME: ignored deletion could be in it's own module */
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -80,17 +79,6 @@ static struct sqlUpdater* gPendingStatusUpdates = NULL;
 /* loaded updates table */
 static struct gbLoadedTbl* gLoadedTbl = NULL;
 
-static boolean inGbStatusTable(struct sqlConnection *conn, char* acc,
-                               time_t modDate)
-/* check if the specified accession is in the gbStatus table */
-{
-char query[512];
-safef(query, sizeof(query),
-      "SELECT count(*) FROM gbStatus WHERE (acc='%s') AND (modDate='%s')",
-      acc, gbFormatDate(modDate));
-return (sqlQuickNum(conn, query) > 0);
-}
-
 void checkInitialLoad(struct sqlConnection *conn)
 /* verify that certain table don't exist whne initialLoad is specified */
 {
@@ -118,136 +106,6 @@ if (existCnt > 0)
     errAbort("drop tables with -drop or don't specify -initialLoad");
     }
 
-}
-
-void deleteFromTables(struct sqlConnection *conn, struct sqlDeleter* deleter,
-                      unsigned srcDb)
-/* deleted acc in a sqlDeleter from all tables. */
-{
-/* order is important here */
-gbAlignDataDeleteFromTables(conn, srcDb, GB_MRNA, deleter);
-gbAlignDataDeleteFromTables(conn, srcDb, GB_EST, deleter);
-
-gbMetaDataDeleteFromIdTables(conn, deleter);
-gbMetaDataDeleteFromTables(conn, srcDb, deleter);
-sqlDeleterDel(deleter, conn, "gbStatus", "acc");
-}
-
-struct sqlDeleter* buildReloadDeleter(char *reloadList, unsigned srcDb, char *tmpDir)
-/* read reload list, building a deleter for the specified source DB */
-{
-struct sqlDeleter* deleter = NULL;
-struct lineFile *lf = gzLineFileOpen(reloadList);
-char *row[1];
-
-while (lineFileChopNext(lf, row, ArraySize(row)))
-    {
-    char *acc = trimSpaces(row[0]);
-    if (gbGuessSrcDb(acc) == srcDb)
-        {
-        if (deleter == NULL)
-            deleter = sqlDeleterNew(tmpDir, (verbose >= 2));
-        sqlDeleterAddAcc(deleter, acc);
-        gbVerbMsg(1, "%s delete for reloading", acc);
-        }
-    }
-gzLineFileClose(&lf);
-return deleter;
-}
-
-void deleteReload(char *reloadList)
-/* delete sequences that have been explictly requested for reloading */
-{
-struct sqlConnection *conn = hAllocConn();
-char tmpDir[PATH_LEN];
-struct sqlDeleter* deleter;
-safef(tmpDir, sizeof(tmpDir), "%s/reload", gWorkDir);
-
-/* delete genbanks to reload */
-deleter = buildReloadDeleter(reloadList, GB_GENBANK, tmpDir);
-if (deleter != NULL)
-    {
-    deleteFromTables(conn, deleter, GB_GENBANK);
-    sqlDeleterFree(&deleter);
-    }
-
-/* delete refseqs to reload */
-deleter = buildReloadDeleter(reloadList, GB_REFSEQ, tmpDir);
-if (deleter != NULL)
-    {
-    deleteFromTables(conn, deleter, GB_REFSEQ);
-    sqlDeleterFree(&deleter);
-    }
-hFreeConn(&conn);
-}
-
-struct sqlDeleter*  buildIgnoredDeleters(struct sqlConnection *conn,
-                                         struct gbRelease* release)
-/* Construct a deleter object with ignored acc that are in gbStatus.
- * return NULL if none. */
-{
-struct sqlDeleter* deleter = NULL;
-struct hashCookie cookie;
-struct hashEl* hel;
-char tmpDir[PATH_LEN];
-
-/* Need to force load of ignore table, as release might not be initialized yet */
-gbReleaseLoadIgnore(release);
-
-if (sqlTableExists(conn, GB_STATUS_TBL))
-    {
-    safef(tmpDir, sizeof(tmpDir), "%s/ignore", gWorkDir);
-
-    /* build delete object */
-    cookie = hashFirst(release->ignore->accHash);
-    while ((hel = hashNext(&cookie)) != NULL)
-        {
-        struct gbIgnoreAcc* igAcc = hel->val;
-        if (inGbStatusTable(conn, igAcc->acc, igAcc->modDate))
-            {
-            if (deleter == NULL)
-                deleter = sqlDeleterNew(tmpDir, (verbose >= 2));
-            sqlDeleterAddAcc(deleter, igAcc->acc);
-            gbVerbMsg(1, "%s %s ignored, will delete", igAcc->acc, 
-                      gbFormatDate(igAcc->modDate));
-            }
-        }
-    }
-return deleter;
-}
-
-void deleteIgnoredRelease(struct gbRelease* release)
-/* deleted any sequences in the ignore table from the database that are
- * in the gbStatus table for a release. */
-{
-struct sqlConnection *conn = hAllocConn();
-struct sqlDeleter* deleter = buildIgnoredDeleters(conn, release);
-
-/* drop what we found in the gbStatus table */
-if (deleter != NULL)
-    {
-    deleteFromTables(conn, deleter, release->srcDb);
-    sqlDeleterFree(&deleter);
-    }
-hFreeConn(&conn);
-}
-
-void deleteIgnored(struct gbSelect* selectList)
-/* Deleted any sequences in the ignore table from the database that are
- * in the gbStatus table for all selected releases. */
-{
-struct gbSelect* select = selectList;
-struct gbRelease *release = NULL;
-
-/* this works because list is grouped by release */
-for (; select != NULL; select = select->next)
-    {
-    if (select->release != release)
-        {
-        deleteIgnoredRelease(select->release);
-        release = select->release;
-        }
-    }
 }
 
 void getSelPartitions(struct gbIndex* index,
@@ -676,14 +534,14 @@ if (gOptions.flags & DBLOAD_INITIAL)
 
 /* delete anything on the reload list up front */
 if (((gOptions.flags & DBLOAD_DRY_RUN) == 0) && (reloadList != NULL))
-    deleteReload(reloadList);
+    gbReloadDelete(reloadList, gWorkDir);
 
 selectList = getPartitions(index);
 if ((gOptions.flags & DBLOAD_INITIAL) && (selectList == NULL))
     errAbort("-initialLoad specified and no sequences were found to load");
 
 /* clean up any ignored entries before setting anything up */
-deleteIgnored(selectList);
+gbIgnoredDelete(selectList, gWorkDir);
 
 /* loaded table to track updates that have been processed */
 gLoadedTbl = gbLoadedTblNew(conn);

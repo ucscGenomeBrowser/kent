@@ -3,7 +3,7 @@
 #include "localmem.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: mgcStatusTbl.c,v 1.6 2003/07/17 16:21:51 markd Exp $";
+static char const rcsid[] = "$Id: mgcStatusTbl.c,v 1.7 2003/08/04 07:48:11 markd Exp $";
 
 /* 
  * Clone detailed status values.
@@ -243,7 +243,7 @@ if (state == MGC_STATE_NULL)
     errAbort("%s:%d: invalid state value: \"%s\"",
              lf->fileName, lf->lineIx, row[2]);
 if (state != status->state)
-    errAbort("%s:%d: state value \"%s\" dosn't match statue value \"%s\"",
+    errAbort("%s:%d: state value \"%s\" dosn't match status value \"%s\"",
              lf->fileName, lf->lineIx, row[2], row[1]);
 mgcStatusTblAdd(mst,  imageId, status, row[3], row[4]);
 }

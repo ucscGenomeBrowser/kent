@@ -3,7 +3,7 @@
 #include "gbDefs.h"
 #include "localmem.h"
 
-static char const rcsid[] = "$Id: gbGenome.c,v 1.2 2003/07/12 23:32:24 markd Exp $";
+static char const rcsid[] = "$Id: gbGenome.c,v 1.3 2003/08/04 07:48:11 markd Exp $";
 
 struct dbToSpecies
 /* structure mapping database prefix to species (e.g. hg -> "Homo sapiens") */
@@ -16,9 +16,22 @@ struct dbToSpecies
 };
 
 static char *hgNames[] = {"Homo sapiens", NULL};
-static char *mmNames[] = {"Mus musculus", NULL};
+static char *mmNames[] = {"Mus musculus", "Mus sp.", NULL};
 static char *rnNames[] = {"Rattus norvegicus", "Rattus sp.", NULL};
 static char *ciNames[] = {"Ciona intestinalis", NULL};
+
+/* species currently unique to zoo */
+static char *zooCatNames[] = {"Felis catus", "Felis sp.", NULL};
+static char *zooChickenNames[] = {"Gallus gallus", "Gallus sp.", NULL};
+static char *zooBaboonNames[] = {"Papio hamadryas", "Papio sp.", NULL};
+static char *zooChimpNames[] = {"Pan troglodytes", NULL};
+static char *zooCowNames[] = {"Bos taurus", "Bos sp.", NULL};
+static char *zooDogNames[] = {"Canis familiaris", "Canis sp.", NULL};
+static char *zooFuguNames[] = {"Takifugu rubripes", NULL};
+static char *zooPigNames[] = {"Sus scrofa", "Sus sp.", NULL};
+static char *zooTetraNames[] = {"Tetraodon nigroviridis", NULL};
+static char *zooZebrafishNames[] = {"Danio rerio", NULL};
+
 static char *endNames[] = {NULL};
 
 static struct dbToSpecies dbToSpeciesMap[] = {
@@ -26,6 +39,19 @@ static struct dbToSpecies dbToSpeciesMap[] = {
     {"mm", mmNames, "Mus musculus "},
     {"rn", rnNames, "Rattus norvegicus "},
     {"ci", ciNames, NULL},
+    {"zooHuman", hgNames, NULL},
+    {"zooCat", zooCatNames, NULL},
+    {"zooChicken", zooChickenNames, NULL},
+    {"zooBaboon", zooBaboonNames, NULL},
+    {"zooChimp", zooChimpNames, "Pan troglodytes "},
+    {"zooCow", zooCowNames, NULL},
+    {"zooDog", zooDogNames, NULL},
+    {"zooFugu", zooFuguNames, NULL},
+    {"zooMouse", mmNames, "Mus musculus "},
+    {"zooPig", zooPigNames, "Sus scrofa "},
+    {"zooRat", rnNames, NULL},
+    {"zooTetra", zooTetraNames, NULL},
+    {"zooZebrafish", zooZebrafishNames, NULL},
     {NULL, endNames, NULL}
 };
 
@@ -102,6 +128,7 @@ for (i = 0; genome->dbMap->names[i] != NULL; i++)
     if (sameString(organism, genome->dbMap->names[i]))
         return GB_NATIVE;
     }
+
 if ((genome->dbMap->subSpeciesPrefix != NULL)
     && startsWith(genome->dbMap->subSpeciesPrefix, organism))
     return GB_NATIVE;

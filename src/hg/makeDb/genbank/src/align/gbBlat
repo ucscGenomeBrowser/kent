@@ -21,7 +21,7 @@
 # is still produced.  This script is very careful to exit non-zero if an error
 # occurs.
 #
-# $Id: gbBlat,v 1.5 2003/07/29 04:44:49 markd Exp $
+# $Id: gbBlat,v 1.6 2003/08/04 07:48:10 markd Exp $
 #
 set -e
 
@@ -103,6 +103,10 @@ case "$database" in
     mm*) oocOpt="-ooc=${MM_OOC}" ;;
     rn*) oocOpt="-ooc=${RN_OOC}" ;;
     ci*) ;;
+    zooHuman*) oocOpt="-ooc=${HG_OOC}" ;;
+    zooMouse*) oocOpt="-ooc=${MM_OOC}" ;;
+    zooRat*) oocOpt="-ooc=${RN_OOC}" ;;
+    zoo*) ;;
     *) echo "Error: gbBlat doesn't know how get ooc for database \"$database\"" >&2
         exit 1;;
 esac
