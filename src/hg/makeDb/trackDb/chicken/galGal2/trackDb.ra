@@ -278,40 +278,44 @@ type bed 12 +
 otherDb rn3
 
 track deweySyntHg16
-shortLabel D Synt Human
-longLabel Exon-anchored 5-way-symm. Human synteny blocks from Dewey, Pachter
+shortLabel Ortho Human
+longLabel Exon-anchored 5-way-symm. Human orthology blocks from Dewey, Pachter
 group compGeno
 priority 127.4
 visibility hide
 type bed 6
 otherDb hg16
+exonArrows on
 
 track deweySyntPanTro1
-shortLabel D Synt Chimp
-longLabel Exon-anchored 5-way-symm. Chimp synteny blocks from Dewey, Pachter
+shortLabel Ortho Chimp
+longLabel Exon-anchored 5-way-symm. Chimp orthology blocks from Dewey, Pachter
 group compGeno
 priority 127.5
 visibility hide
 type bed 6
 otherDb panTro1
+exonArrows on
 
 track deweySyntMm3
-shortLabel D Synt Mouse
-longLabel Exon-anchored 5-way-symm. Mouse synteny blocks from Dewey, Pachter
+shortLabel Ortho Mouse
+longLabel Exon-anchored 5-way-symm. Mouse orthology blocks from Dewey, Pachter
 group compGeno
 priority 127.6
 visibility hide
 type bed 6
 otherDb mm3
+exonArrows on
 
 track deweySyntRn3
-shortLabel D Synt Rat
-longLabel Exon-anchored 5-way-symm. Rat synteny blocks from Dewey, Pachter
+shortLabel Ortho Rat
+longLabel Exon-anchored 5-way-symm. Rat orthology blocks from Dewey, Pachter
 group compGeno
 priority 127.7
 visibility hide
 type bed 6
 otherDb rn3
+exonArrows on
 
 track rnaGene
 shortLabel ncRNA
