@@ -67,7 +67,7 @@
 #include "machSpec.h"
 #include "log.h"
 
-static char const rcsid[] = "$Id: paraHub.c,v 1.80 2005/01/07 23:41:00 galt Exp $";
+static char const rcsid[] = "$Id: paraHub.c,v 1.81 2005/01/10 00:45:13 kent Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -2170,40 +2170,13 @@ saveJobId();
 #endif /* SOON */
 }
 
-void notGoodSubnet(char *sns)
-/* Complain about subnet format. */
-{
-errAbort("'%s' is not a properly formatted subnet.  Subnets must consist of\n"
-         "one to three dot-separated numbers between 0 and 255\n", sns);
-}
-
 void fillInSubnet()
 /* Parse subnet paramenter if any into subnet variable. */
 {
 char *sns = optionVal("subnet", NULL);
 if (sns == NULL)
     sns = optionVal("subNet", NULL);
-if (sns != NULL)
-    {
-    char *snsCopy = strdup(sns);
-    char *words[5];
-    int wordCount, i;
-    wordCount = chopString(snsCopy, ".", words, ArraySize(words));
-    if (wordCount > 3 || wordCount < 1)
-        notGoodSubnet(sns);
-    for (i=0; i<wordCount; ++i)
-	{
-	char *s = words[i];
-	int x;
-	if (!isdigit(s[0]))
-	    notGoodSubnet(sns);
-	x = atoi(s);
-	if (x > 255)
-	    notGoodSubnet(sns);
-	hubSubnet[i] = x;
-	}
-    freez(&snsCopy);
-    }
+netParseSubnet(sns, hubSubnet);
 }
 
 int main(int argc, char *argv[])
