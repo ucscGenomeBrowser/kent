@@ -548,7 +548,7 @@ o - Load best in genome into database as so:
 	cd ~/mouse/vsOo33/bestMouse
         hgLoadPsl hg11 *.psl
 
-PRODUCING CROSS_SPECIES mRNA ALIGNMENTS (for mRNA, not for EST) DONE
+PRODUCING CROSS_SPECIES mRNA ALIGNMENTS DONE
 
 Here you align vertebrate mRNAs against the masked genome on the
 cluster you set up during the previous step.
@@ -700,8 +700,7 @@ TIGR GENE INDEX (todo)
 	  ldHgGene -exon=TCs hg7 tigrGeneIndex *.gff
 
 
-      
-LOAD STS MAP (todo)
+LOAD STS MAP (todo) DONE BY TERRY I BELIEVE - HE WILL UPDATE THIS
      - login to hgwdev
       cd ~/oo/bed
       hg11 < ~/src/hg/lib/stsMap.sql
@@ -715,7 +714,7 @@ LOAD STS MAP (todo)
           quit
 
 
-LOAD CHROMOSOME BANDS (todo)
+LOAD CHROMOSOME BANDS (todo) ALSO DONE BY TERRY I BELIEVE
       - login to hgwdev
       cd /cluster/store1/gs.12/build29/bed
       mkdir cytoBands
