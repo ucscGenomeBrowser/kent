@@ -12,7 +12,7 @@
 #include "../hgNear/hgNear.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: hgNearTest.c,v 1.6 2004/03/04 02:07:26 kent Exp $";
+static char const rcsid[] = "$Id: hgNearTest.c,v 1.7 2004/03/04 02:21:13 kent Exp $";
 
 /* Command line variables. */
 char *dataDir = "/usr/local/apache/cgi-bin/hgNearData";
@@ -408,10 +408,59 @@ if (emptyConfig != NULL )
 htmlPageFree(&emptyConfig);
 }
 
+void testSort(struct htmlPage *emptyConfig, char *org, char *db, char *sort, char *gene,
+	struct nearTest **pTestList)
+/* Test one column. */
+{
+struct htmlPage *printPage = NULL;
+struct nearTest *test;
+struct qaStatus *qs;
+htmlPageSetVar(emptyConfig, NULL, "near.col.acc.vis", "on");
+htmlPageSetVar(emptyConfig, NULL, "near.order", sort);
+htmlPageSetVar(emptyConfig, NULL, "near.count", "25");
+
+qs = qaPageFromForm(emptyConfig, emptyConfig->forms, 
+	"submit", "Submit", &printPage);
+test = nearTestNew(qs, "sortType", cloneString(sort), org, db, "n/a", gene);
+slAddHead(pTestList, test);
+if (printPage != NULL)
+    {
+    int lineCount = qaCountBetween(printPage->fullText, 
+	    "<!-- Start Rows -->", "<!-- End Rows -->", "<!-- Row -->");
+    if (lineCount < 1)
+	qaStatusSoftError(qs, "No rows for sort %s", sort);
+    }
+if (test->status->errMessage != NULL)
+    nearTestLogOne(test, stderr);
+htmlPageFree(&printPage);
+}
+
+
 void testDbSorts(struct htmlPage *dbPage, char *org, char *db, 
 	struct slName *geneList, struct nearTest **pTestList)
 /* Test on one database. */
 {
+struct htmlPage *emptyConfig;
+struct slName *colList = NULL, *col;
+struct htmlFormVar *sortVar = htmlFormVarGet(dbPage->forms, orderVarName);
+struct slName *gene, *sort;
+
+uglyf("testDbSorts %s %s\n", org, db);
+if (sortVar == NULL)
+    errAbort("Couldn't find var %s", orderVarName);
+
+emptyConfig = emptyConfigPage(dbPage, org, db, pTestList);
+if (emptyConfig != NULL)
+    {
+    for (sort = sortVar->values; sort != NULL; sort= sort->next)
+	{
+	for (gene = geneList; gene != NULL; gene = gene->next)
+	    {
+	    testSort(emptyConfig, org, db, sort->name, gene->name, pTestList);
+	    }
+	}
+    htmlPageFree(&emptyConfig);
+    }
 }
 
 void testDb(struct htmlPage *orgPage, char *org, char *db, struct nearTest **pTestList)
