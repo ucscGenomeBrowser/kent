@@ -17,6 +17,14 @@ visibility off
 type lookup knownToU133 name value
 search exact
 
+name U133Plus2Id
+shortLabel U133Plus2 ID
+longLabel ID of Associated Affymetrix U133 Plus 2.0 Expression Data 
+priority 2.61
+visibility off
+type lookup knownToU133Plus2 name value
+search exact
+
 name u95Id
 shortLabel U95 ID
 longLabel ID of Associated Affymetrix U95 Expression Data 
