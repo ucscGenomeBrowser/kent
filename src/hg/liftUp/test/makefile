@@ -2,7 +2,7 @@ include ../../../inc/common.mk
 
 all: test
 
-test: chainQ chainT netQ netT genePred
+test: chainQ chainT netQ netT genePred pslRc
 
 chainQ: output
 	$(HOME)/bin/$(MACHTYPE)/liftUp -chainQ output/testOutQ.chain \
@@ -28,6 +28,14 @@ genePred: output
 	$(HOME)/bin/$(MACHTYPE)/liftUp output/testChrom.gp \
             input/contig.lft warn input/testContig.gp
 	diff expected/testChrom.gp output/testChrom.gp
+
+pslRc: output
+	$(HOME)/bin/$(MACHTYPE)/liftUp output/rcLifted.psl \
+	    input/rcTest.lft warn input/rcContig.psl
+	diff expected/rcLifted.psl output/rcLifted.psl
+	$(HOME)/bin/$(MACHTYPE)/liftUp output/rcRcLifted.psl \
+	    input/rcTest.lft warn input/rcRcContig.psl
+	diff expected/rcRcLifted.psl output/rcRcLifted.psl
 
 output:
 	${MKDIR} output

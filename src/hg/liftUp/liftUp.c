@@ -15,7 +15,7 @@
 #include "chainNet.h"
 #include "liftUp.h"
 
-static char const rcsid[] = "$Id: liftUp.c,v 1.27 2004/01/31 01:43:09 kate Exp $";
+static char const rcsid[] = "$Id: liftUp.c,v 1.28 2004/02/08 02:00:47 kent Exp $";
 
 boolean isPtoG = TRUE;  /* is protein to genome lift */
 boolean nohead = FALSE;	/* No header for psl files? */
@@ -140,6 +140,12 @@ val = atoi(s);
 if (sign)
     val = -val;
 return val;
+}
+
+char flipStrand(char strand)
+/* Turn + to - and vice versa. */
+{
+return (strand == '-' ? '+' : '-');
 }
 
 void liftOut(char *destFile, struct hash *liftHash, int sourceCount, char *sources[])
@@ -318,6 +324,8 @@ for (i=0; i<sourceCount; ++i)
 	        {
 		if (!isPtoG)
 		    {
+		    if (spec->strand == '-')
+			errAbort("Can't handle lifts with - strands on query side");
 		    psl->qStart += offset;
 		    psl->qEnd += offset;
 		    }
@@ -348,6 +356,8 @@ for (i=0; i<sourceCount; ++i)
 		}
 	    else
 	        {
+		if (spec->strand == '-')
+		    reverseIntRange(&psl->tStart, &psl->tEnd, psl->tSize);
 		psl->tStart += offset;
 		psl->tEnd += offset;
 		starts = psl->tStarts;
@@ -373,19 +383,45 @@ for (i=0; i<sourceCount; ++i)
 		    starts[j] += offset;
 		    }
 		}
-	    else if (psl->strand[strandChar] == '-')
-	        {
-		for (j=0; j<blockCount; ++j)
+	    else /* mRNA case. */
+		{
+		if (spec->strand == '+')
 		    {
-		    int tr = seqSize - starts[j];
-		    tr += offset;
-		    starts[j] = spec->newSize - tr;
+		    if (psl->strand[strandChar] == '-')
+			{
+			for (j=0; j<blockCount; ++j)
+			    {
+			    int tr = seqSize - starts[j];
+			    tr += offset;
+			    starts[j] = spec->newSize - tr;
+			    }
+			}
+		    else
+			{
+			for (j=0; j<blockCount; ++j)
+			    starts[j] += offset;
+			}
 		    }
-		}
-	    else
-	        {
-		for (j=0; j<blockCount; ++j)
-		    starts[j] += offset;
+		else
+		    {
+		    if (psl->strand[strandChar] == '-')
+			 errAbort("Can't handle all these minus strands!");
+		    else
+			{
+			for (j=0; j<blockCount; ++j)
+			    {
+			    psl->tStarts[j] = psl->tSize - 
+			    	(psl->tStarts[j] + blockSizes[j]) + offset;
+			    psl->qStarts[j] = psl->qSize - 
+			    	(psl->qStarts[j] + blockSizes[j]);	/* no offset. */
+			    }
+			psl->strand[1-strandChar] = 
+			    flipStrand(psl->strand[1-strandChar]);
+			reverseInts(blockSizes, blockCount);
+			reverseInts(psl->qStarts, blockCount);
+			reverseInts(psl->tStarts, blockCount);
+			}
+		    }
 		}
 	    if (isPtoG)
 		for (j=0; j<blockCount; ++j)
