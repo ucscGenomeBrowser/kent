@@ -13,7 +13,7 @@
 #include "vGfxPrivate.h"
 #include "colHash.h"
 
-static char const rcsid[] = "$Id: memgfx.c,v 1.37 2005/01/20 00:50:41 daryl Exp $";
+static char const rcsid[] = "$Id: memgfx.c,v 1.38 2005/01/21 05:36:27 kent Exp $";
 
 void mgSetDefaultColorMap(struct memGfx *mg)
 /* Set up default color map for a memGfx. */
@@ -705,6 +705,27 @@ void mgDrawHorizontalLine(struct memGfx *mg, int y1, Color color)
 {
 mgDrawLine( mg, mg->clipMinX, y1, mg->clipMaxX, y1, color);
 }
+
+void mgLineH(struct memGfx *mg, int y, int x1, int x2, Color color)
+/* Draw horizizontal line width pixels long starting at x/y in color */
+{
+if (y >= mg->clipMinY && y < mg->clipMaxY)
+    {
+    int w;
+    if (x1 < mg->clipMinX)
+        x1 = mg->clipMinX;
+    if (x2 > mg->clipMaxX)
+        x2 = mg->clipMaxX;
+    w = x2 - x1;
+    if (w > 0)
+        {
+	Color *pt = _mgPixAdr(mg,x1,y);
+	while (--w >= 0)
+	    *pt++ = color;
+	}
+    }
+}
+
 
 boolean mgClipForBlit(int *w, int *h, int *sx, int *sy,
 	struct memGfx *dest, int *dx, int *dy)

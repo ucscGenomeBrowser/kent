@@ -4,26 +4,6 @@
 #include "common.h"
 #include "memgfx.h"
 
-static void hLine(struct memGfx *mg, int y, int x1, int x2, Color color)
-/* Draw horizizontal line width pixels long starting at x/y in color */
-{
-if (y >= mg->clipMinY && y < mg->clipMaxY)
-    {
-    int w;
-    if (x1 < mg->clipMinX)
-        x1 = mg->clipMinX;
-    if (x2 > mg->clipMaxX)
-        x2 = mg->clipMaxX;
-    w = x2 - x1;
-    if (w > 0)
-        {
-	Color *pt = _mgPixAdr(mg,x1,y);
-	while (--w >= 0)
-	    *pt++ = color;
-	}
-    }
-}
-
 void mgCircle(struct memGfx *mg, int xCen, int yCen, int rad, 
 	Color color, boolean filled)
 /* Draw a circle using a stepping algorithm.  Doesn't correct
@@ -48,13 +28,13 @@ for (;;)
     if (filled)
 	{
 	if (y == 0)
-	    hLine(mg, yCen, xCen-x, xCen+x, color);
+	    mgLineH(mg, yCen, xCen-x, xCen+x, color);
 	else
 	    {
 	    if (lasty != y)
 		{
-		hLine(mg, yCen-y, xCen-x, xCen+x, color);
-		hLine(mg, yCen+y, xCen-x, xCen+x, color);
+		mgLineH(mg, yCen-y, xCen-x, xCen+x, color);
+		mgLineH(mg, yCen+y, xCen-x, xCen+x, color);
 		lasty = y;
 		}
 	    }
