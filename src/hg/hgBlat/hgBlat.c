@@ -312,13 +312,23 @@ for (seq = seqList; seq != NULL; seq = seq->next)
 	char *abbrv = NULL;
 	char *words[32];
 	int wordCount;
+	boolean isEns = (stringIn("ENSEMBL:", seq->name) != NULL);
 
 	nameClone = cloneString(seq->name);
 	wordCount = chopString(nameClone, "|", words, ArraySize(words));
-	if (wordCount > 2)	/* Looks like it's an NCBI long name alright. */
+	if (wordCount > 1)	/* Looks like it's an Ensembl/NCBI 
+		                 * long name alright. */
 	    {
-	    abbrv = words[wordCount-1];
-	    if (abbrv[0] == 0) abbrv = words[wordCount-2];
+	    if (isEns)
+		{
+	        abbrv = words[0];
+		if (abbrv[0] == 0) abbrv = words[1];
+		}
+	    else
+		{
+		abbrv = words[wordCount-1];
+		if (abbrv[0] == 0) abbrv = words[wordCount-2];
+		}
 	    if (hashLookup(hash, abbrv) == NULL)
 	        {
 		freeMem(seq->name);
@@ -507,9 +517,10 @@ printf(
 "<FORM ACTION=\"../cgi-bin/hgBlat\" METHOD=\"POST\" ENCTYPE=\"multipart/form-data\" NAME=\"mainForm\">\n"
 "<H1 ALIGN=CENTER>BLAT Search Genome</H1>\n"
 "<P>\n"
-"<TABLE BORDER=0 WIDTH=\"96%%\">\n"
+"<TABLE BORDER=0 WIDTH=\"96%%\" COLS=6>\n"
 "<TR>\n");
 cartSaveSession(cart);
+
 
 printf("%s", "<TD><CENTER>\n");
 printf("Genome:<BR>");
@@ -529,15 +540,23 @@ printf("Output type:<BR>");
 cgiMakeDropList("output", outputList, ArraySize(outputList), cartOptionalString(cart, "output"));
 puts("</TD>\n");
 
-puts("<TD><CENTER>&nbsp;<BR><INPUT TYPE=SUBMIT NAME=Submit VALUE=Submit Align=\"bottom\"> <INPUT TYPE=RESET NAME=Reset VALUE=Reset Align=\"bottom\">\n"
+puts("<TD><CENTER>&nbsp;<BR>\n"
+    "<INPUT TYPE=SUBMIT NAME=Submit VALUE=Submit Align=\"top\">\n"
+    "</TD>\n"
+    "</TR>\n"
+    "<TR>\n"
+    "<TD COLSPAN=5>\n"
+    "Please paste in a query sequence to see where it is located in the\n"
+    "the genome.  Multiple sequences can be searched \n"
+    "at once if separated by a line starting with > and the sequence name.\n"
+    "</TD>\n"
+    "<TD>\n"
+    "<INPUT TYPE=RESET NAME=Reset VALUE=Reset Align=\"bottom\">\n"
     "</TD>\n"
     "</TR>\n"
     "</TABLE>\n"
 );
 
-puts("Please paste in a query sequence to see where it is located in the ");
-printf("the genome.  Multiple sequences can be searched\n");
-puts("at once if separated by a line starting with > and the sequence name.\n");
 puts("<P>");
 
 puts("<TEXTAREA NAME=userSeq ROWS=14 COLS=80></TEXTAREA>\n");
