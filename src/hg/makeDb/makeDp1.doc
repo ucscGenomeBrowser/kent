@@ -253,17 +253,15 @@ exit; # don't actually run this like a script :)
     echo "create table grp (PRIMARY KEY(NAME)) select * from rn1.grp" \
       | hgsql dp1
 
-# MAKE HGCENTRALTEST ENTRY AND TRACKDB TABLE (IN PROGRESS 10/10/03 angie)
+# MAKE HGCENTRALTEST ENTRY AND TRACKDB TABLE (DONE 12/2/03 angie)
     # Warning: genome and organism fields must correspond
     # with defaultDb values
-   
-    # setting active=0; this is just a skeleton browser so we can chain/net
     echo 'INSERT INTO dbDb \
         (name, description, nibPath, organism, \
                 defaultPos, active, orderKey, genome, scientificName, \
                 htmlPath, hgNearOk) values \
         ("dp1", "Aug. 2003", "/gbdb/dp1/nib", "D.pseud.", \
-               "chrUn:827700-845800", 0, 56, "D.pseud.", \
+               "chrUn:827700-845800", 1, 56, "D.pseud.", \
                 "Drosophila pseudoobscura", "/gbdb/dp1/html/description.html", \
                 0);' \
       | hgsql -h genome-testdb hgcentraltest
@@ -283,7 +281,6 @@ exit; # don't actually run this like a script :)
     cvs commit makefile
 
     # Add trackDb directories
-TODO
     mkdir drosophila/dp1
     cvs add drosophila/dp1
     cvs commit drosophila/dp1
@@ -396,5 +393,339 @@ PRODUCING GENSCAN PREDICTIONS (TODO 11/14/03 angie)
     hgsql dp1 < ~/kent/src/hg/lib/ctgPos.sql
     echo "load data local infile 'ctgPos.tab' into table ctgPos" | hgsql dp1
 
+
+# ALL-DROSOPHILA REFSEQ (DONE 12/2/03 angie)
+    ssh kksilo
+    mkdir /cluster/data/dp1/bed/drosRefSeq
+    cd /cluster/data/dp1/bed/drosRefSeq
+    grep "^Drosophila" /cluster/data/genbank/data/species.lst > dros.lst
+    grep "Drosophila" \
+      /cluster/data/genbank/data/processed/refseq.138.0/full/mrna.gbidx \
+    | awk '{print $1;}' > refSeqAcc.lst
+    perl -wpe 's/^>(\w+)\.\d+/>$1/' \
+      /cluster/data/genbank/data/processed/refseq.138.0/full/mrna.fa \
+    > allRefSeq.fa
+    faSomeRecords allRefSeq.fa refSeqAcc.lst drosRefSeq.fa
+    rm allRefSeq.fa
+    faSplit sequence drosRefSeq.fa 4 drs
+    ls -1S drs*.fa > refSeq.lst
+    ls -1S /cluster/data/dp1/chunks/chunk_*.fa > chunks.lst
+    mkdir psl
+    # translated blat because these are xeno:
+    cat << '_EOF_' > gsub
+#LOOP
+/cluster/bin/i386/blat {check in line+ $(path1)} {check in line+ $(path2)} -q=rnax -t=dnax -mask=lower {check out line+ psl/$(root1)_$(root2).psl}
+#ENDLOOP
+'_EOF_'
+    # << this line keeps emacs coloring happy
+    gensub2 chunks.lst refSeq.lst gsub spec
+    ssh kk
+    cd /cluster/data/dp1/bed/drosRefSeq
+    para create spec
+    para try, check, push, check, ...
+#Completed: 1216 of 1216 jobs
+#Average job time:                  85s       1.41m     0.02h    0.00d
+#Longest job:                      308s       5.13m     0.09h    0.00d
+#Submission to last job:           439s       7.32m     0.12h    0.01d
+    # back on kksilo:
+    pslSort dirs raw.psl /cluster/store2/temp psl
+    pslReps raw.psl cooked.psl /dev/null -minAli=0.25 -minCover=0.3
+    liftUp scaffold.psl ../../jkStuff/scaffoldsSplit.lft warn cooked.psl
+    liftUp chrom.psl ../../jkStuff/liftAll.lft warn scaffold.psl
+    pslSortAcc nohead chrom /cluster/store2/temp chrom.psl
+    pslCat -dir chrom > drosRefSeq.psl
+    rm -r chrom raw.psl cooked.psl chrom.psl
+    # Load it up:
+    ssh hgwdev
+    cd /cluster/data/dp1/bed/drosRefSeq
+    hgLoadPsl dp1 drosRefSeq.psl -tNameIx
+    hgLoadSeq dp1 drosRefSeq.fa
+
+
+# ALL-DROSOPHILA MRNA (DONE 12/2/03 angie)
+    ssh kksilo
+    mkdir /cluster/data/dp1/bed/drosMrna
+    cd /cluster/data/dp1/bed/drosMrna
+    grep "Drosophila" \
+      /cluster/data/genbank/data/processed/genbank.138.0/full/mrna.gbidx \
+    | awk '{print $1;}' > mrnaAcc.lst
+    perl -wpe 's/^>(\w+)\.\d+/>$1/' \
+      /cluster/data/genbank/data/processed/genbank.138.0/full/mrna.fa \
+    > allMrna.fa
+    faSomeRecords allMrna.fa mrnaAcc.lst drosMrna.fa
+    rm allMrna.fa
+    faSplit sequence drosMrna.fa 4 drs
+    ls -1S drs*.fa > mrna.lst
+    ls -1S /cluster/data/dp1/chunks/chunk_*.fa > chunks.lst
+    mkdir psl
+    # translated blat because these are xeno:
+    cat << '_EOF_' > gsub
+#LOOP
+/cluster/bin/i386/blat {check in line+ $(path1)} {check in line+ $(path2)} -q=rnax -t=dnax -mask=lower {check out line+ psl/$(root1)_$(root2).psl}
+#ENDLOOP
+'_EOF_'
+    # << this line keeps emacs coloring happy
+    gensub2 chunks.lst mrna.lst gsub spec
+    ssh kk
+    cd /cluster/data/dp1/bed/drosMrna
+    para create spec
+    para try, check, push, check, ...
+#Completed: 1216 of 1216 jobs
+#Average job time:                  69s       1.15m     0.02h    0.00d
+#Longest job:                      102s       1.70m     0.03h    0.00d
+#Submission to last job:           351s       5.85m     0.10h    0.00d
+    # back on kksilo:
+    pslSort dirs raw.psl /cluster/store2/temp psl
+    pslReps raw.psl cooked.psl /dev/null -minAli=0.25
+    liftUp scaffold.psl ../../jkStuff/scaffoldsSplit.lft warn cooked.psl
+    liftUp chrom.psl ../../jkStuff/liftAll.lft warn scaffold.psl
+    pslSortAcc nohead chrom /cluster/store2/temp chrom.psl
+    pslCat -dir chrom > drosMrna.psl
+    rm -r chrom raw.psl cooked.psl chrom.psl
+    # Load it up:
+    ssh hgwdev
+    cd /cluster/data/dp1/bed/drosMrna
+    hgLoadPsl dp1 drosMrna.psl -tNameIx
+    hgLoadSeq dp1 drosMrna.fa
+
+
+# ALL-DROSOPHILA EST (DONE 12/2/03 angie)
+    ssh kksilo
+    mkdir /cluster/data/dp1/bed/drosEst
+    cd /cluster/data/dp1/bed/drosEst
+    foreach idx (/cluster/data/genbank/data/processed/genbank.138.0/full/est.*.gbidx)
+      grep "Drosophila" $idx \
+      | awk '{print $1;}' > $idx:t:r.lst
+      perl -wpe 's/^>(\w+)\.\d+/>$1/' $idx:r.fa \
+      > $idx:t:r.all.fa
+      faSomeRecords $idx:t:r.all.fa $idx:t:r.lst $idx:t:r.fa
+      rm $idx:t:r.all.fa
+    end
+    cat est.*.lst > drosEst.lst
+    cat est.*.fa > drosEst.fa
+    faSplit sequence drosEst.fa 20 drs
+    rm est.*.lst est.*.fa
+    ls -1S drs*.fa > est.lst
+    ls -1S /cluster/data/dp1/chunks/chunk_*.fa > chunks.lst
+    mkdir psl
+    # translated blat because these are xeno:
+    cat << '_EOF_' > gsub
+#LOOP
+/cluster/bin/i386/blat {check in line+ $(path1)} {check in line+ $(path2)} -q=dnax -t=dnax -mask=lower {check out line+ psl/$(root1)_$(root2).psl}
+#ENDLOOP
+'_EOF_'
+    # << this line keeps emacs coloring happy
+    gensub2 chunks.lst est.lst gsub spec
+    ssh kk
+    cd /cluster/data/dp1/bed/drosEst
+    para create spec
+    para try, check, push, check, ...
+#Completed: 6080 of 6080 jobs
+#Average job time:                  63s       1.04m     0.02h    0.00d
+#Longest job:                      109s       1.82m     0.03h    0.00d
+#Submission to last job:           485s       8.08m     0.13h    0.01d
+    # back on kksilo:
+    pslSort dirs raw.psl /cluster/store2/temp psl
+    pslReps raw.psl cooked.psl /dev/null -minAli=0.10
+    liftUp scaffold.psl ../../jkStuff/scaffoldsSplit.lft warn cooked.psl
+    liftUp chrom.psl ../../jkStuff/liftAll.lft warn scaffold.psl
+    pslSortAcc nohead chrom /cluster/store2/temp chrom.psl
+    pslCat -dir chrom > drosEst.psl
+    rm -r chrom raw.psl cooked.psl chrom.psl
+    # Load it up:
+    ssh hgwdev
+    cd /cluster/data/dp1/bed/drosEst
+    hgLoadPsl dp1 drosEst.psl -tNameIx
+    hgLoadSeq dp1 drosEst.fa
+
+
+# LIFTOVER BDGP GENES (IN PROGRESS 12/3/03 angie)
+    ssh hgwdev
+    mkdir /cluster/data/dp1/bed/bdgpAnnotations
+    cd /cluster/data/dp1/bed/bdgpAnnotations
+    echo 'select * from bdgpGene' | hgsql -N dm1 > dm1.bdgpGene.tab
+    liftOver -genePred dm1.bdgpGene.tab \
+      /cluster/data/dm1/bed/blastz.dp1.2003-11-14/axtChainScaffoldQ/all.chain \
+      scaffold.bdgpGene.tab scaffold.unmapped.tab
+    foreach mm (0.5)
+    liftOver -minMatch=$mm -genePred dm1.bdgpGene.tab \
+      /cluster/data/dm1/bed/blastz.dp1.2003-11-14/axtChainChrom/all.chain \
+      chrUn.$mm.bdgpGene.tab chrUn.$mm.unmapped.tab
+    end
+    wc -l bdgpGene.tab chrUn.bdgpGene.tab 
+    ssh hgwdev
+    hgsql dp1 <<end
+CREATE TABLE bdgpGene (
+    name varchar(255) not null, # Name of gene
+    chrom varchar(255) not null,        # Chromosome name
+    strand char(1) not null,    # + or - for strand
+    txStart int unsigned not null,      # Transcription start position
+    txEnd int unsigned not null,        # Transcription end position
+    cdsStart int unsigned not null,     # Coding region start
+    cdsEnd int unsigned not null,       # Coding region end
+    exonCount int unsigned not null,    # Number of exons
+    exonStarts longblob not null,       # Exon start positions
+    exonEnds longblob not null, # Exon end positions
+              #Indices
+    PRIMARY KEY(name(16)),
+    INDEX(chrom(12),txStart),
+    INDEX(chrom(12),txEnd)
+);
+end
+    echo 'load data local infile "chrUn.0.5.bdgpGene.tab" into table bdgpGene'\
+    | hgsql dp1
+    echo 'create table bdgpGenePep select * from dm1.bdgpGenePep' \
+    | hgsql dp1
+
+
+# SWAP DM1-DP1 BLASTZ (DONE 12/3/03 angie)
+    ssh kksilo
+    mkdir -p /cluster/data/dp1/bed/blastz.dm1.swap/axtScaffold/byT
+    cd /cluster/data/dp1/bed/blastz.dm1.swap/axtScaffold/byT
+    foreach f (/cluster/data/dm1/bed/blastz.dp1.2003-11-14/axtScaffold/chr*.axt)
+      axtSwap $f /cluster/data/dm1/chrom.sizes \
+        /cluster/data/dp1/scaffold.sizes $f:t
+    end
+    cd ..
+    mkdir byQ
+    cat byT/chr*.axt | axtSplitByTarget stdin byQ
+    rm -r byT
+    foreach f (byQ/*.axt)
+      axtSort $f $f:t
+    end
+    rm -r byQ
+    cd ..
+    mkdir axtChrom
+    liftUp tmp.axt /cluster/data/dp1/jkStuff/liftAll.lft warn axtScaffold/*.axt
+    axtSort tmp.axt axtChrom/chrUn.axt
+    rm tmp.axt
+
+
+# CHAIN & NET DP1/DM1 BLASTZ ALIGNMENTS (DONE 12/3/03 angie)
+    ssh kkr1u00
+    mkdir -p /cluster/data/dp1/bed/blastz.dm1.swap/axtChainScaffold/run1
+    cd /cluster/data/dp1/bed/blastz.dm1.swap/axtChainScaffold/run1
+    ls -1S ../../axtScaffold/*.axt > input.lst
+    echo '#LOOP' > gsub
+    echo 'doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain} {check out line+ out/$(root1).out}' >> gsub
+    echo '#ENDLOOP' >> gsub
+    gensub2 input.lst single gsub spec
+    echo '#\!/bin/csh' > doChain
+    echo 'axtChain $1 /cluster/data/dp1/scaffoldsNib /cluster/data/dm1/nib $2 > $3' \
+    >> doChain
+    chmod a+x doChain
+    mkdir chain out
+    para create spec
+    para try, check, push, check, ...
+#Completed: 671 of 671 jobs
+#Average job time:                  11s       0.19m     0.00h    0.00d
+#Longest job:                       45s       0.75m     0.01h    0.00d
+#Submission to last job:           639s      10.65m     0.18h    0.01d
+
+    ssh kksilo
+    cd /cluster/data/dp1/bed/blastz.dm1.swap/axtChainScaffold
+    chainMergeSort run1/chain/*.chain > all.chain
+    chainSplit chain all.chain
+    rm run1/chain/*.chain
+
+    mkdir -p ../axtChainChrom/chain
+    liftUp ../axtChainChrom/all.chain \
+      /cluster/data/dp1/jkStuff/liftAll.lft warn all.chain
+    cd ../axtChainChrom/chain
+    chainSplit chain all.chain
+
+    ssh hgwdev
+    cd /cluster/data/dp1/bed/blastz.dm1.swap/axtChainChrom/chain
+    foreach i (*.chain)
+      set c = $i:r
+      hgLoadChain dp1 ${c}_chainDm1 $i
+      echo done $c
+    end
+
+    # Create the nets.  You can do this while the database is loading
+    ssh kksilo
+    cd /cluster/data/dp1/bed/blastz.dm1.swap/axtChainScaffold
+    # First do a crude filter that eliminates many chains so the
+    # real chainer has less work to do.
+    mkdir preNet
+    cd chain
+    foreach i (*.chain)
+      echo preNetting $i
+      chainPreNet $i /cluster/data/dp1/scaffold.sizes \
+        /cluster/data/dm1/chrom.sizes ../preNet/$i
+    end
+    cd ..
+    # Run the main netter, putting the results in n1.
+    mkdir n1 
+    cd preNet
+    foreach i (*.chain)
+      set n = $i:r.net
+      echo primary netting $i
+      chainNet $i -minSpace=1 /cluster/data/dp1/scaffold.sizes \
+        /cluster/data/dm1/chrom.sizes ../n1/$n /dev/null
+    end
+    cd ..
+    # Classify parts of net as syntenic, nonsyntenic etc.
+    cat n1/*.net | netSyntenic stdin noClass.net
+
+    # The final step of net creation needs the database.
+    # Best to wait for the database load to finish if it
+    # hasn't already.
+    ssh hgwdev
+    cd /cluster/data/dp1/bed/blastz.dm1.swap/axtChainScaffold
+    netClass -liftT=/cluster/data/dp1/jkStuff/liftAll.lft -noAr \
+      noClass.net dp1 dm1 fruitfly.net
+    rm -r n1 noClass.net
+    netFilter -minGap=10 fruitfly.net > fruitflyFilt.net
+    liftUp ../axtChainChrom/fruitflyFiltChrom.net \
+      /cluster/data/dp1/jkStuff/liftAll.lft warn fruitflyFilt.net
+    hgLoadNet dp1 netDm1 ../axtChainChrom/fruitflyFiltChrom.net
+    # Move back to the file server to create axt files corresponding
+    # to the net.
+    ssh kksilo
+    cd /cluster/data/dp1/bed/blastz.dm1.swap/axtChainScaffold
+    mkdir ../axtNetScaffold
+    netSplit fruitflyFilt.net fruitflyNet
+    cd fruitflyNet
+    foreach i (*.net)
+        set c = $i:r
+        netToAxt -maxGap=300 $i ../chain/$c.chain \
+          /cluster/data/dp1/scaffoldsNib /cluster/data/dm1/nib \
+          ../../axtNetScaffold/$c.axt
+        echo done ../axtNetScaffold/$c.axt
+    end
+    cd ..
+    rm -r fruitflyNet
+    mkdir ../axtNetChrom
+    cd ../axtNetChrom
+    liftUp tmp.axt /cluster/data/dp1/jkStuff/liftAll.lft warn \
+      ../axtNetScaffold/*.axt
+    axtSort tmp.axt chrUn.axt
+    rm tmp.axt
+
+    # Load up the axtNet (alignment score wiggle) track:
+    ssh hgwdev
+    mkdir /gbdb/dp1/axtNetDm1
+    foreach f (/cluster/data/dp1/bed/blastz.dm1.swap/axtNetChrom/chr*.axt)
+      ln -s $f /gbdb/dp1/axtNetDm1
+    end
+    hgLoadAxt dp1 axtNetDm1
+
+
+# ADD BLASTZ/CHAIN/NET DOWNLOADABLE FILES (DONE 12/3/03 angie)
+    ssh hgwdev
+    mkdir /usr/local/apache/htdocs/goldenPath/dp1/vsDm1
+    cd /usr/local/apache/htdocs/goldenPath/dp1/vsDm1
+    gzip -c \
+      /cluster/data/dp1/bed/blastz.dm1.swap/axtChainScaffold/all.chain \
+      > chain.gz
+    gzip -c \
+      /cluster/data/dp1/bed/blastz.dm1.swap/axtChainScaffold/fruitflyFilt.net \
+      > net.gz
+    mkdir axtNet
+    foreach f (/cluster/data/dp1/bed/blastz.dm1.swap/axtNetScaffold/*.axt)
+      gzip -c $f > axtNet/$f:t.gz
+    end
+    # Make a README.txt which explains the files & formats.
 
 
