@@ -28,17 +28,41 @@ The top-level dir where we are sticking all the split up data files
 */
 static char outputDir[DEFAULT_PATH_SIZE];
 
+/*
+ Struct to hold either gap or frag data depending on what
+was read from the AGP file.
+
+ */
+struct agpData
+{
+/* Flag to indicate either base gap or valid fragment */
+    boolean isGap;
+
+/* Pointer to prev in doubly-linked list */
+    struct agpData *prev;
+/* Pointer to next in doubly-linked list */
+    struct agpData *next;
+
+/* Union to hold either and agpGap or agpFrag, depending on isGap flag. */
+    union
+    {
+	struct agpGap *pGap;
+	struct agpFrag *pFrag;
+    } data;
+};
+
 void usage()
 /* 
 Explain usage and exit. 
 */
 {
 fflush(stdout);
-    errAbort(
+    printf(
       "\nsplitFaIntoContigs - takes a .agp file and .fa file a destination directory in which to save data and a size (default 1Mbase) into which to split each chromosome of the fa file along non-bridged gaps\n"
       "usage:\n\n"
       "   splitFaIntoContigs in.agp in.fa storageDir [approx size in kilobases (default 1000)]\n"
       "\n");
+    exit(-1);
 }
 
 void writeChromLiftFiles(char *chromName)
@@ -87,7 +111,7 @@ sprintf(filename, "%s/%s.fa", destDir, chromName);
 faWrite(filename, chromName, dna, dnaSize);
 }
 
-void createSuperContigAgpFile(DNA *dna, struct agpGap *startGap, struct agpGap *endGap)
+void createSuperContigAgpFile(DNA *dna, struct agpData *startData, struct agpData *endData)
 /*
 Creates an agp file containing the contents of a supercontig in agp format.
 
@@ -98,8 +122,8 @@ param endGap - Pointer to the dna gap or fragment at which we are stopping to
  write data. The data will include the contents of this gap/frag.
  */
 {
-int startOffset = startGap->chromStart;
-int endOffset = endGap->chromEnd;
+int startOffset = startData->data.pGap->chromStart;
+int endOffset = endData->data.pGap->chromEnd;
 int i = 0;
 char filename[DEFAULT_PATH_SIZE];
 char command[DEFAULT_PATH_SIZE];
@@ -108,7 +132,7 @@ char destDir[DEFAULT_PATH_SIZE];
 int dnaSize = 0;
 char sequenceName[DEFAULT_PATH_SIZE];
 
-printf("Writing gap file for chromo %s\n", endGap->chrom);
+printf("Writing gap file for chromo %s\n", endData->data.pGap->chrom);
 
 /*
 filename = outputDir/chromName/chromFrag/chromFrag.fa
@@ -120,7 +144,7 @@ chromFrag = chr1_1
 output/1/chr1_1/chr1_1.fa
 */
 
-if (0 == startGap->chromStart)
+if (0 == startData->data.pGap->chromStart)
     {
     /* Restart the sequence number since we are now
        in a new chromosome*/
@@ -128,19 +152,19 @@ if (0 == startGap->chromStart)
     }
 
 ++sequenceNum;
-sprintf(destDir, "%s/%s/%s_%d", outputDir, &(startGap->chrom[3]), startGap->chrom, sequenceNum);
+sprintf(destDir, "%s/%s/%s_%d", outputDir, &(startData->data.pGap->chrom[3]), startData->data.pGap->chrom, sequenceNum);
 sprintf(command, "mkdir -p %s", destDir);
 system(command);
-sprintf(filename, "%s/%s_%d.fa", destDir, startGap->chrom, sequenceNum);
+sprintf(filename, "%s/%s_%d.fa", destDir, startData->data.pGap->chrom, sequenceNum);
 printf("Filename = %s\n", filename);
 printf("Writing file starting at dna[%d] up to but not including dna[%d]\n", startOffset, endOffset);
 
-sprintf(sequenceName, "%s_%d %d-%d", startGap->chrom, sequenceNum, startOffset, endOffset);
+sprintf(sequenceName, "%s_%d %d-%d", startData->data.pGap->chrom, sequenceNum, startOffset, endOffset);
 dnaSize = endOffset - startOffset;
 faWrite(filename, sequenceName, &dna[startOffset], dnaSize);
 }
 
-void createSuperContigFaFile(DNA *dna, struct agpGap *startGap, struct agpGap *endGap)
+void createSuperContigFaFile(DNA *dna, struct agpData *startData, struct agpData *endData)
 /*
 Creates a fasta file containing the contents of a supercontig in FASTA format.
 
@@ -151,8 +175,8 @@ param endGap - Pointer to the dna gap or fragment at which we are stopping to
  write data. The data will include the contents of this gap/frag.
  */
 {
-int startOffset = startGap->chromStart;
-int endOffset = endGap->chromEnd;
+int startOffset = startData->data.pGap->chromStart;
+int endOffset = endData->data.pGap->chromEnd;
 int i = 0;
 char filename[DEFAULT_PATH_SIZE];
 char command[DEFAULT_PATH_SIZE];
@@ -161,7 +185,7 @@ char destDir[DEFAULT_PATH_SIZE];
 int dnaSize = 0;
 char sequenceName[DEFAULT_PATH_SIZE];
 
-printf("Writing gap file for chromo %s\n", endGap->chrom);
+printf("Writing gap file for chromo %s\n", endData->data.pGap->chrom);
 
 /*
 filename = outputDir/chromName/chromFrag/chromFrag.fa
@@ -173,7 +197,7 @@ chromFrag = chr1_1
 output/1/chr1_1/chr1_1.fa
 */
 
-if (0 == startGap->chromStart)
+if (0 == startData->data.pGap->chromStart)
     {
     /* Restart the sequence number since we are now
        in a new chromosome*/
@@ -181,19 +205,19 @@ if (0 == startGap->chromStart)
     }
 
 ++sequenceNum;
-sprintf(destDir, "%s/%s/%s_%d", outputDir, &(startGap->chrom[3]), startGap->chrom, sequenceNum);
+sprintf(destDir, "%s/%s/%s_%d", outputDir, &(startData->data.pGap->chrom[3]), startData->data.pGap->chrom, sequenceNum);
 sprintf(command, "mkdir -p %s", destDir);
 system(command);
-sprintf(filename, "%s/%s_%d.fa", destDir, startGap->chrom, sequenceNum);
+sprintf(filename, "%s/%s_%d.fa", destDir, startData->data.pGap->chrom, sequenceNum);
 printf("Filename = %s\n", filename);
 printf("Writing file starting at dna[%d] up to but not including dna[%d]\n", startOffset, endOffset);
 
-sprintf(sequenceName, "%s_%d %d-%d", startGap->chrom, sequenceNum, startOffset, endOffset);
+sprintf(sequenceName, "%s_%d %d-%d", startData->data.pGap->chrom, sequenceNum, startOffset, endOffset);
 dnaSize = endOffset - startOffset;
 faWrite(filename, sequenceName, &dna[startOffset], dnaSize);
 }
 
-struct agpGap* nextAgpEntryToSplitOn(struct lineFile *lfAgpFile, int dnaSize, int splitSize, struct agpGap **retStartGap)
+struct agpData* nextAgpEntryToSplitOn(struct lineFile *lfAgpFile, int dnaSize, int splitSize, struct agpData **retStartData)
 /*
 Finds the next agp entry in the agp file at which to split on.
 
@@ -203,10 +227,10 @@ param dnaSize - The total size of the chromsome's dna sequence
  that looks at agp entries.
 param splitSize - The size of the split fragments that we are
  trying to make.
-param retGapStart - An out param returning the starting(inclusive) gap that we
+param retStartData - An out param returning the starting(inclusive) gap that we
  will start to split on.
 
-return struct agpGap* - The ending (inclusive) agp gap we are to split on.
+return struct agpData* - The ending (inclusive) agp data we are to split on.
  */
 {
 int startIndex = 0;
@@ -215,8 +239,9 @@ char *line = NULL;
 char *words[9];
 int lineSize = 0;
 struct agpGap *agpGap = NULL;
-struct agpGap *prevAgpGap = NULL;
 struct agpFrag *agpFrag = NULL;
+struct agpData *curAgpData = NULL;
+struct agpData *prevAgpData = NULL;
 boolean splitPointFound = FALSE;
 
 do 
@@ -241,43 +266,51 @@ if ('N' == words[4][0])
 	*/
         startIndex = --(agpGap->chromStart);
         }
+
     splitPointFound = (0 == strcasecmp(agpGap->bridge, NO));
+    curAgpData = AllocVar(curAgpData);
+    curAgpData->isGap = TRUE;
+    curAgpData->data.pGap = agpGap;
+    curAgpData->next = NULL;
     }
 else
     {
     agpFrag = agpFragLoad(words);
     /* If we find a fragment and not a gap we can't split there */
-    splitPointFound = FALSE;
-
     if (0 == startIndex)
         {
         startIndex = agpFrag->chromStart;
         }
 
-    /* Using cast here to fake polymorphism */
-    agpGap = (struct agpGap*) agpFrag;
+    splitPointFound = FALSE;
+    curAgpData = AllocVar(curAgpData);
+    curAgpData->isGap = FALSE;
+    curAgpData->data.pFrag = agpFrag;
+    curAgpData->next = NULL;
     }
 
 /* Save the start gap as the beginning of the section to write out */
-if (NULL == *retStartGap) 
-    {
-    *retStartGap = agpGap;
+if (NULL == *retStartData) 
+    {    
+    curAgpData->prev = NULL; /* Terminate the beginning of the linked list */
+    *retStartData = curAgpData;
     }
 else
     {
-    /* Build a linked list for use elewhere */
-    prevAgpGap->next = agpGap;
+    /* Build a doubly linked list for use elewhere */
+    prevAgpData->next = curAgpData;
+    curAgpData->prev = prevAgpData;
     }
 
-prevAgpGap = agpGap;
+prevAgpData = curAgpData;
 
 /* TODO: Free non-used returned agpGap and agpFrag entries */
-numBasesRead = agpGap->chromEnd - startIndex;
+numBasesRead = curAgpData->data.pGap->chromEnd - startIndex;
 } while ((numBasesRead < splitSize || !splitPointFound)
-             && agpGap->chromEnd < dnaSize);
+             && curAgpData->data.pGap->chromEnd < dnaSize);
 
-agpGap->next = NULL; /* Terminate the linked list */
-return agpGap;
+curAgpData->next = NULL; /* Terminate the linked list */
+return curAgpData;
 }
 
 void makeSuperContigs(struct lineFile *agpFile, DNA *dna, int dnaSize, int splitSize)
@@ -291,18 +324,18 @@ param splitSize - The sizes of the supercontigs we are splitting the
  dna into.
  */
 {
-struct agpGap *startAgpGap = NULL;
-struct agpGap *endAgpGap = NULL;
+struct agpData *startAgpData = NULL;
+struct agpData *endAgpData = NULL;
 
 do
     {
     /* TODO: free endAgpGap if not NULL */
-    endAgpGap = nextAgpEntryToSplitOn(agpFile, dnaSize, splitSize, &startAgpGap);
-    createSuperContigFaFile(dna, startAgpGap, endAgpGap);
-    createSuperContigAgpFile(dna, startAgpGap, endAgpGap);
-    /* TODO: free startAgpGap */
-    startAgpGap = NULL;
-    } while (endAgpGap->chromEnd < dnaSize);
+    endAgpData = nextAgpEntryToSplitOn(agpFile, dnaSize, splitSize, &startAgpData);
+    createSuperContigFaFile(dna, startAgpData, endAgpData);
+    createSuperContigAgpFile(dna, startAgpData, endAgpData);
+    /* TODO: free all agp data */
+    /*startAgpData = NULL;*/
+    } while (endAgpData->data.pGap->chromEnd < dnaSize);
 }
 
 void splitFaIntoContigs(char *agpFile, char *faFile, int splitSize)
@@ -330,6 +363,7 @@ while (faSpeedReadNext(lfFa, &dna, &dnaSize, &chromName))
     printf("\nProcessing data for Chromosome: %s, size: %d\n", chromName, dnaSize);
     writeChromFaFile(chromName, dna, dnaSize);
     writeChromAgpFile(chromName);
+    writeChromLiftFiles(chromName);
     makeSuperContigs(lfAgp, dna, dnaSize, splitSize);
     printf("Done processing chromosome %s\n", chromName);
     }
