@@ -3,7 +3,25 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit ~/kent/src/utils/doBlastzChainNet.pl instead.
 
-# $Id: doBlastzChainNet.pl,v 1.1 2005/02/17 01:19:30 angie Exp $
+# $Id: doBlastzChainNet.pl,v 1.2 2005/02/17 23:17:10 angie Exp $
+
+# to-do items:
+# - lots of testing
+# - handle .2bit for target
+# - install .over.chain in the correct location
+# - use "Self" in the database table names instead of $QDb when      
+#   loading self alignments
+# - better logging: right now it just passes stdout and stderr,
+#   leaving redirection to a logfile up to the user
+# - do something sensible with directory location w.r.t. DEF arg   
+# - add a -stop option (or at least a -noInstall) for intentionally
+#   partial runs
+# - add swapping (optionally) so we get chains, nets etc. for both
+#   species (non-self alignments only)
+# - compress more files in the cleanup step
+# - more options: -bigClusterHub, -smallClusterHub, -buildDir ...?  
+# - make it churn out a download README.txt from template, inserting
+#   params from DEF.
 
 use Getopt::Long;
 use warnings;
@@ -65,7 +83,7 @@ options:
     -help                 Show detailed help and exit.
 Automates UCSC's blastz/chain/net pipeline:
     1. Big cluster run of blastz.
-    2. Small cluster consolidation of files.
+    2. Small cluster consolidation of blastz result files.
     3. Small cluster chaining run.
     4. Sorting and netting of chains on the fileserver.
     5. Generation of liftOver-suitable chains from nets+chains on fileserver.
@@ -181,7 +199,7 @@ sub checkOptions {
 # be immediately visible.  
 
 sub run {
-  # Run a command in sh, with PATH specified in %defVars.
+  # Run a command in sh (unless -debug).
   my ($cmd) = @_;
   if ($opt_debug) {
     print "# $cmd\n";
@@ -324,7 +342,7 @@ sub doBlastzClusterRun {
     die "doBlastzClusterRun: looks like this was run successfully already " .
       "(run.time exists).  Either run with -continue cat or some later " .
 	"stage, or move aside/remove $runDir/ and run again.\n";
-  } elsif (-e "$runDir/gsub" || -e "$runDir/jobList") {
+  } elsif ((-e "$runDir/gsub" || -e "$runDir/jobList") && ! $opt_debug) {
     die "doBlastzClusterRun: looks like we are not starting with a clean " .
       "slate.  Please move aside or remove $runDir/ and run again.\n";
   }
@@ -396,13 +414,13 @@ sub doCatRun {
     die "doCatRun: looks like this was run successfully already " .
       "(run.time exists).  Either run with -continue chainRun or some later " .
 	"stage, or move aside/remove $runDir/ and run again.\n";
-  } elsif (-e "$runDir/gsub" || -e "$runDir/jobList") {
+  } elsif ((-e "$runDir/gsub" || -e "$runDir/jobList") && ! $opt_debug) {
     die "doCatRun: looks like we are not starting with a clean " .
       "slate.  Please move aside or remove $runDir/ and run again.\n";
   }
   # Make sure previous stage was successful.
   my $successFile = "$buildDir/run.blastz/run.time";
-  if (! -e $successFile) {
+  if (! -e $successFile && ! $opt_debug) {
     die "doCatRun: looks like previous stage was not successful (can't find " .
       "$successFile).\n";
   }
@@ -461,13 +479,13 @@ sub doChainRun {
     die "doChainRun: looks like this was run successfully already " .
       "(run.time exists).  Either run with -continue chainMerge or some " .
 	"later stage, or move aside/remove $runDir/ and run again.\n";
-  } elsif (-e "$runDir/gsub" || -e "$runDir/jobList") {
+  } elsif ((-e "$runDir/gsub" || -e "$runDir/jobList") && ! $opt_debug) {
     die "doChainRun: looks like we are not starting with a clean " .
       "slate.  Please move aside or remove $runDir/ and run again.\n";
   }
   # Make sure previous stage was successful.
   my $successFile = "$buildDir/run.cat/run.time";
-  if (! -e $successFile) {
+  if (! -e $successFile && ! $opt_debug) {
     die "doChainRun: looks like previous stage was not successful (can't " .
       "find $successFile).\n";
   }
@@ -535,13 +553,13 @@ sub postProcessChains {
     die "postProcessChains: looks like this was run successfully already " .
       "(all.chain exists).  Either run with -continue net or some later " .
 	"stage, or move aside/remove $runDir/chain and run again.\n";
-  } elsif (-e "$runDir/chain") {
+  } elsif (-e "$runDir/chain" && ! $opt_debug) {
     die "postProcessChains: looks like we are not starting with a clean " .
       "slate.  Please move aside or remove $runDir/chain and run again.\n";
   }
   # Make sure previous stage was successful.
   my $successFile = "$buildDir/axtChain/run/run.time";
-  if (! -e $successFile) {
+  if (! -e $successFile && ! $opt_debug) {
     die "postProcessChains: looks like previous stage was not successful " .
       "(can't find $successFile).\n";
   }
@@ -585,7 +603,7 @@ sub netChains {
   }
   # Make sure previous stage was successful.
   my $successFile = "$buildDir/axtChain/all.chain";
-  if (! -e $successFile) {
+  if (! -e $successFile && ! $opt_debug) {
     die "netChains: looks like previous stage was not successful " .
       "(can't find $successFile).\n";
   }
@@ -650,7 +668,7 @@ sub loadUp {
   }
   # Make sure previous stage was successful.
   my $successDir = "$buildDir/mafNet/";
-  if (! -d $successDir) {
+  if (! -d $successDir && ! $opt_debug) {
     die "netChains: looks like previous stage was not successful " .
       "(can't find $successDir).\n";
   }
@@ -707,7 +725,7 @@ sub makeDownloads {
   }
   # Make sure previous stage was successful.
   my $successFile = "$buildDir/axtChain/$qDb.net";
-  if (! -e $successFile) {
+  if (! -e $successFile && ! $opt_debug) {
     die "netChains: looks like previous stage was not successful " .
       "(can't find $successFile).\n";
   }
