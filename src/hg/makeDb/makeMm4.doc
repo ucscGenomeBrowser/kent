@@ -4978,17 +4978,70 @@ o Perform preliminary review of Proteom Browser for mm4, then
     
         kent/src/hg/makeDb/trackDb/mouse/mm4
 
-# CHUCK'S MM4->MM5 LIFTOVER CHAIN STUFF (DONE 2/2/05 Andy)
-    # Chuck made a liftOver.chain file it looks like, but it's not in the standard
-    # places.
-    mkdir /cluster/data/mm4/bed/liftOver
-    cd /cluster/data/mm4/bed/liftOver
-    ln -s ../blat.mm5/mm4.mm5.liftOver.chain mm4ToMm5.chain
-    mdkir /gbdb/mm4/liftOver
-    cd /gbdb/mm4/liftOver
-    ln -s /cluster/data/mm4/bed/liftOver/mm4ToMm5.chain mm4ToMm5.over.chain
-    mkdir /usr/local/apache/htdocs/goldenPath/mm4/liftOver
-    cd /usr/local/apache/htdocs/goldenPath/mm4/liftOver
-    cp /cluster/data/mm4/bed/liftOver/mm4ToMm5.chain .
-    gzip mm4ToMm5.chain
-    hgAddLiftOverChain mm4 mm5
+# MM4->MM5 LIFTOVER CHAIN (DONE 2/8/05 Andy)
+    # I'm starting at the chaining point.  Kate believes the alignment is OK, but there's no
+    # chrA_chrB.psl files in the /cluster/data/mm4/bed/blat.mm5/raw directory, so I can't
+    # start at the lifting stage.
+    ssh kk9
+    makeLoChain-chain mm4 /cluster/data/mm4/nib mm5 /cluster/data/mm5/nib
+    cd /cluster/data/mm4/bed/blat.mm5.2005-02-08/chainRun
+    para try
+    para check
+    para push
+#Completed: 43 of 43 jobs
+#CPU time in finished jobs:      21502s     358.36m     5.97h    0.25d  0.001 y
+#IO & Wait Time:                 48317s     805.29m    13.42h    0.56d  0.002 y
+#Average job time:                1624s      27.06m     0.45h    0.02d
+#Longest job:                    21152s     352.53m     5.88h    0.24d
+#Submission to last job:         26995s     449.92m     7.50h    0.31d
+    ssh kk
+    nice makeLoChain-net mm4 mm5
+
+# LIFTOVER CHAINS TO MM5 (REDONE AGAIN 03-02-2005 TO 03-07-2005 Andy)
+
+    # run alignment
+    # NOTE: split mm5 to /iscratch/i is doc'ed in makeHg17.doc
+    ssh kk9
+    cd /cluster/data/mm4
+    makeLoChain-align mm4 /iscratch/i/mm4/softNib \
+                    mm5 /iscratch/i/mm5/liftOver/liftSplit/split /scratch/hg/h/mouse11.ooc
+        # Created parasol job in bed/blat.mm5.2005-03-02/run
+    
+    cd bed
+    rm blat.mm5
+    ln -s blat.mm5.2004-03-02 blat.mm5
+    cd blat.mm5/run
+    grep "mm4/softNib/chr[1239].nib" spec | sed 's/=98/=94/' > spec.reduced
+    grep -v "mm4/softNib/chr[1239].nib" spec > spec.otherChroms
+    para create spec.reduced
+    # 172 jobs written to batch
+    para try
+    para check
+    para push
+
+    # lift results
+    # the lift directory was defined in makeHg17.doc when split was performed
+    # this expects data in bed/blat.mm5, so symlink must be there
+    ssh kksilo
+    cd /cluster/data/mm4/bed
+    ln -s blat.mm5 blat.mm5.2005-03-03
+    cd blat.mm5
+    makeLoChain-lift mm4 mm5 /iscratch/i/mm5/liftOver/liftSplit/lift > lift.log 2> lift.log &
+    # That didn't quite work.  I'll do it manually:
+    cd raw
+    for chr in `awk '{print $1;}' /cluster/data/mm5/chrom.sizes`; do
+      echo $chr
+      liftUp -pslQ ../psl/$chr.psl /iscratch/i/mm5/liftOver/liftSplit/lift/$chr.lft warn chr*_$chr.psl
+    done
+    # chaining
+    ssh kki
+    makeLoChain-chain mm4 /cluster/data/mm4/nib mm5 /cluster/data/mm5/nib
+    cd /cluster/data/mm4/bed/blat.mm5/chainRun
+    para try
+    para check
+    para push
+    # netting (this step also creates the liftOver chain)
+    ssh kksilo
+    makeLoChain-net mm4 mm5
+    ssh hgwdev
+    makeLoChain mm4 mm5
