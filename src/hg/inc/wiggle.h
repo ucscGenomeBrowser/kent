@@ -262,6 +262,7 @@ struct wiggleDataStream
     struct wigAsciiData *ascii;	/*	list of wiggle data values */
     struct bed *bed;		/*	data in bed format	*/
     struct wiggleStats *stats;	/*	list of wiggle stats	*/
+    unsigned long long maxOutput;	/*	maximum items fetched	*/
     boolean useDataConstraint;	/*	to simplify checking if it is on */
     enum wigCompare wigCmpSwitch;	/*	for compare function switch */
     char *dataConstraint;	/*	one of < = >= <= == != 'in range' */
@@ -300,6 +301,7 @@ struct wiggleDataStream
     void (*setDataConstraint)(struct wiggleDataStream *wDS,
 	char *dataConstraint, double lowerLimit, double upperLimit);
 				/*	setting data compare limits 	*/
+    void (*bedOut)(struct wiggleDataStream *wDS, char *fileName);
     void (*statsOut)(struct wiggleDataStream *wDS, char *fileName);
     void (*asciiOut)(struct wiggleDataStream *wDS, char *fileName);
     void (*getData)(struct wiggleDataStream *wDS, int operations);
