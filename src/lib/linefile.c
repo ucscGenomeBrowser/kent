@@ -208,6 +208,30 @@ if (expecting != got)
 	    expecting, lf->lineIx, lf->fileName, got);
 }
 
+void lineFileExpectAtLeast(struct lineFile *lf, int expecting, int got)
+/* Check line has right number of words. */
+{
+if (got < expecting)
+    errAbort("Expecting at least %d words line %d of %s got %d", 
+	    expecting, lf->lineIx, lf->fileName, got);
+}
+
+
+boolean lineFileNextReal(struct lineFile *lf, char **retStart)
+/* Fetch next line from file that is not blank and 
+ * does not start with a '#'. */
+{
+char *s, c;
+while (lineFileNext(lf, retStart, NULL))
+    {
+    s = skipLeadingSpaces(*retStart);
+    c = s[0];
+    if (c != 0 && c != '#')
+	return TRUE;
+    }
+return FALSE;
+}
+
 int lineFileChopNext(struct lineFile *lf, char *words[], int maxWords)
 /* Return next non-blank line that doesn't start with '#' chopped into words. */
 {

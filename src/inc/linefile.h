@@ -45,6 +45,10 @@ void lineFileClose(struct lineFile **pLf);
 boolean lineFileNext(struct lineFile *lf, char **retStart, int *retSize);
 /* Fetch next line from file. */
 
+boolean lineFileNextReal(struct lineFile *lf, char **retStart);
+/* Fetch next line from file that is not blank and 
+ * does not start with a '#'. */
+
 void lineFileNeedNext(struct lineFile *lf, char **retStart, int *retSize);
 /* Fetch next line from file.  Squawk and die if it's not there. */
 
@@ -61,6 +65,9 @@ void lineFileSeek(struct lineFile *lf, off_t offset, int whence);
 /* Seek to read next line from given position. */
  
 void lineFileExpectWords(struct lineFile *lf, int expecting, int got);
+/* Check line has right number of words. */
+
+void lineFileExpectAtLeast(struct lineFile *lf, int expecting, int got);
 /* Check line has right number of words. */
 
 boolean lineFileNextRow(struct lineFile *lf, char *words[], int wordCount);
