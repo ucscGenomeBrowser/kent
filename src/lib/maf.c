@@ -8,7 +8,7 @@
 #include "maf.h"
 #include <fcntl.h>
 
-static char const rcsid[] = "$Id: maf.c,v 1.17 2005/03/10 00:15:51 kate Exp $";
+static char const rcsid[] = "$Id: maf.c,v 1.18 2005/03/10 16:52:11 kate Exp $";
 
 struct mafFile *mafMayOpen(char *fileName)
 /* Open up a maf file and verify header. */
@@ -24,7 +24,6 @@ AllocVar(mf);
 mf->lf = lf;
 
 lineFileNeedNext(lf, &line, NULL);
-fprintf(stderr, "line: %s\n", line);
 if (!startsWith(sig, line))
     {
     errAbort("%s does not start with %s", fileName, sig);
