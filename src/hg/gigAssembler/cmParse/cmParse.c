@@ -63,7 +63,6 @@ struct cloneInfo
     int pos;
     bool inMap;
     bool inFfa;
-    bool suppress;		/* Don't write if this is set. */
     struct cmContig *contig;	/* Back pointer to contig. May be NULL. */
     };
 
@@ -502,7 +501,6 @@ if (minorityHash == NULL) return FALSE;
 majority = hashFindVal(minorityHash, ci->acc);
 if (majority == NULL) return FALSE;
 if (contig == majority) return FALSE;
-uglyf("Suppressing %s in minority contig %s\n", ci->acc, contig->name);
 return TRUE;
 }
 
@@ -520,6 +518,7 @@ FILE *geno;
 FILE *map;
 char *s;
 int i;
+struct hash *noDupCloneHash = newHash(0);
 
 mustMakeDir(outDir);
 mustChangeDir(outDir);
@@ -534,7 +533,7 @@ for (chrom = chromList; chrom != NULL; chrom = chrom->next)
 	}
     printf("Writing chromosome %s", chrom->name);
     fflush(stdout);
-    mustMakeDir(chrom->name);
+    makeDir(chrom->name);
     mustChangeDir(chrom->name);
     for (isOrdered = 1; isOrdered >= 0; --isOrdered)
 	{
@@ -559,11 +558,15 @@ for (chrom = chromList; chrom != NULL; chrom = chrom->next)
 		for (cl = contig->cloneList; cl != NULL; cl = cl->next)
 		    {
 		    ci = cl->clone;
-		    if (!ci->suppress && !suppressMinority(minorityHash, ci, contig))
+		    if (!suppressMinority(minorityHash, ci, contig))
 			{
-			fprintf(info, "%s %d %d\n", ci->acc, ci->pos, ci->phase);
-			if (ci->dir != NULL)
-			    fprintf(geno, "%s/%s.fa\n", ci->dir, ci->acc);
+			if (!hashLookup(noDupCloneHash, ci->acc))
+			    {
+			    hashAdd(noDupCloneHash, ci->acc, NULL);
+			    fprintf(info, "%s %d %d\n", ci->acc, ci->pos, ci->phase);
+			    if (ci->dir != NULL)
+				fprintf(geno, "%s/%s.fa\n", ci->dir, ci->acc);
+			    }
 			}
 		    }
 		fclose(info);
@@ -576,6 +579,7 @@ for (chrom = chromList; chrom != NULL; chrom = chrom->next)
     mustChangeDir("..");
     printf("\n");
     }
+hashFree(&noDupCloneHash);
 }
 
 void faDirToCloneHash(char *dir, struct hash *cloneHash, struct cloneInfo **pCloneList)
@@ -822,8 +826,15 @@ while (lineFileNext(lf, &line, &lineSize))
         errAbort("Expecting at least 5 words line %d of %s", 
 		lf->lineIx, lf->fileName);
     imreCloneStaticLoad(words, &im);
-    if (hashLookup(badHash, im.accession) && !stringIn(im.source, "TPF"))
-        continue;
+    if (hashLookup(badHash, im.accession))
+        {
+	if (stringIn(im.source, "TPF"))
+	   {
+	   hashRemove(badHash, im.accession);
+	   }
+	else
+	    continue;
+	}
     eraseWhiteSpace(im.imreContig);
     if (startsWith("ctg", im.imreContig))
 	strcpy(contigName, im.imreContig);
@@ -1140,6 +1151,8 @@ for (fi1 = fiList1; fi1 != NULL; fi1 = fi1->next)
 	slFreeList(&fiList2);
 	}
     }
+if (chromList == NULL)
+    errAbort("No chromosomes in %s", imreDir);
 slFreeList(&fiList1);
 slReverse(&chromList);
 checkDupes(chromList);
@@ -1300,11 +1313,84 @@ freeMem(dup);
 return hash;
 }
 
-void doImreMerge(char *gsDir, char *imreDir, char *wuFile)
+void addClonesInContigList(struct hash *mixedCloneHash, struct cmContig *contigList, struct cloneInfo **pMixedCloneList)
+/* Add all clones in chromosome to mixedCloneHash and *pMixedCloneList if they don't already exist. */
+{
+struct cmContig *contig;
+struct cloneInfo *clone;
+
+for (contig = contigList; contig != NULL; contig = contig->next)
+    {
+    struct cloneLine *cl;
+    for (cl = contig->cloneList; cl != NULL; cl = cl->next)
+        {
+	struct cloneInfo *ci;
+	char *acc = cl->clone->acc;
+	if ((ci = hashFindVal(mixedCloneHash,  acc)) == NULL)
+	    {
+	    ci = cl->clone;
+	    hashAdd(mixedCloneHash, acc, ci);
+	    slAddHead(pMixedCloneList, ci);
+	    }
+	}
+    }
+}
+
+void addClonesInChrom(struct hash *mixedCloneHash, struct cmChrom *chrom, struct cloneInfo **pMixedCloneList)
+/* Add all clones in chromosome to mixedCloneHash and *pMixedCloneList if they don't already exist. */
+{
+addClonesInContigList(mixedCloneHash, chrom->orderedList, pMixedCloneList);
+addClonesInContigList(mixedCloneHash, chrom->randomList, pMixedCloneList);
+}
+
+void doImreMerge(char *gsDir, char *imreDir, char *wuFile, char *outDir)
 /* Merge WashU and Imre Map.  Use Imre map except for chromosomes
  * in fpcChrom. */
 {
 struct hash *useWuHash = commaListToHash(fpcChrom);
+struct cmChrom *wuChromList = NULL, *imreChromList = NULL, *chrom, *nextChrom;
+struct hash *wuCloneHash = newHash(0), *imreCloneHash = newHash(0);
+struct cloneInfo *wuCloneList = NULL, *imreCloneList = NULL;
+struct hash *wuCtgHash = newHash(0), *imreCtgHash = newHash(0);
+struct hash *minorityHash = newHash(8);
+struct cmChrom *mixedChrom = NULL;
+struct hash *mixedCloneHash = newHash(0);
+struct cloneInfo *mixedCloneList = NULL;
+
+/* Get chromosome lists. */
+wuChromList = wuParse(wuFile, wuCloneHash, &wuCloneList, wuCtgHash);
+slReverse(&wuCloneList);
+imreChromList = imParse(gsDir, imreDir, imreCloneHash, &imreCloneList, imreCtgHash, minorityHash);
+slReverse(&imreCloneList);
+
+for (chrom = imreChromList; chrom != NULL; chrom = nextChrom)
+    {
+    nextChrom = chrom->next;
+    if (!hashLookup(useWuHash, chrom->name))
+        {
+	slAddHead(&mixedChrom, chrom);
+	addClonesInChrom(mixedCloneHash, chrom, &mixedCloneList);
+	}
+    }
+for (chrom = wuChromList; chrom != NULL; chrom = nextChrom)
+    {
+    nextChrom = chrom->next;
+    if (hashLookup(useWuHash, chrom->name))
+        {
+	slAddHead(&mixedChrom, chrom);
+	}
+    else
+        {
+	chrom->orderedList = NULL;
+	slAddHead(&mixedChrom, chrom);
+	}
+    addClonesInChrom(mixedCloneHash, chrom, &mixedCloneList);
+    }
+slReverse(&mixedChrom);
+
+readGsClones(gsDir, mixedCloneHash, &mixedCloneList);
+slReverse(&mixedCloneList);
+makeCmDir(mixedChrom, outDir, minorityHash);
 }
 
 void cmProcess(char *inName, char *badClones, char *finLst, char *gsDir, 
@@ -1331,7 +1417,12 @@ else if (imreVsNa != NULL)
     }
 else if (imreMerge != NULL)
     {
-    doImreMerge(gsDir, imreMerge, inName);
+    uglyf("Looking to imreMerge\n");
+    if (!cgiVarExists("fpcChrom"))
+        errAbort("imreMerge without fpcChrom");
+    uglyf("ok 0\n");
+    doImreMerge(gsDir, imreMerge, inName, outDir);
+    uglyf("ok 100\n");
     }
 else if (imreFormat)
     {
