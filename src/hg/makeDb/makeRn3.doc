@@ -462,15 +462,6 @@ MAKE HGCENTRALTEST ENTRY AND TRACKDB TABLE FOR RN3 (DONE - 2003-06-24 - Hiram)
     echo 'insert into defaultDb values("Rat", "rn3");' \
 	| hgsql -h genome-testdb hgcentraltest
 
-    #  For the beta machine, during release cycle only:
-    echo 'insert into dbDb values("rn3", "Jun 2003", \
-        "/gbdb/rn3/nib", "Rat", "chr5:169359914-169392264", 1, \
-        30, "Rat", "Rattus norvegicus");' | hgsql -h genome-testdb hgcentralbeta
-    echo 'delete from defaultDb where genome="Rat";' \
-	| hgsql -h genome-testdb hgcentralbeta
-    echo 'insert into defaultDb values("Rat", "rn3");' \
-	| hgsql -h genome-testdb hgcentralbeta
-
     # Make trackDb table so browser knows what tracks to expect:
     ssh hgwdev
     cd ~/kent/src/hg/makeDb/trackDb
@@ -1142,16 +1133,12 @@ MAKE LIFT FILE FOR AGPS (TO DO)
       > jkStuff/liftRNOR.lft
 
 
-LOAD BACTIG POSITIONS (TO DO)
+LOAD BACTIG POSITIONS (DONE - 2003-07-14 - Hiram)
 
     ssh hgwdev
     mkdir -p ~/rn3/bed/bactigPos
     cd ~/rn3/bed/bactigPos
-    # Paul Havlak havlak@swan.hgsc.bcm.tmc.edu sent us a BED 4+ email 
-    # attachment.  
-    # Save the attachment as ~/rn3/bed/bactigPos/Rnor2-1.extreme.fix
-    # Fix the 1-based starts to 0-based:
-    awk "-F\t" '{printf "%s\t%d\t%s\t%s\t%s\t%s\n", $1, $2-1, $3, $4, $5, $6;}' < Rnor2-1.extreme.fix > bactigPos.bed
+    awk "-F\t" '{printf "%s\t%d\t%s\t%s\t%s\t%s\n", $1, $2-1, $3, $4, $5, $6;}' < ../../bactigs.contigs > bactigPos.bed
     hgLoadBed rn3 bactigPos bactigPos.bed \
       -noBin -sqlTable=$HOME/kent/src/hg/lib/bactigPos.sql
 
