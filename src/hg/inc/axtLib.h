@@ -8,8 +8,9 @@ struct axt *createAxtGap(char *nibFile, char *chrom,
 			 int start, int end, char strand);
 /* return an axt alignment with the query all deletes - null aligment */
 
-void axtFillGap(struct axt **aList, char *nibDir);
+void axtFillGap(struct axt **aList, char *nibDir, char direction);
 /* fill gaps between blocks with null axts with seq on t and q seq all gaps*/
+/* direction = '+' ascending on + strand, - is descending on - strand */
 
 char *getAxtFileName(char *chrom, char *toDb, char *alignment, char *fromDb);
 /* return file name for a axt alignment */

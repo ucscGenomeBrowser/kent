@@ -277,7 +277,7 @@ axt->tStrand = strand;
 axt->qName = "gap";
 axt->qStart = 1;
 axt->qEnd = size;
-axt->qStrand = ' ';
+axt->qStrand = strand;
 axt->symCount = size;
 axt->score = 0;
 seq = nibLoadPart(nibFile, start,size);
@@ -286,8 +286,9 @@ axt->qSym = cloneMem(gapPt, size+1);
 return axt;
 }
 
-void axtFillGap(struct axt **aList, char *nibDir)
+void axtFillGap(struct axt **aList, char *nibDir, char direction)
 /* fill gaps between blocks with null axts with seq on t and q seq all gaps*/
+/* direction = '+' ascending on + strand, - is descending on - strand */
 {
 struct axt *axt, *next, *axtGap, *tmp, *prevAxt = NULL;
 int prevEnd = 0;
@@ -296,12 +297,21 @@ char nib[128];
 
 for (axt = *aList; axt != NULL; axt = next)
     {
-    if (((axt->tStart)-1) > prevEnd  && prevEnd > 0)
+    if (((axt->tStart)-1) > prevEnd  && prevEnd > 0 && direction == '+')
         {
         assert(prevAxt != NULL);
         tmp = prevAxt->next;
         safef(nib, sizeof(nib), "%s/%s.nib",nibDir,axt->tName);
-        axtGap = createAxtGap(nib,axt->tName,prevEnd,(axt->tStart)-1,axt->qStrand);
+        axtGap = createAxtGap(nib,axt->tName,prevEnd,(axt->tStart),axt->qStrand);
+        axtGap->next = tmp;
+        prevAxt->next = axtGap;
+        }
+    if (((axt->tEnd)+1) < prevStart  && prevStart > 0 && direction == '-')
+        {
+        assert(prevAxt != NULL);
+        tmp = prevAxt->next;
+        safef(nib, sizeof(nib), "%s/%s.nib",nibDir,axt->tName);
+        axtGap = createAxtGap(nib,axt->tName,(axt->tEnd),prevStart,axt->qStrand);
         axtGap->next = tmp;
         prevAxt->next = axtGap;
         }
