@@ -67,6 +67,8 @@
 #include "machSpec.h"
 #include "log.h"
 
+static char const rcsid[] = "";
+
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
     {"spokes", OPTION_INT},

@@ -9,6 +9,8 @@
 #include "paraLib.h"
 #include "paraMessage.h"
 
+static char const rcsid[] = "";
+
 struct rudp *hubRudp;	/* Network connection to paraHub. */
 char *userName;	/* Name of user. */
 

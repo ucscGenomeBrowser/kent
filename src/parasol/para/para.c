@@ -15,6 +15,8 @@
 #include "jobResult.h"
 #include "verbose.h"
 
+static char const rcsid[] = "";
+
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
     {"retries", OPTION_INT},
