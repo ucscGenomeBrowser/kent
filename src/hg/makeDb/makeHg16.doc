@@ -6892,10 +6892,12 @@ hgMapToGene hg16 refGene knownGene knownToLocusLink -lookup=refToLl.txt
 # Create table that maps between known genes and Pfam domains
 hgMapViaSwissProt hg16 knownGene name proteinID Pfam knownToPfam
 #	row count went from 31201 to 32225
+# JK Fixed bug that let multiple identical columns happen in knownToPfam
+# on April 15, 2004.  Row count now 30467
 
 # Create table to map between known genes and GNF Atlas2
 # expression data.
-    hgMapToGene hg16 gnfAtlas2 knownGene knownToGnfAtlas2
+    hgMapToGene hg16 gnfAtlas2 knownGene knownToGnfAtlas2 '-type=bed 12'
 
 # Create expression distance table - takes about an hour
     hgExpDistance hg16 hgFixed.gnfHumanAtlas2MedianRatio \
