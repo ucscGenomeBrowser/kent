@@ -13,7 +13,7 @@ $(T): $(O) ../lib/$(MACHTYPE)
 	mkdir ../lib/$(MACHTYPE)
 
 clean:
-	rm -f ${O} $(MACHTYPE)/jkOwnLib.a
+	rm -f ${O} ../lib/$(MACHTYPE)/jkOwnLib.a
 
 tags:
 	etags ../inc/*.h ../lib/*.h ../lib/*.c  ../hg/inc/*.h ../hg/lib/*.h ../hg/lib/*.c ../hg/hgTracks/hgTracks.c ../hg/hgc/hgc.c ../hg/hgTrackUi/hgTrackUi.c
