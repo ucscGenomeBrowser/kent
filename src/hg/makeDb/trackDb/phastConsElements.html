@@ -10,21 +10,30 @@ changes from one site to the next. </P>
 each species using blastz, followed by chaining and netting.  A multiple
 alignment was then constructed from these pairwise alignments using multiz.
 Predictions of conserved elements were then obtained by running phastCons
-on the multiple alignments with the --viterbi option.  PhastCons constructs
-a two-state phylo-HMM with a state for conserved regions and a state for
-non-conserved regions.  The two states share a single phylogenetic model,
-except that the branch lengths of the tree associated with the conserved
-state are multiplied by a constant scaling factor &rho (0 &le &rho &le 1).
-The phylogenetic model, the scaling factor &rho, and the transition
-probabilities of the HMM are all estimated from the data by maximum
-likelihood using an EM algorithm.  To ensure that the scores in different
-regions of the genome are directly comparable, we first obtain global
-estimates of all parameters and then, in a second pass, produce predictions
-across the genome using the same parameters everywhere.  The predicted
-elements are segments of the alignment that are likely to have been
-"generated" by the conserved state of the phylo-HMM--i.e., maximal segments
-in which the maximum-likelihood (Viterbi) path completely resides in the
-conserved state.  </P>
+on the multiple alignments with the --viterbi option.</P>
+
+<P>PhastCons constructs a two-state phylo-HMM with a state for conserved
+regions and a state for non-conserved regions.  The two states share a
+single phylogenetic model, except that the branch lengths of the tree
+associated with the conserved state are multiplied by a constant scaling
+factor &rho (0 &le &rho &le 1).  The phylogenetic model and the scaling
+factor &rho are all estimated from the data by maximum likelihood using an
+EM algorithm.  The state-transition probabilities of the phylo-HMM may also
+be estimated by maximum likelihood, but we find that more biologically
+useful results are obtained by treating them as tuning parameters.  The
+transition probabilities are set such that the "coverage" of the track
+(portion of sites in conserved elements) is approximately equal to the
+share of the reference genome believed to be under purifying selection
+(e.g., 5% for mammalian genomes) and the prior expected length of a
+conserved element is 12 bp (to help keep short conserved elements from
+being missed).  To ensure that the scores in different regions of the
+genome are directly comparable, we first obtain global estimates of all
+parameters and then, in a second pass, produce predictions across the
+genome using the same parameters everywhere.  The predicted elements are
+segments of the alignment that are likely to have been "generated" by the
+conserved state of the phylo-HMM--i.e., maximal segments in which the
+maximum-likelihood (Viterbi) path completely resides in the conserved
+state.  </P>
 
 <P>Each predicted conserved element is assigned a log-odds score equal to
 its log probability under the conserved model minus its log probability
