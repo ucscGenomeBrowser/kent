@@ -11,6 +11,11 @@
 #include "genePred.h"
 #include "bed.h"
 
+/* I don't like using this global, but don't want to do a zillion 
+ * hChromSizes in addFeature and don't want to add it as a param of 
+ * every call to addFeature. */
+static int chromSize = 0;
+
 void hgSeqFeatureRegionOptions(struct cart *cart, boolean canDoUTR,
 			       boolean canDoIntrons)
 /* Print out HTML FORM entries for feature region options. */
@@ -397,6 +402,10 @@ void addFeature(int *count, unsigned *starts, unsigned *sizes,
 {
 if (size > 0)
     {
+    if (start < 0)
+	start = 0;
+    if (start + size > chromSize)
+	size = chromSize - start;
     starts[*count]    = start;
     sizes[*count]     = size;
     exonFlags[*count] = eFlag;
@@ -416,6 +425,7 @@ int sizes[1];
 boolean exonFlags[1];
 boolean cdsFlags[1];
 
+chromSize = hChromSize(chrom);
 addFeature(&count, starts, sizes, exonFlags, cdsFlags,
 	   chromStart, chromEnd - chromStart, FALSE, FALSE);
 hgSeqRegions(chrom, strand, name, FALSE, count, starts, sizes, exonFlags,
@@ -461,6 +471,7 @@ rowCount = totalCount = 0;
 for (bedItem = bedList;  bedItem != NULL;  bedItem = bedItem->next)
     {
     rowCount++;
+    chromSize = hChromSize(bedItem->chrom);
     // bed: translate relative starts to absolute starts
     for (i=0;  i < bedItem->blockCount;  i++)
 	{
