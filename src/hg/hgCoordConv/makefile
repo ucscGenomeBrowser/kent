@@ -14,4 +14,3 @@ include ../../inc/cgi_build_rules.mk
 compile: $O 
 	${CC} $O ${MYLIBS} ${L} 
 	mv a.out $A
-	chmod a+rx $A

@@ -34,7 +34,6 @@ beta::
 compile: $O 
 	${CC} $O ${MYLIBS} ${L}
 	mv a.out $A
-	chmod a+rx $A
 
 test:
 	${CGI_BIN}-${USER}/$A hgg_gene=D43968 hgg_chrom=chr21 hgg_start=35080500 hgg_end=35181383 db=hg16 hgsid=68172

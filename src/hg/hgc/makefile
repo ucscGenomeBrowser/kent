@@ -17,4 +17,3 @@ mgsc: compile
 compile: $O 
 	${CC} $O ${F64} ${MYLIBS} ${L} 
 	mv a.out $A
-	chmod a+rx $A
