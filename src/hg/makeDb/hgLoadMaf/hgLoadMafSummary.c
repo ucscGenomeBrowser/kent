@@ -12,7 +12,7 @@
 #include "dystring.h"
 #include "mafSummary.h"
 
-static char const rcsid[] = "$Id: hgLoadMafSummary.c,v 1.7 2005/03/21 19:59:07 kate Exp $";
+static char const rcsid[] = "$Id: hgLoadMafSummary.c,v 1.8 2005/04/04 18:20:32 galt Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -159,8 +159,7 @@ for (mc = maf->components; mc != NULL; mc = nextMc)
      * if this one is too small */
 
     /* handle pending alignment block for this species, if any  */
-    if (((struct ms *)msPending = 
-                hashFindVal(componentHash, ms->src)) != NULL)
+    if ( ( msPending = (struct mafSummary *) hashFindVal(componentHash, ms->src)) != NULL)
         {
         /* there is a pending alignment block */
         /* either merge it with the current block, or output it */
