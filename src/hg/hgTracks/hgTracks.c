@@ -4,6 +4,7 @@
 #include "linefile.h"
 #include "portable.h"
 #include "memalloc.h"
+#include "localmem.h"
 #include "obscure.h"
 #include "dystring.h"
 #include "hash.h"
@@ -781,6 +782,14 @@ else if (sameString(type, "green"))
 else if (sameString(type, "blue"))
     colorIx = MG_BLUE;
 return colorIx;
+}
+
+struct track *trackNew()
+/* Allocate track . */
+{
+struct track *tg;
+AllocVar(tg);
+return tg;
 }
 
 int linkedFeaturesCmp(const void *va, const void *vb)
@@ -1988,8 +1997,7 @@ tg->itemEnd = linkedFeaturesSeriesItemEnd;
 struct track *linkedFeaturesTg()
 /* Return generic track for linked features. */
 {
-struct track *tg = NULL;
-AllocVar(tg);
+struct track *tg = trackNew();
 linkedFeaturesMethods(tg);
 tg->colorShades = shadesOfGray;
 return tg;
@@ -3639,15 +3647,6 @@ tg->totalHeight = tgFixedTotalHeight;
 tg->itemHeight = tgFixedItemHeight;
 tg->itemStart = bedItemStart;
 tg->itemEnd = bedItemEnd;
-}
-
-struct track *bedTg()
-/* Get track loaded with generic bed values. */
-{
-struct track *tg;
-AllocVar(tg);
-bedMethods(tg);
-return tg;
 }
 
 int cmpAgpFrag(const void *va, const void *vb)
@@ -5608,34 +5607,6 @@ tg->freeItems = freeEnsPhusionBlast;
 tg->itemColor = ensPhusionBlastItemColor;
 tg->subType = lfWithBarbs;
 }
-
-#ifdef EXAMPLE
-void loadXyz(struct track *tg)
-/* Load up xyz from database table to track items. */
-{
-bedLoadItem(tg, "xyz", (ItemLoader)xyzLoad);
-}
-
-void freeXyz(struct track *tg)
-/* Free up xyz items. */
-{
-xyzFreeList((struct xyz**)&tg->items);
-}
-
-struct track *xyzTg()
-/* Make track for xyz. */
-{
-struct track *tg = bedTg();
-
-tg->mapName = "hgXyz";
-tg->visibility = tvDense;
-tg->longLabel = "xyz";
-tg->shortLabel = "xyz";
-tg->loadItems = loadXyz;
-tg->freeItems = freeXyz;
-return tg;
-}
-#endif /* EXAMPLE */
 
 struct wabaChromHit
 /* Records where waba alignment hits chromosome. */
@@ -9651,8 +9622,7 @@ else if (sameWord(type, "netAlign"))
 struct track *trackFromTrackDb(struct trackDb *tdb)
 /* Create a track based on the tdb. */
 {
-struct track *track;
-AllocVar(track);
+struct track *track = trackNew();
 track->mapName = cloneString(tdb->tableName);
 track->visibility = tdb->visibility;
 track->shortLabel = tdb->shortLabel;
@@ -10485,13 +10455,27 @@ if (!hideControls)
 hPrintf("</CENTER>\n");
 
 
+#ifdef SLOW
+/* We'll rely on the end of program to do the cleanup.
+ * It turns out that the 'free' routine on Linux is
+ * quite slow.  For chromosome level views the browser
+ * spends about 1/3 of it's time doing the cleanup
+ * below if it's enabled.  Since we really don't
+ * need to reclaim this memory at this point I'm
+ * taking this out.  Please don't delete the code though.
+ * I'll like to keep it for testing now and then. -jk. */
+
 /* Clean up. */
 for (track = trackList; track != NULL; track = track->next)
     {
     if (track->visibility != tvHide)
+	{
 	if (track->freeItems != NULL)
-		track->freeItems(track);
+	    track->freeItems(track);
+	lmCleanup(&track->lm);
+	}
     }
+#endif /* SLOW */
 hPrintf("</FORM>");
 }
 
