@@ -27,7 +27,7 @@
 #include "minGeneInfo.h"
 #include <regex.h>
 
-static char const rcsid[] = "$Id: hgFind.c,v 1.134 2004/04/22 17:43:23 angie Exp $";
+static char const rcsid[] = "$Id: hgFind.c,v 1.135 2004/04/26 23:40:43 angie Exp $";
 
 extern struct cart *cart;
 char *hgAppName = "";
@@ -349,12 +349,6 @@ else
     }
 return FALSE;
 }
-
-static struct hgPositions *handleTwoSites(char *spec, char **retChromName, 
-	int *retWinStart, int *retWinEnd, struct cart *cart,
-	boolean useWeb, char *hgAppName);
-/* Function declaration because of circular calls between this and genomePos */
-/* Deal with specifications that in form start;end. */
 
 
 static char *getUiUrl(struct cart *cart)
@@ -1901,64 +1895,84 @@ if (useWeb)
 }
 
 
+struct hgPositions *hgPositionsFind(char *query, char *extraCgi, 
+	char *hgAppName, struct cart *cart, boolean multiTerm);
+/* Return table of positions that match query or NULL if none such. */
+
+
 static struct hgPositions *genomePos(char *spec, char **retChromName, 
 	int *retWinStart, int *retWinEnd, struct cart *cart, boolean showAlias,
 	boolean useWeb, char *hgAppName)
 /* Search for positions in genome that match user query.   
- * Return TRUE if the query results in a unique position.  
- * Otherwise display list of positions and return FALSE. */
+ * Return an hgp if the query results in a unique position.  
+ * Otherwise display list of positions, put # of positions in retWinStart,
+ * and return NULL. */
 { 
-struct hgPositions *hgp;
-struct hgPos *pos;
-char *searchSpec = NULL;
+struct hgPositions *hgp = NULL;
+char *terms[16];
+int termCount = 0;
+int i = 0;
+boolean multiTerm = FALSE;
+char *chrom = NULL;
+int start = BIGNUM;
+int end = 0;
 
-/* Make sure to escape single quotes for DB parseability */
-if (strchr(spec, '\''))
-    {
-    searchSpec = replaceChars(spec, "'", "''");
-    }
-else 
-    {
-    searchSpec = spec;
-    }
+termCount = chopByChar(cloneString(spec), ';', terms, ArraySize(terms));
+multiTerm = (termCount > 1);
 
-if (strstr(searchSpec,";") != NULL)
-    return handleTwoSites(searchSpec, retChromName, retWinStart, retWinEnd,
-			  cart, useWeb, hgAppName);
-
-hgp = hgPositionsFind(searchSpec, "", hgAppName, cart);
-if (hgp == NULL || hgp->posCount == 0)
+for (i = 0;  i < termCount;  i++)
     {
-    hgPositionsFree(&hgp);
-    warn("Sorry, couldn't locate %s in genome database\n", spec);
-    return NULL;
-    }
-
-if (((pos = hgp->singlePos) != NULL) && (!showAlias || !hgp->useAlias))
-    {
-    *retChromName = pos->chrom;
-    *retWinStart = pos->chromStart;
-    *retWinEnd = pos->chromEnd;
-    return hgp;
-    }
-else
-    {
-    if (*retWinStart != 1)
+    hgp = hgPositionsFind(terms[i], "", hgAppName, cart, multiTerm);
+    if (hgp == NULL || hgp->posCount == 0)
+	{
+	hgPositionsFree(&hgp);
+	warn("Sorry, couldn't locate %s in genome database\n", terms[i]);
+	if (multiTerm)
+	    errAbort("%s not uniquely determined -- "
+		     "can't do multi-position search.", terms[i]);
+	*retWinStart = 0;
+	return NULL;
+	}
+    
+    if ((hgp->singlePos != NULL) && (!showAlias || !hgp->useAlias))
+	{
+	if (chrom != NULL && !sameString(chrom, hgp->singlePos->chrom))
+	    errAbort("Sites occur on different chromosomes: %s, %s.",
+		     chrom, hgp->singlePos->chrom);
+	chrom = hgp->singlePos->chrom;
+	if (hgp->singlePos->chromStart < start)
+	    start = hgp->singlePos->chromStart;
+	if (hgp->singlePos->chromEnd > end)
+	    end = hgp->singlePos->chromEnd;
+	}
+    else
+	{
 	hgPositionsHtml(hgp, stdout, useWeb, hgAppName, cart);
-/* now we always return # of hits */
-/*    else */
+	if (multiTerm && hgp->posCount != 1)
+	    errAbort("%s not uniquely determined (%d locations) -- "
+		     "can't do multi-position search.",
+		     terms[i], hgp->posCount);
 	*retWinStart = hgp->posCount;
-
-    return NULL;
+	hgp = NULL;
+	break;
+	}
     }
+if (hgp != NULL)
+    {
+    *retChromName = chrom;
+    *retWinStart  = start;
+    *retWinEnd    = end;
+    }
+return hgp;
 }
 
 
 struct hgPositions *findGenomePos(char *spec, char **retChromName, 
 	int *retWinStart, int *retWinEnd, struct cart *cart)
 /* Search for positions in genome that match user query.   
- * Return TRUE if the query results in a unique position.  
- * Otherwise display list of positions and return FALSE. */
+ * Return an hgp if the query results in a unique position.  
+ * Otherwise display list of positions, put # of positions in retWinStart,
+ * and return NULL. */
 {
 return genomePos(spec, retChromName, retWinStart, retWinEnd, cart, TRUE,
 		 FALSE, "hgTracks");
@@ -1970,8 +1984,9 @@ struct hgPositions *findGenomePosWeb(char *spec, char **retChromName,
 /* Search for positions in genome that match user query.   
  * Use the web library to print out HTML headers if necessary, and use 
  * hgAppName when forming URLs (instead of "hgTracks").  
- * Return TRUE if the query results in a unique position.  
- * Otherwise display list of positions and return FALSE. */
+ * Return an hgp if the query results in a unique position.  
+ * Otherwise display list of positions, put # of positions in retWinStart,
+ * and return NULL. */
 {
 struct hgPositions *hgp;
 if (useWeb)
@@ -1981,65 +1996,6 @@ hgp = genomePos(spec, retChromName, retWinStart, retWinEnd, cart, TRUE,
 if (useWeb)
     webPopErrHandlers();
 return hgp;
-}
-
-static struct hgPositions *handleTwoSites(char *spec, char **retChromName, 
-	int *retWinStart, int *retWinEnd, struct cart *cart, boolean useWeb,
-	char *hgAppName)
-/* Deal with specifications that in form start;end. */
-{
-char firststring[512];
-char secondstring[512];
-int commaspot;
-char *firstChromName;
-int firstWinStart = 0;
-int firstWinEnd;
-char *secondChromName;
-int secondWinStart = 0;
-int secondWinEnd;
-struct hgPositions *firstSuccess;
-struct hgPositions *secondSuccess;
-
-firstWinStart = 1;     /* Pass flags indicating we are dealing with two sites */
-secondWinStart = 1;    /* through firstWinStart and secondWinStart.           */
-
-commaspot = strcspn(spec,";");
-strncpy(firststring,spec,commaspot);
-firststring[commaspot] = '\0';
-strncpy(secondstring,spec + commaspot + 1,strlen(spec));
-firstSuccess = genomePos(firststring, &firstChromName, &firstWinStart,
-			 &firstWinEnd, cart, FALSE, useWeb, hgAppName);
-secondSuccess = genomePos(secondstring, &secondChromName, &secondWinStart,
-			  &secondWinEnd, cart, FALSE, useWeb, hgAppName);
-if (NULL == firstSuccess && NULL == secondSuccess)
-    {
-    errAbort("Neither site uniquely determined.  %d locations for %s and "
-	     "%d locations for %s.",
-	     firstWinStart, firststring, secondWinStart, secondstring);
-    return NULL;
-    }
-if (NULL == firstSuccess) 
-    {
-    errAbort("%s not uniquely determined: %d locations.",
-	     firststring, firstWinStart);
-    return secondSuccess;
-    }
-if (NULL == secondSuccess)
-    {
-    errAbort("%s not uniquely determined: %d locations.",
-	     secondstring, secondWinStart);
-    return firstSuccess;
-    }
-if (strcmp(firstChromName,secondChromName) != 0)
-    {
-    errAbort("Sites occur on different chromosomes: %s,%s.",
-	     firstChromName, secondChromName);
-    return firstSuccess;
-    }
-*retChromName = firstChromName;
-*retWinStart = min(firstWinStart,secondWinStart);
-*retWinEnd = max(firstWinEnd,secondWinEnd);
-return firstSuccess;
 }
 
 
@@ -2150,7 +2106,8 @@ return(xrefList);
 
 static boolean doQuery(struct hgFindSpec *hfs, char *xrefTerm, char *term,
 		       struct hgPositions *hgp,
-		       boolean relativeFlag, int relStart, int relEnd)
+		       boolean relativeFlag, int relStart, int relEnd,
+		       boolean multiTerm)
 /* Perform a query as specified in hfs, assuming table existence has been 
  * checked and xref'ing has been taken care of. */
 {
@@ -2219,7 +2176,7 @@ for (tPtr = tableList;  tPtr != NULL;  tPtr = tPtr->next)
 	    pos->chromEnd   = pos->chromStart + relEnd;
 	    pos->chromStart = pos->chromStart + relStart;
 	    }
-	else if (padding > 0)
+	else if (padding > 0 && !multiTerm)
 	    {
 	    int chromSize = hChromSize(pos->chrom);
 	    pos->chromStart -= padding;
@@ -2242,7 +2199,7 @@ return(found);
 
 boolean hgFindUsingSpec(struct hgFindSpec *hfs, char *term,
 			struct hgPositions *hgp, boolean relativeFlag,
-			int relStart, int relEnd)
+			int relStart, int relEnd, boolean multiTerm)
 /* Perform the search described by hfs on term.  If successful, put results
  * in hgp and return TRUE.  (If not, don't modify hgp.) */
 {
@@ -2275,7 +2232,7 @@ else
 for (xrefPtr = xrefList;  xrefPtr != NULL;  xrefPtr = xrefPtr->next)
     {
     found |= doQuery(hfs, xrefPtr->name, (char *)xrefPtr->val, hgp,
-		     relativeFlag, relStart, relEnd);
+		     relativeFlag, relStart, relEnd, multiTerm);
     }
 slPairFreeValsAndList(&xrefList);
 return(found);
@@ -2304,7 +2261,7 @@ char *sqlRangeExp =
 		     "([0-9,]+)$";
 
 struct hgPositions *hgPositionsFind(char *term, char *extraCgi,
-	char *hgAppNameIn, struct cart *cart)
+	char *hgAppNameIn, struct cart *cart, boolean multiTerm)
 /* Return table of positions that match term or NULL if none such. */
 {
 struct hgPositions *hgp = NULL;
@@ -2354,6 +2311,8 @@ if ((canonical = matchRegexSubstr(term, canonicalRangeExp,
 	relStart--;
     }
 
+term = sqlEscapeString(term);
+
 if (hgOfficialChromName(term) != NULL)
     {
     char *chrom;
@@ -2361,7 +2320,7 @@ if (hgOfficialChromName(term) != NULL)
     hgParseChromRange(term, &chrom, &start, &end);
     if (relativeFlag)
 	{
-	int chromSize = hChromSize(chrom);
+	int chromSize = end;
 	end = start + relEnd;
 	start = start + relStart;
 	if (end > chromSize)
@@ -2381,7 +2340,8 @@ else
     hgFindSpecGetAllSpecs(&shortList, &longList);
     for (hfs = shortList;  hfs != NULL;  hfs = hfs->next)
 	{
-	if (hgFindUsingSpec(hfs, term, hgp, relativeFlag, relStart, relEnd))
+	if (hgFindUsingSpec(hfs, term, hgp, relativeFlag, relStart, relEnd,
+			    multiTerm))
 	    {
 	    done = TRUE;
 	    break;
@@ -2391,7 +2351,8 @@ else
 	{
 	for (hfs = longList;  hfs != NULL;  hfs = hfs->next)
 	    {
-	    hgFindUsingSpec(hfs, term, hgp, relativeFlag, relStart, relEnd);
+	    hgFindUsingSpec(hfs, term, hgp, relativeFlag, relStart, relEnd,
+			    multiTerm);
 	    }
 	/* Lowe lab additions -- would like to replace these with specs, but 
 	 * will leave in for now. */
