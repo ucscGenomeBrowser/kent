@@ -9,7 +9,7 @@
 #include "genePred.h"
 #include "sample.h"
 
-static char const rcsid[] = "$Id: liftOver.c,v 1.1 2004/03/24 23:15:10 kate Exp $";
+static char const rcsid[] = "$Id: liftOver.c,v 1.2 2004/03/25 01:00:28 kate Exp $";
 
 struct chromMap
 /* Remapping information for one (old) chromosome */
@@ -790,7 +790,7 @@ if (lineFileNextReal(lf, &line))
     lineFileReuse(lf);
     freez(&line);
     if (wordCount < 3)
-	 errAbort("Expecting at least 3 fields in %s", fileName);
+	 errAbort("Data format error: expecting at least 3 fields in BED file (%s)", fileName);
     if (wordCount <= 10)
 	 ct = bedOverSmall(lf, wordCount, chainHash, minMatch,
                                 f, unmapped, errCt);
