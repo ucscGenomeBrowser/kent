@@ -274,7 +274,7 @@ o - Produce contig genscan.gtf genscan.pep and genscanExtra.bed files like so:
 	Make 3 subdirectories for genscan to put their output files in
 		mkdir gtf pep subopt
 	Generate a list file, genome.list, of all the contigs
-		ls -1S /scratch/hg/mm2/mContigs/* >genome.list
+		ls -1S /cluster/store2/mm.2002.02/mm2/mContigs/* >genome.list
 	Edit genome.list to remove jobs on all 20 files of chr??_1.fa.masked.
 	Those files have pure Ns due to heterochromatin (unsequencable
 	stuff) and will cause genscan to run forever.
