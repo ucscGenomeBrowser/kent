@@ -1565,10 +1565,12 @@ char o3[128]; /* Option 3 - fill */
 char o4[128]; /* Option 4 - minimum vertical range cutoff of plot */	
 char o5[128]; /* Option 5 - maximum vertical range cutoff of plot */
 char o6[128]; /* Option 6 - max gap where interpolation is still done */
+char cartStr[64];
 
 double hFactor, hFactor2;
 double minRange, maxRange;
 double minRangeCutoff, maxRangeCutoff;
+
 
 Color gridColor = vgFindRgb(vg, &guidelineColor); /* for horizontal lines*/
 
@@ -1595,7 +1597,13 @@ minRangeCutoff = max( atof(cartUsualString(cart,o4,"0.0"))-0.1, tg->minRange );
 maxRangeCutoff = min( atof(cartUsualString(cart,o5,"1000.0"))+0.1, tg->maxRange);
 
 lineGapSize = atoi(cartUsualString(cart, o6, "200"));
+
+//update cart settings to reflect truncated range cutoff values
 cartSetString( cart, "win", "F" );
+itoa(minRangeCutoff, cartStr );
+cartSetString( cart, o4, cartStr );
+itoa(maxRangeCutoff, cartStr );
+cartSetString( cart, o5, cartStr );
 
 heightPer = tg->heightPer+1;
 hFactor = (double)heightPer*tg->scaleRange;
