@@ -1,5 +1,5 @@
 table hugo
-"A cross-reference table between Swiss-Prot accession IDs and InterPro IDs."
+"A cross-reference table between HUGO IDs and other database IDs."
 	(
 	string hgnc;		"HGNC number"
 	string symbol;		"HUGO gene symbol"
