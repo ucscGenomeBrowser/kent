@@ -1,6 +1,7 @@
 /* Joining.c - stuff to help create joined queries.  Most of
  * the joining is happening in C rather than SQL, mostly so
- * that we can filter on an ID hash as we go. */
+ * that we can filter on an ID hash as we go, and also deal
+ * with prefixes and suffixes to the dang keys. */
 
 #include "common.h"
 #include "hash.h"
@@ -11,7 +12,7 @@
 #include "joiner.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: joining.c,v 1.2 2004/07/16 20:28:27 kent Exp $";
+static char const rcsid[] = "$Id: joining.c,v 1.3 2004/07/17 00:57:08 kent Exp $";
 
 struct joinableRow
 /* A row that is joinable.  Allocated in joinableResult->lm. */
@@ -103,9 +104,35 @@ jt->rowCount += 1;
 return jr;
 }
 
+char *chopKey(struct slName *prefixList, struct slName *suffixList, char *key)
+/* Chop off any prefixes/suffixes from key. */
+{
+struct slName *n;
+
+for (n=prefixList; n != NULL; n = n->next)
+    {
+    if (startsWith(n->name, key))
+	{
+        key += strlen(n->name);
+	break;
+	}
+    }
+for (n=suffixList; n!=NULL; n = n->next)
+    {
+    char *e = strstr(key, n->name);
+    if (e != NULL)
+        {
+	*e = 0;
+	break;
+	}
+    }
+return key;
+}
+
 struct joinableTable *fetchKeyedFields(struct region *regionList,
 	struct sqlConnection *conn, char *table, boolean isPositional, char *fields, 
-	char *keyIn, struct hash *keyInHash, char *chopBefore, char *chopAfter,
+	char *keyIn, struct hash *keyInHash, 
+	struct slName *chopBefore, struct slName *chopAfter,
 	struct slName *keyOutList)
 /* This returns a list of keyedRows filtering out those that
  * don't match on keyIn.  */
@@ -114,7 +141,6 @@ struct joinableTable *jt = joinableTableNew(table, fields, keyOutList);
 struct dyString *fieldSpec = dyStringNew(0);
 struct slName *keyOut;
 struct region *region;
-int chopBeforeSize = 0;
 int keyInField = -1;
 
 uglyf("fetchKeyFields from %s,  fields %s, keyIn %s\n",
@@ -126,11 +152,9 @@ if (keyIn != NULL)
     {
     dyStringPrintf(fieldSpec, ",%s", keyIn);
     uglyf("jt->keyCount = %d, jt->fieldCount = %d\n", jt->keyCount, jt->fieldCount);
-    keyInField = jt->keyCount + jt->fieldCount;
     assert(keyInHash != NULL);
+    keyInField = jt->keyCount + jt->fieldCount;
     }
-if (chopBefore != NULL)
-    chopBeforeSize = strlen(chopBefore);
 uglyf("fieldSpec = %s\n", fieldSpec->string);
 uglyf("keyInField = %d\n", keyInField);
 
@@ -147,11 +171,7 @@ for (region = regionList; region != NULL; region = region->next)
 	    {
 	    char *key = row[keyInField];
 	    char *e;
-	    if (chopBefore != NULL && startsWith(key, chopBefore))
-	        key += chopBeforeSize;
-	    if (chopAfter != NULL && (e = stringIn(chopAfter, key)) != NULL)
-	        *e = 0;
-	    if (hashLookup(keyInHash, key))
+	    if (hashLookup(keyInHash, chopKey(chopBefore, chopAfter, key)))
 		jrAddRow(jt, row);
 	    }
 	}
@@ -163,7 +183,8 @@ slReverse(&jt->rowList);
 return jt;
 }
 
-struct hash *hashKeyField(struct joinableTable *jt, char *keyField)
+struct hash *hashKeyField(struct joinableTable *jt, char *keyField,
+	struct slName *chopPrefix, struct slName *chopSuffix)
 /* Make a hash based on key field. */
 {
 int ix = stringArrayIx(keyField, jt->keyNames, jt->keyCount);
@@ -178,8 +199,9 @@ if (ix < 0)
     internalErr();
 for (jr = jt->rowList; jr != NULL; jr = jr->next)
     {
-    uglyf("Adding %s to hash\n", jr->keys[ix]);
-    hashAdd(hash, jr->keys[ix], jr);
+    char *key = chopKey(chopPrefix, chopSuffix, jr->keys[ix]);
+    uglyf("Adding %s to hash\n", key);
+    hashAdd(hash, key, jr);
     }
 return hash;
 }
@@ -215,9 +237,9 @@ jt = fetchKeyedFields(regionList, conn, "ensGene",
 dumpJt(jt);
 uglyf("Fetched %d rows from %s\n\n", slCount(jt->rowList), jt->tableName);
 
-hash2 = hashKeyField(jt, "name");
+hash2 = hashKeyField(jt, "name", NULL, NULL);
 jt2 = fetchKeyedFields(regionList, conn, "ensGtp", 
-	FALSE, "gene,protein", "transcript", hash2, NULL, ".", NULL);
+	FALSE, "gene,protein", "transcript", hash2, NULL, slNameNew("."), NULL);
 uglyf("Fetched %d rows from %s\n", slCount(jt2->rowList), jt2->tableName);
 dumpJt(jt2);
 }
