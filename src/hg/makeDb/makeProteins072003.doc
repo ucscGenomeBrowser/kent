@@ -174,4 +174,24 @@ o Build pdbSP table
 
 	load data local infile "pdbSP.tab" into table proteins072003.pdbSP
 
+o Build spDisease table
+
+  Create the spDisease table in proteins072003.
+
+	CREATE TABLE spDisease (
+  	accession varchar(40) NOT NULL default '',
+  	displayID varchar(40) NOT NULL default '',
+  	diseaseDesc text,
+  	KEY accession (accession),
+  	KEY displayID (displayID)
+	) TYPE=MyISAM;
+	
+  Use the following SQL and hgsql to retrieve rows and create spDisease.tab.
+
+select comment.acc, displayId.val, commentVal.val from sp092903.comment, sp092903.commentVal, sp092903.displayId where comment.commentType=19 and commentVal.id=comment.commentVal and displayId.acc=comment.acc;
+
+  Load the table into proteins072003.
+
+     load data local infile "spDisease.tab" into table proteins072003.spDisease;
+
 
