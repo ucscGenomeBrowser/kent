@@ -85,9 +85,9 @@
 #include "versionInfo.h"
 #include "bedCart.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.838 2004/11/24 19:53:28 heather Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.839 2004/11/28 17:50:10 kent Exp $";
 
-boolean measureTiming = FALSE;	/* Flip this on to display timing
+boolean measureTiming = TRUE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
 
 #define MAX_CONTROL_COLUMNS 5
@@ -3842,7 +3842,7 @@ char *oligoMatchName(struct track *tg, void *item)
 struct bed *bed = item;
 static char buf[22];
 buf[0] = bed->strand[0];
-sprintLongWithCommas(buf+1, bed->chromStart);
+sprintLongWithCommas(buf+1, bed->chromStart+1);
 return buf;
 }
 
