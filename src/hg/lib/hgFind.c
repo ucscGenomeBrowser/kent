@@ -1878,9 +1878,6 @@ struct dyString *ds = newDyString(256);
 char **row = NULL;
 struct hgPosTable *table = NULL;
 struct hgPos *pos = NULL;
-char *specCopy = NULL;
-char *specPtr = spec;
-char name[32];
 
 AllocVar(table);
 slAddHead(&hgp->tableList, table);
@@ -1888,17 +1885,11 @@ slAddHead(&hgp->tableList, table);
 table->description = cloneString("RGD Curated Genes");
 table->name = cloneString("rgdGene");
 
-if (sqlTableExists(conn, "rgdLink") && sqlTableExists(conn, "rgdGene"))
+if (sqlTableExists(conn, "rgdGene"))
     {
-    dyStringPrintf(ds, "select name from rgdLink where id = '%s'", spec);
-    sqlQuickQuery(conn, ds->string, name, sizeof(name));
-    specPtr = name; 
-/* Use the id->name relationship 
-   and then search the main table using name found in ID table */
-    dyStringClear(ds);
-    dyStringPrintf(ds, "select * from rgdGene where name like '%%%s%%'", specPtr);    
+    dyStringPrintf(ds, "select * from rgdGene where name = '%s'", spec);    
     sr = sqlGetResult(conn, ds->string);
-
+    
     while ((row = sqlNextRow(sr)) != NULL)
         {
         AllocVar(pos);
