@@ -8,5 +8,5 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = testXap.o
 
 testXap: $O $(MYLIBS)
-	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/testXap $O $(MYLIBS) $L
-	strip $(HOME)/bin/$(MACHTYPE)/testXap
+	gcc -ggdb -o testXap $O $(MYLIBS) $L
+	strip testXap

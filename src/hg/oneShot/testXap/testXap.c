@@ -15,10 +15,12 @@ errAbort(
   "   testXap file.xml\n"
   "options:\n"
   "   -simple Just print out tag names.\n"
+  "   -text   Print out text as well.\n"
   );
 }
 
 boolean simple = FALSE;
+boolean withText = FALSE;
 
 struct testData
     {
@@ -60,9 +62,12 @@ void testEnd(void *userData, char *name, char *text)
 {
 struct testData *td = userData;
 td->depth -= 1;
-text = skipLeadingSpaces(text);
-if (text[0] != 0)
-    printf("%s\n", text);
+if (withText)
+    {
+    text = skipLeadingSpaces(text);
+    if (text[0] != 0)
+	printf("%s\n", text);
+    }
 indent(stdout, td->depth);
 printf("</%s>\n", name);
 }
@@ -107,6 +112,7 @@ int main(int argc, char *argv[])
 {
 cgiSpoof(&argc, argv);
 simple = cgiBoolean("simple");
+withText = cgiBoolean("text");
 if (argc != 2)
     usage();
 testXap(argv[1]);
