@@ -33,3 +33,22 @@ priority 50
 visibility dense
 color 170,100,0
 type genePred
+
+track hoxGenes
+shortLabel HOX Genes
+longLabel HOX Genes Annotatiosns (Human Curated)
+group genes
+priority 51
+visibility hide
+color 170,100,0
+type genePred
+
+track cytokines
+shortLabel Cytokine Genes
+longLabel Cytokine Genes Annotatiosns (Human Curated)
+group genes
+priority 52
+visibility hide
+color 170,100,0
+type genePred
+
