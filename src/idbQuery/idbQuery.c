@@ -1164,6 +1164,7 @@ switch (featType)
     default:
         errAbort("Sorry, that region type isn't implemented yet");
     }
+    return NULL;
 }
 
 struct idbFeature *offsetFeatures(struct idbFeature *oldList, int type, int start, int end)
