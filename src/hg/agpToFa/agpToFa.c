@@ -7,7 +7,7 @@
 #include "agpFrag.h"
 #include "agpGap.h"
 
-static char const rcsid[] = "$Id: agpToFa.c,v 1.8 2003/10/10 21:05:00 angie Exp $";
+static char const rcsid[] = "$Id: agpToFa.c,v 1.9 2003/11/17 16:55:39 booch Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -73,6 +73,7 @@ void simpleFillInSequence(char *seqDir, struct agpFrag *agpList,
 /* Fill in DNA array with sequences from simple clones. */
 {
 struct agpFrag *agp;
+char underline = '_';
 
 for (agp = agpList; agp != NULL; agp = agp->next)
     {
@@ -81,7 +82,7 @@ for (agp = agpList; agp != NULL; agp = agp->next)
     struct dnaSeq *seq;
     int size;
     strcpy(clone, agp->frag);
-    chopSuffix(clone);
+    chopSuffixAt(clone,underline);
     sprintf(path, "%s/%s.fa", seqDir, clone);
     seq = faReadAllDna(path);
     if (slCount(seq) != 1)
