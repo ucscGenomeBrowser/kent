@@ -963,7 +963,6 @@ printf("<B>Gene Lynx</B> ");
 printf("<A HREF=\"http://www.genelynx.org/cgi-bin/linklist?tableitem=GLID_NAME.name&IDlist=%s&dir=1\" TARGET=_blank>", search);
 printf("%s</A><BR>\n", search);
 }
-
 void printRnaSpecs(char *acc)
 /* Print auxiliarry info on RNA. */
 {
@@ -977,7 +976,10 @@ char *type,*direction,*source,*organism,*library,*clone,*sex,*tissue,
 int seqSize,fileSize;
 long fileOffset;
 char *ext_file;
-
+char qtemp[512];
+char *seqid, *fantomid, *cloneid, *modified_time, *accession, *comment;
+char *qualifier, *anntext, *datasrc, *srckey, *href, *evidence;   
+ 		    
 /* This sort of query and having to keep things in sync between
  * the first clause of the select, the from clause, the where
  * clause, and the results in the row ... is really tedious.
@@ -1050,6 +1052,69 @@ if (row != NULL)
     /* Put up Gene Lynx */
     if (sameWord(type, "mrna"))
         printGeneLynx(acc);
+
+  /* --- */
+
+accession = strdup(acc);
+
+//!!! uncomment the following line, if you want to test Riken annotation 
+// before the new genbank data get loaded into the mouse genome database.  
+//    Fan 3/28/02
+//accession = strdup("AK002809");
+
+sprintf(qtemp, "select seqid from rikenaltid where altid='%s';", accession);
+sqlFreeResult(&sr);
+
+sr = sqlMustGetResult(conn, qtemp);
+row = sqlNextRow(sr);
+
+if (row != NULL)
+	{	
+	//printf("<BR><P><HR ALIGN=\"CENTER\"></P>");
+	
+	seqid=strdup(row[0]);
+	
+	//printf("<H3>Riken Annotation</H3>\n");
+
+	sprintf(qtemp, "select Qualifier, Anntext, Datasrc, Srckey, Href, Evidence from rikenann where seqid='%s';", seqid);
+
+	sqlFreeResult(&sr);
+	
+	sr = sqlMustGetResult(conn, qtemp);
+	row = sqlNextRow(sr);
+	
+	while (row !=NULL)
+		{
+		qualifier = row[0];
+		anntext   = row[1];
+		datasrc   = row[2];
+		srckey    = row[3];
+		href      = row[4];
+		evidence  = row[5];
+		
+		//printf("<B>%s</B>: \n",qualifier);
+		printf("<B>Riken/%s link:</B> ",datasrc);
+	
+	        printf("<A HREF=\"%s\">", href);	
+	        printf("%s",anntext);
+		printf("</A><BR>\n");
+
+		//printf("<B>evidence: </B>%s<BR>\n",evidence);
+		//printf("<BR>\n");
+		row = sqlNextRow(sr);		
+		}
+	
+	sprintf(qtemp, "select comment from rikenseq where id='%s';", seqid);
+	sqlFreeResult(&sr);
+	sr = sqlMustGetResult(conn, qtemp);
+	row = sqlNextRow(sr);
+
+	if (row != NULL)
+	        {
+		comment = row[0];
+		printf("<B>Riken/comment:</B> %s<BR>\n",comment);
+		}
+	}
     }
 else
     {
@@ -1464,12 +1529,25 @@ int dnaSize = 0;
 DNA *dna = NULL;	/* Mixed case version of genomic DNA. */
 int oSize = oSeq->size;
 char *oLetters = cloneString(oSeq->dna);
+//int cfmStart=0;
+int qbafStart, qbafEnd, tbafStart, tbafEnd;
+int qcfmStart, qcfmEnd, tcfmStart, tcfmEnd;
 
 /* Load dna sequence. */
 dnaSeq = hDnaFromSeq(seqName, tStart, tEnd, dnaLower);
 freez(&dnaSeq->name);
 dnaSeq->name = cloneString(psl->tName);
 dnaSize = dnaSeq->size;
+
+tbafStart = psl->tStart;
+tbafEnd   = psl->tEnd;
+tcfmStart = psl->tStart;
+tcfmEnd   = psl->tEnd;
+
+qbafStart = qStart;
+qbafEnd   = qEnd;
+qcfmStart = qStart;
+qcfmEnd   = qEnd;
 
 /* Deal with minus strand. */
 if (tIsRc)
@@ -1479,12 +1557,23 @@ if (tIsRc)
     temp = psl->tSize - tEnd;
     tEnd = psl->tSize - tStart;
     tStart = temp;
+    
+    tbafStart = psl->tEnd;
+    tbafEnd   = psl->tStart;
+    tcfmStart = psl->tEnd;
+    tcfmEnd   = psl->tStart;
     }
 if (qIsRc)
     {
     int temp;
     reverseComplement(oSeq->dna, oSeq->size);
     reverseComplement(oLetters, oSeq->size);
+
+    qcfmStart = qEnd;
+    qcfmEnd   = qStart;
+    qbafStart = qEnd;
+    qbafEnd   = qStart;
+    
     temp = psl->qSize - qEnd;
     qEnd = psl->qSize - qStart;
     qStart = temp;
@@ -1538,7 +1627,7 @@ tolowers(oLetters);
 		}
 	    }
 	}
-    cfm = cfmNew(10, 60, TRUE, qIsRc, f, qStart);
+    cfm = cfmNew(10, 60, TRUE, qIsRc, f, qcfmStart);
     for (i=0; i<oSize; ++i)
 	cfmOut(cfm, oLetters[i], seqOutColorLookup[colorFlags[i]]);
     cfmFree(&cfm);
@@ -1592,7 +1681,9 @@ fprintf(f, "<H4><A NAME=genomic></A>Genomic %s %s:</H4>\n",
 	colorFlags[ts] = socBrightBlue;
 	colorFlags[ts+sz*mulFactor-1] = socBrightBlue;
 	}
-    cfm = cfmNew(10, 60, TRUE, tIsRc, f, psl->tStart);
+
+    cfm = cfmNew(10, 60, TRUE, tIsRc, f, tcfmStart);
+    
     for (i=0; i<dnaSeq->size; ++i)
 	{
 	/* Put down "anchor" on first match position in haystack
@@ -1614,13 +1705,15 @@ fprintf(f, "<H4><A NAME=ali></A>Side by Side Alignment</H4>\n");
     struct baf baf;
     int i,j;
 
-    bafInit(&baf, oSeq->dna, psl->qStart, qIsRc,
-    	dnaSeq->dna, psl->tStart, tIsRc, f, 60, isProt);
+    bafInit(&baf, oSeq->dna, qbafStart, qIsRc,
+            dnaSeq->dna, tbafStart, tIsRc, f, 60, isProt);
+	    
     for (i=0; i<psl->blockCount; ++i)
 	{
 	int qs = psl->qStarts[i] - qStart;
 	int ts = psl->tStarts[i] - tStart;
 	int sz = psl->blockSizes[i];
+
 	bafSetPos(&baf, qs, ts);
 	bafStartLine(&baf);
 	if (isProt)
