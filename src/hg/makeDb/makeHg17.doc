@@ -1521,6 +1521,36 @@ cat > gsub << 'EOF'
     hgLoadSeq hg17 /gbdb/hg17/bacends/BACends.fa
         # 158588 sequences
 
+# PLACE ASSEMBLY CLONES - misc instructions, only somewhat relevant
+#	See PLACE ASSEMBLY CLONES ON CONTIGS AND SEQUENCE below
+
+######	 A second attempt at clone alignment###
+    #	Split the clones into 3K pieces into about 1000 fa files
+
+    #	Example:
+zcat Z99916.1.fa.gz Z99774.1.fa.gz Z99756.7.fa.gz | faSplit size stdin 3000 /tmp/name.fa -lift=/tmp/name.lft -oneFile
+
+    #	Trying this idea in unPlacedBatch
+    ssh kk0
+    mkdir /cluster/data/hg17/bed/contig_overlaps/unPlacedBatch
+    cd /cluster/data/hg17/bed/contig_overlaps/unPlacedBatch
+    ls -1S /scratch/hg/gs.18/build35/bothMaskedNibs > nibList
+    ls -1S /cluster/data/hg17/bed/contig_overlaps/blatClones > cloneList
+cat << '_EOF_' > gsub
+#LOOP
+/cluster/bin/i386/blat -fastMap -ooc=/scratch/hg/h/11.ooc -q=dna -t=dna {check in exists /scratch/hg/gs.18/build35/bothMaskedNibs/$(path1)} {check in exists+ /cluster/data/hg17/bed/contig_overlaps/blatClones/$(path2)} {check out line+ psl/$(root1)/$(root2).psl}
+#ENDLOOP
+'_EOF_'
+    # << this line makes emacs coloring happy
+
+    mkdir psl
+    cat nibList | sed -e "s/.nib//" | while read D
+do
+mkdir psl/$D
+done
+
+    gensub2 nibList cloneList gsub jobList
+    para create jobList
 
 # PLACE ASSEMBLY CLONES ON CONTIGS AND SEQUENCE (DONE - 2004-07-12 - Hiram)
     ssh eieio
@@ -2478,9 +2508,8 @@ cat > template << 'EOF'
 # Load ideogram table
     hgLoadBed -noBin -tab -sqlTable=/cluster/home/booch/src/hg/lib/cytoBandIdeo.sql \
 	hg17 cytoBandIdeo cytobands.bed
-	    
 
-# LOAD AFFYRATIO (WORKING - 2004-06-09 - Hiram)
+# LOAD AFFYRATIO (DONE - 2004-07-14 - Hiram)
 #	Copied from Hg16 doc
     # Set up cluster job to align consenesus/exemplars to hg17
     ssh eieio
@@ -2514,43 +2543,96 @@ cat > template << 'EOF'
 # Longest job:                       80s       1.33m     0.02h    0.00d
 # Submission to last job:           333s       5.55m     0.09h    0.00d
 
-XXXX - pause here while going to fishClone mapping
+    # Do sort, best in genome filter, and convert to chromosome coordinates
+    # to create affyU95.psl
+    ssh eieio
+    cd /cluster/data/hg17/bed/affyGnf.2004-06-09
+    pslSort dirs raw.psl tmp psl
 
-Also do:
+    # change filter parameters for these sequences. only use alignments that
+    # cover 30% of sequence and have at least 95% identity in aligned
+    # region. 
+    # minAli = 0.97 too high. low minCover as a lot of n's in these
+    # sequences
+    pslReps -minCover=0.3 -sizeMatters -minAli=0.95 -nearTop=0.005 \
+	raw.psl contig.psl /dev/null
+    liftUp affyU95.psl ../../jkStuff/liftAll.lft warn contig.psl
+    #   Eliminate the long names
+    sed -e "s/U95Av2://" affyU95.psl | sed -e "s/;//" > affyU95shortQname.psl
+
+    # Merge with spot data and load into database. added -chip flag to 
+    # affyPslAndAtlasToBed to allow correct parsing
+    ssh hgwdev
+    cd /cluster/data/hg17/bed/affyGnf.2004-06-09
+    
+    /cluster/home/sugnet/bin/i386/affyPslAndAtlasToBed -chip=U95Av2 \
+	affyU95shortQname.psl \
+	/projects/compbiodata/microarray/affyGnf/human_atlas_U95_gnf.noquotes.txt \
+	affyRatio.bed affyRatio.exr > affyPslAndAtlasToBed.log 2>&1
+
+    hgLoadBed -sqlTable=$HOME/src/hg/lib/affyRatio.sql hg17 \
+	affyRatio affyRatio.bed
+    #	Loaded 12740 elements of size 15
+
+    mkdir affyU95
+    hgLoadPsl hg17 -table=affyU95 affyU95shortQname.psl
+
 # Load AFFYUCLANORM, extended version of affyUcla track. Hopefully
-# final freeze of data set.
-    cp /projects/compbio/data/microarray/affyUcla/sequences/HG-U133AB_all ./
-and
-# GNF ATLAS 2  [Done jk 3/29/2004]
-    # Align probes from GNF1H chip.
+# final freeze of data set.		(DONE - 2004-07-14 - Hiram)
+    ssh kk
+    mkdir /cluster/data/hg17/bed/affyUclaNorm
+    cd /cluster/data/hg17/bed/affyUclaNorm
 
-######	 A second attempt at clone alignment###
-    #	Split the clones into 3K pieces into about 1000 fa files
+    cp /projects/compbio/data/microarray/affyUcla/sequences/HG-U133AB_all.fa .
+    ls -1 /scratch/hg/gs.18/build35/maskedContigs/* > contig.lst
 
-    #	Example:
-zcat Z99916.1.fa.gz Z99774.1.fa.gz Z99756.7.fa.gz | faSplit size stdin 3000 /tmp/name.fa -lift=/tmp/name.lft -oneFile
-
-    #	Trying this idea in unPlacedBatch
-    ssh kk0
-    mkdir /cluster/data/hg17/bed/contig_overlaps/unPlacedBatch
-    cd /cluster/data/hg17/bed/contig_overlaps/unPlacedBatch
-    ls -1S /scratch/hg/gs.18/build35/bothMaskedNibs > nibList
-    ls -1S /cluster/data/hg17/bed/contig_overlaps/blatClones > cloneList
-cat << '_EOF_' > gsub
+    cat << '_EOF_' > gsub
 #LOOP
-/cluster/bin/i386/blat -fastMap -ooc=/scratch/hg/h/11.ooc -q=dna -t=dna {check in exists /scratch/hg/gs.18/build35/bothMaskedNibs/$(path1)} {check in exists+ /cluster/data/hg17/bed/contig_overlaps/blatClones/$(path2)} {check out line+ psl/$(root1)/$(root2).psl}
+/cluster/bin/i386/blat -fine -mask=lower -minIdentity=95 -ooc=/scratch/hg/h/11.ooc  $(path1) $(path2) {check out line+ psl/$(root1)_$(root2).psl}
 #ENDLOOP
 '_EOF_'
-    # << this line makes emacs coloring happy
+    # << keep emacs happy
 
     mkdir psl
-    cat nibList | sed -e "s/.nib//" | while read D
-do
-mkdir psl/$D
-done
-
-    gensub2 nibList cloneList gsub jobList
+    ls HG-U133AB_all.fa > affy.lst
+    gensub2 contig.lst affy.lst gsub jobList
     para create jobList
+    para try
+    para check
+    para push ... etc
+# Completed: 380 of 380 jobs
+# CPU time in finished jobs:      20070s     334.51m     5.58h    0.23d  0.001 y
+# IO & Wait Time:                162784s    2713.06m    45.22h    1.88d  0.005 y
+# Average job time:                 481s       8.02m     0.13h    0.01d
+# Longest job:                      735s      12.25m     0.20h    0.01d
+# Submission to last job:           771s      12.85m     0.21h    0.01d
+
+    ssh eieio
+    cd /cluster/data/hg17/bed/affyUclaNorm
+    pslSort dirs hg17.affyU133AB_all.psl tmp psl
+    wc hg17.affyU133AB_all.psl
+    #	61022 1281401 12934919 hg17.affyU133AB_all.psl
+    liftUp hg17.affyU133AB_all.lifted.psl \
+	/cluster/data/hg17/jkStuff/liftAll.lft warn hg17.affyU133AB_all.psl 
+    pslReps -minCover=0.5 -sizeMatters -minAli=0.97 \
+	-nearTop=0.005  hg17.affyU133AB_all.lifted.psl \
+	hg17.affyU133AB_all.lifted.pslReps.psl out.psr
+    #	Processed 61017 alignments
+    affyUclaMergePslData -pslFile=hg17.affyU133AB_all.lifted.pslReps.psl \
+	-affyFile=/projects/compbio/data/microarray/affyUcla/data/feature_biomaterial_chip_logratios_formatForTrack.txt \
+	-bedOut=hg17.affyUcla.bed \
+	-expRecordOut=hg17.affyUcla.expRecords \
+	-expFile=/projects/compbio/data/microarray/affyUcla/data/expNames.sorted.txt
+
+    ~/kent/src/hg/affyGnf/addUclaAnnotations.pl hg17.affyUcla.expRecords \
+	/projects/compbio/data/microarray/affyUcla/data/normal_tissue_database_annotations2.txt > hg17.affyUcla.annotations.expRecords
+
+    # Load the databases
+    ssh hgwdev
+    cd /cluster/data/hg17/bed/affyUclaNorm
+    sed -e 's/affyRatio/affyUclaNorm/' ~/kent/src/hg/lib/affyRatio.sql \
+	> affyUclaNorm.sql
+    hgLoadBed hg17 affyUclaNorm hg17.affyUcla.bed -sqlTable=affyUclaNorm.sql
 
 
 # MAKE LINEAGE-SPECIFIC REPEATS FOR CHICKEN & FUGU (DONE 2004-06-10 kate)
@@ -3544,6 +3626,9 @@ cat << 'EOF' > liftup.csh
     rm -r raw
 
 
+#	I believe this was superceeded by the:
+# 	AFFYUCLANORM, extended version of affyUcla track.
+
 # LOAD AffyUclaRatio (WORKING - 2004-06-15 - Hiram)
 #LOAD AffyUclaRatio and AFFY U133A and U133B sequences[DONE hartera Feb 3, 2004]
 # Used consensus/exemplar sequences instead of target sequences
@@ -3617,7 +3702,7 @@ XXX ready to load this here, done
     hgLoadSeq -abbr=U95Av2: hg17 /gbdb/hgFixed/affyProbes/HG-U95Av2_all.fa
     hgLoadSeq hg17 /gbdb/hgFixed/affyProbes/HG-U133AB_all.fa
 
-# GNF ATLAS 2 (WORKING - 2004-06-15 - Hiram
+# GNF ATLAS 2 (DONE - 2004-07-14 - Hiram
     # Align probes from GNF1H chip.
     ssh kk
     cd /cluster/data/hg17/bed
@@ -3666,15 +3751,19 @@ blat -fine -ooc=/scratch/hg/h/11.ooc  /scratch/hg/gs.18/build35/maskedContigs/$(
     hgLoadPsl hg17 affyGnf1h.psl
     hgLoadSeq hg17 /gbdb/hgFixed/affyProbes/gnf1h.fa
 
-XXXX - need affyUcla 2004-06-15
+    grep -v U133B ../affyUclaNorm/hg17.affyU133AB_all.lifted.pslReps.psl \
+	| sed -e "s/exemplar://; s/consensus://; s/U133A://" \
+        | sed -e "s/;//" > affyU133A.psl
 
-    grep -v U133B ../affyUcla.2004-02-04/affyU133.psl | sed 's/exemplar://' \
-	| sed 's/consensus://' \
-        | sed 's/HG-U133A://' | sed 's/;//' > affyU133A.psl
     hgMapMicroarray gnfAtlas2.bed hgFixed.gnfHumanAtlas2MedianRatio \
     	affyU133A.psl  /cluster/data/hg17/bed/geneAtlas2/affyGnf1h.psl
-    # Note that the unmapped 11000 records are from all-N sequences.
+
+# Loaded 44696 rows of expression data from hgFixed.gnfHumanAtlas2MedianRatio
+# Mapped 32857,  multiply-mapped 1462, missed 49, unmapped 11839
+
     hgLoadBed hg17 gnfAtlas2 gnfAtlas2.bed
+    #	Loaded 34319 elements of size 15
+
 
 # GENE SORTER (AKA: FAMILY BROWSER) (WORKING - 2004-06-15 - Hiram)
 #	to be done after knownGene tables are complete from known gene
@@ -3797,26 +3886,28 @@ hgMapViaSwissProt hg17 knownGene name proteinID Pfam knownToPfam
 #	hgsql -e "select count(*) from knownToPfam;" hg17
 #	row count dropped from 30467 in Hg16 to 29725
 
-XXXX - 2004-06-15 - gnfAtlas2 table does not exist
 
 # Create table to map between known genes and GNF Atlas2
 # expression data.
     hgMapToGene hg17 gnfAtlas2 knownGene knownToGnfAtlas2 '-type=bed 12'
+#	hgsql -e "select count(*) from knownToGnfAtlas2;" hg17
+#	row count droppted from 35817 in Hg16 to 35739
 
 # Create expression distance table - takes about an hour
-# (Regenerated April 16, 2004 in response to knownToGnfAtlas2 update)
     hgExpDistance hg17 hgFixed.gnfHumanAtlas2MedianRatio \
     	hgFixed.gnfHumanAtlas2MedianExps gnfAtlas2Distance \
 	-lookup=knownToGnfAtlas2
+# Got 35739 unique elements in hgFixed.gnfHumanAtlas2MedianRatio
+XXX - running 2004-07-14 11:20
 
 # Create a table that maps between known genes and 
 # the nice affy expression data.
-hgMapToGene "-type=bed 12" hg17 affyUcla knownGene knownToU133
+hgMapToGene "-type=bed 12" hg17 affyUclaNorm knownGene knownToU133
 #	row count went from 34148 to 36818
 
 # Create expression distance table.  This will take about an hour.
 cd ~/kent/src/hg/near/hgExpDistance
-time hgExpDistance hg17 affyUcla affyUclaExp knownExpDistance \
+time hgExpDistance hg17 affyUclaNorm affyUclaExp knownExpDistance \
 	-weights=affyUcla.weight -lookup=knownToU133
 # 42 genes, 42 weights, 26.500000 total wieght
 # Got 36818 unique elements in affyUcla
@@ -6553,7 +6644,7 @@ axtChain $1 /iscratch/i/gs.18/build35/bothMaskedNibs \
     #	featureBits hg16 chainSelf
     #	626345319 bases of 2865248791 (21.860%) in intersection
 
-# NET SELF (WORKING - 2004-07-08 - Hiram)
+# NET SELF (DONE - 2004-07-13 - Hiram)
 
     ssh eieio
     cd /cluster/data/hg17/bed/blastzSelf/axtChain
@@ -6704,13 +6795,9 @@ axtChain $1 /iscratch/i/gs.18/build35/bothMaskedNibs \
 
     #	check results
     #	featureBits hg17 blastzBestSelf
-    #	233983062 bases of 2866216770 (8.163%) in intersection
     #	233978156 bases of 2866216770 (8.163%) in intersection
-    #  XXXX DO NOT NEED THESE TABLES - Hg16 was incorrect
-    #	These tables have been dropped for Hg17 and Hg16
-
     #	featureBits hg16 blastzBestSelf
-    #	1388295977 bases of 2865248791 (48.453%) in intersection
+    #	225819219 bases of 2865248791 (7.881%) in intersection
 
 # MAKING HUMAN AXTTIGHT FROM AXTBEST (NOT TO BE DONE - 2004-07-13 - Hiram)
     #	XXXX - ! ! !  DO NOT NEED axtBest for Self alignments
