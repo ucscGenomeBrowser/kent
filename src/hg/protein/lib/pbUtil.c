@@ -163,7 +163,7 @@ conn= hAllocConn();
 if (strstr(protDbName, "proteins") == NULL) 
     {
     safef(query, sizeof(query), "select val from %s.protein where acc='%s';", 
-    	  PROTEOME_DB_NAME, pepAccession);
+    	  UNIPROT_DB_NAME, pepAccession);
     }
 else
     {
