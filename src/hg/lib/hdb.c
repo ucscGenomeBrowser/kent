@@ -27,7 +27,7 @@
 #include "maf.h"
 #include "ra.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.164 2004/02/06 18:25:49 angie Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.165 2004/03/03 08:01:34 kent Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
@@ -854,7 +854,7 @@ while ((hel = hashNext(&cookie)) != NULL)
     slAddHead(&list, el);
     }
 
-slReverse(&list);
+slSort(&list, slNameCmp);
 return list;
 }
 
@@ -875,7 +875,7 @@ while ((hel = hashNext(&cookie)) != NULL)
 
 hFreeOrDisconnect(&conn);
 
-slReverse(&list);
+slSort(&list, slNameCmp);
 return list;
 }
 
