@@ -28,7 +28,7 @@ O = affyAtlas.o affy10KDetails.o affy120KDetails.o affyOffset.o affyPairs.o \
     hdb.o hgConfig.o hgExp.o hgFind.o hgFindSpec.o hgFindSpecCustom.o \
     hgGene.o \
     hgMaf.o hgRelate.o hgSeq.o HInv.o hui.o humanParalog.o \
-    imageClone.o isochores.o itemAttr.o jaxOrtholog.o jaxQTL.o \
+    imageClone.o isochores.o itemAttr.o jalview.o jaxOrtholog.o jaxQTL.o \
     jksql.o joiner.o \
     kgAlias.o kgProtAlias.o knownInfo.o knownMore.o knownToSuper.o \
     lfs.o liftOver.o liftOverChain.o liftUp.o \
