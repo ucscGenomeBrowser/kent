@@ -18,9 +18,10 @@
 #include "hgSeq.h"
 #include "agpGap.h"
 #include "portable.h"
+#include "hgBotDelay.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: sumStats.c,v 1.17 2004/11/19 20:59:49 kent Exp $";
+static char const rcsid[] = "$Id: sumStats.c,v 1.18 2005/04/05 18:17:17 kent Exp $";
 
 long long basesInRegion(struct region *regionList, int limit)
 /* Count up all bases in regions to limit number of regions, 0 == no limit */
@@ -361,6 +362,7 @@ htmlClose();
 void doSummaryStats(struct sqlConnection *conn)
 /* Put up page showing summary stats for track. */
 {
+hgBotDelay();
 if (isWiggle(database, curTable))
     doSummaryStatsWiggle(conn);
 else

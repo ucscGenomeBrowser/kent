@@ -15,6 +15,7 @@
 #include "hCommon.h"
 #include "hgColors.h"
 #include "trackDb.h"
+#include "botDelay.h"
 #include "grp.h"
 #include "customTrack.h"
 #include "pipeline.h"
@@ -23,7 +24,7 @@
 #include "joiner.h"
 #include "bedCart.h"
 
-static char const rcsid[] = "$Id: hgTables.c,v 1.103 2005/04/02 02:20:34 angie Exp $";
+static char const rcsid[] = "$Id: hgTables.c,v 1.104 2005/04/05 18:17:17 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -1231,6 +1232,7 @@ char *trackName = NULL;
 char *table = cartString(cart, hgtaTable);
 struct trackDb *track = NULL;
 
+hgBotDelay();
 if (!sameString(curGroup->name, "allTables"))
     {
     trackName = cartString(cart, hgtaTrack);
