@@ -339,6 +339,22 @@ char *nci60EnumToString(enum nci60OptEnum x);
 void nci60DropDown(char *var, char *curVal);
 /* Make drop down of options. */
 
+/*	chain track color options	*/
+enum chainColorEnum {
+   chainColorChromColors = 0,
+   chainColorScoreColors = 1,
+   chainColorNoColors = 2,
+};
+
+enum chainColorEnum chainColorStringToEnum(char *string);
+/* Convert from string to enum representation. */
+
+char *chainColorEnumToString(enum chainColorEnum x);
+/* Convert from enum to string representation. */
+
+void chainColorDropDown(char *var, char *curVal);
+/* Make drop down of options. */
+
 /*	Wiggle track Windowing combining function option	*/
 enum wiggleWindowingEnum {
    wiggleWindowingMax = 0,
