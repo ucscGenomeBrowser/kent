@@ -14,16 +14,22 @@ set today=""
 set diffs=0
 set outfile=""
 set summaryFile=""
+set mode="terse realTime"
 
-if ( $#argv != 1 ) then
+if ( $#argv < 1 || $#argv > 2 ) then
   echo
   echo "  checks all databases on RR and compares trackDbs."
   echo
-  echo "    usage:  RRmachine."
+  echo "    usage:  RRmachine, "
+  echo "            [mode] (realTime|fast = uses mysql instead of WGET)"
   echo
   exit 1
 else
   set machine=$argv[1]
+endif
+
+if ( $#argv ==  2 ) then
+  set mode="terse $argv[2]"
 endif
 
 checkMachineName.csh $machine
@@ -51,12 +57,16 @@ echo "<HTML><HEAD><TITLE>trackDb Diffs $today</TITLLE></HEAD><BODY>\n<PRE> \
 echo "db      diffs"
 echo "-------------"
 foreach db ( $dbs )
-  set outfile="$dirPath/$today/$db.$machine.trackDbAll"
-  compareTrackDbAll.csh $db hgwbeta $machine >& $outfile
+  set todaysPath="$dirPath/$today"
+  set summaryOut="$db.$machine.trackDbAll"
+  set htmlOut="$db.$machine.htmlOut"
+  set outfile="$todaysPath/$summaryOut"
+  set htmlfile="$todaysPath/$htmlOut"
+  compareTrackDbAll.csh $db hgwbeta $machine $mode >& $outfile
   if ( $status ) then
     echo "$db err" | gawk '{printf "%7s %3s", $1, $2}'
     echo 
-    echo '<A HREF ="'$db.$machine.trackDbAll'">'$db'</A> error      \n\n     ' \
+    echo '<A HREF ="'$summaryOut'">'$db'</A> error \n\n' \
         >> $summaryFile
     # echo "${db}: error detected from compareTrackDbAll.csh"  >> $summaryFile
   else
@@ -67,15 +77,15 @@ foreach db ( $dbs )
       echo "$db number of diffs:" >> $summaryFile
       # rm -f $outfile
     else
-      echo '<A HREF ="'$db.$machine.trackDbAll'">'$db'</A> number of diffs:' \
-        >> $summaryFile
+      echo '<A HREF ="'$summaryOut'">'$db'</A> number of diffs ' \
+       '\n<A HREF ="'$htmlOut'">html</A> field' >> $summaryFile
     endif
     echo "    $diffs\n<P>" >> $summaryFile
   endif
-  sleep 45
+  compareTrackDbFast.csh hgwbeta $machine $db html >& $htmlfile
+  sleep 30
 end
 
-echo
 echo "\n</PRE></BODY></HTML>" >> $summaryFile
 echo $summaryUrl
 exit 0
