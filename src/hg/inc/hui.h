@@ -44,6 +44,7 @@ char *wrapWhiteFont(char *s);
 
 /* display of bases for tracks such as EST's that have psl and sequence */
 #define PSL_SEQUENCE_BASES	"pslSequenceBases"
+#define PSL_SEQUENCE_DEFAULT	"off"
 
 /******  Some stuff for tables of controls ******/
 #define CONTROL_TABLE_WIDTH 610
@@ -410,6 +411,24 @@ char *wiggleGridEnumToString(enum wiggleGridOptEnum x);
 
 void wiggleGridDropDown(char *var, char *curVal);
 /* Make drop down of options. */
+
+/*** for base labeling of EST like track related controls *****/
+
+enum baseColorOptEnum {
+   baseColorOff = 0,
+   baseColorAllBases = 1,
+   baseColorDifferentBases = 2,
+};
+
+enum baseColorOptEnum baseColorStringToEnum(char *string);
+/* Convert from string to enum representation. */
+
+char *baseColorEnumToString(enum baseColorOptEnum x);
+/* Convert from enum to string representation. */
+
+void baseColorDropDown(char *var, char *curVal);
+/* Make drop down of options.*/
+
 
 /*** Some Stuff for the cdsColor track ***/
 
