@@ -20,7 +20,7 @@
 #include "dnautil.h"
 #include "axt.h"
 
-static char const rcsid[] = "$Id: axt.c,v 1.28 2003/10/09 00:17:29 kent Exp $";
+static char const rcsid[] = "$Id: axt.c,v 1.29 2004/02/07 02:09:45 angie Exp $";
 
 void axtFree(struct axt **pEl)
 /* Free an axt. */
@@ -568,26 +568,34 @@ for (i=0; i<4; ++i)
     for (j=0; j<4; ++j)
 	ss->matrix[trans[i]][trans[j]] = lineFileNeedNum(lf, row, j);
     }
-lineFileNeedNext(lf, &line, NULL);
-partCount = chopString(line, " =,\t", parts, ArraySize(parts));
-for (i=0; i<partCount-1; i += 2)
+if (lineFileNext(lf, &line, NULL))
     {
-    if (sameString(parts[i], "O"))
-        {
-	gotO = TRUE;
-	ss->gapOpen = atoi(parts[i+1]);
+    partCount = chopString(line, " =,\t", parts, ArraySize(parts));
+    for (i=0; i<partCount-1; i += 2)
+	{
+	if (sameString(parts[i], "O"))
+	    {
+	    gotO = TRUE;
+	    ss->gapOpen = atoi(parts[i+1]);
+	    }
+	if (sameString(parts[i], "E"))
+	    {
+	    gotE = TRUE;
+	    ss->gapExtend = atoi(parts[i+1]);
+	    }
 	}
-    if (sameString(parts[i], "E"))
-        {
-	gotE = TRUE;
-	ss->gapExtend = atoi(parts[i+1]);
-	}
+    if (!gotO || !gotE)
+	errAbort("Expecting O = and E = in last line of %s", lf->fileName);
+    if (ss->gapOpen <= 0 || ss->gapExtend <= 0)
+	errAbort("Must have positive gap scores");
     }
-if (!gotO || !gotE)
-    errAbort("Expecting O = and E = in last line of %s", lf->fileName);
-if (ss->gapOpen <= 0 || ss->gapExtend <= 0)
-    errAbort("Must have positive gap scores");
+else
+    {
+    ss->gapOpen = 400;
+    ss->gapExtend = 30;
+    }
 propagateCase(ss);
+lineFileClose(&lf);
 return ss;
 }
 
