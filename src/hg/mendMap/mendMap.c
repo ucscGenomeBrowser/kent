@@ -2937,7 +2937,6 @@ for (clone = *pCloneList; clone != NULL; clone = nextClone)
 	slAddHead(&cloneList, clone);
 	}
     }
-uglyf("Removed %d draft clones completely enclosed by finished\n");
 slReverse(&cloneList);
 *pCloneList = cloneList;
 }

@@ -93,7 +93,6 @@ for (i = 0; i<pslCount; ++i)
         (noBin ? "" : "bin smallint unsigned not null,\n"),
 	binIxString,
     	extraIx, extraIx);
-    uglyAbort(ds->string);
     sqlUpdate(conn, ds->string);
     dyStringClear(ds);
     if (noBin)
