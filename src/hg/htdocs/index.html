@@ -98,6 +98,7 @@ document.location = theUrl + 'org=' + theDb;
 					<SELECT NAME="genome" onChange="setDb();">
 						<OPTION VALUE="human">Human
 						<OPTION VALUE="mouse">Mouse 
+						<OPTION VALUE="rat">Rat 
 					</SELECT>
 			</td></tr></table><hr>
 			<A CLASS="leftbar" HREF="javascript:dbGo('/cgi-bin/hgGateway?');">
@@ -110,7 +111,7 @@ document.location = theUrl + 'org=' + theDb;
 				Downloads</A><hr>
 		  	<A CLASS="leftbar" HREF="mirror.html">
 				Mirrors</A><hr>
-  			<A CLASS="leftbar" HREF="http://genome-archive.cse.ucsc.edu">
+  			<A CLASS="leftbar" HREF="http://genome-archive.ucsc.edu">
 				Archives</A><hr>
 			<A CLASS="leftbar" HREF="goldenPath/credits.html">
 				Credits</A><hr>
@@ -141,8 +142,9 @@ document.location = theUrl + 'org=' + theDb;
 	</TD></TR></TABLE>
 	
 	<TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0><TR><TH HEIGHT=3></TH></TR><TR><TD WIDTH=10></TD><TD>
-		<P>This site contains working drafts for the human genome and
-		the mouse genome. The human genome is over 90% complete. Approximately 
+		<P>This site contains working drafts for the human, mouse, and
+		rat genomes. 
+		<P>The human genome is over 90% complete. Approximately 
 		85% of the sequence is in a highly accurate 'finished' state.  The
 		other 15% is merely 'draft' quality.  Some care must be taken
 		when interpreting draft regions, but these are still very 
@@ -178,6 +180,35 @@ document.location = theUrl + 'org=' + theDb;
 	</TD></TR></TABLE>
 	<TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0><TR><TH HEIGHT=3></TH></TR><TR><TD WIDTH=10></TD><TD>
 
+	<P><FONT FACE="courier" SIZE=2>Dec. 6, 2002 </FONT><BR>
+	We're pleased to announce the release of a UCSC Genome Browser on the 
+	Nov. 2002 rat assembly produced by the Baylor College of Medicine Rat 
+	Genome Sequencing Center and the Rat Genome Sequencing Consortium. 
+	The sequence was assembled using a hybrid approach that combines the 
+	clone by clone and whole genome shotgun methods. A new software program -
+	ATLAS - was developed for this effort. The assembly process resulted in 
+	a 6.5-fold coverage of the rat genome, which is estimated to be 
+	approximately 2.8 Gigabases in size.
+	<P>
+	Downloads of the rat data and annotations are available through our 
+	ftp site at <A HREF="ftp://genome.ucsc.edu/goldenPath/rnNov2002" TARGET=_blank>ftp://genome.ucsc.edu/goldenPath/rnNov2002</A> 
+	or via the <A HREF="downloads.html">Downloads</A> 
+	link on this page. This data contains 
+	<A HREF="/goldenPath/credits.html#rat_use">specific 
+	conditions for use</A>. The sequence is also available from the 
+	<A HREF="http://www.hgsc.bcm.tmc.edu/projects/rat" TARGET=_blank> Rat 
+	Genome Project website</A> for the Human Genome Sequencing Center at 
+	Baylor College of Medicine or from GenBank. 
+	<P>
+	We'd like to thank the Baylor team and the Rat Genome Sequencing 
+	Consortium for their collaboration on this project. See the 
+	<A HREF="/goldenPath/credits.html#rat_credits">Credits page</A> 
+	for a complete list of acknowledgements.. For more 
+	information on the rat genome, the assembly process, and the
+	Rat Genome Sequencing Consortium, refer to the website for the 
+	<A HREF="http://www.hgsc.bcm.tmc.edu/" TARGET=_blank> 
+	Human Genome Sequencing Center at Baylor College of Medicine</A>. 
+
 	<P><FONT FACE="courier" SIZE=2>Dec. 5, 2002 </FONT><BR>
 	The International Mouse Genome Sequencing Consortium has announced 
 	the publication of a high-quality draft sequence of the mouse genome, 
@@ -186,18 +217,19 @@ document.location = theUrl + 'org=' + theDb;
 	Browser on this website. The paper appears in the Dec. 5 issue of the 
 	journal Nature at 
 	<A HREF="http://www.nature.com/nature/mousegenome/" TARGET=_blank>http://www.nature.com/nature/mousegenome/</A>.
-	The co-author list includes several people from the UCSC Genome 
+	The co-author list includes several members of the UCSC Genome 
 	Bioinformatics Group: CBSE Director David Haussler, Research 
 	Scientist Jim Kent and research team members 
-	Terrence Furey, Mark Diekhans, Krishna Roskin, Robert Baertsch, Donna 
-	Karolchik, Angie Hinrichs and Matt Schwartz. 
+	Robert Baertsch, Mark Diekhans, Terrence Furey, Angie Hinrichs, Fan Hsu,
+	Donna Karolchik, Krishna Roskin, Matt Schwartz, Charles Sugnet and Ryan 
+	Weber. 
 
 	<P><FONT FACE="courier" SIZE=2>Oct. 29, 2002 </FONT><BR>
 	We've added several new directories of downloadable data to the 28 June 
 	2002 human genome assembly. These directories contain mouse/human 
 	alignments of the June 2002 human assembly vs. the Feb. 2002 mouse assembly. You can access these 
-	directories from our <A HREF="http://genome.ucsc.edu/goldenPath/28jun2002/vsMm2/" TARGET=_blank>Downloads</A> 
-	link or or via our ftp site at <A HREF="ftp://genome.cse.ucsc.edu/goldenPath/28jun2002" TARGET=_blank>ftp://genome.cse.ucsc.edu/goldenPath/28jun2002/vsMm2/</A>. 
+	directories from our <A HREF="http://genome.ucsc.edu/downloads.html" TARGET=_blank>Downloads</A> 
+	link or or via our ftp site at <A HREF="ftp://genome.ucsc.edu/goldenPath/28jun2002" TARGET=_blank>ftp://genome.ucsc.edu/goldenPath/28jun2002/vsMm2/</A>. 
 	<P>Within the main directory <I>vsMm2</I> are 3 subdirectories that contain all 
 	the alignments (<I>axtAll</I>), alignments filtered to provide only the best alignment 
 	for any given region of the human genome (<I>axtBest</I>), and a relatively stringent 
