@@ -56,6 +56,14 @@
 #define caqSig 0x9879b632
 /* Signature of byte-swapped qac file. */
 
+#define twoBitSig 0x1A412743
+/* Signature into 2bit file (2 bits per nucleotide DNA file) plus
+ * information on N and masked bases. */
+
+#define twoBitSwapSig 0x4327411A
+/* Signature of byte-swapped two-bit file. */
+
+
 #endif /* SIG_H */
 
 
