@@ -93,6 +93,7 @@ type psl xeno
 track zhang
 shortLabel CSHL-FirstEF
 longLabel Cold Spring Harbor Labs FirstEF Predictions
-priority 20.4
+priority 17.55
 visibility dense
+color 0,0,255
 type bed 8
