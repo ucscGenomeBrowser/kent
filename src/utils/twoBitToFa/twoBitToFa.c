@@ -7,7 +7,7 @@
 #include "fa.h"
 #include "twoBit.h"
 
-static char const rcsid[] = "$Id: twoBitToFa.c,v 1.5 2004/07/18 19:51:08 markd Exp $";
+static char const rcsid[] = "$Id: twoBitToFa.c,v 1.6 2005/03/24 12:57:33 baertsch Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -49,30 +49,35 @@ faWriteNext(f, seq->name, seq->dna, seq->size);
 dnaSeqFree(&seq);
 }
 
+void outputFa(struct dnaSeq *seq, FILE *f)
+/* Output sequence. */
+{
+faWriteNext(f, seq->name, seq->dna, seq->size);
+}
+
 void twoBitToFa(char *inName, char *outName)
 /* twoBitToFa - Convert all or part of twoBit file to fasta. */
 {
 FILE *outFile = mustOpen(outName, "w");
-struct twoBitFile *tbf;
-struct twoBitIndex *index;
+struct dnaSeq *seq, *seqList = NULL ; //twoBitReadSeqFrag(tbf, seqName, start, end);
 
 /* check for sequence/range in path */
-if (twoBitIsRange(inName))
-    twoBitParseRange(inName, &inName, &clSeq, &clStart, &clEnd);
-tbf = twoBitOpen(inName);
 
 if (clSeq == NULL)
     {
-    for (index = tbf->indexList; index != NULL; index = index->next)
-        {
-	outputOne(tbf, index->name, outFile, clStart, clEnd);
-	}
+    seqList = twoBitLoadAll(inName);
     }
 else
     {
-    outputOne(tbf, clSeq, outFile, clStart, clEnd);
+    char newSpec[512];
+    safef(newSpec, sizeof(newSpec), "%s:%s:%d-%d",inName,clSeq, clStart, clEnd);
+    seqList = twoBitLoadAll(newSpec);
     }
-twoBitClose(&tbf);
+
+for (seq = seqList; seq != NULL; seq = seq->next)
+    {
+    outputFa(seq, outFile);
+    }
 }
 
 int main(int argc, char *argv[])

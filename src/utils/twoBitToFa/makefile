@@ -29,5 +29,6 @@ test:
 	twoBitToFa tests/input/testMask.2bit -seq=manyLower -start=8 -end=9 tests/output/ml_8_9.fa
 	twoBitToFa tests/input/testMask.2bit:manyLower tests/output/spec_ml.fa
 	twoBitToFa tests/input/testMask.2bit:manyLower:2-10 tests/output/spec_ml_2_10.fa
+	twoBitToFa tests/input/testMask.2bit:noLower,startLower,endLower tests/output/spec_ml_no_start_end.fa
 	diff -r -x CVS tests/expected tests/output
 	rm -r tests/output
