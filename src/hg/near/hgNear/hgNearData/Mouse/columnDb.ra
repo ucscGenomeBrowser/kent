@@ -17,7 +17,7 @@ visibility off
 type lookup knownToU74 name value
 search exact
 
-name gnfAtlas2
+name gnfMouseAtlas2
 shortLabel GNF Atlas 2
 longLabel GNF Expression Atlas 2 Data from GNF1M Mouse Chip
 priority 2.79
