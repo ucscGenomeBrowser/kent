@@ -84,7 +84,7 @@
 #include "estOrientInfo.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.731 2004/05/12 18:38:41 kate Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.732 2004/05/17 18:09:33 hartera Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
@@ -7467,6 +7467,11 @@ if (sameString(database, "hg16"))
     hPrintf("<TD ALIGN=CENTER><A HREF=\"http://www.ncbi.nlm.nih.gov/mapview/maps.cgi?CHR=%s&BEG=%d&END=%d\" TARGET=_blank>",
     	skipChr(chromName), winStart+1, winEnd);
     hPrintf("%s</A></TD>", wrapWhiteFont("NCBI"));
+    }
+if (sameString(database, "ce2"))
+    {
+    hPrintf("<TD ALIGN=CENTER><A HREF=\"http://ws120.wormbase.org/db/seq/gbrowse/wormbase?name=%s:%d-%d\" TARGET=_blank>%s</A></TD>", 
+        skipChr(chromName), winStart+1, winEnd, wrapWhiteFont("WormBase"));
     }
 hPrintf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/hgTracks?%s=%u&hgt.psOutput=on\">%s</A></TD>\n",cartSessionVarName(),
        cartSessionId(cart), wrapWhiteFont("PDF/PS"));
