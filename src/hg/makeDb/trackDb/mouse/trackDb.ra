@@ -7,6 +7,14 @@ visibility dense
 altColor 150,50,50
 type bed 4 +
 
+track recombRateMouse
+shortLabel Recomb Rate
+longLabel Recombination Rate from WI and MGD genetic maps (WI default)
+group map
+priority 8
+visibility hide
+type bed 4 +
+
 track jaxQTL
 shortLabel QTL
 longLabel Quantitative Trait Loci From Jax/MGI

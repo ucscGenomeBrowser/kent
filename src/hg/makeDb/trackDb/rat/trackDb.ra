@@ -7,6 +7,14 @@ visibility dense
 altColor 150,50,50
 type bed 4 +
 
+track recombRateRat
+shortLabel Recomb Rate
+longLabel Recombination Rate from SHRSPxBN and FHHxACI genetic maps (SHRSPxBN default)
+group map
+priority 8
+visibility hide
+type bed 4 +
+
 track gap
 shortLabel Gap
 longLabel Gap Locations
