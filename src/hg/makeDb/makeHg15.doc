@@ -3418,7 +3418,7 @@ cd syntenyCow
 # http://genome.ucsc.edu/cgi-bin/hgTracks?db=hg15&position=chr1&hgt.customText=http://cagst.animal.uiuc.edu/BACcontig/larkin_et_al_track 
 # Save as in.bed
 
-hgLoadBed -noBin hg15 cowSynteny in.bed
+hgLoadBed -noBin hg15 syntenyCow in.bed
 
 # add to kent/src/hg/makeDb/trackDb/human/hg15/trackDb.ra
 
