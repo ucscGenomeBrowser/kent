@@ -15,6 +15,7 @@ int overlapSize = 10000;
 boolean noDieMissing = FALSE;
 char *hPrefix = "";
 char *mPrefix = "";
+boolean verbose = FALSE;
 char *rPrefix = "";
 
 void usage()
@@ -37,6 +38,7 @@ errAbort(
   "   -winSize=N Human bases in each directory.  Default %d\n"
   "   -overlapSize=N Amount to overlap each window. Default %d\n"
   "   -noDieMissing Don't die over missing mouse/rat alignments\n"
+  "   -verbose - If set be more verbose with diagnostic output\n"
   "   -hPrefix=hgN. - Prefix hgN. to each human sequence name in output\n"
   "   -mPrefix=mmN. - Prefix for mouse sequence names\n"
   "   -rPrefix=ratN. - Prefix for rat sequence\n",
@@ -149,7 +151,8 @@ if (lf == NULL)
 sprintf(fileName, "%s/%s.axt.ix", ratMouseDir, chrom);
 mcc->bk = binKeeperNew(0, chromSize);
 lf = lineFileOpen(fileName, TRUE);
-printf("Reading %s\n", fileName);
+if (verbose)
+    printf("Reading %s\n", fileName);
 while (lineFileRow(lf, row))
     {
     start = lineFileNeedNum(lf, row, 0);
@@ -244,7 +247,8 @@ for (hStart = 0; hStart<maxChromSize - winSize; hStart += winSize - overlapSize)
 	{
 	/* Make output directory and create output file names. */
 	sprintf(dirName, "%s/%s.%d", outputDir, humanChromName, hStart);
-	printf("Making %s\n", dirName);
+	if (verbose)
+	    printf("Making %s\n", dirName);
 	makeDir(dirName);
 	sprintf(hmName, "%s/hm.maf", dirName);
 	sprintf(mrName, "%s/mr.maf", dirName);
@@ -291,6 +295,7 @@ if (argc != 7)
 winSize = optionInt("winSize", winSize);
 overlapSize = optionInt("overlapSize", overlapSize);
 noDieMissing = optionExists("noDieMissing");
+verbose = optionExists("verbose");
 hPrefix = optionVal("hPrefix", hPrefix);
 mPrefix = optionVal("mPrefix", mPrefix);
 rPrefix = optionVal("rPrefix", rPrefix);
