@@ -15,8 +15,8 @@ DOWNLOAD SEQUENCE (DONE - 2003-06-22 - Hiram)
 
     # Get BCM's chrom assemblies -- we will assemble our own chr*.fa from 
     # contig fa + agp, and cross-check against this.  
-    #  WHAT'S THIS ?  There is no X chrom in June 2003 release ?
-    #  But there now is a 21 ?
+    #	The chrX is picked up as chr21.  We change the name here to
+    #	match our conventions.
     foreach c (1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 Un)
       mkdir $c
       wget -O $c/chr$c.fa.bcm.gz \
@@ -24,6 +24,10 @@ DOWNLOAD SEQUENCE (DONE - 2003-06-22 - Hiram)
       wget -O $c/chr${c}_random.fa.bcm.gz \
        ftp://rat-ftp.hgsc.bcm.tmc.edu/pub/analysis/rat/chromosome/chr$c.random.fa.gz
     end
+    # rename the chr21 business to chrX
+    mkdir X
+    zcat 21/chr21.fa.bcm.gz | sed -e "s/chr21/chrX/g" | gzip > X/chrX.fa.bcm.gz
+    zcat 21/chr21_random.fa.bcm.gz | sed -e "s/chr21/chrX/g" | gzip > X/chrX_random.fa.bcm.gz
 
     # Get BCM's contig fa + agp.  We will split into our own conveniently-sized
     # pseudo-contigs, and assemble chrom fa.  
@@ -33,8 +37,6 @@ DOWNLOAD SEQUENCE (DONE - 2003-06-22 - Hiram)
     # wget ftp://rat-ftp.hgsc.bcm.tmc.edu/pub/analysis/rat/contigs/record.dat.gz
     #  Perhaps the extra three files bac.clones, bactigs.bacs and
     #  bactigs.contigs can be used ?
-    #  WHAT'S THIS ?  There is no X chrom in June 2003 release ?
-    #  But there now is a 21 ?
     foreach c (1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 Un)
       wget -O $c/chr$c.agp.gz \
        ftp://rat-ftp.hgsc.bcm.tmc.edu/pub/analysis/rat/contigs/chr$c.agp.gz
@@ -47,6 +49,13 @@ DOWNLOAD SEQUENCE (DONE - 2003-06-22 - Hiram)
       gunzip $c/chr$c.agp.gz
       gunzip $c/chr${c}_random.agp.gz
     end
+    # rename the chr21 business to chrX
+    sed -e "s/chr21/chrX/g" 21/chr21.agp > X/chrX.agp
+    mv 21/chr21.contig.fa.gz X/chrX.contig.fa.gz
+    sed -e "s/chr21/chrX/g"  21/chr21_random.agp > X/chrX_random.agp
+    mv 21/chr21_random.contig.fa.gz X/chrX_random.contig.fa.gz
+    # end of chr21 business
+    rm -fr 21
 
 BUILD AND CHECK CHROM-LEVEL SEQUENCE (DONE - 2003-06-22 - Hiram)
 
@@ -73,6 +82,8 @@ BUILD AND CHECK CHROM-LEVEL SEQUENCE (DONE - 2003-06-22 - Hiram)
       endif
     end
     # Check that our assembled chrom fa jive with the BCM chrom fa
+    #	You will want a long window size in your terminal to run this
+    #	It outputs quite a few lines
     foreach c ( ?{,?} )
       set ucscLen = `faSize $c/chr$c.fa | awk '{print $1;}'`
       set bcmLen  = `gunzip -c $c/chr$c.fa.bcm.gz | faSize stdin \
@@ -123,6 +134,9 @@ BREAK UP SEQUENCE INTO 5 MB CHUNKS AT NON_BRIDGED CONTIGS
       endif
     end
     # Make sure the reconstructed .fa jives with the original:
+    #	four lines output for each chrom, long window required to be
+    #	able to catch all the output.  Look for non-zero numbers.  The
+    #	wc -l should always output zero
     foreach f ( */*.fa.bak )
       echo $f:r
       diff $f $f:r | wc -l
@@ -145,39 +159,39 @@ BREAK UP SEQUENCE INTO 5 MB CHUNKS AT NON_BRIDGED CONTIGS
     end
     rm */*.bak
 
-COPY OVER JKSTUFF SCRIPTS DIRECTORY (TO DO)
+COPY OVER JKSTUFF SCRIPTS DIRECTORY (DONE - 2003-06-23 - Hiram)
 
     ssh kkstore
     ln -s /cluster/store3/rn3 ~/rn3
     rm -f ~/lastRn
-    ln -s /cluster/store3/rn1 ~/lastRn
+    ln -s /cluster/store4/rn2 ~/lastRn
     cd ~/rn3
     cp -Rp ~/lastRn/jkStuff .
     rm jkStuff/*.{out,lst,lft} jkStuff/*~
 
 
-CREATING DATABASE (TO DO)
+CREATING DATABASE (DONE - 2003-06-23 - Hiram)
 
     # Create the database.
     ssh hgwdev
-    # Enter mysql via:
-    hgsql rn1
-    # At mysql prompt type:
-      create database rn3;
-      quit
+    echo 'create database rn3' | hgsql ''
     # make a semi-permanent read-only alias:
+    #	(I haven't noticed any use of this ?  Useless ? - Hiram)
     alias rn3 "mysql -u hguser -phguserstuff -A rn3"
     # Use df to ake sure there is at least 5 gig free on 
-    # hgwdev:/var/lib/mysql
+    #		hgwdev:/var/lib/mysql
+    # [hiram@hgwdev /cluster/home/hiram] df -h /var/lib/mysql
+    # Filesystem            Size  Used Avail Use% Mounted on
+    # /dev/sda1             472G  384G   64G  86% /var/lib/mysql
 
 
-CREATING GRP TABLE FOR TRACK GROUPING (TO DO)
+CREATING GRP TABLE FOR TRACK GROUPING (DONE - 2003-06-23 - Hiram)
     ssh hgwdev
     echo "create table grp (PRIMARY KEY(NAME)) select * from rn1.grp" \
       | hgsql rn3
 
 
-REPEAT MASKING (TO DO)
+REPEAT MASKING (DONE - 2003-06-24 - Hiram)
    Split contigs, run RepeatMasker, lift results
    Notes: 
    * If there is a new version of RepeatMasker, build it and ask the admins 
@@ -187,46 +201,67 @@ REPEAT MASKING (TO DO)
    * For the NCBI assembly we repeat mask on the sensitive mode setting
      (RepeatMasker -m -s)
 
-        #- Split contigs into 500kb chunks:
-        ssh kkstore
-        cd ~/rn3
-        foreach d ( */chr*_?{,?} )
-          cd $d
-          set contig = $d:t
-          faSplit size $contig.fa 500000 ${contig}_ -lift=$contig.lft \
-            -maxN=500000
-          cd ../..
-        end
+    #- Split contigs into 500kb chunks:
+    ssh kkstore
+    cd ~/rn3
+    foreach d ( */chr*_?{,?} )
+	cd $d
+	echo "splitting $d"
+	set contig = $d:t
+	faSplit size $contig.fa 500000 ${contig}_ -lift=$contig.lft \
+	    -maxN=500000
+	cd ../..
+    end
 
-        #- Make the run directory and job list:
-        cd ~/rn3
-        mkdir RMRun
-        rm -f RMRun/RMJobs
-        touch RMRun/RMJobs
-        foreach d ( ?{,?}/chr*_?{,?} )
+    #- Make the run directory and job list:
+    cd ~/rn3
+    cat << '_EOF_' > jkStuff/RMRat
+#!/bin/csh -fe
+
+cd $1
+pushd .
+/bin/mkdir -p /tmp/$2
+/bin/cp $2 /tmp/$2/
+cd /tmp/$2
+/cluster/bluearc/RepeatMasker030619/RepeatMasker -ali -s -spec rat -comp mouse $2
+popd
+/bin/cp /tmp/$2/$2.out ./
+if (-e /tmp/$2/$2.align) /bin/cp /tmp/$2/$2.align ./
+# /bin/cp /tmp/$2*.masked ../masked/
+/bin/rm -r /tmp/$2
+'_EOF_'
+    chmod +x jkStuff/RMRat
+    mkdir RMRun
+    rm -f RMRun/RMJobs
+    touch RMRun/RMJobs
+    foreach d ( ?{,?}/chr*_?{,?} )
           set ctg = $d:t
           foreach f ( $d/${ctg}_?{,?}.fa )
             set f = $f:t
-            echo /cluster/bin/scripts/RMRat \
+            echo /cluster/store3/rn3/jkStuff/RMRat \
                  /cluster/store3/rn3/$d $f \
                '{'check out line+ /cluster/store3/rn3/$d/$f.out'}' \
               >> RMRun/RMJobs
           end
-        end
+    end
 
-        #- Do the run
-        ssh kk
-        cd ~/rn3/RMRun
-        para create RMJobs
-        para try, para check, para check, para push, para check,...
+    #- Do the run
+    ssh kk
+    cd ~/rn3/RMRun
+    para create RMJobs
+    para try, para check, para check, para push, para check,...
+# CPU time in finished jobs:   37015257s  616920.95m 10282.02h  428.42d  1.174 y
+# IO & Wait Time:                103443s    1724.05m    28.73h    1.20d  0.003 y
+# Average job time:                5978s      99.64m     1.66h    0.07d
+# Longest job:                    16058s     267.63m     4.46h    0.19d
 
         #- Lift up the split-contig .out's to contig-level .out's
-        ssh kkstore
-        cd ~/rn3
+	ssh kkstore
+    cd ~/rn3
         foreach d ( ?{,?}/chr*_?{,?} )
           cd $d
           set contig = $d:t
-          liftUp $contig.fa.out $contig.lft warn ${contig}_*.fa.out > /dev/null
+          /cluster/home/hiram/bin/i386/liftUp $contig.fa.out $contig.lft warn ${contig}_*.fa.out > /dev/null
           cd ../..
         end
 
@@ -238,10 +273,17 @@ REPEAT MASKING (TO DO)
         foreach i (?{,?})
             foreach j ($i/chr${i}_?{,?}/chr${i}_?{,?}.fa \
                        $i/chr${i}_random_?{,?}/chr${i}_random_?{,?}.fa)
-                maskOutFa $j $j.out $j -soft
+                /cluster/home/hiram/bin/i386/maskOutFa $j $j.out $j -soft
             end
             echo done $i
         end
+        # From the above, I get some errors like:
+    #	invalid unsigned number: "-203"
+    #	invalid unsigned number: "-14"
+    #	done 1
+	# on most of the chromosomes.  I'm checking with Arian to see if
+	# this is a problem in the *.out files.
+
 
         #- Load the .out files into the database with:
         ssh hgwdev
@@ -249,23 +291,31 @@ REPEAT MASKING (TO DO)
         hgLoadOut rn3 ?{,?}/*.fa.out
 
 
-MAKE LIFTALL.LFT (TO DO)
+MAKE LIFTALL.LFT (DONE - 2003-06-24 - Hiram)
 
     cd ~/rn3
     cat ?{,?}/lift/{ordered,random}.lft > jkStuff/liftAll.lft
 
-VERIFY REPEATMASKER RESULTS (TO DO)
+VERIFY REPEATMASKER RESULTS (DONE - 2003-06-24 - Hiram)
+
+    # Something about this is too early at this point.  It errors with:
+    #	Can't start query:
+    #	select chrom,size,fileName from chromInfo
+    #	mySQL error 1146: Table 'rn3.chromInfo' doesn't exist
+    # you have to wait until the nibs have been loaded below and the
+    # chrom.sizes works
 
     # Run featureBits on rn3 and on a comparable genome build, and compare:
     ssh hgwdev
     featureBits rn3 rmsk
-    # --> 1100534407 bases of 2764911379 (39.804%) in intersection
-    # --> (orig run, July libs) 1058156286 bases of 2764911379 (38.271%) in intersection
+    #   1117328265 bases of 2571104688 (43.457%) in intersection
     featureBits rn1 rmsk
-    # --> 1081814344 bases of 2852382926 (37.927%) in intersection
+    #	1081814344 bases of 2555848684 (42.327%) in intersection
+    featureBits rn2 rmsk
+    #	1100534407 bases of 2495551408 (44.100%) in intersection
 
 
-STORING O+O SEQUENCE AND ASSEMBLY INFORMATION  (TO DO)
+STORING O+O SEQUENCE AND ASSEMBLY INFORMATION  (DONE - 2003-06-24 - Hiram)
 
     # Make (unmasked) nibs
     ssh kkstore
@@ -274,6 +324,52 @@ STORING O+O SEQUENCE AND ASSEMBLY INFORMATION  (TO DO)
     foreach f (?{,?}/chr*.fa)
       faToNib $f nib/$f:t:r.nib
     end
+#	Writing 268121971 bases in 134060994 bytes
+#	Writing 3887217 bases in 1943617 bytes
+#	Writing 258222147 bases in 129111082 bytes
+#	Writing 4341851 bases in 2170934 bytes
+#	Writing 170969371 bases in 85484694 bytes
+#	Writing 1724363 bases in 862190 bytes
+#	Writing 187371129 bases in 93685573 bytes
+#	Writing 2124656 bases in 1062336 bytes
+#	Writing 173106704 bases in 86553360 bytes
+#	Writing 2145107 bases in 1072562 bytes
+#	Writing 147642806 bases in 73821411 bytes
+#	Writing 1770534 bases in 885275 bytes
+#	Writing 148145035 bases in 74072526 bytes
+#	Writing 1296457 bases in 648237 bytes
+#	Writing 129061546 bases in 64530781 bytes
+#	Writing 887087 bases in 443552 bytes
+#	Writing 113649943 bases in 56824980 bytes
+#	Writing 1166303 bases in 583160 bytes
+#	Writing 155713513 bases in 77856765 bytes
+#	Writing 1856386 bases in 928201 bytes
+#	Writing 110733352 bases in 55366684 bytes
+#	Writing 870782 bases in 435399 bytes
+#	Writing 87800381 bases in 43900199 bytes
+#	Writing 1278614 bases in 639315 bytes
+#	Writing 46649226 bases in 23324621 bytes
+#	Writing 953141 bases in 476579 bytes
+#	Writing 111348958 bases in 55674487 bytes
+#	Writing 608348 bases in 304182 bytes
+#	Writing 112220682 bases in 56110349 bytes
+#	Writing 1825095 bases in 912556 bytes
+#	Writing 109774626 bases in 54887321 bytes
+#	Writing 1609635 bases in 804826 bytes
+#	Writing 90224819 bases in 45112418 bytes
+#	Writing 1400107 bases in 700062 bytes
+#	Writing 97307196 bases in 48653606 bytes
+#	Writing 615889 bases in 307953 bytes
+# 	Writing 87338544 bases in 43669280 bytes
+#	Writing 594525 bases in 297271 bytes
+#	Writing 59223525 bases in 29611771 bytes
+#	Writing 984116 bases in 492066 bytes
+#	Writing 55296979 bases in 27648498 bytes
+#	Writing 604928 bases in 302472 bytes
+#	Writing 75822765 bases in 37911391 bytes
+#	Writing 6862066 bases in 3431041 bytes
+
+
     # Make symbolic links from /gbdb/rn3/nib to the real nibs.
     ssh hgwdev
     mkdir -p /gbdb/rn3/nib
@@ -282,36 +378,55 @@ STORING O+O SEQUENCE AND ASSEMBLY INFORMATION  (TO DO)
     end
     # Load /gbdb/rn3/nib paths into database and save size info.
      ssh hgwdev
-     hgsql rn3  < ~/src/hg/lib/chromInfo.sql
+     hgsql rn3  < ~/kent/src/hg/lib/chromInfo.sql
      cd ~/rn3
      hgNibSeq -preMadeNib rn3 /gbdb/rn3/nib ?{,?}/chr?{,?}{,_random}.fa
+    #	2835152425 total bases
      echo "select chrom,size from chromInfo" | hgsql -N rn3 > chrom.sizes
+    # take a look at chrom.sizes, should be 44 lines and reasonable
+    # numbers
+    wc chrom.sizes
+    #	44      88     778 chrom.sizes
 
 
-GOLD AND GAP TRACKS (TO DO)
+GOLD AND GAP TRACKS (DONE - 2003-06-24 - Hiram)
     ssh hgwdev
     cd ~/rn3
     hgGoldGapGl -noGl rn3 /cluster/store3/rn3 .
 
 
-MAKE GCPERCENT (TO DO)
+MAKE GCPERCENT (DONE - 2003-06-24 - Hiram)
      ssh hgwdev
      mkdir -p /cluster/store3/rn3/bed/gcPercent
      cd /cluster/store3/rn3/bed/gcPercent
-     hgsql rn3  < ~/src/hg/lib/gcPercent.sql
+     hgsql rn3  < ~/kent/src/hg/lib/gcPercent.sql
      hgGcPercent rn3 ../../nib
 
 
-MAKE HGCENTRALTEST ENTRY AND TRACKDB TABLE FOR RN3 (TO DO)
+MAKE HGCENTRALTEST ENTRY AND TRACKDB TABLE FOR RN3 (DONE - 2003-06-24 - Hiram)
     # Enter rn3 into hgcentraltest.dbDb so test browser knows about it:
-    mysql -h genome-testdb -u root -pbigSecret -A hgcentraltest
-      insert into dbDb values("rn3", "Rat Jan. 2003",
-        "/gbdb/rn3/nib", "Rat", "Napa", 1,
-        20, "Rat");
-      quit
+    echo 'insert into dbDb values("rn3", "Jun 2003", \
+        "/gbdb/rn3/nib", "Rat", "Espn", 1, \
+        30, "Rat");' | hgsql -h genome-testdb hgcentraltest
+    # Temporary entry until mrna tables come along.  Approximate
+    # calculated position the same as rn2
+    echo 'insert into dbDb values("rn3", "Jun 2003", \
+        "/gbdb/rn3/nib", "Rat", "chr5:168054448-168086858", 1, \
+        30, "Rat");' | hgsql -h genome-testdb hgcentraltest
+    # since Espn is the specified position here, this default position
+    # will not function as the make trackDb is done next since there are
+    # no tables in which to look up Espn.  But you can run the browser
+    # if you enter actual coodinates, e.g. chr1:1-1000, etc ...
+    #	Espn in Jan 2003 rat is: chr5:186572879-186605289
+    #	The new rat is much shorter for chr5
+    #  If you need to delete this dbDb entry to rewrite it:
+        echo 'delete from dbDb where name="rn3";' \
+        | hgsql -h genome-testdb hgcentraltest
+
+
     # Make trackDb table so browser knows what tracks to expect:
     ssh hgwdev
-    cd ~/src/hg/makeDb/trackDb
+    cd ~/kent/src/hg/makeDb/trackDb
     cvs up -d -P
     # Edit that makefile to add rn3 in all the right places and do
     make update
@@ -350,7 +465,7 @@ SIMPLE REPEAT TRACK (TO DO)
     ssh hgwdev
     cd ~/rn3/bed/simpleRepeat
     hgLoadBed rn3 simpleRepeat simpleRepeat.bed \
-      -sqlTable=$HOME/src/hg/lib/simpleRepeat.sql
+      -sqlTable=$HOME/kent/src/hg/lib/simpleRepeat.sql
 
 
 PROCESS SIMPLE REPEATS INTO MASK (TO DO)
@@ -650,7 +765,7 @@ Load them into database as so:
      ssh hgwdev
      cd ~/rn3/bed/estOrientInfo
      hgLoadBed rn3 estOrientInfo estOrientInfo.bed \
-       -sqlTable=/cluster/home/kent/src/hg/lib/estOrientInfo.sql
+       -sqlTable=$HOME/kent/src/hg/lib/estOrientInfo.sql
      
 PRODUCING MRNAORIENTINFO TABLE (TO DO)
     ssh kkstore
@@ -675,7 +790,7 @@ PRODUCING MRNAORIENTINFO TABLE (TO DO)
     ssh hgwdev
     cd ~/rn3/bed/mrnaOrientInfo
     hgLoadBed rn3 mrnaOrientInfo mrnaOrientInfo.bed \
-       -sqlTable=/cluster/home/kent/src/hg/lib/mrnaOrientInfo.sql
+       -sqlTable=$HOME/kent/src/hg/lib/mrnaOrientInfo.sql
 
 
 CREATE RNACLUSTER TABLE (TO DO)
