@@ -22,7 +22,7 @@ exit; # don't actually run this like a script :)
 
   ssh kksilo
   cd /cluster/data/xenTro1
-  mkdir scaffolds
+  mkdir scaffolds html
 
 # /cluster/bin/i386/faSplit byname downloads/xenopus.041015.fasta scaffolds -outDirDepth=3
 # Tried above and as noted by Heather before, not sure why these didn't get put under scaffolds 
@@ -51,6 +51,7 @@ exit; # don't actually run this like a script :)
   mv xenTro1.2bit ..
   ssh hgwdev
   mkdir /gbdb/xenTro1
+  ln -s /cluster/data/xenTro1/html /gbdb/xenTro1
   mkdir /gbdb/xenTro1/nib
   ln -s /cluster/data/xenTro1/xenTro1.2bit /gbdb/xenTro1/nib
 
