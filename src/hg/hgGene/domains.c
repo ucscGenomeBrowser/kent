@@ -43,7 +43,6 @@ if (section->pfamDomains != NULL)
 	hPrintf("%s</A> - %s<BR>\n", el->name, description);
 	freez(&description);
 	}
-    slFreeList(&section->pfamDomains);
     }
 if (section->interproDomains != NULL)
     {
@@ -67,6 +66,7 @@ if (section->interproDomains != NULL)
 	hPrintf("%s</A> - %s<BR>\n", row[0], row[1]);
 	}
     }
+slFreeList(&section->pfamDomains);
 slFreeList(&section->interproDomains);
 }
 
