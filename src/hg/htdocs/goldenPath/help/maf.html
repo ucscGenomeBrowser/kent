@@ -68,32 +68,30 @@
 		<P>
 		<B>General Structure</B>
    		<P> 
-		MAF files (*.maf) are
-		line-oriented. Each multiple alignment ends with a
-		blank line. Each sequence in the alignment is entered on a
-		separate line, which can get quite long (there is no 
-		length limit). Words in a line are delimited by white 
-		space. Lines starting with &quot;#&quot; are considered to 
-		be comments. Lines starting with &quot;##&quot; 
-		contain meta-data of one form or another, and can be ignored
-		by most programs.
+		MAF files (*.maf) are line-oriented. A file consists
+		of a header line and a parameter line, followed by a series 
+		of alignment blocks (or paragraphs), 
+		each of which contains one set of multiple alignments. Each
+		block is separated from the next by a blank line. 
 		<P>
-		The file consists of a series of paragraphs, each of 
-		which terminates in a blank line.  Within a paragraph, the 
-		first word of a line indicates its type.  Each multiple
-		alignment is in a separate paragraph that begins
-		with an alignment line and contains a sequence line for each
-		sequence in the multiple alignment.  In the current
+		Blocks consist of two parts: an alignment line showing
+		the alignment parameters for the block, followed by 
+		a set of sequence lines showing each sequence in the multiple 
+		alignment at that location. In the current
 		implementation, parsers should ignore other types of 
-		paragraphs and other types of lines within an alignment
-		paragraph. Parsers should also ignore extra blank lines
-		before paragraphs.
+		blocks and other types of lines within an alignment
+		block, as well as extra blank lines between blocks.
+		<P>
+		Lines starting with &quot;#&quot; are considered to 
+		be comments. Lines starting with &quot;##&quot; 
+		contain meta-data of one form or another and can be ignored
+		by most programs.
 		<P>
 		<B><em>Example:</em></B><BR>
 		Here is a simple example
 		of a file containing 2 alignments of 3 sequences each, 
 		from human, horse, and fugu:
-		<FONT color="#0000FF"><PRE><TT> ##maf version=1 scoring=probablity
+		<FONT color="#0000FF"><PRE><TT> ##maf version=1 scoring=probability
  #mblastz 8.91 02-Jan-2005
  
  a score=0.128
@@ -134,15 +132,15 @@
                 </UL>
                 Parsers ignore variables they do not understand.
 		<P><B>2. Parameter line</B><P> 
-		<FONT color="#0000FF"><PRE><TT>  mblastz 8.91 02-Jan-2005</TT></PRE></FONT>
+		<FONT color="#0000FF"><PRE><TT>  #mblastz 8.91 02-Jan-2005</TT></PRE></FONT>
 		One or more <em>parameter lines</em> follow the header. These
 		lines begin with &quot;#&quot; and display the parameters 
 		used to run the alignment program.
 
 		<P><B>3. Alignment lines</B><P> 
-		<FONT color="#0000FF"><PRE><TT> a score=23262.0</TT></PRE></FONT>
-		<em>Alignment lines</em> contain the parameters used for the alignment
-		block that follows. Each alignment block must begin with an 
+		<FONT color="#0000FF"><PRE><TT>  a score=0.128</TT></PRE></FONT>
+		<em>Alignment lines</em> contain the parameters used for that
+		particular alignment block. Each alignment block must begin with an 
 		alignment line. Each alignment line begins with 
 		&quot;a&quot;</B></TT>, 
 		followed by optional <TT><B>name=value</B></TT> 
@@ -163,16 +161,20 @@
 	     	</UL>
 
 	   	<P><B>4. Sequence lines</B><P>
-		<FONT color="#0000FF"><PRE><TT> s hg16.chr7    27707221 13 + 158545518 gcagctgaaaaca
- s panTro1.chr6 28869787 13 + 161576975 gcagctgaaaaca
- s baboon         249182 13 +   4622798 gcagctgaaaaca
- s mm4.chr6     53310102 13 + 151104725 ACAGCTGAAAATA</TT>
-		</PRE></FONT>
+		<FONT color="#0000FF"><PRE><TT>  s human_hoxa 100  9 + 100257 ACA-TTACT
+  s horse_hoxa 120 10 -  98892 ACAATTGCT
+  s fugu_hoxa   88  8  + 90788 ACA--TGCT</TT></PRE></FONT>
+
 	    	<em>Sequence lines</em> define the sequence of each species
-		within an alignment block. These lines, together with the 
-		alignment lines, define a multiple alignment. Not all species
-		will have a sequence line in every alignment block. Each 
-		sequence line begins with &quot;s&quot; and contains the 
+		within an alignment block. Not all species
+		will have a sequence line in every alignment block. 
+		Each sequence in the alignment is entered on 
+		a separate line, one per species, which can get quite long. 
+		All sequences within an alignment block must be of the same 
+		length. Alignment gaps are padded with &quot;-&quot;. 
+		Words within a line are delimited by white space. 
+		<P>
+		Each sequence line begins with &quot;s&quot; and contains the 
 		following required fields:
 		<UL>
 	    	<LI>
@@ -182,6 +184,8 @@
 		browser assembly, the form <em>database.chromosome</em> allows
 	        automatic creation of links to other assemblies.  Non-browser 
 		sequences are typically referenced by the species name alone.
+		Species names must not contain spaces: concatenate multi-word 
+		names or replace the space with an underscore.
 	    	<LI>
 		<B><em>start</em></B> -- Start of the aligning region in
 		the source sequence, using zero-based position coordinates.  
