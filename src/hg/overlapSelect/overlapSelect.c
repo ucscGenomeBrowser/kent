@@ -189,6 +189,43 @@ carefulClose(&outFh);
 lineFileClose(&lf);
 }
 
+boolean coordColsSelected(char *line, struct lineFile *lf)
+/* parse line and determine if it is selected; don't corrupt line */
+{
+static struct dyString *lineBuf = NULL;
+static int rowBufSize = 0;
+static char** rowBuf = NULL;
+int numCols;
+boolean overlaps;
+struct coordColVals colVals;
+
+/* setup local buffers */
+if (lineBuf == NULL)
+    lineBuf = dyStringNew(512);
+if (inCoordCols.minNumCols > rowBufSize)
+    {
+    rowBuf = needMoreMem(rowBuf, rowBufSize*sizeof(char*), inCoordCols.minNumCols*sizeof(char*));
+    rowBufSize = inCoordCols.minNumCols;
+    }
+if (line[0] == '#')
+    return TRUE;  /* keep header line */
+
+dyStringClear(lineBuf);
+dyStringAppend(lineBuf, line);
+numCols = chopByChar(lineBuf->string, '\t', rowBuf, rowBufSize);
+if (numCols == 0)
+    return FALSE;  /* skip empty lines */
+lineFileExpectAtLeast(lf, inCoordCols.minNumCols, numCols);
+colVals = coordColParseRow(&inCoordCols, lf, rowBuf, numCols);
+overlaps = selectIsOverlapped(selectOptions, NULL, colVals.chrom,
+                              colVals.start, colVals.end, colVals.strand);
+
+if (nonOverlaping)
+    return !overlaps;
+else
+    return overlaps;
+}
+
 void coordColsSelect(char* inFile, char* outFile)
 /* copy records that matches the selection criteria when the coordinates are
  * specified by start column. */
@@ -196,29 +233,14 @@ void coordColsSelect(char* inFile, char* outFile)
 struct lineFile *lf = lineFileOpen(inFile, TRUE);
 FILE* outFh = mustOpen(outFile, "w");
 char *line;
-char** row;
-int numCols;
-struct coordColVals colVals;
-struct dyString *lineBuf = dyStringNew(512);
-
-row = needMem(inCoordCols.minNumCols*sizeof(char*));
 
 while (lineFileNextReal(lf, &line))
     {
-    dyStringClear(lineBuf);
-    dyStringAppend(lineBuf, line);
-    lineFileReuse(lf);
-    numCols = lineFileChopNextTab(lf, row, inCoordCols.minNumCols);
-
-    colVals = coordColParseRow(&inCoordCols, lf, row, numCols);
-    if (selectIsOverlapped(selectOptions, NULL, colVals.chrom,
-                           colVals.start, colVals.end, colVals.strand))
-        fprintf(outFh, "%s\n", lineBuf->string);
+    if (coordColsSelected(line, lf))
+        fprintf(outFh, "%s\n", line);
     }
 carefulClose(&outFh);
 lineFileClose(&lf);
-freez(&row);
-dyStringFree(&lineBuf);
 }
 
 void loadSelectTable(char *selectFile)

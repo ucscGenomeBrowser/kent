@@ -12,7 +12,7 @@ test:   psl_over_NM_015110gp psl_nonover_NM_015110gp \
 	bed_over_NM_015110bed_split bed_nonover_NM_015110bed_split \
 	exludeself_over_mrna1 exludeself_nonover_mrna1 \
 	exludeself_over_mrna2 exludeself_nonover_mrna2 \
-	colSelect
+	colSelect colExclude
 
 # select psls overlaping NM_015110 with gp
 psl_over_NM_015110gp: mkout
@@ -123,6 +123,12 @@ colSelect: mkout
 	${OVERSEL} -selectCoordCols=1,2,3 -inCoordCols=3,4,5 \
 	    input/gene.select input/gene.clusters output/colSelect.cluster
 	${DIFF} expected/colSelect.cluster output/colSelect.cluster
+
+# exclude by column
+colExclude: mkout
+	${OVERSEL} -nonOverlaping -selectCoordCols=1,2,3 -inCoordCols=3,4,5 \
+	    input/gene.select input/gene.clusters output/colExclude.cluster
+	${DIFF} expected/colExclude.cluster output/colExclude.cluster
 
 mkout:
 	@mkdir -p output
