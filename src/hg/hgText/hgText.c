@@ -34,7 +34,7 @@
 #include "wiggle.h"
 #include "hgText.h"
 
-static char const rcsid[] = "$Id: hgText.c,v 1.146 2004/05/12 23:16:53 angie Exp $";
+static char const rcsid[] = "$Id: hgText.c,v 1.147 2004/05/13 00:41:59 angie Exp $";
 
 /* sources of tracks, other than the current database: */
 static char *hgFixed = "hgFixed";
@@ -3365,7 +3365,7 @@ if (itemCount == 0)
 
 static void addGffLineFromBed(struct gffLine **pGffList, struct bed *bed,
 			      char *source, char *feature,
-			      int start, int end, char frame)
+			      int start, int end, char frame, char *txName)
 /* Create a gffLine from a bed and line-specific parameters, add to list. */
 {
 struct gffLine *gff;
@@ -3378,7 +3378,8 @@ gff->end = end;
 gff->score = bed->score;
 gff->strand = bed->strand[0];
 gff->frame = frame;
-gff->group = gff->geneId = cloneString(bed->name);
+gff->group = cloneString(txName);
+gff->geneId = cloneString(bed->name);
 slAddHead(pGffList, gff);
 }
 
@@ -3386,13 +3387,13 @@ slAddHead(pGffList, gff);
 static void addCdsStartStop(struct gffLine **pGffList, struct bed *bed,
 			    char *source, int s, int e, char *frames,
 			    int i, int startIndx, int stopIndx,
-			    boolean gtf2StopCodons)
+			    boolean gtf2StopCodons, char *txName)
 {
 // start_codon (goes first for + strand) overlaps with CDS
 if ((i == startIndx) && (bed->strand[0] != '-'))
     {
     addGffLineFromBed(pGffList, bed, source, "start_codon",
-		      s, s+3, '.');
+		      s, s+3, '.', txName);
     }
 // stop codon does not overlap with CDS as of GTF2
 if ((i == stopIndx) && gtf2StopCodons)
@@ -3400,28 +3401,28 @@ if ((i == stopIndx) && gtf2StopCodons)
     if (bed->strand[0] == '-')
 	{
 	addGffLineFromBed(pGffList, bed, source, "stop_codon",
-			  s, s+3, '.');
+			  s, s+3, '.', txName);
 	addGffLineFromBed(pGffList, bed, source, "CDS", s+3, e,
-			  frames[i]);
+			  frames[i], txName);
 	}
     else
 	{
 	addGffLineFromBed(pGffList, bed, source, "CDS", s, e-3,
-			  frames[i]);
+			  frames[i], txName);
 	addGffLineFromBed(pGffList, bed, source, "stop_codon",
-			  e-3, e, '.');
+			  e-3, e, '.', txName);
 	}
     }
 else
     {
     addGffLineFromBed(pGffList, bed, source, "CDS", s, e,
-		      frames[i]);
+		      frames[i], txName);
     }
 // start_codon (goes last for - strand) overlaps with CDS
 if ((i == startIndx) && (bed->strand[0] == '-'))
     {
     addGffLineFromBed(pGffList, bed, source, "start_codon",
-		      e-3, e, '.');
+		      e-3, e, '.', txName);
     }
 }
 
@@ -3430,12 +3431,27 @@ struct gffLine *bedToGffLines(struct bed *bedList, struct hTableInfo *hti,
 			      char *source, boolean gtf2StopCodons)
 /* Translate a (list of) bed into list of gffLine elements. */
 {
+struct hash *nameHash = newHash(20);
 struct gffLine *gffList = NULL;
 struct bed *bed;
 int i, j, s, e;
+char txName[256];
 
 for (bed = bedList;  bed != NULL;  bed = bed->next)
     {
+    /* Enforce unique transcript_ids. */
+    struct hashEl *hel = hashLookup(nameHash, bed->name);
+    int dupCount = (hel != NULL ? ptToInt(hel->val) : 0);
+    if (dupCount > 0)
+	{
+	safef(txName, sizeof(txName), "%s_dup%d", bed->name, dupCount);
+	hel->val = NULL + dupCount + 1;
+	}
+    else
+	{
+	safef(txName, sizeof(txName), "%s", bed->name);
+	hashAddInt(nameHash, bed->name, 1);
+	}
     if (hti->hasBlocks && hti->hasCDS)
 	{
 	char *frames = needMem(bed->blockCount);
@@ -3443,7 +3459,7 @@ for (bed = bedList;  bed != NULL;  bed = bed->next)
 	int nextPhase = 0;
 	int startIndx = 0;
 	int stopIndx = 0;
-	// need a separate pass to compute frames, in case strand is '-'
+	/* first pass: compute frames, in order dictated by strand. */
 	for (i=0;  i < bed->blockCount;  i++)
 	    {
 	    if (bed->strand[0] == '-')
@@ -3473,6 +3489,7 @@ for (bed = bedList;  bed != NULL;  bed = bed->next)
 		frames[j] = '.';
 		}
 	    }
+	/* second pass: one exon (possibly CDS, start/stop_codon) per block. */
 	for (i=0;  i < bed->blockCount;  i++)
 	    {
 	    s = bed->chromStart + bed->chromStarts[i];
@@ -3480,25 +3497,30 @@ for (bed = bedList;  bed != NULL;  bed = bed->next)
 	    if ((s >= bed->thickStart) && (e <= bed->thickEnd))
 		{
 		addCdsStartStop(&gffList, bed, source, s, e, frames,
-				i, startIndx, stopIndx, gtf2StopCodons);
+				i, startIndx, stopIndx, gtf2StopCodons,
+				txName);
 		}
 	    else if ((s < bed->thickStart) && (e > bed->thickEnd))
 		{
 		addCdsStartStop(&gffList, bed, source,
 				bed->thickStart, bed->thickEnd,
-				frames, i, startIndx, stopIndx, gtf2StopCodons);
+				frames, i, startIndx, stopIndx,
+				gtf2StopCodons, txName);
 		}
 	    else if ((s < bed->thickStart) && (e > bed->thickStart))
 		{
 		addCdsStartStop(&gffList, bed, source, bed->thickStart, e,
-				frames, i, startIndx, stopIndx, gtf2StopCodons);
+				frames, i, startIndx, stopIndx,
+				gtf2StopCodons, txName);
 		}
 	    else if ((s < bed->thickEnd) && (e > bed->thickEnd))
 		{
 		addCdsStartStop(&gffList, bed, source, s, bed->thickEnd,
-				frames, i, startIndx, stopIndx, gtf2StopCodons);
+				frames, i, startIndx, stopIndx,
+				gtf2StopCodons, txName);
 		}
-	    addGffLineFromBed(&gffList, bed, source, "exon", s, e, '.');
+	    addGffLineFromBed(&gffList, bed, source, "exon", s, e, '.',
+			      txName);
 	    }
 	freeMem(frames);
 	}
@@ -3508,7 +3530,8 @@ for (bed = bedList;  bed != NULL;  bed = bed->next)
 	    {
 	    s = bed->chromStart + bed->chromStarts[i];
 	    e = s + bed->blockSizes[i];
-	    addGffLineFromBed(&gffList, bed, source, "exon", s, e, '.');
+	    addGffLineFromBed(&gffList, bed, source, "exon", s, e, '.',
+			      txName);
 	    }
 	}
     else if (hti->hasCDS)
@@ -3516,23 +3539,24 @@ for (bed = bedList;  bed != NULL;  bed = bed->next)
 	if (bed->thickStart > bed->chromStart)
 	    {
 	    addGffLineFromBed(&gffList, bed, source, "exon", bed->chromStart,
-			      bed->thickStart, '.');
+			      bed->thickStart, '.', txName);
 	    }
 	addGffLineFromBed(&gffList, bed, source, "CDS", bed->thickStart,
-			  bed->thickEnd, '0');
+			  bed->thickEnd, '0', txName);
 	if (bed->thickEnd < bed->chromEnd)
 	    {
 	    addGffLineFromBed(&gffList, bed, source, "exon", bed->thickEnd,
-			      bed->chromEnd, '.');
+			      bed->chromEnd, '.', txName);
 	    }
 	}
     else
 	{
 	addGffLineFromBed(&gffList, bed, source, "exon", bed->chromStart,
-			  bed->chromEnd, '.');
+			  bed->chromEnd, '.', txName);
 	}
     }
 slReverse(&gffList);
+hashFree(&nameHash);
 return(gffList);
 }
 
