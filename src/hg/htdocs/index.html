@@ -32,8 +32,6 @@ function initDb()
       theDb = queryString.substring(dbIndex + 4);
   }   
 
-alert(theDb);
-
     for (var items = 0; items < document.dbForm.genome.options.length; items++)
     {
       if(sameOrganism(theDb, document.dbForm.genome.options[items].value))
