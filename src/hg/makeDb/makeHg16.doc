@@ -5986,6 +5986,19 @@ hgsql -N -e 'select spID,seq from kgXref,knownGenePep where kgID=name' ${DB} \
     hgLoadPsl -tNameIx hg16 kgProtMap.psl
 
 
+# MAKE LINEAGE-SPECIFIC REPEATS FOR CHICKEN (DONE 2/18/04 angie)
+    # In an email 2/13/04, Arian said we could treat all human repeats as 
+    # lineage-specific for human-chicken blastz.  Scripts expect *.out.spec 
+    # filenames, so set that up:
+    ssh kksilo
+    cd /cluster/data/hg16
+    mkdir /cluster/bluearc/hg16/linSpecRep.Chicken
+    foreach f (/scratch/hg/gs.17/build34/rmsk/chr*.fa.out)
+      cp -p $f /cluster/bluearc/hg16/linSpecRep.Chicken/$f:t:r:r.out.spec
+    end
+    # Use these the next time we run human-chicken blastz.
+
+
 # BLASTZ CHICKEN (GALGAL1) (DONE 2/3/04 angie)
     ssh kk
     # space is awful tight on store4 -- use bluearc.  
@@ -6122,7 +6135,7 @@ SEQ2_LEN=$BASE/S2.len
     end
 
 
-# CHAIN CHICKEN BLASTZ (DONE 2/5/04 angie)
+# CHAIN CHICKEN BLASTZ (DONE 2/12/04 angie)
     # Run axtChain on little cluster
     ssh kkr1u00
     cd /cluster/data/hg16/bed/blastz.galGal1.2004-01-31
@@ -6138,10 +6151,24 @@ doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain} {check
 '_EOF_'
     # << this line makes emacs coloring happy
 
+    # Make our own linear gap file with reduced gap penalties, 
+    # in hopes of getting longer chains:
+    cat << '_EOF_' > ../../chickenHumanTuned.gap
+tablesize	11
+smallSize	111
+position	1	2	3	11	111	2111	12111	32111	72111	152111	252111
+qGap	325	360	400	450	600	1100	3600	7600	15600	31600	56600
+tGap	325	360	400	450	600	1100	3600	7600	15600	31600	56600
+bothGap	625	660	700	750	900	1400	4000	8000	16000	32000	57000
+'_EOF_'
+    # << this line makes emacs coloring happy
+
     cat << '_EOF_' > doChain
 #!/bin/csh
 axtFilter -notQ=chrUn $1 \
-| ~/bin/i386/axtChain -scoreScheme=/cluster/data/blastz/HoxD55.q stdin \
+| ~/bin/i386/axtChain -scoreScheme=/cluster/data/blastz/HoxD55.q \
+                      -linearGap=../../chickenHumanTuned.gap \
+                      -minScore=5000 stdin \
     /cluster/bluearc/scratch/hg/gs.17/build34/bothMaskedNibs \
     /cluster/bluearc/galGal1/nib $2 > $3
 '_EOF_'
@@ -6151,9 +6178,9 @@ axtFilter -notQ=chrUn $1 \
     para create jobList
     para try, check, push, check...
 #Completed: 42 of 42 jobs
-#Average job time:                 895s      14.92m     0.25h    0.01d
-#Longest job:                     2704s      45.07m     0.75h    0.03d
-#Submission to last job:          3810s      63.50m     1.06h    0.04d
+#Average job time:                 214s       3.57m     0.06h    0.00d
+#Longest job:                      566s       9.43m     0.16h    0.01d
+#Submission to last job:          1532s      25.53m     0.43h    0.02d
 
     # now on the cluster server, sort chains
     ssh kksilo
@@ -6161,10 +6188,16 @@ axtFilter -notQ=chrUn $1 \
     chainMergeSort run1/chain/*.chain > all.chain
     chainSplit chain all.chain
     rm run1/chain/*.chain
+    # trim to minScore=10000
+    mkdir chainFilt
+    foreach f (chain/*.chain)
+      chainFilter -minScore=10000 $f > chainFilt/$f:t
+    end
 
     # Load chains into database
     ssh hgwdev
-    cd /cluster/data/hg16/bed/blastz.galGal1.2004-01-31/axtChain/chain
+TODO
+    cd /cluster/data/hg16/bed/blastz.galGal1.2004-01-31/axtChain/chainFilt
     foreach i (*.chain)
         set c = $i:r
         hgLoadChain hg16 ${c}_chainGalGal1 $i
@@ -6172,7 +6205,7 @@ axtFilter -notQ=chrUn $1 \
     end
 
 
-# NET HUMAN BLASTZ (DONE 2/6/04 angie)
+# NET HUMAN BLASTZ (DONE 2/12/04 angie)
     ssh kksilo
     cd /cluster/data/hg16/bed/blastz.galGal1.2004-01-31/axtChain
     mkdir preNet
@@ -6210,7 +6243,6 @@ axtFilter -notQ=chrUn $1 \
     cd /cluster/data/hg16/bed/blastz.galGal1.2004-01-31/axtChain
     netFilter -minGap=10 human.net |  hgLoadNet hg16 netGalGal1 stdin
     netFilter -minGap=10 humanSyn.net | hgLoadNet hg16 netSyntenyGalGal1 stdin
-
     # Add entries for chainGalGal1, netGalGal1, syntenyGalGal1 to 
     # human/hg16 trackDb
 
