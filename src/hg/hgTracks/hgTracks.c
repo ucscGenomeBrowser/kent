@@ -69,7 +69,7 @@
 #include "grp.h"
 #include "chromColors.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.605 2003/09/26 20:07:14 braney Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.606 2003/09/29 19:47:38 braney Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
@@ -1068,6 +1068,7 @@ int x1,x2;
 int shortOff = 2, shortHeight = heightPer-4;
 int tallStart, tallEnd, s, e, e2, s2;
 Color bColor;
+int intronGap = atoi(trackDbSettingOrDefault(tg->tdb, "intronGap", "0"));
 boolean chainLines = ((vis != tvDense)&&(tg->subType == lfSubChain));
 boolean hideLine = ((tg->subType == lfSubChain) || 
 	((vis == tvDense) && (tg->subType == lfSubXeno)));
@@ -1076,10 +1077,12 @@ int midY1 = midY - (heightPer>>2);
 int midY2 = midY + (heightPer>>2);
 int w;
 
+intronGap = (vis == tvDense) ? 0 : intronGap;
+
 if (chainLines && (vis == tvSquish))
     {
-	midY1 = y;
-	midY2 = y + heightPer - 1;
+    midY1 = y;
+    midY2 = y + heightPer - 1;
     }
 lfColors(tg, lf, vg, &color, &bColor);
 tallStart = lf->tallStart;
@@ -1089,12 +1092,12 @@ if (!hideLine)
     x1 = round((double)((int)lf->start-winStart)*scale) + xOff;
     x2 = round((double)((int)lf->end-winStart)*scale) + xOff;
     w = x2-x1;
-    if (vis == tvFull || vis == tvPack)
+    innerLine(vg, x1, midY, w, color);
+    if ((intronGap == 0) && (vis == tvFull || vis == tvPack))
 	{
 	clippedBarbs(vg, x1, midY, w, 2, 5, 
 		 lf->orientation, bColor, FALSE);
 	}
-    innerLine(vg, x1, midY, w, color);
     }
 for (sf = lf->components; sf != NULL; sf = sf->next)
     {
@@ -1119,6 +1122,26 @@ for (sf = lf->components; sf != NULL; sf = sf->next)
 	drawScaledBoxSample(vg, s, e, scale, xOff, y, heightPer, color, lf->score);
 	}
 
+    if ((intronGap || chainLines) && sf->next != NULL)
+	{
+	int qGap, tGap;
+	if (sf->start >= sf->next->end)
+	    {
+	    tGap = sf->start - sf->next->end;
+	    s = sf->next->end + 1;
+	    e = sf->start;
+	    }
+	else
+	    {
+	    tGap = sf->next->start - sf->start;
+	    s = sf->end;
+	    e = sf->next->start;
+	    }
+
+	x1 = round((double)((int)s-winStart)*scale) + xOff;
+	x2 = round((double)((int)e-winStart)*scale) + xOff;
+	if (chainLines)
+	    {
     /* The idea here is to draw one or two lines
      * based on whether the gap in the target
      * is similar to the gap in the query.
@@ -1126,27 +1149,28 @@ for (sf = lf->components; sf != NULL; sf = sf->next)
      * GAPFACTOR times the gap in the query
      * we draw only one line, otherwise two.
      */
-    if (chainLines  && (sf->next != NULL))
-	{
-	int qGap, tGap;
-	qGap = sf->next->grayIx - sf->grayIx;
-	tGap = sf->next->start - sf->start;
-	s = sf->end;
-	e = sf->next->start;
-
-	x1 = round((double)((int)s-winStart)*scale) + xOff;
-	x2 = round((double)((int)e-winStart)*scale) + xOff;
-	x1--; /* this causes some lines to overwrite one
-		 pixel of the previous box */
-	w = x2-x1;
-	w++; /* innerLine subtracts 1 from the width */
+	    x1--; /* this causes some lines to overwrite one
+		     pixel of the previous box */
+	    w = x2-x1;
+	    w++; /* innerLine subtracts 1 from the width */
+	    qGap = sf->next->qStart - sf->qEnd;
+	    tGap = sf->next->start - sf->end;
 #define GAPFACTOR 5
-	if (tGap > GAPFACTOR * qGap)
-	    innerLine(vg, x1, midY, w, color);
-	else
+	    if (tGap > GAPFACTOR * qGap)
+		innerLine(vg, x1, midY, w, color);
+	    else
+		{
+		innerLine(vg, x1, midY1, w, color);
+		innerLine(vg, x1, midY2, w, color);
+		}
+	    }
+	else /* checking for intronGap */
 	    {
-	    innerLine(vg, x1, midY1, w, color);
-	    innerLine(vg, x1, midY2, w, color);
+	    w = x2-x1;
+	    qGap = sf->qStart - sf->next->qEnd;
+	    if ((qGap == 0) && (tGap >= intronGap))
+		clippedBarbs(vg, x1, midY, w, 2, 5, 
+			 lf->orientation, bColor, FALSE);
 	    }
 	}
     }
@@ -1865,7 +1889,8 @@ struct track *userPslTg()
 {
 struct track *tg = linkedFeaturesTg();
 tg->mapName = "hgUserPsl";
-tg->visibility = tvFull;
+tg->canPack = TRUE;
+tg->visibility = tvPack;
 tg->longLabel = "Your Sequence from BLAT Search";
 tg->shortLabel = "BLAT Sequence";
 tg->loadItems = loadUserPsl;
