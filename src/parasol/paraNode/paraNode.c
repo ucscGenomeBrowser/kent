@@ -48,6 +48,8 @@ in_addr_t localIp;		/* localhost IP address. */
 int busyProcs = 0;		/* Number of processers in use. */
 struct rudp *mainRudp;		/* Rudp wrapper around main socket. */ 
 struct paraMessage pmIn;	/* Input message */
+double ticksToHundreths;	/* Conversion factor from system ticks
+                                 * to 100ths of second. */
 
 struct job
 /* Info on one job in this node. */
@@ -251,6 +253,19 @@ freez(&userPath);
 dyStringFree(&dy);
 }
 
+void getTicksToHundreths()
+/* Return number of hundreths of seconds per system tick.
+ * It used to be CLK_TCK would work for this, but
+ * under recent Linux's it doesn't. */
+{
+#ifdef CLK_TCK
+    ticksToHundreths = 100.0/CLK_TCK
+#else
+    ticksToHundreths = 100.0/sysconf(_SC_CLK_TCK);
+#endif /* CLK_TCK */
+}
+
+
 void execProc(char *managingHost, char *jobIdString, char *reserved,
 	char *user, char *dir, char *in, char *out, char *err,
 	char *exe, char **params)
@@ -325,9 +340,11 @@ else
     times(&tms);
     if (ru != NULL)
 	{
+	unsigned long uTime = ticksToHundreths*tms.tms_cutime;
+	unsigned long sTime = ticksToHundreths*tms.tms_cstime;
 	pmInit(&pm, localIp, paraNodePort);
 	pmPrintf(&pm, "jobDone %s %s %d %lu %lu", managingHost, 
-	    jobIdString, status, tms.tms_cutime, tms.tms_cstime);
+	    jobIdString, status, uTime, sTime);
 	pmSend(&pm, ru);
 	rudpClose(&ru);
 	}
@@ -663,6 +680,7 @@ struct sockaddr_in sai;
 /* We have to know who we are... */
 hostName = getMachine();
 initRandom();
+getTicksToHundreths();
 
 /* Make job lists. */
 jobsRunning = newDlList();
