@@ -441,6 +441,10 @@ slReverse(&list);
 return list;
 }
 
+/* Constants for selecting seq/extFile or gbSeq/gbExtFile */
+#define SEQ_TBL_SET   1
+#define GBSEQ_TBL_SET 2
+
 struct largeSeqFile
 /* Manages our large external sequence files.  Typically there will
  * be around four of these.  This basically caches the file handle
@@ -448,13 +452,15 @@ struct largeSeqFile
 {
     struct largeSeqFile *next;  /* Next in list. */
     char *path;                 /* Path name for file. */
+    int seqTblSet;              /* extFile or gbExtFile */
     HGID id;                    /* Id in extFile table. */
     int fd;                     /* File handle. */
     };
 
 static struct largeSeqFile *largeFileList;  /* List of open large files. */
 
-struct largeSeqFile *largeFileHandle(HGID extId)
+static struct largeSeqFile *largeFileHandle(HGID extId,
+                                            int seqTblSet)
 /* Return handle to large external file. */
 {
 struct largeSeqFile *lsf;
@@ -462,7 +468,7 @@ struct largeSeqFile *lsf;
 /* Search for it on existing list and return it if found. */
 for (lsf = largeFileList; lsf != NULL; lsf = lsf->next)
     {
-    if (lsf->id == extId)
+    if ((lsf->id == extId) && (lsf->seqTblSet == seqTblSet))
         return lsf;
     }
 
@@ -477,7 +483,8 @@ for (lsf = largeFileList; lsf != NULL; lsf = lsf->next)
     char *path;
 
     /* Query database to find full path name and size file should be. */
-    sprintf(query, "select path,size from extFile where id=%u", extId);
+    sprintf(query, "select path,size from %s where id=%u", 
+            ((seqTblSet == GBSEQ_TBL_SET) ? "gbExtFile" : "extFile"), extId);
     sr = sqlGetResult(conn,query);
     if ((row = sqlNextRow(sr)) == NULL)
         errAbort("Database inconsistency - no external file with id %lu", extId);
@@ -488,6 +495,7 @@ for (lsf = largeFileList; lsf != NULL; lsf = lsf->next)
     size = sqlUnsigned(row[1]);
     if (fileSize(path) != size)
         errAbort("External file %s has changed, need to resync database.  Old size %ld, new size %ld", path, size, fileSize(path));
+    lsf->seqTblSet = seqTblSet;
     lsf->id = extId;
     if ((lsf->fd = open(path, O_RDONLY)) < 0)
         errAbort("Couldn't open external file %s", path);
@@ -511,12 +519,10 @@ if (read(fd, buf, size) < size)
 return buf;
 }
 
-
-
-int hRnaSeqAndIdx(char *acc, struct dnaSeq **retSeq, HGID *retId, char *gbdate, struct sqlConnection *conn)
-/* Return sequence for RNA and it's database ID. */
+static char* getSeqAndId(struct sqlConnection *conn, char *acc, HGID *retId,
+                         char* gbDate)
+/* Return sequence as a fasta record in a string and it's database ID. */
 {
-//struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr;
 char **row;
 char query[256];
@@ -525,74 +531,73 @@ HGID extId;
 size_t size;
 unsigned long offset;
 char *buf;
+int seqTblSet = SEQ_TBL_SET;
 struct dnaSeq *seq;
 struct largeSeqFile *lsf;
-
-char *gb_date;
 
 sprintf(query,
    "select id,extFile,file_offset,file_size,gb_date from seq where seq.acc = '%s'",
    acc);
 sr = sqlMustGetResult(conn, query);
 row = sqlNextRow(sr);
-if (row == NULL) return(-1);
-
-//    errAbort("No sequence for %s in database", acc);
-*retId = sqlUnsigned(row[0]);
-extId = sqlUnsigned(row[1]);
-offset = sqlUnsigned(row[2]);
-size = sqlUnsigned(row[3]);
-gb_date = row[4];
-
-strcpy(gbdate, gb_date);
-
-lsf = largeFileHandle(extId);
-buf = readOpenFileSection(lsf->fd, offset, size, lsf->path);
-*retSeq = seq = faFromMemText(buf);
-sqlFreeResult(&sr);
-//hFreeConn(&conn);
-return(0);
-}
-
-static char* getSeqAndId(char *acc, HGID *retId)
-/* Return sequence as a fasta record in a string and it's database ID. */
-{
-struct sqlConnection *conn = hAllocConn();
-struct sqlResult *sr;
-char **row;
-char query[256];
-int fd;
-HGID extId;
-size_t size;
-unsigned long offset;
-char *buf;
-struct dnaSeq *seq;
-struct largeSeqFile *lsf;
-
-sprintf(query,
-   "select id,extFile,file_offset,file_size from seq where seq.acc = '%s'",
-   acc);
-sr = sqlMustGetResult(conn, query);
-row = sqlNextRow(sr);
+if ((row == NULL) && sqlTableExists(conn, "gbSeq"))
+    {
+    /* try gbSeq table */
+    sqlFreeResult(&sr);
+    sprintf(query,
+            "select id,gbExtFile,file_offset,file_size,gb_date from gbSeq where gbSeq.acc = '%s'",
+            acc);
+    sr = sqlMustGetResult(conn, query);
+    row = sqlNextRow(sr);
+    seqTblSet = GBSEQ_TBL_SET;
+    }
 if (row == NULL)
-    errAbort("No sequence for %s in database", acc);
+    {
+    sqlFreeResult(&sr);
+    return NULL;
+    }
 if (retId != NULL)
     *retId = sqlUnsigned(row[0]);
 extId = sqlUnsigned(row[1]);
 offset = sqlUnsigned(row[2]);
 size = sqlUnsigned(row[3]);
-lsf = largeFileHandle(extId);
+if (gbDate != NULL)
+    strcpy(gbDate, row[4]);
+
+lsf = largeFileHandle(extId, seqTblSet);
 buf = readOpenFileSection(lsf->fd, offset, size, lsf->path);
 sqlFreeResult(&sr);
-hFreeConn(&conn);
 return buf; 
+}
+static char* mustGetSeqAndId(struct sqlConnection *conn, char *acc,
+                             HGID *retId, char* gbDate)
+/* Return sequence as a fasta record in a string and it's database ID,
+ * abort if not found */
+{
+char *buf= getSeqAndId(conn, acc, retId, gbDate);
+if (buf == NULL)
+    errAbort("No sequence for %s in database", acc);
+return buf;
+}
+
+int hRnaSeqAndIdx(char *acc, struct dnaSeq **retSeq, HGID *retId, char *gbdate, struct sqlConnection *conn)
+/* Return sequence for RNA and it's database ID. */
+{
+char *buf = getSeqAndId(conn, acc, retId, gbdate);
+if (buf == NULL)
+    return -1;
+*retSeq = faFromMemText(buf);
+return 0;
 }
 
 void hRnaSeqAndId(char *acc, struct dnaSeq **retSeq, HGID *retId)
 /* Return sequence for RNA and it's database ID. */
 {
-char *buf = getSeqAndId(acc, retId);
+struct sqlConnection *conn = hAllocConn();
+char *buf = mustGetSeqAndId(conn, acc, retId, NULL);
 *retSeq = faFromMemText(buf);
+hFreeConn(&conn);
+
 }
 
 struct dnaSeq *hExtSeq(char *acc)
@@ -613,7 +618,9 @@ return hExtSeq(acc);
 aaSeq *hPepSeq(char *acc)
 /* Return sequence for a peptide. */
 {
-char *buf = getSeqAndId(acc, NULL);
+struct sqlConnection *conn = hAllocConn();
+char *buf = mustGetSeqAndId(conn, acc, NULL, NULL);
+hFreeConn(&conn);
 return faSeqFromMemText(buf, FALSE);
 }
 

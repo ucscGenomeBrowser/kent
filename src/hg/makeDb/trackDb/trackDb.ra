@@ -290,6 +290,15 @@ visibility hide
 color 12,12,120
 type genePred refPep refMrna
 
+track mgcGenes
+shortLabel MGC Clones
+longLabel Mammalian Gene Collection Clones
+group genes
+priority 36
+visibility dense
+color 12,12,120
+type genePred
+
 track genieAlt
 shortLabel AltGenie
 longLabel Genie Gene Predictions from Affymetrix
@@ -501,45 +510,6 @@ group rna
 priority 58
 visibility hide
 spectrum on
-type psl est
-
-track mgc_mrna
-shortLabel MGC mRNAs
-longLabel Mammalian Gene Collection mRNAs
-group rna
-priority 59
-visibility hide
-spectrum on
-type psl .
-
-track mgcNcbiPicks
-shortLabel NCBI MGC Picks
-longLabel NCBI Clone Picks for the Mammalian Gene Collection
-group rna
-priority 60
-visibility hide
-spectrum on
-private 1
-type psl est
-
-track mgcNcbiSplicedPicks
-shortLabel NCBI Spliced Picks
-longLabel NCBI Clone Picks for the Mammalian Gene Collection That Have Been Spliced
-group rna
-priority 61
-visibility hide
-spectrum on
-private 1
-type psl est
-
-track mgcUcscPicks
-shortLabel UCSC MGC Picks
-longLabel UCSC Clone Picks for the Mammalian Gene Collection
-group rna
-priority 62
-visibility hide
-spectrum on
-private 1
 type psl est
 
 track xenoMrna

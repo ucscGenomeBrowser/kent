@@ -2632,7 +2632,7 @@ else if(sameWord(type,"locusLink"))
     printf("<B>Stanford SOURCE Locus Link:</B> <A HREF=\"%soption=LLID&criteria=%s&choice=Gene\" TARGET=_blank>%s</A><BR>\n",stanSourceLink,acc,acc);
 }
 
-void printRnaSpecs(char *acc)
+void printRnaSpecs(char *acc, boolean isMgcTrack)
 /* Print auxiliarry info on RNA. */
 {
 struct dyString *dy = newDyString(1024);
@@ -2642,11 +2642,34 @@ char **row;
 char *type,*direction,*source,*organism,*library,*clone,*sex,*tissue,
      *development,*cell,*cds,*description, *author,*geneName,
      *date,*productName;
+char mgcGeneName[64];
+int mgcImageId = 0;
 int seqSize,fileSize;
 long fileOffset;
 char *ext_file;	
 boolean hasVersion = hHasField("mrna", "version");
+boolean haveGbSeq = sqlTableExists(conn, "gbSeq");
+char *seqTbl = haveGbSeq ? "gbSeq" : "seq";
 char *version = NULL;
+
+/* If this is an MGC mRNA table, we get some special info from
+ * the mgcStatus table.*/
+strcpy(mgcGeneName, "");
+if (isMgcTrack)
+    {
+    char query[128];
+    safef(query, sizeof(query),
+          "select gene,imageId from mgcStatus where acc = '%s'", acc);
+    sr = sqlMustGetResult(conn, query);
+    row = sqlNextRow(sr);
+    if (row != NULL)
+        {
+        strcpy(mgcGeneName, row[0]);
+        mgcImageId = sqlUnsigned(row[1]);
+        }
+    sqlFreeResult(&sr);
+    }
+
 
 /* This sort of query and having to keep things in sync between
  * the first clause of the select, the from clause, the where
@@ -2658,13 +2681,17 @@ char *version = NULL;
  * and these RNA fields are searched.  So it looks like
  * the code below stays.  Be really careful when you modify
  * it. */
-
+dyStringAppend(dy,
+               "select mrna.type,mrna.direction,"
+               "source.name,organism.name,library.name,mrnaClone.name,"
+               "sex.name,tissue.name,development.name,cell.name,cds.name,"
+               "description.name,author.name,geneName.name,productName.name,");
+if (haveGbSeq)
     dyStringAppend(dy,
-                   "select mrna.type,mrna.direction,"
-                   "source.name,organism.name,library.name,mrnaClone.name,"
-                   "sex.name,tissue.name,development.name,cell.name,cds.name,"
-                   "description.name,author.name,geneName.name,productName.name,"
-                   "seq.size,seq.gb_date,seq.extFile,seq.file_offset,seq.file_size ");
+                   "gbSeq.size,gbSeq.gb_date,gbSeq.gbExtFile,gbSeq.file_offset,gbSeq.file_size ");
+else
+    dyStringAppend(dy,
+                "seq.size,seq.gb_date,seq.extFile,seq.file_offset,seq.file_size ");
 
 /* If the mrna table has a "version" column then will show it */
 if (hasVersion) 
@@ -2673,12 +2700,11 @@ if (hasVersion)
                    ", mrna.version ");    
     } 
 
-dyStringAppend(dy,
-               " from mrna,seq,source,organism,library,mrnaClone,sex,tissue,"
-               "development,cell,cds,description,author,geneName,productName ");
-
 dyStringPrintf(dy,
-               " where mrna.acc = '%s' and mrna.id = seq.id ", acc);
+               " from mrna,%s,source,organism,library,mrnaClone,sex,tissue,"
+               "development,cell,cds,description,author,geneName,productName "
+               " where mrna.acc = '%s' and mrna.id = %s.id ",
+               seqTbl, acc, seqTbl);
 dyStringAppend(dy,
                "and mrna.source = source.id and mrna.organism = organism.id "
                "and mrna.library = library.id and mrna.mrnaClone = mrnaClone.id "
@@ -2705,17 +2731,38 @@ if (row != NULL)
         {
         version = row[20];
         }
-        
+
+
     /* Now we have all the info out of the database and into nicely named
      * local variables.  There's still a few hoops to jump through to 
      * format this prettily on the web with hyperlinks to NCBI. */
-    printf("<H2>Information on %s <A HREF=\"", type);
+    if (isMgcTrack)
+        printf("<H2>Information on MGC Clone <A HREF=\"");
+    else
+        printf("<H2>Information on %s <A HREF=\"", type);
     printEntrezNucleotideUrl(stdout, acc);
     printf("\" TARGET=_blank>%s</A></H2>\n", acc);
 
+    if (isMgcTrack && (mgcImageId > 0))
+        {
+        char *mgcOrganism;
+        if (startsWith("hg", database))
+            mgcOrganism = "Hs";
+        else if (startsWith("mm", database))
+            mgcOrganism = "Mm";
+        else
+            errAbort("can't map database \"%s\" to a MGC organism", database);
+        
+        printf("<B>MGC clone information:</B> ");
+        printf("<A href=\"http://mgc.nci.nih.gov/Reagents/CloneInfo?ORG=%s&IMAGE=%d\" TARGET=_blank>IMAGE:%d</A><BR>", 
+               mgcOrganism, mgcImageId, mgcImageId);
+        }
     printf("<B>description:</B> %s<BR>\n", description);
 
-    medlineLinkedLine("gene", geneName, geneName);
+    if (isMgcTrack && (strlen(mgcGeneName) > 0))
+        medlineLinkedLine("gene", mgcGeneName, mgcGeneName);
+    else
+        medlineLinkedLine("gene", geneName, geneName);
     medlineLinkedLine("product", productName, productName);
     dyStringClear(dy);
     gbToEntrezAuthor(author, dy);
@@ -2744,7 +2791,6 @@ if (row != NULL)
     
     /* Put up Stanford Source link. */
     printStanSource(acc, type);
-    
 
     if ((strstr(hgGetDb(), "mm") != NULL) 
         && hTableExists("rikenaltid"))
@@ -2752,6 +2798,7 @@ if (row != NULL)
         sqlFreeResult(&sr);
 //!	printRikenInfo(acc, conn);
 	}
+
     }
 else
     {
@@ -2799,6 +2846,27 @@ for (same = 1; same >= 0; same -= 1)
 printf("</TT></PRE>");
 }
 
+struct psl *getAlignments(struct sqlConnection *conn, char *table, char *acc)
+/* get the list of alignments for the specified acc */
+{
+struct sqlResult *sr = NULL;
+char **row;
+struct psl *psl, *pslList = NULL;
+boolean hasBin;
+char splitTable[64];
+char query[256];
+hFindSplitTable(seqName, table, splitTable, &hasBin);
+safef(query, sizeof(query), "select * from %s where qName = '%s'", table, acc);
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    psl = pslLoad(row+hasBin);
+    slAddHead(&pslList, psl);
+    }
+sqlFreeResult(&sr);
+slReverse(&pslList);
+return pslList;
+}
 
 void doHgRna(struct trackDb *tdb, char *acc)
 /* Click on an individual RNA. */
@@ -2809,11 +2877,9 @@ struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr = NULL;
 char **row;
 char *type;
-boolean hasBin;
-char splitTable[64];
 char *table;
 int start = cartInt(cart, "o");
-struct psl *pslList = NULL, *psl;
+struct psl *pslList = NULL;
 
 if (sameString("xenoMrna", track) || sameString("xenoBestMrna", track) || sameString("xenoEst", track))
     {
@@ -2844,25 +2910,16 @@ else
 /* Print non-sequence info. */
 cartWebStart(cart, acc);
 
-printRnaSpecs(acc);
+printRnaSpecs(acc, FALSE);
 
 /* Get alignment info. */
-hFindSplitTable(seqName, table, splitTable, &hasBin);
-sprintf(query, "select * from %s where qName = '%s'", table, acc);
-sr = sqlGetResult(conn, query);
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-    psl = pslLoad(row+hasBin);
-    slAddHead(&pslList, psl);
-    }
-sqlFreeResult(&sr);
-slReverse(&pslList);
-
+pslList = getAlignments(conn, table, acc);
 htmlHorizontalLine();
 printf("<H3>%s/Genomic Alignments</H3>", type);
 printAlignments(pslList, start, "htcCdnaAli", table, acc);
 
 printTrackHtml(tdb);
+hFreeConn(&conn);
 }
 
 void doRikenRna(struct trackDb *tdb, char *item)
@@ -5238,6 +5295,31 @@ htmlHorizontalLine();
 pepTbl = sqlTableExists(conn, "refPep") ? "refPep" : "seq";
 geneShowPosAndLinks(rl->mrnaAcc, rl->protAcc, tdb, pepTbl, "htcTranslatedProtein",
 	"htcRefMrna", "htcGeneInGenome", "mRNA Sequence");
+
+printTrackHtml(tdb);
+hFreeConn(&conn);
+}
+
+void doMgcGenes(struct trackDb *tdb, char *acc)
+/* Process click on a mgcGenes track. */
+{
+struct sqlConnection *conn = hAllocConn();
+int start = cartInt(cart, "o");
+struct psl *pslList = NULL;
+
+/* Print non-sequence info. */
+cartWebStart(cart, acc);
+
+printRnaSpecs(acc, TRUE);
+htmlHorizontalLine();
+geneShowPosAndLinks(acc, acc, tdb, NULL, NULL,
+                    "htcGeneMrna", "htcGeneInGenome", "mRNA Sequence");
+
+/* print alignments that track was based on */
+pslList = getAlignments(conn, "all_mrna", acc);
+htmlHorizontalLine();
+printf("<H3>mRNA/Genomic Alignments</H3>");
+printAlignments(pslList, start, "htcCdnaAli", "all_mrna", acc);
 
 printTrackHtml(tdb);
 hFreeConn(&conn);
@@ -10427,6 +10509,10 @@ else if (sameWord(track, "ensGene"))
 else if (sameWord(track, "refGene"))
     {
     doRefGene(tdb, item);
+    }
+else if (sameWord(track, "mgcGenes"))
+    {
+    doMgcGenes(tdb, item);
     }
 else if (sameWord(track, "genieKnown"))
     {
