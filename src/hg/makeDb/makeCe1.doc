@@ -1181,3 +1181,32 @@ LOAD SOFTBERRY GENES (DONE - 2003-08-14 - Hiram)
 
     # Add entry to worm/ce1/trackDb.ra and add specific
     # softberryGene.html file
+
+CREATE ORFTOGENE TABLE (Used by hgGene and hgNear)
+   mkdir /cluster/data/ce1/bed/orfToGene
+   cd !$
+   wget ftp://ftp.wormbase.org/pub/wormbase/GENE_DUMPS/gene_names.txt
+   awk -F '\t' '$2 == "Caenorhabditis elegans" && $3 == "Gene" {printf("%s\t%s\n", $4, $1)}' gene_names.txt > orfToGene.txt
+   hgCeOrfToGene ce1 gene_names.txt sangerGene orfToGene
+
+CREATE SANGER LINKS TABLE FROM WORMBASE INFO (used by hgGene and hgNear)
+   mkdir /cluster/data/ce1/bed/steinHelp
+# Mail Lincoln Stein and ask for mappings from wormPep to
+# SwissProt and from ORF to wormPep to description.  Place
+# these files in the steinHelp directory:
+#	seqPepDesc.ace  - contains ORF/WormPep/Description
+#	spWp.ace - contains WormPep/SwissProt
+# Then go to the AQL search page at
+# http://www.wormbase.org/db/searches/aql_query.
+# and create the following files in that directory:
+#    wbGeneClass.txt - associates 3 letter first part of worm gene
+#             name with a brief description.  Produced with query:
+#             select l,l->Description  from l in class Gene_Class
+#    wbConcise.txt - associates worm gene name with a several
+#             sentence description.  Produces with query:
+#             select l,g from l in class Locus, g in l->Gene_information[Provisional_description]
+    hgWormLinks spWp.ace seqPepDesc.ace wbConcise.txt wbGeneClass.txt ../orfToGene/orfToGene sangerLinks.txt
+    hgsql ce1 < ~/kent/src/hg/near/hgWormLinks/sangerLinks.sql
+    hgsql ce1 <<end
+    load data local infile 'sangerLinks.txt' into table sangerLinks.sql
+
