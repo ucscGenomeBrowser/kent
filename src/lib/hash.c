@@ -8,7 +8,7 @@
 #include "hash.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: hash.c,v 1.23 2004/07/16 19:04:54 kent Exp $";
+static char const rcsid[] = "$Id: hash.c,v 1.24 2005/02/05 04:49:45 markd Exp $";
 
 bits32 hashCrc(char *string)
 /* Returns a CRC value on string. */
@@ -318,8 +318,8 @@ return cookie;
 }
 
 struct hashEl* hashNext(struct hashCookie *cookie)
-/* Return the next entry in the hash table. Do not modify hash table
- * while this is being used. */
+/* Return the next entry in the hash table, or NULL if no more. Do not modify
+ * hash table while this is being used. */
 {
 /* NOTE: if hashRemove were coded to track the previous entry during the
  * search and then use it to do the remove, it would be possible to
@@ -339,6 +339,17 @@ if (cookie->nextEl == NULL)
         cookie->nextEl = cookie->hash->table[cookie->idx];
     }
 return retEl;
+}
+
+void* hashNextVal(struct hashCookie *cookie)
+/* Return the next value in the hash table, or NULL if no more. Do not modify
+ * hash table while this is being used. */
+{
+struct hashEl *hel = hashNext(cookie);
+if (hel == NULL)
+    return NULL;
+else
+    return hel->val;
 }
 
 void freeHash(struct hash **pHash)

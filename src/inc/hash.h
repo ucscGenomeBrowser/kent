@@ -125,8 +125,13 @@ struct hashCookie hashFirst(struct hash *hash);
  * The first call to hashNext will return the first entry in the table. */
 
 struct hashEl* hashNext(struct hashCookie *cookie);
-/* Return the next entry in the hash table. Do not modify hash table
- * while this is being used. (see note in code if you want to fix this) */
+/* Return the next entry in the hash table, or NULL if no more. Do not modify
+ * hash table while this is being used. (see note in code if you want to fix
+ * this) */
+
+void *hashNextVal(struct hashCookie *cookie);
+/* Return the next value in the hash table, or NULL if no more. Do not modify
+ * hash table while this is being used. */
 
 struct hash *newHash(int powerOfTwoSize);
 /* Returns new hash table. */
