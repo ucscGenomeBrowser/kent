@@ -373,3 +373,28 @@ end
     # Making tables to cluster splice varients
     ssh hgwdev
     hgClusterGenes sacCer1 sgdGene sgdIsoforms sgdCanonical
+
+    # Make self mapping table for expression. (Done)
+    echo 'create table sgdToSgd ( \
+          name varchar(10) not null, \
+	  value varchar(10) not null, \
+	  PRIMARY KEY(name), \
+	  UNIQUE (value));' | hgsql sacCer1
+    echo 'select name from sgdGene;' | hgsql -N sacCer1 \
+         | awk '{printf("%s\t%s\n", $1, $1);}' > sgdToSgd.tab
+    echo 'load data local infile "sgdToSgd.tab" into table sgdToSgd' \
+         | hgsql sacCer1
+
+    # Make expression similarity table. (Done)
+    cd ~/src/hg/near/hgExpDistance
+    hgExpDistance sacCer1 hgFixed.yeastChoCellCycle hgFixed.yeastChoCellCycleExps choExpDistance 
+
+    # Extract peptides from genome database into fasta file
+    # and create a blast database out of them. (IN PROGRESS JK)
+    mkdir -p /cluster/data/sacCer1/bed/blastp
+    cd /cluster/data/sacCer1/bed/blastp
+    pepPredToFa sacCer1 sgdPep sgdPep.faa
+    formatdb -i sgdPep.faa -t sgdPep -n sgdPep
+    cd ..
+
+
