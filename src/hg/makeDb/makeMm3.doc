@@ -2544,6 +2544,12 @@ hgLoadBlastTab mm3 knownBlastTab *.tab
 # Create table that maps between known genes and RefSeq
 hgMapToGene mm3 refGene knownGene knownToRefSeq
 
+# Create table that maps between known genes and LocusLink (DONE 5/5/04 Fan)
+hgsql --skip-column-names -e "select mrnaAcc,locusLinkId from refLink" mm3 \
+        > refToLl.txt
+hgMapToGene mm3 refGene knownGene knownToLocusLink -lookup=refToLl.txt
+#       row count is 30116 
+
 # Create a table that maps between known genes and 
 # the nice affy expression data.
 hgMapToGene mm3 affyU74  knownGene knownToU74
