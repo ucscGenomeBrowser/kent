@@ -7,8 +7,8 @@ MYLIBS =  $(MYLIBDIR)/jkOwnLib.a $(MYLIBDIR)/jkweb.a
 O = blat.o
 
 blat: $O $(MYLIBS)
-	gcc -ggdb -o ../../bin/$(MACHTYPE)/blat.x $O $(MYLIBS) $L
-#	strip ../../bin/$(MACHTYPE)/blat.x
+	gcc -ggdb -o ../../bin/$(MACHTYPE)/blat $O $(MYLIBS) $L
+	strip ../../bin/$(MACHTYPE)/blat
 
 all:
 	cd ../lib; make

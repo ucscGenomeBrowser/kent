@@ -1,10 +1,14 @@
 21:
-     o  Adding banded-Smith-Waterman extension.  Virtually eliminated
-	FuzzyFinder, though it still gets called as a lost resort to
-	fish out small internal exons.  A single 11-mer hit is sufficient
-	to grab initial or terminal exons.  These changes currently are
-	available only in blat, not gfClient/gfServer, and only when the
-	-band parameter is used.
+     Added -fine parameter.  This will result in improved alignments
+     for high quality mRNA sequences.  When -fine is used a banded
+     Smith-Waterman is used in the extension phase,  and the program
+     looks harder in various ways for small initial or terminal
+     exons.   Currently I don't recommend using -fine on EST
+     sequences, as EST ends tend to be of low quality,  and the
+     short additional matches it finds are as likely to be by
+     chance as real hit.  For fully sequenced mRNAs though the -fine
+     option is an advantage.  It is only available currently in
+     blat, not in gfClient.   
 
 20:
      o  Recompiled without -o3 in Linux.  This recent change to a makefile

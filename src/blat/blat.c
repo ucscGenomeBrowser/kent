@@ -122,16 +122,19 @@ printf(
   "   -dots=N     Output dot every N sequences to show program's progress\n"
   "   -trimT      Trim leading poly-T\n"
   "   -noTrimA    Don't trim trailing poly-A\n"
-  "   -trimHardA  Remove poly-A tail from qSize as well as alignments in psl output\n"
-  "   -fastMap    Run for fast DNA/DNA remapping - not allowing introns, requiring high %%ID\n"
-  "   -band       Use new banded code\n"
+  "   -trimHardA  Remove poly-A tail from qSize as well as alignments in \n"
+  "               psl output\n"
+  "   -fastMap    Run for fast DNA/DNA remapping - not allowing introns, \n"
+  "               requiring high %%ID\n"
   "   -out=type   Controls output file format.  Type is one of:\n"
-  "                   psl - Default.  Tab separated format without actual sequence\n"
+  "                   psl - Default.  Tab separated format, no sequence\n"
   "                   pslx - Tab separated format with sequence\n"
   "                   axt - blastz-associated axt format\n"
   "                   maf - multiz-associated maf format\n"
   "                   wublast - similar to wublast format\n"
   "                   blast - similar to NCBI blast format\n"
+  "   -fine       For high quality mRNAs look harder for small initial and\n"
+  "               terminal exons.  Not recommended for ESTs\n"
   , gfVersion
   );
 exit(-1);
@@ -354,7 +357,7 @@ void searchOneStrand(struct dnaSeq *seq, struct genoFind *gf, FILE *psl,
 	boolean isRc, struct hash *maskHash, Bits *qMaskBits)
 /* Search for seq in index, align it, and write results to psl. */
 {
-gfLongDnaInMem(seq, gf, isRc, minScore, qMaskBits, gvo, fastMap, optionExists("band"));
+gfLongDnaInMem(seq, gf, isRc, minScore, qMaskBits, gvo, fastMap, optionExists("fine"));
 }
 
 
