@@ -10,9 +10,10 @@
 #include "jksql.h"
 #include "genePred.h"
 
-static char const rcsid[] = "$Id: ldHgGene.c,v 1.13 2003/12/19 19:12:39 braney Exp $";
+static char const rcsid[] = "$Id: ldHgGene.c,v 1.14 2004/01/15 18:58:36 markd Exp $";
 
 char *exonType = "exon";	/* Type field that signifies exons. */
+boolean requireCDS = FALSE;     /* should genes with CDS be dropped */
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -22,6 +23,7 @@ static struct optionSpec optionSpecs[] = {
     {"nonCoding", OPTION_BOOLEAN},
     {"gtf", OPTION_BOOLEAN},
     {"predTab", OPTION_BOOLEAN},
+    {"requireCDS", OPTION_BOOLEAN},
     {NULL, 0}
 };
 
@@ -36,7 +38,8 @@ errAbort(
     "     -oldTable    Don't overwrite what's already in table\n"
     "     -noncoding   Forces whole prediction to be UTR\n"
     "     -gtf         input is GTF, stop codon is not in CDS\n"
-    "     -predTab     input is already in genePredTab format (one file only)\n");
+    "     -predTab     input is already in genePredTab format (one file only)\n"
+    "     -requireCDS  discard genes that don't have CDS annotation\n");
 }
 
 char *createString = 
@@ -141,7 +144,10 @@ for (group = gff->groupList; group != NULL; group = group->next)
 	{
 	if (nonCoding)
 	    gp->cdsStart = gp->cdsEnd = 0;
-	slAddHead(&gpList, gp);
+        if (requireCDS && (gp->cdsStart == gp->cdsEnd))
+            genePredFree(&gp);
+        else
+            slAddHead(&gpList, gp);
 	}
     }
 printf("%d gene predictions\n", slCount(gpList));
@@ -166,6 +172,7 @@ if (argc < 3)
 if (optionExists("exon") && optionExists("gtf"))
     errAbort("can't specify -exon= with -gtf");
 exonType = optionVal("exon", exonType);
+requireCDS = optionExists("requireCDS");
 if (optionExists("predTab"))
     loadIntoDatabase(argv[1], argv[2], argv[3]);
 else
