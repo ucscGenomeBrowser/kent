@@ -275,7 +275,7 @@ sub makeDir($) {
           if (!-d $path) {
               mkdir($path) || gbError("mkdir $path");
               # make sure group write/stick is maintained
-              chmod(02775, $path) || gbError("chmod $path);
+              chmod(02775, $path) || gbError("chmod $path");
           }
       }
   }
