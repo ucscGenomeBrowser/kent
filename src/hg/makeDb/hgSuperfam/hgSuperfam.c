@@ -71,12 +71,15 @@ while (row2 != NULL)
 			
     strcpy(gene_name, name);
 
-    // get rid of version number
+    
+    /* get rid of version number */
     chp = strstr(name, ".");
     if (chp != NULL) *chp = '\0';
 
-    sprintf(cond_str, "transcript_name='%s'", name);
-    translation_name = sqlGetField(conn, genomeDb, "ensTranscript", "translation_name", cond_str);
+    sprintf(cond_str, "transcript='%s'", name);
+    translation_name = sqlGetField(conn, genomeDb, "ensemblXref3", "protein", cond_str);
+    //sprintf(cond_str, "transcript='%s'", name);
+    //translation_name = sqlGetField(conn, genomeDb, "ensGtp2", "protein", cond_str);
     if (translation_name == NULL) 
 	{
 	printf("transcript not found, skipping %s\n", name);
@@ -84,6 +87,10 @@ while (row2 != NULL)
 	}
     else
 	{
+	/* get rid of version number */
+    	chp = strstr(translation_name, ".");
+    	if (chp != NULL) *chp = '\0';
+
     	sprintf(query, "select * from %s.sfAssign where seqID='%s'", genomeDb, translation_name);
     	sr = sqlMustGetResult(conn, query);
     	row = sqlNextRow(sr);
@@ -102,7 +109,7 @@ while (row2 != NULL)
  	    region	= row[3];
  	    eValue	= row[4];
  	    sfID	= row[5];
- 	    sfDesc	= row[6];	// 0302 and other supfam releases has an error here
+ 	    sfDesc	= row[6];	/* 0302 and other supfam releases has an error here */
 		
 	    sprintf(cond_str, "id=%s", sfID);
 	    sfDesc  = sqlGetField(connSf, genomeDb, "sfDes", "description", cond_str);
