@@ -3,7 +3,7 @@
  * about a particular window on a chromosome. This scheme
  * will work without modification for chromosome sizes up
  * to half a gigaBase.  The finest sized bin is 128k (1<<17).
- * The next coarsest is 8x as big (1<<3).  There's a hierarchy
+ * The next coarsest is 8x as big (1<<13).  There's a hierarchy
  * of bins with the chromosome itself being the final bin.
  * Features are put in the finest bin they'll fit in. 
  *
