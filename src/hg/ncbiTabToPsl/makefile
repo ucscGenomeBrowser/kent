@@ -9,7 +9,7 @@ BINDIR = $(HOME)/bin/$(MACHTYPE)
 
 ncbiTabToPsl: $O $(MYLIBS)
 	gcc -ggdb -o ncbiTabToPsl $O $(MYLIBS) $L
-	mkdir -p ${BINDIR}
+	${MKDIR} ${BINDIR}
 	cp -f ncbiTabToPsl ${BINDIR}
 	strip ${BINDIR}/ncbiTabToPsl
 

@@ -30,7 +30,7 @@ genePred: output
 	diff expected/testChrom.gp output/testChrom.gp
 
 output:
-	mkdir -p output
+	${MKDIR} output
 
 clean:
 	rm -rf output

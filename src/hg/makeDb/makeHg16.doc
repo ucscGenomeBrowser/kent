@@ -2593,6 +2593,29 @@ end
     ldHgGene hg16 twinscan chr_gtf/chr*.gtf -gtf
     hgPepPred hg16 generic twinscanPep chr_ptx/chr*-fixed.fa
 
+# RAW TWINSCAN 1.3 GENE PREDICTIONS, WITHOUT FILTERING OF PSEUDOGENES
+# (2004-01-11 acs)
+
+    cd /cluster/data/hg16/bed
+    mkdir twinscan_raw.2004-01-11
+    ln -s twinscan.2004-01-11 twinscan_raw
+    cd twinscan_raw
+    tarFile=NCBI34_Hs_TS13_11_11_03.tgz
+    wget http://genes.cs.wustl.edu/predictions/human/NCBI34_TS13/$tarFile
+    wget http://genes.cs.wustl.edu/predictions/human/NCBI34_TS13/md5sum.txt
+
+    # check file transferred correctly
+    md5sum $tarFile | diff - md5sum.txt
+    tar xvfz $tarFile
+    unset tarFile 
+
+    # pare down protein FASTA header to id and add missing .a:
+    foreach c (1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 X Y)
+      echo chr$c
+      perl -wpe 's/^(\>\S+)\s.*$/$1.a/' < chr_ptx/chr$c.ptx > chr_ptx/chr$c-fixed.fa
+    end
+    ldHgGene hg16 twinscan_raw chr_gtf/chr*.gtf -gtf
+    hgPepPred hg16 generic twinscanrawPep chr_ptx/chr*-fixed.fa
 
 # LOAD GENEID GENES (DONE - 2003-09-02 - Hiram)
     mkdir -p /cluster/data/hg16/bed/geneid/download
@@ -3518,21 +3541,22 @@ o - # ssh hgwdev
     mv hg16.nci60.bed /cluster/store4/gs.17/build34/bed/nci60
     rm *.psl
 
-LOAD AFFYRATIO [GNF done jk Sept 18, 2003] 
-
-    # Set up cluster job to align targets to hg16
+# LOAD AFFYRATIO [GNF in progress jk Sept 19, 2003] 
+# LOAD AFFYRATIO U95Av2 sequences [DONE hartera Feb 2, 2004]
+# Used consensus/exemplar sequences instead of target sequences
+    # Set up cluster job to align consenesus/exemplars to hg16
     ssh kkr1u00
     cd /cluster/data/hg16/bed
-    rm -rf affyGnf/
-    mkdir affyGnf
-    cd affyGnf/
+    rm -rf affyGnf.2004-01-28/
+    mkdir affyGnf.2004-01-28
+    cd affyGnf.2004-01-28/
     mkdir -p /iscratch/i/affy
-    cp /projects/compbio/data/microarray/affyGnf/sequences/HG-U95/HG-U95Av2_all2.fa /iscratch/i/affy
+    cp /projects/compbio/data/microarray/affyGnf/sequences/HG-U95/HG-U95Av2_all.fa /iscratch/i/affy
     iSync
 
     ssh kk
-    cd /cluster/data/hg16/bed/affyGnf
-    ls -1 /iscratch/i/affy/HG-U95Av2_all2.fa > affy.lst
+    cd /cluster/data/hg16/bed/affyGnf.2004-01-28
+    ls -1 /iscratch/i/affy/HG-U95Av2_all.fa > affy.lst
     ls -1 /scratch/hg/gs.17/build34/trfFa/ > allctg.lst
     echo '#LOOP\n/cluster/bin/i386/blat -fine -mask=lower -minIdentity=95 -ooc=/scratch/hg/h/11.ooc  /scratch/hg/gs.17/build34/trfFa/$(path1) $(path2) {check out line+ psl/$(root1)_$(root2).psl}\n#ENDLOOP' > template.sub
     gensub2 allctg.lst affy.lst template.sub para.spec
@@ -3547,37 +3571,51 @@ LOAD AFFYRATIO [GNF done jk Sept 18, 2003]
 #Longest job:                       81s       1.35m     0.02h    0.00d
 #Submission to last job:           272s       4.53m     0.08h    0.00d
 
+# para time - 01/28/04
+#Completed: 491 of 491 jobs
+#CPU time in finished jobs:       8516s     141.94m     2.37h    0.10d  0.000 y
+#IO & Wait Time:                  1485s      24.74m     0.41h    0.02d  0.000 y
+#Average job time:                  20s       0.34m     0.01h    0.00d
+#Longest job:                      292s       4.87m     0.08h    0.00d
+#Submission to last job:           434s       7.23m     0.12h    0.01d
+
     # Do sort, best in genome filter, and convert to chromosome coordinates
-    # to create affyU95.psl.
+    # to create affyU95.psl
     pslSort dirs raw.psl tmp psl
-    pslReps -minCover=0.85 -minAli=0.95 raw.psl contig.psl /dev/null
+    
+    # change alignment parameters for these sequences (provided by Chuck)
+    # only use alignments that cover 50% of sequence and have identity >97% 
+    # in aligned region. low minCover as a lot of n's in these sequences
+
+    pslReps -minCover=0.5 -sizeMatters -minAli=0.97 -nearTop=0.005 raw.psl contig.psl /dev/null
     liftUp affyU95.psl ../../jkStuff/liftAll.lft warn contig.psl
 
-    # Merge with spot data and load into database.
+    # Merge with spot data and load into database. added -chip flag to 
+    # affyPslAndAtlasToBed to allow correct parsing
     ssh hgwdev
-    cd /cluster/data/hg16/bed/affyGnf
-    /cse/grads/sugnet/bin/i386/affyPslAndAtlasToBed affyU95.psl   /projects/compbiodata/microarray/affyGnf/human_atlas_U95_gnf.noquotes.txt affyRatio.bed affyRatio.exr >& affyPslAndAtlasToBed.log 
+    cd /cluster/data/hg16/bed/affyGnf.2004-01-28
+    /cluster/home/sugnet/bin/i386/affyPslAndAtlasToBed -chip=U95Av2 affyU95.psl   /projects/compbiodata/microarray/affyGnf/human_atlas_U95_gnf.noquotes.txt affyRatio.bed affyRatio.exr >& affyPslAndAtlasToBed.log 
     hgLoadBed -sqlTable=$HOME/src/hg/lib/affyRatio.sql hg16 affyRatio affyRatio.bed    
     hgLoadPsl hg16 affyU95.psl
-
     # Clean up
     rm -r psl tmp err affyRatio.bed affyRatio.exr bed.tab scores.tab *.debug batch.bak contig.psl raw.psl
 
 LOAD AffyUclaRatio [in progress jk Sept 19, 2003] 
-
-    # Set up cluster job to align targets to hg16
+#LOAD AffyUclaRatio and AFFY U133A and U133B sequences[DONE hartera Feb 3, 2004]
+# Used consensus/exemplar sequences instead of target sequences
+    # Set up cluster job to align consensus/exemplars to hg16
     ssh kkr1u00
     cd /cluster/data/hg16/bed
-    rm -rf affyUcla/
-    mkdir affyUcla
-    cd affyUcla/
+    rm -rf affyUcla.2004-01-28/
+    mkdir affyUcla.2004-01-28
+    cd affyUcla.2004-01-28/
     mkdir -p /iscratch/i/affy
-    cp /projects/compbio/data/microarray/affyUcla/sequences/HG-U133AB_all2.fa /iscratch/i/affy
+    cp /projects/compbio/data/microarray/affyUcla/sequences/HG-U133AB_all.fa /iscratch/i/affy
     iSync
 
     ssh kk
-    cd /cluster/data/hg16/bed/affyGnf
-    ls -1 /iscratch/i/affy/HG-U133AB_all2.fa > affy.lst
+    cd /cluster/data/hg16/bed/affyUcla.2004-01-28/
+    ls -1 /iscratch/i/affy/HG-U133AB_all.fa > affy.lst
     ls -1 /scratch/hg/gs.17/build34/trfFa/ > allctg.lst
     echo '#LOOP\n/cluster/bin/i386/blat -fine -mask=lower -minIdentity=95 -ooc=/scratch/hg/h/11.ooc  /scratch/hg/gs.17/build34/trfFa/$(path1) $(path2) {check out line+ psl/$(root1)_$(root2).psl}\n#ENDLOOP' > template.sub
     gensub2 allctg.lst affy.lst template.sub para.spec
@@ -3585,20 +3623,34 @@ LOAD AffyUclaRatio [in progress jk Sept 19, 2003]
     para create para.spec
 
     # Actually do the job with usual para try/check/push/time etc.
-
+# on 1/29/04:
+#Completed: 491 of 491 jobs
+#CPU time in finished jobs:      22915s     381.91m     6.37h    0.27d  0.001 y
+#IO & Wait Time:                  1435s      23.92m     0.40h    0.02d  0.000 y
+#Average job time:                  50s       0.83m     0.01h    0.00d
+#Longest job:                      587s       9.78m     0.16h    0.01d
+#Submission to last job:           787s      13.12m     0.22h    0.01d
 
     # Do sort, best in genome filter, and convert to chromosome coordinates
     # to create affyU133.psl.
     pslSort dirs raw.psl tmp psl
-    pslReps -minCover=0.85 -minAli=0.95 raw.psl contig.psl /dev/null
+    
+    # change alignment parameters for these sequences (provided by Chuck)
+    # only use alignments that cover 50% of sequence and have identity >97% 
+    # in aligned region. low minCover as a lot of n's in these sequences
+    pslReps -minCover=0.5 -sizeMatters -minAli=0.97 -nearTop=0.005 raw.psl contig.psl /dev/null
     liftUp affyU133.psl ../../jkStuff/liftAll.lft warn contig.psl
 
     # Merge with spot data and load into database.
     ssh hgwdev
-    cd /cluster/data/hg16/bed/affyUcla
+    cd /cluster/data/hg16/bed/affyUcla.2004-01-28/
+    # added to hashPsls to process shorter Affy probe set names
+    # assumes that names has 2 colons but when shortened to fit in the seq 
+    # database, there is only 1.
+    # e.g. full name: consensus:HG-U133A:212933_x_at; short name: HG-U133A:212933_x_at;
     affyUclaMergePslData affyUclaMergePslData -pslFile=affyU133.psl -affyFile=/projects/compbio/data/microarray/affyUcla/data/030602_ucla_normal_human_tissue_snapshot.txt -bedOut=affyUcla.bed -expRecordOut=affyUcla.expRecords -expFile=/projects/compbio/data/microarray/affyUcla/data/expNames -toDiffFile=toDiff.txt
     hgLoadBed -sqlTable=$HOME/src/hg/lib/affyUcla.sql hg16 affyUcla affyUcla.bed
-    hgLoadPsl hg16 affyUcla.psl
+    hgLoadPsl hg16 affyU133.psl
     
     # Clean up
     rm -r psl tmp err affyUcla.bed affyUcla.expRecords bed.tab *.debug batch.bak contig.psl raw.psl
@@ -3607,9 +3659,10 @@ LOAD AffyUclaRatio [in progress jk Sept 19, 2003]
     # Copy probe sequence to /gbdb if it isn't already
     mkdir -p /gbdb/hgFixed/affyProbes
     cd /gbdb/hgFixed/affyProbes
-    ln -s /projects/compbio/data/microarray/affyGnf/sequences/HG-U95/HG-U95Av2_all2.fa .
-    ln -s /projects/compbio/data/microarray/affyUcla/sequences/HG-U133AB_all2.fa .
-    hgLoadSeq hg16 /gbdb/hgFixed/affyProbes/HG-*2.fa
+    ln -s /projects/compbio/data/microarray/affyGnf/sequences/HG-U95/HG-U95Av2_all.fa .
+    ln -s /projects/compbio/data/microarray/affyUcla/sequences/HG-U133AB_all.fa .
+    hgLoadSeq hg16 /gbdb/hgFixed/affyProbes/HG-U95Av2_all.fa
+    hgLoadSeq hg16 /gbdb/hgFixed/affyProbes/HG-U133AB_all.fa
 
 # GENE BOUNDS (RNACLUSTER) (DONE 10-05-03 Chuck)
     # Create rnaCluster table (depends on {est,mrna}OrientInfo created but not checked in)

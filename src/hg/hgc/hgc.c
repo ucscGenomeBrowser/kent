@@ -55,6 +55,7 @@
 #include "cytoBand.h"
 #include "knownMore.h"
 #include "snp.h"
+#include "snpMap.h"
 #include "softberryHom.h"
 #include "borkPseudoHom.h"
 #include "sanger22extra.h"
@@ -124,8 +125,9 @@
 #include "tfbsCons.h"
 #include "simpleNucDiff.h"
 #include "hgFind.h"
+#include "botDelay.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.552 2004/01/26 22:41:53 kent Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.561 2004/02/07 20:23:10 braney Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -486,6 +488,7 @@ if (bedSize > 5)
    }
 printPos(bed->chrom, bed->chromStart, bed->chromEnd, strand, TRUE, bed->name);
 }
+
 
 void genericHeader(struct trackDb *tdb, char *item)
 /* Put up generic track info. */
@@ -1946,7 +1949,6 @@ while ((row = sqlNextRow(sr)) != NULL)
     printf("<B>Factor:</B> %s<BR>\n", tfbs.factor);
     printf("<B>Species:</B> %s<BR>\n", tfbs.species);
     printf("<B>SwissProt ID:</B> %s<BR>\n", tfbs.id);
-    printf("<A HREF=\"http://hgwdev.cse.ucsc.edu/cgi-bin/pbTracks?proteinID=%s\" target=_blank><B>Protein Browser ID:</B> </A>",  tfbs.id);
     }
 printTrackHtml(tdb);
 freez(&dupe);
@@ -3340,27 +3342,15 @@ if (row != NULL)
         {
         printf("<B>Version:</B> %s<BR>\n", version);
         }
-    if (startsWith("Human", organism))
-    {
-      /* Put up Gene Lynx */
-      if (sameWord(type, "mrna"))
-          printGeneLynxAcc(acc);
-    }
-
-    if (!startsWith("Worm", organism) && !startsWith("Fugu", organism) &&
-	!startsWith("dm", database) && !startsWith("Yeast", organism))
-    {
-	/* Put up Stanford Source link. */
-	printStanSource(acc, type);
-    }
-
-    if ((strstr(hgGetDb(), "mm") != NULL) 
-        && hTableExists("rikenaltid"))
+    if (sameWord(type, "mrna") && startsWith("Human", organism))
 	{
-        sqlFreeResult(&sr);
-//!	printRikenInfo(acc, conn);
+	printGeneLynxAcc(acc);
 	}
-
+    if (startsWith("Human", organism) || startsWith("Mouse", organism) ||
+	startsWith("Rat", organism))
+	{
+	printStanSource(acc, type);
+	}
     }
 else
     {
@@ -6095,48 +6085,53 @@ if (sqlTableExists(conn, "knownCanonical"))
     printf("<BR><BR>");
     }
 
+#ifdef NEVER /* go database has no goObjTerm... */
 // Show GO links if any exists
 hasGO = FALSE;
 goConn = sqlMayConnect("go");
 
-goAspectChar[0] = 'F';
-goAspectChar[1] = 'P';
-goAspectChar[2] = 'C';
-
-// loop for 3 GO aspects 
-for (iGoAsp = 0; iGoAsp<3; iGoAsp++)
-{
-sprintf(query, 
-        "select goID, termName from go.goObjTerm where dbObjectSymbol = '%s' and aspect='%c'",
-        proteinID, goAspectChar[iGoAsp]);
-sr = sqlGetResult(goConn, query);
-row = sqlNextRow(sr);
-if (row != NULL)
+if (goConn != NULL)
     {
-    if (!hasGO)
-	{
-	printf("<B>Gene Ontology</B><UL>");
-	hasGO = TRUE;
-	}
-    if (goAspectChar[iGoAsp] == 'F') printf("<LI><B>Molecular Function:</B></LI><UL>");
-    if (goAspectChar[iGoAsp] == 'P') printf("<LI><B>Biological Process:</B></LI><UL>");
-    if (goAspectChar[iGoAsp] == 'C') printf("<LI><B>Cellular Component:</B></LI><UL>");
-    while (row != NULL)
-	{
-	goID 	   = row[0];
-	goTermName = row[1];
+    goAspectChar[0] = 'F';
+    goAspectChar[1] = 'P';
+    goAspectChar[2] = 'C';
 
-        printf("<LI><A HREF = \"");
-	printf("http://godatabase.org/cgi-bin/go.cgi?view=details&depth=1&query=%s", goID);
-	printf("\" TARGET=_blank>%s</A> %s</LI>\n", goID, goTermName);
+    // loop for 3 GO aspects 
+    for (iGoAsp = 0; iGoAsp<3; iGoAsp++)
+	{
+	sprintf(query, 
+		"select goID, termName from go.goObjTerm where dbObjectSymbol = '%s' and aspect='%c'",
+		proteinID, goAspectChar[iGoAsp]);
+	sr = sqlGetResult(goConn, query);
 	row = sqlNextRow(sr);
+	if (row != NULL)
+	    {
+	    if (!hasGO)
+		{
+		printf("<B>Gene Ontology</B><UL>");
+		hasGO = TRUE;
+		}
+	    if (goAspectChar[iGoAsp] == 'F') printf("<LI><B>Molecular Function:</B></LI><UL>");
+	    if (goAspectChar[iGoAsp] == 'P') printf("<LI><B>Biological Process:</B></LI><UL>");
+	    if (goAspectChar[iGoAsp] == 'C') printf("<LI><B>Cellular Component:</B></LI><UL>");
+	    while (row != NULL)
+		{
+		goID 	   = row[0];
+		goTermName = row[1];
+
+		printf("<LI><A HREF = \"");
+		printf("http://godatabase.org/cgi-bin/go.cgi?view=details&depth=1&query=%s", goID);
+		printf("\" TARGET=_blank>%s</A> %s</LI>\n", goID, goTermName);
+		row = sqlNextRow(sr);
+		}
+	    printf("</UL>");
+	    sqlFreeResult(&sr);
+	    }
 	}
-    printf("</UL>");
-    sqlFreeResult(&sr);
+    fflush(stdout);
+    if (hasGO) printf("</UL>");
     }
-}
-fflush(stdout);
-if (hasGO) printf("</UL>");
+#endif /* NEVER */
 
 // Show Pathway links if any exists
 hasPathway = FALSE;
@@ -8660,6 +8655,7 @@ int i;
 struct psl *pslList = NULL, *psl;
 int pslStart;
 char *sqlMarker = marker;
+boolean hasBin;
 
 /* Make sure to escpae single quotes for DB parseability */
 if (strchr(marker, '\''))
@@ -8678,17 +8674,18 @@ sprintf(query, "SELECT * FROM %s WHERE name = '%s' "
 	table, sqlMarker, seqName, start, end);  
 sr = sqlMustGetResult(conn, query);
 row = sqlNextRow(sr);
+hasBin = hOffsetPastBin(seqName, table);
 if (row != NULL)
     {
     if (stsMapExists)
 	{
-	stsMapStaticLoad(row, &stsRow);
+	stsMapStaticLoad(row+hasBin, &stsRow);
 	}
     else
         /* Load and convert from original bed format */ 
 	{
 	struct stsMarker oldStsRow;
-	stsMarkerStaticLoad(row, &oldStsRow);
+	stsMarkerStaticLoad(row+hasBin, &oldStsRow);
 	stsMapFromStsMarker(&oldStsRow, &stsRow);
 	}
     if (stsInfo2Exists)
@@ -8701,7 +8698,7 @@ if (row != NULL)
 	if (row != NULL)
 	    {
 	    info2Row = stsInfo2Load(row);
-	    infoRow = stsInfoLoad(row);	    
+	    infoRow = stsInfoLoad(row);
 	    }
 	}
     else if (stsInfoExists)
@@ -8873,11 +8870,12 @@ if (row != NULL)
 	sprintf(query, "SELECT * FROM all_sts_seq WHERE qName = '%d'", 
 		infoRow->identNo);  
 	sr1 = sqlGetResult(conn1, query);
+	hasBin = hOffsetPastBin(seqName, "all_sts_seq");
 	i = 0;
 	pslStart = 0;
 	while ((row = sqlNextRow(sr1)) != NULL)
 	    {  
-	    psl = pslLoad(row);
+	    psl = pslLoad(row+hasBin);
 	    if ((sameString(psl->tName, seqName)) 
 		&& (abs(psl->tStart - start) < 1000))
 		{
@@ -8900,12 +8898,13 @@ if (row != NULL)
 	sprintf(stsid,"dbSTS_%d",infoRow->dbSTSid);
 	sprintf(query, "SELECT * FROM all_sts_primer WHERE qName = '%s'", 
 		stsid);  
+	hasBin = hOffsetPastBin(seqName, "all_sts_primer");
 	sr1 = sqlGetResult(conn1, query);
 	i = 0;
 	pslStart = 0;
 	while ((row = sqlNextRow(sr1)) != NULL)
 	    {  
-	    psl = pslLoad(row);
+	    psl = pslLoad(row+hasBin);
 	    if ((sameString(psl->tName, seqName)) 
 		&& (abs(psl->tStart - start) < 1000))
 		{
@@ -8972,17 +8971,18 @@ if (row != NULL)
                            "AND (chrom != '%s' OR chromStart != %d OR chromEnd != %d)",
 		    table, marker, seqName, start, end); 
 	    sr = sqlGetResult(conn,query);
+	    hasBin = hOffsetPastBin(seqName, table);
 	    while ((row = sqlNextRow(sr)) != NULL)
 		{
 		if (stsMapExists)
 		    {
-		    stsMapStaticLoad(row, &stsRow);
+		    stsMapStaticLoad(row+hasBin, &stsRow);
 		    }
 		else
 		    /* Load and convert from original bed format */ 
 		    {
 		    struct stsMarker oldStsRow;
-		    stsMarkerStaticLoad(row, &oldStsRow);
+		    stsMarkerStaticLoad(row+hasBin, &oldStsRow);
 		    stsMapFromStsMarker(&oldStsRow, &stsRow);
 		    }
 		printf("<TR><TD>%s:</TD><TD>%d</TD></TR>\n",
@@ -10133,7 +10133,7 @@ if (snp!=NULL)
     printf("Sequence in Assembly:&nbsp;%s<BR>\n",snp->assembly);
     printf("Alternate Sequence:&nbsp;&nbsp;&nbsp;%s<BR></font>\n",snp->alternate);
     }
-else printf("Supporting details are not currently available for this SNP.\n");
+else printf("<BR>Supporting details are currently unavailable for this SNP.\n");
 dbSnpRSFree(&snp);
 sqlDisconnect(&conn);
 }
@@ -10426,6 +10426,44 @@ sqlFreeResult(&sr);
 hFreeConn(&conn);
 }
 
+void doSnpMap(struct trackDb *tdb, char *itemName)
+/* Put up info on a SNP. */
+{
+char *group = tdb->tableName;
+char *ncbiName = itemName;
+struct snpMap snp;
+int start = cartInt(cart, "o");
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr;
+char **row;
+char query[256];
+int rowOffset;
+
+ncbiName += 2;
+cartWebStart(cart, "Simple Nucleotide Polymorphism (SNP)");
+printf("<H2>Simple Nucleotide Polymorphism (SNP) %s </H2>\n", itemName);
+sprintf(query, "select * "
+	       "from   %s "
+	       "where  chrom = '%s' "
+	       "  and  chromStart = %d "
+	       "  and name = '%s'",
+        group, seqName, start, itemName);
+rowOffset = hOffsetPastBin(seqName, group);
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    snpMapStaticLoad(row+rowOffset, &snp);
+    bedPrintPos((struct bed *)&snp, 3);
+    }
+doDbSnpRS(ncbiName);
+printf("<P><A HREF=\"http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?");
+printf("type=rs&rs=%s\" TARGET=_blank>dbSNP link</A></P>\n", snp.name);
+doSnpLocusLink(tdb, itemName);
+printTrackHtml(tdb);
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+}
+
 
 void doTigrGeneIndex(struct trackDb *tdb, char *item)
 /* Put up info on tigr gene index item. */
@@ -10497,16 +10535,23 @@ if ((descr = getEncodeRegionDescr(item)) != NULL)
 genericClickHandlerPlus(tdb, item, NULL, plus);
 }
 
-void separateIdAndName(char *item, char *encodeId, char *encodeName)
-/* return the id and name of an encode object */
-{
-/* the name is in the format 'ddddddd/nnn' where the first seven 'd' characters
+char *getEncodeName(char *item)
+/* the item is in the format 'ddddddd/nnn' where the first seven 'd' characters
    are the digits of the identifier, and the variable-length 'n' chatacters
-   are the name of the object 
-*/
-strncpy(encodeId,item,7);
-encodeId[7]='\0';
-encodeName = item+8;
+   are the name of the object.  Return the name. */
+{
+char *dupe=cloneString(item);
+return dupe+8;
+}
+
+char *getEncodeId(char *item)
+/* the item is in the format 'ddddddd/nnn' where the first seven 'd' characters
+   are the digits of the identifier, and the variable-length 'n' chatacters
+   are the name of the object.  Return the ID portion. */
+{
+char *id = cloneString(item);
+id[7]='\0';
+return id;
 }
 
 void doEncodeErge(struct trackDb *tdb, char *item)
@@ -10521,10 +10566,9 @@ char *dupe = cloneString(tdb->type);
 char *type, *words[16];
 int wordCount = chopLine(dupe, words);
 char *newLabel = tdb->longLabel + 7; /* removes 'ENCODE ' from label */
-char *encodeName = NULL;
-char encodeId[8];
+char *encodeName = getEncodeName(item);
+char *encodeId = getEncodeId(item);
 
-separateIdAndName(item, encodeName, encodeId);
 cartWebStart(cart, "ENCODE Region Data: %s", newLabel);
 printf("<H2>ENCODE Region <U>%s</U> Data for %s.</H2>\n", newLabel, encodeName);
 genericHeader(tdb, encodeName);
@@ -10542,10 +10586,11 @@ for (ee = encodeErgeLoadByQuery(conn, query); ee!=NULL; ee=ee->next)
     printf("<BR>\n");
     if (ee->Id>0)
 	{
-	printf("<BR>Additional information for <A HREF=\"http://gala.cse.psu.edu/");
-	printf("cgi-bin/dberge/dberge_query?mode=Submit+query&disp=brow+data&pid=");
+	printf("<BR>Additional information for <A HREF=\"http://dberge.cse.psu.edu/");
+	printf("cgi-bin/dberge_query?mode=Submit+query&disp=brow+data&pid=");
 	printf("%s\" TARGET=_blank>%s</A>\n is available from <A ", encodeId, encodeName);
-	printf("HREF=\"http://globin.cse.psu.edu/dberge/testmenu.html\">dbERGEII</A>.\n");
+	printf("HREF=\"http://globin.cse.psu.edu/dberge/testmenu.html\" ");
+	printf("TARGET=_blank>dbERGEII</A>.\n");
 	}
     }
 printTrackHtml(tdb);
@@ -10563,10 +10608,12 @@ int start = cartInt(cart, "o");
 struct sqlResult *sr;
 char *dupe, *type, *words[16];
 int wordCount=0;
+char *encodeName = getEncodeName(item);
+char *encodeId = getEncodeId(item);
 int i;
 
 cartWebStart(cart, "ENCODE Region Data: %s", tdb->longLabel+7);
-printf("<H2>ENCODE Region <U>%s</U> Data for %s</H2>\n", tdb->longLabel+7, item);
+printf("<H2>ENCODE Region <U>%s</U> Data for %s</H2>\n", tdb->longLabel+7, encodeName);
 genericHeader(tdb, item);
 
 dupe = cloneString(tdb->type);
@@ -10591,10 +10638,11 @@ for (ee = encodeErgeHssCellLinesLoadByQuery(conn, query); ee!=NULL; ee=ee->next)
 	    printf("%s, ", words[i]);
 	    }
 	printf("%s.\n",words[wordCount-1]);
-	printf("<BR><BR>Additional information for <A HREF=\"http://gala.cse.psu.edu/");
-	printf("cgi-bin/dberge/dberge_query?mode=Submit+query&disp=brow+data&pid=");
-	printf("%s\" TARGET=_blank>%s</A>\n is available from <A ", ee->Id, ee->name);
-	printf("HREF=\"http://globin.cse.psu.edu/dberge/testmenu.html\">dbERGEII</A>\n");
+	printf("<BR><BR>Additional information for <A HREF=\"http://dberge.cse.psu.edu/");
+	printf("cgi-bin/dberge_query?mode=Submit+query&disp=brow+data&pid=");
+	printf("%s\" TARGET=_blank>%s</A>\n is available from <A ", encodeId, encodeName);
+	printf("HREF=\"http://globin.cse.psu.edu/dberge/testmenu.html\" ");
+	printf("TARGET=_blank>dbERGEII</A>.\n");
 	}
     }
 printTrackHtml(tdb);
@@ -10705,6 +10753,7 @@ struct lfs *lfs, *lfsList = NULL;
 struct psl *pslList = NULL, *psl;
 char sband[32], eband[32];
 boolean gotS, gotB;
+boolean hasBin = hOffsetPastBin(seqName, track);
 
 /* Determine type */
 if (sameString("bacEndPairs", track)) 
@@ -10768,7 +10817,7 @@ sr = sqlMustGetResult(conn, query);
 row = sqlNextRow(sr);
 if (row != NULL)
     {
-    lfs = lfsLoad(row+1);
+    lfs = lfsLoad(row+hasBin);
     if (sameString("bacEndPairs", track)) 
 	{
 	printf("<H2><A HREF=");
@@ -10819,9 +10868,10 @@ if (row != NULL)
 	sprintf(query, "SELECT * FROM %s WHERE qName = '%s'", 
 	        lfs->pslTable, lfs->lfNames[i]);  
 	sr = sqlMustGetResult(conn, query);
+	hasBin = hOffsetPastBin(seqName, lfs->pslTable);
 	while ((row1 = sqlNextRow(sr)) != NULL)
 	    {
-	    psl = pslLoad(row1);
+	    psl = pslLoad(row1+hasBin);
 	    slAddHead(&pslList, psl);
 	    }
 	slReverse(&pslList);
@@ -13077,7 +13127,7 @@ else if (sameWord(track, "chesChordataBlat"))
     {
     chesProtein(tdb, item);
     }
-else if ( sameWord(track, "blastHg15KG") )
+else if ( sameWord(track, "blastHg15KG") || sameWord(track, "blastHg16KG") )
     {
     chesProtein(tdb, item);
     }
@@ -13210,6 +13260,10 @@ else if (startsWith("ct_", track))
 else if (sameWord(track, "snpTsc") || sameWord(track, "snpNih"))
     {
     doSnp(tdb, item);
+    }
+else if (sameWord(track, "snpMap"))
+    {
+    doSnpMap(tdb, item);
     }
 else if (sameWord(track, "affyGeno"))
     {

@@ -27,7 +27,7 @@
 # is still produced.  This script is very careful to exit non-zero if an error
 # occurs.
 #
-# $Id: gbBlat,v 1.11 2004/01/15 19:03:52 markd Exp $
+# $Id: gbBlat,v 1.13 2004/02/02 00:21:32 angie Exp $
 #
 set -e
 
@@ -46,6 +46,9 @@ PSL_INTRONS_ONLY=pslIntronsOnly
 HG_OOC=/scratch/hg/h/11.ooc
 MM_OOC=/scratch/hg/h/mouse11.ooc
 RN_OOC=/scratch/hg/h/rat11.ooc
+PANTRO_OOC=/cluster/bluearc/hg/h/chimp11.ooc
+GALGAL_OOC=/cluster/bluearc/galGal1/11.ooc
+
 
 # entry, parse arguments
 keepTmp="NO"
@@ -130,6 +133,8 @@ case "$database" in
     hg*) oocOpt="-ooc=${HG_OOC}" ;;
     mm*) oocOpt="-ooc=${MM_OOC}" ;;
     rn*) oocOpt="-ooc=${RN_OOC}" ;;
+    panTro*)  oocOpt="-ooc=${PANTRO_OOC}" ;;
+    galGal*)  oocOpt="-ooc=${GALGAL_OOC}" ;;
     zooHuman*) oocOpt="-ooc=${HG_OOC}" ;;
     zooMouse*) oocOpt="-ooc=${MM_OOC}" ;;
     zooRat*) oocOpt="-ooc=${RN_OOC}" ;;

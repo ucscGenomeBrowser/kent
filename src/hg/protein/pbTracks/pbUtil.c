@@ -95,7 +95,7 @@ aa_hydro['V'] =  4.200;
 
 // get average frequency distribution for each AA residue
 conn= hAllocConn();
-if (!hTableExists("resAvgStd"))
+if (!hTableExists("pbResAvgStd"))
     {
     *hasResFreq = 0;
     return;
@@ -104,7 +104,7 @@ else
     {
     *hasResFreq = 1;
     }
-sprintf(query,"select * from %s.resAvgStd", database);
+sprintf(query,"select * from %s.pbResAvgStd", database);
 iaCnt = 0;
 sr = sqlMustGetResult(conn, query);
 row = sqlNextRow(sr);
@@ -169,18 +169,18 @@ sqlFreeResult(&sr);
 return(seq);
 }
 
-int chkAnomaly(double currentAvg, double avg, double stddev)
+int chkAnomaly(double currentAvg, double pctLow, double pctHi)
 /* chkAnomaly() checks if the frequency of an AA residue in a protein
    is abnormally high (returns 1) or low (returns -1) */
 {
 int result;
-if (currentAvg >= (avg + 2.0*stddev))
+if (currentAvg >= pctHi)
     {
     result = 1;
     }
 else
     {
-    if (currentAvg <= (avg - 2.0*stddev))
+    if (currentAvg <= pctLow)
         {
         result = -1;
         }
@@ -220,7 +220,7 @@ char *exonGenomeStartStr, *exonGenomeEndStr;
 char *strand;
 int exonNumber;
 int printedExonNumber = -1;
-int exonColor[2];
+Color exonColor[2];
 int blockCount;
 int exonIndex;
 int i, isize;
@@ -234,7 +234,9 @@ sr  = sqlMustGetResult(conn, query);
 row = sqlNextRow(sr);
 if (row == NULL)
     {
-    errAbort("%s does not have Exon info\n", proteinID);
+    //errAbort("%s does not have Exon info\n", proteinID);
+    errAbort("<BLOCKQUOTE>Sorry, cannot display Proeteome Browser for %s. <BR>No entry is found in kgProtMap table for this protein.</BLOCKQUOTE>", 
+	     proteinID);
     }
 
 qNameStr        = cloneString(row[0]);
@@ -451,43 +453,44 @@ hPrintf("</pre>");
 hPrintf("<font color = black>");
 }
 
-void doGenomeBrowserLink(char *protDisplayID, char *mrnaID)
+void doGenomeBrowserLink(char *protDisplayID, char *mrnaID, char *hgsidStr)
 {
 hPrintf("\n<B>UCSC links:</B><BR>\n ");
 hPrintf("<UL>\n");
 hPrintf("\n<LI>Genome Browser - ");
 if (mrnaID != NULL)
     {
-    hPrintf("<A HREF=\"../cgi-bin/hgTracks?position=%s&db=%s&hgsid=%s\"", mrnaID, database, hgsid);
+    hPrintf("<A HREF=\"../cgi-bin/hgTracks?position=%s&db=%s%s\"", mrnaID, database, hgsidStr);
     }
 else
     {
-    hPrintf("<A HREF=\"../cgi-bin/hgTracks?position=%s&db=%s&hgsid=%s\"", protDisplayID, database, hgsid);
+    hPrintf("<A HREF=\"../cgi-bin/hgTracks?position=%s&db=%s\"", protDisplayID, database, hgsidStr);
     }
 hPrintf(" TARGET=_BLANK>%s</A></LI>\n", mrnaID);
 }
 
-void doFamilyBrowserLink(char *protDisplayID, char *mrnaID)
+void doFamilyBrowserLink(char *protDisplayID, char *mrnaID, char *hgsidStr)
 {
 hPrintf("\n<LI>Family Browser - ");
 if (mrnaID != NULL)
     {
-    hPrintf("<A HREF=\"../cgi-bin/hgNear?near_search=%s&hgsid=%s\"", mrnaID, hgsid);
+    //hPrintf("<A HREF=\"../cgi-bin/hgNear?near_search=%s&hgsid=%s\"", mrnaID, hgsid);
+    hPrintf("<A HREF=\"../cgi-bin/hgNear?near_search=%s%s\"", mrnaID, hgsidStr);
     }
 else
     {
-    hPrintf("<A HREF=\"../cgi-bin/hgNear?near_search=%s&hgsid=%s\"", protDisplayID, hgsid);
+    hPrintf("<A HREF=\"../cgi-bin/hgNear?near_search=%s%s\"", protDisplayID, hgsidStr);
     }
 hPrintf(" TARGET=_BLANK>%s</A>&nbsp</LI>\n", mrnaID);
 hPrintf("</UL>\n");
 }
 
-void doGeneDetailsLink(char *protDisplayID, char *mrnaID)
+void doGeneDetailsLink(char *protDisplayID, char *mrnaID, char *hgsidStr)
 {
 if (mrnaID != NULL)
     {
     hPrintf("\n<LI>Gene Details Page - ");
-    hPrintf("<A HREF=\"../cgi-bin/hgGene?hgg_gene=%s&hgsid=%s\"", mrnaID, hgsid);
+    hPrintf("<A HREF=\"../cgi-bin/hgGene?hgg_gene=%s%s\"", mrnaID, hgsidStr);
     hPrintf(" TARGET=_BLANK>%s</A></LI>\n", mrnaID);
     }
 }

@@ -44,6 +44,7 @@
 #include "stsMap.h"
 #include "stsMapMouseNew.h"
 #include "stsMapRat.h"
+#include "snpMap.h"
 #include "recombRate.h"
 #include "recombRateRat.h"
 #include "recombRateMouse.h"
@@ -75,8 +76,9 @@
 #include "cdsColors.h"
 #include "cds.h"
 #include "simpleNucDiff.h"
+#include "tfbsCons.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.662 2004/01/30 19:09:54 heather Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.669 2004/02/07 18:44:38 kent Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
@@ -187,7 +189,7 @@ if (!suppressHtml)
 }
 
 void hPutc(char c)
-/* putc than can be suppressed if not makeing html. */
+/* putc that can be suppressed if not making html. */
 {
 if (!suppressHtml)
     fputc(c, stdout);
@@ -1366,8 +1368,15 @@ int e = tg->itemEnd(tg, item);
 *retX2 = round((e - winStart)*scale) + xOff;
 }
 
+boolean trackWantsHgGene(struct track *tg)
+/* Return TRUE if track wants hgGene on details page. */
+{
+char *hgGene = trackDbSetting(tg->tdb, "hgGene");
+return hgGene != NULL && sameString(hgGene, "on");
+}
+
 void genericDrawItems(struct track *tg, 
-	int seqStart, int seqEnd,
+        int seqStart, int seqEnd,
         struct vGfx *vg, int xOff, int yOff, int width, 
         MgFont *font, Color color, enum trackVisibility vis)
 /* Draw generic item list.  Features must be fixed height
@@ -1379,7 +1388,7 @@ int heightPer = tg->heightPer;
 int s, e;
 int y, x1, x2, w;
 boolean withLabels = (withLeftLabels && vis == tvPack && !tg->drawName);
-boolean doNear = (trackDbSetting(tg->tdb, "hgGene") != NULL);
+boolean doHgGene = trackWantsHgGene(tg);
 
 if (vis == tvPack || vis == tvSquish)
     {
@@ -1388,45 +1397,42 @@ if (vis == tvPack || vis == tvSquish)
     vgSetClip(vg, insideX, yOff, insideWidth, tg->height);
     for (sn = ss->nodeList; sn != NULL; sn = sn->next)
         {
-	struct slList *item = sn->val;
-	int s = tg->itemStart(tg, item);
-	int e = tg->itemEnd(tg, item);
-	int x1 = round((s - winStart)*scale) + xOff;
-	int x2 = round((e - winStart)*scale) + xOff;
-	int textX = x1;
-	char *name = tg->itemName(tg, item);
-	
-
+        struct slList *item = sn->val;
+        int s = tg->itemStart(tg, item);
+        int e = tg->itemEnd(tg, item);
+        int x1 = round((s - winStart)*scale) + xOff;
+        int x2 = round((e - winStart)*scale) + xOff;
+        int textX = x1;
+        char *name = tg->itemName(tg, item);
+        
 	y = yOff + lineHeight * sn->row;
-	tg->drawItemAt(tg, item, vg, xOff, y, scale, font, color, vis);
-	if (withLabels)
-	    {
-	    int nameWidth = mgFontStringWidth(font, name);
-	    int dotWidth = tl.nWidth/2;
-	    textX -= nameWidth + dotWidth;
-	    if (textX < insideX)	/* Snap label to the left. */
-	         {
-		 textX = leftLabelX;
-		 vgUnclip(vg);
-		 vgSetClip(vg, leftLabelX, yOff, insideWidth, tg->height);
-		 vgTextRight(vg, leftLabelX, y, leftLabelWidth-1, heightPer,
-		 	color, font, name);
-		 vgUnclip(vg);
-		 vgSetClip(vg, insideX, yOff, insideWidth, tg->height);
-		 }
-	    else
-		 vgTextRight(vg, textX, y, nameWidth, heightPer, color, font, name);
-	    }
-	if (!tg->mapsSelf)
-	    {
-	    int w = x2-textX;
-	    if (w > 0)
+        tg->drawItemAt(tg, item, vg, xOff, y, scale, font, color, vis);
+        if (withLabels)
+            {
+            int nameWidth = mgFontStringWidth(font, name);
+            int dotWidth = tl.nWidth/2;
+            textX -= nameWidth + dotWidth;
+            if (textX < insideX)        /* Snap label to the left. */
 		{
-		mapBoxHgcOrHgGene(s, e, textX, y, w, heightPer, tg->mapName, 
-			tg->mapItemName(tg, item), name, doNear);
+		textX = leftLabelX;
+		vgUnclip(vg);
+		vgSetClip(vg, leftLabelX, yOff, insideWidth, tg->height);
+		vgTextRight(vg, leftLabelX, y, leftLabelWidth-1, heightPer,
+			    color, font, name);
+		vgUnclip(vg);
+		vgSetClip(vg, insideX, yOff, insideWidth, tg->height);
 		}
-	    }
-	}
+            else
+		vgTextRight(vg, textX, y, nameWidth, heightPer, color, font, name);
+            }
+        if (!tg->mapsSelf)
+            {
+            int w = x2-textX;
+            if (w > 0)
+                mapBoxHgcOrHgGene(s, e, textX, y, w, heightPer, tg->mapName, 
+				  tg->mapItemName(tg, item), name, doHgGene);
+            }
+        }
     vgUnclip(vg);
     }
 else
@@ -1435,10 +1441,10 @@ else
     struct slList *item;
     y = yOff;
     for (item = tg->items; item != NULL; item = item->next)
-	{
-	tg->drawItemAt(tg, item, vg, xOff, y, scale, font, color, vis);
-	if (isFull) y += lineHeight;
-	} 
+        {
+        tg->drawItemAt(tg, item, vg, xOff, y, scale, font, color, vis);
+        if (isFull) y += lineHeight;
+        } 
     }
 }
 
@@ -1817,7 +1823,7 @@ for (i = 0; i < lfsbed->lfCount; i++)
     	lfsbed->lfStarts[i], lfsbed->lfStarts[i] + lfsbed->lfSizes[i], rest, &rowOffset);
     if ((row = sqlNextRow(sr)) != NULL)
 	{
-	struct psl *psl = pslLoad(row);
+	struct psl *psl = pslLoad(row+rowOffset);
 	lf = lfFromPsl(psl, FALSE);
 	slAddHead(&lfList, lf);
 	pslFree(&psl);
@@ -3194,6 +3200,38 @@ tg->itemStart = bedItemStart;
 tg->itemEnd = bedItemEnd;
 }
 
+void loadTfbsCons(struct track *tg)
+{
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr;
+char **row;
+int rowOffset;
+char *lastName = NULL;
+struct tfbsCons *tfbs, *list = NULL;
+
+sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd, NULL, &rowOffset);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    tfbs = tfbsConsLoad(row+rowOffset);
+    if ((lastName == NULL) || !sameString(lastName, tfbs->name))
+	{
+	slAddHead(&list, tfbs);
+	freeMem(lastName);
+	lastName = cloneString(tfbs->name);
+	}
+    }
+freeMem(lastName);
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+slReverse(&list);
+tg->items = list;
+}
+
+void tfbsConsMethods(struct track *tg)
+{
+    bedMethods(tg);
+    tg->loadItems = loadTfbsCons;
+}
 
 void isochoreLoad(struct track *tg)
 /* Load up isochores from database table to track items. */
@@ -4668,6 +4706,222 @@ tg->freeItems = freeStsMapRat;
 tg->itemColor = stsMapRatColor;
 }
 
+char *snpSourceCart[snpSourceCount];
+char *snpTypeCart[snpTypeCount];
+
+void filterSnpItems(struct track *tg, boolean (*filter)(struct track *tg, void *item))
+/* Filter out items from track->itemList. */
+{
+struct slList *newList = NULL, *el, *next;
+
+for (el = tg->items; el != NULL; el = next)
+    {
+    next = el->next;
+    if (filter(tg, el))
+ 	slAddHead(&newList, el);
+    }
+slReverse(&newList);
+tg->items = newList;
+}
+
+boolean snpSourceFilterItem(struct track *tg, void *item)
+/* Return TRUE if item passes filter. */
+{
+struct snpMap *el = item;
+int    snpSource = 0;
+
+for (snpSource=0; snpSource<snpSourceCount; snpSource++)
+    if (!strcmp(snpSourceDataEnumToString((enum snpSourceEnum)snpSource),el->source))
+ 	if ( (int)snpSourceColorStringToEnum(snpSourceCart[snpSource]) != snpSourceExclude)
+ 	    return TRUE;
+return FALSE;
+}
+
+boolean snpTypeFilterItem(struct track *tg, void *item)
+/* Return TRUE if item passes filter. */
+{
+struct snpMap *el = item;
+int    snpType = 0;
+
+for (snpType=0; snpType<snpTypeCount; snpType++)
+    if (!strcmp(snpTypeDataEnumToString((enum snpTypeEnum)snpType),el->type))
+ 	if ( (int)snpTypeStateStringToEnum(snpTypeCart[snpType]) != snpTypeExclude)
+ 	    return TRUE;
+return FALSE;
+}
+
+void loadSnpMap(struct track *tg)
+/* Load up snpMarkers from database table to track items. */
+{
+int  snpSource = 0;
+int  snpType = 0;
+
+for (snpSource=0; snpSource<snpSourceCount; snpSource++)
+    snpSourceCart[snpSource] = 
+ 	cartUsualString(cart, snpSourceEnumToString((enum snpSourceEnum)snpSource),
+ 			snpSourceColorEnumToString((enum snpSourceEnum)snpSource) );
+for (snpType=0; snpType<snpTypeCount; snpType++)
+    snpTypeCart[snpType] = 
+ 	cartUsualString(cart, snpTypeEnumToString((enum snpTypeEnum)snpType),
+ 			snpTypeStateEnumToString((enum snpTypeEnum)snpType) );
+bedLoadItem(tg, "snpMap", (ItemLoader)snpMapLoad);
+filterSnpItems(tg, snpSourceFilterItem);
+filterSnpItems(tg, snpTypeFilterItem);
+}
+
+void freeSnpMap(struct track *tg)
+/* Free up snpMap items. */
+{
+snpMapFreeList((struct snpMap**)&tg->items);
+}
+
+Color snpMapColor(struct track *tg, void *item, struct vGfx *vg)
+/* Return color of snpMap track item. */
+{
+struct snpMap *el = item;
+int snpSource = 0;
+enum snpSourceEnum snpColor = snpSourceBlack; /* default */
+for (snpSource=0; snpSource<snpSourceCount; snpSource++)
+    if (!strcmp(snpSourceDataEnumToString((enum snpSourceEnum)snpSource),el->source))
+ 	snpColor = snpSourceColorStringToEnum(snpSourceCart[snpSource]);
+switch (snpColor)
+    {
+    case snpSourceRed:
+ 	return MG_RED;
+ 	break;
+    case snpSourceGreen:
+ 	return MG_GREEN;
+ 	break;
+    case snpSourceBlue:
+ 	return MG_BLUE;
+ 	break;
+    default:
+ 	return MG_BLACK;
+ 	break;
+    }
+}
+
+void snpMapDrawItemAt(struct track *tg, void *item, 
+	struct vGfx *vg, int xOff, int y, 
+	double scale, MgFont *font, Color color, enum trackVisibility vis)
+/* Draw a single snpMap item at position. */
+{
+struct snpMap *sm = item;
+int heightPer = tg->heightPer;
+int x1 = round((double)((int)sm->chromStart-winStart)*scale) + xOff;
+int x2 = round((double)((int)sm->chromEnd-winStart)*scale) + xOff;
+int w;
+struct trackDb *tdb = tg->tdb;
+int scoreMin = atoi(trackDbSettingOrDefault(tdb, "scoreMin", "0"));
+int scoreMax = atoi(trackDbSettingOrDefault(tdb, "scoreMax", "1000"));
+Color itemColor = tg->itemColor(tg, sm, vg);
+Color itemNameColor = tg->itemNameColor(tg, sm, vg);
+
+w = x2-x1;
+if (w < 1)
+    w = 1;
+vgBox(vg, x1, y, w, heightPer, itemColor);
+if (tg->drawName && vis != tvSquish)
+    {
+    /* Clip here so that text will tend to be more visible... */
+    char *s = tg->itemName(tg, sm);
+    w = x2-x1;
+    printf("<BR>>%s:%d<",s,(int)itemNameColor);
+    if (w > mgFontStringWidth(font, s))
+	vgTextCentered(vg, x1, y, w, heightPer, itemNameColor, font, s);
+    mapBoxHc(sm->chromStart, sm->chromEnd, x1, y, x2 - x1, heightPer,
+	     tg->mapName, tg->mapItemName(tg, sm), NULL);
+    }
+}
+
+static void snpMapDrawItems(struct track *tg, int seqStart, int seqEnd,
+        struct vGfx *vg, int xOff, int yOff, int width, 
+        MgFont *font, Color color, enum trackVisibility vis)
+/* Draw snpMap items. */
+{
+double scale = scaleForPixels(width);
+int lineHeight = tg->lineHeight;
+int heightPer = tg->heightPer;
+int s, e;
+int y, x1, x2, w;
+boolean withLabels = (withLeftLabels && vis == tvPack && !tg->drawName);
+boolean doHgGene = trackWantsHgGene(tg);
+
+if (!tg->drawItemAt)
+    errAbort("missing drawItemAt in track %s", tg->mapName);
+
+if (vis == tvPack || vis == tvSquish)
+    {
+    struct spaceSaver *ss = tg->ss;
+    struct spaceNode *sn;
+    vgSetClip(vg, insideX, yOff, insideWidth, tg->height);
+    for (sn = ss->nodeList; sn != NULL; sn = sn->next)
+        {
+        struct slList *item = sn->val;
+        int s = tg->itemStart(tg, item);
+        int e = tg->itemEnd(tg, item);
+        int x1 = round((s - winStart)*scale) + xOff;
+        int x2 = round((e - winStart)*scale) + xOff;
+        int textX = x1;
+        char *name = tg->itemName(tg, item);
+	Color itemColor = tg->itemColor(tg, item, vg);
+	Color itemNameColor = tg->itemNameColor(tg, item, vg);
+	
+        y = yOff + lineHeight * sn->row;
+        tg->drawItemAt(tg, item, vg, xOff, y, scale, font, itemColor, vis);
+        if (withLabels)
+            {
+            int nameWidth = mgFontStringWidth(font, name);
+            int dotWidth = tl.nWidth/2;
+            textX -= nameWidth + dotWidth;
+            if (textX < insideX)        /* Snap label to the left. */
+		{
+		textX = leftLabelX;
+		vgUnclip(vg);
+		vgSetClip(vg, leftLabelX, yOff, insideWidth, tg->height);
+		vgTextRight(vg, leftLabelX, y, leftLabelWidth-1, heightPer,
+			    itemNameColor, font, name);
+		vgUnclip(vg);
+		vgSetClip(vg, insideX, yOff, insideWidth, tg->height);
+		}
+            else
+		vgTextRight(vg, textX, y, nameWidth, heightPer, itemNameColor, font, name);
+            }
+        if (!tg->mapsSelf)
+            {
+            int w = x2-textX;
+            if (w > 0)
+                mapBoxHgcOrHgGene(s, e, textX, y, w, heightPer, tg->mapName, 
+				  tg->mapItemName(tg, item), name, doHgGene);
+            }
+        }
+    vgUnclip(vg);
+    }
+else
+    {
+    struct slList *item;
+    y = yOff;
+    for (item = tg->items; item != NULL; item = item->next)
+        {
+	Color itemColor = tg->itemColor(tg, item, vg);
+        tg->drawItemAt(tg, item, vg, xOff, y, scale, font, itemColor, vis);
+        if (vis == tvFull) y += lineHeight;
+        } 
+    }
+}
+
+void snpMapMethods(struct track *tg)
+/* Make track for snps. */
+{
+tg->drawItems = snpMapDrawItems;
+tg->drawItemAt = snpMapDrawItemAt;
+tg->loadItems = loadSnpMap;
+tg->freeItems = freeSnpMap;
+tg->labelColor = MG_BLUE;
+tg->itemColor = snpMapColor;
+tg->itemNameColor = snpMapColor;
+}
+
 void loadGenMapDb(struct track *tg)
 /* Load up genMapDb from database table to track items. */
 {
@@ -5275,16 +5529,6 @@ if (name != NULL)
 return "unknown";
 }
 
-Color haplotypeColor(struct track *tg, struct linkedFeatures *lf,
-                     struct simpleFeature *sf, struct vGfx *vg)
-/* if it is the start or stop blocks make the color the shades
- * otherwise use black */
-{
-if(lf->components == sf || (sf->next == NULL))
-    return tg->colorShades[lf->grayIx+tg->subType];
-return blackIndex();
-}
-
 int haplotypeHeight(struct track *tg, struct linkedFeatures *lf,
                     struct simpleFeature *sf)
 /* if the item isn't the first or the last make it smaller */
@@ -5351,9 +5595,8 @@ tg->colorShades = shadesOfSea;
 void perlegenMethods(struct track *tg)
 /* setup special methods for Perlegen haplotype track */
 {
-tg->drawItemAt = haplotypeLinkedFeaturesDrawAt;
+haplotypeMethods(tg);
 tg->itemName = perlegenName;
-tg->colorShades = shadesOfSea;
 }
 
 char *encodeErgeName(struct track *tg, void *item)
@@ -5979,6 +6222,7 @@ if (withLeftLabels)
 	struct slList *item;
 	enum trackVisibility vis = track->limitedVis;
 	int tHeight;
+	Color labelColor = (track->labelColor ? track->labelColor : track->ixColor);
 	if (vis == tvHide)
 	    continue;
 	tHeight = track->height;
@@ -6089,7 +6333,7 @@ if (withLeftLabels)
 			    vgTextRight(vg, leftLabelX, y, leftLabelWidth - 1, itemHeight,
 					track->ixColor, font, "Mouse Cons");
 			else if( sameString( track->mapName, "musHumL" ) ||
-                     sameString( track->mapName, "mm3Hg15L"))
+				 sameString( track->mapName, "mm3Hg15L"))
 			    vgTextRight(vg, leftLabelX, y, leftLabelWidth - 1, itemHeight,
 					track->ixColor, font, "Human Cons");
 			else if( sameString( track->mapName, "mm3Rn2L" ))
@@ -6106,7 +6350,7 @@ if (withLeftLabels)
 		    else
 			{
 			vgTextRight(vg, leftLabelX, y, leftLabelWidth - 1, 
-				itemHeight, track->ixColor, font, name);
+				itemHeight, labelColor, font, name);
 			y += itemHeight;
 			}
 		    }
@@ -6127,7 +6371,7 @@ if (withLeftLabels)
 				track->ixAltColor, font, maxRangeStr );
 		    }
 		vgTextRight(vg, leftLabelX, y, leftLabelWidth-1, track->lineHeight, 
-			    track->ixColor, font, track->shortLabel);
+			    labelColor, font, track->shortLabel);
 		y += track->height;
 		break;
 	    }
@@ -6225,9 +6469,9 @@ if (withCenterLabels)
         {
 	if (track->limitedVis != tvHide)
 	    {
-	    Color color = track->ixColor;
+	    Color labelColor = (track->labelColor ? track->labelColor : track->ixColor);
 	    vgTextCentered(vg, insideX, y+1, 
-			   clWidth, insideHeight, color, font, track->longLabel);
+			   clWidth, insideHeight, labelColor, font, track->longLabel);
 	    mapBoxToggleVis(trackPastTabX, y+1, 
 			    trackPastTabWidth, insideHeight, track);
 	    y += fontHeight;
@@ -6276,23 +6520,25 @@ if (withLeftLabels)
 	    if (track->drawLeftLabels != NULL)
 		{
 		int tHeight = track->height;
+		Color labelColor = (track->labelColor ? track->labelColor : track->ixColor);
 		if (withCenterLabels)
 		    tHeight += fontHeight;
 		if (track->limitedVis == tvPack)
 		    { /*XXX This needs to be looked at, no example yet*/
 		    vgSetClip(vg, gfxBorder+trackTabWidth+1, y, 
-		    pixWidth-2*gfxBorder-trackTabWidth-1, track->height);
+			      pixWidth-2*gfxBorder-trackTabWidth-1, track->height);
 		    }
 		else
 		    {
 		    vgSetClip(vg, leftLabelX, y, leftLabelWidth, tHeight);
-
-		/* when the limitedVis == tvPack is correct above,
-		 *	this should be outside this else clause
-		 */
-		track->drawLeftLabels(track, winStart, winEnd,
-		    vg, leftLabelX, y, leftLabelWidth, tHeight,
-		    withCenterLabels, font, track->ixColor, track->limitedVis);
+		    
+		    /* when the limitedVis == tvPack is correct above,
+		     *	this should be outside this else clause
+		     */
+		    track->drawLeftLabels(track, winStart, winEnd,
+					  vg, leftLabelX, y, leftLabelWidth, tHeight,
+					  withCenterLabels, font, labelColor, 
+					  track->limitedVis);
 		    }
 		vgUnclip(vg);
 		}
@@ -6312,7 +6558,7 @@ y = yAfterRuler;
 for (track = trackList; track != NULL; track = track->next)
     {
     struct slList *item;
-    boolean doNear = FALSE;
+    boolean doHgGene = FALSE;
     switch (track->limitedVis)
 	{
 	case tvHide:
@@ -6324,7 +6570,7 @@ for (track = trackList; track != NULL; track = track->next)
 	    y += track->height;
 	    break;
 	case tvFull:
-	    doNear = (trackDbSetting(track->tdb, "hgGene") != NULL);
+	    doHgGene = trackWantsHgGene(track);
 	    if (withCenterLabels)
 		y += fontHeight;
 	    start = 1;
@@ -6359,7 +6605,7 @@ for (track = trackList; track != NULL; track = track->next)
                         mapBoxHgcOrHgGene(track->itemStart(track, item), track->itemEnd(track, item),
 				 trackPastTabX,y,trackPastTabWidth,height, track->mapName,
 				 track->mapItemName(track, item),
-				 track->itemName(track, item), doNear);
+				 track->itemName(track, item), doHgGene);
 			}
 		    y += height;
 		    }
@@ -7144,6 +7390,7 @@ registerTrackHandler("stsMarker", stsMarkerMethods);
 registerTrackHandler("stsMap", stsMapMethods);
 registerTrackHandler("stsMapMouseNew", stsMapMouseMethods);
 registerTrackHandler("stsMapRat", stsMapRatMethods);
+registerTrackHandler("snpMap", snpMapMethods);
 registerTrackHandler("recombRate", recombRateMethods);
 registerTrackHandler("recombRateMouse", recombRateMouseMethods);
 registerTrackHandler("recombRateRat", recombRateRatMethods);
@@ -7269,6 +7516,7 @@ registerTrackHandler("celeraDupPositive", celeraDupPositiveMethods);
 registerTrackHandler("celeraCoverage", celeraCoverageMethods);
 registerTrackHandler("jkDuplicon", jkDupliconMethods);
 registerTrackHandler("chimpSimpleDiff", chimpSimpleDiffMethods);
+registerTrackHandler("tfbsCons", tfbsConsMethods);
 
 /* Load regular tracks, blatted tracks, and custom tracks. 
  * Best to load custom last. */
@@ -7846,7 +8094,7 @@ else
 
 
 void customTrackPage()
-/* Put up page that lest user upload custom tracks. */
+/* Put up page that lets user upload custom tracks. */
 {
 puts("<H2>Add Your Own Custom Track</H2>");
 puts("<FORM ACTION=\"/cgi-bin/hgTracks\" METHOD=\"POST\" ENCTYPE=\"multipart/form-data\">\n");
@@ -7978,6 +8226,6 @@ cgiSpoof(&argc, argv);
 if (cgiVarExists("hgt.reset"))
     resetVars();
 htmlSetBackground("../images/floret.jpg");
-cartHtmlShell("UCSC Genome Browser v49", doMiddle, hUserCookie(), excludeVars, NULL);
+cartHtmlShell("UCSC Genome Browser v50", doMiddle, hUserCookie(), excludeVars, NULL);
 return 0;
 }

@@ -23,8 +23,11 @@ lib:
 
 test: test1 test2 test3 test4 test5 test6 test7 test8 test9 test10 test11 test13 test14 test15 test16 test17 test18 test19 testRp131 test26
 %:	input/%.psl
-	mkdir -p output
+	${MKDIR} output
 	pslPseudo $(OPTIONS) $(DB) input/$@.psl $(TESTCMD)  output/$@g.psl output/$@p.psl output/$@l.txt /cluster/data/$(DB)/nib $(GENES)  
 	diff expected/$@g.psl output/$@g.psl 
 	diff expected/$@p.psl output/$@p.psl
 #	rm output/$@g.psl output/$@p.psl
+
+clean::
+	rm -fr ${O} output

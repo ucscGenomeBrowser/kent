@@ -119,6 +119,77 @@ char *smroeEnumToString(enum stsMapRatOptEnum x);
 void smroeDropDown(char *var, char *curVal);
 /* Make drop down of options. */
 
+/****** Some stuff for snpType related controls *******/
+
+/* SingleNP, indel, segnemtal */
+#define snpTypeCount 3
+
+enum snpTypeEnum {
+    snpTypeInclude = 0,
+    snpTypeExclude = 1,
+};
+
+enum snpTypeEnum snpTypeStringToEnum(char *string);
+/* Convert from string to enum representation. */
+
+char *snpTypeEnumToString(enum snpTypeEnum x);
+/* Convert from enum to string representation. */
+
+enum snpTypeEnum snpTypeLabelStringToEnum(char *string);
+/* Convert from string to enum representation. */
+
+char *snpTypeLabelEnumToString(enum snpTypeEnum x);
+/* Convert from enum to string representation. */
+
+enum snpTypeEnum snpTypeStateStringToEnum(char *string);
+/* Convert from string to enum representation. */
+
+char *snpTypeStateEnumToString(enum snpTypeEnum x);
+/* Convert from enum to string representation. */
+
+enum snpTypeEnum snpTypeDataStringToEnum(char *string);
+/* Convert from string to enum representation. */
+
+char *snpTypeDataEnumToString(enum snpTypeEnum x);
+/* Convert from enum to string representation. */
+
+/****** Some stuff for snpSource related controls *******/
+
+/* Random, Bac, Mixed, Other, Affy10K, Affy120K */
+#define snpSourceCount 6
+
+enum snpSourceEnum {
+    snpSourceRed      = 0,
+    snpSourceGreen    = 1,
+    snpSourceBlue     = 2,
+    snpSourceBlack    = 3,
+    snpSourceExclude  = 4,
+};
+
+enum snpSourceEnum snpSourceStringToEnum(char *string);
+/* Convert from string to enum representation. */
+
+char *snpSourceEnumToString(enum snpSourceEnum x);
+/* Convert from enum to string representation. */
+
+enum snpSourceEnum snpSourceLabelStringToEnum(char *string);
+/* Convert from string to enum representation. */
+
+char *snpSourceLabelEnumToString(enum snpSourceEnum x);
+/* Convert from enum to string representation. */
+
+enum snpSourceEnum snpSourceColorStringToEnum(char *string);
+/* Convert from string to enum representation. */
+
+char *snpSourceColorEnumToString(enum snpSourceEnum x);
+/* Convert from enum to string representation. */
+
+enum snpSourceEnum snpSourceDataStringToEnum(char *string);
+/* Convert from string to enum representation. */
+
+char *snpSourceDataEnumToString(enum snpSourceEnum x);
+/* Convert from enum to string representation. */
+
 /****** Some stuff for fishClones related controls *******/
 enum fishClonesOptEnum {
    fcoeFHCRC = 0,
@@ -253,6 +324,66 @@ char *nci60EnumToString(enum nci60OptEnum x);
 void nci60DropDown(char *var, char *curVal);
 /* Make drop down of options. */
 
+/*	Wiggle track Windowing combining function option	*/
+enum wiggleWindowingEnum {
+   wiggleWindowingMax = 0,
+   wiggleWindowingMean = 1,
+   wiggleWindowingMin = 2,
+};
+
+enum wiggleWindowingEnum wiggleWindowingStringToEnum(char *string);
+/* Convert from string to enum representation. */
+
+char *wiggleWindowingEnumToString(enum wiggleWindowingEnum x);
+/* Convert from enum to string representation. */
+
+void wiggleWindowingDropDown(char *var, char *curVal);
+/* Make drop down of options. */
+
+/*	Wiggle track use Smoothing option, 0 and 1 is the same as Off	*/
+enum wiggleSmoothingEnum {
+   wiggleSmoothingOff = 0,
+   wiggleSmoothing2 = 1,
+   wiggleSmoothing3 = 2,
+   wiggleSmoothing4 = 3,
+   wiggleSmoothing5 = 4,
+   wiggleSmoothing6 = 5,
+   wiggleSmoothing7 = 6,
+   wiggleSmoothing8 = 7,
+   wiggleSmoothing9 = 8,
+   wiggleSmoothing10 = 9,
+   wiggleSmoothing11 = 10,
+   wiggleSmoothing12 = 11,
+   wiggleSmoothing13 = 12,
+   wiggleSmoothing14 = 13,
+   wiggleSmoothing15 = 14,
+   wiggleSmoothing16 = 15,
+};
+
+enum wiggleSmoothingEnum wiggleSmoothingStringToEnum(char *string);
+/* Convert from string to enum representation. */
+
+char *wiggleSmoothingEnumToString(enum wiggleSmoothingEnum x);
+/* Convert from enum to string representation. */
+
+void wiggleSmoothingDropDown(char *var, char *curVal);
+/* Make drop down of options. */
+
+/*	Wiggle track y Line Mark on/off option	*/
+enum wiggleYLineMarkEnum {
+   wiggleYLineMarkOff = 0,
+   wiggleYLineMarkOn = 1,
+};
+
+enum wiggleYLineMarkEnum wiggleYLineMarkStringToEnum(char *string);
+/* Convert from string to enum representation. */
+
+char *wiggleYLineMarkEnumToString(enum wiggleYLineMarkEnum x);
+/* Convert from enum to string representation. */
+
+void wiggleYLineMarkDropDown(char *var, char *curVal);
+/* Make drop down of options. */
+
 /*	Wiggle track use AutoScale option	*/
 enum wiggleScaleOptEnum {
    wiggleScaleManual = 0,
@@ -297,7 +428,6 @@ char *wiggleGridEnumToString(enum wiggleGridOptEnum x);
 
 void wiggleGridDropDown(char *var, char *curVal);
 /* Make drop down of options. */
-
 
 /*** Some Stuff for the cdsColor track ***/
 

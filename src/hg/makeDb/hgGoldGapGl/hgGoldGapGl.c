@@ -12,7 +12,7 @@
 #include "glDbRep.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: hgGoldGapGl.c,v 1.16 2003/10/21 00:05:46 angie Exp $";
+static char const rcsid[] = "$Id: hgGoldGapGl.c,v 1.17 2004/02/02 15:18:27 angie Exp $";
 
 
 void usage()
@@ -25,8 +25,9 @@ errAbort(
   "options:\n"
   "   -noGl  - don't do gl bits\n"
   "   -chrom=chrN - just do a single chromosome.  Don't delete old tables.\n"
+  "   -chromLst=chrom.lst - chromosomes subdirs are named in chrom.lst (1, 2, ...)\n"
   "example:\n"
-  "   hgGoldGapGl hg5 /projects/hg/gs.5 oo.21\n");
+  "   hgGoldGapGl -noGl hg16 /cluster/data/hg16 .\n");
 }
 
 char *createGold =
@@ -270,6 +271,19 @@ char ooDir[512];
 char pathName[512];
 struct hash *cloneVerHash = newHash(0);
 boolean gotAny = FALSE;
+struct hash *chromDirHash = newHash(4);
+char *chromLst = optionVal("chromLst", NULL);
+
+if (chromLst != NULL)
+    {
+    struct lineFile *clf = lineFileOpen(chromLst, TRUE);
+    char *row[1];
+    while (lineFileRow(clf, row))
+	{
+	hashAdd(chromDirHash, row[0], NULL);
+	}
+    lineFileClose(&clf);
+    }
 
 sprintf(ooDir, "%s/%s", gsDir, ooSubDir);
 /* target prefix is used in zoo browser */
@@ -286,7 +300,9 @@ if (doGl)
 chrFiList = listDirX(ooDir, "*", FALSE);
 for (chrFi = chrFiList; chrFi != NULL; chrFi = chrFi->next)
     {
-    if (chrFi->isDir && (strlen(chrFi->name) <= 2) || startsWith("NA_", chrFi->name))
+    if (chrFi->isDir &&
+	((strlen(chrFi->name) <= 2) || startsWith("NA_", chrFi->name) ||
+	 hashLookup(chromDirHash, chrFi->name)))
         {
 	if (oneChrom == NULL || sameWord(chrFi->name, oneChrom))
 	    {
@@ -301,6 +317,7 @@ for (chrFi = chrFiList; chrFi != NULL; chrFi = chrFi->next)
     }
 slFreeList(&chrFiList);
 sqlDisconnect(&conn);
+hashFree(&chromDirHash);
 if (!gotAny)
     errAbort("No contig agp and gold files found");
 }

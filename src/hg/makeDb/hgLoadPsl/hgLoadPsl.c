@@ -8,7 +8,7 @@
 #include "hdb.h"
 #include "hgRelate.h"
 
-static char const rcsid[] = "$Id: hgLoadPsl.c,v 1.19 2004/01/29 21:44:40 hartera Exp $";
+static char const rcsid[] = "$Id: hgLoadPsl.c,v 1.20 2004/01/30 22:38:48 hartera Exp $";
 
 unsigned pslCreateOpts = 0;
 unsigned pslLoadOpts = 0;
@@ -123,7 +123,7 @@ for (i = 0; i<pslCount; ++i)
     if (!exportOutput)
         {
         sqlLoadTabFile(conn, tabFile, table, pslLoadOpts);
-        // add a comment and ids to the history table
+        /* add a comment and ids to the history table */
         safef(comment, sizeof(comment), "Add psl alignments to %s table", table);
         hgHistoryComment(conn, comment);
         }

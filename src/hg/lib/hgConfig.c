@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-static char const rcsid[] = "$Id: hgConfig.c,v 1.8 2003/08/21 04:39:42 genbank Exp $";
+static char const rcsid[] = "$Id: hgConfig.c,v 1.9 2004/01/31 02:57:34 kent Exp $";
 
 #include "common.h"
 #include "hash.h"
@@ -74,7 +74,8 @@ if((file = fopen(filename, "r")) != 0)
 }
 
 char* cfgOption(char* name)
-/* Return the option with the given name. */
+/* Return the option with the given name.  Return NULL if
+ * it doesn't exist. */
 {
 /* initilize the config hash if it is not */
 if(cfgOptionsHash == NULL)
@@ -89,5 +90,15 @@ char* cfgOptionDefault(char* name, char* def)
 char *val = cfgOption(name);
 if (val == NULL)
     val = def;
+return val;
+}
+
+char *cfgVal(char *name)
+/* Return option with given name.  Squawk and die if it
+ * doesn't exist. */
+{
+char *val = cfgOption(name);
+if (val == NULL)
+    errAbort("%s doesn't exist in hg.conf file", name);
 return val;
 }

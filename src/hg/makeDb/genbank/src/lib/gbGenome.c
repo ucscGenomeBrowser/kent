@@ -3,7 +3,7 @@
 #include "gbDefs.h"
 #include "localmem.h"
 
-static char const rcsid[] = "$Id: gbGenome.c,v 1.9 2004/01/25 20:23:35 markd Exp $";
+static char const rcsid[] = "$Id: gbGenome.c,v 1.10 2004/02/01 23:57:08 angie Exp $";
 
 struct dbToSpecies
 /* structure mapping database prefix to species (e.g. hg -> "Homo sapiens") */
@@ -23,15 +23,13 @@ static char *frNames[] = {"Takifugu rubripes", NULL};
 static char *dmNames[] = {"Drosophila melanogaster", "Drosophila sp.", NULL};
 static char *sacCerNames[] = {"Saccharomyces cerevisiae", NULL};
 static char *panTroNames[] = {"Pan troglodytes", NULL};
+static char *galGalNames[] = {"Gallus gallus", "Gallus sp.", NULL};
 
 /* species currently unique to zoo */
 static char *zooCatNames[] = {"Felis catus", "Felis sp.", NULL};
-static char *zooChickenNames[] = {"Gallus gallus", "Gallus sp.", NULL};
 static char *zooBaboonNames[] = {"Papio hamadryas", "Papio sp.", NULL};
-static char *zooChimpNames[] = {"Pan troglodytes", NULL};
 static char *zooCowNames[] = {"Bos taurus", "Bos sp.", NULL};
 static char *zooDogNames[] = {"Canis familiaris", "Canis sp.", NULL};
-static char *zooFuguNames[] = {"Takifugu rubripes", NULL};
 static char *zooPigNames[] = {"Sus scrofa", "Sus sp.", NULL};
 static char *zooTetraNames[] = {"Tetraodon nigroviridis", NULL};
 static char *zooZebrafishNames[] = {"Danio rerio", NULL};
@@ -47,14 +45,15 @@ static struct dbToSpecies dbToSpeciesMap[] = {
     {"dm", dmNames, NULL},
     {"sacCer", sacCerNames, NULL},
     {"panTro", panTroNames, NULL},
+    {"galGal", galGalNames, NULL},
     {"zooHuman", hgNames, NULL},
     {"zooCat", zooCatNames, NULL},
-    {"zooChicken", zooChickenNames, NULL},
+    {"zooChicken", galGalNames, NULL},
     {"zooBaboon", zooBaboonNames, NULL},
-    {"zooChimp", zooChimpNames, "Pan troglodytes "},
+    {"zooChimp", panTroNames, "Pan troglodytes "},
     {"zooCow", zooCowNames, NULL},
     {"zooDog", zooDogNames, NULL},
-    {"zooFugu", zooFuguNames, NULL},
+    {"zooFugu", frNames, NULL},
     {"zooMouse", mmNames, "Mus musculus "},
     {"zooPig", zooPigNames, "Sus scrofa "},
     {"zooRat", rnNames, NULL},

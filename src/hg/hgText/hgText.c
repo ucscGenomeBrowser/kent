@@ -29,8 +29,9 @@
 #include "customTrack.h"
 #include "hgColors.h"
 #include "tableDescriptions.h"
+#include "botDelay.h"
 
-static char const rcsid[] = "$Id: hgText.c,v 1.106 2003/12/15 20:28:42 angie Exp $";
+static char const rcsid[] = "$Id: hgText.c,v 1.108 2004/02/01 12:49:05 kent Exp $";
 
 /* sources of tracks, other than the current database: */
 static char *hgFixed = "hgFixed";

@@ -810,6 +810,8 @@ char *dna = NULL, *dnaStart = NULL, *dnaEnd = NULL;
 char thisStrand[2];
 struct sqlConnection *conn2 = hAllocConn();
 int mrnaSize = ni->mrnaEnd - ni->mrnaStart + left + right;
+char accBuf[64];
+char *p;
 
 /* Get the start and end coordinates for the mRNA or EST sequence */
 if ((type == INDEL) || (type == UNALIGNED))
@@ -824,8 +826,13 @@ if ((type == INDEL) || (type == UNALIGNED))
 else
     getCoords(psl, ni->chromStart-1, ni->chromEnd, &start, &end, thisStrand, &nogap);
 
-/* Get the corresponding mRNA or EST  sequence */
-struct dnaSeq *seq = hRnaSeq(psl->qName);
+/* Get the corresponding mRNA or EST  sequence; db doesn't have versions,
+ * so strip them. */
+safef(accBuf, sizeof(accBuf),"%s", psl->qName);
+p = strrchr(accBuf, '.');
+if (p != NULL)
+    *p = '\0';
+struct dnaSeq *seq = hRnaSeq(accBuf);
 if (thisStrand[0] != strand[0])
     {
     int temp = start;
@@ -1954,7 +1961,8 @@ if (codonSubReport)
     }
 
 hSetDb(db);
-hSetDbConnect("hgwdev.cse.ucsc.edu", db, user, password);
+ if (getenv("HGDB_HOST") == NULL)
+     hSetDbConnect("hgwdev.cse.ucsc.edu", db, user, password);
 if (verbose)
     printf("Reading CDS file\n");
 readCds(cf);

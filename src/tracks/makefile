@@ -29,7 +29,7 @@ compile: $O
 	chmod a+rx $A
 
 install:	compile
-	mkdir -p ${DESTDIR}${CGI_BIN}
+	${MKDIR} ${DESTDIR}${CGI_BIN}
 	mv $A ${DESTDIR}${CGI_BIN}/$A
 
 debug: $O

@@ -18,8 +18,9 @@
 #include "blatServers.h"
 #include "web.h"
 #include "hash.h"
+#include "botDelay.h"
 
-static char const rcsid[] = "$Id: hgBlat.c,v 1.68 2003/11/19 22:49:05 kuhn Exp $";
+static char const rcsid[] = "$Id: hgBlat.c,v 1.71 2004/02/03 17:50:31 kent Exp $";
 
 struct cart *cart;	/* The user's ui state. */
 struct hash *oldVars = NULL;
@@ -327,13 +328,13 @@ void blatSeq(char *userSeq)
 FILE *f;
 struct dnaSeq *seqList = NULL, *seq;
 struct tempName pslTn, faTn;
-int maxSingleSize, maxTotalSize;
+int maxSingleSize, maxTotalSize, maxSeqCount;
 char *genome = cgiString("db");
 char *type = cgiString("type");
 char *seqLetters = cloneString(userSeq);
 struct serverTable *serve;
 int conn;
-int oneSize, totalSize = 0;
+int oneSize, totalSize = 0, seqCount = 0;
 boolean isTx = FALSE;
 boolean isTxTx = FALSE;
 boolean txTxBoth = FALSE;
@@ -384,6 +385,7 @@ trimUniq(seqList);
 /* Figure out size allowed. */
 maxSingleSize = (isTx ? 5000 : 25000);
 maxTotalSize = maxSingleSize * 2.5;
+maxSeqCount = 25;
 
 /* Create temporary file to store sequence. */
 makeTempName(&faTn, "hgSs", ".fa");
@@ -418,7 +420,14 @@ pslxWriteHead(f, qType, tType);
 /* Loop through each sequence. */
 for (seq = seqList; seq != NULL; seq = seq->next)
     {
+    hgBotDelay();
     oneSize = realSeqSize(seq, !isTx);
+    if (++seqCount > maxSeqCount)
+        {
+	warn("More than 25 input sequences, stopping at %s.",
+	    seq->name);
+	break;
+	}
     if (oneSize > maxSingleSize)
 	{
 	warn("Sequence %s is %d letters long (max is %d), skipping",
@@ -559,9 +568,9 @@ puts(" <INPUT TYPE=SUBMIT Name=Submit VALUE=\"Submit File\"><P>\n");
 
 printf("%s", 
 "<P>Only DNA sequences of 25,000 or fewer bases and protein or translated \n"
-"sequence of 5000 or fewer letters will be processed.  If multiple sequences\n"
-"are submitted at the same time, the total limit is 50,000 bases or 12,500\n"
-"letters.\n</P>"
+"sequence of 5000 or fewer letters will be processed.  Up to 25 sequences\n"
+"can be submitted at the same time. The total limit for multiple sequence\n"
+"submissions is 50,000 bases or 12,500 letters.\n</P>"
 "BLAT on DNA is designed to\n"
 "quickly find sequences of 95% and greater similarity of length 40 bases or\n"
 "more.  It may miss more divergent or shorter sequence alignments.  It will find\n"

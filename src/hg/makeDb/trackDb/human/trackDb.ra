@@ -109,7 +109,7 @@ type bed 3
 
 track affyU133
 shortLabel Affymetrix U133
-longLabel Alignments of Affymetrix Targets from HG-U133
+longLabel Alignments of Affymetrix Consensus/Exemplars from HG-U133
 group regulation
 priority 90.1
 visibility hide
@@ -117,7 +117,7 @@ type psl .
 
 track affyU95
 shortLabel Affymetrix U95
-longLabel Alignments of Affymetrix Targets from HG-U95
+longLabel Alignments of Affymetrix Consensus/Exemplars from HG-U95
 group regulation
 priority 90.2
 visibility hide
@@ -245,7 +245,7 @@ type chain hg16
 otherDb hg16
 
 track tfbsCons
-shortLabel TFBS_Conserved
+shortLabel TFBS Conserved
 longLabel HMR Conserved Transcription Factor Binding Sites
 priority 1000
 group regulation

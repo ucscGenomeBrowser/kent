@@ -102,6 +102,9 @@ int lineFileChopNextTab(struct lineFile *lf, char *words[], int maxWords);
 /* Return next non-blank line that doesn't start with '#' chopped into words
  * on tabs */
 
+#define lineFileChopTab(lf, words) lineFileChopNextTab(lf, words, ArraySize(words))
+/* Ease-of-usef macro for lineFileChopNext above. */
+
 int lineFileNeedNum(struct lineFile *lf, char *words[], int wordIx);
 /* Make sure that words[wordIx] is an ascii integer, and return
  * binary representation of it. */

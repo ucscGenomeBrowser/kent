@@ -790,6 +790,15 @@ visibility hide
 spectrum on
 type bed 6
 
+track esRegGeneToMotif
+shortLabel Regulatory Module 
+longLabel Eran Segal Regulatory Module
+group regulation
+priority 78.1
+visibility dense
+spectrum on
+type bed 6 +
+
 track triangle
 shortLabel Golden Extra
 longLabel Golden Triangle Motif Matching Sites Near Transcription Start
@@ -1079,6 +1088,14 @@ priority 143
 altColor 0,160,0
 visibility hide
 type sample
+
+track snpMap
+shortLabel SNPs
+longLabel Simple Nucleotide Polymorphisms (SNPs)
+group varRep
+priority 143.9
+visibility hide
+type bed 6 .
 
 track snpNih
 shortLabel Overlap SNPs

@@ -20,10 +20,10 @@ clean:
 	rm -f ${O} ${PROGS}
 
 ${BINARCH}/gbAlignGet: gbAlignGet.o gbAlignCommon.o  ${LIBGENBANK}
-	@mkdir -p ${BINARCH}
+	@${MKDIR} ${BINARCH}
 	gcc ${CFLAGS} ${LDFLAGS} -o ${BINARCH}/gbAlignGet gbAlignCommon.o gbAlignGet.o $(LIBS)
 ${BINARCH}/gbAlignInstall: $O gbAlignInstall.o gbAlignCommon.o ${MYLIBS}
-	@mkdir -p ${BINARCH}
+	@${MKDIR} ${BINARCH}
 	gcc ${CFLAGS} -o ${BINARCH}/gbAlignInstall gbAlignCommon.o gbAlignInstall.o $(LIBS)
 
 

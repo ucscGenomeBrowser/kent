@@ -10,10 +10,19 @@
 #
 #	Thu Nov 20 11:31:51 PST 2003 - Created - Hiram
 #
-#	"$Id: mkProteinsDB.sh,v 1.2 2004/01/23 23:58:36 hiram Exp $"
+#	"$Id: mkProteinsDB.sh,v 1.3 2004/02/04 19:06:49 hiram Exp $"
 
 TOP=/cluster/data/proteins
 export TOP
+
+if [ "$#" -ne 1 ]; then
+    echo "usage: mkProteinsDB.sh <YYMMDD>"
+    echo -e "\t<YYMMDD> - date stamp used to find spYYMMDD DB"
+    exit 255
+fi
+
+SPDB_DATE=$1
+export SPDB_DATE
 
 type spToProteins > /dev/null 2> /dev/null
 
@@ -26,13 +35,22 @@ fi
 MACHINE=`uname -n`
 
 if [ ${MACHINE} != "hgwdev" ]; then
-	echo "ERROR: must run this script on hgwdev.  This is: ${MACHINE}"
-	exit 255
+    echo "ERROR: must run this script on hgwdev.  This is: ${MACHINE}"
+    exit 255
 fi
 
 DATE=`date "+%y%m%d"`
 PDB="proteins${DATE}"
-SPDB=sp"${DATE}"
+SPDB=sp"${SPDB_DATE}"
+export DATE PDB SPDB
+
+SP_TBLS=`hgsql -e "show tables;" "${SPDB}" | wc -l`
+
+if [ "${SP_TBLS}" -lt 30 ]; then
+    echo "ERROR: can not find database ${SPDB}"
+    echo -e "\tor too few tables (< 30).  table count: ${SP_TBLS}"
+    exit 255
+fi
 
 echo "Creating Db: ${PDB}"
 
@@ -58,9 +76,17 @@ hgsqldump -d proteins072003 | ${TOP}/bin/rmSQLIndex.pl > proteins.sql
 echo "hgsql ${PDB} < proteins.sql"
 hgsql ${PDB} < proteins.sql
 
+#	build HUGO database
+mkdir /cluster/store5/proteins/hugo/${DATE}
+cd /cluster/store5/proteins/hugo/${DATE}
+wget --timestamping "http://www.gene.ucl.ac.uk/public-files/nomen/nomeids.txt"
+sed -e "1d" nomeids.txt > hugo.tab
+hgsql -e 'LOAD DATA local INFILE "hugo.tab" into table hugo;' ${PDB}
+
+cd ${TOP}/${DATE}
 #	Create and load tables in proteins
-echo spToProteins ${DATE}
-spToProteins ${DATE}
+echo spToProteins ${SPDB_DATE}
+spToProteins ${SPDB_DATE}
 cd ${TOP}/${DATE}
 hgsql -e 'LOAD DATA local INFILE "spXref2.tab" into table spXref2;' ${PDB}
 hgsql -e 'create index i1 on spXref2(accession);' ${PDB}
@@ -72,13 +98,6 @@ hgsql -e 'create index ii1 on spXref3(accession);' ${PDB}
 hgsql -e 'create index ii2 on spXref3(displayID);' ${PDB}
 hgsql -e 'create index ii3 on spXref3(hugoSymbol);' ${PDB}
 hgsql -e 'LOAD DATA local INFILE "spOrganism.tab" into table spOrganism;' ${PDB}
-
-#	build HUGO database
-mkdir /cluster/store5/proteins/hugo/${DATE}
-cd /cluster/store5/proteins/hugo/${DATE}
-wget --timestamping "http://www.gene.ucl.ac.uk/public-files/nomen/nomeids.txt"
-sed -e "1d" nomeids.txt > hugo.tab
-hgsql -e 'LOAD DATA local INFILE "hugo.tab" into table hugo;' ${PDB}
 
 #	Build spSecondaryID table
 cd ${TOP}/${DATE}
@@ -94,8 +113,10 @@ mkdir /cluster/store5/proteins/pfam/${DATE}
 cd /cluster/store5/proteins/pfam/${DATE}
 wget --timestamping "ftp://ftp.sanger.ac.uk/pub/databases/Pfam/Pfam-A.full.gz"
 #	100 Mb compressed, over 700 Mb uncompressed
+rm -f Pfam-A.full
 gunzip Pfam-A.full.gz
 pfamXref ${PDB} Pfam-A.full pfamADesc.tab pfamAXref.tab
+gzip Pfam-A.full &
 
 hgsql -e 'LOAD DATA local INFILE "pfamADesc.tab" into table pfamDesc;' ${PDB}
 hgsql -e 'LOAD DATA local INFILE "pfamAXref.tab" into table pfamXref;' ${PDB}

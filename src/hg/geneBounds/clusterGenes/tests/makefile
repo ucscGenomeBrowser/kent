@@ -1,4 +1,4 @@
-
+include ../../../../inc/common.mk
 
 all:
 
@@ -11,16 +11,15 @@ test: refSeqTest refSeqCdsTest
 #  chr4:71,201,777-71,250,403 - a merged cluster
 
 refSeqTest: mkout
-	clusterGenes -conflicts=output/refSeqTest.con output/refSeqTest.gl hg16 input/blatRefSeq.gp input/ncbiRefSeq.gp
+	clusterGenes output/refSeqTest.gl hg16 input/blatRefSeq.gp input/ncbiRefSeq.gp
 	diff -u expected/refSeqTest.gl output/refSeqTest.gl
-	diff -u expected/refSeqTest.con output/refSeqTest.con
 
 refSeqCdsTest: mkout
-	clusterGenes -cds -conflicts=output/refSeqCdsTest.con output/refSeqCdsTest.gl hg16 input/blatRefSeq.gp input/ncbiRefSeq.gp
-	diff -u expected/refSeqCdsTest.con output/refSeqCdsTest.con
+	clusterGenes -cds output/refSeqCdsTest.gl hg16 input/blatRefSeq.gp input/ncbiRefSeq.gp
+	diff -u expected/refSeqCdsTest.gl output/refSeqCdsTest.gl
 
 mkout:
-	mkdir -p output
+	${MKDIR} output
 
 clean:
 	rm -rf output

@@ -14,7 +14,7 @@
 #include "cdsColors.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.82 2004/01/29 00:53:30 hiram Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.86 2004/02/06 09:41:32 markd Exp $";
 
 struct cart *cart;	/* Cookie cart with UI settings */
 char *database;		/* Current database. */
@@ -70,6 +70,53 @@ char *stsMapRatMap = cartUsualString(cart, "stsMapRat.type", smroeEnumToString(0
 filterButtons("stsMapRat.filter", stsMapRatFilter, TRUE);
 printf(" ");
 smroeDropDown("stsMapRat.type", stsMapRatMap);
+}
+
+void snpSourceFilterButtons(char *filterTypeVar, char *filterTypeVal)
+/* Put up some filter buttons. */
+{
+radioButton(filterTypeVar, filterTypeVal, "red");
+radioButton(filterTypeVar, filterTypeVal, "green");
+radioButton(filterTypeVar, filterTypeVal, "blue");
+radioButton(filterTypeVar, filterTypeVal, "black");
+radioButton(filterTypeVar, filterTypeVal, "exclude");
+}
+
+void snpTypeFilterButtons(char *filterTypeVar, char *filterTypeVal)
+/* Put up some filter buttons. */
+{
+radioButton(filterTypeVar, filterTypeVal, "include");
+radioButton(filterTypeVar, filterTypeVal, "exclude");
+}
+
+void snpUi(struct trackDb *tdb)
+/* Put up UI snpMarkers. */
+{
+char *snpSourceCart[snpSourceCount];
+char *snpTypeCart[snpTypeCount];
+int   snpSource = 0;
+int   snpType = 0;
+
+printf("<BR><B>Variant Sources:</B><BR>\n");
+for (snpSource=0; snpSource<snpSourceCount; snpSource++)
+    {
+    snpSourceCart[snpSource] = 
+	cartUsualString(cart, snpSourceEnumToString((enum snpSourceEnum)snpSource),
+			snpSourceColorEnumToString((enum snpSourceEnum)snpSource) );
+    snpSourceFilterButtons(snpSourceEnumToString((enum snpSourceEnum)snpSource), 
+			   snpSourceCart[snpSource]);
+    printf(" - <B>%s</B><BR>\n",snpSourceLabelEnumToString((enum snpSourceEnum)snpSource));
+    }
+printf("<BR><B>Variant Types:</B><BR>\n");
+for (snpType=0; snpType<snpTypeCount; snpType++)
+    {
+    snpTypeCart[snpType] = 
+	cartUsualString(cart, snpTypeEnumToString((enum snpTypeEnum)snpType), 
+			snpTypeStateEnumToString((enum snpTypeEnum)snpType));
+    snpTypeFilterButtons(snpTypeEnumToString((enum snpTypeEnum)snpType), 
+			 snpTypeCart[snpType]);
+    printf(" - <B>%s</B><BR>\n",snpTypeLabelEnumToString((enum snpTypeEnum)snpType));
+    }
 }
 
 void cbrWabaUi(struct trackDb *tdb)
@@ -357,7 +404,7 @@ void wigUi(struct trackDb *tdb)
 char *typeLine = NULL;	/*	to parse the trackDb type line	*/
 char *words[8];		/*	to parse the trackDb type line	*/
 int wordCount = 0;	/*	to parse the trackDb type line	*/
-char options[12][256];	/*	our option strings here	*/
+char options[14][256];	/*	our option strings here	*/
 double minY;		/*	from trackDb or cart	*/
 double maxY;		/*	from trackDb or cart	*/
 double tDbMinY;		/*	data range limits from trackDb type line */
@@ -366,24 +413,36 @@ int defaultHeight;	/*	pixels per item	*/
 char *horizontalGrid = NULL;	/*	Grid lines, off by default */
 char *lineBar;	/*	Line or Bar graph */
 char *autoScale;	/*	Auto scaling on or off */
+char *windowingFunction;	/*	Maximum, Mean, or Minimum */
+char *smoothingWindow;	/*	OFF or [2:16] */
+char *yLineMarkOnOff;	/*	user defined Y marker line to draw */
+double yLineMark;		/*	from trackDb or cart	*/
 int maxHeightPixels = atoi(DEFAULT_HEIGHT_PER);
 int minHeightPixels = MIN_HEIGHT_PER;
 
 typeLine = cloneString(tdb->type);
 wordCount = chopLine(typeLine,words);
 
-snprintf( &options[0][0], 256, "%s.heightPer", tdb->tableName );
-snprintf( &options[4][0], 256, "%s.minY", tdb->tableName );
-snprintf( &options[5][0], 256, "%s.maxY", tdb->tableName );
-snprintf( &options[7][0], 256, "%s.horizGrid", tdb->tableName );
-snprintf( &options[8][0], 256, "%s.lineBar", tdb->tableName );
-snprintf( &options[9][0], 256, "%s.autoScale", tdb->tableName );
+snprintf( &options[0][0], 256, "%s.%s", tdb->tableName, HEIGHTPER );
+snprintf( &options[4][0], 256, "%s.%s", tdb->tableName, MIN_Y );
+snprintf( &options[5][0], 256, "%s.%s", tdb->tableName, MAX_Y );
+snprintf( &options[7][0], 256, "%s.%s", tdb->tableName, HORIZGRID );
+snprintf( &options[8][0], 256, "%s.%s", tdb->tableName, LINEBAR );
+snprintf( &options[9][0], 256, "%s.%s", tdb->tableName, AUTOSCALE );
+snprintf( &options[10][0], 256, "%s.%s", tdb->tableName, WINDOWINGFUNCTION );
+snprintf( &options[11][0], 256, "%s.%s", tdb->tableName, SMOOTHINGWINDOW );
+snprintf( &options[12][0], 256, "%s.%s", tdb->tableName, YLINEMARK );
+snprintf( &options[13][0], 256, "%s.%s", tdb->tableName, YLINEONOFF );
 
 wigFetchMinMaxPixels(tdb, &minHeightPixels, &maxHeightPixels, &defaultHeight);
 wigFetchMinMaxY(tdb, &minY, &maxY, &tDbMinY, &tDbMaxY, wordCount, words);
 (void) wigFetchHorizontalGrid(tdb, &horizontalGrid);
 (void) wigFetchAutoScale(tdb, &autoScale);
 (void) wigFetchGraphType(tdb, &lineBar);
+(void) wigFetchWindowingFunction(tdb, &windowingFunction);
+(void) wigFetchSmoothingWindow(tdb, &smoothingWindow);
+(void) wigFetchYLineMark(tdb, &yLineMarkOnOff);
+wigFetchYLineMarkValue(tdb, &yLineMark);
 
 printf("<TABLE BORDER=0><TR><TD ALIGN=LEFT>\n");
 
@@ -405,10 +464,19 @@ printf("<b>Vertical viewing range</b>:&nbsp;&nbsp;\n<b>min:&nbsp;</b>");
 cgiMakeDoubleVar(&options[4][0], minY, 6);
 printf("&nbsp;&nbsp;&nbsp;&nbsp;<b>max:&nbsp;</b>");
 cgiMakeDoubleVar(&options[5][0], maxY, 6);
-printf("<BR>(viewing range limits:&nbsp;min:&nbsp;%g&nbsp;&nbsp;max:&nbsp;%g)",
+printf("<BR>\n(viewing range limits:&nbsp;min:&nbsp;%g&nbsp;&nbsp;max:&nbsp;%g)",
     tDbMinY, tDbMaxY);
-printf("<BR><b>Data view scaling:&nbsp;</b>");
+printf("<BR>\n<b>Data view scaling:&nbsp;</b>");
 wiggleScaleDropDown(&options[9][0], autoScale);
+printf("<BR>\n<b>Windowing function:&nbsp;</b>");
+wiggleWindowingDropDown(&options[10][0], windowingFunction);
+printf("<BR>\n<b>Smoothing window:&nbsp;</b>");
+wiggleSmoothingDropDown(&options[11][0], smoothingWindow);
+printf("&nbsp;pixels");
+printf("<BR>\n<b>Draw indicator line at y=</b>&nbsp;\n");
+cgiMakeDoubleVar(&options[12][0], yLineMark, 6);
+printf("&nbsp;&nbsp;");
+wiggleYLineMarkDropDown(&options[13][0], yLineMarkOnOff);
 printf("</TD></TR></TABLE>\n");
 
 freeMem(typeLine);
@@ -573,6 +641,8 @@ else if (sameString(track, "stsMapMouseNew"))
         stsMapMouseUi(tdb);
 else if (sameString(track, "stsMapRat"))
         stsMapRatUi(tdb);
+else if (sameString(track, "snpMap"))
+        snpUi(tdb);
 else if (sameString(track, "cbr_waba"))
         cbrWabaUi(tdb);
 else if (sameString(track, "fishClones"))
@@ -684,19 +754,13 @@ void doMiddle(struct cart *theCart)
 /* Write body of web page. */
 {
 struct trackDb *tdb;
-struct sqlConnection *conn;
-char where[256];
 char *track;
-char *trackDb = hTrackDbName();
 cart = theCart;
 track = cartString(cart, "g");
 database = cartUsualString(cart, "db", hGetDb());
 hSetDb(database);
 chromosome = cartString(cart, "c");
-conn = hAllocConn();
-sprintf(where, "tableName = '%s'", track);
-tdb = trackDbLoadWhere(conn, trackDb, where);
-hLookupStringsInTdb(tdb, database);
+tdb = hTrackDbForTrack(track);
 if (tdb == NULL)
    errAbort("Can't find %s in track database %s chromosome %s", track, database, chromosome);
 printf("<FORM ACTION=\"%s\">\n\n", hgTracksName());

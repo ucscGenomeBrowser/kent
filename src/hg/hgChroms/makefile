@@ -9,10 +9,10 @@ BINDIR = $(HOME)/bin/$(MACHTYPE)
 
 hgChroms: $O $(MYLIBS)
 	gcc -ggdb -o hgChroms $O $(MYLIBS) $L
-	mkdir -p ${BINDIR}
+	${MKDIR} ${BINDIR}
 	cp -f hgChroms ${BINDIR}
 	strip ${BINDIR}/hgChroms
 
 clean::
 	rm -f ${O} hgChroms ${BINDIR}/hgChroms
-	cd tests && ${MAKE} clean
+#	cd tests && ${MAKE} clean

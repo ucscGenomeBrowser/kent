@@ -10,7 +10,7 @@
 #include "genePred.h"
 #include "hgMaf.h"
 
-static char const rcsid[] = "$Id: mafClick.c,v 1.9 2003/10/25 08:22:08 kent Exp $";
+static char const rcsid[] = "$Id: mafClick.c,v 1.10 2004/01/30 22:45:09 daryl Exp $";
 
 /* Javascript to help make a selection from a drop-down
  * go back to the server. */
@@ -144,7 +144,7 @@ for (mc = maf->components; mc != NULL; mc = mc->next)
         reverseIntRange(&s, &e, mc->srcSize);
     if (hDbExists(dbOnly))
         {
-        fprintf(f, "%s %s (%s) ", 
+        fprintf(f, "%-7s %9s (%4s) ", 
     	        hOrganism(dbOnly), hFreezeFromDb(dbOnly), dbOnly);
         linkToOtherBrowser(dbOnly, chrom, s, e);
         fprintf(f, "%s:%d-%d</A>", chrom, s+1, e);

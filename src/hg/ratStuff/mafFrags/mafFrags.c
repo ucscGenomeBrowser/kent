@@ -11,7 +11,7 @@
 #include "hgMaf.h"
 
 
-static char const rcsid[] = "$Id: mafFrags.c,v 1.1 2003/10/25 06:00:17 kent Exp $";
+static char const rcsid[] = "$Id: mafFrags.c,v 1.2 2004/02/02 23:45:00 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -51,7 +51,9 @@ mafWriteStart(f, "zero");
 while (lineFileRow(lf, row))
     {
     struct bed *bed = bedLoadN(row, ArraySize(row));
-    struct mafAli *maf = hgMafFrag(database, track, 
+    struct mafAli *maf;
+    // uglyf("%s %s:%d%s%d\n", bed->name, bed->chrom, bed->chromStart, bed->strand, bed->chromEnd);
+    maf = hgMafFrag(database, track, 
     	bed->chrom, bed->chromStart, bed->chromEnd, bed->strand[0],
 	bed->name, orgList);
     mafWrite(f, maf);

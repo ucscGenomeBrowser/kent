@@ -1,3 +1,11 @@
+track gap
+shortLabel Gap
+longLabel Gap Locations
+priority 11
+group map
+visibility dense
+type bed 3 +
+
 track xenoRefGene
 shortLabel Non$Organism RefSeq
 long label Non$Organism RefSeq Genes
@@ -17,7 +25,23 @@ autoScaleDefault Off
 maxHeightPixels 128:36:16
 graphTypeDefault Bar
 gridDefault OFF
+windowingFunction Mean
 color 0,128,255
 altColor 255,128,0
 defaultViewLimits 30:70
 type wig 0 100 
+
+track quality
+shortLabel Quality Scores
+longLabel Quality Scores
+group map
+priority 23.6
+visibility hide
+autoScaleDefault Off
+maxHeightPixels 128:36:16
+graphTypeDefault Bar
+gridDefault OFF
+color 0,128,255
+altColor 255,128,0
+type wig 0 100 
+

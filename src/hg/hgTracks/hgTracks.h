@@ -84,6 +84,8 @@ struct track
     Color (*itemColor)(struct track *tg, void *item, struct vGfx *vg);
     /* Get color of item (optional). */
 
+    Color (*itemNameColor)(struct track *tg, void *item, struct vGfx *vg);
+    /* Get color for the item's name (optional). */
 
     void (*mapItem)(struct track *tg, void *item, 
     	char *itemName, int start, int end, 
@@ -122,6 +124,8 @@ struct track
 
     boolean exonArrows;	/* Draw arrows on exons? */
 
+    Color labelColor;   /* Fixed color for the track label (optional) */
+    
     void (*drawLeftLabels)(struct track *tg, int seqStart, int seqEnd,
 	struct vGfx *vg, int xOff, int yOff, int width, int height, 
 	boolean withCenterLabels, MgFont *font,

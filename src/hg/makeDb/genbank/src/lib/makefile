@@ -15,12 +15,12 @@ all: ${LIBGENBANK} ${INSTLIBSRCS}
 
 
 ${LIBGENBANK}: $(O) 
-	@mkdir -p `dirname $@`
+	@${MKDIR} `dirname $@`
 	ar rcu $@ $(O)
 	ranlib $@
 
 ${LIBDIR}/%: %
-	@mkdir -p `dirname $@`
+	@${MKDIR} `dirname $@`
 	cp -f $< $@
 	chmod a-w,a+r $@
 

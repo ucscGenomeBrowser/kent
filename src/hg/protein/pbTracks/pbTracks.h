@@ -15,6 +15,8 @@
 #include "vGfx.h"
 #endif
 
+extern Color pbRed, pbBlue;
+
 extern struct cart *cart; /* The cart where we keep persistent variables. */
 extern char *database;	  /* Name of database we're using. */
 extern char *organism;	  /* Name of organism we're working on. */
@@ -104,15 +106,16 @@ extern boolean scaleButtonPushed;
 
 extern struct vGfx *vg, *vg2;
 extern Color bkgColor;
-extern int abnormalColor;
-extern int normalColor;
+extern Color abnormalColor;
+extern Color normalColor;
+extern char hgsidStr[];
 
 void hWrites(char *string);
 void hButton(char *name, char *label);
 void hPrintf(char *format, ...);
 
 char *getAA(char *pepAccession);
-int chkAnomaly(double currentAvg, double avg, double stddev);
+int chkAnomaly(double currentAvg, double pctLow, double pctHi);
 
 void calxy(int xin, int yin, int *outxp, int *outyp);
 
@@ -121,9 +124,9 @@ int getSuperfamilies(char *proteinID);
 void getExonInfo(char *proteinID, int *exonCount, char **chrom, char *strand);
 void printExonAA(char *proteinID, char *aa, int exonNum);
 void doPathwayLinks(char *protDisplayID, char *mrnaID);
-void doGenomeBrowserLink(char *protDisplayID, char *mrnaID);
-void doGeneDetailsLink(char *protDisplayID, char *mrnaID);
-void doFamilyBrowserLink(char *protDisplayID, char *mrnaID);
+void doGenomeBrowserLink(char *protDisplayID, char *mrnaID, char *hgsidStr);
+void doGeneDetailsLink(char *protDisplayID, char *mrnaID, char *hgsidStr);
+void doFamilyBrowserLink(char *protDisplayID, char *mrnaID, char *hgsidStr);
 
 void doTracks(char *proteinID, char *mrnaID, char *aa, int *yOffp, char *psOutput);
 void doStamps(char *proteinID, char *mrnaID, char *aa, struct vGfx *vg, int *yOffp);

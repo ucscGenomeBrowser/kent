@@ -13,7 +13,7 @@ MYLIBS =  ../lib/$(MACHTYPE)/libSpliceGraph.a  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/
 	gcc -Wimplicit -ggdb  -I../../inc -I../../../inc  -o $@ $(addsuffix .c,$@) $(MYLIBS) $(L)
 
 
-O = bedsSpliceCheck probeMatcher seqForExonProbes mergeAffyProbes merge1lqAndCels makeRFiles
+O =  junctionSets agxStartsEnds bedsSpliceCheck probeMatcher seqForExonProbes mergeAffyProbes merge1lqAndCels makeRFiles
 
 exe: $(O)
 

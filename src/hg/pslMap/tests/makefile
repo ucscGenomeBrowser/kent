@@ -1,3 +1,4 @@
+include ../../../inc/common.mk
 
 all:
 
@@ -34,4 +35,4 @@ clean::
 	rm -rf output
 
 mkdirs:
-	@mkdir -p output
+	@${MKDIR} output

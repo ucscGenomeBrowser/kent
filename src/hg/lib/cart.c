@@ -12,7 +12,7 @@
 #include "hdb.h"
 #include "jksql.h"
 
-static char const rcsid[] = "$Id: cart.c,v 1.33 2004/01/29 09:17:39 genbank Exp $";
+static char const rcsid[] = "$Id: cart.c,v 1.36 2004/02/06 23:52:13 fanhsu Exp $";
 
 static char *sessionVar = "hgsid";	/* Name of cgi variable session is stored in. */
 static char *positionCgiName = "position";
@@ -660,7 +660,7 @@ cartExclude(cart, sessionVar);
 
 /* Write out cookie for next time. */
 printf("Set-Cookie: %s=%u; path=/; domain=%s; expires=%s\n",
-	cookieName, cart->userInfo->id, cfgOption("central.domain"), cookieDate());
+	cookieName, cart->userInfo->id, cfgVal("central.domain"), cookieDate());
 if (doContentType)
     {
     puts("Content-Type:text/html");
@@ -719,16 +719,23 @@ pushWarnHandler(htmlVaWarn);
 htmStart(stdout, title);
 }
 
-void cartWebStart(struct cart *theCart, char *format, ...)
+void cartVaWebStart(struct cart *cart, char *format, va_list args)
+/* Print out pretty wrapper around things when working
+ * from cart. */
+{
+pushWarnHandler(htmlVaWarn);
+webStartWrapper(cart, format, args, FALSE, FALSE);
+inWeb = TRUE;
+}
+
+void cartWebStart(struct cart *cart, char *format, ...)
 /* Print out pretty wrapper around things when working
  * from cart. */
 {
 va_list args;
 va_start(args, format);
-pushWarnHandler(htmlVaWarn);
-webStartWrapper(theCart, format, args, FALSE, FALSE);
+cartVaWebStart(cart, format, args);
 va_end(args);
-inWeb = TRUE;
 }
 
 void cartWebEnd()
@@ -762,6 +769,32 @@ struct cart *cart = cartAndCookie(cookieName, exclude, oldVars);
 cartWarnCatcher(doMiddle, cart, cartEarlyWarningHandler);
 cartCheckout(&cart);
 }
+
+void cartHtmlShellPB(char *title, void (*doMiddle)(struct cart *cart),
+        char *cookieName, char **exclude, struct hash *oldVars)
+/* For Proteome Browser, Load cart from cookie and session cgi variable.  Write web-page
+ * preamble, call doMiddle with cart, and write end of web-page.
+ * Exclude may be NULL.  If it exists it's a comma-separated list of
+ * variables that you don't want to save in the cart between
+ * invocations of the cgi-script. */
+{
+struct cart *cart;
+int status;
+char *db, *org;
+char titlePlus[128];
+char *proteinID;
+pushWarnHandler(cartEarlyWarningHandler);
+cart = cartAndCookie(cookieName, exclude, oldVars);
+getDbAndGenome(cart, &db, &org);
+proteinID = cartOptionalString(cart, "proteinID");
+safef(titlePlus, sizeof(titlePlus), "%s protein %s - %s", org, proteinID, title);
+popWarnHandler();
+htmStart(stdout, titlePlus);
+cartWarnCatcher(doMiddle, cart, htmlVaWarn);
+cartCheckout(&cart);
+htmlEnd();
+}
+
 
 void cartHtmlShell(char *title, void (*doMiddle)(struct cart *cart), 
 	char *cookieName, char **exclude, struct hash *oldVars)

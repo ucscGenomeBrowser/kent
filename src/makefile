@@ -30,6 +30,7 @@ clean:
 	cd lib && ${MAKE} clean 
 	cd hg && ${MAKE} clean
 	cd jkOwnLib && ${MAKE} clean
+	cd utils && ${MAKE} clean
 
 tags:
 	ctags $(HOME)/src/lib/*.c $(HOME)/src/inc/*.h $(HOME)/src/hg/lib/*.c $(HOME)/src/hg/inc/*.h $(HOME)/src/jkOwnLib/*.c

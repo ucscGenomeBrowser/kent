@@ -2,20 +2,20 @@ include ../../inc/common.mk
 HG_WARN += ${HG_WERR}
 
 L = -lm
-MYLIBDIR = ../../lib/$(MACHTYPE)
-MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
+MYLIBDIR = ../../lib/${MACHTYPE}
+MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 
 
 H = selectTable.h coordCols.h
 O = selectTable.o coordCols.o overlapSelect.o
-B =  $(HOME)/bin/$(MACHTYPE)/overlapSelect
+B =  ${HOME}/bin/${MACHTYPE}/overlapSelect
 
 $B: overlapSelect
-	@mkdir -p `dirname $B`
+	@${MKDIR} `dirname $B`
 	cp -f overlapSelect $B
 
-overlapSelect: $O $(MYLIBS)
-	${CC} ${COPT} ${CFLAGS} -o overlapSelect $O $(MYLIBS) ${MYSQLLIBS} $L
+overlapSelect: $O ${MYLIBS}
+	${CC} ${COPT} ${CFLAGS} -o overlapSelect $O ${MYLIBS} ${MYSQLLIBS} $L
 
 
 test:

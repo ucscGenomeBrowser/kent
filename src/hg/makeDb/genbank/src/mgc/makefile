@@ -14,10 +14,10 @@ clean:
 
 
 ${BINARCH}/mgcImport:  mgcImport.o ${O} ${LIBGENBANK}
-	@mkdir -p ${BINARCH}
+	@${MKDIR} ${BINARCH}
 	gcc ${CFLAGS} ${LDFLAGS} -o ${BINARCH}/mgcImport mgcImport.o ${O} $(LIBS)
 
 ${BINARCH}/mgcDbLoad:  mgcDbLoad.o ${O} ${LIBGENBANK}
-	@mkdir -p ${BINARCH}
+	@${MKDIR} ${BINARCH}
 	gcc ${CFLAGS} ${LDFLAGS} -o ${BINARCH}/mgcDbLoad mgcDbLoad.o ${O} $(LIBS)
 

@@ -31,7 +31,7 @@ update:
 	hgTrackDb drosophila dp1 trackDb_$(USER) ../../lib/trackDb.sql .
 	hgTrackDb sacCer sacCer1 trackDb_$(USER) ../../lib/trackDb.sql .
 	hgTrackDb chicken galGal1 trackDb_$(USER) ../../lib/trackDb.sql .
-	hgTrackDb archae pae trackDb_$(USER) ../../lib/trackDb.sql .
+	hgTrackDb archae pyrAer1 trackDb_$(USER) ../../lib/trackDb.sql .
 	hgTrackDb chimp panTro1 trackDb_$(USER) ../../lib/trackDb.sql .
 	cd zoo; make update; cd ..
 
@@ -81,7 +81,7 @@ alpha:
 	cp sars/sc1/description.html /gbdb/sc1/html
 	cp zoo/description.html /gbdb/zoo3/html
 	cp sacCer/sacCer1/description.html /gbdb/sacCer1/html
-	cp archae/pae/description.html /gbdb/pae/html
+	cp archae/pae/description.html /gbdb/pyrAer1/html
 	cp chimp/panTro1/description.html /gbdb/panTro1/html
 
 strict:

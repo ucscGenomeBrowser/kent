@@ -14,7 +14,7 @@
 #include "gbFileOps.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: mgcDbLoad.c,v 1.5 2003/06/27 18:39:34 markd Exp $";
+static char const rcsid[] = "$Id: mgcDbLoad.c,v 1.6 2004/02/02 01:32:30 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -497,7 +497,7 @@ optionInit(&argc, argv, optionSpecs);
 drop = optionExists("drop");
 gbVerbInit(optionInt("verbose", 0));
 if (verbose >= 5)
-    sqlTrace = TRUE;  /* global flag in jksql */
+    sqlMonitorEnable(JKSQL_TRACE);
 if (drop)
     {
     database = argv[1];

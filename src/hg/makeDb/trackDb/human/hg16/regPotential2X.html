@@ -5,7 +5,7 @@ from alignments of human (hg16, Jul. '03) and mouse (mm4, Oct. '03).
 RP scores compare frequencies of short alignment patterns between 
 regulatory elements and neutral DNA. 
 <P>
-The default display range for the track is 0 to 0.1. Score values 
+Score values 
 at or below 0 indicate resemblance to alignment patterns typical of 
 neutral DNA. Score values at or above 
 0.1 indicate very marked resemblance to alignment patterns typical of 
@@ -37,22 +37,41 @@ for length.
 </P>
 
 <H2>Using the Filter</H2>
-<P>The track filter can be used to configure display attributes of the track's graph. 
+<P>The track filter can be used to configure display attributes of
+the track's graph. 
 <UL>
-<LI><B>Type of graph</B>: The default &quot;Bar&quot; setting depicts the graph data using filled-in 
-bars. To switch to a view in which the data are represented by points or lines, select the 
-&quot;Points&quot; setting. 
-<LI><B>Show y=-0.0 line</B>: Select the &quot;ON&quot; setting to display a line marking the 0.0
-position on the graph (default is &quot;OFF&quot;).
-<LI><B>Track height</B>: To change the default display height of the graph in pixels, type in a different
-value between 11 and 128 (the default display height is 128 pixels).
-<LI><B>Vertical viewing range</B>: By default, the viewing range is set to the values of the minimum and 
-maximum data points viewable at this position. Type in a different value to reduce the range of data
-values displayed. 
-<LI><B>Data view scaling</B>: The default &quot;Use Vertical Viewing Range Setting" displays the
-data using the parameters specified in the Vertical viewing range setting. To configure the graph 
-to automatically scale to a range defined by the minimum and maximum data points in the current 
-view, select the &quot;Auto-Scale to data view&quot; option. 
+<LI><B>Type of graph</B>: The default &quot;Bar&quot; setting depicts the graph
+data using color-filled bars. To view the data as a series of points or lines, 
+select the &quot;Points&quot; setting. 
+<LI><B>y = 0.0 line</B>: Select the &quot;ON&quot; setting to display a
+line marking the 0.0 position on the graph (default is &quot;OFF&quot;).
+<LI><B>Track height</B>: To change the default display height of the graph
+in pixels, type in a value from within the indicated range.
+<LI><B>Vertical viewing range</B>: The min and max values specify the 
+vertical portion of the graph that is displayed (default
+range is 0-0.01). These numbers can be used to set data threshold indicators. 
+For example, setting the min to &quot0.005&quot; restricts the display
+to data equal to or greater than that value. 
+<LI><B>Data view scaling</B>: The default &quot;Use vertical viewing range
+setting&quot; option displays the data using the parameters specified in the Vertical
+viewing range setting. To configure the graph to automatically scale to a
+range defined by the minimum and maximum data points in the current 
+view, select the &quot;Auto-scale to data view&quot; option. 
+<LI><B>Windowing function</B>: When a  view is too large to show individual
+data values, the values must be combined to produce a plot point.
+This option specifies the combining function to be used: &quot;Maximim&quot; - 
+the maximum value of all the points to be combined, &quot;Mean&quot; - 
+the mean, or &quot;Minimum&quot; - the minimum of all the
+points to be combined (default is &quot;Mean&quot;).
+<LI><B>Smoothing window</B>: When set to a numerical value, this option 
+determines the size, in pixels, of a smoothing window
+to be passed over the plot to smooth the edges of the bars or lines.  
+This is equivalent to a trend line calculation on the graph.
+The default setting is &quot;OFF&quot;.
+<LI><B>Draw indicator line at y=</B>: When set to &quot;ON&quot;, the track
+displays an arbitrary line on the graph at the specified numerical value 
+(defaults are &quot;0&quot; and &quot;OFF&quot;). This line can be used to 
+mark a significant threshold on the graph.
 </UL></P>
 <P>
 When you have finished configuring the filter, click the <em>Submit</em> button.

@@ -51,9 +51,9 @@ outputFileName   = cloneString(argv[3]);
 conn = hAllocConn();
 conn2= hAllocConn();
 	
-o1 = fopen(outputFileName, "w");
+o1 = mustOpen(outputFileName, "w");
     
-if ((inf = fopen(proteinFileName, "r")) == NULL)
+if ((inf = mustOpen(proteinFileName, "r")) == NULL)
     {		
     fprintf(stderr, "Can't open file %s.\n", proteinFileName);
     exit(8);

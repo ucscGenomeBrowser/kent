@@ -488,7 +488,7 @@ altColor 0,160,0
 type maf
 speciesOrder human chimp orangutan baboon macaque vervet lemur rabbit rat mouse cow pig horse cat dog ajbat cpbat hedgehog opossum dunnart platypus chicken zfish tetra fugu
 
-track tbaLeptin
+track leptin
 shortLabel Leptin TBA
 longLabel Leptin Region TBA alignments (human,mouse,rat,chimp,baboon,cow,pig,cat,dog)
 group compGeno
@@ -1071,3 +1071,36 @@ color 0,128,255
 altColor 255,128,0
 defaultViewLimits 0.0:0.01
 type wig -0.0732 0.153
+
+track chainGalGal1
+shortLabel Chicken Chain 
+longLabel Chained (Jan. 2004 - galGal1) Chicken/$Organism Alignments
+group compGeno
+priority 155
+visibility hide
+color 100,50,0
+altColor 255,240,200
+spectrum on
+type chain galGal1
+otherDb galGal1
+
+track netGalGal1
+shortLabel Chicken Net
+longLabel (Jan. 2004 - galGal1) Chicken/$Organism Alignment Net
+group compGeno
+priority 156
+visibility dense
+spectrum on
+type netAlign galGal1 chainGalGal1
+otherDb galGal1
+
+track netSyntenyGalGal1
+shortLabel Chicken Synteny
+longLabel (Jan. 2004 - galGal1) Chicken/$Organism Synteny Using Chained/Netted Blastz
+group compGeno
+priority 157
+visibility hide
+color 0,100,0
+altColor 255,240,200
+type netAlign galGal1 chainGalGal1
+

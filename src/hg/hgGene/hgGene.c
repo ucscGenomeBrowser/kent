@@ -16,7 +16,7 @@
 #include "hgColors.h"
 #include "hgGene.h"
 
-static char const rcsid[] = "$Id: hgGene.c,v 1.25 2004/01/05 20:07:54 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgGene.c,v 1.26 2004/02/05 13:25:26 fanhsu Exp $";
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
@@ -289,6 +289,7 @@ hPrintf("<A HREF=\"http://www.expasy.org/cgi-bin/niceprot.pl?%s\" TARGET=_blank>
 
 if (summaryTables != NULL)
     {
+    hPrintf("<BR>");
     if (sqlTablesExist(conn, summaryTables))
 	{
 	char *summary = genoQuery(id, "summarySql", conn);

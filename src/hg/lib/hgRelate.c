@@ -14,7 +14,7 @@
 #include "hgRelate.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: hgRelate.c,v 1.16 2004/01/29 22:57:13 hartera Exp $";
+static char const rcsid[] = "$Id: hgRelate.c,v 1.17 2004/01/30 22:34:12 hartera Exp $";
 
 static char extFileCreate[] =
 /* This keeps track of external files and directories. */
@@ -122,10 +122,6 @@ return endUpdateId++;
 
 void hgHistoryComment(struct sqlConnection *conn, char *comment, ...)
 /* Add comment to history table.  Does not lock the process. */
-/* WARNING: hgStartUpdate implements an advisory lock on the process so */
-/* a program can add a history comment using this function after */
-/* hgStartUpdate has been implemented as long as the same conn is used, */
-/* otherwise the writing of the comment to the history table may be blocked */
 {
 struct dyString *query = newDyString(256);
 va_list args;

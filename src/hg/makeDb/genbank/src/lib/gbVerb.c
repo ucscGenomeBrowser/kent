@@ -7,7 +7,7 @@
 #include <unistd.h>
 #include <sys/time.h>
 
-static char const rcsid[] = "$Id: gbVerb.c,v 1.1 2003/06/03 01:27:46 markd Exp $";
+static char const rcsid[] = "$Id: gbVerb.c,v 1.2 2004/02/02 01:32:30 markd Exp $";
 
 #define INDENT_AMT 2  /* characters per indent level */
 
@@ -102,7 +102,7 @@ if (verbose >= level)
     assert(indent < ArraySize(startTimes));
     }
 indent++;
-sqlTraceIndent = indent*INDENT_AMT;
+sqlMonitorSetIndent(indent*INDENT_AMT);
 assert(indent < ArraySize(startTimes));
 startTimes[indent] = curTime;
 }
@@ -116,7 +116,7 @@ double stepStart;
 assert((indent > 0) && (indent < ArraySize(startTimes)));
 stepStart = startTimes[indent];
 indent--;
-sqlTraceIndent = indent*INDENT_AMT;
+sqlMonitorSetIndent(indent*INDENT_AMT);
 
 if (verbose >= level)
     {

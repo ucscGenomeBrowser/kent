@@ -40,7 +40,7 @@
 #include "minGeneInfo.h"
 #include <regex.h>
 
-static char const rcsid[] = "$Id: hgFind.c,v 1.124 2003/12/17 20:02:26 braney Exp $";
+static char const rcsid[] = "$Id: hgFind.c,v 1.125 2004/02/06 22:24:45 angie Exp $";
 
 /* alignment tables to check when looking for mrna alignments */
 static char *estTables[] = { "all_est", "xenoEst", NULL};
@@ -1491,8 +1491,11 @@ if (hTableExists("bacEndPairs"))
 	    {
 	    ok = TRUE;
 	    AllocVar(table);
-	    dyStringClear(query);
 	    slAddHead(&hgp->tableList, table);
+	    dyStringClear(query);
+	    dyStringPrintf(query, "%s Positions found using BAC end sequences", spec);
+	    table->description = cloneString(query->string);
+	    table->name = cloneString("bacEndPairs");
 	    }
 	AllocVar(be);
 	be = lfsLoad(row+1);
@@ -1504,9 +1507,6 @@ if (hTableExists("bacEndPairs"))
 	pos->chromStart = be->chromStart;
 	pos->chromEnd = be->chromEnd;
 	pos->name = cloneString(spec);
-	dyStringPrintf(query, "%s Positions found using BAC end sequences", spec);
-	table->description = cloneString(query->string);
-	table->name = cloneString("bacEndPairs");
 	slAddHead(&table->posList, pos);
 	lfsFree(&be);
 	}
@@ -1545,8 +1545,11 @@ if (hTableExists("fosEndPairs"))
 	    {
 	    ok = TRUE;
 	    AllocVar(table);
-	    dyStringClear(query);
 	    slAddHead(&hgp->tableList, table);
+	    dyStringClear(query);
+	    dyStringPrintf(query, "%s Positions found using fosmid end sequences", spec);
+	    table->description = cloneString(query->string);
+	    table->name = cloneString("fosEndPairs");
 	    }
 	AllocVar(fe);
 	fe = lfsLoad(row+1);
@@ -1558,9 +1561,6 @@ if (hTableExists("fosEndPairs"))
 	pos->chromStart = fe->chromStart;
 	pos->chromEnd = fe->chromEnd;
 	pos->name = cloneString(spec);
-	dyStringPrintf(query, "%s Positions found using fosmid end sequences", spec);
-	table->description = cloneString(query->string);
-	table->name = cloneString("fosEndPairs");
 	slAddHead(&table->posList, pos);
 	lfsFree(&fe);
 	}
@@ -1599,8 +1599,11 @@ if (hTableExists("fosEndPairsBad"))
 	    {
 	    ok = TRUE;
 	    AllocVar(table);
-	    dyStringClear(query);
 	    slAddHead(&hgp->tableList, table);
+	    dyStringClear(query);
+	    dyStringPrintf(query, "%s Positions found using fosmid end sequences", spec);
+	    table->description = cloneString(query->string);
+	    table->name = cloneString("fosEndPairsBad");
 	    }
 	AllocVar(fe);
 	fe = lfsLoad(row+1);
@@ -1612,9 +1615,6 @@ if (hTableExists("fosEndPairsBad"))
 	pos->chromStart = fe->chromStart;
 	pos->chromEnd = fe->chromEnd;
 	pos->name = cloneString(spec);
-	dyStringPrintf(query, "%s Positions found using fosmid end sequences", spec);
-	table->description = cloneString(query->string);
-	table->name = cloneString("fosEndPairsBad");
 	slAddHead(&table->posList, pos);
 	lfsFree(&fe);
 	}

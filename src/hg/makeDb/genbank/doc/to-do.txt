@@ -653,3 +653,14 @@ Warning: NM_181796: malformed RefSeq CDS: join(76,77..708)
 
 - *** gbGetSets on psls reports sequences that didn't align as missing and
   *** only returns the fist one
+
+- rawPsl handling looks broken
+
+- move all genome specific config to genbank.conf, including gbBlat stuff.
+
+- jk on more orgCat: Maybe:   native, close, medium, far
+  where we use untranslated blat for native and close,  translated
+  blat for medium, and some hypothetical more sensitive something for
+  far.  For backwards compatibility if it's an issue we can make
+  xeno a synonym for medium.
+

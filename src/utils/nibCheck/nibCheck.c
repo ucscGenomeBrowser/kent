@@ -50,13 +50,13 @@ for (i=0; i < nibSize; i = endBuf)
         }
       } else {
         if (matchRegion) {
-          blockcount++;
-          strcpy(blockname, "");
-          sprintf(blockname, "N%d", blockcount);
           endpos = (block * bufSize) + pos;
           size = endpos - startpos;
           if (size >= 1000) 
           {
+              blockcount++;
+              strcpy(blockname, "");
+              sprintf(blockname, "N%d", blockcount);
               printf("%s\t%d\t%d\t%s\n", chromname, startpos, endpos, blockname);
           }
           matchRegion = FALSE;
@@ -76,19 +76,22 @@ void usage()
 {
     printf("nibCheck -- report N regions 100 bases or greater.\n"
            "usage:\n"
-           "   nibCheck chromname\n");
+           "   nibCheck path chromname\n");
 }
 
 int main(int argc, char *argv[])
 {
+  char path[512];
   char chromname[512];
-  if (argc < 2) {
+  if (argc < 3) {
     usage();
     return -1;
   }
+  strcpy(path, "");
+  strcat(path, argv[1]);
   strcpy(chromname, "");
-  strcat(chromname, argv[1]);
-  findNRanges("/gbdb/panTro1/nib/", chromname);
+  strcat(chromname, argv[2]);
+  findNRanges(path, chromname);
   return 0;
 }
 

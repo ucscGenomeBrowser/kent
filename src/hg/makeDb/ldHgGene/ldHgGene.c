@@ -11,7 +11,7 @@
 #include "genePred.h"
 #include "hgRelate.h"
 
-static char const rcsid[] = "$Id: ldHgGene.c,v 1.16 2004/01/29 21:37:19 hartera Exp $";
+static char const rcsid[] = "$Id: ldHgGene.c,v 1.19 2004/02/03 22:25:39 braney Exp $";
 
 char *exonType = "exon";	/* Type field that signifies exons. */
 boolean requireCDS = FALSE;     /* should genes with CDS be dropped */
@@ -41,7 +41,7 @@ errAbort(
     "     -oldTable    Don't overwrite what's already in table\n"
     "     -noncoding   Forces whole prediction to be UTR\n"
     "     -gtf         input is GTF, stop codon is not in CDS\n"
-    "     -predTab     input is already in genePredTab format (one file only)\n"
+    "     -predTab     input is already in genePredTab format\n"
     "     -requireCDS  discard genes that don't have CDS annotation\n"
     "     -out=gpfile  write output, in genePred format, instead of loading\n"
     "                  table. Database is ignored.\n");
@@ -66,20 +66,21 @@ char *createString =
 ")";
 
 
-void loadIntoDatabase(char *database, char *table, char *tabName)
+void loadIntoDatabase(char *database, char *table, char *tabName,
+                      bool appendTbl)
 /* Load tabbed file into database table. Drop and create table. */
 {
 struct sqlConnection *conn = sqlConnect(database);
 struct dyString *ds = newDyString(2048);
 char comment[256];
 
-if (!optionExists("oldTable"))
+if (!appendTbl)
     {
     dyStringPrintf(ds, createString, table);
     sqlMaybeMakeTable(conn, table, ds->string);
     dyStringClear(ds);
     dyStringPrintf(ds, 
-       "delete from %s", table);
+       "truncate table %s", table);
     sqlUpdate(conn, ds->string);
     dyStringClear(ds);
     }
@@ -88,7 +89,7 @@ dyStringPrintf(ds,
 
 sqlUpdate(conn, ds->string);
 
-// add a comment and ids to the history table and finish up connection
+/* add a comment and ids to the history table and finish up connection */
 safef(comment, sizeof(comment), "Add gene predictions to %s table", table);
 hgHistoryComment(conn, comment);
 sqlDisconnect(&conn);
@@ -105,6 +106,39 @@ char *s = strrchr(name, '.');
 if (strstr(name, head) == NULL)
     errAbort("Unrecognized Softberry name %s, no %s", name, head);
 return s+1;
+}
+
+void ldHgGenePred(char *database, char *table, int gCount, char *gNames[])
+/* Load up database from a bunch of genePred files. */
+{
+char *tabName = "genePred.tab";
+FILE *f;
+struct genePred *gpList = NULL, *gp;
+int i;
+char *fileName;
+
+for (i=0; i<gCount; ++i)
+    {
+    fileName = gNames[i];
+    printf("Reading %s\n", fileName);
+    gpList = slCat(genePredLoadAll(gNames[i]), gpList);
+    }
+printf("%d gene predictions\n", slCount(gpList));
+slSort(&gpList, genePredCmp);
+
+/* Create tab-delimited file. */
+if (outFile != NULL)
+    f = mustOpen(outFile, "w");
+else
+    f = mustOpen(tabName, "w");
+for (gp = gpList; gp != NULL; gp = gp->next)
+    {
+    genePredTabOut(gp, f);
+    }
+carefulClose(&f);
+
+if (outFile == NULL)
+    loadIntoDatabase(database, table, tabName, optionExists("oldTable"));
 }
 
 void ldHgGene(char *database, char *table, int gtfCount, char *gtfNames[])
@@ -176,7 +210,7 @@ for (gp = gpList; gp != NULL; gp = gp->next)
 carefulClose(&f);
 
 if (outFile == NULL)
-    loadIntoDatabase(database, table, tabName);
+    loadIntoDatabase(database, table, tabName, optionExists("oldTable"));
 }
 
 int main(int argc, char *argv[])
@@ -191,7 +225,7 @@ exonType = optionVal("exon", exonType);
 outFile = optionVal("out", NULL);
 requireCDS = optionExists("requireCDS");
 if (optionExists("predTab"))
-    loadIntoDatabase(argv[1], argv[2], argv[3]);
+    ldHgGenePred(argv[1], argv[2], argc-3, argv+3);
 else
     ldHgGene(argv[1], argv[2], argc-3, argv+3);
 return 0;

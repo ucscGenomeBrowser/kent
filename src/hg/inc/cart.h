@@ -198,6 +198,10 @@ void cartWebStart(struct cart *theCart, char *format, ...);
 /* Print out pretty wrapper around things when working
  * from cart. Balance this with cartWebEnd. */
 
+void cartVaWebStart(struct cart *cart, char *format, va_list args);
+/* Print out pretty wrapper around things when working
+ * from cart. */
+
 void cartWebEnd();
 /* End out pretty wrapper around things when working
  * from cart. */
@@ -209,6 +213,14 @@ void cartHtmlShell(char *title, void (*doMiddle)(struct cart *cart),
  * comma-separated list of variables that you don't want to save in the cart between
  * invocations of the cgi-script. oldVars is an optional hash that will get values
  * of things in the cart that were overwritten by cgi-variables. */
+
+void cartHtmlShellPB(char *title, void (*doMiddle)(struct cart *cart),
+        char *cookieName, char **exclude, struct hash *oldVars);
+/* For Proteome Browser, load cart from cookie and session cgi variable.  Write web-page
+ * preamble, call doMiddle with cart, and write end of web-page.
+ * Exclude may be NULL.  If it exists it's a comma-separated list of
+ * variables that you don't want to save in the cart between
+ * invocations of the cgi-script. */
 
 struct cart *cartAndCookie(char *cookieName, char **exclude, struct hash *oldVars);
 /* Load cart from cookie and session cgi variable.  Write cookie and content-type part 

@@ -21,6 +21,7 @@ struct tempName gifTn;
 char *mapName = "map";
 char *trackTitle;
 int trackTitleLen;
+boolean showPrevGBPos = TRUE;
 
 void calxy(int xin, int yin, int *outxp, int *outyp)
 /* calxy() converts a logical drawing coordinate into an actual
@@ -73,6 +74,8 @@ int index;
 struct sqlConnection *conn;
 char query[56];
 struct sqlResult *sr;
+char cond_str[255];
+char *answer;
 char **row;
     
 int xx, yy;
@@ -87,11 +90,22 @@ int aaResCnt[20];
 double aaResFreqDouble[20];
 int abnormal;
 int ia = -1;
+double pctLow[20], pctHi[20];
 
 // count frequency for each residue for current protein
 chp = aa;
-for (j=0; j<20; j++) aaResCnt[j] = 0;
-   
+for (j=0; j<20; j++) 
+    {
+    aaResCnt[j] = 0;
+       
+    // get cutoff threshold value pairs
+    sprintf(cond_str, "AA='%c'", aaAlphabet[j]);
+    answer = sqlGetField(NULL, database, "pbAnomLimit", "pctLow", cond_str);
+    pctLow[j] = (double)(atof(answer));
+    answer = sqlGetField(NULL, database, "pbAnomLimit", "pctHi", cond_str);
+    pctHi[j] = (double)(atof(answer));
+    }
+
 for (i=0; i<len; i++)
     {
     for (j=0; j<20; j++)
@@ -104,6 +118,7 @@ for (i=0; i<len; i++)
         }
     chp++;
     }
+
 for (j=0; j<20; j++)
     {
     aaResFreqDouble[j] = ((double)aaResCnt[j])/((double)len);
@@ -114,6 +129,8 @@ currentYoffset = *yOffp;
 for (index=0; index < len; index++)
     {
     res = aa[index];
+    
+    ia = -1;
     for (j=0; j<20; j++)
 	{
 	if (res == aaChar[j])
@@ -122,19 +139,22 @@ for (index=0; index < len; index++)
 	    break;
 	    }
 	}
+
+    //skip non-standard AA alphabets
+    if (ia == -1) break;
+
     calxy(index, *yOffp, &xx, &yy);
-    
-    abnormal = chkAnomaly(aaResFreqDouble[ia], avg[ia], stddev[ia]);
+
+    abnormalColor = pbRed;
+    abnormal = chkAnomaly(aaResFreqDouble[ia], pctLow[ia], pctHi[ia]);
     if (abnormal > 0)
 	{
-	//vgBox(g_vg, xx, yy-5, 1*pbScale, 5, MG_RED);
 	vgBox(g_vg, xx, yy-5, 1*pbScale, 5, abnormalColor);
 	}
     else
 	{
 	if (abnormal < 0)
 	    {
-	    //vgBox(g_vg, xx, yy, 1*pbScale, 5, MG_BLUE);
 	    vgBox(g_vg, xx, yy, 1*pbScale, 5, abnormalColor);
 	    }
 	}
@@ -170,17 +190,17 @@ for (index=0; index < len; index++)
 
     if (aa_attrib[(int)res] == CHARGE_POS)
 	{
-	vgBox(g_vg, xx, yy-9, 1*pbScale, 9, MG_BLUE);
+	vgBox(g_vg, xx, yy-9, 1*pbScale, 9, pbBlue);
 	}
     else
     if (aa_attrib[(int)res] == CHARGE_NEG)
 	{
-	vgBox(g_vg, xx, yy, 1*pbScale, 9, MG_RED);
+	vgBox(g_vg, xx, yy, 1*pbScale, 9, pbRed);
 	}
     else
     if (aa_attrib[(int)res] == POLAR)
 	{
-	vgBox(g_vg, xx, yy, 1*pbScale, 5, MG_RED);
+	vgBox(g_vg, xx, yy, 1*pbScale, 5, pbRed);
 	}
     else
     if (aa_attrib[(int)res] == NEUTRAL)
@@ -196,8 +216,8 @@ vgTextRight(g_vg, xx-25, yy-4, 10, 10, MG_BLACK, g_font, trackTitle);
 trackTitleLen = strlen(trackTitle);
 mapBoxTrackTitle(xx-25-trackTitleLen*6, yy-6, trackTitleLen*6+12, 14, trackTitle, "polarity");
 
-vgTextRight(g_vg, xx-14, yy-10, 10, 10, MG_BLUE,  g_font, "+");
-vgTextRight(g_vg, xx-14, yy, 10, 10, MG_RED, g_font, "-");
+vgTextRight(g_vg, xx-14, yy-10, 10, 10, pbBlue,  g_font, "+");
+vgTextRight(g_vg, xx-14, yy, 10, 10, pbRed, g_font, "-");
 
 *yOffp = *yOffp + 15;
 }
@@ -243,12 +263,12 @@ for (index=0; index < len; index++)
 	if (avg> 0.0)
 	    {
 	    h = 5 * 9 * (100.0 * avg / 9.0) / 100;
-	    vgBox(g_vg, xx, yy-h, 1*pbScale, h, MG_BLUE);
+	    vgBox(g_vg, xx, yy-h, 1*pbScale, h, pbBlue);
 	    }
 	else
 	    {
 	    h = - 5 * 9 * (100.0 * avg / 9.0) / 100;
-	    vgBox(g_vg, xx, yy, 1*pbScale, h, MG_RED);
+	    vgBox(g_vg, xx, yy, 1*pbScale, h, pbRed);
 	    }
 	}
     }
@@ -282,7 +302,7 @@ for (index=0; index < len; index++)
     calxy(index, *yOffp, &xx, &yy);
     if (res == 'C')
 	{
-	vgBox(g_vg, xx, yy-9+1, 1*pbScale, 9, MG_BLUE);
+	vgBox(g_vg, xx, yy-9+1, 1*pbScale, 9, pbBlue);
 	}
     else
 	{
@@ -299,7 +319,7 @@ for (index=1; index < (len-2); index++)
 	    {
 	    if ((aa[index+1] != 'C') && (aa[index+2] != 'P'))
 		{
-		vgBox(g_vg, xx-1, yy, 3*pbScale, 9, MG_RED);
+		vgBox(g_vg, xx-1, yy, 3*pbScale, 9, pbRed);
 		}
 	    }
 	}
@@ -309,17 +329,17 @@ calxy0(0, *yOffp, &xx, &yy);
 vgBox(g_vg, 0, yy-15, xx, 33, bkgColor);
 
 trackTitle = cloneString("Cysteines");
-vgTextRight(g_vg, xx-25, yy-8, 10, 10, MG_BLUE, g_font, trackTitle);
+vgTextRight(g_vg, xx-25, yy-8, 10, 10, pbBlue, g_font, trackTitle);
 trackTitleLen = strlen(trackTitle);
 mapBoxTrackTitle(xx-25-trackTitleLen*6, yy-10, trackTitleLen*6+12, 12, trackTitle, "cCntTr");
 
 trackTitle = cloneString("Predicted");
-vgTextRight(g_vg, xx-25, yy, 10, 10, MG_RED, g_font, trackTitle);
+vgTextRight(g_vg, xx-25, yy, 10, 10, pbRed, g_font, trackTitle);
 trackTitleLen = strlen(trackTitle);
 mapBoxTrackTitle(xx-25-trackTitleLen*6, yy, trackTitleLen*6+12, 12, "Glycosylation", "glycosylation");
 
 trackTitle = cloneString("Glycosylation");
-vgTextRight(g_vg, xx-25, yy+10, 10, 10, MG_RED, g_font, trackTitle);
+vgTextRight(g_vg, xx-25, yy+10, 10, 10, pbRed, g_font, trackTitle);
 trackTitleLen = strlen(trackTitle);
 mapBoxTrackTitle(xx-25-trackTitleLen*6, yy+8, trackTitleLen*6+12, 12, trackTitle, "glycosylation");
     
@@ -355,16 +375,21 @@ if ((len % 100) != 0) imax = imax + 100;
     
 calxy(1, *yOffp, &xx, &yy);
 vgBox(g_vg, xx-pbScale/2, yy-tb, (len-1)*pbScale, 1, MG_BLACK);
+vgText(g_vg, xx-pbScale/2+4, yy+4-12*tb, MG_BLACK, g_font, "1");
 
 interval = 50;
 if (pbScale >= 18) interval = 10;    
+	    
+calxy(1, *yOffp, &xx, &yy);
+vgBox(g_vg, xx-pbScale/2, yy-9*tb, 1, 9, MG_BLACK);
+
 for (i=0; i<len; i++)
     {
     index = i+1;
-    if ((index % interval) == 1)
+    if ((index % interval) == 0)
 	{
         markedIndex = index;
-	if (((index % (interval*2)) == 1) || (index == len)) 
+	if (((index % (interval*2)) == 0) || (index == len)) 
 	    {
 	    calxy(index, *yOffp, &xx, &yy);
 	    vgBox(g_vg, xx-pbScale/2, yy-9*tb, 1, 9, MG_BLACK);
@@ -453,7 +478,7 @@ exonGenomeStartPos = blockGenomeStartPositive[exonNumber-1];
 exonGenomeEndPos   = blockGenomeEndPositive[exonNumber-1];
 
 currentYoffset = *yOffp;
-
+    
 if (strand == '-')
     {
     for (i=0; i<(exonCount-2); i++)
@@ -555,7 +580,7 @@ int exonStartPos, exonEndPos;
 int exonGenomeStartPos, exonGenomeEndPos;
 int exonNumber;
 int printedExonNumber = -1;
-int exonColor[2];
+Color exonColor[2];
 int currentPos;
 int currentPBPos;
 int jPrevStart, jPrevEnd;
@@ -563,13 +588,13 @@ int jcnt = 0;
 int iPrevExon = -1;
 int jPrevExonPos = 0;
 
-int defaultColor;
+Color defaultColor;
 defaultColor = vgFindColorIx(g_vg, 170, 170, 170);
 
 // The imaginary mRNA length is 3 times of aaLen
 mrnaLen = aaLen * 3;
 
-exonColor[0] = MG_BLUE;
+exonColor[0] = pbBlue;
 exonColor[1] = vgFindColorIx(g_vg, 0, 180, 0);
 
 jPrevStart = mrnaLen-1;
@@ -693,12 +718,12 @@ else
     if (jPrevExonPos <= 0)
 	{
         calxy(jPrevExonPos/3, *yOffp, &xx, &yy);
-	vgBox(g_vg,  xx, yy, 1, 5, MG_RED);
+	vgBox(g_vg,  xx, yy, 1, 5, pbRed);
 	}
     else
 	{
         calxy(jPrevExonPos/3+1, *yOffp, &xx, &yy);
-	vgBox(g_vg,  xx, yy, 1, 5, MG_RED);
+	vgBox(g_vg,  xx, yy, 1, 5, pbRed);
 	}
 
     mapBoxPrevGB(xx-1, yy-1, 2, 6, positionStr);
@@ -747,15 +772,15 @@ int exonStartPos, exonEndPos;
 int exonGenomeStartPos, exonGenomeEndPos;
 int exonNumber;
 int printedExonNumber = -1;
-int exonColor[2];
+Color exonColor[2];
 
-int defaultColor;
+Color defaultColor;
 defaultColor = vgFindColorIx(g_vg, 170, 170, 170);
 
 // The imaginary mRNA length is 3 times of aaLen
 mrnaLen = aaLen * 3;
 
-exonColor[0] = MG_BLUE;
+exonColor[0] = pbBlue;
 exonColor[1] = vgFindColorIx(g_vg, 0, 180, 0);
 
 exonNumber = 1;
@@ -979,10 +1004,10 @@ char exonNumStr[10];
 int len;
 int sf_len, name_len;
 int show_name;
+Color sfColor;
     
-Color color2;
-    
-color2 = vgFindColorIx(g_vg, 0, 180, 0);
+//sfColor = vgFindColorIx(g_vg, 0xf7, 0xe8, 0xaa);
+sfColor = MG_YELLOW;
    
 currentYoffset = *yOffp;
    
@@ -1009,7 +1034,7 @@ for (ii=0; ii<sf_cnt; ii++)
 	    }
 
 	len = strlen(superfam_name[ii]);
-	vgDrawBox(g_vg, xx, yy-9+(jj%3)*4, (sfEnd[ii] - sfStart[ii])*pbScale, 9, MG_YELLOW);
+	vgDrawBox(g_vg, xx, yy-9+(jj%3)*4, (sfEnd[ii] - sfStart[ii])*pbScale, 9, sfColor);
 	mapBoxSuperfamily(xx, yy-9+(jj%3)*4, 
 			  (sfEnd[ii] - sfStart[ii])*pbScale, 9,
 		 	  superfam_name[ii], sfId[ii]);
@@ -1094,8 +1119,8 @@ int exonStartPos, exonEndPos;
 int exonGenomeStartPos, exonGenomeEndPos;
 int exonNumber;
 int printedExonNumber = -1;
-int exonColor[2];
-int color;
+Color exonColor[2];
+Color color;
 int k;
 struct dnaSeq *dna;
 
@@ -1106,10 +1131,11 @@ int iw = 5;
 float sum;
 int dnaLen;
 
-int defaultColor;
+Color defaultColor;
 defaultColor = vgFindColorIx(g_vg, 170, 170, 170);
 
-exonColor[0] = MG_BLUE;
+//exonColor[0] = pbBlue;
+exonColor[0] = vgFindColorIx(g_vg, 0x00, 0x00, 0xd0);
 exonColor[1] = vgFindColorIx(g_vg, 0, 180, 0);
 
 base[1] = '\0';
@@ -1172,27 +1198,34 @@ for (j = 0; j < mrnaLen; j++)
 
 	if (strand == '-') 
 	    {
-            vgTextRight(g_vg, xx-3+(j%3)*6, yy-3, 10, 10, MG_GRAY, g_font, base);
+            vgTextRight(g_vg, xx-3+(j%3)*6, yy-3, 10, 10, color, g_font, base);
 	    vgTextRight(g_vg, xx-3+(j%3)*6, yy+9, 10, 10, color, g_font, baseComp);
        	    }
 	else
 	    {
-	    //vgTextRight(g_vg, xx-3+(j%3)*6, yy, 10, 10, color, g_font, base);
 	    vgTextRight(g_vg, xx-3+(j%3)*6, yy-3, 10, 10, color, g_font, base);
             }
         }
-    color = MG_BLUE;
+    color = pbBlue;
     }
    
 calxy0(0, *yOffp, &xx, &yy);
 vgBox(g_vg, 0, yy-10, xx, 30, bkgColor);
 
-trackTitle = cloneString("DNA Sequence");
+if (strand == '-') 
+    {
+    trackTitle = cloneString("Coding Sequence");
+    }
+else
+    {
+    trackTitle = cloneString("Genomic Sequence");
+    }
 vgTextRight(g_vg, xx-25, yy-4, 10, 10, MG_BLACK, g_font, trackTitle);
 trackTitleLen = strlen(trackTitle);
 mapBoxTrackTitle(xx-25-trackTitleLen*6, yy-6, trackTitleLen*6+12, 14, trackTitle, "dna");
 
-if (strand == '-') vgTextRight(g_vg, xx-25, yy+9, 10, 10, MG_GRAY, g_font, "& Complement");
+//if (strand == '-') vgTextRight(g_vg, xx-25, yy+9, 10, 10, MG_GRAY, g_font, "& Complement");
+if (strand == '-') vgTextRight(g_vg, xx-25, yy+9, 10, 10, MG_BLACK, g_font, "Genomic Sequence");
 
 if (strand == '-')
     {
@@ -1328,6 +1361,11 @@ if (mrnaID != NULL)
     	}
     }
 
+if ((prevGBStartPos <= blockGenomeStartPositive[exCount-1]) && (prevGBEndPos >= blockGenomeStartPositive[0]))
+    {
+    showPrevGBPos = FALSE;
+    }
+
 if ((cgiOptionalString("aaOrigOffset") != NULL) && scaleButtonPushed)
      {
      trackOrigOffset = atoi(cgiOptionalString("aaOrigOffset"))*pbScale;
@@ -1395,7 +1433,10 @@ hPrintf("<FONT SIZE=1><BR><BR></FONT>\n");
 
 g_vg = vg;
 
+pbRed    = vgFindColorIx(g_vg, 0xf9, 0x51, 0x59);
+pbBlue   = vgFindColorIx(g_vg, 0x00, 0x00, 0xd0);
 bkgColor = vgFindColorIx(vg, 255, 254, 232);
+
 vgBox(vg, 0, 0, insideWidth, pixHeight, bkgColor);
 
 /* Start up client side map. */
@@ -1411,7 +1452,7 @@ if (pbScale >= 6)  doResidues(aa, l, yOffp);
 
 if (pbScale >= 18) doDnaTrack(chrom, strand, exCount, l, yOffp);
 
-if (mrnaID != NULL)
+if ((mrnaID != NULL) && showPrevGBPos)
     {
     doPrevGB(exCount, chrom, strand, l, yOffp, proteinID, mrnaID);
     }

@@ -13,10 +13,16 @@
 #include "sqlNum.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: jksql.c,v 1.48 2004/01/29 22:55:17 hartera Exp $";
+static char const rcsid[] = "$Id: jksql.c,v 1.49 2004/02/02 01:34:15 markd Exp $";
 
-boolean sqlTrace = FALSE;  /* setting to true prints each query */
-int sqlTraceIndent = 0;    /* number of spaces to indent traces */
+/* flags controlling sql monitoring facility */
+static unsigned monitorInited = FALSE;      /* initialized yet? */
+static unsigned monitorFlags = 0;           /* flags indicating what is traced */
+static long monitorEnterTime = 0;           /* time current tasked started */
+static long long sqlTotalTime = 0;          /* total real milliseconds */
+static boolean monitorHandlerSet = FALSE;   /* is exit handler installed? */
+static unsigned traceIndent = 0;            /* how much to indent */
+static char * indentStr = "                                                       ";
 
 struct sqlConnection
 /* This is an item on a list of sql open connections. */
@@ -47,6 +53,108 @@ if (val == NULL)
 return val;
 }
 
+static void monitorInit()
+/* initialize monitoring on the first call */
+{
+unsigned flags = 0;
+char *val;
+
+val = getenv("JKSQL_TRACE");
+if ((val != NULL) && sameString(val, "on"))
+    flags |= JKSQL_TRACE;
+val = getenv("JKSQL_PROF");
+if ((val != NULL) && sameString(val, "on"))
+    flags |= JKSQL_PROF;
+
+if (flags != 0)
+    sqlMonitorEnable(flags);
+
+monitorInited = TRUE;
+}
+
+static void monitorEnter()
+/* called at the beginning of a routine that is monitored, initialize if
+ * necessary and start timing if enabled */
+{
+if (!monitorInited)
+    monitorInit();
+assert(monitorEnterTime == 0);  /* no recursion allowed */
+if (monitorFlags)
+    {
+    monitorEnterTime = clock1000();
+    }
+}
+
+static long monitorLeave()
+/* called at the end of a routine that is monitored, updates time count.
+ * returns time since enter. */
+{
+long deltaTime = 0;
+if (monitorFlags)
+    {
+    deltaTime = clock1000() - monitorEnterTime;
+    assert(monitorEnterTime > 0);
+    if (monitorFlags & JKSQL_PROF)
+        sqlTotalTime += deltaTime;
+    monitorEnterTime = 0;
+    }
+return deltaTime;
+}
+
+static void monitorPrintTime()
+/* print total time */
+{
+/* only print if not explictly disabled */
+if (monitorFlags & JKSQL_PROF)
+    {
+    fprintf(stderr, "%.*sSQL_TOTAL_TIME: %0.3fs\n", traceIndent, indentStr,
+            ((double)sqlTotalTime)/1000.0);
+    }
+}
+
+void sqlMonitorEnable(unsigned flags)
+/* Enable disable tracing or profiling of SQL queries.
+ * If JKSQL_TRACE is specified, then tracing of each SQL query is enabled,
+ * along with the timing of the queries.
+ * If JKSQL_PROF is specified, then time spent in SQL queries is logged
+ * and printed when the program exits or when sqlMonitorDisable is called.
+ *
+ * These options can also be enabled by setting the JKSQL_TRACE and/or
+ * JKSQL_PROF environment variables to "on".  The cheapcgi module will set
+ * these environment variables if the corresponding CGI variables are set
+ * to "on".
+ */
+{
+monitorFlags = flags;
+
+if ((monitorFlags & JKSQL_PROF) && !monitorHandlerSet)
+    {
+    /* only add once */
+    atexit(monitorPrintTime);
+    monitorHandlerSet = TRUE;
+    }
+
+monitorInited = TRUE;
+}
+
+void sqlMonitorSetIndent(unsigned indent)
+/* set the sql indent level indent to the number of spaces to indent each
+ * trace, which can be helpful in making voluminous trace info almost
+ * readable. */
+{
+traceIndent = indent;
+}
+
+void sqlMonitorDisable()
+/* Disable tracing or profiling of SQL queries. */
+{
+if (monitorFlags & JKSQL_PROF)
+    monitorPrintTime();
+
+monitorFlags = 0;
+sqlTotalTime = 0;  /* allow reenabling */
+}
+
 void sqlFreeResult(struct sqlResult **pRes)
 /* Free up a result. */
 {
@@ -54,7 +162,11 @@ struct sqlResult *res = *pRes;
 if (res != NULL)
     {
     if (res->result != NULL)
+        {
+        monitorEnter();
 	mysql_free_result(res->result);
+        monitorLeave();
+        }
     if (res->node != NULL)
 	{
 	dlRemove(res->node);
@@ -86,7 +198,9 @@ if (sc != NULL)
 	}
     if (conn != NULL)
 	{
+        monitorEnter();
 	mysql_close(conn);
+        monitorLeave();
 	}
     if (node != NULL)
 	{
@@ -158,6 +272,11 @@ AllocVar(sc);
 sc->resultList = newDlList();
 sc->node = dlAddValTail(sqlOpenConnections, sc);
 
+monitorEnter();
+if (monitorFlags & JKSQL_TRACE)
+    fprintf(stderr, "%.*sSQL_CONNECT: %s %s %s\n",
+            traceIndent, indentStr, host, user, database);
+
 if ((sc->conn = conn = mysql_init(NULL)) == NULL)
     errAbort("Couldn't connect to mySQL.");
 if (mysql_real_connect(
@@ -175,8 +294,10 @@ if (mysql_real_connect(
 	errAbort("Couldn't connect to database %s on %s as %s.\n%s", 
 	    database, host, user, mysql_error(conn));
         }
+    monitorLeave();
     return NULL;
     }
+monitorLeave();
 return sc;
 }
 
@@ -266,19 +387,20 @@ static struct sqlResult *sqlUseOrStore(struct sqlConnection *sc,
  * that you can do sqlRow() on. */
 {
 MYSQL *conn = sc->conn;
-if (sqlTrace)
-    fprintf(stderr, "%.*squery: %s\n", sqlTraceIndent,
-            "                                                       ",
-            query);
+struct sqlResult *res = NULL;
+long deltaTime;
+
+monitorEnter();
+if (monitorFlags & JKSQL_TRACE)
+    fprintf(stderr, "%.*sSQL_QUERY: %s\n", traceIndent, indentStr, query);
+
 if (mysql_real_query(conn, query, strlen(query)) != 0)
     {
     if (abort)
 	sqlAbort(sc, "Can't start query:\n%s\n", query);
-    return NULL;
     }
 else
     {
-    struct sqlResult *res;
     MYSQL_RES *resSet;
     if ((resSet = getter(conn)) == NULL)
 	{
@@ -286,14 +408,20 @@ else
 	    {
 	    sqlAbort(sc, "Can't use query:\n%s", query);
 	    }
-	return NULL;
 	}
-    AllocVar(res);
-    res->conn = sc;
-    res->result = resSet;
-    res->node = dlAddValTail(sc->resultList, res);
-    return res;
+    else
+        {
+        AllocVar(res);
+        res->conn = sc;
+        res->result = resSet;
+        res->node = dlAddValTail(sc->resultList, res);
+        }
     }
+deltaTime = monitorLeave();
+if (monitorFlags & JKSQL_TRACE)
+    fprintf(stderr, "%.*sSQL_TIME: %0.3fs\n", traceIndent, indentStr,
+            ((double)deltaTime)/1000.0);
+return res;
 }
 
 void sqlDropTable(struct sqlConnection *sc, char *table)
@@ -434,7 +562,9 @@ int numScan = 0;
 struct sqlResult *sr = sqlGetResult(conn,query);
 
 /* Rows matched: 40 Changed: 40 Warnings: 0 */
+monitorEnter();
 info = mysql_info(conn->conn);
+monitorLeave();
 if (info != NULL)
     numScan = sscanf(info, "Rows matched: %d Changed: %d Warnings: %*d",
                      &numMatched, &numChanged);
@@ -527,7 +657,9 @@ else
 safef(query, sizeof(query),  "LOAD DATA %s %s %s INFILE '%s' INTO TABLE %s",
       concurrentOpt, localOpt, dupOpt, tabPath, table);
 sr = sqlGetResult(conn, query);
+monitorEnter();
 info = mysql_info(conn->conn);
+monitorLeave();
 if (info == NULL)
     errAbort("no info available for result of sql query: %s", query);
 numScan = sscanf(info, "Records: %d Deleted: %*d  Skipped: %d  Warnings: %d",
@@ -608,11 +740,13 @@ char **sqlNextRow(struct sqlResult *sr)
 char** row = NULL;
 if (sr != NULL)
     {
+    monitorEnter();
     row = mysql_fetch_row(sr->result);
     if (mysql_errno(sr->conn->conn) != 0)
         {
         sqlAbort(sr->conn, "nextRow failed");
         }
+    monitorLeave();
     }
 return row;
 }
@@ -815,7 +949,11 @@ return ix;
 unsigned int sqlLastAutoId(struct sqlConnection *conn)
 /* Return last automatically incremented id inserted into database. */
 {
-return mysql_insert_id(conn->conn);
+unsigned id;
+monitorEnter();
+id = mysql_insert_id(conn->conn);
+monitorLeave();
+return id;
 }
 
 /* Stuff to manage and cache up to 16 open connections on 

@@ -32,15 +32,16 @@ LIBS = $(LIBGENBANK) $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a ${MYSQLLIBS} -lm
 TESTBIN = ${GBROOT}/tests/bin
 TESTBINARCH = ${TESTBIN}/$(MACHTYPE)
 
+MKDIR = mkdir -p
 
 %.o: %.c
 	${CC} ${CFLAGS} -c -o $@ $<
 
 $(BINARCH)/%: ${O} makefile ${LIBGENBANK}
-	@mkdir -p ${BINARCH}
+	@${MKDIR} -p ${BINARCH}
 	gcc ${CFLAGS} -o $@ $O $(LIBS)
 
 ${BINDIR}/%: %
-	mkdir -p ${BINDIR}
+	@${MKDIR} -p ${BINDIR}
 	cp -f $< $@
 	chmod a-w,a+rx $@

@@ -28,11 +28,17 @@ int netAcceptingSocket(int port, int queueSize);
 /* Create a socket for to accept connections. */
 
 int netAcceptingSocketFrom(int port, int queueSize, char *host);
-/* Create a socket that can accept connections from a particular
- * host.  If host is NULL then accept from anyone. */
+/* Create a socket that can accept connections from a 
+ * IP address on the current machine if the current machine
+ * has multiple IP addresses. */
 
 int netAccept(int sd);
 /* Accept incoming connection from socket descriptor. */
+
+int netAcceptFrom(int sd, unsigned char subnet[4]);
+/* Wait for incoming connection from socket descriptor
+ * from IP address in subnet.  Subnet is something
+ * returned from netParseDottedQuad.  */
 
 void netBlockBrokenPipes();
 /* Make it so a broken pipe doesn't kill us. */

@@ -76,6 +76,10 @@ void hDefaultConnect();
 char *hTrackDbName();
 /* return the name of the track database from the config file. Freez when done */
 
+char *hTrackDbLocalName();
+/* return the name of the trackDbLocal from the config file, or NULL if none.
+ * Freez when done */
+
 char *hPdbFromGdb(char *genomeDb);
 /* return the name of the proteome database given the genome database name */
 
@@ -344,6 +348,10 @@ boolean hTrackOnChrom(struct trackDb *tdb, char *chrom);
 struct trackDb *hTrackDb(char *chrom);
 /* Load tracks associated with current chromosome (which may
  * be NULL */
+
+struct trackDb *hTrackDbForTrack(char *track);
+/* Load trackDb object for a track. If trackDbLocal exists, then it's row is
+ * used if it exists. */
 
 void hFindDefaultChrom(char *db, char defaultChrom[64]);
 /* Find chromosome to use if none specified. */

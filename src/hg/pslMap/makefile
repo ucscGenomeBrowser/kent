@@ -11,7 +11,7 @@ OBJS = pslMap.o
 all: ${BINDIR}/pslMap
 
 ${BINDIR}/pslMap: pslMap
-	mkdir -p ${BINDIR}
+	${MKDIR} ${BINDIR}
 	cp -f pslMap ${BINDIR}
 	strip ${BINDIR}/pslMap
 

@@ -13,7 +13,7 @@
 #include "scoredRef.h"
 #include "hgMaf.h"
 
-static char const rcsid[] = "$Id: hgMaf.c,v 1.1 2003/10/25 08:21:11 kent Exp $";
+static char const rcsid[] = "$Id: hgMaf.c,v 1.2 2004/02/02 23:46:08 kent Exp $";
 
 struct mafAli *mafLoadInRegion(struct sqlConnection *conn, char *table,
 	char *chrom, int start, int end)
@@ -235,60 +235,67 @@ for (maf = mafList; maf != NULL; maf = maf->next)
 		curPos, mcMaster->start);
 	symCount += mcMaster->start - curPos;
 	}
-    if (mafNeedSubset(maf, masterSrc, start, end))
-	subMaf = mafSubset(maf, masterSrc, start, end);
-    else
-        subMaf = maf;
-    for (mc = subMaf->components; mc != NULL; mc = mc->next, ++order)
-        {
-	/* Extract name up to dot into 'orgName' */
-	char buf[128], *e, *orgName;
-	e = strchr(mc->src, '.');
-	if (e == NULL)
-	    orgName = mc->src;
+    if (curPos < mcMaster->start + mcMaster->size) /* Prevent worst 
+    						    * backtracking */
+	{
+	if (mafNeedSubset(maf, masterSrc, curPos, end))
+	    {
+	    subMaf = mafSubset(maf, masterSrc, curPos, end);
+	    if (subMaf == NULL)
+	        continue;
+	    }
 	else
+	    subMaf = maf;
+	for (mc = subMaf->components; mc != NULL; mc = mc->next, ++order)
 	    {
-	    int len = e - mc->src;
-	    if (len >= sizeof(buf))
-	        errAbort("organism/database name %s too long", mc->src);
-	    memcpy(buf, mc->src, len);
-	    buf[len] = 0;
-	    orgName = buf;
-	    }
+	    /* Extract name up to dot into 'orgName' */
+	    char buf[128], *e, *orgName;
+	    e = strchr(mc->src, '.');
+	    if (e == NULL)
+		orgName = mc->src;
+	    else
+		{
+		int len = e - mc->src;
+		if (len >= sizeof(buf))
+		    errAbort("organism/database name %s too long", mc->src);
+		memcpy(buf, mc->src, len);
+		buf[len] = 0;
+		orgName = buf;
+		}
 
-	/* Look up dyString corresponding to  org, and create a
-	 * new one if necessary. */
-	org = hashFindVal(orgHash, orgName);
-	if (org == NULL)
+	    /* Look up dyString corresponding to  org, and create a
+	     * new one if necessary. */
+	    org = hashFindVal(orgHash, orgName);
+	    if (org == NULL)
+		{
+		if (orderList != NULL)
+		   errAbort("%s is not in orderList", orgName);
+		AllocVar(org);
+		slAddHead(&orgList, org);
+		hashAddSaveName(orgHash, orgName, org, &org->name);
+		org->dy = dyStringNew(native->size*1.5);
+		dyStringAppendMultiC(org->dy, '.', symCount);
+		if (nativeOrg == NULL)
+		    nativeOrg = org;
+		}
+	    if (orderList == NULL && order > org->order)
+		org->order = order;
+	    org->hit = TRUE;
+
+	    /* Fill it up with alignment. */
+	    dyStringAppendN(org->dy, mc->text, subMaf->textSize);
+	    }
+	for (org = orgList; org != NULL; org = org->next)
 	    {
-	    if (orderList != NULL)
-	       errAbort("%s is not in orderList", orgName);
-	    AllocVar(org);
-	    slAddHead(&orgList, org);
-	    hashAddSaveName(orgHash, orgName, org, &org->name);
-	    org->dy = dyStringNew(native->size*1.5);
-	    dyStringAppendMultiC(org->dy, '.', symCount);
-	    if (nativeOrg == NULL)
-	        nativeOrg = org;
+	    if (!org->hit)
+		dyStringAppendMultiC(org->dy, '.', subMaf->textSize);
+	    org->hit = FALSE;
 	    }
-	if (orderList == NULL && order > org->order)
-	    org->order = order;
-	org->hit = TRUE;
-
-	/* Fill it up with alignment. */
-	dyStringAppendN(org->dy, mc->text, subMaf->textSize);
+	symCount += subMaf->textSize;
+	curPos = mcMaster->start + mcMaster->size;
+	if (subMaf != maf)
+	    mafAliFree(&subMaf);
 	}
-    for (org = orgList; org != NULL; org = org->next)
-        {
-	if (!org->hit)
-	    dyStringAppendMultiC(org->dy, '.', subMaf->textSize);
-	org->hit = FALSE;
-	}
-    symCount += subMaf->textSize;
-    curPos = mcMaster->start + mcMaster->size;
-
-    if (subMaf != maf)
-        mafAliFree(&subMaf);
     }
 if (curPos < end)
     {

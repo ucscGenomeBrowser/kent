@@ -22,4 +22,4 @@ clean::
 	rm -rf output
 
 mkdirs:
-	@mkdir -p output
+	@${MKDIR} output

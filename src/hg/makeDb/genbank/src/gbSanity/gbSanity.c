@@ -38,7 +38,7 @@
 #include "../dbload/dbLoadOptions.h"
 #include <stdarg.h>
 
-static char const rcsid[] = "$Id: gbSanity.c,v 1.4 2003/07/10 16:49:28 markd Exp $";
+static char const rcsid[] = "$Id: gbSanity.c,v 1.5 2004/02/02 01:32:30 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -305,7 +305,7 @@ if (optionExists("gbdbCurrent"))
     }
 gbVerbInit(optionInt("verbose", 0));
 if (verbose >= 5)
-    sqlTrace = TRUE;  /* global flag in jksql */
+    sqlMonitorEnable(JKSQL_TRACE);
 database = argv[1];
 gOptions = dbLoadOptionsParse(database);
 testMode = optionExists("test");

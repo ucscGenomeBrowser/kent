@@ -9,7 +9,7 @@
 #include "sample.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: altAnalysis.c,v 1.9 2004/01/29 01:25:13 sugnet Exp $";
+static char const rcsid[] = "$Id: altAnalysis.c,v 1.10 2004/02/03 22:11:54 sugnet Exp $";
 static int alt5Flipped = 0;
 static int alt3Flipped = 0;
 static int minConfidence = 0;
@@ -660,7 +660,7 @@ if(vTypes[vs] != ggHardStart || vTypes[ve1] != ggHardEnd || vTypes[ve2] != ggHar
     return FALSE;
 if(em[vs][ve1] && em[vs][ve2]) 
     {
-    /* Try to find a hard end that connects ve1 and ve2. */
+    /* Try to find a hard start that connects ve1 and ve2. */
     for(i=0; i<ag->vertexCount; i++)
 	{
 	if(vTypes[i] == ggHardStart && em[ve1][i] && em[i][ve2] &&
@@ -676,7 +676,26 @@ if(em[vs][ve1] && em[vs][ve2])
 	    /* Alt spliced region. */
 	    bedAlt.chromStart = vPos[ve1];
 	    bedAlt.chromEnd = vPos[i];
-	    
+	    if(optionExists("printRetIntAccs"))
+		{
+		int incEdge = altGraphXGetEdgeNum(ag, vs, ve2);
+		int exEdge = altGraphXGetEdgeNum(ag, ve1, i);
+		struct evidence *ev= slElementFromIx(ag->evidence, incEdge);
+		int i;
+		fprintf(stdout, "RETINT\t%s\t%d\t", ag->name,ev->evCount);
+		for(i = 0; i < ev->evCount; i++)
+		    {
+		    fprintf(stdout, "%s,", ag->mrnaRefs[ev->mrnaIds[i]]);
+		    }
+		fprintf(stdout, "\t");
+		ev= slElementFromIx(ag->evidence, exEdge);
+		fprintf(stdout, "%d\t", ev->evCount);
+		for(i = 0; i < ev->evCount; i++)
+		    {
+		    fprintf(stdout, "%s,", ag->mrnaRefs[ev->mrnaIds[i]]);
+		    }
+		fprintf(stdout, "\n");
+		}
 	    /* Upstream/down stream */
 	    if(altRegion != NULL)
 		{
@@ -1390,8 +1409,8 @@ static int dotMod = 500;
 static int dot = 500;
 if (--dot <= 0)
     {
-    putc('.', stdout);
-    fflush(stdout);
+    putc('.', stderr);
+    fflush(stderr);
     dot = dotMod;
     }
 }
