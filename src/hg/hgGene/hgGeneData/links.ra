@@ -23,7 +23,7 @@ name genePix
 shortLabel Gene Pix
 tables knownToGenePix
 idSql select value from knownToGenePix where name = '%s'
-url ../cgi-bin/hgGenePix?hgp_id=%s
+url ../cgi-bin/hgGenePix?hgp_doId=%s
 hgsid on
 dbInUrl on
 priority 20

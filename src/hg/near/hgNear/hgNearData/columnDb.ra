@@ -93,7 +93,7 @@ priority 2.61
 visibility off
 type lookup knownToGenePix name value
 search exact
-itemUrl ../cgi-bin/hgGenePix?hgp_id=%s
+itemUrl ../cgi-bin/hgGenePix?hgp_doId=%s
 hgsid on
 
 name esRegModule
