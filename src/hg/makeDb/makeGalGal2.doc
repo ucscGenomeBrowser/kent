@@ -2753,4 +2753,124 @@ rm $TMP/$root.ss.gz
       /cse/grads/acs/public_html/gg-top5000-2way \
       "top 5000 conserved elements (2way)" galGal2
 
+# MAKE Human Proteins track
+    mkdir -p /cluster/data/galGal2/bed/tblastn.hg16KG
+    cd /cluster/data/galGal2/bed/tblastn.hg16KG
+    ls -1S /iscratch/i/galGal2/blastDb/*.nsq | sed "s/\.nsq//" > chick.lst
 
+    mkdir kgfa
+    # calculate a reasonable number of jobs
+    calc `wc /cluster/data/hg16/bed/blat.hg16KG/hg16KG.psl | awk "{print \\\$1}"`/\(350000/`wc chick.lst | awk "{print \\\$1}"`\)
+    # 41117/(350000/259) = 30.426580
+    split -l 300 /cluster/data/hg16/bed/blat.hg16KG/hg16KG.psl kgfa/kg
+    cd kgfa
+    for i in *; do split -l 30 $i $i; rm $i; done
+    for i in *; do pslxToFa $i $i.fa; rm $i; done
+    mkdir -p /cluster/bluearc/galGal2/bed/tblastn.hg16KG/kgfa
+    cp * /cluster/bluearc/galGal2/bed/tblastn.hg16KG/kgfa
+    cd ..
+    
+    ls -1S /cluster/bluearc/galGal2/bed/tblastn.hg16KG/kgfa/*.fa > kg.lst
+    mkdir blastOut
+    for i in `cat kg.lst`; do  mkdir blastOut/`basename $i .fa`; done
+    cat << '_EOF_' > blastGsub
+#LOOP
+blastSome $(path1) {check in line $(path2)} {check out exists blastOut/$(root2)/q.$(root1).psl } 
+#ENDLOOP
+'_EOF_'
+    cat << '_EOF_' > blastSome
+#!/bin/sh
+BLASTMAT=/iscratch/i/blast/data
+export BLASTMAT
+f=/tmp/`basename $3`
+for eVal in 0.01 0.001 0.0001 0.00001 0.000001 1E-09 1E-11
+do
+if /scratch/blast/blastall -M BLOSUM80 -m 0 -F no -e $eVal -p tblastn -d $1 -i $2 -o $f.8
+then
+        mv $f.8 $f.1
+        break;
+fi
+done
+if test -f  $f.1
+then
+if /cluster/bin/i386/blastToPsl $f.1 $f.2
+then
+        liftUp -nosort -type=".psl" -nohead $f.3 /iscratch/i/galGal2/lifts/liftAll.lft warn $f.2
+        liftUp -nosort -type=".psl" -pslQ -nohead $3.tmp /iscratch/i/hg16/lifts/protein.lft warn $f.3
+	if pslCheck -prot $3.tmp
+	then
+	    mv $3.tmp $3
+	    rm -f $f.1 $f.2 $f.3
+	    exit 0
+	fi
+    fi
+fi
+rm -f $f.1 $f.2 $3.tmp $f.8
+exit 1
+'_EOF_'
+
+    chmod +x blastSome
+    gensub2 chick.lst kg.lst blastGsub blastSpec
+
+    ssh kk
+    cd /cluster/data/galGal2/bed/tblastn.hg16KG
+    para create blastSpec
+    para push
+
+# Completed: 355088 of 355089 jobs
+# CPU time in finished jobs:   43208509s  720141.82m 12002.36h  500.10d  1.370 y
+# IO & Wait Time:               2326912s   38781.87m   646.36h   26.93d  0.074 y
+# Average job time:                 128s       2.14m     0.04h    0.00d
+# Longest job:                    33767s     562.78m     9.38h    0.39d
+# Submission to last job:         90026s    1500.43m    25.01h    1.04d
+
+    cat << '_EOF_' > chainGsub
+#LOOP
+chainSome $(path1)
+#ENDLOOP
+'_EOF_'
+
+    cat << '_EOF_' > chainSome
+(cd $1; cat q.*.psl | simpleChain -prot -outPsl -maxGap=75000 stdin ../c.`basename $1`.psl)
+'_EOF_'
+    chmod +x chainSome
+
+    ls -1dS `pwd`/blastOut/kg???? > chain.lst
+    gensub2 chain.lst single chainGsub chainSpec
+
+    ssh kki
+    cd /cluster/data/galGal2/bed/tblastn.hg16KG
+    para create chainSpec
+    para push
+# Completed: 1371 of 1371 jobs
+# CPU time in finished jobs:     941133s   15685.54m   261.43h   10.89d  0.030 y
+# IO & Wait Time:                 11226s     187.11m     3.12h    0.13d  0.000 y
+# Average job time:                 695s      11.58m     0.19h    0.01d
+# Longest job:                    14841s     247.35m     4.12h    0.17d
+# Submission to last job:         23130s     385.50m     6.42h    0.27d
+
+    exit
+    # back to kksilo
+    cd /cluster/data/galGal2/bed/tblastn.hg16KG/blastOut
+    for i in kg????
+    do 
+	awk "(\$13 - \$12)/\$11 > 0.6 {print}" c.$i.psl > c60.$i.psl
+	sort -rn c60.$i.psl | pslUniq stdin u.$i.psl
+	awk "((\$1 / \$11) ) > 0.60 { print   }" c60.$i.psl > m60.$i.psl
+	echo $i
+    done
+
+    cat u.*.psl m60* | sort -T /tmp -k 14,14 -k 16,16n -k 17,17n  | uniq  > ../preblastHg16KG.psl
+    cd ..
+    blatDir=/cluster/data/hg16/bed/blat.hg16KG
+    protDat -kg preblastHg16KG.psl $blatDir/hg16KG.psl $blatDir/kg.mapNames blastHg16KG.psl
+
+    ssh hgwdev
+    cd /cluster/data/galGal2/bed/tblastn.hg16KG
+    hgLoadPsl galGal2 blastHg16KG.psl
+    exit
+
+    # back to kksilo
+    rm -rf blastOut
+
+# End tblastn
