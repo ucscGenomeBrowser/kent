@@ -9,7 +9,7 @@
 #include "binRange.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: bed.c,v 1.34 2004/10/19 22:54:19 angie Exp $";
+static char const rcsid[] = "$Id: bed.c,v 1.35 2004/11/23 00:12:59 hiram Exp $";
 
 void bedStaticLoad(char **row, struct bed *ret)
 /* Load a row from bed table into ret.  The contents of ret will
@@ -299,7 +299,7 @@ ret->score = sqlSigned(row[4]);
 strcpy(ret->strand, row[5]);
 ret->thickStart = sqlUnsigned(row[6]);
 ret->thickEnd = sqlUnsigned(row[7]);
-ret->reserved = sqlUnsigned(row[8]);
+ret->itemRgb = sqlUnsigned(row[8]);
 sqlSignedDynamicArray(row[10], &ret->blockSizes, &sizeOne);
 assert(sizeOne == ret->blockCount);
 sqlSignedDynamicArray(row[11], &ret->chromStarts, &sizeOne);
@@ -332,7 +332,7 @@ if (wordCount > 7)
 else
      bed->thickEnd = bed->chromEnd;
 if (wordCount > 8)
-    bed->reserved = sqlUnsigned(row[8]);
+    bed->itemRgb = sqlUnsigned(row[8]);
 if (wordCount > 9)
     bed->blockCount = sqlUnsigned(row[9]);
 if (wordCount > 10)
@@ -422,7 +422,7 @@ if (wordCount > 7)
 else
      bed->thickEnd = bed->chromEnd;
 if (wordCount > 8)
-    bed->reserved = sqlUnsigned(row[9]);
+    bed->itemRgb = sqlUnsigned(row[9]);
 if (wordCount > 9)
     bed->blockCount = sqlUnsigned(row[10]);
 if (wordCount > 10)
@@ -494,7 +494,7 @@ if (wordCount <= 8)
     return;
     }
 fputc(sep,f);
-fprintf(f, "%u", el->reserved);
+fprintf(f, "%u", el->itemRgb);
 if (wordCount <= 9)
     {
     fputc(lastSep, f);
@@ -702,7 +702,7 @@ newBed->score = bed->score;
 strncpy(newBed->strand, bed->strand, sizeof(bed->strand));
 newBed->thickStart = bed->thickStart;
 newBed->thickEnd = bed->thickEnd;
-newBed->reserved = bed->reserved;
+newBed->itemRgb = bed->itemRgb;
 newBed->blockCount = bed->blockCount;
 if (bed->blockCount > 0)
     {
@@ -738,7 +738,7 @@ newBed->score = bed->score;
 strncpy(newBed->strand, bed->strand, sizeof(bed->strand));
 newBed->thickStart = bed->thickStart;
 newBed->thickEnd = bed->thickEnd;
-newBed->reserved = bed->reserved;
+newBed->itemRgb = bed->itemRgb;
 newBed->blockCount = bed->blockCount;
 if (bed->blockCount > 0)
     {
@@ -1047,7 +1047,7 @@ if (fieldCount > 7)
 else
      ret->thickEnd = ret->chromEnd;
 if (fieldCount > 8)
-    ret->reserved = sqlUnsignedComma(&s);
+    ret->itemRgb = sqlUnsignedComma(&s);
 if (fieldCount > 9)
     ret->blockCount = sqlUnsignedComma(&s);
 if (fieldCount > 10)

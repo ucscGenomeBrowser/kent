@@ -35,7 +35,7 @@
 #include "hgText.h"
 #include "botDelay.h"
 
-static char const rcsid[] = "$Id: hgText.c,v 1.160 2004/11/19 16:08:36 kent Exp $";
+static char const rcsid[] = "$Id: hgText.c,v 1.161 2004/11/23 00:12:47 hiram Exp $";
 
 /* sources of tracks, other than the current database: */
 static char *hgFixed = "hgFixed";
@@ -2643,10 +2643,13 @@ if (sameString(customTrackPseudoDb, db))
 	field = newSlName("thickEnd");
 	slAddHead(&fieldList, field);
 	}
+    if (ct->fieldCount >= 9)
+	{
+	field = newSlName("itemRgb");
+	slAddHead(&fieldList, field);
+	}
     if (ct->fieldCount >= 12)
 	{
-	field = newSlName("reserved");
-	slAddHead(&fieldList, field);
 	field = newSlName("blockCount");
 	slAddHead(&fieldList, field);
 	field = newSlName("blockSizes");
@@ -2827,8 +2830,8 @@ for (bed=bedList;  bed != NULL;  bed=bed->next)
 	    printf("%d", bed->thickStart);
 	else if (sameString(field->name, "thickEnd"))
 	    printf("%d", bed->thickEnd);
-	else if (sameString(field->name, "reserved"))
-	    printf("%d", bed->reserved);
+	else if (sameString(field->name, "itemRgb"))
+	    printf("%d", bed->itemRgb);
 	else if (sameString(field->name, "blockCount"))
 	    printf("%d", bed->blockCount);
 	else if (sameString(field->name, "blockSizes"))

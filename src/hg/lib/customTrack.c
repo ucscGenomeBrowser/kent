@@ -21,7 +21,7 @@
 #include "cheapcgi.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: customTrack.c,v 1.51 2004/11/18 23:27:28 kent Exp $";
+static char const rcsid[] = "$Id: customTrack.c,v 1.52 2004/11/23 00:12:59 hiram Exp $";
 
 /* Track names begin with track and then go to variable/value pairs.  The
  * values must be quoted if they include white space. Defined variables are:
@@ -345,7 +345,7 @@ else
      bed->thickEnd = bed->chromEnd;
 if (wordCount > 8)
     {
-    bed->reserved = needNum(row[8], lineIx, 8);
+    bed->itemRgb = needNum(row[8], lineIx, 8);
     }
 if (wordCount > 9)
     bed->blockCount = needNum(row[9], lineIx, 9);
@@ -1169,7 +1169,7 @@ if (fieldCount > 6)
 if (fieldCount > 7)
     fprintf(f, "\t%d", bed->thickEnd);
 if (fieldCount > 8)
-    fprintf(f, "\t%d", bed->reserved);
+    fprintf(f, "\t%d", bed->itemRgb);
 if (fieldCount > 9)
     {
     count = bed->blockCount;

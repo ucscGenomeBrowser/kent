@@ -10,7 +10,7 @@
 #include "hdb.h"
 #include "hgRelate.h"
 
-static char const rcsid[] = "$Id: hgLoadBed.c,v 1.28 2004/10/21 18:13:53 angie Exp $";
+static char const rcsid[] = "$Id: hgLoadBed.c,v 1.29 2004/11/23 00:13:05 hiram Exp $";
 
 /* Command line switches. */
 boolean noSort = FALSE;		/* don't sort */
@@ -205,6 +205,7 @@ else if (!oldTable)
        dyStringAppend(dy, "  thickStart int unsigned not null,\n");
     if (bedSize >= 8)
        dyStringAppend(dy, "  thickEnd int unsigned not null,\n");
+    /*	As of 2004-11-22 the reserved field is used as itemRgb in code */
     if (bedSize >= 9)
        dyStringAppend(dy, "  reserved int unsigned  not null,\n");
     if (bedSize >= 10)

@@ -31,7 +31,7 @@ struct bed
     char strand[2];  /* + or -.  */
     unsigned thickStart; /* Start of where display should be thick (start codon for genes) */
     unsigned thickEnd;   /* End of where display should be thick (stop codon for genes) */
-    unsigned reserved;   /* Always zero for now. */
+    unsigned itemRgb;    /* RGB 8 bits each */
     unsigned blockCount; /* Number of blocks. */
     int *blockSizes;     /* Comma separated list of block sizes.  */
     int *chromStarts;    /* Start positions inside chromosome.  Relative to chromStart*/

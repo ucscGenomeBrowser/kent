@@ -13,7 +13,7 @@ CREATE TABLE bed (
     strand char(1) not null,	# + or -
     thickStart int unsigned not null,	# Start of where display should be thick (start codon)
     thickEnd int unsigned not null,	# End of where display should be thick (stop codon)
-    reserved int unsigned not null,	# Always zero for now
+    reserved int unsigned not null,	# Used as itemRgb as of 2004-11-22
     blockCount int not null,	# Number of blocks
     blockSizes longblob not null,	# Comma separated list of block sizes
     chromStarts longblob not null,	# Start positions relative to chromStart

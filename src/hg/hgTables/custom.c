@@ -156,10 +156,13 @@ if (fieldCount >= 8)
     field = newSlName("thickEnd");
     slAddHead(&fieldList, field);
     }
+if (fieldCount >= 9)
+    {
+    field = newSlName("itemRgb");
+    slAddHead(&fieldList, field);
+    }
 if (fieldCount >= 12)
     {
-    field = newSlName("reserved");
-    slAddHead(&fieldList, field);
     field = newSlName("blockCount");
     slAddHead(&fieldList, field);
     field = newSlName("blockSizes");
@@ -199,8 +202,8 @@ for (field = fieldList; field != NULL; field = field->next)
         hPrintf("%u", bed->thickStart);
     else if (sameString(type, "thickEnd"))
         hPrintf("%u", bed->thickEnd);
-    else if (sameString(type, "reserved"))
-        hPrintf("%u", bed->reserved);
+    else if (sameString(type, "itemRgb"))
+        hPrintf("%u", bed->itemRgb);
     else if (sameString(type, "blockCount"))
         hPrintf("%u", bed->blockCount);
     else if (sameString(type, "blockSizes"))

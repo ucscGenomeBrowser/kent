@@ -150,7 +150,7 @@
 #include "pscreen.h"
 #include "jalview.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.784 2004/11/19 23:14:15 heather Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.785 2004/11/23 00:12:50 hiram Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -11660,6 +11660,7 @@ printf("<H2>ENCODE Region <U>%s</U> Data for %s.</H2>\n", newLabel, encodeName);
 genericHeader(tdb, encodeName);
 
 genericBedClick(conn, tdb, item, start, 14);
+/*	reserved field has changed to itemRgb in code 2004-11-22 - Hiram */
 safef(query, sizeof(query),
 	 "select   chrom, chromStart, chromEnd, name, score, strand, "
 	 "         thickStart, thickEnd, reserved, blockCount, blockSizes, "
@@ -11705,6 +11706,7 @@ genericHeader(tdb, item);
 dupe = cloneString(tdb->type);
 wordCount = chopLine(dupe, words);
 genericBedClick(conn, tdb, item, start, atoi(words[1]));
+/*	reserved field has changed to itemRgb in code 2004-11-22 - Hiram */
 safef(query, sizeof(query),
 	 "select   chrom, chromStart, chromEnd, name, score, strand, "
 	 "         thickStart, thickEnd, reserved, blockCount, blockSizes, "
