@@ -367,7 +367,7 @@ spectrum on
 type psl xeno
 private on
 
-track ancientR
+track ancientR_chr1
 shortLabel Ancient Repeats
 longLabel Ancient Mouse Repeats
 priority 24.2
