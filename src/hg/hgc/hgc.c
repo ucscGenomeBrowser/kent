@@ -8,6 +8,7 @@
 #include "portable.h"
 #include "errabort.h"
 #include "dystring.h"
+#include "nib.h"
 #include "cheapcgi.h"
 #include "htmshell.h"
 #include "cart.h"
@@ -1441,7 +1442,7 @@ for (seq = seqList; seq != NULL; seq = seq->next)
 hFreeConn(&conn);
 }
 
-int showGfAlignment(struct psl *psl, bioSeq *oSeq, FILE *f, enum gfType qType)
+int showGfAlignment(struct psl *psl, bioSeq *oSeq, FILE *f, enum gfType qType, int qStart, int qEnd)
 /* Show protein/DNA alignment. */
 {
 struct dnaSeq *dnaSeq = NULL;
@@ -1449,19 +1450,19 @@ boolean tIsRc = (psl->strand[1] == '-');
 boolean qIsRc = (psl->strand[0] == '-');
 boolean isProt = (qType == gftProt);
 int tStart = psl->tStart, tEnd = psl->tEnd;
-int qStart = 0;
 int mulFactor = (isProt ? 3 : 1);
 int dnaSize = 0;
 DNA *dna = NULL;	/* Mixed case version of genomic DNA. */
 int oSize = oSeq->size;
 char *oLetters = cloneString(oSeq->dna);
 
-
 /* Load dna sequence. */
 dnaSeq = hDnaFromSeq(seqName, tStart, tEnd, dnaLower);
 freez(&dnaSeq->name);
 dnaSeq->name = cloneString(psl->tName);
 dnaSize = dnaSeq->size;
+
+/* Deal with minus strand. */
 if (tIsRc)
     {
     int temp;
@@ -1472,9 +1473,12 @@ if (tIsRc)
     }
 if (qIsRc)
     {
+    int temp;
     reverseComplement(oSeq->dna, oSeq->size);
     reverseComplement(oLetters, oSeq->size);
-    qStart = oSeq->size;
+    temp = psl->qSize - qEnd;
+    qEnd = psl->qSize - qStart;
+    qStart = temp;
     }
 dna = cloneString(dnaSeq->dna);
 
@@ -1489,7 +1493,7 @@ tolowers(oLetters);
 
     for (i=0; i<psl->blockCount; ++i)
 	{
-	int qs = psl->qStarts[i];
+	int qs = psl->qStarts[i] - qStart;
 	int ts = psl->tStarts[i] - tStart;
 	int sz = psl->blockSizes[i]-1;
 	colorFlags[qs] = socBrightBlue;
@@ -1542,7 +1546,7 @@ fprintf(f, "<H4><A NAME=genomic></A>Genomic %s %s:</H4>\n",
 
     for (i=0; i<psl->blockCount; ++i)
 	{
-	int qs = psl->qStarts[i];
+	int qs = psl->qStarts[i] - qStart;
 	int ts = psl->tStarts[i] - tStart;
 	int sz = psl->blockSizes[i];
 	if (isProt)
@@ -1598,11 +1602,11 @@ fprintf(f, "<H4><A NAME=ali></A>Side by Side Alignment</H4>\n");
     struct baf baf;
     int i,j;
 
-    bafInit(&baf, oSeq->dna, qStart, qIsRc,
+    bafInit(&baf, oSeq->dna, psl->qStart, qIsRc,
     	dnaSeq->dna, psl->tStart, tIsRc, f, 60, isProt);
     for (i=0; i<psl->blockCount; ++i)
 	{
-	int qs = psl->qStarts[i];
+	int qs = psl->qStarts[i] - qStart;
 	int ts = psl->tStarts[i] - tStart;
 	int sz = psl->blockSizes[i];
 	bafSetPos(&baf, qs, ts);
@@ -1684,7 +1688,7 @@ blockCount = ffShAliPart(body, ffAli, psl->qName, rna, rnaSize, 0,
 return blockCount;
 }
 
-void showSomeAlignment(struct psl *psl, bioSeq *oSeq, enum gfType qType)
+void showSomeAlignment(struct psl *psl, bioSeq *oSeq, enum gfType qType, int qStart, int qEnd)
 /* Display protein or DNA alignment in a frame. */
 {
 int blockCount;
@@ -1702,7 +1706,7 @@ htmStart(body, psl->qName);
 if (qType == gftRna || qType == gftDna)
     blockCount = showDnaAlignment(psl, oSeq, body);
 else 
-    blockCount = showGfAlignment(psl, oSeq, body, qType);
+    blockCount = showGfAlignment(psl, oSeq, body, qType, qStart, qEnd);
 fclose(body);
 chmod(bodyTn.forCgi, 0666);
 
@@ -1766,9 +1770,9 @@ hFreeConn(&conn);
 
 rnaSeq = hRnaSeq(acc);
 if (startsWith("xeno", type))
-    showSomeAlignment(psl, rnaSeq, gftDnaX);
+    showSomeAlignment(psl, rnaSeq, gftDnaX, 0, rnaSeq->size);
 else
-    showSomeAlignment(psl, rnaSeq, gftDna);
+    showSomeAlignment(psl, rnaSeq, gftDna, 0, rnaSeq->size);
 }
 
 void htcUserAli(char *fileNames)
@@ -1806,7 +1810,7 @@ for (oSeq = oSeqList; oSeq != NULL; oSeq = oSeq->next)
          break;
     }
 if (oSeq == NULL)  errAbort("%s is in %s but not in %s. Internal error.", qName, pslName, faName);
-showSomeAlignment(psl, oSeq, qt);
+showSomeAlignment(psl, oSeq, qt, 0, oSeq->size);
 }
 
 void htcBlatXeno(char *readName, char *table)
@@ -1841,7 +1845,7 @@ psl = pslLoad(row+hasBin);
 sqlFreeResult(&sr);
 hFreeConn(&conn);
 seq = hExtSeq(readName);
-showSomeAlignment(psl, seq, gftDnaX);
+showSomeAlignment(psl, seq, gftDnaX, 0, seq->size);
 }
 
 
@@ -2929,6 +2933,119 @@ sqlFreeResult(&sr);
 slReverse(&pslList);
 printAlignments(pslList, start, "htcBlatXeno", track, itemName);
 printTrackHtml(tdb);
+}
+
+boolean parseRange(char *range, char **retSeq, int *retStart, int *retEnd)
+/* Parse seq:start-end into components. */
+{
+char *s, *e;
+s = strchr(range, ':');
+if (s == NULL)
+    return FALSE;
+*s++ = 0;
+e = strchr(s, '-');
+if (e == NULL)
+    return FALSE;
+*e++ = 0;
+if (!isdigit(s[0]) || !isdigit(e[0]))
+    return FALSE;
+*retSeq = range;
+*retStart = atoi(s);
+*retEnd = atoi(e);
+return TRUE;
+}
+
+void mustParseRange(char *range, char **retSeq, int *retStart, int *retEnd)
+/* Parse seq:start-end or die. */
+{
+if (!parseRange(range, retSeq, retStart, retEnd))
+     errAbort("Malformed range %s", range);
+}
+
+struct psl *loadPslAt(char *track, char *qName, int qStart, int qEnd, char *tName, int tStart, int tEnd)
+/* Load a specific psl */
+{
+struct dyString *dy = newDyString(1024);
+struct sqlConnection *conn = hAllocConn();
+char table[64];
+boolean hasBin;
+struct sqlResult *sr;
+char **row;
+struct psl *psl;
+
+hFindSplitTable(tName, track, table, &hasBin);
+dyStringPrintf(dy, "select * from %s ", table);
+dyStringPrintf(dy, "where qStart = %d ", qStart);
+dyStringPrintf(dy, "and qEnd = %d ", qEnd);
+dyStringPrintf(dy, "and qName = '%s' ", qName);
+dyStringPrintf(dy, "and tStart = %d ", tStart);
+dyStringPrintf(dy, "and tEnd = %d ", tEnd);
+dyStringPrintf(dy, "and tName = '%s'", tName);
+sr = sqlGetResult(conn, dy->string);
+row = sqlNextRow(sr);
+if (row == NULL)
+    errAbort("Couldn't loadPslAt %s:%d-%d", tName, tStart, tEnd);
+psl = pslLoad(row + hasBin);
+sqlFreeResult(&sr);
+freeDyString(&dy);
+hFreeConn(&conn);
+return psl;
+}
+
+struct psl *loadPslFromRangePair(char *track, char *rangePair)
+/* Load a specific psl given 'qName:qStart-qEnd tName:tStart-tEnd' in rangePair. */
+{
+char *qRange, *tRange;
+char *qName, *tName;
+int qStart, qEnd, tStart, tEnd;
+qRange = nextWord(&rangePair);
+tRange = nextWord(&rangePair);
+if (tRange == NULL)
+    errAbort("Expecting two ranges in loadPslFromRangePair");
+mustParseRange(qRange, &qName, &qStart, &qEnd);
+mustParseRange(tRange, &tName, &tStart, &tEnd);
+return loadPslAt(track, qName, qStart, qEnd, tName, tStart, tEnd);
+}
+
+
+void doBlatMus(struct trackDb *tdb, char *item)
+/* Put up cross-species alignment when the second species
+ * sequence is in a nib file. */
+{
+struct psl *psl = NULL;
+char otherString[256];
+char *cgiItem = cgiEncode(item);
+
+cartWebStart(tdb->longLabel);
+psl = loadPslFromRangePair(tdb->tableName, item);
+printf("<B>Mouse position:</B> %s:%d-%d<BR>\n", psl->qName, psl->qStart, psl->qEnd);
+printf("<B>Mouse size:</B> %d<BR>\n", psl->qEnd - psl->qStart);
+printf("<B>Human position:</B> %s:%d-%d<BR>\n", psl->tName, psl->tStart, psl->tEnd);
+printf("<B>Human size:</B> %d<BR>\n", psl->tEnd - psl->tStart);
+printf("<B>Bases in aligning blocks:</B> %d<BR>\n", psl->match + psl->repMatch);
+printf("<B>Percent identity within aligning blocks:</B> %3.1f%%<BR>\n", 0.1*(1000 - pslCalcMilliBad(psl, FALSE)));
+sprintf(otherString, "%d", psl->tStart);
+hgcAnchorSomewhere("htcBlatMus", cgiItem, otherString, psl->tName);
+freez(&cgiItem);
+printf("View detailed alignment</A><BR>\n");
+printTrackHtml(tdb);
+}
+
+void htcBlatMus(char *htcCommand, char *item)
+/* Display alignment - loading sequence from nib file. */
+{
+struct psl *psl = loadPslFromRangePair("blatMus",  item);
+char nibFile[512];
+char query[256];
+struct dnaSeq *musSeq = NULL;
+struct sqlConnection *conn = hAllocConn();
+
+sprintf(query, "select fileName from mouseChrom where chrom = '%s'", psl->qName);
+if (sqlQuickQuery(conn, query, nibFile, sizeof(nibFile)) == NULL)
+    errAbort("Sequence %s isn't in mouseChrom", psl->qName);
+musSeq = nibLoadPart(nibFile, psl->qStart, psl->qEnd - psl->qStart);
+showSomeAlignment(psl, musSeq, gftDnaX, psl->qStart, psl->qEnd);
+hFreeConn(&conn);
 }
 
 void doBlatFish(struct trackDb *tdb, char *itemName)
@@ -5456,6 +5573,14 @@ else if (sameWord(track, "blatMouse") || sameWord(track, "bestMouse")
   || sameWord(track, "blastzTest") || sameWord(track, "blastzTest2"))
     {
     doBlatMouse(tdb, item);
+    }
+else if (sameWord(track, "blatMus"))
+    {
+    doBlatMus(tdb, item);
+    }
+else if (sameWord(track, "htcBlatMus"))
+    {
+    htcBlatMus(track, item);
     }
 else if (sameWord(track, "blatFish"))
     {
