@@ -5229,3 +5229,193 @@ hgMapToGene rn3 refGene knownGene knownToLocusLink -lookup=refToLl.txt
     cd /cluster/data/rn3/bed/encodeRegions
     hgLoadBed rn3 encodeRegions encodeRegions.bed -noBin
 
+# SWAP BLASTZ MOUSE-RAT TO RAT-MOUSE (MM5) (DONE 9/1/04 Fan)
+    ssh eieio
+    mkdir /cluster/data/rn3/bed/blastz.mm5.swap.2004-09-01
+    ln -s blastz.mm5.swap.2004-09-01 /cluster/data/rn3/bed/blastz.mm5
+    cd /cluster/data/rn3/bed/blastz.mm5.swap.2004-09-01
+    set aliDir = /cluster/data/mm5/bed/blastz.rn3
+    cp $aliDir/S1.len S2.len
+    cp $aliDir/S2.len S1.len
+    mkdir unsorted axtChrom
+    cat $aliDir/axtChrom/chr*.axt \
+    | axtSwap stdin $aliDir/S1.len $aliDir/S2.len stdout \
+    | axtSplitByTarget stdin unsorted
+    # Sort the shuffled .axt files.
+
+    foreach f (unsorted/*.axt)
+      echo sorting $f:t:r
+      axtSort $f axtChrom/$f:t
+    end
+    # This took about 2 hours.
+    du -sh $aliDir/axtChrom unsorted axtChrom
+    rm -r unsorted
+
+
+# CHAIN MOUSE BLASTZ (DONE 9/1/04 Fan)
+    # Run axtChain on little cluster
+    ssh kki
+    cd /cluster/data/rn3/bed/blastz.mm5.swap.2004-09-01
+    mkdir -p axtChain/run1
+    cd axtChain/run1
+    mkdir out chain
+    ls -1S /cluster/data/rn3/bed/blastz.mm5.swap.2004-09-01/axtChrom/*.axt \
+      > input.lst
+    cat << '_EOF_' > gsub
+#LOOP
+doChain {check in line+ $(path1)} {check out line+ chain/$(root1).chain} {check out exists out/$(root1).out}
+#ENDLOOP
+'_EOF_'
+    # << this line makes emacs coloring happy
+
+    cat << '_EOF_' > doChain
+#!/bin/csh
+axtChain $1 \
+  /iscratch/i/rn3/bothMaskedNibs \
+  /iscratch/i/mus/mm5/softNib $2 > $3
+'_EOF_'
+    # << this line makes emacs coloring happy
+    chmod a+x doChain
+    gensub2 input.lst single gsub jobList
+    para create jobList
+    para try, check, push, check...
+# Completed: 44 of 44 jobs
+# CPU time in finished jobs:       3611s      60.18m     1.00h    0.04d  0.000 y
+# IO & Wait Time:                  1090s      18.17m     0.30h    0.01d  0.000 y
+# Average job time:                 107s       1.78m     0.03h    0.00d
+# Longest job:                      301s       5.02m     0.08h    0.00d
+# Submission to last job:           484s       8.07m     0.13h    0.01d
+
+    # now on the cluster server, sort chains
+    ssh eieio
+    cd /cluster/data/rn3/bed/blastz.mm5.swap.2004-09-01/axtChain
+    limit vmemoryuse 5000000
+    chainMergeSort run1/chain/*.chain > all.chain
+    chainSplit chain all.chain
+    rm run1/chain/*.chain
+
+    # take a look at score distr's
+    foreach f (chain/*.chain)
+      grep chain $f | awk '{print $2;}' | sort -nr > /tmp/score.$f:t:r
+      echo $f:t:r
+      textHistogram -binSize=5000 /tmp/score.$f:t:r
+      echo ""
+    end
+
+    # Lots of chaff with scores in the 3000's.  Many very-high-scoring 
+    # chains.  So filter the chain down somewhat...
+    mv all.chain all.chain.unfiltered
+    chainFilter -minScore=5000 all.chain.unfiltered > all.chain
+    rm chain/*
+    chainSplit chain all.chain
+    gzip all.chain.unfiltered
+
+    # Load chains into database
+    ssh hgwdev
+    cd /cluster/data/rn3/bed/blastz.mm5.swap.2004-09-01/axtChain/chain
+    foreach i (*.chain)
+        set c = $i:r
+        nice hgLoadChain rn3 ${c}_chainMm5 $i
+    end
+    # Similar to human-mouse coverage -- not nearly as high as rat-human.
+    featureBits -chrom=chr1 rn3 chainMm5Link
+# 158815202 bases of 242966425 (65.365%) in intersection
+    featureBits -chrom=chr2 rn3 chainMm5Link
+# 145927900 bases of 235737501 (61.903%) in intersection
+
+# NET MOUSE BLASTZ (DONE 9/1/04 Fan)
+
+    ssh eieio
+    cd /cluster/data/rn3/bed/blastz.mm5.swap.2004-09-01/axtChain
+
+    chainPreNet all.chain ../S1.len ../S2.len stdout \
+    | chainNet stdin -minSpace=1 ../S1.len ../S2.len rat.net mouse.net
+    limit vmemoryuse 8000000
+    netSyntenic rat.net hNoClass.net
+    # memory usage 1499435008, utime 11055 s/100, stime 1385
+
+    # The netClass operations requires an "ancientRepeat" table to exist
+    # in either rn3 or mm5.  So, create the table:
+
+    ssh hgwdev
+    mkdir -p /cluster/data/rn3/bed/ancientRepeat
+    cd /cluster/data/rn3/bed/ancientRepeat
+    # mysqldump needs write permission to this directory
+    # and you need to use your read/write enabled user with password
+    chmod 777 .
+    hgsqldump --all --tab=. mm4 ancientRepeat
+    chmod 775 .
+    hgsql rn3 < ancientRepeat.sql
+    hgsql mm5 -e 'load data local infile "ancientRepeat.txt" into table ancientRepeat'
+
+    ssh hgwdev
+    cd /cluster/data/rn3/bed/blastz.mm5.swap.2004-09-01/axtChain
+
+    time netClass hNoClass.net rn3 mm5 mouse.net \
+        -tNewR=/cluster/bluearc/rat/rn3/linSpecRep.notInMouse \
+        -qNewR=/cluster/bluearc/scratch/mus/mm5/linSpecRep.notInRat
+    # 386.820u 84.400s 20:15.00 38.7% 0+0k 0+0io 31184pf+0w
+
+    # Make a 'syntenic' subset:
+    ssh eieio
+    cd /cluster/data/rn3/bed/blastz.mm5.swap.2004-09-01/axtChain
+    rm hNoClass.net
+    # Make a 'syntenic' subset of these with
+    netFilter -syn mouse.net > mouseSyn.net
+
+    # Load the nets into database 
+    ssh hgwdev
+    cd /cluster/data/rn3/bed/blastz.mm5.swap.2004-09-01/axtChain
+    nice netFilter -minGap=10 mouse.net |  hgLoadNet rn3 netMm5 stdin
+    nice netFilter -minGap=10 mouseSyn.net | hgLoadNet rn3 netSyntenyMm5 stdin
+    # Add entries for chainMm5, netMm5, syntenyMm5 to rat/rn3 trackDb
+
+# GENERATE MM5 MAF FOR MULTIZ FROM NET (DONE 9/1/04 Fan)
+    ssh eieio
+    cd /cluster/data/rn3/bed/blastz.mm5.swap.2004-09-01/axtChain
+    netSplit mouse.net net
+    cd /cluster/data/rn3/bed/blastz.mm5.swap.2004-09-01
+    mkdir axtNet
+    foreach f (axtChain/net/*)
+      set chr = $f:t:r
+      netToAxt $f axtChain/chain/$chr.chain /cluster/data/rn3/nib \
+        /cluster/data/mm5/nib stdout \
+      | axtSort stdin axtNet/$chr.axt
+    end
+    mkdir mafNet
+    foreach f (axtNet/chr*.axt)
+      set maf = mafNet/$f:t:r.maf
+      axtToMaf $f \
+            /cluster/data/rn3/chrom.sizes /cluster/data/mm5/chrom.sizes \
+            $maf -tPrefix=rn3. -qPrefix=mm5.
+    end
+
+
+# MAKE VSMM5 DOWNLOADABLES (DONE 9/2/04 Fan)
+    ssh eieio
+    cd /cluster/data/rn3/bed/blastz.mm5/axtChain
+    ln all.chain mouse.chain
+    foreach f (mouse.chain mouse.net)
+      gzip -c $f > $f.gz
+    end
+    rm mouse.chain
+    # Make chain-format of raw alignments 
+    cd /cluster/data/rn3/bed/blastz.mm5
+    mkdir blastzECF
+    foreach f (axtChrom/chr*.axt)
+      set chr = $f:t:r
+      axtToChain $f S1.len S2.len stdout \
+      | gzip -c - > blastzECF/$chr.ecf.gz
+    end
+
+    ssh hgwdev
+    mkdir /usr/local/apache/htdocs/goldenPath/rn3/vsMm5
+    cd /usr/local/apache/htdocs/goldenPath/rn3/vsMm5
+    mv /cluster/data/rn3/bed/blastz.mm5/axtChain/mouse*.gz .
+    md5sum *.gz > md5sum.txt
+    # Copy over & edit README.txt w/pointers to chain, net formats.
+    # Not for pushing -- handle separately.
+    mv /cluster/data/rn3/bed/blastz.mm5/blastzECF .
+    cd blastzECF
+    md5sum *.gz > md5sum.txt
+
