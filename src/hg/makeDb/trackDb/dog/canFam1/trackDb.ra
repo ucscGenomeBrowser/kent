@@ -12,17 +12,6 @@ autoScaleDefault Off
 pairwise chm
 speciesOrder human mouse
 
-track phastConsElements
-shortLabel Cons Elements
-longLabel PhastCons Conserved Elements, Dog/Human/Mouse 
-group compGeno
-priority 101
-visibility hide
-spectrum on
-exonArrows off
-showTopScorers 200
-type bed 5 .
-
 track chainMm5
 shortLabel Mouse Chain 
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
