@@ -19,11 +19,13 @@
 #include "subText.h"
 #include "blatServers.h"
 
-static struct sqlConnCache *hdbCc = NULL;
+static struct sqlConnCache *hdbCc = NULL;  /* cache for primary database connection */
+static struct sqlConnCache *hdbCc2 = NULL;  /* cache for second database connection (ortholog) */
 static struct sqlConnCache *centralCc = NULL;
 
 static char *hdbHost;
 static char *hdbName = "hg12";
+static char *hdbName2 = "mm2";
 static char *hdbUser;
 static char *hdbPassword;
 static char *hdbTrackDb = NULL;
@@ -117,10 +119,26 @@ if (hdbCc == NULL)
 return sqlAllocConnection(hdbCc);
 }
 
+struct sqlConnection *hAllocConn2()
+/* Get free connection if possible. If not allocate a new one. */
+{
+if (hdbHost == NULL)
+    hDefaultConnect();
+if (hdbCc2 == NULL)
+    hdbCc2 = sqlNewRemoteConnCache(hdbName2, hdbHost, hdbUser, hdbPassword);
+return sqlAllocConnection(hdbCc2);
+}
+
 void hFreeConn(struct sqlConnection **pConn)
 /* Put back connection for reuse. */
 {
 sqlFreeConnection(hdbCc, pConn);
+}
+
+void hFreeConn2(struct sqlConnection **pConn)
+/* Put back connection for reuse into second pool for second database connection */
+{
+sqlFreeConnection(hdbCc2, pConn);
 }
 
 struct sqlConnection *hConnectCentral()
@@ -166,6 +184,20 @@ int size;
 char query[256];
 
 conn = hAllocConn();
+sprintf(query, "select size from chromInfo where chrom = '%s'", chromName);
+size = sqlQuickNum(conn, query);
+hFreeConn(&conn);
+return size;
+}
+
+int hChromSize2(char *chromName)
+/* Return size of chromosome. */
+{
+struct sqlConnection *conn;
+int size;
+char query[256];
+
+conn = hAllocConn2();
 sprintf(query, "select size from chromInfo where chrom = '%s'", chromName);
 size = sqlQuickNum(conn, query);
 hFreeConn(&conn);
