@@ -9,10 +9,11 @@
 #include <string.h>
 #include "internet.h"
 #include "errabort.h"
+#include "hash.h"
 #include "net.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: net.c,v 1.28 2004/03/01 04:51:03 kent Exp $";
+static char const rcsid[] = "$Id: net.c,v 1.29 2004/03/01 16:43:13 kent Exp $";
 
 /* Brought errno in to get more useful error messages */
 
@@ -252,8 +253,7 @@ strncpy(parsed->host, s, sizeof(parsed->host));
 }
 
 static int netGetOpenHttpExt(char *url, char *method)
-/* Return a file handle that will read the url.  This
- * skips past any header. */
+/* Return a file handle that will read the url.  */
 {
 struct netParsedUrl npu;
 struct dyString *dy = newDyString(512);
@@ -279,34 +279,49 @@ return sd;
 }
 
 static int netGetOpenHttp(char *url)
-/* Return a file handle that will read the url.  This
- * skips past any header. */
+/* Return a file handle that will read the url.  */
 {
 return netGetOpenHttpExt(url, "GET");
 }
 
-int netUrlStatus(char *url)
+int netUrlHead(char *url, struct hash *hash)
 /* Go get head and return status.  Return negative number if
- * can't get head. */
+ * can't get head. If hash is non-null, fill it with header
+ * lines, including hopefully Content-Type: */
 {
 int sd = netGetOpenHttpExt(url, "HEAD");
-char buf[256], *line, *word;
-int bytesRead;
 int status = EIO;
-bytesRead = read(sd, buf, sizeof(buf));
-if (bytesRead < 0)
-    status = errno;
-else
+if (sd >= 0)
     {
-    line = buf;
-    word = nextWord(&line);
-    if (word != NULL && startsWith("HTTP", word))
-        {
-	word = nextWord(&line);
-	if (word != NULL && isdigit(word[0]))
-	    status = atoi(word);
+    char *line, *word;
+    struct lineFile *lf = lineFileAttach(url, TRUE, sd);
+
+    if (lineFileNext(lf, &line, NULL))
+	{
+	if (startsWith("HTTP/", line))
+	    {
+	    word = nextWord(&line);
+	    word = nextWord(&line);
+	    if (word != NULL && isdigit(word[0]))
+	        {
+		status = atoi(word);
+		if (hash != NULL)
+		    {
+		    while (lineFileNext(lf, &line, NULL))
+		        {
+			word = nextWord(&line);
+			if (word == NULL)
+			    break;
+			hashAdd(hash, word, cloneString(skipLeadingSpaces(line)));
+			}
+		    }
+		}
+	    }
 	}
+    lineFileClose(&lf);
     }
+else
+    status = errno;
 return status;
 }
 

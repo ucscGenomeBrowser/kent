@@ -115,9 +115,12 @@ int netUrlOpen(char *url);
 /* Return unix low-level file handle for url. 
  * Just close(result) when done. */
 
-int netUrlStatus(char *url);
+struct hash;
+
+int netUrlHead(char *url, struct hash *hash);
 /* Go get head and return status.  Return negative number if
- * can't get head. */
+ * can't get head. If hash is non-null, fill it with header
+ * lines, including hopefully Content-Type: */
 
 struct lineFile *netLineFileOpen(char *url);
 /* Return a lineFile attatched to url.  This one
