@@ -22,7 +22,7 @@
 
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: qaPushQ.c,v 1.14 2004/05/11 18:08:52 galt Exp $";
+static char const rcsid[] = "$Id: qaPushQ.c,v 1.15 2004/05/11 19:42:05 galt Exp $";
 
 char msg[2048] = "";
 char ** saveEnv;
@@ -57,6 +57,7 @@ char *showColumns = NULL;
 
 char *defaultColumns =
     "pqid,qid,priority,qadate,track,dbs,tbls,cgis,files,currLoc,makeDocYN,onlineHelp,ndxYN,stat,sponsor,reviewer,extSource,notes";
+    
 /*
 "qid,pqid,priority,rank,qadate,newYN,track,dbs,tbls,cgis,files,sizeMB,currLoc,"
 "makeDocYN,onlineHelp,ndxYN,joinerYN,stat,sponsor,reviewer,extSource,openIssues,notes,"
@@ -169,6 +170,7 @@ char *colHdr[] = {
 "Initial &nbsp;&nbsp;Submission&nbsp;&nbsp; Date"
 };
 
+char pushQtbl[256] = "pushQ";   /* default */
 
 
 enum colEnum colOrder[MAXCOLS];
@@ -230,10 +232,13 @@ cleanUp();
 
 
 bool mySqlGetLock(char *name)
-/* Sets an advisory lock on the process for 10 seconds.
+/* Tries to acquire (for 10 seconds) and set an advisory lock.
  *  note: mysql returns 1 if successful,
  *   0 if name already locked or NULL if error occurred 
- *   blocks another client from obtaining a lock with the same name */
+ *   blocks another client from obtaining a lock with the same name
+ *   lock is automatically released by mysql when connection is closed or detected broken
+ *   may even detect program crash and release lock.
+ */
 {
 char query[256];
 struct sqlResult *rs;
@@ -274,8 +279,8 @@ void setLock()
 /* creat may be set to fail if the file exists, allowing a simple lock mechanism */
 int retries = 0;
 
-/* note: only retry 2 times with sleep 5 secs between, then assume failure and push ahead */
-while (retries < 2)
+/* note: only retry 1 times with sleep 5 secs between, then assume failure and push ahead */
+while (retries < 1)
     {
     if (mySqlGetLock("qapushq"))    /* just an advisory semaphore, really */
 	{
@@ -689,14 +694,14 @@ initColsFromString(showColumns);
 safef(monthsql,sizeof(monthsql),"");
 if (!sameString(month,""))
     {
-    safef(monthsql,sizeof(monthsql),"where priority='L' and qadate like '%s%%' ",month);
+    safef(monthsql,sizeof(monthsql)," where priority='L' and qadate like '%s%%' ",month);
     }
 
 /* Get a list of all (or in month). */
-safef(query, sizeof(query), "%s%s%s", 
-    "select * from pushQ ",
+safef(query, sizeof(query), "select * from %s%s%s", 
+    pushQtbl,
     monthsql,
-    "order by priority,rank,qid desc limit 100"
+    " order by priority,rank,qid desc limit 100"
     );
 
 // debug printf("query=%s",query); 
@@ -731,6 +736,7 @@ printf("&nbsp;<A href=/cgi-bin/qaPushQ?action=reset>Logout</A>\n");
 printf("&nbsp;<A href=/cgi-bin/qaPushQ?action=showAllCol>All Columns</A>\n");
 printf("&nbsp;<A href=/cgi-bin/qaPushQ?action=showDefaultCol>Default Columns</A>\n");
 printf("&nbsp;<A href=/cgi-bin/qaPushQ?action=showMonths>Log by Month</A>\n");
+printf("&nbsp;<A href=/cgi-bin/qaPushQ?action=showGateway>Gateway</A>\n");
 printf("&nbsp;<A href=/cgi-bin/qaPushQ?action=showDisplayHelp>Help</A>\n");
 
 /* draw table header */
@@ -806,7 +812,7 @@ char **row;
 struct sqlResult *sr;
 char query[256];
 
-safef(query, sizeof(query), "select * from pushQ where qid = '%s'",qid);
+safef(query, sizeof(query), "select * from %s where qid = '%s'",pushQtbl,qid);
 sr = sqlGetResult(conn, query);
 row = sqlNextRow(sr);
 if (row == NULL)
@@ -835,7 +841,6 @@ void doPushDone()
 
 struct pushQ q; /* just so we get the size of q.qid */
 char query[256];
-char *tbl = "pushQ";
 char *meta = ""
 "<head>"
 "<title>Meta Redirect Code</title>"
@@ -849,14 +854,14 @@ loadPushQ(q.qid, &q, FALSE);
 
 safef(query, sizeof(query), 
     "update %s set rank = 0, priority ='L', pushedYN='Y' where qid = '%s' ", 
-    tbl, q.qid);
+    pushQtbl, q.qid);
 sqlUpdate(conn, query);
 
 
 /* first close the hole where it was */
 safef(query, sizeof(query), 
     "update %s set rank = rank - 1 where priority ='%s' and rank > %d ", 
-tbl, q.priority, q.rank);
+    pushQtbl, q.priority, q.rank);
 sqlUpdate(conn, query);
 
 
@@ -872,7 +877,6 @@ void doPromote(int change)
  * >0 means promote, <0 means demote */
 {
 
-char *tbl = "pushQ";
 char **row;
 struct sqlResult *sr;
 
@@ -895,12 +899,12 @@ if ((q.rank > 1) && (change>0))
     /* swap places with rank-1 */
     safef(query, sizeof(query), 
     "update %s set rank = rank + 1 where priority ='%s' and rank = %d ", 
-    tbl, q.priority, q.rank-1);
+    pushQtbl, q.priority, q.rank-1);
     sqlUpdate(conn, query);
     q.rank--;
     safef(query, sizeof(query), 
     "update %s set rank = %d where qid ='%s'", 
-    tbl, q.rank, q.qid);
+    pushQtbl, q.rank, q.qid);
     sqlUpdate(conn, query);
     }
 
@@ -909,13 +913,13 @@ if (change<0)
     /* swap places with rank+1 */
     safef(query, sizeof(query), 
     "update %s set rank = rank - 1 where priority ='%s' and rank = %d ", 
-    tbl, q.priority, q.rank+1);
+    pushQtbl, q.priority, q.rank+1);
     if (sqlUpdateRows(conn, query, NULL)>0)
     {
     q.rank++;
     safef(query, sizeof(query), 
 	"update %s set rank = %d where qid ='%s'", 
-	tbl, q.rank, q.qid);
+	pushQtbl, q.rank, q.qid);
     sqlUpdate(conn, query);
     }
     }
@@ -934,7 +938,7 @@ struct pushQ q;
 int newqid = 0;
 char query[256];
 char *quickres = NULL;
-safef(query, sizeof(query), "select max(qid) from pushQ");
+safef(query, sizeof(query), "select max(qid) from %s",pushQtbl);
 quickres = sqlQuickString(conn, query);
 if (quickres != NULL) 
     {
@@ -952,11 +956,10 @@ int getNextAvailRank(char *priority)
 struct pushQ q;
 int newqid = 0;
 char query[256];
-char *tbl = "pushQ";
 char *quickres = NULL;
 safef(query, sizeof(query), 
     "select rank from %s where priority='%s' order by rank desc limit 1",
-    tbl, priority);
+    pushQtbl, priority);
 quickres = sqlQuickString(conn, query);
 if (quickres == NULL) 
     {
@@ -1062,7 +1065,6 @@ void doPost()
 {
 
 
-char *tbl = "pushQ";
 int updateSize = 2456;
 int newqid = 0;
 
@@ -1167,7 +1169,7 @@ if ( (!sameString(newPriority,q.priority)) || (sameString(delbutton,"delete")) )
     /* first close the hole where it was */
     safef(query, sizeof(query), 
     "update %s set rank = rank - 1 where priority ='%s' and rank > %d ", 
-    tbl, q.priority, q.rank);
+    pushQtbl, q.priority, q.rank);
     sqlUpdate(conn, query);
     }
 
@@ -1279,7 +1281,7 @@ if (sameString(pushbutton,"push requested"))
 if (sameString(delbutton,"delete")) 
     {
     /* delete old record */
-    safef(query, sizeof(query), "delete from %s where qid ='%s'", tbl, q.qid);
+    safef(query, sizeof(query), "delete from %s where qid ='%s'", pushQtbl, q.qid);
     sqlUpdate(conn, query);
     }
 else if (sameString(newQid,""))
@@ -1288,12 +1290,12 @@ else if (sameString(newQid,""))
     safef(msg, sizeof(msg), "%%0%dd", sizeof(q.qid)-1);
     safef(newQid,sizeof(newQid),msg,newqid);
     safef(q.qid, sizeof(q.qid), newQid);
-    pushQSaveToDbEscaped(conn, &q, tbl, updateSize);
+    pushQSaveToDbEscaped(conn, &q, pushQtbl, updateSize);
     }
 else
     {  
     /* update existing record */
-    pushQUpdateEscaped(conn, &q, tbl, updateSize);
+    pushQUpdateEscaped(conn, &q, pushQtbl, updateSize);
     }
 
 
@@ -1308,7 +1310,7 @@ if (sameString(clonebutton,"clone"))
     q.rank = getNextAvailRank(q.priority);
     strcpy(q.reqdate   ,"" ); 
     strcpy(q.pushedYN  ,"N");  /* default to: push not done yet */
-    pushQSaveToDbEscaped(conn, &q, tbl, updateSize);
+    pushQSaveToDbEscaped(conn, &q, pushQtbl, updateSize);
     }
 
 
@@ -1595,13 +1597,8 @@ char tempVal[2048];
 safef(myUser.user,sizeof(myUser.user),qaUser);
 readAUser(&myUser, FALSE);
 
-while(TRUE)
-    { 
-    parseList(myUser.contents,'?',i,tempVar,sizeof(tempVar));
-    if (tempVar[0]==0) 
-	{
-	break;
-	}
+while(parseList(myUser.contents,'?',i,tempVar,sizeof(tempVar)))
+    {
 
     parseList(tempVar,'=',0,tempVarName,sizeof(tempVarName));
    
@@ -1613,6 +1610,12 @@ while(TRUE)
 	showColumns = needMem(strlen(tempVal)+1);
 	safef(showColumns, strlen(tempVal)+1, tempVal);
 	}
+
+    if (sameString(tempVarName,"org"))
+	{
+	safef(pushQtbl,sizeof(pushQtbl),tempVal);
+	}
+
     // debug
     //safef(msg,sizeof(msg),"tempVar=%s<br>\n tempVarName=%s<br>\n tempVal=%s<br>\n showColumns=%s<br>\n",tempVar,tempVarName,tempVal,showColumns);
     //htmShell(TITLE, doMsg, NULL);
@@ -1631,6 +1634,7 @@ char query[256];
 struct dyString * newcontents = newDyString(2048);  /* need room */
 
 dyStringPrintf(newcontents, "?showColumns=%s", showColumns);
+dyStringPrintf(newcontents, "?org=%s", pushQtbl);
 
 freeMem(&myUser.contents);
 myUser.contents = newcontents->string;
@@ -1840,9 +1844,12 @@ struct sqlResult *sr;
 char **row;
 char query[256];
 
+printf("<h4>Logs for Month</h4>\n");
+printf("<br>\n");
 printf("<A href=qaPushQ?action=display>Current</A><br>\n");
+printf("<br>\n");
 
-safef(query, sizeof(query), "select distinct substring(qadate,1,7) from pushQ where priority='L' order by qadate desc");
+safef(query, sizeof(query), "select distinct substring(qadate,1,7) from %s where priority='L' order by qadate desc",pushQtbl);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -2386,6 +2393,39 @@ printf("<a href=\"/cgi-bin/qaPushQ?action=showSizes&qid=%s\">RETURN</a> <br>\n",
 cleanUp();
 }
 
+
+
+void doShowGateway()
+/* This gives the user a choice of months to filter on */
+{
+
+struct sqlResult *sr;
+char **row;
+char query[256];
+
+printf("<h4>Gateway</h4>\n");
+printf("<br>\n");
+printf("<A href=qaPushQ?org=pushQ>Main Push Queue</A><br>\n");
+printf("<br>\n");
+
+safef(query, sizeof(query), "show tables");
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    if ((!sameString(row[0],"pushQ") && (!sameString(row[0],"users"))))
+	{
+	printf("<A href=qaPushQ?org=%s>%s</A><br>\n",row[0],row[0]);
+	}
+    }
+sqlFreeResult(&sr);
+printf("<br>\n");
+printf("<a href=\"/cgi-bin/qaPushQ\">RETURN</a> <br>\n");
+cleanUp();
+}
+
+
+
+
 /* ------------------------------------------------------- */
 
 
@@ -2397,6 +2437,7 @@ int main(int argc, char *argv[], char *env[])
 {
 
 char *action = NULL;   /* have to put declarations first */
+char *org = NULL;
 
 if (!cgiIsOnWeb())
     {
@@ -2437,7 +2478,6 @@ action = cgiUsualString("action","display");  /* get action, defaults to display
 /* initCgiInput() is not exported in cheapcgi.h, but it should get called by cgiUsualString
 So it will find all input regardless of Get/Put/Post/etc and make available as cgivars */
 
-
 if (sameString(action,"postLogin")) 
     {
     doPostLogin();  /* will redirect back to display */
@@ -2471,6 +2511,12 @@ safef(showColumns, 2048, defaultColumns);
     
 
 readMyUser();
+
+org = cgiUsualString("org","");  /* get org, defaults to display of main push queue */
+if (!sameString(org,""))
+    {
+    safef(pushQtbl,sizeof(pushQtbl),org);
+    }
 
 
 /*
@@ -2572,6 +2618,11 @@ else if (sameString(action,"showEditHelp" ))
 else if (sameString(action,"showSizesHelp" )) 
     {
     htmShell(TITLE, doShowSizesHelp, NULL);
+    }
+
+else if (sameString(action,"showGateway" )) 
+    {
+    htmShell(TITLE, doShowGateway, NULL);
     }
 
 else

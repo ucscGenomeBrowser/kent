@@ -1,24 +1,17 @@
 
-add support for multiple species
-Bob says that an entire queue can 
-run for things with the same database.
-If this is true, I need to modify the 
-code for maintaining rank and filtering.
-Plus provide a way for people to select 
-and change between databases.  
-Then would they still be able to see all at once?
+when the new org/assembly has been finished and the separate queue is 
+no longer needed, make a way to quickly append its records
+to the end of the main queue and clear out or delete the separate queue tbl.
 
 add &cacheDefeat=random to URL and db to suppress back-button problems if any.
 
 give in and use the cart?
 
-monthly reports in easy-to-use format
 add ability to query old logs more fully (later)
 
 
 -------------------------------------------------------------------------------
-revision 1.1
-date: 2004/04/21 20:24:36;  author: galt;  state: Exp;
+date: 2004/04/21 20:24:36;  author: galt;
 Added cgi program qaPushQ to maintain the Push Queue for ucsc genome project.
 hg.conf has new "pq."-entries.
 Program goes in cgi-bin.
@@ -40,6 +33,12 @@ To clear the password:
 update users set password='' where user='theuser';
 To empty the pseudo-cart:
 update users set content='' where user='theuser';
+
+Notes for qaPushQ gateway, adding new queues:
+CREATE TABLE hg17 (UNIQUE (qid)) SELECT * FROM pushQ;
+delete from hg17;
+this will dupe the table structure.
+																       
 =============================================================================
    
 
