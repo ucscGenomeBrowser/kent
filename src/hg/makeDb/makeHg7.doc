@@ -388,7 +388,7 @@ o - Load STSs (done)
           quit
       - Ignore warnings from extra fields (7611 of them).
 
-o - Load in Exonerate alignments
+o - Load in Exonerate alignments (done)
       ssh cc94
       cd ~/oo/bed
       mkdir exonerate
@@ -397,7 +397,7 @@ o - Load in Exonerate alignments
       tar -zxvf mouse*.gz
       cat mouse_gff/*.gff | hgExonerate -elia hg7 exoMouse stdin
        
-o - Load in Fiberglass alignments
+o - Load in Fiberglass alignments (done)
       ssh cc94
       cd ~/oo/bed
       mkdir fiberglass
@@ -410,21 +410,18 @@ o - Load SNPs into database.
       - cd ~/oo/bed
       - mkdir snp
       - cd snp
-      - Download SNPs from ftp://ncbi.nlm.nih.gov/pub/sherry/dbSNPoo27.txt.gz
+      - Download SNPs from ftp://ftp.ncbi.nlm.nih.gov/pub/sherry/gp.oo29.gz
       - Unpack.
-        grep RANDOM db*.txt > snpTsc.txt
-        grep MIXED  db*.txt >> snpTsc.txt
-        grep BAC_OVERLAP  db*.txt > snpNih.txt
-        grep OTHER  db*.txt >> snpNih.txt
+        grep RANDOM gp.oo29 > snpTsc.txt
+        grep MIXED  gp.oo29 >> snpTsc.txt
+        grep BAC_OVERLAP  gp.oo29 > snpNih.txt
+        grep OTHER  gp.oo29 >> snpNih.txt
         awk -f filter.awk snpTsc.txt > snpTsc.contig.bed
         awk -f filter.awk snpNih.txt > snpNih.contig.bed
         liftUp snpTsc.bed ../../jkStuff/liftAll.lft warn snpTsc.contig.bed
         liftUp snpNih.bed ../../jkStuff/liftAll.lft warn snpNih.contig.bed
-        hg7 < ~kent/src/hg/lib/snpTsc.sql
-        hg7 < ~kent/src/hg/lib/snpNih.sql
-      - Start up mySQL with the command 'hg7'.  At the prompt do:
-         load data local infile 'snpTsc.bed' into table snpTsc;
-         load data local infile 'snpNihbed' into table snpNih;
+	hgLoadBed hg7 snpTsc snpTsc.bed
+	hgLoadBed hg7 snpNih snpNih.bed
 
 o - Load cpgIslands
      - login to cc94
@@ -443,12 +440,10 @@ o - Load cpgIslands
 o - Load Ensembl genes:
      cd ~/oo/bed
      mkdir ensembl
-     wget ftp://ftp.ensembl.org/current/data/gtf/ens100_genes_gtf_dump.tar.gz
-     mkdir contig
-     cd contig
-     gtar -zxf ../*.gz
-     cd ..
-     liftUp chromRaw.gtf ../../jkStuff/liftAll.lft warn contig/*.gtf
+     wget ftp://ftp.ebi.ac.uk/pub/software/ensembl/ensembl110.gtf.gz
+     gunzip *.gz
+   edit *.gtf to remove garbage in front of gff-version lines.
+   Note other problems.  Punt back to Elia....
      grep -v start_codon chromRaw.gtf | grep -v stop_codon > chrom.gtf
      ldHgGene hg7 ensGene chrom.gtf
 o - Load Ensembl peptides:
@@ -460,9 +455,9 @@ o - Load Sanger22 genes:
       cd ~/oo/bed
       mkdir sanger22
       cd sanger22
+      wget http://www.cs.columbia.edu/~vic/sanger2gbd/data/All_genes_plus.gene+cds.frameV2.noPseudogenes.GBD.gtf.txt
       wget http://www.cs.columbia.edu/~vic/sanger2gbd/data/All_genes_plus.gene+cds.frameV2.GBD.gtf.txt
-      cat *.txt | awk '{if ($1 != "frame") print;}' > sanger22.gtf
-      ldHgGene hg7 sanger22 sanger22.gtf
+      ldHgGene hg7 sanger22 *.gtf.txt
 
 o - Load rnaGene table
       - login to cc94
