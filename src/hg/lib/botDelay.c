@@ -23,12 +23,14 @@ return atoi(buf);
 void botDelayMessage(char *ip, int millis)
 /* Print out message saying why you are stalled. */
 {
+time_t now = time(NULL);
 printf("<BR>There is a very high volume of traffic coming from your "
-       "site (IP address %s).  So that other users get a fair share "
+       "site (IP address %s) as of %s (California time).  So that other "
+       "users get a fair share "
        "of our bandwidth we are putting in a delay of %3.1f seconds "
        "before we service your request.  This delay will slowly "
-       "decrease as activity returns to normal.  This high volume "
-       "of traffic is likely to be due to program-driven rather than "
+       "decrease over a half hour as activity returns to normal.  This "
+       "high volume of traffic is likely to be due to program-driven rather than "
        "interactive access, or due to submitting queries on a large "
        "number of sequences.  If you are making large batch queries "
        "please write genome@cse.ucsc.edu and inquire to see if there are more "
@@ -36,7 +38,19 @@ printf("<BR>There is a very high volume of traffic coming from your "
        "address with someone else's large batches we apologize for the "
        "inconvenience. Please contact genome-www@cse.ucsc.edu if "
        "you think this delay is being imposed unfairly.<BR><HR>", 
-	    ip, 0.001*millis);
+	    ip, asctime(localtime(&now)), .001*millis);
+}
+
+void botTerminateMessage(char *ip, int millis)
+/* Print out message saying why you are terminated. */
+{
+time_t now = time(NULL);
+errAbort("There is an exceedinly high volume of traffic coming from your "
+       "site (IP address %s) as of %s (California time).  It looks like "
+       "a web robot is launching queries quickly, and not even waiting for "
+       "the results of one query to finish before launching another query. "
+       "We cannot service requests from your IP address under these "
+       "conditions.  (code %d)", ip, asctime(localtime(&now)), millis);
 }
 
 void botDelayCgi(char *host, int port)
@@ -52,7 +66,10 @@ if (ip != NULL)
 	{
 	if (millis > 10000)
 	    {
-	    botDelayMessage(ip, millis);
+	    if (millis > 15000)
+	        botTerminateMessage(ip, millis);
+	    else
+		botDelayMessage(ip, millis);
 	    }
 	sleep1000(millis);
 	}
