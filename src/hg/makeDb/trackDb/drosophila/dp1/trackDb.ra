@@ -96,6 +96,7 @@ searchName bdgpLiftGenePrefix
 searchTable bdgpLiftGene
 searchMethod exact
 termRegex CG[0-9]+
+dontCheck CG[0-9]+-R[A-Z]
 query select chrom,txStart,txEnd,name from %s where name like '%s-R_'
 searchPriority 16
 
