@@ -40,7 +40,7 @@
 #include	"wiggle.h"
 
 
-static char const rcsid[] = "$Id: wigAsciiToBinary.c,v 1.14 2005/01/07 00:15:54 hiram Exp $";
+static char const rcsid[] = "$Id: wigAsciiToBinary.c,v 1.15 2005/03/04 19:21:19 hiram Exp $";
 
 /*	This list of static variables is here because the several
  *	subroutines in this source file need access to all this business
@@ -186,12 +186,12 @@ if (bincount)
 	}
 
     chromEnd = chromStart + (bincount * dataSpan);
-    verbose(2, "row: %llu %llu-%llu total: %llu valid: %llu, miss: %llu, file offset: %llu\n", rowCount, chromStart+add_offset, chromEnd+add_offset, bincount, validCount, bincount-validCount, fileOffsetBegin);
+    verbose(2, "row: %llu %llu-%llu total: %llu valid: %llu, miss: %llu, file offset: %llu\n", rowCount, chromStart+add_offset, chromEnd+add_offset, bincount, validCount, bincount-validCount, (unsigned long long)fileOffsetBegin);
     fprintf( wigout,
 "%s\t%llu\t%llu\t%s.%llu\t%llu\t%llu\t%llu\t%s\t%g\t%g\t%llu\t%g\t%g\n",
 	chromName, chromStart+add_offset, chromEnd+add_offset,
 	featureName, rowCount, dataSpan, bincount,
-	fileOffsetBegin, wibFileName, lowerLimit,
+	(unsigned long long)fileOffsetBegin, wibFileName, lowerLimit,
 	dataRange, validCount, sumData, sumSquares);
     ++rowCount;
     }
