@@ -9960,16 +9960,17 @@ if(sameString(position, ""))
 
 chromName = NULL;
 hgp = findGenomePos(position, &chromName, &winStart, &winEnd, cart);
-if (NULL != hgp && NULL != hgp->tableList && NULL != hgp->tableList->name)
-    {
-    cartSetString(cart, hgp->tableList->name, "full");
-    fprintf(stderr, "XXXXXXXXXX TABLE NAME: %s\n", hgp->tableList->name);
-    }
 
 /* This means that no result was found */
 if (NULL == chromName)
     {
     return;
+    }
+
+if (NULL != hgp && NULL != hgp->tableList && NULL != hgp->tableList->name)
+    {
+    cartSetString(cart, hgp->tableList->name, "full");
+    fprintf(stderr, "XXXXXXXXXX TABLE NAME: %s\n", hgp->tableList->name);
     }
 
 seqBaseCount = hChromSize(chromName);
@@ -10043,7 +10044,9 @@ void doMiddle(struct cart *theCart)
 char *debugTmp = NULL;
 /* Initialize layout and database. */
 cart = theCart;
+
 getDbAndOrganism(cart, &database, &organism);
+hSetDb(database);
 
 debugTmp = cartUsualString(cart, "hgDebug", "off");
 if(sameString(debugTmp, "on"))
@@ -10051,16 +10054,11 @@ if(sameString(debugTmp, "on"))
 else
     hgDebug = FALSE;
 
-//database = cartOptionalString(cart, "db");
-//if (database == NULL)
-//    database = hGetDb();
-hSetDb(database);
-//organism = hOrganism(database);
 hDefaultConnect();
 initTl();
 
 /* Do main display. */
-tracksDisplay();
+tracksDisplay);
 }
 
 void doDown(struct cart *cart)

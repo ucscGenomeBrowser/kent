@@ -1581,6 +1581,7 @@ else if (hgFindClonePos(query, &chrom, &start, &end))
 	end = start + iEnd;
 	start = start + iStart;
 	}
+    
     singlePos(hgp, "Genomic Clone", NULL, "clonePos", query, chrom, start, end);
     }
 else if (findMrnaPos(query, hgp, useHgTracks, cart))
