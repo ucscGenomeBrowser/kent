@@ -85,7 +85,7 @@
 
 
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.700 2004/04/01 17:11:12 weber Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.701 2004/04/02 06:37:52 daryl Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
@@ -7930,13 +7930,16 @@ char *defaultPosition = hDefaultPos(database);
 char *chrom;
 int start, end;
 position = getPositionFromCustomTracks();
+static char *except[] = {"db", "position", NULL};
 if (NULL == position) 
     {
     position = cloneString(cartUsualString(cart, "position", NULL));
     }
 
 if((position == NULL) || sameString(position, ""))
-    resetVars(NULL);
+    {
+    resetVars(except);
+    }
 
 chromName = NULL;
 winStart = 0;
