@@ -272,3 +272,31 @@ PRODUCING GENSCAN PREDICTIONS (DONE 4/23/03)
     hgLoadBed sc1 genscanSubopt genscanSubopt.bed
 
 
+BLATTING OTHER SARS WHOLE GENOMES AGAINST TOR2 (DONE 04/25/03)
+    ssh eieio
+    mkdir -p ~/sc1/bed/otherSARS
+    cd ~/sc1/bed/otherSARS
+    # Went to http://www.ncbi.nlm.nih.gov/ , did a search in Nucleotide 
+    # for SARS Coronavirus, viewed results as FASTA, and saved results to 
+    # <accession>.fa files:
+    # AY278554.2 (CUHK-W1)
+    # AY278741.1 (Urbani)
+    # AY278491.2 (HKU-39849)
+    # AY279354.1 (BJ04 partial)
+    # AY278490.1 (BJ03 partial)
+    # AY278489.1 (GZ01 partial)
+    # AY278488.1 (BJ01 partial)
+    # AY278487.1 (BJ02 partial)
+    # AY268049.1 (Taiwan partial cds)
+    # AY269391.1 (Vietnam partial)
+    cat A*.fa > otherSARS.fa
+    # Now blat (sensitive is OK because these are same organism):
+    /cluster/home/kent/bin/i386/blat -noHead ~/sc1/chr1.fa otherSARS.fa \
+      otherSARS.psl
+    # Now put the sequence in /gbdb and index it into extFile/seq:
+    ssh hgwdev
+    mkdir -p /gbdb/sc1/otherSARS/
+    ln -s `pwd`/otherSARS.fa /gbdb/sc1/otherSARS/
+    hgLoadRna addSeq sc1 /gbdb/sc1/otherSARS/otherSARS.fa -type=otherSARS.fa
+    # And load the alignments:
+    hgLoadPsl sc1 otherSARS.psl
