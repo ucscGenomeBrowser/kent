@@ -26,7 +26,7 @@ type pair affyGnfU74ADistance query target distance 1
 priority 2
 
 name regulatoryModule
-shortLabel Regulation Module
+shortLabel Regulatory Module
 longLabel Eran Segal Regulation Module
 type group esRegGeneToModule gene module
 priority 2.5
