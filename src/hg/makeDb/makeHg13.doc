@@ -1794,27 +1794,39 @@ o - # ssh hgwdev
     mkdir /cluster/store4/gs.14/build31/bed/affyGnf
     rm -rf psl tmp err *.psl *.bed HG-U95Av2_target 
 
-LOAD SAGE DATA (TO DO)
-o - cd /projects/cc/hg/sugnet/sage
+LOAD SAGE DATA (IN PROGRES)
+    cd /projects/cc/hg/sugnet/sage
     mkdir sage.XXX # XXX = current uniGene build
     cd sage.XXX
     ncftp ftp://ftp.ncbi.nih.gov/pub/sage
-    mget -R map/readme.txt map/info.txt extr info map/Hs
+      mget -R map/readme.txt map/info.txt extr info map/Hs
+      quit
     mkdir map
     mv Hs map
     cd map/Hs/NlaIII
-    gunzip SAGEmap_tag_ug-rel_Hs.Z
+    unzip -j SAGEmap_tag_ug-rel.zip
     cd ../../../extr/
     ../../scripts/summarizeCounts.pl expCounts.tab ./SAGE_*
     ../../scripts/countGenesPerTag.pl expCounts.tab allTags.count.tab
-    ../../scripts/createArraysForTags.pl allTags.count.tab tagExpArrays.tab ./SAGE_*
+    ../../scripts/createArraysForTags.pl allTags.count.tab tagExpArrays.tab \
+      ./SAGE_*
     ../../scripts/countsPerExp.pl expCounts.tab expList.tab
     cd ../map/Hs/NlaIII/ 
-    perl -e 'while(<>){chomp($_);@p=split/\t/,$_; print "$p[2]\t$p[3]\t$p[0]\n"}' < SAGEmap_tag_ug-rel_Hs | sort | sed -e 's/ /_/g' > SAGEmap_ug_tag-rel_Hs
+    perl -e 'while (<>) { \
+               chomp($_); \
+               @p = split(/\t/, $_); \
+               print "$p[2]\t$p[3]\t$p[0]\n"\
+             }' \
+      < SAGEmap_tag_ug-rel | sort | sed -e 's/ /_/g' \
+      > SAGEmap_ug_tag-rel_Hs
     cd -
-    createSageSummary ../map/Hs/NlaIII/SAGEmap_ug_tag-rel_Hs tagExpArrays.tab sageSummary.sage
-    # Create the uniGene alignments /cluster/store1/sugnet/gs.14/build31/uniGene/hg13.uniGene.lifted.pslReps.psl
-    addAveMedScoreToPsls /cluster/store1/sugnet/gs.14/build31/uniGene/hg13.uniGene.lifted.pslReps.psl sageSummary.sage  uniGene.pslWScores.psl
+    /cluster/home/sugnet/sugnet/c/src/sage/createSageSummary \
+      ../map/Hs/NlaIII/SAGEmap_ug_tag-rel_Hs \
+      tagExpArrays.tab sageSummary.sage
+    # Create the uniGene alignments 
+    # ~/hg13/uniGene/hg13.uniGene.lifted.pslReps.psl
+    # -- see "MAKE UNIGENE ALIGNMENTS" below
+TODO    addAveMedScoreToPsls /cluster/store1/sugnet/gs.14/build31/uniGene/hg13.uniGene.lifted.pslReps.psl sageSummary.sage  uniGene.pslWScores.psl
     /cluster/home/kent/bin/i386/hgLoadBed hg13 uniGene_2 uniGene.wscores.bed 
     hg13S -A < ~/kk/jk/hg/lib/sage.sql 
     echo "load data local infile 'sageSummary.sage' into table sage" | hg13S -A
@@ -1825,33 +1837,33 @@ o - cd /projects/cc/hg/sugnet/sage
     update kent/src/hg/makeDb/hgTrackDb/hgRoot/uniGene_2.html with current uniGene date.	
 
     
-MAKE UNIGENE ALIGNMENTS (TO DO)
-o - cd /projects/cc/hg/sugnet/uniGene
-    ftp ftp.ncbi.nih.gov
-    user: anonymous
-    password: email
-    cd repository/UniGene/
-    prompt
-    mget Hs.info Hs.seq.uniq.gz Hs.data.gz
-    exit 
+MAKE UNIGENE ALIGNMENTS (DONE 01/24/03)
+    cd /projects/cc/hg/sugnet/uniGene
+    ncftp ftp.ncbi.nih.gov
+      cd repository/UniGene/
+      mget Hs.info Hs.seq.uniq.gz Hs.data.gz
+      quit
     # Cut out the unigene build number and append it to unigene
-    mkdir uniGene.`perl -e '$t=<>;$t=~/\#(\d+)/;print "$1\n";' < Hs.info`
-    # new uniGene directory = uniGene.153
-    mv Hs.* uniGene.153
-    cd uniGene.153
+    set version = `perl -e '$t=<>;$t=~/\#(\d+)/;print "$1\n";' < Hs.info`
+    mkdir uniGene.$version
+    mv Hs.* uniGene.$version
+    cd uniGene.$version
     gunzip Hs.seq.uniq.gz 
     gunzip Hs.data.gz 
     ../countSeqsInCluster.pl Hs.data counts.tab
     ../parseUnigene.pl Hs.seq.uniq Hs.seq.uniq.simpleHeader.fa leftoverData.tab
     # ssh kkstore
-    cp /projects/cc/hg/sugnet/uniGene/uniGene.153/Hs.seq.uniq.simpleHeader.fa /scratch/hg/gs.14/build31/uniGene
+    mkdir -p /scratch/hg/gs.14/build31/uniGene
+    set version = XXX # same as above
+    cp /projects/cc/hg/sugnet/uniGene/uniGene.$version/Hs.seq.uniq.simpleHeader.fa \
+      /scratch/hg/gs.14/build31/uniGene
     # email cluster-admin to push /scratch/hg/gs.14/build31/uniGene to cluster
-    cd  /cluster/store1/sugnet/gs.14/build31
-    mkdir uniGene
-    cd uniGene
-    ls -1 /cluster/store4/gs.14/build31/trfFa.1204/ > allctg.lst
-    echo "/scratch/hg/gs.14/build31/uniGene/Hs.seq.uniq.simpleHeader.fa" > uniGene.lst
-    echo '#LOOP\n/cluster/bin/i386/blat -mask=lower -minIdentity=95 -ooc=/scratch/hg/h/11.ooc /cluster/store4/gs.14/build31/trfFa.1204/$(path1) $(path2) {check out line+ psl/$(root1)_$(root2).psl}\n#ENDLOOP' > template.sub
+    mkdir -p ~/hg13/bed/uniGene
+    cd ~/hg13/bed/uniGene
+    ls -1 /cluster/store4/gs.14/build31/trfFa/ > allctg.lst
+    echo "/scratch/hg/gs.14/build31/uniGene/Hs.seq.uniq.simpleHeader.fa" \
+      > uniGene.lst
+    echo '#LOOP\n/cluster/bin/i386/blat -mask=lower -minIdentity=95 -ooc=/scratch/hg/h/11.ooc /cluster/store4/gs.14/build31/trfFa/$(path1) $(path2) {check out line+ psl/$(root1)_$(root2).psl}\n#ENDLOOP' > template.sub
     gensub2 allctg.lst uniGene.lst template.sub para.spec
     # ssh kk
     para create para.spec
@@ -1859,10 +1871,14 @@ o - cd /projects/cc/hg/sugnet/uniGene
     para try
     para check
     para push
+    # ssh eieio
+    cd ~/hg13/bed/uniGene
     pslSort dirs hg13.uniGene.psl tmp psl >& pslSort.log
-    liftUp hg13.uniGene.lifted.psl /cluster/store4/gs.14/build31/jkStuff/liftAll.lft carry hg13.uniGene.psl
-    pslReps -minCover=0.2 -sizeMatters -minAli=0.98 -nearTop=0.002 hg13.uniGene.lifted hg13.uniGene.lifted.pslReps.psl /dev/null
-    # exit kk and use hg13.uniGene.lifted.pslReps.psl for building SAGE track.
+    liftUp hg13.uniGene.lifted.psl \
+      /cluster/store4/gs.14/build31/jkStuff/liftAll.lft carry hg13.uniGene.psl
+    pslReps -minCover=0.2 -sizeMatters -minAli=0.98 -nearTop=0.002 \
+      hg13.uniGene.lifted.psl hg13.uniGene.lifted.pslReps.psl /dev/null
+    # use hg13.uniGene.lifted.pslReps.psl for building SAGE track (above).
 
 FAKING DATA FROM PREVIOUS VERSION
 (This is just for until proper track arrives.  Rescues about
