@@ -10,13 +10,14 @@
 #include "htmshell.h"
 #include "subText.h"
 #include "cart.h"
+#include "dbDb.h"
 #include "hdb.h"
 #include "hui.h"
 #include "web.h"
 #include "ra.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: hgNear.c,v 1.78 2003/09/17 01:58:53 kent Exp $";
+static char const rcsid[] = "$Id: hgNear.c,v 1.79 2003/09/17 17:17:47 kent Exp $";
 
 char *excludeVars[] = { "submit", "Submit", confVarName, colInfoVarName,
 	defaultConfName, hideAllConfName, showAllConfName,
@@ -38,6 +39,7 @@ char *organism;		/* Name of organism - mouse, human, etc. */
 char *groupOn;		/* Current grouping strategy. */
 int displayCount;	/* Number of items to display. */
 char *displayCountString; /* Ascii version of display count, including 'all'. */
+struct hash *oldCart;	/* Old cart hash. */
 
 struct genePos *curGeneId;	  /* Identity of current gene. */
 
@@ -762,6 +764,79 @@ distanceTypeMethods(col, table, curGene, otherGene, valField);
 
 /* ---- Page/Form Making stuff ---- */
 
+static void makeGenomeAssemblyControls()
+/* Query database to figure out which ones
+ * support neighborhood browser. */
+{
+/* Make up a list of organisms that have a family
+ * browser, and a list of assemblies that have a
+ * family browser for the current organism. */
+struct slRef *as, *asList = NULL;
+struct slRef *org, *orgList = NULL;
+struct dbDb *db, *dbList = hGetIndexedDatabases();
+char *ourOrg = hOrganism(database);
+struct hash *orgHash = newHash(8);
+for (db = dbList; db != NULL; db = db->next)
+    {
+    if (db->hgNearOk)
+	{
+	if (!hashLookup(orgHash, db->organism))
+	    {
+	    hashAdd(orgHash, db->organism, db);
+	    refAdd(&orgList, db);
+	    }
+	if (sameString(ourOrg, db->organism))
+	    refAdd(&asList, db);
+        }
+    }
+slReverse(&asList);
+slReverse(&orgList);
+
+/* Make organism drop-down. */
+hPrintf("organism: ");
+hPrintf("<SELECT NAME=\"%s\" ", orgVarName);
+hPrintf("onchange=\"%s\"",
+  "document.orgForm.org=document.mainForm.org.options[document.mainForm.org.selectedIndex].value;"
+  "document.orgForm.db.value = 0;"
+  "document.orgForm.near_search.value = \"\";"
+  "document.orgForm.submit();");
+hPrintf(">\n");
+for (org = orgList; org != NULL; org = org->next)
+    {
+    struct dbDb *db = org->val;
+    char *organism = db->organism;
+    hPrintf("<OPTION VALUE=\"%s\"", organism);
+    if (sameString(ourOrg, organism))
+	hPrintf(" SELECTED");
+    hPrintf(">%s\n", organism);
+    }
+hPrintf("</SELECT>");
+
+/* Make assembly drop-down. */
+hPrintf(" assembly: ");
+hPrintf("<SELECT NAME=\"%s\" ", dbVarName);
+hPrintf("onchange=\"%s\"",
+  "document.orgForm.db.value = document.mainForm.db.options[document.mainForm.db.selectedIndex].value;"
+  "document.orgForm.submit();");
+hPrintf(">\n");
+for (as = asList; as != NULL; as = as->next)
+    {
+    struct dbDb *db = as->val;
+    hPrintf("<OPTION VALUE=\"%s\"", db->name);
+    if (sameString(database, db->name))
+	hPrintf(" SELECTED");
+    hPrintf(">%s\n", db->description);
+    }
+hPrintf("</SELECT>");
+
+/* Clean up time. */
+slFreeList(&asList);
+slFreeList(&orgList);
+hashFree(&orgHash);
+dbDbFree(&dbList);
+}
+
+
 void controlPanel(struct genePos *gp, struct order *curOrd, struct order *ordList)
 /* Make control panel. */
 {
@@ -807,6 +882,8 @@ hPrintf("<TR><TD ALIGN=CENTER>");
 
 hPrintf("</TD></TR>\n<TR><TD ALIGN=CENTER>");
 
+makeGenomeAssemblyControls();
+#ifdef OLD
 /* Do genome drop down (just fake for now) */
     {
     static char *menu[] = {"Human"};
@@ -820,6 +897,7 @@ hPrintf("</TD></TR>\n<TR><TD ALIGN=CENTER>");
     hPrintf(" assembly: ");
     cgiMakeDropList("near.assembly", menu, ArraySize(menu), menu[0]);
     }
+#endif /* OLD */
 
 /* Make getDna, getText, advFilter, configure buttons */
     {
@@ -1177,12 +1255,19 @@ void doMainDisplay(struct sqlConnection *conn,
 char buf[128];
 safef(buf, sizeof(buf), "UCSC %s Gene Family Browser", organism);
 makeTitle(buf, "hgNear.html");
-hPrintf("<FORM ACTION=\"../cgi-bin/hgNear\" METHOD=GET>\n");
+hPrintf("<FORM ACTION=\"../cgi-bin/hgNear\" NAME=\"mainForm\" METHOD=GET>\n");
 cartSaveSession(cart);
 controlPanel(curGeneId, ord, ordList);
 if (geneList != NULL)
     bigTable(conn, colList,geneList);
 hPrintf("</FORM>");
+
+hPrintf("<FORM ACTION=\"../cgi-bin/hgNear\" METHOD=\"GET\" NAME=\"orgForm\"><input type=\"hidden\" name=\"org\" value=\"%s\">\n", organism);
+hPrintf("<input type=\"hidden\" name=\"db\" value=\"%s\">\n", database);
+hPrintf("<input type=\"hidden\" name=\"%s\" value=\"%s\">\n", searchVarName,
+	cartUsualString(cart, searchVarName, ""));
+cartSaveSession(cart);
+puts("</FORM>");
 }
 
 struct order *curOrder(struct order *ordList)
@@ -1337,6 +1422,57 @@ else
 freeMem(htmlFileName);
 }
 
+static char *defaultHgNearDb(char *organism)
+/* Return default database for hgNear for given
+ * organism (or NULL for default organism.) 
+ * You can freeMem the returned value when done. */
+{
+char *dbName = NULL;
+
+if (organism != NULL)
+    {
+    hDefaultDbForGenome(organism);
+    if (dbName != NULL && hgNearOk(dbName))
+	 return dbName;
+    }
+freez(&dbName);
+dbName = hDefaultDb();
+if (dbName != NULL && hgNearOk(dbName))
+     return dbName;
+freez(&dbName);
+
+/* Find first in list then. */
+    {
+    struct dbDb *db, *dbList = hGetIndexedDatabases();
+    for (db = dbList; db != NULL; db = db->next)
+        {
+	if (db->hgNearOk)
+	    {
+	    dbName = cloneString(db->name);
+	    break;
+	    }
+	}
+    dbDbFree(&dbList);
+    }
+return dbName;
+}
+
+static void makeSureDbHasHgNear()
+/* Check that current database supports hgNear. 
+ * If not try to find one that does. */
+{
+if (hgNearOk(database))
+    return;
+else
+    {
+    database = defaultHgNearDb(organism);
+    if (database == NULL)
+	errAbort("No databases are supporting hgNear.");
+    organism = hOrganism(database);
+    cartSetString(cart, dbVarName, database);
+    cartSetString(cart, orgVarName, organism);
+    }
+}
 
 void doMiddle(struct cart *theCart)
 /* Write the middle parts of the HTML page. 
@@ -1348,13 +1484,13 @@ struct sqlConnection *conn;
 struct column *colList, *col;
 cart = theCart;
 
-#ifdef SOON
 getDbAndGenome(cart, &database, &organism);
-#else
+makeSureDbHasHgNear();
+#ifdef OLD
 database = "hg15";
 cartSetString(cart, "db", database);
 organism = "Human";
-#endif /* SOON */
+#endif /* OLD */
 hSetDb(database);
 conn = hAllocConn();
 
@@ -1450,6 +1586,8 @@ int main(int argc, char *argv[])
 {
 cgiSpoof(&argc, argv);
 htmlSetStyle(htmlStyleUndecoratedLink);
-cartHtmlShell("Gene Family v1", doMiddle, hUserCookie(), excludeVars, NULL);
+hPrintf("</TD><TD>");
+oldCart = hashNew(10);
+cartHtmlShell("Gene Family v1", doMiddle, hUserCookie(), excludeVars, oldCart);
 return 0;
 }

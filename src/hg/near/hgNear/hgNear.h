@@ -176,10 +176,13 @@ extern struct genePos *curGeneId;	  /* Identity of current gene. */
 
 /* ---- Cart Variables ---- */
 
+#define dbVarName "db"      /* Which assembly to use. */
+#define orgVarName "org"      /* Which organism to use. */
 #define confVarName "near.configure"	/* Configuration button */
 #define countVarName "near.count"	/* How many items to display. */
 #define colInfoVarName "near.colInfo"	/* Display column info. */
-#define searchVarName "near.search"	/* Search term. */
+#define searchVarName "near_search"	
+	/* Search term - underbar for Javascript.  Hardcoded in Javascript. */
 #define idVarName "near.id"         	
 	/* Overrides searchVarName if it exists */
 #define idPosVarName "near.idPos"      	
