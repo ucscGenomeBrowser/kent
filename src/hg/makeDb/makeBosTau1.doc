@@ -499,8 +499,43 @@ SEQ2_LEN=$BASE/S2.len
 
     # axtChain
     ssh kki
-    # make input.lst
-    # doChain
+    cd /cluster/data/bosTau1/bed/blastz
+    mkdir -p axtChain/run1
+    cd axtChain/run1
+    mkdir out chainRaw
+    ls -1S /cluster/data/bosTau1/bed/blastz/axtTemp/*.axt > input.lst
+
+    cat << '_EOF_' > gsub
+    #LOOP
+    doChain {check in exists $(path1)} {check out line+ chainRaw/$(root1).chain} {check out line+ out/$(root1).out}
+    #ENDLOOP
+    '_EOF_'
+    # << this line makes emacs coloring happy
+    
+    # Reuse gap penalties from chicken run.
+    cat << '_EOF_' > temp.gap
+    tablesize       11
+    smallSize       111
+    position        1       2       3       11      111     2111    12111   32111   72111   152111  252111
+    qGap    325     360     400     450     600     1100    3600    7600    15600   31600   56600
+    tGap    325     360     400     450     600     1100    3600    7600    15600   31600   56600
+    bothGap 625     660     700     750     900     1400    4000    8000    16000   32000   57000
+    '_EOF_'
+    # << this line makes emacs coloring happy
+    sed 's/  */\t/g' temp.gap > ../../cowHumanTuned.gap
+    rm -f temp.gap
+
+    cat << '_EOF_' > doChain
+    #!/bin/csh
+    axtChain -scoreScheme=/cluster/data/blastz/HoxD55.q \
+       -linearGap=/cluster/data/bosTau1/bed/blastz/cowHumanTuned.gap -verbose=0 $1 \
+       /iscratch/i/hg17/bothMaskedNibs /iscratch/i/bosTau1/nib/bosTau1.2bit stdout | \
+       /cluster/bin/i386/chainAntiRepeat /iscratch/i/hg17/bothMaskedNibs \
+       /iscratch/i/bosTau1/nib/bosTau1.2bit stdin $2
+'_EOF_'
+    
+    # << this line makes emacs coloring happy
+    chmod a+x doChain
     gensub2 input.lst single gsub jobList
     para create jobList
     para try
@@ -524,6 +559,11 @@ SEQ2_LEN=$BASE/S2.len
       echo loading $c
       /cluster/bin/i386/hgLoadChain hg17 ${c}_chainBosTau1 $i
     end
+
+# NET 
+  ssh kksilo
+  cd /cluster/data/bosTau1/bed/blastz
+
 
 
 # GC5BASE - (DONE 2004-10-27 - Hiram)
