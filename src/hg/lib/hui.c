@@ -361,6 +361,36 @@ cgiMakeDropList(var, wiggleOptions, ArraySize(wiggleOptions),
 }
 
 
+/****** Some stuff for chimp track related controls *******/
+
+static char *chimpOptions[] = {
+    "Only samples",
+    "Linear interpolation"
+    };
+
+enum chimpOptEnum chimpStringToEnum(char *string)
+/* Convert from string to enum representation. */
+{
+int x = stringIx(string, chimpOptions);
+if (x < 0)
+   errAbort("hui::chimpStringToEnum() - Unknown option %s", string);
+return x;
+}
+
+char *chimpEnumToString(enum chimpOptEnum x)
+/* Convert from enum to string representation. */
+{
+return chimpOptions[x];
+}
+
+void chimpDropDown(char *var, char *curVal)
+/* Make drop down of options. */
+{
+cgiMakeDropList(var, chimpOptions, ArraySize(chimpOptions), 
+	curVal);
+}
+
+
 
 /****** Some stuff for mRNA and EST related controls *******/
 
