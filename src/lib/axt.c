@@ -132,32 +132,6 @@ const struct axt *b = *((struct axt **)vb);
 return b->score - a->score;
 }
 
-static char *skipIgnoringDash(char *a, int size, bool skipTrailingDash)
-/* Count size number of characters, and any 
- * dash characters. */
-{
-while (size > 0)
-    {
-    if (*a++ != '-')
-        --size;
-    }
-if (skipTrailingDash)
-    while (*a == '-')
-       ++a;
-return a;
-}
-
-
-static int countNonDash(char *a, int size)
-/* Count number of non-dash characters. */
-{
-int count = 0;
-int i;
-for (i=0; i<size; ++i)
-    if (a[i] != '-') 
-        ++count;
-return count;
-}
 
 boolean axtCheck(struct axt *axt, struct lineFile *lf)
 /* Return FALSE if there's a problem with axt. */

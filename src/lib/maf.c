@@ -406,7 +406,7 @@ for (mc = maf->components; mc != NULL; mc = mc->next)
     subMc->src = cloneString(mc->src);
     subMc->srcSize = mc->srcSize;
     subMc->strand = mc->strand;
-    subMc->start += countNonDash(mc->text, textStart);
+    subMc->start = mc->start + countNonDash(mc->text, textStart);
     subMc->size = countNonDash(mc->text+textStart, textSize);
     subMc->text = cloneStringZ(mc->text + textStart, textSize);
     slAddHead(&subset->components, subMc);
