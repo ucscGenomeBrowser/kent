@@ -12,7 +12,7 @@
 #include "../hgNear/hgNear.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: hgNearTest.c,v 1.5 2004/03/04 00:25:03 kent Exp $";
+static char const rcsid[] = "$Id: hgNearTest.c,v 1.6 2004/03/04 02:07:26 kent Exp $";
 
 /* Command line variables. */
 char *dataDir = "/usr/local/apache/cgi-bin/hgNearData";
@@ -152,6 +152,10 @@ if (errCatchStart(errCatch))
     page = htmlPageGet(url);
     htmlPageValidateOrAbort(page);
     }
+else
+    {
+    htmlPageFree(&page);
+    }
 errCatchEnd(errCatch);
 qs = qaStatusOnPage(errCatch, page, startTime, retPage);
 errCatchFree(&errCatch);
@@ -170,6 +174,10 @@ if (errCatchStart(errCatch))
     {
     page = htmlPageFromForm(origPage, form, buttonName, buttonVal);
     htmlPageValidateOrAbort(page);
+    }
+else
+    {
+    htmlPageFree(&page);
     }
 errCatchEnd(errCatch);
 qs = qaStatusOnPage(errCatch, page, startTime, retPage);
@@ -330,9 +338,9 @@ htmlPageSetVar(emptyConfig, NULL, "near.count", "25");
 
 qs = qaPageFromForm(emptyConfig, emptyConfig->forms, 
 	"submit", "Submit", &printPage);
-test = nearTestNew(qs, "colPrint", "geneDistance", org, db, col, gene);
+test = nearTestNew(qs, "colPrint", "n/a", org, db, col, gene);
 slAddHead(pTestList, test);
-if (printPage != NULL && qs->errMessage == NULL)
+if (printPage != NULL)
     {
     int expectCount = 25;
     int lineCount = qaCountBetween(printPage->fullText, 
@@ -346,46 +354,89 @@ htmlPageFree(&printPage);
 htmlPageSetVar(emptyConfig, NULL, visVar, NULL);
 }
 
+struct htmlPage *emptyConfigPage(struct htmlPage *dbPage, char *org,
+	char *db, struct nearTest **pTestList)
+/* Get empty configuration page. */
+{
+struct nearTest *test;
+struct qaStatus *qs;
+struct htmlPage *emptyConfig;
+qs = qaPageFromForm(dbPage, dbPage->forms, "near.do.colHideAll", "on", &emptyConfig);
+test = nearTestNew(qs, "emptyConfig", "n/a", org, db, "n/a", "n/a");
+slAddHead(pTestList, test);
+if (emptyConfig == NULL)
+    warn("Couldn't get empty config page for %s\n", db);
+return emptyConfig;
+}
+
+void testDbColumns(struct htmlPage *dbPage, char *org, char *db, 
+	struct slName *geneList, struct nearTest **pTestList)
+/* Test on one database. */
+{
+struct htmlPage *emptyConfig;
+struct slName *colList = NULL, *col;
+struct htmlFormVar *var;
+struct slName *gene;
+
+uglyf("testDbColumns %s %s\n", org, db);
+emptyConfig = emptyConfigPage(dbPage, org, db, pTestList);
+if (emptyConfig != NULL )
+    {
+    for (var = emptyConfig->forms->vars; var != NULL; var = var->next)
+	{
+	if (startsWith("near.col.", var->name) && endsWith(var->name, ".vis"))
+	    {
+	    char *colNameStart = var->name + strlen("near.col.");
+	    char *colNameEnd = strchr(colNameStart, '.');
+	    *colNameEnd = 0;
+	    col = slNameNew(colNameStart);
+	    slAddHead(&colList, col);
+	    *colNameEnd = '.';
+	    }
+	}
+    slReverse(&colList);
+
+    for (gene = geneList; gene != NULL; gene = gene->next)
+	{
+	htmlPageSetVar(emptyConfig, NULL, "near_search", gene->name);
+	for (col = colList; col != NULL; col = col->next)
+	    {
+	    testCol(emptyConfig, org, db, col->name, gene->name, pTestList);
+	    }
+	}
+    }
+htmlPageFree(&emptyConfig);
+}
+
+void testDbSorts(struct htmlPage *dbPage, char *org, char *db, 
+	struct slName *geneList, struct nearTest **pTestList)
+/* Test on one database. */
+{
+}
+
 void testDb(struct htmlPage *orgPage, char *org, char *db, struct nearTest **pTestList)
 /* Test on one database. */
 {
 struct hash *genomeRa = hgReadRa(org, db, dataDir, "genome.ra", NULL);
-struct htmlPage *emptyConfig, *oneColConfig;
-struct slName *colList = NULL, *col;
-struct htmlFormVar *var;
 char *canonicalTable = hashMustFindVal(genomeRa, "canonicalTable");
-struct slName *gene, *geneList = randomSample(db, canonicalTable, "transcript", clRepeat);
+struct slName *geneList = randomSample(db, canonicalTable, "transcript", clRepeat);
+struct nearTest *test;
+struct qaStatus *qs;
+struct htmlPage *dbPage;
 
-uglyf("testDb(%s,%s)\n", org, db);
 htmlPageSetVar(orgPage, NULL, "db", db);
-emptyConfig = htmlPageFromForm(orgPage, orgPage->forms, "near.do.colHideAll", "on");
-if (emptyConfig == NULL)
-    errAbort("Couldn't get empty config for %s\n", db);
-for (var = emptyConfig->forms->vars; var != NULL; var = var->next)
-    {
-    if (startsWith("near.col.", var->name) && endsWith(var->name, ".vis"))
-        {
-	char *colNameStart = var->name + strlen("near.col.");
-	char *colNameEnd = strchr(colNameStart, '.');
-	*colNameEnd = 0;
-	col = slNameNew(colNameStart);
-	slAddHead(&colList, col);
-	*colNameEnd = '.';
-	}
-    }
-slReverse(&colList);
+htmlPageSetVar(orgPage, NULL, "near_search", "");
+qs = qaPageFromForm(orgPage, orgPage->forms, "Submit", "Go!", &dbPage);
+test = nearTestNew(qs, "dbEmptyPage", "n/a", org, db, "n/a", "n/a");
+slAddHead(pTestList, test);
 
-for (gene = geneList; gene != NULL; gene = gene->next)
-    {
-    htmlPageSetVar(emptyConfig, NULL, "near_search", gene->name);
-    for (col = colList; col != NULL; col = col->next)
-	{
-	testCol(emptyConfig, org, db, col->name, gene->name, pTestList);
-	}
-    }
-htmlPageFree(&emptyConfig);
+testDbColumns(dbPage, org, db, geneList, pTestList);
+testDbSorts(dbPage, org, db, geneList, pTestList);
+
+slFreeList(&geneList);
 hashFree(&genomeRa);
 }
+
 
 void testOrg(struct htmlPage *rootPage, struct htmlForm *rootForm, char *org, char *forceDb,
 	struct nearTest **pTestList)
@@ -398,7 +449,7 @@ struct htmlFormVar *dbVar;
 struct slName *db;
 
 htmlPageSetVar(rootPage, rootForm, "org", org);
-htmlPageSetVar(rootPage, rootForm, "db", org);
+htmlPageSetVar(rootPage, rootForm, "db", NULL);
 htmlPageSetVar(rootPage, rootForm, "near_search", "");
 orgPage = htmlPageFromForm(rootPage, rootPage->forms, "submit", "Go");
 if ((mainForm = htmlFormGet(orgPage, "mainForm")) == NULL)
