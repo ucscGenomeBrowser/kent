@@ -10,6 +10,7 @@
 
 /* Variables that can be overridden from command line. */
 char *goldName = NULL;
+boolean imreFormat = FALSE;
 
 char *finChroms[] = 
 /* Chromosomes that are finished - no need to assemble these. */
@@ -27,7 +28,8 @@ errAbort(
  "each chromosome subdir of ooDir based on contigs in cloneMap and\n"
  "large inserts in inserts file.\n"
  "options:\n"
- "   -goldName=gold.NN - use gold.NN instead of contig.agp\n");
+ "   -goldName=gold.NN - use gold.NN instead of contig.agp\n"
+ "   -imre  - cloneMap is Imre TPF/FPC directory format rather than Wash U\n");
 }
 
 struct contigInfo 
@@ -218,9 +220,10 @@ writeListType(fileName, ciList, ".agp");
 }
 
 
-void ooLiftSpec(char *mapName, char *inserts, char *ooDir)
+void wuLiftSpec(char *mapName, struct hash *insertsHash, 
+	char *ooDir, struct hash *contigHash)
 /* This will make ordered.lft and random.lft 'lift specifications' in
- * each chromosome subdir of ooDir based on cloneMap. */
+ * each chromosome subdir of ooDir based on WashU format clonemap. */
 {
 struct lineFile *lf;
 int lineSize, wordCount;
@@ -232,11 +235,7 @@ char *chrom;
 struct contigInfo *ciList, *ci;
 char *shortType, *type, *suffix;
 boolean gotSizes = FALSE;
-struct hash *insertsHash = newHash(8);
-struct hash *contigHash = newHash(0);
-struct chromInserts *chromInsertList = NULL, *chromInserts;
-
-chromInsertList = chromInsertsRead(inserts, insertsHash);
+struct chromInserts *chromInserts;
 
 lf = lineFileOpen(mapName, TRUE);
 while (lineFileNext(lf, &line, &lineSize))
@@ -293,8 +292,119 @@ while (lineFileNext(lf, &line, &lineSize))
     	type, shortType, chromInserts);
     }
 if (!gotSizes)
-    warn("All contigs size 0??? Maybe you need to run goldToAgp.", chrom);
+    warn("All contigs size 0??? Maybe you need to run goldToAgp.");
 lineFileClose(&lf);
+}
+
+
+boolean imreLiftOne(char *imreFile, char *chromName, char *shortName,
+    struct hash *insertsHash, char *ooDir,
+    struct hash *contigHash)
+/* Handle a single imre-format chromosome file. Returns TRUE if
+ * got any non-empty contigs. */
+{
+struct lineFile *lf = lineFileOpen(imreFile, TRUE);
+char *line, *words[16];
+int wordCount;
+char *imreContig;
+char contigName[256];
+char lastContig[256];
+struct contigInfo *ciList = NULL, *ci = NULL;
+boolean gotSizes;
+
+strcpy(lastContig, "");
+while (lineFileNext(lf, &line, NULL))
+    {
+    if (line[0] == '#' || line[0] == '?')
+        continue;
+    wordCount = chopTabs(line, words);
+    if (wordCount == 0)
+	continue;
+    if (sameWord(words[0], "gap"))
+        continue;
+    if (wordCount < 5)
+	errAbort("Expecting at least 5 words line %d of %s",
+	    lf->lineIx, lf->fileName);
+    imreContig = words[2];
+    eraseWhiteSpace(imreContig);
+    if (startsWith("ctg", imreContig))
+        strcpy(contigName, imreContig);
+    else
+        sprintf(contigName, "ctg%s", imreContig);
+    if (ci == NULL || !sameString(contigName, ci->name))
+        {
+	AllocVar(ci);
+	ci->name = cloneString(contigName);
+	slAddHead(&ciList, ci);
+	hashAdd(contigHash, ci->name, NULL);
+	}
+    }
+slReverse(&ciList);
+lineFileClose(&lf);
+gotSizes = fillInSizes(ciList, ooDir, shortName);
+outputLifts(ooDir, ciList, chromName, shortName, 
+    "ordered", "o", hashFindVal(insertsHash, chromName));
+return gotSizes;
+}
+
+void imreLiftSpec(char *mapDir, struct hash *insertsHash, char *ooDir,
+	struct hash *contigHash)
+/* This will make ordered.lft and random.lft 'lift specifications' in
+ * each chromosome subdir of ooDir based on Imre format clonemap. */
+{
+struct fileInfo *fiList1 = listDirX(mapDir, "*", TRUE), *fi1;
+struct fileInfo *fiList2 = NULL, *fi2;
+char sDir[256], sFile[128];
+char *shortName = NULL;
+char chromName[128];
+int len;
+boolean gotSizes = FALSE;
+
+for (fi1 = fiList1; fi1 != NULL; fi1 = fi1->next)
+    {
+    if (fi1->isDir)
+        {
+        struct fileInfo *fiList2 = listDirX(fi1->name, "t*.txt", TRUE);
+        for (fi2 = fiList2; fi2 != NULL; fi2 = fi2->next)
+	    {
+	    /* Figure out chromosome long and short names from input file name. */
+	    splitPath(fi2->name, sDir, NULL, NULL);
+	    len = strlen(sDir);
+	    if (sDir[len-1] == '/') sDir[len-1] = 0;
+	    splitPath(sDir, NULL, sFile, NULL);
+	    shortName = sFile;
+	    if (startsWith("Chr", shortName))
+		shortName += 3;
+	    sprintf(chromName, "chr%s", shortName);
+
+	    /* Call routine to parse file and produce lift. */
+	    if (stringArrayIx(shortName, finChroms, ArraySize(finChroms)) < 0)
+		{
+		gotSizes |= imreLiftOne(fi2->name, chromName, shortName, insertsHash, 
+		    ooDir, contigHash);
+		}
+	    }
+        slFreeList(&fiList2);
+        }
+    }
+slFreeList(&fiList1);
+if (!gotSizes)
+    warn("All contigs size 0??? Maybe you need to run goldToAgp.");
+}
+
+void ooLiftSpec(char *mapName, char *inserts, char *ooDir)
+/* This will make ordered.lft and random.lft 'lift specifications' in
+ * each chromosome subdir of ooDir based on cloneMap. */
+{
+struct chromInserts *chromInsertList = NULL, *chromInserts;
+struct hash *insertsHash = newHash(8);
+struct hash *contigHash = newHash(0);
+
+chromInsertList = chromInsertsRead(inserts, insertsHash);
+if (imreFormat)
+    imreLiftSpec(mapName, insertsHash, ooDir, contigHash);
+else
+    wuLiftSpec(mapName, insertsHash, ooDir, contigHash);
 
 /* Check that all contigs in insert file are actually used. */
 for (chromInserts = chromInsertList; chromInserts != NULL; chromInserts = chromInserts->next)
@@ -308,7 +418,6 @@ for (chromInserts = chromInsertList; chromInserts != NULL; chromInserts = chromI
     }
 }
 
-
 int main(int argc, char *argv[])
 /* Process command line. */
 {
@@ -316,5 +425,6 @@ cgiSpoof(&argc, argv);
 if (argc != 4)
     usage();
 goldName = cgiOptionalString("goldName");
+imreFormat = cgiBoolean("imre");
 ooLiftSpec(argv[1], argv[2], argv[3]);
 }
