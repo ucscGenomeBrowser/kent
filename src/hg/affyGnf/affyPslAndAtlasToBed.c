@@ -9,7 +9,7 @@
 #include "dystring.h"
 #include "expRecord.h"
 
-static char const rcsid[] = "$Id: affyPslAndAtlasToBed.c,v 1.9 2004/02/07 02:13:45 hartera Exp $";
+static char const rcsid[] = "$Id: affyPslAndAtlasToBed.c,v 1.10 2004/03/30 06:48:09 kent Exp $";
 
 
 #define DEBUG 0
@@ -504,7 +504,7 @@ struct expCounter *ec;
 char *spaced;
 char name[128];
 
-while ((word = nextWord(&line)) != NULL)
+while ((word = nextTabWord(&line)) != NULL)
     {
     if ((ec = hashFindVal(hash, word)) == NULL)
         {
@@ -584,13 +584,13 @@ int dataCount = 0, pslCount = 0, bedCount = 0;
 int minExpVal = 20;
 
 /* Open Atlas file and use first line to create experiment table. */
-if (!lineFileNext(lf, &line, NULL))
+if (!lineFileNextReal(lf, &line))
     errAbort("%s is empty", lf->fileName);
 if (startsWith("Affy", line))
     line += 4;
 if (line[0] != '\t')
     errAbort("%s doesn't seem to be a new format atlas file", lf->fileName);
-expCount = lineToExp(line, expRecOut);
+expCount = lineToExp(line+1, expRecOut);
 if (expCount <= 0)
     errAbort("No experiments in %s it seems", lf->fileName);
 warn("%d experiments\n", expCount);
