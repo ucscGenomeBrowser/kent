@@ -4893,6 +4893,8 @@ for(i=0; i<numIndexes; i++)
     slAddHead(&lfsList, lfsArray[i]);
     }
 slSort(&lfsList,lfsSortByName);
+
+/* need to do some cleanup here, i.e. free bedList etc. */
 return lfsList;
 }
 
@@ -4901,18 +4903,38 @@ void lfsFromNci60Bed(struct trackGroup *tg)
 struct linkedFeaturesSeries *lfsList = NULL, *lfs;
 struct linkedFeatures *lf;
 struct bed *bed = NULL, *bedList= NULL;
+char *grouping = cartUsualString(cart, "nci60_group", "Tissue");
 int i=0;
 bedList = tg->items;
+
 
 if(tg->visibility == tvDense)
     {
     tg->items = lfsFromMsBedSimple(bedList);
     }
-else 
+else if(sameString(grouping,"Tissue"))
     {
     tg->items = msBedGroupByIndex(bedList, "hgFixed", "nci60Exps", 1);
     }
+else 
+    {
+    tg->items = msBedGroupByIndex(bedList, "hgFixed", "nci60Exps", 0);
+    }
 }
+
+void nci60Ui(struct trackGroup *tg)
+/* put up UI for the nci60 track from stanford track */
+{
+char *names[] = {"Tissue","All Experiments"};
+printf("<b>Group By: </b>");
+cgiMakeDropList("nci60_group",names, 2, cartUsualString(cart, "nci60_group", names[0]));
+printf(" <b>Color Scheme</b>: ");
+cgiMakeRadioButton("nci60_color", "rg", sameString(cartUsualString(cart,"nci60_color","rg"), "rg"));
+printf(" red/green ");
+cgiMakeRadioButton("nci60_color", "rb", sameString(cartUsualString(cart,"nci60_color","rb"), "rb"));
+printf(" red/blue ");
+cgiMakeButton("submit", "refresh");
+} 
 
 struct linkedFeaturesSeries *lfsFromMsBed(struct trackGroup *tg, struct bed *bedList)
 /* create a linkedFeatureSeries from a bed list making each
@@ -4973,12 +4995,13 @@ float val = lf->score;
 float absVal = fabs(val);
 int colorIndex = 0;
 float maxDeviation = 1.0;
-
-
+char *colorScheme = cartUsualString(cart, "nci60_color", "rb");
+/* colorScheme should be stored somewhere not looked up every time... */
 if(val == -10000)
     return shadesOfGray[5];
 if(tg->visibility == tvDense)
     val = val/100;
+
 
 if(!exprBedColorsMade)
     makeRedGreenShades(mg);
@@ -4994,7 +5017,12 @@ colorIndex = (int)(absVal * maxRGBShade/maxDeviation);
 if(val > 0) 
     return shadesOfRed[colorIndex];
 else 
-    return shadesOfGreen[colorIndex];
+    {
+    if(sameString(colorScheme, "rg"))
+	return shadesOfGreen[colorIndex];
+    else 
+	return shadesOfBlue[colorIndex];
+    }
 }
 
 
@@ -5041,6 +5069,7 @@ linkedFeaturesSeriesMethods(tg);
 tg->itemColor = nci60Color;
 tg->loadItems = loadMultScoresBed;
 tg->trackFilter = lfsFromNci60Bed ;
+tg->extraUi = nci60Ui;
 }
 
 
