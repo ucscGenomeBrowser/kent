@@ -78,6 +78,43 @@ enum pfParseType
     pptSymName,
     pptTypeName,
     pptTypeTuple,
+
+    pptCastByteToShort,
+    pptCastByteToInt,
+    pptCastByteToLong,
+    pptCastByteToFloat,
+    pptCastByteToDouble,
+
+    pptCastShortToByte,
+    pptCastShortToInt,
+    pptCastShortToLong,
+    pptCastShortToFloat,
+    pptCastShortToDouble,
+
+    pptCastIntToByte,
+    pptCastIntToShort,
+    pptCastIntToLong,
+    pptCastIntToFloat,
+    pptCastIntToDouble,
+
+    pptCastLongToByte,
+    pptCastLongToShort,
+    pptCastLongToInt,
+    pptCastLongToFloat,
+    pptCastLongToDouble,
+
+    pptCastFloatToByte,
+    pptCastFloatToShort,
+    pptCastFloatToInt,
+    pptCastFloatToLong,
+    pptCastFloatToDouble,
+
+    pptCastDoubleToByte,
+    pptCastDoubleToShort,
+    pptCastDoubleToInt,
+    pptCastDoubleToLong,
+    pptCastDoubleToFloat,
+
     };
 
 char *pfParseTypeAsString(enum pfParseType type);

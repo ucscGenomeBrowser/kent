@@ -3,6 +3,8 @@
 
 #include "common.h"
 #include "hash.h"
+#include "pfParse.h"
+#include "pfCompile.h"
 #include "pfType.h"
 
 struct pfBaseType *pfBaseTypeNew(struct pfScope *scope, char *name, 
@@ -70,3 +72,16 @@ else
     }
 }
 
+void pfTypeCheck(struct pfCompile *pfc, struct pfParse *pp)
+/* Check types (adding conversions where needed) on tree,
+ * which should have variables bound already. */
+{
+struct pfParse *p;
+
+for (p = pp->children; p != NULL; p = p->next)
+    pfTypeCheck(pfc, p);
+
+switch (pp->type)
+    {
+    }
+}

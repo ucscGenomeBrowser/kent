@@ -45,4 +45,11 @@ struct pfType *pfTypeNew(struct pfBaseType *base);
 void pfTypeDump(struct pfType *ty, FILE *f);
 /* Write out info on ty to file.  (No newlines written) */
 
+struct pfCompile;
+struct pfParse;
+
+void pfTypeCheck(struct pfCompile *pfc, struct pfParse *pp);
+/* Check types (adding conversions where needed) on tree,
+ * which should have variables bound already. */
+
 #endif /* PFTYPE_H */

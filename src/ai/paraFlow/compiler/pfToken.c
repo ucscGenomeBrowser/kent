@@ -399,6 +399,7 @@ else
     tok->type = pftName;
     tok->val.s = hashStoreName(tkz->symbols, tkz->dy->string);
     }
+tok->textSize = tkz->pos - tok->text;
 }
 
 static void skipLine(struct pfTokenizer *tkz)
