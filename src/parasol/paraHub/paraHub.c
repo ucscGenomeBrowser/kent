@@ -67,7 +67,7 @@
 #include "machSpec.h"
 #include "log.h"
 
-static char const rcsid[] = "$Id: paraHub.c,v 1.83 2005/02/22 19:59:05 galt Exp $";
+static char const rcsid[] = "$Id: paraHub.c,v 1.84 2005/02/23 18:49:26 galt Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -941,11 +941,13 @@ char *name = nextWord(&line), *jobIdString;
 int jobId;
 struct machine *mach;
 struct dlNode *node;
+boolean hostFound = FALSE;
 for (node = deadMachines->head; !dlEnd(node); node = node->next)
     {
     mach = node->val;
     if (sameString(mach->name, name) && mach->isDead)
         {
+	hostFound = TRUE;
 	dlRemove(node);
 	dlAddTail(freeMachines, node);
 	mach->isDead = FALSE;
@@ -1000,6 +1002,10 @@ for (node = deadMachines->head; !dlEnd(node); node = node->next)
 	runner(1);
 	break;
 	}
+    }
+if (!hostFound)
+    {
+    warn("hub 'alive $HOST' msg handler: unable to resurrect host %s, not find in deadMachines list.\n",  name);
     }
 }
 
