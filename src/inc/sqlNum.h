@@ -23,5 +23,9 @@ long long sqlLongLong(char *s);
 /* Convert string to a long long.  Unlike atol assumes all of string is
  * number. */
 
+float sqlFloat(char *s);
+/* Convert string to a float.  Assumes all of string is number
+ * and aborts on an error. */
+
 #endif /* SQLNUM_H */
  
