@@ -8533,7 +8533,7 @@ if (gotBlat)
     {
     printf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/hgCoordConv?origDb=%s&position=%s:%d-%d&phase=table&%s\">%s</A></TD>", database, chromName, winStart+1, winEnd, uiVars->string, wrapWhiteFont("Convert"));
     }
-if (sameString(database, "hg10"))
+if (sameString(database, "hg11"))
     {
     fputs("<TD ALIGN=CENTER>", stdout);
     printEnsemblAnchor();
