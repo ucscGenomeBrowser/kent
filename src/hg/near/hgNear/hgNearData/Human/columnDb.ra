@@ -46,7 +46,7 @@ name gnfDense
 shortLabel Short GNF
 longLabel Selected GNF expression data from normal tissues on U95 chip.
 priority 3.0
-visibility off
+visibility on
 type expRatio knownToU95 affyRatio hgFixed.affyExps
 max 5.0
 representatives 30,6,29,10,53,35,11,12,13,4,
