@@ -14,7 +14,7 @@
 #include "hdb.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: joining.c,v 1.28 2004/10/01 21:26:43 kent Exp $";
+static char const rcsid[] = "$Id: joining.c,v 1.29 2004/10/02 00:12:45 kent Exp $";
 
 struct joinedRow
 /* A row that is joinable.  Allocated in joinableResult->lm. */
@@ -322,8 +322,9 @@ static void orderFieldsInTable(struct tableJoiner *tj)
  * they are the same as the order in the database. */
 {
 struct sqlConnection *conn = sqlConnect(tj->database);
+char *splitTable = chromTable(conn, tj->table);
 struct hash *fieldHash = hashNew(0);
-struct slName *field, *fieldList = sqlListFields(conn, tj->table);
+struct slName *field, *fieldList = sqlListFields(conn, splitTable);
 struct joinerDtf *dtf, *newList = NULL;
 
 /* Build up hash of field names. */
@@ -343,6 +344,7 @@ for (field = fieldList; field != NULL; field = field->next)
 slFreeList(&fieldList);
 slReverse(&newList);
 tj->fieldList = newList;
+freez(&splitTable);
 }
 
 

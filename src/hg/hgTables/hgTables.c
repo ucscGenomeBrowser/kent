@@ -22,7 +22,7 @@
 #include "hgTables.h"
 #include "joiner.h"
 
-static char const rcsid[] = "$Id: hgTables.c,v 1.76 2004/10/01 21:26:43 kent Exp $";
+static char const rcsid[] = "$Id: hgTables.c,v 1.77 2004/10/02 00:12:45 kent Exp $";
 
 
 void usage()
@@ -415,8 +415,6 @@ char *connectingTableForTrack(char *rawTable)
 {
 if (sameString(rawTable, "mrna"))
     return cloneString("all_mrna");
-else if (sameString(rawTable, "intronEst"))
-    return cloneString("all_est");
 else if (sameString(rawTable, "est"))
     return cloneString("all_est");
 else 
