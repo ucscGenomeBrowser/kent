@@ -236,8 +236,8 @@ boolean hGenBankHaveSeq(char *acc, char *compatTable);
  * This handles compatibility between pre-incremental genbank databases where
  * refSeq sequences were stored in tables and the newer scheme that keeps all
  * sequences in external files.  If compatTable is not NULL and the table
- * exists, this is checked as a fallback.  If compatTable is null, only the
- * external file tables are checked.
+ * exists, it is used to obtain the sequence.  Otherwise the seq and gbSeq
+ * tables are checked.
  */
 
 struct dnaSeq *hGenBankGetMrna(char *acc, char *compatTable);
@@ -245,8 +245,8 @@ struct dnaSeq *hGenBankGetMrna(char *acc, char *compatTable);
  * This handles compatibility between pre-incremental genbank databases where
  * refSeq sequences were stored in tables and the newer scheme that keeps all
  * sequences in external files.  If compatTable is not NULL and the table
- * exists, this is checked as a fallback.  If compatTable is null, only the
- * external file tables are checked.
+ * exists, it is used to obtain the sequence.  Otherwise the seq and gbSeq
+ * tables are checked.
  */
 
 aaSeq *hGenBankGetPep(char *acc, char *compatTable);
@@ -254,9 +254,8 @@ aaSeq *hGenBankGetPep(char *acc, char *compatTable);
  * compatibility between pre-incremental genbank databases where refSeq
  * sequences were stored in tables and the newer scheme that keeps all
  * sequences in external files.  If compatTable is not NULL and the table
- * exists, this is checked as a fallback.  If compatTable is null, only the
- * external file tables are checked.  Note, older databases only have
- * peptides in the tables.
+ * exists, it is used to obtain the sequence.  Otherwise the seq and gbSeq
+ * tables are checked.
  */
 
 struct bed *hGetBedRange(char *table, char *chrom, int chromStart,
