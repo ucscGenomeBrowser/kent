@@ -21,7 +21,7 @@
 #include "botDelay.h"
 #include "liftOver.h"
 
-static char const rcsid[] = "$Id: hgLiftOver.c,v 1.14 2004/04/14 20:33:08 kate Exp $";
+static char const rcsid[] = "$Id: hgLiftOver.c,v 1.15 2004/04/14 21:40:47 kate Exp $";
 
 /* CGI Variables */
 #define HGLFT_USERDATA_VAR "hglft.userData"     /* typed/pasted in data */
@@ -47,8 +47,14 @@ char *formatList[] =
 /* Filename prefix */
 #define HGLFT   "hglft"
 
-/* Javascript to change New Assembly pulldown when Orig Assembly changes */
-char *onChangeFromDb = "onchange=\"document.mainForm.toDb.value = document.mainForm.toDb.options[document.mainForm.toDb.selectedIndex].value; document.mainForm.submit();\"";
+/* Javascript to support New Assembly pulldown when Orig Assembly changes */
+/* Copies selected value from the Original Assembly pulldown to a hidden form
+*/
+//char *onChangeFromDb = "onchange=\"document.dbForm.fromDb.value = document.mainForm.fromDb.options[document.mainForm.fromDb.selectedIndex].value; document.dbForm.toDb.value = 0; document.dbForm.submit();\"";
+char *onChangeFromDb = 
+"onchange=\"document.dbForm.fromDb.value = "
+"document.mainForm.fromDb.options[document.mainForm.fromDb.selectedIndex].value;"
+"document.dbForm.submit();\"";
 
 void webMain(char *organism, char *fromDb, char *toDb, char *dataFormat)
     /* set up page for entering data */
@@ -86,7 +92,8 @@ cgiTableFieldEnd();
 
 /* from assembly */
 cgiSimpleTableFieldStart();
-printAllAssemblyListHtmlParm(fromDb, dbList, HGLFT_FROMDB_VAR, FALSE, "");
+printAllAssemblyListHtmlParm(fromDb, dbList, HGLFT_FROMDB_VAR, 
+                                FALSE, onChangeFromDb);
 cgiTableFieldEnd();
 
 /* to assembly */
@@ -94,8 +101,7 @@ cgiSimpleTableFieldStart();
 if (dbList)
     dbDbFreeList(&dbList);
 dbList = hGetLiftOverToDatabases(fromDb);
-printAllAssemblyListHtmlParm(toDb, dbList, HGLFT_TODB_VAR, 
-                                FALSE, onChangeFromDb);
+printAllAssemblyListHtmlParm(toDb, dbList, HGLFT_TODB_VAR, FALSE, "");
 cgiTableFieldEnd();
 
 cgiTableRowEnd();
@@ -159,6 +165,14 @@ printf("<TD><INPUT TYPE=SUBMIT NAME=SubmitFile VALUE=\"Submit File\"></TD>\n");
 cgiTableRowEnd();
 cgiTableEnd();
 printf("</FORM>\n");
+
+/* Hidden form to support menu pulldown behavior */
+printf("<FORM ACTION=\"/cgi-bin/hgLiftOver\""
+       " METHOD=\"GET\" NAME=\"dbForm\">"
+       "<input type=\"hidden\" name=\"fromDb\" value=\"%s\">\n", fromDb);
+printf("<input type=\"hidden\" name=\"toDb\" value=\"%s\">\n", toDb);
+cartSaveSession(cart);
+puts("</FORM><BR>");
 
 cgiParagraph("Results will appear below.");
 }
