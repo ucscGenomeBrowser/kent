@@ -98,7 +98,7 @@ Make and load GC percent table
      hgGcPercent zooMouse1 ../../nib
 
 
-MAKING AND STORING mRNA AND EST ALIGNMENTS  (in progress)
+MAKING AND STORING mRNA AND EST ALIGNMENTS  (DONE)
 
 o - Load up the local disks of the cluster with refSeq.fa, mrna.fa and est.fa
     from /cluster/store1/mrna.127  into /var/tmp/hg/h/mrna
@@ -112,43 +112,52 @@ o - Use BLAT to generate refSeq, mRNA and EST alignments as so:
       Check on progress with para check in mrna, est, and refSeq directories.
       
 o - Process refSeq mRNA and EST alignments into near best in genome.
-      cd ~/zoo/bed
+      Note: No lifting up is needed because the fragments are already in chromosome
+coordinates.
 
+      cd ~/zoo/bed
       cd refSeq
       pslSort dirs raw.psl /tmp psl
       pslReps -minCover=0.2 -sizeMatters -minAli=0.98 -nearTop=0.002 raw.psl contig.psl /dev/null
-      pslSortAcc nohead chrom /tmp psl/chr1_refSeq.psl
+      mv contig.psl all_refSeq.psl
+      pslSortAcc nohead chrom /tmp all_refSeq.psl
       cd ..
 
       cd mrna
       pslSort dirs raw.psl /tmp psl
       pslReps -minAli=0.98 -sizeMatters -nearTop=0.005 raw.psl contig.psl /dev/null
-      pslSortAcc nohead chrom /tmp psl/chr1_mrna.psl
+      mv contig.psl all_mrna.psl
+      pslSortAcc nohead chrom /tmp all_mrna.psl
       cd ..
 
       cd est
       pslSort dirs raw.psl /tmp psl
       pslReps -minAli=0.98 -sizeMatters -nearTop=0.005 raw.psl contig.psl /dev/null
-      pslSortAcc nohead chrom /tmp psl/chr1_est.psl
+      mv contig.psl all_est.psl
+      pslSortAcc nohead chrom /tmp all_est.psl
       cd ..
 
 o - Load mRNA alignments into database.
       ssh hgwdev
-      cd /cluster/store2/zoo/zooMouse1/bed/mrna/
-      ../scripts/mrnaLoadPsl.sh
+      cd /cluster/store2/zoo/zooMouse1/bed/mrna/chrom
+      ../../scripts/mrnaLoadPsl.csh
 
 o - Load EST alignments into database.
       ssh hgwdev
-      cd /cluster/store2/zoo/zooMouse1/bed/est/
-      ../scripts/estLoadPsl.sh
+      cd /cluster/store2/zoo/zooMouse1/bed/est/chrom
+      ../../scripts/estLoadPsl.csh
 
 o - Create subset of ESTs with introns and load into database.
       - ssh kkstore
-      cd ~/mm
-      tcsh jkStuff/makeIntronEst.sh
+      cd ~/zoo/zooMouse1
+      cp /cluster/store1/gs.11/build28/jkStuff/makeIntronEst.sh bed/scripts
+      tcsh bed/scripts/jkStuff/makeIntronEst.sh
       - ssh hgwdev
-      cd ~/mm/bed/est/intronEst
-      hgLoadPsl mm1 *.psl
+      cd ~/zoo/zooMouse1/bed/est/intronEst
+      hgLoadPsl zooMouse1 *.psl
+
+      NOTE: The name CFTR_mouse needs to be changed to chr1 in a lot of
+      files. Details to be forthcoming.
 
 PRODUCING KNOWN GENES (todo)
 

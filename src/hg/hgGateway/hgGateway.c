@@ -11,16 +11,24 @@
 struct cart *cart;
 struct hash *oldVars = NULL;
 
+char *defaultPosition()
+/*
+Function to return the default position for the database
+return - The default position for this database
+ */
+{
+return NULL;
+}
+
 void hgGateway()
 /* hgGateway - Human Genome Browser Gateway. */
 {
 char *db = cartUsualString(cart, "db", hGetDb());
 char *oldDb = hashFindVal(oldVars, "db");
-char *defaultPosition = "USP18";
-char *position = cartUsualString(cart, "position", defaultPosition);
+char *position = cartUsualString(cart, "position", defaultPosition());
 
 if (oldDb != NULL && !sameString(db, oldDb))
-    position = defaultPosition;
+    position = defaultPosition();
 
 puts(
 "<FORM ACTION=\"../cgi-bin/hgTracks\" METHOD=\"POST\" ENCTYPE=\"multipart/form-data\">\n"

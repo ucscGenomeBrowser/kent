@@ -19,6 +19,7 @@ ret->name = row[0];
 ret->description = row[1];
 ret->nibPath = row[2];
 ret->organism = row[3];
+ret->defaultPos = row[4];
 }
 
 struct dbDb *dbDbLoad(char **row)
@@ -34,6 +35,7 @@ ret->name = cloneString(row[0]);
 ret->description = cloneString(row[1]);
 ret->nibPath = cloneString(row[2]);
 ret->organism = cloneString(row[3]);
+ret->defaultPos = cloneString(row[4]);
 return ret;
 }
 
@@ -43,7 +45,7 @@ struct dbDb *dbDbLoadAll(char *fileName)
 {
 struct dbDb *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[4];
+char *row[5];
 
 while (lineFileRow(lf, row))
     {
@@ -94,6 +96,7 @@ ret->name = sqlStringComma(&s);
 ret->description = sqlStringComma(&s);
 ret->nibPath = sqlStringComma(&s);
 ret->organism = sqlStringComma(&s);
+ret->defaultPos = sqlStringComma(&s);
 *pS = s;
 return ret;
 }
@@ -109,6 +112,7 @@ freeMem(el->name);
 freeMem(el->description);
 freeMem(el->nibPath);
 freeMem(el->organism);
+freeMem(el->defaultPos);
 freez(pEl);
 }
 
@@ -143,6 +147,10 @@ if (sep == ',') fputc('"',f);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->organism);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->defaultPos);
 if (sep == ',') fputc('"',f);
 fputc(lastSep,f);
 }

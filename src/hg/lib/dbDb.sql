@@ -9,6 +9,7 @@ CREATE TABLE dbDb (
     description varchar(255) not null,	# Short description - 'Aug. 8, 2001' or the like
     nibPath longblob not null,	# Path to packed sequence files
     organism varchar(255) not null,	# Common name of organism - first letter capitalized
+    defaultPos varchar(255) not null,	# Default starting position
               #Indices
     PRIMARY KEY(name)
 );
