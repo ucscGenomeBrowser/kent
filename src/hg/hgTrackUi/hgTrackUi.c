@@ -20,7 +20,7 @@
 #define CDS_HELP_PAGE "../goldenPath/help/hgCodonColoring.html"
 #define CDS_MRNA_HELP_PAGE "../goldenPath/help/hgCodonColoringMrna.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.115 2004/06/20 22:46:19 braney Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.116 2004/06/23 17:26:57 braney Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -276,16 +276,25 @@ void cdsColorOptions(struct trackDb *tdb, int value)
 
 void blastUi(struct trackDb *tdb)
 {
-char varName[64];
-char *refGeneLabel;
+char geneName[64];
+char accName[64];
+char sprotName[64];
+boolean useGene, useAcc, useSprot;
 
-safef(varName, sizeof(varName), "%s.label", tdb->tableName);
-refGeneLabel = cartUsualString(cart, varName, "gene");
-printf("<P><B>Label:</B> ");
-radioButton(varName, refGeneLabel, "gene");
-radioButton(varName, refGeneLabel, "accession");
-radioButton(varName, refGeneLabel, "both");
-radioButton(varName, refGeneLabel, "none");
+safef(geneName, sizeof(geneName), "%s.geneLabel", tdb->tableName);
+safef(accName, sizeof(accName), "%s.accLabel", tdb->tableName);
+safef(sprotName, sizeof(sprotName), "%s.sprotLabel", tdb->tableName);
+useGene= cartUsualBoolean(cart, geneName, TRUE);
+useAcc= cartUsualBoolean(cart, accName, FALSE);
+useSprot= cartUsualBoolean(cart, sprotName, FALSE);
+
+printf("<P><B>Label elements by: </B> ");
+cgiMakeCheckBox(geneName, useGene);
+printf("Gene ");
+cgiMakeCheckBox(accName, useAcc);
+printf("mRNA ");
+cgiMakeCheckBox(sprotName, useSprot);
+printf("SwissProt ");
 
 //cdsColorOptions(tdb, 2);
 }

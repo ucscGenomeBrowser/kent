@@ -84,7 +84,7 @@
 #include "estOrientInfo.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.756 2004/06/23 03:33:43 braney Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.757 2004/06/23 17:28:03 braney Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
@@ -2929,17 +2929,24 @@ void lookupProteinNames(struct track *tg)
 /* This converts the knownGene accession to a gene name where possible. */
 {
 struct linkedFeatures *lf;
-char *refGeneLabel = cartUsualString(cart, "blastHg16KG.label", "gene");
-boolean useGeneName = sameString(refGeneLabel, "gene")
-    || sameString(refGeneLabel, "both");
-boolean useAcc = sameString(refGeneLabel, "accession")
-    || sameString(refGeneLabel, "both");
+boolean useGene, useAcc, useSprot;
+char geneName[64];
+char accName[64];
+char sprotName[64];
+
+safef(geneName, sizeof(geneName), "%s.geneLabel", tg->tdb->tableName);
+safef(accName, sizeof(accName), "%s.accLabel", tg->tdb->tableName);
+safef(sprotName, sizeof(sprotName), "%s.sprotLabel", tg->tdb->tableName);
+useGene= cartUsualBoolean(cart, geneName, TRUE);
+useAcc= cartUsualBoolean(cart, accName, FALSE);
+useSprot= cartUsualBoolean(cart, sprotName, FALSE);
 
 for (lf = tg->items; lf != NULL; lf = lf->next)
     {
     char *acc, *prot = NULL;
     char *gene = NULL, *pos = NULL;
     char *buffer;
+    boolean added = FALSE;
 
     lf->extra = needMem(strlen(lf->name));
     acc = buffer = cloneString(lf->name);
@@ -2954,12 +2961,24 @@ for (lf = tg->items; lf != NULL; lf = lf->next)
 	    }
 	}
 
-    if (useGeneName && (gene != NULL))
+    if (useGene && (gene != NULL))
+	{
+	added = TRUE;
 	strcat(lf->extra, gene);
-    if (useGeneName && useAcc && (gene != NULL))
-	strcat(lf->extra, "/");
+	}
     if (useAcc)
+	{
+	if (added)
+	    strcat(lf->extra, "/");
+	added = TRUE;
 	strcat(lf->extra, acc);
+	}
+    if (useSprot)
+	{
+	if (added)
+	    strcat(lf->extra, "/");
+	strcat(lf->extra, prot);
+	}
     }
 }
 
