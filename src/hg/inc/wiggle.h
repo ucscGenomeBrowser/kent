@@ -121,6 +121,10 @@ struct wiggleData *wigFetchData(char *db, char *tableName, char *chromName,
  *	summaryOnly TRUE will not look at all the data, just the
  *	summaries in the table rows
  */
+#define	WIG_SUMMARY_ONLY	TRUE
+#define	WIG_ALL_DATA		FALSE
+void wigFreeData(struct wiggleData *wigData);
+/* free everything in the wiggleData structure */
 
 /*	in lib/wiggleCart.c	*/
 extern void wigFetchMinMaxY(struct trackDb *tdb, double *min,
