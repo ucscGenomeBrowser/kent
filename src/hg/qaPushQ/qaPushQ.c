@@ -22,7 +22,7 @@
 
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: qaPushQ.c,v 1.20 2004/05/12 21:04:54 galt Exp $";
+static char const rcsid[] = "$Id: qaPushQ.c,v 1.21 2004/05/12 21:18:22 galt Exp $";
 
 char msg[2048] = "";
 char ** saveEnv;
@@ -2289,7 +2289,7 @@ mySprintWithCommas(nicenumber, sizeof(nicenumber), totalsize);
 printf(" Total size of all: %s <br>\n",nicenumber);
 
 printf(" <br>\n");
-sizeMB = totalsize / (1024 * 1024);
+sizeMB = (((totalsize * 1.0) / (1024 * 1024)) + 0.5);
 if ((sizeMB == 0) && (totalsize > 0))
     {
     sizeMB = 1;
