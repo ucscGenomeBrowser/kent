@@ -8,6 +8,7 @@
 #include "cart.h"
 #include "hdb.h"
 #include "dbDb.h"
+#include "web.h"
 
 struct cart *cart = NULL;
 struct hash *oldVars = NULL;
@@ -36,7 +37,7 @@ char *position = cartUsualString(cart, "position", defaultPosition);
 /* JavaScript to copy input data on the change genome button to a hidden form
 This was done in order to be able to flexibly arrange the UI HTML
 */
-char *onChangeText = "onchange=\"document.orgForm.org.value = document.trackForm.org.options[document.trackForm.org.selectedIndex].value; document.orgForm.submit();\"";
+char *onChangeText = "onchange=\"document.orgForm.org.value = document.mainForm.org.options[document.mainForm.org.selectedIndex].value; document.orgForm.submit();\"";
 /* 
    If we are changing databases via explicit cgi request,
    then remove custom track data which will 
@@ -71,7 +72,7 @@ puts(
 "<table bgcolor=\"FFFEF3\" border=0>\n"
 "<tr>\n"
 "<td>\n"
-"<FORM ACTION=\"/cgi-bin/hgTracks\" NAME=\"trackForm\" METHOD=\"POST\" ENCTYPE=\"multipart/form-data\">\n"
+"<FORM ACTION=\"/cgi-bin/hgTracks\" NAME=\"mainForm\" METHOD=\"POST\" ENCTYPE=\"multipart/form-data\">\n"
 "<input TYPE=\"IMAGE\" BORDER=\"0\" NAME=\"hgt.dummyEnterButton\" src=\"/images/DOT.gif\">\n"
 "<table><tr>\n"
 "<td align=center valign=baseline>genome</td>\n"
@@ -325,7 +326,7 @@ puts(
 "	</FORM>\n"
 );
 
-printf("<FORM ACTION=\"/cgi-bin/hgGateway\" METHOD=\"GET\" NAME=\"orgForm\"><input type=\"hidden\" name=\"%s\" value=\"%s\">\n", orgCgiName, organism);
+printf("<FORM ACTION=\"/cgi-bin/hgGateway\" METHOD=\"GET\" NAME=\"orgForm\"><input type=\"hidden\" name=\"org\" value=\"%s\">\n", organism);
 cartSaveSession(cart);
 puts("</FORM>"
 "	<BR></TD><TD WIDTH=15>&nbsp;</TD></TR></TABLE>\n"
@@ -334,61 +335,12 @@ puts("</FORM>"
 "</TD></TR></TABLE>\n");
 }
 
-char *getDbForOrganism(char *organism, struct cart *cart)
-/*
-  Function to find the default database for the given organism.
-It looks in the cart first and then, if that database's organism matches the 
-passed-in organism, returns it. If the organism does not match, it returns the default
-database that does match that organism.
-
-param organism - The organism for which to find a database
-param cart - The cart to use to first search for a suitable database name
-return - The database matching this organism type
-*/
-{
-char *retDb = cartUsualString(cart, dbCgiName, hGetDb());
-char *dbOrg = hOrganism(retDb);
-
-if (!strstrNoCase(organism, dbOrg))
-    {
-    retDb = hDefaultDbForOrganism(organism);
-    }
-
-return retDb;
-}
-
 void doMiddle(struct cart *theCart)
 /* Set up pretty web display and save cart in global. */
 {
 cart = theCart;
 
-/*
-  The order of preference here is as follows:
-If we got a request that explicitly names the db, that takes
-highest priority, and we synch the organism to that db.
-If we get a cgi request for a specific organism then we use that
-organism to choose the DB.
-
-In the cart only, we use the same order of preference.
-If someone requests an organism we try to give them the same db as
-was in their cart, unless the organism doesn't match.
-*/
-db = cgiOptionalString(dbCgiName);
-organism = cgiOptionalString(orgCgiName);
-if (db)
-    {
-    organism = hOrganism(db);
-    }
-else if (organism)
-    {
-    db = getDbForOrganism(organism, cart);
-    }
-else
-    {
-    db = cartUsualString(cart, dbCgiName, hGetDb());
-    organism = hOrganism(db);
-    }
-
+getDbAndOrganism(cart, &db, &organism);
 cartWebStart(theCart, "%s Genome Browser Gateway \n", organism);
 hgGateway();
 cartWebEnd();

@@ -16,6 +16,7 @@
 #include "cart.h"
 #include "dbDb.h"
 #include "blatServers.h"
+#include "web.h"
 
 struct cart *cart;	/* The user's ui state. */
 char *defaultDatabase;	/* Default database. */
@@ -348,7 +349,7 @@ FILE *f;
 struct dnaSeq *seqList = NULL, *seq;
 struct tempName pslTn, faTn;
 int maxSingleSize, maxTotalSize;
-char *genome = cgiString("genome");
+char *genome = cgiString("db");
 char *type = cgiString("type");
 char *seqLetters = cloneString(userSeq);
 struct serverTable *serve;
@@ -481,20 +482,28 @@ void askForSeq()
 /* Put up a little form that asks for sequence.
  * Call self.... */
 {
-char *db = cartUsualString(cart, "db", defaultDatabase);
-struct serverTable *serve = findServer(db, FALSE);
+char *db = NULL; //cartUsualString(cart, "db", defaultDatabase);
+struct serverTable *serve = NULL; //findServer(db, FALSE);
 char **genomeList;
 int genomeCount;
-char *organism = hOrganism(db);
+char *organism = NULL; //hOrganism(db);
 char *assemblyList[128];
 char *values[128];
 int numAssemblies = 0;
-struct dbDb *dbList = hGetBlatIndexedDatabases();
+struct dbDb *dbList = NULL; // hGetBlatIndexedDatabases();
 struct dbDb *cur = NULL;
 char *assembly = NULL;
 
+/* JavaScript to copy input data on the change genome button to a hidden form
+This was done in order to be able to flexibly arrange the UI HTML
+*/
+char *onChangeText = "onchange=\"document.orgForm.org.value = document.mainForm.org.options[document.mainForm.org.selectedIndex].value; document.orgForm.submit();\"";
+
+getDbAndOrganism(cart, &db, &organism);
+serve = findServer(db, FALSE);
+
 printf( 
-"<FORM ACTION=\"../cgi-bin/hgBlat\" METHOD=\"POST\" ENCTYPE=\"multipart/form-data\">\n"
+"<FORM ACTION=\"../cgi-bin/hgBlat\" METHOD=\"POST\" ENCTYPE=\"multipart/form-data\" NAME=\"mainForm\">\n"
 "<H1 ALIGN=CENTER>BLAT Search Genome</H1>\n"
 "<P>\n"
 "<TABLE BORDER=0 WIDTH=\"96%%\">\n"
@@ -502,37 +511,11 @@ printf(
 cartSaveSession(cart);
 
 printf("%s", "<TD WIDTH=\"20%\"<CENTER>\n");
+printf("Organism:<BR>");
+printOrgListHtml(db, onChangeText);
+printf("%s", "</TD><TD WIDTH=\"22%\"<CENTER>\n");
 printf("Freeze:<BR>");
-
-/* Find all the assemblies that pertain to the selected genome */
-for (cur = dbList; cur != NULL; cur = cur->next)
-    {
-    /* If we are looking at a zoo database then show the zoo database list */
-    if ((strstrNoCase(db, "zoo") || strstrNoCase(organism, "zoo")) &&
-        strstrNoCase(cur->description, "zoo"))
-        {
-        assemblyList[numAssemblies] = cur->description;
-        values[numAssemblies] = cur->name;
-        numAssemblies++;
-        }
-    else if (strstrNoCase(organism, cur->organism) && 
-             !strstrNoCase(cur->description, "zoo") &&
-             (cur->active || strstrNoCase(cur->name, db)))
-        {
-        assemblyList[numAssemblies] = cur->description;
-        values[numAssemblies] = cur->name;
-        numAssemblies++;
-        }
-
-    /* Save a pointer to the current assembly */
-    if (strstrNoCase(db, cur->name))
-       {
-       assembly = cur->description;
-       }
-    }
-
-cgiMakeDropList("genome", assemblyList, numAssemblies, serve->genome);
-
+printAssemblyListHtml(db);
 printf("%s", "</TD><TD WIDTH=\"22%\"<CENTER>\n");
 printf("Query type:<BR>");
 cgiMakeDropList("type", typeList, ArraySize(typeList), NULL);
@@ -593,6 +576,10 @@ printf("%s",
 "licenses are also available.  Contact Jim for details.</P>\n"
 "\n"
 "</FORM>\n");
+
+printf("<FORM ACTION=\"/cgi-bin/hgBlat\" METHOD=\"GET\" NAME=\"orgForm\"><input type=\"hidden\" name=\"org\" value=\"%s\">\n", organism);
+cartSaveSession(cart);
+puts("</FORM>");
 }
 
 void doMiddle(struct cart *theCart)
