@@ -209,7 +209,7 @@ exit; # don't actually run this like a script :)
     hgLoadBed sacCer1 sgdClone  sgdClone.bed -tab \
         -sqlTable=$HOME/kent/src/hg/lib/sgdClone.sql
 
-# AUTO UPDATE GENBANK MRNA RUN  (In Progress 2003-11-24 Jim)
+# AUTO UPDATE GENBANK MRNA RUN  (Done 2003-11-24 Jim)
 
     # Put the nib's on /cluster/bluearc:
     ssh eieio
@@ -248,7 +248,7 @@ sacCer1.downloadDir = sacCer1
     cd /cluster/data/genbank
     nice bin/gbDbLoadStep -verbose=1 -drop -initialLoad sacCer1
 
-# DOING MULTIPLE ALIGNMENT WITH OTHER YEAST
+# DOING MULTIPLE ALIGNMENT WITH OTHER YEAST  (Done Jim)
 # Grab sequence from all six yeast and massage
 # it so that fasta records all start with sacXXX
 # in the directory /cluster/data/sacCer1/bed/otherYeast/align
@@ -360,7 +360,7 @@ end
 	cd sgdLocalization
 	hgSgdGfp sacCer1 ../../download/systematic_results/localization/OS*.tab .
 
-# UPDATE GO DATABASE
+# UPDATE GO DATABASE  (DONE -Jim)
     ssh hgwdev
     cd /cluster/store1/geneOntology
     mkdir 20031202
@@ -760,7 +760,7 @@ end
     cd /cluster/data/sacCer1/bed/blastp/hg16/run/out
     hgLoadBlastTab sacCer1 hgBlastTab -maxPer=1 *.tab
 
-# LOADING ERAN SEGAL'S REGULATORY MODULE STUFF
+# LOADING ERAN SEGAL'S REGULATORY MODULE STUFF  (DONE 2004-9-22 -Jim)
     cd /cluster/data/sacCer1/bed
     mkdir eranSegal
     cd eranSegal
@@ -773,7 +773,7 @@ end
     hgLoadEranModules sacCer1 module_assignments.tab motif_modules.tab \
     	modules_motifs.gxm modules_motif_positions.tab gene_position.tab
 
-# LOADING REGULATORY CODE STUFF
+# LOADING REGULATORY CODE STUFF (In Progress 2004-9-22 -Jim)
     cd /cluster/data/sacCer1/bed
     mkdir fraenkelYoung
     cd fraenkelYoung
