@@ -3,9 +3,12 @@
 This track shows the Arachne $organism assembly Build 1 Version 1 from the Chimp
 Genome Sequencing Consortium.
 <P>
-To build the draft version, a &quot;modified de novo&quot; (MDN) assembly was created first, using the 
-human genome to 
-determine -- among other things -- that particular inserts were not chimeric. A separate &quot;validated
+The Arachne assembly of sequence to WGS (whole genome shotgun) contigs, and the 
+mapping of the contigs to scaffolds (supercontigs) was performed at the 
+Broad Institute.  To build this assembly, a &quot;modified de novo&quot; (MDN) 
+assembly was created first, using the human genome to 
+determine -- among other things -- that particular inserts were not chimeric. 
+A separate &quot;validated
 chimp-on-human&quot; (VCH) assembly was created by taking the chimp reads that align
 uniquely to human, forming them into contigs via this alignment, and then removing
 those contigs that failed a two-haplotype consistency check. Shared reads were then
@@ -15,21 +18,31 @@ enriching the latter. Two global misassemblies were manually removed from the
 merged assembly. This final assembly comprises the Build 1 Version 1 draft
 release.
 <P>
-The assembly is composed of 361,782 contigs with an N50 length of 15.7 kb. The total
-contig length is 2.73 Gb, spanning 3.02 Gb. The assembly contains 37,849 supercontigs
+The ARACHNE assembly is composed of 361,782 contigs with an N50 length of 15.7 kb.
+The total contig length is 2.73 Gb, spanning 3.02 Gb. 
+The assembly contains 37,849 supercontigs
 (scaffolds) having an N50 length of 8.6 Mb (not including gaps).
+</P>
 <P>
-In dense mode, this track depicts the path through the draft 
-scaffolds (aka the golden path) used to create the assembled sequence. 
+To create a chromosome-based assembly, the ARACHNE scaffolds were mapped
+to chimp chromosomes by LaDeana Hillier at the University of Washington,
+using human/chimp homology based on the alignments produced at
+UCSC and the Broad Institute.
+Centromeres were introduced into the
+chimp at the positions of the centromeres in the human chromosomes.
+Nine documented/known human inversions were introduced into the ordering
+as was the break of human chromosome 2 into chimpanzee chromosomes 12 and 13. 
+An additional centromere was introduced in chromosome 13 at the site of the
+30kb of alpha-satellite
+</P>
+<P>
+In dense mode, this track depicts the path through the 
+scaffolds used to create the assembled sequence. 
 Scaffold boundaries are distinguished by the use of alternating gold and brown 
-coloration. Where gaps
-exist in the path, spaces are shown between the gold and brown
-blocks.  If the relative order and orientation of the contigs
-between the two blocks is known, a line is drawn to bridge the
-blocks.</P>
-<P>
-All components within this track are of fragment type &quot;W&quot;: Whole Genome Shotgun contig. 
-
+coloration. Where gaps exist in the path, spaces are shown between the gold and
+brown blocks.  The relative order and orientation of the scaffolds
+is implied for the non-random chromosomes.
+</P>
 <H2>References</H2>
 <P>
 <A HREF="http://www.genome.org/cgi/content/abstract/12/1/177" 
