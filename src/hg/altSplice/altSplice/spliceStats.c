@@ -47,7 +47,15 @@ fprintf(html, "<a href=\"http://genome-test.cse.ucsc.edu/cgi-bin/hgTracks?db=%s&
 	db, ag->tName, start, end, conf, ag->tName, start, end);
 }
 
-int countCassetteExons(struct altGraphX *agList, float minConfidence, FILE *outfile)
+int bedCmpMaxScore(const void *va, const void *vb)
+/* Compare to sort based on score - highest first. */
+{
+const struct bed *a = *((struct bed **)va);
+const struct bed *b = *((struct bed **)vb);
+return b->score - a->score;
+}
+
+int countCassetteExons(struct altGraphX *agList, float minConfidence, FILE *outfile, FILE *bedOutFile)
 /* count up the number of cassette exons that have a certain
    confidence, returns number of edges. If outfile != NULL will output fasta sequences
    to outfile. */
@@ -57,6 +65,7 @@ int edge =0;
 int cassetteCount = 0;
 int i =0;
 int mod3 = 0;
+int counter =0;
 boolean outputted = FALSE;
 float estPrior = cgiOptionalDouble("estPrior", 10);
 FILE *log = mustOpen("confidences.log", "w");
@@ -69,10 +78,19 @@ for(ag = agList; ag != NULL; ag = ag->next)
 	{
 	if(ag->edgeTypes[i] == ggCassette)
 	    {
-	    float conf = altGraphConfidenceForEdge(ag, i, estPrior);
+	    float conf = altGraphCassetteConfForEdge(ag, i, estPrior);
+	    struct bed *bed, *bedList = altGraphGetExonCassette(ag, i);
+	    char buff[256];
+	    snprintf(buff, sizeof(buff), "%d", counter);
+	    slSort(&bedList, bedCmpMaxScore);
+	    for(bed=bedList; bed != NULL; bed = bed->next)
+		bed->name = cloneString(buff);
 	    fprintf(log, "%f\n", conf);
 	    if(conf >= minConfidence) 
 		{
+		if(bedOutFile != NULL)
+		    for(bed=bedList; bed != NULL; bed = bed->next)
+			bedTabOutN(bed,12, bedOutFile);
 		writeBrowserLink(html, ag, conf, i);
 		cassetteCount++;
 		if(!outputted)
@@ -92,6 +110,8 @@ for(ag = agList; ag != NULL; ag = ag->next)
 		    freeDnaSeq(&seq);
 		    }
 		}
+	    counter++;
+	    bedFreeList(&bedList);
 	    }
 	}
     }
@@ -107,19 +127,25 @@ int main(int argc, char *argv[])
 struct altGraphX *agList = NULL;
 int cassetteCount = 0;
 float minConfidence = 0;
+char *bedFileName = NULL;
 if(argc < 4)
     usage();
+cgiSpoof(&argc, argv);
 warn("Loading graphs.");
 agList = altGraphXLoadAll(argv[1]);
+bedFileName = cgiOptionalString("bedFile");
 minConfidence = atof(argv[2]);
 db = argv[3];
 warn("Counting cassette exons from %d clusters above confidence: %f", slCount(agList), minConfidence);
 if(argc == 4)
-    cassetteCount = countCassetteExons(agList, minConfidence, NULL);
+    cassetteCount = countCassetteExons(agList, minConfidence, NULL, NULL);
 else
     {
-    FILE *out = mustOpen(argv[4], "w");
-    cassetteCount = countCassetteExons(agList, minConfidence, out);
+    FILE *out = mustOpen(argv[4], "w");    
+    FILE *bedOut = NULL;
+    if(bedFileName != NULL)
+	bedOut = mustOpen(bedFileName, "w");
+    cassetteCount = countCassetteExons(agList, minConfidence, out,bedOut );
     carefulClose(&out);
     }
 warn("%d cassette exons out of %d clusters in %s", cassetteCount, slCount(agList), argv[1]);
