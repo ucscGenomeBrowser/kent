@@ -1,1 +1,1 @@
-#define CGI_VERSION "76"
+#define CGI_VERSION "77"
