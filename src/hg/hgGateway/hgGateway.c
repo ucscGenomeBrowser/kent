@@ -181,10 +181,30 @@ void doMiddle(struct cart *theCart)
 /* Set up pretty web display and save cart in global. */
 {
 cart = theCart;
+
+/* If we are changing databases, then remove custom track data which will 
+   be irrelevant in this new database */
+
+if (!sameString(cgiUsualString("db", "XXX"), cartUsualString(cart, "database", "YYY")))
+    {
+    removeCustomTrackData();
+    }
+
 cartWebStart("UCSC Genome Browser Gateway");
 hgGateway();
 cartWebEnd();
 }
+
+void removeCustomTrackData()
+/*
+  Remove any custom track data from the cart.
+*/
+{
+cartRemove(cart, "hgt.customText");
+cartRemove(cart, "hgt.customFile");
+cartRemove(cart, "ct");
+}
+
 
 char *excludeVars[] = {NULL};
 
@@ -193,6 +213,7 @@ int main(int argc, char *argv[])
 {
 oldVars = hashNew(8);
 cgiSpoof(&argc, argv);
+
 cartEmptyShell(doMiddle, "hguid", excludeVars, oldVars);
 return 0;
 }
