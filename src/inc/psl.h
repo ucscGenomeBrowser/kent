@@ -246,5 +246,10 @@ int pslShowAlignment(struct psl *psl, boolean isProt,
 	char *tName, bioSeq *tSeq, int tStart, int tEnd, FILE *f);
 /* Show protein/DNA alignment or translated DNA alignment in HTML format. */
 
+int pslGenoShowAlignment(struct psl *psl, boolean isProt,
+		      char *qName, bioSeq *qSeq, int qStart, int qEnd,
+		      char *tName, bioSeq *tSeq, int tStart, int tEnd, int exnStarts[], int exnEnds[], int exnCnt, FILE *f);
+/* Show protein/DNA alignment or translated DNA alignment in HTML format. */
+
 #endif /* PSL_H */
 
