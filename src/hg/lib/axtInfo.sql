@@ -11,5 +11,5 @@ CREATE TABLE axtInfo (
     fileName varchar(255) not null,	# axt  file name 
     sort int not null,	# sort order
               #Indices
-    PRIMARY KEY(species)
+    PRIMARY KEY(species,alignment,chrom)
 );
