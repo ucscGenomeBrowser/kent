@@ -1,8 +1,8 @@
 #include "common.h" 
 #include "jksql.h"
-#include "test.h"
+#include "mainTest.h"
 
-static char const rcsid[] = "$Id: testHarness.c,v 1.2 2003/05/06 07:22:14 kate Exp $";
+static char const rcsid[] = "$Id: testHarness.c,v 1.1 2004/05/19 23:58:56 angie Exp $";
 
 int nextId()
 {
