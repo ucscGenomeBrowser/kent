@@ -78,6 +78,8 @@ errAbort(
   "   List jobs that crashed or failed output checks the last time they were run.\n"
   "para failed\n"
   "   List jobs that crashed after repeated restarts.\n"
+  "para status\n"
+  "   List individual job status, including times.\n"
   "para problems\n"
   "   List jobs that had problems (even if successfully rerun).  Includes host info\n"
   "para running\n"
@@ -170,6 +172,17 @@ enum jaState
  jaCrashed,
  jaFinished,
  };
+
+char *jaStateShortDesc[] =
+/* short description of job state; indexed by enum jaState */
+    {
+    "unsub",
+    "queue",
+    "run",
+    "hung",
+    "crash",
+    "done"
+    };
 
 enum jaState figureState(struct job *job)
 /* Figure out state of job. */
@@ -772,6 +785,15 @@ double jrCpuTime(struct jobResult *jr)
 return 0.01 * (jr->usrTicks + jr->sysTicks);
 }
 
+double jrRealTime(struct jobResult *jr)
+/* Get real time in seconds for job. */
+{
+/* note jr->*Time are unsigned, so we need to convert to double
+ * before subtracking or time moving backwards is not detected
+ */
+return ((double)jr->endTime) - ((double)jr->startTime);
+}
+
 struct hash *markRunJobStatus(struct jobDb *db)
 /* Mark jobs based on results output file. 
  * Returns hash of results. */
@@ -1055,6 +1077,67 @@ for (job = db->jobList; job != NULL; job = job->next)
     if (state == targetState)
 	printf("%s\n", job->spec);
     }
+}
+
+struct submission* getLastSubmission(struct job *job)
+/* get the last submission for a job, or NULL if not submitted */
+{
+struct submission* sub = job->submissionList;
+while ((sub != NULL) && (sub->next != NULL))
+    sub = sub->next;
+return sub;
+}
+
+/* header for job status output */
+static char *jobStatusHdr =
+"#state\ttries\treal\tcpu\tcmd\n";
+
+void paraJobStatus(struct job *job, struct hash *resultsHash, time_t now)
+/* Print status of a job. */
+{
+enum jaState state = figureState(job);
+char *stateStr = jaStateShortDesc[state];
+double realTime = 0.0;
+double cpuTime = 0.0;
+struct submission *sub = getLastSubmission(job);
+struct jobResult *jr = NULL;
+
+if (sub != NULL)
+    {
+    jr = hashFindVal(resultsHash, sub->id);
+    if (sub->trackingError)
+        stateStr = "track";
+    if (state == jaRunning)
+        realTime = (now - sub->startTime);
+    else if (jr != NULL)
+        {
+        realTime = jrRealTime(jr);
+        cpuTime = jrCpuTime(jr);
+        }
+    }
+
+subChar(job->command, '\t', ' ');  /* tabs not allowed in column */
+printf("%s\t%d\t%0.2f\t%0.2f\t%s\n",
+       stateStr,
+       job->submissionCount,
+       realTime, cpuTime,
+       job->command);
+}
+
+void paraStatus(char *batch)
+/* Print status of all jobs. */
+{
+struct jobDb *db = readBatch(batch);
+struct job *job;
+time_t now = time(NULL);
+struct hash *resultsHash;
+
+markQueuedJobs(db);
+markRunJobStatus(db);
+resultsHash = markRunJobStatus(db);
+printf(jobStatusHdr);
+for (job = db->jobList; job != NULL; job = job->next)
+    paraJobStatus(job, resultsHash, now);
 }
 
 void fetchOpenFile(struct paraMessage *pm, struct rudp *ru, char *fileName)
@@ -1447,10 +1530,7 @@ for (job = db->jobList; job != NULL; job = job->next)
 	       {
 	       ++timedCount;
 	       totalCpu += jrCpuTime(jr);
-               /* note jr->*Time are unsigned, so we need to convert to double
-                * before subtracking or time moving backwards is not detected
-                */
-	       oneWall = ((double)jr->endTime) - ((double)jr->startTime);
+	       oneWall = jrRealTime(jr);
 	       if (oneWall < 0)	/* Protect against clock reset. */
 		   {
 		   warn("End before start job %s host %s", sub->id, jr->host);
@@ -1584,6 +1664,10 @@ else if (sameWord(command, "failed"))
 else if (sameWord(command, "finished"))
     {
     paraListState(batch, jaFinished);
+    }
+else if (sameWord(command, "status"))
+    {
+    paraStatus(batch);
     }
 else if (sameWord(command, "problems") || sameWord(command, "problem"))
     {
