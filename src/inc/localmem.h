@@ -22,6 +22,9 @@ void *lmAlloc(struct lm *lm, size_t size);
 char *lmCloneString(struct lm *lm, char *string);
 /* Return local mem copy of string. */
 
+struct slName *lmSlName(struct lm *lm, char *name);
+/* Return slName in memory. */
+
 void *lmCloneMem(struct lm *lm, void *pt, size_t size);
 /* Return a local mem copy of memory block. */
 
