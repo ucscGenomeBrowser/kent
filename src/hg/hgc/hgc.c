@@ -107,7 +107,7 @@
 #include "pseudoGeneLink.h"
 #include "axtLib.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.429 2003/06/16 23:31:08 baertsch Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.430 2003/06/17 00:34:08 kent Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -9241,10 +9241,10 @@ int dupId; /*Holds the duplication id*/
 int rowOffset;
 char title[256];
 char *tbl = cgiUsualString("table", cgiString("g"));
-sprintf(title, "Genome Assembly Comparision");
+sprintf(title, "Genome Duplications");
 cartWebStart(cart, title);
 
-printf("<H2>Genome Assembly Comparision</H2>\n");
+printf("<H2>Genome Duplications</H2>\n");
 if (cgiVarExists("o"))
     {
     int start = cgiInt("o");
@@ -9253,7 +9253,7 @@ if (cgiVarExists("o"))
     parseSuperDupsChromPointPos(dupName,oChrom,&oStart,&dupId);
 
 
-    sprintf(query, "select * from %s where chrom = '%s' and chromStart = %d "
+    safef(query, sizeof(query), "select * from %s where chrom = '%s' and chromStart = %d "
 	    "and uid = %d and otherStart = %d",
 	    track, seqName, start, dupId, oStart);
     sr = sqlGetResult(conn, query);
