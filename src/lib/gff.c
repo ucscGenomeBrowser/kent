@@ -10,7 +10,7 @@
 #include "gff.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: gff.c,v 1.17 2004/03/13 05:37:03 markd Exp $";
+static char const rcsid[] = "$Id: gff.c,v 1.18 2005/03/22 01:22:13 kate Exp $";
 
 void gffGroupFree(struct gffGroup **pGroup)
 /* Free up a gffGroup including lineList. */
@@ -49,6 +49,7 @@ if ((gff = *pGff) != NULL)
     freeHash(&gff->groupHash);
     freeHash(&gff->geneIdHash);
     freeHash(&gff->exonHash);
+    freeHash(&gff->intronStatusHash);
     slFreeList(&gff->lineList);
     slFreeList(&gff->seqList);
     slFreeList(&gff->sourceList);
@@ -205,6 +206,14 @@ for (;;)
            errAbort("Expecting number after exon_number, got %s line %d of %s", val, lineIx, fileName);
        gl->exonNumber = atoi(val);
        }
+   else if (sameString("intron_id", type))
+       gl->intronId = val;
+   else if (sameString("intron_status", type))
+       {
+       if ((hel = hashLookup(gff->intronStatusHash, val)) == NULL)
+	   hel = hashAdd(gff->intronStatusHash, val, NULL);
+       gl->intronStatus = hel->name;
+       }
    }
 if (gl->group == NULL)
     {
@@ -331,6 +340,7 @@ gff->featureHash = newHash(6);
 gff->groupHash = newHash(12);
 gff->geneIdHash = newHash(12);
 gff->exonHash = newHash(16);
+gff->intronStatusHash = newHash(4);
 return gff;
 }
 

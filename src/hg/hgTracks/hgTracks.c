@@ -88,8 +88,9 @@
 #include "versionInfo.h"
 #include "bedCart.h"
 #include "cytoBand.h"
+#include "gencodeIntron.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.928 2005/03/20 23:06:47 markd Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.929 2005/03/22 01:22:13 kate Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -8708,6 +8709,37 @@ linkedFeaturesMethods(tg);
 tg->loadItems = loadGenePred;
 }
 
+Color colorGencodeIntron(struct track *tg, void *item, struct vGfx *vg)
+/* Return color of ENCODE gencode intron track item.
+ * Use recommended color palette pantone colors (level 4) for red, green, blue*/
+{
+struct gencodeIntron *intron = (struct gencodeIntron *)item;
+
+if (sameString(intron->status, "not_tested"))
+    return vgFindColorIx(vg, 10, 12, 17);       /* black */
+if (sameString(intron->status, "RT_positive"))
+    return vgFindColorIx(vg, 145,51,56);       /* red */
+if (sameString(intron->status, "RT_negative"))
+    return vgFindColorIx(vg, 61,142,51);       /* green */
+if (sameString(intron->status, "RT_wrong_junction"))
+    return makeOrangeColor(vg);                 /* orange */
+if (sameString(intron->status, "RT_submitted"))
+    return vgFindColorIx(vg, 0,91,191);       /* blue */
+return vgFindColorIx(vg, 10, 12, 17);       /* black */
+}
+
+static void loadGencodeIntron(struct track *tg)
+/* Load up simple diffs from database table to track items. */
+{
+bedLoadItem(tg, tg->mapName, (ItemLoader)gencodeIntronLoad);
+}
+
+static void gencodeIntronMethods(struct track *tg)
+/* Load up custom methods for ENCODE Gencode intron validation track */
+{
+tg->loadItems = loadGencodeIntron;
+tg->itemColor = colorGencodeIntron;
+}
 
 void fillInFromType(struct track *track, struct trackDb *tdb)
 /* Fill in various function pointers in track from type field of tdb. */
@@ -9660,6 +9692,8 @@ registerTrackHandler("chimpSimpleDiff", chimpSimpleDiffMethods);
 registerTrackHandler("tfbsCons", tfbsConsMethods);
 registerTrackHandler("tfbsConsSites", tfbsConsSitesMethods);
 registerTrackHandler("pscreen", simpleBedTriangleMethods);
+/* ENCODE related */
+registerTrackHandler("encodeGencodeIntron", gencodeIntronMethods);
 
 /* Load regular tracks, blatted tracks, and custom tracks. 
  * Best to load custom last. */

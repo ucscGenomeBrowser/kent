@@ -321,10 +321,11 @@ cat > load.csh << 'EOF'
 
 # TODO: Remove Nov08 data
 
-# GENCODE Sanger Havana annotations
+# GENCODE Sanger Havana annotations (hiram)
+#               (IN PROGRESS 2005-03-21 kate)
     ssh hgwdev
-    mkdir -p /cluster/data/encode/sanger/havana
-    cd /cluster/data/encode/sanger/havana
+    mkdir -p /cluster/data/encode/sanger/gencode
+    cd /cluster/data/encode/sanger/gencode
     wget --timestamping --force-directories --directory-prefix=. \
 	--dont-remove-listing --recursive --level=3 --no-parent \
 	--no-host-directories --cut-dirs=5 \
@@ -347,6 +348,9 @@ priority 113
 visibility hide
 color 170,100,0
 type genePred
+
+    sed 's/$/ 0  0/' CHR_coord/EN*gtf > load.bed
+    ldGencodeIntron hg16 encodeSangerGencodeIntron CHR_coord/EN*gtf
 
 
 # Sanger Chip/chip  (IN PROGRESS 2005-03-14 kate)
