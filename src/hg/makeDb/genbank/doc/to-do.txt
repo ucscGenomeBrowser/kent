@@ -790,3 +790,41 @@ Error: danRer1: gene danRer1.refFlat:1854 NM_131267 chr7: NM_131267 geneName "ir
       /db_xref="LocusID:3952"
   drop old refseq build programs from tree.
 
+
+- dna based ones: 
+      select * from kgXref where kgID like "NM_%" limit 10;
+        NM_000050 -> P00966 swiss Cross-references ->  L00084 is dna
+
+        use kgHg17BTemp
+            locus2Acc0;
+            locus2Ref0
+        use proteins;
+        describe hugo;
+
+   KG gene lookup:
+      start with swissprot accession (spAcc)
+      spAcc lookup gbAccs in swissProt
+      if any of gbAccs in mrna table, then done (on to blat, etc)
+      
+      (see dnaGene.c)
+      foreach refAcc in locus2Ref:
+            locusId = locus2Ref[refAcc].locusId
+            lookup locusId in locus2acc0 with seqType='g', 
+            gbAcc = first of these, now have a (refAcc,gbAcc) pair
+            lookup refAcc in proteins.hugo, 
+            spIdHugo = proteins.hugo.swissprot
+
+            # need to get display id
+            lookup spIdHugo in proteins.spXref 
+            spDisplayId = proteins.spXref.displayID
+
+            if spDisplayId == NULL
+               # look at all matching spxref2
+               foreach gbAcc in locus2Acc0 with locusId:
+                     gbAcc in proteins.spXref.extAC
+                     spDisplayId = spXref.display.ID, break
+            if spDisplayId != NULL:
+               get refGene, output refGene + spID + spDisplayId
+            
+
+       spAcc/spDisplayId, alignment
