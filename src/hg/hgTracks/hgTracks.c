@@ -9868,7 +9868,7 @@ if (!hideControls)
     printf("<B>Track Controls:</B>");
     printf("</th></tr>\n");
     printf("<tr>\n");
-    printf("<tr><td colspan='5' align='middle'>Note: Tracks with more than %d items are always displayed in "
+    printf("<tr><td colspan='5' align='middle' nowrap>Note: Tracks with more than %d items are always displayed in "
            "dense mode.</td></tr>\n", maxItemsInFullTrack);
 
     cg = startControlGrid(MAX_CONTROL_COLUMNS, "left");
