@@ -27,7 +27,7 @@
 #include "minGeneInfo.h"
 #include <regex.h>
 
-static char const rcsid[] = "$Id: hgFind.c,v 1.159 2005/03/24 22:38:49 heather Exp $";
+static char const rcsid[] = "$Id: hgFind.c,v 1.160 2005/03/29 04:03:29 angie Exp $";
 
 extern struct cart *cart;
 char *hgAppName = "";
@@ -798,6 +798,19 @@ static void mrnaHtmlOnePos(struct hgPosTable *table, struct hgPos *pos, FILE *f)
 fprintf(f, "%s", pos->description);
 }
 
+static void makeGbTrackTableName(char *tableName, size_t tnSize, char *base)
+/* Now we have to watch out for scaffold-based browsers where 
+ * the track is all_{mrna,est} not {mrna,est}. */
+{
+char splitTable[256];
+safef(splitTable, sizeof(splitTable), "%s_%s",
+      hDefaultChrom(), base);
+if (hTableExists(splitTable))
+    safef(tableName, tnSize, "%s", base);
+else
+    safef(tableName, tnSize, "all_%s", base);
+}
+
 static boolean findMrnaPos(char *acc,  struct hgPositions *hgp)
 /* Find MRNA or EST position(s) from accession number.
  * Look to see if it's an mRNA or EST.  Fill in hgp and return
@@ -842,16 +855,8 @@ else
             }
         else
             {
-	    /* Now we have to watch out for scaffold-based browsers where 
-	     * the track is all_{mrna,est} not {mrna,est}. */
-	    char splitTable[256];
-	    safef(splitTable, sizeof(splitTable), "%s_%s",
-		  hDefaultChrom(), suffix);
-	    if (hTableExists(splitTable))
-		safef(tableName, sizeof(tableName), "%s", suffix);
-	    else
-		safef(tableName, sizeof(tableName), "all_%s", suffix);
-            }
+	    makeGbTrackTableName(tableName, sizeof(tableName), suffix);
+	    }
 
 	AllocVar(table);
 	table->htmlStart = mrnaHtmlStart;
@@ -1006,7 +1011,7 @@ return FALSE;
 }
 
 static int addMrnaPositionTable(struct hgPositions *hgp, 
-                                struct slName *accList, struct cart *cart,
+                                struct slName **pAccList, struct cart *cart,
                                 struct sqlConnection *conn, char *hgAppName,
                                 boolean aligns, boolean isXeno)
 /* Generate table of positions that match criteria.
@@ -1016,6 +1021,7 @@ char title[256];
 struct hgPosTable *table;
 struct hgPos *pos;
 struct slName *el;
+struct slName *elToFree = NULL;
 struct dyString *dy = newDyString(256);
 char **row;
 char query[256];
@@ -1030,25 +1036,21 @@ int itemOrganismID;
 int organismID = hOrganismID(hgp->database);   /* id from mrna organism table */
 int alignCount = 0;
 char hgAppCombiner = (strchr(hgAppName, '?')) ? '&' : '?';
-boolean xenoExists = hTableExists("xenoMrna");
-
-/* Don't do xeno alignments if xeno table doesn't exist */
-if (!aligns && !xenoExists) 
-    return alignCount;
 
 AllocVar(table);
 
 /* Examine all accessions to see if they fit criteria for
  * this table. Add all matching to the position list, and
  * remove from the accession list */
-for (el = accList; el != NULL; el = el->next)
+for (el = *pAccList; el != NULL; el = el->next)
     {
+    freez(&elToFree);
     acc = el->name;
     if (!mrnaInfo(acc, conn, &mrnaType, &itemOrganismID))
         {
         /* bad element -- remove from list */
-        slRemoveEl(accList, el);
-        freeMem(el);
+        slRemoveEl(pAccList, el);
+        elToFree = el;
         continue;
         }
     /* check if item matches xeno criterion */
@@ -1075,9 +1077,14 @@ for (el = accList; el != NULL; el = el->next)
         }
     else
         {
+	char tableName[64];
+	if (isXeno)
+	    safef(tableName, sizeof(tableName), "xenoMrna");
+	else
+	    makeGbTrackTableName(tableName, sizeof(tableName), "mrna");
         /* display mRNA details page -- need to add dummy CGI variables*/
-        dyStringPrintf(dy, "<A HREF=\"%s%cg=xenoMrna&i=%s&c=0&o=0&l=0&r=0",
-		       hgcName(), hgAppCombiner, acc);
+        dyStringPrintf(dy, "<A HREF=\"%s%cg=%s&i=%s&c=0&o=0&l=0&r=0",
+		       hgcName(), hgAppCombiner, tableName, acc);
         }
     if (ui != NULL)
         dyStringPrintf(dy, "&%s", ui);
@@ -1120,17 +1127,13 @@ for (el = accList; el != NULL; el = el->next)
     pos->description = cloneString(dy->string);
 
     /* remove processed element from accession list */
-    // TODO: figure out why removal from list doesn't work
-    slRemoveEl(accList, el);
-    // TODO: figure out why freeing this mem crashes
-    //freeMem(el);
+    slRemoveEl(pAccList, el);
+    elToFree = el;
     }
 
 /* fill in table and add to hgp only if it contains results */
-// TODO: figure out why list always has 1 element
-//if (slLastEl(&table->posList) != NULL)
-alignCount = slCount(&table->posList);
-if (alignCount > 1)
+alignCount = slCount(table->posList);
+if (alignCount > 0)
     {
     char *organism = hOrganism(hgp->database);      /* dbDb organism column */
     slReverse(&table->posList);
@@ -1203,17 +1206,17 @@ if (allKeysList == NULL)
 
 /* generate position lists and add to hgp */
 /* organism aligning */
-alignCount = addMrnaPositionTable(hgp, allKeysList, cart, conn, hgAppName,
+alignCount = addMrnaPositionTable(hgp, &allKeysList, cart, conn, hgAppName,
 				  TRUE, FALSE);
 /* organism non-aligning */
-addMrnaPositionTable(hgp, allKeysList, cart, conn, hgAppName, FALSE, FALSE);
+addMrnaPositionTable(hgp, &allKeysList, cart, conn, hgAppName, FALSE, FALSE);
 /* xeno aligning */
 /* NOTE: to suppress display of xeno mrna's in non-model organisms
  * (RT 801 and 687), uncommented the following...
 /* add to display list only if there is a scarcity of items
  * already listed as aligning (low number of own mRna's for this organism) */
 if (alignCount < 20)
-    addMrnaPositionTable(hgp, allKeysList, cart, conn, hgAppName, TRUE, TRUE);
+    addMrnaPositionTable(hgp, &allKeysList, cart, conn, hgAppName, TRUE, TRUE);
 hFreeConn(&conn);
 return(found);
 }
