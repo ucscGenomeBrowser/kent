@@ -297,11 +297,14 @@ static char dummyFrag;
 
 while (lineFileRow(lf, words))
     {
-    AllocVar(clone);
-    slAddHead(&cloneList, clone);
-    hashAddSaveName(cloneHash, words[0], clone, &clone->name);
-    clone->size = lineFileNeedNum(lf, words, 2);
-    clone->phase = atoi(words[3]);
+    if (!sameString(words[3], "0"))
+	{
+	AllocVar(clone);
+	slAddHead(&cloneList, clone);
+	hashAddSaveName(cloneHash, words[0], clone, &clone->name);
+	clone->size = lineFileNeedNum(lf, words, 2);
+	clone->phase = atoi(words[3]);
+	}
     }
 lineFileClose(&lf);
 slSort(&cloneList, mmCloneCmpMapPos);
@@ -677,7 +680,12 @@ while ((psl = pslNext(lf)) != NULL)
 	}
     ++goodCount;
     fragToCloneName(psl->tName, cloneName);
-    clone = hashMustFindVal(cloneHash, cloneName);
+    clone = hashFindVal(cloneHash, cloneName);
+    if (clone == NULL)
+        {
+	warn("Clone %s is in %s but not cloneInfo", cloneName, fileName);
+	continue;
+	}
     cloneRefAddUnique(&bep->cloneList, clone);
     bepRefAddUnique(&clone->bepList, bep);
     if (sameString(psl->qName, bep->a))
