@@ -5025,7 +5025,6 @@ char *grouping = cartUsualString(cart, "nci60.group", "Tissue");
 int i=0;
 bedList = tg->items;
 
-
 if(tg->visibility == tvDense)
     {
     tg->items = lfsFromMsBedSimple(bedList, "NCI 60");
@@ -5040,6 +5039,35 @@ else
     }
 bedFreeList(&bedList);
 }
+
+void lfsFromRosettaBed(struct trackGroup *tg)
+/* filters the bedList stored at tg->items
+into a linkedFeaturesSeries as determined by
+filter type */
+{
+struct linkedFeaturesSeries *lfsList = NULL, *lfs;
+struct linkedFeatures *lf;
+struct bed *bed = NULL, *bedList= NULL;
+char *grouping = cartUsualString(cart, "rosetta.group", "All");
+int i=0;
+bedList = tg->items;
+
+
+if(tg->visibility == tvDense)
+    {
+    tg->items = lfsFromMsBedSimple(bedList, "Rosetta");
+    }
+else if(sameString(grouping,"All"))
+    {
+    tg->items = msBedGroupByIndex(bedList, "hgFixed", "rosettaExps", 0, NULL, -1);
+    }
+else if(sameString(grouping, "Common Pool"))
+    {
+    tg->items = msBedGroupByIndex(bedList, "hgFixed", "rosettaExps", 1, NULL, -1);
+    }
+bedFreeList(&bedList);
+}
+
 
 void lfsFromCghNci60Bed(struct trackGroup *tg)
 {
@@ -5246,6 +5274,30 @@ else
     }
 }
 
+char *rosettaName(struct trackGroup *tg, void *item)
+/* Return Abbreviated rosetta experiment name */
+{
+struct linkedFeaturesSeries *lfs = item;
+char *full = NULL;
+static char abbrev[32];
+char *tmp = strstr(lfs->name, "_vs_");
+if(tmp != NULL) 
+    {
+    tmp += 4;
+    full = tmp = cloneString(tmp);
+    tmp = strstr(tmp, "_(");
+    if(tmp != NULL)
+	*tmp = '\0';
+    strncpy(abbrev, full, sizeof(abbrev));
+    freez(&full);
+    }
+else 
+    {
+    strncpy(abbrev, tg->shortLabel, sizeof(abbrev));
+    }
+return abbrev;
+}
+
 void loadMaScoresBed(struct trackGroup *tg)
 /* load up bed15 data types into linkedFeaturesSeries and then set the noLines
    flag on each one */
@@ -5265,6 +5317,8 @@ void rosettaMethods(struct trackGroup *tg)
 linkedFeaturesSeriesMethods(tg);
 tg->itemColor = nci60Color;
 tg->loadItems = loadMaScoresBed;
+tg->trackFilter = lfsFromRosettaBed;
+tg->itemName = rosettaName;
 tg->mapItem = lfsMapItemName;
 tg->mapsSelf = TRUE;
 }
