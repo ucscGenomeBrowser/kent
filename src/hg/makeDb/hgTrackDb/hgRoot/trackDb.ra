@@ -899,7 +899,8 @@ type bed 5 +
 track humMus
 shortLabel Mouse Evolution
 longLabel Human/Mouse Evolutionary Mutual Information (s-score)
-altColor 255,0,0
+color 100,50,0
+altColor 255,240,200
 priority 25.6
 visibility hide
 type sample 9 
@@ -908,7 +909,8 @@ type sample 9
 track humMusL 
 shortLabel Mouse Conserv
 longLabel Human/Mouse Evolutionary Conservation Score
-altColor 0,0,255 
+color 100,50,0
+altColor 175,150,128
 priority 25.7
 visibility full
 type sample 9
@@ -916,7 +918,8 @@ type sample 9
 track musHumL
 shortLabel Human Conserv
 longLabel Mouse/Human Evolutionary Conservation Score
-altColor 0,0,255
+color 100,50,0
+altColor 175,150,128
 priority 25.8
 visibility full
 type sample 9 
