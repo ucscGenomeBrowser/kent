@@ -1418,7 +1418,7 @@ SEQ2_LEN=$BASE/S2.len
      hgsql mm4 < axtInfoInserts.sql
 
 
-# MAKING THE AXTTIGHT FROM AXTBEST (TBD)
+# MAKING THE AXTTIGHT FROM AXTBEST (DONE - 2003-10-31 - Hiram)
     # After creating axtBest alignments above, use subsetAxt to get axtTight:
     ssh kksilo
     cd /cluster/data/mm4/bed/blastz.rn3/axtNet
@@ -1566,7 +1566,30 @@ SEQ2_LEN=$BASE/S2.len
     ../../jkStuff/BlastZ_run2.sh
     cd run.2
     para try, check, push, etc ...
-XXXX running 2003-10-31 21:30
+# Completed: 37 of 44 jobs
+# Crashed: 7 jobs
+# CPU time in finished jobs:      12417s     206.95m     3.45h    0.14d  0.000 y
+# IO & Wait Time:                186792s    3113.20m    51.89h    2.16d  0.006 y
+# Average job time:                5384s      89.73m     1.50h    0.06d
+# Longest job:                    33349s     555.82m     9.26h    0.39d
+# Submission to last job:         33401s     556.68m     9.28h    0.39d
+    # failed: chr17, chr1_random, chr2, chr3, chr5, chr7, chrUn_random
+    # finish these on kolossus
+    cat << '_EOF_' > runFailed.sh
+#!/bin/sh
+
+for c in 17 1_random 2 3 5 7 Un_random
+do
+time ../../../jkStuff/x86_64-chromlav2axt \
+        /cluster/data/mm4/bed/blastzSelf/lav/chr${c} \
+        /cluster/data/mm4/bed/blastzSelf/axtChrom/chr${c}.axt \
+        /cluster/data/mm4/nib /cluster/data/mm4/nib
+done
+'_EOF_'
+    #
+    chmod +x runFailed.sh
+    ./runFailed.sh > runFailed.out 2>&1
+XXXX running 2003-11-03 08:35
 
 # PRODUCING GENSCAN PREDICTIONS (DONE - 2003-10-27 - Hiram)
 
@@ -1840,14 +1863,14 @@ rm -fr /tmp/${root1}_${root2}
 # Submission to last job:          5781s      96.35m     1.61h    0.07d
 
 # Compile alignments and lift the files (takes a while)
-    ssh kolossus
+    ssh kksilo
     cd /cluster/data/mm4/bed/bacends
     time pslSort dirs raw.psl temp bacEnds.out/*
-    # real    836m25.100s	<- that is 14 hours !
-    # user    522m23.850s
-    # sys     63m52.100s
-    # it is a 68 Gb file !
+    # real    852m20.286s	<- over 14 hours !
+    # user    522m19.890s
+    # sys     65m43.910s
 
+    ssh kolossus
     time pslReps -nearTop=0.01 -minCover=0.7 -minAli=0.8 -noIntrons raw.psl  bacEnds.psl /dev/null
 # Processed 540122688 alignments
 # 5289.06user 306.10system 1:56:57elapsed
@@ -1861,6 +1884,8 @@ rm -fr /tmp/${root1}_${root2}
     # sys     17m13.940s
 
     rmdir temp
+    #	You will want to keep this file around until later processing is
+    #	proven correct
     rm raw.psl		# 68 Gb !  It takes a while even to remove it.
 
     ssh kksilo
