@@ -27,7 +27,11 @@
 #endif
 
 #ifndef NIB_H
+    #include "nib.h"
 #endif
+
+
+
 
 
 unsigned int flipNegStrand( char strand, unsigned int start, unsigned int size )
