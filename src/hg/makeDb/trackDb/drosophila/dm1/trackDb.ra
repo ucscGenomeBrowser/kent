@@ -72,25 +72,25 @@ exonArrows off
 showTopScorers 200
 type bed 5 .
 
-track multiz7way
+track multizForPhastConsPaper
 shortLabel Conservation (Std)
-longLabel Six Flies and Mosquito, Multiz Alignments & Standardized Conservation
+longLabel Three Files & Mosquito, Multiz Alignments & Standardized Conservation
 group compGeno
-priority 106
-visibility hide
+priority 106.01
+visibility pack
 type wigMaf 0.0 1.0
 maxHeightPixels 100:40:11
-wiggle phastCons7way
+wiggle phastConsPaper
 yLineOnOff Off
 autoScaleDefault Off
-pairwise 041109
-speciesOrder droYak1 droAna1 dp2 droVir1 droMoj1 anoGam1
+pairwise myp2a
+speciesOrder droYak1 dp2 anoGam1
 
 track phastConsElementsPaper
 shortLabel Most Cons. (Std)
-longLabel PhastCons Conserved Elements for 6 Flies and Mosquito, Standardized Across Species
+longLabel PhastCons Conserved Elements for Three Flies and Mosquito, Standardized Across Species
 group compGeno
-priority 106.01
+priority 106.02
 visibility hide
 exonArrows off
 showTopScorers 200
