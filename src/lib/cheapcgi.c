@@ -672,11 +672,11 @@ if (checked == NULL) checked = menu[0];
 
 if (NULL != extraAttribs)
     {
-    printf("<SELECT ALIGN=CENTER NAME=\"%s\" %s>", name, extraAttribs);
+    printf("<SELECT NAME=\"%s\" %s>", name, extraAttribs);
     }
 else
     {
-    printf("<SELECT ALIGN=CENTER NAME=\"%s\">", name);
+    printf("<SELECT NAME=\"%s\">", name);
     }
 
 for (i=0; i<menuSize; ++i)
