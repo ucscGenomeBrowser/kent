@@ -10,17 +10,30 @@
 #include "hdb.h"
 #include "liftOverChain.h"
 
-static char const rcsid[] = "$Id: hgAddLiftOverChain.c,v 1.1 2004/04/07 22:30:54 kate Exp $";
+static char const rcsid[] = "$Id: hgAddLiftOverChain.c,v 1.2 2005/02/02 08:46:50 aamp Exp $";
 
 #define TABLE_NAME "liftOverChain"
 
 /* Command line options */
 char *path = NULL; /* filename instead of 
                         /gbdb/<fromDb>/liftOver/<fromDb>To<ToDb>.over.chain */
+float minMatch = 0.95; /* Minimum ratio of bases that must remap. */
+int minSizeT = 0; /* Minimum chain size in target. */
+int minSizeQ = 0; /* Minimum chain size in query. */
+boolean multiple = FALSE; /* Map query to multiple regions. */
+float minBlocks = 1; /* Min ratio of alignment blocks/exons that must map. */
+boolean fudgeThick = FALSE; /* If thickStart/thickEnd is not mapped, use the,
+                              closest mapped base. */
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
         {"path", OPTION_STRING},
+        {"minMatch", OPTION_FLOAT},
+        {"minSizeT", OPTION_INT},
+        {"minSizeQ", OPTION_INT},
+        {"multiple", OPTION_BOOLEAN},
+        {"minBlocks", OPTION_FLOAT},
+        {"fudgeThick", OPTION_BOOLEAN},
         {NULL, 0}
 };
 
@@ -33,7 +46,16 @@ errAbort(
     "   hgAddLiftOverChain fromDatabase toDatabase chainFile\n"
     "options:\n"
     "    -path=<path>\tfile pathname to use:\n"
-    "                           (default /gbdb/<fromDb>To<ToDb>.over.chain)"
+    "                           (default /gbdb/<fromDb>To<ToDb>.over.chain)\n"
+    "    -minMatch=0.N Minimum ratio of bases that must remap. Default %3.2f\n"
+    "    -minBlocks=0.N Minimum ratio of alignment blocks/exons that must map\n"
+    "                  (default %3.2f)\n"
+    "    -fudgeThick    If thickStart/thickEnd is not mapped, use the closest \n"
+    "                  mapped base.  Recommended if using -minBlocks.\n"
+    "    -multiple               Allow multiple output regions\n"
+    "    -minSizeT, -minSizeQ    Minimum chain size in target/query,\n" 
+    "                             when mapping to multiple output regions\n"
+    "                                     (default 0, 0)"
     );
 }
 
@@ -55,6 +77,12 @@ if (!sqlTableExists(conn, TABLE_NAME))
     dyStringPrintf(dy, "  fromDb varchar(255) not null,\n");
     dyStringPrintf(dy, "  toDb varchar(255) not null,\n");
     dyStringPrintf(dy, "  path longblob not null,\n");
+    dyStringPrintf(dy, "  minMatch float not null,\n");
+    dyStringPrintf(dy, "  minSizeT int unsigned not null,\n");
+    dyStringPrintf(dy, "  minSizeQ int unsigned not null,\n");
+    dyStringPrintf(dy, "  multiple char(1) not null,\n");
+    dyStringPrintf(dy, "  minBlocks float not null,\n");
+    dyStringPrintf(dy, "  fudgeThick char(1) not null\n");
     dyStringAppend(dy, ")\n");
     sqlRemakeTable(conn, TABLE_NAME, dy->string);
     freeDyString(&dy);
@@ -72,6 +100,13 @@ if (!fileExists(chainFile))
 loChain.fromDb = fromDb;
 loChain.toDb = toDb;
 loChain.path = chainFile;
+loChain.minMatch = minMatch;
+loChain.minSizeQ = minSizeQ;
+loChain.minSizeT = minSizeT;
+loChain.multiple[0] = (multiple) ? 'Y' : 'N';
+loChain.minBlocks = minBlocks;
+loChain.fudgeThick[0] = (fudgeThick) ? 'Y' : 'N';
+
 liftOverChainSaveToDbEscaped(conn, &loChain, TABLE_NAME, 1024);
 hDisconnectCentral(&conn);
 }
@@ -94,6 +129,12 @@ upperToDb[0] = toupper(upperToDb[0]);
 safef(buf, sizeof(buf), "/gbdb/%s/liftOver/%sTo%s.over.chain", 
                                         fromDb, fromDb, upperToDb);
 path = optionVal("path", buf);
+minMatch = optionFloat("minMatch", minMatch);
+minSizeT = optionInt("minSizeT", minSizeT);
+minSizeT = optionInt("minSizeT", minSizeQ);
+multiple = optionExists("multiple");
+minBlocks = optionFloat("minBlocks", minBlocks);
+fudgeThick = optionExists("fudgeThick");
 hgAddLiftOverChain(fromDb, toDb, path);
 return 0;
 }
