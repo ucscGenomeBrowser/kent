@@ -385,7 +385,7 @@ in = inString;
 out = outString;
 while ((c = *in++) != 0)
     {
-    if (isalnum(c) || c == '.')
+    if (isalnum(c) || c == '.' || c == '_')
         *out++ = c;
     else if (c == ' ')
         *out++ = '+';

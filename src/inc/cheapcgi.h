@@ -130,3 +130,7 @@ boolean cgiSpoof(int *pArgc, char *argv[]);
  *        cgiSpoof(&argc, argv);
  */
 
+boolean cgiFromCommandLine(int *pArgc, char *argv[], boolean preferWeb);
+/* Use the command line to set up things as if we were a CGI program. 
+ * If preferWeb is TRUE will choose real CGI variables over command
+ * line ones. */
