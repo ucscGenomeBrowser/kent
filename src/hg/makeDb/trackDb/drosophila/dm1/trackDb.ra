@@ -138,5 +138,5 @@ longLabel Spellman Rubin Similarly Expressed Domains from Microarray
 priority 107
 group compGeno
 visibility dense
-type bed 4 +
+type bed 3 +
 
