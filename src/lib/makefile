@@ -29,4 +29,4 @@ clean:
 	rm -f ${O} $(MACHTYPE)/jkweb.a
 
 tags:
-	etags ../inc/*.h ../lib/*.c ../hg/inc/*.h ../hg/lib/*.c  ../hg/hgTracks/hgTracks.c
+	etags ../inc/*.h ../lib/*.h ../lib/*.c  ../hg/inc/*.h ../hg/lib/*.h ../hg/lib/*.c ../hg/hgTracks/hgTracks.c ../hg/hgc/hgc.c ../hg/hgTrackUi/hgTrackUi.c
