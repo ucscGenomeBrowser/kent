@@ -50,6 +50,9 @@ struct hash *sqlHashOfDatabases();
 void sqlDisconnect(struct sqlConnection **pSc);
 /* Close down connection. */
 
+char* sqlGetDatabase(struct sqlConnection *sc);
+/* Get the database associated with an connection. */
+
 struct sqlConnCache *sqlNewConnCache(char *database);
 /* Return a new connection cache. (Useful if going to be
  * doing lots of different queries in different routines

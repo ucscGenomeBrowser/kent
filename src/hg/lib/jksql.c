@@ -94,6 +94,12 @@ if (sc != NULL)
     }
 }
 
+char* sqlGetDatabase(struct sqlConnection *sc)
+/* Get the database associated with an connection. */
+{
+return sc->conn->db;
+}
+
 void sqlCleanupAll()
 /* Cleanup all open connections and resources. */
 {
@@ -334,7 +340,7 @@ int numScan, numRecs, numSkipped, numWarnings;
 char *localOpt, *info;
 struct sqlResult *sr;
 
-if ((options & SQL_SERVER_TAB_FILE) == 0)
+if (options & SQL_SERVER_TAB_FILE)
     {
     /* tab file on server requiries full path */
     strcpy(tabPath, "");
