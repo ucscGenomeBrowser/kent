@@ -834,21 +834,17 @@ cover the same region </LI>
 <P>The following tables contain additional information about mRNA sequences: 
 <UL>
   <LI><A 
-  href="#MrnaInfo">mrna</A> 
-  - Very relational mRNA and EST information table. Consists mostly of the mRNA 
-  accession and pointers into the tables below. 
-  <LI><A 
-  href="#MrnaInfo">author</A> 
+  href="#MrnaChar">author</A> 
   - List of authors 
   <LI><A 
   href="#MrnaInfo">bacClone</A> 
   - Name of the Bacterial Artificial Chromosome clone that a sequence 
     was grown in, if applicable (Last used Aug. 2001) </LI>
   <LI><A 
-  href="#MrnaInfo">cds</A> 
+  href="#MrnaChar">cds</A> 
   - Coding sequence in GenBank format 
   <LI><A 
-  href="#MrnaInfo">cell</A> 
+  href="#MrnaChar">cell</A> 
   - Cell types 
   <LI><A 
   href="#MrnaInfo">center</A> 
@@ -860,37 +856,44 @@ cover the same region </LI>
   href="#MrnaInfo">cytoMap</A> 
   - Position on a cytological map (Last used Aug. 2001)
   <LI><A 
-  href="#MrnaInfo">description</A> 
+  href="#MrnaChar">description</A> 
   - Short (one line) description 
   <LI><A 
-  href="#MrnaInfo">development</A> 
+  href="#MrnaChar">development</A> 
   - Stage of development of organism 
   <LI><A 
-  href="#MrnaInfo">geneName</A> 
+  href="#MrnaChar">geneName</A> 
   - Name of gene 
   <LI><A 
-  href="#MrnaInfo">keyword</A> 
+  href="#MrnaChar">keyword</A> 
   - Associated keywords in GenBank 
   <LI><A 
-  href="#MrnaInfo">library</A> 
+  href="#MrnaChar">library</A> 
   - Clone library (mostly for ESTs) 
   <LI><A 
-  href="#MrnaInfo">mrnaClone</A> 
+  href="#MrnaChar">moddate</A> 
+  - Last modification date
+  <LI><A 
+  href="#MrnaInfo">mrna</A> 
+  - Very relational mRNA and EST information table. Consists mostly of the mRNA 
+  accession and pointers into other tables that contain additional mRNA information. 
+  <LI><A 
+  href="#MrnaChar">mrnaClone</A> 
   - Clone name (mostly for ESTs) 
   <LI><A 
-  href="#MrnaInfo">organism</A> 
+  href="#MrnaChar">organism</A> 
   - Name of organism 
   <LI><A 
-  href="#MrnaInfo">productName</A> 
+  href="#MrnaChar">productName</A> 
   - Protein product name 
   <LI><A 
-  href="#MrnaInfo">sex</A> 
+  href="#MrnaChar">sex</A> 
   - Sex of organism 
   <LI><A 
-  href="#MrnaInfo">source</A> 
+  href="#MrnaChar">source</A> 
   - Source field in GenBank, often fairly redundant with other fields 
   <LI><A 
-  href="#MrnaInfo">tissue</A> 
+  href="#MrnaChar">tissue</A> 
   - Tissue isolated from </LI></UL>
 <P>The last set of tables are primarily for internal use:</P>
 <UL>
@@ -2737,7 +2740,7 @@ The bacEndPairs table uses all fields.
 
 	<TABLE BGCOLOR="fffee8" WIDTH="100%" BORDERCOLOR="888888" BORDER=1><TR><TD>
 	<TABLE BGCOLOR="D9E4F8"  BACKGROUND="../images/hr.gif" WIDTH="100%"><TR><TD>
-	<FONT SIZE="4"><B><A name=MrnaInfo></A>&nbsp; mRNA and EST Data</B></FONT>
+	<FONT SIZE="4"><B>&nbsp; mRNA and EST Data</B></FONT>
 	</TD></TR></TABLE>
 	<TABLE BGCOLOR="fffee8" WIDTH=100% CELLPADDING=0><TH HEIGHT=10></TH><TR><TD WIDTH=10>&nbsp;</TD><TD>
 
@@ -2747,7 +2750,7 @@ to determine the organism, the 'organism' field in the <TT>mrna</TT> table conta
 in the corresponding <TT>organism</TT> table will give the name of the organism.
 
 
-<H4>Main mRNA/EST Information Table</H4>
+<H4><A name=MrnaInfo></A>Main mRNA/EST Information Table</H4>
 <PRE>table mrna
 "Basic information about mRNA and ESTs with links to other tables"
    (
@@ -2774,7 +2777,7 @@ in the corresponding <TT>organism</TT> table will give the name of the organism.
    )
 </PRE>
 
-<H4>mRNA/EST Characteristic Tables</H4>
+<H4><A NAME=MrnaChar></A>mRNA/EST Characteristic Tables</H4>
 This table is used for the author, bacClone, cds, cell, center, chromosome, 
 cytoMap, description, development, geneName, keyword, library, mrnaClone, 
 organism, productName, sex, source, and tissue tables.  Each has a 
