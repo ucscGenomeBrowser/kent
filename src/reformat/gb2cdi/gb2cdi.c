@@ -251,8 +251,8 @@ static char devStage[128];
 int maxProduct = 2048-1;
 char *product = needMem(maxProduct+1);
 struct cdi *cdi = NULL;
-boolean isStratagene;  /* Stratagene EST? */
-boolean isUaWuEst;     /* Univ. of Arizona/Washington U. EST? */
+boolean isStratagene = FALSE;  /* Stratagene EST? */
+boolean isUaWuEst = FALSE;     /* Univ. of Arizona/Washington U. EST? */
 char *section;
 int baseCount;
 DNA *dna = NULL;
