@@ -182,11 +182,12 @@ for (;;)	/* Skip over white space. */
 	}
     tkz->linePt = tkz->curLine;
     }
-if (isalnum(c))
+if (isalnum(c) || (c == '_'))
     {
     for (;;)
 	{
-	if (!isalnum(*(++s)))
+        s++;
+	if (!(isalnum(*s) || (*s == '_')))
 	    break;
 	}
     end = s;
@@ -437,6 +438,12 @@ void cTable(struct dbObject *dbObj, FILE *f)
 struct column *col;
 struct lowTypeInfo *lt;
 struct dbObject *obType;
+char defineName[256];
+
+safef(defineName, sizeof(defineName), "%s", dbObj->name);
+touppers(defineName);
+fprintf(f, "#define %s_NUM_COLS %d\n\n", defineName,
+        slCount(dbObj->columnList));
 
 fprintf(f, "struct %s\n", dbObj->name);
 fprintf(f, "/* %s */\n", dbObj->comment);
@@ -862,11 +869,11 @@ void dynamicLoadAll(struct dbObject *table, FILE *f, FILE *hFile)
 char *tableName = table->name;
 
 fprintf(hFile, "struct %s *%sLoadAll(char *fileName);\n", tableName, tableName);
-fprintf(hFile, "/* Load all %s from a tab-separated file.\n", tableName);
+fprintf(hFile, "/* Load all %s from whitespace-separated file.\n", tableName);
 fprintf(hFile, " * Dispose of this with %sFreeList(). */\n\n", tableName);
 
 fprintf(f, "struct %s *%sLoadAll(char *fileName) \n", tableName, tableName);
-fprintf(f, "/* Load all %s from a tab-separated file.\n", tableName);
+fprintf(f, "/* Load all %s from a whitespace-separated file.\n", tableName);
 fprintf(f, " * Dispose of this with %sFreeList(). */\n", tableName);
 fprintf(f, "{\n");
 fprintf(f, "struct %s *list = NULL, *el;\n", tableName);
