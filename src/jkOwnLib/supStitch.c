@@ -15,7 +15,7 @@
 #include "supStitch.h"
 #include "chainBlock.h"
 
-static char const rcsid[] = "$Id: supStitch.c,v 1.25 2004/11/06 02:07:26 kent Exp $";
+static char const rcsid[] = "$Id: supStitch.c,v 1.26 2005/01/10 00:31:02 kent Exp $";
 
 static void ssFindBestBig(struct ffAli *ffList, bioSeq *qSeq, bioSeq *tSeq,
 	enum ffStringency stringency, boolean isProt, struct trans3 *t3List,
@@ -541,7 +541,7 @@ ssGraphFree(&graph);
 static enum ffStringency ssStringency;
 static boolean ssIsProt;
 
-static int ssGapCost(int dq, int dt)
+static int ssGapCost(int dq, int dt, void *data)
 /* Return gap penalty.  This just need be a lower bound on 
  * the penalty actually. */
 {
@@ -553,7 +553,7 @@ return cost;
 }
 
 
-static int findOverlap(struct boxIn *a, struct boxIn *b)
+static int findOverlap(struct cBlock *a, struct cBlock *b)
 /* Figure out how much a and b overlap on either sequence. */
 {
 int dq = b->qStart - a->qEnd;
@@ -561,7 +561,7 @@ int dt = b->tStart - a->tEnd;
 return -min(dq, dt);
 }
 
-static int ssConnectCost(struct boxIn *a, struct boxIn *b)
+static int ssConnectCost(struct cBlock *a, struct cBlock *b, void *data)
 /* Calculate connection cost - including gap score
  * and overlap adjustments if any. */
 {
@@ -596,7 +596,7 @@ if (overlap > 0)
 	dt -= overlap;
 	}
     }
-return overlapAdjustment + ssGapCost(dq, dt);
+return overlapAdjustment + ssGapCost(dq, dt, data);
 }
 
 
@@ -606,7 +606,7 @@ static void ssFindBestBig(struct ffAli *ffList, bioSeq *qSeq, bioSeq *tSeq,
 /* Go set up things to call chainBlocks to find best way to string together
  * blocks in alignment. */
 {
-struct boxIn *boxList = NULL, *box, *prevBox;
+struct cBlock *boxList = NULL, *box, *prevBox;
 struct ffAli *ff, *farRight = NULL;
 struct lm *lm = lmInit(0);
 int boxSize;
@@ -651,7 +651,7 @@ tMax -= tMin;
 ssStringency = stringency;
 ssIsProt = isProt;
 chainList = chainBlocks(qSeq->name, qSeq->size, '+', "tSeq", tMax, &boxList,
-	ssConnectCost, ssGapCost, NULL);
+	ssConnectCost, ssGapCost, NULL, NULL);
 
 /* Fixup crossovers on best (first) chain. */
 bestChain = chainList;
