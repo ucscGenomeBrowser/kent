@@ -18,5 +18,5 @@ set db = $1
 set out = $2
 
 echo "Doing select on $db into $db.$out"
-echo "select distinct(acc) from mrna,library where library.name like '%Athersys%' and library.id=mrna.library;" | mysql -uhguser -phguserstuff $db -A | egrep -v "acc" > $db.$out
+hgsql -N -e 'select distinct(acc) from gbCdnaInfo,library where library.name like "%Athersys%" and library.id=gbCdnaInfo.library' $db > $db.$out
 echo "Done."
