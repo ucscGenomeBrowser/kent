@@ -104,7 +104,7 @@ databases </A>&nbsp;(100 Gb)
 <LI><A HREF="#step7">Set up Hgcentral session preference table</A>
 <LI><A HREF="#step8">Create a $WEBROOT/trash apache user writable directory for temp files</A>
 <LI><A HREF="#step9">Set up HgFixed database</A>&nbsp;(500 Mb)
-<LI><A HREF="#step10">Set up the protein databases</A>&nbsp;(500 Mb)
+<LI><A HREF="#step10">Set up the protein databases</A>&nbsp;(700 Mb)
 <LI><A HREF="#step11">Set up the swissProt database</A>&nbsp;(400 Mb)
 </OL>
 <BR><BR>
@@ -204,7 +204,7 @@ rsync --progress --partial -avz \
  --exclude='goldenPath/scApr2003/*' \
  --exclude='goldenPath/hgFixed/*' \
  --exclude='goldenPath/chromReports/*' \
- --exclude='goldenPath/proteins*' \
+ --exclude='goldenPath/protein*' \
  --exclude='goldenPath/mapPlots/*' \
  --exclude='ancestors/*' \
  --exclude='zoo/*' \
@@ -599,20 +599,11 @@ mysql&gt; create database hgFixed
 10. Create the five protein databases</H4>
 
 <OL type="a">
-<LI>Download a copy of the dumped protein tables. (500 Mb)
+<LI>Download a copy of the dumped protein tables. (700 Mb)
 <PRE>
 rsync --progress --partial -avz  \
-    rsync://hgdownload.cse.ucsc.edu/genome/goldenPath/proteins092903/ \
-    $WEBROOT/goldenPath/
-rsync --progress --partial -avz  \
-    rsync://hgdownload.cse.ucsc.edu/genome/goldenPath/proteins040115/ \
-    $WEBROOT/goldenPath/
-rsync --progress --partial -avz  \
-    rsync://hgdownload.cse.ucsc.edu/genome/goldenPath/proteins040315/ \
-    $WEBROOT/goldenPath/
-rsync --progress --partial -avz  \
-    rsync://hgdownload.cse.ucsc.edu/genome/goldenPath/proteins040515/ \
-    $WEBROOT/goldenPath/
+    rsync://hgdownload.cse.ucsc.edu/genome/goldenPath/proteinDB/ \
+    $WEBROOT/goldenPath/proteinDB/
 </PRE>
 <LI>Create the protein databases
 <PRE>
@@ -621,7 +612,8 @@ mysql&gt; create database proteins040115
 mysql&gt; create database proteins040315
 mysql&gt; create database proteins040515
 </PRE>
-<LI>Import the data in a similar fashion as listed above.
+<LI>Import the data from proteinDB/proteins*/database in a similar
+	fashion as listed above.
 </OL>
 
 <H4><a NAME="step11"></A>
