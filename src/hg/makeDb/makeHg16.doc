@@ -4744,7 +4744,7 @@ doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain} {check
     gunzip ensemblPep.fa.gz
     hgPepPred hg16 ensembl ensemblPep.fa
 
-LOAD GENOMIC DUPES (TRIED - does not work - 2003-11-11 - Hiram)
+LOAD GENOMIC DUPES (DONE - 2003-11-11 - Hiram)
 o - Load genomic dupes
     ssh hgwdev
     mkdir /cluster/data/hg16/bed/genomicDups
@@ -4758,5 +4758,9 @@ o - Load genomic dupes
     gunzip *.gz
     # awk -f filter.awk oo33_dups_for_kent > genomicDups.bed
     hgsql hg16 < ~/kent/src/hg/lib/genomicDups.sql
-    hgLoadBed hg16 genomicDups Build34GenomicDups
+    hgLoadBed hg16 -oldTable genomicDups Build34GenomicDups
     # load of genomicDups did not go as planned: 57702 record(s), 0 row(s) skipped, 57702 warning(s) loading bed.tab
+    # There was an error in this data delivery.  To fixup:
+    hgsql -e \
+	'update genomicDups set name = concat(otherChrom,":",otherStart);' \
+	hg16
