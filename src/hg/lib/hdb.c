@@ -27,7 +27,7 @@
 #include "maf.h"
 #include "ra.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.166 2004/03/23 22:43:33 angie Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.167 2004/03/29 23:57:52 hiram Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
@@ -46,7 +46,6 @@ static char *hdbUser = NULL;
 static char *hdbPassword = NULL;
 static char *hdbTrackDb = NULL;
 static char *hdbTrackDbLocal = NULL;
-static char *protDbName = DEFAULT_PROTEINS;
 
 static char* getCfgValue(char* envName, char* cfgName)
 /* get a configuration value, from either the environment or the cfg file,
@@ -572,36 +571,6 @@ boolean hTableExists2(char *table)
 return(hTableExistsDb(hGetDb2(), table));
 }
 
-boolean hColExistsDb(char *db, char *table , char *column)
-/* Return TRUE if a column exists in a table in db. */
-{
-struct sqlConnection *conn = hAllocOrConnect(db);
-struct sqlResult *sr;
-boolean exists;
-char query[256];
-char *field;
-
-snprintf(query, sizeof(query), "select * from %s ", table);
-sr = sqlGetResult(conn, query);
-exists = FALSE;
-while (field = sqlFieldName(sr))
-    {
-    if (sameString(field, column ) && field != 0)
-        {
-        exists = TRUE;
-        }
-    }
-sqlFreeResult(&sr);
-hFreeOrDisconnect(&conn);
-return exists;
-}
-
-boolean hColExists(char *table, char *column)
-/* Return TRUE if a column exists in a table. */
-{
-return(hColExistsDb(hGetDb(), table, column));
-}
-
 void hParseTableName(char *table, char trackName[128], char chrom[32])
 /* Parse an actual table name like "chr17_random_blastzWhatever" into 
  * the track name (blastzWhatever) and chrom (chr17_random). */
@@ -695,7 +664,6 @@ char fileName[512];
 struct dnaSeq *block = NULL;
 struct dnaSeq *bedSeq = NULL;
 int i = 0 ;
-int size = 0;
 assert(bed);
 /* Handle very simple beds and beds with blocks. */
 if(bed->blockCount == 0)
@@ -826,7 +794,6 @@ else
 struct dnaSeq *hDnaFromSeq(char *seqName, int start, int end, enum dnaCase dnaCase)
 /* Fetch DNA */
 {
-char fileName[512];
 struct dnaSeq *seq = hChromSeq(seqName, start, end);
 if (dnaCase == dnaUpper)
     touppers(seq->dna);
@@ -977,13 +944,11 @@ static char* getSeqAndId(struct sqlConnection *conn, char *acc, HGID *retId, cha
 struct sqlResult *sr = NULL;
 char **row;
 char query[256];
-int fd;
 HGID extId;
 size_t size;
 off_t offset;
 char *buf;
 int seqTblSet = SEQ_TBL_SET;
-struct dnaSeq *seq;
 struct largeSeqFile *lsf;
 
 row = NULL;
@@ -1634,9 +1599,7 @@ int hOrganismID(char *database)
 /* Return -1 if not found */
 {
 char query[256];
-char buf[64];
 struct sqlConnection *conn = hAllocOrConnect(database);
-int organismID;
 int ret;
 
 sprintf(query, "select id from organism where name = '%s'",
@@ -1876,7 +1839,7 @@ boolean hFindBed12FieldsAndBinDb(char *db, char *table,
 	char retName[32], char retScore[32], char retStrand[32],
         char retCdsStart[32], char retCdsEnd[32],
 	char retCount[32], char retStarts[32], char retEndsSizes[32],
-        boolean *retBinned)
+        char retSpan[32], boolean *retBinned)
 /* Given a table return the fields corresponding to all the bed 12 
  * fields, if they exist.  Fields that don't exist in the given table 
  * will be set to "". */
@@ -1920,6 +1883,7 @@ if (fitFields(hash, "chrom", "chromStart", "chromEnd", retChrom, retStart, retEn
     fitField(hash, "chromStarts", retStarts) ||
 	fitField(hash, "blockStarts", retStarts);
     fitField(hash, "blockSizes", retEndsSizes);
+    fitField(hash, "span", retSpan);
     }
 /* Look for psl-style names. */
 else if (fitFields(hash, "tName", "tStart", "tEnd", retChrom, retStart, retEnd))
@@ -1932,6 +1896,7 @@ else if (fitFields(hash, "tName", "tStart", "tEnd", retChrom, retStart, retEnd))
     fitField(hash, "blockCount", retCount);
     fitField(hash, "tStarts", retStarts);
     fitField(hash, "blockSizes", retEndsSizes);
+    retSpan[0] = 0;
     }
 /* Look for gene prediction names. */
 else if (fitFields(hash, "chrom", "txStart", "txEnd", retChrom, retStart, retEnd))
@@ -1945,6 +1910,7 @@ else if (fitFields(hash, "chrom", "txStart", "txEnd", retChrom, retStart, retEnd
     fitField(hash, "exonCount", retCount);
     fitField(hash, "exonStarts", retStarts);
     fitField(hash, "exonEnds", retEndsSizes);
+    retSpan[0] = 0;
     }
 /* Look for repeatMasker names. */
 else if (fitFields(hash, "genoName", "genoStart", "genoEnd", retChrom, retStart, retEnd))
@@ -1957,6 +1923,7 @@ else if (fitFields(hash, "genoName", "genoStart", "genoEnd", retChrom, retStart,
     retCount[0] = 0;
     retStarts[0] = 0;
     retEndsSizes[0] = 0;
+    retSpan[0] = 0;
     }
 else if (startsWith("chr", table) && endsWith(table, "_gl") && hashLookup(hash, "start") && hashLookup(hash, "end"))
     {
@@ -1971,6 +1938,7 @@ else if (startsWith("chr", table) && endsWith(table, "_gl") && hashLookup(hash, 
     retCount[0] = 0;
     retStarts[0] = 0;
     retEndsSizes[0] = 0;
+    retSpan[0] = 0;
     }
 else
     gotIt = FALSE;
@@ -1978,65 +1946,6 @@ freeHash(&hash);
 hFreeOrDisconnect(&conn);
 *retBinned = binned;
 return gotIt;
-}
-
-
-boolean hFindBed12Fields(char *table, 
-	char retChrom[32], char retStart[32], char retEnd[32],
-	char retName[32], char retScore[32], char retStrand[32],
-        char retCdsStart[32], char retCdsEnd[32],
-	char retCount[32], char retStarts[32], char retEndsSizes[32])
-/* Given a table return the fields corresponding to all the bed 12 
- * fields, if they exist.  Fields that don't exist in the given table 
- * will be set to "". */
-{
-boolean isBinned;
-return hFindBed12FieldsAndBinDb(hGetDb(), table,
-				retChrom, retStart, retEnd,
-				retName, retScore, retStrand,
-				retCdsStart, retCdsEnd,
-				retCount, retStarts, retEndsSizes,
-				&isBinned);
-}
-
-boolean hFindBed12FieldsDb(char *db, char *table, 
-	char retChrom[32], char retStart[32], char retEnd[32],
-	char retName[32], char retScore[32], char retStrand[32],
-        char retCdsStart[32], char retCdsEnd[32],
-	char retCount[32], char retStarts[32], char retEndsSizes[32])
-/* Given a table return the fields corresponding to all the bed 12 
- * fields, if they exist.  Fields that don't exist in the given table 
- * will be set to "". */
-{
-boolean isBinned;
-return hFindBed12FieldsAndBinDb(db, table,
-				retChrom, retStart, retEnd,
-				retName, retScore, retStrand,
-				retCdsStart, retCdsEnd,
-				retCount, retStarts, retEndsSizes,
-				&isBinned);
-}
-
-boolean hFindFieldsAndBin(char *table, 
-	char retChrom[32], char retStart[32], char retEnd[32],
-	boolean *retBinned)
-/* Given a table return the fields for selecting chromosome, start, end,
- * and whether it's binned . */
-{
-char retName[32];
-char retScore[32];
-char retStrand[32];
-char retCdsStart[32];
-char retCdsEnd[32];
-char retCount[32];
-char retStarts[32];
-char retEndsSizes[32];
-return hFindBed12FieldsAndBinDb(hGetDb(), table,
-				retChrom, retStart, retEnd,
-				retName, retScore, retStrand,
-				retCdsStart, retCdsEnd,
-				retCount, retStarts, retEndsSizes,
-				retBinned);
 }
 
 boolean hFindChromStartEndFields(char *table, 
@@ -2051,13 +1960,14 @@ char retCdsEnd[32];
 char retCount[32];
 char retStarts[32];
 char retEndsSizes[32];
+char retSpan[32];
 boolean isBinned;
 return hFindBed12FieldsAndBinDb(hGetDb(), table,
 				retChrom, retStart, retEnd,
 				retName, retScore, retStrand,
 				retCdsStart, retCdsEnd,
 				retCount, retStarts, retEndsSizes,
-				&isBinned);
+				retSpan, &isBinned);
 }
 
 
@@ -2073,13 +1983,14 @@ char retCdsEnd[32];
 char retCount[32];
 char retStarts[32];
 char retEndsSizes[32];
+char retSpan[32];
 boolean isBinned;
 return hFindBed12FieldsAndBinDb(db, table,
 				retChrom, retStart, retEnd,
 				retName, retScore, retStrand,
 				retCdsStart, retCdsEnd,
 				retCount, retStarts, retEndsSizes,
-				&isBinned);
+				retSpan, &isBinned);
 }
 
 int hdbChromSize(char *db, char *chromName)
@@ -2142,7 +2053,7 @@ if ((hti = hashFindVal(hash, rootName)) == NULL)
 	hti->nameField, hti->scoreField, hti->strandField,
 	hti->cdsStartField, hti->cdsEndField,
 	hti->countField, hti->startsField, hti->endsSizesField,
-	&hti->hasBin);
+	hti->spanField, &hti->hasBin);
     hti->hasCDS = (hti->cdsStartField[0] != 0);
     hti->hasBlocks = (hti->startsField[0] != 0);
     if (hti->isPos)
@@ -2160,6 +2071,8 @@ if ((hti = hashFindVal(hash, rootName)) == NULL)
 	    hti->type = cloneString("gl");
 	else if (hti->strandField[0] !=0)
 	    hti->type = cloneString("bed 6");
+	else if (hti->spanField[0] !=0)
+	    hti->type = cloneString("wiggle");
 	else if (hti->nameField[0] !=0)
 	    hti->type = cloneString("bed 4");
 	else
@@ -2318,7 +2231,7 @@ char *db = sqlGetDatabase(conn);
 struct hTableInfo *hti = hFindTableInfoDb(db, chrom, rootTable);
 struct sqlResult *sr = NULL;
 struct dyString *query = newDyString(1024);
-char fullTable[64], *table = NULL;
+char *table = NULL;
 int rowOffset = 0;
 
 if (hti == NULL)
@@ -2400,7 +2313,6 @@ char *db = sqlGetDatabase(conn);
 struct hTableInfo *hti = hFindTableInfoDb(db, chrom, rootTable);
 struct sqlResult *sr = NULL;
 struct dyString *query = newDyString(1024);
-char fullTable[64], *table = NULL;
 int rowOffset = 0;
 
 if (hti == NULL)
