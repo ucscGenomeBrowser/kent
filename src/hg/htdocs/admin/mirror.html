@@ -64,10 +64,10 @@
 			    To set up a full mirror browser, we recommend at a
 			    MINIMUM the following disk partitions and sizes:
 			    <UL>
-			        <LI>MySQL Table spaces: ~ 300 Gb
+			        <LI>MySQL Table spaces: ~ 400 Gb
 			        <LI>Apache web pages area: ~ 1 Gb
-			        <LI>"/gbdb" area for the browser: ~ 300 Gb
-			        <LI>Genome database text dumps: ~ 120 Gb
+			        <LI>"/gbdb" area for the browser: ~ 400 Gb
+			        <LI>Genome database text dumps: ~ 200 Gb
 			    </UL></P><P>
 				These data requirements will increase
 				in the future as genomes are added to
@@ -181,15 +181,23 @@ rsync --progress --partial -avz \
  --exclude='goldenPath/10april2003/*' \
  --exclude='goldenPath/14nov2002/*' \
  --exclude='goldenPath/panTro1/*' \
- --exclude='goldenPath/dp1/*' \
- --exclude='goldenPath/galGal2/*' \
- --exclude='goldenPath/mm4/*' \
+ --exclude='goldenPath/canFam1/*' \
  --exclude='goldenPath/mmFeb2003/*' \
+ --exclude='goldenPath/mm4/*' \
+ --exclude='goldenPath/mm5/*' \
  --exclude='goldenPath/rnJun2003/*' \
  --exclude='goldenPath/rnJan2003/*' \
+ --exclude='goldenPath/galGal2/*' \
+ --exclude='goldenPath/danRer1/*' \
  --exclude='goldenPath/fr1/*' \
+ --exclude='goldenPath/ci1/*' \
  --exclude='goldenPath/dm1/*' \
+ --exclude='goldenPath/dp1/*' \
+ --exclude='goldenPath/dp2/*' \
+ --exclude='goldenPath/droYak1/*' \
+ --exclude='goldenPath/anoGam1/*' \
  --exclude='goldenPath/ceMay2003/*' \
+ --exclude='goldenPath/ce2/*' \
  --exclude='goldenPath/cbJul2002/*' \
  --exclude='goldenPath/sacCer1/*' \
  --exclude='goldenPath/scApr2003/*' \
@@ -208,6 +216,15 @@ rsync --progress --partial -avz \
 <B>3. Get the data for each individual genome assembly and installing databases ( 120 Gb )</B>
 
 <OL type="a">
+
+<LI>Get Human May, 2004 full data set (hg17: 15 Gb) by doing:
+<P>
+<PRE>
+rsync --progress --partial -avz \
+  rsync://hgdownload.cse.ucsc.edu/genome/goldenPath/hg17/ \
+  $WEBROOT/goldenPath/
+</PRE>
+
 <LI>Get Human July, 2003 full data set (hg16: 15 Gb) by doing:
 <P>
 <PRE>
@@ -236,25 +253,27 @@ rsync --progress --partial -avz  \
   $WEBROOT/goldenPath/10april2003/
 </PRE>
 
-<LI>Get Human November 14, 2002 full data set (hg13: 8.5 Gb) by doing:
-<P>
-<PRE>
-rsync --progress --partial -avz \
-  rsync://hgdownload.cse.ucsc.edu/genome/goldenPath/14nov2002/bigZips/ \
-  $WEBROOT/goldenPath/14nov2002/
-rsync --progress --partial -avz \
-  rsync://hgdownload.cse.ucsc.edu/genome/goldenPath/14nov2002/chromosomes/ \
-  $WEBROOT/goldenPath/14nov2002/
-rsync --progress --partial -avz  \
-  rsync://hgdownload.cse.ucsc.edu/genome/goldenPath/14nov2002/database/ \
-  $WEBROOT/goldenPath/14nov2002/
-</PRE>
-
 <LI>Get Chimp November, 2003 full data set (panTro1: 3.0 Gb) by doing:
 <P>
 <PRE>
 rsync --progress --partial -avz \
   rsync://hgdownload.cse.ucsc.edu/genome/goldenPath/panTro1/ \
+  $WEBROOT/goldenPath/
+</PRE>
+
+<LI>Get Dog July, 2004 full data set (canFam1: 5.6 Gb) by doing:
+<P>
+<PRE>
+rsync --progress --partial -avz \
+  rsync://hgdownload.cse.ucsc.edu/genome/goldenPath/canFam1/ \
+  $WEBROOT/goldenPath/
+</PRE>
+
+<LI>Get Mouse May, 2004 full data set (mm5: 14 Gb) by doing:
+<P>
+<PRE>
+rsync --progress --partial -avz \
+  rsync://hgdownload.cse.ucsc.edu/genome/goldenPath/mm5/ \
   $WEBROOT/goldenPath/
 </PRE>
 
@@ -270,20 +289,6 @@ rsync --progress --partial -avz \
 rsync --progress --partial -avz  \
   rsync://hgdownload.cse.ucsc.edu/genome/goldenPath/mm4/database/ \
   $WEBROOT/goldenPath/mm4/
-</PRE>
-
-<LI>Get Mouse February, 2003 full data set (mm3: 9 Gb) by doing:
-<P>
-<PRE>
-rsync --progress --partial -avz \
-  rsync://hgdownload.cse.ucsc.edu/genome/goldenPath/mmFeb2003/bigZips/ \
-  $WEBROOT/goldenPath/mmFeb2003/
-rsync --progress --partial -avz \
-  rsync://hgdownload.cse.ucsc.edu/genome/goldenPath/mmFeb2003/chromosomes/ \
-  $WEBROOT/goldenPath/mmFeb2003/
-rsync --progress --partial -avz  \
-  rsync://hgdownload.cse.ucsc.edu/genome/goldenPath/mmFeb2003/database/ \
-  $WEBROOT/goldenPath/mmFeb2003/
 </PRE>
 
 <LI>Get Rat June, 2003 full data set (rn3: 14 Gb) by doing:
@@ -316,6 +321,14 @@ rsync --progress --partial -avz \
   $WEBROOT/goldenPath/
 </PRE>
 
+<LI>Get C. intestinalis December, 2002 full data set (ci1: 715 Mb) by doing:
+<P>
+<PRE>
+rsync --progress --partial -avz \
+  rsync://hgdownload.cse.ucsc.edu/genome/goldenPath/ci1/ \
+  $WEBROOT/goldenPath/
+</PRE>
+
 <LI>Get Fugu August, 2003 full data set (fr1: 800 Mb) by doing:
 <P>
 <PRE>
@@ -329,6 +342,30 @@ rsync --progress --partial -avz \
 <PRE>
 rsync --progress --partial -avz \
   rsync://hgdownload.cse.ucsc.edu/genome/goldenPath/dm1/ \
+  $WEBROOT/goldenPath/
+</PRE>
+
+<LI>Get D. pseudoobscura August 2003 full data set (dp1: 178 Mb) by doing:
+<P>
+<PRE>
+rsync --progress --partial -avz \
+  rsync://hgdownload.cse.ucsc.edu/genome/goldenPath/dp1/ \
+  $WEBROOT/goldenPath/
+</PRE>
+
+<LI>Get D. yakuba April 2004 full data set (droYak1: 439 Mb) by doing:
+<P>
+<PRE>
+rsync --progress --partial -avz \
+  rsync://hgdownload.cse.ucsc.edu/genome/goldenPath/droYak1/ \
+  $WEBROOT/goldenPath/
+</PRE>
+
+<LI>Get A. gambiae Feb 2003 full data set (anoGam1: 731 Mb) by doing:
+<P>
+<PRE>
+rsync --progress --partial -avz \
+  rsync://hgdownload.cse.ucsc.edu/genome/goldenPath/anoGam1/ \
   $WEBROOT/goldenPath/
 </PRE>
 
@@ -404,17 +441,22 @@ assembly:
 <TABLE CELLPADDING=0 CELLSPACING=0 MARGINS=0>
 <TR><TD> $FREEZEDATE </TD><TD WIDTH=10></TD><TD> $DBVERSION </TD></TR>
 <TR><TD> --------------- </TD><TD></TD><TD> ---------------  </TD></TR>
+<TR><TD> hg17        </TD><TD></TD><TD> hg17        </TD></TR>
 <TR><TD> hg16        </TD><TD></TD><TD> hg16        </TD></TR>
 <TR><TD> 10april2003 </TD><TD></TD><TD> hg15        </TD></TR>
-<TR><TD> 14nov2002   </TD><TD></TD><TD> hg13        </TD></TR>
 <TR><TD> panTro1     </TD><TD></TD><TD> panTro1     </TD></TR>
+<TR><TD> canFam1     </TD><TD></TD><TD> canFam1     </TD></TR>
+<TR><TD> mm5         </TD><TD></TD><TD> mm5         </TD></TR>
 <TR><TD> mm4         </TD><TD></TD><TD> mm4         </TD></TR>
-<TR><TD> mmFeb2003   </TD><TD></TD><TD> mm3         </TD></TR>
 <TR><TD> rnJun2003   </TD><TD></TD><TD> rn3         </TD></TR>
 <TR><TD> rnJan2003   </TD><TD></TD><TD> rn2         </TD></TR>
 <TR><TD> galGal2     </TD><TD></TD><TD> galGal2     </TD></TR>
 <TR><TD> fr1         </TD><TD></TD><TD> fr1         </TD></TR>
+<TR><TD> ci1         </TD><TD></TD><TD> ci1         </TD></TR>
 <TR><TD> dm1         </TD><TD></TD><TD> dm1         </TD></TR>
+<TR><TD> dp1         </TD><TD></TD><TD> dp1         </TD></TR>
+<TR><TD> droYak1     </TD><TD></TD><TD> droYak1     </TD></TR>
+<TR><TD> anoGam1     </TD><TD></TD><TD> anoGam1     </TD></TR>
 <TR><TD> ce2         </TD><TD></TD><TD> ce2         </TD></TR>
 <TR><TD> ceMay2003   </TD><TD></TD><TD> ce1         </TD></TR>
 <TR><TD> cbJul2002   </TD><TD></TD><TD> cb1         </TD></TR>
