@@ -1,12 +1,18 @@
 
-L = -lm $(MYSQLLIBS)
+include ../../inc/common.mk
+
+L = $(MYSQLLIBS) -lm 
 MYLIBDIR = ../../lib/$(MACHTYPE)
-MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a $(L)
+MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 
-O = affyPslAndAtlasToBed affyUclaMergePslData pslAffySelect
+% : %.c
+	$(CC) $(COPT) -I../inc  -I../../inc  -o $@ $(addsuffix .c,$@) $(MYLIBS) $(MYSQLLIBS) -lm -lz
+	cp $@ $(HOME)/bin/$(MACHTYPE)
 
-%: %.c 
-	gcc -Wimplicit -ggdb  -I../inc -I../../inc  -o $(HOME)/bin/$(MACHTYPE)/$@ $(addsuffix .c,$@) $(MYLIBS)
+O = affyUclaMergePslData affyPslAndAtlasToBed pslAffySelect
 
-all : $(O)
 
+exe: $(O)
+
+lib:
+	cd ../../lib; make
