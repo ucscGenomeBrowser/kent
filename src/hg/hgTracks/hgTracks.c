@@ -84,7 +84,7 @@
 #include "estOrientInfo.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.794 2004/09/02 19:55:22 kent Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.795 2004/09/02 20:54:52 kent Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
@@ -409,7 +409,7 @@ int packCountRows(struct track *tg, int maxCount, boolean withLabels)
 return packCountRowsOverflow(tg, maxCount, withLabels, FALSE);
 }
 
-int tgFixedTotalHeightOverflow(struct track *tg, enum trackVisibility vis, 
+int tgFixedTotalHeightOptionalOverflow(struct track *tg, enum trackVisibility vis, 
 			       int lineHeight, int heightPer, boolean allowOverflow)
 /* Most fixed height track groups will use this to figure out the height 
  * they use. */
@@ -458,18 +458,18 @@ return tg->height;
 }
 
 
-int tgFixedTotalHeight(struct track *tg, enum trackVisibility vis)
+int tgFixedTotalHeightNoOverflow(struct track *tg, enum trackVisibility vis)
 /* Most fixed height track groups will use this to figure out the height 
  * they use. */
 {
-return tgFixedTotalHeightOverflow(tg,vis, tl.fontHeight+1, tl.fontHeight, FALSE);
+return tgFixedTotalHeightOptionalOverflow(tg,vis, tl.fontHeight+1, tl.fontHeight, FALSE);
 }
 
-int tgFixedTotalMaxHeight(struct track *tg, enum trackVisibility vis)
+int tgFixedTotalHeightUsingOverflow(struct track *tg, enum trackVisibility vis)
 /* Returns how much height this track will use, but ensures that the max
    reported is never more than maxItemsInFullTrack * tl.fontHeight. */
 {
-int height = tgFixedTotalHeightOverflow(tg, vis, tl.fontHeight+1, tl.fontHeight, TRUE);
+int height = tgFixedTotalHeightOptionalOverflow(tg, vis, tl.fontHeight+1, tl.fontHeight, TRUE);
 return height;
 }
 
@@ -1526,8 +1526,8 @@ if (vis == tvPack || vis == tvSquish)
     /* These variables keep track of state if there are
        too many items and there is going to be an overflow row. */
     int maxHeight = maxItemsInFullTrack * tl.fontHeight;
-    int restRow = (maxHeight - tl.fontHeight +1) / lineHeight;
-    int restRowCount = 0;
+    int overflowRow = (maxHeight - tl.fontHeight +1) / lineHeight;
+    int overflowCount = 0;
     boolean overflowDrawn = FALSE;
     char nameBuff[128];
     boolean origWithLabels = withLabels;
@@ -1541,8 +1541,8 @@ if (vis == tvPack || vis == tvSquish)
     /* Loop though and count number of entries that will 
        end up in overflow. */
     for (sn = ss->nodeList; sn != NULL; sn = sn->next)
-	if(sn->row >= restRow)
-	    restRowCount++;
+	if(sn->row >= overflowRow)
+	    overflowCount++;
 
     /* Loop through and draw each item individually. */
     for (sn = ss->nodeList; sn != NULL; sn = sn->next)
@@ -1565,10 +1565,10 @@ if (vis == tvPack || vis == tvSquish)
 
 	/* If this row falls outside of the last row have to
 	   change some state to paint it in the "overflow" row. */
-	if(sn->row >= restRow)
+	if(sn->row >= overflowRow)
 	    {
 	    doingOverflow = TRUE;
-	    sn->row = restRow;
+	    sn->row = overflowRow;
 	    vis = tg->limitedVis = tvDense;
 	    heightPer = tg->heightPer = tl.fontHeight;
 	    lineHeight = tg->lineHeight = tl.fontHeight+1;
@@ -1630,7 +1630,7 @@ if (vis == tvPack || vis == tvSquish)
 		int nameWidth = 0;
 		vgUnclip(vg);
 		vgSetClip(vg, leftLabelX, yOff, insideWidth, tg->height);
-		safef(nameBuff, sizeof(nameBuff), "%d Not Shown", restRowCount);
+		safef(nameBuff, sizeof(nameBuff), "%d in Last Row", overflowCount);
 		mgFontStringWidth(font, nameBuff);
 		vgTextRight(vg, leftLabelX, y, leftLabelWidth-1, lineHeight, 
 			    color, font, nameBuff);
@@ -1915,7 +1915,7 @@ tg->drawItems = linkedFeaturesDraw;
 tg->drawItemAt = linkedFeaturesDrawAt;
 tg->itemName = linkedFeaturesName;
 tg->mapItemName = linkedFeaturesName;
-tg->totalHeight = tgFixedTotalHeight;
+tg->totalHeight = tgFixedTotalHeightNoOverflow;
 tg->itemHeight = tgFixedItemHeight;
 tg->itemStart = linkedFeaturesItemStart;
 tg->itemEnd = linkedFeaturesItemEnd;
@@ -1944,7 +1944,7 @@ tg->drawItems = linkedFeaturesSeriesDraw;
 tg->drawItemAt = linkedFeaturesSeriesDrawAt;
 tg->itemName = linkedFeaturesSeriesName;
 tg->mapItemName = linkedFeaturesSeriesName;
-tg->totalHeight = tgFixedTotalHeight;
+tg->totalHeight = tgFixedTotalHeightNoOverflow;
 tg->itemHeight = tgFixedItemHeight;
 tg->itemStart = linkedFeaturesSeriesItemStart;
 tg->itemEnd = linkedFeaturesSeriesItemEnd;
@@ -2971,7 +2971,7 @@ tg->drawItems 	= superfamilyDraw;
 tg->drawItemAt 	= superfamilyDrawAt;
 tg->itemName 	= superfamilyName;
 tg->mapItemName = superfamilyMapName;
-tg->totalHeight = tgFixedTotalHeight;
+tg->totalHeight = tgFixedTotalHeightNoOverflow;
 tg->itemHeight 	= tgFixedItemHeight;
 tg->itemStart 	= superfamilyItemStart;
 tg->itemEnd 	= superfamilyItemEnd;
@@ -3457,7 +3457,7 @@ void estMethods(struct track *tg)
 {
 tg->drawItems = linkedFeaturesAverageDenseOrientEst;
 tg->extraUiData = newMrnaUiData(tg->mapName, FALSE);
-tg->totalHeight = tgFixedTotalMaxHeight;
+tg->totalHeight = tgFixedTotalHeightUsingOverflow;
 }
 
 void mrnaMethods(struct track *tg)
@@ -3770,7 +3770,7 @@ tg->drawItems = bedDrawSimple;
 tg->drawItemAt = bedDrawSimpleAt;
 tg->itemName = bedName;
 tg->mapItemName = bedName;
-tg->totalHeight = tgFixedTotalHeight;
+tg->totalHeight = tgFixedTotalHeightNoOverflow;
 tg->itemHeight = tgFixedItemHeight;
 tg->itemStart = bedItemStart;
 tg->itemEnd = bedItemEnd;
@@ -6261,7 +6261,7 @@ repeatMethods(tg);
 tg->loadItems = cghLoadTrack;
 tg->drawItems = cghDraw;
 tg->colorShades = shadesOfGray;
-tg->totalHeight = tgFixedTotalHeight;
+tg->totalHeight = tgFixedTotalHeightNoOverflow;
 tg->itemHeight = tgFixedItemHeight;
 tg->itemStart = tgItemNoStart;
 tg->itemEnd = tgItemNoEnd;

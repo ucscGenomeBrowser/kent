@@ -11,7 +11,7 @@
 #include "chainNet.h"
 #include "chainNetDbLoad.h"
 
-static char const rcsid[] = "$Id: netTrack.c,v 1.14 2003/12/08 09:40:03 kate Exp $";
+static char const rcsid[] = "$Id: netTrack.c,v 1.15 2004/09/02 20:54:53 kent Exp $";
 
 struct netItem
 /* A net track item. */
@@ -262,7 +262,7 @@ tg->freeItems = netFree;
 tg->drawItems = netDraw;
 tg->itemName = netName;
 tg->mapItemName = netName;
-tg->totalHeight = tgFixedTotalHeight;
+tg->totalHeight = tgFixedTotalHeightNoOverflow;
 tg->itemHeight = tgFixedItemHeight;
 tg->itemStart = tgItemNoStart;
 tg->itemEnd = tgItemNoEnd;

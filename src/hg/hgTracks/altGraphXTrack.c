@@ -249,9 +249,9 @@ static int altGraphXFixedTotalHeight(struct track *tg, enum trackVisibility vis)
 /* Used to calculate total height when in pack or squish modes. */
 {
 if(vis == tvPack)
-    return tgFixedTotalHeightOverflow(tg,vis, tg->lineHeight, tg->heightPer, FALSE);
+    return tgFixedTotalHeightOptionalOverflow(tg,vis, tg->lineHeight, tg->heightPer, FALSE);
 else
-    return tgFixedTotalHeight(tg,vis);
+    return tgFixedTotalHeightNoOverflow(tg,vis);
 }
 
 static int altGraphXCalcHeight(struct track *tg, enum trackVisibility vis)
