@@ -115,11 +115,11 @@ done after repeat masking and distributing to cluster nodes)
         rm -f RMRun/RMJobs
         touch RMRun/RMJobs
         foreach d ( ?{,?}/NT_* )
-          foreach f ( /cluster/store3/gs.12/build29/$d/NT_*_*.fa )
+          foreach f ( /cluster/store3/gs.13/build30/$d/NT_*_*.fa )
             set f = $f:t
             echo /cluster/bin/scripts/RMLocalSens \
-                 /cluster/store3/gs.12/build29/$d $f \
-                '{'check out line+ /cluster/store3/gs.12/build29/$d/$f.out'}' \
+                 /cluster/store3/gs.13/build30/$d $f \
+                '{'check out line+ /cluster/store3/gs.13/build30/$d/$f.out'}' \
               >> RMRun/RMJobs
           end
         end
