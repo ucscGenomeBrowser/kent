@@ -75,16 +75,43 @@ printf(" red/blue ");
 void nci60Ui(struct trackDb *tdb)
 /* put up UI for the nci60 track from stanford track */
 {
-static char *names[] = {"Tissue","All Experiments"};
+char *nci60Map = cartUsualString(cart, "nci60.type", nci60EnumToString(0));
 char *col = cartUsualString(cart, "nci60.color", "rg");
-printf("<b>Group By: </b>");
-cgiMakeDropList("nci60.group",names, 2, cartUsualString(cart, "nci60.group", names[0]));
+printf("<p><b>Cell Lines: </b> ");
+nci60DropDown("nci60.type", nci60Map);
+printf(" ");
 printf(" <b>Color Scheme</b>: ");
 cgiMakeRadioButton("nci60.color", "rg", sameString(col, "rg"));
 printf(" red/green ");
 cgiMakeRadioButton("nci60.color", "rb", sameString(col, "rb"));
 printf(" red/blue ");
-} 
+}
+
+void rosettaUi(struct trackDb *tdb)
+/* put up UI for the rosetta track */
+{
+char *rosettaMap = cartUsualString(cart, "rosetta.type", rosettaEnumToString(0));
+char *col = cartUsualString(cart, "rosetta.color", "rg");
+
+char *exonTypesOpts[] = {
+    "Confirmed Only",
+    "Predicted Only",
+    "All",
+};
+
+printf("<p><b>Cell Lines: </b> ");
+rosettaDropDown("rosetta.type", rosettaMap);
+printf("  ");
+printf("<b>Exons Shown:</b> ");
+cgiMakeDropList("rosetta.et", exonTypesOpts, ArraySize(exonTypesOpts), exonTypesOpts[0]);
+printf(" <b>Color Scheme</b>: ");
+cgiMakeRadioButton("rosetta.color", "rg", sameString(col, "rg"));
+printf(" red/green ");
+cgiMakeRadioButton("rosetta.color", "rb", sameString(col, "rb"));
+printf(" red/blue ");
+}
+
+
 
 void oneMrnaFilterUi(struct controlGrid *cg, char *text, char *var)
 /* Print out user interface for one type of mrna filter. */
@@ -146,6 +173,8 @@ else if (sameString(track, "xenoBestMrna"))
     mrnaUi(tdb, TRUE);
 else if (sameString(track, "xenoEst"))
     mrnaUi(tdb, TRUE);
+else if (sameString(track, "rosetta"))
+    rosettaUi(tdb);
 }
 
 void trackUi(struct trackDb *tdb)
