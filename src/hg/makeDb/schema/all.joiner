@@ -307,6 +307,15 @@ identifier affyU74
     $mm.affyGnfU74C.name
     $mm.knownToU74.value
 
+identifier affyRAE230
+"Affymetrix Rat RAE230 chip identifiers"
+    $mm.affyU34A.qName dupeOk
+
+identifier affyU34A
+"Affymetrix Rat U34A chip identifiers"
+    $mm.affyU34A.qName dupeOk
+    $mm.knownToU34A.value
+
 identifier kimWormGeneId
 "Identifiers for Kim-lab worm genes"
     hgFixed.kimWormLifeAllRatio.name
