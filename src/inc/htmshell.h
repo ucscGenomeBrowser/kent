@@ -53,7 +53,8 @@ extern char *htmlStyleUndecoratedLink;
 void htmlSetStyle(char *style);
 /* Set document wide style. A favorite style to
  * use for many purposes is htmlStyleUndecoratedLink
- * which will remove underlines from links. */
+ * which will remove underlines from links. 
+ * Needs to be called before htmlStart or htmShell. */
 
 void htmlSetBackground(char *imageFile);
 /* Set background image - needs to be called before htmlStart

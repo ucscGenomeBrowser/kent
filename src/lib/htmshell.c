@@ -16,7 +16,7 @@
 #include "errabort.h"
 #include "dnautil.h"
 
-static char const rcsid[] = "$Id: htmshell.c,v 1.18 2003/09/12 22:08:52 kent Exp $";
+static char const rcsid[] = "$Id: htmshell.c,v 1.19 2003/09/13 04:15:09 kent Exp $";
 
 jmp_buf htmlRecover;
 
@@ -98,7 +98,8 @@ char *htmlStyleUndecoratedLink =
 void htmlSetStyle(char *style)
 /* Set document wide style. A favorite style to
  * use for many purposes is htmlStyleUndecoratedLink
- * which will remove underlines from links. */
+ * which will remove underlines from links. 
+ * Needs to be called before htmlStart or htmShell. */
 {
 htmlStyle = style;
 }
