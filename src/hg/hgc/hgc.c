@@ -284,6 +284,40 @@ freeDyString(&dy);
 hgFreeConn(&conn);
 }
 
+void printRnaAlignments(struct psl *pslList, 
+	int startFirst, char *hgcCommand, char *typeName, char *seqName)
+/* Print list of mRNA alignments. */
+{
+struct psl *psl;
+int aliCount = slCount(pslList);
+boolean same;
+char otherString[512];
+
+if (aliCount > 1)
+    printf("The alignment you clicked on is first in the table below.<BR>\n");
+
+printf("<TT><PRE>");
+printf(" SIZE IDENTITY CHROMOSOME STRAND  START     END       cDNA   START  END  TOTAL\n");
+printf("------------------------------------------------------------------------------\n");
+for (same = 1; same >= 0; same -= 1)
+    {
+    for (psl = pslList; psl != NULL; psl = psl->next)
+	{
+	if (same ^ (psl->tStart != startFirst))
+	    {
+	    sprintf(otherString, "%d&type=%s", psl->tStart, typeName);
+	    hgcAnchorSomewhere(hgcCommand, seqName, otherString, psl->tName);
+	    printf("%5d  %5.1f%%  %9s     %s %9d %9d  %8s %5d %5d %5d</A>",
+		psl->match + psl->misMatch + psl->repMatch + psl->nCount,
+		100.0 - pslCalcMilliBad(psl, TRUE) * 0.1,
+		skipChr(psl->tName), psl->strand, psl->tStart + 1, psl->tEnd,
+		psl->qName, psl->qStart+1, psl->qEnd, psl->qSize);
+	    printf("\n");
+	    }
+	}
+    }
+}
+
 void doHgRna(char *acc, boolean isEst)
 /* Click on an individual RNA. */
 {
@@ -295,9 +329,6 @@ struct linkedFeatures *lfList = NULL, *lf;
 char *type = (isEst ? "est" : "mrna");
 int start = cgiInt("o");
 struct psl *pslList = NULL, *psl;
-int aliCount;
-char otherString[32];
-boolean same;
 
 /* Print non-sequence info. */
 htmlStart(acc);
@@ -316,33 +347,47 @@ while ((row = sqlNextRow(sr)) != NULL)
 sqlFreeResult(&sr);
 slReverse(&pslList);
 
-/* Print alignments. */
 htmlHorizontalLine();
 printf("<H3>%s/Genomic Alignments</H3>", (isEst ? "EST" : "mRNA"));
-aliCount = slCount(pslList);
-if (aliCount > 1)
-    printf("The alignment you clicked on is first in the table below.<BR>\n");
 
-printf("<TT><PRE>");
-printf(" SIZE IDENTITY CHROMOSOME STRAND  START     END       cDNA   START  END  TOTAL\n");
-printf("------------------------------------------------------------------------------\n");
-for (same = 1; same >= 0; same -= 1)
+printRnaAlignments(pslList, start, "htcCdnaAli", type, acc);
+}
+
+void parseSs(char *ss, char **retPslName, char **retFaName)
+/* Parse space separated 'ss' item. */
+{
+static char buf[512*2];
+int wordCount;
+char *words[2];
+strcpy(buf, ss);
+wordCount = chopLine(buf, words);
+if (wordCount != 2)
+    errAbort("Expecting 2 words in ss item");
+*retPslName = words[0];
+*retFaName = words[1];
+}
+
+void doUserPsl(char *item)
+/* Process click on user-defined alignment. */
+{
+int start = cgiInt("o");
+struct lineFile *lf;
+struct psl *pslList = NULL, *psl;
+char *pslName, *faName;
+char *encItem = cgiEncode(item);
+
+htmlStart("Fast Sequence Search Alignments");
+printf("<H2>Fast Sequence Search Alignments</H2>\n");
+parseSs(item, &pslName, &faName);
+lf = lineFileOpen(pslName, TRUE);
+while ((psl = pslNext(lf)) != NULL)
     {
-    for (psl = pslList; psl != NULL; psl = psl->next)
-	{
-	if (same ^ (psl->tStart != start))
-	    {
-	    sprintf(otherString, "%d&type=%s", psl->tStart, type);
-	    hgcAnchorSomewhere("htcCdnaAli", acc, otherString, psl->tName);
-	    printf("%5d  %5.1f%%  %9s     %s %9d %9d  %8s %5d %5d %5d</A>",
-		psl->match + psl->misMatch + psl->repMatch + psl->nCount,
-		100.0 - pslCalcMilliBad(psl, TRUE) * 0.1,
-		skipChr(psl->tName), psl->strand, psl->tStart + 1, psl->tEnd,
-		psl->qName, psl->qStart+1, psl->qEnd, psl->qSize);
-	    printf("\n");
-	    }
-	}
+    slAddHead(&pslList, psl);
     }
+slReverse(&pslList);
+lineFileClose(&lf);
+printRnaAlignments(pslList, start, "htcUserAli", "user", encItem);
+pslFreeList(&pslList);
 }
 
 void doHgGold(char *fragName)
@@ -509,23 +554,15 @@ for (seq = seqList; seq != NULL; seq = seq->next)
 hFreeConn(&conn);
 }
 
-void htcCdnaAli(char *acc)
+void showAlignment(struct psl *psl, struct dnaSeq *rnaSeq)
 /* Show alignment for accession. */
 {
 struct tempName indexTn, bodyTn;
 FILE *index, *body;
-struct dnaSeq *rnaSeq;
 struct dnaSeq *dnaSeq;
 DNA *rna;
 int dnaSize,rnaSize;
 boolean isRc = FALSE;
-char *type;
-int start;
-char query[256];
-struct sqlConnection *conn = hAllocConn();
-struct sqlResult *sr;
-char **row;
-struct psl *psl;
 struct ffAli *ffAli, *ff;
 int tStart, tEnd, tRcAdjustedStart;
 int lastEnd = 0;
@@ -533,32 +570,14 @@ int blockCount;
 int i;
 char title[256];
 
-/* Print start of HTML. */
-puts("Content-Type:text/html\n");
-puts("<HTML>");
-printf("<HEAD>\n<TITLE>%s vs Genomic</TITLE>\n</HEAD>\n\n", acc);
-
-type = cgiString("type");
-start = cgiInt("o");
 
 makeTempName(&indexTn, "index", ".html");
 makeTempName(&bodyTn, "body", ".html");
 
-/* Look up alignments in database */
-sprintf(query, "select * from %s_%s where qName = '%s' and tStart=%d",
-    seqName, type, acc, start);
-sr = sqlGetResult(conn, query);
-if ((row = sqlNextRow(sr)) == NULL)
-    errAbort("Couldn't find alignment for %s at %d", acc, start);
-psl = pslLoad(row);
-sqlFreeResult(&sr);
-
-
 /* Get RNA and DNA sequence.  Save a mixed case copy of DNA, make
  * all lower case for fuzzyFinder. */
-rnaSeq = hRnaSeq(acc);
-rnaSize = rnaSeq->size;
 rna = rnaSeq->dna;
+rnaSize = rnaSeq->size;
 tStart = psl->tStart - 100;
 if (tStart < 0) tStart = 0;
 tEnd  = psl->tEnd + 100;
@@ -569,7 +588,7 @@ dnaSeq->name = cloneString(psl->tName);
 
 /* Start writing body of alignment. */
 body = mustOpen(bodyTn.forCgi, "w");
-htmStart(body, acc);
+htmStart(body, psl->qName);
 
 /* Convert psl alignment to ffAli. */
 tRcAdjustedStart = tStart;
@@ -583,9 +602,9 @@ if (psl->strand[0] == '-')
 ffAli = pslToFfAli(psl, rnaSeq, dnaSeq, tRcAdjustedStart);
 
 /* Write body. */
-fprintf(body, "<H2>Alignment of %s and %s:%d-%d</H2>\n", acc, psl->tName, psl->tStart, psl->tEnd);
+fprintf(body, "<H2>Alignment of %s and %s:%d-%d</H2>\n", psl->qName, psl->tName, psl->tStart, psl->tEnd);
 fprintf(body, "Click on links in the frame to left to navigate through alignment.\n");
-blockCount = ffShAliPart(body, ffAli, acc, rna, rnaSize, 0, 
+blockCount = ffShAliPart(body, ffAli, psl->qName, rna, rnaSize, 0, 
 	dnaSeq->name, dnaSeq->dna, dnaSeq->size, tStart, 
 	8, FALSE, isRc, FALSE, TRUE, TRUE, TRUE);
 fclose(body);
@@ -593,8 +612,8 @@ chmod(bodyTn.forCgi, 0666);
 
 /* Write index. */
 index = mustOpen(indexTn.forCgi, "w");
-htmStart(index, acc);
-fprintf(index, "<H3>%s</H3>", acc);
+htmStart(index, psl->qName);
+fprintf(index, "<H3>%s</H3>", psl->qName);
 fprintf(index, "<A HREF=\"%s#cDNA\" TARGET=\"body\">cDNA</A><BR>\n", bodyTn.forCgi);
 fprintf(index, "<A HREF=\"%s#genomic\" TARGET=\"body\">genomic</A><BR>\n", bodyTn.forCgi);
 for (i=1; i<=blockCount; ++i)
@@ -612,8 +631,75 @@ printf("  <FRAME SRC=\"%s\" NAME=\"index\" RESIZE>\n", indexTn.forCgi);
 printf("  <FRAME SRC=\"%s\" NAME=\"body\" RESIZE>\n", bodyTn.forCgi);
 puts("</FRAMESET>");
 puts("<NOFRAMES><BODY></BODY></NOFRAMES>");
-hFreeConn(&conn);
 }
+
+void htcCdnaAli(char *acc)
+/* Show alignment for accession. */
+{
+char query[256];
+struct sqlConnection *conn;
+struct sqlResult *sr;
+char **row;
+struct psl *psl;
+struct dnaSeq *rnaSeq;
+char *type;
+int start;
+
+/* Print start of HTML. */
+puts("Content-Type:text/html\n");
+printf("<HEAD>\n<TITLE>%s vs Genomic</TITLE>\n</HEAD>\n\n", acc);
+puts("<HTML>");
+
+/* Get some environment vars. */
+type = cgiString("type");
+start = cgiInt("o");
+
+/* Look up alignments in database */
+conn = hAllocConn();
+/* ~~~ Include tName here in query too? */
+sprintf(query, "select * from %s_%s where qName = '%s' and tStart=%d",
+    seqName, type, acc, start);
+sr = sqlGetResult(conn, query);
+if ((row = sqlNextRow(sr)) == NULL)
+    errAbort("Couldn't find alignment for %s at %d", acc, start);
+psl = pslLoad(row);
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+
+rnaSeq = hRnaSeq(acc);
+showAlignment(psl, rnaSeq);
+}
+
+void htcUserAli(char *fileNames)
+/* Show alignment for accession. */
+{
+char *pslName, *faName;
+struct lineFile *lf;
+struct dnaSeq *rnaSeq;
+struct psl *psl;
+int start;
+
+/* Print start of HTML. */
+puts("Content-Type:text/html\n");
+printf("<HEAD>\n<TITLE>User Sequence vs Genomic</TITLE>\n</HEAD>\n\n");
+puts("<HTML>");
+
+start = cgiInt("o");
+parseSs(fileNames, &pslName, &faName);
+lf = lineFileOpen(pslName, TRUE);
+while ((psl = pslNext(lf)) != NULL)
+    {
+    if (sameString(psl->tName, seqName) && psl->tStart == start)
+        break;
+    pslFree(&psl);
+    }
+lineFileClose(&lf);
+if (psl == NULL)
+    errAbort("Couldn't find alignment at %s:%d", seqName, start);
+rnaSeq = faReadDna(faName);
+showAlignment(psl, rnaSeq);
+}
+
 
 void writeMatches(FILE *f, char *a, char *b, int count)
 /* Write a | where a and b agree, a ' ' elsewhere. */
@@ -1979,6 +2065,10 @@ else if (sameWord(group, "hgCytoBands"))
     {
     doCytoBands(item);
     }
+else if (sameWord(group, "hgUserPsl"))
+    {
+    doUserPsl(item);
+    }
 else if (sameWord(group, "snpTsc") || sameWord(group, "snpNih"))
     {
     doSnp(group, item);
@@ -1990,6 +2080,10 @@ else if (sameWord(group, "htcCloneSeq"))
 else if (sameWord(group, "htcCdnaAli"))
    {
    htcCdnaAli(item);
+   }
+else if (sameWord(group, "htcUserAli"))
+   {
+   htcUserAli(item);
    }
 else if (sameWord(group, "htcTranslatedProtein"))
    {
