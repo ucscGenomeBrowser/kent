@@ -111,7 +111,7 @@
 #include "axtLib.h"
 #include "ensFace.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.466 2003/08/12 04:42:00 booch Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.467 2003/08/12 07:11:51 kate Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -119,7 +119,8 @@ struct cart *cart;	/* User's settings. */
 char *seqName;		/* Name of sequence we're working on. */
 int winStart, winEnd;   /* Bounds of sequence. */
 char *database;		/* Name of mySQL database. */
-char *organism;		/* Name of organism. */
+char *organism;		/* Colloquial name of organism. */
+char *scientificName;	/* Scientific name of organism. */
 
 char *protDbName;	/* Name of proteome database */
 struct hash *trackHash;	/* A hash of all tracks - trackDb valued */
@@ -363,8 +364,9 @@ cfmFree(&cfm);
 printf("</TT></PRE>");
 }
 
-void printPos(char *chrom, int start, int end, char *strand, boolean featDna)
-/* Print position lines.  'strand' argument may be null. */
+
+void printPosOnChrom(char *chrom, int start, int end, char *strand, boolean featDna)
+/* Print position lines referenced to chromosome. Strand argument may be NULL */
 {
 char band[64];
 
@@ -387,6 +389,37 @@ if (featDna)
     }
 }
 
+
+void printPosOnScaffold(char *chrom, int start, int end, char *strand)
+/* Print position lines referenced to scaffold.  'strand' argument may be null. */
+{
+    char *scaffoldName;
+    int scaffoldStart, scaffoldEnd;
+
+    if (!hScaffoldPos(chrom, start, end, &scaffoldName, &scaffoldStart, &scaffoldEnd))
+        {
+        printPosOnChrom(chrom, start,end,strand, FALSE);
+        return;
+        }
+    printf("<B>Scaffold:</B> %s<BR>\n", scaffoldName);
+    printf("<B>Begin in Scaffold:</B> %d<BR>\n", scaffoldStart+1);
+    printf("<B>End in Scaffold:</B> %d<BR>\n", scaffoldEnd);
+    printf("<B>Genomic Size:</B> %d<BR>\n", scaffoldEnd - scaffoldStart);
+    if (strand != NULL)
+            printf("<B>Strand:</B> %s<BR>\n", strand);
+    else
+            strand = "?";
+}
+
+void printPos(char *chrom, int start, int end, char *strand, boolean featDna)
+/* Print position lines.  'strand' argument may be null. */
+{
+    if (sameWord(organism, "Fugu"))
+        /* use this for unmapped genomes */
+        printPosOnScaffold(chrom, start, end, strand);
+    else
+        printPosOnChrom(chrom, start, end, strand, featDna);
+}
 
 void samplePrintPos(struct sample *smp, int smpSize)
 /* Print first three fields of a sample 9 type structure in
@@ -5907,7 +5940,7 @@ if (url != NULL && url[0] != 0)
     chp = strstr(shortItemName, ".");
     if (chp != NULL) *chp = '\0';
 
-    genomeStrEnsembl = ensOrgName(organism);
+    genomeStrEnsembl = ensOrgNameFromScientificName(scientificName);
     if (genomeStrEnsembl == NULL)
 	{
 	warn("Organism %s not found!", organism); fflush(stdout);
@@ -12410,6 +12443,7 @@ struct trackDb *tdb;
 /*	database and organism are global variables used in many places	*/
 database = cartUsualString(cart, "db", hGetDb());
 organism = hOrganism(database);
+scientificName = hScientificName(database);
 
 hDefaultConnect(); 	/* set up default connection settings */
 hSetDb(database);

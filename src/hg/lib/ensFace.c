@@ -4,7 +4,7 @@
 #include "dystring.h"
 #include "ensFace.h"
 
-static char const rcsid[] = "$Id: ensFace.c,v 1.2 2003/08/12 01:39:52 kate Exp $";
+static char const rcsid[] = "$Id: ensFace.c,v 1.3 2003/08/12 07:11:51 kate Exp $";
 
 struct stringPair
 /* A pair of strings. */
@@ -14,10 +14,7 @@ struct stringPair
    };
 
 
-/* Special case for fugu -- scientific name was changed
- * in Genbank, and Ensembl hasn't changed */
-
-char *ensOrgName(char *scientificName)
+char *ensOrgNameFromScientificName(char *scientificName)
 /* Convert from ucsc to Ensembl organism name.
  * This is scientific name, with underscore replacing spaces
  * Caller must free returned string */

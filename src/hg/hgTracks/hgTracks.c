@@ -68,7 +68,7 @@
 #include "web.h"
 #include "grp.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.577 2003/08/12 01:39:52 kate Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.578 2003/08/12 07:11:51 kate Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROMOSOME_SHADES 4
@@ -5659,7 +5659,7 @@ void printEnsemblAnchor(char *database)
 /* Print anchor to Ensembl display on same window. */
 {
 char *scientificName = hScientificName(database);
-char *dir = ensOrgName(scientificName);
+char *dir = ensOrgNameFromScientificName(scientificName);
 struct dyString *ensUrl;
 char *name;
 char *scaffoldName;
