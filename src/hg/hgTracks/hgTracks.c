@@ -73,7 +73,7 @@
 #include "grp.h"
 #include "chromColors.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.646 2003/12/24 02:19:27 daryl Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.647 2003/12/24 11:23:16 kent Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
@@ -7631,6 +7631,21 @@ puts(
 );
 }
 
+
+void resetVars()
+/* Reset vars except for position and database. */
+{
+static char *except[] = {"db", "position", NULL};
+char *cookieName = hUserCookie();
+int sessionId = cgiUsualInt(cartSessionVarName(), 0);
+char *hguidString = findCookieData(cookieName);
+int userId = (hguidString == NULL ? 0 : atoi(hguidString));
+struct cart *oldCart = cartNew(userId, sessionId, NULL, NULL);
+cartRemoveExcept(oldCart, except);
+cartCheckout(&oldCart);
+cgiVarExcludeExcept(except);
+}
+
 void doMiddle(struct cart *theCart)
 /* Print the body of an html file.   */
 {
@@ -7641,8 +7656,7 @@ cart = theCart;
 /* Uncomment this to see parameters for debugging. */
 /* Be careful though, it breaks if custom track
  * is more than 4k */
-/*state = cgiUrlString();
- printf("State: %s\n", state->string);   */
+/*state = cgiUrlString(); printf("State: %s\n", state->string);   */
 getDbAndGenome(cart, &database, &organism);
 hSetDb(database);
 protDbName = hPdbFromGdb(database);
@@ -7689,27 +7703,37 @@ char *excludeVars[] = { "submit", "Submit", "hgt.reset",
 			"hgt.tui", "hgt.hideAll", "hgt.psOutput", "hideControls",
 			NULL };
 
-void resetVars()
-/* Reset vars except for position and database. */
+static void veryEarlyWarningHandler(char *format, va_list args)
+/* Write an error message so user can see it before page is really started. */
 {
-static char *except[] = {"db", "position", NULL};
-char *cookieName = hUserCookie();
-int sessionId = cgiUsualInt(cartSessionVarName(), 0);
-char *hguidString = findCookieData(cookieName);
-int userId = (hguidString == NULL ? 0 : atoi(hguidString));
-struct cart *oldCart = cartNew(userId, sessionId, NULL, NULL);
-cartRemoveExcept(oldCart, except);
-cartCheckout(&oldCart);
-cgiVarExcludeExcept(except);
+static boolean initted = FALSE;
+if (!initted)
+    {
+    htmlStart("Very Early Error");
+    printf("<!-- HGERROR -->\n");
+    initted = TRUE;
+    }
+htmlVaParagraph(format,args);
 }
 
+void veryEarlyAbortHandler()
+/* Exit close web page during early abort. */
+{
+printf("</BODY></HTML>");
+exit(0);
+}
 
 int main(int argc, char *argv[])
 {
+/* Push very early error handling - this is just
+ * for the benefit of the cgiVarExists, which 
+ * somehow can't be moved effectively into doMiddle. */
+pushWarnHandler(veryEarlyWarningHandler);
+pushAbortHandler(veryEarlyAbortHandler);
 cgiSpoof(&argc, argv);
-htmlSetBackground("../images/floret.jpg");
 if (cgiVarExists("hgt.reset"))
     resetVars();
+htmlSetBackground("../images/floret.jpg");
 cartHtmlShell("UCSC Genome Browser v46", doMiddle, hUserCookie(), excludeVars, NULL);
 return 0;
 }
