@@ -29,7 +29,7 @@
 #include "dbDb.h"
 #include "htmlPage.h"
 
-static char const rcsid[] = "$Id: qaPushQ.c,v 1.55 2004/07/21 18:22:24 galt Exp $";
+static char const rcsid[] = "$Id: qaPushQ.c,v 1.56 2004/07/30 19:02:58 galt Exp $";
 
 char msg[2048] = "";
 char ** saveEnv;
@@ -1770,6 +1770,7 @@ doDisplay();
 void doEdit()
 /* Handle edit request for a pushQ entry */
 {
+int updateSize = 2456;
 struct pushQ q;
 ZeroVar(&q);
 safef(q.qid, sizeof(q.qid), cgiString("qid"));
@@ -1778,6 +1779,29 @@ if (!loadPushQ(q.qid, &q,TRUE))
     printf("Queue Id %s not found.", q.qid);
     return;
     }
+
+if ( sameString(qaUser,"kuhn") || sameString(qaUser,"kuhn2") )  /* for users that want to automatically try to lock record immediately */
+    {
+    if (sameString(action,"edit") || sameString(action,"setSize")) 
+	{
+	if (sameString(q.lockUser,""))  /* q.lockUser blank if nobody has lock */
+	    {
+	    safef(q.lockUser, sizeof(q.lockUser), qaUser);
+	    strftime(q.lockDateTime, sizeof(q.lockDateTime), "%Y-%m-%d %H:%M", loctime);
+	    pushQUpdateEscaped(conn, &q, pushQtbl, updateSize);
+	    /* annoying! the call imm. above destroys the q variable, so reload */
+	    ZeroVar(&q);
+	    safef(q.qid, sizeof(q.qid), cgiString("qid"));
+            loadPushQ(q.qid, &q,TRUE);
+	    }
+	}
+    else /* we are coming back from a post? so return to display automatically */
+	{
+	doDisplay();
+	return;  /* this is needed? */
+	}
+    }
+    
 replacePushQFields(&q, FALSE);  /* new rec = false */
 }
 
