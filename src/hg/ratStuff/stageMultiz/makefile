@@ -9,4 +9,4 @@ O = stageMultiz.o
 
 stageMultiz: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/stageMultiz $O $(MYLIBS) $L
-	strip $(HOME)/bin/$(MACHTYPE)/stageMultiz
+#	strip $(HOME)/bin/$(MACHTYPE)/stageMultiz
