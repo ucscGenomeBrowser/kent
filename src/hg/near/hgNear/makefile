@@ -1,11 +1,19 @@
 include ../../../inc/common.mk
 
-L = -lm
-MYLIBDIR = $(HOME)/src/lib/$(MACHTYPE)
+L = $(MYSQLLIBS) -lm 
+MYLIBDIR = ../../../lib/$(MACHTYPE)
 MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
+X = hgNear
 
-O = hgNear.o
+O = $X.o colBlast.o
 
-hgNear: $O $(MYLIBS)
-	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/hgNear $O $(MYLIBS) $L
-	strip $(HOME)/bin/$(MACHTYPE)/hgNear
+my: compile
+	mv $X /usr/local/apache/cgi-bin-$(USER)/$X
+
+alpha: compile
+	mv $X /usr/local/apache/cgi-bin/$X
+
+compile: $O $(MYLIBS)
+	gcc -ggdb -o $X $O $(MYLIBS) $L
+	strip $X
+	chmod a+rx $X
