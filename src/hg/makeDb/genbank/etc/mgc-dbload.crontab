@@ -1,0 +1,13 @@
+#
+# load database on MGC server
+#
+
+SHELL=/bin/sh
+MAILTO=markd@cse.ucsc.edu
+
+# poll every hour at half-past
+30 0-23 * * *	/scratch/genbank/etc/genbank-mgc-load
+
+
+
+

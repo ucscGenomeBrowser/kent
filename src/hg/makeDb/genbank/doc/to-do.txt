@@ -1,0 +1,461 @@
+- handle HTS for terry
+
+- change download to generate single md5 for pair of .gbff and .fsa
+
+- lock some table during update (gbStatus).
+
+- update naming between refseq and genbank should be made consistent,
+  maybe include date in full?
+
+- entries duplicated in updates get aligned multiple times, end up
+  in index multiple times.  Need to make sure doesn't get loaded
+  multiple times (see "AF530914")
+
+- testing:
+     - download, process
+     - test/make-test-download
+
+- selectVer field use is more limited, can it be dropped?
+
+- clean up hgRelate junk
+
+- all error messages with update should include the release too.
+  - use common method.
+
+- skip alignment if sequence is already outdated in an update?
+
+- gb reference, authors, journal may occur multiple times, only first
+  kept.  Renable warning in readOneField to get list.
+
+- need to remove align work directory (with option to keep by date).
+
+- **** deal with not downloading outdated refseq dailies.  Makesure that
+       when the same version/moddate is in full and an daily, that
+       full wins (this appears to not be the case).
+
+- delete hgRefSeqStatus.c, hgRefSeqMrna
+
+- get image clones ids (already in table, need to analyze and maybe
+  split in seperate fields).
+
+- gbSanity:
+      - add check of sequence in fasta
+
+- keep versions in accesion tables
+
+- need to verify that all of the features that can contain db_xref attributes
+  are handled by gbToFaRa (or we just select the onces we are interested in).
+
+- check that we still have matt's change to not abort on a bad extFile table.
+
+- delete hgRefSeqStatus
+
+- add checks of refFlat, refGene, refAlign
+
+- figure out how to pipe lift in gbAlignFinish
+
+- gbGetTest creates empty .seq files, and not gziped ones
+
+- AJ431705 - a EST in gbest28.seq.gz,
+   error in  download/genbank.132.0/daily-nc/nc1113.flat.gz, made it an
+   mrna.  (latter corrected);
+
+- why does reflink store product names as both id and string,
+  also annoying that id doesn't follow convention of other tables
+  that the name is the same.
+
+- gbBlat location in alignment job file may not be valid if run on
+  a different machine.
+
+- empty processed fasta files are created.
+
+
+- build geneName table for Fan from /gene= features.
+        http://www.gene.ucl.ac.uk/nomenclature/
+        http://www.gene.ucl.ac.uk/public-files/nomen/nomeids.txt
+   Issues:
+       Names with spaces: AB005521S1 /gene="ppar gamma"
+       Weird names: AB006000 /gene="hchm-I(3-6)"
+                    AAU57044 /gene="gamma1/gamma2"
+       Multiple names: AB001517 /gene="TMEM1", /gene="PWP2", /gene="KNP-I"
+
+
+- looks like refseq locus can have multiple accessions!!
+        LOCUS       AOC2
+        ACCESSION   NM_009590
+                             /gene="AOC2"
+        ACCESSION   NC_001776
+        ACCESSION   NC_002184
+        
+- *** raToFaRa needs to parse multiple gene names, which might contain
+      spaces  refseq gene name perhaps should be locus rather than 
+      /gene=.  Old used CDS /gene= name.
+
+  -   For NM_130786 (reviewed), we have
+        LOCUS       A1BG
+        gene            1..3386
+                     /gene="A1BG"
+                     /note="synonyms: A1B, ABG, GAB"
+      For NM_020469 (provisional)
+        LOCUS       ABO
+             gene            1..1065
+                     /gene="ABO"
+
+      For hugo CCRN4L ->AF183961, NM_012118
+        LOCUS       AF183961
+        ACCESSION   AF183961
+
+      For ROBO2 -> AF040991
+        LOCUS       AF040991
+             gene            <1..>854
+                     /gene="robo2"
+             CDS             <1..>854
+                     /gene="robo2"
+
+- specify --buffer-size for the gbAlignFinish sort commands.
+
+- somehow report gbLoadRna warnings.
+
+- what would be required to use a database for data:
+   - browser db would have to have copy of databases to do select.
+   
+- make blat take coordinates to extract from nib.
+
+- put hgLoadTabFile bacl to the way it was if we don't use any more.
+
+- index access patterns:
+   * could we used entries that have just the lates processed and latest
+     aligned?  Think we need processed matching aligned version.
+   - processed - just creates index files, doesn't read.
+   - gbAlignGet
+        - does one update at a time, 
+        - loads processed for current release.
+        - if full, loads previous release aligned for genome (not processed)
+        - loads current processed (but not aligned, since working on an
+          unaligned update).
+        - foreach processed entry in update:
+          gbUpdateFindNeedAligned:
+            - check if proc-entry is new or version changed in this update
+              - if have prevAligned, check prev aligned entry.
+        - foreach fastaRec, check if entry to see if selected.
+      **  this could load a single processed update at a time, but needs
+          entire previous aligned.
+
+   - gbAlignInstall:
+        - does one update at a time, 
+        - loads processed for current release.
+        - if full, loads previous release aligned for genome (not processed)
+        - gbUpdateFindNeedAligned:
+           - to traverse processed + prevAlign and find
+             all entries to migrate in current alignment.
+        - foreach prevUpdate, traverse psls and check if flagged for migration
+        - traverse psl, and save flagged
+        - gbUpdateFindNeedAligned - build index
+
+   - gbLoadRna
+        - load processed and aligned.
+        - load status table and add aux info:
+           - load gbStatus  *big*
+           - foreach gbStatus selected 
+                - not in aligned -> mark deleted
+                - version increased -> mark seqChg
+                - modDate increased -> mark metaChg
+                - else -> mark noChg
+           - foreach aligned
+                - not in gbStatus -> mark new
+           - foreach seq not in gbStatus 
+                - flag orphaned
+        - read ra files
+
+   - gbSanity
+        - 
+
+- Combine type and source DB in gbStatusTbl in the same manner as seq
+  or make seq compatbile???
+
+- should be able to load aligned/processed for one update?? maybe not
+  always useful because of metaDataChg being in differet update.
+
+- `select' struct and `select' flag names confusing
+
+- check size of hash tables
+
+- reruning gbAlignSetup on partially completed jobs doesn't appear to
+  generate a subset.  Also, there is no way to check if it completed
+  anyway, sicne we don't make jobs without output.  Probably need
+  a sanit ycheck.
+
+- need to make sure we have new version of programs:
+   - pslReps
+   - liftUp
+   - hgLoadPsl
+   - pslIntronsOnly
+
+- mrna names are varchar(255), could probably be shorter.
+
+- frequnt failures doing download; nd a retry mchanism.
+
+- perl error message are a bit ugly due to trap shit.
+
+- have alignFinish write files direcly, then install index from them.
+  Saves one I/O pass.
+
+- add sanity check for having someintron psls
+
+- mrnaClone table is huge, maybe shouldn't be a unique string table.
+
+
+- PENDING TASKS
+   - deployment doc
+
+- deployment:
+  - download / process / alignSetup on th file servr
+  - rsh to kkr1u00 to align
+  - align finsih
+
+- mytop reports: Query LOAD data local infile 'load/genbank.132.0/hg13/est/estOrien
+
+- should refseq pep sequences be in gbStatus?
+
+- double .tmp: ls processed/genbank.132.0/full/
+   mrna.fa.tmp.tmp  mrna.fil.tmp  mrna.gbidx.tmp  mrna.ra.tmp
+
+- `delete outdated alignments' alignment message should be entery/level
+
+- gbLoadRna should generate errors in some cases where nothing is done.
+
+- add doc about the way to correct a full download with a corrupt file
+  is to remove the corrupt file and the *.md5 file.
+
+- gbLoadRna - don't generabte delet outdate, etc message if there are
+  no outdated.
+
+- it would be nice to have each aligned update have all of the
+  sequences in it aligned, even if they are not seqChg or now.  This
+  would make removing an update less damaging.  Maybe migrate from
+  other update???
+
+- build list of refseqs without dbref for mim and send to ncbi
+
+- **** Have some limit to prevent deleting large number of entries
+
+- reflink diffs:
+    - ~92 refseqs (132.0) don't have OMIM IDS because the
+        gbff don't have FEATURES/gene/db_xref="MIM:191195"
+      need to report this to ncbi
+
+- **** Corrupt (truncated) alidx created and not detected.  Not sure
+       how this happened or how to detect.  sqlnum didn't report error
+       was part of the problems.  Maybe reread after writing, but before
+       closing???
+
+- Determine if all refseqs should have mim/locus links ids, and if so, report
+  as an error.
+
+- add better bookkeeping during the alignment process, keeping lists
+  of acc that aligned or did not align, where they aligned and 
+  ones that need migrated.  Also add bookkeeping for intronPsl
+
+- chagne est-intron check to include other splice sites.
+
+- need method to migrate links
+
+- blat tmp file for  chrX.nib:chrX_5:39292303-56445259 is /var/tmp/gbBlat.19070.tmp/chrX_5.psl
+
+- psl and oi can end up in different order if multiple align to the same loc.
+
+- selectOrientInfo doesn't take into account multiple alignments of
+  the same acc at the same look, so OI ends up larger
+    - fix #ifdef-ed check in gbAlignInstall
+
+- aligned files should be write protected and checksumed
+
+- finish align version is a bit weird; gbAlignInstall makes noise
+  all of the time, but the higher-level script doesn't, which is 
+   a bit confusing to debug.
+
+- report mRNA that is really intergenic
+
+- add data/ route for directory
+
+### Task list ###
+  - cleanup of load directory
+  - make sure index files are carefully check for write errors, we
+    have acopuple of trauncated ones, also when parse.
+  - add processing of HTS sets
+
+- add checks for *.alidx files being there for *.gbidx.
+
+- X63368.2, in genbank.133.0 gbpri23 is marked as a DNA.!
+
+- fix paths in gbBlat
+
+- move sqlTrace global to sqlConnection
+
+- add some kind of complete flag for alignments
+
+- Add sanity checks of release and update info in gbStatus.
+
+- check indcex of gbStatus, seq (include extFile id).
+
+- use blat, etc from our own directory.
+
+- does seq table index typeSrcDbAcc2(type, srcDb, acc(2))),
+  split so that it works without acc(2)
+
+
+- looks like some are mm2 are `Mus musculus musculus'
+
+- Update of file names:
+  - if seq release is older than current release, but seq not changed,
+    and to fa update list.
+  - 
+
+-make sure refseq prot fa gets updated with seq fa.
+
+- *** Need to have a way to track alignment version, to handle realignment
+  with different parameters.  
+
+- refseq peptides are not deleted when no longer referenced
+
+- keep our own copy of all progs
+
+- refseq peptide sequences that are no longer refereced are not deleted
+  and don't have their paths changed
+
+- use para output checks for gbBlat
+
+- don't do unneeded steps in dbload.
+
+- always log state counts in gbLoadrna
+
+- add indices to seq to speed up gbSanity.
+
+
+-** these accessions had multiple portions of the mRNA align to the
+    exact same range of the genome.  Check out why??>
+    AF064839.1
+    AK025862.1
+    AK025986.1
+      X98410.1
+
+- Remove OI count check in migrate, due to above case.  We don't count
+  intronPsls anyway.  Add sanity check that all intronPsls have psls
+  and all psls have OIs..
+
+- alignrun failes if nothing to align (not jobs file generated.  Should
+  check.
+
+- add better parameter validation to gbblat (require .psl.gz)
+
+- -gbAlignInstall should print a message about what is being processed..
+
+- add checks of database for initialLoad flag.
+
+- both gbLoadRna and gbSanity have messages about `loading' tables, although
+  having the oposite meaning.  Confusing.
+
+- don't need to build xeno.alidx for refseq..
+
+- either remove hgRefSeqMrna or change to use function now in genePred.h
+
+- have scripts send reminder if semaphore files detected which are more than a 
+  day old
+
+- full implement gbSeq.version files, including adding to gbSanity
+
+- add orgCat to gbStatus
+
+- Make process/align files read-only
+        also log files.
+
+- *** Would be really good to figure out how to add a date to
+      the genbank update directories.
+
+- normalize verbose messages
+
+- fix weird clone ids:
+        AF072864	IMAGE:25838: 138-g24
+        AB063297	IMAGE: 1837972  (space
+        IMAGE Consortium ID: 504484
+        AF132495	IMAGE: 512859, 731044, 509500
+        AF159441	ac34a06.sl; IMAGE: 1375897
+        NM_020359	ac34a06.sl; IMAGE: 1375897
+
+                
+- should filter stuff be kept in gbToFaRa, or mayde command line??
+
+- Make sure genePred conversions is sane with what Fan did
+
+- add $root/var/ directory for logs and run files.
+
+- is seq.gb_date really needed???
+
+- allow filter to be specified on gbToFaRa cmd line.
+
+- use explict paths to executables to make sure we don't pick up wrong ones.
+
+- (AF201929) in the "SARS mRNA" track is actually a full murine hepatitus strain 2 viral genome (bad label in
+
+- need a way to check if mgc tables are out-of-date.
+
+- dealing with maxShrinkage errors is a pain, need to rerun by had to get list to
+   check, then run again to override.
+
+- lock gbStatus or gbLoaded during update, can be used as a check by
+  other programs while not blocking browser
+
+- alignment parameters
+
+ slightly better to add -q=rna on the native mRNA as well. 
+
+    refseq mrna: (drop -trimHardA)
+         blat -q=rna -fine -ooc=/scratch/hg/h/11.ooc
+         pslReps -minCover=0.15 -sizeMatters -minAli=0.98 -nearTop=0.001
+    native mrna:
+         blat -q=rna -fine -ooc=/scratch/hg/h/11.ooc
+         pslReps -minAli=0.98 -sizeMatters -nearTop=0.005
+    native est:
+         blat -mask=lower -ooc=/scratch/hg/h/11.ooc
+         pslReps -minAli=0.98 -sizeMatters -nearTop=0.005
+    xeno mrna:
+         blat -q=rnax -t=dnax -mask=lower
+         pslReps -minAli=0.25
+    xeno est:
+         blat -q=dnax -t=dnax -mask=lower
+         pslReps -minAli=0.10
+
+- mgc tar file has abs paths
+
+- hmm, looks like:refseq status are: Predicted,Provisional,Reviewed,Unknown
+        -validated lost, also INFERRED,
+
+- why doesn't gbLoadRna use the ignore tables from in gbRelease.
+
+- dir structures
+    doc/
+    etc/
+    test/
+    src/
+        align/
+        dbload/
+        download/
+        gbGetSeqs/
+        gbLoadRna/
+        gbSanity/
+        gbToFaRa/
+        hgLoadSeq/
+        inc/
+        lib/
+        makefile
+        mgc/
+        process/
+        selectWithPsl/
+
+- *** Some refseqse don't have status: NC_001224  Is this ok??>
+        - why does this get saved to begin with??
+
+- add mgc gene name to mgcStatus.
+   - need to handle MGC being select multiple times
+
+- cpio directory permissions

@@ -1,0 +1,21 @@
+#!/bin/bash -e
+
+# Script that runs the MGC download and processing.  This is run by cron
+# weekly.
+
+# errors terminate with message
+set -e
+trap "echo Error: mgc-build failed on `hostname` >&2;exit 1" ERR
+
+# initialize
+gbRoot=/cluster/store5/genbank
+cd $gbRoot
+. $gbRoot/lib/gbCommon.sh
+
+# allow 250mb core dumps
+ulimit -c 256000
+
+# download and process
+mgcDownloadStep
+
+echo "mgc build complete on `hostname`"

@@ -1,0 +1,197 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 3.2//EN">
+
+<HTML>
+  <HEAD>
+    <META name="generator" content=
+    "HTML Tidy for Linux/x86 (vers 1st June 2002), see www.w3.org">
+
+    <TITLE>GenBank/RefSeq Genome Setup</TITLE>
+  </HEAD>
+
+  <BODY bgcolor="white">
+    <H1>GenBank/RefSeq Genome Setup</H1>
+    The page describes that process of setting up the GenBank/RefSeq update
+    process for a new genome or new assembly. It's assumed that the
+    automated download and build already in place and in <CODE>$gbRoot</CODE>.
+
+    <H3>Initial Alignment</H3>
+    Building the initial alignments is a long process, involving gigabytes
+    of disk space and over a day of cluster time.  Do not be surprised if
+    it does not go smoothly.  Manual intervention maybe required to
+    correct problems.
+
+    <OL>
+      <LI> If this is the first time this organism has been aligned:
+      <UL>
+      <LI> A mapping between the prefix used in the UCSC databases names
+           (e.g. <CODE>hg</CODE> of <CODE>hg13</CODE>) and the species names
+           used in GenBank needs to be defined.  This is done by editing
+           <CODE>lib/gbGenome.c</CODE> and rebuilding the programs.  It maybe
+           necessary to define multiple species name mappings.  The list of 
+           species used by GenBank can be obtained by using a command in the form:<BR>
+           <CODE>
+           awk 'BEGIN{FS=&quot;\t&quot;}{print $4}' processed/genbank.135.0/full/*.gbidx |sort -u &gt;species.txt
+           </CODE>
+           on the latest GenBank release. 
+      <LI> Edit <CODE>align/gbBlat</CODE> to add the <EM><CODE>ooc</CODE></EM> file.
+           If there is no <EM><CODE>ooc</CODE></EM>, this script still needs to be
+           modified to indicate this fact.
+      </UL>
+
+      <LI> The following information is needed to do the alignment.  This
+           is represented as variables used in the remainder of this
+           document.
+           <UL>
+           <LI> <CODE>set db=hg20</CODE><BR>
+               The database associated with the genome that is being aligned
+           <LI> <CODE>set nibGlob='/scratch/hg/hg20/chromTrfMixedNib/chr*.nib'</CODE><BR>
+                Glob pattern for location of nibs on cluster.  Single quotes
+                must be use to prevent expansion of the glob pattern by
+                the shell.  Must also be in this location on the server machine where
+                the build is run.
+           <LI> <CODE>set liftFile=/cluster/store5/gs.21/build64/jkStuff/liftAll.lft</CODE><BR>
+                Location of lift file for this genome.  If the genome contigs or scaffolds
+                have not been assembled into chromosomes, specify an empty string.
+                The lift file is used to split the nibs for alignment.
+           </UL>
+           
+      <LI><CODE>ssh kkstore</CODE><BR>
+          The GenBank files currently live on an <CODE>eieio</CODE> file
+          system, however it doesn't have a copy of the cluster
+          <CODE>/scratch</CODE> directory, so <CODE>kkstore</CODE> is used.
+
+      <LI><CODE>cd /cluster/store5/genbank</CODE><BR>
+          This directory is <CODE>$gbRoot</CODE>.
+
+      <LI> <CODE>bin/gbAlignStep -verbose=1 -initial $db $nibGlob $liftFile</CODE><BR>
+           <P>This will run the entire alignment process.
+           The <CODE>-initial</CODE> option defaults several parameters for
+           and initial alignment and prevents this alignment from blocking
+           the automatic daily alignments.  In particular:
+           <UL>
+           <LI> Temporary working directory is <CODE>work/initial.$db/align</CODE>.
+           <LI> Log file will be in the form <CODE>var/initial/2003.05.23-21:51:12.$db.align.log</CODE>.
+           <LI> No semaphore files are created, so this doesn't block the
+                daily build.
+           </UL>
+
+           <P><EM>Important:</EM> this script rsyncs the fasta files to the
+           iservers under <CODE>/iscratch/genbank/</CODE>.  If any of the
+           iservers are down, this can cause the process to hang or fail.
+           If any of the iservers are down, make sure that the rack 
+           is switched use another iserver.  Use the <CODE>-omit-iserver</CODE>
+           option with the simple host name of the iserver:
+           <UL>
+           <LI> <CODE>-omit-iserver=kkr5u00</CODE>
+           </UL>
+           This maybe repeated in multiple iservers are down.
+           <P>
+           All output is saved in the log file.
+           <P> If this is the first time a databases is built for an organism,
+               it's a good idea to start out by aligning and loading just the
+               the mRNAs, as this will go much faster.  Two options control
+               what is aligned:
+               <UL>
+               <LI> <CODE>-srcDb=<EM>name</EM></CODE> - Restrict the source
+                  database to either <CODE>genbank</CODE> or <CODE>refseq</CODE>.
+               <LI> <CODE>-type=<EM>name</EM></CODE> - Restrict the type of sequence
+                  processeed to either <CODE>mrna</CODE> or <CODE>est</CODE>.
+               </UL>
+               Note that since the alignment processs only aligns what neededs
+               to be aligned, no option is required when doing the ESTs after
+               an initial mRNA alignment.
+
+          <P> If anything fails, a subset of the trasks done by
+              <CODE>gbAlignStep</CODE> script can be rerun after correcting
+              the problem.  This is done using the
+              <CODE>-continue=<EM>subtask</EM></CODE> option with
+              <CODE><EM>subtask</EM></CODE> is either
+              <UL>
+              <LI><CODE>copy</CODE> - continue with coping to the iserver,
+              this skips extracting the sequences to align.
+              <LI><CODE>finish</CODE> - finish, alignments, doing
+              lifting and filtering.
+              </UL>
+
+              If the parasol alignment run fails,  then it is
+              continued using parasol directly,
+              followed by an <CODE>gbAlignStep</CODE> with
+              <CODE>-continue=finish</CODE>.   If parasol loses track of
+              the jobs, one can use the <CODE>parasol recover</CODE>
+              command to generate a new jobs file with the jobs
+              that have not completed.
+    </OL>
+
+    <H3>Initial Database Load</H3>
+
+    <OL>
+      <LI><CODE>bin/i386/gbLoadRna -drop $db</CODE> <BR>
+          Drop Genbank and RefSeq related tables if there have been
+          failed attempts to load the database.</LI>
+      
+      <LI><CODE>bin/gbDbLoadStep -verbose=1 -initialLoad $db</CODE></LI>
+      <UL>
+      <LI> Add <CODE>-buildFullMgc=$db</CODE> if this a an MGC species
+           (currently human and mouse).
+      <LI> If an initial load was done using only the mRNAs, it will be
+           most likely be <B>much</B> faster to drop all of the GenBank
+           tables and load with the <CODE>-initialLoad</CODE> option
+           when loading the ESTs.
+      </UL>
+
+    </OL>
+<!--
+
+set workdir=align.hg15
+set clusterdir=/iscratch/genbank/$workdir
+set iserverdir=/scratch/genbank
+bin/gbAlignSetup -verbose=1 -workdir=$workdir -clusterdir=$clusterdir hg15 '/scratch/hg/gs.16/build33/chromTrfMixedNib/*.nib' /cluster/store5/gs.16/build33/jkStuff/liftAll.lft  >&setup.log
+
+bin/gbAlignIServerCopy align.hg15 /scratch/genbank >&rsync.log
+
+bin/gbAlignFinish -verbose=1 -workdir=$workdir hg15 /cluster/store5/gs.16/build33/jkStuff/liftAll.lft  >&finish.log
+
+
+*** need to add ci to  
+
+ci1
+These are in /scratch/hg/ci1/nib/Scaffold_{0..2501).nib
+
+
+set workdir=ci1.work
+set clusterdir=/iscratch/genbank/$workdir
+set iserverdir=/scratch/genbank
+
+bin/gbAlignSetup -srcDb=genbank -type=mrna -verbose=1 -workdir=$workdir -clusterdir=$clusterdir ci1 '/scratch/hg/ci1/nib/*.nib' ''  >&ci1.setup.log
+bin/gbAlignIServerCopy $workdir /scratch/genbank >&ci1.rsync.log
+bin/gbAlignRun -workdir=$workdir >& ci1.align.log
+bin/gbAlignFinish -verbose=1 -workdir=$workdir ci1 ''  >&ci1.finish.log
+
+ /cluster/store5/squirt/ci1/nib/*.nib
+
+###bin/gbAlignIServerClean $workdir
+
+ setup /gbdb symlink if not present.
+use gbLoadRna -drop
+ ./bin/gbDbLoadStep -initialLoad -noPerChrom=ci1 ci1 >&log&
+
+- changing blat and plsReps alignments.
+
+para recover
+
+-finish
+
+- upodate etc files
+
+entry AK027653.1 2003-04-21 organism previously specified as "Homo sapiens" (native), is specfied as "synthetic construct" (xeno) in ./data/processed/genbank.135.0/daily.0521/mrna.gbidx, add one to ignored.idx
+
+fgrep AK027653 data/processed/genbank.135.0/*/*.gbidx
+ running gbSanity
+   -allowLargeDeletes - override check for deleting large number of
+    entries.
+
+
+-->
+  </BODY>
+</HTML>
+

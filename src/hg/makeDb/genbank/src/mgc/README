@@ -1,0 +1,8 @@
+Process MGC database tab files from NCBI.
+
+autoSql files created to parse MGC tables:
+    mgcClone.as  - clone
+    mgcFullength.as - fullength
+    mgcLibrary.as - library
+    mgcStage1.as - stage1
+

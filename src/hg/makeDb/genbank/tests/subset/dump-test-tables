@@ -1,0 +1,154 @@
+#!/usr/bin/perl
+#
+# dump-test-tables db outdir
+#
+# Dump tables from a test database in a form that can be diffed.  This removes
+# variant fields, such as ids and timestamps and sorts the results.  This can
+# be used to compare the results of loading in different ways, such as loading
+# all available updates, with incrementally obtained updates.  
+# 
+use strict;
+use warnings;
+use File::Basename;
+use FindBin;
+use lib "$FindBin::Bin/../../lib";
+use gbCommon;
+
+my $quick = 0;  # skip PSLs if set
+
+setTaskName("dump-test-tables");
+
+# command to run mysql
+my $MYSQL = "hgu-mysql -N";
+
+# run mysql and output results to a file
+sub runMySql($$) {
+    my($outFile, $sqlCmd) = @_;
+    runProg("$MYSQL -e '$sqlCmd' $main::db > $outFile");
+}
+
+# run mysql and return results as a list of lines
+sub callMySql($) {
+    my($sqlCmd) = @_;
+    my $out = callProg("$MYSQL -e '$sqlCmd' $main::db");
+    chomp($out);
+    return split('\n', $out);
+}
+
+if ($#ARGV != 1) {
+    die("wrong # args: dump-test-tables db outdir");
+    }
+$main::db = $ARGV[0];
+$main::outdir = $ARGV[1];
+my $tbldir = "$main::outdir/tbls";
+makeDir($tbldir);
+
+# save load directory
+if (-e "load") {
+    removeDir("$main::outdir/load");
+    renameFile("load", "$main::outdir/load");
+}
+
+my @chroms = callMySql("select chrom from chromInfo");
+push(@chroms, "all");
+my @tables = callMySql("show tables");
+
+if (!$quick) {
+    # Used to generate psl chromosome (and all) table names. Tables existance is
+    # check, so this can be a super-set.
+    my @pslTables;
+    foreach my $type ("mrna", "est", "intronEst") {
+        foreach my $chr (@chroms) {
+            push(@pslTables, $chr . "_" . $type);
+        }
+    }
+    push(@pslTables, "xenoMrna");
+    push(@pslTables, "xenoEst");
+    foreach my $chr (@chroms) {
+        push(@pslTables, $chr . "_" . "intronEst");
+    }
+
+    foreach my $tbl (@pslTables) {
+        if (inList($tbl, @tables)) {
+            runMySql("$tbldir/$tbl.tbl",
+                     "SELECT * FROM $tbl ORDER BY "
+                     . "tName,tStart,tEnd,qName,qStart,qEnd");
+        }
+    }
+}
+
+# *OrientInfo tables
+foreach my $type ("mrna", "est") {
+    my $tbl = "${type}OrientInfo";
+    if (inList($tbl, @tables)) {
+        runMySql("$tbldir/$tbl.tbl", 
+             "SELECT * FROM $tbl ORDER BY chrom,chromStart,chromEnd,name");
+    }
+}
+
+# get contents of mrna tables, joining the values in the unique name table
+my $mrnaSel =
+    "SELECT mrna.acc, mrna.version, mrna.moddate, mrna.type, mrna.direction,"
+    . "        author.name AS author, cds.name AS cds, cell.name AS cell,"
+    . "        description.name AS description, "
+    . "        development.name AS development, geneName.name AS geneName,"
+    . "        keyword.name AS keyword, library.name AS library, "
+    . "        mrnaClone.name as mrnaClone, organism.name AS organism,"
+    . "        productName.name AS productName, sex.name AS sex, "
+    . "        source.name AS source, tissue.name AS tissue "
+    . " FROM mrna,author,cds,cell,description,development,geneName,keyword,"
+    . "      library,mrnaClone,organism,productName,sex,source,tissue"
+    . " WHERE mrna.author=author.id AND mrna.cds=cds.id"
+    . "       AND mrna.cell=cell.id AND mrna.description=description.id"
+    . "       AND mrna.development=development.id AND mrna.geneName=geneName.id"
+    . "       AND mrna.keyword=keyword.id AND mrna.library=library.id"
+    . "       AND mrna.mrnaClone=mrnaClone.id AND mrna.organism=organism.id"
+    . "       AND mrna.productName=productName.id AND mrna.sex=sex.id"
+    . "       AND mrna.source=source.id AND mrna.tissue=tissue.id"
+    . "       ORDER BY acc";
+
+runMySql("$tbldir/mrna.tbl", $mrnaSel);
+
+# seq and file tables, dropping the ids
+runMySql("$tbldir/gbSeq.tbl",
+         "SELECT acc,version,size,file_offset,file_size,type,srcDb FROM gbSeq ORDER BY acc");
+# this always differs, so don't save in tbldir
+runMySql("$main::outdir/gbExtFile.tbl",
+         "SELECT path,size FROM gbExtFile ORDER BY path");
+
+# gbStatus, save select data for diff, plus full table
+runMySql("$tbldir/gbStatus.tbl",
+         "SELECT acc,version,modDate,type,srcDb,numAligns FROM gbStatus ORDER BY acc");
+runMySql("$main::outdir/gbStatus.tbl",
+         "SELECT * FROM gbStatus ORDER BY acc");
+
+# refseq-specific tables
+my $refLinkSel =
+    "SELECT refLink.name,refLink.product,refLink.mrnaAcc,refLink.protAcc,"
+    . "       geneName.name,productName.name,refLink.locusLinkId,refLink.omimId "
+    . "FROM refLink,geneName,productName "
+    . "WHERE refLink.geneName=geneName.id and refLink.prodName=productName.id "
+    . "ORDER BY refLink.mrnaAcc";
+    
+runMySql("$tbldir/refLink.tbl", $refLinkSel);
+
+runMySql("$tbldir/refSeqStatus.tbl",
+         "SELECT mrnaAcc,status FROM refSeqStatus ORDER BY mrnaAcc");
+
+runMySql("$tbldir/refSeqAli.tbl",
+         "SELECT * FROM refSeqAli ORDER BY tName,tStart,tEnd,qName,qStart,qEnd");
+
+runMySql("$tbldir/refGene.tbl",
+         "SELECT * FROM refGene ORDER BY name,chrom,txStart,txEnd");
+runMySql("$tbldir/refFlat.tbl",
+         "SELECT * FROM refFlat ORDER BY geneName,name,chrom,txStart,txEnd");
+
+runMySql("$tbldir/gbLoaded.tbl",
+         "SELECT srcDb,loadRelease,loadUpdate,type,accPrefix FROM gbLoaded ORDER BY srcDb,loadRelease,loadUpdate,type,accPrefix");
+
+runMySql("$tbldir/imageClone.tbl",
+         "SELECT imageId,acc,type FROM imageClone ORDER BY imageId,acc");
+
+# get gbSeq table join with gbExtFile
+runMySql("$tbldir/gbSeqExtFile.tbl", 
+         "SELECT gbSeq.acc,gbExtFile.path FROM gbSeq,gbExtFile WHERE gbSeq.gbExtFile=gbExtFile.id ORDER BY gbSeq.acc");
