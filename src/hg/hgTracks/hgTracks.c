@@ -76,7 +76,7 @@
 #include "web.h"
 #include "grp.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.558 2003/07/11 17:20:42 braney Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.559 2003/07/11 23:09:07 baertsch Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define EXPR_DATA_SHADES 16
@@ -10059,6 +10059,7 @@ registerTrackHandler("blastzCb1", longXenoPslMethods);
 registerTrackHandler("blastzCe1", longXenoPslMethods);
 registerTrackHandler("blastzSelf", longXenoPslMethods);
 registerTrackHandler("pseudoMrna", xenoMrnaMethods);
+registerTrackHandler("mrnaBlastz", xenoMrnaMethods);
 registerTrackHandler("xenoBlastzMrna", xenoMrnaMethods);
 registerTrackHandler("xenoBestMrna", xenoMrnaMethods);
 registerTrackHandler("xenoMrna", xenoMrnaMethods);

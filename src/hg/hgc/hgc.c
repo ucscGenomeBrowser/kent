@@ -111,7 +111,7 @@
 #include "axtLib.h"
 #include "ensFace.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.451 2003/07/03 00:18:25 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.452 2003/07/11 23:09:28 baertsch Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -3144,7 +3144,7 @@ char *table;
 int start = cartInt(cart, "o");
 struct psl *pslList = NULL;
 
-if (sameString("xenoMrna", track) || sameString("xenoBestMrna", track) || sameString("xenoEst", track) || sameString("sim4", track) || sameString("pseudoMrna",track))
+if (sameString("xenoMrna", track) || sameString("xenoBestMrna", track) || sameString("xenoEst", track) || sameString("sim4", track) || sameString("pseudoMrna",track)|| sameWord("mrnaBlastz", track))
     {
     char temp[256];
     sprintf(temp, "non-%s RNA", organism);
@@ -3162,7 +3162,7 @@ else if (startsWith("psu", track))
     type = "Pseudo & Real Genes";
     table = "psu";
     }
-else if (sameWord("xenoBlastzMrna", track))
+else if (sameWord("xenoBlastzMrna", track) )
     {
     type = "Blastz to foreign mRNA";
     table = "xenoBlastzMrna";
@@ -11795,6 +11795,7 @@ else if (sameWord(track, "mrna") || sameWord(track, "mrna2") ||
 	 sameWord(track, "all_mrna") ||
          sameWord(track, "est") || sameWord(track, "intronEst") || 
          sameWord(track, "xenoMrna") || sameWord(track, "xenoBestMrna") ||
+         sameWord(track, "mrnaBlastz") || 
          sameWord(track, "xenoBlastzMrna") || sameWord(track, "sim4") ||
          sameWord(track, "xenoEst") || sameWord(track, "psu") ||
          sameWord(track, "tightMrna") || sameWord(track, "tightEst") ||

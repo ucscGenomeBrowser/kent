@@ -13,7 +13,7 @@
 #include "chainLink.h"
 #include "chainDb.h"
 
-static char const rcsid[] = "$Id: chainTrack.c,v 1.14 2003/07/10 16:04:03 braney Exp $";
+static char const rcsid[] = "$Id: chainTrack.c,v 1.15 2003/07/11 23:09:07 baertsch Exp $";
 
 
 static void doQuery(struct sqlConnection *conn, char *fullName, 
@@ -198,11 +198,25 @@ struct chain chain;
 int rowOffset;
 char **row;
 struct sqlConnection *conn = hAllocConn();
-struct sqlResult *sr = hRangeQuery(conn, track, chromName, winStart, winEnd,
-	NULL, &rowOffset);
+struct sqlResult *sr = NULL;
 struct linkedFeatures *list = NULL, *lf;
 int qs;
+char optionChr[128]; /* Option -  chromosome filter */
+char *optionChrStr;
+char extraWhere[128] ;
 
+snprintf( optionChr, sizeof(optionChr), "%s.chromFilter", tg->mapName);
+optionChrStr = cartUsualString(cart, optionChr, "All");
+if (startsWith("chr",optionChrStr)) 
+    {
+    snprintf(extraWhere, sizeof(extraWhere), "qName = \"%s\"",optionChrStr);
+    sr = hRangeQuery(conn, track, chromName, winStart, winEnd, extraWhere, &rowOffset);
+    }
+else
+    {
+    snprintf(extraWhere, sizeof(extraWhere), " ");
+    sr = hRangeQuery(conn, track, chromName, winStart, winEnd, NULL, &rowOffset);
+    }
 while ((row = sqlNextRow(sr)) != NULL)
     {
     char buf[16];
