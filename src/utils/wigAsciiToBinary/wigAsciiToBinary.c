@@ -40,7 +40,7 @@
 
 #define	NO_DATA	128
 
-static char const rcsid[] = "$Id: wigAsciiToBinary.c,v 1.4 2003/09/16 20:24:37 hiram Exp $";
+static char const rcsid[] = "$Id: wigAsciiToBinary.c,v 1.5 2003/09/19 21:17:13 hiram Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -48,6 +48,7 @@ static struct optionSpec optionSpecs[] = {
     {"binsize", OPTION_LONG_LONG},
     {"dataSpan", OPTION_LONG_LONG},
     {"chrom", OPTION_STRING},
+    {"name", OPTION_STRING},
     {"verbose", OPTION_BOOLEAN},
     {NULL, 0}
 };
@@ -57,17 +58,19 @@ static long long binsize = 1024;	/* # of data points per table row */
 static long long dataSpan = 1;		/* bases spanned per data point */
 static boolean verbose = FALSE;		/* describe what happens	*/
 static char * chrom = (char *) NULL;	/* to specify chrN file name	*/
+static char * name = (char *) NULL;	/* to specify feature name	*/
 
 static void usage()
 {
 errAbort(
     "wigAsciiToBinary - convert ascii Wiggle data to binary file\n"
     "usage: wigAsciiToBinary [-offset=N] [-binsize=N] [-dataSpan=N] \\\n"
-    "\t[-chrom=chrN] [-verbose] <file names>\n"
+    "\t[-chrom=chrN] [-name=<feature name>] [-verbose] <file names>\n"
     "\t-offset=N - add N to all coordinates, default 0\n"
     "\t-binsize=N - # of points per database row entry, default 1024\n"
     "\t-dataSpan=N - # of bases spanned for each data point, default 1\n"
-    "\t-chrom=chrN - this data is for chrN\n"
+    "\t-chrom=chrN - this data is for chrN, to name output file\n"
+    "\t-name=<feature name> - to name the feature, default chrN\n"
     "\t-verbose - display process while underway\n"
     "\t<file names> - list of files to process\n"
     "If the name of the input files are of the form: chrN.<....> this will\n"
@@ -84,21 +87,25 @@ errAbort(
  *	so it is a define here, which works just fine.
  *	Definition of this row format can be found in hg/inc/wiggle.h
  *	and hg/lib/wiggle.as, etc ...
- *	Probably do not need the score field which is simply output as
- *	zero here.  And probably do not need the strand either, but will
- *	keep them around in case some good use can be found later.
+ *	Going to use the score field as our first line of data
+ *	compression.  It will be the maximum of the data values in this
+ *	bin.  Probably do not need the strand, but will
+ *	it them around in case some good use can be found later.
  */
 #define OUTPUT_ROW \
-    chromEnd = chromStart + (bincount * dataSpan) - 1; \
-    fprintf( wigout, \
-"%s\t%llu\t%llu\t%s_%llu_%swiggle\t0\t%c\t%llu\t%llu\t%llu\t%s\n", \
-	chromName, chromStart, chromEnd, chromName, rowCount, \
-	spanName, strand, dataSpan, bincount, fileOffsetBin, \
-	binfile ); \
-    ++rowCount; \
-    bincount = 0;	/* to count up to binsize	*/ \
-    chromStart = Offset + dataSpan; \
-    fileOffsetBin = fileOffset;
+    if( bincount ) { \
+	chromEnd = chromStart + (bincount * dataSpan); \
+	fprintf( wigout, \
+"%s\t%llu\t%llu\t%s_%llu_%s\t%d\t%c\t%llu\t%llu\t%llu\t%s\n", \
+	    chromName, chromStart+add_offset, chromEnd+add_offset, \
+	    featureName, rowCount, spanName, maxScore, strand, dataSpan, \
+	    bincount, fileOffsetBegin, binfile ); \
+	++rowCount; \
+	} \
+	bincount = 0;	/* to count up to binsize	*/ \
+	maxScore = 0;	/* new bin, start new max */ \
+	chromStart = Offset + dataSpan; \
+	fileOffsetBegin = fileOffset;
 
 void wigAsciiToBinary( int argc, char *argv[] )
 {
@@ -112,8 +119,9 @@ unsigned long long previousOffset = 0;	/* for data missing detection */
 unsigned long long bincount = 0;	/* to count binsize for wig file */
 unsigned long long Offset = 0;		/* from data input	*/
 off_t fileOffset = 0;			/* where are we in the binary data */
-off_t fileOffsetBin = 0;		/* where this bin started in binary */
+off_t fileOffsetBegin = 0;		/* where this bin started in binary */
 int score = 0;				/* from data input	*/
+int maxScore = 0;			/* max score in this bin */
 char *binfile = (char *) NULL;	/*	file name of binary data file	*/
 char *wigfile = (char *) NULL;	/*	file name of wiggle database file */
 FILE *binout;	/*	file handle for binary data file	*/
@@ -124,6 +132,7 @@ unsigned long long chromStart = 0;	/* for table row data */
 unsigned long long chromEnd = 0;	/* for table row data */
 char strand = '+';			/* may never use - strand ? */
 char spanName[64];			/* short-hand name for dataSpan */
+char featureName[254];			/* the name of this feature */
 
 /*	for each input data file	*/
 for( i = 1; i < argc; ++i )
@@ -142,7 +151,12 @@ for( i = 1; i < argc; ++i )
 		    dataSpan/(1024*1024) );
 	} else {
 	    snprintf( spanName, sizeof(spanName)-1, "%lluG",
-		    dataSpan/(1024*1024) );
+		    dataSpan/(1024*1024*1024) );
+	}
+    /*	Is the name of this feature specified ?	*/
+    if( name )
+	{
+	    snprintf( featureName, sizeof(featureName) - 1, "%s", name );
 	}
     /*	Name mangling to determine output file name */
     if( chrom )	/*	when specified, simply use it	*/
@@ -150,6 +164,8 @@ for( i = 1; i < argc; ++i )
 	binfile = addSuffix(chrom, ".wib");
 	wigfile = addSuffix(chrom, ".wig");
 	chromName = cloneString(chrom);
+	if( ! name )
+	    snprintf( featureName, sizeof(featureName) - 1, "%s", chrom );
 	} else {	/*	not specified, construct from input names */
 	if( startsWith("chr",argv[i]) )
 	    {
@@ -159,6 +175,8 @@ for( i = 1; i < argc; ++i )
 	    binfile = addSuffix(tmpString, ".wib");
 	    wigfile = addSuffix(tmpString, ".wig");
 	    chromName = cloneString(tmpString);
+	    if( ! name )
+		snprintf(featureName, sizeof(featureName) - 1, "%s", tmpString);
 	    freeMem(tmpString);
 	    } else {
 errAbort("Can not determine output file name, no -chrom specified\n");
@@ -167,8 +185,9 @@ errAbort("Can not determine output file name, no -chrom specified\n");
     if( verbose ) printf("output files: %s, %s\n", binfile, wigfile);
     rowCount = 0;	/* to count rows output */
     bincount = 0;	/* to count up to binsize	*/
+    maxScore = 0;	/* max score in this bin */
     fileOffset = 0;	/* current location within binary data file	*/
-    fileOffsetBin = 0;	/* location in binary data file where this bin starts */
+    fileOffsetBegin = 0;/* location in binary data file where this bin starts*/
     binout = mustOpen(binfile,"w");	/*	binary data file	*/
     wigout = mustOpen(wigfile,"w");	/*	table row definition file */
     lf = lineFileOpen(argv[i], TRUE);	/*	input file	*/
@@ -194,6 +213,8 @@ warn("WARNING: truncating score %d to 0 at line %d\n", score, lineCount );
 warn("WARNING: truncating score %d to 127 at line %d\n", score, lineCount );
 		score = 127;
 	    }
+	if( score > maxScore )
+	    maxScore = score;
 	/* see if this is the first time through, establish chromStart 	*/
 	if( lineCount == 1 )
 	    chromStart = Offset;
@@ -201,21 +222,41 @@ warn("WARNING: truncating score %d to 127 at line %d\n", score, lineCount );
 	if( Offset > (previousOffset + dataSpan) )
 	    {
 	    unsigned long long off;
+	    unsigned long long fillSize;	/* number of bytes */
 	    if( verbose )
 printf("missing data offsets: %llu - %llu\n",previousOffset+1,Offset-1);
-	    /*	fill missing data with NO_DATA indication	*/
-	    for( off = previousOffset + dataSpan; off < Offset; off += dataSpan )
+	    /*	If we are just going to fill the rest of this bin with
+	     *  no data, then may as well stop here.  No need to fill
+	     *  it with nothing.
+	     */
+	    fillSize = (Offset - (previousOffset + dataSpan)) / dataSpan;
+	    if( verbose )
+printf("filling NO_DATA for %llu bytes\n", fillSize );
+	    if( fillSize + bincount >= binsize )
 		{
-		fputc(NO_DATA,binout);
-		++fileOffset;
-		++bincount;	/*	count scores in this bin */
-		if( bincount >= binsize ) break;
-		}
-		/*	If that finished off this bin, output it */
-		if( bincount >= binsize )
-		    {
 		    OUTPUT_ROW;
+	    if( verbose )
+printf("completed a bin due to  NO_DATA for %llu bytes, only %llu - %llu = %llu to go\n", fillSize, binsize, bincount, binsize - bincount );
+		} else {
+		fillSize = 0;
+		/*	fill missing data with NO_DATA indication	*/
+		for( off = previousOffset + dataSpan; off < Offset;
+			off += dataSpan )
+		    {
+		    ++fillSize;
+		    fputc(NO_DATA,binout);
+		    ++fileOffset;
+		    ++bincount;	/*	count scores in this bin */
+		    if( bincount >= binsize ) break;
 		    }
+	    if( verbose )
+printf("filled NO_DATA for %llu bytes\n", fillSize );
+		/*	If that finished off this bin, output it */
+		    if( bincount >= binsize )
+			{
+			OUTPUT_ROW;
+			}
+	        }
 	    }
 	/*	With perhaps the missing data taken care of, back to the
 	 *	real data.
@@ -257,13 +298,11 @@ optionInit(&argc, argv, optionSpecs);
 if(argc < 2)
     usage();
 
-/*	the add_offset will only be useful when this turns into the
- *	database load function.  It has no value here.
- */
-add_offset = optionLongLong("verbose", 0);
+add_offset = optionLongLong("offset", 0);
 binsize = optionLongLong("binsize", 1024);
 dataSpan = optionLongLong("dataSpan", 1);
 chrom = optionVal("chrom", NULL);
+name = optionVal("name", NULL);
 verbose = optionExists("verbose");
 
 if( verbose ) {
@@ -271,6 +310,9 @@ if( verbose ) {
 	add_offset, binsize, dataSpan);
     if( chrom ) {
 	printf("-chrom=%s\n", chrom);
+    }
+    if( name ) {
+	printf("-name=%s\n", name);
     }
 }
 wigAsciiToBinary(argc, argv);
