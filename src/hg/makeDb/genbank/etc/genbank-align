@@ -11,11 +11,6 @@
 #  changed since the alignment was started.
 #
 
-# IMPORTANT: set omitIServers to a list of -omit-iserver=host options
-# if one or more iservers are down
-omitIServers=""
-omitIServers="-omit-iserver=kkr5u00 -omit-iserver=kkr6u00"
-
 # errors terminate with message
 set -e
 trap "echo Error: genbank-align failed on `hostname` >&2; exit 1" ERR
@@ -54,17 +49,7 @@ fi
 # align on large cluster, rsyncing to iservers
 clusterdir=/iscratch/genbank
 
-hg15nibs='/scratch/hg/gs.16/build33/chromTrfMixedNib/chr*.nib'
-hg15lift=/cluster/store5/gs.16/build33/jkStuff/liftAll.lft
-
-mm3nibs='/scratch/hg/mm3/chromTrfMixedNib/chr*.nib'
-mm3lift=/cluster/store2/mm.2003.02/mm3/jkStuff/liftAll.lft
-
-nice gbAlignStep $finish $omitIServers \
-    -workdir=$workdir \
-    -clusterdir=$clusterdir \
-    hg15 "$hg15nibs" $hg15lift \
-    mm3  "$mm3nibs"  $mm3lift
+nice gbAlignStep $finish -workdir=$workdir -clusterRootDir=$clusterdir hg15 mm3 rn2
 
 gbMkTimeFile $buildTime
 
