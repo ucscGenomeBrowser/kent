@@ -4,6 +4,7 @@
 #include "net.h"
 #include "linefile.h"
 #include "sqlNum.h"
+#include "dnaseq.h"
 #include "fa.h"
 #include "fuzzyFind.h"
 #include "supStitch.h"
@@ -896,6 +897,7 @@ for (range = rangeList; range != NULL; range = range->next)
 	bun, outData, FALSE, ffCdna, minMatch, outFunction);
     ssBundleFree(&bun);
     }
+gfRangeFreeList(&rangeList);
 for (frame=0; frame<3; ++frame)
     gfClumpFreeList(&clumps[frame]);
 lmCleanup(&lm);
