@@ -27,7 +27,6 @@ o - Create the trackDb table as so
        cvs commit makefile
 
 
-
 STORING O+O SEQUENCE AND ASSEMBLY INFORMATION (DONE)
 
 Create packed chromosome sequence files 
@@ -113,7 +112,7 @@ When that is done do:
 	end
 	cd ..
     end
-Then ask admins to do a binrsync. - BINRSYNC IN PROGRESS 5/7/02 - 4:30 PM - MATT 
+Then ask admins to do a binrsync.
 
 
 
@@ -180,28 +179,32 @@ Then load the .out files into the database with:
     hgLoadOut hg11 ?/*.fa.out ??/*.fa.out
 
 
-MAKING AND STORING mRNA AND EST ALIGNMENTS (todo)
+MAKING AND STORING mRNA AND EST ALIGNMENTS (IN PROGRESS)
 
 o - Load up the local disks of the cluster with refSeq.fa, mrna.fa and est.fa
-    from /cluster/store1/mrna.129  into /var/tmp/hg/h/mrna
+    Copy the above 3 files from /cluster/store1/mrna.129 into /scratch/hg/h/mrna
+    Request the admins to do a binrsync to the cluster.
 
 o - Use BLAT to generate refSeq, mRNA and EST alignments as so:
       Make sure that /scratch/hg/gs.12/build29/contigs is loaded
       with NT_*.fa and pushed to the cluster nodes.
+          ssh kkstore
+
 	  cd ~/oo/bed
 	  foreach i (refSeq mrna est)
-	      mkdir $i
+	      mkdir -p $i
 	      cd $i
-	      echo /scratch/hg/gs.12/build29/contigs | wordLine stdin > genome.lst
-	      ls -1 /scratch/hg/mrna.129/$i.fa > mrna.lst
-	      mkdir psl
+              cp ~kent/lastOo/bed/$i/gsub .
+	      echo /scratch/hg/gs.12/build29/contig/*.fa | wordLine stdin > genome.lst
+	      ls -1 /scratch/hg/h/mrna/$i.fa > mrna.lst
+	      mkdir -p psl
 	      gensub2 genome.lst mrna.lst gsub spec
-	      jabba make hut spec
-	      jabba push hut
+	      para create spec
+              cd ..
 	  end 
-    check on progress with jabba check hut in mrna, est, and refSeq
-    directories.
 
+    Now, by hand cd to the mrna, refSeq, and est directories respectively
+     and run a para push and para check in each ont.
       
 o - Process refSeq mRNA and EST alignments into near best in genome.
       cd ~/oo/bed
@@ -501,7 +504,7 @@ o - Process these out of genbank flat files as so:
        ssh kks00
        cd /projects/hg2
        mkdir mrna.129
-       cp /cluster/store1/mrna.129/xenoRna.* mrna.129
+       cp /cluster/store1/mrna.129/xenoRna*.* mrna.129
 Above set of commands is DONE.
 
 Set up cluster run.  First make sure genome is in kks00:/scratch/hg/gs.8/build29/contigTrf
@@ -513,6 +516,7 @@ stage).  Also make sure /scratch/hg/mrna.129 is loaded with xenoRna.fa Then do:
        cd xenoMrna
        mkdir psl
        ls -1S /scratch/hg/gs.12/build29/trfFa > human.lst
+       cp /projects/hg2/mrna.129/* /scratch/hg/mrna.129
        ls -1S /scratch/hg/mrna.129/xenoRna?*.fa > mrna.lst
        cp ~/lastOo/bed/xenoMrna/gsub .
        gensub2 human.lst mrna.lst gsub spec
