@@ -1090,7 +1090,7 @@ return sub;
 
 /* header for job status output */
 static char *jobStatusHdr =
-"#state\ttries\treal\tcpu\tcmd\n";
+"#state\ttries\treal\tcpu\thost\tcmd\n";
 
 void paraJobStatus(struct job *job, struct hash *resultsHash, time_t now)
 /* Print status of a job. */
@@ -1101,6 +1101,7 @@ double realTime = 0.0;
 double cpuTime = 0.0;
 struct submission *sub = getLastSubmission(job);
 struct jobResult *jr = NULL;
+char *host = "";
 
 if (sub != NULL)
     {
@@ -1114,13 +1115,15 @@ if (sub != NULL)
         realTime = jrRealTime(jr);
         cpuTime = jrCpuTime(jr);
         }
+    host = sub->host;
     }
 
 subChar(job->command, '\t', ' ');  /* tabs not allowed in column */
-printf("%s\t%d\t%0.2f\t%0.2f\t%s\n",
+
+printf("%s\t%d\t%0.2f\t%0.2f\t%s\t%s\n",
        stateStr,
        job->submissionCount,
-       realTime, cpuTime,
+       realTime, cpuTime, host,
        job->command);
 }
 
