@@ -153,7 +153,7 @@
 #include "pscreen.h"
 #include "jalview.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.799 2004/12/13 20:34:40 angie Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.800 2004/12/14 20:37:00 fanhsu Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -11498,6 +11498,13 @@ if ((row = sqlNextRow(sr)) != NULL)
 			"Laboratoire de Biologie Moléculaire Eucaryote: ", 
 			"http://www-snorna.biotoul.fr/plus.php?id=$$", TRUE);
     	printf("<B>RNA Type:</B> CD Box snoRNA\n");
+	}
+    if (sameWord(wgRna->type, "scaRna"))
+    	{
+	printCustomUrlWithLabel(tdb, item, 
+			"Laboratoire de Biologie Moléculaire Eucaryote: ", 
+			"http://www-snorna.biotoul.fr/plus.php?id=$$", TRUE);
+    	printf("<B>RNA Type:</B> small Cajal body-specific RNA\n");
 	}
     if (sameWord(wgRna->type, "miRna"))
     	{
