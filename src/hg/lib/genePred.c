@@ -169,14 +169,19 @@ boolean anyExon = FALSE;
 
 /* Look to see if any exons.  If not allow CDS to be
  * used instead. */
-for (gl = group->lineList; gl != NULL; gl = gl->next)
+if (exonSelectWord)
     {
-    if (sameWord(gl->feature, exonSelectWord))
+    for (gl = group->lineList; gl != NULL; gl = gl->next)
 	{
-        anyExon = TRUE;
-	break;
+	if (sameWord(gl->feature, exonSelectWord))
+	    {
+	    anyExon = TRUE;
+	    break;
+	    }
 	}
     }
+else
+    anyExon = TRUE;
 if (!anyExon)
     exonSelectWord = "CDS";
 

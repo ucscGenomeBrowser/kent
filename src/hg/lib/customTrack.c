@@ -8,6 +8,7 @@
 #include "errabort.h"
 #include "linefile.h"
 #include "sqlList.h"
+#include "jksql.h"
 #include "customTrack.h"
 #include "ctgPos.h"
 #include "psl.h"
@@ -394,7 +395,7 @@ for (;;)
 static char *niceGeneName(char *name)
 /* Return a nice version of name. */
 {
-static char buf[64];
+static char buf[128];
 char *e;
 
 strncpy(buf, name, sizeof(buf));
