@@ -109,6 +109,7 @@ UTIL_DIRS = \
 	gpToGtf \
 	gpcrParser \
 	gsBig \
+	hgChroms \
 	hgsql \
 	hgsqldump \
 	intronEnds \
