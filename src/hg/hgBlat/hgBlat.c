@@ -24,7 +24,7 @@ struct serverTable
    char *nibDir;	/* Directory of sequence files. */
    };
 
-char *genomeList[] = {"Oct. 7, 2000", "Dec. 12, 2000", "April 1, 2001", "Aug. 6, 2001"};
+char *genomeList[] = {"Dec. 12, 2000", "April 1, 2001", "Aug. 6, 2001"};
 char *typeList[] = {"BLAT's guess", "DNA", "protein", "translated RNA", "translated DNA"};
 char *sortList[] = {"query,score", "query,start", "chrom,score", "chrom,start", "score"};
 char *outputList[] = {"hyperlink", "psl", "psl no header"};
@@ -401,32 +401,35 @@ for (seq = seqList; seq != NULL; seq = seq->next)
     conn = gfConnect(serve->host, serve->port);
     if (isTx)
 	{
-	static struct gfSavePslxData data;
-	data.f = f;
-	data.reportTargetStrand = TRUE;
+	static struct gfSavePslxData outForm;
+	outForm.f = f;
+	outForm.reportTargetStrand = TRUE;
 	if (isTxTx)
 	    {
-	    gfAlignTransTrans(conn, serve->nibDir, seq, FALSE, 5, gfSavePslx, &data, !txTxBoth);
+	    gfAlignTransTrans(conn, serve->nibDir, seq, FALSE, 5, gfSavePslx, &outForm, !txTxBoth);
 	    if (txTxBoth)
 		{
 		close(conn);
 		reverseComplement(seq->dna, seq->size);
 		conn = gfConnect(serve->host, serve->port);
-		gfAlignTransTrans(conn, serve->nibDir, seq, TRUE, 5, gfSavePslx, &data, FALSE);
+		gfAlignTransTrans(conn, serve->nibDir, seq, TRUE, 5, gfSavePslx, &outForm, FALSE);
 		}
 	    }
 	else
 	    {
-	    gfAlignTrans(conn, serve->nibDir, seq, 5, gfSavePslx, &data);
+	    outForm.qIsProt = TRUE;
+	    gfAlignTrans(conn, serve->nibDir, seq, 5, gfSavePslx, &outForm);
 	    }
 	}
     else
 	{
-	gfAlignStrand(conn, serve->nibDir, seq, FALSE, 20, gfSavePsl, f);
+	static struct gfSavePslxData outForm;
+	outForm.f = f;
+	gfAlignStrand(conn, serve->nibDir, seq, FALSE, 20, gfSavePslx, &outForm);
 	close(conn);
 	reverseComplement(seq->dna, seq->size);
 	conn = gfConnect(serve->host, serve->port);
-	gfAlignStrand(conn, serve->nibDir, seq, TRUE, 20, gfSavePsl, f);
+	gfAlignStrand(conn, serve->nibDir, seq, TRUE, 20, gfSavePslx, &outForm);
 	}
     close(conn);
     }
@@ -527,9 +530,6 @@ if(userSeq != 0 && userSeq[0] == '\0') {
 	userSeq = cgiOptionalString("seqFile");
 }
 
-//printf("seqFile: %s\n", cgiOptionalString("seqFile"));
-//printf("file   : %s\n", cgiOptionalString("file"));
-
 if(userSeq == NULL || userSeq[0] == '\0')
     {
     enterHtml("BLAT Search");
@@ -538,7 +538,7 @@ if(userSeq == NULL || userSeq[0] == '\0')
 else
     {
     enterHtml("BLAT Results");
-    blatSeq(userSeq);
+    blatSeq(skipLeadingSpaces(userSeq));
     }
 }
 
