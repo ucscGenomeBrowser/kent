@@ -291,7 +291,7 @@ if (seqList != NULL && seqList->name[0] == 0)
 trimUniq(seqList);
 
 /* Figure out size allowed. */
-maxSingleSize = (isTx ? 4000 : 20000);
+maxSingleSize = (isTx ? 5000 : 20000);
 maxTotalSize = maxSingleSize * 2.5;
 
 /* Create temporary file to store sequence. */
