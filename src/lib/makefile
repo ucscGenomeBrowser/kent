@@ -1,6 +1,6 @@
 include ../inc/common.mk
 
-O = aliType.o asParse.o axt.o axtAffine.o bits.o binRange.o \
+O = aliType.o asParse.o axt.o axtAffine.o bandExt.o bits.o binRange.o \
     blastOut.o blastParse.o boxClump.o browserGfx.o \
     cda.o chain.o chainBlock.o chainToAxt.o chainToPsl.o cheapcgi.o \
     codebias.o colHash.o common.o \
