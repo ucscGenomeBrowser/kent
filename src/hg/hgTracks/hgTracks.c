@@ -69,7 +69,7 @@
 #include "grp.h"
 #include "chromColors.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.607 2003/09/30 00:07:53 braney Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.608 2003/10/02 05:16:24 angie Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
@@ -6270,7 +6270,7 @@ if (gotBlat)
 hPrintf("<TD ALIGN=CENTER><A HREF=\"%s&o=%d&g=getDna&i=mixed&c=%s&l=%d&r=%d&db=%s&%s\">"
       " %s </A></TD>",  hgcNameAndSettings(),
       winStart, chromName, winStart, winEnd, database, uiVars->string, wrapWhiteFont(" DNA "));
-hPrintf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/hgText?db=%s&position=%s:%d-%d&phase=table&%s=%u\">%s</A></TD>",
+hPrintf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/hgText?db=%s&position=%s:%d-%d&phase=table&tbPosOrKeys=pos&%s=%u\">%s</A></TD>",
        database, chromName, winStart+1, winEnd, cartSessionVarName(),
        cartSessionId(cart), wrapWhiteFont("Tables"));
 
@@ -6980,7 +6980,7 @@ if (NULL == position)
     position = cloneString(cartUsualString(cart, "position", NULL));
     }
 
-if(sameString(position, ""))
+if((position == NULL) || sameString(position, ""))
     errAbort("Please go back and enter a coordinate range in the \"position\" field.<br>For example: chr22:20100000-20200000.\n");
 
 chromName = NULL;
