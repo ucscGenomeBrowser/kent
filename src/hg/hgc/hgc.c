@@ -122,7 +122,7 @@
 #include "sgdDescription.h"
 #include "hgFind.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.542 2004/01/06 22:58:59 angie Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.543 2004/01/07 19:01:24 kent Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -412,10 +412,11 @@ else
 if (featDna)
     {
     char *tbl = cgiUsualString("table", cgiString("g"));
+    strand = cgiEncode(strand);
     printf("<A HREF=\"%s&o=%d&g=getDna&i=%s&c=%s&l=%d&r=%d&strand=%s&table=%s\">"
 	   "View DNA for this feature</A><BR>\n",  hgcPathAndSettings(),
 	   start, (item != NULL ? cgiEncode(item) : ""),
-	   chrom, start, end, strand, tbl);
+	   chrom, start, end, cgiEncode(strand), tbl);
     }
 }
 
@@ -436,20 +437,20 @@ void printPosOnScaffold(char *chrom, int start, int end, char *strand)
     printf("<B>End in Scaffold:</B> %d<BR>\n", scaffoldEnd);
     printf("<B>Genomic Size:</B> %d<BR>\n", scaffoldEnd - scaffoldStart);
     if (strand != NULL)
-            printf("<B>Strand:</B> %s<BR>\n", strand);
+	printf("<B>Strand:</B> %s<BR>\n", strand);
     else
-            strand = "?";
+	strand = "?";
 }
 
 void printPos(char *chrom, int start, int end, char *strand, boolean featDna,
 	      char *item)
 /* Print position lines.  'strand' argument may be null. */
 {
-    if (sameWord(organism, "Fugu"))
-        /* use this for unmapped genomes */
-        printPosOnScaffold(chrom, start, end, strand);
-    else
-        printPosOnChrom(chrom, start, end, strand, featDna, item);
+if (sameWord(organism, "Fugu"))
+    /* use this for unmapped genomes */
+    printPosOnScaffold(chrom, start, end, strand);
+else
+    printPosOnChrom(chrom, start, end, strand, featDna, item);
 }
 
 void samplePrintPos(struct sample *smp, int smpSize)
@@ -470,13 +471,17 @@ void bedPrintPos(struct bed *bed, int bedSize)
 /* Print first three fields of a bed type structure in
  * standard format. */
 {
+char *strand = NULL;
 if (bedSize > 3)
     printf("<B>Item:</B> %s<BR>\n", bed->name);
 if (bedSize > 4)
     printf("<B>Score:</B> %d<BR>\n", bed->score);
 if (bedSize > 5)
+   {
    printf("<B>Strand:</B> %s<BR>\n", bed->strand);
-printPos(bed->chrom, bed->chromStart, bed->chromEnd, NULL, TRUE, bed->name);
+   strand = bed->strand;
+   }
+printPos(bed->chrom, bed->chromStart, bed->chromEnd, strand, TRUE, bed->name);
 }
 
 void genericHeader(struct trackDb *tdb, char *item)
