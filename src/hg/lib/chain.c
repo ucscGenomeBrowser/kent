@@ -16,6 +16,7 @@ void chainStaticLoad(char **row, struct chain *ret)
 int sizeOne,i;
 char *s;
 
+ret->score = atof(row[0]);
 ret->tName = row[1];
 ret->tSize = sqlUnsigned(row[2]);
 ret->tStart = sqlUnsigned(row[3]);
@@ -37,6 +38,7 @@ int sizeOne,i;
 char *s;
 
 AllocVar(ret);
+ret->score = atof(row[0]);
 ret->tName = cloneString(row[1]);
 ret->tSize = sqlUnsigned(row[2]);
 ret->tStart = sqlUnsigned(row[3]);
