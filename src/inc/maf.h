@@ -82,5 +82,13 @@ void mafWriteEnd(FILE *f);
 void mafWriteAll(struct mafFile *mf, char *fileName);
 /* Write out full mafFile. */
 
+void mafFromAxtTemp(struct axt *axt, int tSize, int qSize,
+	struct mafAli *temp);
+/* Make a maf out of axt,  parasiting on the memory in axt.
+ * Do *not* mafFree this temp.  The memory it has in pointers
+ * is still owned by the axt.  Furthermore the next call to
+ * this function will invalidate the previous temp value.
+ * It's sort of a kludge, but quick to run and easy to implement. */
+
 #endif /* MAF_H */
 

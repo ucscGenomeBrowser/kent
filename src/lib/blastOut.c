@@ -74,15 +74,14 @@ return bzScore/19;
 }
 
 static double blastzScoreToWuBits(int bzScore, boolean isProt)
-/* Convert from blastz score to bit score.  The magic number
- * 32.1948 was derived from the wu-blast bit to score ratio.
- * I'm not sure I agree with this, but am doing it to be compatible.   
- * I'd tend to give 2 bits for each matching base more or less. 
- * This is much less. */
+/* Convert from blastz score to bit score.  The magic number's
+ * here are taken from comparing wu-blast scores to axtScores on
+ * a couple of sequences.  This doesn't really seem to be a bit
+ * score.  It's not very close to 2 bits per base. */
 {
 int wuScore = blastzToWublastScore(bzScore);
 if (isProt)
-    return wuScore * 0.355;
+    return wuScore * 0.3545;
 else
     return wuScore * 0.1553;
 }

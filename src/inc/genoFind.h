@@ -192,6 +192,10 @@ struct gfOutput *gfOutputAxt(int goodPpt, boolean qIsProt,
 	boolean tIsProt, FILE *f);
 /* Setup output for axt format. */
 
+struct gfOutput *gfOutputAxtMem(int goodPpt, boolean qIsProt, 
+	boolean tIsProt);
+/* Setup output for in memory axt output. */
+
 struct gfOutput *gfOutputBlast(int goodPpt, 
 	boolean qIsProt, boolean tIsProt, 
 	char *databaseName, int databaseSeqCount, double databaseLetters,
