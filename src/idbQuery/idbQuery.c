@@ -12,7 +12,7 @@
 #include "cda.h"
 #include "xa.h"
 
-FILE *uglyOut;
+FILE *debugOut;
 
 char **chromNames;
 int chromCount;
@@ -637,7 +637,7 @@ for (feat = featList; feat != NULL; feat = feat->next)
 	    {
             fprintf(stdout, ">%s chromosome %s:%d-%d %c\n", 
                 feat->name, feat->chrom, feat->start, feat->end, feat->strand);
-            fprintf(uglyOut, ">%s chromosome %s:%d-%d %c\n", 
+            fprintf(debugOut, ">%s chromosome %s:%d-%d %c\n", 
                 feat->name, feat->chrom, feat->start, feat->end, feat->strand);
 	    }
         if (outputType == otFasta)
@@ -668,7 +668,7 @@ for (feat = featList; feat != NULL; feat = feat->next)
             if (feat->strand == '-')
                 reverseComplement(dna, featSize);
             printSequence(stdout, dna, featSize, lineSize, wordSize, numberLines, 0);
-            printSequence(uglyOut, dna, featSize, lineSize, wordSize, numberLines, 0);
+            printSequence(debugOut, dna, featSize, lineSize, wordSize, numberLines, 0);
             freez(&dna);
             }
         }
@@ -1816,7 +1816,7 @@ if (reportTime) printf("%4.3f seconds to outputList\n", 0.001*(endTime-startTime
 
 int main(int argv, char *argc[])
 {
-uglyOut = mustOpen("/usr/local/apache/trash/uglyOut.fa", "w");
+debugOut = mustOpen("/usr/local/apache/trash/uglyOut.fa", "w");
 dnaUtilOpen();
 localMem = lmInit(0);
 htmShell("Relative Sequence Data", doMiddle, NULL);
