@@ -9,7 +9,7 @@
 #include "jksql.h"
 #include "joiner.h"
 
-static char const rcsid[] = "$Id: joinerCheck.c,v 1.15 2004/03/13 01:43:55 kent Exp $";
+static char const rcsid[] = "$Id: joinerCheck.c,v 1.16 2004/03/13 02:59:31 kent Exp $";
 
 /* Variable that are set from command line. */
 boolean parseOnly; 
@@ -412,7 +412,9 @@ if (keyHash == NULL)
     {
     char *keyDb;
     if (slNameInList(keyField->dbList, db))
+	{
 	keyDb = db;
+	}
     else
 	{
 	if (slCount(keyField->dbList) == 1)
@@ -422,7 +424,7 @@ if (keyHash == NULL)
 	    warn("Error line %d of %s:\n"
 		 "Key (first) field contains multiple databases\n"
 		 "but not all databases in other fields."
-		 , joiner->fileName, keyField->lineIx);
+		 , keyField->lineIx, joiner->fileName);
 	    return;
 	    }
 	}
