@@ -67,7 +67,7 @@
 #include "machSpec.h"
 #include "log.h"
 
-static char const rcsid[] = "$Id: paraHub.c,v 1.79.24.1 2005/01/06 02:49:14 galt Exp $";
+static char const rcsid[] = "$Id: paraHub.c,v 1.79.24.2 2005/01/06 02:59:02 galt Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -83,7 +83,7 @@ static struct optionSpec optionSpecs[] = {
     {NULL, 0}
 };
 
-int version = 10;	/* Version number. */
+int version = 11;	/* Version number. */
 
 /* Some command-line configurable quantities and their defaults. */
 int jobCheckPeriod = 10;	/* Minutes between checking running jobs. */
