@@ -69,7 +69,7 @@
 #include "grp.h"
 #include "chromColors.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.633 2003/11/19 17:28:29 kate Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.634 2003/11/21 15:49:33 kent Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
@@ -593,8 +593,9 @@ if (x < xEnd)
     hPrintf("<AREA SHAPE=RECT COORDS=\"%d,%d,%d,%d\" ", x, y, xEnd, yEnd);
     if (doHgGene)
         {
-	hPrintf("HREF=\"../cgi-bin/hgGene?%s&%s=%s&%s=%s&%s=%d&%s=%d\" ",
+	hPrintf("HREF=\"../cgi-bin/hgGene?%s&%s=%s&%s=%s&%s=%s&%s=%d&%s=%d\" ",
 		cartSidUrlString(cart),
+		"db", database,
 		"hgg_gene", item,
 		"hgg_chrom", chromName,
 		"hgg_start", start,
