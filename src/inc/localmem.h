@@ -26,9 +26,5 @@ void *lmCloneMem(struct lm *lm, void *pt, size_t size);
 /* Return a local mem copy of memory block. */
 
 #define lmAllocVar(lm, pt) (pt = lmAlloc(lm, sizeof(*pt)));
-/* Shortcut to allocating a single variable in local mem and
- * assigning pointer to it. */
-
-#define lmAllocArray(lm, pt, size) (pt = lmAlloc(lm, sizeof(*pt) * (size)))
-/* Shortcut to allocating an array in local mem and
+/* Shortcut to allocating a single variable in local mem
  * assigning pointer to it. */

@@ -1,5 +1,8 @@
-#include "paraCommon.h"
 #include <sys/utsname.h>
+#include <pwd.h>
+#include <sys/types.h>
+#include <signal.h>
+#include "common.h"
 #include "options.h"
 #include "errabort.h"
 #include "net.h"
@@ -15,8 +18,28 @@ now = time(NULL);
 
 char paraSig[17] = "0d2f070562685f29";  /* Mild security measure. */
 int paraSigSize = 16;
-int paraHubPort = 0x46DC;		      /* Our hub port */
-int paraNodePort = 0x46DD;		      /* Our node port */
+int paraPort = 0x46DC;		      /* Our port */
+
+boolean sendWithSig(int fd, char *string)
+/* Send a string with the signature prepended.  Warn 
+ * but don't abort if there's a problem.  Return TRUE
+ * on success. */
+{
+if (write(fd, paraSig, paraSigSize) < paraSigSize)
+    {
+    warn("Couldn't write signature to socket");
+    return FALSE;
+    }
+return netSendLongString(fd, string);
+}
+
+void mustSendWithSig(int fd, char *string)
+/* Send a string with the signature prepended. 
+ * Abort on failure. */
+{
+if (!sendWithSig(fd, string))
+    noWarnAbort();
+}
 
 char *getMachine()
 /* Return host name. */
@@ -54,6 +77,7 @@ boolean parseRunJobMessage(char *line, struct runJobMessage *rjm)
 /* Parse runJobMessage as paraNodes sees it. */
 {
 bool ret;
+rjm->managingHost = nextWord(&line);
 rjm->jobIdString = nextWord(&line);
 rjm->reserved = nextWord(&line);
 rjm->user = nextWord(&line);
@@ -101,6 +125,7 @@ if (logFile != NULL)
     va_end(args);
     }
 }
+
 
 static void warnToLog(char *format, va_list args)
 /* Warn handler that prints to log file. */

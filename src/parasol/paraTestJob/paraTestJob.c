@@ -1,5 +1,5 @@
 /* paraTestJob - A good test job to run on Parasol.  Can be configured to take a long time or crash. */
-#include "paraCommon.h"
+#include "common.h"
 #include "linefile.h"
 #include "hash.h"
 #include "options.h"
@@ -47,23 +47,6 @@ for (i=0; i<1060000; ++i)
     }
 }
 
-int countLines(char *fileName)
-/* Count up lines in file. */
-{
-struct lineFile *lf = lineFileOpen(fileName, FALSE);
-int lineCount = 0, charCount = 0;
-int sizeOne;
-char *line;
-while (lineFileNext(lf, &line, &sizeOne))
-    {
-    ++lineCount;
-    charCount += sizeOne;
-    }
-lineFileClose(&lf);
-printf("%s has %d lines (%d chars)\n", fileName, lineCount, charCount);
-return lineCount;
-}
-
 void paraTestJob(char *countString)
 /* paraTestJob - A good test job to run on Parasol.  Can be configured to take a long time or crash. */
 {
@@ -71,8 +54,6 @@ int i, count = atoi(countString);
 char *outName = optionVal("output", NULL);
 int heavy = optionInt("heavy", 0);
 FILE *f = NULL;
-if (optionExists("input"))
-    countLines(optionVal("input", NULL));
 if (outName != NULL)
     f = mustOpen(outName, "w");
 for (i=0; i<count; ++i)

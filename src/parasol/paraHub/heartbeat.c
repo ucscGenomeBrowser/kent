@@ -1,40 +1,50 @@
 /* This daemon just sends a heartbeat message to the hub
  * every now and again. */
 
-#include "paraCommon.h"
+#include <signal.h>
+#include "common.h"
 #include "errabort.h"
+#include "paraLib.h"
 #include "net.h"
 #include "paraHub.h"
 
-static pthread_t heartbeatThread;
-static boolean alive = TRUE;
+static int heartPid;	/* Process id of heartbeat. */
 
-static void *heartbeatDeamon(void *vptr)
+static void heartbeatDeamon()
 /* Send out a beat every now and again to hub. */
 {
-struct paraMessage *pm;
-while (alive)
+int hubFd;
+for (;;)
     {
     sleep(MINUTE/4);
     findNow();
-    pm = pmNew(0,0);
-    pmSet(pm, "heartbeat");
-    hubMessagePut(pm);
+    hubFd = hubConnect();
+    if (hubFd > 0)
+        {
+	netSendLongString(hubFd, "heartbeat");
+	close(hubFd);
+	}
     }
-return NULL;
 }
 
 void endHeartbeat()
-/* Kill heartbeat deamon.  This won't take effect right away
- * though. */
+/* Kill heartbeat deamon. */
 {
-alive = FALSE;
+if (heartPid != 0)
+    {
+    kill(heartPid, SIGTERM);
+    heartPid = 0;
+    }
 }
 
 void startHeartbeat()
 /* Start heartbeat deamon. */
 {
-int err = pthread_create(&heartbeatThread, NULL, heartbeatDeamon, NULL);
-if (err < 0)
-    errAbort("Couldn't create heartbeatThread %s", strerror(err));
+int pid = fork();
+if (pid < 0)
+    errAbort("Couldn't start heartbeat.");
+if (pid == 0)
+    heartbeatDeamon();
+else
+    heartPid = pid;
 }

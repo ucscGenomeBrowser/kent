@@ -13,18 +13,12 @@
 #ifndef _LARGEFILE_SOURCE
 #define _LARGEFILE_SOURCE 1
 #endif
-
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE
 #endif
 
 #ifndef _FILE_OFFSET_BITS
 #define _FILE_OFFSET_BITS 64
-#endif
-
-/* Some stuff for safer pthreads. */
-#ifndef _REENTRANT
-#define _REENTRANT
 #endif
 
 #include <stdio.h>
@@ -54,7 +48,6 @@
 #define WORD short	      /* Wants to be signed 16 bits. */
 #define bits32 unsigned       /* Wants to be unsigned 32 bits. */
 #define bits16 unsigned short /* Wants to be unsigned 16 bits. */
-#define bits8 unsigned char   /* Wants to be unsigned 8 bits. */
 #define signed32 int	      /* Wants to be signed 32 bits. */
 #define bits8 unsigned char   /* Wants to be unsigned 8 bits. */
 

@@ -1,5 +1,11 @@
 /* netC - net client. */
-#include "paraCommon.h"
+#include <sys/socket.h>
+#include <net/if.h>
+#include <netinet/in.h>
+#include <netdb.h>
+#include <arpa/inet.h>
+#include <sys/ioctl.h>
+#include "common.h"
 #include "options.h"
 #include "obscure.h"
 

@@ -1,6 +1,4 @@
-/* burstServer - A udp server that accepts a burst of data, queues it, 
- * and prints it out slowly. */
-
+/* burstServer - A udp server that accepts a burst of data, queues it, and prints it out slowly. */
 #include "common.h"
 #include "internet.h"
 #include <sys/time.h>
@@ -10,7 +8,6 @@
 #include "options.h"
 #include "net.h"
 #include "rudp.h"
-#include "dlist.h"
 #include "portable.h"
 
 int burstPort = 12354;
@@ -46,11 +43,14 @@ struct countMessage
     char payload[16];
     };
 
-struct dlList *hubQueue;  /* List of message counts */
+struct countMessage messages[10000];   /* Array of messages. */
+int messageCount;	/* The number of messages we've received. */
 pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
 pthread_cond_t ready = PTHREAD_COND_INITIALIZER;
 
 struct timeval startTime;
+
+
 
 void mutexLock(pthread_mutex_t *mutex)
 /* Lock a mutex or die trying. */
@@ -84,40 +84,6 @@ if (err != 0)
     errAbort("Couldn't contWait: %s", strerror(err));
 }
 
-void hubMessageQueueInit()
-/* Setup stuff for hub message queue.  Must be called once
- * at the beginning before spawning threads. */
-{
-if (hubQueue != NULL)
-    errAbort("You can't call hubMessageQueueInit twice");
-hubQueue = dlListNew();
-}
-
-struct countMessage *hubMessageGet()
-/* Get message from central queue, waiting if necessary for one to appear.
- * Do a paraMessageFree when you're done with this message. */
-{
-struct dlNode *node;
-struct countMessage *pm;
-mutexLock(&mutex);
-while (dlEmpty(hubQueue))
-    condWait(&ready, &mutex);
-node = dlPopHead(hubQueue);
-mutexUnlock(&mutex);
-pm = node->val;
-freeMem(node);
-return pm;
-}
-
-void hubMessagePut(struct countMessage *pm)
-/* Add message to central queue.  Message must be dynamically allocated. */
-{
-mutexLock(&mutex);
-dlAddValTail(hubQueue, pm);
-condSignal(&ready);
-mutexUnlock(&mutex);
-}
-    
 void *suckSocket(void *vptr)
 /* Suck down stuff from socket and add it to message list. */
 {
@@ -125,26 +91,28 @@ struct rudp *ru = vptr;
 int err;
 int i;
 struct sockaddr_in sai;
-struct countMessage *pm;
 
 ZeroVar(&sai);
 sai.sin_family = AF_INET;
-for (;;)
+for (i=0; i<ArraySize(messages); ++i)
     {
     int saiSize = sizeof(sai);
-    AllocVar(pm);
-    err = rudpReceive(ru, pm, sizeof(*pm));
+    messages[i];
+    err = rudpReceive(ru, &messages[i], sizeof(messages[i]));
     if (err < 0)
 	{
         warn("couldn't receive %s", strerror(errno));
 	continue;
 	}
-    if (err != sizeof(*pm))
+    if (err != sizeof(messages[i]))
         {
 	warn("Message truncated");
 	continue;
 	}
-    hubMessagePut(pm);
+    mutexLock(&mutex);
+    ++messageCount;
+    condSignal(&ready);
+    mutexUnlock(&mutex);
     }
 return NULL;
 }
@@ -160,8 +128,6 @@ struct sockaddr_in sai;
 struct rudp *ru;
 int ear;
 int outIx = 0;
-struct countMessage *pm;
-boolean alive = TRUE;
 
 /* Initialize socket etc. */
 ZeroVar(&sai);
@@ -173,19 +139,27 @@ if (bind(ear, (struct sockaddr *)&sai, sizeof(sai)) < 0)
     errAbort("Couldn't bind ear");
 ru = rudpNew(ear);
 gettimeofday(&startTime, NULL);
-hubMessageQueueInit();
 
 /* Start thread to suck stuff out of socket. */
 err = pthread_create(&socketSucker, NULL, suckSocket, ru);
 
 /* Go into loop that prints things out 50 per second max. */
-while (alive)
+for (;;)
     {
-    pm = hubMessageGet();
-    printf("#%d sent at %f seconds. Payload '%s'\n", 
-	pm->count, 0.000001 * pm->time, pm->payload);
-    alive = pm->message;
-    freez(&pm);
+    int inIx;
+    mutexLock(&mutex);
+    while (messageCount <= outIx)
+        condWait(&ready, &mutex);
+    inIx = messageCount;
+    mutexUnlock(&mutex);
+    if (inIx > outIx)
+        {
+	printf("#%d sent at %f seconds. Payload '%s'\n", 
+	    messages[outIx].count, 0.000001 * messages[outIx].time, messages[outIx].payload);
+	if (messages[outIx].message == 0)
+	    break;
+	++outIx;
+	}
     }
 }
 

@@ -115,8 +115,6 @@ struct genoFind
 void genoFindFree(struct genoFind **pGenoFind);
 /* Free up a genoFind index. */
 
-struct gfSeqSource *gfFindNamedSource(struct genoFind *gf, char *name);
-/* Find target of given name.  Return NULL if none. */
 
 /* ---  Stuff for saving results ---- */
 
@@ -254,14 +252,6 @@ struct gfClump *gfFindClumpsWithQmask(struct genoFind *gf, bioSeq *seq,
 	struct lm *lm, int *retHitCount);
 /* Find clumps associated with one sequence soft-masking seq according to qMaskBits */
 
-struct gfHit *gfFindHitsInRegion(struct genoFind *gf, bioSeq *seq, 
-	Bits *qMaskBits, int qMaskOffset, struct lm *lm, 
-	struct gfSeqSource *target, int tMin, int tMax);
-/* Find hits restricted to one particular region. 
- * The hits returned by this will be in target sequence
- * coordinates rather than concatenated whole genome
- * coordinates as hits inside of clumps usually are.  */
-
 void gfTransFindClumps(struct genoFind *gfs[3], aaSeq *seq, struct gfClump *clumps[3], struct lm *lm, int *retHitCount);
 /* Find clumps associated with one sequence in three translated reading frames. */
 
@@ -329,7 +319,7 @@ void gfMakeOoc(char *outName, char *files[], int fileCount,
 
 void gfLongDnaInMem(struct dnaSeq *query, struct genoFind *gf, 
    boolean isRc, int minScore, Bits *qMaskBits, struct gfOutput *out,
-   boolean fastMap, boolean band);
+   boolean fastMap);
 /* Chop up query into pieces, align each, and stitch back
  * together again. */
 

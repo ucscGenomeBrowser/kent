@@ -1,5 +1,6 @@
 /* simpleC - simple client. */
-#include "paraCommon.h"
+#include "common.h"
+#include <sys/socket.h>
 
 void usage()
 /* Explain usage and exit. */

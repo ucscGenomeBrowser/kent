@@ -3,15 +3,19 @@
  * waiting on a remote host.  Parasol recieves all messages through it's
  * central socket though. */
 
-#include "paraCommon.h"
+#include <signal.h>
+#include <sys/socket.h>
+#include <sys/un.h>
+#include <netinet/in.h>
+#include <netdb.h>
+#include "common.h"
 #include "dlist.h"
 #include "dystring.h"
 #include "linefile.h"
+#include "paraLib.h"
 #include "net.h"
-#include "internet.h"
-#include "portable.h"
-#include "pthreadWrap.h"
 #include "paraHub.h"
+#include "portable.h"
 
 int spokeLastId;	/* Id of last spoke allocated. */
 static char *runCmd = "run";
@@ -19,165 +23,277 @@ static char *runCmd = "run";
 static void notifyNodeDown(char *machine, char *job)
 /* Notify hub that a node is down. */
 {
-struct paraMessage *pm = pmNew(0,0);
-pmPrintf(pm, "nodeDown %s %s", machine, job);
-hubMessagePut(pm);
+int hubFd = hubConnect();
+char buf[512];
+if (hubFd > 0)
+    {
+    sprintf(buf, "nodeDown %s %s", machine, job);
+    netSendLongString(hubFd, buf);
+    close(hubFd);
+    }
 }
 
 static void sendRecycleMessage(char *spokeName)
 /* Tell hub spoke is free. */
 {
-struct paraMessage *pm = pmNew(0,0);
-pmPrintf(pm, "recycleSpoke %s", spokeName);
-hubMessagePut(pm);
+char buf[512];
+int hubFd = hubConnect();
+if (hubFd > 0)
+    {
+    sprintf(buf, "recycleSpoke %s", spokeName);
+    netSendLongString(hubFd, buf);
+    freeMem(netGetLongString(hubFd));
+    close(hubFd);
+    }
 }
 
-static void spokeSendRemote(char *spokeName, char *machine, char *dottedQuad, char *message)
+static void spokeSendRemote(char *spokeName, char *machine, char *message)
 /* Send message to remote machine. */
 {
-boolean ok;
-struct paraMessage pm;
-struct rudp *ru = rudpOpen();
-bits32 ip;
+int sd;
+boolean ok = FALSE;
 
-if (ru != NULL)
+/* Try and tell machine about job. */
+sd = netConnect(machine, paraPort);
+if (sd > 0)
     {
-    internetDottedQuadToIp(dottedQuad, &ip);
-    if (ip == 0)
-	pmInitFromName(&pm, machine, paraNodePort);
-    else
-        pmInit(&pm, ip, paraNodePort);
-    pmSet(&pm, message);
-    ok = pmSend(&pm, ru);
-    if (!ok)
+    ok = sendWithSig(sd, message);
+    close(sd);
+    }
+if (!ok)
+    {
+    char *command = nextWord(&message);
+    char *job = NULL;
+    if (sameString(runCmd, command) || sameString("check", command))
 	{
-	char *command = nextWord(&message);
-	char *job = NULL;
-	if (sameString(runCmd, command))
-	    {
-	    job = nextWord(&message);
-	    if (job != 0)
-		notifyNodeDown(machine, job);
-	    }
+	char *hub = nextWord(&message);
+	job = nextWord(&message);
 	}
-    rudpClose(&ru);
+    if (job == NULL)
+        job = "0";
+    notifyNodeDown(machine, job);
     }
 
 /* Tell hub spoke is free. */
 sendRecycleMessage(spokeName);
 }
 
-static void *spokeProcess(void *vptr)
+static void spokeProcess(char *socketName)
 /* Loop around forever listening to socket and forwarding messages to machines. */
 {
-struct spoke *spoke = vptr;
 int conn, fromLen;
-char *line, *machine, *dottedQuad;
-struct paraMessage *message = NULL;
+char *buf, *line, *machine, sig[20];
+int sd;
+struct sockaddr_un sa;
+int sigLen = strlen(paraSig);
 
-/* Wait on message and process it. */
+/* Do some precomputation on signature. */
+assert(sigLen < sizeof(sig));
+sig[sigLen] = 0;
+
+/* Make your basic Unix socket. */
+sd = socket(AF_UNIX, SOCK_STREAM, 0);
+if (sd < 0)
+    {
+    warn("%s: Couldn't create Unix socket", socketName);
+    return;
+    }
+
+/* Bind it to file system. */
+ZeroVar(&sa);
+sa.sun_family = AF_UNIX;
+strncpy(sa.sun_path, socketName, sizeof(sa.sun_path));
+if (bind(sd, (struct sockaddr *)&sa, sizeof(sa)) < 0)
+    {
+    warn("spoke: Couldn't bind socket to %s", socketName);
+    close(sd);
+    return;
+    }
+
+/* Listen on socket until we get killed. */
+listen(sd,3);
+conn = accept(sd, NULL, &fromLen);
 for (;;)
     {
-    /* Wait for next message. */
-    pthreadMutexLock(&spoke->messageMutex);
-    while (spoke->message == NULL)
-	pthreadCondWait(&spoke->messageReady, &spoke->messageMutex);
-    message = spoke->message;
-    spoke->message = NULL;
-    pthreadMutexUnlock(&spoke->messageMutex);
-
-    line = message->data;
-    logIt("%s: %s\n", spoke->name, line);
+    if (netReadAll(conn, sig, sigLen) != sigLen)
+	continue;
+    findNow();
+    if (!sameString(sig, paraSig))
+	continue;
+    line = buf = netGetLongString(conn);
+    logIt("%s: %s\n", socketName, line);
     machine = nextWord(&line);
-    dottedQuad = nextWord(&line);
-    if (dottedQuad != NULL)
+    if (machine != NULL)
 	{
-	if (line != NULL && line[0] != 0)
-	    spokeSendRemote(spoke->name, machine, dottedQuad, line);
+	if (sameWord(machine, "ping"))
+	    sendRecycleMessage(socketName);
+	else if (line != NULL && line[0] != 0)
+	    spokeSendRemote(socketName, machine, line);
 	}
-    pmFree(&message);
+    freez(&buf);
     }
-return NULL;
 }
 
-struct spoke *spokeNew()
-/* Get a new spoke.  This will create a thread for the spoke and
- * initialize the message synchronization stuff. */
+struct spoke *spokeNew(int *closeList)
+/* Get a new spoke.  Close list is an optional, -1 terminated array of file
+ * handles to close. This will fork and create a process for spoke and a 
+ * socket for communicating with it. */
 {
 struct spoke *spoke;
-char spokeName[64];
-int err;
+int childId;
+int sd = 0;
+char socketName[64];
+int spokeId = ++spokeLastId;
+struct sockaddr_un sa;
 
-sprintf(spokeName, "spoke_%03d", ++spokeLastId);
-AllocVar(spoke);
-AllocVar(spoke->node);
-spoke->node->val = spoke;
-spoke->name = cloneString(spokeName);
-if ((err = pthread_mutex_init(&spoke->messageMutex, NULL)) != 0)
-    errAbort("Couldn't create mutex for %s", spoke->name);
-if ((err = pthread_cond_init(&spoke->messageReady, NULL)) != 0)
-    errAbort("Couldn't create cond for %s", spoke->name);
-err = pthread_create(&spoke->thread, NULL, spokeProcess, spoke);
-if (err < 0)
-    errAbort("Couldn't create %s %s", spoke->name, strerror(err));
-return spoke;
+sprintf(socketName, "spoke_%03d", spokeId);
+remove(socketName);
+
+childId = fork();
+if (childId < 0)
+    {
+    warn("hub: Couldn't fork in spokeNew");
+    close(sd);
+    return NULL;
+    }
+else if (childId == 0)
+    {
+    int i;
+    int fd;
+    if (closeList != NULL)
+        {
+	for (i=0; ;++i)
+	    {
+	    fd = closeList[i];
+	    if (fd < 0)
+	        break;
+	    close(fd);
+	    }
+	}
+    close(sd);
+    spokeProcess(socketName);
+    return NULL;
+    }
+else
+    {
+    AllocVar(spoke);
+    AllocVar(spoke->node);
+    spoke->node->val = spoke;
+    spoke->id = spokeLastId;
+    spoke->socketName = cloneString(socketName);
+    spoke->pid = childId;
+    return spoke;
+    }
 }
 
 void spokeFree(struct spoke **pSpoke)
 /* Free spoke.  Close socket and kill process associated with it. */
 {
-/* Since this is multithreaded and threads may still be using
- * this, just defer to the big cleanup on exit. */
-*pSpoke = NULL;
+struct spoke *spoke = *pSpoke;
+if (spoke != NULL)
+    {
+    if (spoke->socket != 0)
+	close(spoke->socket);
+    if (spoke->pid != 0)
+	kill(spoke->pid, SIGTERM);
+    if (spoke->socketName != NULL)
+	{
+        remove(spoke->socketName);
+	freeMem(spoke->socketName);
+	}
+    freeMem(spoke->machine);
+    freez(pSpoke);
+    }
 }
 
-static struct paraMessage *messageWithHeader(struct machine *machine)
-/* Return a message with machine name filled in. */
+static int spokeGetSocket(struct spoke *spoke)
+/* Get socket for spoke, opening it if not already open. */
 {
-struct paraMessage *pm = pmNew(0,0);
-char dottedQuad[17];
-internetIpToDottedQuad(machine->ip, dottedQuad);
-pmPrintf(pm, "%s %s ", machine->name, dottedQuad);
-return pm;
+int sd = spoke->socket;
+if (sd == 0)
+    {
+    struct sockaddr_un sa;
+    /* Make your basic socket. */
+    sd = socket(AF_UNIX, SOCK_STREAM, 0);
+    if (sd < 0)
+	{
+        warn("spoke: couldn't open socket in spokeSendMessage");
+	return -1;
+	}
+
+    /* Get connection to socket process via file system. */
+    ZeroVar(&sa);
+    sa.sun_family = AF_UNIX;
+    strncpy(sa.sun_path, spoke->socketName, sizeof(sa.sun_path));
+    if (connect(sd, (struct sockaddr*) &sa, sizeof(sa)) < 0)
+        {
+	warn("spoke: couldn't connect to socket in spokeSendMessage");
+	close(sd);
+	return -1;
+	}
+    spoke->socket = sd;
+    }
+return sd;
 }
 
-static void spokeSyncSendMessage(struct spoke *spoke, struct paraMessage *pm)
-/* Synchronize with spoke and update it's message pointer. */
+void spokePing(struct spoke *spoke)
+/* Send ping message to spoke.  It should eventually respond
+ * with recycleSpoke message to hub socket.  */
 {
-pthreadMutexLock(&spoke->messageMutex);
-if (spoke->message != NULL)
-    warn("Sending message to %s, which is occupied", spoke->name);
-spoke->message = pm;
-pthreadCondSignal(&spoke->messageReady);
-pthreadMutexUnlock(&spoke->messageMutex);
+int sd = spokeGetSocket(spoke);
+if (sd > 0)
+    {
+    write(sd, paraSig, strlen(paraSig));
+    netSendLongString(sd, "ping");
+    }
 }
 
 void spokeSendMessage(struct spoke *spoke, struct machine *machine, char *message)
 /* Send a generic message to machine through spoke. */
 {
-struct paraMessage *pm = messageWithHeader(machine);
-pmPrintf(pm, "%s", message);
-spokeSyncSendMessage(spoke, pm);
+struct dyString *dy = newDyString(1024);
+int sd = spokeGetSocket(spoke);
+
+if (sd > 0)
+    {
+    /* Send out signature, machine, and message to spoke. */
+    freez(&spoke->machine);
+    spoke->machine = cloneString(machine->name);
+    dyStringPrintf(dy, "%s %s", spoke->machine, message);
+    write(sd, paraSig, strlen(paraSig));
+    netSendLongString(sd, dy->string);
+    }
+dyStringFree(&dy);
 }
+
 
 void spokeSendJob(struct spoke *spoke, struct machine *machine, struct job *job)
 /* Tell spoke to start up a job. */
 {
-struct paraMessage *pm = messageWithHeader(machine);
+struct dyString *dy = newDyString(1024);
+int sd = spokeGetSocket(spoke);
 char *reserved = "0";	/* An extra parameter to fill in some day */
-char err[512];
 
-fillInErrFile(err, job->id, machine->tempDir);
-freez(&job->err);
-job->err = cloneString(err);
-pmPrintf(pm, "%s", runCmd);
-pmPrintf(pm, " %d", job->id);
-pmPrintf(pm, " %s", reserved);
-pmPrintf(pm, " %s", job->batch->user->name);
-pmPrintf(pm, " %s", job->dir);
-pmPrintf(pm, " %s", job->in);
-pmPrintf(pm, " %s", job->out);
-pmPrintf(pm, " %s", job->err);
-pmPrintf(pm, " %s", job->cmd);
-spokeSyncSendMessage(spoke, pm);
+if (sd > 0)
+    {
+    char err[512];
+    fillInErrFile(err, job->id, machine->tempDir);
+    freez(&job->err);
+    job->err = cloneString(err);
+    freez(&spoke->machine);
+    spoke->machine = cloneString(machine->name);
+    dyStringPrintf(dy, "%s %s", machine->name, runCmd);
+    dyStringPrintf(dy, " %s", hubHost);
+    dyStringPrintf(dy, " %d", job->id);
+    dyStringPrintf(dy, " %s", reserved);
+    dyStringPrintf(dy, " %s", job->batch->user->name);
+    dyStringPrintf(dy, " %s", job->dir);
+    dyStringPrintf(dy, " %s", job->in);
+    dyStringPrintf(dy, " %s", job->out);
+    dyStringPrintf(dy, " %s", job->err);
+    dyStringPrintf(dy, " %s", job->cmd);
+    write(sd, paraSig, strlen(paraSig));
+    netSendLongString(sd, dy->string);
+    }
+dyStringFree(&dy);
 }

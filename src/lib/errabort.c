@@ -12,8 +12,11 @@
  * This file is copyright 2002 Jim Kent, but license is hereby
  * granted for all use - public, private or commercial. */
 
-#include "common.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdarg.h>
 #include "errabort.h"
+#include "common.h"
 
 static void defaultVaWarn(char *format, va_list args)
 /* Default error message handler. */

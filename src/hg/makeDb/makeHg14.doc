@@ -205,7 +205,7 @@ exit; # don't actually run this like a script :)
     ~kent/bin/iSync
 
 
-# REPEAT MASKING (DONE 03/17/03)
+# REPEAT MASKING (IN PROGRESS)
     # Split contigs, run RepeatMasker, lift results
     # Notes: 
     # * If there is a new version of RepeatMasker, build it and ask the admins 
@@ -245,13 +245,12 @@ exit; # don't actually run this like a script :)
     ssh kk
     cd ~/hg14/RMRun
     para create RMJobs
-    para try, para check, para check, para push, para check,...
+TODO    para try, para check, para check, para push, para check,...
     #- Now while that's running, run TRF (simpleRepeat), and RefSeq 
     #- alignments, in parallel.  Also, create the database and the 
     #- tracks that don't rely on cluster runs or on masked sequence.  
 
     #- Lift up the split-contig .out's to contig-level .out's
-    ssh eieio
     cd ~/hg14
     foreach d ( ?{,?}/NT_* )
       cd $d
@@ -259,38 +258,39 @@ exit; # don't actually run this like a script :)
       liftUp $contig.fa.out $contig.lft warn ${contig}_*.fa.out > /dev/null
       cd ../..
     end
+
     #- Lift up RepeatMask .out files to chromosome coordinates via
-    tcsh jkStuff/liftOut2.sh
-    #- By this point, the database should have been created (below):
-    ssh hgwdev
     cd ~/hg14
-    hgLoadOut hg14 ?/*.fa.out ??/*.fa.out
+    tcsh jkStuff/liftOut2.sh
 
 
-# VERIFY REPEATMASKER RESULTS (DONE 03/18/03)
+# VERIFY REPEATMASKER RESULTS (TODO)
 
     # Run featureBits on hg14 and on a comparable genome build, and compare:
     ssh hgwdev
     featureBits hg14 rmsk
-    # --> 1384772888 bases of 3060248386 (45.250%) in intersection
-
+    # --> 
     featureBits hg13 rmsk
     # --> 1383216615 bases of 3070074689 (45.055%) in intersection
 
     # Validate the RepeatMasking by randomly selecting a few NT_*.fa files, 
     # manually repeat masking them and matching the .out files with the 
     # related part in the chromosome-level .out files.  For example:
-    ssh kkr1u00
-    # Pick arbitrary values of $chr and $nt and run these commands: 
-    set chr = 1
-    set nt  = NT_004321
-    mkdir /tmp/RMTest/$nt
-    cd /tmp/RMTest/$nt
-    cp ~/hg14/$chr/$nt/$nt.fa .
-    /scratch/hg/RepeatMasker/RepeatMasker -s $nt.fa
-    # Compare $nt.fa.out against the original ~/hg14/$chr/$nt/$nt.fa.out 
-    # and against the appropriate part of $chr/chr$chr.fa.out (use the coords 
-    # for $nt given in seq_contig.md).  
+    ssh kk
+    cd ~/hg14
+    # Pick several values of $chr and $nt and run these commands: 
+    set chr = ?
+    set nt  = NT_??????
+    mv $chr/$nt/$nt.fa.out $chr/$nt/$nt.fa.out.bak
+    /scratch/hg/RepeatMasker/RepeatMasker -s $chr/$nt/$nt.fa
+    rm $chr/$nt/$nt.fa.{masked,cat,cut,stderr,tbl}
+    # Compare each $chr/$nt/$nt.fa.out against the original and against 
+    # the appropriate part of $chr/chr$chr.fa.out (use the coords for 
+    # $nt given in seq_contig.md).  
+    mv $chr/$nt/$nt.fa.out.bak $chr/$nt/$nt.fa.out
+
+    # For build 32, the following were checked:
+    # <1/NT_004321, Y/NT_025975, 11/NT_033237> (TODO)
 
 
 # MAKE LIFTALL.LFT, NCBI.LFT (DONE 03/16/03)
@@ -398,7 +398,7 @@ exit; # don't actually run this like a script :)
     end
 
 
-# MASK SEQUENCE WITH BOTH REPEATMASKER AND SIMPLE REPEAT/TRF (DONE 03/17/03)
+# MASK SEQUENCE WITH BOTH REPEATMASKER AND SIMPLE REPEAT/TRF (TODO)
     # This used to be done right after RepeatMasking.  Now, we mask with 
     # TRF as well, so do this after the "PROCESS SIMPLE REPEATS" step above.
     ssh eieio
@@ -409,19 +409,14 @@ exit; # don't actually run this like a script :)
     ./jkStuff/makeHardMasked.sh
     #- Rebuild the nib, mixedNib, maskedNib files:
     ./jkStuff/makeNib.sh
-    # Copy the masked contig fa to /iscratch and /scratch:
-    ssk kkr1u00
-    rm -rf /iscratch/i/gs.15/build32/trfFa
-    mkdir -p /iscratch/i/gs.15/build32/trfFa
-    cp -p ~/hg14/?{,?}/NT_*/NT_??????.fa /iscratch/i/gs.15/build32/trfFa
-    ~kent/bin/iSync
+    # Copy the masked contig fa to /scratch:
     ssh kkstore
     rm -rf /scratch/hg/gs.15/build32/trfFa
     mkdir -p /scratch/hg/gs.15/build32/trfFa
     cp -p ~/hg14/?{,?}/NT_*/NT_??????.fa /scratch/hg/gs.15/build32/trfFa
 
 
-# PREPARE CLUSTER FOR BLASTZ RUN (DONE 03/17/03)
+# PREPARE CLUSTER FOR BLASTZ RUN (TODO)
     # This needs to be done after trf-masking and nib generation.
     ssh eieio
     # Extract lineage-specific repeats using Arian Smit's script:
@@ -430,7 +425,7 @@ exit; # don't actually run this like a script :)
     foreach f (~/hg14/*/*.out)
         ln -sf $f .
     end
-    /cluster/bin/scripts/primateSpecificRepeats.pl *.out
+    /cluster/bin/scripts/rodentSpecificRepeats.pl *.out
     /cluster/bin/scripts/perl-rename 's/(\.fa|\.nib)//' *.out.*spec
     /cluster/bin/scripts/perl-rename 's/\.(rod|prim)spec/.spec/' *.out.*spec
     rm *.out
@@ -451,12 +446,6 @@ exit; # don't actually run this like a script :)
     mkdir -p /scratch/hg/gs.15/build32/chromTrfMixedNib
     cp -p mixedNib/chr*.nib /scratch/hg/gs.15/build32/chromTrfMixedNib
     # Ask cluster-admin@cse.ucsc.edu to binrsync /scratch/hg to clusters
-    # Copy to /iscratch as well so we can run blastz before binrsync finishes:
-    rm -rf /iscratch/i/gs.15/build32/{linSpecRep,rmsk,chromTrfMixedNib}
-    cp -Rp /scratch/hg/gs.15/build32/{linSpecRep,rmsk,chromTrfMixedNib} \
-      /iscratch/i/gs.15/build32/
-    ssh kkr1u00
-    ~kent/bin/iSync
 
     # Jim's comments Feb 12 '03 about the order in which to run blastz:
     # In general we should do
@@ -472,7 +461,7 @@ exit; # don't actually run this like a script :)
     # do the inverse explicitly.
 
 
-# MAKE DOWNLOADABLE SEQUENCE FILES (DONE 03/20/03)
+# MAKE DOWNLOADABLE SEQUENCE FILES (TODO)
     ssh eieio
     cd ~/hg14
     #- Build the .zip files
@@ -481,7 +470,6 @@ exit; # don't actually run this like a script :)
     #- Check zip file integrity:
     mkdir zip
     mv *.zip* zip
-    cd zip
     foreach f (*.zip)
       unzip -t $f > $f.test
       tail -1 $f.test
@@ -492,7 +480,7 @@ exit; # don't actually run this like a script :)
     cd ~/hg14/zip
     # Edit cpToWeb.sh to contain the correct destination path.
     ../jkStuff/cpToWeb.sh
-    cd /usr/local/apache/htdocs/goldenPath/10mar2003
+    cd /usr/local/apache/htdocs/goldenPath/??mar2003
     #- Take a look at bigZips/* and chromosomes/*, update their README.txt's
 
 
@@ -512,6 +500,12 @@ exit; # don't actually run this like a script :)
     # Copy over grp table (for track grouping) from another database:
     echo "create table grp (PRIMARY KEY(NAME)) select * from hg13.grp" \
     | hgsql hg14
+
+
+# LOAD REPEAT MASKS (TODO)
+    ssh hgwdev
+    cd ~/hg14
+    hgLoadOut hg14 ?/*.fa.out ??/*.fa.out
 
 
 # SEQUENCE INFO: CHROMINFO (DONE 03/16/03)
@@ -655,15 +649,15 @@ exit; # don't actually run this like a script :)
       /cluster/store5/mrna.134/humanXenoEst.ra
 
 
-# MAKE HGCENTRALTEST BLATSERVERS ENTRY (DONE 03/20/03)
+# MAKE HGCENTRALTEST BLATSERVERS ENTRY (TODO)
     ssh hgwdev
     # Substitute BBB with the correct number for the hostname:
-    echo 'insert into blatServers values("hg14", "blat11", "17778", "1"); \
-          insert into blatServers values("hg14", "blat11", "17779", "0");' \
+    echo 'insert into blatServers values("hg14", "blatBBB", "17778", "1"); \
+          insert into blatServers values("hg14", "blatBBB", "17779", "0");' \
     | hgsql -h genome-testdb hgcentraltest
 
 
-# MAKING AND STORING mRNA AND EST ALIGNMENTS (DONE 03/18/03)
+# MAKING AND STORING mRNA AND EST ALIGNMENTS (TODO)
     # Make sure that /scratch/hg/gs.15/build32/trfFa is loaded with NT_*.fa 
     # and has been pushed to the big cluster nodes.  (MASK SEQUENCE above)
     # Make sure mrna/est .fa's are under /iscratch/i too (GENBANK above)
@@ -711,7 +705,7 @@ exit; # don't actually run this like a script :)
     # Load mRNA alignments into database. 
     ssh hgwdev
     cd ~/hg14/bed/mrna/chrom
-    rm -f *_mrna.psl
+    rm *_mrna.psl
     foreach i (*.psl)
       mv $i $i:r_mrna.psl
     end
@@ -721,8 +715,8 @@ exit; # don't actually run this like a script :)
 
     # Load EST alignments into database.
     ssh hgwdev
-    cd ~/hg14/bed/est/chrom
-    rm -f *_est.psl
+    cd /cluster/store5/gs.15/build32/bed/est/chrom
+    rm *_est.psl
     foreach i (*.psl)
       mv $i $i:r_est.psl
     end
@@ -732,7 +726,7 @@ exit; # don't actually run this like a script :)
     # Sequence info should have already been loaded into database (PRELOAD)
 
 
-# SPLICED ESTS (INTRONEST) (DONE 03/18/03)
+# SPLICED ESTS (INTRONEST) (TODO)
     # Create subset of ESTs with introns and load into database.
     ssh eieio
     cd ~/hg14
@@ -742,9 +736,9 @@ exit; # don't actually run this like a script :)
     hgLoadPsl hg14 *.psl
 
 
-# ESTORIENTINFO, MRNAORIENTINFO, GENE BOUNDS (RNACLUSTER) (DONE 03/22/03)
+# ESTORIENTINFO, MRNAORIENTINFO, GENE BOUNDS (RNACLUSTER) (TODO)
     # Put orientation info on ESTs and mRNAs into database:
-    ssh eieio
+    ssh kk
     cd ~/hg14/bed/est
     pslSortAcc nohead contig /cluster/store3/tmp contig.psl
     cd ~/hg14/bed/mrna
@@ -756,72 +750,53 @@ exit; # don't actually run this like a script :)
     cp -r ~/hg14/bed/est/contig /iscratch/i/gs.15/build32/bed/est
     cp -r ~/hg14/bed/mrna/contig /iscratch/i/gs.15/build32/bed/mrna
     ~kent/bin/iSync
-    # mrna: use big cluster.
     ssh kk
-    mkdir -p ~/hg14/bed/mrnaOrientInfo/oi
-    cd ~/hg14/bed/mrnaOrientInfo
-    ls -1S /iscratch/i/gs.15/build32/bed/mrna/*.psl > psl.lst
-    ls -1S /iscratch/i/mrna.134/Homo_sapiens/mrna*.fa > mrna.lst
-    cp ~/hg13/bed/mrnaOrientInfo/gsub .
-    # Edit gsub to point to the correct paths.
-    gensub2 psl.lst mrna.lst gsub spec
+    foreach d (est mrna)
+      mkdir -p ~/hg14/bed/${d}OrientInfo/oi
+      cd ~/hg14/bed/${d}OrientInfo
+      ls -1 /scratch/hg/gs.15/build32/bed/${d}/*.psl > psl.lst
+      cp ~/hg13/bed/${d}OrientInfo/gsub .
+    end
+    # Edit ~/hg14/bed/${d}OrientInfo/gsub to point to the correct paths.
+    # For each of ~/hg14/bed/{est,mrna}OrientInfo, cd there and do this:
+    gensub2 psl.lst single gsub spec
     para create spec
     para try 
-    para check, para push, para check, ....
+    para check      
+    para push
+    # check until done, or use 'para shove'
     # When the cluster run is done do:
     ssh hgwdev
-    cd ~/hg14/bed/mrnaOrientInfo
-    liftUp mrnaOrientInfo.bed ~/hg14/jkStuff/liftAll.lft warn oi/*.tab
-    hgLoadBed hg14 mrnaOrientInfo mrnaOrientInfo.bed \
-      -sqlTable=$HOME/kent/src/hg/lib/mrnaOrientInfo.sql > /dev/null
-
-    # est: use small cluster (I/O intensive).  Use 2-level output dir 
-    # (input est.fa has been split into multiple files).  
-    ssh kkr1u00
-    mkdir -p ~/hg14/bed/estOrientInfo/oi
-    cd ~/hg14/bed/estOrientInfo
-    foreach f (`cat mrna.lst`)
-      mkdir oi/$f:t:r
+    foreach d (est mrna)
+      cd ~/hg14/bed/${d}OrientInfo
+      liftUp ${d}OrientInfo.bed ~/hg14/jkStuff/liftAll.lft warn oi/*.tab
+      hgLoadBed hg14 ${d}OrientInfo ${d}OrientInfo.bed \
+        -sqlTable=$HOME/src/hg/lib/${d}OrientInfo.sql > /dev/null
     end
-    ls -1S /iscratch/i/gs.15/build32/bed/est/*.psl > psl.lst
-    ls -1S /iscratch/i/est.134/Homo_sapiens/est*.fa > mrna.lst
-    cp ~/hg13/bed/estOrientInfo/gsub .
-    # Edit gsub to point to the correct paths.
-    gensub2 psl.lst mrna.lst gsub spec
-    para create spec
-    para try 
-    para check, para push, para check, ....
-    # When the cluster run is done do:
-    ssh hgwdev
-    cd ~/hg14/bed/estOrientInfo
-    # oi/*/*.tab -> argument list too long... so cat the lowest level together:
-    foreach d (oi/*)
-      cat $d/*.tab > $d.tab
-    end
-    liftUp estOrientInfo.bed ~/hg14/jkStuff/liftAll.lft warn oi/*.tab
-    bedSort estOrientInfo.bed estOrientInfo.bed
-    hgLoadBed hg14 estOrientInfo estOrientInfo.bed \
-      -sqlTable=$HOME/kent/src/hg/lib/estOrientInfo.sql > /dev/null
-
     # Create rnaCluster table (depends on {est,mrna}OrientInfo above)
+    ssh hgwdev
     cd ~/hg14
     # Create a list of accessions that come from RAGE libraries and need to
     # be excluded. (added by Chuck Wed Nov 27 13:09:07 PST 2002)
     ~/kent/src/hg/geneBounds/clusterRna/generateRageAccList.csh hg14 \
-      rage.libs
+      hg14.rage.libs
     mkdir -p ~/hg14/bed/rnaCluster/chrom
-    # Exclude accesions in the RAGE file
-    foreach f (?{,?}/chr*.fa)
-      set c = $f:t:r
-      set out = bed/rnaCluster/chrom/$c.bed
-      echo clusterRna -mrnaExclude=hg14.rage.libs hg14 /dev/null $out -chrom=$c
-      clusterRna -mrnaExclude=hg14.rage.libs hg14 /dev/null $out -chrom=$c
+    foreach i (? ??)
+      cd $i
+      foreach j (chr*.fa)
+        set c = $j:r
+        set f = ../bed/rnaCluster/chrom/$c.bed
+        # Exclude accesions in the RAGE file up one directory
+        echo clusterRna -mrnaExclude=../hg14.rage.libs hg14 /dev/null $f -chrom=$c
+        clusterRna -mrnaExclude=../hg14.rage.libs  hg14 /dev/null $f -chrom=$c
+      end
+      cd ..
     end
     cd bed/rnaCluster
     hgLoadBed hg14 rnaCluster chrom/*.bed > /dev/null
 
 
-# GENEBANDS (DONE 03/18/03)
+# GENEBANDS (TODO)
     # Create precomputed geneBands table:
     ssh hgwdev
     hgGeneBands hg14 geneBands.txt
@@ -831,7 +806,7 @@ exit; # don't actually run this like a script :)
     rm geneBands.txt
 
 
-# PRODUCING GENSCAN PREDICTIONS (DONE 03/23/03)
+# PRODUCING GENSCAN PREDICTIONS (TODO)
 
     ssh eieio
     mkdir -p ~/hg14/bed/genscan
@@ -869,7 +844,7 @@ exit; # don't actually run this like a script :)
     para check
     # If there were out-of-memory problems (run "para problems"), then 
     # re-run those jobs by hand but change the -window arg from 2400000
-    # to 1200000.  In build32, this was 22/NT_011519.
+    # to 1200000.  In build31, these were 22/NT_011519 and 19/NT_011109.
 
     # Convert these to chromosome level files as so:     
     ssh eieio
@@ -887,7 +862,7 @@ exit; # don't actually run this like a script :)
     hgLoadBed hg14 genscanSubopt genscanSubopt.bed > /dev/null
 
 
-# CPGISLANDS (DONE 03/17/03)
+# CPGISLANDS (TODO)
     ssh eieio
     mkdir -p ~/hg14/bed/cpgIsland
     cd ~/hg14/bed/cpgIsland
@@ -902,8 +877,8 @@ exit; # don't actually run this like a script :)
     # characters like R, S, etc.  Ignore the warnings.  
     foreach f (../../?{,?}/chr?{,?}{,_random}.fa.masked)
       set fout=$f:t:r:r.cpg
-      echo producing $fout...
       ./cpg_dist/cpglh.exe $f > $fout
+      echo Done with $fout
     end
     cp ~/hg13/bed/cpgIsland/filter.awk .
     awk -f filter.awk chr*.cpg > cpgIsland.bed
@@ -1065,19 +1040,18 @@ o - Create bed file
 o - Create database tables
         ssh hgwdev
         cd /projects/hg2/booch/psl/tables
-        hgsql hg14 < all_sts_primer.sql
-        hgsql hg14 < all_sts_seq.sql
-        hgsql hg14 < stsAlias.sql
-        hgsql hg14 < stsInfo2.sql
-        hgsql hg14 < stsMap.sql
+        mysql -uhgcat -pXXXXXXX hg14 < all_sts_primer.sql
+        mysql -uhgcat -pXXXXXXX hg14 < all_sts_seq.sql
+        mysql -uhgcat -pXXXXXXX hg14 < stsAlias.sql
+        mysql -uhgcat -pXXXXXXX hg14 < stsInfo2.sql
+        mysql -uhgcat -pXXXXXXX hg14 < stsMap.sql
 
 o - Load the tables
         load /projects/hg2/booch/psl/gs.15/build32/sts/stsMarkers.psl.filter.lifted into all_sts_seq        
         load /projects/hg2/booch/psl/gs.15/build32/primers/primers.psl.filter.lifted into all_sts_primer        
         load /projects/hg2/booch/psl/gs.15/build32/stsAlias.bed into stsAlias
         load /projects/hg2/booch/psl/gs.15/build32/stsInfo2.bed into stsInfo2
-      echo 'load data local infile "/projects/hg2/booch/psl/gs.15/build32/stsMap.bed" into table stsMap;' \
-      | hgsql hg14
+        load /projects/hg2/booch/psl/gs.15/build32/stsMap.bed into stsMap
 
     # Load the sequences (change sts.# to match correct location)
     mkdir /gbdb/hg14/sts.6
@@ -1165,10 +1139,10 @@ o - Load the tables
    # 9) Create database tables
         ssh hgwdev
         cd /projects/hg2/booch/psl/tables
-        hgsql hg14 < all_bacends.sql
-        hgsql hg14 < bacEndPairs.sql
-        hgsql hg14 < bacEndPairsBad.sql
-        hgsql hg14 < bacEndPairsLong.sql
+        mysql -uhgcat -pXXXXXXX < all_bacends.sql
+        mysql -uhgcat -pXXXXXXX < bacEndPairs.sql
+        mysql -uhgcat -pXXXXXXX < bacEndPairsBad.sql
+        mysql -uhgcat -pXXXXXXX < bacEndPairsLong.sql
 
    # 10) Load the tables
         load /projects/hg2/booch/psl/gs.15/build32/bacends/bacEnds.psl.filter.lifted into all_bacends        
@@ -1213,8 +1187,8 @@ o - Create bed file
 o - Create database tables
         ssh hgwdev
         cd /projects/hg2/booch/psl/tables
-        hgsql hg14 < all_fosends.sql
-        hgsql hg14 < fosEndPairs.sql
+        mysql -uhgcat -pXXXXXXX < all_fosends.sql
+        mysql -uhgcat -pXXXXXXX < fosEndPairs.sql
 
 o - Load the tables
         load /projects/hg2/booch/psl/gs.15/build32/fosends/fosEnds.psl.filter.lifted into all_fosends        
@@ -1248,7 +1222,7 @@ CREATE AND LOAD FISH CLONES TRACK (DONE 3/20/2003)
 
 o - Extract the file with clone positions from database
         ssh hgwdev
-        hgsql hg14
+        mysql -uhgcat -pXXXXXXXX hg14
         mysql>  select * into outfile "/tmp/booch/clonePos.txt" from clonePos;
         mysql> quit
         mv /tmp/booch/clonePos.txt /projects/hg2/booch/psl/gs.15/build32/fish
@@ -1260,7 +1234,7 @@ o - Create bed file
 o - Create database table
         ssh hgwdev
         cd /projects/hg2/booch/psl/tables
-        hgsql hg14 < fishClones.sql
+        mysql -uhgcat -pXXXXXXX < fishClones.sql
 
 o - Load the table
         load /projects/hg2/booch/psl/gs.15/build32/fish/fishClones.bed into fishClones
@@ -1278,11 +1252,11 @@ o - Create bed file
 o - Create database table
         ssh hgwdev
         cd /projects/hg2/booch/psl/tables
-        hgsql hg14 < cytoBand.sql
+        mysql -uhgcat -pXXXXXXX < cytoBand.sql
         
+
 o - Load the table
-      echo "load data local infile '/projects/hg2/booch/psl/gs.15/build32/cytobands/cytobands.bed' into table cytoBand;"
-      | hgsql hg14
+        load /projects/hg2/booch/psl/gs.15/build32/cytobands/cytobands.bed into cytoBand
 
 
 CREATE CHROMOSOME REPORTS (NOT BEING DONE)
@@ -1461,6 +1435,30 @@ TIGR GENE INDEX (TODO)
       end
     end
     ldHgGene -exon=TC hg14 tigrGeneIndex *.gff
+
+
+
+LOAD STS MAP (todo) TODO BY TERRY I BELIEVE - HE WILL UPDATE THIS
+     - login to hgwdev
+      cd ~/hg14/bed
+      hg14 < ~/src/hg/lib/stsMap.sql
+      mkdir stsMap
+      cd stsMap
+      bedSort /projects/cc/hg/mapplots/data/tracks/build32/stsMap.bed stsMap.bed
+      echo 'load data local infile "stsMap.bed" into table stsMap;' \
+      | hgsql hg14
+
+
+LOAD CHROMOSOME BANDS (todo) ALSO TODO BY TERRY I BELIEVE
+      - login to hgwdev
+      cd /cluster/store5/gs.15/build32/bed
+      mkdir cytoBands
+      cp /projects/cc/hg/mapplots/data/tracks/hg14.29/cytobands.bed cytoBands
+      cd cytoBands
+      hg14 < ~/src/hg/lib/cytoBand.sql
+      Enter database with "hg14" command.
+      echo "load data local infile 'cytobands.bed' into table cytoBand;"
+      | hgsql hg14
 
 
 LOAD MOUSEREF TRACK (todo)
@@ -1765,7 +1763,7 @@ o - # ssh hgwdev
     mkdir /cluster/store5/gs.15/build32/bed/affyGnf
     rm -rf psl tmp err *.psl *.bed HG-U95Av2_target 
 
-# LOAD SAGE DATA (TODO)
+# LOAD SAGE DATA (IN PROGRESS)
     ssh hgwdev
     cd ~/kent/src/hg/sage
     make
@@ -1799,6 +1797,7 @@ o - # ssh hgwdev
     cd -
     createSageSummary ../map/Hs/NlaIII/SAGEmap_ug_tag-rel_Hs \
       tagExpArrays.tab sageSummary.sage
+DONE TO HERE for SAGE build on Hs 159
     # Create the uniGene alignments 
     # ~/hg14/uniGene/hg14.uniGene.lifted.pslReps.psl
     # -- see "MAKE UNIGENE ALIGNMENTS" below
@@ -1818,7 +1817,7 @@ o - # ssh hgwdev
     # with current uniGene date. 
 
     
-# MAKE UNIGENE ALIGNMENTS (TODO)
+# MAKE UNIGENE ALIGNMENTS (IN PROGRESS)
     # Download of the latest UniGene version is now automated by a 
     # cron job -- see /cluster/home/angie/crontab , 
     # /cluster/home/angie/unigeneVers/unigene.csh .  
@@ -1842,6 +1841,7 @@ o - # ssh hgwdev
       /iscratch/i/uniGene.$version
     ssh kkr1u00
     ~kent/bin/iSync
+DONE TO HERE for Hs 159
     ssh kk
     set version = XXX # same as above
     mkdir -p ~/hg14/bed/uniGene.$version
@@ -1866,14 +1866,14 @@ o - # ssh hgwdev
     # use hg14.uniGene.lifted.pslReps.psl for building SAGE track (above).
 
 
-LOADING MOUSE MM3 BLASTZ ALIGNMENTS FROM PENN STATE: (DONE 03/17/03)
+LOADING MOUSE MM3 BLASTZ ALIGNMENTS FROM PENN STATE: (TODO)
 
     # Translate Penn State .lav files into sorted axt:
     ssh eieio
-    set base="/cluster/store5/gs.15/build32/bed/blastz.mm3.2003-03-17-ASH"
+    set base="/cluster/store5/gs.15/build32/bed/blastz.mm3.2003-03-09-ASH"
     set seq1_dir="/cluster/store5/gs.15/build32/mixedNib/"
     set seq2_dir="/cluster/store2/mm.2003.02/mm3/mixedNib/"
-    set tbl="blastzMm3"
+    set tbl="blastzMm"
     cd $base
     mkdir -p axtChrom
     foreach c (lav/*)
@@ -1892,23 +1892,22 @@ LOADING MOUSE MM3 BLASTZ ALIGNMENTS FROM PENN STATE: (DONE 03/17/03)
     mkdir -p pslChrom
     foreach f (axtChrom/chr*.axt)
       set c=$f:t:r
-      echo $c
       axtToPsl $f S1.len S2.len pslChrom/${c}_${tbl}.psl
     end
 
     # Load tables
     ssh hgwdev
-    set base="/cluster/store5/gs.15/build32/bed/blastz.mm3.2003-03-17-ASH"
-    set tbl="blastzMm3"
+    set base="/cluster/store5/gs.15/build32/bed/blastz.mm3.2003-03-09-ASH"
+    set tbl="blastzMm"
     cd $base/pslChrom
     hgLoadPsl hg14 chr*_${tbl}.psl
 
-MAKING THE BLASTZBESTMOUSE TRACK FROM PENN STATE MM3 AXT FILES (DONE 03/17/03)
+MAKING THE BLASTZBESTMOUSE TRACK FROM PENN STATE MM3 AXT FILES (TODO)
 
     # Consolidate AXT files to chrom level, sort, pick best, make psl.
     ssh eieio
-    set base="/cluster/store5/gs.15/build32/bed/blastz.mm3.2003-03-17-ASH"
-    set tbl="blastzBestMm3"
+    set base="/cluster/store5/gs.15/build32/bed/blastz.mm3.2003-03-09-ASH"
+    set tbl="blastzBestMouse"
     cd $base
     mkdir -p axtBest pslBest
     foreach chrdir (lav/chr*)
@@ -1918,15 +1917,28 @@ MAKING THE BLASTZBESTMOUSE TRACK FROM PENN STATE MM3 AXT FILES (DONE 03/17/03)
       echo translating axtBest to psl for $chr
       axtToPsl axtBest/$chr.axt S1.len S2.len pslBest/${chr}_${tbl}.psl
     end
+    # If a chromosome has so many alignments that axtBest runs out of mem,
+    # run axtBest in 2 passes to reduce size of the input to final axtBest:
+    foreach chrdir (lav/chr19)
+      set chr=$chrdir:t
+      echo two-pass axtBesting $chr
+      foreach a ($chrdir/*.axt)
+        axtBest $a $chr $a:r.axtBest
+      end
+      cat `ls -1 $chrdir/*.axtBest | sort -g` \
+        > $chrdir/$chr.axtBestPieces
+      axtBest $chrdir/$chr.axtBestPieces $chr axtBest/$chr.axt
+      axtToPsl axtBest/$chr.axt S1.len S2.len pslBest/${chr}_${tbl}.psl
+    end
+
     # Load tables
      ssh hgwdev
-     set base="/cluster/store5/gs.15/build32/bed/blastz.mm3.2003-03-17-ASH"
-     set tbl="blastzBestMm3"
+     set base="/cluster/store5/gs.15/build32/bed/blastz.mm3.2003-03-09-ASH"
+     set tbl="blastzBestMouse"
      cd $base/pslBest
      hgLoadPsl hg14 chr*_${tbl}.psl
 
     # Make /gbdb links and add them to the axtInfo table:
-# Not done for build 32:
      mkdir -p /gbdb/hg14/axtBestMm3
      cd /gbdb/hg14/axtBestMm3
      foreach f ($base/axtBest/chr*.axt)
@@ -1943,13 +1955,12 @@ MAKING THE BLASTZBESTMOUSE TRACK FROM PENN STATE MM3 AXT FILES (DONE 03/17/03)
      hgsql hg14 < ~/kent/src/hg/lib/axtInfo.sql
      hgsql hg14 < axtInfoInserts.sql
 
-MAKING THE AXTTIGHT FROM AXTBEST (DONE 03/17/03)
+MAKING THE AXTTIGHT FROM AXTBEST (TODO)
     # After creating axtBest alignments above, use subsetAxt to get axtTight:
     ssh eieio
-    cd ~/hg14/bed/blastz.mm3.2003-03-17-ASH/axtBest
+    cd ~/hg14/bed/blastz.mm3.2003-03-09-ASH/axtBest
     mkdir -p ../axtTight
     foreach i (*.axt)
-      echo $i
       subsetAxt  $i ../axtTight/$i \
         ~kent/src/hg/mouseStuff/subsetAxt/coding.mat 3400
     end
@@ -1958,20 +1969,20 @@ MAKING THE AXTTIGHT FROM AXTBEST (DONE 03/17/03)
     mkdir -p ../pslTight
     foreach i (*.axt)
       set c = $i:r
-      axtToPsl $i ../S1.len ../S2.len ../pslTight/${c}_blastzTightMm3.psl
+      axtToPsl $i ../S1.len ../S2.len ../pslTight/${c}_blastzTightMouse.psl
     end
     # Load tables into database
     ssh hgwdev
-    cd ~/hg14/bed/blastz.mm3.2003-03-17-ASH/pslTight
-    hgLoadPsl hg14 chr*_blastzTightMm3.psl
+    cd ~/hg14/bed/blastz.mm3.2003-03-09-ASH/pslTight
+    hgLoadPsl hg14 chr*_blastzTightMouse.psl
 
 BEGINNING OF RAT BLASTZ
 
-LOADING RAT RN2 BLASTZ ALIGNMENTS FROM PENN STATE: (DONE 03/19/03)
+LOADING RAT RN2 BLASTZ ALIGNMENTS FROM PENN STATE: (TODO)
 
     # Translate Penn State .lav files into sorted axt:
     ssh eieio
-    set base="/cluster/store5/gs.15/build32/bed/blastz.rn2.2003-03-18-ASH"
+    set base="/cluster/store5/gs.15/build32/bed/blastz.rn2.2003-03-13-ASH"
     set seq1_dir="/cluster/store5/gs.15/build32/mixedNib/"
     set seq2_dir="/cluster/store4/rn2/mixedNib/"
     set tbl="blastzRn2"
@@ -1998,16 +2009,16 @@ LOADING RAT RN2 BLASTZ ALIGNMENTS FROM PENN STATE: (DONE 03/19/03)
     end
     # Load tables
     ssh hgwdev
-    set base="/cluster/store5/gs.15/build32/bed/blastz.rn2.2003-03-18-ASH"
+    set base="/cluster/store5/gs.15/build32/bed/blastz.rn2.2003-03-13-ASH"
     set tbl="blastzRn2"
     cd $base/pslChrom
     hgLoadPsl hg14 chr*_${tbl}.psl
 
-MAKING THE BLASTZBESTRAT TRACK FROM PENN STATE RN2 AXT FILES (DONE 03/19/03)
+MAKING THE BLASTZBESTRAT TRACK FROM PENN STATE RN2 AXT FILES (TODO)
 
     # Consolidate AXT files to chrom level, sort, pick best, make psl.
     ssh eieio
-    set base="/cluster/store5/gs.15/build32/bed/blastz.rn2.2003-03-18-ASH"
+    set base="/cluster/store5/gs.15/build32/bed/blastz.rn2.2003-03-13-ASH"
     set tbl="blastzBestRn2"
     cd $base
     mkdir -p axtBest pslBest
@@ -2021,13 +2032,12 @@ MAKING THE BLASTZBESTRAT TRACK FROM PENN STATE RN2 AXT FILES (DONE 03/19/03)
 
     # Load tables
      ssh hgwdev
-     set base="/cluster/store5/gs.15/build32/bed/blastz.rn2.2003-03-18-ASH"
+     set base="/cluster/store5/gs.15/build32/bed/blastz.rn2.2003-03-13-ASH"
      set tbl="blastzBestRn2"
      cd $base/pslBest
      hgLoadPsl hg14 chr*_${tbl}.psl
 
     # Make /gbdb links and add them to the axtInfo table:
-# Not done for build 32:
      mkdir -p /gbdb/hg14/axtBestRn2
      cd /gbdb/hg14/axtBestRn2
      foreach f ($base/axtBest/chr*.axt)
@@ -2044,10 +2054,10 @@ MAKING THE BLASTZBESTRAT TRACK FROM PENN STATE RN2 AXT FILES (DONE 03/19/03)
      hgsql hg14 < ~/kent/src/hg/lib/axtInfo.sql
      hgsql hg14 < axtInfoInserts.sql
 
-MAKING THE AXTTIGHT FROM AXTBEST (DONE 03/19/03)
+MAKING THE AXTTIGHT FROM AXTBEST (TODO)
     # After creating axtBest alignments above, use subsetAxt to get axtTight:
     ssh eieio
-    cd ~/hg14/bed/blastz.rn2.2003-03-18-ASH/axtBest
+    cd ~/hg14/bed/blastz.rn2.2003-03-13-ASH/axtBest
     mkdir -p ../axtTight
     foreach i (*.axt)
       subsetAxt  $i ../axtTight/$i \
@@ -2062,19 +2072,19 @@ MAKING THE AXTTIGHT FROM AXTBEST (DONE 03/19/03)
     end
     # Load tables into database
     ssh hgwdev
-    cd ~/hg14/bed/blastz.rn2.2003-03-18-ASH/pslTight
+    cd ~/hg14/bed/blastz.rn2.2003-03-13-ASH/pslTight
     hgLoadPsl hg14 chr*_blastzTightRn2.psl
 
 XXX END OF RAT BLASTZ
 
 BEGINNING OF HUMAN BLASTZ
 
-LOADING HUMAN HG14 (SELF) BLASTZ ALIGNMENTS: (DONE 03/19/20)
+LOADING HUMAN HG14 (SELF) BLASTZ ALIGNMENTS: (TODO)
 
     # Translate Penn State .lav files into sorted axt, with alignments 
     # to self/diagonal dropped:
     ssh eieio
-    set base="/cluster/store5/gs.15/build32/bed/blastz.hg14.2003-03-18-ASH"
+    set base="/cluster/store5/gs.15/build32/bed/blastz.hg14.2003-02-18-ASH"
     set seq1_dir="/cluster/store5/gs.15/build32/mixedNib/"
     set seq2_dir="/cluster/store5/gs.15/build32/mixedNib/"
     set tbl="blastzHuman"
@@ -2098,7 +2108,6 @@ LOADING HUMAN HG14 (SELF) BLASTZ ALIGNMENTS: (DONE 03/19/20)
       popd
     end
 
-# STOPPED HERE -- big data, low demand.
     # Translate the sorted axt files into psl:
     cd $base
     mkdir -p pslChrom
@@ -2110,16 +2119,16 @@ LOADING HUMAN HG14 (SELF) BLASTZ ALIGNMENTS: (DONE 03/19/20)
 
     # Load tables
     ssh hgwdev
-    set base="/cluster/store5/gs.15/build32/bed/blastz.hg14.2003-03-18-ASH"
+    set base="/cluster/store5/gs.15/build32/bed/blastz.hg14.2003-02-18-ASH"
     set tbl="blastzHuman"
     cd $base/pslChrom
     hgLoadPsl hg14 chr*_${tbl}.psl
 
-MAKING THE BLASTZBESTHUMAN TRACK FROM UNFILTERED AXT FILES (DONE 03/20/03)
+MAKING THE BLASTZBESTHUMAN TRACK FROM UNFILTERED AXT FILES (TODO)
 
     # Consolidate AXT files to chrom level, sort, pick best, make psl.
     ssh eieio
-    set base="/cluster/store5/gs.15/build32/bed/blastz.hg14.2003-03-18-ASH"
+    set base="/cluster/store5/gs.15/build32/bed/blastz.hg14.2003-02-18-ASH"
     set tbl="blastzBestHuman"
     cd $base
     mkdir -p axtBest pslBest
@@ -2127,8 +2136,9 @@ MAKING THE BLASTZBESTHUMAN TRACK FROM UNFILTERED AXT FILES (DONE 03/20/03)
     foreach chrdir (lav/*)
       set chr=$chrdir:t
       echo two-pass axtBesting $chr
-      foreach a ($chrdir/*.axt)
-        axtBest $a $chr $a:r.axtBest
+      foreach a ($chrdir/*.axt.gz)
+        gunzip -c $a \
+        | axtBest stdin $chr $a:r.axtBest
       end
       cat `ls -1 $chrdir/*.axtBest | sort -g` \
         > $chrdir/$chr.axtBestPieces
@@ -2138,13 +2148,12 @@ MAKING THE BLASTZBESTHUMAN TRACK FROM UNFILTERED AXT FILES (DONE 03/20/03)
 
     # Load tables
      ssh hgwdev
-     set base="/cluster/store5/gs.15/build32/bed/blastz.hg14.2003-03-18-ASH"
+     set base="/cluster/store5/gs.15/build32/bed/blastz.hg14.2003-02-18-ASH"
      set tbl="blastzBestHuman"
      cd $base/pslBest
      hgLoadPsl hg14 chr*_${tbl}.psl
 
     # Make /gbdb links and add them to the axtInfo table:
-# Not done for build 32:
      mkdir -p /gbdb/hg14/axtBestHg14
      cd /gbdb/hg14/axtBestHg14
      foreach f ($base/axtBest/chr*.axt)
@@ -2161,10 +2170,10 @@ MAKING THE BLASTZBESTHUMAN TRACK FROM UNFILTERED AXT FILES (DONE 03/20/03)
      hgsql hg14 < ~/kent/src/hg/lib/axtInfo.sql
      hgsql hg14 < axtInfoInserts.sql
 
-MAKING THE AXTTIGHT FROM AXTBEST (DONE 03/20/03)
+MAKING THE AXTTIGHT FROM AXTBEST (TODO)
     # After creating axtBest alignments above, use subsetAxt to get axtTight:
     ssh eieio
-    cd ~/hg14/bed/blastz.hg14.2003-03-18-ASH/axtBest
+    cd ~/hg14/bed/blastz.hg14.2003-02-18-ASH/axtBest
     mkdir -p ../axtTight
     foreach i (*.axt)
       subsetAxt  $i ../axtTight/$i \
@@ -2179,7 +2188,7 @@ MAKING THE AXTTIGHT FROM AXTBEST (DONE 03/20/03)
     end
     # Load tables into database
     ssh hgwdev
-    cd ~/hg14/bed/blastz.hg14.2003-03-18-ASH/pslTight
+    cd ~/hg14/bed/blastz.hg14.2003-02-18-ASH/pslTight
     hgLoadPsl hg14 chr*_blastzTightHuman.psl
 
 
@@ -2248,6 +2257,7 @@ TWINSCAN GENE PREDICTIONS (TODO)
     cp -p /cluster/store1/chimpSeq/*.fa /iscratch/i/chimp/
     # Make sure it unpacked OK
     ~kent/bin/iSync
+DONE TO HERE
     ssh kk
     mkdir ~/hg14/bed/blatChimp
     cd ~/hg14/bed/blatChimp

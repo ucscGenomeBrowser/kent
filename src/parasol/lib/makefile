@@ -2,8 +2,8 @@ include ../../inc/common.mk
 
 
 
-O = broadData.o paraLib.o paraMessage.o machSpec.o
+O = broadData.o paraLib.o machSpec.o
 
 $(MACHTYPE)/paralib.a: $(O) 
-	ar rcu $(MACHTYPE)/paralib.a $(O)
-	ranlib $(MACHTYPE)/paralib.a
+	ar rcu ../lib/$(MACHTYPE)/paralib.a $(O)
+	ranlib ../lib/$(MACHTYPE)/paralib.a

@@ -100,20 +100,6 @@ char* sqlGetDatabase(struct sqlConnection *sc)
 return sc->conn->db;
 }
 
-struct slName *sqlGetAllDatabase(struct sqlConnection *sc)
-/* Get a list of all database on the server */
-{
-struct sqlResult *sr = sqlGetResult(sc, "show databases");
-char **row;
-struct slName *databases = NULL;
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-    slSafeAddHead(&databases, slNameNew(row[0]));
-    }
-sqlFreeResult(&sr);
-return databases;
-}
-
 void sqlCleanupAll()
 /* Cleanup all open connections and resources. */
 {
@@ -376,18 +362,8 @@ safef(query, sizeof(query),  "LOAD data %s infile '%s' into table %s",
       localOpt, tabPath, table);
 sr = sqlGetResult(conn, query);
 info = mysql_info(conn->conn);
-/* FIXME: sometimes mysql_info returns null after long load!! */
-#if 0
 if (info == NULL)
     errAbort("no info available for result of sql query: %s", query);
-#else
-if (info == NULL)
-    {
-    fprintf(stderr, "Warning: mysql_info returned null for query: %s\n", query);
-    sqlFreeResult(&sr);
-    return; /* can't check */
-    }
-#endif
 numScan = sscanf(info, "Records: %d Deleted: %*d  Skipped: %d  Warnings: %d",
                  &numRecs, &numSkipped, &numWarnings);
 if (numScan != 3)

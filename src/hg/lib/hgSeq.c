@@ -511,13 +511,6 @@ boolean isCDS, doIntron;
 boolean foundFields;
 boolean canDoUTR, canDoIntrons;
 
-/* catch a special case: introns selected, but no exons -> include all introns
- * instead of qualifying intron with exon flags. */
-if (intron && !(utrExon5 || cdsExon || utrExon3))
-    {
-    utrIntron5 = cdsIntron = utrIntron3 = TRUE;
-    }
-
 canDoUTR = hti->hasCDS;
 canDoIntrons = hti->hasBlocks;
 

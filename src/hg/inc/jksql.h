@@ -49,9 +49,6 @@ void sqlDisconnect(struct sqlConnection **pSc);
 char* sqlGetDatabase(struct sqlConnection *sc);
 /* Get the database associated with an connection. */
 
-struct slName *sqlGetAllDatabase(struct sqlConnection *sc);
-/* Get a list of all database on the server */
-
 struct sqlConnCache *sqlNewConnCache(char *database);
 /* Return a new connection cache. (Useful if going to be
  * doing lots of different queries in different routines

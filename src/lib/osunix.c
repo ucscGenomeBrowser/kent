@@ -3,10 +3,12 @@
  * This file is copyright 2002 Jim Kent, but license is hereby
  * granted for all use - public, private or commercial. */
 
-#include "common.h"
+#include <unistd.h>
+#include <time.h>
 #include <dirent.h>
 #include <sys/utsname.h>
 #include <sys/time.h>
+#include "common.h"
 #include "portable.h"
 #include "portimpl.h"
 
@@ -40,13 +42,10 @@ return (tv.tv_sec-origSec)*1000 + tv.tv_usec / 1000;
 void sleep1000(int milli)
 /* Sleep for given number of 1000ths of second */
 {
-if (milli > 0)
-    {
-    struct timeval tv;
-    tv.tv_sec = milli/1000;
-    tv.tv_usec = (milli%1000)*1000;
-    select(0, NULL, NULL, NULL, &tv);
-    }
+struct timeval tv;
+tv.tv_sec = milli/1000;
+tv.tv_usec = (milli%1000)*1000;
+select(0, NULL, NULL, NULL, &tv);
 }
 
 long clock1()

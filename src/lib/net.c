@@ -3,10 +3,10 @@
  * This file is copyright 2002 Jim Kent, but license is hereby
  * granted for all use - public, private or commercial. */
 
-#include "common.h"
 #include <signal.h>
 #include <errno.h>
 #include <string.h>
+#include "common.h"
 #include "internet.h"
 #include "errabort.h"
 #include "net.h"

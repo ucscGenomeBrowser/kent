@@ -1007,7 +1007,7 @@ SGP GENE PREDICTIONS (DONE 01/29/03)
     hgPepPred mm2 generic sgpPep download/*-fixed.prot
 
 
-TIGR GENE INDEX (REDONE 3/31/03)
+TIGR GENE INDEX (DONE 2/26/03)
   o mkdir -p ~/mm2/bed/tigr    
     cd ~/mm2/bed/tigr  
     wget ftp://ftp.tigr.org/private/NHGI_mgi_jiashu/TGI_track_MouseGenome_Feb2003.tgz
@@ -1019,8 +1019,8 @@ TIGR GENE INDEX (REDONE 3/31/03)
 
     foreach o (mouse cow human pig rat)
       setenv O $o
-      foreach f ([Cc]hr*_$o*s)
-       tail +2 $f | perl -wpe 's /THC/TC/; s/(TH?C\d+)/$ENV{O}_$1/;' > $f.gff
+      foreach f (Chr*_$o*s)
+        tail +2 $f | perl -wpe 's /THC/TC/; s/(TH?C\d+)/$ENV{O}_$1/;' > $f.gff
       end
     end
     ldHgGene -exon=TC mm2 tigrGeneIndex *.gff

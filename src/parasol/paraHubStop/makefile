@@ -8,5 +8,6 @@ MYLIBS =  $(MYLIBDIR)/jkweb.a
 O = paraHubStop.o
 
 paraHubStop: $O $(MYLIBS)
-	gcc -o ../bin/paraHubStop $O ../lib/$(MACHTYPE)/paralib.a ../../lib/$(MACHTYPE)/jkweb.a
-	strip ../bin/paraHubStop
+	gcc -o $(HOME)/bin/$(MACHTYPE)/paraHubStop $O ../lib/$(MACHTYPE)/paralib.a ../../lib/$(MACHTYPE)/jkweb.a
+	strip $(HOME)/bin/$(MACHTYPE)/paraHubStop
+	chmod 744 $(HOME)/bin/$(MACHTYPE)/paraHubStop

@@ -5,7 +5,6 @@
 
 #Extra information on mRNAs - calculated by polyInfo program
 CREATE TABLE mrnaOrientInfo (
-    bin smallint unsigned not null,   # Bin for fast index
     chrom varchar(255) not null,	# Human chromosome or FPC contig
     chromStart int unsigned not null,	# Start position in chromosome
     chromEnd int unsigned not null,	# End position in chromosome
@@ -16,8 +15,5 @@ CREATE TABLE mrnaOrientInfo (
     signalPos smallint not null,	# Position of start of polyA signal relative to end of EST or 0 if no signal
     revSignalPos smallint not null,	# PolyA signal position on reverse strand if any
               #Indices
-    INDEX(chrom(8),bin),
-    INDEX(chrom(8),chromStart),
-    INDEX(chrom(8),chromEnd),
-    INDEX(name(20))
+    PRIMARY KEY(chrom)
 );

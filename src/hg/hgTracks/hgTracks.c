@@ -56,6 +56,8 @@
 #include "mouseSyn.h"
 #include "mouseSynWhd.h"
 #include "ensPhusionBlast.h"
+#include "syntenyBerk.h"
+#include "syntenySanger.h"
 #include "knownMore.h"
 #include "customTrack.h"
 #include "trackDb.h"
@@ -5254,13 +5256,54 @@ tg->freeItems = freeFishClones;
 tg->itemColor = fishClonesColor;
 }
 
-void loadSynteny(struct track *tg)
+
+void loadSyntenyBerk(struct track *tg)
 {
-bedLoadItem(tg, tg->mapName, (ItemLoader)synteny100000Load);
+bedLoadItem(tg, "syntenyBerk", (ItemLoader)syntenyBerkLoad);
 slSort(&tg->items, bedCmp);
 }
 
-void freeSynteny(struct track *tg)
+void freeSyntenyBerk(struct track *tg)
+{
+syntenyBerkFreeList((struct syntenyBerk**)&tg->items);
+}
+
+void loadSyntenySanger(struct track *tg)
+{
+bedLoadItem(tg, "syntenySanger", (ItemLoader)syntenySangerLoad);
+slSort(&tg->items, bedCmp);
+}
+
+void freeSyntenySanger(struct track *tg)
+{
+syntenySangerFreeList((struct syntenySanger**)&tg->items);
+}
+
+void loadSyntenyMouse(struct track *tg)
+{
+bedLoadItem(tg, "syntenyMouse", (ItemLoader)synteny100000Load);
+slSort(&tg->items, bedCmp);
+}
+
+void loadSyntenyHuman(struct track *tg)
+{
+bedLoadItem(tg, "syntenyHuman", (ItemLoader)synteny100000Load);
+slSort(&tg->items, bedCmp);
+}
+
+void loadSynteny100000(struct track *tg)
+{
+bedLoadItem(tg, "synteny100000", (ItemLoader)synteny100000Load);
+slSort(&tg->items, bedCmp);
+}
+
+void loadSyntenyRat(struct track *tg)
+{
+bedLoadItem(tg, "syntenyRat", (ItemLoader)synteny100000Load);
+slSort(&tg->items, bedCmp);
+}
+
+void freeSynteny100000(struct track *tg)
 {
 synteny100000FreeList((struct synteny100000**)&tg->items);
 }
@@ -5326,7 +5369,6 @@ else
     strncpy(chromStr,ms->name,2);
 return ((Color)getChromColor(chromStr, vg));
 }
-
 Color syntenyItemColor(struct track *tg, void *item, struct vGfx *vg)
 /* Return color of psl track item based on chromsome. */
 {
@@ -5350,6 +5392,55 @@ else
 return ((Color)getChromColor(chromStr, vg));
 }
 
+Color syntenyBerkItemColor(struct track *tg, void *item, struct vGfx *vg)
+/* Return color of psl track item based on chromsome. */
+{
+char chromStr[20];     
+char *chptr;
+struct syntenyBerk *ms = item;
+if (strlen(ms->name) == 8)
+    {
+    strncpy(chromStr,(char *)(ms->name+1),1);
+    chromStr[1] = '\0';
+    }
+else if (strlen(ms->name) == 9)
+    {
+    strncpy(chromStr,(char *)(ms->name+1),2);
+    chromStr[2] = '\0';
+    }
+else
+    {
+    chptr = strstr(ms->name,"chr");
+    strncpy(chromStr,(char *)(chptr+3),2);
+    chromStr[2] = '\0';
+    }
+return ((Color)getChromColor(chromStr, vg));
+}
+
+Color syntenySangerItemColor(struct track *tg, void *item, struct vGfx *vg)
+/* Return color of psl track item based on chromsome. */
+{
+char chromStr[20];     
+char *chptr;
+struct syntenySanger *ms = item;
+if (strlen(ms->name) == 8)
+    {
+    strncpy(chromStr,(char *)(ms->name+1),1);
+    chromStr[1] = '\0';
+    }
+else if (strlen(ms->name) == 9)
+    {
+    strncpy(chromStr,(char *)(ms->name+1),2);
+    chromStr[2] = '\0';
+    }
+else
+    {
+    chptr = strstr(ms->name,"chr");
+    strncpy(chromStr,(char *)(chptr+3),2);
+    chromStr[2] = '\0';
+    }
+return ((Color)getChromColor(chromStr, vg));
+}
 
 void loadMouseSyn(struct track *tg)
 /* Load up mouseSyn from database table to track items. */
@@ -5357,11 +5448,56 @@ void loadMouseSyn(struct track *tg)
 bedLoadItem(tg, "mouseSyn", (ItemLoader)mouseSynLoad);
 }
 
-void syntenyMethods(struct track *tg)
+void syntenyHumanMethods(struct track *tg)
 {
-tg->loadItems = loadSynteny;
-tg->freeItems = freeSynteny;
+tg->loadItems = loadSyntenyHuman;
+tg->freeItems = freeSynteny100000;
 tg->itemColor = syntenyItemColor;
+tg->drawName = FALSE;
+tg->subType = lfWithBarbs ;
+}
+
+void syntenyMouseMethods(struct track *tg)
+{
+tg->loadItems = loadSyntenyMouse;
+tg->freeItems = freeSynteny100000;
+tg->itemColor = syntenyItemColor;
+tg->drawName = FALSE;
+tg->subType = lfWithBarbs ;
+}
+
+void synteny100000Methods(struct track *tg)
+{
+tg->loadItems = loadSynteny100000;
+tg->freeItems = freeSynteny100000;
+tg->itemColor = syntenyItemColor;
+tg->drawName = FALSE;
+tg->subType = lfWithBarbs ;
+}
+
+void syntenyRatMethods(struct track *tg)
+{
+tg->loadItems = loadSyntenyRat;
+tg->freeItems = freeSynteny100000;
+tg->itemColor = syntenyItemColor;
+tg->drawName = FALSE;
+tg->subType = lfWithBarbs ;
+}
+
+void syntenyBerkMethods(struct track *tg)
+{
+tg->loadItems = loadSyntenyBerk;
+tg->freeItems = freeSyntenyBerk;
+tg->itemColor = syntenyBerkItemColor;
+tg->drawName = FALSE;
+tg->subType = lfWithBarbs ;
+}
+
+void syntenySangerMethods(struct track *tg)
+{
+tg->loadItems = loadSyntenySanger;
+tg->freeItems = freeSyntenySanger;
+tg->itemColor = syntenySangerItemColor;
 tg->drawName = FALSE;
 tg->subType = lfWithBarbs ;
 }
@@ -9094,26 +9230,6 @@ slReverse(&list);
 tg->items = list;
 }
 
-void bed8To12(struct bed *bed)
-/* Turn a bed 8 into a bed 12 by defining one block. */
-{
-// Make up a block: the whole thing.
-bed->blockCount  = 1;
-bed->blockSizes  = needMem(bed->blockCount * sizeof(int));
-bed->chromStarts = needMem(bed->blockCount * sizeof(int));
-bed->blockSizes[0]  = bed->chromEnd - bed->chromStart;
-bed->chromStarts[0] = 0;
-// Some tracks overload thickStart and thickEnd -- catch garbage here.
-if ((bed->thickStart != 0) &&
-    ((bed->thickStart < bed->chromStart) ||
-     (bed->thickStart > bed->chromEnd)))
-    bed->thickStart = bed->chromStart;
-if ((bed->thickEnd != 0) &&
-    ((bed->thickEnd < bed->chromStart) ||
-     (bed->thickEnd > bed->chromEnd)))
-    bed->thickEnd = bed->chromEnd;
-}
-
 void loadBed8(struct track *tg)
 /* Convert bed 8 info in window to linked feature. */
 {
@@ -9128,7 +9244,21 @@ sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd, NULL, &rowOffse
 while ((row = sqlNextRow(sr)) != NULL)
     {
     bed = bedLoadN(row+rowOffset, 8);
-    bed8To12(bed);
+    // Make up a block: the whole thing.
+    bed->blockCount  = 1;
+    bed->blockSizes  = needMem(bed->blockCount * sizeof(int));
+    bed->chromStarts = needMem(bed->blockCount * sizeof(int));
+    bed->blockSizes[0]  = bed->chromEnd - bed->chromStart;
+    bed->chromStarts[0] = 0;
+    // Some tracks overload thickStart and thickEnd -- catch garbage here.
+    if ((bed->thickStart != 0) &&
+	((bed->thickStart < bed->chromStart) ||
+	 (bed->thickStart > bed->chromEnd)))
+	bed->thickStart = bed->chromStart;
+    if ((bed->thickEnd != 0) &&
+	((bed->thickEnd < bed->chromStart) ||
+	 (bed->thickEnd > bed->chromEnd)))
+	bed->thickEnd = bed->chromEnd;
     lf = lfFromBed(bed);
     slAddHead(&lfList, lf);
     bedFree(&bed);
@@ -9567,28 +9697,6 @@ slSort(&list, bedCmp);
 tg->items = list;
 }
 
-void ctLoadBed8(struct track *tg)
-/* Convert bed info in window to linked feature. */
-{
-struct customTrack *ct = tg->customPt;
-struct bed *bed;
-struct linkedFeatures *lfList = NULL, *lf;
-
-for (bed = ct->bedList; bed != NULL; bed = bed->next)
-    {
-    if (bed->chromStart < winEnd && bed->chromEnd > winStart 
-    		&& sameString(chromName, bed->chrom))
-	{
-	bed8To12(bed);
-	lf = lfFromBed(bed);
-	slAddHead(&lfList, lf);
-	}
-    }
-slReverse(&lfList);
-slSort(&lfList, linkedFeaturesCmp);
-tg->items = lfList;
-}
-
 void ctLoadGappedBed(struct track *tg)
 /* Convert bed info in window to linked feature. */
 {
@@ -9625,13 +9733,9 @@ struct track *newCustomTrack(struct customTrack *ct)
 struct track *tg;
 char buf[64];
 tg = trackFromTrackDb(ct->tdb);
-if (ct->fieldCount < 8)
+if (ct->fieldCount < 12)
     {
     tg->loadItems = ctLoadSimpleBed;
-    }
-else if (ct->fieldCount < 12)
-    {
-    tg->loadItems = ctLoadBed8;
     }
 else
     {
@@ -9809,7 +9913,7 @@ if (gotBlat)
     {
     hPrintf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/hgCoordConv?origDb=%s&position=%s:%d-%d&phase=table&%s\">%s</A></TD>", database, chromName, winStart+1, winEnd, uiVars->string, wrapWhiteFont("Convert"));
     }
-if (sameString(database, "hg13"))
+if (sameString(database, "hg12"))
     {
     hPuts("<TD ALIGN=CENTER>");
     printEnsemblAnchor();
@@ -9965,14 +10069,13 @@ registerTrackHandler("chr18deletions", chr18deletionsMethods);
 registerTrackHandler("mouseSyn", mouseSynMethods);
 registerTrackHandler("mouseSynWhd", mouseSynWhdMethods);
 registerTrackHandler("ensRatMusHom", ensPhusionBlastMethods);
-registerTrackHandler("syntenyHuman", syntenyMethods);
-registerTrackHandler("syntenyMouse", syntenyMethods);
-registerTrackHandler("syntenyRat", syntenyMethods);
-registerTrackHandler("synteny100000", syntenyMethods);
-registerTrackHandler("syntenyBuild30", syntenyMethods);
-registerTrackHandler("syntenyBerk", syntenyMethods);
-registerTrackHandler("syntenyRatBerkSmall", syntenyMethods);
-registerTrackHandler("syntenySanger", syntenyMethods);
+registerTrackHandler("syntenyHuman", syntenyHumanMethods);
+registerTrackHandler("syntenyMouse", syntenyMouseMethods);
+registerTrackHandler("syntenyRat", syntenyRatMethods);
+registerTrackHandler("synteny100000", synteny100000Methods);
+registerTrackHandler("syntenyBuild30", synteny100000Methods);
+registerTrackHandler("syntenyBerk", syntenyBerkMethods);
+registerTrackHandler("syntenySanger", syntenySangerMethods);
 registerTrackHandler("mouseOrtho", mouseOrthoMethods);
 registerTrackHandler("mouseOrthoSeed", mouseOrthoMethods);
 //registerTrackHandler("orthoTop4", drawColorMethods);

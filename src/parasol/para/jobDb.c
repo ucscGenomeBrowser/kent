@@ -2,7 +2,7 @@
  * generated jobDb.h and jobDb.sql.  This module links the database and
  * the RAM representation of objects. */
 
-#include "paraCommon.h"
+#include "common.h"
 #include "linefile.h"
 #include "dystring.h"
 #include "jobDb.h"

@@ -1,13 +1,9 @@
-/* paraLib - some misc. routines used by multiple parasol 
- * associated programs. */
-
 #ifndef PARALIB_H
-#define PARALIB_H
 
 extern char *cuserid(char *__s);  /* Linux should define this but... */
 
-extern int paraHubPort;		      /* Port for hub. */
-extern int paraNodePort;	      /* Port for nodes. */
+extern char paraSig[];  /* Mild security measure. */
+extern int paraPort;		      /* Our port */
 
 boolean sendWithSig(int fd, char *string);
 /* Send a string with the signature prepended.  Warn 
@@ -46,6 +42,7 @@ void logClose();
 struct runJobMessage
 /* Parsed out runJob message as paraNode sees it. */
     {
+    char *managingHost;	   /* Hub's machine. */
     char *jobIdString;	   /* Unique ID - ascii number */
     char *reserved;	   /* Reserved for future expansion, always "0" */
     char *user;		   /* User associated with job. */

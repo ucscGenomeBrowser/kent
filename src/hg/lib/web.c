@@ -275,25 +275,6 @@ va_end(args);
 exit(0);
 }
 
-static boolean haveDatabase(char *db)
-/* check if the database server has the specified database */
-{
-/* list of databases that actually exists (not really worth hashing) */
-static struct hash* validDatabases = NULL;
-if (validDatabases == NULL)
-    {
-    struct sqlConnection *sc = hAllocConn();
-    struct slName* allDatabases = sqlGetAllDatabase(sc);
-    struct slName* dbName = allDatabases;
-    validDatabases = hashNew(8);
-    for (; dbName != NULL; dbName = dbName->next)
-        hashAdd(validDatabases, dbName->name, NULL);
-    hFreeConn(&sc);
-    slFreeList(&allDatabases);
-    }
-return (hashLookup(validDatabases, db) != NULL);
-}
-
 void printGenomeListHtml(char *db, char *onChangeText)
 /* Prints to stdout the HTML to render a dropdown list 
  * containing a list of the possible genomes to choose from.
@@ -311,7 +292,7 @@ char *values [128];
 
 for (cur = dbList; cur != NULL; cur = cur->next)
     {
-    if (!hashFindVal(hash, cur->genome) && haveDatabase(cur->name))
+    if (!hashFindVal(hash, cur->genome))
         {
         hashAdd(hash, cur->genome, cur);
         orgList[numGenomes] = cur->genome;
@@ -321,7 +302,6 @@ for (cur = dbList; cur != NULL; cur = cur->next)
     }
 
 cgiMakeDropListFull(orgCgiName, orgList, values, numGenomes, selGenome, onChangeText);
-hashFree(&hash);
 }
 
 void printSomeAssemblyListHtmlParm(char *db, struct dbDb *dbList, char *dbCgi, char *javascript)
@@ -345,8 +325,7 @@ char *selAssembly = NULL;
 for (cur = dbList; cur != NULL; cur = cur->next)
     {
     if (strstrNoCase(genome, cur->genome)
-        && (cur->active || strstrNoCase(cur->name, db))
-        && haveDatabase(cur->name))
+        && (cur->active || strstrNoCase(cur->name, db)))
         {
         assemblyList[numAssemblies] = cur->description;
         values[numAssemblies] = cur->name;
@@ -360,7 +339,7 @@ for (cur = dbList; cur != NULL; cur = cur->next)
        }
     }
 
-cgiMakeDropListFull(dbCgi, assemblyList, values, numAssemblies, selAssembly, javascript);
+    cgiMakeDropListFull(dbCgi, assemblyList, values, numAssemblies, selAssembly, javascript);
 }
 
 void printSomeAssemblyListHtml(char *db, struct dbDb *dbList)
@@ -494,7 +473,7 @@ if (!hDbExists(retDb))
     retDb = hDefaultDb();
     }
 
-/* If genomes don't match, then get the default db for that genome */
+/* If genomes dont match, then get the default db for that genome */
 if (!containsStringNoCase(genome, hGenome(retDb)))
     {
     retDb = hDefaultDbForGenome(genome);
@@ -519,8 +498,6 @@ void getDbAndGenome(struct cart *cart, char **retDb, char **retGenome)
 *retDb = cgiOptionalString(dbCgiName);
 *retGenome = cgiOptionalString(orgCgiName);
 
-// Was the database passed in as a cgi param?
-// If so, it takes precedence and determines the genome.
 if (*retDb)
     {
     if (!hDbExists(*retDb))
@@ -529,39 +506,14 @@ if (*retDb)
         }
     *retGenome = hGenome(*retDb);
     }
-// If no db was passed in as a cgi param then was the organism (a.k.a. genome)
-// passed in as a cgi param?
-// If so, the we use the proper database for that genome.
 else if (*retGenome)
     {
     *retDb = getDbForGenome(*retGenome, cart);
     *retGenome = hGenome(*retDb);
     }
-// If no cgi params passed in then we need to inspect the session
 else
     {
-    *retDb = cartOptionalString(cart, dbCgiName);
-    // If there was a db found in the session that determines everything.
-    if (*retDb) 
-        {
-        *retGenome = hGenome(*retDb);
-        }
-    // If no db was found in the session then check if the organism is in
-    // the session.
-    else
-        {
-        *retGenome = cartOptionalString(cart, orgCgiName);
-        // If the organism was found in the genome then get its default db.
-        if (*retGenome)
-            {
-            *retDb = hDefaultDbForGenome(*retGenome);
-            }
-        // If no organism in the session then get the default db and organism.
-        else
-            {
-            *retDb = hGetDb();
-            *retGenome = hGenome(*retDb);
-            }
-        }
+    *retDb = cartUsualString(cart, dbCgiName, hGetDb());
+    *retGenome = hGenome(*retDb);
     }
 }

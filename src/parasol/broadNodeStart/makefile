@@ -7,5 +7,5 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = broadNodeStart.o
 
 broadNodeStart: $O $(MYLIBS)
-	gcc -ggdb -o ../bin/broadNodeStart $O $(MYLIBS) $L
-	strip ../bin/broadNodeStart
+	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/broadNodeStart $O $(MYLIBS) $L
+	strip $(HOME)/bin/$(MACHTYPE)/broadNodeStart

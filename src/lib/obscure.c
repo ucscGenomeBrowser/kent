@@ -3,8 +3,8 @@
  * This file is copyright 2002 Jim Kent, but license is hereby
  * granted for all use - public, private or commercial. */
 
-#include "common.h"
 #include <unistd.h>
+#include "common.h"
 #include "portable.h"
 #include "hash.h"
 #include "obscure.h"

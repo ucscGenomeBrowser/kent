@@ -1,28 +1,21 @@
-/* rudp - (semi) reliable UDP communication.  This adds an
- * acknowledgement and resend layer on top of UDP. 
- *
- * UDP is a packet based rather than stream based internet communication 
- * protocol. Messages sent by UDP are checked for integrety by the UDP layer, 
- * and discarded if transmission errors are detected.  However packets are
+/* rudp - (semi) reliable UDP communication.  UDP is a packet based 
+ * rather than stream based internet communication protocol.  
+ * Messages sent by UDP are checked for integrety by the UDP layer, and 
+ * discarded if transmission errors are detected.  However packets are
  * not necessarily received in the same order that they are sent,
- * and packets may be duplicated or lost.  
- 
- * Using rudp packets are only very rarely lost, and the sender is 
- * notified if they are.  After rudp there are still duplicate
- * packets that may arrive out of order.  Aside from the duplicates
- * the packets are in order though.
+ * and packets may be duplicated or lost. 
  *
  * For many, perhaps most applications, TCP/IP is a saner choice
- * than UDP or rudp.  If the communication channel is between just 
- * two computers you can pretty much just treat TCP/IP as a fairly
+ * than UDP.  If the communication channel is between just two
+ * computers you can pretty much just treat TCP/IP as a fairly
  * reliable pipe.   However if the communication involves many
  * computers sometimes UDP can be a better choice.  It is possible to
  * do broadcast and multicast with UDP but not with TCP/IP.  Also
- * for systems like parasol, where a server may be making and breaking
- * connections rapidly to thousands of computers, TCP paradoxically
- * can end up less reliable than UDP.  Though TCP is relatively 
- * robust when a connection is made,  it can relatively easily fail
- * to make a connection in the first place, and spend quite a long
+ * for systems like parasol, where thousand of computers may be
+ * rapidly making and breaking connections a server,  TCP paradoxically
+ * can end up less reliable than UDP.  Though TCP is relatively robust
+ * when a connection is made,  it can it turns out relatively easily
+ * fail to make a connection in the first place, and spend quite a long
  * time figuring out that the connection can't be made.  Moreover at
  * the end of each connection TCP goes into a 'TIMED_WAIT' state,  which
  * prevents another connection from coming onto the same port for a
@@ -45,14 +38,10 @@
  *
  * Much of this code is based on the 'Adding Reliability to a UDP Application
  * section in volume I, chapter 20, section 5, of _UNIX Network Programming_
- * by W. Richard Stevens. */
+ * by W. Richard Stevens, may he rest in peace. */
 
 #ifndef RUDP_H
 #define RUDP_H
-
-#ifndef INTERNET_H
-#include "internet.h"
-#endif
 
 struct rudp
 /* A UDP socket and a little bit of stuff to help keep track
@@ -68,7 +57,6 @@ struct rudp
     int resendCount;	/* Number of resends. */
     int failCount;	/* Number of failures. */
     bits32 lastId;	/* Id number of last message sent. */
-    int maxRetries;	/* Maximum number of retries per message. */
     };
 
 enum rudpType
@@ -98,53 +86,18 @@ typedef bits32 rudpHost;  /* The IP address (in host order) of another computer.
 #define rudpMaxSize (udpEthMaxSize - sizeof(struct rudpHeader)  )
 
 struct rudp *rudpNew(int socket);
-/* Wrap a rudp around a socket. Call rudpFree when done, or
- * rudpClose if you also want to close(socket). */
+/* Wrap a rudp around a socket. */
 
 void rudpFree(struct rudp **pRu);
 /* Free up rudp.  Note this does *not* close the associated socket. */
 
-struct rudp *rudpOpen();
-/* Open up an unbound rudp.   This is suitable for
- * writing to and for reading responses.  However 
- * you'll want to rudpOpenBound if you want to listen for
- * incoming messages.   Call rudpClose() when done 
- * with this one.  Warns and returns NULL if there is
- * a problem. */
-
-struct rudp *rudpMustOpen();
-/* Open up unbound rudp.  Warn and die if there is a problem. */
-
-struct rudp *rudpOpenBound(struct sockaddr_in *sai);
-/* Open up a rudp socket bound to a particular port and address.
- * Use this rather than rudpOpen if you want to wait for
- * messages at a specific address in a server or the like. */
-
-struct rudp *rudpMustOpenBound(struct sockaddr_in *sai);
-/* Open up a rudp socket bound to a particular port and address
- * or die trying. */
-
-void rudpClose(struct rudp **pRu);
-/* Close socket and free memory. */
-
-int rudpSend(struct rudp *ru, struct sockaddr_in *sai, void *message, int size);
+int rudpSend(struct rudp *ru, rudpHost host, bits16 port, void *message, int size);
 /* Send message of given size to port at host via rudp.  Prints a warning and
  * sets errno and returns -1 if there's a problem. */
 
 int rudpReceive(struct rudp *ru, void *messageBuf, int bufSize);
 /* Read message into buffer of given size.  Returns actual size read on
  * success. On failure prints a warning, sets errno, and returns -1. */
-
-int rudpReceiveFrom(struct rudp *ru, void *messageBuf, int bufSize, 
-	struct sockaddr_in *retFrom);
-/* Read message into buffer of given size.  Returns actual size read on
- * success. On failure prints a warning, sets errno, and returns -1. 
- * Also returns ip address of message source. */
-
-int rudpReceiveTimeOut(struct rudp *ru, void *messageBuf, int bufSize, 
-	struct sockaddr_in *retFrom, int timeOut);
-/* Like rudpReceive from above, but with a timeOut (in microseconds)
- * parameter.  If timeOut is zero then it will wait forever. */
 
 void rudpPrintStatus(struct rudp *ru);
 /* Print out status info. */

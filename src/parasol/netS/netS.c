@@ -1,5 +1,10 @@
 /* netS - net server. */
-#include "paraCommon.h"
+#include "common.h"
+#include <signal.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <netdb.h>
+#include <arpa/inet.h>
 #include "options.h"
 #include "dystring.h"
 

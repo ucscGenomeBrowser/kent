@@ -963,8 +963,8 @@ static void gfClumpComputeQueryCoverage(struct gfClump *clumpList,
 /* Figure out how much of query is covered by clump list. (Thanks AG). */
 {
 struct gfClump *clump;
-struct gfHit *hit;
-struct gfHit *hitList;
+struct gfHit* hit;
+struct gfHit* hitList;
 int qcov;
 int blockStart, blockEnd;
 
@@ -1229,6 +1229,7 @@ for (i=0; i<bucketCount; ++i)
     boundary += bucketSize;
     }
 clumpList = clumpNear(gf, clumpList, minMatch);
+/* slSort(&clumpList, gfClumpCmpHitCount); */
 gfClumpComputeQueryCoverage(clumpList, tileSize);	/* Thanks AG */
 slSort(&clumpList, gfClumpCmpQueryCoverage);
 
@@ -1245,8 +1246,7 @@ return clumpList;
 
 
 static struct gfHit *gfFastFindDnaHits(struct genoFind *gf, struct dnaSeq *seq, 
-	Bits *qMaskBits,  int qMaskOffset, struct lm *lm, int *retHitCount,
-	struct gfSeqSource *target, int tMin, int tMax)
+	Bits *qMaskBits,  int qMaskOffset, struct lm *lm, int *retHitCount)
 /* Find hits associated with one sequence. This is is special fast
  * case for DNA that is in an unsegmented index. */
 {
@@ -1283,17 +1283,12 @@ for (i=tileSizeMinusOne; i<size; ++i)
 	    tList = gf->lists[bits];
 	    for (j=0; j<listSize; ++j)
 		{
-		int tStart = tList[j];
-		if (target == NULL || 
-			(target == findSource(gf, tStart) && tStart >= tMin && tStart < tMax) ) 
-		    {
-		    lmAllocVar(lm, hit);
-		    hit->qStart = qStart;
-		    hit->tStart = tStart;
-		    hit->diagonal = tStart + size - qStart;
-		    slAddHead(&hitList, hit);
-		    ++hitCount;
-		    }
+		lmAllocVar(lm, hit);
+		hit->qStart = qStart;
+		hit->tStart = tList[j];
+		hit->diagonal = hit->tStart + size - qStart;
+		slAddHead(&hitList, hit);
+		++hitCount;
 		}
 	    }
 	}
@@ -1303,8 +1298,8 @@ return hitList;
 }
 
 static struct gfHit *gfStraightFindHits(struct genoFind *gf, aaSeq *seq, 
-	Bits *qMaskBits, int qMaskOffset, struct lm *lm, int *retHitCount,
-	struct gfSeqSource *target, int tMin, int tMax)
+	Bits *qMaskBits, int qMaskOffset, struct lm *lm,
+	int *retHitCount)
 /* Find hits associated with one sequence in a non-segmented
  * index where hits match exactly. */
 {
@@ -1335,17 +1330,12 @@ for (i=0; i<=lastStart; ++i)
 	    tList = gf->lists[tile];
 	    for (j=0; j<listSize; ++j)
 		{
-		int tStart = tList[j];
-		if (target == NULL || 
-			(target == findSource(gf, tStart) && tStart >= tMin && tStart < tMax) ) 
-		    {
-		    lmAllocVar(lm,hit);
-		    hit->qStart = qStart;
-		    hit->tStart = tStart;
-		    hit->diagonal = tStart + size - qStart;
-		    slAddHead(&hitList, hit);
-		    ++hitCount;
-		    }
+		lmAllocVar(lm,hit);
+		hit->qStart = qStart;
+		hit->tStart = tList[j];
+		hit->diagonal = hit->tStart + size - qStart;
+		slAddHead(&hitList, hit);
+		++hitCount;
 		}
 	    }
 	}
@@ -1355,8 +1345,7 @@ return hitList;
 }
 
 static struct gfHit *gfStraightFindNearHits(struct genoFind *gf, aaSeq *seq, 
-	Bits *qMaskBits, int qMaskOffset, struct lm *lm, int *retHitCount,
-	struct gfSeqSource *target, int tMin, int tMax)
+	Bits *qMaskBits, int qMaskOffset, struct lm *lm, int *retHitCount)
 /* Find hits associated with one sequence in a non-segmented
  * index where hits can mismatch in one letter. */
 {
@@ -1426,18 +1415,12 @@ for (i=0; i<=lastStart; ++i)
 			    tList = gf->lists[tile];
 			    for (j=0; j<listSize; ++j)
 				{
-				int tStart = tList[j];
-				if (target == NULL || 
-					(target == findSource(gf, tStart) 
-					&& tStart >= tMin && tStart < tMax) ) 
-				    {
-				    lmAllocVar(lm,hit);
-				    hit->qStart = qStart;
-				    hit->tStart = tStart;
-				    hit->diagonal = tStart + size - qStart;
-				    slAddHead(&hitList, hit);
-				    ++hitCount;
-				    }
+				lmAllocVar(lm,hit);
+				hit->qStart = qStart;
+				hit->tStart = tList[j];
+				hit->diagonal = hit->tStart + size - qStart;
+				slAddHead(&hitList, hit);
+				++hitCount;
 				}
 			    }
 			}
@@ -1453,8 +1436,8 @@ return hitList;
 }
 
 static struct gfHit *gfSegmentedFindHits(struct genoFind *gf, aaSeq *seq, 
-	Bits *qMaskBits, int qMaskOffset, struct lm *lm, int *retHitCount,
-	struct gfSeqSource *target, int tMin, int tMax)
+	Bits *qMaskBits, int qMaskOffset, struct lm *lm,
+	int *retHitCount)
 /* Find hits associated with one sequence in general case in a segmented
  * index. */
 {
@@ -1492,18 +1475,12 @@ for (i=0; i<=lastStart; ++i)
 	    {
 	    if (endList[0] == tileTail)
 		{
-		int tStart = (endList[1]<<16) + endList[2];
-		if (target == NULL || 
-			(target == findSource(gf, tStart) 
-			&& tStart >= tMin && tStart < tMax) ) 
-		    {
-		    lmAllocVar(lm,hit);
-		    hit->qStart = qStart;
-		    hit->tStart = tStart;
-		    hit->diagonal = tStart + size - qStart;
-		    slAddHead(&hitList, hit);
-		    ++hitCount;
-		    }
+		lmAllocVar(lm,hit);
+		hit->qStart = qStart;
+		hit->tStart = (endList[1]<<16) + endList[2];
+		hit->diagonal = hit->tStart + size - qStart;
+		slAddHead(&hitList, hit);
+		++hitCount;
 		}
 	    endList += 3;
 	    }
@@ -1514,8 +1491,7 @@ return hitList;
 }
 
 static struct gfHit *gfSegmentedFindNearHits(struct genoFind *gf, 
-	aaSeq *seq, Bits *qMaskBits, int qMaskOffset, struct lm *lm, int *retHitCount,
-	struct gfSeqSource *target, int tMin, int tMax)
+	aaSeq *seq, Bits *qMaskBits, int qMaskOffset, struct lm *lm, int *retHitCount)
 /* Find hits associated with one sequence in a segmented
  * index where one mismatch is allowed. */
 {
@@ -1591,18 +1567,12 @@ for (i=0; i<=lastStart; ++i)
 			    {
 			    if (endList[0] == tileTail)
 				{
-				int tStart = (endList[1]<<16) + endList[2];
-				if (target == NULL || 
-					(target == findSource(gf, tStart) 
-					&& tStart >= tMin && tStart < tMax) ) 
-				    {
-				    lmAllocVar(lm,hit);
-				    hit->qStart = qStart;
-				    hit->tStart = tStart;
-				    hit->diagonal = tStart + size - qStart;
-				    slAddHead(&hitList, hit);
-				    ++hitCount;
-				    }
+				lmAllocVar(lm,hit);
+				hit->qStart = qStart;
+				hit->tStart = (endList[1]<<16) + endList[2];
+				hit->diagonal = hit->tStart + size - qStart;
+				slAddHead(&hitList, hit);
+				++hitCount;
 				}
 			    endList += 3;
 			    }
@@ -1625,86 +1595,42 @@ return hitList;
 }
 
 
-static struct gfHit *gfFindHitsWithQmask(struct genoFind *gf, bioSeq *seq,
-	Bits *qMaskBits, int qMaskOffset, struct lm *lm, int *retHitCount, 
-	struct gfSeqSource *target, int tMin, int tMax)
-/* Find hits associated with one sequence soft-masking seq according to qMaskBits.
- * The hits will be in genome rather than chromosome coordinates. */
+struct gfClump *gfFindClumpsWithQmask(struct genoFind *gf, bioSeq *seq, 
+	Bits *qMaskBits, int qMaskOffset,
+	struct lm *lm, int *retHitCount)
+/* Find clumps associated with one sequence soft-masking seq according to qMaskBits */
 {
 struct gfHit *hitList = NULL;
+struct gfClump *clumpList = NULL;
+int minMatch = gf->minMatch;
+
+if (seq->size < gf->tileSize * (gf->minMatch+1))
+     minMatch = 1;
+
 if (gf->segSize == 0 && !gf->isPep && !gf->allowOneMismatch)
     {
-    hitList = gfFastFindDnaHits(gf, seq, qMaskBits, qMaskOffset, lm, retHitCount,
-	NULL, 0, 0);
+    hitList = gfFastFindDnaHits(gf, seq, qMaskBits, qMaskOffset, lm, retHitCount);
     }
 else
     {
     if (gf->segSize == 0)
 	{
 	if (gf->allowOneMismatch)
-	    {
-	    hitList = gfStraightFindNearHits(gf, seq, qMaskBits, qMaskOffset, lm, 
-		retHitCount, target, tMin, tMax);
-	    }
+	    hitList = gfStraightFindNearHits(gf, seq, qMaskBits, qMaskOffset, lm, retHitCount);
 	else
-	    {
-	    hitList = gfStraightFindHits(gf, seq, qMaskBits, qMaskOffset, lm, retHitCount, 
-		target, tMin, tMax);
-	    }
+	    hitList = gfStraightFindHits(gf, seq, qMaskBits, qMaskOffset, lm, retHitCount);
 	}
     else
 	{
 	if (gf->allowOneMismatch)
-	    {
-	    hitList = gfSegmentedFindNearHits(gf, seq, qMaskBits, qMaskOffset, lm, retHitCount,
-		target, tMin, tMax);
-	    }
+	    hitList = gfSegmentedFindNearHits(gf, seq, qMaskBits, qMaskOffset, lm, retHitCount);
 	else
-	    {
-	    hitList = gfSegmentedFindHits(gf, seq, qMaskBits, qMaskOffset, lm, retHitCount,
-		target, tMin, tMax);
-	    }
+	    hitList = gfSegmentedFindHits(gf, seq, qMaskBits, qMaskOffset, lm, retHitCount);
 	}
     }
-return hitList;
-}
-
-struct gfClump *gfFindClumpsWithQmask(struct genoFind *gf, bioSeq *seq, 
-	Bits *qMaskBits, int qMaskOffset,
-	struct lm *lm, int *retHitCount)
-/* Find clumps associated with one sequence soft-masking seq according to qMaskBits */
-{
-struct gfClump *clumpList = NULL;
-struct gfHit *hitList;
-int minMatch = gf->minMatch;
-
-if (seq->size < gf->tileSize * (gf->minMatch+1))
-     minMatch = 1;
-
-hitList =  gfFindHitsWithQmask(gf, seq, qMaskBits, qMaskOffset, lm,
-	retHitCount, NULL, 0, 0);
 cmpQuerySize = seq->size;
 clumpList = clumpHits(gf, hitList, minMatch);
 return clumpList;
-}
-
-struct gfHit *gfFindHitsInRegion(struct genoFind *gf, bioSeq *seq, 
-	Bits *qMaskBits, int qMaskOffset, struct lm *lm, 
-	struct gfSeqSource *target, int tMin, int tMax)
-/* Find hits restricted to one particular region. 
- * The hits returned by this will be in target sequence
- * coordinates rather than concatenated whole genome
- * coordinates as hits inside of clumps usually are.  */
-{
-int targetStart = target->start;
-struct gfHit *hitList, *hit;
-int hitCount;
-
-hitList =  gfFindHitsWithQmask(gf, seq, qMaskBits, qMaskOffset, lm,
-	&hitCount, target, tMin + targetStart, tMax + targetStart);
-for (hit = hitList; hit != NULL; hit = hit->next)
-    hit->tStart -= targetStart;
-return hitList;
 }
 
 struct gfClump *gfFindClumps(struct genoFind *gf, bioSeq *seq, struct lm *lm, int *retHitCount)
@@ -1818,32 +1744,5 @@ for (i=0; i<tileSpaceSize; ++i)
 carefulClose(&f);
 genoFindFree(&gf);
 printf("Wrote %d overused %d-mers to %s\n", oocCount, tileSize, outName);
-}
-
-struct gfSeqSource *gfFindNamedSource(struct genoFind *gf, char *name)
-/* Find target of given name.  Return NULL if none. */
-{
-struct gfSeqSource *source = gf->sources;
-int count = gf->sourceCount;
-
-if (source->seq == NULL)	/* Use first source to see if seq or file. */
-    {
-    char rootName[256];
-    while (--count >= 0)
-	{
-	splitPath(source->fileName, NULL, rootName, NULL);
-	if (sameString(name, rootName))
-	     return source;
-	}
-    }
-else
-    {
-    while (--count >= 0)
-	{
-	if (sameString(source->seq->name, name))
-	    return source;
-	}
-    }
-return NULL;
 }
 

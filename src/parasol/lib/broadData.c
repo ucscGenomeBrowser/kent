@@ -1,6 +1,10 @@
 /* broadData - stuff to help with data broadcasting. */
 
-#include "paraCommon.h"
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <sys/time.h>
+#include "common.h"
 #include "broadData.h"
 
 

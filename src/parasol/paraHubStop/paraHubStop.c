@@ -1,11 +1,10 @@
 /* paraHubStop - Shut down paraHub daemon. */
-#include "paraCommon.h"
+#include "common.h"
 #include "linefile.h"
 #include "hash.h"
 #include "options.h"
 #include "net.h"
 #include "paraLib.h"
-#include "paraMessage.h"
 
 void usage()
 /* Explain usage and exit. */
@@ -19,10 +18,9 @@ errAbort(
 void paraHubStop(char *now)
 /* paraHubStop - Shut down paraHub daemon. */
 {
-struct rudp *ru = rudpOpen();
-struct paraMessage pm;
-pmInitFromName(&pm, "localhost", paraHubPort);
-pmSendString(&pm, ru, "quit");
+int hubFd = netMustConnect("localhost", paraPort);
+sendWithSig(hubFd, "quit");
+close(hubFd);
 }
 
 int main(int argc, char *argv[])

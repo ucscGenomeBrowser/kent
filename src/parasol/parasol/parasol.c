@@ -1,5 +1,11 @@
 /* parasol - Parasol program - for launching programs in parallel on a computer cluster. */
-#include "paraCommon.h"
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <netdb.h>
+#include <unistd.h>
+#include <stdio.h>
+#include "common.h"
 #include "net.h"
 #include "linefile.h"
 #include "errabort.h"
@@ -7,9 +13,8 @@
 #include "hash.h"
 #include "options.h"
 #include "paraLib.h"
-#include "paraMessage.h"
 
-struct rudp *hubRudp;	/* Network connection to paraHub. */
+int hubFd;	/* Network connection to paraHub. */
 char *userName;	/* Name of user. */
 
 void mustBeRoot()
@@ -17,6 +22,16 @@ void mustBeRoot()
 {
 if (!sameString(userName, "root"))
     errAbort("That command can only be run by root.");
+}
+
+void closeHubFd()
+/* Close connection to hub if it's open. */
+{
+if (hubFd != 0)
+    {
+    close(hubFd);
+    hubFd = 0;
+    }
 }
 
 void usage()
@@ -45,25 +60,18 @@ errAbort(
   );
 }
 
-boolean commandHub(char *command)
+void commandHub(char *command)
 /* Send a command to hub. */
 {
-struct paraMessage pm;
-pmInitFromName(&pm, "localhost", paraHubPort);
-return pmSendString(&pm, hubRudp, command);
+mustSendWithSig(hubFd, command);
 }
 
 char *hubCommandGetReciept(char *command)
 /* Send command to hub,  wait for one line respons and
  * return it.  freeMem return value when done. */
 {
-struct paraMessage pm;
-if (!commandHub(command))
-    return NULL;
-if (pmReceive(&pm, hubRudp))
-    return cloneString(pm.data);
-else
-    return NULL;
+commandHub(command);
+return netRecieveLongString(hubFd);
 }
 
 void hubCommandCheckReciept(char *command)
@@ -81,18 +89,15 @@ void hubCommandAndPrint(char *command)
 {
 char *line = NULL;
 struct slRef *list = NULL, *ref;
-struct paraMessage pm;
 
 /* Issue command and suck down response quickly into memory. */
-if (!commandHub(command))
-    errAbort("Couldn't send '%s' command to paraHub", command);
+commandHub(command);
 for (;;)
     {
-    if (!pmReceive(&pm, hubRudp))
-	break;
-    if (pm.size == 0)
+    line = netRecieveLongString(hubFd);
+    if (line[0] == 0)
         break;
-    refAdd(&list, cloneString(pm.data));
+    refAdd(&list, line);
     }
 slReverse(&list);
 
@@ -234,21 +239,27 @@ if (job == NULL)
 return job;
 }
 
+void reopenHub()
+/* Close hub if it's already open.  Then reopen it. */
+{
+closeHubFd();
+hubFd = netMustConnect("localhost", paraPort);
+}
 
 struct jobInfo *getJobList()
 /* Read job list from server. */
 {
-struct paraMessage pm;
+char *line;
 struct jobInfo *jobList = NULL, *job;
 commandHub("listJobs");
 for (;;)
     {
-    if (!pmReceive(&pm, hubRudp))
-	break;
-    if (pm.size == 0)
+    line = netRecieveLongString(hubFd);
+    if (line[0] == 0)
         break;
-    job = jobInfoMustParse(pm.data);
+    job = jobInfoMustParse(line);
     slAddHead(&jobList, job);
+    freeMem(line);
     }
 slReverse(&jobList);
 return jobList;
@@ -268,6 +279,7 @@ for (job = jobList; job != NULL; job = job->next)
     if (sameString(user, job->user) && 
     	(wildCard == NULL || wildMatch(wildCard, job->command)))
 	{
+	reopenHub();
         removeJob(job->id);
 	}
     }
@@ -293,6 +305,8 @@ void ping(int count)
 int i;
 for (i=0; i<count; ++i)
     {
+    if (i != 0)
+	reopenHub();
     hubCommandCheckReciept("ping");
     }
 printf("Pinged hub %d times\n", count);
@@ -303,9 +317,8 @@ void parasol(char *command, int argc, char *argv[])
 /* parasol - Parasol program - for launching programs in parallel on a computer cluster. */
 {
 char *subType = argv[0];
-int sd;
-
-hubRudp = rudpMustOpen();
+atexit(closeHubFd);
+reopenHub();
 if (sameString(command, "add"))
     {
     if (argc < 1)
@@ -374,6 +387,7 @@ else if (sameString(command, "status"))
     status();
 else
     usage();
+closeHubFd();
 }
 
 int main(int argc, char *argv[])

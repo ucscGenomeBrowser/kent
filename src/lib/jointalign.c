@@ -3,6 +3,7 @@
  * This file is copyright 2002 Ryan Weber, but license is hereby
  * granted for all use - public, private or commercial. */
 
+#include <string.h>
 #include "common.h"
 #include "errabort.h"
 #include "jointalign.h"

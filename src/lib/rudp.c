@@ -1,28 +1,21 @@
-/* rudp - (semi) reliable UDP communication.  This adds an
- * acknowledgement and resend layer on top of UDP. 
- *
- * UDP is a packet based rather than stream based internet communication 
- * protocol. Messages sent by UDP are checked for integrety by the UDP layer, 
- * and discarded if transmission errors are detected.  However packets are
+/* rudp - (semi) reliable UDP communication.  UDP is a packet based 
+ * rather than stream based internet communication protocol.  
+ * Messages sent by UDP are checked for integrety by the UDP layer, and 
+ * discarded if transmission errors are detected.  However packets are
  * not necessarily received in the same order that they are sent,
- * and packets may be duplicated or lost.  
- 
- * Using rudp packets are only very rarely lost, and the sender is 
- * notified if they are.  After rudp there are still duplicate
- * packets that may arrive out of order.  Aside from the duplicates
- * the packets are in order though.
+ * and packets may be duplicated or lost. 
  *
  * For many, perhaps most applications, TCP/IP is a saner choice
- * than UDP or rudp.  If the communication channel is between just 
- * two computers you can pretty much just treat TCP/IP as a fairly
+ * than UDP.  If the communication channel is between just two
+ * computers you can pretty much just treat TCP/IP as a fairly
  * reliable pipe.   However if the communication involves many
  * computers sometimes UDP can be a better choice.  It is possible to
  * do broadcast and multicast with UDP but not with TCP/IP.  Also
- * for systems like parasol, where a server may be making and breaking
- * connections rapidly to thousands of computers, TCP paradoxically
- * can end up less reliable than UDP.  Though TCP is relatively 
- * robust when a connection is made,  it can relatively easily fail
- * to make a connection in the first place, and spend quite a long
+ * for systems like parasol, where thousand of computers may be
+ * rapidly making and breaking connections a server,  TCP paradoxically
+ * can end up less reliable than UDP.  Though TCP is relatively robust
+ * when a connection is made,  it can it turns out relatively easily
+ * fail to make a connection in the first place, and spend quite a long
  * time figuring out that the connection can't be made.  Moreover at
  * the end of each connection TCP goes into a 'TIMED_WAIT' state,  which
  * prevents another connection from coming onto the same port for a
@@ -45,23 +38,21 @@
  *
  * Much of this code is based on the 'Adding Reliability to a UDP Application
  * section in volume I, chapter 20, section 5, of _UNIX Network Programming_
- * by W. Richard Stevens. */
-
+ * by W. Richard Stevens, may he rest in peace. */
 
 #include "common.h"
+#include <sys/types.h>
 #include <sys/time.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
-#include "errabort.h"
+#include <errno.h>
 #include "rudp.h"
-
-#define MAX_TIME_OUT 999999
 
 static int rudpCalcTimeOut(struct rudp *ru)
 /* Return calculation of time out based on current data. */
 {
 int timeOut = ru->rttAve + (ru->rttVary<<2);
-if (timeOut > MAX_TIME_OUT) timeOut = MAX_TIME_OUT; /* No more than a second. */
+if (timeOut > 999999) timeOut = 999999;	/* No more than a second. */
 if (timeOut < 10000) timeOut = 10000;	/* No less than 1/100th second */
 return timeOut;
 }
@@ -83,13 +74,10 @@ static void rudpTimedOut(struct rudp *ru)
 /* Tell system about a time-out. */
 {
 ru->timeOut <<=  1;   /* Back off exponentially. */
-if (ru->timeOut >= MAX_TIME_OUT)
-    ru->timeOut = MAX_TIME_OUT;
 }
 
 struct rudp *rudpNew(int socket)
-/* Wrap a rudp around a socket. Call rudpFree when done, or
- * rudpClose if you also want to close(socket). */
+/* Wrap a rudp around a socket. */
 {
 struct rudp *ru;
 assert(socket >= 0);
@@ -97,7 +85,6 @@ AllocVar(ru);
 ru->socket = socket;
 ru->rttVary = 250;	/* Initial variance 250 microseconds. */
 ru->timeOut = rudpCalcTimeOut(ru);
-ru->maxRetries = 7;
 return ru;
 }
 
@@ -107,69 +94,6 @@ void rudpFree(struct rudp **pRu)
 freez(pRu);
 }
 
-struct rudp *rudpOpen()
-/* Open up an unbound rudp.   This is suitable for
- * writing to and for reading responses.  However 
- * you'll want to rudpBind if you want to listen for
- * incoming messages.   Call rudpClose() when done 
- * with this one.  Warns and returns NULL if there is
- * a problem. */
-{
-int sd = socket(AF_INET,  SOCK_DGRAM, IPPROTO_UDP);
-if (sd < 0)
-    {
-    warn("Couldn't open socket in rudpOpen %s", strerror(errno));
-    return NULL;
-    }
-return rudpNew(sd);
-}
-
-struct rudp *rudpMustOpen()
-/* Open up unbound rudp.  Warn and die if there is a problem. */
-{
-struct rudp *ru = rudpOpen();
-if (ru == NULL)
-    noWarnAbort();
-return ru;
-}
-
-struct rudp *rudpOpenBound(struct sockaddr_in *sai)
-/* Open up a rudp socket bound to a particular port and address.
- * Use this rather than rudpOpen if you want to wait for
- * messages at a specific address in a server or the like. */
-{
-struct rudp *ru = rudpOpen();
-if (ru != NULL)
-    {
-    if (bind(ru->socket, (struct sockaddr *)sai, sizeof(*sai)) < 0)
-	{
-	warn("Couldn't bind rudp socket: %s", strerror(errno));
-	rudpClose(&ru);
-	}
-    }
-return ru;
-}
-
-struct rudp *rudpMustOpenBound(struct sockaddr_in *sai)
-/* Open up a rudp socket bound to a particular port and address
- * or die trying. */
-{
-struct rudp *ru = rudpOpenBound(sai);
-if (ru == NULL)
-    noWarnAbort();
-return ru;
-}
-
-void rudpClose(struct rudp **pRu)
-/* Close socket and free memory. */
-{
-struct rudp *ru = *pRu;
-if (ru != NULL)
-    {
-    close(ru->socket);
-    freez(pRu);
-    }
-}
 
 static int timeDiff(struct timeval *t1, struct timeval *t2)
 /* Return difference in microseconds between t1 and t2.  t2 must be
@@ -180,49 +104,8 @@ int microDiff = 0;
 if (secDiff != 0)
     microDiff = secDiff * 1000000;
 microDiff += (t2->tv_usec - t1->tv_usec);
-if (microDiff < 0)
-    {
-    /* Note, this case actually happens, currently particularly on
-     * kkr2u62 and kkr8u19.  I think this is just a bug in their clock
-     * hardware/software.  However in general it _could_ happen very
-     * rarely on normal machines when the clock is reset by the
-     * network time protocol thingie. */
-    warn("t1 %u.%u, t2 %u.%u.  t1 > t2 but later?!", t1->tv_sec, t1->tv_usec,
-    	t2->tv_sec, t2->tv_usec);
-    microDiff = 0;
-    }
+assert(microDiff >= 0);
 return microDiff;
-}
-
-static boolean readReadyWait(int sd, int microseconds)
-/* Wait for descriptor to have some data to read, up to
- * given number of microseconds. */
-{
-struct timeval tv;
-fd_set set;
-int readyCount;
-
-for (;;)
-    {
-    if (microseconds > 1000000)
-	{
-	tv.tv_sec = microseconds/1000000;
-	tv.tv_usec = microseconds%1000000;
-	}
-    else
-	{
-	tv.tv_sec = 0;
-	tv.tv_usec = microseconds;
-	}
-    FD_ZERO(&set);
-    FD_SET(sd, &set);
-    readyCount = select(sd+1, &set, NULL, NULL, &tv);
-    if (readyCount == EINTR)	/* Select interrupted, not timed out. */
-	continue;
-    else if (readyCount < 0)
-        warn("select failure in rudp: %s", strerror(errno));
-    return readyCount > 0;	/* Zero readCount indicates time out */
-    }
 }
 
 static boolean getOurAck(struct rudp *ru, struct timeval *startTv)
@@ -234,24 +117,32 @@ static boolean getOurAck(struct rudp *ru, struct timeval *startTv)
 struct rudpHeader head;
 int readyCount, readSize;
 int timeOut = ru->timeOut;
+fd_set set;
 
 for (;;)
     {
     /* Set up select with our time out. */
     struct sockaddr_in sai;
     int saiSize = sizeof(sai);
-    int dt;
     struct timeval tv;
+    tv.tv_sec = 0;
+    tv.tv_usec = timeOut;
+    FD_ZERO(&set);
+    FD_SET(ru->socket, &set);
+    readyCount = select(ru->socket+1, &set, NULL, NULL, &tv);
+    if (readyCount == EINTR)	/* Select interrupted, not timed out. */
+	continue;
+    if (readyCount == 0)
+	return FALSE;		/* Timed out.  We return unsuccessfully. */
 
-    if (readReadyWait(ru->socket, timeOut))
+    /* Read message and if it's our ack return true.   */
+    if (FD_ISSET(ru->socket, &set))
 	{
-	/* Read message and if it's our ack return true.   */
 	readSize = recvfrom(ru->socket, &head, sizeof(head), 0, NULL, NULL);
 	if (readSize >= sizeof(head) && head.type == rudpAck && head.id == ru->lastId)
 	    {
 	    gettimeofday(&tv, NULL);
-	    dt = timeDiff(startTv, &tv);
-	    rudpAddRoundTripTime(ru, dt);
+	    rudpAddRoundTripTime(ru, timeDiff(startTv, &tv));
 	    return TRUE;
 	    }
 	}
@@ -267,17 +158,17 @@ for (;;)
     }
 }
 
-int rudpSend(struct rudp *ru, struct sockaddr_in *sai, void *message, int size)
+int rudpSend(struct rudp *ru, rudpHost host, bits16 port, void *message, int size)
 /* Send message of given size to port at host via rudp.  Prints a warning and
  * sets errno and returns -1 if there's a problem. */
 {
+struct sockaddr_in sai;	/* Internet address. */
 struct timeval sendTv;	/* Current time. */
 
 char outBuf[udpEthMaxSize];
 struct rudpHeader *head;
 int fullSize = size + sizeof(*head);
-int i, err = 0, maxRetry = ru->maxRetries;
-
+int i, err = 0, maxRetry = 3;
 
 /* Make buffer with header in front of message. 
  * At some point we might replace this with a scatter/gather
@@ -289,6 +180,12 @@ memcpy(head+1, message, size);
 head->id = ++ru->lastId;
 head->type = rudpData;
 
+/* Make up internet address for destination. */
+ZeroVar(&sai);
+sai.sin_addr.s_addr = htonl(host);
+sai.sin_family = AF_INET;
+sai.sin_port = htons(port);
+
 /* Go into send/wait for ack/retry loop. */
 for (i=0; i<maxRetry; ++i)
     {
@@ -296,12 +193,12 @@ for (i=0; i<maxRetry; ++i)
     head->sendSec = sendTv.tv_sec;
     head->sendMicro = sendTv.tv_usec;
     err =  sendto(ru->socket, outBuf, fullSize, 0, 
-	(struct sockaddr *)sai, sizeof(*sai));
+	(struct sockaddr *)&sai, sizeof(sai));
     if (err < 0) 
 	{
 	/* Warn, wait, and retry. */
 	struct timeval tv;
-	warn(" sendto problem %s", strerror(errno));
+	warn(" sendto problem on host %d:  %s", host, strerror(errno));
 	tv.tv_sec = 0;
 	tv.tv_usec = ru->timeOut;
 	select(0, NULL, NULL, NULL, &tv);
@@ -316,51 +213,33 @@ for (i=0; i<maxRetry; ++i)
     rudpTimedOut(ru);
     ru->resendCount += 1;
     }
-if (err >= 0)
-    {
+if (err == 0)
     err = ETIMEDOUT;
-    warn("rudpSend timed out");
-    }
 ru->failCount += 1;
 return err;
 }
 
 
-int rudpReceiveTimeOut(struct rudp *ru, void *messageBuf, int bufSize, 
-	struct sockaddr_in *retFrom, int timeOut)
+int rudpReceive(struct rudp *ru, void *messageBuf, int bufSize)
 /* Read message into buffer of given size.  Returns actual size read on
- * success. On failure prints a warning, sets errno, and returns -1. 
- * Also returns ip address of message source. If timeOut is nonzero,
- * it represents the timeout in milliseconds.  It will set errno to
- * ETIMEDOUT in this case.*/
+ * success. On failure prints a warning, sets errno, and returns -1. */
 {
 char inBuf[udpEthMaxSize];
 struct rudpHeader *head = (struct rudpHeader *)inBuf;
 struct rudpHeader ackHead;
 struct sockaddr_in sai;
-int saiSize = sizeof(sai);
 int readSize, err;
 assert(bufSize <= rudpMaxSize);
 ru->receiveCount += 1;
 for (;;)
     {
-    if (timeOut != 0)
-	{
-	if (!readReadyWait(ru->socket, timeOut))
-	    {
-	    warn("rudpReceive timed out\n");
-	    errno = ETIMEDOUT;
-	    return -1;
-	    }
-	}
+    int saiSize = sizeof(sai);
     readSize = recvfrom(ru->socket, inBuf, sizeof(inBuf), 0, 
 	(struct sockaddr*)&sai, &saiSize);
-    if (retFrom != NULL)
-	*retFrom = sai;
+    if (readSize == EINTR)
+	continue;
     if (readSize < 0)
 	{
-	if (errno == EINTR)
-	    continue;
 	warn("recvfrom error: %s", strerror(errno));
 	ru->failCount += 1;
 	return readSize;
@@ -372,8 +251,7 @@ for (;;)
 	}
     if (head->type != rudpData)
 	{
-	if (head->type != rudpAck)
-	    warn("skipping non-data message %d in rudpReceive", head->type);
+	warn("skipping non-data message in rudpReceive");
 	continue;
 	}
     ackHead = *head;
@@ -394,22 +272,6 @@ for (;;)
     break;
     }
 return readSize;
-}
-
-int rudpReceiveFrom(struct rudp *ru, void *messageBuf, int bufSize, 
-	struct sockaddr_in *retFrom)
-/* Read message into buffer of given size.  Returns actual size read on
- * success. On failure prints a warning, sets errno, and returns -1. 
- * Also returns ip address of message source. */
-{
-return rudpReceiveTimeOut(ru, messageBuf, bufSize, retFrom, 0);
-}
-
-int rudpReceive(struct rudp *ru, void *messageBuf, int bufSize)
-/* Read message into buffer of given size.  Returns actual size read on
- * success. On failure prints a warning, sets errno, and returns -1. */
-{
-return rudpReceiveFrom(ru, messageBuf, bufSize, NULL);
 }
 
 void rudpPrintStatus(struct rudp *ru)

@@ -2,7 +2,7 @@
  * generated jobResult.h and jobResult.sql.  This module links the database and
  * the RAM representation of objects. */
 
-#include "paraCommon.h"
+#include "common.h"
 #include "linefile.h"
 #include "dystring.h"
 #include "sqlNum.h"
@@ -66,7 +66,7 @@ while (lineFileNext(lf, &line, &lineSize))
     char lastChar = line[lineSize-1];
     if (lastChar != '\n')
     	{
-	// warn("Skipping incomplete last line of %s", fileName);
+	warn("Skipping incomplete last line of %s", fileName);
 	break;
 	}
     line[lineSize-1] = 0;

@@ -1,13 +1,10 @@
 /* paraNodeStatus - Check status of paraNode on a list of machines. */
-#include "paraCommon.h"
+#include "common.h"
 #include "linefile.h"
 #include "hash.h"
 #include "options.h"
 #include "net.h"
-#include "internet.h"
 #include "paraLib.h"
-#include "rudp.h"
-#include "paraMessage.h"
 
 void usage()
 /* Explain usage and exit. */
@@ -17,11 +14,6 @@ errAbort(
   "usage:\n"
   "    paraStat machineList\n"
   "options:\n"
-  "    -retries=N Number of retries to get in touch with machine\n"
-  "               The first retry is after 1/100th of a second.  Each\n"
-  "               retry after that takes twice as long up to a maximum\n"
-  "               of 1 second per retry.  7 retries is default and takes\n"
-  "               about a second.\n"
   "    -long - List details of current and recent jobs\n");
 }
 
@@ -31,49 +23,55 @@ void listJobsErr(char *name, int n)
 warn("%s: listJobs bad reponse %d", name, n);
 }
 
-void showLong(char *name, struct rudp *ru, int *pRunning, int *pRecent)
+void showLong(char *name, int sd, int *pRunning, int *pRecent)
 /* Fetch and display response to listJobs message.
  * Increment running and recent counts. */
 {
 char *line;
 int running, recent, i;
-struct paraMessage pm;
-
-if (!pmReceive(&pm, ru))
+if ((line = netGetLongString(sd)) == NULL)
     {
     warn("%s: no listJobs response", name);
     return;
     }
-running = atoi(pm.data);
+running = atoi(line);
+freez(&line);
 for (i=0; i<running; ++i)
     {
-    if (!pmReceive(&pm, ru))
+    line = netGetLongString(sd);
+    if (line == NULL)
         {
 	listJobsErr(name, 1);
 	return;
 	}
-    printf("%s %s %s\n", name, "running", pm.data);
+    printf("%s %s %s\n", name, "running", line);
+    freez(&line);
     }
-if (!pmReceive(&pm, ru))
+if ((line = netGetLongString(sd)) == NULL)
     {
     listJobsErr(name, 2);
     return;
     }
-recent = atoi(pm.data);
+recent = atoi(line);
+freez(&line);
 for (i=0; i<recent; ++i)
     {
-    if (!pmReceive(&pm, ru))
+    line = netGetLongString(sd);
+    if (line == NULL)
         {
 	listJobsErr(name, 3);
 	return;
 	}
-    printf("%s %s %s\n", name, "recent", pm.data);
-    if (!pmReceive(&pm, ru))
+    printf("%s %s %s\n", name, "recent", line);
+    freez(&line);
+    line = netGetLongString(sd);
+    if (line == NULL)
         {
 	listJobsErr(name, 4);
 	return;
 	}
-    printf("%s %s %s\n", name, "result", pm.data);
+    printf("%s %s %s\n", name, "result", line);
+    freez(&line);
     }
 printf("%s summary %d running %d recent\n", name, running, recent);
 printf("\n");
@@ -86,37 +84,33 @@ void paraNodeStatus(char *machineList)
 {
 struct lineFile *lf = lineFileOpen(machineList, FALSE);
 boolean longFormat = optionExists("long");
+int sd;
+char statCmd[256];
+char status[256];
 int size;
 char *row[1];
 int totalCpu = 0, totalBusy = 0, totalRecent = 0;
-struct sockaddr_in outAddress;
-bits32 hostIp;
 
 while (lineFileRow(lf, row))
     {
     char *name = row[0];
-    struct paraMessage pm;
-    struct rudp *ru = rudpMustOpen();
-
-    if (optionExists("retries"))
-        ru->maxRetries = optionInt("retries", 7);
-    pmInitFromName(&pm, name, paraNodePort);
-    if (longFormat)
+    if ((sd = netConnect(name, paraPort)) >= 0)
 	{
-	pmPrintf(&pm, "%s", "listJobs");
-	if (pmSend(&pm, ru))
-	    showLong(name, ru, &totalBusy, &totalRecent);
-	}
-    else
-	{
-	pmPrintf(&pm, "%s", "status");
-	if (pmSend(&pm, ru))
+	if (longFormat)
 	    {
-	    if (pmReceive(&pm, ru))
+	    mustSendWithSig(sd, "listJobs");
+	    showLong(name, sd, &totalBusy, &totalRecent);
+	    }
+	else
+	    {
+	    mustSendWithSig(sd, "status");
+	    size = read(sd, status, sizeof(status)-1);
+	    if (size >= 0)
 		{
 		char *row[3];
-		printf("%s %s\n", name, pm.data);
-		chopLine(pm.data, row);
+		status[size] = 0;
+		printf("%s %s\n", name, status);
+		chopLine(status, row);
 		totalBusy += atoi(row[0]);
 		if (!sameString(row[1], "of"))
 		    errAbort("paraNode status message format changed");
@@ -127,12 +121,12 @@ while (lineFileRow(lf, row))
 		printf("%s no status return: %s\n", name, strerror(errno));
 		}
 	    }
-	else
-	    {
-	    printf("%s unreachable\n", name);
-	    }
+	close(sd);
 	}
-    rudpClose(&ru);
+    else
+	{
+	printf("%s - no node server\n", name);
+	}
     }
 if (longFormat)
     printf("%d running, %d recent\n", totalBusy, totalRecent);

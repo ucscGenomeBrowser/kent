@@ -64,9 +64,3 @@ old_alpha:
 	hgTrackDb human hg7  trackDb ../../lib/trackDb.sql .
 	hgTrackDb human hg8  trackDb ../../lib/trackDb.sql .
 	hgTrackDb human hg9  trackDb ../../lib/trackDb.sql .
-
-mgc:
-	hgTrackDb human hg13 trackDb ../../lib/trackDb.sql .
-	hgTrackDb mouse mm2 trackDb ../../lib/trackDb.sql .
-	hgTrackDb rat rn1 trackDb ../../lib/trackDb.sql .
-

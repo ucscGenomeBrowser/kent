@@ -3,7 +3,7 @@ include ../../inc/common.mk
 
 L = -lm
 MYLIBDIR = ../../lib/$(MACHTYPE)
-MYLIBS =  $(MYLIBDIR)/jkweb.a
+MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 
 O = pslPretty.o
 

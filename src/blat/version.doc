@@ -1,14 +1,3 @@
-21:
-     o  Adding banded-Smith-Waterman extension.  Virtually eliminated
-	FuzzyFinder, though it still gets called as a lost resort to
-	fish out small internal exons.  A single 11-mer hit is sufficient
-	to grab initial or terminal exons.  These changes currently are
-	available only in blat, not gfClient/gfServer, and only when the
-	-band parameter is used.
-
-20:
-     o  Recompiled without -o3 in Linux.  This recent change to a makefile
-        ended up causing problems.
 19: 
      o  Bumping max size of intron that gets stitched to 750kb from 500kb.
      o  Handle a rare case that could lead to zero sized exons.

@@ -1,5 +1,8 @@
 /* para - para - manage a batch of jobs in parallel on a compute cluster.. */
-#include "paraCommon.h"
+#include <time.h>
+#include <sys/wait.h>
+#include <signal.h>
+#include "common.h"
 #include "errabort.h"
 #include "linefile.h"
 #include "options.h"
@@ -9,7 +12,6 @@
 #include "portable.h"
 #include "net.h"
 #include "paraLib.h"
-#include "paraMessage.h"
 #include "jobDb.h"
 #include "jobResult.h"
 
@@ -345,30 +347,36 @@ for (job = db->jobList; job != NULL; job = job->next)
     jobCommaOut(job, f);
     fprintf(f, "\n");
     }
-if (ferror(f))
-    errAbort("error writing %s", fileName);
 carefulClose(&f);
 }
 
-void atomicWriteBatch(struct jobDb *db, char *fileName)
-/* Wrapper to avoid corruption file by two para process being run in the same
- * directory. */
+boolean gotSig = FALSE;	/* Set to true if got signal. */
+int sigVal;		/* Which signal we got. */
+
+void catchSig(int sig)
+/* Catch termination signal. */
 {
-char hostName[128];
-char tmpName[PATH_LEN];
-
-/* generate a unique name for tmp file */
-if (gethostname(hostName, sizeof(hostName)) < 0)
-    errnoAbort("can't get host name");
-safef(tmpName, sizeof(tmpName), "%s.%d.%s.tmp", fileName, getpid(), 
-      hostName);
-
-writeBatch(db, tmpName);
-
-/* now rename (which is attomic) */
-if (rename(tmpName, fileName) < 0)
-    errnoAbort("can't rename %s to %s", tmpName, fileName);
+gotSig = TRUE;
+sigVal = sig;
 }
+
+void atomicWriteBatch(struct jobDb *db, char *fileName)
+/* Wrapper to avoid termination in the middle of
+ * writing a batch file out. */
+{
+void (*oldHup)(int) = signal(SIGHUP, catchSig);
+void (*oldTerm)(int) = signal(SIGTERM, catchSig);
+void (*oldInt)(int) = signal(SIGINT, catchSig);
+void (*oldQuit)(int) = signal(SIGQUIT, catchSig);
+writeBatch(db, fileName);
+signal(SIGHUP, oldHup);
+signal(SIGTERM, oldTerm);
+signal(SIGINT, oldInt);
+signal(SIGQUIT, oldQuit);
+if (gotSig)
+    errAbort("Exiting from signal %d", sigVal);
+}
+
 
 struct jobDb *readBatch(char *batch)
 /* Read a batch file. */
@@ -398,17 +406,19 @@ char *hubSingleLineQuery(char *query)
 /* Send message to hub and get single line response.
  * This should be freeMem'd when done. */
 {
-struct rudp *ru = rudpMustOpen();
-struct paraMessage pm;
-char *result = NULL;
+int hubFd = netConnect("localhost", paraPort);
+char *result;
 
-pmInitFromName(&pm, "localhost", paraHubPort);
-if (!pmSendString(&pm, ru, query))
-    noWarnAbort();
-if (!pmReceive(&pm, ru))
-    noWarnAbort();
-rudpClose(&ru);
-return cloneString(pm.data);
+if (hubFd < 0)
+    return NULL;
+if (!sendWithSig(hubFd, query))
+    {
+    close(hubFd);
+    return NULL;
+    }
+result = netRecieveLongString(hubFd);
+close(hubFd);
+return result;
 }
 
 struct slRef *hubMultilineQuery(char *query)
@@ -417,20 +427,21 @@ struct slRef *hubMultilineQuery(char *query)
 {
 struct slRef *list = NULL, *el;
 char *line;
-struct rudp *ru = rudpMustOpen();
-struct paraMessage pm;
-pmInitFromName(&pm, "localhost", paraHubPort);
-if (!pmSendString(&pm, ru, query))
-    noWarnAbort();
-for (;;)
+int hubFd = netConnect("localhost", paraPort);
+if (hubFd > 0)
     {
-    if (!pmReceive(&pm, ru))
-	break;
-    if (pm.size == 0)
-	break;
-    refAdd(&list, cloneString(pm.data));
+    if (sendWithSig(hubFd, query))
+        {
+	for (;;)
+	    {
+	    line = netRecieveLongString(hubFd);
+	    if (line == NULL || line[0] == 0)
+		break;
+	    refAdd(&list, line);
+	    }
+	}
+    close(hubFd);
     }
-rudpClose(&ru);
 slReverse(&list);
 return list;
 }
@@ -500,7 +511,7 @@ slReverse(&db->jobList);
 
 doChecks(db, "in");
 sprintf(backup, "%s.bak", batch);
-atomicWriteBatch(db, backup);
+writeBatch(db, backup);
 atomicWriteBatch(db, batch);
 printf("%d jobs written to %s\n", db->jobCount, batch);
 }
@@ -637,7 +648,7 @@ return WIFEXITED(status) && (WEXITSTATUS(status) == 0);
 double jrCpuTime(struct jobResult *jr)
 /* Get CPU time in seconds for job. */
 {
-return 0.01 * (jr->usrTicks + jr->sysTicks);
+return 1.0/(double)CLK_TCK * (jr->usrTicks + jr->sysTicks);
 }
 
 struct hash *markRunJobStatus(struct jobDb *db)
@@ -924,32 +935,34 @@ for (job = db->jobList; job != NULL; job = job->next)
     }
 }
 
-void fetchOpenFile(struct paraMessage *pm, struct rudp *ru, char *fileName)
+void fetchOpenFile(int fd, char *fileName)
 /* Read everything you can from socket and output to file. */
 {
 FILE *f = mustOpen(fileName, "w");
-while (pmReceive(pm, ru))
-    {
-    if (pm->size == 0)
-	break;
-    mustWrite(f, pm->data, pm->size);
-    }
+char buf[4*1024];
+int size;
+
+while ((size = read(fd, buf, sizeof(buf))) > 0)
+    mustWrite(f, buf, size);
+if (size < 0)
+    errnoAbort("Couldn't read all into %s", fileName);
+
 carefulClose(&f);
 }
 
 void fetchFile(char *host, char *sourceName, char *destName)
 /* Fetch small file. */
 {
-struct rudp *ru = rudpOpen();
-struct paraMessage pm;
-if (ru != NULL)
+struct dyString *dy = newDyString(1024);
+int sd = netConnect(host, paraPort);
+if (sd >= 0)
     {
-    pmInitFromName(&pm, host, paraNodePort);
-    pmPrintf(&pm, "fetch %s %s", getUser(), sourceName);
-    if (pmSend(&pm, ru))
-	fetchOpenFile(&pm, ru, destName);
-    rudpClose(&ru);
+    dyStringPrintf(dy, "fetch %s %s", getUser(), sourceName);
+    if (sendWithSig(sd, dy->string))
+	fetchOpenFile(sd, destName);
+    close(sd);
     }
+dyStringFree(&dy);
 }
 
 void printErrFile(struct submission *sub, struct jobResult *jr)
@@ -1282,7 +1295,6 @@ int runTime = 0;
 int otherCount = 0;
 struct hash *resultsHash;
 long now = time(NULL);
-double ioTime;
 
 markQueuedJobs(db);
 resultsHash = markRunJobStatus(db);
@@ -1351,9 +1363,7 @@ if (otherCount > 0)
 if (queueCount > 0)
     printf("In queue waiting: %d jobs\n", queueCount);
 printTimes("CPU time in finished jobs:", totalCpu, TRUE);
-ioTime = totalWall - totalCpu;
-if (ioTime < 0) ioTime = 0;
-printTimes("IO & Wait Time:", ioTime, TRUE);
+printTimes("IO & Wait Time:", totalWall-totalCpu, TRUE);
 if (runningCount > 0)
     {
     printTimes("Time in running jobs:", runTime, TRUE);

@@ -20,21 +20,30 @@
 #include "subText.h"
 #include "blatServers.h"
 #include "bed.h"
-#include "defaultDb.h"
-
-#define DEFAULT_PROTEINS "proteins"
-#define DEFAULT_GENOME "Human"
 
 static struct sqlConnCache *hdbCc = NULL;  /* cache for primary database connection */
 static struct sqlConnCache *hdbCc2 = NULL;  /* cache for second database connection (ortholog) */
 static struct sqlConnCache *centralCc = NULL;
 
-static char *hdbHost = NULL;
-static char *hdbName = NULL;
-static char *hdbName2 = NULL;
-static char *hdbUser = NULL;
-static char *hdbPassword = NULL;
+#define DEFAULT_HUMAN "hg13"
+#define DEFAULT_MOUSE "mm3"
+#define DEFAULT_RAT   "rn1"
+#define DEFAULT_ZOO   "zooHuman3"
+#define DEFAULT_DB "hg13"
+#define DEFAULT_PROTEINS   "proteins"
+
+static char *defaultHuman = DEFAULT_HUMAN;
+static char *defaultMouse = DEFAULT_MOUSE;
+static char *defaultRat   = DEFAULT_RAT;
+static char *defaultZoo   = DEFAULT_ZOO;
+
+static char *hdbHost;
+static char *hdbName = DEFAULT_HUMAN;
+static char *hdbName2 = DEFAULT_MOUSE;
+static char *hdbUser;
+static char *hdbPassword;
 static char *hdbTrackDb = NULL;
+
 static char *protDbName = DEFAULT_PROTEINS;
 
 static char* getCfgValue(char* envName, char* cfgName)
@@ -117,69 +126,21 @@ if (hdbCc2 != NULL)
 hdbName2 = dbName;
 }
 
-char *hDefaultDbForGenome(char *genome)
-/*
-Purpose: Return the default database matching the Genome.
-
-param Genome - The Genome for which we are trying to get the 
-    default database.
-return - The default database name for this Genome
-Free the returned database name.
- */
-{
-struct sqlConnection *conn = hConnectCentral();
-struct sqlResult *sr = NULL;
-char **row;
-struct defaultDb *db = NULL;
-char query [256];
-char *result = NULL;
-
-if (NULL == genome)
-    {
-    genome = DEFAULT_GENOME;
-    }
-
-/* Get proper default from defaultDb table */
-sprintf(query, "select * from defaultDb where genome = '%s'", genome);
-sr = sqlGetResult(conn, query);
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-    db = defaultDbLoad(row);
-    }
-
-sqlFreeResult(&sr);
-hDisconnectCentral(&conn);
-AllocArray(result, strlen(db->name) + 1);
-strcpy(result, db->name);
-defaultDbFree(&db);
-return result;
-}
-
 char *hDefaultDb()
 /* Return the default db if all else fails */
 {
-return hDefaultDbForGenome(DEFAULT_GENOME);
+return DEFAULT_DB;
 }
 
 char *hGetDb()
 /* Return the current database name. */
 {
-if (NULL == hdbName)
-    {
-    hdbName = hDefaultDb();
-    }
-
 return hdbName;
 }
 
 char *hGetDb2()
 /* Return the current database name. */
 {
-if (NULL == hdbName)
-    {
-    hdbName = hDefaultDbForGenome("Mouse");
-    }
-
 return hdbName2;
 }
 
@@ -480,10 +441,6 @@ slReverse(&list);
 return list;
 }
 
-/* Constants for selecting seq/extFile or gbSeq/gbExtFile */
-#define SEQ_TBL_SET   1
-#define GBSEQ_TBL_SET 2
-
 struct largeSeqFile
 /* Manages our large external sequence files.  Typically there will
  * be around four of these.  This basically caches the file handle
@@ -491,15 +448,13 @@ struct largeSeqFile
 {
     struct largeSeqFile *next;  /* Next in list. */
     char *path;                 /* Path name for file. */
-    int seqTblSet;              /* extFile or gbExtFile */
     HGID id;                    /* Id in extFile table. */
     int fd;                     /* File handle. */
     };
 
 static struct largeSeqFile *largeFileList;  /* List of open large files. */
 
-static struct largeSeqFile *largeFileHandle(HGID extId,
-                                            int seqTblSet)
+struct largeSeqFile *largeFileHandle(HGID extId)
 /* Return handle to large external file. */
 {
 struct largeSeqFile *lsf;
@@ -507,7 +462,7 @@ struct largeSeqFile *lsf;
 /* Search for it on existing list and return it if found. */
 for (lsf = largeFileList; lsf != NULL; lsf = lsf->next)
     {
-    if ((lsf->id == extId) && (lsf->seqTblSet == seqTblSet))
+    if (lsf->id == extId)
         return lsf;
     }
 
@@ -522,8 +477,7 @@ for (lsf = largeFileList; lsf != NULL; lsf = lsf->next)
     char *path;
 
     /* Query database to find full path name and size file should be. */
-    sprintf(query, "select path,size from %s where id=%u", 
-            ((seqTblSet == GBSEQ_TBL_SET) ? "gbExtFile" : "extFile"), extId);
+    sprintf(query, "select path,size from extFile where id=%u", extId);
     sr = sqlGetResult(conn,query);
     if ((row = sqlNextRow(sr)) == NULL)
         errAbort("Database inconsistency - no external file with id %lu", extId);
@@ -534,7 +488,6 @@ for (lsf = largeFileList; lsf != NULL; lsf = lsf->next)
     size = sqlUnsigned(row[1]);
     if (fileSize(path) != size)
         errAbort("External file %s has changed, need to resync database.  Old size %ld, new size %ld", path, size, fileSize(path));
-    lsf->seqTblSet = seqTblSet;
     lsf->id = extId;
     if ((lsf->fd = open(path, O_RDONLY)) < 0)
         errAbort("Couldn't open external file %s", path);
@@ -558,10 +511,12 @@ if (read(fd, buf, size) < size)
 return buf;
 }
 
-static char* getSeqAndId(struct sqlConnection *conn, char *acc, HGID *retId,
-                         char* gbDate)
-/* Return sequence as a fasta record in a string and it's database ID. */
+
+
+int hRnaSeqAndIdx(char *acc, struct dnaSeq **retSeq, HGID *retId, char *gbdate, struct sqlConnection *conn)
+/* Return sequence for RNA and it's database ID. */
 {
+//struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr;
 char **row;
 char query[256];
@@ -570,73 +525,74 @@ HGID extId;
 size_t size;
 unsigned long offset;
 char *buf;
-int seqTblSet = SEQ_TBL_SET;
 struct dnaSeq *seq;
 struct largeSeqFile *lsf;
+
+char *gb_date;
 
 sprintf(query,
    "select id,extFile,file_offset,file_size,gb_date from seq where seq.acc = '%s'",
    acc);
 sr = sqlMustGetResult(conn, query);
 row = sqlNextRow(sr);
-if ((row == NULL) && sqlTableExists(conn, "gbSeq"))
-    {
-    /* try gbSeq table */
-    sqlFreeResult(&sr);
-    sprintf(query,
-            "select id,gbExtFile,file_offset,file_size,gb_date from gbSeq where gbSeq.acc = '%s'",
-            acc);
-    sr = sqlMustGetResult(conn, query);
-    row = sqlNextRow(sr);
-    seqTblSet = GBSEQ_TBL_SET;
-    }
+if (row == NULL) return(-1);
+
+//    errAbort("No sequence for %s in database", acc);
+*retId = sqlUnsigned(row[0]);
+extId = sqlUnsigned(row[1]);
+offset = sqlUnsigned(row[2]);
+size = sqlUnsigned(row[3]);
+gb_date = row[4];
+
+strcpy(gbdate, gb_date);
+
+lsf = largeFileHandle(extId);
+buf = readOpenFileSection(lsf->fd, offset, size, lsf->path);
+*retSeq = seq = faFromMemText(buf);
+sqlFreeResult(&sr);
+//hFreeConn(&conn);
+return(0);
+}
+
+static char* getSeqAndId(char *acc, HGID *retId)
+/* Return sequence as a fasta record in a string and it's database ID. */
+{
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr;
+char **row;
+char query[256];
+int fd;
+HGID extId;
+size_t size;
+unsigned long offset;
+char *buf;
+struct dnaSeq *seq;
+struct largeSeqFile *lsf;
+
+sprintf(query,
+   "select id,extFile,file_offset,file_size from seq where seq.acc = '%s'",
+   acc);
+sr = sqlMustGetResult(conn, query);
+row = sqlNextRow(sr);
 if (row == NULL)
-    {
-    sqlFreeResult(&sr);
-    return NULL;
-    }
+    errAbort("No sequence for %s in database", acc);
 if (retId != NULL)
     *retId = sqlUnsigned(row[0]);
 extId = sqlUnsigned(row[1]);
 offset = sqlUnsigned(row[2]);
 size = sqlUnsigned(row[3]);
-if (gbDate != NULL)
-    strcpy(gbDate, row[4]);
-
-lsf = largeFileHandle(extId, seqTblSet);
+lsf = largeFileHandle(extId);
 buf = readOpenFileSection(lsf->fd, offset, size, lsf->path);
 sqlFreeResult(&sr);
+hFreeConn(&conn);
 return buf; 
-}
-static char* mustGetSeqAndId(struct sqlConnection *conn, char *acc,
-                             HGID *retId, char* gbDate)
-/* Return sequence as a fasta record in a string and it's database ID,
- * abort if not found */
-{
-char *buf= getSeqAndId(conn, acc, retId, gbDate);
-if (buf == NULL)
-    errAbort("No sequence for %s in database", acc);
-return buf;
-}
-
-int hRnaSeqAndIdx(char *acc, struct dnaSeq **retSeq, HGID *retId, char *gbdate, struct sqlConnection *conn)
-/* Return sequence for RNA and it's database ID. */
-{
-char *buf = getSeqAndId(conn, acc, retId, gbdate);
-if (buf == NULL)
-    return -1;
-*retSeq = faFromMemText(buf);
-return 0;
 }
 
 void hRnaSeqAndId(char *acc, struct dnaSeq **retSeq, HGID *retId)
 /* Return sequence for RNA and it's database ID. */
 {
-struct sqlConnection *conn = hAllocConn();
-char *buf = mustGetSeqAndId(conn, acc, retId, NULL);
+char *buf = getSeqAndId(acc, retId);
 *retSeq = faFromMemText(buf);
-hFreeConn(&conn);
-
 }
 
 struct dnaSeq *hExtSeq(char *acc)
@@ -657,9 +613,7 @@ return hExtSeq(acc);
 aaSeq *hPepSeq(char *acc)
 /* Return sequence for a peptide. */
 {
-struct sqlConnection *conn = hAllocConn();
-char *buf = mustGetSeqAndId(conn, acc, NULL, NULL);
-hFreeConn(&conn);
+char *buf = getSeqAndId(acc, NULL);
 return faSeqFromMemText(buf, FALSE);
 }
 
@@ -2182,6 +2136,37 @@ st.nibDir = cloneString(row[5]);
 sqlFreeResult(&sr);
 hDisconnectCentral(&conn);
 return &st;
+}
+
+char *hDefaultDbForGenome(char *genome)
+/*
+Purpose: Return the default database matching the Genome.
+
+param Genome - The Genome for which we are trying to get the 
+    default database.
+return - The default database name for this Genome
+ */
+{
+char *result = hGetDb();
+
+if (strstrNoCase(genome, "mouse"))
+    {
+    result = defaultMouse;
+    }
+else if (strstrNoCase(genome, "rat"))
+    {
+    result = defaultRat;
+    }
+else if (strstrNoCase(genome, "zoo"))
+    {
+    result = defaultZoo;
+    }
+else if (strstrNoCase(genome, "human"))
+    {
+    result = defaultHuman;
+    }
+
+return result;
 }
 
 char *sqlGetField(struct sqlConnection *connIn, 

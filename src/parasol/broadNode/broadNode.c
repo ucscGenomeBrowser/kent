@@ -1,5 +1,11 @@
 /* broadNode - Daemon that runs on cluster nodes in broadcast data system. */
-#include "paraCommon.h"
+#include <sys/time.h>
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+#include <netdb.h>
+#include "common.h"
 #include "linefile.h"
 #include "hash.h"
 #include "options.h"

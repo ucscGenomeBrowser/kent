@@ -8,5 +8,5 @@ MYLIBS =  $(MYLIBDIR)/jkweb.a
 O = para.o jobDb.o jobResult.o
 
 para: $O $(MYLIBS)
-	gcc -o ../bin/para $O ../lib/$(MACHTYPE)/paralib.a ../../lib/$(MACHTYPE)/jkweb.a
-	strip ../bin/para
+	gcc -o $(HOME)/bin/$(MACHTYPE)/para $O ../lib/$(MACHTYPE)/paralib.a ../../lib/$(MACHTYPE)/jkweb.a
+	strip $(HOME)/bin/$(MACHTYPE)/para

@@ -2,9 +2,11 @@
  *
  * This file is copyright 2002 Jim Kent, but license is hereby
  * granted for all use - public, private or commercial. */
-#include "common.h"
 #include <io.h>
+#include <fcntl.h>
+#include <time.h>
 #include <direct.h>
+#include "common.h"
 #include "portable.h"
 
 /* Return how long the named file is in bytes. 
