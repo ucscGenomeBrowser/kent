@@ -347,10 +347,6 @@ while ((line = nextSubbedLine(lf, symHash, dyBuf)) != NULL)
 	     {
 	     jf->dupeOk = TRUE;
 	     }
-	 else if (sameString("oneToOne", word))
-	     {
-	     jf->oneToOne = TRUE;
-	     }
 	 else if (sameString("minCheck", word))
 	     {
 	     if (e == NULL)
@@ -360,6 +356,10 @@ while ((line = nextSubbedLine(lf, symHash, dyBuf)) != NULL)
 	 else if (sameString("splitPrefix", word))
 	     {
 	     jf->splitPrefix = cloneSpecified(lf, word, e);
+	     }
+	 else if (sameString("splitSuffix", word))
+	     {
+	     jf->splitSuffix = cloneSpecified(lf, word, e);
 	     }
 	 else if (sameString("exclude", word))
 	     {

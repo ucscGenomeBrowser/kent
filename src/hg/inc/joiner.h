@@ -23,6 +23,7 @@ struct joinerField
     boolean oneToOne;		/* Is 1-1 with primary key? */
     float minCheck;		/* Minimum ratio that must hit primary key */
     char *splitPrefix;		/* Prefix for splitting tables. */
+    char *splitSuffix;		/* Suffix for splitting tables. */
     struct slName *exclude;	/* List of keys to exclude from verification */
     };
 
