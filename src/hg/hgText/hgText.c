@@ -50,6 +50,64 @@ boolean allGenome = FALSE;
 /* main() sets this: */
 struct hash *oldVars = NULL;
 
+/* simple integer statistics */
+struct intStats
+{
+    struct intStats *next;
+    int n;
+    int min;
+    int max;
+    double avg;
+    double stdev;
+};
+
+void intStatsCopy(struct intStats *dst, struct intStats *src)
+/* Copy src's fields into dst. */
+{
+dst->n = src->n;
+dst->min = src->min;
+dst->max = src->max;
+dst->avg = src->avg;
+dst->stdev = src->stdev;
+}
+
+void intStatsFromArr(int *X, int N, struct intStats *retStats)
+/* simple statistics on n datapoints in X; results are stored in retStats. */
+{
+int min = BIGNUM;
+int max = -BIGNUM;
+double total;
+double avg;
+int i;
+
+if (N < 1)
+    errAbort("Don't call intStatsFromArr with 0 datapoints.");
+
+total = 0.0;
+for (i=0;  i < N;  i++)
+    {
+    if (X[i] < min)
+	min = X[i];
+    if (X[i] > max)
+	max = X[i];
+    total += (double)X[i];
+    }
+avg = total / N;
+/* second pass for stdev: */
+total = 0.0;
+for (i=0;  i < N;  i++)
+    {
+    double diff = (double)X[i] - avg;
+    total += (diff * diff);
+    }
+retStats->n = N;
+retStats->min = min;
+retStats->max = max;
+retStats->avg = avg;
+retStats->stdev = sqrt(total / N);
+}
+
+
 /* Representation of bed-filtering operations */
 /* maybe these should be moved to the bed lib? */
 enum charFilterType
@@ -119,6 +177,7 @@ static char * const onChangeText = "onchange=\"document.orgForm.org.value = docu
 #define gffPhase            "GTF"
 #define bedOptionsPhase     "BED/Custom Track..."
 #define linksPhase          "Hyperlinks to Genome Browser"
+#define statsPhase          "Summary/Statistics"
 char *outputTypePosMenu[] =
 {
     bedOptionsPhase,
@@ -127,14 +186,16 @@ char *outputTypePosMenu[] =
     linksPhase,
     allFieldsPhase,
     chooseFieldsPhase,
+    statsPhase,
 };
-int outputTypePosMenuSize = 6;
+int outputTypePosMenuSize = 7;
 char *outputTypeNonPosMenu[] =
 {
     allFieldsPhase,
     chooseFieldsPhase,
+    statsPhase,
 };
-int outputTypeNonPosMenuSize = 2;
+int outputTypeNonPosMenuSize = 3;
 /* Other values that the "phase" var can take on: */
 #define chooseTablePhase    "table"
 #define outputOptionsPhase  "Advanced query..."
@@ -325,18 +386,26 @@ cgiMakeHiddenVar("origPhase", phase);
 cgiMakeButton("submit", "Look up");
 }
 
+void preserveCgiExceptPosition()
+/* Store all CGI vars except position as hidden vars in the current form. */
+{
+struct cgiVar *cv;
+for (cv = cgiVarList(); cv != NULL; cv = cv->next)
+    if (! sameString("position", cv->name))
+	cgiMakeHiddenVar(cv->name, cv->val);
+}
+
 void positionLookupSamePhase()
 /* print the location and a jump button if the table is positional */
 {
 if (tableIsPositional)
     {
+    printf("<FORM ACTION=\"%s\" NAME=\"posForm\">\n", hgTextName());
     puts("position: ");
     positionLookup(cgiString("phase"));
+    preserveCgiExceptPosition();
+    puts("</FORM>");
     puts("<P>");
-    }
-else
-    {
-    cgiMakeHiddenVar("position", position);
     }
 }
 
@@ -1092,11 +1161,12 @@ saveChooseTableState();
 
 webStart(cart, "Table Browser: %s: %s", freezeName, outputOptionsPhase);
 checkTableExists(fullTableName);
+positionLookupSamePhase();
 printf("<FORM ACTION=\"%s\" NAME=\"mainForm\">\n\n", hgTextName());
 cartSaveSession(cart);
 cgiMakeHiddenVar("db", database);
 cgiMakeHiddenVar("table", getTableVar());
-positionLookupSamePhase();
+cgiMakeHiddenVar("position", position);
 
 printf("<P><HR><H3> Select Output Format for %s </H3>\n", table);
 if (tableIsPositional)
@@ -1121,7 +1191,8 @@ cgiMakeButton("phase", getOutputPhase);
 if (tableIsPositional)
     {
     puts("<P><HR><H3> (Optional) Intersect Results with Another Table </H3>");
-    puts("Note: Output Format must be FASTA, BED, Hyperlinks or GTF \n"
+    puts("Note: Output Format must be FASTA, BED, Hyperlinks, GTF \n"
+	 "or Summary/Statistics "
 	 "for this feature.  <P>");
     categorizeTables(&posTableList, &nonposTableList);
     puts("Choose a second table:");
@@ -1905,11 +1976,9 @@ if (ct->fieldCount >= 12)
 return(hti);
 }
 
-struct hTableInfo *getHti()
+struct hTableInfo *getHti(char *db, char *table)
 /* Return primary table info. */
 {
-char *db = getTableDb();
-char *table = getTableName();
 struct hTableInfo *hti;
 
 if (sameString(customTrackPseudoDb, db))
@@ -1919,7 +1988,11 @@ if (sameString(customTrackPseudoDb, db))
     }
 else
     {
-    char *track = getTrackName();
+    char *track;
+    if (startsWith("chrN_", table))
+	track = table + strlen("chrN_");
+    else
+	track = table;
     hti = hFindTableInfoDb(db, chrom, track);
     }
 
@@ -1936,8 +2009,9 @@ struct hTableInfo *getOutputHti()
  * bed4 that isn't a track (unless user makes it a custom track).  
  * Otherwise this will just be the primary table info. */
 {
-struct hTableInfo *hti = getHti();
+char *db = getTableDb();
 char *table = getTableName();
+struct hTableInfo *hti = getHti(db, table);
 char *table2 = getTable2Name();
 char *op = cgiOptionalString("hgt.intersectOp");
 
@@ -2249,18 +2323,18 @@ struct bed *filterBed(struct bed *bedListIn, struct bedFilter *bf)
 return filterBedInRange(bedListIn, bf, NULL, 0, 0);
 }
 
-struct bed *getBedList()
+struct bed *getBedList(boolean ignoreConstraints, char *onlyThisChrom)
 /* For any positional table output: get the features selected by the user 
  * and return them as a bed list.  This is where table intersection happens. */
 {
 struct slName *chromList, *chromPtr;
 struct bed *bedList = NULL, *bedListT1 = NULL, *bedListChrom = NULL;
-struct hTableInfo *hti = getHti();
-char *constraints;
+char *db = getTableDb();
 char *table = getTableName();
+struct hTableInfo *hti = getHti(db, table);
+char *constraints;
 char *table2 = getTable2Name();
 char *op = cgiOptionalString("hgt.intersectOp");
-char *db = getTableDb();
 char *track = getTrackName();
 char *outputType = cgiString("outputType");
 int fields;
@@ -2268,8 +2342,13 @@ int i, totalCount;
 
 checkTableExists(fullTableName);
 constraints = constrainFields(NULL);
+if (ignoreConstraints ||
+    ((constraints != NULL) && (constraints[0] == 0)))
+    constraints = NULL;
 
-if (allGenome)
+if (onlyThisChrom != NULL)
+    chromList = newSlName(onlyThisChrom);
+else if (allGenome)
     chromList = hAllChromNames();
 else
     chromList = newSlName(chrom);
@@ -2310,6 +2389,9 @@ for (chromPtr=chromList;  chromPtr != NULL;  chromPtr = chromPtr->next)
 	    {
 	    webAbort("Error", "Invalid value \"%s\" of CGI variable hgt.intersectOp", op);
 	    }
+	if (ignoreConstraints ||
+	    ((constraints2 != NULL) && (constraints2[0] == 0)))
+	    constraints2 = NULL;
 	fprintf(stderr, "TBQuery:  p=%s:%d-%d  t1=%s  q1=%s  t2=%s  q2=%s  op=%s  mT=%d  lT=%d  iT=%d  iT2=%d\n",
 		chrom, winStart, winEnd,
 		table, constraints,
@@ -2798,12 +2880,13 @@ saveIntersectOptionsState();
 
 webStart(cart, "Table Browser: %s: Choose Fields of %s", freezeName, table);
 checkTableExists(fullTableName);
+positionLookupSamePhase();
 printf("<FORM ACTION=\"%s\" NAME=\"mainForm\">\n\n", hgTextName());
 cartSaveSession(cart);
 cgiMakeHiddenVar("db", database);
 cgiMakeHiddenVar("table", getTableVar());
+cgiMakeHiddenVar("position", position);
 cgiMakeHiddenVar("outputType", outputType);
-positionLookupSamePhase();
 preserveConstraints(fullTableName, db, NULL);
 preserveTable2();
 
@@ -2843,14 +2926,15 @@ saveIntersectOptionsState();
 
 webStart(cart, "Table Browser: %s: %s", freezeName, seqOptionsPhase);
 checkTableExists(fullTableName);
+positionLookupSamePhase();
 printf("<FORM ACTION=\"%s\" NAME=\"mainForm\">\n\n", hgTextName());
 cartSaveSession(cart);
 cgiMakeHiddenVar("db", database);
 cgiMakeHiddenVar("table", getTableVar());
+cgiMakeHiddenVar("position", position);
 cgiMakeHiddenVar("outputType", outputType);
 preserveConstraints(fullTableName, getTableDb(), NULL);
 preserveTable2();
-positionLookupSamePhase();
 printf("<H3>Table: %s</H3>\n", hti->rootName);
 hgSeqOptionsHtiCart(hti, cart);
 cgiMakeButton("phase", getSequencePhase);
@@ -2862,7 +2946,7 @@ webEnd();
 void doGetSequence()
 {
 struct hTableInfo *hti = getOutputHti();
-struct bed *bedList = getBedList();
+struct bed *bedList = getBedList(FALSE, NULL);
 int itemCount;
 
 saveOutputOptionsState();
@@ -3054,7 +3138,7 @@ return(gffList);
 void doGetGFF()
 {
 struct hTableInfo *hti = getOutputHti();
-struct bed *bedList = getBedList();
+struct bed *bedList = getBedList(FALSE, NULL);
 struct gffLine *gffList, *gffPtr;
 char source[64];
 char *db = getTableDb();
@@ -3102,14 +3186,15 @@ saveIntersectOptionsState();
 
 webStart(cart, "Table Browser: %s: %s", freezeName, bedOptionsPhase);
 checkTableExists(fullTableName);
+positionLookupSamePhase();
 puts("<FORM ACTION=\"/cgi-bin/hgText\" NAME=\"mainForm\" METHOD=\"GET\">\n");
 cartSaveSession(cart);
 cgiMakeHiddenVar("db", database);
 cgiMakeHiddenVar("table", getTableVar());
+cgiMakeHiddenVar("position", position);
 cgiMakeHiddenVar("outputType", outputType);
 preserveConstraints(fullTableName, db, NULL);
 preserveTable2();
-positionLookupSamePhase();
 printf("<H3> Select BED Options for %s: </H3>\n", hti->rootName);
 puts("<TABLE><TR><TD>");
 cgiMakeCheckBox("hgt.doCustomTrack",
@@ -3178,7 +3263,7 @@ return(ct);
 void doGetBed()
 {
 struct hTableInfo *hti = getOutputHti();
-struct bed *bedList = getBedList();
+struct bed *bedList = getBedList(FALSE, NULL);
 struct bed *bedPtr;
 struct featureBits *fbList = NULL, *fbPtr;
 struct customTrack *ctNew = NULL;
@@ -3282,7 +3367,7 @@ bedFreeList(&bedList);
 void doGetBrowserLinks()
 {
 struct hTableInfo *hti = getOutputHti();
-struct bed *bedList = getBedList();
+struct bed *bedList = getBedList(FALSE, NULL);
 struct bed *bedPtr;
 char *table = getTableName();
 char *track = getTrackName();
@@ -3350,16 +3435,19 @@ if (! tableIsPositional)
 if (! sameString(outputType, seqOptionsPhase) &&
     ! sameString(outputType, bedOptionsPhase) &&
     ! sameString(outputType, linksPhase) &&
+    ! sameString(outputType, statsPhase) &&
     ! sameString(outputType, gffPhase))
     webAbort("Error", "Please choose one of the supported output formats "
-	     "(FASTA, BED, HyperLinks or GTF) for intersection of tables.");
+	     "(FASTA, BED, HyperLinks, GTF or Summary/Statistics) for "
+	     "intersection of tables.");
 
+positionLookupSamePhase();
 puts("<FORM ACTION=\"/cgi-bin/hgText\" NAME=\"mainForm\" METHOD=\"GET\">\n");
 cartSaveSession(cart);
 cgiMakeHiddenVar("db", database);
 cgiMakeHiddenVar("table", getTableVar());
+cgiMakeHiddenVar("position", position);
 cgiMakeHiddenVar("outputType", outputType);
-positionLookupSamePhase();
 cgiMakeHiddenVar("table2", getTable2Var());
 preserveConstraints(fullTableName, db, NULL);
 preserveConstraints(fullTableName2, db2, "2");
@@ -3418,6 +3506,519 @@ puts("</FORM>");
 webEnd();
 }
 
+
+void doGetStatsNonpositional()
+/* Print out statistics about nonpositional query results. */
+{
+struct hTableInfo *hti = getOutputHti();
+webStart(cart, "Table Browser: %s: %s", freezeName, statsPhase);
+checkTableExists(fullTableName);
+//#*** This never has to deal with custom tracks or intersections -- 
+//#*** go straight to db.
+printf("Not implemented for non-positional tables yet...\n");
+webEnd();
+}
+
+void getCumulativeStats(int **Xarrs, int *Ns, int num, struct intStats *stats)
+/* Copy the arrays X[1]...X[num] into X[0], according to lengths in N.
+ * Put stats on X[0] into stats[0]. */
+{
+/* Actually, only go to the trouble if there are multiple arrays.
+ * If not, just copy the single array [1] to the cumulative location [0]. */
+if (num > 1)
+    {
+    int i;
+    int offset = 0;
+    Xarrs[0] = needMem(Ns[0] * sizeof(int));
+    for (i=1;  i <= num;  i++)
+	{
+	memcpy(Xarrs[0]+offset, Xarrs[i], Ns[i] * sizeof(int));
+	freez(&(Xarrs[i]));
+	offset += Ns[i];
+	}
+    assert(offset == Ns[0]);
+    intStatsFromArr(Xarrs[0], Ns[0], stats);
+    }
+else
+    {
+    Xarrs[0] = Xarrs[1];
+    intStatsCopy(stats, &(stats[1]));
+    }
+}
+
+void getBedBaseCounts(struct bed *bedList, boolean hasBlocks,
+		      int *utr5s, int *cdss, int *utr3s)
+/* Given a list of beds with CDS, tally up the number of bases in 
+ * 5'UTR, CDS and 3'UTR and store them in the count arrays. */
+{
+struct bed *bed;
+int j;
+
+for (bed=bedList, j=0;  bed != NULL;  bed=bed->next, j++)
+    {
+    int utr5=0, cds=0, utr3=0;
+    boolean isRc = (bed->strand[0] == '-');
+    if (hasBlocks)
+	{
+	int k;
+	for (k=0;  k < bed->blockCount; k++)
+	    {
+	    int s = bed->chromStart + bed->chromStarts[k];
+	    int e = s + bed->blockSizes[k];
+	    if (e < bed->thickStart)
+		if (isRc)
+		    utr3 += e - s;
+		else
+		    utr5 += e - s;
+	    else if (s < bed->thickStart)
+		if (e > bed->thickEnd)
+		    {
+		    cds += bed->thickEnd - bed->thickStart;
+		    if (isRc)
+			{
+			utr3 += bed->thickStart - s;
+			utr5 += e - bed->thickEnd;
+			}
+		    else
+			{
+			utr5 += bed->thickStart - s;
+			utr3 += e - bed->thickEnd;
+			}
+		    }
+		else
+		    {
+		    cds += e - bed->thickStart;
+		    if (isRc)
+			utr3 += bed->thickStart - s;
+		    else
+			utr5 += bed->thickStart - s;
+		    }
+	    else if (s > bed->thickEnd)
+		if (isRc)
+		    utr5 += e - s;
+		else
+		    utr3 += e - s;
+	    else if (e > bed->thickEnd)
+		{
+		cds += bed->thickEnd - s;
+		if (isRc)
+		    utr5 += e - bed->thickEnd;
+		else
+		    utr3 += e - bed->thickEnd;
+		}
+	    else
+		cds += e - s;
+	    }
+	}
+    else
+	{
+	cds  = bed->thickEnd - bed->thickStart;
+	if (isRc)
+	    {
+	    utr3 = bed->thickStart - bed->chromStart;
+	    utr5 = bed->chromEnd - bed->thickEnd;
+	    }
+	else
+	    {
+	    utr5 = bed->thickStart - bed->chromStart;
+	    utr3 = bed->chromEnd - bed->thickEnd;
+	    }
+	}
+    utr5s[j] = utr5;
+    cdss[j]  = cds;
+    utr3s[j] = utr3;
+    }
+}
+
+void doGetStatsPositional()
+/* Print out statistics about positional query results. */
+{
+struct hTableInfo *hti = getOutputHti();
+struct slName *chromList, *chromPtr;
+struct intStats *chromLengthStats;
+struct intStats *scoreStats;
+struct intStats *utr5Stats;
+struct intStats *cdsStats;
+struct intStats *utr3Stats;
+struct intStats *blockCountStats;
+struct intStats *blockSizeStats;
+char *db = getTableDb();
+char *table = getTableName();
+char *db2 = getTable2Db();
+char *table2 = getTable2Name();
+char *op = cgiOptionalString("hgt.intersectOp");
+char *constraints, *constraints2;
+char fullTableName2[256];
+int numChroms;
+int numCols;
+int *itemCounts, *bitCounts, *itemUncCounts;
+int *strandPCounts, *strandMCounts, *strandQCounts;
+int **chromLengthArrs;
+int **scoreArrs;
+int **utr5Arrs;
+int **cdsArrs;
+int **utr3Arrs;
+int **blockCountArrs;
+int **blockSizeArrs;
+int i, j;
+
+saveOutputOptionsState();
+saveIntersectOptionsState();
+
+if (op == NULL)
+    table2 = NULL;
+
+if (allGenome)
+    chromList = hAllChromNames();
+else
+    chromList = newSlName(chrom);
+numChroms = slCount(chromList);
+itemCounts = needMem((numChroms+1) * sizeof(int));
+bitCounts = needMem((numChroms+1) * sizeof(int));
+itemUncCounts = needMem((numChroms+1) * sizeof(int));
+strandPCounts = needMem((numChroms+1) * sizeof(int));
+strandMCounts = needMem((numChroms+1) * sizeof(int));
+strandQCounts = needMem((numChroms+1) * sizeof(int));
+chromLengthArrs = needMem((numChroms+1) * sizeof(int *));
+chromLengthStats = needMem((numChroms+1) * sizeof(struct intStats));
+scoreArrs = needMem((numChroms+1) * sizeof(int *));
+scoreStats = needMem((numChroms+1) * sizeof(struct intStats));
+utr5Arrs = needMem((numChroms+1) * sizeof(int *));
+utr5Stats = needMem((numChroms+1) * sizeof(struct intStats));
+cdsArrs = needMem((numChroms+1) * sizeof(int *));
+cdsStats = needMem((numChroms+1) * sizeof(struct intStats));
+utr3Arrs = needMem((numChroms+1) * sizeof(int *));
+utr3Stats = needMem((numChroms+1) * sizeof(struct intStats));
+blockCountArrs = needMem((numChroms+1) * sizeof(int *));
+blockCountStats = needMem((numChroms+1) * sizeof(struct intStats));
+blockSizeArrs = needMem((numChroms+1) * sizeof(int *));
+blockSizeStats = needMem((numChroms+1) * sizeof(struct intStats));
+
+webStart(cart, "Table Browser: %s: %s", freezeName, statsPhase);
+checkTableExists(fullTableName);
+
+positionLookupSamePhase();
+printf("<FORM ACTION=\"%s\" NAME=\"mainForm\">\n\n", hgTextName());
+cartSaveSession(cart);
+cgiMakeHiddenVar("db", database);
+cgiMakeHiddenVar("table", getTableVar());
+cgiMakeHiddenVar("position", position);
+preserveConstraints(fullTableName, db, NULL);
+preserveTable2();
+
+printf("<H4> Get Output: </H4>\n");
+cgiMakeDropList("outputType", outputTypePosMenu, outputTypePosMenuSize,
+		outputTypePosMenu[0]);
+cgiMakeButton("phase", getOutputPhase);
+puts("</FORM>");
+
+printf("<HR><H3> Summary/Statistics for your query on %s%s%s </H3>\n", table,
+       (table2 != NULL) ? " vs. " : "",
+       (table2 != NULL) ? table2 : "");
+constraints = constrainFields(NULL);
+if ((constraints != NULL) && (constraints[0] == 0))
+    constraints = NULL;
+constraints2 = constrainFields("2");
+if ((constraints2 != NULL) && (constraints2[0] == 0))
+    constraints2 = NULL;
+
+puts("<H4> About your query: </H4>");
+printf("Position range: %s\n", position);
+printf("<P> Primary table: %s\n", table);
+if (constraints != NULL)
+    printf("<P> Constraints on primary table: %s \n", constraints);
+else
+    printf("<P> No additional constraints selected on fields of primary table.\n");
+if (table2 != NULL)
+    {
+    char tableUse[128], table2Use[128];
+    printf("<P> Secondary table: %s\n", table2);
+    if (constraints2 != NULL)
+	printf("<P> Constraints on secondary table: %s\n", constraints2);
+    else
+	printf("<P> No additional constraints selected on fields of secondary table.\n");
+    if (cgiBoolean("hgt.invertTable"))
+	snprintf(tableUse, sizeof(tableUse), "complement of %s", table);
+    else
+	strncpy(tableUse, table, sizeof(tableUse));
+    if (cgiBoolean("hgt.invertTable2"))
+	snprintf(table2Use, sizeof(table2Use), "complement of %s", table2);
+    else
+	strncpy(table2Use, table2, sizeof(table2Use));
+    puts("<P> Means of combining tables:");
+    if (sameString(op, "any"))
+	printf("Include %s records that have any overlap with %s <P>\n",
+	       table, table2);
+    else if (sameString(op, "none"))
+	printf("Include %s records that have no overlap with %s <P>\n",
+	       table, table2);
+    else if (sameString(op, "more"))
+	printf("Include %s records that have at least %s%% overlap with %s <P>\n",
+	       table, cgiString("hgt.moreThresh"), table2);
+    else if (sameString(op, "less"))
+	printf("Include %s records that have at most %s%% overlap with %s <P>\n",
+	       table, cgiString("hgt.lessThresh"), table2);
+    else if (sameString(op, "and"))
+	printf("List positions of base pairs covered by both %s and %s <P>\n",
+	       tableUse, table2Use);
+    else if (sameString(op, "or"))
+	printf("List positions of base pairs covered by either %s or %s <P>\n",
+	       tableUse, table2Use);
+    else
+	errAbort("Unrecognized table combination type.");
+    }
+
+puts("<H4> Statistics: </H4>");
+
+numCols = (numChroms > 1) ? numChroms+1 : 1;
+for (chromPtr=chromList,i=1;  chromPtr != NULL;  chromPtr=chromPtr->next,i++)
+    {
+    struct bed *bedListConstr, *bed;
+    int count;
+    getFullTableName(fullTableName, chromPtr->name, table);
+    bedListConstr = getBedList(FALSE, chrom);
+    count = slCount(bedListConstr);
+    itemCounts[0] += count;
+    itemCounts[i] = count;
+    if (count > 0)
+	{
+	struct featureBits *fbList =
+	    fbFromBed("out", hti, bedListConstr, winStart, winEnd,
+		      FALSE, FALSE);
+	int chromSize = hChromSize(chrom);
+	Bits *bits = bitAlloc(chromSize+8);
+	fbOrBits(bits, chromSize, fbList, 0);
+	count = bitCountRange(bits, 0, chromSize);
+	bitFree(&bits);
+	}
+    else
+	count = 0;
+    bitCounts[0] += count;
+    bitCounts[i] = count;
+    if ((constraints != NULL) || ((table2 != NULL) && (constraints2 != NULL)))
+	{
+	struct bed *bedListUnc = getBedList(TRUE, chrom);
+	count = slCount(bedListUnc);
+	itemUncCounts[0] += count;
+	itemUncCounts[i] = count;
+	}
+    if (itemCounts[i] > 0)
+	{
+	chromLengthArrs[i] = needMem(itemCounts[i] * sizeof(int));
+	for (bed=bedListConstr, j=0;  bed != NULL;  bed=bed->next, j++)
+	    chromLengthArrs[i][j] = bed->chromEnd - bed->chromStart;
+	intStatsFromArr(chromLengthArrs[i], itemCounts[i],
+			&(chromLengthStats[i]));
+	if (hti->scoreField[0] != 0)
+	    {
+	    scoreArrs[i] = needMem(itemCounts[i] * sizeof(int));
+	    for (bed=bedListConstr, j=0;  bed != NULL;  bed=bed->next, j++)
+		scoreArrs[i][j] = bed->score;
+	    intStatsFromArr(scoreArrs[i], itemCounts[i], &(scoreStats[i]));
+	    }
+	if (hti->strandField[0] != 0)
+	    {
+	    for (bed=bedListConstr;  bed != NULL;  bed=bed->next)
+		{
+		if (bed->strand[0] == '+')
+		    {
+		    strandPCounts[0]++;
+		    strandPCounts[i]++;
+		    }
+		else if (bed->strand[0] == '-')
+		    {
+		    strandMCounts[0]++;
+		    strandMCounts[i]++;
+		    }
+		else
+		    {
+		    strandQCounts[0]++;
+		    strandQCounts[i]++;
+		    }
+		}
+	    }
+	if (hti->hasCDS)
+	    {
+	    utr5Arrs[i] = needMem(itemCounts[i] * sizeof(int));
+	    cdsArrs[i]  = needMem(itemCounts[i] * sizeof(int));
+	    utr3Arrs[i] = needMem(itemCounts[i] * sizeof(int));
+	    getBedBaseCounts(bedListConstr, hti->hasBlocks,
+			     utr5Arrs[i], cdsArrs[i], utr3Arrs[i]);
+	    intStatsFromArr(utr5Arrs[i], itemCounts[i], &(utr5Stats[i]));
+	    intStatsFromArr(cdsArrs[i],  itemCounts[i], &(cdsStats[i]));
+	    intStatsFromArr(utr3Arrs[i], itemCounts[i], &(utr3Stats[i]));
+	    }
+	if (hti->hasBlocks)
+	    {
+	    blockCountArrs[i] = needMem(itemCounts[i] * sizeof(int));
+	    blockSizeArrs[i]  = needMem(itemCounts[i] * sizeof(int));
+	    for (bed=bedListConstr, j=0;  bed != NULL;  bed=bed->next, j++)
+		{
+		int k, totalSize = 0;
+		if (bed->blockCount < 1)
+		    errAbort("Illegal bed: appears to have blocks, but blockCount is %d (%s\t%d\t%d\t%s...)",
+			     bed->blockCount, bed->chrom, bed->chromStart,
+			     bed->chromEnd, bed->name);
+		blockCountArrs[i][j] = bed->blockCount;
+		for (k=0;  k < bed->blockCount;  k++)
+		    totalSize += bed->blockSizes[k];
+		// we lose some granularity here, but not too much...
+		blockSizeArrs[i][j] = round(totalSize / bed->blockCount);
+		}
+	    intStatsFromArr(blockCountArrs[i], itemCounts[i],
+			    &(blockCountStats[i]));
+	    intStatsFromArr(blockSizeArrs[i], itemCounts[i],
+			    &(blockSizeStats[i]));
+	    }
+	}
+    }
+
+getCumulativeStats(chromLengthArrs, itemCounts, numChroms,
+		   chromLengthStats);
+if (hti->scoreField[0] != 0)
+    getCumulativeStats(scoreArrs, itemCounts, numChroms, scoreStats);
+if (hti->hasCDS)
+    {
+    getCumulativeStats(utr5Arrs, itemCounts, numChroms, utr5Stats);
+    getCumulativeStats(cdsArrs,  itemCounts, numChroms, cdsStats);
+    getCumulativeStats(utr3Arrs, itemCounts, numChroms, utr3Stats);
+    }
+if (hti->hasBlocks)
+    {
+    getCumulativeStats(blockCountArrs, itemCounts, numChroms, blockCountStats);
+    getCumulativeStats(blockSizeArrs, itemCounts, numChroms, blockSizeStats);
+    }
+
+puts("<TABLE BORDER=\"1\">");
+puts("<TR><TH>statistic</TH><TH>total</TH>");
+if (numCols > 1)
+    for (chromPtr=chromList;  chromPtr != NULL;  chromPtr=chromPtr->next)
+	printf("<TH>%s</TH>", chromPtr->name);
+puts("</TR>");
+puts("<TR><TD>number of items matching query</TD>");
+for (i=0;  i < numCols;  i++)
+    printf("<TD>%d</TD>", itemCounts[i]);
+puts("</TR>");
+puts("<TR><TD>number of bases covered by matching items</TD>");
+for (i=0;  i < numCols;  i++)
+    printf("<TD>%d</TD>", bitCounts[i]);
+puts("</TR>");
+if ((constraints != NULL) || ((table2 != NULL) && (constraints2 != NULL)))
+    {
+    puts("<TR><TD>number of items without constraints</TD>");
+    for (i=0;  i < numCols;  i++)
+	printf("<TD>%d</TD>", itemUncCounts[i]);
+    puts("</TR>");
+    }
+if (itemCounts[0] > 0)
+    {
+    if (hti->strandField[0] != 0)
+	{
+	puts("<TR><TD>number of items on strand: <br>+<br>-<br>?</TD>");
+	for (i=0;  i < numCols;  i++)
+	    printf("<TD><br>%d<br>%d<br>%d</TD>",
+		   strandPCounts[i], strandMCounts[i], strandQCounts[i]);
+	puts("</TR>");
+	}
+    puts("<TR><TD>(chromEnd - chromStart): <br>min<br>avg<br>max<br>stdev</TD>");
+    for (i=0;  i < numCols;  i++)
+	printf("<TD><br>%d<br>%.2f<br>%d<br>%.2f</TD>",
+	       chromLengthStats[i].min, chromLengthStats[i].avg,
+	       chromLengthStats[i].max, chromLengthStats[i].stdev);
+    puts("</TR>");
+    if (hti->scoreField[0] != 0)
+	{
+	puts("<TR><TD>score: <br>min<br>avg<br>max<br>stdev</TD>");
+	for (i=0;  i < numCols;  i++)
+	    printf("<TD><br>%d<br>%.2f<br>%d<br>%.2f</TD>",
+		   scoreStats[i].min, scoreStats[i].avg,
+		   scoreStats[i].max, scoreStats[i].stdev);
+	puts("</TR>");
+	}
+    if (hti->hasCDS != 0)
+	{
+	puts("<TR><TD>number of bases in 5\' UTR: <br>min<br>avg<br>max<br>stdev</TD>");
+	for (i=0;  i < numCols;  i++)
+	    printf("<TD><br>%d<br>%.2f<br>%d<br>%.2f</TD>",
+		   utr5Stats[i].min, utr5Stats[i].avg,
+		   utr5Stats[i].max, utr5Stats[i].stdev);
+	puts("</TR>");
+	puts("<TR><TD>number of bases in CDS: <br>min<br>avg<br>max<br>stdev</TD>");
+	for (i=0;  i < numCols;  i++)
+	    printf("<TD><br>%d<br>%.2f<br>%d<br>%.2f</TD>",
+		   cdsStats[i].min, cdsStats[i].avg,
+		   cdsStats[i].max, cdsStats[i].stdev);
+	puts("</TR>");
+	puts("<TR><TD>number of bases in 3\' UTR: <br>min<br>avg<br>max<br>stdev</TD>");
+	for (i=0;  i < numCols;  i++)
+	    printf("<TD><br>%d<br>%.2f<br>%d<br>%.2f</TD>",
+		   utr3Stats[i].min, utr3Stats[i].avg,
+		   utr3Stats[i].max, utr3Stats[i].stdev);
+	puts("</TR>");
+	}
+    if (hti->hasBlocks != 0)
+	{
+	puts("<TR><TD>number of exons (blocks): <br>min<br>avg<br>max<br>stdev</TD>");
+	for (i=0;  i < numCols;  i++)
+	    printf("<TD><br>%d<br>%.2f<br>%d<br>%.2f</TD>",
+		   blockCountStats[i].min, blockCountStats[i].avg,
+		   blockCountStats[i].max, blockCountStats[i].stdev);
+	puts("</TR>");
+	puts("<TR><TD>number of bases per exon (block): <br>min<br>avg<br>max<br>stdev</TD>");
+	for (i=0;  i < numCols;  i++)
+	    printf("<TD><br>%d<br>%.2f<br>%d<br>%.2f</TD>",
+		   blockSizeStats[i].min, blockSizeStats[i].avg,
+		   blockSizeStats[i].max, blockSizeStats[i].stdev);
+	puts("</TR>");
+	}
+    }
+puts("</TABLE>");
+freez(&(chromLengthArrs[0]));
+freez(&chromLengthArrs);
+freez(&chromLengthStats);
+if (hti->scoreField[0] != 0)
+    freez(&(scoreArrs[0]));
+freez(&scoreArrs);
+freez(&scoreStats);
+if (hti->hasCDS)
+    {
+    freez(&(utr5Arrs[0]));
+    freez(&(cdsArrs[0]));
+    freez(&(utr3Arrs[0]));
+    }
+if (hti->hasBlocks)
+    {
+    freez(&(blockCountArrs[0]));
+    freez(&(blockSizeArrs[0]));
+    }
+freez(&utr5Arrs);
+freez(&utr5Stats);
+freez(&cdsArrs);
+freez(&cdsStats);
+freez(&utr3Arrs);
+freez(&utr3Stats);
+freez(&blockCountArrs);
+freez(&blockCountStats);
+freez(&blockSizeArrs);
+freez(&blockSizeStats);
+freez(&itemCounts);
+freez(&bitCounts);
+freez(&itemUncCounts);
+freez(&strandPCounts);
+freez(&strandMCounts);
+freez(&strandQCounts);
+webEnd();
+}
+
+
+void doGetStats()
+/* Print out statistics about the query results. */
+{
+if (tableIsPositional)
+    doGetStatsPositional();
+else
+    doGetStatsNonpositional();
+}
 
 void doMiddle(struct cart *theCart)
 /* the main body of the program */
@@ -3502,6 +4103,8 @@ else
 	    doBedOptions();
 	else if (existsAndEqual("outputType", linksPhase))
 	    doGetBrowserLinks();
+	else if (existsAndEqual("outputType", statsPhase))
+	    doGetStats();
 	else
 	    webAbort("Table Browser: CGI option error",
 		     "Error: unrecognized value of CGI var outputType: %s",
@@ -3526,6 +4129,8 @@ else
 	doGetBed();
     else if (existsAndEqual("phase", linksPhase))
 	doGetBrowserLinks();
+    else if (existsAndEqual("phase", statsPhase))
+	doGetStats();
     else if (existsAndEqual("phase", intersectOptionsPhase))
 	doIntersectOptions();
     else
