@@ -3167,4 +3167,262 @@ cat << 'EOF' > makeMaf.csh
     nice rm axtChain/run1/chain/* &
     nice gzip {axt,psl}Chrom/* lav/*/* axtChain/{all.chain,*.net} &
 
+# UPDATE BACEND SEQUENCES (DONE - 2004-07-20 - Fan)
+
+    # Download new files
+    ssh kksilo
+    mkdir –p /cluster/data/mm5/bed/bacends/ncbi
+    cd /cluster/data/mm5/bed/bacends/ncbi
+    wget ftp://ftp.ncbi.nih.gov/genomes/M_musculus/BACENDS/AllBACends.mfa.gz
+    wget ftp://ftp.ncbi.nih.gov/genomes/M_musculus/BACENDS/cl_acc_gi_len.gz
+    wget ftp://ftp.ncbi.nih.gov/genomes/M_musculus/BACENDS/README
+    gunzip AllBACends.mfa.gz
+    gunzip cl_acc_gi_len.gz
+
+    # Convert fa file
+    cat << '_EOF_' > convert.pl
+#!/usr/local/bin/perl -w
+
+use strict;
+
+while (my $line = <>) {
+    if (substr($line,0,1) ne ">") {
+        print $line;
+    } else {
+        my @fields = split(/\|/, $line);
+        my $printed = 0;
+        for (my $i = 0; $i < $#fields; $i++) {
+                if ($fields[$i] eq "gb") {
+                        (my $name, my $vers) = split(/\./,$fields[$i+1]);
+                        print ">$name\n";
+                        $i= $#fields;
+                        $printed = 1;
+                }
+        }
+        if (!$printed) {
+                die("Failed for $line\n");
+        }
+    }
+}
+'_EOF_'
+    chmod +x convert.pl
+    ./convert.pl < AllBACends.mfa > BACends.fa
+
+    # Create new pairs files
+    convertBacEndPairInfo cl_acc_gi_len
+
+    # Split file into pieces and copy to cluster to propagate
+    ssh kksilo
+    cd /cluster/data/mm5/bed/bacends/ncbi
+    /cluster/bin/i386/faSplit sequence BACends.fa 100 BACends
+    rm -rf /cluster/bluearc/scratch/mus/mm5/bacEnds
+    mkdir /cluster/bluearc/scratch/mus/mm5/bacEnds
+    mv BACends???.fa /cluster/bluearc/scratch/mus/mm5/bacEnds
+    cp -p BACends.fa /cluster/bluearc/scratch/mus/mm5/bacEnds
+
+    # Ask for propagation from sysadmin
+
+    # Load the sequences (change bacends.# to match correct location)
+    ssh hgwdev
+    mkdir /gbdb/mm5/bacends
+    cd /gbdb/mm5/bacends
+    ln -s /cluster/data/mm5/bed/bacends/ncbi/BACends.fa .
+    cd /tmp
+    hgLoadSeq mm5 /gbdb/mm5/bacends/BACends.fa
+    #Adding /gbdb/mm5/bacends/BACends.fa
+    #452237 sequences
+    #Updating seq table
+    #All done
+
+# BACEND SEQUENCE ALIGNMENTS (DONE - 2004-07-23 - Fan)
+    # (alignments done without RepeatMasking)
+    #	We need an ooc file for this genome
+    ssh kksilo
+    mkdir /cluster/data/mm5/ooc
+    cd /cluster/data/mm5/ooc
+    ls ../unmaskedNib/chr*.nib > nib.list
+    blat -makeOoc=11.ooc -repMatch=1024 nib.list nib.list output.psl
+    # Wrote 26077 overused 11-mers to 11.ooc
+    # Did not end using this.  Used an old one instead.
+
+    # Create full sequence alignments
+    ssh kk
+    cd /cluster/data/mm5/bed/bacends
+
+    /cluster/bin/scripts/splitContigList -scratch 
+/iscratch/i/mus/mm5/maskedContigs 1
+
+    # allow blat to run politely in /tmp while it writes output, then
+    # copy results to results file:
+
+    cat << '_EOF_' > runBlat.sh
+#!/bin/sh
+path1=$1
+path2=$2
+root1=$3
+root2=$4
+result=$5
+rm -fr /tmp/${root1}_${root2}
+mkdir /tmp/${root1}_${root2}
+pushd /tmp/${root1}_${root2}
+/cluster/bin/i386/blat ${path1} ${path2} -ooc=/scratch/hg/h/mouse11.ooc \
+	${root1}.${root2}.psl
+popd
+rm -f ${result}
+mv /tmp/${root1}_${root2}/${root1}.${root2}.psl ${result}
+rm -fr /tmp/${root1}_${root2}
+'_EOF_'
+    # << this line keeps emacs coloring happy
+    chmod +x runBlat.sh
+
+    cat << '_EOF_' > template
+#LOOP
+./runBlat.sh {check in exists $(path1)} {check in exists $(path2)} $(root1) 
+$(root2) {check out line+ bacEnds.out/$(root2)/$(root1).$(root2).psl}
+#ENDLOOP
+'_EOF_'
+    #ls -1S /iscratch/i/mm5/bacEnds/BACends???.fa > bacEnds.lst
+    ls -1S /scratch/mus/mm5/bacEnds/BACends???.fa > bacEnds.lst
+    mkdir bacEnds.out
+    #	create results directories for each to avoid the all result files in
+    #	one directory problem
+    foreach f (`cat bacEnds.lst`)
+	set b = $f:t:r
+	echo $b
+	mkdir bacEnds.out/$b
+    end
+
+    gensub2 contig.lst bacEnds.lst template jobList
+    para create jobList
+    # 62622 jobs written to batch
+    para try, check, push, etc ...
+
+# Completed: 62622 of 62622 jobs
+# CPU time in finished jobs:    3760354s   62672.57m  1044.54h   43.52d  0.119 y
+# IO & Wait Time:               3216480s   53608.00m   893.47h   37.23d  0.102 y
+# Average job time:                 111s       1.86m     0.03h    0.00d
+# Longest job:                     2841s      47.35m     0.79h    0.03d
+# Submission to last job:          9395s     156.58m     2.61h    0.11d
+
+# Compile alignments and lift the files.
+# First attempt failed due to /cluster/store6 ran out of space.
+# Redoing it 7/22/04.
+
+    ssh kksilo
+    cd /cluster/data/mm5/bed/bacends
+
+    mkdir /cluster/store8/fanTemp
+    time pslSort dirs raw.psl /cluster/store8/fanTemp bacEnds.out/* \
+      > time.out &
+
+    # This may take over over 14 hours!
+
+    ssh kolossus
+    cd /cluster/data/mm5/bed/bacends
+
+    time pslReps -nearTop=0.01 -minCover=0.7 -minAli=0.8 -noIntrons raw.psl  
+bacEnds.psl /dev/null
+# Processed 562840490 alignments
+
+    rmdir temp
+    #	You will want to keep this file around until later processing is
+    #	proven correct
+    rm raw.psl		# 72 Gb !  It takes a while even to remove it.
+
+    ssh kksilo
+    cd /cluster/data/mm5/bed/bacends
+
+    time /cluster/bin/scripts/lifter -psl -mouse /cluster/data/mm5 bacEnds.psl 
+    # real    130m36.149s
+    # user    82m38.180s
+    # sys     10m59.580s
+
+    cp -p ~booch/clusterJobs/bacends/split.pl .
+    cp -p ~booch/clusterJobs/bacends/header .
+    time ./split.pl header < bacEnds.psl.lifted
+    # real    2m16.354s
+    # user    0m36.390s
+    # sys     0m42.290s
+
+    cp -p bacEnds.psl.lifted bacEnds.psl.lifted.save
+    time pslSort dirs bacEnds.psl.lifted temp split
+
+    # real    17m2.353s
+    # user    14m17.040s
+    # sys     1m38.560s
+
+    rmdir temp
+    rm -r split
+
+    # Copy files to final destination and remove
+    mkdir /cluster/data/mm5/bacends
+    cp -p bacEnds.psl.lifted /cluster/data/mm5/bacends
+
+# BACEND PAIRS TRACK (DONE  2004-07-27 - Fan)
+
+    ssh kolossus
+    cd /cluster/data/mm5/bacends
+
+bash
+time /cluster/bin/x86_64/pslPairs -tInsert=10000 -minId=0.91 -noBin -min=25000 \
+-max=350000 -slopval=10000 -hardMax=500000 -slop -short -long -orphan \
+-mismatch -verbose bacEnds.psl.lifted \
+	../bed/bacends/ncbi/bacEndPairs.txt all_bacends bacEnds
+
+    # create header required by "rdb" tools
+    echo 'chr\tstart\tend\tclone\tscore\tstrand\tall\tfeatures\tstarts\tsizes' > 
+header
+    echo '10\t10N\t10N\t10\t10N\t10\t10\t10N\t10\t10' >> header
+    # edit header to make sure \t is/become tab character
+
+    cat header bacEnds.pairs | row score ge 300 | sorttbl chr start | headchg -
+del > bacEndPairs.bed
+    cat header  bacEnds.slop bacEnds.short bacEnds.long bacEnds.mismatch 
+bacEnds.orphan \
+        | row score ge 300 | sorttbl chr start | headchg -del > 
+bacEndPairsBad.bed
+
+# The following took too long, break it into 3 steps.
+#    extractPslLoad -noBin bacEnds.psl.lifted bacEndPairs.bed \
+#    bacEndPairsBad.bed | sorttbl tname tstart | headchg -del > bacEnds.load.psl
+
+    extractPslLoad -noBin bacEnds.psl.lifted bacEndPairs.bed   \
+    bacEndPairsBad.bed >j1.out
+    cat j1.out| sorttbl tname tstart >j2.out
+    cat j2.out | headchg -del > bacEnds.load.psl
+
+    rm j1.out j2.out
+
+    # load into database
+    ssh hgwdev
+    cd /cluster/data/mm5/bacends
+
+    # edit bacEndPairs.bed to fix one ID that has a blank character in it.
+    hgLoadBed mm5 bacEndPairs bacEndPairs.bed \
+                 -sqlTable=/cluster/home/kate/kent/src/hg/lib/bacEndPairs.sql
+        # Loaded 168535
+    # note - this track isn't pushed to RR, just used for assembly QA
+    hgLoadBed mm5 bacEndPairsBad bacEndPairsBad.bed \
+                 -sqlTable=/cluster/home/kate/kent/src/hg/lib/bacEndPairsBad.sql
+        # Loaded 43182
+    #hgLoadPsl mm5 -nobin -table=all_bacends bacEnds.load.psl
+    # NOTE: truncates file to 0 if -nobin is used
+    hgLoadPsl mm5 -table=all_bacends bacEnds.load.psl
+    # load of all_bacends did not go as planned: 14426473 record(s), 0 row(s) 
+skipped, 4519 warning(s) loading psl.tab
+    
+# featureBits mm5 all_bacends
+# 268502414 bases of 2615483787 (10.266%) in intersection
+# featureBits mm4 all_bacends
+# 243096171 bases of 2627444668 (9.252%) in intersection
+
+# featureBits mm5 bacEndPairs
+# 2567958504 bases of 2615483787 (98.183%) in intersection
+# featureBits mm4 bacEndPairs
+# 2549945356 bases of 2627444668 (97.050%) in intersection
+
+# featureBits mm5 bacEndPairsBad
+# 541027882 bases of 2615483787 (20.686%) in intersection
+# featureBits mm4 bacEndPairsBad
+# 1074505863 bases of 2627444668 (40.895%) in intersection
 
