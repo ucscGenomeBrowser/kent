@@ -286,6 +286,7 @@ boolean hasBin;
 char t[512], *s;
 char table[512];
 boolean isSplit;
+
 isolateTrackPartOfSpec(track, t);
 s = strrchr(t, '.');
 if (s != NULL)
@@ -476,7 +477,7 @@ else
         {
 	chromFeatureSeq(conn, chrom->name, tables[0],
 		bedFile, faFile, &itemCount, &baseCount);
-	totalBases += baseCount;
+	totalBases += countBases(conn, chrom->name, baseCount);
 	totalItems += itemCount;
 	}
     }
