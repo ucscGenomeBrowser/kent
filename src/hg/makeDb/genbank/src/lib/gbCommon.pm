@@ -36,7 +36,7 @@ BEGIN {
     # under gbRoot/bin/i386.  Use path to this script to find bin dir. Can't
     # use MACHTYPE as it is i686-pc-linux-gnu on the cluster.
     
-    my $rootDir = "$FindBin::Bin/..";
+    my $rootDir = dirname($FindBin::Bin);
     my $newPath;
     my $arch;
     if (defined($main::ENV{MACHTYPE})) {
@@ -45,7 +45,7 @@ BEGIN {
         $arch = "i386";  # FIXME: hack for cron.
     }
     $newPath .= "$rootDir/bin:$rootDir/bin/$arch:/cluster/bin/$arch";
-    $main::ENV{PATH} = $newPath . $main::ENV{PATH};
+    $main::ENV{PATH} = $newPath . ":" . $main::ENV{PATH};
 
     # also allow for shared libraries in lib/$arch
     if (defined($main::ENV{LD_LIBRARY_PATH})) {
