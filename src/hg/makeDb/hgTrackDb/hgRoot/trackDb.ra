@@ -363,9 +363,9 @@ type bed 6
 
 track triangle
 shortLabel Golden Extra
-longLabel Golden Triangle Extrapolated Transcription Factor Binding Sites
+longLabel Golden Triangle Motif Matching Sites Near Transcription Start
 priority 18.3
-visibility dense
+visibility hide
 spectrum on
 type bed 6
 
