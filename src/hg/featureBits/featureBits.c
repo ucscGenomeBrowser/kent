@@ -14,7 +14,7 @@
 #include "agpGap.h"
 #include "chain.h"
 
-static char const rcsid[] = "$Id: featureBits.c,v 1.19 2003/05/23 15:16:58 kent Exp $";
+static char const rcsid[] = "$Id: featureBits.c,v 1.20 2003/08/04 17:28:46 kate Exp $";
 
 int minSize = 1;	/* Minimum size of feature. */
 char *clChrom = "all";	/* Which chromosome. */
@@ -56,7 +56,7 @@ errAbort(
   "The tables can be bed, psl, or chain files, or a directory full of\n"
   "such files as well as actual database tables.  To count the bits\n"
   "used in dir/chrN_something*.bed you'd do:\n"
-  "   featureBits dir/something.bed\n"
+  "   featureBits database dir/_something.bed\n"
   );
 }
 
