@@ -12,7 +12,7 @@
 #include "cda.h"
 #include "seqOut.h"
 
-static char const rcsid[] = "$Id: fuzzyShow.c,v 1.13 2003/05/12 17:12:49 booch Exp $";
+static char const rcsid[] = "$Id: fuzzyShow.c,v 1.14 2004/01/08 00:21:24 braney Exp $";
 
 int ffShAliPart(FILE *f, struct ffAli *aliList, 
     char *needleName, DNA *needle, int needleSize, int needleNumOffset,
@@ -188,7 +188,7 @@ if (showSideBySide)
     fprintf(f, "<TT><PRE>\n");
     lastAli = NULL;
     charsInLine = 0;
-    bafInit(&baf, needle, 0, FALSE, 
+    bafInit(&baf, needle, needleNumOffset, FALSE, 
     	haystack, hayNumOffset, rcHaystack, f, 50, FALSE);
     for (ali=leftAli; ali!=NULL; ali = ali->right)
 	{
