@@ -217,6 +217,7 @@ exit; # don't actually run this like a script :)
     cd ~/hg15
     mkdir contigOut
     cd contigOut
+    mkdir split
     foreach d (../contigs/NT_* )
       set contig = $d:t
       faSplit size ../contigs/$contig 500000 split/${contig}_ -lift=split/$contig.lft \
@@ -271,15 +272,16 @@ exit; # don't actually run this like a script :)
     hgLoadOut hg15 ?/*.fa.out ??/*.fa.out
 
 
-# VERIFY REPEATMASKER RESULTS (TO DO)
+# VERIFY REPEATMASKER RESULTS (DONE 041103)
 
     # Run featureBits on hg15 and on a comparable genome build, and compare:
     ssh hgwdev
+
     featureBits hg15 rmsk
-    # --> 1384772888 bases of 3060248386 (45.250%) in intersection
+    # --> 1386879340 bases of 2866468600 (48.383%) in intersection
 
     featureBits hg13 rmsk
-    # --> 1383216615 bases of 3070074689 (45.055%) in intersection
+    # --> 1383216615 bases of 2860907679 (48.349%) in intersection
 
     # Validate the RepeatMasking by randomly selecting a few NT_*.fa files, 
     # manually repeat masking them and matching the .out files with the 
@@ -499,12 +501,15 @@ exit; # don't actually run this like a script :)
     # Chrom-level mixed nibs that have been repeat- and trf-masked:
     rm -rf /scratch/hg/gs.16/build33/chromTrfMixedNib
     mkdir -p /scratch/hg/gs.16/build33/chromTrfMixedNib
-    cp -p mixedNib/chr*.nib /scratch/hg/gs.16/build33/chromTrfMixedNib
+    cd ~/hg15
+    cp -p nib/chr*.nib /scratch/hg/gs.16/build33/chromTrfMixedNib
+
     # Ask cluster-admin@cse.ucsc.edu to binrsync /scratch/hg to clusters
     # Copy to /iscratch as well so we can run blastz before binrsync finishes:
-    rm -rf /iscratch/i/gs.16/build33/{linSpecRep,rmsk,chromTrfMixedNib}
+???- why is this step here? ->    rm -rf /iscratch/i/gs.16/build33/{linSpecRep,rmsk,chromTrfMixedNib}
     cp -Rp /scratch/hg/gs.16/build33/{linSpecRep,rmsk,chromTrfMixedNib} \
       /iscratch/i/gs.16/build33/
+RSYNC IN PROGRESS - DONE TO HERE - MATT
     ssh kkr1u00
     ~kent/bin/iSync
 
@@ -632,7 +637,7 @@ exit; # don't actually run this like a script :)
     ln -s /cluster/store5/mrna.134/refSeq/041003/org/Homo_sapiens/refSeq.fa
     # Load the refSeq mRNA
     cd /cluster/store2/tmp
-    ~kent/bin/i386/hgLoadRna add -type=refSeq hg15 /gbdb/hg15/mrna.134/refSeq.fa \
+    hgLoadRna add -type=refSeq hg15 /gbdb/hg15/mrna.134/refSeq.fa \
       /cluster/store5/mrna.134/refSeq/041003/org/Homo_sapiens/refSeq.ra
     cd ~/hg15/bed/refSeq
     hgRefSeqMrna hg15 /gbdb/hg15/mrna.134/refSeq.fa \
@@ -671,13 +676,13 @@ exit; # don't actually run this like a script :)
     ln -s /cluster/store5/mrna.134/humanXenoEst.fa
     # Store the sequence (non-alignment) info in database.
     cd /cluster/store2/tmp
-    ~kent/bin/i386/hgLoadRna add -type=mRNA hg15 /gbdb/hg15/mrna.134/mrna.fa \
+    hgLoadRna add -type=mRNA hg15 /gbdb/hg15/mrna.134/mrna.fa \
       /cluster/store5/mrna.134/org/Homo_sapiens/mrna.ra
-    ~kent/bin/i386/hgLoadRna add -type=EST hg15 /gbdb/hg15/mrna.134/est.fa \
+    hgLoadRna add -type=EST hg15 /gbdb/hg15/mrna.134/est.fa \
       /cluster/store5/mrna.134/org/Homo_sapiens/est.ra
-    ~kent/bin/i386/hgLoadRna add -type=xenoRna hg15 /gbdb/hg15/mrna.134/humanXenoRna.fa \
+    hgLoadRna add -type=xenoRna hg15 /gbdb/hg15/mrna.134/humanXenoRna.fa \
       /cluster/store5/mrna.134/humanXenoRna.ra
-    ~kent/bin/i386/hgLoadRna add -type=xenoEst hg15 /gbdb/hg15/mrna.134/humanXenoEst.fa \
+    hgLoadRna add -type=xenoEst hg15 /gbdb/hg15/mrna.134/humanXenoEst.fa \
       /cluster/store5/mrna.134/humanXenoEst.ra
 
 
@@ -777,7 +782,7 @@ mrna is done against unmasked 041203
     cd ~/hg15/bed/mrnaOrientInfo
     ls -1S /iscratch/i/gs.16/build33/bed/mrna/*.psl > psl.lst
     ls -1S /iscratch/i/mrna.134/Homo_sapiens/mrna*.fa > mrna.lst
-    cp ~/hg13/bed/mrnaOrientInfo/gsub .
+    cp ~/hg14/bed/mrnaOrientInfo/gsub .
     # Edit gsub to point to the correct paths.
     gensub2 psl.lst mrna.lst gsub spec
     para create spec
@@ -799,13 +804,14 @@ mrna is done against unmasked 041203
       mkdir oi/$f:t:r
     end
     ls -1S /iscratch/i/gs.16/build33/bed/est/*.psl > psl.lst
-    ls -1S /iscratch/i/est.134/Homo_sapiens/est*.fa > mrna.lst
-    cp ~/hg13/bed/estOrientInfo/gsub .
+    ls -1S /iscratch/i/mrna.134/Homo_sapiens/est*.fa > mrna.lst
+    cp ~/hg14/bed/estOrientInfo/gsub .
     # Edit gsub to point to the correct paths.
     gensub2 psl.lst mrna.lst gsub spec
     para create spec
     para try 
     para check, para push, para check, ....
+DONE TO HERE - MATT
     # When the cluster run is done do:
     ssh hgwdev
     cd ~/hg15/bed/estOrientInfo
@@ -868,6 +874,8 @@ mrna is done against unmasked 041203
     # big cluster, due to limitation of memory and swap space on each
     # processing node).
     ssh kkr1u00
+    cd ~/hg15
+    cd bed/genscan
     # Create template file, gsub, for gensub2.  For example (3-line file):
 #LOOP    rm -f genome.list
 /cluster/home/kent/bin/i386/gsBig {check in line+ $(path1)} {check out line gtf/$(root1).gtf} -trans={check out line pep/$(root1).pep} -subopt={check out line subopt/$(root1).bed} -exe=/cluster/home/fanhsu/projects/compbio/bin/genscan-linux/genscan -par=/cluster/home/fanhsu/projects/compbio/bin/genscan-linux/HumanIso.smat -tmp=/tmp -window=2400000
@@ -885,7 +893,7 @@ mrna is done against unmasked 041203
     # If there were out-of-memory problems (run "para problems"), then 
     # re-run those jobs by hand but change the -window arg from 2400000
     # to 1200000.  In build33, this was 22/NT_011519.
-
+DONE TO HERE - MATT
     # Convert these to chromosome level files as so:     
     ssh eieio
     cd ~/hg15/bed/genscan
@@ -902,7 +910,7 @@ mrna is done against unmasked 041203
     hgLoadBed hg15 genscanSubopt genscanSubopt.bed > /dev/null
 
 
-# CPGISLANDS (TO DO)
+# CPGISLANDS (DONE 041203)
     ssh eieio
     mkdir -p ~/hg15/bed/cpgIsland
     cd ~/hg15/bed/cpgIsland
@@ -1466,7 +1474,7 @@ CREATE CHROMOSOME REPORTS (TO DO)
     # Sequence info should have already been loaded into database (PRELOAD)
 
 
-# PRODUCING FUGU ALIGNMENTS (TODO)
+# PRODUCING FUGU ALIGNMENTS (DONE 041203)
     # Distribute fugu sequence to /iscratch/i/fugu/ (if it isn't already there)
     ssh kkr1u00
     rm -rf /iscratch/i/fugu
@@ -1483,8 +1491,8 @@ CREATE CHROMOSOME REPORTS (TO DO)
       mkdir -p psl/$c
     end
     ls -1S /iscratch/i/fugu/*.fa > fugu.lst
-    ls -1S /scratch/hg/gs.16/build33/trfFa/*.fa.trf > human.lst
-    cp ~/hg13/bed/blatFugu gsub .
+    ls -1S /scratch/hg/gs.16/build33/trfFa/*.fa > human.lst
+    cp ~/hg14/bed/blatFugu gsub .
     gensub2 human.lst fugu.lst gsub spec
     para create spec
     para try
@@ -1495,7 +1503,7 @@ CREATE CHROMOSOME REPORTS (TO DO)
     # When cluster run is done, sort alignments:
     ssh eieio
     cd ~/hg15/bed/blatFugu
-    pslCat -dir psl/NT_??????.fa | \
+    pslCat -dir psl/NT_?????? | \
       liftUp -type=.psl stdout ~/hg15/jkStuff/liftAll.lft warn stdin | \
       pslSortAcc nohead chrom temp stdin
 
@@ -1508,6 +1516,7 @@ CREATE CHROMOSOME REPORTS (TO DO)
         mv $i ${r}_blatFugu.psl
     end
     hgLoadPsl hg15 *.psl
+
     # Make fugu /gbdb/ symlink and load Fugu sequence data.
     mkdir /gbdb/hg15/fuguSeq
     cd /gbdb/hg15/fuguSeq
