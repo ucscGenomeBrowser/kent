@@ -24,7 +24,7 @@ void axtSort(char *in, char *out, boolean byQuery)
 {
 struct axt *axtList = NULL, *axt;
 struct lineFile *lf = lineFileOpen(in, TRUE);
-FILE *f = mustOpen(out, "w");
+FILE *f;
 
 while ((axt = axtRead(lf)) != NULL)
     {
@@ -34,6 +34,8 @@ if (byQuery)
     slSort(&axtList, axtCmpQuery);
 else
     slSort(&axtList, axtCmpTarget);
+lineFileClose(&lf);
+f = mustOpen(out, "w");
 for (axt = axtList; axt != NULL; axt = axt->next)
     axtWrite(axt, f);
 }
