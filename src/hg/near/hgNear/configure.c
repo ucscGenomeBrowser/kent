@@ -12,7 +12,7 @@
 #include "web.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: configure.c,v 1.31 2003/09/25 08:29:35 kent Exp $";
+static char const rcsid[] = "$Id: configure.c,v 1.32 2003/09/25 08:39:39 kent Exp $";
 
 static char *onOffString(boolean on)
 /* Return "on" or "off". */
@@ -205,32 +205,36 @@ cartSaveSession(cart);
 
 hPrintf("<TABLE BORDER=0 CELLSPACING=1 CELLPADDING=1>\n");
 hPrintf("<TR><TD ALIGN=LEFT>");
-hPrintf("Expression ratio colors: ");
-colorSchemeDropDown();
-hPrintf("Show all splicing variants: ");
-cgiMakeCheckBox(showAllSpliceVarName, 
-	cartUsualBoolean(cart, showAllSpliceVarName, FALSE));
-hPrintf(" ");
+hPrintf("Columns:");
+hPrintf("</TD><TD> ");
+cgiMakeButton(hideAllConfName, "Hide All");
+hPrintf("</TD><TD>");
+cgiMakeButton(showAllConfName, "Show All");
+hPrintf("</TD><TD>");
+cgiMakeButton(defaultConfName, "Default");
+hPrintf("</TD><TD>");
+hPrintf("Settings:");
+hPrintf("</TD><TD>");
+cgiMakeButton(saveCurrentConfName, "Save");
+hPrintf("</TD><TD>");
+cgiMakeOptionalButton(useSavedConfName, "Load", !userSettingsAnySaved(us));
+hPrintf("</TD><TD> ");
+hPrintf("</TD><TD> ");
+hPrintf("</TD><TD>");
 cgiMakeButton("submit", "Submit");
-// hPrintf("</TD></TR><TR><TD>");
 hPrintf("</TD></TR></TABLE>");
 
 // hPrintf("<HR>");
 // hPrintf("<H2>Column Configuration</H2>\n");
 hPrintf("<TABLE BORDER=0 CELLSPACING=1 CELLPADDING=1>\n");
 hPrintf("<TR><TD ALIGN=LEFT>");
-hPrintf("Columns: ");
-cgiMakeButton(hideAllConfName, "Hide All");
-hPrintf(" ");
-cgiMakeButton(showAllConfName, "Show All");
-hPrintf(" ");
-cgiMakeButton(defaultConfName, "Default");
+hPrintf("Expression ratio colors: ");
+colorSchemeDropDown();
 hPrintf("</TD><TD>");
-hPrintf("Settings: ");
-cgiMakeButton(saveCurrentConfName, "Save");
+hPrintf("Show all splicing variants: ");
+cgiMakeCheckBox(showAllSpliceVarName, 
+	cartUsualBoolean(cart, showAllSpliceVarName, FALSE));
 hPrintf(" ");
-cgiMakeOptionalButton(useSavedConfName, "Load", !userSettingsAnySaved(us));
-hPrintf("</TD><TD>");
 hPrintf("</TD></TR></TABLE>");
 configTable(colList, conn);
 hPrintf("</FORM>");
