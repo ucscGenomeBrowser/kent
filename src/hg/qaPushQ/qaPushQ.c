@@ -29,7 +29,7 @@
 #include "dbDb.h"
 #include "htmlPage.h"
 
-static char const rcsid[] = "$Id: qaPushQ.c,v 1.47 2004/06/03 22:06:39 galt Exp $";
+static char const rcsid[] = "$Id: qaPushQ.c,v 1.48 2004/06/04 22:15:53 galt Exp $";
 
 char msg[2048] = "";
 char ** saveEnv;
@@ -2828,7 +2828,9 @@ printf("< - click to move the column to the left.<br>\n");
 printf("> - click to move the column to the right.<br>\n");
 printf("<br>\n");
 printf("^ - click to raise the priority of the record higher within the priority-class.<br>\n");
-printf("v - click to lower the  priority.<br>\n");
+printf("v - click to lower the priority.<br>\n");
+printf("T - click to raise to top priority.<br>\n");
+printf("B - click to lower to bottom priority.<br>\n");
 printf("<br>\n");
 printf("Queue Id - click to edit or see the details page for the record.<br>\n");
 printf("<br>\n");
