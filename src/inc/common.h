@@ -591,9 +591,4 @@ __attribute__((format(printf, 3, 4)))
 #endif
 ;
 
-void itoa (int n, char *buf);
-/* converts an integer to a string. Requres memory be allocated for
- * buf and doesn' check for overflow. */    
- 
-
 #endif /* COMMON_H */

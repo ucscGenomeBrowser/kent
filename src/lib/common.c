@@ -1365,25 +1365,3 @@ sz = vasafef(buffer, bufSize, format, args);
 va_end(args);
 return sz;
 }
-
-/*converts an integer to a string (the opposite of atoi)*/
-/*this itoa was written by Ethan Miller -> for DLXos*/
-void itoa (int n, char *buf)
-{
-    int     k;
-    if (n < 0) 
-    {
-        *(buf++) = '-';
-        n = -n;
-    } else if (n == 0) {
-        *(buf++) = '0';
-    } else {
-        for (k = 1; k <= n; k *= 10) { }
-        do 
-        {
-        k /= 10;
-        *(buf++) = (n / k) + '0'; 
-        n %= k; 
-        } while (k > 1);
-    } *buf = '\0';
-}
