@@ -260,8 +260,10 @@ void bafOut(struct baf *baf, char n, char h)
 {
 baf->nChars[baf->cix] = n;
 baf->hChars[baf->cix] = h;
-baf->nCurPos += 1;
-baf->hCurPos += 1;
+if (n != '.' && n != '-')
+    baf->nCurPos += 1;
+if (h != '.' && h != '-')
+    baf->hCurPos += 1;
 if (++(baf->cix) >= baf->lineSize)
     {
     bafWriteLine(baf);

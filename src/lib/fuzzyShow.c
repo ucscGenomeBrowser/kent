@@ -165,26 +165,23 @@ if (showSideBySide)
 	    {
 	    int nSkip = ali->nStart - lastAli->nEnd;
 	    int hSkip = ali->hStart - lastAli->hEnd;
-	    if (nSkip >= 0 && hSkip >= 0 && nSkip <= blockMaxGap && hSkip <= blockMaxGap)
+	    if (nSkip > 0 && nSkip <= blockMaxGap && hSkip == 0)
 		{
-		if (nSkip > 0 && hSkip == 0)
-		    {
-		    for (i=0; i<nSkip; ++i)
-			bafOut(&baf, lastAli->nEnd[i],'.');
-		    doBreak = FALSE; 
-		    }
-		if (hSkip > 0 && nSkip == 0)
-		    {
-		    for (i=0; i<hSkip; ++i)
-			bafOut(&baf, '.', lastAli->hEnd[i]);
-		    doBreak = FALSE;
-		    }
-		if (hSkip == nSkip)
-		    {
-		    for (i=0; i<hSkip; ++i)
-			bafOut(&baf, lastAli->nEnd[i], lastAli->hEnd[i]);
-		    doBreak = FALSE;
-		    }
+		for (i=0; i<nSkip; ++i)
+		    bafOut(&baf, lastAli->nEnd[i],'.');
+		doBreak = FALSE; 
+		}
+	    else if (hSkip > 0 && hSkip <= blockMaxGap && nSkip == 0)
+		{
+		for (i=0; i<hSkip; ++i)
+		    bafOut(&baf, '.', lastAli->hEnd[i]);
+		doBreak = FALSE;
+		}
+	    else if (hSkip == nSkip && hSkip <= blockMaxGap)
+		{
+		for (i=0; i<hSkip; ++i)
+		    bafOut(&baf, lastAli->nEnd[i], lastAli->hEnd[i]);
+		doBreak = FALSE;
 		}
 	    }
 	else
@@ -215,8 +212,7 @@ return anchorCount;
 int ffShAli(FILE *f, struct ffAli *aliList, 
     char *needleName, DNA *needle, int needleSize, int needleNumOffset,
     char *haystackName, DNA *haystack, int haySize, int hayNumOffset,
-    int blockMaxGap,
-    boolean rcNeedle)
+    int blockMaxGap, boolean rcNeedle)
 /* Display allignment on html page.  Returns number of blocks (after
  * merging blocks separated by blockMaxGap or less). */
 {
