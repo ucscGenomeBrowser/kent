@@ -129,7 +129,7 @@ void mgClearPixels(struct memGfx *mg)
 zeroBytes(mg->pixels, mg->width*mg->height);
 }
 
-Color _mgFindColor(struct memGfx *mg, unsigned char r, unsigned char g, unsigned char b)
+Color mgFindColor(struct memGfx *mg, unsigned char r, unsigned char g, unsigned char b)
 /* Returns closest color in color map to rgb values.  If it doesn't
  * already exist in color map and there's room, it will create
  * exact color in map. */
@@ -140,12 +140,6 @@ if ((che = colHashLookup(mg->colorHash, r, g, b)) != NULL)
 if (mgColorsFree(mg))
     return mgAddColor(mg, r, g, b);
 return mgClosestColor(mg, r, g, b);
-}
-
-Color mgFindColor(struct memGfx *mg, unsigned char r, unsigned char g, unsigned char b)
-{
-Color c = _mgFindColor(mg, r, g, b);
-return c;
 }
 
 Color mgClosestColor(struct memGfx *mg, unsigned char r, unsigned char g, unsigned char b)

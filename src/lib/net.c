@@ -23,16 +23,22 @@ return sd;
 static boolean netFillInAddress(char *hostName, int port, struct sockaddr_in *address)
 /* Fill in address. Return FALSE if can't.  */
 {
-struct hostent *hostent = gethostbyname(hostName);
+struct hostent *hostent;
 ZeroVar(address);
 address->sin_family = AF_INET;
 address->sin_port = htons(port);
-if (hostent == NULL)
+if (hostName == NULL)
+    address->sin_addr.s_addr = INADDR_ANY;
+else
     {
-    warn("Couldn't find host %s. h_errno %d", hostName, h_errno);
-    return FALSE;
+    hostent = gethostbyname(hostName);
+    if (hostent == NULL)
+	{
+	warn("Couldn't find host %s. h_errno %d", hostName, h_errno);
+	return FALSE;
+	}
+    memcpy(&address->sin_addr.s_addr, hostent->h_addr_list[0], sizeof(address->sin_addr.s_addr));
     }
-memcpy(&address->sin_addr.s_addr, hostent->h_addr_list[0], sizeof(address->sin_addr.s_addr));
 return TRUE;
 }
 
@@ -42,6 +48,11 @@ int netConnect(char *hostName, int port)
 int sd, err;
 struct sockaddr_in sai;		/* Some system socket info. */
 
+if (hostName == NULL)
+    {
+    warn("NULL hostName in netConnect");
+    return -1;
+    }
 if (!netFillInAddress(hostName, port, &sai))
     return -1;
 if ((sd = netStreamSocket()) < 0)
@@ -72,8 +83,9 @@ if (!isdigit(portName[0]))
 return netMustConnect(hostName, atoi(portName));
 }
 
-int netAcceptingSocket(int port, int queueSize)
-/* Create a socket that can accept connections. */
+static int netAcceptingSocketFrom(int port, int queueSize, char *host)
+/* Create a socket that can accept connections from a particular
+ * host.  If host is NULL then accept from anyone. */
 {
 struct sockaddr_in sai;
 int sd;
@@ -81,10 +93,8 @@ int sd;
 netBlockBrokenPipes();
 if ((sd = netStreamSocket()) < 0)
     return sd;
-ZeroVar(&sai);
-sai.sin_family = AF_INET;
-sai.sin_port = htons(port);
-sai.sin_addr.s_addr = INADDR_ANY;
+if (!netFillInAddress(host, port, &sai))
+    return -1;
 if (bind(sd, &sai, sizeof(sai)) == -1)
     {
     warn("Couldn't bind socket to %d", port);
@@ -93,6 +103,13 @@ if (bind(sd, &sai, sizeof(sai)) == -1)
     }
 listen(sd, queueSize);
 return sd;
+}
+
+int netAcceptingSocket(int port, int queueSize)
+/* Create a socket that can accept connections from
+ * anywhere. */
+{
+return netAcceptingSocketFrom(port, queueSize, NULL);
 }
 
 int netAccept(int sd)
@@ -309,7 +326,10 @@ unsigned length = strlen(s);
 UBYTE b[2];
 
 if (length >= 64*1024)
-    errAbort("Trying to send a string longer than 64k bytes (%d bytes)", length);
+    {
+    warn("Trying to send a string longer than 64k bytes (%d bytes)", length);
+    return FALSE;
+    }
 b[0] = (length>>8);
 b[1] = (length&0xff);
 if (write(sd, b, 2) < 0)
