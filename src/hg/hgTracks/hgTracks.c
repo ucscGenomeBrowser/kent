@@ -84,7 +84,7 @@
 #include "estOrientInfo.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.770 2004/07/24 15:48:01 braney Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.771 2004/07/26 17:30:41 kent Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
@@ -7865,6 +7865,10 @@ hPrintf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/hgGateway?org=%s&db=%s&%s\">%s</A
 if (gotBlat)
     {
     hPrintf("<TD><P ALIGN=CENTER><A HREF=\"../cgi-bin/hgBlat?%s\">%s</A></TD>", uiVars->string, wrapWhiteFont("BLAT"));
+    }
+if (hgPcrOk(database))
+    {
+    hPrintf("<TD><P ALIGN=CENTER><A HREF=\"../cgi-bin/hgPcr?%s\">%s</A></TD>", uiVars->string, wrapWhiteFont("PCR"));
     }
 hPrintf("<TD ALIGN=CENTER><A HREF=\"%s&o=%d&g=getDna&i=mixed&c=%s&l=%d&r=%d&db=%s&%s\">"
       " %s </A></TD>",  hgcNameAndSettings(),
