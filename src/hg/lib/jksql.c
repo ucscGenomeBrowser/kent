@@ -12,7 +12,7 @@
 #include "jksql.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: jksql.c,v 1.42 2003/10/23 17:43:37 sugnet Exp $";
+static char const rcsid[] = "$Id: jksql.c,v 1.43 2003/11/12 18:44:43 kent Exp $";
 
 boolean sqlTrace = FALSE;  /* setting to true prints each query */
 int sqlTraceIndent = 0;    /* number of spaces to indent traces */
@@ -345,6 +345,25 @@ sqlNextRow(sr);	/* Just discard. */
 sqlFreeResult(&sr);
 return TRUE;
 }
+
+boolean sqlTablesExist(struct sqlConnection *conn, char *tables)
+/* Check all tables in space delimited string exist. */
+{
+char *dupe = cloneString(tables);
+char *s = dupe, *word;
+boolean ok = TRUE;
+while ((word = nextWord(&s)) != NULL)
+     {
+     if (!sqlTableExists(conn, word))
+         {
+	 ok = FALSE;
+	 break;
+	 }
+     }
+freeMem(dupe);
+return ok;
+}
+
 
 struct sqlResult *sqlGetResult(struct sqlConnection *sc, char *query)
 /* Returns NULL if result was empty.  Otherwise returns a structure

@@ -138,6 +138,9 @@ boolean sqlDatabaseExists(char *database);
 boolean sqlTableExists(struct sqlConnection *sc, char *table);
 /* Return TRUE if a table exists. */
 
+boolean sqlTablesExist(struct sqlConnection *conn, char *tables);
+/* Check all tables in space delimited string exist. */
+
 char *sqlQuickQuery(struct sqlConnection *sc, char *query, char *buf, int bufSize);
 /* Does query and returns first field in first row.  Meant
  * for cases where you are just looking up one small thing.  
