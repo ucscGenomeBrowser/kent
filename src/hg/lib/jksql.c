@@ -350,7 +350,7 @@ return mysql_field_count(sr->result);
 char *sqlQuickQuery(struct sqlConnection *sc, char *query, char *buf, int bufSize)
 /* Does query and returns first field in first row.  Meant
  * for cases where you are just looking up one small thing.  
- * Return NULL query comes up empty. */
+ * Returns NULL if query comes up empty. */
 {
 struct sqlResult *sr;
 char **row;
