@@ -12,7 +12,7 @@
 #include "scoredRef.h"
 #include "customTrack.h"
 
-static char const rcsid[] = "$Id: wigTrack.c,v 1.52 2004/06/07 18:36:18 sugnet Exp $";
+static char const rcsid[] = "$Id: wigTrack.c,v 1.53 2004/06/10 22:01:29 hiram Exp $";
 
 /*	wigCartOptions structure - to carry cart options from wigMethods
  *	to all the other methods via the track->extraUiData pointer
@@ -914,7 +914,7 @@ for (x1 = 0; x1 < width; ++x1)
 	    }
 	/*	Special case data value on upper limit line	*/
 	if ((boxTop+boxHeight) == 0)
-		boxHeight += 1;
+	    boxHeight += 1;
 	/*	Special case data value is below the lower view limit,
  	 *	should still show a 1 pixel wide line at the bottom */
 	if ((graphLowerLimit >= 0.0) && (dataValue < graphLowerLimit))
@@ -922,6 +922,14 @@ for (x1 = 0; x1 < width; ++x1)
 	    boxTop = h - 1;
 	    boxHeight = 1;
 	    }
+	/*	Special case data value is above the upper view limit,
+ 	 *	should still show a 1 pixel wide line at the top */
+	if ((graphUpperLimit <= 0.0) && (dataValue > graphUpperLimit))
+	    {
+	    boxTop = 0;
+	    boxHeight = 1;
+	    }
+
 
 	drawColor = colorArray[x1];
 /* 	/\*	negative data is the alternate color	*\/ */
