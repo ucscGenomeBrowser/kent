@@ -103,6 +103,24 @@ REPEAT MASKING (DONE 07/30/02)
         tcsh jkStuff/cpToWeb.sh
 
 
+EXTRACT LINEAGE-SPECIFIC REPEATS (ARIAN SMIT''s scripts) (DONE 11/4/02)
+
+    ssh kkstore
+    mkdir -p ~/mm2/bed/linSpecRep
+    cd ~/mm2/bed/linSpecRep
+    foreach f (~/mm2/*/*.out)
+        ln -sf $f .
+    end
+    /cluster/bin/scripts/rodentSpecificRepeats.pl *.out
+    /cluster/bin/scripts/perl-rename 's/(\.fa|\.nib)//' *.out.*spec
+    /cluster/bin/scripts/perl-rename 's/\.(rod|prim)spec/.spec/' *.out.*spec
+    rm *.out
+    rm -rf /scratch/hg/mm2/linSpecRep
+    cd ..
+    cp -R linSpecRep /scratch/hg/mm2
+    # Ask cluster-admin@cse.ucsc.edu to binrsync /scratch/hg to clusters
+
+
 CREATING DATABASE AND STORING mRNA/EST SEQUENCE AND AUXILIARY INFO 
 
 o - Create the database.

@@ -215,6 +215,24 @@ LOAD REPEAT MASKS (DONE 7/29/02)
        hgLoadOut hg12 ?/*.fa.out ??/*.fa.out
 
 
+EXTRACT LINEAGE-SPECIFIC REPEATS (ARIAN SMIT's scripts) (DONE 11/4/02)
+
+    ssh kkstore
+    mkdir -p ~/hg12/bed/linSpecRep
+    cd ~/hg12/bed/linSpecRep
+    foreach f (~/hg12/*/*.out)
+        ln -sf $f .
+    end
+    /cluster/bin/scripts/primateSpecificRepeats.pl *.out
+    /cluster/bin/scripts/perl-rename 's/(\.fa|\.nib)//' *.out.*spec
+    /cluster/bin/scripts/perl-rename 's/\.(rod|prim)spec/.spec/' *.out.*spec
+    rm *.out
+    rm -rf /scratch/hg/gs.13/build30/linSpecRep
+    cd ..
+    cp -R linSpecRep /scratch/hg/gs.13/build30
+    # Ask cluster-admin@cse.ucsc.edu to binrsync /scratch/hg to clusters
+
+
 STORING O+O SEQUENCE AND ASSEMBLY INFORMATION (DONE 7/12/02)
 
 Create packed chromosome sequence files 
