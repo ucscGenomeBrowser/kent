@@ -111,7 +111,7 @@
 #include "axtLib.h"
 #include "ensFace.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.477 2003/09/23 19:16:15 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.478 2003/09/23 19:48:41 fanhsu Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -5774,7 +5774,7 @@ goto skipPB;
 
 // display link to UCSC Proteome Browser
 printf("<LI><B>UCSC Proteome Browser: </B>");
-printf("<A HREF=\"http://hgwdev-fanhsu.cse.ucsc.edu/cgi-bin/pb10?");
+printf("<A HREF=\"http:/cgi-bin/pb10?");
 printf("proteinDB=SWISS&proteinID=%s&mrnaID=%s\" ", proteinID, mrnaName);
 printf(" target=_blank>");
 printf(" %s</A>", proteinID);
@@ -5786,7 +5786,7 @@ row = sqlNextRow(sr);
 if (row != NULL) printf(", ");
 while (row != NULL)    
     {
-    printf("<A HREF=\"http://hgwdev-fanhsu.cse.ucsc.edu/cgi-bin/pb10?");
+    printf("<A HREF=\"http:/cgi-bin/pb10?");
     printf("proteinDB=SWISS&proteinID=%s&mrnaID=%s\" ", row[0], mrnaName);
     printf(" target=_blank>");
     printf(" %s</A>", row[0]);
@@ -5800,7 +5800,7 @@ printf("</UL>");
 
 // Display Gene Family Browser link
 printf("<B>UCSC Gene Family Browser:</B> ");
-printf("<A HREF=\"http://hgwdev-fanhsu.cse.ucsc.edu/cgi-bin/hgNear?near.search=%s\"", mrnaName);
+printf("<A HREF=\"http:/cgi-bin/hgNear?near.search=%s\"", mrnaName);
 printf("TARGET=_blank>%s</A>&nbsp\n", geneSymbol);fflush(stdout);
 printf("<BR>");
 
