@@ -1,6 +1,9 @@
 #Optimized for performance or debugging
-#OPT= -ggdb -O
+#OPT= -ggdb -O3
 OPT= -ggdb
+
+# for now, we use statis executables because of the RH 7/9 and libc pains
+OPT += -static
 
 KENT = ${GBROOT}/../kent/src
 ifneq ($(wildcard ${GBROOT}/extern/lib/libmysqlclient.a),)
