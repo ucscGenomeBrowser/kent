@@ -17,15 +17,16 @@
 #include "paraHub.h"
 
 int spokeLastId;	/* Id of last spoke allocated. */
+static char *runCmd = "run";
 
-static void notifyNodeDown(char *machine)
+static void notifyNodeDown(char *machine, char *job)
 /* Notify hub that a node is down. */
 {
 int hubFd = hubConnect();
 char buf[512];
 if (hubFd > 0)
     {
-    sprintf(buf, "nodeDown %s", machine);
+    sprintf(buf, "nodeDown %s %s", machine, job);
     netSendLongString(hubFd, buf);
     close(hubFd);
     }
@@ -60,7 +61,17 @@ if (sd > 0)
     }
 else
     {
-    notifyNodeDown(machine);
+    char *command = nextWord(&message);
+    char *job = NULL;
+    uglyf("%s: problems with %s %s\n", spokeName, command, message);
+    if (sameString(runCmd, command))
+	{
+	char *hub = nextWord(&message);
+	job = nextWord(&message);
+	}
+    if (job == NULL)
+        job = "0";
+    notifyNodeDown(machine, job);
     }
 
 /* Tell hub spoke is free. */
@@ -115,7 +126,7 @@ for (;;)
 	continue;
 	}
     line = buf = netGetLongString(conn);
-    // uglyf("%s: %s\n", socketName, line);
+    uglyf("%s: %s\n", socketName, line);
     machine = nextWord(&line);
     if (machine != NULL)
 	{
@@ -268,7 +279,7 @@ int sd = spokeGetSocket(spoke);
 if (sd > 0)
     {
     spoke->machine = cloneString(machine->name);
-    dyStringPrintf(dy, "%s %s", machine->name, "run");
+    dyStringPrintf(dy, "%s %s", machine->name, runCmd);
     dyStringPrintf(dy, " %s", hubHost);
     dyStringPrintf(dy, " %d", job->id);
     dyStringPrintf(dy, " %s", job->user);

@@ -127,6 +127,26 @@ for (node = list->head; !dlEnd(node); node = node->next)
 return NULL;
 }
 
+struct machine *findMachineWithJob(char *name, int jobId)
+/* Find named machine that is running job.  If jobId is
+ * 0, find it regardless of job it's running. */
+{
+struct machine *mach;
+for (mach = machineList; mach != NULL; mach = mach->next)
+     {
+     if (sameString(mach->name, name))
+	 {
+	 struct job *job = mach->job;
+	 if (jobId == 0)
+	     return mach;
+	 if (job != NULL && job->id == jobId)
+	     return mach;
+	 }
+     }
+return NULL;
+}
+
+
 struct job *jobFind(struct dlList *list, int id)
 /* Find node of job with given id on list.  Return NULL if
  * not found. */
@@ -157,14 +177,20 @@ if ((mach = findMachine(name)) != NULL)
     }
 }
 
-void nodeDown(char *name)
+void nodeDown(char *line)
 /* Deal with a node going down - move it to dead list and
  * put job back on head of job list. */
 {
 struct machine *mach;
+char *machName = nextWord(&line);
+char *jobIdString = nextWord(&line);
+int jobId;
 struct job *job;
-name = trimSpaces(name);
-if ((mach = findMachine(name)) != NULL)
+
+if (jobIdString == NULL)
+    return;
+jobId = atoi(jobIdString);
+if ((mach = findMachineWithJob(machName, jobId)) != NULL)
     {
     if ((job = mach->job) != NULL)
         {
@@ -505,36 +531,40 @@ else
     runner(1);
 }
 
-boolean addJob(char *line)
-/* Add job.  Line format is <user> <dir> <stdin> <stdout> <stderr> <command> */
+int addJob(char *line)
+/* Add job.  Line format is <user> <dir> <stdin> <stdout> <stderr> <command> 
+ * Returns job ID or 0 if a problem. */
 {
 char *user, *dir, *in, *out, *err, *command;
 struct job *job;
 
 if ((user = nextWord(&line)) == NULL)
-    return FALSE;
+    return 0;
 if ((dir = nextWord(&line)) == NULL)
-    return FALSE;
+    return 0;
 if ((in = nextWord(&line)) == NULL)
-    return FALSE;
+    return 0;
 if ((out = nextWord(&line)) == NULL)
-    return FALSE;
+    return 0;
 if ((err = nextWord(&line)) == NULL)
-    return FALSE;
+    return 0;
 if (line == NULL || line[0] == 0)
-    return FALSE;
+    return 0;
 command = line;
 job = jobNew(command, user, dir, in, out, err);
 job->submitTime = time(NULL);
 dlAddTail(pendingJobs, job->node);
 runner(1);
-return TRUE;
+return job->id;
 }
 
 void addJobAcknowledge(char *line, int connectionHandle)
 /* Add job and send 'ok' or 'err' back to client. */
 {
-sendOk(addJob(line), connectionHandle);
+int id = addJob(line);
+char jobIdString[16];
+sprintf(jobIdString, "%d", id);
+netSendLongString(connectionHandle, jobIdString);
 }
 
 void respondToPing(int connectionHandle)
@@ -848,6 +878,9 @@ socketHandle = netAcceptingSocket(paraPort, 100);
 if (socketHandle < 0)
     errAbort("Can't set up socket.  Urk!  I'm dead.");
 
+/* Move output to log file. */
+setupDaemonLog(optionVal("log", NULL));
+
 /* Do some initialization. */
 startSpokes();
 startHeartbeat();
@@ -922,7 +955,6 @@ if (argc < 2)
 jobCheckPeriod = optionInt("jobCheckPeriod", jobCheckPeriod);
 machineCheckPeriod = optionInt("machineCheckPeriod", machineCheckPeriod);
 initialSpokes = optionInt("spokes",  initialSpokes);
-setupDaemonLog(optionVal("log", NULL));
 startHub(argv[1]);
 return 0;
 }

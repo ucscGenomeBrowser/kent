@@ -54,13 +54,19 @@ if (write(hubFd, paraSig, sigSize) < sigSize)
 netSendLongString(hubFd, command);
 }
 
-void hubCommandGetReciept(char *command)
+char *hubCommandGetReciept(char *command)
+/* Send command to hub,  wait for one line respons and
+ * return it.  freeMem return value when done. */
+{
+commandHub(command);
+return netRecieveLongString(hubFd);
+}
+
+void hubCommandCheckReciept(char *command)
 /* Send command to hub, and wait for one line response which should
  * be 'ok'. */
 {
-char *line;
-commandHub(command);
-line = netRecieveLongString(hubFd);
+char *line = hubCommandGetReciept(command);
 if (line == NULL || !sameString(line, "ok"))
     errAbort("Hub didn't acknowledge %s", command);
 freeMem(line);
@@ -100,7 +106,7 @@ sprintf(buf, "%s %s", "addMachine", machine);
 commandHub(buf);
 }
 
-void addJob(int argc, char *argv[])
+int pushJob(int argc, char *argv[], boolean report)
 /* Tell hub about a new job. */
 {
 struct dyString *dy = newDyString(1024);
@@ -110,13 +116,34 @@ char *in = optionVal("in", "/dev/null"),
      *err = optionVal("err", "/dev/null"), 
      *dir = optionVal("dir", dirBuf);
 int i;
+char *jobIdString;
 
 getcwd(dirBuf, sizeof(dirBuf));
 dyStringPrintf(dy, "addJob %s %s %s %s %s", getlogin(), dir, in, out, err);
 for (i=0; i<argc; ++i)
     dyStringPrintf(dy, " %s", argv[i]);
-hubCommandGetReciept(dy->string);
+jobIdString = hubCommandGetReciept(dy->string);
 dyStringFree(&dy);
+if (report)
+    {
+    printf("your job %s (\"%s", jobIdString, argv[0]);
+    for (i=1; i<argc; ++i)
+	 printf(" %s", argv[i]);
+    printf("\") has been submitted\n");
+    }
+return atoi(jobIdString);
+}
+
+int addJob(int argc, char *argv[])
+/* Tell hub about a new job. */
+{
+return pushJob(argc, argv, FALSE);
+}
+
+void qsub(int argc, char *argv[])
+/* Tell hub about new job,  print job id. */
+{
+pushJob(argc, argv, TRUE);
 }
 
 void addSpoke()
@@ -291,7 +318,7 @@ for (i=0; i<count; ++i)
     {
     if (i != 0)
 	reopenHub();
-    hubCommandGetReciept("ping");
+    hubCommandCheckReciept("ping");
     }
 printf("Pinged hub %d times\n", count);
 }
@@ -303,7 +330,13 @@ void parasol(char *command, int argc, char *argv[])
 char *subType = argv[0];
 atexit(closeHubFd);
 reopenHub();
-if (sameString(command, "add"))
+if (sameString(command, "qsub"))
+    {
+    if (argc < 1)
+	usage;
+    qsub(argc, argv);
+    }
+else if (sameString(command, "add"))
     {
     if (argc < 1)
         usage();
