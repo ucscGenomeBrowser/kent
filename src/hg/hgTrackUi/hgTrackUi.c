@@ -167,6 +167,18 @@ printf(" off ");
 }
 
 
+void ancientRUi(struct trackDb *tdb)
+/* put up UI for the ancient repeats track to let user enter an
+ * integer to filter out those repeats with less aligned bases.*/
+{
+int ancientRMinLength = atoi(cartUsualString(cart, "ancientR.minLength", "50"));
+printf("<p><b>Length Filter</b><br>Exclude aligned repeats with less than ");
+cgiMakeIntVar("ancientR.minLength", ancientRMinLength, 4 );
+printf("aligned bases (not necessarily identical). Enter 0 for no filtering.");
+}
+
+
+
 void specificUi(struct trackDb *tdb)
 /* Draw track specific parts of UI. */
 {
@@ -197,6 +209,8 @@ else if (sameString(track, "affy"))
     affyUi(tdb);
 else if (sameString(track, "wiggle"))
     wiggleUi(tdb);
+else if (sameString(track, "ancientR"))
+    ancientRUi(tdb);
 }
 
 void trackUi(struct trackDb *tdb)
