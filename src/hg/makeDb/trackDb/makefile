@@ -77,7 +77,7 @@ beta:
 	hgTrackDb mouse mm4 trackDb_beta ../../lib/trackDb.sql .
 	hgTrackDb rat rn1 trackDb_beta ../../lib/trackDb.sql .
 	hgTrackDb rat rn2 trackDb_beta ../../lib/trackDb.sql .
-	hgTrackDb rat rn3 trackDb_beta ../../lib/trackDb.sql .
+	hgTrackDb -visibility=fugu/visibility.ra rat rn3 trackDb_beta ../../lib/trackDb.sql .
 	hgTrackDb sars sc1 trackDb_beta ../../lib/trackDb.sql .
 	hgTrackDb squirt ci1 trackDb_beta ../../lib/trackDb.sql .
 	hgTrackDb -visibility=fugu/visibility.ra fugu fr1 trackDb_beta ../../lib/trackDb.sql .
