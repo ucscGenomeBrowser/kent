@@ -105,7 +105,7 @@
 #include "hgc.h"
 #include "genbank.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.418 2003/05/20 17:52:49 braney Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.419 2003/05/22 21:37:36 weber Exp $";
 
 
 struct cart *cart;	/* User's settings. */
@@ -11723,6 +11723,10 @@ else if( sameWord( track, "musHumL" ))
 else if( sameWord( track, "mm3Rn2L" ))
     {
     humMusClickHandler( tdb, item, "Rat", "rn2", "blastzBestRat", 0 );
+    }
+else if( sameWord( track, "hg15Mm3L" ))
+    {
+    humMusClickHandler( tdb, item, "Mouse", "mm3", "blastzBestMm3", 0 );
     }
 else if( sameWord( track, "footPrinter" ))
     {
