@@ -10,7 +10,7 @@
 #include "psl.h"
 #include "dnautil.h"
 
-static char const rcsid[] = "$Id: axtToPsl.c,v 1.9 2004/01/04 05:43:02 markd Exp $";
+static char const rcsid[] = "$Id: axtToPsl.c,v 1.10 2004/10/15 00:20:43 braney Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -38,10 +38,9 @@ while (lineFileRow(lf, row))
     {
     char *name = row[0];
     int size = lineFileNeedNum(lf, row, 1);
-    if (hashLookup(hash, name) != NULL)
-        warn("Duplicate %s, ignoring all but first\n", name);
-    else
-	hashAdd(hash, name, intToPt(size));
+    
+    /* trust the user to not have duplicated names in the lengths file */
+    hashAdd(hash, name, intToPt(size));
     }
 lineFileClose(&lf);
 return hash;
