@@ -150,7 +150,7 @@
 #include "pscreen.h"
 #include "jalview.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.782 2004/11/18 01:03:36 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.783 2004/11/18 19:33:33 fanhsu Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -11566,18 +11566,38 @@ sr = sqlGetResult(conn, query);
 if ((row = sqlNextRow(sr)) != NULL)
     {
     jaxQTL = jaxQTL3Load(row);
+    printf("<B>Jax/MGI Link: </B>");
+    printf("<a href=\"http://www.informatics.jax.org/searches/accession_report.cgi?id=%s\">%s</a><BR>\n", 
+    	   jaxQTL->mgiID, jaxQTL->mgiID);
     printf("<B>QTL:</B> %s<BR>\n", jaxQTL->name);
     printf("<B>Description:</B> %s <BR>\n", jaxQTL->description);
-    if (!sameWord("", jaxQTL->marker)) printf("<B>Peak Marker:</B> %s <BR>\n", jaxQTL->marker);
-    if (!sameWord("", jaxQTL->flank1)) printf("<B>Flank Marker 1:</B> %s <BR>\n", jaxQTL->flank1);
-    if (!sameWord("", jaxQTL->flank2)) printf("<B>Flank Marker 2:</B> %s <BR>\n", jaxQTL->flank2);
+    
+    if (!sameWord("", jaxQTL->flank1)) 
+    	{
+	printf("<B>Flank Marker 1: </B>");
+	printf("<a href=\"http://www.informatics.jax.org/javawi2/servlet/WIFetch?page=searchTool&query=%s", jaxQTL->flank1);
+	printf("+&selectedQuery=Genes+and+Markers\">%s</a><BR>\n", jaxQTL->flank1);
+	}	
+    if (!sameWord("", jaxQTL->marker)) 
+    	{
+	printf("<B>Peak Marker: </B>");
+	printf("<a href=\"http://www.informatics.jax.org/javawi2/servlet/WIFetch?page=searchTool&query=%s", jaxQTL->marker);
+	printf("+&selectedQuery=Genes+and+Markers\">%s</a><BR>\n", jaxQTL->marker);
+	}	
+    if (!sameWord("", jaxQTL->flank2)) 
+    	{
+	printf("<B>Flank Marker 2: </B>");
+	printf("<a href=\"http://www.informatics.jax.org/javawi2/servlet/WIFetch?page=searchTool&query=%s", jaxQTL->flank2);
+	printf("+&selectedQuery=Genes+and+Markers\">%s</a><BR>\n", jaxQTL->flank2);
+	}	
+    
     /* no cMscore for current release*/
     /*printf("<B>cM position of marker associated with peak LOD score:</B> %3.1f<BR>\n", 
       jaxQTL->cMscore);
     */
+    
     printf("<B>Chromosome:</B> %s<BR>\n", skipChr(seqName));
     printBand(seqName, start, 0, FALSE);
-    printCustomUrl(tdb, jaxQTL->mgiID, FALSE);
     }
 printTrackHtml(tdb);
 sqlFreeResult(&sr);
