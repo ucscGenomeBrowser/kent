@@ -149,9 +149,10 @@ exit; # don't actually run this like a script :)
     mkdir sacCer1Nib
     scp 'hgwdev:/cluster/data/sacCer1/nib/*.nib' sacCer1Nib
     # Ask admins to set up blat servers and ask which ports they assign.
+    # 8/26/04: set canPcr=1 for untranslated blat server.
     ssh hgwdev
-    echo 'insert into blatServers values("sacCer1", "blat10", "17788", "0"); \
-          insert into blatServers values("sacCer1", "blat10", "17789", "1");' \
+    echo 'insert into blatServers values("sacCer1", "blat10", 17788, 0, 1); \
+          insert into blatServers values("sacCer1", "blat10", 17789, 1, 0);' \
       | hgsql -h genome-testdb hgcentraltest
 
 # CREATING SGD-BASED KNOWN GENES AND OTHER FEATURES (DONE 2003-12-02 Jim)

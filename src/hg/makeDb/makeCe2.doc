@@ -1308,8 +1308,9 @@ doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain} {check
     # next machine
     ssh hgwdev
     # DNA port is "0", trans prot port is "1"
-    echo 'insert into blatServers values("ce2", "blat1", "17781", "0"); \
-          insert into blatServers values("ce2", "blat1", "17780", "1");' \
+    # 8/26/04: set canPcr=1 for untranslated blat server.
+    echo 'insert into blatServers values("ce2", "blat1", 17781, 0, 1); \
+          insert into blatServers values("ce2", "blat1", 17780, 1, 0);' \
       | hgsql -h genome-testdb hgcentraltest
         # if you need to delete those entries
         echo 'delete from blatServers where db="ce2";' \
