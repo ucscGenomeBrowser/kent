@@ -22,3 +22,5 @@ extern symrec *sym_table;
 symrec *putsym(char const *, int);
 symrec *getsym(char const *);
 
+void init_table();
+/* Put arithmetic functions in table. */

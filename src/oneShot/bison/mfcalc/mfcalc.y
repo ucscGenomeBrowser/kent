@@ -5,9 +5,8 @@
 #include <ctype.h>
 #include <stdio.h>
 #include "calc.h"
+#include "yy.h"
 
-int yylex(void);
-void yyerror(char const *);
 %}
 
 %union {
@@ -155,48 +154,5 @@ return c;
 void yyerror(char const *s)
 {
 fprintf(stderr, "%s\n", s);
-}
-
-struct builtinFunction
-    {
-    char const *fname;
-    double (*fnct)(double);
-    };
-
-struct builtinFunction const arith_fncts[] =
-    {
-    { "sin", sin, },
-    { "cos", cos, },
-    { "tan", tan, },
-    { "asin", asin,},
-    { "atan", atan, },
-    { "ln", log, },
-    { "exp", exp, },
-    { "sqrt", sqrt, },
-    { 0, 0, },
-    };
-
-void init_table()
-/* Put arithmetic functions in table. */
-{
-int i;
-symrec *ptr;
-for (i=0; arith_fncts[i].fname != 0; i++)
-    {
-    ptr = putsym(arith_fncts[i].fname, FNCT);
-    ptr->value.fnctptr = arith_fncts[i].fnct;
-    }
-ptr = putsym("pi", VAR);
-ptr->value.var = 2*asin(1);
-ptr = putsym("e", VAR);
-ptr->value.var = exp(1);
-}
-
-int main(void)
-{
-yylloc.first_line = yylloc.last_line = 1;
-yylloc.first_column = yylloc.last_column = 0;
-init_table();
-return yyparse();
 }
 
