@@ -18,7 +18,7 @@
 #include "geneGraph.h"
 #include "dystring.h"
 
-static char const rcsid[] = "$Id: geneGraph.c,v 1.13 2004/04/29 20:50:20 sugnet Exp $";
+static char const rcsid[] = "$Id: geneGraph.c,v 1.14 2004/07/20 21:43:41 sugnet Exp $";
 
 void ggEvidenceFree(struct ggEvidence **pEl)
 /* Free a single dynamically allocated ggEvidence */
@@ -594,7 +594,14 @@ for (i=0; i<totalVertexCount; ++i)
     {
     bool *waysOut = em[i];
     if(gg->vertices[i].type == ggUnused)
+	{	
+	for (j=0; j<totalVertexCount; ++j)
+	    {
+	    if(gg->edgeMatrix[i][j])
+		errAbort("Shouldn't be any connections to an unused vertex %d-%d.", i, j);
+	    }
 	continue;
+	}
     for (j=0; j<totalVertexCount; ++j)
 	if (waysOut[j] && gg->vertices[j].type != ggUnused)
 	    {

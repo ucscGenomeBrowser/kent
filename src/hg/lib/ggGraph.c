@@ -13,7 +13,7 @@
 #include "ggPrivate.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: ggGraph.c,v 1.13 2004/04/29 20:50:20 sugnet Exp $";
+static char const rcsid[] = "$Id: ggGraph.c,v 1.14 2004/07/20 21:43:41 sugnet Exp $";
 
 static int maxEvidence = 50;
 
@@ -235,6 +235,26 @@ for (startIx=0; startIx<vCount; ++startIx)
 return bestStartIx;
 }
 
+static boolean connectToAnything(struct geneGraph *gg, int vertIx)
+/* Return TRUE if vertIx connects to anything. */
+{
+int i;
+for(i = 0; i < gg->vertexCount; i++)
+    if(gg->edgeMatrix[vertIx][i] == TRUE)
+	return TRUE;
+return FALSE;
+}
+
+static boolean anythingConnectsTo(struct geneGraph *gg, int vertIx)
+/* Return TRUE if anything connects to vertIx. */
+{
+int i;
+for(i = 0; i < gg->vertexCount; i++)
+    if(gg->edgeMatrix[i][vertIx] == TRUE)
+	return TRUE;
+return FALSE;
+}
+
 static boolean softlyTrimStart(struct geneGraph *gg, int softIx)
 /* Try and trim one soft start. Return TRUE if did trim. */
 {
@@ -263,7 +283,7 @@ for (endIx=0; endIx < vCount; ++endIx)
 	    }
 	}
     }
-if (!anyLeft)
+if (!anyLeft && !anythingConnectsTo(gg, softIx))
     vertices[softIx].type = ggUnused;
 return anyTrim;
 }
@@ -315,7 +335,8 @@ for (startIx=0; startIx < vCount; ++startIx)
 	if (bestEnd != softIx)
 	    {
 	    anyTrim = TRUE;
-	    em[startIx][softIx] = FALSE; // update evidence
+	    em[startIx][softIx] = FALSE; 
+            // update evidence
 	    moveEvidenceIfUnique(&gg->evidence[startIx][bestEnd], &gg->evidence[startIx][softIx]);
 	    }
 	else
@@ -324,7 +345,7 @@ for (startIx=0; startIx < vCount; ++startIx)
 	    }
 	}
     }
-if (!anyLeft)
+if (!anyLeft && !connectToAnything(gg, softIx))
     vertices[softIx].type = ggUnused;
 return anyTrim;
 }
@@ -715,7 +736,7 @@ for (i=0; i<vCount; ++i)
 	    }
 	}
     }
-if (!anyLeft)
+if (!anyLeft && !anythingConnectsTo(gg, softStartIx))
     {
     gg->vertices[softStartIx].type = ggUnused;
     }
@@ -795,7 +816,7 @@ for (i=0; i<vCount; ++i)
 	    }
 	}
     }
-if (!anyLeft)
+if (!anyLeft && !connectToAnything(gg, softEndIx))
     {
     gg->vertices[softEndIx].type = ggUnused;
     }

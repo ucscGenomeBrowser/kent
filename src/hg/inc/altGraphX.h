@@ -25,6 +25,21 @@
 #include "vGfx.h"
 #endif
 
+enum altSpliceType
+/* Type of alternative splicing event. */
+{
+    alt5Prime,       /* 0 */
+    alt3Prime,       /* 1 */
+    altCassette,     /* 2 */
+    altRetInt,       /* 3 */
+    altIdentity,     /* 4 */
+    altOther,        /* 5 */
+    altControl,      /* 6 */
+    alt3PrimeSoft,   /* 7 Alt Poly Adenlation sites */
+    alt5PrimeSoft,   /* 8 Alt transcription start */
+    altMutExclusive  /* 9 Mutally exlcusive. */
+};
+
 struct evidence
 /* List of mRNA/ests supporting a given edge */
     {
@@ -369,6 +384,17 @@ boolean agxIsAlt3PrimeSoft(struct altGraphX *ag, bool **em,  int vs, int ve1, in
    4
    5   
 */
+
+struct altGraphX *agxConnectedComponents(struct altGraphX *agx);
+/* Find the connected components of the graph and break them up into
+   seperate graphs. Free the result with altGraphXFreeList().
+   Algorithm for connected components from: Baase & Van Gelder
+   "Computer Algorithms Introduction to Design and Analysis" 3rd
+   edition 2000. pp 340-341
+*/
+
+void agxPrintEdges(struct altGraphX *ag);
+/* Print the edges in ag. */
 
 #endif /* ALTGRAPHX_H */
 

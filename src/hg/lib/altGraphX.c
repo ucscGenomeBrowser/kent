@@ -10,7 +10,7 @@
 #include "geneGraph.h"
 #include "bed.h"
 
-static char const rcsid[] = "$Id: altGraphX.c,v 1.26 2004/07/13 00:23:34 sugnet Exp $";
+static char const rcsid[] = "$Id: altGraphX.c,v 1.27 2004/07/20 21:43:40 sugnet Exp $";
 struct altGraphX *_agxSortable = NULL; /* used for sorting. */
 
 struct evidence *evidenceCommaIn(char **pS, struct evidence *ret)
@@ -792,6 +792,13 @@ int agVertSortableCmp(const void *e1, const void *e2)
 const struct agVertSortable *a = *((struct agVertSortable **)e1);
 const struct agVertSortable *b = *((struct agVertSortable **)e2);
 return (a->vPosition - b->vPosition);
+}
+
+void agxPrintEdges(struct altGraphX *ag) 
+{
+int i = 0;
+for(i = 0; i < ag->edgeCount; i++)
+    warn("%d - %d", ag->edgeStarts[i], ag->edgeEnds[i]);
 }
 
 void altGraphXVertPosSort(struct altGraphX *ag)
