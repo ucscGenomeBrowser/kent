@@ -221,7 +221,7 @@ track zoo
 shortLabel ZooSeq
 longLabel Blastz Alignments
 priority 470
-visible hide
+visible full
 chromosomes target1,chr7,
 color 0,60,120
 altColor 0,128,0
