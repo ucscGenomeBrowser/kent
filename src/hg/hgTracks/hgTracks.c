@@ -1331,21 +1331,8 @@ if( sameString( tg->mapName, "humMus" ) )
     minRange = 1.0;
     maxRange = 1000.0;
 
-    min0 = whichNum( 1.0, -6.30436, 5.53297, 1000 );
-    max0 = whichNum( 1000.0, -6.30436, 5.53297, 1000 );
-
-    /*draw horizontal line across track at 0.0, 2.0, and 5.0*/
-    tmp = -whichBin( 0.0, min0, max0, 1000 );
-    y1 = (int)((double)y+((double)tmp)* hFactor+(double)heightPer);
-    mgDrawHorizontalLine( mg, y1, lineColor );
-
-    tmp = -whichBin( 2.0, min0, max0, 1000 );
-    y1 = (int)((double)y+((double)tmp)* hFactor+(double)heightPer);
-    mgDrawHorizontalLine( mg, y1, lineColor );
-
-    tmp = -whichBin( 5.0, min0, max0, 1000 );
-    y1 = (int)((double)y+((double)tmp)* hFactor+(double)heightPer);
-    mgDrawHorizontalLine( mg, y1, lineColor );
+    min0 = whichNum( 1.0, 0.0, 5.0, 1000 );
+    max0 = whichNum( 1000.0, 0.0, 5.0, 1000 );
     
     }
     else
@@ -8103,8 +8090,8 @@ if (withLeftLabels)
 	    }
     else if( sameString( group->mapName, "zooCons" ) )
 	    {
-	    sprintf( minRangeStr, "%g", whichNum( 1.0, -6.30436, 5.53297, 1000 ));
-	    sprintf( maxRangeStr, "%g", whichNum( 1000.0, -6.30436, 5.53297, 1000 ));
+	    sprintf( minRangeStr, "%d", (int)whichNum( 1.0, 0.0, 5.0, 1000 ));
+	    sprintf( maxRangeStr, "%d", (int)whichNum( 1000.0, 0.0, 5.0, 1000 ));
 	    }
 	else
 	    {
