@@ -26,7 +26,7 @@
 #include "portable.h"
 #include "customTrack.h"
 
-static char const rcsid[] = "$Id: hgText.c,v 1.85 2003/06/17 23:11:09 braney Exp $";
+static char const rcsid[] = "$Id: hgText.c,v 1.86 2003/06/18 20:45:16 braney Exp $";
 
 /* sources of tracks, other than the current database: */
 static char *hgFixed = "hgFixed";
@@ -386,10 +386,11 @@ void doGateway()
 {
 char *oldDb;
 
-position = cartCgiUsualString(cart, "position", hDefaultPos(database));
+position = cloneString(cartCgiUsualString(cart, "position", hDefaultPos(database)));
 webStart(cart, "Table Browser: Choose Organism &amp; Assembly");
 
 handleDbChange();
+
 
 puts(
 "<CENTER>"
@@ -475,6 +476,7 @@ cartSaveSession(cart);
 puts("</FORM>");
 
 hgPositionsHelpHtml(organism);
+cartSetString(cart, "position",position);
 webEnd();
 }
 
