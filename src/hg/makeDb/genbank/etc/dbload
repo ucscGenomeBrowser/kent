@@ -1,6 +1,6 @@
 #!/bin/bash -e
 #
-# dbload [-inclEsts] [-getDownloadSeqs=days] [-updateDownloadSeqs] gbRoot databases timefile workdir
+# dbload [-inclEsts] [-extFileUpdate] [-getDownloadSeqs=days] [-updateDownloadSeqs] gbRoot databases timefile workdir
 #
 # Load genbank/refseq sequences.  This is a light weight script 
 # that checks for new alignments and for lock files.  This is the
@@ -9,13 +9,17 @@
 # timefile is name of time file to check for a new alignments
 # being ready, relative to gbRoot
 #
-# -inclEsts, do both ESTs and mRNAs, otherwise do just mRNAs.
-#
+# -inclEsts - do both ESTs and mRNAs, otherwise do just mRNAs.
+# -extFileUpdate - update gbSeq/gbExtFile entries to point to the
+#  latest release.  A limit on the number to update is set in this
+#  file.
 
 # errors terminate with message
 set -e
 trap "echo Error: `hostname` dbload failed >&2; exit 1" ERR
 exec </dev/null
+
+maxExtFileUpdate=100000
 
 # parse command line
 inclEsts=NO
@@ -26,6 +30,8 @@ while [[ $1 == -* ]] ; do
     case "$opt" in
         -inclEsts) 
             inclEsts=YES ;;
+        -extFileUpdate) 
+            opts="$opts -maxExtFileUpdate=$maxExtFileUpdate" ;;
         -getDownloadSeqs=*) 
             opts="$opts $opt" ;;
         -updateDownloadSeqs)
