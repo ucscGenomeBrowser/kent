@@ -732,7 +732,9 @@ struct pfToken *tok;
 for (tok = tokList; tok->type != pftEnd; tok = tok->next)
     {
     if (tok->type == '{' || tok->type == '}')
+	{
         scope = tok->val.scope;
+	}
     if (tok->type == pftClass)
 	{
 	tok = tok->next;
@@ -765,7 +767,8 @@ while ((tok = pfTokenizerNext(pfTkz)) != NULL)
 	}
     else if (tok->type == '}')
         {
-	tok->val.scope = scope->parent;
+	scope = scope->parent;
+	tok->val.scope = scope;
 	}
     }
 
