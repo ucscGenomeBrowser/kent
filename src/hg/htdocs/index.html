@@ -152,27 +152,46 @@ document.location = theUrl + 'org=' + theDb;
 	</TD></TR></TABLE>
 	
 	<TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0><TR><TH HEIGHT=3></TH></TR><TR><TD WIDTH=10></TD><TD>
-		<P>This site contains working drafts for the human, mouse, and
-		rat genomes. 
-		<P>The human genome is over 95% complete. Approximately 
-		90% of the sequence is in a highly accurate 'finished' state.  The
-		other 10% is merely 'draft' quality.  Some care must be taken
-		when interpreting draft regions, but these are still very 
-		useful to the working scientist.  
-		<P>The mouse genome is
-		largely the result of a full genome shotgun assembly. While there are 
-		many gaps in the sequence, the order and orientation of the contigs on 
-		either side of a gap are known in almost all cases. We estimate
-		that 90-96% of the mouse genome is present in the
-		assembly. We encourage you to explore the
-		working drafts with the genome browser, which displays
-		the work of many annotators worldwide.
-		<P>The Genome Browser and the data it displays are freely available for 
-		academic, nonprofit, and personal use with a few exceptions. Check the
-		README.txt file in the download directory of a particular
-		assembly to view the use restrictions
-		specific to that release. Interactive use is limited to a 
-		maximum of 10,000 hits/day or 10 hits/minute. 
+	<P>This site contains the reference sequence for the human
+	genome and the working drafts for the mouse and rat genomes. 
+	<P>
+	The human reference sequence - produced by the International Human
+	Genome Sequencing Consortium - covers about 99 percent of 
+	the gene-containing regions in the genome, and has been sequenced to an accuracy of 
+	99.99 percent. The missing portions are essentially contained in less 
+	than 400 defined gaps representing DNA regions with unusual structures 
+	that can't be reliably sequenced using current technology. The reference
+	sequence is considered to be "finished", a technical term indicating that 
+	the sequence is highly accurate (with fewer than one error per 10,000 
+	bases) and highly contiguous (with the only remaining gaps corresponding 
+	to regions whose sequence cannot be reliably resolved with current 
+	technology). Future work on the reference sequence will focus on improving
+	accuracy and reducing gaps in the sequence. 
+
+	<P>The mouse genome (Mus musculus) was produced by the Mouse Genome Sequencing Consortium and is
+	largely the result of a full genome shotgun assembly. The current assembly
+	includes 705 megabases of finished sequence. While there are 
+	many gaps in the sequence, the order and orientation of the contigs on 
+	either side of a gap are known in almost all cases. We estimate
+	that 90-96% of the mouse genome is present in the
+	assembly. 
+
+	<P>
+	The rat genome (Rattus norvegicus) has been provided by the Rat Genome Sequencing Consortium.
+	The sequence was assembled using a hybrid approach that combines the 
+	clone by clone and whole genome shotgun methods. The current assembly
+	provides approximately 6.5-fold coverage of the rat genome.
+	
+	<P>
+	We encourage you to explore the reference sequence and working drafts 
+	with the UCSC Genome Browser, which displays the work of many annotators 
+	worldwide. The Genome Browser and the data it displays are freely 
+	available for 
+	academic, nonprofit, and personal use with a few exceptions. Check the
+	README.txt file in the download directory of a particular
+	assembly to view the use restrictions
+	specific to that release. Interactive use is limited to a 
+	maximum of 10,000 hits/day or 10 hits/minute. 
 	</TD><TD WIDTH=15></TD></TR></TABLE>
 	<BR></TD></TR></TABLE>
 	</TD></TR></TABLE>
@@ -190,151 +209,60 @@ document.location = theUrl + 'org=' + theDb;
 	</TD></TR></TABLE>
 	<TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0><TR><TH HEIGHT=3></TH></TR><TR><TD WIDTH=10></TD><TD>
 
-	<P><FONT FACE="courier" SIZE=3><B>Apr. 2, 2003</B></FONT><BR>
-	The Dec. 2001 Human assembly (hg10) and the Nov. 2001 Mouse assembly
-	(mm1) have been moved to the archives. They are no longer accessible
-	from the main browser, but instead can be found by clicking the 
-	<A HREF="http://genome-archive.cse.ucsc.edu">Archives</A> link on this 
-	page.
+	<P><FONT FACE="courier" SIZE=3><B>Apr. 14, 2003</B></FONT><BR>
+	The International Human Genome Sequencing Consortium today announced the
+	successful completion of the Human Genome Project. The most
+	significant outcome of this project is the reference sequence of
+	the human genome. The sequencing of
+	the 3 billion letters of DNA in the human genome - which many consider to 
+	be one of the most ambitious scientific undertakings in history - was
+	completed 2 years ahead of schedule and at substantially less cost than
+	original estimates. The reference sequence will serve as a new foundation
+	for research in the fields of medicine and human biology.
+	<P>
+	In conjunction with this announcement, the UCSC Genome Bioinformatics 
+	group is proud to release a genome browser and BLAT server on the 
+	reference sequence (NCBI Build 33), along with bulk downloads of the 
+	sequence and annotation data. The initial browser provides a preliminary 
+	set of annotations that will be expanded in coming weeks. Bulk downloads
+	of the data are available via FTP at 
+	<A HREF="ftp://genome.ucsc.edu/goldenPath/10april2003">ftp://genome.ucsc.edu/goldenPath/10april2003</A> 
+	or through the <A HREF="downloads.html">Downloads</A> link on this page. 
+	We
+	recommend that FTP be used rather than HTML for the download
+	of large or multiple files.
+	<P>
+	The reference sequence covers about 99 percent of the human genome's gene-containing
+	regions, and has been sequenced to an accuracy of 99.99 percent. The
+	missing portions are essentially contained in less than 400 defined gaps
+	that represent DNA regions with unusual structures that can't be reliably
+	sequenced using current technology. The average DNA letter now lies within
+	a stretch of approximately 27,332,000 base pairs of uninterrupted 
+	sequence! 
+	<P>
+	Chromosomal sequences for this release were assembled by the 
+	International Human Genome Sequencing Consortium sequencing centers and verified by 
+	NCBI and UCSC. In some cases, sequence joins between adjacent clones 
+	could not be computationally validated, e.g. due to polymorphisms in the 
+	overlapping sequence. In situations like this, supporting evidence for 
+	the join has been provided by the sequencing center responsible for that 
+	particular chromosome. The <A HREF="goldenPath/certTable.html">
+	Non-standard Join Certificates</A> table displays this information. The 
+	annotations on the UCSC website have been provided
+	by UCSC and collaborators worldwide. See the 
+	<A HREF="goldenPath/credits.html">Credits</A> page for a detailed
+	list of organizations and individuals who contributed to the success of 
+	this release.
 
-	<P><FONT FACE="courier" SIZE=3><B>Mar. 26, 2003</B></FONT><BR>
-	We've added an updated rat assembly to our site: Rat Jan 2003 (rn2). This
-	corresponds to the Version 2.1 Jan 2003 Update of the rat genome 
-	assembly, produced by the Atlas group at Baylor HGSC as part of the Rat
-	Genome Sequencing Consortium.
 	<P>
-	This update corrects duplications that were assembly artifacts in the 
-	previous version and improves the linking of bactigs to create larger
-	"ultrabactigs". Compared with the previous rat assembly, sequence mapped 
-	to specific chromosomal coordinates is reduced by about 1.6 percent. 
-	Loosely mapped and unmapped sequence is reduced by 17 percent. For more
-	details and statistics on the Jan 2003 assembly, see the Baylor HGSC
-	<A HREF="ftp://rat-ftp.hgsc.bcm.tmc.edu/pub/analysis/rat/README">
-	README</A> for this release.
-	<P>
-	UCSC has released a Genome Browser and BLAT server for this assembly 
-	update. The initial <A HREF="http://genome.ucsc.edu/cgi-bin/hgTracks?db=rn2">
-	browser</A> contains 16 annotation tracks, with more to follow in coming 
-	weeks. Sequence downloads are currently available at 
-	<A HREF="ftp://genome.ucsc.edu/goldenPath/rnJan2003/" TARGET=_blank>
-	ftp://genome.ucsc.edu/goldenPath/rnJan2003/</A> or via the Downloads 
-	link on this page. A complete set of database downloads will be available at the beginning 
-	of next week. This data contains 
-	<A HREF="http://genome.ucsc.edu/goldenPath/credits.html#rat_use">specific 
-	conditions for use</A>.
-	<P>
-	Thanks to the Atlas group at Baylor HGSC, the Rat Genome Sequencing Consortium,
-	the UCSC Genome Bioinformatics group, and contributors worldwide for 
-	making this release available.
-	
-	<P><FONT FACE="courier" SIZE=3><B>Mar. 13, 2003</B></FONT><BR>
-	We're happy to announce an update to the mouse genome sequence. This new 
-	version (Mouse Feb.  2003) includes 705 megabases of finished sequence, 
-	compared to 96 megabases of finished sequence in the previous assembly. 
-	Many people in the Mouse Genome Sequencing Consortium contributed to 
-	this update. The Sanger Institute in particular contributed a large 
-	amount of finished sequence. Richa Agarwala, Deanna Church, and 
-	coworkers at NCBI layered the finished clones on top of the Arachne whole genome shotgun assembly. Arian Smit constructed a new RepeatMasker 
-	library.  
-	<P>
-	UCSC has released a Genome Browser and BLAT server for the Feb. 2003 
-	Mouse genome. The initial 
-	<A HREF="http://genome.ucsc.edu/cgi-bin/hgTracks?db=mm3">
-	browser</A> contains 14 annotation tracks, with more to follow in coming 
-	weeks. Sequence downloads are currently available at 
-	<A HREF="ftp://genome.ucsc.edu/goldenPath/mmFeb2003/" TARGET=_blank>
-	ftp://genome.ucsc.edu/goldenPath/mmFeb2003/</A> or via the Downloads 
-	link on this page. Database downloads will be available at the beginning 
-	of next week. 
-	<P>
-	Thanks to everybody at UCSC and around the world that contributed to the 
-	success of this release! 
-
-	<P><FONT FACE="courier" SIZE=3><B>Feb. 5, 2003</B></FONT><BR>
-	We're proud to announce the release of version 17 of the UCSC Genome 
-	Browser. 
-	This version contains powerful new features, numerous improvements to 
-	the annotation track display, additional annotation 
-	tracks, and a number of bug fixes. In this release cycle, we've also introduced
-	an enhanced QA process that formalizes our testing and verification
-	of the Genome Browser software and the data displayed in the browser.
-	<P>
-	<HR>
-	<B>New functionality in v.17:</B><BR> 
-	-- Numerous enhancements to the table browser that allow the user to 
-	conduct more complex and specific searches. New features include support 
-	for intersections of tracks, a new summary statistics output format, and 
-	the ability to output query results as a custom annotation track that 
-	can be viewed in the Genome Browser.
-	 The new 
-	<A HREF="goldenPath/help/hgTextHelp.html" 
-	TARGET=_blank> Table Browser User's Guide</A> contains a detailed 
-	description of the new features and provides a wealth of information and
-	examples for conducting various types of searches on the database tables. 
-	<P>
-	-- Two new display modes available for most annotation tracks: pack and
-	squish modes. In <I>pack mode</I> display, annotation track features are fully
-	displayed, but more than one feature may be displayed on the same line. 
-	This greatly reduces the amount of display space needed by a track 
-	when a user wishes to view a large number of individual features at one 
-	time. <I>Squish mode</I> is similar to pack mode, but displays features 
-	at 50% height and without labels. This mode is particularly 
-	useful for viewing tracks in which a large number of features align to 
-	the same section of a chromosome, e.g. EST tracks.
-	<P>
-	-- Functional groupings of annotation track controls. This 
-	makes it much easier to find a particular item in the track control list 
-	and gives a better visual overview 
-	of the annotations available in a particular category, e.g. comparative
-	genomics tracks or gene prediction tracks.
-	<P>
-	-- A mechanism for saving the annotation tracks image in postscript or 
-	PDF format. This much requested feature enables Genome Browser users to print an image at
-	high resolution, edit it with a drawing progam, or display it in a 
-	postscript or PDF viewer.
-	<P>
-	-- A <A HREF="goldenPath/customTracks/custTracks.html"
-	TARGET=_blank>collection of custom annotation tracks</A> supplied by 
-	Genome Browser users and members of the UCSC Genome Bioinformatics lab.
-	Additional contributions to this collection are welcome! Contact 
-	<A HREF="mailto:genome@soe.ucsc.edu">genome@soe.ucsc.edu</A> if you have 
-	an annotation you'd like to share.
-	<P>
-	<HR>
-	<B>New annotation tracks in v.17:</B><BR> 
-	-- a new Known Genes track (Human Builds 30 & 31, Feb 2002 Mouse, 
-	Nov 2002 Rat) that shows known 
-	protein coding genes based on proteins from SWISS-PROT, TrEMBL, and
-   	TrEMBL-NEW and their corresponding mRNAs from Genbank. Features within
-	the track are color-coded according to origin and review status.  
-	<P>
-	-- a new Superfamily track (Human Build 30, Feb 2002 Mouse) that shows proteins having 
-	homologs with known structures or functions. Each entry in the track 
-	shows the coding region of a gene (based on Ensembl gene prediction). 
-	The feature label consists of the names of all known protein domains coded 
-	by the gene, and usually contains structural and/or function 
-	descriptions that provide valuable information for getting a quick grasp 
-	of the biological significance for the gene.
-	<P>
-	We have also released several additional annotation 
-	tracks on the latest human and rat assemblies in the past
-	month.
-	<P>
-	<HR>
-	<B>Bug fixes in v.17:</B><BR>
-	-- Approximately 40 bugs (mostly minor problems) have been fixed in 
-	this version. 
-	<P>
-	<HR>
-	To take full advantage of the new display features in this release, we 
-	recommend that you reset your browser to the new default settings. NOTE:
-	you may not want to reset your browser if you have customized settings
-	that you wish to preserve. You can reset your browser by clicking 
-	the "Click here to reset" link on the Browser Gateway page.
-	<P>
-	We hope this new release facilitates your work with the UCSC Genome Browser.
-	If you have any questions or comments about the new release, send email
-	to <A HREF="mailto:genome@soe.ucsc.edu">genome@soe.ucsc.edu</A>.
+	We'd like to congratulate the many people worldwide who have worked on 
+	the Human Genome Project for this landmark achievement. We'd also like to acknowledge the UCSC
+	Genome Browser project team who worked many long hours to ensure that
+	the genome browser and sequence data were released on time for this
+	announcement: David Haussler, Jim Kent, Terry Furey, Matt Schwartz, Heather Trumbower, 
+	Angie Hinrichs, Fan Hsu, 
+	Donna Karolchik, Jorge Garcia, Patrick Gavin, and the
+	many graduate and post-doc students in the UCSC Genome Bioinformatics lab.
 
     </TD><TD WIDTH=15></TD></TR></TABLE>
 	<BR></TD></TR></TABLE>
@@ -350,9 +278,10 @@ document.location = theUrl + 'org=' + theDb;
 	</TD></TR></TABLE>
 	<TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0><TR><TH HEIGHT=3></TH></TR><TR><TD>
 <UL>
-	<LI><A HREF="goldenPath/term.html"><FONT SIZE="4">Terminology</FONT></A>
-	<LI><A HREF="goldenPath/datorg.html"><FONT SIZE="4">Data organization and format</FONT></A>
+	<LI><A HREF="goldenPath/certTable.html"><FONT SIZE="4">Non-standard Join Certificates (April 2003 Human Genome)</FONT></A>
 	<LI><A HREF="goldenPath/gbdDescriptions.html"><FONT SIZE="4">Description of the annotation database</FONT></A>
+	<LI><A HREF="goldenPath/datorg.html"><FONT SIZE="4">Data organization and format</FONT></A>
+	<LI><A HREF="goldenPath/term.html"><FONT SIZE="4">Terminology</FONT></A>
 	<LI><A HREF="goldenPath/stats.html"><FONT SIZE="4">Summary statistics</FONT></A>
 	<LI><A HREF="goldenPath/chromReports"><FONT SIZE="4">Chromosome Reports</FONT></A>
          <LI><A HREF="goldenPath/mapPlots/"><FONT SIZE="4">Genome Map Plots</FONT></A>
