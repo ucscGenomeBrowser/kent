@@ -10,7 +10,7 @@ MYLIBS =  ../lib/$(MACHTYPE)/libSpliceGraph.a $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/j
 %Test: %Test.c 
 	gcc -Wimplicit -ggdb -I../inc -I../../inc -I../../../inc  -o $@ $(addsuffix .c,$@) $(MYLIBS) $(L)
 
-O =  altSplice spliceStats correlateWithExpression
+O =  altSplice orthoSplice agxToBed #spliceStats correlateWithExpression
 
 TESTO = test_geneGraph.o
 
@@ -25,3 +25,9 @@ clean:
 	rm -rf $(O)
 lib:
 	cd ../../lib; make
+
+testCase: 
+	load.tcsh
+
+ranbp1:
+	makeRanbp1.csh
