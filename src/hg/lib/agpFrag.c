@@ -19,7 +19,7 @@ ret->chromEnd = sqlUnsigned(row[2]);
 ret->ix = sqlSigned(row[3]);
 strcpy(ret->type, row[4]);
 ret->frag = row[5];
-ret->fragStart = sqlUnsigned(row[6])-1;
+ret->fragStart = sqlSigned(row[6])-1;
 ret->fragEnd = sqlUnsigned(row[7]);
 strcpy(ret->strand, row[8]);
 }
