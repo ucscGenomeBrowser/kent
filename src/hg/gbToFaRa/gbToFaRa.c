@@ -1006,6 +1006,27 @@ return stringIn("5'", s) || stringIn("Five prime", s)
 	|| stringIn("five prime", s) || stringIn("5 prime", s);
 }
 
+char *getEstDir(char *def, char *com)
+/* Return EST direction as deduced from definition and comment lines. */
+{
+char *three = "3'";
+char *five = "5'";
+char *dir = NULL;
+boolean gotThreePrime, gotFivePrime;
+
+gotThreePrime = isThreePrime(def);
+gotFivePrime = isFivePrime(def);
+if (gotThreePrime ^ gotFivePrime)
+    dir = (gotThreePrime ? three : five);
+if (dir == NULL)
+    {
+    gotThreePrime = isThreePrime(com);
+    gotFivePrime = isFivePrime(com);
+    dir = (gotThreePrime ? three : five);
+    }
+return dir;
+}
+
 void procOneGbFile(char *inName, FILE *faFile, char *faDir, FILE *raFile, 
     struct hash *uniqueNameHash, struct hash *estAuthorHash, struct filter *filter)
 /* Process one genBank file into fa and ra files. */
@@ -1131,15 +1152,9 @@ while (readGbInfo(lf))
 	    wordCount >= 6 && sameString(words[5], "EST"))
             {
             /* Try and figure out if it's a 3' or 5' EST */
-            char *def = definitionField->val;
-            boolean gotThreePrime;
-            boolean gotFivePrime;
-	    gotThreePrime = (isThreePrime(def) || isThreePrime(com));
-	    gotFivePrime = (isFivePrime(def) || isFivePrime(com));
-            if (gotThreePrime ^ gotFivePrime)
-                {
-                kvtAdd(kvt, "dir", (gotThreePrime ? "3'" : "5'"));
-                }
+	    char *dir = getEstDir(definitionField->val, com);
+	    if (dir != NULL)
+                kvtAdd(kvt, "dir", dir);
             isEst = TRUE;
             }
 
