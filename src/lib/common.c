@@ -7,31 +7,6 @@
  * Strings, singly-linked lists, and a little file i/o. */
 #include "common.h"
 
-/* removes the '\r' character from a string */
-/* the source and destination strings can be the same, if there is no threads */
-void removeReturns(char* dest, char* src) {
-    int i = 0;
-    int j = 0;
-
-    // until the end of the string
-    while(1) {
-        // skip the returns
-        while(src[j] == '\r')
-            j++;
-
-        // copy the characters
-        dest[i] = src[j];
-
-        // check to see if done
-        if(src[j] == '\0')
-            break;
-
-        // advance the counters
-        i++;
-        j++;
-    }
-}
-
 void *cloneMem(void *pt, size_t size)
 /* Allocate a new buffer of given size, and copy pt to it. */
 {
@@ -1075,5 +1050,33 @@ v.bytes[1] = u.bytes[2];
 v.bytes[2] = u.bytes[1];
 v.bytes[3] = u.bytes[0];
 return v.whole;
+}
+
+void removeReturns(char *dest, char *src) 
+/* Removes the '\r' character from a string.
+ * The source and destination strings can be the same, if there are 
+ * no other threads */
+{
+int i = 0;
+int j = 0;
+
+// until the end of the string
+for (;;)
+    {
+    // skip the returns
+    while(src[j] == '\r')
+	j++;
+
+    // copy the characters
+    dest[i] = src[j];
+
+    // check to see if done
+    if(src[j] == '\0')
+	break;
+
+    // advance the counters
+    i++;
+    j++;
+    }
 }
 
