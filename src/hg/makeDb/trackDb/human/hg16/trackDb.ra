@@ -861,7 +861,7 @@ type wig 0.0 1.0
 autoScaleDefault off
 
 track phastConsElements
-shortLabel Cons Elements
+shortLabel MostConserved
 longLabel PhastCons Conserved Elements, Human/Chimp/Mouse/Rat/Chicken
 group compGeno
 priority 100.12
@@ -902,7 +902,7 @@ pairwise hmrg
 speciesOrder chimp mouse rat chicken
 
 track pHMM_5_WayTop5
-shortLabel Most Conserved
+shortLabel Thresholded Cons
 longLabel Top 5 % of Human/Chimp/Mouse/Rat/Chicken PhyloHMM Cons
 priority 100.1
 group compGeno
@@ -918,7 +918,7 @@ visibility hide
 type bed 4
 
 track pHMM_3_WayTop5
-shortLabel Most 3-Way Cons
+shortLabel Thresholded 3-Way Cons
 longLabel Top 5 % of Human/Mouse/Rat PhyloHMM Cons
 priority 100.2
 group compGeno
