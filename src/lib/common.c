@@ -7,7 +7,7 @@
 #include "common.h"
 #include "errabort.h"
 
-static char const rcsid[] = "$Id: common.c,v 1.42 2003/05/16 15:24:39 kent Exp $";
+static char const rcsid[] = "$Id: common.c,v 1.43 2003/05/25 15:21:50 baertsch Exp $";
 
 void *cloneMem(void *pt, size_t size)
 /* Allocate a new buffer of given size, and copy pt to it. */
@@ -1392,4 +1392,44 @@ va_start(args, format);
 sz = vasafef(buffer, bufSize, format, args);
 va_end(args);
 return sz;
+}
+
+int chromToInt(char *s)
+/* converts a chrom name chrXX into an integer from 1 to 54. 
+    X = 23 Y = 24 Un = 25 M = 26 random = chr + 26;*/
+{
+char *u;
+int ret = 0;
+char str[64];
+
+if (!startsWith("chr", s))
+    {
+    return 0;
+    }
+s += 3;
+sprintf(str,"%s",s);
+u = strchr(str,'_');
+if (u != NULL)
+    {
+    ret = 26;
+    *u = '\0';
+    }
+switch (str[0])
+    {
+    case 'X':
+        ret += 23; 
+        break;
+    case 'Y':
+        ret += 24; 
+        break;
+    case 'U':
+        ret += 25; 
+        break;
+    case 'M':
+        ret += 26; 
+        break;
+    default:
+        ret += atoi(s);
+    }
+return ret;
 }
