@@ -868,10 +868,12 @@ zip -j zip/scaffolds.lft.zip jkStuff/scaffolds.lft
     para check
     para push
 
-    # If there were out-of-memory problems (run "para problems"), then 
-    # re-run those jobs by hand but change the -window arg from 2400000
-    # to 1200000.  In build33, this was 22/NT_011519.
-    #  In build34 there were NO failures !
+    # DONE TO HERE
+
+    # NOTE: 2 jobs (chr6_7, chr19_10) failed with:
+    #   "No overlap between a and b in mergeTwo" -- investigating,
+    # but continuing with the track
+
     # Convert these to chromosome level files as so:     
     ssh kksilo
     cd /cluster/data/panTro1/bed/genscan
@@ -1240,7 +1242,7 @@ cat > net.csh << 'EOF'
     rm -r netChain/hNoClass.net
 
 
-# CHAIN FILES FROM THE NET (IN PROGRESS kate)
+# CHAIN FILES FROM THE NET (DONE kate)
 #       for downloads area
     ssh kksilo
     cd /cluster/data/panTro1
@@ -1262,7 +1264,7 @@ cat > net.csh << 'EOF'
     cp ~/kent/src/hg/mouseStuff/chainFormat.doc .
 
 
-# AXT FILES FROM THE NET (IN PROGRESS kate)
+# AXT FILES FROM THE NET (DONE kate)
 #    for a "Human Best" track that displays alignments at
     # base level, and for download
     ssh kksilo
@@ -1308,8 +1310,17 @@ cat > makeAxt.csh << 'EOF'
     gzip *.axt
     md5sum *.gz > md5sum.txt
     # create README.txt
- 
 
+    # add to axtInfo table for Comparative Sequence link on gene pred tracks
+    #  (2004-04-27 kate)
+    ssh hgwdev
+    hgsql panTro1 < ~/kent/src/hg/lib/axtInfo.sql
+    foreach f (/gbdb/panTro1/axtNetHg16/chr*.axt)
+        set chr=$f:t:r
+        echo "INSERT INTO axtInfo (species, alignment, chrom, fileName) \
+                VALUES ('hg16','Reciprocal Best','$chr','$f');" | hgsql panTro1
+    end
+ 
 # Genbank ESTs completed, but needed to redo native ESTs/mRNAs with 
 # new ooc file.
 
@@ -1382,6 +1393,7 @@ ldHgGene panTro1 mappedRefSeq new.gtf
     /cluster/bin/i386/hgLoadBed panTro1 humanDels indels.chimp.chr.bed
     #add description file humanDels.html 
     # to  ~/kent/src/hg/makeDb/trackDb/chimp/panTro1
+
     #add a track entry to trackDb.ra 
     # in  ~/kent/src/hg/makeDb/trackDb/chimp/panTro1
 
@@ -1663,9 +1675,21 @@ cat > gsub << 'EOF'
     echo "load data local infile 'ctgPos.tab' into table ctgPos" | hgsql panTro1
 
                 
+# FUGU BLAT ALIGNMENTS (2004-04-27 kate)
+    ssh kk
+    mkdir /cluster/data/panTro1/bed/blatFr1
+    cd /cluster/data/panTro1/bed/blatFr1
+    ls -1S /iscratch/i/fugu/trfFa/*.fa > fugu.lst
+    ls -1S /scratch/chimp/panTro1/nib/*.nib > chimp.lst
+    cat << '_EOF_' > gsub
+#LOOP
+blat -mask=lower -q=dnax -t=dnax {check in exists $(path1)} {check in line+ $(path2)} {check out line+ psl/$(root1)_$(root2).psl}
+#ENDLOOP
+'_EOF_' 
+    # << this line makes emacs coloring happy
+    mkdir psl
+    gensub2 chimp.lst fugu.lst gsub spec
+    para create spec
+    para try, check, push, check, ...
+
     
-
-
-    
-
-
