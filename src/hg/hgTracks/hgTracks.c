@@ -4445,24 +4445,6 @@ mgFree(&mg);
 }
 
 
-void makeDropList(char *name, char *menu[], int menuSize, char *checked)
-/* Make a drop-down list. */
-{
-int i;
-char *selString;
-if (checked == NULL) checked = menu[0];
-printf("<SELECT ALIGN=CENTER NAME=\"%s\">", name);
-for (i=0; i<menuSize; ++i)
-    {
-    if (!differentWord(menu[i], checked))
-        selString = " SELECTED";
-    else
-        selString = "";
-    printf("<OPTION%s>%s</OPTION>", selString, menu[i]);
-    }
-printf("</SELECT>");
-}
-
 void makeCheckBox(char *name, boolean isChecked)
 /* Create a checkbox with the given name in the given state. */
 {
@@ -4642,7 +4624,7 @@ fputs("</TABLE><CENTER>\n", stdout);
 
 /* Display bottom control panel. */
 fputs("Chromosome ", stdout);
-makeDropList("seqName", hgChromNames, 24, chromName);
+cgiMakeDropList("seqName", hgChromNames, 24, chromName);
 fputs(" bases ",stdout);
 cgiMakeIntVar("winStart", winStart, 12);
 fputs(" - ", stdout);
@@ -4669,7 +4651,7 @@ printf("<BR><B>Track Controls:</B><BR> ");
 printf("</th></tr>\n");
 printf("<tr><td align=left>\n");
 printf(" Base Position <BR>");
-makeDropList("ruler", offOn, 2, offOn[withRuler]);
+cgiMakeDropList("ruler", offOn, 2, offOn[withRuler]);
 printf("</td>");
 controlColNum=1;
 for (group = tGroupList; group != NULL; group = group->next)
@@ -4685,7 +4667,7 @@ for (group = tGroupList; group != NULL; group = group->next)
 	controlColNum++;
 	}
     printf(" %s<BR> ", group->shortLabel);
-    makeDropList(group->mapName, tvStrings, ArraySize(tvStrings), tvStrings[group->visibility]);
+    cgiMakeDropList(group->mapName, tvStrings, ArraySize(tvStrings), tvStrings[group->visibility]);
     printf("</td>\n");
     }
 /* now finish out the table */
