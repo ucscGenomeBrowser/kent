@@ -30,6 +30,7 @@ update:
 	hgTrackDb drosophila dm1 trackDb_$(USER) ../../lib/trackDb.sql .
 	hgTrackDb drosophila dp1 trackDb_$(USER) ../../lib/trackDb.sql .
 	hgTrackDb sacCer sacCer1 trackDb_$(USER) ../../lib/trackDb.sql .
+	hgTrackDb chicken galGal1 trackDb_$(USER) ../../lib/trackDb.sql .
 	hgTrackDb archae pae trackDb_$(USER) ../../lib/trackDb.sql .
 	hgTrackDb chimp panTro1 trackDb_$(USER) ../../lib/trackDb.sql .
 	cd zoo; make update; cd ..
@@ -62,6 +63,7 @@ alpha:
 	hgTrackDb drosophila dm1 trackDb ../../lib/trackDb.sql .
 	hgTrackDb drosophila dp1 trackDb ../../lib/trackDb.sql .
 	hgTrackDb sacCer sacCer1 trackDb ../../lib/trackDb.sql .
+	hgTrackDb chicken galGal1 trackDb ../../lib/trackDb.sql .
 	hgTrackDb chimp panTro1 trackDb ../../lib/trackDb.sql .
 	cd zoo; make alpha; cd ..
 	cp human/hg13/description.html /gbdb/hg13/html
@@ -98,6 +100,7 @@ strict:
 	hgTrackDb -strict=yes drosophila dm1 trackDb ../../lib/trackDb.sql .
 	hgTrackDb -strict=yes drosophila dp1 trackDb ../../lib/trackDb.sql .
 	hgTrackDb -strict=yes sacCer sacCer1 trackDb ../../lib/trackDb.sql .
+	hgTrackDb -strict=yes chicken galGal1 trackDb ../../lib/trackDb.sql .
 	hgTrackDb -strict=yes chimp panTro1 trackDb ../../lib/trackDb.sql .
 
 beta:
@@ -120,6 +123,7 @@ beta:
 	hgTrackDb drosophila dm1 trackDb_beta ../../lib/trackDb.sql .
 	hgTrackDb drosophila dp1 trackDb_beta ../../lib/trackDb.sql .
 	hgTrackDb sacCer sacCer1 trackDb ../../lib/trackDb.sql .
+	hgTrackDb chicken galGal1 trackDb ../../lib/trackDb.sql .
 	hgTrackDb chimp panTro1 trackDb ../../lib/trackDb.sql .
 	cd zoo; make beta; cd ..
 
@@ -145,4 +149,5 @@ mgc:
 	hgTrackDb drosophila dm1 trackDb_beta ../../lib/trackDb.sql .
 	hgTrackDb drosophila dp1 trackDb_beta ../../lib/trackDb.sql .
 	hgTrackDb sacCer sacCer1 trackDb ../../lib/trackDb.sql .
+	hgTrackDb chicken galGal1 trackDb ../../lib/trackDb.sql .
 
