@@ -114,7 +114,7 @@
 #include "affyGenoDetails.h"
 #include "encodeRegionInfo.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.501 2003/10/15 04:45:08 angie Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.502 2003/10/16 23:17:36 angie Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -3204,7 +3204,8 @@ if (row != NULL)
         printf("<B>Version:</B> %s<BR>\n", version);
         }
 
-    if (!startsWith("Worm", organism) && !startsWith("Fugu", organism))
+    if (!startsWith("Worm", organism) && !startsWith("Fugu", organism) &&
+	!startsWith("dm", database))
     {
 	/* Put up Gene Lynx */
 	if (sameWord(type, "mrna"))
@@ -6586,18 +6587,21 @@ if (rl->locusLinkId != 0)
 	}
     } 
 if (!startsWith("Worm", organism))
-{
+    {
     medlineLinkedLine("PubMed on Gene", rl->name, rl->name);
     if (rl->product[0] != 0)
 	medlineLinkedLine("PubMed on Product", rl->product, rl->product);
     printf("\n");
-    printGeneLynxName(rl->name);
-    printf("\n");
-    printf("<B>GeneCards:</B> ");
-    printf("<A HREF = \"http://bioinfo.weizmann.ac.il/cards-bin/cardsearch.pl?search=%s\" TARGET=_blank>",
-       rl->name);
-    printf("%s</A><BR>\n", rl->name);
-}
+    if (!startsWith("dm", database))
+	{
+	printGeneLynxName(rl->name);
+	printf("\n");
+	printf("<B>GeneCards:</B> ");
+	printf("<A HREF = \"http://bioinfo.weizmann.ac.il/cards-bin/cardsearch.pl?search=%s\" TARGET=_blank>",
+	       rl->name);
+	printf("%s</A><BR>\n", rl->name);
+	}
+    }
 if (hTableExists("jaxOrtholog"))
     {
     struct jaxOrtholog jo;
@@ -6627,7 +6631,7 @@ if (startsWith("hg", hGetDb()))
 	   rl->name);
     printf("%s</A><BR>\n", rl->name);
     }
-if (!startsWith("Worm", organism))
+if (!startsWith("Worm", organism) && !startsWith("dm", database))
 {
     printStanSource(rl->mrnaAcc, "mrna");
 }
