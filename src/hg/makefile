@@ -20,7 +20,6 @@ USE_DIRS = $(DIRS)
 BAD_DIRS = \
 	altGraph \
 	cgiExample \
-	checkAgpAndFa \
 	geneOverlap \
 	hgBatch \
 	makeSeqs \
@@ -94,6 +93,7 @@ DIRS = \
 	borfBig \
 	cartDump \
 	cartReset \
+	checkAgpAndFa \
 	checkDbSync \
 	checkGoldDupes \
 	checkN \
