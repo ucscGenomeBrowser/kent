@@ -29,7 +29,7 @@ static struct sqlConnCache *centralCc = NULL;
 #define DEFAULT_MOUSE "mm2"
 #define DEFAULT_RAT   "rn1"
 #define DEFAULT_ZOO   "zooHuman3"
-
+#define DEFAULT_DB "hg13"
 #define DEFAULT_PROTEINS   "proteins"
 
 static char *defaultHuman = DEFAULT_HUMAN;
@@ -95,6 +95,21 @@ void hSetDbConnect2(char* host, char *db, char *user, char *password)
     hdbPassword = password;
 }
 
+boolean hDbExists(char *database)
+/*
+  Function to check if this is a valid db name
+*/
+{
+struct sqlConnection *conn = hConnectCentral();
+char buf[128];
+char query[256];
+boolean res = FALSE;
+sprintf(query, "select name from dbDb where name = '%s'", database);
+res = (sqlQuickQuery(conn, query, buf, sizeof(buf)) != NULL);
+hDisconnectCentral(&conn);
+return res;
+}
+
 void hSetDb(char *dbName)
 /* Set the database name. */
 {
@@ -109,6 +124,12 @@ void hSetDb2(char *dbName)
 if (hdbCc2 != NULL)
     errAbort("Can't hgSetDb after an hgAllocConn2(), sorry.");
 hdbName2 = dbName;
+}
+
+char *hDefaultDb()
+/* Return the default db if all else fails */
+{
+return DEFAULT_DB;
 }
 
 char *hGetDb()

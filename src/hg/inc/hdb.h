@@ -69,11 +69,17 @@ void hSetDbConnect(char* host, char *db, char *user, char *password);
 void hSetDbConnect2(char* host, char *db, char *user, char *password);
 /* set the connection information for the database */
 
+boolean hDbExists(char *database);
+/* Function to check if this is a valid db name */
+
 void hSetDb(char *dbName);
 /* Set the database name. */
 
 void hSetDb2(char *dbName);
 /* Set the database name. */
+
+char *hDefaultDb();
+/* Return the default db if all else fails */
 
 char *hGetDb();
 /* Return the current database name. */
