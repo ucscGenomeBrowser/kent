@@ -928,3 +928,10 @@ color 100,50,0
 altColor 0,0,255
 chromosomes chr22,chr21
 type sample 9
+
+track multAlignWebbcat
+shortLabel Multiple species alignments
+longLabel Multiple species alignments
+priority 51
+visibility hide
+type psl
