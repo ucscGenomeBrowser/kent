@@ -21,7 +21,7 @@
 #include "botDelay.h"
 #include "liftOver.h"
 
-static char const rcsid[] = "$Id: hgLiftOver.c,v 1.15 2004/04/14 21:40:47 kate Exp $";
+static char const rcsid[] = "$Id: hgLiftOver.c,v 1.16 2004/04/14 22:18:12 kate Exp $";
 
 /* CGI Variables */
 #define HGLFT_USERDATA_VAR "hglft.userData"     /* typed/pasted in data */
@@ -180,7 +180,6 @@ cgiParagraph("Results will appear below.");
 void webDataFormats()
 {
 webNewSection("Data Formats");
-printf("<UL>");
 /*
 printf("<LI>");
 printf("For <B>Position</B> format, enter the <I>chromosome</I>, <I>start</I>, and <I>end</I> positions, in the format <B>chrN:S-E</B>\n");
@@ -190,7 +189,32 @@ printf(
     "<A HREF=\"/goldenPath/help/customTrack.html#BED\" TARGET=_blank>"
     //"<A HREF=\"http://genome.ucsc.edu/goldenPath/help/customTrack.html#BED\" TARGET=_blank>"
     "Browser Extensible Data (BED)</A>\n");
-printf("</UL>");
+}
+
+void webDownloads()
+{
+webNewSection("Command Line Tool");
+cgiParagraph(
+"To lift genome annotations locally on Linux systems, download the "
+"<A HREF=\"http://www.soe.ucsc.edu/~kent/exe/linux/liftOver.gz\">" 
+"<I>liftOver</I></A> executable and the appropriate chain file."
+" Run <I>liftOver</I> with no arguments to see the usage message.\n");
+
+cgiParagraph("Chain Files:\n");
+puts("<UL>\n");
+puts("<LI>");
+puts( "<A HREF=\"/goldenPath/hg15/liftOver\" TARGET=_blank>" 
+    "Apr. 2003 UCSC hg15 (NCBI Build 33) </A>\n");
+puts("</LI>");
+puts("<LI>");
+puts( "<A HREF=\"/goldenPath/hg13/liftOver\" TARGET=_blank>" 
+    "Nov. 2002 UCSC hg13 (NCBI Build 31) </A>\n");
+puts("</LI>");
+puts("<LI>");
+puts( "<A HREF=\"/goldenPath/hg12/liftOver\" TARGET=_blank>" 
+    "June 2002 UCSC hg12 [ARCHIVED] (NCBI Build 30) </A>\n");
+puts("</LI>");
+puts("</UL>");
 }
 
 void doMiddle(struct cart *theCart)
@@ -221,12 +245,7 @@ fromDb = cartCgiUsualString(cart, HGLFT_FROMDB_VAR, previousDb);
 toDb = cartCgiUsualString(cart, HGLFT_TODB_VAR, db);
 webMain(organism, fromDb, toDb, dataFormat);
 
-if (userData == NULL || userData[0] == '\0')
-    {
-    /* display main form to enter input annotation data */
-    webDataFormats();
-    }
-else 
+if (userData != NULL && userData[0] != '\0')
     {
     struct hash *chainHash = newHash(0);
     char *chainFile;
@@ -324,8 +343,9 @@ else
         printf("</PRE>\n");
         printf("</BLOCKQUOTE>\n");
         }
-    webDataFormats();
     }
+webDataFormats();
+webDownloads();
 cartWebEnd();
 }
 
