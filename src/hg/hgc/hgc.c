@@ -37,6 +37,7 @@
 #include "cytoBand.h"
 #include "knownMore.h"
 #include "snp.h"
+#include "softberryHom.h"
 
 char *seqName;		/* Name of sequence we're working on. */
 int winStart, winEnd;   /* Bounds of sequence. */
@@ -50,11 +51,23 @@ void printEntrezNucleotideUrl(FILE *f, char *accession)
 fprintf(f, "\"%s&db=n&term=%s\"", entrezScript, accession);
 }
 
+void printEntrezProteinUrl(FILE *f, char *accession)
+/* Print URL for Entrez browser on a nucleotide. */
+{
+fprintf(f, "\"%s&db=p&term=%s\"", entrezScript, accession);
+}
+
+char *hgcPath()
+/* Return path of this CGI script. */
+{
+return "../cgi-bin/hgc";
+}
+
 void hgcAnchorSomewhere(char *group, char *item, char *other, char *chrom)
 /* Generate an anchor that calls click processing program with item and other parameters. */
 {
-printf("<A HREF=\"../cgi-bin/hgc?g=%s&i=%s&c=%s&l=%d&r=%d&db=%s&o=%s\">",
-	group, item, chrom, winStart, winEnd, database, other);
+printf("<A HREF=\"%s?g=%s&i=%s&c=%s&l=%d&r=%d&db=%s&o=%s\">",
+	hgcPath(), group, item, chrom, winStart, winEnd, database, other);
 }
 
 void hgcAnchor(char *group, char *item, char *other)
@@ -988,6 +1001,253 @@ if (name == NULL)
 return name;
 }
 
+void geneShowCommon(char *geneName, char *geneTable, char *pepTable)
+/* Show parts of gene common to everything */
+{
+char other[256];
+showGenePos(geneName, geneTable);
+printf("<H3>Links to sequence:</H3>\n");
+printf("<UL>\n");
+hgcAnchorSomewhere("htcTranslatedProtein", geneName, pepTable, seqName);
+printf("<LI>Translated Protein</A>\n"); 
+hgcAnchorSomewhere("htcGeneMrna", geneName, geneTable, seqName);
+printf("<LI>Predicted mRNA</A>\n");
+hgcAnchorSomewhere("htcGeneInGenome", geneName, geneTable, seqName);
+printf("<LI>Genomic Sequence</A>\n");
+printf("</UL>\n");
+}
+
+
+void htcTranslatedProtein(char *geneName)
+/* Display translated protein. */
+{
+htmlStart("Protein Translation");
+showProteinPrediction(geneName, cgiString("o"));
+}
+
+void getCdsInMrna(struct genePred *gp, int *retCdsStart, int *retCdsEnd)
+/* Given a gene prediction, figure out the
+ * CDS start and end in mRNA coordinates. */
+{
+int missingStart = 0, missingEnd = 0;
+int exonStart, exonEnd, exonSize, exonIx;
+int totalSize = 0;
+
+for (exonIx = 0; exonIx < gp->exonCount; ++exonIx)
+    {
+    exonStart = gp->exonStarts[exonIx];
+    exonEnd = gp->exonEnds[exonIx];
+    exonSize = exonEnd - exonStart;
+    totalSize += exonSize;
+    missingStart += exonSize - rangeIntersection(exonStart, exonEnd, gp->cdsStart, exonEnd);
+    missingEnd += exonSize - rangeIntersection(exonStart, exonEnd, exonStart, gp->cdsEnd);
+    }
+*retCdsStart = missingStart;
+*retCdsEnd = totalSize - missingEnd;
+}
+
+int genePredCdnaSize(struct genePred *gp)
+/* Return total size of all exons. */
+{
+int totalSize = 0;
+int exonIx;
+
+for (exonIx = 0; exonIx < gp->exonCount; ++exonIx)
+    {
+    totalSize += (gp->exonEnds[exonIx] - gp->exonStarts[exonIx]);
+    }
+return totalSize;
+}
+
+struct dnaSeq *getCdnaSeq(struct genePred *gp)
+/* Load in cDNA sequence associated with gene prediction. */
+{
+int txStart = gp->txStart;
+struct dnaSeq *genoSeq = hDnaFromSeq(gp->chrom, txStart, gp->txEnd,  dnaLower);
+struct dnaSeq *cdnaSeq;
+int cdnaSize = genePredCdnaSize(gp);
+int cdnaOffset = 0, exonStart, exonSize, exonIx;
+
+AllocVar(cdnaSeq);
+cdnaSeq->dna = needMem(cdnaSize+1);
+cdnaSeq->size = cdnaSize;
+for (exonIx = 0; exonIx < gp->exonCount; ++exonIx)
+    {
+    exonStart = gp->exonStarts[exonIx];
+    exonSize = gp->exonEnds[exonIx] - exonStart;
+    memcpy(cdnaSeq->dna + cdnaOffset, genoSeq->dna + (exonStart - txStart), exonSize);
+    cdnaOffset += exonSize;
+    }
+assert(cdnaOffset == cdnaSeq->size);
+freeDnaSeq(&genoSeq);
+return cdnaSeq;
+}
+
+void htcGeneMrna(char *geneName)
+/* Display associated cDNA. */
+{
+char *table = cgiString("o");
+char query[512];
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr;
+char **row;
+struct genePred *gp;
+struct dnaSeq *seq;
+int cdsStart, cdsEnd;
+
+htmlStart("DNA Near Gene");
+sprintf(query, "select * from %s where name = '%s'", table, geneName);
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    gp = genePredLoad(row);
+    seq = getCdnaSeq(gp);
+    getCdsInMrna(gp, &cdsStart, &cdsEnd);
+    toUpperN(seq->dna + cdsStart, cdsEnd - cdsStart);
+    if (gp->strand[0] == '-')
+	{
+        reverseComplement(seq->dna, seq->size);
+	}
+    printf("<TT><PRE>");
+    faWriteNext(stdout, NULL, seq->dna, seq->size);
+    printf("</TT></PRE>");
+    genePredFree(&gp);
+    freeDnaSeq(&seq);
+    }
+sqlFreeResult(&sr);
+}
+
+void htcGeneInGenome(char *geneName)
+/* Put up page that lets user display genomic sequence
+ * associated with gene. */
+{
+htmlStart("Genomic Sequence Near Gene");
+printf("<H2>Get Genomic Sequence Near Gene</H2>");
+printf("<FORM ACTION=\"%s\">\n\n", hgcPath());
+cgiMakeHiddenVar("g", "htcDnaNearGene");
+cgiContinueHiddenVar("i");
+printf("\n");
+cgiContinueHiddenVar("db");
+printf("\n");
+cgiContinueHiddenVar("c");
+printf("\n");
+cgiContinueHiddenVar("l");
+printf("\n");
+cgiContinueHiddenVar("r");
+printf("\n");
+cgiContinueHiddenVar("o");
+printf("\n");
+printf("<INPUT TYPE=RADIO NAME=how VALUE = \"tx\" CHECKED>Transcript<BR>");
+printf("<INPUT TYPE=RADIO NAME=how VALUE = \"cds\">Coding Region Only<BR>");
+printf("<INPUT TYPE=RADIO NAME=how VALUE = \"txPlus\">Transcript + Promoter<BR>");
+printf("<INPUT TYPE=RADIO NAME=how VALUE = \"promoter\">Promoter Only<BR>");
+printf("Promoter Size: ");
+cgiMakeIntVar("promoterSize", 1000, 6);
+printf("<BR>");
+cgiMakeButton("submit", "submit");
+printf("</FORM>");
+}
+
+void toUpperExons(int startOffset, struct dnaSeq *seq, struct genePred *gp)
+/* Upper case bits of DNA sequence that are exons according to gp. */
+{
+int s, e, size;
+int exonIx;
+int seqStart = startOffset, seqEnd = startOffset + seq->size;
+
+if (seqStart < gp->txStart)
+    seqStart = gp->txStart;
+if (seqEnd > gp->txEnd)
+    seqEnd = gp->txEnd;
+    
+for (exonIx = 0; exonIx < gp->exonCount; ++exonIx)
+    {
+    s = gp->exonStarts[exonIx];
+    e = gp->exonEnds[exonIx];
+    if (s < seqStart) s = seqStart;
+    if (e > seqEnd) e = seqEnd;
+    if ((size = e - s) > 0)
+	{
+	s -= startOffset;
+	if (s < 0 ||  s + size > seq->size)
+	   errAbort("Out of range! %d-%d not in %d-%d", s, s+size, 0, size);
+	toUpperN(seq->dna + s, size);
+	}
+    }
+}
+
+void htcDnaNearGene(char *geneName)
+/* Fetch DNA near a gene. */
+{
+char *table = cgiString("o");
+char query[512];
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr = NULL;
+char **row = NULL;
+struct genePred *gp = NULL;
+struct dnaSeq *seq = NULL;
+char *how = cgiString("how");
+int start, end, promoSize;
+boolean isRev;
+char faLine[256];
+
+htmlStart("Predicted mRNA");
+sprintf(query, "select * from %s where name = '%s'", table, geneName);
+sr = sqlGetResult(conn, query);
+if ((row = sqlNextRow(sr)) != NULL)
+    {
+    gp = genePredLoad(row);
+    isRev = (gp->strand[0] == '-');
+    start = gp->txStart;
+    end = gp->txEnd;
+    promoSize = cgiInt("promoterSize");
+    if (sameString(how, "cds"))
+        {
+	start = gp->cdsStart;
+	end = gp->cdsEnd;
+	}
+    else if (sameString(how, "txPlus"))
+        {
+	if (isRev)
+	    {
+	    end += promoSize;
+	    }
+	else
+	    {
+	    start -= promoSize;
+	    if (start < 0) start = 0;
+	    }
+	}
+    else if (sameString(how, "promoter"))
+        {
+	if (isRev)
+	    {
+	    start = gp->txEnd;
+	    end = start + promoSize;
+	    }
+	else
+	    {
+	    end = gp->txStart;
+	    start = end - promoSize;
+	    if (start < 0) start = 0;
+	    }
+	}
+    seq = hDnaFromSeq(gp->chrom, start, end, dnaLower);
+    toUpperExons(start, seq, gp);
+    if (isRev)
+        reverseComplement(seq->dna, seq->size);
+    printf("<TT><PRE>");
+    sprintf(faLine, "%s:%d-%d %s exons in upper case",
+    	gp->chrom, start+1, end,
+	(isRev ? "(reverse complemented)" : "") );
+    faWriteNext(stdout, faLine, seq->dna, seq->size);
+    printf("</TT></PRE>");
+    genePredFree(&gp);
+    freeDnaSeq(&seq);
+    }
+sqlFreeResult(&sr);
+}
+
 void doKnownGene(char *geneName)
 /* Handle click on known gene track. */
 {
@@ -1065,11 +1325,7 @@ if (geneName != NULL)
 if (anyMore)
     htmlHorizontalLine();
 
-showGenePos(transName, "genieKnown");
-htmlHorizontalLine();
-
-showProteinPrediction(transName, "genieKnownPep");
-htmlHorizontalLine();
+geneShowCommon(transName, "genieKnown", "genieKnownPep");
 puts(
    "<P>Known genes are derived from the "
    "<A HREF = \"http://www.ncbi.nlm.nih.gov/LocusLink/\" TARGET=_blank>"
@@ -1096,9 +1352,7 @@ void doGeniePred(char *geneName)
 {
 htmlStart("Genie Gene Prediction");
 printf("<H2>Genie Gene Prediction %s</H2>\n", geneName);
-showGenePos(geneName, "genieAlt");
-showProteinPrediction(geneName, "genieAltPep");
-htmlHorizontalLine();
+geneShowCommon(geneName, "genieAlt", "genieAltPep");
 puts(
    "<P>Genie predictions are based on "
    "<A HREF = \"http://www.affymetrix.com\" TARGET=_blank>Affymetrix's</A> "
@@ -1115,10 +1369,7 @@ void doEnsPred(char *geneName)
 struct sqlConnection *conn = hAllocConn();
 htmlStart("Ensembl Prediction");
 printf("<H2>Ensembl Prediction %s</H2>\n", geneName);
-showGenePos(geneName, "ensGene");
-if (sqlTableExists(conn, "ensPep"))
-    showProteinPrediction(geneName, "ensPep");
-htmlHorizontalLine();
+geneShowCommon(geneName, "ensGene", "ensPep");
 if (!sameString(database, "hg3"))
     {
     printf("<P>Visit <A HREF=\"http://www.ensembl.org/perl/transview?transcript=%s\" _TARGET=blank>"
@@ -1127,17 +1378,72 @@ if (!sameString(database, "hg3"))
 hFreeConn(&conn);
 }
 
+char *getGi(char *ncbiFaHead)
+/* Get GI number from NCBI FA format header. */
+{
+char *s;
+static char gi[64];
+
+if (!startsWith("gi|", ncbiFaHead))
+    return NULL;
+ncbiFaHead += 3;
+strncpy(gi, ncbiFaHead, sizeof(gi));
+s = strchr(gi, '|');
+if (s != NULL) 
+    *s = 0;
+return trimSpaces(gi);
+}
+
+void showHomologies(char *geneName, char *table)
+/* Show homology info. */
+{
+struct sqlConnection *conn = hAllocConn();
+char query[256];
+struct sqlResult *sr;
+char **row;
+boolean isFirst = TRUE, gotAny = FALSE;
+char *gi;
+struct softberryHom hom;
+
+
+if (sqlTableExists(conn, table))
+    {
+    sprintf(query, "select * from %s where name = '%s'", table, geneName);
+    sr = sqlGetResult(conn, query);
+    while ((row = sqlNextRow(sr)) != NULL)
+	{
+	softberryHomStaticLoad(row, &hom);
+	if ((gi = getGi(hom.giString)) == NULL)
+	    continue;
+	if (isFirst)
+	    {
+	    htmlHorizontalLine();
+	    printf("<H3>Protein Homologies:</H3>\n");
+	    isFirst = FALSE;
+	    gotAny = TRUE;
+	    }
+	printf("<A HREF=");
+	sprintf(query, "%s[gi]", gi);
+	printEntrezProteinUrl(stdout, query);
+	printf(" TARGET=_blank>%s</A> %s<BR>", hom.giString, hom.description);
+	}
+    }
+if (gotAny)
+    htmlHorizontalLine();
+hFreeConn(&conn);
+}
+
 void doSoftberryPred(char *geneName)
 /* Handle click on Softberry gene track. */
 {
 htmlStart("Fgenesh++ Gene Prediction");
 printf("<H2>Fgenesh++ Gene Prediction %s</H2>\n", geneName);
-showGenePos(geneName, "softberryGene");
-showProteinPrediction(geneName, "softberryPep");
-htmlHorizontalLine();
+showHomologies(geneName, "softberryHom");
+geneShowCommon(geneName, "softberryGene", "softberryPep");
 puts(
    "<P>Fgenesh++ predictions are based on Softberry's gene finding software. "
-   "Fgenesh++ uses both HMMs and protein similarity to find genes.  See the "
+   "Fgenesh++ uses both HMMs and protein similarity to find genes in a "
+   "completely automated manner.  See the "
    "paper \"Ab initio gene finding in </I>Drosophila genomic DNA\", <I>"
    "Genome Research</I> 10(5) 516-522 for more information.</P>"
    "<P>The Fgenesh++ gene predictions were produced by "
@@ -1685,6 +1991,22 @@ else if (sameWord(group, "htcCloneSeq"))
 else if (sameWord(group, "htcCdnaAli"))
    {
    htcCdnaAli(item);
+   }
+else if (sameWord(group, "htcTranslatedProtein"))
+   {
+   htcTranslatedProtein(item);
+   }
+else if (sameWord(group, "htcGeneMrna"))
+   {
+   htcGeneMrna(item);
+   }
+else if (sameWord(group, "htcGeneInGenome"))
+   {
+   htcGeneInGenome(item);
+   }
+else if (sameWord(group, "htcDnaNearGene"))
+   {
+   htcDnaNearGene(item);
    }
 else
    {
