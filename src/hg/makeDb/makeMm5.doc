@@ -6483,6 +6483,8 @@ cat `ls -1 *.lav | sort -g` \
 #   no need to reload
 
 # CHAIN ZEBRAFISH (danRer2) BLASTZ (DONE, 2004-12-13, hartera)
+# APPLY chainAntiRepeat TO REMOVE CHAINS THAT ARE THE PRIMARILY THE RESULTS OF 
+# REPEATS AND DEGENERATE DNA (DONE, 2004-12-22, hartera)
     # Make chains with rescored blastz danRer2
     # Run axtChain on little cluster
     ssh kki
@@ -6548,9 +6550,27 @@ axtChain -scoreScheme=/cluster/data/blastz/HoxD55.q \
     # remove old chains
     rm -r chain
     chainSplit chain all.chain.filt5k
-    
+   
+    # remove repeats from chains and reload into database
+    # (2004-12-22, hartera)
+    ssh kksilo
+    cd /cluster/data/mm5/bed/blastz.danRer2/axtChain
+    mv chain chainRaw
+    mkdir chain
+    cd chainRaw
+    foreach f (*.chain)
+       set c = $f:r
+       echo $c
+       nice chainAntiRepeat /cluster/bluearc/scratch/mus/mm5/softNib \
+                            /cluster/bluearc/danRer2/nib $f \
+                            ../chain/$c.chain
+    end
+    cd ..
+    chainMergeSort ./chain/*.chain > all.chain.antirepeat
+    chainSplit chainAR all.chain.antirepeat
+    # load filtered chains with chains removed that are mostly due to repeats 
     ssh hgwdev
-    cd /cluster/data/mm5/bed/blastz.danRer2/axtChain/chain
+    cd /cluster/data/mm5/bed/blastz.danRer2/axtChain/chainAR
     foreach i (*.chain)
         set c = $i:r
         hgLoadChain mm5 ${c}_chainDanRer2 $i
@@ -6568,12 +6588,18 @@ axtChain -scoreScheme=/cluster/data/blastz/HoxD55.q \
 # featureBits -chrom=chr1 mm5 refGene:cds chainDanRer1Link -enrichment
 # refGene:cds 0.780%, chainDanRer1Link 2.022%, both 0.512%, cover 65.64%, 
 # enrich 32.47x
-
+# after chainAntiRepeat:
+# featureBits -chrom=chr1 mm5 refGene:cds chainDanRer2Link -enrichment
+# refGene:cds 0.785%, chainDanRer2Link 2.058%, both 0.530%, cover 67.53%, 
+# enrich 32.81x
+ 
 # NET ZEBRAFISH (danRer2) BLASTZ (DONE, 2004-12-13, hartera)
+# RE-DO NET WITH CHAINS FILTERED BY chainAntiRepeat (DONE, 2004-12-22,hartera)
     ssh kksilo
     cd /cluster/data/mm5/bed/blastz.danRer2/axtChain
+    rm -r preNet
     mkdir preNet
-    cd chain
+    cd chainAR
     foreach i (*.chain)
        echo preNetting $i
        /cluster/bin/i386/chainPreNet $i ../../S1.len ../../S2.len \
@@ -6590,8 +6616,7 @@ axtChain -scoreScheme=/cluster/data/blastz/HoxD55.q \
     end
     cd ..
     cat n1/*.net | /cluster/bin/i386/netSyntenic stdin noClass.net
-    # memory usage 110891008, utime 692 s/100, stime 87
-
+    # memory usage 105357312, utime 632 s/100, stime 117
 # Add classification info using db tables:
     cd /cluster/data/mm5/bed/blastz.danRer2/axtChain
     # netClass looks for ancient repeats in one of the databases
@@ -6605,17 +6630,21 @@ axtChain -scoreScheme=/cluster/data/blastz/HoxD55.q \
        /cluster/bluearc/danRer2/linSpecRep.notInMouse
     ssh hgwdev
     cd /cluster/data/mm5/bed/blastz.danRer2/axtChain
-    time netClass noClass.net mm5 danRer2 danRer2.net \
+    time netClass noClass.net mm5 danRer2 zfishdanRer2.net \
          -tNewR=/cluster/bluearc/mm5/linSpecRep.notInZebrafish \
          -qNewR=/cluster/bluearc/danRer2/linSpecRep.notInMouse -noAr
-    # 88.050u 55.640s 3:49.74 62.5%   0+0k 0+0io 200pf+0w
-    netFilter -minGap=10 danRer2.net |  hgLoadNet mm5 netDanRer2 stdin
+    # 87.010u 56.100s 5:15.16 45.4%   0+0k 0+0io 207pf+0w
+    netFilter -minGap=10 zfishdanRer2.net |  hgLoadNet mm5 netDanRer2 stdin
 # featureBits mm5 refGene:cds netDanRer2 -enrichment
 # refGene:cds 0.938%, netDanRer2 21.447%, both 0.714%, cover 76.17%, 
 # enrich 3.55x
 # featureBits mm5 refGene:cds netDanRer1 -enrichment
 # refGene:cds 0.938%, netDanRer1 19.993%, both 0.702%, cover 74.87%, 
 # enrich 3.74x
+# after chainAntiRepeat:
+# featureBits mm5 refGene:cds netDanRer2 -enrichment
+# refGene:cds 0.942%, netDanRer2 21.161%, both 0.717%, cover 76.14%, 
+# enrich 3.60x
 # add trackDb.ra entries and html for details pages
 
 # TIGR GENE INDEX (DONE 2004-12-13 Fan)
@@ -6806,6 +6835,8 @@ axtChain -scoreScheme=/cluster/data/blastz/HoxD55.q \
 # created 21899 records output
 
 # MAKE VSDANRER2 DOWNLOADABLES (DONE, 2004-12-14, hartera)
+# REMAKE FOR CHAINS AND NET AFTER USING chainAntiRepeat
+# (DONE, 2004-12-22, hartera)
     ssh hgwdev
     cd /cluster/data/mm5/bed/blastz.danRer2/axtChrom
     set gp = /usr/local/apache/htdocs/goldenPath/mm5
@@ -6816,17 +6847,24 @@ axtChain -scoreScheme=/cluster/data/blastz/HoxD55.q \
     md5sum *.gz > md5sum.txt
                                                                                
     # copy chains and nets to downloads area
+    # re-make chains and net downloadables (2004-12-22, hartera)
+    rm $gp/vsDanRer2/zebrafish*.gz $gp/vsDanRer2/md5sum.txt
     cd /cluster/data/mm5/bed/blastz.danRer2/axtChain
-    gzip -c all.chain.filt5k > /cluster/data/mm5/zip/zebrafish.chain.gz
-    gzip -c danRer2.net > /cluster/data/mm5/zip/zebrafish.net.gz
+    gzip -c all.chain.antirepeat > \
+            /cluster/data/mm5/zip/zebrafishDanRer2.chain.gz
+    gzip -c zfishdanRer2.net > /cluster/data/mm5/zip/zebrafishDanRer2.net.gz
     cd $gp/vsDanRer2
     mv /cluster/data/mm5/zip/zebrafish*.gz .
     md5sum *.gz > md5sum.txt
     # Copy over & edit README.txt w/pointers to chain, net formats.
 
 # BLASTZ DANRER2 CLEANUP (DONE, 2004-12-14, hartera)
+# RE-DONE (DONE, 2004-12-22, hartera)
     ssh kksilo
     cd /cluster/data/mm5/bed/blastz.danRer2
     nice rm axtChain/run1/chain/* &
     nice rm -fr axtChain/n1 axtChain/noClass.net &
     nice gzip axtChrom/* pslChrom/* axtChain/all.chain axtChain/all.chain.unfiltered axtChain/*.net &
+    nice gzip axtChain/all.chain.antirepeat axtChain/all.chain.filt5k axtChain/chainAR/*.chain &
+    nice rm -fr axtChain/chain axtChain/chainRaw axtChain/preNet &
+
