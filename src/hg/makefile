@@ -19,7 +19,6 @@ USE_DIRS = $(DIRS)
 
 BAD_DIRS = \
 	altGraph \
-	autoXml \
 	cgiExample \
 	checkAgpAndFa \
 	geneOverlap \
@@ -87,6 +86,7 @@ DIRS = \
 	agpToFa \
 	agpToGl \
 	autoSql \
+	autoXml \
 	barger \
 	bedIntersect \
 	bedSort \
