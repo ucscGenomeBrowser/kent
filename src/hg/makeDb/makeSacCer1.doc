@@ -1,0 +1,216 @@
+#!/bin/csh -f # set emacs mode
+exit; # don't actually run this like a script :)
+
+# This describes how to make the sacCer1 browser database.
+#
+# The genomic sequence was downloaded Nov. 17, 2003, and is dated
+# 10/1/2003 on the Stanford FTP site.  The previous version of the
+# genomic sequence is dated Nov. 2002.  I don't see version numbers.
+
+# Create the directory structure and download sequence from the SGD
+# site at Stanford.
+    mkdir /cluster/store6/sacCer1
+    ln -s /cluster/store6/sacCer1 /cluster/data/sacCer1
+    cd /cluster/data/sacCer1
+    mkdir 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 M bed download
+    cd download
+    mkdir chromosomes
+    cd chromosomes
+    foreach i (01 02 03 04 05 06 07 08 09 10 11 12 13 14 15 16 mt)
+	wget ftp://genome-ftp.stanford.edu/pub/yeast/data_download/sequence/genomic_sequence/chromosomes/fasta/chr$i.fsa
+    end
+    foreach i (1 2 3 4 5 6 7 8 9)
+	echo ">chr$i" > chr$i.fa
+	grep -v '^>' chr0$i.fsa >> chr$i.fa
+    end
+    foreach i (chr1?.fsa)
+	echo ">$i:r" > $i:r.fa
+	grep -v '^>' $i >> $i:r.fa
+    end
+    echo ">chrM" > chrM.fa
+    grep -v '^>' chrmt.fsa > chrM.fa
+    foreach i (1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 M)
+	mv chr$i.fa ../../$i
+    end
+    gzip -4 *.fsa
+
+# Download other info from the FTP site.
+    wget -nH --cut-dirs=3 -r ftp://genome-ftp.stanford.edu/pub/yeast/data_download/chromosomal_features
+    wget -nH --cut-dirs=3 -r ftp://genome-ftp.stanford.edu/pub/yeast/data_download/gene_registry
+    wget -nH --cut-dirs=3 -r ftp://genome-ftp.stanford.edu/pub/yeast/data_download/literature_curation
+    wget -nH --cut-dirs=3 -r ftp://genome-ftp.stanford.edu/pub/yeast/data_download/oracle_schema
+    wget -nH --cut-dirs=3 -r ftp://genome-ftp.stanford.edu/pub/yeast/data_download/protein_info
+    wget -nH --cut-dirs=3 -r ftp://genome-ftp.stanford.edu/pub/yeast/data_download/sequence_similarity
+    wget -nH --cut-dirs=3 -r ftp://genome-ftp.stanford.edu/pub/yeast/data_download/systematic_results
+
+#Make dummy gap files
+#    cd /cluster/data/sacCer1
+#    foreach c (?{,?})
+#        echo -n "" > $c/chr$c.gap
+#    end
+
+# CREATING DATABASE, MAKE AND LOAD NIBS (DONE 2003-11-24 - Jim)
+# NOTE FOR YEAST WE DO NOT REPEAT MASK SEQUENCE.
+    ssh hgwdev
+    echo 'create database sacCer1' | hgsql ''
+    cd /cluster/data/sacCer1
+    hgNibSeq sacCer1 /cluster/data/sacCer1/nib */*.fa
+    # Create a read-only alias in your .cshrc or .profile
+    alias sacCer1 mysql -u hguser -phguserstuff -A sacCer1
+    # Use df to ake sure there is at least 5 gig of free mySql table space
+    df -h /var/lib/mysql
+
+# CREATING GRP TABLE FOR TRACK GROUPING (DONE 2003-11-21 - Jim)
+    ssh hgwdev
+    #  the following command copies all the data from the table
+    #	grp in the database hg16 to our new database sacCer1
+    echo "create table grp (PRIMARY KEY(NAME)) select * from hg16.grp" \
+      | hgsql sacCer1
+
+# MAKE HGCENTRALTEST ENTRY AND TRACKDB TABLE FOR YEAST (DONE 2003-11-24 Jim)
+    # Warning: must genome and organism fields must correspond
+    # with defaultDb values
+    echo 'INSERT INTO dbDb \
+        (name, description, nibPath, organism, \
+                defaultPos, active, orderKey, genome, scientificName, \
+                htmlPath, hgNearOk) values \
+        ("sacCer1", "Oct. 2003", "/gbdb/sacCer/nib", "Yeast", \
+               "chr2:827700-845800", 1, 65, "Yeast", \
+                "Saccharomyces cerevisiea", "/gbdb/sacCer1/html/description.html", \
+                0);' \
+      | hgsql -h genome-testdb hgcentraltest
+    echo 'INSERT INTO defaultDb (genome, name) values ("Yeast", "sacCer1");' \
+      | hgsql -h genome-testdb hgcentraltest
+
+    # Make trackDb table so browser knows what tracks to expect:
+    ssh hgwdev
+    cd ~/src/hg/makeDb/trackDb
+    cvs up -d -P
+
+    # Edit that makefile to add sacCer1 in all the right places and do
+    make update
+
+    # go public on genome-test
+    #make alpha
+    cvs commit makefile
+
+    # Add trackDb directories
+    mkdir sacCer
+    mkdir sacCer/sacCer1
+    cvs add sacCer
+    cvs add sacCer/sacCer1
+    cvs commit sacCer
+
+
+# MAKE GCPERCENT (DONE 2003-11-24 - Jim)
+     ssh hgwdev
+     mkdir /cluster/data/sacCer1/bed/gcPercent
+     cd /cluster/data/sacCer1/bed/gcPercent
+     # create and load gcPercent table
+     hgsql sacCer1  < ~/src/hg/lib/gcPercent.sql
+     hgGcPercent sacCer1 ../../nib
+
+# RUN TANDEM REPEAT MASKER (DONE 2003-11-24 - Jim)
+    # Do tandem repeat masking - this takes about 2 minutes.
+    ssh hgwdev
+    mkdir -p /cluster/data/sacCer1/bed/simpleRepeat
+    cd /cluster/data/sacCer1
+    foreach i (? ??)
+	trfBig $i/chr$i.fa /dev/null \
+	-bedAt=/cluster/data/sacCer1/bed/simpleRepeat/chr$i.bed
+    end
+    # Load into the database
+    cd /cluster/data/sacCer1/bed/simpleRepeat
+    hgLoadBed sacCer1 simpleRepeat *.bed \
+      -sqlTable=$HOME/src/hg/lib/simpleRepeat.sql
+    # Loaded 1316 elements of size 16
+    featureBits sacCer1 simpleRepeat
+    # 82600648 bases of 2627444668 (3.144%) in intersection
+
+# MAKE DESCRIPTION/SAMPLE POSITION HTML PAGE (TODO)
+    ssh hgwdev
+    # Write ~/kent/src/hg/makeDb/trackDb/sacCer/sacCer1/description.html 
+    # with a description of the assembly and some sample position queries.  
+    chmod a+r ~/kent/src/hg/makeDb/trackDb/sacCer/sacCer1/description.html
+    # Check it in and copy (perhaps via a make in trackDb??) to 
+    # /cluster/data/sacCer1/html.  
+    mkdir -p /gbdb/sacCer1/html
+    ln -s /cluster/data/sacCer1/html/description.html /gbdb/sacCer1/html/
+
+# MAKE HGCENTRALTEST BLATSERVERS ENTRY (In Progress 2003-11-24 Jim)
+# AND SET UP BLAT SERVERS
+    ssh blat10
+    cd /scratch
+    mkdir sacCer1Nib
+    scp 'hgwdev:/cluster/data/sacCer1/nib/*.nib' sacCer1Nib
+    # Ask admins to set up blat servers and ask which ports they assign.
+    ssh hgwdev
+    # Get appropriate hostname from cluster admins
+    echo 'insert into blatServers values("sacCer1", "blat10", "177??", "1"); \
+          insert into blatServers values("sacCer1", "blat10", "177??", "0");' \
+      | hgsql -h genome-testdb hgcentraltest
+
+# AUTO UPDATE GENBANK MRNA RUN  (In Progress 2003-11-24 Jim)
+
+    # Put the nib's on /cluster/bluearc:
+    ssh kksilo
+    mkdir -p /cluster/bluearc/sacCer/sacCer1
+    cp -pR /cluster/data/sacCer1/nib /cluster/bluearc/sacCer/sacCer1
+
+    # Instructions for setting up incremental genbank updates are here:
+    # http://www.soe.ucsc.edu/~markd/genbank-update/doc/initial-load.html
+
+    # Added
+static char *sacCerNames[] = {"Saccharomyces cerevisiea", NULL};
+    and
+{"dm", dmNames, NULL},
+    to appropriate parts of src/hg/makeDb/genbank/src/lib/gbGenome.c
+
+    # Edit /cluster/data/genbank/etc/genbank.conf and add:
+# sacCer1
+sacCer1.genome = /cluster/bluearc/sacCer/sacCer1/nib/chr*.nib
+sacCer1.lift = no
+sacCer1.genbank.mrna.xeno.load = yes
+sacCer1.genbank.est.xeno.load = no
+sacCer1.downloadDir = sacCer1
+
+    ssh eieio
+    cd /cluster/data/genbank
+    # This is an -initial run, mRNA only:
+    nice bin/gbAlignStep -iserver=no -clusterRootDir=/cluster/bluearc/genbank \
+      -srcDb=genbank -type=mrna -verbose=1 -initial sacCer1
+--- This is not taking any time.  Is that right? ----
+
+    # Load the results from the above
+    ssh hgwdev
+    cd /cluster/data/genbank
+    nice bin/gbDbLoadStep -verbose=1 -drop -initialLoad sacCer1
+
+    ssh eieio
+    # To get this next one started, the work directory of the initial run 
+    # needs to be moved out of the way.  
+    rm -r /cluster/bluearc/genbank/work/initial.sacCer1
+    # Now align refseqs:
+    cd /cluster/data/genbank
+    nice bin/gbAlignStep -iserver=no -clusterRootDir=/cluster/bluearc/genbank \
+      -srcDb=refseq -type=mrna -verbose=1 -initial sacCer1
+    # Load results:
+    ssh hgwdev
+    cd /cluster/data/genbank
+    nice bin/gbDbLoadStep -verbose=1 sacCer1
+
+    ssh eieio
+    # To get this next one started, the work directory of the initial run 
+    # needs to be moved out of the way.  
+    rm -r /cluster/bluearc/genbank/work/initial.sacCer1
+    # Now align ESTs:
+    nice bin/gbAlignStep -iserver=no -clusterRootDir=/cluster/bluearc/genbank \
+      -srcDb=genbank -type=est -verbose=1 -initial sacCer1
+    # Load results:
+    ssh hgwdev
+    cd /cluster/data/genbank
+    nice bin/gbDbLoadStep -verbose=1 sacCer1
+    # Clean up:
+    rm -r /cluster/bluearc/genbank/work/initial.sacCer1
+
+
