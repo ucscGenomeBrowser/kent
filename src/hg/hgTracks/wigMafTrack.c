@@ -14,7 +14,7 @@
 #include "hgMaf.h"
 #include "mafTrack.h"
 
-static char const rcsid[] = "$Id: wigMafTrack.c,v 1.45 2004/11/01 19:55:52 kate Exp $";
+static char const rcsid[] = "$Id: wigMafTrack.c,v 1.46 2004/11/02 02:36:12 kate Exp $";
 
 struct wigMafItem
 /* A maf track item -- 
@@ -441,7 +441,7 @@ int insertSize = 0, previousInserts = 0;
 
 /* count up insert counts in the existing line -- need to 
    add these to determine where to start this sequence in the line */
-for (i=0; i < offset; i++)
+for (i=0; outLine[i]; i++)
     if (outLine[i] == '|')
         {
         previousInserts++;
@@ -731,7 +731,7 @@ char noAlignment[2000];
 
 /* initialize "no alignment" string to o's */
 for (i = 0; i < sizeof noAlignment - 1; i++)
-    noAlignment[i] = 'o';
+    noAlignment[i] = UNALIGNED_SEQ;
 
 safef(option, sizeof(option), "%s.%s", track->mapName, MAF_DOT_VAR);
 dots = cartCgiUsualBoolean(cart, option, FALSE);
@@ -829,7 +829,7 @@ for (maf = mafList; maf != NULL; maf = maf->next)
                             "SELECT count(*) from %s WHERE tStart < %d AND tEnd > %d",
                                         chainTable, subStart, subEnd);
                         if (sqlQuickNum(conn, query) > 0)
-                            processSeq(noAlignment, mcMaster->text, 
+                            processSeq(noAlignment, noAlignment,
                                         sub->textSize, lines[mi->ix],
                                         lineOffset, subSize);
                         hFreeConn(&conn);
