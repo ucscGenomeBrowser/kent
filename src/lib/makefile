@@ -29,6 +29,9 @@ $(MACHTYPE)/jkweb.a: $(O) $(MACHTYPE)
 $(MACHTYPE):
 	mkdir $(MACHTYPE)
 
+test:
+	cd tests && ${MAKE} test
+
 clean:
 	rm -f ${O} $(MACHTYPE)/jkweb.a
 
