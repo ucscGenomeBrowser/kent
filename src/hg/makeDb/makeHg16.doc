@@ -25,7 +25,7 @@ exit; # don't actually run this like a script :)
 # NCBI download site:
 
     ftp ftp.ncbi.nih.gov
-    # user hgpguest, password from /cse/guests/kent/buildHg6.doc
+    # user and password from /cse/guests/kent/buildHg6.doc
     cd build_34    
  
 # Download all finished agp's and fa's into gs.17/agp
@@ -69,10 +69,34 @@ exit; # don't actually run this like a script :)
     mkdir contigs
     /cluster/bin/i386/faNcbiToUcsc -split -ntLast ../ffa/ncbi_build34.fa \
       contigs
+    # The above command misses several sequences.  Two because they are
+    # not named NT_ but rather NG_ - and one for unknown reasons.
+    # As done below in the simpleRepeats instructions, the following
+    # will fetch these sequences out of the ncbi_build34.fa file:
+    ssh eieio
+    cd ~/hg16/contigs
+    faOneRecord /cluster/store4/gs.17/ffa/ncbi_build34.fa \
+	"ref|NG_002392" > NG_002392.fa
+    faOneRecord /cluster/store4/gs.17/ffa/ncbi_build34.fa \
+	"ref|NG_002432" > NG_002432.fa
+    #	I don't know about this one.  Its problem is that it is listed
+    #	twice in the seq_contig.md file, in both the X and Y
+    #	chromosomes.
+    faOneRecord /cluster/store4/gs.17/ffa/ncbi_build34.fa \
+	"ref|NT_079581" > NT_079581.fa
+    # These three files end up with non-Standard (for UCSC) ident lines,
+    # edit them to remove everything on the first line except
+    # their NG_, NT_ numbers:
+	>NG_002392
+	>NG_002432
+	>NT_079581
    
 # Copy over chrM contig from previous version
     cd ~/oo
     cp -r gs.16/build33/M .
+    # I'm not sure if this chM sequence needs to be in the contigs
+    # directory or not.  It is missed during the simpleRepeats
+    # operation.  And it is not repeat masked.
 
 # Determine the chromosome sizes from agps
 
@@ -223,10 +247,11 @@ exit; # don't actually run this like a script :)
     # If a lift file has been edited (e.g. as in 6.2.5 above), edit ncbi.lft 
     # to match. If no step 6.2.5 then no editing needed
 
-# REPEAT MASKING (WORKING - 2003-07-25 - Hiram)
+# REPEAT MASKING (DONE - 2003-07-25 - Hiram)
     # Split contigs, run RepeatMasker, lift results
     # Notes: 
     # * Using new RepeatMasker in /cluster/bluearc/RepeatMasker030619
+    #	Always check for new RepeatMasker before proceeding
     # * Contigs (*/NT_*/NT_*.fa) are split into 500kb chunks to make 
     #   RepeatMasker runs manageable on the cluster ==> results need lifting.
     # * For the NCBI assembly we repeat mask on the sensitive mode setting
@@ -239,6 +264,14 @@ exit; # don't actually run this like a script :)
     cd contigOut
     mkdir split
     foreach d (../contigs/NT_* )
+      set contig = $d:t
+	echo "splitting $contig"
+      faSplit size ../contigs/$contig 500000 split/${contig}_ \
+	-lift=split/$contig.lft -maxN=500000
+    end
+    #	There are two NG_* files, these were missed in the main run.
+    #	Their runs were performed manually afterwards
+    foreach d (../contigs/NG_* )
       set contig = $d:t
 	echo "splitting $contig"
       faSplit size ../contigs/$contig 500000 split/${contig}_ \
@@ -297,6 +330,68 @@ if (-e /tmp/hg16/$2/$2.tbl) /bin/cp /tmp/hg16/$2/$2.tbl ./
     #- While that is running, you can run TRF (simpleRepeat) on the small
     # cluster.  See SIMPLE REPEAT section below
 
+    # Manually run the two missed NG_ files:
+    /cluster/store4/gs.17/build34/jkStuff/RMHuman \
+	/cluster/store4/gs.17/build34/contigOut/split NG_0023920.fa \
+	/cluster/store4/gs.17/build34/contigOut/split/NG_0023920.fa.out &
+    /cluster/store4/gs.17/build34/jkStuff/RMHuman \
+	/cluster/store4/gs.17/build34/contigOut/split NG_0024320.fa \
+	/cluster/store4/gs.17/build34/contigOut/split/NG_0024320.fa.out &
+
+# This 'Edit script first!'  note I believe was from Matt.  Looks like
+# there was an after the fact move of the *.align files in hg15,
+# although these were never used and were not produced in this hg16
+# sequence.  I took a look at the script and it was set to ONLY move
+# *.align files.  I reset it to move .* files.
+# Edit script first!  (This note I believe was from Matt.  Looks like
+# This copies lft/out/align files from the flat dir structure we were forced to use at first.
+# This is a one-time only step.
+    /cluster/bin/scripts/distNcbiCtgOut contigOut/split .
+#  Due to missing lift entries, it failed to move the chr6 files:
+# NT_0780200.fa      NT_0780201.fa.tbl  NT_0780230.fa      NT_0780231.fa.tbl
+# NT_0780200.fa.out  NT_0780202.fa      NT_0780230.fa.out  NT_078023.fa.lft
+# NT_0780200.fa.tbl  NT_0780202.fa.out  NT_0780230.fa.tbl
+# NT_0780201.fa      NT_0780202.fa.tbl  NT_0780231.fa
+# NT_0780201.fa.out  NT_078020.fa.lft   NT_0780231.fa.out
+#   So, I moved those manually:
+    mv contigOut/split/NT_078020* 6/NT_078020
+    mv contigOut/split/NT_078023* 6/NT_078023
+
+    #- Lift up the split-contig .out's to contig-level .out's
+    ssh eieio
+    cd ~/hg16
+    foreach d ( ?{,?}/N{T,G}_* )
+      cd $d
+      set contig = $d:t
+      liftUp $contig.fa.out $contig.fa.lft warn ${contig}?*.fa.out > /dev/null
+      cd ../..
+    end
+
+    #- Lift up RepeatMask .out files to chromosome coordinates via
+    # picked up jkStuff/liftOut2.sh from the hg15 build.  Reset the
+    # liftUp command from ~kent/bin/$MACHTYPE to be from
+    # /cluster/bin/i386.  Took the redirection to dev/null off of the
+    # command and capture the output here to see what errors we have.
+
+    ./jkStuff/liftOut2.sh > liftOut2.out 2>&1 &
+    # It does have some errors in chrX and chrY: NT_07958[12345]
+    # Same sequences are missing from each.  There is some problem
+    # duplication going on here.
+
+    #- By this point, the database should have been created (above):
+    ssh hgwdev
+    cd ~/hg16
+    hgLoadOut hg16 ?/*.fa.out ??/*.fa.out
+    # errors during this load:
+Processing 2/chr2.fa.out
+Strange perc. field -6.1 line 243430 of 2/chr2.fa.out
+Strange perc. field -5.6 line 243430 of 2/chr2.fa.out
+Strange perc. field -6.1 line 243432 of 2/chr2.fa.out
+Strange perc. field -5.6 line 243432 of 2/chr2.fa.out
+Processing 5/chr5.fa.out
+Strange perc. field -0.3 line 4339 of 5/chr5.fa.out
+Processing 19/chr19.fa.out
+Strange perc. field -18.6 line 77032 of 19/chr19.fa.out
 
 # SIMPLE REPEAT [TRF] TRACK (DONE - 2003-07-25 - Hiram)
     # Distribute contigs to /iscratch/i
@@ -354,8 +449,37 @@ rmdir --ignore-fail-on-non-empty /tmp/$outputFN
 # Average job time:                  81s       1.35m     0.02h    0.00d
 # Longest job:                     6992s     116.53m     1.94h    0.08d
 # Submission to last job:         10703s     178.38m     2.97h    0.12d
-    # When cluster run is done
+    # When cluster run is done, a couple of extra files not caught in
+    # the above sequence
+    ./runTrf /cluster/store4/gs.17/build34/M/NT_999999/NT_999999.fa trf/NT_999999.bed
+    # That produces an empty .bed file, mark it so:
+    echo "# trf run produces nothing for this one" >> trf/NT_999999.bed
+    # A couple of NG_ contigs were missed  (these same instructions are
+    #	mentioned above where the contigs/ directory was initially
+    #	populated.  This should be done there.)
+    ssh eieio
+    cd ~/hg16/contigs
+    faOneRecord /cluster/store4/gs.17/ffa/ncbi_build34.fa \
+	"ref|NG_002392" > NG_002392.fa
+    faOneRecord /cluster/store4/gs.17/ffa/ncbi_build34.fa \
+	"ref|NG_002432" > NG_002432.fa
+    faOneRecord /cluster/store4/gs.17/ffa/ncbi_build34.fa \
+	"ref|NT_079581" > NT_079581.fa
+    # These three files end up with non-Standard (for UCSC) ident lines,
+    # edit them to remove everything except their NG_, NT_ numbers:
+	>NG_002392
+	>NG_002432
+	>NT_079581
+    ./runTrf /cluster/store4/gs.17/build34/contigs/NT_079581.fa \
+	trf/NT_079581.bed
+    ./runTrf /cluster/store4/gs.17/build34/contigs/NG_002392.fa \
+	trf/NG_002392.bed
+    ./runTrf /cluster/store4/gs.17/build34/contigs/NG_002432.fa \
+	trf/NG_002432.bed
+
     liftUp simpleRepeat.bed ~/hg16/jkStuff/liftAll.lft warn trf/*.bed
+    # This produces some errors related to:
+    # NT_078020 isn't in liftSpec file line 1 of trf/NT_078020.bed
 
     # Load into the database:
     ssh hgwdev
@@ -364,18 +488,18 @@ rmdir --ignore-fail-on-non-empty /tmp/$outputFN
       -sqlTable=$HOME/kent/src/hg/lib/simpleRepeat.sql
 #	stringTab = 0
 #	Reading simpleRepeat.bed
-#	Loaded 625049 elements
+#	Loaded 625197 elements
 #	Sorted
 #	Saving bed.tab
 #	Loading hg16
 
-# PROCESS SIMPLE REPEATS INTO MASK (TBD)
+# PROCESS SIMPLE REPEATS INTO MASK (DONE but problems - 2003-07-27 - Hiram)
     # After the simpleRepeats track has been built, make a filtered version 
     # of the trf output: keep trf's with period <= 12:
     ssh eieio
     cd ~/hg16/bed/simpleRepeat
     mkdir -p trfMask
-    foreach f (trf/NT_*.bed)
+    foreach f (trf/N{T,G}_*.bed)
       awk '{if ($5 <= 12) print;}' $f > trfMask/$f:t
     end
     # Lift up filtered trf output to chrom coords as well:
@@ -409,4 +533,102 @@ rmdir --ignore-fail-on-non-empty /tmp/$outputFN
 # Got 483 lifts in jkStuff/liftAll.lft
 # Couldn't open bed/simpleRepeat/trfMask/NT_079581.bed , No such file or direc
 
+# MASK SEQUENCE BOTH REPEATMASKER AND SIMPLE REPEAT/TRF (DONE - 2003-07-27)
+#							 but problems -Hiram
+    # This used to be done right after RepeatMasking.  Now, we mask with 
+    # TRF as well, so do this after the "PROCESS SIMPLE REPEATS" step above.
+    ssh eieio
+    cd ~/hg16
+    # Make chr*.fa from contig .fa
+    #  Copied chrFa.sh from hg15/jkStuff - reset  path from ~kent to
+    #  /cluster for the ctgToChromFa comand
+    # This doesn't work.  There is something fundamentally wrong with
+    # all the names.  The contig names have extra digits on them.  These
+    # were the split repeat masker names.  I don't know why they don't
+    # have the original names.  I would imagine the lifting should have
+    # brought them into existence.  But I don't see any lifting.
+    #  These things are in the ./contigs directory
+    #  Let's try this business which used to be at the top of makeHg15:
+# 7) Distribute contig .fa to appropriate directory (assumes all files
+#    are in "contigs" directory).
 
+    cd ~/hg16
+    /cluster/bin/scripts/distNcbiCtgFa contigs .
+#  This fails because of the confusion on the X and Y chromosomes
+#	Reset the script to not die on missing sequences, run it
+#	again and it gets everything except the two on chr6:
+#	NT_078020.fa  NT_078023.fa
+#   move them manually
+	mv contigs/NT_078020.fa 6/NT_078020
+	mv contigs/NT_078023.fa 6/NT_078023
+
+    rm -r contigs
+
+#  Now, with those in place, maybe this will work:
+    ./jkStuff/chrFa.sh > chrFa.out 2>&1 &
+#  Nope, that doesn't work.  It fails in X and Y due to missing sequence
+
+    # copied these three scripts from hg15 - fixup path names to
+    # reference /cluster/bin instead of ~kent/bin
+
+    #- Soft-mask (lower-case) the contig and chr .fa's
+    ./jkStuff/makeFaMasked.sh > maFaMasked.out 2>&1
+    #- Make hard-masked .fa.masked files as well:
+    ./jkStuff/makeHardMasked.sh > maHardMasked.out 2>&1
+    #- Rebuild the nib, mixedNib, maskedNib files:
+    ./jkStuff/makeNib.sh > maNib.out 2>&1
+
+    # Make symbolic links from /gbdb/hg16/nib to the real nibs.
+    ssh hgwdev
+    mkdir -p /gbdb/hg16/nib
+    foreach f (/cluster/store4/gs.17/build34/nib/chr*.nib)
+      ln -s $f /gbdb/hg16/nib
+    end
+    # Load /gbdb/hg16/nib paths into database and save size info.
+    hgsql hg16  < ~/kent/src/hg/lib/chromInfo.sql
+    cd ~/hg16
+    hgNibSeq -preMadeNib hg16 /gbdb/hg16/nib ?{,?}/chr?{,?}{,_random}.fa
+    echo "select chrom,size from chromInfo" | hgsql -N hg16 > chrom.sizes
+
+    # XXXX Done to here - 2003-07-27 01:10
+
+    # Copy the masked contig fa to /iscratch and /scratch:
+    ssh kkr1u00
+    rm -rf /iscratch/i/gs.17/build34/trfFa
+    mkdir -p /iscratch/i/gs.17/build34/trfFa
+    cp -p ~/hg16/?{,?}/NT_*/NT_??????.fa /iscratch/i/gs.17/build34/trfFa
+    ~kent/bin/iSync
+    ssh kkstore
+    rm -rf /scratch/hg/gs.17/build34/trfFa
+    mkdir -p /scratch/hg/gs.17/build34/trfFa
+    cp -p ~/hg16/?{,?}/NT_*/NT_??????.fa /scratch/hg/gs.17/build34/trfFa
+
+
+# O+O: ASSEMBLY [GOLD], GAP, COVERAGE, MAP CONTIGS TRACKS (DONE - 2003-07-27)
+#	Will need to be redone when chroms X, Y and 6 are fixed	-Hiram
+# Store o+o info in database.
+    # Note: for build31, Terry specially requested these files from NCBI:
+    # finished.finf
+    # draft.finf
+    # predraft.finf
+    # extras.finf
+    ssh eieio
+    cd /cluster/store4/gs.17/build34
+    if (-f contig_overlaps.agp) then
+      jkStuff/liftGl.sh contig.gl
+    else
+      ssh hgwdev
+      hgGoldGapGl -noGl hg16 /cluster/store4/gs.17 build34 
+      echo ""
+      echo "*** Note from makeHg15.doc:"
+      echo "Come back to this step later when we have contig_overlaps.agp\!"
+    endif
+    ssh hgwdev
+    cd /cluster/store4/gs.17/build34
+    if (-f contig_overlaps.agp) then
+      hgGoldGapGl hg16 /cluster/store4/gs.17 build34 
+      cd /cluster/store4/gs.17
+      /cluster/bin/i386/hgClonePos hg16 build34 ffa/sequence.inf /cluster/store4/gs.17 -maxErr=3
+    end 
+    cd /cluster/store4/gs.17
+    hgCtgPos hg16 build34 
