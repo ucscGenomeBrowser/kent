@@ -5,6 +5,8 @@
 #include <netdb.h>
 #include "common.h"
 #include "dlist.h"
+#include "hash.h"
+#include "options.h"
 #include "dystring.h"
 #include "linefile.h"
 #include "paraLib.h"
@@ -16,7 +18,11 @@ void usage()
 {
 errAbort("paraHub - parasol hub server.\n"
          "usage:\n"
-	 "    paraHub start\n");
+	 "    paraHub start\n"
+	 "options:\n"
+	 "    spokes=N  Number of processes that feed jobs to nodes - default 50\n"
+	 "    machines=list  File with list of node machines, one per line\n");
+
 }
 
 struct spoke *spokeList;	/* List of all spokes. */
@@ -26,7 +32,7 @@ struct dlList *busySpokes;	/* List of busy spokes. */
 struct machine *machineList; /* List of all machines. */
 struct dlList *freeMachines;     /* List of machines ready for jobs. */
 struct dlList *busyMachines;     /* List of machines running jobs. */
-struct dlList *downMachines;     /* List of machines that aren't running. */
+struct dlList *deadMachines;     /* List of machines that aren't running. */
 
 struct dlList *pendingJobs;     /* Jobs still to do. */
 struct dlList *runningJobs;     /* Jobs that are running. */
@@ -41,7 +47,7 @@ void setupLists()
 {
 freeMachines = newDlList();
 busyMachines = newDlList();
-downMachines = newDlList();
+deadMachines = newDlList();
 pendingJobs = newDlList();
 runningJobs = newDlList();
 freeSpokes = newDlList();
@@ -82,22 +88,54 @@ dlAddTail(freeMachines, mach->node);
 slAddHead(&machineList, mach);
 }
 
+struct machine *findMachine(char *name)
+/* Find named machine. */
+{
+struct machine *mach;
+for (mach = machineList; mach != NULL; mach = mach->next)
+     {
+     if (sameString(mach->name, name))
+         return mach;
+     }
+return NULL;
+}
+
 void removeMachine(char *name)
 /* Remove machine form pool. */
 {
 struct machine *mach;
 name = trimSpaces(name);
-for (mach = machineList; mach != NULL; mach = mach->next)
+if ((mach = findMachine(name)) != NULL)
     {
-    if (sameString(mach->name, name))
+    if (mach->job != NULL)
+	removeJobId(mach->job->id);
+    dlRemove(mach->node);
+    slRemoveEl(&machineList, mach);
+    machineFree(&mach);
+    }
+}
+
+void nodeDown(char *name)
+/* Deal with a node going down - move it to dead list and
+ * put job back on head of job list. */
+{
+struct machine *mach;
+struct job *job;
+name = trimSpaces(name);
+if ((mach = findMachine(name)) != NULL)
+    {
+    if ((job = mach->job) != NULL)
         {
-	if (mach->job != NULL)
-	    removeJobId(mach->job->id);
-	dlRemove(mach->node);
-	slRemoveEl(&machineList, mach);
-	machineFree(&mach);
-	break;
+	mach->job = NULL;
+	job->machine = NULL;
+	dlRemove(job->node);
+	dlAddHead(pendingJobs, job->node);
 	}
+    dlRemove(mach->node);
+    mach->lastChecked = time(NULL);
+    mach->isDead = TRUE;
+    dlAddTail(deadMachines, mach->node);
+    uglyf("hub: moved %s to dead list\n", mach->name);
     }
 }
 
@@ -163,11 +201,80 @@ if (!dlEmpty(freeMachines) && !dlEmpty(freeSpokes) && !dlEmpty(pendingJobs))
     }
 }
 
-void runNextJobs()
+void runner()
 /* Try to run a couple of jobs. */
 {
 runNextJob();
 runNextJob();
+}
+
+void checkPeriodically(struct dlList *machList, int period, char *checkMessage)
+/* Periodically send checkup messages to machines on list. */
+{
+struct dlNode *mNode, *sNode;
+struct machine *machine;
+struct spoke *spoke;
+char message[512];
+
+sprintf(message, "%s %s", checkMessage, getHost());
+for (;;)
+    {
+    /* If we have some free spokes and some busy machines, and
+     * the busy machines haven't been checked for a while, go
+     * check them. */
+    if (dlEmpty(freeSpokes) || dlEmpty(machList))
+        break;
+    machine = machList->head->val;
+    if (time(NULL) - machine->lastChecked < period)
+        break;
+    machine->lastChecked = time(NULL);
+    mNode = dlPopHead(machList);
+    sNode = dlPopHead(freeSpokes);
+    dlAddTail(machList, mNode);
+    dlAddTail(busySpokes, sNode);
+    spoke = sNode->val;
+    spokeSendMessage(spoke, machine, message);
+    }
+}
+
+void hangman()
+/* Check that nodes aren't hung.  Check that they aren't
+ * free and we don't know about it. */
+{
+checkPeriodically(busyMachines, 50 /* ugly * 15 */, "check");
+}
+
+void graveDigger()
+/* Check out dead nodes.  Try and resurrect them periodically. */
+{
+checkPeriodically(deadMachines, 50 /* ugly *30 */, "resurrect");
+}
+
+void nodeAlive(char *name)
+/* Deal with message from node that says it's alive.
+ * Move it from dead to free list. */
+{
+struct machine *mach;
+struct dlNode *node;
+for (node = deadMachines->head; !dlEnd(node); node = node->next)
+    {
+    mach = node->val;
+    if (sameString(mach->name, name))
+        {
+	dlRemove(node);
+	dlAddTail(freeMachines, node);
+	mach->isDead = FALSE;
+	runner();
+	break;
+	}
+    }
+}
+
+void nodeCheckIn(char *line)
+/* Deal with check in message from node. */
+{
+/* ~~~ Todo - if node says it's free when we think it's busy, move
+ * to free list. */
 }
 
 void recycleSpoke(char *spokeName)
@@ -191,7 +298,7 @@ for (node = busySpokes->head; !dlEnd(node); node = node->next)
 if (!foundSpoke)
     warn("Couldn't free spoke %s", spokeName);
 else
-    runNextJobs();
+    runner();
 }
 
 void addJob(char *line)
@@ -216,7 +323,7 @@ command = line;
 job = jobNew(command, user, dir, in, out, err);
 job->submitTime = time(NULL);
 dlAddTail(pendingJobs, job->node);
-runNextJobs();
+runner();
 }
 
 struct job *jobFind(struct dlList *list, int id)
@@ -237,7 +344,6 @@ return NULL;
 void recycleMachine(struct machine *mach)
 /* Recycle machine into free list. */
 {
-uglyf("hub: recycleMachine %s\n", mach->name);
 mach->job = NULL;
 dlRemove(mach->node);
 dlAddTail(freeMachines, mach->node);
@@ -262,7 +368,7 @@ struct machine *mach = job->machine;
 if (mach != NULL)
      recycleMachine(mach);
 recycleJob(job);
-runNextJobs();
+runner();
 }
 
 void removeJob(struct job *job)
@@ -294,17 +400,15 @@ void jobDone(char *line)
 /* Handle job is done message. */
 {
 struct job *job;
-char *id, *status;
+char *machine, *id, *status;
 id = nextWord(&line);
 status = nextWord(&line);
-if (id != NULL)
+if (status != NULL)
     {
-    uglyf("hub: jobDone() status = %s, id = %s\n", status, id);
     job = jobFind(runningJobs, atoi(id));
-    uglyf("hub: jobDone() job = %p\n", job);
     if (job != NULL)
 	{
-	uglyf("hub: jobDone() mach = %p\n", job->machine);
+	job->machine->lastChecked = time(NULL);
 	finishJob(job);
 	}
     }
@@ -325,7 +429,12 @@ for (mach = machineList; mach != NULL; mach = mach->next)
     if (job != NULL)
         dyStringPrintf(dy, "%-10s %s", job->user, job->cmd);
     else
-        dyStringPrintf(dy, "idle");
+	{
+	if (mach->isDead)
+	    dyStringPrintf(dy, "dead");
+	else
+	    dyStringPrintf(dy, "idle");
+	}
     netSendLongString(fd, dy->string);
     }
 netSendLongString(fd, "");
@@ -369,8 +478,8 @@ void status(int fd)
  * followed by a blank line. */
 {
 char buf[256];
-sprintf(buf, "%d machines busy, %d free, %d jobs running, %d waiting, %d spokes busy, %d free", 
-	dlCount(busyMachines), dlCount(freeMachines), 
+sprintf(buf, "%d machines busy, %d free, %d dead, %d jobs running, %d waiting, %d spokes busy, %d free", 
+	dlCount(busyMachines), dlCount(freeMachines),  dlCount(deadMachines), 
 	dlCount(runningJobs), dlCount(pendingJobs),
 	dlCount(busySpokes), dlCount(freeSpokes));
 netSendLongString(fd, buf);
@@ -408,7 +517,9 @@ for (spoke = spokeList; spoke != NULL; spoke = next)
 void processHeartbeat()
 /* Check that system is ok.  See if we can do anything useful. */
 {
-runNextJobs();
+runner();
+hangman();
+graveDigger();
 }
 
 int hubConnect()
@@ -422,10 +533,32 @@ if (hubFd > 0)
 return hubFd;
 }
 
+void startSpokes()
+/* Start default number of spokes. */
+{
+int i, initialSpokes = atoi(optionVal("spokes", "50"));
+for (i=0; i<initialSpokes; ++i)
+    addSpoke(-1, -1);
+}
+
+void startMachines()
+/* If they give us a beginning machine list use it here. */
+{
+char *fileName = optionVal("machines", NULL);
+if (fileName != NULL)
+    {
+    struct lineFile *lf = lineFileOpen(fileName, TRUE);
+    char *line;
+    while (lineFileNext(lf, &line, NULL))
+	addMachine(line);
+    lineFileClose(&lf);
+    }
+}
+
 void startHub()
 /* Do hub daemon - set up socket, and loop around on it until we get a quit. */
 {
-int readSize, res;
+int i, readSize, res;
 int socketHandle = 0, connectionHandle = 0;
 char sig[20], *line, *command;
 static struct sockaddr_in sai;		/* Some system socket info. */
@@ -436,6 +569,7 @@ char *buf = NULL;
 
 /* Set up various lists. */
 setupLists();
+startMachines();
 assert(sigLen < sizeof(sig));
 sig[sigLen] = 0;
 
@@ -446,7 +580,8 @@ if (bind(socketHandle, (struct sockaddr*)&sai, sizeof(sai)) == -1)
      errAbort("Couldn't bind to %s port %d", hostName, paraPort);
 res = listen(socketHandle, 100);
 
-/* Start heartbeat. */
+/* Do some initialization. */
+startSpokes();
 startHeartbeat();
 
 /* Main event loop. */
@@ -471,6 +606,12 @@ for (;;)
          processHeartbeat();
     else if (sameWord(command, "addJob"))
          addJob(line);
+    else if (sameWord(command, "nodeDown"))
+         nodeDown(line);
+    else if (sameWord(command, "alive"))
+         nodeAlive(line);
+    else if (sameWord(command, "checkIn"))
+         nodeCheckIn(line);
     else if (sameWord(command, "removeJob"))
          removeJobName(line);
     else if (sameWord(command, "addMachine"))
@@ -499,6 +640,7 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 char *command;
+optionHash(&argc, argv);
 if (argc < 2)
     usage();
 command = argv[1];

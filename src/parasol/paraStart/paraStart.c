@@ -32,7 +32,7 @@ for (i=0; i<mCount; ++i)
     name = mNames[i];
     uglyf("Starting up %s\n", name);
     execlp("rsh", name,
-	    "/projects/cc/hg/jk/src/parasol/paraNode/paraNode", 
+	    "/projects/cc/hg/jk/bin/i386/paraNode", 
 	    "start", NULL);
     }
 }

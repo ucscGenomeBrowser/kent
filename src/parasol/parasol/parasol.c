@@ -8,7 +8,7 @@
 #include "errabort.h"
 #include "dystring.h"
 #include "hash.h"
-#include "cheapcgi.h"
+#include "options.h"
 #include "paraLib.h"
 
 
@@ -20,7 +20,8 @@ errAbort(
   "usage:\n"
   "   parasol add machine machineName\n"
   "   parasol remove machine machineName\n"
-  "   parasol add job command-line\n"
+  "   parasol [options] add job command-line\n"
+  "         options: -out=out -in=in -err=err -dir=dir\n"
   "   parasol remove job id\n"
   "   parasol close (close down system - kill paraHub, but not paraNodes on remote machines)\n"
   "   parasol remove user name [jobPattern]\n"
@@ -55,7 +56,10 @@ void addJob(int argc, char *argv[])
 {
 struct dyString *dy = newDyString(1024);
 char dirBuf[512] ;
-char *in = "/dev/null", *out = "/dev/null", *err = "/dev/null", *dir = dirBuf;
+char *in = optionVal("in", "/dev/null"), 
+     *out = optionVal("out", "/dev/null"), 
+     *err = optionVal("err", "/dev/null"), 
+     *dir = optionVal("dir", dirBuf);
 int i;
 
 getcwd(dirBuf, sizeof(dirBuf));
@@ -322,6 +326,7 @@ if (hubFd != 0)
 int main(int argc, char *argv[])
 /* Process command line. */
 {
+optionHashSome(&argc, argv, TRUE);
 if (argc < 2)
     usage();
 parasol(argv[1], argc-2, argv+2);

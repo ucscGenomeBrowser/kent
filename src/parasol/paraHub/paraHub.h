@@ -25,7 +25,8 @@ struct machine
     char *name;                 /* Name.  Not alloced here. */
     struct job *job;		/* Current job if any. */
     int errCount;               /* Number of errors. */
-    time_t lastAlive;		/* Last time saw machine was alive in seconds past 1972 */
+    time_t lastChecked;		/* Last time we checked machine in seconds past 1972 */
+    boolean isDead;		/* True if machine dead. */
     };
 
 struct spoke
@@ -41,7 +42,7 @@ struct spoke
     char *socketName;		/* File name of socket. */
     int pid;			/* Process ID. */
     char *machine;		/* Machine this spoke is communicating with or NULL */
-    time_t lastAlive;		/* Last time saw spoke was alive in seconds past 1972 */
+    time_t lastChecked;		/* Last time saw spoke was alive in seconds past 1972 */
     };
 
 struct spoke *spokeNew(int *closeList);

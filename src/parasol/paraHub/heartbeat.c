@@ -19,7 +19,6 @@ int hubFd;
 for (;;)
     {
     sleep(30);
-    uglyf("heartbeat: thump\n");
     hubFd = hubConnect();
     if (hubFd > 0)
         {

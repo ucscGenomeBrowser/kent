@@ -9,4 +9,4 @@ O = parasol.o ../lib/paraLib.o
 
 parasol: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/parasol $O $(MYLIBS) $L
-#	strip $(HOME)/bin/$(MACHTYPE)/parasol
+	strip $(HOME)/bin/$(MACHTYPE)/parasol

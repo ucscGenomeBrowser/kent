@@ -12,6 +12,7 @@
 int socketHandle;		/* Handle to socket to hub. */
 int connectionHandle;	        /* Connection to singel hub request. */
 char execCommand[16*1024];          /* Name of command currently executing. */
+char *hostName;			/* Name of this host. */
 
 boolean busy = FALSE;           /* True if executing a command. */
 boolean gotZombie = FALSE;      /* True if command finished. */
@@ -62,7 +63,9 @@ if (grandId != 0)
 exit(-1);
 }
 
-void manageExec(char *managingHost, char *jobId, char *exe, char *params[])
+void manageExec(char *managingHost, char *jobId, char *user,
+	char *dir, char *in, char *out, char *err,
+	char *exe, char **params)
 /* This routine is the child process of doExec.
  * It spawns a grandchild that actually does the
  * work and waits on it.  It then lets the hub
@@ -71,8 +74,29 @@ void manageExec(char *managingHost, char *jobId, char *exe, char *params[])
 close(connectionHandle);
 if ((grandId = fork()) == 0)
     {
+    int newStdin, newStdout, newStderr;
+
+    /* Get rid of excess old file handles. */
     close(socketHandle);
-    uglyf("node: manageExec(%s, %s %s)\n", exe, params[0], params[1]);
+
+    /* Change to given dir. */
+    chdir(dir);
+
+    /* Redirect standard io.  You'd think there'd be a less
+     * cryptic way to do this. */
+    newStdin = open(in, O_RDONLY);
+    close(0);
+    dup(newStdin);
+    newStdout = open(out, O_WRONLY | O_CREAT, 0666);
+    close(1);
+    dup(newStdout);
+    newStderr = open(err, O_WRONLY | O_CREAT, 0666);
+    close(2);
+    dup(newStderr);
+    close(newStdin);
+    close(newStdout);
+    close(newStderr);
+
     if (execvp(exe, params) < 0)
 	{
 	perror("");
@@ -102,6 +126,37 @@ else
     }
 }
 
+void doCheck(char *line)
+/* Send back check result */
+{
+char *managingHost = nextWord(&line);
+if (managingHost != NULL)
+    {
+    int sd = netConnPort(managingHost, paraPort);
+    char *status = (busy ? "busy" : "free");
+    char buf[256];
+    sprintf(buf, "checkIn %s %s", hostName, status);
+    write(sd, paraSig, strlen(paraSig));
+    netSendLongString(sd, buf);
+    close(sd);
+    }
+}
+
+void doResurrect(char *line)
+/* Send back I'm alive message */
+{
+char *managingHost = nextWord(&line);
+if (managingHost != NULL)
+    {
+    int sd = netConnPort(managingHost, paraPort);
+    char buf[256];
+    sprintf(buf, "alive %s", hostName);
+    write(sd, paraSig, strlen(paraSig));
+    netSendLongString(sd, buf);
+    close(sd);
+    }
+}
+
 void doRun(char *line)
 /* Execute command. */
 {
@@ -116,7 +171,6 @@ else if (!busy || gotZombie)
     char *exe;
     if (gotZombie)
 	clearZombie();
-    printf("node: executing %s\n", line);
     strcpy(execCommand, line);
     argCount = chopLine(line, args);
     if (argCount >= ArraySize(args))
@@ -133,7 +187,8 @@ else if (!busy || gotZombie)
     signal(SIGCHLD, childSignalHandler);
     if ((childId = fork()) == 0)
 	{
-	manageExec(managingHost, jobId, args[commandOffset], args+commandOffset);
+	manageExec(managingHost, jobId, user, dir, in, out, err,
+		args[commandOffset], args+commandOffset);
 	}
     else
 	{
@@ -168,12 +223,8 @@ void doStatus()
 char *status = (busy ? "busy" : "free");
 struct dyString *dy = newDyString(256);
 dyStringAppend(dy, status);
-uglyf("status %s\n", (busy ? "busy" : "free"));
 if (busy)
-    {
-    uglyf("executing %s\n", execCommand);
     dyStringPrintf(dy, " %s", execCommand);
-    }
 write(connectionHandle, dy->string, dy->stringSize);
 }
 
@@ -188,9 +239,9 @@ struct hostent *hostent;
 char *command;
 char signature[20];
 int sigLen = strlen(paraSig);
-char *hostName = getenv("HOST");
-if (hostName == NULL)
-    hostName = "localhost";
+
+/* We have to know who we are... */
+hostName = getHost();
 
 /* Precompute some signature stuff. */
 assert(sigLen < sizeof(signature));
@@ -219,7 +270,7 @@ for (;;)
 	if (sameString(paraSig, signature))
 	    {
 	    line = buf = netGetLongString(connectionHandle);
-	    uglyf("paraNode %s: read '%s'\n", hostName, line);
+	    uglyf("node  %s: %s\n", hostName, line);
 	    clearZombie();
 	    ++childCount;
 	    command = nextWord(&line);
@@ -231,6 +282,10 @@ for (;;)
 		doStatus();
 	    else if (sameString("kill", command))
 		doKill();
+	    else if (sameString("check", command))
+	        doCheck(line);
+	    else if (sameString("resurrect", command))
+	        doResurrect(line);
 	    freez(&buf);
 	    }
 	}

@@ -18,14 +18,21 @@
 
 int spokeLastId;	/* Id of last spoke allocated. */
 
+static void notifyNodeDown(char *machine)
+/* Notify hub that a node is down. */
+{
+int hubFd = hubConnect();
+char buf[512];
+sprintf(buf, "nodeDown %s", machine);
+netSendLongString(hubFd, buf);
+close(hubFd);
+}
+
 static void spokeSendRemote(char *socketName, char *machine, char *message)
 /* Send message to remote machine. */
 {
-int sd;
-int hubFd;
+int sd, hubFd;
 char buf[512];
-
-uglyf("%s->%s: %s", socketName, machine, message);
 
 /* Try and tell machine about job. */
 sd = netConnPort(machine, paraPort);
@@ -37,14 +44,10 @@ if (sd > 0)
     }
 else
     {
-    /* Tell hub about failure if any */
-    hubFd = hubConnect();
-    sprintf(buf, "nodeDown %s %d", machine, sd);
-    netSendLongString(hubFd, buf);
-    close(hubFd);
+    notifyNodeDown(machine);
     }
 
-/* Tell hub we're free. */
+/* Tell hub spoke is free. */
 hubFd = hubConnect();
 if (hubFd > 0)
     {
@@ -77,7 +80,6 @@ if (sd < 0)
     }
 
 /* Bind it to file system. */
-uglyf("%s: ok1\n", socketName);
 ZeroVar(&sa);
 sa.sun_family = AF_UNIX;
 strncpy(sa.sun_path, socketName, sizeof(sa.sun_path));
@@ -89,24 +91,20 @@ if (bind(sd, (struct sockaddr *)&sa, sizeof(sa)) < 0)
     }
 
 /* Listen on socket until we get killed. */
-uglyf("%s: ok2\n", socketName);
 listen(sd,2);
 conn = accept(sd, NULL, &fromLen);
 for (;;)
     {
-    uglyf("%s: ok3\n", socketName);
     if (!netMustReadAll(conn, sig, sigLen))
         {
 	close(conn);
 	continue;
 	}
-    uglyf("%s: ok4\n", socketName);
     if (!sameString(sig, paraSig))
         {
 	close(conn);
 	continue;
 	}
-    uglyf("%s: ok5\n", socketName);
     line = buf = netGetLongString(conn);
     uglyf("%s: %s\n", socketName, line);
     machine = nextWord(&line);
@@ -164,7 +162,7 @@ else
     spoke->id = spokeLastId;
     spoke->socketName = cloneString(socketName);
     spoke->pid = childId;
-    spoke->lastAlive = time(NULL);
+    spoke->lastChecked = time(NULL);
     return spoke;
     }
 }
@@ -242,7 +240,6 @@ void spokeSendJob(struct spoke *spoke, struct machine *machine, struct job *job)
 struct dyString *dy = newDyString(1024);
 int sd = spokeGetSocket(spoke);
 
-uglyf("hub: host = %s\n", getHost());
 if (sd > 0)
     {
     spoke->machine = cloneString(machine->name);
@@ -256,7 +253,6 @@ if (sd > 0)
     dyStringPrintf(dy, " %s", job->err);
     dyStringPrintf(dy, " %s", job->cmd);
     write(sd, paraSig, strlen(paraSig));
-    uglyf("hub: spoke %s machine %s gets job %s\n", spoke->socketName, machine->name, job->cmd);
     netSendLongString(sd, dy->string);
     }
 dyStringFree(&dy);
