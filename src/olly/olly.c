@@ -12,6 +12,7 @@
 int maxDiff = 3;
 int ollySize = 25;
 int ramMb = 490;
+int batchSize = 20000;
 boolean easyOut = FALSE;
 
 void usage()
@@ -32,6 +33,9 @@ errAbort(
   "       In this case just do \n"
   "         olly nibDir -makeBatch=spec.\n"
   "       Spec will be a parasol spec to do everything in nibDir\n" 
+  "   -batchSize=N Default number of oligoes to query in batch\n"
+  "       For maxDiff 3, 20000 is good, for maxDiff 2 or less\n"
+  "       100000 is good\n"
   , maxDiff, ollySize, ramMb
   );
 }
@@ -77,6 +81,7 @@ char seed3[] = "11101001000111";	/* This is the shortest seed that
 					 * base seeds. */
 char *seedForMiss[4] = {seed0, seed1, seed2, seed3};
 int minOllySize[4] = {11, 19, 25, 24};
+int defaultBatchSize[4] = {100000, 100000, 100000, 20000};
 
 int maxMem;		/* Maximum amount of memory to use. */
 int bigChromSize = 240000000;
@@ -252,18 +257,6 @@ if (pastEnd > 0)
     tEnd -= pastEnd;
     }
 regionSize = qEnd - qStart;
-#ifdef OLD
-assert(regionSize == tEnd - tStart);
-if (regionSize < ollySize)
-    {
-    warn("regionSize %d, ollySize %d", regionSize, ollySize);
-    warn("qStart %d, qEnd %d, tStart %d, tEnd %d", qStart, qEnd, tStart, tEnd);
-    warn("qSize %d, tSize %d", qSize, tSize);
-    warn("original hit location:");
-    warn("q %d, t %d, ollySize %d", qHit - query, tHit - target, ollySize);
-    assert(FALSE);
-    }
-#endif /* OLD */
 
 /* Do initial scan to count up differences in first ollyInSize-1
  * bases. */
@@ -419,21 +412,6 @@ if (hash != NULL)
 }
 
 
-#ifdef OLD
-int ollySizeNeighborhood()
-/* Count number of oligos that differ by maxDiff
- * or less.*/
-{
-rHash = oHashNew();
-rOlly = needMem(ollySize+1);
-memset(rOlly, 'a', ollySize);
-AllocArray(rMask, ollySize);
-rCount = 0;
-raddVarients(maxDiff, 0);
-/* This guy doesn't need to clean up for now at least. */
-return rCount;
-}
-
 void batchLineOut(FILE *f, char *nibDir, char *chromName, 
 	int start, int end)
 /* Output one line to batch file. */
@@ -452,16 +430,11 @@ char nibName[512];
 char chromName[128];
 struct slName *dirList,  *dirEl;
 FILE *f = mustOpen(batchFile, "w");
-int ollySizePer = ollySizeNeighborhood() * sizeof(struct hashEl);
-int fixedSize = oHashTableSize() * sizeof(struct hashEl *);
 struct dnaSeq *chromSeq;
 DNA *dna;
 int i, lastOlly;
 int rangeStart, goodCount;
-int maxGood;
 
-maxGood = (maxMem - fixedSize - bigChromSize)/ollySizePer;
-uglyf("maxGood = %d\n", maxGood);
 dirList = listDir(nibDir, "*.nib");
 for (dirEl = dirList; dirEl != NULL; dirEl = dirEl->next)
     {
@@ -478,7 +451,7 @@ for (dirEl = dirList; dirEl != NULL; dirEl = dirEl->next)
 	if (goodSeq(dna+i))
 	    {
 	    ++goodCount;
-	    if (goodCount >= maxGood)
+	    if (goodCount >= batchSize)
 	        {
 		batchLineOut(f, nibDir, chromName, rangeStart, i+ollySize);
 		rangeStart = i;
@@ -493,7 +466,6 @@ for (dirEl = dirList; dirEl != NULL; dirEl = dirEl->next)
     freeDnaSeq(&chromSeq);
     }
 }
-#endif /* OLD */
 
 int main(int argc, char *argv[])
 /* Process command line. */
@@ -510,10 +482,20 @@ if (maxDiff > 3)
    errAbort("maxDiff can only be up to 3");
 if (ollySize < minOllySize[maxDiff] )
    errAbort("For %d mismatches, minimum oligo size is %d", maxDiff, ollySize);
+batchSize = optionInt("batchSize", defaultBatchSize[maxDiff]);
 
-if (argc != 6)
-     usage();
 seedInit(seedForMiss[maxDiff]);
-olly(argv[1], argv[2], atoi(argv[3]), atoi(argv[4]), argv[5]);
+if (optionExists("makeBatch"))
+    {
+    if (argc < 2)
+        errAbort("Please include nibDir parameter with makeBatch");
+    makeBatch(optionVal("makeBatch", NULL), argv[1]);
+    }
+else
+    {
+    if (argc != 6)
+	 usage();
+    olly(argv[1], argv[2], atoi(argv[3]), atoi(argv[4]), argv[5]);
+    }
 return 0;
 }

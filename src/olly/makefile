@@ -8,5 +8,6 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = olly.o
 
 olly: $O $(MYLIBS)
-	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/olly $O $(MYLIBS) $L
+	gcc -ggdb -o olly $O $(MYLIBS) $L
+#	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/olly $O $(MYLIBS) $L
 #	strip $(HOME)/bin/$(MACHTYPE)/olly
