@@ -12,7 +12,7 @@ spToDb: $O $(MYLIBS)
 
 test: test1 
 %:	input/%
-	mkdir -p output/$@
+	${MKDIR} output/$@
 	spToDb input/$@ output/$@
 	diff -x CVS -r expected/$@ output/$@
 	rm -r output
