@@ -1,9 +1,10 @@
 track blastHg16KG
-shortLabel Human (hg16) Proteins
-longLabel Human (hg16) Proteins
+shortLabel Human Proteins
+longLabel $o_Organism ($o_date/$o_db) Proteins
 group compGeno
 priority 142
 visibility pack
 colorChromDefault off
 type psl protein
+otherDb hg16
 
