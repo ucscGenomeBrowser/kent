@@ -1,5 +1,5 @@
 track cytoBand
-shortLabel Chromosome Bands
+shortLabel Chromosome Band
 longLabel Chromosome Bands Localized by FISH Mapping Clones
 priority 1
 visibility dense
