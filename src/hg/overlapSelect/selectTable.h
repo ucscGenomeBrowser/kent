@@ -12,7 +12,7 @@ struct lineFile;
 void selectAddPsls(struct lineFile *pslLf);
 /* add records from a psl file to the select table */
 
-void selectAddGenePreds(struct lineFile *genePredLf);
+void selectAddGenePreds(struct lineFile *genePredLf, boolean useCds);
 /* add blocks from a genePred file to the select table */
 
 void selectAddBeds(struct lineFile* bedLf);

@@ -98,25 +98,31 @@ while ((psl = pslNext(pslLf)) != NULL)
     }
 }
 
-static void selectAddGenePred(struct genePred* gp)
+static void selectAddGenePred(struct genePred* gp, boolean useCds)
 /* add blocks from a genePred to the select table */
 {
 int iExon;
 for (iExon = 0; iExon < gp->exonCount; iExon++)
     {
-    selectAddRange(gp->chrom, gp->exonStarts[iExon], gp->exonEnds[iExon], 
-                   gp->strand[0], gp->name);
+    int start = gp->exonStarts[iExon];
+    int end = gp->exonEnds[iExon];
+    if (useCds && (gp->cdsStart > start))
+        start = gp->cdsStart;
+    if (useCds && (gp->cdsEnd < end))
+        end = gp->cdsEnd;
+    if (start < end)
+        selectAddRange(gp->chrom, start, end, gp->strand[0], gp->name);
     }
 }
 
-void selectAddGenePreds(struct lineFile *genePredLf)
+void selectAddGenePreds(struct lineFile *genePredLf, boolean useCds)
 /* add blocks from a genePred file to the select table */
 {
 char* row[GENEPRED_NUM_COLS];
 while (lineFileNextRowTab(genePredLf, row, GENEPRED_NUM_COLS))
     {
     struct genePred *gp = genePredLoad(row);
-    selectAddGenePred(gp);
+    selectAddGenePred(gp, useCds);
     genePredFree(&gp);
     }
 }

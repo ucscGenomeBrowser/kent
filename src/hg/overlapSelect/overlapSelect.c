@@ -16,8 +16,10 @@
 static struct optionSpec optionSpecs[] = {
     {"selectFmt", OPTION_STRING},
     {"selectCoordCols", OPTION_STRING},
+    {"selectCds", OPTION_BOOLEAN},
     {"inFmt", OPTION_STRING},
     {"inCoordCols", OPTION_STRING},
+    {"inCds", OPTION_BOOLEAN},
     {"nonOverlaping", OPTION_BOOLEAN},
     {"strand", OPTION_BOOLEAN},
     {"excludeSelf", OPTION_BOOLEAN},
@@ -34,9 +36,11 @@ static struct optionSpec optionSpecs[] = {
 
 /* Options parsed from the command line */
 unsigned selectFmt = UNKNOWN_FMT;
-unsigned inFmt = UNKNOWN_FMT;
 struct coordCols selectCoordCols;
+boolean selectUseCds = FALSE;
+unsigned inFmt = UNKNOWN_FMT;
 struct coordCols inCoordCols;
+boolean inUseCds = FALSE;
 boolean nonOverlaping = FALSE;
 unsigned selectOptions = 0;
 
@@ -115,9 +119,15 @@ int iExon;
 boolean overlaps = FALSE;
 for (iExon = 0; (iExon < gp->exonCount) && !overlaps; iExon++)
     {
-    overlaps = selectIsOverlapped(selectOptions, gp->name,
-                                  gp->chrom, gp->exonStarts[iExon],
-                                  gp->exonEnds[iExon], gp->strand[0]);
+    int start = gp->exonStarts[iExon];
+    int end = gp->exonEnds[iExon];
+    if (inUseCds && (gp->cdsStart > start))
+        start = gp->cdsStart;
+    if (inUseCds && (gp->cdsEnd < end))
+        end = gp->cdsEnd;
+    if (start < end)
+        overlaps = selectIsOverlapped(selectOptions, gp->name,
+                                      gp->chrom, start, end, gp->strand[0]);
     }
 if (nonOverlaping)
     return !overlaps;
@@ -248,7 +258,7 @@ switch (selectFmt)
         selectAddPsls(lf);
         break;
     case GENEPRED_FMT:
-        selectAddGenePreds(lf);
+        selectAddGenePreds(lf, selectUseCds);
         break;
     case BED_FMT:
         selectAddBeds(lf);
@@ -312,7 +322,7 @@ errAbort("%s:\n"
          "                     *.genePred files).\n"
          "          bed - BED format (default for *.bed files).\n"
          "                If BED doesn't have blocks, the bed range is used.\n" 
-         "  -inFmt=fmt - specify inFile format, same values as -selectFmt.\n"
+         "  -selectCds - Use only CDS in the select file\n"
          "  -selectCoordCols=spec - Select file is tab-separate with coordinates\n"
          "          as described by spec, which is one of:\n"
          "            o chromCol - chrom in this column followed by start and end.\n"
@@ -320,8 +330,10 @@ errAbort("%s:\n"
          "              columns.\n"
          "            o chromCol,startCol,endCol,strandCol - chrom, start,, end, and\n"
          "              strand in specified columns.\n"
+         "  -inFmt=fmt - specify inFile format, same values as -selectFmt.\n"
          "  -inCoordCols=spec - in file is tab-separate with coordinates specified by\n"
          "          spec, in format described above.\n"
+         "  -inCds - Use only CDS in the in file\n"
          "  -nonOverlaping - select non-overlaping instead of overlaping records\n"
          "  -strand - must be on the same strand to be considered overlaping\n"
          "  -excludeSelf - don't compare alignments with the same id.\n"
@@ -355,6 +367,10 @@ else if (optionExists("selectCoordCols"))
     }
 else
     selectFmt = getFileFormat(selectFile);
+selectUseCds = optionExists("selectCds");
+if (selectUseCds && (selectFmt != GENEPRED_FMT))
+    errAbort("-selectCds only allowed with genePred format select files");
+
 if (optionExists("inFmt"))
     inFmt = parseFormatSpec(optionVal("inFmt", NULL));
 else if (optionExists("inCoordCols"))
@@ -365,6 +381,9 @@ else if (optionExists("inCoordCols"))
     }
 else
     inFmt = getFileFormat(inFile);
+inUseCds = optionExists("inCds");
+if (inUseCds && (inFmt != GENEPRED_FMT))
+    errAbort("-inCds only allowed with genePred format in files");
 
 dropFile = optionVal("dropped", NULL);
 
