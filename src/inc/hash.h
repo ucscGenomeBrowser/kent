@@ -7,6 +7,7 @@
 #define HASH_H
 
 struct hashEl
+/* An element in a hash list. */
     {
     struct hashEl *next;
     char *name;
