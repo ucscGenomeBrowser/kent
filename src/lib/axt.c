@@ -20,7 +20,7 @@
 #include "dnautil.h"
 #include "axt.h"
 
-static char const rcsid[] = "$Id: axt.c,v 1.31 2004/04/04 04:30:58 baertsch Exp $";
+static char const rcsid[] = "$Id: axt.c,v 1.32 2004/06/02 14:25:49 braney Exp $";
 
 void axtFree(struct axt **pEl)
 /* Free an axt. */
@@ -458,7 +458,7 @@ return ss;
 }
 
 
-static char blosumText[] = {
+char blosumText[] = {
 "#  Matrix made by matblas from blosum62.iij\n"
 "#  * column uses minimum score\n"
 "#  BLOSUM Clustered Scoring Matrix in 1/2 Bit Units\n"
