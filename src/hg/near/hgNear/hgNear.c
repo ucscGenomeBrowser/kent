@@ -16,7 +16,7 @@
 #include "ra.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: hgNear.c,v 1.70 2003/09/12 11:06:51 kent Exp $";
+static char const rcsid[] = "$Id: hgNear.c,v 1.71 2003/09/12 11:37:45 kent Exp $";
 
 char *excludeVars[] = { "submit", "Submit", confVarName, colInfoVarName,
 	defaultConfName, hideAllConfName, showAllConfName,
@@ -533,6 +533,8 @@ dyStringPrintf(query, "select %s from %s where %s ",
 	col->keyField, col->table, col->valField);
 if (sameString(searchHow, "fuzzy"))
     dyStringPrintf(query, "like '%%%s%%'", search);
+else if (sameString(searchHow, "prefix"))
+    dyStringPrintf(query, "like '%s%%'", search);
 else
     dyStringPrintf(query, " = '%s'", search);
 sr = sqlGetResult(searchConn, query->string);

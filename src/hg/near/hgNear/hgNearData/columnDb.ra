@@ -23,10 +23,19 @@ type lookup kgXref kgID spDisplayID
 search fuzzy
 itemUrl http://us.expasy.org/cgi-bin/niceprot.pl?%s
 
+name refSeq
+shortLabel RefSeq
+longLabel NCBI RefSeq Gene Accession
+priority 2.2
+visibility off
+type lookup knownToRefSeq name value
+itemUrl http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Search&db=Nucleotide&term=%s&doptcmdl=GenBank&tool=genome.ucsc.edu
+itemUrl http://www.ncbi.nlm.nih.gov/LocusLink/list.cgi?V=0&Q=%s
+
 name acc
 shortLabel GenBank
 longLabel GenBank mRNA accession
-priority 2.2
+priority 2.3
 visibility off
 type acc
 itemUrl http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Search&db=Nucleotide&term=%s&doptcmdl=GenBank&tool=genome.ucsc.edu
@@ -37,7 +46,7 @@ longLabel Ensembl transcript ID
 priority 2.5
 visibility off
 type lookup knownToEnsembl name value
-search exact
+search prefix
 itemUrl http://www.ensembl.org/Homo_sapiens/geneview?transcript=%s
 
 name expDense
