@@ -141,7 +141,7 @@
 #include "bed6FloatScore.h"
 #include "pscreen.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.721 2004/08/18 19:20:31 kate Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.722 2004/08/19 23:27:37 donnak Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -2582,9 +2582,10 @@ if (winEnd - winStart > 1000000)
 printf("<H1>Extended DNA Case/Color Options</H1>\n");
 puts(
      "Use this page to highlight features in genomic DNA text. "
-     "DNA covered by a particular track can be hilighted by "
+     "DNA covered by a particular track can be highlighted by "
      "case, underline, bold, italic, or color.  See below for "
-     "details about color, and for examples. <P>");
+     "details about color, and for examples. Tracks in &quot;hide&quot; "
+     "display mode are not shown in the grid below. <P>");
 
 if (cgiBooleanDefined("hgSeq.revComp"))
     {
@@ -2709,7 +2710,7 @@ printf("</TABLE>\n");
 printf("</FORM>\n");
 printf("<H3>Coloring Information and Examples</H3>\n");
 puts("The color values range from 0 (darkest) to 255 (lightest) and are additive.\n");
-puts("The examples below show a few ways to hilight individual tracks, "
+puts("The examples below show a few ways to highlight individual tracks, "
      "and their interplay. It's good to keep it simple at first.  It's easy "
      "to make pretty but completely cryptic displays with this feature.");
 puts(
