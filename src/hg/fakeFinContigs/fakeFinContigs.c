@@ -107,6 +107,10 @@ for (contig = contigList; contig != NULL; contig = contig->next)
     fragIx = 0;
     for (agp = contig->agpList; agp != NULL; agp = agp->next)
 	{
+	char buf[128];
+	sprintf(buf, "%s/%s", skipChr(agp->chrom), contig->name);
+	freez(&agp->chrom);
+	agp->chrom = cloneString(buf);
 	agp->chromStart -= contig->startOffset;
 	agp->chromEnd -= contig->startOffset;
 	agp->ix = ++fragIx;
