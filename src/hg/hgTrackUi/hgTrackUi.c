@@ -196,6 +196,7 @@ int humMusHeightPer = atoi(cartUsualString(cart, "humMus.heightPer", "100"));
 char *interpolate = cartUsualString(cart, "humMus.linear.interp", "Linear Interpolation");
 char *aa = cartUsualString(cart, "humMus.anti.alias", "on");
 char *fill = cartUsualString(cart, "humMus.fill", "1");
+int humMusLineGap = atoi(cartUsualString(cart, "humMus.interp.gap", "10000"));
 
 printf("<p><b>Interpolation: </b> ");
 wiggleDropDown("humMus.linear.interp", interpolate );
@@ -217,6 +218,11 @@ printf(" off ");
 printf("<p><b>Track Height</b>:&nbsp;&nbsp;");
 cgiMakeIntVar("humMus.heightPer", humMusHeightPer, 5 );
 printf("&nbsp;pixels");
+
+printf("<p><b>Maximum Interval to Interpolate Across</b>:&nbsp;&nbsp;");
+cgiMakeIntVar("humMus.interp.gap", humMusLineGap, 10 );
+printf("&nbsp;pixels");
+
 
 }
 
