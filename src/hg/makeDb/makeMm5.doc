@@ -990,7 +990,7 @@ SEQ2_LEN=$BASE/S2.len
     bash		#	for tcsh users
     for F in chr*_blastzHg17.psl
     do
-	/cluster/bin/i386/hgLoadPsl mm5 ${F}
+	/cluster/bin/i386/hgLoadPsl -noTNameIx mm5 ${F}
 	echo "${F} done"
     done
     # this is a 40 minute job
@@ -1216,7 +1216,7 @@ XXX - running 2004-07-13 14;18
     cd /cluster/data/mm5/bed/blastz.hg17/pslBest
     for I in chr*BestHg17.psl
     do
-	/cluster/bin/i386/hgLoadPsl mm5 ${I}
+	/cluster/bin/i386/hgLoadPsl -noTNameIx mm5 ${I}
 	echo "done ${I}"
     done
 
@@ -1309,7 +1309,7 @@ hgLoadBed mm5 ensRatMusHg17 ucsc100k.bed -sqlTable=ensRatMusHg17.sql
     cd /cluster/data/mm5/bed/blastz.hg17/pslTight
     for I in chr*TightHg17.psl
     do
-	/cluster/bin/i386/hgLoadPsl mm5 ${I}
+	/cluster/bin/i386/hgLoadPsl -noTNameIx mm5 ${I}
 	echo "done ${I}"
     done
 
@@ -1505,6 +1505,7 @@ done
 # BLASTZ CHICKEN (GALGAL2) (DONE 7/19/04 angie)
     ssh kk
     mkdir /cluster/data/mm5/bed/blastz.galGal2.2004-07-15
+    ln -s blastz.galGal2.2004-07-15 /cluster/data/mm5/bed/blastz.galGal2
     cd /cluster/data/mm5/bed/blastz.galGal2.2004-07-15
     # Use human-chicken params: set L=10000 (higher threshold on blastz's 
     # outer loop) and abridge repeats.
@@ -1724,7 +1725,7 @@ axtChain -scoreScheme=/cluster/data/blastz/HoxD55.q \
     end
     mkdir mafNet
     foreach f (axtNet/chr*.axt)
-      set maf = mafNet/$f:t:r.mg.maf
+      set maf = mafNet/$f:t:r.maf
       axtToMaf $f \
             /cluster/data/mm5/chrom.sizes /cluster/data/galGal2/chrom.sizes \
             $maf -tPrefix=mm5. -qPrefix=galGal2.
@@ -1782,6 +1783,7 @@ axtChain -scoreScheme=/cluster/data/blastz/HoxD55.q \
 # BLASTZ DOG (CANFAM1) (DONE 7/16/04 angie)
     ssh kk
     mkdir /cluster/data/mm5/bed/blastz.canFam1.2004-07-15
+    ln -s blastz.canFam1.2004-07-15 /cluster/data/mm5/bed/blastz.canFam1
     cd /cluster/data/mm5/bed/blastz.canFam1.2004-07-15
     # Use default (Human-Mouse) settings for starters.
     cat << '_EOF_' > DEF
@@ -2021,7 +2023,7 @@ axtChain $1 \
     end
     mkdir mafNet
     foreach f (axtNet/chr*.axt)
-      set maf = mafNet/$f:t:r.mc.maf
+      set maf = mafNet/$f:t:r.maf
       axtToMaf $f \
             /cluster/data/mm5/chrom.sizes /cluster/data/canFam1/chrom.sizes \
             $maf -tPrefix=mm5. -qPrefix=canFam1.
@@ -2093,7 +2095,7 @@ pslSortAcc nohead chrom temp all_affyU74.psl
 cat chrom/*.psl > affyU74.psl
 # shorten qName to "xxxx_at" instead of "U74Xv2:xxxx_at;"
 # and reload data into table
-hgLoadPsl mm5 affyU74.psl -tNameIx
+hgLoadPsl mm5 affyU74.psl
 rm -fr chrom temp run
 
 ##   MAKE THE affyGnfU74 TRACKs (DONE - 2004-07-18 - Fan)
@@ -2879,7 +2881,7 @@ Submission to last job:         73416s    1223.60m    20.39h    0.85d
     bash
 for I in *.psl
 do
-/cluster/bin/i386/hgLoadPsl mm5 ${I}
+/cluster/bin/i386/hgLoadPsl -noTNameIx mm5 ${I}
 echo "done: ${I}"
 done
     # Check results
@@ -3134,7 +3136,7 @@ cat << 'EOF' > makeMaf.csh
     bash
     for I in chr*BestRn3.psl
     do
-	/cluster/bin/i386/hgLoadPsl mm5 ${I}
+	/cluster/bin/i386/hgLoadPsl -noTNameIx mm5 ${I}
 	echo "done ${I}"
     done
 
