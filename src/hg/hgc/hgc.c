@@ -48,6 +48,7 @@
 #include "knownMore.h"
 #include "snp.h"
 #include "softberryHom.h"
+#include "borkPseudoHom.h"
 #include "sanger22extra.h"
 #include "refLink.h"
 #include "hgConfig.h"
@@ -137,6 +138,12 @@ void printEntrezProteinUrl(FILE *f, char *accession)
 /* Print URL for Entrez browser on a nucleotide. */
 {
 fprintf(f, "\"%s&db=p&term=%s\"", entrezScript, accession);
+}
+
+void printSwissProtProteinUrl(FILE *f, char *accession)
+/* Print URL for Entrez browser on a nucleotide. */
+{
+fprintf(f, "\"http://www.expasy.org/cgi-bin/niceprot.pl?%s\"", accession);
 }
 
 void printEntrezUniSTSUrl(FILE *f, char *name)
@@ -665,30 +672,40 @@ for (axt = axtList; axt != NULL; axt = axt->next)
         for (i=0; i<oneSize; ++i)
             {
             if (posStrand)
-                {
+                {/*start of exon on positive strand*/
                 if ((tClass==INTRON) && (tPtr >= nextStart) && (tPtr >= tStart) && (tPtr < tEnd))
                     {
                     tCoding=TRUE;
                     dyStringPrintf(exonTag, "exon%d",nextEndIndex+1);
                     addTag(dyT,exonTag);
-                    if (qStopCodon == FALSE) qCoding=TRUE;
+                    if (qStopCodon == FALSE) 
+                        {
+                        qCoding=TRUE;
+                        qCodonPos = tCodonPos; /* put translation back in sync */
+                        qFlip = tFlip;
+                        }
                     }
                 else if ((tPtr >= nextStart) && (tPtr < tStart))
-                    {
+                    { /* start of UTR 5'*/
                     tClass=UTR5; qClass=UTR5;
                     }
                 }
             else{
                 if ((tClass==INTRON) && (tPtr <= nextStart-1) && (tPtr <= tStart) && (tPtr > tEnd))
-                    {
+                    { /*start of exon on neg strand */
                     tCoding=TRUE;
                     dyStringPrintf(exonTag, "exon%d",nextEndIndex+1);
                     addTag(dyT,exonTag);
 
-                    if (qStopCodon == FALSE) qCoding=TRUE;
+                    if (qStopCodon == FALSE) 
+                        {
+                        qCoding=TRUE;
+                        qCodonPos = tCodonPos; /* put translation back in sync */
+                        qFlip = tFlip;
+                        }
                     }
                 else if ((tPtr <= nextStart-1) && (tPtr > tStart))
-                    {
+                    { /* start of UTR 5'*/
                     tClass=UTR5; qClass=UTR5;
                     }
                 }
@@ -831,7 +848,7 @@ for (axt = axtList; axt != NULL; axt = axt->next)
                 }
             if (qCoding && qCodonPos == 3)
                 {
-                qCodon[tCodonPos-1] = q[i];
+                qCodon[qCodonPos-1] = q[i];
                 qCodon[3] = 0;
                 qProt = lookupCodon(qCodon);
                 if (qProt == 'X') qProt = ' ';
@@ -839,7 +856,7 @@ for (axt = axtList; axt != NULL; axt = axt->next)
                     {
                     qProt = '*'; /* stop codon is * */
                     qClass = INFRAMESTOP;
-                    qStopCodon = TRUE;
+                    qStopCodon = FALSE;
                     qCoding = TRUE;
                     }
                 if (tProt == qProt) qProt = '|'; /* if the AA matches  print | */
@@ -3940,9 +3957,57 @@ if (sqlTableExists(conn, table))
 	    gotAny = TRUE;
 	    }
 	printf("<A HREF=");
-	sprintf(query, "%s[gi]", gi);
+	sprintf(query, "%s", gi);
 	printEntrezProteinUrl(stdout, query);
 	printf(" TARGET=_blank>%s</A> %s<BR>", hom.giString, hom.description);
+	}
+    }
+if (gotAny)
+    htmlHorizontalLine();
+hFreeConn(&conn);
+}
+
+void showPseudoHomologies(char *geneName, char *table)
+/* Show homology info. */
+{
+struct sqlConnection *conn = hAllocConn();
+char query[256];
+struct sqlResult *sr;
+char **row;
+boolean isFirst = TRUE, gotAny = FALSE;
+char *gi;
+struct borkPseudoHom hom;
+char *parts[10];
+int partCount;
+char *clone;
+
+
+if (sqlTableExists(conn, table))
+    {
+    sprintf(query, "select * from %s where name = '%s'", table, geneName);
+    sr = sqlGetResult(conn, query);
+    while ((row = sqlNextRow(sr)) != NULL)
+	{
+	borkPseudoHomStaticLoad(row, &hom);
+//	if ((gi = getGi(hom.giString)) == NULL)
+//	    continue;
+	if (isFirst)
+	    {
+	    htmlHorizontalLine();
+	    printf("<H3>Aligning Protein :</H3>\n");
+	    isFirst = FALSE;
+	    gotAny = TRUE;
+	    }
+    clone = cloneStringZ(hom.protRef,80);
+    partCount = chopString(hom.protRef, "_", parts, ArraySize(parts));
+    if (partCount > 1)
+        {
+        printf("<A HREF=");
+        sprintf(query, "%s", parts[1]);
+        printSwissProtProteinUrl(stdout, query);
+        printf(" TARGET=_blank>Jump to SwissProt / sptrembl</A> " );
+        }
+    printf(" %s <BR><BR>Alignment Information:<BR><BR>%s<BR>", clone, hom.description);
 	}
     }
 if (gotAny)
@@ -3956,6 +4021,15 @@ void doSoftberryPred(struct trackDb *tdb, char *geneName)
 genericHeader(tdb, geneName);
 showHomologies(geneName, "softberryHom");
 geneShowCommon(geneName, tdb, "softberryPep");
+printTrackHtml(tdb);
+}
+
+void doPseudoPred(struct trackDb *tdb, char *geneName)
+/* Handle click on Softberry gene track. */
+{
+genericHeader(tdb, geneName);
+showPseudoHomologies(geneName, "borkPseudoHom");
+geneShowCommon(geneName, tdb, "borkPseudoPep");
 printTrackHtml(tdb);
 }
 
@@ -8121,6 +8195,14 @@ else if (sameWord(track, "genieKnown"))
 else if (sameWord(track, "softberryGene"))
     {
     doSoftberryPred(tdb, item);
+    }
+else if (sameWord(track, "borkPseudo"))
+    {
+    doPseudoPred(tdb, item);
+    }
+else if (sameWord(track, "borkPseudoBig"))
+    {
+    doPseudoPred(tdb, item);
     }
 else if (sameWord(track, "sanger22"))
     {
