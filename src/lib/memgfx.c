@@ -624,10 +624,12 @@ void mgConnectingLine( struct memGfx *mg, int x1, int y1, int x2, int y2, Color 
 int minY;
 int maxY;
 Color *pt1, *pt2;
+Color *pt1Home, *pt2Home;
 int i,j;
 int bpr = _mgBpr(mg);
 int startOffset, offset;
 int yOffset;
+double sum, slope;
 
 if (x1 < mg->clipMinX)
     x1 = mg->clipMinX;
@@ -638,16 +640,32 @@ if ((x2 - x1) <= 0)
 
 minY = mg->clipMinY;
 maxY = mg->clipMaxY;
-pt1 = _mgPixAdr(mg,x1,y1);
-pt2 = _mgPixAdr(mg,x2,y2);
-
-/*drax x-component of line first*/
+pt1Home = pt1 = _mgPixAdr(mg,x1,y1);
+pt2Home = pt2 = _mgPixAdr(mg,x2,y2);
 offset = 0;
+
+slope = (double)(y2 - y1)/(double)(x2-x1);
+sum = 0.0;
+
 if (minY <= y1 && y1 < maxY)
     {
-    for (j=offset; j<(x2-x1); j += 1)
+    if( fabs( slope ) >= 1.0 )  /*y-dominated movement (or equal)*/
         {
-        pt1[j] = color;
+        for (j=offset; j<(y2-y1); j += 1)
+            {
+            sum += 1.0 / slope;
+            pt1 += bpr * sign(slope);
+            pt1[(int)sum] = color;
+            }
+        }
+    else                    /*x-dominated movement*/
+        {
+        for (j=offset; j<(x2-x1); j += 1)
+            {
+            sum += slope;
+            pt1 = (bpr * (int)sum * sign(slope)) + pt1Home;
+            pt1[j] = color;
+            }
         }
     }
 
