@@ -23,6 +23,8 @@
     <OL>
       <LI> Make sure <CODE>ssh</CODE> is configure to
            <A HREF="ssh.html">not require a passphase</A>.
+      <LI> In this document, <CODE>$db</CODE> refers to the database being aligned.
+           Substitute the actual database name (e.g. <CODE>hg15</CODE>).
       <LI> If this is the first time this organism has been aligned:
       <UL>
       <LI> A mapping between the prefix used in the UCSC databases names
@@ -39,23 +41,13 @@
            If there is no <EM><CODE>ooc</CODE></EM>, this script still needs to be
            modified to indicate this fact.
       </UL>
-
-      <LI> The following information is needed to do the alignment.  This
-           is represented as variables used in the remainder of this
-           document.
+      <LI> Edit <A HREF="config.html"><CODE><EM>$gbRoot</EM>/etc/genbank.conf</CODE></A> to 
+           configure this databases.  Must set:
            <UL>
-           <LI> <CODE>set db=hg20</CODE><BR>
-               The database associated with the genome that is being aligned
-           <LI> <CODE>set nibGlob='/scratch/hg/hg20/chromTrfMixedNib/chr*.nib'</CODE><BR>
-                Glob pattern for location of nibs on cluster.  Single quotes
-                must be use to prevent expansion of the glob pattern by
-                the shell.  Must also be in this location on the server machine where
-                the build is run.
-           <LI> <CODE>set liftFile=/cluster/store5/gs.21/build64/jkStuff/liftAll.lft</CODE><BR>
-                Location of lift file for this genome.  If the genome contigs or scaffolds
-                have not been assembled into chromosomes, specify an empty string.
-                The lift file is used to split the nibs for alignment.
+           <LI> <CODE>$db.genome</CODE>
+           <LI> <CODE>$db.lift</CODE>
            </UL>
+           You may want to set some database load options to override the defaults.
            
       <LI><CODE>ssh eieio</CODE><BR>
           <EM>It is important to run on <CODE>eieio</CODE> to avoid creating
@@ -64,7 +56,7 @@
       <LI><CODE>cd /cluster/store5/genbank</CODE><BR>
           This directory is <CODE>$gbRoot</CODE>.
 
-      <LI> <CODE>nice bin/gbAlignStep -verbose=1 -initial $db $nibGlob $liftFile</CODE><BR>
+      <LI> <CODE>nice bin/gbAlignStep -verbose=1 -initial <EM>$db</EM>&</CODE><BR>
            <P>This will run the entire alignment process.
            The <CODE>-initial</CODE> option defaults several parameters for
            and initial alignment and prevents this alignment from blocking
@@ -75,17 +67,19 @@
            <LI> No semaphore files are created, so this doesn't block the
                 daily build.
            </UL>
-
-           <P><EM>Important:</EM> this script rsyncs the fasta files to the
-           iservers under <CODE>/iscratch/genbank/</CODE>.  If any of the
-           iservers are down, this can cause the process to hang or fail.
-           If any of the iservers are down, make sure that the rack 
-           is switched use another iserver.  Use the <CODE>-omit-iserver</CODE>
-           option with the simple host name of the iserver:
+           <P>
+           If you want to use the <EM>bluearc</EM> cluster file system, add
            <UL>
-           <LI> <CODE>-omit-iserver=kkr5u00</CODE>
+           <LI><CODE>-iserver=no -clusterRootDir=/cluster/bluearc/genbank</CODE> 
            </UL>
-           This maybe repeated in multiple iservers are down.
+           before the <CODE><EM>$db</EM></CODE>.
+           <BLOCKQUOTE>
+           Warning: <CODE>gbAlignStep</CODE> and other GenBank do not currently accept options after
+           the positional arguments.
+           </BLOCKQUOTE>
+
+           <P>If you use the <EM>iservers</EM>, <A HREF="config.html"><CODE><EM>$gbRoot</EM>/etc/genbank.conf</CODE></A>
+           should already have the list of working servers. 
            <P>
            All output is saved in the log file.
            <P> If this is the first time a databases is built for an organism,
@@ -133,25 +127,23 @@
     <H3>Initial Database Load</H3>
 
     <OL>
-      <LI><CODE>bin/i386/gbLoadRna -drop $db</CODE> <BR>
-          Drop Genbank and RefSeq related tables if there have been
-          failed attempts to load the database.</LI>
-      
-      <LI><CODE>nice bin/gbDbLoadStep -verbose=1 -initialLoad $db</CODE></LI>
+      <LI><CODE>nice bin/gbDbLoadStep -verbose=1 -drop -initialLoad $db</CODE></LI>
       <UL>
-      <LI> Add <CODE>-buildFullMgc=$db</CODE> if this a an MGC species
-           (currently human and mouse).
+      <LI> The <CODE>-drop</CODE> option drops any existing GenBank or RefSeq
+           tables before loading.
       <LI> If an initial load was done using only the mRNAs, it will be
            most likely be <B>much</B> faster to drop all of the GenBank
            tables and load with the <CODE>-initialLoad</CODE> option
            when loading the ESTs.
-      <LI> If the genome does not have assembled chromosomes, as is the
-           case with a large number of scaffolds, use the 
-           <CODE>-noPerChrom=$db</CODE> option to avoid creating the 
-           per-chromsome alignment tables.
       </UL>
 
     </OL>
+<!--
+FIXME: 
+  - mention that build takes place on kk.
+  - alignment directory, monitor with list batches
+-->
+
   </BODY>
 </HTML>
 

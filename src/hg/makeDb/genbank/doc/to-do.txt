@@ -494,5 +494,79 @@
        2003.06.17-21:55:32.download.log
        mod time: Jun 18 08:15
 
-- instead of checking the mgc host name in the browser, make it a hg.conf
-  option.
+- aligned/genbank.136 didn't endup with right perms *** (work dirs too).
+
+- copy log messsage is confusing, only shows the cpio output of 0 blocks.
+
+- You should probably doc the fact that hgwdev's (dbload) lock is global.
+
+- add lock of gbStatus durring load, just to be paranoid.
+
+- add in exists checks to blat para.
+
+- make sure that full is done first on a new release; check the
+  logic with the release update.
+
+ 
+- refseq CDS problems:
+  Warning: NM_012577: malformed RefSeq CDS: join(1,2..633)
+  Warning: NR_001363: malformed RefSeq CDS: 
+  Warning: NR_001368: malformed RefSeq CDS: 
+  - also, still problem with some MGC's cds.
+
+- add type and source db to image clone; makes it easy to clean out.
+
+- can the refseq pep sequences be extract from the the genbank records
+  rather than downloaded seperately?
+
+- index string tables as full text
+
+- options for using /bluearc
+
+- gbExtFile table includes a . in path:
+  /gbdb/genbank/./data/processed/genbank.136.0/full/mrna.fa
+
+- trying to use bluearc didn't generate jobs with correct paths.
+
+- move species names to conf.
+
+
+
+- alignment seems slower" build times for old hg15:
+    mrna: Completed: 546 of 546 jobs
+    CPU time in finished jobs:     149115s    2485.24m    41.42h    1.73d  0.005 y
+    IO & Wait Time:                116248s    1937.47m    32.29h    1.35d  0.004 y
+    Average job time:                 486s       8.10m     0.14h    0.01d
+    Longest job:                     6977s     116.28m     1.94h    0.08d
+    Submission to last job:          6977s     116.28m     1.94h    0.08d
+
+    est: Completed: 6006 of 6006 jobs
+    CPU time in finished jobs:     670646s   11177.43m   186.29h    7.76d  0.021 y
+    IO & Wait Time:               1756084s   29268.07m   487.80h   20.33d  0.056 y
+    Average job time:                 404s       6.73m     0.11h    0.00d
+    Longest job:                     1100s      18.33m     0.31h    0.01d
+    Submission to last job:          2839s      47.32m     0.79h    0.03d
+
+    xenoMrna: Completed: 25662 of 25662 jobs
+    CPU time in finished jobs:    2721254s   45354.23m   755.90h   31.50d  0.086 y
+    IO & Wait Time:                 76077s    1267.95m    21.13h    0.88d  0.002 y
+    Average job time:                 109s       1.82m     0.03h    0.00d
+    Longest job:                     6739s     112.32m     1.87h    0.08d
+    Submission to last job:          7650s     127.50m     2.12h    0.09d
+
+    xenoEst: Completed: 40950 of 40950 jobs
+    CPU time in finished jobs:   60566146s 1009435.76m 16823.93h  701.00d  1.921 y
+    IO & Wait Time:               3218137s   53635.62m   893.93h   37.25d  0.102 y
+    Average job time:                1558s      25.96m     0.43h    0.02d
+    Longest job:                    35550s     592.50m     9.88h    0.41d
+    Submission to last job:        130925s    2182.08m    36.37h    1.52d
+    
+    refSeq: Completed: 44 of 44 jobs
+    CPU time in finished jobs:      11930s     198.84m     3.31h    0.14d  0.000 y
+    IO & Wait Time:                 16931s     282.18m     p4.70h    0.20d  0.001 y
+    Average job time:                 656s      10.93m     0.18h    0.01d
+    Longest job:                     2355s      39.25m     0.65h    0.03d
+    Submission to last job:          2402s      40.03m     0.67h    0.03d
+
+    total CPU: 41.42+186.29+755.90+16823.93+3.31 = 17810.85h
+    total wait: 32.29+487.80+21.13+893.93+4.70   =  1439.85h
