@@ -85,9 +85,9 @@
 #include "versionInfo.h"
 #include "bedCart.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.840 2004/11/29 05:13:05 kate Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.841 2004/11/29 23:56:08 kent Exp $";
 
-boolean measureTiming = TRUE;	/* Flip this on to display timing
+boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
 
 #define MAX_CONTROL_COLUMNS 5
