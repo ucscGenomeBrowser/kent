@@ -152,11 +152,13 @@ assembly:
 <TABLE CELLPADDING=0 CELLSPACING=0 MARGINS=0>
 <TR><TD> $FREEZEDATE </TD><TD WIDTH=10></TD><TD> $DBVERSION </TD></TR>
 <TR><TD> --------------- </TD><TD></TD><TD> ---------------  </TD></TR>
+<TR><TD> mmFeb2002   </TD><TD></TD><TD> mm2         </TD></TR>
 <TR><TD> mmNov2001   </TD><TD></TD><TD> mm1         </TD></TR>
+<TR><TD> 05apr2002   </TD><TD></TD><TD> hg11         </TD></TR>
 <TR><TD> 22dec2001   </TD><TD></TD><TD> hg10         </TD></TR>
 <TR><TD> Not Released</TD><TD></TD><TD> hg9         </TD></TR>
 <TR><TD> 06aug2001   </TD><TD></TD><TD> hg8         </TD></TR>
-<TR><TD> 01apr2001   </TD><TD></TD><TD> hg7         </TD></TR>
+<TR><TD> 01apr2001   </TD><TD></TD><TD> archived    </TD></TR>
 <TR><TD> 12dec2000   </TD><TD></TD><TD> archived    </TD></TR>
 <TR><TD> 07oct2000   </TD><TD></TD><TD> archived    </TD></TR>
 <TR><TD> 05sept2000  </TD><TD></TD><TD> archived    </TD></TR>
@@ -164,6 +166,27 @@ assembly:
 </TABLE>
 </ul>
 <ol type="a">
+
+<li>Get Mouse February, 2002 full data set (3.4 GB) by doing:
+<p> 
+i)&nbsp;&nbsp;&nbsp;&nbsp;  rsync --progress -avz &nbsp;&nbsp;\
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+rsync://genome-rsync.cse.ucsc.edu/genome/goldenPath/mmFeb2002/bigZips/&nbsp;&nbsp;\
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+$WEBROOT/goldenPath/mmFeb2002/bigZips/.
+<p> 
+ii)&nbsp;&nbsp;&nbsp;  rsync --progress -avz &nbsp;&nbsp;\
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+rsync://genome-rsync.cse.ucsc.edu/genome/goldenPath/mmFeb2002/chromosomes/ &nbsp;&nbsp;\
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+$WEBROOT/goldenPath/mmFeb2002/chromosomes/.
+<p> 
+iii)&nbsp;&nbsp;   rsync --progress -avz  &nbsp;&nbsp;\
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+rsync://genome-rsync.cse.ucsc.edu/genome/goldenPath/mmFeb2002/database/ &nbsp;&nbsp;\
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+$WEBROOT/goldenPath/mmFeb2002/database/.
+<br><br>
 
 <li>Get Mouse November, 2001 full data set (2.1 GB) by doing:
 <p> 
@@ -184,6 +207,27 @@ iii)&nbsp;&nbsp;   rsync --progress -avz  &nbsp;&nbsp;\
 rsync://genome-rsync.cse.ucsc.edu/genome/goldenPath/mmNov2001/database/ &nbsp;&nbsp;\
 <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 $WEBROOT/goldenPath/mmNov2001/database/.
+<br><br>
+
+<li>Get Human April 5, 2002 full data set (9.8 GB) by doing:
+<p> 
+i)&nbsp;&nbsp;&nbsp;&nbsp;  rsync --progress -avz &nbsp;&nbsp;\
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+rsync://genome-rsync.cse.ucsc.edu/genome/goldenPath/05apr2002/bigZips/&nbsp;&nbsp;\
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+$WEBROOT/goldenPath/05apr2002/bigZips/.
+<p> 
+ii)&nbsp;&nbsp;&nbsp;  rsync --progress -avz &nbsp;&nbsp;\
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+rsync://genome-rsync.cse.ucsc.edu/genome/goldenPath/05apr2002/chromosomes/ &nbsp;&nbsp;\
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+$WEBROOT/goldenPath/05apr2002/chromosomes/.
+<p> 
+iii)&nbsp;&nbsp;   rsync --progress -avz  &nbsp;&nbsp;\
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+rsync://genome-rsync.cse.ucsc.edu/genome/goldenPath/05apr2002/database/ &nbsp;&nbsp;\
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+$WEBROOT/goldenPath/05apr2002/database/.
 <br><br>
 
 <li>Get Human December 22, 2001 full data set (4.9 GB) by doing:
@@ -229,29 +273,6 @@ rsync://genome-rsync.cse.ucsc.edu/genome/goldenPath/06aug2001/database/ &nbsp;&n
 $WEBROOT/goldenPath/06aug2001/database/.
 <br><br>
 
-<li>Get April 1, 2001 full data set (5.2 GB) by doing:
-
-<p> 
-i)&nbsp;&nbsp;&nbsp;&nbsp;  rsync --progress -avz &nbsp;&nbsp;\
-<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-rsync://genome-rsync.cse.ucsc.edu/genome/goldenPath/01apr2001/bigZips/&nbsp;&nbsp;\
-<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-$WEBROOT/goldenPath/01apr2001/bigZips/.
-<p> 
-ii)&nbsp;&nbsp;&nbsp;  rsync --progress -avz &nbsp;&nbsp;\
-<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-rsync://genome-rsync.cse.ucsc.edu/genome/goldenPath/01apr2001/chromosomes/ &nbsp;&nbsp;\
-<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-$WEBROOT/goldenPath/01apr2001/chromosomes/.
-<p> 
-iii)&nbsp;&nbsp;   rsync --progress -avz  &nbsp;&nbsp;\
-<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-rsync://genome-rsync.cse.ucsc.edu/genome/goldenPath/01apr2001/database/ &nbsp;&nbsp;\
-<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-$WEBROOT/goldenPath/01apr2001/database/.
-<br><br>
-
-
 </ol>
 
 <h4><a NAME="step4"></a>4. Set up database</h4>
@@ -270,7 +291,7 @@ All the files for creating the "$DBVERSION" database are in this directory.
 ii)&nbsp;&nbsp;  Create tables: (You may have to use the following 
 shell script for this step.)
 <ul><br>
-for file in `find . -name '*.sql'`  <br>
+for file in *.sql  <br>
 do <br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	mysql -options $DBVERSION < $file  <br>
 done <br>
@@ -279,7 +300,7 @@ done <br>
 iii)&nbsp;&nbsp;   Load data into the tables: (You may have to use the following 
 shell script for this step.)
 <ul><br>
-for file in `find . -name '*.txt.gz'`  <br>
+for file in *.txt.gz  <br>
 do <br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	gunzip $file  <br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	mysqlimport -options $DBVERSION $file  <br>
