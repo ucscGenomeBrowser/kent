@@ -53,7 +53,7 @@ errAbort("paraNode - parasol node server.\n"
 	 "    -cpu=N  Number of CPUs to use - default 1.\n");
 }
 
-static char const rcsid[] = "$Id: paraNode.c,v 1.77 2005/02/22 19:59:17 markd Exp $";
+static char const rcsid[] = "$Id: paraNode.c,v 1.78 2005/02/23 06:28:23 markd Exp $";
 
 /* Command line overwriteable variables. */
 char *hubName;			/* Name of hub machine, may be NULL. */
@@ -294,6 +294,32 @@ void getTicksToHundreths()
 #endif /* CLK_TCK */
 }
 
+void setupProcStdio(char *in, char *out, char *err)
+/* setup stdio for process (after fork) */
+{
+int newStdin, newStdout, newStderr;
+
+close(mainRudp->socket);
+
+newStdin = open(in, O_RDONLY);
+if (newStdin < 0)
+    errnoAbort("can't open job stdin file %s", in);
+if (dup2(newStdin, STDIN_FILENO) < 0)
+    errnoAbort("can't dup2 stdin");
+
+newStdout = open(out, O_WRONLY | O_CREAT, 0666);
+if (newStdout < 0)
+    errnoAbort("can't open job stdout file %s", out);
+if (dup2(newStdout, STDOUT_FILENO) < 0)
+    errnoAbort("can't dup2 stdout");
+
+newStderr = open(err, O_WRONLY | O_CREAT, 0666);
+if (newStderr < 0)
+    errnoAbort("can't open job stderr file %s", err);
+if (dup2(newStderr, STDERR_FILENO) < 0)
+    errnoAbort("can't dup2 stderr");
+}
+
 void execProc(char *managingHost, char *jobIdString, char *reserved,
 	char *user, char *dir, char *in, char *out, char *err,
 	char *exe, char **params)
@@ -304,11 +330,16 @@ void execProc(char *managingHost, char *jobIdString, char *reserved,
 {
 if ((grandChildId = forkOrDie()) == 0)
     {
-    int newStdin, newStdout, newStderr;
     char *homeDir = "";
 
-    /* Change to given user (if root) and dir */
+    /* Change to given user (if root) */
     changeUid(user, &homeDir);
+
+    /* create output files just after becoming user so that errors in the rest
+     * of this proc will go to the err file and be available via para
+     * problems */
+    setupProcStdio(in, out, err);
+
     if (chdir(dir) < 0)
         errnoAbort("can't chdir to %s", dir);
     setsid();
@@ -328,27 +359,6 @@ if ((grandChildId = forkOrDie()) == 0)
 	freeHashAndVals(&hash);
 	}
 
-    /* Redirect standard io. */
-    close(mainRudp->socket);
-
-    newStdin = open(in, O_RDONLY);
-    if (newStdin < 0)
-        errnoAbort("can't open job stdin file %s", in);
-    if (dup2(newStdin, STDIN_FILENO) < 0)
-        errnoAbort("can't dup2 stdin");
-
-    newStdout = open(out, O_WRONLY | O_CREAT, 0666);
-    if (newStdout < 0)
-        errnoAbort("can't open job stdout file %s", out);
-    if (dup2(newStdout, STDOUT_FILENO) < 0)
-        errnoAbort("can't dup2 stdout");
-
-    newStderr = open(err, O_WRONLY | O_CREAT, 0666);
-    if (newStderr < 0)
-        errnoAbort("can't open job stderr file %s", err);
-    if (dup2(newStderr, STDERR_FILENO) < 0)
-        errnoAbort("can't dup2 stderr");
-    
     randomSleep();	/* Sleep a random bit before executing this thing
                          * to help spread out i/o when a big batch of jobs
 			 * hit idle cluster */
@@ -768,7 +778,7 @@ for (;;)
 	     * parse out first word as command. */
 	    line = pmIn.data;
 	    logDebug("message from %s: \"%s\"",
-                     paraFormatIp(pmIn.ipAddress.sin_addr.s_addr), 
+                     paraFormatIp(ntohl(pmIn.ipAddress.sin_addr.s_addr)),
                      line);
 	    command = nextWord(&line);
 	    if (command != NULL)
@@ -799,7 +809,7 @@ for (;;)
 	else
 	    {
 	    logWarn("command from unauthorized host %s",
-                    paraFormatIp(pmIn.ipAddress.sin_addr.s_addr));
+                    paraFormatIp(ntohl(pmIn.ipAddress.sin_addr.s_addr)));
 	    }
 	}
     }
