@@ -10,6 +10,8 @@
 #include "altGraphX.h"
 #include "hgGene.h"
 
+static char const rcsid[] = "$Id: altSplice.c,v 1.5 2003/11/12 18:47:21 kent Exp $";
+
 static int gpBedBasesShared(struct genePred *gp, struct bed *bed)
 /* Return number of bases genePred and bed share. */
 {

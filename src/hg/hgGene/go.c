@@ -7,6 +7,8 @@
 #include "spDb.h"
 #include "hgGene.h"
 
+static char const rcsid[] = "$Id: go.c,v 1.5 2003/11/12 18:47:21 kent Exp $";
+
 static boolean goExists(struct section *section, 
 	struct sqlConnection *conn, char *geneId)
 /* Return TRUE if GO database exists and has something

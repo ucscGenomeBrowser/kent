@@ -9,6 +9,8 @@
 #include "portable.h"
 #include "hgGene.h"
 
+static char const rcsid[] = "$Id: rnaStructure.c,v 1.4 2003/11/12 18:47:21 kent Exp $";
+
 static boolean rnaStructureExists(struct section *section, 
 	struct sqlConnection *conn, char *geneId)
 /* Return TRUE if tables exists and have our gene. */

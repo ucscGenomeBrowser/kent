@@ -7,6 +7,8 @@
 #include "jksql.h"
 #include "hgGene.h"
 
+static char const rcsid[] = "$Id: pathways.c,v 1.5 2003/11/12 18:47:21 kent Exp $";
+
 struct pathwayLink
 /* Info to link into a pathway. */
     {

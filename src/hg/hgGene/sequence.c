@@ -14,6 +14,8 @@
 #include "hCommon.h"
 #include "hgGene.h"
 
+static char const rcsid[] = "$Id: sequence.c,v 1.9 2003/11/12 18:47:21 kent Exp $";
+
 static void printGenomicAnchor(char *table, char *itemName,
 	char *chrom, int start, int end)
 /* Print genomic sequence anchor. */

@@ -8,6 +8,8 @@
 #include "hdb.h"
 #include "hgGene.h"
 
+static char const rcsid[] = "$Id: links.c,v 1.13 2003/11/12 18:47:21 kent Exp $";
+
 struct link
 /* A link to another web site. */
     {

@@ -8,6 +8,8 @@
 #include "hgGene.h"
 #include "fbTables.h"
 
+static char const rcsid[] = "$Id: flyBaseInfo.c,v 1.4 2003/11/12 18:47:21 kent Exp $";
+
 static char *getFlyBaseId(struct sqlConnection *conn, char *geneId)
 /* Return flyBase ID of gene if any. */
 {

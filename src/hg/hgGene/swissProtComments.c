@@ -7,6 +7,8 @@
 #include "spDb.h"
 #include "hgGene.h"
 
+static char const rcsid[] = "$Id: swissProtComments.c,v 1.8 2003/11/12 18:47:21 kent Exp $";
+
 struct spComment
 /* Swiss prot comment. */
     {

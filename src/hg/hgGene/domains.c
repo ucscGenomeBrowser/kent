@@ -7,6 +7,8 @@
 #include "spDb.h"
 #include "hgGene.h"
 
+static char const rcsid[] = "$Id: domains.c,v 1.8 2003/11/12 18:47:21 kent Exp $";
+
 static boolean domainsExists(struct section *section, 
 	struct sqlConnection *conn, char *geneId)
 /* Return TRUE if there's some pfam domains in swissProt on this one. 
