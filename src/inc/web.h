@@ -9,7 +9,8 @@ void webStartText();
 void webStart(char* format,...);
 /* output a CGI and HTML header with the given title in printf format */
 
-void webStartWrapper(char *format, va_list args, boolean withHttpHeader);
+void webStartWrapper(char *format, va_list args, boolean withHttpHeader,
+	boolean withLogo);
 /* output a CGI and HTML header with the given title in printf format */
 
 void webNewSection(char* format, ...);

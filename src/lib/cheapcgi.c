@@ -11,6 +11,7 @@
 #include "cheapcgi.h"
 #include "portable.h"
 
+
 /* These three variables hold the parsed version of cgi variables. */
 static char *inputString = NULL;
 static unsigned long inputSize;
@@ -71,6 +72,9 @@ for (i=0; i<inputSize; ++i)
     }
 inputString[inputSize] = 0;
 }
+
+#define memmem(hay, haySize, needle, needleSize) \
+    memMatch(needle, needleSize, hay, haySize)
 
 static void cgiParseMultipart(char *input, struct hash **retHash, struct cgiVar **retList)
 /* process a multipart form */

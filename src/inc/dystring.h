@@ -45,5 +45,9 @@ void dyStringPrintf(struct dyString *ds, char *format, ...);
 #define dyStringClear(ds) (ds->string[0] = ds->stringSize = 0)
 /* Clear string. */
 
+struct dyString * dyStringSub(char *orig, char *in, char *out);
+/* Make up a duplicate of orig with all occurences of in substituted
+ * with out. */
+
 #endif /* DYSTRING_H */
 
