@@ -1578,10 +1578,44 @@ IN PROGRESS
     hgLoadPsl hg15 xenoEst.psl -tNameIx
     # Sequence info should have already been loaded into database (PRELOAD)
 
+# PRODUCING SQUIRT ALIGNMENTS  (DONE 06/04/03)
+    ssh kk
+    mkdir -p ~/hg15/bed/blatCi1
+    cd ~/hg15/bed/blatCi1
+    mkdir psl
+    foreach f (~/hg15/?{,?}/NT_??????/NT_??????.fa)
+      set c=$f:t:r
+      mkdir -p psl/$c
+    end
+    ls -1S /iscratch/i/squirt/ci1/queryFa/*.fa > squirt.lst
+    ls -1S /scratch/hg/gs.16/build33/trfFa/*.fa > human.lst
+    gensub2 human.lst squirt.lst gsub2D spec
+    para create spec
+    ....
+    # When cluster run is done, sort alignments:
+    ssh eieio
+    cd ~/hg15/bed/blatCi1
+    mkdir /tmp/$LOGNAME
+    pslSort dirs raw.psl /tmp/$LOGNAME psl/*
+    pslReps raw.psl cooked.psl /dev/null -minAli=0.25
+    liftUp -nohead lifted.psl ../../jkStuff/liftAll.lft warn cooked.psl
+    pslSortAcc nohead chrom /tmp/$LOGNAME lifted.psl
 
-# PRODUCING SQUIRT ALIGNMENTS (DONE 052003)
-    # Distribute fugu sequence to /iscratch/i/fugu/ (if it isn't already there)
-    Doing...
+    # Rename to correspond with tables as so and load into database:
+    ssh hgwdev
+    cd ~/hg15/bed/blatSquirt/chrom
+    rm -f chr*_blatSquirt.psl
+    foreach i (chr?{,?}{,_random}.psl)
+        set r = $i:r
+        mv $i ${r}_blatSquirt.psl
+    end
+    hgLoadPsl hg15 *.psl
+
+    # Make squirt /gbdb/ symlink and load squirt sequence data.
+    mkdir /gbdb/hg15/squirtSeq
+    cd /gbdb/hg15/squirtSeq
+    ln -s /cluster/store5/squirt/ci1/ciona.rm.fasta
+
 # PRODUCING FUGU ALIGNMENTS (DONE 041203)
     # Distribute fugu sequence to /iscratch/i/fugu/ (if it isn't already there)
     ssh kkr1u00
