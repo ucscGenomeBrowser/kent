@@ -585,9 +585,12 @@ void cartHtmlShell(char *title, void (*doMiddle)(struct cart *cart), char *cooki
  * comma-separated list of variables that you don't want to save in the cart between
  * invocations of the cgi-script. */
 {
-struct cart *cart = cartAndCookie(cookieName, exclude, oldVars);
+struct cart *cart;
 int status;
 
+pushWarnHandler(cartEarlyWarningHandler);
+cart = cartAndCookie(cookieName, exclude, oldVars);
+popWarnHandler();
 htmStart(stdout, title);
 cartWarnCatcher(doMiddle, cart, htmlVaWarn);
 cartCheckout(&cart);
