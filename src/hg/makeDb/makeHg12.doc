@@ -1402,6 +1402,33 @@ o - Load genomic dupes
     mysql -u hgcat -pbigSECRET hg12 < ~/src/hg/lib/genomicDups.sql
     hgLoadBed hg12 -oldTable genomicDups genomicDupes.bed
 
+LOAD AFFYRATIO (GNF)
+o - # ssh hgwdev
+    cd /cluster/store1/sugnet/
+    mkdir gs.13
+    mkdir gs.13/build30
+    mkdi20r gs.13/build30/affyGnf
+    cd gs.13/build30/affyGnf
+    cp /projects/compbiodata/microarray/affyGnf/sequences/HG-U95Av2_target ./
+    ls -1 /cluster/store3/gs.13/build30/trfFa/ > allctg.lst
+    echo "/cluster/store1/sugnet/gs.13/build30/affyGnf/HG-U95Av2_target" > affy.lst
+    echo '#LOOP\n/cluster/bin/i386/blat -mask=lower -minIdentity=95 -ooc=/cluster/store3/gs.13/build30/jkStuff/post.refCheck.old/11.ooc /cluster/store3/gs.13/build30/trfFa/$(path1) $(path2) {check out line+ psl/$(root1)_$(root2).psl}\n#ENDLOOP' > template.sub
+    gensub2 allctg.lst affy.lst template.sub para.spec
+    # ssh kkr1u00
+    para create para.spec
+    para try
+    para check
+    para push
+    # exit kkr1u00
+    pslSort dirs hg12.affy.psl tmp psl >& pslSort.log
+    liftUp hg12.affy.lifted.psl /cluster/store3/gs.13/build30/jkStuff/liftAll.lft warn hg12.affy.psl
+    pslAffySelect seqIdent=.95 basePct=.95 in=hg12.affy.lifted.psl out=hg12.affy.pAffySelect.95.95.psl
+    affyPslAndAtlasToBed hg12.affy.pAffySelect.95.95.psl  /projects/compbiodata/microarray/affyGnf/human_atlas_U95_gnf.noquotes.txt affyRatio.bed affyRatio.exr >& affyPslAndAtlasToBed.log 
+    hg12S -A </projects/compbiodata/microarray/affyGnf/browserFiles/affyRatio.sql 
+    echo "load data local infile 'affyRatio.bed' into table affyRatio" | hg12S -A
+    rm -rf psl tmp err *.psl *.bed HG-U95Av2_target 
+
+
 FAKING DATA FROM PREVIOUS VERSION
 (This is just for until proper track arrives.  Rescues about
 97% of data  Just an experiment, not really followed through on).
