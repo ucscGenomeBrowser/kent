@@ -1725,6 +1725,21 @@ shortLabel Pol2 32hr
 longLabel Affymetrix ChIp/Chip (Pol2 RA-stim HL60, 32hrs) Sites in ENCODE Regions
 priority 4
 
+track encodeSangerChip
+shortLabel ChIp/Sanger
+longLabel Sanger ChIp/Chip (H3K4me3 GM06990) in ENCODE Regions
+group encode
+color 10,10,130
+altColor 50,50,50
+priority 47.3
+chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
+visibility hide
+type bedGraph 4
+maxHeightPixels 128:40:16
+autoScaleDefault on
+minLimit 0
+maxLimit 75
+
 track encodeAffyRnaHl60Sig
 compositeTrack on
 shortLabel RNA/Affy Signal
@@ -1920,6 +1935,7 @@ subTrack encodeBuPromoters
 longLabel Boston University Promoters in Testis
 shortLabel Testis
 priority 10
+
 
 searchTable encode_NHGRI_DNaseHS
 searchType bed
