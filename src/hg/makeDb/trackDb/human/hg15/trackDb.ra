@@ -245,6 +245,15 @@ spectrum on
 type psl xeno rn2
 otherDb rn2
 
+track jkDuplicon
+shortLabel JK Duplicon
+longLabel Duplicated Regions of $Organism Genome Shaded by % ID
+group varRep
+priority 144
+visibility hide
+spectrum on
+type bed 6
+
 track blastzSelf
 shortLabel Blastz Self
 longLabel Merged Blastz Human Alignments
