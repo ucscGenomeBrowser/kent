@@ -9,7 +9,7 @@
 #include "chainBlock.h"
 #include "dnautil.h"
 
-static char const rcsid[] = "$Id: chainToPsl.c,v 1.2 2003/05/06 07:22:27 kate Exp $";
+static char const rcsid[] = "$Id: chainToPsl.c,v 1.3 2003/05/16 22:02:22 baertsch Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -142,49 +142,11 @@ int qs,qe,ts,te;
 int *blocks = NULL, *qStarts = NULL, *tStarts = NULL;
 struct boxIn *b, *nextB;
 int qbSize = 0, tbSize = 0; /* sum of block sizes */
-
-/* Fix up things for ones that end or begin in '-' */
-    /*int qStartInsert = countInitialChars(qString, '-');
-    {
-    int tStartInsert = countInitialChars(tString, '-');
-    int qEndInsert = countTerminalChars(qString, '-');
-    int tEndInsert = countTerminalChars(tString, '-');
-    int startInsert = max(qStartInsert, tStartInsert);
-    int endInsert = max(qEndInsert, tEndInsert);
-    int qNonCount, tNonCount;
-
-    if (startInsert > 0)
-        
-	qNonCount = countNonInsert(qString, startInsert);
-	tNonCount = countNonInsert(tString, startInsert);
-	qString += startInsert;
-	tString += startInsert;
-	aliSize -= startInsert;
-	qStart += qNonCount;
-	tStart += tNonCount;
-	}
-    if (endInsert > 0)
-        {
-	aliSize -= endInsert;
-	qNonCount = countNonInsert(qString+aliSize, endInsert);
-	tNonCount = countNonInsert(tString+aliSize, endInsert);
-	qString[aliSize] = 0;
-	tString[aliSize] = 0;
-        qEnd -= qNonCount;
-        tEnd -= tNonCount;
-	}
-    }
-    */
+int qtSize = 0, ttSize = 0; /* sum of block + gap sizes */
 
 /* Don't ouput if either query or target is zero length */
  if ((qStart == qEnd) || (tStart == tEnd))
      return;
-/* First count up number of blocks and inserts. */
- /*
-countInserts(qString, aliSize, &qNumInsert, &qBaseInsert);
-countInserts(tString, aliSize, &tNumInsert, &tBaseInsert);
-blockCount = 1 + qNumInsert + tNumInsert;
-*/
 
 for (b = chain->blockList; b != NULL; b = nextB)
     {
@@ -193,7 +155,7 @@ for (b = chain->blockList; b != NULL; b = nextB)
     tbSize += b->tEnd - b->tStart + 1;
     nextB = b->next;
     }
-printf("blockCount %d qbSize %d tbSize %d\n",blockCount, qbSize, tbSize);
+//printf("blockCount %d qbSize %d tbSize %d %d %s\n",blockCount, qbSize, tbSize, 0, chain->qName);
 /* Count up match/mismatch. */
 /*
 for (i=0; i<aliSize; ++i)
@@ -208,8 +170,8 @@ for (i=0; i<aliSize; ++i)
 	    ++misMatch;
 	}
     }
-    */
-match=chain->score * tbSize / 70;
+*/
+//match=chain->score * tbSize / 70;
 /* Deal with minus strand. */
 /*
 qs = qStart;
@@ -237,8 +199,16 @@ fprintf(f, "%d\t", tBaseInsert);
 fprintf(f, "%c\t", strand);
 fprintf(f, "%s\t", qName);
 fprintf(f, "%d\t", qSize);
-fprintf(f, "%d\t", qStart);
-fprintf(f, "%d\t", qEnd);
+if (strand == '+')
+    {
+    fprintf(f, "%d\t", qStart);
+    fprintf(f, "%d\t", qEnd);
+    }
+    else
+    {
+    fprintf(f, "%d\t", qSize - qEnd);
+    fprintf(f, "%d\t", qSize - qStart);
+    }
 fprintf(f, "%s\t", tName);
 fprintf(f, "%d\t", tSize);
 fprintf(f, "%d\t", tStart);
@@ -309,6 +279,7 @@ int q,t;
 
 while ((chain = chainRead(lf)) != NULL)
     {
+    uglyf("chain %s %s \n",chain->tName,chain->qName); 
     q = findSize(qSizeHash, chain->qName);
     t = findSize(tSizeHash, chain->tName);
     aliStringToPsl(lf, chain->qName, chain->tName, chain->qSize, chain->tSize,
