@@ -1333,10 +1333,10 @@ if( sameString( tg->mapName, "humMus" ) )
     else if( sameString( tg->mapName, "binomialCons" ) )
     {
     minRange = 1.0;
-    maxRange = 250.0;
+    maxRange = 25.0;
 
-    min0 = whichNum( minRange, 0.0, 100.0, 1000 );
-    max0 = whichNum( maxRange, 0.0, 100.0, 1000 );
+    min0 = whichNum( minRange, 0.0, 25.0, 1000 );
+    max0 = whichNum( maxRange, 0.0, 25.0, 1000 );
     
     }
     else
