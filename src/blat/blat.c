@@ -18,7 +18,7 @@
 #include "trans3.h"
 #include "gfClientLib.h"
 
-static char const rcsid[] = "$Id: blat.c,v 1.100 2005/01/10 00:28:27 kent Exp $";
+static char const rcsid[] = "$Id: blat.c,v 1.100.14.1 2005/02/23 02:14:33 kent Exp $";
 
 /* Variables shared with other modules.  Set in this module, read only
  * elsewhere. */
@@ -49,6 +49,7 @@ char *ooc = NULL;
 enum gfType qType = gftDna;
 enum gfType tType = gftDna;
 char *mask = NULL;
+char *repeats = NULL;
 char *qMask = NULL;
 double minRepDivergence = 15;
 double minIdentity = 90;
@@ -122,6 +123,9 @@ printf(
   "                 file.out - mask database according to RepeatMasker file.out\n"
   "   -qMask=type Mask out repeats in query sequence.  Similar to -mask above but\n"
   "               for query rather than target sequence.\n"
+  "   -repeats=type Type is same as mask types above.  Repeat bases will not be\n"
+  "               masked in any way, but matches in repeat areas will be reported\n"
+  "               separately from matches in other areas in the psl output.\n"
   "   -minRepDivergence=NN - minimum percent divergence of repeats to allow \n"
   "               them to be unmasked.  Default is 15.  Only relevant for \n"
   "               masking using RepeatMasker .out files.\n"
@@ -169,6 +173,7 @@ struct optionSpec options[] = {
    {"repMatch", OPTION_INT},
    {"mask", OPTION_STRING},
    {"qMask", OPTION_STRING},
+   {"repeats", OPTION_STRING},
    {"minRepDivergence", OPTION_FLOAT},
    {"dots", OPTION_INT},
    {"trimT", OPTION_BOOLEAN},
@@ -505,6 +510,7 @@ struct genoFind *gf;
 boolean tIsProt = (tType == gftProt);
 boolean qIsProt = (qType == gftProt);
 boolean bothSimpleNuc = (tType == gftDna && (qType == gftDna || qType == gftRna));
+boolean bothSimpleProt = (tIsProt && qIsProt);
 FILE *f = mustOpen(outName, "w");
 boolean showStatus = (f != stdout);
 
@@ -518,7 +524,7 @@ if (makeOoc != NULL)
     exit(0);
     }
 gfClientFileArray(queryFile, &queryFiles, &queryCount);
-dbSeqList = gfClientSeqList(dbCount, dbFiles, tIsProt, tType == gftDnaX, mask, 
+dbSeqList = gfClientSeqList(dbCount, dbFiles, tIsProt, tType == gftDnaX, repeats, 
 	minRepDivergence, showStatus);
 databaseSeqCount = slCount(dbSeqList);
 for (seq = dbSeqList; seq != NULL; seq = seq->next)
@@ -527,22 +533,33 @@ for (seq = dbSeqList; seq != NULL; seq = seq->next)
 gvo = gfOutputAny(outputFormat, minIdentity*10, qIsProt, tIsProt, noHead, 
 	databaseName, databaseSeqCount, databaseLetters, f);
 
-if (bothSimpleNuc || (tIsProt && qIsProt))
+if (bothSimpleNuc || bothSimpleProt)
     {
     struct hash *maskHash = NULL;
-    /* Build index, possibly upper-case masked. */
-    gf = gfIndexSeq(dbSeqList, minMatch, maxGap, tileSize, repMatch, ooc, 
-    	tIsProt, oneOff, mask != NULL, stepSize);
-    if (mask != NULL)
+
+    /* Save away masking info for output. */
+    if (repeats != NULL)
 	{
 	int i;
-	struct gfSeqSource *source = gf->sources;
 	maskHash = newHash(0);
-	for (i=0; i<gf->sourceCount; ++i)
-	    if (source[i].maskedBits)
-		hashAdd(maskHash, source[i].seq->name, source[i].maskedBits);
-        gfClientUnmask(dbSeqList);
+	for (seq = dbSeqList; seq != NULL; seq = seq->next)
+	    {
+	    Bits *maskedBits = maskFromUpperCaseSeq(seq);
+	    hashAdd(maskHash, seq->name, maskedBits);
+	    }
 	}
+
+    /* Handle masking and indexing.  If masking is off, we want the indexer
+     * to see unmasked sequence, otherwise we want it to see masked.  However
+     * after indexing we always want it unmasked, because things are always
+     * unmasked for the extension phase. */
+    if (mask == NULL && !bothSimpleProt)
+        gfClientUnmask(dbSeqList);
+    gf = gfIndexSeq(dbSeqList, minMatch, maxGap, tileSize, repMatch, ooc, 
+    	tIsProt, oneOff, FALSE, stepSize);
+    if (mask != NULL)
+        gfClientUnmask(dbSeqList);
+
     searchOneIndex(queryCount, queryFiles, gf, outName, tIsProt, maskHash, f, showStatus);
     freeHash(&maskHash);
     }
@@ -707,6 +724,12 @@ ooc = optionVal("ooc", NULL);
 makeOoc = optionVal("makeOoc", NULL);
 mask = optionVal("mask", NULL);
 qMask = optionVal("qMask", NULL);
+repeats = optionVal("repeats", NULL);
+if (repeats != NULL && mask != NULL && differentString(repeats, mask))
+    errAbort("The -mask and -repeat settings disagree.  "
+             "You can just omit -repeat if -mask is on");
+if (mask != NULL)	/* Mask setting will also set repeats. */
+    repeats = mask;
 outputFormat = optionVal("out", outputFormat);
 dotEvery = optionInt("dots", 0);
 /* set global for fuzzy find functions */
