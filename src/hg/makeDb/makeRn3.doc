@@ -57,7 +57,7 @@ DOWNLOAD SEQUENCE (DONE - 2003-06-22 - Hiram)
     # end of chr21 business
     rm -fr 21
 
-BUILD AND CHECK CHROM-LEVEL SEQUENCE (DONE - 2003-06-22 - Hiram)
+BUILD AND CHECK CHROM-LEVEL SEQUENCE (DONE - 2003-06-25 - Hiram)
 
     # Make chrom fa:
     ssh kkstore
@@ -125,7 +125,7 @@ BUILD AND CHECK CHROM-LEVEL SEQUENCE (DONE - 2003-06-22 - Hiram)
     end
 
 BREAK UP SEQUENCE INTO 5 MB CHUNKS AT NON_BRIDGED CONTIGS
-					(DONE - 2003-06-22 - Hiram)
+					(DONE - 2003-06-25 - Hiram)
 
     # This will split the rat sequence into approx. 5 Mbase
     # supercontigs between non-bridged clone contigs and drop the
@@ -183,12 +183,22 @@ BREAK UP SEQUENCE INTO 5 MB CHUNKS AT NON_BRIDGED CONTIGS
 #	echo $c
 #	gzip $c/chr*.contig.fa
 #	end
+	foreach c (?{,?})
+	echo "$c/chr${c}.contig.fa -> $c/chr${c}.contig.fa.UC"
+	mv $c/chr${c}_random.contig.fa $c/chr${c}_random.contig.fa.UC
+	mv $c/chr${c}.contig.fa $c/chr${c}.contig.fa.UC
+	end
     # This rm may be a good thing to do.  But later, after repeat
     # masking is done and thus the soft masked results can be compared
     # with the *.bak originals.
 #	rm */*.bak
 
 COPY OVER JKSTUFF SCRIPTS DIRECTORY (DONE - 2003-06-23 - Hiram)
+	# Some of these scripts are being edited after they were
+	#	copied to here.  Some cases of binaries in
+	#	~kent/bin/i386 need to be changed either to
+	#	/cluster/bin/i386 or ~hiram/bin/i386 depending upon what
+	#	was being fixed as all this proceeded.
 
     ssh kkstore
     ln -s /cluster/store3/rn3 ~/rn3
@@ -220,7 +230,7 @@ CREATING GRP TABLE FOR TRACK GROUPING (DONE - 2003-06-23 - Hiram)
       | hgsql rn3
 
 
-REPEAT MASKING (DONE - 2003-06-24 - Hiram)
+REPEAT MASKING (DONE - 2003-06-26 - Hiram)
    Split contigs, run RepeatMasker, lift results
    Notes: 
    * If there is a new version of RepeatMasker, build it and ask the admins 
@@ -317,9 +327,7 @@ if (-e /tmp/$2/$2.align) /bin/cp /tmp/$2/$2.align ./
         cd ~/rn3
         hgLoadOut rn3 ?{,?}/*.fa.out
 
-XXXXXXXXXX  STOP HERE 2003-06-26 in the second try ...
-
-MAKE LIFTALL.LFT (DONE - 2003-06-24 - Hiram)
+MAKE LIFTALL.LFT (DONE - 2003-06-26 - Hiram)
 
     cd ~/rn3
     cat ?{,?}/lift/{ordered,random}.lft > jkStuff/liftAll.lft
@@ -348,55 +356,11 @@ STORING O+O SEQUENCE AND ASSEMBLY INFORMATION  (DONE - 2003-06-24 - Hiram)
     # Make (unmasked) nibs
     ssh kkstore
     cd ~/rn3
-    mkdir nib
+    mkdir nibNotMasked
     foreach f (?{,?}/chr*.fa)
-      faToNib $f nib/$f:t:r.nib
+      echo -n "${f} - "
+      ~/bin/i386/faToNib $f nibNotMasked/$f:t:r.nib
     end
-#	Writing 268121971 bases in 134060994 bytes
-#	Writing 3887217 bases in 1943617 bytes
-#	Writing 258222147 bases in 129111082 bytes
-#	Writing 4341851 bases in 2170934 bytes
-#	Writing 170969371 bases in 85484694 bytes
-#	Writing 1724363 bases in 862190 bytes
-#	Writing 187371129 bases in 93685573 bytes
-#	Writing 2124656 bases in 1062336 bytes
-#	Writing 173106704 bases in 86553360 bytes
-#	Writing 2145107 bases in 1072562 bytes
-#	Writing 147642806 bases in 73821411 bytes
-#	Writing 1770534 bases in 885275 bytes
-#	Writing 148145035 bases in 74072526 bytes
-#	Writing 1296457 bases in 648237 bytes
-#	Writing 129061546 bases in 64530781 bytes
-#	Writing 887087 bases in 443552 bytes
-#	Writing 113649943 bases in 56824980 bytes
-#	Writing 1166303 bases in 583160 bytes
-#	Writing 155713513 bases in 77856765 bytes
-#	Writing 1856386 bases in 928201 bytes
-#	Writing 110733352 bases in 55366684 bytes
-#	Writing 870782 bases in 435399 bytes
-#	Writing 87800381 bases in 43900199 bytes
-#	Writing 1278614 bases in 639315 bytes
-#	Writing 46649226 bases in 23324621 bytes
-#	Writing 953141 bases in 476579 bytes
-#	Writing 111348958 bases in 55674487 bytes
-#	Writing 608348 bases in 304182 bytes
-#	Writing 112220682 bases in 56110349 bytes
-#	Writing 1825095 bases in 912556 bytes
-#	Writing 109774626 bases in 54887321 bytes
-#	Writing 1609635 bases in 804826 bytes
-#	Writing 90224819 bases in 45112418 bytes
-#	Writing 1400107 bases in 700062 bytes
-#	Writing 97307196 bases in 48653606 bytes
-#	Writing 615889 bases in 307953 bytes
-# 	Writing 87338544 bases in 43669280 bytes
-#	Writing 594525 bases in 297271 bytes
-#	Writing 59223525 bases in 29611771 bytes
-#	Writing 984116 bases in 492066 bytes
-#	Writing 55296979 bases in 27648498 bytes
-#	Writing 604928 bases in 302472 bytes
-#	Writing 75822765 bases in 37911391 bytes
-#	Writing 6862066 bases in 3431041 bytes
-
 
     # Make symbolic links from /gbdb/rn3/nib to the real nibs.
     ssh hgwdev
@@ -417,18 +381,18 @@ STORING O+O SEQUENCE AND ASSEMBLY INFORMATION  (DONE - 2003-06-24 - Hiram)
     #	44      88     778 chrom.sizes
 
 
-GOLD AND GAP TRACKS (DONE - 2003-06-24 - Hiram)
+GOLD AND GAP TRACKS (DONE - 2003-06-26 - Hiram)
     ssh hgwdev
     cd ~/rn3
     hgGoldGapGl -noGl rn3 /cluster/store3/rn3 .
 
 
-MAKE GCPERCENT (DONE - 2003-06-24 - Hiram)
+MAKE GCPERCENT (DONE - 2003-06-26 - Hiram)
      ssh hgwdev
      mkdir -p /cluster/store3/rn3/bed/gcPercent
      cd /cluster/store3/rn3/bed/gcPercent
      hgsql rn3  < ~/kent/src/hg/lib/gcPercent.sql
-     hgGcPercent rn3 ../../nib
+     hgGcPercent rn3 ../../nibNotMasked
 
 
 MAKE HGCENTRALTEST ENTRY AND TRACKDB TABLE FOR RN3 (DONE - 2003-06-24 - Hiram)
@@ -469,7 +433,7 @@ MAKE HGCENTRALTEST BLATSERVERS ENTRY FOR RN3 (TO DO)
       | hgsql -h genome-testdb hgcentraltest
 
 
-SIMPLE REPEAT TRACK (DONE - 2003-06-24 - Hiram)
+SIMPLE REPEAT TRACK (DONE - 2003-06-26 - Hiram)
     #  Need to be careful with this one on the cluster.  This trf
     #  thing does a lot of I/O on the input and output file.
     #  Place the splits on /cluster/bluearc for cluster access
@@ -485,7 +449,7 @@ SIMPLE REPEAT TRACK (DONE - 2003-06-24 - Hiram)
     cd ~/rn3/bed/simpleRepeat
     mkdir trf
     ls /cluster/bluearc/rat/rn3/?{,?}/chr*_*/chr?{,?}{,_random}_?{,?}.fa \
-	2> /dev/null > genome.lst
+	> genome.lst
 
     cat << '_EOF_' > runTrf
 #!/bin/csh -fe
@@ -519,14 +483,15 @@ rmdir --ignore-fail-on-non-empty /tmp/$outputFN
     para check
     para push
     ... etc ...
-# Completed: 591 of 591 jobs
-# CPU time in finished jobs:      27858s     464.30m     7.74h    0.32d  0.001 y
-# IO & Wait Time:                 30794s     513.24m     8.55h    0.36d  0.001 y
-# Average job time:                  99s       1.65m     0.03h    0.00d
-# Longest job:                      242s       4.03m     0.07h    0.00d
-# Submission to last job:           337s       5.62m     0.09h    0.00d
+Completed: 591 of 591 jobs
+CPU time in finished jobs:      27837s     463.95m     7.73h    0.32d  0.001 y
+IO & Wait Time:                 13105s     218.41m     3.64h    0.15d  0.000 y
+Average job time:                  69s       1.15m     0.02h    0.00d
+Longest job:                      205s       3.42m     0.06h    0.00d
+Submission to last job:           263s       4.38m     0.07h    0.00d
 
     ssh kkstore
+    cd ~/rn3/bed/simpleRepeat
     liftUp simpleRepeat.bed ~/rn3/jkStuff/liftAll.lft warn trf/*.bed
 
     # Load this into the database as so
@@ -535,7 +500,7 @@ rmdir --ignore-fail-on-non-empty /tmp/$outputFN
     hgLoadBed rn3 simpleRepeat simpleRepeat.bed \
       -sqlTable=$HOME/kent/src/hg/lib/simpleRepeat.sql
 
-PROCESS SIMPLE REPEATS INTO MASK (DONE - 2003-06-24 - Hiram)
+PROCESS SIMPLE REPEATS INTO MASK (DONE - 2003-06-26 - Hiram)
 
     # After the simpleRepeats track has been built, make a filtered version 
     # of the trf output: keep trf's with period <= 12:
@@ -564,7 +529,8 @@ PROCESS SIMPLE REPEATS INTO MASK (DONE - 2003-06-24 - Hiram)
     end
 
 
-MASK SEQUENCE WITH BOTH REPEATMASKER AND SIMPLE REPEAT/TRF (TO DO)
+MASK SEQUENCE WITH BOTH REPEATMASKER AND SIMPLE REPEAT/TRF
+			(DONE - 2003-06-26 - Hiram)
 
     # This used to be done right after RepeatMasking.  Now, we mask with 
     # TRF as well, so do this after the "PROCESS SIMPLE REPEATS" step above.
@@ -572,6 +538,9 @@ MASK SEQUENCE WITH BOTH REPEATMASKER AND SIMPLE REPEAT/TRF (TO DO)
     cd ~/rn3
     #- Soft-mask (lower-case) the contig and chr .fa's
     ./jkStuff/makeFaMasked.sh
+    # You will see warnings from the above command, these are OK:
+    # WARNING: negative rEnd: -203 chr1:36149039-36149198 L1M3c
+    # WARNING: negative rEnd: -14 chr1:185432802-185432864 PB1D10
     #- Make hard-masked .fa.masked files as well:
     ./jkStuff/makeHardMasked.sh
     #- Rebuild the nib, mixedNib, maskedNib files:
@@ -620,7 +589,7 @@ MAKE DOWNLOADABLE SEQUENCE FILES (TO DO)
     rm upstream5000.fa
 
 
-PREPARE CLUSTER FOR BLASTZ RUN (TO DO)
+PREPARE CLUSTER FOR BLASTZ RUN (DONE - 2003-06-27 - Hiram)
     # This needs to be done after trf-masking and nib generation.
     ssh kkstore
     # Extract lineage-specific repeats using Arian Smit's script:
@@ -633,20 +602,20 @@ PREPARE CLUSTER FOR BLASTZ RUN (TO DO)
     /cluster/bin/scripts/perl-rename 's/(\.fa|\.nib)//' *.out.*spec
     /cluster/bin/scripts/perl-rename 's/\.(rod|prim)spec/.spec/' *.out.*spec
     rm *.out
-    cd ..
-    rm -rf /scratch/hg/rn3/linSpecRep
-    mkdir -p /scratch/hg/rn3
-    cp -Rp linSpecRep /scratch/hg/rn3
+    cd ~/rn3/bed
+    rm -rf /cluster/bluearc/rat/rn3/linSpecRep
+    #  This dir already exists from above
+    # mkdir -p /cluster/bluearc/rat/rn3
+    cp -Rp linSpecRep /cluster/bluearc/rat/rn3
     # RepeatMasker .out:
     cd ~/rn3
-    rm -rf /scratch/hg/rn3/rmsk
-    mkdir -p /scratch/hg/rn3/rmsk
-    cp -p ?{,?}/chr?{,?}{,_random}.fa.out /scratch/hg/rn3/rmsk
+    rm -rf /cluster/bluearc/rat/rn3/rmsk
+    mkdir -p /cluster/bluearc/rat/rn3/rmsk
+    cp -p ?{,?}/chr?{,?}{,_random}.fa.out /cluster/bluearc/rat/rn3/rmsk
     # Chrom-level mixed nibs that have been repeat- and trf-masked:
-    rm -rf /scratch/hg/rn3/chromTrfMixedNib
-    mkdir -p /scratch/hg/rn3/chromTrfMixedNib
-    cp -p mixedNib/chr*.nib /scratch/hg/rn3/chromTrfMixedNib
-    # Ask cluster-admin@cse.ucsc.edu to binrsync /scratch/hg to clusters
+    rm -rf /cluster/bluearc/rat/rn3/softNib
+    mkdir -p /cluster/bluearc/rat/rn3/softNib
+    cp -p softNib/chr*.nib /cluster/bluearc/rat/rn3/softNib
 
     # Jim's comments Feb 12 '03 about the order in which to run blastz:
     # In general we should do
@@ -661,6 +630,10 @@ PREPARE CLUSTER FOR BLASTZ RUN (TO DO)
     # 2 in particular is so fast perhaps it's just as well to
     # do the inverse explicitly.
 
+XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX  STOP HERE 2003-06-27
+XXXXXXXXXXXXXXXXXX  The following needs to be done with Mark's new
+XXXXXXXXXXXXXXXXXX  system of auto-update genbank data.  Will start
+XXXXXXXXXXXXXXXXXX  on this later today.
 
 MAKING AND STORING mRNA AND EST ALIGNMENTS  (TO DO)
 
