@@ -1750,12 +1750,7 @@ o - Rescuing STS track:
 LOADING MOUSE MM2 BLASTZ ALIGNMENTS FROM PENN STATE: (DONE 10/30/02)
 (DONE 8/18/02 with 08-15-ASH run)
 
-    - loading both blastz alignments and reference (single coverage) alignments
-    - in xAli format, which includes sequence
-    - done in a tmp dir and intermediate files discarded
-
-    - create psl files for each per-contig lav file
-
+    # create psl files for each per-contig lav file
        ssh kkstore
        set base="/cluster/store3/gs.13/build30/blastz.mm2.2002-08-24"
        cd $base
@@ -1769,13 +1764,13 @@ LOADING MOUSE MM2 BLASTZ ALIGNMENTS FROM PENN STATE: (DONE 10/30/02)
          end
        end
 
-    - Substitute scratch/... path with chrom name:
+    # Substitute scratch/... path with chrom name:
        foreach f (lav-psl/*/*.psl)
-         perl -wpi -e 's@/?scratch/hg/gs.13/build30/chromMixedNib.0729/(chr.+)\.nib:\d+-\d+@$1@; s@/?scratch/hg/mm2/mixedNib.0730/(chr.+)\.nib:\d+-\d+@$1@' $f
+         perl -wpi -e 's@/?scratch/hg/gs.13/build30/[\w\.-_]+/+(chr.+)\.nib:\d+-\d+@$1@; s@/?scratch/hg/mm2/[\w\.-_]+/+(chr.+)\.nib:\d+-\d+@$1@; s@:___@@g;' $f
        end
 
-    - Convert to per-chromsome files, sort, and add sequence
-    - kkstore's /tmp might not have enough space; try kk, kkr1u00 etc.
+    # Convert to per-chromsome files, sort, and add sequence
+    # kkstore's /tmp might not have enough space; try kk, kkr1u00 etc.
        mkdir -p lav-xa
        foreach chrdir (lav-psl/*)
          set chr=$chrdir:t
@@ -1786,17 +1781,17 @@ LOADING MOUSE MM2 BLASTZ ALIGNMENTS FROM PENN STATE: (DONE 10/30/02)
           > lav-xa/${chr}_${tbl}.psl
        end
 
-    - Load tables
+    # Load tables
         ssh hgwdev
         set base="/cluster/store3/gs.13/build30/blastz.mm2.2002-08-24"
         cd $base/lav-xa
-        hgLoadPsl hg12 *.psl
+        hgLoadPsl hg12 *_${tbl}.psl
 
 MAKING THE BLASTZBESTMOUSE TRACK FROM PENN STATE MM2 AXT FILES (DONE 9/3/02)
-    - When Scott Schwartz is done generating .axt's for the blastz mm2 
-      alignments (takes longer than the .lav used for blastxMm2 above):
+    # When Scott Schwartz is done generating .axt's for the blastz mm2 
+    # alignments (takes longer than the .lav used for blastxMm2 above):
 
-    - Create tSizes (human chrom size) and qSizes (mouse) for axtToPsl.
+    # Create tSizes (human chrom size) and qSizes (mouse) for axtToPsl.
       In mysql:
          use hg12
          select chrom,size from chromInfo;
@@ -1805,7 +1800,7 @@ MAKING THE BLASTZBESTMOUSE TRACK FROM PENN STATE MM2 AXT FILES (DONE 9/3/02)
       Edit the results of the first select into a tab-separated tSizes,
       edit the results of the second select into a tab-separated qSizes.
 
-    - Consolidate AXT files to chrom level, sort, pick best, make psl.
+    # Consolidate AXT files to chrom level, sort, pick best, make psl.
     ssh kkstore
     set base="/cluster/store3/gs.13/build30/blastz.mm2.2002-08-24"
     cd $base
@@ -1819,8 +1814,8 @@ MAKING THE BLASTZBESTMOUSE TRACK FROM PENN STATE MM2 AXT FILES (DONE 9/3/02)
       axtToPsl axtBest/$chr.axt tSizes qSizes pslBest/${chr}_blastzBestMouse.psl
       echo Done with $chr.
     end
-    - If a chromosome has so many alignments that axtBest runs out of mem,
-      run axtBest in 2 passes to reduce size of the input to final axtBest:
+    # If a chromosome has so many alignments that axtBest runs out of mem,
+    # run axtBest in 2 passes to reduce size of the input to final axtBest:
     foreach chrdir (lav/chr19)
       set chr=$chrdir:t
       foreach a ($chrdir/*.axt.gz)
@@ -1836,12 +1831,12 @@ MAKING THE BLASTZBESTMOUSE TRACK FROM PENN STATE MM2 AXT FILES (DONE 9/3/02)
       echo Done with $chr.
     end
 
-    - Load tables
+    # Load tables
      ssh hgwdev
      set base="/cluster/store3/gs.13/build30/blastz.mm2.2002-08-24"
      cd $base/pslBest
      hgLoadPsl hg12 *.psl
-   # Make /gbdb links and add them to the axtInfo table:
+    # Make /gbdb links and add them to the axtInfo table:
      mkdir -p /gbdb/hg12/axtBestMm2
      cd /gbdb/hg12/axtBestMm2
      foreach f ($base/axtBest/chr*.axt)
