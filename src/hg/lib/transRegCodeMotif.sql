@@ -4,7 +4,7 @@
 # automatic way.
 
 #A gapless DNA motif
-CREATE TABLE dnaMotif (
+CREATE TABLE transRegCodeMotif (
     name varchar(255) not null,	# Motif name.
     columnCount int not null,	# Count of columns in motif.
     aProb longblob not null,	# Probability of A's in each column.
