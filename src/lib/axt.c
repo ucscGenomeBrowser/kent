@@ -69,11 +69,9 @@ axt->qStrand = words[7][0];
 axt->tName = cloneString(words[1]);
 axt->tStart = lineFileNeedNum(lf, words, 2) - 1;
 axt->tEnd = lineFileNeedNum(lf, words, 3);
-axt->tStrand = words[7][1];
+axt->tStrand = '+';
 if (wordCount > 8)
     axt->score = lineFileNeedNum(lf, words, 8);
-if (axt->tStrand == 0)
-    axt->tStrand = '+';
 lineFileNeedNext(lf, &line, NULL);
 axt->symCount = symCount = strlen(line);
 axt->tSym = cloneMem(line, symCount+1);
