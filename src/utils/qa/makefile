@@ -13,10 +13,12 @@ install:
 	cp -p --remove-destination compareHgFindSpecs.csh  ${SCRIPTS}
 	cp -p --remove-destination compareTableLists.csh   ${SCRIPTS}
 	cp -p --remove-destination compareTrackDbAll.csh   ${SCRIPTS}
+	cp -p --remove-destination compareTrackDbFast.csh  ${SCRIPTS}
 	cp -p --remove-destination compareTrackDbs.csh     ${SCRIPTS}
 	cp -p --remove-destination compareWholeColumn.csh  ${SCRIPTS}
 	cp -p --remove-destination compareWholeTable.csh   ${SCRIPTS}
 	cp -p --remove-destination countRows.csh           ${SCRIPTS}
+	cp -p --remove-destination dropUserTables.csh      ${SCRIPTS}
 	cp -p --remove-destination findColumn.csh          ${SCRIPTS}
 	cp -p --remove-destination generic_range_check.csh ${SCRIPTS}
 	cp -p --remove-destination getAssemblies.csh       ${SCRIPTS}
@@ -29,4 +31,3 @@ install:
 	cp -p --remove-destination trackDbGlobal.csh       ${SCRIPTS}
 	cp -p --remove-destination updateTimes.csh         ${SCRIPTS}
 	cp -p --remove-destination updateTimesDb.csh       ${SCRIPTS}
-	cp -p --remove-destination dropUserTables.csh      ${SCRIPTS}
