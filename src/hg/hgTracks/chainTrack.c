@@ -13,12 +13,17 @@
 #include "chainLink.h"
 #include "chainDb.h"
 
-static char const rcsid[] = "$Id: chainTrack.c,v 1.13 2003/07/10 13:28:14 braney Exp $";
+static char const rcsid[] = "$Id: chainTrack.c,v 1.14 2003/07/10 16:04:03 braney Exp $";
 
 
-static void doQuery(struct sqlConnection *conn, 
-			char *fullName, struct lm *lm, struct hash *hash, 
+static void doQuery(struct sqlConnection *conn, char *fullName, 
+			struct lm *lm, struct hash *hash, 
 			int start, int end)
+/* doQuery- check the database for chain elements between
+ * 	start and end.  Use the passed hash to resolve chain
+ * 	id's and place the elements into the right
+ * 	linkedFeatures structure
+ */
 {
 struct sqlResult *sr = NULL;
 char **row;
@@ -27,7 +32,7 @@ struct simpleFeature *sf;
 struct dyString *query = newDyString(1024);
 
 dyStringPrintf(query, 
-	"select chainId,tStart,tEnd,qStart from %sLink where ",fullName);
+    "select chainId,tStart,tEnd,qStart from %sLink where ",fullName);
 hAddBinToQuery(start, end, query);
 dyStringPrintf(query, "tStart<%u and tEnd>%u", end, start);
 sr = sqlGetResult(conn, query->string);
@@ -65,8 +70,9 @@ struct sqlConnection *conn;
 double scale = ((double)(winEnd - winStart))/width;
 char fullName[64];
 int start, end, extra;
-boolean keepGoing;
 struct simpleFeature *components, *lastSf;
+int maxOverLeft = 0, maxOverRight = 0;
+int overLeft, overRight;
 
 if (tg->items == NULL)		/*Exit Early if nothing to do */
     return;
@@ -87,6 +93,12 @@ for (lf = tg->items; lf != NULL; lf = lf->next)
     if (pixelWidth >= 2.5)
 	{
 	hashAdd(hash, lf->extra, lf);
+	overRight = lf->end - seqEnd;
+	if (overRight > maxOverRight)
+	    maxOverRight = overRight;
+	overLeft = seqStart - lf->start ;
+	if (overLeft > maxOverLeft)
+	    maxOverLeft = overLeft;
 	}
     else
 	{
@@ -98,6 +110,7 @@ for (lf = tg->items; lf != NULL; lf = lf->next)
 	}
     }
 
+/* if some chains are bigger than 3 pixels */
 if (hash->size)
     {
     /* Make up range query. */
@@ -105,26 +118,37 @@ if (hash->size)
     if (!hTableExistsDb(hGetDb(), fullName))
 	strcpy(fullName, tg->mapName);
 
-#define STARTSLOP	10000
-    extra = STARTSLOP;
-    start = seqStart - extra;
-    end = seqEnd + extra;
-    doQuery(conn, fullName, lm,  hash, start, end);
-
-    if (vis != tvDense)
+    /* in dense mode we don't draw the lines 
+     * so we don't need items off the screen 
+     */
+    if (vis == tvDense)
+	doQuery(conn, fullName, lm,  hash, seqStart, seqEnd);
+    else
 	{
-	for (lf = tg->items; lf != NULL; lf = lf->next)
-	    if (lf->components != NULL)
-		slSort(&lf->components, linkedFeaturesCmpStart);
+	/* if chains extend beyond edge of window we need to get 
+	 * elements that are off the screen
+	 * in both directions so we know whether to draw
+	 * one or two lines to the edge of the screen.
+	 */
+#define STARTSLOP	10000
+	extra = (STARTSLOP < maxOverLeft) ? STARTSLOP : maxOverLeft;
+	start = seqStart - extra;
+	extra = (STARTSLOP < maxOverRight) ? STARTSLOP : maxOverRight;
+	end = seqEnd + extra;
+	doQuery(conn, fullName, lm,  hash, start, end);
 
 	for (lf = tg->items; lf != NULL; lf = lf->next)
 	    {
+	    if (lf->components != NULL)
+		slSort(&lf->components, linkedFeaturesCmpStart);
+	    extra = (STARTSLOP < maxOverRight)?STARTSLOP:maxOverRight;
 	    end = seqEnd + extra;
 	    while (lf->end > end )
 		{
 		for(lastSf=sf=lf->components;sf;lastSf=sf,sf=sf->next)
 		    ;
 
+		/* get out if we have an element off right side */
 		if ( (lastSf != NULL) &&(lastSf->end > seqEnd))
 		    break;
 
@@ -132,10 +156,14 @@ if (hash->size)
 		start = end;
 		end = start + extra;
 		doQuery(conn, fullName, lm,  hash, start, end);
-		slSort(&lf->components, linkedFeaturesCmpStart);
+		if (lf->components != NULL)
+		    slSort(&lf->components, linkedFeaturesCmpStart);
 		}
 
-	    extra = STARTSLOP;
+	    /* we know we have a least one component off right
+	     * now look for one off left
+	     */
+	    extra = (STARTSLOP < maxOverLeft) ? STARTSLOP:maxOverLeft;
 	    start = seqStart - extra; 
 	    while((lf->start < start) && 
 		(lf->components->start > seqStart))
