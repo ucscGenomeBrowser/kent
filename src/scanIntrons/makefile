@@ -6,6 +6,8 @@ scanIntrons.exe: $(O) lib
 	${CC} ${COPT} ${CFLAGS} $O ../lib/$(MACHTYPE)/jkweb.a
 	mv a.out scanIntrons.exe
 	chmod a+rx scanIntrons.exe
+
+push:	
 	mv scanIntrons.exe ${CGI_BIN}-${USER}
 
 lib: 

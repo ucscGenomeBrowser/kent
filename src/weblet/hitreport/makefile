@@ -7,4 +7,6 @@ hitreport: $(O)
 	${CC} ${COPT} ${CFLAGS} $O ../../lib/$(MACHTYPE)/jkweb.a
 	mv a.out hitreport.exe
 	chmod a+rx hitreport.exe
+
+push:	
 	mv hitreport.exe ${CGI_BIN}-${USER}

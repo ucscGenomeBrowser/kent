@@ -9,6 +9,12 @@ A = tracksWS120.exe
 
 O = tracks.o 
 
+compile: $O 
+	${CC} $O $(MYLIBS) $(L) 
+	mv a.out $A
+#${STRIP} $A
+	chmod a+rx $A
+
 my: compile
 	mv $A ${CGI_BIN}-$(USER)/$A
 
@@ -21,12 +27,6 @@ alpha: compile
 beta: compile
 	mv $A ${CGI_BIN}-beta/$A
 
-
-compile: $O 
-	${CC} $O $(MYLIBS) $(L) 
-	mv a.out $A
-#${STRIP} $A${EXE}
-	chmod a+rx $A
 
 install:	compile
 	${MKDIR} ${DESTDIR}${CGI_BIN}
