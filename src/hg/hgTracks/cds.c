@@ -382,6 +382,7 @@ else
     lf->tallStart = gp->cdsStart;
     lf->tallEnd = gp->cdsEnd;
     sfList = splitGenePredByCodon(chrom, lf, gp, retGaps, extraInfo);
+    genePredTabOut(gp, stderr);
     genePredFree(&gp);
     }
 return(sfList);

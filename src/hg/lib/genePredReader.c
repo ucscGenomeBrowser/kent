@@ -286,8 +286,8 @@ if (gpr != NULL)
     }
 }
 
-struct genePred *genePredReaderDoQuery(struct sqlConnection* conn,
-                                       char* table, char* where)
+struct genePred *genePredReaderLoadQuery(struct sqlConnection* conn,
+                                         char* table, char* where)
 /* Function that encapsulates doing a query and loading the results */
 {
 struct genePredReader *gpr = genePredReaderQuery(conn, table, where);
@@ -296,10 +296,10 @@ genePredReaderFree(&gpr);
 return gpList;
 }
 
-struct genePred *genePredReaderDoRangeQuery(struct sqlConnection* conn,
-                                            char* table, char* chrom,
-                                            int start, int end, 
-                                            char* extraWhere)
+struct genePred *genePredReaderLoadRangeQuery(struct sqlConnection* conn,
+                                              char* table, char* chrom,
+                                              int start, int end, 
+                                              char* extraWhere)
 /* Function that encapsulates doing a range query and loading the results */
 {
 struct genePredReader *gpr = genePredReaderRangeQuery(conn, table, chrom,
@@ -309,7 +309,7 @@ genePredReaderFree(&gpr);
 return gpList;
 }
 
-struct genePred *genePredReaderDoFile(char* gpFile, char* chrom)
+struct genePred *genePredReaderLoadFile(char* gpFile, char* chrom)
 /* Function that encapsulates reading a genePred file */
 {
 

@@ -137,7 +137,7 @@
 #include "vntr.h"
 #include "zdobnovSynt.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.620 2004/04/28 22:02:17 braney Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.621 2004/05/03 16:09:18 markd Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -5653,7 +5653,7 @@ char *prot = NULL;
 hgcStart("Protein Translation");
 
 safef(where, sizeof(where), "name = \"%s\"", geneName);
-gp = genePredReaderDoQuery(conn, tdb->tableName, where);
+gp = genePredReaderLoadQuery(conn, tdb->tableName, where);
 hFreeConn(&conn);
 if (gp == NULL)
     errAbort("%s not found in %s when translating to protein",

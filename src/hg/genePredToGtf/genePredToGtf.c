@@ -8,7 +8,7 @@
 #include "genePred.h"
 #include "genePredReader.h"
 
-static char const rcsid[] = "$Id: genePredToGtf.c,v 1.6 2004/03/15 09:14:37 markd Exp $";
+static char const rcsid[] = "$Id: genePredToGtf.c,v 1.7 2004/05/03 16:09:18 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -225,12 +225,12 @@ char *source = optionVal("source", table);
 
 if (sameString(database, "file"))
     {
-    gpList = genePredReaderDoFile(table, NULL);
+    gpList = genePredReaderLoadFile(table, NULL);
     }
 else
     {
     struct sqlConnection *conn = sqlConnect(database);
-    gpList = genePredReaderDoQuery(conn, table, NULL);
+    gpList = genePredReaderLoadQuery(conn, table, NULL);
     sqlDisconnect(&conn);
     }
 slSort(&gpList, genePredCmp);
