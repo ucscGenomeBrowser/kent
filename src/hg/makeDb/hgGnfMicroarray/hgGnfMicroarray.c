@@ -8,13 +8,17 @@
 #include "expRecord.h"
 #include "expData.h"
 
-static char const rcsid[] = "$Id: hgGnfMicroarray.c,v 1.1 2003/10/06 23:16:04 kent Exp $";
+static char const rcsid[] = "$Id: hgGnfMicroarray.c,v 1.2 2003/12/08 07:26:56 kent Exp $";
 
 char *chip = "HG-U95Av2";
 char *database = "hgFixed";
 char *tabDir = ".";
+char *chopName = NULL;
 boolean doLoad;
 int limit = 0;
+char *expUrl = "http://www.affymetrix.com/analysis/index.affx";
+char *expRef = "http://expression.gnf.org";
+char *expCredit = "http://www.gnf.org";
 
 void usage()
 /* Explain usage and exit. */
@@ -34,7 +38,11 @@ errAbort(
   "    -tab=dir - Output tab-separated files to directory.\n"
   "    -noLoad  - If true don't load database and don't clean up tab files\n"
   "    -limit=N - Only do limit rows of table, for testing\n"
-  , database, chip);
+  "    -chopName=XXX (chop off name at XXX)\n"
+  "    -url=XXX, default %s\n"
+  "    -ref=XXX, default %s\n"
+  "    -credit=XXX, default %s\n"
+  , database, chip, expUrl, expRef, expCredit);
 }
 
 static struct optionSpec options[] = {
@@ -43,6 +51,10 @@ static struct optionSpec options[] = {
    {"tab", OPTION_STRING},
    {"noLoad", OPTION_BOOLEAN},
    {"limit", OPTION_INT},
+   {"chopName", OPTION_STRING},
+   {"url", OPTION_STRING},
+   {"ref", OPTION_STRING},
+   {"credit", OPTION_STRING},
    {NULL, 0},
 };
 
@@ -81,9 +93,9 @@ while ((word = nextWord(&line)) != NULL)
     fprintf(f, "%d\t", wordCount);
     fprintf(f, "%s\t", name);
     fprintf(f, "%s\t", name);
-    fprintf(f, "%s\t", "http://www.affymetrix.com/analysis/index.affx");
-    fprintf(f, "%s\t", "http://expression.gnf.org");
-    fprintf(f, "%s\t", "http://www.gnf.org");
+    fprintf(f, "%s\t", expUrl);
+    fprintf(f, "%s\t", expRef);
+    fprintf(f, "%s\t", expCredit);
     fprintf(f, "3\t");
     fprintf(f, "%s,%s,%s,\n", chip, "n/a", spaced);
     ++wordCount;
@@ -136,6 +148,8 @@ if (!lineFileNext(lf, &line, NULL))
     errAbort("%s is empty", lf->fileName);
 if (startsWith("Affy", line))
     line += 4;
+if (startsWith("Gene Name", line))
+    line += 9;
 if (line[0] != '\t')
     errAbort("%s doesn't seem to be a new format atlas file", lf->fileName);
 expCount = lineToExpTable(line, expTable);
@@ -154,6 +168,12 @@ while (lineFileNextReal(lf, &line))
     if (wordCount != expCount)
         errAbort("Expecting %d data points, got %d line %d of %s", 
 		expCount, wordCount, lf->lineIx, lf->fileName);
+    if (chopName != NULL)
+        {
+	char *e = stringIn(chopName, affyId);
+	if (e != NULL)
+	    *e = 0;
+	}
     if (hashLookup(hash, affyId))
 	{
         warn("Duplicate %s, skipping all but first.", affyId);
@@ -186,6 +206,10 @@ optionInit(&argc, argv, options);
 database = optionVal("database", database);
 chip = optionVal("chip", chip);
 doLoad = !optionExists("noLoad");
+chopName = optionVal("chopName", chopName);
+expUrl = optionVal("url", expUrl);
+expRef = optionVal("ref", expRef);
+expCredit = optionVal("credit", expCredit);
 if (optionExists("tab"))
     {
     tabDir = optionVal("tab", tabDir);
