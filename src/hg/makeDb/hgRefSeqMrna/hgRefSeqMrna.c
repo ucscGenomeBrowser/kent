@@ -10,7 +10,7 @@
 #include "hgRelate.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: hgRefSeqMrna.c,v 1.15 2003/12/31 22:47:41 weber Exp $";
+static char const rcsid[] = "$Id: hgRefSeqMrna.c,v 1.17 2004/01/12 17:43:48 weber Exp $";
 
 
 /* Variables that can be set from command line. */
@@ -234,13 +234,77 @@ skip:
 *retEnd = end;
 }
 
-void findCdsStartEndInGenomeFromRefSeqInfo(struct refSeqInfo *rsi, struct psl *psl, 
+void findCdsStartEndInGenome(struct refSeqInfo *rsi, struct psl *psl, 
 	int *retCdsStart, int *retCdsEnd)
-/* Convert cdsStart/End from mrna to genomic coordinates, using
- * refSeqInfo to get mRNA start/stop positions. */
+/* Convert cdsStart/End from mrna to genomic coordinates. */
 {
-    findCdsStartEndInGenome(psl, rsi->cdsStart, rsi->cdsEnd,
-            retCdsStart, retCdsEnd, TRUE);
+int startOffset, endOffset;
+int cdsStart = -1, cdsEnd = -1;
+int i;
+
+if (psl->strand[0] == '-')
+    {
+    endOffset = rsi->cdsStart - psl->qStart;
+    startOffset =  psl->qEnd - rsi->cdsEnd;
+    }
+else
+    {
+    startOffset = rsi->cdsStart - psl->qStart;
+    endOffset =  psl->qEnd - rsi->cdsEnd;
+    }
+
+
+/* Adjust starting pos. */
+for (i=0; i<psl->blockCount; ++i)
+    {
+    int blockSize = psl->blockSizes[i];
+    if (startOffset < 0) startOffset = 0;
+    if (startOffset < blockSize)
+	{
+        cdsStart = psl->tStarts[i] + startOffset;
+	break;
+	}
+    /* Adjust start offset for this block.  Also adjust for
+     * query sequence between blocks that doesn't align. */
+    startOffset -= blockSize;
+    if (i != psl->blockCount - 1)
+	{
+	int skip =  psl->qStarts[i+1] - (psl->qStarts[i] + blockSize);
+	startOffset -= skip;
+	}
+    }
+
+/* Adjust end pos. */
+for (i=psl->blockCount-1; i >= 0; --i)
+    {
+    int blockSize = psl->blockSizes[i];
+    if (endOffset < 0) endOffset = 0;
+    if (endOffset < blockSize)
+        {
+	cdsEnd = psl->tStarts[i] + blockSize - endOffset;
+	break;
+	}
+    /* Adjust start offset for this block.  Also adjust for
+     * query sequence between blocks that doesn't align. */
+    endOffset -= blockSize;
+    if (i != 0)
+        {
+	int skip =  psl->qStarts[i] - (psl->qStarts[i-1] + psl->blockSizes[i-1]);
+	endOffset -= skip;
+	if (endOffset < 0)	/* CDS end was in gap, ugh! */
+	    {
+	    cdsEnd = psl->tStarts[i] + blockSize;
+	    break;
+	    }
+	}
+    }
+
+if (cdsStart == -1 || cdsEnd == -1)
+    {
+    cdsEnd = cdsStart = psl->tEnd;
+    }
+*retCdsStart = cdsStart;
+*retCdsEnd = cdsEnd;
 }
 
 char *unburyAcc(struct lineFile *lf, char *longNcbiName)
@@ -505,7 +569,7 @@ while ((psl = pslNext(lf)) != NULL)
 	}
     exonList = pslToExonList(psl);
     rsi = hashMustFindVal(rsiHash, psl->qName);
-    findCdsStartEndInGenomeFromRefSeqInfo(rsi, psl, &cdsStart, &cdsEnd);
+    findCdsStartEndInGenome(rsi, psl, &cdsStart, &cdsEnd);
     fprintf(kgTab, "%s\t%s\t%c\t%d\t%d\t",
 	psl->qName, psl->tName, psl->strand[0], psl->tStart, psl->tEnd);
     fprintf(kgTab, "%d\t%d\t", cdsStart, cdsEnd);

@@ -11,7 +11,7 @@ priority 12
 name omim
 shortLabel OMIM
 tables refLink kgXref
-idSql select refLink.omimId from kgXref,refLink where kgID = '%s' and kgXref.refseq = refLink.mrnaAcc
+idSql select refLink.omimId from kgXref,refLink where kgID = '%s' and kgXref.refseq = refLink.mrnaAcc and refLink.omimId != 0
 url http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Search&db=OMIM&term=%s&doptcmdl=Detailed&tool=genome.ucsc.edu
 priority 65
 
