@@ -11,7 +11,7 @@
 #include "genbank.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: genePred.c,v 1.50 2004/05/11 23:10:51 markd Exp $";
+static char const rcsid[] = "$Id: genePred.c,v 1.51 2004/05/15 21:26:00 markd Exp $";
 
 /* SQL to create a genePred table */
 static char *createSql = 
@@ -423,7 +423,7 @@ static void chkGroupLine(struct gffGroup *group, struct gffLine *gl, struct gene
 /* check that a gffLine is consistent with the genePred being built.  this
  * helps detect some problems that lead to corrupt genePreds */
 {
-if (!sameString(gl->seq, gp->chrom) && (gl->strand == gp->strand[0]))
+if (!(sameString(gl->seq, gp->chrom) && (gl->strand == gp->strand[0])))
     {
     fprintf(stderr, "invalid gffGroup detected on line: ");
     gffTabOut(gl, stderr);
