@@ -126,14 +126,14 @@ if (wordCount > 4)
 if (wordCount > 5)
      {
      strncpy(bed->strand, row[5], sizeof(bed->strand));
-     if (bed->strand[0] != '+' && bed->strand[1] != '-')
+     if (bed->strand[0] != '+' && bed->strand[0] != '-')
 	  errAbort("line %d of custrom input: Expecting + or - in strand", lineIx);
      }
 if (wordCount > 6)
      bed->otherStart = needNum(row[6], lineIx);
 if (wordCount > 7)
      {
-     bed->otherStart = needNum(row[7], lineIx);
+     bed->otherEnd = needNum(row[7], lineIx);
      if (bed->otherStart > bed->otherEnd)
 	errAbort("line %d of custom input: otherStart after otherEnd", lineIx);
      }
@@ -315,7 +315,7 @@ browserTableFree(&def);
 static void saveBedPart(FILE *f, char *fileName, struct bed *bed, int fieldCount)
 /* Write out bed that may not include all lines as a line in file. */
 {
-int i, count, *pt;
+int i, count = 0, *pt;
 fprintf(f, "%s\t%d\t%d", bed->chrom, bed->chromStart, bed->chromEnd);
 if (fieldCount > 3)
     fprintf(f, "\t%s",  bed->name);
@@ -380,8 +380,8 @@ static char *testData =
 "chr2	22	219	yellow\n"
 "chr2	18	188	green\n"
 "track shortLabel=animals longLabel='Some fuzzy animals'\n"
-"chr2	122	219	gorilla\n"
-"chr2	128	229	mongoose\n";
+"chr2	122	219	gorilla	900	+	10	20	30	2	4,4	10,20,\n"
+"chr2	128	229	mongoose	620	-	1	2	10	1	1,	1,\n";
 
 boolean customTrackTest()
 /* Tests module - returns FALSE and prints warning message on failure. */
