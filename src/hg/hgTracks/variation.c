@@ -32,9 +32,9 @@ int    snpMapSource = 0;
 
 for (snpMapSource=0; snpMapSource<snpMapSourceCartSize; snpMapSource++)
     if (containsStringNoCase(el->source,snpMapSourceDataName[snpMapSource]))
- 	if (strcmp(snpMapSourceCart[snpMapSource], "exclude"))
- 	    return TRUE;
-return FALSE;
+ 	if (sameString(snpMapSourceCart[snpMapSource], "exclude"))
+ 	    return FALSE;
+return TRUE;
 }
 
 boolean snpMapTypeFilterItem(struct track *tg, void *item)
@@ -45,9 +45,9 @@ int    snpMapType = 0;
 
 for (snpMapType=0; snpMapType<snpMapTypeCartSize; snpMapType++)
     if (containsStringNoCase(el->type,snpMapTypeDataName[snpMapType]))
- 	if (strcmp(snpMapTypeCart[snpMapType], "exclude"))
- 	    return TRUE;
-return FALSE;
+ 	if (sameString(snpMapTypeCart[snpMapType], "exclude"))
+ 	    return FALSE;
+return TRUE;
 }
 
 boolean snpSourceFilterItem(struct track *tg, void *item)
@@ -58,9 +58,9 @@ int    snpSource = 0;
 
 for (snpSource=0; snpSource<snpSourceCartSize; snpSource++)
     if (containsStringNoCase(el->source,snpSourceDataName[snpSource]))
- 	if (strcmp(snpSourceCart[snpSource], "exclude") )
- 	    return TRUE;
-return FALSE;
+ 	if (sameString(snpSourceCart[snpSource], "exclude") )
+ 	    return FALSE;
+return TRUE;
 }
 
 boolean snpMolTypeFilterItem(struct track *tg, void *item)
@@ -71,9 +71,9 @@ int    snpMolType = 0;
 
 for (snpMolType=0; snpMolType<snpMolTypeCartSize; snpMolType++)
     if (containsStringNoCase(el->molType,snpMolTypeDataName[snpMolType]))
- 	if ( strcmp(snpMolTypeCart[snpMolType], "exclude") )
- 	    return TRUE;
-return FALSE;
+ 	if ( sameString(snpMolTypeCart[snpMolType], "exclude") )
+ 	    return FALSE;
+return TRUE;
 }
 
 boolean snpClassFilterItem(struct track *tg, void *item)
@@ -84,9 +84,9 @@ int    snpClass = 0;
 
 for (snpClass=0; snpClass<snpClassCartSize; snpClass++)
     if (containsStringNoCase(el->class,snpClassDataName[snpClass]))
- 	if ( strcmp(snpClassCart[snpClass], "exclude") )
- 	    return TRUE;
-return FALSE;
+ 	if ( sameString(snpClassCart[snpClass], "exclude") )
+ 	    return FALSE;
+return TRUE;
 }
 
 boolean snpValidFilterItem(struct track *tg, void *item)
@@ -97,9 +97,9 @@ int    snpValid = 0;
 
 for (snpValid=0; snpValid<snpValidCartSize; snpValid++)
     if (containsStringNoCase(el->valid,snpValidDataName[snpValid]))
- 	if ( strcmp(snpValidCart[snpValid], "exclude") )
- 	    return TRUE;
-return FALSE;
+ 	if ( sameString(snpValidCart[snpValid], "exclude") )
+ 	    return FALSE;
+return TRUE;
 }
 
 boolean snpFuncFilterItem(struct track *tg, void *item)
@@ -110,9 +110,9 @@ int    snpFunc = 0;
 
 for (snpFunc=0; snpFunc<snpFuncCartSize; snpFunc++)
     if (containsStringNoCase(el->func,snpFuncDataName[snpFunc]))
- 	if ( strcmp(snpFuncCart[snpFunc], "exclude") )
- 	    return TRUE;
-return FALSE;
+ 	if ( sameString(snpFuncCart[snpFunc], "exclude") )
+ 	    return FALSE;
+return TRUE;
 }
 
 void loadSnpMap(struct track *tg)
@@ -125,7 +125,7 @@ for (snpMapSource=0; snpMapSource<snpMapSourceCartSize; snpMapSource++)
 for (snpMapType=0; snpMapType<snpMapTypeCartSize; snpMapType++)
     snpMapTypeCart[snpMapType] = cartUsualString(cart, snpMapTypeStrings[snpMapType], snpMapTypeDefault[snpMapType]);
 bedLoadItem(tg, "snpMap", (ItemLoader)snpMapLoad);
-if (strncmp(database,"hg",2))
+if (!startsWith("hg",database))
     return;
 filterSnpMapItems(tg, snpMapSourceFilterItem);
 filterSnpMapItems(tg, snpMapTypeFilterItem);
@@ -151,7 +151,7 @@ for (snpValid=0;   snpValid   < snpValidCartSize; snpValid++)
 for (snpFunc=0;    snpFunc    < snpFuncCartSize; snpFunc++)
     snpFuncCart[snpFunc] = cartUsualString(cart, snpFuncStrings[snpFunc], snpFuncDefault[snpFunc]);
 bedLoadItem(tg, "snp", (ItemLoader)snpLoad);
-//return;
+
 filterSnpItems(tg, snpSourceFilterItem);
 filterSnpItems(tg, snpMolTypeFilterItem);
 filterSnpItems(tg, snpClassFilterItem);

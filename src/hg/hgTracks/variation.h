@@ -29,14 +29,12 @@ void freeSnpMap(struct track *tg);
 Color snpMapColor(struct track *tg, void *item, struct vGfx *vg);
 /* Return color of snpMap track item. */
 
-void snpMapDrawItemAt(struct track *tg, void *item, 
-	struct vGfx *vg, int xOff, int y, 
-        double scale, MgFont *font, Color color, enum trackVisibility vis);
+void snpMapDrawItemAt(struct track *tg, void *item, struct vGfx *vg, int xOff, int y, 
+		      double scale, MgFont *font, Color color, enum trackVisibility vis);
 /* Draw a single snpMap item at position. */
 
 void snpMapMethods(struct track *tg);
 /* Make track for snps. */
-
 
 boolean snpSourceFilterItem(struct track *tg, void *item);
 /* Return TRUE if item passes filter. */
@@ -62,20 +60,17 @@ void freeSnp(struct track *tg);
 Color snpColor(struct track *tg, void *item, struct vGfx *vg);
 /* Return color of snp track item. */
 
-void snpDrawItemAt(struct track *tg, void *item, 
-	struct vGfx *vg, int xOff, int y, 
-        double scale, MgFont *font, Color color, enum trackVisibility vis);
+void snpDrawItemAt(struct track *tg, void *item, struct vGfx *vg, int xOff, int y, 
+		   double scale, MgFont *font, Color color, enum trackVisibility vis);
 /* Draw a single snp item at position. */
 
 void snpMethods(struct track *tg);
 /* Make track for snps. */
 
-
 char *perlegenName(struct track *tg, void *item);
 /* return the actual perlegen name, in form xx/yyyy cut off xx/ return yyyy */
 
-int haplotypeHeight(struct track *tg, struct linkedFeatures *lf,
-                    struct simpleFeature *sf);
+int haplotypeHeight(struct track *tg, struct linkedFeatures *lf, struct simpleFeature *sf);
 /* if the item isn't the first or the last make it smaller */
 
 void haplotypeMethods(struct track *tg);
