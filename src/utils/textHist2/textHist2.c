@@ -3,6 +3,7 @@
 #include "linefile.h"
 #include "hash.h"
 #include "options.h"
+#include "psGfx.h"
 
 int xBins = 12, yBins = 12;
 int xBinSize = 1, yBinSize = 1;
@@ -37,174 +38,6 @@ errAbort(
 }
 
 
-struct psOutput 
-/* A postScript output file. */
-    {
-    FILE *f;                    /* File to write to. */
-    int pixWidth, pixHeight;	/* Size of image in virtual pixels. */
-    double ptWidth, ptHeight;   /* Size of image in points (1/72 of an inch) */
-    double xScale, yScale;      /* Conversion from pixels to points. */
-    double xOff, yOff;          /* Offset from pixels to points. */
-    };
-
-void psFloatOut(FILE *f, double x)
-/* Write out a floating point number, but not in too much
- * precision. */
-{
-int i = round(x);
-if (i == x)
-   fprintf(f, "%d ", i);
-else
-   fprintf(f, "%0.3f ", x);
-}
-
-void psWriteHeader(FILE *f, double width, double height)
-/* Write postScript header.  It's encapsulated PostScript
- * actually, so you need to supply image width and height
- * in points. */
-{
-char *s =
-#include "common.pss"
-;
-
-fprintf(f, "%%!PS-Adobe-3.1 EPSF-3.0\n");
-fprintf(f, "%%%%BoundingBox: 0 0 ");
-psFloatOut(f, width);
-psFloatOut(f, height);
-fprintf(f, "\n\n");
-fprintf(f, "%s", s);
-}
-
-struct psOutput *psOpen(char *fileName, 
-	int pixWidth, int pixHeight, 	 /* Dimension of image in pixels. */
-	double ptWidth, double ptHeight, /* Dimension of image in points. */
-	double ptMargin)                 /* Image margin in points. */
-/* Open up a new postscript file.  If ptHeight is 0, it will be
- * calculated to keep pixels square. */
-{
-struct psOutput *ps;
-
-/* Allocate structure and open file. */
-AllocVar(ps);
-ps->f = mustOpen(fileName, "w");
-psWriteHeader(ps->f, ptWidth, ptHeight);
-
-/* Save page dimensions and calculate scaling factors. */
-ps->pixWidth = pixWidth;
-ps->pixHeight = pixHeight;
-ps->ptWidth = ptWidth;
-ps->xScale = (ptWidth - 2*ptMargin)/pixWidth;
-if (ptHeight != 0.0)
-   {
-   ps->ptHeight = ptHeight;
-   ps->yScale = (ptHeight - 2*ptMargin) / pixHeight;
-   }
-else
-   {
-   ps->yScale = ps->xScale;
-   ps->ptHeight = pixHeight * ps->yScale + 2*ptMargin;
-   }
-ps->xOff = ptMargin;
-ps->yOff = ptMargin;
-
-/* Cope with fact y coordinates are bottom to top rather
- * than top to bottom. */
-ps->yScale = -ps->yScale;
-ps->yOff = ps->ptHeight - ps->yOff;
-
-return ps;
-}
-
-void psClose(struct psOutput **pPs)
-/* Close out postScript file. */
-{
-struct psOutput *ps = *pPs;
-if (ps != NULL)
-    {
-    carefulClose(&ps->f);
-    freez(pPs);
-    }
-}
-
-void psXyOut(struct psOutput *ps, int x, int y)
-/* Output x,y position transformed into PostScript space. */
-{
-FILE *f = ps->f;
-psFloatOut(f, x * ps->xScale + ps->xOff);
-psFloatOut(f, y * ps->yScale + ps->yOff);
-}
-
-void psWhOut(struct psOutput *ps, int width, int height)
-/* Output width/height transformed into PostScript space. */
-{
-FILE *f = ps->f;
-psFloatOut(f, width * ps->xScale);
-psFloatOut(f, height * -ps->yScale);
-}
-
-void psDrawBox(struct psOutput *ps, int x, int y, int width, int height)
-/* Draw a filled box in current color. */
-{
-psWhOut(ps, width, height);
-psXyOut(ps, x, y+height);
-fprintf(ps->f, "fillBox\n");
-}
-
-
-void psMoveTo(struct psOutput *ps, int x, int y)
-/* Move PostScript position to given point. */
-{
-psXyOut(ps, x, y);
-fprintf(ps->f, "moveto\n");
-}
-
-void psTextAt(struct psOutput *ps, int x, int y, char *text)
-/* Output text in current font at given position. */
-{
-psMoveTo(ps, x, y);
-fprintf(ps->f, "(%s) show\n", text);
-}
-
-void psTextDown(struct psOutput *ps, int x, int y, char *text)
-/* Output text going downwards rather than across at position. */
-{
-FILE *f = ps->f;
-psMoveTo(ps, x, y);
-fprintf(ps->f, "gsave\n");
-fprintf(ps->f, "-90 rotate\n");
-fprintf(ps->f, "(%s) show\n", text);
-fprintf(ps->f, "grestore\n");
-}
-
-void psSetColor(struct psOutput *ps, int r, int g, int b)
-/* Set current color. */
-{
-FILE *f = ps->f;
-double scale = 1.0/255;
-if (r == g && g == b)
-    {
-    psFloatOut(f, scale * r);
-    fprintf(f, "setgray\n");
-    }
-else
-    {
-    psFloatOut(f, scale * r);
-    psFloatOut(f, scale * g);
-    psFloatOut(f, scale * b);
-    fprintf(f, "setrgbcolor\n");
-    }
-}
-
-void psSetGray(struct psOutput *ps, double grayVal)
-/* Set gray value. */
-{
-FILE *f = ps->f;
-if (grayVal < 0) grayVal = 0;
-if (grayVal > 1) grayVal = 1;
-psFloatOut(f, grayVal);
-fprintf(f, "setgray\n");
-}
-
 double mightLog(double val)
 /* Put val through a log transform if doLog is set. */
 {
@@ -229,7 +62,7 @@ for (i=0; i<bothBins; ++i)
 return maxVal;
 }
 
-void boxOut(struct psOutput *ps, int x, int y, int width, int height)
+void boxOut(struct psGfx *ps, int x, int y, int width, int height)
 /* Draw a filled box in current color. */
 {
 psDrawBox(ps, x, y, width+1, height+1);
@@ -243,7 +76,7 @@ double labelSize = 72.0/2;
 double psInnerSize = psSize - labelSize;
 double tickSize = labelSize/4;
 double textSize = labelSize - tickSize;
-struct psOutput *ps = psOpen(psFile, psSize, psSize, psSize, psSize, margin);
+struct psGfx *ps = psOpen(psFile, psSize, psSize, psSize, psSize, margin);
 double val, maxVal = findMaxVal(hist);
 int x, y, both;
 double grayScale;
