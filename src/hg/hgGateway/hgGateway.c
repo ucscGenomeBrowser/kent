@@ -12,7 +12,7 @@
 #include "hgFind.h"
 #include "hCommon.h"
 
-static char const rcsid[] = "$Id: hgGateway.c,v 1.52 2003/06/21 03:22:48 kent Exp $";
+static char const rcsid[] = "$Id: hgGateway.c,v 1.53 2003/06/21 16:43:44 kent Exp $";
 
 struct cart *cart = NULL;
 struct hash *oldVars = NULL;
@@ -67,6 +67,12 @@ organism = hGenome(db);
 if (position == NULL)
     position = hDefaultPos(db);
     
+/* Save all this recomputed stuff to the cart. */
+cartSetString(cart, "position",position);
+cartSetString(cart, "db",db);
+cartSetString(cart, "org",organism);
+
+
 puts(
 "<CENTER>"
 "<TABLE BGCOLOR=\"FFFEF3\" BORDERCOLOR=\"cccc99\" BORDER=0 CELLPADDING=1>\n"
