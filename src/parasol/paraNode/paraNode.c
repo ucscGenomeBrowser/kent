@@ -49,7 +49,7 @@ errAbort("paraNode - parasol node server.\n"
 	 "    -cpu=N  Number of CPUs to use - default 1.\n");
 }
 
-static char const rcsid[] = "$Id: paraNode.c,v 1.69 2004/09/24 16:39:24 markd Exp $";
+static char const rcsid[] = "$Id: paraNode.c,v 1.70 2004/09/24 17:01:57 markd Exp $";
 
 /* Command line overwriteable variables. */
 char *hubName;			/* Name of hub machine, may be NULL. */
@@ -615,8 +615,8 @@ if ((user == NULL) || (fileName != NULL))
             user = "<null>";
 	pmPrintf(&pmIn, "Couldn't open fetch file: \"%s\" %s for user %s",
                  fileName, strerror(errno), user);
-	warn("Couldn't open fetch file: \"%s\" %s for user %s",
-             fileName, strerror(errno), user);
+	warn("Couldn't open fetch file: \"%s\" %s for user %s (depth=%d, pid=%d)",
+             fileName, strerror(errno), user, paraForkDepth, getpid());
 	pmSend(&pmIn, mainRudp);
 	pmClear(&pmIn);
 	pmSend(&pmIn, mainRudp);
@@ -630,7 +630,8 @@ if ((user == NULL) || (fileName != NULL))
 	    if (size < 0)
 		{
 		size = 0;
-		warn("Couldn't read fetch file %s %s", fileName, strerror(errno));
+		warn("Couldn't read fetch file: \"%s\" %s",
+                     fileName, strerror(errno));
 		}
 	    pmIn.size = size;
 	    pmSend(&pmIn, mainRudp);
@@ -759,8 +760,9 @@ for (;;)
 	    /* Host and signature look ok,  read a string and
 	     * parse out first word as command. */
 	    line = pmIn.data;
-	    logDebug("message from 0x%x: %s",
-                     ntohl(pmIn.ipAddress.sin_addr.s_addr), line);
+	    logDebug("message from 0x%x (depth=%d, pid=%d): \"%s\"",
+                     ntohl(pmIn.ipAddress.sin_addr.s_addr), 
+                     paraForkDepth, getpid(), line);
 	    command = nextWord(&line);
 	    if (command != NULL)
 		{
@@ -783,14 +785,16 @@ for (;;)
 		else if (sameString("fetch", command))
 		    doFetch(line);
                 else
-                    logWarn("invalid command: \"%s\"", command);
+                    logWarn("invalid command (depth=%d, pid=%d): \"%s\"", 
+                            paraForkDepth, getpid(), command);
 		}
 	    logDebug("done command");
 	    }
 	else
 	    {
-	    logWarn("command from unauthorized host 0x%x",
-                    ntohl(pmIn.ipAddress.sin_addr.s_addr));
+	    logWarn("command from unauthorized host 0x%x (depth=%d, pid=%d)",
+                    ntohl(pmIn.ipAddress.sin_addr.s_addr),
+                    paraForkDepth, getpid());
 	    }
 	}
     }
