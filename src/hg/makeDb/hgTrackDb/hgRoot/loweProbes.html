@@ -21,7 +21,7 @@ threshold. </li>
 <li> As oligos are chosen, candidate oligos that overlap those
 already chosen are discarded. </li>
 <li> If no scores pass the BLAT score or not enough oligos have been
-chosen just pick best oligos that have the best combined score. </li>
+chosen just pick oligos that have the best combined score. </li>
 </ul>
 
 <hr>
@@ -37,7 +37,8 @@ chosen just pick best oligos that have the best combined score. </li>
     href="http://rna.chem.rochester.edu/RNAstructure.html
     ">RNAstructure</a> program. </li>
 <li><b>Affy Heuristic:</b> 1 if oligo passes heuristics published by Affymetrix 
-"Nature Biotechnology" vol. 14, Dec, '96) are satisfied, 0 otherwise.
+"Nature Biotechnology" vol. 14, Dec, '96) are satisfied, 0 otherwise. The heuristic
+is as follows:
 <pre>
    no more than 9 A's in window of 20 
    no more than 9 T's in window of 20
