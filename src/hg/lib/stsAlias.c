@@ -16,7 +16,7 @@ char *s;
 
 ret->alias = row[0];
 ret->identNo = sqlUnsigned(row[1]);
-ret->name = row[2];
+ret->trueName = row[2];
 }
 
 struct stsAlias *stsAliasLoad(char **row)
@@ -30,7 +30,7 @@ char *s;
 AllocVar(ret);
 ret->alias = cloneString(row[0]);
 ret->identNo = sqlUnsigned(row[1]);
-ret->name = cloneString(row[2]);
+ret->trueName = cloneString(row[2]);
 return ret;
 }
 
@@ -64,7 +64,7 @@ if (ret == NULL)
     AllocVar(ret);
 ret->alias = sqlStringComma(&s);
 ret->identNo = sqlUnsignedComma(&s);
-ret->name = sqlStringComma(&s);
+ret->trueName = sqlStringComma(&s);
 *pS = s;
 return ret;
 }
@@ -77,7 +77,7 @@ struct stsAlias *el;
 
 if ((el = *pEl) == NULL) return;
 freeMem(el->alias);
-freeMem(el->name);
+freeMem(el->trueName);
 freez(pEl);
 }
 
@@ -105,7 +105,7 @@ fputc(sep,f);
 fprintf(f, "%u", el->identNo);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->name);
+fprintf(f, "%s", el->trueName);
 if (sep == ',') fputc('"',f);
 fputc(lastSep,f);
 }

@@ -11,7 +11,7 @@ struct stsAlias
     struct stsAlias *next;  /* Next in singly linked list. */
     char *alias;	/* STS marker name */
     unsigned identNo;	/* Identification number of STS marker */
-    char *name;	/* Official UCSC name for marker */
+    char *trueName;	/* Official UCSC name for marker */
     };
 
 void stsAliasStaticLoad(char **row, struct stsAlias *ret);

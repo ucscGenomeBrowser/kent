@@ -3,5 +3,5 @@ table stsAlias
     (
     string alias;       "STS marker name"
     uint identNo;       "Identification number of STS marker"
-    string name;        "Official UCSC name for marker"
+    string trueName;        "Official UCSC name for marker"
     )
