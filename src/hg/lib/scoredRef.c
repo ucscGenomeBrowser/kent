@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "scoredRef.h"
 
-static char const rcsid[] = "$Id: scoredRef.c,v 1.4 2003/09/17 17:11:52 kent Exp $";
+static char const rcsid[] = "$Id: scoredRef.c,v 1.5 2003/12/30 16:04:51 heather Exp $";
 
 void scoredRefStaticLoad(char **row, struct scoredRef *ret)
 /* Load a row from scoredRef table into ret.  The contents of ret will
@@ -143,7 +143,7 @@ static char *createString =
 "              #Indices\n"
 "    INDEX(chrom(8),bin),\n"
 "    INDEX(chrom(8),chromStart),\n"
-"    INDEX(chrom(8),chromStart)\n"
+"    INDEX(chrom(8),chromEnd)\n"
 ")\n";
 struct dyString *dy = newDyString(1024);
 dyStringPrintf(dy, createString, tableName);
