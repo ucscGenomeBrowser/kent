@@ -37,7 +37,7 @@ O = agpFrag.o agpGap.o bbRepMask.o bed.o blatServers.o \
     sage.o sageExp.o pslWScore.o coordConv.o expRecord.o dnaProbe.o \
     ancientRref.o ggMrnaAli.o \
     glDbRep.o ggDump.o altGraphX.o sample.o exprBed.o genMapDb.o \
-    dbSnpRS.o synMap.o
+    dbSnpRS.o synMap.o refSeqStatus.o
 
 ../../lib/$(MACHTYPE)/jkhgap.a: $(O) 
 	ar rcu ../../lib/$(MACHTYPE)/jkhgap.a $(O)
