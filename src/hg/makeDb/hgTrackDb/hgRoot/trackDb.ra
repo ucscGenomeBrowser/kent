@@ -240,6 +240,8 @@ visibility hide
 color 20,20,170
 type genePred
 
+
+
 track refGene
 shortLabel RefSeq Genes
 longLabel RefSeq Genes
@@ -675,6 +677,17 @@ altColor 255,240,200
 spectrum on
 type psl xeno
 
+track blastzBestMouse_0824
+shortLabel Blastz Mus Best 0824
+longLabel Blastz Mouse Best in Genome Alignments  0824
+priority 25.801
+visibility hide
+color 100,50,0
+altColor 255,240,200
+spectrum on
+type psl xeno
+
+
 track blastzMm2Sc
 shortLabel Blastz Mouse SC
 longLabel Merged Blastz Mouse Single Coverage Alignments
@@ -798,14 +811,22 @@ priority 25.6
 visibility hide
 type sample 9 
 
-
 track humMusL
-shortLabel Mouse EvoCons
-longLabel Human/mouse Evolutionary Conservation Score
+shortLabel Mouse Cons
+longLabel Human/Mouse Evolutionary Conservation Score
 altColor 0,0,255
 priority 25.7
 visibility hide
-type sample 9 
+type sample 9
+
+track musHumL
+shortLabel Human Cons
+longLabel Mouse/Human Evolutionary Conservation Score
+altColor 0,0,255
+priority 25.8
+visibility hide
+type sample 9
+
 
 
 track exoFish
