@@ -18,7 +18,7 @@
 #include "aliType.h"
 #include "binRange.h"
 
-static char const rcsid[] = "$Id: psl.c,v 1.50 2004/09/01 05:14:46 markd Exp $";
+static char const rcsid[] = "$Id: psl.c,v 1.52 2004/09/08 23:10:06 baertsch Exp $";
 
 static char *createString = 
 "CREATE TABLE %s (\n"
@@ -616,7 +616,7 @@ if (wordCount == 23)
     }
 else
     {
-    errAbort("Bad line %d of %s", lf->lineIx, lf->fileName);
+    errAbort("Bad line %d of %s wordCount is %d instead of 21 or 23\n", lf->lineIx, lf->fileName, wordCount);
     return NULL;
     }
 }

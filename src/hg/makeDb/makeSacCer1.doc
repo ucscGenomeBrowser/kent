@@ -901,10 +901,7 @@ chainSome $(path1)
 	echo $i
     done
 
-    cat u.*.psl m60* | sort -T /tmp -k 14,14 -k 16,16n -k 17,17n  | uniq  > ../preblastHg16KG.psl
-    cd ..
-    blatDir=/cluster/data/hg16/bed/blat.hg16KG
-    protDat -kg preblastHg16KG.psl $blatDir/hg16KG.psl $blatDir/kg.mapNames blastHg16KG.psl
+    cat u.*.psl m60* | sort -T /tmp -k 14,14 -k 16,16n -k 17,17n  | uniq  > ../blastHg16KG.psl
 
     ssh hgwdev
     cd /cluster/data/sacCer1/bed/tblastn.hg16KG
@@ -915,3 +912,60 @@ chainSome $(path1)
     rm -rf blastOut
 
 # End tblastn
+
+# BLAT SGD predicted sacCer1 proteins against sacCer1
+    ssh hgwdev
+    cd /cluster/data/sacCer1/bed
+    mkdir blat.sacCer1SG
+    cd  blat.sacCer1SG
+    pepPredToFa sacCer1 sgdPep sacCer1SG.fa
+    hgPepPred sacCer1 generic blastSGPep00 sacCer1SG.fa
+    ssh kk
+    cd /cluster/data/sacCer1/bed/blat.sacCer1SG
+    cat << '_EOF_' > blatSome
+#!/bin/csh -fe
+/cluster/bin/i386/blat -t=dnax -q=prot -out=pslx $1 $2 $3
+'_EOF_'
+    # << keep emacs happy
+    chmod +x blatSome
+    ls -1S /cluster/bluearc/sacCer/sacCer1/nib/*.nib > yeast.lst
+    mkdir sgfas
+    cd sgfas
+    faSplit sequence ../sacCer1SG.fa 1000 sg
+    cd ..
+    ls -1S sgfas/*.fa > sg.lst
+    cat << '_EOF_' > blatGsub
+#LOOP
+blatSome $(path1) {check in line $(path2)} {check out line psl/$(root1)/$(root2).psl}
+#ENDLOOP
+'_EOF_'
+    # << keep emacs happy
+    gensub2 yeast.lst sg.lst blatGsub blatSpec
+    mkdir psl
+    cd psl
+    foreach i (`cat ../yeast.lst`)
+	mkdir `basename $i .nib`
+    end
+    cd ..
+    para create blatSpec
+    para push
+
+# Completed: 16490 of 16490 jobs
+# CPU time in finished jobs:      52796s     879.94m    14.67h    0.61d  0.002 y
+# IO & Wait Time:                 44955s     749.25m    12.49h    0.52d  0.001 y
+# Average job time:                   6s       0.10m     0.00h    0.00d
+# Longest job:                       22s       0.37m     0.01h    0.00d
+# Submission to last job:           714s      11.90m     0.20h    0.01d
+
+    ssh kksilo
+    cd /cluster/data/sacCer1/bed/blat.sacCer1SG
+    pslSort dirs raw.psl /tmp psl/*
+    pslReps -nohead -minCover=0.9 -minAli=0.9 raw.psl cov90.psl /dev/null
+    pslMaxMap -maxMap=1 cov90.psl sacCer1SG.psl
+    pslxToFa sacCer1SG.psl sacCer1SG_ex.fa -liftTarget=genome.lft -liftQuery=protein.lft
+    sgName sacCer1 sacCer1SG.psl blastSGRef00
+    ssh hgwdev
+    cd /cluster/data/sacCer1/bed/blat.sacCer1SG
+    hgsql sacCer1 < ~/kent/src/hg/lib/blastRef.sql
+    echo "rename table blastRef to blastSGRef00" | hgsql sacCer1
+    echo "load data local infile 'blastSGRef00' into table blastSGRef00" | hgsql sacCer1

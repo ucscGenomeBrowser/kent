@@ -541,15 +541,15 @@ searchTable miRNA
 searchMethod prefix
 searchType bed
 shortCircuit 1
-termRegex hsa-(mir|let)-[0-9]+[a-z]?
-dontCheck hsa-(mir|let)-[0-9]+[a-z]?(-[0-9]+)?
+termRegex h?sa-(mir|let)-[0-9]+[a-z]?
+dontCheck h?sa-(mir|let)-[0-9]+[a-z]?(-[0-9]+)?
 searchPriority 18
 
 searchTable miRNA
 searchMethod exact
 searchType bed
 shortCircuit 1
-termRegex hsa-(mir|let)-.+
+termRegex h?sa-(mir|let)-.+
 searchPriority 18.5
 
 searchTable uniGene_2

@@ -7,10 +7,11 @@
 #include "dlist.h"
 #include "fa.h"
 #include "nib.h"
+#include "twoBit.h"
 #include "psl.h"
 #include "axt.h"
 
-static char const rcsid[] = "$Id: pslPretty.c,v 1.28 2004/07/13 12:53:15 baertsch Exp $";
+static char const rcsid[] = "$Id: pslPretty.c,v 1.29 2004/09/04 15:47:13 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -29,7 +30,7 @@ errAbort(
   "It's a really good idea if the psl file is sorted by target\n"
   "if it contains multiple targets.  Otherwise this will be\n"
   "very very slow.   The target and query lists can either be\n"
-  "fasta files, nib files, or a list of fasta and/or nib files\n"
+  "fasta, 2bit or nib files, or a list of fasta, 2bit and/or nib files\n"
   "one per line\n");
 }
 
@@ -45,6 +46,8 @@ struct seqFilePos
     char *file;	/* Sequence file name, allocated in hash. */
     long pos; /* Position in fa file/size of nib. */
     bool isNib;	/* True if a nib file. */
+    bool isTwoBit;  /* True if a two bit file. */
+    struct twoBitFile *tbf;	/* Open two bit file. */
     };
 
 boolean isFa(char *file)
@@ -71,6 +74,26 @@ sfp->isNib = TRUE;
 nibOpenVerify(file, &f, &size);
 sfp->pos = size;
 }
+
+void addTwoBit(char *file, struct hash *fileHash, struct hash *seqHash)
+/* Add a nib file to hashes. */
+{
+struct seqFilePos *sfp;
+char root[128];
+int size;
+FILE *f = NULL;
+struct twoBitFile *tbf = twoBitOpen(file);
+struct twoBitIndex *index;
+for (index = tbf->indexList; index != NULL; index = index->next)
+    {
+    AllocVar(sfp);
+    hashAddSaveName(seqHash, index->name, sfp, &sfp->name);
+    sfp->file = hashStoreName(fileHash, file);
+    sfp->isTwoBit = TRUE;
+    sfp->tbf = tbf;
+    }
+}
+
 
 void addFa(char *file, struct hash *fileHash, struct hash *seqHash)
 /* Add a fa file to hashes. */
@@ -102,7 +125,9 @@ lineFileClose(&lf);
 void hashFileList(char *fileList, struct hash *fileHash, struct hash *seqHash)
 /* Read file list into hash */
 {
-if (endsWith(fileList, ".nib"))
+if (twoBitIsFile(fileList))
+    addTwoBit(fileList, fileHash, seqHash);
+else if (endsWith(fileList, ".nib"))
     addNib(fileList, fileHash, seqHash);
 else if (isFa(fileList))
     addFa(fileList, fileHash, seqHash);
@@ -113,7 +138,9 @@ else
     while (lineFileRow(lf, row))
         {
 	char *file = row[0];
-	if (endsWith(file, ".nib"))
+	if (twoBitIsFile(file))
+	    addTwoBit(file, fileHash, seqHash);
+	else if (endsWith(file, ".nib"))
 	    addNib(file, fileHash, seqHash);
 	else
 	    addFa(file, fileHash, seqHash);
@@ -182,25 +209,10 @@ if (!faReadNext(f, "", TRUE, NULL, &seq))
 return seq;
 }
 
-struct dnaSeq *readCachedSeq(char *seqName, struct hash *hash, 
-	struct dlList *fileCache)
-/* Read sequence hopefully using file cashe. */
-{
-struct seqFilePos *sfp = hashMustFindVal(hash, seqName);
-FILE *f = openFromCache(fileCache, sfp->file);
-if (sfp->isNib)
-    {
-    return nibLdPart(sfp->file, f, sfp->pos, 0, sfp->pos);
-    }
-else
-    {
-    return readSeqFromFaPos(sfp, f);
-    }
-}
 
 void readCachedSeqPart(char *seqName, int start, int size, 
      struct hash *hash, struct dlList *fileCache, 
-     struct dnaSeq **retSeq, int *retOffset, boolean *retIsNib)
+     struct dnaSeq **retSeq, int *retOffset, boolean *retIsPartial)
 /* Read sequence hopefully using file cashe. If sequence is in a nib
  * file just read part of it. */
 {
@@ -210,13 +222,19 @@ if (sfp->isNib)
     {
     *retSeq = nibLdPart(sfp->file, f, sfp->pos, start, size);
     *retOffset = start;
-    *retIsNib = TRUE;
+    *retIsPartial = TRUE;
+    }
+else if (sfp->isTwoBit)
+    {
+    *retSeq = twoBitReadSeqFragLower(sfp->tbf, seqName, start, start+size);
+    *retOffset = start;
+    *retIsPartial = TRUE;
     }
 else
     {
     *retSeq = readSeqFromFaPos(sfp, f);
     *retOffset = 0;
-    *retIsNib = FALSE;
+    *retIsPartial = FALSE;
     }
 }
 
@@ -572,8 +590,8 @@ int qs, ts;
 int lastQ = 0, lastT = 0, size;
 int qOffset = 0;
 int tOffset = 0;
-boolean qIsNib = FALSE;
-boolean tIsNib = FALSE;
+boolean qIsPartial = FALSE;
+boolean tIsPartial = FALSE;
 
 if (qName == NULL || !sameString(qName, psl->qName))
     {
@@ -581,19 +599,19 @@ if (qName == NULL || !sameString(qName, psl->qName))
     freez(&qName);
     qName = cloneString(psl->qName);
     readCachedSeqPart(qName, psl->qStart, psl->qEnd-psl->qStart, 
-    	qHash, fileCache, &qSeq, &qOffset, &qIsNib);
-    if (qIsNib && psl->strand[0] == '-')
+    	qHash, fileCache, &qSeq, &qOffset, &qIsPartial);
+    if (qIsPartial && psl->strand[0] == '-')
 	    qOffset = psl->qSize - psl->qEnd;
     }
-if (tName == NULL || !sameString(tName, psl->tName) || tIsNib)
+if (tName == NULL || !sameString(tName, psl->tName) || tIsPartial)
     {
     freeDnaSeq(&tSeq);
     freez(&tName);
     tName = cloneString(psl->tName);
     readCachedSeqPart(tName, psl->tStart, psl->tEnd-psl->tStart, 
-	tHash, fileCache, &tSeq, &tOffset, &tIsNib);
+	tHash, fileCache, &tSeq, &tOffset, &tIsPartial);
     }
-if (tIsNib && psl->strand[1] == '-')
+if (tIsPartial && psl->strand[1] == '-')
     tOffset = psl->tSize - psl->tEnd;
 if (psl->strand[0] == '-')
     reverseComplement(qSeq->dna, qSeq->size);
@@ -640,9 +658,9 @@ if (checkFile != NULL)
     {
     outputCheck(psl, qSeq, qOffset, tSeq, tOffset, checkFile);
     }
-if (psl->strand[0] == '-' && !qIsNib)
+if (psl->strand[0] == '-' && !qIsPartial)
     reverseComplement(qSeq->dna, qSeq->size);
-if (psl->strand[1] == '-' && !tIsNib)
+if (psl->strand[1] == '-' && !tIsPartial)
     reverseComplement(tSeq->dna, tSeq->size);
 
 if(q->stringSize != t->stringSize)
@@ -656,9 +674,9 @@ else
     prettyOutString(q->string, t->string, min(q->stringSize,t->stringSize), 60, psl, f);
 dyStringFree(&q);
 dyStringFree(&t);
-if (qIsNib)
+if (qIsPartial)
     freez(&qName);
-if (tIsNib)
+if (tIsPartial)
     freez(&tName);
 }
 

@@ -388,12 +388,12 @@ int tgItemNoEnd(struct track *tg, void *item);
 int tgFixedItemHeight(struct track *tg, void *item);
 /* Return item height for fixed height track. */
 
-int tgFixedTotalHeightOverflow(struct track *tg, enum trackVisibility vis, 
+int tgFixedTotalHeightOptionalOverflow(struct track *tg, enum trackVisibility vis, 
 			       int lineHeight, int heightPer, boolean allowOverflow);
 /* Most fixed height track groups will use this to figure out the height 
  * they use. */
 
-int tgFixedTotalHeight(struct track *tg, enum trackVisibility vis);
+int tgFixedTotalHeightNoOverflow(struct track *tg, enum trackVisibility vis);
 /* Most fixed height track groups will use this to figure out the height 
  * they use. */
 
@@ -427,6 +427,9 @@ struct linkedFeatures *lfFromBed(struct bed *bed);
 
 void linkedFeaturesFreeList(struct linkedFeatures **pList);
 /* Free up a linked features list. */
+
+void freeLinkedFeaturesSeries(struct linkedFeaturesSeries **pList);
+/* Free up a linked features series list. */
 
 int linkedFeaturesCmpStart(const void *va, const void *vb);
 /* Help sort linkedFeatures by starting pos. */

@@ -27,7 +27,7 @@
 #include "minGeneInfo.h"
 #include <regex.h>
 
-static char const rcsid[] = "$Id: hgFind.c,v 1.148 2004/08/05 00:20:31 braney Exp $";
+static char const rcsid[] = "$Id: hgFind.c,v 1.149 2004/09/09 00:08:59 angie Exp $";
 
 extern struct cart *cart;
 char *hgAppName = "";
@@ -2406,14 +2406,17 @@ char *htmlPath = hHtmlPath(database);
 char *htmlString = NULL;
 size_t htmlStrLength = 0;
 
+if (strstrNoCase(organism, "zoo")) 
+    webNewSection("About the NISC Comparative Sequencing Program Browser");
+else
+    webNewSection("About the %s %s (%s) assembly"
+		  "  <A HREF=\"%s?%s=%d&chromInfoPage=\">(sequences)</A>",
+		  organism, hFreezeFromDb(database), database,
+		  hgTracksName(), cartSessionVarName(), cartSessionId(cart));
+
 if (htmlPath != NULL && fileExists(htmlPath))
-    {
     readInGulp(htmlPath, &htmlString, &htmlStrLength);
-    if (strstrNoCase(organism, "zoo")) 
-        webNewSection("About the NISC Comparative Sequencing Program Browser");
-    else
-        webNewSection("About the %s %s assembly", organism, database);
-    }
+
 if (htmlStrLength > 0)
     {
     puts(htmlString);

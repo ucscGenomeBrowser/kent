@@ -86,5 +86,8 @@ void uglyfBreak();
 char *getUser();
 /* Get user name */
 
+void envUpdate(char *name, char *value);
+/* Update an environment string */
+
 #endif /* PORTABLE_H */
 

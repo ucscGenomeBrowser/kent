@@ -14,7 +14,7 @@
 #include "gbFileOps.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: mgcDbLoad.c,v 1.10 2004/09/01 05:14:46 markd Exp $";
+static char const rcsid[] = "$Id: mgcDbLoad.c,v 1.11 2004/09/05 18:27:07 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -25,8 +25,6 @@ static struct optionSpec optionSpecs[] = {
     {NULL, 0}
 };
 
-
-#define SMALL_INSERT_SIZE 5
 
 /* Flags indicate what tables depending on browser (all or just full)  */
 #define MGC_BOTH_TABLES 0x10  /* tables in both all and full-length */
@@ -251,7 +249,7 @@ if (!genbankCdsParse(row[0], &cds))
 
     }
 
-genePred = genePredFromPsl2(psl, genePredAllFlds, &cds, SMALL_INSERT_SIZE);
+genePred = genePredFromPsl2(psl, genePredAllFlds, &cds, genePredStdInsertMergeSize);
 pslFree(&psl);
 return genePred;
 }

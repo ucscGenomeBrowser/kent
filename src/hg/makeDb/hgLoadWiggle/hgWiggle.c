@@ -11,7 +11,7 @@
 #include "hdb.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: hgWiggle.c,v 1.25 2004/08/18 19:07:35 hiram Exp $";
+static char const rcsid[] = "$Id: hgWiggle.c,v 1.27 2004/09/03 22:08:33 hiram Exp $";
 
 /* Command line switches. */
 static boolean noAscii = FALSE;	/*	do not output ascii data */
@@ -117,7 +117,7 @@ if (moreHelp)
 exit(255);
 }
 
-static void hgWiggle(struct wiggleDataStream *wDS, int trackCount,
+static void hgWiggle(struct wiggleDataStream *wds, int trackCount,
 	char *tracks[])
 /* hgWiggle - dump wiggle data from database or .wig file */
 {
@@ -178,7 +178,7 @@ for (i=0; i<trackCount; ++i)
 
 	if (chromPtr)
 	    {
-	    wDS->setChromConstraint(wDS, chromPtr->name);
+	    wds->setChromConstraint(wds, chromPtr->name);
 	    verbose(VERBOSE_CHR_LEVEL,"#\tchrom: %s\n", chromPtr->name);
 	    }
 
@@ -193,13 +193,13 @@ for (i=0; i<trackCount; ++i)
 
 	if (bedFile)
 	    {
-	    struct bed *bedList = bedLoadNAllChrom(bedFile, 3, wDS->chrName);
-	    valuesMatched = wDS->getDataViaBed(wDS, db, tracks[i],
+	    struct bed *bedList = bedLoadNAllChrom(bedFile, 3, wds->chrName);
+	    valuesMatched = wds->getDataViaBed(wds, db, tracks[i],
 		operations, &bedList);
 	    bedFreeList(&bedList);
 	    }
 	else
-	    valuesMatched = wDS->getData(wDS, db, tracks[i], operations);
+	    valuesMatched = wds->getData(wds, db, tracks[i], operations);
 
 	totalMatched += valuesMatched;
 
@@ -214,37 +214,37 @@ for (i=0; i<trackCount; ++i)
 	     *	no need to print stats until all done.
 	     */
 	    if (doStats && (!chromPtr) && (trackCount == 1))
-		wDS->statsOut(wDS, "stdout", TRUE, statsHTML);
+		wds->statsOut(wds, "stdout", TRUE, statsHTML);
 	    if (doBed)
-		wDS->bedOut(wDS, "stdout", TRUE);
+		wds->bedOut(wds, "stdout", TRUE);
 	    if (!noAscii)
-		wDS->asciiOut(wDS, "stdout", TRUE, rawDataOut);
+		wds->asciiOut(wds, "stdout", TRUE, rawDataOut);
 	    }
-	wDS->freeBed(wDS);
-	wDS->freeAscii(wDS);
+	wds->freeBed(wds);
+	wds->freeAscii(wds);
 	if (doStats && (!chromPtr) && (trackCount == 1))
-	    wDS->freeStats(wDS);
+	    wds->freeStats(wds);
 	if (timing)
 	    {
 	    long et;
 	    long chrEndClock;
-	    unsigned long long chrBytesRead = wDS->validPoints - chrBytesStart;
+	    unsigned long long chrBytesRead = wds->validPoints - chrBytesStart;
 	    unsigned long long chrNoDataBytes =
-		wDS->noDataPoints - chrNoDataBytesStart;
-	    unsigned long long chrRowsRead = wDS->rowsRead - chrRowsStart;
+		wds->noDataPoints - chrNoDataBytesStart;
+	    unsigned long long chrRowsRead = wds->rowsRead - chrRowsStart;
 	    unsigned long long chrValuesMatched =
-		wDS->valuesMatched - chrValuesMatchedStart;
+		wds->valuesMatched - chrValuesMatchedStart;
 
 	    chrEndClock = clock1000();
 	    et = chrEndClock - chrStartClock;
 	    verbose(VERBOSE_ALWAYS_ON,"#\t%s.%s %llu data bytes, %llu no-data bytes, %ld ms, %llu rows, %llu matched\n",
-			tracks[i], wDS->currentChrom, chrBytesRead,
+			tracks[i], wds->currentChrom, chrBytesRead,
 			chrNoDataBytes, et, chrRowsRead, chrValuesMatched);
 	    chrNoDataBytes = chrBytesRead = 0;
-	    chrBytesStart = wDS->validPoints;
-	    chrNoDataBytesStart = wDS->noDataPoints;
-	    chrRowsStart = wDS->rowsRead;
-	    chrValuesMatchedStart = wDS->valuesMatched;
+	    chrBytesStart = wds->validPoints;
+	    chrNoDataBytesStart = wds->noDataPoints;
+	    chrRowsStart = wds->rowsRead;
+	    chrValuesMatchedStart = wds->valuesMatched;
 	    chrStartClock = clock1000();
 	    }
 	if (chromPtr)
@@ -254,8 +254,8 @@ for (i=0; i<trackCount; ++i)
 /* when working through a chrom list, or track list, stats only at the end */
 if (doStats && (chromList || (trackCount > 1)))
     {
-    wDS->statsOut(wDS, "stdout", TRUE, statsHTML);
-    wDS->freeStats(wDS);
+    wds->statsOut(wds, "stdout", TRUE, statsHTML);
+    wds->freeStats(wds);
     }
 endClock = clock1000();
 
@@ -266,19 +266,19 @@ if (timing)
     {
     long et;
     et = endClock - startClock;
-    if (wDS->validPoints > 0 )
+    if (wds->validPoints > 0 )
 	{
     verbose(VERBOSE_ALWAYS_ON,"#\ttotal %llu valid bytes, %llu no-data bytes, %ld ms, %llu rows\n#\t%llu matched = %% %.2f, %llu wib bytes, %llu bytes skipped\n",
-	wDS->validPoints, wDS->noDataPoints, et, wDS->rowsRead,
-	wDS->valuesMatched,
-	100.0 * (float)wDS->valuesMatched / (float)wDS->validPoints,
-	wDS->bytesRead, wDS->bytesSkipped);
+	wds->validPoints, wds->noDataPoints, et, wds->rowsRead,
+	wds->valuesMatched,
+	100.0 * (float)wds->valuesMatched / (float)wds->validPoints,
+	wds->bytesRead, wds->bytesSkipped);
 	}
     else
 	{
     verbose(VERBOSE_ALWAYS_ON,"#\ttotal %llu valid bytes, %llu no-data bytes, %ld ms, %llu rows\n#\t%llu matched = %% 0.00, %llu wib bytes, %llu bytes skipped\n",
-	wDS->validPoints, wDS->noDataPoints, et, wDS->rowsRead,
-	wDS->valuesMatched, wDS->bytesRead, wDS->bytesSkipped);
+	wds->validPoints, wds->noDataPoints, et, wds->rowsRead,
+	wds->valuesMatched, wds->bytesRead, wds->bytesSkipped);
 	}
     }
 }	/*	void hgWiggle()	*/
@@ -286,7 +286,7 @@ if (timing)
 int main(int argc, char *argv[])
 /* Process command line. */
 {
-struct wiggleDataStream *wDS = NULL;
+struct wiggleDataStream *wds = NULL;
 float lowerLimit = -1 * INFINITY;  /*	for constraint comparison	*/
 float upperLimit = INFINITY;	/*	for constraint comparison	*/
 unsigned span = 0;	/*	select for this span only	*/
@@ -333,12 +333,12 @@ if (chromLst && chr)
     }
 
 /*	create the object here to allow constraint settings	*/
-wDS = newWigDataStream();
+wds = wiggleDataStreamNew();
 
 if (chr)
     {
-    wDS->setChromConstraint(wDS, chr);
-    verbose(VERBOSE_CHR_LEVEL, "#\tchrom constraint: %s\n", wDS->chrName);
+    wds->setChromConstraint(wds, chr);
+    verbose(VERBOSE_CHR_LEVEL, "#\tchrom constraint: %s\n", wds->chrName);
     }
 if (position)
     {
@@ -369,8 +369,8 @@ if (position)
     winStart = sqlUnsigned(startEnd[0]) - 1;	/* !!! 1-relative coming in */
     winEnd = sqlUnsigned(startEnd[1]);
     freeMem(stripped);
-    wDS->setPositionConstraint(wDS, winStart, winEnd);
-    verbose(VERBOSE_CHR_LEVEL, "#\tposition specified: %u-%u\n", wDS->winStart+1, wDS->winEnd);
+    wds->setPositionConstraint(wds, winStart, winEnd);
+    verbose(VERBOSE_CHR_LEVEL, "#\tposition specified: %u-%u\n", wds->winStart+1, wds->winEnd);
     }
 if (noAscii)
     verbose(VERBOSE_CHR_LEVEL, "#\tnoAscii option on, do not perform the default ascii output\n");
@@ -392,8 +392,8 @@ if (statsHTML)
     verbose(VERBOSE_CHR_LEVEL, "#\tstatsHTML option on, output stats in HTML format\n");
 if (span)
     {
-    wDS->setSpanConstraint(wDS, span);
-    verbose(VERBOSE_CHR_LEVEL, "#\tspan constraint: %u\n", wDS->spanLimit);
+    wds->setSpanConstraint(wds, span);
+    verbose(VERBOSE_CHR_LEVEL, "#\tspan constraint: %u\n", wds->spanLimit);
     }
 
 if (bedFile)
@@ -416,14 +416,14 @@ if (dataConstraint)
 	usage(FALSE);
 	}
 
-    wDS->setDataConstraint(wDS, dataConstraint, lowerLimit, upperLimit);
+    wds->setDataConstraint(wds, dataConstraint, lowerLimit, upperLimit);
 
     if (sameString(dataConstraint, "in range"))
-	verbose(VERBOSE_CHR_LEVEL, "#\tdataConstraint: %s [%f : %f]\n", wDS->dataConstraint,
-		wDS->limit_0, wDS->limit_1);
+	verbose(VERBOSE_CHR_LEVEL, "#\tdataConstraint: %s [%f : %f]\n", wds->dataConstraint,
+		wds->limit_0, wds->limit_1);
     else
 	verbose(VERBOSE_CHR_LEVEL, "#\tdataConstraint: data values %s %f\n",
-		wDS->dataConstraint, wDS->limit_0);
+		wds->dataConstraint, wds->limit_0);
     }
 else if (optionExists("ll") || optionExists("ul"))
     {
@@ -434,9 +434,9 @@ else if (optionExists("ll") || optionExists("ul"))
 if (argc < 2)
     usage(FALSE);
 
-hgWiggle(wDS, argc-1, argv+1);
+hgWiggle(wds, argc-1, argv+1);
 
-destroyWigDataStream(&wDS);
+wiggleDataStreamFree(&wds);
 
 return 0;
 }

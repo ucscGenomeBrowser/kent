@@ -20,7 +20,13 @@
 #include "wiggle.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: wiggle.c,v 1.8 2004/08/31 23:15:38 hiram Exp $";
+static char const rcsid[] = "$Id: wiggle.c,v 1.14 2004/09/03 22:16:26 hiram Exp $";
+
+enum wigOutputType 
+/*	type of output requested	*/
+    {
+    wigOutData, wigOutBed,
+    };
 
 boolean isWiggle(char *db, char *table)
 /* Return TRUE if db.table is a wiggle. */
@@ -44,7 +50,84 @@ if (db != NULL && table != NULL)
 return(typeWiggle);
 }
 
-void wigDataHeader(char *name, char *description, char *visibility)
+static boolean checkWigDataFilter(char *db, char *table,
+	char **constraint, double *ll, double *ul)
+{
+char varPrefix[128];
+struct hashEl *varList, *var;
+char *pat = NULL;
+char *cmp = NULL;
+
+safef(varPrefix, sizeof(varPrefix), "%s%s.%s.", hgtaFilterVarPrefix, db, table);
+
+varList = cartFindPrefix(cart, varPrefix);
+if (varList == NULL)
+    return FALSE;
+
+/*	check varList, look for dataValue.pat and dataValue.cmp	*/
+
+for (var = varList; var != NULL; var = var->next)
+    {
+    if (endsWith(var->name, ".pat"))
+	{
+	char *name;
+	name = cloneString(var->name);
+	tolowers(name);
+	/*	make sure we are actually looking at datavalue	*/
+	if (stringIn("datavalue", name))
+	    {
+	    pat = cloneString(var->val);
+	    }
+	freeMem(name);
+	}
+    if (endsWith(var->name, ".cmp"))
+	{
+	char *name;
+	name = cloneString(var->name);
+	tolowers(name);
+	/*	make sure we are actually looking at datavalue	*/
+	if (stringIn("datavalue", name))
+	    {
+	    cmp = cloneString(var->val);
+	    tolowers(cmp);
+	    if (stringIn("ignored", cmp))
+		freez(&cmp);
+	    }
+	freeMem(name);
+	}
+    }
+
+/*	Must get them both for this to work	*/
+if (cmp && pat)
+    {
+    int wordCount = 0;
+    char *words[2];
+    char *dupe = cloneString(pat);
+
+    wordCount = chopString(dupe, ", \t\n", words, ArraySize(words));
+    switch (wordCount)
+	{
+	case 2: if (ul) *ul = sqlDouble(words[1]);
+	case 1: if (ll) *ll = sqlDouble(words[0]);
+		break;
+	default:
+	    warn("can not understand numbers input for dataValue filter");
+	    errAbort(
+	    "dataValue filter must be one or two numbers (two for 'in range')");
+	}
+    if (sameWord(cmp,"in range") && (wordCount != 2))
+	errAbort("'in range' dataValue filter must have two numbers input\n");
+
+    if (constraint)
+	*constraint = cmp;
+
+    return TRUE;
+    }
+else
+    return FALSE;
+}	/*	static boolean checkWigDataFilter()	*/
+
+static void wigDataHeader(char *name, char *description, char *visibility)
 /* Write out custom track header for this wiggle region. */
 {
 hPrintf("track type=wiggle_0");
@@ -57,18 +140,32 @@ if (visibility != NULL)
 hPrintf("\n");
 }
 
-int wigOutDataRegion(char *table, struct sqlConnection *conn,
-	struct region *region, int maxOut)
+static int wigOutRegion(char *table, struct sqlConnection *conn,
+	struct region *region, int maxOut, enum wigOutputType wigOutType)
 /* Write out wig data in region.  Write up to maxOut elements. 
  * Returns number of elements written. */
 {
+int linesOut = 0;
 char splitTableOrFileName[256];
 struct customTrack *ct;
 boolean isCustom = FALSE;
-struct wiggleDataStream *wDS = NULL;
-unsigned span = 0;
+struct wiggleDataStream *wds = NULL;
 unsigned long long valuesMatched = 0;
 int operations = wigFetchAscii;
+char *dataConstraint;
+double ll = 0.0;
+double ul = 0.0;
+
+switch (wigOutType)
+    {
+    case wigOutBed:
+	operations = wigFetchBed;
+	break;
+    default:
+    case wigOutData:
+	operations = wigFetchAscii;
+	break;
+    };
 
 if (isCustomTrack(table))
     {
@@ -85,22 +182,19 @@ if (isCustomTrack(table))
     isCustom = TRUE;
     }
 
-wDS = newWigDataStream();
+wds = wiggleDataStreamNew();
 
-wDS->setMaxOutput(wDS, maxOut);
-wDS->setChromConstraint(wDS, region->chrom);
-wDS->setPositionConstraint(wDS, region->start, region->end);
+wds->setMaxOutput(wds, maxOut);
+wds->setChromConstraint(wds, region->chrom);
+wds->setPositionConstraint(wds, region->start, region->end);
+
+if (checkWigDataFilter(database, table, &dataConstraint, &ll, &ul))
+    wds->setDataConstraint(wds, dataConstraint, ll, ul);
 
 if (isCustom)
     {
-    valuesMatched = wDS->getData(wDS, NULL,
+    valuesMatched = wds->getData(wds, NULL,
 	    splitTableOrFileName, operations);
-    /*  XXX We need to properly get the smallest span for custom tracks */
-    /*	This is not necessarily the correct answer here	*/
-    if (wDS->stats)
-	span = wDS->stats->span;
-    else
-	span = 1;
     }
 else
     {
@@ -108,41 +202,83 @@ else
 
     if (hFindSplitTable(region->chrom, table, splitTableOrFileName, &hasBin))
 	{
+	/* XXX TBD, watch for a span limit coming in as an SQL filter */
+/*
 	span = minSpan(conn, splitTableOrFileName, region->chrom,
 	    region->start, region->end, cart);
-	wDS->setSpanConstraint(wDS, span);
-	valuesMatched = wDS->getData(wDS, database,
+	wds->setSpanConstraint(wds, span);
+*/
+	valuesMatched = wds->getData(wds, database,
 	    splitTableOrFileName, operations);
 	}
     }
 
-wDS->asciiOut(wDS, "stdout", TRUE, FALSE);
+switch (wigOutType)
+    {
+    case wigOutBed:
+	linesOut = wds->bedOut(wds, "stdout", TRUE);/* TRUE == sort output */
+	break;
+    default:
+    case wigOutData:
+	linesOut = wds->asciiOut(wds, "stdout", TRUE, FALSE);
+	break;		/* TRUE == sort output, FALSE == not raw data out */
+    };
 
-destroyWigDataStream(&wDS);
 
-return valuesMatched;
+wiggleDataStreamFree(&wds);
+
+return linesOut;
 }
 
-void doOutWigData(struct trackDb *track, struct sqlConnection *conn)
-/* Save as wiggle data. */
+static void doOutWig(struct trackDb *track, struct sqlConnection *conn,
+	enum wigOutputType wigOutType)
 {
 struct region *regionList = getRegions(), *region;
-/*int maxOut = 100000, oneOut, curOut = 0;*/
-int maxOut = 100, oneOut, curOut = 0;
+int maxOut = 100000, oneOut, curOut = 0;
+char *name;
+extern char *maxOutMenu[];
+char *maxOutputStr = NULL;
+char *maxOutput = NULL;
+
+name = filterFieldVarName(database, curTable, "", filterMaxOutputVar);
+maxOutputStr = cartOptionalString(cart, name);
+/*	Don't modify(stripChar) the values sitting in the cart hash	*/
+if (NULL == maxOutputStr)
+    maxOutput = cloneString(maxOutMenu[0]);
+else
+    maxOutput = cloneString(maxOutputStr);
+
+stripChar(maxOutput, ',');
+maxOut = sqlUnsigned(maxOutput);
+freeMem(maxOutput);
+
 textOpen();
 
 wigDataHeader(track->shortLabel, track->longLabel, NULL);
+
 for (region = regionList; region != NULL; region = region->next)
     {
-    oneOut = wigOutDataRegion(track->tableName, conn, region, maxOut - curOut);
+    oneOut = wigOutRegion(track->tableName, conn, region, maxOut - curOut,
+	wigOutType);
     curOut += oneOut;
     if (curOut >= maxOut)
         break;
     }
 if (curOut >= maxOut)
-    warn("Only fetching first %d data values, please make region smaller", curOut);
+    warn("Reached output limit of %d data values, please make region smaller,\n\tor set a higher output line limit with the filter settings.", curOut);
 }
 
+void doOutWigData(struct trackDb *track, struct sqlConnection *conn)
+/* Return wiggle data in variableStep format. */
+{
+doOutWig(track, conn, wigOutData);
+}
+
+void doOutWigBed(struct trackDb *track, struct sqlConnection *conn)
+/* Return wiggle data in bed format. */
+{
+doOutWig(track, conn, wigOutBed);
+}
 
 void doSummaryStatsWiggle(struct sqlConnection *conn)
 /* Put up page showing summary stats for wiggle track. */
@@ -157,12 +293,17 @@ long startTime, wigFetchTime;
 char splitTableOrFileName[256];
 struct customTrack *ct;
 boolean isCustom = FALSE;
-struct wiggleDataStream *wDS = NULL;
+struct wiggleDataStream *wds = NULL;
 unsigned long long valuesMatched = 0;
 int regionCount = 0;
 unsigned span = 0;
+char *dataConstraint;
+double ll = 0.0;
+double ul = 0.0;
+boolean haveDataConstraint = FALSE;
 
 startTime = clock1000();
+
 
 /*	Count the regions, when only one, we can do a histogram	*/
 for (region = regionList; region != NULL; region = region->next)
@@ -185,7 +326,13 @@ if (isCustomTrack(table))
     isCustom = TRUE;
     }
 
-wDS = newWigDataStream();
+wds = wiggleDataStreamNew();
+
+if (checkWigDataFilter(database, table, &dataConstraint, &ll, &ul))
+    {
+    wds->setDataConstraint(wds, dataConstraint, ll, ul);
+    haveDataConstraint = TRUE;
+    }
 
 for (region = regionList; region != NULL; region = region->next)
     {
@@ -199,12 +346,15 @@ for (region = regionList; region != NULL; region = region->next)
 	operations |= wigFetchAscii;
 #endif
 
-    wDS->setChromConstraint(wDS, region->chrom);
+    wds->setChromConstraint(wds, region->chrom);
 
     if (fullGenomeRegion())
-	wDS->setPositionConstraint(wDS, 0, 0);
+	wds->setPositionConstraint(wds, 0, 0);
     else
-	wDS->setPositionConstraint(wDS, region->start, region->end);
+	wds->setPositionConstraint(wds, region->start, region->end);
+
+    if (haveDataConstraint)
+	wds->setDataConstraint(wds, dataConstraint, ll, ul);
 
     /* depending on what is coming in on regionList, we may need to be
      * smart about how often we call getData for these custom tracks
@@ -212,12 +362,12 @@ for (region = regionList; region != NULL; region = region->next)
      */
     if (isCustom)
 	{
-	valuesMatched = wDS->getData(wDS, NULL,
+	valuesMatched = wds->getData(wds, NULL,
 		splitTableOrFileName, operations);
 	/*  XXX We need to properly get the smallest span for custom tracks */
 	/*	This is not necessarily the correct answer here	*/
-	if (wDS->stats)
-	    span = wDS->stats->span;
+	if (wds->stats)
+	    span = wds->stats->span;
 	else
 	    span = 1;
 	}
@@ -227,21 +377,19 @@ for (region = regionList; region != NULL; region = region->next)
 	    {
 	    span = minSpan(conn, splitTableOrFileName, region->chrom,
 		region->start, region->end, cart);
-	    wDS->setSpanConstraint(wDS, span);
-	    valuesMatched = wDS->getData(wDS, database,
+	    wds->setSpanConstraint(wds, span);
+	    valuesMatched = wds->getData(wds, database,
 		splitTableOrFileName, operations);
 	    }
 	}
-
-    wDS->freeConstraints(wDS);
     }
 
 if (1 == regionCount)
-    statsPreamble(wDS, regionList->chrom, regionList->start, regionList->end,
+    statsPreamble(wds, regionList->chrom, regionList->start, regionList->end,
 	span, valuesMatched);
 
 /* first TRUE == sort results, second TRUE == html table output */
-wDS->statsOut(wDS, "stdout", TRUE, TRUE);
+wds->statsOut(wds, "stdout", TRUE, TRUE);
 
 #if defined(NOT)
 /*	can't do the histogram now, that operation times out	*/
@@ -253,24 +401,24 @@ if ((valuesMatched > 1) && (1 == regionCount))
     struct histoResult *histoGramResult;
 
     /*	convert the ascii data listings to one giant float array 	*/
-    valuesArray = wDS->asciiToDataArray(wDS, valuesMatched, &valueCount);
+    valuesArray = wds->asciiToDataArray(wds, valuesMatched, &valueCount);
 
     /*	histoGram() may return NULL if it doesn't work	*/
 
     histoGramResult = histoGram(valuesArray, valueCount,
-	    NAN, (unsigned) 0, NAN, (float) wDS->stats->lowerLimit,
-		(float) (wDS->stats->lowerLimit + wDS->stats->dataRange),
+	    NAN, (unsigned) 0, NAN, (float) wds->stats->lowerLimit,
+		(float) (wds->stats->lowerLimit + wds->stats->dataRange),
 		(struct histoResult *)NULL);
 
     printHistoGram(histoGramResult);
 
     freeHistoGram(&histoGramResult);
-    wDS->freeAscii(wDS);
-    wDS->freeArray(wDS);
+    wds->freeAscii(wds);
+    wds->freeArray(wds);
     }
 #endif
 
-wDS->freeStats(wDS);
+wds->freeStats(wds);
 
 wigFetchTime = clock1000() - startTime;
 webNewSection("Region and Timing Statistics");
@@ -281,5 +429,5 @@ numberStatRow("bases in gaps", gapTotal);
 floatStatRow("load and calc time", 0.001*wigFetchTime);
 hTableEnd();
 htmlClose();
-destroyWigDataStream(&wDS);
+wiggleDataStreamFree(&wds);
 }

@@ -407,6 +407,16 @@ color 150,0,0
 type genePred ensPep
 url http://www.ensembl.org/perl/transview?transcript=$$
 
+track ensEstGene
+shortLabel Ensembl EST Genes
+longLabel Ensembl EST Gene Predictions
+group genes
+priority 40.5
+visibility hide
+color 150,0,0
+type genePred ensEstPep
+url http://www.ensembl.org/perl/geneview?db=estgene&transcript=$$
+
 track acembly
 shortLabel Acembly Genes
 longLabel AceView Gene Models With Alt-Splicing
@@ -1277,6 +1287,7 @@ colorChromDefault off
 type psl protein
 pred sacCer1.blastSGPep00
 blastRef sacCer1.blastSGRef00
+url http://db.yeastgenome.org/cgi-bin/SGD/locus.pl?locus=
 
 track blastHg17KG
 shortLabel Hg17  Proteins
@@ -1390,10 +1401,10 @@ termRegex [a-z][a-z0-9][0-9]+
 searchPriority 10
 
 searchTable encodeRegions
-searchMethod exact
+searchMethod prefix
 searchType bed
 shortCircuit 1
-termRegex EN[rm][0-9]+
+termRegex EN[rm][0-9]+(_[0-9]+)?
 searchPriority 11
 
 searchName snpMapShort
@@ -1430,6 +1441,32 @@ shortCircuit 1
 xrefTable ensGtp
 xrefQuery select transcript,protein from %s where protein like '%s%%'
 termRegex ENSP[0-9]+(\.[0-9]+)?
+
+searchTable ensEstGene
+searchType genePred
+shortCircuit 1
+searchMethod prefix
+termRegex ENSESTT[0-9]+(\.[0-9]+)?
+searchPriority 50
+
+searchName ensEstGeneGtpGene
+searchTable ensEstGene
+searchType genePred
+searchMethod prefix
+shortCircuit 1
+xrefTable ensEstGtp
+xrefQuery select transcript,gene from %s where gene like '%s%%'
+termRegex ENSESTG[0-9]+(\.[0-9]+)?
+searchPriority 50
+
+searchName ensEstGeneGtpProtein
+searchTable ensEstGene
+searchType genePred
+searchMethod prefix
+shortCircuit 1
+xrefTable ensEstGtp
+xrefQuery select transcript,protein from %s where protein like '%s%%'
+termRegex ENSESTP[0-9]+(\.[0-9]+)?
 searchPriority 50
 
 track phastConsElements
@@ -1644,10 +1681,28 @@ searchType bed
 query select tName,tStart,tEnd,qName from %s where qName like '%%%s%%'
 searchPriority 25
 
+searchTable blastSacCer1SG
+searchType psl
+query select tName,tStart,tEnd,qName from %s where qName like '%%%s%%'
+searchPriority 25
+
 searchTable blastHg16KG
 searchType psl
 query select tName,tStart,tEnd,qName from %s where qName like '%%%s%%'
 searchPriority 25
+
+searchName blastSacCer1SGSprot
+searchTable blastSacCer1SG
+searchType psl
+xrefTable sacCer1.blastSGRef00
+xrefQuery select acc,extra1 from %s where extra1 like '%%%s%%'
+searchPriority 25
+
+searchName blastSacCer1SGGene
+searchTable blastSacCer1SG
+searchType psl
+xrefTable sacCer1.blastSGRef00
+xrefQuery select acc,geneId from %s where geneId like '%%%s%%'
 
 searchName blastHg16KGSprot
 searchTable blastHg16KG

@@ -28,7 +28,7 @@
 #include "gbSql.h"
 #include "sqlDeleter.h"
 
-static char const rcsid[] = "$Id: gbAlignData.c,v 1.14 2004/09/01 05:14:46 markd Exp $";
+static char const rcsid[] = "$Id: gbAlignData.c,v 1.15 2004/09/05 18:27:06 markd Exp $";
 
 /* table names */
 static char *REF_SEQ_ALI = "refSeqAli";
@@ -275,8 +275,9 @@ else
 
 writePsl(fh, psl);
 
-/* genePred and geneFlat tables, merge insert <= 5 bases */
-gene = genePredFromPsl(psl, status->cdsStart, status->cdsEnd, 5);
+/* genePred and geneFlat tables, merge insert <= n bases */
+gene = genePredFromPsl(psl, status->cdsStart, status->cdsEnd,
+                       genePredStdInsertMergeSize);
 if (select->orgCats == GB_NATIVE)
     fh= getOtherTabFile(REF_GENE_TBL, conn, gRefGeneTableDef,
                         &gRefGeneUpd);

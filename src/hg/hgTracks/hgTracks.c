@@ -84,7 +84,7 @@
 #include "estOrientInfo.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.793 2004/09/01 22:42:35 braney Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.799 2004/09/09 00:07:12 angie Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
@@ -409,20 +409,32 @@ int packCountRows(struct track *tg, int maxCount, boolean withLabels)
 return packCountRowsOverflow(tg, maxCount, withLabels, FALSE);
 }
 
-int tgFixedTotalHeightOverflow(struct track *tg, enum trackVisibility vis, 
+int maximumTrackHeight()
+/* Return the maximum track height allowed in pixels. */
+{
+return maxItemsInFullTrack * tl.fontHeight;
+}
+
+int tgFixedTotalHeightOptionalOverflow(struct track *tg, enum trackVisibility vis, 
 			       int lineHeight, int heightPer, boolean allowOverflow)
 /* Most fixed height track groups will use this to figure out the height 
  * they use. */
 {
 int rows;
-double maxHeight = maxItemsInFullTrack * tl.fontHeight;
+double maxHeight = maximumTrackHeight();
 int itemCount = slCount(tg->items);
 tg->heightPer = heightPer;
 tg->lineHeight = lineHeight;
 
 /* Note that the maxCount variable passed to packCountRowsOverflow() 
    is tied to the maximum height allowed for a track and influences
-   decisions about when to squish, dense, or overflow a track. */
+   decisions about when to squish, dense, or overflow a track.
+
+   If doing overflow try to pack all the items into the maxHeight area
+   or put all the overflow into the last row. If not doing overflow
+   allow the track enough rows to go over the maxHeight (thus if the
+   spaceSaver fills up the total height will be more than maxHeight).
+*/
 switch (vis)
     {
     case tvFull:
@@ -458,18 +470,18 @@ return tg->height;
 }
 
 
-int tgFixedTotalHeight(struct track *tg, enum trackVisibility vis)
+int tgFixedTotalHeightNoOverflow(struct track *tg, enum trackVisibility vis)
 /* Most fixed height track groups will use this to figure out the height 
  * they use. */
 {
-return tgFixedTotalHeightOverflow(tg,vis, tl.fontHeight+1, tl.fontHeight, FALSE);
+return tgFixedTotalHeightOptionalOverflow(tg,vis, tl.fontHeight+1, tl.fontHeight, FALSE);
 }
 
-int tgFixedTotalMaxHeight(struct track *tg, enum trackVisibility vis)
-/* Returns how much height this track will use, but ensures that the max
-   reported is never more than maxItemsInFullTrack * tl.fontHeight. */
+int tgFixedTotalHeightUsingOverflow(struct track *tg, enum trackVisibility vis)
+/* Returns how much height this track will use, tries to pack overflow into
+  last row to avoid being more than maximumTrackHeight(). */
 {
-int height = tgFixedTotalHeightOverflow(tg, vis, tl.fontHeight+1, tl.fontHeight, TRUE);
+int height = tgFixedTotalHeightOptionalOverflow(tg, vis, tl.fontHeight+1, tl.fontHeight, TRUE);
 return height;
 }
 
@@ -522,7 +534,7 @@ if (!tg->limitedVisSet)
     {
     enum trackVisibility vis = tg->visibility;
     int h;
-    int maxHeight = maxItemsInFullTrack * tl.fontHeight;
+    int maxHeight = maximumTrackHeight();
     tg->limitedVisSet = TRUE;
     h = tg->totalHeight(tg, vis);
     if (h > maxHeight)
@@ -1525,9 +1537,9 @@ if (vis == tvPack || vis == tvSquish)
     struct spaceNode *sn;
     /* These variables keep track of state if there are
        too many items and there is going to be an overflow row. */
-    int maxHeight = maxItemsInFullTrack * tl.fontHeight;
-    int restRow = (maxHeight - tl.fontHeight +1) / lineHeight;
-    int restRowCount = 0;
+    int maxHeight = maximumTrackHeight();
+    int overflowRow = (maxHeight - tl.fontHeight +1) / lineHeight;
+    int overflowCount = 0;
     boolean overflowDrawn = FALSE;
     char nameBuff[128];
     boolean origWithLabels = withLabels;
@@ -1541,8 +1553,8 @@ if (vis == tvPack || vis == tvSquish)
     /* Loop though and count number of entries that will 
        end up in overflow. */
     for (sn = ss->nodeList; sn != NULL; sn = sn->next)
-	if(sn->row >= restRow)
-	    restRowCount++;
+	if(sn->row >= overflowRow)
+	    overflowCount++;
 
     /* Loop through and draw each item individually. */
     for (sn = ss->nodeList; sn != NULL; sn = sn->next)
@@ -1565,10 +1577,10 @@ if (vis == tvPack || vis == tvSquish)
 
 	/* If this row falls outside of the last row have to
 	   change some state to paint it in the "overflow" row. */
-	if(sn->row >= restRow)
+	if(sn->row >= overflowRow)
 	    {
 	    doingOverflow = TRUE;
-	    sn->row = restRow;
+	    sn->row = overflowRow;
 	    vis = tg->limitedVis = tvDense;
 	    heightPer = tg->heightPer = tl.fontHeight;
 	    lineHeight = tg->lineHeight = tl.fontHeight+1;
@@ -1630,7 +1642,7 @@ if (vis == tvPack || vis == tvSquish)
 		int nameWidth = 0;
 		vgUnclip(vg);
 		vgSetClip(vg, leftLabelX, yOff, insideWidth, tg->height);
-		safef(nameBuff, sizeof(nameBuff), "%d Not Shown", restRowCount);
+		safef(nameBuff, sizeof(nameBuff), "%d in Last Row", overflowCount);
 		mgFontStringWidth(font, nameBuff);
 		vgTextRight(vg, leftLabelX, y, leftLabelWidth-1, lineHeight, 
 			    color, font, nameBuff);
@@ -1915,7 +1927,7 @@ tg->drawItems = linkedFeaturesDraw;
 tg->drawItemAt = linkedFeaturesDrawAt;
 tg->itemName = linkedFeaturesName;
 tg->mapItemName = linkedFeaturesName;
-tg->totalHeight = tgFixedTotalHeight;
+tg->totalHeight = tgFixedTotalHeightNoOverflow;
 tg->itemHeight = tgFixedItemHeight;
 tg->itemStart = linkedFeaturesItemStart;
 tg->itemEnd = linkedFeaturesItemEnd;
@@ -1944,7 +1956,7 @@ tg->drawItems = linkedFeaturesSeriesDraw;
 tg->drawItemAt = linkedFeaturesSeriesDrawAt;
 tg->itemName = linkedFeaturesSeriesName;
 tg->mapItemName = linkedFeaturesSeriesName;
-tg->totalHeight = tgFixedTotalHeight;
+tg->totalHeight = tgFixedTotalHeightNoOverflow;
 tg->itemHeight = tgFixedItemHeight;
 tg->itemStart = linkedFeaturesSeriesItemStart;
 tg->itemEnd = linkedFeaturesSeriesItemEnd;
@@ -2971,7 +2983,7 @@ tg->drawItems 	= superfamilyDraw;
 tg->drawItemAt 	= superfamilyDrawAt;
 tg->itemName 	= superfamilyName;
 tg->mapItemName = superfamilyMapName;
-tg->totalHeight = tgFixedTotalHeight;
+tg->totalHeight = tgFixedTotalHeightNoOverflow;
 tg->itemHeight 	= tgFixedItemHeight;
 tg->itemStart 	= superfamilyItemStart;
 tg->itemEnd 	= superfamilyItemEnd;
@@ -3457,7 +3469,7 @@ void estMethods(struct track *tg)
 {
 tg->drawItems = linkedFeaturesAverageDenseOrientEst;
 tg->extraUiData = newMrnaUiData(tg->mapName, FALSE);
-tg->totalHeight = tgFixedTotalMaxHeight;
+tg->totalHeight = tgFixedTotalHeightUsingOverflow;
 }
 
 void mrnaMethods(struct track *tg)
@@ -3770,7 +3782,7 @@ tg->drawItems = bedDrawSimple;
 tg->drawItemAt = bedDrawSimpleAt;
 tg->itemName = bedName;
 tg->mapItemName = bedName;
-tg->totalHeight = tgFixedTotalHeight;
+tg->totalHeight = tgFixedTotalHeightNoOverflow;
 tg->itemHeight = tgFixedItemHeight;
 tg->itemStart = bedItemStart;
 tg->itemEnd = bedItemEnd;
@@ -3815,6 +3827,7 @@ char *rOligo = cloneString(fOligo);
 char *rMatch = NULL, *fMatch = NULL;
 struct bed *bedList = NULL, *bed;
 char strand;
+int count = 0, maxCount = 1000000;
 
 if (oligoSize >= 2)
     {
@@ -3856,14 +3869,24 @@ if (oligoSize >= 2)
 	    fMatch = stringIn(fOligo, fMatch+1);
 	    strand = '+';
 	    }
-	AllocVar(bed);
-	bed->chromStart = winStart + (oneMatch - dna);
-	bed->chromEnd = bed->chromStart + oligoSize;
-	bed->strand[0] = strand;
-	slAddHead(&bedList, bed);
+	if (count < maxCount)
+	    {
+	    ++count;
+	    AllocVar(bed);
+	    bed->chromStart = winStart + (oneMatch - dna);
+	    bed->chromEnd = bed->chromStart + oligoSize;
+	    bed->strand[0] = strand;
+	    slAddHead(&bedList, bed);
+	    }
+	else
+	    break;
 	}
     slReverse(&bedList);
-    tg->items = bedList;
+    if (count < maxCount)
+	tg->items = bedList;
+    else
+        warn("More than %d items in %s, suppressing display",
+	    maxCount, tg->shortLabel);
     }
 }
 
@@ -6250,7 +6273,7 @@ repeatMethods(tg);
 tg->loadItems = cghLoadTrack;
 tg->drawItems = cghDraw;
 tg->colorShades = shadesOfGray;
-tg->totalHeight = tgFixedTotalHeight;
+tg->totalHeight = tgFixedTotalHeightNoOverflow;
 tg->itemHeight = tgFixedItemHeight;
 tg->itemStart = tgItemNoStart;
 tg->itemEnd = tgItemNoEnd;
@@ -8264,7 +8287,7 @@ if (sameString(database, "hg16")
     printEnsemblAnchor(database);
     hPrintf("%s</A></TD>", wrapWhiteFont("Ensembl"));
     }
-if (sameString(database, "hg16"))
+if (sameString(database, "hg17"))
     {
     hPrintf("<TD ALIGN=CENTER><A HREF=\"http://www.ncbi.nlm.nih.gov/mapview/maps.cgi?CHR=%s&BEG=%d&END=%d\" TARGET=_blank>",
     	skipChr(chromName), winStart+1, winEnd);
@@ -8556,7 +8579,12 @@ registerTrackHandler("gbProtCode", gbGeneMethods);
 registerTrackHandler("tigrCmrORFs", tigrGeneMethods);
 registerTrackHandler("llaPfuPrintA",llArrayMethods);
 registerTrackHandler("llaPaePrintA",llArrayMethods);
+registerTrackHandler("BlastPEuk",llBlastPMethods);
+registerTrackHandler("BlastPBac",llBlastPMethods);
+registerTrackHandler("BlastPpyrFur2",llBlastPMethods);
+registerTrackHandler("codeBlast",codeBlastMethods);
 registerTrackHandler("tigrOperons",tigrOperonMethods);
+registerTrackHandler("rnaGenes",rnaGenesMethods);
 /* MGC related */
 registerTrackHandler("mgcIncompleteMrna", mrnaMethods);
 registerTrackHandler("mgcFailedEst", estMethods);
@@ -9254,6 +9282,178 @@ puts("</FORM>");
 }
 
 
+int chromNameCmp(const void *el1, const void *el2)
+/* Compare chromosome names by number, then suffix.  el1 and el2 must be 
+ * char *s that match the regex "chr([0-9]+|[A-Za-z0-9]+)(_[A-Za-z0-9_]+)". */
+{
+char *str1 = (char *)el1;
+char *str2 = (char *)el2;
+int num1 = 0, num2 = 0;
+int match1 = 0, match2 = 0;
+char suffix1[512], suffix2[512];
+
+/* get past "chr" prefix: */
+if (!startsWith("chr", str1))
+    return -1;
+if (!startsWith("chr", str2))
+    return 1;
+str1 += 3;
+str2 += 3;
+/* If only one is numeric, that one goes first. */
+/* If both are numeric, compare by number; if same number, look at suffix. */
+/* Otherwise go alph. but put M and U/Un/Un_random at end. */
+match1 = sscanf(str1, "%d%s", &num1, suffix1);
+match2 = sscanf(str2, "%d%s", &num2, suffix2);
+if (match1 && !match2)
+    return -1;
+else if (!match1 && match2)
+    return 1;
+else if (match1 && match2)
+    {
+    int diff = num1 - num2;
+    if (diff != 0)
+	return diff;
+    /* same chrom number... got suffix? */
+    if (match1 > 1 && match2 <= 1)
+	return 1;
+    else if (match1 <= 1 && match2 > 1)
+	return -1;
+    else if (match1 > 1 && match2 > 1)
+	return strcmp(suffix1, suffix2);
+    else
+	/* This shouldn't happen (duplicate chrom name passed in) */
+	return 0;
+    }
+else if (sameString(str1, "M") && !sameString(str2, "M"))
+    return 1;
+else if (!sameString(str1, "M") && sameString(str2, "M"))
+    return -1;
+else if (str1[0] == 'U' && str2[0] != 'U')
+    return 1;
+else if (str1[0] != 'U' && str2[0] == 'U')
+    return -1;
+else
+    return strcmp(str1, str2);
+}
+
+int chromSlNameCmp(const void *el1, const void *el2)
+/* Compare chromosome names by number, then suffix.  el1 and el2 must be 
+ * slNames that match the regex "chr([0-9]+|[A-Za-z0-9]+)(_[A-Za-z0-9_]+)". */
+{
+struct slName *sln1 = *(struct slName **)el1;
+struct slName *sln2 = *(struct slName **)el2;
+return chromNameCmp((void *)(sln1->name), (void *)(sln2->name));
+}
+
+void chromInfoTotalRow(long long total)
+/* Make table row with total size from chromInfo. */
+{
+cgiSimpleTableRowStart();
+cgiSimpleTableFieldStart();
+printf("Total");
+cgiTableFieldEnd();
+cgiSimpleTableFieldStart();
+printLongWithCommas(stdout, total);
+cgiTableFieldEnd();
+cgiTableRowEnd();
+}
+
+void chromInfoRowsChrom()
+/* Make table rows of chromosomal chromInfo name & size, sorted by name. */
+{
+struct slName *chromList = hAllChromNames();
+struct slName *chromPtr = NULL;
+long long total = 0;
+
+slSort(&chromList, chromSlNameCmp);
+for (chromPtr = chromList;  chromPtr != NULL;  chromPtr = chromPtr->next)
+    {
+    unsigned size = hChromSize(chromPtr->name);
+    cgiSimpleTableRowStart();
+    cgiSimpleTableFieldStart();
+    printf("<A HREF=\"%s?%s=%u&position=%s\">%s</A>",
+	   hgTracksName(), cartSessionVarName(), cartSessionId(cart),
+	   chromPtr->name, chromPtr->name);
+    cgiTableFieldEnd();
+    cgiSimpleTableFieldStart();
+    printLongWithCommas(stdout, size);
+    cgiTableFieldEnd();
+    cgiTableRowEnd();
+    total += size;
+    }
+chromInfoTotalRow(total);
+slFreeList(&chromList);
+}
+
+void chromInfoRowsNonChrom()
+/* Make table rows of non-chromosomal chromInfo name & size, sorted by size. */
+{
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr = NULL;
+char **row = NULL;
+long long total = 0;
+
+sr = sqlGetResult(conn, "select chrom,size from chromInfo order by size desc");
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    unsigned size = sqlUnsigned(row[1]);
+    cgiSimpleTableRowStart();
+    cgiSimpleTableFieldStart();
+    printf("<A HREF=\"%s?%s=%u&position=%s\">%s</A>",
+	   hgTracksName(), cartSessionVarName(), cartSessionId(cart),
+	   row[0], row[0]);
+    cgiTableFieldEnd();
+    cgiSimpleTableFieldStart();
+    printLongWithCommas(stdout, size);
+    cgiTableFieldEnd();
+    cgiTableRowEnd();
+    total += size;
+    }
+chromInfoTotalRow(total);
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+}
+
+void chromInfoPage()
+/* Show list of chromosomes (or scaffolds, etc) on which this db is based. */
+{
+char *position = cartUsualString(cart, "position", hDefaultPos(database));
+struct dyString *title = dyStringNew(512);
+dyStringPrintf(title, "%s %s (%s) Browser Sequences",
+	       hOrganism(database), hFreezeFromDb(database), database);
+webStartWrapper(cart, title->string, NULL, FALSE, FALSE);
+printf("<FORM ACTION=\"%s\" NAME=\"posForm\" METHOD=GET>\n", hgTracksName());
+cartSaveSession(cart);
+
+puts("Enter a position, or click on a sequence name to view the entire "
+     "sequence in the genome browser.<P>");
+puts("position ");
+hTextVar("position", addCommasToPos(position), 30);
+cgiMakeButton("Submit", "Submit");
+puts("<P>");
+
+hTableStart();
+cgiSimpleTableRowStart();
+cgiSimpleTableFieldStart();
+puts("Sequence name &nbsp;");
+cgiTableFieldEnd();
+cgiSimpleTableFieldStart();
+puts("Length (bp) including gaps &nbsp;");
+cgiTableFieldEnd();
+cgiTableRowEnd();
+
+if (startsWith("chr", hDefaultChrom()))
+    chromInfoRowsChrom();
+else
+    chromInfoRowsNonChrom();
+
+hTableEnd();
+
+hgPositionsHelpHtml(organism, database);
+puts("</FORM>");
+dyStringFree(&title);
+}
+
 void resetVars()
 /* Reset vars except for position and database. */
 {
@@ -9298,6 +9498,11 @@ if (cartVarExists(cart, "customTrackPage"))
     {
     cartRemove( cart, "customTrackPage");
     customTrackPage();
+    }
+else if (cartVarExists(cart, "chromInfoPage"))
+    {
+    cartRemove(cart, "chromInfoPage");
+    chromInfoPage();
     }
 else
     {

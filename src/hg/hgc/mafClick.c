@@ -12,7 +12,7 @@
 #include "hui.h"
 #include "hCommon.h"
 
-static char const rcsid[] = "$Id: mafClick.c,v 1.17 2004/08/26 17:32:53 hiram Exp $";
+static char const rcsid[] = "$Id: mafClick.c,v 1.18 2004/09/11 00:12:19 hiram Exp $";
 
 /* Javascript to help make a selection from a drop-down
  * go back to the server. */
@@ -317,7 +317,7 @@ else
 
 	if (wigTable)
 	    {
-	    char *chrom = cgiString("c");
+	    char *chrom = cartCgiUsualString(cart, "c", "chr7");
 	    char other[128];
 	    char *pix = cartUsualString(cart, "pix", DEFAULT_PIX_WIDTH );
 	    safef(other, ArraySize(other), "%d", winStart);

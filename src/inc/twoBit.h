@@ -74,6 +74,9 @@ struct dnaSeq *twoBitLoadAll(char *spec);
  * or
  *    file/path/name:seqName */
 
+struct slName *twoBitSeqNames(char *fileName);
+/* Get list of all sequences in twoBit file. */
+
 struct twoBit *twoBitFromDnaSeq(struct dnaSeq *seq, boolean doMask);
 /* Convert dnaSeq representation in memory to twoBit representation.
  * If doMask is true interpret lower-case letters as masked. */

@@ -283,6 +283,8 @@ char *filterFieldVarName(char *db, char *table, char *field, char *type);
 #define filterPatternVar "pat"
 #define filterRawLogicVar "rawLogic"
 #define filterRawQueryVar "rawQuery"
+#define filterDataValueVar "dataValue"
+#define filterMaxOutputVar "maxOutput"
 
 /* --------- Functions related to intersecting. --------------- */
 
@@ -383,6 +385,7 @@ boolean anyIntersection();
 #define outCustomTrack "customTrack"
 #define outHyperlinks "hyperlinks"
 #define outWigData "wigData"
+#define outWigBed "wigBed"
 
 /* --------- Identifier list handling stuff. ------------ */
 
@@ -415,8 +418,11 @@ void stringStatRow(char *label, char *val);
 boolean isWiggle(char *db, char *table);
 /* Return TRUE if db.table is a wiggle. */
 
+void doOutWigBed(struct trackDb *track, struct sqlConnection *conn);
+/* Return wiggle data in bed format. */
+
 void doOutWigData(struct trackDb *track, struct sqlConnection *conn);
-/* Save as wiggle data. */
+/* Return wiggle data in variableStep format. */
 
 void doSummaryStatsWiggle(struct sqlConnection *conn);
 /* Put up page showing summary stats for wiggle track. */

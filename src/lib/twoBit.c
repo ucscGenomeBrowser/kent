@@ -7,7 +7,7 @@
 #include "obscure.h"
 #include "twoBit.h"
 
-static char const rcsid[] = "$Id: twoBit.c,v 1.9 2004/07/18 19:49:23 markd Exp $";
+static char const rcsid[] = "$Id: twoBit.c,v 1.10 2004/09/04 15:49:27 kent Exp $";
 
 static int countBlocksOfN(char *s, int size)
 /* Count number of blocks of N's (or n's) in s. */
@@ -622,6 +622,22 @@ else
     slReverse(&list);
     }
 twoBitClose(&tbf);
+return list;
+}
+
+struct slName *twoBitSeqNames(char *fileName)
+/* Get list of all sequences in twoBit file. */
+{
+struct twoBitFile *tbf = twoBitOpen(fileName);
+struct twoBitIndex *index;
+struct slName *name, *list = NULL;
+for (index = tbf->indexList; index != NULL; index = index->next)
+    {
+    name = slNameNew(index->name);
+    slAddHead(&list, name);
+    }
+twoBitClose(&tbf);
+slReverse(&list);
 return list;
 }
 

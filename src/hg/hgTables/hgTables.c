@@ -20,7 +20,7 @@
 #include "hgTables.h"
 #include "joiner.h"
 
-static char const rcsid[] = "$Id: hgTables.c,v 1.57 2004/08/28 23:42:15 kent Exp $";
+static char const rcsid[] = "$Id: hgTables.c,v 1.58 2004/09/03 16:57:18 hiram Exp $";
 
 
 void usage()
@@ -770,6 +770,8 @@ else if (sameString(output, outHyperlinks))
     doOutHyperlinks(table, conn);
 else if (sameString(output, outWigData))
     doOutWigData(track, conn);
+else if (sameString(output, outWigBed))
+    doOutWigBed(track, conn);
 else
     errAbort("Don't know how to handle %s output yet", output);
 }

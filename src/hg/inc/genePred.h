@@ -70,6 +70,12 @@ struct genePred
                                    * available. */
 };
 
+/* Standard value to use for insertMergeSize when creating genePred.
+ * Set to 8 due to microdeletions.
+ */
+#define genePredStdInsertMergeSize 8
+
+
 #define GENEPRED_NUM_COLS 10  /* number of columns in a genePred */
 #define GENEPREDX_NUM_COLS 15  /* max number of columns in extended genePred */
 
@@ -155,19 +161,19 @@ struct genePred *genePredFromPsl2(struct psl *psl, unsigned optFields,
                                   struct genbankCds* cds, int insertMergeSize);
 /* Convert a PSL of an RNA alignment to a genePred, converting a genbank CDS
  * specification string to genomic coordinates. Small inserts, no more than
- * insertMergeSize, will be dropped and the blocks merged. A negative
- * insertMergeSize disables merging of blocks. optFields is a set from
- * genePredFields, indicated what fields to create.  Zero-length CDS, or null
- * cds, creates without CDS annotation.  If cds is null, it will set status
- * fields to cdsNone.  */
+ * insertMergeSize, will be dropped and the blocks merged. Use
+ * genePredStdInsertMergeSize if you don't know better. A negative
+ * insertMergeSize disables merging of blocks.  This differs from specifying
+ * zero in that adjacent blocks will not be merged. The optfields field is a
+ * set from genePredFields, indicated what fields to create.  Zero-length CDS,
+ * or null cds, creates without CDS annotation.  If cds is null, it will set
+ * status fields to cdsNone.  */
 
 struct genePred *genePredFromPsl(struct psl *psl, int cdsStart, int cdsEnd,
                                  int insertMergeSize);
-/* Compatibility function, genePredFromPsl2 is prefered. Convert a PSL of an
- * RNA alignment to a genePred, converting a genbank CDS specification string
- * to genomic coordinates. Small inserts, no more than insertMergeSize, will
- * be dropped and the blocks merged.  CDS start or end of -1 creates without
- * CDS annotation*/
+/* Compatibility function, genePredFromPsl2 is prefered.  See that function's
+ * documentation for details.This calls genePredFromPsl2 with no options.
+ */
 
 char* genePredGetCreateSql(char* table, unsigned extFields, unsigned options);
 /* Get SQL required to create a genePred table. extFields is a bit set
@@ -192,6 +198,13 @@ boolean genePredCdsExon(struct genePred *gp, int iExon, int *startPtr, int *endP
 
 boolean genePredCdsIntersect(struct genePred *gp, int start, int end);
 /* Check if a range intersects the CDS */
+
+int genePredCheck(char *desc, FILE* out, int chromSize, 
+                  struct genePred* gp);
+/* Validate a genePred for consistency.  desc is printed the error messages
+ * to file out (open /dev/null to discard).  chromSize should contain
+ * size of chromosome, or 0 if chrom is not valid, or -1 to not check
+ * chromosome bounds. Returns count of errors. */
 
 #endif /* GENEPRED_H */
 

@@ -11,7 +11,7 @@
 #include "common.h"
 #include "localmem.h"
 
-static char const rcsid[] = "$Id: localmem.c,v 1.7 2003/09/30 00:22:25 kent Exp $";
+static char const rcsid[] = "$Id: localmem.c,v 1.8 2004/09/07 15:13:51 kent Exp $";
 
 struct lm
     {
@@ -116,9 +116,9 @@ struct slName *lmSlName(struct lm *lm, char *name)
 /* Return slName in memory. */
 {
 struct slName *n;
-int size = sizeof(*n) + strlen(name);
+int size = sizeof(*n) + strlen(name) + 1;
 n = lmAlloc(lm, size);
-memcpy(n->name, name, size);
+strcpy(n->name, name);
 return n;
 }
 

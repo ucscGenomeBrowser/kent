@@ -7,31 +7,31 @@
 #include "portable.h"
 #include "hgColors.h"
 
-static char const rcsid[] = "$Id: wigDataStream.c,v 1.33 2004/08/31 22:06:33 hiram Exp $";
+static char const rcsid[] = "$Id: wigDataStream.c,v 1.39 2004/09/03 22:15:18 hiram Exp $";
 
 /*	PRIVATE	METHODS	************************************************/
-static void addConstraint(struct wiggleDataStream *wDS, char *left, char *right)
+static void addConstraint(struct wiggleDataStream *wds, char *left, char *right)
 {
 struct dyString *constrain = dyStringNew(256);
-if (wDS->sqlConstraint)
-    dyStringPrintf(constrain, "%s AND ", wDS->sqlConstraint);
+if (wds->sqlConstraint)
+    dyStringPrintf(constrain, "%s AND ", wds->sqlConstraint);
 
 dyStringPrintf(constrain, "%s \"%s\"", left, right);
 
-freeMem(wDS->sqlConstraint);
-wDS->sqlConstraint = cloneString(constrain->string);
+freeMem(wds->sqlConstraint);
+wds->sqlConstraint = cloneString(constrain->string);
 dyStringFree(&constrain);
 }
 
-static boolean nextRow(struct wiggleDataStream *wDS, char *row[], int maxRow)
+static boolean nextRow(struct wiggleDataStream *wds, char *row[], int maxRow)
 /*	read next wig row from sql query or lineFile
  *	FALSE return on no more data	*/
 {
 int numCols;
 
-if (wDS->isFile)
+if (wds->isFile)
     {
-    numCols = lineFileChopNextTab(wDS->lf, row, maxRow);
+    numCols = lineFileChopNextTab(wds->lf, row, maxRow);
     if (numCols != maxRow) return FALSE;
     verbose(VERBOSE_PER_VALUE_LEVEL, "#\tnumCols = %d, row[0]: %s, row[1]: %s, row[%d]: %s\n",
 	numCols, row[0], row[1], maxRow-1, row[maxRow-1]);
@@ -40,7 +40,7 @@ else
     {
     int i;
     char **sqlRow;
-    sqlRow = sqlNextRow(wDS->sr);
+    sqlRow = sqlNextRow(wds->sr);
     if (sqlRow == NULL)
 	return FALSE;
     /*	skip the bin column sqlRow[0]	*/
@@ -52,49 +52,49 @@ else
 return TRUE;
 }
 
-static void openWibFile(struct wiggleDataStream *wDS, char *file)
+static void openWibFile(struct wiggleDataStream *wds, char *file)
 {
-if (wDS->wibFile)
+if (wds->wibFile)
     {		/*	close and open only if different */
-    if (differentString(wDS->wibFile,file))
+    if (differentString(wds->wibFile,file))
 	{
-	if (wDS->wibFH > 0)
-	    close(wDS->wibFH);
-	freeMem(wDS->wibFile);
-	wDS->wibFile = cloneString(file);
-	wDS->wibFH = open(wDS->wibFile, O_RDONLY);
-	if (wDS->wibFH == -1)
-	    errAbort("openWibFile: failed to open %s", wDS->wibFile);
+	if (wds->wibFH > 0)
+	    close(wds->wibFH);
+	freeMem(wds->wibFile);
+	wds->wibFile = cloneString(file);
+	wds->wibFH = open(wds->wibFile, O_RDONLY);
+	if (wds->wibFH == -1)
+	    errAbort("openWibFile: failed to open %s", wds->wibFile);
 	}
     }
 else
     {
-    wDS->wibFile = cloneString(file);	/* first time */
-    wDS->wibFH = open(wDS->wibFile, O_RDONLY);
-    if (wDS->wibFH == -1)
-	errAbort("openWibFile: failed to open %s", wDS->wibFile);
+    wds->wibFile = cloneString(file);	/* first time */
+    wds->wibFH = open(wds->wibFile, O_RDONLY);
+    if (wds->wibFH == -1)
+	errAbort("openWibFile: failed to open %s", wds->wibFile);
     }
 }
 
-static void setCompareByte(struct wiggleDataStream *wDS,
+static void setCompareByte(struct wiggleDataStream *wds,
 	double lower, double range)
 {
-if (wDS->limit_0 < lower)
-    wDS->ucLowerLimit = 0;
-else if (wDS->limit_0 > (lower+range))
-    wDS->ucLowerLimit = MAX_WIG_VALUE;
+if (wds->limit_0 < lower)
+    wds->ucLowerLimit = 0;
+else if (wds->limit_0 > (lower+range))
+    wds->ucLowerLimit = MAX_WIG_VALUE;
 else
-    wDS->ucLowerLimit = MAX_WIG_VALUE * ((wDS->limit_0 - lower)/range);
+    wds->ucLowerLimit = MAX_WIG_VALUE * ((wds->limit_0 - lower)/range);
 
-if (wDS->limit_1 < lower)
-    wDS->ucUpperLimit = 0;
-else if (wDS->limit_1 > (lower+range))
-    wDS->ucUpperLimit = MAX_WIG_VALUE;
+if (wds->limit_1 < lower)
+    wds->ucUpperLimit = 0;
+else if (wds->limit_1 > (lower+range))
+    wds->ucUpperLimit = MAX_WIG_VALUE + 1;	/* +1 because in range is [) */
 else
-    wDS->ucUpperLimit = MAX_WIG_VALUE * ((wDS->limit_1 - lower)/range);
+    wds->ucUpperLimit = MAX_WIG_VALUE * ((wds->limit_1 - lower)/range);
 
 verbose(VERBOSE_HIGHEST, "#\twigSetCompareByte: [%g : %g] becomes [%d : %d]\n",
-	lower, lower+range, wDS->ucLowerLimit, wDS->ucUpperLimit);
+	lower, lower+range, wds->ucLowerLimit, wds->ucUpperLimit);
 }
 
 static void resetStats(float *lowerLimit, float *upperLimit, float *sumData,
@@ -110,7 +110,7 @@ static void resetStats(float *lowerLimit, float *upperLimit, float *sumData,
 *chromEnd = 0;
 }
 
-static void accumStats(struct wiggleDataStream *wDS, float lowerLimit,
+static void accumStats(struct wiggleDataStream *wds, float lowerLimit,
 	float upperLimit, float sumData, float sumSquares,
 	unsigned statsCount, long int chromStart,
 	long int chromEnd)
@@ -120,10 +120,10 @@ if (statsCount > 0)
     struct wiggleStats *ws;
 
     AllocVar(ws);
-    ws->chrom = cloneString(wDS->currentChrom);
+    ws->chrom = cloneString(wds->currentChrom);
     ws->chromStart = chromStart;
     ws->chromEnd = chromEnd;
-    ws->span = wDS->currentSpan;
+    ws->span = wds->currentSpan;
     ws->count = statsCount;
     ws->lowerLimit = lowerLimit;
     ws->dataRange = upperLimit - lowerLimit;
@@ -138,7 +138,7 @@ if (statsCount > 0)
 	if (ws->variance > 0.0)
 	    ws->stddev = sqrt(ws->variance);
 	}
-    slAddHead(&wDS->stats, ws);
+    slAddHead(&wds->stats, ws);
     }
 }
 
@@ -158,87 +158,87 @@ bed->name = cloneString(name);
 return bed;
 }
 
-static void closeWibFile(struct wiggleDataStream *wDS)
+static void closeWibFile(struct wiggleDataStream *wds)
 /*	if there is a Wib file open, close it	*/
 {
-if (wDS->wibFH > 0)
-    close(wDS->wibFH);
-wDS->wibFH = -1;
-if (wDS->wibFile)
-    freez(&wDS->wibFile);
+if (wds->wibFH > 0)
+    close(wds->wibFH);
+wds->wibFH = -1;
+if (wds->wibFile)
+    freez(&wds->wibFile);
 }
 
-static void closeWigConn(struct wiggleDataStream *wDS)
+static void closeWigConn(struct wiggleDataStream *wds)
 {
-lineFileClose(&wDS->lf);
-closeWibFile(wDS);	/*	closes only if it is open	*/
-if (wDS->conn)
+lineFileClose(&wds->lf);
+closeWibFile(wds);	/*	closes only if it is open	*/
+if (wds->conn)
     {
-    sqlFreeResult(&wDS->sr);
-    sqlDisconnect(&wDS->conn);
+    sqlFreeResult(&wds->sr);
+    sqlDisconnect(&wds->conn);
     }
-if (wDS->sqlConstraint)
-    freez(&wDS->sqlConstraint);	/*	always reconstructed at open time */
+if (wds->sqlConstraint)
+    freez(&wds->sqlConstraint);	/*	always reconstructed at open time */
 }
 
-static void openWigConn(struct wiggleDataStream *wDS)
+static void openWigConn(struct wiggleDataStream *wds)
 /*	open connection to db or to a file, prepare SQL result for db */
 {
-if (!wDS->tblName)
+if (!wds->tblName)
   errAbort("openWigConn: table name missing.  setDbTable before open.");
 
-if (wDS->isFile)
+if (wds->isFile)
     {
     struct dyString *fileName = dyStringNew(256);
-    lineFileClose(&wDS->lf);	/*	possibly a previous file */
+    lineFileClose(&wds->lf);	/*	possibly a previous file */
     /*	don't add .wig if it is already there	*/
-    if (endsWith(wDS->tblName,".wig"))
-	dyStringPrintf(fileName, "%s", wDS->tblName);
+    if (endsWith(wds->tblName,".wig"))
+	dyStringPrintf(fileName, "%s", wds->tblName);
     else
-	dyStringPrintf(fileName, "%s.wig", wDS->tblName);
-    wDS->lf = lineFileOpen(fileName->string, TRUE);
+	dyStringPrintf(fileName, "%s.wig", wds->tblName);
+    wds->lf = lineFileOpen(fileName->string, TRUE);
     dyStringFree(&fileName);
     }
 else
     {
     struct dyString *query = dyStringNew(256);
-    dyStringPrintf(query, "select * from %s", wDS->tblName);
-    if (wDS->chrName)
-	addConstraint(wDS, "chrom =", wDS->chrName);
-    if (wDS->winEnd)
+    dyStringPrintf(query, "select * from %s", wds->tblName);
+    if (wds->chrName)
+	addConstraint(wds, "chrom =", wds->chrName);
+    if (wds->winEnd)
 	{
 	char limits[256];
-	safef(limits, ArraySize(limits), "%d", wDS->winEnd );
-	addConstraint(wDS, "chromStart <", limits);
-	safef(limits, ArraySize(limits), "%d", wDS->winStart );
-	addConstraint(wDS, "chromEnd >", limits);
+	safef(limits, ArraySize(limits), "%d", wds->winEnd );
+	addConstraint(wds, "chromStart <", limits);
+	safef(limits, ArraySize(limits), "%d", wds->winStart );
+	addConstraint(wds, "chromEnd >", limits);
 	}
-    if (wDS->spanLimit)
+    if (wds->spanLimit)
 	{
 	struct dyString *dyTmp = dyStringNew(256);
-	dyStringPrintf(dyTmp, "%u", wDS->spanLimit);
-	addConstraint(wDS, "span =", dyTmp->string);
+	dyStringPrintf(dyTmp, "%u", wds->spanLimit);
+	addConstraint(wds, "span =", dyTmp->string);
 	dyStringFree(&dyTmp);
 	}
-    if (wDS->sqlConstraint)
+    if (wds->sqlConstraint)
 	dyStringPrintf(query, " where (%s)",
-	    wDS->sqlConstraint);
+	    wds->sqlConstraint);
     dyStringPrintf(query, " order by ");
-    if (!wDS->chrName)
+    if (!wds->chrName)
 	dyStringPrintf(query, " chrom ASC,");
-    if (!wDS->spanLimit)
+    if (!wds->spanLimit)
 	dyStringPrintf(query, " span ASC,");
     dyStringPrintf(query, " chromStart ASC");
 
     verbose(VERBOSE_SQL_ROW_LEVEL, "#\t%s\n", query->string);
-    if (!wDS->conn)
-	wDS->conn = sqlConnect(wDS->db);
-    wDS->sr = sqlGetResult(wDS->conn,query->string);
+    if (!wds->conn)
+	wds->conn = sqlConnect(wds->db);
+    wds->sr = sqlGetResult(wds->conn,query->string);
     }
 }
 
 
-static void setDbTable(struct wiggleDataStream *wDS, char * db, char *table)
+static void setDbTable(struct wiggleDataStream *wds, char * db, char *table)
 /*	sets the DB and table name, determines if table is a file or not */
 {
 struct dyString *fileName = dyStringNew(256);
@@ -254,54 +254,69 @@ else
 
 /*	file present ignores db specification	*/
 if (fileExists(fileName->string))
-    wDS->isFile = TRUE;
+    wds->isFile = TRUE;
 else
     {
     if (db)			/*	db can be NULL	*/
-	wDS->isFile = FALSE;	/*	assume it will be in the db */
+	wds->isFile = FALSE;	/*	assume it will be in the db */
     else
 	errAbort("setDbTable: db is NULL and can not find file %s",
 	    fileName->string);
     }
 dyStringFree(&fileName);
 
-freeMem(wDS->db);		/*	potentially previously existing	*/
-if (!wDS->isFile && db)
-	wDS->db = cloneString(db);
-freeMem(wDS->tblName);		/*	potentially previously existing */
-wDS->tblName = cloneString(table);
+freeMem(wds->db);		/*	potentially previously existing	*/
+if (!wds->isFile && db)
+	wds->db = cloneString(db);
+freeMem(wds->tblName);		/*	potentially previously existing */
+wds->tblName = cloneString(table);
 }
 
-static void outputIdentification(struct wiggleDataStream *wDS, FILE *fh)
+static char *dateTimeStamp()
 {
-if (wDS->db)
-    fprintf (fh, "#\tdb: '%s', track: '%s'\n", wDS->db, wDS->tblName);
-if (wDS->isFile)
-    fprintf (fh, "#\tfrom file input, track: '%s'\n", wDS->tblName);
+time_t now = time(NULL);
+char *dateTime;
+
+dateTime = sqlUnixTimeToDate(&now,TRUE);	/* TRUE == gmTime */
+return dateTime;
 }
 
-static void showConstraints(struct wiggleDataStream *wDS, FILE *fh)
+static void outputIdentification(struct wiggleDataStream *wds, FILE *fh)
 {
-if (wDS->chrName)
-    fprintf (fh, "#\tchrom specified: %s\n", wDS->chrName);
-if (wDS->spanLimit)
-    fprintf (fh, "#\tspan specified: %u\n", wDS->spanLimit);
-if (wDS->winEnd)
+char *dateStamp = dateTimeStamp();
+
+if (wds->db)
+    fprintf (fh, "#\tdb: '%s', track: '%s', output date: %s UTC\n",
+	wds->db, wds->tblName, dateStamp);
+if (wds->isFile)
+    fprintf (fh, "#\tfrom file input, output date: %s UTC\n",
+	dateStamp);
+
+freeMem(dateStamp);
+}
+
+static void showConstraints(struct wiggleDataStream *wds, FILE *fh)
+{
+if (wds->chrName)
+    fprintf (fh, "#\tchrom specified: %s\n", wds->chrName);
+if (wds->spanLimit)
+    fprintf (fh, "#\tspan specified: %u\n", wds->spanLimit);
+if (wds->winEnd)
     fprintf (fh, "#\tposition specified: %d-%d\n",
-	wDS->winStart+1, wDS->winEnd);
-if (wDS->bedConstrained && !wDS->chrName)
+	wds->winStart+1, wds->winEnd);
+if (wds->bedConstrained && !wds->chrName)
     fprintf (fh, "#\tconstrained by chr names and coordinates in bed list\n");
-else if (wDS->bedConstrained)
+else if (wds->bedConstrained)
     fprintf (fh, "#\tconstrained by coordinates in bed list\n");
-if (wDS->useDataConstraint)
+if (wds->useDataConstraint)
     {
-    if ((wDS->dataConstraint) &&
-	sameWord(wDS->dataConstraint,"in range"))
-	    fprintf (fh, "#\tdata values in range [%g : %g]\n",
-		    wDS->limit_0, wDS->limit_1);
+    if ((wds->dataConstraint) &&
+	sameWord(wds->dataConstraint,"in range"))
+	    fprintf (fh, "#\tdata values in range [%g : %g)\n",
+		    wds->limit_0, wds->limit_1);
     else
 	    fprintf (fh, "#\tdata values %s %g\n",
-		    wDS->dataConstraint, wDS->limit_0);
+		    wds->dataConstraint, wds->limit_0);
     }
 }
 
@@ -378,14 +393,14 @@ return dif;
 }
 
 /*	currently this dataArrayOut is private, but it may become public */
-static void dataArrayOut(struct wiggleDataStream *wDS, char *fileName,
+static void dataArrayOut(struct wiggleDataStream *wds, char *fileName,
 	boolean rawDataOut, boolean sort)
 /*	print to fileName ascii data values from the first list element
  *	of the data "array" results	*/
 {
 FILE * fh;
 fh = mustOpen(fileName, "w");
-if (wDS->array)
+if (wds->array)
     {
     unsigned pointCount;
     unsigned chromPosition;
@@ -393,12 +408,12 @@ if (wDS->array)
     float *dataPtr;
 
     if (sort)
-	slSort(&wDS->array, arrayDataCmp);
+	slSort(&wds->array, arrayDataCmp);
 
-    dataPtr = wDS->array->data;
+    dataPtr = wds->array->data;
     /*	user visible coordinates are 1 relative	*/
-    chromPosition = wDS->array->winStart + 1;
-    pointCount = wDS->array->winEnd - wDS->array->winStart;
+    chromPosition = wds->array->winStart + 1;
+    pointCount = wds->array->winEnd - wds->array->winStart;
     for (inx = 0; inx < pointCount; ++inx)
 	{
 	if (!isnan(*dataPtr))
@@ -417,7 +432,7 @@ else
     {
     if (!rawDataOut)
 	{
-	showConstraints(wDS, fh);
+	showConstraints(wds, fh);
 	fprintf(fh, "#\tdataArray: no data points found\n");
 	}
     }
@@ -425,27 +440,27 @@ carefulClose(&fh);
 }	/*	static void dataArrayOut()	*/
 
 /*	PUBLIC	METHODS   **************************************************/
-static void setMaxOutput(struct wiggleDataStream *wDS,
+static void setMaxOutput(struct wiggleDataStream *wds,
 	unsigned long long maxOut)
 /*	set the maximum # of values to return */
 {
-wDS->maxOutput = maxOut;
-verbose(VERBOSE_CHR_LEVEL,"#\tsetMaxOutput: %llu\n", wDS->maxOutput);
+wds->maxOutput = maxOut;
+verbose(VERBOSE_CHR_LEVEL,"#\tsetMaxOutput: %llu\n", wds->maxOutput);
 }
 
-static void setPositionConstraint(struct wiggleDataStream *wDS,
+static void setPositionConstraint(struct wiggleDataStream *wds,
 	int winStart, int winEnd)
 /*	both 0 means no constraint	*/
 {
-if ((!wDS->isFile) && wDS->conn)
+if ((!wds->isFile) && wds->conn)
     {	/*	this should not happen	*/
     errAbort("setPositionConstraint: not allowed after openWigConn()");
     }
 /*	keep them in proper order	*/
 if (winStart > winEnd)
     {
-    wDS->winStart = winEnd;
-    wDS->winEnd = winStart;
+    wds->winStart = winEnd;
+    wds->winEnd = winStart;
     }
 else if ((winEnd > 0) && (winStart == winEnd))
     errAbort(
@@ -453,49 +468,49 @@ else if ((winEnd > 0) && (winStart == winEnd))
 	    winStart, winEnd);
 else
     {
-    wDS->winStart = winStart;
-    wDS->winEnd = winEnd;
+    wds->winStart = winStart;
+    wds->winEnd = winEnd;
     }
-verbose(VERBOSE_CHR_LEVEL,"#\tsetPosition: %d - %d\n", wDS->winStart, wDS->winEnd);
+verbose(VERBOSE_CHR_LEVEL,"#\tsetPosition: %d - %d\n", wds->winStart, wds->winEnd);
 }
 
-static void setChromConstraint(struct wiggleDataStream *wDS, char *chr)
+static void setChromConstraint(struct wiggleDataStream *wds, char *chr)
 {
-freeMem(wDS->chrName);
-wDS->chrName = cloneString(chr);
+freeMem(wds->chrName);
+wds->chrName = cloneString(chr);
 }
 
-static void setSpanConstraint(struct wiggleDataStream *wDS, unsigned span)
+static void setSpanConstraint(struct wiggleDataStream *wds, unsigned span)
 {
-wDS->spanLimit = span;
+wds->spanLimit = span;
 }
 
-static void freeConstraints(struct wiggleDataStream *wDS)
+static void freeConstraints(struct wiggleDataStream *wds)
 /*	free the position, span, chrName and data constraints */
 {
-wDS->spanLimit = 0;
-wDS->setPositionConstraint(wDS, 0, 0);
-if (wDS->chrName)
-    freez(&wDS->chrName);
-if (wDS->dataConstraint)
-    freez(&wDS->dataConstraint);
-wDS->wigCmpSwitch = wigNoOp_e;
-wDS->limit_0 = wDS->limit_1 = 0.0;
-wDS->ucLowerLimit = wDS->ucUpperLimit = 0;
-if (wDS->sqlConstraint)
-    freez(&wDS->sqlConstraint);
-wDS->useDataConstraint = FALSE;
-wDS->bedConstrained = FALSE;
+wds->spanLimit = 0;
+wds->setPositionConstraint(wds, 0, 0);
+if (wds->chrName)
+    freez(&wds->chrName);
+if (wds->dataConstraint)
+    freez(&wds->dataConstraint);
+wds->wigCmpSwitch = wigNoOp_e;
+wds->limit_0 = wds->limit_1 = 0.0;
+wds->ucLowerLimit = wds->ucUpperLimit = 0;
+if (wds->sqlConstraint)
+    freez(&wds->sqlConstraint);
+wds->useDataConstraint = FALSE;
+wds->bedConstrained = FALSE;
 }
 
-static void freeAscii(struct wiggleDataStream *wDS)
+static void freeAscii(struct wiggleDataStream *wds)
 /*	free the wiggleAsciiData list	*/
 {
-if (wDS->ascii)
+if (wds->ascii)
     {
     struct wigAsciiData *el, *next;
 
-    for (el = wDS->ascii; el != NULL; el = next)
+    for (el = wds->ascii; el != NULL; el = next)
 	{
 	next = el->next;
 	freeMem(el->chrom);
@@ -503,24 +518,24 @@ if (wDS->ascii)
 	freeMem(el);
 	}
     }
-wDS->ascii = NULL;
+wds->ascii = NULL;
 }
 
-static void freeBed(struct wiggleDataStream *wDS)
+static void freeBed(struct wiggleDataStream *wds)
 /*	free the wiggle bed list	*/
 {
-bedFreeList(&wDS->bed);
+bedFreeList(&wds->bed);
 }
 
-static void freeArray(struct wiggleDataStream *wDS)
+static void freeArray(struct wiggleDataStream *wds)
 /*	free the wiggleArray list	*/
 {
-if (wDS->array)
+if (wds->array)
     {
     struct wiggleArray *wa;
     struct wiggleArray *next;
 
-    for (wa = wDS->array; wa; wa = next)
+    for (wa = wds->array; wa; wa = next)
 	{
 	next = wa->next;
 	freeMem(wa->chrom);
@@ -528,37 +543,38 @@ if (wDS->array)
 	freeMem(wa);
 	}
     }
-wDS->array = NULL;
+wds->array = NULL;
 }
 
-static void freeStats(struct wiggleDataStream *wDS)
+static void freeStats(struct wiggleDataStream *wds)
 /*	free the wiggleStats list	*/
 {
-if (wDS->stats)
+if (wds->stats)
     {
     struct wiggleStats *el, *next;
 
-    for (el = wDS->stats; el != NULL; el = next)
+    for (el = wds->stats; el != NULL; el = next)
 	{
 	next = el->next;
 	freeMem(el->chrom);
 	freeMem(el);
 	}
     }
-wDS->stats = NULL;
+wds->stats = NULL;
 }
 
 /*	the double comparison functions
  *	used to check the wiggle SQL rows which are a bucket of values
  *	between *lower and *upper.  Therefore, the value to be checked
- *	which is in wDS->limit_0 (and wDS->limit_1 in the case of
+ *	which is in wds->limit_0 (and wds->limit_1 in the case of
  *	a range) needs to be compared to the bucket of values.  If it
  *	falls within the specified range, then it is considered to be in
  *	that bucket.
  */
-/* InRange means the SQL row begins before the limit_1 (lower<=limit_1)
+/* InRange means the SQL row begins before the limit_1 (lower<limit_1)
  *	 and the row ends after the limit_0 (upper>=limit_0)
  *	i.e. there is at least some overlap of the range
+ *	This is a half open inquiry: [ limit_0 : limit_1 )
  */
 /* LessThan means:  the row begins before the limit_0 (value<limit_0)
  *	i.e. there are data values below the specified limit_0
@@ -583,53 +599,60 @@ wDS->stats = NULL;
  *	byte values
  */
 
-static void wigSetCompareFunctions(struct wiggleDataStream *wDS)
+static void wigSetCompareFunctions(struct wiggleDataStream *wds)
 {
-if (!wDS->dataConstraint)
+if (!wds->dataConstraint)
     return;
 
-if (sameWord(wDS->dataConstraint,"<"))
-    wDS->wigCmpSwitch = wigLessThan_e;
-else if (sameWord(wDS->dataConstraint,"<="))
-    wDS->wigCmpSwitch = wigLessEqual_e;
-else if (sameWord(wDS->dataConstraint,"="))
-    wDS->wigCmpSwitch = wigEqual_e;
-else if (sameWord(wDS->dataConstraint,"!="))
-    wDS->wigCmpSwitch = wigNotEqual_e;
-else if (sameWord(wDS->dataConstraint,">="))
-    wDS->wigCmpSwitch = wigGreaterEqual_e;
-else if (sameWord(wDS->dataConstraint,">"))
-    wDS->wigCmpSwitch = wigGreaterThan_e;
-else if (sameWord(wDS->dataConstraint,"in range"))
-    wDS->wigCmpSwitch = wigInRange_e;
+if (sameWord(wds->dataConstraint,"<"))
+    wds->wigCmpSwitch = wigLessThan_e;
+else if (sameWord(wds->dataConstraint,"<="))
+    wds->wigCmpSwitch = wigLessEqual_e;
+else if (sameWord(wds->dataConstraint,"="))
+    wds->wigCmpSwitch = wigEqual_e;
+else if (sameWord(wds->dataConstraint,"!="))
+    wds->wigCmpSwitch = wigNotEqual_e;
+else if (sameWord(wds->dataConstraint,">="))
+    wds->wigCmpSwitch = wigGreaterEqual_e;
+else if (sameWord(wds->dataConstraint,">"))
+    wds->wigCmpSwitch = wigGreaterThan_e;
+else if (sameWord(wds->dataConstraint,"in range"))
+    wds->wigCmpSwitch = wigInRange_e;
 else
     errAbort("wigSetCompareFunctions: unknown constraint: '%s'",
-	wDS->dataConstraint);
-verbose(VERBOSE_CHR_LEVEL, "#\twigSetCompareFunctions: set to '%s'\n", wDS->dataConstraint);
+	wds->dataConstraint);
+verbose(VERBOSE_CHR_LEVEL, "#\twigSetCompareFunctions: set to '%s'\n", wds->dataConstraint);
 }
 
-static void setDataConstraint(struct wiggleDataStream *wDS,
+static void setDataConstraint(struct wiggleDataStream *wds,
 	char *dataConstraint, double lowerLimit, double upperLimit)
 {
-wDS->dataConstraint = cloneString(dataConstraint);
-if (lowerLimit < upperLimit)
+wds->dataConstraint = cloneString(dataConstraint);
+if (differentWord(wds->dataConstraint, "in range"))
     {
-    wDS->limit_0 = lowerLimit;
-    wDS->limit_1 = upperLimit;
+    wds->limit_0 = lowerLimit;
     }
-else if (!(upperLimit < lowerLimit))
-  errAbort("wigSetDataConstraint: upper and lower limits are equal: %g == %g",
-	lowerLimit, upperLimit);
 else
     {
-    wDS->limit_0 = upperLimit;
-    wDS->limit_1 = lowerLimit;
+    if (lowerLimit < upperLimit)
+	{
+	wds->limit_0 = lowerLimit;
+	wds->limit_1 = upperLimit;
+	}
+    else if (!(upperLimit < lowerLimit))
+      errAbort("wigSetDataConstraint: upper and lower limits are equal: %g == %g",
+	    lowerLimit, upperLimit);
+    else
+	{
+	wds->limit_0 = upperLimit;
+	wds->limit_1 = lowerLimit;
+	}
     }
-wigSetCompareFunctions(wDS);
-wDS->useDataConstraint = TRUE;
+wigSetCompareFunctions(wds);
+wds->useDataConstraint = TRUE;
 }
 
-static unsigned long long getData(struct wiggleDataStream *wDS, char *db,
+static unsigned long long getData(struct wiggleDataStream *wds, char *db,
 	char *table, int operations)
 /* getData - read and return wiggle data	*/
 {
@@ -679,7 +702,7 @@ if (! (doNoOp || doAscii || doDataArray || doBed || doStats) )
     }
 
 /*	not going to do this without a range specified and a chr name */
-if (doDataArray && wDS->winEnd && wDS->chrName)
+if (doDataArray && wds->winEnd && wds->chrName)
     {
     long startTime = 0;
     struct wiggleArray *wa;
@@ -687,9 +710,9 @@ if (doDataArray && wDS->winEnd && wDS->chrName)
     size_t winSize;
 
     AllocVar(wa);
-    wa->chrom = cloneString(wDS->chrName);
-    wa->winStart = wDS->winStart;
-    wa->winEnd = wDS->winEnd;
+    wa->chrom = cloneString(wds->chrName);
+    wa->winStart = wds->winStart;
+    wa->winEnd = wds->winEnd;
     winSize = wa->winEnd - wa->winStart;
     size = sizeof(float) * winSize;
     /*	good enough for 500,000,000 bases	*/
@@ -703,7 +726,7 @@ if (doDataArray && wDS->winEnd && wDS->chrName)
 	*dataArrayPtr++ = NAN;
     dataArrayPtr = wa->data;
     dataArrayPosition = wa->winStart;
-    slAddHead(&wDS->array, wa);
+    slAddHead(&wds->array, wa);
     if (verboseLevel() >= VERBOSE_CHR_LEVEL)
 	{
 	long et = clock1000() - startTime;
@@ -724,10 +747,10 @@ else if (doDataArray && !(doNoOp || doAscii || doBed || doStats))
 	return(valuesMatched);	/*	NOTHING ASKED FOR ?	*/
     }
 
-setDbTable(wDS, db, table);
-openWigConn(wDS);
+setDbTable(wds, db, table);
+openWigConn(wds);
 
-if (doStats && wDS->useDataConstraint)
+if (doStats && wds->useDataConstraint)
     summaryOnly = FALSE;
 if (doDataArray)
     summaryOnly = FALSE;
@@ -735,7 +758,7 @@ if (doAscii)
     summaryOnly = FALSE;
 if (doBed)
     summaryOnly = FALSE;
-if (!wDS->isFile && wDS->winEnd)
+if (!wds->isFile && wds->winEnd)
     summaryOnly = FALSE;
 
 /*	nextRow() produces the next SQL row from either DB or file.
@@ -749,7 +772,7 @@ if (!wDS->isFile && wDS->winEnd)
  *	source file, as it should be.
  */
 	    
-for ( ; (!maxReached) && nextRow(wDS, row, WIGGLE_NUM_COLS);
+for ( ; (!maxReached) && nextRow(wds, row, WIGGLE_NUM_COLS);
 	wiggleFree(&wiggle) )
     {
     struct wigAsciiData *wigAscii = NULL;
@@ -759,16 +782,16 @@ for ( ; (!maxReached) && nextRow(wDS, row, WIGGLE_NUM_COLS);
     ++rowCount;
     wiggle = wiggleLoad(row);
     /*	constraints have to be done manually for files	*/
-    if (wDS->isFile)
+    if (wds->isFile)
 	{
 	/*	if chrName is not correct, or span is not correct,
 	 *	or outside of window, go to next SQL row
 	 */
 	if (
-	    ((wDS->chrName) && (differentString(wDS->chrName,wiggle->chrom))) ||
-	    ((wDS->spanLimit) && (wDS->spanLimit != wiggle->span)) ||
-	    ((wDS->winEnd) && ((wiggle->chromStart >= wDS->winEnd) ||
-		(wiggle->chromEnd < wDS->winStart)) )
+	    ((wds->chrName) && (differentString(wds->chrName,wiggle->chrom))) ||
+	    ((wds->spanLimit) && (wds->spanLimit != wiggle->span)) ||
+	    ((wds->winEnd) && ((wiggle->chromStart >= wds->winEnd) ||
+		(wiggle->chromEnd < wds->winStart)) )
 	   )
 	    {
 	    bytesSkipped += wiggle->count;
@@ -779,41 +802,41 @@ for ( ; (!maxReached) && nextRow(wDS, row, WIGGLE_NUM_COLS);
     chromPosition = wiggle->chromStart;
 
     /*	this will be true the very first time for both reasons	*/
-    if ( (wDS->currentSpan != wiggle->span) || 
-	    (wDS->currentChrom &&
-		differentString(wDS->currentChrom, wiggle->chrom)))
+    if ( (wds->currentSpan != wiggle->span) || 
+	    (wds->currentChrom &&
+		differentString(wds->currentChrom, wiggle->chrom)))
 	{
 	/*	if we have been working on one, then doBed	*/
-	if (!firstSpanDone && doBed && wDS->currentChrom)
+	if (!firstSpanDone && doBed && wds->currentChrom)
 	    {
 	    if (bedElEnd > bedElStart)
 		{
 		struct bed *bedEl;
-		bedEl = bedElement(wDS->currentChrom,
+		bedEl = bedElement(wds->currentChrom,
 			bedElStart, bedElEnd, ++bedElCount);
-		slAddHead(&wDS->bed, bedEl);
+		slAddHead(&wds->bed, bedEl);
 		}
 	    bedElStart = 0;
 	    bedElEnd = 0;
 	    bedElCount = 0;
 	    }
-	if (wDS->currentSpan && (wDS->currentSpan != wiggle->span))
+	if (wds->currentSpan && (wds->currentSpan != wiggle->span))
 	    firstSpanDone = TRUE;
-	if (wDS->currentChrom &&
-		differentString(wDS->currentChrom, wiggle->chrom))
+	if (wds->currentChrom &&
+		differentString(wds->currentChrom, wiggle->chrom))
 	    firstSpanDone = FALSE;
 	/*	if we have been working on one, then doStats	*/
-	if (doStats && wDS->currentChrom)
+	if (doStats && wds->currentChrom)
 	    {
-	    accumStats(wDS, lowerLimit, upperLimit, sumData, sumSquares,
+	    accumStats(wds, lowerLimit, upperLimit, sumData, sumSquares,
 		statsCount, chromStart, chromEnd);
 	    resetStats(&lowerLimit, &upperLimit, &sumData, &sumSquares,
 		&statsCount, &chromStart, &chromEnd);
 	    }
-	freeMem(wDS->currentChrom);
+	freeMem(wds->currentChrom);
 	/*	set them whether they are changing or not, doesn't matter */
-	wDS->currentChrom = cloneString(wiggle->chrom);
-	wDS->currentSpan = wiggle->span;
+	wds->currentChrom = cloneString(wiggle->chrom);
+	wds->currentSpan = wiggle->span;
 	}
 
     /*	it may seem inefficient to make one of these for each SQL row,
@@ -830,7 +853,7 @@ for ( ; (!maxReached) && nextRow(wDS, row, WIGGLE_NUM_COLS);
 	wigAscii->data = (struct asciiDatum *) needMem((size_t)
 	    (sizeof(struct asciiDatum) * wiggle->validCount));
 	asciiOut = wigAscii->data;
-	slAddHead(&wDS->ascii,wigAscii);
+	slAddHead(&wds->ascii,wigAscii);
 	}
 
     verbose(VERBOSE_SQL_ROW_LEVEL,
@@ -838,50 +861,50 @@ for ( ; (!maxReached) && nextRow(wDS, row, WIGGLE_NUM_COLS);
 	    rowCount, wiggle->chromStart, wiggle->dataRange,
 	    wiggle->lowerLimit, wiggle->lowerLimit+wiggle->dataRange,
 	    wiggle->dataRange/(double)MAX_WIG_VALUE);
-    if (wDS->useDataConstraint)
+    if (wds->useDataConstraint)
 	{
 	boolean takeIt = FALSE;
-	switch (wDS->wigCmpSwitch)
+	switch (wds->wigCmpSwitch)
 	    {
 	    case wigNoOp_e:
 		takeIt = TRUE;
 		break;
 	    case wigInRange_e:
-		takeIt = (wiggle->lowerLimit <= wDS->limit_1) &&
+		takeIt = (wiggle->lowerLimit < wds->limit_1) &&
 		    ((wiggle->lowerLimit + wiggle->dataRange) >=
-			    wDS->limit_0);
+			    wds->limit_0);
 		break;
 	    case wigLessThan_e:
-		takeIt = wiggle->lowerLimit < wDS->limit_0;
+		takeIt = wiggle->lowerLimit < wds->limit_0;
 		break;
 	    case wigLessEqual_e:
-		takeIt = wiggle->lowerLimit <= wDS->limit_0;
+		takeIt = wiggle->lowerLimit <= wds->limit_0;
 		break;
 	    case wigEqual_e:
-		takeIt = (wiggle->lowerLimit <= wDS->limit_0) &&
-		    (wDS->limit_0 <=
+		takeIt = (wiggle->lowerLimit <= wds->limit_0) &&
+		    (wds->limit_0 <=
 			(wiggle->lowerLimit + wiggle->dataRange));
 		break;
 	    case wigNotEqual_e:
-		takeIt = (wDS->limit_0 < wiggle->lowerLimit) ||
+		takeIt = (wds->limit_0 < wiggle->lowerLimit) ||
 		    ((wiggle->lowerLimit + wiggle->dataRange) <
-			wDS->limit_0);
+			wds->limit_0);
 		break;
 	    case wigGreaterEqual_e:
-	       takeIt = wDS->limit_0 <=
+	       takeIt = wds->limit_0 <=
 		    (wiggle->lowerLimit + wiggle->dataRange);
 		break;
 	    case wigGreaterThan_e:
-	       takeIt = wDS->limit_0 <
+	       takeIt = wds->limit_0 <
 		    (wiggle->lowerLimit + wiggle->dataRange);
 		break;
 	    default:
 		errAbort("wig_getData: illegal wigCmpSwitch ? %#x",
-		    wDS->wigCmpSwitch);
+		    wds->wigCmpSwitch);
 		break;
-	    }	/*	switch (wDS->wigCmpSwitch)	*/
+	    }	/*	switch (wds->wigCmpSwitch)	*/
 	if (takeIt)
-	    setCompareByte(wDS, wiggle->lowerLimit, wiggle->dataRange);
+	    setCompareByte(wds, wiggle->lowerLimit, wiggle->dataRange);
 	else
 	    {
 	    verbose(VERBOSE_HIGHEST,
@@ -915,12 +938,12 @@ for ( ; (!maxReached) && nextRow(wDS, row, WIGGLE_NUM_COLS);
 	unsigned char *datum;    /* to walk through readData bytes */
 	unsigned char *readData;    /* the bytes read in from the file */
 
-	openWibFile(wDS, wiggle->file);
+	openWibFile(wds, wiggle->file);
 		    /* possibly open a new wib file */
 	readData = (unsigned char *) needMem((size_t) (wiggle->count + 1));
-	wDS->bytesRead += wiggle->count;
-	lseek(wDS->wibFH, wiggle->offset, SEEK_SET);
-	read(wDS->wibFH, readData,
+	wds->bytesRead += wiggle->count;
+	lseek(wds->wibFH, wiggle->offset, SEEK_SET);
+	read(wds->wibFH, readData,
 	    (size_t) wiggle->count * (size_t) sizeof(unsigned char));
 
 	verbose(VERBOSE_PER_VALUE_LEVEL,
@@ -934,14 +957,14 @@ for ( ; (!maxReached) && nextRow(wDS, row, WIGGLE_NUM_COLS);
 	for (j = 0; j < wiggle->count;
 		++datum, chromPosition += wiggle->span, ++j)
 	    {
-	    if (wDS->maxOutput)
+	    if (wds->maxOutput)
 		{
 		if (doAscii)
 		    {
-		    /*	previous results to this fetch are wDS->valuesMatched
+		    /*	previous results to this fetch are wds->valuesMatched
 		     *	this result is currently at valuesMatched
 		     */
-		    if (wDS->maxOutput <= (wDS->valuesMatched + valuesMatched))
+		    if (wds->maxOutput <= (wds->valuesMatched + valuesMatched))
 			{
 			maxReached = TRUE;
 			break;
@@ -950,10 +973,13 @@ for ( ; (!maxReached) && nextRow(wDS, row, WIGGLE_NUM_COLS);
 		if (doBed)
 		    {
 		    /*	previous results to this fetch are
-		     *	wDS->totalBedElements, this result is currently
-		     *	at bedElCount
+		     *	wds->totalBedElements, this result is currently
+		     *	at bedElCount.  The -1 is because there is
+		     *	one more bed element to go upon exit from
+		     *	this loop.
 		     */
-		    if (wDS->maxOutput <= (wDS->totalBedElements + bedElCount))
+		    if ( (wds->totalBedElements + bedElCount) >=
+				(wds->maxOutput - 1) )
 			{
 			maxReached = TRUE;
 			break;
@@ -964,7 +990,7 @@ for ( ; (!maxReached) && nextRow(wDS, row, WIGGLE_NUM_COLS);
 		{
 		boolean takeIt = FALSE;
 
-		if (wDS->winEnd)  /* non-zero means a range is in effect */
+		if (wds->winEnd)  /* non-zero means a range is in effect */
 		    {	/*	do not allow item (+span) to run over winEnd */
 		    unsigned span = wiggle->span;
 
@@ -972,43 +998,43 @@ for ( ; (!maxReached) && nextRow(wDS, row, WIGGLE_NUM_COLS);
 		    if (doDataArray && !(doStats || doBed || doStats))
 			span = 1;
 
-		    if ( (chromPosition < wDS->winStart) ||
-			((chromPosition+span) > wDS->winEnd) )
+		    if ( (chromPosition < wds->winStart) ||
+			((chromPosition+span) > wds->winEnd) )
 			continue;	/*	next *datum	*/
 		    }
 		++validData;
-		switch (wDS->wigCmpSwitch)
+		switch (wds->wigCmpSwitch)
 		    {
 		    case wigNoOp_e:
 			takeIt = TRUE;
 			break;
 		    case wigInRange_e:
-			takeIt = (*datum <= wDS->ucUpperLimit) &&
-			    (*datum >= wDS->ucLowerLimit);
+			takeIt = (*datum < wds->ucUpperLimit) &&
+			    (*datum >= wds->ucLowerLimit);
 			break;
 		    case wigLessThan_e:
-			takeIt = *datum < wDS->ucLowerLimit;
+			takeIt = *datum < wds->ucLowerLimit;
 			break;
 		    case wigLessEqual_e:
-			takeIt = *datum <= wDS->ucLowerLimit;
+			takeIt = *datum <= wds->ucLowerLimit;
 			break;
 		    case wigEqual_e:
-			takeIt = *datum == wDS->ucLowerLimit;
+			takeIt = *datum == wds->ucLowerLimit;
 			break;
 		    case wigNotEqual_e:
-			takeIt = *datum != wDS->ucLowerLimit;
+			takeIt = *datum != wds->ucLowerLimit;
 			break;
 		    case wigGreaterEqual_e:
-			takeIt = *datum >= wDS->ucLowerLimit;
+			takeIt = *datum >= wds->ucLowerLimit;
 			break;
 		    case wigGreaterThan_e:
-			takeIt = *datum > wDS->ucLowerLimit;
+			takeIt = *datum > wds->ucLowerLimit;
 			break;
 		    default:
 			errAbort("wig_getData: illegal wigCmpSwitch ? %#x",
-			    wDS->wigCmpSwitch);
+			    wds->wigCmpSwitch);
 			break;
-		    }	/*	switch (wDS->wigCmpSwitch)	*/
+		    }	/*	switch (wds->wigCmpSwitch)	*/
 		if (takeIt)
 		    {
 		    float value = 0.0;
@@ -1032,8 +1058,8 @@ for ( ; (!maxReached) && nextRow(wDS, row, WIGGLE_NUM_COLS);
 			dataArrayPosition += gap;
 
 			/*	special case squeezing into the end	*/
-			if ((dataArrayPosition + span) > wDS->winEnd)
-				span = wDS->winEnd - dataArrayPosition;
+			if ((dataArrayPosition + span) > wds->winEnd)
+				span = wds->winEnd - dataArrayPosition;
 				
 			dataArrayPtr += gap;	/* move up, leave NaN's */
 			verbose(VERBOSE_PER_VALUE_LEVEL, "#\t%u-%u <- %g\n",
@@ -1064,7 +1090,7 @@ for ( ; (!maxReached) && nextRow(wDS, row, WIGGLE_NUM_COLS);
 				struct bed *bedEl;
 				bedEl = bedElement(wiggle->chrom,
 					bedElStart, bedElEnd, ++bedElCount);
-				slAddHead(&wDS->bed, bedEl);
+				slAddHead(&wds->bed, bedEl);
 				}
 			    /*	start a new element here	*/
 			    bedElStart = chromPosition;
@@ -1096,7 +1122,7 @@ for ( ; (!maxReached) && nextRow(wDS, row, WIGGLE_NUM_COLS);
 	    }	/*	for (j = 0; j < wiggle->count; ++j)	*/
 	freeMem(readData);
 	}	/*	if (!skipDataRead)	*/
-    }		/*	for ( ; nextRow(wDS, row, WIGGLE_NUM_COLS); ... ) */
+    }		/*	for ( ; nextRow(wds, row, WIGGLE_NUM_COLS); ... ) */
 
 /*	there may be one last bed element to output	*/
 if (!firstSpanDone && doBed)
@@ -1104,34 +1130,34 @@ if (!firstSpanDone && doBed)
     if (bedElEnd > bedElStart)
 	{
 	struct bed *bedEl;
-	bedEl = bedElement(wDS->currentChrom,
+	bedEl = bedElement(wds->currentChrom,
 		bedElStart, bedElEnd, ++bedElCount);
-	slAddHead(&wDS->bed, bedEl);
+	slAddHead(&wds->bed, bedEl);
 	}
     }
 
 /*	there are accumulated stats to complete	*/
 if (doStats)
     {
-    accumStats(wDS, lowerLimit, upperLimit, sumData, sumSquares,
+    accumStats(wds, lowerLimit, upperLimit, sumData, sumSquares,
 	statsCount, chromStart, chromEnd);
     resetStats(&lowerLimit, &upperLimit, &sumData, &sumSquares,
 	&statsCount, &chromStart, &chromEnd);
     }
 
-wDS->rowsRead += rowCount;
-wDS->validPoints += validData;
-wDS->valuesMatched += valuesMatched;
-wDS->noDataPoints += noDataBytes;
-wDS->bytesSkipped += bytesSkipped;
-wDS->totalBedElements += bedElCount;
+wds->rowsRead += rowCount;
+wds->validPoints += validData;
+wds->valuesMatched += valuesMatched;
+wds->noDataPoints += noDataBytes;
+wds->bytesSkipped += bytesSkipped;
+wds->totalBedElements += bedElCount;
 
-closeWigConn(wDS);
+closeWigConn(wds);
 
 return(valuesMatched);
 }	/*	unsigned long long getData()	*/
 
-static float *asciiToDataArray(struct wiggleDataStream *wDS,
+static float *asciiToDataArray(struct wiggleDataStream *wds,
 	unsigned long long count, size_t *returned)
 /*	convert the AsciiData list to a float array */ 
 {
@@ -1150,7 +1176,7 @@ AllocArray(floatArray, count);
 fptr = floatArray;
 
 /*	the (valuesDone <= count) condition is for safety */
-for (asciiData = wDS->ascii; asciiData && (valuesDone < count);
+for (asciiData = wds->ascii; asciiData && (valuesDone < count);
 	asciiData = asciiData->next)
     {
     if (asciiData->count)
@@ -1174,7 +1200,7 @@ if (returned)
 return floatArray;
 }
 
-static unsigned long long getDataViaBed(struct wiggleDataStream *wDS, char *db,
+static unsigned long long getDataViaBed(struct wiggleDataStream *wds, char *db,
 	char *table, int operations, struct bed **bedList)
 /* getDataViaBed - constrained by the bedList	*/
 {
@@ -1183,8 +1209,8 @@ unsigned long long valuesMatched = 0;
 if (bedList && *bedList)
     {
     struct bed *filteredBed = NULL;
-    boolean chromConstraint = ((char *)NULL != wDS->chrName);
-    boolean positionConstraints = (0 != wDS->winEnd);
+    boolean chromConstraint = ((char *)NULL != wds->chrName);
+    boolean positionConstraints = (0 != wds->winEnd);
     int saveWinStart = 0;
     int saveWinEnd = 0;
     char * saveChrName = NULL;
@@ -1198,9 +1224,9 @@ if (bedList && *bedList)
     /* remember these constraints so we can reset them afterwards
      * because we are going to use them for our own internal uses here.
      */
-    saveWinStart = wDS->winStart;
-    saveWinEnd = wDS->winEnd;
-    saveChrName = wDS->chrName;
+    saveWinStart = wds->winStart;
+    saveWinEnd = wds->winEnd;
+    saveChrName = wds->chrName;
 
     chromSizes = newHash(0);
 
@@ -1211,12 +1237,12 @@ if (bedList && *bedList)
      */
     if (chromConstraint)
 	{
-	chr = newSlName(wDS->chrName);
+	chr = newSlName(wds->chrName);
 	slAddHead(&chromList, chr);
 	AllocVar(chrStartEnd);
-	chrStartEnd->chrStart = wDS->winStart;
-	chrStartEnd->chrEnd = wDS->winEnd;
-	hashAdd(chromSizes, wDS->chrName, chrStartEnd);
+	chrStartEnd->chrStart = wds->winStart;
+	chrStartEnd->chrEnd = wds->winEnd;
+	hashAdd(chromSizes, wds->chrName, chrStartEnd);
 	}
     else
 	{
@@ -1301,9 +1327,9 @@ if (bedList && *bedList)
 	doDataArray = operations & wigFetchDataArray;
 
 	/*	set chrom name constraint	*/
-	wDS->setChromConstraint(wDS, (char *)&chr->name);
+	wds->setChromConstraint(wds, (char *)&chr->name);
 
-	chrStartEnd = hashFindVal(chromSizes, wDS->chrName); 
+	chrStartEnd = hashFindVal(chromSizes, wds->chrName); 
 	if (NULL == chrStartEnd)
 	    errAbort("getDataViaBed: constructed hash of bed coords is broken");
 	/* This may seem unusual, but if the caller has
@@ -1325,7 +1351,7 @@ if (bedList && *bedList)
 	/*	remember this window extent	*/
 	winExtent = winEnd - winStart;
 	/*	set window position constraint	*/
-	wDS->setPositionConstraint(wDS, winStart, winEnd);
+	wds->setPositionConstraint(wds, winStart, winEnd);
 
 	/*	Going to create a TRUE/FALSE marker array from the bedList.
 	 *	Each chrom position will be marked TRUE if it belongs to
@@ -1335,7 +1361,7 @@ if (bedList && *bedList)
 	 */
 	for (bed = *bedList; bed; bed = bed->next)
 	    {
-	    if (sameString(wDS->chrName, bed->chrom))
+	    if (sameString(wds->chrName, bed->chrom))
 		{
 		/*	if (no limits) OR (within limits) use it	*/
 		if (!(winEnd) || ( (bed->chromStart < winEnd) &&
@@ -1350,7 +1376,7 @@ if (bedList && *bedList)
 	    {
 	    verbose(VERBOSE_CHR_LEVEL,
 		"#\tfilter found nothing in bed file: %s:%u-%u\n",
-		wDS->chrName, winStart, winEnd);
+		wds->chrName, winStart, winEnd);
 	    continue;	/*	next chrom */
 	    }
 	else
@@ -1444,7 +1470,7 @@ if (bedList && *bedList)
 	/*	must have actual positions for constraints for getData
 	 *	to do this wigFetchDataArray function.
 	 */
-	wDS->setPositionConstraint(wDS, winStart, winEnd);
+	wds->setPositionConstraint(wds, winStart, winEnd);
 	/*	now fetch all the wiggle data for this position,
 	 *	constraints have been set at the top of this loop
 	 */
@@ -1454,7 +1480,7 @@ if (bedList && *bedList)
 	 *	with the given bed list filter.
 	 */
 
-	valuesFound = wDS->getData(wDS, db, table, wigFetchDataArray);
+	valuesFound = wds->getData(wds, db, table, wigFetchDataArray);
 
 	verbose(VERBOSE_CHR_LEVEL,
 	    "#\tback from getData, found %llu valid points\n", valuesFound);
@@ -1474,10 +1500,10 @@ if (bedList && *bedList)
 	    struct asciiDatum *asciiOut = NULL;
 		/* to address data[] in wigAsciiData */
 
-	    dataArraySize = wDS->array->winEnd - wDS->array->winStart;
+	    dataArraySize = wds->array->winEnd - wds->array->winStart;
 
 	    if (verboseLevel() > VERBOSE_PER_VALUE_LEVEL)
-		dataArrayOut(wDS, "stdout", FALSE, TRUE);
+		dataArrayOut(wds, "stdout", FALSE, TRUE);
 
 	    /*	OK, ready to scan the bedArray in concert with the data
 	     *	array and pick out those values that are masked by the bed.
@@ -1487,32 +1513,32 @@ if (bedList && *bedList)
 	    if (doAscii)
 		{
 		AllocVar(wigAscii);
-		wigAscii->chrom = cloneString(wDS->chrName);
+		wigAscii->chrom = cloneString(wds->chrName);
 		wigAscii->span = 1;	/* span information has been lost */
 		wigAscii->count = 0;	/* will count up as values added */
 		wigAscii->data = (struct asciiDatum *) needMem((size_t)
 		    (sizeof(struct asciiDatum) * dataArraySize));
 			/*	maximum area needed, may use less 	*/
 		asciiOut = wigAscii->data;	/* ptr to data area	*/
-		slAddHead(&wDS->ascii,wigAscii);
+		slAddHead(&wds->ascii,wigAscii);
 		}
 
 	    chromPosition = max(bedStart, winStart);
 	    boolPtr = bedArray + (chromPosition - bedStart);
 
-	    fptr = wDS->array->data + (chromPosition - winStart);
+	    fptr = wds->array->data + (chromPosition - winStart);
 
 	    while ((!maxReached) && (chromPosition < winEnd))
 		{
-		if (wDS->maxOutput)
+		if (wds->maxOutput)
 		    {
 		    if (doAscii)
 			{
-		/*	previous results to this fetch are wDS->valuesMatched
+		/*	previous results to this fetch are wds->valuesMatched
 		 *	this result is currently at valuesMatched
 		 */
-			if (wDS->maxOutput <=
-				(wDS->valuesMatched + valuesMatched))
+			if (wds->maxOutput <=
+				(wds->valuesMatched + valuesMatched))
 			    {
 			    maxReached = TRUE;
 			    break;
@@ -1521,13 +1547,13 @@ if (bedList && *bedList)
 		    if (doBed)
 			{
 			/*	previous results to this fetch are
-			 *	wDS->totalBedElements, this result is currently
+			 *	wds->totalBedElements, this result is currently
 			 *	at bedElCount.  The -1 is because there is
 			 *	one more bed element to go upon exit from
 			 *	this loop.
 			 */
-			if (wDS->maxOutput <=
-				((wDS->totalBedElements + bedElCount) - 1))
+			if ( (wds->totalBedElements + bedElCount) >=
+				    (wds->maxOutput - 1) )
 			    {
 			    maxReached = TRUE;
 			    break;
@@ -1564,9 +1590,9 @@ if (bedList && *bedList)
 			    if (bedElEnd > bedElStart)
 				{
 				struct bed *bedEl;
-				bedEl = bedElement(wDS->chrName,
+				bedEl = bedElement(wds->chrName,
 					bedElStart, bedElEnd, ++bedElCount);
-				slAddHead(&wDS->bed, bedEl);
+				slAddHead(&wds->bed, bedEl);
 				}
 			    /*	start a new element here	*/
 			    bedElStart = chromPosition;
@@ -1618,15 +1644,15 @@ if (bedList && *bedList)
 		if (bedElEnd > bedElStart)
 		    {
 		    struct bed *bedEl;
-		    bedEl = bedElement(wDS->chrName,
+		    bedEl = bedElement(wds->chrName,
 			    bedElStart, bedElEnd, ++bedElCount);
-		    slAddHead(&wDS->bed, bedEl);
+		    slAddHead(&wds->bed, bedEl);
 		    }
 		}
 	    /*	there are accumulated stats to complete	*/
 	    if (doStats)
 		{
-		accumStats(wDS, lowerLimit, upperLimit, sumData, sumSquares,
+		accumStats(wds, lowerLimit, upperLimit, sumData, sumSquares,
 		    statsCount, chromStart, chromEnd);
 		resetStats(&lowerLimit, &upperLimit, &sumData, &sumSquares,
 		    &statsCount, &chromStart, &chromEnd);
@@ -1639,96 +1665,100 @@ if (bedList && *bedList)
 
 	/*	did they want the data array returned ?  No, then release it */
 	if (!doDataArray)
-	    wDS->freeArray(wDS);
+	    wds->freeArray(wds);
 	/*	we are certainly done with the bedArray	*/
 	bedFreeList(&filteredBed);
 	freeMem(bedArray);
-	wDS->totalBedElements += bedElCount;
+	wds->totalBedElements += bedElCount;
 	}	/*	for (chr = chromList; chr; chr = chr->next)	*/
 
     /*	restore these constraints we used here
      */
     if (chromConstraint)
-	wDS->chrName = saveChrName;
+	wds->chrName = saveChrName;
     else
 	{
-	freeMem(wDS->chrName);
-	wDS->chrName = NULL;
+	freeMem(wds->chrName);
+	wds->chrName = NULL;
 	}
     if (positionConstraints)
-	wDS->setPositionConstraint(wDS, saveWinStart, saveWinEnd);
+	wds->setPositionConstraint(wds, saveWinStart, saveWinEnd);
     else
-	wDS->setPositionConstraint(wDS, 0, 0);
+	wds->setPositionConstraint(wds, 0, 0);
 
     /*	The bedConstrained flag will provide a printout indication of
      *	what happened to the *Out() routines.
      */
-    wDS->bedConstrained = TRUE;	/* to signal the *Out() displays */
+    wds->bedConstrained = TRUE;	/* to signal the *Out() displays */
 
     freeHashAndVals(&chromSizes);
     }	/*	if (bedList && *bedList)	*/
 
-wDS->valuesMatched += valuesMatched;
+wds->valuesMatched += valuesMatched;
 return(valuesMatched);
 
 }
 
-static void sortResults(struct wiggleDataStream *wDS)
+static void sortResults(struct wiggleDataStream *wds)
 /*	sort any results that exist	*/
 {
-if (wDS->bed)
-    slSort(&wDS->bed, bedCmp);
-if (wDS->ascii)
-    slSort(&wDS->ascii, asciiDataCmp);
-if (wDS->stats)
-    slSort(&wDS->stats, statsDataCmp);
-if (wDS->array)
-    slSort(&wDS->array, arrayDataCmp);
+if (wds->bed)
+    slSort(&wds->bed, bedCmp);
+if (wds->ascii)
+    slSort(&wds->ascii, asciiDataCmp);
+if (wds->stats)
+    slSort(&wds->stats, statsDataCmp);
+if (wds->array)
+    slSort(&wds->array, arrayDataCmp);
 }
 
-static void bedOut(struct wiggleDataStream *wDS, char *fileName, boolean sort)
+static int bedOut(struct wiggleDataStream *wds, char *fileName, boolean sort)
 /*	print to fileName the bed list */
 {
+int linesOut = 0;
+
 FILE * fh;
 fh = mustOpen(fileName, "w");
-if (wDS->bed)
+if (wds->bed)
     {
     struct bed *bedEl, *next;
 
-    outputIdentification(wDS, fh);
-    showConstraints(wDS, fh);
+    outputIdentification(wds, fh);
+    showConstraints(wds, fh);
 
     if (sort)
-	slSort(&wDS->bed, bedCmp);
+	slSort(&wds->bed, bedCmp);
 
-    for (bedEl = wDS->bed; bedEl; bedEl = next )
+    for (bedEl = wds->bed; bedEl; bedEl = next )
 	{
 	fprintf(fh,"%s\t%u\t%u\t%s\n", bedEl->chrom, bedEl->chromStart,
 	    bedEl->chromEnd, bedEl->name);
 	next = bedEl->next;
+	++linesOut;
 	}
     }
 else
     {
-    showConstraints(wDS, fh);
-    fprintf(fh, "#\tbed: no data points found for bed format output\n");
+    showConstraints(wds, fh);
+    fprintf(fh, "#\tbed: no data points found for bed format output (maxOutput: %llu\n", wds->maxOutput);
     }
 carefulClose(&fh);
+return (linesOut);
 }	/*	static void bedOut()	*/
 
-static void statsOut(struct wiggleDataStream *wDS, char *fileName,
+static void statsOut(struct wiggleDataStream *wds, char *fileName,
 	boolean sort, boolean htmlOut)
 /*	print to fileName the statistics */
 {
 FILE * fh;
 fh = mustOpen(fileName, "w");
-if (wDS->stats)
+if (wds->stats)
     {
     struct wiggleStats *stats, *next;
     int itemsDisplayed = 0;
 
     if (sort)
-	slSort(&wDS->stats, statsDataCmp);
+	slSort(&wds->stats, statsDataCmp);
 
     if (htmlOut)
 	{
@@ -1741,14 +1771,14 @@ if (wDS->stats)
 	    "\" BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"1\"><TR><TD>");
 
 	fprintf (fh, "<TABLE COLS=12 BORDER=1 BGCOLOR=\""HG_COL_INSIDE"\" ALIGN=CENTER HSPACE=0><TR>");
-	if (wDS->db)
-	    fprintf(fh, "<TH COLSPAN=6 ALIGN=LEFT> Database: %s </TH><TH COLSPAN=6 ALIGN=RIGHT> Table: %s </TH></TR>\n", wDS->db, wDS->tblName);
-	if (wDS->isFile)
+	if (wds->db)
+	    fprintf(fh, "<TH COLSPAN=6 ALIGN=LEFT> Database: %s </TH><TH COLSPAN=6 ALIGN=RIGHT> Table: %s </TH></TR>\n", wds->db, wds->tblName);
+	if (wds->isFile)
 	    {
-	    if (stringIn("trash/ct_",wDS->tblName))
+	    if (stringIn("trash/ct_",wds->tblName))
 		fprintf(fh, "<TH COLSPAN=12 ALIGN=LEFT> custom track </TH></TR>\n" );
 	    else
-		fprintf(fh, "<TH COLSPAN=12 ALIGN=LEFT> from file %s </TH></TR>\n", wDS->tblName);
+		fprintf(fh, "<TH COLSPAN=12 ALIGN=LEFT> from file %s </TH></TR>\n", wds->tblName);
 	    }
 
 	fprintf(fh,"<TR><TH> Chrom </TH><TH> Data <BR> start </TH>");
@@ -1760,10 +1790,10 @@ if (wDS->stats)
 	}
     else
 	{
-	if (wDS->db)
-	    fprintf(fh, "#\t Database: %s, Table: %s\n", wDS->db, wDS->tblName);
-	if (wDS->isFile)
-	    fprintf(fh, "#\t from file, Table: %s\n", wDS->tblName);
+	if (wds->db)
+	    fprintf(fh, "#\t Database: %s, Table: %s\n", wds->db, wds->tblName);
+	if (wds->isFile)
+	    fprintf(fh, "#\t from file, Table: %s\n", wds->tblName);
 
 	fprintf(fh,"# Chrom\tData\tData");
 	fprintf(fh,"\t# Data\tData");
@@ -1778,7 +1808,7 @@ if (wDS->stats)
 	fprintf(fh,"\t\tdeviation\n");
 	}
 
-    for (stats = wDS->stats; stats; stats = next )
+    for (stats = wds->stats; stats; stats = next )
 	{
 	if (htmlOut)
 	    {
@@ -1830,28 +1860,31 @@ if (wDS->stats)
     }
 else
     {
-    showConstraints(wDS, fh);
+    showConstraints(wds, fh);
     fprintf(fh, "#\tstats: no data points found\n");
     }
 carefulClose(&fh);
 }	/*	static void statsOut()	*/
 
-static void asciiOut(struct wiggleDataStream *wDS, char *fileName, boolean sort,
+static int asciiOut(struct wiggleDataStream *wds, char *fileName, boolean sort,
 	boolean rawDataOut)
 /*	print to fileName the ascii data values	*/
 {
+boolean firstLine = TRUE;
+int linesOut = 0;
+
 FILE * fh;
 fh = mustOpen(fileName, "w");
-if (wDS->ascii)
+if (wds->ascii)
     {
     struct wigAsciiData *asciiData;
     char *chrom = NULL;
     unsigned span = 0;
 
     if (sort)
-	slSort(&wDS->ascii, asciiDataCmp);
+	slSort(&wds->ascii, asciiDataCmp);
 
-    for (asciiData = wDS->ascii; asciiData; asciiData = asciiData->next)
+    for (asciiData = wds->ascii; asciiData; asciiData = asciiData->next)
 	{
 	unsigned i;
 	struct asciiDatum *data;
@@ -1867,7 +1900,14 @@ if (wDS->ascii)
 		span = asciiData->span;
 		if (!rawDataOut)
 		    {
-		    showConstraints(wDS, fh);
+		    if (firstLine)
+			{
+			char *dateStamp = dateTimeStamp();
+			fprintf (fh, "#\toutput date: %s UTC\n", dateStamp);
+			firstLine = FALSE;
+			freeMem(dateStamp);
+			}
+		    showConstraints(wds, fh);
 		    fprintf (fh, "variableStep chrom=%s span=%u\n",
 			chrom, span);
 		    }
@@ -1881,6 +1921,7 @@ if (wDS->ascii)
 		else
 		    fprintf (fh, "%u\t%g\n", data->chromStart + 1, data->value);
 		++data;
+		++linesOut;
 		}
 	    }
 	}
@@ -1889,66 +1930,69 @@ else
     {
     if (!rawDataOut)
 	{
-	showConstraints(wDS, fh);
+	showConstraints(wds, fh);
 	fprintf(fh, "#\tasciiOut: no data points found\n");
 	}
     }
 carefulClose(&fh);
+
+return (linesOut);
 }	/*	static void asciiOut()	*/
 
-void destroyWigDataStream(struct wiggleDataStream **wDS)
+void wiggleDataStreamFree(struct wiggleDataStream **wds)
 /*	free all structures and zero the callers' structure pointer	*/
 {
-if (wDS)
+if (wds)
     {
-    struct wiggleDataStream *wds;
-    wds=*wDS;
-    if (wds)
+    struct wiggleDataStream *wdstream;
+    wdstream=*wds;
+    if (wdstream)
 	{
-	closeWigConn(wds);
-	wds->freeAscii(wds);
-	wds->freeBed(wds);
-	wds->freeStats(wds);
-	wds->freeArray(wds);
-	wds->freeConstraints(wds);
-	freeMem(wds->currentChrom);
+	closeWigConn(wdstream);
+	wdstream->freeAscii(wdstream);
+	wdstream->freeBed(wdstream);
+	wdstream->freeStats(wdstream);
+	wdstream->freeArray(wdstream);
+	wdstream->freeConstraints(wdstream);
+	freeMem(wdstream->currentChrom);
 	}
-    freez(wDS);
+    freez(wds);
     }
 }
 
-struct wiggleDataStream *newWigDataStream()
+struct wiggleDataStream *wiggleDataStreamNew()
 {
-struct wiggleDataStream *wds;
+struct wiggleDataStream *wdstream;
 
-AllocVar(wds);
+AllocVar(wdstream);
 /*	everything is zero which is good since that is NULL for all the
  *	strings and lists.  A few items should have some initial values
  *	which are not necessarily NULL
  */
-wds->isFile = FALSE;
-wds->useDataConstraint = FALSE;
-wds->wibFH = -1;
-wds->limit_0 = -1 * INFINITY;
-wds->limit_1 = INFINITY;
-wds->wigCmpSwitch = wigNoOp_e;
-wds->freeConstraints = freeConstraints;
-wds->freeAscii = freeAscii;
-wds->freeBed = freeBed;
-wds->freeStats = freeStats;
-wds->freeArray = freeArray;
-wds->setMaxOutput = setMaxOutput;
-wds->setPositionConstraint = setPositionConstraint;
-wds->setChromConstraint = setChromConstraint;
-wds->setSpanConstraint = setSpanConstraint;
-wds->setDataConstraint = setDataConstraint;
-wds->bedOut = bedOut;
-wds->statsOut = statsOut;
-wds->asciiOut = asciiOut;
-wds->sortResults = sortResults;
-wds->asciiToDataArray = asciiToDataArray;
-wds->getDataViaBed = getDataViaBed;
-wds->getData = getData;
-return wds;
+wdstream->isFile = FALSE;
+wdstream->useDataConstraint = FALSE;
+wdstream->wibFH = -1;
+wdstream->limit_0 = -1 * INFINITY;
+wdstream->limit_1 = INFINITY;
+wdstream->wigCmpSwitch = wigNoOp_e;
+wdstream->freeConstraints = freeConstraints;
+wdstream->freeAscii = freeAscii;
+wdstream->freeBed = freeBed;
+wdstream->freeStats = freeStats;
+wdstream->freeArray = freeArray;
+wdstream->setMaxOutput = setMaxOutput;
+wdstream->setPositionConstraint = setPositionConstraint;
+wdstream->setChromConstraint = setChromConstraint;
+wdstream->setSpanConstraint = setSpanConstraint;
+wdstream->setDataConstraint = setDataConstraint;
+wdstream->bedOut = bedOut;
+wdstream->statsOut = statsOut;
+wdstream->asciiOut = asciiOut;
+wdstream->sortResults = sortResults;
+wdstream->asciiToDataArray = asciiToDataArray;
+wdstream->getDataViaBed = getDataViaBed;
+wdstream->getData = getData;
+wdstream->maxOutput = 0;
+return wdstream;
 }
 

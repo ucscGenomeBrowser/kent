@@ -27,13 +27,13 @@
 static struct optionSpec optionSpecs[] = {
   {"fhcrc", OPTION_STRING},
   {"psl", OPTION_STRING},
-  {"verbose", OPTION_INT},
+  {"verbose", OPTION_STRING},
   {"noRandom", OPTION_BOOLEAN},
   {"noBin", OPTION_BOOLEAN},
   {NULL, 0}
 };
 
-int VERBOSE = 0;
+int verb = 0;
 boolean NORANDOM = FALSE;
 boolean NOBIN = FALSE;
 
@@ -45,12 +45,14 @@ struct position
   int start;
   int end;
   char *type;
+  int phase;
 };
 
 struct name
 {
   struct name *next;
   char *name;
+  int phase;
 };
 
 struct place
@@ -65,6 +67,7 @@ struct place
   int numSts;
   struct name *sts;
   int numBacEndPair;
+  struct name *bePair;
   int numBacEnd;
   struct name *bacEnd;
   int score;
@@ -73,6 +76,7 @@ struct place
 struct map
 {
   struct map *next;
+  char *chrom;
   char *band1;
   char *band2;
   char *center;
@@ -102,6 +106,7 @@ void mapFree(struct map **map)
 {
   struct map *m;
   if ((m = *map) == NULL) return;
+  free(m->chrom);
   free(m->band1);
   free(m->band2);
   free(m->center);
@@ -177,6 +182,7 @@ void placeFree(struct place **place)
   free(p->chrom);
   free(p->type);
   nameFreeList(&p->acc);
+  nameFreeList(&p->bePair);
   nameFreeList(&p->sts);
   nameFreeList(&p->bacEnd);
   freez(place);
@@ -238,21 +244,36 @@ struct map *createMap(char *mapInfo, char *center, char *chr)
   struct map *ret;
   char *bands[16], band[16];
   int wordCount;
+  char chrom[16];
+  char *mi, *words[10];
 
   AllocVar(ret);
   ret->next = NULL;
+  /* Determine chromosome */
+  mi = cloneString(mapInfo);
+  if (stringIn("p", mapInfo))
+    wordCount = chopByChar(mi, 'p', words, ArraySize(words));      
+  else if (stringIn("q", mapInfo))
+    wordCount = chopByChar(mi, 'q', words, ArraySize(words));      
+  else if (stringIn("cen", mapInfo))
+    wordCount = chopByChar(mi, 'c', words, ArraySize(words));
+  else
+    errAbort("Couldn't determine chrom for %s\n", mapInfo);
+  safef(chrom, sizeof(chrom), "chr%s", words[0]);
+  verbose(3, "\tchromosome for %s is %s\n", mapInfo, chrom);
+  ret->chrom = cloneString(chrom);
 
   if (stringIn("~\0", mapInfo))
     {
       wordCount = chopByChar(mapInfo, '~', bands, ArraySize(bands));
       if ((wordCount == 2) && stringIn("p\0", bands[0]))
 	{
-	  sprintf(band, "%sp%s", chr, bands[1]); 
+	  safef(band, sizeof(band), "%sp%s", chr, bands[1]); 
 	  bands[1] = cloneString(band);
 	}
       else if ((wordCount == 2) && stringIn("q\0", bands[0]))
 	{
-	  sprintf(band, "%sq%s", chr, bands[1]); 
+	  safef(band, sizeof(band), "%sq%s", chr, bands[1]); 
 	  bands[1] = cloneString(band);
 	}
     }
@@ -282,6 +303,7 @@ struct position *createPosition(char *name, char *type)
   ret->start = 0;
   ret->end = 0;
   ret->type = type;
+  ret->phase = 0;
 
   return(ret);
 }
@@ -294,7 +316,7 @@ struct name *createName(char *n)
   AllocVar(ret);
   ret->next = NULL;
   ret->name = cloneString(n);
-
+  ret->phase = 0;
   return(ret);
 }
 
@@ -302,7 +324,10 @@ struct place *createPlace(struct position *pos)
 /* Create a place record */
 {
   struct place *ret;
-  
+  char *names, *words[2];
+  struct name *n;
+  int wordCount;
+
   AllocVar(ret);
   ret->next = NULL;
   ret->chrom = cloneString(pos->chrom);
@@ -320,10 +345,17 @@ struct place *createPlace(struct position *pos)
     {
       ret->numAcc++;
       ret->acc = createName(pos->name);
+      ret->acc->phase = pos->phase;
     } 
   if (sameString(ret->type, "BAC End Pair"))
     {
+      names = cloneString(pos->name);
+      wordCount = chopString(names, ",",words,2);
+      ret->bePair = createName(words[0]);
+      n = createName(words[1]);
+      slAddHead(&ret->bePair, n);
       ret->numBacEndPair++;
+
     } 
   if (sameString(ret->type, "STS Marker"))
     {
@@ -338,6 +370,27 @@ struct place *createPlace(struct position *pos)
   ret->score = 0;
 
   return(ret);
+}
+
+boolean sameName(struct name *n1, struct name *n2)
+/* Determine if two names the same */
+{
+  if ((n1 != NULL) && (n2 != NULL) && (sameString(n1->name, n2->name)))
+    return(TRUE);
+  
+  return(FALSE);
+}
+
+boolean inNameList(struct name *n, struct name *nList)
+/* Determine if n is in nList */
+{
+  struct name *n1;
+
+  for (n1 = nList; n1 != NULL; n1 = n1->next)
+    if (sameName(n, n1))
+      return(TRUE);
+  
+  return(FALSE);
 }
 
 void readFishInfo(struct lineFile *ff)
@@ -604,6 +657,7 @@ void findAccPosition(struct sqlConnection *conn, struct position *pos, struct fi
       pos->chrom = cloneString(cp->chrom);
       pos->start = cp->chromStart;
       pos->end = cp->chromEnd;
+      pos->phase = cp->phase;
       clonePosFree(&cp);
       while ((row = sqlNextRow(sr)) != NULL) 
 	{
@@ -612,6 +666,7 @@ void findAccPosition(struct sqlConnection *conn, struct position *pos, struct fi
 	  newPos->chrom = cloneString(cp->chrom);
 	  newPos->start = cp->chromStart;
 	  newPos->end = cp->chromEnd;
+	  newPos->phase = cp->phase;
 	  clonePosFree(&cp);
 	  slAddHead(&fc->acc, newPos);
 	}
@@ -683,7 +738,7 @@ void findStsPosition(struct sqlConnection *conn, struct position *pos, struct fi
 void findBacEndPairPosition(struct sqlConnection *conn, struct fishClone *fc)
 /* Determine the positions of bac end pairs for a clone */
 {
-  char query[256];
+  char query[256], names[256];
   struct sqlResult *sr;
   char **row;
   struct lfs *be;
@@ -693,8 +748,9 @@ void findBacEndPairPosition(struct sqlConnection *conn, struct fishClone *fc)
   sr = sqlGetResult(conn, query);
   while ((row = sqlNextRow(sr)) != NULL)
     {
-      newPos = createPosition(fc->cloneName, "BAC End Pair");
       be = lfsLoad(row+1);
+      safef(names, sizeof(names), "%s,%s", be->lfNames[0], be->lfNames[1]);
+      newPos = createPosition(names, "BAC End Pair");
       newPos->chrom = cloneString(be->chrom);
       newPos->start = be->chromStart;
       newPos->end = be->chromEnd;
@@ -711,6 +767,8 @@ int combinePos(struct place *p, struct position *pos)
   int d1 = abs(p->start - pos->start);
   int d2 = abs(p->end - pos->end);
   struct name *n;
+  char *words[2], *names;
+  int wordCount;
 
   if ((sameString(p->chrom, pos->chrom)) && 
       ((d1 < 200000) || ((pos->start >= p->start) && (pos->start <= p->end))) && 
@@ -724,23 +782,41 @@ int combinePos(struct place *p, struct position *pos)
 	{
 	  p->numAcc++;
 	  n = createName(pos->name);
+	  n->phase = pos->phase;
 	  slAddHead(&p->acc, n);
+	  /* p->type = pos->type; */	  
 	} 
       if (sameString(pos->type, "BAC End Pair"))
 	{
+	  names = cloneString(pos->name);
+	  wordCount = chopString(names, ",",words,2);
+	  n = createName(words[0]);
+	  slAddHead(&p->bePair, n);
+	  n = createName(words[1]);
+	  slAddHead(&p->bePair, n);
 	  p->numBacEndPair++;
+	  /* if (!sameString(p->type, "Accession"))
+	     p->type = pos->type; */
 	} 
       if (sameString(pos->type, "STS Marker"))
 	{
 	  p->numSts++;
 	  n = createName(pos->name);
 	  slAddHead(&p->sts, n);
+	  /* if (sameString(p->type, "BAC End"))
+	     p->type = pos->type; */
 	} 
       if (sameString(pos->type, "BAC End"))
 	{
-	  p->numBacEnd++;
+	  /* Check if used for end pair */
 	  n = createName(pos->name);
-	  slAddHead(&p->bacEnd, n);
+	  if (!inNameList(n, p->bePair))
+	    {
+	      p->numBacEnd++;
+	      slAddHead(&p->bacEnd, n);
+	    }
+	  else
+	    nameFree(&n);
 	} 
       ret = 1;
     }
@@ -748,15 +824,69 @@ int combinePos(struct place *p, struct position *pos)
   return(ret);
 }
 
-int scorePlace(struct place *p)
+int scorePlace(struct place *p, struct map *m)
 /* Score a placement */
 {
-  int ret = 0;
+  int ret = 0, wordCount;
+  struct map *m1;
+  struct name *n, *nList=NULL, *new;  
+  char *chrom, *words[2];
+  
+  /* Check if chromosome agress with any fish mapping */  
+  verbose(3, "\tdetermining if in fish chrom\n");
+  chrom = cloneString(p->chrom);
+  /* Get rid of "random" */
+  wordCount = chopString(chrom, "_",words, 2);
+  for (m1 = m; m1 != NULL; m1 = m1->next)
+    {
+      verbose(3, "\tchecking %s vs. %s\n", m1->chrom, words[0]);
+      if (sameString(m1->chrom, words[0]))
+	{
+	  if (wordCount == 1)
+	    ret += 2;
+	  else
+	    ret += 1;
+	  break;
+	}
+    }
 
-  ret += p->numAcc * 5;
+  /* Score accessions based on phase of sequencing */
+  verbose(3, "\tscoring accessions\n");
+  for (n = p->acc; n != NULL; n = n->next)
+    if (!inNameList(n, nList))
+      {
+	if (n->phase == 3)
+	  ret += 5;
+	else if (n->phase == 2)
+	  ret += 3;
+	else if (n->phase == 1)
+	  ret += 2;
+	else
+	  ret += 1;
+	new = createName(n->name);
+	slAddHead(&nList, new);
+      }
+
   ret += p->numBacEndPair * 3;
-  ret += p->numSts * 2;
-  ret += p->numBacEnd * 1;
+
+  /* Make sure each name only counted once */
+  verbose(3, "\tscoring sts markers\n");
+  for (n = p->sts; n != NULL; n = n->next)
+    if (!inNameList(n, nList))
+      {
+	ret += 2;
+	new = createName(n->name);
+	slAddHead(&nList, new);
+      }
+  verbose(3, "\tscoring bac ends\n");
+  for (n = p->bacEnd; n != NULL; n = n->next)
+    if (!inNameList(n, nList))
+      {
+	ret += 1;
+	new = createName(n->name);
+	slAddHead(&nList, new);
+      }
+  nameFreeList(&nList);
 
   return(ret);
 }
@@ -808,6 +938,7 @@ void addOrCombinePos(struct fishClone *fc, struct position *pos)
   boolean combined = FALSE;
   struct place *p, *newP;
 
+  verbose(3, "\tchecking if position can be combined\n");
   if (pos->chrom)
     {
       combined = FALSE;
@@ -831,6 +962,7 @@ void findGoodPlace(struct fishClone *fc)
   struct position *pos;
 
   /* Check clone acc positions */
+  verbose(3, "\tchecking if can combine for %s\n", fc->cloneName);
   for (pos = fc->acc; pos != NULL; pos = pos->next)
     addOrCombinePos(fc, pos);
   /* Check bac end pair positions */
@@ -844,9 +976,12 @@ void findGoodPlace(struct fishClone *fc)
     addOrCombinePos(fc, pos);
 
   /* Score each of the placements */
+  verbose(3, "\tscoring placements for %s\n", fc->cloneName);
   for (p = fc->good; p != NULL; p = p->next)
-    p->score = scorePlace(p);
-
+    {
+      p->score = scorePlace(p, fc->cyto);
+      verbose(3, "\tscore on %s is %d\n", p->chrom,p->score);
+    }
   /* Filter to retain only best placements */
   filterGoodPlace(fc);
   
@@ -860,6 +995,7 @@ void findClonePos()
   struct position *pos;
 
   /* Process each clone */
+  verbose(3, "\tdetermining positions of fish clones\n");
   for (fc = fcList; fc != NULL; fc=fc->next)
     {
       verbose(3, "\tfinding pos of %s\n", fc->cloneName);
@@ -946,7 +1082,13 @@ void writeOut(FILE *of, FILE *af)
 		fprintf(of, ",%s", n->name);
 	    }
 	  fprintf(of, "\t");
-	  fprintf(of, "%d\t", p->numBacEnd);
+	  fprintf(of, "%d\t", p->numBacEnd + p->numBacEndPair*2);
+	  if (p->numBacEndPair) 
+	    {
+	      fprintf(of, "%s", p->bePair->name);
+	      for (n = p->bePair->next; n != NULL; n=n->next)
+		fprintf(of, ",%s", n->name);
+	    }
 	  if (p->numBacEnd) 
 	    {
 	      fprintf(of, "%s", p->bacEnd->name);
@@ -973,8 +1115,6 @@ int main(int argc, char *argv[])
   if (password == NULL)
     password = cfgOption("db.password");
   
-  verboseSetLevel(0);
-  
   optionInit(&argc, argv, optionSpecs);
   if (argc < 4)
     {
@@ -995,8 +1135,8 @@ int main(int argc, char *argv[])
   safef(filename, sizeof(filename), "%s.acc", argv[6]);
   af = mustOpen(filename, "w");
 
-  VERBOSE = optionExists("verbose");
-  verboseSetLevel(VERBOSE);
+  verb = optionInt("verbose", 0);
+  verboseSetLevel(verb);
   NORANDOM = optionExists("noRandom");
   NOBIN = optionExists("noBin");
   stsName = optionVal("fhcrc", NULL);

@@ -1,10 +1,11 @@
 #include <stdio.h>
 
-static char const rcsid[] = "$Id: hgConfig.c,v 1.9 2004/01/31 02:57:34 kent Exp $";
+static char const rcsid[] = "$Id: hgConfig.c,v 1.10 2004/09/03 23:04:11 markd Exp $";
 
 #include "common.h"
 #include "hash.h"
 #include "cheapcgi.h"
+#include "portable.h"
 #include <sys/types.h>
 #include <sys/stat.h>
 
@@ -67,7 +68,12 @@ if((file = fopen(filename, "r")) != 0)
 	    {
 	    /* read the key/value pair */
 	    if (sscanf(line, "%[^=]=%[^\n]", name, value) == 2)
+                {
 		hashAdd(cfgOptionsHash, name, cloneString(value));
+                /* Set enviroment variables to enable sql tracing and/or profiling */
+                if (sameString(name, "JKSQL_TRACE") || sameString(name, "JKSQL_PROF"))
+                    envUpdate(name, value);
+                }
 	    }
 	}
     }

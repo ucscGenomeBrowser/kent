@@ -1242,6 +1242,18 @@ XXX - running 2004-07-13 14;18
     #	table axtInfo may already exist, ignore create error.
     hgsql mm5 < axtInfoInserts.sql
 
+
+# ADD CHAIN AND NET TO VSHG17 DOWNLOAD AREAS (DONE Sept. 8th, 2004, Heather)
+    ssh hgwdev
+    cp -p /cluster/data/mm5/bed/blastz.hg17/axtChain/all.chain.gz \
+      /usr/local/apache/htdocs/goldenPath/mm5/vsHg17/human.chain.gz
+    cp -p /cluster/data/mm5/bed/blastz.hg17/axtChain/human.net.gz \
+      /usr/local/apache/htdocs/goldenPath/mm5/vsHg17/human.net.gz
+    cd /usr/local/apache/htdocs/goldenPath/mm5/vsHg17
+    md5sum *.gz */*.gz > md5sum.txt
+    # Update the README.txt
+
+
 # MAKING HUMAN SYNTENY (DONE - 2004-07-13 - Hiram)
 
 ssh hgwdev
@@ -4425,7 +4437,7 @@ cat > multiz5way/loadMaf.csh << 'EOF'
 # speciesOrder rat human dog chicken
 
 
-# MULTIZ DOWNLOAD FILES (WORKING kate 2004-08-03)
+# MULTIZ DOWNLOAD FILES (DONE kate 2004-08-03)
     ssh kksilo
     cd /cluster/data/mm5/bed/multiz5way
 
@@ -4960,6 +4972,10 @@ CAACCAGCTCAC    1825, 1025BP    0       MUS MUSCULUS
 
 #  BLASTZ RAT RN3 (RE-DONE - 2004-08-30 - Fan)
 
+#  !!! PLEASE NOTE AS OF 9/2/04, THE 8/30/04-8/31/04 REBUILD OF BLASTZ, CHAIN, AND NET 
+#  FOR MM5-RN3 IS NO LONG USED FOR MM5.  THE OLD MM5-RN3 CHAIN AND NET BUILD OF 7/14/04
+#  IS REVERSE PUSHED FROM RR BACK TO HGWDEV.
+
 # Reason for rebuild is to use more stringent blastz parameters to reduce size
 # of output files.
 
@@ -5337,4 +5353,102 @@ done
     nice rm axtChain/run1/chain/* 
 
 # do the following later, after rn3-mm5 net and chain done.
-#    nice gzip {axt,psl}Chrom/* lav/*/* axtChain/{all.chain,*.net} &
+    nice gzip {axt,psl}Chrom/* lav/*/* axtChain/{all.chain,*.net} &
+# The above line done on 9/7/04. Fan.
+:
+# CREATE CYTOBAND TRACK (DONE - 2004-09-7 - Fan)
+    # Should be done after NCBI updated their MapViewer to the latest release.
+    ssh hgwdev
+    cd /cluster/data/mm5
+    mkdir cytoBand
+    cd cytoBand
+    # Get file from NCBI
+    wget ftp://ftp.ncbi.nih.gov/genomes/M_musculus/maps/mapview/BUILD.33/ideogram.gz
+    gunzip ideogram
+    # Create bed file
+    /cluster/bin/scripts/createNcbiCytoBand ideogram
+    # Load the bed file
+    hgLoadBed -noBin -sqlTable=/cluster/home/kent/src/hg/lib/cytoBand.sql mm5 cytoBand cytoBand.bed
+
+# Make cytoBandIdeo track for ideogram gif on hgTracks page.
+    # For mouse cytoBandIdeo is just a replicate of the cytoBand track.
+    # Make the cytoBand track (above) and then:
+    echo "create table cytoBandIdeo (index(chrom(10),chromStart)) as select * from cytoBand;" | hgsql mm5
+
+
+# ADD MAP CONTIGS TRACK (DONE - 2004-09-07 - Fan)
+    ssh hgwdev
+    mkdir -p /cluster/data/mm5/bed/ctgPos
+    cd /cluster/data/mm5/bed/ctgPos
+    # hgCtgPos uses the lift files... but mouse lift files are for the
+    # 5MB contigs from splitFaIntoContigs, not for the real NT_ contigs
+    # from the assembly.  (In the future, we should go with the NT's!)
+    # So... just for this release, go straight from the seq_contig.md
+    # to the table def'n: contig, size, chrom, chromStart, chromEnd
+    cat << '_EOF_' > parseSeqContig.pl
+#!/usr/local/bin/perl -w
+
+use strict;
+
+while (<>) {
+    if (/^\d+\s+(\S+)\s+(\d+)\s+(\d+)\s+(\S+)\s+(N[TC]_\d+)\s+(\S+)\s+contig\s+\S+\s+\S+\s*$/i) {
+        my $chr=$1; my $start=$2; $start -= 1; my $end=$3; my $ctg=$5;
+        if ($chr !~ /N/ ) {
+        print "$ctg\t" . ($end-$start) . "\tchr$chr\t$start\t$end\n";
+        }
+    }
+}
+'_EOF_'
+    chmod +x parseSeqContig.pl
+      ./parseSeqContig.pl ../../ncbi/seq_contig.md > ctgPos.tab
+    hgsql mm5 < ~/kent/src/hg/lib/ctgPos.sql
+    echo "load data local infile 'ctgPos.tab' into table ctgPos" | hgsql mm5
+    # Note: the info is there in seq_contig.md to also do the _random's,
+    # but we'd have to do some more work: duplicate the gaps of 50000 between
+    # contigs for all _random's except chrUn_random (1000 between).
+
+    # featureBits mm5 ctgPos
+    # 2557516950 bases of 2615483787 (97.784%) in intersection
+    # featureBits mm4 ctgPos 
+    # 2554101163 bases of 2627444668 (97.209%) in intersection
+    # featureBits mm3 ctgPos
+    # 2500661074 bases of 2505900260 (99.791%) in intersection
+
+# FUGU BLAT ALIGNMENTS (DONE 2004-09-08 Fan)
+    ssh kk
+    mkdir /cluster/data/mm5/bed/blatFr1
+    cd /cluster/data/mm5/bed/blatFr1
+    ls -1S /iscratch/i/fugu/trfFa/*.fa > fugu.lst
+    ls -1S /scratch/mus/mm5/softNib/*.nib > mouse.lst
+    cat << '_EOF_' > gsub
+#LOOP
+blat -mask=lower -q=dnax -t=dnax {check in exists $(path1)} {check in line+ $(path2)} {check out line+ psl/$(root1)_$(root2).psl}
+#ENDLOOP
+'_EOF_'
+    # << this line makes emacs coloring happy
+    mkdir psl
+    gensub2 mouse.lst fugu.lst gsub spec
+    para create spec
+    para try, check, push, check, ...
+Completed: 24854 of 24854 jobs
+CPU time in finished jobs:    8215774s  136929.56m  2282.16h   95.09d  0.261 y
+IO & Wait Time:               1415723s   23595.39m   393.26h   16.39d  0.045 y
+Average job time:                 388s       6.46m     0.11h    0.00d
+Longest job:                    46761s     779.35m    12.99h    0.54d
+Submission to last job:         46761s     779.35m    12.99h    0.54d
+
+    # Sort alignments:
+    ssh kksilo
+    cd /cluster/data/mm5/bed/blatFr1
+    pslCat -dir psl | pslSortAcc nohead chrom temp stdin
+    # Processed 1116383 lines into 5 temp files
+    # lift query side to Fugu browser chrUn coordinates
+    liftUp -pslQ all.psl /cluster/data/fr1/fugu_v3.masked.lft warn chrom/*.psl
+
+    # load into database:
+    ssh hgwdev
+    cd /cluster/data/mm5/bed/blatFr1
+    hgLoadPsl -fastLoad -table=blatFr1 mm5 all.psl
+    # Processing all.psl
+    # load of blatFr1 did not go as planned: 1116383 record(s), 0 row(s) skipped, 1 warning(s) loading psl.tab
+    # a record is already in trackDb as type xeno psl fr1, with colorChromDefault off

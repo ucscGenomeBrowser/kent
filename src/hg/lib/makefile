@@ -4,7 +4,7 @@ include ../../inc/common.mk
 L = -lm $(MYSQLLIBS)
 
 O = affyAtlas.o affy10KDetails.o affy120KDetails.o affyOffset.o affyPairs.o \
-    agpFrag.o agpGap.o alignSeqSizes.o altGraph.o \
+    agp.o agpFrag.o agpGap.o alignSeqSizes.o altGraph.o \
     altGraphX.o ancientRref.o  axtInfo.o \
     axtLib.o bactigPos.o bbRepMask.o bdgpExprLink.o bdgpGeneInfo.o bed.o \
     bed6FloatScore.o bgiGeneInfo.o bgiGeneSnp.o bgiSnp.o \
@@ -12,7 +12,7 @@ O = affyAtlas.o affy10KDetails.o affy120KDetails.o affyOffset.o affyPairs.o \
     cart.o cartDb.o celeraCoverage.o celeraDupPositive.o cgh.o chainCart.o \
     chainDb.o chainLink.o chainNet.o chainNetDbLoad.o chr18deletions.o \
     chromInfo.o chromInserts.o chromKeeper.o \
-    clonePos.o codeBlast.o columnInfo.o coordConv.o \
+    clonePos.o codeBlast.o codeBlastScore.o cogs.o columnInfo.o coordConv.o \
     cpgIsland.o cpgIslandExt.o ctgPos.o ctgPos2.o customTrack.o cytoBand.o \
     dbDb.o dbSnpRs.o defaultDb.o dnaMotif.o dnaProbe.o \
     encodeErge.o encodeErgeHssCellLines.o\
@@ -39,7 +39,7 @@ O = affyAtlas.o affy10KDetails.o affy120KDetails.o affyOffset.o affyPairs.o \
     rankProp.o recombRate.o recombRateRat.o recombRateMouse.o \
     refLink.o refSeqStatus.o \
     riken.o rikenBest.o rikenCluster.o rmskOut.o \
-    rnaFold.o rnaGene.o rnaGroup.o \
+    rnaFold.o rnaGene.o rnaGenes.o rnaGroup.o \
     roughAli.o sage.o sageCounts.o sageExp.o sample.o tfbsCons.o \
     sanger22extra.o sangerGene.o scopDes.o scoredRef.o sgdAbundance.o \
     sgdClone.o sgdDescription.o sgdOther.o simpleNucDiff.o simpleRepeat.o \

@@ -17,7 +17,7 @@
 #include "joiner.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: filterFields.c,v 1.6 2004/08/28 23:42:14 kent Exp $";
+static char const rcsid[] = "$Id: filterFields.c,v 1.8 2004/09/02 19:26:49 hiram Exp $";
 
 /* ------- Stuff shared by Select Fields and Filters Pages ----------*/
 
@@ -125,7 +125,6 @@ static void showLinkedTables(struct joiner *joiner, struct dbTable *inList,
 /* Print section with list of linked tables and check boxes to turn them
  * on. */
 {
-struct slName *table;
 struct dbTable *outList = NULL, *out, *in;
 char dtName[256];
 struct hash *uniqHash = newHash(0);
@@ -501,6 +500,14 @@ char *eqOpMenu[] =
 };
 int eqOpMenuSize = ArraySize(eqOpMenu);
 
+char *maxOutMenu[] =
+{
+    "100,000",
+    "1,000,000",
+    "10,000,000",
+};
+int maxOutMenuSize = ArraySize(maxOutMenu);
+
 void stringFilterOption(char *db, char *table, char *field, char *logOp)
 /* Print out a table row with filter constraint options for a string/char. */
 {
@@ -569,32 +576,42 @@ struct sqlResult *sr;
 char **row;
 boolean gotFirst = FALSE;
 
-safef(query, sizeof(query), "describe %s", table);
-sr = sqlGetResult(conn, query);
-hPrintf("<TABLE BORDER=0>\n");
-while ((row = sqlNextRow(sr)) != NULL)
+if (isWiggle(db, table))
     {
-    char *field = row[0];
-    char *type = row[1];
-    char *logic = "";
-
-    if (!sameWord(type, "longblob"))
-        {
-	if (!gotFirst)
-	    gotFirst = TRUE;
-	else
-	    logic = " AND ";
-	}
-    if (isSqlStringType(type))
-        {
-	stringFilterOption(db, rootTable, field, logic);
-	}
-    else
-        {
-	numericFilterOption(db, rootTable, field, field, logic);
-	}
+    hPrintf("<TABLE BORDER=0>\n");
+    numericFilterOption(db, rootTable, filterDataValueVar,
+	filterDataValueVar, "");
+    hPrintf("</TABLE>\n");
     }
-hPrintf("</TABLE>\n");
+else
+    {
+    safef(query, sizeof(query), "describe %s", table);
+    sr = sqlGetResult(conn, query);
+    hPrintf("<TABLE BORDER=0>\n");
+    while ((row = sqlNextRow(sr)) != NULL)
+	{
+	char *field = row[0];
+	char *type = row[1];
+	char *logic = "";
+
+	if (!sameWord(type, "longblob"))
+	    {
+	    if (!gotFirst)
+		gotFirst = TRUE;
+	    else
+		logic = " AND ";
+	    }
+	if (isSqlStringType(type))
+	    {
+	    stringFilterOption(db, rootTable, field, logic);
+	    }
+	else
+	    {
+	    numericFilterOption(db, rootTable, field, field, logic);
+	    }
+	}
+    hPrintf("</TABLE>\n");
+    }
 
 /* Printf free-form query row. */
     {
@@ -607,6 +624,17 @@ hPrintf("</TABLE>\n");
     name = filterFieldVarName(db, rootTable, "", filterRawQueryVar);
     cgiMakeTextVar(name, cartUsualString(cart, name, ""), 50);
     hPrintf("</TD></TR></TABLE>\n");
+    }
+
+if (isWiggle(db, table))
+    {
+    char *name;
+    hPrintf("<TABLE BORDER=0><TR><TD> Limit data output to:&nbsp\n");
+    name = filterFieldVarName(db, rootTable, "",
+	filterMaxOutputVar);
+    cgiMakeDropList(name, maxOutMenu, maxOutMenuSize,
+		cartUsualString(cart, name, maxOutMenu[0]));
+    hPrintf("&nbsp lines</TD></TR></TABLE>\n");
     }
 
 freez(&table);
@@ -622,46 +650,54 @@ static void filterControlsForTableCt(char *db, char *table)
 {
 struct customTrack *ct = lookupCt(table);
 puts("<TABLE BORDER=0>");
-if (ct->fieldCount >= 3)
+
+if (ct->wiggle)
     {
-    stringFilterOption(db, table, "chrom", " AND ");
-    numericFilterOption(db, table, "chromStart", "chromStart", " AND ");
-    numericFilterOption(db, table, "chromEnd", "chromEnd", " AND ");
+    numericFilterOption(db, table, filterDataValueVar, filterDataValueVar, "");
     }
-if (ct->fieldCount >= 4)
+else
     {
-    stringFilterOption(db, table, "name", " AND ");
-    }
-if (ct->fieldCount >= 5)
-    {
-    numericFilterOption(db, table, "score", "score", " AND ");
-    }
-if (ct->fieldCount >= 6)
-    {
-    stringFilterOption(db, table, "strand", " AND ");
-    }
-if (ct->fieldCount >= 8)
-    {
-    numericFilterOption(db, table, "thickStart", "thickStart", " AND ");
-    numericFilterOption(db, table, "thickEnd", "thickEnd", " AND ");
-    }
-if (ct->fieldCount >= 12)
-    {
-    numericFilterOption(db, table, "blockCount", "blockCount", " AND ");
-    }
-/* These are not bed fields, just extra constraints that we offer: */
-if (ct->fieldCount >= 3)
-    {
-    numericFilterOption(db, table, "chromLength", "(chromEnd - chromStart)", 
-			(ct->fieldCount >= 8) ? " AND " : "");
-    }
-if (ct->fieldCount >= 8)
-    {
-    numericFilterOption(db, table, "thickLength", "(thickEnd - thickStart)",
-			" AND ");
-    eqFilterOption(db, table, "compareStarts", "chromStart", "thickStart", 
-		   " AND ");
-    eqFilterOption(db, table, "compareEnds", "chromEnd", "thickEnd", "");
+    if (ct->fieldCount >= 3)
+	{
+	stringFilterOption(db, table, "chrom", " AND ");
+	numericFilterOption(db, table, "chromStart", "chromStart", " AND ");
+	numericFilterOption(db, table, "chromEnd", "chromEnd", " AND ");
+	}
+    if (ct->fieldCount >= 4)
+	{
+	stringFilterOption(db, table, "name", " AND ");
+	}
+    if (ct->fieldCount >= 5)
+	{
+	numericFilterOption(db, table, "score", "score", " AND ");
+	}
+    if (ct->fieldCount >= 6)
+	{
+	stringFilterOption(db, table, "strand", " AND ");
+	}
+    if (ct->fieldCount >= 8)
+	{
+	numericFilterOption(db, table, "thickStart", "thickStart", " AND ");
+	numericFilterOption(db, table, "thickEnd", "thickEnd", " AND ");
+	}
+    if (ct->fieldCount >= 12)
+	{
+	numericFilterOption(db, table, "blockCount", "blockCount", " AND ");
+	}
+    /* These are not bed fields, just extra constraints that we offer: */
+    if (ct->fieldCount >= 3)
+	{
+	numericFilterOption(db, table, "chromLength", "(chromEnd - chromStart)", 
+			    (ct->fieldCount >= 8) ? " AND " : "");
+	}
+    if (ct->fieldCount >= 8)
+	{
+	numericFilterOption(db, table, "thickLength", "(thickEnd - thickStart)",
+			    " AND ");
+	eqFilterOption(db, table, "compareStarts", "chromStart", "thickStart", 
+		       " AND ");
+	eqFilterOption(db, table, "compareEnds", "chromEnd", "thickEnd", "");
+	}
     }
 puts("</TABLE>");
 hPrintf("<BR>\n");
@@ -890,6 +926,7 @@ boolean needAnd = FALSE;
  * NULL if no filter on us. */
 if (!anyFilter())
     return NULL;
+
 safef(varPrefix, sizeof(varPrefix), "%s%s.%s.", hgtaFilterVarPrefix, db, table);
 varPrefixSize = strlen(varPrefix);
 varList = cartFindPrefix(cart, varPrefix);

@@ -7,22 +7,13 @@ visibility hide
 url http://www.ncbi.nlm.nih.gov/entrez/viewer.fcgi?db=nucleotide&val=$$
 type bed 4 .
  
-track loweTrnaGene
-shortLabel Lowe tRNA
-longLabel tRNA genes found by Todd Lowe
+track rnaGenes
+shortLabel All RNAs
+longLabel Lowe tRNA & Lowe snoRNA & GenBank rRNA
 group genes
-priority 2.5
+priority 2.51
 visibility dense
 color 160,40,40
-type bed 6 +
-
-track loweSnoGene
-shortLabel Lowe snoRNA
-longLabel snoRNA genes found by Todd Lowe
-group genes
-priority 2.61
-visibility dense
-color 160,140,50
 type bed 6 .
 
 track primAORF
@@ -54,3 +45,13 @@ expStep 0.5
 expTable llaPaePrintAExps
 chip printA
 canPack off
+
+track codeBlast
+shortLabel BLASTP codes
+longLabel Conservation of proteins with BLASTP
+group compGeno
+priority 4.5
+visibility dense
+type bed 6 +
+canPack off
+
