@@ -834,4 +834,12 @@ Error: danRer1: gene danRer1.refFlat:1854 NM_131267 chr7: NM_131267 geneName "ir
 - tmp load files should be removed first or they get write permission
   errors if loaded by a different user.
 
+- Weird cases to look at with new cdna filtering:
+
+  - KG gets both of these; RS just gets a cr22_random, although
+    CCDS places it on chr11.
+    NM_000039 at chr22_random:13497-15365 - (BC005380) apolipoprotein A-I
+    NM_000039 at chr11:116211680-116213334 - (BC005380) apolipoprotein A-I
+    NM_000039 at chr22_random:13976-15367 - (M29068) APOA1 protein (Fragment).
+    NM_000039 at chr11:116211678-116213033 - (M29068) APOA1 protein (Fragment).
 
