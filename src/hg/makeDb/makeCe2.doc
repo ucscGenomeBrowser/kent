@@ -2006,6 +2006,7 @@ done
     #	sys     0m1.500s
 
 # MAKE phyloHMM data
+# (redone using new phastCons, acs 9/14/04)
     ssh hgwdev
     mkdir /cluster/data/ce2/bed/pHMM
     cd /cluster/data/ce2/bed/pHMM
@@ -2023,111 +2024,130 @@ sed -e "s/chrUn/cb1.chrUn/" maf/chr${c}.Tmaf | sed -e "s/ chr/ ce2.chr/" > \
 rm -f maf/chr${c}.Tmaf
 echo "done chr${c}"
 done
-    #	create .ss files from the maf files
-for i in I II III IV V X M
-do
-echo "chr${i}.ss"
-/cluster/data/woody/bin/msa_view -i MAF maf/chr${i}.maf -o SS -z -O ce2,cb1 > \
-        chr${i}.ss
-done
-    #	create the model parameters
-    /cluster/data/woody/bin/msa_view -i SS -o SS -A ce2,cb1 chr*.ss > all.ss
-    echo "(1,2);" > tree.nh
-    /cluster/data/woody/bin/fit_tree_model -i SS -m all.ss -t tree.nh -s REV \
-        -k 10 -o rev_dg
-    cat rev_dg.mod
-#	ALPHABET: A C G T 
-#	ORDER: 0
-#	SUBST_MOD: REV
-#	NRATECATS: 10
-#	ALPHA: 1.340710
-#	TRAINING_LNL: -17312218.745377
-#	BACKGROUND: 0.314002 0.186665 0.186748 0.312585 
-#	RATE_MAT:
-#	  -0.868000    0.166586    0.469971    0.231443 
-#	   0.280225   -1.221111    0.151932    0.788953 
-#	   0.790216    0.151865   -1.219545    0.277464 
-#	   0.232492    0.471137    0.165766   -0.869395 
-#	TREE: (1:0.228767,2:0.228767);
 
-    #	split up the mafs for the label processing
-    ssh eieio
-    cd /cluster/data/ce2/bed/pHMM
-    mkdir WINDOWS
-    mkdir msa_split
-for c in M I II III IV V X
-do
-    cd /cluster/data/ce2/bed/pHMM
-    maf=maf/chr${c}.maf
-    prefix=chr${c}
-    mkdir msa_split/$prefix
-    /cluster/data/woody/bin/msa_split $maf -i MAF -M \
-	/cluster/data/ce2/sangerFa/$prefix.fa -O ce2,cb1 -w 1000000,0 \
-	-r msa_split/$prefix/$prefix -o SS -I 1000 -d 1 -B 5000
-    cd msa_split/${prefix}
-    for f in *.ss; do gzip -c ${f} > ../../WINDOWS/${f}.gz; done
-    echo "done chr${c}"
+    # split up alignments; no need to use cluster with worm
+mkdir -p /cluster/bluearc/ce2/phastCons/WINDOWS
+mkdir -p /scratch/phastCons.ce2.09-14-04.WINDOWS
+for i in I II III IV V X M; do \
+    msa_split maf/chr${i}.maf -i MAF -M /cluster/data/ce2/sangerFa/chr${i}.fa \
+	-w 1000000,0 -r /scratch/phastCons.ce2.09-14-04.WINDOWS/chr${i} -o SS \
+	-I 1000 -B 5000 ;\
 done
+for file in /scratch/phastCons.ce2.09-14-04.WINDOWS/* ; do \
+    echo $file ;\
+    gzip -c $file > /cluster/bluearc/ce2/phastCons/WINDOWS/`basename $file`.gz ;\
+done
+rm -rf /scratch/phastCons.ce2.09-14-04.WINDOWS
 
-    #	perform the label processing as a cluster job
-    ssh kk
-    cd /cluster/data/ce2/bed/pHMM
-    mkdir label.tmp
-    mkdir POSTPROBS
-    cat << '_EOF_' > doPostProbs.sh
+    # produce rough starting model
+msa_view -i MAF --aggregate ce2,cb1 -o SS -z maf/chr*.maf > all.ss
+phyloFit -i SS all.ss -o starting-tree
+    # also get average GC content of aligned regions
+msa_view -i SS all.ss --summary-only
+#   descrip.                      A          C          G          T        G+C length   all_gaps  some_gaps
+#   all.ss                   0.3130     0.1872     0.1869     0.3129     0.3741   58909311          0   11236473
+
+    # now set up cluster job to estimate model parameters.  See
+    # makeHg17.doc for add'l details
+
+cat << 'EOF' > doEstimate.sh
 #!/bin/sh
-file=$1
-root=`echo $file | awk -F\/ '{print $NF}' | sed 's/\.ss\.gz//'`
-chrom=`echo $root | awk -F\. '{print $1}'`
-TMP=/tmp/pHMMCe1/${root}
-mkdir -p ${TMP}
-zcat $file |  /cluster/data/woody/bin/label -m - -d rev_dg.mod -i SS \
-    -o ${TMP}/$root -k 10 -L 0.9 -A -p 0 -j 1 -s $chrom -x
-mkdir POSTPROBS/$chrom
-gzip -c ${TMP}/$root.postprob > POSTPROBS/$chrom/$root.postprob.gz
-rm -f ${TMP}/$root.postprob
-rmdir --ignore-fail-on-non-empty ${TMP}
-rmdir --ignore-fail-on-non-empty /tmp/pHMMCe1
-'_EOF_'
-    chmod +x doPostProbs.sh
-    rm -f jobs.lst
-    for file in WINDOWS/chr*.ss.gz
-    do
-        echo "./doPostProbs.sh $file" >> jobs.lst
-    done
-    para create jobs2.lst
-    para try
-    para check
-    para push
-# Completed: 104 of 104 jobs
-# CPU time in finished jobs:      28092s     468.20m     7.80h    0.33d  0.001 y
-# IO & Wait Time:                   704s      11.73m     0.20h    0.01d  0.000 y
-# Average job time:                 277s       4.61m     0.08h    0.00d
-# Longest job:                      335s       5.58m     0.09h    0.00d
-# Submission to last job:           373s       6.22m     0.10h    0.00d
+zcat $1 | /cluster/bin/phast/phastCons - starting-tree.mod --gc 0.3741 --nrates 1,1 --no-post-probs --ignore-missing --expected-lengths 25 --target-coverage 0.45 --quiet --log $2 --estimate-trees $3
+EOF
+chmod u+x doEstimate.sh
+    # (target of .45 is based on target of 0.2 and about 45% alignment
+    # coverage: 0.2/0.45 is approx. 0.45)
 
-    #	ready to create and load the data track
-    ssh eieio
-    cd /cluster/data/ce2/bed/pHMM
-    mkdir wibLimits
-    mkdir wib
-    for dir in POSTPROBS/*
-    do
-	chrom=${dir/POSTPROBS\//}
-	echo $dir $chrom
-        zcat `ls POSTPROBS/$chrom/*postprob.gz | sort -t\. -k2,2n` | \
-            wigAsciiToBinary -chrom=$chrom -binsize=1024 \
-                -dataSpan=1 -wibFile=wib/${chrom}_phyloHMMcons -name=cb1 \
-                stdin 2> wibLimits/${chrom}
-    done
+rm -fr LOG TREES
+mkdir -p LOG TREES
+rm -f jobs.lst
+for f in /cluster/bluearc/ce2/phastCons/WINDOWS/*.ss.gz ; do
+    root=`basename $f .ss.gz` ;\
+    echo doEstimate.sh $f LOG/$root.log TREES/$root >> jobs.lst ;\
+done
 
-    #	load the phyloHMM track
-    ssh hgwdev
-    cd /cluster/data/ce2/bed/pHMM
-    hgLoadWiggle -pathPrefix=/gbdb/ce2/wib/pHMMCb1 ce2 phyloHMMcons_Cb1 \
-	wib/*_phyloHMMcons.wig 
-    mkdir /gbdb/ce2/wib/pHMMCb1
-    ln -s `pwd`/wib/chr*_phyloHMMcons.wib /gbdb/ce2/wib/pHMMCb1
+    # run cluster job
+ssh kk... para create ...
+    # (takes about 2 minutes)
+
+    # Now combine parameter estimates.  
+ls TREES/*.cons.mod > cons.txt
+phyloBoot --read-mods '*cons.txt' --output-average ave.cons.mod > cons_summary.txt
+ls TREES/*.noncons.mod > noncons.txt
+phyloBoot --read-mods '*noncons.txt' --output-average ave.noncons.mod > noncons_summary.txt
+
+    # Now set up cluster job for computing consevation scores and predicted elements
+cat << 'EOF' > doPhastCons.sh
+#!/bin/sh
+
+mkdir -p /cluster/bluearc/ce2/phastCons/POSTPROBS /cluster/bluearc/ce2/phastCons/ELEMENTS
+pref=`basename $1 .ss.gz`
+chr=`echo $pref | awk -F\. '{print $1}'`
+tmpfile=/scratch/phastCons.$$
+zcat $1 | /cluster/bin/phast/phastCons - ave.cons.mod,ave.noncons.mod --expected-lengths 25 --target-coverage 0.45 --quiet --seqname $chr --idpref $pref --viterbi /cluster/bluearc/ce2/phastCons/ELEMENTS/$pref.bed --score --require-informative 0 > $tmpfile
+gzip -c $tmpfile > /cluster/bluearc/ce2/phastCons/POSTPROBS/$pref.pp.gz
+rm $tmpfile
+EOF
+chmod u+x doPhastCons.sh
+
+rm -fr /cluster/bluearc/ce2/phastCons/POSTPROBS /cluster/bluearc/ce2/phastCons/ELEMENTS
+rm -f jobs2.lst
+for f in /cluster/bluearc/ce2/phastCons/WINDOWS/*.ss.gz ; do echo doPhastCons.sh $f >> jobs2.lst ; done
+
+    # run cluster job
+ssh kk... para create, ...
+    # (takes about 30 sec)
+
+    # set up phastConsElements track
+awk '{printf "%s\t%d\t%d\tlod=%d\t%s\n", $1, $2, $3, $5, $5;}' /cluster/bluearc/ce2/phastCons/ELEMENTS/*.bed > all.raw.bed 
+/cluster/bin/scripts/lodToBedScore all.raw.bed > all.bed
+hgLoadBed ce2 phastConsElements all.bed
+featureBits ce2 phastConsElements
+#   20217282 bases of 100291761 (20.158%) in intersection
+
+    # set up wiggle
+mkdir wib
+for i in I II III IV V X M; do \
+    zcat `ls /cluster/bluearc/ce2/phastCons/POSTPROBS/chr${i}.*.pp.gz | sort -t\. -k2,2n` | \
+	wigAsciiToBinary -chrom=chr${i} -wibFile=wib/chr${i}_phastCons stdin ;\
+done
+hgLoadWiggle ce2 phastCons -pathPrefix=/gbdb/ce2/phastCons/wib wib/chr*_phastCons.wig
+mkdir -p /gbdb/ce2/phastCons/wib
+rm -f /gbdb/ce2/phastCons/wib/chr*phastCons.wib
+ln -s /cluster/data/ce2/bed/pHMM/wib/*.wib /gbdb/ce2/phastCons/wib
+chmod 775 . wib /gbdb/ce2/phastCons /gbdb/ce2/phastCons/wib
+chmod 664 wib/*.wib
+
+    # move postprobs over and clean up bluearc 
+rsync -av /cluster/bluearc/ce2/phastCons/POSTPROBS .
+    # (people sometimes want the raw scores)
+rm -r /cluster/bluearc/ce2/phastCons/ELEMENTS /cluster/bluearc/ce2/phastCons/POSTPROBS 
+
+    # set up full alignment/conservation track
+    # note that in this case the pairwise mafs are used both for the
+    # "multiple" alignment and the pairwise alignments
+mkdir -p /gbdb/ce2/c_briggsae_pwMaf
+cd maf
+ln -s `pwd`/*.maf /gbdb/ce2/c_briggsae_pwMaf
+hgLoadMaf ce2 -warn c_briggsae_pwMaf -pathPrefix=/gbdb/ce2/c_briggsae_pwMaf
+chmod 775 /gbdb/ce2/c_briggsae_pwMaf .
+chmod 664 *.maf
+
+    # trackDb entry:
+#   track c_briggsae_pwMaf
+#   shortLabel Conservation
+#   longLabel Blastz Alignments with C. Briggsae & Conservation 
+#   group compGeno
+#   priority 100
+#   visibility pack
+#   type wigMaf 0.0 1.0
+#   maxHeightPixels 100:40:11
+#   wiggle phastCons
+#   yLineOnOff Off
+#   autoScaleDefault Off
+#   pairwise pwMaf
+#   speciesOrder c_briggsae
+
 
 ######## MAKING GENE SORTER TABLES #### (DONE - 2004-05-27 - hartera)
 # These are instructions for building the
