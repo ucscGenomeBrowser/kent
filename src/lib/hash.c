@@ -8,7 +8,7 @@
 #include "hash.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: hash.c,v 1.16 2003/06/23 22:04:09 baertsch Exp $";
+static char const rcsid[] = "$Id: hash.c,v 1.17 2003/07/31 06:24:55 kent Exp $";
 
 bits32 hashCrc(char *string)
 /* Returns a CRC value on string. */
@@ -55,18 +55,23 @@ while (el != NULL)
 return el;
 }
 
-struct hashEl *hashAdd(struct hash *hash, char *name, void *val)
-/* Add new element to hash table. */
+struct hashEl *hashAddN(struct hash *hash, char *name, int nameSize, void *val)
+/* Add name of given size to hash (no need to be zero terminated) */
 {
 struct hashEl *el = lmAlloc(hash->lm, sizeof(*el));
 int hashVal = (hashCrc(name)&hash->mask);
-int len = strlen(name);
-el->name = lmAlloc(hash->lm, len+1);
-strcpy(el->name, name);
+el->name = lmAlloc(hash->lm, nameSize+1);
+memcpy(el->name, name, nameSize);
 el->val = val;
 el->next = hash->table[hashVal];
 hash->table[hashVal] = el;
 return el;
+}
+
+struct hashEl *hashAdd(struct hash *hash, char *name, void *val)
+/* Add new element to hash table. */
+{
+return hashAddN(hash, name, strlen(name), val);
 }
 
 void *hashRemove(struct hash *hash, char *name)

@@ -45,6 +45,9 @@ struct hashEl *hashLookupNext(struct hashEl *hashEl);
 struct hashEl *hashAdd(struct hash *hash, char *name, void *val);
 /* Add new element to hash table. */
 
+struct hashEl *hashAddN(struct hash *hash, char *name, int nameSize, void *val);
+/* Add name of given size to hash (no need to be zero terminated) */
+
 void *hashRemove(struct hash *hash, char *name);
 /* Remove item of the given name from hash table. 
  * Returns value of removed item. */
