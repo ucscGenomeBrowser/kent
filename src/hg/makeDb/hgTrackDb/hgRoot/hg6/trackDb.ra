@@ -1,0 +1,7 @@
+track stsMap
+shortLabel STS Markers
+longLabel STS Markers on Genetic (blue), FISH (green) and Radiation Hybrid (black) Maps
+priority 3
+visibility dense
+altColor 128,128,255,
+type bed 5 +
