@@ -26,7 +26,9 @@ int minMatch = gfMinMatch;	/* Can be overridden from command line. */
 int tileSize = gfTileSize;	/* Can be overridden from command line. */
 boolean doTrans = FALSE;	/* Do translation? */
 boolean allowOneMismatch = FALSE; 
-int repMatch = 1024;
+int repMatch = 1024;    /* Can be overridden from command line. */
+int maxDnaHits = 100;   /* Can be overridden from command line. */
+int maxTransHits = 200; /* Can be overridden from command line. */
 int maxGap = gfMaxGap;
 FILE *logFile = NULL;
 boolean seqLog = FALSE;
@@ -65,6 +67,12 @@ errAbort(
   "   -log=logFile keep a log file that records server requests.\n"
   "   -mask      Use masking from nib file.\n"
   "   -seqLog    Include sequences in log file\n"
+  "   -repMatch=N Number of occurrences of a tile (nmer) that trigger repeat masking the tile.\n"
+  "               Default is 1024.\n"
+  "   -maxDnaHits=N Maximum number of hits for a dna query that are sent from the server.\n"
+  "               Default is 100.\n"
+  "   -maxTransHits=N Maximum number of hits for a translated query that are sent from the server.\n"
+  "               Default is 200.\n"
   );
 
 }
@@ -144,7 +152,7 @@ int clumpCount = 0, hitCount = -1;
 struct lm *lm = lmInit(0);
 
 if (seq->size > 3*gf->tileSize)
-     limit = 100;
+     limit = maxDnaHits;
 clumpList = gfFindClumps(gf, seq, lm, &hitCount);
 if (clumpList == NULL)
     ++missCount;
@@ -187,7 +195,7 @@ for (isRc = 0; isRc <= 1; ++isRc)
     hitCount += oneHit;
     for (frame = 0; frame < 3; ++frame)
         {
-	int limit = 200;
+	int limit = maxTransHits;
 	for (clump = clumps[frame]; clump != NULL; clump = clump->next)
 	    {
 	    struct gfSeqSource *ss = clump->target;
@@ -241,7 +249,7 @@ for (isRc = 0; isRc <= 1; ++isRc)
 	{
 	for (tFrame=0; tFrame<3; ++tFrame)
 	    {
-	    int limit = 200;
+	    int limit = maxTransHits;
 	    for (clump = clumps[qFrame][tFrame]; clump != NULL; clump = clump->next)
 		{
 		struct gfSeqSource *ss = clump->target;
@@ -623,6 +631,8 @@ if (cgiBoolean("trans"))
 tileSize = cgiOptionalInt("tileSize", tileSize);
 minMatch = cgiOptionalInt("minMatch", minMatch);
 repMatch = cgiOptionalInt("repMatch", repMatch);
+maxDnaHits = cgiOptionalInt("maxDnaHits", maxDnaHits);
+maxTransHits = cgiOptionalInt("maxTransHits", maxTransHits);
 seqLog = cgiBoolean("seqLog");
 maskNib = cgiBoolean("mask");
 if (argc < 2)
