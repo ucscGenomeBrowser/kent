@@ -107,7 +107,7 @@ for(er = erList; er != NULL; er = er->next)
     if ((filterIndex == -1) || (sameString(filter, er->extras[filterIndex])))
         {
 	char *name;
-	if (index >= 0)
+	if (index >= 0 && er->numExtras > index)
 	    name = er->extras[index];
 	else
 	    name = er->name;
@@ -225,7 +225,7 @@ sqlDisconnect(&conn);
 for(er = erList; er != NULL; er = er->next)
     {
     char *name;
-    if (expIndex >= 0)
+    if (expIndex >= 0 && er->numExtras > expIndex)
         name = er->extras[expIndex];
     else
         name = er->name;
