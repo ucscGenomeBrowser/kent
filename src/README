@@ -156,8 +156,9 @@ as "chromosome22Annotations" or "chr22Ann."
 Note the capitalized 'A" after the 22.
 
 These naming rules apply to variables, constants, functions, fields,
-and structures.  Whenever possible they should be used for
-file names, database table and database column names as well.
+and structures.  They generally are used for file names, database tables,
+database columns, and C macros as well, though there is a bit less
+consistency there in the existing code base.
 
 
 ERROR HANDLING AND MEMORY ALLOCATION
