@@ -1721,23 +1721,27 @@ SGP GENE PREDICTIONS (4/17/03 KRR)
     hgPepPred mm3 generic sgpPep download/*-fixed.prot
 
 
-# TIGR GENE INDEX (DONE 2003-10-31 kate)
+# TIGR GENE INDEX (DONE 2003-11-10 kate)
+    ssh kkstore
     mkdir -p /cluster/data/mm3/bed/tigr
     cd /cluster/data/mm3/bed/tigr
-    wget ftp://ftp.tigr.org/pub/data/tgi/Mus_musculus/TGI_track_TGI_track_MouseGenome_Feb2003.tgz
+    wget ftp://ftp.tigr.org/pub/data/tgi/Mus_musculus/TGI_track_MouseGenome_Feb2003.tgz
     tar xvfz TGI*.tgz
     foreach f (*cattle*)
       set f1 = `echo $f | sed -e 's/cattle/cow/g'`
       mv $f $f1
     end
     foreach o (mouse cow human pig rat)
+      echo $o
       setenv O $o
       foreach f (chr*_$o*s)
         tail +2 $f | perl -wpe 's /THC/TC/; s/(TH?C\d+)/$ENV{O}_$1/;' > $f.gff
       end
     end
+    ssh hgwdev
+    cd /cluster/data/mm3/bed/tigr
     ldHgGene -exon=TC mm3 tigrGeneIndex *.gff
-       # 247855 gene predictions
+       # 286333 transcripts in 1180977 lines in 105 files
     gzip *TCs *.gff
 
 
