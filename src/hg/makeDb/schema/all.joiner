@@ -44,7 +44,7 @@ set xrg $panTro,$galGal,$ci,$canFam,$dp,$droYak,$droMult
 exclusiveSet $gbd
 
 # Define other databases that we check
-set otherDb uniProt,go,hgFixed
+set otherDb uniProt,go,hgFixed,proteome
 
 # Define protein databases (currently not checked)
 set proteinDb proteins050201,proteins041115,proteins0111,proteins0305,proteins031112,proteins040115,proteins040115,proteins0405,proteins070403,proteins072003,proteins092903,proteins1129
