@@ -1893,33 +1893,37 @@ http://genome.imim.es/genepredictions/G.gallus/golden_path_200402/geneid_v1.1/$c
     # emailed the files to John Wallis w/warning they're prelim, automated.
 
 
-# SNP & GENES FROM BEIJING GENOME INST. (DONE 3/18/04 angie)
-    ssh kolossus
+# SNP & GENES FROM BEIJING GENOME INST. (DONE 7/20/04 angie)
+    ssh kksilo
     mkdir /cluster/data/galGal2/bed/bgi
     cd /cluster/data/galGal2/bed/bgi
     # Their files are very fragmented into a deep dir structure.  
     # Pull the whole thing (except chromatograms) over intact.  
-    # Use --active-ftp because passive mode was timing out.  
-    # Replace XXXX, YYYY and HHHH with username, password & host emailed from 
-    # Yong Zhang <zhangy@genomics.org.cn>.
-    wget -r --exclude-directories=\*/chromatograms --active-ftp \
-      --timestamping ftp://XXXX:YYYY@HHHH/BGI/
-    # Takes hours... ~30kB/s from China, & lots o' data...
+    wget -r --exclude-directories=\*/chromatograms \
+      --timestamping ftp://genome.wustl.edu/private/BGI/
+    # Takes hours...
+    # Zhang Yong said to ignore the target regions, so move the dir 
+    # out of the way for now...
+    mv genome.wustl.edu/private/BGI/SNPs_by_locus/ .
 
     # Coverage track: bed 4 showing where SNP reads were performed.
     # Looks like we can get strain info from filename... 
-    find . -name \*ContigCov-\*.txt\* -print \
+    find genome.wustl.edu/private/BGI/SNPs_by_strain/2004-07-07 \
+       -name \*ContigCov-\*.txt\* -print \
+    | grep -v /BAC-endpairs/ \
     | xargs $HOME/kent/src/hg/snp/bgi/bgiCovToBed.pl \
       > bgiCov.bed
 
     # Gene annotations:
-    find . -name \*exon_intron.txt -print \
+    find genome.wustl.edu/private/BGI/external_data/2004-05-11 \
+      -name \*exon_intron.txt -print \
     | sed -e 's/ /\\ /g' \
     | xargs $HOME/kent/src/hg/snp/bgi/bgiExonIntronToGenePred.pl \
       > bgiGene.tab
 
     # Gene annotation peptide seqs:
-    find 6* -name \*.pep\* -print \
+    find genome.wustl.edu/private/BGI/external_data/2004-05-11 \
+      -name \*.pep\* -print \
     | sed -e 's/ /\\ /g' \
     | xargs $HOME/kent/src/hg/snp/bgi/bgiPep.pl \
       > bgiGenePep.fa
@@ -1928,14 +1932,21 @@ http://genome.imim.es/genepredictions/G.gallus/golden_path_200402/geneid_v1.1/$c
     # SNPlist-* files, cross-reference, and dump out bgiGeneInfo.sql 
     # and bgiSnp.bed.  (bgiGeneInfo.sql with INSERT statements because of 
     # the longblobs which can't be loaded in from .tab unfortunately)
-    find . -name SNPlist-\*.txt\* -print \
+    find genome.wustl.edu/private/BGI/SNPs_by_strain/2004-07-07 \
+      -name SNPlist-\*.txt\* -print \
+      | grep -v /BAC-endpairs/ \
       > SNPlists.list
-    find 6*/BGI/SNPs_by_cDNA/2004-03-15 -name \*GeneSNPcon\*.txt\* -print \
+    find genome.wustl.edu/private/BGI/SNPs_by_cDNA/2004-07-07 \
+      -name \*GeneSNPcon\*.txt\* -print \
       > GeneSNPcons.list
-    find 6*/BGI/SNPs_by_locus -name \*GeneSNPcon\*.txt\* -print \
-    | grep -v MHC_Region \
-      >> GeneSNPcons.list
-    $HOME/kent/src/hg/snp/bgi/bgiXref.pl SNPlists.list GeneSNPcons.list
+    # Takes about 15 minutes:
+    time $HOME/kent/src/hg/snp/bgi/bgiXref.pl SNPlists.list GeneSNPcons.list
+    # Tons of duplicated gene-snp association warnings like this:
+#dup assoc ENS.ENSGALT00000000020        snp.117.58.6795.S.2:
+#  ENS.ENSGALT00000000020        snp.117.58.6795.S.2     Intron
+#  ENS.ENSGALT00000000020        snp.117.58.6795.S.2     Splice Site     AG->AA
+    # which I think is OK.  Also duplicated gene sources (asked Zhang Yong):
+#dup:    HDG.ENSG00000005381     HumanDiseaseGene        HumanDiseaseGene
 
     # Load 'em up...
     ssh hgwdev
