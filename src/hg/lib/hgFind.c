@@ -40,7 +40,7 @@
 #include "minGeneInfo.h"
 #include <regex.h>
 
-static char const rcsid[] = "$Id: hgFind.c,v 1.100 2003/08/08 17:09:41 donnak Exp $";
+static char const rcsid[] = "$Id: hgFind.c,v 1.101 2003/08/08 17:26:49 donnak Exp $";
 
 /* alignment tables to check when looking for mrna alignments */
 static char *estTables[] = { "all_est", "xenoEst", NULL};
@@ -3047,9 +3047,12 @@ if (strstrNoCase(organism, "human"))
 "<P>The latest human reference sequence (UCSC version hg16) is based on NCBI \n" 
 "Build 34 and was produced by the International Human \n"
 "Genome Sequencing Consortium. The sequence covers about 99 percent of \n"
-"the gene-containing regions in the genome, and has been sequenced to an accuracy of \n"
-"99.99 percent. There are 2,843,433,602 finished sequenced bases in the \n"
-"ordered and oriented portion of this assembly, which is an increase of 0.4 \n" 
+"the gene-containing regions in the genome, and has been sequenced to an \n"
+"accuracy of 99.99 percent. \n"
+"Of note in this release is the addition of the pseudoautosomal regions \n"
+"of the Y chromosome. \n"
+"There are 2,843,433,602 finished sequenced bases in the \n"
+"ordered and oriented portion of the assembly, which is an increase of 0.4 \n" 
 "percent, or approximately 11 Mb, over the Build 33 assembly. \n"
 "The missing portions are essentially contained in approximately \n"
 "301 defined gaps in the euchromatic region representing DNA regions with unusual structures \n"
