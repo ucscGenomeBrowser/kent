@@ -29,7 +29,7 @@
 #include "dbDb.h"
 
 
-static char const rcsid[] = "$Id: qaPushQ.c,v 1.38 2004/05/24 08:24:10 galt Exp $";
+static char const rcsid[] = "$Id: qaPushQ.c,v 1.39 2004/05/24 17:29:54 galt Exp $";
 
 char msg[2048] = "";
 char ** saveEnv;
@@ -3016,7 +3016,7 @@ for (ki = kiList; ki != NULL; ki = ki->next)
     
     safef(query,sizeof(query),
 	"select releaseLog, qadate from pushQ "
-	"where priority='L' and dbs like '%%%s%%' "
+	"where priority='L' and releaseLog != '' and dbs like '%%%s%%' "
 	"order by qadate desc, qid desc",
 	ki->name);
 	
