@@ -1878,6 +1878,17 @@ o - Load Ensembl peptides:
      sed "s/\*$//" mm3EnsGene.pep > ensembl.pep
      hgPepPred mm3 generic ensPep ensembl.pep
 
+o - Load ensGtp table.
+    # ensGtp associates geneId/transcriptId/proteinId for hgPepPred and 
+    # hgKnownToSuper.  Use ensMart to create it as above, except:
+    # Page 3) Choose the "Features" box. In "Ensembl Attributes", check 
+    # Ensembl Gene ID, Ensembl Transcript ID, Ensembl Peptide ID.  
+    # Choose Text, tab-separated as the output format.  Result name ensGtp.
+    # Save file as ensGtp.txt.gz
+    gunzip ensGtp.txt.gz
+    hgsql hg16 < ~/kent/src/hg/lib/ensGtp.sql
+    echo "load data local infile 'ensGtp.txt' into table ensGtp" | hgsql -N hg16
+
 
 LOAD ENSEMBL ESTS (DONE June 6, 03)
      cd ~/mm3/bed
