@@ -13,7 +13,7 @@
 #include "hCommon.h"
 #include "hui.h"
 
-static char const rcsid[] = "$Id: hgGateway.c,v 1.68 2003/11/27 05:13:40 jill Exp $";
+static char const rcsid[] = "$Id: hgGateway.c,v 1.69 2003/12/08 18:32:52 donnak Exp $";
 
 struct cart *cart = NULL;
 struct hash *oldVars = NULL;
@@ -107,6 +107,7 @@ puts(
 "<td align=center valign=baseline>position</td>\n"
 "<td align=center valign=baseline> </td>\n"
 "<td align=center valign=baseline>image width</td>\n"
+"</tr>\n"
 );
 
 puts("<tr><td align=center>\n");
@@ -155,7 +156,7 @@ puts(
 "</center>\n"
 "</td></tr><tr><td><center>\n"
 );
-cgiMakeButton("customTrackPage", "Add Your Own Tracks");
+cgiMakeButton("customTrackPage", "Add Your Own Custom Tracks");
 puts("</center>\n"
 "</td></tr></table>\n"
 "</td></tr></table>\n"
@@ -165,21 +166,13 @@ puts("</center>");
 
 hgPositionsHelpHtml(organism, db);
 
-webNewSection("Add Your Own Tracks");
-puts("We're changing the interface. To add your own tracks "
-     "please push the button under the position box near the top "
-     "of the page "
-     "</FORM>\n"
+puts("</FORM>\n"
 );
 
 printf("<FORM ACTION=\"/cgi-bin/hgGateway\" METHOD=\"GET\" NAME=\"orgForm\"><input type=\"hidden\" name=\"org\" value=\"%s\">\n", organism);
 printf("<input type=\"hidden\" name=\"db\" value=\"%s\">\n", db);
 cartSaveSession(cart);
-puts("</FORM>"
-"	<BR></TD><TD WIDTH=15>&nbsp;</TD></TR></TABLE>\n"
-"	</TD></TR></TABLE>\n"
-"			\n"
-"</TD></TR></TABLE>\n");
+puts("</FORM><BR>");
 }
 
 void doMiddle(struct cart *theCart)
