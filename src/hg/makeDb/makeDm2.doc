@@ -3822,6 +3822,29 @@ zcat `ls -1 /cluster/bluearc/dm2/phastCons/POSTPROBS/$chr.*.pp.gz \
     hgsql dm2 -e 'load data local infile "flyregMotif.tab" into table flyregMotif'
 
 
+# LIFTOVER DM1 FLYREG, COMPARE TO DM2 FLYREG (DONE 2/25/05 angie)
+    # Casey Bergman is very eager to see alternate confirmation of his 
+    # dm1->dm2 mapping of flyreg, so run liftOver on it:
+    ssh kksilo
+    cd /cluster/data/dm2/bed/flyreg
+    liftOver /cluster/data/dm1/bed/flyreg/flyreg.bed \
+      /cluster/data/dm1/bed/bedOver/dm1ToDm2.over.chain \
+      flyregLift.bed flyregLift.unmapped
+    wc -l flyreg2.bed flyregLift.bed flyregLift.unmapped 
+#  1362 flyreg2.bed
+#  1363 flyregLift.bed
+#     0 flyregLift.unmapped
+    awk '{print $1 "\t" $2 "\t" $3 "\t" $4 "\t" $5;}' flyreg2.bed | sort \
+      > /tmp/1
+    awk '{print $1 "\t" $2 "\t" $3 "\t" $4 "\t" $5;}' flyregLift.bed | sort \
+      > /tmp/2
+    diff /tmp/[12] > newVsLift
+    # Analyzed the differences: 2 duplicates in original (uniquified in v2),
+    # 1 new item in v2, and 4 items incorrectly mapped by liftOver (fooled 
+    # by what looks like a slightly diverged local duplication) but probably
+    # correctly mapped by Casey.
+
+
 # SELF ALIGNMENTS (DONE 2/24/05 angie)
     # Doing this largely as a test of doBlastzChainNet.pl...
     ssh kksilo
