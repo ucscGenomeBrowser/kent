@@ -24,11 +24,14 @@
   block that spans two or more bases.
 </P>
 <P>
-  When chromStart = chromEnd+1 in the graphical display (or chromStart = 
-  chromEnd in the zero-based database records), this is generally not an 
+  When the start coordinate for a SNP is shown as chromStart = chromEnd+1 on 
+  the SNP's details page, this is generally not an 
   error; rather, it indicates that the variant is an insertion at this genomic
   position.  In these instances, the location type will be set to 
-  &quot;between&quot;.
+  &quot;between&quot;. Note that insertions are represented as chromStart = 
+  chromEnd in the <em>snp</em> table accessible from the Table Browser 
+  or downloads server, due to the half-open zero-based representation of
+  data in the underlying database. 
 </P>
 <P>
   The colors of variants in the display may be changed to highlight their 
@@ -37,7 +40,8 @@
   same
   criteria or if they fall below the user-specified minimum 
   <A name="AvHet"><A HREF="http://www.ncbi.nlm.nih.gov/SNP/Hetfreq.html" 
-  target="_blank">average heterozygosity</A>.
+  target="_blank">average heterozygosity</A>. The track configuration options
+  are located at the top of the SNPs track description page.
 </P>
 <P>
   The following configuration categories reflect the following definitions defined
