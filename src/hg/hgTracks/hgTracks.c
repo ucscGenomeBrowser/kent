@@ -84,7 +84,7 @@
 #include "estOrientInfo.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.780 2004/08/23 17:26:47 aamp Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.781 2004/08/24 19:32:43 sugnet Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
@@ -6127,23 +6127,24 @@ boolean *inMotif = NULL;
 int motifCount = 0;
 Color noMatchColor = lighterColor(vg, color);
 Color clr;
+int textLength = strlen(text);
 
 /* If we have motifs, look for them in the string. */
-if(motifString != NULL)
+if(motifString != NULL && strlen(motifString) != 0)
     {
     touppers(motifString);
     motifString = cloneString(motifString);
     motifCount = chopString(motifString, ",", NULL, 0);
     AllocArray(motifs, motifCount);
     chopString(motifString, ",", motifs, motifCount);
-    AllocArray(inMotif, strlen(text));
+    AllocArray(inMotif, textLength);
     for(i = 0; i < motifCount; i++)
 	{
 	char *mark = text;
 	while((mark = stringIn(motifs[i], mark)) != NULL)
 	    {
 	    int end = mark-text + strlen(motifs[i]);
-	    for(j = mark-text; j < end && j < count ; j++)
+	    for(j = mark-text; j < end && j < textLength ; j++)
 		{
 		inMotif[j] = TRUE;
 		}
@@ -6153,7 +6154,7 @@ if(motifString != NULL)
     freez(&motifString);
     }
 
-for (i=0; i<count; i++, text++)
+for (i=0; i<count; i++, text++, textPos++)
     {
     x1 = i * width / count;
     x2 = (i+1) * width/count;
@@ -6171,7 +6172,7 @@ for (i=0; i<count; i++, text++)
     if (match != NULL && match[i])
         if (*text != match[i])
             clr = noMatchColor;
-    if(inMotif != NULL && inMotif[i])
+    if(inMotif != NULL && textPos < textLength && inMotif[textPos])
 	{
 	vgBox(vg, x1+x, y, x2-x1, height, clr);
 	vgTextCentered(vg, x1+x, y, x2-x1, height, MG_WHITE, font, c);
@@ -6278,7 +6279,7 @@ else
 if(doIdeo)
     {
     /* Draw the ideogram. */
-    makeTempName(&gifTn, "hgt", ".gif");
+    makeTempName(&gifTn, "hgtIdeo", ".gif");
     /* Start up client side map. */
     hPrintf("<MAP Name=%s>\n", mapName);
     ideoHeight = gfxBorder + ideoTrack->height;
@@ -8233,7 +8234,7 @@ registerTrackHandler("genomicSuperDups", genomicSuperDupsMethods);
 registerTrackHandler("celeraDupPositive", celeraDupPositiveMethods);
 registerTrackHandler("celeraCoverage", celeraCoverageMethods);
 registerTrackHandler("jkDuplicon", jkDupliconMethods);
-/* registerTrackHandler("altGraphXCon2", altGraphXMethods ); */
+registerTrackHandler("altGraphXCon2", altGraphXMethods ); 
 registerTrackHandler("altGraphXPsb2004", altGraphXMethods ); 
 /* registerTrackHandler("altGraphXOrtho", altGraphXMethods ); */
 /* registerTrackHandler("altGraphXT6Con", altGraphXMethods ); */
