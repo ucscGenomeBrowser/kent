@@ -9,7 +9,7 @@
 #include "options.h"
 #include "twoBit.h"
 
-static char const rcsid[] = "$Id: hgGcPercent.c,v 1.12 2004/10/13 23:59:59 heather Exp $";
+static char const rcsid[] = "$Id: hgGcPercent.c,v 1.13 2004/10/15 23:02:00 heather Exp $";
 
 /* Command line switches. */
 int winSize = 20000;               /* window size */
@@ -175,7 +175,9 @@ char query[256];
 struct sqlResult *sr;
 char **row;
 char twoBitFile[256];
+struct twoBitFile *tbf;
 struct slName *twoBitNames, *el;
+int size = 0;
 
 // output file
 if (file)
@@ -189,16 +191,13 @@ sprintf(twoBitFile, "%s/%s.2bit", nibDir, database);
 if (fileExists(twoBitFile) && useTwoBit)
     {
     printf("Using twoBit: %s\n", twoBitFile);
-    // twoBitSeqNames not giving me what I'd like
-    // twoBitNames = twoBitSeqNames(twoBitFile);
-    // for (el = twoBitNames; el != NULL; el = el->next)
-    conn = sqlConnect(database);
-    sprintf(query, "select chrom, size from chromInfo");
-    sr = sqlMustGetResult(conn, query);
-    while ((row = sqlNextRow(sr)) != NULL)
+    tbf = twoBitOpen(twoBitFile);
+    twoBitNames = twoBitSeqNames(twoBitFile);
+    for (el = twoBitNames; el != NULL; el = el->next)
         {
-            printf("Processing twoBit %s\n", row[0]);
-            makeGcTab(twoBitFile, row[0], atoi(row[1]), tabFile);
+            printf("Processing twoBit %s\n", el->name);
+	    size = twoBitSeqSize(tbf, el->name);
+            makeGcTab(twoBitFile, el->name, size, tabFile);
 	}
     }
   
