@@ -5165,7 +5165,7 @@ if (isFull)
             vgBox(vg, b1, ni->yOffset, w, heightPer, col);
             textColor = contrastingColor(vg, col);
             if (w > 3)
-                clippedBarbs(vg, g1, midY, w, 2, 5, dir, textColor, TRUE);
+                clippedBarbs(vg, b1, midY, w, 2, 5, dir, textColor, TRUE);
         }
     freeHash(&hash);
     }
