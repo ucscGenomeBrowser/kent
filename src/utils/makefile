@@ -17,6 +17,10 @@ scripts:
 	    cp $$F $(BIN_DIR); \
 	 done
 
+test:
+	cd faToTwoBit && ${MAKE} test
+	cd twoBitToFa && ${MAKE} test
+
 clean:
 	- find . -name \*.o -print | xargs --no-run-if-empty rm
 
@@ -55,6 +59,7 @@ DIRS = \
 	faSomeRecords \
 	faSplit \
 	faToNib \
+	faToTwoBit \
 	faTrans \
 	faTrimPolyA \
 	fixCr \
@@ -82,6 +87,7 @@ DIRS = \
 	tickToDate \
 	toLower \
 	toUpper \
+	twoBitToFa \
 	undupFa \
 	upper \
 	venn \
