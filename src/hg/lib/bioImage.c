@@ -63,11 +63,12 @@ safef(query, sizeof(query),
 return cloneOrNull(sqlQuickQuery(conn, query, buf, sizeof(buf)));
 }
 
-char *bioImageStage(struct sqlConnection *conn, int id)
+char *bioImageStage(struct sqlConnection *conn, int id, boolean doLong)
 /* Return string describing growth stage of organism 
  * FreeMem this when done. */
 {
 char query[256], buf[256];
+boolean isEmbryo;
 double daysPassed;
 char *startMarker;
 struct sqlResult *sr;
@@ -77,12 +78,25 @@ safef(query, sizeof(query),
 sr = sqlGetResult(conn, query);
 if ((row = sqlNextRow(sr)) == NULL)
     errAbort("No image of id %d", id);
-if (!sameString(row[0], "0"))
-    startMarker = "fertilization";
-else
-    startMarker = "birth";
+isEmbryo = differentString(row[0], "0");
 daysPassed = atof(row[1]);
-safef(buf, sizeof(buf), "%3.1f days after %s", daysPassed, startMarker);
+if (doLong)
+    {
+    if (isEmbryo)
+	startMarker = "fertilization";
+    else
+	startMarker = "birth";
+    safef(buf, sizeof(buf), "%3.1f days after %s", daysPassed, startMarker);
+    }
+else
+    {
+    char c;
+    if (isEmbryo)
+        c = 'e';
+    else
+        c = 'n';
+    safef(buf, sizeof(buf), "%c%3.1f", c, daysPassed);
+    }
 sqlFreeResult(&sr);
 return cloneString(buf);
 }

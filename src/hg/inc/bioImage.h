@@ -19,7 +19,7 @@ char *bioImageOrganism(struct sqlConnection *conn, int id);
 /* Return binomial scientific name of organism associated with given image. 
  * FreeMem this when done. */
 
-char *bioImageStage(struct sqlConnection *conn, int id);
+char *bioImageStage(struct sqlConnection *conn, int id, boolean doLong);
 /* Return string describing growth stage of organism 
  * FreeMem this when done. */
 
