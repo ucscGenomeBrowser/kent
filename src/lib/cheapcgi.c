@@ -373,7 +373,7 @@ char *outString, *out, *in;
 in = inString;
 while ((c = *in++) != 0)
     {
-    if (isalnum(c) || c == ' ' || c == '.')
+    if (isalnum(c) || c == ' ' || c == '.' || c == '_')
         outSize += 1;
     else
         outSize += 3;
@@ -637,7 +637,7 @@ for (cv = inputList; cv != NULL; cv = cv->next)
 }
 
 
-boolean cgiSpoof(int *pArgc, char *argv[])
+boolean cgiFromCommandLine(int *pArgc, char *argv[], boolean preferWeb)
 /* Use the command line to set up things as if we were a CGI program. 
  * User types in command line (assuming your program called cgiScript) 
  * like:
@@ -662,7 +662,7 @@ boolean gotAny = FALSE;
 boolean startDash;
 boolean gotEq;
 
-if (cgiIsOnWeb())
+if (preferWeb && cgiIsOnWeb())
     return TRUE;	/* No spoofing required! */
 q += sprintf(q, "%s", "QUERY_STRING=cgiSpoof=on");
 for (i=0; i<argcLeft; )
@@ -696,3 +696,12 @@ putenv(queryString);
 initCgiInput();
 return gotAny;
 }
+
+boolean cgiSpoof(int *pArgc, char *argv[])
+/* If run from web line set up input
+ * variables from web line, otherwise
+ * set up from command line. */
+{
+return cgiFromCommandLine(pArgc, argv, TRUE);
+}
+
