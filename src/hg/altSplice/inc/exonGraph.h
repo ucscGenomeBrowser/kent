@@ -34,6 +34,9 @@ struct exonNode
     unsigned *edgesIn;	/* Ids of nodes that connect to this node. */
     unsigned edgeOutCount;	/* Number of edges leaving from this graph. */
     unsigned *edgesOut;	/* Ids of exonNodes that this node connects to, by convention edgesOut[0] = next node in path */
+    unsigned accCount;	/* Number of accessions that support this node. */
+    char **accs;	/* Accessions that support this node. */
+    boolean accDeepFree;   /* Freee each bit of memory individually for accs. */
     struct exonPath *ep; /* Path that this node is part of. */
     struct exonPath *paths; /* Paths that lead to this node. */
 };

@@ -24,6 +24,7 @@ ret->startCount = sqlUnsigned(row[12]);
 ret->endCount = sqlUnsigned(row[14]);
 ret->edgeInCount = sqlUnsigned(row[16]);
 ret->edgeOutCount = sqlUnsigned(row[18]);
+ret->accCount = sqlUnsigned(row[20]);
 ret->tName = cloneString(row[0]);
 ret->tStart = sqlSigned(row[1]);
 ret->tEnd = sqlSigned(row[2]);
@@ -44,6 +45,8 @@ sqlUnsignedDynamicArray(row[17], &ret->edgesIn, &sizeOne);
 assert(sizeOne == ret->edgeInCount);
 sqlUnsignedDynamicArray(row[19], &ret->edgesOut, &sizeOne);
 assert(sizeOne == ret->edgeOutCount);
+sqlStringDynamicArray(row[21], &ret->accs, &sizeOne);
+assert(sizeOne == ret->accCount);
 if(_egTmpLoadingArray != NULL)
     {
     assert(_egTmpLoadingArraySize < ret->id);
@@ -58,7 +61,7 @@ struct exonNode *exonNodeLoadAll(char *fileName)
 {
 struct exonNode *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[20];
+char *row[22];
 
 while (lineFileRow(lf, row))
     {
@@ -128,6 +131,15 @@ for (i=0; i<ret->edgeOutCount; ++i)
     }
 s = sqlEatChar(s, '}');
 s = sqlEatChar(s, ',');
+ret->accCount = sqlUnsignedComma(&s);
+s = sqlEatChar(s, '{');
+AllocArray(ret->accs, ret->accCount);
+for (i=0; i<ret->accCount; ++i)
+    {
+    ret->accs[i] = sqlStringComma(&s);
+    }
+s = sqlEatChar(s, '}');
+s = sqlEatChar(s, ',');
 *pS = s;
 return ret;
 }
@@ -144,6 +156,19 @@ freeMem(el->starts);
 freeMem(el->ends);
 freeMem(el->edgesIn);
 freeMem(el->edgesOut);
+if(el->accDeepFree) 
+    {
+    int i;
+    for(i=0; i<el->accCount; i++)
+	freez(&el->accs[i]);
+    }
+else 
+    {
+/* All strings in accs are allocated at once, so only need to free first. */
+    if (el->accs != NULL)
+	freeMem(el->accs[0]);
+    }
+freeMem(el->accs);
 freez(pEl);
 }
 
@@ -231,9 +256,20 @@ for (i=0; i<el->edgeOutCount; ++i)
     fputc(',', f);
     }
 if (sep == ',') fputc('}',f);
+fputc(sep,f);
+fprintf(f, "%u", el->accCount);
+fputc(sep,f);
+if (sep == ',') fputc('{',f);
+for (i=0; i<el->accCount; ++i)
+    {
+    if (sep == ',') fputc('"',f);
+    fprintf(f, "%s", el->accs[i]);
+    if (sep == ',') fputc('"',f);
+    fputc(',', f);
+    }
+if (sep == ',') fputc('}',f);
 fputc(lastSep,f);
 }
-
 
 struct exonPath *exonPathLoad(char **row)
 /* Load a exonPath from row fetched with select * from exonPath
