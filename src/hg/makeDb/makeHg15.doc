@@ -2893,7 +2893,7 @@ doBestAxt $(root1) /cluster/bluearc/hg/hg15/bed/blastz.rn3/axtChrom/$(root1).axt
     # Translate Penn State .lav files into sorted axt, with alignments 
     # to self/diagonal dropped:
     ssh eieio
-    set base="/cluster/store5/gs.16/build33/bed/blastz.hg15.2003-03-18-ASH"
+    set base="/cluster/store5/gs.16/build33/bed/blastz.hg15.2003-06-06"
     set seq1_dir="/cluster/store5/gs.16/build33/mixedNib/"
     set seq2_dir="/cluster/store5/gs.16/build33/mixedNib/"
     set tbl="blastzHuman"
@@ -3389,3 +3389,28 @@ rm -rf out
 
 
 
+# Making Humor 3 way alignment using axtNet 300 
+
+    set multizDir = /cluster/data/hg15/bed/humor300
+    cd /cluster/data/hg15/bed/blastz.mm3/axtChain/mouseNet
+    mkdir -p ../../axtNet300
+    forEachChrom
+        netToAxt -mapGap=300 $i.net ../chain/$i.chain /cluster/data/hg15/nib /cluster/data/mm3/nib ../../axtNet300/$i.axt
+    cd /cluster/data/hg15/bed/blastz.rn3/axtChain/mouseNet
+    mkdir -p ../../axtNet300
+    forEachChrom
+        netToAxt -mapGap=300 $i.net ../chain/$i.chain /cluster/data/hg15/nib /cluster/data/mm3/nib ../../axtNet300/$i.axt
+    cd /cluster/data/hg15
+    mkdir humor300
+    forEachChrom
+        axtToMaf blastz.mm3/axtNet300 /cluster/data/hg15/chrom.sizes /cluster/data/mm3/chrom.sizes axtNet300/$i.mm3.maf -tPrefix=hg15. -qPrefix=mm3. 
+        axtToMaf blastz.rn3/axtNet300 /cluster/data/hg15/chrom.sizes /cluster/data/mm3/chrom.sizes axtNet300/$i.rn3.maf -tPrefix=hg15. -qPrefix=rn3. 
+        /cluster/bin/penn/humor.v4 axtNet300/$i.mm3.maf axtNet300/$i.rn3.maf $multizDir/$i.hmr.axtNet300.maf
+
+    mkdir -p /gbdb/hg15/humor300
+    cd /gbdb/hg15/humor300
+    foreach f ($multizDir/*.maf)
+        ln -s $f .
+    end
+    # load into database
+    /cluster/bin/i386/hgLoadMaf -warn hg15 humor300
