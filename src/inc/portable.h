@@ -46,6 +46,9 @@ long clock1000();
 /* A 1 hz clock. */
 long clock1();
 
+/* Make a temp name that's almost certainly unique. */
+char *rTempName(char *dir, char *base, char *suffix);
+
 /* This structure helps us generate temp names and use
  * them.  Since different servers locate where the cgi
  * runs from differently, and where the generated html
