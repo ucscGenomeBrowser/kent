@@ -16,11 +16,12 @@
 #include "wiggle.h"
 #include "hgMaf.h"
 #include "obscure.h"
+#include "chainCart.h"
 
 #define CDS_HELP_PAGE "../goldenPath/help/hgCodonColoring.html"
 #define CDS_MRNA_HELP_PAGE "../goldenPath/help/hgCodonColoringMrna.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.120 2004/07/16 21:56:58 hiram Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.121 2004/07/19 22:51:41 hiram Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -131,11 +132,11 @@ for (snpType=0; snpType<snpTypeCount; snpType++)
 void cbrWabaUi(struct trackDb *tdb)
 /* Put up UI cbrWaba. */
 {
+/*   This link is disabled in the external browser
 char *cbrWabaFilter = cartUsualString(cart, "cbrWaba.filter", "red");
 char *cbrWabaMap = cartUsualString(cart, "cbrWaba.type", fcoeEnumToString(0));
 int start = cartInt(cart, "cbrWaba.start");
 int end = cartInt(cart, "cbrWaba.end");
-/*   This link is disabled in the external browser
 printf(
 "<P><A HREF=\"http://genome-test.cse.ucsc.edu/cgi-bin/tracks.exe?where=%s%%3A%d-%d\"> Temporary Intronerator link: %s:%d-%d</A> <I>for testing purposes only</I> \n</P>", chromosome+3, start, end, chromosome+3, start, end );
 */
@@ -414,8 +415,7 @@ int scoreSetting;
 int scoreVal = 0;
 char tempScore[256];
 /* initial value of score theshold is 0, unless
- * overridden by the scoreDefault setting in the track */
-char *scoreDefault = trackDbSettingOrDefault(tdb, "scoreDefault", "0");
+ * overridden by the scoreFilter setting in the track */
 printf("<p><b>Only Show items that score above </b>: ");
 snprintf(scoreVar, sizeof(scoreVar), "%s.scoreFilter", tdb->tableName);
 scoreSetting = cartUsualInt(cart,  scoreVar,  scoreVal);
@@ -431,7 +431,7 @@ void zooWiggleUi(struct trackDb *tdb )
 char options[7][256];
 int thisHeightPer, thisLineGap;
 float thisMinYRange, thisMaxYRange;
-char *interpolate, *aa, *fill;
+char *interpolate, *fill;
 
 char **row;
 int rowOffset;
@@ -498,6 +498,20 @@ while ((row = sqlNextRow(sr)) != NULL)
 
 }
 
+void chainColorUi(struct trackDb *tdb)
+/* UI for the chain tracks */
+{
+char options[1][256];	/*	our option strings here	*/
+char *colorOpt;
+
+(void) chainFetchColorOption(tdb, &colorOpt);
+
+snprintf( &options[0][0], 256, "%s.%s", tdb->tableName, OPT_CHROM_COLORS );
+printf("<p><b>Color chains by:&nbsp;</b>");
+chainColorDropDown(&options[0][0], colorOpt);
+
+freeMem (colorOpt);
+}
 
 void wigUi(struct trackDb *tdb)
 /* UI for the wiggle track */
@@ -663,7 +677,7 @@ void genericWiggleUi(struct trackDb *tdb, int optionNum )
 	char options[7][256];
 	int thisHeightPer, thisLineGap;
 	float thisMinYRange, thisMaxYRange;
-	char *interpolate, *aa, *fill;
+	char *interpolate, *fill;
 
 snprintf( &options[0][0], 256, "%s.heightPer", tdb->tableName );
 snprintf( &options[1][0], 256, "%s.linear.interp", tdb->tableName );
@@ -717,7 +731,7 @@ void humMusUi(struct trackDb *tdb, int optionNum )
 	char options[7][256];
 	int thisHeightPer, thisLineGap;
 	float thisMinYRange, thisMaxYRange;
-	char *interpolate, *aa, *fill;
+	char *interpolate, *fill;
 
 snprintf( &options[0][0], 256, "%s.heightPer", tdb->tableName );
 snprintf( &options[1][0], 256, "%s.linear.interp", tdb->tableName );
@@ -769,8 +783,6 @@ void affyTranscriptomeUi(struct trackDb *tdb)
 	/* put up UI for the GC percent track (a sample track)*/
 {
 	int affyTranscriptomeHeightPer = atoi(cartUsualString(cart, "affyTranscriptome.heightPer", "100"));
-	char *interpolate = cartUsualString(cart, "affyTranscriptome.linear.interp", "Only samples");
-	char *aa = cartUsualString(cart, "affyTranscriptome.anti.alias", "on");
 	char *fill = cartUsualString(cart, "affyTranscriptome.fill", "1");
 
 	printf("<br><br>");
@@ -878,6 +890,8 @@ else if (sameString(track, "humMusL") ||
          sameString( track, "mm3Hg15L" ) ||
          sameString( track, "hg15Mm3L" ))
             humMusUi(tdb,7);
+else if (sameString(track, "XXX_chainRn3")) /* under development */
+            chainColorUi(tdb);
 /* NOTE: type psl xeno <otherDb> tracks use crossSpeciesUi, so
  * add explicitly here only if track has another type (bed, chain).
  * For crossSpeciesUi, the
