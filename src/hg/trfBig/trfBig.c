@@ -6,7 +6,7 @@
 #include "portable.h"
 #include "cheapcgi.h"
 
-static char const rcsid[] = "$Id: trfBig.c,v 1.11 2003/05/06 07:22:35 kate Exp $";
+static char const rcsid[] = "$Id: trfBig.c,v 1.12 2003/05/31 03:51:33 kate Exp $";
 
 /* Variables that can be set from command line. */
 char *trfExe = "trf";	/* trf executable name. */
@@ -105,7 +105,6 @@ sprintf(command, "cd %s; %s %s 2 7 7 80 10 50 %d -m %s",
 	tempDir, trfExe, faFile, maxPeriod, doBed ? "-d" : "");
 uglyf("faFile %s, command %s\n", faFile, command);
 system(command);
-exit(0);
 }
 
 void outputWithBreaks(FILE *out, char *s, int size, int lineSize)
