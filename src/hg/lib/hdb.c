@@ -970,6 +970,44 @@ hFreeConn(&conn);
 return binned;
 }
 
+int hFieldIndex(char *table, char *field)
+/* Return index of field in table or -1 if it doesn't exist. */
+{
+char query[256];
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr;
+char **row;
+int result = -1;
+int index = 0;
+int cols = 0;
+
+/* Read table description into hash. */
+sprintf(query, "describe %s", table);
+sr = sqlGetResult(conn, query);
+if ((row = sqlNextRow(sr)) != NULL)
+    {
+    cols = sqlCountColumns(sr);
+    while (index < cols)
+        {
+        if (sameString(row[index], field))
+            {
+            result = index;
+            break;
+            }
+        index++;
+        }
+    }
+
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+return result;
+}
+
+boolean hHasField(char *table, char *field)
+/* Return TRUE if table has field */
+{
+return hFieldIndex(table, field) >= 0;
+}
 
 boolean hFindBed12FieldsAndBinDb(char *db, char *table, 
 	char retChrom[32], char retStart[32], char retEnd[32],

@@ -222,6 +222,12 @@ boolean hFindChromStartEndFieldsDb(char *db, char *table,
 boolean hIsBinned(char *table);
 /* Return TRUE if a table is binned. */
 
+int hFieldIndex(char *table, char *field)
+/* Return index of field in table or -1 if it doesn't exist. */;
+
+boolean hHasField(char *table, char *field);
+/* Return TRUE if table has field */
+
 boolean hFindFieldsAndBin(char *table, 
 	char retChrom[32], char retStart[32], char retEnd[32],
 	boolean *retBinned);
