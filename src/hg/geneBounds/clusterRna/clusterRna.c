@@ -625,7 +625,7 @@ void outputBestAndGoodMgc(struct binElement *list, char *fileName, char *chromNa
 {
 struct binElement *el = NULL;
 FILE *f = mustOpen(fileName, "w");
-int clusterNumber =0;
+int clusterIx =0;
 uglyf("Printing %s\n", fileName);
 fprintf(f, "#chrom\tstart    \tend      \tstrand\tMGC EST \t5' dist\tAli%%\tGood EST\t5' dist\tAli%%\tMGC RNA \t5' dist\tAli%%\tGood RNA\t5' dist\tAli%%\tOther RNA \t5' dist\tAli%%\tRefSeq  \t5' dist\tAli%%\tGroup Number\n");
 for (el = list; el != NULL; el = el->next)
@@ -637,7 +637,7 @@ for (el = list; el != NULL; el = el->next)
     printClosestInfo(f, start, end, cluster, mgcRnaHash, TRUE);
     printClosestInfo(f, start, end, cluster, rnaHash, FALSE);
     printClosestInfo(f, start, end, cluster, refSeqHash, FALSE);
-    fprintf(f, "\t%s:%d", chromName, clusterNumber);
+    fprintf(f, "\t%s:%d", chromName, ++clusterIx);
     fprintf(f, "\n");
     }
 carefulClose(&f);
@@ -674,7 +674,7 @@ const struct ggAiSorter *b = *((struct ggAiSorter **)vb);
 if(clusterStart == -1 || clusterEnd == -1  || clusterStrand == NULL)
     errAbort("clusterRna::fivePrimeDistCmp() - Need to set clusterStart, clusterEnd, clusterStrand before sorting.");
 aDist = findStrandDistance(a->ai, *clusterStrand, clusterStart, clusterEnd);
-bDist = findStrandDistance(a->ai, *clusterStrand, clusterStart, clusterEnd);
+bDist = findStrandDistance(b->ai, *clusterStrand, clusterStart, clusterEnd);
 diff = aDist - bDist;
 return diff;
 }
@@ -695,7 +695,7 @@ void outputNGoodInHash(struct binElement *list, char *fileName, char *chromName,
    5' end of the cluster, and 3) "good" as defined by goodDa() */
 {
 struct binElement *el = NULL;
-int clusterNumber =0;
+int clusterIx=0;
 FILE *f = mustOpen(fileName, "w");
 char *bedFile = addSuffix(fileName, ".bed");
 FILE *bedOut = mustOpen(bedFile, "w");
@@ -705,15 +705,19 @@ for (el = list; el != NULL; el = el->next)
     int start = el->start, end = el->end;
     struct ggAiSorter *ais = NULL, *aisList = ggAiSorterByHash(cluster->mrnaList, hash);
     int i;
+    clusterIx++;
     clusterStrand = cluster->strand;
     clusterStart = start;
     clusterEnd = end;
     slSort(&aisList, fivePrimeDistCmp);
-    for(ais=aisList, i=0; ais != NULL, findStrandDistance(ais->ai,cluster->strand[0], start, end) < maxDistance, i <maxPicks; ais = ais->next, i++)
+    for(ais=aisList, i=0; ais != NULL && findStrandDistance(ais->ai,cluster->strand[0], start, end) < maxDistance && i <maxPicks; ais = ais->next, i++)
 	{
-	writeOutAccession(f, ais, cluster, chromName, clusterNumber);
+	writeOutAccession(f, ais, cluster, chromName, clusterIx);
 	ggMrnaAliBed12Out(ais->ai->ma, bedOut);
 	}
+    clusterStrand = NULL;
+    clusterStart = -1;
+    clusterEnd = -1;
     slFreeList(&aisList);
     }
 freez(&bedFile);
