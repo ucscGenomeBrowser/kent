@@ -137,13 +137,6 @@ void hgcStart(char *title)
 cartHtmlStart(title);
 }
 
-static double whichNum( double tmp, double min0, double max0, int n)
-/*gets range nums. from bin values*/
-{
-return( (max0 - min0)/(double)n * tmp + min0 );
-}
-
-
 static void printEntrezNucleotideUrl(FILE *f, char *accession)
 /* Print URL for Entrez browser on a nucleotide. */
 {
@@ -464,7 +457,6 @@ while ((row = sqlNextRow(sr)) != NULL)
     }
 }
 
-
 void genericBedClick(struct sqlConnection *conn, struct trackDb *tdb, 
 	char *item, int start, int bedSize)
 /* Handle click in generic BED track. */
@@ -556,12 +548,6 @@ switch (class)
     }
 }
 
-void startColor(FILE *f, int color, int track)
-{
-fprintf(f,"</FONT><FONT COLOR=\"%06X\">",color);
-currentColor[track] = color;
-}
-
 void startColorStr(struct dyString *dy, int color, int track)
 {
 currentColor[track] = color;
@@ -569,36 +555,14 @@ if (prevColor[track] != currentColor[track])
     dyStringPrintf(dy,"</FONT><FONT COLOR=\"%06X\">",color);
 }
 
-void stopColor(FILE *f, int track)
-{
-prevColor[track] = currentColor[track];
-}
-
 void stopColorStr(struct dyString *dy, int track)
 {
 prevColor[track] = currentColor[track];
 }
 
-void endLine(FILE *f)
-{
-    fprintf(f,"</FONT>");
-}
-
-void endLineStr(struct dyString *dy)
-{
-    dyStringPrintf(dy,"</FONT>");
-}
-
-void setClass(FILE *f, int class, int track)
-{
-startColor(f,setAttributeColor(class),track);
-if (class == STARTCODON)
-    fprintf(f,"<A name=startcodon></a>");
-}
-
 void addTag(struct dyString *dy, struct dyString *tag)
 {
-    dyStringPrintf(dy,"<A name=%s></a>",tag->string);
+dyStringPrintf(dy,"<A name=%s></a>",tag->string);
 }
 
 void setClassStr(struct dyString *dy, int class, int track)
@@ -608,14 +572,9 @@ if (class == STARTCODON)
 startColorStr(dy,setAttributeColor(class),track);
 }
 
-void resetClass(FILE *f, int track)
-{
-    stopColor(f,track);
-}
-
 void resetClassStr(struct dyString *dy, int track)
 {
-    stopColorStr(dy,track);
+stopColorStr(dy,track);
 }
 
 void axtOneGeneOut(struct axt *axtList, int lineSize, 
@@ -856,16 +815,12 @@ for (axt = axtList; axt != NULL; axt = axt->next)
                 prevTclass = tClass;
                 }
             dyStringAppendC(dyT,t[i]);
-            /*if (tClass != INTERGENIC)
-                resetClassStr(dyT);*/
             if (qClass != prevQclass)
                 {
                 setClassStr(dyQ,qClass,0);
                 prevQclass = qClass;
                 }
             dyStringAppendC(dyQ,q[i]);
-            /*if (qClass != INTERGENIC)
-                resetClassStr(dyQ);*/
             if (tCoding && tFlip && (tCodonPos == 3))
                 {
                 tFlip=FALSE;
@@ -1026,7 +981,8 @@ for (axt = axtList; axt != NULL; axt = axt->next)
     }
 }
 
-struct axt *createAxtGap(char *nibFile, char *chrom, int start, int end, char strand)
+struct axt *createAxtGap(char *nibFile, char *chrom, 	
+	int start, int end, char strand)
 /* return an axt alignment with the query all deletes - null aligment */
 {
 struct axt *axt;
@@ -1175,7 +1131,8 @@ sqlFreeResult(&sr);
 hFreeConn(&conn);
 }
 
-void showGenePosMouse(char *name, struct trackDb *tdb, struct sqlConnection *connMm)
+void showGenePosMouse(char *name, struct trackDb *tdb, 
+	struct sqlConnection *connMm)
 /* Show gene prediction position and other info. */
 {
 char query[512];
@@ -1201,6 +1158,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     }
 sqlFreeResult(&sr);
 }
+
 void geneShowPosAndLinks(char *geneName, char *pepName, struct trackDb *tdb, 
 	char *pepTable, char *pepClick, 
 	char *mrnaClick, char *genomicClick, char *mrnaDescription)
@@ -1276,8 +1234,9 @@ void geneShowMouse(char *geneName, struct trackDb *tdb, char *pepTable,
 	struct sqlConnection *connMm)
 /* Show parts of gene common to everything */
 {
-geneShowPosAndLinksMouse(geneName, geneName, tdb, pepTable, connMm, "htcTranslatedProtein",
-	"htcGeneMrna", "htcGeneInGenome", "Predicted mRNA");
+geneShowPosAndLinksMouse(geneName, geneName, tdb, pepTable, connMm, 
+	"htcTranslatedProtein", "htcGeneMrna", "htcGeneInGenome", 
+	"Predicted mRNA");
 }
 
 void genericGenePredClick(struct sqlConnection *conn, struct trackDb *tdb, 
@@ -1323,7 +1282,6 @@ void genericChainClick(struct sqlConnection *conn, struct trackDb *tdb,
 	char *item, int start, char *otherDb)
 /* Handle click in chain track, at least the basics. */
 {
-char chrom[128]  ="xxxxxx";
 char *thisOrg = hOrganism(database);
 char *otherOrg = hOrganism(otherDb);
 char table[64];
@@ -3207,12 +3165,8 @@ blockCount = ffShAliPart(body, ffAli, psl->qName, rna, rnaSize, 0,
 return blockCount;
 }
 
-void showGeneAlignment()
-{
-}
-
-void showSomeAlignment(struct psl *psl, bioSeq *oSeq, enum gfType qType, int qStart, int qEnd,
-	char *qName)
+void showSomeAlignment(struct psl *psl, bioSeq *oSeq, 
+	enum gfType qType, int qStart, int qEnd, char *qName)
 /* Display protein or DNA alignment in a frame. */
 {
 int blockCount;
@@ -9327,6 +9281,12 @@ boolean sampleClickRelevant( struct sample *smp, int i, int left, int right,
             return(1);
 }
  
+static double whichNum( double tmp, double min0, double max0, int n)
+/*gets range nums. from bin values*/
+{
+return( (max0 - min0)/(double)n * tmp + min0 );
+}
+
 void humMusSampleClick(struct sqlConnection *conn, struct trackDb *tdb,
     char *item, int start, int smpSize, char *otherOrg, char *otherDb,
     char *pslTableName, boolean printWindowFlag )
