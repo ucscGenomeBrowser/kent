@@ -9939,6 +9939,14 @@ if (!hideControls)
     /* Make line that says position. */
 	{
 	char buf[256];
+        char *javascript = "onchange=\"document.location = '/cgi-bin/hgTracks?db=' + document.TrackForm.db.options[document.TrackForm.db.selectedIndex].value;\"";
+
+        if (containsStringNoCase(database, "zoo"))
+            {
+            puts("Change organism ");
+            printAssemblyListHtmlExtra(database, javascript);
+            }
+
 	sprintf(buf, "%s:%d-%d", chromName, winStart+1, winEnd);
 	position = cloneString(buf);
 	fputs("position ", stdout);
