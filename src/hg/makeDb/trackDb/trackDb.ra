@@ -975,7 +975,7 @@ longLabel Simple Nucleotide Polymorphisms (SNPs)
 group varRep
 priority 144
 visibility hide
-type bed 6 .
+type bed 4 .
 
 track perlegen
 shortLabel Haplotype Blocks
