@@ -803,10 +803,6 @@ void gfClumpFree(struct gfClump **pClump)
 struct gfClump *clump;
 if ((clump = *pClump) == NULL)
     return;
-#ifdef OLD
-The hit list has been moved to local memory.
-slFreeList(&clump->hitList);
-#endif
 freez(pClump);
 }
 
@@ -1059,9 +1055,6 @@ else
 	    }
 	else
 	    {
-#ifdef OLD
-	    slFreeList(&inList);
-#endif 
 	    inList = NULL;
 	    }
 	oldList = outList;
@@ -1222,33 +1215,6 @@ for (clump = clumpList; clump != NULL; clump = clump->next)	/* uglyf */
 freez(&buckets);
 return clumpList;
 }
-
-#ifdef OLD
-struct gfClump *clumpsOfOne(struct genoFind *gf, struct gfHit *hitList)
-/* Turn each hit into a clump with just one hit. */
-{
-struct gfClump *clumpList = NULL, *clump;
-struct gfHit *hit, *nextHit;
-int tileSize = gf->tileSize;
-
-for (hit = hitList; hit != NULL; hit = nextHit)
-    {
-    nextHit = hit->next;
-    hit->next = NULL;
-    AllocVar(clump);
-    slAddHead(&clumpList, clump);
-    clump->hitCount = 1;
-    clump->hitList = hit;
-    clump->qStart =  hit->qStart;
-    clump->tStart =  hit->tStart;
-    clump->qEnd = hit->qStart + tileSize;
-    clump->tEnd += hit->tStart + tileSize;
-    clump->target = findSource(gf, clump->tStart);
-    }
-slReverse(&clumpList);
-return clumpList;
-}
-#endif /* OLD */
 
 
 static struct gfHit *gfFastFindDnaHits(struct genoFind *gf, struct dnaSeq *seq, 
@@ -1597,13 +1563,8 @@ else
 	}
     }
 cmpQuerySize = seq->size;
-#ifdef OLD
-if (gf->minMatch == 1)
-    return clumpsOfOne(gf, hitList);
-else
-#endif /* OLD */
 clumpList = clumpHits(gf, hitList, gf->minMatch);
-//uglyf("hitCount = %d, clumpCount = %d\n", *retHitCount, slCount(clumpList));
+// uglyf("hitCount = %d, clumpCount = %d\n", *retHitCount, slCount(clumpList));
 return clumpList;
 }
 
