@@ -7,7 +7,7 @@
 #include "portable.h"
 #include "hgColors.h"
 
-static char const rcsid[] = "$Id: wigDataStream.c,v 1.32 2004/08/31 18:34:47 hiram Exp $";
+static char const rcsid[] = "$Id: wigDataStream.c,v 1.33 2004/08/31 22:06:33 hiram Exp $";
 
 /*	PRIVATE	METHODS	************************************************/
 static void addConstraint(struct wiggleDataStream *wDS, char *left, char *right)
@@ -305,13 +305,41 @@ if (wDS->useDataConstraint)
     }
 }
 
+static int chrStrippedCmp(char *chrA, char *chrB)
+/*	compare chrom names after stripping chr or scaffold prefix */
+{
+int dif;
+int lenA = 0;
+int lenB = 0;
+
+if (startsWith("chr", chrA))
+    chrA += strlen("chr");
+else if (startsWith("scaffold",chrA))
+    chrA += strlen("scaffold");
+
+if (startsWith("chr",chrB))
+    chrB += strlen("chr");
+else if (startsWith("scaffold",chrB))
+    chrB += strlen("scaffold");
+
+lenA = strlen(chrA);
+lenB = strlen(chrB);
+
+dif = lenA - lenB;
+
+if (dif == 0)
+    dif = strcmp(chrA, chrB);
+
+return dif;
+}
+
 static int arrayDataCmp(const void *va, const void *vb)
 /* Compare to sort based on chrom,winStart */
 {
 const struct wiggleArray *a = *((struct wiggleArray **)va);
 const struct wiggleArray *b = *((struct wiggleArray **)vb);
 int dif;
-dif = strcmp(a->chrom, b->chrom);
+dif = chrStrippedCmp(a->chrom, b->chrom);
 if (dif == 0)
     dif = a->winStart - b->winStart;
 return dif;
@@ -323,7 +351,7 @@ static int asciiDataCmp(const void *va, const void *vb)
 const struct wigAsciiData *a = *((struct wigAsciiData **)va);
 const struct wigAsciiData *b = *((struct wigAsciiData **)vb);
 int dif;
-dif = strcmp(a->chrom, b->chrom);
+dif = chrStrippedCmp(a->chrom, b->chrom);
 if (dif == 0)
     {
     dif = a->span - b->span;
@@ -339,7 +367,7 @@ static int statsDataCmp(const void *va, const void *vb)
 const struct wiggleStats *a = *((struct wiggleStats **)va);
 const struct wiggleStats *b = *((struct wiggleStats **)vb);
 int dif;
-dif = strcmp(a->chrom, b->chrom);
+dif = chrStrippedCmp(a->chrom, b->chrom);
 if (dif == 0)
     {
     dif = a->span - b->span;
@@ -397,6 +425,14 @@ carefulClose(&fh);
 }	/*	static void dataArrayOut()	*/
 
 /*	PUBLIC	METHODS   **************************************************/
+static void setMaxOutput(struct wiggleDataStream *wDS,
+	unsigned long long maxOut)
+/*	set the maximum # of values to return */
+{
+wDS->maxOutput = maxOut;
+verbose(VERBOSE_CHR_LEVEL,"#\tsetMaxOutput: %llu\n", wDS->maxOutput);
+}
+
 static void setPositionConstraint(struct wiggleDataStream *wDS,
 	int winStart, int winEnd)
 /*	both 0 means no constraint	*/
@@ -624,6 +660,7 @@ boolean firstSpanDone = FALSE;	/*	to prevent multiple bed lists */
 float *dataArrayPtr = NULL;	/*	to access the data array values */
 unsigned dataArrayPosition = 0;	/*  marches thru all from beginning to end */
 struct wiggle *wiggle;		/*	one SQL data read results	*/
+boolean maxReached = FALSE;
 
 doAscii = operations & wigFetchAscii;
 doDataArray = operations & wigFetchDataArray;
@@ -712,7 +749,8 @@ if (!wDS->isFile && wDS->winEnd)
  *	source file, as it should be.
  */
 	    
-for ( ; nextRow(wDS, row, WIGGLE_NUM_COLS); wiggleFree(&wiggle) )
+for ( ; (!maxReached) && nextRow(wDS, row, WIGGLE_NUM_COLS);
+	wiggleFree(&wiggle) )
     {
     struct wigAsciiData *wigAscii = NULL;
     struct asciiDatum *asciiOut = NULL;	/* to address data[] in wigAsciiData */
@@ -896,6 +934,32 @@ for ( ; nextRow(wDS, row, WIGGLE_NUM_COLS); wiggleFree(&wiggle) )
 	for (j = 0; j < wiggle->count;
 		++datum, chromPosition += wiggle->span, ++j)
 	    {
+	    if (wDS->maxOutput)
+		{
+		if (doAscii)
+		    {
+		    /*	previous results to this fetch are wDS->valuesMatched
+		     *	this result is currently at valuesMatched
+		     */
+		    if (wDS->maxOutput <= (wDS->valuesMatched + valuesMatched))
+			{
+			maxReached = TRUE;
+			break;
+			}
+		    }
+		if (doBed)
+		    {
+		    /*	previous results to this fetch are
+		     *	wDS->totalBedElements, this result is currently
+		     *	at bedElCount
+		     */
+		    if (wDS->maxOutput <= (wDS->totalBedElements + bedElCount))
+			{
+			maxReached = TRUE;
+			break;
+			}
+		    }
+		}
 	    if (*datum != WIG_NO_DATA)
 		{
 		boolean takeIt = FALSE;
@@ -1055,35 +1119,12 @@ if (doStats)
 	&statsCount, &chromStart, &chromEnd);
     }
 
-/*	The proper in chrom ordering was already done by the original SQL
- *	select statement.  To finish off, all results need to be reversed
- *	since they went in via AddHead which is an inverse insertion.
- *	More properly, we need a real sort routine on these specialized
- *	lists to make sure they really get into order.  The special
- *	thing on bedConstrained is a one-time test since getData is
- *	being called multiple times before it is finished and there is
- *	no need to try and reverse all accumulating results before they
- *	are done.  In fact it gets them all mixed up.  Thus again, a
- *	real need for an actual sort routine that would do everything
- *	properly no matter what happened during the result assembly.
-if (!wDS->bedConstrained)
-    {
-    if (doAscii)
-	slReverse(&wDS->ascii);
-    if (doBed)
-	slReverse(&wDS->bed);
-    if (doStats)
-	slReverse(&wDS->stats);
-    }
-	A sortResults method has been added.  It can be used by the caller,
- *	or the *Out() methods will sort results before output.
- */
-
 wDS->rowsRead += rowCount;
 wDS->validPoints += validData;
 wDS->valuesMatched += valuesMatched;
 wDS->noDataPoints += noDataBytes;
 wDS->bytesSkipped += bytesSkipped;
+wDS->totalBedElements += bedElCount;
 
 closeWigConn(wDS);
 
@@ -1101,6 +1142,9 @@ struct wigAsciiData *asciiData = NULL;
 
 if (count < 1)
     return floatArray;
+
+/*	good enough for 500,000,000 bases	*/
+setMaxAlloc((size_t)2100000000);	/*2^31 = 2,147,483,648 */
 
 AllocArray(floatArray, count);
 fptr = floatArray;
@@ -1149,6 +1193,7 @@ if (bedList && *bedList)
     struct hash *chromSizes = NULL;
     struct { unsigned chrStart; unsigned chrEnd; } *chrStartEnd;
     unsigned long long valuesFound = 0;
+    boolean maxReached = FALSE;
 
     /* remember these constraints so we can reset them afterwards
      * because we are going to use them for our own internal uses here.
@@ -1219,7 +1264,7 @@ if (bedList && *bedList)
      *	e.g. they wanted the first 10,000 bases of each chrom,
      *		winStart=0, winEnd = 10,000, no chrName specified
      */
-    for (chr = chromList; chr; chr = chr->next)
+    for (chr = chromList; (!maxReached) && chr; chr = chr->next)
 	{
 	long startTime = 0;
 	float *fptr;
@@ -1457,8 +1502,38 @@ if (bedList && *bedList)
 
 	    fptr = wDS->array->data + (chromPosition - winStart);
 
-	    while (chromPosition < winEnd)
+	    while ((!maxReached) && (chromPosition < winEnd))
 		{
+		if (wDS->maxOutput)
+		    {
+		    if (doAscii)
+			{
+		/*	previous results to this fetch are wDS->valuesMatched
+		 *	this result is currently at valuesMatched
+		 */
+			if (wDS->maxOutput <=
+				(wDS->valuesMatched + valuesMatched))
+			    {
+			    maxReached = TRUE;
+			    break;
+			    }
+			}
+		    if (doBed)
+			{
+			/*	previous results to this fetch are
+			 *	wDS->totalBedElements, this result is currently
+			 *	at bedElCount.  The -1 is because there is
+			 *	one more bed element to go upon exit from
+			 *	this loop.
+			 */
+			if (wDS->maxOutput <=
+				((wDS->totalBedElements + bedElCount) - 1))
+			    {
+			    maxReached = TRUE;
+			    break;
+			    }
+			}
+		    }
 		if (*boolPtr && (!isnan(*fptr)))
 		    {
 		    float value = *fptr;
@@ -1522,7 +1597,10 @@ if (bedList && *bedList)
 		}
 	    /*	if we can save more than 100,000 data locations, move
 	     *	the results to a smaller area.  Could be huge savings on
-	     *	very sparse result sets.
+	     *	very sparse result sets.  This comes about because at
+	     *	the beginning we blindly allocated a full
+	     *	winEnd-winStart data array and we probably did not use
+	     *	all of that.
 	     */
 	    if (doAscii && ((dataArraySize - wigAscii->count) > 100000))
 		{
@@ -1565,6 +1643,7 @@ if (bedList && *bedList)
 	/*	we are certainly done with the bedArray	*/
 	bedFreeList(&filteredBed);
 	freeMem(bedArray);
+	wDS->totalBedElements += bedElCount;
 	}	/*	for (chr = chromList; chr; chr = chr->next)	*/
 
     /*	restore these constraints we used here
@@ -1589,7 +1668,9 @@ if (bedList && *bedList)
     freeHashAndVals(&chromSizes);
     }	/*	if (bedList && *bedList)	*/
 
+wDS->valuesMatched += valuesMatched;
 return(valuesMatched);
+
 }
 
 static void sortResults(struct wiggleDataStream *wDS)
@@ -1856,6 +1937,7 @@ wds->freeAscii = freeAscii;
 wds->freeBed = freeBed;
 wds->freeStats = freeStats;
 wds->freeArray = freeArray;
+wds->setMaxOutput = setMaxOutput;
 wds->setPositionConstraint = setPositionConstraint;
 wds->setChromConstraint = setChromConstraint;
 wds->setSpanConstraint = setSpanConstraint;
