@@ -1,6 +1,6 @@
 #!/bin/tcsh
 
-if ($#argv < 1 || $#argv > 4) then
+if ($#argv < 3 || $#argv > 4) then
  echo ""
  echo "  compares trackDb on two machines."
  echo "  optionally compares other field instead of tableName."
@@ -68,7 +68,7 @@ wget -q -O $machine.$db.$table "$url1$machine$url2$db$url3$db$url4$table$url5$fi
 
 "diff" $machine1.$db.$table $machine2.$db.$table
 if ( $status ) then
- echo "\nDifferences are found in $table.$field"
+ echo "The differences above are found in $table.$field"
  echo "between $machine1 and $machine2\n"
 else
   echo " No differences in $table.$field."
