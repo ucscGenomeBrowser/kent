@@ -1787,11 +1787,11 @@ done
     cd /cluster/data/mm4
     mkdir cytoBand
     cd cytoBand
-    # Get file from NCBI
-    wget ftp://ftp.ncbi.nih.gov/genomes/M_musculus/maps/mapview/BUILD.32/Mouse400.dat.gz
-    gunzip Mouse400.dat.gz
+    # Get file from NCBI - might be Mouse400.dat.gz for future
+    wget ftp://ftp.ncbi.nih.gov/genomes/M_musculus/maps/mapview/BUILD.32/ideogram.gz
+    gunzip ideogram
     # Create bed file
-    /cluster/bin/scripts/createNcbiCytoBand Mouse400.dat
+    /cluster/bin/scripts/createNcbiCytoBand ideogram
     # Load the bed file
     hgLoadBed -noBin -sqlTable=/cluster/home/kent/src/hg/lib/cytoBand.sql mm4 cytoBand cytoBand.bed
 
