@@ -14,7 +14,7 @@
 #include "genePred.h"
 #include "bed.h"
 
-static char const rcsid[] = "$Id: getSeq.c,v 1.3 2003/08/21 07:32:00 kent Exp $";
+static char const rcsid[] = "$Id: getSeq.c,v 1.4 2003/08/21 16:58:40 kent Exp $";
 
 static void printNameAndDescription(struct sqlConnection *conn, char *id)
 /* Look up name and description and print. */
@@ -46,7 +46,7 @@ char query[256];
 struct genePos *gp;
 struct sqlConnection *conn2 = hAllocConn();
 
-hPrintf("</TT></PRE>");
+hPrintf("<TT><PRE>");
 for (gp = geneList; gp != NULL; gp = gp->next)
     {
     char *id = gp->name;
@@ -63,7 +63,7 @@ for (gp = geneList; gp != NULL; gp = gp->next)
 	}
     sqlFreeResult(&sr);
     }
-hPrintf("<TT><PRE>");
+hPrintf("</TT></PRE>");
 hFreeConn(&conn2);
 }
 
