@@ -288,6 +288,7 @@ struct sqlResult *sr;
 char query[256], **row;
 int exonCount = gp->exonCount, exonIx, exonStart, exonEnd;
 boolean anyMrna = FALSE;
+int mrnaSize, cdsSize, utrSize;
 
 AllocVar(stats);
 
@@ -334,10 +335,12 @@ else
 
 /* Gather stats on exons, tracking UTR and CDS part of
  * exons separately. */
+mrnaSize = utrSize = cdsSize = 0;
 for (exonIx = 0; exonIx < exonCount; ++exonIx)
     {
     exonStart = gp->exonStarts[exonIx];
     exonEnd = gp->exonEnds[exonIx];
+    mrnaSize += exonEnd - exonStart;
     if (halfAddToStats(&stats->mrnaTotal, exonStart, exonEnd, genoStart, genoEnd, milliMatches) > 0)
 	{
 	anyMrna = TRUE;
@@ -347,33 +350,42 @@ for (exonIx = 0; exonIx < exonCount; ++exonIx)
 	struct stat *stat = (gp->strand[0] == '+' ? &stats->utr5 : &stats->utr3);
 	int end = min(exonEnd, gp->cdsStart);
 	addToStats(stat, exonStart, end, genoStart, genoEnd, milliMatches);
+	utrSize += end - exonStart;
 	}
     if (exonEnd > gp->cdsEnd)		/* Other UTR */
         {
 	struct stat *stat = (gp->strand[0] == '-' ? &stats->utr5 : &stats->utr3);
 	int start = max(exonStart, gp->cdsEnd);
 	addToStats(stat, start, exonEnd, genoStart, genoEnd, milliMatches);
+	utrSize += exonEnd - start;
 	}
     if (exonStart <= gp->cdsStart && exonEnd >= gp->cdsEnd)  /* Single exon CDS */
         {
 	addToStats(&stats->onlyCds, gp->cdsStart, gp->cdsEnd, 
 		genoStart, genoEnd, milliMatches);
+	cdsSize += gp->cdsEnd - gp->cdsStart;
 	}
     else if (exonStart <= gp->cdsStart && exonEnd > gp->cdsStart)
         {
 	struct stat *stat = (gp->strand[0] == '+' ? &stats->firstCds : &stats->endCds);
 	addToStats(stat, gp->cdsStart, exonEnd, genoStart, genoEnd, milliMatches);
+	cdsSize += exonEnd - gp->cdsStart;
 	}
     else if (exonStart < gp->cdsEnd && exonEnd >= gp->cdsEnd)
         {
 	struct stat *stat = (gp->strand[0] == '-' ? &stats->firstCds : &stats->endCds);
 	addToStats(stat, exonStart, gp->cdsEnd, genoStart, genoEnd, milliMatches);
+	cdsSize += gp->cdsEnd - exonStart;
 	}
-    else
+    else if (exonStart >= gp->cdsStart && exonEnd <= gp->cdsEnd)
         {
 	addToStats(&stats->middleCds, exonStart, exonEnd, genoStart, genoEnd, milliMatches);
+	cdsSize += exonEnd - exonStart;
 	}
     }
+if (mrnaSize != cdsSize + utrSize)
+   uglyf("%s cds %d  utr %d  mrna %d\n", gp->name, cdsSize, utrSize, mrnaSize);
+
 if (anyMrna)
     stats->mrnaTotal.hits += 1;
 stats->mrnaTotal.features += 1;
@@ -514,22 +526,6 @@ for (gp = gi->gpList; gp != NULL; gp = gp->next)
 return maxGp;
 }
 
-boolean findSplitTable(char *chrom, char *splitTable, char *table)
-/* Look to see if 'origTable' is in database.   If it's
- * not then shift to chrN_table.  Returns TRUE if table is split. */
-{
-if (hTableExists(splitTable))
-    {
-    strcpy(table, splitTable);
-    return FALSE;
-    }
-else
-    {
-    sprintf(table, "%s_%s", chrom, splitTable);
-    return TRUE;
-    }
-}
-
 struct psl *getChromPsl(char *chrom, char *splitTable)
 /* Get all alignments for chromosome sorted by chromosome
  * start position. */
@@ -538,18 +534,19 @@ char table[64];
 char query[256], **row;
 struct sqlResult *sr;
 struct psl *pslList = NULL, *psl;
-boolean isSplit = findSplitTable(chrom, splitTable, table);
+boolean hasBin;
+boolean isSplit = hFindSplitTable(chrom, splitTable, table, &hasBin);
 if (hTableExists(table))
     {
     struct sqlConnection *conn = hAllocConn();
     if (isSplit)
 	sprintf(query, "select * from %s", table);
     else
-	sprintf(query, "select * from %s and qName = '%s'", table, chrom);
+	sprintf(query, "select * from %s where qName = '%s'", table, chrom);
     sr = sqlGetResult(conn, query);
     while ((row = sqlNextRow(sr)) != NULL)
 	{
-	psl = pslLoad(row);
+	psl = pslLoad(row+hasBin);
 	slAddHead(&pslList, psl);
 	}
     sqlFreeResult(&sr);
@@ -569,8 +566,10 @@ char table[64];
 char query[256], **row;
 struct sqlResult *sr;
 struct bed *bedList = NULL, *bed;
-boolean isSplit = findSplitTable(chrom, splitTable, table);
+boolean hasBin;
+boolean isSplit = hFindSplitTable(chrom, splitTable, table, &hasBin);
 
+uglyf("hFindSplitTable(%s, %s, %s, %d)\n", chrom, splitTable, table, hasBin);
 if (hTableExists(table))
     {
     struct sqlConnection *conn = hAllocConn();
@@ -594,6 +593,8 @@ if (hTableExists(table))
     }
 else
     warn("Table %s doesn't exist", table);
+uglyf("Got %d beds\n", slCount(bedList));
+uglyf("bed1 = %s:%d-%d\n", bedList->chrom, bedList->chromStart, bedList->chromEnd);
 return bedList;
 }
 

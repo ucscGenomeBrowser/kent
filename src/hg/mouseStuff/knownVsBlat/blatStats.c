@@ -28,6 +28,49 @@ if (reportPercentId)
 fprintf(f, "\n");
 }
 
+struct stat *totalUtr(struct blatStats *stats)
+/* Return sum of 5' and 3' UTRs. */
+{
+static struct stat acc;
+ZeroVar(&acc);
+addStat(&stats->utr5, &acc);
+addStat(&stats->utr3, &acc);
+return &acc;
+}
+
+struct stat *totalSplice(struct blatStats *stats)
+/* Return sum of 5' and 3' splice sites. */
+{
+static struct stat acc;
+ZeroVar(&acc);
+addStat(&stats->splice5, &acc);
+addStat(&stats->splice3, &acc);
+return &acc;
+}
+
+struct stat *totalCds(struct blatStats *stats)
+/* Return sum of all CDS regions. */
+{
+static struct stat acc;
+ZeroVar(&acc);
+addStat(&stats->firstCds, &acc);
+addStat(&stats->middleCds, &acc);
+addStat(&stats->endCds, &acc);
+addStat(&stats->onlyCds, &acc);
+}
+
+struct stat *totalIntron(struct blatStats *stats)
+/* Return sum of all intron regions. */
+{
+static struct stat acc;
+ZeroVar(&acc);
+addStat(&stats->firstIntron, &acc);
+addStat(&stats->middleIntron, &acc);
+addStat(&stats->endIntron, &acc);
+addStat(&stats->onlyIntron, &acc);
+}
+
+
 void reportStats(FILE *f, struct blatStats *stats, char *name, boolean reportPercentId)
 /* Print out stats. */
 {
@@ -46,14 +89,18 @@ reportStat(f, "upstream 400", &stats->upstream400, reportPercentId);
 reportStat(f, "upstream 800", &stats->upstream800, reportPercentId);
 reportStat(f, "downstream 200", &stats->downstream200, reportPercentId);
 reportStat(f, "mrna total", &stats->mrnaTotal, reportPercentId);
+reportStat(f, "UTR", totalUtr(stats), reportPercentId);
 reportStat(f, "5' UTR", &stats->utr5, reportPercentId);
 reportStat(f, "3' UTR", &stats->utr3, reportPercentId);
+reportStat(f, "CDS", totalCds(stats), reportPercentId);
 reportStat(f, "first CDS", &stats->firstCds, reportPercentId);
 reportStat(f, "middle CDS", &stats->middleCds, reportPercentId);
 reportStat(f, "end CDS", &stats->endCds, reportPercentId);
 reportStat(f, "only CDS", &stats->onlyCds, reportPercentId);
+reportStat(f, "splice", totalSplice(stats), reportPercentId);
 reportStat(f, "5' splice", &stats->splice5, reportPercentId);
 reportStat(f, "3' splice", &stats->splice3, reportPercentId);
+reportStat(f, "intron", totalIntron(stats), reportPercentId);
 reportStat(f, "first intron", &stats->firstIntron, reportPercentId);
 reportStat(f, "middle intron", &stats->middleIntron, reportPercentId);
 reportStat(f, "end intron", &stats->endIntron, reportPercentId);
