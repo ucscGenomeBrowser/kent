@@ -39,8 +39,8 @@ type psl .
 url http://www.wormbase.org/db/gene/gene?name=$$
 
 track cbr_waba
-shortLabel C briggsae
-longLabel C briggsae WABA alignment
+shortLabel Briggsae WABA
+longLabel C. briggsae WABA Alignment
 # group compGeno
 group genes
 priority 50
@@ -49,8 +49,8 @@ color 140,0,200
 altColor 210,140,250
 
 track blatCi
-shortLabel C. intestinalis BLAT
-longLabel Ciona intestinalis Translated BLAT Alignments
+shortLabel C. intestinalis Blat
+longLabel Ciona intestinalis Translated Blat Alignments
 group compGeno
 priority 113
 visibility hide
@@ -69,8 +69,8 @@ color 12,12,120
 type genePred refPep refMrna
 
 track blastzCb1
-shortLabel briggsae Blastz
-longLabel Blastz C briggsae
+shortLabel Briggsae Blastz
+longLabel Blastz C. briggsae
 group compGeno
 priority 159
 visibility dense
@@ -80,8 +80,8 @@ spectrum on
 type psl xeno cb1
 
 track cb1Chain
-shortLabel briggsae Chain 
-longLabel Chained briggsae/elegans Alignments
+shortLabel Briggsae Chain 
+longLabel Chained C. briggsae/elegans Alignments
 group compGeno
 priority 125
 visibility dense
@@ -92,7 +92,7 @@ type chain cb1
 
 track blastzSelf
 shortLabel Blastz Self
-longLabel Blastz C elegans (self)
+longLabel Blastz C. elegans (self)
 group compGeno
 priority 159
 visibility dense
@@ -102,8 +102,8 @@ spectrum on
 type psl xeno ce1
 
 track chainSelf
-shortLabel self Chain 
-longLabel Chained elegans/elegans Alignments
+shortLabel Self Chain 
+longLabel Chained C. elegans/elegans Alignments
 group compGeno
 priority 125
 visibility dense
