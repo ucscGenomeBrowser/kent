@@ -22,7 +22,7 @@
 #include "net.h"
 #include "htmlPage.h"
 
-static char const rcsid[] = "$Id: htmlPage.c,v 1.9 2004/06/15 17:49:50 kent Exp $";
+static char const rcsid[] = "$Id: htmlPage.c,v 1.10 2004/06/17 23:35:17 galt Exp $";
 
 void htmlStatusFree(struct htmlStatus **pStatus)
 /* Free up resources associated with status */
@@ -1078,7 +1078,9 @@ if (buttonName != NULL)
     appendCgiVar(dy, buttonName, buttonVal);
 for (var = form->vars; var != NULL; var = var->next)
     {
-    if (sameWord(var->tagName, "SELECT") || var->type != NULL &&
+    if (sameWord(var->tagName, "SELECT") || 
+        sameWord(var->tagName, "TEXTAREA") || 
+	var->type != NULL &&
     	( sameWord(var->type, "RADIO") || sameWord(var->type, "TEXTBOX")
 	|| sameWord(var->type, "PASSWORD") || sameWord(var->type, "HIDDEN")
 	|| sameWord(var->type, "TEXT") || sameWord(var->type, "FILE")))
