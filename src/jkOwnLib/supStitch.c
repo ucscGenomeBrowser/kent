@@ -15,7 +15,7 @@
 #include "supStitch.h"
 #include "chainBlock.h"
 
-static char const rcsid[] = "$Id: supStitch.c,v 1.26 2005/01/10 00:31:02 kent Exp $";
+static char const rcsid[] = "$Id: supStitch.c,v 1.27 2005/01/12 17:36:01 kent Exp $";
 
 static void ssFindBestBig(struct ffAli *ffList, bioSeq *qSeq, bioSeq *tSeq,
 	enum ffStringency stringency, boolean isProt, struct trans3 *t3List,
@@ -214,13 +214,16 @@ static struct ffAli *forceMonotonic(struct ffAli *aliList,
 /* Remove any blocks that violate strictly increasing order in both coordinates. 
  * This is not optimal, but it turns out to be very rarely used. */
 {
-if (!isMonotonic(aliList))
+if (!isProt)
     {
-    struct ffAli *leftovers = NULL;
-    int score;
-    ssFindBestBig(aliList, qSeq, tSeq, stringency, isProt, t3List, &aliList, &score,
-       &leftovers);
-    ffFreeAli(&leftovers);
+    if (!isMonotonic(aliList))
+	{
+	struct ffAli *leftovers = NULL;
+	int score;
+	ssFindBestBig(aliList, qSeq, tSeq, stringency, isProt, t3List, &aliList, &score,
+	   &leftovers);
+	ffFreeAli(&leftovers);
+	}
     }
 return aliList;
 }
@@ -246,9 +249,8 @@ else
 	    newLeft = ffFind(left->nEnd, right->nStart, left->hEnd, right->hStart, stringency);
 	    if (newLeft != NULL)
 	        {
-		if (!bundle->isProt)
-		    newLeft = forceMonotonic(newLeft, qSeq, genoSeq, 
-		    	stringency, bundle->isProt, bundle->t3List );
+		newLeft = forceMonotonic(newLeft, qSeq, genoSeq, 
+		    stringency, bundle->isProt, bundle->t3List );
 		newRight = ffRightmost(newLeft);
                 if (left != NULL)
                     {
@@ -531,8 +533,7 @@ static void ssFindBestSmall(struct ffAli *ffList, bioSeq *qSeq, bioSeq *tSeq,
 {
 struct ssGraph *graph = ssGraphMake(ffList, qSeq, stringency, isProt, t3List);
 ssGraphFindBest(graph, retBestAli, retScore, retLeftovers);
-if (!isProt)
-    *retBestAli = forceMonotonic(*retBestAli, qSeq, tSeq, stringency, isProt, t3List);
+*retBestAli = forceMonotonic(*retBestAli, qSeq, tSeq, stringency, isProt, t3List);
 ssGraphFree(&graph);
 }
 
@@ -767,6 +768,8 @@ while (ffList != NULL)
     bestPath = ffRemoveEmptyAlis(bestPath, TRUE);
     bestPath = ffMergeHayOverlaps(bestPath);
     bestPath = ffRemoveEmptyAlis(bestPath, TRUE);
+    forceMonotonic(bestPath, qSeq, genoSeq, stringency,
+    	bundle->isProt, bundle->t3List);
 
     if (firstTime && stringency == ffCdna && bundle->avoidFuzzyFindKludge == FALSE)
 	{
