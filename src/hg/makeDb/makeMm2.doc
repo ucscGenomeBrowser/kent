@@ -25,35 +25,82 @@ o - Copy the mouse sequence supercontigs to the cluster
 o - Distribute this data to the local nodes:
        sudo /cluster/install/utilities/localUpdate
 
-REPEAT MASKING SENSITIVE MODE (done, needs redoing on sensitive mode)
+REPEAT MASKING (DONE 07/30/02)
+   Split contigs, run RepeatMasker, lift results
+   Notes: 
+   * If there is a new version of RepeatMasker, build it and ask the admins 
+     to binrsync it (kkstore:/scratch/hg/RepeatMasker/*).
+   * Contigs (*/chr*_*/chr*_*.fa) are split into 500kb chunks to make 
+     RepeatMasker runs manageable on the cluster ==> results need lifting.
+   * For the NCBI assembly we repeat mask on the sensitive mode setting
+     (RepeatMasker -m -s)
 
-Repeat mask on sensitive settings by doing
-    ssh kk
-    cd ~/mm/bed
-    mkdir rmskS
-    cd rmskS
-    cp ~/lastMm/bed/rmskS/rmskS.csh .
-edit rmskS.csh to update paths to current mouse assembly
-    cp ~/lastMm/bed/rmskS/template
-    ls -1 /scratch/hg/mm2/contigs/*.fa > genome.lst
-    gensub2 genome.lst single template spec
-    mkdir out
-    para create spec
-then do
-    para try
-and check things out.  If it looks good then para push or para shove
-until finished.
+        #- Split contigs into 500kb chunks:
+        cd ~/mm2
+        foreach d ( */chr*_?{,?} )
+          cd $d
+          set contig = $d:t
+          faSplit size $contig.fa 500000 ${contig}_ -lift=$contig.lft \
+            -maxN=500000
+          cd ../..
+        end
 
-Next copy these into the chromosome/contig directories by updating
-the paths in jkStuff/cpRmskS.sh, and then sourcing it.
+        #- Make the run directory and job list:
+        cd ~/mm2
+        mkdir RMRun
+        rm -f RMRun/RMJobs
+        touch RMRun/RMJobs
+        foreach d ( ?{,?}/chr*_?{,?} )
+          foreach f ( $d/chr*_*_*.fa )
+            set f = $f:t
+            echo /cluster/bin/scripts/RMMouse \
+                 /cluster/store2/mm.2002.02/mm2/$d $f \
+               '{'check out line+ /cluster/store2/mm.2002.02/mm2/$d/$f.out'}' \
+              >> RMRun/RMJobs
+          end
+        end
 
-Then lift these up to chromosome coordinates with
-    cd ~/mm
-    tcsh jkStuff/liftOut3.sh
-Then load the .out files into the database with:
-    ssh hgwdev
-    cd ~/mm
-    hgLoadOut mm2 ?/*.fa.out ??/*.fa.out
+        #- Do the run
+        ssh kk
+        cd ~/mm2/RMRun
+        para create RMJobs
+        para try, para check, para check, para push, para check,...
+
+        #- Lift up the split-contig .out's to contig-level .out's
+        cd ~/mm2
+        foreach d ( ?{,?}/chr*_?{,?} )
+          cd $d
+          set contig = $d:t
+          liftUp $contig.fa.out $contig.lft warn ${contig}_*.fa.out > /dev/null
+          cd ../..
+        end
+
+        #- Lift up the contig-level .out's to chr-level
+        cd ~/mm2
+        ./jkStuff/liftOut5.sh
+
+        #- Load the .out files into the database with:
+        ssh hgwdev
+        cd ~/mm2
+        hgLoadOut mm2 ?/*.fa.out ??/*.fa.out
+
+        ssh kkstore
+        cd ~/mm2
+        #- Soft-mask (lower-case) the contig and chr .fa's
+        tcsh jkStuff/makeFaMasked.sh
+        #- Make hard-masked .fa.masked files as well:
+        tcsh jkStuff/makeHardMasked.sh
+        #- Rebuild the nib, mixedNib, maskedNib files:
+        tcsh jkStuff/makeNib.sh
+        #- Rebuild the .zip files
+        tcsh jkStuff/zipAll.sh
+        #- copy the contig .fa's to the appropriate place on /scratch
+        cp -p ?{,?}/chr*/chr?{,?}_?{,?}.fa /scratch/hg/mm2/contigs.0730
+
+        #- Copy the .zip files to hgwdev:/usr/local/apache/...
+        ssh hgwdev
+        cd ~/mm2
+        tcsh jkStuff/cpToWeb.sh
 
 
 CREATING DATABASE AND STORING mRNA/EST SEQUENCE AND AUXILIARY INFO 
@@ -202,7 +249,7 @@ Wait for these to finish.
      cd estOrientInfo
      mkdir ei
      ls -1S /scratch/hg/mm2/est/contig > psl.lst
-     cp ~/oo/bed/estOrientInfo/gsub .
+     cp ~/lastMm/bed/estOrientInfo/gsub .
 Update gsub to refer to mouse contig sequence currently on
 /scratch, and mouse ESTs on /scratch.
      gensub2 psl.lst single gsub spec
@@ -227,7 +274,7 @@ CREATE RNACLUSTER TABLE (done)
  (see above).
 
    ssh hgwdev
-   cd ~/oo/bed
+   cd ~/mm/bed
    mkdir rnaCluster
    cd rnaCluster
    mkdir rna est
@@ -392,7 +439,7 @@ NCBI GENOMESCAN MODELS (done 05/31/02)
     wget ftp://ftp.ncbi.nih.gov/genomes/M_musculus/MGSCv3_Release1/protein/GS_prot.fsa.gz
     hgPepPred mm2 generic genomeScanPep GS_prot.fsa
 
-PREPARING SEQUENCE FOR CROSS SPECIES ALIGNMENTS (todo)
+PREPARING SEQUENCE FOR CROSS SPECIES ALIGNMENTS (DONE 8/02/02)
 
 Make sure that the contig files are lower-case repeat masked
 then do
@@ -401,8 +448,8 @@ then do
    source jkStuff/makeTrfFa.sh
 Then make sure there is enough space available on /scratch
 and do
-   cp -r ~/mm/trfFa /scratch/hg/mm2
-   sudo /cluster/install/utilities/updateLocal
+   cp -Rp ~/mm/trfFa /scratch/hg/mm2/trfFa.0802
+   # sudo /cluster/install/utilities/updateLocal
 
 
 DOING HUMAN/MOUSE ALIGMENTS (todo)
@@ -514,7 +561,7 @@ the first line into 1.org, the second line into 2.org,  and
 so forth.  After the 6th line just leave the rest in 7.org.
 Then
       ls -1 *.org > rna.lst
-      cp ~/oo/bed/xenoMrna/gsub .
+      cp ~/mm/bed/xenoMrna/gsub .
       gensub2 genome.lst rna.lst gsub spec
       para create
       para try
@@ -558,7 +605,7 @@ o - Do fish/mouse alignments.
        mkdir psl
        ls -1S /scratch/hg/fish/* > fish.lst
        ls -1S /scratch/hg/mm2/trfFa/* > mouse.lst
-       cp ~/oo/blatFish/gsub .
+       cp ~/lastMm/blatFish/gsub .
        gensub2 mouse.lst fish.lst gsub spec
        para create spec
        para try
@@ -592,7 +639,7 @@ LOAD GENEID GENES (done)
    http://www1.imim.es/genepredictions/M.musculus/mmFeb2002/geneid_v1.1
    Get rid of the extra .N in the transcripts with subs.  
      cd ..
-     cp ~/oo/bed/geneid/subs .
+     cp ~/lastMm/bed/geneid/subs .
      subs -e download/*.gtf > /dev/null
      ldHgGene mm2 geneid download/*.gtf -exon=CDS
      hgPepPred mm2 generic geneidPep download/*.prot
@@ -607,7 +654,7 @@ SGP GENE PREDICTIONS (done)
    http://www1.imim.es/genepredictions/M.musculus/mmFeb2002/SGP/
    Get rid of the extra .N in the transcripts with subs.  
      cd ..
-     cp ~/oo/bed/sgp/subs .
+     cp ~/lastMm/bed/sgp/subs .
      subs -e download/*.gtf > /dev/null
      ldHgGene mm2 sgpGene download/*.gtf -exon=CDS
      hgPepPred mm2 generic sgpPep download/*.prot
@@ -717,11 +764,10 @@ LOAD CPGISSLANDS (todo)
      At mysql> prompt type in:
        load data local infile 'cpgIsland.bed' into table cpgIsland
 
-LOAD ENSEMBL ESTs (done 05/28/02)
+LOAD ENSEMBL ESTs (done 05/28/02, reloaded w/new data 08/05/02)
      ln -s /cluster/store2/mm.2002.02/mm2 ~/mm2
-     cd ~/mm2/bed
-     mkdir ensembl
-     cd ensembl
+     mkdir -p ~/mm2/bed/ensembl
+     cd ~/mm2/bed/ensembl
      wget http://www.ebi.ac.uk/~stabenau/mouse-est.gz
      wget http://www.ebi.ac.uk/~stabenau/mouse-est.pep.gz
      gunzip -c mouse-est.gz | \
@@ -736,14 +782,13 @@ LOAD ENSEMBL ESTs (done 05/28/02)
        mouse-est-fixed.pep
      hgPepPred mm2 generic ensEstPep mouse-est-fixed.pep
 
-LOAD ENSEMBLE GENES (done 05/28/02)
-     cd ~/mm2/bed
-     mkdir -p ensembl
-     cd ensembl
+LOAD ENSEMBLE GENES (done 05/28/02, reloaded w/new data 08/05/02)
+     mkdir -p ~/mm2/bed/ensembl
+     cd ~/mm2/bed/ensembl
      wget http://www.ebi.ac.uk/~stabenau/mouse-ensembl.gz
      wget http://www.ebi.ac.uk/~stabenau/mouse-ensembl.pep.gz
      gunzip -c mouse-ensembl.gz | \
-       perl -w -p -e 's/^(\w)/chr$1/' mouse-ensembl > mouse-ensembl-fixed.gtf
+       perl -w -p -e 's/^(\w)/chr$1/' > mouse-ensembl-fixed.gtf
      ldHgGene mm2 ensGene mouse-ensembl-fixed.gtf
 > mouse-ensembl contains stopcodons, due to some glitches in our
 > genebuild. The id behind '>' is internal and was not in our gtf dump, so
@@ -776,7 +821,7 @@ LOAD ENSEMBL "Merge" TRACKs - SECRET! (done 6/25/02)
      be made secret - see NOTE's below & revision history comments for 
      hgTracks.c 1.277.
 
-LOAD ENSEMBL/RIKEN - SECRET! (05/31/02 - pep todo)
+LOAD ENSEMBL/RIKEN - SECRET! (05/31/02 - pep todo, reloaded w/new data 08/05/02)
      - Use mgsc database, not mm2.  Only MGSC members should be able to 
        access this track, and only by password protection.
      mkdir -p ~/mm2/bed/ensRiken
@@ -863,7 +908,7 @@ LOAD MOUSE SYNTENY (todo)
      - cd ~/kent/src/hg/lib
      - mm2 < mouseSyn.sql
      - mkdir ~/mm/bed/mouseSyn
-     - cd ~/oo/bed/mouseSyn
+     - cd ~/mm/bed/mouseSyn
      - Put Deanna Church's (church@ncbi.nlm.nih.gov) email attatchment as
        mouseSyn.txt
      - awk -f format.awk *.txt > mouseSyn.bed
