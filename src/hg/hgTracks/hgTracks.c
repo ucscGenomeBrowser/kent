@@ -17,6 +17,7 @@
 #include "hdb.h"
 #include "hui.h"
 #include "hgFind.h"
+#include "hgTracks.h"
 #include "spaceSaver.h" 
 #include "wormdna.h"
 #include "aliType.h"
@@ -56,8 +57,6 @@
 #include "ensPhusionBlast.h"
 #include "syntenyBerk.h"
 #include "syntenySanger.h"
-#include "netAlign.h"
-#include "netGap.h"
 #include "chainBlock.h"
 #include "chain.h"
 #include "chainLink.h"
@@ -117,11 +116,11 @@ struct cart *cart;	/* The cart where we keep persistent variables. */
 char *chromName;		/* Name of chromosome sequence . */
 char *database;			/* Name of database we're using. */
 char *organism;			/* Name of organism we're working on. */
-char *position = NULL; 		/* Name of position. */
 int winStart;			/* Start of window in sequence. */
 int winEnd;			/* End of window in sequence. */
-char *userSeqString = NULL;	/* User sequence .fa/.psl file. */
-char *ctFileName = NULL;	/* Custom track file. */
+static char *position = NULL; 		/* Name of position. */
+static char *userSeqString = NULL;	/* User sequence .fa/.psl file. */
+static char *ctFileName = NULL;	/* Custom track file. */
 
 char *protDbName;               /* Name of proteome database for this genome. */
 
@@ -138,25 +137,25 @@ boolean withRuler = TRUE;		/* Display ruler? */
 boolean hideControls = FALSE;		/* Hide all controls? */
 
 /* Structure returned from findGenomePos. 
-We use this to to expand any tracks to full
- that were found to contain the searched-upon
-position string */
+ * We use this to to expand any tracks to full
+ * that were found to contain the searched-upon
+ * position string */
 struct hgPositions *hgp = NULL;
 
 struct hash *zooSpeciesHash = NULL;
 
-struct trackLayout
-/* This structure controls the basic dimensions of display. */
-    {
-    MgFont *font;		/* What font to use. */
-    int leftLabelWidth;		/* Width of left labels. */
-    int trackWidth;		/* Width of tracks. */
-    int picWidth;		/* Width of entire picture. */
-    } tl;
+struct trackLayout tl;
 
 boolean suppressHtml = FALSE;	
 	/* If doing PostScript output we'll suppress most
          * of HTML output. */
+
+void hvPrintf(char *format, va_list args)
+/* Suppressable variable args printf. */
+{
+if (!suppressHtml)
+    vprintf(format, args);
+}
 
 void hPrintf(char *format, ...)
 /* Printf that can be suppressed if not making
@@ -164,10 +163,7 @@ void hPrintf(char *format, ...)
 {
 va_list(args);
 va_start(args, format);
-if (!suppressHtml)
-    {
-    vprintf(format, args);
-    }
+hvPrintf(format, args);
 va_end(args);
 }
 
@@ -228,13 +224,17 @@ if (!suppressHtml)
     cgiMakeDropList(name, menu, menuSize, checked);
 }
 
-void printHtmlComment(char *comment)
+void printHtmlComment(char *format, ...)
 /* Function to print output as a comment so it is not seen in the HTML
- * output but only in the HTML source
- * param comment _ The comment to be printed */
+ * output but only in the HTML source. */
 {
-hPrintf("\n<!-- DEBUG: %s -->\n", comment);
+va_list(args);
+va_start(args, format);
+hWrites("\n<!-- DEBUG: ");
+hvPrintf(format, args);
+hWrites(" -->\n");
 //fflush(stdout); /* USED ONLY FOR DEBUGGING BECAUSE THIS IS SLOW - MATT */
+va_end(args);
 }
 
 void setPicWidth(char *s)
@@ -280,102 +280,30 @@ int maxShade = 9;	/* Highest shade in a color gradient. */
 Color shadesOfGray[10+1];	/* 10 shades of gray from white to black
                                  * Red is put at end to alert overflow. */
 Color shadesOfBrown[10+1];	/* 10 shades of brown from tan to tar. */
-static struct rgbColor brownColor = {100, 50, 0};
-static struct rgbColor tanColor = {255, 240, 200};
-static struct rgbColor guidelineColor = { 220, 220, 255};
+struct rgbColor brownColor = {100, 50, 0};
+struct rgbColor tanColor = {255, 240, 200};
+struct rgbColor guidelineColor = { 220, 220, 255};
 
 Color shadesOfSea[10+1];       /* Ten sea shades. */
-static struct rgbColor darkSeaColor = {0, 60, 120};
-static struct rgbColor lightSeaColor = {200, 220, 255};
-
-struct trackGroup
-/* Structure that displays a group of tracks. */
-{
-    struct trackGroup *next;   /* Next on list. */
-    char *mapName;             /* Name on image map and for ui buttons. */
-    enum trackVisibility visibility; /* How much of this to see if possible. */
-    enum trackVisibility limitedVis; /* How much of this actually see. */
-    boolean limitedVisSet;	     /* Is limited visibility set? */
-
-    char *longLabel;           /* Long label to put in center. */
-    char *shortLabel;          /* Short label to put on side. */
-
-    bool mapsSelf;          /* True if system doesn't need to do map box. */
-    bool drawName;          /* True if BED wants name drawn in box. */
-
-    Color *colorShades;	       /* Color scale (if any) to use. */
-    struct rgbColor color;     /* Main color. */
-    Color ixColor;             /* Index of main color. */
-    struct rgbColor altColor;  /* Secondary color. */
-    Color ixAltColor;
-
-    void (*loadItems)(struct trackGroup *tg);
-    /* loadItems loads up items for the chromosome range indicated.  It also usually sets the
-     * following variables.  */ 
-    void *items;               /* Some type of slList of items. */
-
-    char *(*itemName)(struct trackGroup *tg, void *item);
-    /* Return name of one of a member of items above to display on left side. */
-
-    char *(*mapItemName)(struct trackGroup *tg, void *item);
-    /* Return name to associate on map. */
-
-    int (*totalHeight)(struct trackGroup *tg, enum trackVisibility vis);
-        /* Return total height. Called before and after drawItems. 
-         * Must set the following variables. */
-    int height;                /* Total height - must be set by above call. */
-    int lineHeight;            /* Height per track including border. */
-    int heightPer;             /* Height per track minus border. */
-
-    int (*itemHeight)(struct trackGroup *tg, void *item);
-    /* Return height of one item. */
-
-    void (*drawItems)(struct trackGroup *tg, int seqStart, int seqEnd,
-        struct vGfx *vg, int xOff, int yOff, int width, 
-        MgFont *font, Color color, enum trackVisibility vis);
-    /* Draw item list, one per track. */
-
-    int (*itemStart)(struct trackGroup *tg, void *item);
-    /* Return start of item in base pairs. */
-
-    int (*itemEnd)(struct trackGroup *tg, void *item);
-    /* Return start of item in base pairs. */
-
-    void (*freeItems)(struct trackGroup *tg);
-    /* Free item list. */
-
-    Color (*itemColor)(struct trackGroup *tg, void *item, struct vGfx *vg);
-    /* Get color of item (optional). */
-
-
-    void (*mapItem)(struct trackGroup *tg, void *item, char *itemName, int start, int end, 
-		    int x, int y, int width, int height); 
-    /* Write out image mapping for a given item */
-
-    boolean hasUi;		/* True if has an extended UI page. */
-    void *extraUiData;		/* Pointer for track specific filter etc. data. */
-    void (*trackFilter)(struct trackGroup *tg);	
-    /* Stuff to handle user interface parts. */
-
-    void *customPt;            /* Misc pointer variable unique to group. */
-    int customInt;             /* Misc int variable unique to group. */
-    int subType;               /* Variable to say what subtype this is for similar groups
-                                * to share code. */
-    unsigned short private;	/* True(1) if private, false(0) otherwise. */
-    int bedSize;		/* Number of fields if a bed file. */
-    float priority;	/* Priority to load tracks in, i.e. order to load tracks in. */
-};
+struct rgbColor darkSeaColor = {0, 60, 120};
+struct rgbColor lightSeaColor = {200, 220, 255};
 
 void loadSampleIntoLinkedFeature(struct trackGroup *tg);
 void loadSampleZoo(struct trackGroup *tg);
 
-struct trackGroup *tGroupList = NULL;  /* List of all tracks. */
+struct trackGroup *tGroupList = NULL;    /* List of all tracks. */
 
-struct trackGroup *sortGroupList = NULL; /* Used temporarily for sample sorting. */
-static boolean tgLoadNothing(){return TRUE;}
-static void tgDrawNothing(){}
-static void tgFreeNothing(){}
-static char *tgNoName(){return"";}
+struct trackGroup *sortGroupList = NULL; 
+                               /* Used temporarily for sample sorting. */
+
+
+/* Some little functional stubs to fill in track group
+ * function pointers with if we have nothing to do. */
+boolean tgLoadNothing(struct trackGroup *tg){return TRUE;}
+void tgDrawNothing(struct trackGroup *tg){}
+void tgFreeNothing(struct trackGroup *tg){}
+int tgItemNoStart(struct trackGroup *tg, void *item) {return -1;}
+int tgItemNoEnd(struct trackGroup *tg, void *item) {return -1;}
 
 int tgCmpPriority(const void *va, const void *vb)
 /* Compare to sort based on priority. */
@@ -391,14 +319,15 @@ else
    return 1;
 }
 
-static int tgFixedItemHeight(struct trackGroup *tg, void *item)
+int tgFixedItemHeight(struct trackGroup *tg, void *item)
 /* Return item height for fixed height track. */
 {
 return tg->lineHeight;
 }
 
-static int tgFixedTotalHeight(struct trackGroup *tg, enum trackVisibility vis)
-/* Most fixed height track groups will use this to figure out the height they use. */
+int tgFixedTotalHeight(struct trackGroup *tg, enum trackVisibility vis)
+/* Most fixed height track groups will use this to figure out the height 
+ * they use. */
 {
 tg->lineHeight = mgFontLineHeight(tl.font)+1;
 tg->heightPer = tg->lineHeight - 1;
@@ -446,7 +375,8 @@ freeMem(tempstr2);
 return(ret);
 }
 
-static int tgUserDefinedTotalHeight(struct trackGroup *tg, enum trackVisibility vis)
+static int tgUserDefinedTotalHeight(struct trackGroup *tg, 
+	enum trackVisibility vis)
 /* Wiggle track groups will use this to figure out the height they use
 as defined in the cart */
 {
@@ -486,18 +416,6 @@ switch (vis)
 
     }
 return tg->height;
-}
-
-int tgWeirdItemStart(struct trackGroup *tg, void *item)
-/* Space filler function for tracks without regular items. */
-{
-return -1;
-}
-
-int tgWeirdItemEnd(struct trackGroup *tg, void *item)
-/* Space filler function for tracks without regular items. */
-{
-return -1;
 }
 
 int orientFromChar(char c)
@@ -603,14 +521,16 @@ hPrintf(">\n");
 }
 
 
-void mapBoxToggleVis(int x, int y, int width, int height, struct trackGroup *curGroup)
+void mapBoxToggleVis(int x, int y, int width, int height, 
+	struct trackGroup *curGroup)
 /* Print out image map rectangle that would invoke this program again.
  * program with the current track expanded. */
 {
 mapBoxReinvoke(x, y, width, height, curGroup, NULL, 0, 0, NULL);
 }
 
-void mapBoxJumpTo(int x, int y, int width, int height, char *newChrom, int newStart, int newEnd, char *message)
+void mapBoxJumpTo(int x, int y, int width, int height, 
+	char *newChrom, int newStart, int newEnd, char *message)
 /* Print out image map rectangle that would invoke this program again
  * at a different window. */
 {
@@ -638,7 +558,8 @@ void mapBoxHc(int start, int end, int x, int y, int width, int height,
 char *encodedItem = cgiEncode(item);
 hPrintf("<AREA SHAPE=RECT COORDS=\"%d,%d,%d,%d\" ", x, y, x+width, y+height);
 hPrintf("HREF=\"%s&o=%d&t=%d&g=%s&i=%s&c=%s&l=%d&r=%d&db=%s&pix=%d\" ", 
-    hgcNameAndSettings(), start, end, group, encodedItem, chromName, winStart, winEnd, 
+    hgcNameAndSettings(), start, end, group, encodedItem, 
+    chromName, winStart, winEnd, 
     database, tl.picWidth);
 /*if (start !=-1)*/
 if( withPopUps ) 
@@ -655,9 +576,17 @@ sprintf(table, "%s%s", chromName, tabSuffix);
 return hTableExists(table);
 }
 
+double scaleForPixels(double pixelWidth)
+/* Return what you need to multiply bases by to
+ * get to scale of pixel coordinates. */
+{
+return pixelWidth / (winEnd - winStart);
+}
+
 void drawScaledBox(struct vGfx *vg, int chromStart, int chromEnd, 
 	double scale, int xOff, int y, int height, Color color)
-/* Draw a box scaled from chromosome to window coordinates. */
+/* Draw a box scaled from chromosome to window coordinates. 
+ * Get scale first with scaleForPixels. */
 {
 int x1 = round((double)(chromStart-winStart)*scale) + xOff;
 int x2 = round((double)(chromEnd-winStart)*scale) + xOff;
@@ -755,35 +684,6 @@ else if (sameString(type, "blue"))
 return colorIx;
 }
 
-struct simpleFeature
-/* Minimal feature - just stores position in browser coordinates. */
-    {
-    struct simpleFeature *next;
-    int start, end;			/* Start/end in browser coordinates. */
-    int grayIx;                         /* Level of gray usually. */
-    };
-
-enum {lfSubXeno = 1};
-enum {lfSubSample = 2};
-enum {lfWithBarbs = 3}; /* turn on barbs to show direction based on strand field */
-
-struct linkedFeatures
-/* A linked set of features - drawn as a bunch of boxes (often exons)
- * connected by horizontal lines (often introns). */
-    {
-    struct linkedFeatures *next;
-    int start, end;			/* Start/end in browser coordinates. */
-    int tallStart, tallEnd;		/* Start/end of fat display. */
-    int grayIx;				/* Average of components. */
-    int filterColor;			/* Filter color (-1 for none) */
-    float score;                        /* score for this feature */
-    char name[64];			/* Accession of query seq. */
-    int orientation;                    /* Orientation. */
-    struct simpleFeature *components;   /* List of component simple features. */
-    void *extra;			/* Extra info that varies with type. */
-    char popUp[128];			/* text for popup */
-    };
-
 struct linkedFeaturesPair
     {
     struct linkedFeaturesPair *next;
@@ -808,7 +708,7 @@ struct linkedFeatures *lf = item;
 return lf->name;
 }
 
-void freeLinkedFeatures(struct linkedFeatures **pList)
+void linkedFeaturesFreeList(struct linkedFeatures **pList)
 /* Free up a linked features list. */
 {
 struct linkedFeatures *lf;
@@ -817,10 +717,10 @@ for (lf = *pList; lf != NULL; lf = lf->next)
 slFreeList(pList);
 }
 
-void freeLinkedFeaturesItems(struct trackGroup *tg)
+void linkedFeaturesFreeItems(struct trackGroup *tg)
 /* Free up linkedFeaturesTrack items. */
 {
-freeLinkedFeatures((struct linkedFeatures**)(&tg->items));
+linkedFeaturesFreeList((struct linkedFeatures**)(&tg->items));
 }
 
 enum {blackShadeIx=9,whiteShadeIx=0};
@@ -851,7 +751,7 @@ void freeLinkedFeaturesSeries(struct linkedFeaturesSeries **pList)
 struct linkedFeaturesSeries *lfs;
 
 for (lfs = *pList; lfs != NULL; lfs = lfs->next)
-    freeLinkedFeatures(&lfs->features);
+    linkedFeaturesFreeList(&lfs->features);
 slFreeList(pList);
 }
 
@@ -1138,7 +1038,7 @@ const struct linkedFeaturesSeries *b = *((struct linkedFeaturesSeries **)vb);
 return b->grayIx - a->grayIx;
 }
 
-static int linkedFeaturesCmpStart(const void *va, const void *vb)
+int linkedFeaturesCmpStart(const void *va, const void *vb)
 /* Help sort linkedFeatures by starting pos. */
 {
 const struct linkedFeatures *a = *((struct linkedFeatures **)va);
@@ -1191,7 +1091,7 @@ int itemOff, itemHeight;
 boolean isFull = (vis == tvFull);
 Color *shades = tg->colorShades;
 Color bColor = tg->ixAltColor;
-double scale = width/(double)baseWidth;
+double scale = scaleForPixels(width);
 boolean isXeno = tg->subType == lfSubXeno;
 boolean hideLine = (vis == tvDense && tg->subType == lfSubXeno);
 
@@ -1309,13 +1209,15 @@ for (lfs = tg->items; lfs != NULL; lfs = lfs->next)
 
 
 
-int whichBin( double num, double thisMin, double thisMax, double binCount )
+int whichSampleBin( double num, double thisMin, double thisMax, 
+	double binCount )
 /* Get bin value from num. */
 {
 return (num - thisMin) * binCount / (thisMax - thisMin);
 }
 
-double whichNum( double bin, double thisMin, double thisMax, double binCount )
+double whichSampleNum( double bin, double thisMin, double thisMax, 
+	double binCount )
 /* gets range nums. from bin values*/
 {
 return( (thisMax - thisMin) / binCount * bin + thisMin );
@@ -1325,27 +1227,25 @@ return( (thisMax - thisMin) / binCount * bin + thisMin );
 int basePositionToXAxis( int base, int seqStart, int seqEnd, int
                 width, int xOff  ) 
 {
-    int baseWidth = seqEnd - seqStart;
-    double scale = width/(double)baseWidth;
-    double x1 = round((double)((int)base-seqStart)*scale) + xOff; 
-    return(x1);
+int baseWidth = seqEnd - seqStart;
+double scale = scaleForPixels(width);
+double x1 = round((double)((int)base-seqStart)*scale) + xOff; 
+return(x1);
 }
 
 int humMusZoomLevel( void )
 {
-    int zoom1 = 80000, zoom2 = 5000, zoom3 = 300; /* bp per data point */      
-    int pixPerBase = (winEnd - winStart)/ tl.picWidth;
-    if(pixPerBase >= zoom1)
-        return(1);
-    else if( pixPerBase >= zoom2 ) 
-        return(2);
-    else if(pixPerBase >= zoom3)
-        return(3);
-    else    
-        return(0);
+int zoom1 = 80000, zoom2 = 5000, zoom3 = 300; /* bp per data point */      
+int pixPerBase = (winEnd - winStart)/ tl.picWidth;
+if(pixPerBase >= zoom1)
+    return(1);
+else if( pixPerBase >= zoom2 ) 
+    return(2);
+else if(pixPerBase >= zoom3)
+    return(3);
+else    
+    return(0);
 }
-
-            
 
 int gfxBorder = 1;
 
@@ -1367,7 +1267,7 @@ static void drawWiggleHorizontalLine( struct vGfx *vg,
 {
 int bin;
 double y1;
-bin = -whichBin( where, min0, max0, binCount);
+bin = -whichSampleBin( where, min0, max0, binCount);
 y1 = (int)((double)y+((double)bin)*hFactor+(double)heightPer);
 vgBox( vg, 0, y1, vg->width, 1, lineColor );
 }
@@ -1392,7 +1292,7 @@ int lineHeight = tg->lineHeight;
 int x1,x2;
 boolean isFull = (vis == tvFull);
 Color bColor = tg->ixAltColor;
-double scale = width/(double)baseWidth;
+double scale = scaleForPixels(width);
 int prevX = -1;
 int gapPrevX = -1;
 double prevY = -1;
@@ -1463,8 +1363,8 @@ if( sameString( tg->mapName, "humMus" ) )
     minRange = 300.0;
     maxRange = 1000.0;
 
-    min0 = whichNum( minRange, -7.99515, 6.54171, 1000 );
-    max0 = whichNum( maxRange, -7.99515, 6.54171, 1000 );
+    min0 = whichSampleNum( minRange, -7.99515, 6.54171, 1000 );
+    max0 = whichSampleNum( maxRange, -7.99515, 6.54171, 1000 );
 
     /*draw horizontal line across track at 0.0, 2.0, and 5.0*/
     if( !isFull )
@@ -1482,11 +1382,11 @@ else if( sameString( tg->mapName, "humMusL" )
 	|| sameString( tg->mapName, "musHumL" )  )
     {
     minRange = 0.0;
-    maxRange = whichBin( 6.0, 0.0, 8.0 ,binCount );
-    min0 = whichNum( minRange, 0.0, 8.0, binCount );
-    max0 = whichNum( maxRange, 0.0, 8.0, binCount );
+    maxRange = whichSampleBin( 6.0, 0.0, 8.0 ,binCount );
+    min0 = whichSampleNum( minRange, 0.0, 8.0, binCount );
+    max0 = whichSampleNum( maxRange, 0.0, 8.0, binCount );
 
-    //errAbort( "whichBin=%g\n", maxRange );
+    //errAbort( "whichSampleBin=%g\n", maxRange );
 
     if( isFull )
 	{
@@ -1543,7 +1443,7 @@ for(lf = tg->items; lf != NULL; lf = lf->next)
 	/*mapping or sequencing gap*/
 	if (sampleY == 0)
 	    {
-	    bin = -whichBin( (int)((maxRange - minRange)/5.0+minRange), 
+	    bin = -whichSampleBin( (int)((maxRange - minRange)/5.0+minRange), 
 	    	minRange, maxRange, binCount );
 	    y1 = (int)((double)y+((double)bin)* hFactor+(double)heightPer);
 	    if( gapPrevX >= 0 )
@@ -1557,7 +1457,7 @@ for(lf = tg->items; lf != NULL; lf = lf->next)
 	    sampleY = maxRange;
 	if (sampleY < minRange)
 	    sampleY = minRange;
-	bin = -whichBin( sampleY, minRange, maxRange, binCount );
+	bin = -whichSampleBin( sampleY, minRange, maxRange, binCount );
 
 	x1 = round((double)(sampleX-winStart)*scale) + xOff;
 	y1 = (int)((double)y+((double)bin)* hFactor+(double)heightPer);
@@ -1613,12 +1513,10 @@ for(lf = tg->items; lf != NULL; lf = lf->next)
     }
 }
 
-
-static void linkedFeaturesDraw(struct trackGroup *tg, int seqStart, int seqEnd,
+void linkedFeaturesDraw(struct trackGroup *tg, int seqStart, int seqEnd,
         struct vGfx *vg, int xOff, int yOff, int width, 
         MgFont *font, Color color, enum trackVisibility vis)
 /* Draw linked features items. */
-/* Integrated with linkedFeaturesSeriesDraw */
 {
 /* Convert to a linked features series object */
 linkedFeaturesToLinkedFeaturesSeries(tg);
@@ -1748,7 +1646,7 @@ static void linkedFeaturesSeriesDrawAverage(struct trackGroup *tg, int seqStart,
 /* Draw dense clone items. */
 {
 int baseWidth = seqEnd - seqStart;
-double scale = width/(double)baseWidth;
+double scale = scaleForPixels(width);
 UBYTE *useCounts;
 int i;
 int lineHeight = mgFontLineHeight(font);
@@ -1797,7 +1695,7 @@ vgVerticalSmear(vg,xOff,yOff,width,lineHeight,useCounts,TRUE);
 freeMem(useCounts);
 }
 
-static void linkedFeaturesDrawAverage(struct trackGroup *tg, int seqStart, int seqEnd,
+void linkedFeaturesDrawAverage(struct trackGroup *tg, int seqStart, int seqEnd,
         struct vGfx *vg, int xOff, int yOff, int width, 
         MgFont *font, Color color, enum trackVisibility vis)
 /* Draw dense clone items. */
@@ -1810,7 +1708,8 @@ linkedFeaturesSeriesDrawAverage(tg, seqStart, seqEnd, vg, xOff, yOff, width, fon
 linkedFeaturesSeriesToLinkedFeatures(tg);
 }
 
-static void linkedFeaturesAverageDense(struct trackGroup *tg, int seqStart, int seqEnd,
+static void linkedFeaturesAverageDense(struct trackGroup *tg, 
+	int seqStart, int seqEnd,
         struct vGfx *vg, int xOff, int yOff, int width, 
         MgFont *font, Color color, enum trackVisibility vis)
 /* Draw dense linked features items. */
@@ -1862,7 +1761,7 @@ int itemOff, itemHeight;
 boolean isFull = (vis == tvFull);
 Color *shades = tg->colorShades;
 Color bColor = tg->ixAltColor;
-double scale = width/(double)baseWidth;
+double scale = scaleForPixels(width);
 boolean isXeno = tg->subType == lfSubXeno;
 boolean hideLine = (vis == tvDense && tg->subType == lfSubXeno);
  
@@ -1996,6 +1895,7 @@ grayThreshold(useCounts, width);
 vgVerticalSmear(vg,xOff,yOff,width,lineHeight,useCounts,TRUE);
 freeMem(useCounts);
 }
+
 static void linkedFeaturesAverageDensePair(struct trackGroup *tg, int seqStart, int seqEnd,
         struct vGfx *vg, int xOff, int yOff, int width, 
         MgFont *font, Color color, enum trackVisibility vis)
@@ -2028,7 +1928,7 @@ if (count == 0)
 return (total+(count>>1))/count;
 }
 
-void finishLf(struct linkedFeatures *lf)
+void linkedFeaturesBoundsAndGrays(struct linkedFeatures *lf)
 /* Calculate beginning and end of lf from components, etc. */
 {
 struct simpleFeature *sf;
@@ -2069,7 +1969,7 @@ return lf->end;
 void linkedFeaturesMethods(struct trackGroup *tg)
 /* Fill in track group methods for linked features. */
 {
-tg->freeItems = freeLinkedFeaturesItems;
+tg->freeItems = linkedFeaturesFreeItems;
 tg->drawItems = linkedFeaturesDraw;
 tg->itemName = linkedFeaturesName;
 tg->mapItemName = linkedFeaturesName;
@@ -2082,7 +1982,7 @@ tg->itemEnd = linkedFeaturesItemEnd;
 void sampleLinkedFeaturesMethods(struct trackGroup *tg)
 /* Fill in track group methods for 'sample' tracks. */
 {
-tg->freeItems = freeLinkedFeaturesItems;
+tg->freeItems = linkedFeaturesFreeItems;
 tg->drawItems = wiggleLinkedFeaturesDraw;
 tg->itemName = linkedFeaturesName;
 tg->mapItemName = linkedFeaturesName;
@@ -2155,7 +2055,7 @@ for (i=0; i<blockCount; ++i)
     }
 slReverse(&sfList);
 lf->components = sfList;
-finishLf(lf);
+linkedFeaturesBoundsAndGrays(lf);
 lf->tallStart = bed->thickStart;
 lf->tallEnd = bed->thickEnd;
 return lf;
@@ -2196,7 +2096,7 @@ for (i=0; i<sampleCount; ++i)
     }
 slReverse(&sfList);
 lf->components = sfList;
-finishLf(lf);
+linkedFeaturesBoundsAndGrays(lf);
 lf->end = sample->chromEnd;
 return lf;
 }
@@ -2263,7 +2163,7 @@ for (i=0; i<blockCount; ++i)
     }
 slReverse(&sfList);
 lf->components = sfList;
-finishLf(lf);
+linkedFeaturesBoundsAndGrays(lf);
 lf->start = psl->tStart;	/* Correct for rounding errors... */
 lf->end = psl->tEnd;
 return lf;
@@ -2877,7 +2777,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 	}
     slReverse(&sfList);
     lf->components = sfList;
-    finishLf(lf);
+    linkedFeaturesBoundsAndGrays(lf);
     lf->tallStart = gp->cdsStart;
     lf->tallEnd = gp->cdsEnd;
     slAddHead(&lfList, lf);
@@ -3644,7 +3544,7 @@ Color brown = color;
 Color gold = tg->ixAltColor;
 Color col;
 int ix = 0;
-double scale = (double)width/(double)baseWidth;
+double scale = scaleForPixels(width);
 
 /* Draw gaps if any. */
 if (!isFull)
@@ -3695,35 +3595,6 @@ tg->itemName = goldName;
 tg->mapItemName = goldName;
 }
 
-
-struct netItem
-/* A net track item. */
-    {
-    struct netItem *next;
-    int level;
-    char *className;
-    int yOffset;
-    };
-
-static char *netClassNames[] =  {
-    "Level 1", "Level 2", "Level 3", "Level 4", "Level 5", "Level 6", "Level 7", "Level 8" };
-
-struct netItem *makeNetItems()
-/* Make the levels for net alignment track. */
-{
-struct netItem *ni, *niList = NULL;
-int i;
-int numClasses = ArraySize(netClassNames);
-for (i=0; i<numClasses; ++i)
-    {
-    AllocVar(ni);
-    ni->level = i;
-    ni->className = netClassNames[i];
-    slAddHead(&niList, ni);
-    }
-slReverse(&niList);
-return niList;
-}
 
 /* Repeat items.  Since there are so many of these, to avoid 
  * memory problems we don't query the database and store the results
@@ -3893,8 +3764,8 @@ tg->itemName = repeatName;
 tg->mapItemName = repeatName;
 tg->totalHeight = tgFixedTotalHeight;
 tg->itemHeight = tgFixedItemHeight;
-tg->itemStart = tgWeirdItemStart;
-tg->itemEnd = tgWeirdItemEnd;
+tg->itemStart = tgItemNoStart;
+tg->itemEnd = tgItemNoEnd;
 }
 
 typedef struct slList *(*ItemLoader)(char **row);
@@ -3923,14 +3794,13 @@ tg->items = itemList;
 hFreeConn(&conn);
 }
 
-static Color contrastingColor(struct vGfx *vg, int backgroundIx)
+Color contrastingColor(struct vGfx *vg, int backgroundIx)
 /* Return black or white whichever would be more visible over
  * background. */
 {
 struct rgbColor c = vg->colorIxToRgb(vg, backgroundIx);
-int valSquared = c.r * c.r + c.g * c.g + c.b * c.b;
-int threshold = 3*150*150;
-if (valSquared > threshold)
+int val = (int)c.r + c.g + c.g + c.b;
+if (val >= 256)
     return MG_BLACK;
 else
     return MG_WHITE;
@@ -3948,7 +3818,7 @@ int heightPer = tg->heightPer;
 int lineHeight = tg->lineHeight;
 int x1,x2,w;
 boolean isFull = (vis == tvFull);
-double scale = width/(double)baseWidth;
+double scale = scaleForPixels(width);
 int invPpt;
 int midLineOff = heightPer/2;
 int dir;
@@ -4088,7 +3958,7 @@ int heightPer = tg->heightPer;
 int lineHeight = tg->lineHeight;
 int x1,x2,w;
 boolean isFull = (vis == tvFull);
-double scale = width/(double)baseWidth;
+double scale = scaleForPixels(width);
 int invPpt;
 
 for (item = tg->items; item != NULL; item = item->next)
@@ -4457,7 +4327,7 @@ boolean isFull = (vis == tvFull);
 Color col, textCol;
 int ix = 0;
 char *s;
-double scale = width/(double)baseWidth;
+double scale = scaleForPixels(width);
 for (band = tg->items; band != NULL; band = band->next)
     {
     x1 = round((double)((int)band->chromStart-winStart)*scale) + xOff;
@@ -4517,7 +4387,7 @@ int heightPer = tg->heightPer;
 int lineHeight = tg->lineHeight;
 int x1,x2,w;
 boolean isFull = (vis == tvFull);
-double scale = width/(double)baseWidth;
+double scale = scaleForPixels(width);
 int invPpt;
 int midLineOff = heightPer/2;
 int dir;
@@ -4911,7 +4781,7 @@ int shortOff = 2, shortHeight = heightPer-4;
 int tallStart, tallEnd, shortStart, shortEnd;
 int itemOff, itemHeight;
 boolean isFull = (vis == tvFull);
-double scale = width/(double)baseWidth;
+double scale = scaleForPixels(width);
 
 memset(colorBin, 0, MAXPIXELS * sizeof(colorBin[0]));
 
@@ -5162,263 +5032,6 @@ else if (!strcmp(name,"Y "))
 if (chromNum > 24) chromNum = 0;
 colorNum = chromColor[chromNum];
 return colorNum;
-}
-
-void netLoad(struct trackGroup *tg)
-/* Load up net tracks.  (Will query database during drawing for a change.) */
-{
-tg->items = makeNetItems();
-}
-
-void netFree(struct trackGroup *tg)
-/* Free up netGroup items. */
-{
-slFreeList(&tg->items);
-}
-
-char *netName(struct trackGroup *tg, void *item)
-/* Return name of net level track. */
-{
-struct netItem *ni = item;
-return ni->className;
-}
-
-Color netItemColor(struct netAlign *ms, struct vGfx *vg)
-/* Return color of track item based on chromsome. */
-{
-char chromStr[20];     
-if (strlen(ms->qName) == 8)
-    {
-    strncpy(chromStr,(char *)(ms->qName+1),1);
-    chromStr[1] = '\0';
-    }
-else if (strlen(ms->qName) == 9)
-    {
-    strncpy(chromStr,(char *)(ms->qName+1),2);
-    chromStr[2] = '\0';
-    }
-else
-    {
-    strncpy(chromStr,ms->qName+3,2);
-    chromStr[2] = '\0';
-    }
-return ((Color)getChromColor(chromStr, vg));
-}
-
-static void netDraw(struct trackGroup *tg, int seqStart, int seqEnd,
-        struct vGfx *vg, int xOff, int yOff, int width, 
-        MgFont *font, Color color, enum trackVisibility vis)
-/* Draw routine for netAlign type tracks.  This will load
- * the items as well as drawing them. */
-{
-int baseWidth = seqEnd - seqStart;
-struct netItem *ni;
-char chromStr[10];
-int y = yOff;
-int heightPer = tg->heightPer;
-int midLineOff = heightPer/2;
-int lineHeight = tg->lineHeight;
-int x1,x2,w, b1,b2, g1,g2;
-boolean isFull = (vis == tvFull);
-Color col;
-int ix = 0;
-struct sqlConnection *conn = hAllocConn();
-struct sqlConnection *conn2 = hAllocConn();
-struct sqlResult *sr = NULL;
-struct sqlResult *srGap = NULL;
-char **row;
-char **gapRow;
-int rowOffset, gapRowOffset, textColor;
-char levelWhere[64];
-struct dyString *bubble;
-
-if (isFull)
-    {
-    /* Do gray scale representation spread out among tracks. */
-    struct hash *hash = newHash(8);
-    struct netAlign na, np;
-    int percId;
-    int grayLevel, boxStart, boxEnd, level = 1;
-    char statusLine[128];
-    char levelName[10];
-    char where[128];
-    int midY, dir = 0;
-
-    for (ni = tg->items; ni != NULL; ni = ni->next)
-        {
-        ni->yOffset = y;
-        y += lineHeight;
-        sprintf(levelName,"%d", ni->level);
-        hashAdd(hash, levelName, ni);
-        }
-    for (level = 1 ; level <=8 ; level++)
-        {
-        sprintf(where,"level = %d",level);
-        sr = hOrderedRangeQuery(conn, tg->mapName, chromName, winStart, winEnd, where, &rowOffset);
-        row = sqlNextRow(sr) ;
-        if (row == NULL) continue;
-        netAlignStaticLoad(row+rowOffset, &np);
-        netAlignStaticLoad(row+rowOffset, &na);
-        sprintf(levelName,"%d", np.level-1);
-        ni = hashMustFindVal(hash, levelName);
-        midY = ni->yOffset + midLineOff;
-        percId = np.score;
-        grayLevel = grayInRange(percId, 500, 1000);
-        col = shadesOfGray[grayLevel];
-        col = netItemColor(&na, vg);
-        if (np.tStart >= winStart)
-            {
-            x1 = roundingScale(np.tStart-winStart, width, baseWidth)+xOff;
-            boxStart = np.tStart;
-            }
-        else
-            {
-            x1 = roundingScale(0, width, baseWidth)+xOff;
-            boxStart = winStart;
-            }
-        b1 = x1;
-        g1 = x1; //in case there are no gaps
-        x2 = roundingScale(np.tEnd-winStart, width, baseWidth)+xOff;
-        boxEnd = np.tEnd;
-        w = x2-x1;
-        if (w <= 0)
-            w = 1;
-        while ((row = sqlNextRow(sr)) != NULL)
-            {
-            netAlignStaticLoad(row+rowOffset, &na);
-            bubble = newDyString(1024);
-            dyStringPrintf(bubble, "%s %dk %s ", np.qName, np.qStart/1000,np.strand);
-            if (np.tR > 0 || np.qR > 0)
-                dyStringPrintf(bubble, " RM Repeats %d/%d",np.tR,np.qR);
-            if (np.tOldR > 0 || np.qOldR > 0)
-                dyStringPrintf(bubble, " ancient Rep %d/%d",np.tOldR,np.qOldR);
-            if (np.tNewR > 0 || np.qNewR > 0)
-                dyStringPrintf(bubble, " new Rep %d/%d",np.tNewR,np.qNewR);
-            if (np.tTrf > 0 || np.qTrf > 0)
-                dyStringPrintf(bubble, " Trf Rep %d/%d",np.tTrf,np.qTrf);
-            if (np.tN > 0 || np.qN > 0)
-                dyStringPrintf(bubble, " Ns %d/%d",np.tN,np.qN);
-            if (np.qFar > 0)
-                dyStringPrintf(bubble, " Far %d",np.qFar);
-            if (np.qOver > 0)
-                dyStringPrintf(bubble, " Over %d",np.qOver);
-            if (np.qDup > 0)
-                dyStringPrintf(bubble, " Dup %d",np.qDup);
-            textColor = contrastingColor(vg, col);
-            dir = 0;
-            if(sameString(np.strand , "+")) 
-                dir = 1;
-            if(sameString(np.strand , "-")) 
-                dir = -1;
-            if (sameString(na.type, "gap"))
-                {
-                boxEnd = na.tStart;
-                if (na.tStart >= winStart)
-                    {
-                    b2 = roundingScale(na.tStart-winStart, width, baseWidth)+xOff;
-                    g1 = b2;
-                    }
-                else
-                    {
-                    b2 = -1;
-                    g1 = roundingScale(0, width, baseWidth)+xOff;
-                    }
-                g2 = roundingScale(na.tEnd-winStart, width, baseWidth)+xOff;
-                if ((g2 - g1) > 3)
-                    /* draw narrow line for gap */
-                    {
-                    clippedBarbs(vg, g1, midY, g2-g1, 2, 5, 
-                                   dir, col, TRUE);
-                    innerLine(vg, g1, midY, g2-g1, col);
-                    }
-                w = b2-b1;
-                /* draw block */
-                if (w <= 0)
-                    w = 1;
-                else
-                    vgBox(vg, b1, ni->yOffset, w, heightPer, col);
-                if (w > 3)
-                    clippedBarbs(vg, b1, midY, w, 2, 5, dir, textColor, TRUE);
-                if (w > 1)
-                    {
-                    sprintf(levelName,"%d", na.level);
-                    mapBoxHc(boxStart, boxEnd, b1, ni->yOffset, w, heightPer, tg->mapName,
-                        levelName, bubble->string);
-                    }
-                boxStart = na.tEnd;
-                b1 = roundingScale(na.tEnd-winStart, width, baseWidth)+xOff;
-                /*if (np.tStart > winStart)
-                    x1 = roundingScale(np.tStart-winStart, width, baseWidth)+xOff;
-                else 
-                    x1 = roundingScale(0, width, baseWidth)+xOff;*/
-                w = x2-b1;
-                if (w <= 0)
-                    w = 1;
-                }
-            else 
-                {
-                vgBox(vg, x1, ni->yOffset, w, heightPer, col);
-                if (w > 3)
-                    clippedBarbs(vg, x1, midY, w, 2, 5, dir, textColor, TRUE);
-                if (w > 1)
-                    {
-                    sprintf(levelName,"%d", na.level);
-                    mapBoxHc(na.tStart, na.tEnd, x1, ni->yOffset, w, heightPer, tg->mapName,
-                        levelName, bubble->string);
-                    }
-                col = netItemColor(&na, vg);
-                x1 = roundingScale(na.tStart-winStart, width, baseWidth)+xOff;
-                x2 = roundingScale(na.tEnd-winStart, width, baseWidth)+xOff;
-                boxStart = na.tStart;
-                boxEnd = na.tEnd;
-                w = x2-x1;
-                if (w <= 0)
-                    w = 1;
-                }
-            netAlignStaticLoad(row+rowOffset, &np);
-            dyStringFree(&bubble);
-            }
-            vgBox(vg, b1, ni->yOffset, w, heightPer, col);
-            textColor = contrastingColor(vg, col);
-            if (w > 3)
-                clippedBarbs(vg, b1, midY, w, 2, 5, dir, textColor, TRUE);
-        }
-    freeHash(&hash);
-    }
-else
-    {
-    char table[64];
-    boolean hasBin;
-    struct netAlign na;
-    struct dyString *query = newDyString(1024);
-    /* Do black and white on single track.  Fetch less than we need from database. */
-    if (hFindSplitTable(chromName, tg->mapName, table, &hasBin))
-        {
-	dyStringPrintf(query, "select tStart,tEnd, qName from %s where ", table);
-	if (hasBin)
-	    hAddBinToQuery(winStart, winEnd, query);
-	dyStringPrintf(query, "tStart<%u and tEnd>%u", winEnd, winStart);
-	sr = sqlGetResult(conn, query->string);
-	while ((row = sqlNextRow(sr)) != NULL)
-	    {
-	    int start = sqlUnsigned(row[0]);
-	    int end = sqlUnsigned(row[1]);
-	    x1 = roundingScale(start-winStart, width, baseWidth)+xOff;
-	    x2 = roundingScale(end-winStart, width, baseWidth)+xOff;
-	    w = x2-x1;
-	    if (w <= 0)
-		w = 1;
-	    strncpy(chromStr,row[2]+3,2);
-	    chromStr[2] = '\0';
-	    col = getChromColor(chromStr, vg);
-	    vgBox(vg, x1, yOff, w, heightPer, col);
-	    }
-	}
-    dyStringFree(&query);
-    }
-sqlFreeResult(&sr);
-hFreeConn(&conn);
-hFreeConn(&conn2);
 }
 
 Color pslItemColor(struct trackGroup *tg, void *item, struct vGfx *vg)
@@ -6584,7 +6197,7 @@ boolean isFull = (vis == tvFull);
 Color col;
 int ix = 0;
 char *s;
-double scale = width/(double)baseWidth;
+double scale = scaleForPixels(width);
 for (ctg = tg->items; ctg != NULL; ctg = ctg->next)
     {
     x1 = round((double)((int)ctg->chromStart-winStart)*scale) + xOff;
@@ -6714,7 +6327,7 @@ boolean isFull = (vis == tvFull);
 Color col;
 int ix = 0;
 char *s;
-double scale = width/(double)baseWidth;
+double scale = scaleForPixels(width);
 for (bactig = tg->items; bactig != NULL; bactig = bactig->next)
     {
     x1 = round((double)((int)bactig->chromStart-winStart)*scale) + xOff;
@@ -7398,7 +7011,7 @@ int heightPer = tg->heightPer;
 int lineHeight = tg->lineHeight;
 int x1,x2,w;
 boolean isFull = (vis == tvFull);
-double scale = width/(double)baseWidth;
+double scale = scaleForPixels(width);
 int halfSize = heightPer/2;
 
 for (item = tg->items; item != NULL; item = item->next)
@@ -7484,7 +7097,7 @@ for (i=0; i<blockCount; ++i)
     }
 slReverse(&sfList);
 lf->components = sfList;
-finishLf(lf);
+linkedFeaturesBoundsAndGrays(lf);
 lf->start = psl->tStart;	/* Correct for rounding errors... */
 lf->end = psl->tEnd;
 return lf;
@@ -7581,7 +7194,7 @@ int itemOff, itemHeight;
 boolean isFull = (vis == tvFull);
 Color *shades = tg->colorShades;
 Color bColor = tg->ixAltColor;
-double scale = width/(double)baseWidth;
+double scale = scaleForPixels(width);
 boolean isXeno = tg->subType == lfSubXeno;
 boolean hideLine = (vis == tvDense && tg->subType == lfSubXeno);
 int midY = y + midLineOff;
@@ -7644,7 +7257,7 @@ int heightPer = tg->heightPer;
 int lineHeight = tg->lineHeight;
 int x1,x2;
 boolean isFull = (vis == tvFull);
-double scale = width/(double)baseWidth;
+double scale = scaleForPixels(width);
 int i;
 double y1, y2;
 int midLineOff = heightPer/2;
@@ -7865,7 +7478,7 @@ int heightPer = tg->heightPer;
 int lineHeight = tg->lineHeight;
 int x1,x2;
 boolean isFull = (vis == tvFull);
-double scale = width/(double)baseWidth;
+double scale = scaleForPixels(width);
 int i;
 double y1, y2;
 int midLineOff = heightPer/2;
@@ -9352,8 +8965,8 @@ tg->itemName = repeatName;
 tg->mapItemName = repeatName;
 tg->totalHeight = tgFixedTotalHeight;
 tg->itemHeight = tgFixedItemHeight;
-tg->itemStart = tgWeirdItemStart;
-tg->itemEnd = tgWeirdItemEnd;
+tg->itemStart = tgItemNoStart;
+tg->itemEnd = tgItemNoEnd;
 }
 
 
@@ -9393,7 +9006,7 @@ if (vis == tvDense)
 	int promoSize = 1000;
 	int rowOffset;
 	int baseWidth = seqEnd - seqStart;
-	double scale = width/(double)baseWidth;
+	double scale = scaleForPixels(width);
 	struct sqlConnection *conn = hAllocConn();
 	struct sqlResult *sr = hRangeQuery(conn, "rnaCluster", chromName, 
 		winStart - promoSize, winEnd + promoSize, NULL, &rowOffset);
@@ -9478,7 +9091,7 @@ void printYAxisLabel( struct vGfx *vg, int y, struct trackGroup *group, char *la
     int itemHeight0 = group->itemHeight(group, group->items);
     int inWid = trackOffsetX()-gfxBorder*3;
     
-    tmp = -whichBin( atof(labelString), min0, max0, 999 );
+    tmp = -whichSampleBin( atof(labelString), min0, max0, 999 );
     tmp = (int)((double)ymin+((double)tmp)*(double)group->heightPer/1000.0+(double)group->heightPer)-fontHeight/2.0;
     if( !withCenterLabels ) tmp -= fontHeight;
     vgTextRight(vg, gfxBorder, tmp, inWid-1, itemHeight0, group->ixColor, tl.font, labelString );
@@ -9599,8 +9212,8 @@ if (withLeftLabels)
 	if( sameString( group->mapName, "humMus" ) )
 	    {
 
-	    min0 = whichNum( 300.0, -7.99515, 6.54171, binCount );
-	    max0 =  whichNum( 1000.0, -7.99515, 6.54171, binCount );
+	    min0 = whichSampleNum( 300.0, -7.99515, 6.54171, binCount );
+	    max0 =  whichSampleNum( 1000.0, -7.99515, 6.54171, binCount );
 	    sprintf( minRangeStr, "%0.2g", min0  );
 	    sprintf( maxRangeStr, "%0.2g", max0 );
 
@@ -9618,9 +9231,9 @@ if (withLeftLabels)
 	    {
 
 	    minRange = 0.0;
-	    maxRange = whichBin( 6.0, 0.0, 8.0 ,binCount ); 
-	    min0 = whichNum( minRange, 0.0, 8.0, binCount );
-	    max0 = whichNum( maxRange, 0.0, 8.0, binCount );
+	    maxRange = whichSampleBin( 6.0, 0.0, 8.0 ,binCount ); 
+	    min0 = whichSampleNum( minRange, 0.0, 8.0, binCount );
+	    max0 = whichSampleNum( maxRange, 0.0, 8.0, binCount );
 
 
 	    sprintf( minRangeStr, " "  );
@@ -9640,13 +9253,13 @@ if (withLeftLabels)
 
 	else if( sameString( group->mapName, "zoo" ) )
 	    {
-	    sprintf( minRangeStr, "%d", (int)whichNum( 500.0, 1.0, 100.0, 1000 ));
-	    sprintf( maxRangeStr, "%d", (int)whichNum( 1000.0, 1.0, 100.0, 1000 ));
+	    sprintf( minRangeStr, "%d", (int)whichSampleNum( 500.0, 1.0, 100.0, 1000 ));
+	    sprintf( maxRangeStr, "%d", (int)whichSampleNum( 1000.0, 1.0, 100.0, 1000 ));
 	    }
 	else if( sameString( group->mapName, "zooCons" ) )
 	    {
-	    sprintf( minRangeStr, "%d", (int)whichNum( 0.0, 0.0, 5.0, 1000 ));
-	    sprintf( maxRangeStr, "%d", (int)whichNum( 1000.0, 0.0, 5.0, 1000 ));
+	    sprintf( minRangeStr, "%d", (int)whichSampleNum( 0.0, 0.0, 5.0, 1000 ));
+	    sprintf( maxRangeStr, "%d", (int)whichSampleNum( 1000.0, 0.0, 5.0, 1000 ));
 	    }
 	else if( sameString( group->mapName, "binomialCons2" ) )
 	    {
@@ -9665,8 +9278,8 @@ if (withLeftLabels)
 	    }
 	else
 	    {
-	    sprintf( minRangeStr, "%d", 1); //whichNum( 1.0, 0.0, 100.0, 1000 ));
-	    sprintf( maxRangeStr, "%d", 100);// whichNum( 1000.0, 0.0, 100.0, 1000 ));
+	    sprintf( minRangeStr, "%d", 1); 
+	    sprintf( maxRangeStr, "%d", 100);
 	    }
 
 	
@@ -10226,20 +9839,6 @@ else
     tg->itemColor = NULL;
 linkedFeaturesMethods(tg);
 tg->loadItems = loadGenePred;
-}
-
-void netMethods(struct trackGroup *tg)
-/* Make track group for chain/net alignment. */
-{
-tg->loadItems = netLoad;
-tg->freeItems = netFree;
-tg->drawItems = netDraw;
-tg->itemName = netName;
-tg->mapItemName = netName;
-tg->totalHeight = tgFixedTotalHeight;
-tg->itemHeight = tgFixedItemHeight;
-tg->itemStart = tgWeirdItemStart;
-tg->itemEnd = tgWeirdItemEnd;
 }
 
 void fillInFromType(struct trackGroup *group, struct trackDb *tdb)
