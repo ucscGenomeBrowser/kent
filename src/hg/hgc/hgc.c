@@ -71,6 +71,7 @@ struct pslWScore *sageExpList = NULL;
 char *entrezScript = "http://www.ncbi.nlm.nih.gov/htbin-post/Entrez/query?form=4";
 char *unistsScript = "http://www.ncbi.nlm.nih.gov/genome/sts/sts.cgi?uid=";
 char *gdbScript = "http://www.gdb.org/gdb-bin/genera/accno?accessionNum=";
+char *cloneRegScript = "http://www.ncbi.nlm.nih.gov/genome/clone/clname.cgi?stype=Name&list=";
 
 static void earlyWarning(char *format, va_list args)
 /* Write an error message so user can see it before page is really started. */
@@ -114,6 +115,12 @@ void printGdbUrl(FILE *f, char *id)
 /* Print URL for GDB browser for an id */
 {
 fprintf(f, "\"%s%s\"", gdbScript, id);
+}
+
+void printCloneRegUrl(FILE *f, char *clone)
+/* Print URL for Clone Registry at NCBI for a clone */
+{
+fprintf(f, "\"%s%s\"", cloneRegScript, clone);
 }
 
 char *hgcPath()
@@ -3253,7 +3260,9 @@ if (row != NULL)
     {
     fc = fishClonesLoad(row);
     /* Print out general sequence positional information */
-    printf("<H2>Clone %s</H2>\n", fc->name);
+    printf("<H2><A HREF=");
+    printCloneRegUrl(stdout, clone);
+    printf(">%s</A></H2>\n", clone);
     htmlHorizontalLine();
     printf("<TABLE>\n");
     printf("<TR><TH ALIGN=left>Chromosome:</TH><TD>%s</TD></TR>\n", seqName);
@@ -3503,6 +3512,12 @@ row = sqlNextRow(sr);
 if (row != NULL)
     {
     lfs = lfsLoad(row+1);
+    if (sameString("bacEndPairs", track)) 
+    {
+    printf("<H2><A HREF=");
+    printCloneRegUrl(stdout, clone);
+    printf(">%s</A></H2>\n", clone);
+    }
     /*printf("<H2>%s - %s</H2>\n", type, clone);*/
     printf("<P><HR ALIGN=\"CENTER\"></P>\n<TABLE>\n");
     printf("<TR><TH ALIGN=left>Chromosome:</TH><TD>%s</TD></TR>\n",seqName);
