@@ -20,7 +20,7 @@
 #include "hash.h"
 #include "botDelay.h"
 
-static char const rcsid[] = "$Id: hgBlat.c,v 1.83 2004/09/10 03:29:47 kent Exp $";
+static char const rcsid[] = "$Id: hgBlat.c,v 1.84 2004/10/01 19:11:01 kent Exp $";
 
 struct cart *cart;	/* The user's ui state. */
 struct hash *oldVars = NULL;
@@ -245,7 +245,7 @@ else
 	    pslName, faName, uiState, unhideTrack);
 	printf("browser</A> ");
 	printf("<A HREF=\"%s?o=%d&g=htcUserAli&i=%s+%s+%s&c=%s&l=%d&r=%d&db=%s&%s\">", 
-	    hgcUrl, psl->tStart, pslName, faName, psl->qName,  psl->tName,
+	    hgcUrl, psl->tStart, pslName, cgiEncode(faName), psl->qName,  psl->tName,
 	    psl->tStart, psl->tEnd, database, uiState);
 	printf("details</A> ");
 	printf("%-14s %5d %5d %5d %5d %5.1f%%  %4s  %2s  %9d %9d %6d\n",
