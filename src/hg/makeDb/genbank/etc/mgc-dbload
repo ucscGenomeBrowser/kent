@@ -8,7 +8,8 @@
 opts="$*"
 
 # databases to update
-databases="hg15 mm3 hg16 rn3"
+#databases="hg15 mm3 hg16 rn3"
+databases="mm3 hg16 rn3"
 
 # gbRoot on hgnfs1
 gbRoot=/genbank
@@ -26,4 +27,4 @@ lastCopyTime=$dbloadVar/copy.time
 lastCopyTimeTmp=$lastCopyTime.tmp
 dbloadTime=$dbloadVar/dbload.time
 
-exec $gbRoot/etc/dbload $opts $gbRoot $databases $copyTime $workdir
+exec $gbRoot/etc/dbload $opts $gbRoot "$databases" $copyTime $workdir

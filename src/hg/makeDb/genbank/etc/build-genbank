@@ -10,6 +10,7 @@
 # errors terminate with message
 set -e
 trap "echo Error: build-genbank failed on `hostname` >&2; exit 1" ERR
+exec </dev/null
 
 # allow 250mb core dumps
 ulimit -c 256000

@@ -6,6 +6,7 @@
 
 set -e  # errors terminate
 trap "echo Error: `hostname` copy failed >&2; exit 1" ERR
+exec </dev/null
 
 # databases to copy:
 databases="hg15 mm3 rn3 hg16"

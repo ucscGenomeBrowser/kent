@@ -17,4 +17,4 @@ workdir=/var/tmp/genbank
 # wait for copy to hgwnfs1
 copyTime=var/copy/copy.time
 
-exec $gbRoot/etc/dbload $opts $gbRoot $databases $copyTime $workdir
+exec $gbRoot/etc/dbload $opts $gbRoot "$databases" $copyTime $workdir

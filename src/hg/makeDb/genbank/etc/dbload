@@ -37,7 +37,7 @@ fi
 
 gbRoot=$1
 databases=$2
-fileFile=$3
+timeFile=$3
 workdir=$4
 
 cd $gbRoot
@@ -67,12 +67,12 @@ mkdir -p $dbloadVar
 gbCheckLock $dbloadVar/run/dbload.lock
 
 # check if the build is newer that what was last loaded
-if ! gbCmpTimeFiles $fileFile $lastTime ; then
+if ! gbCmpTimeFiles $timeFile $lastTime ; then
     exit 0
 fi
 
 # save build time before load
-cp -f $timeFile $lastimeTmp
+cp -f $timeFile $lastTimeTmp
 
 if [ $inclEsts = YES ] ; then
     typeArg=""

@@ -18,7 +18,7 @@ buildTime=var/build/build.time
 # workdir is a local dir
 workdir=/scratch/tmp/genbank
 
-exec $gbRoot/etc/dbload $opts $gbRoot $databases $buildTime $workdir
+exec $gbRoot/etc/dbload $opts $gbRoot "$databases" $buildTime $workdir
 
 
 

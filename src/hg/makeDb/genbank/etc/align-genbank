@@ -14,6 +14,7 @@
 # errors terminate with message
 set -e
 trap "echo Error: genbank-align failed on `hostname` >&2; exit 1" ERR
+exec </dev/null
 
 # config
 databases="hg15 mm3 rn3 hg16"

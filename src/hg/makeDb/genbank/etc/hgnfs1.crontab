@@ -5,5 +5,5 @@
 SHELL=/bin/sh
 MAILTO=genbank@cse.ucsc.edu
 
-# poll every hour at 50 minutes after
-50 0-23 * * *	/export/genbank/etc/hgnfs1-copy
+# poll every hour at 20 minutes after
+20 0-23 * * *	/export/genbank/etc/hgnfs1-copy
