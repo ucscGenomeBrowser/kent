@@ -1,4 +1,8 @@
-test:   simpleTest dirTest
+test:   simpleTest dirTest zeroTest
+
+zeroTest:     mkdirs
+	${HOME}/bin/${MACHTYPE}/regionAgp input/test0.bed input/test0.agp output/test0.agp
+	diff expected/test0.agp output
 
 simpleTest:     mkdirs
 	${HOME}/bin/${MACHTYPE}/regionAgp input/test.bed input/test.agp output/region.agp

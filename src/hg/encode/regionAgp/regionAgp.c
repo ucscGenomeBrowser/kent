@@ -10,7 +10,7 @@
 #include "agpFrag.h"
 #include "agpGap.h"
 
-static char const rcsid[] = "$Id: regionAgp.c,v 1.2 2004/08/12 01:58:57 kate Exp $";
+static char const rcsid[] = "$Id: regionAgp.c,v 1.3 2004/08/17 21:53:36 kate Exp $";
 
 #define DIR_OPTION      "dir"
 
@@ -73,19 +73,13 @@ while (lineFileNext(lf, &line, &lineSize))
         lineFileExpectWords(lf, 9, wordCount);
         agpFrag = agpFragLoad(words);
         if (agpFrag->chromStart != lastPos)
-            errAbort("Start doesn't match previous end line %d of %s\n",
-                         lf->lineIx, lf->fileName);
+            errAbort(
+               "Frag start (%d, %d) doesn't match previous end line %d of %s\n",
+                     agpFrag->chromStart, lastPos, lf->lineIx, lf->fileName);
         if (agpFrag->chromEnd - agpFrag->chromStart != 
                         agpFrag->fragEnd - agpFrag->fragStart)
             errAbort("Sizes don't match in %s and %s line %d of %s\n",
                     agpFrag->chrom, agpFrag->frag, lf->lineIx, lf->fileName);
-        if ((agpList = hashFindVal(chromAgpHash, chrom)) == NULL)
-            {
-            /* new chrom */
-            /* add to hashes of chrom agp lists and sizes */
-            AllocVar(agpList);
-            hashAdd(chromAgpHash, chrom, agpList);
-            }
         lastPos = agpFrag->chromEnd + 1;
         agp->entry = agpFrag;
         agp->isFrag = TRUE;
@@ -96,23 +90,27 @@ while (lineFileNext(lf, &line, &lineSize))
         lineFileExpectWords(lf, 8, wordCount);
         agpGap = agpGapLoad(words);
         if (agpGap->chromStart != lastPos)
-            errAbort("Start doesn't match previous end line %d of %s\n",
-                         lf->lineIx, lf->fileName);
-        if ((agpList = hashFindVal(chromAgpHash, chrom)) == NULL)
-            {
-            /* new chrom */
-            AllocVar(agpList);
-            /* add to hashes of chrom agp lists and sizes */
-            hashAdd(chromAgpHash, chrom, agpList);
-            }
+            errAbort("Gap start (%d, %d) doesn't match previous end line %d of %s\n",
+                     agpGap->chromStart, lastPos, lf->lineIx, lf->fileName);
         lastPos = agpGap->chromEnd + 1;
         agp->entry = agpGap;
         agp->isFrag = FALSE;
         }
-    /* TODO: speed up by adding to head, then at the end, go through
-     * hashes, reversing each list */
-    slAddTail(&agpList, agp);
+    if ((agpList = hashFindVal(chromAgpHash, chrom)) == NULL)
+        {
+        /* new chrom */
+        /* add to hashes of chrom agp lists and sizes */
+        agpList = agp;
+        }
+    else
+        {
+        slAddHead(&agpList, agp);
+        hashRemove(chromAgpHash, chrom);
+        }
+    hashAdd(chromAgpHash, chrom, agpList);
     }
+/* reverse AGP lists */
+hashTraverseVals(chromAgpHash, slReverse);
 return chromAgpHash;
 }
 
@@ -127,20 +125,19 @@ struct lineFile *lf = lineFileOpen(agpIn, TRUE);
 FILE *fout = NULL;
 int start = 1;
 int seqNum = 1;
-#define REGION_NAME_SIZE 16
-char regionName[REGION_NAME_SIZE];
-#define OUTFILE_NAME_SIZE 64
-char outFile[OUTFILE_NAME_SIZE];
+char regionName[16];
+char outFile[64];
 
 /* read in BED file with chromosome coordinate ranges */
-fprintf(stderr, "Loading bed file\n");
+//fprintf(stderr, "Loading bed file\n");
+fprintf(stderr, "Loading bed file...\n");
 posList = bedLoadNAll(bedFile, 5);
 
 /* read chrom AGP file into a hash of AGP's, one per chrom */
-fprintf(stderr, "Loading AGP's\n");
+fprintf(stderr, "Loading AGP's...\n");
 agpHash = agpLoadAll(agpIn);
 
-fprintf(stderr, "Creating new AGP's\n");
+fprintf(stderr, "Creating new AGP's...\n");
 if (!dirOption)
     fout = mustOpen(agpOut, "w");
 
@@ -148,21 +145,22 @@ if (!dirOption)
 for (pos = posList; pos != NULL; pos = pos->next)
     {
     if (pos->score == 1)
+        /* score field of the BED is actually the sequence number
+         * of the segment in the region */
         start = 1;
-#ifdef DEBUG
-    fprintf(stderr, "chr=%s, start=%d, end=%d, region=%s, seqnum=%d\n",
+    verbose(2, "chr=%s, start=%d, end=%d, region=%s, seqnum=%d\n",
             pos->chrom, pos->chromStart, pos->chromEnd, pos->name, pos->score);
-#endif
-    safef(regionName, REGION_NAME_SIZE, "%s_%d", pos->name, pos->score);
+    safef(regionName, ArraySize(regionName), "%s_%d", pos->name, pos->score);
     if (dirOption)
         {
         start = 1;
         seqNum = 1;
-        safef(outFile, OUTFILE_NAME_SIZE, "%s/%s.agp", agpOut, regionName);
+        safef(outFile, ArraySize(outFile), "%s/%s.agp", agpOut, regionName);
         fout = mustOpen(outFile, "w");
         }
     agpList = (struct agp *)hashMustFindVal(agpHash, pos->chrom);
-    for (agp = agpList->next; agp != NULL; agp = agp->next)
+    for (agp = agpList; agp != NULL; agp = agp->next)
+    //for (agp = agpList->next; agp != NULL; agp = agp->next)
         {
         if (agp->isFrag)
             {
@@ -221,6 +219,8 @@ for (pos = posList; pos != NULL; pos = pos->next)
     if (dirOption)
         carefulClose(&fout);
     }
+if (!dirOption)
+    carefulClose(&fout);
 }
 
 int main(int argc, char *argv[])
