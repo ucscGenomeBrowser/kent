@@ -1062,13 +1062,13 @@ LOAD CPGISSLANDS (DONE 03/06/03)
       -sqlTable=$HOME/kent/src/hg/lib/cpgIsland.sql cpgIsland.bed
 
 
-LOAD GENEID GENES (TODO)
+LOAD GENEID GENES (DONE 04/01/03)
     mkdir -p ~/rn2/bed/geneid/download
     cd ~/rn2/bed/geneid/download
     foreach f (~/rn2/?{,?}/chr?{,?}{,_random}.fa)
       set chr = $f:t:r
-      wget http://genome.imim.es/genepredictions/R.norvegicus/rnNov2002/geneid_v1.1/$chr.gtf
-      wget http://genome.imim.es/genepredictions/R.norvegicus/rnNov2002/geneid_v1.1/$chr.prot
+      wget http://genome.imim.es/genepredictions/R.norvegicus/rnJan2003/geneid_v1.1/$chr.gtf
+      wget http://genome.imim.es/genepredictions/R.norvegicus/rnJan2003/geneid_v1.1/$chr.prot
     end
     # Add missing .1 to protein id's
     foreach f (*.prot)
