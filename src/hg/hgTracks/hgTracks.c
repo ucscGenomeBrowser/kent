@@ -1327,7 +1327,9 @@ return tg;
 void loadMusTest1(struct trackGroup *tg)
 /* Load up mouse alignments (psl format) from table. */
 {
-tg->items = lfFromPslsInRange("musTest1", winStart, winEnd, chromName, TRUE);
+char table[64];
+sprintf(table, "%s_musTest1", chromName);
+tg->items = lfFromPslsInRange(table, winStart, winEnd, NULL, TRUE);
 }
 
 struct trackGroup *musTest1Tg()
@@ -1345,7 +1347,9 @@ return tg;
 void loadMusTest2(struct trackGroup *tg)
 /* Load up mouse alignments (psl format) from table. */
 {
-tg->items = lfFromPslsInRange("musTest2", winStart, winEnd, chromName, TRUE);
+char table[64];
+sprintf(table, "%s_musTest2", chromName);
+tg->items = lfFromPslsInRange(table, winStart, winEnd, NULL, TRUE);
 }
 
 struct trackGroup *musTest2Tg()
@@ -5447,8 +5451,8 @@ if (privateVersion())
     if (hTableExists("cpgIsland2")) slSafeAddHead(&tGroupList, cpgIsland2Tg());
     if (hTableExists("mus7of8")) slSafeAddHead(&tGroupList, mus7of8Tg());
     if (hTableExists("musPairOf4")) slSafeAddHead(&tGroupList, musPairOf4Tg());
-    if (hTableExists("musTest1")) slSafeAddHead(&tGroupList, musTest1Tg());
-    if (hTableExists("musTest2")) slSafeAddHead(&tGroupList, musTest2Tg());
+    if (chromTableExists("_musTest1")) slSafeAddHead(&tGroupList, musTest1Tg());
+    if (chromTableExists("_musTest2")) slSafeAddHead(&tGroupList, musTest2Tg());
     }
 if (chromTableExists("_blatMouse")) slSafeAddHead(&tGroupList, blatMouseTg());
 if (hTableExists("exoMouse")) slSafeAddHead(&tGroupList, exoMouseTg());
