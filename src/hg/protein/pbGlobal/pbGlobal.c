@@ -348,7 +348,7 @@ if (proteinInSupportedGenome || (blatGbDb != NULL))
     /* Show BLAT link if we have UCSC Genome Browser for it */
     if (blatGbDb != NULL)
     	{
-    	doBlatLink(blatGbDb, sciName, commonName);
+    	doBlatLink(blatGbDb, sciName, commonName, protSeq);
     	}
 	
     hPrintf("</UL><P>");

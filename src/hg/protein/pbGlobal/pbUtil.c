@@ -552,10 +552,10 @@ if (mrnaID != NULL)
     }
 }
 
-void doBlatLink(char *db, char *sciName, char *commonName)
+void doBlatLink(char *db, char *sciName, char *commonName, char *aaSeq)
 {
 hPrintf("\n<LI>BLAT - ");
-hPrintf("<A HREF=\"../cgi-bin/hgBlat?db=%s\"", db);
+hPrintf("<A HREF=\"../cgi-bin/hgBlat?db=%s&type=protein&userSeq=%s\"", db, aaSeq);
 hPrintf(" TARGET=_BLANK>%s", sciName);
 if (commonName != NULL) hPrintf(" (%s)", commonName);
 hPrintf("</A></LI>\n");
