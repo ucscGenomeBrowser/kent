@@ -590,11 +590,11 @@ hPrintf("HREF=\"%s?position=%s:%d-%d",
 hPrintf("&%s\"", ui->string);
 freeDyString(&ui);
 
-if (toggleGroup && withPopUps)
+/*if (toggleGroup && withPopUps)
         hPrintf(" onMouseOver=\"javascript:popup('Change between dense and full view of %s track');\" onMouseOut=\"javascript:popupoff();\"", toggleGroup->shortLabel);
 else
     if( withPopUps ) 
-        hPrintf(" onMouseOver=\"javascript:popup('%s');\" onMouseOut=\"javascript:popupoff();\"",message);
+        hPrintf(" onMouseOver=\"javascript:popup('%s');\" onMouseOut=\"javascript:popupoff();\"",message);*/
 hPrintf(">\n");
 }
 
@@ -5019,9 +5019,17 @@ if (isFull)
         grayLevel = grayInRange(percId, 500, 1000);
         col = shadesOfGray[grayLevel];
         col = netItemColor(&na, vg);
-        x1 = roundingScale(na.tStart-winStart, width, baseWidth)+xOff;
+        if (na.tStart >= winStart)
+            {
+            x1 = roundingScale(na.tStart-winStart, width, baseWidth)+xOff;
+            boxStart = na.tStart;
+            }
+        else
+            {
+            x1 = roundingScale(0, width, baseWidth)+xOff;
+            boxStart = winStart;
+            }
         x2 = roundingScale(na.tEnd-winStart, width, baseWidth)+xOff;
-        boxStart = na.tStart;
         boxEnd = na.tEnd;
         w = x2-x1;
         if (w <= 0)
@@ -10469,6 +10477,7 @@ registerTrackHandler("blastBestHuman_75", longXenoPslMethods);
 registerTrackHandler("blastBestHuman", longXenoPslMethods);
 registerTrackHandler("blastzAllHuman", longXenoPslMethods);
 registerTrackHandler("blastzTightHuman", longXenoPslMethods);
+registerTrackHandler("blastzMouseSyn", longXenoPslMethods);
 registerTrackHandler("blastzChain", chainMethods);
 registerTrackHandler("xenoBestMrna", xenoMrnaMethods);
 registerTrackHandler("xenoMrna", xenoMrnaMethods);
