@@ -13,7 +13,7 @@
 #include "hCommon.h"
 #include "hui.h"
 
-static char const rcsid[] = "$Id: hgGateway.c,v 1.79 2005/02/09 19:06:00 jill Exp $";
+static char const rcsid[] = "$Id: hgGateway.c,v 1.80 2005/02/14 00:55:58 jill Exp $";
 
 struct cart *cart = NULL;
 struct hash *oldVars = NULL;
@@ -99,10 +99,7 @@ if (gotClade)
 puts(
 "<td align=center valign=baseline>genome</td>\n"
 "<td align=center valign=baseline>assembly</td>\n"
-"<td align=center valign=baseline>position &nbsp;&nbsp;&nbsp;");
-cgiMakeOnClickButton("document.mainForm.position.value=''","clear");
-puts(
-" </td>\n"
+"<td align=center valign=baseline>position</td>\n"
 "<td align=center valign=baseline>image width</td>\n"
 "<td align=center valign=baseline> &nbsp; </td>\n"
 "</tr>\n<tr>"
@@ -164,6 +161,8 @@ puts(
 cgiMakeButton("customTrackPage", "Add Your Own Custom Tracks");
 printf(" ");
 cgiMakeButton("hgTracksConfigPage", "Configure Tracks and Display");
+printf(" ");
+cgiMakeOnClickButton("document.mainForm.position.value=''","Clear Position");
 puts("</center>\n"
 "</td></tr></table>\n"
 "</td></tr></table>\n"
