@@ -75,7 +75,7 @@ static void recycle(struct rbTree *tree, struct rbTreeNode *node)
 /* For now do nothing. */
 }
     
-struct rbTree *rbTreeNew(int (* compare)(const void *, const void *))
+struct rbTree *rbTreeNew(int (*compare)(void *, void *))
 /* rbTreeNew() - Allocates space for a red-black tree and returns a pointer
  * to it.  The function compare compares they keys of two items, and returns a
  * negative, zero, or positive integer depending on whether the first item is
@@ -123,7 +123,7 @@ void *rbTreeAdd(struct rbTree *t, void *item)
  */
 {
 struct rbTreeNode *x, *p, *q, *m, **attachX;
-int (* compare)(const void *, const void *);
+int (* compare)(void *, void *);
 int cmpResult;
 rbTreeColor col;
 struct rbTreeNode **stack = NULL;
@@ -240,7 +240,7 @@ void *rbTreeFind(struct rbTree *t, void *item)
  */
 {
 struct rbTreeNode *p, *nextP;
-int (*compare)(const void *, const void *) = t->compare;
+int (*compare)(void *, void *) = t->compare;
 int cmpResult;
     
 /* Repeatedly explore either the left or right branch, depending on the
@@ -269,7 +269,7 @@ struct rbTreeNode *p, *r, *x, *y, *z, *b, *newY;
 struct rbTreeNode *m;
 rbTreeColor removeCol;
 void *returnItem;
-int (* compare)(const void *, const void *);
+int (* compare)(void *, void *);
 int cmpResult;
 struct rbTreeNode **stack;
 int i, tos;
@@ -568,7 +568,7 @@ return returnItem;
 /* Some variables to help recursively dump tree. */
 static int dumpLevel;	/* Indentation level. */
 static FILE *dumpFile;  /* Output file */
-static void (*dumpIt)(const void *item, FILE *f);  /* Item dumper. */
+static void (*dumpIt)(void *item, FILE *f);  /* Item dumper. */
 
 static void rTreeDump(struct rbTreeNode *n)
 /* Recursively dump. */
@@ -585,7 +585,7 @@ rTreeDump(n->right);
 }
 
 void rbTreeDump(struct rbTree *tree, FILE *f, 
-	void (*dumpItem)(const void *item, FILE *f))
+	void (*dumpItem)(void *item, FILE *f))
 /* Dump out rb tree to file, mostly for debugging. */
 {
 dumpFile = f;
@@ -595,5 +595,39 @@ fprintf(f, "rbTreeDump\n");
 rTreeDump(tree->root);
 }
 
+
+
+/* Variables to help recursively traverse tree. */
+static void (*doIt)(void *item);
+static void *minIt, *maxIt;
+static int (*compareIt)(void *, void *);
+
+void rTreeTraverseRange(struct rbTreeNode *n)
+/* Recursively traverse tree applying doIt. */
+{
+if (n != NULL)
+   {
+   int minCmp = compareIt(n->item, minIt);
+   int maxCmp = compareIt(n->item, maxIt);
+   if (minCmp >= 0 && maxCmp <= 0)
+       doIt(n->item);
+   if (minCmp >= 0)
+       rTreeTraverseRange(n->left);
+   if (maxCmp <= 0)
+       rTreeTraverseRange(n->right);
+   }
+}
+
+void rbTreeTraverseRange(struct rbTree *tree, void *minItem, void *maxItem,
+	void (*doItem)(void *item))
+/* Apply doItem function to all items in tree such that
+ * minItem <= item <= maxItem */
+{
+doIt = doItem;
+minIt = minItem;
+maxIt = maxItem;
+compareIt = tree->compare;
+rTreeTraverseRange(tree->root);
+}
 
 

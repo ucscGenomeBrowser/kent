@@ -23,13 +23,13 @@ struct rbTree
     {
     struct rbTreeNode *root;			/* Root of tree */
     int n;					/* Number of items in tree. */
-    int (* compare)(const void *, const void *);/* Comparison function */
+    int (* compare)(void *, void *);/* Comparison function */
     struct rbTreeNode **stack;                  /* Ancestor stack. */
     struct lm *lm;	                        /* Local memory pool. */
     struct rbTreeNode *freeList;		/* List of nodes to reuse. */
     };
 
-struct rbTree *rbTreeNew(int (*compare)(const void *, const void *));
+struct rbTree *rbTreeNew(int (*compare)(void *, void *));
 /* Allocates space for a red-black tree and returns a pointer
  * to it.  The function compare compares they keys of two items, and returns a
  * negative, zero, or positive integer depending on whether the first item is
@@ -58,8 +58,13 @@ void *rbTreeRemove(struct rbTree *t, void *item);
  * and NULL if no item was found.
  */
 
+void rbTreeTraverseRange(struct rbTree *tree, void *minItem, void *maxItem,
+	void (*doItem)(void *item));
+/* Apply doItem function to all items in tree such that
+ * minItem <= item <= maxItem */
+
 void rbTreeDump(struct rbTree *tree, FILE *f, 
-	void (*dumpItem)(const void *item, FILE *f));
+	void (*dumpItem)(void *item, FILE *f));
 /* Dump out rb tree to file, mostly for debugging. */
 
 #endif /* RBTREE_H */
