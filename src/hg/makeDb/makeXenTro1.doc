@@ -52,8 +52,7 @@ exit; # don't actually run this like a script :)
   ssh hgwdev
   mkdir /gbdb/xenTro1
   ln -s /cluster/data/xenTro1/html /gbdb/xenTro1
-  mkdir /gbdb/xenTro1/nib
-  ln -s /cluster/data/xenTro1/xenTro1.2bit /gbdb/xenTro1/nib
+  ln -s /cluster/data/xenTro1/xenTro1.2bit /gbdb/xenTro1
 
 # CREATE DATABASE
 
@@ -79,7 +78,7 @@ exit; # don't actually run this like a script :)
   ssh hgwdev
   cd /cluster/data/xenTro1
   faSize -detailed=on downloads/xenopus.041015.fasta \
-    | awk '{printf("%s\t%s\t%s\n", $1, $2, "/gbdb/xenTro1/nib/xenTro1.2bit");}' \
+    | awk '{printf("%s\t%s\t%s\n", $1, $2, "/gbdb/xenTro1/xenTro1.2bit");}' \
     > chromInfo.tab
   hgsql xenTro1 < ~/src/hg/lib/chromInfo.sql
   hgsql xenTro1 -e 'load data local infile "chromInfo.tab" into table chromInfo'
