@@ -3,12 +3,18 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit ~/kent/src/utils/doBlastzChainNet.pl instead.
 
-# $Id: doBlastzChainNet.pl,v 1.13 2005/03/18 22:40:17 angie Exp $
+# $Id: doBlastzChainNet.pl,v 1.14 2005/03/31 01:18:21 angie Exp $
 
 # to-do items:
 # - lots of testing
 # - better logging: right now it just passes stdout and stderr,
 #   leaving redirection to a logfile up to the user
+# - -swapBlastz, -loadBlastz
+# - -tDb, -qDb
+# - -tUnmasked, -qUnmasked
+# - -axtBlastz
+# - another Gill wish list item: save a lav header (involves run-blastz-ucsc)
+# - 2bit / multi-sequence support when abridging?
 # - reciprocal best?
 # - hgLoadSeq of query instead of assuming there's a $qDb database?
 
@@ -48,6 +54,7 @@ use vars qw/
     $opt_swap
     $opt_chainMinScore
     $opt_workhorse
+    $opt_fileServer
     $opt_bigClusterHub
     $opt_smallClusterHub
     $opt_debug
@@ -103,6 +110,8 @@ options:
     -chainMinScore n      Add -minScore=n to the axtChain command.
     -workhorse machine    Use machine (default: $workhorse) for compute or
                           memory-intensive steps.
+    -fileServer mach      Use mach (default: fileServer of the build directory)
+                          for I/O-intensive steps.
     -bigClusterHub mach   Use mach (default: $bigClusterHub) as parasol hub for blastz
                           cluster run.
     -smallClusterHub mach Use mach (default: $smallClusterHub) as parasol hub for cat &
@@ -236,6 +245,7 @@ sub checkOptions {
 		      "swap",
 		      "chainMinScore=i",
 		      "workhorse=s",
+		      "fileServer=s",
 		      "bigClusterHub=s",
 		      "smallClusterHub=s",
 		      "verbose=n",
@@ -749,6 +759,8 @@ sub getAllChain {
     $chain = "all.chain.gz";
   } elsif (-e "$runDir/all.chain") {
     $chain = "all.chain";
+  } elsif ($opt_debug) {
+    $chain = "$runDir/$tDb.$qDb.all.chain.gz";
   }
   return $chain;
 }
@@ -1381,7 +1393,8 @@ if (! -e "$buildDir/DEF") {
   &run("cp $DEF $buildDir/DEF");
 }
 
-my $fileServer = $opt_swap ? `$getFileServer $swapDir/` :
+my $fileServer = $opt_fileServer ? $opt_fileServer :
+                 $opt_swap ? `$getFileServer $swapDir/` :
                              `$getFileServer $buildDir/`;
 chomp $fileServer;
 
