@@ -6,7 +6,7 @@
 #include "options.h"
 #include "jksql.h"
 
-static char const rcsid[] = "$Id: freen.c,v 1.49 2004/10/11 18:17:14 kent Exp $";
+static char const rcsid[] = "$Id: freen.c,v 1.50 2004/10/12 14:19:52 kent Exp $";
 
 void usage()
 /* Print usage and exit. */
@@ -18,7 +18,7 @@ void freen(char *a)
 /* Test some hair-brained thing. */
 {
 struct sqlConnection *conn = sqlConnect("hg17");
-int count = sqlQuickNum(conn, "select size from chromInfo where chrom='chr_XXX'");
+int count = sqlNeedQuickNum(conn, "select max(size) from chromInfo where chrom like 'chr%_random%'");
 printf("Count = %d\n", count);;
 }
 
