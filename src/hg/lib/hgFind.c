@@ -125,7 +125,9 @@ hgp->posCount = posCount;
 static boolean isContigName(char *contig)
 /* Return TRUE if a FPC contig name. */
 {
-return startsWith("ctg", contig) || startsWith("NT_", contig);
+return(startsWith("ctg", contig) ||
+       startsWith("NT_", contig) ||
+       startsWith("RNOR", contig));
 }
 
 static boolean isAncientRName(char *name)
@@ -173,6 +175,9 @@ struct sqlResult *sr = NULL;
 struct dyString *query = newDyString(256);
 char **row;
 boolean foundIt;
+
+if (! hTableExists("ctgPos"))
+    return FALSE;
 
 dyStringPrintf(query, "select * from ctgPos where contig = '%s'", contig);
 sr = sqlMustGetResult(conn, query->string);
