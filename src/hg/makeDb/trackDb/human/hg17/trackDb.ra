@@ -181,12 +181,23 @@ color 0, 10, 100
 altColor 1,128,0
 type wigMaf 0.0 1.0
 maxHeightPixels 100:40:11
-wiggle chr7_phyloHMMcons_CFTR
+wiggle phastConsTba37
 yLineOnOff Off
 pairwise tba37CFTR 15
 autoScaleDefault Off
 speciesOrder chimp gorilla orangutan baboon macaque vervet marmoset dusky_titi squirrel_monkey mouse_lemur lemur galago rabbit rat mouse cow sheep muntjak_indian pig horse cat dog ajbat cpbat hedgehog armadillo opossum monodelphis wallaby dunnart platypus chicken tortoise zebrafish tetra fugu
 chromosomes chr7
+
+track phastConsElementsTba37
+shortLabel Most Conserved TBA
+longLabel PhastCons Conserved Elements, TBA 37-way
+group compGeno
+priority 109.999
+visibility hide
+spectrum on
+exonArrows off
+showTopScorers 200
+type bed 5 .
 
 track varMultizMm5Rn3GalGal2Fr1
 shortLabel varMultiz5Way
