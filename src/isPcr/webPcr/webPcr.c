@@ -73,7 +73,7 @@ if (errCatchStart(errCatch))
     if (gpoList != NULL)
 	{
 	printf("<TT><PRE>");
-	gfPcrOutputWriteAll(gpoList, "fa", "stdout");
+	gfPcrOutputWriteAll(gpoList, "fa", NULL, "stdout");
 	printf("</PRE></TT>");
         ok = TRUE;
 	}
@@ -87,20 +87,6 @@ if (errCatch->gotError)
      }
 errCatchFree(&errCatch); 
 return ok;
-}
-
-char *makePrimer(char *s)
-/* Make primer (lowercased DNA) out of text.  Complain if
- * it is too short or too long. */
-{
-int size = dnaFilteredSize(s);
-int realSize;
-char *primer = needMem(size+1);
-dnaFilter(s, primer);
-realSize = size - countChars(primer, 'n');
-if (realSize < 10 || realSize < size/2)
-   errAbort("%s does not seem to be a good primer", s);
-return primer;
 }
 
 void doHelp()
@@ -170,8 +156,8 @@ if (cgiVarExists("wp_help"))
     }
 else if (cgiVarExists("wp_f") && cgiVarExists("wp_r"))
     {
-    fPrimer = makePrimer(cgiString("wp_f"));
-    rPrimer = makePrimer(cgiString("wp_r"));
+    fPrimer = gfPcrMakePrimer(cgiString("wp_f"));
+    rPrimer = gfPcrMakePrimer(cgiString("wp_r"));
     if (doPcr(fPrimer, rPrimer, maxSize, minPerfect, minGood))
          return;
     }

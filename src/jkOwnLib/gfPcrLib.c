@@ -5,6 +5,7 @@
 #include "linefile.h"
 #include "hash.h"
 #include "options.h"
+#include "dystring.h"
 #include "fa.h"
 #include "net.h"
 #include "genoFind.h"
@@ -12,7 +13,7 @@
 #include "gfInternal.h"
 #include "gfPcrLib.h"
 
-static char const rcsid[] = "$Id: gfPcrLib.c,v 1.2 2004/06/06 03:23:37 kent Exp $";
+static char const rcsid[] = "$Id: gfPcrLib.c,v 1.3 2004/06/07 23:04:45 kent Exp $";
 
 /**** Input and Output Handlers *****/
 
@@ -145,7 +146,7 @@ for (i=0; i<size; ++i)
     }
 }
 
-static void outputFa(struct gfPcrOutput *out, FILE *f)
+static void outputFa(struct gfPcrOutput *out, FILE *f, char *url)
 /* Output match in fasta format. */
 {
 int fPrimerSize = strlen(out->fPrimer);
@@ -154,16 +155,25 @@ int productSize = out->rPos - out->fPos;
 char *dna = cloneStringZ(out->dna, productSize);
 char *rrPrimer = cloneString(out->rPrimer);
 char *ffPrimer = cloneString(out->fPrimer);
-char faLabel[PATH_LEN+25];
+struct dyString *faLabel = newDyString(0);
 char *name = out->name;
 
-/* Create fasta header with position, possibly empty name, and upper cased primers. */
+/* Create fasta header with position, possibly empty name, and upper cased primers with position optionally hyperlinked. */
 if (name == NULL)
     name = "";
 touppers(rrPrimer);
 touppers(ffPrimer);
-safef(faLabel, sizeof(faLabel),
-	"%s:%d%c%d %s %s %s", out->seqName, out->fPos+1, out->strand, out->rPos,
+if (url != NULL)
+    {
+    dyStringAppend(faLabel, "<A HREF=\"");
+    dyStringPrintf(faLabel, url, out->seqName, out->fPos+1, out->rPos);
+    dyStringAppend(faLabel, "\">");
+    }
+dyStringPrintf(faLabel, "%s:%d%c%d", 
+	out->seqName, out->fPos+1, out->strand, out->rPos);
+if (url != NULL)
+    dyStringAppend(faLabel, "</A>");
+dyStringPrintf(faLabel, " %s %s %s",
 	name, ffPrimer, rrPrimer);
 
 /* Flip reverse primer to be in same direction and case as sequence. */
@@ -173,12 +183,13 @@ tolowers(rrPrimer);
 /* Capitalize where sequence and primer match, and write out sequence. */
 upperMatch(dna, out->fPrimer, fPrimerSize);
 upperMatch(dna + productSize - rPrimerSize, rrPrimer, rPrimerSize);
-faWriteNext(f, faLabel, dna, productSize);
+faWriteNext(f, faLabel->string, dna, productSize);
 
 /* Clean up. */
 freez(&dna);
 freez(&rrPrimer);
 freez(&ffPrimer);
+dyStringFree(&faLabel)
 }
 
 static int countMatch(char *a, char *b, int size)
@@ -191,7 +202,7 @@ for (i=0; i<size; ++i)
 return count;
 }
 
-static void outputBed(struct gfPcrOutput *out, FILE *f)
+static void outputBed(struct gfPcrOutput *out, FILE *f, char *url)
 /* Output match in fasta format. */
 {
 int match;
@@ -211,26 +222,32 @@ fprintf(f, "%d\t", round(1000.0 * match / (double)(fPrimerSize + rPrimerSize) ))
 fprintf(f, "%c\n", out->strand);
 }
 
-void gfPcrOutputWriteList(struct gfPcrOutput *outList, char *format, FILE *f)
-/* Write list of outputs in specified format (either "fa" or "bed") to file */
+void gfPcrOutputWriteList(struct gfPcrOutput *outList, char *outType, 
+	char *url, FILE *f)
+/* Write list of outputs in specified format (either "fa" or "bed") 
+ * to file.  If url is non-null it should be a printf formatted
+ * string that takes %s, %d, %d for chromosome, start, end. */
 {
 struct gfPcrOutput *out;
-void (*output)(struct gfPcrOutput *out, FILE *f) = NULL;
-if (sameString(format, "fa"))
+void (*output)(struct gfPcrOutput *out, FILE *f, char *url) = NULL;
+if (sameString(outType, "fa"))
     output = outputFa;
-else if (sameString(format, "bed"))
+else if (sameString(outType, "bed"))
     output = outputBed;
 else
-    errAbort("Unrecognized pcr output type %s", format);
+    errAbort("Unrecognized pcr output type %s", outType);
 for (out = outList; out != NULL; out = out->next)
-    output(out, f);
+    output(out, f, url);
 }
 
-void gfPcrOutputWriteAll(struct gfPcrOutput *outList, char *format, char *fileName)
-/* Create file and write list of outputs in specified format (either "fa" or "bed"). */
+void gfPcrOutputWriteAll(struct gfPcrOutput *outList, 
+	char *outType, char *url, char *fileName)
+/* Create file of outputs in specified format (either "fa" or "bed") 
+ * to file.  If url is non-null it should be a printf formatted
+ * string that takes %s, %d, %d for chromosome, start, end. */
 {
 FILE *f = mustOpen(fileName, "w");
-gfPcrOutputWriteList(outList, format, f);
+gfPcrOutputWriteList(outList, outType, url, f);
 carefulClose(&f);
 }
 
@@ -427,5 +444,19 @@ for (in = inList; in != NULL; in = in->next)
 gfFileCacheFree(&tFileCache);
 slReverse(&outList);
 return outList;
+}
+
+char *gfPcrMakePrimer(char *s)
+/* Make primer (lowercased DNA) out of text.  Complain if
+ * it is too short or too long. */
+{
+int size = dnaFilteredSize(s);
+int realSize;
+char *primer = needMem(size+1);
+dnaFilter(s, primer);
+realSize = size - countChars(primer, 'n');
+if (realSize < 10 || realSize < size/2)
+   errAbort("%s does not seem to be a good primer", s);
+return primer;
 }
 

@@ -13,7 +13,10 @@ webPcr: $O ${MYLIBS}
 clean:
 	rm -f $O
 
-install: webPcr
+installOsX: webPcr
 	cp webPcr /Library/WebServer/CGI-Executables
 	cp webPcr.cfg /Library/WebServer/CGI-Executables
 
+installUcsc: webPcr
+	cp webPcr /usr/local/apache/cgi-bin-kent
+	cp webPcr.cfg /usr/local/apache/cgi-bin-kent

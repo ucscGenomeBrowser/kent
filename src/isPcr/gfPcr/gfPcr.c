@@ -7,7 +7,7 @@
 #include "genoFind.h"
 #include "gfPcrLib.h"
 
-static char const rcsid[] = "$Id: gfPcr.c,v 1.2 2004/06/07 18:42:57 kent Exp $";
+static char const rcsid[] = "$Id: gfPcr.c,v 1.3 2004/06/07 23:04:55 kent Exp $";
 
 /* Command line overridable variables. */
 int maxSize = 4000; /* corresponds to maxSize= parameter. */
@@ -89,7 +89,7 @@ host = argv[1];
 port = argv[2];
 seqDir = argv[3];
 outList = gfPcrViaNet(host, port, seqDir, inList, maxSize, minPerfect, minGood);
-gfPcrOutputWriteAll(outList, clOut, outFile);
+gfPcrOutputWriteAll(outList, clOut, NULL, outFile);
 gfPcrOutputFreeList(&outList);
 gfPcrInputFreeList(&inList);
 return 0;

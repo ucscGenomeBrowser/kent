@@ -109,7 +109,7 @@ for (clump = clumpList; clump != NULL; clump = clump->next)
     gfPcrLocal(name, &lSeq, tStart, lSeq.name, maxSize, 
 	    fPrimer, fPrimerSize, rPrimer, rPrimerSize,
 	    minPerfect, minGood, strand, &gfoList);
-    gfPcrOutputWriteList(gfoList, outFormat, f);
+    gfPcrOutputWriteList(gfoList, outFormat, NULL, f);
     gfPcrOutputFreeList(&gfoList);
     if (strand == '-')
         reverseComplement(lSeq.dna, lSeq.size);

@@ -74,10 +74,20 @@ struct gfPcrOutput *gfPcrViaNet(char *host, char *port, char *seqDir,
 	int maxSize, int minPerfect, int minGood);
 /* Do PCRs using gfServer index, returning list of results. */
 
-void gfPcrOutputWriteList(struct gfPcrOutput *outList, char *format, FILE *f);
-/* Write list of outputs in specified format (either "fa" or "bed") to file */
+void gfPcrOutputWriteList(struct gfPcrOutput *outList, char *outType, 
+	char *url, FILE *f);
+/* Write list of outputs in specified format (either "fa" or "bed") 
+ * to file.  If url is non-null it should be a printf formatted
+ * string that takes %s, %d, %d for chromosome, start, end. */
 
-void gfPcrOutputWriteAll(struct gfPcrOutput *outList, char *format, char *fileName);
-/* Write list of outputs in specified format (either "fa" or "bed") to file */
+void gfPcrOutputWriteAll(struct gfPcrOutput *outList, 
+	char *outType, char *url, char *fileName);
+/* Create file of outputs in specified format (either "fa" or "bed") 
+ * to file.  If url is non-null it should be a printf formatted
+ * string that takes %s, %d, %d for chromosome, start, end. */
+
+char *gfPcrMakePrimer(char *s);
+/* Make primer (lowercased DNA) out of text.  Complain if
+ * it is too short or too long. */
 
 #endif /* GFPCRLIB_H */
