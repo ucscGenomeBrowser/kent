@@ -281,6 +281,14 @@ visibility hide
 spectrum on
 type psl .
 
+track rnaCluster
+shortLabel Gene Bounds 
+longLabel Gene Boundaries as Defined by RNA and Spliced EST Clusters
+priority 18.2
+visibility hide
+color 200,0,50
+type bed 12
+
 track intronEst
 shortLabel Spliced ESTs
 longLabel Human ESTs That Have Been Spliced
@@ -329,7 +337,6 @@ longLabel UniGene Alignments and SAGE Info
 priority 20.5
 visibility dense
 type psl .
-
 
 track mgc_mrna
 shortLabel MGC mRNAs
