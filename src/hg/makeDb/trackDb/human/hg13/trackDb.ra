@@ -193,4 +193,4 @@ visibility hide
 chromosomes chr14,chr20,chr22,
 color 0,100,180
 type genePred vegaPep
-url http://vega.sanger.ac.uk/Homo_sapiens/transview?transcript=$$
+url http://vega.sanger.ac.uk/Homo_sapiens/geneview?transcript=$$
