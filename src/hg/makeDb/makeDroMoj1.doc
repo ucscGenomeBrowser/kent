@@ -32,7 +32,7 @@ exit; # don't actually run this like a script :)
     ssh kksilo
     cd /cluster/data/droMoj1
     mkdir chunks
-    faSplit downloads/mojavensis/assembly.bases stdin 500000 chunks/chunk_
+    faSplit about downloads/mojavensis/assembly.bases 500000 chunks/chunk_
 
 
 # CREATING DATABASE (DONE 11/3/04 angie)
@@ -163,13 +163,13 @@ popd
     # Make chromInfo.tab.
     mkdir bed/chromInfo
     twoBitInfo droMoj1.2bit stdout \
-    | awk '{printf "%s\t%s\t/gbdb/droMoj1/nib/droMoj1.2bit\n", $1, $2;}' \
+    | awk '{printf "%s\t%s\t/gbdb/droMoj1/droMoj1.2bit\n", $1, $2;}' \
     > bed/chromInfo/chromInfo.tab
 
-    # Make symbolic a link from /gbdb/droMoj1/nib to the 2bit.
+    # Make symbolic a link from /gbdb/droMoj1/ to the 2bit.
     ssh hgwdev
-    mkdir -p /gbdb/droMoj1/nib
-    ln -s /cluster/data/droMoj1/droMoj1.2bit /gbdb/droMoj1/nib
+    mkdir -p /gbdb/droMoj1
+    ln -s /cluster/data/droMoj1/droMoj1.2bit /gbdb/droMoj1/
     # Load chromInfo table.
     hgsql droMoj1 < $HOME/kent/src/hg/lib/chromInfo.sql
     hgsql droMoj1 -e 'load data local infile \
@@ -195,8 +195,8 @@ popd
         (name, description, nibPath, organism, \
              defaultPos, active, orderKey, genome, scientificName, \
              htmlPath, hgNearOk, hgPbOk, sourceName) values \
-        ("droMoj1", "Aug. 2004", "/gbdb/droMoj1/nib", "D. mojavensis", \
-             "contig_1100:63975-78814", 1, 57, \
+        ("droMoj1", "Aug. 2004", "/gbdb/droMoj1", "D. mojavensis", \
+             "contig_2959:30001-44626", 1, 57, \
              "D. mojavensis", \
              "Drosophila mojavensis", "/gbdb/droMoj1/html/description.html", \
              0, 0, "Agencourt 11 Aug 2004");' \
@@ -415,7 +415,7 @@ gsBig {check in line+ $(path1)} {check out line gtf/$(root1).gtf} -trans={check 
     iSync
 
 
-# AUTO UPDATE GENBANK MRNA RUN  (IN PROGRESS 11/10/04 angie)
+# AUTO UPDATE GENBANK MRNA RUN  (DONE 11/19/04 angie)
     ssh hgwdev
     # Update genbank config and source in CVS:
     cd ~/kent/src/hg/makeDb/genbank
@@ -432,8 +432,7 @@ droMoj1.refseq.mrna.xeno.pslReps = -minCover=0.15 -minAli=0.75 -nearTop=0.005
 droMoj1.genbank.mrna.xeno.load = yes
 # GenBank has no D. mojavensis ESTs at this point... that may change.
 droMoj1.genbank.est.native.load = no
-droMoj1.genbank.est.xeno.load = yes
-droMoj1.genbank.est.xeno.pslReps = -minAli=0.5 -nearTop=0.01
+droMoj1.genbank.est.xeno.load = no
 droMoj1.downloadDir = droMoj1
 droMoj1.perChromTables = no
 
@@ -451,7 +450,6 @@ droMoj1.perChromTables = no
     # Install to /cluster/data/genbank:
     make install-server
 
-#TODO
     ssh eieio
     cd /cluster/data/genbank
     # This is an -initial run, (xeno) RefSeq only:
@@ -462,7 +460,8 @@ droMoj1.perChromTables = no
     cd /cluster/data/genbank
     nice bin/gbDbLoadStep -verbose=1 -drop -initialLoad droMoj1
     featureBits droMoj1 xenoRefGene
-#14616774 bases of 135845121 (10.760%) in intersection
+# About half the coverage of dp2...maybe we should loosen the params:
+#10125930 bases of 189814987 (5.335%) in intersection
     # Clean up:
     rm -rf work/initial.droMoj1
 
@@ -474,17 +473,9 @@ droMoj1.perChromTables = no
     cd /cluster/data/genbank
     nice bin/gbDbLoadStep -verbose=1 -drop -initialLoad droMoj1
     featureBits droMoj1 all_mrna
+#245 bases of 189814987 (0.000%) in intersection
     featureBits droMoj1 xenoMrna
-    # Clean up:
-    rm -rf work/initial.droMoj1
-
-    # -initial for ESTs
-    nice bin/gbAlignStep -srcDb=genbank -type=est -initial droMoj1 &
-    tail -f [its logfile]
-    # Load results:
-    ssh hgwdev
-    cd /cluster/data/genbank
-    nice bin/gbDbLoadStep -verbose=1 droMoj1 &
+#14690077 bases of 189814987 (7.739%) in intersection
     # Clean up:
     rm -rf work/initial.droMoj1
 

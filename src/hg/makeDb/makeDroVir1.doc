@@ -181,13 +181,13 @@ popd
     # Make chromInfo.tab.
     mkdir bed/chromInfo
     twoBitInfo droVir1.2bit stdout \
-    | awk '{printf "%s\t%s\t/gbdb/droVir1/nib/droVir1.2bit\n", $1, $2;}' \
+    | awk '{printf "%s\t%s\t/gbdb/droVir1/droVir1.2bit\n", $1, $2;}' \
     > bed/chromInfo/chromInfo.tab
 
-    # Make symbolic a link from /gbdb/droVir1/nib to the 2bit.
+    # Make symbolic a link from /gbdb/droVir1 to the 2bit.
     ssh hgwdev
-    mkdir -p /gbdb/droVir1/nib
-    ln -s /cluster/data/droVir1/droVir1.2bit /gbdb/droVir1/nib
+    mkdir -p /gbdb/droVir1
+    ln -s /cluster/data/droVir1/droVir1.2bit /gbdb/droVir1/
     # Load chromInfo table.
     hgsql droVir1 < $HOME/kent/src/hg/lib/chromInfo.sql
     hgsql droVir1 -e 'load data local infile \
@@ -206,8 +206,8 @@ popd
         (name, description, nibPath, organism, \
              defaultPos, active, orderKey, genome, scientificName, \
              htmlPath, hgNearOk, hgPbOk, sourceName) values \
-        ("droVir1", "Jul. 2004", "/gbdb/droVir1/nib", "D. virilis", \
-             "scaffold_0:63975-78814", 1, 57, \
+        ("droVir1", "Jul. 2004", "/gbdb/droVir1", "D. virilis", \
+             "scaffold_6:5128001-5158000", 1, 57, \
              "D. virilis", \
              "Drosophila virilis", "/gbdb/droVir1/html/description.html", \
              0, 0, "Agencourt 12 July 2004");' \
@@ -418,7 +418,7 @@ gsBig {check in line+ $(path1)} {check out line gtf/$(root1).gtf} -trans={check 
     iSync
 
 
-# AUTO UPDATE GENBANK MRNA RUN  (TODO 11/?/04 angie)
+# AUTO UPDATE GENBANK MRNA RUN (DONE 11/22/04 angie)
     ssh hgwdev
     # Update genbank config and source in CVS:
     cd ~/kent/src/hg/makeDb/genbank
@@ -431,8 +431,10 @@ droVir1.mondoTwoBitParts = 1000
 droVir1.lift = no
 droVir1.refseq.mrna.native.load = no
 droVir1.refseq.mrna.xeno.load = yes
-droVir1.refseq.mrna.xeno.pslReps = -minCover=0.15 -minAli=0.75 -nearTop=0.005
+droVir1.refseq.mrna.xeno.pslReps = -minCover=0.15 -minAli=0.60 -nearTop=0.005
 droVir1.genbank.mrna.xeno.load = yes
+# GenBank has no D. virilis ESTs at this point... that may change.
+droVir1.genbank.est.native.load = no
 droVir1.genbank.est.xeno.load = no
 droVir1.downloadDir = droVir1
 droVir1.perChromTables = no
@@ -461,7 +463,7 @@ droVir1.perChromTables = no
     cd /cluster/data/genbank
     nice bin/gbDbLoadStep -verbose=1 -drop -initialLoad droVir1
     featureBits droVir1 xenoRefGene
-#14616774 bases of 135845121 (10.760%) in intersection
+#15497250 bases of 189178031 (8.192%) in intersection
     # Clean up:
     rm -rf work/initial.droVir1
 
@@ -473,17 +475,9 @@ droVir1.perChromTables = no
     cd /cluster/data/genbank
     nice bin/gbDbLoadStep -verbose=1 -drop -initialLoad droVir1
     featureBits droVir1 all_mrna
+#51271 bases of 189178031 (0.027%) in intersection
     featureBits droVir1 xenoMrna
-    # Clean up:
-    rm -rf work/initial.droVir1
-
-    # -initial for ESTs
-    nice bin/gbAlignStep -srcDb=genbank -type=est -initial droVir1 &
-    tail -f [its logfile]
-    # Load results:
-    ssh hgwdev
-    cd /cluster/data/genbank
-    nice bin/gbDbLoadStep -verbose=1 droVir1 &
+#15562690 bases of 189178031 (8.226%) in intersection
     # Clean up:
     rm -rf work/initial.droVir1
 
@@ -501,6 +495,7 @@ droVir1.perChromTables = no
     echo 'insert into blatServers values("droVir1", "blat?", "177??", 1, 0); \
           insert into blatServers values("droVir1", "blat?", "177??", 0, 1);' \
       | hgsql -h genome-testdb hgcentraltest
+
 
 # MAKE Drosophila Proteins track  (DONE braney 11/17/04)
     ssh kksilo

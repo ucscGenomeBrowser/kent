@@ -178,13 +178,13 @@ popd
     # Make chromInfo.tab.
     mkdir bed/chromInfo
     twoBitInfo droAna1.2bit stdout \
-    | awk '{printf "%s\t%s\t/gbdb/droAna1/nib/droAna1.2bit\n", $1, $2;}' \
+    | awk '{printf "%s\t%s\t/gbdb/droAna1/droAna1.2bit\n", $1, $2;}' \
     > bed/chromInfo/chromInfo.tab
 
-    # Make symbolic a link from /gbdb/droAna1/nib to the 2bit.
+    # Make symbolic a link from /gbdb/droAna1 to the 2bit.
     ssh hgwdev
-    mkdir -p /gbdb/droAna1/nib
-    ln -s /cluster/data/droAna1/droAna1.2bit /gbdb/droAna1/nib
+    mkdir -p /gbdb/droAna1
+    ln -s /cluster/data/droAna1/droAna1.2bit /gbdb/droAna1/
     # Load chromInfo table.
     hgsql droAna1 < $HOME/kent/src/hg/lib/chromInfo.sql
     hgsql droAna1 -e 'load data local infile \
@@ -210,8 +210,8 @@ popd
         (name, description, nibPath, organism, \
              defaultPos, active, orderKey, genome, scientificName, \
              htmlPath, hgNearOk, hgPbOk, sourceName) values \
-        ("droAna1", "Jul. 2004", "/gbdb/droAna1/nib", "D. ananassae", \
-             "2448876:2687852-2740591", 1, 57, \
+        ("droAna1", "Jul. 2004", "/gbdb/droAna1", "D. ananassae", \
+             "2448876:2700001-2725000", 1, 57, \
              "D. ananassae", \
              "Drosophila ananassae", "/gbdb/droAna1/html/description.html", \
              0, 0, "TIGR 15 July 2004");' \
@@ -444,7 +444,7 @@ gsBig {check in line+ $(path1)} {check out line gtf/$(root1).gtf} -trans={check 
     # at this point!  
 
 
-# AUTO UPDATE GENBANK MRNA RUN  (IN PROGRESS 11/10/04 angie)
+# AUTO UPDATE GENBANK MRNA RUN (DONE 11/16/04 angie)
     ssh hgwdev
 
     # Update genbank config and source in CVS:
@@ -462,8 +462,7 @@ droAna1.refseq.mrna.xeno.pslReps = -minCover=0.15 -minAli=0.75 -nearTop=0.005
 droAna1.genbank.mrna.xeno.load = yes
 # GenBank has no D. ananassae ESTs at this point... that may change.
 droAna1.genbank.est.native.load = no
-droAna1.genbank.est.xeno.load = yes
-droAna1.genbank.est.xeno.pslReps = -minAli=0.5 -nearTop=0.01
+droAna1.genbank.est.xeno.load = no
 droAna1.downloadDir = droAna1
 droAna1.perChromTables = no
 
@@ -498,23 +497,14 @@ droAna1.perChromTables = no
     # This is an -initial run, mRNA only:
     nice bin/gbAlignStep -srcDb=genbank -type=mrna -initial droAna1 &
     tail -f [its logfile]
-#TODO
     # Load results:
     ssh hgwdev
     cd /cluster/data/genbank
     nice bin/gbDbLoadStep -verbose=1 -drop -initialLoad droAna1
     featureBits droAna1 all_mrna
+#19602 bases of 165766797 (0.012%) in intersection
     featureBits droAna1 xenoMrna
-    # Clean up:
-    rm -rf work/initial.droAna1
-
-    # -initial for ESTs
-    nice bin/gbAlignStep -srcDb=genbank -type=est -initial droAna1 &
-    tail -f [its logfile]
-    # Load results:
-    ssh hgwdev
-    cd /cluster/data/genbank
-    nice bin/gbDbLoadStep -verbose=1 droAna1 &
+#17295487 bases of 165766797 (10.434%) in intersection
     # Clean up:
     rm -rf work/initial.droAna1
 
