@@ -8,7 +8,7 @@
 #include "hdb.h"
 #include "hgGene.h"
 
-static char const rcsid[] = "$Id: links.c,v 1.13 2003/11/12 18:47:21 kent Exp $";
+static char const rcsid[] = "$Id: links.c,v 1.14 2004/04/09 16:56:10 kent Exp $";
 
 struct link
 /* A link to another web site. */
@@ -22,6 +22,7 @@ struct link
     char *nameFormat;	/* Text formatting for name. */
     char *url;		/* URL of link. */
     boolean useHgsid;	/* If true add hgsid to link. */
+    boolean useDb;	/* If true add db= to link. */
     char *preCutAt;	/* String to chop at before sql. */
     char *postCutAt;	/* String to chop at after sql. */
     };
@@ -79,6 +80,7 @@ for (ra = raList; ra != NULL; ra = ra->next)
 	    link->nameFormat = linkOptionalField(ra, "nameFormat");
 	    link->url = linkRequiredField(ra, "url");
 	    link->useHgsid = (linkOptionalField(ra, "hgsid") != NULL);
+	    link->useDb = (linkOptionalField(ra, "dbInUrl") != NULL);
 	    link->preCutAt = linkOptionalField(ra, "preCutAt");
 	    link->postCutAt = linkOptionalField(ra, "postCutAt");
 	    slAddHead(&linkList, link);
@@ -129,6 +131,8 @@ if (row != NULL)
     dyStringPrintf(dy, link->url, name, row[1], row[2]);
     if (link->useHgsid)
 	dyStringPrintf(dy, "&%s", cartSidUrlString(cart));
+    if (link->useDb)
+        dyStringPrintf(dy, "&db=%s", database);
     url = cloneString(dy->string);
     dyStringFree(&dy);
     freez(&name);

@@ -67,6 +67,7 @@ link.  Some fields are optional.  The fields are:
          CGI variable is added to the URL.  This is used for links
 	 back into genome.ucsc.edu.  By convention if present the value
 	 is 'on'.
+    dbInUrl - (optional) Add db= to url in link.
     preCutAt - (optional) If present part of the gene ID is removed
          before using the idSql.  The code looks for the preCutAt
 	 value in the gene ID, and remove it, and everything after it.

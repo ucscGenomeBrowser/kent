@@ -7,6 +7,7 @@ idSql select chrom,txStart+1,txEnd from knownGene where name = '%s'
 url ../cgi-bin/hgTracks?position=%s:%s-%s
 nameFormat %s:%s-%s
 hgsid on
+dbInUrl on
 priority 10
 
 name family
@@ -15,6 +16,7 @@ tables kgXref
 idSql select kgID from kgXref where kgID = '%s'
 url ../cgi-bin/hgNear?near_search=%s
 hgsid on
+dbInUrl on
 priority 20
 
 name swissProt
