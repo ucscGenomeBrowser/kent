@@ -2816,12 +2816,10 @@ struct genomicDups *dup = item;
 int ppt = dup->score;
 int grayLevel;
 
-#ifdef OLD
 if (ppt > 990)
     return tg->ixColor;
 else if (ppt > 980)
     return tg->ixAltColor;
-#endif /* OLD */
 grayLevel = grayInRange(ppt, 900, 1000);
 return shadesOfGray[grayLevel];
 }
