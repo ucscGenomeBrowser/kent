@@ -16,23 +16,19 @@ group map
 visibility dense
 type bed 3 +
 
-track mappedRefSeq
-shortLabel Human RefSeq (Mapped)
-longLabel Mapped Human RefSeq Genes
-group genes
-priority 34.5
-visibility pack
-color 12,12,120
-type genePred
-
-track xenoRefGene
-shortLabel Human RefSeq
-longLabel Human RefSeq Genes
-group genes
-priority 35
-visibility dense
-color 12,12,120
-type genePred
+track quality
+shortLabel Quality Scores
+longLabel Quality Scores
+group map
+priority 12
+visibility hide
+autoScaleDefault Off
+maxHeightPixels 128:36:11
+graphTypeDefault Bar
+gridDefault OFF
+color 0,128,255
+altColor 255,128,0
+type wig 0 50
 
 track gc20KBase
 shortLabel GC Percent
@@ -50,19 +46,23 @@ altColor 255,128,0
 defaultViewLimits 30:70
 type wig 0 100 
 
-track quality
-shortLabel Quality Scores
-longLabel Quality Scores
-group map
-priority 23.6
-visibility hide
-autoScaleDefault Off
-maxHeightPixels 128:36:11
-graphTypeDefault Bar
-gridDefault OFF
-color 0,128,255
-altColor 255,128,0
-type wig 0 50
+track mappedRefSeq
+shortLabel Human RefSeq (Mapped)
+longLabel Mapped Human RefSeq Genes
+group genes
+priority 34.5
+visibility pack
+color 12,12,120
+type genePred
+
+track xenoRefGene
+shortLabel Human RefSeq
+longLabel Human RefSeq Genes
+group genes
+priority 35
+visibility dense
+color 12,12,120
+type genePred
 
 track chainHg16
 shortLabel Human Chain
