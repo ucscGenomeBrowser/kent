@@ -1,3 +1,12 @@
+track softberryGene
+shortLabel Fgenesh++ Genes
+longLabel Fgenesh++ Gene Predictions
+group genes
+priority 48
+visibility pack
+color 0,100,0
+type genePred softberryPep
+
 track mrna
 shortLabel $Organism mRNAs
 longLabel $Organism mRNAs from Genbank 
