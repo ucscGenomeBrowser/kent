@@ -1,4 +1,4 @@
-#!/usr/bin/env tcl
+#!/usr/bin/env tclsh
 #
 # Run blat, polyInfo and pslIntronsOnly.
 #
@@ -46,7 +46,7 @@
 # written in Tcl because bash version was getting hideously hard and wanted
 # a language with named fuction parameters, like fortran.
 #
-# $Id: gbBlat,v 1.31 2004/10/17 18:27:15 markd Exp $
+# $Id: gbBlat,v 1.32 2004/10/18 18:08:45 markd Exp $
 #
 
 # Tools are normally taken from /cluster/bin, however we allow them to be
@@ -82,6 +82,20 @@ proc getOoc {database} {
             error "no blat OOC defined for $database, edit gbBlat function getOoc to add"
         }
     }
+}
+
+
+# lassign list varname ?varname..?
+proc lassign {vals args} {
+    set i 0
+    foreach var $args {
+        if {$var != ""} {
+            set val [lindex $vals $i]
+            uplevel 1 [list set $var $val]
+        }
+        incr i
+    }
+    return [lrange $vals $i end]
 }
 
 ##
@@ -163,7 +177,7 @@ proc parseCDnaFaPath {rnaFa} {
             abort "invalid type \"$cdnaType\" in mrna file name: $rnaFa"
         }
     }
-    if {![lcontain {native xeno} $orgCat]} {
+    if {!(($orgCat == "native") || ($orgCat == "xeno"))} {
         abort "invalid organism category \"$orgCat\" in mrna file name: $rnaBase"
     }
     return [list $srcDb $orgCat $cdnaType]
@@ -290,7 +304,7 @@ proc liftSubseq {type inFile outFh subInfo} {
 # append to output file, lifting if subInfo is not empty
 ##
 proc liftOrCat {type inFile outFh subInfo} {
-    if {[lempty $subInfo]} {
+    if {[llength $subInfo] == 0} {
         doExec cat $inFile >@$outFh
     } else {
         liftSubseq $type $inFile $outFh $subInfo
@@ -361,11 +375,11 @@ proc setupOutput {orgCat cdnaType} {
 proc finishOutput {} {
     global outPsl outPslFh outOi outOiFh outIntronPsl outIntronPslFh
 
-    if {![lempty $outOiFh]} {
+    if {$outOiFh != ""} {
         close $outOiFh
         file rename -force $outOi.tmp $outOi
     }
-    if {![lempty $outIntronPslFh]} {
+    if {$outIntronPslFh != ""} {
         close $outIntronPslFh
         file rename -force $outIntronPsl.tmp $outIntronPsl
     }
