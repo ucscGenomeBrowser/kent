@@ -10,7 +10,7 @@
 #include "jksql.h"
 #include "genePred.h"
 
-static char const rcsid[] = "$Id: ldHgGene.c,v 1.12 2003/09/24 04:09:31 kent Exp $";
+static char const rcsid[] = "$Id: ldHgGene.c,v 1.13 2003/12/19 19:12:39 braney Exp $";
 
 char *exonType = "exon";	/* Type field that signifies exons. */
 
@@ -21,6 +21,7 @@ static struct optionSpec optionSpecs[] = {
     {"noncoding", OPTION_BOOLEAN},
     {"nonCoding", OPTION_BOOLEAN},
     {"gtf", OPTION_BOOLEAN},
+    {"predTab", OPTION_BOOLEAN},
     {NULL, 0}
 };
 
@@ -34,7 +35,8 @@ errAbort(
     "     -exon=type   Sets type field for exons to specific value\n"
     "     -oldTable    Don't overwrite what's already in table\n"
     "     -noncoding   Forces whole prediction to be UTR\n"
-    "     -gtf         input is GTF, stop codon is not in CDS\n");
+    "     -gtf         input is GTF, stop codon is not in CDS\n"
+    "     -predTab     input is already in genePredTab format (one file only)\n");
 }
 
 char *createString = 
@@ -164,6 +166,9 @@ if (argc < 3)
 if (optionExists("exon") && optionExists("gtf"))
     errAbort("can't specify -exon= with -gtf");
 exonType = optionVal("exon", exonType);
-ldHgGene(argv[1], argv[2], argc-3, argv+3);
+if (optionExists("predTab"))
+    loadIntoDatabase(argv[1], argv[2], argv[3]);
+else
+    ldHgGene(argv[1], argv[2], argc-3, argv+3);
 return 0;
 }
