@@ -152,7 +152,7 @@ if ($cookies) {
 # Pass the UserAgent handle to our web tester.  
 my $webTest = new WebTest($ua, $sleep, $verbose, $debug);
 # Make some configs for the webTester.
-my $expectFail = {'mustMatch'    => ['(sorry|error|can\'t)']};
+my $expectFail = {'mustMatch'    => ['(sorry|error|can\'t|Please go back)']};
 my $expectPass = {'mustNotMatch' => ['(sorry|error|can\'t)']};
 my $expectHgTU = {'mustNotMatch' => ['not found']};
 # this isn't used, but I'll leave it here as an example of using mult. pat's:
