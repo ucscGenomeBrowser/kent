@@ -17,6 +17,11 @@ hgDumpWiggle:	hgDumpWiggle.o ${MYLIBS}
 		${MYLIBS} $L
 	strip ${HOME}/bin/${MACHTYPE}/hgDumpWiggle
 
+hgWiggle:	hgWiggle.o ${MYLIBS}
+	${CC} -o ${HOME}/bin/${MACHTYPE}/hgWiggle hgWiggle.o \
+		${MYLIBS} $L
+	strip ${HOME}/bin/${MACHTYPE}/hgWiggle
+
 test:
 	cd test_data && ./runtest
 
@@ -26,4 +31,4 @@ clean:
 	test_data/chr1_begin.ascii test_data/chr1_end.ascii \
 	test_data/chr1_middle.ascii test_data/chrM.ascii test_data/chrM.wib \
 	test_data/chrM.wig test_data/wiggle.tab \
-	${O}
+	${O} hgDumpWiggle.o hgWiggle.o
