@@ -90,6 +90,9 @@ void dnaMotifMakeProbabalistic(struct dnaMotif *motif);
 /* Change motif, which may be score or count based, to 
  * probabalistic one, where each column adds to 1.0 */
 
+double dnaMotifBitsOfInfo(struct dnaMotif *motif, int pos);
+/* Return bits of information at position. */
+
 void dnaMotifPrintProb(struct dnaMotif *motif, FILE *f);
 /* Print DNA motif probabilities. */
 

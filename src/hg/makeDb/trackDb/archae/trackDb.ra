@@ -79,3 +79,64 @@ priority 4.52
 visibility dense
 type bed 6 +
 canPack off
+
+searchName gbProtCodeName
+searchTable gbProtCode
+searchType bed
+searchMethod prefix
+searchDescription Genbank Protein-coding Genes
+searchPriority 20
+
+searchName gbProtCodeAnnoteProduct
+searchTable gbProtCode
+searchType bed
+searchMethod fuzzy
+xrefTable gbProtCodeXra
+xrefQuery select name,product from %s where product like '%%%s%%'
+searchPriority 21
+
+searchName gbProtCodeAnnoteNote
+searchTable gbProtCode
+searchType bed
+searchMethod fuzzy
+xrefTable gbProtCodeXra
+xrefQuery select name,note from %s where note like '%%%s%%'
+searchPriority 22
+
+searchName gbProtCodeCOGName
+searchTable gbProtCode
+searchType bed
+searchMethod exact
+xrefTable COG
+xrefQuery select name,COG from %s where COG like '%s'
+searchDescription COG name search
+searchPriority 23
+
+searchTable Rfam
+searchType bed
+searchMethod fuzzy
+searchPriority 33
+
+searchName tigrCmrORFsCommon
+searchTable tigrCmrORFs
+searchType bed
+searchMethod fuzzy
+query select chrom,chromStart,chromEnd,tigrCommon from %s where tigrCommon like '%%%s%%'
+searchDescription Common Name of TIGR Locus
+searchPriority 61
+
+searchName tigrCmrORFsMainRole
+searchTable tigrCmrORFs
+searchType bed
+searchMethod fuzzy
+query select chrom,chromStart,chromEnd,tigrMainRole from %s where tigrMainRole like '%%%s%%'
+searchDescription Main Role of TIGR Locus
+searchPriority 62
+
+searchName tigrCmrORFsSubRole
+searchTable tigrCmrORFs
+searchType bed
+searchMethod fuzzy
+query select chrom,chromStart,chromEnd,tigrSubRole from %s where tigrSubRole like '%%%s%%'
+searchDescription SubRole of TIGR Locus
+searchPriority 63

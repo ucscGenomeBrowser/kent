@@ -10,7 +10,7 @@
 #include "sample.h"
 #include "liftOver.h"
 
-static char const rcsid[] = "$Id: liftOver.c,v 1.15 2004/09/30 00:08:36 kate Exp $";
+static char const rcsid[] = "$Id: liftOver.c,v 1.16 2004/10/06 17:22:44 kate Exp $";
 
 double minMatch = LIFTOVER_MINMATCH;
 double minBlocks = LIFTOVER_MINBLOCKS;
@@ -19,6 +19,7 @@ double minSizeQ = 0;
 bool fudgeThick = FALSE;
 bool errorHelp = FALSE;
 bool multiple = FALSE;
+char *chainTable = NULL;
 
 void usage()
 /* Explain usage and exit. */
@@ -47,6 +48,8 @@ errAbort(
   "                             when mapping to multiple output regions\n"
   "                                     (default 0, 0)\n"
   "   -multiple               Allow multiple output regions\n"
+  "   -chainTable             Used with -multiple, format is db.tablename,\n"
+  "                               to extend chains from net (preserves dups)\n"
   "   -errorHelp              Explain error messages\n",
     LIFTOVER_MINMATCH, LIFTOVER_MINBLOCKS
   );
@@ -54,7 +57,8 @@ errAbort(
 
 void liftOver(char *oldFile, char *mapFile, double minMatch, 
                 double minBlocks, int minSizeT, int minSizeQ,
-                bool multiple, char *newFile, char *unmappedFile)
+                bool multiple, char *chainTable, 
+                char *newFile, char *unmappedFile)
 /* liftOver - Move annotations from one assembly to another. */
 {
 struct hash *chainHash = newHash(0);		/* Old chromosome name keyed, chromMap valued. */
@@ -80,7 +84,7 @@ else if (optionExists("pslT"))
                         mapped, unmapped);
 else
     liftOverBed(oldFile, chainHash, minMatch, minBlocks, minSizeT, minSizeQ, 
-                    fudgeThick, mapped, unmapped, multiple, &errCt);
+                fudgeThick, mapped, unmapped, multiple, chainTable, &errCt);
 carefulClose(&mapped);
 carefulClose(&unmapped);
 }
@@ -95,11 +99,12 @@ fudgeThick = optionExists("fudgeThick");
 multiple = optionExists("multiple");
 minSizeT = optionInt("minSizeT", minSizeT);
 minSizeQ = optionInt("minSizeQ", minSizeQ);
+chainTable = optionVal("chainTable", chainTable);
 if (optionExists("errorHelp"))
     errAbort(liftOverErrHelp());
 if (argc != 5)
     usage();
 liftOver(argv[1], argv[2], minMatch, minBlocks, minSizeT, minSizeQ, 
-                        multiple, argv[3], argv[4]);
+                        multiple, chainTable, argv[3], argv[4]);
 return 0;
 }

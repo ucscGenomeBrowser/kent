@@ -182,9 +182,6 @@ exit; # don't actually run this like a script :)
 	mv sts.Z dbSTS.FASTA.dailydump.Z
 	gunzip dbSTS.FASTA.dailydump.Z
 
-# Edit Makefile PREV variable to current sts.X version, 
-#    and update STS files
-        make update
 
 # Make new directory for this info and move files there
         mkdir /cluster/store1/sts.8
@@ -208,6 +205,7 @@ exit; # don't actually run this like a script :)
 	cd /cluster/store2/tmp
 	hgLoadRna addSeq hg16 /gbdb/hg16/sts.8/all.STS.fa
 	hgLoadRna addSeq hg16 /gbdb/hg16/sts.8/all.primers.fa
+
 
 # CREATE STS MARKER ALIGNMENTS (DONE 2003-08-03 Terry)
 
@@ -1188,6 +1186,7 @@ printf("%s\t%s\t%s\t%s %s\t%s\t%s\t%0.0f\t%0.1f\t%s\n",
     #  That produced no difference at all between those two targets.
     #  Have requested confirmation from Arian
 
+
 #  BLASTZ MOUSE (DONE - 2003-08-07 - Hiram)
 
     ssh eieio
@@ -1962,6 +1961,55 @@ Submission to last job:         10327s     172.12m     2.87h    0.12d
     # Add entries for net and chain to human/hg16 trackDb
 
 
+# MAKE HUMAN-MOUSE MM3 OVER.CHAIN FOR LIFTOVER (2004-07-09 kate)
+    ssh eieio
+    set chainDir = /cluster/data/hg16/bed/blastz.mm3/axtChain
+    gunzip *.gz
+
+    ssh kolossus
+    set chainDir = /cluster/data/hg16/bed/blastz.mm3/axtChain
+    cd $chainDir
+    mkdir subset
+cat > makeSubset.csh << 'EOF'
+    set chainDir = /cluster/data/hg16/bed/blastz.mm3/axtChain
+    foreach f ($chainDir/chain/*.chain.gz)
+      set c = $f:t:r:r
+      echo subsetting $c
+      gunzip -c $f | netChainSubset $chainDir/mouseNet/$c.net stdin \
+                        subset/$c.chain
+    end
+'EOF'
+# << for emacs
+    csh makeSubset.csh >&! makeSubset.log &
+    tail -100f makeSubset.log
+    cat subset/*.chain > /cluster/data/hg16/bed/liftOver/hg16Tomm3.chain
+
+    # test reciprocal best on chr6 for ENr233
+    ssh kkstore
+    cd /cluster/data/hg16/bed/blastz.mm3/axtChain
+
+    # renumber chains to assure unique ID's, 
+    # since netting splits some (should redo the  liftOver chain with new ID's)
+    # then sort by score for netter
+    mkdir uniqueSubset
+    chainMergeSort subset/chr6.chain > uniqueSubset/chr6.chain
+    mkdir swappedSubset
+    chainSwap uniqueSubset/chr6.chain swappedSubset/chr6.chain
+
+    mkdir recipBestTest
+    cd recipBestTest
+    chainSort ../uniqueSubset/chr6.chain stdout | \
+        chainNet stdin \
+                /cluster/data/hg16/chrom.sizes /cluster/data/mm3/chrom.sizes\
+                    human.chr6.net mouse.chr6.net
+    netChainSubset mouse.chr6.net ../swappedSubset/chr6.chain stdout | \
+        chainSwap stdin chr6.chain
+    ssh hgwdev
+    cd /cluster/data/hg16/bed/blastz.mm3/axtChain/recipBestTest
+    hgLoadChain hg16 rBestChainMm3 chr6.chain
+    # didn't filter enuff -- perhaps didn't rechain in proper direction
+
+
 #  BLASTZ RAT  (DONE - 2003-08-07 - Hiram)
 
     ssh eieio
@@ -2499,6 +2547,7 @@ hgLoadBed hg16 syntenyRn3 ucsc100k.bed
     hgsql hg16 < ancientRepeat.sql
     mysqlimport -u<r/w user> -p<r/w pass> hg16 ancientRepeat.txt
     # This is a hand curated table obtained from Arian.
+
 	
     #	The mouse.net argument here should have been rat.net
     cd /cluster/data/hg16/bed/blastz.rn3/axtChain
@@ -2524,6 +2573,32 @@ hgLoadBed hg16 syntenyRn3 ucsc100k.bed
     netFilter -minGap=10 mouseSyn.net | hgLoadNet hg16 syntenyNetRn3 stdin
 
     # Add entries for net and chain to human/hg16 trackDb
+
+
+# MAKE HUMAN-RAT OVER.CHAIN FOR LIFTOVER (2004-07-09 kate)
+    ssh eieio
+    set chainDir = /cluster/data/hg16/bed/blastz.rn3/axtChain
+    cd $chainDir/ratNet
+    gunzip *.gz
+
+    ssh kolossus
+    cd /cluster/data/hg16/bed/liftOver
+    mkdir hg16Torn3
+    cd hg16Torn3
+    set chainDir = /cluster/data/hg16/bed/blastz.rn3/axtChain
+    mkdir subset
+cat > makeSubset.csh << 'EOF'
+    set chainDir = /cluster/data/hg16/bed/blastz.rn3/axtChain
+    foreach f ($chainDir/chain/*.chain)
+      set c = $f:t:r:r
+      echo subsetting $c
+      netChainSubset $chainDir/ratNet/$c.net $f subset/$c.chain
+    end
+'EOF'
+# << for emacs
+    csh makeSubset.csh >&! makeSubset.log &
+    tail -100f makeSubset.log
+    cat subset/*.chain > /cluster/data/hg16/bed/liftOver/hg16Torn3.chain
 
 
 # Make Known Genes Track
@@ -2775,7 +2850,7 @@ EOF
     gzip $dir/mm3/*
     gzip $dir/rn3/*
 
-    # Create upstream files
+    # Create upstream files (kent)
     ssh hgwdev
     cd /usr/local/apache/htdocs/goldenPath/hg16/humorMm3Rn3
     echo hg16 mm3 rn3 > org.txt
@@ -7541,6 +7616,74 @@ done
     zip -j hg16Topt0.zip /cluster/data/hg16/bed/bedOver/hg16Topt0.chain
     # update README.txt
 
+    # lift scaffold-based over.chain to chrom-based (2004-07-09 kate)
+    ssh kksilo
+    cd /cluster/data/hg16/bed/bedOver
+    liftUp -chainQ hg16TopanTro1.chain /cluster/data/panTro1/jkStuff/scaffolds.lft warn hg16Topt0.chain
+
+    # NOTE: these chains appear to be broken up -- try using all chains,
+    # instead of reciprocal best
+    ssh kolossus
+    cd /cluster/data/hg16/bed/blastz-blat.panTro1
+    netChainSubset human.net all.chain over.chain
+    # load just for ENCODE dev
+    hgLoadChain hg16 liftOverPanTro1Chain over.chain
+    # TODO: delete table
+
+    ssh kolossus
+    cd /cluster/data/hg16/bed/blastz-blat.panTro1
+    chainSwap \
+        /cluster/data/panTro1/bed/blastz-blatHg16.pt0.swap/all.newId.chain \
+                all.newId.swp.chain
+    chainSplit chain.newId all.newId.swp.chain
+    mkdir preNet
+    cd chain.newId
+cat > preNet.csh << 'EOF'
+    foreach i (*.chain)
+        echo pre-netting $i
+        chainSort $i stdout | \
+            chainPreNet stdin /cluster/data/hg16/chrom.sizes \
+                        /cluster/data/panTro1/chrom.sizes ../preNet/$i
+    end
+'EOF'
+    csh preNet.csh >&! preNet.log &
+    tail -100f preNet.log
+    cd ..
+# << for emacs
+
+mkdir n1
+cd preNet
+cat > net.csh << 'EOF'
+    foreach i (*.chain)
+        set n = $i:r.net
+        echo netting $i
+        chainNet $i -minSpace=1 /cluster/data/hg16/chrom.sizes \
+                        /cluster/data/panTro1/chrom.sizes ../n1/$n /dev/null
+    end
+'EOF'
+    csh net.csh >&! net.log &
+    tail -100f net.log
+    cd ..
+
+    cat n1/*.net | /cluster/bin/i386/netSyntenic stdin hNoClass.net
+
+    # GOT HERE
+
+    ssh hgwdev
+    cd /cluster/data/hg16/bed/blastz-blat.panTro1
+    netClass hNoClass.net hg16 panTro1 chimp.newId.net
+
+    # chain files from the net
+    ssh kolossus
+    cd /cluster/data/hg16/bed/blastz-blat.panTro1
+    netChainSubset chimp.newId.net all.newId.swp.chain over.newId.chain
+    cp over.newId.chain \
+        /cluster/data/hg16/bed/liftOver/hg16ToPanTro1.newId.over.chain
+
+    ssh hgwdev
+    cd /cluster/data/hg16/bed/blastz-blat.panTro1
+    hgLoadChain hg16 liftOverPanTro1NewIdChain over.newId.chain
+
 
 # MAKE HUMAN-CHICKEN OVER.CHAIN FOR LIFTOVER (DONE 3/2/04 angie)
     ssh kolossus
@@ -8585,15 +8728,22 @@ $HOME/bin/x86_64/axtToPsl ../../axtChrom/$chr.axt ../../S1.len ../../S2.len \
 #Submission to last job:            80s       1.33m     0.02h    0.00d
 
 
-# CHAIN FUGU BLASTZ (DONE 4/19/04 angie)
+# CHAIN FUGU BLASTZ (REDONE 10/1/04 angie)
+    # NOTE: originally done 4/19, but with a buggy axtChain.
+    # axtChain dir moved aside to axtChain.orig before rebuilding.
     # Run axtChain on little cluster
     ssh kki
     cd /cluster/data/hg16/bed/blastz.fr1.2004-04-19
     mkdir -p axtChain/run1
     cd axtChain/run1
     mkdir out chain
-    ls -1S /cluster/data/hg16/bed/blastz.fr1.2004-04-19/axtChrom/*.axt \
-      > input.lst
+    # Check size>0 for .axt files (empty inputs cause out line+ check to fail):
+    cp /dev/null input.lst
+    foreach f (`ls -1S /cluster/data/hg16/bed/blastz.fr1.2004-04-19/axtChrom/*.axt`)
+      if (-s $f) then
+        echo $f >> input.lst
+      endif
+    end
     cat << '_EOF_' > gsub
 #LOOP
 doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain} {check out line+ out/$(root1).out}
@@ -8602,21 +8752,11 @@ doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain} {check
     # << this line makes emacs coloring happy
 
     # Reuse gap penalties from chicken run.
-    cat << '_EOF_' > ../../chickenHumanTuned.gap
-tablesize	11
-smallSize	111
-position	1	2	3	11	111	2111	12111	32111	72111	152111	252111
-qGap	325	360	400	450	600	1100	3600	7600	15600	31600	56600
-tGap	325	360	400	450	600	1100	3600	7600	15600	31600	56600
-bothGap	625	660	700	750	900	1400	4000	8000	16000	32000	57000
-'_EOF_'
-    # << this line makes emacs coloring happy
-
     cat << '_EOF_' > doChain
 #!/bin/csh
 axtChain -scoreScheme=/cluster/data/blastz/HoxD55.q \
-                      -linearGap=../../chickenHumanTuned.gap \
-                      -minScore=5000 $1 \
+         -linearGap=/cluster/data/blastz/chickenHumanTuned.gap \
+         -minScore=5000 $1 \
     /iscratch/i/gs.17/build34/bothMaskedNibs \
     /iscratch/i/fr1/nib $2 > $3
 '_EOF_'
@@ -8625,12 +8765,10 @@ axtChain -scoreScheme=/cluster/data/blastz/HoxD55.q \
     gensub2 input.lst single gsub jobList
     para create jobList
     para try, check, push, check...
-    # axtChrom/chr19_random.axt is empty, so the {out line +} checks failed:
-#Completed: 41 of 42 jobs
-#Crashed: 1 jobs
-#Average job time:                  18s       0.30m     0.00h    0.00d
-#Longest job:                       86s       1.43m     0.02h    0.00d
-#Submission to last job:            86s       1.43m     0.02h    0.00d
+#Completed: 41 of 41 jobs
+#Average job time:                  26s       0.44m     0.01h    0.00d
+#Longest job:                      121s       2.02m     0.03h    0.00d
+#Submission to last job:           121s       2.02m     0.03h    0.00d
 
     # now on the cluster server, sort chains
     ssh kksilo
@@ -8649,7 +8787,8 @@ axtChain -scoreScheme=/cluster/data/blastz/HoxD55.q \
     end
 
 
-# NET FUGU BLASTZ (DONE 4/19/04 angie)
+# NET FUGU BLASTZ (REDONE 10/1/04 angie)
+    # NOTE: originally done 4/19, but with results of a buggy axtChain.
     ssh kksilo
     cd /cluster/data/hg16/bed/blastz.fr1.2004-04-19/axtChain
     chainPreNet all.chain ../S1.len ../S2.len stdout \
@@ -8659,20 +8798,26 @@ axtChain -scoreScheme=/cluster/data/blastz/HoxD55.q \
     # Add classification info using db tables:
     ssh hgwdev
     cd /cluster/data/hg16/bed/blastz.fr1.2004-04-19/axtChain
-    netClass noClass.net hg16 fr1 human.net
+    netClass noClass.net hg16 fr1 fugu.net
 
     # Make a 'syntenic' subset:
     ssh kksilo
     cd /cluster/data/hg16/bed/blastz.fr1.2004-04-19/axtChain
     rm noClass.net
     # Make a 'syntenic' subset of these with
-    netFilter -syn human.net > humanSyn.net
+    netFilter -syn fugu.net > fuguSyn.net
 
     # Load the nets into database 
     ssh hgwdev
     cd /cluster/data/hg16/bed/blastz.fr1.2004-04-19/axtChain
-    netFilter -minGap=10 human.net |  hgLoadNet hg16 netFr1 stdin
-    netFilter -minGap=10 humanSyn.net | hgLoadNet hg16 netSyntenyFr1 stdin
+    netFilter -minGap=10 fugu.net |  hgLoadNet hg16 netFr1 stdin
+    netFilter -minGap=10 fuguSyn.net | hgLoadNet hg16 netSyntenyFr1 stdin
+
+# LIFTOVER CHAIN TO FUGU FR1 (DONE 2004-09-28 kate)
+    ssh kolossus
+    cd /cluster/data/hg16/bed/blastz.fr1/axtChain
+    time netChainSubset human.net all.chain \
+        /cluster/data/hg16/bed/liftOver/hg16ToFr1.chain
 
 
 # RUN AXTBEST (DONE 4/20/04 angie)
@@ -8727,7 +8872,7 @@ axtChain -scoreScheme=/cluster/data/blastz/HoxD55.q \
     # load track of mrna alignments
     hgwdev
     cd /cluster/data/hg16/bed/hinv
-    hgLoadPsl hg16 -table=hinvGeneMrna hinv_mrna.psl
+    hgLoadPsl hg16 -table=HInvGeneMrna hinv_mrna.psl
 
     # also make a gene track using the genomic exon coordinates for build34
     # in the FCDNA file.  NOTE: not all of the genes have these
@@ -9239,6 +9384,144 @@ echo "Ready for cluster run.  para try, check, push, etc ..."
     end
     para create jobList
     para try, check, push, check
+
+# seq table acc field is too small; up the max to match new hgLoadSeq 
+# schema (2004/05/22 markd)
+
+    alter table modify column `acc` varchar(128) NOT NULL default '';
+
+
+####  Blat knownGene proteins to determine exons (braney 2004-06-02)
+    ssh kk
+    mkdir blat.hg16KG.2004-05-27
+    rm blat.hg16KG
+    ln -s  blat.hg16KG.2004-05-27 blat.hg16KG
+    pepPredToFa hg16 knownGenePep known.fa
+    grep ">" known.fa | sed "s/>//" > kgName.lst
+    kgName hg16 kgName.lst kg.mapNames
+    cat << '_EOF_' > blatSome
+#!/bin/csh -fe
+/cluster/bin/i386/blat -t=dnax -q=prot -out=pslx $1 $2 $3
+'_EOF_'
+    ls -1S /scratch/hg/gs.17/build34/bothMaskedNibs/*.nib > human.lst
+    mkdir kgfa
+    cd kgfa
+    faSplit sequence ../known.fa 300 kg
+    ls -1S kgfa/*.fa > kg.lst
+    cat << '_EOF_' > blatGsub
+#LOOP
+blatSome $(path1) {check in line $(path2)} {check out line psl/$(root1)/$(root2).psl}
+#ENDLOOP
+'_EOF_'
+    gensub2 human.lst kg.lst blatGsub blatSpec
+    mkdir psl
+    cd psl
+    foreach i (`cat ../human.lst`)
+	mkdir `basename $i .nib`
+    end
+    para create blatSpec
+    para push
+# Completed: 12222 of 12222 jobs
+# CPU time in finished jobs:   23286365s  388106.09m  6468.43h  269.52d  0.738 y
+# IO & Wait Time:                710342s   11839.03m   197.32h    8.22d  0.023 y
+# Average job time:                1963s      32.72m     0.55h    0.02d
+# Longest job:                   106239s    1770.65m    29.51h    1.23d
+# Submission to last job:        106248s    1770.80m    29.51h    1.23d
+
+    pslSort dirs raw.psl /tmp psl/*
+    pslReps -nohead -minCover=0.9 -minAli=0.9 raw.psl cooked.psl /dev/null
+    pslxToFa uniq.psl uniq_ex.fa -liftTarget=genome.lft -liftQuery=protein.lft
+
+
+# LIFTOVER CHAINS TO HG17 (DONE 2004-07-14 kate)
+
+    # run alignment
+    # NOTE: split hg17 to /iscratch/i is doc'ed in makeHg17.doc
+    ssh kk
+    cd /cluster/data/hg16
+    makeLoChain-align hg16 /scratch/hg/gs.17/build34/bothMaskedNibs \
+                    hg17 /iscratch/i/hg17/liftOver/split
+        # Created parasol job in bed/blat.hg17.2004-07-14/run
+    cd bed
+    rm blat.hg17
+    ln -s blat.hg17.2004-07-14 blat.hg17
+    cd blat.hg17/run
+    para try
+    para check
+    para push
+
+    # lift results
+    # the lift directory was defined in makeHg17.doc when split was performed
+    # this expects data in bed/blat.hg17, so symlink must be there 
+    # use kolossus for speed
+    ssh kolossus
+    cd /cluster/data/hg16/bed/blat.hg17
+    makeLoChain-lift hg16 hg17 /cluster/data/hg17/bed/liftOver/liftSplit \
+                        >&! lift.log &
+    tail -100f lift.log
+        # 25 minutes 
+    
+    # chain alignments
+    ssh kk
+    makeLoChain-chain hg16 /cluster/data/hg16/nib hg17 /cluster/data/hg17/nib
+        # Created parasol job in /cluster/data/hg16/bed/blat.hg17/chainRun
+    cd /cluster/data/hg16/bed/blat.hg17/chainRun
+    para try
+        # 46 jobs
+    para check
+    para push
+
+    # make alignment net
+    ssh kolossus
+    makeLoChain-net hg16 hg17
+
+    # load into database and copy to download directory
+    ssh hgwdev
+    makeLoChain-load hg16 hg17
+        # Finished loading hg16ToHg17.over.chain
+        # Now, add download link for /usr/local/apache/htdocs/goldenPath/hg16/liftOver/hg16ToHg17.over.chain.gz
+
+
+# ENCODE Regions        (kate)
+#       NOTE: these instructions are not yet complete (scripts and datafiles 
+#               are currently in ~kate/encode)
+    mkRegionsBed.pl build34_regions.txt > encodeRegionsHg16.bed
+    hgLoadBed hg16 encodeRegions encodeRegionsHg16.bed -noBin
+    mkdir -p /cluster/data/hg16/bed/encodeRegions
+    cp encodeRegionsHg16.bed /cluster/data/hg16/bed/encodeRegions/encodeRegions.bed
+
+    # Create hgFixed table for name+description
+    hgsql -D hgFixed < ${HOME}/kent/src/hg/lib/encodRegionInfo.sql
+    sed -e 's/^/INSERT INTO encodeRegionInfo (name, descr) VALUES (\"/' \
+            -e 's/|/\",\"/' \
+            -e 's/$/\");/' < regionInfo.txt | hgsql -D hgFixed
+
+    # create frameset for region display
+    make
+
+    # create sequence downloads
+    set dir = /usr/local/apache/htdocs/ENCODE/sequences
+    rm sizes.txt
+    foreach b (hg12 hg13 hg15 hg16)
+        encodeSequence.pl regions.$b.txt /cluster/data/$b/nib > $b.fa
+        cp $b.fa $dir
+        faCount $b.fa | awk '{print $1, $2}' > $dir/${b}_count.txt
+        echo $b >> sizes.txt
+        faSize $b.fa >> sizes.txt
+        echo "" >> sizes.txt
+    end
+    cp sizes.txt $dir
+    cd $dir
+    md5sum *.fa > md5sum.txt
+
+    # QA
+    checkEncodeRegions.pl regions.hg12.txt /cluster/data/hg12/nib > hg12.check
+    cp sizes.txt $dir
+       # etc.
+    csh printRegionDiffs.csh > regionDiffs.out
+
+
+
 ## end of blastz macaca mulatta alignment
 
 
@@ -9956,6 +10239,14 @@ axtChain $1 \
     netFilter -minGap=10 dogSyn.net | hgLoadNet hg16 syntenyNetCanFam1 stdin
     # Add entries for chainCanFam1, netCanFam1 to human/hg16 trackDb
 
+
+# LIFTOVER CHAIN TO DOG CANFAM1 (DONE 2004-09-16 kate)
+    ssh kolossus
+    cd /cluster/data/hg16/bed/blastz.canFam1/axtChain
+    time netChainSubset dog.net all.chain \
+        /cluster/data/hg16/bed/liftOver/hg16ToCanFam1.chain
+
+
 # LOAD ENSEMBL ESTS (DONE 2004-09-07 braney)
      cd /cluster/data/hg16/bed
      mkdir ensEst
@@ -10003,3 +10294,370 @@ axtChain $1 \
     gunzip ensGtp.tsv.gz
     sed "s/ensGtp/ensESTGtp/"  ~/kent/src/hg/lib/ensGtp.sql | hgsql hg16
     echo "load data local infile 'ensESTGtp.tsv' into table ensESTGtp ignore 1 lines" | hgsql hg16
+
+
+# BLASTZ MOUSE MM5 (DONE 2004-09-10 kate)
+    
+    ssh kk
+    # use store7 (lots of space)
+    mkdir -p /cluster/store7/hg16/bed/blastz.mm5.2004-09-10
+    ln -s /cluster/store7/hg16/bed/blastz.mm5.2004-09-10 \
+                /cluster/data/hg16/bed
+    cd /cluster/data/hg16/bed
+    ln -s  blastz.mm5.2004-09-10 blastz.mm5
+    cd blastz.mm5
+
+    cat << '_EOF_' > DEF
+# human vs. mouse
+export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/home/angie/schwartzbin:/cluster/home/kent/bin/i386
+
+ALIGN=blastz-run
+BLASTZ=blastz
+BLASTZ_H=2000
+BLASTZ_ABRIDGE_REPEATS=1
+
+# TARGET
+# Human
+SEQ1_DIR=/iscratch/i/gs.17/build34/bothMaskedNibs
+# not used
+SEQ1_RMSK=
+# not used
+SEQ1_FLAG=
+SEQ1_SMSK=/iscratch/i/gs.17/build34/linSpecRep.notInMouse
+SEQ1_IN_CONTIGS=0
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY
+# Mouse
+SEQ2_DIR=/scratch/mus/mm5/softNib
+# RMSK not currently used
+SEQ2_RMSK=/scratch/mus/mm5/rmsk
+# FLAG not currently used
+SEQ2_FLAG=-rodent
+SEQ2_SMSK=/scratch/mus/mm5/linSpecRep.notInHuman
+SEQ2_IN_CONTIGS=0
+SEQ2_CHUNK=30000000
+SEQ2_LAP=0
+
+BASE=/cluster/data/hg16/bed/blastz.mm5.2004-09-10
+
+DEF=$BASE/DEF
+RAW=$BASE/raw
+CDBDIR=$BASE
+SEQ1_LEN=$BASE/S1.len
+SEQ2_LEN=$BASE/S2.len
+'_EOF_'
+    # << this line keeps emacs coloring happy
+
+    # first cluster run: blastz alignments
+    ssh kk
+    bash # if a csh/tcsh user
+    cd /cluster/data/hg16/bed/blastz.mm5.2004-09-10
+    source DEF
+    mkdir $RAW run.0
+    /cluster/home/angie/hummus/make-joblist $DEF > $BASE/run.0/j
+    sh ./xdir.sh
+    cd run.0
+    sed -e 's@^blastz-run@/cluster/bin/penn/blastz-run@' j > jobList
+    para create jobList
+        # 44060 jobs
+    para try, check, push, check, ....
+# Average job time:                 382s       6.37m     0.11h    0.00d
+# Longest job:                     4510s      75.17m     1.25h    0.05d
+# Submission to last job:         26324s     438.73m     7.31h    0.30d
+
+    # second cluster run: lift raw alignments -> lav dir
+    ssh kki
+    bash # if a csh/tcsh user
+    cd /cluster/data/hg16/bed/blastz.mm5.2004-09-10
+    source DEF
+    mkdir run.1 lav
+    /cluster/bin/scripts/blastz-make-out2lav $DEF $BASE > $BASE/run.1/jobList
+    cd run.1
+    wc -l jobList
+    para create jobList
+        # 339 jobs
+    para try, check, push, etc ...
+# Average job time:                  16s       0.27m     0.00h    0.00d
+# Longest job:                      112s       1.87m     0.03h    0.00d
+# Submission to last job:           401s       6.68m     0.11h    0.00d
+
+    # convert lav files to axt
+    ssh kki
+    cd /cluster/data/hg16/bed/blastz.mm5.2004-09-10
+    mkdir axtChrom pslChrom
+    # a new run directory
+    mkdir run.2
+    cd run.2
+    cat << '_EOF_' > do.csh
+#!/bin/csh
+cd $1
+set chr = $1:t
+cat `ls -1 *.lav | sort -g` \
+|  /cluster/bin/x86_64/lavToAxt -dropSelf stdin \
+    /iscratch/i/gs.17/build34/bothMaskedNibs /iscratch/i/mus/mm5/softNib stdout \
+| /cluster/bin/x86_64/axtSort stdin ../../axtChrom/$chr.axt 
+/cluster/bin/x86_64/axtToPsl ../../axtChrom/$chr.axt ../../S1.len ../../S2.len \
+  ../../pslChrom/$chr.psl
+'_EOF_'
+    # << this line makes emacs coloring happy
+    chmod a+x do.csh
+    cat << '_EOF_' > gsub
+#LOOP
+./do.csh {check in exists $(path1)} {check out line+ /cluster/data/hg16/bed/blastz.mm5.2004-09-10/axtChrom/$(root1).axt} {check out line+ /cluster/data/hg16/bed/blastz.mm5.2004-09-10/pslChrom/$(root1).psl}
+#ENDLOOP
+'_EOF_'
+    # << this line makes emacs coloring happy
+    ls -1Sd ../lav/chr* > chrom.list
+    gensub2 chrom.list single gsub jobList
+    wc -l jobList
+        # 42 jobs
+    head jobList
+    para create jobList
+    para try, check, push, check,...
+
+    # Load database tables
+    ssh hgwdev
+    cd /cluster/data/hg16/bed/blastz.mm5/pslChrom
+    foreach f (*.psl)
+        set c = $f:r
+        hgLoadPsl -noTNameIx hg16 -table=${c}_blastzMm5 $f
+    end
+    # takes 30-60 min
+
+
+# CHAIN MOUSE MM5 BLASTZ (DONE 2004-09-15 kate)
+    # Run axtChain on little cluster
+    ssh kki
+    cd /cluster/data/hg16/bed/blastz.mm5.2004-09-10
+    mkdir -p axtChain/run1
+    cd axtChain/run1
+    mkdir out chain
+    ls -1S /cluster/data/hg16/bed/blastz.mm5.2004-09-10/axtChrom/*.axt \
+      > input.lst
+    cat << '_EOF_' > gsub
+#LOOP
+doChain {check in line+ $(path1)} {check out line+ chain/$(root1).chain} {check out exists out/$(root1).out}
+#ENDLOOP
+'_EOF_'
+    # << this line makes emacs coloring happy
+
+    cat << '_EOF_' > doChain
+#!/bin/csh
+axtChain $1 \
+    /iscratch/i/gs.17/build34/bothMaskedNibs \
+    /iscratch/i/mus/mm5/softNib $2 > $3
+'_EOF_'
+    # << this line makes emacs coloring happy
+    chmod a+x doChain
+    gensub2 input.lst single gsub jobList
+    # edit to remove chr19_random
+    para create jobList
+        # 41 jobs
+    para try, check, push, check...
+
+    # now on the cluster server, sort chains
+    ssh kksilo
+    cd /cluster/data/hg16/bed/blastz.mm5.2004-09-10/axtChain
+    time chainMergeSort run1/chain/*.chain > all.chain
+        # 5 min -- 230.070u 58.980s 5:07.13 94.1%  0+0k 0+0io 117pf+0w
+    time chainSplit chain all.chain
+        # 5 min -- 208.490u 56.360s 4:48.81 91.7%  0+0k 0+0io 125pf+0w
+    rm run1/chain/*.chain
+
+    # Load chains into database
+    ssh hgwdev
+    cd /cluster/data/hg16/bed/blastz.mm5.2004-09-10/axtChain/chain
+    foreach i (*.chain)
+        set c = $i:r
+        echo $c
+        hgLoadChain hg16 ${c}_chainMm5 $i
+    end
+    # compare with previous mouse, and with this assembly on later human
+    featureBits hg16 -chrom=chr1 chainMm5
+    featureBits hg17 -chrom=chr1 chainMm5
+    featureBits hg16 -chrom=chr1 chainMm3
+
+    featureBits hg16 -chrom=chr1 chainMm5Link
+        # 83288228 bases of 221562941 (37.591%) in intersection
+    featureBits hg17 -chrom=chr1 chainMm5Link
+        # 83773012 bases of 222827847 (37.595%) in intersection
+    featureBits hg16 -chrom=chr1 chainMm3Link
+        # 82665800 bases of 221562941 (37.310%) in intersection
+
+
+# NET MOUSE MM5 BLASTZ (DONE 2004-09-16 kate)
+    ssh kolossus
+    cd /cluster/data/hg16/bed/blastz.mm5.2004-09-10/axtChain
+    chainPreNet all.chain ../S1.len ../S2.len stdout \
+    | chainNet stdin -minSpace=1 ../S1.len ../S2.len stdout /dev/null \
+    | netSyntenic stdin noClass.net
+    # < 10 minutes
+
+    # Add classification info using db tables:
+    ssh hgwdev
+    cd /cluster/data/hg16/bed/blastz.mm5.2004-09-10/axtChain
+    time netClass noClass.net hg16 mm5 human.net
+        # 15 minutes
+
+    # Make a 'syntenic' subset:
+    ssh kksilo
+    cd /cluster/data/hg16/bed/blastz.mm5.2004-09-10/axtChain
+    rm noClass.net
+    # Make a 'syntenic' subset of these with
+    netFilter -syn human.net > humanSyn.net
+
+    # Load the nets into database 
+    ssh hgwdev
+    cd /cluster/data/hg16/bed/blastz.mm5.2004-09-10/axtChain
+    netFilter -minGap=10 human.net |  hgLoadNet hg16 netMm5 stdin
+    netFilter -minGap=10 humanSyn.net | hgLoadNet hg16 netSyntenyMm5 stdin
+
+    # GOT HERE
+
+    # Add entries for chainMm5, netMm5, netSyntenyMm5
+    # human/hg16 trackDb
+
+
+# LIFTOVER CHAIN TO MOUSE MM5 (DONE 2004-09-16 kate)
+    ssh kolossus
+    cd /cluster/data/hg16/bed/blastz.mm5/axtChain
+    time netChainSubset human.net all.chain \
+        /cluster/data/hg16/bed/liftOver/hg16ToMm5.chain
+        # 7 mins.
+
+# TIGHT FOR MOUSE MM5 (TBD kate)
+# BEST FOR MOUSE MM5 (TBD kate)
+# SYNTENIC NET FOR MOUSE MM5 (TBD kate)
+
+# DOWNLOADS FOR MOUSE MM5 (TBD kate)
+
+
+# BLASTZ FOR ZEBRAFISH DANRER1 (WORKING 2004-09-29 kate)
+
+    # Treat all repeats as lineage-specific
+    ssh kkr1u00
+    mkdir /iscratch/i/gs.17/build34/linSpecRep.notInZebrafish
+    foreach f (/iscratch/i/gs.17/build34/rmsk/chr*.fa.out)
+        cp -p $f  \
+           /iscratch/i/gs.17/build34/linSpecRep.notInZebrafish/$f:t:r:r.out.spec
+    end
+    iSync
+  
+    ssh kk
+    # use store7 (lots of space)
+    mkdir -p /cluster/store7/hg16/bed/blastz.danRer1.2004-09-29
+    ln -s /cluster/store7/hg16/bed/blastz.danRer1.2004-09-29 \
+                /cluster/data/hg16/bed
+    cd /cluster/data/hg16/bed
+    ln -s  blastz.danRer1.2004-09-29 blastz.danRer1
+    cd blastz.danRer1
+
+    cat << '_EOF_' > DEF
+# human vs zebrafish (danRer1)
+# params for zebrafish --  L=6000 (threshold for gapped alignments)
+# (same params as used for Fugu)
+export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/bin/i386:/cluster/home/angie/schwartzbin
+
+ALIGN=blastz-run
+BLASTZ=blastz
+
+# Reuse parameters from hg16-fr1.
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=6000
+BLASTZ_K=2200
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+BLASTZ_ABRIDGE_REPEATS=1
+
+# Target: Human
+SEQ1_DIR=/iscratch/i/gs.17/build34/bothMaskedNibs
+SEQ1_RMSK=
+SEQ1_FLAG=
+SEQ1_SMSK=/iscratch/i/gs.17/build34/linSpecRep.notInZebrafish
+SEQ1_IN_CONTIGS=0
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# Query: Zebrafish (danRer1)
+SEQ2_DIR=/iscratch/i/danRer1/nib/
+SEQ2_RMSK=
+SEQ2_FLAG=
+SEQ2_SMSK=/iscratch/i/danRer1/linSpecRep.notInHuman
+SEQ2_IN_CONTIGS=0
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+
+BASE=/cluster/data/hg16/bed/blastz.danRer1.2004-09-29
+
+DEF=$BASE/DEF
+RAW=$BASE/raw
+CDBDIR=$BASE
+SEQ1_LEN=$BASE/S1.len
+SEQ2_LEN=$BASE/S2.len
+'_EOF_'
+    # << this line keeps emacs coloring happy
+    # Save the DEF file in the current standard place
+    cp DEF ~angie/hummus/DEF.hg16-danRer1.2004-09-29
+
+    # prepare first cluster run
+    ssh kk
+    bash # if a csh/tcsh user
+    cd /cluster/data/hg16/bed/blastz.danRer1
+    source DEF
+    mkdir $RAW run.0
+    /cluster/home/angie/hummus/make-joblist $DEF > $BASE/run.0/j
+    sh ./xdir.sh
+    cd run.0
+    sed -e 's@^blastz-run@/cluster/bin/penn/blastz-run@' j > jobList
+    para create jobList
+        # 57630 jobs
+    para try, check, push, check, ....
+
+    # second cluster run: lift raw alignments -> lav dir
+    ssh kki
+    cd /cluster/data/hg16/bed/blastz.danRer1
+    bash # if a csh/tcsh user
+    source DEF
+    mkdir run.1 lav
+    /cluster/bin/scripts/blastz-make-out2lav $DEF $BASE > $BASE/run.1/jobList
+    cd run.1
+    wc -l jobList
+    para create jobList
+        # 170 jobs
+    para try
+    para check 
+    para push
+#Average job time:                 104s       1.73m     0.03h    0.00d
+#Longest job:                      564s       9.40m     0.16h    0.01d
+#Submission to last job:          1242s      20.70m     0.34h    0.01d
+
+    # third run: lav -> axt
+    ssh kki
+    cd /cluster/data/hg16/bed/blastz.danRer1
+    mkdir axtChrom run.2
+    cd run.2
+    cat << '_EOF_' > do.csh
+#!/bin/csh -ef
+cd $1
+cat `ls -1 *.lav | sort -g` \
+| lavToAxt stdin /iscratch/i/gs.17/build34/bothMaskedNibs \
+/iscratch/i/danRer1/nib stdout \
+| axtSort stdin $2
+'_EOF_'
+    # << this line makes emacs coloring happy
+    chmod a+x do.csh
+    cat << '_EOF_' > gsub
+#LOOP
+./do.csh {check in exists $(path1)} {check out line+ /cluster/data/hg16/bed/blastz.danRer1/axtChrom/$(root1).axt}
+#ENDLOOP
+'_EOF_'
+    # << this line makes emacs coloring happy
+    ls -1Sd ../lav/chr* > chrom.list
+    gensub2 chrom.list single gsub jobList
+    wc -l jobList
+    head jobList
+    para create jobList
+        # 29 jobs
+    para try, check, push, check,...

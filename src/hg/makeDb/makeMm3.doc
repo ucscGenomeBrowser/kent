@@ -3608,3 +3608,106 @@ done
     ssh hgwdev
     cd /cluster/data/mm3/bed/encodeRegions
     hgLoadBed mm3 encodeRegions encodeRegions.bed -noBin
+
+    ssh kkstore
+    cd /cluster/data/mm3/bed/encodeRegions
+    mkdir minMatch10
+    cd minMatch10
+    liftOver -minMatch=.10 \
+        /cluster/data/hg16/bed/encodeRegions/encodeRegions.bed \
+        /cluster/data/hg16/bed/liftOver/hg16Tomm3.chain \
+        encodeRegions.bed encodeRegions.unmapped
+    wc -l *
+        # 42 encodeRegions.bed
+        # 4 encodeRegions.unmapped
+    ssh hgwdev
+    cd /cluster/data/mm3/bed/encodeRegions/minMatch10
+    hgLoadBed mm3 encodeRegionsNew encodeRegions.bed -noBin
+    # NOTE: need to create this table with the schema
+    # to preserve the Notes field
+
+
+# LIFTOVER CHAINS TO MM5 (WORKING 2004-09-29 kate)
+
+    # run alignment
+    # NOTE: split mm5 to /iscratch/i is doc'ed in makeHg17.doc
+    ssh kk9
+    cd /cluster/data/mm3
+    makeLoChain-align mm3 /scratch/hg/mm3/chromTrfMixedNib \
+        mm5 /iscratch/i/mm5/liftOver/liftSplit/split /scratch/hg/h/mouse11.ooc
+        #Setting up blat in /cluster/data/mm3/bed/blat.mm5.2004-09-29
+        # 1591 jobs
+    cd bed
+    rm -f blat.mm5
+    ln -s blat.mm5.2004-09-29 blat.mm5
+    cd blat.mm5/run
+    para try
+    para check
+    para push
+    # GOT HERE
+
+    # lift results
+    # the lift directory was defined in makeMm5.doc when split was performed
+    # this expects data in bed/blat.mm5, so symlink must be there 
+    # use kolossus for speed
+    ssh kkstore
+    cd /cluster/data/mm3/bed/blat.mm5
+    makeLoChain-lift mm3 mm5 /iscratch/i/mm5/liftOver/liftSplit/lift \
+                        >&! lift.log &
+    tail -100f lift.log
+        # 25 minutes 
+
+    # GOT HERE
+
+    # chain alignments
+    ssh kki
+    makeLoChain-chain mm3 /cluster/data/mm3/nib mm5 /cluster/data/mm5/nib
+        # Created parasol job in /cluster/data/mm3/bed/blat.mm5/chainRun
+    cd /cluster/data/mm3/bed/blat.mm5/chainRun
+    para try
+        # 46 jobs
+    para check
+    para push
+
+    # make alignment net
+    ssh kolossus
+    makeLoChain-net mm3 mm5
+
+    # load into database and copy to download directory
+    ssh hgwdev
+    makeLoChain-load mm3 mm5
+        # Finished loading mm3ToHg17.over.chain
+        # Now, add download link for /usr/local/apache/htdocs/goldenPath/mm3/liftOver/mm3ToHg17.over.chain.gz
+
+
+# HUMAN HG13 BLASTZ CLEANUP (DONE 2004-09-20 kate)
+    ssh kkstore
+    cd /cluster/data/mm3/bed/blastz.hg13
+    nice rm -rf raw lav
+    nice rm axtChain/run1/chain/* axtChain/preNet/*.chain axtChain/hNoClass.net
+    nice gzip axtChrom/*.axt axtChain/{all.chain,*.net} axtChain/*Net/*.net
+    nice gzip axtBest/*.axt pslChrom/*.psl
+
+# HUMAN HG15 BLASTZ CLEANUP (DONE 2004-09-21 kate)
+    ssh kkstore
+    cd /cluster/data/mm3/bed/blastz.hg15.swap
+    nice rm -rf raw lav
+    nice rm axtChain/run1/chain/* axtChain/preNet/*.chain axtChain/hNoClass.net
+    nice gzip axtChain/{all.chain,*.net} axtChain/*[nN]et/*.net
+    nice gzip axtChain/chain2/*.chain
+    nice gzip axt*/*.axt psl*/*.psl
+
+# RAT RN2 BLASTZ CLEANUP (DONE 2004-09-21 kate)
+    ssh kkstore
+    cd /cluster/data/mm3/bed/blastz.rn2
+    nice rm axtChain/run1/chain/* axtChain/preNet/*.chain axtChain/hNoClass.net
+    nice gzip axtChain/{all.chain,*.net} axtChain/*[nN]et/*.net
+    nice gzip axt*/*.axt psl*/*.psl
+    rm psl*/psl.tab
+
+# MOUSE MM3 BLASTZ CLEANUP (DONE 2004-09-21 kate)
+    ssh kkstore
+    cd /cluster/data/mm3/bed/blastz.mm3.2003-03-06-ASH
+    nice gzip axt*/*.axt psl*/*.psl
+
+

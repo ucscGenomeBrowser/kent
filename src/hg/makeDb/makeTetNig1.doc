@@ -133,7 +133,7 @@ exit; # don't actually run this like a script :)
     echo 'create database tetNig1' | hgsql ''
     # if you need to delete that database:  !!! WILL DELETE EVERYTHING !!!
     echo 'drop database tetNig1' | hgsql tetNig1
-    # Use df to ake sure there is at least 5 gig free on
+    # Use df to make sure there is at least 5 gig free on
     df -h /var/lib/mysql
 # Before loading data:
 # Filesystem            Size  Used Avail Use% Mounted on

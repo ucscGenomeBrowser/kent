@@ -1,0 +1,22 @@
+track gap
+shortLabel Gap
+longLabel Gap Locations
+priority 11
+group map
+visibility dense
+type bed 3 +
+
+track ctgPos2
+shortLabel Contigs
+longLabel Assembly Contigs
+group map
+priority 10
+visibility hide
+
+searchTable ctgPos2
+searchMethod exact
+shortCircuit 1
+termRegex (ctg|BX|AL)[0-9]+
+query select chrom,chromStart,chromEnd,contig from %s where contig like '%s'
+searchPriority 5
+                                                                                

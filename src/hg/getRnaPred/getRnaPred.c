@@ -9,7 +9,7 @@
 #include "dnautil.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: getRnaPred.c,v 1.12 2004/09/30 00:41:46 markd Exp $";
+static char const rcsid[] = "$Id: getRnaPred.c,v 1.13 2004/09/30 06:46:18 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -248,7 +248,12 @@ void getRnaForTable(char *table, char *chrom, struct dyString *dnaBuf, struct dy
 int rowOffset;
 char **row;
 struct sqlConnection *conn = hAllocConn();
-struct sqlResult *sr = hChromQuery(conn, table, chrom, NULL, &rowOffset);
+struct sqlResult *sr;
+
+if (!sqlTableExists(conn, table))
+    errAbort("table or file \"%s\" does not exists", table);
+
+sr = hChromQuery(conn, table, chrom, NULL, &rowOffset);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     /* Load gene prediction from database. */

@@ -7,7 +7,7 @@
 #include "portable.h"
 #include "hgColors.h"
 
-static char const rcsid[] = "$Id: wigDataStream.c,v 1.53 2004/09/28 19:27:49 hiram Exp $";
+static char const rcsid[] = "$Id: wigDataStream.c,v 1.55 2004/10/05 23:42:08 hiram Exp $";
 
 /*	PRIVATE	METHODS	************************************************/
 static void addConstraint(struct wiggleDataStream *wds, char *left, char *right)
@@ -680,12 +680,23 @@ if (doDataArray && wds->winEnd && wds->chrName)
     struct wiggleArray *wa;
     size_t inx, size; 
     size_t winSize;
+    unsigned long long hugeSize;
 
     AllocVar(wa);
     wa->chrom = cloneString(wds->chrName);
     wa->winStart = wds->winStart;
     wa->winEnd = wds->winEnd;
     winSize = wa->winEnd - wa->winStart;
+    hugeSize = (unsigned long long)sizeof(float) * (unsigned long long)winSize;
+
+    if (sizeof(size_t) == 4)
+	{
+	if (hugeSize > 2100000000)
+	    {
+		warn("ERROR: Can not perform requested data operation.<BR>");
+		errAbort("Not enough memory (requested: %llu bytes)", hugeSize);
+	    }
+	}
     size = sizeof(float) * winSize;
     /*	good enough for 500,000,000 bases	*/
     setMaxAlloc((size_t)2100000000);	/*2^31 = 2,147,483,648 */
@@ -1382,9 +1393,7 @@ if (bedList && *bedList)
 	    if (bed->chromStart < bedStart)
 		bedStart = bed->chromStart;
 	    if (bed->chromEnd > bedEnd)
-		{
 		bedEnd = bed->chromEnd;
-		}
 	    }
 	bedExtent = bedEnd - bedStart;
 
@@ -1427,8 +1436,7 @@ if (bedList && *bedList)
 	    boolPtr = bedArray + (bed->chromStart - bedStart);
 	    memset((void *)boolPtr, TRUE, elSize);
 	    boolPtr += elSize;
-	    bedPosition += (unsigned long)((void *)boolPtr - (void *)bedArray)
-				 + elSize;
+	    bedPosition = (unsigned long)((void *)boolPtr - (void *)bedArray);
 	    bedMarked += elSize;	/*	number of bases marked	*/
 	    }
 	bedEnd = bedPosition;
@@ -1665,7 +1673,8 @@ if (bedList && *bedList)
 		{
 		accumStats(wds, lowerLimit, upperLimit, sumData, sumSquares,
 		    statsCount, chromStart, chromEnd);
-    		wds->stats->span = 1;	/*	viaBed reduces span to 1 */
+		if (wds->stats)
+		    wds->stats->span = 1;  /* viaBed reduces span to 1 */
 		resetStats(&lowerLimit, &upperLimit, &sumData, &sumSquares,
 		    &statsCount, &chromStart, &chromEnd);
 		}

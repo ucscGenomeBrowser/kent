@@ -9,7 +9,7 @@
 #include "dnaMotif.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: dnaMotif.c,v 1.8 2004/09/26 06:30:08 kent Exp $";
+static char const rcsid[] = "$Id: dnaMotif.c,v 1.9 2004/10/06 17:31:02 kent Exp $";
 
 struct dnaMotif *dnaMotifLoad(char **row)
 /* Load a dnaMotif from row fetched with select * from dnaMotif
@@ -357,9 +357,11 @@ return -( u1(motif->aProb[pos]) + u1(motif->cProb[pos])
 	+ u1(motif->gProb[pos]) +u1(motif->gProb[pos]) );
 }
 
-static double bitsOfInfo(struct dnaMotif *motif, int pos)
+double dnaMotifBitsOfInfo(struct dnaMotif *motif, int pos)
 /* Return bits of information at position. */
 {
+if (pos > motif->columnCount || pos < 0)
+    internalErr();
 return 2 - uncertainty(motif, pos);
 }
 
@@ -471,7 +473,7 @@ fprintf(f, "%s", "% Start of code for this specific logo\n");
 
 for (i=0; i<motif->columnCount; ++i)
     {
-    double infoScale = bitsOfInfo(motif, i)/2.0;
+    double infoScale = dnaMotifBitsOfInfo(motif, i)/2.0;
     psOneColumn(motif, i, xStart, 0, widthPerBase, infoScale * height, f);
     xStart += widthPerBase;
     }

@@ -1867,6 +1867,12 @@ http://genome.imim.es/genepredictions/G.gallus/golden_path_200402/geneid_v1.1/$c
       /cluster/data/hg16/bed/bedOver/hg16TogalGal2.chain \
       galGal2.encodeRegions.bed galGal2.encodeRegions.unmapped
     # emailed the files to John Wallis w/warning they're prelim, automated.
+    # This is experimental, so no track is put up yet, (2004-07-9 kate)
+    cd /cluster/data/galGal2/bed
+    ln -s encodeLiftOver encodeRegions
+    cd encodeRegions
+    ln -s galGal2.encodeRegions.bed encodeRegions.bed
+    hgLoadBed galGal2 encodeRegions encodeRegions.bed -noBin
 
 
 # SNP & GENES FROM BEIJING GENOME INST. (DONE 7/20/04 angie)
@@ -2165,7 +2171,7 @@ http://genome.imim.es/genepredictions/G.gallus/golden_path_200402/geneid_v1.1/$c
 # genome in the map (in this case we have 5*4 + 1 = 21 columns).  If a 
 # segment is not found in one of the genomes, the columns for that genome 
 # are set to "NA" for that segment.  The order of the genomes in the file is:
-#   galGal2 hg16 mm3 panTro1 rn3
+#   galGal2 hg16 mm3  rn3
 # and all intervals are 0-based, half-open.
     # Make a bed6 track for each xenoDb.
     ./deweyMap2Bed6.pl 1 5  gg-hs-mm-pt-rn.map > deweySyntHg16.bed
@@ -3085,8 +3091,34 @@ chainSome $(path1)
     cd /cluster/data/galGal2/bed/tblastn.hg16KG
     hgLoadPsl galGal2 blastHg16KG.psl
     exit
-
     # back to kksilo
     rm -rf blastOut
-
 # End tblastn
+
+
+# ACCESSIONS FOR CONTIGS (DONE 2004-08-20 kate)
+#  Used for Assembly track details, and also ENCODE AGP's
+    cd /cluster/data/galGal2/bed
+    mkdir -p contigAcc
+    cd contigAcc
+    
+    # extract WGS contig to accession mapping from Entrez Nucleotide summaries
+    # To get the summary file, access the Genbank page for the project 
+    # by searching:
+    #       genus[ORGN] AND WGS[KYWD]
+    # At the end of the page, click on the list of accessions for the contigs.
+    # Select summary format, and send to file.
+    # output to file <species>.acc
+
+    contigAccession chicken.acc > contigAcc.tab
+    wc -l contigAcc.tab
+        # 111864 contigAcc.tab
+    cd /cluster/data/galGal2/agp_040224
+     grep Contig *.agp | wc -l
+        # 111864
+    hgsql galGal2 < $HOME/kent/src/hg/lib/contigAcc.sql
+    echo "LOAD DATA LOCAL INFILE 'contigAcc.tab' INTO TABLE contigAcc" | \
+        hgsql galGal2
+    hgsql galGal2 -e "SELECT COUNT(*) FROM contigAcc"
+        # 111864
+

@@ -51,6 +51,7 @@ oneTest "$HGWIGGLE -doBed -position=chrM:4000-10000 -dataConstraint=\"in range\"
 oneTest "$HGWIGGLE -doStats -position=chrM:4000-10000 -dataConstraint=\"in range\" -ll=23 -ul=60 -db=ce2 gc5Base" "54084     1"
 oneTest "$HGWIGGLE -doStats -doBed -position=chrM:4000-10000 -dataConstraint=\"in range\" -ll=23 -ul=60 -db=ce2 gc5Base" "06015     6"
 oneTest "$HGWIGGLE -span=5 -doHistogram -hBinSize=10 -hBinCount=10 -position=chrM:4000-10000 -dataConstraint=\"in range\" -ll=3 -ul=90 -db=ce2 gc5Base" "44411     1"
+oneTest "$HGWIGGLE -bedFile=mm5.miRNA.bed -dataConstraint=\">\" -ll=0.85 -chr=chr2 -doStats -db=mm5 phastCons" "62191     1"
 
 if [ -n "${verbose}" ]; then
     C=`echo $tests | awk '{printf "%4d", $1}'`

@@ -223,6 +223,10 @@ int hChromSize(char *chromName);
 int hChromSize2(char *chromName);
 /* Return size of chromosome from secondary database. */
 
+struct dnaSeq *fetchSeq(char *fileName, char *seqName, int start, int end);
+/* Fetch sequence from file.  If it is a .2bit file then fetch the named sequence.
+If it is .nib then just ignore seqName. */
+
 struct dnaSeq *hChromSeq(char *chrom, int start, int end);
 /* Return lower case DNA from chromosome. */
 

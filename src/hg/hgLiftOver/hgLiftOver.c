@@ -16,7 +16,7 @@
 #include "hash.h"
 #include "liftOver.h"
 
-static char const rcsid[] = "$Id: hgLiftOver.c,v 1.28 2004/09/08 14:24:34 kate Exp $";
+static char const rcsid[] = "$Id: hgLiftOver.c,v 1.29 2004/10/06 23:03:14 kate Exp $";
 
 /* CGI Variables */
 #define HGLFT_USERDATA_VAR "hglft_userData"     /* typed/pasted in data */
@@ -284,7 +284,7 @@ if (userData != NULL && userData[0] != '\0')
         ct = liftOverBed(oldTn.forCgi, chainHash, 
                         LIFTOVER_MINMATCH, LIFTOVER_MINBLOCKS,
                         0, 0,
-                        FALSE, mapped, unmapped, FALSE, &errCt);
+                        FALSE, mapped, unmapped, FALSE, NULL, &errCt);
         }
     else
         /* programming error */

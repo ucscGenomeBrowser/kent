@@ -20,7 +20,7 @@
 #include "wiggle.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: wiggle.c,v 1.24 2004/09/25 05:38:37 kent Exp $";
+static char const rcsid[] = "$Id: wiggle.c,v 1.26 2004/10/05 23:21:35 hiram Exp $";
 
 extern char *maxOutMenu[];
 
@@ -213,7 +213,7 @@ if (table2)
 
 if (isCustom)
     {
-    if (intersectBedList)
+    if (table2 || intersectBedList)
 	valuesMatched = wds->getDataViaBed(wds, NULL, splitTableOrFileName,
 	    operations, &intersectBedList);
     else
@@ -232,7 +232,7 @@ else
 	    region->start, region->end, cart);
 	wds->setSpanConstraint(wds, span);
 */
-	if (intersectBedList)
+	if (table2 || intersectBedList)
 	    {
 	    unsigned span;	
 	    span = minSpan(conn, splitTableOrFileName, region->chrom,
@@ -411,7 +411,7 @@ if (table2)
 
 if (isCustom)
     {
-    if (intersectBedList)
+    if (table2 || intersectBedList)
 	valuesMatched = wds->getDataViaBed(wds, NULL, splitTableOrFileName,
 	    operations, &intersectBedList);
     else
@@ -434,7 +434,7 @@ else
 	    region->start, region->end, cart);
 	wds->setSpanConstraint(wds, span);
 
-	if (intersectBedList)
+	if (table2 || intersectBedList)
 	    {
 	    valuesMatched = wds->getDataViaBed(wds, database,
 		splitTableOrFileName, operations, &intersectBedList);
@@ -567,7 +567,7 @@ for (region = regionList; region != NULL; region = region->next)
      */
     if (isCustom)
 	{
-	if (intersectBedList)
+	if (table2 || intersectBedList)
 	    valuesMatched = wds->getDataViaBed(wds, NULL, splitTableOrFileName,
 		operations, &intersectBedList);
 	else
@@ -587,7 +587,7 @@ for (region = regionList; region != NULL; region = region->next)
 	    span = minSpan(conn, splitTableOrFileName, region->chrom,
 		region->start, region->end, cart);
 	    wds->setSpanConstraint(wds, span);
-	    if (intersectBedList)
+	    if (table2 || intersectBedList)
 		{
 		valuesMatched = wds->getDataViaBed(wds, database,
 		    splitTableOrFileName, operations, &intersectBedList);
@@ -623,9 +623,12 @@ if (1 == regionCount)
 	span, valuesMatched, table2);
     /* 3 X TRUE = sort results, html table output, with header,
      *	the FALSE means close the table after printing, no more rows to
-     *	come
+     *	come.  The case in the if() statement was already taken care of
+     *	in the statsPreamble() printout.  No need to do that again.
      */
-    wds->statsOut(wds, "stdout", TRUE, TRUE, TRUE, FALSE);
+
+    if ( ! ((valuesMatched == 0) && table2) )
+	wds->statsOut(wds, "stdout", TRUE, TRUE, TRUE, FALSE);
     }
 else
     {	/* this is a bit of a kludge here since these printouts are done in the
@@ -636,9 +639,9 @@ else
 	 */
     /*	close the table which was left open in the loop above	*/
     if (!gotSome)
-	printf("<TR><TH ALIGN=CENTER COLSPAN=12> No data found matching this request </TH></TR>\n");
+	hPrintf("<TR><TH ALIGN=CENTER COLSPAN=12> No data found matching this request </TH></TR>\n");
 
-    printf("</TABLE></TD></TR></TABLE></P>\n");
+    hPrintf("</TABLE></TD></TR></TABLE></P>\n");
     }
 
 

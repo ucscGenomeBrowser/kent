@@ -3,15 +3,15 @@
 # an object which can be loaded and saved from RAM in a fairly 
 # automatic way.
 
-#Relational object of display attributes for individual items
+#Relational object of display attributes for individual track items
 CREATE TABLE itemAttr (
+    name varchar(255) not null,	# name of item
     chrom varchar(255) not null,	# chromosome
     chromStart int unsigned not null,	# Start position in chromosome
     chromEnd int unsigned not null,	# End position in chromosome
-    itemId int unsigned not null,	# Primary key of item
     colorR tinyint unsigned not null,	# Color red component 0-255
     colorG tinyint unsigned not null,	# Color green component 0-255
     colorB tinyint unsigned not null,	# Color blue component 0-255
               #Indices
-    PRIMARY KEY(chrom)
+    PRIMARY KEY(name)
 );

@@ -14,7 +14,7 @@
 #include "sqlNum.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: jksql.c,v 1.64 2004/09/25 19:42:28 kent Exp $";
+static char const rcsid[] = "$Id: jksql.c,v 1.65 2004/10/02 19:35:54 kent Exp $";
 
 /* flags controlling sql monitoring facility */
 static unsigned monitorInited = FALSE;      /* initialized yet? */
@@ -1420,6 +1420,28 @@ time = sqlDateToUnixTime(row[updateIx]);
 sqlFreeResult(&sr);
 return time;
 }
+
+char *sqlGetPrimaryKey(struct sqlConnection *conn, char *table)
+/* Get primary key if any for table, return NULL if none. */
+{
+char query[512];
+struct sqlResult *sr;
+char **row;
+char *key = NULL;
+safef(query, sizeof(query), "describe %s", table);
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    if (sameWord(row[3], "PRI"))
+	{
+        key = cloneString(row[0]);
+	break;
+	}
+    }
+sqlFreeResult(&sr);
+return key;
+}
+
 
 char** sqlGetEnumDef(struct sqlConnection *conn, char* table, char* colName)
 /* Get the definitions of a enum column in a table, returning a

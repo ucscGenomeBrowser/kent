@@ -361,33 +361,6 @@ visibility hide
 color 34,139,34
 type genePred
 
-track ncbiGeneSet
-shortLabel NCBI gene set
-longLabel NCBI $Organism 34.3 gene set
-group x
-priority 30.10
-visibility hide
-color 10,100,15
-type genePred +
-
-track ncbiGeneCDS99
-shortLabel NCBI CDS 99 set
-longLabel NCBI $Organism 34.3 CDS 99 set
-group x
-priority 30.10
-visibility hide
-color 33,66,15
-type genePred
-
-track hinxtonGeneSet
-shortLabel Hinxton gene set
-longLabel Hinxton $Organism 34 gene set
-group x
-priority 30.12
-visibility hide
-color 10,15,100,
-type genePred
-
 track genieAlt
 shortLabel AltGenie
 longLabel Genie Gene Predictions from Affymetrix
@@ -1648,37 +1621,6 @@ searchPriority 50
 searchTable rgdGene
 searchType genePred
 searchPriority 50
-
-searchTable gbProtCode
-searchType gbProtCode
-searchPriority 60
-
-searchName tigrCmrORFsCommon
-searchTable tigrCmrORFs
-searchType bed
-searchMethod fuzzy
-xrefTable tigrCmrORFsInfo
-xrefQuery select name,tigrCommon from %s where tigrCommon like '%%%s%%'
-searchDescription Common Name of TIGR Locus
-searchPriority 61
-
-searchName tigrCmrORFsMainRole
-searchTable tigrCmrORFs
-searchType bed
-searchMethod fuzzy
-xrefTable tigrCmrORFsInfo
-xrefQuery select name,tigrMainRole from %s where tigrMainRole like '%%%s%%'
-searchDescription Main Role of TIGR Locus
-searchPriority 62
-
-searchName tigrCmrORFsSubRole
-searchTable tigrCmrORFs
-searchType bed
-searchMethod fuzzy
-xrefTable tigrCmrORFsInfo
-xrefQuery select name,tigrSubRole from %s where tigrSubRole like '%%%s%%'
-searchDescription SubRole of TIGR Locus
-searchPriority 63
 
 searchTable rnaCluster
 searchMethod exact

@@ -14,7 +14,7 @@
 /* FIXME: remove when bugs fixes */
 #define WARN_BLAT_BUGS 1
 
-static char const rcsid[] = "$Id: genePred.c,v 1.56 2004/09/05 20:42:19 markd Exp $";
+static char const rcsid[] = "$Id: genePred.c,v 1.57 2004/10/04 19:54:28 markd Exp $";
 
 /* SQL to create a genePred table */
 static char *createSql = 
@@ -636,7 +636,7 @@ for (gl = group->lineList; gl != NULL; gl = gl->next)
         }
     /* frame: don't include start/stop_codon check here, only CDS. This is
      * outside of the isExon test to handle GFF.  Here we check for being in
-     * CDS range og the gp, since some GFFs (ce sangerGene) have a feature
+     * CDS range of the gp, since some GFFs (ce sangerGene) have a feature
      * just for the full CDS range.
      */
     if ((optFields & genePredExonFramesFld)

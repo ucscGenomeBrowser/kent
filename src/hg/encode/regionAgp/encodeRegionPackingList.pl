@@ -1,7 +1,7 @@
 #!/usr/local/bin/perl 
 # create packing list for a set of organism AGP files
 
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/regionAgp/encodeRegionPackingList.pl,v 1.3 2004/08/20 23:04:09 kate Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/regionAgp/encodeRegionPackingList.pl,v 1.4 2004/10/06 17:07:17 kate Exp $
 
 sub usage() {
     print "usage: encodePackingList <bedfile> <agpdir> <org> <scientific name> <taxon ID> <strain> <freezedate> <db> <build id> [comment]\n", 
@@ -66,7 +66,9 @@ while (<BED>) {
 
     my $seqName = join('_', $organism, $region, $seqNum);
 
-    # BED file is 1/2-open coords, so don't add 1
+    # BED file is 1/2-open coords, adjust chromStart to match AGP
+    $chromStart++;
+
     my $length = $chromEnd - $chromStart + 1;
 
     my $agpFile = "$agpDir/$seqName.agp";

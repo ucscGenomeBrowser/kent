@@ -804,7 +804,7 @@ mkdir run.2
 cd run.2
 # usage:  blastz-chromlav2axt lav-dir axt-file seq1-dir seq2-dir
 echo '#LOOP' > gsub
-echo '/cluster/bin/scripts/blastz-chromlav2axt '${BASE}'/lav/$(root1) {check out line+ '${BASE}'/axtChrom/$(root1).axt} '${SEQ1_DIR} ${SEQ2_DIR} >> gsub
+echo '/cluster/bin/scripts/blastz-contiglav2axt '${BASE}'/lav/$(root1) {check out line+ '${BASE}'/axtChrom/$(root1).axt} '${SEQ1_DIR} ${SEQ2_DIR} >> gsub
 echo '#ENDLOOP' >> gsub
 ls -1S ${BASE}/lav > chrom.list
 gensub2 chrom.list single gsub jobList
@@ -2613,7 +2613,7 @@ XXX  This is an unusual increase ?
     /projects/compbio/usr/booch/booch/scripts/createUCSCplots -x 50000000 \
 	${STSFLAGS} /cluster/data/mm4 ../maps ../../stsMarkers_pos.rdb
 
-LOAD GENEID GENES (DONE - 2003-11-27 - Hiram)
+LOAD GENEID GENES (DONE - 2003-11-27 - Hiram RELOADED -gtf 2004-04-02 kate)
     mkdir -p /cluster/data/mm4/bed/geneid/download
     cd /cluster/data/mm4/bed/geneid/download
     foreach f (/cluster/data/mm4/?{,?}/chr?{,?}{,_random}.fa)
@@ -2628,7 +2628,8 @@ http://genome.imim.es/genepredictions/M.musculus/mmOct2003/geneid_v1.1/$chr.prot
       perl -wpe 's/^(>chr\w+)$/$1.1/' $f > $f:r-fixed.prot
     end
     cd ..
-    ldHgGene mm4 geneid download/*.gtf -exon=CDS
+    ldHgGene mm4 geneid download/*.gtf -gtf
+        # 36974 gene predictions
     hgPepPred mm4 generic geneidPep download/*-fixed.prot
 
 # SGP GENE PREDICTIONS (DONE - 2003-12-30 - Hiram)
@@ -4845,6 +4846,23 @@ o Perform preliminary review of Proteom Browser for mm4, then
   notify QA for formal review.
 
 
+# LIFTOVER ENCODE REGIONS (DONE 2004-04-16 kate)
+    # preliminary test
+    ssh hgwdev
+    mkdir /cluster/data/mm4/bed/encodeLiftOver
+    cd /cluster/data/mm4/bed/encodeLiftOver
+    echo 'select * from hg16.encodeRegions' | hgsql hg16 -N > hg16.eR.bed
+    # Of 44 regions:
+    # -minMatch=.95 (default) -> nothing mapped
+    # -minMatch=.5 -> 6 mapped
+    # -minMatch=.2 -> 35 mapped
+    # -minMatch=.1 -> 43 mapped
+    liftOver -minMatch=.1 hg16.eR.bed \
+      /cluster/data/hg16/bed/bedOver/hg16ToMm4.over.chain \
+      encodeRegions.bed encodeRegions.unmapped
+    hgLoadBed mm4 encodeRegions encodeRegions.bed -noBin
+
+
 # TIGR GENE INDEX (DONE 2004-05020 Fan)
     mkdir -p /cluster/data/mm4/bed/tigr
     cd /cluster/data/mm4/bed/tigr
@@ -4882,4 +4900,57 @@ o Perform preliminary review of Proteom Browser for mm4, then
     checkTableCoords mm4 tigrGeneIndex
     
     gzip *.gff *TCs
+
+
+# LIFTOVER CHAINS TO MM5 (WORKING 2004-08-02 kate)
+
+    # run alignment
+    # NOTE: split mm5 to /iscratch/i is doc'ed in makeHg17.doc
+    ssh kk
+    cd /cluster/data/mm4
+    makeLoChain-align mm4 /iscratch/i/mm4/softNib \
+                    mm5 /iscratch/i/mm5/liftOver/liftSplit/split /scratch/hg/h/mouse11.ooc
+        # Created parasol job in bed/blat.mm5.2004-08-02/run
+        # 1892 jobs
+    cd bed
+    rm blat.mm5
+    ln -s blat.mm5.2004-08-02 blat.mm5
+    cd blat.mm5/run
+    para try
+    para check
+    para push
+
+    # lift results
+    # the lift directory was defined in makeHg17.doc when split was performed
+    # this expects data in bed/blat.mm5, so symlink must be there 
+    ssh kksilo
+    cd /cluster/data/mm4/bed/blat.mm5
+    makeLoChain-lift mm4 mm5 /iscratch/i/mm5/liftOver/liftSplit/lift \
+                        >&! lift.log &
+    tail -100f lift.log
+        # GOT HERE
+        # Problems with lift: 
+# liftUp: psl.c:112: pslLoad: Assertion `sizeOne == ret->blockCount' failed.
+# sizeOne tStarts 4 bs 17
+# Abort
+
+    # chain alignments
+    ssh kk
+    makeLoChain-chain mm4 /cluster/data/mm4/nib mm5 /cluster/data/mm5/nib
+        # Created parasol job in /cluster/data/mm4/bed/blat.mm5/chainRun
+    cd /cluster/data/mm4/bed/blat.mm5/chainRun
+    para try
+        # 46 jobs
+    para check
+    para push
+
+    # make alignment net
+    ssh kolossus
+    makeLoChain-net mm4 mm5
+
+    # load into database and copy to download directory
+    ssh hgwdev
+    makeLoChain-load mm4 mm5
+        # Finished loading mm4ToHg17.over.chain
+        # Now, add download link for /usr/local/apache/htdocs/goldenPath/mm4/liftOver/mm4ToHg17.over.chain.gz
 

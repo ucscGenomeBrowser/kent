@@ -5,6 +5,7 @@
 #include "options.h"
 #include "binRange.h"
 #include "chain.h"
+#include "chainNetDbLoad.h"
 #include "bed.h"
 #include "genePred.h"
 #include "sample.h"
@@ -13,7 +14,7 @@
 #include "portable.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: liftOver.c,v 1.16 2004/09/29 19:33:13 kate Exp $";
+static char const rcsid[] = "$Id: liftOver.c,v 1.17 2004/10/06 17:21:46 kate Exp $";
 
 struct chromMap
 /* Remapping information for one (old) chromosome */
@@ -90,7 +91,7 @@ return total;
 }
 
 static boolean mapThroughChain(struct chain *chain, double minRatio, 
-                                        int *pStart, int *pEnd)
+                            int *pStart, int *pEnd, struct chain **subChainRet)
 /* Map interval from start to end from target to query side of chain.
  * Return FALSE if not possible, otherwise update *pStart, *pEnd. */
 {
@@ -116,6 +117,7 @@ else
     *pStart = subChain->qSize - subChain->qEnd;
     *pEnd = subChain->qSize - subChain->qStart;
     }
+*subChainRet = subChain;
 chainFree(&freeChain);
 return ok;
 }
@@ -123,26 +125,30 @@ return ok;
 static char *remapRange(struct hash *chainHash, double minRatio, 
                         int minChainSizeT, int minChainSizeQ, 
                         char *chrom, int s, int e, char strand, double minMatch,
-                        char *regionName, struct bed **bedRet)
+                        char *regionName, char *db, char *chainTableName,
+                        struct bed **bedRet, struct bed **unmappedBedRet)
 /* Remap a range through chain hash.  If all is well return NULL
- * and results in a BED (or a list of BED's, if regionName is set).  Otherwise
- * return a string describing the problem. */
+ * and results in a BED (or a list of BED's, if regionName is set (-multiple).   * Otherwise return a string describing the problem. */
 {
 struct binElement *list = findRange(chainHash, chrom, s, e), *el;
 struct chain *chainsHit = NULL, 
                 *chainsPartial = NULL, 
                 *chainsMissed = NULL, *chain;
-struct bed *bedList = NULL, *bed = NULL, *prevBed = NULL;
+struct bed *bedList = NULL, *unmappedBedList = NULL;
+struct bed *bed = NULL, *prevBed = NULL;
 /* initialize for single region case */
 int start = s, end = e;
 double minMatchSize = minMatch * (end - start);
 int intersectSize;
+int tStart;
 bool multiple = (regionName != NULL);
 /* set minimum region size to minimum chain in query size -- later may
    * make this a distinct parameter */
 int minSizeQ = minChainSizeQ;
 
-verbose(2, "%s:%d-%d\n", chrom, s, e);
+
+verbose(2, "%s:%d-%d", chrom, s, e);
+verbose(2, multiple ? "\t%d\n": "\n", regionName);
 for (el = list; el != NULL; el = el->next)
     {
     chain = el->val;
@@ -187,17 +193,33 @@ else if (chainsHit->next != NULL && !multiple)
 /* sort chains by position in target to order subregions by orthology */
 slSort(&chainsHit, chainCmpTarget);
 
+tStart = s;
 for (chain = chainsHit; chain != NULL; chain = chain->next)
     {
+    struct chain *subChain;
     int start=s, end=e;
+    verbose(3,"hit chain %s:%d %s:%d-%d %c (%d)\n",
+        chain->tName, chain->tStart,  chain->qName, chain->qStart, chain->qEnd,
+        chain->qStrand, chain->id);
     if (multiple)
+        {
         /* no real need to verify ratio again (it would require
          * adjusting coords again). */
         minRatio = 0;
-    verbose(3,"hit chain %s:%d %s:%d-%d %c\n",
-        chain->tName, chain->tStart,  chain->qName, chain->qStart, chain->qEnd,
-        chain->qStrand);
-    if (!mapThroughChain(chain, minRatio, &start, &end))
+        if (db)
+            {
+            /* use full chain, not the possibly truncated chain
+             * from the net */
+            struct chain *next = chain->next;
+            chain = chainLoadIdRange(db, chainTableName,
+                                        chrom, s, e, chain->id);
+            chain->next = next;
+            verbose(3,"chain from db %s:%d %s:%d-%d %c (%d)\n",
+                chain->tName, chain->tStart,  chain->qName, 
+                chain->qStart, chain->qEnd, chain->qStrand, chain->id);
+            }
+        }
+    if (!mapThroughChain(chain, minRatio, &start, &end, &subChain))
         errAbort("Chain mapping error: %s:%d-%d\n", chain->qName, start, end);
     if (chain->qStrand == '-')
 	strand = otherStrand(strand);
@@ -217,9 +239,25 @@ for (chain = chainsHit; chain != NULL; chain = chain->next)
     bed->strand[0] = strand;
     bed->strand[1] = 0;
     slAddHead(&bedList, bed);
+
+    if (tStart < subChain->tStart)
+        {
+        /* unmapped portion of target */
+        AllocVar(bed);
+        bed->chrom = cloneString(chain->tName);
+        bed->chromStart = tStart;
+        bed->chromEnd = subChain->tStart;
+        if (regionName)
+            bed->name = cloneString(regionName);
+        slAddHead(&unmappedBedList, bed);
+        }
+    tStart = subChain->tEnd;
     }
 slReverse(&bedList);
 *bedRet = bedList;
+slReverse(&unmappedBedList);
+if (unmappedBedRet)
+    *unmappedBedRet = unmappedBedList;
 return NULL;
 }
 
@@ -235,7 +273,7 @@ struct bed *bed;
 char *error;
 
 error = remapRange(chainHash, minMatch, 0, 0, chrom, s, e, strand, minMatch,
-                                        NULL, &bed);
+                                        NULL, NULL, NULL, &bed, NULL);
 if (error != NULL)
     return error;
 if (retChrom)
@@ -253,8 +291,9 @@ return NULL;
 
 static int bedOverSmall(struct lineFile *lf, int fieldCount, 
                         struct hash *chainHash, double minMatch, 
-                        int minSizeT, int minSizeQ,
-                        FILE *mapped, FILE *unmapped, bool multiple, int *errCt)
+                        int minSizeT, int minSizeQ, 
+                        FILE *mapped, FILE *unmapped, 
+                        bool multiple, char *chainTable, int *errCt)
 /* Do a bed without a block-list.
  * NOTE: it would be preferable to have all of the lift
  * functions work at the line level, rather than the file level.
@@ -269,9 +308,20 @@ char *error;
 int ct = 0;
 int errs = 0;
 int bedCount;
-struct bed *bedList = NULL;
+struct bed *bedList = NULL, *unmappedBedList = NULL;
+int totalUnmapped = 0;
+int totalUnmappedAll = 0;
+int totalBases = 0;
+double mappedRatio;
 char *region = NULL;   /* region name from BED file-- used with  -multiple */
+char *db = NULL, *chainTableName = NULL;
 
+if (chainTable)
+    {
+    chainTableName = chopPrefix(chainTable);
+    db = chainTable;
+    chopSuffix(chainTable);
+    }
 while ((wordCount = lineFileChop(lf, words)) != 0)
     {
     FILE *f = mapped;
@@ -289,8 +339,9 @@ while ((wordCount = lineFileChop(lf, words)) != 0)
     if (wordCount >= 6)
 	strand = words[5][0];
     error = remapRange(chainHash, minMatch, minSizeT, minSizeQ, 
-                                chrom, s, e, strand, 
-                                minMatch, region, &bedList);
+                                chrom, s, e, strand, minMatch, 
+                                region, db, chainTableName,
+                                &bedList, &unmappedBedList);
     if (error == NULL)
         {
         /* successfully mapped */
@@ -325,6 +376,21 @@ while ((wordCount = lineFileChop(lf, words)) != 0)
             }
         /* track how many successfully mapped */
         ct++;
+
+        totalUnmapped = 0;
+        for (bed = unmappedBedList; bed != NULL; bed = bed->next)
+            {
+            int size = bed->chromEnd - bed->chromStart;
+            totalUnmapped += size;
+            verbose(2, "Unmapped: %s:%d-%d (size %d) %s\n",
+                        bed->chrom, bed->chromStart, bed->chromEnd,
+                        size, bed->name);
+            }
+        double unmappedRatio = (double)(totalUnmapped * 100) / (e - s);
+        verbose(2, "Unmapped total: %s\t%5.1f\%\t%7d\n", 
+                            region, unmappedRatio, totalUnmapped);
+        totalUnmappedAll += totalUnmapped;
+        totalBases += (e - s);
         }
     else
 	{
@@ -343,6 +409,8 @@ while ((wordCount = lineFileChop(lf, words)) != 0)
     }
 if (errCt)
     *errCt = errs;
+mappedRatio = (totalBases - totalUnmappedAll)*100.0 / totalBases;
+verbose(2, "Mapped bases: \t%5.0f%\n", mappedRatio);
 return ct;
 }
 
@@ -869,7 +937,7 @@ int liftOverBed(char *fileName, struct hash *chainHash,
                         double minMatch,  double minBlocks, 
                         int minSizeT, int minSizeQ,
                         bool fudgeThick, FILE *f, FILE *unmapped, 
-                        bool multiple, int *errCt)
+                        bool multiple, char *chainTable, int *errCt)
 /* Open up file, decide what type of bed it is, and lift it. 
  * Return the number of records successfully converted */
 {
@@ -890,7 +958,7 @@ if (lineFileNextReal(lf, &line))
     if (wordCount <= 10)
 	 ct = bedOverSmall(lf, wordCount, chainHash, minMatch, 
                                 minSizeT, minSizeQ,
-                                f, unmapped, multiple, errCt);
+                                f, unmapped, multiple, chainTable, errCt);
     else
 	 ct = bedOverBig(lf, wordCount, chainHash, minMatch, minBlocks, 
                                 fudgeThick, f, unmapped, errCt);
@@ -948,7 +1016,7 @@ makeTempName(&unmappedBedTn, LIFTOVER_FILE_PREFIX, ".bedunmapped");
 mappedBed = mustOpen(mappedBedTn.forCgi, "w");
 unmappedBed = mustOpen(unmappedBedTn.forCgi, "w");
 ct = liftOverBed(bedTn.forCgi, chainHash, minMatch, 0, 0, 0, FALSE, 
-                        mappedBed, unmappedBed, FALSE, errCt);
+                        mappedBed, unmappedBed, FALSE, NULL, errCt);
 carefulClose(&mappedBed);
 chmod(mappedBedTn.forCgi, 0666);
 carefulClose(&unmappedBed);

@@ -11,7 +11,7 @@
 #include "genePred.h"
 #include "hgRelate.h"
 
-static char const rcsid[] = "$Id: ldHgGene.c,v 1.31 2004/05/05 20:30:44 markd Exp $";
+static char const rcsid[] = "$Id: ldHgGene.c,v 1.32 2004/10/01 17:09:20 angie Exp $";
 
 char *exonType = "exon";	/* Type field that signifies exons. */
 boolean requireCDS = FALSE;     /* should genes with CDS be dropped */
@@ -94,10 +94,10 @@ int i;
 
 for (i=0; i<gCount; ++i)
     {
-    printf("Reading %s\n", gNames[i]);
+    verbose(1, "Reading %s\n", gNames[i]);
     gpList = slCat(genePredExtLoadAll(gNames[i]), gpList);
     }
-printf("%d gene predictions\n", slCount(gpList));
+verbose(1, "%d gene predictions\n", slCount(gpList));
 slSort(&gpList, genePredCmp);
 
 /* Create tab-delimited file. */
@@ -135,14 +135,14 @@ int nextId = 1;
 
 for (i=0; i<gtfCount; ++i)
     {
-    printf("Reading %s\n", gtfNames[i]);
+    verbose(1, "Reading %s\n", gtfNames[i]);
     gffFileAdd(gff, gtfNames[i], 0);
     }
 lineCount = slCount(gff->lineList);
-printf("Read %d transcripts in %d lines in %d files\n", 
+verbose(1, "Read %d transcripts in %d lines in %d files\n", 
 	slCount(gff->groupList), lineCount, gtfCount);
 gffGroupLines(gff);
-printf("  %d groups %d seqs %d sources %d feature types\n",
+verbose(1, "  %d groups %d seqs %d sources %d feature types\n",
     slCount(gff->groupList), slCount(gff->seqList), slCount(gff->sourceList),
     slCount(gff->featureList));
 
@@ -172,7 +172,7 @@ for (group = gff->groupList; group != NULL; group = group->next)
             }
 	}
     }
-printf("%d gene predictions\n", slCount(gpList));
+verbose(1, "%d gene predictions\n", slCount(gpList));
 slSort(&gpList, genePredCmp);
 
 /* Create tab-delimited file. */

@@ -3,15 +3,18 @@ include ../../../inc/common.mk
 L = -lm ${MYSQLLIBS}
 MYLIBDIR = ../../../lib/${MACHTYPE}
 MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
+INSTALLDIR = ${HOME}/bin/${MACHTYPE}
+SCRIPT_DIR = /cluster/data/encode/bin/scripts
+CFLAGS = -g
 
-A = regionOrtho
-O = $A.o
+PROG = regionOrtho
+O = ${PROG}.o
 
-#include ../inc/cgi_build_rules.mk
+all: ${PROG}
 
-compile: $O 
-	${CC} $O ${MYLIBS} ${L} 
-	mv -f a.out ${HOME}/bin/${MACHTYPE}/${A}
-	rm -f ${HOME}/.html/${A}.html
-	$A > ${HOME}/.html/${A}.html
-	chmod ugo+r ${HOME}/.html/${A}.html
+${PROG}: $O ${MYLIBS}
+	${CC} ${COPT} ${CFLAGS} -o ${INSTALLDIR}/${PROG} $O ${MYLIBS} $L
+#	strip ${INSTALLDIR}/${PROG}
+
+test: ${INSTALLDIR}/${PROG}
+	cd tests && ${MAKE} test

@@ -11,6 +11,7 @@
 #include "web.h"
 #include "hgColors.h"
 #include "hui.h"
+#include "spDb.h"
 #include "pbStamp.h"
 #include "pbStampPict.h"
 #include "pbTracks.h"
@@ -231,11 +232,11 @@ if (answer != NULL)
     }
 if (sciName != NULL)
     {
-    printf("%s", sciName);
+    hPrintf("%s", sciName);
     }
 if (commonName != NULL)
     {
-    printf(" (%s)", commonName);
+    hPrintf(" (%s)", commonName);
     }
 hPrintf("<br>");
 
@@ -299,7 +300,15 @@ hPrintf("<P>");
 
 hPrintf("\n<IMG SRC=\"%s\" BORDER=1 WIDTH=%d HEIGHT=%d USEMAP=#%s><BR>",
             gifTn2.forCgi, pixWidth, pixHeight, mapName);
-hPrintf("\n<A HREF=\"../goldenPath/help/pbTracksHelpFiles/pbTracksHelp.shtml#histograms\" TARGET=_blank>");
+if (proteinInSupportedGenome)
+    {
+    hPrintf("\n<A HREF=\"../goldenPath/help/pbTracksHelpFiles/pbTracksHelp.shtml#histograms\" TARGET=_blank>");
+    }
+else
+    {
+    hPrintf("\n<A HREF=\"../goldenPath/help/pbTracksHelpFiles/pbGlobal/pbTracksHelp.shtml#histograms\" TARGET=_blank>");
+    }
+
 hPrintf("Explanation of Protein Property Histograms</A><BR>");
 
 hPrintf("<P>");
@@ -385,11 +394,21 @@ cartSaveSession(cart);
 hPrintf("<TABLE WIDTH=\"100%%\" BGCOLOR=\"#"HG_COL_HOTLINKS"\" BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"2\"><TR>\n");
 hPrintf("<TD ALIGN=LEFT><A HREF=\"/index.html\">%s</A></TD>", wrapWhiteFont("Home"));
 hPrintf("<TD ALIGN=CENTER><FONT COLOR=\"#FFFFFF\" SIZE=4>%s</FONT></TD>",
-        "UCSC Proteome Browser (V1.1)");
+        "UCSC Proteome Browser");
 hPrintf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/pbGlobal?%s=%u&pbt.psOutput=on\">%s</A></TD>\n",
         cartSessionVarName(), cartSessionId(cart), wrapWhiteFont("PDF/PS"));
-hPrintf("<TD ALIGN=Right><A HREF=\"../goldenPath/help/pbTracksHelpFiles/pbTracksHelp.shtml\" TARGET=_blank>%s</A></TD>",
+hPrintf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/pbGateway\">%s</A></TD>", wrapWhiteFont("New Query"));
+if (proteinInSupportedGenome)
+    {
+    hPrintf("<TD ALIGN=Right><A HREF=\"../goldenPath/help/pbTracksHelpFiles/pbTracksHelp.shtml\" TARGET=_blank>%s</A></TD>",
         wrapWhiteFont("Help"));
+    }
+else
+    {
+    hPrintf("<TD ALIGN=Right><A HREF=\"../goldenPath/help/pbTracksHelpFiles/pbGlobal/pbTracksHelp.shtml\" TARGET=_blank>%s</A></TD>",
+        wrapWhiteFont("Help"));
+    }
+    
 hPrintf("</TR></TABLE>");
 fflush(stdout);
 
@@ -455,9 +474,6 @@ char *debugTmp = NULL;
 struct dyString *state = NULL;
 char *chromStr, *cdsStartStr, *cdsEndStr, posStr[255];
 
-/* Initialize layout and database. */
-cart = theCart;
-
 char *supportedGenomeDatabase;
 char *org = NULL;
 char *spID, *displayID, *desc;
@@ -468,6 +484,9 @@ struct sqlResult *sr3;
 char **row3;
 char *answer;
 char *queryID;
+
+/* Initialize layout and database. */
+cart = theCart;
 
 /* Uncomment this to see parameters for debugging. */
 /* Be careful though, it breaks if custom track
@@ -496,7 +515,7 @@ else
     if ((protCntInSupportedGenomeDb > 1) || protCntInSwissByGene >= 1)
     	{
 	/* more than 1 proteins match the query ID, present selection web page */
-	presentProteinSelections(queryID);
+	presentProteinSelections(queryID, protCntInSwissByGene, protCntInSupportedGenomeDb);
 	return;
 	}
     else

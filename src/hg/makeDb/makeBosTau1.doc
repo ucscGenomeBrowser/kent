@@ -9,7 +9,7 @@ exit; # don't actually run this like a script :)
 # ftp://ftp.hgsc.bcm.tmc.edu/pub/data/Btaurus/fasta/Btau20040927-freeze
 # anonymous ftp, no login/password needed
 
-# DOWNLOAD SEQUENCE (DONE Sept. 27, 2004 Heather)
+# DOWNLOAD SEQUENCE (DONE Sept. 30, 2004 Heather)
     ssh kksilo
     mkdir /cluster/store8/bosTau1
     cd /cluster/data
@@ -22,5 +22,236 @@ exit; # don't actually run this like a script :)
     cd Bin0
     wget ftp://ftp.hgsc.bcm.tmc.edu/pub/data/Btaurus/fasta/Btau20040927-freeze/Bin0/Btau20040927-freeze-bin0.fa.gz
     wget ftp://ftp.hgsc.bcm.tmc.edu/pub/data/Btaurus/fasta/Btau20040927-freeze/Bin0/Btau20040927-freeze-bin0.fa.qual.gz
+    wget ftp://ftp.hgsc.bcm.tmc.edu/pub/data/Btaurus/fasta/Btau20040927-freeze/Bin0/Btau_lib_insert_size_20040927.tbl.gz
+    cd ..
+
+    mkdir contigs
+    cd contigs
+    wget ftp://ftp.hgsc.bcm.tmc.edu/pub/data/Btaurus/fasta/Btau20040927-freeze/contigs/Btau20040927-freeze-contigs.fa.gz
+    wget ftp://ftp.hgsc.bcm.tmc.edu/pub/data/Btaurus/fasta/Btau20040927-freeze/contigs/Btau20040927-freeze-contigs.fa.qual.gz
+    wget ftp://ftp.hgsc.bcm.tmc.edu/pub/data/Btaurus/fasta/Btau20040927-freeze/contigs/Btau_v1.0_20040927.agp.gz
+    wget ftp://ftp.hgsc.bcm.tmc.edu/pub/data/Btaurus/fasta/Btau20040927-freeze/contigs/AAFC01_accs.gz
+    cd ..
+
+    mkdir linearScaffolds
+    cd linearScaffolds
+    wget ftp://ftp.hgsc.bcm.tmc.edu/pub/data/Btaurus/fasta/Btau20040927-freeze/linearScaffolds/Btau20040927-freeze-assembly.fa.gz
+    wget ftp://ftp.hgsc.bcm.tmc.edu/pub/data/Btaurus/fasta/Btau20040927-freeze/linearScaffolds/Btau20040927-freeze-assembly.fa.qual.gz
+    cd ..
+
+    mkdir repeat-reads
+    cd repeat-reads
+    wget ftp://ftp.hgsc.bcm.tmc.edu/pub/data/Btaurus/fasta/Btau20040927-freeze/repeat-reads/Btau20040927-freeze-repeat-reads.fa.gz
+    wget ftp://ftp.hgsc.bcm.tmc.edu/pub/data/Btaurus/fasta/Btau20040927-freeze/repeat-reads/Btau20040927-freeze-repeat-reads.fa.qual.gz
+    cd ..
+
+# GUNZIP
+  gunzip */*.gz
+
+# CHECK FILES
+
+# Check that IDs in .fa match IDs in .qual
+  
+  ssh kksilo
+  cd /cluster/data/bosTau1/downloads
+  # foreach Bin0 contigs linearScaffolds repeat-reads
+  grep ">" *.fa > id.fa
+  grep ">" *.qual > id.qual
+  diff id.fa id.qual
+
+  # this takes about 5-10 minutes
+  /cluster/bin/i386/checkAgpAndFa contigs/Btau_v1.0_20040927.gap linearScaffolds/Btau20040927-freeze >& check.out
+  /cluster/bin/i386/checkAgpAndFa contigs/Btau_v1.0_20040927.gap linearScaffolds/Btau20040927-freeze > check.err
+
+
+# SPLIT SCAFFOLDS (DONE Sep. 30, 2004, Heather)
+
+  ssh eieio
+  cd /cluster/data/bosTau1
+  mkdir scaffolds
+  /cluster/bin/i386/faSplit byname downloads/linearScaffolds/Btau20040927-freeze-assembly.fa scaffolds -outDirDepth=3
+  # not sure why these didn't get put under scaffolds directory
+  mv 1 scaffolds
+  mv 2 scaffolds
+  mv 3 scaffolds
+  mv 4 scaffolds
+  etc.
+  # generate list
+  find scaffolds -print > scaffolds.list.0
+  grep fa scaffolds.list.0 > scaffolds.list
+
+# MAKE 2BIT NIB FILE (DONE Oct.1, 2004, Heather)
+
+  ssh kksilo
+  cd /cluster/data/bosTau1/linearScaffolds
+  /cluster/bin/i386/faToTwoBit Btau20040927-freeze-assembly.fa bosTau1.2bit
+  /cluster/bin/i386/twoBitToFa bosTau1.2bit check.fa
+  mv bosTau1.2bit ../..
+  diff -q Btau20040927-freeze-assembly.fa check.fa
+  # could also use cmp
+  # note: size match
+  ssh hgwdev
+  mkdir /gbdb/bosTau1
+  mkdir /gbdb/bosTau1/nib
+  ln -s /cluster/data/bosTau1/bosTau1.2bit /gbdb/bosTau1/nib
+
+# CREATE DATABASE
+
+  ssh hgwdev
+  hgsql hg17
+  create database bosTau1;
+  use bosTau1;
+  create table grp (PRIMARY KEY(NAME)) select * from hg17.grp;
+  # add rows to hgcentraltest on hgwbeta in dbDb and defaultDb
+  # set orderKey past dog, before mouse
+
+# CREATE GAP TABLE
+
+  ssh hgwdev
+  cd kent/src/hg/lib
+  # remove bin column for now
+  hgsql bosTau1 < gap2.sql
+  cd /cluster/data/bosTau1/downloads/contigs
+  grep fragment Btau_v1.0_20040927.agp > fragment.txt
+  hgsql bosTau1
+  load data local infile 'fragment.txt' into table gap
+  # create trackDb/cow/bosTau1/gap.html
+
+# CREATE CONTIG TABLE (DONE, Oct. 5, 2004, Heather)
+
+  ssh hgwdev
+  cd kent/src/hg/lib
+  # this doesn't include strand or contig start/end
+  hgsql bosTau1 < ctgPos2.sql
+  cd /cluster/data/bosTau1/downloads/contigs
+  grep Contig Btau_v1.0_20040927.agp > Contig.out
+  ssh kksilo
+  cd /cluster/data/bosTau1/downloads/contigs
+  getContig.pl < Contig.out > ctgPos2
+  ssh hgwdev
+  load data local infile 'ctgPos2' into table ctgPos2
+  # 9 skipped
+  # Contig24811
+  # Contig368174
+  # Contig44331
+  # Contig55201
+  # Contig59195
+  # Contig64664
+  # Contig67471
+  # Contig88377
+  # Contig89200
+  # 9 with size 0
+
+# CREATE CHROMINFO TABLE (DONE Oct. 5, 2004, Heather)
+# an improvement here would be to have getMaxCoord output the 2bit file name
+  ssh hgwdev
+  cd /cluster/data/bosTau1
+  # get coordinates from agp and put in database table
+  getcoords.pl < downloads/contigs/Btau_v1.0_20040927.agp > scaffolds.coords
+  hgsql bosTau1 < coords.sql
+  load data local infile 'scaffolds.coords' into table scaffoldCoords
+  # calculate maximum coords; check that start coord is always 1
+  /cluster/home/heather/bin/i386/GetMaxCoord > getMaxCoord.bosTau1
+  # edit chromInfo.sql; allow fileName to be null
+  cp ~heather/kent/src/hg/lib/chromInfo.sql .
+  hgsql bosTau1 < chromInfo.sql
+  load data local infile 'getMaxCoord.bosTau1' into table chromInfo
+  update chromInfo set fileName = "/gbdb/bosTau1/nib/bosTau1.2bit"
+
+# REPEATMASKER (DONE, Oct. 5, 2004, Heather)
+# using the split scaffold fa files generated earlier
+# do a trial run
+  ssh hgwdev
+  cd /cluster/data/bosTau1/scaffolds/0/0/0
+  /cluster/bluearc/RepeatMasker/RepeatMasker -ali -s -spec bos SCAFFOLD1000.fa
+# configure
+  cd /cluster/data/bosTau1
+  mkdir jkStuff
+  cp /cluster/data/anoGam1/jkStuff/RMAnopheles jkStuff/RMBosTaurus
+  # change references anoGam1 --> bosTau1
+  mkdir RMRun
+
+  # /bin/csh makeJoblist-RM.csh
+
+  cd scaffolds
+  foreach i (0 1 2 3 4 5 6 7 8 9)
+    cd $i
+    foreach j (0 1 2 3 4 5 6 7 8 9)
+      cd $j
+      foreach k (0 1 2 3 4 5 6 7 8 9)
+        cd $k
+        foreach f (*.fa)
+          echo /cluster/data/bosTau1/jkStuff/RMBosTaurus \
+	       /cluster/data/bosTau1/scaffolds/$i/$j/$k $f \
+	      '{'check out line+ /cluster/data/bosTau1/$i/$j/$k/$f.out'}' \
+	  >> /cluster/data/bosTau1/RMRun/RMJobs
+	end
+      cd ..
+      end
+    cd ..
+    end
+  cd ..
+  end
+
+  # do the run
+  ssh kk
+  cd /cluster/data/bosTau1/RMRun
+  para create RMJobs
+  para try
+  para push
+  para check
+  para time
+  etc.
+
+  # concatenate into one output file; took about 90 minutes
+  ssh kksilo
+  cd /cluster/data/bosTau1
+  /bin/tcsh concatRM.tcsh
+  # use grep -v to get rid of all the headers
+  # then, add back in an initial header
+  # this is so hgLoadOut is happy
+  grep SCAFFOLD repeats.all > repeats.clean
+  cat repeats.header repeats.clean > repeats.final
+  grep "There were no repetitive sequences found" repeats.final > repeats.notfound
+  grep -v "There were no repetitive sequences found" repeats.final > repeats.final.final
+  hgLoadOut bosTau1 repeats.final.final
+  # Strange perc. fields:
+  # -2.3 line 925441
+  # -18.2 line 1644720
+  # -18.2 line 1644722
+  hgsql bosTau1
+  rename table repeats_rmsk to rmsk
+
+  # select count(*) from rmsk;
+  # 4,244,045
+  # select count(*) from rmsk where repName like "Bov%";
+  # 1,445,972
+
+# SIMPLE REPEATS (DONE, Oct. 6, 2004, Heather)
+# put the results throughout the scaffold 0/0/0 directories,
+# same as RepeatMasker, to avoid too many files in the same directory
+  ssh kksilo
+  cd /cluster/data/bosTau1
+  mkdir bed
+  cd bed
+  mkdir simpleRepeat
+  cd simpleRepeat
+
+  /bin/csh makeJoblist-trf.csh
+  # do the run; took about 12 hours
+  tcsh trf-run.csh > & ! trf.log &
+
+  # concatenate into one output file; took about an hour
+  /bin/tcsh concatTRF.csh
+
+  # load
+  /cluster/bin/i386/hgLoadBed bosTau1 simpleRepeat trf.all \
+    -sqlTable = /cluster/home/heather/kent/src/hg/lib/simpleRepeat.sql
+
+  # Reading trf.all
+  # Loaded 248313 elements of size 16
+  # Sorted
+  # Saving bed.tab
+  # Loading bosTau1
 
 

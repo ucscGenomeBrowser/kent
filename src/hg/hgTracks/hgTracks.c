@@ -84,7 +84,7 @@
 #include "estOrientInfo.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.807 2004/09/30 21:20:14 angie Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.811 2004/10/06 17:25:26 angie Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
@@ -2370,7 +2370,8 @@ while ((gp = genePredReaderNext(gpr)) != NULL)
         lf->components = sfFromGenePred(gp, grayIx);
 
     if ((tg->itemAttrTbl != NULL) && (gp->optFields & genePredIdFld))
-        lf->itemAttr = itemAttrTblGet(tg->itemAttrTbl, gp->id);
+        lf->itemAttr = itemAttrTblGet(tg->itemAttrTbl, gp->name,
+                                      gp->chrom, gp->txStart, gp->txEnd);
 
     linkedFeaturesBoundsAndGrays(lf);
 
@@ -7738,6 +7739,101 @@ slSort(&lfList, linkedFeaturesCmp);
 tg->items = lfList;
 }
 
+void loadValAl(struct track *tg)
+/* Load the items in one custom track - just move beds in
+ * window... */
+{
+struct linkedFeatures *lfList = NULL, *lf;
+struct bed *bed, *list = NULL;
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr;
+char **row;
+int rowOffset;
+
+sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd, NULL, &rowOffset);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    bed = bedLoadN(row+rowOffset, 15);
+    slAddHead(&list, bed);
+    }
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+//slReverse(&list);
+
+for (bed = list; bed != NULL; bed = bed->next)
+    {
+    struct simpleFeature *sf;
+    int i;
+    lf = lfFromBed(bed);
+    lf->grayIx = 9;
+    slReverse(&lf->components);
+    for (sf = lf->components, i = 0; sf != NULL, i < bed->expCount; sf = sf->next, i++)
+	{
+	sf->grayIx = bed->expIds[i];
+	//sf->grayIx = grayInRange((int)(bed->expIds[i]),11,13);
+	}
+    slAddHead(&lfList,lf);
+    }
+tg->items = lfList;
+}
+
+void valAlDrawAt(struct track *tg, void *item,
+	struct vGfx *vg, int xOff, int y, double scale, 
+	MgFont *font, Color color, enum trackVisibility vis)
+/* Draw the operon at position. */
+{
+struct linkedFeatures *lf = item; 
+struct simpleFeature *sf;
+int heightPer = tg->heightPer;
+int x1,x2;
+int s, e, e2, s2;
+Color *shades = tg->colorShades;
+int midY = y + (heightPer>>1);
+int midY1 = midY - (heightPer>>2);
+int midY2 = midY + (heightPer>>2);
+int w;
+
+color = shadesOfGray[2];
+x1 = round((double)((int)lf->start-winStart)*scale) + xOff;
+x2 = round((double)((int)lf->end-winStart)*scale) + xOff;
+w = x2-x1;
+innerLine(vg, x1, midY, w, color);
+/*
+if (vis == tvFull || vis == tvPack)
+    {
+    clippedBarbs(vg, x1, midY, w, 2, 5, 
+		 lf->orientation, color, FALSE);
+    }
+    */
+for (sf = lf->components; sf != NULL; sf = sf->next)
+    {
+    s = sf->start; e = sf->end;
+    /* shade ORF (exon) based on the grayIx value of the sf */
+    switch(sf->grayIx)
+	{
+	case 1:
+	    color = vgFindColorIx(vg, 204, 204,204);
+	    break;
+	case 2:
+	    color = vgFindColorIx(vg, 252, 90, 90);
+	    break;
+	case 3:
+	    color = vgFindColorIx(vg, 0, 0,0);
+	    break;
+	}
+    drawScaledBox(vg, s, e, scale, xOff, y, heightPer,
+			color );
+    }
+}
+
+void valAlMethods(struct track *tg)
+{
+linkedFeaturesMethods(tg);
+tg->loadItems = loadValAl;
+tg->colorShades = shadesOfGray;
+tg->drawItemAt = valAlDrawAt;
+}
+
 
 void loadBlast(struct track *tg)
 {
@@ -7966,7 +8062,7 @@ if (exonArrows == NULL)
     }
 track->exonArrows = sameString(exonArrows, "on");
 
-iatName = trackDbSetting(tdb, "itemAttrIdTbl");
+iatName = trackDbSetting(tdb, "itemAttrTbl");
 if (iatName != NULL)
     track->itemAttrTbl = itemAttrTblNew(iatName);
 fillInFromType(track, tdb);
@@ -8534,6 +8630,8 @@ registerTrackHandler("vegaGene", vegaMethods);
 registerTrackHandler("vegaPseudoGene", vegaMethods);
 registerTrackHandler("bdgpGene", bdgpGeneMethods);
 registerTrackHandler("bdgpNonCoding", bdgpGeneMethods);
+registerTrackHandler("bdgpLiftGene", bdgpGeneMethods);
+registerTrackHandler("bdgpLiftNonCoding", bdgpGeneMethods);
 registerTrackHandler("sgdGene", sgdGeneMethods);
 registerTrackHandler("genieAlt", genieAltMethods);
 registerTrackHandler("ensGene", ensGeneMethods);
@@ -8598,6 +8696,8 @@ registerTrackHandler("BlastPBac",llBlastPMethods);
 registerTrackHandler("BlastPpyrFur2",llBlastPMethods);
 registerTrackHandler("codeBlast",codeBlastMethods);
 registerTrackHandler("tigrOperons",tigrOperonMethods);
+registerTrackHandler("mapMm2X",valAlMethods);
+registerTrackHandler("mapMm3X",valAlMethods);
 registerTrackHandler("rnaGenes",rnaGenesMethods);
 registerTrackHandler("sargassoSea",sargassoSeaMethods);
 /* MGC related */
@@ -9124,7 +9224,11 @@ if (NULL == position)
     position = cloneString(cartUsualString(cart, "position", NULL));
     }
 
-if((position == NULL) || sameString(position, ""))
+/* default if not set at all, as would happen if it came from a URL with no
+ * position. Otherwise tell them to go back to the gateway */
+if ((position == NULL) && (defaultPosition != NULL))
+    position = cloneString(defaultPosition);
+if (sameString(position, ""))
     {
     errAbort("Please go back and enter a coordinate range in the \"position\" field.<br>For example: chr22:20100000-20200000.\n");
     }

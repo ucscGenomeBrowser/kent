@@ -102,10 +102,12 @@ int sqlUpdateRows(struct sqlConnection *conn, char *query, int* matched);
 boolean sqlExists(struct sqlConnection *conn, char *query);
 /* Query database and return TRUE if it had a non-empty result. */
 
-/* Return TRUE if row where field = key is in table. */
 
 boolean sqlRowExists(struct sqlConnection *conn,
 	char *table, char *field, char *key);
+/* Return TRUE if row where field = key is in table. */
+
+
 /* Options to sqlLoadTabFile */
 
 #define SQL_TAB_FILE_ON_SERVER 0x01  /* tab file is directly accessable
@@ -297,6 +299,9 @@ char *sqlUnixTimeToDate(time_t *timep, boolean gmTime);
 
 int sqlTableUpdateTime(struct sqlConnection *conn, char *table);
 /* Get last update time for table (in Unix terms). */
+
+char *sqlGetPrimaryKey(struct sqlConnection *conn, char *table);
+/* Get primary key if any for table, return NULL if none. */
 
 char** sqlGetEnumDef(struct sqlConnection *conn, char* table, char* colName);
 /* Get the definitions of a enum column in a table, returning a

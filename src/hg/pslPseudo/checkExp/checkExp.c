@@ -12,6 +12,7 @@
 #include "nib.h"
 #include "fa.h"
 #include "dlist.h"
+#include "dystring.h"
 #include "binRange.h"
 #include "options.h"
 #include "genePred.h"
@@ -23,7 +24,7 @@
 #include "twoBit.h"
 #include "chainToAxt.h"
 
-static char const rcsid[] = "$Id: checkExp.c,v 1.1 2004/09/27 08:11:27 baertsch Exp $";
+static char const rcsid[] = "$Id: checkExp.c,v 1.2 2004/09/30 16:52:15 baertsch Exp $";
 struct axtScoreScheme *ss = NULL; /* blastz scoring matrix */
 struct dnaSeq *mrnaList = NULL; /* list of all input mrna sequences */
 struct hash *pseudoHash = NULL, *mrnaHash = NULL, *chainHash = NULL, *faHash = NULL, *tHash = NULL;
@@ -502,6 +503,8 @@ while (lineFileNextRow(bf, row, ArraySize(row)))
     struct binElement *el, *elist = NULL;
     struct psl *mPsl = NULL, *gPsl = NULL, *rPsl = NULL, *pPsl = NULL, *psl ;
     struct misMatch *mf = NULL;
+    struct dyString *parentMatch = newDyString(16*1024);
+    struct dyString *retroMatch = newDyString(16*1024);
     ps = pseudoGeneLinkLoad(row);
     tmpName[0] = cloneString(ps->name);
     chopByChar(tmpName[0], '.', tmpName, sizeof(tmpName));
@@ -643,6 +646,7 @@ while (lineFileNextRow(bf, row, ArraySize(row)))
                         verbose (3,"match retro[%d] %d %c == %c parent %c %d\n",
                                 i,mf->retroLoc, mf->retroBase, mAxt->qSym[j+i], 
                                 mf->parentBase, mf->parentLoc);
+                        dyStringPrintf(retroMatch, "%d,", mf->retroLoc);
                         scoreRetro++;
                         }
                     else if (toupper(mf->parentBase) == toupper(mAxt->qSym[j+i]))
@@ -650,6 +654,7 @@ while (lineFileNextRow(bf, row, ArraySize(row)))
                         verbose (3,"match parent[%d] %d %c == %c retro %c %d\n",
                                 i,mf->parentLoc, mf->parentBase, mAxt->qSym[j+i], 
                                 mf->retroBase, mf->retroLoc);
+                        dyStringPrintf(parentMatch, "%d,", mf->parentLoc);
                         scoreParent++;
                         }
                     else
@@ -662,13 +667,15 @@ while (lineFileNextRow(bf, row, ArraySize(row)))
                 }
             verbose(2,"final score %s parent %d retro %d  neither %d\n",
                     mPsl->qName, scoreParent, scoreRetro, scoreNeither);
-            fprintf(outFile,"%s\t%d\t%d\t%s\t%s\t%d\t%d\t%s\t%d\t%d\t%d\n",
-                    ps->chrom, ps->chromStart, ps->chromEnd, ps->name, 
+            fprintf(outFile,"%s\t%d\t%d\t%s\t%d\t%s\t%d\t%d\t%s\t%d\t%d\t%d\t%s\t%s\n",
+                    ps->chrom, ps->chromStart, ps->chromEnd, ps->name, ps->score, 
                     mPsl->tName, mPsl->tStart, mPsl->tEnd, mPsl->qName, 
-                    scoreParent, scoreRetro, scoreNeither);
+                    scoreParent, scoreRetro, scoreNeither, parentMatch->string, retroMatch->string);
             mAxt = mAxt->next;
             }
         }
+    dyStringFree(&parentMatch);
+    dyStringFree(&retroMatch);
     }
 }
 
@@ -699,6 +706,7 @@ twoBitFile = twoBitOpen(argv[5]);
 verbose(1,"Reading chains from %s\n",argv[6]);
 chainHash = readChainToBinKeeper(argv[2], argv[6]);
 outFile = fopen(argv[8],"w");
+verbose(1,"Scoring %s\n",argv[1]);
 checkExp(argv[1], argv[7], argv[4]);
 fclose(outFile);
 freeDnaSeqList(&mrnaList);

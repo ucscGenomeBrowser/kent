@@ -5385,6 +5385,8 @@ done
          >> axtInfoInserts.sql
      end
     
+    # these axtInfo file entries should be appended to the table,
+    # not replacing it.  The previous hg17 entries are needed  --  bob kuhn
     hgsql mm5 -e 'drop table mm5.axtInfo;'
     hgsql mm5 < ~/kent/src/hg/lib/axtInfo.sql
     hgsql mm5 < axtInfoInserts.sql
@@ -5994,4 +5996,22 @@ axtChain -linearGap=../../chickenHumanTuned.gap $1 \
     end
     cat subset/*.chain > /cluster/data/mm5/bed/bedOver/mm5Tohg17.chain
 
-
+#  miRNA track (DONE - 2004-09-30 - Fan)
+    #   data from: Sam Griffiths-Jones <sgj@sanger.ac.uk>
+    #   and Michel.Weber@ibcg.biotoul.fr
+    #   notify them when done.
+    cd /cluster/data/mm5/bed
+    mkdir miRNA
+    cd miRNA
+    wget --timestamping \
+    ftp://ftp.sanger.ac.uk/pub/databases/Rfam/miRNA/genomes/mmu.bed
+    grep -v "tion" mmu.bed | sed -e "s/ /\t/g" > mm5.bed
+    # check previous release track before update
+    nice featureBits mm4 miRNA
+    # 17782 bases of 2627444668 (0.001%) in intersection
+    hgLoadBed mm5 miRNA mm5.bed
+    # entry in trackDb/trackDb.ra already there
+    # and verify similar numbers after:
+    nice featureBits mm5 miRNA
+    # 17957 bases of 2615483787 (0.001%) in intersection
+ 

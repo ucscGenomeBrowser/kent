@@ -27,11 +27,17 @@ static char const rcsid[] = "";
 
 /* Command line variables. */
 char *db  = NULL;	/* DB from command line */
+
+char *flankPath  = NULL; /* path to flank files *.seq.gz */
+
 char *chr = NULL;	/* chr name from command line e.g "chr1" */
 
 int threshold = 70;  /* minimum score for match */
 
-int Verbose = 0;    /* set to 1 to see more detailed output (used upper case because var name collision in namespace) */
+int Verbose = 0;    /* set to 1 to see more detailed output 
+(used upper case because var name collision in namespace) */
+
+int maxFlank = 25;  /* maximum length of each flanking sequence, left and right. */
 
 void usage()
 /* Explain usage and exit. */
@@ -39,19 +45,23 @@ void usage()
 errAbort(
   "snpValid - Validate snp alignments\n"
   "usage:\n"
-  "   snpValid db \n"
+  "   snpValid db flankPath\n"
+  "     db is the database, e.g. hg16.\n"
+  "     flankPath is the path to the flank files *.seq.gz.\n"
   "options:\n"
   "   -chr=name - Use chrom name (e.g chr1) to limit validation, default all chromosomes.\n"
   "   -threshold=number - Use threshold as minimum score 0-99, default %u.\n"
   "   -verbose=number - Use verbose=1 to see all output mismatches, default %u.\n"
-  , threshold, Verbose);
+  "   -maxFlank=number - Use maxFlank as maximum length of each flank, default %u.\n"
+  , threshold, Verbose, maxFlank);
 }
 
 
 static struct optionSpec options[] = {
    { "chr"      , OPTION_STRING },
    { "threshold", OPTION_INT    },
-   { "verbose"  , OPTION_STRING },
+   { "verbose"  , OPTION_INT    },
+   { "maxFlank" , OPTION_INT    },
    { NULL       , 0             },
 };
 
@@ -59,7 +69,185 @@ static struct optionSpec options[] = {
 // ==========================================================================
 
 
-struct snpMap *readSnps(char *chrom)
+/* --- save memory by defining just the fields needed from flank file  ---- */
+
+struct flank
+/* Information from snp */
+    {
+    struct flank *next;  	/* Next in singly linked list. */
+    char *rsId;			/* reference snp (rs) identifier */
+    char *leftFlank;		/* leftFlank  */
+    char *rightFlank;		/* rightFlank */
+    char *observed;		/* observed   */
+    };
+
+int slFlankCmp(const void *va, const void *vb)
+/* Compare two slNames. */
+{
+const struct flank *a = *((struct flank **)va);
+const struct flank *b = *((struct flank **)vb);
+return strcmp(a->rsId, b->rsId);
+}
+
+struct flank *flankLoad(char **row)
+/* Load a flank from row fetched from linefile
+ * Dispose of this with flankFree(). */
+{
+struct flank *ret;
+
+AllocVar(ret);
+ret->rsId       = cloneString(row[0]);
+ret->leftFlank  = cloneString(row[1]);
+ret->rightFlank = cloneString(row[2]);
+ret->observed   = cloneString(row[3]);
+return ret;
+}
+
+void flankFree(struct flank **pEl)
+/* Free a single dynamically allocated flank such as created
+ * with flankLoad(). */
+{
+struct flank *el;
+
+if ((el = *pEl) == NULL) return;
+freeMem(el->rsId);
+freeMem(el->leftFlank);
+freeMem(el->rightFlank);
+freeMem(el->observed);
+freez(pEl);
+}
+
+void flankFreeList(struct flank **pList)
+/* Free a list of dynamically allocated snp's */
+{
+struct flank *el, *next;
+
+for (el = *pList; el != NULL; el = next)
+    {
+    next = el->next;
+    flankFree(&el);
+    }
+*pList = NULL;
+}
+
+
+struct flank *readFlank(char *chrom)
+/* Slurp in the flank rows for one chrom */
+{
+char fileName[256]="";
+struct lineFile *lf=NULL;
+struct flank *list=NULL, *el;
+char *row[4];
+int rowCount=4;
+char *ch = &chrom[3];
+
+// safef(fileName,sizeof(fileName),"/cluster/bluearc/snp/hg16/build122/seq/ds_ch%s.xml.contig.seq.gz",ch);
+
+safef(fileName,sizeof(fileName),"%s/ds_ch%s.xml.contig.seq.gz",flankPath,ch);
+
+lf=lineFileMayOpen(fileName, TRUE);
+if (lf == NULL)
+    {
+    safef(fileName,sizeof(fileName),"%s/ds_ch%s.xml.contig.seq",flankPath,ch);
+    lf=lineFileMayOpen(fileName, TRUE);
+    if (lf == NULL)
+	{
+	return NULL;
+	}
+    }
+
+while (lineFileNextRowTab(lf, row, rowCount))
+    {
+    el = flankLoad(row);
+    slAddHead(&list,el);
+    }
+slReverse(&list);  /* could possibly skip if it made much difference in speed. */
+lineFileClose(&lf);
+return list;
+}
+
+
+/* --- save memory by defining just the fields needed from snp  ---- */
+
+struct snp
+/* Information from snp */
+    {
+    struct snp *next;  	        /* Next in singly linked list. */
+    char *chrom;		/* chrom */
+    int chromStart;             /* start */
+    int chromEnd;               /* end   */
+    char *name;		        /* name  */
+    char *strand;		/* strand*/
+    };
+
+struct snp *snpLoad(char **row)
+/* Load a snp from row fetched with select * from snp
+ * from database.  Dispose of this with snpFree(). */
+{
+struct snp *ret;
+
+AllocVar(ret);
+ret->chrom      = cloneString(row[0]);
+ret->chromStart =        atoi(row[1]);
+ret->chromEnd   =        atoi(row[2]);
+ret->name       = cloneString(row[3]);
+ret->strand     = cloneString(row[4]);
+return ret;
+}
+
+void snpFree(struct snp **pEl)
+/* Free a single dynamically allocated snp such as created
+ * with snpLoad(). */
+{
+struct snp *el;
+
+if ((el = *pEl) == NULL) return;
+freeMem(el->chrom);
+freeMem(el->name);
+freeMem(el->strand);
+freez(pEl);
+}
+
+void snpFreeList(struct snp **pList)
+/* Free a list of dynamically allocated snp's */
+{
+struct snp *el, *next;
+
+for (el = *pList; el != NULL; el = next)
+    {
+    next = el->next;
+    snpFree(&el);
+    }
+*pList = NULL;
+}
+
+
+struct snp *readSnp(char *chrom)
+/* Slurp in the snp rows for one chrom */
+{
+struct snp *list=NULL, *el;
+char query[512];
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr;
+char **row;
+safef(query, sizeof(query), "select chrom, chromStart, chromEnd, name, strand "
+"from snp where chrom='%s' order by name", chrom);
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    el = snpLoad(row);
+    slAddHead(&list,el);
+    }
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+slReverse(&list);  /* could possibly skip if it made much difference in speed. */
+return list;
+}
+
+
+/* ------------------------------------------------ */
+
+struct snpMap *readSnpMap(char *chrom)
 /* Slurp in the snpMap rows for one chrom */
 {
 struct snpMap *list=NULL, *el;
@@ -411,7 +599,9 @@ misscnt += abs(len2-len1);
 return misscnt;
 }
 
-char *checkAndFetchNib(struct dnaSeq *chromSeq, struct snpMap *snp, int lf, int ls)
+//debug changed:
+//char *checkAndFetchNib(struct dnaSeq *chromSeq, struct snpMap *snp, int lf, int ls)
+char *checkAndFetchNib(struct dnaSeq *chromSeq, struct snp *snp, int lf, int ls)
 /* fetch nib return string to be freed later. Reports if segment exceends ends of chromosome. */
 {
 if ((snp->chromStart - lf) < 0) 
@@ -483,11 +673,12 @@ char affy120id[12];
 
 int matchScore = 100;
 int misMatchScore = 100;
-int gapOpenPenalty = 400;
-int gapExtendPenalty = 50;
+int gapOpenPenalty = 400;  // was 400, tried 250 ok
+int gapExtendPenalty = 5; // was 50, reducing for new snp version.
 
 int noDna = 0;
-int snpMapRows = 0;
+//int snpMapRows = 0;
+int snpRows = 0;
 
 
 /* controls whether affy120k, affy10k, or dbSnpRs is used 
@@ -506,6 +697,9 @@ Org = hOrganism(db);
 if (sameWord(Org,"Human"))
     affy = TRUE;
 
+//debug:
+affy=FALSE;
+
 
 if (sameWord(Org,"Human"))
     dbSnpTbl = "dbSnpRsHg";
@@ -521,13 +715,13 @@ else
 
 simpleDnaScheme = axtScoreSchemeSimpleDna(matchScore, misMatchScore, gapOpenPenalty, gapExtendPenalty);
 
-uglyf("dbSnp Table=%s \n",dbSnpTbl);
+//uglyf("dbSnp Table=%s \n",dbSnpTbl);
 
 uglyf("Affy=%s \n", affy ? "TRUE" : "FALSE" );
 
-
-dbSnps = readDbSnps(dbSnpTbl);
-printf("read hgFixed.%s \n",dbSnpTbl);
+//debug: disabled
+//dbSnps = readDbSnps(dbSnpTbl);
+//printf("read hgFixed.%s \n",dbSnpTbl);
 
 if (affy)
     {
@@ -583,27 +777,52 @@ else
     {
     mode=2; /* start on dbSnps with "rs*" in snpMap.rsId */
     }
-    
+
+uglyf("maxFlank = %d \n",maxFlank);
+
 for (cn = cns; cn != NULL; cn = cn->next)
     {
     struct dnaSeq *chromSeq = NULL;
-    struct snpMap *snps = NULL;
-    struct snpMap *snp = NULL;
+    //debug: removed
+    //struct snpMap *snps = NULL;
+    //struct snpMap *snp = NULL;
+    struct snp *snps = NULL;
+    struct snp *snp = NULL;
 
+    struct flank *flanks = NULL;
+    struct flank *flank = NULL;
+    
     if (chr != NULL)
 	if (!sameWord(chr,cn->name))
 	    continue;
 
-    //uglyf("testDb: beginning chrom %s \n",cn->name);
+    uglyf("beginning chrom %s \n",cn->name);
    
     chromSeq = hLoadChrom(cn->name);
-    printf("testDb: chrom %s :  size (%u) \n",cn->name,chromSeq->size);
+    printf("chrom %s :  size (%u) \n",cn->name,chromSeq->size);
     
-    snps = readSnps(cn->name);
-    printf("read %s.snpMap where chrom=%s \n",db,cn->name);
-
+    //debug: removed
+    //snps = readSnpMap(cn->name);
+    //printf("read %s.snpMap where chrom=%s \n",db,cn->name);
+    
+    snps = readSnp(cn->name);
+    printf("read %s.snp done for chrom=%s \n",db,cn->name);
         
-    dbSnp   = dbSnps; 
+    flanks = readFlank(cn->name);
+    printf("readFlank done for chrom %s \n",cn->name);
+    if (flanks == NULL)
+	{
+	errAbort("readFlank returned NULL for chrom %s.\n",cn->name);
+	}
+    
+    printf("slCount(flanks)=%d for chrom %s \n",slCount(flanks),cn->name);
+
+    slSort(&flanks, slFlankCmp);
+    printf("slSort done for chrom %s \n",cn->name);
+
+    
+    flank   = flanks; 
+    //dbSnp   = dbSnps; 
     affy10  = affy10s;
     affy120 = affy120s;
     
@@ -614,18 +833,21 @@ for (cn = cns; cn != NULL; cn = cn->next)
 	char *nibDna=NULL;
 	char *nibDnaRc=NULL;
 
-	++snpMapRows;
+	//++snpMapRows;
+	++snpRows;
 
 	
-	/* 
-    	printf("%s %s %u %u %s\n",
-	  snp->name,
-	  snp->chrom,
-	  snp->chromStart,
-	  snp->chromEnd,
-	  nibDna
-	  );
-	*/
+	if (Verbose)
+	    {
+	    printf("debug %s %u %u %s %s\n",
+	      snp->chrom,
+	      snp->chromStart,
+	      snp->chromEnd,
+	      snp->name,
+	      snp->strand
+	      );
+	    }
+	/* continue; */
 
 	
         while (cmp < 0)
@@ -637,7 +859,8 @@ for (cn = cns; cn != NULL; cn = cn->next)
 		    case 1:
 			next = affy120; break;
 		    case 2:
-			next = dbSnp; break;
+			//next = dbSnp; break;
+			next = flank; break;
 		    case 3:
 			next = affy10; break;
 		    }
@@ -664,11 +887,13 @@ for (cn = cns; cn != NULL; cn = cn->next)
 		switch (mode)
 		    {
 		    case 1:
-			safef(affy120id, sizeof(affy120id), "%d", affy120->affyId); /* have int type but want string */
+			/* have int type but want string */
+			safef(affy120id, sizeof(affy120id), "%d", affy120->affyId); 
 			id = affy120id;
 			break;
 		    case 2:
-			id = dbSnp->rsId; break;
+			//id = dbSnp->rsId; break;
+			id = flank->rsId; break;
 		    case 3:
 			id = affy10->affyId; break;
 		    }
@@ -682,7 +907,8 @@ for (cn = cns; cn != NULL; cn = cn->next)
 		    case 1:
 			affy120 = affy120->next; break;
 		    case 2:
-			dbSnp = dbSnp->next; break;
+			//dbSnp = dbSnp->next; break;
+			flank = flank->next; break;
 		    case 3:
 			affy10 = affy10->next; break;
 		    }
@@ -695,17 +921,44 @@ for (cn = cns; cn != NULL; cn = cn->next)
 	    int strand=1;
 	    char *rc = NULL;
 	    int m = 0;
-	    int lf = 0;  /* size of left flank context (lower case dna) */
+	    int lf = 0;  /* size of left flank context (lower case dna) (this was when dbSnpRs? may still be true for affy) */
 	    int rf = 0;  /* size of right flank context (lower case dna) */
 	    int ls = 0;  /* total size of assembly dna context plus actual region in dbSnpRs/affy */
 	    char *origSeq = NULL; /* use to display the original dnSnpRs.assembly seq */
+	    int flankSize = 0;
 	    
 	    switch (mode)
 		{
 		case 1:
 		    seq = affy120->sequenceA; break;
 		case 2:
-		    seq = dbSnp->assembly; break;
+		    //seq = dbSnp->assembly; break;
+		    lf=strlen(flank->leftFlank);
+		    rf=strlen(flank->rightFlank);
+		    
+		    /* if flanks exceed maxFlank, truncate */
+		    if (lf>maxFlank) 
+			{
+			char *temp=flank->leftFlank;
+			flank->leftFlank=cloneString(temp+lf-maxFlank);
+			lf = maxFlank;
+			freez(&temp);
+			}
+		    if (rf>maxFlank) 
+			{
+			rf = maxFlank;
+			flank->rightFlank[rf]=0;
+			}
+		    /* at Daryl's request, lower case */
+		    toLowerN(flank->leftFlank , lf);
+		    toLowerN(flank->rightFlank, rf);
+		    
+		    flankSize = lf+1+rf;
+		    seq = needMem(flankSize+1);
+		    safef(seq,flankSize+1,"%s-%s",flank->leftFlank,flank->rightFlank);
+		    //debug
+		    //uglyf("flanks together=%s \n",seq);
+		    break;
 		case 3:
 		    seq = affy10->sequenceA; break; 
 		}
@@ -717,6 +970,7 @@ for (cn = cns; cn != NULL; cn = cn->next)
 		printf("(no assembly context) rsId=%s chrom=%s %u %u \n assembly=%s \n\n",
 		  id,
 		  snp->chrom,
+
 		  snp->chromStart,
 		  snp->chromEnd,
 		  seq
@@ -725,12 +979,21 @@ for (cn = cns; cn != NULL; cn = cn->next)
 		}
 	
 	    origSeq = seq;
-	    lf = leftFlank(origSeq);
-	    rf = rightFlank(origSeq);
-	    seq = cloneString(origSeq);
-	    stripDashes(seq);      /* remove dashes indicating insert to simplify and correct processing of nib data */
-            ls = strlen(seq);      /* used to be: lengthOneDash(seq); */
+	    if (mode != 2)
+		{
+    		lf = leftFlank(origSeq);
+    		rf = rightFlank(origSeq);
+		}
 	    
+	    //debug
+	    //uglyf("flanks lf=%d, rf=%d \n",lf,rf);
+	    
+	    seq = cloneString(origSeq);
+	    /* remove dashes indicating insert to simplify and correct processing of nib data */
+	    stripDashes(seq);     
+	    
+            //oldway: ls = strlen(seq);      /* used to be: lengthOneDash(seq); */
+	    ls = lf + rf + (snp->chromEnd - snp->chromStart);
 	    
 	    //debug
 	    //uglyf("about to call checkandFetchNib origSeq=%s lf=%d, rf=%d ls=%d \n", origSeq, lf, rf, ls);
@@ -820,7 +1083,7 @@ for (cn = cns; cn != NULL; cn = cn->next)
 		strand = 1;
 		if (axtAln) 
 		    {
-		    bestScore = axtAln->score / ls;
+		    bestScore = axtAln->score / (lf+rf);   // was  ls;
 		    }
 		axtFree(&axtAln);
 		
@@ -830,10 +1093,10 @@ for (cn = cns; cn != NULL; cn = cn->next)
 		    target.dna = rc;
 		    target.size = strlen(target.dna);
 		    axtAln = axtAffine(&query, &target, simpleDnaScheme);
-		    if ((axtAln) && (bestScore < (axtAln->score / ls)))
+		    if ((axtAln) && (bestScore < (axtAln->score / (lf+rf))))  // was ls
 			{
 			strand = -1;
-			bestScore = axtAln->score / ls;
+			bestScore = axtAln->score / (lf+rf);  // was ls;
 			}
 		    axtFree(&axtAln);
 		    }
@@ -852,14 +1115,15 @@ for (cn = cns; cn != NULL; cn = cn->next)
 		if ((bestScore < threshold) || Verbose) 
 		    {
 		    printf(
-			"score=%d misses=%u strand=%d rsId=%s chrom=%s %u %u lf=%d ls=%d \n"
-			" assembly=%s \n"
-			"   snpMap=%s \n"
-			"rc snpMap=%s \n"
+			"score=%d misses=%u strand=%d repstr=%s rsId=%s chrom=%s %u %u lf=%d ls=%d \n"
+			"   flanks=%s \n"
+			"      chr=%s \n"
+			"   rc chr=%s \n"
 			"\n",
 		      bestScore,
 		      m,
-		      strand,
+		      strand,       /* best match found */
+		      snp->strand,  /* reported from snp table */
 		      id,
 		      snp->chrom,
 		      snp->chromStart,
@@ -876,6 +1140,10 @@ for (cn = cns; cn != NULL; cn = cn->next)
 		
 	    freez(&rc);
 	    freez(&seq);
+	    
+	    if (mode==2)
+		freez(&origSeq);
+	    
 	
 	    }
 	else
@@ -888,12 +1156,14 @@ for (cn = cns; cn != NULL; cn = cn->next)
 		case 1:
 		    safef(snpLkup,sizeof(snpLkup),"%s","affy120"); break;
 		case 2:
-		    safef(snpLkup,sizeof(snpLkup),"%s",dbSnpTbl); break;
+		    //safef(snpLkup,sizeof(snpLkup),"%s",dbSnpTbl); break;
+		    safef(snpLkup,sizeof(snpLkup),"flnk%s",snp->chrom); break;
 		case 3:
 		    safef(snpLkup,sizeof(snpLkup),"%s","affy10"); break;
 		}
 	    if (Verbose)		    
-    		printf("snpMap.name=%s is missing from %s (now at %s) \n\n",snp->name,snpLkup,id);
+    		//printf("snpMap.name=%s is missing from %s (now at %s) \n\n",snp->name,snpLkup,id);
+    		printf("snp.name=%s is missing from %s (now at %s) \n\n",snp->name,snpLkup,id);
 	    }
 	
 	
@@ -903,14 +1173,18 @@ for (cn = cns; cn != NULL; cn = cn->next)
 	//break;
     
 	}
-    snpMapFreeList(&snps);
+    //debug: removed	    
+    //snpMapFreeList(&snps);
+    snpFreeList(&snps);
+    
+    flankFreeList(&flanks);
 
     dnaSeqFree(&chromSeq);  
 
     printf("\n\n\n Total matches for chrom %s:\n ",cn->name);
     printf("             matches: %u \n ",match);
     printf("          mismatches: %u \n",mismatch);
-    printf("missing from dbSnpRs: %u \n",missing);
+    printf(" missing from flanks: %u \n",missing);
     printf("   rev compl matches: %u \n",goodrc);
     printf("        assembly = -: %u \n",assemblyDash);
     printf("         nib in gap : %u \n",gapNib);
@@ -941,8 +1215,8 @@ for (cn = cns; cn != NULL; cn = cn->next)
 
 slFreeList(&cns);
 
-
-dbSnpRsFreeList(&dbSnps);
+//debug: removed
+//dbSnpRsFreeList(&dbSnps);
 if (affy) 
     {
     affy10KDetailsFreeList(&affy10s);
@@ -954,13 +1228,14 @@ axtScoreSchemeFree(&simpleDnaScheme);
 printf("\n\n\n Grand Totals:  \n ");
 printf("             matches: %u \n ",totalMatch);
 printf("          mismatches: %u \n",totalMismatch);
-printf("missing from dbSnpRs: %u \n",totalMissing);
+printf(" missing from flanks: %u \n",totalMissing);
 printf("   rev compl matches: %u \n",totalGoodrc);
 printf("        assembly = -: %u \n",totalAssemblyDash);
 printf("         nib in gap : %u \n",totalGapNib);
 
 
-printf("\n       Total rows in snpMap: %u \n ",snpMapRows);
+//printf("\n       Total rows in snpMap: %u \n ",snpMapRows);
+printf("\n          Total rows in snp: %u \n ",snpRows);
 printf("\n        # no dna found for : %u \n ",noDna);
 
 printf("\n\n=========================================\n");
@@ -978,12 +1253,14 @@ int main(int argc, char *argv[])
 srand( (unsigned)time( NULL ) );
  
 optionInit(&argc, argv, options);
-if (argc != 2)
+if (argc != 3)
     usage();
 db = argv[1];
+flankPath = argv[2];
 chr       = optionVal("chr"      , chr      );
 threshold = optionInt("threshold", threshold);
 Verbose   = optionInt("verbose"  , Verbose  );
+maxFlank  = optionInt("maxFlank" , maxFlank );
 
 snpValid();
 
