@@ -58,3 +58,13 @@ visibility hide
 color 200,100,0
 type bed 6 +
 url http://www.informatics.jax.org/searches/accession_report.cgi?id=$$
+
+track blatFish
+shortLabel Tetraodon Blat
+longLabel Tetraodon nigriviridis Translated Blat Alignments
+priority 29.1
+visibility dense
+color 0,60,120
+altColor 200,220,255
+spectrum on
+type psl xeno
