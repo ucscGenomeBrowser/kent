@@ -138,7 +138,7 @@
 #include "zdobnovSynt.h"
 #include "HInv.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.624 2004/05/05 18:45:15 kate Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.625 2004/05/06 20:54:00 kent Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -2641,8 +2641,7 @@ if (sameString(action, "Extended case/color options"))
     doGetDnaExtended1();
     return;
     }
-
-
+pushWarnHandler(htmlVaWarn);
 puts("<PRE>");
 if (tbl[0] == 0)
     {
