@@ -116,6 +116,9 @@ void axtSubsetOnT(struct axt *axt, int newStart, int newEnd,
 int axtTransPosToQ(struct axt *axt, int tPos);
 /* Convert from t to q coordinates */
 
+void axtSwap(struct axt *axt, int tSize, int qSize);
+/* Flip target and query on one axt. */
+
 struct axtBundle
 /* A bunch of axt's on the same query/target sequence. */
     {

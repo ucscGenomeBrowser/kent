@@ -520,6 +520,37 @@ if (ss->gapOpen <= 0 || ss->gapExtend <= 0)
 return ss;
 }
 
+void axtSwap(struct axt *axt, int tSize, int qSize)
+/* Flip target and query on one axt. */
+{
+struct axt old = *axt;
+
+/* Copy non-strand dependent stuff */
+axt->qName = old.tName;
+axt->tName = old.qName;
+axt->qSym = old.tSym;
+axt->tSym = old.qSym;
+axt->qStart = old.tStart;
+axt->qEnd = old.tEnd;
+axt->tStart = old.qStart;
+axt->tEnd = old.qEnd;
+
+/* Copy strand dependent stuff. */
+assert(axt->tStrand != '-');
+
+if (axt->qStrand == '-')
+    {
+    /* axt's are really set up so that the target is on the
+     * + strand and the query is on the minus strand.
+     * Therefore we need to reverse complement both 
+     * strands while swapping to preserve this. */
+    reverseIntRange(&axt->tStart, &axt->tEnd, qSize);
+    reverseIntRange(&axt->qStart, &axt->qEnd, tSize);
+    reverseComplement(axt->qSym, axt->symCount);
+    reverseComplement(axt->tSym, axt->symCount);
+    }
+}
+
 void axtBundleFree(struct axtBundle **pObj)
 /* Free a axtBundle. */
 {
