@@ -11,7 +11,7 @@
 #include "web.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: hgNear.c,v 1.5 2003/06/18 17:44:49 kent Exp $";
+static char const rcsid[] = "$Id: hgNear.c,v 1.6 2003/06/18 17:51:11 kent Exp $";
 
 char *excludeVars[] = { "submit", "Submit", confVarName, defaultConfName,
 	resetConfName, NULL }; 
@@ -183,7 +183,7 @@ groupOn = cartUsualString(cart, groupVarName, "homology");
 
 /* Do items to display drop-down */
     {
-    char *count = cartUsualString(cart, countVarName, "50");
+    char *count = cartUsualString(cart, countVarName, "25");
     static char *menu[] = {"25", "50", "100", "200", "500", "1000"};
     hPrintf(" display ");
     cgiMakeDropList(countVarName, menu, ArraySize(menu), count);
