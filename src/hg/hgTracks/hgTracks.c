@@ -85,7 +85,7 @@
 
 
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.697 2004/03/31 20:25:25 kent Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.698 2004/04/01 03:22:37 markd Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
@@ -7215,28 +7215,20 @@ struct hash *hash = newHash(8);
 struct track *track;
 struct trackRef *tr;
 boolean gotUserTracks = FALSE;
+struct grp* grps = hLoadGrps();
+struct grp *grp;
 
-/* Get list of groups from database. */
-if (hTableExists("grp"))
+/* build group objects from database. */
+for (grp = grps; grp != NULL; grp = grp->next)
     {
-    struct sqlConnection *conn = hAllocConn();
-    struct sqlResult *sr;
-    char **row;
-    sr = sqlGetResult(conn, "select * from grp order by priority");
-    while ((row = sqlNextRow(sr)) != NULL)
-	{
-	struct grp grp;
-	grpStaticLoad(row, &grp);
-	AllocVar(group);
-	slAddHead(&list, group);
-	hashAdd(hash, grp.name, group);
-	group->name = cloneString(grp.name);
-	group->label = cloneString(grp.label);
-	group->priority = grp.priority;
-	}
-    sqlFreeResult(&sr);
-    hFreeConn(&conn);
+    AllocVar(group);
+    slAddHead(&list, group);
+    hashAdd(hash, grp->name, group);
+    group->name = cloneString(grp->name);
+    group->label = cloneString(grp->label);
+    group->priority = grp->priority;
     }
+grpFreeList(&grps);
 
 /* Loop through tracks and fill in their groups. 
  * If necessary make up an unknown group. */

@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "grp.h"
 
-static char const rcsid[] = "$Id: grp.c,v 1.2 2003/05/06 07:22:22 kate Exp $";
+static char const rcsid[] = "$Id: grp.c,v 1.3 2004/04/01 03:22:37 markd Exp $";
 
 void grpStaticLoad(char **row, struct grp *ret)
 /* Load a row from grp table into ret.  The contents of ret will
@@ -70,6 +70,28 @@ ret->label = sqlStringComma(&s);
 ret->priority = sqlFloatComma(&s);
 *pS = s;
 return ret;
+}
+
+struct grp *grpLoadByQuery(struct sqlConnection *conn, char *query)
+/* Load all grp from table that satisfy the query given.  
+ * Where query is of the form 'select * from example where something=something'
+ * or 'select example.* from example, anotherTable where example.something = 
+ * anotherTable.something'.
+ * Dispose of this with grpFreeList(). */
+{
+struct grp *list = NULL, *el;
+struct sqlResult *sr;
+char **row;
+
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    el = grpLoad(row);
+    slAddHead(&list, el);
+    }
+slReverse(&list);
+sqlFreeResult(&sr);
+return list;
 }
 
 void grpFree(struct grp **pEl)

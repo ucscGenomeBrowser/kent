@@ -26,8 +26,9 @@
 #include "scoredRef.h"
 #include "maf.h"
 #include "ra.h"
+#include "grp.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.171 2004/03/31 07:31:46 angie Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.172 2004/04/01 03:22:37 markd Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
@@ -168,7 +169,7 @@ char *hTrackDbName()
 /* return the name of the track database from the config file. Freez when done */
 {
 if(hdbTrackDb == NULL)
-    hdbTrackDb = cfgOption("db.trackDb");
+    hdbTrackDb = getCfgValue("HGDB_TRACKDB", "db.trackDb");
 if(hdbTrackDb == NULL)
     errAbort("Please set the db.trackDb field in the hg.conf config file.");
 return cloneString(hdbTrackDb);
@@ -181,7 +182,7 @@ char *hTrackDbLocalName()
 static boolean first = TRUE;
 if (first)
     {
-    hdbTrackDbLocal = cfgOption("db.trackDbLocal");
+    hdbTrackDbLocal = getCfgValue("HGDB_TRACKDB_LOCAL", "db.trackDbLocal");
     first = FALSE;
     }
 if (hdbTrackDbLocal == NULL)
@@ -2482,11 +2483,10 @@ slReverse(&tdbRetList);
 return tdbRetList;
 }
 
-struct trackDb *hTrackDbForTrack(char *track)
+static struct trackDb *loadTrackDbForTrack(struct sqlConnection *conn, char *track)
 /* Load trackDb object for a track. If trackDbLocal exists, then it's row is
- * used if it exists. */
+ * used if it exists. this is common code for two external functions. */
 {
-struct sqlConnection *conn = hAllocConn();
 struct trackDb *tdb;
 char where[256];
 
@@ -2497,6 +2497,15 @@ if (tdb == NULL)
     tdb = loadTrackDb(conn, where);
 if (tdb != NULL)
     hLookupStringsInTdb(tdb, hGetDb());
+return tdb;
+}
+
+struct trackDb *hTrackDbForTrack(char *track)
+/* Load trackDb object for a track. If trackDbLocal exists, then it's row is
+ * used if it exists. */
+{
+struct sqlConnection *conn = hAllocConn();
+struct trackDb *tdb = loadTrackDbForTrack(conn, track);
 hFreeConn(&conn);
 return tdb;
 }
@@ -2628,24 +2637,10 @@ return hgParseContigRange(spec, NULL, NULL, NULL);
 struct trackDb *hMaybeTrackInfo(struct sqlConnection *conn, char *trackName)
 /* Look up track in database, return NULL if it's not there. */
 {
-char query[256];
-struct sqlResult *sr;
-char **row;
-struct trackDb *tdb = NULL;
-char *tdbTable = hTrackDbName();
-
-if (sqlTableExists(conn, tdbTable))
-    {
-    safef(query, sizeof(query), "select * from %s where tableName = '%s'",
-	  tdbTable, trackName);
-    sr = sqlGetResult(conn, query);
-    if ((row = sqlNextRow(sr)) == NULL)
-	return NULL;
-    tdb = trackDbLoad(row);
-    hLookupStringsInTdb(tdb, hGetDb());
-    sqlFreeResult(&sr);
-    }
-return tdb;
+if (sqlTableExists(conn, hTrackDbName()))
+    return loadTrackDbForTrack(conn, trackName);
+else
+    return NULL;
 }
 
 struct trackDb *hTrackInfo(struct sqlConnection *conn, char *trackName)
@@ -3054,4 +3049,73 @@ else
     }
 
 return buffer;
+}
+
+static struct grp* loadGrp(struct sqlConnection *conn, char *confName, char *defaultTbl)
+/* load all of the grp rows from a table.  The table name is first looked up
+ * in hg.conf with confName. If not there, use defaultTbl.  If the table
+ * doesn't exist, return NULL */
+{
+char query[128];
+struct grp *grps = NULL;
+char *tbl = cfgOption(confName);
+if (tbl == NULL)
+    tbl = defaultTbl;
+if (sqlTableExists(conn, tbl))
+    {
+    safef(query, sizeof(query), "select * from %s", tbl);
+    grps = grpLoadByQuery(conn, query);
+    }
+return grps;
+}
+
+static struct grp* findGrp(struct grp** grpList, char* name)
+/* search a list of grp objects for a object of the particular name and remove
+ * from list.  Return NULL if not found  */
+{
+struct grp *grp, *prevGrp = NULL;
+for (grp = *grpList; grp != NULL; prevGrp = grp, grp = grp->next)
+    {
+    if (sameString(grp->name, name))
+        {
+        if (prevGrp == NULL)
+            *grpList = grp->next;
+        else
+            prevGrp->next = grp->next;
+        return grp;
+        }
+    }
+return NULL;
+}
+
+struct grp* hLoadGrps()
+/* load the grp and optional grpLocal tables from the databases.  If grpLocal
+ * exists, then entries in this table will override or supplement the grp
+ * table.  The names of these tables can be configured in the hg.conf file
+ * with db.grp and db.grpLocal variables.  List will be returned sorted by
+ * priority. */
+{
+struct sqlConnection *conn = hAllocConn();
+struct grp *grpList = loadGrp(conn, "db.grp", "grp");
+struct grp *grpLocalList = loadGrp(conn, "db.grpLocal", "grpLocal");
+struct grp *grps = NULL;
+
+/* check each object from grp table to see if it's grpLocal overrides it */
+while (grpList != NULL)
+    {
+    struct grp *grp = slPopHead(&grpList);
+    struct grp *grpLocal = findGrp(&grpLocalList, grp->name);
+    if (grpLocal != NULL)
+        {
+        grpFree(&grp);
+        grp = grpLocal;
+        }
+    slAddHead(&grps, grp);
+    }
+
+/* add remainder of grpLocal */
+grps = slCat(grps, grpLocalList);
+
+slSort(&grps, grpCmpPriority);
+return grps;
 }

@@ -588,4 +588,11 @@ char *addCommasToPos(char *position);
 /* add commas to the numbers in a position 
  * returns pointer to static */
 
+struct grp* hLoadGrps();
+/* load the grp and optional grpLocal tables from the databases.  If grpLocal
+ * exists, then entries in this table will override or supplement the grp
+ * table.  The names of these tables can be configured in the hg.conf file
+ * with db.grp and db.grpLocal variables.  List will be returned sorted by
+ * priority. */
+
 #endif /* HDB_H */

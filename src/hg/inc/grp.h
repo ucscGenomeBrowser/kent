@@ -31,6 +31,13 @@ struct grp *grpCommaIn(char **pS, struct grp *ret);
  * This will fill in ret if non-null, otherwise will
  * return a new grp */
 
+struct grp *grpLoadByQuery(struct sqlConnection *conn, char *query);
+/* Load all grp from table that satisfy the query given.  
+ * Where query is of the form 'select * from example where something=something'
+ * or 'select example.* from example, anotherTable where example.something = 
+ * anotherTable.something'.
+ * Dispose of this with grpFreeList(). */
+
 void grpFree(struct grp **pEl);
 /* Free a single dynamically allocated grp such as created
  * with grpLoad(). */
