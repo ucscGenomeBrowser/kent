@@ -7,7 +7,7 @@
 #include "portable.h"
 #include "hgColors.h"
 
-static char const rcsid[] = "$Id: wigDataStream.c,v 1.25 2004/08/24 20:41:16 hiram Exp $";
+static char const rcsid[] = "$Id: wigDataStream.c,v 1.26 2004/08/25 22:09:32 hiram Exp $";
 
 /*	PRIVATE	METHODS	************************************************/
 static void addConstraint(struct wiggleDataStream *wDS, char *left, char *right)
@@ -1388,7 +1388,7 @@ if (bedList && *bedList)
 	    chromPosition = max(bedStart, winStart);
 	    boolPtr = bedArray + (chromPosition - bedStart);
 
-	    fptr = wDS->array->data + (chromPosition - bedStart);
+	    fptr = wDS->array->data + (chromPosition - winStart);
 
 	    while (chromPosition < winEnd)
 		{
