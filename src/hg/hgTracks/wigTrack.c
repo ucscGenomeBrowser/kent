@@ -12,7 +12,7 @@
 #include "scoredRef.h"
 #include "customTrack.h"
 
-static char const rcsid[] = "$Id: wigTrack.c,v 1.58 2004/08/30 19:36:23 hiram Exp $";
+static char const rcsid[] = "$Id: wigTrack.c,v 1.59 2004/08/30 23:57:02 hiram Exp $";
 
 /*	wigCartOptions structure - to carry cart options from wigMethods
  *	to all the other methods via the track->extraUiData pointer
@@ -1225,7 +1225,8 @@ track->itemHeight = tgFixedItemHeight;
 track->itemStart = tgItemNoStart;
 track->itemEnd = tgItemNoEnd;
 /*	the wigMaf parent will turn mapsSelf off	*/
-track->mapsSelf = TRUE;
+/*	This is off until the stats at zoomed views can be done properly */
+track->mapsSelf = FALSE;
 track->extraUiData = (void *) wigCart;
 track->colorShades = shadesOfGray;
 track->drawLeftLabels = wigLeftLabels;
