@@ -12,8 +12,16 @@ static boolean goExists(struct section *section,
 /* Return TRUE if GO database exists and has something
  * on this one. */
 {
-return swissProtAcc != NULL 
-	&& sqlDatabaseExists("go") && sqlTableExists(conn, "go.goaPart");
+char query[512];
+if (swissProtAcc == NULL || !sqlDatabaseExists("go") 
+	|| !sqlTableExists(conn, "go.goaPart"))
+    return FALSE;
+safef(query, sizeof(query),
+	"select count(*)"
+	" from go.goaPart"
+	" where dbObjectId = '%s'"
+	, swissProtAcc);
+return sqlQuickNum(conn, query) > 0;
 }
 
 static void goPrint(struct section *section, 
