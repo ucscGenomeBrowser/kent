@@ -56,6 +56,6 @@ will also surface as amino acid compositional anomalies.
 </TABLE>
 </BLOCKQUOTE>
 <CENTER>
-<IMG height=262 src="hydro.jpg" width=286></TD> 
+<IMG height=262 src="hydro.jpg" width=286>
 </CENTER>
 
