@@ -9,7 +9,7 @@
 #include "obscure.h"
 #include "net.h"
 
-static char const rcsid[] = "$Id: htmlCheck.c,v 1.9 2004/02/28 11:47:22 kent Exp $";
+static char const rcsid[] = "$Id: htmlCheck.c,v 1.10 2004/02/29 00:25:18 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -20,11 +20,13 @@ errAbort(
   "   htmlCheck how url\n"
   "where how is:\n"
   "   ok - just check for 200 return.  Print error message and exit -1 if no 200\n"
-  "   printAll - read the url (header and html) and print to stdout\n"
-  "   printHeader - read the header and print to stdout\n"
-  "   printHtml - print the html, but not the header to stdout\n"
-  "   printLinks - print links\n"
-  "   printTags - print out just the tags\n"
+  "   getAll - read the url (header and html) and print to stdout\n"
+  "   getHeader - read the header and print to stdout\n"
+  "   getHtml - print the html, but not the header to stdout\n"
+  "   getForms - print the form structure to stdout\n"
+  "   getVars - print the form variables to stdout\n"
+  "   getLinks - print links\n"
+  "   getTags - print out just the tags\n"
   "   validate - do some basic validations including TABLE/TR/TD nesting\n"
   );
 }
@@ -40,35 +42,88 @@ struct httpStatus
     int status;
     };
 
-struct httpAttribute
-/* An http attribute - part of a set of name/values pairs in form. */
+struct htmlAttribute
+/* An html attribute - part of a set of name/values pairs in form. */
     {
-    struct httpAttribute *next;
+    struct htmlAttribute *next;
     char *name;		/* Attribute name. */
     char *val;		/* Attribute value. */
     };
 
-struct httpTag
-/* A http tag - includes attribute list and parent, but no text. */
+struct htmlTag
+/* A html tag - includes attribute list and parent, but no text. */
     {
-    struct httpTag *next;
+    struct htmlTag *next;
     char *name;	/* Tag name. */
-    struct httpAttribute *attributes;  /* Attribute list. */
+    struct htmlAttribute *attributes;  /* Attribute list. */
     char *start;  /* Start of this tag. */
     char *end;	  /* End of tag (one past closing '>') */
     };
 
-struct httpPage
-/* A complete http page parsed out. */
+struct htmlFormVar
+/* A variable within an html form - from input, button, etc. */
     {
-    struct httpPage *next;
+    struct htmlFormVar *next;	/* Next in list. */
+    char *name;			/* Variable name. */
+    char *tagName;		/* Name of tag. */
+    char *type;			/* Variable type. */
+    char *curVal;		/* Current value if any. */
+    struct slName *values;	/* List of available values.  Null if textBox. */
+    struct slRef *tags;	        /* List of references associated tags. */
+    };
+
+struct htmlForm
+/* A form within an html page. */
+    {
+    struct htmlForm *next;	/* Next form in list. */
+    char *name;			/* Name (or "" if not defined). */
+    char *action;		/* Action attribute value. */
+    char *method;		/* Method attribute value.  Defaults to "GET" */
+    struct htmlTag *startTag;	/* Tag that holds <FORM> */
+    struct htmlTag *endTag;	/* Tag one past </FORM> */
+    struct htmlFormVar *vars; /* List of form variables. */
+    };
+
+struct htmlPage
+/* A complete html page parsed out. */
+    {
+    struct htmlPage *next;
     struct httpStatus *status;		/* Version and status */
     char *fullText;			/* Full unparsed text including headers. */
-    char *htmlText;			/* Text unparsed after header. */
     struct hash *header;		/* Hash of header lines (cookies, etc.) */
-    struct httpTag *tags;		/* List of tags in this page. */
-    struct slName *links;		/* List of all links. */
+    char *htmlText;			/* Text unparsed after header. */
+    struct htmlTag *tags;		/* List of tags in this page. */
+    struct htmlForm *forms;		/* List of all forms. */
     };
+
+void tagVaWarn(struct htmlTag *tag, char *format, va_list args)
+/* Print warning message and some context of tag. */
+{
+char context[80];
+strncpy(context, tag->start, sizeof(context));
+context[sizeof(context)-1] = 0;
+warn("Error near: %s", context);
+vaWarn(format, args);
+}
+
+void tagWarn(struct htmlTag *tag, char *format, ...)
+/* Print warning message and some context of tag. */
+{
+va_list args;
+va_start(args, format);
+tagVaWarn(tag, format, args);
+va_end(args);
+}
+
+void tagAbort(struct htmlTag *tag, char *format, ...)
+/* Print abort message and some context of tag. */
+{
+va_list args;
+va_start(args, format);
+tagVaWarn(tag, format, args);
+va_end(args);
+noWarnAbort();
+}
 
 static char *nextCrLfLine(char **pS)
 /* Return zero-terminated line and advance *pS to start of
@@ -94,15 +149,15 @@ else
 return s;
 }
 
-struct httpStatus *httpStatusParse(char **pHtml)
-/* Read in status from first line.  Update pHtml to point to next line. */
+struct httpStatus *httpStatusParse(char **pText)
+/* Read in status from first line.  Update pText to point to next line. */
 {
-char *line = nextCrLfLine(pHtml);
+char *line = nextCrLfLine(pText);
 char *word;
 struct httpStatus *status;
 if (line == NULL)
     {
-    warn("Empty html file.");
+    warn("Empty http output.");
     return NULL;
     }
 AllocVar(status);
@@ -122,7 +177,7 @@ status->status = atoi(word);
 return status;
 }
 
-struct hash *httpHeaderRead(char **pHtml)
+struct hash *htmlHeaderRead(char **pHtml)
 /* Read in from second line through first blank line and
  * save in hash.  These lines are in the form name: value. */
 {
@@ -145,14 +200,40 @@ for (;;)
 return hash;
 }
 
-struct httpTag *httpTagScan(char *html)
+
+char *tagAttributeVal(struct htmlTag *tag, char *name, char *defaultVal)
+/* Return value of named attribute, or defaultVal if attribute doesn't exist. */
+{
+struct htmlAttribute *att;
+for (att = tag->attributes; att != NULL; att = att->next)
+    {
+    if (sameWord(att->name, name))
+        return att->val;
+    }
+return defaultVal;
+}
+
+char *tagAttributeNeeded(struct htmlTag *tag, char *name)
+/* Return named tag attribute.  Complain and return "n/a" if it
+ * doesn't exist. */
+{
+char *val = tagAttributeVal(tag, name, NULL);
+if (val == NULL)
+    {
+    tagWarn(tag, "Missing %s attribute", name);
+    val = "n/a";
+    }
+return val;
+}
+
+struct htmlTag *htmlTagScan(char *html)
 /* Scan HTML for tags and return a list of them. */
 {
 char *dupe = cloneString(html);
 char *s = dupe, c, *e, *tagName;
 struct slName *list = NULL, *link;
-struct httpTag *tagList, *tag;
-struct httpAttribute *att;
+struct htmlTag *tagList, *tag;
+struct htmlAttribute *att;
 int pos;
 
 for (;;)
@@ -295,29 +376,148 @@ slReverse(&tagList);
 return tagList;
 }
 
-struct httpPage *httpPageParse(char *html)
+static struct htmlFormVar *findOrMakeVar(char *name, 
+	struct hash *hash, struct htmlTag *tag,
+	struct htmlFormVar **pVarList)
+/* Find variable of existing name if it exists,  otherwise
+ * make a new one and add to hash and list.  Add reference
+ * to this tag to var. */
+{
+struct htmlFormVar *var = hashFindVal(hash, name);
+if (var == NULL)
+    {
+    AllocVar(var);
+    var->name = name;
+    var->tagName = tag->name;
+    hashAdd(hash, name, var);
+    slAddHead(pVarList, var);
+    }
+else
+    {
+    if (!sameWord(var->tagName, tag->name))
+        {
+	tagWarn(tag, "Mixing FORM variable tag types %s and %s", 
+		var->tagName, tag->name);
+	var->tagName = tag->name;
+	}
+    }
+refAdd(&var->tags, tag);
+return var;
+}
+
+struct htmlFormVar *formParseVars(struct htmlForm *form)
+/* Return a list of variables parsed out of form.  
+ * A form variable is something that may appear in the name
+ * side of the name=value pairs that serves as input to a CGI
+ * script.  The variables may be constructed from buttons, 
+ * INPUT tags, OPTION lists, or TEXTAREAs. */
+{
+struct htmlTag *tag;
+struct htmlFormVar *varList = NULL, *var;
+struct hash *hash = newHash(0);
+for (tag = form->startTag->next; tag != form->endTag; tag = tag->next)
+    {
+    if (sameWord(tag->name, "INPUT"))
+        {
+	char *varName = tagAttributeNeeded(tag, "NAME");
+	char *type = tagAttributeNeeded(tag, "TYPE");
+	char *value = tagAttributeVal(tag, "VALUE", NULL);
+	var = findOrMakeVar(varName, hash, tag, &varList); 
+	if (var->type != NULL && !sameWord(var->type, type))
+	    tagWarn(tag, "Mixing input types %s and %s", var->type, type);
+	var->type = type;
+	if (sameWord(type, "TEXT") || sameWord(type, "PASSWORD") 
+		|| sameWord(type, "FILE") || sameWord(type, "HIDDEN"))
+	    {
+	    var->curVal = value;
+	    }
+	else if (sameWord(type, "CHECKBOX") || sameWord(type, "RADIO"))
+	    {
+	    if (tagAttributeVal(tag, "CHECKED", NULL) != NULL)
+	        var->curVal = value;
+	    }
+	else if ( sameWord(type, "RESET") || sameWord(type, "BUTTON") ||
+		sameWord(type, "SUBMIT") || sameWord(type, "IMAGE") ||
+		sameWord(type, "n/a"))
+	    {
+	    /* Do nothing. */
+	    }
+	else
+	    {
+	    tagWarn(tag, "Unrecognized INPUT TYPE %s", type);
+	    }
+	}
+    }
+slReverse(&varList);
+for (var = varList; var != NULL; var = var->next)
+    slReverse(&var->tags);
+return varList;
+    char *curVal;		/* Current value if any. */
+    struct slName *values;	/* List of available values.  Null if textBox. */
+    struct slRef *tags;	        /* List of references associated tags. */
+}
+
+struct htmlForm *htmlParseForms(struct htmlTag *startTag, struct htmlTag *endTag)
+/* Parse out list of forms from tag stream. */
+{
+struct htmlForm *formList = NULL, *form = NULL;
+struct htmlTag *tag;
+for (tag = startTag; tag != endTag; tag = tag->next)
+    {
+    if (sameWord(tag->name, "FORM"))
+        {
+	if (form != NULL)
+	    tagWarn(tag, "FORM inside of FORM");
+	AllocVar(form);
+	form->startTag = tag;
+	slAddHead(&formList, form);
+	form->name = tagAttributeVal(tag, "name", "n/a");
+	form->action = tagAttributeNeeded(tag, "action");
+	form->method = tagAttributeVal(tag, "method", "GET");
+	}
+    else if (sameWord(tag->name, "/FORM"))
+        {
+	if (form == NULL)
+	    tagWarn(tag, "/FORM outside of FORM");
+	else
+	    {
+	    form->endTag = tag->next;
+	    form = NULL;
+	    }
+	}
+    }
+slReverse(&formList);
+for (form = formList; form != NULL; form = form->next)
+    {
+    form->vars = formParseVars(form);
+    }
+return formList;
+}
+
+struct htmlPage *htmlPageParse(char *fullText)
 /* Parse out page and return. */
 {
-struct httpPage *page;
-char *dupe = cloneString(html);
+struct htmlPage *page;
+char *dupe = cloneString(fullText);
 char *s = dupe;
 struct httpStatus *status = httpStatusParse(&s);
 
 if (status == NULL)
     return NULL;
 AllocVar(page);
-page->fullText = html;
+page->fullText = fullText;
 page->status = status;
-page->header = httpHeaderRead(&s);
-page->htmlText = html + (s - dupe);
-page->tags = httpTagScan(s);
+page->header = htmlHeaderRead(&s);
+page->htmlText = fullText + (s - dupe);
+page->tags = htmlTagScan(s);
+page->forms = htmlParseForms(page->tags, NULL);
 return page;
 }
 
-struct httpPage *httpPageParseOk(char *html)
+struct htmlPage *htmlPageParseOk(char *fullText)
 /* Parse out page and return only if status ok. */
 {
-struct httpPage *page = httpPageParse(html);
+struct htmlPage *page = htmlPageParse(fullText);
 if (page == NULL)
    noWarnAbort();
 if (page->status->status != 200)
@@ -325,13 +525,13 @@ if (page->status->status != 200)
 return page;
 }
 
-struct slName *httpPageScanAttribute(struct httpPage *page, 
+struct slName *htmlPageScanAttribute(struct htmlPage *page, 
 	char *tagName, char *attribute)
 /* Scan page for values of particular attribute in particular tag.
  * if tag is NULL then scans in all tags. */
 {
-struct httpTag *tag;
-struct httpAttribute *att;
+struct htmlTag *tag;
+struct htmlAttribute *att;
 struct slName *list = NULL, *el;
 
 for (tag = page->tags; tag != NULL; tag = tag->next)
@@ -352,23 +552,23 @@ slReverse(&list);
 return list;
 }
 
-struct slName *httpPageLinks(struct httpPage *page)
+struct slName *htmlPageLinks(struct htmlPage *page)
 /* Scan through tags list and pull out HREF attributes. */
 {
-return httpPageScanAttribute(page, NULL, "HREF");
+return htmlPageScanAttribute(page, NULL, "HREF");
 }
 
-void checkOk(char *html)
+void checkOk(char *fullText)
 /* Parse out first line and check it's ok. */
 {
-struct httpStatus *status = httpStatusParse(&html);
+struct httpStatus *status = httpStatusParse(&fullText);
 if (status == NULL)
     noWarnAbort();
 if (status->status != 200)
     errAbort("Status code %d", status->status);
 }
 
-void printHeader(char *html)
+void getHeader(char *html)
 /* Parse out and print header. */
 {
 char *line;
@@ -380,21 +580,63 @@ while ((line = nextCrLfLine(&html)) != NULL)
     }
 }
 
-void printLinks(struct httpPage *page)
+void getLinks(struct htmlPage *page)
 /* Print out all links. */
 {
-struct slName *link, *linkList = httpPageLinks(page);
+struct slName *link, *linkList = htmlPageLinks(page);
 for (link = linkList; link != NULL; link = link->next)
     {
     printf("%s\n", link->name);
     }
 }
 
-void printTags(struct httpPage *page)
+static char *naForNull(char *s)
+/* Return 'n/a' if s is NULL, otherwise s. */
+{
+if (s == NULL) 
+   s = "n/a";
+return s;
+}
+
+void getForms(struct htmlPage *page)
+/* Print out all forms. */
+{
+struct htmlForm *form;
+struct htmlFormVar *var;
+for (form = page->forms; form != NULL; form = form->next)
+    {
+    printf("%s\t%s\t%s\n", form->name, form->method, form->action);
+    for (var = form->vars; var != NULL; var = var->next)
+        {
+	struct htmlTag *tag = var->tags->val;
+	printf("\t%s\t%s\t%s\t%s\n", var->name, var->tagName, var->type, 
+		naForNull(var->curVal));
+	}
+    }
+}
+
+void getVars(struct htmlPage *page)
+/* Print out all forms. */
+{
+struct htmlForm *form;
+struct htmlFormVar *var;
+for (form = page->forms; form != NULL; form = form->next)
+    {
+    for (var = form->vars; var != NULL; var = var->next)
+        {
+	struct htmlTag *tag = var->tags->val;
+	printf("%s\t%s\t%s\t%s\n", var->name, var->tagName, var->type, 
+		naForNull(var->curVal));
+	}
+    }
+}
+
+
+void getTags(struct htmlPage *page)
 /* Print out all tags. */
 {
-struct httpTag *tag;
-struct httpAttribute *att;
+struct htmlTag *tag;
+struct htmlAttribute *att;
 for (tag = page->tags; tag != NULL; tag = tag->next)
     {
     printf("%s", tag->name);
@@ -410,42 +652,29 @@ for (tag = page->tags; tag != NULL; tag = tag->next)
     }
 }
 
-struct httpRow
+struct htmlRow
 /* Data on a row */
     {
-    struct httpRow *next;
+    struct htmlRow *next;
     int tdCount;
     int inTd;
     };
 
-struct httpTable 
+struct htmlTable 
 /* Data on a table. */
     {
-    struct httpTable *next;
-    struct httpRow *row;
+    struct htmlTable *next;
+    struct htmlRow *row;
     int rowCount;
     };
 
-void tagAbort(struct httpTag *tag, char *format, ...)
-/* Print abort message and some context of tag. */
-{
-char context[80];
-va_list args;
-va_start(args, format);
-strncpy(context, tag->start, sizeof(context));
-context[sizeof(context)-1] = 0;
-warn("Error: %s", context);
-vaErrAbort(format, args);
-va_end(args);
-}
-
-void validateTables(struct httpTag *startTag, struct httpTag *endTag)
+void validateTables(struct htmlTag *startTag, struct htmlTag *endTag)
 /* Validate <TABLE><TR><TD> are all properly nested, and that there
  * are no empty rows. */
 {
-struct httpTable *tableStack = NULL, *table;
-struct httpRow *row;
-struct httpTag *tag;
+struct htmlTable *tableStack = NULL, *table;
+struct htmlRow *row;
+struct htmlTag *tag;
 
 for (tag = startTag; tag != endTag; tag = tag->next)
     {
@@ -521,14 +750,14 @@ if (tableStack != NULL)
 }
 
 void checkTagIsInside(char *outsiders, char *insiders,  
-	struct httpTag *startTag, struct httpTag *endTag)
+	struct htmlTag *startTag, struct htmlTag *endTag)
 /* Check that insiders are all bracketed by outsiders. */
 {
 char *outDupe = cloneString(outsiders);
 char *inDupe = cloneString(insiders);
 char *line, *word;
 int depth = 0;
-struct httpTag *tag;
+struct htmlTag *tag;
 struct hash *outOpen = newHash(8);
 struct hash *outClose = newHash(8);
 struct hash *inHash = newHash(8);
@@ -574,10 +803,10 @@ freeMem(outDupe);
 freeMem(inDupe);
 }
 
-void checkNest(char *type, struct httpTag *startTag, struct httpTag *endTag)
+void checkNest(char *type, struct htmlTag *startTag, struct htmlTag *endTag)
 /* Check that <type> and </type> tags are properly nested. */
 {
-struct httpTag *tag;
+struct htmlTag *tag;
 int depth = 0;
 char endType[256];
 safef(endType, sizeof(endType), "/%s", type);
@@ -596,7 +825,7 @@ if (depth != 0)
     errAbort("Missing <%s> tag", endType);
 }
 
-void validateNestingTags(struct httpTag *startTag, struct httpTag *endTag,
+void validateNestingTags(struct htmlTag *startTag, struct htmlTag *endTag,
 	char *nesters[], int nesterCount)
 /* Validate many tags that do need to nest. */
 {
@@ -620,11 +849,11 @@ static char *headNesters[] =
     "TITLE",
 };
 
-struct httpTag *validateBody(struct httpTag *startTag)
+struct htmlTag *validateBody(struct htmlTag *startTag)
 /* Go through tags from current position (just past <BODY>)
  * up to and including </BODY> and check some things. */
 {
-struct httpTag *tag, *endTag = NULL;
+struct htmlTag *tag, *endTag = NULL;
 
 /* First search for end tag. */
 for (tag = startTag; tag != NULL; tag = tag->next)
@@ -651,10 +880,10 @@ validateNestingTags(startTag, endTag, bodyNesters, ArraySize(bodyNesters));
 return endTag->next;
 }
 
-void validate(struct httpPage *page)
+void validate(struct htmlPage *page)
 /* Do some basic validations. */
 {
-struct httpTag *tag;
+struct htmlTag *tag;
 boolean gotTitle = FALSE;
 
 /* To simplify things upper case all tag names. */
@@ -696,21 +925,25 @@ void htmlCheck(char *command, char *url)
 {
 struct dyString *dy = netSlurpUrl(url);
 char *fullText = dy->string;
-if (sameString(command, "printAll"))
+if (sameString(command, "getAll"))
     mustWrite(stdout, dy->string, dy->stringSize);
 else if (sameString(command, "ok"))
     checkOk(fullText);
-else if (sameString(command, "printHeader"))
-    printHeader(fullText);
+else if (sameString(command, "getHeader"))
+    getHeader(fullText);
 else /* Do everything that requires full parsing. */
     {
-    struct httpPage *page = httpPageParseOk(fullText);
-    if (sameString(command, "printHtml"))
+    struct htmlPage *page = htmlPageParseOk(fullText);
+    if (sameString(command, "getHtml"))
         fputs(page->htmlText, stdout);
-    else if (sameString(command, "printLinks"))
-	printLinks(page);
-    else if (sameString(command, "printTags"))
-	printTags(page);
+    else if (sameString(command, "getLinks"))
+	getLinks(page);
+    else if (sameString(command, "getForms"))
+        getForms(page);
+    else if (sameString(command, "getVars"))
+        getVars(page);
+    else if (sameString(command, "getTags"))
+	getTags(page);
     else if (sameString(command, "validate"))
 	validate(page);	
     else
