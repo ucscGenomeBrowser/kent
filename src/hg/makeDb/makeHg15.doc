@@ -2683,9 +2683,11 @@ SEQ2_LEN=$BASE/S2.len
     hgLoadPsl hg15 chr*_blastzTightRn2.psl
 
 
-# RUNNING RN3 BLASTZ  (IN PROGRESS 2003-07-09 kate)
+# BLASTZ RAT RN3  (DONE 2003-07-09 kate)
+# Note: these alignments are swapped and displayed on Rn3 browser
 
     ssh eieio
+    mkdir -p /cluster/data/hg15/bed/blastz.rn3
     cd /cluster/data/hg15/bed/blastz.rn3
     cat << '_EOF_' > DEF
 # human vs. rat

@@ -518,7 +518,7 @@ if (-e /tmp/$USER/$2/$2.align) /bin/cp /tmp/$USER/$2/$2.align ./
     cd ~/mm4
     cp -p liftAll.lft /iscratch/i/mm4
     mkdir -p /iscratch/i/mm4/mixedNib
-    cp -p mixedNib/chr*.nib /cluster/bluearc/mm4/mixedNib
+    cp -p /cluster/bluearc/mm4/mixedNib/chr*.nib /iscratch/i/mixedNib
     mkdir -p /iscratch/i/mm4/trfFa
     cp ?{,?}/chr*_*/chr?{,?}{,_random}_?{,?}.fa /cluster/bluearc/mm4/trfFa
     /cluster/bin/scripts/iSync

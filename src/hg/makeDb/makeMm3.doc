@@ -279,60 +279,6 @@ VERIFY REPEATMASKER RESULTS (IN PROGRESS)
     # --> 1037964664 bases of 2726995854 (38.063%) in intersection
 
 
-# RUN NEW REPEATMASKER (6/03 VERSION) (IN PROGRESS 2003-07-15 kate)
-#    This version of RM has rat libraries, and will allow extraction
-#       of mouse lineage-specific repeats to use with
-#       mouse/rat alignments
-
-# copy contigs to new work directory
-    cd /cluster/data/mm3
-    #find ?{,?} -type d |sed 's#^#/cluster/data/mm3.RM030619/#' |xargs mkdir -p 
-    foreach c ( ?{,?} )
-        cp -rP $c/chr${c}_?{,?}/chr${c}_*_*.fa /cluster/data/mm3.RM030619
-        cp -rP $c/chr${c}_random_?{,?}/chr${c}_random_*_*.fa \
-                                                /cluster/data/mm3.RM030619
-    end
-
-    cd /cluster/data/mm3.RM030619
-    mkdir jkStuff
-    cat << '_EOF_' > jkStuff/RMMouse
-#!/bin/csh -fe
-cd $1
-pushd .
-/bin/mkdir -p /tmp/$USER/$2
-/bin/cp $2 /tmp/$USER/$2/
-cd /tmp/$USER/$2
-/cluster/bluearc/RepeatMasker030619/RepeatMasker -ali -s -m $2
-popd
-/bin/cp /tmp/$USER/$2/$2.out ./$2.out
-if (-e /tmp/$USER/$2/$2.align) /bin/cp /tmp/$USER/$2/$2.align ./
-if (-e /tmp/$USER/$2/$2.tbl) /bin/cp /tmp/$USER/$2/$2.tbl ./
-if (-e /tmp/$USER/$2/$2.cat) /bin/cp /tmp/$USER/$2/$2.cat ./
-# /bin/cp /tmp/$2*.masked ../masked/
-/bin/rm -r /tmp/$USER
-'_EOF_'
-    chmod +x jkStuff/RMMouse
-
-    mkdir RMRun
-    cp /dev/null RMRun/RMJobs
-    foreach d (?{,?}/chr*_*)
-        foreach f ($d/*.fa)
-        set f = $f:t
-        echo /cluster/store5/mm3.RM030619/jkStuff/RMMouse \
-                 /cluster/store5/mm3.RM030619/$d $f \
-               '{'check out line+ /cluster/store5/mm3.RM030619/$d/$f.out'}' \
-              >> RMRun/RMJobs
-        end
-    end
-
-    #- Do the run
-    ssh kk
-    cd /cluster/data/mm3.RM030619/RMRun
-    para create RMJobs
-    para try
-    para push
-
-
 MAKE LIFTALL.LFT (DONE 02/20/03)
 
     cd ~/mm3
