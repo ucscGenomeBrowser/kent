@@ -48,6 +48,9 @@ struct sqlConnection *sqlConnectRemote(char *host,
 struct hash *sqlHashOfDatabases();
 /* Get hash table with names of all databases that are online. */
 
+struct slName *sqlListOfDatabases();
+/* Get list of all databases that are online. */
+
 void sqlDisconnect(struct sqlConnection **pSc);
 /* Close down connection. */
 

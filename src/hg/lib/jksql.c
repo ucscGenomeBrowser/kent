@@ -13,7 +13,7 @@
 #include "sqlNum.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: jksql.c,v 1.50 2004/03/12 06:39:32 kent Exp $";
+static char const rcsid[] = "$Id: jksql.c,v 1.51 2004/03/15 18:39:25 kent Exp $";
 
 /* flags controlling sql monitoring facility */
 static unsigned monitorInited = FALSE;      /* initialized yet? */
@@ -1194,11 +1194,19 @@ sqlDisconnect(&conn);
 return hash;
 }
 
+struct slName *sqlListOfDatabases()
+/* Get list of all databases that are online. */
+{
+struct sqlConnection *conn = sqlConnect("mysql");
+struct slName *list = sqlGetAllDatabase(conn);
+sqlDisconnect(&conn);
+return list;
+}
 
 char *connGetDatabase(struct sqlConnCache *conn)
 /* return database for a connection cache */
 {
-    return conn->database;
+return conn->database;
 }
 
 char *sqlLikeFromWild(char *wild)
