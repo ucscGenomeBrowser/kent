@@ -27,6 +27,7 @@ alpha:
 		echo $$cmd ;  $$cmd ; \
 		cmd="hgFindSpec zoo $$DB hgFindSpec ../../../lib/hgFindSpec.sql ." ; \
 		echo $$cmd ;  $$cmd ; \
+		cp description.html /gbdb/zoo3/html;\
 	    fi ; \
 	done
 
