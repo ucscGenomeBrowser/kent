@@ -9,7 +9,7 @@
 #include "hdb.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: checkTableCoords.c,v 1.6 2004/10/08 22:00:43 angie Exp $";
+static char const rcsid[] = "$Id: checkTableCoords.c,v 1.7 2004/10/08 22:27:36 angie Exp $";
 
 /* Default parameter values */
 char *db = NULL;                        /* first arg */
@@ -324,7 +324,8 @@ for (bed = bedList;  bed != NULL;  bed = bed->next)
 		       i-1, i);
 	    bNotAscend++;
 	    }
-	if (bed->chromStarts[i] < lastEnd)
+	if (bed->chromStarts[i] < lastEnd &&
+	    i > 0 && bed->chromStarts[i] > bed->chromStarts[i-1])
 	    {
 	    if (verboseBlocks || verboseLevel() >= 2)
 		verbose(0, "%s.%s item %s %s:%d-%d: blocks %d and %d overlap.\n",
