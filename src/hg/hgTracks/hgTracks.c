@@ -273,6 +273,13 @@ tl.picWidth = 620;
 setPicWidth(cartOptionalString(cart, "pix"));
 }
 
+boolean zoomedToBaseLevel()
+/* Return TRUE if zoomed in enough we can actually draw 
+ * bases. */
+{
+int winWidth = winEnd - winStart;
+return winWidth * tl.mWidth <= insideWidth;
+}
 
 char *offOn[] =
 /* Off/on control. */
@@ -8523,6 +8530,27 @@ void printYAxisLabel( struct vGfx *vg, int y, struct track *track, char *labelSt
     vgTextRight(vg, gfxBorder, tmp, inWid-1, itemHeight0, track->ixColor, tl.font, labelString );
 }
 
+void drawBases(struct vGfx *vg, int x, int y, int width, int height,
+	Color color, MgFont *font)
+/* Draw evenly spaced bases. */
+{
+struct dnaSeq *seq = hDnaFromSeq(chromName, winStart, winEnd, dnaUpper);
+int baseCount = seq->size;
+char s[2];
+int i;
+int x1,x2;
+
+s[1] = 0;	/* Put zero tag on string. */
+for (i=0; i<baseCount; ++i)
+    {
+    x1 = i * width / baseCount;
+    x2 = (i+1) * width/baseCount;
+    s[0] = seq->dna[i];
+    vgTextCentered(vg,x1+x,y,x2-x1,height,color,font,s);
+    }
+freeDnaSeq(&seq);
+}
+
 void makeActiveImage(struct track *trackList, char *psOutput)
 /* Make image and image map. */
 {
@@ -8541,6 +8569,8 @@ int pixWidth, pixHeight;
 int y;
 int typeCount = slCount(trackList);
 int rulerHeight = fontHeight;
+int baseHeight = fontHeight;
+int basePositionHeight = rulerHeight;
 int yAfterRuler = gfxBorder;
 int relNumOff;
 int i;
@@ -8552,6 +8582,7 @@ char maxRangeStr[32];
 struct slList *prev = NULL;
 int start;
 int newy;
+boolean needDrawBases = zoomedToBaseLevel();
 
 /* Figure out dimensions and allocate drawing space. */
 pixWidth = tl.picWidth;
@@ -8560,8 +8591,10 @@ pixWidth = tl.picWidth;
 pixHeight = gfxBorder;
 if (withRuler)
     {
-    yAfterRuler += rulerHeight;
-    pixHeight += rulerHeight;
+    if (needDrawBases);
+	basePositionHeight += baseHeight;
+    yAfterRuler += basePositionHeight;
+    pixHeight += basePositionHeight;
     }
 for (track = trackList; track != NULL; track = track->next)
     {
@@ -8611,7 +8644,7 @@ if (withLeftLabels && psOutput == NULL)
     int butOff;
     y = gfxBorder;
     if (withRuler)
-        y += rulerHeight;
+        y += basePositionHeight;
     for (track = trackList; track != NULL; track = track->next)
         {
 	int h, yStart = y, yEnd;
@@ -8645,7 +8678,7 @@ if (withLeftLabels)
 	{
 	vgTextRight(vg, leftLabelX, y, leftLabelWidth-1, rulerHeight, 
 	    MG_BLACK, font, "Base Position");
-	y += rulerHeight;
+	y += basePositionHeight;
 	}
     for (track = trackList; track != NULL; track = track->next)
         {
@@ -8831,10 +8864,13 @@ if (withGuidelines)
 if (withRuler)
     {
     y = 0;
-    vgSetClip(vg, insideX, y, insideWidth, rulerHeight);
+    vgSetClip(vg, insideX, y, insideWidth, basePositionHeight);
     relNumOff = winStart;
     vgDrawRulerBumpText(vg, insideX, y, rulerHeight, insideWidth, MG_BLACK, font,
 			relNumOff, winBaseCount, 0, 1);
+    if (needDrawBases)
+        drawBases(vg, insideX, y+rulerHeight, insideWidth, baseHeight, 
+		MG_BLACK, font);
     vgUnclip(vg);
 
     /* Make hit boxes that will zoom program around ruler. */
@@ -8865,7 +8901,7 @@ if (withRuler)
 		ns -= (ne - seqBaseCount);
 		ne = seqBaseCount;
 		}
-	    mapBoxJumpTo(ps+insideX,y,pe-ps,rulerHeight,
+	    mapBoxJumpTo(ps+insideX,y,pe-ps,basePositionHeight,
 			 chromName, ns, ne, "3x zoom");
 	    }
 	}
@@ -9937,9 +9973,6 @@ if (userSeqString && !ssFilesExist(userSeqString))
     }
 if (!hideControls)
     hideControls = cartUsualBoolean(cart, "hideControls", FALSE);
-withLeftLabels = cartUsualBoolean(cart, "leftLabels", TRUE);
-withCenterLabels = cartUsualBoolean(cart, "centerLabels", TRUE);
-withGuidelines = cartUsualBoolean(cart, "guidelines", TRUE);
 #ifdef ROBERTS_EXPERIMENT
 withPopUps = cartUsualBoolean(cart, "popUps", TRUE);
 #endif /* ROBERTS_EXPERIMENT */
@@ -10128,12 +10161,6 @@ if(hideAll)
     hideAllTracks(trackList);
     }
 
-/* Figure out basic dimensions of display.  Loaders
- * as well as drawers want to know this, so that
- * they don't have to load too much detail. */
-insideX = trackOffsetX();
-insideWidth = tl.picWidth-gfxBorder-insideX;
-
 /* Tell tracks to load their items. */
 for (track = trackList; track != NULL; track = track->next)
     {
@@ -10168,6 +10195,7 @@ if (!hideControls)
     hButton("hgt.in1", "1.5x");
     hButton("hgt.in2", " 3x ");
     hButton("hgt.in3", "10x");
+    hButton("hgt.inBase", "base");
     hWrites(" zoom out ");
     hButton("hgt.out1", "1.5x");
     hButton("hgt.out2", " 3x ");
@@ -10331,40 +10359,51 @@ for (track = trackList; track != NULL; track = track->next)
 hPrintf("</FORM>");
 }
 
-
-void zoomAroundCenter(double amount)
-/* Set ends so as to zoom around center by scaling amount. */
+void zoomToSize(int newSize)
+/* Zoom so that center stays in same place,
+ * but window is new size.  If necessary move
+ * center a little bit to keep it from going past
+ * edges. */
 {
 int center = (winStart + winEnd)/2;
-double newCountDbl = (winBaseCount*amount + 0.5);
-int newCount;
-if (newCountDbl > seqBaseCount)
-    newCount = seqBaseCount;
-else if (newCountDbl < 0)
-    newCount = 0;
-else
-    newCount = (int)newCountDbl;
-if (newCount < 30) newCount = 30;
-if (newCount > seqBaseCount)
-    newCount = seqBaseCount;
-winStart = center - newCount/2;
-winEnd = winStart + newCount;
-if (winStart <= 0 && winEnd >= seqBaseCount)
+if (newSize > seqBaseCount)
+    newSize = seqBaseCount;
+winStart = center - newSize/2;
+winEnd = winStart + newSize;
+if (winStart <= 0)
     {
     winStart = 0;
-    winEnd = seqBaseCount;
-    }
-else if (winStart <= 0)
-    {
-    winStart = 0;
-    winEnd = newCount;
+    winEnd = newSize;
     }
 else if (winEnd > seqBaseCount)
     {
     winEnd = seqBaseCount;
-    winStart = winEnd - newCount;
+    winStart = winEnd - newSize;
     }
 winBaseCount = winEnd - winStart;
+}
+
+void zoomAroundCenter(double amount)
+/* Set ends so as to zoom around center by scaling amount. */
+{
+double newSizeDbl = (winBaseCount*amount + 0.5);
+int newSize;
+if (newSizeDbl > seqBaseCount)
+    newSize = seqBaseCount;
+else if (newSizeDbl < 0)
+    newSize = 0;
+else
+    newSize = (int)newSizeDbl;
+if (newSize < 30) newSize = 30;
+if (newSize > seqBaseCount)
+    newSize = seqBaseCount;
+zoomToSize(newSize);
+}
+
+void zoomToBaseLevel()
+/* Set things so that it's zoomed to base level. */
+{
+zoomToSize(insideWidth/tl.mWidth);
 }
 
 void relativeScroll(double amount)
@@ -10519,6 +10558,15 @@ if (NULL == chromName)
 seqBaseCount = hChromSize(chromName);
 winBaseCount = winEnd - winStart;
 
+/* Figure out basic dimensions of display.  This
+ * needs to be done early for the sake of the
+ * zooming and dinking routines. */
+withLeftLabels = cartUsualBoolean(cart, "leftLabels", TRUE);
+withCenterLabels = cartUsualBoolean(cart, "centerLabels", TRUE);
+withGuidelines = cartUsualBoolean(cart, "guidelines", TRUE);
+insideX = trackOffsetX();
+insideWidth = tl.picWidth-gfxBorder-insideX;
+
 /* Do zoom/scroll if they hit it. */
 if (cgiVarExists("hgt.left3"))
     relativeScroll(-0.95);
@@ -10532,6 +10580,8 @@ else if (cgiVarExists("hgt.right2"))
     relativeScroll(0.475);
 else if (cgiVarExists("hgt.right3"))
     relativeScroll(0.95);
+else if (cgiVarExists("hgt.inBase"))
+    zoomToBaseLevel();
 else if (cgiVarExists("hgt.in3"))
     zoomAroundCenter(1.0/10.0);
 else if (cgiVarExists("hgt.in2"))
@@ -10631,7 +10681,7 @@ printf("new tracks, including some gene predictions.  Please try again tomorrow.
  * variables are not hgt. qualified.  It's a good idea if other
  * program's unique variables be qualified with a prefix though. */
 char *excludeVars[] = { "submit", "Submit", "hgt.reset",
-			"hgt.in1", "hgt.in2", "hgt.in3", 
+			"hgt.in1", "hgt.in2", "hgt.in3", "hgt.inBase",
 			"hgt.out1", "hgt.out2", "hgt.out3",
 			"hgt.left1", "hgt.left2", "hgt.left3", 
 			"hgt.right1", "hgt.right2", "hgt.right3", 
