@@ -247,6 +247,7 @@ struct slName
     };
 
 struct slName *newSlName(char *name);
+#define slNameNew newSlName
 /* Return a new name. */
 
 int slNameCmp(const void *va, const void *vb);
