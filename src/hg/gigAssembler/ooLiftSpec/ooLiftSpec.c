@@ -280,7 +280,7 @@ while (lineFileNext(lf, &line, &lineSize))
     else
 	{
 	chromInserts = hashFindVal(insertsHash, chromName);
-	if (chromInserts == NULL)
+	if (chromInserts == NULL && !stringIn("_random", chromName))
 	    warn("No inserts found for %s", chromName);
 	ciList = readContigs(lf);
 	}
