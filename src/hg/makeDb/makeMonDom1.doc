@@ -584,6 +584,13 @@ Submission to last job:          1309s      21.82m     0.36h    0.02d
     cp -p /cluster/data/monDom1/jkStuff/chunkedScaffolds.lft .
     cp -p /cluster/data/monDom1/monDom1.2bit .
 
+    #	And create a chunks.2bit for the lavToAxt operations
+    ssh kkr1u00
+    cd /iscratch/i/monDom1/chunks
+    faToTwoBit chunks*.fa ../chunks.2bit
+    cd ..
+    twoBitInfo chunks.2bit chunks.info
+    /cluster/bin/iSync
     #	request rsync of scratch to the cluster
 
 # PRODUCING GENSCAN PREDICTIONS (DONE - 2004-12-07 - Hiram)
@@ -734,6 +741,19 @@ gsBig {check in line+ $(path1)} {check out line gtf/$(root1).gtf} -trans={check 
     nice bin/gbDbLoadStep -verbose=1 -drop -initialLoad monDom1
     #	2 minute load time
 
+    #	And finally, the long-lived EST alignments.  Several cluster days
+    ssh kksilo
+    cd /cluster/data/genbank/work
+    mv initial.monDom1 initial.monDom1.genbank.mrna
+
+    cd /cluster/data/genbank
+    nice bin/gbAlignStep -srcDb=genbank -type=est -verbose=1 -initial monDom1
+    # logFile: var/build/logs/2004.12.14-14:16:18.monDom1.initalign.log
+    #	It said there was nothing to align, must be no native est's for
+    #	the Opossum, add this line to the genbank.conf file:
+    #	monDom1.genbank.est.native.load = no
+    #	and add this so it will do the xeno's:
+    #	monDom1.genbank.est.xeno.load = yes
 
 # GC5BASE (DONE - 2004-12-08 - Hiram)
     ssh eieio
@@ -756,21 +776,28 @@ gsBig {check in line+ $(path1)} {check out line gtf/$(root1).gtf} -trans={check 
     hgsql monDom1 -e "create index bin on gc5Base (chrom(14), bin);"
     #	this is fixed in hgLoadWiggle as of 2004-12-09
 
-# QUALITY (DONE - 2004-12-08 - Hiram)
-    ssh kksilo
-    cd /cluster/data/monDom1/broad.mit.edu
+# QUALITY (DONE - 2004-12-14 - Hiram)
+    ssh eieio
+    mkdir /cluster/data/monDom1/bed/quality
+    cd /cluster/data/monDom1/bed/quality
     #	Create perl script to read the quality file and pipe to
     #	wigEncode:
-    ./qaToWigEncode.pl assembly.agp.qual | wigEncode stdin qual.wig qual.wib
+    ./qaToWigEncode.pl ../../broad.mit.edu/assembly.agp.qual \
+	| wigEncode stdin quality.wig quality.wib
     #	Converted stdin, upper limit 68.00, lower limit 0.00
-    #	Took 5 hours of processing time.
-    #	I would like to go back to this, fix the script to coordinate
-    #	with the AGP file and not place zero values in the gap regions.
+    #	Took 6 hours 40 minutes of processing time.
+    #	Resulting files:
+    ls -og quality.wi?
+    #	-rw-rw-r--  1  377775898 Dec 13 21:40 quality.wig
+    #	-rw-rw-r--  1 3492108230 Dec 13 21:40 quality.wib
+
 
     ssh hgwdev
-    cd /cluster/data/monDom1/broad.mit.edu
-    hgLoadWiggle -pathPrefix=/gbdb/monDom1/wib monDom1 quality qual.wig
-    #	fix the index  (this is fixed in hgLoadWiggle as of 2004-12-09)
+    cd /cluster/data/monDom1/bed/quality
+    ln -s `pwd`/quality.wib /gbdb/monDom1/wib
+    hgLoadWiggle -pathPrefix=/gbdb/monDom1/wib monDom1 quality quality.wig
+    #	fix the index  (this was supposed to be fixed, hgLoadWiggle
+    #	needs to be looked at)
     hgsql monDom1 -e "drop index chrom on quality;"
     hgsql monDom1 -e "create index bin on quality (chrom(14), bin);"
 
@@ -856,14 +883,7 @@ SEQ2_LEN=$BASE/S2.len
 # Submission to last job:          1524s      25.40m     0.42h    0.02d
 
     # third run: lav -> axt (an I/O bound process, run only on fileserver)
-    #	need to convert the chunks .fa files into a 2bit so lavToAxt
-    #	will work.  Then lift the resulting axt
-    ssh kkr1u00
-    cd /iscratch/i/monDom1/chunks
-    faToTwoBit chunks*.fa ../chunks.2bit
-    cd ..
-    twoBitInfo chunks.2bit chunks.info
-    /cluster/bin/iSync
+    #	Use the chunks.2bit so lavToAxt will work. Then lift the resulting axt
 
     ssh eieio
     cd /cluster/data/monDom1/bed/zb.hg17
@@ -891,14 +911,14 @@ done
     # << this line keeps emacs coloring happy
 
     chmod +x lav2axt.sh
-    time ./lav2axt.sh
+    ./lav2axt.sh
 
     #	load this blast result just to see how it looks
     #	It is not needed in the browser after the chains and nets are
     #	made, drop it later.
     ssh hgwdev
-    hgLoadPsl -table=blastzMonDom1 -noTNameIx hg17 chrM.psl
     cd /cluster/data/monDom1/bed/zb.hg17/pslChrom
+    hgLoadPsl -table=blastzMonDom1 -noTNameIx hg17 chrM.psl
     for I in `ls *.psl | grep -v chrM.psl`
     do
         /cluster/bin/i386/hgLoadPsl -table=blastzMonDom1 -append \
@@ -907,7 +927,13 @@ done
     done
     #	Let's see what featureBits has to say about this data
     featureBits hg17 blastzMonDom1
-    # 486216407 bases of 2866216770 (16.964%) in intersection
+    #	486216407 bases of 2866216770 (16.964%) in intersection
+    featureBits hg17 blastzMm5
+    #	1052077141 bases of 2866216770 (36.706%) in intersection
+    featureBits hg17 blastzRn3
+    #	1013003285 bases of 2866216770 (35.343%) in intersection
+
+
 
 # CHAIN HUMAN BLASTZ  (DONE - 2004-12-12 - Hiram)
     # Run axtChain on file server, job is mostly I/O, cluster does not help
@@ -920,14 +946,14 @@ done
     ls -1S /cluster/data/monDom1/bed/zb.hg17/axtChrom/*.axt > input.lst
     cat << '_EOF_' > doChain.sh
 #!/bin/sh
-for A in `cat input.lst`
+for chrAxtFile in `cat input.lst`
 do
-    B=`basename ${A}`
+    chr=`basename ${chrAxtFile}`
     axtChain -scoreScheme=/cluster/data/blastz/HoxD55.q \
 	-linearGap=../../opossumHumanTuned.gap \
-	-minScore=5000 ${A} \
+	-minScore=5000 ${chrAxtFile} \
 	/cluster/data/hg17/nib \
-	/cluster/data/monDom1/monDom1.2bit chainRaw/${B}.chain > out/${B}.out
+	/cluster/data/monDom1/monDom1.2bit chainRaw/${chr}.chain > out/${chr}.out
 done
 '_EOF_'
     # << this line keeps emacs coloring happy
@@ -946,7 +972,7 @@ bothGap	625	660	700	750	900	1400	4000	8000	16000	32000	57000
     rm -f temp.gap
 
     chmod +x doChain
-    time ./doChain
+    ./doChain
 
     # On the cluster server weed the chains for repeats
     ssh eieio
@@ -977,6 +1003,8 @@ do
     hgLoadChain hg17 ${c}_chainMonDom1 $i
 done
 
+    featureBits hg17 chainMonDom1
+    #	2618859142 bases of 2866216770 (91.370%) in intersection
     featureBits hg17 chainMonDom1Link
     #	456069062 bases of 2866216770 (15.912%) in intersection
 
@@ -1020,11 +1048,11 @@ done
     #	4 minutes
     #	compare featureBits with some other assemblies
     featureBits hg17 netMonDom1
-    2595812636 bases of 2866216770 (90.566%) in intersection
+    #	2595812636 bases of 2866216770 (90.566%) in intersection
     featureBits hg17 netBosTau1
-    2261085097 bases of 2866216770 (78.887%) in intersection
+    #	2261085097 bases of 2866216770 (78.887%) in intersection
     featureBits hg17 netRn3
-    2817656275 bases of 2866216770 (98.306%) in intersection
+    #	2817656275 bases of 2866216770 (98.306%) in intersection
 
 # SWAP EVERYTHING AND REMAKE NET FROM OPOSSUM REFERENCE
     ssh eieio
@@ -1053,9 +1081,21 @@ done
     netFilter -minGap=10 monDom1.net | hgLoadNet monDom1 netHg17 stdin
     #	6 minutes
 
-    # Load chains into database (takes about 2 hours).
+    # Load chains into database (takes about 4 hours).
     hgLoadChain -tIndex monDom1 chainHg17 all.chain
-XXX - RUNNING - 2004-12-13 12:40
+    #	nearly 4 hours
+    #	I wonder if this would go better if loaded without an index,
+    #	then create the index after ?
+    #	Examining the index, it doesn't look too good.
+    featureBits monDom1 chainHg17Link
+    #	459086956 bases of 3492108230 (13.146%) in intersection
+    featureBits monDom1 chainHg17
+    #	3246158618 bases of 3492108230 (92.957%) in intersection
+    featureBits monDom1 netHg17
+    #	3223616544 bases of 3492108230 (92.311%) in intersection
+
+
+# BLASTZ HUMAN CLEAN UP
     rm chain.tab link.tab
 
 # LOAD CPGISSLANDS (DONE - 2004-12-13 - Hiram)
@@ -1183,13 +1223,12 @@ SEQ2_LEN=$BASE/S2.len
 
     cd run.0
     para try, push check, para push, para check....
-XXXX - RUNNING - 2004-12-13
-# Completed: 112871 of 112871 jobs
-# CPU time in finished jobs:   42061387s  701023.12m 11683.72h  486.82d  1.334 y
-# IO & Wait Time:                578862s    9647.70m   160.80h    6.70d  0.018 y
-# Average job time:                 378s       6.30m     0.10h    0.00d
-# Longest job:                     3157s      52.62m     0.88h    0.04d
-# Submission to last job:         81243s    1354.05m    22.57h    0.94d
+# Completed: 49981 of 49981 jobs
+# CPU time in finished jobs:   24745519s  412425.31m  6873.76h  286.41d  0.785 y
+# IO & Wait Time:                204758s    3412.64m    56.88h    2.37d  0.006 y
+# Average job time:                 499s       8.32m     0.14h    0.01d
+# Longest job:                     2857s      47.62m     0.79h    0.03d
+# Submission to last job:         85888s    1431.47m    23.86h    0.99d
 
     #	Second cluster run to convert the .out's to .lav's
     #	You do NOT want to run this on the big cluster.  It brings
@@ -1200,22 +1239,15 @@ XXXX - RUNNING - 2004-12-13
     /cluster/data/monDom1/jkStuff/BlastZ_run1.sh
     cd run.1
     para try, check, push, etc ...
-# Completed: 341 of 341 jobs
-# CPU time in finished jobs:       3525s      58.75m     0.98h    0.04d  0.000 y
-# IO & Wait Time:                 11315s     188.58m     3.14h    0.13d  0.000 y
-# Average job time:                  44s       0.73m     0.01h    0.00d
-# Longest job:                      181s       3.02m     0.05h    0.00d
-# Submission to last job:          1524s      25.40m     0.42h    0.02d
+# Completed: 151 of 151 jobs
+# CPU time in finished jobs:       1131s      18.85m     0.31h    0.01d  0.000 y
+# IO & Wait Time:                  2130s      35.50m     0.59h    0.02d  0.000 y
+# Average job time:                  22s       0.36m     0.01h    0.00d
+# Longest job:                       95s       1.58m     0.03h    0.00d
+# Submission to last job:           490s       8.17m     0.14h    0.01d
 
     # third run: lav -> axt (an I/O bound process, run only on fileserver)
-    #	need to convert the chunks .fa files into a 2bit so lavToAxt
-    #	will work.  Then lift the resulting axt
-    ssh kkr1u00
-    cd /iscratch/i/monDom1/chunks
-    faToTwoBit chunks*.fa ../chunks.2bit
-    cd ..
-    twoBitInfo chunks.2bit chunks.info
-    /cluster/bin/iSync
+    #	Use the chunks.2bit so lavToAxt will work. Then lift the resulting axt
 
     ssh eieio
     cd /cluster/data/monDom1/bed/zb.galGal2
@@ -1230,7 +1262,7 @@ do
     echo -n "${L} -> ${chr}.axt working ... "
     cat `ls -1 *.lav | sort -g` \
 	| lavToAxt stdin \
-	/iscratch/i/galGal2/bothMaskedNibs \
+	/iscratch/i/galGal2/nib \
 	/iscratch/i/monDom1/chunks.2bit stdout \
 	| axtSort stdin stdout | liftUp -axtQ ../../axtChrom/${chr}.axt \
 	    /iscratch/i/monDom1/chunkedScaffolds.lft warn stdin
@@ -1243,21 +1275,153 @@ done
     # << this line keeps emacs coloring happy
 
     chmod +x lav2axt.sh
-    time ./lav2axt.sh
+    ./lav2axt.sh
+    #	12 minutes
 
     #	load this blast result just to see how it looks
     #	It is not needed in the browser after the chains and nets are
     #	made, drop it later.
     ssh hgwdev
-    hgLoadPsl -table=blastzMonDom1 -noTNameIx galGal2 chrM.psl
     cd /cluster/data/monDom1/bed/zb.galGal2/pslChrom
+
+    hgLoadPsl -table=blastzMonDom1 -noTNameIx galGal2 chrM.psl
     for I in `ls *.psl | grep -v chrM.psl`
     do
         /cluster/bin/i386/hgLoadPsl -table=blastzMonDom1 -append \
 		-noTNameIx galGal2 ${I}
         echo "done: ${I}"
     done
+    
     #	Let's see what featureBits has to say about this data
     featureBits galGal2 blastzMonDom1
+    # 486216407 bases of 2866216770 (16.964%) in intersection
+
+# ALIGN TO MOUSE (WORKING - 2004-12-14 - Hiram)
+  ssh kk
+  mkdir -p /cluster/data/monDom1/bed/zb.mm5
+  cd /cluster/data/monDom1/bed/zb.mm5
+
+  # Create DEF file for run of scaffolds vs. mouse chromosomes
+  cat << '_EOF_' > DEF
+# mouse vs. M.domestica
+export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/bin/i386:/cluster/home/angie/schwartzbin
+
+ALIGN=blastz-run
+BLASTZ=blastz
+# Set up blastz parameters using parameters between (chicken and fish ?)
+# but not abridging repeats since can't do that with scaffolds, and
+# it's not very relevant at this evolutionary distance.
+# Specific settings for chicken (per Webb email to Brian Raney)
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=10000
+BLASTZ_K=2200
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+BLASTZ_ABRIDGE_REPEATS=0
+
+# TARGET: mouse
+SEQ1_DIR=/scratch/mus/mm5/softNib
+SEQ1_RMSK=
+SEQ1_FLAG=
+SEQ1_SMSK=
+SEQ1_IN_CONTIGS=0
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Opossum
+SEQ2_DIR=/iscratch/i/monDom1/chunks
+SEQ2_RMSK=
+SEQ2_FLAG=
+SEQ2_SMSK=
+SEQ2_IN_CONTIGS=1
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+
+BASE=/cluster/data/monDom1/bed/zb.mm5
+
+DEF=$BASE/DEF
+RAW=$BASE/raw
+CDBDIR=$BASE
+SEQ1_LEN=$BASE/S1.len
+SEQ2_LEN=$BASE/S2.len
+'_EOF_'
+  # << this line keeps emacs coloring happy
+
+    cp -p /cluster/data/mm5/chrom.sizes S1.len
+    cp -p /cluster/data/monDom1/chrom.sizes S2.len
+    # script copied over from /cluster/data/mm5/jkStuff/BlastZ_run0.sh
+    /cluster/data/monDom1/jkStuff/BlastZ_run0.sh
+
+    cd run.0
+    para try, push check, para push, para check....
+XXXX - RUNNING - 2004-12-14 15:52
+# Completed: 112871 of 112871 jobs
+# CPU time in finished jobs:   42061387s  701023.12m 11683.72h  486.82d  1.334 y
+# IO & Wait Time:                578862s    9647.70m   160.80h    6.70d  0.018 y
+# Average job time:                 378s       6.30m     0.10h    0.00d
+# Longest job:                     3157s      52.62m     0.88h    0.04d
+# Submission to last job:         81243s    1354.05m    22.57h    0.94d
+
+    #	Second cluster run to convert the .out's to .lav's
+    #	You do NOT want to run this on the big cluster.  It brings
+    #	the file server to its knees.  Run this on the small cluster.
+    ssh kki
+    cd /cluster/data/monDom1/bed/zb.mm5
+    # script copied over from /cluster/data/mm5/jkStuff/BlastZ_run1.sh
+    /cluster/data/monDom1/jkStuff/BlastZ_run1.sh
+    cd run.1
+    para try, check, push, etc ...
+# Completed: 341 of 341 jobs
+# CPU time in finished jobs:       3525s      58.75m     0.98h    0.04d  0.000 y
+# IO & Wait Time:                 11315s     188.58m     3.14h    0.13d  0.000 y
+# Average job time:                  44s       0.73m     0.01h    0.00d
+# Longest job:                      181s       3.02m     0.05h    0.00d
+# Submission to last job:          1524s      25.40m     0.42h    0.02d
+
+    # third run: lav -> axt (an I/O bound process, run only on fileserver)
+    #	Use the chunks.2bit so lavToAxt will work. Then lift the resulting axt
+
+    ssh eieio
+    cd /cluster/data/monDom1/bed/zb.mm5
+    mkdir axtChrom pslChrom
+
+    cat << '_EOF_' > lav2axt.sh
+#!/bin/sh
+for L in lav/chr*
+do
+    chr=${L/lav\//}
+    cd ${L}
+    echo -n "${L} -> ${chr}.axt working ... "
+    cat `ls -1 *.lav | sort -g` \
+	| lavToAxt stdin \
+	/iscratch/i/mm5/bothMaskedNibs \
+	/iscratch/i/monDom1/chunks.2bit stdout \
+	| axtSort stdin stdout | liftUp -axtQ ../../axtChrom/${chr}.axt \
+	    /iscratch/i/monDom1/chunkedScaffolds.lft warn stdin
+    cd ../..
+    echo -n "${chr}.axt -> ${chr}.psl working ..."
+    axtToPsl axtChrom/${chr}.axt S1.len S2.len pslChrom/${chr}.psl
+    echo "DONE"
+done
+'_EOF_'
+    # << this line keeps emacs coloring happy
+
+    chmod +x lav2axt.sh
+    ./lav2axt.sh
+
+    #	load this blast result just to see how it looks
+    #	It is not needed in the browser after the chains and nets are
+    #	made, drop it later.
+    ssh hgwdev
+    cd /cluster/data/monDom1/bed/zb.mm5/pslChrom
+    hgLoadPsl -table=blastzMonDom1 -noTNameIx mm5 chrM.psl
+    for I in `ls *.psl | grep -v chrM.psl`
+    do
+        /cluster/bin/i386/hgLoadPsl -table=blastzMonDom1 -append \
+		-noTNameIx mm5 ${I}
+        echo "done: ${I}"
+    done
+    #	Let's see what featureBits has to say about this data
+    featureBits mm5 blastzMonDom1
     # 486216407 bases of 2866216770 (16.964%) in intersection
 
