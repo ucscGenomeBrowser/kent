@@ -10373,7 +10373,7 @@ void relativeScroll(double amount)
 int offset;
 int newStart, newEnd;
 
-offset = (int)(amount * winBaseCount + 0.5);
+offset = (int)(amount * winBaseCount);
 /* Make sure don't scroll of ends. */
 newStart = winStart + offset;
 newEnd = winEnd + offset;
