@@ -17,7 +17,9 @@
 #include "twoBit.h"
 #include "trans3.h"
 
-static char const rcsid[] = "$Id: gfBlatLib.c,v 1.6 2004/11/15 17:08:08 kent Exp $";
+static char const rcsid[] = "$Id: gfBlatLib.c,v 1.7 2004/11/29 05:27:06 kent Exp $";
+
+static int ssAliCount = 16;	/* Number of alignments returned by ssStitch. */
 
 void dumpRange(struct gfRange *r, FILE *f)
 /* Dump range to file. */
@@ -578,7 +580,7 @@ for (range = rangeList; range != NULL; range = range->next)
     bun->qSeq = seq;
     bun->genoSeq = targetSeq;
     alignComponents(range, bun, ffCdna);
-    ssStitch(bun, ffCdna, minMatch, 16);
+    ssStitch(bun, ffCdna, minMatch, ssAliCount);
     saveAlignments(targetName, range->tTotalSize, range->tStart, 
 	bun, NULL, isRc, FALSE, ffCdna, minMatch, out);
     ssBundleFree(&bun);
@@ -649,7 +651,7 @@ for (range = rangeList; range != NULL; range = range->next)
     bun->qSeq = seq;
     bun->genoSeq = targetSeq;
     alignComponents(range, bun, ffCdna);
-    ssStitch(bun, ffCdna, minScore, 16);
+    ssStitch(bun, ffCdna, minScore, ssAliCount);
     slAddHead(&bunList, bun);
     }
 slReverse(&bunList);
@@ -904,7 +906,7 @@ for (range = rangeList; range != NULL; range = range->next)
     bun->genoSeq = targetSeq;
     bun->ffList = gfRangesToFfItem(range->components, seq);
     bun->isProt = isProt;
-    ssStitch(bun, stringency, minMatch, 16);
+    ssStitch(bun, stringency, minMatch, ssAliCount);
     saveAlignments(targetSeq->name, targetSeq->size, 0, 
 	bun, NULL, isRc, FALSE, stringency, minMatch, out);
     ssBundleFree(&bun);
@@ -974,7 +976,7 @@ for (range = rangeList; range != NULL; range = range->next)
     bun->ffList = gfRangesToFfItem(range->components, qSeq);
     bun->isProt = TRUE;
     bun->t3List = t3;
-    ssStitch(bun, ffCdna, minMatch, 16);
+    ssStitch(bun, ffCdna, minMatch, ssAliCount);
     saveAlignments(targetSeq->name, t3->seq->size, 0, 
 	bun, t3Hash, FALSE, tIsRc, ffCdna, minMatch, out);
     ssBundleFree(&bun);
@@ -1114,7 +1116,7 @@ for (isRc = 0; isRc <= 1;  ++isRc)
 	bun->isProt = TRUE;
 	t3 = hashMustFindVal(t3Hash, range->tName);
 	bun->t3List = t3;
-	ssStitch(bun, ffCdna, minMatch, 16);
+	ssStitch(bun, ffCdna, minMatch, ssAliCount);
 	getTargetName(range->tName, out->includeTargetFile, targetName);
 	saveAlignments(targetName, t3->nibSize, 0, 
 	    bun, t3Hash, FALSE, isRc, ffCdna, minMatch, out);
@@ -1242,7 +1244,7 @@ for (tIsRc=0; tIsRc <= 1; ++tIsRc)
 	bun->qSeq = qSeq;
 	bun->genoSeq = targetSeq;
 	bun->ffList = gfRangesToFfItem(range->components, qSeq);
-	ssStitch(bun, stringency, minMatch, 16);
+	ssStitch(bun, stringency, minMatch, ssAliCount);
 	getTargetName(range->tName, out->includeTargetFile, targetName);
 	t3 = range->t3;
 	saveAlignments(targetName, t3->nibSize, t3->start, 
@@ -1308,7 +1310,7 @@ for (range = rangeList; range != NULL; range = range->next)
     bun->qSeq = qSeq;
     bun->genoSeq = targetSeq;
     bun->ffList = gfRangesToFfItem(range->components, qSeq);
-    ssStitch(bun, stringency, minMatch, 16);
+    ssStitch(bun, stringency, minMatch, ssAliCount);
     slAddHead(&bunList, bun);
     }
 for (qFrame = 0; qFrame<3; ++qFrame)
@@ -1517,7 +1519,7 @@ for (subOffset = 0; subOffset<query->size; subOffset = nextOffset)
 
 for (bun = bigBunList; bun != NULL; bun = bun->next)
     {
-    ssStitch(bun, ffCdna, minScore, 16);
+    ssStitch(bun, ffCdna, minScore, ssAliCount);
     if (!fastMap && !band)
 	refineSmallExonsInBundle(bun);
     saveAlignments(bun->genoSeq->name, bun->genoSeq->size, 0, 
@@ -1578,7 +1580,7 @@ for (subOffset = 0; subOffset<query->size; subOffset = nextOffset)
     }
 for (bun = bigBunList; bun != NULL; bun = bun->next)
     {
-    ssStitch(bun, ffCdna, minScore, 16);
+    ssStitch(bun, ffCdna, minScore, ssAliCount);
     saveAlignments(bun->genoSeq->name, bun->genoSeq->size, 0, 
 	bun, NULL, qIsRc, tIsRc, stringency, minScore, out);
     }
