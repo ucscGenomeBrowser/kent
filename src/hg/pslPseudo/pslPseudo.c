@@ -24,7 +24,7 @@
 #define PSEUDO 1
 #define NOTPSEUDO -1
 
-static char const rcsid[] = "$Id: pslPseudo.c,v 1.8 2003/12/17 21:31:58 baertsch Exp $";
+static char const rcsid[] = "$Id: pslPseudo.c,v 1.9 2003/12/18 17:04:30 baertsch Exp $";
 
 double minAli = 0.98;
 double maxRep = 0.35;
@@ -686,6 +686,7 @@ if (pslList != NULL)
                 overlapDiagonal += positiveRangeIntersection(psl->tStart, psl->tEnd, 
                         bed->chromStart, bed->chromEnd);
                 }
+            overlapDiagonal = (overlapDiagonal*100)/(psl->tEnd-psl->tStart);
             slFreeList(&elist);
             }
 
@@ -752,9 +753,14 @@ if (pslList != NULL)
                     {
                     if (!quiet)
                         printf("NO %s reps %.3f %.3f\n",psl->tName,(float)rep/(float)(psl->match+(psl->misMatch)) , maxRep);
-                    outputLink( psl, "maxRep", bestPsl->qName, bestPsl->tName, bestPsl->tStart, bestPsl->tEnd, 
-                            maxExons, geneOverlap, bestPsl->strand, polyA, polyAstart, NOTPSEUDO ,
-                            exonCover, intronCount, bestAliCount, rep, qReps, overlapDiagonal); 
+                    if (bestPsl == NULL)
+                        outputLink( psl, "maxRep", "?", "?", -1, -1, 
+                                maxExons, geneOverlap, "?", polyA, polyAstart, NOTPSEUDO ,
+                                exonCover, intronCount, bestAliCount, rep, qReps, overlapDiagonal); 
+                    else
+                        outputLink( psl, "maxRep", bestPsl->qName, bestPsl->tName, bestPsl->tStart, bestPsl->tEnd, 
+                                maxExons, geneOverlap, bestPsl->strand, polyA, polyAstart, NOTPSEUDO ,
+                                exonCover, intronCount, bestAliCount, rep, qReps, overlapDiagonal); 
                     continue;
                     }
 
@@ -793,7 +799,7 @@ if (pslList != NULL)
                         if (!quiet)
                             printf("NO %s better blat mrna %s \n",psl->qName,mPsl->qName);
                         outputLink(psl, "better", mPsl->qName, mPsl->tName, mPsl->tStart, mPsl->tEnd, 
-                                maxExons, geneOverlap, bestPsl->strand, polyA, polyAstart, 
+                                maxExons, geneOverlap, mPsl->strand, polyA, polyAstart, 
                                 NOTPSEUDO, exonCover, intronCount, bestAliCount, 
                                 tReps, qReps, overlapDiagonal); 
                         continue;
@@ -805,15 +811,25 @@ if (pslList != NULL)
                     if ( positiveRangeIntersection(bestStart, bestEnd, psl->tStart, psl->tEnd) && 
                                 sameString(psl->tName, bestChrom))
                         {
-                        outputLink(psl, "self", bestPsl->qName, bestPsl->tName, bestPsl->tStart, bestPsl->tEnd, 
-                                maxExons, geneOverlap, bestPsl->strand, polyA, polyAstart, NOTPSEUDO,
-                                exonCover, intronCount, bestAliCount, tReps, qReps, overlapDiagonal); 
+                        if (bestPsl == NULL)
+                            outputLink( psl, "self", "?", "?", -1, -1, 
+                                    maxExons, geneOverlap, "?", polyA, polyAstart, NOTPSEUDO ,
+                                    exonCover, intronCount, bestAliCount, tReps, qReps, overlapDiagonal); 
+                        else
+                            outputLink(psl, "self", bestPsl->qName, bestPsl->tName, bestPsl->tStart, bestPsl->tEnd, 
+                                    maxExons, geneOverlap, bestPsl->strand, polyA, polyAstart, NOTPSEUDO,
+                                    exonCover, intronCount, bestAliCount, tReps, qReps, overlapDiagonal); 
                         }
-                    else if (overlapDiagonal >= 50)
+                    else if (overlapDiagonal >= 40)
                        {
                         if (!quiet)
                             printf("NO. %s %d diag %s %d  bestChrom %s\n",psl->qName, 
                                     overlapDiagonal, psl->tName, psl->tStart, bestChrom);
+                        if (bestPsl == NULL)
+                            outputLink( psl, "diagonal", "?", "?", -1, -1, 
+                                    maxExons, geneOverlap, "?", polyA, polyAstart, NOTPSEUDO ,
+                                    exonCover, intronCount, bestAliCount, tReps, qReps, overlapDiagonal); 
+                        else
                             outputLink(psl, "diagonal", bestPsl->qName, bestPsl->tName, bestPsl->tStart, bestPsl->tEnd, 
                                 maxExons, geneOverlap, bestPsl->strand, polyA, polyAstart, NOTPSEUDO,
                                 exonCover, intronCount, bestAliCount, tReps, qReps, overlapDiagonal); 
@@ -833,7 +849,7 @@ if (pslList != NULL)
                             printf("\n");
                             }
                         pslTabOut(psl, pseudoFile);
-                        if (kg != NULL)
+                        if (kg != NULL && bestPsl != NULL)
                             {
                             outputLink( psl, "knownGene", kg->name, bestPsl->tName, bestPsl->tStart, bestPsl->tEnd, 
                                     maxExons, geneOverlap, kg->strand, polyA, polyAstart, PSEUDO,
@@ -841,7 +857,7 @@ if (pslList != NULL)
                             }
                         else 
                             {
-                            if (gp != NULL)
+                            if (gp != NULL && bestPsl != NULL)
                                 {
                                 outputLink( psl, "refGene", gp->name, bestPsl->tName, bestPsl->tStart, bestPsl->tEnd, 
                                         maxExons, geneOverlap, gp->strand, polyA, polyAstart, PSEUDO,
@@ -849,15 +865,19 @@ if (pslList != NULL)
                                 }
                             else 
                                 {
-                                if (mgc != NULL)
+                                if (mgc != NULL && bestPsl != NULL)
                                     {
-                                    outputLink( psl, "mgcGenes", gp->name, bestPsl->tName, bestPsl->tStart, bestPsl->tEnd, 
-                                            maxExons, geneOverlap, gp->strand, polyA, polyAstart, 
+                                    outputLink( psl, "mgcGenes", mgc->name, bestPsl->tName, bestPsl->tStart, bestPsl->tEnd, 
+                                            maxExons, geneOverlap, mgc->strand, polyA, polyAstart, 
                                             PSEUDO, exonCover, intronCount, bestAliCount, tReps, qReps, overlapDiagonal); 
                                     }
-                                else
+                                else if (bestPsl != NULL)
                                     outputLink(psl, "mrna", bestPsl->qName, bestPsl->tName, bestPsl->tStart, bestPsl->tEnd, 
                                             maxExons, geneOverlap, bestPsl->strand, polyA, polyAstart, PSEUDO,
+                                            exonCover, intronCount, bestAliCount, tReps, qReps, overlapDiagonal); 
+                                else
+                                    outputLink(psl, "mrna", "?", "?", -1, -1, 
+                                            maxExons, geneOverlap, "?", polyA, polyAstart, NOTPSEUDO,
                                             exonCover, intronCount, bestAliCount, tReps, qReps, overlapDiagonal); 
                                 }
                             }
@@ -872,9 +892,14 @@ if (pslList != NULL)
                             bestAliCount, exonCover,
                             calcMilliScore(psl),  psl->match + psl->repMatch , 
                             minCoverPseudo * (float)psl->qSize, tReps + qReps);
-                    outputLink( psl, "span", bestPsl->qName, bestPsl->tName, bestPsl->tStart, bestPsl->tEnd, 
-                            maxExons, geneOverlap, bestPsl->strand, polyA, polyAstart, NOTPSEUDO,
-                            exonCover, intronCount, bestAliCount, tReps, qReps, overlapDiagonal); 
+                    if (bestPsl == NULL)
+                        outputLink( psl, "span", "?", "?", -1, -1, 
+                                maxExons, geneOverlap, "?", polyA, polyAstart, NOTPSEUDO ,
+                                exonCover, intronCount, bestAliCount, tReps, qReps, overlapDiagonal); 
+                    else
+                        outputLink( psl, "span", bestPsl->qName, bestPsl->tName, bestPsl->tStart, bestPsl->tEnd, 
+                                maxExons, geneOverlap, bestPsl->strand, polyA, polyAstart, NOTPSEUDO,
+                                exonCover, intronCount, bestAliCount, tReps, qReps, overlapDiagonal); 
                 }
             }
             else 
@@ -889,8 +914,8 @@ if (pslList != NULL)
                             maxExons, geneOverlap, bestPsl->strand, polyA, polyAstart, NOTPSEUDO,
                             exonCover, intronCount, bestAliCount, tReps, qReps, overlapDiagonal); 
                 else
-                    outputLink( psl, "noBest", "none", "none", -1, -1, 
-                            maxExons, geneOverlap, "x", polyA, polyAstart, NOTPSEUDO,
+                    outputLink( psl, "noBest", "?", "?", -1, -1, 
+                            maxExons, geneOverlap, "?", polyA, polyAstart, NOTPSEUDO,
                             exonCover, intronCount, bestAliCount, tReps, qReps, overlapDiagonal); 
             }
         }
