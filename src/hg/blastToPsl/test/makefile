@@ -11,9 +11,9 @@ clean:
 liver: liver.fa liver.tab BLOSUM45 liver.psl $(NIBDIR) 
 	rm -f testLiver.psl 
 	../blastToPsl liver.tab $(NIBDIR) liver.fa BLOSUM45 testLiver.psl
-	-@cmp liver.psl testLiver.psl 
+	-@cmp liver.psl testLiver.psl || pslCheck testLiver.psl
 
 heart: heart.fa heart.tab BLOSUM45 heart.psl $(NIBDIR) 
 	rm -f testHeart.psl
 	../blastToPsl heart.tab $(NIBDIR) heart.fa BLOSUM45 testHeart.psl
-	-@cmp heart.psl testHeart.psl
+	-@cmp heart.psl testHeart.psl|| pslCheck testHeart.psl
