@@ -6285,7 +6285,7 @@ BASE=/cluster/data/dm1/bed/blastz.dm1.2005-02-24
 
 '_EOF_'
     # << this line keeps emacs coloring happy
-    ~/kent/src/utils/doBlastzChainNet.pl DEF \
+    doBlastzChainNet.pl DEF \
       -blastzOutRoot /panasas/store/dm1SelfOut >& do.log &
     tail -f do.log
     rmdir /panasas/store/dm1SelfOut
