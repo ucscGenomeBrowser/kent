@@ -10,9 +10,9 @@
 #include "cheapcgi.h"
 #include "genePred.h"
 
-static char const rcsid[] = "$Id: expClick.c,v 1.6 2004/01/06 22:09:42 angie Exp $";
+static char const rcsid[] = "$Id: expClick.c,v 1.6.30.1 2004/04/26 22:54:45 galt Exp $";
 
-struct rgbColor getColorForExprBed(float val, float max)
+static struct rgbColor getColorForExprBed(float val, float max)
 /* Return the correct color for a given score */
 {
 char *colorScheme = cartUsualString(cart, "exprssn.color", "rg");
@@ -65,7 +65,7 @@ else
 return color;
 }
 
-struct rgbColor getColorForAffyBed(float val, float max)
+static struct rgbColor getColorForAffyBed(float val, float max)
 /* Return the correct color for a given score */
 {
 struct rgbColor color; 
@@ -111,7 +111,7 @@ return color;
 
 
 
-void msBedPrintTableHeader(struct bed *bedList, 
+static void msBedPrintTableHeader(struct bed *bedList, 
 			   struct hash *erHash, char *itemName, 
 			   char **headerNames, int headerCount, char *scoresHeader)
 /* print out a bed with multiple scores header for a table.
@@ -137,7 +137,7 @@ for(bed = bedList; bed != NULL; bed = bed->next)
 printf("</tr>\n");
 }
 
-void msBedDefaultPrintHeader(struct bed *bedList, struct hash *erHash, 
+static void msBedDefaultPrintHeader(struct bed *bedList, struct hash *erHash, 
 			     char *itemName)
 /* print out a header with names for each bed with itemName highlighted */
 {
@@ -146,7 +146,7 @@ char *scoresHeader = "Item Name";
 msBedPrintTableHeader(bedList, erHash, itemName, headerNames, ArraySize(headerNames), scoresHeader);
 }
 
-char *abbrevExprBedName(char *name)
+static char *abbrevExprBedName(char *name)
 /* chops part off rosetta exon identifiers, returns pointer to 
    local static char* */
 {
@@ -157,7 +157,7 @@ abbr(abbrev, "LINK_Em:");
 return abbrev;
 }
 
-void rosettaPrintHeader(struct bed *bedList, 
+static void rosettaPrintHeader(struct bed *bedList, 
 			struct hash *erHash, char *itemName)
 /* print out the header for the rosetta details table */
 {
@@ -166,7 +166,7 @@ char *scoresHeader = "Exon Number";
 msBedPrintTableHeader(bedList, erHash, itemName, headerNames, ArraySize(headerNames), scoresHeader);
 }
 
-void cghNci60PrintHeader(struct bed *bedList, 
+static void cghNci60PrintHeader(struct bed *bedList, 
 			 struct hash *erHash, char *itemName)
 /* print out the header for the CGH NCI 60 details table */
 {
@@ -175,7 +175,7 @@ char *scoresHeader ="CGH Log Ratio";
 msBedPrintTableHeader(bedList, erHash, itemName, headerNames, ArraySize(headerNames), scoresHeader);
 }
 
-void printExprssnColorKey(float minVal, float maxVal, float stepSize, int base,
+static void printExprssnColorKey(float minVal, float maxVal, float stepSize, int base,
 			  struct rgbColor(*getColor)(float val, float maxVal))
 /* print out a little table which provides a color->score key */
 {
@@ -204,7 +204,7 @@ printf("</tr></table>\n");
 printf("</td></tr></table>\n");
 }
 
-void printAffyExprssnColorKey(float minVal, float maxVal, float stepSize, int base,
+static void printAffyExprssnColorKey(float minVal, float maxVal, float stepSize, int base,
 			      struct rgbColor(*getColor)(float val, float maxVal))
 /* print out a little table which provides a color->score key */
 {
@@ -236,7 +236,7 @@ printf("</tr></table>\n");
 printf("</td></tr></table>\n");
 }
 
-void msBedExpressionPrintRow(struct bed *bedList, struct hash *erHash, 
+static void msBedExpressionPrintRow(struct bed *bedList, struct hash *erHash, 
 			     int expIndex, char *expName, float maxScore)
 /* print the name of the experiment and color the 
    background of individual cells using the score to 
@@ -264,7 +264,7 @@ for(bed = bedList;bed != NULL; bed = bed->next)
 printf("</tr>\n");
 }
 
-void msBedAffyPrintRow(struct bed *bedList, struct hash *erHash, int expIndex, char *expName, float maxScore)
+static void msBedAffyPrintRow(struct bed *bedList, struct hash *erHash, int expIndex, char *expName, float maxScore)
 /* print the name of the experiment and color the 
    background of individual cells using the score to 
    create false two color display */
@@ -292,7 +292,7 @@ printf("</tr>\n");
 }
 
 
-void msBedPrintTable(struct bed *bedList, struct hash *erHash, char *itemName, 
+static void msBedPrintTable(struct bed *bedList, struct hash *erHash, char *itemName, 
 		     char *expName, float minScore, float maxScore, float stepSize, int base,
 		     void(*printHeader)(struct bed *bedList, struct hash *erHash, char *item),
 		     void(*printRow)(struct bed *bedList,struct hash *erHash, int expIndex, char *expName, float maxScore),
@@ -324,7 +324,7 @@ printf("</td></tr></table>");
 printf("</basefont>");
 }
 
-struct bed * loadMsBed(char *table, char *chrom, uint start, uint end)
+static struct bed * loadMsBed(char *table, char *chrom, uint start, uint end)
 /* load every thing from a bed 15 table in the given range */
 {
 struct sqlConnection *conn = hAllocConn();
@@ -344,7 +344,7 @@ slReverse(&bedList);
 return bedList;
 }
 
-struct bed * loadMsBedAll(char *table)
+static struct bed * loadMsBedAll(char *table)
 /* load every thing from a bed 15 table */
 {
 struct sqlConnection *conn = hAllocConn();
@@ -365,7 +365,7 @@ slReverse(&bedList);
 return bedList;
 }
 
-struct expRecord * loadExpRecord(char *table, char *database)
+static struct expRecord * loadExpRecord(char *table, char *database)
 /* load everything from an expRecord table in the
    specified database, usually hgFixed instead of hg7, hg8, etc. */
 {
@@ -378,7 +378,7 @@ sqlDisconnect(&conn);
 return erList;
 }
 
-void msBedGetExpDetailsLink(char *expName, struct trackDb *tdb, char *expTable)
+static void msBedGetExpDetailsLink(char *expName, struct trackDb *tdb, char *expTable)
 /* Create link to download data from a MsBed track */
 {
 char *msBedTable = tdb->tableName;
@@ -435,7 +435,7 @@ for (b = bedList; b != NULL; b = b->next)
 printf("</PRE>");
 }
 
-struct bed *rosettaFilterByExonType(struct bed *bedList)
+static struct bed *rosettaFilterByExonType(struct bed *bedList)
 /* remove beds from list depending on user preference for 
    seeing confirmed and/or predicted exons */
 {
@@ -471,7 +471,7 @@ slReverse(&tmpList);
 return tmpList;
 }
 
-void rosettaPrintRow(struct bed *bedList, struct hash *erHash, int expIndex, char *expName, float maxScore)
+static void rosettaPrintRow(struct bed *bedList, struct hash *erHash, int expIndex, char *expName, float maxScore)
 /* print a row in the details table for rosetta track, designed for
    use msBedPrintTable */
 {
@@ -500,7 +500,7 @@ for(bed = bedList;bed != NULL; bed = bed->next)
 printf("</tr>\n");
 }
 
-void rosettaPrintDataTable(struct bed *bedList, char *itemName, char *expName, float maxScore, char *tableName)
+static void rosettaPrintDataTable(struct bed *bedList, char *itemName, char *expName, float maxScore, char *tableName)
 /* creates a false color table of the data in the bedList */
 {
 struct expRecord *erList = NULL, *er;
@@ -626,7 +626,7 @@ else
     }
 }
 
-void printAffyGnfLinks(char *name, char *chip)
+static void printAffyGnfLinks(char *name, char *chip)
 /* print out links to affymetrix's netaffx website */
 {
 char *netaffx = "https://www.affymetrix.com/LinkServlet?array=";
@@ -650,7 +650,7 @@ if(name != NULL)
     }
 }
 
-void printAffyUclaLinks(char *name, char *chip)
+static void printAffyUclaLinks(char *name, char *chip)
 /* print out links to affymetrix's netaffx website */
 {
 char *netaffx = "https://www.netaffx.com/LinkServlet?array=";
@@ -706,9 +706,9 @@ else
     }
 }
 
-void genericRatioDetails(struct trackDb *tdb, char *expName, char *expTable,
+static void genericRatioDetails(struct trackDb *tdb, char *expName, char *expTable,
 	char *chip, float stepSize, float maxScore,
-	void (*printLinks)(char *item, char *chip)) 
+	void (*printLinks)(char *item, char *chip), boolean printHtml) 
 /* print out a page for the affy data from gnf based on ratio of
  * measurements to the median of the measurements. */
 {
@@ -739,8 +739,8 @@ else
     bedFreeList(&bedList);
     }
 printf("<h2></h2><p>\n");
-printf("%s", tdb->html);
-
+if (printHtml)
+    printf("%s", tdb->html);
 if (printLinks)
     printLinks(itemName, chip);
 }
@@ -750,10 +750,10 @@ void affyUclaDetails(struct trackDb *tdb, char *expName)
  * measurements to the median of the measurements. */
 {
 genericRatioDetails(tdb, expName, "affyUclaExps", "U133", 0.25, 1.5,
-	printAffyUclaLinks);
+	printAffyUclaLinks, TRUE);
 }
 
-struct rgbColor getColorForCghBed(float val, float max)
+static struct rgbColor getColorForCghBed(float val, float max)
 /* Return the correct color for a given score */
 {
 char *colorScheme = cartUsualString(cart, "cghNci60.color", "gr");
@@ -821,7 +821,7 @@ else
 return color;
 }
 
-void msBedCghPrintRow(struct bed *bedList, struct hash *erHash, int expIndex, char *expName, float maxScore)
+static void msBedCghPrintRow(struct bed *bedList, struct hash *erHash, int expIndex, char *expName, float maxScore)
 /* print the name of the experiment and color the 
    background of individual cells using the score to 
    create false two color display */
@@ -888,8 +888,8 @@ else
     }
 }
 
-void grcExpRatio(struct trackDb *tdb, char *item,
-	void (*printLinks)(char *item, char *chip))
+static void grcExpRatio(struct trackDb *tdb, char *item,
+	void (*printLinks)(char *item, char *chip), boolean printHtml)
 /* Print display for expRatio tracks with given link. */
 {
 char *expTable = trackDbRequiredSetting(tdb, "expTable");
@@ -898,19 +898,20 @@ char *expStep = trackDbRequiredSetting(tdb, "expStep");
 char *chip = trackDbRequiredSetting(tdb, "chip");
 double maxScore = atof(expScale);
 double stepSize = atof(expStep);
-genericRatioDetails(tdb, item, expTable, chip, stepSize, maxScore, printLinks);
+genericRatioDetails(tdb, item, expTable, chip, stepSize, maxScore, 
+	printLinks, printHtml);
 }
 
 void gnfExpRatioDetails(struct trackDb *tdb, char *item)
 /* Put up details on some gnf track. */
 {
-grcExpRatio(tdb, item, printAffyGnfLinks);
+grcExpRatio(tdb, item, printAffyGnfLinks, TRUE);
 }
 
 void genericExpRatio(struct sqlConnection *conn, struct trackDb *tdb, 
 	char *item, int start)
 /* Display details for expRatio tracks. */
 {
-grcExpRatio(tdb, item, NULL);
+grcExpRatio(tdb, item, NULL, FALSE);
 }
 
