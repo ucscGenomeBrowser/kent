@@ -269,6 +269,17 @@ altColor 255,240,200
 spectrum on
 type psl xeno 
 
+track blastzBestGg0
+shortLabel Chicken Best
+longLabel Blastz Chicken (Gg0-contigs, 5.2x coverage) Best in Genome
+group compGeno
+priority 145.91
+visibility hide
+color 100,50,0
+altColor 255,240,200
+spectrum on
+type psl xeno 
+
 track HMRConservation
 shortLabel HMRConservation
 longLabel Mouse/Human/Rat Evolutionary Conservation Score
