@@ -223,7 +223,6 @@ struct trackGroup
     int customInt;             /* Misc int variable unique to group. */
     int subType;               /* Variable to say what subtype this is for similar groups
                                 * to share code. */
-    char *version;	/* Versioning information about table. */
     unsigned short private;	/* True(1) if private, false(0) otherwise. */
     int bedSize;		/* Number of fields if a bed file. */
     float priority;	/* Priority to load tracks in, i.e. order to load tracks in. */
@@ -5943,7 +5942,7 @@ int main(int argc, char *argv[])
 {
 cgiSpoof(&argc, argv);
 htmlSetBackground("../images/floret.jpg");
-htmShell("UCSC Human Genome Browser v5", doMiddle, NULL);
+htmShell("UCSC Human Genome Browser v6", doMiddle, NULL);
 //htmShell("Browser Being Updated", doDown, NULL);
 return 0;
 }
