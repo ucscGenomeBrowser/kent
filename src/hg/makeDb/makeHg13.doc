@@ -559,12 +559,14 @@ REFFLAT and GENEBANDS
 o - create precomputed join of refFlat and refGene:
       echo 'CREATE TABLE refFlat (KEY geneName (geneName), KEY name (name), KEY chrom (chrom)) SELECT refLink.name as geneName, refGene.* FROM refLink,refGene WHERE refLink.mrnaAcc = refGene.name' | hgsql hg13
 
+DONE (MATT 2/03/03)
 o - Create precomputed geneBands table:
       ssh hgwdev
       hgGeneBands hg13 geneBands.txt
+      create the geneBands table from kent/src/hg/lib/geneBands.sql
       hgsql hg13
-          >mysql load data local infile 'geneBands.txt' into table geneBands;
-	  >mysqy quit
+      >mysql load data local infile 'geneBands.txt' into table geneBands;
+      >mysql quit
       rm geneBands.txt
 
 SIMPLE REPEAT TRACK (DONE 12/4/02)
