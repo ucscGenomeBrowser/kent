@@ -36,76 +36,6 @@ errAbort(
     "     ldHgGene database table file(s).gff");
 }
 
-struct genePred *makeGenePred(struct gffFile *gff, struct gffGroup *group, char *name)
-/* Convert gff->groupList to genePred list. */
-{
-struct genePred *gp;
-int cdsStart = BIGNUM, cdsEnd = -BIGNUM;
-int exonCount = 0;
-struct gffLine *gl;
-unsigned *eStarts, *eEnds;
-int i;
-
-/* Count up exons and figure out cdsStart and cdsEnd. */
-for (gl = group->lineList; gl != NULL; gl = gl->next)
-    {
-    char *feat = gl->feature;
-    if (sameWord(feat, "exon"))
-        {
-	++exonCount;
-	}
-    else if (sameWord(feat, "CDS") || sameWord(feat, "start_codon") 
-        || sameWord(feat, "stop_codon"))
-	{
-	if (gl->start < cdsStart) cdsStart = gl->start;
-	if (gl->end > cdsEnd) cdsEnd = gl->end;
-	}
-    }
-if (cdsStart > cdsEnd)
-    {
-    cdsStart = group->start;
-    cdsEnd = group->end;
-    }
-if (exonCount == 0)
-    return NULL;
-
-/* Allocate genePred and fill in values. */
-AllocVar(gp);
-gp->name = cloneString(name);
-gp->chrom = cloneString(group->seq);
-gp->strand[0] = group->strand;
-gp->txStart = group->start;
-gp->txEnd = group->end;
-gp->cdsStart = cdsStart;
-gp->cdsEnd = cdsEnd;
-gp->exonCount = exonCount;
-gp->exonStarts = AllocArray(eStarts, exonCount);
-gp->exonEnds = AllocArray(eEnds, exonCount);
-i = 0;
-for (gl = group->lineList; gl != NULL; gl = gl->next)
-    {
-    if (sameWord(gl->feature, "exon"))
-        {
-	eStarts[i] = gl->start;
-	eEnds[i] = gl->end;
-	++i;
-	}
-    }
-return gp;
-}
-
-int genePredCmp(const void *va, const void *vb)
-/* Compare to sort based on chromosome, txStart. */
-{
-const struct genePred *a = *((struct genePred **)va);
-const struct genePred *b = *((struct genePred **)vb);
-int dif;
-dif = strcmp(a->chrom, b->chrom);
-if (dif == 0)
-    dif = a->txStart - b->txStart;
-return dif;
-}
-
 void loadIntoDatabase(char *database, char *table, char *tabName)
 /* Load tabbed file into database table. Drop and create table. */
 {
@@ -176,7 +106,7 @@ for (group = gff->groupList; group != NULL; group = group->next)
         {
 	name = convertSoftberryName(name);
 	}
-    gp = makeGenePred(gff, group, name);
+    gp = genePredFromGroupedGff(gff, group, name, "exon");
     if (gp != NULL)
 	slAddHead(&gpList, gp);
     }

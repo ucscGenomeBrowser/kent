@@ -39,7 +39,7 @@ char historyTable[] =
   "endId int unsigned not null,"                /* First id for next session. */
   "who varchar(255) not null,"         /* User who updated. */
   "what varchar(255) not null,"        /* What they did. */
-  "when timestamp not null)";	       /* When they did it. */
+  "modTime timestamp not null)";        /* Modification time. */
 
 char extFileTable[] =
 /* This keeps track of external files and directories. */
