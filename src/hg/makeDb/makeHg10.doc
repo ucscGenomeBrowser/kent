@@ -94,7 +94,7 @@ Store o+o info in database.
      cd /cluster/store1/gs.11
      hgClonePos hg10 build28 ffa/sequence.inf /cluster/store1/gs.11
 (Ignore warnings about missing clones - these are in chromosomes 21 and 22)
-     # hgCtgPos hg10 build28  - NCBI has no physical map.
+     hgCtgPos hg10 build28 
 
 Make and load GC percent table
      ssh hgwdev
@@ -153,6 +153,12 @@ o - Process refSeq mRNA and EST alignments into near best in genome.
       pslSortAcc nohead chrom /cluster/fast1/temp all_est.psl
       cd ..
 
+o - Load refSeq alignments into database
+      ssh hgwdev
+      cd /cluster/store1/gs.11/build28/bed/refSeq
+      pslCat -dir chrom > refSeqAli.psl
+      hgLoadPsl hg10 -tNameIx refSeqAli.psl
+
 o - Load mRNA alignments into database.
       ssh hgwdev
       cd /cluster/store1/gs.11/build28/bed/mrna/chrom
@@ -180,6 +186,44 @@ o - Create subset of ESTs with introns and load into database.
       - ssh hgwdev
       cd ~/oo/bed/est/intronEst
       hgLoadPsl hg10 *.psl
+
+o - Put orientation info on ESTs into database:
+     ssh kkstore
+     cd ~/oo/bed/est
+     pslSortAcc nohead contig /cluster/fast1/temp/contig.psl
+     mkdir /scratch/hg/gs.11/build28/bed
+     cp -r contig /scratch/hg/gs.11/build28/bed/est
+     sudo /cluster/install/utilities/updateLocal
+     cd ~/oo/bed
+     mkdir estOrientInfo
+     cd estOrientInfo
+     mkdir ei
+     ls -1 /scratch/hg/gs.11/build28/bed/est > psl.lst
+   Get onto kk and cd to ~/oo/bed/estOrientInfo.  Copy in
+   gsub from the previous version and edit it to say where
+   things are located in scratch on this version.  Then:
+     gensub2 gsub psl.lst single spec
+     para create spec
+     para try 
+     para push 
+   check until done, or use 'para shove'
+
+o - Create rnaCluster table
+   ssh hgwdev
+   cd ~/oo
+   mkdir -p bed/rnaCluster/chrom
+   foreach i (? ??)
+       cd $i
+       foreach j (chr*.fa)
+	   set c = $j:r
+	   echo clusterRna hg10 /dev/null ../bed/rnaCluster/chrom/$c.bed -chrom=$c
+	   clusterRna hg10 /dev/null ../bed/rnaCluster/chrom/$c.bed -chrom=$c
+       end
+       cd ..
+   end
+   cd bed/rnaCluster
+   hgLoadBed hg10 rnaCluster chrom/*.bed
+
 
 PRODUCING KNOWN GENES (done)
 
@@ -290,85 +334,65 @@ Then ask admins to do a binrsync.
 
 DOING HUMAN/MOUSE ALIGMENTS (todo)
 
-o - Download the lower-case-masked assembly and put it in
-    kkstore:/cluster/store1/a2ms.
-   
-o - Mask simple repeats in addition to normal repeats with:
-        mkdir ~/oo/jkStuff/trfCon
-	cd ~/oo/allctgs
-	/bin/ls -1 | grep -v '\.' > ~/oo/jkStuff/trfCon/ctg.lst
-        cd ~/oo/jkStuff/trfCon
-	mkdir err log out
-    edit ~/oo/jkStuff/trf.gsub to update gs and oo version
-	gensub ctg.lst ~/oo/jkStuff/trf.gsub
-	mv gensub.out trf.con
-	condor_submit trf.con
-    wait for this to finish.  Check as so
-        cd ~/oo
-	source jkStuff/checkTrf.sh
-    there should be no output.
-o - Copy the RepeatMasked and trf masked genome to
-    kkstore:/scratch/hg/gs.8/build28/contigTrf, and ask
-    Jorge and all to binrsync to propagate the data
-    across the new cluster.
-o - Download the assembled mouse genome in lower-case
-    masked form to /cluster/store1/arachne.3/whole.  
-    Execute the script splitAndCopy.csh to chop it
-    into roughly 50M pieces in arachne.3/parts
-o - Set up the jabba job to do the alignment as so:
-       ssh kkstore
-       cd /cluster/store1/gs.8/build28
-       mkdir blatMouse.phusion
-       cd blatMouse.phusion
-       ls -1S /scratch/hg/gs.3/build28/contigTrf/* > human.lst
-       ls -1 /cluster/store1/arachne.3/parts/* > mouse.lst
-    Make a file 'gsub' with the following three lines in it
-#LOOP
-/cluster/home/kent/bin/i386/blat -q=dnax -t=dnax {check in line+ $(path2)} {check in line+ $(path1)}  {check out line+ psl/$(root2)_$(root1).psl} -minScore=20 -minIdentity=20 -tileSize=4 -minMatch=2 -oneOff=0 -ooc={check in exists /scratch/hg/h/4.pooc} -qMask=lower -mask=lower
-#ENDLOOP
-    Process this into a jabba file and launch the first set
-    of jobs (10,000 out of 70,000) as so:
-        gensub2 mouse.lst human.lst gsub spec
-	jabba make hut spec
-	jabba push hut
-    Do a 'jabba check hut' after about 20 minutes and make sure
-    everything is right.  After that make a little script that
-    does a "jabba push hut" followed by a "sleep 30" about 50
-    times.  Interrupt script when you see jabba push say it's
-    not pushing anything.
+o - Start with the mouse assembly in 1 Mb chunks lower-case
+    repeat and tandem-repeat masked in /scratch/hg/mm1/trfFa,
+    and the human assembly in contigs similiarly masked in
+    /scratch/hg/gs.11/build28/trfFa
+    Then
+        ssh kkstore
+	cd ~/oo/bed
+	mkdir blatMus
+	cd blatMus
+	ls -1 /scratch/hg/mm1/trfFa/*.fa.trf > mouseAll
+	mkdir mm
+	cd mm
+	splitFile ../mouseAll 50 mm
+	cd ..
+	ls -1 mm/* > mouse.lst
+    Then bundle up the human into pieces of less than 12
+    meg mostly by
+	ls -lS /scratch/hg/gs.11/build28/trfFa/*.fa.trf > bigHuman
+    edit this file and move all of the lines less than 3 meg
+    into the file smallHuman.  Then do
+        awk '{printf("/scratch/hg/gs.11/build28/trfFa/%s\n", $9);}' bigHuman > bigH
+        awk '{printf("/scratch/hg/gs.11/build28/trfFa/%s\n", $9);}' smallHuman > smallH
+	mkdir hs
+	cd hs
+	splitFile ../bigH 1 big
+	rm big177
+	splitFile ../smallH 4 small
+	rm small 705
+        cd ..
+	ls -1 hs/* > human.lst
+    (The rm's probably indicate splitFile needs a fix - they are zero length).
+    Finally generate the job list with
+        gensub2 human.lst mouse.lst gsub spec
+
+o - Do the cluster run as so
+       ssh kk
+       cd ~/oo/bed/blatMus
+       mkdir psl
+       para create spec
+       para try
+    and then do para push/check/push/check/shove etc.
 
 o - Sort alignments as so 
        ssh kkstore
-       cd /cluster/store1/gs.8/build28/blatMouse
-       pslCat -dir -check psl | liftUp -type=.psl stdout ../liftAll.lft warn stdin | pslSortAcc nohead chrom /cluster/store2/temp stdin
+       cd ~/oo/bed/blatMus
+       pslCat -dir -check psl | liftUp -type=.psl stdout ../../jkStuff/liftAll.lft warn stdin | liftUp -type=.psl stdout ~/mm/jkStuff/liftAll.lft warn stdin -pslQ | pslSortAcc nohead chromPile /cluster/store2/temp stdin
 o - Get rid of big pile-ups due to contamination as so:
-       cd chrom
+       mkdir chrom
+       cd chromPile
        foreach i (*.psl)
            echo $i
-           mv $i xxx
-           pslUnpile -maxPile=600 xxx $i
-       rm xxx
+           pslUnpile -maxPile=250 $i ../chrom/$i
        end
-o - Remove long redundant bits from read names by making a file
-    called subs.in with the following line:
-        gnl|ti^ti
-        contig_^tig_
-    and running the commands
-        cd ~/mouse/vsOo33/blatMouse.phusion/chrom
-	subs -e -c ^ *.psl > /dev/null
-o - Copy over to network where database is:
-        ssh kks00
-	cd ~/oo/bed
-	mkdir blatMouse
-	mkdir blatMouse/ph.chrom600
-	cd !$
-        cp /cluster/store1/gs.8/build28/blatMouse.phusion/chrom/*.psl .
 o - Rename to correspond with tables as so and load into database:
        ssh hgwdev
-       cd ~/oo/bed/blatMouse/ph.chrom600
+       cd ~/oo/bed/blatMus/chrom
        foreach i (*.psl)
 	   set r = $i:r
-           mv $i ${r}_blatMouse.psl
+           mv $i ${r}_blatMus.psl
        end
        hgLoadPsl hg10 *.psl
 o - load sequence into database as so:
@@ -395,7 +419,7 @@ o - Load best in genome into database as so:
 	cd ~/mouse/vsOo33/bestMouse
         hgLoadPsl hg10 *.psl
 
-PRODUCING CROSS_SPECIES mRNA ALIGMENTS (in progress)
+PRODUCING CROSS_SPECIES mRNA ALIGMENTS (done for mRNA, not for EST)
 
 Here you align vertebrate mRNAs against the masked genome on the
 cluster you set up during the previous step.
@@ -485,45 +509,37 @@ Load into database as so:
 
 PRODUCING FISH ALIGNMENTS (todo)
 
-o - Download sequence from ... and put it in 
-	ssh kks00
-       /projects/hg3/fish/seq15jun2001/bqcnstn_0106151510.fa
-    then
-	ln -s /projects/hg3/fish ~/fish
-    split this into multiple files and compress original with
-	cd ~/fish/seq15jun2001
-        faSplit sequence bq* 100 fish
-	compress bq*
-	copy over to kkstore:/cluster/store2/fish/seq15jun2001
 o - Do fish/human alignments.
-       ssh kkstore
-       cd /cluster/store2/fish
-       mkdir vsOo33
-       cd vsOo33
+       ssh kk
+       cd ~/mm/bed
+       mkdir blatFish
+       cd blatFish
        mkdir psl
-       ls -1S /var/tmp/hg/gs.8/build28/tanMaskNib/*.fa.trf > human.lst
-       ls -1S /projects/hg3/fish/seq15jun2001/*.fa > fish.lst
+       ls -1S /scratch/hg/fish > fish.lst
+       ls -1S /scratch/hg/build28/trfFa > human.lst
      Copy over gsub from previous version and edit paths to
      point to current assembly.
-       gensub2 fish.lst human.lst gsub spec
-       jabba make hut spec
-       jabba try hut
-     Make sure jobs are going ok.  Then
-       jabba push hut
+       gensub2 human.lst fish.lst gsub spec
+       para create spec
+       para try
+     Make sure jobs are going ok with para check.  Then
+       para push
      wait about 2 hours and do another
-       jabba push hut
-     do a jabba check hut, and if necessary another push hut.
+       para push
+     do para checks and if necessary para pushes until done
+     or use para shove.
 o - Sort alignments as so 
-       pslCat -dir psl | liftUp -type=.psl stdout ~/oo/jkStuff/liftAll.lft warn stdin | pslSortAcc nohead chrom temp stdin
+       pslCat -dir psl | liftUp -type=.psl stdout ~/mm/jkStuff/liftAll.lft warn stdin | pslSortAcc nohead chrom temp stdin
 o - Copy to hgwdev:/scratch.  Rename to correspond with tables as so and 
     load into database:
        ssh hgwdev
-       cd ~/fish/vsOo33/chrom
+       cd ~/oo/bed/blatFish/chrom
        foreach i (*.psl)
 	   set r = $i:r
            mv $i ${r}_blatFish.psl
        end
        hgLoadPsl hg10 *.psl
+
 
 
 

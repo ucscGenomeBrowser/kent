@@ -111,7 +111,7 @@ Make and load GC percent table
 
 
 
-MAKING AND STORING mRNA AND EST ALIGNMENTS  (done except for refSeq)
+MAKING AND STORING mRNA AND EST ALIGNMENTS  (done)
 
 o - Load up the local disks of the cluster with refSeq.fa, mrna.fa and est.fa
     from /cluster/store1/mrna.127  into /var/tmp/hg/h/mrna
@@ -189,7 +189,7 @@ o - Create subset of ESTs with introns and load into database.
       cd ~/mm/bed/est/intronEst
       hgLoadPsl mm1 *.psl
 
-PRODUCING KNOWN GENES (todo)
+PRODUCING KNOWN GENES (done)
 
 o - Download everything from ftp://ncbi.nlm.nih.gov/refseq/H_sapiens/mRNA_Prot/
     into /cluster/store1/mrna.127/refSeq.
@@ -209,20 +209,9 @@ o - Produce refGene, refPep, refMrna, and refLink tables as so:
        cd ~/mm/bed/refSeq
        ln -s /cluster/store1/mrna.127 mrna
        hgRefSeqMrna mm1 mrna/mouseRefSeq.fa mrna/mouseRefSeq.ra all_refSeq.psl loc2ref mrna/refSeq/mouse.faa mim2loc
-o - Add Jackson labs info
-     cd ~/mm/bed
-     mkdir jaxOrtholog
-     cd jaxOrtholog
-     ftp ftp://ftp.informatics.jax.org/pub/informatics/reports/HMD_Human3.rpt
-     awk -f filter.awk *.rpt > jaxOrtholog.tab
-    Load this into mysql with something like:
-     mysql -u hgcat -pBIGSECRET mm1 < ~/src/hg/lib/jaxOrtholog.sql
-     mysql -u hgcat -pBIGSECRET -A mm1
-    and at the mysql> prompt
-     load data local infile 'jaxOrtholog.tab' into table jaxOrtholog;
 
 
-SIMPLE REPEAT TRACK (todo)
+SIMPLE REPEAT TRACK (done)
 
 o - Create cluster parasol job like so:
         ssh kk
@@ -300,7 +289,7 @@ o - Load into the database as so:
      hgLoadBed mm1 genscanSubopt genscanSubopt.bed
 
 
-PREPARING SEQUENCE FOR CROSS SPECIES ALIGNMENTS 
+PREPARING SEQUENCE FOR CROSS SPECIES ALIGNMENTS (done)
 
 Make sure that the NT*.fa files are lower-case repeat masked, and that
 the simpleRepeat track is made.  Then put doubly (simple & interspersed)
@@ -428,7 +417,7 @@ o - Load best in genome into database as so:
 	cd ~/mouse/vsOo33/bestMouse
         hgLoadPsl mm1 *.psl
 
-PRODUCING CROSS_SPECIES mRNA ALIGMENTS (in progress)
+PRODUCING CROSS_SPECIES mRNA ALIGMENTS (todo)
 
 Here you align vertebrate mRNAs against the masked genome on the
 cluster you set up during the previous step.
@@ -516,42 +505,36 @@ Load into database as so:
        end
 
 
-PRODUCING FISH ALIGNMENTS (todo)
+PRODUCING FISH ALIGNMENTS (in progress)
 
-o - Download sequence from ... and put it in 
-	ssh kks00
-       /projects/hg3/fish/seq15jun2001/bqcnstn_0106151510.fa
-    then
-	ln -s /projects/hg3/fish ~/fish
-    split this into multiple files and compress original with
-	cd ~/fish/seq15jun2001
-        faSplit sequence bq* 100 fish
-	compress bq*
-	copy over to kkstore:/cluster/store2/fish/seq15jun2001
-o - Do fish/human alignments.
-       ssh kkstore
-       cd /cluster/store2/fish
-       mkdir vsOo33
-       cd vsOo33
+o - Download sequence from ... and put it on the cluster local disk
+    at
+       /scratch/hg/fish
+o - Do fish/mouse alignments.
+       ssh kk
+       cd ~/mm/bed
+       mkdir blatFish
+       cd blatFish
        mkdir psl
-       ls -1S /var/tmp/hg/gs.11/build28/tanMaskNib/*.fa.trf > human.lst
-       ls -1S /projects/hg3/fish/seq15jun2001/*.fa > fish.lst
+       ls -1S /scratch/hg/fish > fish.lst
+       ls -1S /scratch/hg/mm1/trfFa > mouse.lst
      Copy over gsub from previous version and edit paths to
      point to current assembly.
-       gensub2 fish.lst human.lst gsub spec
-       jabba make hut spec
-       jabba try hut
-     Make sure jobs are going ok.  Then
-       jabba push hut
+       gensub2 mouse.lst fish.lst gsub spec
+       para create spec
+       para try
+     Make sure jobs are going ok with para check.  Then
+       para push
      wait about 2 hours and do another
-       jabba push hut
-     do a jabba check hut, and if necessary another push hut.
+       para push
+     do para checks and if necessary para pushes until done
+     or use para shove.
 o - Sort alignments as so 
        pslCat -dir psl | liftUp -type=.psl stdout ~/mm/jkStuff/liftAll.lft warn stdin | pslSortAcc nohead chrom temp stdin
 o - Copy to hgwdev:/scratch.  Rename to correspond with tables as so and 
     load into database:
        ssh hgwdev
-       cd ~/fish/vsOo33/chrom
+       cd ~/mm/bed/blatFish/chrom
        foreach i (*.psl)
 	   set r = $i:r
            mv $i ${r}_blatFish.psl
@@ -579,7 +562,7 @@ TIGR GENE INDEX (todo)
 
 
       
-LOAD STS MAP 
+LOAD STS MAP (todo)
      - login to hgwdev
       cd ~/mm/bed
       mm1 < ~/src/hg/lib/stsMap.sql
@@ -593,7 +576,7 @@ LOAD STS MAP
           quit
 
 
-LOAD CHROMOSOME BANDS
+LOAD CHROMOSOME BANDS (todo)
       - login to hgwdev
       cd /cluster/store2/mm.2001.11/mm1/bed
       mkdir cytoBands
@@ -761,7 +744,7 @@ LOAD SOFTBERRY GENES (done)
      hgPepPred mm1 softberry *.pro
      hgSoftberryHom mm1 *.pro
 
-LOAD ACEMBLY
+LOAD ACEMBLY (todo)
     - Get acembly*gene.gff from Jean and Michelle Thierry-Miegs and
       place in ~/mm/bed/acembly
     - Replace c_chr with chr in acembly*.gff
