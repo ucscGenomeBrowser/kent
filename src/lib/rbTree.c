@@ -630,4 +630,20 @@ compareIt = tree->compare;
 rTreeTraverseRange(tree->root);
 }
 
+struct slRef *itList;  /* List of items that rbTreeItemsInRange returns. */
 
+static void addRef(void *item)
+/* Add item it itList. */
+{
+refAdd(&itList, item);
+}
+
+struct slRef *rbTreeItemsInRange(struct rbTree *tree, void *minItem, void *maxItem)
+/* Return a sorted list of references to items in tree between range.
+ * slFree this list when done. */
+{
+itList = NULL;
+rbTreeTraverseRange(tree, minItem, maxItem, addRef);
+slReverse(&itList);
+return itList;
+}

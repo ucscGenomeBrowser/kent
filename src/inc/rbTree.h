@@ -63,6 +63,10 @@ void rbTreeTraverseRange(struct rbTree *tree, void *minItem, void *maxItem,
 /* Apply doItem function to all items in tree such that
  * minItem <= item <= maxItem */
 
+struct slRef *rbTreeItemsInRange(struct rbTree *tree, void *minItem, void *maxItem);
+/* Return a sorted list of references to items in tree between range.
+ * slFree this list when done. */
+
 void rbTreeDump(struct rbTree *tree, FILE *f, 
 	void (*dumpItem)(void *item, FILE *f));
 /* Dump out rb tree to file, mostly for debugging. */
