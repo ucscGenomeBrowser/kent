@@ -9,8 +9,9 @@
 #include "hdb.h"
 #include "hui.h"
 #include "hCommon.h"
+#include "chainDb.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.43 2004/06/02 22:05:29 kate Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.44 2004/07/19 22:45:54 hiram Exp $";
 
 char *hUserCookie()
 /* Return our cookie name. */
@@ -782,6 +783,34 @@ void rosettaExonDropDown(char *var, char *curVal)
 cgiMakeDropList(var, rosettaExonOptions, ArraySize(rosettaExonOptions), curVal);
 }
 
+/****** Options for the chain track color options *******/
+static char *chainColorOptions[] = {
+    CHROM_COLORS,
+    SCORE_COLORS,
+    NO_COLORS
+    };
+
+enum chainColorEnum chainColorStringToEnum(char *string)
+/* Convert from string to enum representation. */
+{
+int x = stringIx(string, chainColorOptions);
+if (x < 0)
+   errAbort("hui::chainColorStringToEnum() - Unknown option %s", string);
+return x;
+}
+
+char *chainColorEnumToString(enum chainColorEnum x)
+/* Convert from enum to string representation. */
+{
+return chainColorOptions[x];
+}
+
+void chainColorDropDown(char *var, char *curVal)
+/* Make drop down of options. */
+{
+cgiMakeDropList(var, chainColorOptions, ArraySize(chainColorOptions), curVal);
+}
+
 /****** Options for the wiggle track Windowing *******/
 
 static char *wiggleWindowingOptions[] = {
@@ -1127,7 +1156,6 @@ char *genePredDropDown(struct cart *cart, struct hash *trackHash,
  * If formName isn't NULL, it's the form for auto submit (onchange attr).
  * If formName is NULL, no submit occurs when menu is changed */
 {
-struct trackDb *curTrack = NULL;
 char *cartTrack = cartOptionalString(cart, varName);
 struct hashEl *trackList, *trackEl;
 char *selectedName = NULL;
