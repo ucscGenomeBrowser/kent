@@ -6,4 +6,7 @@ O = faSplit.o
 faSplit: $(O)
 	gcc ${F64} -o $(HOME)/bin/$(MACHTYPE)/faSplit $O ../../lib/$(MACHTYPE)/jkweb.a
 
+debug:
+	gcc ${F64} -o faSplit $O ../../lib/$(MACHTYPE)/jkweb.a
+
 
