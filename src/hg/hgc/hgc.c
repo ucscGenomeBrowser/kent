@@ -268,10 +268,16 @@ if (featDna)
     }
 }
 
-void bedPrintPos(struct bed *bed)
+void bedPrintPos(struct bed *bed, int bedSize)
 /* Print first three fields of a bed type structure in
  * standard format. */
 {
+if (bedSize > 3)
+    printf("<B>Item:</B> %s<BR>\n", bed->name);
+if (bedSize > 4)
+    printf("<B>Score:</B> %d<BR>\n", bed->score);
+if (bedSize > 5)
+    printf("<B>Strand:</B> %s<BR>\n", bed->strand);
 printPos(bed->chrom, bed->chromStart, bed->chromEnd, NULL, TRUE);
 }
 
@@ -371,13 +377,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     else
 	htmlHorizontalLine();
     bed = bedLoadN(row+hasBin, bedSize);
-    if (bedSize > 3)
-	printf("<B>Item:</B> %s<BR>\n", bed->name);
-    if (bedSize > 4)
-        printf("<B>Score:</B> %d<BR>\n", bed->score);
-    if (bedSize > 5)
-        printf("<B>Strand:</B> %s<BR>\n", bed->strand);
-    bedPrintPos(bed);
+    bedPrintPos(bed, bedSize);
     }
 }
 
@@ -2302,7 +2302,7 @@ if (cgiVarExists("o"))
     while ((row = sqlNextRow(sr)) != NULL)
 	{
 	pro = softPromoterLoad(row+rowOffset);
-	bedPrintPos((struct bed *)pro);
+	bedPrintPos((struct bed *)pro, 3);
 	printf("<B>Short Name:</B> %s<BR>\n", pro->name);
 	printf("<B>Full Name:</B> %s<BR>\n", pro->origName);
 	printf("<B>Type:</B> %s<BR>\n", pro->type);
@@ -2361,7 +2361,7 @@ if (cgiVarExists("o"))
     while ((row = sqlNextRow(sr)) != NULL)
 	{
 	island = cpgIslandLoad(row+rowOffset);
-	bedPrintPos((struct bed *)island);
+	bedPrintPos((struct bed *)island, 3);
 	printf("<B>Size:</B> %d<BR>\n", island->chromEnd - island->chromStart);
 	printf("<B>CpG count:</B> %d<BR>\n", island->cpgNum);
 	printf("<B>C count plus G count:</B> %d<BR>\n", island->gcNum);
@@ -3196,6 +3196,32 @@ if (gotAny)
 sqlFreeResult(&sr);
 }
 
+struct hash *makeTrackHash(char *chrom)
+/* Make hash of trackDb items for this chromosome. */
+{
+struct sqlConnection *conn = hAllocConn();
+struct hash *trackHash = newHash(7);
+struct sqlResult *sr;
+char **row;
+struct trackDb *tdb;
+char *trackDb = hTrackDbName();
+char query[256];
+snprintf(query, sizeof(query), "select * from %s", trackDb);
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    tdb = trackDbLoad(row);
+    hLookupStringsInTdb(tdb, database);
+    if (hTrackOnChrom(tdb, chrom))
+	hashAdd(trackHash, tdb->tableName, tdb);
+    else
+        trackDbFree(&tdb);
+    }
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+return trackHash;
+}
+
 void doMouseOrtho(struct trackDb *tdb, char *geneName)
 /* Handle click on MouseOrtho gene track. */
 {
@@ -3620,7 +3646,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     {
     est3StaticLoad(row+rowOffset, &el);
     printf("<B>EST 3' End Count:</B> %d<BR>\n", el.estCount);
-    bedPrintPos((struct bed *)&el);
+    bedPrintPos((struct bed *)&el, 3);
     printf("<B>strand:</B> %s<BR>\n", el.strand);
     htmlHorizontalLine();
     }
@@ -3659,7 +3685,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     printf("<B>is pseudo-gene:</B> %s<BR>\n", (rna.isPsuedo ? "yes" : "no"));
     printf("<B>program predicted with:</B> %s<BR>\n", rna.source);
     printf("<B>strand:</B> %s<BR>\n", rna.strand);
-    bedPrintPos((struct bed *)&rna);
+    bedPrintPos((struct bed *)&rna, 3);
     htmlHorizontalLine();
     }
 puts(tdb->html);
@@ -4443,7 +4469,7 @@ sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     snpStaticLoad(row+rowOffset, &snp);
-    bedPrintPos((struct bed *)&snp);
+    bedPrintPos((struct bed *)&snp, 3);
     }
 printf(
   "<P><A HREF=\"http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=%s\" TARGET=_blank>", 
@@ -4877,7 +4903,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     printf("<B>Number of SNPs in block:</B> %d<BR>\n", bed->blockCount);
     printf("<B>Number of SNPs to represent block:</B> %d<BR>\n",numSnpsReq);
     printf("<B>Strand:</B> %s<BR>\n", bed->strand);
-    bedPrintPos(bed);
+    bedPrintPos(bed, 3);
     }
 printTrackHtml(tdb);
 hFreeConn(&conn);
@@ -4942,7 +4968,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 
     printf("<h4><i>Human Sequence</i></h4>");
     printf("<B>Strand:</B> %s<BR>\n", bed->strand);
-    bedPrintPos(bed);
+    bedPrintPos(bed, 3);
 
     }
 
@@ -6514,33 +6540,7 @@ for (bed = ct->bedList; bed != NULL; bed = bed->next)
 if (bed == NULL)
     errAbort("Couldn't find %s@%s:%d in %s", itemName, seqName, start, fileName);
 printCustomUrl(ct->tdb, itemName, TRUE);
-bedPrintPos(bed);
-}
-
-struct hash *makeTrackHash(char *chrom)
-/* Make hash of trackDb items for this chromosome. */
-{
-struct sqlConnection *conn = hAllocConn();
-struct hash *trackHash = newHash(7);
-struct sqlResult *sr;
-char **row;
-struct trackDb *tdb;
-char *trackDb = hTrackDbName();
-char query[256];
-snprintf(query, sizeof(query), "select * from %s", trackDb);
-sr = sqlGetResult(conn, query);
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-    tdb = trackDbLoad(row);
-    hLookupStringsInTdb(tdb, database);
-    if (hTrackOnChrom(tdb, chrom))
-	hashAdd(trackHash, tdb->tableName, tdb);
-    else
-        trackDbFree(&tdb);
-    }
-sqlFreeResult(&sr);
-hFreeConn(&conn);
-return trackHash;
+bedPrintPos(bed, ct->fieldCount);
 }
 
 void doMiddle()
