@@ -3920,7 +3920,7 @@ while (<>) {
     # update ~/kent/src/hg/makeDb/trackDb/human/hg16/uniGene_2.html 
     # with current uniGene date. 
 
-# MAKING FOLDUTR TABLES
+# MAKING FOLDUTR TABLES (DONE - jk - 2003-10-14)
 # First set up directory structure and extract UTR sequence on hgwdev
     ssh hgwdev
     mkdir -p /cluster/data/hg16/bed/rnaStruct
