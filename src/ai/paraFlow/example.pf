@@ -7,27 +7,23 @@
 
 to printHello
 // Simple no parameter or return result declaration
-    {
     print("Hello world")
-    }
 
 to printWordLots(string word, int count)
 // Declaration with a couple of parameters, no return value.
-    {
-    for i in [1,count]
+    for (int i=0; i<count; i += 1)
        print(word + " ")
-    }
 
 
 to factorial(int n) into (float result)
 // Declaration with an integer parameter that returns floating point result
     {
     result = 1
-    for i in [2,n]
+    for (int i=2; i<=n; i += 1)
 	result *= i    
     }
 
-to stats(float a, float b, float c) into (float sum, float average)
+to stats3(float a, float b, float c) into (float sum, float average)
 // Declaration with three float inputs and two float outputs.
     {
     sum = a + b + c
@@ -123,7 +119,7 @@ object hash implements collection
    // We use a simple but effective hash function, since 5 is coprime to 1024
        {
        result = 0
-       for c in name
+       foreach c in name
 	   {
            result *= 5;
 	   result += c;
@@ -143,7 +139,7 @@ object hash implements collection
   to find(string name) into (object val)
   // Find element
       {
-      for el in buckets[func(name)]
+      foreach el in buckets[func(name)]
 	  {
           if (el.name == name)
 	      {

@@ -21,21 +21,26 @@ enum pfTokType
     pftString,
     pftInt,
     pftFloat,
-    pftPlusPlus,
-    pftMinusMinus,
-    pftPlusEquals,
-    pftMinusEquals,
-    pftDivEquals,
-    pftMulEquals,
-    pftModEquals,
-    pftEqualsEquals,
-    pftNotEquals,
-    pftGreaterOrEquals,
-    pftLessOrEquals,
-    pftLogAnd,
-    pftLogOr,
-    pftShiftLeft,
-    pftShiftRight,
+    pftPlusPlus,        /* ++ */
+    pftMinusMinus,      /* -- */
+    pftPlusEquals,      /* += */
+    pftMinusEquals,     /* -= */
+    pftDivEquals,       /* /= */
+    pftMulEquals,       /* *= */
+    pftModEquals,       /* %= */
+    pftEqualsEquals,    /* == */
+    pftNotEquals,       /* != */
+    pftGreaterOrEquals, /* >= */
+    pftLessOrEquals,    /* <= */
+    pftLogAnd,          /* && */
+    pftLogOr,           /* || */
+    pftShiftLeft,       /* << */
+    pftShiftRight,      /* >> */
+    pftRoot,            /* /. */
+    pftParent,          /* <. */
+    pftSys,             /* %. */
+    pftUser,            /* +. */
+    pftSysOrUser,       /* *. */
 
     /* - reserved words - */
     pftClass,

@@ -93,17 +93,26 @@ switch (type)
     case pftString: return "pftString";
     case pftInt: return "pftInt";
     case pftFloat: return "pftFloat";
-    case pftPlusPlus: return "pftPlusPlus";
-    case pftMinusMinus: return "pftMinusMinus";
-    case pftPlusEquals: return "pftPlusEquals";
-    case pftMinusEquals: return "pftMinusEquals";
-    case pftDivEquals: return "pftDivEquals";
-    case pftMulEquals: return "pftMulEquals";
-    case pftModEquals: return "pftModEquals";
-    case pftEqualsEquals: return "pftEqualsEquals";
-    case pftNotEquals: return "pftNotEquals";
-    case pftGreaterOrEquals: return "pftGreaterOrEquals";
-    case pftLessOrEquals: return "pftLessOrEquals";
+    case pftPlusPlus:        return "++";
+    case pftMinusMinus:      return "--";
+    case pftPlusEquals:      return "+=";
+    case pftMinusEquals:     return "-=";
+    case pftDivEquals:       return "/=";
+    case pftMulEquals:       return "*=";
+    case pftModEquals:       return "%=";
+    case pftEqualsEquals:    return "==";
+    case pftNotEquals:       return "!=";
+    case pftGreaterOrEquals: return ">=";
+    case pftLessOrEquals:    return "<=";
+    case pftLogAnd:          return "&&";
+    case pftLogOr:           return "||";
+    case pftShiftLeft:       return "<<";
+    case pftShiftRight:      return ">>";
+    case pftRoot:            return "/.";
+    case pftParent:          return "<.";
+    case pftSys:             return "%.";
+    case pftUser:            return "+.";
+    case pftSysOrUser:       return "*.";
     default:
         buf[0] = type;
 	return buf;
@@ -600,6 +609,8 @@ switch (c)
     case '/':
 	if (c2 == '=')
 	    tokTwoChar(tkz, tok, pftDivEquals);
+	else if (c2 == '.')
+	    tokTwoChar(tkz, tok, pftRoot);
 	else
 	    tokSingleChar(tkz, tok, c);
 	break;
@@ -608,6 +619,8 @@ switch (c)
 	    tokTwoChar(tkz, tok, pftPlusPlus);
 	else if (c2 == '=')
 	    tokTwoChar(tkz, tok, pftPlusEquals);
+	else if (c2 == '.')
+	    tokTwoChar(tkz, tok, pftUser);
 	else
 	    tokSingleChar(tkz, tok, c);
 	break;
@@ -622,12 +635,16 @@ switch (c)
     case '*':
 	if (c2 == '=')
 	    tokTwoChar(tkz, tok, pftMulEquals);
+	else if (c2 == '.')
+	    tokTwoChar(tkz, tok, pftSysOrUser);
 	else
 	    tokSingleChar(tkz, tok, c);
 	break;
     case '%':
 	if (c2 == '=')
 	    tokTwoChar(tkz, tok, pftModEquals);
+	else if (c2 == '.')
+	    tokTwoChar(tkz, tok, pftSys);
 	else
 	    tokSingleChar(tkz, tok, c);
 	break;
@@ -656,6 +673,8 @@ switch (c)
 	    tokTwoChar(tkz, tok, pftLessOrEquals);
 	else if (c2 == '<')
 	    tokTwoChar(tkz, tok, pftShiftLeft);
+	else if (c2 == '.')
+	    tokTwoChar(tkz, tok, pftParent);
 	else
 	    tokSingleChar(tkz, tok, c);
         break;

@@ -28,6 +28,9 @@ enum pfParseType
     {
     pptNone = 0,
     pptProgram,
+    pptScope,
+    pptInto,
+    pptModule,
     pptNop,
     pptCompound,
     pptTuple,
@@ -80,6 +83,11 @@ enum pfParseType
     pptBitXor,
     pptLogAnd,
     pptLogOr,
+    pptRoot,
+    pptParent,
+    pptSys,
+    pptUser,
+    pptSysOrUser,
     };
 
 
@@ -90,6 +98,12 @@ switch (type)
     {
     case pptProgram:
     	return "pptProgram";
+    case pptScope:
+        return "pptScope";
+    case pptInto:
+        return "pptInto";
+    case pptModule:
+        return "pptModule";
     case pptNop:
     	return "pptNop";
     case pptCompound:
@@ -192,6 +206,16 @@ switch (type)
 	return "pptLogAnd";
     case pptLogOr:
 	return "pptLogOr";
+    case pptRoot:
+	return "pptRoot";
+    case pptParent:
+	return "pptParent";
+    case pptSys:
+	return "pptSys";
+    case pptUser:
+	return "pptUser";
+    case pptSysOrUser:
+	return "pptSysOrUser";
     default:
         internalErr();
 	return NULL;
@@ -367,29 +391,85 @@ return pp;
 struct pfParse *parseDottedNames(struct pfParse *parent, struct pfToken **pTokList, struct pfScope *scope)
 /* Parse this.that.the.other */
 {
-struct pfParse *pp = parseNameUse(parent, pTokList, scope);
 struct pfToken *tok = *pTokList;
-struct pfParse *dots = NULL;
-if (tok->type == '.')
+struct pfParse *dots, *first = NULL, *pp;
+boolean startsSpecial = FALSE;
+
+/* If it's a name try and take shortcut if there's no
+ * following dot,  otherwise set up first from name. */
+if (tok->type == pftName)
     {
-    dots = pfParseNew(pptDot, tok, parent);
-    dots->children = pp;
-    pp->parent = dots;
-    while (tok->type == '.')
+    first = parseNameUse(parent, &tok, scope);
+    if (tok->type != '.')
+	{
+	*pTokList = tok;
+	return first;
+	}
+    else
+        tok = tok->next;
+    }
+/* Eat through special token at front of name. */
+else
+    {
+    enum pfParseType type = pptNone;
+    startsSpecial = TRUE;
+    switch (tok->type)
+	{
+	case pftRoot:
+	    type = pptRoot;
+	    break;
+	case pftParent:
+	    type = pptParent;
+	    break;
+	case pftSys:
+	    type = pptSys;
+	    break;
+	case pftUser:
+	    type = pptUser;
+	    break;
+	case pftSysOrUser:
+	    type = pptSysOrUser;
+	    break;
+	default:
+	    expectingGot("name", tok);
+	    break;
+	}
+    first = pfParseNew(type, tok, NULL);
+    tok = tok->next;
+    }
+
+/* Create dot list parse and add first element to it. */
+dots = pfParseNew(pptDot, tok, parent);
+first->parent = dots;
+slAddHead(&dots->children, first);
+
+/* In some cases there may be additional parents to add in front. */
+if (startsSpecial)
+    {
+    while (tok->type == pftParent)
 	{
 	tok = tok->next;
-	pp = parseNameUse(dots, &tok, scope);
+	pp = pfParseNew(pptParent, tok, dots);
 	slAddHead(&dots->children, pp);
 	}
     }
-*pTokList = tok;
-if (dots != NULL)
+
+/* Keep adding names until we run out of dots. */
+for (;;)
     {
-    slReverse(&dots->children);
-    return dots;
+    if (tok->type != pftName)
+        expectingGot("name", tok);
+    pp = parseNameUse(dots, &tok, scope);
+    slAddHead(&dots->children, pp);
+    if (tok->type != '.')
+        break;
+    tok = tok->next;
     }
-else
-    return pp;
+
+/* Clean up and go home. */
+slReverse(&dots->children);
+*pTokList = tok;
+return dots;
 }
 
 
@@ -427,7 +507,10 @@ struct pfParse *varUseOrDeclare(struct pfParse *parent, struct pfToken **pTokLis
  * based on it. */
 {
 struct pfToken *tok = *pTokList;
-struct pfBaseType *baseType = pfScopeFindType(scope, tok->val.s);
+struct pfBaseType *baseType = NULL;
+
+if (tok->type == pftName)
+    baseType = pfScopeFindType(scope, tok->val.s);
 if (baseType != NULL)
     {
     struct pfToken *nextTok = tok->next;
@@ -465,6 +548,11 @@ struct pfParse *pp = NULL;
 switch (tok->type)
     {
     case pftName:
+    case pftRoot:
+    case pftParent:
+    case pftSys:
+    case pftUser:
+    case pftSysOrUser:
 	pp = varUseOrDeclare(parent, &tok, scope);
 	break;
     case pftString:
@@ -1101,10 +1189,25 @@ return parseWordStatement(parent, pTokList, scope, pptContinue);
     	
 static struct pfParse *parseReturn(struct pfParse *parent,
 	struct pfToken **pTokList, struct pfScope *scope)
-/* Parse continue statement */
+/* Parse return statement */
 {
 return parseWordStatement(parent, pTokList, scope, pptReturn);
 }
+
+static struct pfParse *parseInto(struct pfParse *parent,
+	struct pfToken **pTokList, struct pfScope *scope)
+/* Parse into statement */
+{
+struct pfToken *tok = *pTokList;
+struct pfParse *pp = pfParseNew(pptInto, tok, parent);
+
+tok = tok->next;	/* Have covered 'into' */
+pp->children = parseDottedNames(pp, &tok, scope);
+
+*pTokList = tok;
+return pp;
+}
+
     	
 struct pfParse *pfParseStatement(struct pfParse *parent, 
 	struct pfToken **pTokList, struct pfScope *scope)
@@ -1116,6 +1219,9 @@ struct pfParse *statement;
 
 switch (tok->type)
     {
+    case pftInto:
+        statement = parseInto(parent, &tok, scope);
+	break;
     case '{':
 	statement = parseCompound(parent, &tok, scope);
 	break;
@@ -1160,6 +1266,7 @@ switch (tok->type)
 	statement = pfParseExpression(parent, &tok, scope);
 	break;
     default:
+	pfTokenDump(tok, uglyOut, FALSE);
         expectingGot("statement", tok);
 	statement = NULL;
 	break;
