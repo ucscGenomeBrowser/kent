@@ -7,7 +7,7 @@ visibility pack
 color 0,100,0
 type genePred softberryPep
 
-track mrna
+track all_mrna
 shortLabel $Organism mRNAs
 longLabel $Organism mRNAs from GenBank 
 group rna
