@@ -196,6 +196,11 @@ struct bed *getAllIntersectedBeds(struct sqlConnection *conn,
 /* Get list of beds in selected regions that pass intersection
  * (and filtering). Do lmCleanup (not bedFreeList) when done. */
 
+struct bed *cookedBedList(struct sqlConnection *conn,
+	struct trackDb *track, struct region *region, struct lm *lm);
+/* Get data for track in region after all processing steps (filtering
+ * intersecting etc.) in BED format. */
+
 struct hTableInfo *getHti(char *db, char *table);
 /* Return primary table info. */
 

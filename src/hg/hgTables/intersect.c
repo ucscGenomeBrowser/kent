@@ -14,7 +14,7 @@
 #include "featureBits.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: intersect.c,v 1.6 2004/07/23 08:18:12 kent Exp $";
+static char const rcsid[] = "$Id: intersect.c,v 1.7 2004/07/23 09:12:50 kent Exp $";
 
 /* We keep two copies of variables, so that we can
  * cancel out of the page. */
@@ -392,7 +392,7 @@ lmCleanup(&lm2);
 return intersectedBedList;
 }
 
-struct bed *getIntersectedBeds(struct sqlConnection *conn,
+static struct bed *getIntersectedBeds(struct sqlConnection *conn,
 	struct trackDb *track, struct region *region, struct lm *lm)
 /* Get list of beds in region that pass intersection
  * (and filtering) */
@@ -406,6 +406,15 @@ if (anyIntersection())
 else
     return bedList;
 }
+
+struct bed *cookedBedList(struct sqlConnection *conn,
+	struct trackDb *track, struct region *region, struct lm *lm)
+/* Get data for track in region after all processing steps (filtering
+ * intersecting etc.) in BED format. */
+{
+return getIntersectedBeds(conn, track, region, lm);
+}
+
 
 static struct bed *getIntersectedBedsOnRegions(struct sqlConnection *conn, 
 	struct trackDb *track, struct region *regionList, struct lm *lm)

@@ -20,7 +20,7 @@
 #include "portable.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: sumStats.c,v 1.9 2004/07/23 08:18:12 kent Exp $";
+static char const rcsid[] = "$Id: sumStats.c,v 1.10 2004/07/23 09:12:50 kent Exp $";
 
 long long basesInRegion(struct region *regionList)
 /* Count up all bases in regions. */
@@ -158,91 +158,45 @@ for (cov = list; cov != NULL; cov = cov->next)
 return tot;
 }
 
-void covStatsInitOnRegions(
-	struct region *regionList, 
-	struct covStats **retList,
-	struct hash **retHash)	/* Hash is keyed by chrom */
-/* Make up list/hash of covsStats, one for each region. */
-{
-struct hash *hash = newHash(16);
-struct covStats *list = NULL, *cov;
-struct region *region;
-
-for (region = regionList; region != NULL; region = region->next)
-    {
-    cov = covStatsNew(region);
-    hashAdd(hash, region->chrom, cov);
-    slAddHead(&list, cov);
-    }
-slReverse(&list);
-*retList = list;
-*retHash = hash;
-}
-
-static void basesCoveredFromBits(struct covStats *list)
+static void basesCoveredFromBits(struct covStats *cov)
 /* Calculate basesCovered from bits for each item on list. */
 {
-struct covStats *cov;
-for (cov = list; cov != NULL; cov = cov->next)
-    {
-    int regionSize = cov->region->end - cov->region->start;
-    cov->basesCovered = bitCountRange(cov->bits, 0, regionSize);
-    }
+int regionSize = cov->region->end - cov->region->start;
+cov->basesCovered = bitCountRange(cov->bits, 0, regionSize);
+bitFree(&cov->bits);
 }
 
-static struct covStats *calcSpanOverRegions(struct region *regionList,
+static struct covStats *calcSpanOverRegion(struct region *region,
 	struct bed *bedList)
 /* Get stats calculated over regions. */
 {
-struct hash *chromHash;
-struct covStats *covList, *cov;
+struct covStats *cov = covStatsNew(region);
 struct bed *bed;
-struct hashEl *hel;
 
-covStatsInitOnRegions(regionList, &covList, &chromHash);
 for (bed = bedList; bed != NULL; bed = bed->next)
-    {
-    hel = hashLookup(chromHash, bed->chrom);
-    while (hel != NULL)
-        {
-	cov = hel->val;
-	covAddRange(cov, bed->chromStart, bed->chromEnd);
-	hel = hashLookupNext(hel);
-	}
-    }
-basesCoveredFromBits(covList);
-freeHash(&chromHash);
-return covList;
+    covAddRange(cov, bed->chromStart, bed->chromEnd);
+basesCoveredFromBits(cov);
+return cov;
 }
 
-static struct covStats *calcBlocksOverRegions(struct region *regionList,
+static struct covStats *calcBlocksOverRegion(struct region *region,
 	struct bed *bedList)
 /* Get stats calculated over blocks in regions. */
 {
-struct hash *chromHash;
-struct covStats *covList, *cov;
+struct covStats *cov = covStatsNew(region);
 struct bed *bed;
-struct hashEl *hel;
 
-covStatsInitOnRegions(regionList, &covList, &chromHash);
 for (bed = bedList; bed != NULL; bed = bed->next)
     {
-    hel = hashLookup(chromHash, bed->chrom);
-    while (hel != NULL)
-        {
-	int i;
-	cov = hel->val;
-	for (i=0; i<bed->blockCount; ++i)
-	    {
-	    int start = bed->chromStarts[i] + bed->chromStart;
-	    covAddRange(cov, start, start + bed->blockSizes[i]);
-	    }
-	hel = hashLookupNext(hel);
+    int i, blockCount = bed->blockCount;
+    for (i=0; i<blockCount; ++i)
+	{
+	int start = bed->chromStarts[i] + bed->chromStart;
+	covAddRange(cov, start, start + bed->blockSizes[i]);
 	}
     }
-basesCoveredFromBits(covList);
-freeHash(&chromHash);
-return covList;
+basesCoveredFromBits(cov);
+return cov;
 }
 
 void percentStatRow(char *label, long long p, long long q)
@@ -285,50 +239,81 @@ static void doSummaryStatsBed(struct sqlConnection *conn)
 {
 struct trackDb *track = curTrack;
 struct bed *bedList = NULL;
-struct region *regionList = getRegions();
-#ifdef OLD
-struct region *regionList = getRegionsWithChromEnds();
-#endif
+struct region *regionList = getRegions(), *region;
 char *regionName = getRegionName();
-long long regionSize, gapTotal, realSize;
-long startTime, loadTime, calcTime;
-struct covStats *covList, *cov;
-int itemCount;
+long long regionSize = 0, gapTotal = 0, realSize = 0;
+long startTime, midTime, endTime;
+long loadTime = 0, calcTime = 0, freeTime = 0;
+struct covStats *itemCovList = NULL, *blockCovList = NULL, *cov;
+int itemCount = 0;
 struct hTableInfo *hti = getHti(database, track->tableName);
-struct lm *lm = lmInit(64*1024);
+int minScore = BIGNUM, maxScore = -BIGNUM;
+long long sumScores = 0;
 
 
 htmlOpen("%s (%s) Summary Statistics", track->shortLabel, track->tableName);
 cartSaveSession(cart);
-startTime = clock1000();
-bedList = getAllIntersectedBeds(conn, track, lm);
-regionFillInChromEnds(regionList);
+
+for (region = regionList; region != NULL; region = region->next)
+    {
+    struct lm *lm = lmInit(64*1024);
+    startTime = clock1000();
+    bedList = cookedBedList(conn, track, region, lm);
+    if (region->end == 0) region->end = hChromSize(region->chrom);
+    midTime = clock1000();
+    loadTime += midTime - startTime;
+
+    if (bedList != NULL)
+	{
+	itemCount += slCount(bedList);
+	regionSize += region->end - region->start;
+	cov = calcSpanOverRegion(region, bedList);
+	slAddHead(&itemCovList, cov);
+	if (hti->hasBlocks)
+	    {
+	    cov = calcBlocksOverRegion(region, bedList);
+	    slAddHead(&blockCovList, cov);
+	    }
+	if (hti->scoreField[0] != 0)
+	    {
+	    struct bed *bed;
+	    for (bed = bedList; bed != NULL; bed = bed->next)
+		{
+		int score = bed->score;
+		if (score < minScore) minScore = score;
+		if (score > maxScore) maxScore = score;
+		sumScores += score;
+		}
+	    }
+	}
+    endTime = clock1000();
+    calcTime += endTime - midTime;
+    lmCleanup(&lm);
+    bedList = NULL;
+    freeTime  += clock1000() - endTime;
+    }
+
 regionSize = basesInRegion(regionList);
 gapTotal = gapsInRegion(conn, regionList);
 realSize = regionSize - gapTotal;
-loadTime = clock1000() - startTime;
 
 
 hTableStart();
 startTime = clock1000();
-itemCount = slCount(bedList);
 numberStatRow("item count", itemCount);
 if (itemCount > 0)
     {
-    covList = calcSpanOverRegions(regionList, bedList);
-    cov = covStatsSum(covList);
+    cov = covStatsSum(itemCovList);
     percentStatRow("item bases", cov->basesCovered, realSize);
     percentStatRow("item total", cov->sumBases, realSize);
     numberStatRow("smallest item", cov->minBases);
     numberStatRow("average item", round((double)cov->sumBases/cov->itemCount));
     numberStatRow("biggest item", cov->maxBases);
-    covStatsFreeList(&covList);
     }
 
 if (hti->hasBlocks && itemCount > 0)
     {
-    covList = calcBlocksOverRegions(regionList, bedList);
-    cov = covStatsSum(covList);
+    cov = covStatsSum(blockCovList);
     hPrintf("<TR><TD>block count</TD><TD ALIGN=RIGHT>");
     printLongWithCommas(stdout, cov->itemCount);
     hPrintf("</TD><TR>\n");
@@ -337,29 +322,14 @@ if (hti->hasBlocks && itemCount > 0)
     numberStatRow("smallest block", cov->minBases);
     numberStatRow("average block", round((double)cov->sumBases/cov->itemCount));
     numberStatRow("biggest block", cov->maxBases);
-    covStatsFreeList(&covList);
     }
 
-if (hti->scoreField[0] != 0 && itemCount > 0)
+if (hti->scoreField[0] != 0 && itemCount > 0 && sumScores != 0)
     {
-    struct bed *bed;
-    int minScore = BIGNUM, maxScore = -BIGNUM;
-    long long sumScores = 0;
-    for (bed = bedList; bed != NULL; bed = bed->next)
-        {
-	int score = bed->score;
-	if (score < minScore) minScore = score;
-	if (score > maxScore) maxScore = score;
-	sumScores += score;
-	}
-    if (sumScores != 0)
-        {
-	numberStatRow("smallest score", minScore);
-	numberStatRow("average score", round((double)sumScores/itemCount));
-	numberStatRow("biggest score", maxScore);
-	}
+    numberStatRow("smallest score", minScore);
+    numberStatRow("average score", round((double)sumScores/itemCount));
+    numberStatRow("biggest score", maxScore);
     }
-calcTime = clock1000() - startTime;
 hTableEnd();
 
 /* Show region and time stats part of stats page. */
@@ -370,11 +340,13 @@ numberStatRow("bases in region", regionSize);
 numberStatRow("bases in gaps", gapTotal);
 floatStatRow("load time", 0.001*loadTime);
 floatStatRow("calculation time", 0.001*calcTime);
+floatStatRow("free memory time", 0.001*freeTime);
 stringStatRow("filter", (anyFilter() ? "on" : "off"));
 stringStatRow("intersection", (anyIntersection() ? "on" : "off"));
 hTableEnd();
+covStatsFreeList(&itemCovList);
+covStatsFreeList(&blockCovList);
 htmlClose();
-lmCleanup(&lm);
 }
 
 void doSummaryStats(struct sqlConnection *conn)
