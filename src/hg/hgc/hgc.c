@@ -150,7 +150,7 @@
 #include "pscreen.h"
 #include "jalview.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.782 2004/11/18 01:03:36 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.782.2.1 2004/11/19 23:24:02 heather Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -7915,6 +7915,8 @@ if (hTableExists("all_mrna"))
     getSequenceInRange(&seqList , faHash, "all_mrna", "Parent", \
             pg->gChrom, pg->gStart, pg->gEnd);
     faWriteAll(faTn.forCgi, seqList);
+
+#ifdef NOT_USED
     /* either display a link to jalview or call it */
     if (jal != NULL && sameString(jal, "YES"))
         {
@@ -7929,6 +7931,7 @@ if (hTableExists("all_mrna"))
         hgcAnchorJalview(pg->name,  faTn.forCgi);
         printf("JalView alignment of parent gene to retroGene</a>\n");
         }
+#endif /* NOT_USED */
 
     if (pslList != NULL)
         {
