@@ -6,7 +6,7 @@
 #include "cheapcgi.h"
 #include "jksql.h"
 #include "dystring.h"
-#include "bed.h"
+#include "sample.h"
 #include "hdb.h"
 
 /* Command line switches. */
@@ -20,9 +20,9 @@ void usage()
 /* Explain usage and exit. */
 {
 errAbort(
-  "hgLoadBed - Load a generic bed file into database\n"
+  "hgLoadSample - Load a sample 9 (wiggle) file into database\n"
   "usage:\n"
-  "   hgLoadBed database track files(s).bed\n"
+  "   hgLoadSample database track files(s).smp\n"
   "options:\n"
   "   -noBin   suppress bin field\n"
   "   -oldTable add to existing table\n"
@@ -132,7 +132,7 @@ void loadDatabase(char *database, char *track, int bedSize, struct bedStub *bedL
 {
 struct sqlConnection *conn = sqlConnect(database);
 struct dyString *dy = newDyString(1024);
-char *tab = "bed.tab";
+char *tab = "sample.tab";
 
 /* First make table definition. */
 if (sqlTable != NULL)
@@ -165,17 +165,11 @@ else if (!oldTable)
     if (bedSize >= 6)
        dyStringAppend(dy, "  strand char(1) not null,\n");
     if (bedSize >= 7)
-       dyStringAppend(dy, "  thickStart int unsigned not null,\n");
+       dyStringAppend(dy, "  sampleCount int unsigned not null,\n");
     if (bedSize >= 8)
-       dyStringAppend(dy, "  thickEnd int unsigned not null,\n");
+       dyStringAppend(dy, "  samplePosition longblob not null,\n");
     if (bedSize >= 9)
-       dyStringAppend(dy, "  reserved int unsigned  not null,\n");
-    if (bedSize >= 10)
-       dyStringAppend(dy, "  blockCount int unsigned not null,\n");
-    if (bedSize >= 11)
-       dyStringAppend(dy, "  blockSizes longblob not null,\n");
-    if (bedSize >= 12)
-       dyStringAppend(dy, "  chromStarts longblob not null,\n");
+       dyStringAppend(dy, "  sampleHeight longblob not null,\n");
     dyStringAppend(dy, "#Indices\n");
     if (!noBin)
        dyStringAppend(dy, "  INDEX(chrom(8),bin),\n");
