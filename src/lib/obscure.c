@@ -251,3 +251,42 @@ for (;;)
 return hash;
 }
 
+void sprintLongWithCommas(char *s, long l)
+/* Print out a long number with commas a thousands, millions, etc. */
+{
+int billions, millions, thousands;
+if (l >= 1000000000)
+    {
+    billions = l/1000000000;
+    l -= billions * 1000000000;
+    millions = l/1000000;
+    l -= millions * 1000000;
+    thousands = l/1000;
+    l -= thousands * 1000;
+    sprintf(s, "%d,%03d,%03d,%03ld", billions, millions, thousands, l);
+    }
+else if (l >= 1000000)
+    {
+    millions = l/1000000;
+    l -= millions * 1000000;
+    thousands = l/1000;
+    l -= thousands * 1000;
+    sprintf(s, "%d,%03d,%03ld", millions, thousands, l);
+    }
+else if (l >= 1000)
+    {
+    thousands = l/1000;
+    l -= thousands * 1000;
+    sprintf(s, "%d,%03ld", thousands, l);
+    }
+else
+    sprintf(s, "%ld", l);
+}
+
+void printLongWithCommas(FILE *f, long l)
+/* Print out a long number with commas a thousands, millions, etc. */
+{
+char ascii[32];
+sprintLongWithCommas(ascii, l);
+fprintf(f, "%s", ascii);
+}
