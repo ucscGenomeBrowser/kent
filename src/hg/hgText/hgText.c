@@ -13,23 +13,173 @@
 #include "hgConfig.h"
 #include "hgFind.h"
 #include "hash.h"
-#include "hdb.h"
 #include "fa.h"
 #include "psl.h"
 #include "nib.h"
 #include "web.h"
+#include "dbDb.h"
 
 /* Variables used by getFeatDna code */
-char *database;			/* Which database? */
+char *database = NULL;		/* Which database? */
 int chromStart = 0;		/* Start of range to select from. */
 int chromEnd = BIGNUM;          /* End of range. */
 char *where = NULL;		/* Extra selection info. */
 boolean breakUp = FALSE;	/* Break up things? */
 int merge = -1;			/* Merge close blocks? */
 char *outputType = "fasta";	/* Type of output. */
+char *position = NULL;
 
 static int blockIx = 0;	/* Index of block written. */
 
+void showPage(char *errorMsg)
+/*
+ Function to show the page if no suitable parameters are given
+ */
+{
+char *database = cgiUsualString("db", hGetDb());
+char *organism = hOrganism(database);
+char *assemblyList[128];
+char *values[128];
+int numAssemblies = 0;
+struct dbDb *dbList = hGetIndexedDatabases();
+struct dbDb *cur = NULL;
+char *assembly = NULL;
+
+webStart("Genome Table Browser");
+
+puts(
+     "<TABLE BGCOLOR=\"fffee8\" WIDTH=\"100%\" CELLPADDING=0>\n"
+     "<TR><TH HEIGHT=10></TH></TR><TR><TD WIDTH=10></TD>\n"
+     "<TD><P>This tool allows you to download portions of the database used by the
+	genome browser in a simple tab-delimited text format.
+	Please enter a position in the genome and press the submit button:\n"
+     );
+
+printf("(Use <A HREF=\"/cgi-bin/hgBlat?db=%s\">BLAT Search</A> to locate a particular sequence in the genome.)	
+	<P><FORM ACTION=\"/cgi-bin/hgText\" METHOD=\"GET\">Freeze:\n", database);
+
+/* Find all the assemblies that pertain to the selected genome */
+for (cur = dbList; cur != NULL; cur = cur->next)
+    {
+    /* If we are looking at a zoo database then show the zoo database list */
+    if ((strstrNoCase(database, "zoo") || strstrNoCase(organism, "zoo")) &&
+        strstrNoCase(cur->description, "zoo"))
+        {
+        assemblyList[numAssemblies] = cur->description;
+        values[numAssemblies] = cur->name;
+        numAssemblies++;
+        }
+    else if (strstrNoCase(organism, cur->organism) && 
+             !strstrNoCase(cur->description, "zoo") &&
+             (cur->active || strstrNoCase(cur->name, database)))
+        {
+        assemblyList[numAssemblies] = cur->description;
+        values[numAssemblies] = cur->name;
+        numAssemblies++;
+        }
+
+    /* Save a pointer to the current assembly */
+    if (strstrNoCase(database, cur->name))
+       {
+       assembly = cur->description;
+       }
+    }
+
+cgiMakeDropListFull("db", assemblyList, values, numAssemblies, assembly, NULL);
+printf(" &nbsp; Genome position:\n");
+position = cgiUsualString("position", hDefaultPos(database));
+cgiMakeTextVar("position", position, 30);
+cgiMakeButton("Submit", "Submit");
+cgiMakeHiddenVar("phase", "table");
+
+puts(
+	"<P>A genome position can be specified by the accession number of a
+	sequenced genomic clone, an mRNA or EST or STS marker, or
+a cytological band, a chromosomal coordinate range, or keywords from the Genbank
+description of an mRNA. The following list provides examples of various types of
+position queries for the human genome. Analogous queries can be made for many of
+these in the mouse genome. See the <A HREF=\"/goldenPath/help/hgTracksHelp.html\" TARGET=_blank>User Guide</A> for more help.
+<P>
+<TABLE  border=0 CELLPADDING=0 CELLSPACING=0>
+<TR><TD VALIGN=Top NOWRAP><B>Request:</B><br></TD>
+	<TD VALIGN=Top COLSPAN=2><B>&nbsp;&nbsp; Genome Browser Response:</B><br></TD></TR>
+	
+<TR><TD VALIGN=Top><br></TD></TR>
+	
+<TR><TD VALIGN=Top NOWRAP>chr7</TD>
+	<TD WIDTH=14></TD>
+	<TD VALIGN=Top>Displays all of chromosome 7</TD></TR>
+<TR><TD VALIGN=Top NOWRAP>20p13</TD>
+	<TD WIDTH=14></TD>
+	<TD VALIGN=Top>Displays region for band p13 on chr 20</TD></TR>
+<TR><TD VALIGN=Top NOWRAP>chr3:1-1000000</TD>
+	<TD WIDTH=14></TD>
+	<TD VALIGN=Top>Displays first million bases of chr 3, counting from p arm telomere</TD></TR>
+
+<TR><TD VALIGN=Top><br></TD></TR>
+
+<TR><TD VALIGN=Top NOWRAP>D16S3046</TD>
+	<TD WIDTH=14></TD>
+	<TD VALIGN=Top>Displays region around STS marker D16S3046 from the Genethon/Marshfield maps
+	(open \"STS Markers\" track by clicking to see this marker)</TD></TR>
+<TR><TD VALIGN=Top NOWRAP>D22S586;D22S43</TD>
+	<TD WIDTH=14></TD>
+	<TD VALIGN=Top>Displays region between STS markers D22S586 and D22S43.
+	Includes 250,000 bases to either side as well.
+<TR><TD VALIGN=Top NOWRAP>AA205474</TD>
+	<TD WIDTH=14></TD>
+	<TD VALIGN=Top>Displays region of EST with GenBank accession AA205474 in BRCA1 cancer gene on chr 17
+	(open \"spliced ESTs\" track by clicking to see this EST)</TD></TR>
+<TR><TD VALIGN=Top NOWRAP>AC008101</TD>
+	<TD WIDTH=14></TD>
+	<TD VALIGN=Top>Displays region of clone with GenBank accession number AC008101
+	(open \"coverage\" track by clicking to see this clone)</TD></TR>
+
+<TR><TD VALIGN=Top><br></TD></TR>
+
+<TR><TD VALIGN=Top NOWRAP>AF083811</TD>
+	<TD WIDTH=14></TD>
+	<TD VALIGN=Top>Displays region of mRNA with GenBank accession number
+	AF083811</TD></TR>
+<TR><TD VALIGN=Top NOWRAP>PRNP</TD>
+	<TD WIDTH=14></TD>
+	<TD>Displays region of genome with HUGO identifier PRNP</TD></TR>
+
+<TR><TD VALIGN=Top><br></TD></TR>
+
+<TR><TD VALIGN=Top NOWRAP>pseudogene mRNA</TD>
+	<TD WIDTH=14></TD>
+	<TD VALIGN=Top>Lists transcribed pseudogenes but not cDNAs</TD></TR>
+<TR><TD VALIGN=Top NOWRAP>homeobox caudal</TD>
+	<TD WIDTH=14></TD>
+	<TD VALIGN=Top>Lists mRNAs for caudal homeobox genes</TD></TR>
+<TR><TD VALIGN=Top NOWRAP>zinc finger</TD>
+	<TD WIDTH=14></TD>
+	<TD VALIGN=Top>Lists many zinc finger mRNAs</TD></TR>
+<TR><TD VALIGN=Top NOWRAP>kruppel zinc finger</TD>
+	<TD WIDTH=14></TD>
+	<TD VALIGN=Top>Lists only kruppel-like zinc fingers</TD></TR>
+<TR><TD VALIGN=Top NOWRAP>huntington</TD>
+	<TD WIDTH=14></TD>
+	<TD VALIGN=Top>Lists candidate genes associated with Huntington's disease</TD></TR>
+<TR><TD VALIGN=Top NOWRAP>zahler</TD>
+	<TD WIDTH=14></TD>
+	<TD VALIGN=Top>Lists mRNAs deposited by scientist named Zahler</TD></TR>
+<TR><TD VALIGN=Top NOWRAP>Evans,J.E.</TD>
+	<TD WIDTH=14></TD>
+	<TD VALIGN=Top>Lists mRNAs deposited by co-author J.E. Evans</TD></TR>
+
+<TR><TD VALIGN=Top><br></TD></TR>
+	
+<TR><TD COLSPAN=\"3\" > Use this last format for entry authors -- even though Genbank searches require Evans JE format, GenBank entries themselves use Evans,J.E. internally.
+</TABLE>
+	</TD><TD WIDTH=15></TD></TR></TABLE>
+	<BR></TD></TR></TABLE>
+</FORM>
+<BR></TD></TR></TABLE>
+</BODY></HTML>"
+    );
+}
 
 char* getTableVar()
 {
@@ -168,7 +318,10 @@ conn = hAllocConn();
 if(position == NULL)
 	position = "";
 if(position[0] == '\0')
-    webAbort("Missing position", "Please enter a position");
+    {
+    showPage("Missing position: Please enter a position");
+    return;
+    }
 if(strcmp(position, "genome"))
     {
     if(position != NULL && position[0] != 0)
@@ -356,7 +509,10 @@ position = cgiOptionalString("position");
 if(position == NULL)
 	position = "";
 if(position[0] == '\0')
-    webAbort("Missing position", "Please enter a position");
+    {
+    showPage("Missing position: Please enter a position");
+    return;
+    }
 if(strcmp(position, "genome"))
 	{
 	if(position != NULL && position[0] != 0)
@@ -478,7 +634,10 @@ conn = hAllocConn();
 if(position == NULL)
 	position = "";
 if(position[0] == '\0')
-    webAbort("Missing position", "Please enter a position");
+    {
+    showPage("Missing position: Please enter a position");
+    return;
+    }
 if(strcmp(position, "genome"))
 	{
 	if(position != NULL && position[0] != 0)
@@ -578,7 +737,10 @@ position = cgiOptionalString("position");
 if(position == NULL)
 	position = "";
 if(position[0] == '\0')
-    webAbort("Missing position", "Please enter a position");
+    {
+    showPage("Missing position: Please enter a position");
+    return;
+    }
 if(strcmp(position, "genome"))
 	{
 	if(position != NULL && position[0] != 0)
@@ -1364,7 +1526,10 @@ database = cgiUsualString("db", hGetDb());
 if(position == NULL)
 	position = "";
 if(position[0] == '\0')
-    webAbort("Missing position", "Please enter a position");
+    {
+    showPage("Missing position: Please enter a position");
+    return;
+    }
 if(strcmp(position, "genome"))
 	{
 	if(position != NULL && position[0] != 0)
@@ -1511,6 +1676,7 @@ if (!cgiIsOnWeb())
 
 /* select the database */
 database = cgiUsualString("db", hGetDb());
+
 hSetDb(database);
 hDefaultConnect();
 
