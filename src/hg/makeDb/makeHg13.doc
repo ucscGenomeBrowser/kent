@@ -1572,9 +1572,14 @@ LOAD ENSEMBL GENES (TODO)
 
         gunzip the file and name to ensembl.gtf
 
-     Add "chr" to front of each line in the gene data gtf file to make it compatible with ldHgGene 
 
-     ~matt/bin/addchr.pl ensembl.gtf ensGene.gtf
+# Ensembl handles random chromosomes differently than us, so we
+# strip this data.  Fortunately it just loses a couple of genes.
+     grep -v ^6_DR51 ensembl.gtf | grep -v _NT_ > unrandom.gtf
+
+# Add "chr" to front of each line in the gene data gtf file to make 
+# it compatible with ldHgGene 
+     ~matt/bin/addchr.pl unrandom.gtf ensGene.gtf
      ./fixEns.pl ensGene.gtf ensFixed.gtf 
      ldHgGene hg13 ensGene ensGene.gtf
 
