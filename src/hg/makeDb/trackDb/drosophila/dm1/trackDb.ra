@@ -30,6 +30,17 @@ autoScaleDefault Off
 pairwise 041109
 speciesOrder droYak1 droAna1 dp2 droVir1 droMoj1 anoGam1 apiMel1
 
+track phastConsElements8way
+shortLabel Most Conserved
+longLabel PhastCons Conserved Elements (6 Flies, Mosquito and Honeybee)
+group compGeno
+priority 105
+visibility hide
+spectrum on
+exonArrows off
+showTopScorers 200
+type bed 5 .
+
 track anophelesEcores
 shortLabel Anopheles Ecores
 longLabel $Organism/$o_Organism ($o_date/$o_db) Evolutionary Conserved Regions
