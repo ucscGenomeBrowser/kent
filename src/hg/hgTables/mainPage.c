@@ -16,7 +16,7 @@
 #include "hgTables.h"
 #include "joiner.h"
 
-static char const rcsid[] = "$Id: mainPage.c,v 1.45 2004/09/22 07:59:11 kent Exp $";
+static char const rcsid[] = "$Id: mainPage.c,v 1.46 2004/09/24 05:03:18 kent Exp $";
 
 
 struct grp *makeGroupList(struct sqlConnection *conn, 
@@ -240,117 +240,96 @@ return selTable;
 
 
 
-static void showOutDropDown(char **types, char **labels, int typeCount)
+struct outputType
+/* Info on an output type. */
+    {
+    struct outputType *next;
+    char *name;		/* Symbolic name of type. */
+    char *label;	/* User visible label. */
+    };
+
+static void showOutDropDown(struct outputType *otList)
 /* Display output drop-down. */
 {
-int i;
-char *outputType = cartUsualString(cart, hgtaOutputType, outPrimaryTable);
-int selIx = stringArrayIx(outputType, types, typeCount);
-if (selIx < 0) selIx = 0;
+struct outputType *ot;
+char *outputType = cartUsualString(cart, hgtaOutputType, otList->name);
 hPrintf("<SELECT NAME=%s>\n", hgtaOutputType);
-for (i=0; i<typeCount; ++i)
+for (ot = otList; ot != NULL; ot = ot->next)
     {
-    hPrintf(" <OPTION VALUE=%s", types[i]);
-    if (i == selIx)
+    hPrintf(" <OPTION VALUE=%s", ot->name);
+    if (sameString(ot->name, outputType))
 	hPrintf(" SELECTED");
-    hPrintf(">%s\n", labels[i]);
+    hPrintf(">%s\n", ot->label);
     }
 hPrintf("</SELECT>\n");
 hPrintf("</TD></TR>\n");
 }
 
+struct outputType otAllFields = { NULL, 
+	outPrimaryTable, 
+	"all fields from primary table", };
+struct outputType otSelected = { NULL, 
+    outSelectedFields,
+    "selected fields from primary and related tables",  };
+struct outputType otSequence = { NULL, 
+    outSequence,
+    "sequence", };
+struct outputType otGff = { NULL, 
+    outGff,
+    "GTF - gene transfer format", };
+struct outputType otBed = { NULL, 
+    outBed,
+    "BED - browser extensible data", };
+struct outputType otGala = { NULL, 
+    outGala,
+    "query results to GALA", };
+struct outputType otCustomTrack = { NULL, 
+    outCustomTrack,
+    "custom track", };
+struct outputType otHyperlinks = { NULL, 
+    outHyperlinks,
+    "hyperlinks to Genome Browser", };
+struct outputType otWigData = { NULL, 
+     outWigData, 
+    "data points", };
+struct outputType otWigBed = { NULL, 
+     outWigBed, 
+    "bed format", };
+
+
 static void showOutputTypeRow(boolean isWig, boolean isPositional)
 /* Print output line. */
 {
-static char *usualTypes[] = 
-    {outPrimaryTable, 
-     outSelectedFields, 
-     outSequence, 
-     outGff, 
-     outBed, 
-     outCustomTrack ,
-     outHyperlinks};
-static char *usualLabels[] =
-    {"all fields from primary table", 
-     "selected fields from primary and related tables", 
-     "sequence", 
-     "GTF - gene transfer format", 
-     "BED - browser extensible data", 
-     "custom track",
-     "hyperlinks to Genome Browser"};
-static char *tracklessTypes[] = 
-    {outPrimaryTable, 
-     outSelectedFields};
-static char *tracklessLabels[] =
-    {"all fields from primary table", 
-     "selected fields from primary and related tables"};
-    
-static char *wigTypes[] = 
-     {
-     outWigData, 
-     outWigBed, 
-     outCustomTrack ,
-     };
-static char *wigLabels[] =
-    {
-    "data points", 
-    "bed format", 
-    "custom track",
-    };
-
-static char *galaUsualTypes[] =
-    {
-    outPrimaryTable,
-    outSelectedFields,
-    outSequence,
-    outGff,
-    outBed,
-    outGala,
-    outCustomTrack,
-    outHyperlinks,
-    };
-static char *galaUsualLabels[] =
-    {
-    "all fields from primary table",
-    "selected fields from related tables",
-    "sequence",
-    "GTF - gene transfer format",
-    "BED - browser extensible data",
-    "query results to GALA",
-    "custom track",
-    "hyperlinks to Genome Browser",
-    };
-static char *galaWigTypes[] =
-     {
-     outWigData,
-     outWigBed,
-     outGala,
-     outCustomTrack,
-     };
-static char *galaWigLabels[] =
-    {
-    "data points",
-    "bed format",
-    "query results to GALA",
-    "custom track",
-    };
+struct outputType *otList = NULL, *ot;
 
 hPrintf("<TR><TD><B>output format:</B>\n");
 
 if (isWig)
+    {
+    slAddTail(&otList, &otWigData);
+    slAddTail(&otList, &otWigBed);
     if (galaAvail(database))
-        showOutDropDown(galaWigTypes, galaWigLabels, ArraySize(galaWigTypes));
-    else
-        showOutDropDown(wigTypes, wigLabels, ArraySize(wigTypes));
+        slAddTail(&otList, &otGala);
+    slAddTail(&otList, &otCustomTrack);
+    }
 else if (isPositional)
     {
+    slAddTail(&otList, &otAllFields);
+    slAddTail(&otList, &otSelected);
+    slAddTail(&otList, &otSequence);
+    slAddTail(&otList, &otGff);
+    slAddTail(&otList, &otBed);
     if (galaAvail(database))
-        showOutDropDown(galaUsualTypes, galaUsualLabels, ArraySize(galaUsualTypes));
-    else
-        showOutDropDown(usualTypes, usualLabels, ArraySize(usualTypes));
+	slAddTail(&otList, &otGala);
+    slAddTail(&otList, &otCustomTrack);
+    slAddTail(&otList, &otHyperlinks);
     }
 else
-    showOutDropDown(tracklessTypes, tracklessLabels, ArraySize(tracklessTypes));
+    {
+    slAddTail(&otList, &otAllFields);
+    slAddTail(&otList, &otSelected);
+    }
+showOutDropDown(otList);
 }
 
 void nbSpaces(int count)
