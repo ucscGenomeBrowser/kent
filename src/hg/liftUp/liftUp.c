@@ -668,7 +668,7 @@ for (i=0; i<sourceCount; ++i)
     source = sources[i];
     if (!pipeOut) printf("Processing %s\n", source);
     contig = contigInDir(source, dirBuf);
-    if (!startsWith("ctg", contig))
+    if (!startsWith("ctg", contig) && !startsWith("NT_", contig))
         {
 	sprintf(chromName, "chr%s", contig);
 	contig = chromName;
