@@ -1469,3 +1469,90 @@ done
     zip upstream5000.zip upstream5000.fa
     rm upstream5000.fa
     # mrna zips -- auto dump process takes care of this
+
+######## MAKING GENE SORTER TABLES #######  (STARTED - 2004-07-15 - Hiram)
+# These are instructions for building the
+# Gene Sorter.  Don't start these until
+# there is a knownGene track. and the affy tracks
+
+# Cluster together various alt-splicing isoforms.
+#	Creates the knownIsoforms and knownCanonical tables
+ssh hgwdev
+cd /tmp
+hgClusterGenes mm5 knownGene knownIsoforms knownCanonical
+#	You may need to build this binary in src/hg/near/hgClusterGenes
+#	Got 24603 clusters, from 41208 genes in 43 chromosomes
+#	featureBits mm5 knownCanonical
+#	853516995 bases of 2615483787 (32.633%) in intersection
+#	featureBits mm4 knownCanonical
+#	840021165 bases of 2627444668 (31.971%) in intersection
+#	featureBits mm3 knownCanonical
+#	825943052 bases of 2505900260 (32.960%) in intersection
+#	! ! ! Can not do featureBits on knownIsoforms
+
+# Extract peptides from knownGenes into fasta file
+# and create a blast database out of them.
+ssh hgwdev
+mkdir -p  /cluster/data/mm5/bed/geneSorter/blastp
+cd /cluster/data/mm5/bed/geneSorter/blastp
+pepPredToFa mm5 knownGenePep known.faa
+#	You may need to build this binary in src/hg/near/pepPredToFa
+/cluster/bluearc/blast229/formatdb -i known.faa -t known -n known
+
+# Copy over database to bluearc scratch
+mkdir /cluster/bluearc/scratch/mus/mm5/blastp
+cp -p /cluster/data/mm5/bed/geneSorter/blastp/known.* \
+	/cluster/bluearc/scratch/mus/mm5/blastp
+
+# Split up fasta file into bite sized chunks for cluster
+cd /cluster/data/mm5/bed/geneSorter/blastp
+mkdir split
+faSplit sequence known.faa 8000 split/kg
+
+# Make parasol run directory 
+ssh kk
+mkdir /cluster/data/mm5/bed/geneSorter/blastp/self
+cd /cluster/data/mm5/bed/geneSorter/blastp/self
+mkdir run
+cd run
+mkdir out
+
+# Make blast script
+cat  << '_EOF_' > blastSome
+#!/bin/sh
+BLASTMAT=/cluster/bluearc/blast229/data /cluster/bluearc/blast229/blastall \
+	-p blastp -d /cluster/bluearc/scratch/mus/mm5/blastp/known \
+	-i $1 -o $2 -e 0.01 -m 8 -b 1000
+'_EOF_'
+    # << keep emacs happy
+chmod a+x blastSome
+
+# Make gensub2 file
+cat  << '_EOF_' > gsub
+#LOOP
+blastSome {check in line+ $(path1)} {check out line out/$(root1).tab}
+#ENDLOOP
+'_EOF_'
+    # << keep emacs happy
+
+# Create parasol batch
+#	'ls ../../split/*.fa' is too much, hence the echo
+echo ../../split/*.fa | wordLine stdin > split.lst
+gensub2 split.lst single gsub jobList
+para create jobList
+para try
+para check
+para push ... etc ...
+# Completed: 7739 of 7739 jobs
+# CPU time in finished jobs:     120685s    2011.42m    33.52h    1.40d  0.004 y
+# IO & Wait Time:                 22722s     378.69m     6.31h    0.26d  0.001 y
+# Average job time:                  19s       0.31m     0.01h    0.00d
+# Longest job:                      147s       2.45m     0.04h    0.00d
+# Submission to last job:           705s      11.75m     0.20h    0.01d
+
+# Load into database.  This takes about an hour.
+ssh hgwdev
+cd /cluster/data/mm5/bed/geneSorter/blastp/self/run/out
+hgLoadBlastTab mm5 knownBlastTab *.tab
+# Scanning through 7739 files
+XXX - loading 2004-07-15 15:30
