@@ -7381,6 +7381,26 @@ else if (fileName != NULL)
 	}
     }
 
+if (customTrackNeedsLift(ctList))
+    {
+    /* Load up hash of contigs and lift up tracks. */
+    struct hash *ctgHash = newHash(0);
+    struct ctgPos *ctg, *ctgList = NULL;
+    struct sqlConnection *conn = hAllocConn();
+    struct sqlResult *sr = sqlGetResult(conn, "select * from ctgPos");
+    char **row;
+    while ((row = sqlNextRow(sr)) != NULL)
+       {
+       ctg = ctgPosLoad(row);
+       slAddHead(&ctgList, ctg);
+       hashAdd(ctgHash, ctg->contig, ctg);
+       }
+    customTrackLift(ctList, ctgHash);
+    ctgPosFreeList(&ctgList);
+    hashFree(&ctgHash);
+    }
+
+
 /* Process browser commands in custom track. */
 for (bl = browserLines; bl != NULL; bl = bl->next)
     {
@@ -7475,32 +7495,26 @@ struct dyString *uiVars = uiStateUrlPart(NULL);
 
 printf("<TABLE WIDTH=\"100%%\" BGCOLOR=\"#000000\" BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"1\"><TR><TD>\n");
 printf("<TABLE WIDTH=\"100%%\" BGCOLOR=\"#536ED3\" BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"2\"><TR>\n");
-printf("<TD><P ALIGN=CENTER><A HREF=\"/index.html\">%s</A></TD>", wrapWhiteFont("Home"));
+printf("<TD ALIGN=CENTER><A HREF=\"/index.html\">%s</A></TD>", wrapWhiteFont("Home"));
 if (gotBlat)
     {
     fprintf(stdout, "<TD><P ALIGN=CENTER><A HREF=\"../cgi-bin/hgBlat?%s\">%s</A></TD>", uiVars->string, wrapWhiteFont("BLAT"));
     }
-printf("<TD><P ALIGN=CENTER><A HREF=\"%s&o=%d&g=getDna&i=mixed&c=%s&l=%d&r=%d&db=%s&%s\">"
+printf("<TD ALIGN=CENTER><A HREF=\"%s&o=%d&g=getDna&i=mixed&c=%s&l=%d&r=%d&db=%s&%s\">"
       " %s </A></TD>",  hgcNameAndSettings(),
       winStart, chromName, winStart, winEnd, database, uiVars->string, wrapWhiteFont(" DNA "));
-printf("<TD><P ALIGN=CENTER><A HREF=\"../cgi-bin/hgText?db=%s&position=%s:%d-%d&phase=table\">%s</A></TD>", database, chromName, winStart+1, winEnd, wrapWhiteFont("Tables"));
+printf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/hgText?db=%s&position=%s:%d-%d&phase=table\">%s</A></TD>", database, chromName, winStart+1, winEnd, wrapWhiteFont("Tables"));
 
 if (gotBlat)
     {
-    printf("<TD><P ALIGN=CENTER><A HREF=\"../cgi-bin/hgCoordConv?origDb=%s&position=%s:%d-%d&phase=table&%s\">%s</A></TD>", database, chromName, winStart+1, winEnd, uiVars->string, wrapWhiteFont("Convert"));
+    printf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/hgCoordConv?origDb=%s&position=%s:%d-%d&phase=table&%s\">%s</A></TD>", database, chromName, winStart+1, winEnd, uiVars->string, wrapWhiteFont("Convert"));
     }
-
-if (sameString(database, "hg8"))
-    {
-    fputs("<TD><P ALIGN=CENTER>", stdout);
-    printEnsemblAnchor();
-    printf("%s</A></TD>", wrapWhiteFont("Ensembl"));
-    }
-
 if (sameString(database, "hg10"))
     {
-    fputs("<TD><P ALIGN=CENTER>", stdout);
-    printf("<A HREF=\"http://www.ncbi.nlm.nih.gov/cgi-bin/Entrez/maps.cgi?CHR=%s&BEG=%d&END=%d\" TARGET=_blank>",
+    fputs("<TD ALIGN=CENTER>", stdout);
+    printEnsemblAnchor();
+    printf("%s</A></TD>", wrapWhiteFont("Ensembl"));
+    printf("<TD ALIGN=CENTER><A HREF=\"http://www.ncbi.nlm.nih.gov/cgi-bin/Entrez/maps.cgi?CHR=%s&BEG=%d&END=%d\" TARGET=_blank>",
     	skipChr(chromName), winStart+1, winEnd);
     printf("%s</A></TD>", wrapWhiteFont("Map View"));
     }
