@@ -2356,7 +2356,7 @@ CREATE bigZips stuff for release (DONE 2003-08-01, 08-06, 08-08 - Hiram)
     zip upstream5000.zip upstream5000.fa
     rm upstream5000.fa
 
-# MAKING MOUSE AND RAT SYNTENY (MOUSE TBD)(RAT TBD)
+# MAKING MOUSE AND RAT SYNTENY (MOUSE done 2003-09-16)(RAT Done 2003-08-28)
 
 ssh hgwdev
 mkdir -p /cluster/data/hg16/bed/syntenyMm3
@@ -2365,7 +2365,6 @@ cd /cluster/data/hg16/bed/syntenyMm3
 cp -p /cluster/data/hg15/bed/syntenyMouse/*.pl .
 
 ./syntenicBest.pl -db=hg16 -table=blastzBestMm3
-XXXX
 ./smooth.pl
 ./joinsmallgaps.pl
 ./fillgap.pl -db=hg16 -table=blastzBestMm3
@@ -2376,7 +2375,6 @@ hgLoadBed hg16 syntenyMm3 ucsc100k.bed
 mkdir ../syntenyRn3
 cd ../syntenyRn3
 ../syntenyMm3/syntenicBest.pl -db=hg16 -table=blastzBestRn3
-XXXX
 #	smooth.pl overwrites genomeBest2phase created by the previous
 #	run of this above.  Runs quickly.
 ../syntenyMm3/smooth.pl
@@ -2388,12 +2386,6 @@ XXXX
 ../syntenyMm3/synteny2bed.pl
 hgLoadBed hg16 syntenyRn3 ucsc100k.bed
 # Loaded 1537 elements
-# save data files from above operation on Rn3
-mv genomeBest1phase genomeBest1phase.Rn3
-mv genomeBest2phase genomeBest2phase.Rn3
-mv genomeBest3phase genomeBest3phase.Rn3
-mv genomeBestFinal genomeBestFinal.Rn3
-mv ucsc100k.bed ucsc100k.bed.Rn3
 
 # NET RAT BLASTZ (WORKING - 2003-08-11 - Hiram)
 
