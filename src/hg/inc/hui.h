@@ -47,6 +47,7 @@ struct controlGrid
     int columns;	/* How many columns in grid. */
     int columnIx;	/* Index (0 based) of current column. */
     char *align;	/* Which way to align. */
+    boolean rowOpen;	/* True if have opened a row. */
     };
 
 struct controlGrid *startControlGrid(int columns, char *align);

@@ -84,7 +84,7 @@
 #include "estOrientInfo.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.817 2004/10/18 20:04:01 kate Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.818 2004/10/19 18:55:00 kent Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
@@ -8950,7 +8950,6 @@ if (!hideControls)
 	   "Tracks with lots of items will automatically be displayed in "
 	   "more compact modes.</td></tr>\n");
     cg = startControlGrid(MAX_CONTROL_COLUMNS, "left");
-    hPrintf("<TR>");
     for (group = groupList; group != NULL; group = group->next)
         {
 	struct trackRef *tr;
@@ -8959,6 +8958,8 @@ if (!hideControls)
 	    continue;
 
 	/* Print group label on left. */
+	hPrintf("<TR>");
+	cg->rowOpen = TRUE;
 	hPrintf("<th colspan=%d BGCOLOR=#536ED3>", 
 		MAX_CONTROL_COLUMNS);
 	hPrintf("<B>%s</B>", wrapWhiteFont(group->label));
@@ -8975,7 +8976,6 @@ if (!hideControls)
 		    chromName, RULER_TRACK_NAME);
 	    hPrintf(" %s<BR> ", RULER_TRACK_LABEL);
             hPrintf("</A>");
-            // TODO: perhaps replace with standard vis menu, below */
 	    hDropList("ruler", rulerMenu, sizeof(rulerMenu)/sizeof(char *), 
                                                         rulerMenu[rulerMode]);
 	    controlGridEndCell(cg);
