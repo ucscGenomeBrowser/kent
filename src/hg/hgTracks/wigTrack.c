@@ -10,8 +10,9 @@
 #include "hgTracks.h"
 #include "wiggle.h"
 #include "scoredRef.h"
+#include "customTrack.h"
 
-static char const rcsid[] = "$Id: wigTrack.c,v 1.47 2004/03/22 22:16:38 hiram Exp $";
+static char const rcsid[] = "$Id: wigTrack.c,v 1.48 2004/05/05 22:47:24 hiram Exp $";
 
 /*	wigCartOptions structure - to carry cart options from wigMethods
  *	to all the other methods via the track->extraUiData pointer
@@ -157,8 +158,6 @@ int wigTotalHeight(struct track *tg, enum trackVisibility vis)
 /* Wiggle track will use this to figure out the height they use
    as defined in the cart */
 {
-struct wigItem *item;
-int defaultHeight;
 struct wigCartOptions *wigCart;
 
 wigCart = (struct wigCartOptions *) tg->extraUiData;
@@ -185,6 +184,87 @@ tg->heightPer = tg->lineHeight;
 tg->height = tg->lineHeight;
 
 return tg->height + 1;
+}
+
+void ctWigLoadItems(struct track *tg) {
+/*	load custom wiggle track data	*/
+struct customTrack *ct;
+char *row[13];
+struct lineFile *lf = NULL;
+struct wiggle *wiggle;
+struct wigItem *wiList = NULL;
+int itemsLoaded = 0;
+char spanName[128];
+char *previousFileName;
+struct hashEl *el;
+struct hash *spans = NULL;	/* Spans encountered during load */
+
+/*	Verify this is a custom track	*/
+if (tg->customPt == (void *)NULL)
+    errAbort("ctWigLoadItems: did not find a custom wiggle track: %s", tg->mapName);
+
+/*	Allocate trackSpans one time only	*/
+if (! trackSpans)
+    trackSpans = newHash(0);
+/*	Each instance of this LoadItems will create a new spans hash
+ *	It will be the value included in the trackSpans hash
+ */
+spans = newHash(0);
+/*	Each row read will be turned into an instance of a wigItem
+ *	A growing list of wigItems will be the items list to return
+ */
+previousFileName = "";
+itemsLoaded = 0;
+
+ct = tg->customPt;
+tg->items = wiList;
+
+lf = lineFileOpen(ct->wigFile, TRUE);
+while (lineFileChopNextTab(lf, row, ArraySize(row)))
+    {
+    struct wigItem *wi;
+    size_t fileNameSize = 0;
+
+    ++itemsLoaded;
+    wiggle = wiggleLoad(row);
+    AllocVar(wi);
+    wi->start = wiggle->chromStart;
+    wi->end = wiggle->chromEnd;
+    /*	May need unique name here some day XXX	*/
+    wi->name = tg->shortLabel;
+    fileNameSize = strlen(wiggle->file) + 1;
+
+    if (differentString(previousFileName,wiggle->file))
+	{
+	if (! fileExists(wiggle->file))
+	    errAbort("wigLoadItems: file '%s' missing", wiggle->file);
+	previousFileName = cloneString(wiggle->file);
+	}
+    wi->file = cloneString(wiggle->file);
+
+    wi->span = wiggle->span;
+    wi->count = wiggle->count;
+    wi->offset = wiggle->offset;
+    wi->lowerLimit = wiggle->lowerLimit;
+    wi->dataRange = wiggle->dataRange;
+    wi->validCount = wiggle->validCount;
+    wi->sumData = wiggle->sumData;
+    wi->sumSquares = wiggle->sumSquares;
+
+    el = hashLookup(trackSpans, wi->name);
+    if ( el == NULL)
+	    hashAdd(trackSpans, wi->name, spans);
+    snprintf(spanName, sizeof(spanName), "%d", wi->span);
+    el = hashLookup(spans, spanName);
+    if ( el == NULL)
+	    hashAddInt(spans, spanName, wi->span);
+    slAddHead(&wiList, wi);
+    wiggleFree(&wiggle);
+    }
+slReverse(&wiList);
+tg->items = wiList;
+
+lineFileClose(&lf);
 }
 
 /*	wigLoadItems - read the table rows that hRangeQuery returns
@@ -217,8 +297,7 @@ char *whereNULL = NULL;
 int itemsLoaded = 0;
 char spanName[128];
 char *previousFileName;
-struct hashEl *el, *elList;
-struct hashEl *el2, *elList2;
+struct hashEl *el;
 struct hash *spans = NULL;	/* Spans encountered during load */
 /*	Check our scale from the global variables that exist in
  *	hgTracks.c - This can give us a guide about which rows to load.
@@ -229,6 +308,10 @@ struct hash *spans = NULL;	/* Spans encountered during load */
 int basesPerPixel = (int)((double)(winEnd - winStart)/(double)insideWidth);
 char *span1K = "Span >= 1000 limit 1";
 char *spanOver1K = "Span >= 1000";
+
+/*	Verify this is NOT a custom track	*/
+if (tg->customPt != (void *)NULL)
+    errAbort("wigLoadItems: encountered a custom wiggle track: %s in the wrong place", tg->mapName);
 
 if (basesPerPixel >= 1024) {
 sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd,
@@ -333,13 +416,11 @@ static void wigDrawItems(struct track *tg, int seqStart, int seqEnd,
 struct wigItem *wi;
 double pixelsPerBase = scaleForPixels(width);
 double basesPerPixel = 1.0;
-struct rgbColor *normal = &(tg->color);
 Color drawColor = vgFindColorIx(vg, 0, 0, 0);
 int itemCount = 0;
 char *currentFile = (char *) NULL;	/*	the binary file name */
 FILE *f = (FILE *) NULL;		/*	file handle to binary file */
 struct hashEl *el, *elList;
-char cartStr[64];	/*	to set cart strings	*/
 struct wigCartOptions *wigCart;
 enum wiggleGridOptEnum horizontalGrid;
 enum wiggleGraphOptEnum lineBar;
@@ -348,8 +429,6 @@ enum wiggleWindowingEnum windowingFunction;
 enum wiggleYLineMarkEnum yLineOnOff;
 double yLineMark;
 Color black = vgFindColorIx(vg, 0, 0, 0);
-struct rgbColor blackColor = {0, 0, 0};
-struct rgbColor whiteColor = {255, 255, 255};
 struct preDrawElement *preDraw;	/* to accumulate everything in prep for draw */
 int preDrawZero;		/* location in preDraw where screen starts */
 int preDrawSize;		/* size of preDraw array */
@@ -438,7 +517,7 @@ for (wi = tg->items; wi != NULL; wi = wi->next)
 		{
 		if (f != (FILE *) NULL)
 		    {
-		    fclose(f);
+		    carefulClose(&f);
 		    freeMem(currentFile);
 		    }
 		currentFile = cloneString(wi->file);
@@ -528,10 +607,9 @@ for (wi = tg->items; wi != NULL; wi = wi->next)
 	freeMem(ReadData);
 	}	/*	Draw if span is correct	*/
     }	/*	for (wi = tg->items; wi != NULL; wi = wi->next)	*/
-if (f != (FILE *) NULL)
-    {
-    fclose(f);
-    }
+
+carefulClose(&f);
+
 if (currentFile)
     freeMem(currentFile);
 
@@ -779,7 +857,6 @@ for (x1 = 0; x1 < width; ++x1)
 if ((vis == tvFull) && (horizontalGrid == wiggleHorizontalGridOn))
     {
     int x1, x2, y1, y2;
-    int gridLines = 2;
 
     x1 = xOff;
     x2 = x1 + width;
@@ -803,7 +880,6 @@ if ((vis == tvFull) && (horizontalGrid == wiggleHorizontalGridOn))
 if ((vis == tvFull) && (yLineOnOff == wiggleYLineMarkOn))
     {
     int x1, x2, y1, y2;
-    int gridLines = 2;
 
     x1 = xOff;
     x2 = x1 + width;
@@ -833,8 +909,6 @@ static void wigLeftLabels(struct track *tg, int seqStart, int seqEnd,
 struct wigItem *wi;
 int fontHeight = tl.fontHeight+1;
 int centerOffset = 0;
-enum wiggleYLineMarkEnum yLineOnOff;
-double yLineMark;
 double lines[2];	/*	lines to label	*/
 int numberOfLines = 1;	/*	at least one: 0.0	*/
 int i;			/*	loop counter	*/
@@ -963,16 +1037,13 @@ void wigMethods(struct track *track, struct trackDb *tdb,
 	int wordCount, char *words[])
 {
 int defaultHeight;	/*	truncated by limits	*/
-enum wiggleGraphOptEnum wiggleLineBar = wiggleGraphStringToEnum("Bar");
 double minY;	/*	from trackDb or cart, requested minimum */
 double maxY;	/*	from trackDb or cart, requested maximum */
 double tDbMinY;	/*	from trackDb type line, the absolute minimum */
 double tDbMaxY;	/*	from trackDb type line, the absolute maximum */
 double yLineMark;	/*	from trackDb or cart */
-char cartStr[64];	/*	to set cart strings	*/
 struct wigCartOptions *wigCart;
 int maxHeight = atoi(DEFAULT_HEIGHT_PER);
-int defaultHeightPixels = maxHeight;
 int minHeight = MIN_HEIGHT_PER;
 
 AllocVar(wigCart);
