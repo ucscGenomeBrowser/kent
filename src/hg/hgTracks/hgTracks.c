@@ -89,7 +89,7 @@
 #include "bedCart.h"
 #include "cytoBand.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.907 2005/02/14 23:21:57 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.908 2005/02/15 01:20:15 hiram Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -1302,12 +1302,18 @@ boolean *foundStartPtr = &foundStart;
 int drawOptionNum = 0; //off
 boolean errorColor = FALSE;
 Color saveColor = color;
+boolean pslSequenceBases = cartVarExists(cart, PSL_SEQUENCE_BASES);
 
 /*if we are zoomed in far enough, look to see if we are coloring
   by codon, and setup if so.*/
 if (zoomedToCdsColorLevel && (vis != tvDense))
+    {
+    if (!pslSequenceBases && tg->tdb)
+	pslSequenceBases = ((char *) NULL != trackDbSetting(tg->tdb,
+		PSL_SEQUENCE_BASES));
     drawOptionNum = cdsColorSetup(vg, tg, cdsColor, &mrnaSeq, &psl,
             &errorColor, lf, cdsColorsMade);
+    }
 
 if ((tg->tdb != NULL) && (vis != tvDense))
     intronGap = atoi(trackDbSettingOrDefault(tg->tdb, "intronGap", "0"));
@@ -1365,7 +1371,8 @@ for (sf = lf->components; sf != NULL; sf = sf->next)
     if (e > s)
 	{
         if (zoomedToCdsColorLevel && drawOptionNum>0 && vis != tvDense &&
-            e + 6 >= winStart && s - 6 < winEnd && e-s <= 3) 
+            e + 6 >= winStart && s - 6 < winEnd &&
+		(e-s <= 3 || pslSequenceBases)) 
                 drawCdsColoredBox(tg, lf, sf->grayIx, cdsColor, vg, xOff, y, 
                                     scale, font, s, e, heightPer, 
                                     zoomedToCodonLevel, mrnaSeq, psl, 
