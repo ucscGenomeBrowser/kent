@@ -3544,18 +3544,20 @@ o - # ssh hgwdev
 # LOAD AFFYRATIO [GNF in progress jk Sept 19, 2003] 
 # LOAD AFFYRATIO U95Av2 sequences [DONE hartera Feb 2, 2004]
 # Used consensus/exemplar sequences instead of target sequences
+# LOAD AFFYRATIO [in progress, Feb 4, 2004]
+# changed pslReps parameters as minAli = 0.97 was too stringent
     # Set up cluster job to align consenesus/exemplars to hg16
     ssh kkr1u00
     cd /cluster/data/hg16/bed
-    rm -rf affyGnf.2004-01-28/
-    mkdir affyGnf.2004-01-28
-    cd affyGnf.2004-01-28/
+    rm -rf affyGnf.2004-02-04/
+    mkdir affyGnf.2004-02-04
+    cd affyGnf.2004-02-04/
     mkdir -p /iscratch/i/affy
     cp /projects/compbio/data/microarray/affyGnf/sequences/HG-U95/HG-U95Av2_all.fa /iscratch/i/affy
     iSync
 
     ssh kk
-    cd /cluster/data/hg16/bed/affyGnf.2004-01-28
+    cd /cluster/data/hg16/bed/affyGnf.2004-02-04
     ls -1 /iscratch/i/affy/HG-U95Av2_all.fa > affy.lst
     ls -1 /scratch/hg/gs.17/build34/trfFa/ > allctg.lst
     echo '#LOOP\n/cluster/bin/i386/blat -fine -mask=lower -minIdentity=95 -ooc=/scratch/hg/h/11.ooc  /scratch/hg/gs.17/build34/trfFa/$(path1) $(path2) {check out line+ psl/$(root1)_$(root2).psl}\n#ENDLOOP' > template.sub
@@ -3564,36 +3566,28 @@ o - # ssh hgwdev
     para create para.spec
 
     # Actually do the job with usual para try/check/push/time etc.
+# para time 2/4/04
 #Completed: 491 of 491 jobs
-#CPU time in finished jobs:       2268s      37.81m     0.63h    0.03d  0.000 y
-#IO & Wait Time:                  1437s      23.94m     0.40h    0.02d  0.000 y
-#Average job time:                   8s       0.13m     0.00h    0.00d
-#Longest job:                       81s       1.35m     0.02h    0.00d
-#Submission to last job:           272s       4.53m     0.08h    0.00d
-
-# para time - 01/28/04
-#Completed: 491 of 491 jobs
-#CPU time in finished jobs:       8516s     141.94m     2.37h    0.10d  0.000 y
-#IO & Wait Time:                  1485s      24.74m     0.41h    0.02d  0.000 y
-#Average job time:                  20s       0.34m     0.01h    0.00d
-#Longest job:                      292s       4.87m     0.08h    0.00d
-#Submission to last job:           434s       7.23m     0.12h    0.01d
+#CPU time in finished jobs:       8344s     139.06m     2.32h    0.10d  0.000 y
+#IO & Wait Time:                  2281s      38.02m     0.63h    0.03d  0.000 y
+#Average job time:                  22s       0.36m     0.01h    0.00d
+#Longest job:                      289s       4.82m     0.08h    0.00d
+#Submission to last job:           388s       6.47m     0.11h    0.00d
 
     # Do sort, best in genome filter, and convert to chromosome coordinates
     # to create affyU95.psl
     pslSort dirs raw.psl tmp psl
     
-    # change alignment parameters for these sequences (provided by Chuck)
-    # only use alignments that cover 50% of sequence and have identity >97% 
-    # in aligned region. low minCover as a lot of n's in these sequences
-
-    pslReps -minCover=0.5 -sizeMatters -minAli=0.97 -nearTop=0.005 raw.psl contig.psl /dev/null
+    # change filter parameters for these sequences. only use alignments that
+    # cover 30% of sequence and have at least 95% identity in aligned region. 
+    # minAli = 0.97 too high. low minCover as a lot of n's in these sequences
+    pslReps -minCover=0.3 -sizeMatters -minAli=0.95 -nearTop=0.005 raw.psl contig.psl /dev/null
     liftUp affyU95.psl ../../jkStuff/liftAll.lft warn contig.psl
 
     # Merge with spot data and load into database. added -chip flag to 
     # affyPslAndAtlasToBed to allow correct parsing
     ssh hgwdev
-    cd /cluster/data/hg16/bed/affyGnf.2004-01-28
+    cd /cluster/data/hg16/bed/affyGnf.2004-02-04
     /cluster/home/sugnet/bin/i386/affyPslAndAtlasToBed -chip=U95Av2 affyU95.psl   /projects/compbiodata/microarray/affyGnf/human_atlas_U95_gnf.noquotes.txt affyRatio.bed affyRatio.exr >& affyPslAndAtlasToBed.log 
     hgLoadBed -sqlTable=$HOME/src/hg/lib/affyRatio.sql hg16 affyRatio affyRatio.bed    
     hgLoadPsl hg16 affyU95.psl
@@ -3606,15 +3600,15 @@ LOAD AffyUclaRatio [in progress jk Sept 19, 2003]
     # Set up cluster job to align consensus/exemplars to hg16
     ssh kkr1u00
     cd /cluster/data/hg16/bed
-    rm -rf affyUcla.2004-01-28/
-    mkdir affyUcla.2004-01-28
-    cd affyUcla.2004-01-28/
+    rm -rf affyUcla.2004-02-04/
+    mkdir affyUcla.2004-02-04
+    cd affyUcla.2004-02-04/
     mkdir -p /iscratch/i/affy
     cp /projects/compbio/data/microarray/affyUcla/sequences/HG-U133AB_all.fa /iscratch/i/affy
     iSync
 
     ssh kk
-    cd /cluster/data/hg16/bed/affyUcla.2004-01-28/
+    cd /cluster/data/hg16/bed/affyUcla.2004-02-04/
     ls -1 /iscratch/i/affy/HG-U133AB_all.fa > affy.lst
     ls -1 /scratch/hg/gs.17/build34/trfFa/ > allctg.lst
     echo '#LOOP\n/cluster/bin/i386/blat -fine -mask=lower -minIdentity=95 -ooc=/scratch/hg/h/11.ooc  /scratch/hg/gs.17/build34/trfFa/$(path1) $(path2) {check out line+ psl/$(root1)_$(root2).psl}\n#ENDLOOP' > template.sub
@@ -3623,22 +3617,22 @@ LOAD AffyUclaRatio [in progress jk Sept 19, 2003]
     para create para.spec
 
     # Actually do the job with usual para try/check/push/time etc.
-# on 1/29/04:
+# on 2/4/04:
 #Completed: 491 of 491 jobs
-#CPU time in finished jobs:      22915s     381.91m     6.37h    0.27d  0.001 y
-#IO & Wait Time:                  1435s      23.92m     0.40h    0.02d  0.000 y
-#Average job time:                  50s       0.83m     0.01h    0.00d
-#Longest job:                      587s       9.78m     0.16h    0.01d
-#Submission to last job:           787s      13.12m     0.22h    0.01d
+#CPU time in finished jobs:      23137s     385.61m     6.43h    0.27d  0.001 y
+#IO & Wait Time:                 23057s     384.29m     6.40h    0.27d  0.001 y
+#Average job time:                  94s       1.57m     0.03h    0.00d
+#Longest job:                      617s      10.28m     0.17h    0.01d
+#Submission to last job:           747s      12.45m     0.21h    0.01d
 
     # Do sort, best in genome filter, and convert to chromosome coordinates
     # to create affyU133.psl.
     pslSort dirs raw.psl tmp psl
     
-    # change alignment parameters for these sequences (provided by Chuck)
-    # only use alignments that cover 50% of sequence and have identity >97% 
-    # in aligned region. low minCover as a lot of n's in these sequences
-    pslReps -minCover=0.5 -sizeMatters -minAli=0.97 -nearTop=0.005 raw.psl contig.psl /dev/null
+    # change filter parameters for these sequences. only use alignments that
+    # cover 30% of sequence and have at least 95% identity in aligned region. 
+    # minAli = 0.97 too high. low minCover as a lot of n's in these sequences
+    pslReps -minCover=0.3 -sizeMatters -minAli=0.95 -nearTop=0.005 raw.psl contig.psl /dev/null
     liftUp affyU133.psl ../../jkStuff/liftAll.lft warn contig.psl
 
     # Merge with spot data and load into database.
