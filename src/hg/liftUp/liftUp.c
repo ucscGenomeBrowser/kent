@@ -11,7 +11,7 @@
 #include "chromInserts.h"
 #include "axt.h"
 
-static char const rcsid[] = "$Id: liftUp.c,v 1.20 2003/10/30 13:25:24 braney Exp $";
+static char const rcsid[] = "$Id: liftUp.c,v 1.21 2003/11/19 17:41:20 braney Exp $";
 
 boolean nohead = FALSE;	/* No header for psl files? */
 boolean nosort = FALSE;	/* Don't sort files */
@@ -23,7 +23,7 @@ void usage()
 {
 errAbort(
  "liftUp - change coordinates of .psl, .agp, .gl, .out, .gff, .gtf \n"
- ".score .tab .gdup .axt or .bed files to parent coordinate system.\n"
+ ".bscore .tab .gdup .axt or .bed files to parent coordinate system.\n"
  "usage:\n"
  "   liftUp [-type=.xxx] destFile liftSpec how sourceFile(s)\n"
  "The optional -type parameter tells what type of files to lift\n"
@@ -819,13 +819,13 @@ void liftGdup(char *destFile, struct hash *liftHash, int sourceCount, char *sour
 liftTabbed(destFile, liftHash, sourceCount, sources, 0, 1, 2, TRUE, 6, 7, 8, 1, -1);
 }
 
-void liftScore(char *destFile, struct hash *liftHash, int sourceCount, char *sources[], boolean querySide)
-/* Lift up coordinates of a .score */
+void liftBScore(char *destFile, struct hash *liftHash, int sourceCount, char *sources[], boolean querySide)
+/* Lift up coordinates of a .bscore */
 {
 if (querySide)
-    liftTabbed(destFile, liftHash, sourceCount, sources, 4, 5, 6, FALSE, 0, 0, 0, 0, 1);
+    liftTabbed(destFile, liftHash, sourceCount, sources, 1, 2, 3, FALSE, 0, 0, 0, 0, 1);
 else
-    liftTabbed(destFile, liftHash, sourceCount, sources, 0, 2, 3, FALSE, 0, 0, 0, 0, 1);
+    liftTabbed(destFile, liftHash, sourceCount, sources, 4, 5, 6, FALSE, 0, 0, 0, 0, 1);
 }
 
 void liftBlast(char *destFile, struct hash *liftHash, int sourceCount, char *sources[])
@@ -968,11 +968,11 @@ else if (endsWith(destType, ".bed"))
     liftHash = hashLift(lifts, TRUE);
     liftBed(destFile, liftHash, sourceCount, sources);
     }
-else if (endsWith(destType, ".score"))
+else if (endsWith(destType, ".bscore"))
     {
     rmChromPart(lifts);
     liftHash = hashLift(lifts, TRUE);
-    liftScore(destFile, liftHash, sourceCount, sources,
+    liftBScore(destFile, liftHash, sourceCount, sources,
     	cgiBoolean("pslQ") || cgiBoolean("pslq"));
     }
 else if (endsWith(destType, ".tab"))
