@@ -98,3 +98,19 @@ spectrum on
 type psl xeno
 url http://www.ncbi.nlm.nih.gov/htbin-post/Entrez/query?form=4&db=n&term=$$
 
+track humanRefSeq
+shortLabel Human RefSeq Genes
+longLabel  Human RefSeq Genes
+group compGeno
+priority 172
+visibility dense
+type psl 
+
+track blastMrnaHuman
+shortLabel Human Protein Blast
+longLabel   Human Protein Blast
+group compGeno
+priority 173
+visibility dense
+type psl 
+
