@@ -1163,7 +1163,10 @@ static int cmpLfWhiteToBlack(const void *va, const void *vb)
 {
 const struct linkedFeatures *a = *((struct linkedFeatures **)va);
 const struct linkedFeatures *b = *((struct linkedFeatures **)vb);
-return a->grayIx - b->grayIx;
+int diff = a->filterColor - b->filterColor;
+if (diff == 0)
+    diff = a->grayIx - b->grayIx;
+return diff;
 }
 
 int linkedFeaturesCmpStart(const void *va, const void *vb)
@@ -2210,7 +2213,6 @@ for (fil = mud->filterList; fil != NULL; fil = fil->next)
 if (!anyFilter)
     return;
 
-isDense = (limitVisibility(tg) == tvDense);
 
 type = cartUsualString(cart, mud->filterTypeVar, "red");
 if (sameString(type, "exclude"))
@@ -2327,7 +2329,7 @@ slReverse(&oldList);
 if (colorIx > 0)
    {
    /* Draw stuff that passes filter first in full mode, last in dense. */
-   if (isDense)
+   if (tg->visibility == tvDense)
        {
        newList = slCat(oldList, newList);
        }
@@ -2337,6 +2339,7 @@ if (colorIx > 0)
        }
    }
 *pLfList = newList;
+tg->limitedVisSet = FALSE;	/* Need to recalculate this after filtering. */
 
 /* Free up hashes, etc. */
 for (fil = mud->filterList; fil != NULL; fil = fil->next)
@@ -2389,11 +2392,7 @@ tg->items = lfList;	/* Do this twice for benefit of limit visibility */
 if (limitVisibility(tg) != tvDense)
     slSort(&lfList, linkedFeaturesCmpStart);
 if (tg->extraUiData)
-    {
     filterMrna(tg, &lfList);
-    tg->limitedVisSet = FALSE;	/* We need to recalculate this since we
-                                 * may have taken stuff out. */
-    }
 tg->items = lfList;
 sqlFreeResult(&sr);
 }
