@@ -10,7 +10,7 @@ O = $A.o altGraphXTrack.o chainTrack.o contigTrack.o \
 	coverageTrack.o cytoBandTrack.o \
         expRatioTracks.o goldTrack.o loweLabTracks.o \
 	mafTrack.o netTrack.o pslTrack.o rmskTrack.o \
-	sampleTracks.o wabaTrack.o
+	sampleTracks.o wabaTrack.o wigTrack.o
 
 my: compile
 	mv $A ${CGI_BIN}-${USER}/$A
