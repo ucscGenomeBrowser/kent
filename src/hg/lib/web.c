@@ -9,7 +9,7 @@
 #include "axtInfo.h"
 #include "hgColors.h"
 
-static char const rcsid[] = "$Id: web.c,v 1.50 2004/05/25 18:50:42 donnak Exp $";
+static char const rcsid[] = "$Id: web.c,v 1.51 2004/06/07 23:08:01 kent Exp $";
 
 /* flag that tell if the CGI header has already been outputed */
 boolean webHeadAlreadyOutputed = FALSE;
@@ -372,12 +372,12 @@ printSomeGenomeListHtml(db, hGetIndexedDatabases(), onChangeText);
 
 void printAllAssemblyListHtmlParm(char *db, struct dbDb *dbList, 
                             char *dbCgi, bool allowInactive, char *javascript)
-{
 /* Prints to stdout the HTML to render a dropdown list containing the list 
-of assemblies for the current genome to choose from.  By default,
- this includes only active assemblies with a database (with the
- exception of the default assembly, which will be included even
- if it isn't active).
+ * of assemblies for the current genome to choose from.  By default,
+ * this includes only active assemblies with a database (with the
+ * exception of the default assembly, which will be included even
+ * if it isn't active).
+{
 
 param db - The default assembly (the database name) to choose as selected. 
                 If NULL, no default selection.
@@ -422,10 +422,10 @@ cgiMakeDropListFull(dbCgi, assemblyList, values, numAssemblies,
 
 void printSomeAssemblyListHtmlParm(char *db, struct dbDb *dbList, 
                                         char *dbCgi, char *javascript)
-{
 /* Find all the assemblies from the list that are active.
-Prints to stdout the HTML to render a dropdown list containing the list 
-of the possible assemblies to choose from.
+ * Prints to stdout the HTML to render a dropdown list containing the list 
+ * of the possible assemblies to choose from.
+{
 
 param db - The default assembly (the database name) to choose as selected. 
                 If NULL, no default selection.
@@ -434,12 +434,12 @@ param db - The default assembly (the database name) to choose as selected.
 }
  
 void printSomeAssemblyListHtml(char *db, struct dbDb *dbList, char *javascript)
-{
-printSomeAssemblyListHtmlParm(db, dbList, dbCgiName, javascript);
-}
 /* Find all assemblies from the list that are active, and print
  * HTML to render dropdown list 
  * param db - default assembly.  If NULL, no default selection */
+{
+printSomeAssemblyListHtmlParm(db, dbList, dbCgiName, javascript);
+}
 
 void printAssemblyListHtml(char *db, char *javascript)
 /* Find all the assemblies that pertain to the selected genome 
