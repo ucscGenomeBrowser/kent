@@ -10,7 +10,7 @@
 #	are created.  See also, scripts:
 #	mkSwissProtDB.sh and mkProteinsDB.sh
 #
-#	"$Id: KGprocess.sh,v 1.7 2004/02/07 00:22:35 hiram Exp $"
+#	"$Id: KGprocess.sh,v 1.8 2004/02/07 06:08:03 hiram Exp $"
 #
 #	Thu Nov 20 11:16:16 PST 2003 - Created - Hiram
 #		Initial version is a translation of makeKgMm3.doc
@@ -111,7 +111,7 @@ DB=$1
 RO_DB=$2
 DATE=$3
 PDB=proteins${DATE}
-TOP=/cluster/data/${DB}/bed/knownGenes
+TOP=/cluster/data/kgDB/bed/${DB}
 export DB RO_DB DATE PDB TOP
 
 IS_THERE=`hgsql -e "show tables;" ${PDB} | wc -l`
@@ -140,6 +140,7 @@ fi
 echo "`date` using protein database: ${PDB}"
 
 if [ ! -d ${TOP} ]; then
+	echo "`date` mkdir ${TOP}"
 	mkdir ${TOP}
 fi
 
@@ -181,7 +182,7 @@ if [ ! -s mrna.fa -o ! -s mrna.ra -o ! -s all_mrna.psl ]; then
 fi
 
 #	generate list of mrna accession numbers
-if [ ! -f mrna.lis ]; then
+if [ ! -s mrna.lis ]; then
     grep "^>" mrna.fa > mrna.lis
     rm -f mrnaPep.fa
 fi
@@ -192,13 +193,13 @@ fi
 if [ ! -d ll ]; then
     mkdir -p ll
     cd ll
-    if [ ! -f loc2ref ]; then
+    if [ ! -s loc2ref ]; then
 	wget --timestamping "ftp://ftp.ncbi.nih.gov/refseq/LocusLink/loc2ref"
     fi
-    if [ ! -f loc2acc ]; then
+    if [ ! -s loc2acc ]; then
 	wget --timestamping "ftp://ftp.ncbi.nih.gov/refseq/LocusLink/loc2acc"
     fi
-    if [ ! -f mim2loc ]; then
+    if [ ! -s mim2loc ]; then
 	wget --timestamping "ftp://ftp.ncbi.nih.gov/refseq/LocusLink/mim2loc"
     fi
 
@@ -223,7 +224,7 @@ fi
 #	e.g.:	AA001432        NM_000227
 #	hgMrnaRefseq reads from ${DB}Temp.locus2Ref0 and ${DB}Temp.locus2Acc0
 #	to create the mrnaRefseq.tab
-if [ ! -f mrnaRefseq.tab ]; then
+if [ ! -s mrnaRefseq.tab ]; then
     echo "`date` running hgMrnaRefseq ${DB}"
     hgMrnaRefseq ${DB}
     echo "`date` loading mrnaRefseq.tab into ${DB}.mrnaRefseq"
@@ -243,14 +244,14 @@ fi
 #	for each mrna
 #	reads from proteins${DATE}.spXref2 and sp${DATE}.protein
 #	to create mrnaPep.tab and mrna.lis
-if [ ! -f mrnaPep.fa ]; then
+if [ ! -s mrnaPep.fa ]; then
     echo "`date` running: kgGetPep ${DATE}"
     kgGetPep ${DATE} > mrnaPep.fa
     rm -f ${DB}KgMrna.out
 fi
 
 #	Filter the all_mrna's to create tight_mrna.psl
-if [ ! -f tight_mrna.psl ]; then
+if [ ! -s tight_mrna.psl ]; then
     echo "`date` running: pslReps all_mrna.psl tight_mrna.psl"
     pslReps -minCover=0.40 -sizeMatters -minAli=0.97 -nearTop=0.002 \
 	all_mrna.psl tight_mrna.psl /dev/null
@@ -260,7 +261,7 @@ fi
 #	Load tables productName, geneName, refLink, refPep,
 #	refGene, and refMrna tables, creates a history table too
 #	into ${DB}Temp
-if [ ! -f ${DB}KgMrna.out ]; then
+if [ ! -s ${DB}KgMrna.out ]; then
     echo "`date` running: hgKgMrna ${DB}Temp ... ${PDB}"
     hgsql -e "delete from productName;" ${DB}Temp
     hgsql -e "delete from geneName;" ${DB}Temp
@@ -327,13 +328,13 @@ TablePopulated "knownGeneMrna" ${DB} || { \
 
 #	spm3 reads from ${DB}Temp.refGene and proteins${DATE}.spXref2
 #	to create proteinMrna.tab and protein.lis
-if [ ! -f proteinMrna.tab ]; then
+if [ ! -s proteinMrna.tab ]; then
     echo "`date` running spm3 ${DATE} ${DB}"
     spm3 ${DATE} ${DB}
     hgsql -e "delete from spMrna;" ${DB}Temp
 fi
 
-if [ ! -f proteinMrna.tab ]; then
+if [ ! -s proteinMrna.tab ]; then
 	echo "ERROR: can not find file: proteinMrna.tab"
 	echo -e "\tShould have been created by spm3"
 	exit 255
@@ -373,7 +374,7 @@ fi
 
 #	kgResultBestMrna processes the results of the cluster run
 cd ${TOP}/kgBestMrna
-if [ ! -f best.lis ]; then
+if [ ! -s best.lis ]; then
 	echo "`date` Assuming cluster run done, Running analysis of output."
 	echo "`date` kgResultBestMrna ${DATE} ${DB} ${RO_DB}"
 	$HOME/bin/i386/kgResultBestMrna ${DATE} ${DB} ${RO_DB} > ResultBest.out 2>&1
@@ -688,13 +689,13 @@ case ${RO_DB} in
 	;;
 esac
 
-if [ ! -f ${SPECIES}.lis ]; then
+if [ ! -s ${SPECIES}.lis ]; then
     wget --timestamping -O ${SPECIES}.html "http://www.genome.ad.jp/dbget-bin/www_bfind_sub?dbkey=pathway&keywords=${SPECIES}&mode=bfind&max_hit=1000&.cgifields=max_hit"
-    grep HREF hsa.html | perl -wpe "s/<[^>]+>//g" > hsa.lis
+    grep HREF ${SPECIES}.html | perl -wpe "s/<[^>]+>//g" > ${SPECIES}.lis
     $HOME/kent/src/hg/protein/getKeggList.pl ${SPECIES} > keggList.tab
 fi
 
-if [ ! -f keggList.tab ]; then
+if [ ! -s keggList.tab ]; then
     echo "ERROR: can not find keggList.tab"
     echo -e "\tShould have been created by getKeggList.pl operation"
     exit 255
@@ -709,7 +710,7 @@ TablePopulated "keggList" ${DB}Temp || { \
 #	hgKegg reads from ${DB}Temp.locus2Ref0, ${DB}Temp.locus2Acc0locus2Ref0,
 #	${DB}Temp.keggList, ${DB}.knownGene
 #	to create keggPathway.tab and keggMapDesc.tab
-if [ ! -f keggPathway.tab ]; then
+if [ ! -s keggPathway.tab ]; then
     echo "`date` running hgKegg ${DB}"
     hgKegg ${DB}
 fi
@@ -743,14 +744,14 @@ case ${RO_DB} in
 	;;
 esac
 
-if [ ! -f ${SPECIES}_GeneData.dat ]; then
+if [ ! -s ${SPECIES}_GeneData.dat ]; then
     echo "`date` fetching ${SPECIES}_GeneData.dat from nci.nih.gov"
     wget --timestamping -O ${SPECIES}_GeneData.dat \
 	"ftp://ftp1.nci.nih.gov/pub/CGAP/${SPECIES}_GeneData.dat"
 fi
 
 #	hgCGAP reads GeneData.dat and creates a bunch of cgap*.tab files
-if [ ! -f cgapAlias.tab ]; then
+if [ ! -s cgapAlias.tab ]; then
     echo "`date` running hgCGAP ${SPECIES}_GeneData.dat"
     hgCGAP ${SPECIES}_GeneData.dat
     cat cgapSEQUENCE.tab cgapSYMBOL.tab cgapALIAS.tab > cgapAlias.tab
