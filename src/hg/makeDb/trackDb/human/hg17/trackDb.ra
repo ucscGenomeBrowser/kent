@@ -299,12 +299,20 @@ type netAlign galGal2 chainGalGal2
 otherDb galGal2
 
 track elephant
-shortLabel Elephant Blastz
-longLabel Human/Elephant Blastz (Loxodonta Africana trimmed reads) Reciprocal Best
+shortLabel Elephant Blastz RBest
+longLabel Human/Elephant Blastz (Loxodonta Africana Aug 2004 trimmed reads) Reciprocal Best
 group compGeno
 priority 165
 visibility hide
 type maf
+
+track blastzElephant
+shortLabel Elephant Blastz
+longLabel Human/Elephant Blastz (Loxodonta Africana Sep 2004 trimmed reads) Reciprocal Best
+group compGeno
+priority 165
+visibility hide
+type psl xeno
 
 track blastzRn3
 shortLabel Rat Blastz
