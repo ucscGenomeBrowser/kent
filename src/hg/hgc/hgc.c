@@ -87,6 +87,7 @@
 #include "axt.h"
 #include "axtInfo.h"
 #include "jaxQTL.h"
+#include "hgSeq.h"
 
 #define ROGIC_CODE 1
 #define FUREY_CODE 1
@@ -211,8 +212,10 @@ return dy->string;
 void hgcAnchorSomewhere(char *group, char *item, char *other, char *chrom)
 /* Generate an anchor that calls click processing program with item and other parameters. */
 {
-printf("<A HREF=\"%s&g=%s&i=%s&c=%s&l=%d&r=%d&o=%s\">",
-	hgcPathAndSettings(), group, item, chrom, winStart, winEnd, other);
+char *tbl = cgiUsualString("table", cgiString("g"));
+printf("<A HREF=\"%s&g=%s&i=%s&c=%s&l=%d&r=%d&o=%s&table=%s\">",
+       hgcPathAndSettings(), group, item, chrom, winStart, winEnd, other,
+       tbl);
 }
 
 void hgcAnchorWindow(char *group, char *item, int thisWinStart, 
@@ -304,9 +307,10 @@ else
     strand = "?";
 if (featDna)
     {
-    printf("<A HREF=\"%s&o=%d&g=getDna&i=mixed&c=%s&l=%d&r=%d&strand=%s\">"
+    char *tbl = cgiUsualString("table", cgiString("g"));
+    printf("<A HREF=\"%s&o=%d&g=getDna&i=mixed&c=%s&l=%d&r=%d&strand=%s&table=%s\">"
 	  "View DNA for this feature</A><BR>\n",  hgcPathAndSettings(),
-	  start, chrom, start, end, strand);
+	  start, chrom, start, end, strand, tbl);
     }
 }
 
@@ -1337,31 +1341,20 @@ cgiContinueHiddenVar("db");
 void doGetDna1()
 /* Do first get DNA dialog. */
 {
-char *var = "hgc.dna.out1";
-char *oldVal = cartUsualString(cart, var, "lcRepeats");
-
+char *tbl = cartString(cart, "table");
 cartWebStart(cart, "Get DNA in Window");
 printf("<H2>Get DNA for %s:%d-%d</H2>\n", seqName, winStart+1, winEnd);
 printf("<FORM ACTION=\"%s\">\n\n", hgcPath());
 cartSaveSession(cart);
 cgiMakeHiddenVar("g", "htcGetDna2");
+cgiMakeHiddenVar("table", tbl);
 savePosInHidden();
-cgiMakeRadioButton(var, "lcRepeats", sameString(oldVal, "lcRepeats"));
-printf(" lower case repeats<BR>\n");
-cgiMakeRadioButton(var, "nRepeats", sameString(oldVal, "nRepeats"));
-printf(" mask repeats<BR>\n");
-cgiMakeRadioButton(var, "lc", sameString(oldVal, "lc"));
-printf(" all lower case<BR>\n");
-cgiMakeRadioButton(var, "uc", sameString(oldVal, "uc"));
-printf(" all upper case<BR>\n");
-cgiMakeRadioButton(var, "extended", sameString(oldVal, "extended"));
-printf(" extended case/color options<BR>\n");
-printf(" reverse complement ");
-cgiMakeCheckBox("hgc.dna.rc", FALSE);
-printf(" ");
+hgSeqOptions(tbl);
+puts("<P>");
 cgiMakeButton("Submit", "Submit");
-printf("</FORM>\n");
-
+puts("</FORM><P>");
+hgcAnchorSomewhere("htcGetDnaExtended1", cgiString("i"), tbl, cgiString("c"));
+puts("<H3> Extended case/color options </H3></A><BR>");
 }
 
 void maskRepeats(char *chrom, int chromStart, int chromEnd, DNA *dna, int offset, boolean soft)
@@ -1547,40 +1540,10 @@ trackDbFreeList(&tdbList);
 void doGetDna2()
 /* Do second DNA dialog (or just fetch DNA) */
 {
-char *outType = cartString(cart, "hgc.dna.out1");
-if (sameString(outType, "extended"))
-    {
-    doGetDnaExtended1();
-    }
-else
-    {
-    struct dnaSeq *seq;
-    char name[256];
-    boolean isRc = cartBoolean(cart, "hgc.dna.rc");
-
-    sprintf(name, "%s:%d-%d %s", seqName, winStart+1, winEnd, 
-	(isRc ? "(reverse complement)" : ""));
-    hgcStart(name);
-    seq = hDnaFromSeq(seqName, winStart, winEnd, dnaLower);
-    if (sameString(outType, "uc"))
-        touppers(seq->dna);
-    else if (sameString(outType, "lcRepeats"))
-        {
-	touppers(seq->dna);
-	maskRepeats(seqName, winStart, winEnd, seq->dna, winStart, TRUE);
-	}
-    else if (sameString(outType, "nRepeats"))
-        {
-	touppers(seq->dna);
-	maskRepeats(seqName, winStart, winEnd, seq->dna, winStart, FALSE);
-	}
-    if (isRc)
-	reverseComplement(seq->dna, seq->size);
-    printf("<TT><PRE>");
-    faWriteNext(stdout, name, seq->dna, seq->size);
-    printf("</TT></PRE>");
-    freeDnaSeq(&seq);
-    }
+char *tbl = cartString(cart, "table");
+puts("<PRE>");
+hgSeqItemsInRange(tbl, seqName, cartInt(cart, "o"), cartInt(cart, "t"), NULL);
+puts("</PRE>");
 }
 
 void addColorToRange(int r, int g, int b, struct rgbColor *colors, int start, int end)
@@ -3536,17 +3499,7 @@ cgiContinueHiddenVar("r");
 printf("\n");
 cgiContinueHiddenVar("o");
 printf("\n");
-cartContinueRadio("hgc.gene.how", "tx", "tx");
-printf("Transcript<BR>");
-cartContinueRadio("hgc.gene.how", "cds", "tx");
-printf("Coding Region Only<BR>");
-cartContinueRadio("hgc.gene.how", "txPlus", "tx");
-printf("Transcript + Promoter<BR>");
-cartContinueRadio("hgc.gene.how", "promoter", "tx");
-printf("Promoter Only<BR>");
-printf("Promoter Size: ");
-cgiMakeIntVar("hgc.gene.promoterSize", 1000, 6);
-printf("<BR>");
+hgSeqOptions(cgiString("o"));
 cgiMakeButton("submit", "submit");
 printf("</FORM>");
 }
@@ -3572,17 +3525,7 @@ cgiContinueHiddenVar("r");
 printf("\n");
 cgiContinueHiddenVar("o");
 printf("\n");
-cartContinueRadio("hgc.gene.how", "tx", "tx");
-printf("Transcript<BR>");
-cartContinueRadio("hgc.gene.how", "cds", "tx");
-printf("Coding Region Only<BR>");
-cartContinueRadio("hgc.gene.how", "txPlus", "tx");
-printf("Transcript + Promoter<BR>");
-cartContinueRadio("hgc.gene.how", "promoter", "tx");
-printf("Promoter Only<BR>");
-printf("Promoter Size: ");
-cgiMakeIntVar("hgc.gene.promoterSize", 1000, 6);
-printf("<BR>");
+hgSeqOptions(cgiString("o"));
 cgiMakeButton("submit", "submit");
 printf("</FORM>");
 }
@@ -3618,74 +3561,13 @@ for (exonIx = 0; exonIx < gp->exonCount; ++exonIx)
 void htcDnaNearGene(char *geneName)
 /* Fetch DNA near a gene. */
 {
-char *table = cartString(cart, "o");
-char query[512];
-struct sqlConnection *conn = hAllocConn();
-struct sqlResult *sr = NULL;
-char **row = NULL;
-struct genePred *gp = NULL;
-struct dnaSeq *seq = NULL;
-char *how = cartString(cart, "hgc.gene.how");
-int start, end, promoSize;
-boolean isRev;
-char faLine[256];
-int rowOffset = hOffsetPastBin(seqName, table);
+char *table    = cartString(cart, "o");
+char constraints[256];
 
-hgcStart("Predicted mRNA");
-sprintf(query, "select * from %s where name = '%s' and txEnd > %u and txStart < %u and chrom='%s'", table, geneName, winStart, winEnd, seqName);
-sr = sqlGetResult(conn, query);
-if ((row = sqlNextRow(sr)) != NULL)
-    {
-    gp = genePredLoad(row+rowOffset);
-    isRev = (gp->strand[0] == '-');
-    start = gp->txStart;
-    end = gp->txEnd;
-    promoSize = cartInt(cart, "hgc.gene.promoterSize");
-    if (sameString(how, "cds"))
-        {
-	start = gp->cdsStart;
-	end = gp->cdsEnd;
-	}
-    else if (sameString(how, "txPlus"))
-        {
-	if (isRev)
-	    {
-	    end += promoSize;
-	    }
-	else
-	    {
-	    start -= promoSize;
-	    if (start < 0) start = 0;
-	    }
-	}
-    else if (sameString(how, "promoter"))
-        {
-	if (isRev)
-	    {
-	    start = gp->txEnd;
-	    end = start + promoSize;
-	    }
-	else
-	    {
-	    end = gp->txStart;
-	    start = end - promoSize;
-	    if (start < 0) start = 0;
-	    }
-	}
-    seq = hDnaFromSeq(gp->chrom, start, end, dnaLower);
-    toUpperExons(start, seq, gp);
-    if (isRev)
-        reverseComplement(seq->dna, seq->size);
-    printf("<TT><PRE>");
-    sprintf(faLine, "%s:%d-%d %s exons in upper case",
-	gp->chrom, start+1, end,
-	(isRev ? "(reverse complemented)" : "") );
-    faWriteNext(stdout, faLine, seq->dna, seq->size);
-    printf("</TT></PRE>");
-    genePredFree(&gp);
-    freeDnaSeq(&seq);
-    }
-sqlFreeResult(&sr);
+snprintf(constraints, sizeof(constraints), "name = '%s'", geneName);
+puts("<PRE>");
+hgSeqItemsInRange(table, seqName, winStart, winEnd, constraints);
+puts("</PRE>");
 }
 
 void doKnownGene(struct trackDb *tdb, char *geneName)
@@ -6129,6 +6011,7 @@ int oStart;
 int dupId; /*Holds the duplication id*/
 int rowOffset;
 char title[256];
+char *tbl = cgiUsualString("table", cgiString("g"));
 sprintf(title, "Genome Assembly Comparision");
 cartWebStart(cart, title);
 
@@ -6151,16 +6034,16 @@ if (cgiVarExists("o"))
 	genomicSuperDupsStaticLoad(row+rowOffset, &dup);
 	printf("<B>Current Position:</B> %s:%d-%d\n &nbsp;&nbsp;&nbsp;",
 	   dup.chrom, dup.chromStart, dup.chromEnd);
-	printf("<A HREF=\"%s?o=%d&g=getDna&i=mixed&c=%s&l=%d&r=%d&strand=+&db=%s\">"
+	printf("<A HREF=\"%s?o=%d&g=getDna&i=mixed&c=%s&l=%d&r=%d&strand=+&db=%s&table=%s\">"
 			  "View DNA for this feature</A><BR>\n",  hgcPath(), dup.chromStart,
-		  dup.chrom, dup.chromStart, dup.chromEnd, database);
+		  dup.chrom, dup.chromStart, dup.chromEnd, database, tbl);
 
 
 	printf("<B>Other Position:</B> %s:%d-%d &nbsp;&nbsp;&nbsp;\n",
 	   dup.otherChrom, dup.otherStart, dup.otherEnd);
-	printf("<A HREF=\"%s?o=%d&g=getDna&i=mixed&c=%s&l=%d&r=%d&strand=%s&db=%s\">"
+	printf("<A HREF=\"%s?o=%d&g=getDna&i=mixed&c=%s&l=%d&r=%d&strand=%s&db=%s&table=%s\">"
 				  "View DNA for this feature</A><BR>\n",  hgcPath(), dup.otherStart,
-			  dup.otherChrom, dup.otherStart, dup.otherEnd, dup.strand, database);
+			  dup.otherChrom, dup.otherStart, dup.otherEnd, dup.strand, database, tbl);
 
 	//printf("<B>Name:</B>%s<BR>\n",dup.name);
 	//printf("<B>Score:</B>%d<BR>\n",dup.score);
@@ -8599,6 +8482,10 @@ else if (sameWord(track, "htcGetDna2"))
 else if (sameWord(track, "htcGetDna3"))
    {
    doGetDna3();
+   }
+else if (sameWord(track, "htcGetDnaExtended1"))
+   {
+   doGetDnaExtended1();
    }
 else if (sameWord(track, "mrna") || sameWord(track, "mrna2") || 
 	sameWord(track, "est") || sameWord(track, "intronEst") || 
