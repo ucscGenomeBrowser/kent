@@ -14,6 +14,8 @@
 #include "hdb.h"
 #include "hui.h"
 #include "cart.h"
+#include "dbDb.h"
+#include "blatServers.h"
 
 struct cart *cart;	/* The user's ui state. */
 char *defaultDatabase;	/* Default database. */
@@ -29,40 +31,69 @@ struct serverTable
    char *nibDir;	/* Directory of sequence files. */
    };
 
-char *genomeList[] = {"Dec. 12, 2000", "April 1, 2001", "Aug. 6, 2001"};
 char *typeList[] = {"BLAT's guess", "DNA", "protein", "translated RNA", "translated DNA"};
 char *sortList[] = {"query,score", "query,start", "chrom,score", "chrom,start", "score"};
 char *outputList[] = {"hyperlink", "psl", "psl no header"};
 
-struct serverTable serverTable[] =  {
-{"hg6", "Dec. 12, 2000", TRUE,  "blat2", "17778", "/projects/hg2/gs.6/oo.27/nib"},
-{"hg6", "Dec. 12, 2000", FALSE, "blat2", "17779", "/projects/hg2/gs.6/oo.27/nib"},
-{"hg7", "April 1, 2001", TRUE, "blat1", "17778", "/projects/hg3/gs.7/oo.29/nib"},
-{"hg7", "April 1, 2001", FALSE, "blat1", "17779", "/projects/hg3/gs.7/oo.29/nib"},
-{"hg8", "Aug. 6, 2001", TRUE, "blat3", "17778", "/projects/hg3/gs.8/oo.33/nib"},
-{"hg8", "Aug. 6, 2001", FALSE, "blat3", "17779", "/projects/hg3/gs.8/oo.33/nib"},
-};
+
+void getIndexedGenomeDescriptions(char ***retArray, int *retCount)
+/* Find out the list of genomes that have blat servers on them. */
+{
+struct dbDb *dbList = hGetBlatIndexedDatabases(), *db;
+int i, count = slCount(dbList);
+char **array;
+
+if (count == 0)
+    errAbort("No active blat servers in database");
+AllocArray(array, count);
+for (i=0, db=dbList; i<count; ++i, db=db->next)
+    array[i] = cloneString(db->description);
+dbDbFreeList(&dbList);
+*retArray = array;
+*retCount = count;
+}
 
 struct serverTable *findServer(char *db, boolean isTrans)
-/* Return server for given database. */
+/* Return server for given database.  Db can either be
+ * database name or description. */
 {
-int i;
-struct serverTable *serve;
+static struct serverTable st;
+struct sqlConnection *conn = hConnectCentral();
+char query[256];
+struct sqlResult *sr;
+char **row;
+char dbActualName[32];
 
-if (db == NULL)
-    db = defaultDatabase;
-for (i=0; i<ArraySize(serverTable); ++i)
+/* If necessary convert database description to name. */
+sprintf(query, "select name from dbDb where name = '%s'", db);
+if (!sqlExists(conn, query))
     {
-    serve = &serverTable[i];
-	
-    if (sameWord(serve->db, db) && serve->isTrans == isTrans)
-        return serve;
-    if (sameWord(serve->genome, db) && serve->isTrans == isTrans)
-        return serve;
+    sprintf(query, "select name from dbDb where description = '%s'", db);
+    if (sqlQuickQuery(conn, query, dbActualName, sizeof(dbActualName)) != NULL)
+        db = dbActualName;
     }
-errAbort("Can't find a server for %s database %s\n",
-	(isTrans ? "translated" : "DNA"), db);
-return NULL;
+
+/* Do a little join to get data to fit into the serverTable. */
+sprintf(query, "select dbDb.name,dbDb.description,blatServers.isTrans"
+               ",blatServers.host,blatServers.port,dbDb.nibPath "
+	       "from dbDb,blatServers where blatServers.isTrans = %d and "
+	       "dbDb.name = '%s' and dbDb.name = blatServers.db", 
+	       isTrans, db);
+sr = sqlGetResult(conn, query);
+if ((row = sqlNextRow(sr)) == NULL)
+    {
+    errAbort("Can't find a server for %s database %s\n",
+	    (isTrans ? "translated" : "DNA"), db);
+    }
+st.db = cloneString(row[0]);
+st.genome = cloneString(row[1]);
+st.isTrans = atoi(row[2]);
+st.host = cloneString(row[3]);
+st.port = cloneString(row[4]);
+st.nibDir = cloneString(row[5]);
+sqlFreeResult(&sr);
+hDisconnectCentral(&conn);
+return &st;
 }
 
 void usage()
@@ -442,6 +473,8 @@ void askForSeq()
 {
 char *db = cartOptionalString(cart, "db");
 struct serverTable *serve = findServer(db, FALSE);
+char **genomeList;
+int genomeCount;
 
 printf("%s", 
 "<FORM ACTION=\"../cgi-bin/hgBlat\" METHOD=\"POST\" ENCTYPE=\"multipart/form-data\">\n"
@@ -453,7 +486,8 @@ cartSaveSession(cart);
 
 printf("%s", "<TD WIDTH=\"20%\"<CENTER>\n");
 printf("Freeze:<BR>");
-cgiMakeDropList("genome", genomeList, ArraySize(genomeList), serve->genome);
+getIndexedGenomeDescriptions(&genomeList, &genomeCount);
+cgiMakeDropList("genome", genomeList, genomeCount, serve->genome);
 printf("%s", "</TD><TD WIDTH=\"22%\"<CENTER>\n");
 printf("Query type:<BR>");
 cgiMakeDropList("type", typeList, ArraySize(typeList), NULL);
@@ -539,17 +573,6 @@ else
     }
 }
 
-
-#ifdef OLD
-void errDoMiddle()
-/* Do middle with a nice early warning error handler. */
-{
-pushWarnHandler(earlyWarning);
-dnaUtilOpen();
-doMiddle();
-}
-#endif /* OLD */
-
 /* Null terminated list of CGI Variables we don't want to save
  * permanently. */
 char *excludeVars[] = {"Submit", "submit", "type", "genome", "userSeq", "seqFile", NULL};
@@ -563,3 +586,4 @@ htmlSetBackground("../images/floret.jpg");
 cartHtmlShell("BLAT Search", doMiddle, hUserCookie(), excludeVars);
 return 0;
 }
+
