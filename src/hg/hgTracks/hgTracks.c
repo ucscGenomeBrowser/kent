@@ -5935,6 +5935,7 @@ void bactigFree(struct track *tg)
 bactigPosFreeList((struct bactigPos**)&tg->items);
 }
 
+#ifdef OLD
 char *abbreviateBactig(char *string, MgFont *font, int width)
 /* Return a string abbreviated enough to fit into space. */
 {
@@ -5991,13 +5992,16 @@ for (bactig = tg->items; bactig != NULL; bactig = bactig->next)
     ++ix;
     }
 }
+#endif /* OLD */
 
 void bactigMethods(struct track *tg)
 /* Make track for bactigPos */
 {
 tg->loadItems = bactigLoad;
 tg->freeItems = bactigFree;
+#ifdef OLD
 tg->drawItems = bactigDraw;
+#endif /* OLD */
 }
 
 struct cloneFrag
