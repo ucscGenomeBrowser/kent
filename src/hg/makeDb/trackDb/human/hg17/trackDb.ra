@@ -1322,3 +1322,19 @@ priority 69
 visibility hide
 spectrum on
 type bed 12 .
+
+track luPosi
+shortLabel potential_code
+longLabel potential coding fragments
+priority 1100
+group x
+visibility hide
+type bed 12
+
+track luNega
+shortLabel potential_pseudo
+longLabel potential pseudo fragments
+priority 1100
+group x
+visibility hide
+type bed 12
