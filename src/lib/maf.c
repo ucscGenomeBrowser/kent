@@ -7,7 +7,7 @@
 #include "axt.h"
 #include "maf.h"
 
-static char const rcsid[] = "$Id: maf.c,v 1.12 2003/10/25 08:24:00 kent Exp $";
+static char const rcsid[] = "$Id: maf.c,v 1.13 2003/11/03 16:26:45 angie Exp $";
 
 struct mafFile *mafMayOpen(char *fileName)
 /* Open up a maf file and verify header. */
@@ -210,10 +210,7 @@ struct mafComp *comp;
 int srcChars = 0, startChars = 0, sizeChars = 0, srcSizeChars = 0;
 
 /* Write out alignment header */
-fputc('a', f);
-if (ali->score != 0.0)
-    fprintf(f, " score=%f", ali->score);
-fputc('\n', f);
+fprintf(f, "a score=%f\n", ali->score);
 
 /* Figure out length of each field. */
 for (comp = ali->components; comp != NULL; comp = comp->next)
