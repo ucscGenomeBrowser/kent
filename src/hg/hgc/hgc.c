@@ -157,7 +157,7 @@
 #include "pscreen.h"
 #include "jalview.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.818 2005/01/14 19:26:52 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.819 2005/01/17 20:31:23 daryl Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -10476,44 +10476,6 @@ if (!strcmp(dbOrg,"Hg"))
 return rsId;
 }
 
-void doSnpLocusLink(struct trackDb *tdb, char *name)
-/* print link to Locus Link for this SNP */
-{
-char *group = tdb->tableName;
-struct sqlConnection *conn = hAllocConn();
-struct sqlResult *sr;
-char **row;
-char query[512];
-int rowOffset;
-
-safef(query, sizeof(query),
-         "select distinct        "
-         "       rl.locusLinkID, "
-         "       rl.name,        "
-         "       kg.name,        "
-         "       kg.proteinID    "
-         "from   knownGene  kg,  "
-         "       refLink    rl,  "
-         "       %s         snp, "
-	 "       mrnaRefseq mrs  "
-         "where  snp.chrom  = kg.chrom       "
-	 "  and  kg.name    = mrs.mrna       "
-         "  and  mrs.refSeq = rl.mrnaAcc     "
-         "  and  kg.txStart < snp.chromStart "
-         "  and  kg.txEnd   > snp.chromEnd   "
-         "  and  snp.name   = '%s'", group, name);
-rowOffset = hOffsetPastBin(seqName, group);
-sr = sqlGetResult(conn, query);
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-    printf("<P><A HREF=\"http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?");
-    printf("locusId=%s\" TARGET=_blank>LocusLink for ", row[0]);
-    printf("%s (%s; %s)</A></P>\n", row[1], row[2], row[3]);
-    }
-sqlFreeResult(&sr);
-hFreeConn(&conn);
-}
-
 void doSnpOld(struct trackDb *tdb, char *itemName)
 /* Put up info on a SNP. */
 {
@@ -10557,37 +10519,32 @@ if (printId)
     {
     printf("<P><A HREF=\"http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?");
     if (!strcmp(printId, "valid"))
-	{
 	printf("type=rs&rs=%s\" TARGET=_blank>dbSNP link</A></P>\n", itemName);
-	doSnpLocusLink(tdb, itemName);
-	}
     else
-	{
 	printf("type=rs&rs=%s\" TARGET=_blank>dbSNP link (%s)</A></P>\n", 
 	       printId, printId);
-	doSnpLocusLink(tdb, printId);
-	}
     }
 printTrackHtml(tdb);
 sqlFreeResult(&sr);
 hFreeConn(&conn);
 }
 
-void writeSnpException(char *exceptionList, char *itemName, int rowOffset)
+void writeSnpException(char *exceptionList, char *itemName, int rowOffset, 
+		       char *chrom, int chromStart)
 {
-char *tokens;
-struct lineFile *lf;
-struct tokenizer *tkz;
-struct snpExceptions se;
-struct sqlConnection *conn = hAllocConn();
-struct sqlResult *sr;
-char **row;
-char query[256];
-char *id;
-char *br=" ";
-char *noteColor="#7f0000";
-boolean firstException=TRUE;
-boolean multiplePositions=FALSE;
+char    *tokens;
+struct   lineFile      *lf;
+struct   tokenizer     *tkz;
+struct   snpExceptions  se;
+struct   sqlConnection *conn = hAllocConn();
+struct   sqlResult     *sr;
+char   **row;
+char     query[256];
+char    *id;
+char    *br=" ";
+char    *noteColor="#7f0000";
+boolean  firstException=TRUE;
+boolean  multiplePositions=FALSE;
 
 if (sameString(exceptionList,"0"))
     return;
@@ -10620,15 +10577,16 @@ printf("%s\n",br);
 if (multiplePositions)
     {
     struct snp snp;
-    printf("<font color=#7f0000><B>Other Positions</font></B>:<BR>");
+    printf("<font color=#7f0000><B>Other Positions</font></B>:<BR><BR>");
     safef(query, sizeof(query), "select * from snp where name='%s'", itemName);
     sr = sqlGetResult(conn, query);
     while ((row = sqlNextRow(sr))!=NULL)
-	{
-	snpStaticLoad(row+rowOffset, &snp);
-	bedPrintPos((struct bed *)&snp, 3);
-	printf("<BR>\n");
-	}
+	if (differentString(chrom,snp.chrom) && chromStart!=snp.chromStart)
+	    {
+	    snpStaticLoad(row+rowOffset, &snp);
+	    bedPrintPos((struct bed *)&snp, 3);
+	    printf("<BR>\n");
+	    }
     }
 }
 
@@ -10661,6 +10619,8 @@ char   query[256];
 int    rowOffset=hOffsetPastBin(seqName, group);
 int    firstOne=1;
 char  *exception=0;
+char  *chrom="";
+int    chromStart=0;
 
 cartWebStart(cart, "Simple Nucleotide Polymorphism (SNP)");
 printf("<H2>Simple Nucleotide Polymorphism (SNP) %s</H2>\n", itemName);
@@ -10673,6 +10633,8 @@ while ((row = sqlNextRow(sr))!=NULL)
     if (firstOne)
 	{
 	exception=cloneString(snp.exception);
+	chrom = cloneString(snp.chrom);
+	chromStart = snp.chromStart;
 	bedPrintPos((struct bed *)&snp, 3);
 	printf("<BR>\n");
 	firstOne=0;
@@ -10681,9 +10643,8 @@ while ((row = sqlNextRow(sr))!=NULL)
     }
 printf("<P><A HREF=\"http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?");
 printf("type=rs&rs=%s\" TARGET=_blank>dbSNP link</A></P>\n", itemName);
-doSnpLocusLink(tdb, itemName);
 if (hTableExists("snpExceptions") && differentString(exception,"0"))
-    writeSnpException(exception, itemName,rowOffset);
+    writeSnpException(exception, itemName, rowOffset, chrom, chromStart);
 printTrackHtml(tdb);
 sqlFreeResult(&sr);
 hFreeConn(&conn);
@@ -10729,7 +10690,6 @@ if (snp!=NULL)
 	printf("type=rs&rs=%s\" TARGET=_blank>dbSNP link for %s</A></P>\n",
 	       snp->rsId, snp->rsId);
 	}
-    doSnpLocusLink(tdb, name);
     printf("<BR>Genotypes:<BR>");
     printf("\n<BR><font face=\"Courier\">");
     printf("NA04477:&nbsp;%s&nbsp;&nbsp;", snp->NA04477);
@@ -10871,7 +10831,6 @@ if (snp!=NULL)
     printf("<P><A HREF=\"http://snp.cshl.org/cgi-bin/snp?name=");
     printf("%s\" TARGET=_blank>TSC link for %s</A></P>\n",
 	   snp->tscId, snp->tscId);
-    doSnpLocusLink(tdb, name);
     }
 /* else errAbort("<BR>Error in Query:\n%s<BR>\n",query); */
 affy10KDetailsFree(&snp);
