@@ -11,7 +11,7 @@
 #include "hdb.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: hgWiggle.c,v 1.30 2004/09/15 17:15:21 hiram Exp $";
+static char const rcsid[] = "$Id: hgWiggle.c,v 1.31 2004/09/15 17:55:13 hiram Exp $";
 
 /* Command line switches. */
 static boolean doAscii = TRUE;	/*	do not output ascii data */
@@ -33,9 +33,9 @@ static char *bedFile = NULL;	/*	to constrain via bedFile */
 static unsigned winStart = 0;	/*	from the position specification */
 static unsigned winEnd = 0;	/*	from the position specification */
 static float hBinSize = 1.0;	/*	histoGram bin size	*/
-static unsigned hBinCount = 26;	/*	histoGram bin count	*/
+static unsigned hBinCount = 25;	/*	histoGram bin count	*/
 static float hMinVal = 0.0;	/*	histoGram minimum value	*/
-static float hRange = 0.0;	/*	hRange = hBinSize * (hBinCount - 1); */
+static float hRange = 0.0;	/*	hRange = hBinSize * hBinCount; */
 static float hMax = 0.0;	/*	hMax = hMinVal + hRange;	*/
 
 /* command line option specifications */
@@ -120,7 +120,7 @@ if (moreHelp)
   "   -doHistogram - perform histogram on data, turns off all other outputs\n"
   "                - see also -htmlOut to output the histogram in html\n"
   "   -hBinSize=<F> - sets histogram bin size to <F> (float, default 1.0)\n"
-  "   -hBinCount=<D> - sets histogram bin count to <D> (int, default 26)\n"
+  "   -hBinCount=<D> - sets histogram bin count to <D> (int, default 25)\n"
   "   -hMinVal=<F> - sets histogram minimum value to <F> (float, default 0.0)\n"
   "   -timing - display timing statistics to stderr\n"
   "   -silent - no output, scanning data only and prepares result (timing check)\n"
@@ -229,11 +229,11 @@ for (i=0; i<trackCount; ++i)
 	    /* first time starts the histogram, next times accumulate into it */
 	    if (histoGramResult == NULL)
 		histoGramResult = histoGram(valuesArray, valueCount,
-		    hBinSize, hBinCount, hMinVal, hMinVal, hMax,
+		    hBinSize, hBinCount+1, hMinVal, hMinVal, hMax,
 			(struct histoResult *)NULL);
 	    else
 		(void) histoGram(valuesArray, valueCount,
-		    hBinSize, hBinCount, hMinVal, hMinVal, hMax,
+		    hBinSize, hBinCount+1, hMinVal, hMinVal, hMax,
 			histoGramResult);
 	    freeMem(valuesArray);
 	    }
@@ -360,7 +360,7 @@ lowerLimit = optionFloat("ll", -1 * INFINITY);
 upperLimit = optionFloat("ul", INFINITY);
 hBinSize = optionFloat("hBinSize", 1.0);
 hMinVal = optionFloat("hMinVal", 0.0);
-hBinCount = optionInt("hBinCount", 26);
+hBinCount = optionInt("hBinCount", 25);
 
 if (help)
     usage(TRUE);
@@ -374,7 +374,7 @@ if (doHistogram)	/*	histogram turns off everything else */
     doBed = FALSE;
     doStats = FALSE;
     rawDataOut = FALSE;
-    hRange = hBinSize * (hBinCount - 1);
+    hRange = hBinSize * hBinCount;
     if ( !(hRange > 0.0))
 	errAbort("ERROR: histogram range is not > 0.0. binSize: %g, binCount: %u, range: %g", hBinSize, hBinCount, hRange);
     hMax = hMinVal + hRange;
