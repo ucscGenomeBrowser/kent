@@ -2,17 +2,18 @@
 exit; # don't actually run this like a script :)
 
 # This file describes how to make the browser database for the
-# worms C. elegans and C. briggsae
-# Currently 2003-05-09 this file is a copy of the makeSc1.doc and
-# is being reworked as I move through the steps.
+# worm C. elegans
+# Currently 2003-05-12 this file is in a state of flux as it is being
+# worked out.
 
-DOWNLOAD SEQUENCE (DONE 2003-05-09 - Hiram)
+DOWNLOAD SEQUENCE (DONE 2003-05-12 - Hiram)
 
     ssh eieio
-    mkdir -p /projects/compbio/experiments/worm/cb1/sanger
-    cd /projects/compbio/experiments/worm/cb1/sanger
-    wget -o cb1.fetch.log -r -l1 --no-directories \
+    mkdir -p /projects/compbio/experiments/worm/ce1/sanger
+    cd /projects/compbio/experiments/worm/ce1/sanger
+    wget -o ce1.fetch.log -r -l1 --no-directories \
 	ftp://ftp.sanger.ac.uk/pub/wormbase/current_release/CHROMOSOMES/
+#   Takes about five minutes
 #   This current_release is updated every two weeks.  Although the
 #	sequence is quite stable at this time and rarely changes.
 #   Check that you have some valid files. Should be chroms I II III IV V X
@@ -26,8 +27,8 @@ DOWNLOAD SEQUENCE (DONE 2003-05-09 - Hiram)
 #   get out of this download data directory, and create your home symlink
 #	shortcut
     cd ..
-    ln -s /projects/compbio/experiments/worm/cb1 ~/cb1
-    cd ~/cb1
+    ln -s /projects/compbio/experiments/worm/ce1 ~/ce1
+    cd ~/ce1
     mkdir nib
 #   translate to unzipped .fa and to nib
     foreach f (I II III IV V X M)
@@ -45,13 +46,15 @@ DOWNLOAD SEQUENCE (DONE 2003-05-09 - Hiram)
 #	M Writing 13794 bases in 6905 bytes
 
 
-CREATING DATABASE (DONE 2003-05-09 - Hiram)
+CREATING DATABASE (DONE 2003-05-12 - Hiram)
 
     # Create the database.
     ssh hgwdev
-    echo 'create database cb1' | hgsql ''
+    echo 'create database ce1' | hgsql ''
+    # if you need to delete that database:
+	echo 'drop database ce1' | hgsql ce1
     # make a semi-permanent read-only alias:
-    alias cb1 "mysql -u hguser -phguserstuff -A cb1"
+    alias ce1 "mysql -u hguser -phguserstuff -A ce1"
     # Use df to ake sure there is at least 5 gig free on 
     df -h /var/lib/mysql
 # Before loading data:
@@ -59,38 +62,43 @@ CREATING DATABASE (DONE 2003-05-09 - Hiram)
 # /dev/sda1             472G  389G   58G  87% /var/lib/mysql
 
 
-CREATING GRP TABLE FOR TRACK GROUPING (DONE 2003-05-09 - Hiram)
+CREATING GRP TABLE FOR TRACK GROUPING (DONE 2003-05-12 - Hiram)
     ssh hgwdev
+    #  the following command copies all the data from the table
+    #	grp in the database rn1 to our new database ce1
     echo "create table grp (PRIMARY KEY(NAME)) select * from rn1.grp" \
-      | hgsql cb1
+      | hgsql ce1
+    # if you need to delete that table:
+	echo 'drop table grp;' | hgsql ce1
 
+STORING O+O SEQUENCE AND ASSEMBLY INFORMATION  (DONE 2003-05-12 - Hiram)
 
-STORING O+O SEQUENCE AND ASSEMBLY INFORMATION  (DONE 2003-05-09 - Hiram)
-
-    # Make symbolic links from /gbdb/cb1/nib to the real nibs.
+    # Make symbolic links from /gbdb/ce1/nib to the real nibs.
     ssh hgwdev
-    mkdir -p /gbdb/cb1/nib
-    foreach f (/projects/compbio/experiments/worm/cb1/nib/*.nib)
-      ln -s $f /gbdb/cb1/nib
+    mkdir -p /gbdb/ce1/nib
+    foreach f (/projects/compbio/experiments/worm/ce1/nib/*.nib)
+      ln -s $f /gbdb/ce1/nib
     end
-    # Load /gbdb/cb1/nib paths into database and save size info.
-    hgsql cb1  < ~/kent/src/hg/lib/chromInfo.sql
-    cd ~/cb1
-    hgNibSeq -preMadeNib cb1 /gbdb/cb1/nib chr*.fa
+    # Load /gbdb/ce1/nib paths into database and save size info.
+    hgsql ce1  < ~/kent/src/hg/lib/chromInfo.sql
+    # if you need to delete that table:
+	echo 'drop table chromInfo;' | hgsql ce1
+    cd ~/ce1
+    hgNibSeq -preMadeNib ce1 /gbdb/ce1/nib chr*.fa
 # Typical output:
-# Processing chrI.fa to /gbdb/cb1/nib/chrI.nib
-# Processing chrII.fa to /gbdb/cb1/nib/chrII.nib
-# Processing chrIII.fa to /gbdb/cb1/nib/chrIII.nib
-# Processing chrIV.fa to /gbdb/cb1/nib/chrIV.nib
-# Processing chrM.fa to /gbdb/cb1/nib/chrM.nib
-# Processing chrV.fa to /gbdb/cb1/nib/chrV.nib
-# Processing chrX.fa to /gbdb/cb1/nib/chrX.nib
+# Processing chrI.fa to /gbdb/ce1/nib/chrI.nib
+# Processing chrII.fa to /gbdb/ce1/nib/chrII.nib
+# Processing chrIII.fa to /gbdb/ce1/nib/chrIII.nib
+# Processing chrIV.fa to /gbdb/ce1/nib/chrIV.nib
+# Processing chrM.fa to /gbdb/ce1/nib/chrM.nib
+# Processing chrV.fa to /gbdb/ce1/nib/chrV.nib
+# Processing chrX.fa to /gbdb/ce1/nib/chrX.nib
 # 100277879 total bases
 
 #   Verify the hgNibSeq load functioned OK:
-    echo "select chrom,size from chromInfo" | hgsql -N cb1 > chrom.sizes
-#   Typical contents of chrom.sizes:
+    echo "select chrom,size from chromInfo" | hgsql -N ce1 > chrom.sizes
     cat chrom.sizes
+#   Typical contents of chrom.sizes:
 chrI    15080473
 chrII   15279303
 chrIII  13783268
@@ -100,39 +108,54 @@ chrV    20922238
 chrX    17705013
 
     # Set up relational mrna tables.
-    hgLoadRna new cb1
+    hgLoadRna new ce1
+    # that created a bunch of tables.  If you need to delete them:
+	echo 'drop table author; \
+drop table cds; drop table cell; drop table description; \
+drop table development; drop table extFile; drop table geneName; \
+drop table history; drop table keyword; drop table library; drop table mrna; \
+drop table mrnaClone; drop table organism; drop table productName; \
+drop table seq; drop table sex; drop table source; drop table tissue;' \
+	| hgsql ce1
 
 
-MAKE GCPERCENT (DONE 2003-05-09 - Hiram)
+MAKE GCPERCENT (DONE 2003-05-12 - Hiram)
      ssh hgwdev
-     mkdir -p /projects/compbio/experiments/worm/cb1/bed/gcPercent
-     cd /projects/compbio/experiments/worm/cb1/bed/gcPercent
-     hgsql cb1  < ~/kent/src/hg/lib/gcPercent.sql
-     hgGcPercent cb1 ../../nib
+     mkdir -p /projects/compbio/experiments/worm/ce1/bed/gcPercent
+     cd /projects/compbio/experiments/worm/ce1/bed/gcPercent
+     hgsql ce1  < ~/kent/src/hg/lib/gcPercent.sql
+    #  If you need to delete that table created
+	echo 'drop table gcPercent;' | hgsql ce1;
+     hgGcPercent ce1 ../../nib
 
-
-MAKE HGCENTRALTEST ENTRY AND TRACKDB TABLE FOR SC1 (DONE 2002-05-09 - Hiram)
+MAKE HGCENTRALTEST ENTRY AND TRACKDB TABLE FOR SC1 (DONE 2002-05-12 - Hiram)
      ssh hgwdev
-    echo 'insert into defaultDb values("Caenorhabditis elegans", "cb1");' \
+    echo 'insert into defaultDb values("Caenorhabditis elegans", "ce1");' \
       | hgsql -h genome-testdb hgcentraltest
-    echo 'insert into dbDb values("cb1", "C elegans 2003-05-09", \
-	"/gbdb/cb1/nib", "Caenorhabditis elegans", "chrI", 1, 10, \
+    #  If you need to delete that entry:
+	echo 'delete from defaultDb where name="ce1";' \
+        | hgsql -h genome-testdb hgcentraltest
+    echo 'insert into dbDb values("ce1", "May 2003", \
+	"/gbdb/ce1/nib", "worm", "chrII:14646858-14667232", 1, 10, \
 	"Caenorhabditis elegans");' \
+	| hgsql -h genome-testdb hgcentraltest
+    #  If you need to delete that entry:
+	echo 'delete from dbDb where name="ce1";' \
 	| hgsql -h genome-testdb hgcentraltest
     # Make trackDb table so browser knows what tracks to expect:
     cd ~/kent/src/hg/makeDb/trackDb
     cvs up -d -P
-    # Edit that makefile to add cb1 in all the right places and do
+    # Edit that makefile to add ce1 in all the right places and do
     make update
     make alpha
     cvs commit makefile
 
-# *****************   END HERE 2003-05-09 16:00 - Hiram  ***************
+# *****************   END HERE 2003-05-12 10:50 - Hiram  ***************
 
 MAKE HGCENTRALTEST BLATSERVERS ENTRY FOR SC1 (TODO)
     ssh hgwdev
-    echo 'insert into blatServers values("cb1", "blat10", "17778", "1"); \
-          insert into blatServers values("cb1", "blat10", "17779", "0");' \
+    echo 'insert into blatServers values("ce1", "blat10", "17778", "1"); \
+          insert into blatServers values("ce1", "blat10", "17779", "0");' \
       | hgsql -h genome-testdb hgcentraltest
 
 
