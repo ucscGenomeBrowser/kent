@@ -5451,6 +5451,9 @@ ls /cluster/bluearc/hg17/multiz.2004-07-12/canFam1/*.maf > chrom.lst
 
 #TREE: (((((1:0.006523,2:0.007997):0.103779,(3:0.104867,4:0.078911):0.265676):0.0196,5:0.2051):0.3906,6:0.5293):0.5557,(7:0.9558,8:0.9375):0.5557);
 
+    # make a copy of the .mod file and replace the TREE line with the
+    # one above.  The new one is called
+    # hg17panTro1rn3mm5canFam1galGal2fr1danRer1.mod
     
 # 7-WAY MULTIZ MULTIPLE ALIGNMENT (2004-06-24 kate)
 
