@@ -395,5 +395,6 @@ longLabel  PFam Hmm hits
 group x
 priority 148
 visibility hide
+spectrum on
 type bed 6 +
 
