@@ -10,7 +10,7 @@
 # The format of the summaries and the contig naming convention
 # differs for each project
 
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/regionAgp/contigAccession.pl,v 1.2 2005/03/16 23:20:04 kate Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/regionAgp/contigAccession.pl,v 1.3 2005/03/17 20:55:56 kate Exp $
 
 sub usage() {
     print "usage: contigAccession <summaryfile>\n";
@@ -80,7 +80,19 @@ while (<SUMMARY>) {
         $_ = <SUMMARY>;
         ($gi, $num, $gb, $acc) = split /\|/;
         print "$contig\t$acc\n";
+    } elsif (/^Tetraodon/) {
+        # contig name is SCAF*, in the 2nd line in the Genbank summary
+        # and the same in the AGP files from the assembly
+        # accession is on 3rd or 4th line
+        ($contig) = /(SCAF.*),/;
+        $_ = <SUMMARY>;
+        ($gi, $num, $gb, $acc) = split /\|/;
+        if ($gi ne "gi") {
+            $_ = <SUMMARY>;
+            ($gi, $num, $gb, $acc) = split /\|/;
+        }
+        print "$contig\t$acc\n";
     } else {
-        die "Unknown WGS project: only know rat, chicken, chimp, dog, opossum";
+        die "Unknown WGS project: only know rat, chicken, chimp, dog, opossum, tetra";
     }
 }
