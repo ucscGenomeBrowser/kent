@@ -8,7 +8,7 @@ CREATE TABLE stsInfoMouseNew (
     identNo int unsigned not null,	# UCSC identification number
     name varchar(255) not null,	# Official UCSC name
     MGIId int unsigned not null,	# Marker's MGI Id
-    MGIName varchar(255) not null,	# Marker's MGI name
+    MGIIdName varchar(255) not null,	# Marker's MGI name
     UiStsId int unsigned not null,	# Marker's UiStsId
     nameCount int unsigned not null,	# Number of alias
     alias varchar(255) not null,	# alias, or N/A
