@@ -111,7 +111,7 @@
 #include "axtLib.h"
 #include "ensFace.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.475 2003/09/19 19:15:44 baertsch Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.476 2003/09/23 05:47:58 baertsch Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -6690,7 +6690,7 @@ cartWebStart(cart, acc);
 printf("<H4>PseudoGene/Genomic Alignment</H4>");
 printAlignments(pslList, start, "htcCdnaAli", table, acc);
 
-sprintf(query, "select * from pseudoGeneLink where name = '%s'", acc);
+sprintf(query, "select * from pseudoGeneLink where name = '%s' and pchrom = '%s' and pStart = %d", acc, chrom, start);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
