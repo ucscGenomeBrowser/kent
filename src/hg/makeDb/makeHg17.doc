@@ -11305,3 +11305,29 @@ axtChain -scoreScheme=/cluster/data/blastz/HoxD55.q \
     hgLoadBed -sqlTable=/cluster/home/fanhsu/hg/lib/wgRna.sql hg17 wgRna wgRna.tab
 # create and edit wgRna.html under src/hg/makeDb/trackDb/human/hg17.
 
+# MAKE VSDANRER2 DOWNLOADABLES (DONE, 2004-12-14, hartera)
+    ssh hgwdev
+    cd /cluster/data/hg17/bed/blastz.danRer2/axtChrom
+    set gp = /usr/local/apache/htdocs/goldenPath/hg17
+    mkdir -p $gp/vsDanRer2/axtChrom
+    cp -p *.axt $gp/vsDanRer2/axtChrom
+    cd $gp/vsDanRer2/axtChrom
+    gzip *.axt
+    md5sum *.gz > md5sum.txt
+                                                                                
+    # copy chains and nets to downloads area
+    cd /cluster/data/hg17/bed/blastz.danRer2/axtChain
+    gzip -c all.chain > /cluster/data/hg17/zip/zebrafish.chain.gz
+    gzip -c zfishdanRer2.net > /cluster/data/hg17/zip/zebrafish.net.gz
+    cd $gp/vsDanRer2
+    mv /cluster/data/hg17/zip/zebrafish*.gz .
+    md5sum *.gz > md5sum.txt
+    # Copy over & edit README.txt w/pointers to chain, net formats.
+                                                                                
+# CLEANUP DANRER2 BLASTZ (DONE, 2004-12-14, hartera)
+    ssh kksilo
+    cd /cluster/data/hg17/bed/blastz.danRer2
+    nice rm axtChain/run1/chain/* &
+    nice rm -fr axtChain/n1 axtChain/noClass.net &
+    nice gzip axtChrom/* pslChrom/* axtChain/all.chain axtChain/*.net &
+
