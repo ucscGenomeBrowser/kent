@@ -45,16 +45,16 @@ $efetchURL  = "http://www.ncbi.nih.gov/entrez/eutils/efetch.fcgi?db=nucleotide&r
 $bluearc    = "/cluster/bluearc/encode";
 $msaDir     = "/usr/local/apache/htdocs/encode/downloads/msa";
 $freezeDate = shift;
-$metadata   = "$msaDir/$freezeDate/metadata.txt";
-$wgetList   = "$bluearc/wgetList";
-$maskList   = "$bluearc/para/maskList";
-$testDir    = "$bluearc/$freezeDate.test";
-$nibFragF   = "$testDir/runNibFragDiff";
+$metadata   = "${msaDir}/${freezeDate}/metadata.txt";
+$wgetList   = "${bluearc}/wgetList";
+$maskList   = "${bluearc}/para/maskList";
+$testDir    = "${bluearc}/${freezeDate}.test";
+$nibFragF   = "${testDir}/runNibFragDiff";
 
-open(METADATA, " < $metadata") or die "can't open $metadata for reading.\n";
-open(WGETLIST, " > $wgetList") or die "can't open $wgetList";
-open(MASKLIST, " > $maskList") or die "can't open $maskList";
-open(NIBFRAG,  " > $nibFragF") or die "can't open $nibFragF";
+open(METADATA, " < ${metadata}") or die "can't open ${metadata} for reading.\n";
+open(WGETLIST, " > ${wgetList}") or die "can't open ${wgetList}";
+open(MASKLIST, " > ${maskList}") or die "can't open ${maskList}";
+open(NIBFRAG,  " > ${nibFragF}") or die "can't open ${nibFragF}";
 
 print(WGETLIST "cd $bluearc\n");
 
@@ -69,14 +69,14 @@ while (<METADATA>)
     $chromEnd   = $fields[9];
     $acc        = $fields[10];
 
-    print(WGETLIST "wget -O $bluearc/original/$acc \"${efetchURL}&id=$acc\"\n");
-    if ($db ne ".")
+    print(WGETLIST "wget -O ${bluearc}/original/$acc \"${efetchURL}&id=${acc}\"\n");
+    if (${db} ne ".")
     {
-	$chromStart -= 1;
-	print(NIBFRAG  "nibFrag -masked /cluster/data/$db/nib/$chrom.nib $chromStart $chromEnd + $testDir/$acc.nibFrag;\n");
-	print(NIBFRAG  "diff -biB $bluearc/masked/$acc $testDir/$acc.nibFrag;\n");
+	${chromStart} -= 1;
+	print(NIBFRAG  "nibFrag -masked /cluster/data/${db}/nib/${chrom}.nib ${chromStart} ${chromEnd} + ${testDir}/${acc}.nibFrag;\n");
+	print(NIBFRAG  "diff -biB ${bluearc}/masked/${acc} ${testDir}/${acc}.nibFrag;\n");
     }
-    die ("Missing species: ". lc($species) . "\n") unless (defined $libOptions{lc($species)});
+    die ("Missing species: ". lc(${species}) . "\n") unless (defined $libOptions{lc($species)});
     print(MASKLIST "/cluster/bin/scripts/maskOne.csh $acc $libOptions{lc($species)}\n");
 } 
 EOF
