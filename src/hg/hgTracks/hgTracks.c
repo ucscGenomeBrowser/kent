@@ -553,7 +553,7 @@ struct linkedFeatures
     int grayIx;				/* Average of components. */
     int filterColor;			/* Filter color (-1 for none) */
     float score;                        /* score for this feature */
-    char name[NAME_LEN];			/* Accession of query seq. */
+    char name[NAME_LEN];		/* Accession of query seq. */
     int orientation;                    /* Orientation. */
     struct simpleFeature *components;   /* List of component simple features. */
     void *extra;			/* Extra info that varies with type. */
@@ -6476,8 +6476,7 @@ if (withLeftLabels)
 	    h = nextY - lastY - 1;
  	    drawButtonBox(mg, trackTabX, lastY, trackTabWidth, h, group->hasUi); 
 	    if (group->hasUi)
-		mapBoxTrackUi(trackTabX, lastY, trackTabWidth, 
-			      h,  group);
+		mapBoxTrackUi(trackTabX, lastY, trackTabWidth, h, group);
 	    }
 	switch (group->limitedVis)
 	    {
@@ -6490,7 +6489,11 @@ if (withLeftLabels)
 		    {
 		    char *name = group->itemName(group, item);
 		    int itemHeight = group->itemHeight(group, item);
-		    mgTextRight(mg, gfxBorder, y, inWid-1, itemHeight, group->ixColor, font, name);
+                    /* Set the clipping rectangle to account for the buttons */
+                    mgSetClip(mg, gfxBorder + trackTabWidth, gfxBorder, inWid - (trackTabWidth), pixHeight - (2 * gfxBorder));
+		    mgTextRight(mg, gfxBorder, y, inWid - 1, itemHeight, group->ixColor, font, name);
+                    /* Reset the clipping rectangle to its original proportions */
+                    mgSetClip(mg, gfxBorder, gfxBorder, inWid, pixHeight - (2 * gfxBorder));
 		    y += itemHeight;
 		    }
 		break;
