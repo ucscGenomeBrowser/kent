@@ -69,7 +69,7 @@
 #include "grp.h"
 #include "chromColors.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.598 2003/09/20 01:40:10 braney Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.599 2003/09/21 19:50:32 braney Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
@@ -1595,12 +1595,13 @@ tg->colorShades = shadesOfGray;
 return tg;
 }
 
-struct linkedFeatures *lfFromBed(struct bed *bed)
+struct linkedFeatures *lfFromBedExtra(struct bed *bed, int scoreMin, 
+	int scoreMax)
 /* Return a linked feature from a (full) bed. */
 {
 struct linkedFeatures *lf;
 struct simpleFeature *sf, *sfList = NULL;
-int grayIx = grayInRange(bed->score, 0, 1000);
+int grayIx = grayInRange(bed->score, scoreMin, scoreMax);
 int *starts = bed->chromStarts, start;
 int *sizes = bed->blockSizes;
 int blockCount = bed->blockCount, i;
@@ -1627,7 +1628,10 @@ lf->tallEnd = bed->thickEnd;
 return lf;
 }
 
-
+struct linkedFeatures *lfFromBed(struct bed *bed)
+{
+    return lfFromBedExtra(bed, 0, 1000);
+}
 
 void setTgDarkLightColors(struct track *tg, int r, int g, int b)
 /* Set track color to r,g,b.  Set altColor to a lighter version
@@ -2830,13 +2834,16 @@ int heightPer = tg->heightPer;
 int x1 = round((double)((int)bed->chromStart-winStart)*scale) + xOff;
 int x2 = round((double)((int)bed->chromEnd-winStart)*scale) + xOff;
 int w;
+struct trackDb *tdb = tg->tdb;
+int scoreMin = atoi(trackDbSettingOrDefault(tdb, "scoreMin", "0"));
+int scoreMax = atoi(trackDbSettingOrDefault(tdb, "scoreMax", "1000"));
 
 if (tg->itemColor != NULL)
     color = tg->itemColor(tg, bed, vg);
 else
     {
     if (tg->colorShades)
-	color = tg->colorShades[grayInRange(bed->score, 0, 1000)];
+	color = tg->colorShades[grayInRange(bed->score, scoreMin, scoreMax)];
     }
 w = x2-x1;
 if (w < 1)
@@ -5781,13 +5788,16 @@ char **row;
 int rowOffset;
 struct bed *bed;
 struct linkedFeatures *lfList = NULL, *lf;
+struct trackDb *tdb = tg->tdb;
+int scoreMin = atoi(trackDbSettingOrDefault(tdb, "scoreMin", "0"));
+int scoreMax = atoi(trackDbSettingOrDefault(tdb, "scoreMax", "1000"));
 
 sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd, NULL, &rowOffset);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     bed = bedLoadN(row+rowOffset, 8);
     bed8To12(bed);
-    lf = lfFromBed(bed);
+    lf = lfFromBedExtra(bed, scoreMin, scoreMax);
     slAddHead(&lfList, lf);
     bedFree(&bed);
     }
@@ -5807,12 +5817,15 @@ char **row;
 int rowOffset;
 struct bed *bed;
 struct linkedFeatures *lfList = NULL, *lf;
+struct trackDb *tdb = tg->tdb;
+int scoreMin = atoi(trackDbSettingOrDefault(tdb, "scoreMin", "0"));
+int scoreMax = atoi(trackDbSettingOrDefault(tdb, "scoreMax", "1000"));
 
 sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd, NULL, &rowOffset);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     bed = bedLoad12(row+rowOffset);
-    lf = lfFromBed(bed);
+    lf = lfFromBedExtra(bed, scoreMin, scoreMax);
     slAddHead(&lfList, lf);
     bedFree(&bed);
     }
@@ -5947,6 +5960,7 @@ if (tdb->useScore)
 	track->colorShades = shadesOfGray;
     }
 fillInFromType(track, tdb);
+track->tdb = tdb;
 return track;
 }
 
