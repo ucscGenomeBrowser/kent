@@ -16,7 +16,7 @@
 #include "hgTables.h"
 #include "joiner.h"
 
-static char const rcsid[] = "$Id: mainPage.c,v 1.62 2004/11/22 05:18:18 kent Exp $";
+static char const rcsid[] = "$Id: mainPage.c,v 1.63 2004/12/02 00:24:24 hiram Exp $";
 
 
 int trackDbCmpShortLabel(const void *va, const void *vb)
@@ -81,7 +81,6 @@ jsDropDownCarryOver(dy, "org");
 jsDropDownCarryOver(dy, hgtaTable);
 return jsOnChangeEnd(&dy);
 }
-
 
 void makeRegionButton(char *val, char *selVal)
 /* Make region radio button including a little Javascript
@@ -346,7 +345,7 @@ static void showOutputTypeRow(boolean isWig, boolean isPositional,
 	boolean isMaf)
 /* Print output line. */
 {
-struct outputType *otList = NULL, *ot;
+struct outputType *otList = NULL;
 
 hPrintf("<TR><TD><B>output format:</B>\n");
 
@@ -536,11 +535,21 @@ showOutputTypeRow(isWig, isPositional, isMaf);
 
 /* Print output destination line. */
     {
+    char *compressType =
+	cartUsualString(cart, hgtaCompressType, hgtaCompressNone);
     char *fileName = cartUsualString(cart, hgtaOutFileName, "");
     hPrintf("<TR><TD>\n");
-    hPrintf("<B>output file:</B> ");
+    hPrintf("<B>output file:</B>&nbsp;");
     cgiMakeTextVar(hgtaOutFileName, fileName, 29);
-    hPrintf(" (leave blank to keep output in browser)\n");
+    hPrintf("&nbsp;(leave blank to keep output in browser)</TD></TR>\n");
+    hPrintf("<TR><TD>\n");
+    hPrintf("<B>file type returned:&nbsp;</B>");
+    cgiMakeRadioButton(hgtaCompressType, hgtaCompressNone,
+	sameWord(hgtaCompressNone,compressType));
+    hPrintf("&nbsp;plain text&nbsp&nbsp");
+    cgiMakeRadioButton(hgtaCompressType, hgtaCompressGzip,
+	sameWord(hgtaCompressGzip,compressType));
+    hPrintf("&nbsp;gzip");
     hPrintf("</TD></TR>\n");
     }
 

@@ -23,7 +23,7 @@
 #include "joiner.h"
 #include "bedCart.h"
 
-static char const rcsid[] = "$Id: hgTables.c,v 1.91 2004/11/29 22:27:41 kent Exp $";
+static char const rcsid[] = "$Id: hgTables.c,v 1.92 2004/12/02 00:24:24 hiram Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -49,6 +49,10 @@ struct trackDb *fullTrackList;	/* List of all tracks in database. */
 struct trackDb *curTrack;	/* Currently selected track. */
 char *curTable;		/* Currently selected table. */
 struct joiner *allJoiner;	/* Info on how to join tables. */
+
+static struct pipeline *compressPipeline = (struct pipeline *)NULL;
+
+static char **getCompressor(char *fileName); /* forward declaration */
 
 /* --------------- HTML Helpers ----------------- */
 
@@ -147,23 +151,111 @@ exit(-1);
 }
 
 void textOpen()
-/* Start up page in text format. (No need to close this). */
+/* Start up page in text format. (No need to close this).
+ *	In case of pipeline output to a compressor, it is closed
+ *	at main() exit.
+ */
 {
 char *fileName = cartUsualString(cart, hgtaOutFileName, "");
+
 trimSpaces(fileName);
 if (fileName[0] == 0)
     printf("Content-Type: text/plain\n\n");
 else
     {
-    printf("Content-Disposition: attachment; filename=%s\n", fileName);
-    printf("Content-Type: application/octet-stream\n");
-    printf("\n");
+    if (anyCompression())
+	{
+	struct dyString *compressFileName = dyStringNew(0);
+	char *compressType =
+	    cartUsualString(cart, hgtaCompressType, hgtaCompressNone);
+
+	if (sameWord(hgtaCompressNone,compressType))
+	    {	/*	should not get here, but to be safe	*/
+	    printf("Content-Type: application/octet-stream\n");
+	    printf("Content-Disposition: attachment; filename=%s\n", fileName);
+	    printf("\n");
+	    }
+	else if (sameWord(hgtaCompressGzip,compressType))
+	    {
+	    if (endsWith(fileName,".gz"))
+		dyStringPrintf(compressFileName, "%s", fileName);
+	    else
+		dyStringPrintf(compressFileName, "%s.gz", fileName);
+
+	    /*	start the header before we pipe into compression */
+	    printf("Content-Type: application/x-gzip\n");
+	    printf("Content-Disposition: attachment; filename=%s\n",
+		compressFileName->string);
+	    printf("\n");
+
+	    /* necessary to flush, otherwise pending stdout output gets
+	     *	mixed up with the output of the gzip
+	     */
+	    fflush(stdout);
+
+	    compressPipeline =
+		pipelineCreateWrite1(getCompressor(compressFileName->string),
+		    pipelineInheritFd, (char *)NULL);
+
+	    if (-1 == dup2(pipelineFd(compressPipeline),STDOUT_FILENO))
+		errnoAbort(
+		    "dup2(pipelineFd %d, stdout %d) failed in textOpen()",
+			pipelineFd(compressPipeline),STDOUT_FILENO);
+/*	ALL OUTPUT TO STDOUT after this goes through the gzip command */
+	    }
+	else
+	    {	/*	should not get here, but to be safe	*/
+	    printf("Content-Type: application/octet-stream\n");
+	    printf("Content-Disposition: attachment; filename=%s\n", fileName);
+	    printf("\n");
+	    }
+
+	dyStringFree(&compressFileName);
+	}	/*	if (anyCompression())	*/
+    else
+	{
+	printf("Content-Type: application/octet-stream\n");
+	printf("Content-Disposition: attachment; filename=%s\n", fileName);
+	printf("\n");
+	}
     }
 pushWarnHandler(textWarnHandler);
 pushAbortHandler(textAbortHandler);
 }
 
 /* --------- Utility functions --------------------- */
+
+boolean anyCompression()
+/*  Check if any compressed file output has been requested */
+{
+char *compressType=cartUsualString(cart, hgtaCompressType, hgtaCompressNone);
+
+if (differentWord(hgtaCompressNone, compressType))
+    return TRUE;
+else
+    return FALSE;
+}
+
+static char **getCompressor(char *fileName)
+/* if a file is to be compressed, return the command to compress the 
+ * approriate format, otherwise return NULL */
+{
+static char *GZ_WRITE[] = {"./gzip", "-qc", NULL};
+static char *Z_WRITE[] = {"./compress", "-c", NULL};
+static char *BZ2_WRITE[] = {"./bzip2", "-qzc", NULL};
+static char *ZIP_WRITE[] = {"./zip", "-q", NULL};
+
+if (endsWith(fileName, ".gz"))
+    return GZ_WRITE;
+else if (endsWith(fileName, ".Z"))
+    return Z_WRITE;
+else if (endsWith(fileName, ".bz2"))
+    return BZ2_WRITE;
+else if (endsWith(fileName, ".zip"))
+    return ZIP_WRITE;
+else
+    return NULL;
+}
 
 void dbOverrideFromTable(char buf[256], char **pDb, char **pTable)
 /* If *pTable includes database, overrider *pDb with it, using
@@ -1277,5 +1369,13 @@ htmlPushEarlyHandlers(); /* Make errors legible during initialization. */
 pushCarefulMemHandler(1500000000);  /* enough for wiggle intersects on chr1 */
 cgiSpoof(&argc, argv);
 hgTables();
+
+if (compressPipeline)
+    {
+    fflush(stdout);
+    fclose(stdout);
+    pipelineWait(&compressPipeline);
+    }
+
 return 0;
 }
