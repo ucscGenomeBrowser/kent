@@ -2,8 +2,8 @@
 #A database of browser databases.
 CREATE TABLE dbDb (
    name varchar(32) not null,	# Name of database
-   description varchar(256) not null, # Short description (freeze date, etc.)
-   nibPath varchar(256) not null, # Path to packed DNA files
+   description varchar(255) not null, # Short description (freeze date, etc.)
+   nibPath varchar(255) not null, # Path to packed DNA files
      #Indices
    UNIQUE(name)
 );
@@ -19,7 +19,7 @@ CREATE TABLE blatServers (
    port int not null,		# Port this is on
    isTrans tinyint not null,	# Set to 1 if translated
      #Indices
-   UNIQUE(name)
+   INDEX(db)
 );
 
 INSERT blatServers VALUES
