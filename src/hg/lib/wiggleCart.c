@@ -10,7 +10,7 @@
 #include "hui.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: wiggleCart.c,v 1.8 2004/04/02 23:42:46 hiram Exp $";
+static char const rcsid[] = "$Id: wiggleCart.c,v 1.9 2004/05/10 23:45:02 hiram Exp $";
 
 extern struct cart *cart;      /* defined in hgTracks.c or hgTrackUi */
 
@@ -18,7 +18,7 @@ extern struct cart *cart;      /* defined in hgTracks.c or hgTrackUi */
 	{ double d; d = max; max = min; min = d; }
 /* check a min,max pair (doubles) and keep them properly in order */
 
-#if defined(DEBUG)
+#if defined(DEBUG)	/*	dbg	*/
 
 #include "portable.h"
 
@@ -91,12 +91,36 @@ double minYc;   /*	value from cart */
 double maxYc;   /*	value from cart */
 double minY;    /*	from trackDb.ra words, the absolute minimum */
 double maxY;    /*	from trackDb.ra words, the absolute maximum */
-char * defaultViewLimits =
-    trackDbSettingOrDefault(tdb, DEFAULTVIEWLIMITS, "NONE");
+char * tdbDefault = cloneString(
+    trackDbSettingOrDefault(tdb, DEFAULTVIEWLIMITS, "NONE") );
 double defaultViewMinY = 0.0;	/* optional default viewing window	*/
 double defaultViewMaxY = 0.0;	/* can be different than absolute min,max */
 boolean optionalViewLimitsExist = FALSE;	/* to decide if using these */
 
+
+/*	Allow the word "viewLimits" to be recognized too */
+if (sameWord("NONE",tdbDefault))
+    {
+    freeMem(tdbDefault);
+    tdbDefault = cloneString(trackDbSettingOrDefault(tdb, VIEWLIMITS, "NONE"));
+    }
+
+if (sameWord("NONE",tdbDefault))
+    {
+    struct hashEl *hel;
+    /*	no viewLimits from trackDb, maybe it is in tdb->settings
+     *	(custom tracks keep settings here)
+     */
+    if ((tdb->settings != (char *)NULL) &&
+	(tdb->settingsHash != (struct hash *)NULL))
+	{
+	if ((hel = hashLookup(tdb->settingsHash, VIEWLIMITS)) != NULL)
+	    {
+	    freeMem(tdbDefault);
+	    tdbDefault = cloneString((char *)hel->val);
+	    }
+	}
+    }
 
 /*	Assume last resort defaults, these should never be used
  *	The only case they would be used is if trackDb settings are not
@@ -131,11 +155,11 @@ correctOrder(minY,maxY);
  *	good, they are as good as not there and the result is a pair of
  *	zeros and they are not used.
  */
-if (differentWord("NONE",defaultViewLimits))
+if (differentWord("NONE",tdbDefault))
     {
     char *words[2];
     char *sep = ":";
-    int wordCount = chopString(defaultViewLimits,sep,words,ArraySize(words));
+    int wordCount = chopString(tdbDefault,sep,words,ArraySize(words));
     if (wordCount == 2)
 	{
 	defaultViewMinY = atof(words[0]);
@@ -187,7 +211,7 @@ else
 /*      And ensure their order is correct     */
 correctOrder(*min,*max);
 
-return;
+freeMem(tdbDefault);
 }	/*	void wigFetchMinMaxY()	*/
 
 /*	Min, Max, Default Pixel height of track
@@ -204,8 +228,25 @@ int maxHeightPixels = atoi(DEFAULT_HEIGHT_PER);
 int defaultHeightPixels = maxHeightPixels;
 int defaultHeight;      /*      truncated by limits     */
 int minHeightPixels = MIN_HEIGHT_PER;
-char * maxHeightPixelString =
-    trackDbSettingOrDefault(tdb, MAXHEIGHTPIXELS, DEFAULT_HEIGHT_PER);
+char * tdbDefault = cloneString(
+    trackDbSettingOrDefault(tdb, MAXHEIGHTPIXELS, DEFAULT_HEIGHT_PER) );
+
+if (sameWord(DEFAULT_HEIGHT_PER,tdbDefault))
+    {
+    struct hashEl *hel;
+    /*	no maxHeightPixels from trackDb, maybe it is in tdb->settings
+     *	(custom tracks keep settings here)
+     */
+    if ((tdb->settings != (char *)NULL) &&
+	(tdb->settingsHash != (struct hash *)NULL))
+	{
+	if ((hel = hashLookup(tdb->settingsHash, MAXHEIGHTPIXELS)) != NULL)
+	    {
+	    freeMem(tdbDefault);
+	    tdbDefault = cloneString((char *)hel->val);
+	    }
+	}
+    }
 
 /*	the maxHeightPixels string can be one, two, or three words
  *	separated by :
@@ -218,12 +259,12 @@ char * maxHeightPixelString =
  *	If it isn't available, these three have already been set
  *	in their declarations above
  */
-if (differentWord(DEFAULT_HEIGHT_PER,maxHeightPixelString))
+if (differentWord(DEFAULT_HEIGHT_PER,tdbDefault))
     {
     char *words[3];
     char *sep = ":";
     int wordCount;
-    wordCount=chopString(maxHeightPixelString,sep,words,ArraySize(words));
+    wordCount=chopString(tdbDefault,sep,words,ArraySize(words));
     switch (wordCount)
 	{
 	case 3:
@@ -265,15 +306,59 @@ defaultHeight = max(minHeightPixels, defaultHeight);
 *Default = defaultHeight;
 *Min = minHeightPixels;
 
+freeMem(tdbDefault);
 }	/* void wigFetchMinMaxPixels()	*/
 
-/*	These last three items are all looking pretty identical in their
- *	processing.  They could be turned into one generic set of code
- *	except their defaults are all different.  You would need to pass
- *	in a default as an argument and I'm not sure we want to do that.
- *	Right now all defaults are specified here and can be overridden
- *	by trackDb strings.
+/*	A common operation for binary options (two values possible)
+ *	check for trackDb.ra, then tdb->settings values
+ *	return one of the two possibilities if found
+ *	(the tdbString and secondTdbString are a result of
+ *		early naming conventions changing over time resulting in
+ *		two possible names for the same thing ...)
  */
+static char *wigCheckBinaryOption(struct trackDb *tdb, char *Default,
+    char *notDefault, char *tdbString, char *secondTdbString)
+{
+char *tdbDefault = trackDbSettingOrDefault(tdb, tdbString, "NONE");
+char *ret;
+
+ret = Default;	/* the answer, unless found to be otherwise	*/
+
+if (sameWord("NONE",tdbDefault) && (secondTdbString != (char *)NULL))
+	tdbDefault = trackDbSettingOrDefault(tdb, secondTdbString, "NONE");
+
+if (differentWord("NONE",tdbDefault))
+    {
+    if (differentWord(Default,tdbDefault))
+    	ret = notDefault;
+    }
+else
+    {
+    struct hashEl *hel;
+    /*	no setting from trackDb, maybe it is in tdb->settings
+     *	(custom tracks keep settings here)
+     */
+    if ((tdb->settings != (char *)NULL) &&
+	(tdb->settingsHash != (struct hash *)NULL))
+	{
+	if ((hel = hashLookup(tdb->settingsHash, tdbString)) != NULL)
+	    {
+	    if (differentWord(Default,(char *)hel->val))
+		ret = notDefault;
+	    }
+	else if (secondTdbString != (char *)NULL)
+	    {
+	    if ((hel = hashLookup(tdb->settingsHash, secondTdbString)) != NULL)
+		{
+		if (differentWord(Default,(char *)hel->val))
+		    ret = notDefault;
+		}
+	    }
+	}
+    }
+return(cloneString(ret));
+}
+
 /*	horizontalGrid - off by default **********************************/
 enum wiggleGridOptEnum wigFetchHorizontalGrid(struct trackDb *tdb,
     char **optString)
@@ -282,58 +367,45 @@ char *Default = wiggleGridEnumToString(wiggleHorizontalGridOff);
 char *notDefault = wiggleGridEnumToString(wiggleHorizontalGridOn);
 char option[MAX_OPT_STRLEN]; /* .horizGrid  */
 char *horizontalGrid = NULL;
+enum wiggleGridOptEnum ret;
 
 snprintf( option, sizeof(option), "%s.%s", tdb->tableName, HORIZGRID );
-horizontalGrid = cartOptionalString(cart, option);
+horizontalGrid = cloneString(cartOptionalString(cart, option));
 
-/*	If horizontalGrid is a string, it came from the cart, otherwise
- *	return the default for this option.
- */
-if (!horizontalGrid)
-    {
-    char * gridDefault = 
-	trackDbSettingOrDefault(tdb, GRIDDEFAULT, Default);
-    if (differentWord(Default,gridDefault))
-	horizontalGrid = notDefault;
-    else
-	horizontalGrid = Default;
-    }
+if (!horizontalGrid)	/*	if it is NULL	*/
+    horizontalGrid = wigCheckBinaryOption(tdb,Default,notDefault,GRIDDEFAULT,
+	HORIZGRID);
 
 if (optString)
-    *optString = horizontalGrid;
+    *optString = cloneString(horizontalGrid);
 
-return wiggleGridStringToEnum(horizontalGrid);
+ret = wiggleGridStringToEnum(horizontalGrid);
+freeMem(horizontalGrid);
+return(ret);
 }	/*	enum wiggleGridOptEnum wigFetchHorizontalGrid()	*/
 
 /******	autoScale - on by default ***************************************/
 enum wiggleScaleOptEnum wigFetchAutoScale(struct trackDb *tdb, char **optString)
 {
-char * Default = wiggleScaleEnumToString(wiggleScaleAuto);
-char * notDefault = wiggleScaleEnumToString(wiggleScaleManual);
+char *Default = wiggleScaleEnumToString(wiggleScaleAuto);
+char *notDefault = wiggleScaleEnumToString(wiggleScaleManual);
 char option[MAX_OPT_STRLEN]; /* .autoScale  */
-char * autoScale = NULL;
+char *autoScale = NULL;
+enum wiggleScaleOptEnum ret;
 
 snprintf( option, sizeof(option), "%s.%s", tdb->tableName, AUTOSCALE );
-autoScale = cartOptionalString(cart, option);
+autoScale = cloneString(cartOptionalString(cart, option));
 
-/*	If autoScale is a string, it came from the cart, otherwise
- *	see if it is specified in the trackDb option, finally
- *	return the default.
- */
-if (!autoScale)
-    {
-    char * autoScaleDefault = 
-	trackDbSettingOrDefault(tdb, AUTOSCALEDEFAULT, Default);
-    if (differentWord(Default,autoScaleDefault))
-	autoScale = notDefault;
-    else
-	autoScale = Default;
-    }
+if (!autoScale)	/*	if nothing from the Cart, check trackDb/settings */
+    autoScale = wigCheckBinaryOption(tdb,Default,notDefault,AUTOSCALEDEFAULT,
+	AUTOSCALE);
 
 if (optString)
-    *optString = autoScale;
+    *optString = cloneString(autoScale);
 
-return wiggleScaleStringToEnum(autoScale);
+ret = wiggleScaleStringToEnum(autoScale);
+freeMem(autoScale);
+return(ret);
 }	/*	enum wiggleScaleOptEnum wigFetchAutoScale()	*/
 
 /******	graphType - line(points) or bar graph *****************************/
@@ -343,39 +415,34 @@ char *Default = wiggleGraphEnumToString(wiggleGraphBar);
 char *notDefault = wiggleGraphEnumToString(wiggleGraphPoints);
 char option[MAX_OPT_STRLEN]; /* .lineBar  */
 char *graphType = NULL;
+enum wiggleGraphOptEnum ret;
 
 snprintf( option, sizeof(option), "%s.%s", tdb->tableName, LINEBAR );
-graphType = cartOptionalString(cart, option);
+graphType = cloneString(cartOptionalString(cart, option));
 
-/*	If graphType is a string, it came from the cart, otherwise
- *	return the default for this option.
- */
-if (!graphType)
-    {
-    char * graphTypeDefault = 
-	trackDbSettingOrDefault(tdb, GRAPHTYPEDEFAULT, Default);
-    if (differentWord(Default,graphTypeDefault))
-	graphType = notDefault;
-    else
-	graphType = Default;
-    }
+if (!graphType)	/*	if nothing from the Cart, check trackDb/settings */
+    graphType = wigCheckBinaryOption(tdb,Default,notDefault,GRAPHTYPEDEFAULT,
+	GRAPHTYPE);
 
 if (optString)
-    *optString = graphType;
+    *optString = cloneString(graphType);
 
-return wiggleGraphStringToEnum(graphType);
+ret = wiggleGraphStringToEnum(graphType);
+freeMem(graphType);
+return(ret);
 }	/*	enum wiggleGraphOptEnum wigFetchGraphType()	*/
 
 /******	windowingFunction - Maximum by default **************************/
 enum wiggleWindowingEnum wigFetchWindowingFunction(struct trackDb *tdb,
 	char **optString)
 {
-char * Default = wiggleWindowingEnumToString(wiggleWindowingMax);
+char *Default = wiggleWindowingEnumToString(wiggleWindowingMax);
 char option[MAX_OPT_STRLEN]; /* .windowingFunction  */
-char * windowingFunction = NULL;
+char *windowingFunction = NULL;
+enum wiggleWindowingEnum ret;
 
 snprintf( option, sizeof(option), "%s.%s", tdb->tableName, WINDOWINGFUNCTION );
-windowingFunction = cartOptionalString(cart, option);
+windowingFunction = cloneString(cartOptionalString(cart, option));
 
 /*	If windowingFunction is a string, it came from the cart, otherwise
  *	see if it is specified in the trackDb option, finally
@@ -383,18 +450,38 @@ windowingFunction = cartOptionalString(cart, option);
  */
 if (!windowingFunction)
     {
-    char * windowingTdb = 
+    char * tdbDefault = 
 	trackDbSettingOrDefault(tdb, WINDOWINGFUNCTION, Default);
-    if (differentWord(Default,windowingTdb))
-	windowingFunction = windowingTdb;
+
+    freeMem(windowingFunction);
+    if (differentWord(Default,tdbDefault))
+	windowingFunction = cloneString(tdbDefault);
     else
-	windowingFunction = Default;
+	{
+	struct hashEl *hel;
+	/*	no windowingFunction from trackDb, maybe it is in tdb->settings
+	 *	(custom tracks keep settings here)
+	 */
+	windowingFunction = cloneString(Default);
+	if ((tdb->settings != (char *)NULL) &&
+	    (tdb->settingsHash != (struct hash *)NULL))
+	    {
+	    if ((hel =hashLookup(tdb->settingsHash, WINDOWINGFUNCTION)) !=NULL)
+		if (differentWord(Default,(char *)hel->val))
+		    {
+		    freeMem(windowingFunction);
+		    windowingFunction = cloneString((char *)hel->val);
+		    }
+	    }
+	}
     }
 
 if (optString)
-    *optString = windowingFunction;
+    *optString = cloneString(windowingFunction);
 
-return wiggleWindowingStringToEnum(windowingFunction);
+ret = wiggleWindowingStringToEnum(windowingFunction);
+freeMem(windowingFunction);
+return(ret);
 }	/*	enum wiggleWindowingEnum wigFetchWindowingFunction() */
 
 /******	smoothingWindow - OFF by default **************************/
@@ -404,28 +491,45 @@ enum wiggleSmoothingEnum wigFetchSmoothingWindow(struct trackDb *tdb,
 char * Default = wiggleSmoothingEnumToString(wiggleSmoothingOff);
 char option[MAX_OPT_STRLEN]; /* .smoothingWindow  */
 char * smoothingWindow = NULL;
+enum wiggleSmoothingEnum ret;
 
 snprintf( option, sizeof(option), "%s.%s", tdb->tableName, SMOOTHINGWINDOW );
-smoothingWindow = cartOptionalString(cart, option);
+smoothingWindow = cloneString(cartOptionalString(cart, option));
 
-/*	If smoothingWindow is a string, it came from the cart, otherwise
- *	see if it is specified in the trackDb option, finally
- *	return the default.
- */
-if (!smoothingWindow)
+if (!smoothingWindow) /* if nothing from the Cart, check trackDb/settings */
     {
-    char * smoothingTdb = 
+    char * tdbDefault = 
 	trackDbSettingOrDefault(tdb, SMOOTHINGWINDOW, Default);
-    if (differentWord(Default,smoothingTdb))
-	smoothingWindow = smoothingTdb;
+
+
+    if (differentWord(Default,tdbDefault))
+	smoothingWindow = cloneString(tdbDefault);
     else
-	smoothingWindow = Default;
+	{
+	struct hashEl *hel;
+	/*	no smoothingWindow from trackDb, maybe it is in tdb->settings
+	 *	(custom tracks keep settings here)
+	 */
+	smoothingWindow = cloneString(Default);
+	if ((tdb->settings != (char *)NULL) &&
+	    (tdb->settingsHash != (struct hash *)NULL))
+	    {
+	    if ((hel = hashLookup(tdb->settingsHash, SMOOTHINGWINDOW)) != NULL)
+		if (differentWord(Default,(char *)hel->val))
+		    {
+		    freeMem(smoothingWindow);
+		    smoothingWindow = cloneString((char *)hel->val);
+		    }
+	    }
+	}
     }
 
 if (optString)
-    *optString = smoothingWindow;
+    *optString = cloneString(smoothingWindow);
 
-return wiggleSmoothingStringToEnum(smoothingWindow);
+ret = wiggleSmoothingStringToEnum(smoothingWindow);
+freeMem(smoothingWindow);
+return(ret);
 }	/*	enum wiggleSmoothingEnum wigFetchSmoothingWindow()	*/
 
 /*	yLineMark - off by default **********************************/
@@ -436,41 +540,52 @@ char *Default = wiggleYLineMarkEnumToString(wiggleYLineMarkOff);
 char *notDefault = wiggleYLineMarkEnumToString(wiggleYLineMarkOn);
 char option[MAX_OPT_STRLEN]; /* .yLineMark  */
 char *yLineMark = NULL;
+enum wiggleYLineMarkEnum ret;
 
 snprintf( option, sizeof(option), "%s.%s", tdb->tableName, YLINEONOFF );
-yLineMark = cartOptionalString(cart, option);
+yLineMark = cloneString(cartOptionalString(cart, option));
 
-/*	If yLineMark is a string, it came from the cart, otherwise
- *	return the default for this option.
- */
-if (!yLineMark)
-    {
-    char * gridDefault = 
-	trackDbSettingOrDefault(tdb, YLINEONOFF, Default);
-    if (differentWord(Default,gridDefault))
-	yLineMark = notDefault;
-    else
-	yLineMark = Default;
-    }
+if (!yLineMark)	/*	if nothing from the Cart, check trackDb/settings */
+    yLineMark = wigCheckBinaryOption(tdb,Default,notDefault,YLINEONOFF,
+	(char *)NULL);
 
 if (optString)
-    *optString = yLineMark;
+    *optString = cloneString(yLineMark);
 
-return wiggleYLineMarkStringToEnum(yLineMark);
+ret = wiggleYLineMarkStringToEnum(yLineMark);
+freeMem(yLineMark);
+return(ret);
 }	/*	enum wiggleYLineMarkEnum wigFetchYLineMark()	*/
 
 /*	y= marker line value
  *	User requested value is defined in the cart
  *	A Default value can be defined as
- *		defaultYMarkLine declaration from trackDb
+ *		yLineMark declaration from trackDb
  *****************************************************************************/
 void wigFetchYLineMarkValue(struct trackDb *tdb, double *tDbYMark )
 {
 char option[MAX_OPT_STRLEN]; /* Option 11 - value from: .yLineMark */
 char *yLineMarkValue = NULL;  /*	string from cart	*/
 double yLineValue;   /*	value from cart or trackDb */
-char * defaultYMarkLine =
-    trackDbSettingOrDefault(tdb, YLINEMARK, "NONE");
+char * tdbDefault = cloneString(
+    trackDbSettingOrDefault(tdb, YLINEMARK, "NONE") );
+
+if (sameWord("NONE",tdbDefault))
+    {
+    struct hashEl *hel;
+    /*	no yLineMark from trackDb, maybe it is in tdb->settings
+     *	(custom tracks keep settings here)
+     */
+    if ((tdb->settings != (char *)NULL) &&
+	(tdb->settingsHash != (struct hash *)NULL))
+	{
+	if ((hel = hashLookup(tdb->settingsHash, YLINEMARK)) != NULL)
+	    {
+	    freeMem(tdbDefault);
+	    tdbDefault = cloneString((char *)hel->val);
+	    }
+	}
+    }
 
 /*	If nothing else, it is zero	*/
 yLineValue = 0.0;
@@ -483,12 +598,12 @@ yLineMarkValue = cartOptionalString(cart, option);
 if (yLineMarkValue)
     yLineValue = atof(yLineMarkValue);
 else /*    See if a default line is specified in the trackDb.ra file */
-    if (differentWord("NONE",defaultYMarkLine))
-	yLineValue = atof(defaultYMarkLine);
+    if (differentWord("NONE",tdbDefault))
+	yLineValue = atof(tdbDefault);
 
 /*	If possible to return	*/
 if (tDbYMark)
 	*tDbYMark = yLineValue;
 
-return;
+freeMem(tdbDefault);
 }	/*	void wigFetchYLineMarkValue()	*/
