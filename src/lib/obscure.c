@@ -10,7 +10,7 @@
 #include "obscure.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: obscure.c,v 1.27 2003/11/25 21:02:51 sugnet Exp $";
+static char const rcsid[] = "$Id: obscure.c,v 1.28 2004/02/13 09:22:46 kent Exp $";
 static int _dotForUserMod = 100; /* How often does dotForUser() output a dot. */
 
 long incCounterFile(char *fileName)
@@ -273,22 +273,42 @@ else
     }
 }
 
+static void escCopy(char *in, char *out, char toEscape, char escape)
+/* Copy in to out, escaping as needed.  Out better be big enough. */
+{
+char c;
+for (;;)
+    {
+    c = *in++;
+    if (c == toEscape)
+        *out++ = escape;
+    *out++ = c;
+    if (c == 0)
+        break;
+    }
+}
+
+char *makeEscapedString(char *in, char toEscape)
+/* Return string that is a copy of in, but with all
+ * toEscape characters preceded by '\' 
+ * When done freeMem result. */
+{
+int newSize = strlen(in) + countChars(in, toEscape);
+char *out = needMem(newSize+1);
+escCopy(in, out, toEscape, '\\');
+return out;
+}
+
 char *makeQuotedString(char *in, char quoteChar)
 /* Create a string surrounded by quoteChar, with internal
  * quoteChars escaped.  freeMem result when done. */
 {
 int newSize = 2 + strlen(in) + countChars(in, quoteChar);
 char *out = needMem(newSize+1);
-char c, *s = out;
-*s++ = quoteChar;
-while ((c = *in++) != 0)
-    {
-    if (c == quoteChar)
-       *s++ = '\\';
-    *s++ = c;
-    }
-*s++ = quoteChar;
-*s = 0;
+char c;
+out[0] = quoteChar;
+escCopy(in, out+1, quoteChar, '\\');
+out[newSize-1] = quoteChar;
 return out;
 }
 
