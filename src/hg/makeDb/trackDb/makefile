@@ -32,6 +32,7 @@ update:
 	hgTrackDb sacCer sacCer1 trackDb_$(USER) ../../lib/trackDb.sql .
 	hgTrackDb chicken galGal1 trackDb_$(USER) ../../lib/trackDb.sql .
 	hgTrackDb archae pyrAer1 trackDb_$(USER) ../../lib/trackDb.sql .
+	hgTrackDb archae pyrFur2 trackDb_$(USER) ../../lib/trackDb.sql .
 	hgTrackDb chimp panTro1 trackDb_$(USER) ../../lib/trackDb.sql .
 	cd zoo; make update; cd ..
 
