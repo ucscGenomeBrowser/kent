@@ -3976,8 +3976,17 @@ SEQ2_LEN=$BASE/S2.len
     ssh hgwdev
     cd /cluster/data/hg16/bed/blastz.mm4/pslChrom
     /cluster/bin/i386/hgLoadPsl hg16 chr*_blastzMm4.psl
-
     # this is a 55 minute job
+
+    # featureBits on blastzMm3 or 4 will not work on hgwdev, runs out of
+    # memory.  But if you reset your ~/.hg.conf to use the read-only
+    #	user and contact the hgwdev host, and build featureBits as a
+    #	x86_64 binary, you can run it on kolossus:
+    # featureBits hg16 blastzMm3
+    # 1050190071 bases of 2865248791 (36.653%) in intersection
+    # featureBits hg16 blastzMm4
+    # 1056761609 bases of 2865248791 (36.882%) in intersection
+
 
 # CHAIN Mm4 BLASTZ (DONE - 2003-11-03 - Hiram)
 
@@ -4099,6 +4108,16 @@ doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain} {check
 #   real    12m53.070s
 #   user    6m6.540s
 #   sys     0m50.580s
+    # check results
+    # featureBits hg16 netMm4
+    # 2823565051 bases of 2865248791 (98.545%) in intersection
+    # featureBits hg16 netMm3
+    # 2834484276 bases of 2865248791 (98.926%) in intersection
+
+    # featureBits hg16 syntenyNetMm3
+    # 2804467412 bases of 2865248791 (97.879%) in intersection
+    # featureBits hg16 syntenyNetMm4
+    # 2786960572 bases of 2865248791 (97.268%) in intersection
 
     # Add entries for net and chain to mouse/hg16 trackDb
 
@@ -4158,11 +4177,10 @@ doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain} {check
     # sys     0m24.250s
 
      # check results
-#  featureBits hg16 blastzBestMm4
-#	253005809 bases of 2865248791 (8.830%) in intersection
-
-#  featureBits hg16 blastzBestMm3
-#	1007362800 bases of 2865248791 (35.158%) in intersection
+    # featureBits hg16 blastzBestMm4
+    # 996722004 bases of 2865248791 (34.787%) in intersection
+    # featureBits hg16 blastzBestMm3
+    # 1007362800 bases of 2865248791 (35.158%) in intersection
 
     # Make /gbdb links and add them to the axtInfo table:
      mkdir -p /gbdb/hg16/axtBestMm4
@@ -4180,7 +4198,7 @@ doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain} {check
     #	table axtInfo may already exist, ignore create error.
     hgsql hg16 < axtInfoInserts.sql
 
-# MAKING THE AXTTIGHT FROM AXTBEST (TBD)
+# MAKING THE AXTTIGHT FROM AXTBEST (DONE - 2003-11-04 - Hiram)
     # After creating axtBest alignments above, use subsetAxt to get axtTight:
     ssh eieio
     cd /cluster/data/hg16/bed/blastz.mm4/axtNet
@@ -4205,7 +4223,12 @@ doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain} {check
     ssh hgwdev
     cd /cluster/data/hg16/bed/blastz.mm4/pslTight
     hgLoadPsl hg16 chr*_blastzTightMm4.psl
-XXX running  2003-11-03 16:56
+
+    # check results
+    # featureBits hg16 blastzTightMm4
+    # 162641577 bases of 2865248791 (5.676%) in intersection
+    # featureBits hg16 blastzTightMm3
+    # 164148288 bases of 2865248791 (5.729%) in intersection
 
     # copy to axt's to download area
     cd /cluster/data/hg16/bed/blastz.mm4/axtTight
