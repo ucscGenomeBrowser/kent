@@ -145,6 +145,18 @@ $main::SIG{__WARN__} = sub {
     gbError($msg);
 };
 
+# trap signal so they are logged
+sub sigHandler($) {
+    my($sig) = @_;
+    print STDERR "Error: received signal: " . $sig . "\n";
+    exit(1);
+}
+my @trapSigs = ('HUP', 'INT', 'QUIT', 'ILL', 'ABRT', 'FPE', 'KILL', 'SEGV',
+             'PIPE', 'ALRM', 'TERM', 'USR1', 'USR2');
+foreach my $sig (@trapSigs) {
+    $main::SIG{$sig} = "gbCommon::sigHandler";
+}
+
 # get the prefix for a message, also used in semaphores
 sub getMsgPrefix() {
     return $gbCommon::hostName . " " . getTimeStamp() . " " . $taskName . ": ";

@@ -8,6 +8,8 @@
 #include <unistd.h>
 #include <sys/wait.h>
 
+/* FIXME: switch to using pipeline.h */
+
 struct gbProc
 /* A single process in a pipeline */
 {

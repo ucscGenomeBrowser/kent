@@ -12,13 +12,15 @@ PATH="$gbRoot/bin:$gbRoot/bin/i386:$PATH"
 #
 # Check for a lock or stop file file.  If the lock file exists and is less
 # than a day old, silently exit 0.  If the lock file is more than a day old,
-# generate an error.  A absolute path to lockFile will result in a better
-# error message.  This scheme supports light-weight polling.
+# generate an error.  After the first warning, a second timestamp file is
+# created so that warns occur only twice a day.  An absolute path to lockFile
+# will result in a better error message.  This scheme supports light-weight
+# polling.
 #
 gbCheckLock() {
     local lockFile=$1
     if [ -e $lockFile ] ; then
-        # compare modification time, first work in file contains modtime
+        # compare modification time, first word in file contains modtime
         gawk -v "lockFile=$lockFile" '{
            modTime=$1;
            if (systime() > modTime+(60*60*24)) {
@@ -44,7 +46,7 @@ gbMkTimeFile() {
 }
 
 
-# Compare time files.  First must exist. Returns 0 if second is 
+# Compare time files.  First file must exist. Returns 0 if second file is
 # out-of-date
 gbCmpTimeFiles() {
     local timeFile1=$1 timeFile2=$2
