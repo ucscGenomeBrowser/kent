@@ -290,6 +290,7 @@ type bed 6+
 spectrum on
 scoreMin 830
 scoreMax 1000
+urlLabel Transfac matrix link:
 url http://www.gene-regulation.com/cgi-bin/pub/databases/transfac/getTF.cgi?AC=$$
 
 track promoterStanford
