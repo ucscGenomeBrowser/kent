@@ -14,7 +14,7 @@
 #include "featureBits.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: intersect.c,v 1.14 2004/10/01 19:27:45 kent Exp $";
+static char const rcsid[] = "$Id: intersect.c,v 1.15 2004/10/28 18:58:25 angie Exp $";
 
 /* We keep two copies of variables, so that we can
  * cancel out of the page. */
@@ -303,10 +303,10 @@ static struct bed *intersectOnRegion(
  * chew up bedList1. */
 {
 /* Grab parameters for intersection from cart. */
-int moreThresh = cgiOptionalInt(hgtaMoreThreshold, 0);
-int lessThresh = cgiOptionalInt(hgtaLessThreshold, 100);
-boolean invTable = cgiBoolean(hgtaInvertTable);
-boolean invTable2 = cgiBoolean(hgtaInvertTable2);
+int moreThresh = cartCgiUsualInt(cart, hgtaMoreThreshold, 0);
+int lessThresh = cartCgiUsualInt(cart, hgtaLessThreshold, 100);
+boolean invTable = cartCgiUsualBoolean(cart, hgtaInvertTable, FALSE);
+boolean invTable2 = cartCgiUsualBoolean(cart, hgtaInvertTable2, FALSE);
 char *op = cartString(cart, hgtaIntersectOp);
 char *table2 = cartString(cart, hgtaIntersectTrack);
 /* Load up intersecting bedList2 (to intersect with) */
