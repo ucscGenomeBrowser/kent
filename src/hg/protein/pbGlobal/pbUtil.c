@@ -807,7 +807,7 @@ while (row3 != NULL)
     if ((answer != NULL) && (!sameWord(answer, "0")))
 	{
 	/* display organism name */
-	hPrintf("<FONT SIZE=4><B>%s:</B></FONT>\n", org);
+	hPrintf("<FONT SIZE=4><B>%s (%s):</B></FONT>\n", orgSciName, org);
 	hPrintf("<UL>");
     	    
 	conn = sqlConnect(gDatabase);
