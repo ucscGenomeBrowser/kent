@@ -112,7 +112,7 @@ longLabel Baylor RT-PCR GeneA for MGC
 group genes
 priority 36.1
 visibility hide
-color 200,0,50
+color 10,100,15
 type psl .
 
 track baylorRtPcr
@@ -121,7 +121,7 @@ longLabel Baylor RT-PCR for MGC
 group genes
 priority 36.2
 visibility hide
-color 200,0,100
+color 10,100,150
 type psl .
 
 track mgcTSExpPcr
@@ -142,13 +142,14 @@ visibility pack
 color 155,0,125
 type genePred
 
+# Vancouver tracks
 track bcGscMatch
 shortLabel BC GSC Matching
 longLabel  BC GSC RT-PCR for MGC: RefSeq matching
 group genes
 priority 36.7
 visibility hide
-color 200,0,50
+color 155,0,125
 type psl .
 
 track bcGscDiscrep
@@ -157,7 +158,7 @@ longLabel  BC GSC RT-PCR for MGC: Validated discrepancies
 group genes
 priority 36.8
 visibility hide
-color 155,0,125
+color 200,0,150
 type psl .
 
 track mgcIncompleteMrna
@@ -201,6 +202,6 @@ shortLabel TwinScan MGC
 longLabel TwinScan MGC Candidates
 group gene
 priority 159
-visibility pack
+visibility hide
 type genepred
 
