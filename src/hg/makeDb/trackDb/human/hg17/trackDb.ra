@@ -830,7 +830,7 @@ track indelible
 shortLabel Indelible Inserts
 longLabel Insertions into the human genome found by indelible
 priority 11
-group X
+group x
 visibility dense
 type bed 3 +
 
@@ -838,7 +838,7 @@ track tarjeiUnverify
 shortLabel Unverified Tarjei
 longLabel Insertions found by Tarjei and unverified by Indelible
 priority 11
-group X
+group x
 visibility dense
 type bed 3 +
 
