@@ -3,6 +3,11 @@
 #include "linefile.h"
 #include "hash.h"
 #include "options.h"
+#include "rbTree.h"
+#include "jksql.h"
+#include "hdb.h"
+#include "localmem.h"
+#include "agpGap.h"
 
 void usage()
 /* Explain usage and exit. */
@@ -16,14 +21,14 @@ errAbort(
   );
 }
 
-struct chromNet
+struct chainNet
 /* A net on one chromosome. */
     {
-    struct chromNet *next;
+    struct chainNet *next;
     char *name;			/* Chromosome name. */
     int size;			/* Chromosome size. */
     struct fill *fillList;	/* Top level fills. */
-    struct hash *nameHash; 	/* Hash of all fill->qChrom names. */
+    struct hash *nameHash; 	/* Hash of all fill->qName names. */
     };
 
 struct fill
@@ -32,7 +37,7 @@ struct fill
     /* Required fields */
     struct fill *next;	   /* Next in list. */
     int tStart, tSize;	   /* Range in target chromosome. */
-    char *qChrom;	   /* Other chromosome (not allocated here) */
+    char *qName;	   /* Other chromosome (not allocated here) */
     char qStrand;	   /* Orientation + or - in other chrom. */
     int qStart,	qSize;	   /* Range in query chromosome. */
     struct fill *children; /* List of child gaps. */
@@ -80,10 +85,10 @@ for (el = *pList; el != NULL; el = next)
 *pList = NULL;
 }
 
-void chromNetFree(struct chromNet **pNet)
+void chromNetFree(struct chainNet **pNet)
 /* Free up a chromosome net. */
 {
-struct chromNet *net = *pNet;
+struct chainNet *net = *pNet;
 if (net != NULL)
     {
     freeMem(net->name);
@@ -93,10 +98,10 @@ if (net != NULL)
     }
 }
 
-void chromNetFreeList(struct chromNet **pList)
-/* Free up a list of chromNet. */
+void chromNetFreeList(struct chainNet **pList)
+/* Free up a list of chainNet. */
 {
-struct chromNet *el, *next;
+struct chainNet *el, *next;
 
 for (el = *pList; el != NULL; el = next)
     {
@@ -107,7 +112,7 @@ for (el = *pList; el != NULL; el = next)
 }
 
 
-struct fill *rNetRead(struct chromNet *net, struct lineFile *lf)
+struct fill *rNetRead(struct chainNet *net, struct lineFile *lf)
 /* Recursively read in file. */
 {
 static char *words[64];
@@ -143,7 +148,7 @@ for (;;)
 	slAddHead(&fillList, fill);
 	fill->tStart = lineFileNeedNum(lf, words, 1);
 	fill->tSize = lineFileNeedNum(lf, words, 2);
-	fill->qChrom = hashStoreName(net->nameHash, words[3]);
+	fill->qName = hashStoreName(net->nameHash, words[3]);
 	fill->qStrand = words[4][0];
 	fill->qStart = lineFileNeedNum(lf, words, 5);
 	fill->qSize = lineFileNeedNum(lf, words, 6);
@@ -177,7 +182,7 @@ for (fill = fillList; fill != NULL; fill = fill->next)
     char *type = (fill->chainId ? "fill" : "gap");
     spaceOut(f, depth);
     fprintf(f, "%s %d %d %s %c %d %d", type, fill->tStart, fill->tSize,
-    	fill->qChrom, fill->qStrand, fill->qStart, fill->qSize);
+    	fill->qName, fill->qStrand, fill->qStart, fill->qSize);
     if (fill->chainId)
         fprintf(f, " id %d", fill->chainId);
     if (fill->tN >= 0)
@@ -194,7 +199,7 @@ for (fill = fillList; fill != NULL; fill = fill->next)
     }
 }
 
-void chromNetWrite(struct chromNet *net, FILE *f)
+void chromNetWrite(struct chainNet *net, FILE *f)
 /* Write out chain net. */
 {
 fprintf(f, "net %s %d\n", net->name, net->size);
@@ -215,11 +220,11 @@ for (fill = fillList; fill != NULL; fill = fill->next)
 return count;
 }
 
-struct chromNet *chromNetRead(struct lineFile *lf)
+struct chainNet *chromNetRead(struct lineFile *lf)
 /* Read next net from file. Return NULL at end of file.*/
 {
 char *line, *words[3];
-struct chromNet *net;
+struct chainNet *net;
 int wordCount;
 
 if (!lineFileNextReal(lf, &line))
@@ -234,21 +239,231 @@ net->name = cloneString(words[1]);
 net->size = lineFileNeedNum(lf, words, 2);
 net->nameHash = hashNew(6);
 net->fillList = rNetRead(net, lf);
-uglyf("Read %d top level elements, %d total in %s\n", 
-	slCount(net->fillList), fillForestSize(net->fillList), net->name);
 return net;
+}
+
+struct chrom
+/* Basic information on a chromosome. */
+    {
+    struct chrom *next;	  /* Next in list */
+    char *name;		  /* Chromosome name, allocated in hash. */
+    int size;		  /* Chromosome size. */
+    struct rbTree *nGaps; /* Gaps in sequence (Ns) */
+    struct rbTree *repeats; /* Repeats in sequence */
+    };
+
+struct range
+/* A part of a chromosome. */
+    {
+    int start, end;	/* Half open zero based coordinates. */
+    };
+
+int rangeCmp(void *va, void *vb)
+/* Return -1 if a before b,  0 if a and b overlap,
+ * and 1 if a after b. */
+{
+struct range *a = va;
+struct range *b = vb;
+if (a->end <= b->start)
+    return -1;
+else if (b->end <= a->start)
+    return 1;
+else
+    return 0;
+}
+
+static int interSize;	/* Size of intersection. */
+static struct range interRange; /* Range to intersect with. */
+
+void addInterSize(void *item)
+/* Add range to interSize. */
+{
+struct range *r = item;
+int size;
+size = rangeIntersection(r->start, r->end, interRange.start, interRange.end);
+interSize += size;
+}
+
+int intersectionSize(struct rbTree *tree, int start, int end)
+/* Return total size of things intersecting range start-end. */
+{
+interRange.start = start;
+interRange.end = end;
+interSize = 0;
+rbTreeTraverseRange(tree, &interRange, &interRange, addInterSize);
+return interSize;
+}
+
+struct rbTree *getSeqGaps(char *db, char *chrom)
+/* Return a tree of ranges for sequence gaps in chromosome */
+{
+struct sqlConnection *conn = sqlConnect(db);
+struct rbTree *tree = rbTreeNew(rangeCmp);
+int rowOffset;
+struct sqlResult *sr = hChromQuery(conn, "gap", chrom, NULL, &rowOffset);
+char **row;
+
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    struct agpGap gap;
+    struct range *range;
+    agpGapStaticLoad(row+rowOffset, &gap);
+    lmAllocVar(tree->lm, range);
+    range->start = gap.chromStart;
+    range->end = gap.chromEnd;
+    rbTreeAdd(tree, range);
+    }
+sqlFreeResult(&sr);
+sqlDisconnect(&conn);
+return tree;
+}
+
+struct rbTree *getRepeats(char *db, char *chrom)
+/* Return a tree of ranges for sequence gaps in chromosome */
+{
+struct sqlConnection *conn = sqlConnect(db);
+struct sqlResult *sr;
+char **row;
+struct rbTree *tree = rbTreeNew(rangeCmp);
+char tableName[64];
+char query[256];
+boolean hasBin;
+
+if (!hFindSplitTable(chrom, "rmsk", tableName, &hasBin))
+    errAbort("Can't find rmsk table for %s\n", chrom);
+sprintf(query, "select genoStart,genoEnd from %s", tableName);
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    struct range *range;
+    lmAllocVar(tree->lm, range);
+    range->start = sqlUnsigned(row[0]);
+    range->end = sqlUnsigned(row[1]);
+    rbTreeAdd(tree, range);
+    }
+sqlFreeResult(&sr);
+sqlDisconnect(&conn);
+return tree;
+}
+
+void getChroms(char *db, struct hash **retHash, struct chrom **retList)
+/* Get hash of chromosomes from database. */
+{
+struct sqlConnection *conn = sqlConnect(db);
+struct sqlResult *sr;
+char **row;
+struct chrom *chromList = NULL, *chrom;
+struct hash *hash = hashNew(8);
+
+sr = sqlGetResult(conn, "select chrom,size from chromInfo");
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    AllocVar(chrom);
+    hashAddSaveName(hash, row[0], chrom, &chrom->name);
+    chrom->size = atoi(row[1]);
+    slAddHead(&chromList, chrom);
+    }
+sqlFreeResult(&sr);
+sqlDisconnect(&conn);
+slReverse(&chromList);
+*retHash = hash;
+*retList = chromList;
+}
+
+void addTn(struct chainNet *net, struct fill *fillList, struct rbTree *tnTree)
+/* Add tN's to all gaps underneath fillList. */
+{
+struct fill *fill, *gap;
+for (fill = fillList; fill != NULL; fill = fill->next)
+    {
+    for (gap = fill->children; gap != NULL; gap = gap->next)
+        {
+	int s = gap->tStart;
+	gap->tN = intersectionSize(tnTree, s, s + gap->tSize);
+	if (gap->children)
+	    addTn(net, gap->children, tnTree);
+	}
+    }
+}
+
+void addQn(struct chainNet *net, struct fill *fillList, struct hash *qChromHash)
+/* Add qN's to all gaps underneath fillList. */
+{
+struct fill *fill, *gap;
+for (fill = fillList; fill != NULL; fill = fill->next)
+    {
+    struct chrom *qChrom = hashMustFindVal(qChromHash, fill->qName);
+    struct rbTree *qnTree = qChrom->nGaps;
+    for (gap = fill->children; gap != NULL; gap = gap->next)
+        {
+	int s = gap->qStart;
+	gap->qN = intersectionSize(qnTree, s, s + gap->qSize);
+	if (gap->children)
+	    addQn(net, gap->children, qChromHash);
+	}
+    }
+}
+
+void addTr(struct chainNet *net, struct fill *fillList, struct rbTree *trTree)
+/* Add t repeats's to all things underneath fillList. */
+{
+struct fill *fill;
+for (fill = fillList; fill != NULL; fill = fill->next)
+    {
+    int s = fill->tStart;
+    fill->tR = intersectionSize(trTree, s, s + fill->tSize);
+    if (fill->children)
+	addTr(net, fill->children, trTree);
+    }
+}
+
+void addQr(struct chainNet *net, struct fill *fillList, struct hash *qChromHash)
+/* Add q repeats to all things underneath fillList. */
+{
+struct fill *fill;
+for (fill = fillList; fill != NULL; fill = fill->next)
+    {
+    struct chrom *qChrom = hashMustFindVal(qChromHash, fill->qName);
+    int s = fill->qStart;
+    fill->qR = intersectionSize(qChrom->repeats, s, s + fill->qSize);
+    if (fill->children)
+	addQr(net, fill->children, qChromHash);
+    }
 }
 
 void netClass(char *inName, char *tDb, char *qDb, char *outName)
 /* netClass - Add classification info to net. */
 {
-struct chromNet *net;
+struct chainNet *net;
 struct lineFile *lf = lineFileOpen(inName, TRUE);
 FILE *f = mustOpen(outName, "w");
+struct chrom *qChromList, *chrom;
+struct hash *qChromHash;
+
+getChroms(qDb, &qChromHash, &qChromList);
+
+printf("Reading gaps in %s\n", qDb);
+for (chrom = qChromList; chrom != NULL; chrom = chrom->next)
+    chrom->nGaps = getSeqGaps(qDb, chrom->name);
+printf("Reading repeats in %s\n", qDb);
+for (chrom = qChromList; chrom != NULL; chrom = chrom->next)
+    chrom->repeats = getRepeats(qDb, chrom->name);
+
+
 while ((net = chromNetRead(lf)) != NULL)
     {
+    struct rbTree *tnTree, *trTree;
+    printf("Processing %s.%s\n", tDb, net->name);
+    tnTree = getSeqGaps(tDb, net->name);
+    trTree = getRepeats(tDb, net->name);
+    addTn(net, net->fillList, tnTree);
+    addQn(net, net->fillList, qChromHash);
+    addTr(net, net->fillList, trTree);
+    addQr(net, net->fillList, qChromHash);
     chromNetWrite(net, f);
     chromNetFree(&net);
+    rbTreeFree(&tnTree);
+    rbTreeFree(&trTree);
     }
 }
 
