@@ -8,19 +8,18 @@
 #include "hdb.h"
 #include "hCommon.h"
 #include "obscure.h"
-#include "goa.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: go.c,v 1.9 2003/09/13 04:10:42 kent Exp $";
+static char const rcsid[] = "$Id: go.c,v 1.10 2003/10/02 06:01:58 kent Exp $";
 
 static boolean goExists(struct column *col, struct sqlConnection *conn)
-/* This returns true if go database and goa table exists. */
+/* This returns true if go database and goaPart table exists. */
 {
 boolean gotIt = FALSE;
 col->goConn = sqlMayConnect("go");
 if (col->goConn != NULL)
     {
-    gotIt = sqlTableExists(col->goConn, "goa");
+    gotIt = sqlTableExists(col->goConn, "goaPart");
     }
 return gotIt;
 }
@@ -40,7 +39,7 @@ struct hash *hash = newHash(6);
 if (gp->protein != NULL && gp->protein[0] != 0)
     {
     safef(query, sizeof(query), 
-	    "select term.name from goa,term where goa.dbObjectSymbol = '%s' and goa.goId = term.acc", gp->protein);
+	    "select term.name from goaPart,term where goaPart.dbObjectSymbol = '%s' and goaPart.goId = term.acc", gp->protein);
     sr = sqlGetResult(col->goConn, query);
     while ((row = sqlNextRow(sr)) != NULL)
         {
@@ -77,9 +76,9 @@ hPrintf("<TD>");
 if (gp->protein != NULL && gp->protein[0] != 0)
     {
     safef(query, sizeof(query), 
-	    "select term.name,term.acc from goa,term "
-	    "where goa.dbObjectSymbol = '%s' "
-	    "and goa.goId = term.acc", 
+	    "select term.name,term.acc from goaPart,term "
+	    "where goaPart.dbObjectSymbol = '%s' "
+	    "and goaPart.goId = term.acc", 
 	    gp->protein);
     sr = sqlGetResult(col->goConn, query);
     while ((row = sqlNextRow(sr)) != NULL)
@@ -131,14 +130,14 @@ if (searchString != NULL )
 	if (startsWith("GO:", term->name))
 	    {
 	    safef(query, sizeof(query),
-		"select dbObjectSymbol from goa "
+		"select dbObjectSymbol from goaPart "
 		"where goId = '%s'", term->name);
 	    }
 	else
 	    {
 	    safef(query, sizeof(query), 
-		    "select goa.dbObjectSymbol from goa,term "
-		    "where term.name = '%s' and term.acc = goa.goId"
+		    "select goaPart.dbObjectSymbol from goaPart,term "
+		    "where term.name = '%s' and term.acc = goaPart.goId"
 		    , term->name);
 	    }
 	sr = sqlGetResult(col->goConn, query);
@@ -203,13 +202,13 @@ col->advFilter = goAdvFilter;
 }
 
 static boolean goOrderExists(struct order *ord, struct sqlConnection *ignore)
-/* This returns true if go database and goa table exists. */
+/* This returns true if go database and goaPart table exists. */
 {
 boolean gotIt = FALSE;
 struct sqlConnection *conn = sqlMayConnect("go");
 if (conn != NULL)
     {
-    gotIt = sqlTableExists(conn, "goa");
+    gotIt = sqlTableExists(conn, "goaPart");
     sqlDisconnect(&conn);
     }
 return gotIt;
@@ -241,7 +240,7 @@ for (gp = *pGeneList; gp != NULL; gp = gp->next)
 if (curGeneId->protein != NULL)
     {
     safef(query, sizeof(query), 
-	    "select goId from goa where dbObjectSymbol = '%s'", curGeneId->protein);
+	    "select goId from goaPart where dbObjectSymbol = '%s'", curGeneId->protein);
     sr = sqlGetResult(conn, query);
     while ((row = sqlNextRow(sr)) != NULL)
 	{
@@ -251,7 +250,7 @@ if (curGeneId->protein != NULL)
     }
 
 /* Stream through association table counting matches. */
-sr = sqlGetResult(conn, "select dbObjectSymbol,goId from goa");
+sr = sqlGetResult(conn, "select dbObjectSymbol,goId from goaPart");
 while ((row = sqlNextRow(sr)) != NULL)
     {
     if (hashLookup(curTerms, row[1]))
