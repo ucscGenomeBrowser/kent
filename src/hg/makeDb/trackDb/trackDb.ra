@@ -213,7 +213,7 @@ type sample
 track genomicSuperDups
 shortLabel Segmental Dups
 longLabel Duplications of >1000 Bases of Non-RepeatMasked Sequence
-group map
+group varRep
 priority 27
 visibility hide
 type bed 6 
