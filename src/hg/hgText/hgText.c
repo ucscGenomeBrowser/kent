@@ -35,7 +35,7 @@
 #include "hgText.h"
 #include "botDelay.h"
 
-static char const rcsid[] = "$Id: hgText.c,v 1.164 2005/03/02 00:22:04 hiram Exp $";
+static char const rcsid[] = "$Id: hgText.c,v 1.165 2005/03/04 20:15:53 hiram Exp $";
 
 /* sources of tracks, other than the current database: */
 static char *hgFixed = "hgFixed";
@@ -4813,8 +4813,8 @@ static int descendingFreqCmp(const void *el1, const void *el2)
 {
 const struct hashEl *hel1 = *((struct hashEl **)el1);
 const struct hashEl *hel2 = *((struct hashEl **)el2);
-int v1 = (int)(hel1->val);
-int v2 = (int)(hel2->val);
+int v1 = ptToInt(hel1->val);
+int v2 = ptToInt(hel2->val);
 int dif;
 
 dif = v2 - v1;
@@ -4931,7 +4931,7 @@ for (chromPtr=chromList;  chromPtr != NULL;  chromPtr=chromPtr->next)
 		if (! sameString(el->name, row[0]))
 		    printf("Hash-collision warning: %s --> %s<P>\n",
 			   el->name, row[0]);
-		(el->val) = (void *)((int)(el->val) + 1);
+		(el->val) = intToPt(ptToInt(el->val) + 1);
 		}
 	    }
 	}
@@ -4950,7 +4950,7 @@ if (els == NULL)
     return;
     }
 slSort(&els, descendingFreqCmp);
-maxFreq = (int)els->val;
+maxFreq = ptToInt(els->val);
 if (maxFreq > 50)
     scale = (50.0 / maxFreq);
 else
@@ -4968,13 +4968,13 @@ puts("--------------------------------------------------------------------------
 for (el = els;  el != NULL;  el=el->next)
     {
     printf("%50s ", el->name);
-    freq = (int)el->val;
+    freq = ptToInt(el->val);
     freq = (int)(scale * freq);
     for (i=0;  i < freq;  i++)
 	putchar('*');
     for (i=freq; i < 50;  i++)
 	putchar(' ');
-    printf(" %8d\n", (int)el->val);
+    printf(" %8d\n", ptToInt(el->val));
     }
 puts("</PRE></TT>");
 webEnd();
