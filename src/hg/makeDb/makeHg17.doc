@@ -8104,6 +8104,25 @@ s/chr24/chrY/g
 #done firstEF
 
 
+# GENE BOUNDS (RNACLUSTER) (DONE 08-18-2004 Chuck)
+# Create rnaCluster table (depends on {est,mrna}OrientInfo)
+cd ~sugnet/store1/altSplice/hg17/
+mkdir rnaCluster
+cd rnaCluster/
+mkdir chrom
+# Create a list of accessions that come from RAGE libraries and need to be excluded.
+~/kent/src/hg/geneBounds/clusterRna/generateRageAccList.csh hg17 rage.libs
+foreach f (/cluster/data/hg17/nib/chr*.nib)
+    set c = $f:t:r
+    set out = chrom/$c.bed
+    # Exclude accesions in the RAGE file
+    echo clusterRna -mrnaExclude=hg17.rage.libs hg17 /dev/null $out -chrom=$c
+    clusterRna -mrnaExclude=hg17.rage.libs hg17 /dev/null $out -chrom=$c
+end
+hgLoadBed hg17 rnaCluster chrom/*.bed
+mkdir /cluster/data/hg17/bed/rnaCluster
+cp -r chrom /cluster/data/hg17/bed/rnaCluster
+
 #  miRNA track (DONE 2004-08-24 - Hiram)
     #	The source data for this was received via email from Sam
     #	Griffiths-Jones to Donna 16 August 2004.  In other email Michel
@@ -8709,7 +8728,6 @@ axtChain -linearGap=../../chickenHumanTuned.gap $1 \
     # featureBits hg17 refGene:cds netTetNig1 -enrichment
     # refGene:cds 0.978%, netTetNig1 25.095%, both 0.778%, cover 79.53%, 
     # enrich 3.17x
-
 
 # TWINSCAN 1.3 GENE PREDICTIONS (Done, 2004-Aug-26, heather)
 
