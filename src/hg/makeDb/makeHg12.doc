@@ -40,7 +40,7 @@ into gs.XX/buildXX/ directory.
 3.1) Make a fake chrM contig
 cd ~/oo
 mkdir M
-put the Mitochondrial fasta sequence there as chrM.fa
+copy in chrM.fa, chrM.agp and chrM.gl from previous version.
 mkdir M/NT_999999
 cp chrM.fa NT_999999/NT_999999.fa
 
@@ -1753,7 +1753,7 @@ MAKING THE BLASTZBESTMOUSE TRACK FROM PENN STATE MM2 AXT FILES (DONE 8/18/02)
       gunzip -c $chrdir/*.axt.gz | \
         liftUp -type=.axt -axtQ axtChrom/$chr.lifted.axt \
         /cluster/store2/mm.2002.02/mm2/jkStuff/liftAll.lft warn stdin
-      axtBest axtChrom/$chr.lifted.axt $chr axtBest/$chr.axt
+      axtBest axtChrom/$chr.lifted.axt $chr axtBest/$chr.axt -minScore=300
       axtToPsl axtBest/$chr.axt tSizes qSizes pslBest/${chr}_blastzBestMouse.psl
       echo Done with $chr.
     end
