@@ -9,7 +9,7 @@
 #include "internet.h"
 #include "net.h"
 
-static char const rcsid[] = "$Id: bottleneck.c,v 1.2 2004/01/31 21:22:50 kent Exp $";
+static char const rcsid[] = "$Id: bottleneck.c,v 1.3 2004/02/04 07:00:40 kent Exp $";
 
 int port = 17776;	/* Default bottleneck port. */
 char *host = "localhost";   /* Default host. */
@@ -61,6 +61,7 @@ struct tracker
     char *name;	/* Name (IP address).  Not allocated here. */
     time_t lastAccess;		/* Time of last access. */
     int curDelay;		/* Current delay in 1000ths of second. */
+    int maxDelay;		/* Maximum delay so far. */
     int accessCount;		/* Total number of accesses since started tracking. */
     };
 
@@ -87,11 +88,14 @@ struct tracker *tracker;
 char buf[256];
 time_t now = time(NULL);
 int timeDiff;
+safef(buf, sizeof(buf), "#IP_ADDRESS\thits\ttime\tmax\tcurrent");
+netSendString(socket, buf);
 for (tracker = trackerList; tracker != NULL; tracker = tracker->next)
     {
     timeDiff = now - tracker->lastAccess;
-    safef(buf, sizeof(buf), "%s %d %d %d", 
-    	tracker->name, tracker->accessCount, timeDiff, calcDelay(tracker, now));
+    safef(buf, sizeof(buf), "%s\t%d\t%d\t%d\t%d", 
+    	tracker->name, tracker->accessCount, timeDiff, 
+	tracker->maxDelay, calcDelay(tracker, now));
     if (!netSendString(socket, buf))
         break;
     }
@@ -160,6 +164,8 @@ for (;;)
 		}
 	    tracker->accessCount += 1;
 	    tracker->curDelay = calcDelay(tracker, now);
+	    if (tracker->maxDelay < tracker->curDelay)
+	        tracker->maxDelay = tracker->curDelay;
 	    tracker->lastAccess = now;
 	    safef(buf, sizeof(buf), "%d", tracker->curDelay);
 	    netSendString(socket, buf);
