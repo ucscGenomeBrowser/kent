@@ -33,7 +33,7 @@
 #include "web.h"
 #include <regex.h>
 
-static char const rcsid[] = "$Id: hgFind.c,v 1.83 2003/06/18 16:44:49 sugnet Exp $";
+static char const rcsid[] = "$Id: hgFind.c,v 1.84 2003/06/19 01:16:22 sugnet Exp $";
 
 char *MrnaIDforGeneName(char *geneName)
 /* return mRNA ID for a gene name */
@@ -1386,15 +1386,15 @@ while ((row = sqlNextRow(sr)) != NULL)
     {
     if (ok == FALSE)
         {
-		ok = TRUE;
-		AllocVar(table);
-		dyStringClear(query);
-		dyStringPrintf(query, "%s Gene Predictions", tableName);
-		table->description = cloneString(query->string);
-		table->name = cloneString(tableName);
-		slAddHead(&hgp->tableList, table);
-		}
-
+	ok = TRUE;
+	AllocVar(table);
+	dyStringClear(query);
+	dyStringPrintf(query, "%s Gene Predictions", tableName);
+	table->description = cloneString(query->string);
+	table->name = cloneString(tableName);
+	slAddHead(&hgp->tableList, table);
+	}
+    
     AllocVar(pos);
     pos->chrom = hgOfficialChromName(row[0]);
     pos->chromStart = atoi(row[1]);
@@ -1839,6 +1839,11 @@ while ((c = *s++) != 0)
 return TRUE;
 }
 
+static void findAffyProbe(char *spec, struct hgPositions *hgp)
+/* Look up affy probes. */
+{
+}
+
 static void findRefGenes(char *spec, struct hgPositions *hgp)
 /* Look up refSeq genes in table. */
 {
@@ -2002,55 +2007,55 @@ freeDyString(&ds);
 hFreeConn(&conn);
 }
 
-static boolean isAffyProbeName(char *name)
-/* Return TRUE if name is an Affymetrix Probe ID for HG-U95Av2. */
-{
-return startsWith("HG-U95Av2:", name);
-}
-
-static boolean isAffyU133ProbeName(char *name)
-/* Return TRUE if name is an Affymetrix Probe ID for HG-U95Av2. */
-{
-return startsWith("HG-U133:", name);
-}
-
-static void findBedProbePos(char *table, char *name, char **retChromName, 
-	int *retWinStart, int *retWinEnd)
-/* Find bed start, end, and chrom from "name" from table.  Don't alter
- * return variables if some sort of error. */
+static void findBedPos(char *name, struct hgPositions *hgp, char *tableName)
+/* Look for positions in bed table. */
 {
 struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr = NULL;
 struct dyString *query = newDyString(256);
+struct hgPos *pos = NULL;
 char **row;
 struct bed *bed = NULL;
-dyStringPrintf(query, "select chrom, chromStart, chromEnd, name from %s where name = '%s'", table, name);
-if(!hTableExists(table))
-    errAbort("Sorry %s track not available yet in this version of the browser.", table);
+struct hgPosTable *table = NULL;
+dyStringPrintf(query, "select chrom, chromStart, chromEnd, name from %s where name = '%s'", tableName, name);
+if(!hTableExists(tableName))
+    errAbort("Sorry %s track not available yet in this version of the browser.", tableName);
 sr = sqlGetResult(conn, query->string);
-row = sqlNextRow(sr);
-if (row == NULL)
-    errAbort("Couldn't find record with name: %s in table: %s", name, table);
-bed = bedLoadN(row,4);
-*retChromName = hgOfficialChromName(bed->chrom);
-*retWinStart = bed->chromStart;
-*retWinEnd = bed->chromEnd;
-bedFree(&bed);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    if(table == NULL)
+	{
+	AllocVar(table);
+	dyStringClear(query);
+	dyStringPrintf(query, "%s Bed Records", tableName);
+	table->description = cloneString(query->string);
+	table->name = cloneString(tableName);
+	slAddHead(&hgp->tableList, table);
+	}
+    bed = bedLoadN(row,4);
+    AllocVar(pos);
+    pos->chrom = hgOfficialChromName(row[0]);
+    pos->chromStart = atoi(row[1]);
+    pos->chromEnd = atoi(row[2]);
+    pos->name = cloneString(row[3]);
+    slAddHead(&table->posList, pos);
+    bedFree(&bed);
+    }
+if (table != NULL)
+    slReverse(&table->posList);
 freeDyString(&query);
 sqlFreeResult(&sr);
 hFreeConn(&conn);
 }
 
-static void findAffyProbePos(char *name, char **retChromName, 
-	int *retWinStart, int *retWinEnd)
-/* Find affy probe start, end, and chrom
- * from "name".  Don't alter
- * return variables if some sort of error. */
+static void findBedTablePos(char *spec, char *prefix, struct hgPositions *hgp, char *tableName)
+/* Look for name in "spec" after "prefix" in tableName where tableName is a bed type table. */
 {
-char *temp = strstr(name, ":"); /* parse name out of something like "HG-U95Av2:probeName" */
-assert(temp);
-temp++;
-findBedProbePos("affyRatio", temp, retChromName, retWinStart, retWinEnd);
+char *name = strstr(spec, prefix); /* parse name out of something like "HG-U95Av2:probeName" */
+if(name == NULL || *(name + strlen(prefix)) == '\0')
+    return;
+name+=strlen(prefix);
+findBedPos(name, hgp, tableName);
 }
 
 static struct hgPositions *genomePos(char *spec, char **retChromName, 
@@ -2250,19 +2255,6 @@ if (hgIsChromRange(query))
 	}
     singlePos(hgp, "Chromosome Range", NULL, NULL, query, chrom, start, end);
     }
-else if (isAffyProbeName(query))
-    {
-    findAffyProbePos(query, &chrom, &start, &end);
-    singlePos(hgp, "GNF Ratio Expression data", NULL, "affyRatio", query, chrom, start, end);
-    }
-else if (isAffyU133ProbeName(query))
-    {
-    char *affyName = strstr(query,":");
-    assert(affyName);
-    affyName++;
-    findBedProbePos("affyUcla", affyName , &chrom, &start, &end);
-    singlePos(hgp, "UCLA U133 GeneChip Expression data", NULL, "affyUcla", query, chrom, start, end);
-    }
 else if (isContigName(query) && findContigPos(query, &chrom, &start, &end))
     {
     if (relativeFlag == TRUE)
@@ -2335,6 +2327,8 @@ else
     findGenePred(query, hgp, "acembly");
     findGenePred(query, hgp, "genscan");
     findGenePred(query, hgp, "sangerGene");
+    findBedTablePos(query, "HG-U95:", hgp, "affyGnf");
+    findBedTablePos(query, "HG-U133:", hgp, "affyUcla");
     }
 
 slReverse(&hgp->tableList);
