@@ -9,6 +9,7 @@
 #include "glDbRep.h"
 #include "clonePos.h"
 #include "gsSeqInfo.h"
+#include "options.h"
 
 void usage()
 /* Explain usage and exit. */
@@ -16,8 +17,12 @@ void usage()
 errAbort(
   "hgClonePos - create clonePos table in browser database\n"
   "usage:\n"
-  "   hgClonePos database ooDir ffa/sequence.inf gsDir\n");
+  "   hgClonePos database ooDir ffa/sequence.inf gsDir\n"
+  "options:\n"
+  "   maxErr=N  set maximum allowed errors before aborting (default 0)\n");
 }
+
+int maxErr = 0;
 
 char *createClonePos = 
 "CREATE TABLE clonePos (\n"
@@ -227,10 +232,12 @@ for (clone = cloneList; clone != NULL; clone = clone->next)
         {
 	if (errCount < 20)
 	    warn("Missing file location on %s (not under gsDir)", clone->name);
+	clone->faFile = cloneString("");
+        clone->stage[0] = 'D';
 	++errCount;
 	}
     }
-if (errCount > 0)
+if (errCount > maxErr)
     {
     errAbort("Aborting with %d errors\n", errCount);
     }
@@ -285,8 +292,10 @@ clonePosFreeList(&cloneList);
 int main(int argc, char *argv[])
 /* Process command line. */
 {
+optionHash(&argc, argv);
 if (argc != 5)
     usage();
+maxErr = optionInt("maxErr", maxErr);
 hgClonePos(argv[1], argv[2], argv[3], argv[4]);
 return 0;
 }
