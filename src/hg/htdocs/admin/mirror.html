@@ -56,12 +56,13 @@ disk partitions and sizes:
 <li>MySQL Table spaces: ~ 50GB
 <li>Apache web pages area: ~ 40GB
 <li>"/projects" area for the browser: ~ 60GB
+<li>"/cluster" area for the browser: ~ 15GB
 </ul>
 
 <br><p><a NAME="script"></a><b>Sample Automated Script:</b>
 <p> We have created a script, <a href="GENOME-MIRROR.sh">GENOME-MIRROR.sh</a>,
 which should automate the following steps but remains a work in progress. 
-It has only been tested on Redhat Linux 7.1 systems, but you may find it useful.
+It has only been tested on Redhat Linux 7.2 systems, but you may find it useful.
 <br>
 	</TD><TD WIDTH=15></TD></TR></TABLE>
 	<br></TD></TR></TABLE>
@@ -76,11 +77,15 @@ It has only been tested on Redhat Linux 7.1 systems, but you may find it useful.
 	<TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0><TR><TH HEIGHT=10></TH></TR>
 	<TR><TD WIDTH=10>&nbsp;</TD><TD>
 
-1. <a href="#step1">Install Apache server and MySQL server</a></font>
-<p> 2. <a href="#step2">Get all the html files and most of the text files</a> (0.5 GB)
-<p> 3. <a href="#step3">Get the data for each individual genome assembly and installing databases </a>(35.1 GB)
-<p> 4. <a href="#step4">Set up database</a>
-<p> 5. <a href="#step5">Get executable files</a>
+</font>
+<UL>
+<LI><a href="#step1">Install Apache server and MySQL server</a>
+<LI><a href="#step2">Get all the html files and most of the text files</a> (0.5 GB)
+<LI><a href="#step3">Get the data for each individual genome assembly and installing databases </a>(35.1 GB)
+<LI><a href="#step4">Set up database</a>
+<LI><a href="#step5">Get executable files</a>
+<li><a href="#step6">Setup Hgcentral session preference table</a>
+</UL>
 <br><br>
 <hr>
 <p><a NAME="step1"></a><b>1. Install Apache server and MySQL server</b>
@@ -88,7 +93,7 @@ It has only been tested on Redhat Linux 7.1 systems, but you may find it useful.
 <li> We will not provide consulting on the operation or configuration 
 	of Apache or MySQL. If you are not familiar with the setup of Apache or MySQL, 
 	you will have to find someone at your site that is. We use a reference platform 
-	of Redhat 7.1 for all the steps described here. <br>
+	of Redhat 7.2 for all the steps described here. <br>
 <li> Find where your web pages are located. For example on a Redhat Linux
 	system using a stock apache RPM, the web pages are stored in /var/www/html. 
 	We will refer to this directory as WEBROOT in this document and you should 
@@ -147,15 +152,60 @@ assembly:
 <TABLE CELLPADDING=0 CELLSPACING=0 MARGINS=0>
 <TR><TD> $FREEZEDATE </TD><TD WIDTH=10></TD><TD> $DBVERSION </TD></TR>
 <TR><TD> --------------- </TD><TD></TD><TD> ---------------  </TD></TR>
+<TR><TD> mmNov2001   </TD><TD></TD><TD> mm1         </TD></TR>
+<TR><TD> 22dec2001   </TD><TD></TD><TD> hg10         </TD></TR>
+<TR><TD> Not Released</TD><TD></TD><TD> hg9         </TD></TR>
 <TR><TD> 06aug2001   </TD><TD></TD><TD> hg8         </TD></TR>
 <TR><TD> 01apr2001   </TD><TD></TD><TD> hg7         </TD></TR>
-<TR><TD> 12dec2000   </TD><TD></TD><TD> hg6         </TD></TR>
-<TR><TD> 07oct2000   </TD><TD></TD><TD> hg5         </TD></TR>
+<TR><TD> 12dec2000   </TD><TD></TD><TD> archived    </TD></TR>
+<TR><TD> 07oct2000   </TD><TD></TD><TD> archived    </TD></TR>
 <TR><TD> 05sept2000  </TD><TD></TD><TD> archived    </TD></TR>
 <TR><TD> 17july2000  </TD><TD></TD><TD> archived    </TD></TR>
 </TABLE>
 </ul>
 <ol type="a">
+
+<li>Get Mouse November, 2001 full data set (2.1 GB) by doing:
+<p> 
+i)&nbsp;&nbsp;&nbsp;&nbsp;  rsync --progress -avz &nbsp;&nbsp;\
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+rsync://genome-rsync.cse.ucsc.edu/genome/goldenPath/mmNov2001/bigZips/&nbsp;&nbsp;\
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+$WEBROOT/goldenPath/mmNov2001/bigZips/.
+<p> 
+ii)&nbsp;&nbsp;&nbsp;  rsync --progress -avz &nbsp;&nbsp;\
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+rsync://genome-rsync.cse.ucsc.edu/genome/goldenPath/mmNov2001/chromosomes/ &nbsp;&nbsp;\
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+$WEBROOT/goldenPath/mmNov2001/chromosomes/.
+<p> 
+iii)&nbsp;&nbsp;   rsync --progress -avz  &nbsp;&nbsp;\
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+rsync://genome-rsync.cse.ucsc.edu/genome/goldenPath/mmNov2001/database/ &nbsp;&nbsp;\
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+$WEBROOT/goldenPath/mmNov2001/database/.
+<br><br>
+
+<li>Get Human December 22, 2001 full data set (4.9 GB) by doing:
+<p> 
+i)&nbsp;&nbsp;&nbsp;&nbsp;  rsync --progress -avz &nbsp;&nbsp;\
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+rsync://genome-rsync.cse.ucsc.edu/genome/goldenPath/22dec2001/bigZips/&nbsp;&nbsp;\
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+$WEBROOT/goldenPath/22dec2001/bigZips/.
+<p> 
+ii)&nbsp;&nbsp;&nbsp;  rsync --progress -avz &nbsp;&nbsp;\
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+rsync://genome-rsync.cse.ucsc.edu/genome/goldenPath/22dec2001/chromosomes/ &nbsp;&nbsp;\
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+$WEBROOT/goldenPath/22dec2001/chromosomes/.
+<p> 
+iii)&nbsp;&nbsp;   rsync --progress -avz  &nbsp;&nbsp;\
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+rsync://genome-rsync.cse.ucsc.edu/genome/goldenPath/22dec2001/database/ &nbsp;&nbsp;\
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+$WEBROOT/goldenPath/22dec2001/database/.
+<br><br>
 
 <li>Get August 6, 2001 full data set (5.2 GB) by doing:
 
@@ -201,51 +251,7 @@ rsync://genome-rsync.cse.ucsc.edu/genome/goldenPath/01apr2001/database/ &nbsp;&n
 $WEBROOT/goldenPath/01apr2001/database/.
 <br><br>
 
-<li>Get Dec. 12, 2000 full data set (9.4 GB), Oct. 7, 2000 full data
-set (8.5 GB) and Sept. 5, 2000 full data set (7.2 GB) by doing:
-<p> 
-i)&nbsp;&nbsp;&nbsp;  Set the $FREEZEDATE to either 12dec2000, 07oct2000
-or 05sept2000
-<p> 
-ii)&nbsp;&nbsp;  rsync --progress -avz  &nbsp;&nbsp;\
-<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-rsync://genome-rsync.cse.ucsc.edu/genome/goldenPath/$FREEZEDATE/bigZips/ &nbsp;&nbsp;\
-<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-$WEBROOT/goldenPath/$FREEZEDATE/bigZips/.
-<p> 
-iii)&nbsp;&nbsp;   rsync --progress -avz  &nbsp;&nbsp;\
-<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-rsync://genome-rsync.cse.ucsc.edu/genome/goldenPath/$FREEZEDATE/chromosomes/ &nbsp;&nbsp;\
-<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-$WEBROOT/goldenPath/$FREEZEDATE/chromosomes/.
-<p> 
-iv)&nbsp;&nbsp;  rsync --progress -avz  &nbsp;&nbsp;\
-<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-rsync://genome-rsync.cse.ucsc.edu/genome/goldenPath/$FREEZEDATE/database/ &nbsp;&nbsp;\
-<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-$WEBROOT/goldenPath/$FREEZEDATE/database/.
-<p> 
-v)&nbsp;&nbsp;  rsync --progress -avz  &nbsp;&nbsp;\
-<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-rsync://genome-rsync.cse.ucsc.edu/genome/goldenPath/$FREEZEDATE/contigs/ &nbsp;&nbsp;\
-<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-$WEBROOT/goldenPath/$FREEZEDATE/contigs/.
-<br><br>
 
-<li>Get July 17, 2000 full data set (4.8 GB) by doing:
-<p>
-i)&nbsp;&nbsp;&nbsp;  rsync --progress -avz  &nbsp;&nbsp;\
-<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-rsync://genome-rsync.cse.ucsc.edu/genome/goldenPath/17july2000/bigZips/ &nbsp;&nbsp;\
-<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-$WEBROOT/goldenPath/17july2000/bigZips/.
-<p> 
-ii)&nbsp;&nbsp;  rsync --progress -avz  &nbsp;&nbsp;\
-<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-rsync://genome-rsync.cse.ucsc.edu/genome/goldenPath/17july2000/pieces/ &nbsp;&nbsp;\
-<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-$WEBROOT/goldenPath/17july2000/pieces/.
-<br>
 </ol>
 
 <h4><a NAME="step4"></a>4. Set up database</h4>
@@ -294,9 +300,15 @@ database is restricted to read-only.
 
 <br><br>
 
-<li>One more thing to get before your database works properly (41.7 GB):
+<li>The database references datafiles which were located in NFS mounted
+    filesystems at UCSC. While currently using full paths, we are working
+    on changing them to allow more flexible path names.
+<BR> You will need the portions of /projects used by the browser (41.7 GB):
 <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 rsync --progress -avz &nbsp;  rsync://genome-rsync.cse.ucsc.edu/projects/ &nbsp; /projects/.
+<BR> And you will now need the portions of /cluster used by the browser (41.7 GB):
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+rsync --progress -avz &nbsp;  rsync://genome-rsync.cse.ucsc.edu/cluster/ &nbsp; /cluster/.
 
 <br>
 </ol>
@@ -324,6 +336,18 @@ Kent's directory</a>.
 Follow the <a href="jk-install.html">instructions</a> for how to compile
 the files.
 </ol>
+
+<h4><a NAME="step6"></a>6. Setup the "hgcentral" tables </h4>
+<ol type="a">
+<li>Download the schema for the hgcentral database <a href="hgcentral.sql"> Here </a>
+<li>Create a hgcentral database
+<li>Add the tables
+<li>Create a user/password with the ability to update and insert
+<li>Add that user to the hg.conf
+<li>test
+</ol>
+
+
 
 <p>
 <hr WIDTH="100%">
