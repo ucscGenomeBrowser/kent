@@ -2247,7 +2247,7 @@ if (s != NULL)
    }
 }
 
-void printTableHeaderName(char *name) 
+void printTableHeaderName(char *name, char *clickName) 
 /* creates a table to display a name vertically,
  * basically creates a column of letters 
  */
@@ -2264,7 +2264,19 @@ for(i = 0; i < length; i++)
     if(header[i] == ' ') 
 	printf("<tr><td align=center>&nbsp</td></tr>\n");
     else
-	printf("<tr><td align=center>%c</td></tr>\n", header[i]);
+	{
+	printf("<tr><td align=center>");
+	if(sameString(name,clickName)) 
+	    {
+	    printf("<font color=blue>");
+	    }
+	printf("%c", header[i]);
+	if(sameString(name, clickName)) 
+	    {
+	    printf("</font>");
+	    }
+	printf("</tr></td>");
+	}
     }
 printf("</table>\n");
 }
@@ -2280,14 +2292,13 @@ puts(
      "<i>Nature</i> vol 409 pp 922-7 for more information. Rosetta created DNA probes for "
      "each exon as described by the Sanger center for the October 2000 draft of the genome. "
      "Exons are labeled according whether they are predicted (pe) or true (te) exons, the "
-     "relative position in the genome, and the contig name.</p><p><b>Please note that as "
-     "the predicted exons sometimes overlap experimentally verified exons there may appear to be more " 
-     "features here than on the browser page.</b></p><br>\n"
+     "relative position in the genome, and the contig name. The exon probe selected is highlighted "
+     "in blue.</p><br></br>"
      "</td></tr></table>\n"
      );
 }
 
-void exprBedPrintTable(struct exprBed *expList)
+void exprBedPrintTable(struct exprBed *expList, char *itemName)
 /* prints out a table from the data present in the exprBed */
 {
 int i,featureCount=0, currentRow=0,square=10;
@@ -2307,7 +2318,7 @@ printf("</tr>\n<tr><td>&nbsp</td>\n");
 for(exp = expList; exp != NULL; exp = exp->next)
     {
     printf("<td valign=top align=center>\n");
-    printTableHeaderName(exp->name);
+    printTableHeaderName(exp->name, itemName);
     printf("</td>");
     }
 printf("</tr>\n");
@@ -2355,7 +2366,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 slReverse(&expList);
 sqlFreeResult(&sr);
 hFreeConn(&conn);
-exprBedPrintTable(expList);
+exprBedPrintTable(expList, itemName);
 }
 
 #endif /*CHUCK_CODE*/
