@@ -3846,3 +3846,13 @@ zcat /cluster/store1/superFamily/genomes/ass_11-Jan-2004.tab.gz | \
 hgsql \
  -e 'update gdbPdb set proteomeDb = "proteins040115" where genomeDb = "mm4";' \
         -h genome-testdb hgcentraltest
+
+#  miRNA track (DONE - 2004-03-02 - Hiram)
+    mkdir /cluster/data/mm4/bed/miRNA
+    cd /cluster/data/mm4/bed/miRNA
+    wget --timestamping \
+    "http://www.sanger.ac.uk/Software/Rfam/mirna/data/ucsc_mouse_mir_track.txt"
+    grep "^chr" ucsc_mouse_mir_track.txt | sed -e "s/ /\t/g" > mouse.mir.bed
+    hgLoadBed mm4 miRNA mouse.mir.bed
+    # entry in trackDb/trackDb.ra already there for same track in Hg16
+    #	see makeHg16.doc for more comments on this
