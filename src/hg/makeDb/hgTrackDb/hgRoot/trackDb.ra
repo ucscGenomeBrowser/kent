@@ -997,7 +997,7 @@ type sample 9
 
 track footPrinter
 shortLabel FootPrinter
-longlabel FootPrinter Conservation Scores
+longlabel FootPrinter Conservation Score
 priority 41.0022
 color 100,100,100
 altColor 0,0,160
