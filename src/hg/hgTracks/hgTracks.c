@@ -5483,7 +5483,7 @@ else
 Color nci60Color(struct trackGroup *tg, void *item, struct memGfx *mg)
 /* Does the score->color conversion for various microarray tracks */
 {
-return expressionColor(tg, item, mg, .6, 1.0);
+return expressionColor(tg, item, mg, 1.0, 2.6);
 }
 
 Color getColorForAffyExpssn(float val, float max)
