@@ -110,7 +110,7 @@ para make sJobs
 mkdir $queryTable
 chmod 777 $queryTable
 foreachChrom
-	mysqldump -u hgcat -pCa7outB6 -T${queryTable} $target chr${f}_${queryTable}
+	mysqldump -u SECRET_USER -pBIGSECRET -T${queryTable} $target chr${f}_${queryTable}
 end
 cd $queryTable
 foreach f (chr*_${queryTable}.txt)
