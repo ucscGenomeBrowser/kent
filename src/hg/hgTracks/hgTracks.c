@@ -5728,7 +5728,7 @@ boolean testing = FALSE;
 /* Initialize layout and database. */
 database = cgiOptionalString("db");
 if (database == NULL)
-    database = "hg7";
+    database = hGetDb();
 hSetDb(database);
 hDefaultConnect();
 initTl();
