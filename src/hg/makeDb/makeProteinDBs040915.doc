@@ -79,7 +79,7 @@ o run mkSwissProtDB.sh
 #
 #	Thu Nov 20 11:31:51 PST 2003 - Created - Hiram
 #
-#	"$Id: makeProteinDBs040915.doc,v 1.1 2004/09/27 19:23:09 fanhsu Exp $"
+#	"$Id: makeProteinDBs040915.doc,v 1.2 2004/09/27 19:29:09 fanhsu Exp $"
 
 TOP=/cluster/data/swissprot
 export TOP
@@ -284,4 +284,15 @@ o Update mkProteinsDB.sh script to:
      Then edit pbStamp.tab to adjust maximum y values for various stamps 
      and load it to pbStamp tables until all their scales look reasonable.
 	
-	
+
+# SWITCH SYMBOLIC PROTEIN DATABASE LINKS
+
+  o Ask system admin to switch the following symbolic database links:
+
+       swissProt --> sp040915
+       proteins  --> proteins040915
+
+    Perform some tests on hgTracks, hgNear, hgGene, pbTracks, and pbGlobal  
+    to make sure things are running OK.
+    
+    Release to QA for formal testing.
