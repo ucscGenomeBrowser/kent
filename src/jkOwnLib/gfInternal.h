@@ -48,3 +48,14 @@ void ffExpandExactRight(struct ffAli *ali, DNA *needleEnd, DNA *hayEnd);
 void ffExpandExactLeft(struct ffAli *ali, DNA *needleStart, DNA *hayStart);
 /* Expand aligned segment to left as far as can exactly. */
 
+struct ssBundle *gfSeedExtInMem(struct genoFind *gf, struct dnaSeq *qSeq, Bits *qMaskBits, 
+	int qOffset, struct lm *lm, int minScore, boolean isRc);
+/* Do seed and extend type alignment */
+
+struct ffAli *ffFindExtendEightmers(char *nStart, char *nEnd, char *hStart, char *hEnd);
+/* Find perfectly matching 8-mers and extend them. */
+
+struct ffAli *ffMergeClose(struct ffAli *aliList);
+/* Remove overlapping areas needle in alignment. Assumes ali is sorted on
+ * ascending nStart field. Also merge perfectly abutting neighbors or
+ * ones that could be merged at the expense of just a few mismatches.*/

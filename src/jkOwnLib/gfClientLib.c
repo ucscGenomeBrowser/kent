@@ -1394,10 +1394,6 @@ static void gfAlignSomeClumps(struct genoFind *gf,  struct gfClump *clumpList,
     bioSeq *seq, boolean isRc,  int minMatch, 
     struct gfOutput *out, boolean isProt, enum ffStringency stringency);
 
-struct ssBundle *gfSeedExtInMem(struct genoFind *gf, struct dnaSeq *qSeq, Bits *qMaskBits, 
-	int qOffset, struct lm *lm, int minScore);
-/* Do seed and extend type alignment */
-
 void gfLongDnaInMem(struct dnaSeq *query, struct genoFind *gf, 
    boolean isRc, int minScore, Bits *qMaskBits, 
    struct gfOutput *out, boolean fastMap, boolean band)
@@ -1446,7 +1442,7 @@ for (subOffset = 0; subOffset<query->size; subOffset = nextOffset)
     *endPos = 0;
     if (band)
 	{
-	oneBunList = gfSeedExtInMem(gf, &subQuery, qMaskBits, subOffset, lm, minScore);
+	oneBunList = gfSeedExtInMem(gf, &subQuery, qMaskBits, subOffset, lm, minScore, isRc);
 	}
     else
 	{

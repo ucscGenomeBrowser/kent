@@ -285,7 +285,12 @@ if (nGap < 0)   /* Jumping back in needle gets rid of previous alignment. */
     acc += -nGap;
     nGap = 0;
     }
-return acc + digitsBaseTwo(hGap+nGap);
+acc += digitsBaseTwo(hGap)/2;
+if (nGap != 0)
+    {
+    acc += digitsBaseTwo(nGap);
+    }
+return acc;
 }
 
 static int calcTightGap(int hGap, int nGap)

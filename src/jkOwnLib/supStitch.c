@@ -187,7 +187,7 @@ for (t3 = t3List; t3 != NULL; t3 = t3->next)
 internalErr();
 }
 
-static struct ffAli *ffMergeClose(struct ffAli *aliList)
+struct ffAli *ffMergeClose(struct ffAli *aliList)
 /* Remove overlapping areas needle in alignment. Assumes ali is sorted on
  * ascending nStart field. Also merge perfectly abutting neighbors or
  * ones that could be merged at the expense of just a few mismatches.*/
@@ -195,6 +195,8 @@ static struct ffAli *ffMergeClose(struct ffAli *aliList)
 struct ffAli *mid, *ali;
 int closeEnough = -3;
 
+if (aliList == NULL)
+    return NULL;
 for (mid = aliList->right; mid != NULL; mid = mid->right)
     {
     for (ali = aliList; ali != mid; ali = ali->right)
@@ -724,12 +726,10 @@ struct ffAli *bestPath, *leftovers;
 int score;
 int newAliCount = 0;
 int totalFfCount = 0;
-int trimCount = qSeq->size/200 + genoSeq->size/1000 + 2000;
 boolean firstTime = TRUE;
 
 if (bundle->ffList == NULL)
     return 0;
-
 
 /* The score may improve when we stitch together more alignments,
  * so don't let minScore be too harsh at this stage. */
