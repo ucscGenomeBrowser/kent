@@ -19,4 +19,5 @@ test:
 
 clean:
 	rm -f ${HOME}/bin/${MACHTYPE}/${A} $O \
-	test_data/chrM.ascii test_data/chr0.wib
+	test_data/chrM.ascii test_data/chr0.wib test_data/chr0.wig \
+	test_data/chrM_256.ascii test_data/chrS.wib test_data/chrS.wig

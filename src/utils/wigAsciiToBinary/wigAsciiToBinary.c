@@ -8,7 +8,7 @@
  *
  *	This first pass will assume the scores are specified for
  *	a single nucleotide base.  If the offset sequence has
- *	holes in it, those holes will be set to the "NO_DATA"
+ *	missing data in it, the missing data will be set to the "NO_DATA"
  *	indication.
  *
  *	Future ideas need to account for very large holes in the
@@ -24,6 +24,13 @@
  *	will become part of the database load function.  Right now it is
  *	just an exercise to see how to use Jim's libraries to read data,
  *	organize it and re-write to a second file.
+ *
+ *	Besides the binary data file, this will also create a database
+ *	bed-like row definition file to be used to load the track.
+ *
+ *	When we run into a string of missing data that is bigger than
+ *	the binsize, that is time to start skipping rows for the missing
+ *	data
  */
 #include	"common.h"
 #include	"options.h"
@@ -36,12 +43,16 @@ static char const rcsid[] = "$Id:";
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
     {"offset", OPTION_LONG_LONG},
+    {"binsize", OPTION_LONG_LONG},
+    {"dataSpan", OPTION_LONG_LONG},
     {"chrom", OPTION_STRING},
     {"verbose", OPTION_BOOLEAN},
     {NULL, 0}
 };
 
 static long long add_offset = 0;
+static long long binsize = 1024;
+static long long dataSpan = 1;
 static boolean verbose = FALSE;
 static char * chrom = (char *) NULL;
 
@@ -50,7 +61,9 @@ static void usage()
 errAbort(
     "wigAsciiToBinary - convert ascii Wiggle data to binary file\n"
     "usage: wigAsciiToBinary [-offset=N] -chrom=chrN [-verbose] <file names>\n"
-    "\t-offset=N - add N to all coordinates\n"
+    "\t-offset=N - add N to all coordinates, default 0\n"
+    "\t-binsize=N - # of points per database row entry, default 1024\n"
+    "\t-dataSpan=N - # of bases spanned for each data point, default 1\n"
     "\t-chrom=chrN - this data is for chrN\n"
     "\t-verbose - display process while underway\n"
     "\t<file names> - list of files to process\n"
@@ -62,6 +75,16 @@ errAbort(
 );
 }
 
+#define OUTPUT_ROW \
+    chromEnd = chromStart + (bincount * dataSpan) - 1; \
+    fprintf( wigout, "%s\t%llu\t%llu\t%s_%llu_%lluwiggle\t%llu\t%llu\n", \
+	chromName, chromStart, chromEnd, chromName, rowCount, \
+	dataSpan, fileOffsetBin, bincount ); \
+    ++rowCount; \
+    bincount = 0;	/* to count up to binsize	*/ \
+    chromStart = Offset + dataSpan; \
+    fileOffsetBin = fileOffset;
+
 void wigAsciiToBinary( int argc, char *argv[] ) {
 int i = 0;
 struct lineFile *lf;
@@ -69,11 +92,21 @@ char *line = (char *) NULL;
 int wordCount = 0;
 char *words[2];
 int lineCount = 0;
-unsigned long long previousOffset = 0;
+unsigned long long previousOffset = 0;	/* for data missing detection */
+unsigned long long bincount = 0;	/* to count binsize for wig file */
 unsigned long long Offset = 0;
+off_t fileOffset = 0;
+off_t fileOffsetBin = 0;
 int score = 0;
-char *outfile = (char *) NULL;
-FILE *out;
+char *binfile = (char *) NULL;	/*	file name of binary data file	*/
+char *wigfile = (char *) NULL;	/*	file name of wiggle database file */
+FILE *binout;	/*	file handle for binary data file	*/
+FILE *wigout;	/*	file handle for wiggle database file	*/
+unsigned long long rowCount = 0;	/* to count rows output */
+char *chromName = (char *) NULL;	/* pseudo bed-6 data to follow */
+unsigned long long chromStart = 0;
+unsigned long long chromEnd = 0;
+char strand = '+';			/* may never use - strand ? */
 
 for( i = 1; i < argc; ++i )
     {
@@ -81,21 +114,30 @@ for( i = 1; i < argc; ++i )
     /*	Name mangling to determine output file name */
     if( chrom )
 	{
-	outfile = addSuffix(chrom, ".wib");
+	binfile = addSuffix(chrom, ".wib");
+	wigfile = addSuffix(chrom, ".wig");
+	chromName = cloneString(chrom);
 	} else {
 	if( startsWith("chr",argv[i]) )
 	    {
 	    char *tmpString;
 	    tmpString = cloneString(argv[i]);
 	    chopSuffix(tmpString);
-	    outfile = addSuffix(tmpString, ".wib");
+	    binfile = addSuffix(tmpString, ".wib");
+	    wigfile = addSuffix(tmpString, ".wig");
+	    chromName = cloneString(tmpString);
 	    freeMem(tmpString);
 	    } else {
 errAbort("Can not determine output file name, no -chrom specified\n");
 	    }
 	}
-    if( verbose ) printf("output file: %s\n", outfile);
-    out = mustOpen(outfile,"w");
+    if( verbose ) printf("output files: %s, %s\n", binfile, wigfile);
+    rowCount = 0;	/* to count rows output */
+    bincount = 0;	/* to count up to binsize	*/
+    fileOffset = 0;
+    fileOffsetBin = 0;
+    binout = mustOpen(binfile,"w");
+    wigout = mustOpen(wigfile,"w");
     lf = lineFileOpen(argv[i], TRUE);
     while (lineFileNext(lf, &line, NULL))
 	{
@@ -106,10 +148,7 @@ errAbort("Can not determine output file name, no -chrom specified\n");
 	if( Offset < 1 )
 	    errAbort("Illegal offset: %llu at line %d, score: %d", Offset, 
 		    lineCount, score );
-	/*	we have no need to translate coordinates here, but this
-	 *	will become important when we are loading the database
-	 */
-	/*Offset -= 1;	/* our coordinates are zero relative half open */
+	Offset -= 1;	/* our coordinates are zero relative half open */
 	if( score < 0 )
 	    {
 warn("WARNING: truncating score %d to 0 at line %d\n", score, lineCount );
@@ -120,27 +159,55 @@ warn("WARNING: truncating score %d to 0 at line %d\n", score, lineCount );
 warn("WARNING: truncating score %d to 127 at line %d\n", score, lineCount );
 		score = 127;
 	    }
-	if( Offset > (previousOffset + 1) )
+	/* see if this is the first time through, establish chromStart 	*/
+	if( lineCount == 1 )
+	    {
+	    chromStart = Offset;
+	    chromEnd = chromStart;
+	    }
+	/*	See if data is being skipped	*/
+	if( Offset > (previousOffset + dataSpan) )
 	    {
 	    unsigned long long off;
 	    int no_data = NO_DATA;
 	    if( verbose )
-		printf("hole in data %llu - %llu\n",previousOffset+1,Offset-1);
-	    /*	fill no data hole with NO_DATA indication	*/
-	    for( off = previousOffset + 1; off < Offset; ++off )
-		fputc(no_data,out);
-	    fputc(score,out);
-	    } else {
-	    if( verbose && (0 == (lineCount % 1000) ))
-		printf("line %d: %llu %d\n", lineCount, Offset, score );
-	    fputc(score,out);
+printf("missing data offsets: %llu - %llu\n",previousOffset+1,Offset-1);
+	    /*	fill missing data with NO_DATA indication	*/
+	    for( off = previousOffset + dataSpan; off < Offset; ++off )
+		{
+		fputc(no_data,binout);
+		++fileOffset;
+		++bincount;	/*	count scores in this bin */
+		if( bincount >= binsize ) break;
+		}
+		if( bincount >= binsize )
+		{
+		OUTPUT_ROW;
+		}
+	    }
+	fputc(score,binout);	/*	output a valid byte	*/
+	++fileOffset;
+	++bincount;	/*	count scores in this bin */
+	/*	Is it time to output a row definition ? */
+	if( bincount >= binsize )
+	    {
+	    OUTPUT_ROW;
 	    }
 	previousOffset = Offset;
         }
+    /*	Any data points left in this bin ?	*/
+    if( bincount )
+	{
+	OUTPUT_ROW;
+	}
     lineFileClose(&lf);
-    fclose(out);
-    freeMem(outfile);
-    outfile = (char *) NULL;
+    fclose(binout);
+    fclose(wigout);
+    freeMem(binfile);
+    freeMem(wigfile);
+    freeMem(chromName);
+    binfile = (char *) NULL;
+    wigfile = (char *) NULL;
     if( verbose ) printf("read %d lines in file %s\n", lineCount, argv[i] );
     }
 return;
@@ -156,11 +223,14 @@ if(argc < 2)
  *	database load function.  It has no value here.
  */
 add_offset = optionLongLong("verbose", 0);
+binsize = optionLongLong("binsize", 1024);
+dataSpan = optionLongLong("dataSpan", 1);
 chrom = optionVal("chrom", NULL);
 verbose = optionExists("verbose");
 
 if( verbose ) {
-    printf("options: -verbose, offset = %llu\n", add_offset);
+    printf("options: -verbose, offset= %llu, binsize= %llu, dataSpan= %llu\n",
+	add_offset, binsize, dataSpan);
     if( chrom ) {
 	printf("-chrom=%s\n", chrom);
     }
