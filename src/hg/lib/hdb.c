@@ -426,7 +426,7 @@ for (lsf = largeFileList; lsf != NULL; lsf = lsf->next)
     char query[256];
     struct sqlResult *sr;
     char **row;
-    unsigned long size;
+    off_t size;
     char *path;
 
     /* Query database to find full path name and size file should be. */
@@ -442,7 +442,7 @@ for (lsf = largeFileList; lsf != NULL; lsf = lsf->next)
 
     if (fileSize(path) != size) 
         {
-        errAbort("External file %s has changed, need to resync database.  Old size %ld, new size %ld", path, size, fileSize(path));
+        errAbort("External file %s has changed, need to resync database.  Old size %lld, new size %lld", path, size, fileSize(path));
         }
 
     lsf->id = extId;
