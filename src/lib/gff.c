@@ -156,9 +156,10 @@ for (;;)
        if (val[len] == ';')
 	   {
 	   val[len] = 0;
+	   len -= 1;
            gotSemi = TRUE;
 	   }
-       if (len == 0)
+       if (len < 0)
            errAbort("Empty value for %s line %d of %s", type, lineIx, fileName);
        }
    if (s != NULL && !gotSemi)
@@ -381,8 +382,6 @@ struct gffLine *ungroupedLines = NULL;
 for (line = gff->lineList; line != NULL; line = nextLine)
     {
     nextLine = line->next;
-    if (startsWith("dJ362J20", line->group))
-        uglyf("%s %s %s %d %d %f %c %c %s\n", line->seq, line->source, line->feature, line->start, line->end, line->score, line->strand, line->frame, line->group);
     if ((groupName = line->group) != NULL)
 	{
 	struct hashEl *hel = hashLookup(groupHash, groupName);
