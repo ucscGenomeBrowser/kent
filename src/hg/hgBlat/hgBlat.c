@@ -170,7 +170,6 @@ else if (sameString(sort, "chrom,score"))
     }
 else
     {
-    uglyf("DEFAULT<BR>\n");
     slSort(&pslList, pslCmpQueryScore);
     }
 printf("<H2>BLAT Search Results</H2>");

@@ -10,6 +10,7 @@
 #include "chromInserts.h"
 
 boolean nohead = FALSE;	/* No header for psl files? */
+int dots=0;	/* Put out I'm alive dot now and then? */
 
 void usage()
 /* Explain usage and exit. */
@@ -38,7 +39,8 @@ errAbort(
  "should be added.\n"
  "\n"
  "options:\n"
- "   -nohead  No header written for .psl files"
+ "   -nohead  No header written for .psl files\n"
+ "   -dots=N Output a dot every N lines processed\n"
  );
 }
 
@@ -268,6 +270,7 @@ struct liftSpec *spec;
 int offset;
 int blockCount;
 char *tName;
+int dotMod = dots;
 
 if (!nohead)
     pslWriteHead(dest);
@@ -283,6 +286,15 @@ for (i=0; i<sourceCount; ++i)
     lf = pslFileOpen(source);
     while ((psl = pslNext(lf)) != NULL)
 	{
+	if (dots > 0)
+	    {
+	    if (--dotMod <= 0)
+	        {
+		fputc('.', stdout);
+		fflush(stdout);
+		dotMod = dots;
+		}
+	    }
 	tName = psl->tName;
 	spec = findLift(liftHash, tName, lf);
 	if (spec == NULL)
@@ -762,6 +774,7 @@ int main(int argc, char *argv[])
 {
 cgiSpoof(&argc, argv);
 nohead = cgiBoolean("nohead");
+dots = cgiUsualInt("dots", dots);
 if (argc < 5)
     usage();
 liftUp(argv[1], argv[2], argv[3], argc-4, argv+4);

@@ -14,6 +14,9 @@
 #include "browserTable.h"
 #include "sqlList.h"
 #include "customTrack.h"
+#include "ctgPos.h"
+#include "hdb.h"
+
 
 void usage()
 /* Explain usage and exit. */
@@ -27,23 +30,32 @@ void doMiddle()
 char *customText;
 struct customTrack *trackList, *track;
 
+#ifdef SOON
 /* Grab custom track from text box or from file. */
 customText = cgiString("customText");
 if (customText[0] == 0)
     customText = cgiString("customFile");
 trackList = customTracksFromText(customText);
+#endif /* SOON */
+
+trackList = customTracksFromFile("test.foo");
+if (customTrackNeedsLift(trackList))
+    {
+    struct hash *ctgHash;
+    uglyf("Needs lift\n");
+    ctgHash = hCtgPosHash();
+    customTrackLift(trackList, ctgHash);
+    customTrackSave(trackList, "test.lift");
+    }
 }
 
 int main(int argc, char *argv[])
 /* Process command line. */
 {
-customTrackTest();
-#ifdef SOON
-trackList = parseCustomTracks(customText);
 cgiSpoof(&argc, argv);
+customTrackTest();
 dnaUtilOpen();
 htmlSetBackground("../images/floret.jpg");
 htmShell("BLAT Search", doMiddle, NULL);
-#endif /* SOON */
 return 0;
 }

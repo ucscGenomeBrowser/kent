@@ -2226,22 +2226,29 @@ struct sqlResult *sr = NULL;
 char **row;
 int start = cgiInt("o");
 struct psl *pslList = NULL, *psl;
+struct dnaSeq *seq;
+char *tiNum = strrchr(itemName, '|');
 
-/* Print non-sequence info. */
+/* Print heading info. */
+if (tiNum == NULL) 
+    tiNum = itemName;
+else
+    ++tiNum;
 htmlStart(itemName);
-printf("<H1>BLAT Alignment of Mouse Read %s</H1>", itemName);
+printf("<H1>BLAT Alignment of Mouse Read ");
+printf("<A HREF=\"http://www.ncbi.nlm.nih.gov/Traces/trace.cgi?val=%s\" TARGET=_blank>", 
+	tiNum);
+printf("%s</A></H1>", itemName);
 
-puts(
- "<P>This track displays alignments of 16 million mouse whole genome shotgun "
- "reads (3x coverage) vs. the draft human genome.  The alignments were done "
- "with BLAT in translated protein mode requiring two perfect 4-mer hits "
- "within 100 amino acids of each other to trigger an alignment.  The human "
- "genome was masked with RepeatMasker and Tandem Repeat Finder before "
- "running BLAT.  Places where more than 150 reads aligned were filtered out "
- "as were alignments of greater than 95% base identity (to avoid human "
- "contaminants in the mouse data). </P>");
-htmlHorizontalLine();
-/* Get alignment info. */
+/* Print sequence. */
+printf("<H2>%s sequence</H2>\n", itemName);
+printf("<PRE><TT>");
+seq = hExtSeq(itemName);
+faWriteNext(stdout, itemName, seq->dna, seq->size);
+printf("</PRE></TT>");
+
+/* Get alignment info and print. */
+printf("<H2>Alignments</H2>\n");
 sprintf(query, "select * from %s where qName = '%s'", tableName, itemName);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
@@ -2251,11 +2258,20 @@ while ((row = sqlNextRow(sr)) != NULL)
     }
 sqlFreeResult(&sr);
 slReverse(&pslList);
-
 printAlignments(pslList, start, "htcBlatMouse", tableName, itemName);
-htmlHorizontalLine();
+
+printf("<H2>Methods</H2>\n");
 puts(
- "<B>Conditions of Data Release</B><BR>"
+ "<P>This track displays alignments of 16 million mouse whole genome shotgun "
+ "reads (3x coverage) vs. the draft human genome.  The alignments were done "
+ "with BLAT in translated protein mode requiring two perfect 4-mer hits "
+ "within 100 amino acids of each other to trigger an alignment.  The human "
+ "genome was masked with RepeatMasker and Tandem Repeat Finder before "
+ "running BLAT.  Places where more than 150 reads aligned were filtered out "
+ "as were alignments of greater than 95% base identity (to avoid human "
+ "contaminants in the mouse data). </P>");
+printf("<H2>Data Release Policy</H2>\n");
+puts(
  "These data are made available before scientific publication with the "
  "following understanding:<BR>"
  "1.The data may be freely downloaded, used in analyses, and "

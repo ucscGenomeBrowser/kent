@@ -282,25 +282,24 @@ o - Get rid of big pile-ups due to contamination as so:
            pslUnpile -maxPile=150 xxx $i
        rm xxx
        end
-       pslCat -nohead *.psl > ../blatMouse.psl
+o - Remove long redundant bits from read names by making a file
+    called subs.in with the following line:
+        gnl|ti^ti
+    and running the commands
+        cd ~/mouse/vsOo29/chrom
+	subs -e -c ^ *.psl > /dev/null
 o - Rename to correspond with tables as so and load into database:
+       ssh cc94
+       cd ~/mouse/vsOo29/chrom
        foreach i (*.psl)
 	   set r = $i:r
            mv $i ${r}_blatMouse.psl
        end
        hgLoadPsl hg7 *.psl
-o - Remove long redundant bits from read names by making a file
-    called subs.in with the following line:
-        gnl|ti^ti
-    and running the commands
-        cd ~/mouse/vsOo29
-	subs -e -c ^ blatMouse.psl > /dev/null
-o - load into database as so:
+o - load sequence into database as so:
 	ssh cc94
-	cd ~/mouse/vsOo29/chrom
-	hgLoadPsl -tNameIx hg7 blatMouse.psl
-	hgLoadRna addSeq '-abbr=gnl|' hg7 /projects/hg3/mouse/ncbiTrace/fasta.mus*
-    These last two will take quite some time.  Perhaps an hour each.
+	hgLoadRna addSeq '-abbr=gnl|' hg7 /projects/hg3/mouse/ncbiTrimmed/fasta.*.fa
+    This will take quite some time.  Perhaps an hour .
       
 LOADING IN EXTERNAL FILES
 
