@@ -1517,7 +1517,7 @@ char **row;
 int rowOffset;
 struct linkedFeaturesSeries *lfsList = NULL, *lfs; 
 
-sr = hRangeQuery(conn, table, chromName, start, end, NULL, &rowOffset);
+sr = hOrderedRangeQuery(conn, table, chromName, start, end, NULL, &rowOffset);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     struct lfs *lfsbed = lfsLoad(row+rowOffset);
