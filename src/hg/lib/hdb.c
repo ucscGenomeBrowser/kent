@@ -94,6 +94,26 @@ int size = hChromSize(chromName);
 return hDnaFromSeq(chromName, 0, size, dnaLower);
 }
 
+struct slName *hAllChromNames()
+/* Get list of all chromosome names. */
+{
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr;
+struct slName *list = NULL, *el;
+char **row;
+
+sr = sqlGetResult(conn, "select chrom from chromInfo");
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    el = newSlName(row[0]);
+    slAddHead(&list, el);
+    }
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+slReverse(&list);
+return list;
+}
+
 struct largeSeqFile
 /* Manages our large external sequence files.  Typically there will
  * be around four of these.  This basically caches the file handle

@@ -31,6 +31,9 @@ struct dnaSeq *hDnaFromSeq(char *seqName, int start, int end, enum dnaCase dnaCa
 struct dnaSeq *hLoadChrom(char *chromName);
 /* Fetch entire chromosome into memory. */
 
+struct slName *hAllChromNames();
+/* Get list of all chromosomes. */
+
 struct dnaSeq *hExtSeq(char *acc);
 /* Return sequence for external seq. */
 
