@@ -91,6 +91,9 @@ struct track
     Color (*itemNameColor)(struct track *tg, void *item, struct vGfx *vg);
     /* Get color for the item's name (optional). */
 
+    Color (*itemLabelColor)(struct track *tg, void *item, struct vGfx *vg);
+    /* Get color for the item's label (optional). */
+
     void (*mapItem)(struct track *tg, void *item, 
     	char *itemName, int start, int end, 
 	int x, int y, int width, int height); 
@@ -268,9 +271,7 @@ void makeRedGreenShades(struct vGfx *vg);
 /* Allocate the  shades of Red, Green and Blue */
 
 /* used in MAF display */
-#define UNALIGNED_SEQ_BEFORE '^'
-#define UNALIGNED_SEQ_AFTER 'V'
-#define UNALIGNED_SEQ_BOTH 'X'
+#define UNALIGNED_SEQ '^'
 
 void hPrintf(char *format, ...);
 /* Printf that can be suppressed if not making html. 
@@ -701,8 +702,10 @@ void linkedFeaturesDrawAt(struct track *tg, void *item,
 /* Draw a single simple bed item at position. */
 
 char *dnaInWindow();
-
 /* This returns the DNA in the window, all in lower case. */
+
+Color lighterColor(struct vGfx *vg, Color color);
+/* Get lighter shade of a color */ 
 
 #endif /* HGTRACKS_H */
 

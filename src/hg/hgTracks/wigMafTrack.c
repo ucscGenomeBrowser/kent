@@ -14,7 +14,7 @@
 #include "hgMaf.h"
 #include "mafTrack.h"
 
-static char const rcsid[] = "$Id: wigMafTrack.c,v 1.44 2004/10/21 04:45:30 kate Exp $";
+static char const rcsid[] = "$Id: wigMafTrack.c,v 1.45 2004/11/01 19:55:52 kate Exp $";
 
 struct wigMafItem
 /* A maf track item -- 
@@ -23,6 +23,7 @@ struct wigMafItem
     struct wigMafItem *next;
     char *name;		/* Common name */
     char *db;		/* Database */
+    int group;          /* number of species group/clade */
     int ix;		/* Position in list. */
     int height;		/* Pixel height of item. */
     };
@@ -52,6 +53,14 @@ for (el = *pList; el != NULL; el = next)
 *pList = NULL;
 }
 
+Color wigMafItemLabelColor(struct track *tg, void *item, struct vGfx *vg)
+/* Return color to draw a maf item based on the species group it is in */
+{
+return (((struct wigMafItem *)item)->group % 2 ? 
+                        //lighterColor(vg, tg->ixColor) : tg->ixColor);
+                        tg->ixAltColor : tg->ixColor);
+}
+
 struct mafAli *wigMafLoadInRegion(struct sqlConnection *conn, 
 	char *table, char *chrom, int start, int end)
 /* Load mafs from region */
@@ -74,8 +83,9 @@ retDb[len] = 0;
 return TRUE;
 }
 
-static struct wigMafItem *newMafItem(char *s)
-/* Allocate and initialize a maf item. Param can be a db or name */
+
+static struct wigMafItem *newMafItem(char *s, int g)
+/* Allocate and initialize a maf item. Species param can be a db or name */
 {
 struct wigMafItem *mi;
 char *val;
@@ -95,7 +105,56 @@ else
 mi->name = hgDirForOrg(mi->name);
 *mi->name = tolower(*mi->name);
 mi->height = tl.fontHeight;
+mi->group = g;
 return mi;
+}
+
+struct wigMafItem *newSpeciesItems(struct track *track, int height)
+/* Make up item list for all species configured in track settings */
+{
+char option[64];
+char *species[100];
+char *groups[20];
+char sGroup[24];
+struct wigMafItem *mi = NULL, *miList = NULL;
+int group;
+int i;
+int speciesCt = 0, groupCt = 1;
+/* either speciesOrder or speciesGroup is specified in trackDb */
+char *speciesOrder = trackDbSetting(track->tdb, SPECIES_ORDER_VAR);
+char *speciesGroup = trackDbSetting(track->tdb, SPECIES_GROUP_VAR);
+
+if (speciesOrder == NULL && speciesGroup == NULL)
+    errAbort(
+      "Track %s missing required trackDb setting: speciesOrder or speciesGroup",
+                track->mapName);
+if (speciesGroup)
+    groupCt = chopLine(speciesGroup, groups);
+
+/* Make up items for other organisms by scanning through group & species 
+   track settings */
+for (group = 0; group < groupCt; group++)
+    {
+    if (groupCt != 1 || !speciesOrder)
+        {
+        safef(sGroup, sizeof sGroup, "%s%s", 
+                                SPECIES_GROUP_PREFIX, groups[group]);
+        speciesOrder = trackDbRequiredSetting(track->tdb, sGroup);
+        }
+    speciesCt = chopLine(speciesOrder, species);
+    for (i = 0; i < speciesCt; i++)
+        {
+        /* skip this species if UI checkbox was unchecked */
+        safef(option, sizeof(option), "%s.%s", track->mapName, species[i]);
+        if (!cartUsualBoolean(cart, option, TRUE))
+            continue;
+        mi = newMafItem(species[i], group);
+        slAddHead(&miList, mi);
+        }
+    }
+for (mi = miList; mi != NULL; mi = mi->next)
+    mi->height = height;
+return miList;
 }
 
 static struct wigMafItem *scoreItem(scoreHeight)
@@ -112,13 +171,9 @@ return mi;
 static struct wigMafItem *loadBaseByBaseItems(struct track *track)
 /* Make up base-by-base track items. */
 {
-struct wigMafItem *miList = NULL, *mi;
+struct wigMafItem *miList = NULL, *speciesList = NULL, *mi;
 struct sqlConnection *conn = hAllocConn();
-char *species[100];
-char option[64];
 int i;
-char *speciesOrder = trackDbRequiredSetting(track->tdb, SPECIES_ORDER_VAR);
-int speciesCt = chopLine(speciesOrder, species);
 
 /* load up mafs */
 track->customPt = wigMafLoadInRegion(conn, track->mapName, 
@@ -132,20 +187,12 @@ mi->height = tl.fontHeight;
 slAddHead(&miList, mi);
 
 /* Make up item for this organism. */
-mi = newMafItem(database);
+mi = newMafItem(database, 0);
 slAddHead(&miList, mi);
 
-/* Make up items for other organisms by scanning through species 
-   track setting */
-for (i = 0; i < speciesCt; i++)
-    {
-    /* skip this species if UI checkbox was unchecked */
-    safef(option, sizeof(option), "%s.%s", track->mapName, species[i]);
-    if (!cartUsualBoolean(cart, option, TRUE))
-        continue;
-    mi = newMafItem(species[i]);
-    slAddHead(&miList, mi);
-    }
+/* Make items for other species */
+speciesList = newSpeciesItems(track, tl.fontHeight);
+miList = slCat(speciesList, miList);
 
 /* Add item for score wiggle after base alignment */
 if (track->subtracks != NULL)
@@ -229,7 +276,7 @@ static struct wigMafItem *loadPairwiseItems(struct track *track)
    for each "other species" in the multiple alignment.
    These may be density plots (pack) or wiggles (full). */
 {
-struct wigMafItem *miList = NULL, *mi;
+struct wigMafItem *miList = NULL, *speciesItems = NULL, *mi;
 struct track *wigTrack = track->subtracks;
 char *suffix;
 
@@ -245,26 +292,10 @@ if (suffix != NULL)
     /* make up items for other organisms by scanning through
      * all mafs and looking at database prefix to source. */
     {
-    char *speciesOrder = trackDbRequiredSetting(track->tdb, SPECIES_ORDER_VAR);
-    char *species[200];
-    int speciesCt = chopLine(speciesOrder, species);
-    int i;
-
-    /* build item list in species order */
-    for (i = 0; i < speciesCt; i++)
-        {
-        char option[64];
-        safef (option, sizeof(option), "%s.%s", track->mapName, species[i]);
-        /* skip this species if UI checkbox was unchecked */
-        if (!cartUsualBoolean(cart, option, TRUE))
-            continue;
-        mi = newMafItem(species[i]);
-        if (track->visibility == tvFull)
-            mi->height = pairwiseWigHeight(track);
-        else
-            mi->height = tl.fontHeight;
-        slAddHead(&miList, mi);
-        }
+    speciesItems = newSpeciesItems(track, track->visibility == tvFull ?
+                                                pairwiseWigHeight(track) :
+                                                tl.fontHeight);
+    miList = slCat(speciesItems, miList);
     }
 slReverse(&miList);
 return miList;
@@ -436,15 +467,6 @@ for (i=0; i < textSize && outPositions < outSize;  i++)
         if (text[i] != '-')
             insertSize++;
         }
-    }
-if (text[0] == UNALIGNED_SEQ_BEFORE)
-    {
-    /* end unaligned sequence with indicator */
-    char unalignedChar;
-    unalignedChar = (outLine[--outIx] == UNALIGNED_SEQ_BEFORE ?
-                                                UNALIGNED_SEQ_BOTH :
-                                                UNALIGNED_SEQ_AFTER);
-    outLine[outIx] = unalignedChar;
     }
 }
 
@@ -705,13 +727,11 @@ int alignLineLength = winBaseCount*2 * 1;
 boolean complementBases = cartUsualBoolean(cart, COMPLEMENT_BASES_VAR, FALSE);
 bool dots, chainBreaks;         /* configuration options */
 /* this line must be longer than the longest base-level display */
-char noAlignment[2000] = {UNALIGNED_SEQ_BEFORE};
+char noAlignment[2000];
 
-/* initialize "no alignment" string to "^--------------" */
-/* The ^ indicates a break in the alignment, to distinguish from
- * a gapped alignment */
-for (i = 1; i < sizeof noAlignment - 1; i++)
-    noAlignment[i] = '-';
+/* initialize "no alignment" string to o's */
+for (i = 0; i < sizeof noAlignment - 1; i++)
+    noAlignment[i] = 'o';
 
 safef(option, sizeof(option), "%s.%s", track->mapName, MAF_DOT_VAR);
 dots = cartCgiUsualBoolean(cart, option, FALSE);
@@ -985,9 +1005,9 @@ track->totalHeight = wigMafTotalHeight;
 track->itemHeight = wigMafItemHeight;
 track->itemStart = tgItemNoStart;
 track->itemEnd = tgItemNoEnd;
+track->itemLabelColor = wigMafItemLabelColor;
 track->mapsSelf = TRUE;
 //track->canPack = TRUE;
-//track->drawLeftLabels = wigMafLeftLabels;
 
 if ((wigTable = trackDbSetting(tdb, "wiggle")) != NULL)
     if (hTableExists(wigTable))

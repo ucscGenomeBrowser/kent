@@ -84,7 +84,7 @@
 #include "estOrientInfo.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.828 2004/10/30 00:36:59 kent Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.829 2004/11/01 19:55:52 kate Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
@@ -6503,12 +6503,6 @@ Color alignInsertsColor()
     return orangeColor;
 }
 
-Color alignBreakColor()
-/* Return color used for alignment break indicators in multiple alignments */
-{
-    return brickColor;
-}
-
 int spreadStringCharWidth(int width, int count)
 {
     return width/count;
@@ -6581,27 +6575,6 @@ for (i=0; i<count; i++, text++, textPos++)
         continue;
         }
     printChar = *text;
-    if (match != NULL && (*text == UNALIGNED_SEQ_BEFORE ||
-                         *text == UNALIGNED_SEQ_AFTER ||
-                         *text == UNALIGNED_SEQ_BOTH))
-        {
-        /* process unaligned region indicators - display as gaps
-         * delimited by vertical red bars, suppressing redundant ones:
-         * X, ^ -> left bar, unless preceded by V or X
-         * X, V -> right bar, unless preceded by ^ or X
-         */ 
-        if (*text == UNALIGNED_SEQ_BEFORE || *text == UNALIGNED_SEQ_BOTH)
-            if (i==0 || (text[-1] != UNALIGNED_SEQ_AFTER && 
-                         text[-1] != UNALIGNED_SEQ_BOTH))
-                /* vertical bar to the left of the gap */
-                vgBox(vg, x+x1, y, 1, height, alignBreakColor());
-        if (*text == UNALIGNED_SEQ_AFTER || *text == UNALIGNED_SEQ_BOTH)
-            if (i==count-1 || (text[1] != UNALIGNED_SEQ_BEFORE && 
-                               text[1] != UNALIGNED_SEQ_BOTH))
-                /* vertical bar to the right of the gap */
-                vgBox(vg, x+x2, y, 1, height, alignBreakColor());
-        printChar = '-';
-        }
     c[0] = printChar;
     clr = color;
     if (dots)
@@ -7046,6 +7019,9 @@ if (withLeftLabels)
 		    char *name = track->itemName(track, item);
 		    int itemHeight = track->itemHeight(track, item);
 		    newy = y;
+
+                    if (track->itemLabelColor != NULL)
+                        labelColor = track->itemLabelColor(track, item, vg);
 		    
 		    /* Do some fancy stuff for sample tracks. 
 		     * Draw y-value limits for 'sample' tracks. */
