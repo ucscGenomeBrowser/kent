@@ -8,7 +8,7 @@
 #include "options.h"
 #include <sys/wait.h>
 
-static char const rcsid[] = "$Id: ccCp.c,v 1.5 2003/05/06 07:41:04 kate Exp $";
+static char const rcsid[] = "$Id: ccCp.c,v 1.6 2005/03/04 19:54:46 galt Exp $";
 
 int crossSwitchMax = 40;		/* Max copies between switches at once. */
 
@@ -259,7 +259,7 @@ struct dlList *sourceList = newDlList();        /* These are sources for copies.
 struct dlList *workingList = newDlList();       /* These are copying data to themselves. */
 struct dlList *errList = newDlList();           /* These are messed up 3x or more. */
 bool firstOk = FALSE;
-struct dlNode *finNode, *node, *next, *sourceNode, *destNode;
+struct dlNode *finNode, *node, *sourceNode, *destNode;
 struct dyString *cmd = newDyString(256);
 int machineCount;
 int machinesFinished = 0;
@@ -276,7 +276,7 @@ machineCount = slCount(machineList);
 if (!fileExists(source))
     errAbort("%s doesn't exist\n", source);
 size = fileSize(source);
-printf("Copying %s (%lld bytes) to %d machines\n", source, size, machineCount);
+printf("Copying %s (%lld bytes) to %d machines\n", source, (unsigned long long)size, machineCount);
 
 /* Add everything to the to-do list. */
 for (m = machineList; m != NULL; m = m->next)
@@ -419,8 +419,6 @@ printf("Copied to %d of %d machines (grand total %e bytes) in %d seconds\n",
 int main(int argc, char *argv[])
 /* Process command line. */
 {
-int start = 0, count = 0;
-char *lockDir;
 char *source, *dest, *hostList;
 
 optionHash(&argc, argv);
