@@ -39,86 +39,6 @@ int subsetCount = 0;    /* Keep track of trimmed number written. */
 int baseOutCount = 0;   /* Keep track of target bases written. */
 int baseInCount = 0;    /* Keep track of target bases input. */
 
-static int baseVal[256];
-/* Table to look up integer values for bases. */
-
-void initBaseVal()
-/* Init base val array */
-{
-int i;
-for (i=0; i<ArraySize(baseVal); ++i)
-    baseVal[i] = N_BASE_VAL;
-baseVal['a'] = baseVal['A'] = A_BASE_VAL;
-baseVal['c'] = baseVal['C'] = C_BASE_VAL;
-baseVal['g'] = baseVal['G'] = G_BASE_VAL;
-baseVal['t'] = baseVal['T'] = T_BASE_VAL;
-}
-
-int axtScore(struct axt *axt, struct axtScoreScheme *ss)
-/* Return calculated score of axt. */
-{
-int i, symCount = axt->symCount;
-char *qSym = axt->qSym, *tSym = axt->tSym;
-char q,t;
-int score = 0;
-boolean lastGap = FALSE;
-int gapStart = ss->gapOpen;
-int gapExt = ss->gapExtend;
-
-for (i=0; i<symCount; ++i)
-    {
-    q = qSym[i];
-    t = tSym[i];
-    if (q == '-' || t == '-')
-        {
-	if (lastGap)
-	    score -= gapExt;
-	else
-	    {
-	    score -= gapStart;
-	    lastGap = TRUE;
-	    }
-	}
-    else
-        {
-	score += ss->matrix[baseVal[q]][baseVal[t]];
-	lastGap = FALSE;
-	}
-    }
-return score;
-}
-
-int countNonDash(char *a, int size)
-/* Count number of non-dash characters. */
-{
-int count = 0;
-int i;
-for (i=0; i<size; ++i)
-    if (a[i] != '-') 
-        ++count;
-return count;
-}
-
-boolean axtCheck(struct axt *axt, struct lineFile *lf)
-/* Return FALSE if there's a problem with axt. */
-{
-int tSize = countNonDash(axt->tSym, axt->symCount);
-int qSize = countNonDash(axt->qSym, axt->symCount);
-if (tSize != axt->tEnd - axt->tStart)
-    {
-    warn("%d non-dashes, but %d bases to cover at line %d of %s", 
-    	tSize, axt->tEnd - axt->tStart, lf->lineIx, lf->fileName);
-    return FALSE;
-    }
-if (qSize != axt->qEnd - axt->qStart)
-    {
-    warn("%d non-dashes, but %d bases to cover at line %d of %s", 
-    	tSize, axt->qEnd - axt->qStart, lf->lineIx, lf->fileName);
-    return FALSE;
-    }
-return TRUE;
-}
-
 struct axt *readAllAxt(char *fileName, struct axtScoreScheme *ss, int threshold,
 	char *chromName)
 /* Read all axt's in a file. */
@@ -223,7 +143,7 @@ for (i=0; i<symCount; ++i)
 	}
     else
         {
-	score += ss->matrix[baseVal[q]][baseVal[t]];
+	score += ss->matrix[ntVal5[q]][ntVal5[t]];
 	lastGap = FALSE;
 	}
     if (score < 0)
@@ -317,62 +237,6 @@ else
 freez(&tScore);
 }
 
-char *skipIgnoringDash(char *a, int size, bool skipTrailingDash)
-/* Count size number of characters, and any 
- * dash characters. */
-{
-while (size > 0)
-    {
-    if (*a++ != '-')
-        --size;
-    }
-if (skipTrailingDash)
-    while (*a == '-')
-       ++a;
-return a;
-}
-
-void writeAxtTrackStats(struct axt *axt, FILE *f)
-/* Write axt and keep track of some stats. */
-{
-if (axt->tEnd - axt->tStart >= minOutSize)
-    {
-    axtWrite(axt, f);
-    ++writeCount;
-    baseOutCount += axt->tEnd - axt->tStart;
-    }
-}
-
-void axtSubsetOnT(struct axt *axt, int newStart, int newEnd, 
-	struct axtScoreScheme *ss, FILE *f)
-/* Write out subset of axt that goes from newStart to newEnd
- * in target coordinates. */
-{
-if (newStart == axt->tStart && newEnd == axt->tEnd)
-    {
-    axt->score = axtScore(axt, ss);
-    writeAxtTrackStats(axt, f);
-    }
-else
-    {
-    struct axt a = *axt;
-    char *tSymStart = skipIgnoringDash(a.tSym, newStart - a.tStart, TRUE);
-    char *tSymEnd = skipIgnoringDash(tSymStart, newEnd - newStart, FALSE);
-    int symCount = tSymEnd - tSymStart;
-    char *qSymStart = a.qSym + (tSymStart - a.tSym);
-    a.qStart += countNonDash(a.qSym, qSymStart - a.qSym);
-    a.qEnd = a.qStart + countNonDash(qSymStart, symCount);
-    a.tStart = newStart;
-    a.tEnd = newEnd;
-    a.symCount = symCount;
-    a.qSym = qSymStart;
-    a.tSym = tSymStart;
-    a.score = axtScore(&a, ss);
-    // uglyf("subsetting %s %d %d %s %d %d to %s %d %d, score %d\n", axt->qName, axt->qStart, axt->qEnd, axt->tName, axt->tStart, axt->tEnd, axt->tName, newStart, newEnd, a.score);
-    writeAxtTrackStats(&a, f);
-    ++subsetCount;
-    }
-}
 
 void outputBestRanges(struct bestKeep *bk, int chromStart, 
 	int rangeSize, struct axtScoreScheme *ss, FILE *f)
@@ -392,13 +256,20 @@ for (i=0; i<=rangeSize; ++i)
         {
 	if (lastAxt != NULL)
 	    {
-	    axtSubsetOnT(lastAxt, s+chromStart, i+chromStart, ss, f);
+	    int tBaseCount = lastAxt->tEnd - lastAxt->tStart;
+	    if (tBaseCount >= minOutSize)
+		{
+		axtSubsetOnT(lastAxt, s+chromStart, i+chromStart, ss, f);
+		++writeCount;
+		baseOutCount += tBaseCount;
+		}
 	    }
 	s = i;
 	lastAxt = axt;
 	}
     }
 }
+
 
 void chromRange(struct axt *axtList, int *retStart, int *retEnd)
 /* Return range in chromosome covered. */
@@ -489,7 +360,7 @@ if (argc != 4)
 winSize = optionInt("winSize", winSize);
 minScore = optionInt("minScore", minScore);
 minOutSize = optionInt("minOutSize", minOutSize);
-initBaseVal();
+dnaUtilOpen();
 setMaxAlloc(2000000000U);
 axtBest(argv[1], argv[2], argv[3]);
 return 0;
