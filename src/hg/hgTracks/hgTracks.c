@@ -213,6 +213,11 @@ struct trackGroup
     Color (*itemColor)(struct trackGroup *tg, void *item, struct memGfx *mg);
     /* Get color of item (optional). */
 
+
+    void (*mapItem)(struct trackGroup *tg, void *item, char *itemName, int start, int end, 
+		    int x, int y, int width, int height); 
+    /* Write out image mapping for a given item */
+
     boolean hasUi;		/* True if has an extended UI page. */
     void *extraUiData;		/* Pointer for track specific filter etc. data. */
     void (*trackFilter)(struct trackGroup *tg);	
@@ -566,14 +571,15 @@ enum {blackShadeIx=9,whiteShadeIx=0};
 
 struct linkedFeaturesSeries
 /* series of linked features that are comprised of multiple linked features */
-    {
+{
     struct linkedFeaturesSeries *next; 
     char name[32];                         /* name for series of linked features */
     int start, end;                     /* Start/end in browser coordinates. */
     int orientation;                    /* Orientation. */
     int grayIx;				/* Gray index (average of features) */
+    boolean noLine;                     /* if true don't draw line connecting features */
     struct linkedFeatures *features;    /* linked features for a series */
-    };
+};
 
 char *linkedFeaturesSeriesName(struct trackGroup *tg, void *item)
 /* Return name of item */
@@ -820,12 +826,12 @@ for (lfs = tg->items; lfs != NULL; lfs = lfs->next)
 	x2 = round((double)((int)lf->start-winStart)*scale) + xOff;
 	w = x2-x1;
 	bColor = mgFindColor(mg,0,0,0);
-	if ((isFull) && (prevEnd != -1)) 
+	if ((isFull) && (prevEnd != -1) && !lfs->noLine) 
 	    {
 	    mgBarbedHorizontalLine(mg, x1, midY, w, 2, 5, 
 		 		     lfs->orientation, bColor, TRUE);
 	    }
-	if (prevEnd != -1) 
+	if (prevEnd != -1 && !lfs->noLine) 
 	    {
 	    mgDrawBox(mg, x1, midY, w, 1, bColor);
 	    }
@@ -839,11 +845,15 @@ for (lfs = tg->items; lfs != NULL; lfs = lfs->next)
 	    color =  shades[lf->grayIx+isXeno];
 	tallStart = lf->tallStart;
 	tallEnd = lf->tallEnd;
+
+
 	if (lf->components != NULL && !hideLine)
 	    {
 	    x1 = round((double)((int)lf->start-winStart)*scale) + xOff;
 	    x2 = round((double)((int)lf->end-winStart)*scale) + xOff;
 	    w = x2-x1;
+	    if(tg->mapsSelf && tg->mapItem)
+		tg->mapItem(tg, lfs, lf->name, lf->start, lf->end, x1, y, x2-x1, lineHeight);
 	    if (isFull)
 	        {
 	        if (shades) bColor =  shades[(lf->grayIx>>1)];
@@ -4775,7 +4785,35 @@ for(lf = tg->items; lf != NULL; lf = lf->next)
 	y += lineHeight;
     }
 }
+
+void mapBoxHcTwoItems(int start, int end, int x, int y, int width, int height, 
+	char *group, char *item1, char *item2, char *statusLine)
+/* Print out image map rectangle that would invoke the htc (human track click)
+ * program. */
+{
+char *encodedItem1 = cgiEncode(item1);
+char *encodedItem2 = cgiEncode(item2);
+printf("<AREA SHAPE=RECT COORDS=\"%d,%d,%d,%d\" ", x, y, x+width, y+height);
+printf("HREF=\"%s&o=%d&t=%d&g=%s&i=%s&i2=%s&c=%s&l=%d&r=%d&db=%s&pix=%d\" ", 
+       hgcNameAndSettings(), start, end, group, encodedItem1, encodedItem2,chromName, winStart, winEnd, 
+       database, tl.picWidth);
+printf("ALT=\"%s\">\n", statusLine); 
+freeMem(encodedItem1);
+freeMem(encodedItem2);
+}
+
+
+void lfsMapItemName(struct trackGroup *tg, void *item, char *itemName, int start, int end, 
+		    int x, int y, int width, int height)
+{
+struct linkedFeaturesSeries *lfs = tg->items;
+struct linkedFeaturesSeries *lfsItem = item;
+mapBoxHcTwoItems(start, end, x,y, width, height, tg->mapName, lfsItem->name, itemName, itemName);
+}
+
+
 struct linkedFeaturesSeries *lfsFromMsBedSimple(struct bed *bedList, char * name)
+/* create a lfs containing all beds on a single line */
 {
 struct linkedFeaturesSeries *lfs;
 struct linkedFeatures *lf;
@@ -4801,7 +4839,11 @@ for(bed = bedList; bed != NULL; bed = bed->next)
 return lfs;
 }
 
-void expRecordMapTypes(struct hash *expIndexesToNames, struct hash *indexes, int *numIndexes, struct expRecord *erList,  int index, char *filter, int filterIndex)
+
+void expRecordMapTypes(struct hash *expIndexesToNames, struct hash *indexes, int *numIndexes, 
+		       struct expRecord *erList,  int index, char *filter, int filterIndex)
+/* creates two hashes which contain a mapping from 
+   experiment to type and from type to lists of experiments */
 {
 struct expRecord *er = NULL;
 struct slRef *srList=NULL, *sr=NULL, *val=NULL;
@@ -4847,13 +4889,18 @@ hashFree(&seen);
 }
 
 int lfsSortByName(const void *va, const void *vb)    
+/* used for slSorting linkedFeaturesSeries */
 {
 const struct linkedFeaturesSeries *a = *((struct linkedFeaturesSeries **)va);
 const struct linkedFeaturesSeries *b = *((struct linkedFeaturesSeries **)vb);
 return(strcmp(a->name, b->name));
 }
 
-struct linkedFeaturesSeries *msBedGroupByIndex(struct bed *bedList, char *database, char *table, int expIndex, char *filter, int filterIndex) 
+
+struct linkedFeaturesSeries *msBedGroupByIndex(struct bed *bedList, char *database, char *table, int expIndex, 
+					       char *filter, int filterIndex) 
+/* groups bed expScores in multiple scores bed by the expIndex 
+   in the expRecord->extras array. */
 {
 struct linkedFeaturesSeries *lfsList = NULL, *lfs, **lfsArray;
 struct linkedFeatures *lf = NULL;
@@ -4967,6 +5014,9 @@ return lfsList;
 }
 
 void lfsFromNci60Bed(struct trackGroup *tg)
+/* filters the bedList stored at tg->items
+into a linkedFeaturesSeries as determined by
+filter type */
 {
 struct linkedFeaturesSeries *lfsList = NULL, *lfs;
 struct linkedFeatures *lf;
@@ -5162,7 +5212,6 @@ else
 }
 
 
-
 void loadMultScoresBed(struct trackGroup *tg)
 /* Convert bed info in window to linked feature. */
 {
@@ -5197,14 +5246,39 @@ else
     }
 }
 
+void loadMaScoresBed(struct trackGroup *tg)
+/* load up bed15 data types into linkedFeaturesSeries and then set the noLines
+   flag on each one */
+{
+struct linkedFeaturesSeries *lfs;
+loadMultScoresBed(tg);
+for(lfs = tg->items; lfs != NULL; lfs = lfs->next)
+    {
+    lfs->noLine = TRUE;
+    }
+}
+
+
+void rosettaMethods(struct trackGroup *tg)
+/* methods for Rosetta track using bed track */
+{
+linkedFeaturesSeriesMethods(tg);
+tg->itemColor = nci60Color;
+tg->loadItems = loadMaScoresBed;
+tg->mapItem = lfsMapItemName;
+tg->mapsSelf = TRUE;
+}
+
 void nci60Methods(struct trackGroup *tg)
 /* set up special methods for NCI60 track and tracks with multiple
    scores in general */
 {
 linkedFeaturesSeriesMethods(tg);
 tg->itemColor = nci60Color;
-tg->loadItems = loadMultScoresBed;
+tg->loadItems = loadMaScoresBed;
 tg->trackFilter = lfsFromNci60Bed ;
+tg->mapItem = lfsMapItemName;
+tg->mapsSelf = TRUE;
 }
 
 void cghNci60Methods(struct trackGroup *tg)
@@ -5415,14 +5489,22 @@ for (item = tg->items; item != NULL; item = item->next)
     if (w < 1)
 	w = 1;
     mgExprBedBox(mg, x1, y, w, lineHeight, item);
-    if(otherFrame != NULL)
-	mapBoxHcWTarget(item->chromStart, item->chromEnd, x1, y, w, lineHeight, 
-			tg->mapName, item->name, abbrevExprBedName(item->name), TRUE, otherFrame); 
-    else
-	mapBoxHcWTarget(item->chromStart, item->chromEnd, x1, y, w, lineHeight, 
-			tg->mapName, item->name, abbrevExprBedName(item->name), FALSE, NULL); 
+    if(tg->visibility == tvFull)
+	{
+	if(otherFrame != NULL)
+	    mapBoxHcWTarget(item->chromStart, item->chromEnd, x1, y, w, lineHeight, 
+			    tg->mapName, item->name, abbrevExprBedName(item->name), TRUE, otherFrame); 
+	else
+	    mapBoxHcWTarget(item->chromStart, item->chromEnd, x1, y, w, lineHeight, 
+			    tg->mapName, item->name, abbrevExprBedName(item->name), FALSE, NULL); 
+	}
+    else 
+	{
+	mapBoxToggleVis(0, y, tl.picWidth, tg->lineHeight, tg);
+	}
     }
 }
+
 
 void loadRosettaPeBed(struct trackGroup *tg)
 /* Load up exprBed from database table rosettaPe to trackgroup items. */
@@ -6448,6 +6530,7 @@ registerTrackHandler("uniGene",uniGeneMethods);
 registerTrackHandler("perlegen",perlegenMethods);
 registerTrackHandler("nci60", nci60Methods);
 registerTrackHandler("cghNci60", cghNci60Methods);
+registerTrackHandler("rosetta", rosettaMethods);
 
 /* Load regular tracks, blatted tracks, and custom tracks. 
  * Best to load custom last. */
