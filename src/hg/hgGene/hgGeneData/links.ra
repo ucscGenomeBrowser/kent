@@ -75,3 +75,26 @@ tables knownToEnsembl
 idSql select value from knownToEnsembl where name = '%s'
 priority 100
 
+#name modBase
+#shortLabel ModBase
+#tables kgXref
+#idSql select spId from kgXref where kgID = '%s'
+#nameSql select spDisplayId from kgXref where kgID = '%s'
+#url http://
+#priority 110
+
+name lsSnpFunc
+shortLabel LS-SNP Function
+tables kgXref
+idSql select spId from kgXref where kgID = '%s'
+nameSql select spDisplayId from kgXref where kgID = '%s'
+url http://alto.compbio.ucsf.edu/LS-SNP-cgi/SNP_query.pl?idvalue=%s&RequestType=QueryById&idtype=sprotID&PropertySelect=Functional
+priority 120
+
+name lsSnpStruct
+shortLabel LS-SNP Structure
+tables kgXref
+idSql select spId from kgXref where kgID = '%s'
+nameSql select spDisplayId from kgXref where kgID = '%s'
+url http://alto.compbio.ucsf.edu/LS-SNP-cgi/SNP_query.pl?idvalue=%s&RequestType=QueryById&idtype=sprotID&PropertySelect=Protein_structure
+priority 130
