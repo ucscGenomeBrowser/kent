@@ -86,6 +86,8 @@ static struct optionSpec optionSpecs[] =
     {"strictDisagree", OPTION_BOOLEAN},
     {"exonStats", OPTION_STRING},
     {"spreadSheet", OPTION_STRING},
+    {"doSjRatios", OPTION_BOOLEAN},
+    {"ratioFile", OPTION_STRING},
     {NULL, 0}
 };
 
@@ -105,7 +107,9 @@ static char *optionDescripts[] =
     "Optional threshold at which to call not expressed.",
     "Call disagreements only if below absense threshold instead of below present thresh.",
     "File to output confirming exon stats to.",
-    "File to output spreadsheet format picks to."
+    "File to output spreadsheet format picks to.",
+    "[optional] Calculate ratios of sj to other sj in same junction set.",
+    "[optional] File to store sjRatios in."
 };
 
 double presThresh = 0;     /* Probability above which we consider
@@ -870,20 +874,20 @@ else
     dyStringPrintf(buff, "%s", js->hName);
 }
 
-void outputLinks(struct junctSet *jsList, struct hash *bedHash, struct resultM *probM, FILE *out)
+void outputLinks(struct junctSet **jsList, struct hash *bedHash, struct resultM *probM, FILE *out)
 /* Output a report for each junction set. */
 {
 struct junctSet *js = NULL;
 int colIx = 0, junctIx = 0;
 struct dyString *dy = newDyString(2048);
 if(optionExists("sortByExonCorr")) 
-    slSort(&jsList, junctSetExonCorrCmp);
+    slSort(jsList, junctSetExonCorrCmp);
 else if(optionExists("sortByExonPercent"))
-    slSort(&jsList, junctSetExonPercentCmp);
+    slSort(jsList, junctSetExonPercentCmp);
 else
-    slSort(&jsList, junctSetScoreCmp);
+    slSort(jsList, junctSetScoreCmp);
 fprintf(out, "<ol>\n");
-for(js = jsList; js != NULL; js = js->next)
+for(js = *jsList; js != NULL; js = js->next)
     {
     if(js->score <= 1)
 	{
@@ -965,6 +969,97 @@ for(junctIx = 0; junctIx < js->junctDupCount; junctIx++)
 return bestJunct;
 }
 
+void calcJunctSetRatios(struct junctSet *jsList, struct resultM *intenM)
+/* Caluclate the ratio of junction to every other junction in 
+   the set. */
+{
+char *outFile = optionVal("ratioFile", NULL);
+struct junctSet *js = NULL;
+int i = 0, j = 0, expIx = 0;
+int numIx = 0, denomIx = 0;
+FILE *out = NULL;
+double **mat = intenM->matrix;
+int colCount = intenM->colCount;
+
+struct hash *nIndex = intenM->nameIndex;
+
+if(outFile == NULL)
+    errAbort("Must specify a ratioFile to print ratios to.");
+
+out = mustOpen(outFile, "w");
+/* Print the header. */
+for(i = 0; i < colCount-1; i++)
+    fprintf(out, "%s\t", intenM->colNames[i]);
+fprintf(out, "%s\n", intenM->colNames[i]);
+for(js = jsList; js != NULL; js = js->next) 
+    {
+    char **jPSets = js->junctPSets;
+    char **djPSets = js->dupJunctPSets;
+    int jCount = js->maxJunctCount;
+    int dCount = js->junctDupCount;
+
+    for(i = 0; i < jCount; i++)
+	{
+	numIx = hashIntValDefault(nIndex, jPSets[i], -1);
+	if(numIx == -1)
+	    errAbort("Can't find %s in hash.", jPSets[i]);
+
+	/* Calc ratios for the rest of the probe sets. */
+	for(j = i+1; j < jCount; j++)
+	    {
+	    denomIx = hashIntValDefault(nIndex, jPSets[j], -1);
+	    if(numIx == -1)
+		errAbort("Can't find %s in hash.", jPSets[j]);
+	    fprintf(out, "%s|%s\t", jPSets[i], jPSets[j]);
+	    for(expIx = 0; expIx < colCount - 1; expIx++)
+		{
+		assert(mat[denomIx][expIx] != 0);
+		fprintf(out, "%f\t", mat[numIx][expIx] / mat[denomIx][expIx]);
+		}
+	    fprintf(out, "%f\n", mat[numIx][expIx] / mat[denomIx][expIx]);
+	    }
+	/* Calc ratios for the dup probe sets. */
+	for(j = 0; j < dCount; j++)
+	    {
+	    denomIx = hashIntValDefault(nIndex, djPSets[j], -1);
+	    if(numIx == -1)
+		errAbort("Can't find %s in hash.", djPSets[j]);
+	    fprintf(out, "%s|%s\t", jPSets[i], djPSets[j]);
+	    for(expIx = 0; expIx < colCount - 1; expIx++)
+		{
+		assert(mat[denomIx][expIx] != 0);
+		fprintf(out, "%f\t", mat[numIx][expIx] / mat[denomIx][expIx]);
+		}
+		fprintf(out, "%f\n", mat[numIx][expIx] / mat[denomIx][expIx]);
+	    }
+	}
+    
+    /* Get the ratios of the duplicate probes to eachother. */
+    for(i = 0; i < dCount; i++)
+	{
+	numIx = hashIntValDefault(nIndex, djPSets[i], -1);
+	if(numIx == -1)
+	    errAbort("Can't find %s in hash.", djPSets[i]);
+
+	/* Calc ratios for the rest of the dup probe sets. */
+	for(j = i+1; j < dCount; j++)
+	    {
+	    denomIx = hashIntValDefault(nIndex, djPSets[j], -1);
+	    if(numIx == -1)
+		errAbort("Can't find %s in hash.", djPSets[j]);
+	    fprintf(out, "%s|%s\t", djPSets[i], djPSets[j]);
+	    for(expIx = 0; expIx < colCount - 1; expIx++)
+		{
+		assert(mat[denomIx][expIx] != 0);
+		fprintf(out, "%f\t", mat[numIx][expIx] / mat[denomIx][expIx]);
+		}
+	    fprintf(out, "%f\n", mat[numIx][expIx] / mat[denomIx][expIx]);
+	    }
+	}
+    }
+}
+
+
 void fillInJunctUsed(struct junctSet *jsList, struct resultM *intenM)
 /* If it isn't already determined, figures out which junctions we're
    using. */
@@ -1013,7 +1108,7 @@ return bedHash;
 void altHtmlPages(char *junctFile, char *probFile, char *intensityFile, char *bedFile)
 /* Do a top level summary. */
 {
-struct junctSet *jsList = junctSetLoadAll(junctFile);
+struct junctSet *jsList = NULL;
 struct junctSet *js = NULL;
 struct resultM *probM = NULL;
 struct resultM *intenM = NULL;
@@ -1029,16 +1124,22 @@ char *htmlPrefix = optionVal("htmlPrefix", "");
 struct hash *bedHash = NULL;
 char *db = "mm2";
 assert(junctFile);
-assert(probFile);
 assert(intensityFile);
-assert(bedFile);
+jsList = junctSetLoadAll(junctFile);
 warn("Loaded %d records from %s", slCount(jsList), junctFile);
-
-
-probM = readResultMatrix(probFile);
-warn("Loaded %d rows and %d columns from %s", probM->rowCount, probM->colCount, probFile);
 intenM = readResultMatrix(intensityFile);
 warn("Loaded %d rows and %d columns from %s", intenM->rowCount, intenM->colCount, intensityFile);
+if(optionExists("doSjRatios"))
+    {
+    calcJunctSetRatios(jsList, intenM);
+    exit(0);
+    }
+
+assert(probFile);
+assert(bedFile);
+probM = readResultMatrix(probFile);
+warn("Loaded %d rows and %d columns from %s", probM->rowCount, probM->colCount, probFile);
+
 
 fillInJunctUsed(jsList, intenM);
 fillInProbs(jsList, probM);
@@ -1055,7 +1156,7 @@ warn("Writing out links.");
 safef(nameBuff, sizeof(nameBuff), "%s%s", htmlPrefix, "lists.html");
 htmlOut = mustOpen(nameBuff, "w");
 fprintf(htmlOut, "<html><body>\n");
-outputLinks(jsList, bedHash, probM, htmlOut);
+outputLinks(&jsList, bedHash, probM, htmlOut);
 fprintf(htmlOut, "</body></html>\n");
 carefulClose(&htmlOut);
 
