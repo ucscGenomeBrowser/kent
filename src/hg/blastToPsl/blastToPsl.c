@@ -9,7 +9,7 @@
 #include "blastTab.h"
 #include "psl.h"
 
-static char const rcsid[] = "$Id: blastToPsl.c,v 1.1 2003/07/29 18:19:18 braney Exp $";
+static char const rcsid[] = "$Id: blastToPsl.c,v 1.2 2003/07/29 18:23:31 braney Exp $";
 
 static int lifted;
 
@@ -107,51 +107,48 @@ return hash;
 
 int pslSortFunc(const void *va, const void *vb)
 {       
-    const struct psl *a = *((struct psl **)va);
-    const struct psl *b = *((struct psl **)vb);
-    int dif;
-    int tmp;
-    dif = strcmp(a->qName, b->qName);
+const struct psl *a = *((struct psl **)va);
+const struct psl *b = *((struct psl **)vb);
+int dif;
+int tmp;
+dif = strcmp(a->qName, b->qName);
 
-    if (dif == 0)
-	{
-	return b->repMatch - a->repMatch;
-	}
-    return dif;
+if (dif == 0)
+    {
+    return b->repMatch - a->repMatch;
+    }
+return dif;
 }
 
 int sortFunc(const void *va, const void *vb)
 {       
-    const struct blastTab *a = *((struct blastTab **)va);
-    const struct blastTab *b = *((struct blastTab **)vb);
-    int dif;
-    int tmp;
-    dif = strcmp(a->target, b->target);
+const struct blastTab *a = *((struct blastTab **)va);
+const struct blastTab *b = *((struct blastTab **)vb);
+int dif;
+int tmp;
+dif = strcmp(a->target, b->target);
+if (dif == 0)
+    {
+    dif = strcmp(a->query, b->query);
     if (dif == 0)
 	{
-	dif = strcmp(a->query, b->query);
-	if (dif == 0)
+	if (a->tStart > a->tEnd) 
 	    {
-		/*
-		dif = a->qStart - b->qStart;
-		*/
-	    if (a->tStart > a->tEnd) 
-		{
-		if (b->tStart > b->tEnd) 
-		    dif = b->tEnd - a->tEnd;
-	    	else
-		    dif = 1;
-		}
+	    if (b->tStart > b->tEnd) 
+		dif = b->tEnd - a->tEnd;
 	    else
-		{
-		if (b->tStart <= b->tEnd) 
-		    dif = b->tStart - a->tStart;
-		else
-		    dif = -1;
-		}
+		dif = 1;
+	    }
+	else
+	    {
+	    if (b->tStart <= b->tEnd) 
+		dif = b->tStart - a->tStart;
+	    else
+		dif = -1;
 	    }
 	}
-    return dif; 
+    }
+return dif; 
 }       
 
 /*
@@ -220,10 +217,6 @@ else
     psl->strand[1] = '+';
     negStrand = FALSE;
     }
-/*
-if (negStrand && (strand == '-'))
-    abort();
-    */
 
 lastStart = (negStrand)? 10000000 : 0;
 for(el = patches ;el; el=el->next)
@@ -257,43 +250,33 @@ for(el = patches ;el; el=el->next)
     psl->qStarts[psl->blockCount] = el->qStart - 1;
     psl->blockSizes[psl->blockCount] =el->qEnd - (el->qStart - 1);
 
-    /*
-    if (negStrand)
-	blockSizes[psl->blockCount] =el->qEnd - (el->qStart - 1);
-    else
-	blockSizes[psl->blockCount] =el->qEnd - (el->qStart - 1);
-	*/
     if (negStrand)
 	{
-//	psl->blockSizes[psl->blockCount] = (el->tStart - el->tEnd)/3;
 	psl->tStarts[psl->blockCount] =  tSize - el->tStart;
 	psl->tEnd = el->tStart;
 	}
     else
 	{
 	psl->tEnd = el->tEnd;
-//	psl->blockSizes[psl->blockCount] = (el->tEnd - el->tStart)/3;
 	psl->tStarts[psl->blockCount] = el->tStart;
 	}
     psl->tStarts[psl->blockCount]--;
     psl->blockCount++;
     }
 
-    //blockSizes[psl->blockCount - 1] = qStarts[psl->blockCount] - qStarts[psl->blockCount - 1];
 if (negStrand)
     {
     reverse(psl->qStarts, psl->blockCount);
     reverse(psl->tStarts, psl->blockCount);
     reverse(psl->blockSizes, psl->blockCount);
     }
-//fprintf(pslFile, "%g ", score);
 psl->repMatch = (psl->qEnd - psl->qStart)* score * 1000 / qSize ;
 
 if (psl->blockCount > 200)
     abort();
 slAddHead(pslList, psl);
-// pslTabOut(&psl, pslFile);
 }
+
 void chainBlast(char *lift, char *seq, char *in, char *outPsl)
 {
 struct lineFile *seqlf = lineFileOpen(seq, TRUE);
@@ -345,7 +328,6 @@ for (el = blastTab; el != NULL; el = el->next)
 	{
 	if ((strand != oldStrand) || (strcmp(el->query, oldQuery) != 0))
 	    {
-	//    slReverse(&patches);
 	    makeChains( patches, hash, seqHash, &pslList );
 
 	    lmCleanup(&lm);
