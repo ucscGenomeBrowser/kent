@@ -68,7 +68,7 @@
 #include "web.h"
 #include "grp.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.585 2003/08/25 20:12:37 kent Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.586 2003/08/25 23:25:44 kent Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROMOSOME_SHADES 4
@@ -6102,7 +6102,7 @@ for (bl = browserLines; bl != NULL; bl = bl->next)
         {
         char *command = words[1];
         if (sameString(command, "position"))
-            pos = words[2];
+            pos = cloneString(words[2]);
         }
     freez(&dupe);
     if (pos != NULL)
@@ -6364,7 +6364,7 @@ if (psOutput != NULL)
    }
 
 /* Tell browser where to go when they click on image. */
-hPrintf("<FORM ACTION=\"%s\" NAME=\"TrackForm\" METHOD=POST>\n\n", hgTracksName());
+hPrintf("<FORM ACTION=\"%s\" NAME=\"TrackForm\" METHOD=GET>\n\n", hgTracksName());
 cartSaveSession(cart);
 
 /* See if want to include sequence search results. */
@@ -7051,6 +7051,35 @@ else
 }
 
 
+void customTrackPage()
+/* Put up page that lest user upload custom tracks. */
+{
+puts("<H2>Add Your Own Custom Track</H2>");
+puts("<FORM ACTION=\"/cgi-bin/hgTracks\" METHOD=\"POST\" ENCTYPE=\"multipart/form-data\">\n");
+cartSaveSession(cart);
+
+puts(
+"<P>Display your own annotation tracks in the browser using \n"
+"the <A HREF=\"../goldenPath/help/customTrack.html\"> \n"
+"procedure described here</A>.  Annotations may be stored in files or\n"
+"pasted in. You can also paste in a URL or a list of URLs which refer to \n"
+"files in one of the supported formats.</P>\n"
+"Click \n"
+"<A HREF=\"../goldenPath/customTracks/custTracks.html\" TARGET=_blank>here</A> \n"
+"to view a collection of custom annotation tracks submitted by Genome Browser users.</P> \n"
+"\n"
+"	Annotation File: <INPUT TYPE=FILE NAME=\"hgt.customFile\">\n"
+);
+
+cgiMakeButton("Submit", "Submit");
+
+puts(
+"<BR>\n"
+"<TEXTAREA NAME=\"hgt.customText\" ROWS=14 COLS=80></TEXTAREA>\n"
+"</FORM>\n"
+);
+}
+
 void doMiddle(struct cart *theCart)
 /* Print the body of an html file.   */
 {
@@ -7076,7 +7105,15 @@ hDefaultConnect();
 initTl();
 
 /* Do main display. */
-tracksDisplay();
+if (cartVarExists(cart, "customTrackPage"))
+    {
+    cartRemove( cart, "customTrackPage");
+    customTrackPage();
+    }
+else
+    {
+    tracksDisplay();
+    }
 }
 
 void doDown(struct cart *cart)
