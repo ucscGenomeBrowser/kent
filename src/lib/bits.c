@@ -6,7 +6,7 @@
 #include "common.h"
 #include "bits.h"
 
-static char const rcsid[] = "$Id: bits.c,v 1.14 2004/03/29 01:00:07 markd Exp $";
+static char const rcsid[] = "$Id: bits.c,v 1.15 2004/12/09 23:59:57 krish Exp $";
 
 
 static Bits oneBit[8] = { 0x80, 0x40, 0x20, 0x10, 0x8, 0x4, 0x2, 0x1};
@@ -74,6 +74,12 @@ void bitSetOne(Bits *b, int bitIx)
 /* Set a single bit. */
 {
 b[bitIx>>3] |= oneBit[bitIx&7];
+}
+
+void bitClearOne(Bits *b, int bitIx)
+/* Clear a single bit. */
+{
+b[bitIx>>3] &= ~oneBit[bitIx&7];
 }
 
 void bitSetRange(Bits *b, int startIx, int bitCount)
