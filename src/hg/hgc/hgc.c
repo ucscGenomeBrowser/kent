@@ -64,6 +64,7 @@
 #include "featureBits.h"
 #include "web.h"
 #include "jaxOrtholog.h"
+#include "expRecord.h"
 
 #define CHUCK_CODE 1
 #define ROGIC_CODE 1
@@ -1754,6 +1755,7 @@ enum gfType tt, qt;
 boolean isProt;
 
 /* Print start of HTML. */
+puts("Content-Type:text/html\n");
 printf("<HEAD>\n<TITLE>User Sequence vs Genomic</TITLE>\n</HEAD>\n\n");
 puts("<HTML>");
 
@@ -3954,7 +3956,6 @@ void makeCheckBox(char *name, boolean isChecked)
 {
 printf("<INPUT TYPE=CHECKBOX NAME=\"%s\" VALUE=on%s>", name,
     (isChecked ? " CHECKED" : "") );
-
 }
 
 
@@ -3964,14 +3965,14 @@ struct rgbColor getColorForExprBed(float val, float max, boolean RG_COLOR_SCHEME
 float absVal = fabs(val);
 struct rgbColor color; 
 int colorIndex = 0;
-if(absVal > 100) 
+/* if log score is -10000 data is missing */
+if(val == -10000) 
     {
     color.g = color.r = color.b = 128;
     return(color);
     }
 if(absVal > max) 
     absVal = max;
-
 if (max == 0) 
     errAbort("ERROR: hgc::getColorForExprBed() maxDeviation can't be zero\n"); 
 colorIndex = (int)(absVal * 255/max);
@@ -4043,7 +4044,7 @@ subChar(header,'_',' ');
 length = strlen(header);
 if(url == NULL)
     url = cloneString("");
-
+/* printf("<b>Name:</b> %s\t<b>clickName:</b> %s\n", name,clickName); */
 printf("<table border=0 cellspacing=0 cellpadding=0>\n");
 for(i = 0; i < length; i++)
     {
@@ -4051,12 +4052,12 @@ for(i = 0; i < length; i++)
 	printf("<tr><td align=center>&nbsp</td></tr>\n");
     else
 	{
-	if(sameString(name,clickName)) 
+	if(strstr(clickName,name)) 
 	    printf("<tr><td align=center bgcolor=\"red\">");
 	else 
 	    printf("<tr><td align=center>");
 	printf("<a href=\"%s\">%c</a>", url, header[i]);
-	if(sameString(name, clickName)) 
+	if(strstr(clickName,name)) 
 	    {
 	    printf("</font>");
 	    }
@@ -4213,6 +4214,138 @@ printf("</td></tr></table></td></tr></table>\n");
 chuckHtmlContactInfo();
 }
 
+void msBedDefaultPrintHeader(struct bed *bedList, struct hash *erHash, char *itemName)
+/* print out a header with names for each bed with itemName highlighted */
+{
+struct bed *bed;
+int featureCount = slCount(bedList);
+printf("<tr><th align=center>Experiment</th>\n");
+printf("<th align=center colspan=%d valign=top>Item Name</th>\n",featureCount);
+printf("</tr>\n<tr><td>&nbsp</td>\n");
+for(bed = bedList; bed != NULL; bed = bed->next)
+    {
+    printf("<td valign=top align=center>\n");
+    printTableHeaderName(bed->name, itemName, NULL);
+    printf("</td>");
+    }
+printf("</tr>\n");
+}
+
+void msBedExpressionPrintRow(struct bed *bedList, struct hash *erHash, int expIndex)
+/* print the name of the experiment and color the 
+   background of individual cells using the score to 
+   creat false two color display */
+{
+char buff[32];
+struct bed *bed;
+struct expRecord *er = NULL;
+char *colorScheme = cartUsualString(cart, "nci60.color", "rg");
+int square = 10;
+boolean redColor = sameString(colorScheme, "rg");
+snprintf(buff, sizeof(buff), "%d", expIndex);
+er = hashMustFindVal(erHash, buff);
+
+printf("<tr>\n");
+printf("<td align=left>");
+printf(" %s</td>\n",er->name);
+for(bed = bedList;bed != NULL; bed = bed->next)
+    {
+	/* use the background colors to creat patterns */
+	struct rgbColor rgb = getColorForExprBed(bed->expScores[expIndex], 1.0, redColor);
+	printf("<td height=%d width=%d bgcolor=\"#%.2X%.2X%.2X\">&nbsp</td>\n", square, square, rgb.r, rgb.g, rgb.b);
+	}
+printf("</tr>\n");
+}
+
+void msBedPrintTable(struct bed *bedList, struct hash *erHash, char *currItem,
+		     void(*printHeader)(struct bed *bedList, struct hash *erHash, char *item),
+		     void(*printRow)(struct bed *bedList,struct hash *erHash, int expIndex))
+/* prints out a table from the data present in the bedList */
+{
+int i,featureCount=0, currnetRow=0, square=10;
+struct bed *bed = NULL;
+char buff[32];
+if(bedList == NULL)
+    errAbort("hgc::msBedPrintTable() - bedList is NULL");
+
+featureCount = slCount(bedList);
+/* time to write out some html, first the table and header */
+printf("<basefont size=-1>\n");
+printf("<table cellspacing=0 border=0 cellpadding=0 >\n");
+printHeader(bedList, erHash, currItem);
+printf("</tr>\n<tr><td>&nbsp</td>\n");
+for(i=0; i<bedList->expCount; i++)
+    {
+    printRow(bedList, erHash, i);
+    }
+
+printf("</table>");
+printf("</basefont>");
+}
+
+struct bed * loadMsBed(char *table, char *chrom, uint start, uint end)
+/* load every thing from a bed 15 table in the given range */
+{
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr;
+char **row;
+int rowOffset;
+struct bed *bedList = NULL, *bed;
+sr = hRangeQuery(conn, table, chrom, start, end, NULL, &rowOffset);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    bed = bedLoadN(row+rowOffset, 15);
+    slAddHead(&bedList, bed);
+    }
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+slReverse(&bedList);
+return bedList;
+}
+
+struct expRecord * loadExpRecord(char *table, char *database)
+/* load everything from an expRecord table in the
+   specified database, usually hgFixed instead of hg7, hg8, etc. */
+{
+struct sqlConnection *conn = sqlConnect(database);
+char query[256];
+struct expRecord *erList = NULL;
+snprintf(query, sizeof(query), "select * from %s", table);
+erList = expRecordLoadByQuery(conn, query);
+sqlDisconnect(&conn);
+return erList;
+}
+
+
+void nci60Details(struct trackDb *tdb, char *itemName) 
+/* print out a page for the nci60 data from stanford */
+{
+struct bed *bedList;
+char *tableName = "nci60Exps";
+struct expRecord *erList = NULL, *er;
+char buff[32];
+struct hash *erHash;
+bedList = loadMsBed(tdb->tableName, seqName, winStart, winEnd);
+genericHeader(tdb, itemName);
+
+if(bedList == NULL)
+    printf("<b>No Expression Data in this Range.</b>\n");
+else 
+    {
+    erHash = newHash(2);
+    erList = loadExpRecord(tableName, "hgFixed");
+    for(er = erList; er != NULL; er=er->next)
+	{
+	snprintf(buff, sizeof(buff), "%d", er->id);
+	hashAddUnique(erHash, buff, er);
+	}
+    msBedPrintTable(bedList, erHash, itemName, msBedDefaultPrintHeader, msBedExpressionPrintRow);
+    expRecordFreeList(&erList);
+    hashFree(&erHash);
+    bedFreeList(&bedList);
+    }
+webEnd();
+}
 
 struct sageExp *loadSageExps(char *tableName, struct pslWScore  *psList)
 /* load the sage experiment data 
@@ -4755,6 +4888,10 @@ else if (sameWord(track, "htcDnaNearGene"))
    {
    htcDnaNearGene(item);
    }
+else if (sameWord(track, "nci60"))
+    {
+    nci60Details(tdb, item);
+    }
 else if (sameWord(track, "perlegen"))
     {
     perlegenDetails(tdb, item);
