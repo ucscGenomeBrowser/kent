@@ -329,6 +329,79 @@ o - Load this into the database as so
 	hgLoadBed mm2 simpleRepeat simpleRepeat.bed -sqlTable=$HOME/src/hg/lib/simpleRepeat.sql
 
 
+MAKING THE BLASTZBESTMOUSE TRACK FROM PENN STATE AXT FILES (IN PROGRESS)
+    # When Scott Schwartz is done generating .axt's for the blastz 
+    # alignments...
+
+    # Create tSizes (human chrom size) and qSizes (mouse) for axtToPsl.
+      ssh hgwdev
+      cd /cluster/store1/gs.13/build30/blastz.mm2gs13.2002-08-30
+      In mysql:
+         use mm2
+         select chrom,size from chromInfo;
+         use hg12
+         select chrom,size from chromInfo;
+      Edit the results of the first select into a tab-separated tSizes,
+      edit the results of the second select into a tab-separated qSizes.
+
+    # Consolidate AXT files to chrom level, sort, pick best, make psl.
+    ssh kkstore
+    set base="/cluster/store1/gs.13/build30/blastz.mm2gs13.2002-08-30"
+    set tbl="blastzBestHuman_08_30"
+    cd $base
+    mkdir -p axtBest pslBest
+    foreach f (run.2/chr*.axt.gz)
+      set chr=$f:t:r:r
+      gunzip $f
+      axtBest -minScore=300 $f:r $chr axtBest/$chr.axt
+      axtToPsl axtBest/$chr.axt tSizes qSizes pslBest/${chr}_${tbl}.psl
+      gzip $f:r
+      echo Done with $chr.
+    end
+    # If axtBest runs out of memory, split those chromosome files into 
+    # smaller pieces and run axtBest in 2 passes.  
+    foreach f (run.2/chr{7,Un}.axt.gz)
+      set chr=$f:t:r:r
+      rm -f xx*
+      gunzip -c $f \
+        | perl -we '$/="";  $seq=0; \
+                    while (<>) { \
+                      if (($. % 1000) == 1) { \
+                        close(OUT) if ($. > 1000); \
+                        $seq++; \
+                        open(OUT, ">xx$seq"); \
+                      } \
+                      print OUT; \
+                    } \
+                    close(OUT);'
+      foreach s (xx*)
+        axtBest -minScore=300 $s $chr $s.axtBest
+      end
+      cat xx?*.axtBest > xx.axtBest
+      axtBest -minScore=300 xx.axtBest $chr axtBest/$chr.axt
+      rm xx*
+      axtToPsl axtBest/$chr.axt tSizes qSizes \
+        pslBest/${chr}_${tbl}.psl
+      echo Done with $chr.
+    end
+
+    # Load tables
+TODO     ssh hgwdev
+     set base="/cluster/store1/gs.13/build30/blastz.mm2gs13.2002-08-30"
+     cd $base/pslBest
+     hgLoadPsl mm2 *.psl
+     rm -f ~/kent/src/hg/lib/axtInfoFillMm2.sql
+     touch ~/kent/src/hg/lib/axtInfoFillMm2.sql
+     foreach f ($base/axtBest/chr*.axt)
+       set chr=$f:t:r
+       echo 'insert into axtInfo values ("hg12","Blastz Best in Genome","'$chr'","'$f'");' \
+         >> ~/kent/src/hg/lib/axtInfoFillMm2.sql
+     end
+     hgsql mm2 < ~/kent/src/hg/lib/axtInfo.sql
+     hgsql mm2 < ~/kent/src/hg/lib/axtInfoFillMm2.sql
+     cvs add ~/kent/src/hg/lib/axtInfoFillMm2.sql
+     cvs ci ~/kent/src/hg/lib/axtInfoFillMm2.sql
+
 PRODUCING GENSCAN PREDICTIONS (done)
     
 o - Produce contig genscan.gtf genscan.pep and genscanExtra.bed files like so:
