@@ -40,7 +40,7 @@
 #include	"wiggle.h"
 
 
-static char const rcsid[] = "$Id: wigAsciiToBinary.c,v 1.13 2004/12/22 23:27:23 hiram Exp $";
+static char const rcsid[] = "$Id: wigAsciiToBinary.c,v 1.14 2005/01/07 00:15:54 hiram Exp $";
 
 /*	This list of static variables is here because the several
  *	subroutines in this source file need access to all this business
@@ -122,7 +122,10 @@ double sumData = 0.0;
 double sumSquares = 0.0;
 unsigned long long i;
 unsigned long long validCount = 0; /* number of valid data points */
-boolean allIntegers = TRUE;
+boolean allIntegers = FALSE;	/*	off until further notice */
+	/*	with the allIntegers function on, the "Maximum" of the
+	 *	data ends up being artifically high.
+	 */
 
 if (bincount)
     {
@@ -136,8 +139,10 @@ if (bincount)
 	    if (data_values[i] < lowerLimit) lowerLimit = data_values[i];
 	    sumData += data_values[i];
 	    sumSquares += data_values[i] * data_values[i];
+#ifdef NOT
 	    if (allIntegers && (! isIntD(data_values[i])))
 		allIntegers = FALSE;
+#endif
 	    }
 	}
     if (validCount < 1) {
