@@ -1389,13 +1389,16 @@ wabAliFree(&wa);
 hFreeConn(&conn);
 }
 
-void doHgTet(char *track, char *name)
+void doHgTet(struct trackDb *tdb, char *name)
 /* Do thing with tet track. */
 {
+char table[64];
+int hasBin;
 hgcStart("Tetraodon Alignment");
+hFindSplitTable(seqName, tdb->tableName, table, &hasBin);
 printf("Alignment between tetraodon sequence %s (above) and human chromosome %s (below)\n",
     name, skipChr(seqName));
-fetchAndShowWaba(track, name);
+fetchAndShowWaba(table, name);
 }
 
 void doHgRepeat(char *track, char *repeat)
@@ -3295,7 +3298,7 @@ else if (sameWord(track, "gap"))
     }
 else if (sameWord(track, "tet_waba"))
     {
-    doHgTet(track, item);
+    doHgTet(tdb, item);
     }
 else if (sameWord(track, "rmsk"))
     {
