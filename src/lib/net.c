@@ -13,7 +13,7 @@
 #include "net.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: net.c,v 1.30 2004/03/03 07:23:51 kent Exp $";
+static char const rcsid[] = "$Id: net.c,v 1.31 2004/07/30 19:27:35 kent Exp $";
 
 /* Brought errno in to get more useful error messages */
 
@@ -126,7 +126,7 @@ sai.sin_family = AF_INET;
 for (;;)
     {
     int addrSize = sizeof(sai);
-    int sd = accept(acceptor, &sai, &addrSize);
+    int sd = accept(acceptor, (struct sockaddr *)&sai, &addrSize);
     if (sd >= 0)
 	{
 	if (subnet == NULL)
