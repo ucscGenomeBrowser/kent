@@ -8,7 +8,7 @@
 #include "xenalign.h"
 #include "pairHmm.h"
 
-static char const rcsid[] = "$Id: xensmall.c,v 1.4 2004/06/30 16:03:23 kent Exp $";
+static char const rcsid[] = "$Id: xensmall.c,v 1.5 2004/06/30 16:09:13 kent Exp $";
 
 /* Mommy coding scheme - this is how one cell in the dynamic programming table
  * points to it's parent (mommy) cell.  Since these tables are really big,
@@ -131,7 +131,8 @@ freeMem(am->allScores);
 zeroBytes(am, sizeof(*am));
 }
 
-static struct phmmState *nameState(struct phmmMatrix *am, int stateIx, char *name, char emitLetter)
+static struct phmmState *phmmNameState(struct phmmMatrix *am, int stateIx, 
+	char *name, char emitLetter)
 /* Give a name to a state and return a pointer to it. */
 {
 struct phmmState *state;
@@ -142,7 +143,8 @@ state->emitLetter = emitLetter;
 return state;
 }
 
-static void findMatrixIx(struct phmmMatrix *am, struct phmmMommy *cell, int *retStateIx, int *retQix, int *retTix)
+static void phmmFindMatrixIx(struct phmmMatrix *am, struct phmmMommy *cell, 
+	int *retStateIx, int *retQix, int *retTix)
 /* Given a cell in matrix return state, query, and target index. */
 {
 int cellIx = cell - am->allCells;
@@ -152,7 +154,8 @@ cellIx %= am->stateSize;
 *retQix = cellIx % am->qDim;
 }
 
-static struct phmmMommy *findMommy(struct phmmMatrix *am, struct phmmMommy *baby)
+static struct phmmMommy *phmmFindMommy(struct phmmMatrix *am, 
+	struct phmmMommy *baby)
 /* Find baby's mommy and return it. */
 {
 int momStateIx, qOff, tOff;
@@ -162,14 +165,14 @@ UBYTE mommy;
 if ((mommy = baby->mommy) == nullMommy)
     return NULL;
 phmmUnpackMommy(mommy, &momStateIx, &qOff, &tOff);
-findMatrixIx(am, baby, &babyStateIx, &qIx, &tIx);
+phmmFindMatrixIx(am, baby, &babyStateIx, &qIx, &tIx);
 return am->states[momStateIx].cells + (tOff + tIx) * am->qDim + (qOff + qIx);
 }
 
-struct aliPair
+struct phmmAliPair
 /* Each position in alignment gets one of these. */
     {
-    struct aliPair *next;
+    struct phmmAliPair *next;
     int queryIx;
     int targetIx;
     UBYTE hiddenIx;  /* If I code one of these with more than 255 states shoot me! */
@@ -178,16 +181,16 @@ struct aliPair
     char hiddenSym;
     };
 
-static struct aliPair *traceBack(struct phmmMatrix *am, struct phmmMommy *end)
+static struct phmmAliPair *phmmTraceBack(struct phmmMatrix *am, struct phmmMommy *end)
 /* Create list of alignment pair by tracing back through matrix from end
  * state back to a start.*/
 {
-struct aliPair *pairList = NULL, *pair;
+struct phmmAliPair *pairList = NULL, *pair;
 struct phmmMommy *cell, *parent = end;
 int parentSix, parentTix, parentQix;
 int sIx, tIx, qIx;
 
-findMatrixIx(am, parent, &parentSix, &parentQix, &parentTix);
+phmmFindMatrixIx(am, parent, &parentSix, &parentQix, &parentTix);
 for (;;)
     {
     cell = parent;
@@ -195,9 +198,9 @@ for (;;)
     tIx = parentTix;
     qIx = parentQix;
 
-    if ((parent = findMommy(am, cell)) == NULL)
+    if ((parent = phmmFindMommy(am, cell)) == NULL)
         break;
-    findMatrixIx(am, parent, &parentSix, &parentQix, &parentTix);
+    phmmFindMatrixIx(am, parent, &parentSix, &parentQix, &parentTix);
     
     cell->mommy != phmmMommyTraceBit;
 
@@ -231,11 +234,11 @@ for (;;)
 return pairList;
 }
 
-static void printTrace(struct phmmMatrix *am, struct aliPair *pairList, boolean showStates, 
+static void phmmPrintTrace(struct phmmMatrix *am, struct phmmAliPair *pairList, boolean showStates, 
     FILE *f, boolean extraAtEnds)
 /* Print out trace to file. */
 {
-struct aliPair *pair;
+struct phmmAliPair *pair;
 #define lineLen 50
 char asyms[lineLen+1];
 char qsyms[lineLen+1];
@@ -560,7 +563,7 @@ struct phmmMatrix a;
 struct phmmState *hf, *lf, *iq, *it, *c1, *c2, *c3;
 int qIx, tIx, sIx;  /* Query, target, and state indices */
 int rowOffset, newCellOffset;
-struct aliPair *pairList;
+struct phmmAliPair *pairList;
 int matchOff, qSlipOff, tSlipOff;
 int bestScore = -0x4fffffff;
 struct phmmMommy *bestCell = NULL;
@@ -579,13 +582,13 @@ calcCostBenefit(gcRatio);
 
 /* Initialize 7 state matrix. */
 phmmMatrixInit(&a, 7, query, querySize, target, targetSize);
-hf = nameState(&a, hiFiIx, "highFi", 'H');
-lf = nameState(&a, loFiIx, "lowFi", 'L');
-iq = nameState(&a, qSlipIx, "qSlip", 'Q');
-it = nameState(&a, tSlipIx, "tSlip", 'T');
-c1 = nameState(&a, c1Ix, "frame1", '1');
-c2 = nameState(&a, c2Ix, "frame2", '2');
-c3 = nameState(&a, c3Ix, "frame3", '3');
+hf = phmmNameState(&a, hiFiIx, "highFi", 'H');
+lf = phmmNameState(&a, loFiIx, "lowFi", 'L');
+iq = phmmNameState(&a, qSlipIx, "qSlip", 'Q');
+it = phmmNameState(&a, tSlipIx, "tSlip", 'T');
+c1 = phmmNameState(&a, c1Ix, "frame1", '1');
+c2 = phmmNameState(&a, c2Ix, "frame2", '2');
+c3 = phmmNameState(&a, c3Ix, "frame3", '3');
 
 qSlipOff = -a.qDim;
 tSlipOff = -1;
@@ -793,8 +796,8 @@ for (tIx = 1; tIx < a.tDim; tIx += 1)
     }
 
 /* Trace back from best scoring cell. */
-pairList = traceBack(&a, bestCell);
-printTrace(&a, pairList, TRUE, f, printExtraAtEnds);
+pairList = phmmTraceBack(&a, bestCell);
+phmmPrintTrace(&a, pairList, TRUE, f, printExtraAtEnds);
 
 slFreeList(&pairList);
 phmmMatrixCleanup(&a);
@@ -830,7 +833,7 @@ struct phmmMatrix a;
 struct phmmState *hf, *iq, *it;
 int qIx, tIx, sIx;  /* Query, target, and state indices */
 int rowOffset, newCellOffset;
-struct aliPair *pairList;
+struct phmmAliPair *pairList;
 int matchOff, qSlipOff, tSlipOff;
 int bestScore = -0x4fffffff;
 struct phmmMommy *bestCell = NULL;
@@ -850,9 +853,9 @@ gapExt = -20;
 
 /* Initialize 3 state matrix (match, query insert, target insert). */
 phmmMatrixInit(&a, 3, query, querySize, target, targetSize);
-hf = nameState(&a, hiFiIx, "match", 'M');
-iq = nameState(&a, qSlipIx, "qSlip", 'Q');
-it = nameState(&a, tSlipIx, "tSlip", 'T');
+hf = phmmNameState(&a, hiFiIx, "match", 'M');
+iq = phmmNameState(&a, qSlipIx, "qSlip", 'Q');
+it = phmmNameState(&a, tSlipIx, "tSlip", 'T');
 
 qSlipOff = -a.qDim;
 tSlipOff = -1;
@@ -989,8 +992,8 @@ for (tIx = 1; tIx < a.tDim; tIx += 1)
     }
 
 /* Trace back from best scoring cell. */
-pairList = traceBack(&a, bestCell);
-printTrace(&a, pairList, TRUE, f, printExtraAtEnds);
+pairList = phmmTraceBack(&a, bestCell);
+phmmPrintTrace(&a, pairList, TRUE, f, printExtraAtEnds);
 
 slFreeList(&pairList);
 phmmMatrixCleanup(&a);
