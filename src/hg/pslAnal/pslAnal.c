@@ -42,8 +42,8 @@ boolean xeno = FALSE;
 struct acc
 {
   struct acc *next;
-  char name[16];
-  char organism[64];
+  char *name;
+  char *organism;
 };
 
 struct clone
@@ -90,8 +90,7 @@ struct indel
   char *mrna;
   int mrnaStart;
   int mrnaEnd;
-  struct clone *mrnaCloneId;
-
+  /* struct clone *mrnaCloneId; */
   struct evid *hs;
   struct evid *xe;
 
@@ -144,12 +143,23 @@ struct hash *rnaSeqs = NULL;
 
 int indels[128];
 
+void cloneFree(struct clone **clone)
+/* Free a dynamically allocated acc */
+{
+struct clone *c;
+
+if ((c = *clone) == NULL) return;
+freez(clone);
+}
+
 void accFree(struct acc **acc)
 /* Free a dynamically allocated acc */
 {
 struct acc *a;
 
 if ((a = *acc) == NULL) return;
+freez(&(a->organism));
+freez(&(a->name));
 freez(acc);
 }
 
@@ -204,6 +214,7 @@ struct indel *i;
 if ((i = *in) == NULL) return;
 evidListFree(&(i->hs));
 evidListFree(&(i->xe));
+/* cloneFree(&(i->mrnaCloneId)); */
 freez(in);
 }
 
@@ -230,7 +241,7 @@ pslFree(&(el->psl));
 indelListFree(&(el->indelList));
 indelListFree(&(el->mmList));
 indelListFree(&(el->codonSubList));
-freez(&(el->mrnaCloneId));
+cloneFree(&(el->mrnaCloneId));
 freez(pi);
 }
 
@@ -351,34 +362,51 @@ int snpBase(struct sqlConnection *conn, char *chr, int position)
 char query[256];
 struct sqlResult *sr;
 char **row;
+int ret = 0;
+boolean haveSnpTsc = sqlTableExists(conn, "snpTsc");
+boolean haveSnpNih = sqlTableExists(conn, "snpNih");
+boolean haveAffyGeno = sqlTableExists(conn, "affyGeno");
 
-sprintf(query, "select * from snpTsc where chrom = '%s' and chromStart = %d", chr, position); 
-sr = sqlGetResult(conn, query);
-if ((row = sqlNextRow(sr)) != NULL) 
+if (haveSnpTsc)
     {
+    sprintf(query, "select * from snpTsc where chrom = '%s' and chromStart = %d", chr, position); 
+    sr = sqlGetResult(conn, query);
+    if ((row = sqlNextRow(sr)) != NULL) 
+      ret = 1;
     sqlFreeResult(&sr);
-    return(1);  
-    }
-sprintf(query, "select * from snpNih where chrom = '%s' and chromStart = %d", chr, position); 
-sr = sqlGetResult(conn, query);
-if ((row = sqlNextRow(sr)) != NULL) 
-    {
-    sqlFreeResult(&sr);
-    return(1);
     }
 
-return(0);
+if ((haveSnpNih) && (!ret))
+    {
+    sprintf(query, "select * from snpNih where chrom = '%s' and chromStart = %d", chr, position); 
+    sr = sqlGetResult(conn, query);
+    if ((row = sqlNextRow(sr)) != NULL) 
+        ret = 1;
+    sqlFreeResult(&sr);
+    }
+
+if ((haveAffyGeno) && (!ret))
+    {
+    sprintf(query, "select * from affyGeno where chrom = '%s' and chromStart = %d", chr, position); 
+    sr = sqlGetResult(conn, query);
+    if ((row = sqlNextRow(sr)) != NULL) 
+        ret = 1;
+    sqlFreeResult(&sr);
+    }
+
+return(ret);
 }
 
 void findOrganism(struct sqlConnection *conn, struct acc *acc)
 /* Determine organism for each non-human mrna/est in the list */
 {
 char query[256];
-struct sqlResult *sr, *sr1;
+struct sqlResult *sr;
 char **row;
 char *a;
 char *accs[4];
-int wordCount;
+int wordCount, id = -1;
+
 
 a = cloneString(acc->name);
 wordCount = chopByChar(a, '.', accs, ArraySize(accs)); 
@@ -387,15 +415,17 @@ if (wordCount != 2)
 sprintf(query, "select organism from mrna where acc = '%s'", accs[0]); 
 sr = sqlGetResult(conn, query);
 if ((row = sqlNextRow(sr)) != NULL)
+    id = sqlUnsigned(row[0]);
+sqlFreeResult(&sr);
+if (id != -1)
     {
-    sprintf(query, "select name from organism where id = %d", sqlUnsigned(row[0]));   
-    sqlFreeResult(&sr);
-    sr1 = sqlGetResult(conn, query);
-    if ((row = sqlNextRow(sr1)) != NULL)
-	sprintf(acc->organism, "%s", row[0]);
+    sprintf(query, "select name from organism where id = %d", id);   
+    sr = sqlGetResult(conn, query);
+    if ((row = sqlNextRow(sr)) != NULL)
+      acc->organism = cloneString(row[0]);
     else
-      printf("Could not find organism for id %d\n", sqlUnsigned(row[0]));
-    sqlFreeResult(&sr1);
+      printf("Could not find organism for id %d\n", id);
+    sqlFreeResult(&sr);
     } 
 else 
     printf("Could not find mrna record for %s\n", acc->name);
@@ -523,14 +553,14 @@ else
     dna = cloneString("");
 /* Classify this mrna/est */
 AllocVar(acc);
-strcpy(acc->name,seq->name);
+acc->name = cloneString(seq->name);
+acc->organism = NULL;
 /* If it doesn't align to this region */
 if ((start == 0) && (end == 0))
     {
     if (sameString(table, "mrna"))
         {
         ni->hs->unMrna++;
-	sprintf(acc->organism, "Homo sapiens");
         slAddHead(&ni->hs->unMrnaAcc, acc);
         } 
     else if (sameString(table, "xenoMrna"))
@@ -542,7 +572,6 @@ if ((start == 0) && (end == 0))
     else if (sameString(table, "est"))
         {
         ni->hs->unEst++;
-	sprintf(acc->organism, "Homo sapiens");
         slAddHead(&ni->hs->unEstAcc, acc);
 	}
      else if (sameString(table, "xenoEst"))
@@ -558,7 +587,6 @@ else if ((sameString(gseq->dna, dna)) || ((type == INDEL) && (strlen(dna) == gse
     if (sameString(table, "mrna"))
         {
         ni->hs->genMrna++;
-	sprintf(acc->organism, "Homo sapiens");
         slAddHead(&ni->hs->genMrnaAcc, acc);
         } 
     else if (sameString(table, "xenoMrna"))
@@ -570,7 +598,6 @@ else if ((sameString(gseq->dna, dna)) || ((type == INDEL) && (strlen(dna) == gse
     else if (sameString(table, "est"))
         {
         ni->hs->genEst++;
-	sprintf(acc->organism, "Homo sapiens");
         slAddHead(&ni->hs->genEstAcc, acc);
 	}
      else if (sameString(table, "xenoEst"))
@@ -586,7 +613,6 @@ else if ((sameString(mdna, dna)) || ((type == INDEL) && (strlen(dna) == strlen(m
     if (sameString(table, "mrna"))
         {
         ni->hs->mrnaMrna++;
-	sprintf(acc->organism, "Homo sapiens");
         slAddHead(&ni->hs->mrnaMrnaAcc, acc);
         } 
     else if (sameString(table, "xenoMrna"))
@@ -598,7 +624,6 @@ else if ((sameString(mdna, dna)) || ((type == INDEL) && (strlen(dna) == strlen(m
     else if (sameString(table, "est"))
         {
         ni->hs->mrnaEst++;
-	sprintf(acc->organism, "Homo sapiens");
         slAddHead(&ni->hs->mrnaEstAcc, acc);
 	}
      else if (sameString(table, "xenoEst"))
@@ -614,7 +639,6 @@ else
     if (sameString(table, "mrna"))
         {
 	ni->hs->noMrna++;
-	sprintf(acc->organism, "Homo sapiens");
         slAddHead(&ni->hs->noMrnaAcc, acc);
         } 
     else if (sameString(table, "xenoMrna"))
@@ -626,7 +650,6 @@ else
     else if (sameString(table, "est"))
         {
         ni->hs->noEst++;
-	sprintf(acc->organism, "Homo sapiens");
         slAddHead(&ni->hs->noEstAcc, acc);
 	}
      else if (sameString(table, "xenoEst"))
@@ -642,7 +665,7 @@ dnaSeqFree(&gseq);
 hFreeConn(&conn2);
 }
 
-void searchTrans(struct sqlConnection *conn, char *table, char *mrnaName, struct dnaSeq *rna, struct indel *ni, char *strand, unsigned type)
+void searchTrans(struct sqlConnection *conn, char *table, char *mrnaName, struct dnaSeq *rna, struct indel *ni, char *strand, unsigned type, struct clone *mrnaCloneId)
 /* Find all mRNA's or EST's that align in the region of an indel, mismatch, or codon */
 {
 struct sqlResult *sr;
@@ -661,6 +684,7 @@ if (type == INDEL)
     {
     if ((ni->mrnaEnd-ni->mrnaStart+4) > 0)
         {
+	assert((ni->mrnaEnd-ni->mrnaStart+4) < sizeof(mdna));
         strncpy(mdna,rna->dna + ni->mrnaStart - 2,ni->mrnaEnd-ni->mrnaStart+4);
         mdna[ni->mrnaEnd-ni->mrnaStart+4] = '\0';
         /*printf("Indel at %d-%d (%d) in %s:%d-%d bases %s\n", ni->mrnaStart, ni->mrnaEnd, rna->size, ni->chrom, ni->chromStart, ni->chromEnd, mseq->dna);*/
@@ -671,6 +695,7 @@ if (type == INDEL)
 else
     {
     int len = (ni->mrnaEnd-ni->mrnaStart)+1;
+    assert((len) < sizeof(mdna));
     strncpy(mdna,rna->dna + ni->mrnaStart,len);
     mdna[len] = '\0';
     /*printf("Mismatch in %s at %d in %s:%d bases %s\n", mrnaName, ni->mrnaStart, ni->chrom, ni->chromStart, mdna);*/
@@ -685,12 +710,39 @@ while ((row = sqlNextRow(sr)) != NULL)
     {
     psl = pslLoad(row+offset);
     cloneId = getMrnaCloneId(conn2, psl->qName);
-    if ((!sameString(psl->qName,mrnaName)) && (!sameClone(cloneId,ni->mrnaCloneId)))
+    if ((!sameString(psl->qName,mrnaName)) && (!sameClone(cloneId,mrnaCloneId)))
         searchTransPsl(table, mrnaName, mdna, ni, strand, type, psl);
+    cloneFree(&cloneId);
     pslFree(&psl);
     }
 sqlFreeResult(&sr);
 hFreeConn(&conn2);
+}
+
+struct evid *createEvid()
+/* Create an instance of an evid struct */
+{
+struct evid *ev;
+
+ AllocVar(ev);
+ ev->next = NULL;
+ ev->genMrna = 0;
+ ev->genMrnaAcc = NULL;
+ ev->genEst = 0;
+ ev->genEstAcc = NULL;
+ ev->mrnaMrna = 0;
+ ev->mrnaMrnaAcc = NULL;
+ ev->mrnaEst = 0;
+ ev->mrnaEstAcc = NULL;
+ ev->noMrna = 0;
+ ev->noMrnaAcc = NULL;
+ ev->noEst = 0;
+ ev->noEstAcc = NULL;
+ ev->unMrna = 0;
+ ev->unMrnaAcc = NULL;
+ ev->unEst = 0;
+ ev->unEstAcc = NULL;
+ return(ev);
 }
 
 struct indel *createMismatch(struct sqlConnection *conn, char *mrna, int mbase, char* chr, int gbase, 
@@ -698,27 +750,24 @@ struct indel *createMismatch(struct sqlConnection *conn, char *mrna, int mbase, 
 /* Create a record of a mismatch */
 {
   struct indel *mi;
-  struct evid *ev;
  
   AllocVar(mi);
+  mi->next = NULL;
   mi->size = 1;
   mi->chrom = chr;
   mi->chromStart = mi->chromEnd = gbase;
   mi->mrna = mrna;
   mi->mrnaStart = mi->mrnaEnd = mbase;
-  mi->mrnaCloneId = cloneId;
-  AllocVar(ev);
-  mi->hs = ev;
-  AllocVar(ev);
-  mi->xe = ev;
+  mi->hs = createEvid();
+  mi->xe = createEvid();
   
   /* Determine whether mRNAs and ESTs support genomic or mRNA sequence in mismatch */
-  searchTrans(conn, "mrna", mrna, rna, mi, strand, MISMATCH);
-  searchTrans(conn, "est", mrna, rna, mi, strand, MISMATCH);
+  searchTrans(conn, "mrna", mrna, rna, mi, strand, MISMATCH, cloneId);
+  searchTrans(conn, "est", mrna, rna, mi, strand, MISMATCH, cloneId);
   if (xeno)
       {
-      searchTrans(conn, "xenoMrna", mrna, rna, mi, strand, MISMATCH);
-      searchTrans(conn, "xenoEst", mrna, rna, mi, strand, MISMATCH);
+      searchTrans(conn, "xenoMrna", mrna, rna, mi, strand, MISMATCH, cloneId);
+      searchTrans(conn, "xenoEst", mrna, rna, mi, strand, MISMATCH, cloneId);
       }
 
   return(mi);
@@ -730,7 +779,6 @@ struct indel *createCodonSub(struct sqlConnection *conn, char *mrna, int mrnaSta
 /* Create a record of a mismatch */
 {
   struct indel *mi;
-  struct evid *ev;
 #if 0
   printf("codonSub: mrna=%s mrnaStart=%d  genPos=%d,%d,%d mCodon=%s,gCodon=%s, aa=%c %c\n",
          mrna, mrnaStart, genPos[0], genPos[1], genPos[2], mCodon, gCodon,
@@ -738,6 +786,7 @@ struct indel *createCodonSub(struct sqlConnection *conn, char *mrna, int mrnaSta
 #endif
  
   AllocVar(mi);
+  mi->next = NULL;
   mi->size = 1;
   mi->chrom = chr;
   mi->chromStart = genPos[0];
@@ -748,20 +797,17 @@ struct indel *createCodonSub(struct sqlConnection *conn, char *mrna, int mrnaSta
   memcpy(mi->codonGenPos, genPos, sizeof(mi->codonGenPos));
   strcpy(mi->genCodon, gCodon);
   strcpy(mi->mrnaCodon, mCodon);
-  mi->mrnaCloneId = cloneId;
-  AllocVar(ev);
-  mi->hs = ev;
-  AllocVar(ev);
-  mi->xe = ev;
+  mi->hs = createEvid();
+  mi->xe = createEvid();
   
   
   /* Determine whether mRNAs and ESTs support genomic or mRNA sequence in mismatch */
-  searchTrans(conn, "mrna", mrna, rna, mi, strand, CODONSUB);
-  searchTrans(conn, "est", mrna, rna, mi, strand, CODONSUB);
+  searchTrans(conn, "mrna", mrna, rna, mi, strand, CODONSUB, cloneId);
+  searchTrans(conn, "est", mrna, rna, mi, strand, CODONSUB, cloneId);
   if (xeno)
       {
-      searchTrans(conn, "xenoMrna", mrna, rna, mi, strand, CODONSUB);
-      searchTrans(conn, "xenoEst", mrna, rna, mi, strand, CODONSUB);
+      searchTrans(conn, "xenoMrna", mrna, rna, mi, strand, CODONSUB, cloneId);
+      searchTrans(conn, "xenoEst", mrna, rna, mi, strand, CODONSUB, cloneId);
       }
   return(mi);
 }
@@ -883,9 +929,9 @@ struct indel *createIndel(struct sqlConnection *conn, char *mrna, int mstart, in
 /* Create a record of an indel */
 {
   struct indel *ni;
-  struct evid *ev;
  
   AllocVar(ni);
+  ni->next = NULL;
   if ((mend - mstart) > 0) 
     ni->size = mend - mstart;
   else
@@ -896,20 +942,17 @@ struct indel *createIndel(struct sqlConnection *conn, char *mrna, int mstart, in
   ni->mrna = mrna;
   ni->mrnaStart = mstart;
   ni->mrnaEnd = mend;
-  ni->mrnaCloneId = cloneId;
-  AllocVar(ev);
-  ni->hs = ev;
-  AllocVar(ev);
-  ni->xe = ev;
+  ni->hs = createEvid();
+  ni->xe = createEvid();
   
   
   /* Determine whether mRNAs and ESTs support genomic or mRNA sequence in indel region */
-  searchTrans(conn, "mrna", mrna, rna, ni, strand, INDEL);
-  searchTrans(conn, "est", mrna, rna, ni, strand, INDEL);
+  searchTrans(conn, "mrna", mrna, rna, ni, strand, INDEL, cloneId);
+  searchTrans(conn, "est", mrna, rna, ni, strand, INDEL, cloneId);
   if (xeno)
       {
-      searchTrans(conn, "xenoMrna", mrna, rna, ni, strand, INDEL);
-      searchTrans(conn, "xenoEst", mrna, rna, ni, strand, INDEL);
+      searchTrans(conn, "xenoMrna", mrna, rna, ni, strand, INDEL, cloneId);
+      searchTrans(conn, "xenoEst", mrna, rna, ni, strand, INDEL, cloneId);
       }
 
   return(ni);
@@ -1234,8 +1277,6 @@ for (indel = iList; indel != NULL; indel=indel->next)
 void writeOut(FILE *of, FILE *in, FILE *mm, FILE* cs, FILE* un, struct pslInfo *pi)
 /* Output results of the mRNA alignment analysis */
 {
-struct indel *indel;
-struct acc *acc;
 int i;
 
 fprintf(of, "%s\t%s\t%d\t%d\t%d\t%d\t%d\t%d\t", pi->psl->qName, pi->psl->tName, pi->psl->tStart, 
@@ -1359,9 +1400,17 @@ if (verbose)
     printf("Processing psl file\n");
 doFile(pf, of, in, mm, cs, un);
 
-lineFileClose(&pf);
+if (indelReport)
+    {
+    fclose(in);
+    fclose(un);
+    }
+if (mismatchReport)
+    fclose(mm);
+if (codonSubReport)
+    fclose(cs);
 fclose(of);
-fclose(in);
+lineFileClose(&pf);
 
 return 0;
 }
