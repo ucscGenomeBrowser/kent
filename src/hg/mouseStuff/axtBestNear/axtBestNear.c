@@ -9,7 +9,7 @@
 #include "dnautil.h"
 #include "axt.h"
 
-static char const rcsid[] = "$Id: axtBestNear.c,v 1.1 2003/08/27 01:14:15 baertsch Exp $";
+static char const rcsid[] = "$Id: axtBestNear.c,v 1.2 2003/08/31 08:16:58 baertsch Exp $";
 #define NEARSIZE 2  /* keep this many best hits */
 
 void usage()
@@ -53,6 +53,64 @@ int writeCount = 0;	/* Keep track of number actually written. */
 int subsetCount = 0;    /* Keep track of trimmed number written. */
 int baseOutCount = 0;   /* Keep track of target bases written. */
 int baseInCount = 0;    /* Keep track of target bases input. */
+int totalRead = 0;      /* Keep track of number alignments read . */
+int readSoft = 0;       /* Keep track of alignments after soft filter . */
+
+/* Variables to buffer input */
+struct axt *axtBuffer; /* keep last axt for subsequenct calls to readAxtChunk */
+bool axtSaved; /* true if next axt is buffered and should not be read from axtRead */
+
+struct axt *axtReadNext(struct lineFile *lf)
+{
+if (axtBuffer == NULL || axtSaved == FALSE)
+    {
+    axtBuffer = axtRead(lf);
+    }
+else
+    axtSaved = FALSE;
+return axtBuffer ;
+}
+struct axt *readAxtChunk(struct lineFile *lf, struct axtScoreScheme *ss, int threshold,
+	char *chromName)
+/* Read a chunk of overlapping axt's from a file. */
+{
+struct axt *list = NULL;
+int maxT = 0;
+
+while ((axtBuffer = axtReadNext(lf)) != NULL)
+    {
+    if (!axtCheck(axtBuffer, lf))
+	{
+	axtFree(&axtBuffer);
+	continue;
+	}
+    assert(axtBuffer != NULL);
+    if (sameString(chromName, axtBuffer->tName))
+	{
+        if (axtBuffer->tStart > maxT && maxT != 0)
+            {
+            axtSaved = TRUE;
+            break;
+            }
+	if (axtBuffer->tStrand != '+')
+	    errAbort("Can't handle minus target strand line %d of %s",
+	        lf->lineIx, lf->fileName);
+	axtBuffer->score = axtScore(axtBuffer, ss);
+	baseInCount += axtBuffer->tEnd - axtBuffer->tStart;
+	if (axtBuffer->score >= threshold)
+	    {
+	    slAddHead(&list, axtBuffer);
+            maxT = max(maxT, axtBuffer->tEnd);
+	    }
+	else
+	    axtFree(&axtBuffer);
+	}
+    else
+        axtFree(&axtBuffer);
+    }
+slReverse(&list);
+return list;
+}
 
 struct axt *readAllAxt(char *fileName, struct axtScoreScheme *ss, int threshold,
 	char *chromName)
@@ -109,7 +167,8 @@ struct bestKeep *bestKeepNew(int tStart, int tEnd)
 /* Allocate new bestKeep structure */
 {
 struct bestKeep *bk;
-int size;
+long size;
+int *score;
 AllocVar(bk);
 size = tEnd - tStart;
 assert(size >= 0);
@@ -349,33 +408,25 @@ for (axt = axtList; axt != NULL; axt = axt->next)
 *retEnd = maxSize;
 }
 
-void axtBestNear(char *inName, char *chromName, char *outName)
-/* axtBestNear - Remove near best alignments. */
+void axtBestNearChunk(struct axt *axtList, char *inName, struct axtScoreScheme *ss, FILE *f)
+/* axtBestNear - Remove near best alignments from a list. */
 {
-FILE *f = mustOpen(outName, "w");
-char *matrixName = optionVal("matrix", NULL);
-struct axtScoreScheme *ss = NULL;
-struct axt *axtList = NULL, *axt, *nextAxt, *goodList = NULL;
+struct axt *axt, *nextAxt, *goodList = NULL;
 struct bestKeep *bk = NULL;
 int i;
 int chromStart, chromEnd;
 int rangeSize;
 
-if (matrixName == NULL)
-    ss = axtScoreSchemeDefault();
-else
-    ss = axtScoreSchemeRead(matrixName);
-axtList = readAllAxt(inName, ss, minScore, chromName);
 if (axtList == NULL)
     {
     printf("Empty %s\n", inName);
     return;
     }
-printf("Read %d elements from %s\n", slCount(axtList), inName);
+totalRead += slCount(axtList);
 chromRange(axtList, &chromStart, &chromEnd);
 rangeSize = chromEnd - chromStart;
 bk = bestKeepNew(chromStart, chromEnd);
-printf("Allocated %d elements in array\n", rangeSize);
+//printf("Allocated %d elements in array\n", rangeSize);
 
 
 /* Find local best in big soft window and get rid of
@@ -406,7 +457,7 @@ for (axt = axtList; axt != NULL; axt = nextAxt)
     }
 slReverse(&goodList);
 axtList = NULL;
-printf("%d elements in after soft filter.\n", slCount(goodList));
+readSoft += slCount(goodList);
 
 //outputBestRanges(bk, chromStart, rangeSize, ss, f);
 //fprintf(f,"#=====\n");
@@ -417,6 +468,27 @@ bestKeepInitScores(bk);
 for (axt = goodList; axt != NULL; axt = axt->next)
     markBest(axt, bk, chromStart, rangeSize, ss, winSize, FALSE);
 outputBestRanges(bk, chromStart, rangeSize, ss, f);
+}
+
+void axtBestNear(char *inName, char *chromName, char *outName)
+/* axtBestNear - Remove near best alignments. */
+{
+FILE *f = mustOpen(outName, "w");
+char *matrixName = optionVal("matrix", NULL);
+struct axtScoreScheme *ss = NULL;
+struct axt *axtList = NULL; 
+struct lineFile *lf = lineFileOpen(inName, TRUE);
+
+if (matrixName == NULL)
+    ss = axtScoreSchemeDefault();
+else
+    ss = axtScoreSchemeRead(matrixName);
+axtBuffer = NULL;
+axtSaved = FALSE;
+while ((axtList = readAxtChunk(lf, ss, minScore, chromName)) != NULL)
+    axtBestNearChunk(axtList, inName, ss, f);
+printf("Read %d elements from %s\n", totalRead, inName);
+printf("%d elements in after soft filter.\n", readSoft);
 printf("Output %d alignments including %d trimmed from overlaps\n", writeCount, subsetCount);
 printf("Bases in %d, bases out %d (%4.2f%%)\n", baseInCount, baseOutCount,
 	100.0 * baseOutCount / baseInCount);
