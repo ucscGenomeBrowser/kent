@@ -12,7 +12,7 @@
 #include "hCommon.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: colKnownGene.c,v 1.2 2003/06/18 21:05:44 kent Exp $";
+static char const rcsid[] = "$Id: colKnownGene.c,v 1.3 2003/06/19 15:44:20 kent Exp $";
 
 static char *posFromRow3(char **row)
 /* Convert chrom/start/end row to position. */
@@ -72,7 +72,7 @@ else
     sprintLongWithCommas(numBuf, (start+end+1)/2);
     hPrintf("<A HREF=\"%s?db=%s&position=%s&%s\">",
 	    hgTracksName(), database, pos, cartSidUrlString(cart));
-    hPrintf("%s %s</A>", chrom, numBuf);
+    hPrintf("%s&nbsp;%s</A>", chrom, numBuf);
     freeMem(pos);
     }
 hPrintf("</TD>");
