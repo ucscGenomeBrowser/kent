@@ -8,18 +8,26 @@
 /* command line options and values */
 static struct optionSpec optionSpecs[] =
 {
+    {"nonComparative", OPTION_BOOLEAN},
     {"minId", OPTION_FLOAT},
     {"idNearTop", OPTION_FLOAT},
     {"minCover", OPTION_FLOAT},
     {"coverNearTop", OPTION_FLOAT},
     {"coverWeight", OPTION_FLOAT},
+    {"maxRepMatch", OPTION_FLOAT},
     {"minQSize", OPTION_INT},
     {"maxAligns", OPTION_INT},
     {"polyASizes", OPTION_STRING},
     {"dropped", OPTION_STRING},
+    {"alignStats", OPTION_STRING},
     {"weirdOverlapped", OPTION_STRING},
     {NULL, 0}
 };
+
+/* options that are comparative */
+char *comparativeOpts[] = {"idNearTop", "coverNearTop", "coverWeight",
+                           "weirdOverlapped", NULL};
+
 char *gPolyASizes = NULL; /* polyA size file */
 char *gDropped = NULL; /* save dropped psls here */
 char *gWeirdOverlappped = NULL; /* save weird overlapping psls here */
@@ -28,9 +36,11 @@ float gIdNearTop = 0.01;        /* keep within this fraction of the top */
 float gMinCover = 0.90;         /* minimum coverage */
 float gCoverNearTop = 0.1;      /* keep within this fraction of best cover */
 float gCoverWeight = 0.5;       /* weight of cover vs id */
+float gMaxRepMatch = 1.0;       /* maximum repeat match/aligned */
 int gMinQSize = 0;              /* drop queries shorter than this */
 int gMaxAligns = -1;            /* only allow this many alignments for a query
-                                 * if >= 0. */
+                                 * -1 disables check. */
+char *gAlignStats = NULL;       /* file for statistics output */
 
 void usage(char *msg)
 /* usage msg and exit */
@@ -38,9 +48,16 @@ void usage(char *msg)
 errAbort("%s\n%s", msg,
          "pslCDnaFilter [options] inPsl outPsl\n"
          "\n"
-         "Filter cDNA alignments in psl format.\n"
+         "Filter cDNA alignments in psl format.  Filtering parameters are\n"
+         "comparative and non-comparative.  Comparative filters select the\n"
+         "best alignments for each query and requre input be sorted by query\n"
+         "name.  Non-comparative filters are based only on the quality of an\n"
+         "individual alignement.\n"
          "\n"
          "Options:\n"
+         "   -nonComparative - only do non-comparative filtering.  This is\n"
+         "    use to prefilter before all of the alignments for a query have\n"
+         "    been combined.\n"
          "   -minId=0.95 - only keep alignments with at least this fraction\n"
          "    identity.\n"
          "   -idNearTop=0.01 - keep alignments within this fraction\n"
@@ -55,12 +72,16 @@ errAbort("%s\n%s", msg,
          "   -minQSize=0 - drop queries shorter than this size\n"
          "   -maxAligns=n - maximum number of alignments for a given query. If\n"
          "    exceeded, then alignments are sorted by weighed coverage and\n"
-         "    identity an the those over this are dropped.\n"
+         "    identity an the those over this are dropped, A value of -1\n"
+         "    disables (default)\n"
+         "   -maxRepMatch=1.0 - Maximum fraction of matching aligned bases that\n"
+         "    are repeats.  Must use -repeats on BLAT if doing unmasked alignments.\n"
          "   -polyASizes=file - tab separate file as output by faPolyASizes, columns are:\n"
          "        id seqSize tailPolyASize headPolyTSize\n"
          "   -dropped=psl - save psls that were dropped to this file.\n"
          "   -weirdOverlapped=psl - output weirdly overlapping PSLs to\n"
-         "    this file.\n" 
+         "    this file.\n"
+         "   -alignStats=file - output the per-alignment statistics to this file\n"
          "   -verbose=1 - 0: quite\n"
          "                1: output stats\n"
          "                2: list problem alignment (weird or invalid)\n"
@@ -68,13 +89,15 @@ errAbort("%s\n%s", msg,
          "                4: list kept psl and info\n"
          "                5: info about all PSLs\n"
          "\n"
-         "Warning: inPsl MUST be sorted by qName\n"
+         "Warning: inPsl MUST be sorted by qName if comparative filters\n"
+         "are used.\n"
          "\n"
          "This filters for the following criteria and in this order:\n"
          "  o PSLs that are not internally consistent, such has having\n"
          "    overlapping blocks, are dropped.  Use pslCheck program to\n"
          "    get the details.\n"
          "  o Drop queries less than the min size, if specified\n"
+         "  o Drop if repMatch/totalMatch is greater than maxRepMatch.\n"
          "  o Overlapping alignments, trying to keep the one with the most\n"
          "    coverage, but not dropping weird overlaps. These are sets of\n"
          "    alignments for a given query that overlap, however the same\n"
@@ -92,6 +115,19 @@ errAbort("%s\n%s", msg,
          "    highest coverage alignment.\n"
          "  o By maxAligns, if specified\n");
 }
+
+
+struct outFiles
+/* open output files */
+{
+    FILE *pslFh;               /* filtered psls */
+    FILE *droppedFh;           /* dropped psls, or NULL */
+    FILE *weirdOverPslFh;      /* wierd overlap psls, or NULL */
+    FILE *alignStatsFh;        /* alignment stats, or NULL;
+}
+
+XXX;
+
 
 void minQSizeFilter(struct cDnaAligns *cdAlns)
 /* filter by minimum query size */
@@ -204,6 +240,25 @@ for (aln = cdAlns->alns; aln != NULL; aln = aln->next)
         }
 }
 
+void repMatchFilter(struct cDnaAligns *cdAlns)
+/* filter by maxRepMatch */
+{
+struct cDnaAlign *aln;
+
+/* drop those that are over max */
+for (aln = cdAlns->alns; aln != NULL; aln = aln->next)
+    {
+    float repMatch = ((float)aln->psl->repMatch)/((float)(aln->psl->match+aln->psl->repMatch));
+    if ((!aln->drop) && (aln->cover > gMaxAligns))
+        {
+        aln->drop = TRUE;
+        cdAlns->minCoverCnts.aligns++;
+        cDnaAlignVerb(3, aln->psl, "drop: max repMatch %g", repMatch);
+        }
+    }
+}
+
+
 struct cDnaAlign *findMaxAlign(struct cDnaAligns *cdAlns)
 /* find first alignment over max size */
 {
@@ -221,7 +276,6 @@ void maxAlignFilter(struct cDnaAligns *cdAlns)
 /* filter by maximum number of alignments */
 {
 struct cDnaAlign *aln;
-int cnt;
 cDnaAlignsSort(cdAlns);
 for (aln = findMaxAlign(cdAlns); aln != NULL; aln = aln->next)
     if (!aln->drop)
@@ -291,6 +345,7 @@ verbStats("drop minIdent", &cdAlns->minIdCnts);
 verbStats("drop idNearTop", &cdAlns->idTopCnts);
 verbStats("drop minCover", &cdAlns->minCoverCnts);
 verbStats("drop coverNearTop", &cdAlns->coverTopCnts);
+verbStats("drop maxRepMatch", &cdAlns->maxRepMatchCnts);
 verbStats("drop maxAligns", &cdAlns->maxAlignsCnts);
 cDnaAlignsFree(&cdAlns);
 }
@@ -300,7 +355,7 @@ float optionFrac(char *name, float def)
 {
 float val = optionFloat(name, def);
 if (!((0.0 <= val) && (val <= 1.0)))
-    errAbort("-%s must be in the range 0.0..1.0");
+    errAbort("-%s must be in the range 0.0..1.0", name);
 return val;
 }
 
@@ -318,8 +373,22 @@ gIdNearTop = optionFrac("idNearTop", gIdNearTop);
 gMinCover = optionFrac("minCover", gMinCover);
 gCoverNearTop = optionFrac("coverNearTop", gCoverNearTop);
 gCoverWeight = optionFrac("coverWeight", gCoverWeight);
+gMaxRepMatch = optionFrac("maxRepMatch", gMaxRepMatch);
 gMinQSize = optionInt("minQSize", gMinQSize);
 gMaxAligns = optionInt("maxAligns", gMaxAligns);
+gAlignStats = optionInt("alignStats", alignStats);
+
+if (optionExists("nonComparative"))
+    {
+    int i;
+    for (i = 0; comparativeOpts[i] != NULL; i++)
+        if (optionExists(comparativeOpts[i]))
+            errAbort("option -%s is not compatible with -nonComparative",
+                     comparativeOpts[i]);
+    gIdNearTop = 1.0;
+    gCoverNearTop = 1.0;
+    }
+
 pslCDnaFilter(argv[1], argv[2]);
 return 0;
 }

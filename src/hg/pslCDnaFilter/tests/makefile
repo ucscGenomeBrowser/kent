@@ -3,7 +3,7 @@ include ../../../inc/common.mk
 PSLFILT = ../pslCDnaFilter
 DIFF = diff -u --exclude CVS -r
 
-test: overlapTest maxAlignTest minQSizeTest
+test: overlapTest maxAlignTest minQSizeTest nonCompareTest
 
 overlapTest:
 	${MAKE} doFilterSave name=$@ inPsl=overlap.psl inSizes=overlap.sizes \
@@ -16,6 +16,10 @@ maxAlignTest:
 minQSizeTest:
 	${MAKE} doFilter name=$@ inPsl=misc.psl \
 	    filtArgs='-minQSize=30 -minCover=0 -minId=0'
+
+nonCompareTest:
+	${MAKE} doFilter name=$@ inPsl=overlap.psl inSizes=overlap.sizes \
+	    filtArgs='-nonComparative -minCover=0.15 -minId=0.96'
 
 
 # Recursive targets:

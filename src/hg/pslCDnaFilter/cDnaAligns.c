@@ -208,6 +208,7 @@ updateCounter(&cdAlns->minIdCnts);
 updateCounter(&cdAlns->idTopCnts);
 updateCounter(&cdAlns->minCoverCnts);
 updateCounter(&cdAlns->coverTopCnts);
+updateCounter(&cdAlns->maxRepMatchCnts);
 updateCounter(&cdAlns->maxAlignsCnts);
 }
 

@@ -47,6 +47,7 @@ struct cDnaAligns
     struct cDnaCnts idTopCnts;         /* number dropped less that top id */
     struct cDnaCnts minCoverCnts;      /* number dropped less that min cover */
     struct cDnaCnts coverTopCnts;      /* number dropped less that top cover */
+    struct cDnaCnts maxRepMatchCnts;   /* number dropped due maxRepMatch */
     struct cDnaCnts maxAlignsCnts;     /* number dropped due to over max */
 };
 
