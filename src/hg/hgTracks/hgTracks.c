@@ -42,7 +42,8 @@
 #include "exprBed.h"
 
 #define CHUCK_CODE 1
-
+#define MAX_CONTROL_COLUMNS 5
+#define CONTROL_TABLE_WIDTH 600
 #ifdef CHUCK_CODE
 /* begin Chuck code */
 #define EXPR_DATA_SHADES 16
@@ -4482,7 +4483,7 @@ void doForm()
  * buttons and the active image. */
 {
 struct trackGroup *group;
-
+int controlColNum=0;
 /* See if want to include sequence search results. */
 userSeqString = cgiOptionalString("ss");
 if (userSeqString != NULL)
@@ -4640,14 +4641,38 @@ printf("<BR>\n");
 
 
 /* Display viewing options for each group. */
-printf("<B>Track Controls:</B> ");
-printf(" Base Position ");
+/* Chuck: This is going to be wrapped in a table so that
+ * the controls don't wrap around randomly
+ */
+printf("<table border=0 cellspacing=1 cellpadding=1 width=%d>\n", CONTROL_TABLE_WIDTH);
+printf("<tr><th colspan=%d>\n", MAX_CONTROL_COLUMNS);
+printf("<BR><B>Track Controls:</B><BR> ");
+printf("</th></tr>\n");
+printf("<tr><td align=left>\n");
+printf(" Base Position <BR>");
 makeDropList("ruler", offOn, 2, offOn[withRuler]);
+printf("</td>");
+controlColNum=1;
 for (group = tGroupList; group != NULL; group = group->next)
     {
-    printf(" %s ", group->shortLabel);
+    if(controlColNum >= MAX_CONTROL_COLUMNS) 
+	{
+	printf("</tr><tr><td align=left>\n");
+	controlColNum =1;
+	}
+    else 
+	{
+	printf("<td align=left>\n");
+	controlColNum++;
+	}
+    printf(" %s<BR> ", group->shortLabel);
     makeDropList(group->mapName, tvStrings, ArraySize(tvStrings), tvStrings[group->visibility]);
+    printf("</td>\n");
     }
+/* now finish out the table */
+for( ; controlColNum < MAX_CONTROL_COLUMNS; controlColNum++)
+    printf("<td>&nbsp</td>\n");
+printf("</tr>\n</table>\n");
 saveHiddenVars();
 
 /* Clean up. */
