@@ -16,17 +16,11 @@ char *hgTracksName();
 char *hgTrackUiName();
 /* Relative URL to extended track UI. */
 
-char *hgcFullName();
-/* Absolute URL to click processing program. */
-
-char *hgTracksFullName();
-/* Absolute URL to browser. */
-
 char *hgTextName();
-/* Relative URL to text browser. */
+/* Relative URL to old table browser. */
 
-char *hgTracksFullName();
-/* Absolute URL to text browser. */
+char *hgTablesName();
+/* Relative URL to table browser. */
 
 void fragToCloneName(char *fragName, char cloneName[128]);
 /* Convert fragment name to clone name. */

@@ -6,17 +6,13 @@
 #include "portable.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: hCommon.c,v 1.25 2004/10/12 21:49:35 fanhsu Exp $";
+static char const rcsid[] = "$Id: hCommon.c,v 1.26 2004/10/29 20:35:14 angie Exp $";
 
 static char *_hgcName = "../cgi-bin/hgc";	/* Path to click processing program. */
-static char *_hgTracksName = "../cgi-bin/hgTracks"; /* Path back to self. */
+static char *_hgTracksName = "../cgi-bin/hgTracks"; /* Path back to genome browser. */
 static char *_hgTrackUiName = "../cgi-bin/hgTrackUi"; /* Path to extended ui program. */
-static char *_hgcFullName = "http://genome.ucsc.edu/cgi-bin/hgc";	/* Path to click processing program. */
-static char *_hgTracksFullName = "http://genome.ucsc.edu/cgi-bin/hgTracks"; /* Path back to self. */
-static char *_hgTrackUiFullName = "http://genome.ucsc.edu/cgi-bin/hgTrackUi"; /* Path back to extended ui program. */
-
 static char *_hgTextName = "/cgi-bin/hgText"; /* Path back to the text browser. */
-static char *_hgTextFullName = "http://genome.ucsc.edu/cgi-bin/hgText"; /* Path back to the text browser. */
+static char *_hgTablesName = "/cgi-bin/hgTables"; /* Path back to the table browser. */
 
 char *hgcName()
 /* Relative URL to click processing program. */
@@ -36,28 +32,16 @@ char *hgTrackUiName()
 return _hgTrackUiName;
 }
 
-char *hgcFullName()
-/* Absolute URL to click processing program. */
-{
-return _hgcFullName;
-}
-
-char *hgTracksFullName()
-/* Absolute URL to browser. */
-{
-return _hgTracksFullName;
-}
-
 char *hgTextName()
-/* Text broswer relative URL to browser. */
+/* Relative URL to old table browser. */
 {
 return _hgTextName;
 }
 
-char *hgTextFullName()
-/* Absolute URL to browser. */
+char *hgTablesName()
+/* Relative URL to table browser. */
 {
-return _hgTextFullName;
+return _hgTablesName;
 }
 
 static void finishCloneName(char *fragName, char *e, char cloneName[128])
