@@ -12,3 +12,9 @@ axtDropOverlap: $O $(MYLIBS)
 
 lib:
 	cd ../../lib; make
+test:	test1 test2
+%:	input/%.axt
+	mkdir -p output
+	axtDropOverlap input/$@.axt input/H input/H output/$@.axt
+	diff output/$@.axt expected/$@.axt
+	rm output/$@.axt
