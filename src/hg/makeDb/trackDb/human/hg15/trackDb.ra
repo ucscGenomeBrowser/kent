@@ -299,7 +299,7 @@ spectrum on
 type chain ce1
 
 track chesMammal
-shortLabel MammalNotHuman
+shortLabel MammalNotHuman tblastn
 longLabel tblastn of MammalNotHuman Seeds
 priority 1100
 group x
@@ -307,7 +307,7 @@ visibility hide
 type bed 5
 
 track chesChordata
-shortLabel ChordataNotHuman
+shortLabel ChordataNotHuman tblastn
 longLabel tblastn of ChordataNotHuman Seeds
 priority 1100
 group x
@@ -315,23 +315,23 @@ visibility hide
 type bed 5
 
 track chesMammalPsl
-shortLabel chesMammalPsl
-longLabel Boneheaded chain of MammalNotHuman tblast
+shortLabel Mammal blastToPsl
+longLabel blastToPsl of MammalNotHuman tblast
 group x
 priority 1101
 visibility hide
 type psl protein
 
 track chesChordataPsl
-shortLabel chesChordataPsl
-longLabel Boneheaded chain of ChordataNotHuman tblast
+shortLabel Chordata blastToPsl
+longLabel blastToPsl of ChordataNotHuman tblast
 group x
 priority 1101
 visibility hide
 type psl protein
 
 track chesMammalBlat
-shortLabel chesMammalBlat
+shortLabel Mammal BLAT
 longLabel Blat of mammalNotHuman
 group x
 priority 1102
@@ -339,7 +339,7 @@ visibility hide
 type psl xeno
 
 track chesChordataBlat
-shortLabel chesChordataBlat
+shortLabel Chordata BLAT
 longLabel Blat of chordataNotMammal
 group x
 priority 1102
