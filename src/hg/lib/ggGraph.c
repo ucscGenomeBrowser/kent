@@ -13,7 +13,7 @@
 #include "ggPrivate.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: ggGraph.c,v 1.10 2003/12/08 18:42:55 sugnet Exp $";
+static char const rcsid[] = "$Id: ggGraph.c,v 1.11 2004/01/29 01:32:20 sugnet Exp $";
 
 static int maxEvidence = 50;
 
@@ -528,9 +528,9 @@ return hash;
 }
 
 int consensusSoftStartVertex(struct geneGraph *gg, int softStartIx, int hardEndIx, 
-			     int *oIndex, int oCount)
+			     int *oIndex, int oCount, boolean allowSmaller)
 /** Pick the best soft start out of oIndex. Return index of best start
-    into gg->vertices, -1 if no vertex found.
+    into gg->vertices, -1 if no vertex found. Allow smaller exon only if allowSmaller == TRUE.
     Best is defined by:
     - Number of other alignments that support it.
     - Distance from softStartIx. */
@@ -547,7 +547,8 @@ for(i=0; i<oCount; i++)
     {
     int curCount = slCount(e[oIndex[i]][hardEndIx]);
     int curDist = v[softStartIx].position - v[oIndex[i]].position;
-    if( (!isHard || v[oIndex[i]].type  == ggHardStart) &&     /* Replace if not replacing hard with soft. */
+    if( (curDist > 0 || allowSmaller) &&                     /* Exon is larger or we're allowing smaller exons. */
+	(!isHard || v[oIndex[i]].type  == ggHardStart) &&     /* Replace if not replacing hard with soft. */
 	(curCount > bestCount ||                              /* and current count is better. */
 	 (curCount == bestCount && curDist > bestDist && curDist < maxDistance) )) /* or start is farther upstream. */
 	{
@@ -563,9 +564,9 @@ return bestVertex;
 
 
 int consensusSoftEndVertex(struct geneGraph *gg, int hardStartIx, int softEndIx, 
-			     int *oIndex, int oCount)
+			     int *oIndex, int oCount, boolean allowSmaller)
 /** Pick the best hard end out of oIndex. Return index of best hard end index
-    into gg->vertices, -1 if no vertex found.
+    into gg->vertices, -1 if no vertex found. Allow smaller exon only if allowSmaller == TRUE.
     Best is defined by:
     - Number of other alignments that support it.
     - Distance from softStartIx. */
@@ -582,9 +583,10 @@ for(i=0; i<oCount; i++)
     {
     int curCount = slCount(e[hardStartIx][oIndex[i]]);
     int curDist = v[oIndex[i]].position - v[softEndIx].position;
-    if( (!isHard || v[oIndex[i]].type == ggHardEnd) &&  /* Replace if not replacing hard with soft. */
+    if( (curDist > 0 || allowSmaller) &&                     /* Exon is larger or we're allowing smaller exons. */
+        (!isHard || v[oIndex[i]].type == ggHardEnd) &&  /* Replace if not replacing hard with soft. */
 	(curCount > bestCount ||                        /* and current count is better. */
-	 (curCount == bestCount && curDist > bestDist && curDist < maxDist) )) /* or end is farther downstream. */
+	(curCount == bestCount && curDist > bestDist && curDist < maxDist) )) /* or end is farther downstream. */
 	{
 	if(v[oIndex[i]].type == ggHardEnd)
 	    isHard = TRUE;
@@ -598,10 +600,11 @@ return bestVertex;
 
 
 static boolean softStartOverlapConsensusArcs(struct geneGraph *gg, struct hash *aliHash, 
-					     int softStartIx, enum ggVertexType startType)
+					     int softStartIx, enum ggVertexType startType, boolean allowSmaller)
 /** For each edge that contains softStartIx see if there are overlapping
     edges that have a hard start. If there are, find the consensus hard start
-    and extend original edge to it. */
+    and extend original edge to it. Only allow replacement of a softStart with a shorter
+    exon when allowSmaller is TRUE. */
 {
 struct ggVertex *overlapping = NULL; /* Array of vertexes that could replace softStartIx. */
 int *oIndex = NULL;                  /* Index into gg->vertexes array for overlapping. */
@@ -618,7 +621,7 @@ for (i=0; i<vCount; ++i)
 	{
 	oCount = 0;
 	getStartEdgesOverlapping(gg, aliHash, softStartIx, i,  startType, &oIndex, &oCount);
-	bestStart = consensusSoftStartVertex(gg, softStartIx, i, oIndex, oCount);
+	bestStart = consensusSoftStartVertex(gg, softStartIx, i, oIndex, oCount, allowSmaller);
 	if(bestStart >= 0 && bestStart != softStartIx)
 	    {
 	    struct ggEvidence *ge = NULL;
@@ -636,7 +639,7 @@ return changed;
 }
 
 static boolean softEndOverlapConsensusArcs(struct geneGraph *gg, struct hash *aliHash, 
-					   int softEndIx, enum ggVertexType endType)
+					   int softEndIx, enum ggVertexType endType, boolean allowSmaller)
 /** For each edge that contains softEndIx see if there are overlapping
     edges that have a hard end. If there are, find the consensus hard start
     and extend original edge to it. */
@@ -656,7 +659,7 @@ for (i=0; i<vCount; ++i)
 	{
 	oCount = 0;
 	getEndEdgesOverlapping(gg, aliHash, i, softEndIx, endType, &oIndex, &oCount);
-	bestEnd = consensusSoftEndVertex(gg, i, softEndIx, oIndex, oCount);
+	bestEnd = consensusSoftEndVertex(gg, i, softEndIx, oIndex, oCount, allowSmaller);
 	if(bestEnd >= 0 && bestEnd != softEndIx)
 	    {
 	    struct ggEvidence *ge = NULL;
@@ -914,10 +917,10 @@ for (i=0; i<vCount; ++i)
     switch (vertices[i].type)
 	{
 	case ggSoftStart:
-	    result |= softStartOverlapConsensusArcs(gg, aliHash, i, ggSoftStart);
+	    result |= softStartOverlapConsensusArcs(gg, aliHash, i, ggSoftStart, TRUE);
 	    break;
 	case ggSoftEnd:
-	    result |= softEndOverlapConsensusArcs(gg, aliHash, i, ggSoftEnd);
+	    result |= softEndOverlapConsensusArcs(gg, aliHash, i, ggSoftEnd, TRUE);
 	    break;
 	}
     }
@@ -1084,9 +1087,9 @@ for(i=0; i<gg->vertexCount; i++)
 for(i=0; i<gg->vertexCount; i++)
     {
     if(gg->vertices[i].type == ggSoftStart)
-	softStartOverlapConsensusArcs(gg, aliHash, i, ggHardStart);
+	softStartOverlapConsensusArcs(gg, aliHash, i, ggHardStart, FALSE);
     else if(gg->vertices[i].type == ggSoftEnd)
-	softEndOverlapConsensusArcs(gg, aliHash, i, ggHardEnd);
+	softEndOverlapConsensusArcs(gg, aliHash, i, ggHardEnd, FALSE);
     }
 //softlyTrim(gg);
 /* Fill in soft ends and starts with the "best" soft end or start. */
