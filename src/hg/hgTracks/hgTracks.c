@@ -9943,7 +9943,7 @@ if (!hideControls)
 
         if (containsStringNoCase(database, "zoo"))
             {
-            puts("Change organism ");
+            puts("Organism ");
             printAssemblyListHtmlExtra(database, javascript);
             }
 
