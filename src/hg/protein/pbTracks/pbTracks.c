@@ -15,7 +15,7 @@
 #include "pbStampPict.h"
 #include "pbTracks.h"
 
-static char const rcsid[] = "$Id: pbTracks.c,v 1.26 2004/05/04 20:54:26 fanhsu Exp $";
+static char const rcsid[] = "$Id: pbTracks.c,v 1.27 2004/05/06 23:18:15 fanhsu Exp $";
 
 boolean hgDebug = FALSE;      /* Activate debugging code. Set to true by hgDebug=on in command line*/
 
@@ -196,6 +196,7 @@ int  ii = 0;
 int  iypos;
 
 hPrintf("<br><font size=4>");
+hPrintf("%s protein: ", organism);
 hPrintf("<A HREF=\"http://www.expasy.org/cgi-bin/niceprot.pl?%s\" TARGET=_blank><B>%s</B></A>\n", 
 	proteinID, proteinID);
 if (strcmp(proteinID, protDisplayID) != 0)hPrintf(" (aka %s)", protDisplayID);
@@ -271,7 +272,12 @@ hPrintf("<P>");
 
 doGenomeBrowserLink(protDisplayID, mrnaID, hgsidStr);
 doGeneDetailsLink(protDisplayID, mrnaID, hgsidStr);
-doFamilyBrowserLink(protDisplayID, mrnaID, hgsidStr);
+
+/* show Family Browser link only if it is valid for this genome */
+if (hgNearOk(database))
+    {
+    doFamilyBrowserLink(protDisplayID, mrnaID, hgsidStr);
+    }
 
 hPrintf("<P>");
 domainsPrint(conn, proteinID);
