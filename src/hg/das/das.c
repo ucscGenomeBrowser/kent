@@ -13,7 +13,7 @@
 #include "trackTable.h"
 #include <regex.h>
 
-static char const rcsid[] = "$Id: das.c,v 1.20 2004/01/07 00:23:50 kent Exp $";
+static char const rcsid[] = "$Id: das.c,v 1.21 2004/01/07 00:28:46 kent Exp $";
 
 char *version = "1.00";
 char *database = NULL;	
@@ -157,7 +157,8 @@ return((!hasLogicalChromName(seqName)) &&
 boolean dasableTrack(char *name)
 /* Return TRUE if track can be put into DAS format. */
 {
-if (startsWith("chain", name) || startsWith("net", name))
+if (startsWith("chain", name) || startsWith("net", name)
+	|| startsWith("syntenyNet", name) || startsWith("trackDb_", name))
     return FALSE;
 return TRUE;
 }
