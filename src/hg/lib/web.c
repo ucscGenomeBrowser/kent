@@ -9,7 +9,7 @@
 #include "axtInfo.h"
 #include "hgColors.h"
 
-static char const rcsid[] = "$Id: web.c,v 1.59 2004/07/26 23:08:41 hiram Exp $";
+static char const rcsid[] = "$Id: web.c,v 1.60 2004/09/27 19:20:25 kent Exp $";
 
 /* flag that tell if the CGI header has already been outputed */
 boolean webHeadAlreadyOutputed = FALSE;
@@ -164,7 +164,7 @@ if (db == NULL || hgPcrOk(db))
 	   uiState);
     puts("           PCR</A> &nbsp; - &nbsp;");
     }
-printf("       <A HREF=\"/cgi-bin/hgText%s\" class=\"topbar\">\n", uiState);
+printf("       <A HREF=\"/cgi-bin/hgTables%s\" class=\"topbar\">\n", uiState);
 puts("           Tables</A> &nbsp; - &nbsp;");
 puts("       <A HREF=\"/FAQ.html\" class=\"topbar\">" "\n"
      "           FAQ</A> &nbsp; - &nbsp;" "\n" 

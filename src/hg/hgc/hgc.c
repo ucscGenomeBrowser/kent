@@ -145,7 +145,7 @@
 #include "bed6FloatScore.h"
 #include "pscreen.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.759 2004/09/25 22:02:06 kent Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.760 2004/09/27 19:20:15 kent Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -2383,6 +2383,35 @@ cgiMakeTextVar("getDnaPos", newPos, strlen(newPos) + 2);
 cgiContinueHiddenVar("db");
 }
 
+char *hgTablesUrl(boolean usePos, char *track)
+/* Make up URL for table browser. */
+{
+struct dyString *url = dyStringNew(0);
+dyStringAppend(url, "../cgi-bin/hgTables?");
+dyStringAppend(url, cartSidUrlString(cart));
+dyStringPrintf(url, "&db=%s", database);
+if (usePos)
+    {
+    dyStringPrintf(url, "&position=%s:%d-%d", seqName, winStart+1, winEnd);
+    dyStringAppend(url, "&hgta_regionType=range");
+    }
+if (track != NULL)
+    {
+    struct trackDb *tdb = hashFindVal(trackHash, track);
+    if (tdb != NULL)
+	{
+	char *grp = tdb->grp;
+	if (grp != NULL && grp[0] != 0)
+	    {
+	    dyStringPrintf(url, "&hgta_group=%s", grp);
+	    dyStringPrintf(url, "&hgta_track=%s", track);
+	    dyStringPrintf(url, "&hgta_table=%s", track);
+	    }
+	}
+    }
+return dyStringCannibalize(&url);
+}
+
 void doGetDna1()
 /* Do first get DNA dialog. */
 {
@@ -2411,28 +2440,16 @@ if (tbl[0] == 0)
     puts("<P>"
 	 "Note: if you would prefer to get DNA for features of a particular "
 	 "track or table, try the ");
-    printf("<A HREF=\"%s?%s&db=%s&position=%s:%d-%d&phase=table&tbPosOrKeys=pos\" TARGET=_BLANK>",
-	   hgTextName(), cartSidUrlString(cart), database,
-	   seqName, winStart+1, winEnd);
-    puts("Table Browser</A>: select a positional table, "
-	 "perform an Advanced Query and select FASTA as the output format.");
+    printf("<A HREF=\"%s\" TARGET=_blank>", hgTablesUrl(TRUE, NULL));
+    puts("Table Browser</A> using the output format sequence.");
     }
 else
     {
-    char hgTextTbl[128];
-    snprintf(hgTextTbl, sizeof(hgTextTbl), "chr1_%s", tbl);
-    if (hTableExists(hgTextTbl))
-	snprintf(hgTextTbl, sizeof(hgTextTbl), "%s.chrN_%s", database, tbl);
-    else
-	snprintf(hgTextTbl, sizeof(hgTextTbl), "%s.%s", database, tbl);
     puts("<P>"
 	 "Note: if you would prefer to get DNA for more than one feature of "
 	 "this track at a time, try the ");
-    printf("<A HREF=\"%s?%s&db=%s&position=%s:%d-%d&table0=%s&phase=table&tbPosOrKeys=pos&tbTrack=\" TARGET=_BLANK>",
-	   hgTextName(), cartSidUrlString(cart), database,
-	   seqName, winStart+1, winEnd, hgTextTbl);
-    puts("Table Browser</A>: "
-	 "perform an Advanced Query and select FASTA as the output format.");
+    printf("<A HREF=\"%s\" TARGET=_blank>", hgTablesUrl(FALSE, tbl));
+    puts("Table Browser</A> using the output format sequence.");
     }
 
 hgSeqOptionsHtiCart(hti,cart);
@@ -5579,24 +5596,15 @@ void htcGeneInGenome(char *geneName)
  * associated with gene. */
 {
 char *tbl = cgiString("o");
-char hgTextTbl[128];
 
 cartWebStart(cart, "Genomic Sequence Near Gene");
 printf("<H2>Get Genomic Sequence Near Gene</H2>");
 
-snprintf(hgTextTbl, sizeof(hgTextTbl), "chr1_%s", tbl);
-if (hTableExists(hgTextTbl))
-    snprintf(hgTextTbl, sizeof(hgTextTbl), "%s.chrN_%s", database, tbl);
-else
-    snprintf(hgTextTbl, sizeof(hgTextTbl), "%s.%s", database, tbl);
 puts("<P>"
      "Note: if you would prefer to get DNA for more than one feature of "
      "this track at a time, try the ");
-printf("<A HREF=\"%s?%s&db=%s&position=%s:%d-%d&table0=%s&phase=table&tbPosOrKeys=pos&tbTrack=\" TARGET=_BLANK>",
-       hgTextName(), cartSidUrlString(cart), database,
-       seqName, winStart+1, winEnd, hgTextTbl);
-puts("Table Browser</A>: "
-     "perform an Advanced Query and select FASTA as the output format.");
+printf("<A HREF=\"%s\" TARGET=_blank>", hgTablesUrl(FALSE, tbl));
+puts("Table Browser</A> using the output format sequence.");
 
 printf("<FORM ACTION=\"%s\">\n\n", hgcPath());
 cartSaveSession(cart);
