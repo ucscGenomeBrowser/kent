@@ -227,6 +227,9 @@ stored in a single table rather than one table per chromosome:</P>
   href="#FishClones">fishClones</A> 
   - Clones placed on Cytogenetic Map using FISH </LI>
   <LI><A 
+  href="#FosEndPairs">fosEndPairs</A> 
+  - Positions of end pairs for fosmids
+  <LI><A 
   href="#GCpercent">gcPercent</A> 
   - Average number of G and C per 1000 bases in non-overlapping 20Kb windows 
   <LI><A 
@@ -439,6 +442,9 @@ TrEMBL-NEW and their corresponding mRNAs from Genbank
   - STS marker mappings from various maps and FISH clone mappings from the BAC 
   Resource Consortium (obsolete as of Apr. 2001, replaced by stsMap)</LI>
   <LI><A 
+  href="#BED">superfamily</A> 
+  - Superfamily proteins</LI>
+  <LI><A 
   href="#GenePredictions">tigrGeneIndex</A> 
   - Fgenesh++ Gene Predictions </LI>
   <LI><A 
@@ -552,12 +558,12 @@ This section describes the format of each table field by field in
 <a href=" http://www.soe.ucsc.edu/~kent/exe/doc/">  AutoSql</a> format.
 
 <H4><A name=BED></A>Browser Extensible Data</H4>
-The following definition is used for the 
-nci60, perlegen, and rosetta
-tables as follows:<BR>
+The following definition is used for the nci60, perlegen, rosetta, and
+superfamily tables as follows:<BR>
 - nci60 uses the first 15 fields of this table. <BR>
 - perlegen uses the first 12 fields of this table. <BR>
 - rosetta uses the first 15 fields of this table. <BR>
+- superfamily uses the first 4 fields of this table. <BR>
 <PRE>table bed
 "Browser extensible data"
     (
@@ -709,6 +715,26 @@ Last used Apr. 2001.
    string[stsCount] stsNames;      "Names of STS  markers"
    uint beCount;                   "Number of BAC end sequences associated with this clone"
    string[beCount] beNames;        "Accessions of BAC ends"
+   )
+</PRE>
+
+<H4><A name=FosEndPairs></A>Fosmid End Pairs</H4>
+<PRE>table fosEndPairs
+"Positions of end pairs for fosmids"
+   (
+   short  bin;        "Bin number for browser speedup"
+   string chrom;      "Human chromosome"
+   uint   chromStart; "Start position of fosmid in chromosome"
+   uint   chromEnd;   "End position of fosmid in chromosome"
+   string name;       "Name of fosmid"
+
+   uint   score;      "Score = 1000/(# of times fosmid appears in assembly)"
+   char[1] strand;    "Value should be + or -"
+   string pslTable;   "Table which contains corresponding PSL records for linked features"
+   uint   lfCount;    "Number of linked features in the series"
+   uint[lfCount]   lfStarts;  "Comma separated list of start positions of each linked feature in genomic"
+   uint[lfCount]   lfSizes;   "Comma separated list of sizes of each linked feature in genomic"
+   string[lfCount] lfNames;   "Comma separated list of names of linked features"
    )
 </PRE>
 
