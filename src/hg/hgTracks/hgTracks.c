@@ -9230,6 +9230,26 @@ slReverse(&list);
 tg->items = list;
 }
 
+void bed8To12(struct bed *bed)
+/* Turn a bed 8 into a bed 12 by defining one block. */
+{
+// Make up a block: the whole thing.
+bed->blockCount  = 1;
+bed->blockSizes  = needMem(bed->blockCount * sizeof(int));
+bed->chromStarts = needMem(bed->blockCount * sizeof(int));
+bed->blockSizes[0]  = bed->chromEnd - bed->chromStart;
+bed->chromStarts[0] = 0;
+// Some tracks overload thickStart and thickEnd -- catch garbage here.
+if ((bed->thickStart != 0) &&
+    ((bed->thickStart < bed->chromStart) ||
+     (bed->thickStart > bed->chromEnd)))
+    bed->thickStart = bed->chromStart;
+if ((bed->thickEnd != 0) &&
+    ((bed->thickEnd < bed->chromStart) ||
+     (bed->thickEnd > bed->chromEnd)))
+    bed->thickEnd = bed->chromEnd;
+}
+
 void loadBed8(struct track *tg)
 /* Convert bed 8 info in window to linked feature. */
 {
@@ -9244,21 +9264,7 @@ sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd, NULL, &rowOffse
 while ((row = sqlNextRow(sr)) != NULL)
     {
     bed = bedLoadN(row+rowOffset, 8);
-    // Make up a block: the whole thing.
-    bed->blockCount  = 1;
-    bed->blockSizes  = needMem(bed->blockCount * sizeof(int));
-    bed->chromStarts = needMem(bed->blockCount * sizeof(int));
-    bed->blockSizes[0]  = bed->chromEnd - bed->chromStart;
-    bed->chromStarts[0] = 0;
-    // Some tracks overload thickStart and thickEnd -- catch garbage here.
-    if ((bed->thickStart != 0) &&
-	((bed->thickStart < bed->chromStart) ||
-	 (bed->thickStart > bed->chromEnd)))
-	bed->thickStart = bed->chromStart;
-    if ((bed->thickEnd != 0) &&
-	((bed->thickEnd < bed->chromStart) ||
-	 (bed->thickEnd > bed->chromEnd)))
-	bed->thickEnd = bed->chromEnd;
+    bed8To12(bed);
     lf = lfFromBed(bed);
     slAddHead(&lfList, lf);
     bedFree(&bed);
@@ -9697,6 +9703,28 @@ slSort(&list, bedCmp);
 tg->items = list;
 }
 
+void ctLoadBed8(struct track *tg)
+/* Convert bed info in window to linked feature. */
+{
+struct customTrack *ct = tg->customPt;
+struct bed *bed;
+struct linkedFeatures *lfList = NULL, *lf;
+
+for (bed = ct->bedList; bed != NULL; bed = bed->next)
+    {
+    if (bed->chromStart < winEnd && bed->chromEnd > winStart 
+    		&& sameString(chromName, bed->chrom))
+	{
+	bed8To12(bed);
+	lf = lfFromBed(bed);
+	slAddHead(&lfList, lf);
+	}
+    }
+slReverse(&lfList);
+slSort(&lfList, linkedFeaturesCmp);
+tg->items = lfList;
+}
+
 void ctLoadGappedBed(struct track *tg)
 /* Convert bed info in window to linked feature. */
 {
@@ -9733,9 +9761,13 @@ struct track *newCustomTrack(struct customTrack *ct)
 struct track *tg;
 char buf[64];
 tg = trackFromTrackDb(ct->tdb);
-if (ct->fieldCount < 12)
+if (ct->fieldCount < 8)
     {
     tg->loadItems = ctLoadSimpleBed;
+    }
+else if (ct->fieldCount < 12)
+    {
+    tg->loadItems = ctLoadBed8;
     }
 else
     {
