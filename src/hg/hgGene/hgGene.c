@@ -15,7 +15,7 @@
 #include "genePred.h"
 #include "hgGene.h"
 
-static char const rcsid[] = "$Id: hgGene.c,v 1.11 2003/10/14 06:29:54 kent Exp $";
+static char const rcsid[] = "$Id: hgGene.c,v 1.12 2003/10/14 07:18:03 kent Exp $";
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
@@ -450,6 +450,8 @@ sr = sqlGetResult(conn, query);
 if ((row = sqlNextRow(sr)) != NULL)
     gp = genePredLoad(row + hasBin);
 sqlFreeResult(&sr);
+if (gp == NULL)
+    errAbort("Can't find %s", query);
 return gp;
 }
 
