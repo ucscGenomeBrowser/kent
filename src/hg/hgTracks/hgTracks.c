@@ -1108,6 +1108,7 @@ for (lfPair = tg->items; lfPair != NULL; lfPair = lfPair->next)
       }
       else{
 	lf = lfPair->lf3prime;
+	lf->orientation = -lf->orientation;
 	color = mgFindColor(mg,color3prime.r,color3prime.g,color3prime.b);
 	bColor = color;
       } 
