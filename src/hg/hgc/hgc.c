@@ -153,7 +153,7 @@
 #include "pscreen.h"
 #include "jalview.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.800 2004/12/14 20:37:00 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.801 2004/12/17 19:12:50 braney Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -2259,7 +2259,8 @@ struct tfbsConsFactors *tfbsConsFactor;
 struct tfbsConsFactors *tfbsConsFactorList = NULL;
 boolean firstTime = TRUE;
 char *mappedId = NULL;
-boolean haveProtMap = hTableExists("kgProtMap");
+char protMapTable[256];
+char *factorDb;
 
 dupe = cloneString(tdb->type);
 genericHeader(tdb, item);
@@ -2328,14 +2329,17 @@ if (tfbsConsFactorList)
 	    printf("<B>Species:</B> %s<BR>\n", tfbsConsFactor->species);
 	    printf("<B>SwissProt ID:</B> %s<BR>\n", sameString(tfbsConsFactor->id, "N")? "unknown": tfbsConsFactor->id);
 
+	    factorDb = hDefaultDbForGenome(tfbsConsFactor->species);
+	    safef(protMapTable, sizeof(protMapTable), "%s.kgProtMap", factorDb);
+
 	    /* Only display link if entry exists in protein browser */
-	    if (haveProtMap)
+	    if (hTableExists(protMapTable))
 		{
-		sprintf(query, "select * from kgProtMap where qName = '%s';", tfbsConsFactor->id );
+		sprintf(query, "select * from %s where qName = '%s'", protMapTable, tfbsConsFactor->id );
 		sr = sqlGetResult(conn, query); 
 		if ((row = sqlNextRow(sr)) != NULL)                                                         
 		    {
-		    printf("<A HREF=\"/cgi-bin/pbTracks?proteinID=%s\" target=_blank><B>Protein Browser Entry</B></A><BR>",  tfbsConsFactor->id);
+		    printf("<A HREF=\"/cgi-bin/pbTracks?proteinID=%s&db=%s\" target=_blank><B>Protein Browser Entry</B></A><BR>",  tfbsConsFactor->id,factorDb);
 		    sqlFreeResult(&sr); 
 		    }
 		}
