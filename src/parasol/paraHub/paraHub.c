@@ -67,7 +67,7 @@
 #include "machSpec.h"
 #include "log.h"
 
-static char const rcsid[] = "$Id: paraHub.c,v 1.79.24.2 2005/01/06 02:59:02 galt Exp $";
+static char const rcsid[] = "$Id: paraHub.c,v 1.79.24.3 2005/01/06 07:59:01 galt Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -1444,7 +1444,7 @@ void listBatches(struct paraMessage *pm)
  * line followed by a blank line. */
 {
 struct user *user;
-pmSendString(pm, rudpOut, "#user     run   wait   done crash pri batch");
+pmSendString(pm, rudpOut, "#user     run   wait   done crash pri max batch");
 for (user = userList; user != NULL; user = user->next)
     {
     struct dlNode *bNode;
