@@ -769,7 +769,8 @@ else if (fitFields(hash, "tName", "tStart", "tEnd", retChrom, retStart, retEnd))
 /* Look for gene prediction names. */
 else if (fitFields(hash, "chrom", "txStart", "txEnd", retChrom, retStart, retEnd))
     {
-    fitField(hash, "name", retName);
+    fitField(hash, "geneName", retName) ||
+	fitField(hash, "name", retName);
     fitField(hash, "strand", retStrand);
     fitField(hash, "cdsStart", retCdsStart);
     fitField(hash, "cdsEnd", retCdsEnd);
