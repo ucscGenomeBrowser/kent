@@ -3,6 +3,7 @@
 #include "options.h"
 #include "jksql.h"
 #include "rankProp.h"
+#include "rankPropProt.h"
 #include "kgXref.h"
 #include "localmem.h"
 #include "hash.h"
@@ -10,21 +11,27 @@
 #include "hgRelate.h"
 #include "verbose.h"
 
-static char const rcsid[] = "$Id: spLoadRankProp.c,v 1.2 2004/08/31 00:47:28 markd Exp $";
+static char const rcsid[] = "$Id: spLoadRankProp.c,v 1.3 2004/10/05 08:04:27 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
     {"append", OPTION_BOOLEAN},
     {"keep", OPTION_BOOLEAN},
     {"noLoad", OPTION_BOOLEAN},
+    {"noKgIdFile", OPTION_STRING},
     {NULL, 0}
 };
 
 boolean gAppend = FALSE;  /* append to table? */
 boolean gKeep = FALSE;    /* keep tab file */
 boolean gLoad = TRUE;     /* load databases */
+char *gNoKgIdFile = NULL; /* output dropped sp ids to this file */
 
-struct hash *gProtToKgMap = NULL;  /* has of protein id to kg id */
+struct hash *gProtToKgMap = NULL;  /* has of protein id to kg id. Also
+                                    * contains entries with a NULL value for
+                                    * proteins not found in kgProtMap so these
+                                    * can be counted. There maybe multiple
+                                    * entries for a given swissprot id. */
 
 void usage()
 /* Explain usage and exit. */
@@ -37,6 +44,8 @@ errAbort(
   "  -append - append to the table instead of recreating it\n"
   "  -keep - keep tab file used to load database\n"
   "  -noLoad - don't load database, implies -keep\n"
+  "  -noKgIdFile=file - write list of swissprots dropped because a known gene\n"
+  "   id was not found.\n"
   "  -verbose=n - n >=2 lists dropped entries\n"
   "\n"
   "Load a file in the format:\n"
@@ -78,28 +87,111 @@ while ((row = sqlNextRow(sr)) != NULL)
 sqlFreeResult(&sr);
 }
 
-boolean processRow(char **row, FILE *tabFh)
-/* parse and process on row of a rankProp file, converting ids to known gene
- * ids */
+char *getKgId(char *spId)
+/* get the kgId for a swissprot.  If not found, enter in the
+ * table for later counting */
 {
-struct rankProp rec;
-char *qKgId, *tKgId;
-rankPropStaticLoad(row, &rec);
-qKgId = hashFindVal(gProtToKgMap, rec.qKgId);
-tKgId = hashFindVal(gProtToKgMap, rec.tKgId);
-if ((qKgId == NULL) || (tKgId == NULL))
+struct hashEl *hel = hashStore(gProtToKgMap, spId);
+if (hel->val == NULL)
+    return NULL;
+else
+    return hel->val;
+}
+
+int countKgMissing()
+/* count the number kgIds that were not found */
+{
+int missing = 0;
+struct hashCookie cookie = hashFirst(gProtToKgMap);
+struct hashEl *hel;
+
+while ((hel = hashNext(&cookie)) != NULL)
+    {
+    if (hel->val == NULL)
+        missing++;
+    }
+return missing;
+}
+
+void listKgMissing(char *file)
+/* output the spIds for the kgIds that were not found */
+{
+FILE *fh = mustOpen(file, "w");
+struct hashCookie cookie = hashFirst(gProtToKgMap);
+struct hashEl *hel;
+
+while ((hel = hashNext(&cookie)) != NULL)
+    {
+    if (hel->val == NULL)
+        fprintf(fh, "%s\n", hel->name);
+    }
+carefulClose(&fh);
+}
+
+enum rowStat
+/* reason a row was skipped */
+{
+    rowKeep,             /* row was loaded */
+    rowNoKgXref,         /* target or query not in kgXref */
+    rowSingleton         /* no score or e-value */
+};
+
+void outputEntry(struct rankPropProt *inRec, FILE *tabFh,
+                 struct hashEl *qKgHel, struct hashEl *tKgHel)
+/* output entry for all combinations of kgIDs corrisponding to the swissprot
+ * pair */
+{
+struct rankProp outRec;
+struct hashEl *qKgScan,  *tKgScan;
+
+outRec.score = inRec->score;
+outRec.qtEVal = inRec->qtEVal;
+outRec.tqEVal = inRec->tqEVal;
+
+for (qKgScan = qKgHel; qKgScan != NULL; qKgScan = hashLookupNext(qKgScan))
+    {
+    outRec.qKgId = qKgScan->val;
+    for (tKgScan = tKgHel; tKgScan != NULL; tKgScan = hashLookupNext(tKgScan))
+        {
+        outRec.tKgId = tKgScan->val;
+        rankPropTabOut(&outRec, tabFh);
+        }
+    }
+}
+
+enum rowStat processRow(char **row, FILE *tabFh)
+/* Parse and process on row of a rankProp file, converting ids to known gene
+ * ids. Only output if score is greater than zero or there is an e-value */
+{
+struct rankPropProt inRec;
+struct rankProp outRec;
+struct hashEl *qKgHel, *tKgHel;
+rankPropProtStaticLoad(row, &inRec);
+
+if ((inRec.score == 0.0) && (inRec.qtEVal < 0) && (inRec.tqEVal < 0))
+    {
+    verbose(2, "no score or edges for %s <=> %s\n",
+            inRec.qSpId, inRec.tSpId);
+    return rowSingleton;;
+    }
+
+/* since a swissprot can be associated with multiple kgIds, need to
+ * loop over all combinations.  Use hashStore so NULL entries are added
+ * for ids that are not found. */
+
+qKgHel = hashStore(gProtToKgMap, inRec.qSpId);
+tKgHel = hashStore(gProtToKgMap, inRec.tSpId);
+if ((qKgHel->val == NULL) || (tKgHel == NULL))
     {
     verbose(2, "can't find kgXref id for %s, skipping %s <=> %s\n",
-            ((qKgId == NULL) ? rec.qKgId : rec.tKgId),
-            rec.qKgId, rec.tKgId);
-    return FALSE;
+            ((qKgHel->val == NULL) ? inRec.qSpId : inRec.tSpId),
+            inRec.qSpId, inRec.tSpId);
+    return rowNoKgXref;
     }
 else
     {
-    rec.qKgId = qKgId;
-    rec.tKgId = tKgId;
-    rankPropTabOut(&rec, tabFh);
-    return TRUE;
+    outputEntry(&inRec, tabFh, qKgHel, tKgHel);
+    return rowKeep;
     }
 }
 
@@ -108,22 +200,33 @@ void loadRankProp(struct sqlConnection *conn, char *table, char *rankPropFile)
 {
 struct lineFile *inLf = lineFileOpen(rankPropFile, TRUE);
 FILE *tabFh = hgCreateTabFile(".", table);
-char *row[RANKPROP_NUM_COLS];
-int total = 0;
-int numSkipped = 0;
+char *row[RANKPROPPROT_NUM_COLS];
+int statCnts[3]; /* indexed by status */
+
+statCnts[rowKeep] = 0;
+statCnts[rowNoKgXref] = 0;
+statCnts[rowSingleton] = 0;
 
 /* copy file, converting ids */
-while (lineFileNextRowTab(inLf, row, RANKPROP_NUM_COLS))
+while (lineFileNextRowTab(inLf, row, RANKPROPPROT_NUM_COLS))
     {
-    if (!processRow(row, tabFh))
-        numSkipped++;
-    total++;
+    enum rowStat stat = processRow(row, tabFh);
+    statCnts[stat]++;
     }
 lineFileClose(&inLf);
-verbose(1, "skipped %d of %d due to not being in kgXref\n", numSkipped,
-        total);
+if (statCnts[rowNoKgXref] > 0)
+    {
+    verbose(1, "skipped %d pairs due to not being in kgXref \n", statCnts[rowNoKgXref]);
+    verbose(1, "%d proteins could not be mapped\n", countKgMissing());
+    }
+if (statCnts[rowSingleton] > 0)
+    verbose(1, "skipped %d entries due to no score and no edges\n", statCnts[rowSingleton]);
+verbose(1, "kept %d pairs\n", statCnts[rowKeep]);
+if (gNoKgIdFile != NULL)
+    listKgMissing(gNoKgIdFile);
+
 if (gLoad)
-    hgLoadTabFile(conn, ".", table, &tabFh);
+    hgLoadTabFileOpts(conn, ".", table, SQL_TAB_FILE_ON_SERVER, &tabFh);
 if (!gKeep)
     hgRemoveTabFile(".", table);
 }
@@ -157,6 +260,7 @@ if (argc != 4)
 gAppend = optionExists("append");
 gKeep = optionExists("keep");
 gLoad = !optionExists("noLoad");
+gNoKgIdFile = optionVal("noKgIdFile", NULL);
 if (!gLoad)
     gKeep = TRUE;
 spLoadRankProp(argv[1], argv[2], argv[3]);
