@@ -3268,6 +3268,7 @@ sys     16m13.770s
     ln -s `pwd`/wigData5_1K/*.wib /gbdb/rn3/wib/gc5Base
 
 # Affymetrix RG-U34A GeneChip track - affyRGU34A 
+# RG-U34A is the chip used for the GNF Atlas 2 expression data for Rat
 # (DONE, 2004-05-11, hartera)
 
     mkdir -p /projects/compbio/data/microarray/affyRat
