@@ -10,7 +10,7 @@
 #	are created.  See also, scripts:
 #	mkSwissProtDB.sh and mkProteinsDB.sh
 #
-#	"$Id: KGprocess.sh,v 1.3 2004/01/23 23:39:27 hiram Exp $"
+#	"$Id: KGprocess.sh,v 1.4 2004/01/23 23:48:29 hiram Exp $"
 #
 #	Thu Nov 20 11:16:16 PST 2003 - Created - Hiram
 #		Initial version is a translation of makeKgMm3.doc
@@ -391,7 +391,7 @@ cd ${TOP}/kgBestMrna
 TablePopulated "spMrna" ${DB} || { \
     hgsql -e "drop table spMrna;" ${DB} 2> /dev/null; \
     hgsql ${DB} < ~/kent/src/hg/lib/spMrna.sql; \
-    echo "`date` loading proteinMrna.tab into ${DB}.spMrna"; \
+    echo "`date` loading best.lis into ${DB}.spMrna"; \
     hgsql -e 'LOAD DATA local INFILE "best.lis" into table spMrna;' ${DB}; \
 }
 
