@@ -14,6 +14,7 @@
 #include <regex.h>
 
 char *version = "1.00";
+char *database = NULL;	
 
 void usage()
 /* Explain usage and exit. */
@@ -389,7 +390,7 @@ for (db = dbList; db != NULL; db = db->next)
     printf("   <DSN>\n");
     printf("     <SOURCE id=\"%s\" version=\"%s\">%s Human Genome at UCSC</SOURCE>\n", 
     	db->name, version, freeze);
-    printf("     <MAPMASTER>http://genome-test.cse.ucsc.edu:80/cgi-bin/das/%s</MAPMASTER>\n",
+    printf("     <MAPMASTER>http://genome.cse.ucsc.edu:80/cgi-bin/das/%s</MAPMASTER>\n",
         db->name);
     printf("     <DESCRIPTION>%s Human Genome at UCSC</DESCRIPTION>\n", freeze);
     printf("   </DSN>\n");
@@ -555,8 +556,8 @@ for (i=0; i<gp->exonCount; ++i)
     printf(" <ORIENTATION>%c</ORIENTATION>\n", gp->strand[0]);
     printf(" <PHASE>-</PHASE>\n");
     printf(" <GROUP id=\"%s.%s.%d\">\n", gp->name, gp->chrom, gp->txStart);
-    printf("  <LINK href=\"http://genome.ucsc.edu/cgi-bin/hgTracks?position=%s:%d-%d\">Link to UCSC Browser</LINK>\n", 
-    	gp->chrom, gp->txStart, gp->txEnd);
+    printf("  <LINK href=\"http://genome.ucsc.edu/cgi-bin/hgTracks?position=%s:%d-%d&amp;db=%s\">Link to UCSC Browser</LINK>\n", 
+	gp->chrom, gp->txStart, gp->txEnd, database);
     printf(" </GROUP>\n");
     printf("</FEATURE>\n");
     }
@@ -571,6 +572,7 @@ for (i=0; i<psl->blockCount; ++i)
     {
     int s = psl->tStarts[i];
     int e = s + psl->blockSizes[i];
+    int qs, qe, qStart, qEnd;
     int start,end;
     if (psl->strand[1] == '-')
         {
@@ -581,6 +583,18 @@ for (i=0; i<psl->blockCount; ++i)
         {
 	start = s;
 	end = e;
+	}
+    s = psl->qStarts[i];
+    e = s + psl->blockSizes[i];
+    if (psl->strand[0] == '-')
+        {
+	qStart = psl->qSize - e;
+	qEnd = psl->qSize - s;
+	}
+    else
+        {
+	qStart = s;
+	qEnd = e;
 	}
     printf(
     "<FEATURE id=\"%s.%s.%d.%d\" label=\"%s\">\n", psl->qName, psl->tName, psl->tStart, i, psl->qName);
@@ -595,14 +609,18 @@ for (i=0; i<psl->blockCount; ++i)
     printf(" <ORIENTATION>%c</ORIENTATION>\n", psl->strand[0]);
     printf(" <PHASE>-</PHASE>\n");
     printf(" <GROUP id=\"%s.%s.%d\">\n", psl->qName, psl->tName, psl->tStart);
-    printf("  <LINK href=\"http://genome.ucsc.edu/cgi-bin/hgTracks?position=%s:%d-%d\">Link to UCSC Browser</LINK>\n", 
-	psl->tName, psl->tStart, psl->tEnd);
+    printf("  <LINK href=\"http://genome.ucsc.edu/cgi-bin/hgTracks?position=%s:%d-%d&amp;db=%s\">Link to UCSC Browser</LINK>\n", 
+	psl->tName, psl->tStart, psl->tEnd, database);
+    printf("  <TARGET id=\"%s\" start=\"%d\" end=\"%d\">%s</TARGET>\n",
+        psl->qName, qStart+1, qEnd, psl->qName);
     printf(" </GROUP>\n");
     printf("</FEATURE>\n");
     }
 }
 
-void dasOutBed(char *chrom, int start, int end, char *name, struct tableDef *td, struct trackTable *tt)
+void dasOutBed(char *chrom, int start, int end, 
+	char *name, char *strand, char *score, 
+	struct tableDef *td, struct trackTable *tt)
 /* Write out a generic one. */
 {
 printf("<FEATURE id=\"%s.%s.%d\" label=\"%s\">\n", name, chrom, start, name);
@@ -613,15 +631,26 @@ else
     printf(" <METHOD></METHOD>\n");
 printf(" <START>%d</START>\n", start+1);
 printf(" <END>%d</END>\n", end);
-printf(" <SCORE>-</SCORE>\n");
-printf(" <ORIENTATION>0</ORIENTATION>\n");
+printf(" <SCORE>%s</SCORE>\n", score);
+printf(" <ORIENTATION>%s</ORIENTATION>\n", strand);
 printf(" <PHASE>-</PHASE>\n");
 printf(" <GROUP id=\"%s.%s.%d\">\n", name, chrom, start);
-printf("  <LINK href=\"http://genome.ucsc.edu/cgi-bin/hgTracks?position=%s:%d-%d\">Link to UCSC Browser</LINK>\n", 
-    chrom, start, end);
+printf("  <LINK href=\"http://genome.ucsc.edu/cgi-bin/hgTracks?position=%s:%d-%d&amp;db=%s\">Link to UCSC Browser</LINK>\n", 
+    chrom, start, end, database);
 printf(" </GROUP>\n");
 printf("</FEATURE>\n");
 }
+
+int fieldIndex(char *table, char *field)
+/* Returns index of field in a row from table, or -1 if it 
+ * doesn't exist. */
+{
+struct sqlConnection *conn = hAllocConn();
+int ix = sqlFieldIndex(conn, table, field);
+hFreeConn(&conn);
+return ix;
+}
+
 
 void doFeatures()
 /* features - DAS Annotation Feature Server. */
@@ -639,7 +668,6 @@ struct sqlResult *sr;
 char **row;
 int start, end;
 char *seq;
-struct dyString *table = newDyString(0);
 struct dyString *query = newDyString(0);
 
 /* Write out DAS features header. */
@@ -665,6 +693,10 @@ for (segment = segmentList; segment != NULL; segment = segment->next)
 	if (catTypeFilter(category, td->category, type, td->name) )
 	    {
 	    int rowOffset;
+	    boolean hasBin;
+	    char table[64];
+
+	    hFindSplitTable(seq, td->name, table, &hasBin);
 	    tt = hashFindVal(trackHash, td->name);
 	    sr = hRangeQuery(conn, td->name, seq, start, end, NULL, &rowOffset);
 	    if (sameString(td->startField, "tStart"))
@@ -687,11 +719,22 @@ for (segment = segmentList; segment != NULL; segment = segment->next)
 		}
 	    else if (sameString(td->startField, "chromStart"))
 	        {
+		int scoreIx = fieldIndex(table, "score");
+		int strandIx = fieldIndex(table, "strand");
+		int nameIx = fieldIndex(table, "name");
+
+		if (scoreIx == -1)
+		    scoreIx = fieldIndex(table, "gcPpt");
 		while ((row = sqlNextRow(sr)) != NULL)
+		    {
+		    char *strand = (strandIx >= 0 ? row[strandIx] : "0");
+		    char *score = (scoreIx >= 0 ? row[scoreIx] : "-");
+		    char *name = (nameIx >= 0 ? row[nameIx] : td->name);
 		    dasOutBed(row[0+rowOffset], 
 		    	sqlUnsigned(row[1+rowOffset]), 
 			sqlUnsigned(row[2+rowOffset]), 
-			row[3+rowOffset], td, tt);
+			name, strand, score, td, tt);
+		    }
 		}
 	    sqlFreeResult(&sr);
 	    }
@@ -703,7 +746,6 @@ for (segment = segmentList; segment != NULL; segment = segment->next)
 printf("</GFF></DASGFF>\n");
 
 /* Clean up. */
-freeDyString(&table);
 freeDyString(&query);
 freeHash(&trackHash);
 hFreeConn(&conn);
@@ -787,6 +829,7 @@ if (sameString(dataSource, "dsn"))
     doDsn(dbList);
 else if (slNameFind(dbList, dataSource) != NULL)
     {
+    database = dataSource;
     hSetDb(dataSource);
     if (sameString(command, "entry_points"))
         doEntryPoints();
