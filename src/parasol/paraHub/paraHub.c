@@ -173,9 +173,15 @@ user->priority = BIGNUM;
 for (node = user->curBatches->head; !dlEnd(node); node = node->next)
     {
     batch = node->val;
+    
+    uglyf("\n user %s: examining batch %s priority=%d \n", user->name, batch->name, batch->priority);
+    
     if (batch->priority < user->priority)
      user->priority = batch->priority;
     }
+
+uglyf("\n user %s: new priority=%d \n", user->name, user->priority);
+
 }
 
 struct batch *findBatchInList(struct dlList *list,  char *nameString)
@@ -204,7 +210,6 @@ batch->name = nameString;
 batch->user = user;
 batch->jobQueue = newDlList();
 batch->priority = NORMAL_PRIORITY;
-updateUserPriority(user);
 return batch;
 }
 
@@ -215,14 +220,15 @@ struct batch *batch;
 name = hashStoreName(stringHash, name);
 batch = findBatchInList(user->curBatches, name);
 if (batch == NULL)
-     {
-     batch = findBatchInList(user->oldBatches, name);
-     if (batch != NULL)
-	 dlRemove(batch->node);
-     else
-	 batch = newBatch(name, user);
-     dlAddTail(user->curBatches, batch->node);
-     }
+    {
+    batch = findBatchInList(user->oldBatches, name);
+    if (batch != NULL)
+	dlRemove(batch->node);
+    else
+	batch = newBatch(name, user);
+    dlAddTail(user->curBatches, batch->node);
+    updateUserPriority(user);
+    }
 return batch;
 }
 
@@ -277,6 +283,10 @@ for (node = queuedUsers->head; !dlEnd(node); node = node->next)
 	minUser = user;
 	}
     }
+
+if (minUser)
+uglyf("\n lucky user %s: priority=%d \n", minUser->name, minUser->priority);
+
 return minUser;
 }
 
@@ -295,6 +305,10 @@ for (node = user->curBatches->head; !dlEnd(node); node = node->next)
 	minBatch = batch;
 	}
     }
+
+if (minBatch)
+uglyf("\n lucky batch %s: priority=%d \n", minBatch->name, minBatch->priority);
+
 return minBatch;
 }
 
@@ -1241,6 +1255,7 @@ if (batchName != NULL)
 		}
 	    dlRemove(batch->node);
 	    dlAddTail(user->oldBatches, batch->node);
+	    updateUserPriority(user);
 	    }
 	res = "ok";
 	}
@@ -1358,7 +1373,7 @@ void listBatches(struct paraMessage *pm)
  * line followed by a blank line. */
 {
 struct user *user;
-pmSendString(pm, rudpOut, "#user     run   wait   done crash batch");
+pmSendString(pm, rudpOut, "#user     run   wait   done crash pri batch");
 for (user = userList; user != NULL; user = user->next)
     {
     struct dlNode *bNode;

@@ -562,13 +562,13 @@ for (lineEl = lineList; lineEl != NULL; lineEl = lineEl->next)
     {
     int wordCount;
     char *line = lineEl->val;
-    char *row[6];
+    char *row[7];
     if (line[0] != '#')
 	{
 	char *b;
 	wordCount = chopLine(line, row);
-	b = row[5];
-	if (wordCount < 6 || b[0] != '/')
+	b = row[6];
+	if (wordCount < 7 || b[0] != '/')
 	    errAbort("paraHub and para out of sync on listBatches");
 	if (sameString(b, batchName))
 	    ret = TRUE;
@@ -1317,6 +1317,24 @@ freez(&result);
 verbose(1, "Told hub to chill out\n");
 }
 
+void sendSetPriorityMessage(char *val)
+/* Tell hub to change priority on batch */
+{
+struct dyString *dy = newDyString(1024);
+char curDir[512];
+char *result;
+int priority = atoi(val);
+if (getcwd(curDir, sizeof(curDir)) == NULL)
+    errAbort("Couldn't get current directory");
+dyStringPrintf(dy, "setPriority %s %s/para.results %d", getUser(), curDir, priority);
+result = hubSingleLineQuery(dy->string);
+dyStringFree(&dy);
+if (result == NULL || sameString(result, "0"))
+    errAbort("Couldn't set priority for %s\n", curDir);
+freez(&result);
+verbose(1, "Told hub to set priority %d\n",priority);
+}
+
 
 int cleanTrackingErrors(struct jobDb *db)
 /* Remove submissions with tracking errors. 
@@ -1681,6 +1699,12 @@ else if (sameWord(command, "running"))
 else if (sameWord(command, "time") || sameWord(command, "times"))
     {
     paraTimes(batch);
+    }
+else if (sameWord(command, "priority"))
+    {
+    if (argc != 3)
+        usage();
+    sendSetPriorityMessage(argv[2]);
     }
 else
     {
