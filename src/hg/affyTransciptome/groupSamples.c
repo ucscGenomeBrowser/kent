@@ -11,8 +11,6 @@ errAbort(
     "use bedSort first if they are not).\n"
     "usage:\n"
     "   groupSamples <grouping size - int> <input file> <output file>\n"
-    "options:\n"
-    "   -sort - sort samples (otherwise it assumes they are sorted already)\n"
     );
 }
 
