@@ -10,6 +10,7 @@
 #include "dbDb.h"
 #include "web.h"
 #include "hgFind.h"
+#include "hCommon.h"
 
 struct cart *cart = NULL;
 struct hash *oldVars = NULL;
@@ -160,7 +161,10 @@ void doMiddle(struct cart *theCart)
 cart = theCart;
 
 getDbAndGenome(cart, &db, &organism);
-cartWebStart(theCart, "%s Genome Browser Gateway \n", organism);
+if (hIsMgcServer())
+    cartWebStart(theCart, "MGC %s Genome Browser Gateway \n", organism);
+else
+    cartWebStart(theCart, "%s Genome Browser Gateway \n", organism);
 hgGateway();
 cartWebEnd();
 }

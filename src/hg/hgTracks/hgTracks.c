@@ -10244,7 +10244,12 @@ if (!hideControls)
     freezeName = hFreezeFromDb(database);
     if(freezeName == NULL)
 	freezeName = "Unknown";
-    hPrintf("<FONT SIZE=5><B>UCSC Genome Browser on %s Freeze</B></FONT><BR>\n",freezeName); 
+    hPrintf("<FONT SIZE=5><B>");
+    if (hIsMgcServer())
+        hPrintf("MGC Genome Browser on %s Freeze", freezeName);
+    else
+        hPrintf("UCSC Genome Browser on %s Freeze", freezeName);
+    hPrintf("</B></FONT><BR>\n");
     /* This is a clear submit button that browsers will use by default when enter is pressed in position box. */
     hPrintf("<INPUT TYPE=IMAGE BORDER=0 NAME=\"hgt.dummyEnterButton\" src=\"../images/DOT.gif\">");
     /* Put up scroll and zoom controls. */
