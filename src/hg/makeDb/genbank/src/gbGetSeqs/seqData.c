@@ -36,7 +36,7 @@ static void processSeq(struct gbSelect* select, struct gbFa* inFa)
 /* process the next sequence from an update fasta file, possibly outputing
  * the sequence */
 {
-char acc[GB_ACC_BUFSZ];
+char acc[GB_ACC_BUFSZ], hdrBuf[GB_ACC_BUFSZ], *hdr = NULL;
 short version = gbSplitAccVer(inFa->id, acc);
 
 /* will return NULL on ignored sequences */
@@ -53,8 +53,12 @@ if ((entry != NULL) && (version == entry->selectVer) && !entry->clientFlags)
     if (isValidMrnaSeq(inFa))
         {
         if (!gInclVersion)
-            strcpy(inFa->id, acc);  /* remove version */
-        gbFaWriteFromFa(gOutFa, inFa, NULL);
+            {
+            /* put version in comment */
+            safef(hdrBuf, sizeof(hdrBuf), "%s %d", acc, version);
+            hdr = hdrBuf;
+            }
+        gbFaWriteFromFa(gOutFa, inFa, hdr);
         entry->clientFlags = TRUE; /* flag so only gotten once */
         }
     else
