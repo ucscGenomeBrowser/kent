@@ -9,7 +9,7 @@
 #include "axt.h"
 #include "hgGene.h"
 
-static char const rcsid[] = "$Id: otherOrgs.c,v 1.4 2004/11/22 20:37:28 kent Exp $";
+static char const rcsid[] = "$Id: otherOrgs.c,v 1.5 2004/11/22 21:15:56 kent Exp $";
 
 struct otherOrg
 /* Links involving another organism. */
@@ -19,6 +19,7 @@ struct otherOrg
     char *name;		/* Symbolic name. */
     char *shortLabel;	/* Short human-readable label. */
     char *idSql;	/* SQL to create ID. */
+    char *idToProtIdSql;/* Convert from id to protein ID. */
     char *genomeUrl;	/* URL of genome browser link. */
     char *sorterUrl;	/* URL of genome browser link. */
     char *otherUrl;	/* URL of other link. */
@@ -76,6 +77,7 @@ for (ra = raList; ra != NULL; ra = ra->next)
 	    otherOrg->name = otherOrgRequiredField(ra, "name");
 	    otherOrg->shortLabel = otherOrgRequiredField(ra, "shortLabel");
 	    otherOrg->idSql = otherOrgRequiredField(ra, "idSql");
+	    otherOrg->idToProtIdSql = otherOrgOptionalField(ra, "idToProtIdSql");
 	    otherOrg->genomeUrl = otherOrgOptionalField(ra, "genomeUrl");
 	    otherOrg->sorterUrl = otherOrgOptionalField(ra, "sorterUrl");
 	    otherOrg->otherUrl = otherOrgOptionalField(ra, "otherUrl");
@@ -116,6 +118,34 @@ if (row != NULL)
     otherId = cloneString(row[0]);
 sqlFreeResult(&sr);
 return otherId;
+}
+
+static char *otherOrgProteinId(struct otherOrg *otherOrg, struct sqlConnection *conn,
+    char *geneId)
+/* Return protein ID in other organism or NULL if it doesn't exist. */
+{
+char *otherId = otherOrgId(otherOrg, conn, geneId);
+char *protId = NULL;
+if (otherId != NULL && otherOrg->idToProtIdSql != NULL)
+    {
+    struct sqlConnection *conn = sqlConnect(otherOrg->db);
+    char query[512];
+    struct sqlResult *sr;
+    char **row;
+    safef(query, sizeof(query), otherOrg->idToProtIdSql, otherId);
+    sr = sqlGetResult(conn, query);
+    row = sqlNextRow(sr);
+    if (row != NULL)
+	{
+	freez(&otherId);
+	protId = cloneString(row[0]);
+	}
+    sqlFreeResult(&sr);
+    sqlDisconnect(&conn);
+    }
+else
+    protId = otherId;
+return protId;
 }
 
 static void otherOrgPrintLink(struct otherOrg *otherOrg,  
@@ -226,14 +256,14 @@ for (otherOrg = otherOrgList; otherOrg != NULL; otherOrg = otherOrg->next)
 hPrintf("</TR>\n<TR>");
 for (otherOrg = otherOrgList; otherOrg != NULL; otherOrg = otherOrg->next)
     {
-    char *id = otherOrgId(otherOrg, conn, geneId);
+    char *id = otherOrgProteinId(otherOrg, conn, geneId);
     otherOrgPepLink(otherOrg, hggDoOtherProteinSeq, "Protein Sequence", id, conn);
     freeMem(id);
     }
 hPrintf("</TR>\n<TR>");
 for (otherOrg = otherOrgList; otherOrg != NULL; otherOrg = otherOrg->next)
     {
-    char *id = otherOrgId(otherOrg, conn, geneId);
+    char *id = otherOrgProteinId(otherOrg, conn, geneId);
     otherOrgPepLink(otherOrg, hggDoOtherProteinAli, "Alignment", id, conn);
     freeMem(id);
     }
@@ -302,9 +332,10 @@ if (localSeq != NULL && otherSeq != NULL)
 	hPrintf("<TT><PRE>");
 	if (axt != NULL)
 	    {
-	    printf("Alignment between %s (top %s %daa) and %s homolog (bottom %s %daa) score %d\n\n",
-		    localName, localSeq->name, localSeq->size, otherTable, otherSeq->name, 
-		    otherSeq->size, axt->score);
+	    printf("Alignment between %s (top %s %daa) and\n",
+		    localName, localSeq->name, localSeq->size);
+	    printf("%s homolog (bottom %s %daa) score %d\n\n",
+		     otherTable, otherSeq->name, otherSeq->size, axt->score);
 	    axtPrintTraditional(axt, 60, ss, stdout);
 	    axtFree(&axt);
 	    }
