@@ -669,7 +669,7 @@ if (col->isSizeLink == isSizeLink)
 		{
 		struct dbObject *obj = col->obType;
 		fprintf(f, "s = row[%d];\n", colIx);
-		fprintf(f, "if(s != NULL)\n");
+		fprintf(f, "if(s != NULL && differentString(s, \"\"))\n");
 		fprintf(f, "   ret->%s = %sCommaIn(&s, NULL);\n", col->name, obj->name);
 		break;
 		}
@@ -677,7 +677,7 @@ if (col->isSizeLink == isSizeLink)
 		{
 		struct dbObject *obj = col->obType;
 		fprintf(f, "s = row[%d];\n", colIx);
-		fprintf(f, "if(s != NULL)\n");
+		fprintf(f, "if(s != NULL && differentString(s, \"\"))\n");
 		fprintf(f, "   %sCommaIn(&s, &ret->%s);\n", obj->name, col->name);
 		break;
 		}
@@ -878,6 +878,38 @@ fprintf(f, "struct lineFile *lf = lineFileOpen(fileName, TRUE);\n");
 fprintf(f, "char *row[%d];\n", slCount(table->columnList));
 fprintf(f, "\n");
 fprintf(f, "while (lineFileRow(lf, row))\n");
+fprintf(f, "    {\n");
+fprintf(f, "    el = %sLoad(row);\n", tableName);
+fprintf(f, "    slAddHead(&list, el);\n");
+fprintf(f, "    }\n");
+fprintf(f, "lineFileClose(&lf);\n");
+fprintf(f, "slReverse(&list);\n");
+fprintf(f, "return list;\n");
+fprintf(f, "}\n\n");
+}
+
+void dynamicLoadAllByChar(struct dbObject *table, FILE *f, FILE *hFile)
+/* Create C code to load a all objects from a tab separated file. */
+{
+char *tableName = table->name;
+
+fprintf(hFile, "struct %s *%sLoadAllByChar(char *fileName, char chopper);\n", tableName, tableName);
+fprintf(hFile, "/* Load all %s from chopper separated file.\n", tableName);
+fprintf(hFile, " * Dispose of this with %sFreeList(). */\n\n", tableName);
+
+fprintf(hFile, "#define %sLoadAllByTab(a) %sLoadAllByChar(a, '\\t');\n", tableName, tableName);
+fprintf(hFile, "/* Load all %s from tab separated file.\n", tableName);
+fprintf(hFile, " * Dispose of this with %sFreeList(). */\n\n", tableName);
+
+fprintf(f, "struct %s *%sLoadAllByChar(char *fileName, char chopper) \n", tableName, tableName);
+fprintf(f, "/* Load all %s from a chopper separated file.\n", tableName);
+fprintf(f, " * Dispose of this with %sFreeList(). */\n", tableName);
+fprintf(f, "{\n");
+fprintf(f, "struct %s *list = NULL, *el;\n", tableName);
+fprintf(f, "struct lineFile *lf = lineFileOpen(fileName, TRUE);\n");
+fprintf(f, "char *row[%d];\n", slCount(table->columnList));
+fprintf(f, "\n");
+fprintf(f, "while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))\n");
 fprintf(f, "    {\n");
 fprintf(f, "    el = %sLoad(row);\n", tableName);
 fprintf(f, "    slAddHead(&list, el);\n");
@@ -1537,6 +1569,7 @@ for (obj = objList; obj != NULL; obj = obj->next)
 	    staticLoadRow(obj, cFile, hFile);
 	dynamicLoadRow(obj, cFile, hFile);
 	dynamicLoadAll(obj, cFile, hFile);
+	dynamicLoadAllByChar(obj, cFile, hFile);
 	if(doDbLoadAndSave)
 	    {
 	    dynamicLoadByQuery(obj, cFile, hFile);

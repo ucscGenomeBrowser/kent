@@ -238,7 +238,7 @@ out = mustOpen(fileName, "w");
 autoTestTabOut(at, out);
 carefulClose(&out);
 /* Read in. */
-atRead = autoTestLoadAll(fileName);
+atRead = autoTestLoadAllByTab(fileName);
 remove(fileName);
 /* Compare. */
 result = autoTestsIdentical(at, atRead);
@@ -306,7 +306,7 @@ void doTests()
 {
 struct sqlConnection *conn = dbConnect();
 testCommaOutputInput();
-//testTabOutputInput();
+testTabOutputInput();
 setupTable(conn);
 testInsertion(conn, FALSE);
 testInsertion(conn, TRUE);
