@@ -247,6 +247,7 @@ return;
 
 /*  ---- This section of code is for convex, polygons.  It's faster. ---- */
 
+#ifdef SOME_OFF_BY_ONE_PROBLEMS
 static int *xdda_ebuf(int *ebuf, int x1, int y1, int x2, int y2)
 /* Calculate the x-positions of a line from x1,y1  to x2/y2  */
 {
@@ -402,11 +403,8 @@ while (--i >= 0)
 	pcount = fill_ebuf(valley, poly->ptCount - pcount, thread2)
 		- thread2;
 	blast_hlines(mg, thread1, thread2, highy, pcount, color);
-	uglyf("ok 1\n");
 	freeMem(thread1);
-	uglyf("ok 2\n");
 	freeMem(thread2);
-	uglyf("ok 3\n");
 	return;
 	}
     pcount++;
@@ -415,13 +413,14 @@ while (--i >= 0)
     }	
 return;	/*all points of poly have same y value */
 }
+#endif /* SOME_OFF_BY_ONE_PROBLEMS */
 
 void mgDrawPoly(struct memGfx *mg, struct gfxPoly *poly, Color color,
 	boolean filled)
 /* Draw polygon, possibly filled in color. */
 {
 if (filled)
-    mgDrawPolyFilled(mg, poly, color);
+    fillConcave(mg, poly, color);
 mgDrawPolyOutline(mg, poly, color);
 }
 
