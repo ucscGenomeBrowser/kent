@@ -8,7 +8,7 @@
 #include "dbDb.h"
 #include "axtInfo.h"
 
-static char const rcsid[] = "$Id: web.c,v 1.38 2003/06/21 02:40:33 kent Exp $";
+static char const rcsid[] = "$Id: web.c,v 1.39 2003/06/22 03:06:26 kent Exp $";
 
 /* flag that tell if the CGI header has already been outputed */
 boolean webHeadAlreadyOutputed = FALSE;
@@ -101,16 +101,7 @@ if (withLogo)
 
 if (NULL != theCart)
     {
-    char *theDb = NULL;
-    char *theGenome = NULL;
-    char *genomeEnc = NULL;
-
-    getDbAndGenome(theCart, &theDb, &theGenome);
-    genomeEnc = cgiEncode(theGenome);
-
-    snprintf(uiState, sizeof(uiState), "?%s=%s&%s=%s&%s=%u", 
-	     orgCgiName, genomeEnc,
-	     dbCgiName, theDb,
+    snprintf(uiState, sizeof(uiState), "?%s=%u", 
 	     cartSessionVarName(), cartSessionId(theCart));
     }
 else
