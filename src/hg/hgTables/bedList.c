@@ -18,7 +18,7 @@
 #include "hgTables.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: bedList.c,v 1.17 2004/09/25 05:38:37 kent Exp $";
+static char const rcsid[] = "$Id: bedList.c,v 1.18 2004/10/01 18:10:32 kent Exp $";
 
 boolean htiIsPsl(struct hTableInfo *hti)
 /* Return TRUE if table looks to be in psl format. */
@@ -333,8 +333,6 @@ char buf[256];
 char *setting;
 htmlOpen("Output %s as %s", table, (doCt ? "Custom Track" : "BED"));
 hPrintf("<FORM ACTION=\"../cgi-bin/hgTables\" METHOD=GET>\n");
-hPrintf("%s\n", "<A HREF=\"/goldenPath/help/hgTextHelp.html#BEDOptions\">"
-     "<B>Help</B></A><P>");
 hPrintf("%s\n", "<TABLE><TR><TD>");
 if (doCt)
     {
