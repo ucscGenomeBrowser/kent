@@ -101,5 +101,8 @@ gbDbLoadStep $verb $typeArg $opts -workdir=$workdir $databases
 mv -f $lastTimeTmp $lastTime
 gbMkTimeFile $dbloadTime
 
+# save tables statistics for all databases
+dumpTableStats
+
 echo "`hostname`: dbload completed"
 

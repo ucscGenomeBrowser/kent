@@ -19,7 +19,7 @@
 #include "gbProcessed.h"
 #include "gbStatusTbl.h"
 
-static char const rcsid[] = "$Id: gbBuildState.c,v 1.12 2004/03/09 02:11:36 markd Exp $";
+static char const rcsid[] = "$Id: gbBuildState.c,v 1.13 2004/05/15 16:12:27 markd Exp $";
 
 static struct dbLoadOptions* gOptions; /* options from cmdline and conf */
 static int gErrorCnt = 0;  /* count of errors during build */
@@ -256,10 +256,10 @@ else
     {
     /* validate entries are not going backwards */
     if (aligned->version < tmpStatus->version)
-        errAbort("version for %s is release (%d) is less than one in database (%d)",
+        errAbort("version for %s in release (%d) is less than one in database (%d)",
                  entry->acc, aligned->version, tmpStatus->version);
     if (processed->modDate < tmpStatus->modDate)
-        errAbort("modDate for %s is release (%s) is before one in database (%s)",
+        errAbort("modDate for %s in release (%s) is before one in database (%s)",
                  entry->acc, gbFormatDate(processed->modDate),
                  gbFormatDate(tmpStatus->modDate));
 
