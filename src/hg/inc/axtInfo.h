@@ -5,6 +5,10 @@
 #ifndef AXTINFO_H
 #define AXTINFO_H
 
+#ifndef JKSQL_H
+#include "jksql.h"
+#endif 
+
 struct axtInfo
 /* Axt alignment names and sizes */
     {
