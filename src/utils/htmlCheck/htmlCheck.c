@@ -8,7 +8,7 @@
 #include "obscure.h"
 #include "net.h"
 
-static char const rcsid[] = "$Id: htmlCheck.c,v 1.2 2004/02/26 10:19:22 kent Exp $";
+static char const rcsid[] = "$Id: htmlCheck.c,v 1.3 2004/02/26 10:26:22 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -159,7 +159,16 @@ for (;;)
         {
 	if (*s == '!')	/* HTML comment. */
 	    {
-	    s = strchr(s, '>');
+	    s += 1;
+	    if (s[0] == '-' && s[1] == '-')
+	        s = stringIn("-->", s);
+	    else
+		s = strchr(s, '>');
+	    if (s == NULL)
+		{
+	        warn("End of file in comment");
+		break;
+		}
 	    }
 	else
 	    {
