@@ -816,7 +816,7 @@ type sample 9
 
 
 track humMusL
-shortLabel Mouse EvoCons
+shortLabel Mouse Cons
 longLabel Human/Mouse Evolutionary Conservation Score
 altColor 0,0,255
 priority 25.7
