@@ -964,15 +964,14 @@ type wig 0 100
 	-srcDb=genbank -type=est -verbose=1 -initial panTro1
     
 
-
 # CREATING QUALITY SCORE TRACK
 
     # Create compressed scaffold quality file
     ssh kksilo
     cd /cluster/data/panTro1
     zcat contigs.quals.gz | qaToQac stdin stdout | \
-    	chimpSuperQuals assembly.agp stdin scaffolds.qac
-    # qaToQac contigs.quals stdout | chimpSuperQuals assembly.agp stdin scaffolds.qac
+    	chimpChromQuals assembly.agp stdin scaffolds.qac
+    # qaToQac contigs.quals stdout | chimpChromQuals assembly.agp stdin scaffolds.qac
     mkdir -p bed/qual/{wigData,dataLimits}
 cat > jkStuff/chromQuals.csh << 'EOF'
     foreach c (?{,?})
@@ -996,6 +995,7 @@ cat > jkStuff/chromQuals.csh << 'EOF'
 'EOF'
     csh jkStuff/chromQuals.csh >& jkStuff/chromQuals.log &
     tail -100f jkStuff/chromQuals.log
+    # takes 3-4 hours
 
     # Note: can verify size of chrom qual files by comparing wc to 
     # chrom length -- subtracting out length of trailing gap when doing this
@@ -1021,21 +1021,100 @@ graphTypeDefault Bar
 gridDefault OFF
 color 0,128,255
 altColor 255,128,0
-type wig 0 100 
+type wig 0 50
 
 
-# HUMAN ALIGNMENTS (IN PROGRESS 2004-02-01 kate)
+# HUMAN ALIGNMENTS (IN PROGRESS 2004-02-10 kate)
 
-    # lift hg16/pt0 blat alignments to chimp chroms, and swap target/query
     ssh kksilo
     cd /cluster/data/panTro1
-    mkdir -p bed/blatHg16.pt0.swap/chrom
-    liftUp -type=.psl -pslQ stdout jkStuff/scaffolds.lft warn \
-        /cluster/data/pt0/bed/blatHg16.scaffolds/chrom/*.psl | \
-            pslCat stdin stdout \|
-            pslSwap -keepStrand stdin stdout | \
-                pslSortAcc nohead bed/blatHg16.pt0.swap/chrom \
-                                  bed/blatHg16.pt0.swap/temp stdin
+
+    # start with full chimp-reference chains from
+    # December Human/Chimp alignments (hg16/pt0, blastz+blat)
+    mkdir -p bed/blastz-blatHg16.pt0.swap
+    cd bed/blastz-blatHg16.pt0.swap
+    cp /cluster/data/pt0/bed/blastz-blatHg16/all.scaffold.chain .
+
+    # lift to chimp chromosome coordinates
+    # (need latest liftUp)
+    ~kate/bin/i386/liftUp all.chain ../../jkStuff/scaffolds.lft \
+        warn all.scaffold.chain
+
+    # rechain to catch alignments spanning scaffold boundaries
+    ls -1S /cluster/data/panTro1/nib/*.nib > chimpNib.lst
+    ls -1S /cluster/data/hg16/nib/*.nib > humanNib.lst
+    chainToPsl all.chain ../../chrom.sizes /cluster/data/hg16/chrom.sizes \
+                    chimpNib.lst humanNib.lst all.chain.psl
+    # in retrospect, I would have done a chainSplit first...
+    pslSortAcc nohead pslChain temp all.chain.psl
+        # Processed 9254050 lines into 38 temp files
+
+    mkdir -p pslChain/run
+    cd pslChain/run
+    mkdir out chain
+
+    ssh kk
+    cd /cluster/data/panTro1
+    cd blastz-blatHg16.pt0.swap/pslChain/run
+    # copy nibs to iservers (seem to have disappeared from /scratch/chimp)
+    mkdir -p /iscratch/i/chimp/panTro1/nib
+    cp /cluster/bluearc/scratch/chimp/panTro1/nib/* \
+                        /iscratch/i/chimp/panTro1/nib
+    iSync
+    ls -1S /cluster/data/panTro1/bed/blastz-blatHg16.pt0.swap/pslChain/*.psl \
+                                                > input.lst
+  cat << '_EOF_' > gsub
+#LOOP
+doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain} {check out line+ out/$(root1).out}
+#ENDLOOP
+'_EOF_'
+    # << this line makes emacs coloring happy
+
+    cat << '_EOF_' > doChain
+#!/bin/csh
+    axtChain -psl $1 \
+        /scratch/chimp/panTro1/nib \
+        /iscratch/i/gs.17/build34/bothMaskedNibs $2 > $3
+'_EOF_'
+    # << this line makes emacs coloring happy
+    chmod a+x doChain
+    gensub2 input.lst single gsub jobList
+    para create jobList
+        # 52 jobs
+    para try
+    para push
+
+    # net the chains
+    ssh kksilo
+    cd /cluster/data/panTro1
+    cd bed/blastz-blatHg16.pt0.swap/pslChain
+cat > net.csh << 'EOF'
+    chainMergeSort run/chain/*.chain | chainPreNet stdin \
+      /cluster/data/panTro1/chrom.sizes /cluster/data/hg16/chrom.sizes stdout\
+            chainNet stdin  -minScore=0 -minSpace=1 \
+                         /cluster/data/panTro1/chrom.sizes  \
+                        /cluster/data/hg16/chrom.sizes ../chimp.net ../human.net
+'EOF'
+    # << this line makes emacs coloring happy
+    csh net.csh >&! net.log &
+    tail -100f net.log
+
+    # load chimp-reference chains and net into the browser
+    ssh kksilo
+    cd /cluster/data/panTro1
+    cd bed/blastz-blatHg16.pt0.swap
+    chainMergeSort all.chain | chainSplit chain stdin
+
+    ssh hgwdev
+    cd /cluster/data/panTro1
+    cd bed/blastz-blatHg16.pt0.swap
+    cd chain
+    foreach i (*.chain)
+        set c = $i:r
+        hgLoadChain panTro1 ${c}_chainHg16 $i
+        echo done $c
+    end
+    netSyntenic ../chimp.net stdout | hgLoadNet -warn panTro1 netHg16 stdin
 
 
 # Genbank ESTs completed, but needed to redo native ESTs/mRNAs with 
@@ -1051,6 +1130,8 @@ type wig 0 100
     # Reload mRNAs and load ESTS
     ssh hgwdev
     nice bin/gbDbLoadStep -verbose=1 -drop -initialLoad panTro1
+
+=======
 
 # HUMAN REFSEQ MAPPINGS (Writeup incomplete, in progress jk)
 liftOver ../../../bedOverHg16/refGene2/hg16.refGene.gtf ../../humanTarget.chain new.gtf unmapped.gtf -minMatch=0.5 -gff
