@@ -1,5 +1,7 @@
-OPT= -ggdb 
-#OPT = -O3 -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_GNU_SOURCE -Wuninitialized
+#OPT= -ggdb 
+OPT = -O3 -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_GNU_SOURCE -Wuninitialized
+#OPT= -ggdb -pg
+
 MYLIBDIR = ../../../lib/$(MACHTYPE)
 LIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a ./$(MACHTYPE)/libSpliceGraph.a
 
@@ -29,7 +31,7 @@ TESTS = heapTest
 
 clean:
 	rm -f $(O);
-	rm -r $(TESTS)
+	rm -f $(TESTS)
 	rm -f ./$(MACHTYPE)/jkhgap.a;
 
 ctags:
