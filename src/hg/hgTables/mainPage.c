@@ -16,7 +16,7 @@
 #include "hgTables.h"
 #include "joiner.h"
 
-static char const rcsid[] = "$Id: mainPage.c,v 1.28 2004/08/28 23:42:15 kent Exp $";
+static char const rcsid[] = "$Id: mainPage.c,v 1.29 2004/08/31 00:06:51 hiram Exp $";
 
 
 struct grp *makeGroupList(struct sqlConnection *conn, 
@@ -470,7 +470,7 @@ hPrintf("</TABLE>\n");
         }
     cgiMakeButton(hgtaDoTopSubmit, "Get Output");
     hPrintf(" ");
-    if (isPositional)
+    if (isPositional || isWig)
 	{
 	cgiMakeButton(hgtaDoSummaryStats, "Summary/Statistics");
 	hPrintf(" ");
