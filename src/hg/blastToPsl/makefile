@@ -8,19 +8,14 @@ A = blastToPsl
 O = $A.o 
 
 my: compile
-	mv $A ${CGI_BIN}-${USER}/$A
+	mv $A $(HOME)/bin/$(MACHTYPE)
 
 compile: $O 
 	${CC} $O ${F64} ${MYLIBS} ${L} 
 	mv a.out $A
-	strip $A
+#	strip $A
 	chmod a+rx $A
 
-install:	compile
-	@if [ ! -d "${DESTDIR}${CGI_BIN}" ]; then \
-		${MKDIR} "${DESTDIR}${CGI_BIN}"; \
-	fi
-	mv $A ${DESTDIR}${CGI_BIN}/$A
 
 debug: $O
 	${CC} $O ${MYLIBS} ${L} 
