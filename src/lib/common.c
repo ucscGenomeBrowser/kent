@@ -538,15 +538,17 @@ return NULL;
 void toUpperN(char *s, int n)
 /* Convert a section of memory to upper case. */
 {
-while (--n >= 0)
-    *s++ = toupper(*s);
+int i;
+for (i=0; i<n; ++i)
+    s[i] = toupper(s[i]);
 }
 
 void toLowerN(char *s, int n)
 /* Convert a section of memory to upper case. */
 {
-while (--n >= 0)
-    *s++ = tolower(*s);
+int i;
+for (i=0; i<n; ++i)
+    s[i] = tolower(s[i]);
 }
 
 void toggleCase(char *s, int size)
