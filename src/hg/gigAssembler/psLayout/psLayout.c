@@ -482,7 +482,7 @@ readAllWordsOrFa(genoListName, &genoList, &genoListSize, &genoListBuf);
 filterMissingFiles(genoList, &genoListSize);
 if (genoListSize <= 0)
     errAbort("There are no files that exist in %s\n", genoListName);
-readAllWords(otherListName, &otherList, &otherListSize, &otherListBuf);
+readAllWordsOrFa(otherListName, &otherList, &otherListSize, &otherListBuf);
 if (otherListSize <= 0)
     errAbort("There are no files that exist in %s\n", otherListName);
 filterMissingFiles(otherList, &otherListSize);
