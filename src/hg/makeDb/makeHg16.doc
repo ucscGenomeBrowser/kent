@@ -175,3 +175,138 @@ exit; # don't actually run this like a script :)
 
 # Copy it to the new freeze location
         cp /projects/hg2/booch/psl/fish/all.fish.format /projects/hg2/booch/psl/gs.17/build34/fish/
+
+# REPEAT MASKING (WORKING - 2003-07-25 - Hiram)
+    # Split contigs, run RepeatMasker, lift results
+    # Notes: 
+    # * Using new RepeatMasker in /cluster/bluearc/RepeatMasker030619
+    # * Contigs (*/NT_*/NT_*.fa) are split into 500kb chunks to make 
+    #   RepeatMasker runs manageable on the cluster ==> results need lifting.
+    # * For the NCBI assembly we repeat mask on the sensitive mode setting
+    #   (RepeatMasker -s)
+
+    #- Split contigs into 500kb chunks:
+    ssh eieio
+    cd ~/hg16
+    mkdir contigOut
+    cd contigOut
+    mkdir split
+    foreach d (../contigs/NT_* )
+      set contig = $d:t
+	echo "splitting $contig"
+      faSplit size ../contigs/$contig 500000 split/${contig}_ -lift=split/$contig.lft \
+        -maxN=500000
+    end
+
+    #- Make the run directory and job list:
+    cd ~/hg16
+    mkdir jkStuff
+    #  According to RepeatMasker help file, no arguments are required to
+    #	specify species because its default is set for primate (human)
+    #  This run script saves the .tbl file to be sent to Arian.  He uses
+    # those for his analysis.  Sometimes he needs the .cat and .align files for
+    # checking problems.  They are pretty big, do not want to save them
+    # if not absolutely necessary.
+
+    cat << '_EOF_' > jkStuff/RMHuman
+#!/bin/csh -fe
+
+cd $1
+pushd .
+/bin/mkdir -p /tmp/hg16/$2
+/bin/cp $2 /tmp/hg16/$2/
+cd /tmp/hg16/$2
+/cluster/bluearc/RepeatMasker030619/RepeatMasker -ali -s $2
+popd
+/bin/cp /tmp/hg16/$2/$2.out ./
+# if (-e /tmp/hg16/$2/$2.align) /bin/cp /tmp/hg16/$2/$2.align ./
+if (-e /tmp/hg16/$2/$2.tbl) /bin/cp /tmp/hg16/$2/$2.tbl ./
+# if (-e /tmp/hg16/$2/$2.cat) /bin/cp /tmp/hg16/$2/$2.cat ./
+/bin/rm -fr /tmp/hg16/$2/*
+/bin/rmdir --ignore-fail-on-non-empty /tmp/hg16/$2
+/bin/rmdir --ignore-fail-on-non-empty /tmp/hg16
+'_EOF_'
+    chmod +x jkStuff/RMHuman
+    mkdir RMRun
+    rm -f RMRun/RMJobs
+    touch RMRun/RMJobs
+   foreach f ( /cluster/store4/gs.17/build34/contigOut/split/NT_*.fa )
+        set f = $f:t
+        echo /cluster/store4/gs.17/build34/jkStuff/RMHuman \
+   		/cluster/store4/gs.17/build34/contigOut/split $f \
+            '{'check out line+ /cluster/store4/gs.17/build34/contigOut/split/$f.out'}' \
+          >> RMRun/RMJobs
+    end
+
+    # We have 5994 jobs in RMJobs:
+    wc RMRun/RMJobs
+#	5994   41958 1140350 RMRun/RMJobs
+
+    #- Do the run
+    ssh kk
+    cd ~/hg16/RMRun
+    para create RMJobs
+    para try, para check, para check, para push, para check,...
+    #- While that is running, you can run TRF (simpleRepeat) on the small
+    # cluster.  See SIMPLE REPEAT section below
+
+
+# SIMPLE REPEAT [TRF] TRACK (WORKING - 2003-07-25 - Hiram)
+    # Distribute contigs to /iscratch/i
+    ssh kkr1u00
+    rm -rf /iscratch/i/gs.17/build34/contigs
+    mkdir -p /iscratch/i/gs.17/build34/contigs
+    cd ~/hg16
+    cp -p contigs/*.fa /iscratch/i/gs.17/build34/contigs
+    # Make sure the total size looks like what you'd expect:
+    du ./contigs /iscratch/i/gs.17/build34/contigs
+    # 2839768 ./contigs
+    # 2839768 /iscratch/i/gs.17/build34/contigs
+    ~kent/bin/iSync
+
+    # Create cluster parasol job like so:
+    mkdir -p ~/hg16/bed/simpleRepeat
+    cd ~/hg16/bed/simpleRepeat
+    mkdir trf
+    cat << '_EOF_' > runTrf
+#!/bin/csh -fe
+#
+set path1 = $1
+set inputFN = $1:t
+set outpath = $2
+set outputFN = $2:t
+mkdir -p /tmp/$outputFN
+cp $path1 /tmp/$outputFN
+pushd .
+cd /tmp/$outputFN
+/cluster/bin/i386/trfBig -trf=/cluster/bin/i386/trf $inputFN /dev/null -bedAt=$outputFN -tempDir=/tmp
+popd
+rm -f $outpath
+cp -p /tmp/$outputFN/$outputFN $outpath
+rm -fr /tmp/$outputFN/*
+rmdir --ignore-fail-on-non-empty /tmp/$outputFN
+'_EOF_'
+    chmod +x runTrf
+
+    cat << '_EOF_' > gsub
+#LOOP
+./runTrf {check in line+ $(path1)}  {check out line trf/$(root1).bed}
+#ENDLOOP
+'_EOF_'
+
+    ls -1S /iscratch/i/gs.17/build34/contigs/*.fa > genome.lst
+    gensub2 genome.lst single gsub spec
+    para create spec
+    para try
+    para check
+    para push
+    para check
+    # When cluster run is done
+    liftUp simpleRepeat.bed ~/hg16/jkStuff/liftAll.lft warn trf/*.bed
+
+    # Load into the database:
+    ssh hgwdev
+    cd ~/hg16/bed/simpleRepeat
+    ~matt/bin/i386/hgLoadBed hg16 simpleRepeat simpleRepeat.bed \
+      -sqlTable=$HOME/src/hg/lib/simpleRepeat.sql
+
