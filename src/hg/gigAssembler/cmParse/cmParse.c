@@ -324,7 +324,7 @@ while (lineFileNext(in, &line, &lineSize))
 	}
     }
 if (!gotEnd)
-    warn("%s seems to be truncated\n", in->fileName);
+    errAbort("%s seems to be truncated\n", in->fileName);
 }
 
 void readNa(struct lineFile *in, struct cmChrom *chrom,
@@ -391,7 +391,7 @@ while (lineFileNext(in, &line, &lineSize))
 	}
     }
 if (!gotEnd)
-    warn("%s seems to be truncated\n", in->fileName);
+    errAbort("%s seems to be truncated\n", in->fileName);
 }
 
 
@@ -576,9 +576,16 @@ for (chrom = chromList; chrom != NULL; chrom = chrom->next)
 			if (!hashLookup(noDupCloneHash, ci->acc))
 			    {
 			    hashAdd(noDupCloneHash, ci->acc, NULL);
-			    fprintf(info, "%s %d %d\n", ci->acc, ci->pos, ci->phase);
 			    if (ci->dir != NULL)
+				{
+				fprintf(info, "%s %d %d\n", ci->acc, ci->pos, ci->phase);
 				fprintf(geno, "%s/%s.fa\n", ci->dir, ci->acc);
+				}
+			    else if (ci->phase != 0)
+				{
+			        warn("No sequence file for %s\n", ci->acc);
+				fprintf(errLog, "No sequence file for %s\n", ci->acc);
+				}
 			    }
 			}
 		    }
