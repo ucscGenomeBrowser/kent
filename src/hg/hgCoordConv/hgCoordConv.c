@@ -1,5 +1,5 @@
 /**
-   cgi program to converte coordinates from one draft of the 
+   cgi program to convert coordinates from one draft of the 
    genome to another 
 */
 #include "common.h"
@@ -30,6 +30,9 @@ bool fakeWeb = FALSE;
 char *position = NULL;
 char *newGenome = NULL;
 char *origGenome = NULL;
+char *defaultPos = "chr22:17045228-17054909";
+char *origDb = NULL;
+
 
 /* keeps track of the database version names and hg's */
 struct namePair 
@@ -125,6 +128,7 @@ return NULL;
     cgi script or from the command line */ 
 void checkArguments() 
 {
+origDb = cgiOptionalString("origDb");
 origGenome = cgiOptionalString("origGenome");
 newGenome = cgiOptionalString("newGenome");
 position = cgiOptionalString("position");
@@ -140,7 +144,7 @@ calledSelf = cgiBoolean("calledSelf");
 /* parse the position string and make sure that it makes sense */
 if (position != NULL && position[0] != 0)
     {
-    parsePosition(position, &chrom, &start, &end);
+    parsePosition(cloneString(position), &chrom, &start, &end);
     }
 if (start > end && onWeb)
     { 
@@ -288,12 +292,38 @@ else
 coordConvRepFreeList(&ccr);
 }
 
+
+/* match up our possible databases with the date version i.e. Dec 17, 2000 */
+char *chooseDb(char *db1, char *db2, struct namePair *versions, int numVersions)
+{
+int i;
+if(db1 != NULL) 
+    {
+    for(i=0;i<numVersions; i++)
+	{
+	if(sameString(versions[i].database, db1) || sameString(versions[i].version, db1))
+	    return versions[i].database;
+	}
+    }
+else 
+    {
+    for(i=0;i<numVersions; i++)
+	{
+	if(sameString(versions[i].database, db2) || sameString(versions[i].version, db2))
+	    return versions[i].database;
+	}
+    }
+return NULL;
+}
+
 /** Print out the form for users */
 void doForm() 
 {
 char *origChoices[ArraySize(oldVersions)];
 char *newChoices[ArraySize(serverTab)];
+char *dbChoice = NULL;
 int i = 0;
+
 for(i=0; i< ArraySize(origChoices); i++) 
     {
     origChoices[i] = oldVersions[i].database;
@@ -315,10 +345,14 @@ printf("<form action=\"../cgi-bin/hgCoordConv\" method=get>\n");
 printf("<br><br>\n");
 printf("<table><tr>\n");
 printf("<b><td><table><tr><td>Original Draft: </b>\n");
-cgiMakeDropList("origGenome", origChoices, ArraySize(origChoices), defaultOldDb);
+dbChoice = chooseDb(origDb, defaultOldDb, oldVersions, ArraySize(oldVersions)); 
+cgiMakeDropList("origGenome", origChoices, ArraySize(origChoices), dbChoice);
 printf("</td></tr></table></td>\n");
 printf("  <b><td><table><tr><td>Original Position:  </b>\n");
-cgiMakeTextVar("position","", 30);
+if(position == NULL) 
+    cgiMakeTextVar("position",defaultPos, 30);
+else
+    cgiMakeTextVar("position",position, 30);
 printf("</td></tr></table></td>\n");
 printf("<b><td><table><tr><td>New Draft: </b>\n");
 cgiMakeDropList("newGenome", newChoices, ArraySize(newChoices), defaultNewDb);
