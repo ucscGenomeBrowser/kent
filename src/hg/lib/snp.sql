@@ -72,6 +72,15 @@ CREATE TABLE snp (
 		 'INDEL',               # Insertion or Deletion
 		 'SEGMENTAL'            # Segmental Duplication
 		 )               not null default 'unknown',
+    valid      set (
+		 'no-information',	# no validation information
+		 'by-2hit-2allele',	# each allele seen in at least two individuals
+		 'by-cluster',		# 
+		 'by-frequency',	# 
+		 'other-pop'		# seen in another population
+		 ) 	         not null default 'no-information',
+    avHet      float             not null,	# the average heterozygosity from all observations
+    avHetSE    float             not null,	# the Standard Error for the average heterozygosity
     func       set (
 		 'unknown',   		# no functional classification
 		 'coding-synon',    	# synonymous mutation
@@ -83,15 +92,6 @@ CREATE TABLE snp (
 		 'reference',       	# 
 		 'locus-region'    	# locus region
 		 ) 	         not null default 'unknown',
-    valid      set (
-		 'no-information',	# no validation information
-		 'by-2hit-2allele',	# each allele seen in at least two individuals
-		 'by-cluster',		# 
-		 'by-frequency',	# 
-		 'other-pop'		# seen in another population
-		 ) 	         not null default 'no-information',
-    avHet      float             not null,	# the average heterozygosity from all observations
-    avHetSE    float             not null,	# the Standard Error for the average heterozygosity
               #Indices
     INDEX(chrom,bin),
     INDEX(chrom,chromStart),
