@@ -129,12 +129,12 @@ o - Store the mRNA (non-alignment) info in database.
      hgLoadRna new hg12
      hgLoadRna add hg12 /cluster/store1/mrna.129/mrna.fa /cluster/store1/mrna.129/mrna.ra
      hgLoadRna add hg12 /cluster/store1/mrna.129/est.fa /cluster/store1/mrna.129/est.ra
+     hgLoadRna add -type=refSeq hg12 /cluster/store1/mrna.129/refSeq.fa /cluster/store1/mrna.129/refSeq.ra
 
-    The last line will take quite some time to complete.  It will count up to
-    about 3,800,000 before it is done.
+    The last line will take quite some time to complete.
 
 
-MAKING AND STORING mRNA AND EST ALIGNMENTS (IP)
+MAKING AND STORING mRNA AND EST ALIGNMENTS (IN PROGRESS)
 
 o - Load up the local disks of the cluster with refSeq.fa, mrna.fa and est.fa
     Copy the above 3 files from /cluster/store1/mrna.129 into /scratch/hg/h/mrna
@@ -186,11 +186,11 @@ o - Process refSeq mRNA and EST alignments into near best in genome.
       cd ..
 
       cd est
-      pslSort dirs raw.psl /tmp psl
+      pslSort dirs raw.psl /oldscratch psl
       pslReps -minAli=0.93 -nearTop=0.01 raw.psl contig.psl /dev/null
       liftUp -nohead all_est.psl ../../jkStuff/liftAll.lft carry contig.psl
-      pslSortAcc nohead chrom /tmp all_est.psl
-      cd .. TODO
+      pslSortAcc nohead chrom /oldscratch all_est.psl
+      cd .. IN PROGRESS
 
 o - Load refSeq alignments into database
       ssh hgwdev
@@ -201,6 +201,7 @@ o - Load refSeq alignments into database
 o - Load mRNA alignments into database. 
       ssh hgwdev
       cd /cluster/store1/gs.13/build30/bed/mrna/chrom
+
 In tcsh:
       foreach i (*.psl)
           mv $i $i:r_mrna.psl
@@ -213,6 +214,8 @@ In tcsh:
 o - Load EST alignments into database. TODO
       ssh hgwdev
       cd /cluster/store1/gs.13/build30/bed/est/chrom
+
+in tcsh do:
       foreach i (*.psl)
             mv $i $i:r_est.psl
       end
@@ -272,23 +275,68 @@ o - Create rnaCluster table
    hgLoadBed hg12 rnaCluster chrom/*.bed
 TODO
 
-SIMPLE REPEAT TRACK (TODO)
+PRODUCING KNOWN GENES (DONE)
+
+o - Download everything from ftp://ncbi.nlm.nih.gov/refseq/H_sapiens/mRNA_Prot/
+    into /cluster/store1/mrna.129/refSeq. 
+o - Unpack this into fa files and get extra info with:
+       cd /cluster/store1/mrna.129/refSeq
+       gunzip hs.gbff
+       gunzip hs.faa.gz
+       gbToFaRa ~/hg/h/mrna.fil ../refSeq.fa ../refSeq.ra ../refSeq.ta 
+o - Align refSeq.fa to genome as described under mRNA/EST alignments above. 
+o - Get extra info from NCBI and produce refGene table as so:
+       ssh hgwdev
+       cd ~/oo/bed
+       mkdir refSeq
+       cd refSeq
+       wget ftp://ncbi.nlm.nih.gov/refseq/LocusLink/loc2ref 
+       wget ftp://ncbi.nlm.nih.gov/refseq/LocusLink/mim2loc 
+o - Similarly download refSeq proteins in fasta format to refSeq.pep - I believe this is hs.faa
+o - RefSeq should have already been aligned to the genome by processes 
+        described under mRNA/EST alignments above.
+o - Produce refGene, refPep, refMrna, and refLink tables as so:
+       ssh hgwdev
+       cd ~/oo/bed/refSeq
+       ln -s /cluster/store1/mrna.129 mrna
+       cp mrna/refSeq/mim2loc .
+       cp mrna/refSeq/loc2ref .
+       hgRefSeqMrna hg12 mrna/refSeq.fa mrna/refSeq.ra all_refSeq.psl loc2ref mrna/refSeq/hs.faa mim2loc
+
+o - Add RefSeq status info 
+    hgRefSeqStatus hg12 loc2ref
+
+o - Add Jackson labs info
+     cd ~/oo/bed
+     mkdir jaxOrtholog
+     cd jaxOrtholog
+     ftp ftp://ftp.informatics.jax.org/pub/informatics/reports/HMD_Human3.rpt
+     cp /cluster/store1/gs.12/build29/bed/jaxOrtholog/filter.awk .
+     awk -f filter.awk *.rpt > jaxOrtholog.tab
+    Load this into mysql with something like:
+     mysql -u hgcat -pBIGSECRET hg12 < ~/src/hg/lib/jaxOrtholog.sql
+     mysql -u hgcat -pBIGSECRET -A hg12
+    and at the mysql> prompt
+     load data local infile 'jaxOrtholog.tab' into table jaxOrtholog;
+
+
+SIMPLE REPEAT TRACK (IN PROGRESS)
 
 o - Create cluster parasol job like so:
         ssh kk
 	cd ~/oo/bed
 	mkdir simpleRepeat
 	cd simpleRepeat
-	cp /cluster/store1/gs11.build28/bed/simpleRepeat/gsub ./gsub
+	cp /cluster/store1/gs12.build29/bed/simpleRepeat/gsub ./gsub
 	mkdir trf
 
-Ask the admins to push /scratch/hg/gs.13/build30/contig/*.fa to the cluster
-	ls -1S /scratch/hg/gs.13/build30/contig/*.fa > genome.lst
+Ask the admins to push /scratch/hg/gs.13/build30/ to the cluster
+	ls -1S /scratch/hg/gs.13/build30/*/*/*.fa > genome.lst
 	gensub2 genome.lst single gsub spec
 	para create spec
 	para try
 	para check
-	para push
+	para push IN PROGRESS
         liftUp simpleRepeat.bed ~/oo/jkStuff/liftAll.lft warn trf/*.bed
 
 o - Load this into the database as so
@@ -297,47 +345,7 @@ o - Load this into the database as so
 	hgLoadBed hg12 simpleRepeat simpleRepeat.bed -sqlTable=$HOME/src/hg/lib/simpleRepeat.sql
 
 
-PRODUCING KNOWN GENES (TODO)
-
-o - Download everything from ftp://ncbi.nlm.nih.gov/refseq/H_sapiens/mRNA_Prot/
-    into /cluster/store1/mrna.129/refSeq. TODO
-o - Unpack this into fa files and get extra info with:
-       cd /cluster/store1/mrna.129/refSeq
-       gunzip hs.gbff
-       gunzip hs.faa.gz
-       gbToFaRa ~/hg/h/mrna.fil ../refSeq.fa ../refSeq.ra ../refSeq.ta TODO
-o - Align refSeq.fa to genome as described under mRNA/EST alignments above. TODO
-o - Get extra info from NCBI and produce refGene table as so:
-       ssh hgwdev
-       cd ~/oo/bed
-       mkdir refSeq
-       cd refSeq
-       wget ftp://ncbi.nlm.nih.gov/refseq/LocusLink/loc2ref TODO
-       wget ftp://ncbi.nlm.nih.gov/refseq/LocusLink/mim2loc TODO
-o - Similarly download refSeq proteins in fasta format to refSeq.pep - I believe this is hs.faa
-o - RefSeq should have already been aligned to the genome by processes 
-        described under mRNA/EST alignments above.
-o - Produce refGene, refPep, refMrna, and refLink tables as so:
-       ssh hgwdev
-       cd ~/oo/bed/refSeq
-       ln -s /cluster/store1/mrna.129 mrna
-       hgRefSeqMrna hg12 mrna/refSeq.fa mrna/refSeq.ra all_refSeq.psl loc2ref mrna/refSeq/hs.faa mim2loc TODO
-o - Add Jackson labs info TODO
-     cd ~/oo/bed
-     mkdir jaxOrtholog
-     cd jaxOrtholog
-     ftp ftp://ftp.informatics.jax.org/pub/informatics/reports/HMD_Human3.rpt
-     awk -f filter.awk *.rpt > jaxOrtholog.tab
-    Load this into mysql with something like:
-     mysql -u hgcat -pBIGSECRET hg12 < ~/src/hg/lib/jaxOrtholog.sql
-     mysql -u hgcat -pBIGSECRET -A hg12
-    and at the mysql> prompt
-     load data local infile 'jaxOrtholog.tab' into table jaxOrtholog;
-o - Add RefSeq status info (TODO 6/19/02)
-    hgRefSeqStatus hg12 loc2ref
-
-
-PRODUCING GENSCAN PREDICTIONS (done)
+PRODUCING GENSCAN PREDICTIONS (TODO)
    
 o - Produce contig genscan.gtf genscan.pep and genscanExtra.bed files like so:
 
@@ -435,7 +443,7 @@ Locate motifs on all promoters with
       dnaMotifFind motif.200.1000.e.txt upstream1000.fa hits.200.1000.e.txt -rc -markov=2
       liftPromoHits upstream1000.bed hits.200.1000.e.txt triangle.bed
 
-CREATE STS/FISH/BACENDS/CYTOBANDS DIRECTORY STRUCTURE AND SETUP (done)
+CREATE STS/FISH/BACENDS/CYTOBANDS DIRECTORY STRUCTURE AND SETUP (TODO)
 
 o - Create directory structure to hold information for these tracks
 	cd /projects/hg2/booch/psl/
@@ -460,7 +468,7 @@ o - Update all Makefiles with latest OOVERS and GSVERS
 o - Create accession_info file
 	make accession_info.rdb
 
-UPDATE STS INFORMATION (done)
+UPDATE STS INFORMATION (TODO)
 
 o - Download and unpack updated information from dbSTS:
 
@@ -482,7 +490,7 @@ o - Make new directory for this info and move files there
 	cp all.primers /cluster/store1/sts.#
 	cp all.primers.fa /cluster/store1/sts.#
 
-STS ALIGNMENTS (done)
+STS ALIGNMENTS (TODO)
 (alignments done without RepeatMasking, so start ASAP!)
 
 o - Create full sequence alignments
@@ -521,7 +529,7 @@ o - Copy files to final destination and remove
 	make copy.assembly
 	make clean.assembly
 	
-CREATE AND LOAD STS MARKERS TRACK (done)
+CREATE AND LOAD STS MARKERS TRACK (TODO)
 
 o - Create final version of sts sequence placements
 	ssh kks00
@@ -557,7 +565,7 @@ o - Load the sequences (change sts.# to match correct location)
 	hgLoadRna addSeq hg12 /cluster/store1/sts.2/all.primers.fa
 
 
-BACEND SEQUENCE ALIGNMENTS (done)
+BACEND SEQUENCE ALIGNMENTS (TODO)
 (alignments done without RepeatMasking, so start ASAP!)
 
 o - Create full sequence alignments
