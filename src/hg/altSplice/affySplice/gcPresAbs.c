@@ -36,9 +36,12 @@ struct psProb
 
 struct row1lq **gcBins = NULL;     /* Bins of lists of row1lqs for different amounts of GCs. */
 struct hash *probeSetHash = NULL;  /* Hash of slRefs for each probe set where slRef->val is a row1lq. */
+struct hash *killHash = NULL;      /* Hash of probes to be ignored. */
 int minGcBin = 0;                  /* Minimum GC bin. */
 int maxGcBin = 0;                  /* Maximum GC bin. */
-struct psProb *probePVals = NULL; /* List of psProbe structs with pVals filled in. */
+struct psProb *probePVals = NULL;  /* List of psProbe structs with pVals filled in. */
+int minProbeNum = 3;               /* Ignore probe sets that have less than this many probes. */
+char *placeHolder = "dummy";        /* Hold a place in a hash. */
 
 static struct optionSpec optionSpecs[] = 
 /* Our acceptable options to be called with. */
@@ -46,6 +49,8 @@ static struct optionSpec optionSpecs[] =
     {"help", OPTION_BOOLEAN},
     {"1lqFile", OPTION_STRING},
     {"outFile", OPTION_STRING},
+    {"badProbes", OPTION_STRING},
+    {"testVals", OPTION_BOOLEAN},
     {NULL,0}
 };
 
@@ -54,7 +59,9 @@ static char *optionDescripts[] =
 {
     "Display this message.",
     "1lq file from affymetrix specifying probe layout on chip",
-    "File to output matrix of probabilities to."
+    "File to output matrix of probabilities to.",
+    "File with sequence of probes that are known to be bad and should be ignored.",
+    "Skip everything else and just run inverse chisq on each value degreeFreedom pair on command line.",
 };
 
 void usage()
@@ -118,6 +125,22 @@ if(gcCount > maxGcBin)
 return gcCount - minGcBin;
 }
 
+void readBadProbes(char *fileName)
+/* Read in a list that contains bad probes sequence should be in first row. */
+{
+struct lineFile *lf = NULL;
+char *line = NULL;
+killHash = newHash(15);
+lf = lineFileOpen(fileName, TRUE);
+while(lineFileNextReal(lf, &line))
+    {
+    tolowers(line);
+    hashAdd(killHash, line, placeHolder);
+    }
+lineFileClose(&lf);
+}
+
+
 void read1lqFile(char *name, struct row1lq ***pRowArray, int *pRowCount)
 /* Read in the 1lq popluating the gcBins and hasing by probe set name.
    Need to index rows by a few different ways:
@@ -174,6 +197,12 @@ for(row = rowList; row != NULL; row = rowNext)
     /* Ignore the probes with no sequence data. */
     if(sameString(row->seq, "!")) 
 	continue;
+
+    /* Skip things that are on the kill list. */
+    tolowers(row->seq);
+    if(killHash != NULL && hashFindVal(killHash, row->seq) != NULL)
+	continue;
+
     /* Add it to the correct gc bin. */
     row->gcCount = countGc(row->seq);
     bin = binForGc(row->gcCount);
@@ -252,6 +281,11 @@ double probProduct = 0;
 int probeCount = 0;
 refList = val;
 probeCount = slCount(refList);
+
+/* If we don't have enough probes don't make an estimate. 
+   Might want to change this to set to zero instead... */
+if(probeCount < minProbeNum) 
+    return;
 assert(probeCount > 0);
 
 /* Allocate some memory. */
@@ -269,6 +303,18 @@ ps->pVal = gsl_cdf_chisq_P(-2*probProduct,2*probeCount);
 if(ps->pVal > 1 || ps->pVal < 0) 
     warn("%s pVal is %.10f, wrong!");
 slAddHead(&probePVals, ps);
+}
+
+doInvChiSq(int argc, char *argv[])
+/* Test routine to make sure that gsl_cdf_chisq_P() is working correctly. */
+{
+int i = 0;
+double result = 0;
+for(i = 1; i < argc; i+=2)
+    {
+    result = gsl_cdf_chisq_P(atof(argv[i]), atoi(argv[i+1]));
+    printf("%s\t%s\t%.2f\n", argv[i], argv[i+1], result);
+    }
 }
 
 
@@ -335,14 +381,26 @@ void gcPresAbs(char *outFile, char *file1lq, int celCount, char *celFiles[])
 struct row1lq **rowArray = NULL, *row=NULL;
 char **expNames = NULL;
 double **matrix = NULL;
-double **probeSetPVals = NULL;     /* Matrix of pVals of expression with probe sets ordered altphabetically. */
-char **probeSetNames = NULL;      /* List of probe set names indexing the probeSetPVals matrix. */
+double **probeSetPVals = NULL; /* Matrix of pVals of expression with probe sets ordered altphabetically. */
+char **probeSetNames = NULL;   /* List of probe set names indexing the probeSetPVals matrix. */
+char *badProbeName = NULL;     /* Name of file with bad probes. */
 int psCount = 0;
 int i=0,j=0;
 int rowCount=0;
 FILE *out = NULL;
 dotForUserInit(1);
 initGcBins(5,20);
+
+/* See if we have a kill list. */
+badProbeName = optionVal("badProbes", NULL);
+if(badProbeName != NULL)
+    {
+    warn("Reading the kill list");
+    readBadProbes(badProbeName);
+    }
+
+/* Read in a 1lq file and put it in an array, lists and hash
+   all at the same time. */
 warn("Reading 1lq file: %s", file1lq);
 read1lqFile(file1lq, &rowArray, &rowCount);
 
@@ -360,7 +418,7 @@ for(i=0; i<celCount; i++)
     expNames[i] = cloneString(celFiles[i]);
     fillInMatrix(matrix, i, rowCount, celFiles[i]);
     }
-
+warn("Done.");
 warn("Calculating pVals");
 for(i=0; i<celCount; i++)
     {
@@ -368,6 +426,7 @@ for(i=0; i<celCount; i++)
     fillInProbeSetPvals(matrix, rowCount, celCount, i, rowArray,
 			&probeSetPVals, &probeSetNames, &psCount);
     }
+warn("Done.");
 warn("Writing out the results.");
 out = mustOpen(outFile, "w");
 for(i = 0; i < celCount; i++)
@@ -396,9 +455,12 @@ if(optionExists("help") || origCount < 3)
     usage();
 affy1lqName = optionVal("1lqFile", NULL);
 outFileName = optionVal("outFile", NULL);
-if(affy1lqName == NULL || outFileName == NULL)
+if(optionExists("testVals"))
+    doInvChiSq(argc, argv);
+else if(affy1lqName == NULL || outFileName == NULL)
     errAbort("Need to specify 1lqFile and outFile, use -help for usage.");
-gcPresAbs(outFileName, affy1lqName, argc-1, argv+1);
+else 
+    gcPresAbs(outFileName, affy1lqName, argc-1, argv+1);
 return 0;
 }
 
