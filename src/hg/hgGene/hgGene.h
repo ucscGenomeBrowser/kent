@@ -226,6 +226,7 @@ void doSamT02(char *proteinId, char *database);
 #define hggStart "hgg_start"	/* Start position. */
 #define hggEnd	"hgg_end"	/* End position. */
 #define hggType	"hgg_type"	/* Gene track type. */
+#define hggItem	"hgg_item"	/* Gene item, used for ccdsGene */
 #define hggExpRatioColors "hgg_expRatioColors" /* Expression Ratio coloring. */
 #define hggMrnaFoldRegion "hgg_mrnaFoldRegion"	/* Which region in mRNA to show. */
 #define hggMrnaFoldPs	"hgg_mrnaFoldPs"	/* PostScript file. */
@@ -237,7 +238,8 @@ extern struct cart *cart;	/* This holds cgi and other variables between clicks. 
 extern struct hash *oldCart;	/* Old cart hash. */
 extern char *database;		/* Name of genome database - hg15, mm3, or the like. */
 extern char *genome;		/* Name of genome - mouse, human, etc. */
-extern char *curGeneId;	/* Current Gene Id. */
+extern char *curGeneId;		/* Current Gene Id. */
+extern char *curGeneItem;	/* Current Gene Item. */
 extern char *curGeneType;	/* gene track type */
 extern char *curGeneName;		/* Biological name of gene. */
 extern char *curGeneChrom;	/* Chromosome current gene is on. */
