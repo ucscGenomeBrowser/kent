@@ -38,7 +38,7 @@ have been verified, and that the size field is not blank.
    
 Currently users must be added manually to the database:
 hgsql qapushq
-insert into users values ('newname','','','');
+insert into users values ('newname','','','','');
 To clear the password:
 update users set password='' where user='theuser';
 To empty the pseudo-cart:

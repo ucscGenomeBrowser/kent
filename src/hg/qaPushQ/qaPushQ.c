@@ -20,9 +20,9 @@
 
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: qaPushQ.c,v 1.2 2004/04/30 00:11:59 galt Exp $";
+static char const rcsid[] = "$Id: qaPushQ.c,v 1.3 2004/05/01 00:33:28 galt Exp $";
 
-char msg[256] = "";
+char msg[2048] = "";
 char ** saveEnv;
 
 #define BUFMAX 65536
@@ -57,6 +57,23 @@ char *defaultColumns =
     "pqid,qid,priority,qadate,track,dbs,tbls,cgis,files,currLoc,makeDocYN,onlineHelp,ndxYN,stat,sponsor,reviewer,extSource,notes";
 /*
 "qid,pqid,priority,rank,qadate,newYN,track,dbs,tbls,cgis,files,sizeMB,currLoc,makeDocYN,onlineHelp,ndxYN,joinerYN,stat,sponsor,reviewer,extSource,openIssues,notes,reqdate,pushYN";
+*/
+
+/* structural improvements suggested by MarkD:
+
+static struct {
+enum colEnum col;
+char *name;
+char *hdr;
+} colTbl [] = {
+{e_qid, "qid"},
+{0,      NULL},
+}
+
+ArraySize(colTbl)
+
+numWords = chopString(liststr, ",", NULL,  NULL);
+
 */
 
 
@@ -676,7 +693,7 @@ char monthsql[256];
 initColsFromString(showColumns);
 
 safef(monthsql,sizeof(monthsql),"");
-if (sameString(month,""))
+if (!sameString(month,""))
     {
     safef(monthsql,sizeof(monthsql),"where qadate like '%s%%' ",month);
     }
@@ -687,6 +704,8 @@ safef(query, sizeof(query), "%s%s%s",
     monthsql,
     "order by priority,rank,qid desc limit 100"
     );
+
+//debug printf("query=%s",query);
 
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
@@ -940,7 +959,11 @@ safef(query, sizeof(query),
     "select rank from %s where priority='%s' order by rank desc limit 1",
     tbl, priority);
 quickres = sqlQuickString(conn, query);
-if (quickres != NULL) 
+if (quickres == NULL) 
+    {
+    q.rank = 0;
+    }
+else
     {
     sscanf(quickres,"%d",&q.rank);
     freez(&quickres);
@@ -1392,12 +1415,20 @@ else
     {
     if (strlen(u.password)==0) 
 	{ /* if pwd in db is blank, use this as their new password and encrypt it and save in db. */
-	encryptNewPWD(password, u.password, sizeof(u.password));  
-	safef(query, sizeof(query), 
-	    "update %s set password = '%s' where user = '%s' ", 
-	    tbl, u.password, u.user);
-	sqlUpdate(conn, query);
-	htmlSetCookie("qapushq", u.user, NULL, NULL, NULL, FALSE);
+	if (strlen(password) < 6)
+	    { /* bad pwd */
+	    safef(msg,sizeof(msg),"Invalid password. Password must be at least 6 characters long.");
+	    dyStringAppend(url, "?action=login");  
+	    }
+	else
+	    {
+	    encryptNewPWD(password, u.password, sizeof(u.password));  
+	    safef(query, sizeof(query), 
+		"update %s set password = '%s' where user = '%s' ", 
+		tbl, u.password, u.user);
+	    sqlUpdate(conn, query);
+	    htmlSetCookie("qapushq", u.user, NULL, NULL, NULL, FALSE);
+	    }
 	}
     else
 	{ /* verify password matches db */
@@ -1446,14 +1477,22 @@ while(TRUE)
 	{
 	break;
 	}
+
     parseList(tempVar,'=',0,tempVarName,sizeof(tempVarName));
+   
     parseList(tempVar,'=',1,tempVal,sizeof(tempVal));
+   
     if (sameString(tempVarName,"showColumns"))
 	{
 	freeMem(showColumns);
 	showColumns = needMem(strlen(tempVal)+1);
 	safef(showColumns, strlen(tempVal)+1, tempVal);
 	}
+    // debug
+    //safef(msg,sizeof(msg),"tempVar=%s<br>\n tempVarName=%s<br>\n tempVal=%s<br>\n showColumns=%s<br>\n",tempVar,tempVarName,tempVal,showColumns);
+    //htmShell(TITLE, doMsg, NULL);
+    //exit(0);
+
     i++;
     }
 }
@@ -1687,6 +1726,7 @@ database = cfgOption("pq.db"      );
 host     = cfgOption("pq.host"    );
 user     = cfgOption("pq.user"    );
 password = cfgOption("pq.password");
+
 
 setLock();
 
