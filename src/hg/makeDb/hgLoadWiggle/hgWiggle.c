@@ -11,7 +11,7 @@
 #include "hdb.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: hgWiggle.c,v 1.17 2004/08/11 22:01:14 hiram Exp $";
+static char const rcsid[] = "$Id: hgWiggle.c,v 1.18 2004/08/12 18:35:05 hiram Exp $";
 
 /* Command line switches. */
 static boolean noAscii = FALSE;	/*	do not output ascii data */
@@ -89,7 +89,6 @@ static void hgWiggle(struct wiggleDataStream *wDS, int trackCount,
 /* hgWiggle - dump wiggle data from database or .wig file */
 {
 struct slName *chromList = NULL;	/*	list of chroms to process */
-struct bed *bedList = NULL;		/*	from bedFile if there is one */
 int i;
 long startClock;
 long endClock;
@@ -158,10 +157,7 @@ for (i=0; i<trackCount; ++i)
 
 	if (bedFile)
 	    {
-	    if (wDS->chrName)
-		bedList = bedLoadNAllChrom(bedFile, 3, wDS->chrName);
-	    else
-		errAbort("can not do bedList option without a chrom specified");
+	    struct bed *bedList = bedLoadNAllChrom(bedFile, 3, wDS->chrName);
 	    wDS->getDataViaBed(wDS, db, tracks[i], operations, &bedList);
 	    bedFreeList(&bedList);
 	    }
@@ -170,16 +166,25 @@ for (i=0; i<trackCount; ++i)
 
 	if (!silent)
 	    {
-	    if (doStats)
-		wDS->statsOut(wDS, "stdout");
+	    /*	the TRUE means sort the results.  The FALSE case is
+	     *	possible if you are accumulating results via numerous calls
+	     *	and perhaps sorted them all at once with the
+	     *	sortResults() method elsewhere, then came to printout.
+	     *	No need to sort again.
+	     *	When working through a list of chroms, no need to print
+	     *	stats until all done.
+	     */
+	    if (doStats && !chromPtr)
+		wDS->statsOut(wDS, "stdout", TRUE);
 	    if (doBed)
-		wDS->bedOut(wDS, "stdout");
+		wDS->bedOut(wDS, "stdout", TRUE);
 	    if (!noAscii)
-		wDS->asciiOut(wDS, "stdout");
+		wDS->asciiOut(wDS, "stdout", TRUE);
 	    }
 	wDS->freeBed(wDS);
 	wDS->freeAscii(wDS);
-	wDS->freeStats(wDS);
+	if (doStats && !chromPtr)
+	    wDS->freeStats(wDS);
 	if (timing)
 	    {
 	    long et;
@@ -207,6 +212,12 @@ for (i=0; i<trackCount; ++i)
 	    chromPtr = chromPtr->next;
 	--once;
 	}
+	/*	when working through a chrom list, stats only at the end */
+	if (doStats && chromList)
+	    {
+	    wDS->statsOut(wDS, "stdout", TRUE);
+	    wDS->freeStats(wDS);
+	    }
     }
 endClock = clock1000();
 
