@@ -515,7 +515,6 @@ for (i=0; i<20; ++i)
 for (i=0; i<nibCount; ++i)
     {
     nibName = nibNames[i];
-    uglyf("Counting %s in 3 frames\n", nibName);
     seq = nibLoadAll(nibName);
     uglyf("Loaded %s\n", nibName);
     for (isRc=0; isRc <= 1; ++isRc)
@@ -526,7 +525,6 @@ for (i=0; i<nibCount; ++i)
 	    uglyf("Reverse complemented\n %s", nibName);
 	    }
 	t3 = trans3New(seq);
-	uglyf("Translated %s\n", nibName);
 	for (frame = 0; frame < 3; ++frame)
 	    {
 	    gfCountSeq(transGf[isRc][frame], t3->trans[frame]);
@@ -555,7 +553,6 @@ for (isRc=0; isRc <= 1; ++isRc)
 for (i=0; i<nibCount; ++i)
     {
     nibName = nibNames[i];
-    uglyf("Adding %s in 3 frames\n", nibName);
     seq = nibLoadAll(nibName);
     uglyf("Loaded %s\n", nibName);
     for (isRc=0; isRc <= 1; ++isRc)
@@ -566,7 +563,6 @@ for (i=0; i<nibCount; ++i)
 	    uglyf("Reverse complemented\n %s", nibName);
 	    }
 	t3 = trans3New(seq);
-	uglyf("Translated %s\n", nibName);
 	for (frame = 0; frame < 3; ++frame)
 	    {
 	    gf = transGf[isRc][frame];
@@ -593,7 +589,6 @@ for (isRc=0; isRc <= 1; ++isRc)
 	gfZeroOverused(gf);
 	}
     }
-uglyf("Done zeroing\n");
 }
 
 struct genoFind *gfIndexSeq(bioSeq *seqList,
@@ -695,6 +690,109 @@ for (hit = clump->hitList; hit != NULL; hit = hit->next)
     fprintf(f, "   q %d, t %d, diag %d\n", hit->qStart, hit->tStart, hit->diagonal);
 #endif
 }
+
+/* Fast sorting routines for sorting gfHits on diagonal. 
+ * More or less equivalent to system qsort, but with
+ * comparison function inline.  Worth a little tweaking
+ * since this is the bottleneck for the whole procedure. */
+
+static void gfHitSort2(struct gfHit **ptArray, int n);
+
+/* Some variables used by recursive function gfHitSort2
+ * across all incarnations. */
+static struct gfHit **nosTemp, *nosSwap;
+
+static void gfHitSort2(struct gfHit **ptArray, int n)
+/* This is a fast recursive sort that uses a temporary
+ * buffer (nosTemp) that has to be as big as the array
+ * that is being sorted. */
+{
+struct gfHit **tmp, **pt1, **pt2;
+int n1, n2;
+
+/* Divide area to sort in two. */
+n1 = (n>>1);
+n2 = n - n1;
+pt1 = ptArray;
+pt2 =  ptArray + n1;
+
+/* Sort each area separately.  Handle small case (2 or less elements)
+ * here.  Otherwise recurse to sort. */
+if (n1 > 2)
+    gfHitSort2(pt1, n1);
+else if (n1 == 2 && pt1[0] > pt1[1])
+    {
+    nosSwap = pt1[1];
+    pt1[1] = pt1[0];
+    pt1[0] = nosSwap;
+    }
+if (n2 > 2)
+    gfHitSort2(pt2, n2);
+else if (n2 == 2 && pt2[0] > pt2[1])
+    {
+    nosSwap = pt2[1];
+    pt2[1] = pt2[0];
+    pt2[0] = nosSwap;
+    }
+
+/* At this point both halves are internally sorted. 
+ * Do a merge-sort between two halves copying to temp
+ * buffer.  Then copy back sorted result to main buffer. */
+tmp = nosTemp;
+while (n1 > 0 && n2 > 0)
+    {
+    if ((*pt1)->diagonal <= (*pt2)->diagonal)
+	{
+	--n1;
+	*tmp++ = *pt1++;
+	}
+    else
+	{
+	--n2;
+	*tmp++ = *pt2++;
+	}
+    }
+/* One or both sides are now fully merged. */
+
+/* If some of first side left to merge copy it to end of temp buf. */
+if (n1 > 0)
+    memcpy(tmp, pt1, n1 * sizeof(*tmp));
+
+/* If some of second side left to merge, we finesse it here:
+ * simply refrain from copying over it as we copy back temp buf. */
+memcpy(ptArray, nosTemp, (n - n2) * sizeof(*ptArray));
+}
+
+void gfHitSortDiagonal(struct gfHit **pList)
+/* Sort a singly linked list with Qsort and a temporary array. */
+{
+struct gfHit *list = *pList;
+if (list != NULL && list->next != NULL)
+    {
+    int count = slCount(list);
+    struct gfHit *el;
+    struct gfHit **array;
+    int i;
+    int byteSize = count*sizeof(*array);
+    array = needLargeMem(byteSize);
+    nosTemp = needLargeMem(byteSize);
+    for (el = list, i=0; el != NULL; el = el->next, i++)
+        array[i] = el;
+    gfHitSort2(array, count);
+    list = NULL;
+    for (i=0; i<count; ++i)
+        {
+        array[i]->next = list;
+        list = array[i];
+        }
+    freez(&array);
+    freez(&nosTemp);
+    slReverse(&list);
+    *pList = list;       
+    }
+}
+
+
 
 static int cmpQuerySize;
 
@@ -917,7 +1015,6 @@ for (hit = hitList; hit != NULL; hit = nextHit)
     slAddHead(pb, hit);
     }
 
-uglyf("bucketCount %d, bucketSize %d, gf->totalSeqSize %d\n", bucketCount, bucketSize, gf->totalSeqSize);
 /* Sort each bucket on diagonal and clump. */
 for (i=0; i<bucketCount; ++i)
     {
@@ -925,7 +1022,7 @@ for (i=0; i<bucketCount; ++i)
     bits32 maxT;
     struct gfHit *clumpHits;
     pb = buckets + i;
-    slSort(pb, gfHitCmpDiagonal);
+    gfHitSortDiagonal(pb);
     for (hit = *pb; hit != NULL; )
          {
 	 /* Each time through this loop will get info on a clump.  Will only
@@ -964,7 +1061,6 @@ for (i=0; i<bucketCount; ++i)
     *pb = NULL;
     boundary += bucketSize;
     }
-uglyf("%d hits, %d used in %d clumps\n", totalHits, usedHits, clumpCount);
 clumpList = clumpNear(gf, clumpList, minMatch);
 slSort(&clumpList, gfClumpCmpHitCount);
 #ifdef DEBUG
