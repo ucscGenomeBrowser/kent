@@ -2,9 +2,9 @@
 # panTro1,galGal2,fr1,cb1 databases
 
 # Define databases used for various organisms
-set hg hg11,hg12,hg13,hg15,hg16
-set mm mm1,mm2,mm3,mm4
-set rn rn1,rn2,rn3
+set hg hg13,hg15,hg16
+set mm mm3,mm4
+set rn rn2,rn3
 set fr fr1
 set ce ce1
 set ci ci1
@@ -103,6 +103,42 @@ identifier affyU74
     $mm.affyGnfU74C.name
     $mm.affyU74.qName
     $mm.knownToU74.value
+
+identifier gnfU95SampleId
+"Identifiers of RNA samples used in GNF Human Expression Atlas 1"
+     hgFixed.affyExps.id
+     $hg.affyRatio.expIds comma
+     $hg.affyRatio.expScores comma indexOf
+
+identifier gnfU74ASampleId
+"Identifiers of RNA samples used in GNF Mouse Expression Atlas 1 on U74A Chip"
+     hgFixed.affyGnfU74AExps.id
+     $mm.affyGnfU74A.expIds comma
+     $mm.affyGnfU74A.expScores comma indexOf
+
+identifier gnfU74BSampleId
+"Identifiers of RNA samples used in GNF Mouse Expression Atlas 1 on U74B Chip"
+     hgFixed.affyGnfU74BExps.id
+     $mm.affyGnfU74B.expIds comma
+     $mm.affyGnfU74B.expScores comma indexOf
+
+identifier gnfU74CSampleId
+"Identifiers of RNA samples used in GNF Mouse Expression Atlas 1 on U74C Chip"
+     hgFixed.affyGnfU74CExps.id
+     $mm.affyGnfU74C.expIds comma
+     $mm.affyGnfU74C.expScores comma indexOf
+
+identifier arbFlyLifeAllSampleId
+"Identifiers of RNA samples used in Arbeitman Fly Life Cycle experiments"
+     hgFixed.arbFlyLifeAllExps.id
+     hgFixed.arbFlyLifeAll.expScores comma indexOf
+     hgFixed.arbFlyLifeAllRatio.expScores comma indexOf
+     
+identifier arbFlyLifeMedianSampleId
+"Identifiers of pooled RNA samples used in Arbeitman Fly Life Cycle experiments"
+     hgFixed.arbFlyLifeMedianExps.id
+     hgFixed.arbFlyLifeMedian.expScores comma indexOf
+     hgFixed.arbFlyLifeMedianRatio.expScores comma indexOf
 
 identifier chain${chainDb}Id
 "Link together chimp ${chainDb} chain info"
@@ -641,12 +677,23 @@ identifier cgapMapId
     $gbd.cgapBioDesc.mapID
     $gbd.cgapBiocPathway.mapID
 
+identifier affySnp10KId external=Affymetrix
+"Affymetrix 10K SNP Identifier"
+    hgFixed.affy10KDetails.affyId
+    $hg.affy10K.name
+
+identifier affySnp120KId external=Affymetrix
+"Affymetrix 120K SNP Identifier"
+    hgFixed.affyGeno.affyId
+    $hg.affyGeno.name
+
 identifier dbSnpId external=dbSNP
 "NCBI dbSNP ID"
     $knownDb.knownToCdsSnp.value
     $gbd.snpMap.name
     $gbd.snpNih.name
     $gbd.snpTsc.name
+    hgFixed.affy10KDetails.rsId
 
 identifier unigeneId
 "NCBI UniGene Cluster ID"
