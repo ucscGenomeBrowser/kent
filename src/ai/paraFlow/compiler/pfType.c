@@ -148,6 +148,8 @@ castType += baseTypeLogicalSize(pfc, newBase);
 insertCast(castType, newType, pPp);
 }
 
+static void coerceTuple(struct pfCompile *pfc, struct pfParse *tuple,
+	struct pfType *types);
 
 static void coerceOne(struct pfCompile *pfc, struct pfParse **pPp,
 	struct pfType *type)
@@ -263,6 +265,11 @@ else
 	    {
 	    typeMismatch(pp);
 	    }
+	}
+    else if (type->isTuple)
+        {
+	assert(pt->isTuple);
+	coerceTuple(pfc, pp, type);
 	}
     }
 }
