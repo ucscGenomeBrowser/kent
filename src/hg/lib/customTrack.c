@@ -27,24 +27,23 @@
  */
 
 
-static struct browserTable *btDefault()
+static struct trackDb *tdbDefault()
 /* Return default custom table: black, dense, etc. */
 {
-struct browserTable *bt;
+struct trackDb *tdb;
+char buf[256];
 static int count=0;
-AllocVar(bt);
-strncpy(bt->tableName, "custom", sizeof(bt->tableName));
-strncpy(bt->longLabel, "User Supplied Track", sizeof(bt->longLabel));
-strncpy(bt->shortLabel, "User Track", sizeof(bt->shortLabel));
-sprintf(bt->mapName, "ct_%d", ++count);
-strncpy(bt->trackType, "bed", sizeof(bt->trackType));
-bt->visibility = 1;
-bt->version = cloneString("custom");
-return bt;
+AllocVar(tdb);
+tdb->longLabel = cloneString("User Supplied Track");
+tdb->shortLabel = cloneString("User Track");
+sprintf(buf, "ct_%d", ++count);
+tdb->tableName = cloneString(buf);
+tdb->visibility = 1;
+return tdb;
 }
 
 static void parseRgb(char *s, int lineIx, 
-	unsigned short *retR, unsigned short *retG, unsigned short *retB)
+	unsigned char *retR, unsigned char *retG, unsigned char *retB)
 /* Turn comma separated list to RGB vals. */
 {
 int wordCount;
@@ -69,46 +68,44 @@ static struct customTrack *trackFromLine(char *line, int lineIx)
 /* Convert a track specification line to a custom table. */
 {
 struct customTrack *track;
-struct browserTable *bt = btDefault();
+struct trackDb *tdb = tdbDefault();
 struct hash *hash = hashVarLine(line, lineIx);
 char *val;
 AllocVar(track);
-track->bt = bt;
+track->tdb = tdb;
 if ((val = hashFindVal(hash, "name")) != NULL)
     {
     char buf[256];
-    strncpy(bt->shortLabel, val, sizeof(bt->shortLabel));
-    sprintf(buf, "ct_%s", bt->shortLabel);
+    tdb->shortLabel = cloneString(val);
+    sprintf(buf, "ct_%s", tdb->shortLabel);
     eraseWhiteSpace(buf);
-    strncpy(bt->mapName, buf, sizeof(bt->mapName));
+    tdb->tableName = cloneString(buf);
     }
 if ((val = hashFindVal(hash, "description")) != NULL)
-    strncpy(bt->longLabel, val, sizeof(bt->longLabel));
+    tdb->longLabel = cloneString(val);
 if ((val = hashFindVal(hash, "url")) != NULL)
-    bt->url = cloneString(val);
+    tdb->url = cloneString(val);
 if ((val = hashFindVal(hash, "visibility")) != NULL)
     {
-    bt->visibility = needNum(val, lineIx);
-    if (bt->visibility > 2)
+    tdb->visibility = needNum(val, lineIx);
+    if (tdb->visibility > 2)
         errAbort("line %d of custom input: Expecting visibility 0,1, or 2 got %s", lineIx, val);
     }
 if ((val = hashFindVal(hash, "useScore")) != NULL)
-    bt->useScore = !sameString(val, "0");
+    tdb->useScore = !sameString(val, "0");
 if ((val = hashFindVal(hash, "priority")) != NULL)
-    bt->priority = needNum(val, lineIx);
+    tdb->priority = atof(val);
 if ((val = hashFindVal(hash, "color")) != NULL)
-    {
-    parseRgb(val, lineIx, &bt->colorR, &bt->colorG, &bt->colorB);
-    }
+    parseRgb(val, lineIx, &tdb->colorR, &tdb->colorG, &tdb->colorB);
 if ((val = hashFindVal(hash, "altColor")) != NULL)
-    parseRgb(val, lineIx, &bt->altColorR, &bt->altColorG, &bt->altColorB);
+    parseRgb(val, lineIx, &tdb->altColorR, &tdb->altColorG, &tdb->altColorB);
 else
     {
     /* If they don't explicitly set the alt color make it a lighter version
      * of color. */
-    bt->altColorR = (bt->colorR + 255)/2;
-    bt->altColorG = (bt->colorG + 255)/2;
-    bt->altColorB = (bt->colorB + 255)/2;
+    tdb->altColorR = (tdb->colorR + 255)/2;
+    tdb->altColorG = (tdb->colorG + 255)/2;
+    tdb->altColorB = (tdb->colorB + 255)/2;
     }
 if ((val = hashFindVal(hash, "offset")) != NULL)
     track->offset = atoi(val);
@@ -428,6 +425,7 @@ char *row[32];
 struct bed *bed = NULL;
 struct hash *chromHash = newHash(8);
 struct lineFile *lf = NULL;
+float prio = 0.0;
 
 customDefaultRows(row);
 if (isFile)
@@ -465,7 +463,7 @@ for (;;)
     if (track == NULL)
         {
 	AllocVar(track);
-	track->bt = btDefault();
+	track->tdb = tdbDefault();
 	slAddTail(&trackList, track);
 	}
 
@@ -519,6 +517,7 @@ for (;;)
     }
 for (track = trackList; track != NULL; track = track->next)
      {
+     char buf[64];
      slReverse(&track->bedList);
      if (track->fromPsl)
          track->fieldCount = 12;
@@ -536,6 +535,13 @@ for (track = trackList; track != NULL; track = track->next)
 	     bed->chromStart += offset;
 	     bed->chromEnd += offset;
 	     }
+	 }
+     sprintf(buf, "bed %d .", track->fieldCount);
+     track->tdb->type = cloneString(buf);
+     if (track->tdb->priority == 0)
+         {
+	 prio += 0.001;
+	 track->tdb->priority = prio;
 	 }
      }
 return trackList;
@@ -585,40 +591,36 @@ struct customTrack *customTracksFromFile(char *text)
 return customTracksParse(text, TRUE);
 }
 
-static void saveBtLine(FILE *f, char *fileName, struct browserTable *bt)
-/* Write 'track' line that save browserTable info.  Only
+static void saveTdbLine(FILE *f, char *fileName, struct trackDb *tdb)
+/* Write 'track' line that save trackDb info.  Only
  * write parts that aren't default. */
 {
-struct browserTable *def = btDefault();
+struct trackDb *def = tdbDefault();
 
 fprintf(f, "track");
-if (!sameString(bt->shortLabel, def->shortLabel))
-    fprintf(f, "\t%s='%s'", "name", bt->shortLabel);
-if (!sameString(bt->longLabel, def->longLabel))
-    fprintf(f, "\t%s='%s'", "description", bt->longLabel);
-if (!sameString(bt->tableName, def->tableName))
-    fprintf(f, "\t%s='%s'", "tableName", bt->tableName);
-if (!sameString(bt->mapName, def->mapName))
-    fprintf(f, "\t%s='%s'", "mapName", bt->mapName);
-if (!sameString(bt->trackType, def->trackType))
-    fprintf(f, "\t%s='%s'", "trackType", bt->trackType);
-if (bt->url != NULL)
-    fprintf(f, "\t%s='%s'", "url", bt->url);
-if (bt->visibility != def->visibility)
-    fprintf(f, "\t%s='%d'", "visibility", bt->visibility);
-if (bt->useScore != def->useScore)
-    fprintf(f, "\t%s='%d'", "useScore", bt->useScore);
-if (bt->priority != def->priority)
-    fprintf(f, "\t%s='%d'", "priority", bt->priority);
-if (bt->colorR != def->colorR || bt->colorG != def->colorG || bt->colorB != bt->colorB)
-    fprintf(f, "\t%s='%d,%d,%d'", "color", bt->colorR, bt->colorG, bt->colorB);
-if (bt->altColorR != def->altColorR || bt->altColorG != def->altColorG 
-	|| bt->altColorB != bt->altColorB)
-    fprintf(f, "\t%s='%d,%d,%d'", "altColor", bt->altColorR, bt->altColorG, bt->altColorB);
+if (!sameString(tdb->shortLabel, def->shortLabel))
+    fprintf(f, "\t%s='%s'", "name", tdb->shortLabel);
+if (!sameString(tdb->longLabel, def->longLabel))
+    fprintf(f, "\t%s='%s'", "description", tdb->longLabel);
+if (!sameString(tdb->tableName, def->tableName))
+    fprintf(f, "\t%s='%s'", "tableName", tdb->tableName);
+if (tdb->url != NULL)
+    fprintf(f, "\t%s='%s'", "url", tdb->url);
+if (tdb->visibility != def->visibility)
+    fprintf(f, "\t%s='%d'", "visibility", tdb->visibility);
+if (tdb->useScore != def->useScore)
+    fprintf(f, "\t%s='%d'", "useScore", tdb->useScore);
+if (tdb->priority != def->priority)
+    fprintf(f, "\t%s='%f'", "priority", tdb->priority);
+if (tdb->colorR != def->colorR || tdb->colorG != def->colorG || tdb->colorB != tdb->colorB)
+    fprintf(f, "\t%s='%d,%d,%d'", "color", tdb->colorR, tdb->colorG, tdb->colorB);
+if (tdb->altColorR != def->altColorR || tdb->altColorG != def->altColorG 
+	|| tdb->altColorB != tdb->altColorB)
+    fprintf(f, "\t%s='%d,%d,%d'", "altColor", tdb->altColorR, tdb->altColorG, tdb->altColorB);
 fputc('\n', f);
 if (ferror(f))
     errnoAbort("Write error to %s", fileName);
-browserTableFree(&def);
+trackDbFree(&def);
 }
 
 static void saveBedPart(FILE *f, char *fileName, struct bed *bed, int fieldCount)
@@ -669,7 +671,7 @@ FILE *f = mustOpen(fileName, "w");
 
 for (track = trackList; track != NULL; track = track->next)
     {
-    saveBtLine(f, fileName, track->bt);
+    saveTdbLine(f, fileName, track->tdb);
     for (bed = track->bedList; bed != NULL; bed = bed->next)
          saveBedPart(f, fileName, bed, track->fieldCount);
     }

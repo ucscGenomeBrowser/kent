@@ -25,7 +25,7 @@ void trackDbPolish(struct trackDb *bt);
 
 
 int trackDbCmp(const void *va, const void *vb)
-/* Compare to sort based on query. */
+/* Compare to sort based on priority. */
 {
 const struct trackDb *a = *((struct trackDb **)va);
 const struct trackDb *b = *((struct trackDb **)vb);

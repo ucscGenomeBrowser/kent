@@ -6,15 +6,15 @@
 #include "bed.h"
 #endif
 
-#ifndef BROWSERTABLE_H
-#include "browserTable.h"
+#ifndef TRACKDB_H
+#include "trackDb.h"
 #endif
 
 struct customTrack
 /* A custom track. */
     {
     struct customTrack *next;	/* Next in list. */
-    struct browserTable *bt;	/* Browser table description of track. */
+    struct trackDb *tdb;	/* TrackDb description of track. */
     struct bed *bedList;	/* List of beds. */
     int fieldCount;		/* Number of fields in bed. */
     boolean needsLift;		/* True if coordinates need lifting. */

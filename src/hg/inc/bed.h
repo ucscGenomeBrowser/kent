@@ -87,10 +87,6 @@ int bedLineCmp(const void *va, const void *vb);
 void bedSortFile(char *inFile, char *outFile);
 /* Sort a bed file (in place, overwrites old file. */
 
-struct bed *bedLoadWScore(char **row);
-/* Load a bed from row fetched with select * from bed
- * from database including the score.  Dispose of this with bedFree(). */
-
 struct bed *bedLoad3(char **row);
 /* Load first three fields of bed. */
 

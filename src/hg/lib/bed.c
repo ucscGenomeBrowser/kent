@@ -11,9 +11,6 @@ void bedStaticLoad(char **row, struct bed *ret)
 /* Load a row from bed table into ret.  The contents of ret will
  * be replaced at the next call to this function. */
 {
-int sizeOne,i;
-char *s;
-
 ret->chrom = row[0];
 ret->chromStart = sqlUnsigned(row[1]);
 ret->chromEnd = sqlUnsigned(row[2]);
@@ -25,9 +22,6 @@ struct bed *bedLoad(char **row)
  * from database.  Dispose of this with bedFree(). */
 {
 struct bed *ret;
-int sizeOne,i;
-char *s;
-
 AllocVar(ret);
 ret->chrom = cloneString(row[0]);
 ret->chromStart = sqlUnsigned(row[1]);
@@ -42,7 +36,6 @@ struct bed *bedCommaIn(char **pS, struct bed *ret)
  * return a new bed */
 {
 char *s = *pS;
-int i;
 
 if (ret == NULL)
     AllocVar(ret);
@@ -223,22 +216,6 @@ for (bl = blList; bl != NULL; bl = bl->next)
 fclose(f);
 }
 
-struct bed *bedLoadWScore(char **row)
-/* Load a bed from row fetched with select * from bed
- * from database.  Dispose of this with bedFree(). */
-{
-struct bed *ret;
-int sizeOne,i;
-char *s;
-
-AllocVar(ret);
-ret->chrom = cloneString(row[0]);
-ret->chromStart = sqlUnsigned(row[1]);
-ret->chromEnd = sqlUnsigned(row[2]);
-ret->name = cloneString(row[3]);
-ret->score = sqlUnsigned(row[4]);
-return ret;
-}
 struct bed *bedLoad3(char **row)
 /* Load first three fields of bed. */
 {
