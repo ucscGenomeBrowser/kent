@@ -139,7 +139,7 @@
 #include "HInv.h"
 #include "bed6FloatScore.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.671 2004/06/18 22:08:52 baertsch Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.672 2004/06/21 07:02:34 galt Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -5370,6 +5370,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     freeDnaSeq(&seq);
     }
 sqlFreeResult(&sr);
+hFreeConn(&conn);
 }
 
 void htcRefMrna(char *geneName)
