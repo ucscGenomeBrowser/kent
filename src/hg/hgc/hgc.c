@@ -2248,9 +2248,9 @@ puts(
      "<i>Nature</i> vol 409 pp 922-7 for more information. Rosetta created DNA probes for "
      "each exon as described by the Sanger center for the October 2000 draft of the genome. "
      "Exons are labeled according whether they are predicted (pe) or true (te) exons, the "
-     "relative position in the genome, and the contig name. Please note that as sometimes "
-     "the predicted exons overlap experimentally verified exons there may appear to be more " 
-     "features here than on the browser page, but this is not case. </p><br>\n"
+     "relative position in the genome, and the contig name.</p><p><b>Please note that as "
+     "the predicted exons sometimes overlap experimentally verified exons there may appear to be more " 
+     "features here than on the browser page.</b></p><br>\n"
      "</td></tr></table>\n"
      );
 }
