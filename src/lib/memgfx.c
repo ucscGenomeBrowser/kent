@@ -289,6 +289,13 @@ if (width > 0 && height > 0)
     }
 }
 
+void mgDrawHorizontalLine(struct memGfx *mg, int y1, Color color)
+/*special case of mgDrawLine, for horizontal line across entire window 
+  at y-value y1.*/
+{
+mgDrawLine( mg, mg->clipMinX, y1, mg->clipMaxX, y1, color);
+}
+
 void mgDrawLine(struct memGfx *mg, int x1, int y1, int x2, int y2, Color color)
 /* Draw a line from one point to another. */
 {
