@@ -311,7 +311,7 @@ longLabel Deletions in Chimp (panTro1-Nov 03) Relative to Human
 group compGeno
 priority 203
 visibility hide
-type bed
+type bed 4
 
 track chainPt0
 shortLabel Pt0 Chain
