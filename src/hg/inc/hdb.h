@@ -411,8 +411,16 @@ char *sqlGetField(struct sqlConnection *connIn,
 /* Return a single field from the database, given database name, 
    table name, field name, and a condition string */
 
+struct hash *hChromSizeHash(char *db);
+/* Get hash of chromosome sizes for database.  Just hashFree it when done. */
+
 struct mafAli *mafLoadInRegion(struct sqlConnection *conn, char *table,
 	char *chrom, int start, int end);
 /* Return list of alignments in region. */
+
+struct mafAli *axtLoadAsMafInRegion(struct sqlConnection *conn, char *table,
+	char *chrom, int start, int end, 
+	char *tPrefix, char *qPrefix, int tSize,  struct hash *qSizeHash);
+/* Return list of alignments in region from axt external file as a maf. */
 
 #endif /* HDB_H */
