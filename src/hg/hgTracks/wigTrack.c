@@ -12,7 +12,7 @@
 #include "scoredRef.h"
 #include "customTrack.h"
 
-static char const rcsid[] = "$Id: wigTrack.c,v 1.53 2004/06/10 22:01:29 hiram Exp $";
+static char const rcsid[] = "$Id: wigTrack.c,v 1.54 2004/07/21 19:50:59 sugnet Exp $";
 
 /*	wigCartOptions structure - to carry cart options from wigMethods
  *	to all the other methods via the track->extraUiData pointer
@@ -95,13 +95,13 @@ for(lf = lfList; lf != NULL; lf = lf->next)
 	if(x1 == x2)
 	    x2++;
 	for(i = x1; i < x2; i++)
-	    colArray[i] = colorTrack->ixColor;
+	    colArray[i] = colorTrack->ixAltColor;
 	}
     }
 }
 
 static void wigFillInColorBedArray(struct track *wigTrack, Color *colArray, int colSize,
-				  struct track *colorTrack)
+				  struct track *colorTrack, struct vGfx *vg)
 /* Fill in a color array with the simple bed based colorTrack's
    color where it would normally have an block. */
 {
@@ -120,10 +120,9 @@ for (bed = bedList; bed != NULL; bed = bed->next)
     if(x1 == x2)
 	x2++;
     for(i = x1; i < x2; i++)
-	colArray[i] = colorTrack->ixColor;
+	colArray[i] = colorTrack->itemColor(colorTrack, bed, vg);
     }
 }
-
 
 void wigFillInColorArray(struct track *wigTrack, struct vGfx *vg, 
 			 Color *colorArray, int colSize, struct track *colorTrack)
@@ -143,7 +142,7 @@ if(colorTrack->visibility == tvHide)
 if(colorTrack->drawItemAt == linkedFeaturesDrawAt)
     wigFillInColorLfArray(wigTrack, colorArray, colSize, colorTrack);
 else if(colorTrack->drawItemAt == bedDrawSimpleAt)
-    wigFillInColorBedArray(wigTrack, colorArray, colSize, colorTrack);
+    wigFillInColorBedArray(wigTrack, colorArray, colSize, colorTrack, vg);
 
 if(trackLoaded && colorTrack->freeItems != NULL)
     colorTrack->freeItems(colorTrack);
@@ -521,6 +520,7 @@ Color *colorArray = NULL;       /*	Array of pixels to be drawn.	*/
 wigCart = (struct wigCartOptions *) tg->extraUiData;
 if(sameString(tg->mapName, "affyTranscription"))
     wigCart->colorTrack = "affyTransfrags";
+
 horizontalGrid = wigCart->horizontalGrid;
 lineBar = wigCart->lineBar;
 autoScale = wigCart->autoScale;
