@@ -9,4 +9,4 @@ O = whyConserved.o
 
 whyConserved: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/whyConserved $O $(MYLIBS) $L
-#	strip $(HOME)/bin/$(MACHTYPE)/whyConserved
+	strip $(HOME)/bin/$(MACHTYPE)/whyConserved

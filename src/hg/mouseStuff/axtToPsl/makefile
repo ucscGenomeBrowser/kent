@@ -9,4 +9,4 @@ O = axtToPsl.o
 
 axtToPsl: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/axtToPsl $O $(MYLIBS) $L
-#	strip $(HOME)/bin/$(MACHTYPE)/axtToPsl
+	strip $(HOME)/bin/$(MACHTYPE)/axtToPsl

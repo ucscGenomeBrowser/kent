@@ -9,4 +9,4 @@ O = mousePoster.o
 
 mousePoster: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/mousePoster $O $(MYLIBS) $L
-#	strip $(HOME)/bin/$(MACHTYPE)/mousePoster
+	strip $(HOME)/bin/$(MACHTYPE)/mousePoster

@@ -566,21 +566,9 @@ for (sp = spList; sp != NULL; sp = sp->next)
 slSort(&chainList, chainCmpScore);
 for (chain = chainList; chain != NULL; chain = chain->next)
     {
-    struct boxIn *b, *nextB;
     assert(chain->qStart == chain->blockList->qStart 
-    	&& chain->tStart == chain->blockList->tStart);
-    fprintf(f, "chain %d %s %d + %d %d %s %d %c %d %d\n", chain->score,
-	chain->tName, chain->tSize, chain->tStart, chain->tEnd,
-	chain->qName, chain->qSize, chain->qStrand, chain->qStart, chain->qEnd);
-    for (b = chain->blockList; b != NULL; b = nextB)
-	{
-	nextB = b->next;
-	fprintf(f, "%d", b->qEnd - b->qStart);
-	if (nextB != NULL)
-	    fprintf(f, "\t%d\t%d", nextB->tStart - b->tEnd, nextB->qStart - b->qEnd);
-	fputc('\n', f);
-	}
-    fputc('\n', f);
+	&& chain->tStart == chain->blockList->tStart);
+    chainWrite(chain, f);
     }
 
 dyStringFree(&dy);
