@@ -732,24 +732,15 @@ LOAD AVID MOUSE TRACK (todo)
       hgLoadBed avidRepeat avidRepeat.bed
       hgLoadBed avidUnique avidUnique.bed
 
-
-LOAD SNPS (todo)
+LOAD SNPS (Done.  Daryl Thomas August 16, 2002)
       - ssh hgwdev
       - cd ~/mm/bed
       - mkdir snp
       - cd snp
-      - Download SNPs from ftp://ftp.ncbi.nlm.nih.gov/pub/sherry/gp.oo33.gz
+      - Download SNPs from ftp://ftp.ncbi.nlm.nih.gov/pub/sherry/mouse.b27.out.gz
       - Unpack.
-        grep RANDOM gp.oo33 > snpTsc.txt
-        grep MIXED  gp.oo33 >> snpTsc.txt
-        grep BAC_OVERLAP  gp.oo33 > snpNih.txt
-        grep OTHER  gp.oo33 >> snpNih.txt
-        awk -f filter.awk snpTsc.txt > snpTsc.contig.bed
-        awk -f filter.awk snpNih.txt > snpNih.contig.bed
-        liftUp snpTsc.bed ../../jkStuff/liftAll.lft warn snpTsc.contig.bed
-        liftUp snpNih.bed ../../jkStuff/liftAll.lft warn snpNih.contig.bed
-	hgLoadBed mm2 snpTsc snpTsc.bed
-	hgLoadBed mm2 snpNih snpNih.bed
+        createBed < mouse.b27.out > snpNih.bed
+        hgLoadBed mm2 snpNih snpNih.bed
 
 LOAD CPGISSLANDS (todo)
      login to hgwdev
