@@ -1218,18 +1218,18 @@ void printStanSource(char *acc, char *type)
 char *stanSourceLink = "http://genome-www5.stanford.edu/cgi-bin/SMD/source/sourceResult?"; 
 if(sameWord(type, "est"))
     {
-    printf("<B>Stanford SOURCE:</B> %s <A HREF=\"%soption=Number&criteria=%s&choice=Gene\">[Gene Info]</A> ",acc,stanSourceLink,acc);
-    printf("<A HREF=\"%soption=Number&criteria=%s&choice=cDNA\">[Clone Info]</A><BR>\n",stanSourceLink,acc);
+    printf("<B>Stanford SOURCE:</B> %s <A HREF=\"%soption=Number&criteria=%s&choice=Gene\" TARGET=_blank>[Gene Info]</A> ",acc,stanSourceLink,acc);
+    printf("<A HREF=\"%soption=Number&criteria=%s&choice=cDNA\" TARGET=_blank>[Clone Info]</A><BR>\n",stanSourceLink,acc);
     }
 else if(sameWord(type,"unigene"))
     {
-    printf("<B>Stanford SOURCE:</B> %s <A HREF=\"%soption=CLUSTER&criteria=%s&choice=Gene\">[Gene Info]</A> ",acc,stanSourceLink,acc);
-    printf("<A HREF=\"%soption=CLUSTER&criteria=%s&choice=cDNA\">[Clone Info]</A><BR>\n",stanSourceLink,acc);
+    printf("<B>Stanford SOURCE:</B> %s <A HREF=\"%soption=CLUSTER&criteria=%s&choice=Gene\" TARGET=_blank>[Gene Info]</A> ",acc,stanSourceLink,acc);
+    printf("<A HREF=\"%soption=CLUSTER&criteria=%s&choice=cDNA\" TARGET=_blank>[Clone Info]</A><BR>\n",stanSourceLink,acc);
     }
 else if(sameWord(type,"mrna"))
-    printf("<B>Stanford SOURCE:</B> <A HREF=\"%soption=Number&criteria=%s&choice=Gene\">%s</A><BR>\n",stanSourceLink,acc,acc);
+    printf("<B>Stanford SOURCE:</B> <A HREF=\"%soption=Number&criteria=%s&choice=Gene\" TARGET=_blank>%s</A><BR>\n",stanSourceLink,acc,acc);
 else if(sameWord(type,"locusLink"))
-    printf("<B>Stanford SOURCE Locus Link:</B> <A HREF=\"%soption=LLID&criteria=%s&choice=Gene\">%s</A><BR>\n",stanSourceLink,acc,acc);
+    printf("<B>Stanford SOURCE Locus Link:</B> <A HREF=\"%soption=LLID&criteria=%s&choice=Gene\" TARGET=_blank>%s</A><BR>\n",stanSourceLink,acc,acc);
 }
 
 void printRnaSpecs(char *acc)
