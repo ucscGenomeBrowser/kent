@@ -7,7 +7,7 @@
 #include "portable.h"
 #include "hgColors.h"
 
-static char const rcsid[] = "$Id: wigDataStream.c,v 1.39 2004/09/03 22:15:18 hiram Exp $";
+static char const rcsid[] = "$Id: wigDataStream.c,v 1.40 2004/09/10 03:49:09 hiram Exp $";
 
 /*	PRIVATE	METHODS	************************************************/
 static void addConstraint(struct wiggleDataStream *wds, char *left, char *right)
@@ -1205,6 +1205,7 @@ static unsigned long long getDataViaBed(struct wiggleDataStream *wds, char *db,
 /* getDataViaBed - constrained by the bedList	*/
 {
 unsigned long long valuesMatched = 0;
+unsigned long long prevValuesMatched = 0;
 
 if (bedList && *bedList)
     {
@@ -1220,6 +1221,8 @@ if (bedList && *bedList)
     struct { unsigned chrStart; unsigned chrEnd; } *chrStartEnd;
     unsigned long long valuesFound = 0;
     boolean maxReached = FALSE;
+    unsigned long long prevMaxOutput = 0;
+    
 
     /* remember these constraints so we can reset them afterwards
      * because we are going to use them for our own internal uses here.
@@ -1474,13 +1477,18 @@ if (bedList && *bedList)
 	/*	now fetch all the wiggle data for this position,
 	 *	constraints have been set at the top of this loop
 	 */
-	/*	POTENTIAL GREAT SPEEDUP here, if only bed results are
+	/*	POTENTIAL SPEEDUP here, if only bed results are
 	 *	the requested result, then we should just ask for a bed
 	 *	list from getData and simply intersect that bed list
 	 *	with the given bed list filter.
 	 */
 
+	prevValuesMatched = wds->valuesMatched;
+	prevMaxOutput = wds->maxOutput;
+	wds->maxOutput = 0;
 	valuesFound = wds->getData(wds, db, table, wigFetchDataArray);
+	wds->valuesMatched = prevValuesMatched;
+	wds->maxOutput = prevMaxOutput;
 
 	verbose(VERBOSE_CHR_LEVEL,
 	    "#\tback from getData, found %llu valid points\n", valuesFound);
@@ -1528,7 +1536,8 @@ if (bedList && *bedList)
 
 	    fptr = wds->array->data + (chromPosition - winStart);
 
-	    while ((!maxReached) && (chromPosition < winEnd))
+	    for ( ; (!maxReached) && (chromPosition < winEnd);
+				++chromPosition, ++boolPtr, ++fptr)
 		{
 		if (wds->maxOutput)
 		    {
@@ -1617,9 +1626,6 @@ if (bedList && *bedList)
 			}
 		    }	/*	if (*boolPtr && (!isnan(*fptr)))	*/
 
-		++chromPosition;
-		++boolPtr;
-		++fptr;
 		}
 	    /*	if we can save more than 100,000 data locations, move
 	     *	the results to a smaller area.  Could be huge savings on
@@ -1654,6 +1660,7 @@ if (bedList && *bedList)
 		{
 		accumStats(wds, lowerLimit, upperLimit, sumData, sumSquares,
 		    statsCount, chromStart, chromEnd);
+    		wds->stats->span = 1;	/*	viaBed reduces span to 1 */
 		resetStats(&lowerLimit, &upperLimit, &sumData, &sumSquares,
 		    &statsCount, &chromStart, &chromEnd);
 		}
@@ -1697,7 +1704,7 @@ if (bedList && *bedList)
 wds->valuesMatched += valuesMatched;
 return(valuesMatched);
 
-}
+}	/*	static unsigned long long getDataViaBed()	*/
 
 static void sortResults(struct wiggleDataStream *wds)
 /*	sort any results that exist	*/
