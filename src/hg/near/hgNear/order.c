@@ -76,7 +76,9 @@ while ((row = sqlNextRow(sr)) != NULL)
     while (hel != NULL)
         {
 	struct genePos *gp = hel->val;
-	gp->distance = atof(row[1]) * multiplier;
+	double distance = atof(row[1]) * multiplier;
+	if (distance < gp->distance)
+	    gp->distance = distance;
 	hel = hashLookupNext(hel);
 	++count;
 	}
