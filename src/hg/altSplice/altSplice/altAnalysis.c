@@ -9,7 +9,7 @@
 #include "sample.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: altAnalysis.c,v 1.2 2003/07/13 06:16:15 sugnet Exp $";
+static char const rcsid[] = "$Id: altAnalysis.c,v 1.3 2003/07/21 04:33:27 sugnet Exp $";
 
 static int alt5PrimeCount = 0;
 static int alt3PrimeCount = 0;
@@ -868,20 +868,21 @@ for(i=0; i<vCount; i++)
 		    }
 		}
 	    }
-	else 
+	/* Only want non alt-spliced exons for our controls. */
+	if(em[i][j] && 
+	   rowSum(em[i], ag->vTypes, ag->vertexCount) == 1 &&
+	   rowSum(em[j], ag->vTypes, ag->vertexCount) == 1 &&
+	   colSum(em, ag->vTypes, ag->vertexCount, j) == 1 &&
+	   colSum(em, ag->vTypes, ag->vertexCount, j) == 1 &&
+	   altGraphXEdgeVertexType(ag, i, j) == ggExon &&
+	   areHard(ag, i, j) && 
+	   areConstitutive(ag, em, i, j))
 	    {
-	    /* Only want non alt-spliced exons for our controls. */
-	    if(em[i][j] && rowSum(em[i], ag->vTypes, ag->vertexCount) &&
-	       altGraphXEdgeVertexType(ag, i, j) == ggExon &&
-	       areHard(ag, i, j) && 
-	       areConstitutive(ag, em, i, j))
-		{
-		notAlt = initASplice(ag, em, i, j, j);
-		if(altRegion != NULL) 
-		    outputControlExonBeds(ag, i, j);
-		slAddHead(&notAltList, notAlt);
-		} 
-	    }
+	    notAlt = initASplice(ag, em, i, j, j);
+	    if(altRegion != NULL) 
+		outputControlExonBeds(ag, i, j);
+	    slAddHead(&notAltList, notAlt);
+	    } 
 	}
     if(aSplice != NULL) 
 	{
