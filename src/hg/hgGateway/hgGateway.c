@@ -13,7 +13,7 @@
 #include "hCommon.h"
 #include "hui.h"
 
-static char const rcsid[] = "$Id: hgGateway.c,v 1.80 2005/02/14 00:55:58 jill Exp $";
+static char const rcsid[] = "$Id: hgGateway.c,v 1.81 2005/03/09 06:34:19 donnak Exp $";
 
 struct cart *cart = NULL;
 struct hash *oldVars = NULL;
@@ -148,7 +148,7 @@ cgiMakeIntVar("pix", cartUsualInt(cart, "pix", hgDefaultPixWidth), 4);
 cartSaveSession(cart);
 printf("</td>\n");
 printf("<td align=center>");
-cgiMakeButton("Submit", "Submit");
+cgiMakeButton("Submit", "submit");
 printf("</td>\n");
 
 puts(
@@ -158,11 +158,11 @@ puts(
 "</center>\n"
 "</td></tr><tr><td><center>\n"
 );
-cgiMakeButton("customTrackPage", "Add Your Own Custom Tracks");
+cgiMakeButton("customTrackPage", "add your own custom tracks");
 printf(" ");
-cgiMakeButton("hgTracksConfigPage", "Configure Tracks and Display");
+cgiMakeButton("hgTracksConfigPage", "configure tracks and display");
 printf(" ");
-cgiMakeOnClickButton("document.mainForm.position.value=''","Clear Position");
+cgiMakeOnClickButton("document.mainForm.position.value=''","clear position");
 puts("</center>\n"
 "</td></tr></table>\n"
 "</td></tr></table>\n"
