@@ -2218,15 +2218,13 @@ while (<>) {
 # Submission to last job:          2132s      35.53m     0.59h    0.02d
 
     /cluster/bin/i386/pslSort dirs primers.psl temp primers.out
-
-XXX next step needs all.epcr
-    /projects/compbio/usr/booch/booch/scripts/filterPrimers -mouse \
-	/cluster/store5/mouseMarker/stsInfoMouse.bed primers.psl \
-	/cluster/bluearc/scratch/mus/mm4/musPrimer.fa \
-	all.epcr > primers.psl.filter.blat
-
-
-    # 
+    rmdir temp
+    # comparing results to mm3:
+    # /projects/hg2/booch/psl/mm.2003.02/mm3/primers/primers.psl
+    # Mm3 wc primers.psl
+    # 4263983 89543582 440456942 primers.psl
+    # Mm4 wc primers.psl /cluster/data/mm4/bed/STSmarkers/primer/primers.psl
+    # 4805773 100921172 496200670 primers.psl
 
     cd /cluster/data/mm4/bed/STSmarkers/ePCR
     ls -1S /cluster/bluearc/scratch/mus/mm4/trfFa > contig.lst
@@ -2250,6 +2248,120 @@ XXX next step needs all.epcr
 # Average job time:                 112s       1.87m     0.03h    0.00d
 # Longest job:                      159s       2.65m     0.04h    0.00d
 # Submission to last job:           791s      13.18m     0.22h    0.01d
+
+    # all those results become all.epcr
+    cat epcr.out/*.epcr > all.epcr
+    # comparing results to Mm3:
+    # /projects/hg2/booch/psl/mm.2003.02/mm3/primers/all.epcr
+    # Mm3 wc all.epcr
+    #  24627   98508 1329559 all.epcr
+    # Mm4 wc all.epcr	/cluster/data/mm4/bed/STSmarkers/ePCR/all.epcr
+    #  65121  260484 3485112 ../ePCR/all.epcr
+
+    cd /cluster/data/mm4/bed/STSmarkers/primer
+
+    # create primers.psl.filter.blat and epcr.not.found
+    /projects/compbio/usr/booch/booch/scripts/filterPrimers -mouse \
+	/cluster/store5/mouseMarker/stsInfoMouse.bed primers.psl \
+	/cluster/bluearc/scratch/mus/mm4/musPrimer.fa \
+	../ePCR/all.epcr > primers.psl.filter.blat
+    #
+    # comparing results to Mm3:
+    # Mm3: wc primers.psl.filter.blat
+    #  26088  547848 2612720 primers.psl.filter.blat
+    # Mm4:  wc primers.psl.filter.blat
+    #  24056  505176 2385675 primers.psl.filter.blat
+
+    # create accession_info.rdb  (chrM added to Terry's script for mouse)
+    touch empty_sequence.inf
+    /projects/compbio/usr/booch/booch/scripts/compileAccInfo -mouse \
+	/cluster/data/mm4 empty_sequence.inf
+    mv accession_info.rdb temp
+    ~booch/bin/sorttbl Chr Ord Start < temp > accession_info.rdb
+    rm temp
+    # comparing results to Mm3:
+    #  Mm3 wc accession_info.rdb
+    # 173948 1913432 12738822 accession_info.rdb
+    #  Mm4 wc accession_info.rdb
+    #  86935  956289 6374930 accession_info.rdb
+    #### This is an interesting difference.  The structure of the .agp files 
+    # for Mm3 and Mm4 show a large difference in line counts:
+    # wc /cluster/data/mm3/?/*.agp /cluster/data/mm3/??/*.agp
+    # 339937 2893447 18141029 total
+    # wc /cluster/data/mm4/?/*.agp /cluster/data/mm4/??/*.agp
+    # 219652 1885501 11875772 total
+
+    # creates epcr.not.found.nomatch and epcr.not.found.psl
+    /projects/compbio/usr/booch/booch/scripts/epcrToPsl -mouse \
+	epcr.not.found /cluster/bluearc/scratch/mus/mm4/musPrimer.fa \
+	accession_info.rdb /cluster/data/mm4
+    # epcr.not.found.psl is empty
+    # Comparing results to Mm3:
+    # Mm3 wc epcr*
+    # 205     820    7585 epcr.not.found
+    #   1      12      95 epcr.not.found.nomatch
+    # 204    4284   19817 epcr.not.found.psl
+    # 410    5116   27497 total
+
+    # Mm4 wc epcr*
+    #  132     528    5154 epcr.not.found
+    #  132    1584   11622 epcr.not.found.nomatch
+    #    0       0       0 epcr.not.found.psl
+    #  264    2112   16776 total
+
+    # combine them to one, since epcr.not.found.psl is empty, this is a copy
+    cat primers.psl.filter.blat epcr.not.found.psl > primers.psl.filter
+
+    # lift those primers  (added chrM to this lifter script for mouse)
+    # creates primers.psl.filter.lifted
+    /projects/compbio/usr/booch/booch/scripts/lifter -mouse -psl \
+	/cluster/data/mm4 primers.psl.filter
+
+    # create primers.initial
+    PATH=/cluster/home/booch/bin:$PATH \
+	/projects/compbio/usr/booch/booch/scripts/extractPslInfo \
+	primers.psl.filter.lifted
+    # create primers.initial.acc
+    /projects/compbio/usr/booch/booch/scripts/findAccession -agp \
+	-mouse primers.initial /cluster/data/mm4
+
+    # this needs to be -rat as that specifies how to scan the
+    # stsInfoMouse.bed file and it does not work if you use -mouse
+    /projects/compbio/usr/booch/booch/scripts/getStsId -rat \
+	/cluster/store5/mouseMarker/stsInfoMouse.bed \
+	primers.initial.acc > primers.initial.acc.trans
+
+    sort -k 4n primers.initial.acc.trans > primers.final
+    rm primers.initial.acc primers.initial.acc.trans
+    # comparing results to Mm3:
+    # Mm3 wc primers.final
+    # 26292  184044 1253365 primers.final
+    # Mm4 wc primers.final
+    # 24056  168392 1289371 primers.final
+
+    cd /cluster/data/mm4/bed/STSmarkers
+    # stsMarkers.final is empty for mouse
+    touch stsMarkers.final dummy
+    PATH=/cluster/home/booch/bin:$PATH \
+    /projects/compbio/usr/booch/booch/scripts/combineSeqPrimerPos \
+	stsMarkers.final primer/primers.final > stsMarkers_pos.rdb
+    # Comparing results to Mm3
+    # Mm3 wc stsMarkers_pos.rdb
+    # 25925  181475 1413458 stsMarkers_pos.rdb
+    # Mm4 wc stsMarkers_pos.rdb
+    # 24058  168406 1133400 stsMarkers_pos.rdb
+
+XXXX
+    # I'm getting an empty result from this
+    /projects/compbio/usr/booch/booch/scripts/combineAllSeqPrimer \
+	-mouse /cluster/store5/mouseMarker/stsInfoMouse.bed \
+	dummy primer/primers.initial.acc > stsMarkers_pos_all.rdb
+
+
+    # there doesn't seem to be any script by this name
+    /projects/compbio/usr/booch/booch/scripts/createStsBed \
+	/cluster/store5/mouseMarker/stsInfoMouse.bed \
+	stsMarkers_pos.rdb 500 > stsMapMouse.bed
 
 # SET defaultDb in hgcentraltest to move from mm3 to mm4
     hgsql -e 'update defaultDb set name = "mm4" where name = "mm3";' \
