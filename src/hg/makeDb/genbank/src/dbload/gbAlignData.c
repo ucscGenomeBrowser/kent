@@ -27,7 +27,7 @@
 #include "gbSql.h"
 #include "sqlDeleter.h"
 
-static char const rcsid[] = "$Id: gbAlignData.c,v 1.8 2003/10/22 03:37:48 markd Exp $";
+static char const rcsid[] = "$Id: gbAlignData.c,v 1.9 2004/02/23 07:40:18 markd Exp $";
 
 /* table names */
 static char *REF_SEQ_ALI = "refSeqAli";
@@ -76,10 +76,10 @@ void makeRefGeneCreateSql(char *geneTable, char *flatTable,
 /* generate the string for create one of the refGene/refFlat pair tables */
 {
 char editDef[1024], *tmpDef, *part2, *p;
-*geneTableDef = genePredGetCreateSql(geneTable, 0);
+*geneTableDef = genePredGetCreateSql(geneTable, 0, 0);
     
 /* edit generated SQL to add geneName column and index */
-tmpDef = genePredGetCreateSql(flatTable, 0);
+tmpDef = genePredGetCreateSql(flatTable, 0, 0);
 part2 = strchr(tmpDef, '(');
 *(part2++) = '\0';
 p = strrchr(part2, ')');
@@ -419,7 +419,7 @@ if ((status != NULL) && (status->selectAlign != NULL)
     }
 }
 
-static void processIntrolPslFile(struct sqlConnection *conn,
+static void processIntronPslFile(struct sqlConnection *conn,
                                  struct gbSelect* select,
                                  struct gbStatusTbl* statusTbl, char* pslPath)
 /* Parse an intron psl file, looking for accessions to add to the database. */
@@ -492,7 +492,7 @@ if ((select->type == GB_EST) && (select->orgCats == GB_NATIVE))
     char intronPslPath[PATH_LEN];
     gbAlignedGetPath(select, "intronPsl.gz", NULL, intronPslPath);
     if (fileExists(intronPslPath))
-        processIntrolPslFile(conn, select, statusTbl, intronPslPath);
+        processIntronPslFile(conn, select, statusTbl, intronPslPath);
     }
 
 /* refFlat table has is a join of metaData (geneName) with alignment, so we
@@ -584,6 +584,9 @@ static void deleteRefSeqAligns(struct sqlConnection *conn,
 sqlDeleterDel(deleter, conn, "refSeqAli", "qName");
 sqlDeleterDel(deleter, conn, "refGene", "name");
 sqlDeleterDel(deleter, conn, "refFlat", "name");
+sqlDeleterDel(deleter, conn, "xenoRefSeqAli", "qName");
+sqlDeleterDel(deleter, conn, "xenoRefGene", "name");
+sqlDeleterDel(deleter, conn, "xenoRefFlat", "name");
 sqlDeleterDel(deleter, conn, "mrnaOrientInfo", "name");
 }
 
@@ -599,7 +602,6 @@ if (srcDb == GB_REFSEQ)
 else
     deleteGenBankAligns(conn, deleter, type);
 }
-
 
 void gbAlignDataDeleteOutdated(struct sqlConnection *conn,
                                struct gbSelect* select, 
@@ -634,6 +636,64 @@ gbAlignDataDeleteFromTables(conn, select->release->srcDb, select->type,
 
 sqlDeleterFree(&deleter);
 } 
+
+static void removeRefSeq(struct sqlConnection *conn, struct gbSelect* select,
+                         struct sqlDeleter* deleter)
+/* delete all refseq alignments */
+{
+if (select->orgCats & GB_NATIVE)
+    {
+    sqlDropTable(conn, "refSeqAli");
+    sqlDropTable(conn, "refGene"); 
+    sqlDropTable(conn, "refFlat");
+    sqlDeleterDel(deleter, conn, "mrnaOrientInfo", "name");
+    }
+if (select->orgCats & GB_XENO)
+    {
+    sqlDropTable(conn, "xenoRefSeqAli");
+    sqlDropTable(conn, "xenoRefGene");
+    sqlDropTable(conn, "xenoRefFlat");
+    }
+}
+
+static void removeGenBankMrna(struct sqlConnection *conn, struct gbSelect* select,
+                              struct sqlDeleter* deleter)
+/* delete all genbank mRNA alignments */
+{
+if (select->orgCats & GB_NATIVE)
+    {
+    struct slName* chrom;
+    char table[64];
+    if (gChroms == NULL)
+        gChroms = hAllChromNames();
+    sqlDropTable(conn, "all_mrna");
+    sqlDeleterDel(deleter, conn, "mrnaOrientInfo", "name");
+    for (chrom = gChroms; chrom != NULL; chrom = chrom->next)
+        {
+        safef(table, sizeof(table), "%s_mrna", chrom->name);
+        sqlDropTable(conn, table);
+        }
+    }
+if (select->orgCats & GB_XENO)
+    {
+    sqlDropTable(conn, "xenoMrna");
+    }
+    
+}
+
+void gbAlignRemove(struct sqlConnection *conn, struct gbSelect* select,
+                   struct sqlDeleter* deleter)
+/* Delete all alignments for the selected categories.  Used when reloading
+ * alignments.*/
+{
+/* ESTs not implemented, which gets rid of complexities of accPrefix */
+if (select->type & GB_EST)
+    errAbort("gbAlignRemove doesn't handle ESTs");
+if (select->release->srcDb & GB_REFSEQ)
+    removeRefSeq(conn, select, deleter);
+if (select->release->srcDb & GB_GENBANK)
+    removeGenBankMrna(conn, select, deleter);
+}
 
 struct slName* gbAlignDataListTables(struct sqlConnection *conn)
 /* Get list of alignment tables from database. */

@@ -149,6 +149,11 @@ struct sqlUpdater* gbStatusTblUpdate(struct gbStatusTbl *statusTbl,
 
 void gbStatusTblFree(struct gbStatusTbl** statusTbl);
 /* Free a gbStatusTbl object */
+
+struct slName* gbStatusTblLoadAcc(struct sqlConnection *conn, 
+                                  unsigned select, char* accPrefix);
+/* load a list of accession from the table matching the selection
+ * criteria */
 #endif
 /*
  * Local Variables:

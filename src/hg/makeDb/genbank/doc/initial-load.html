@@ -128,16 +128,55 @@
 
     <OL>
       <LI><CODE>nice bin/gbDbLoadStep -verbose=1 -drop -initialLoad $db</CODE></LI>
-      <UL>
-      <LI> The <CODE>-drop</CODE> option drops any existing GenBank or RefSeq
-           tables before loading.
-      <LI> If an initial load was done using only the mRNAs, it will be
-           most likely be <B>much</B> faster to drop all of the GenBank
-           tables and load with the <CODE>-initialLoad</CODE> option
-           when loading the ESTs.
-      </UL>
-
+      <LI>
+          <UL>
+          <LI> The <CODE>-drop</CODE> option drops any existing GenBank or RefSeq
+               tables before loading.
+          <LI> If an initial load was done using only the mRNAs, it will be
+               most likely be <B>much</B> faster to drop all of the GenBank
+               tables and load with the <CODE>-initialLoad</CODE> option
+               when loading the ESTs.
+          </UL>
     </OL>
+
+    <H3>Realigning Tracks</H3>
+    It maybe necessary to realign and reload tracks to change alignment
+    parameters or other attributes.  This is fairly straight forward
+    when a genome databases is initially being built.  It's more complex
+    if one has to sync up multiple systems.
+
+    <OL>
+      <LI> If automated alignment or update has been enabled for the database,
+           disable it by editing the scripts in <CODE>$gbRoot/etc/</CODE>.
+      <LI> Make sure an automated alignment isn't current running.
+      <LI> To triger a realignment, on needs to remove the related files
+           for some partation of the data for all updates.  These live
+           under either the genbank or refseq alignment directories,
+           for example:
+           <UL>
+           <LI><CODE>data/aligned/genbank.139.0/hg16/</CODE>
+           <LI><CODE>data/aligned/refseq.139.0/hg16/</CODE>
+           </UL>
+           To realign native RefSeq mRNAs for hg16, one would remove:
+           <UL>
+           <LI><CODE>data/aligned/refseq.139.0/hg16/*/mrna.native.*</CODE>
+           </UL>
+           To realign xeno GeneBank ESTs for hg16, one would remove:
+           <UL>
+           <LI><CODE>data/aligned/refseq.139.0/hg16/*/est.*.xeno.*</CODE>
+           </UL>
+
+      <LI> Do an initial alignment as described above, restricting 
+           with <CODE>-srcDb</CODE> and <CODE>-type</CODE>.
+      <LI> Reload the database with the partation of data that was realigned.
+           The <CODE>-srcDb</CODE> and <CODE>-type</CODE> options restrict
+           the subset.  The organism category (native or xeno) isn't 
+           specified.  Reloading of ESTs isn't supported, use <CODE>-drop</CODE>
+           and <CODE>-initialLoad</CODE> instead.
+          <UL>
+          <LI><CODE>nice bin/gbDbLoadStep=1 -reload -srcDb=genbank -type=mrna $db</CODE></LI>
+          </UL>
+      </OL>
 <!--
 FIXME: 
   - mention that build takes place on kk.

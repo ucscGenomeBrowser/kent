@@ -30,7 +30,7 @@
 #include "extFileTbl.h"
 #include <signal.h>
 
-static char const rcsid[] = "$Id: gbLoadRna.c,v 1.17 2004/02/07 17:39:09 markd Exp $";
+static char const rcsid[] = "$Id: gbLoadRna.c,v 1.18 2004/02/23 07:40:18 markd Exp $";
 
 /* FIXME: add optimize subcommand to sort all alignment tables */
 
@@ -52,6 +52,7 @@ static struct optionSpec optionSpecs[] = {
     {"allowLargeDeletes", OPTION_BOOLEAN},
     {"gbdbGenBank", OPTION_STRING},
     {"reloadList", OPTION_STRING},
+    {"reload", OPTION_BOOLEAN},
     {"extFileUpdate", OPTION_BOOLEAN},
     {"maxExtFileUpdate", OPTION_INT},
     {"verbose", OPTION_INT},
@@ -65,6 +66,7 @@ static char *gDatabase = NULL;        /* database to load */
 static char* gGbdbGenBank = NULL;     /* root file path to put in database */
 static float gMaxShrinkage = 0.1;     /* restriction on number deleted */
 static char* gWorkDir = NULL;         /* tmp directory */
+static boolean gReload = FALSE;       /* reload the select categories */
 static struct dbLoadOptions gOptions; /* options from cmdline and conf */
 
 /* other globals */
@@ -483,6 +485,26 @@ gbStatusTblFree(&statusTbl);
 hFreeConn(&conn);
 }
 
+void removeForReload(struct gbSelect* select, struct sqlConnection* conn,
+                     char* tmpDir)
+/* delete all in selected categories.  This is faster than deleting
+ * individually */
+{
+struct sqlDeleter * deleter;
+if (select->type & GB_EST)
+    errAbort("-reload doesn't handle ESTs (it would be very, very slow),"
+             " use -drop instead");
+
+deleter = gbBuildStateReloadDeleter(conn, select,  tmpDir);
+if (deleter != NULL)
+    {
+    gbAlignRemove(conn, select, deleter);
+    gbMetaDataRemove(conn, select, deleter);
+    sqlDeleterDel(deleter, conn, "gbStatus", "acc");
+    }
+sqlDeleterFree(&deleter);
+}
+
 void doLoadPartition(struct gbSelect* select)
 /* Do work of syncing the database with the state in the genbank respository for
  * a given partition.  */
@@ -511,6 +533,10 @@ checkForStop();  /* don't even get started */
 
 /* Need to make sure this release has been loaded into the gbLoaded obj */
 gbLoadedTblUseRelease(gLoadedTbl, conn, select->release);
+
+/* if reloading, clean everything out */
+if (gReload)
+    removeForReload(select, conn, gWorkDir);
 
 /* do a cheap check to see if it possible there is something
  * to load, before much longer examination of per-sequence tables.*/
@@ -557,7 +583,10 @@ void gbLoadRna(char* reloadList)
 struct gbIndex* index = gbIndexNew(gDatabase, NULL);
 struct gbSelect* selectList, *select;
 struct sqlConnection* conn;
-boolean forceLoad = (reloadList != NULL);
+boolean forceLoad = (reloadList != NULL) || gReload;
+
+if (gReload && (gOptions.flags & DBLOAD_DRY_RUN))
+    errAbort("can't specify both -reload and -dryRun");
 
 conn = hAllocConn();
 
@@ -819,6 +848,7 @@ optionInit(&argc, argv, optionSpecs);
 drop = optionExists("drop");
 move = optionExists("move");
 copy = optionExists("copy");
+gReload = optionExists("reload");
 if (move || copy) 
     {
     if (argc != 3)

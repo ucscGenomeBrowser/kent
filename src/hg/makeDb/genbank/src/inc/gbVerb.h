@@ -39,8 +39,24 @@ void gbVerbPr(int level, char* msg, ...)
 __attribute__((format(printf, 2, 3)))
 #endif
 ;
-#endif
 
+void gbVerbPrStart(int level, char* msg, ...)
+/* like gbVerbPr, only doesn't print a newline; use gbVerbPrMore
+ * to add more lines and then the newline*/
+#ifdef __GNUC__
+__attribute__((format(printf, 2, 3)))
+#endif
+;
+
+void gbVerbPrMore(int level, char* msg, ...)
+/* output more after gbVerbPrStart, with no newline */
+#ifdef __GNUC__
+__attribute__((format(printf, 2, 3)))
+#endif
+;
+
+
+#endif
 /*
  * Local Variables:
  * c-file-style: "jkent-c"

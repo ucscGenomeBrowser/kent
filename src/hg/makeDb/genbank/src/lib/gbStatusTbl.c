@@ -10,7 +10,7 @@
 #include "errabort.h"
 #include "jksql.h"
 
-static char const rcsid[] = "$Id: gbStatusTbl.c,v 1.2 2004/02/07 17:39:10 markd Exp $";
+static char const rcsid[] = "$Id: gbStatusTbl.c,v 1.3 2004/02/23 07:40:19 markd Exp $";
 
 // FIXME: the stateChg flags vs the list is a little confusing; maybe
 // have simpler lists (new, deleted, change, orphaned)
@@ -50,6 +50,11 @@ static char* createSql =
   /* Index for selecting ESTs based on first two letters of the accession */
   "index typeSrcDbAcc2(type, srcDb, acc(2)))";
 
+static char *GB_STAT_ALL_COLS = "acc,version,modDate,type,srcDb,orgCat,"
+"gbSeq,numAligns,seqRelease,seqUpdate,metaRelease,metaUpdate,"
+"extRelease,extUpdate,time";
+
+
 char* gbStatusTblGetStr(struct gbStatusTbl *statusTbl, char *str)
 /* allocate a unique string for the table */
 {
@@ -60,7 +65,7 @@ return hel->name;
 }
 
 static struct sqlResult* loadQuery(struct sqlConnection *conn, 
-                                   unsigned select, char* accPrefix)
+                                   unsigned select, char* accPrefix, char *columns)
 /* generate a query to load the table */
 {
 char query[1024];
@@ -132,7 +137,7 @@ static void loadTable(struct gbStatusTbl *statusTbl,
 {
 /* table exists, read existing entries */
 char **row;
-struct sqlResult *sr =  loadQuery(conn, select, accPrefix);
+struct sqlResult *sr =  loadQuery(conn, select, accPrefix, GB_STAT_ALL_COLS);
 while ((row = sqlNextRow(sr)) != NULL)
     processRow(statusTbl, row, selectFunc, clientData);
 sqlFreeResult(&sr);
@@ -346,6 +351,23 @@ void gbStatusTblFree(struct gbStatusTbl** statusTbl)
 hashFree(&(*statusTbl)->accHash);
 hashFree(&(*statusTbl)->strPool);
 freez(statusTbl);
+}
+
+struct slName* gbStatusTblLoadAcc(struct sqlConnection *conn, 
+                                  unsigned select, char* accPrefix)
+/* load a list of accession from the table matching the selection
+ * criteria */
+{
+struct slName* accList = NULL;
+if (sqlTableExists(conn, GB_STATUS_TBL))
+    {
+    char **row;
+    struct sqlResult *sr =  loadQuery(conn, select, accPrefix, "acc");
+    while ((row = sqlNextRow(sr)) != NULL)
+        slSafeAddHead(&accList, slNameNew(row[0]));
+    sqlFreeResult(&sr);
+    }
+return accList;
 }
 
 /*

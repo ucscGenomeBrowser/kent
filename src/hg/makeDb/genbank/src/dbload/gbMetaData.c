@@ -31,7 +31,7 @@
 #include "genbank.h"
 #include "gbSql.h"
 
-static char const rcsid[] = "$Id: gbMetaData.c,v 1.19 2004/02/10 20:33:08 markd Exp $";
+static char const rcsid[] = "$Id: gbMetaData.c,v 1.20 2004/02/23 07:40:18 markd Exp $";
 
 // FIXME: move mrna, otherse to objects.
 
@@ -661,6 +661,15 @@ if ((select->release->srcDb == GB_REFSEQ)
     && (gOptions->flags & DBLOAD_EXT_FILE_UPDATE))
     refSeqPepClean(conn);
 } 
+
+void gbMetaDataRemove(struct sqlConnection *conn,
+                      struct gbSelect* select,
+                      struct sqlDeleter* deleter)
+/* remove metaData from all entries in the select categories.
+ * Used when reloading. */
+{
+gbMetaDataDeleteFromTables(conn, select->release->srcDb, deleter);
+}
 
 struct slName* gbMetaDataListTables(struct sqlConnection *conn)
 /* Get a list of metadata tables that exist in the database */

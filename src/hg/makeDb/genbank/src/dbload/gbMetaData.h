@@ -37,6 +37,12 @@ void gbMetaDataDeleteFromTables(struct sqlConnection *conn, unsigned srcDb,
                                 struct sqlDeleter* deleter);
 /* delete sequence from metadata tables */
 
+void gbMetaDataRemove(struct sqlConnection *conn,
+                      struct gbSelect* select,
+                      struct sqlDeleter* deleter);
+/* remove metaData from all entries in the select categories.
+ * Used when reloading. */
+
 void gbMetaDataDeleteOutdated(struct sqlConnection *conn,
                               struct gbSelect* select,
                               struct gbStatusTbl* statusTbl,

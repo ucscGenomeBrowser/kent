@@ -7,7 +7,7 @@
 #include <unistd.h>
 #include <sys/time.h>
 
-static char const rcsid[] = "$Id: gbVerb.c,v 1.2 2004/02/02 01:32:30 markd Exp $";
+static char const rcsid[] = "$Id: gbVerb.c,v 1.3 2004/02/23 07:40:19 markd Exp $";
 
 #define INDENT_AMT 2  /* characters per indent level */
 
@@ -158,6 +158,32 @@ if (verbose >= level)
     vfprintf(stderr, msg, args);
     va_end(args);
     fprintf(stderr, "\n");
+    }
+}
+
+void gbVerbPrStart(int level, char* msg, ...)
+/* like gbVerbPr, only doesn't print a newline. */
+{
+va_list args;
+
+if (verbose >= level)
+    {
+    prIndent();
+    va_start(args, msg);
+    vfprintf(stderr, msg, args);
+    va_end(args);
+    }
+}
+void gbVerbPrMore(int level, char* msg, ...)
+/* output more after gbVerbPrStart, with no newline */
+{
+va_list args;
+
+if (verbose >= level)
+    {
+    va_start(args, msg);
+    vfprintf(stderr, msg, args);
+    va_end(args);
     }
 }
 

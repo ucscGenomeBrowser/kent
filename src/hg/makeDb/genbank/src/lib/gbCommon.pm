@@ -54,7 +54,7 @@ BEGIN {
         $main::ENV{LD_LIBRARY_PATH} = "$rootDir/lib/$arch";
     }
 
-    # set umask to preserve group writability
+    # set umask to preserve group write
     umask 0022;
         
     @gbCommon::savedArgv = @ARGV;

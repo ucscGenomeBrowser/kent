@@ -23,6 +23,12 @@ struct gbStatusTbl* gbBuildState(struct sqlConnection *conn,
  * compared to the database.  If maxShrinkage is exeeeded, the list of deleted
  * accessions is printed and maxShrinkageExceeded is set to true. */
 
+struct sqlDeleter *gbBuildStateReloadDeleter(struct sqlConnection *conn,
+                                             struct gbSelect* select,
+                                             char *tmpDirPath);
+/* get deleter for list of accessions to reload for the selected categories.
+ * Used when reloading. Returns null if none found */
+
 #endif
 /*
  * Local Variables:

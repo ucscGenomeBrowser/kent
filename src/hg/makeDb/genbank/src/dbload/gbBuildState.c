@@ -10,6 +10,7 @@
 #include "gbRelease.h"
 #include "gbVerb.h"
 #include "gbEntry.h"
+#include "sqlDeleter.h"
 #include "dbLoadOptions.h"
 #include "gbAligned.h"
 #include "gbUpdate.h"
@@ -18,7 +19,7 @@
 #include "gbProcessed.h"
 #include "gbStatusTbl.h"
 
-static char const rcsid[] = "$Id: gbBuildState.c,v 1.9 2004/02/07 17:39:09 markd Exp $";
+static char const rcsid[] = "$Id: gbBuildState.c,v 1.10 2004/02/23 07:40:18 markd Exp $";
 
 static struct dbLoadOptions* gOptions; /* options from cmdline and conf */
 static int gErrorCnt = 0;  /* count of errors during build */
@@ -35,17 +36,16 @@ struct selectStatusData
 static void traceSelect(char* which, struct gbStatus *status)
 /* output verbose information when a entry is selected */
 {
-fflush(stdout);
-fprintf(stderr, "    %s: %s.%d %s id=%u", which, status->acc, status->version,
-        gbFormatDate(status->modDate), status->gbSeqId);
+
+gbVerbPrStart(4, "%s: %s.%d %s id=%u", which, status->acc, status->version,
+              gbFormatDate(status->modDate), status->gbSeqId);
 if (status->selectProc != NULL)
-    fprintf(stderr, ", proc=%s/%s", status->selectProc->update->name,
-            gbFormatDate(status->selectProc->modDate));
+    gbVerbPrMore(4, ", proc=%s/%s", status->selectProc->update->name,
+                 gbFormatDate(status->selectProc->modDate));
 if (status->selectAlign != NULL)
-    fprintf(stderr, ", aln=%s/%d",
-            status->selectAlign->update->name,
-            status->selectAlign->version);
-fprintf(stderr, "\n");
+   gbVerbPrMore(4, ", aln=%s/%d", status->selectAlign->update->name,
+                status->selectAlign->version);
+gbVerbPrMore(4, "\n");
 }
 
 static struct gbProcessed* getProcAligned(struct gbEntry* entry,
@@ -300,6 +300,11 @@ if (entry->selectVer == NULL_VERSION)
                              aligned->update->release->version,
                              aligned->update->shortName, 0);
         markNew(statusTbl, status, processed, aligned);
+        }
+    else if (verbose >= 4)
+        {
+        gbVerbPr(4, "notAligned: %s.%d %s", entry->acc, entry->processed->version,
+                 gbFormatDate(entry->processed->modDate));
         }
     }
 }
@@ -574,6 +579,54 @@ if (gErrorCnt > 0)
     errAbort("Errors detecting when constructing state table");
 gbVerbLeave(1, "build state table");
 return statusTbl;
+}
+
+struct sqlDeleter *gbBuildStateReloadDeleter(struct sqlConnection *conn,
+                                             struct gbSelect* select,
+                                             char *tmpDirPath)
+/* get deleter for list of accessions to reload for the selected categories.
+ * Used when reloading. Returns null if none found */
+{
+struct hash* seqTblAccs;
+struct slName *gbStatAccs, *acc;
+struct hashCookie cookie;
+struct hashEl *hel;
+struct sqlDeleter* deleter;
+unsigned cnt = 0;
+unsigned statTblSelect = select->release->srcDb | select->orgCats | select->type;
+
+/* ESTs not implemented, which gets rid of complexities of accPrefix */
+if (select->type & GB_EST)
+    errAbort("gbBuildStateReloadDeleter doesn't handle ESTs");
+
+seqTblAccs = seqTblLoadAcc(conn, select);
+gbStatAccs = gbStatusTblLoadAcc(conn,  statTblSelect,  NULL);
+
+/* build up deleter combining the two */
+deleter = sqlDeleterNew(tmpDirPath, (verbose >= 2));
+
+cookie = hashFirst(seqTblAccs);
+while ((hel = hashNext(&cookie)) != NULL)
+    {
+    sqlDeleterAddAcc(deleter, hel->name);
+    cnt++;
+    }
+
+for (acc = gbStatAccs; acc != NULL; acc = acc->next)
+    {
+    if (hashLookup(seqTblAccs, acc->name) == NULL)
+        {
+        sqlDeleterAddAcc(deleter, acc->name);
+        cnt++;
+        }
+    }
+
+hashFree(&seqTblAccs);
+slFreeList(&gbStatAccs);
+if (cnt == 0)
+    sqlDeleterFree(&deleter);
+
+return deleter;
 }
 
 /*

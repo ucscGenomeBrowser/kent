@@ -4,7 +4,7 @@
 #include "gbDefs.h"
 #include "gbRelease.h"
 
-static char const rcsid[] = "$Id: seqTbl.c,v 1.2 2003/07/25 18:25:33 markd Exp $";
+static char const rcsid[] = "$Id: seqTbl.c,v 1.3 2004/02/23 07:40:19 markd Exp $";
 
 /*
  * Note: don't use autoincrement for id column, as it causes problems for
@@ -123,35 +123,40 @@ void seqTblCommit(struct seqTbl *st, struct sqlConnection *conn)
 sqlUpdaterCommit(st->updater, conn);
 }
 
+static void buildSelect(struct gbSelect* select, char* query,
+                        int queryBufSize)
+/* Build up a sql select for accessions based on the gbSelect */
+{
+int len = 0;
+len = safef(query, queryBufSize,
+            "SELECT acc from gbSeq WHERE (srcDb='%s') AND (type='%s')",
+            ((select->release->srcDb == GB_REFSEQ) ? SEQ_REFSEQ
+             : SEQ_GENBANK),
+            ((select->type == GB_MRNA) ? SEQ_MRNA : SEQ_EST));
+if (select->accPrefix != NULL)
+    len += safef(query+len, queryBufSize-len,
+                 " AND (acc LIKE '%s%%')", select->accPrefix);
+}
+
 struct hash* seqTblLoadAcc(struct sqlConnection *conn,
                            struct gbSelect* select)
 /* build a hash table for the acc in the sequence table matching the 
  * select paramters.  No values are stored in the hash. */
 {
 char query[512];
-int len = 0;
 char **row;
 struct sqlResult *sr;
 struct hash* seqHash = hashNew(19);
 
 if (sqlTableExists(conn, SEQ_TBL))
     {
-    len = safef(query, sizeof(query),
-                "SELECT acc from gbSeq WHERE (srcDb='%s') AND (type='%s')",
-                ((select->release->srcDb == GB_REFSEQ) ? SEQ_REFSEQ
-                 : SEQ_GENBANK),
-                ((select->type == GB_MRNA) ? SEQ_MRNA : SEQ_EST));
-    if (select->accPrefix != NULL)
-        len += safef(query+len, sizeof(query)-len,
-                     " AND (acc LIKE '%s%%')", select->accPrefix);
-    
+    buildSelect(select, query, sizeof(query));
     sr = sqlGetResult(conn, query);
     while ((row = sqlNextRow(sr)) != NULL)
         hashAdd(seqHash, row[0], NULL);
     sqlFreeResult(&sr);
     }
 return seqHash;
-
 }
 
 /*
