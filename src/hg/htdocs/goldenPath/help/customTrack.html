@@ -135,13 +135,15 @@ The hgt.customText variable tells the browser where to find your track file.
 <UL>
    <LI>position - Describes the part of the genome the browser will initially display in 
        chromosome:start-end format.  
-   <LI>pix - Sets the display to width pixels.
+   <LI>pix - Sets the display to the specified width in pixels.
    <LI>hide all - Hides all tracks except for custom ones.
-   <LI>hide trackName(s) - this hides tracks based on their symbolic names.  You can find the symbolic names of tracks by viewing the genome browser as source under your web browser.
+   <LI>hide trackName(s) - Hides tracks based on their symbolic names.  You can
+   find the symbolic names of the tracks on this <A HREF="symNames.html"
+   TARGET=_blank>list</A> or by viewing the genome browser as source under your web browser.
    <LI>dense all - Shows all tracks in dense mode.
-   <LI>dense trackName(s) - makes particular tracks dense.
+   <LI>dense trackName(s) - Displays the specified tracks in dense mode.
    <LI>full all - Shows all tracks in full mode.
-   <LI>full trackName(s) - makes particular tracks full.
+   <LI>full trackName(s) - Displays the specified tracks in full mode.
 </UL>
 	</TD><TD WIDTH=15></TD></TR></TABLE>
 	<br></TD></TR></TABLE>
@@ -316,7 +318,10 @@ from one to the other:
 	<TR><TD WIDTH=10>&nbsp;</TD><TD>
 
 <P>GFF lines are based on the GFF standard file format.  GFF lines have 9
-required fields which must be tab separated (space-separated fields won't do).  Here is a brief description of the fields:</P>
+required fields which must be tab-separated. NOTE: If the fields are separated by
+spaces instead of tabs, the track will not display correctly.</P>  
+<P>
+Here is a brief description of the fields:</P>
 
 <OL>
 	<LI>seqname - The name of the sequence.  Must be a chromosome or a contig.
@@ -331,7 +336,9 @@ required fields which must be tab separated (space-separated fields won't do).  
 	<LI>group - All lines with the same group are linked together into a single item.<A HREF="http://www.sanger.ac.uk/Software/formats/GFF/GFF_Spec.html"></A>
 </OL>
 
-<P>Here's an example of a GFF based track:</P>
+<P>Here's an example of a GFF based track. NOTE: If you paste this example into
+your browser, check that all fields remain tab-separated (some browsers
+may replace the tabs with spaces).</P>
 <PRE><TT>track name=regulatory description=&quot;TeleGene(tm) Regulatory Regions&quot;
 chr22  TeleGene	enhancer  1000000  1001000  500	+  .  touch1
 chr22  TeleGene	promoter  1010000  1010100  900	+  .  touch1
