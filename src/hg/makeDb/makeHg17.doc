@@ -10854,7 +10854,7 @@ quit
   hgsql hg17 < ~/src/hg/lib/pbStamp.sql
   hgsql hg17Sav2 -e 'select * from pbStamp' > pbStamp.tab
 
-  hgsql hg17 -e 'load data local infile "pbStamp.tab" into table hg17.pbStamp;'
+  hgsql hg17 -e 'load data local infile "pbStamp.tab" into table hg17.pbStamp ignore 1 lines;'
 
 # Adjust drawing parameters for Proteome Browser stamps
 
