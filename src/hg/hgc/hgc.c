@@ -116,7 +116,7 @@
 #include "encodeRegionInfo.h"
 #include "hgFind.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.519 2003/11/19 10:03:10 baertsch Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.520 2003/11/20 22:06:59 heather Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -3226,14 +3226,16 @@ if (row != NULL)
         {
         printf("<B>Version:</B> %s<BR>\n", version);
         }
+    if (startsWith("Human", organism))
+    {
+      /* Put up Gene Lynx */
+      if (sameWord(type, "mrna"))
+          printGeneLynxAcc(acc);
+    }
 
     if (!startsWith("Worm", organism) && !startsWith("Fugu", organism) &&
 	!startsWith("dm", database))
     {
-	/* Put up Gene Lynx */
-	if (sameWord(type, "mrna"))
-	    printGeneLynxAcc(acc);
-    
 	/* Put up Stanford Source link. */
 	printStanSource(acc, type);
     }
