@@ -62,7 +62,7 @@ return fetchQualifiers("exon", qualifier, extra, retSize);
 }
 
 static boolean cdsQualifier(char *qualifier, char *extra, int *retSize)
-/* Return TRUE if it's a exon qualifier. */
+/* Return TRUE if it's a cds qualifier. */
 {
 return fetchQualifiers("cds", qualifier, extra, retSize);
 }
@@ -72,6 +72,20 @@ static boolean endQualifier(char *qualifier, char *extra, int *retSize)
 {
 return fetchQualifiers("end", qualifier, extra, retSize);
 }
+
+static boolean utr3Qualifier(char *qualifier, char *extra, int *retSize)
+/* Return TRUE if it's a utr3 qualifier. */
+{
+return fetchQualifiers("utr3", qualifier, extra, retSize);
+}
+
+static boolean utr5Qualifier(char *qualifier, char *extra, int *retSize)
+/* Return TRUE if it's a utr5 qualifier. */
+{
+return fetchQualifiers("utr5", qualifier, extra, retSize);
+}
+
+
 
 boolean fbUnderstandTrack(char *track)
 /* Return TRUE if can turn track into a set of ranges or bits. */
@@ -273,7 +287,8 @@ static struct featureBits *fbGenePredBits(int winStart, int winEnd,
 struct genePred *gp;
 char **row;
 int i, count, s, e, w, *starts, *ends;
-boolean doUp = FALSE, doEnd = FALSE, doCds = FALSE, doExon = FALSE;
+boolean doUp = FALSE, doEnd = FALSE, doCds = FALSE, doExon = FALSE,
+	doUtr3 = FALSE, doUtr5 = FALSE;
 int promoSize = 0, extraSize = 0;
 struct featureBits *fbList = NULL;
 char nameBuf[512];
@@ -290,27 +305,36 @@ else if ((doExon = exonQualifier(qualifier, extra, &extraSize)) != FALSE)
 else if ((doEnd = endQualifier(qualifier, extra, &extraSize)) != FALSE)
     {
     }
+else if ((doUtr3 = utr3Qualifier(qualifier, extra, &extraSize)) != FALSE)
+    {
+    }
+else if ((doUtr5 = utr5Qualifier(qualifier, extra, &extraSize)) != FALSE)
+    {
+    }
 while ((row = sqlNextRow(sr)) != NULL)
     {
     gp = genePredLoad(row+rowOffset);
     if (doUp)
 	{
-	int start;
-	char strand;
-	if (gp->strand[0] == '-')
+	if (gp->txStart != gp->cdsStart)
 	    {
-	    start = gp->txEnd;
-	    strand = '-';
+	    int start;
+	    char strand;
+	    if (gp->strand[0] == '-')
+		{
+		start = gp->txEnd;
+		strand = '-';
+		}
+	    else
+		{
+		start = gp->txStart - promoSize;
+		strand = '+';
+		}
+	    sprintf(nameBuf, "%s_up_%d_%s_%d_%c", 
+		    gp->name, promoSize, gp->chrom, start+1, frForStrand(strand));
+	    fbAddFeature(&fbList, nameBuf, gp->chrom, start, promoSize, strand, 
+		winStart, winEnd);
 	    }
-	else
-	    {
-	    start = gp->txStart - promoSize;
-	    strand = '+';
-	    }
-	sprintf(nameBuf, "%s_up_%d_%s_%d_%c", 
-		gp->name, promoSize, gp->chrom, start+1, frForStrand(strand));
-	fbAddFeature(&fbList, nameBuf, gp->chrom, start, promoSize, strand, 
-	    winStart, winEnd);
 	}
     else if (doEnd)
         {
@@ -344,6 +368,14 @@ while ((row = sqlNextRow(sr)) != NULL)
 	        {
 		if (s < gp->cdsStart) s = gp->cdsStart;
 		if (e > gp->cdsEnd) e = gp->cdsEnd;
+		}
+	    else if (doUtr5)
+	        {
+		if (e > gp->cdsStart) e = gp->cdsStart;
+		}
+	    else if (doUtr3)
+	        {
+		if (s < gp->cdsEnd) s = gp->cdsEnd;
 		}
 	    setRangePlusExtra(&fbList, NULL, gp->chrom, s, e, gp->strand[0],
 	    	(i == 0 ? 0 : extraSize), 
