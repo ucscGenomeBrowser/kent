@@ -107,7 +107,7 @@
 #include "pseudoGeneLink.h"
 #include "axtLib.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.432 2003/06/17 06:10:02 kate Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.433 2003/06/17 06:53:45 donnak Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -1568,7 +1568,7 @@ if (subChain != NULL)
     {
     qChainRangePlusStrand(subChain, &qs, &qe);
     linkToOtherBrowser(otherDb, subChain->qName, qs, qe);
-    printf("Open %s browser </A> at position corresponding to the part of chain that is in this window.<BR>\n", otherOrg);
+    printf("Open %s browser</A> at position corresponding to the part of chain that is in this window.<BR>\n", otherOrg);
     }
 chainFree(&toFree);
 }
@@ -1592,7 +1592,7 @@ if (! sameWord(otherDb, "seq"))
 chain = chainDbLoad(conn, database, track, seqName, atoi(item));
 printf("<B>%s position:</B> %s:%d-%d</a>  size: %d <BR>\n",
        thisOrg, chain->tName, chain->tStart+1, chain->tEnd, chain->tEnd-chain->tStart);
-printf("<B>strand:</B> %c<BR>\n", chain->qStrand);
+printf("<B>Strand:</B> %c<BR>\n", chain->qStrand);
 qChainRangePlusStrand(chain, &qs, &qe);
 if (sameWord(otherDb, "seq"))
     {
@@ -1605,15 +1605,15 @@ else
 	   otherOrg, otherDb, chain->qName, qs, qe, chain->qName, 
 	   qs, qe, chain->qEnd - chain->qStart);
     }
-printf("<B>chain id:</B> %s<BR>\n", item);
-printf("<B>score:</B> %1.0f<BR>\n", chain->score);
+printf("<B>Chain ID:</B> %s<BR>\n", item);
+printf("<B>Score:</B> %1.0f<BR>\n", chain->score);
 printf("<BR>\n");
 
 chainWinSize = min(winEnd-winStart, chain->tEnd - chain->tStart);
 if (chainWinSize < 1000000)
     {
     hgcAnchorSomewhere("htcChainAli", item, track, chain->tName);
-    printf("View details of parts of chain within browser window.</A><BR>\n");
+    printf("View details of parts of chain within browser window</A>.<BR>\n");
     }
 else
     {
@@ -1706,7 +1706,7 @@ if (net->chainId != 0)
 	    char id[20];
 	    snprintf(id, sizeof(id), "%d", net->chainId);
 	    hgcAnchorWindow("htcChainAli", id, ns, ne, chainTrack, seqName);
-	    printf("View alignment details of parts of net within browser window.</A><BR>\n");
+	    printf("View alignment details of parts of net within browser window</A>.<BR>\n");
 	    }
 	else
 	    {
@@ -1725,18 +1725,18 @@ if (net->chainId != 0)
 	}
     htmlHorizontalLine();
     }
-printf("<B>type:</B> %s<BR>\n", net->type);
-printf("<B>level:</B> %d<BR>\n", net->level/2 + 1);
+printf("<B>Type:</B> %s<BR>\n", net->type);
+printf("<B>Level:</B> %d<BR>\n", net->level/2 + 1);
 printf("<B>%s position:</B> %s:%d-%d<BR>\n", 
        org, net->tName, net->tStart+1, net->tEnd);
 printf("<B>%s position:</B> %s:%d-%d<BR>\n", 
        otherOrg, net->qName, net->qStart+1, net->qEnd);
-printf("<B>strand:</B> %c<BR>\n", net->strand[0]);
-printf("<B>score:</B> %1.1f<BR>\n", net->score);
+printf("<B>Strand:</B> %c<BR>\n", net->strand[0]);
+printf("<B>Score:</B> %1.1f<BR>\n", net->score);
 if (net->chainId)
     {
-    printf("<B>chain ID:</B> %u<BR>\n", net->chainId);
-    printf("<B>bases aligning:</B> %u<BR>\n", net->ali);
+    printf("<B>Chain ID:</B> %u<BR>\n", net->chainId);
+    printf("<B>Bases aligning:</B> %u<BR>\n", net->ali);
     printf("<B>%s parent overlap:</B> %u<BR>\n", otherOrg, net->qOver);
     printf("<B>%s parent distance:</B> %u<BR>\n", otherOrg, net->qFar);
     printf("<B>%s bases duplicated:</B> %u<BR>\n", otherOrg, net->qDup);
@@ -3028,29 +3028,29 @@ if (row != NULL)
 
     if (isMgcTrack && (imageId > 0))
         printMgcRnaSpecs(tdb, acc, imageId);
-    printf("<B>description:</B> %s<BR>\n", description);
+    printf("<B>Description:</B> %s<BR>\n", description);
 
-    medlineLinkedLine("gene", geneName, geneName);
-    medlineLinkedLine("product", productName, productName);
+    medlineLinkedLine("Gene", geneName, geneName);
+    medlineLinkedLine("Product", productName, productName);
     dyStringClear(dy);
     gbToEntrezAuthor(author, dy);
-    medlineLinkedLine("author", author, dy->string);
-    printf("<B>organism:</B> ");
+    medlineLinkedLine("Author", author, dy->string);
+    printf("<B>Organism:</B> ");
     printf("<A href=\"http://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?mode=Undef&name=%s&lvl=0&srchmode=1\" TARGET=_blank>", 
 	   cgiEncode(organism));
     printf("%s</A><BR>\n", organism);
-    printf("<B>tissue:</B> %s<BR>\n", tissue);
-    printf("<B>development stage:</B> %s<BR>\n", development);
-    printf("<B>cell type:</B> %s<BR>\n", cell);
-    printf("<B>sex:</B> %s<BR>\n", sex);
-    printf("<B>library:</B> %s<BR>\n", library);
-    printf("<B>clone:</B> %s<BR>\n", clone);
-    if (direction[0] != '0') printf("<B>read direction:</B> %s'<BR>\n", direction);
-    printf("<B>cds:</B> %s<BR>\n", cds);
-    printf("<B>date:</B> %s<BR>\n", date);
+    printf("<B>Tissue:</B> %s<BR>\n", tissue);
+    printf("<B>Development stage:</B> %s<BR>\n", development);
+    printf("<B>Cell type:</B> %s<BR>\n", cell);
+    printf("<B>Sex:</B> %s<BR>\n", sex);
+    printf("<B>Library:</B> %s<BR>\n", library);
+    printf("<B>Clone:</B> %s<BR>\n", clone);
+    if (direction[0] != '0') printf("<B>Read direction:</B> %s'<BR>\n", direction);
+    printf("<B>CDS:</B> %s<BR>\n", cds);
+    printf("<B>Date:</B> %s<BR>\n", date);
     if (hasVersion) 
         {
-        printf("<B>version:</B> %s<BR>\n", version);
+        printf("<B>Version:</B> %s<BR>\n", version);
         }
 
     /* Put up Gene Lynx */
@@ -3508,10 +3508,10 @@ printf("\" TARGET=_blank>%s</A></H2>\n", cloneName);
 printf("<B>GenBank: <A HREF=\"");
 printEntrezNucleotideUrl(stdout, cloneName);
 printf("\" TARGET=_blank>%s</A></B> <BR>\n", cloneName);
-printf("<B>status:</B> %s<BR>\n", cloneStageName(clone->stage));
-printf("<B>fragments:</B> %d<BR>\n", fragCount);
-printf("<B>size:</B> %d bases<BR>\n", clone->seqSize);
-printf("<B>chromosome:</B> %s<BR>\n", skipChr(clone->chrom));
+printf("<B>Status:</B> %s<BR>\n", cloneStageName(clone->stage));
+printf("<B>Fragments:</B> %d<BR>\n", fragCount);
+printf("<B>Size:</B> %d bases<BR>\n", clone->seqSize);
+printf("<B>Chromosome:</B> %s<BR>\n", skipChr(clone->chrom));
 printf("<BR>\n");
 
 hFreeConn(&conn);
@@ -4292,7 +4292,7 @@ else
         printf("This track contains the LTR (long terminal repeat) class of repeats which includes retroposons<BR>\n");
     else
         printf("This track contains the %s class of repeats<BR>\n", repeat);
-    printf("Click right on top of an individual repeat for more information on that repeat<BR>\n");
+    printf("Click on an individual repeat for more information on that repeat<BR>\n");
     }
 printTrackHtml(tdb);
 }
@@ -6106,7 +6106,7 @@ printf("Show %s gene aligned to pseudogene</A>  to see frameshifts and in frame 
 puts("</LI>\n");
 puts("<LI>\n");
 linkToOtherBrowser(pg->assembly, pg->chrom, pg->gStart, pg->gEnd);
-printf("Open %s browser </A> at position corresponding to the Gene.<BR>\n",hOrganism(pg->assembly) );
+printf("Open %s browser</A> at position corresponding to the Gene.<BR>\n",hOrganism(pg->assembly) );
 puts("</LI>\n");
 }
 
@@ -6591,7 +6591,7 @@ sprintf(otherString, "%d&pslTable=%s&otherOrg=%s&otherChromTable=%s&otherDb=%s",
 if (pslTrimToTargetRange(psl, winStart, winEnd) != NULL)
     {
     hgcAnchorSomewhere("htcLongXenoPsl2", cgiItem, otherString, psl->tName);
-    printf("<BR>View details of parts of alignment within browser window.</A><BR>\n");
+    printf("<BR>View details of parts of alignment within browser window</A>.<BR>\n");
     }
 freez(&cgiItem);
 }
@@ -6630,7 +6630,7 @@ sprintf(otherString, "%d&pslTable=%s&otherOrg=%s&otherChromTable=%s&otherDb=%s",
 if (pslTrimToTargetRange(psl, winStart, winEnd) != NULL)
     {
     hgcAnchorSomewhere("htcLongXenoPsl2", cgiItem, otherString, psl->tName);
-    printf("<BR>View details of parts of alignment within browser window.</A><BR>\n");
+    printf("<BR>View details of parts of alignment within browser window</A>.<BR>\n");
     }
 
 if (containsStringNoCase(otherDb, "zoo"))
@@ -6717,7 +6717,7 @@ sprintf(otherString, "%d&pslTable=%s&otherOrg=%s&otherChromTable=%s", psl->tStar
 if (pslTrimToTargetRange(psl, winStart, winEnd) != NULL)
     {
     hgcAnchorSomewhere("htcLongXenoPsl2", cgiItem, otherString, psl->tName);
-    printf("<BR>View details of parts of alignment within browser window.</A><BR>\n");
+    printf("<BR>View details of parts of alignment within browser window</A>.<BR>\n");
     }
 printTrackHtml(tdb);
 freez(&cgiItem);
