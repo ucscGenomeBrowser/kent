@@ -322,17 +322,11 @@ void searchOneStrand(struct dnaSeq *seq, struct genoFind *gf, FILE *psl,
 	boolean isRc, struct hash *maskHash)
 /* Search for seq in index, align it, and write results to psl. */
 {
-int hitCount;
 static struct gfSavePslxData data;
-struct lm *lm = lmInit(0);
-struct gfClump *clumpList = gfFindClumps(gf, seq, lm, &hitCount);
-
 data.f = psl;
 data.maskHash = maskHash;
 data.minGood = round(10*minIdentity);
-gfAlignDnaClumps(gf, clumpList, seq, isRc, minScore, gfSavePslx, &data, FALSE);
-gfClumpFreeList(&clumpList);
-lmCleanup(&lm);
+gfLongDnaInMem(seq, gf, isRc, minScore, gfSavePslx, &data);
 }
 
 void searchOneProt(aaSeq *seq, struct genoFind *gf, FILE *psl)
@@ -638,7 +632,7 @@ argv = words;
 }
 #endif /* DEBUG */
 
-cgiSpoof(&argc, argv);
+cgiFromCommandLine(&argc, argv, FALSE);
 if (argc != 4)
     usage();
 
