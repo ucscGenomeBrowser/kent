@@ -11,7 +11,7 @@ hgNearTest: $O ${MYLIBS}
 #	strip ${HOME}/bin/${MACHTYPE}/hgNearTest
 
 test:
-	hgNearTest hgwbeta.cse.ucsc.edu/cgi-bin/hgNear org=Yeast repeat=1
+	hgNearTest hgwdev-${USER}.cse.ucsc.edu/cgi-bin/hgNear org=Yeast repeat=1 test.log
 
 clean:
 	rm -f $O

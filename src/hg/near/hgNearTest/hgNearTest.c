@@ -9,9 +9,10 @@
 #include "errCatch.h"
 #include "ra.h"
 #include "htmlPage.h"
+#include "../hgNear/hgNear.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: hgNearTest.c,v 1.4 2004/03/03 21:17:10 kent Exp $";
+static char const rcsid[] = "$Id: hgNearTest.c,v 1.5 2004/03/04 00:25:03 kent Exp $";
 
 /* Command line variables. */
 char *dataDir = "/usr/local/apache/cgi-bin/hgNearData";
@@ -26,7 +27,7 @@ void usage()
 errAbort(
   "hgNearTest - Test hgNear web page\n"
   "usage:\n"
-  "   hgNearTest url\n"
+  "   hgNearTest url log\n"
   "options:\n"
   "   -org=Human - Restrict to Human (or Mouse, Fruitfly, etc.)\n"
   "   -db=hg16 - Restrict to particular database\n"
@@ -77,18 +78,28 @@ struct qaStatus
     struct qaStatus *next;
     int milliTime;	/* Time page fetch took. */
     char *errMessage;	/* Error message if any. */
+    boolean hardError;	/* Crash of some sort. */
     };
 
-void qaStatusReportOne(struct qaStatus *qs, char *format, ...)
+void qaStatusReportOne(FILE *f, struct qaStatus *qs, char *format, ...)
 /* Report status */
 {
+char *severity = "ok";
 va_list args;
 va_start(args, format);
 char *errMessage = qs->errMessage;
 if (errMessage == NULL)
-    errMessage = "ok";
-vprintf(format, args);
-printf(" %4.3fs %s\n", 0.001*qs->milliTime, errMessage);
+    errMessage = "";
+else
+    {
+    if (qs->hardError)
+        severity = "hard";
+    else
+        severity = "soft";
+    }
+  
+vfprintf(f, format, args);
+fprintf(f, " %4.3fs (%s) %s\n", 0.001*qs->milliTime, severity, errMessage);
 va_end(args);
 }
 
@@ -102,6 +113,7 @@ AllocVar(qs);
 if (errCatch->gotError || page == NULL)
     {
     errMessage = errCatch->message->string;
+    qs->hardError = TRUE;
     }
 else
     {
@@ -110,6 +122,7 @@ else
 	dyStringPrintf(errCatch->message, "HTTP status code %d\n", 
 		page->status->status);
 	errMessage = errCatch->message->string;
+	qs->hardError = TRUE;
 	}
     else
         {
@@ -164,6 +177,39 @@ errCatchFree(&errCatch);
 return qs;
 }
 
+struct qaStatistics
+/* Stats on one set of tests. */
+    {
+    struct qaStatistics *next;
+    int testCount;	/* Number of tests. */
+    int softCount;	/* Soft error count. */
+    int hardCount;	/* Hard error count. */
+    long milliTotal;	/* Time tests took. */
+    };
+
+void qaStatisticsAdd(struct qaStatistics *stats, struct qaStatus *qs)
+/* Add test results to totals */
+{
+stats->testCount += 1;
+stats->milliTotal += qs->milliTime;
+if (qs->errMessage)
+    {
+    if (qs->hardError)
+        stats->hardCount += 1;
+    else
+        stats->softCount += 1;
+    }
+}
+
+void qaStatisticsReport(struct qaStatistics *stats, char *label, FILE *f)
+/* Write a line of stats to file. */
+{
+fprintf(f, "%20s:  %3d tests, %2d soft errors, %2d hard errors, %5.2f seconds\n",
+	label, stats->testCount, stats->softCount, stats->hardCount, 
+	0.001 * stats->milliTotal);
+}
+
+
 struct slName *randomSample(char *db, char *table, char *field, int count)
 /* Get random sample from database. */
 {
@@ -184,58 +230,123 @@ sqlDisconnect(&conn);
 return list;
 }
 
-struct colTest
+struct nearTest
 /* Test on one column. */
     {
-    struct colTest *next;
-    char *type;			/* Type of test. */
+    struct nearTest *next;
     struct qaStatus *status;	/* Result of test. */
-    char *org;			/* Organism. */
-    char *db;			/* Database. */
-    char *col;			/* Column. */
-    char *gene;			/* Gene. */
+    char *info[6];
     };
 
-struct colTest *colTestNew(char *type, struct qaStatus *status,
-	char *org, char *db, char *col, char *gene)
+enum nearTestInfoIx {
+   ntiiType = 0,
+   ntiiSort = 1,
+   ntiiOrg = 2,
+   ntiiDb = 3,
+   ntiiCol = 4,
+   ntiiGene = 5,
+};
+
+char *nearTestInfoTypes[] =
+   { "type", "sort", "organism", "db", "column", "gene" };
+
+struct nearTest *nearTestNew(struct qaStatus *status,
+	char *type, char *sort, char *org, char *db, char *col, char *gene)
 /* Save away column test results. */
 {
-struct colTest *test;
+struct nearTest *test;
 AllocVar(test);
-test->type = type;
 test->status = status;
-test->org = org;
-test->db = db;
-test->col = col;
-test->gene = gene;
+test->info[ntiiType] = type;
+test->info[ntiiSort] = sort;
+test->info[ntiiSort] = sort;
+test->info[ntiiOrg] = org;
+test->info[ntiiDb] = db;
+test->info[ntiiCol] = col;
+test->info[ntiiGene] = gene;
 return test;
 }
 
+void nearTestLogOne(struct nearTest *test, FILE *f)
+/* Log test result to file. */
+{
+int i;
+for (i=0; i<ArraySize(test->info); ++i)
+    fprintf(f, "%s ", test->info[i]);
+fprintf(f, "%s\n", test->status->errMessage);
+}
+
+void qaStatusSoftError(struct qaStatus *qs, char *format, ...)
+/* Add error message for something less than a crash. */
+{
+struct dyString *dy = dyStringNew(0);
+va_list args;
+va_start(args, format);
+if (qs->errMessage)
+    {
+    dyStringAppend(dy, qs->errMessage);
+    dyStringAppendC(dy, '\n');
+    }
+dyStringVaPrintf(dy, format, args);
+va_end(args);
+freez(&qs->errMessage);
+qs->errMessage = cloneString(dy->string);
+dyStringFree(&dy);
+}
+
+int qaCountBetween(char *s, char *startPattern, char *endPattern, 
+	char *midPattern)
+/* Count the number of midPatterns that occur between start and end pattern. */
+{
+int count = 0;
+char *e;
+s = stringIn(startPattern, s);
+if (s != NULL)
+    {
+    s += strlen(startPattern);
+    e = stringIn(endPattern, s);
+    while (s < e)
+        {
+	if (startsWith(midPattern, s))
+	    ++count;
+	s += 1;
+	}
+    }
+return count;
+}
+
 void testCol(struct htmlPage *emptyConfig, char *org, char *db, char *col, char *gene,
-	struct colTest **pTestList)
+	struct nearTest **pTestList)
 /* Test one column. */
 {
-struct htmlPage *colPage;
-struct colTest *test;
-struct qaStatus *status;
+struct htmlPage *printPage = NULL;
+struct nearTest *test;
+struct qaStatus *qs;
 char visVar[256];
 safef(visVar, sizeof(visVar), "near.col.%s.vis", col);
-uglyf("testCol(%s,%s,%s,%s)\n", org, db, col, gene);
 htmlPageSetVar(emptyConfig, NULL, visVar, "on");
 htmlPageSetVar(emptyConfig, NULL, "near.order", "geneDistance");
 htmlPageSetVar(emptyConfig, NULL, "near.count", "25");
 
-status = qaPageFromForm(emptyConfig, emptyConfig->forms, 
-	"submit", "Submit", &colPage);
-test = colTestNew("colOk", status, org, db, col, gene);
+qs = qaPageFromForm(emptyConfig, emptyConfig->forms, 
+	"submit", "Submit", &printPage);
+test = nearTestNew(qs, "colPrint", "geneDistance", org, db, col, gene);
 slAddHead(pTestList, test);
-if (colPage != NULL && colPage->fullText != NULL)
-    uglyf(" %d chars\n", strlen(colPage->fullText));
-htmlPageFree(&colPage);
+if (printPage != NULL && qs->errMessage == NULL)
+    {
+    int expectCount = 25;
+    int lineCount = qaCountBetween(printPage->fullText, 
+	    "<!-- Start Rows -->", "<!-- End Rows -->", "<!-- Row -->");
+    if (lineCount != expectCount)
+	qaStatusSoftError(qs, "Got %d rows, expected %d", lineCount, expectCount);
+    }
+if (test->status->errMessage != NULL)
+    nearTestLogOne(test, stderr);
+htmlPageFree(&printPage);
 htmlPageSetVar(emptyConfig, NULL, visVar, NULL);
 }
 
-void testDb(struct htmlPage *orgPage, char *org, char *db, struct colTest **pTestList)
+void testDb(struct htmlPage *orgPage, char *org, char *db, struct nearTest **pTestList)
 /* Test on one database. */
 {
 struct hash *genomeRa = hgReadRa(org, db, dataDir, "genome.ra", NULL);
@@ -277,7 +388,7 @@ hashFree(&genomeRa);
 }
 
 void testOrg(struct htmlPage *rootPage, struct htmlForm *rootForm, char *org, char *forceDb,
-	struct colTest **pTestList)
+	struct nearTest **pTestList)
 /* Test on organism.  If forceDb is non-null, only test on
  * given database. */
 {
@@ -286,7 +397,6 @@ struct htmlForm *mainForm;
 struct htmlFormVar *dbVar;
 struct slName *db;
 
-uglyf("testOrg %s (%s)\n", org, forceDb);
 htmlPageSetVar(rootPage, rootForm, "org", org);
 htmlPageSetVar(rootPage, rootForm, "db", org);
 htmlPageSetVar(rootPage, rootForm, "near_search", "");
@@ -298,18 +408,86 @@ if ((dbVar = htmlFormVarGet(mainForm, "db")) == NULL)
 for (db = dbVar->values; db != NULL; db = db->next)
     {
     if (forceDb == NULL || sameString(forceDb, db->name))
-	testDb(orgPage, org, db->name, pTestList);
+	testDb(orgPage, org, cloneString(db->name), pTestList);
     }
 htmlPageFree(&orgPage);
 }
 
-void hgNearTest(char *url)
+void statsOnSubsets(struct nearTest *list, int subIx, FILE *f)
+/* Report tests of certain subtype. */
+{
+struct nearTest *test;
+struct hash *hash = newHash(0);
+struct slName *typeList = NULL, *type;
+
+fprintf(f, "\n%s subtotals\n", nearTestInfoTypes[subIx]);
+
+/* Get list of all types in this field. */
+for (test = list; test != NULL; test = test->next)
+    {
+    char *info = test->info[subIx];
+    if (!hashLookup(hash, info))
+       {
+       type = slNameNew(info);
+       hashAdd(hash, info, type);
+       slAddHead(&typeList, type);
+       }
+    }
+slNameSort(&typeList);
+hashFree(&hash);
+
+for (type = typeList; type != NULL; type = type->next)
+    {
+    struct qaStatistics *stats;
+    AllocVar(stats);
+    for (test = list; test != NULL; test = test->next)
+        {
+	if (sameString(type->name, test->info[subIx]))
+	    {
+	    qaStatisticsAdd(stats, test->status);
+	    }
+	}
+    qaStatisticsReport(stats, type->name, f);
+    freez(&stats);
+    }
+}
+
+
+void reportSummary(struct nearTest *list, FILE *f)
+/* Report summary of test results. */
+{
+struct qaStatistics *stats;
+struct nearTest *test;
+AllocVar(stats);
+int i;
+
+for (i=0; i<=ntiiCol; ++i)
+    statsOnSubsets(list, i, f);
+for (test = list; test != NULL; test = test->next)
+    qaStatisticsAdd(stats, test->status);
+qaStatisticsReport(stats, "Total", f);
+}
+
+
+void reportAll(struct nearTest *list, FILE *f)
+/* Report all tests. */
+{
+struct nearTest *test;
+for (test = list; test != NULL; test = test->next)
+    {
+    if (test->status->errMessage != NULL)
+	nearTestLogOne(test, f);
+    }
+}
+
+void hgNearTest(char *url, char *log)
 /* hgNearTest - Test hgNear web page. */
 {
 struct htmlPage *rootPage = htmlPageGet(url);
 struct htmlForm *mainForm;
 struct htmlFormVar *orgVar;
-struct colTest *testList = NULL;
+struct nearTest *testList = NULL;
+FILE *f = mustOpen(log, "w");
 htmlPageValidateOrAbort(rootPage);
 if ((mainForm = htmlFormGet(rootPage, "mainForm")) == NULL)
     errAbort("Couldn't get main form");
@@ -322,11 +500,14 @@ else
     struct slName *org;
     for (org = orgVar->values; org != NULL; org = org->next)
         {
-	testOrg(rootPage, mainForm, org->name, clDb, &testList);
+	testOrg(rootPage, mainForm, cloneString(org->name), clDb, &testList);
 	}
     }
 htmlPageFree(&rootPage);
-uglyf("Executed %d test\n", slCount(testList));
+reportSummary(testList, stdout);
+reportAll(testList, f);
+fprintf(f, "---------------------------------------------\n");
+reportSummary(testList, f);
 }
 
 #ifdef TEST 
@@ -335,7 +516,7 @@ void hgNearTest(char *url)
 struct htmlPage *page;
 struct qaStatus *qs;
 qs = qaPageGet(url, &page);
-qaStatusReportOne(qs, url);
+qaStatusReportOne(stdout, qs, url);
 htmlPageFree(&page);
 }
 #endif /* TEST */
@@ -345,14 +526,14 @@ int main(int argc, char *argv[])
 {
 pushCarefulMemHandler(200000000);
 optionInit(&argc, argv, options);
-if (argc != 2)
+if (argc != 3)
     usage();
 clDb = optionVal("db", clDb);
 clOrg = optionVal("org", clOrg);
 clSearch = optionVal("search", clSearch);
 dataDir = optionVal("dataDir", dataDir);
 clRepeat = optionInt("repeat", clRepeat);
-hgNearTest(argv[1]);
+hgNearTest(argv[1], argv[2]);
 carefulCheckHeap();
 return 0;
 }
