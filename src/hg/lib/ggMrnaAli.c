@@ -503,6 +503,21 @@ for(i=0; i < ma->blockCount; i++)
     }
 }
 
+void ggMrnaAliBed12Out(struct ggMrnaAli *ma, FILE *f)
+/* Write out the target blocks as a linked feature bed format. */
+{
+int i;
+fprintf(f, "%s\t%d\t%d\t%s\t%d\t%s\t%d\t%d\t0\t%d\t", 
+	ma->tName, ma->tStart, ma->tEnd, ma->qName, 1000, ma->strand,
+	ma->tStart, ma->tEnd, ma->blockCount);
+for(i=0; i< ma->blockCount; i++)
+    fprintf(f, "%d,", (ma->blocks[i].tEnd - ma->blocks[i].tStart));
+fprintf(f,"\t");
+for(i=0; i< ma->blockCount; i++)
+    fprintf(f, "%d,", (ma->blocks[i].tStart - ma->tStart));
+fprintf(f,"\n");
+}
+
 struct ggMrnaAli *pslListToGgMrnaAliList(struct psl *pslList, char *chrom, unsigned int chromStart, 
 					 unsigned int chromEnd, struct dnaSeq *genoSeq, int maxGap)
 /* create a ggMrnaAli list from a psl list merging gaps below size maxGap */

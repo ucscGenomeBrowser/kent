@@ -196,6 +196,9 @@ int cmpGgMrnaAliTargetStart(const void *va, const void *vb);
 void ggMrnaAliBedOut(struct ggMrnaAli *ma, FILE *f);
 /* write out the target blocks in simple bed format, one bed per block */
 
+void ggMrnaAliBed12Out(struct ggMrnaAli *ma, FILE *f);
+/* Write out the target blocks as a linked feature bed format. */
+
 struct ggMrnaInput *ggMrnaInputFromAlignments(struct ggMrnaAli *maList, struct dnaSeq *genoSeq);
 /* wrap a ggMrnaInput around some alignments */
 
