@@ -79,5 +79,8 @@ void expRecordOutput(struct expRecord *el, FILE *f, char sep, char lastSep);
 
 /* -------------------------------- End autoSql Generated Code -------------------------------- */
 
+void expRecordCreateTable(struct sqlConnection *conn, char *table);
+/* Create expression record format table of given name. */
+
 #endif /* EXPRECORD_H */
 
