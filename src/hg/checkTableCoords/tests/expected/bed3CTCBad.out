@@ -1,0 +1,3 @@
+test.bed3CTCBad has 1 records with chrom not described in chromInfo.
+test.bed3CTCBad has 1 records with end < start.
+test.bed3CTCBad has 1 records with end > chromSize.

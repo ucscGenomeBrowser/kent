@@ -1,0 +1,5 @@
+test.pslCTCBad has 1 records with chrom not described in chromInfo.
+test.pslCTCBad has 1 records with end > chromSize.
+test.pslCTCBad has 1 records with blocks not in ascending order.
+test.pslCTCBad has 2 records with overlapping blocks.
+test.pslCTCBad has 2 records with blockEnd[n-1] != end.

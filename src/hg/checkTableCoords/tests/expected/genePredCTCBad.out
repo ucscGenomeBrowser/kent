@@ -1,0 +1,8 @@
+test.genePredCTCBad has 1 records with chrom not described in chromInfo.
+test.genePredCTCBad has 1 records with cdsEnd < cdsStart.
+test.genePredCTCBad has 2 records with blockStart[0] != start.
+test.genePredCTCBad has 1 records with blockEnd[i] < blockStart[i].
+test.genePredCTCBad has 1 records with blocks not in ascending order.
+test.genePredCTCBad has 3 records with overlapping blocks.
+test.genePredCTCBad has 3 records with blockEnd[n-1] != end.
+test.genePredCTCBad has 1 records with end > chromSize.
