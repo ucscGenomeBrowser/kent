@@ -16,7 +16,7 @@
 #include "fuzzyFind.h"
 #include "aliType.h"
 
-static char const rcsid[] = "$Id: psl.c,v 1.27 2003/09/10 23:22:38 braney Exp $";
+static char const rcsid[] = "$Id: psl.c,v 1.28 2003/09/11 14:14:02 braney Exp $";
 
 static char *createString = 
 "CREATE TABLE %s (\n"
@@ -583,11 +583,11 @@ if (sizeDif < 0)
     else
 	sizeDif = -sizeDif;
     }
-insertFactor = psl->qNumInsert * sizeMul;
+insertFactor = psl->qNumInsert;
 if (!isMrna)
     insertFactor += psl->tNumInsert;
 
-milliBad = (1000 * (psl->misMatch*sizeMul + insertFactor + round(3*log(1+sizeDif)))) / (psl->match * sizeMul + sizeMul * psl->repMatch + sizeMul * psl->misMatch);
+milliBad = (1000 * (psl->misMatch*sizeMul + insertFactor + round(3*log(1+sizeDif)))) / (sizeMul * (psl->match + psl->repMatch + psl->misMatch));
 return milliBad;
 }
 
@@ -596,7 +596,7 @@ int pslScore(const struct psl *psl)
 {
 int sizeMul = pslIsProtein(psl) ? 3 : 1;
 
-return sizeMul * psl->match + (sizeMul * psl->repMatch>>1) - 
+return sizeMul * (psl->match + ( psl->repMatch>>1)) - 
 	sizeMul * psl->misMatch - psl->qNumInsert - psl->tNumInsert;
 }
 
