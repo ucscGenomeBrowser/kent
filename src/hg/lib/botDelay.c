@@ -66,7 +66,7 @@ if (ip != NULL)
 	{
 	if (millis > 10000)
 	    {
-	    if (millis > 15000)
+	    if (millis > 20000)
 	        botTerminateMessage(ip, millis);
 	    else
 		botDelayMessage(ip, millis);
