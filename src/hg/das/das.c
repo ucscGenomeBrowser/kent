@@ -543,6 +543,8 @@ for (i=0; i<gp->exonCount; ++i)
     {
     int start = gp->exonStarts[i];
     int end =  gp->exonEnds[i];
+    char strand = gp->strand[0];
+    if (strand == 0) strand = '?';
     printf(
     "<FEATURE id=\"%s.%s.%d.%d\" label=\"%s\">\n", gp->name, gp->chrom, gp->txStart, i, gp->name);
     dasPrintType(td, tt);
@@ -553,7 +555,7 @@ for (i=0; i<gp->exonCount; ++i)
     printf(" <START>%d</START>\n", start+1);
     printf(" <END>%d</END>\n", end);
     printf(" <SCORE>-</SCORE>\n");
-    printf(" <ORIENTATION>%c</ORIENTATION>\n", gp->strand[0]);
+    printf(" <ORIENTATION>%c</ORIENTATION>\n", strand);
     printf(" <PHASE>-</PHASE>\n");
     printf(" <GROUP id=\"%s.%s.%d\">\n", gp->name, gp->chrom, gp->txStart);
     printf("  <LINK href=\"http://genome.ucsc.edu/cgi-bin/hgTracks?position=%s:%d-%d&amp;db=%s\">Link to UCSC Browser</LINK>\n", 
