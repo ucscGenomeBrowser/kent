@@ -876,7 +876,9 @@ int edgePopularityCmp(const void *va, const void *vb)
 int cmp = 0;
 const int *a = ((int *)va);
 const int *b = ((int *)vb);
-cmp = _agxSortable->evidence[*b].evCount - _agxSortable->evidence[*a].evCount;
+struct evidence *evB = slElementFromIx(_agxSortable->evidence, *b);
+struct evidence *evA = slElementFromIx(_agxSortable->evidence, *a);
+cmp = evB->evCount - evA->evCount;
 return cmp;
 }
 
@@ -937,6 +939,12 @@ freez(&exonEndEdges);
 return tpSite;
 }
 
+int getEvidenceCount(struct altGraphX *ag, int edge)
+{
+struct evidence *ev = slElementFromIx(ag->evidence, edge);
+return ev->evCount;
+}
+
 struct bed *createBedFromEdges( struct altGraphX *ag, int fpEdge, int cassEdge, int tpEdge)
 /* Put the edges together to from a bed structure. */
 {
@@ -944,22 +952,30 @@ int *vPos = ag->vPositions;
 int *starts = ag->edgeStarts;
 int *ends = ag->edgeEnds;
 struct bed *bed;
+int numBlocks = 3;
 AllocVar(bed);
 bed->chrom = cloneString(ag->tName);
 snprintf(bed->strand, sizeof(bed->strand), "%s", ag->strand);
 bed->chromStart = bed->thickStart = vPos[starts[fpEdge]];
 bed->chromEnd = bed->thickEnd = vPos[ends[tpEdge]];
 bed->name = cloneString(ag->name);
-bed->blockCount = 3;
-bed->blockSizes = AllocArray(bed->blockSizes, 3);
-bed->chromStarts = AllocArray(bed->chromStarts, 3);
+bed->blockCount = numBlocks;
+bed->blockSizes = AllocArray(bed->blockSizes, numBlocks);
+bed->chromStarts = AllocArray(bed->chromStarts, numBlocks);
 bed->blockSizes[0] = vPos[ends[fpEdge]] - vPos[starts[fpEdge]];
 bed->blockSizes[1] = vPos[ends[cassEdge]] - vPos[starts[cassEdge]];
 bed->blockSizes[2] = vPos[ends[tpEdge]] - vPos[starts[tpEdge]];
 bed->chromStarts[0] = vPos[starts[fpEdge]] -bed->chromStart;
 bed->chromStarts[1] = vPos[starts[cassEdge]] - bed->chromStart;
 bed->chromStarts[2] = vPos[starts[tpEdge]] -bed->chromStart;
-bed->score = ag->evidence[fpEdge].evCount + ag->evidence[tpEdge].evCount;
+bed->score = getEvidenceCount(ag,fpEdge)+ getEvidenceCount(ag, tpEdge);
+
+bed->expCount = numBlocks;
+bed->expIds = AllocArray(bed->expIds, numBlocks);
+bed->expScores = AllocArray(bed->expScores, numBlocks);
+bed->expIds[0] = fpEdge;
+bed->expIds[1] = cassEdge;
+bed->expIds[2] = tpEdge;
 return bed;
 }
 
