@@ -16,8 +16,8 @@ CREATE TABLE refAlign (
     hBaseInsert int not null,	# Number of bases inserted in human
     aNumInsert int unsigned not null,	# Number of inserts in aligned seq
     aBaseInsert int not null,	# Number of bases inserted in query
-    humanSeq varchar(255) not null,	# Human sequence, contains - for aligned seq inserts
-    alignSeq varchar(255) not null,	# Aligned sequence, contains - for human seq inserts
+    humanSeq longblob not null,	# Human sequence, contains - for aligned seq inserts
+    alignSeq longblob not null,	# Aligned sequence, contains - for human seq inserts
     attribs varchar(255) not null,	# Comma seperated list of attribute names
               #Indices
     PRIMARY KEY(chrom)

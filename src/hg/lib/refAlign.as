@@ -12,7 +12,7 @@ table refAlign
     int hBaseInsert;   "Number of bases inserted in human"
     uint aNumInsert;   "Number of inserts in aligned seq"
     int aBaseInsert;   "Number of bases inserted in query"
-    string humanSeq;   "Human sequence, contains - for aligned seq inserts"
-    string alignSeq;   "Aligned sequence, contains - for human seq inserts"
+    lstring humanSeq;  "Human sequence, contains - for aligned seq inserts"
+    lstring alignSeq;  "Aligned sequence, contains - for human seq inserts"
     string attribs;    "Comma seperated list of attribute names"
    ) 

@@ -37,9 +37,9 @@ static char* createTableCmd =
 "    hBaseInsert int not null,	        # Number of bases inserted in human\n"
 "    aNumInsert int unsigned not null,	# Number of inserts in aligned seq\n"
 "    aBaseInsert int not null,	        # Number of bases inserted in query\n"
-"    humanSeq text not null,	        # Human sequence, contains - for aligned seq inserts\n"
-"    alignSeq text not null,	        # Aligned sequence, contains - for human seq inserts\n"
-"    attribs varchar(64) not null,	# Comma seperated list of attribute names\n"
+"    humanSeq  longblob not null,	        # Human sequence, contains - for aligned seq inserts\n"
+"    alignSeq longblob not null,	        # Aligned sequence, contains - for human seq inserts\n"
+"    attribs varchar(255) not null,	# Comma seperated list of attribute names\n"
 "    #Indices\n"
 "    %s"				/* Optional bin */
 "    UNIQUE(%schromStart),\n"           /* different depending if using one */
