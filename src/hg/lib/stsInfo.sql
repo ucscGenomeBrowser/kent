@@ -23,8 +23,8 @@ CREATE TABLE stsInfo (
     sequence int unsigned not null,	# Whether the full sequence is available (1) or not (0) for STS
     otherUCSCcount int unsigned not null,	# Number of related active UCSC ids
     otherUCSC longblob not null,	# Related active UCSC ids
-    otherUCSCcount int unsigned not null,	# Number of merged inactive UCSC ids
-    otherUCSC longblob not null,	# Related merged inactive UCSC ids
+    mergeUCSCcount int unsigned not null,	# Number of merged inactive UCSC ids
+    mergeUCSC longblob not null,	# Related merged inactive UCSC ids
     genethonName varchar(255) not null,	# Name in Genethon map
     genethonChr varchar(255) not null,	# Chromosome in Genethon map
     genethonPos float not null,	# Position in Genethon map

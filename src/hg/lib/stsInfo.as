@@ -21,8 +21,8 @@ table stsInfo
 
     uint otherUCSCcount;          "Number of related active UCSC ids"
     uint[otherUCSCcount] otherUCSC;  "Related active UCSC ids"
-    uint otherUCSCcount;          "Number of merged inactive UCSC ids"
-    uint[otherUCSCcount] otherUCSC;  "Related merged inactive UCSC ids"
+    uint mergeUCSCcount;          "Number of merged inactive UCSC ids"
+    uint[mergeUCSCcount] mergeUCSC;  "Related merged inactive UCSC ids"
 
     string genethonName;          "Name in Genethon map"
     string genethonChr;           "Chromosome in Genethon map"

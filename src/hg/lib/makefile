@@ -21,7 +21,8 @@ O = agpFrag.o agpGap.o bbRepMask.o bed.o \
     ooUtils.o pepPred.o pslWScore.o qaSeq.o refLink.o rmskOut.o \
     rnaGene.o roughAli.o sage.o sageExp.o sanger22extra.o \
     simpleRepeat.o snp.o softberryHom.o \
-    softPromoter.o stsAlias.o stsMarker.o traceInfo.o trackDb.o \
+    softPromoter.o stsAlias.o stsInfo.o stsMarker.o \
+    traceInfo.o trackDb.o \
     trackDbCustom.o trackTable.o wabAli.o refAlign.o \
     sage.o sageExp.o pslWScore.o coordConv.o
 

@@ -21,7 +21,7 @@ ret->gdbCount = sqlUnsigned(row[4]);
 ret->nameCount = sqlUnsigned(row[6]);
 ret->otherDbstsCount = sqlUnsigned(row[9]);
 ret->otherUCSCcount = sqlUnsigned(row[16]);
-ret->otherUCSCcount = sqlUnsigned(row[18]);
+ret->mergeUCSCcount = sqlUnsigned(row[18]);
 ret->identNo = sqlUnsigned(row[0]);
 ret->name = cloneString(row[1]);
 sqlStringDynamicArray(row[3], &ret->genbank, &sizeOne);
@@ -40,8 +40,8 @@ ret->organism = cloneString(row[14]);
 ret->sequence = sqlUnsigned(row[15]);
 sqlUnsignedDynamicArray(row[17], &ret->otherUCSC, &sizeOne);
 assert(sizeOne == ret->otherUCSCcount);
-sqlUnsignedDynamicArray(row[19], &ret->otherUCSC, &sizeOne);
-assert(sizeOne == ret->otherUCSCcount);
+sqlUnsignedDynamicArray(row[19], &ret->mergeUCSC, &sizeOne);
+assert(sizeOne == ret->mergeUCSCcount);
 ret->genethonName = cloneString(row[20]);
 ret->genethonChr = cloneString(row[21]);
 ret->genethonPos = atof(row[22]);
@@ -154,12 +154,12 @@ for (i=0; i<ret->otherUCSCcount; ++i)
     }
 s = sqlEatChar(s, '}');
 s = sqlEatChar(s, ',');
-ret->otherUCSCcount = sqlUnsignedComma(&s);
+ret->mergeUCSCcount = sqlUnsignedComma(&s);
 s = sqlEatChar(s, '{');
-AllocArray(ret->otherUCSC, ret->otherUCSCcount);
-for (i=0; i<ret->otherUCSCcount; ++i)
+AllocArray(ret->mergeUCSC, ret->mergeUCSCcount);
+for (i=0; i<ret->mergeUCSCcount; ++i)
     {
-    ret->otherUCSC[i] = sqlUnsignedComma(&s);
+    ret->mergeUCSC[i] = sqlUnsignedComma(&s);
     }
 s = sqlEatChar(s, '}');
 s = sqlEatChar(s, ',');
@@ -221,7 +221,7 @@ freeMem(el->rightPrimer);
 freeMem(el->distance);
 freeMem(el->organism);
 freeMem(el->otherUCSC);
-freeMem(el->otherUCSC);
+freeMem(el->mergeUCSC);
 freeMem(el->genethonName);
 freeMem(el->genethonChr);
 freeMem(el->marshfieldName);
@@ -338,12 +338,12 @@ for (i=0; i<el->otherUCSCcount; ++i)
     }
 if (sep == ',') fputc('}',f);
 fputc(sep,f);
-fprintf(f, "%u", el->otherUCSCcount);
+fprintf(f, "%u", el->mergeUCSCcount);
 fputc(sep,f);
 if (sep == ',') fputc('{',f);
-for (i=0; i<el->otherUCSCcount; ++i)
+for (i=0; i<el->mergeUCSCcount; ++i)
     {
-    fprintf(f, "%u", el->otherUCSC[i]);
+    fprintf(f, "%u", el->mergeUCSC[i]);
     fputc(',', f);
     }
 if (sep == ',') fputc('}',f);
