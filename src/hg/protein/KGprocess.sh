@@ -1,14 +1,16 @@
 #!/bin/sh
 #		KGprocess.sh
-#	usage: KGprocess <YYMMDD>
+#	usage: KGprocess <DB> <RO_DB> <YYMMDD>
+#		<DB> - database to load, can be temporary
+#		<RO_DB> - actual organism database to read other data from
 #		<YYMMDD> - date stamp used to find proteinsYYMMDD database
-#	(A second argument needs to be added to specify organism DB)
+#	use a temporary test <DB> to verify correct operation
 #
 #	This script is used AFTER a new swissprot and proteins database
 #	are created.  See also, scripts:
 #	mkSwissProtDB.sh and mkProteinsDB.sh
 #
-#	"$Id: KGprocess.sh,v 1.1 2003/11/20 19:37:44 hiram Exp $"
+#	"$Id: KGprocess.sh,v 1.2 2004/01/22 22:57:38 hiram Exp $"
 #
 #	Thu Nov 20 11:16:16 PST 2003 - Created - Hiram
 #		Initial version is a translation of makeKgMm3.doc
@@ -30,12 +32,6 @@
 #	Also a second argument should be added to specify the database to
 #	work on.  Right now it is specified below as "DB=mm4"
 
-echo "Add second argument or fixup DB name below to operate this script"
-exit 0
-
-DB=mm4
-TOP=/cluster/data/${DB}/bed/knownGenes
-export DB TOP
 
 ###########################  subroutines  ############################
 
@@ -59,20 +55,45 @@ fi
 
 ###########################  MAIN  ###################################
 
-if [ "$#" -ne 1 ]; then
-    echo "usage: KGprocess <YYMMDD>"
+if [ "$#" -ne 3 ]; then
+    echo "usage: KGprocess <DB> <RO_DB> <YYMMDD>"
+    echo -e "\t<DB> - organism database to load"
+    echo -e "\t<RO_DB> - read only from this database (the target)"
     echo -e "\t<YYMMDD> - date stamp used to find proteinsYYMMDD DB"
+    echo -e "\tFor the DB, instead of loading directly into an organism"
+    echo -e "\tDB, you can load into a new DB to see if everything is going"
+    echo -e "\tto work out."
     exit 255
 fi
 
-#	check for all binaries that will be used here
+#	check for all binaries that will be used here. Source locations:
+#	src/hg/protein/kgGetPep
+#	src/hg/protein/kgBestMrna
+#	src/hg/protein/spm3
+#	src/hg/protein/spm6
+#	src/hg/protein/spm7
+#	src/hg/protein/rmKGPepMrna
+#	src/hg/protein/kgXref
+#	src/hg/protein/kgAliasM
+#	src/hg/protein/kgAliasP
+#	src/hg/protein/kgProtAlias
+#	src/hg/protein/kgAliasKgXref
+#	src/hg/protein/kgAliasRefseq
+#	src/hg/protein/kgProtAliasNCBI
+#	src/hg/dnaGene
+#	src/hg/makeDb/hgMrnaRefseq
+#	src/hg/makeDb/hgKgMrna
+#	src/hg/makeDb/hgKegg
+
+echo "`date` KGprocess.sh $*"
 
 foundALL=""
 for i in hgsql kgXref rmKGPepMrna \
 	/cluster/data/genbank/bin/i386/gbGetSeqs wget \
 	hgMrnaRefseq kgGetPep pslReps hgKgMrna kgPrepBestMrna spm3 spm7 \
-	kgResultBestMrna dnaGene rmKGPepMrna kgXref kgAliasM kgAliasM \
-	kgProtAlias kgProtAliasNCBI ./getKeggList.pl hgKegg hgCGAP
+	kgResultBestMrna dnaGene rmKGPepMrna kgXref kgAliasM kgAliasP \
+	kgProtAlias kgAliasKgXref kgAliasRefseq kgProtAliasNCBI \
+	$HOME/kent/src/hg/protein/getKeggList.pl hgKegg hgCGAP
 do
     type ${i} > /dev/null 2> /dev/null
     if [ "$?" -ne 0 ]; then
@@ -86,9 +107,12 @@ if [ -n "${foundALL}" ]; then
     exit 255
 fi
 
-DATE=$1
+DB=$1
+RO_DB=$2
+DATE=$3
 PDB=proteins${DATE}
-export DATE PDB
+TOP=/cluster/data/${DB}/bed/knownGenes
+export DB RO_DB DATE PDB TOP
 
 IS_THERE=`hgsql -e "show tables;" ${PDB} | wc -l`
 
@@ -99,38 +123,72 @@ if [ ${IS_THERE} -lt 10 ]; then
 	exit 255
 fi
 
-echo "using protein database: ${PDB}"
+hgsql -e "show table status;" ${DB} 2>&1 | grep Unknown > /dev/null 2> /dev/null
+
+if [ $? -ne 1 ]; then
+	echo "ERROR: can not find database: ${DB}"
+	exit 255
+fi
+
+IS_THERE=`hgsql -e "show tables;" ${RO_DB} | wc -l`
+
+if [ ${IS_THERE} -lt 10 ]; then
+	echo "ERROR: can not find database: ${RO_DB}"
+	exit 255
+fi
+
+echo "`date` using protein database: ${PDB}"
 
 if [ ! -d ${TOP} ]; then
 	mkdir ${TOP}
 fi
 
 if [ ! -d ${TOP} ]; then
-	exit "Can not create ${TOP}"
+	echo "Can not create ${TOP}"
 	exit 255
 fi
 
 cd ${TOP}
 
-if [ ! -f mrna.fa ]; then
-    /cluster/data/genbank/bin/i386/gbGetSeqs -native -db=${DB} \
+#	Fetch current mrna sequences from organism genbank system
+if [ ! -s mrna.fa ]; then
+    echo "`date` fetch mrna.fa sequences from ${RO_DB}"
+    /cluster/data/genbank/bin/i386/gbGetSeqs -native -db=${RO_DB} \
 	-gbRoot=/cluster/data/genbank genbank mrna mrna.fa
+    rm -f mrna.lis
+    rm -f ${DB}KgMrna.out
 fi
 
-if [ ! -f mrna.ra ]; then
-    /cluster/data/genbank/bin/i386/gbGetSeqs -get=ra -native -db=${DB} \
+if [ ! -s mrna.ra ]; then
+    echo "`date` fetch mrna.ra sequences from ${RO_DB}"
+    /cluster/data/genbank/bin/i386/gbGetSeqs -get=ra -native -db=${RO_DB} \
 	-gbRoot=/cluster/data/genbank genbank mrna mrna.ra
+    rm -f ${DB}KgMrna.out
 fi
 
-if [ ! -f all_mrna.psl ]; then
-    /cluster/data/genbank/bin/i386/gbGetSeqs -get=psl -native -db=${DB} \
-	-gbRoot=/cluster/data/genbank genbank mrna all_mrna.psl
+if [ ! -s all_mrna.psl ]; then
+    echo "`date` fetch all_mrna.psl sequences from ${RO_DB}"
+#    /cluster/data/genbank/bin/i386/gbGetSeqs -get=psl -native -db=${RO_DB} \
+#	-gbRoot=/cluster/data/genbank genbank mrna all_mrna.psl
+    hgsql -N -e 'select * from all_mrna' ${RO_DB} | cut -f 2-30 >all_mrna.psl
+    rm -f tight_mrna.psl
 fi
 
+if [ ! -s mrna.fa -o ! -s mrna.ra -o ! -s all_mrna.psl ]; then
+    echo "ERROR: can not find one of mrna.fa, mrna.ra or all_mrna.psl"
+    echo -e "\tShould have been fetched by gbGetSeqs"
+    exit 255;
+fi
+
+#	generate list of mrna accession numbers
 if [ ! -f mrna.lis ]; then
     grep "^>" mrna.fa > mrna.lis
+    rm -f mrnaPep.fa
 fi
 
+#	Fetch LocusLink dat to generate mrnaRefseq table
+#	This step begins the ${DB}Temp database as a temporary working
+#	database for intermediate tables during processing
 if [ ! -d ll ]; then
     mkdir -p ll
     cd ll
@@ -149,15 +207,23 @@ if [ ! -d ll ]; then
     hgsql ${DB}Temp < ~/kent/src/hg/protein/Temp.sql
     hgsql -e "drop table history;" ${DB}Temp 2> /dev/null
 
-    echo "loading loc2acc and loc2ref into ${DB}Temp"
+    echo "`date` loading loc2acc and loc2ref into ${DB}Temp"
 
     hgsql -e 'LOAD DATA local INFILE "loc2acc" into table locus2Acc0;' ${DB}Temp
     hgsql -e 'LOAD DATA local INFILE "loc2ref" into table locus2Ref0;' ${DB}Temp
     cd ${TOP}
+    rm -f mrnaRefseq.tab
+    rm -f ${DB}KgMrna.out
 fi
 
+#	mrnaRefseq.tab is a two column table created by reading
+#	${DB}Temp.locus2Ref0 and ${DB}Temp.locus2Acc0 to cross reference:
+#	GenBank Accession number	RefSeq Accession number
+#	e.g.:	AA001432        NM_000227
 if [ ! -f mrnaRefseq.tab ]; then
+    echo "`date` running hgMrnaRefseq ${DB}"
     hgMrnaRefseq ${DB}
+    echo "`date` loading mrnaRefseq.tab into ${DB}.mrnaRefseq"
     hgsql -e "drop table mrnaRefseq;" ${DB} 2> /dev/null
 
     hgsql -e 'CREATE TABLE mrnaRefseq (
@@ -169,22 +235,40 @@ if [ ! -f mrnaRefseq.tab ]; then
  hgsql -e 'LOAD DATA local INFILE "mrnaRefseq.tab" into table mrnaRefseq;' ${DB}
 fi
 
+#	kgGetPep reads the mrna.lis (mrna accession numbers) to
+#	extract from DBs proteins${DATE} and sp{DATE} the fasta records
+#	for each mrna
 if [ ! -f mrnaPep.fa ]; then
+    echo "`date` running: kgGetPep ${DATE}"
     kgGetPep ${DATE} > mrnaPep.fa
+    rm -f ${DB}KgMrna.out
 fi
 
+#	Filter the all_mrna's to create tight_mrna.psl
 if [ ! -f tight_mrna.psl ]; then
+    echo "`date` running: pslReps all_mrna.psl tight_mrna.psl"
     pslReps -minCover=0.40 -sizeMatters -minAli=0.97 -nearTop=0.002 \
 	all_mrna.psl tight_mrna.psl /dev/null
+    rm -f ${DB}KgMrna.out
 fi
 
+#	Load tables refLink, refPep, refGene, and refMrna tables
+#	into DB ${DB}Temp
 if [ ! -f ${DB}KgMrna.out ]; then
-    echo "running: hgKgMrna"
+    echo "`date` running: hgKgMrna ${DB}Temp ... ${PDB}"
+    hgsql -e "delete from refLink;" ${DB}Temp
+    hgsql -e "delete from refPep;" ${DB}Temp
+    hgsql -e "delete from refGene;" ${DB}Temp
+    hgsql -e "delete from refMrna;" ${DB}Temp
+    hgsql -e "delete from refMrna;" ${DB} > /dev/null 2> /dev/null
+    hgsql -e "delete from mrnaGene;" ${DB}Temp
     hgKgMrna ${DB}Temp mrna.fa mrna.ra tight_mrna.psl ll/loc2ref \
 	mrnaPep.fa ll/mim2loc ${PDB} > ${DB}KgMrna.out 2> ${DB}KgMrna.err
+    hgsql -e "drop table knownGenePep;" ${DB} 2> /dev/null
+    hgsql -e "drop table knownGeneMrna;" ${DB} 2> /dev/null
 fi
 
-for T in refGene refMrna refPep
+for T in refGene refMrna refPep refLink
 do
     if [ ! -f ${T}.tab ]; then
 	echo "ERROR: can not find file: ${T}.tab"
@@ -193,23 +277,33 @@ do
     fi
 done
 
-
-IS_THERE=`hgsql -e "select count(*) from refGene;" ${DB}Temp | tail -1`
+#	Loading the tables created by hgKgMrna
+#	I'm not so sure about this.  Temp.refMrna seems to have already
+#	have been loaded by hgKgMrna itself.
+#	mrnaGene is used by spm6
+IS_THERE=`hgsql -e "select count(*) from mrnaGene;" ${DB}Temp | tail -1`
 if [ "${IS_THERE}" -eq 0 ]; then
-    echo "loading refGene.tab"
-    hgsql -e 'LOAD DATA local INFILE "refGene.tab" into table refGene;' \
+    hgsql -e "delete from mrnaGene;" ${DB}Temp
+    echo "`date` loading refGene.tab into ${DB}Temp.mrnaGene"
+    hgsql -e 'LOAD DATA local INFILE "refGene.tab" into table mrnaGene;' \
 	${DB}Temp
+    rm -f ${TOP}/kgBestMrna/knownGene0.tab
+    rm -f proteinMrna.tab
 fi
 
 IS_THERE=`hgsql -e "select count(*) from refMrna;" ${DB}Temp | tail -1`
 if [ "${IS_THERE}" -eq 0 ]; then
-    echo "loading refMrna.tab"
+    echo "`date` loading refMrna.tab into ${DB}Temp.refMrna"
     hgsql -e 'LOAD DATA local INFILE "refMrna.tab" into table refMrna;' \
 	${DB}Temp
 fi
 
 #	WARNING: .tab file names do not match DB table names
+#	(I'm not sure how I decided on this backslash continued line
+#	structure.  That shouldn't be necessary.  This should be
+#	straightened out.)
 TablePopulated "knownGenePep" ${DB} || { \
+    echo "`date` loading refPep.tab into ${DB}.knownGenePep"; \
     hgsql -e "drop table knownGenePep;" ${DB} 2> /dev/null; \
     hgsql ${DB} < ~/kent/src/hg/lib/knownGenePep.sql; \
     hgsql -e \
@@ -217,16 +311,19 @@ TablePopulated "knownGenePep" ${DB} || { \
 }
 
 TablePopulated "knownGeneMrna" ${DB} || { \
+    echo "`date` loading refMrna.tab into ${DB}.knownGeneMrna"; \
     hgsql -e "drop table knownGeneMrna;" ${DB} 2> /dev/null; \
     hgsql ${DB} < ~/kent/src/hg/lib/knownGeneMrna.sql; \
     hgsql -e \
      'LOAD DATA local INFILE "refMrna.tab" into table knownGeneMrna;' ${DB}; \
 }
 
-
-
+#	spm3 reads from ${DB}Temp.refGene and proteins${DATE}.spXref2
+#	to create proteinMrna.tab and protein.lis
 if [ ! -f proteinMrna.tab ]; then
+    echo "`date` running spm3 ${DATE} ${DB}"
     spm3 ${DATE} ${DB}
+    hgsql -e "delete from spMrna;" ${DB}Temp
 fi
 
 if [ ! -f proteinMrna.tab ]; then
@@ -236,7 +333,7 @@ if [ ! -f proteinMrna.tab ]; then
 fi
 
 TablePopulated "spMrna" ${DB}Temp || { \
-    echo "loading proteinMrna.tab into ${DB}Temp.spMrna" 2> /dev/null; \
+    echo "`date` loading proteinMrna.tab into ${DB}Temp.spMrna" 2> /dev/null; \
     hgsql -e 'LOAD DATA local INFILE "proteinMrna.tab" into table spMrna;' \
 	${DB}Temp; \
 }
@@ -249,10 +346,14 @@ cd kgBestMrna
 
 ln -s ../protein.lis . 2> /dev/null
 
+#	kgPrepBestMrna reads the protein.lis file and the
+#	SwissProt tables sp${DATE}.displayId and sp${DATE}.protein
+#	and the ${DB}Temp.spMrna table to generate a hierarchy
+#	of data directories to be used in the cluster run.
 if [ ! -d clusterRun ]; then
-	echo "Preparing cluster run data and jobList"
+	echo "`date` Preparing cluster run data and jobList"
 	kgPrepBestMrna ${DATE} ${DB} 2> jobList > Prep.out
-	echo "Cluster Run has been prepared."
+	echo "`date` Cluster Run has been prepared."
 	echo "on machine kk in: "`pwd`
 	echo "perform:"
 	echo "para create jobList"
@@ -261,90 +362,148 @@ if [ ! -d clusterRun ]; then
 	exit 255
 fi
 
+#	About 45 minutes of processing time to here
+
+#	kgResultBestMrna processes the results of the cluster run
+cd ${TOP}/kgBestMrna
 if [ ! -f best.lis ]; then
-	echo "Assuming cluster run done, Running analysis of output."
-	kgResultBestMrna ${DATE} ${DB} > ResultBest.out 2>&1
+	echo "`date` Assuming cluster run done, Running analysis of output."
+	echo "`date` kgResultBestMrna ${DATE} ${DB} ${RO_DB}"
+	$HOME/bin/i386/kgResultBestMrna ${DATE} ${DB} ${RO_DB} > ResultBest.out 2>&1
 fi
 
 BEST_LEN=`cat best.lis | wc -l`
 if [ "${BEST_LEN}" -lt 1000 ]; then
 	echo "ERROR: do not find correct results from kgResultBestMrna"
-	echo "ERROR: BEST_LEN: $BEST_LEN"
+	echo "ERROR: best.lis length: $BEST_LEN"
 	exit 255
 fi
 
+
+cd ${TOP}/kgBestMrna
 TablePopulated "spMrna" ${DB} || { \
     hgsql -e "drop table spMrna;" ${DB} 2> /dev/null; \
     hgsql ${DB} < ~/kent/src/hg/lib/spMrna.sql; \
-    echo "loading proteinMrna.tab into ${DB}.spMrna"; \
+    echo "`date` loading proteinMrna.tab into ${DB}.spMrna"; \
     hgsql -e 'LOAD DATA local INFILE "best.lis" into table spMrna;' ${DB}; \
 }
 
-if [ ! -f knownGene0.tab ]; then
-    echo "running spm6 ${DATE} ${DB}"
-    spm6 ${DATE} ${DB}
+#	spm6 reads best.lis and from ${DB}Temp.mrnaGene
+#	creating knownGene0.tab and sorted.lis
+if [ ! -s knownGene0.tab ]; then
+    echo "`date` running spm6 ${DATE} ${DB} ${RO_DB}"
+    spm6 ${DATE} ${DB} ${RO_DB}
+fi
+
+if [ ! -s knownGene0.tab ]; then
+    echo "ERROR: can not find knownGene0.tab"
+    echo -e "\tShould have been created by spm6 operation"
+    exit 255
 fi
 
 TablePopulated "knownGene0" ${DB}Temp || { \
-    echo "loading knownGene0.tab into ${DB}Temp.knownGene0"; \
+    echo "`date` loading knownGene0.tab into ${DB}Temp.knownGene0"; \
     hgsql -e 'LOAD DATA local INFILE "knownGene0.tab" into table knownGene0;' \
 	${DB}Temp; \
 }
 
-if [ ! -f knownGene.tab ]; then
-    echo "running spm7 ${DATE} ${DB}"
+#	spm7 reads sorted.lis and from ${DB}Temp.knownGene0 and
+#	sp${DATE}.displayId sp${DATE}.protein
+#	to create knownGene.tab and duplicate.tab
+if [ ! -s knownGene.tab ]; then
+    echo "`date` running spm7 ${DATE} ${DB}"
     spm7 ${DATE} ${DB} > spm7.out
+fi
+
+if [ ! -s knownGene.tab ]; then
+    echo "ERROR: can not find knownGene.tab"
+    echo -e "\tShould have been created by spm7 operation"
+    exit 255
+fi
+
+if [ ! -s duplicate.tab ]; then
+    echo "ERROR: can not find duplicate.tab"
+    echo -e "\tShould have been created by spm7 operation"
+    exit 255
 fi
 
 TablePopulated "dupSpMrna" ${DB} || { \
     hgsql -e "drop table dupSpMrna;" ${DB} 2> /dev/null; \
     hgsql ${DB} < ~/kent/src/hg/lib/dupSpMrna.sql; \
-    echo "loading duplicate.tab into ${DB}.dupSpMrna"; \
+    echo "`date` loading duplicate.tab into ${DB}.dupSpMrna"; \
     hgsql -e 'LOAD DATA local INFILE "duplicate.tab" into table dupSpMrna;' \
-	${DB}; \
-}
-
-if [ ! -f dnaLink.tab ]; then
-    echo "running dnaGene ${DB} ${DATE}"
-    dnaGene ${DB} proteins${DATE}
-fi
-
-if [ ! -f dnaGene.tab ]; then
-    echo "ERROR: can not find dnaGene.tab"
-    echo -e "\tShould have been created by dnaGene operation"
-    exit 255
-fi
-
-
-TablePopulated "knownGeneLink" ${DB} || { \
-    hgsql -e "drop table knownGeneLink;" ${DB} 2> /dev/null; \
-    hgsql ${DB} < ~/kent/src/hg/lib/knownGeneLink.sql; \
-    echo "loading dnaLink.tab into ${DB}.knownGeneLink"; \
-    hgsql -e 'LOAD DATA local INFILE "dnaLink.tab" into table knownGeneLink;' \
 	${DB}; \
 }
 
 TablePopulated "knownGene" ${DB} || {
     hgsql -e "drop table knownGene;" ${DB} 2> /dev/null; \
     hgsql ${DB} < ~/kent/src/hg/lib/knownGene.sql; \
-    echo "loading knownGene.tab into ${DB}.knownGene"; \
+    echo "`date` loading knownGene.tab into ${DB}.knownGene"; \
     hgsql -e 'LOAD DATA local INFILE "knownGene.tab" into table knownGene;' \
 	${DB}; \
-    hgsql -e "select count(*) from knownGene;" ${DB}; \
-    echo "loading dnaGene.tab into ${DB}.knownGene"; \
-    hgsql -e 'LOAD DATA local INFILE "dnaGene.tab" into table knownGene;' \
-	${DB}; \
-    hgsql -e "select count(*) from knownGene;" ${DB}; \
+    rm -f loadedKnownDnaGene
 }
+
+#	dnaGne reads from ${DB}Temp.locus2Acc0, ${DB}Temp.locus2Ref0 and
+#	${RO_DB}.refGene
+#	to create dnaGene.tab and dnaLink.tab
+if [ ! -s dnaLink.tab ]; then
+    echo "`date` running dnaGene ${DB} ${PDB}"
+    dnaGene ${DB} ${PDB} ${RO_DB}
+    rm -f loadedKnownDnaGene
+fi
+
+if [ ! -s dnaGene.tab ]; then
+    echo "ERROR: can not find dnaGene.tab"
+    echo -e "\tShould have been created by dnaGene operation"
+    exit 255
+fi
+
+if [ ! -s dnaLink.tab ]; then
+    echo "ERROR: can not find dnaLink.tab"
+    echo -e "\tShould have been created by dnaGene operation"
+    exit 255
+fi
+
+TablePopulated "knownGeneLink" ${DB} || { \
+    hgsql -e "drop table knownGeneLink;" ${DB} 2> /dev/null; \
+    hgsql ${DB} < ~/kent/src/hg/lib/knownGeneLink.sql; \
+    echo "`date` loading dnaLink.tab into ${DB}.knownGeneLink"; \
+    hgsql -e 'LOAD DATA local INFILE "dnaLink.tab" into table knownGeneLink;' \
+	${DB}; \
+}
+
+#	We need to add dnaGene.tab to knownGene
+#	to make sure this is all done correctly, reload the entire
+#	table
+if [ ! -f loadedKnownDnaGene ]; then
+    hgsql -e "drop table knownGene;" ${DB} 2> /dev/null
+    hgsql ${DB} < ~/kent/src/hg/lib/knownGene.sql
+    echo "`date` loading knownGene.tab into ${DB}.knownGene"
+    hgsql -e 'LOAD DATA local INFILE "knownGene.tab" into table knownGene;' \
+	${DB}
+    hgsql -e "select count(*) from knownGene;" ${DB}
+    echo "`date` loading dnaGene.tab into ${DB}.knownGene"
+    hgsql -e 'LOAD DATA local INFILE "dnaGene.tab" into table knownGene;' \
+	${DB}
+    hgsql -e "select count(*) from knownGene;" ${DB}
+    touch loadedKnownDnaGene
+fi
 
 cd ${TOP}
 
-if [ ! -f knownGenePep.tab ]; then
-    echo "running rmKGPepMrna ${DB} ${DATE}"
-    rmKGPepMrna ${DB} ${DATE}
+#	rmKGPepMrna reads from ${DB}.knownGene.proteinID,
+#	${DB}.knownGenePep.seq, ${DB}.proteinID, sp${DATE}.displayId.acc,
+#	sp${DATE}.protein.val, ${DB}.knownGeneMrna.seq, sp${DATE}.displayId,
+#	sp${DATE}.protein
+#	to create knownGenePep.tab and knownGeneMrna.tab
+if [ ! -s knownGenePep.tab ]; then
+    echo "`date` running rmKGPepMrna ${DB} ${DATE}"
+    rmKGPepMrna ${DB} ${DATE} ${RO_DB}
+    rm -f loadedPepMrna
 fi
 
-if [ ! -f knownGeneMrna.tab ]; then
+if [ ! -s knownGeneMrna.tab ]; then
     echo "ERROR: can not find knownGeneMrna.tab"
     echo -e "\tShould have been created by rmKGPepMrna operation"
     exit 255
@@ -353,65 +512,97 @@ fi
 if [ ! -f loadedPepMrna ]; then
     hgsql -e "drop table knownGenePep;" ${DB} 2> /dev/null
     hgsql ${DB} < ~/kent/src/hg/lib/knownGenePep.sql
-    echo "loading knownGenePep"
+    echo "`date` loading knownGenePep into ${DB}.knownGenePep"
     hgsql -e \
     'LOAD DATA local INFILE "knownGenePep.tab" into table knownGenePep;' ${DB}
 
     hgsql -e "drop table knownGeneMrna;" ${DB} 2> /dev/null
     hgsql ${DB} < ~/kent/src/hg/lib/knownGeneMrna.sql
-    echo "loading knownGeneMrna"
+    echo "`date` loading knownGeneMrna into ${DB}.knownGeneMrna"
     hgsql -e \
     'LOAD DATA local INFILE "knownGeneMrna.tab" into table knownGeneMrna;' ${DB}
     touch loadedPepMrna
 fi
 
-if [ ! -f kgXref.tab ]; then
-    echo "running kgXref"
+#	kgXref reads from  ${DB}.knownGene.name, ${DB}.knownGene.proteinID
+#	${PDB}.spXref3.accession, ${PDB}.spXref3.description
+#	${PDB}.spXref3.hugoSymbol, ${PDB}.spXref3.hugoDesc
+#	${DB}.knownGeneLink.seqType, ${DB}.refLink.name,
+#	${DB}.refLink.product, ${DB}.refLink.protAcc,
+#	${DB}.mrnaRefseq.refseq
+#	to create kgXref.tab
+if [ ! -s kgXref.tab ]; then
+    echo "`date` running kgXref ${DB} ${PDB}"
     kgXref ${DB} ${PDB}
+fi
+
+if [ ! -s kgXref.tab ]; then
+    echo "ERROR: can not find kgXref.tab"
+    echo -e "\tShould have been created by kgXref operation"
+    exit 255
 fi
 
 TablePopulated "kgXref" ${DB} || { \
     hgsql -e "drop table kgXref;" ${DB} 2> /dev/null; \
     hgsql ${DB} < ~/kent/src/hg/lib/kgXref.sql; \
-    echo "loading kgXref"; \
+    echo "`date` loading kgXref into ${DB}.kgXref"; \
     hgsql -e \
     'LOAD DATA local INFILE "kgXref.tab" into table kgXref;' ${DB}; \
 }
 
-if [ ! -f kgAliasM.tab ]; then
-    echo "running kgAliasM"
+if [ ! -s kgAliasM.tab ]; then
+    echo "`date` running kgAliasM ${DB} ${PDB}"
     kgAliasM ${DB} ${PDB}
+    rm -f kgAlias.tab
 fi
 
-if [ ! -f kgAlias.tab ]; then
-    echo "running kgAliasP sp.lis"
+if [ ! -s kgAliasKgXref.tab ]; then
+    echo "`date` running kgAliasKgXref ${DB}"
+    kgAliasKgXref ${DB}
+    rm -f kgAlias.tab
+fi
+
+if [ ! -s kgAliasRefseq.tab ]; then
+    echo "`date` running kgAliasRefseq ${DB}"
+    kgAliasRefseq ${DB}
+    rm -f kgAlias.tab
+fi
+
+if [ ! -s kgAliasP.tab ]; then
+    echo "`date` running kgAliasP ${DB} ... sp.lis"
     kgAliasP ${DB} /cluster/data/swissprot/${DATE}/build/sprot.dat sp.lis
-    echo "running kgAliasP tr.lis"
+    echo "`date` running kgAliasP ${DB} ... tr.lis"
     kgAliasP ${DB} /cluster/data/swissprot/${DATE}/build/trembl.dat tr.lis
-    echo "running kgAliasP new.lis"
+    echo "`date` running kgAliasP ${DB} ... new.lis"
     kgAliasP ${DB} /cluster/data/swissprot/${DATE}/build/trembl_new.dat new.lis
     cat sp.lis tr.lis new.lis | sort | uniq > kgAliasP.tab
+    rm -f kgAlias.tab
+fi
+
+if [ ! -s kgAlias.tab ]; then
+    cat kgAliasM.tab kgAliasRefseq.tab  kgAliasKgXref.tab \
+	kgAliasP.tab | sort |uniq > kgAlias.tab
 fi
 
 TablePopulated "kgAlias" ${DB} || { \
-    echo "creating table kgAlias"; \
+    echo "`date` creating table kgAlias"; \
     hgsql -e "drop table kgAlias;" ${DB} 2> /dev/null; \
     hgsql ${DB} < ~/kent/src/hg/lib/kgAlias.sql; \
     hgsql -e \
     'LOAD DATA local INFILE "kgAlias.tab" into table kgAlias;' ${DB}; \
 }
 
-if [ ! -f kgProtAliasBoth.tab ]; then
-    echo "running kgProtAlias"
+if [ ! -s kgProtAliasBoth.tab ]; then
+    echo "`date` running kgProtAlias ${DB} ${PDB}"
     kgProtAlias ${DB} ${PDB}
-    echo "running kgProtAliasNCBI"
+    echo "`date` running kgProtAliasNCBI ${DB}"
     kgProtAliasNCBI ${DB}
     cat kgProtAliasNCBI.tab kgProtAlias.tab | sort | uniq > kgProtAliasBoth.tab
     rm kgProtAliasNCBI.tab kgProtAlias.tab
 fi
 
 TablePopulated "kgProtAlias" ${DB} || { \
-    echo "creating table kgProtAlias"; \
+    echo "`date` creating table kgProtAlias"; \
     hgsql -e "drop table kgProtAlias;" ${DB} 2> /dev/null; \
     hgsql ${DB} < ~/kent/src/hg/lib/kgProtAlias.sql; \
     hgsql -e \
@@ -419,77 +610,94 @@ TablePopulated "kgProtAlias" ${DB} || { \
 	${DB}; \
 }
 
+#	This perl script getKeggList.pl is a tricky operation
+#	It requires SOAP and XML modules to be installed
+#	I see they are in /usr/lib/perl5/site_perl/5.6.1
+#	But our perl in /usr/local/bin is 5.8.0
+#	This requires a PERL5LIB environment setting of:
+#	PERL5LIB=/usr/lib/perl5/site_perl/5.6.1
 if [ ! -f mmu.lis ]; then
     wget --timestamping -O mmu.lis "http://www.genome.ad.jp/dbget-bin/www_bfind_sub?dbkey=pathway&keywords=mmu&mode=bfind&max_hit=1000&.cgifields=max_hit"
-    ./getKeggList.pl mmu
+    PERL5LIB=/usr/lib/perl5/site_perl/5.6.1 \
+	$HOME/kent/src/hg/protein/getKeggList.pl mmu
+fi
+
+if [ ! -f keggList.tab ]; then
+    echo "ERROR: can not find keggList.tab"
+    echo -e "\tShould have been created by getKeggList.pl operation"
+    exit 255
 fi
 
 TablePopulated "keggList" ${DB}Temp || { \
-    echo "loading keggList"; \
+    echo "`date` loading keggList"; \
     hgsql -e \
     'LOAD DATA local INFILE "keggList.tab" into table keggList;' ${DB}Temp; \
 }
 
+#	hgKegg reads from ${DB}Temp.locus2Ref0, ${DB}Temp.locus2Acc0locus2Ref0,
+#	${DB}Temp.keggList, ${DB}.knownGene
+#	to create keggPathway.tab and keggMapDesc.tab
 if [ ! -f keggPathway.tab ]; then
-    echo "running hgKegg ${DB}"
+    echo "`date` running hgKegg ${DB}"
     hgKegg ${DB}
 fi
 
 TablePopulated "keggPathway" ${DB} || { \
-    echo "creating table keggPathway"; \
+    echo "`date` creating table keggPathway"; \
     hgsql -e "drop table keggPathway;" ${DB} 2> /dev/null; \
     hgsql ${DB} < ~/kent/src/hg/protein/keggPathway.sql; \
-    echo "loading keggPathway"; \
+    echo "`date` loading keggPathway"; \
     hgsql -e \
     'LOAD DATA local INFILE "keggPathway.tab" into table keggPathway;' ${DB}; \
 }
 
 TablePopulated "keggMapDesc" ${DB} || { \
-    echo "creating table keggMapDesc"; \
+    echo "`date` creating table keggMapDesc"; \
     hgsql -e "drop table keggMapDesc;" ${DB} 2> /dev/null; \
     hgsql ${DB} < ~/kent/src/hg/protein/keggMapDesc.sql; \
-    echo "loading keggMapDesc"; \
+    echo "`date` loading keggMapDesc"; \
     hgsql -e \
     'LOAD DATA local INFILE "keggMapDesc.tab" into table keggMapDesc;' ${DB}; \
 }
 
 if [ ! -f Mm_GeneData.dat ]; then
-    echo "fetching Mm_GeneData.dat from nci.nih.gov"
+    echo "`date` fetching Mm_GeneData.dat from nci.nih.gov"
     wget --timestamping -O Mm_GeneData.dat \
 	"ftp://ftp1.nci.nih.gov/pub/CGAP/Mm_GeneData.dat"
 fi
 
+#	hgCGAP reads Mm_GeneData.dat and creates a bunch of cgap*.tab files
 if [ ! -f cgapAlias.tab ]; then
-    echo "running hgCGAP Mm_GeneData.dat"
+    echo "`date` running hgCGAP Mm_GeneData.dat"
     hgCGAP Mm_GeneData.dat
     cat cgapSEQUENCE.tab cgapSYMBOL.tab cgapALIAS.tab > cgapAlias.tab
 fi
 
 TablePopulated "cgapBiocPathway" ${DB} || { \
-    echo "creating table cgapBiocPathway"; \
+    echo "`date` creating table cgapBiocPathway"; \
     hgsql -e "drop table cgapBiocPathway;" ${DB} 2> /dev/null; \
     hgsql ${DB} < ~/kent/src/hg/hgCGAP/cgapBiocPathway.sql; \
-    echo "loading cgapBiocPathway"; \
+    echo "`date` loading cgapBiocPathway"; \
     hgsql -e \
     'LOAD DATA local INFILE "cgapBIOCARTA.tab" into table cgapBiocPathway;' \
 	${DB}; \
 }
 
 TablePopulated "cgapBiocDesc" ${DB} || { \
-    echo "creating table cgapBiocDesc"; \
+    echo "`date` creating table cgapBiocDesc"; \
     hgsql -e "drop table cgapBiocDesc;" ${DB} 2> /dev/null; \
     hgsql ${DB} < ~/kent/src/hg/hgCGAP/cgapBiocDesc.sql; \
-    echo "loading cgapBiocDesc"; \
+    echo "`date` loading cgapBiocDesc"; \
     hgsql -e \
     'LOAD DATA local INFILE "cgapBIOCARTAdesc.tab" into table cgapBiocDesc;' \
 	${DB}; \
 }
 
 TablePopulated "cgapAlias" ${DB} || { \
-    echo "creating table cgapAlias"; \
+    echo "`date` creating table cgapAlias"; \
     hgsql -e "drop table cgapAlias;" ${DB} 2> /dev/null; \
     hgsql ${DB} < ~/kent/src/hg/hgCGAP/cgapAlias.sql; \
-    echo "loading cgapAlias"; \
+    echo "`date` loading cgapAlias"; \
     hgsql -e \
     'LOAD DATA local INFILE "cgapAlias.tab" into table cgapAlias;' ${DB}; \
 }
