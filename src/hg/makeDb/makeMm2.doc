@@ -49,7 +49,7 @@ the paths in jkStuff/cpRmskS.sh, and then sourcing it.
 
 Then lift these up to chromosome coordinates with
     cd ~/mm
-    tcsh jkStuff/liftOut2.sh
+    tcsh jkStuff/liftOut3.sh
 Then load the .out files into the database with:
     ssh hgwdev
     cd ~/mm
@@ -347,6 +347,47 @@ o - Load into the database as so:
      hgPepPred mm2 generic genscanPep genscan.pep
      hgLoadBed mm2 genscanSubopt genscanSubopt.bed
 
+
+TWINSCAN GENE PREDICTIONS (05/23/02 - pep todo, new data on the way)
+
+    mkdir -p ~/mm2/bed/twinscan
+    cd ~/mm2/bed/twinscan
+#    wget http://genes.cs.wustl.edu/mouse/AllChrs.tgz
+#    gunzip -c AllChrs.tgz | tar xvf -
+#*** hack until all chromosomes are recomputed:
+#*** foreach i (1 2 3 4 5 6 7 8 9 10 11 12)
+foreach i (13 14 15 16 17 18 19 X)
+  wget http://genes.cs.wustl.edu/mouse/chr$i.gtf
+end
+#***
+    ldHgGene mm2 twinscan chr*.gtf -exon=CDS
+    ??? hgPepPred mm2 generic twinscanPep *.prot
+
+NCBI GENE MODELS (done 05/31/02)
+
+    mkdir -p ~/mm2/bed/ncbiGenes
+    cd ~/mm2/bed/ncbiGenes
+    wget ftp://ftp.ncbi.nih.gov/genomes/M_musculus/MGSCv3_Release1/maps/chr_genes.gtf.gz
+    wget ftp://ftp.ncbi.nih.gov/genomes/M_musculus/MGSCv3_Release1/protein/protein.fa.gz
+    gunzip chr_genes.gtf.gz
+    gunzip protein.fa.gz
+    - Process the .gtf and .fa together to join IDs
+    ../../jkStuff/mungeNCBIids chr_genes.gtf protein.fa |& uniq
+    ldHgGene mm2 ncbiGenes chr_genes-fixed.gtf
+    hgPepPred mm2 generic ncbiPep protein-fixed.fa
+
+NCBI GENOMESCAN MODELS (done 05/31/02)
+
+    mkdir -p ~/mm2/bed/genomeScan
+    cd ~/mm2/bed/genomeScan
+    wget ftp://ftp.ncbi.nih.gov/genomes/M_musculus/MGSCv3_Release1/maps/chr_GenomeScan.gtf.gz
+    - Remove the ".1" at the end of transcript_id's:
+    gunzip -c chr_GenomeScan.gtf.gz | \
+      perl -wpe 's/transcript_id "([^\"]+)\.1"/transcript_id "$1"/' > \
+      chr_GenomeScan-fixed.gtf
+    ldHgGene mm2 genomeScan chr_GenomeScan-fixed.gtf
+    wget ftp://ftp.ncbi.nih.gov/genomes/M_musculus/MGSCv3_Release1/protein/GS_prot.fsa.gz
+    hgPepPred mm2 generic genomeScanPep GS_prot.fsa
 
 PREPARING SEQUENCE FOR CROSS SPECIES ALIGNMENTS (todo)
 
@@ -672,22 +713,64 @@ LOAD CPGISSLANDS (todo)
      At mysql> prompt type in:
        load data local infile 'cpgIsland.bed' into table cpgIsland
 
-LOAD ENSEMBLE GENES (todo)
-     cd ~/mm/bed
+LOAD ENSEMBL ESTs (done 05/28/02)
+     ln -s /cluster/store2/mm.2002.02/mm2 ~/mm2
+     cd ~/mm2/bed
      mkdir ensembl
      cd ensembl
-     wget http://www.sanger.ac.uk/~birney/all_april_ctg.gtf.gz
-     gunzip all*.gz
-     liftUp ensembl110.gtf ~/mm/jkStuff/liftAll.lft warn all*.gtf
-     ldHgGene mm2 ensGene en*.gtf
-o - Load Ensembl peptides:
-     (poke around ensembl to get their peptide files as ensembl.pep)
-     (substitute ENST for ENSP in ensemble.pep with subs)
-     wget ftp://ftp.ensembl.org/pub/current/data/fasta/pep/ensembl.pep.gz
-     gunzip ensembl.pep.gz
-   edit subs.in to read: ENSP|ENST
-     subs -e ensembl.pep
-     hgPepPred mm2 generic ensPep ensembl.pep
+     wget http://www.ebi.ac.uk/~stabenau/mouse-est.gz
+     wget http://www.ebi.ac.uk/~stabenau/mouse-est.pep.gz
+     gunzip -c mouse-est.gz | \
+       perl -w -p -e 's/^(\w)/chr$1/' > mouse-est-fixed.gtf
+     ldHgGene mm2 ensEst mouse-est-fixed.gtf
+> The id behind '>' is internal and was not in our gtf dump, so
+> you have to do some more parsing.
+     # pick out the transcript= attribute -- that's the id to use:
+     # also remove the first line:
+     gunzip -c mouse-est.pep.gz | tail +2 | \
+       perl -w -p -e 's/^\>gene_id=.*transcript=(\w+)\s+.*$/\>$1/' > \
+       mouse-est-fixed.pep
+     hgPepPred mm2 generic ensEstPep mouse-est-fixed.pep
+
+LOAD ENSEMBLE GENES (done 05/28/02)
+     cd ~/mm2/bed
+     mkdir -p ensembl
+     cd ensembl
+     wget http://www.ebi.ac.uk/~stabenau/mouse-ensembl.gz
+     wget http://www.ebi.ac.uk/~stabenau/mouse-ensembl.pep.gz
+     gunzip -c mouse-ensembl.gz | \
+       perl -w -p -e 's/^(\w)/chr$1/' mouse-ensembl > mouse-ensembl-fixed.gtf
+     ldHgGene mm2 ensGene mouse-ensembl-fixed.gtf
+> mouse-ensembl contains stopcodons, due to some glitches in our
+> genebuild. The id behind '>' is internal and was not in our gtf dump, so
+> you have to do some more parsing.
+# pick out the transcript= attribute -- that's the id to use:
+# also remove the first line:
+     tail +2 mouse-ensembl.pep | \
+       perl -w -p -e 's/^\>gene_id=.*transcript=(\w+)\s+.*$/\>$1/' > \
+       mouse-ensembl-fixed.pep
+     hgPepPred mm2 generic ensPep mouse-ensembl-fixed.pep
+
+LOAD ENSEMBL/RIKEN - SECRET! (05/31/02 - pep todo)
+     - Use mgsc database, not mm2.  Only MGSC members should be able to 
+       access this track, and only by password protection.
+     mkdir -p ~/mm2/bed/ensRiken
+     cd ~/mm2/bed/ensRiken
+     wget http://www.ebi.ac.uk/~stabenau/mouse-riken.gz
+    *** wget http://www.ebi.ac.uk/~stabenau/mouse-riken.pep.gz
+     gunzip -c mouse-riken.gz | \
+       perl -w -p -e 's/^(\w)/chr$1/' > mouse-riken-fixed.gtf
+     ldHgGene mgsc ensRiken mouse-riken-fixed.gtf
+> The id behind '>' is internal and was not in our gtf dump, so
+> you have to do some more parsing.
+     # pick out the transcript= attribute -- that's the id to use:
+     # also remove the first line:
+     gunzip -c mouse-riken.pep.gz | tail +2 | \
+       perl -w -p -e 's/^\>gene_id=.*transcript=(\w+)\s+.*$/\>$1/' > \
+       mouse-riken-fixed.pep
+     hgPepPred mgsc generic ensRikenPep mouse-riken-fixed.pep
+     - NOTE: hooks had to be added to hgTracks.c to enable/disable this 
+       track together with the main riken track.
 
 LOAD SANGER22 GENES (todo)
       - cd ~/mm/bed
@@ -741,7 +824,7 @@ LOAD MOUSE SYNTENY (todo)
      - mm2 < mouseSyn.sql
      - mkdir ~/mm/bed/mouseSyn
      - cd ~/oo/bed/mouseSyn
-     - Put Dianna Church's (church@ncbi.nlm.nih.gov) email attatchment as
+     - Put Deanna Church's (church@ncbi.nlm.nih.gov) email attatchment as
        mouseSyn.txt
      - awk -f format.awk *.txt > mouseSyn.bed
      - delete first line of mouseSyn.bed
@@ -750,17 +833,15 @@ LOAD MOUSE SYNTENY (todo)
           load data local infile 'mouseSyn.bed' into table mouseSyn
 
 
-LOAD GENIE (todo)
-     - cat */ctg*/ctg*.affymetrix.gtf > predContigs.gtf
-     - liftUp predChrom.gtf ../../jkStuff/liftAll.lft warn predContigs.gtf
-     - ldHgGene mm2 genieAlt predChrom.gtf
-
-     - cat */ctg*/ctg*.affymetrix.aa > pred.aa
-     - hgPepPred mm2 genie pred.aa 
-
-     - mm2
-         mysql> delete * from genieAlt where name like 'RS.%';
-         mysql> delete * from genieAlt where name like 'C.%';
+LOAD GENIE (done 05/30/02)
+     mkdir -p ~/mm2/bed/genieAlt
+     cd ~/mm2/bed/genieAlt
+     wget http://www.neomorphic.com/mgap/mgscv3/gtf/mgscv3.genie.gtf.tgz
+     gunzip -c mgscv3.genie.gtf.tgz | tar xvf -
+     ldHgGene mm2 genieAlt mgscv3.genie.gtf/chr*.gtf
+     wget http://www.neomorphic.com/mgap/mgscv3/fa/mgscv3.aa.tgz
+     gunzip -c mgscv3.aa.tgz | tar xvf -
+     hgPepPred mm2 genie geniePep chr*.aa.fa
 
 LOAD SOFTBERRY GENES (todo)
      - ln -s /cluster/store2/mm.2002.02/mm2 ~/mm
@@ -773,7 +854,7 @@ LOAD SOFTBERRY GENES (todo)
      hgSoftberryHom mm2 *.protein
 
 LOAD ACEMBLY (todo)
-    - Get acembly*gene.gff from Jean and Michelle Thierry-Miegs and
+    - Get acembly*gene.gff from Jean and Danielle Thierry-Mieg and
       place in ~/mm/bed/acembly
     - Replace c_chr with chr in acembly*.gff
     - Replace G_t1_chr with chr and likewise
