@@ -70,7 +70,7 @@
 			Annotation track descriptions</A>
 	</B></UL></TD></TR></TABLE>
 <P>
-The Genome Browser User's Guide was last updated on 9 Sep 2003. 
+The Genome Browser User's Guide was last updated on 23 Mar. 2004. 
 <A HREF="mailto:&#103;&#101;&#110;&#111;&#109;e&#64;&#115;&#111;&#101;.&#117;&#99;sc.e&#100;&#117;">Questions and feedback are welcome</A>.
 		</TD><TD WIDTH=15></TD></TR></TABLE>
 	<BR></TD></TR></TABLE>
@@ -136,7 +136,7 @@ Viewer</A> annotation.
 The browser data represents an immense 
 <A HREF="http://genome.ucsc.edu/goldenPath/credits.html">collaborative effort</A> 
 involving thousands of people from the international biomedical research community. 
-UCSC itself does no sequencing and creates only about half of the tracks in-house. Its 
+UCSC itself does no sequencing and creates only about half the tracks in-house. Its 
 other major roles include building genome assemblies, creating the Genome Browser work 
 environment, and serving it online. The majority of the sequence data, annotation tracks, and even 
 software are in the public domain and are available for anyone
@@ -176,9 +176,9 @@ window:
 	</TD></TR>
 
 	<TR><TD WIDTH="20" VALIGN="top"><B>2.</B></TD><TD>
-	Specify the genome location that you'd like the Genome Browser to open to. To 
-	select a location, you must enter a valid position query in the <I>position</I> 
-	text box at the top of the Gateway page, or accept the default position already 
+	Specify the genome location you'd like the Genome Browser to open to. To 
+	select a location, enter a valid position query in the <I>position</I> 
+	text box at the top of the Gateway page or accept the default position already 
 	displayed. The position search supports several different types of queries: gene 
 	symbols, mRNA or EST accession numbers, chromosome 
 	bands, descriptive terms likely to occur in GenBank text, or specific chromosomal 
@@ -188,7 +188,8 @@ window:
 	</TD></TR>
 
 	<TR><TD WIDTH="20" VALIGN="top"><B>3.</B></TD><TD>
-	Click the <I>Submit</I> button to open up the Genome Browser window to that location. 
+	Click the <I>Submit</I> button to open up the Genome Browser window to the
+	requested location. 
 	</TD></TR>
 </TABLE>
 <P>
@@ -199,8 +200,9 @@ will open to that location.
 <P>
 The position search mechanism is not a site-wide search engine. Instead, it primarily 
 searches GenBank mRNA records whose text annotations can include gene names, gene 
-symbols, journal title words, author names, and RefSeq mRNAs. Searches on NP and
-NM accession numbers, OMIM identifiers, and LocusLink identifiers are supported. 
+symbols, journal title words, author names, and RefSeq mRNAs. Searches on other
+selected identifiers, such as NP and
+NM accession numbers, OMIM identifiers, and LocusLink IDs are supported. 
 However, some types of position queries will return an error, e.g. post-freeze GenBank 
 entries, withdrawn gene names, and abandoned synonyms. 
 <P>
@@ -296,21 +298,19 @@ are corrected.  The Genome Browser offers a tool that can correctly
 convert coordinates between different assembly releases. To access the <A
 HREF="http://genome.ucsc.edu/cgi-bin/hgCoordConv" TARGET=_blank>conversion
 tool</A>, click the Convert link on the top menu bar
-on the Genome Browser window.
+on the Genome Browser window. NOTE: The conversion tool is available only on
+human genome assemblies at the present time.
 <P>
 To ensure uninterrupted browser services for your research during UCSC server 
 maintenance and power outages, bookmark a geographically convenient 
-<A HREF="http://genome.ucsc.edu/mirror.html" TARGET=_blank>mirror</A> site that replicates the 
-UCSC genome browser.
+<A HREF="http://genome.ucsc.edu/mirror.html" TARGET=_blank>mirror</A> site that 
+replicates the UCSC genome browser. 
 <P>
 Bear in mind that the Genome Browser cannot outperform the underlying quality of 
 the draft genome. Assembly errors and sequence gaps may still occur well into
 the sequencing process due to regions that are intrinsically difficult to sequence. 
 Artifactual duplications arise as unavoidable compromises during a build, causing 
-misleading matches in genome coordinates found by alignment. Post-freeze GenBank 
-submissions lead to gradual track obsolescence, which can be addressed by supplemental 
-<A HREF="http://www.ncbi.nlm.nih.gov/blast/index.nojs.cgi" TARGET=_blank>BLAST</A> searches. The 
-Genome Browser does the best it can to operate under this environment.
+misleading matches in genome coordinates found by alignment. 
 <BR>
 	</TD><TD WIDTH=15></TD></TR></TABLE>
 	<br></TD></TR></TABLE>
@@ -322,7 +322,7 @@ Genome Browser does the best it can to operate under this environment.
   	<TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1"><TR><TD>	
     <TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0"><TR><TD>	
 	<TABLE BGCOLOR="D9E4F8" BACKGROUND="/images/hr.gif" WIDTH=100%><TR><TD>
-		<FONT SIZE="4"><a NAME="TOC"></a><b>&nbsp; Fine-tuning the
+		<FONT SIZE="4"><a NAME="TOC"></a><b>&nbsp; Interpreting and fine-tuning the
 		Genome Browser display</b></FONT>
 	</TD></TR></TABLE>
 	<TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0><TR><TH HEIGHT=10></TH></TR>
@@ -330,7 +330,7 @@ Genome Browser does the best it can to operate under this environment.
 <p>
 The Genome Browser page displays a genome location specified
 through a Gateway position search, a BLAT search, or an uploaded custom annotation track.
-There are three main features on this page: the annotations tracks
+There are three sets features on this page: the annotations tracks
 image, navigation controls, and display controls. 
 <P>
 The first time you open the
@@ -408,7 +408,7 @@ display conventions:<BR>
 	chromosomal location of the sequence in the organism's genome, as shown by the
 	Chromosome Color Key below the annotation track window.</TD></TR>
 
-	<TR><TD WIDTH="20" VALIGN="top">--</TD><TD><B>Wiggle tracks:</B> 
+	<TR><TD WIDTH="20" VALIGN="top">--</TD><TD><B>&quot;Wiggle&quot; tracks:</B> 
 	These tracks plot a continuous function along a chromosome. Data is 
 	displayed in windows of a set number of base pairs in width. 
 	The score for each window is given on a logarithmic scale, called the 
@@ -487,8 +487,8 @@ for a displayed track (or pack mode when available) by clicking on the optional
 center label for the track. 
 <P>
 <B>Changing the display of a track by using filters</B><BR>
-Some tracks have additional
-filter capabilities, e.g. EST tracks, mRNA tracks, NC160, etc. These filters
+Some tracks have additional filter and configuration capabilities, 
+e.g. EST tracks, mRNA tracks, NC160, etc. These filters
 let the user modify the color or restrict the data displayed within an annotation track.
 Filters are useful for focusing attention on items relevant to the current task
 in tracks that contain large amounts of data. For example, to highlight ESTs
@@ -518,7 +518,8 @@ Genome Browser page to zoom in or out on the center of the annotation tracks win
 10-fold. Alternatively, you can zoom in 3-fold on the display by clicking
 anywhere on the
 Base Position track. In this case, the zoom is centered on the coordinate of the
-mouse click. 
+mouse click.  To view the base composition of the sequence underlying the
+current annotation track display, click the <em>base</em> button. 
 <P>
 To scroll the annotation tracks sideways to the left or right by 10%, 50%, or 95% of the displayed
 size (as given in base pairs), click the corresponding <I>move</I> arrow. It is also 
@@ -541,8 +542,7 @@ By default, the width of the annotation track window is set to 610 pixels. To mo
 best suit the display capabilities of your monitor, enter a new value in the 
 <I>image width</I> text box, then click the <I>Jump</I> button. For example, setting the 
 display to 1100 pixels on a 19" monitor will increase the visible portion of the genome
-and reduce the need for redraws. The maximum supported width is 5000 pixels,
-although it is recommended that you don't exceed your monitor width initially. 
+and reduce the need for redraws. The maximum supported width is 5000 pixels.
 <P>
 <B>Printing a copy of the annotation track window</B><BR>
 The Genome Browser provides a mechanism for saving a copy of 
@@ -557,7 +557,7 @@ To print or save the image to a file:
 	<TR><TD WIDTH="20" VALIGN="top"><B>1.</B></TD><TD>
 	Click the PDF/PS link in the menu on the annotation tracks page.</TD></TR>
 	<TR><TD WIDTH="20" VALIGN="top"><B>2.</B></TD><TD>
-	Choose the PostScript or PDF link.</TD></TR> 
+	Click the PostScript or PDF link.</TD></TR> 
 </TABLE>
 
 	</TD><TD WIDTH=15></TD></TR></TABLE>
@@ -577,12 +577,12 @@ To print or save the image to a file:
 BLAT (BLAST-Like Alignment Tool) is a very fast sequence alignment tool similar to 
 BLAST. 
 For more information on BLAT's internal scoring schemes and its overall n-mer 
-alignment seed strategy, refer to the paper W. James Kent (2002) <A
+alignment seed strategy, refer to W. James Kent (2002) <A
 HREF="http://www.genome.org/cgi/content/abstract/12/4/656" TARGET=_blank>BLAT -
 The BLAST-Like Alignment Tool</A>, <em>Genome Res</em> 12:4 656-664. 
 <P>
 On DNA queries, BLAT is designed to quickly find sequences with 95% or greater 
-similarity of length 40 bases or more. It may miss genomic sequences that
+similarity of length 40 bases or more. It may miss genomic alignments that
 are more divergent or shorter than these minimums, although it will find perfect 
 sequence matches of 33 bases and sometimes as few as 22 bases. The tool is
 capable of aligning sequences that contain large introns. 
@@ -590,7 +590,7 @@ On protein queries, BLAT rapidly locates genomic sequences with 80% or greater
 similarity of length 20 amino acids or more. In general, gene family members that 
 arose within the last 350 million years can generally be detected. More
 divergent sequences can be aligned to the human genome by using NCBI's BLAST and
-psi-BLAST, then by using BLAT to align the resulting match onto the UCSC genome 
+psi-BLAST, then using BLAT to align the resulting match onto the UCSC genome 
 assembly. In practice DNA BLAT works well on primates, and protein BLAT works
 well on land vertebrates. 
 <P>
@@ -652,13 +652,18 @@ contain unique names.
 Multiple sequences may be submitted at the same time if they are of the
 same type and are preceded by unique header lines. Numbers, spaces, and extraneous 
 characters are ignored. 
-<P>
+<P><B>BLAT limitations</B><BR>
 DNA input sequences are limited to a maximum length of 25,000 bases. Protein or
-translated input sequences must not exceed 5000 letters. If multiple sequences are 
-submitted at the same time, the maximum combined length of DNA input is 50,000
-bases (with a 20,000 base limit per individual sequence). For protein or
-translated input, the maximum combined input length is 12,500 letters (with a 5000 
-letter limit per individual sequence). 
+translated input sequences must not exceed 5000 letters. As many as 25 multiple 
+sequences may be submitted at the same time. The maximum combined length of DNA 
+input for multiple sequence submissions is 50,000 bases (with a 25,000 base 
+limit per individual sequence). For 
+protein or translated input, the maximum combined input length is 12,500 letters 
+(with a 5000 letter limit per individual sequence). 
+<P>
+NOTE: Program-driven BLAT use is
+limited to a maximum of one hit every 15 seconds and no more than 5000 hits per
+day.
 <P><B>BLAT query search results</B><BR>
 If a query returns successfully, BLAT will display a flat database file that 
 summarizes the alignments found. A BLAT query often generates multiple 
@@ -687,16 +692,25 @@ To make a custom track directly from BLAT, select the
 output option. The resulting PSL track can be uploaded into the Genome Browser by 
 pasting it into the <I>Add Your Own Tracks</I> text box, accessed from the Browser 
 Gateway page.
-<P><B>Using BLAT for large jobs or commercial use</B><BR>
-The BLAT servers are <A HREF="http://genome.ucsc.edu/mirror.html"
-TARGET=_blank>mirrored</A> at several institutions to ensure continuous availability. 
-For large batch jobs and internal parameter changes, it is best to install
+<P><B>Using BLAT for large batch jobs or commercial use</B><BR>
+For large batch jobs or internal parameter changes, it is best to install
 command line BLAT on your own Linux server. Sources and executables are free for
-academic, personal, and non-profit purposes. Non-exclusive commercial licenses
-are also available. Contact <A HREF="http://www.cse.ucsc.edu/~kent"
-TARGET=_blank>Jim Kent</A>
-for more information. 
-<P>
+academic, personal, and non-profit purposes. BLAT source may be downloaded from 
+<A HREF="http://www.soe.ucsc.edu/~kent/src" 
+TARGET=_blank>http://www.soe.ucsc.edu/~kent</A> (look for the blatSrc* zip file 
+with the most recent date). For BLAT executables, go to 
+<A HREF="http://www.soe.ucsc.edu/~kent/exe/" 
+TARGET=_blank>http://www.soe.ucsc.edu/~kent/exe/</A>; binaries are sorted by 
+platform. 
+Non-exclusive commercial licenses are available from the 
+<A HREF="http://www.genomeblat.com/genomeblat/index.asp" TARGET=_blank>Genome
+Blat</A> website. 
+<P><B>BLAT documentation</B><BR>
+For more information on the BLAT suite of programs, see the 
+<A HREF="http://genome.ucsc.edu/goldenPath/help/blatSpec.html">BLAT
+Program Specifications</A> and the 
+<A HREF="http://genome.ucsc.edu/FAQ/FAQblat">Blat section</A> of the Genome 
+Browser FAQ.
 		</TD><TD WIDTH=15></TD></TR></TABLE>
 	<br></TD></TR></TABLE>
 </TD></TR></TABLE>
@@ -713,116 +727,21 @@ for more information.
 			<TR><TD WIDTH=10>&nbsp;</TD><TD>
 <P>
 The <A HREF="http://genome.ucsc.edu/cgi-bin/hgText" TARGET=_blank>Table
-Browser</A> provides a tabular alternative to the graphical display of the Genome
-Browser. This tool allows the user to view and download the primary database tables containing 
-a genome sequence and its associated annotation tracks. 
+Browser</A> provides text-based access to the genome assemblies and annotation
+data stored in the Genome Browser database. As a flexible alternative to the 
+graphical-based Genome Browser, this tool offers an enhanced level of 
+query support that includes restrictions based on field values, free-form 
+SQL queries, and combined queries on multiple tables. Output can be filtered 
+to restrict the fields and lines returned, and may be organized into one of 
+several formats, including a simple tab-delimited file that can be loaded into 
+a spreadsheet or database as well as advanced formats that may be uploaded into 
+the Genome Browser as custom annotation tracks. 
 The Table Browser provides a convenient
 alternative to downloading and manipulating the entire genome and its massive data tracks.
 (See the <A
 HREF="#Download">Downloading Genome Data</A> section.) 
-
-<!--Commented out, link to Angie's new Table Browser doc
 <P>
-When a new genome assembly is released, a set of annotations tracks is generated by
-aligning features such as mRNAs and ESTs against the genome using BLAT. The alignment
-process generates <I>positional</I> stop-start coordinates and other descriptive data, which are 
-stored within MySQL relational database tables. Other data is inherently 
-<I>non-positional</I>, i.e. not tied to genomic coordinates. Non-positional data includes such 
-things as names of authors who have submitted data into GenBank, types of tissue from
-which sequences originate, and links to RefSeq. 
-<P>
-Because the same positional and non-positional tables drive both the graphical annotation tracks 
-displayed in the Genome Browser and the text-based data displayed in the Table Browser, the data 
-is always in synch.
-<P><B>Using the table browser</B><BR>
-The Table Browser can be accessed in two different ways: 
-<TABLE>
-	<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
-	Click the Tables link on the UCSC Genome Bioinformatics home page to open up 
-	the Table Browser Gateway page. On this page, select the genome and assembly from the menus, enter the position in the genome that you would like to view, then click the
-	<I>Submit</I> button. The Gateway page contains several examples of valid position
-	queries.  <TD></TR> 
-
-	<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
-	Click the Tables link in the blue menu bar on the Genome Browser page to open
-	up the Table Browser to the same assembly and position displayed in the annotation
-	tracks window. </TD></TR>
-</TABLE> 
-<P>
-To display a table, follow these steps:
-<TABLE>
-	<TR><TD WIDTH="20" VALIGN="top"><B>1.</B></TD><TD>
-	If the default position is acceptable, skip to the next step. Otherwise, enter the
-	position in the genome that you would like to display, then click the
-	<I>Look up</I> button. 
-	The same query criteria used for position searches on the Gateway pages apply to this 
-	position search as well. As with position searches in other parts of the Genome
-	Browser, a query may return a list of several options, requiring you to select the
-	appropriate one.
-	<TD></TR> 
-
-	<TR><TD WIDTH="20" VALIGN="top"><B>2.</B></TD><TD>
-	Choose one of the options from either the <I>Positional tables</I> or
-	<I>Non-positional tables</I> lists. Positional tables are listed by their symbolic names. For a
-	complete description of the tables, refer to the documentation on the 
-	<A HREF="http://genome.ucsc.edu/goldenPath/gbdDescriptions.html"
-	TARGET=_blank>Genome Browser database</A>.
-	</TD></TR>
-
-	<TR><TD WIDTH="20" VALIGN="top"><B>3.</B></TD><TD>
-	Click one of the buttons on the <I>Choose an action</I> line to select the type of output
-	and display it. 
-	<TABLE>
-	<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
-	<I>Filter fields</I>: Click this button to display a filter page that lets
-	you hand-select the table fields and lines that are displayed in the text output. To 
-	specify which fields to display, check the boxes in front of the appropriate 
-	fields or click the <I>Check All</I> button to select all the fields.
-	By default, all lines in the specified position range will be returned.
-	To restrict the number of lines that are returned, you may enter patterns with 
-	wildcards for each text field and/or enter range restrictions for numeric 
-	fields. The match criteria for different fields can be combined by selecting
-	<I>AND</I> or <I>OR</I>. By default, fields are combined using <I>AND</I>.
-	<I>ORs</I> have precedence: if any field marked <I>OR</I> matches, then the line 
-	matches. Otherwise, if all fields marked <I>AND</I> match, the line matches. To
-	view the filtered output, click the <I>Get these fields</I> button.
-	<TD></TR> 
-
-	<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
-	<I>Get all fields</I>:  This button
-	defaults to a display containing all the fields in the table. 
-	</TD></TR>
-
-	<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
-	<I>Get DNA</I>: If you have selected
-	a positional table, click this button to display a list of DNA sequences in
-	fasta format for all the table features in the specified position range.
-	For many tables, an interim page displays giving you the opportunity to 
-	restrict the regions for which DNA will be retrieved. 
-	</TD></TR>
-	</TABLE> 
-	</TD></TR>
-</TABLE> 
-<P>
-If a Table Browser query fails to return data, it may be necessary to broaden the 
-range of the position query. If you are not familiar with a particular table, it is recommended that you select the <I>Choose 
-fields</I> button to configure the output of the table display. Some tables offer many columns 
-of data, of which only a few may be relevant. Reducing the number of fields to the minimum 
-necessary simplifies viewing and further processing of the data. 
-<P>
-The tab-delimited data returned by a Table Browser search can be post-processed in a
-spreadsheet or database to produce output in the format required for a <A
-HREF="customTrack.html" TARGET=_blank>custom annotation track</A>. 
-<P>
-In the future, the Table Browser may offer the user the ability to filter records, which will 
-reduce the size of large tables by allowing both row and column selection. Limited boolean logic 
-processing, such as joins of two tracks, may also be supported at a later time.
-<P>
-As with the graphical Genome Browser, note that chromosomal coordinates within tables often 
-change from one assembly to the next, as gap are filled and the assembly procedure is refined. 
--->
-<P>
-For information on using the Table Browser, refer to the <A HREF="hgTextHelp.html">Table Browser User Guide</A>.
+For information on using the Table Browser features, refer to the <A HREF="hgTextHelp.html">Table Browser User Guide</A>.
 		</TD><TD WIDTH=15></TD></TR></TABLE>
 	<br></TD></TR></TABLE>
 </TD></TR></TABLE>
@@ -851,7 +770,7 @@ genes vs. gene predictions), or mask out unwanted features.
 <P><B>Using the DNA text formatting feature</B><BR>
 To access the feature, click on the DNA link on the top blue menu
 bar on the Genome Browser page. The Get DNA in Window page that appears contains 
-sections for configuring the retrieval and formatting options. 
+sections for configuring the retrieval and output format. 
 <P>
 To display extra bases upstream of the 5' end of your sequence or downstream
 of the 3' end of the sequence, enter the number of bases in the corresponding
@@ -859,9 +778,8 @@ text box. This option is useful in looking for regulatory regions.
 <P>
 The Sequence Formatting section lists several options for
 adjusting the case of all or part of the DNA sequence. To choose one of these formats,
-click the corresponding option button, then click the <I>Submit</I> button. To access a table 
-of extended formatting options, click the <I>extended case/color options</I> button, then
-click <I>Submit</I>.
+click the corresponding option button, then click the <I>Get DNA</I> button. To access a table 
+of extended formatting options, click the <I>Extended case/color options</I> button. 
 <P>
 The Extended DNA Case/Color page presents a table with many more format options. The page
 provides instructions for using the formatting table, as well as examples of its use. The
@@ -893,12 +811,17 @@ formatted by the tool is approximately 10 Mbp.
 change from one assembly to the next as gaps are closed, strand orientations are
 corrected, and duplications are reduced. Occasionally, a chunk of sequence will
 even get moved from one chromosome to another as the map is
-refined. The Genome Browser Convert tool is useful for 
+refined. There are 3 different methods available for migrating data from one 
+assembly to another: BLAT alignment, coordinate conversion, and lifting of
+coordinates.
+<P>
+The Genome Browser Convert tool is useful for 
 locating the position of a feature of interest in a newer release of a genome.
 During the conversion process, portions of the genome in the coordinate range of
 the original assembly are aligned to the new assembly while preserving their order and 
 orientation. In general, it is easier to achieve successful conversions with shorter 
-sequences.
+sequences. NOTE: At the present time, this tool may be used only on human
+genome assemblies.
 <P>
 The Conversion tool works by performing a BLAT search on the first 1000, last 1000, and middle
 1000 bases
@@ -914,11 +837,11 @@ Genome Browser page. On the page that displays, select the assembly
 version in which the feature is located in the <I>Original Draft</I> list, then
 pick the assembly version you'd like to convert to in the <I>New Draft</I> list.
 Modify the position coordinates if necessary, then click the <I>submit</I>
-button. Note that archived assembly versions aren't accessible from the
+button. Note that archived assembly versions are not accessible from the
 conversion tool. Currently the tool supports only the human genome.
 <P>
 If the match is successful, the Genome Browser will announce success and display
-the coordinate ranges for both the original and new assemblies. Clicking on the
+the coordinate ranges for both the original and new assemblies. Clicking the
 <I>browser</I> link to the right of the coordinate range will start up the
 browser at the given position on the assembly. The Alignment Details section
 shows which sequences of the original draft were aligned by BLAT to determine
@@ -976,89 +899,105 @@ Genome data can be downloaded in two different ways:
 	</TD></TR>
 </TABLE> 
 <P><B>Types of data available</B><BR>
-There are 3 download directories associated with each version of a genome
+There may be several download directories associated with each version of a genome
 assembly: the full data set <I>(bigZips)</I>, the full data set by 
-chromosome <I>(chromosome)</I>, and the annotation database tables
-<I>(database)</I>. For some assemblies, a set of cross-species alignments may
-may also be available for download, e.g. <I>vsMm2</I> on the hg12 assembly. 
+chromosome <I>(chromosome)</I>, the annotation database tables
+<I>(database)</I>, and one or more sets of comparative cross-species alignments. 
 <P>
 <I>BigZips</I> contains the entire draft of the 
 genome in chromosome and/or contig form. Depending on the genome, this 
 directory may contain some or all of the following files:<BR> 
 <TABLE>
+	<TR><TD WIDTH="20" VALIGN="top">--</TD><TD><B>chromAgp.zip:</B>
+    	Description of how the assembly was generated, unpacking to one file
+	per chromosome. 
+	</TD></TR> 
+
 	<TR><TD WIDTH="20" VALIGN="top">--</TD><TD><B>chromFa.zip:</B>
-	the working draft sequence chromosomes, in one file per chromosome. 
-	Repeats are
-	shown in lower case and non-repeating sequence is shown in upper case.
+	The assembly sequence chromosomes, in one file per chromosome. 
+	Repeats from RepeatMasker and Tandem Repeat Finder are shown in 
+	lower case; non-repeating sequence is in upper case.
+	The main assembly is contained in the <em>chrN.fa</em> files, where 
+	<em>chrN</em> is the name of the chromosome.  The <em>chrN_random.fa</em> 
+	files contain clones that are not yet finished or cannot be placed
+	with certainty at a specific place on the chromosome. In some
+	cases, including the human HLA region on chromosome 6, the 
+	<em>chrN_random.fa</em> files also contain haplotypes that differ from
+	the main assembly.
 	</TD></TR> 
 
 	<TR><TD WIDTH="20" VALIGN="top">--</TD><TD><B>chromFaMasked.zip:</B>
-	the working draft sequence chromosomes, in one file per chromosome. 
-	Repeats are masked by capital N's and non-repeating sequence is shown in upper 
+	The assembly sequence chromosomes, in one file per chromosome. 
+	Repeats are masked by capital Ns; non-repeating sequence is shown in upper
 	case.
 	</TD></TR> 
 
-	<TR><TD WIDTH="20" VALIGN="top">--</TD><TD><B>contigFa.zip:</B>
-	the working draft sequence contigs, in one file per contig. All 
-	contigs are in forward orientation relative to the chromosome. In some 
-	cases of
-	the human genome, this means that some contigs will be reversed 
-	relative to their orientation in the NCBI data. Repeats are
-	shown in lower case non-repeating sequence is shown in upper case.
-	</TD></TR> 
-
-	<TR><TD WIDTH="20" VALIGN="top">--</TD><TD><B>contigFaMasked.zip:</B>
-	the working draft sequence contigs, in one file per contig. 
-	Repeats are masked by capital N's and non-repeating sequence is shown in 
-	upper case.
-	</TD></TR> 
-
-	<TR><TD WIDTH="20" VALIGN="top">--</TD><TD><B>contigAgp.zip:</B>
-	description of how the working draft was generated from fragments at a 
-	contig layout level. 
-	</TD></TR> 
-
-	<TR><TD WIDTH="20" VALIGN="top">--</TD><TD><B>chromAgp.zip:</B>
-    	similar to contigAGP.zip, but unpacks to one file per chromosome.  
-	</TD></TR> 
-
-	<TR><TD WIDTH="20" VALIGN="top">--</TD><TD><B>contigOut.zip:</B>
-	RepeatMasker .out file for contigs, generated with RepeatMasker at the 
-	<I>-s</I> sensitive setting.
-	</TD></TR> 
-
 	<TR><TD WIDTH="20" VALIGN="top">--</TD><TD><B>chromOut.zip:</B>
-	RepeatMasker .out file for chromosomes, generated with RepeatMasker at 
-	the <I>-s</I> sensitive setting.
-	</TD></TR> 
-
-	<TR><TD WIDTH="20" VALIGN="top">--</TD><TD><B>database.zip:</B>
-	the Genome Browser database as tab-delimited files and associated 
-	MySQL table-creation tiles (eliminated in later assemblies due to
-	size restrictions).
+	RepeatMasker <em>.out</em> file for chromosomes, generated by RepeatMasker
+	at the <I>-s</I> sensitive setting.
 	</TD></TR> 
 
 	<TR><TD WIDTH="20" VALIGN="top">--</TD><TD><B>chromTrf.zip:</B>
 	Tandem Repeat Finder locations, filtered to keep repeats with period 
-	less than or equal to 12, translated into one .bed file per chromosomes.
+	less than or equal to 12, translated into one <em>.bed</em> file per 
+	chromosome.
+	</TD></TR> 
+
+	<TR><TD WIDTH="20" VALIGN="top">--</TD><TD><B>contigAgp.zip:</B>
+	Description of how the assembly was generated from fragments at a contig 
+	layout level. 
+	</TD></TR> 
+
+	<TR><TD WIDTH="20" VALIGN="top">--</TD><TD><B>contigFa.zip:</B>
+	The assembly sequence contigs, in one file per contig. All 
+	contigs are in forward orientation relative to the chromosome. 
+        In some cases, this means that contigs will be reversed 
+	relative to their orientation in the NCBI assembly. Repeats are
+	shown in lower case; non-repeating sequence is shown in upper case.
+	</TD></TR> 
+
+	<TR><TD WIDTH="20" VALIGN="top">--</TD><TD><B>contigFaMasked.zip:</B>
+	The assembly sequence contigs, in one file per contig. 
+	Repeats are masked by capital <em>N</em>s; non-repeating sequence is 
+	shown in upper case.
+	</TD></TR> 
+
+	<TR><TD WIDTH="20" VALIGN="top">--</TD><TD><B>contigOut.zip:</B>
+	RepeatMasker <em>.out</em> file for contigs, generated by RepeatMasker 
+	at the <I>-s</I> sensitive setting.
 	</TD></TR> 
 
 	<TR><TD WIDTH="20" VALIGN="top">--</TD><TD><B>contigTrf.zip:</B>
 	Tandem Repeat Finder locations, filtered to keep repeats with period 
-	less than or equal to 12, translated into one .bed file per contig.
+	less than or equal to 12, and translated into one <em>.bed</em> file per 
+	contig.
+	</TD></TR> 
+
+	<TR><TD WIDTH="20" VALIGN="top">--</TD><TD><B>database.zip:</B>
+	The Genome Browser database as tab-delimited files and associated 
+	MySQL table-creation tiles (eliminated in later assemblies due to
+	size restrictions).
+	</TD></TR> 
+
+	<TR><TD WIDTH="20" VALIGN="top">--</TD><TD><B>est.fa.zip:</B>
+	Sequences of all GenBank ESTs for the selected species. 
 	</TD></TR> 
 
 	<TR><TD WIDTH="20" VALIGN="top">--</TD><TD><B>liftAll.zip:</B>
-	the offsets of contigs within chromosomes.
+	The offsets of contigs within chromosomes.
 	</TD></TR> 
 
 	<TR><TD WIDTH="20" VALIGN="top">--</TD><TD><B>mrna.zip:</B>
-	a zipped-up file of mRNA from GenBank. 
+	mRNAs in GenBank from the selected species. 
+	</TD></TR> 
+
+	<TR><TD WIDTH="20" VALIGN="top">--</TD><TD><B>refmrna.zip:</B>
+	RefSeq mRNAs from the selected species.
 	</TD></TR> 
 
 	<TR><TD WIDTH="20" VALIGN="top">--</TD><TD><B>upstream1000.zip:</B>
 	Sequences 1000 bases upstream of annotated transcription start of RefSeq 
-	genes.  This includes only cases where the transcription start is 
+	genes. This includes only cases where the transcription start is 
 	annotated separately from the coding region start.
 	</TD></TR> 
 
@@ -1070,10 +1009,18 @@ directory may contain some or all of the following files:<BR>
 	Same as upstream1000, but with 5000 bases. 
 	</TD></TR> 
 
+	<TR><TD WIDTH="20" VALIGN="top">--</TD><TD><B>xenoMrna.zip:</B>
+	All GenBank mRNAs from species other than that of the selected one.
+	</TD></TR> 
 </TABLE> 
-<P><I>Chromosomes</I> contains 
-the assembled sequence for the genome in separate files for each
-chromosome in a zipped fasta format.
+<P>
+<I>Chromosomes</I> contains the assembled sequence for the 
+genome in separate files for each chromosome in a zipped fasta format.
+The main assembly can be found in the <em>chrN.fa</em> files, where <em>N</em> 
+is the name of the chromosome.  The <em>chrN_random.fa</em> files contain clones
+that are not yet finished or cannot be placed with certainty
+at a specific place on the chromosome. In some cases, the <em>chrN_random.fa</em>
+files also contain haplotypes that differ from the main assembly.
 <P>
 <I>Database</I> contains all of the 
 positional and non-positional tables in the genome annotation database. Each 
@@ -1084,8 +1031,7 @@ table is represented by 2 files:
 	</TD></TR>
 	<TR><TD WIDTH="20" VALIGN="top">--</TD><TD><B>.txt.gz file:</B>
 	the MySQL database table data in tab-delimited format and 
-	compressed with
-	gzip.
+	compressed with gzip.
 	</TD></TR>
 </TABLE> 
 <P>
@@ -1094,11 +1040,11 @@ TARGET=_blank>Description of the annotation database</A> link on the Downloads p
 points to a document containing a full
 description of all the tables in the annotation database.
 <P>
-Optional <I>cross-species alignments</I> directories, such as the <I>vsMm2</I> 
-directory in the hg12 assembly, contain alignments and filtered alignments files 
+<I>Cross-species alignments</I> directories, such as the <I>vsMm4</I> 
+and <em>humorMm3Rn3</em> directories in the hg16 assembly, contain pairwise
+and multiple species alignments and filtered alignment files 
 used to produce cross-species annotations. Refer to the READMEs in these 
 directories for information about their contents. 
-
 		</TD><TD WIDTH=15></TD></TR></TABLE>
 	<br></TD></TR></TABLE>
 </TD></TR></TABLE>
@@ -1119,7 +1065,7 @@ computed at UCSC or have been provided by outside collaborators. In addition to 
 standard tracks, it is also possible for users to upload their own annotations for
 temporary display in the browser. These custom annotation tracks are viewable
 only on the machine from which they were uploaded and are only
-kept for 8 hours after the last time they were accessed. Users can optionally
+kept for 8 hours after the last time they were accessed. Optionally, users can 
 make custom annotations viewable by others as well. 
 <P>
 Custom tracks are an important research feature of the Genome Browser. Because
@@ -1127,15 +1073,17 @@ space is limited in the Genome Browser track window, many excellent genome-wide 
 cannot be included in the set of tracks packaged with the Genome Browser. Other
 tracks of interest may be excluded from distribution because the annotation
 track data is too specific to be of general interest or can't be shared until
-journal publication. 
+journal publication. To view a list of custom annotation tracks submitted by
+Genome Browser users, click the <A HREF="/goldenPath/customTracks/custTracks.html">Custom 
+Tracks</A> link on the Genome Browser home page.
 <P>
 Custom annotation tracks are similar to standard tracks, but never become part of the 
 MySQL genome database. Each track has its own controller and persists even when not 
 displayed in the Genome Browser window, e.g. if the position changes to a range
-that no longer includes the track. Typically custom annotation tracks are aligned 
+that no longer includes the track. Typically, custom annotation tracks are aligned 
 under corresponding genomic sequence, but they can also be completely unrelated to 
-the data. For example, a track could be displayed under a long sequence
-consisting of millions of N's.
+the data. For example, a track can be displayed under a long sequence
+consisting of millions of <em>N</em>s.
 <P>
 This section presents a summary of the steps involved in constructing and
 displaying a custom annotation track. For a complete discussion of custom
@@ -1676,7 +1624,7 @@ assembly to the human genome.
 </TABLE></P>
 
 <P><B>Chimp BAC Ends </B><BR>
-This track displays BAC alignments of the chimp genome (Pan troglodytes) to human, based on Blat alignments from Ingo Ebersberger, Joshua Bacher, and Svante P‰‰bo at the <A HREF="http://www.eva.mpg.de" TARGET=_blank>MPI for Evolutionary Anthropology</A>. 
+This track displays BAC alignments of the chimp genome (Pan troglodytes) to human, based on BLAT alignments from Ingo Ebersberger, Joshua Bacher, and Svante P‰‰bo at the <A HREF="http://www.eva.mpg.de" TARGET=_blank>MPI for Evolutionary Anthropology</A>. 
 
 <TABLE CELLPADDING=0 CELLSPACING=0>
 		<TR><TD WIDTH="20" VALIGN="top">--</TD><TD>
