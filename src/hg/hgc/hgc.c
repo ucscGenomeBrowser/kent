@@ -161,7 +161,7 @@
 #include "pscreen.h"
 #include "jalview.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.848.2.1 2005/03/22 17:20:52 heather Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.848.2.2 2005/03/23 00:58:18 kuhn Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -1989,7 +1989,7 @@ printf("<A TARGET=\"_blank\" HREF=\"%s?db=%s&%s&position=%s%%3A%d-%d\">",
 void linkToOtherBrowser(char *otherDb, char *chrom, int start, int end)
 /* Make anchor tag to open another browser window. */
 {
-printf("<A TARGET=\"_blank\" HREF=\"%s?db=%s&position=%s%%3A%d-%d\">",
+printf("<A TARGET=\"_blank\" HREF=\"%s?db=%s&ct=&position=%s%%3A%d-%d\">",
        hgTracksName(), otherDb, chrom, start+1, end);
 }
 
