@@ -82,8 +82,6 @@ else if (!oldTable)
     dyStringAppend(dy, "#Indices\n");
     if (!noBin)
        dyStringAppend(dy, "  INDEX(bin),\n");
-    dyStringAppend(dy, "  INDEX(tStart),\n");
-    dyStringAppend(dy, "  INDEX(tEnd),\n");
     dyStringAppend(dy, "  INDEX(chainId)\n");
     dyStringAppend(dy, ")\n");
     sqlRemakeTable(conn, track, dy->string);
