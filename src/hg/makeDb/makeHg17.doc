@@ -8123,7 +8123,7 @@ hgLoadBed hg17 rnaCluster chrom/*.bed
 mkdir /cluster/data/hg17/bed/rnaCluster
 cp -r chrom /cluster/data/hg17/bed/rnaCluster
 
-#  miRNA track (DONE 2004-08-24 - Hiram)
+#  miRNA track (DONE 2004-09-03 - Hiram)
     #	The source data for this was received via email from Sam
     #	Griffiths-Jones to Donna 16 August 2004.  In other email Michel
     #	Weber asked to add one more data line to that file.
@@ -8134,7 +8134,10 @@ cp -r chrom /cluster/data/hg17/bed/rnaCluster
     cd /cluster/data/hg17/bed
     mkdir miRNA
     cd miRNA
-    egrep -v "^track |^browser " miRNA_hg17_1.bed | sed -e "s/ /\t/g" > hg17.bed
+    #	one name was missing the h in hsa-mir and one was miR instead of
+    #	mir
+    egrep -v "^track |^browser " miRNA_hg17_1.bed | \
+	sed -e "s/miR/mir/g; s/ sa-mir/ hsa-mir/g; s/ /\t/g;" > hg17.bed
     hgLoadBed hg17 miRNA hg17.bed
     #	compare with previous results, should be relatively similar
     #	featureBits hg16 miRNA
