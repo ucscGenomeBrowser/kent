@@ -642,8 +642,5 @@ void mapBoxHgcOrHgGene(int start, int end, int x, int y, int width, int height,
 /* Print out image map rectangle that would invoke the hgc (human genome click)
  * program. */
 
-void resetVars(char **except);
-/* Reset vars except for vars in 'char *except[]' array. */
-
 #endif /* HGTRACKS_H */
 
