@@ -540,7 +540,7 @@ if (haveSnp)
         {
         struct snp snp;
         snpStaticLoad(row+rowOff, &snp);
-        if (sameString(snp.class, "SNP"))
+        if (sameString(snp.class, "snp"))
             ret = TRUE;
         }
     sqlFreeResult(&sr);
