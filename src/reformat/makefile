@@ -5,3 +5,5 @@ all:
 	cd geniegff; make
 	cd gffgenes; make
 	cd moresyn; make
+	cd gb2cdi; make
+	cd wabToSt; make
