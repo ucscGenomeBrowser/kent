@@ -1,3 +1,6 @@
+/* gfServer - set up an index of the genome in memory and
+ * respond to search requests. */
+/* Copyright 2001-2002 Jim Kent.  All rights reserved. */
 #include "common.h"
 #include <signal.h>
 #include <sys/socket.h>
