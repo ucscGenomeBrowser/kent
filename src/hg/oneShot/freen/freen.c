@@ -1,242 +1,210 @@
 /* freen - My Pet Freen. */
 #include "common.h"
-#include "linefile.h"
-#include "hash.h"
-#include "localmem.h"
-#include <unistd.h>
-#include <time.h>
-#include <dirent.h>
+#include <sys/types.h>
+#include "errabort.h"
+#include "sqlNum.h"
 
-struct numObj
-/* A number on a list. */
-     {
-     struct numObj *next;
-     int num;
-     };
-
-
-static void numObjSort2(struct numObj **ptArray, int n);
-
-/* Some variables used by recursive function numObjSort2
- * across all incarnations. */
-static struct numObj **nosTemp, *nosSwap;
-
-static void numObjSort2(struct numObj **ptArray, int n)
-/* This is a fast recursive sort that uses a temporary
- * buffer (nosTemp) that has to be as big as the array
- * that is being sorted. */
-{
-struct numObj **tmp, **pt1, **pt2;
-int n1, n2;
-
-/* Divide area to sort in two. */
-n1 = (n>>1);
-n2 = n - n1;
-pt1 = ptArray;
-pt2 =  ptArray + n1;
-
-/* Sort each area separately.  Handle small case (2 or less elements)
- * here.  Otherwise recurse to sort. */
-if (n1 > 2)
-    numObjSort2(pt1, n1);
-else if (n1 == 2 && pt1[0] > pt1[1])
-    {
-    nosSwap = pt1[1];
-    pt1[1] = pt1[0];
-    pt1[0] = nosSwap;
-    }
-if (n2 > 2)
-    numObjSort2(pt2, n2);
-else if (n2 == 2 && pt2[0] > pt2[1])
-    {
-    nosSwap = pt2[1];
-    pt2[1] = pt2[0];
-    pt2[0] = nosSwap;
-    }
-
-/* At this point both halves are internally sorted. 
- * Do a merge-sort between two halves copying to temp
- * buffer.  Then copy back sorted result to main buffer. */
-tmp = nosTemp;
-while (n1 > 0 && n2 > 0)
-    {
-    if ((*pt1)->num <= (*pt2)->num)
-	{
-	--n1;
-	*tmp++ = *pt1++;
-	}
-    else
-	{
-	--n2;
-	*tmp++ = *pt2++;
-	}
-    }
-/* One or both sides are now fully merged. */
-
-/* If some of first side left to merge copy it to end of temp buf. */
-if (n1 > 0)
-    memcpy(tmp, pt1, n1 * sizeof(*tmp));
-
-/* If some of second side left to merge, we finesse it here:
- * simply refrain from copying over it as we copy back temp buf. */
-memcpy(ptArray, nosTemp, (n - n2) * sizeof(*ptArray));
-}
-
-void numObjSort(struct numObj **pList)
-/* Sort a singly linked list with Qsort and a temporary array. */
-{
-struct numObj *list = *pList;
-if (list != NULL && list->next != NULL)
-    {
-    int count = slCount(list);
-    struct numObj *el;
-    struct numObj **array;
-    int i;
-    int byteSize = count*sizeof(*array);
-    array = needLargeMem(byteSize);
-    nosTemp = needLargeMem(byteSize);
-    for (el = list, i=0; el != NULL; el = el->next, i++)
-        array[i] = el;
-    numObjSort2(array, count);
-    list = NULL;
-    for (i=0; i<count; ++i)
-        {
-        array[i]->next = list;
-        list = array[i];
-        }
-    freez(&array);
-    freez(&nosTemp);
-    slReverse(&list);
-    *pList = list;       
-    }
-}
 
 void usage()
 /* Explain usage and exit. */
 {
 errAbort(
-  "freen - My Pet Freen\n"
+  "freen - My pet freen\n"
   "usage:\n"
-  "   freen inFile\n");
+  "   freen numBytes fileName\n");
 }
 
-int numObjCmp(const void *va, const void *vb)
-/* Compare to sort based . */
+/* stuff for my buffered io */
+#define BSIZE (64*1024)
+struct bFile
+	{
+	int fd;
+	int left;
+	UBYTE *buf;
+	UBYTE *filept;
+	int writable;
+	};
+
+void bFlush(struct bFile *bf)
+/* Do any pending writes to buffered file.  Force next read to be
+   straight from disk */
 {
-const struct numObj *a = *((struct numObj **)va);
-const struct numObj *b = *((struct numObj **)vb);
-return (a->num - b->num);
-}
+unsigned long size, wsize;
 
-int binaryDigits(unsigned val)
-/* Figure out how many binary digits needed to represent val. */
-{
-int digits = 0;
-while (val > 0)
+if (bf->writable)
     {
-    ++digits;
-    val >>= 1;
-    }
-return digits;
-}
-
-void doubleSort(struct numObj **pList, int maxVal)
-/* Do a preliminary bucket sort followed by a bunch of 
- * qsorts. */
-{
-int rangeDigits = binaryDigits(maxVal);
-int shift = rangeDigits - 14;
-struct numObj **buckets;
-int i, bucketCount;
-int itemCount;
-struct numObj *el, *next, *list = NULL;
-int ix;
-
-itemCount = slCount(*pList);
-// uglyf("MaxVal %d, rangeDigits %d, items %d\n", maxVal, rangeDigits, itemCount);
-if (shift < 1 || itemCount < 1024*8)
-    {
-    slSort(pList, numObjCmp);
-    return;
-    }
-bucketCount = (maxVal >> shift) + 1;
-AllocArray(buckets, bucketCount);
-
-for (el = *pList; el != NULL; el = next)
-    {
-    next = el->next;
-    slAddHead(&buckets[el->num>>shift], el);
-    }
-for (i=0; i<bucketCount; ++i)
-    {
-    slSort(&buckets[i], numObjCmp);
-    }
-for (i=bucketCount-1; i >= 0; i -= 1)
-    {
-    for (el = buckets[i]; el != NULL; el = next)
-        {
-	next = el->next;
-	slAddHead(&list, el);
+    size = BSIZE-bf->left;
+    if (size > 0)
+	{
+	wsize = write(bf->fd, bf->buf, size);
+	bf->filept = bf->buf;
+	bf->left = BSIZE;
+	if (wsize < size)
+            errnoAbort("Write error");
 	}
     }
-slReverse(&list);
-freeMem(buckets);
-// uglyf("%d items after\n", slCount(list));
-*pList = list;
+else
+    {
+    bf->left = 0;
+    }
 }
 
-void sortTime(int size, boolean doDouble)
-/* Make a list of random items of the given size and
- * time how long it takes to sort it. */
+
+
+void bClose(struct bFile **pBf)
+/* flush and close a buffered file.  Free up memory used by buffer. */
+{
+int ok = TRUE;
+struct bFile *bf;
+
+if ((bf = *pBf) != NULL)
+    {
+    if (bf->writable)
+	{
+	bFlush(bf);
+	}
+    if (bf->fd != 0)
+	(bf->fd);
+    freeMem(bf->buf);
+    freez(pBf);
+    }
+}
+
+static struct bFile *bFileNew()
+/* Get buffer for a bFile. */
+{
+struct bFile *bf;
+AllocVar(bf);
+bf->buf = needMem(BSIZE);
+return bf;
+}
+
+struct bFile *bOpen(char *name)
+/* Open up a buffered file to read */
+{
+struct bFile *bf = bFileNew();
+if ((bf->fd = open(name, O_RDONLY)) < 0)
+    errnoAbort("Couldn't open %s", name);
+return bf;
+}
+
+struct bFile *bCreate(char *name)
+/* Create a buffered file to write */
+{
+struct bFile *bf = bFileNew();
+if ((bf->fd = creat(name, 0666)) < 0)
+    {
+    errnoAbort("Couldn't create %s", name);
+    }
+bf->writable = 1;
+bf->left = BSIZE;
+bf->filept = bf->buf;
+return bf;
+}
+
+off_t bSeek(struct bFile *bf, off_t offset, int mode)
+/* Seek to character position.  Mode parameter same as MS-DOS.  IE 
+	mode = 0  for seek from beginning */
+{
+bFlush(bf);
+return lseek(bf->fd,offset,mode);
+}
+
+void bPutByte(struct bFile *bf, char c)
+/* Write out a single byte to buffered file */
+{
+*bf->filept++ = c;
+if (--bf->left <= 0)
+    {
+    bFlush(bf);
+    }
+}
+
+int bWrite(struct bFile *bf, char *buf, size_t count)
+/* Write out a block (32K or less) to buffered file */
 {
 int i;
-struct numObj *list = NULL, *el;
-clock_t allocStart, allocEnd, sortStart, sortEnd, 
-	countStart, countEnd, freeStart, freeEnd;
-struct lm *lm = lmInit(0);
-
-allocStart = clock();
-for (i=0; i<size; ++i)
+if (count <= 0)
+    return(0);
+for (i=0; i<count; i++)
     {
-    el = lmAlloc(lm, sizeof(*el));
-    el->num = (random()&(0x3fffffff));
-    slAddHead(&list, el);
+    *bf->filept++ = *buf++;
+    if (--bf->left <= 0)
+	{
+	bFlush(bf);
+	}
     }
-allocEnd = countStart = clock();
-slCount(list);
-countEnd = sortStart = clock();
-if (doDouble)
-//    doubleSort(&list, 0x3fffffff);
-     numObjSort(&list);
-else
-    slSort(&list, numObjCmp);
-sortEnd = freeStart = clock();
-lmCleanup(&lm);
-// slFreeList(&list);
-freeEnd = clock();
-
-printf("%c %8d %8d %8d %8d %8d\n", 
-	(doDouble ?  'd' : 'q'),
-	size, allocEnd - allocStart, sortEnd - sortStart,
-	freeEnd - freeStart, countEnd - countStart);
+return(count);
 }
 
-void freen(int maxSize)
-/* freen - My Pet Freen. */
+int bGetByte(struct bFile *bf)
+/* Read next byte of buffered file */
 {
-int size;
-for (size = 1; size <= maxSize; size *= 2)
+if (--bf->left < 0)
     {
-    sortTime(size, FALSE);
-    sortTime(size, TRUE);
+    bf->left = read(bf->fd, bf->buf, BSIZE);
+    if (bf->left <= 0)
+        {
+        return EOF;
+	}
+    --(bf->left);
+    bf->filept = bf->buf;
     }
+return(*bf->filept++);
+}
+
+int bRead(struct bFile *bf, char *buf, int count)
+/* Read from buffered file */
+{
+int c,i;
+
+if (count <= 0)
+    return(0);
+for (i=0; i<count; i++)
+    {
+    if ((c = bGetByte(bf)) < 0)
+	return(i);
+    *buf++ = c;
+    }
+return(count);
+}
+
+
+
+void biggaBigga(unsigned numBytes, char *fileName)
+/* Make a great big file. */
+{
+UBYTE c = 'a';
+unsigned i;
+struct bFile *bf;
+
+printf("Making big file %s of %u bytes\n", fileName, numBytes);
+bf = bCreate(fileName);
+for (i=0; i<numBytes; ++i)
+    {
+    bPutByte(bf, c);
+    if (c == '\n')
+        c = 'a';
+    else
+        {
+	c += 1;
+	if (c > 'z')
+	    c = '\n';
+	}
+    if ((i&0x3ff) == 0)
+        {
+	if ((i&0x3fffff) == 0)
+	    printf("Byte %u\n", i);
+	}
+    }
+bClose(&bf);
 }
 
 int main(int argc, char *argv[])
 /* Process command line. */
 {
-if (argc != 2 || !isdigit(argv[1][0]))
+if (argc != 3 || !isdigit(argv[1][0]))
     usage();
-freen(atoi(argv[1]));
+biggaBigga(sqlUnsigned(argv[1]), argv[2]);
 return 0;
 }
