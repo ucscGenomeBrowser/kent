@@ -3909,7 +3909,7 @@ static int exprBedItemHeight(struct trackGroup *tg, void *item)
 int minHeight;
 struct exprBed *exp = item;
 if(tg->limitedVis == tvFull) 
-    minHeight = calcExprBedFullSize(exp);
+    minHeight = (2*calcExprBedFullSize(exp)) + (2*mgFontLineHeight(tl.font));
 else 
     minHeight = mgFontLineHeight(tl.font)+1;
 
@@ -3928,7 +3928,7 @@ tg->heightPer = tg->lineHeight - 1;
 switch (vis)
     {
     case tvFull:
-	tg->height = tg->lineHeight = tg->heightPer = calcExprBedFullSize(exp);
+	tg->height = tg->lineHeight = tg->heightPer = (2*calcExprBedFullSize(exp) + 2*mgFontLineHeight(tl.font));
 	break;
     case tvDense:
 	tg->height = mgFontLineHeight(tl.font)+1;
@@ -4035,22 +4035,56 @@ int lineHeight = tg->lineHeight;
 int x1,x2,w;
 boolean isFull = (vis == tvFull);
 double scale = width/(double)baseWidth;
+int fontHeight = mgFontLineHeight(font);
+int insideHeight = fontHeight-1;
 exp = tg->items;
 heightPer = calcExprBedFullSize(exp);
+
 makeRedGreenShades(mg);
+if(vis == tvFull)
+    {
+    mgTextCentered(mg, xOff, y+1, width, insideHeight, color, font, "Confirmed Exons");
+    y += fontHeight;
+    }
 for (item = tg->items; item != NULL; item = item->next)
     {
-    x1 = round((double)((int)item->chromStart-winStart)*scale) + xOff;
-    x2 = round((double)((int)item->chromEnd-winStart)*scale) + xOff;
-    w = x2-x1;
-    if (tg->itemColor != NULL)
-        color = tg->itemColor(tg, item, mg);
-    if (w < 1)
-	w = 1;
-    mgExprBedBox(mg, x1, y, w, heightPer, item);
+    if(strstr(item->name, "_te"))
+	{
+	x1 = round((double)((int)item->chromStart-winStart)*scale) + xOff;
+	x2 = round((double)((int)item->chromEnd-winStart)*scale) + xOff;
+	w = x2-x1;
+	if (tg->itemColor != NULL)
+	    color = tg->itemColor(tg, item, mg);
+	if (w < 1)
+	    w = 1;
+	mgExprBedBox(mg, x1, y, w, heightPer, item);
+	mapBoxHc(item->chromStart, item->chromEnd, x1, y, w, heightPer, 
+		 tg->mapName, item->name, item->name); 
+	}
+    }
+if(vis == tvFull) 
+    {
+    y += heightPer;
+    mgTextCentered(mg, xOff, y+1, width, insideHeight, color, font, "Predicted Exons");
+    y += fontHeight;
+    }
+for (item = tg->items; item != NULL; item = item->next)
+    {
+    if(strstr(item->name, "_pe")) 
+	{
+	x1 = round((double)((int)item->chromStart-winStart)*scale) + xOff;
+	x2 = round((double)((int)item->chromEnd-winStart)*scale) + xOff;
+	w = x2-x1;
+	if (tg->itemColor != NULL)
+	    color = tg->itemColor(tg, item, mg);
+	if (w < 1)
+	    w = 1;
+	mgExprBedBox(mg, x1, y, w, heightPer, item);
+	mapBoxHc(item->chromStart, item->chromEnd, x1, y, w, heightPer, 
+		 tg->mapName, item->name, item->name); 
+	}
     }
 }
-
 void loadExprBed(struct trackGroup *tg)
 /* Load up exprBed from database table to trackGroup items. */
 {
@@ -4068,6 +4102,7 @@ struct trackGroup *exprBedTg()
 {
 struct trackGroup *tg = bedTg();
 
+tg->mapsSelf = TRUE;
 tg->drawItems = exprBedDraw;
 tg->mapName = "hgExprBed";
 tg->visibility = tvHide;
