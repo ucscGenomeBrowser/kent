@@ -73,6 +73,7 @@ union pfTokVal
     long long i;	/* An integer type */
     double x;		/* Floating point */
     char c;		/* A single character symbol. */
+    struct pfScope *scope;	/* Scope start for {'s  */
     };
 
 struct pfToken

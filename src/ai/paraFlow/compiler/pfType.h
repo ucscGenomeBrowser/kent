@@ -1,4 +1,6 @@
 /* pfType - ParaFlow type heirarchy */
+#ifndef PFTYPE_H
+#define PFTYPE_H
 
 struct pfBaseType
 /* A type, may have parents in object heirarchy, and
@@ -20,3 +22,5 @@ struct pfCollectedType
     struct pfCollectedType *next;
     struct pfBaseType *base;		/* Base type. */
     };
+
+#endif /* PFTYPE_H */

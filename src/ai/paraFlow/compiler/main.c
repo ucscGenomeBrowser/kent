@@ -5,8 +5,9 @@
 #include "hash.h"
 #include "dystring.h"
 #include "localmem.h"
-#include "pfToken.h"
 #include "pfType.h"
+#include "pfScope.h"
+#include "pfToken.h"
 
 void usage()
 /* Explain command line and exit. */
@@ -157,102 +158,6 @@ struct paraSymbol
     struct paraType *type;	/* Symbol type */
     };
 
-struct pfScope
-/* The symbol tables for this scope and a pointer to the
- * parent scope. */
-     {
-     struct pfScope *parent;	/* Parent scope if any. */
-     struct hash *types;	/* Types defined in this scope. */
-     struct hash *vars;		/* Variables defined in this scope (including functions) */
-     };
-
-struct pfVar
-/* A variable at a certain scope; */
-     {
-     char *name;			/* Name (not allocated here) */
-     struct pfScope *scope;		/* Scope we're declared in. */
-     struct pfCollectedType *type;	/* Variable type. */
-     };
-
-struct pfScope *pfScopeNew(struct pfScope *parent, int size)
-/* Create new scope with given parent.  Size is just a hint
- * of what to make the size of the symbol table as a power of
- * two.  Pass in 0 if you don't care. */
-{
-struct pfScope *scope;
-int varSize = size;
-int typeSize;
-
-if (varSize <= 0)
-    varSize = 5;
-typeSize = varSize - 2;
-if (typeSize <= 0)
-    typeSize = 3;
-AllocVar(scope);
-scope->types = hashNew(typeSize);
-scope->vars = hashNew(varSize);
-scope->parent = parent;
-return scope;
-}
-
-static void pfScopeAddType(struct pfScope *scope, char *name, boolean isCollection,
-	struct pfBaseType *parentType)
-/* Add type to scope. */
-{
-struct pfBaseType *type;
-AllocVar(type);
-type->scope = scope;
-type->parentType = parentType;
-type->isCollection = isCollection;
-hashAddSaveName(scope->types, name, type, &type->name);
-}
-
-static struct pfVar *pfScopeAddVar(struct pfScope *scope, char *name, struct pfCollectedType *ct)
-/* Add type to scope. */
-{
-struct pfVar *var;
-AllocVar(var);
-var->scope = scope;
-var->type = ct;
-hashAddSaveName(scope->vars, name, var, &var->name);
-return var;
-}
-
-struct pfBaseType *pfScopeFindType(struct pfScope *scope, char *name)
-/* Find type associated with name in scope and it's parents. */
-{
-while (scope != NULL)
-    {
-    struct pfBaseType *baseType = hashFindVal(scope->types, name);
-    if (baseType != NULL)
-        return baseType;
-    scope = scope->parent;
-    }
-return NULL;
-}
-
-struct pfVar *pfScopeFindVar(struct pfScope *scope, char *name)
-/* Find variable associated with name in scope and it's parents. */
-{
-while (scope != NULL)
-    {
-    struct pfVar *var = hashFindVal(scope->vars, name);
-    if (var != NULL)
-        return var;
-    scope = scope->parent;
-    }
-return NULL;
-}
-
-struct pfVar *pfScopeFindOrCreateVar(struct pfScope *scope, char *name)
-/* Find variable.  If it doesn't exist create it in innermost scope. */
-{
-struct pfVar *var = pfScopeFindVar(scope, name);
-if (var == NULL)
-    var = pfScopeAddVar(scope, name, NULL);
-return var;
-}
-
 struct pfParse
 /* The para parse tree. */
     {
@@ -378,6 +283,7 @@ static void compoundToChildren(struct pfParse *pp, struct pfToken **pTokList,
 struct pfToken *tok = *pTokList;
 if (tok->type != '{')
     expectingGot("{", tok);
+scope = tok->val.scope;
 tok = tok->next;
 for (;;)
     {
@@ -818,6 +724,25 @@ hashAddInt(hash, "else", pftElse);
 return hash;
 }
 
+void addClasses(struct pfToken *tokList, struct pfScope *scope)
+/* Add types in classes to appropriate scope.  We do this as
+ * a first pass to help disambiguate the grammar. */
+{
+struct pfToken *tok;
+for (tok = tokList; tok->type != pftEnd; tok = tok->next)
+    {
+    if (tok->type == '{' || tok->type == '}')
+        scope = tok->val.scope;
+    if (tok->type == pftClass)
+	{
+	tok = tok->next;
+	if (tok->type != pftName)
+	    expectingGot("class name", tok);
+	pfScopeAddType(scope, tok->val.s, FALSE, NULL);
+	}
+    }
+}
+
 void paraFlowOnFile(char *fileName, struct pfScope *scope)
 /* Execute paraFlow on single file. */
 {
@@ -828,11 +753,19 @@ struct pfParse *program;
 int endCount = 3;
 
 scope = pfScopeNew(scope, 12);
+
+/* Read tokens, add scoping info, and add to list. */
 while ((tok = pfTokenizerNext(pfTkz)) != NULL)
     {
-    if (tok->type != pftWhitespace && tok->type != pftComment)
-	{
-	slAddHead(&tokList, tok);
+    slAddHead(&tokList, tok);
+    if (tok->type == '{')
+        {
+	scope = pfScopeNew(scope, 0);
+	tok->val.scope = scope;
+	}
+    else if (tok->type == '}')
+        {
+	tok->val.scope = scope->parent;
 	}
     }
 
@@ -848,6 +781,7 @@ while (--endCount >= 0)
 
 slReverse(&tokList);
 
+addClasses(tokList, scope);
 program = pfParseProgram(tokList, scope);
 pfParseDump(program, 0, stdout);
 }
