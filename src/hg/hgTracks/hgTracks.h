@@ -214,6 +214,9 @@ extern int insideX;			/* Start of area to draw track in in pixels. */
 extern int seqBaseCount;  /* Number of bases in sequence. */
 extern int winBaseCount;  /* Number of bases in window. */
 extern boolean zoomedToBaseLevel; /* TRUE if zoomed so we can draw bases. */
+extern boolean zoomedToCodonLevel; /* TRUE if zoomed so we can print codon text in genePreds*/
+extern boolean zoomedToCdsColorLevel; /* TRUE if zoomed so we cancolor each codon*/
+
 
 extern boolean withLeftLabels;		/* Display left labels? */
 extern boolean withCenterLabels;	/* Display center labels? */
@@ -303,6 +306,9 @@ int grayInRange(int val, int minVal, int maxVal);
 
 int percentGrayIx(int percent);
 /* Return gray shade corresponding to a number from 50 - 100 */
+
+int pslGrayIx(struct psl *psl, boolean isXeno, int maxShade);
+/* Figure out gray level for an RNA block. */
 
 int vgFindRgb(struct vGfx *vg, struct rgbColor *rgb);
 /* Find color index corresponding to rgb color. */
@@ -471,7 +477,7 @@ void pslMethods(struct track *track, struct trackDb *tdb,
 /* Load up psl type methods. */
 
 struct linkedFeatures *lfFromPslx(struct psl *psl, 
-	int sizeMul, boolean isXeno, boolean nameGetsPos);
+	int sizeMul, boolean isXeno, boolean nameGetsPos, char *mapName);
 /* Create a linked feature item from pslx.  Pass in sizeMul=1 for DNA, 
  * sizeMul=3 for protein. */
 
@@ -565,6 +571,13 @@ void lfsMapItemName(struct track *tg, void *item, char *itemName, int start, int
 Color expressionColor(struct track *tg, void *item, struct vGfx *vg,
                       float denseMax, float fullMax);
 /* Returns track item color based on expression. */
+
+void drawScaledBoxSample(struct vGfx *vg,
+        int chromStart, int chromEnd, double scale,
+        int xOff, int y, int height, Color color,
+        int score);
+/* Draw a box scaled from chromosome to window coordinates. */
+        
 
 #endif /* HGTRACKS_H */
 

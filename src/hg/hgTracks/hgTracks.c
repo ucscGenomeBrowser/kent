@@ -72,11 +72,14 @@
 #include "web.h"
 #include "grp.h"
 #include "chromColors.h"
+#include "cdsColors.h"
+#include "cds.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.647 2003/12/24 11:23:16 kent Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.648 2004/01/06 09:00:57 weber Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
+#define CDS_COLORS 6
 #define LOW 1
 #define MEDIUM 2
 #define BRIGHT 3
@@ -97,6 +100,11 @@ Color chromColor[CHROM_COLORS+1];
 
 /* Have the 3 shades of 8 chromosome colors been allocated? */
 boolean chromosomeColorsMade = FALSE; 
+
+/* Declare colors for each CDS coloring possibility
+ * {start,stop,splice,alternate codons} */
+Color cdsColor[CDS_COLORS+1];
+boolean cdsColorsMade = FALSE;
 
 
 int z;
@@ -124,6 +132,8 @@ int insideWidth;		/* Width of area to draw tracks in in pixels. */
 int leftLabelX;			/* Start of area to draw left labels on. */
 int leftLabelWidth;		/* Width of area to draw left labels on. */
 boolean zoomedToBaseLevel; 	/* TRUE if zoomed so we can draw bases. */
+boolean zoomedToCodonLevel; /* TRUE if zoomed so we can print codons text in genePreds*/
+boolean zoomedToCdsColorLevel; /* TRUE if zoomed so we can color each codon*/
 
 char *protDbName;               /* Name of proteome database for this genome. */
 
@@ -524,6 +534,26 @@ mapStatusMessage("%s controls", tg->shortLabel);
 hPrintf(">\n");
 }
 
+static void mapBoxToggleComplement(int x, int y, int width, int height, 
+	struct track *toggleGroup, char *chrom,
+	int start, int end, char *message)
+/*print out a box along the DNA bases that toggles a cart variable
+ * "complement" to complement the DNA bases at the top by the ruler*/
+{
+struct dyString *ui = uiStateUrlPart(toggleGroup);
+hPrintf("<AREA SHAPE=RECT COORDS=\"%d,%d,%d,%d\" ", x, y, x+width, y+height);
+hPrintf("HREF=\"%s?complement=%d",
+	hgTracksName(), !cartUsualBoolean(cart,"complement",FALSE));
+hPrintf("&%s\"", ui->string);
+freeDyString(&ui);
+if (message != NULL)
+    mapStatusMessage("%s", message);
+hPrintf(">\n");
+}
+
+
+
+
 void mapBoxReinvoke(int x, int y, int width, int height, 
 	struct track *toggleGroup, char *chrom,
 	int start, int end, char *message)
@@ -655,6 +685,7 @@ if (w < 1)
 vgBox(vg, x1, y, w, height, color);
 }
 
+
 void drawScaledBoxSample(struct vGfx *vg, 
 	int chromStart, int chromEnd, double scale, 
 	int xOff, int y, int height, Color color, int score)
@@ -662,13 +693,12 @@ void drawScaledBoxSample(struct vGfx *vg,
 {
 int i;
 int x1, x2, w;
-
 x1 = round((double)(chromStart-winStart)*scale) + xOff;
 x2 = round((double)(chromEnd-winStart)*scale) + xOff;
+
 if (x2 >= MAXPIXELS)
     x2 = MAXPIXELS - 1;
 w = x2-x1;
-
 if (w < 1)
     w = 1;
 vgBox(vg, x1, y, w, height, color);
@@ -942,6 +972,8 @@ vgMakeColorGradient(vg, &black, &green, EXPR_DATA_SHADES, shadesOfGreen);
 exprBedColorsMade = TRUE;
 }
 
+
+
 /*	See inc/chromColors.h for color defines	*/
 void makeChromosomeShades(struct vGfx *vg) 
 /* Allocate the  shades of 8 colors in 3 shades to cover 24 chromosomes  */
@@ -1095,6 +1127,8 @@ else
     }
 }
 
+
+
 static void linkedFeaturesDrawAt(struct track *tg, void *item,
 	struct vGfx *vg, int xOff, int y, double scale, 
 	MgFont *font, Color color, enum trackVisibility vis)
@@ -1117,6 +1151,19 @@ int midY2 = midY + (heightPer>>2);
 int w;
 boolean exonArrows = tg->exonArrows;
 
+
+//variables for genePred cds coloring
+struct psl *psl = NULL;
+struct dnaSeq *mrnaSeq = NULL;
+boolean foundStart = FALSE;
+int drawOptionNum = 0; //off
+boolean errorColor = FALSE;
+
+/*if we are zoomed in far enough, look to see if we are coloring
+  by codon, and setup if so.*/
+if(zoomedToCdsColorLevel)
+    drawOptionNum = cdsColorSetup(vg, tg, cdsColor, mrnaSeq, psl,
+            &errorColor, lf, cdsColorsMade);
 
 if ((tg->tdb != NULL) && (vis != tvDense))
     intronGap = atoi(trackDbSettingOrDefault(tg->tdb, "intronGap", "0"));
@@ -1147,6 +1194,7 @@ if (!hideLine)
 		 lf->orientation, bColor, FALSE);
 	}
     }
+
 for (sf = lf->components; sf != NULL; sf = sf->next)
     {
     s = sf->start; e = sf->end;
@@ -1161,22 +1209,30 @@ for (sf = lf->components; sf != NULL; sf = sf->next)
     if (e > tallEnd)
 	{
 	s2 = s;
-	if (s2 < tallEnd) s2 = tallEnd;
+	if (s2 < tallEnd) s2 = tallEnd; 
 	drawScaledBoxSample(vg, s2, e, scale, xOff, y+shortOff, shortHeight, color , lf->score);
 	e = s2;
 	}
     if (e > s)
 	{
-	drawScaledBoxSample(vg, s, e, scale, xOff, y, heightPer, color, lf->score);
-	if (exonArrows)
-	    {
-	    int nw = e - s - 2;
-	    x1 = round((double)((int)s-winStart)*scale) + xOff;
-	    x2 = round((double)((int)e-winStart)*scale) + xOff;
-	    w = x2-x1;
-	    clippedBarbs(vg, x1+1, midY, x2-x1-2, 2, 5, lf->orientation,
-	       MG_WHITE, TRUE);
-	    }
+        if(drawOptionNum>0 && zoomedToCdsColorLevel)
+            drawCdsColoredBox(tg, lf, sf->grayIx, cdsColor, vg, xOff, y, scale, 
+	            font, s, e, heightPer, zoomedToCodonLevel, mrnaSeq,
+                psl, drawOptionNum, errorColor, &foundStart, MAXPIXELS);
+        else
+            {
+	        drawScaledBoxSample(vg, s, e, scale, xOff, y, heightPer, color, lf->score );
+
+	        if (exonArrows)
+	            {
+	            int nw = e - s - 2;
+	            x1 = round((double)((int)s-winStart)*scale) + xOff;
+	            x2 = round((double)((int)e-winStart)*scale) + xOff;
+	            w = x2-x1;
+	            clippedBarbs(vg, x1+1, midY, x2-x1-2, 2, 5, lf->orientation,
+	                MG_WHITE, TRUE);
+	            }
+            }
 	}
 
     if ((intronGap || chainLines) && sf->next != NULL)
@@ -1958,7 +2014,7 @@ while ((psl = pslNext(f)) != NULL)
     {
     if (sameString(psl->tName, chromName) && psl->tStart < winEnd && psl->tEnd > winStart)
 	{
-	lf = lfFromPslx(psl, sizeMul, TRUE, FALSE);
+	lf = lfFromPslx(psl, sizeMul, TRUE, FALSE, tg->mapName);
 	sprintf(buf2, "%s %s", ss, psl->qName);
 	lf->extra = cloneString(buf2);
 	slAddHead(&lfList, lf);
@@ -2006,32 +2062,45 @@ struct linkedFeatures *lfList = NULL, *lf;
 int grayIx = maxShade;
 int rowOffset;
 
+int drawOptionNum = 0; //off
+if(table != NULL)
+    drawOptionNum = getCdsDrawOptionNum(table);
+
 sr = hRangeQuery(conn, table, chrom, start, end, NULL, &rowOffset);
+
 while ((row = sqlNextRow(sr)) != NULL)
     {
     struct simpleFeature *sfList = NULL, *sf;
     struct genePred *gp = genePredLoad(row + rowOffset);
-    unsigned *starts = gp->exonStarts;
-    unsigned *ends = gp->exonEnds;
-    int i, blockCount = gp->exonCount;
-
     AllocVar(lf);
     lf->grayIx = grayIx;
     strncpy(lf->name, gp->name, sizeof(lf->name));
     lf->orientation = orientFromChar(gp->strand[0]);
-    for (i=0; i<blockCount; ++i)
-	{
-	AllocVar(sf);
-	sf->start = starts[i];
-	sf->end = ends[i];
-	sf->grayIx = grayIx;
-	slAddHead(&sfList, sf);
-	}
-    slReverse(&sfList);
+
+    if(drawOptionNum>0 && zoomedToCdsColorLevel)
+        sfList = splitGenePredByCodon(chrom, lf, gp,NULL);
+    else
+        {
+        unsigned *starts = gp->exonStarts;
+        unsigned *ends = gp->exonEnds;
+        int i, blockCount = gp->exonCount;
+
+        for (i=0; i<blockCount; ++i)
+            {
+            AllocVar(sf);
+            sf->start = starts[i];
+            sf->end = ends[i];
+            sf->grayIx = grayIx;
+            slAddHead(&sfList, sf);
+            }
+        slReverse(&sfList);
+        }
+
     lf->components = sfList;
     linkedFeaturesBoundsAndGrays(lf);
     lf->tallStart = gp->cdsStart;
     lf->tallEnd = gp->cdsEnd;
+    
     slAddHead(&lfList, lf);
     genePredFree(&gp);
     }
@@ -5657,13 +5726,28 @@ for (i=0; i<count; ++i)
 }
 
 static void drawBases(struct vGfx *vg, int x, int y, int width, int height,
-	Color color, MgFont *font)
+	Color color, MgFont *font, boolean complementSeq)
 /* Draw evenly spaced bases. */
 {
 struct dnaSeq *seq = hDnaFromSeq(chromName, winStart, winEnd, dnaUpper);
+if(complementSeq)
+    complement(seq->dna,seq->size);
 spreadString(vg, x, y, width, height, color, font, seq->dna, seq->size);
 freeDnaSeq(&seq);
 }
+
+
+void drawComplementArrow( struct vGfx *vg, int leftLabel, 
+        int height, int width, int baseHeight, MgFont *font)
+{
+        if(cartUsualBoolean(cart, "complement", FALSE))
+	        vgTextRight(vg, leftLabel, height, width, baseHeight, 
+		        MG_GRAY, font, "<---");
+        else
+	        vgTextRight(vg, leftLabel, height, width, baseHeight, 
+		        MG_BLACK, font, "--->");
+}
+
 
 void makeActiveImage(struct track *trackList, char *psOutput)
 /* Make image and image map. */
@@ -5801,6 +5885,9 @@ if (withLeftLabels)
 	{
 	vgTextRight(vg, leftLabelX, y, leftLabelWidth-1, rulerHeight, 
 		    MG_BLACK, font, "Base Position");
+    if(zoomedToBaseLevel)
+        drawComplementArrow(vg,leftLabelX, y+rulerHeight,
+                leftLabelWidth-1, baseHeight, font);
 	y += basePositionHeight;
 	}
     for (track = trackList; track != NULL; track = track->next)
@@ -5990,8 +6077,17 @@ if (withRuler)
     vgDrawRulerBumpText(vg, insideX, y, rulerHeight, insideWidth, MG_BLACK, font,
 			relNumOff, winBaseCount, 0, 1);
     if (zoomedToBaseLevel)
+        {
+        Color baseColor = MG_BLACK;
+        boolean complementRulerBases = cartUsualBoolean(cart, "complement", FALSE);
+        if(complementRulerBases)
+            baseColor = MG_GRAY;
         drawBases(vg, insideX, y+rulerHeight, insideWidth, baseHeight, 
-		MG_BLACK, font);
+        baseColor, font, complementRulerBases);
+        /*make a click on the bases complement them*/
+        mapBoxToggleComplement(insideX, y+rulerHeight, insideWidth,
+                baseHeight, NULL, chromName, winStart, winEnd, "complement bases");
+        }
     vgUnclip(vg);
 
     /* Make hit boxes that will zoom program around ruler. */
@@ -6022,7 +6118,7 @@ if (withRuler)
 		ns -= (ne - seqBaseCount);
 		ne = seqBaseCount;
 		}
-	    mapBoxJumpTo(ps+insideX,y,pe-ps,basePositionHeight,
+	    mapBoxJumpTo(ps+insideX,y,pe-ps,rulerHeight,
 			 chromName, ns, ne, "3x zoom");
 	    }
 	}
@@ -6872,6 +6968,8 @@ boolean hideAll = cgiVarExists("hgt.hideAll");
 boolean showedRuler = FALSE;
 
 zoomedToBaseLevel = (winBaseCount * tl.mWidth) <= insideWidth;
+zoomedToCodonLevel = (ceil(winBaseCount/3) * tl.mWidth) <= insideWidth;
+zoomedToCdsColorLevel = (ceil(winBaseCount/30) * tl.mWidth) <= insideWidth;
 if (psOutput != NULL)
    {
    suppressHtml = TRUE;
