@@ -1690,7 +1690,7 @@ sqlFreeResult(&sr);
 hFreeConn(&conn);
 
 rnaSeq = hRnaSeq(acc);
-if (sameString("xenoMrna", table) || sameString("xenoBestMrna", table))
+if (startsWith("xeno", type))
     showSomeAlignment(psl, rnaSeq, gftDnaX);
 else
     showSomeAlignment(psl, rnaSeq, gftDna);
@@ -1753,7 +1753,6 @@ char fullTable[64];
 boolean hasBin;
 
 /* Print start of HTML. */
-puts("Content-Type:text/html\n");
 printf("<HEAD>\n<TITLE>Mouse Read %s</TITLE>\n</HEAD>\n\n", readName);
 puts("<HTML>");
 
@@ -2298,16 +2297,22 @@ char **row;
 char query[256];
 
 hgcStart("RefSeq mRNA");
-sprintf(query, "select seq from refMrna where name = '%s'", geneName);
+sprintf(query, "select name,seq from refMrna where name = '%s'", geneName);
 sr = sqlGetResult(conn, query);
 printf("<PRE><TT>");
 while ((row = sqlNextRow(sr)) != NULL)
     {
-    faWriteNext(stdout, NULL, row[0], strlen(row[0]));
+    faWriteNext(stdout, row[0], row[1], strlen(row[1]));
     }
 sqlFreeResult(&sr);
 }
 
+void cartContinueRadio(char *var, char *val, char *defaultVal)
+/* Put up radio button, checking it if it matches val */
+{
+char *oldVal = cartUsualString(cart, var, defaultVal);
+cgiMakeRadioButton(var, val, sameString(oldVal, val));
+}
 
 void htcGeneInGenome(char *geneName)
 /* Put up page that lets user display genomic sequence
@@ -2330,12 +2335,16 @@ cgiContinueHiddenVar("r");
 printf("\n");
 cgiContinueHiddenVar("o");
 printf("\n");
-printf("<INPUT TYPE=RADIO NAME=how VALUE = \"tx\" CHECKED>Transcript<BR>");
-printf("<INPUT TYPE=RADIO NAME=how VALUE = \"cds\">Coding Region Only<BR>");
-printf("<INPUT TYPE=RADIO NAME=how VALUE = \"txPlus\">Transcript + Promoter<BR>");
-printf("<INPUT TYPE=RADIO NAME=how VALUE = \"promoter\">Promoter Only<BR>");
+cartContinueRadio("hgc.gene.how", "tx", "tx");
+printf("Transcript<BR>");
+cartContinueRadio("hgc.gene.how", "cds", "tx");
+printf("Coding Region Only<BR>");
+cartContinueRadio("hgc.gene.how", "txPlus", "tx");
+printf("Transcript + Promoter<BR>");
+cartContinueRadio("hgc.gene.how", "promoter", "tx");
+printf("Promoter Only<BR>");
 printf("Promoter Size: ");
-cgiMakeIntVar("promoterSize", 1000, 6);
+cgiMakeIntVar("hgc.gene.promoterSize", 1000, 6);
 printf("<BR>");
 cgiMakeButton("submit", "submit");
 printf("</FORM>");
@@ -2380,7 +2389,7 @@ struct sqlResult *sr = NULL;
 char **row = NULL;
 struct genePred *gp = NULL;
 struct dnaSeq *seq = NULL;
-char *how = cartString(cart, "how");
+char *how = cartString(cart, "hgc.gene.how");
 int start, end, promoSize;
 boolean isRev;
 char faLine[256];
@@ -2395,7 +2404,7 @@ if ((row = sqlNextRow(sr)) != NULL)
     isRev = (gp->strand[0] == '-');
     start = gp->txStart;
     end = gp->txEnd;
-    promoSize = cartInt(cart, "promoterSize");
+    promoSize = cartInt(cart, "hgc.gene.promoterSize");
     if (sameString(how, "cds"))
         {
 	start = gp->cdsStart;
@@ -3886,7 +3895,6 @@ void chuckHtmlStart(char *title)
  * easier maintaince 
  */
 {
-printf("Content-Type: text/html\n\n<HTML><HEAD>\n");
 printf("<LINK REL=STYLESHEET TYPE=\"text/css\" href=\"http://genome-test.cse.ucsc.edu/style/blueStyle.css\" title=\"Chuck Style\">\n");
 printf("<title>%s</title>\n</head><body bgcolor=\"#f3f3ff\">",title);
 }
