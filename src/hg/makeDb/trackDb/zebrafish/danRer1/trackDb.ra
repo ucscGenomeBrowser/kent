@@ -180,3 +180,19 @@ xrefQuery select transcript,protein from %s where protein like '%s%%'
 termRegex ENSDARP[0-9]+(\.[0-9]+)?
 searchPriority 50
 
+searchTable affyZebrafish
+searchMethod exact
+searchType psl
+shortCircuit 1
+termRegex Zebrafish:.+
+searchPriority 15
+termPrefix Zebrafish:
+
+searchName affyZebrafishAbbrev
+searchTable affyZebrafish
+searchMethod exact
+searchType psl
+shortCircuit 1
+termRegex [Dr][[:alnum:]_\.]+.*_at
+searchPriority 15
+
