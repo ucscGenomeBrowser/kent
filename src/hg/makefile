@@ -106,6 +106,7 @@ UTIL_DIRS = \
 	bedSort \
 	blastToPsl \
 	borfBig \
+	checkTableCoords \
 	ctgFaToFa \
 	ctgToChromFa \
 	embossToPsl \
@@ -143,6 +144,10 @@ UTIL_DIRS = \
 	mdToNcbiLift \
 	mouseStuff \
 	mrnaToGene \
+	near/hgClusterGenes \
+	near/hgExpDistance \
+	near/hgMapViaSwissProt \
+	near/pepPredToFa \
 	nci60 \
 	overlapSelect \
 	patCount \
