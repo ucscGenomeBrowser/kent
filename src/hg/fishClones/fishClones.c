@@ -875,7 +875,7 @@ void findClonePos()
 void writeOut(FILE *of, FILE *af)
 /* Print out the fishClones.bed file */
 {
-  int score;
+  int score=0;
   struct map *m;
   struct fishClone *fc;
   struct place *p;
