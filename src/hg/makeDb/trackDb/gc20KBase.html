@@ -9,38 +9,37 @@ gene-rich areas.
 the track's graph. 
 <UL>
 <LI><B>Type of graph</B>: The default &quot;Bar&quot; setting depicts the graph
-data using filled-in bars. To switch to a view in which the data are
-represented by points or lines,
-select the 
-&quot;Points&quot; setting. 
+data using color-filled bars. To view the data as a series of points or lines, 
+select the &quot;Points&quot; setting. 
 <LI><B>y = 0.0 line</B>: Select the &quot;ON&quot; setting to display a
 line marking the 0.0 position on the graph (default is &quot;OFF&quot;).
 <LI><B>Track height</B>: To change the default display height of the graph
-in pixels, type in a value between 16 and 128
-(the default display height is 36 pixels).
-<LI><B>Vertical viewing range</B>: By default, the viewing range is set to
-the values of min: 30, max: 70.  Change these values to move this view
-window over the data.  Can be used as a threshold indicator, for example,
-enter a minimum value of 50 to view GC percent values only above 50%.
-<LI><B>Data view scaling</B>: The default &quot;Use Vertical Viewing Range
-Setting" displays the data using the parameters specified in the Vertical
-viewing range setting.  To configure the graph to automatically scale to a
+in pixels, type in a value from within the indicated range.
+<LI><B>Vertical viewing range</B>: The min and max values specify the 
+vertical portion of the graph that is displayed (default
+range is 30-70). These numbers can be used to set data threshold indicators. 
+For example, to display only those GC values greater than 50 percent, set the 
+min value to &quot;50&quot;.
+<LI><B>Data view scaling</B>: The default &quot;Use vertical viewing range
+setting&quot; option displays the data using the parameters specified in the Vertical
+viewing range setting. To configure the graph to automatically scale to a
 range defined by the minimum and maximum data points in the current 
-view, select the &quot;Auto-Scale to data view&quot; option. 
-<LI><B>Windowing function</B>: At views that are too large to show individual
-data values, the data values must be combined to produce a plot point.
-This option selects the combining function.  <em> Maximim </em> will select
-the maximum value of all the points to be combined, <em> Mean </em>
-selects the mean, <em> Minimum </em> selects the minimum of all the
-points to be combined.  (default is &quot;Mean&quot;).
-<LI><B>Smoothing window</B>: Sets the size, in pixels, of a smoothing window
-to be passed over the plot.  Can be used to smooth the edges of the
-bar plot.  This is equivalent to a trend line calculation on the graph.
-(default is &quot;OFF&quot;).
-<LI><B>Draw indicator line at y=</B>: Draw an arbitrary line on the
-graph at the selected value.  Can be used to indicate a significant threshold
-on the graph.  Use the OFF/ON menu to turn it on or off.
-(default is &quot;OFF&quot;).
+view, select the &quot;Auto-scale to data view&quot; option. 
+<LI><B>Windowing function</B>: When a  view is too large to show individual
+data values, the values must be combined to produce a plot point.
+This option specifies the combining function to be used: &quot;Maximim&quot; - 
+the maximum value of all the points to be combined, &quot;Mean&quot; - 
+the mean, or &quot;Minimum&quot; - the minimum of all the
+points to be combined (default is &quot;Mean&quot;).
+<LI><B>Smoothing window</B>: When set to a numerical value, this option 
+determines the size, in pixels, of a smoothing window
+to be passed over the plot to smooth the edges of the bars or lines.  
+This is equivalent to a trend line calculation on the graph.
+The default setting is &quot;OFF&quot;.
+<LI><B>Draw indicator line at y=</B>: When set to &quot;ON&quot;, the track
+displays an arbitrary line on the graph at the specified numerical value 
+(defaults are &quot;0&quot; and &quot;OFF&quot;). This line can be used to 
+mark a significant threshold on the graph.
 </UL></P>
 <P>
 When you have finished configuring the filter, click the <em>Submit</em> button.
@@ -49,6 +48,5 @@ When you have finished configuring the filter, click the <em>Submit</em> button.
 <H2>Credits</H2>
 <P> The data and presentation of this graph were prepared by
 Hiram Clawson (<A HREF="mailto:&#104;&#105;&#114;a&#109;&#64;&#115;&#111;&#101;
-.&#117;&#99;&#115;&#99;.&#101;&#100;u">
-&#104;&#105;&#114;a&#109;&#64;&#115;&#111;&#101;.&#117;&#99;&#115;&#99;.
+.&#117;&#99;&#115;&#99;.&#101;&#100;u">&#104;&#105;&#114;a&#109;&#64;&#115;&#111;&#101;.&#117;&#99;&#115;&#99;.
 &#101;&#100;u</A>).
