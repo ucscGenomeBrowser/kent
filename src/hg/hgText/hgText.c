@@ -33,7 +33,7 @@
 #include "botDelay.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: hgText.c,v 1.124 2004/03/24 19:06:58 hiram Exp $";
+static char const rcsid[] = "$Id: hgText.c,v 1.125 2004/03/24 21:22:10 hiram Exp $";
 
 /* sources of tracks, other than the current database: */
 static char *hgFixed = "hgFixed";
@@ -245,7 +245,8 @@ double wigDataConstraint[2][2] = {
 #define WIG_TABLE_1	0
 #define WIG_TABLE_2	1
 
-boolean (*wiggleCompare[2])(int tableId, double value);
+boolean (*wiggleCompare[2])(int tableId, double value, boolean summaryOnly,
+    struct wiggle *wiggle);
 
 void storeStringIfSet(char *var)
 /* If var is in CGI, store it in cart. */
@@ -1768,34 +1769,80 @@ if (numLeftParen != numRightParen)
 slFreeList(&tokList);
 }
 
-static boolean wigInRange(int tableId, double value)
+/*********   wiggle compare functions   ***********************************/
+static boolean wigInRange(int tableId, double value, boolean summaryOnly,
+    struct wiggle *wiggle)
 {
-return (value >= wigDataConstraint[tableId][0] &&
-		value <= wigDataConstraint[tableId][1]);
+boolean ret = FALSE;
+if (summaryOnly)
+    ret = ((wiggle->lowerLimit <= wigDataConstraint[tableId][1]) &&
+      (wiggle->lowerLimit+wiggle->dataRange >= wigDataConstraint[tableId][0]));
+else
+    ret = (value >= wigDataConstraint[tableId][0] &&
+	value <= wigDataConstraint[tableId][1]);
+return ret;
 }
-static boolean wigLessThan(int tableId, double value)
+static boolean wigLessThan(int tableId, double value, boolean summaryOnly,
+    struct wiggle *wiggle)
 {
-return (value < wigDataConstraint[tableId][0]);
+boolean ret = FALSE;
+if (summaryOnly)
+   ret = (wiggle->lowerLimit < wigDataConstraint[tableId][0]);
+else
+   ret = (value < wigDataConstraint[tableId][0]);
+return ret;
 }
-static boolean wigLessEqual(int tableId, double value)
+static boolean wigLessEqual(int tableId, double value, boolean summaryOnly,
+    struct wiggle *wiggle)
 {
-return (value <= wigDataConstraint[tableId][0]);
+boolean ret = FALSE;
+if (summaryOnly)
+   ret = (wiggle->lowerLimit <= wigDataConstraint[tableId][0]);
+else
+   ret = (value <= wigDataConstraint[tableId][0]);
+return ret;
 }
-static boolean wigEqual(int tableId, double value)
+static boolean wigEqual(int tableId, double value, boolean summaryOnly,
+    struct wiggle *wiggle)
 {
-return (value == wigDataConstraint[tableId][0]);
+boolean ret = FALSE;
+if (summaryOnly)
+   ret = ((wiggle->lowerLimit < wigDataConstraint[tableId][0]) &&
+	(wiggle->lowerLimit+wiggle->dataRange > wigDataConstraint[tableId][0]));
+else
+   ret = (value == wigDataConstraint[tableId][0]);
+return ret;
 }
-static boolean wigNotEqual(int tableId, double value)
+static boolean wigNotEqual(int tableId, double value, boolean summaryOnly,
+    struct wiggle *wiggle)
 {
-return (value != wigDataConstraint[tableId][0]);
+boolean ret = FALSE;
+if (summaryOnly)
+   ret = ((wiggle->lowerLimit > wigDataConstraint[tableId][0]) ||
+	(wiggle->lowerLimit+wiggle->dataRange < wigDataConstraint[tableId][0]));
+else
+   ret = (value != wigDataConstraint[tableId][0]);
+return ret;
 }
-static boolean wigGreaterEqual(int tableId, double value)
+static boolean wigGreaterEqual(int tableId, double value, boolean summaryOnly,
+    struct wiggle *wiggle)
 {
-return (value >= wigDataConstraint[tableId][0]);
+boolean ret = FALSE;
+if (summaryOnly)
+   ret=(wiggle->lowerLimit+wiggle->dataRange >= wigDataConstraint[tableId][0]);
+else
+   ret = (value >= wigDataConstraint[tableId][0]);
+return ret;
 }
-static boolean wigGreaterThan(int tableId, double value)
+static boolean wigGreaterThan(int tableId, double value, boolean summaryOnly,
+    struct wiggle *wiggle)
 {
-return (value > wigDataConstraint[tableId][0]);
+boolean ret = FALSE;
+if (summaryOnly)
+   ret = (wiggle->lowerLimit+wiggle->dataRange > wigDataConstraint[tableId][0]);
+else
+   ret = (value > wigDataConstraint[tableId][0]);
+return ret;
 }
 
 void wiggleConstraints(char *cmp, char *pat, int tableIndex)
