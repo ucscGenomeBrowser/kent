@@ -28,7 +28,7 @@
 			<IMG SRC="../images/h_browser.jpg" ALIGN="absmiddle" BORDER="0" NAME="BROWSER" ALT="&nbsp;&nbsp; Genome Browser"></A></TD>
 			
 		<TD WIDTH=100>
-			<A HREF="../cgi-bin/hgBlat?command=start&db=hg7" onMouseOver="SEARCH.src='../images/hl_blat.jpg'" onMouseOut="SEARCH.src='../images/h_blat.jpg'">
+			<A HREF="../cgi-bin/hgBlat?command=start&db=hg8" onMouseOver="SEARCH.src='../images/hl_blat.jpg'" onMouseOut="SEARCH.src='../images/h_blat.jpg'">
 			<IMG SRC="../images/h_blat.jpg" ALIGN="absmiddle" BORDER="0" NAME="SEARCH" ALT="&nbsp;&nbsp; BLAT Search"></A></TD>
 			
 		<TD WIDTH=100>
@@ -55,19 +55,19 @@
 
 <CENTER><H2>Human Genome Browser</H2>
 <PRE>Web tool created by <A HREF="http://www.cse.ucsc.edu/~kent">Jim Kent</A>, Charles Sugnet, and <A HREF="http://www.cse.ucsc.edu/~booch">Terry Furey</A> of UC Santa Cruz.
-1 April 2001 <A HREF="http://genome.cse.ucsc.edu/index.html">draft assembly</A> of the human genome
+6 August 2001 preliminary <A HREF="http://genome.cse.ucsc.edu/index.html">draft assembly</A> of the human genome
 </PRE></CENTER>
 <P>
 Please enter a position in the genome, set your preferred window width, and press the submit button:
-(Use <A HREF="../cgi-bin/hgBlat?db=hg7">BLAT Search</A> to locate a particular sequence in the genome.)
+(Use <A HREF="../cgi-bin/hgBlat?db=hg8">BLAT Search</A> to locate a particular sequence in the genome.)
 You can also <A HREF="#custom">add your own tracks</A>.
 
 <CENTER><P>genome position: 
-<INPUT TYPE="TEX" NAME="position" SIZE="34" VALUE="chr9:2954936-2989310"> 
+<INPUT TYPE="TEX" NAME="position" SIZE="34" VALUE="chr3:212340692-212346763"> 
  pixel width 
 <INPUT TYPE="TEXT" NAME="pix" SIZE="4" VALUE="610"> 
 <INPUT TYPE="SUBMIT" NAME="Submit" VALUE="Submit"> 
-<INPUT TYPE="HIDDEN" NAME="db" VALUE="hg7">
+<INPUT TYPE="HIDDEN" NAME="db" VALUE="hg8">
 
 </P></CENTER>
 
@@ -161,7 +161,6 @@ annotations in <A HREF="help/customTrack.html">
 formats described here</A>.  Annotations can be stored in files or
 pasted in. You can also paste in a URL or list of URLs which refer to 
 files in one of the supported formats.</P>
-
 
 	Annotation File: <INPUT TYPE=FILE NAME="customFile"><BR>
 	<TEXTAREA NAME="customText" ROWS=14 COLS=80></TEXTAREA>
