@@ -61,6 +61,9 @@ struct dnaSeq *hExtSeq(char *acc);
 struct dnaSeq *hRnaSeq(char *acc);
 /* Return sequence for RNA. */
 
+struct hash *hCtgPosHash();
+/* Return hash of ctgPos from current database keyed by contig name. */
+
 char *hFreezeFromDb(char *database);
 /* return the freeze for the database version. 
    For example: "db6" returns "Dec 12, 2000". If database

@@ -17,6 +17,7 @@ struct customTrack
     struct browserTable *bt;	/* Browser table description of track. */
     struct bed *bedList;	/* List of beds. */
     int fieldCount;		/* Number of fields in bed. */
+    boolean needsLift;		/* True if coordinates need lifting. */
     };
 
 struct customTrack *customTracksFromText(char *text);
@@ -28,6 +29,15 @@ struct customTrack *customTracksFromFile(char *text);
 struct customTrack *customTracksParse(char *text, boolean isFile);
 /* Parse text into a custom set of tracks.  Text parameter is a
  * file name if 'isFile' is set.*/
+
+void customTrackSave(struct customTrack *trackList, char *fileName);
+/* Save out custom tracks. */
+
+void customTrackLift(struct customTrack *trackList, struct hash *ctgPosHash);
+/* Lift tracks based on hash of ctgPos. */
+
+boolean customTrackNeedsLift(struct customTrack *trackList);
+/* Return TRUE if any track in list needs a lift. */
 
 struct bed *customTrackBed(char *row[13], int wordCount, struct hash *chromHash, int lineIx);
 /* Convert a row of strings to a bed. */
