@@ -12,7 +12,7 @@ RefSeq track [FIXME - should this be Known Genes?], which is a mixture of known,
 The genome-wide statistical distribution is based on the exonCount field of the 
 [FIXME - verify table name] refGene table, which contains the exon number for 
 the RefSeq genes displayed in the Genome Browser. 
-This data is somewhat distorted because a small number of alternatively 
+These data are somewhat distorted because a small number of alternatively 
 spliced genes are counted more than once, and the first and last 
 exons of many predicted genes are incomplete.
 <P>
@@ -23,7 +23,7 @@ included. While further work will improve and add many gene models, the overall
 affect on statistics may be slight. 
 <P>
 Reference mRNAs do not always align fully anywhere in the genome
-for a variety of reasons. It is worth distinguishing gaps in the
+for a variety of reasons as determined by Blat. It is worth distinguishing gaps in the
 genomic sequence that may disappear in later assemblies and indel 
 polymorphisms in the mRNA relative to the genome. For example, genomic 
 PRNP is 24 bp shorter than 98% of mRNAs from random subjects. 
@@ -37,14 +37,14 @@ consistency requirements.
 On the Proteome Browser display, the amino acid 
 sequence is derived from its experimental evidence, the mRNA, 
 whereas the exon track comes from the genomic alignment. When a 
-piece of the mRNA can't be aligned, it is grayed out and not 
+piece of the mRNA cannot be aligned, it is grayed out and not 
 assigned an exon number. 
 This results in unstable exon numbers downstream, and perhaps gives unfamiliar 
 numbers to well-known exons in certain genes assigned in the experimental literature.  
 However, exon numbering is dynamic, as new 5' UTR exons are often found over 
 time. Numbering exons from the start codon is vulnerable to alternative translation 
 starts. With alternative splicing, there may not be a consistently dominant or 
-naturally canonical form in all tissues to number from. Thus, there is no consensus on 
+naturally canonical form in all tissues to initiate numbering. Thus, there is no consensus on 
 exon numbering at this time.  
 <P>
 The information presented in the Exons track can be verified and adjusted by
@@ -56,11 +56,11 @@ indicate uncertainty through the other cases.  Also, if the mRNA coding has
 an insertion relative to the base genomic
 sequence, it is indicated by a gray bar in the Exon display.
 <P>
-It is advisable to plac3 some sort of cutoff on mRNA-derived protein 
+It is advisable to place some sort of cutoff on mRNA-derived protein 
 length. Proteins under 100 amino acids are often fragments, mispredictions, or 
 simply artifacts. To set the cut-off objectively, the length distribution plot 
 was sampled for hand-curation at the low end (5 putative proteins in each 
-block-of-ten range, e.g., 30-40 amino acids) to examine the evidence. The quality 
+block-of-ten range, e.g., 30 - 40 amino acids) to examine the evidence. The quality 
 increases 
 monotonically with greater length; the cutoff was set at 80% or greater having 
 meaningful other supporting documentation. 

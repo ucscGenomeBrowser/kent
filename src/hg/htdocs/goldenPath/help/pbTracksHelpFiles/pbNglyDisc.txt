@@ -20,7 +20,7 @@ moieties are not always fully built-out. The three amino acids involved are
 very common; therefore, many chance occurrences happen, which can be
 estimated as occurrence of the reversed motif. Thus, the number of
 glycosylation sites used genome-wide can be estimated as the excess,
-(NxT+NxS) -(TxN +SxN), x not P. However, this does not address
+(NxT + NxS) - (TxN + SxN), x not P. However, this does not address
 glycosylation of specific motifs. Some glycosylation sites are quite
 ancient, but others have been gained or lost over moderate time scales in
 paralog familes.
@@ -28,8 +28,8 @@ paralog familes.
 Conservation of a potential motif in mammals provides only weak support for
 its utilization. Because overall protein conservation is 85% between -- for
 example -- mouse and human, the 2-amino-acid motif would be invariant 72% of 
-the time
-regardless. Even observed conservation between pufferfish and human is not
+the time without its necessarily being conserved due to selection. Even observed 
+conservation between pufferfish and human is not
 persuasive (50% chance). The motif might be conserved for catalytic or
 structural reasons, not glycosylation. However, a persuasive case can
 sometimes be made from integration of all available information on a given

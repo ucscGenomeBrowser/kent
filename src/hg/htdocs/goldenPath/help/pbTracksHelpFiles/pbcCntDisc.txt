@@ -38,7 +38,8 @@ in subfamily lineages and no ancient disulfides are retained. Conserved
 cysteines that are not part of an active site are distinguishable from sporadic
 cysteines and are likely in a disulfide.
 If the family is large enough and the number of cysteines 
-fairly small, the pairing pattern can sometimes be inferred, starting with the 2 
+fairly small, the pairing pattern can sometimes be inferred, starting with the
+two 
 best-conserved cysteines found in the deepest alignment. Other proteins, with 
 complex disulfide knots, are intractable to homology methods. 
 <P>
