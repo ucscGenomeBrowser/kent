@@ -25,10 +25,10 @@ else
     return FALSE;
 }
 
-static boolean promoterQualifier(char *qualifier, char *extra, int *retSize)
-/* Return TRUE if it's a promoter qualifier. */
+static boolean upstreamQualifier(char *qualifier, char *extra, int *retSize)
+/* Return TRUE if it's a upstream qualifier. */
 {
-return fetchQualifiers("promoter", qualifier, extra, retSize);
+return fetchQualifiers("upstream", qualifier, extra, retSize);
 }
 
 static boolean exonQualifier(char *qualifier, char *extra, int *retSize)
@@ -63,17 +63,17 @@ static void fbOrPslBits(Bits *bits, int chromSize, struct sqlResult *sr, int row
 struct psl *psl;
 char **row;
 int i, blockCount, *tStarts, *blockSizes, s, e, w;
-boolean doPromo, doExon;
+boolean doUp, doExon;
 int promoSize, extraSize = 0;
 
-doPromo = promoterQualifier(qualifier, extra, &promoSize);
+doUp = upstreamQualifier(qualifier, extra, &promoSize);
 doExon = exonQualifier(qualifier, extra, &extraSize);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     psl = pslLoad(row+rowOffset);
     if (psl->tSize != chromSize)
         errAbort("Inconsistent chromSize (%d) and tSize (%d) in fbOrPslBits", chromSize, psl->tSize);
-    if (doPromo)
+    if (doUp)
         {
 	if (psl->strand[0] == '-')
 	    bitSetRange(bits, psl->tEnd, promoSize);
@@ -133,10 +133,10 @@ static void fbOrGenePredBits(Bits *bits, int chromSize, struct sqlResult *sr, in
 struct genePred *gp;
 char **row;
 int i, count, s, e, w, *starts, *ends;
-boolean doPromo, doCds = FALSE, doExon;
+boolean doUp, doCds = FALSE, doExon;
 int promoSize, extraSize = 0;
 
-if ((doPromo = promoterQualifier(qualifier, extra, &promoSize)) != FALSE)
+if ((doUp = upstreamQualifier(qualifier, extra, &promoSize)) != FALSE)
     {
     }
 else if ((doCds = cdsQualifier(qualifier, extra, &extraSize)) != FALSE)
@@ -148,7 +148,7 @@ else if ((doExon = exonQualifier(qualifier, extra, &extraSize)) != FALSE)
 while ((row = sqlNextRow(sr)) != NULL)
     {
     gp = genePredLoad(row+rowOffset);
-    if (doPromo)
+    if (doUp)
 	{
 	if (gp->strand[0] == '-')
 	    bitSetRange(bits, gp->txEnd, promoSize);
