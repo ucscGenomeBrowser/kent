@@ -59,6 +59,7 @@
 #include "fishClones.h"
 #include "featureBits.h"
 #include "web.h"
+#include "jaxOrtholog.h"
 
 #define CHUCK_CODE 1
 #define ROGIC_CODE 1
@@ -2579,6 +2580,20 @@ printf("<B>GeneCards:</B> ");
 printf("<A HREF = \"http://bioinfo.weizmann.ac.il/cards-bin/cardsearch.pl?search=%s\" TARGET=_blank>",
 	rl->name);
 printf("%s</A><BR>\n", rl->name);
+if (hTableExists("jaxOrtholog"))
+    {
+    struct jaxOrtholog jo;
+    sprintf(query, "select * from jaxOrtholog where humanSymbol='%s'", rl->name);
+    sr = sqlGetResult(conn, query);
+    while ((row = sqlNextRow(sr)) != NULL)
+        {
+	jaxOrthologStaticLoad(row, &jo);
+	printf("<B>Mouse Ortholog:</B> ");
+	printf("<A HREF=\"http://www.informatics.jax.org/searches/accession_report.cgi?id=%s\" target=_BLANK>", jo.mgiId);
+	printf("%s</A><BR>\n", jo.mouseSymbol);
+	}
+    sqlFreeResult(&sr);
+    }
 htmlHorizontalLine();
 
 geneShowPosAndLinks(rl->mrnaAcc, rl->protAcc, track, "refPep", "htcTranslatedProtein",
@@ -2594,6 +2609,7 @@ puts(
 puts(
    "<P>Additional information may be available by clicking on the "
    "mRNA associated with this gene in the main browser window.</P>");
+hFreeConn(&conn);
 webEnd();
 }
 
@@ -2718,9 +2734,10 @@ s = e+1;
 *retPos = atoi(s);
 }
 
-void doGenomicDups(char *track, char *dupName)
+void doGenomicDups(struct trackDb *tdb, char *dupName)
 /* Handle click on genomic dup track. */
 {
+char *track = tdb->tableName;
 struct genomicDups dup;
 char query[512];
 struct sqlConnection *conn = hAllocConn();
@@ -2728,8 +2745,6 @@ struct sqlResult *sr;
 char **row;
 char oChrom[64];
 int oStart;
-
-
 
 webStart("Genomic Duplications");
 printf("<H2>Genomic Duplication</H2>\n");
@@ -2762,14 +2777,7 @@ else
     {
     puts("<P>Click directly on a repeat for specific information on that repeat</P>");
     }
-puts("This region was detected as a duplication within the golden path. "
-     "Regions with more than 1000 bases of non-RepeatMasked sequence and "
-     "greater than 90% pairwise similarity are included in this track. "
-     "Duplications of 99% or greater similarity are shown as orange. "
-     "Duplications of 98% - 99% similarity are shown as yellow. "
-     "Duplications of 90% - 98% similarity are shown as shades of gray. "
-     "The data was provided by <A HREF=\"mailto:jab@cwru.edu\">Evan Eichler "
-     "and Jeff Bailey</A>.");
+puts(tdb->html);
 hFreeConn(&conn);
 webEnd();
 }
@@ -4565,10 +4573,10 @@ else if (sameWord(track, "sanger20"))
     }
 else if (sameWord(track, "genomicDups"))
     {
-    doGenomicDups(track, item);
+    doGenomicDups(tdb, item);
     }
 else if (sameWord(track, "blatMouse") || sameWord(track, "bestMouse")
-  || sameWord(track, "blastzTest"))
+  || sameWord(track, "blastzTest") || sameWord(track, "blastzTest2"))
     {
     doBlatMouse(tdb, item);
     }
