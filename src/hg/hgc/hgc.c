@@ -139,7 +139,7 @@
 #include "HInv.h"
 #include "bed6FloatScore.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.672 2004/06/21 07:02:34 galt Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.673 2004/06/21 07:17:30 galt Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -5350,7 +5350,7 @@ int cdsStart, cdsEnd;
 int rowOffset = hOffsetPastBin(seqName, table);
 
 hgcStart("DNA Near Gene");
-sprintf(query, "select * from %s where name = '%s'", table, geneName);
+safef(query, sizeof(query), "select * from %s where name = '%s'", table, geneName);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
