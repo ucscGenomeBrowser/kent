@@ -14,8 +14,9 @@
 </TABLE>
 
 <P>
-The Sept. 2004 <em>Bos taurus</em> draft assembly was obtained from 
-the Baylor Medical College v.1.0. 
+The Sept. 2004 <em>Bos taurus</em> draft assembly (Btau_1.0) was obtained from 
+the Baylor College of Medicine Human Genome Sequencing Center.
+
 
 <H3>Sample position queries</H3>
 <P>
@@ -38,18 +39,46 @@ TARGET=_blank>User's Guide</A> for more information.
         <TD WIDTH=14>&nbsp;</TD>
        	<TD VALIGN=Top>Displays all of SCAFFOLD100 (on an unmapped genome assembly)</TD>
     </TR>
-    <TR><TD VALIGN=Top NOWRAP>SCAFFOLD1000:1-10,000</TD>
+    <TR><TD VALIGN=Top NOWRAP>SCAFFOLD5:21,000-22,500</TD>
        	<TD WIDTH=14>&nbsp;</TD>
-       	<TD VALIGN=Top>Displays the first 10,000 bases of SCAFFOLD1000 (on an unmapped genome assembly)</TD>
+       	<TD VALIGN=Top>Displays a region of SCAFFOLD5 with a cluster of Spliced ESTs</TD>
     </TR>
     <TR><TD VALIGN=Top><br></TD></TR>
+
+    <TR><TD VALIGN=Top NOWRAP>AF527382</TD>
+       	<TD WIDTH=14></TD>
+      	<TD VALIGN=Top>Displays mRNA with GenBank accession AF527382 (ankyrin repeat and SOCS box)</TD>
+    </TR>
+
+    <TR><TD VALIGN=Top NOWRAP>PCDHB1</TD>
+    	<TD WIDTH=14></TD>
+       	<TD VALIGN=Top>Displays human protocadherins aligned to SCAFFOLD16</TD>
+    </TR>
+
+    <TR><TD VALIGN=Top NOWRAP>McDaneld,T.G.</TD>
+       	<TD WIDTH=14></TD>
+       	<TD VALIGN=Top>Lists mRNAs deposited by co-author T.G. McDaneld</TD>
+    </TR>
+    <TR><TD VALIGN=Top><br></TD></TR>
+    <TR><TD COLSPAN="3"> Use this last format for author queries. Although GenBank 
+			requires the search format <em>McDaneld TG</em>, internally it uses 
+			the format <em>McDaneld,T.G.</em>.</TD>
+    </TR>
 </TABLE>
 
 <HR>
 <H3>Assembly details</H3>
 <P>
-This whole genome shotgun assembly was constructed with the Baylor assembler,
-Atlas, achieving a coverage of 3X.   It contains 470,000 scaffolds.
+The Btau_1.0 release was produced by assembling whole genome shotgun
+reads with the Atlas genome assembly system.
+Several WGS libraries, with
+inserts of 2-4 kb, and 4-6 kb, were used to produce the data. About 15
+million reads were assembled, representing about 9 Gb of sequence and
+about 3x coverage of the (clonable) bovine genome. Highly repeated
+sequences and sequences from BAC clones were omitted from this assembly
+and will be placed in a subsequent version of the draft sequence.
+
+The assembly contains 470,000 scaffolds.
 <P>
 For more information about the bosTau1 assembly, see the Baylor 
 <A HREF="http://www.hgsc.bcm.tmc.edu/projects/bovine" 
