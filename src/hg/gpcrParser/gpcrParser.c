@@ -1,4 +1,4 @@
-/** proteinParser.c - Parses transmembrane cooridnates, outputs to xml file. */
+/** gpcrParser.c - Parses transmembrane cooridnates, outputs to xml file. */
 #include "common.h"
 #include "memalloc.h"
 
