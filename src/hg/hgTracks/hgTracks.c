@@ -69,7 +69,7 @@
 #include "grp.h"
 #include "chromColors.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.606 2003/09/29 19:47:38 braney Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.607 2003/09/30 00:07:53 braney Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
@@ -1068,7 +1068,7 @@ int x1,x2;
 int shortOff = 2, shortHeight = heightPer-4;
 int tallStart, tallEnd, s, e, e2, s2;
 Color bColor;
-int intronGap = atoi(trackDbSettingOrDefault(tg->tdb, "intronGap", "0"));
+int intronGap = 0;
 boolean chainLines = ((vis != tvDense)&&(tg->subType == lfSubChain));
 boolean hideLine = ((tg->subType == lfSubChain) || 
 	((vis == tvDense) && (tg->subType == lfSubXeno)));
@@ -1077,7 +1077,8 @@ int midY1 = midY - (heightPer>>2);
 int midY2 = midY + (heightPer>>2);
 int w;
 
-intronGap = (vis == tvDense) ? 0 : intronGap;
+if ((tg->tdb != NULL) && (vis != tvDense))
+    intronGap = atoi(trackDbSettingOrDefault(tg->tdb, "intronGap", "0"));
 
 if (chainLines && (vis == tvSquish))
     {
