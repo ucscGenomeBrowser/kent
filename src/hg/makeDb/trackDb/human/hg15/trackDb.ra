@@ -320,7 +320,7 @@ longLabel Boneheaded chain of MammalNotHuman tblast
 group x
 priority 1101
 visibility hide
-type psl xeno
+type psl protein
 
 track chesChordataPsl
 shortLabel chesChordataPsl
@@ -328,7 +328,7 @@ longLabel Boneheaded chain of ChordataNotHuman tblast
 group x
 priority 1101
 visibility hide
-type psl xeno
+type psl protein
 
 track chesMammalBlat
 shortLabel chesMammalBlat
