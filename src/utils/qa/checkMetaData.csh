@@ -15,7 +15,7 @@ set dbTrunc=""
 
 if ($#argv == 1 || $#argv == 3) then
   set db=$argv[1]
-  set dbTrunc=`echo $db | sed -e "s/[0-9]//"`
+  set dbTrunc=`echo $db | sed -e "s/[0-9]*//"`
 else
   # no command line args
   echo
