@@ -2,7 +2,7 @@
 #
 name arbExpn
 shortLabel Expression (Arbeitman)
-longLabel Difference in expression with selected gene
+longLabel Difference in Expression with Selected Gene
 type pair arbExpDistance query target distance 1
 priority 1
 
