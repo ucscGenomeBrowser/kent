@@ -44,6 +44,7 @@ group rna
 priority 54
 visibility pack
 spectrum on
+intronGap 30
 type psl .
 url http://www.wormbase.org/db/gene/gene?name=$$
 
