@@ -40,7 +40,7 @@
 
 #define	NO_DATA	128
 
-static char const rcsid[] = "$Id: wigAsciiToBinary.c,v 1.5 2003/09/19 21:17:13 hiram Exp $";
+static char const rcsid[] = "$Id: wigAsciiToBinary.c,v 1.6 2003/09/19 23:39:12 hiram Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -96,9 +96,9 @@ errAbort(
     if( bincount ) { \
 	chromEnd = chromStart + (bincount * dataSpan); \
 	fprintf( wigout, \
-"%s\t%llu\t%llu\t%s_%llu_%s\t%d\t%c\t%llu\t%llu\t%llu\t%s\n", \
+"%s\t%llu\t%llu\t%s.%llu\t%d\t%c\t%llu\t%llu\t%llu\t%s\n", \
 	    chromName, chromStart+add_offset, chromEnd+add_offset, \
-	    featureName, rowCount, spanName, maxScore, strand, dataSpan, \
+	    featureName, rowCount, maxScore, strand, dataSpan, \
 	    bincount, fileOffsetBegin, binfile ); \
 	++rowCount; \
 	} \
@@ -131,7 +131,7 @@ char *chromName = (char *) NULL;	/* pseudo bed-6 data to follow */
 unsigned long long chromStart = 0;	/* for table row data */
 unsigned long long chromEnd = 0;	/* for table row data */
 char strand = '+';			/* may never use - strand ? */
-char spanName[64];			/* short-hand name for dataSpan */
+/* char spanName[64];			/* short-hand name for dataSpan */
 char featureName[254];			/* the name of this feature */
 
 /*	for each input data file	*/
@@ -141,6 +141,7 @@ for( i = 1; i < argc; ++i )
     /* let's shorten the dataSpan name which will be used in the
      * "Name of item" column
      */
+    /*	the spanName idea is currently unused
     if ( dataSpan < 1024 )
 	{
 	    snprintf( spanName, sizeof(spanName)-1, "%llu", dataSpan );
@@ -153,6 +154,7 @@ for( i = 1; i < argc; ++i )
 	    snprintf( spanName, sizeof(spanName)-1, "%lluG",
 		    dataSpan/(1024*1024*1024) );
 	}
+    */
     /*	Is the name of this feature specified ?	*/
     if( name )
 	{
