@@ -17,7 +17,7 @@
 #include "trans3.h"
 #include "binRange.h"
 
-static char const rcsid[] = "$Id: genoFind.c,v 1.17 2004/06/17 01:43:16 kate Exp $";
+static char const rcsid[] = "$Id: genoFind.c,v 1.18 2004/12/09 04:18:39 kent Exp $";
 
 static int blockSize = 1024;
 static int blockShift = 10;
@@ -2140,8 +2140,8 @@ for (fTileIx=0; fTileIx<fTileCount; ++fTileIx)
 	    struct gfClump *clump;
 	    AllocVar(clump);
 	    clump->target = bkEl->val;
-	    clump->tStart = bkEl->start + clump->target->start;
-	    clump->tEnd = bkEl->end + clump->target->start;
+	    clump->tStart = bkEl->start;
+	    clump->tEnd = bkEl->end;
 	    slAddHead(&clumpList, clump);
 	    }
 	slFreeList(&bkList);
