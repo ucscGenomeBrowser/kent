@@ -801,7 +801,6 @@ cat > jkStuff/zipChroms.csh << 'EOF'
 #	Saving bed.tab
 #	Loading panTro1
 
-<<<<<<< makePanTro1.doc
 
 # CPGISLANDS (DONE - 2004-01-26 - kate)
     ssh kksilo
@@ -906,7 +905,9 @@ altColor 255,128,0
 defaultViewLimits 30:70
 type wig 0 100 
 
-# GENERATE OOC FILE FOR CHIMP MRNA ALIGNMENTS
+
+# GENERATE OOC FILE FOR CHIMP MRNA ALIGNMENTS (DONE 2004-01-30 kate)
+    # Note: have MarkD add ooc file to scripts, and redo chimp mrna alignments
     ssh kksilo
     cd /cluster/data/panTro1
     ls ?{,?}/*.fa > jkStuff/chrom.lst
@@ -914,4 +915,99 @@ type wig 0 100
         -tileSize=11 -makeOoc=11.ooc -repMatch=1024
     cp 11.ooc /cluster/bluearc/hg/hg/chimp11.ooc
 
-This should do the trick.
+    # redo chimp mrna's
+    ssh eieio
+    cd /cluster/bluearc/genbank/work
+    mv initial.panTro1 initial.panTro1.genbank.est
+    cd /cluster/data/genbank
+    nice bin/gbAlignStep -iserver=no  \
+	-srcDb=genbank -type=mrna -verbose=1 -initial panTro1
+
+    # Load the results 
+    ssh hgwdev
+    cd /cluster/data/genbank
+    nice bin/gbDbLoadStep -verbose=1 -drop -initialLoad panTro1
+
+    # restart EST's (process dropped out for some reason)
+    ssh eieio
+    cd /cluster/bluearc/genbank/work
+    mv initial.panTro1 initial.panTro1.genbank.mrna2
+    mv initial.panTro1.genbank.est initial.panTro1
+    cd /cluster/data/genbank
+    nice bin/gbAlignStep -iserver=no  -continue=finish \
+	-srcDb=genbank -type=est -verbose=1 -initial panTro1
+    
+
+
+# CREATING QUALITY SCORE TRACK
+
+    # Create compressed scaffold quality file
+    ssh kksilo
+    cd /cluster/data/panTro1
+    zcat contigs.quals.gz | qaToQac stdin stdout | \
+    	chimpSuperQuals assembly.agp stdin scaffolds.qac
+    # qaToQac contigs.quals stdout | chimpSuperQuals assembly.agp stdin scaffolds.qac
+    mkdir -p bed/qual/{wigData,dataLimits}
+cat > jkStuff/chromQuals.csh << 'EOF'
+    foreach c (?{,?})
+        echo "chr$c quality scores"
+        if (-e $c/chr$c.agp) then
+            chimpChromQuals $c/chr$c.agp scaffolds.qac $c/chr$c.qac
+            qacToWig $c/chr$c.qac -name=chr$c stdout | \
+                wigAsciiToBinary -dataSpan=1 -chrom=chr$c \
+                    -wibFile=bed/qual/wigData/qual_$c -name=$c stdin > \
+                                bed/qual/dataLimits/chr$c
+        endif
+        if (-e $c/chr${c}_random.agp) then
+            chimpChromQuals $c/chr${c}_random.agp \
+                scaffolds.qac $c/chr${c}_random.qac
+            qacToWig $c/chr${c}_random.qac -name=chr${c}_random stdout | \
+                wigAsciiToBinary -dataSpan=1 -chrom=chr${c}_random \
+                    -wibFile=bed/qual/wigData/qual_${c}r -name=${c}r stdin > \
+                                bed/qual/dataLimits/chr${c}_random
+        endif
+    end
+'EOF'
+    csh jkStuff/chromQuals.csh >& jkStuff/chromQuals.log &
+    tail -100f jkStuff/chromQuals.log
+
+    # Note: can verify size of chrom qual files by comparing wc to 
+    # chrom length -- subtracting out length of trailing gap when doing this
+    # as chimpChromQuals doesn't add quality scores for this
+
+    # load wiggle into database
+    ssh hgwdev
+    cd /cluster/data/panTro1/bed/qual
+    hgLoadWiggle panTro1 quality wigData/*.wig
+    #	create symlinks for .wib files
+    mkdir /gbdb/panTro1/wib
+    ln -s `pwd`/wigData/*.wib /gbdb/panTro1/wib
+    #	the trackDb entry
+track quality
+shortLabel Quality Scores
+longLabel Quality Scores
+group map
+priority 23.6
+visibility hide
+autoScaleDefault Off
+maxHeightPixels 128:36:16
+graphTypeDefault Bar
+gridDefault OFF
+color 0,128,255
+altColor 255,128,0
+type wig 0 100 
+
+
+# HUMAN ALIGNMENTS (IN PROGRESS 2004-02-01 kate)
+
+    # lift hg16/pt0 blat alignments to chimp chroms, and swap target/query
+    ssh kksilo
+    cd /cluster/data/panTro1
+    mkdir -p bed/blatHg16.pt0.swap/chrom
+    liftUp -type=.psl -pslQ stdout jkStuff/scaffolds.lft warn \
+        /cluster/data/pt0/bed/blatHg16.scaffolds/chrom/*.psl | \
+            pslCat stdin stdout \|
+            pslSwap -keepStrand stdin stdout | \
+                pslSortAcc nohead bed/blatHg16.pt0.swap/chrom \
+                                  bed/blatHg16.pt0.swap/temp stdin
+
