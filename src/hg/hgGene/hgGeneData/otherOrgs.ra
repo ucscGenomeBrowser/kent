@@ -17,6 +17,14 @@ url ../cgi-bin/hgTracks?org=mouse&position=%s
 hgsid on
 priority 20
 
+name rat
+shortLabel Rat
+tables rnBlastTab 
+idSql select target from rnBlastTab where query = '%s'
+url ../cgi-bin/hgTracks?org=rat&position=%s
+hgsid on
+priority 25
+
 name zebrafish
 shortLabel Zebrafish
 tables drBlastTab
