@@ -22,7 +22,7 @@ public class MGCCheck {
   *  Runs program to check mgc machine : all assemblies,
   *    all tracks, multiple positions and density views.
   */
-  public static void main(String[] args) {
+  public static void main(String[] args) throws Exception {
 
     boolean debug = false;
 
@@ -30,17 +30,12 @@ public class MGCCheck {
 
     SimpleDateFormat dateFormat = new SimpleDateFormat();
 
-    // make these command line arguments!
-    // or read from .hg.conf!!
-    String user = "hgcat";
-    String password = "XXXXXX";
-
     if (!QADBLibrary.checkDriver()) return;
     
     // get list of assemblies
 
     HGDBInfo metadbinfo = 
-      new HGDBInfo("genome-testdb", "hgcentralbeta", user, password);
+      new HGDBInfo("hgwbeta", "hgcentralbeta");
 
     if (!metadbinfo.validate()) return;
 
@@ -63,15 +58,15 @@ public class MGCCheck {
       String startDateString = dateFormat.format(startDate);
       System.out.println("Start time = " + startDateString);
 
-      // create HGDBInfo for this assembly
-      HGDBInfo dbinfo = new HGDBInfo("localhost", assembly, user, password);
-      if (!dbinfo.validate()) {
-        System.out.println("Cannot connect to database for " + assembly);
-        continue;
-      }
 
       // find default pos for this assembly
       try {
+	// create HGDBInfo for this assembly
+	HGDBInfo dbinfo = new HGDBInfo("localhost", assembly);
+	if (!dbinfo.validate()) {
+	  System.out.println("Cannot connect to database for " + assembly);
+	  continue;
+	}
         String defaultPos = QADBLibrary.getDefaultPosition(metadbinfo,assembly);
         System.out.println("defaultPos = " + defaultPos);
         System.out.println();

@@ -48,21 +48,13 @@ public class HGGeneCheck {
     if (!QADBLibrary.checkDriver()) return;
     
     // get read access to database
-    Properties dbloginread;
+    HGDBInfo metadbinfo; 
     try {
-      dbloginread = QALibrary.readProps("javadbconf.read");
+      metadbinfo = new HGDBInfo("hgwbeta", "hgcentraltest");
     } catch (Exception e) {
-      System.out.println("Cannot read javadbconf.read");
+      System.out.println(e.toString());
       return;
     }
-    String userRead = dbloginread.getProperty("login");
-    String passwordRead = dbloginread.getProperty("password");
-
-    // get list of assemblies
-
-    HGDBInfo metadbinfo = 
-      new HGDBInfo("genome-testdb", "hgcentralbeta", userRead, passwordRead);
-
     if (!metadbinfo.validate()) return;
 
     ArrayList assemblyList = 
@@ -76,13 +68,13 @@ public class HGGeneCheck {
       if (!assembly.equals("mm4")) continue;
       // System.out.println("Assembly = " + assembly);
       // create HGDBInfo for this assembly
-      HGDBInfo dbinfo = new HGDBInfo("localhost", assembly, userRead, passwordRead);
-      if (!dbinfo.validate()) {
-        System.out.println("Cannot connect to database for " + assembly);
-        continue;
-      }
 
       try {
+	HGDBInfo dbinfo = new HGDBInfo("localhost", assembly);
+	if (!dbinfo.validate()) {
+	  System.out.println("Cannot connect to database for " + assembly);
+	  continue;
+	}
         // does this assembly have knownGene track?
         // could write a helper routine to do this
 

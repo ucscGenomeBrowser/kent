@@ -50,21 +50,13 @@ public class HGNearCheck {
     if (!QADBLibrary.checkDriver()) return;
     
     // get read access to database
-    Properties dbloginread;
+    HGDBInfo metadbinfo; 
     try {
-      dbloginread = QALibrary.readProps("javadbconf.read");
+      metadbinfo = new HGDBInfo("hgwbeta", "hgcentraltest");
     } catch (Exception e) {
-      System.out.println("Cannot read javadbconf.read");
+      System.out.println(e.toString());
       return;
     }
-    String userRead = dbloginread.getProperty("login");
-    String passwordRead = dbloginread.getProperty("password");
-
-    // get list of assemblies
-
-    HGDBInfo metadbinfo = 
-      new HGDBInfo("hgwbeta", "hgcentralbeta", userRead, passwordRead);
-
     if (!metadbinfo.validate()) return;
 
     ArrayList assemblyList = Metadata.getHGNearAssemblies(metadbinfo);
@@ -74,15 +66,15 @@ public class HGNearCheck {
     Iterator assemblyIter = assemblyList.iterator();
     while (assemblyIter.hasNext()) {
       String assembly = (String) assemblyIter.next();
-      // create HGDBInfo for this assembly
-      // will use this for getting new gene names to search for
-      HGDBInfo dbinfo = new HGDBInfo("localhost", assembly, userRead, passwordRead);
-      if (!dbinfo.validate()) {
-        System.out.println("Cannot connect to database for " + assembly);
-        continue;
-      }
 
       try {
+	// create HGDBInfo for this assembly
+	// will use this for getting new gene names to search for
+	HGDBInfo dbinfo = new HGDBInfo("localhost", assembly);
+	if (!dbinfo.validate()) {
+	  System.out.println("Cannot connect to database for " + assembly);
+	  continue;
+	}
         // initialize robot
         String hgNearURL = "http://" + target.machine + "/cgi-bin/hgNear?db=";
         hgNearURL = hgNearURL + assembly;
@@ -93,7 +85,7 @@ public class HGNearCheck {
         // get column list for this assembly
         String hgNearConfig = hgNearURL + "&near.do.configure=configure";
         Robot configRobot = new Robot(hgNearConfig);
-        // ArrayList cols = HgNear.getColumns(configRobot);
+        ArrayList cols = HgNear.getColumns(configRobot);
         // iterate through columns
         // Iterator colIter = col.iterator();
         // while (colIter.hasNext()) {

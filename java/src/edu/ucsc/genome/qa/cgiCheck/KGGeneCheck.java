@@ -38,28 +38,22 @@ public class KGGeneCheck {
     if (!QADBLibrary.checkDriver()) return;
     
     // get read access to database
-    Properties dbloginread;
+    HGDBInfo metadbinfo; 
     try {
-      dbloginread = QALibrary.readProps("javadbconf.read");
+      metadbinfo = new HGDBInfo("hgwbeta", "hgcentraltest");
     } catch (Exception e) {
-      System.out.println("Cannot read javadbconf.read");
+      System.out.println(e.toString());
       return;
     }
-    String userRead = dbloginread.getProperty("login");
-    String passwordRead = dbloginread.getProperty("password");
-
-    HGDBInfo metadbinfo = 
-      new HGDBInfo("hgwbeta", "hgcentraltest", userRead, passwordRead);
-
     if (!metadbinfo.validate()) return;
 
-    HGDBInfo dbinfo = new HGDBInfo("localhost", assembly, userRead, passwordRead);
-    if (!dbinfo.validate()) {
-      System.out.println("Cannot connect to database for " + assembly);
-      return;
-    }
 
     try {
+      HGDBInfo dbinfo = new HGDBInfo("localhost", assembly);
+      if (!dbinfo.validate()) {
+	System.out.println("Cannot connect to database for " + assembly);
+	return;
+      }
       // get tracks for this assembly (read track controls from web)
       String hgtracksURL = "http://" + machine + "/cgi-bin/hgTracks?db=";
       hgtracksURL = hgtracksURL + assembly;

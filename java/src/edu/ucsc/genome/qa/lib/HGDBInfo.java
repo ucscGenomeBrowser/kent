@@ -31,6 +31,23 @@ public class HGDBInfo {
   }
 
  /**
+  * Constructor for database query parameters.  This
+  * takes the user and password from hg.conf.
+  * 
+  * @param machineVar      The machine
+  * @param databaseVar 	   The name of the database
+  */
+  public HGDBInfo(String machineVar, String databaseVar) throws Exception {
+
+    HgConf hgConf = new HgConf();
+    machine = machineVar;
+    database = databaseVar;
+    user = hgConf.getProperty("db.user");
+    password = hgConf.getProperty("db.password");
+  }
+
+
+ /**
   * Checks for valid conenction to database
   * 
   * @return   True if database connection is successful

@@ -17,19 +17,14 @@ public class HGDBInfoTest {
     if (!QADBLibrary.checkDriver()) return;
     
     // get read access to database
-    Properties dbloginread;
+    HgConf hgConf;
+    HGDBInfo metadbinfo; 
     try {
-      dbloginread = QALibrary.readProps("javadbconf.read");
+      metadbinfo = new HGDBInfo("hgwbeta", "hgcentraltest");
     } catch (Exception e) {
-      System.out.println("Cannot read javadbconf.read");
+      System.out.println(e.toString());
       return;
     }
-    String userRead = dbloginread.getProperty("login");
-    String passwordRead = dbloginread.getProperty("password");
-
-    HGDBInfo metadbinfo = 
-       new HGDBInfo("hgwbeta", "hgcentraltest", userRead, passwordRead);
-
     if (!metadbinfo.validate()) return;
 
   /*  incomplete ?  no HGDBInfo objects with this signature
