@@ -9984,6 +9984,101 @@ hgsql kgHg17B -e 'load data local infile "chromInfo.tab" into table chromInfo ig
     delete from gdbPdb where genomeDb='hg17';
     insert into gdbPdb values('hg17', 'proteins041115');
 
+
+# UPDATE TABLES NEEDED BY hgGene (DONE 11/30/04 Fan)
+
+# UPDATE BioCyc TABLES
+    hgsql hg17 -e 'delete from bioCycPathway'
+    hgsql hg17 -e 'delete from bioCycMapDesc'
+
+#  Using data files sent by Peter Carp from SRI,
+#  per Peter's email of 10/1/04, they don't have recent update,
+#  so data files received last year are used.
+  
+#  Save the BioCyc Pathway name and description table as gene-pathway.dat.
+#  Save the pathway data file as gene-pathway.dat.
+#  Make sure there is no extra ^M at end of the lines.
+
+# Run hgBioCyc program to generate the file bioCycPathway.tab.
+
+	 hgBioCyc gene-pathway.dat hg17
+
+# Load results into hg17.
+
+    LOAD DATA local INFILE 'pathway-names.dat' into table bioCycMapDesc;
+    LOAD DATA local INFILE 'bioCycPathway.tab' into table bioCycPathway;
+
+# REBUID FOLDUTR TABLES (DONE - 2004-11-30 Fan)
+# First set up directory structure and extract UTR sequence on hgwdev
+    ssh hgwdev
+    cd /cluster/data/hg17/bed
+    mv rnaStruct rnaStruct.2004-10-04
+    mkdir -p /cluster/data/hg17/bed/rnaStruct.2004-11-30
+    ln –s rnaStruct.2004-11-30 rnaStruct
+    cd /cluster/data/hg17/bed/rnaStruct
+    mkdir -p utr3/split utr5/split utr3/fold utr5/fold
+    utrFa hg17 knownGene utr3 utr3/utr.fa
+    utrFa hg17 knownGene utr5 utr5/utr.fa
+
+# Split up files and make files that define job.
+    ssh kk
+    cd /cluster/data/hg17/bed/rnaStruct
+    faSplit sequence utr3/utr.fa 50000 utr3/split/s
+    faSplit sequence utr5/utr.fa 50000 utr5/split/s
+    ls -1 utr3/split > utr3/in.lst
+    ls -1 utr5/split > utr5/in.lst
+    cd utr3
+    cat > gsub <<end
+#LOOP
+rnaFoldBig split/\$(path1) fold
+#ENDLOOP
+end
+    cp gsub ../utr5
+
+# Do cluster run for 3' UTRs
+    gensub2 in.lst single gsub spec
+    para create spec
+    para try
+    para push
+# Completed: 38115 of 38115 jobs
+# CPU time in finished jobs:    1101680s   18361.33m   306.02h   12.75d  0.035 y
+# IO & Wait Time:                100275s    1671.25m    27.85h    1.16d  0.003 y
+# Average job time:                  32s       0.53m     0.01h    0.00d
+# Longest job:                     3645s      60.75m     1.01h    0.04d
+# Submission to last job:          7007s     116.78m     1.95h    0.08d
+
+# Do cluster run for 5' UTRs 
+    cd ../utr5
+    gensub2 in.lst single gsub spec
+    para create spec
+    para try
+    para push
+# Completed: 30524 of 30524 jobs
+# CPU time in finished jobs:     116647s    1944.12m    32.40h    1.35d  0.004 y
+# IO & Wait Time:                 80477s    1341.28m    22.35h    0.93d  0.003 y
+# Average job time:                   6s       0.11m     0.00h    0.00d
+# Longest job:                     2449s      40.82m     0.68h    0.03d
+# Submission to last job:          3386s      56.43m     0.94h    0.04d
+
+# Load database
+    ssh hgwdev
+    cd /cluster/data/hg17/bed/rnaStruct/utr5
+    hgLoadRnaFold hg17 foldUtr5 fold
+# Parsed 30525 files
+# Warning: load of foldUtr5 did not go as planned: 30525 record(s), 2 row(s) skipped, 0 warning(s) loading 
+./foldUtr5.tab
+
+    cd ../utr3
+    hgLoadRnaFold hg17 foldUtr3 fold
+# Parsed 38115 files
+#Warning: load of foldUtr3 did not go as planned: 38115 record(s), 2 row(s) skipped, 0 warning(s) loading 
+./foldUtr3.tab
+
+# Clean up
+    rm -r split fold err batch.bak
+    cd ../utr5
+    rm -r split fold err batch.bak
+
 # UPDATE GENE SORTER TABLES (AKA: FAMILY BROWSER) (DONE - 2004-11-29 - Fan)
 #	This should be done after knownGene tables are complete from known gene
 #	process.
@@ -10529,4 +10624,85 @@ hgLoadBlastTab hg17 dmBlastTab -maxPer=1 *.tab
 # Verified that there is now new release of HInv data.
 hgMapToGene hg17 HInvGeneMrna knownGene knownToHInv
 # count changed to 33236
+
+#### BUILD Ensembl cross-reference table, ensemblXref3 (DONE - 2004-11-30 - Fan)
+
+    # Get the ensembl gene/protein cross-reference data from
+    # http://www.ensembl.org/Homo_sapiens/martview
+    # Follow this sequence through the pages:
+    # Page 1) Make sure that the Homo_sapiens choice is selected. Hit next.
+    # Page 2) Uncheck the "Limit to" box in the region choice. Then hit next.
+    # Page 3) Choose the "Feature" box, select gene, transcript, protein,
+              SPTrEMBL ID, SWISSPROT ID, and SWISSPROT AC
+    # Page 4) Choose "Text, tab separated".  choose gzip compression.  hit export.
+    # Save as ensXref.txt
+
+    sed ensXref.txt -e 's/\./\t/g' > ensemblXref3.tab
+
+    hgsql hg17 -e "drop table ensemblXref3"
+    hgsql hg17 < ~/src/hg/lib/ensemblXref3.sql
+
+    hgsql hg17 -e 'load data local infile "ensemblXref3.tab" into table ensemblXref3 ignore 1 lines'
+
+#### BUILD SUPERFAMILY RELATED TABLES (DONE - 2004-11-30 - Fan)
+
+# Download Superfamily data files and build the Superfamily DB
+# from supfam.mrc-lmb.cam.ac.uk
+
+    mkdir /cluster/store8/superfamily/041128
+    ln –s /cluster/store8/superfamily/041128 /cluster/data/superfamily/041128
+    cd /cluster/data/superfamily/041128
+# ftp over the following two files:
+ass_28-Nov-2004.tab.gz
+      supfam_28-Nov-2004.sql.gz
+    
+    gzip -d *.gz
+# Load the Superfamily database
+    hgsql hg17 -e "create database superfam041128"
+    hgsql superfam041128 < supfam_28-Nov-2004.sql
+# This may take about an hour.
+
+# Make sure to add an index on id of the des table of superfam041128.
+    hgsql superfam041128 –e "create index id on des(id);"
+
+    hgsql superfam041128 < ~/src/hg/lib/sfAssign.sql
+    hgsql superfam041128 -e 'load data local infile "ass_28-Nov-2004.tab" into table 
+superfam041128.sfAssign;'
+
+# Build or rebuild Superfamily track and create sf tables needed for PB
+
+   hgsql hg17 < ~/src/hg/lib/sfAssign.sql
+
+   cd /cluster/data/superfamily/041128  
+   hgsql hg17 -e 'load data local infile "ass_28-Nov-2004.tab" into table hg17.sfAssign;'
+
+# If hg17.sfDes already exists, drop it.
+
+   hgsql superfam041128 -e "select * from des" >sfDes.tab
+   hgsql hg17 < ~/src/hg/lib/sfDes.sql
+   hgsql hg17 -e 'load data local infile "sfDes.tab" into table hg17.sfDes ignore 1 lines;'
+
+# If hg17.superfamily already exists, drop it.
+   cd /cluster/data/hg17/bed
+   mkdir /cluster/data/hg17/sf.2004-1128
+   ln -s sf.2004-1128 sf
+   hgSuperfam hg17 > sf.log
+
+# It is normal that many proteins does not have corresponding Superfamily entries.
+
+# If hg17.sfDescription exists, drop it.
+
+   hgsql hg17 < ~/src/hg/lib/sfDescription.sql
+   hgsql hg17 -e 'LOAD DATA local INFILE "sfDescription.tab"  into table hg17.sfDescription;'
+
+# Finally, load the superfamily table.
+
+   hgLoadBed hg17 superfamily superfamily.tab -tab
+
+# Create knownToSuperfamily table
+# Note hs is changed into ht for this Superfamily release.
+   
+   cat /cluster/data/superfamily/041128/ass_28-Nov-2004.tab \
+   | hgKnownToSuper hg17 hs stdin
+# created 25287 rows in knownToSuper
 
