@@ -15,7 +15,7 @@
 #include "pbStampPict.h"
 #include "pbTracks.h"
 
-static char const rcsid[] = "$Id: pbTracks.c,v 1.33 2005/02/08 18:37:15 fanhsu Exp $";
+static char const rcsid[] = "$Id: pbTracks.c,v 1.34 2005/02/09 22:57:22 fanhsu Exp $";
 
 boolean hgDebug = FALSE;      /* Activate debugging code. Set to true by hgDebug=on in command line*/
 
@@ -198,13 +198,31 @@ char *chp;
 int  i,l;
 int  ii = 0;
 int  iypos;
+char *spDisplayId;
 
 hPrintf("<br><font size=4>");
 hPrintf("%s protein: ", organism);
 hPrintf("<A HREF=\"http://www.expasy.org/cgi-bin/niceprot.pl?%s\" TARGET=_blank><B>%s</B></A>\n", 
 	proteinID, proteinID);
-if (strcmp(proteinID, protDisplayID) != 0)hPrintf(" (aka %s)", protDisplayID);
 
+/* show SWISS-PROT display ID if it is different than the accession ID */
+/* but, if display name is like: Q03399 | Q03399_HUMAN, then don't show display name */
+spDisplayId = spAccToId(spConn, proteinID);
+if (strstr(spDisplayId, proteinID) == NULL)
+   {
+   hPrintf(" (aka %s", spDisplayId);
+   /* don't show 2nd aka if the new and old displayId are the same */
+   if (!sameWord(spDisplayId, oldSpDisplayId(spDisplayId)))
+	{
+	hPrintf(" or %s", oldSpDisplayId(spDisplayId));
+        /* add an extra <br> */
+	hPrintf(")<br>\n", oldSpDisplayId(spDisplayId));
+	}
+   else
+	{
+        hPrintf(")\n", oldSpDisplayId(spDisplayId));
+	}
+   }
 hPrintf(" %s\n", description);
 hPrintf("</font><br><br>");
 
