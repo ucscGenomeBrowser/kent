@@ -12,7 +12,7 @@
 #include "chainBlock.h"
 #include "portable.h"
 
-int minScore = 400;
+int minScore = 1000;
 char *detailsName = NULL;
 
 void usage()
@@ -23,8 +23,9 @@ errAbort(
   "usage:\n"
   "   axtChain in.axt tNibDir qNibDir out.chain\n"
   "options:\n"
-  "   -minScore=N  Minimum score for chain, default 400\n"
+  "   -minScore=N  Minimum score for chain, default %d\n"
   "   -details=fileName Output some additional chain details\n"
+  , minScore
   );
 }
 
@@ -205,11 +206,12 @@ struct scoreData
     };
 struct scoreData scoreData;
 
-int interpolate(int x, int *s, int *v, int sCount)
+int interpolate(int x, int *s, double *v, int sCount)
 /* Find closest value to x in s, and then lookup corresponding
  * value in v.  Interpolate where necessary. */
 {
-int i, ds, dv, ss;
+int i, ds, ss;
+double dv;
 for (i=0; i<sCount; ++i)
     {
     ss = s[i];
@@ -228,12 +230,21 @@ dv = v[sCount-1] - v[sCount-2];
 return v[sCount-2] + dv * (x - s[sCount-2]) / ds;
 }
 
-/* Tables that define piecewise linear gap costs. 
- * These were created by looking at the 'main chain'
- * of alignments between human chromosome 22 and mouse
- * chromosome 2 using a preliminary gap cost of
- * 400 * pow(dq+dt, 0.4).   The program 'gapCost' 
- * did this. */
+static int gapInitPos[] = { 
+   1,   2,   3,   11,  111, 2111, 12111, 32111,  72111, 152111, 252111,
+};
+static double gapInitQGap[] = { 
+   350, 425, 450, 600, 900, 2900, 22900, 57900, 117900, 217900, 317900,
+};
+static double gapInitTGap[] = { 
+   350, 425, 450, 600, 900, 2900, 22900, 57900, 117900, 217900, 317900,
+};
+static double gapInitBothGap[] = { 
+   500+350, 500+425, 500+450, 500+600, 500+900, 500+2900, 
+   500+22900, 500+57900, 500+117900, 500+217900, 500+317900,
+};
+
+#ifdef OLD
 static int gapInitPos[] = { 
    1, 3, 11, 111, 2111, 12111, 20000, 120000,
 };
@@ -246,6 +257,14 @@ static int gapInitTGap[] = {
 static int gapInitBothGap[] = { 
    500+400, 500+500, 500+700, 500+900, 500+2900, 500+22900, 500+40000, 500+140000,
 };
+#endif /* OLD */
+
+/* Tables that define piecewise linear gap costs. 
+ * These were created by looking at the 'main chain'
+ * of alignments between human chromosome 22 and mouse
+ * chromosome 2 using a preliminary gap cost of
+ * 400 * pow(dq+dt, 0.4).   The program 'gapCost' 
+ * did this. */
 
 #ifdef OLD
 static int gapInitPos[29] = { 
@@ -282,9 +301,9 @@ struct gapAid
     int *tSmall;   /* Table for small gaps in t. */
     int *bSmall;   /* Table for small gaps in either. */
     int *longPos;/* Table of positions to interpolate between for larger gaps. */
-    int *qLong;	/* Values to interpolate between for larger gaps in q. */
-    int *tLong;	/* Values to interpolate between for larger gaps in t. */
-    int *bLong;	/* Values to interpolate between for larger gaps in both. */
+    double *qLong; /* Values to interpolate between for larger gaps in q. */
+    double *tLong; /* Values to interpolate between for larger gaps in t. */
+    double *bLong; /* Values to interpolate between for larger gaps in both. */
     int longCount;	/* Number of long positions overall in longPos. */
     int qPosCount;	/* Number of long positions in q. */
     int tPosCount;	/* Number of long positions in t. */
@@ -319,8 +338,10 @@ AllocArray(aid.tSmall, aid.smallSize);
 AllocArray(aid.bSmall, aid.smallSize);
 for (i=1; i<aid.smallSize; ++i)
     {
-    aid.qSmall[i] = interpolate(i, gapInitPos, gapInitQGap, ArraySize(gapInitQGap));
-    aid.tSmall[i] = interpolate(i, gapInitPos, gapInitTGap, ArraySize(gapInitTGap));
+    aid.qSmall[i] = 
+    	interpolate(i, gapInitPos, gapInitQGap, ArraySize(gapInitQGap));
+    aid.tSmall[i] = 
+    	interpolate(i, gapInitPos, gapInitTGap, ArraySize(gapInitTGap));
     aid.bSmall[i] = interpolate(i, gapInitPos, 
     	gapInitBothGap, ArraySize(gapInitBothGap));
     }
@@ -341,9 +362,9 @@ aid.qPosCount = ArraySize(gapInitQGap) - startLong;
 aid.tPosCount = ArraySize(gapInitTGap) - startLong;
 aid.bPosCount = ArraySize(gapInitBothGap) - startLong;
 aid.longPos = cloneMem(gapInitPos + startLong, aid.longCount * sizeof(int));
-aid.qLong = cloneMem(gapInitQGap + startLong, aid.qPosCount * sizeof(int));
-aid.tLong = cloneMem(gapInitTGap + startLong, aid.tPosCount * sizeof(int));
-aid.bLong = cloneMem(gapInitBothGap + startLong, aid.bPosCount * sizeof(int));
+aid.qLong = cloneMem(gapInitQGap + startLong, aid.qPosCount * sizeof(double));
+aid.tLong = cloneMem(gapInitTGap + startLong, aid.tPosCount * sizeof(double));
+aid.bLong = cloneMem(gapInitBothGap + startLong, aid.bPosCount * sizeof(double));
 
 /* Set up to handle huge values. */
 aid.qLastPos = aid.longPos[aid.qPosCount-1];
@@ -670,6 +691,10 @@ dyStringFree(&dy);
 void testGaps()
 {
 int i;
+for (i=1; i<=10; i++)
+   {
+   uglyf("%d: %d %d %d\n", i, gapCost(i, 0), gapCost(0, i), gapCost(i/2, i-i/2));
+   }
 for (i=1; ; i *= 10)
    {
    uglyf("%d: %d %d %d\n", i, gapCost(i, 0), gapCost(0, i), gapCost(i/2, i-i/2));
@@ -690,7 +715,7 @@ minScore = optionInt("minScore", minScore);
 detailsName = optionVal("details", NULL);
 dnaUtilOpen();
 initGapAid();
-testGaps();
+// testGaps();
 if (argc != 5)
     usage();
 axtChain(argv[1], argv[2], argv[3], argv[4]);
