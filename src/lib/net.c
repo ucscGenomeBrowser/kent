@@ -89,11 +89,14 @@ static int netAcceptingSocketFrom(int port, int queueSize, char *host)
 {
 struct sockaddr_in sai;
 int sd;
+int flag = 1; 
 
 netBlockBrokenPipes();
 if ((sd = netStreamSocket()) < 0)
     return sd;
 if (!netFillInAddress(host, port, &sai))
+    return -1;
+if (setsockopt(sd, SOL_SOCKET, SO_REUSEADDR, &flag, sizeof(int)))
     return -1;
 if (bind(sd, (struct sockaddr*)&sai, sizeof(sai)) == -1)
     {
