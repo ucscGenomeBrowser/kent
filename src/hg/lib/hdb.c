@@ -27,7 +27,7 @@
 #include "maf.h"
 #include "ra.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.159 2003/12/19 01:12:54 baertsch Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.160 2003/12/20 19:17:19 angie Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
@@ -1300,13 +1300,15 @@ while ((row = sqlNextRow(sr)) != NULL)
 	bedItem->blockCount = atoi(row[7]);
 	sqlSignedDynamicArray(row[8], &bedItem->chromStarts, &count);
 	if (count != bedItem->blockCount)
-	    errAbort("Data error: block count (%d) must be the same as the number of block starts (%d) for item %s %s:%d-%d",
-		     bedItem->blockCount, count, bedItem->name, bedItem->chrom,
+	    errAbort("Data error: block count (%d) must be the same as the number of block starts (%d) for table %s item %s %s:%d-%d",
+		     bedItem->blockCount, count, table,
+		     bedItem->name, bedItem->chrom,
 		     bedItem->chromStart, bedItem->chromEnd);
 	sqlSignedDynamicArray(row[9], &bedItem->blockSizes, &count);
 	if (count != bedItem->blockCount)
-	    errAbort("Data error: block count (%d) must be the same as the number of block ends/sizes (%d) for item %s %s:%d-%d",
-		     bedItem->blockCount, count, bedItem->name, bedItem->chrom,
+	    errAbort("Data error: block count (%d) must be the same as the number of block ends/sizes (%d) for table %s item %s %s:%d-%d",
+		     bedItem->blockCount, count, table,
+		     bedItem->name, bedItem->chrom,
 		     bedItem->chromStart, bedItem->chromEnd);
 	if (sameString("exonEnds", hti->endsSizesField))
 	    {
@@ -1352,9 +1354,9 @@ while ((row = sqlNextRow(sr)) != NULL)
 		    }
 		}
 	if (bedItem->chromStart != bedItem->chromStarts[0])
-	    errAbort("Data error: start (%d) must be the same as first block start (%d) for item %s %s:%d-%d",
+	    errAbort("Data error: start (%d) must be the same as first block start (%d) for table %s item %s %s:%d-%d",
 		     bedItem->chromStart, bedItem->chromStarts[0],
-		     bedItem->name,
+		     table, bedItem->name,
 		     bedItem->chrom, bedItem->chromStart, bedItem->chromEnd);
 	    }
 	if (! (sameString("chromStarts", hti->startsField) ||
