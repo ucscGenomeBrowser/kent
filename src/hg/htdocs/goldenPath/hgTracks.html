@@ -2,16 +2,17 @@
 <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=windows-1252">
 <META NAME="Generator" CONTENT="Microsoft Word 97">
 <TITLE>Human Genome Browser Gateway</TITLE>
-</HEAD><BODY BACKGROUND="http://genome.ucsc.edu/images/floret.jpg"> 
+</HEAD><BODY BACKGROUND="../images/floret.jpg"> 
 
-<FORM ACTION="../cgi-bin/hgTracks" METHOD="GET">
+<FORM ACTION="../cgi-bin/hgTracks" METHOD="POST" ENCTYPE="multipart/form-data">
 <CENTER><H2>Human Genome Browser</H2>
 <PRE>Web tool created by <A HREF="http://www.cse.ucsc.edu/~kent">Jim Kent</A> of UC Santa Cruz
 12 Dec 2000 <A HREF="http://genome.cse.ucsc.edu/index.html">draft assembly</A> of the human genome
 </PRE></CENTER>
 <P>
 Please enter a position in the genome, set your preferred window width, and press the submit button:
-(Use <A HREF="../cgi-bin/hgBlat?db=hg6">BLAT Search</A> to locate a particular sequence in the genome.)
+(Use <A HREF="../cgi-bin/hgBlat?db=hg6">BLAT Search</A> to locate a particular sequence in the genome.
+You can also <A HREF="#custom">add your own tracks</A>.)
 
 <CENTER><P>genome position: 
 <INPUT TYPE="TEX" NAME="position" SIZE="34" VALUE="chr2:213373283-213377671"> 
@@ -23,7 +24,7 @@ Please enter a position in the genome, set your preferred window width, and pres
 </P></CENTER>
 
 <P>A genome position can be specified by the accession number of a sequenced human genomic clone, an mRNA or EST or STS marker, or 
-a cytological band, a chromosomal coordinate range, or keywords from the Genbank description of an mRNA. See the <A HREF="http://genome.cse.ucsc.edu/goldenPath/help/hgTracksHelp.html" TARGET=_blank>User Guide</A> for more help. 
+a cytological band, a chromosomal coordinate range, or keywords from the Genbank description of an mRNA. See the <A HREF="help/hgTracksHelp.html" TARGET=_blank>User Guide</A> for more help. 
 <P>
 
 <P>
@@ -77,10 +78,20 @@ Lists mRNAs for valyl tRNA synthetases but not unsubmitted tRNA<br>
 Lists many zinc finger mRNAs<br>
 Lists only kruppel-like zinc fingers<br>
 Lists candidate genes associated with Huntington's disease<br>
-Lists mRNAs deposited by scientist named Zahler<br>
+Lists mRNAs deposited by Dr. Zahler<br>
 Lists mRNAs deposited by co-author J.E. Evans<br>
 
 <TR><TD COLSPAN="2" > Use this last format for entry authors -- even though Genbank searches require Evans JE format, GenBank entries themselves use Evans,J.E. internally.
 </TABLE></CENTER>
-<P>
+
+<H2><A NAME="custom"></A>Add Your Own Tracks </H2>
+<P>You can add your own annotation tracks to the browser by uploading in
+annotations in <A HREF="help/customTrack.html"> 
+formats described here</A>.  Annotations can be stored in files or
+pasted in.</P>
+
+
+Annotation File: <INPUT TYPE=FILE NAME="customFile"><BR>
+<TEXTAREA NAME="customText" ROWS=14 COLS=80></TEXTAREA>
+
 </FORM></BODY></HTML>
