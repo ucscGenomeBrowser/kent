@@ -472,14 +472,22 @@ sqlFreeResult(&sr);
 hgFreeConn(&conn);
 }
 
-struct dnaSeq *hgRnaSeq(char *acc)
-/* Return sequence for RNA. */
+struct dnaSeq *hgExtSeq(char *acc)
+/* Return externally stored sequence. */
 {
 struct dnaSeq *seq;
 HGID id;
 hgRnaSeqAndId(acc, &seq, &id);
 return seq;
 }
+
+struct dnaSeq *hgRnaSeq(char *acc)
+/* Return sequence for RNA. */
+{
+return hgExtSeq(acc);
+}
+
+
 
 static struct dnaSeq *getBacContigSeqList(struct sqlConnection *conn, char *acc)
 /* Get list of contig DNA for bac. */
