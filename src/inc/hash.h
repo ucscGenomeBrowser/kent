@@ -24,6 +24,8 @@ struct hash
     struct lm *lm;	/* Local memory pool. */
     };
 
+#define hashMaxSize 24
+
 struct hashCookie
 /* used by hashFirst/hashNext in tracking location in traversing hash */
     {
@@ -132,6 +134,9 @@ void freeHash(struct hash **pHash);
 void freeHashAndVals(struct hash **pHash);
 /* Free up hash table and all values associated with it.
  * (Just calls freeMem on each hel->val) */
+
+void hashFreeList(struct hash **pList);
+/* Free up a list of hashes. */
 
 #endif /* HASH_H */
 

@@ -8,6 +8,7 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = affyAtlas.o affy10KDetails.o affy120KDetails.o affyOffset.o affyPairs.o \
     agpFrag.o agpGap.o alignSeqSizes.o altGraph.o altGraphX.o ancientRref.o axtInfo.o \
     axtLib.o bactigPos.o bbRepMask.o bdgpExprLink.o bdgpGeneInfo.o bed.o \
+    bgiGeneInfo.o bgiSnp.o \
     blastTab.o blastzNet.o blatServers.o borf.o borkPseudoHom.o botDelay.o \
     cart.o cartDb.o celeraCoverage.o celeraDupPositive.o cgh.o \
     chainDb.o chainLink.o chainNet.o chainNetDbLoad.o chr18deletions.o \
@@ -20,15 +21,15 @@ O = affyAtlas.o affy10KDetails.o affy120KDetails.o affyOffset.o affyPairs.o \
     estPair.o exoFish.o expData.o expRecord.o exprBed.o \
     fbTables.o featureBits.o findKGAlias.o findKGProtAlias.o fishClones.o \
     flyBaseSwissProt.o gbProtAnn.o gcPercent.o genMapDb.o genbank.o \
-    geneBands.o geneGraph.o genePred.o genePredName.o genePredReader.o genomicDups.o \
+    geneBands.o geneGraph.o genePred.o genePredReader.o genomicDups.o \
     genomicSuperDups.o ggCluster.o ggDbIo.o ggDump.o ggGraph.o ggMrnaAli.o \
     glDbRep.o goa.o goaPart.o grp.o hCommon.o \
     hdb.o hgConfig.o hgExp.o hgFind.o hgGene.o \
     hgMaf.o hgRelate.o hgSeq.o hui.o humanParalog.o \
-    imageClone.o isochores.o jaxOrtholog.o jaxQTL.o jksql.o \
+    imageClone.o isochores.o jaxOrtholog.o jaxQTL.o jksql.o joiner.o \
     kgAlias.o kgProtAlias.o knownInfo.o knownMore.o knownToSuper.o \
     lfs.o liftUp.o llaInfo.o loweTrnaGene.o mapSts.o mcnBreakpoints.o minGeneInfo.o \
-    mouseOrtho.o mouseSyn.o mouseSynWhd.o netAlign.o ooUtils.o \
+    mouseOrtho.o mouseSyn.o mouseSynWhd.o mysqlTableStatus.o netAlign.o ooUtils.o \
     pbStamp.o pepPred.o plasEndPairs.o pseudoGeneLink.o pslWScore.o qaSeq.o \
     recombRate.o recombRateRat.o recombRateMouse.o refLink.o refSeqStatus.o \
     riken.o rikenBest.o rikenCluster.o rmskOut.o rnaFold.o rnaGene.o rnaGroup.o \

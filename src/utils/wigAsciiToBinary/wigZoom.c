@@ -12,7 +12,7 @@
 #include	"options.h"
 #include	"linefile.h"
 
-static char const rcsid[] = "$Id: wigZoom.c,v 1.3 2004/02/23 18:10:36 kent Exp $";
+static char const rcsid[] = "$Id: wigZoom.c,v 1.4 2004/03/11 23:14:33 hiram Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -85,7 +85,7 @@ dataBlock = (struct dataPoint *)
 /*	for each input data file	*/
 for (i = 1; i < argc; ++i)
     {
-    verbose(1, "translating file: %s\n", argv[i]);
+    verbose(2, "translating file: %s\n", argv[i]);
     lineCount = 0;
     validLines = 0;
     dataCount = 0;

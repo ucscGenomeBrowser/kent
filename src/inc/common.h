@@ -350,6 +350,9 @@ struct slName *newSlName(char *name);
 #define slNameNew newSlName
 /* Return a new name. */
 
+struct slName *slNameNewN(char *name, int size);
+/* Return new slName of given size. */
+
 int slNameCmp(const void *va, const void *vb);
 /* Compare two slNames. */
 
@@ -366,6 +369,17 @@ void *slNameFind(void *list, char *string);
 char *slNameStore(struct slName **pList, char *string);
 /* Put string into list if it's not there already.  
  * Return the version of string stored in list. */
+
+struct slName *slNameCloneList(struct slName *list);
+/* Return clone of list. */
+
+struct slName *slNameListFromString(char *s, char delimiter);
+/* Return list of slNames gotten from parsing delimited string.
+ * The final delimiter is optional. a,b,c  and a,b,c, are equivalent
+ * for comma-delimited lists. */
+
+#define slNameListFromComma(s) slNameListFromString(s, ',')
+/* Parse out comma-separated list. */
 
 struct slRef
 /* Singly linked list of generic references. */
@@ -448,6 +462,9 @@ boolean startsWith(char *start,char *string);
 #define stringIn(needle, haystack) strstr(haystack, needle)
 /* Returns position of needle in haystack or NULL if it's not there. */
 /*        char *stringIn(char *needle, char *haystack);      */
+
+char *rStringIn(char *needle, char *haystack);
+/* Return last position of needle in haystack, or NULL if it's not there. */
 
 boolean endsWith(char *string, char *end);
 /* Returns TRUE if string ends with end. */

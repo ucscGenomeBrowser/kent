@@ -11,7 +11,7 @@
 #include "genePred.h"
 #include "bed.h"
 
-static char const rcsid[] = "$Id: hgSeq.c,v 1.19 2004/01/06 22:54:22 angie Exp $";
+static char const rcsid[] = "$Id: hgSeq.c,v 1.20 2004/03/17 00:43:02 angie Exp $";
 
 /* I don't like using this global, but don't want to do a zillion 
  * hChromSizes in addFeature and don't want to add it as a param of 
@@ -124,8 +124,10 @@ if (canDoIntrons && canDoUTR)
 		    cartCgiUsualBoolean(cart, "hgSeq.splitCDSUTR", FALSE));
     puts("Split UTR and CDS parts of an exon into separate FASTA records");
     }
-puts("<P>\n");
-
+puts("<BR>\n");
+puts("Note: if a feature is close to the beginning or end of a chromosome \n"
+     "and upstream/downstream bases are added, they may be truncated \n"
+     "in order to avoid extending past the edge of the chromosome. <P>");
 }
 
 
@@ -280,6 +282,7 @@ char recName[256];
 int seqStart, seqEnd;
 int offset, cSize;
 int i;
+int chromSize = hChromSize(chrom);
 boolean isRc     = (strand == '-') || cgiBoolean("hgSeq.revComp");
 boolean maskRep  = cgiBoolean("hgSeq.maskRepeats");
 int padding5     = cgiOptionalInt("hgSeq.padding5", 0);
@@ -301,6 +304,11 @@ if (concatRegions)
 i = rCount - 1;
 seqStart = rStarts[0]             - (isRc ? padding3 : padding5);
 seqEnd   = rStarts[i] + rSizes[i] + (isRc ? padding5 : padding3);
+/* Padding might push us off the edge of the chrom; if so, truncate: */
+if (seqStart < 0)
+    seqStart = 0;
+if (seqEnd > chromSize)
+    seqEnd = chromSize;
 if (seqEnd <= seqStart)
     {
     printf("# Null range for %s%s%s_%s (range=%s:%d-%d 5'pad=%d 3'pad=%d)\n",

@@ -8,7 +8,7 @@
 #include "hdb.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: checkTableCoords.c,v 1.2 2003/12/19 00:51:49 angie Exp $";
+static char const rcsid[] = "$Id: checkTableCoords.c,v 1.3 2004/03/17 02:19:01 kent Exp $";
 
 /* Default parameter values */
 char *theTable = NULL;                  /* -table option */
@@ -76,32 +76,6 @@ errAbort("checkTableCoords - check invariants on genomic coords in table(s).\n"
 }
 
 
-int sqlDateToClockTime(char *sqlDate)
-/* Convert a SQL date such as "2003-12-09 11:18:43" to clock time 
- * (seconds since midnight 1/1/1970 in UNIX). */
-{
-struct tm *tm = NULL;
-long clockTime = 0;
-
-if (sqlDate == NULL)
-    errAbort("Null string passed to sqlDateToClockTime()");
-AllocVar(tm);
-if (sscanf(sqlDate, "%4d-%2d-%2d %2d:%2d:%2d",
-	   &(tm->tm_year), &(tm->tm_mon), &(tm->tm_mday),
-	   &(tm->tm_hour), &(tm->tm_min), &(tm->tm_sec))  != 6)
-    errAbort("Couldn't parse sql date \"%s\"", sqlDate);
-tm->tm_year -= 1900;
-tm->tm_mon  -= 1;
-clockTime = mktime(tm);
-if (clockTime < 0)
-    errAbort("mktime failed (%d-%d-%d %d:%d:%d).",
-	     tm->tm_year, tm->tm_mon, tm->tm_mday,
-	     tm->tm_hour, tm->tm_min, tm->tm_sec);
-freez(&tm);
-return clockTime;
-}
-
-
 struct slName *getTableNames(struct sqlConnection *conn)
 /* Return a list of names of tables that have not been excluded by 
  * command line options. */
@@ -120,7 +94,7 @@ while((row = sqlNextRow(sr)) != NULL)
     boolean gotMatch = FALSE;
     if (hoursOld)
 	{
-	int tableUpdateTime = sqlDateToClockTime(row[11]);
+	int tableUpdateTime = sqlDateToUnixTime(row[11]);
 	int ageInSeconds = startTime - tableUpdateTime;
 	if (ageInSeconds > ageThresh)
 	    continue;

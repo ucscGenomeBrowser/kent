@@ -1,4 +1,4 @@
-hmsk# First chimp release
+# First chimp release
 
 # DOWNLOAD FILES FROM WHITEHEAD   (kate)
 
@@ -328,13 +328,13 @@ cat > jkStuff/makeNib.csh << 'EOF'
       | hgsql -h genome-testdb hgcentraltest
 
     # Warning: genome and organism fields must correspond
-    # with defaultDb values
+    # with defaultDb values, start as not ACTIVE
     echo 'INSERT INTO dbDb \
         (name, description, nibPath, organism, \
             defaultPos, active, orderKey, genome, \
             scientificName, htmlPath, hgNearOK) values \
         ("panTro1", "Nov. 2003", "/gbdb/panTro1/nib", "Chimp", \
-           "chr8:26828631-26938371", 0, 15, "Chimp", \
+           "chr6:115705331-115981791", 0, 15, "Chimp", \
            "Pan troglodytes", "/gbdb/panTro1/html/description.html", 0);' \
       | hgsql -h genome-testdb hgcentraltest
 
@@ -346,6 +346,7 @@ cat > jkStuff/makeNib.csh << 'EOF'
     cvs up -d -P
     # Edit that makefile to add panTro1 in all the right places and do
     make update
+
 
 # MAKE HGCENTRALTEST BLATSERVERS ENTRY (DONE - 2003-07-31 - Hiram)
     ssh hgwdev
@@ -664,7 +665,7 @@ cat > jkStuff/zipChroms.csh << 'EOF'
     foreach f (?{,?}/*.fa)
         echo "zipping $f"
         set b = $f:t:r
-        nice zip -j $dir/${b}.zip $f
+        nice zip -j $dir/${b}.fa.zip $f
     end
 'EOF'
     csh jkStuff/zipChroms.csh >&! jkStuff/zipChroms.log &
@@ -699,6 +700,7 @@ zip -j zip/chromOut.zip */chr*.fa.out
     ssh hgwdev
     cd /cluster/data/panTro1/zip
     set gp = /usr/local/apache/htdocs/goldenPath/panTro1
+    # create README.txt
     mkdir -p $gp/bigZips
     cp -p *.zip $gp/bigZips
     cd $gp/bigZips
@@ -1127,6 +1129,7 @@ done
     #	create symlinks for .wib files
     ln -s `pwd`/*.wib /gbdb/panTro1/wib
 
+
 # HUMAN ALIGNMENTS (DONE 2004-02-11 kate)
 
     ssh kksilo
@@ -1192,6 +1195,8 @@ doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain} {check
     cd /cluster/data/panTro1
     cd bed/blastz-blatHg16.pt0.swap
     chainMergeSort pslChain/run/chain/*.chain | chainSplit netChain stdin
+    # NOTE: next time, save the merged chain file for alter use
+    # (e.g. netChainSubset will need it)
 
     # load chains into browser
     ssh hgwdev
@@ -1225,37 +1230,85 @@ cat > net.csh << 'EOF'
     ssh hgwdev
     cd /cluster/data/panTro1
     cd bed/blastz-blatHg16.pt0.swap/netChain
-    netClass hNoClass.net panTro1 hg16 human.net
+    netClass hNoClass.net panTro1 hg16 ../human.net
 
     # load net into the browser
     ssh hgwdev
     cd /cluster/data/panTro1
-    cd bed/blastz-blatHg16.pt0.swap/netChain
+    cd bed/blastz-blatHg16.pt0.swap
     hgLoadNet -warn panTro1 netHg16 human.net
-    rm -r hNoClass.net
+    rm -r netChain/hNoClass.net
 
-    # Make AXT files from the net, for a track that displays alignments at
+
+# CHAIN FILES FROM THE NET (IN PROGRESS kate)
+#       for downloads area
+    ssh kksilo
+    cd /cluster/data/panTro1
+    cd bed/blastz-blatHg16.pt0.swap
+    chainMergeSort -saveId *.chain |  \
+        netChainSubset human.net stdin netChain/human.net.chain
+    chainSplit netChainSubset netChain/human.net.chain
+
+    ssh hgwdev
+    cd /cluster/data/panTro1
+    cd bed/blastz-blatHg16.pt0.swap/netChainSubset
+    set dir = /usr/local/apache/htdocs/goldenPath/panTro1/vsHg16/netChain
+    # add README to vsHg16 dir.
+    mkdir -p $dir
+    cp *.chain $dir
+    cd $dir
+    gzip *.chain
+    md5sum *.gz > md5sum.txt
+    cp ~/kent/src/hg/mouseStuff/chainFormat.doc .
+
+
+# AXT FILES FROM THE NET (IN PROGRESS kate)
+#    for a "Human Best" track that displays alignments at
     # base level, and for download
     ssh kksilo
     cd /cluster/data/panTro1
     cd bed/blastz-blatHg16.pt0.swap
-    mkdir chimpNet chimpNetAxt
-    netSplit chimpSyn.2.net chimpNet
-    cd chimpNet
+    mkdir net axtNet
+    netSplit human.net net
+    cd axtNet
 cat > makeAxt.csh << 'EOF'
+    cd ../net
     foreach f (*.net)
         set i = $f:r
         echo $i.net
-        netToAxt $i.net ../all.chain \
+        netToAxt $i.net ../netChain/$i.chain \
                 /cluster/data/panTro1/nib /cluster/data/hg16/nib \
-                ../chimpNetAxt/$i.axt
+                ../axtNet/$i.axt
     end
 'EOF'
     # << this line makes emacs coloring happy
     csh -f makeAxt.csh >&! makeAxt.log &
     tail -100f makeAxt.log
 
+    # save in /gbdb and load into database
+    ssh hgwdev
+    mkdir -p /gbdb/panTro1/axtNetHg16
+    cd /gbdb/panTro1/axtNetHg16
+    foreach f (/cluster/data/panTro1/bed/blastz-blatHg16.pt0.swap/axtNet/*.axt)
+        ln -s $f /gbdb/panTro1/axtNetHg16
+    end
+    cd /cluster/data/panTro1
+    cd bed/blastz-blatHg16.pt0.swap/axtNet
+    hgLoadAxt panTro1 axtNetHg16
 
+    # copy to download area
+    ssh kksilo
+    cd /cluster/data/panTro1
+    cd bed/blastz-blatHg16.pt0.swap/axtNet
+
+    ssh hgwdev
+    mkdir -p /usr/local/apache/htdocs/goldenPath/panTro1/vsHg16/axtNet
+    cd /usr/local/apache/htdocs/goldenPath/panTro1/vsHg16/axtNet
+    cp /cluster/data/panTro1/bed/blastz-blatHg16.pt0.swap/axtNet/*.axt .
+    gzip *.axt
+    md5sum *.gz > md5sum.txt
+    # create README.txt
+ 
 
 # Genbank ESTs completed, but needed to redo native ESTs/mRNAs with 
 # new ooc file.
@@ -1336,3 +1389,43 @@ ldHgGene panTro1 mappedRefSeq new.gtf
    Added hack in genbank alignment code so that the xeno refseq track
    consists only of human refseqs.  This had to be reloaded due to
    query type getting lost.
+
+# load twinscan predictions without filtering pseudogenes baertsch 3/11/04
+# loaded frame info 
+cd /cluster/data/panTro1/bed
+mkdir -p twinscan
+cd twinscan
+wget http://genes.cs.wustl.edu/predictions/chimp/panTro1_vs_mm4/chimp_panTro1_vs_mm4.tgz
+cd chr_gtf
+ldHgGene panTro1 twinscan chr*.gtf -gtf -frame -geneName
+
+
+# GENEID GENES (2003-03-15 kate)
+
+    ssh hgwdev
+    mkdir -p /cluster/data/panTro1/bed/geneid/download
+    cd /cluster/data/panTro1/bed/geneid/download
+
+    # Now download *.gtf and *.prot from 
+    set dir = genome.imim.es/genepredictions/P.troglodytes/golden_path_200311/geneid_v1.1/
+    foreach c (1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 X Y Un)
+      wget http://$dir/chr$c.gtf
+      wget http://$dir/chr${c}_random.gtf
+      wget http://$dir/chr$c.prot
+      wget http://$dir/chr${c}_random.prot
+    end
+    wget http://$dir/readme
+    # Add missing .1 to protein id's
+    foreach f (*.prot)
+      perl -wpe 's/^(>chr\w+)$/$1.1/' $f > $f:r-fixed.prot
+      echo "done $f"
+    end
+    cd ..
+    ldHgGene panTro1 geneid download/*.gtf -exon=CDS
+        #Read 34198 transcripts in 279022 lines in 51 files
+	# Compare to Hg16 was: Read 32255 transcripts in 281180 lines 
+        #   in 40 files
+        #34198 groups 51 seqs 1 sources 3 feature types
+        #34198 gene predictions
+    hgPepPred panTro1 generic geneidPep download/*-fixed.prot
+

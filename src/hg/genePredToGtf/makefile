@@ -6,6 +6,6 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 
 O = genePredToGtf.o
 
-genePredToGtf: $O $(MYLIBS)
+genePredToGtf: $O $(MYLIBS) makefile
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/genePredToGtf $O $(MYLIBS) $L
 	strip $(HOME)/bin/$(MACHTYPE)/genePredToGtf

@@ -8,7 +8,7 @@
 #include "cheapcgi.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: hgGcPercent.c,v 1.8 2004/02/23 18:10:33 kent Exp $";
+static char const rcsid[] = "$Id: hgGcPercent.c,v 1.9 2004/03/11 23:14:00 hiram Exp $";
 
 /* Command line switches. */
 int winSize = 20000;               /* window size */
@@ -138,7 +138,7 @@ if (file)
 
 tabFile = mustOpen(tabFileName, "w");
 
-verbose(1, "writing to file %s\n", tabFileName);
+verbose(2, "writing to file %s\n", tabFileName);
 
 /* Create tab file with all GC percent data. */
 for (nibEl = nibList; nibEl != NULL; nibEl = nibEl->next)

@@ -177,7 +177,7 @@ type sample 0 8
 track regpotent
 shortLabel Reg. Potential
 longLabel Human/Mouse Regulatory Potential Score
-group compGeno
+group regulation
 color 100,50,0
 altColor 50,150,128
 priority 119
@@ -188,7 +188,7 @@ track slamNonCodingMouse
 shortLabel Slam Non Coding Mouse
 longLabel Slam Predictions of Human/Mouse Conserved Non-Coding Regions
 group compGeno
-priority 120
+priority 180
 visibility hide
 color 30,130,210
 altColor 200,220,255
@@ -199,7 +199,7 @@ track slamNonCodingRat
 shortLabel Slam Non Coding Rat
 longLabel Slam Predictions of Human/Rat Conserved Non-Coding Regions
 group compGeno
-priority 121
+priority 170
 visibility hide
 color 30,130,210
 altColor 200,220,255
@@ -264,12 +264,12 @@ track chimpSimpleDiff
 shortLabel Chimp Diff
 longLabel Chimp Simple Differences in Regions of High Quality Sequence
 group compGeno
-priority 145.8
+priority 206
 visibility hide
 type bed 3+
 
 
-track affyGeno
+track affy120K
 shortLabel Affy 120K SNPs
 longLabel Affymetrix 120K SNP Release Oct 2003
 group varRep

@@ -9,11 +9,12 @@
 #include "errabort.h"
 #include <mysql.h>
 #include "dlist.h"
+#include "dystring.h"
 #include "jksql.h"
 #include "sqlNum.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: jksql.c,v 1.49 2004/02/02 01:34:15 markd Exp $";
+static char const rcsid[] = "$Id: jksql.c,v 1.54 2004/03/17 04:22:14 angie Exp $";
 
 /* flags controlling sql monitoring facility */
 static unsigned monitorInited = FALSE;      /* initialized yet? */
@@ -230,6 +231,79 @@ while ((row = sqlNextRow(sr)) != NULL)
 sqlFreeResult(&sr);
 return databases;
 }
+
+struct slName *sqlListTables(struct sqlConnection *conn)
+/* Return list of tables in database associated with conn. */
+{
+struct sqlResult *sr = sqlGetResult(conn, "show tables");
+char **row;
+struct slName *list = NULL, *el;
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    el = slNameNew(row[0]);
+    slAddHead(&list, el);
+    }
+sqlFreeResult(&sr);
+slReverse(&list);
+return list;
+}
+
+struct slName *sqlListFields(struct sqlConnection *conn, char *table)
+/* Return list of fields in table. */
+{
+char query[256];
+safef(query, sizeof(query), "describe %s", table);
+char **row;
+struct slName *list = NULL, *el;
+struct sqlResult *sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    el = slNameNew(row[0]);
+    slAddHead(&list, el);
+    }
+sqlFreeResult(&sr);
+slReverse(&list);
+return list;
+}
+
+struct hash *sqlAllFields()
+/* Get hash of all database.table.field. */
+{
+struct hash *fullHash = hashNew(18);
+struct hash *dbHash = sqlHashOfDatabases();
+struct hashEl *dbList, *db;
+char fullName[512];
+int count = 0;
+
+dbList = hashElListHash(dbHash);
+for (db = dbList; db != NULL; db = db->next)
+    {
+    struct sqlConnection *conn = sqlConnect(db->name);
+    struct slName *table, *tableList = sqlListTables(conn);
+    struct sqlResult *sr;
+    char query[256];
+    char **row;
+    for (table = tableList; table != NULL; table = table->next)
+        {
+	safef(query, sizeof(query), "describe %s", table->name);
+	sr = sqlGetResult(conn, query);
+	while ((row = sqlNextRow(sr)) != NULL)
+	    {
+	    safef(fullName, sizeof(fullName), "%s.%s.%s", 
+	    	db->name, table->name, row[0]);
+	    hashAdd(fullHash, fullName, NULL);
+	    ++count;
+	    }
+	sqlFreeResult(&sr);
+	}
+    slFreeList(&tableList);
+    sqlDisconnect(&conn);
+    }
+slFreeList(&dbList);
+hashFree(&dbHash);
+return fullHash;
+}
+
 
 void sqlCleanupAll()
 /* Cleanup all open connections and resources. */
@@ -751,16 +825,14 @@ if (sr != NULL)
 return row;
 }
 
+char* sqlFieldName(struct sqlResult *sr)
 /* repeated calls to this function returns the names of the fields 
  * the given result */
-char* sqlFieldName(struct sqlResult *sr)
 {
 MYSQL_FIELD *field;
-
 field = mysql_fetch_field(sr->result);
-if(field == 0)
-	return 0;
-
+if(field == NULL)
+    return NULL;
 return field->name;
 }
 
@@ -945,6 +1017,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 sqlFreeResult(&sr);
 return ix;
 }
+
 
 unsigned int sqlLastAutoId(struct sqlConnection *conn)
 /* Return last automatically incremented id inserted into database. */
@@ -1139,11 +1212,31 @@ sqlDisconnect(&conn);
 return hash;
 }
 
+struct slName *sqlListOfDatabases()
+/* Get list of all databases that are online. */
+{
+struct sqlConnection *conn = sqlConnect("mysql");
+struct slName *list = sqlGetAllDatabase(conn);
+sqlDisconnect(&conn);
+return list;
+}
 
 char *connGetDatabase(struct sqlConnCache *conn)
 /* return database for a connection cache */
 {
-    return conn->database;
+return conn->database;
+}
+
+boolean sqlWildcardIn(char *s)
+/* Return TRUE if there is a sql wildcard char in string. */
+{
+char c;
+while ((c = *s++) != 0)
+    {
+    if (c == '_' || c == '%')
+        return TRUE;
+    }
+return FALSE;
 }
 
 char *sqlLikeFromWild(char *wild)
@@ -1176,5 +1269,71 @@ while ((c = *wild++) != 0)
 	}
     }
 return retVal;
+}
+
+int sqlDateToUnixTime(char *sqlDate)
+/* Convert a SQL date such as "2003-12-09 11:18:43" to clock time 
+ * (seconds since midnight 1/1/1970 in UNIX). */
+{
+struct tm *tm = NULL;
+long clockTime = 0;
+
+if (sqlDate == NULL)
+    errAbort("Null string passed to sqlDateToClockTime()");
+AllocVar(tm);
+if (sscanf(sqlDate, "%4d-%2d-%2d %2d:%2d:%2d",
+	   &(tm->tm_year), &(tm->tm_mon), &(tm->tm_mday),
+	   &(tm->tm_hour), &(tm->tm_min), &(tm->tm_sec))  != 6)
+    errAbort("Couldn't parse sql date \"%s\"", sqlDate);
+tm->tm_year -= 1900;
+tm->tm_mon  -= 1;
+clockTime = mktime(tm);
+if (clockTime < 0)
+    errAbort("mktime failed (%d-%d-%d %d:%d:%d).",
+	     tm->tm_year, tm->tm_mon, tm->tm_mday,
+	     tm->tm_hour, tm->tm_min, tm->tm_sec);
+freez(&tm);
+return clockTime;
+}
+
+static int getUpdateFieldIndex(struct sqlResult *sr)
+/* Return index of update field. */
+{
+static int updateFieldIndex = -1;
+if (updateFieldIndex < 0)
+    {
+    int ix;
+    char *name;
+    for (ix=0; ;++ix)
+        {
+	name = sqlFieldName(sr);
+	if (name == NULL)
+	    errAbort("Can't find Update_time field in show table status result");
+	if (sameString("Update_time", name))
+	    {
+	    updateFieldIndex = ix;
+	    break;
+	    }
+	}
+    }
+return updateFieldIndex;
+}
+
+int sqlTableUpdateTime(struct sqlConnection *conn, char *table)
+/* Get last update time for table. */
+{
+char query[512], **row;
+struct sqlResult *sr;
+int updateIx;
+int time;
+safef(query, sizeof(query), "show table status like '%s'", table);
+sr = sqlGetResult(conn, query);
+updateIx = getUpdateFieldIndex(sr);
+row = sqlNextRow(sr);
+if (row == NULL)
+    errAbort("Database table %s doesn't exist", table);
+time = sqlDateToUnixTime(row[updateIx]);
+sqlFreeResult(&sr);
+return time;
 }
 

@@ -82,8 +82,6 @@ while ((row = sqlNextRow(sr)) != NULL)
 	hel = hashLookupNext(hel);
 	++count;
 	}
-    if (count >= maxCount)
-	break;
     }
 sqlFreeResult(&sr);
 }
@@ -145,8 +143,6 @@ if (group != NULL)
 	    hel = hashLookupNext(hel);
 	    ++count;
 	    }
-	if (count >= maxCount)
-	    break;
 	}
     sqlFreeResult(&sr);
     }

@@ -77,7 +77,28 @@ void wiggleOutput(struct wiggle *el, FILE *f, char sep, char lastSep);
 #define MAX_WIG_VALUE	127
 #define MAX_OPT_STRLEN	128
 
-#include "hdb.h"
+struct wiggleDatum
+/* a single instance of a wiggle data value */
+    {
+    unsigned chromStart;    /* Start position in chromosome, 0 relative */
+    double value;
+    };
+
+struct wiggleData
+/* linked list of wiggle data values */
+    {
+    struct wiggleData *next;  /* Next in singly linked list. */
+    char *chrom;	/* chromosome or contig */
+    unsigned chromStart;    /* Start position, first value */
+    unsigned chromEnd;      /* End position, last value */
+    unsigned span;	/* each value spans this many bases */
+    unsigned count;	/* number of values in this block */
+    double lowerLimit;	/* lowest data value in this block */
+    double dataRange;	/* lowerLimit + dataRange = upperLimit */
+    double sumData;   /* sum of the data points, for average and stddev calc */
+    double sumSquares;	/* sum of data points squared, for stddev calc */
+    struct wiggleDatum *data;	/* many individual data items here */
+    };
 
 /*	anonymous declaration of track to take care of the use of this struct
  *	in the wigSetCart definition below.  Prevents compiler warnings on
@@ -88,6 +109,11 @@ struct track;
 /*	in hgTracks/wigTrack.c	*/
 void wigSetCart(struct track *track, char *dataID, void *dataValue);
     /*	set one of the variables in the wigCart	*/
+
+/*	in lib/wiggleUtils.c	*/
+struct wiggleData *fetchWigData(char *db, char *tableName, char *chromName,
+    int winStart, int winEnd);
+/*  return linked list of wiggle data between winStart, winEnd */
 
 /*	in lib/wiggleCart.c	*/
 extern void wigFetchMinMaxY(struct trackDb *tdb, double *min,

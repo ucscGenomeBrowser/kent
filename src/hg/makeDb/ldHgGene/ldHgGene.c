@@ -11,7 +11,7 @@
 #include "genePred.h"
 #include "hgRelate.h"
 
-static char const rcsid[] = "$Id: ldHgGene.c,v 1.28 2004/03/04 16:22:40 sugnet Exp $";
+static char const rcsid[] = "$Id: ldHgGene.c,v 1.29 2004/03/17 03:41:40 markd Exp $";
 
 char *exonType = "exon";	/* Type field that signifies exons. */
 boolean requireCDS = FALSE;     /* should genes with CDS be dropped */
@@ -199,10 +199,10 @@ if (optionExists("exon") && optionExists("gtf"))
 exonType = optionVal("exon", exonType);
 outFile = optionVal("out", NULL);
 requireCDS = optionExists("requireCDS");
- if (optionExists("frame"))
-     gOptFields |= (genePredCdsStatFld|genePredExonFramesFld);
- if (optionExists("geneName"))
-     gOptFields |= genePredName2Fld;
+if (optionExists("frame"))
+    gOptFields |= (genePredCdsStatFld|genePredExonFramesFld);
+if (optionExists("geneName"))
+    gOptFields |= genePredName2Fld;
 
 if (optionExists("predTab"))
     ldHgGenePred(argv[1], argv[2], argc-3, argv+3);

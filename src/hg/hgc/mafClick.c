@@ -10,7 +10,7 @@
 #include "genePred.h"
 #include "hgMaf.h"
 
-static char const rcsid[] = "$Id: mafClick.c,v 1.11 2004/02/07 06:58:42 daryl Exp $";
+static char const rcsid[] = "$Id: mafClick.c,v 1.12 2004/03/17 03:45:57 kate Exp $";
 
 /* Javascript to help make a selection from a drop-down
  * go back to the server. */
@@ -127,6 +127,7 @@ static void mafPrettyHeader(FILE *f, struct mafAli *maf)
 /* Write out summary. */
 {
 struct mafComp *mc;
+char buf[16];
 for (mc = maf->components; mc != NULL; mc = mc->next)
     {
     char dbOnly[128];
@@ -144,14 +145,15 @@ for (mc = maf->components; mc != NULL; mc = mc->next)
         reverseIntRange(&s, &e, mc->srcSize);
     if (hDbExists(dbOnly))
         {
-        fprintf(f, "%-10s %-10s (%13s) ", 
-    	        hOrganism(dbOnly), hFreezeFromDb(dbOnly), dbOnly);
+        safef(buf, sizeof(buf), "(%s)", dbOnly);
+        fprintf(f, "%-10s %-10s %-10s ", 
+    	        hOrganism(dbOnly), hFreezeFromDb(dbOnly), buf);
         linkToOtherBrowser(dbOnly, chrom, s, e);
         fprintf(f, "%s:%d-%d</A>", chrom, s+1, e);
         }
     else
         {
-        fprintf(f, "%-33s%5c", dbOnly, ' ');
+        fprintf(f, "%-28s%5c", dbOnly, ' ');
         fprintf(f, "%s:%d-%d", chrom, s+1, e);
         }
     fprintf(f, ", strand %c, size %d\n", mc->strand, mc->size);
@@ -402,7 +404,7 @@ else
 	printf("Capitalize ");
 	cgiMakeDropListFull(codeVarName, codeAll, codeAll, 
 	    ArraySize(codeAll), codeVarVal, autoSubmit);
-	printf("exons based on: ");
+	printf("exons based on ");
 	capTrack = genePredDropDown("hgc.multiCapTrack");
 	printf("<BR>\n");
 	printf("</FORM>\n");

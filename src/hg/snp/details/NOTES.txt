@@ -7,16 +7,13 @@ While parsing the XML files (rewrite getObsHet), get the information to update t
   - snpMap.chromStart / snpMap.chromEnd
   - snpMap.type  
 
-- for all SNPs                       
+- for all SNPs
   - snpMap.source (starting with build 120?)
-  - snpMap.function (add new smallint field with function_id)
   - dbSnpRsXX.allele1  / dbSnpRsXX.allele2  ??
   - dbSnpRsXX.observed / dbSnpRsXX.alternate ??
   - snpPop  - populations for frequencies
   - snpFreq - frequencies of snps in populations
 
-
-Change the format of snpMap fields 'source' and 'type' to enum.
 Add validaton status to snpMap? (enum, of course) - requires UI update also
 
 

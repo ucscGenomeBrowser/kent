@@ -11,7 +11,7 @@
 #include "genbank.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: genePred.c,v 1.39 2004/03/08 05:20:30 markd Exp $";
+static char const rcsid[] = "$Id: genePred.c,v 1.42 2004/03/15 19:17:52 markd Exp $";
 
 /* SQL to create a genePred table */
 static char *createSql = 
@@ -383,11 +383,17 @@ return dif;
 static boolean isExon(char *feat, boolean isGtf, char *exonSelectWord)
 /* determine if a feature is an exon; different criteria for GFF ane GTF */
 {
-/* FIXME: shouldn't actually need to allow CDS here for GTF */
 if (isGtf)
-    return (sameWord(feat, "CDS") || sameWord(feat, "exon"));
+    {
+    /* must check for stop_codon here, because GTF put it outside of the
+     * CDS */
+    return (sameWord(feat, "CDS") || sameWord(feat, "stop_codon")
+            || sameWord(feat, "start_codon") || sameWord(feat, "exon"));
+    }
 else
+    {
     return ((exonSelectWord == NULL) || sameWord(feat, exonSelectWord));
+    }
 }
 
 static void chkGroupLine(struct gffGroup *group, struct gffLine *gl, struct genePred *gp)
@@ -407,7 +413,8 @@ if (!sameString(gl->seq, gp->chrom) && (gl->strand == gp->strand[0]))
 static boolean isCds(char *feat, boolean isGtf)
 /* determine if a feature is CDS */
 {
-return sameWord(feat, "CDS");
+return sameWord(feat, "CDS") ||  sameWord(feat, "stop_codon")
+    || sameWord(feat, "start_codon");
 }
 
 static struct genePred *mkFromGroupedGxf(struct gffFile *gff, struct gffGroup *group, char *name,
@@ -515,50 +522,62 @@ if (optFields & genePredExonFramesFld)
 eFrames = gp->exonFrames;
 
 
-/* adjust tx range to include stop codon on */
+/* adjust tx range to include stop codon */
 if ((group->strand == '+') && (gp->txEnd == stopCodonStart))
      gp->txEnd = stopCodonEnd;
 else if ((group->strand == '-') && (gp->txStart == stopCodonEnd))
     gp->txStart = stopCodonStart;
 
-i = 0;
+i = -1; /* before first exon */
 /* fill in exons, merging overlaping and adjacent exons */
 for (gl = group->lineList; gl != NULL; gl = gl->next)
     {
-    if ((optFields & genePredExonFramesFld) && isCds(gl->feature, isGtf))
-        {
-        /* set frame if this is a CDS */
-        assert(i < exonCount);
-        if (isdigit(gl->frame))
-            eFrames[i] = (int)gl->frame - '0';
-        }
     if (isExon(gl->feature, isGtf, exonSelectWord))
         {
         chkGroupLine(group, gl, gp);
-        if ((i == 0) || (gl->start > eEnds[i-1]))
+        if ((i < 0) || (gl->start > eEnds[i]))
             {
+            /* start a new exon */
+            ++i;
+            assert(i < exonCount);
             eStarts[i] = gl->start;
             eEnds[i] = gl->end;
-            ++i;
             }
         else
             {
             /* overlap, extend exon, picking the largest of ends */
-            assert(gl->start >= eStarts[i-1]);
-            if (gl->end > eEnds[i-1])
-                eEnds[i-1] = gl->end;
+            assert(i < exonCount);
+            assert(gl->start >= eStarts[i]);
+            if (gl->end > eEnds[i])
+                eEnds[i] = gl->end;
             }
         /* extend exon for stop codon in GTF if needed */
         if (isGtf)
             {
-            if ((group->strand == '+') && (eEnds[i-1] == stopCodonStart))
-                eEnds[i-1] = stopCodonEnd;
-            else if ((group->strand == '-') && (eStarts[i-1] == stopCodonEnd))
-                eStarts[i-1] = stopCodonStart;
+            if ((group->strand == '+') && (eEnds[i] == stopCodonStart))
+                eEnds[i] = stopCodonEnd;
+            else if ((group->strand == '-') && (eStarts[i] == stopCodonEnd))
+                eStarts[i] = stopCodonStart;
+            }
+        if ((optFields & genePredExonFramesFld) && isCds(gl->feature, isGtf))
+            {
+            /* set frame if this is a CDS, convert from GFF/GTF definition.
+            * leave unchanged if no frame.*/
+            switch (gl->frame) {
+                case '0':
+                    eFrames[i] = 0;
+                    break;
+                case '1':
+                    eFrames[i] = 2;
+                    break;
+                case '2':
+                    eFrames[i] = 1;
+                    break;
+                }
             }
         }
     }
-gp->exonCount = i;
+gp->exonCount = i+1;
 return gp;
 }
 
@@ -629,6 +648,10 @@ for (iBlk = 0; (iBlk < psl->blockCount) && (cdsStart < 0); iBlk++)
         {
         /* in gap before block, set to start of block */
         cdsStart = psl->tStarts[iBlk];
+        if (gene->strand[0] == '+')
+            cds->startComplete = FALSE;
+        else
+            cds->endComplete = FALSE;
         }
     else if (rnaCdsStart < (psl->qStarts[iBlk] + psl->blockSizes[iBlk]))
         {
@@ -645,10 +668,17 @@ if (cdsStart < 0)
 /* find query block or gap containing end and map to target */
 for (iBlk = 0; (iBlk < psl->blockCount) && (cdsEnd < 0); iBlk++)
     {
-    if (rnaCdsEnd < psl->qStarts[iBlk])
+    if (rnaCdsEnd <= psl->qStarts[iBlk])
         {
-        /* in gap before block, set to end of gap */
-        cdsEnd = psl->tStarts[iBlk];
+        /* in gap before block, set to start of gap */
+        if (iBlk == 0)
+            cdsEnd = psl->tStarts[0] - 1;  /* end of gene */
+        else
+            cdsEnd = psl->tStarts[iBlk-1] + psl->blockSizes[iBlk-1];
+        if (gene->strand[0] == '+')
+            cds->endComplete = FALSE;
+        else
+            cds->startComplete = FALSE;
         }
     else if (rnaCdsEnd < (psl->qStarts[iBlk] + psl->blockSizes[iBlk]))
         {
@@ -660,14 +690,36 @@ if (cdsEnd < 0)
     {
     /* after last block, set to end of that block */
     cdsEnd = psl->tStarts[iBlk-1] + psl->blockSizes[iBlk-1];
+    if (gene->strand[0] == '+')
+        cds->endComplete = FALSE;
+    else
+        cds->startComplete = FALSE;
     }
 
 if (psl->strand[1] == '-')
     reverseIntRange(&cdsStart, &cdsEnd, psl->tSize);
 
-assert(cdsStart <= cdsEnd);
-gene->cdsStart = cdsStart;
-gene->cdsEnd = cdsEnd;
+if (cdsStart < cdsEnd)
+    {
+    gene->cdsStart = cdsStart;
+    gene->cdsEnd = cdsEnd;
+    if (gene->optFields & genePredCdsStatFld)
+        {
+        gene->cdsStartStat = (cds->startComplete) ? cdsComplete : cdsIncomplete;
+        gene->cdsEndStat = (cds->endComplete) ? cdsComplete : cdsIncomplete;;
+        }
+    }
+else
+    {
+    /* CDS not aligned */
+    gene->cdsStart = gene->txEnd;
+    gene->cdsEnd = gene->txEnd;
+    if (gene->optFields & genePredCdsStatFld)
+        {
+        gene->cdsStartStat = cdsUnknown;
+        gene->cdsEndStat = cdsUnknown;
+        }
+    }
 }
 
 static void annotateCds(struct psl *psl, struct genbankCds* cds,
@@ -676,7 +728,7 @@ static void annotateCds(struct psl *psl, struct genbankCds* cds,
 {
 if (cds == NULL)
     {
-    /* no CDS, set to end */
+    /* no CDS, set to zero-length at end */
     gene->cdsStart = psl->tEnd;
     gene->cdsEnd = psl->tEnd;
     if (gene->optFields & genePredCdsStatFld)
@@ -706,11 +758,6 @@ else
         adjCds.endComplete = FALSE;
         }
     mapCdsToGenome(psl, &adjCds, gene);
-    if (gene->optFields & genePredCdsStatFld)
-        {
-        gene->cdsStartStat = (adjCds.startComplete) ? cdsComplete : cdsIncomplete;
-        gene->cdsEndStat = (adjCds.endComplete) ? cdsComplete : cdsIncomplete;;
-        }
     }
 }
 

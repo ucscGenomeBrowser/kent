@@ -122,12 +122,14 @@ hgsql $db < ~/src/hg/affyGnf/affyGnfU95.sql
 # the GNF data.
 hgMapToGene $db affyU95 knownGene knownToU95
 cd ~/src/hg/near/hgExpDistance
-hgExpDistance $db affyGnfU95 affyGnfU95Exps knownGnfDistance -lookup=knownToU95
+#hgExpDistance $db affyGnfU95 affyGnfU95Exps knownGnfDistance -lookup=knownToU95
+hgExpDistance $db hgFixed.gnfHumanU95MedianRatio hgFixed.gnfHumanU95MedianExps knownGnfDistance -lookup=knownToU95
 
 #For worm did instead
-hgExpDistance ce1 kimLifeCycleMedian kimWormLifeCycleMedian kimExpDistance
+#hgExpDistance ce1 kimLifeCycleMedian kimWormLifeCycleMedian kimExpDistance
+hgExpDistance ce1 hgFixed.kimWormLifeMedianRatio hgFixed.kimWormLifeMedianExps kimExpDistance
 
-#FOr mouse did instead
+#For mouse did instead
 hgExpDistance mm3 affyGnfU74A affyGnfU74AExps affyGnfU74ADistance -lookup=knownToU74
 hgExpDistance mm3 affyGnfU74B affyGnfU74BExps affyGnfU74BDistance -lookup=knownToU74
 hgExpDistance mm3 affyGnfU74C affyGnfU74CExps affyGnfU74CDistance -lookup=knownToU74

@@ -1,4 +1,5 @@
 /* joinerCheck - Parse and check joiner file. */
+
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"
@@ -6,8 +7,20 @@
 #include "dystring.h"
 #include "obscure.h"
 #include "jksql.h"
+#include "joiner.h"
 
-static char const rcsid[] = "$Id: joinerCheck.c,v 1.4 2004/03/11 09:56:45 kent Exp $";
+static char const rcsid[] = "$Id: joinerCheck.c,v 1.20 2004/03/17 02:20:35 kent Exp $";
+
+/* Variable that are set from command line. */
+boolean parseOnly; 
+char *fieldListIn;
+char *fieldListOut;
+char *identifier;
+char *database;
+boolean foreignKeys;	/* "keys" command line variable. */
+boolean checkTimes;	/* "times" command line variable. */
+boolean tableCoverage;
+boolean dbCoverage;
 
 void usage()
 /* Explain usage and exit. */
@@ -17,425 +30,33 @@ errAbort(
   "usage:\n"
   "   joinerCheck file.joiner\n"
   "options:\n"
-  "   -xxx=XXX\n"
+  "   -parseOnly just parse joiner file, don't check database.\n"
+  "   -fieldListOut=file - List all fields in all databases to file.\n"
+  "   -fieldListIn=file - Get list of fields from file rather than mysql.\n"
+  "   -identifier=name - Just validate given identifier.\n"
+  "   -database=name - Just validate given database.\n"
+  "   -keys - Validate (foreign) keys.  Takes about an hour.\n"
+  "   -noTableCoverage - No check that all tables are mentioned in joiner file\n"
+  "   -noDbCoverage - No check that all databases are mentioned in joiner file\n"
+  "   -noTimes - Check update times of tables are after tables they depend on\n"
   );
 }
 
-struct joinerField
-/* A field that can be joined on. */
-    {
-    struct joinerField *next;	/* Next in list. */
-    struct slName *dbList;	/* List of possible databases. */
-    char *table;		/* Associated table. */
-    char *field;		/* Associated field. */
-    char *chopBefore;		/* Chop before string */
-    char *chopAfter;		/* Chop after string */
-    char *separator;		/* Separators for lists. */
-    boolean indexOf;		/* True if id is index in this list. */
-    };
-
-struct joinerSet
-/* Information on a set of fields that can be joined together. */
-    {
-    struct joinerSet *next;		/* Next in list. */
-    char *name;				/* Name of field set. */
-    struct joinerSet *parent;		/* Parsed-out parent type if any. */
-    char *typeOf;			/* Parent type name if any. */
-    char *external;			/* External name if any. */
-    char *description;			/* Short description. */
-    struct joinerField *fieldList;	/* List of fields. */
-    char *fileName;		/* File parsed out of for error reporting */
-    int lineIx;			/* Line index of start for error reporting */
-    };
-
-static boolean nextSubTok(struct lineFile *lf,
-	char **pLine, char **retTok, int *retSize)
-/* Return next token for substitution purposes.  Return FALSE
- * when no more left. */
-{
-char *start, *s, c;
-
-s = start = *retTok = *pLine;
-c = *s;
-
-if (c == 0)
-    return FALSE;
-if (isspace(c))
-    {
-    while (isspace(*(++s)))
-	;
-    }
-else if (isalnum(c))
-    {
-    while (isalnum(*(++s)))
-	;
-    }
-else if (c == '$')
-    {
-    if (s[1] == '{')
-        {
-	s += 1;
-	for (;;)
-	    {
-	    c = *(++s);
-	    if (c == '}')
-		{
-		++s;
-	        break;
-		}
-	    if (c == 0)	/* Arguably could warn/abort here. */
-		{
-		errAbort("End of line in ${var} line %d of %s",
-			lf->lineIx, lf->fileName);
-		}
-	    }
-	}
-    else
-        {
-	while (isalnum(*(++s)))
-	    ;
-	}
-    }
-else
-    {
-    ++s;
-    }
-*pLine = s;
-*retSize = s - start;
-return TRUE;
-}
-
-char *subThroughHash(struct lineFile *lf,
-	struct hash *hash, struct dyString *dy, char *s)
-/* Return string that has any variables in string-valued hash looked up. 
- * The result is put in the passed in dyString, and also returned. */
-{
-char *tok;
-int size;
-dyStringClear(dy);
-while (nextSubTok(lf, &s, &tok, &size))
-    {
-    if (tok[0] == '$')
-        {
-	char tokBuf[256], *val;
-
-	/* Extract 'var' out of '$var' or '${var}' into tokBuf*/
-	tok += 1;
-	size -= 1;
-	if (tok[0] == '{')
-	    {
-	    tok += 1;
-	    size -= 2;
-	    }
-	if (size >= sizeof(tokBuf))
-	    errAbort("Variable name too long line %d of %s", 
-	    	lf->lineIx, lf->fileName);
-	memcpy(tokBuf, tok, size);
-	tokBuf[size] = 0;
-
-	/* Do substitution. */
-	val = hashFindVal(hash, tokBuf);
-	if (val == NULL)
-	    errAbort("$%s not defined line %d of %s", tokBuf, 
-	    	lf->lineIx, lf->fileName);
-	dyStringAppend(dy, val);
-	}
-    else
-        {
-	dyStringAppendN(dy, tok, size);
-	}
-    }
-return dy->string;
-}
-
 static struct optionSpec options[] = {
+   {"parseOnly", OPTION_BOOLEAN},
+   {"fieldListIn", OPTION_STRING},
+   {"fieldListOut", OPTION_STRING},
+   {"identifier", OPTION_STRING},
+   {"database", OPTION_STRING},
+   {"keys", OPTION_BOOLEAN},
+   {"noTimes", OPTION_BOOLEAN},
+   {"noTableCoverage", OPTION_BOOLEAN},
+   {"noDbCoverage", OPTION_BOOLEAN},
    {NULL, 0},
 };
 
-char *nextSubbedLine(struct lineFile *lf, struct hash *hash, 
-	struct dyString *dy)
-/* Return next line after string substitutions.  This skips comments. */
-{
-char *line;
-for (;;)
-    {
-    if (!lineFileNext(lf, &line, NULL))
-	return NULL;
-    if (line[0] != '#')
-	break;
-    }
-return subThroughHash(lf, hash, dy, line);
-}
 
-void unspecifiedVar(struct lineFile *lf, char *var)
-/* Complain about variable that needs to be followed by = but isn't */
-{
-errAbort("%s must be followed by = line %d of %s", var, 
-	lf->lineIx, lf->fileName);
-}
-
-struct joinerSet *parseOneJoiner(struct lineFile *lf, char *line, 
-	struct hash *symHash, struct dyString *dyBuf)
-/* Parse out one joiner record - keep going until blank line or
- * end of file. */
-{
-struct joinerSet *js;
-struct joinerField *jf;
-struct slName *dbName;
-char *word, *s, *e;
-struct hash *varHash;
-char *parts[3];
-int partCount;
-
-/* Parse through first line - first word is name. */
-word = nextWord(&line);
-if (word == NULL || strchr(word, '=') != NULL)
-    errAbort("joiner without name line %d of %s\n", lf->lineIx, lf->fileName);
-AllocVar(js);
-js->name = cloneString(word);
-js->lineIx = lf->lineIx;
-js->fileName = cloneString(lf->fileName);
-
-while ((word = nextWord(&line)) != NULL)
-    {
-    char *e = strchr(word, '=');
-    if (e == NULL)
-        errAbort("Expecting name=value pair line %d of %s", 
-		lf->lineIx, lf->fileName);
-    *e++ = 0;
-    if (sameString(word, "typeOf"))
-	js->typeOf = cloneString(e);
-    else if (sameString(word, "external"))
-	js->external = cloneString(e);
-    else
-        errAbort("Unknown attribute %s line %d of %s", word, 
-		lf->lineIx, lf->fileName);
-    }
-
-/* Parse second line, make sure it is quoted, and save as description. */
-line = nextSubbedLine(lf, symHash, dyBuf);
-if (line == NULL)
-    lineFileUnexpectedEnd(lf);
-line = trimSpaces(line);
-if (line[0] != '"' || lastChar(line) != '"')
-    errAbort("Expecting quoted line, line %d of %s\n", 
-    	lf->lineIx, lf->fileName);
-line[strlen(line)-1] = 0;
-js->description = cloneString(line+1);
-
-/* Go through subsequent lines. */
-while ((line = nextSubbedLine(lf, symHash, dyBuf)) != NULL)
-     {
-     /* Keep grabbing until we get a blank line. */
-     line = skipLeadingSpaces(line);
-     if (line[0] == 0)
-         break;
-
-     /* First word in line should be database.tabe.field. */
-     word = nextWord(&line);
-     partCount = chopString(word, ".", parts, ArraySize(parts));
-     if (partCount != 3)
-         errAbort("Expecting database.table.field line %d of %s",
-	 	lf->lineIx, lf->fileName);
-
-     /* Allocate struct and save table and field. */
-     AllocVar(jf);
-     jf->table = cloneString(parts[1]);
-     jf->field = cloneString(parts[2]);
-     slAddHead(&js->fieldList, jf);
-
-     /* Database may be a comma-separated list.  Parse it here. */
-     s = parts[0];
-     while (s != NULL)
-         {
-	 e = strchr(s, ',');
-	 if (e != NULL)
-	     {
-	     *e++ = 0;
-	     if (e[0] == 0)
-	         e = NULL;
-	     }
-	 if (s[0] == 0)
-	     errAbort("Empty database name line %d of %s", 
-	     	lf->lineIx, lf->fileName);
-	 dbName = slNameNew(s);
-	 slAddHead(&jf->dbList, dbName);
-	 s = e;
-	 }
-     slReverse(&jf->dbList);
-
-     /* Look for other fields in subsequent space-separated words. */
-     while ((word = nextWord(&line)) != NULL)
-         {
-	 if ((e = strchr(word, '=')) != NULL)
-	     *e++ = 0;
-	 if (sameString("comma", word))
-	     jf->separator = cloneString(",");
-	 else if (sameString("separator", word))
-	     {
-	     if (e == NULL)
-		 unspecifiedVar(lf, word);
-	     jf->separator = cloneString(e);
-	     }
-	 else if (sameString("chopBefore", word))
-	     {
-	     if (e == NULL)
-		 unspecifiedVar(lf, word);
-	     jf->chopBefore = cloneString(e);
-	     }
-	 else if (sameString("chopAfter", word))
-	     {
-	     if (e == NULL)
-		 unspecifiedVar(lf, word);
-	     jf->chopAfter = cloneString(e);
-	     }
-	 else if (sameString("indexOf", word))
-	     {
-	     jf->indexOf = TRUE;
-	     }
-	 else
-	     {
-	     errAbort("Unrecognized attribute %s line %d of %s",
-	     	word, lf->lineIx, lf->fileName);
-	     }
-	 }
-     if (jf->indexOf && jf->separator == NULL)
-         errAbort("indexOf without comma or separator line %d of %s",
-	 	lf->lineIx, lf->fileName);
-     }
-slReverse(&js->fieldList);
-return js;
-}
-
-struct joinerSet *joinerParsePassOne(struct lineFile *lf)
-/* Do first pass parsing of joiner file and return list of
- * joinerSets. */
-{
-char *line, *word;
-struct hash *symHash = newHash(0);
-struct dyString *dyBuf = dyStringNew(0);
-struct joinerSet *jsList = NULL, *js;
-
-while ((line = nextSubbedLine(lf, symHash, dyBuf)) != NULL)
-    {
-    if ((word = nextWord(&line)) != NULL)
-        {
-	if (sameString("set", word))
-	    {
-	    char *var, *val;
-	    var = nextWord(&line);
-	    if (var == NULL)
-	        errAbort("set what line %d of %s", lf->lineIx, lf->fileName);
-	    val = trimSpaces(line);
-	    if (val[0] == 0)
-	        errAbort("Set with no value line %d of %s", 
-			lf->lineIx, lf->fileName);
-	    hashAdd(symHash, var, cloneString(val));
-	    }
-	else if (sameString("joiner", word))
-	    {
-	    js = parseOneJoiner(lf, line, symHash, dyBuf);
-	    if (js != NULL)
-	        slAddHead(&jsList, js);
-	    }
-	}
-    }
-slReverse(&jsList);
-return jsList;
-}
-
-void joinerParsePassTwo(struct joinerSet *jsList)
-/* Go through and link together parents and children. */
-{
-struct joinerSet *js, *parent;
-struct hash *hash = newHash(0);
-for (js = jsList; js != NULL; js = js->next)
-    {
-    if (hashLookup(hash, js->name))
-        errAbort("Duplicate joiner %s line %d of %s",
-		js->name, js->lineIx, js->fileName);
-    hashAdd(hash, js->name, js);
-    }
-for (js = jsList; js != NULL; js = js->next)
-    {
-    char *typeOf = js->typeOf;
-    if (typeOf != NULL)
-        {
-	js->parent = hashFindVal(hash, typeOf);
-	if (js->parent == NULL)
-	    errAbort("%s not define line %d of %s", 
-	    	typeOf, js->lineIx, js->fileName);
-	}
-    }
-for (js = jsList; js != NULL; js = js->next)
-    {
-    for (parent = js->parent; parent != NULL; parent = parent->parent)
-        {
-	if (parent == js)
-	    errAbort("Circular typeOf dependency on joiner %s line %d of %s", 
-	    	js->name, js->lineIx, js->fileName);
-	}
-    }
-}
-
-struct slName *sqlListTables(struct sqlConnection *conn)
-/* Return list of tables in database associated with conn. */
-{
-struct sqlResult *sr = sqlGetResult(conn, "show tables");
-char **row;
-struct slName *list = NULL, *el;
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-    el = slNameNew(row[0]);
-    slAddHead(&list, el);
-    }
-sqlFreeResult(&sr);
-slReverse(&list);
-return list;
-}
-
-struct hash *sqlAllFields()
-/* Get hash of all database.table.field. */
-{
-struct hash *fullHash = hashNew(18);
-struct hash *dbHash = sqlHashOfDatabases();
-struct hashEl *dbList, *db;
-char fullName[512];
-int count = 0;
-
-dbList = hashElListHash(dbHash);
-uglyf("%d databases\n", slCount(dbList));
-for (db = dbList; db != NULL; db = db->next)
-    {
-    struct sqlConnection *conn = sqlConnect(db->name);
-    struct slName *table, *tableList = sqlListTables(conn);
-    struct sqlResult *sr;
-    char query[256];
-    char **row;
-    uglyf("%s %d tables\n", db->name, slCount(tableList));
-    for (table = tableList; table != NULL; table = table->next)
-        {
-	safef(query, sizeof(query), "describe %s", table->name);
-	sr = sqlGetResult(conn, query);
-	while ((row = sqlNextRow(sr)) != NULL)
-	    {
-	    safef(fullName, sizeof(fullName), "%s.%s.%s", 
-	    	db->name, table->name, row[0]);
-	    hashAdd(fullHash, fullName, NULL);
-	    ++count;
-	    }
-	sqlFreeResult(&sr);
-	}
-    slFreeList(&tableList);
-    sqlDisconnect(&conn);
-    }
-slFreeList(&dbList);
-hashFree(&dbHash);
-uglyf("%d total fields\n", count);
-return fullHash;
-}
-
-void printField(struct joinerField *jf, FILE *f)
+static void printField(struct joinerField *jf, FILE *f)
 /* Print out field info to f. */
 {
 struct slName *db;
@@ -448,41 +69,134 @@ for (db = jf->dbList; db != NULL; db = db->next)
 fprintf(f, ".%s.%s", jf->table, jf->field);
 }
 
-boolean fieldExists(struct hash *fieldHash,
-	struct hash *dbChromHash,
+static char *emptyForNull(char *s)
+/* Return "" for NULL strings, otherwise string itself. */
+{
+if (s == NULL)
+    s = "";
+return s;
+}
+
+void checkOneDependency(struct joiner *joiner,
+	struct joinerDependency *dep, struct sqlConnection *conn, char *dbName)
+/* Check out one dependency in one database. */
+{
+char *tableToCheck = dep->table->table;
+if (sqlWildcardIn(tableToCheck))
+    {
+    errAbort("Can't handle wildCards in dependency tables line %d of %s",
+    	dep->lineIx, joiner->fileName);
+    }
+if (slNameInList(dep->table->dbList, dbName) 
+	&& sqlTableExists(conn, tableToCheck))
+    {
+    int tableTime = sqlTableUpdateTime(conn, tableToCheck);
+    struct joinerTable *dependsOn;
+    for (dependsOn = dep->dependsOnList; dependsOn != NULL; 
+	dependsOn = dependsOn->next)
+	{
+	if (slNameInList(dependsOn->dbList, dbName))
+	    {
+	    if (!sqlTableExists(conn, dependsOn->table))
+		{
+		warn("Error: %s.%s doesn't exist line %d of %s",
+		    dbName, dependsOn->table, 
+		    dep->lineIx, joiner->fileName);
+		}
+	    else
+		{
+		int depTime = sqlTableUpdateTime(conn, dependsOn->table);
+		if (depTime > tableTime)
+		    {
+		    warn("Error: %s.%s updated after %s.%s line %d of %s",
+			dbName, dependsOn->table, dbName, tableToCheck,
+			dep->lineIx, joiner->fileName);
+		    }
+		}
+	    }
+	}
+    }
+}
+
+void joinerCheckDependencies(struct joiner *joiner, char *specificDb)
+/* Check time stamps on dependent tables. */
+{
+struct hashEl *db, *dbList = hashElListHash(joiner->databasesChecked);
+for (db = dbList; db != NULL; db = db->next)
+    {
+    if (specificDb == NULL || sameString(specificDb, db->name))
+        {
+	struct sqlConnection *conn = sqlMayConnect(db->name);
+	if (conn != NULL)	/* We've already warned on this NULL */
+	    {
+	    struct joinerDependency *dep;
+	    for (dep = joiner->dependencyList; dep != NULL; dep = dep->next)
+	        {
+		checkOneDependency(joiner, dep, conn, db->name);
+		}
+	    sqlDisconnect(&conn);
+	    }
+	}
+    }
+slFreeList(&dbList);
+}
+
+struct slName *getTablesForField(struct sqlConnection *conn, 
+	char *splitPrefix, char *table, char *splitSuffix)
+/* Get tables that match field. */
+{
+struct slName *list = NULL, *el;
+if (splitPrefix != NULL || splitSuffix != NULL)
+    {
+    char query[256], **row;
+    struct sqlResult *sr;
+    safef(query, sizeof(query), "show tables like '%s%s%s'", 
+    	emptyForNull(splitPrefix), table, emptyForNull(splitSuffix));
+    sr = sqlGetResult(conn, query);
+    while ((row = sqlNextRow(sr)) != NULL)
+        {
+	el = slNameNew(row[0]);
+	slAddHead(&list, el);
+	}
+    sqlFreeResult(&sr);
+    slReverse(&list);
+    }
+if (list == NULL)
+    if (sqlTableExists(conn, table))
+	list = slNameNew(table);
+return list;
+}
+
+static boolean fieldExists(struct hash *fieldHash,
 	struct joinerSet *js, struct joinerField *jf)
 /* Make sure field exists in at least one database. */
 {
 struct slName *db;
-
-/* First try to find it as non-split in some database. */
-for (db = jf->dbList; db != NULL; db = db->next)
+boolean gotIt = FALSE;
+for (db = jf->dbList; db != NULL && !gotIt; db = db->next)
     {
+    struct sqlConnection *conn = sqlConnect(db->name);
+    struct slName *table, *tableList = getTablesForField(conn,
+    			jf->splitPrefix, jf->table, jf->splitSuffix);
     char fieldName[512];
-    safef(fieldName, sizeof(fieldName), "%s.%s.%s", 
-    	db->name, jf->table, jf->field);
-    if (hashLookup(fieldHash, fieldName))
-        return TRUE;
-    }
-
-/* Next try to find it as split. */
-for (db = jf->dbList; db != NULL; db = db->next)
-    {
-    struct slName *chrom, *chromList = hashFindVal(dbChromHash, db->name);
-    char fieldName[512];
-    for (chrom = chromList; chrom != NULL; chrom = chrom->next)
-        {
-	safef(fieldName, sizeof(fieldName), "%s.%s_%s.%s", 
-	    db->name, chrom->name, jf->table, jf->field);
+    sqlDisconnect(&conn);
+    for (table = tableList; table != NULL; table = table->next)
+	{
+	safef(fieldName, sizeof(fieldName), "%s.%s.%s", 
+	    db->name, table->name, jf->field);
 	if (hashLookup(fieldHash, fieldName))
-	    return TRUE;
+	    {
+	    gotIt = TRUE;
+	    break;
+	    }
 	}
+    slFreeList(&tableList);
     }
-
-return FALSE;
+return gotIt;
 }
 
-struct hash *getDbChromHash()
+#ifdef OLD
+static struct hash *getDbChromHash()
 /* Return hash with chromosome name list for each database
  * that has a chromInfo table. */
 {
@@ -515,41 +229,541 @@ for (db = dbList; db != NULL; db = db->next)
 slFreeList(&dbList);
 return dbHash;
 }
+#endif /* OLD */
 
-void joinerValidateOnDbs(struct joinerSet *jsList)
+
+void joinerValidateFields(struct joiner *joiner, struct hash *fieldHash,
+	char *oneIdentifier)
 /* Make sure that joiner refers to fields that exist at
  * least somewhere. */
 {
 struct joinerSet *js;
 struct joinerField *jf;
 struct slName *db;
-struct hash *fieldHash = sqlAllFields();
-struct hash *dbChromHash = getDbChromHash();
 
-for (js=jsList; js != NULL; js = js->next)
+for (js=joiner->jsList; js != NULL; js = js->next)
+    {
+    if (oneIdentifier == NULL || sameString(oneIdentifier, js->name))
+	{
+	for (jf = js->fieldList; jf != NULL; jf = jf->next)
+	    {
+	    if (!fieldExists(fieldHash, js, jf))
+		 {
+		 if (!js->expanded)
+		     {
+		     fprintf(stderr, "Error: ");
+		     printField(jf, stderr);
+		     fprintf(stderr, " not found in %s line %d of %s\n",
+			js->name, jf->lineIx, joiner->fileName);
+		     }
+		 }
+	    }
+	}
+    }
+}
+
+struct slName *jsAllDb(struct joinerSet *js)
+/* Get list of all databases referred to by set. */
+{
+struct slName *list = NULL, *db;
+struct joinerField *jf;
+for (jf = js->fieldList; jf != NULL; jf = jf->next)
+    {
+    for (db = jf->dbList; db != NULL; db = db->next)
+	slNameStore(&list, db->name);
+    }
+return list;
+}
+
+int sqlTableRows(struct sqlConnection *conn, char *table)
+/* REturn number of rows in table. */
+{
+char query[256];
+safef(query, sizeof(query), "select count(*) from %s", table);
+return sqlQuickNum(conn, query);
+}
+
+int totalTableRows(struct sqlConnection *conn, struct slName *tableList)
+/* Return total number of rows in all tables in list. */
+{
+int rowCount = 0;
+struct slName *table;
+for (table = tableList; table != NULL; table = table->next)
+    {
+    rowCount += sqlTableRows(conn, table->name);
+    }
+return rowCount;
+}
+
+struct sqlConnection *sqlWarnConnect(char *db)
+/* Connect to database, or warn and return NULL. */
+{
+struct sqlConnection *conn = sqlMayConnect(db);
+if (conn == NULL)
+    warn("Error: Couldn't connect to database %s", db);
+return conn;
+}
+
+static char *doChops(struct joinerField *jf, char *id)
+/* Return chopped version of id.  (This may insert a zero into s) */
+{
+struct slName *chop;
+for (chop = jf->chopBefore; chop != NULL; chop = chop->next)
+    {
+    char *s = stringIn(chop->name, id);
+    if (s != NULL)
+	 id = s + strlen(chop->name);
+    }
+for (chop = jf->chopAfter; chop != NULL; chop = chop->next)
+    {
+    char *s = rStringIn(chop->name, id);
+    if (s != NULL)
+	*s = 0;
+    }
+return id;
+}
+
+struct hash *readKeyHash(char *db, struct joiner *joiner, 
+	struct joinerField *keyField)
+/* Read key-field into hash.  Check for dupes if need be. */
+{
+struct sqlConnection *conn = sqlWarnConnect(db);
+struct hash *keyHash = NULL;
+if (conn == NULL)
+    {
+    return NULL;
+    }
+else
+    {
+    struct slName *table;
+    struct slName *tableList = getTablesForField(conn,keyField->splitPrefix,
+    						 keyField->table, 
+						 keyField->splitSuffix);
+    int rowCount = totalTableRows(conn, tableList);
+    int hashSize = digitsBaseTwo(rowCount)+1;
+    char query[256], **row;
+    struct sqlResult *sr;
+    int itemCount = 0;
+    int dupeCount = 0;
+    char *dupe = NULL;
+
+    if (rowCount > 0)
+	{
+	if (hashSize > hashMaxSize)
+	    hashSize = hashMaxSize;
+	keyHash = hashNew(hashSize);
+	for (table = tableList; table != NULL; table = table->next)
+	    {
+	    safef(query, sizeof(query), "select %s from %s", 
+		keyField->field, table->name);
+	    sr = sqlGetResult(conn, query);
+	    while ((row = sqlNextRow(sr)) != NULL)
+		{
+		char *id = doChops(keyField, row[0]);
+		if (hashLookup(keyHash, id))
+		    {
+		    if (!keyField->dupeOk)
+			{
+			if (keyField->exclude == NULL || 
+				!slNameInList(keyField->exclude, id))
+			    {
+			    if (dupeCount == 0)
+				dupe = cloneString(id);
+			    ++dupeCount;
+			    }
+			}
+		    }
+		else
+		    {
+		    hashAdd(keyHash, id, NULL);
+		    ++itemCount;
+		    }
+		}
+	    sqlFreeResult(&sr);
+	    }
+	if (dupe != NULL)
+	    {
+	    warn("Error: %d duplicates in %s.%s.%s including '%s'",
+		    dupeCount, db, keyField->table, keyField->field, dupe);
+	    freez(&dupe);
+	    }
+	verbose(1, "%s.%s.%s - %d unique identifiers\n", 
+		db, keyField->table, keyField->field, itemCount);
+	}
+    slFreeList(&tableList);
+    }
+sqlDisconnect(&conn);
+return keyHash;
+}
+
+static void addHitMiss(struct hash *keyHash, char *id, struct joinerField *jf,
+	int *pHits, char **pMiss, int *pTotal)
+/* Record info about one hit or miss to keyHash */
+{
+id = doChops(jf, id);
+if (jf->exclude == NULL || !slNameInList(jf->exclude, id))
+    {
+    if (hashLookup(keyHash, id))
+	++(*pHits);
+    else
+	{
+	if (*pMiss == NULL)
+	    *pMiss = cloneString(id);
+	}
+    ++(*pTotal);
+    }
+}
+
+void doMinCheck(char *db, struct joiner *joiner, struct joinerSet *js, 
+	struct hash *keyHash, struct joinerField *keyField,
+	struct joinerField *jf)
+{
+struct sqlConnection *conn = sqlMayConnect(db);
+if (conn != NULL)
+    {
+    int total = 0, hits = 0, hitsNeeded;
+    char *miss = NULL;
+    struct slName *table;
+    struct slName *tableList = getTablesForField(conn,jf->splitPrefix,
+    						 jf->table, jf->splitSuffix);
+    for (table = tableList; table != NULL; table = table->next)
+	{
+	char query[256], **row;
+	struct sqlResult *sr;
+	safef(query, sizeof(query), "select %s from %s", 
+		jf->field, table->name);
+	sr = sqlGetResult(conn, query);
+	while ((row = sqlNextRow(sr)) != NULL)
+	    {
+	    if (jf->separator == NULL)
+		{
+		addHitMiss(keyHash, row[0], jf, &hits, &miss, &total);
+		}
+	    else 
+	        {
+		/* Do list. */
+		struct slName *el, *list;
+		int ix;
+		list = slNameListFromString(row[0], jf->separator[0]);
+		for (el = list, ix=0; el != NULL; el = el->next, ++ix)
+		    {
+		    char *id;
+		    char buf[16];
+		    if (jf->indexOf)
+			{
+		        safef(buf, sizeof(buf), "%d", ix);
+			id = buf;
+			}
+		    addHitMiss(keyHash, el->name, jf, &hits, &miss, &total);
+		    }
+		slFreeList(&list);
+		}
+	    }
+	sqlFreeResult(&sr);
+	}
+    if (tableList != NULL)
+	{
+	verbose(1, "%s.%s.%s - hits %d of %d\n", db, jf->table, jf->field, hits, total);
+	hitsNeeded = round(total * jf->minCheck);
+	if (hits < hitsNeeded)
+	    {
+	    warn("Error: %d of %d elements of %s.%s.%s are not in key %s.%s line %d of %s\n"
+		 "Example miss: %s"
+		, total - hits, total, db, jf->table, jf->field
+		, keyField->table, keyField->field
+		, jf->lineIx, joiner->fileName, miss);
+	    }
+	freez(&miss);
+	sqlDisconnect(&conn);
+	}
+    slFreeList(&tableList);
+    }
+}
+
+void jsValidateKeysOnDb(struct joiner *joiner, struct joinerSet *js,
+	char *db, struct hash *keyHash)
+/* Validate keys pertaining to this database. */
+{
+struct joinerField *jf;
+struct hash *localKeyHash = NULL;
+struct joinerField *keyField;
+
+if (js->isFuzzy)
+    return;
+if ((keyField = js->fieldList) == NULL)
+    return;
+if (keyHash == NULL)
+    {
+    char *keyDb;
+    if (slNameInList(keyField->dbList, db))
+	{
+	keyDb = db;
+	}
+    else
+	{
+	if (slCount(keyField->dbList) == 1)
+	    keyDb = keyField->dbList->name;
+	else
+	    {
+	    warn("Error line %d of %s:\n"
+		 "Key (first) field contains multiple databases\n"
+		 "but not all databases in other fields."
+		 , keyField->lineIx, joiner->fileName);
+	    return;
+	    }
+	}
+    keyHash = localKeyHash = readKeyHash(keyDb, joiner, keyField);
+    }
+if (keyHash != NULL)
+    {
+    for (jf = js->fieldList; jf != NULL; jf = jf->next)
+	{
+	if (jf != keyField && slNameInList(jf->dbList, db))
+	    doMinCheck(db, joiner, js, keyHash, keyField, jf);
+	}
+    }
+hashFree(&localKeyHash);
+}
+
+void jsValidateKeys(struct joiner *joiner, struct joinerSet *js, 
+	char *preferredDb)
+/* Validate keys on js.  If preferredDb is non-NULL then do it on
+ * that database.  Otherwise do it on all databases. */
+{
+struct joinerField *keyField;
+struct hash *keyHash = NULL;
+
+/* If key is found in a single database then make hash here
+ * rather than separately for each database. */
+if ((keyField = js->fieldList) == NULL)
+    return;
+if (slCount(keyField->dbList) == 1)
+    keyHash = readKeyHash(keyField->dbList->name, joiner, keyField);
+
+/* Check key for database(s) */
+if (preferredDb)
+    jsValidateKeysOnDb(joiner, js, preferredDb, keyHash);
+else
+    {
+    struct slName *db, *dbList = jsAllDb(js);
+    for (db = dbList; db != NULL; db = db->next)
+        jsValidateKeysOnDb(joiner, js, db->name, keyHash);
+    slFreeList(&dbList);
+    }
+hashFree(&keyHash);
+}
+
+void joinerValidateKeys(struct joiner *joiner, 
+	char *oneIdentifier, char *oneDatabase)
+/* Make sure that joiner refers to fields that exist at
+ * least somewhere. */
+{
+struct joinerSet *js;
+int validations = 0;
+for (js = joiner->jsList; js != NULL; js = js->next)
+    {
+    if (oneIdentifier == NULL || sameString(oneIdentifier, js->name))
+	{
+        jsValidateKeys(joiner, js, oneDatabase);
+	++validations;
+	}
+    }
+if (validations < 1 && oneIdentifier)
+    errAbort("Identifier %s not found in %s", oneIdentifier, joiner->fileName);
+}
+
+struct hash *processFieldHash(char *inName, char *outName)
+/* Read in field hash from file if inName is non-NULL, 
+ * else read from database.  If outName is non-NULL, 
+ * save it to file. */
+{
+struct hash *fieldHash;
+struct hashEl *el;
+
+if (inName != NULL)
+    fieldHash = hashWordsInFile(inName, 18);
+else
+    fieldHash = sqlAllFields();
+if (outName != NULL)
+    {
+    struct hashEl *el, *list = hashElListHash(fieldHash);
+    FILE *f = mustOpen(outName, "w");
+    slSort(&list, hashElCmp);
+    for (el = list; el != NULL; el = el->next)
+	fprintf(f, "%s\n", el->name);
+    slFreeList(&list);
+    carefulClose(&f);
+    }
+return fieldHash;
+}
+
+void reportErrorList(struct slName **pList, char *message)
+/* Report error on list of string references. */
+/* Convert a list of string references to a comma-separated
+ * slName.  Free up refList. */
+{
+if (*pList != NULL)
+    {
+    struct dyString *dy = dyStringNew(0);
+    struct slName *name, *list;
+    slReverse(pList);
+    list = *pList;
+    dyStringAppend(dy, list->name);
+    for (name = list->next; name != NULL; name = name->next)
+	{
+        dyStringAppendC(dy, ',');
+	dyStringAppend(dy, name->name);
+	}
+    warn("Error: %s %s", dy->string, message);
+    slFreeList(pList);
+    dyStringFree(&dy);
+    }
+}
+
+
+static void joinerCheckDbCoverage(struct joiner *joiner)
+/* Complain about databases that aren't in databasesChecked or ignored. */
+{
+struct slName *missList = NULL, *miss;
+struct slName *db, *dbList = sqlListOfDatabases();
+
+/* Keep a list of databases that aren't in either hash. */
+for (db = dbList; db != NULL; db = db->next)
+    {
+    if (!hashLookup(joiner->databasesChecked, db->name) 
+        && !hashLookup(joiner->databasesIgnored, db->name))
+	{
+	miss = slNameNew(db->name);
+	slAddHead(&missList, miss);
+	}
+    }
+
+/* If necessary report (in a single message) database not in joiner file. */
+reportErrorList(&missList, "not in databasesChecked or databasesIgnored");
+}
+
+static void addTablesLike(struct hash *hash, struct sqlConnection *conn,
+	char *spec)
+/* Add tables like spec to hash. */
+{
+if (sqlWildcardIn(spec))
+    {
+    struct sqlResult *sr;
+    char query[512], **row;
+    safef(query, sizeof(query), 
+	    "show tables like '%s'", spec);
+    sr = sqlGetResult(conn, query);
+    while ((row = sqlNextRow(sr)) != NULL)
+	hashAdd(hash, row[0], NULL);
+    sqlFreeResult(&sr);
+    }
+else
+    {
+    hashAdd(hash, spec, NULL);
+    }
+}
+
+
+struct hash *getCoveredTables(struct joiner *joiner, char *db, 
+	struct sqlConnection *conn)
+/* Get list of tables covered in database. */
+{
+struct hash *hash = hashNew(0);
+struct joinerIgnore *ig;
+struct slName *spec;
+struct joinerSet *js;
+struct joinerField *jf;
+
+/* First put in all the ignored tables. */
+for (ig = joiner->tablesIgnored; ig != NULL; ig = ig->next)
+    {
+    if (slNameInList(ig->dbList, db))
+        {
+	for (spec = ig->tableList; spec != NULL; spec = spec->next)
+	    {
+	    addTablesLike(hash, conn, spec->name);
+	    }
+	}
+    }
+
+/* Now put in tables that are in one of the identifiers. */
+for (js = joiner->jsList; js != NULL; js = js->next)
     {
     for (jf = js->fieldList; jf != NULL; jf = jf->next)
         {
-	if (!fieldExists(fieldHash, dbChromHash, js, jf))
-	     {
-	     printField(jf, stderr);
-	     fprintf(stderr, " not found in %s after line %d of %s\n",
-	     	js->name, js->lineIx, js->fileName);
-	     }
+	if (slNameInList(jf->dbList, db))
+	    {
+	    char spec[512];
+	    safef(spec, sizeof(spec), "%s%s%s",
+	        emptyForNull(jf->splitPrefix), jf->table,
+		emptyForNull(jf->splitSuffix));
+	    addTablesLike(hash, conn, spec);
+	    }
 	}
     }
+return hash;
+}
+
+void joinerCheckTableCoverage(struct joiner *joiner, char *specificDb)
+/* Check that all tables either are part of an identifier or
+ * are in the tablesIgnored statements. */
+{
+struct slName *miss, *missList = NULL;
+struct hashEl *dbList, *db;
+
+dbList = hashElListHash(joiner->databasesChecked);
+for (db = dbList; db != NULL; db = db->next)
+    {
+    if (specificDb == NULL || sameString(db->name, specificDb))
+	{
+	struct sqlConnection *conn = sqlMayConnect(db->name);
+	if (conn == NULL)
+	    warn("Error: database %s doesn't exist", db->name);
+	else
+	    {
+	    struct slName *table;
+	    struct slName *tableList = sqlListTables(conn);
+	    struct hash *hash = getCoveredTables(joiner, db->name, conn);
+	    for (table = tableList; table != NULL; table = table->next)
+		{
+		if (!hashLookup(hash, table->name))
+		    {
+		    char fullName[256];
+		    safef(fullName, sizeof(fullName), "%s.%s", 
+			    db->name, table->name);
+		    miss = slNameNew(fullName);
+		    slAddHead(&missList, miss);
+		    }
+		}
+	    slFreeList(&tableList);
+	    freeHash(&hash);
+	    reportErrorList(&missList, "tables not in .joiner file");
+	    }
+	sqlDisconnect(&conn);
+	}
+    }
+slFreeList(&dbList);
 }
 
 void joinerCheck(char *fileName)
 /* joinerCheck - Parse and check joiner file. */
 {
-struct lineFile *lf = lineFileOpen(fileName, TRUE);
-struct joinerSet *js, *jsList = joinerParsePassOne(lf);
-joinerParsePassTwo(jsList);
-uglyf("Got %d joiners in %s\n", slCount(jsList), fileName);
-joinerValidateOnDbs(jsList);
+struct joiner *joiner = joinerRead(fileName);
+if (!parseOnly)
+    {
+    struct hash *fieldHash;
+    if (dbCoverage)
+	joinerCheckDbCoverage(joiner);
+    if (tableCoverage)
+	joinerCheckTableCoverage(joiner, database);
+    fieldHash = processFieldHash(fieldListIn, fieldListOut);
+    joinerValidateFields(joiner, fieldHash, identifier);
+    if (checkTimes)
+	joinerCheckDependencies(joiner, database);
+    if (foreignKeys)
+	joinerValidateKeys(joiner, identifier, database);
+    }
 }
-
 
 int main(int argc, char *argv[])
 /* Process command line. */
@@ -557,6 +771,15 @@ int main(int argc, char *argv[])
 optionInit(&argc, argv, options);
 if (argc != 2)
     usage();
+parseOnly = optionExists("parseOnly");
+fieldListIn = optionVal("fieldListIn", NULL);
+fieldListOut = optionVal("fieldListOut", NULL);
+identifier = optionVal("identifier", NULL);
+database = optionVal("database", NULL);
+foreignKeys = optionExists("keys");
+checkTimes = !optionExists("noTimes");
+dbCoverage = !optionExists("noDbCoverage");
+tableCoverage = !optionExists("noTableCoverage");
 joinerCheck(argv[1]);
 return 0;
 }

@@ -9,6 +9,7 @@ O = hgGcPercent.o
 hgGcPercent: $O ../../../lib/${MACHTYPE}/jkweb.a
 	${CC} ${COPT} ${CFLAGS} -o ${HOME}/bin/${MACHTYPE}/hgGcPercent \
 		$O ${MYLIBS} $L
+	strip ${HOME}/bin/${MACHTYPE}/hgGcPercent
 
 compile: $O ../../../lib/${MACHTYPE}/jkweb.a
 	${CC} ${COPT} ${CFLAGS} -o hgGcPercent ${O} ${MYLIBS} $L

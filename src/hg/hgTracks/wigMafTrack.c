@@ -14,7 +14,7 @@
 #include "hgMaf.h"
 #include "mafTrack.h"
 
-static char const rcsid[] = "$Id: wigMafTrack.c,v 1.10 2004/03/10 23:04:45 kate Exp $";
+static char const rcsid[] = "$Id: wigMafTrack.c,v 1.17 2004/03/17 18:26:49 kate Exp $";
 
 struct wigMafItem
 /* A maf track item -- 
@@ -89,11 +89,17 @@ static struct wigMafItem *loadBaseByBaseItems(struct track *track)
 /* Make up base-by-base track items. */
 {
 struct wigMafItem *miList = NULL, *mi;
-struct mafAli *maf;
+struct mafAli *mafList = NULL, *maf; 
 char buf[64];
 char *otherOrganism;
 char *myOrg = hOrganism(database);
+struct sqlConnection *conn = hAllocConn();
 tolowers(myOrg);
+
+/* load up mafs */
+track->customPt = wigMafLoadInRegion(conn, track->mapName, 
+                                        chromName, winStart, winEnd);
+hFreeConn(&conn);
 
 /* Make up item that will show inserts in this organism. */
 AllocVar(mi);
@@ -152,8 +158,8 @@ slAddHead(&miList, mi);
 /* Add item for score wiggle after base alignment */
 if (track->subtracks != NULL)
     {
-    enum trackVisibility wigVis = (track->visibility == tvFull || 
-                                   track->visibility == tvPack ? tvFull : tvDense);
+    enum trackVisibility wigVis = 
+                (track->visibility == tvFull ? tvFull : tvDense);
     mi = scoreItem(wigTotalHeight(track->subtracks, wigVis));
     slAddHead(&miList, mi);
     }
@@ -195,8 +201,6 @@ static struct wigMafItem *loadPairwiseItems(struct track *track)
    These may be density plots (pack) or wiggles (full). */
 {
 struct wigMafItem *miList = NULL, *mi;
-struct mafAli *maf;
-char buf[64];
 char *otherOrganism;
 struct track *wigTrack = track->subtracks;
 int smallWigHeight = pairwiseWigHeight(wigTrack);
@@ -205,57 +209,19 @@ char *suffix;
 if (wigTrack != NULL)
     {
     mi = scoreItem(wigTotalHeight(wigTrack, tvFull));
+    /* mark this as not a pairwise item */
+    mi->ix = -1;
     slAddHead(&miList, mi);
     }
 suffix = trackDbSetting(track->tdb, "pairwise");
-if (suffix != NULL);
-
-/* Make up items for other organisms by scanning through
- * all mafs and looking at database prefix to source. */
+if (suffix != NULL)
+    /* make up items for other organisms by scanning through
+     * all mafs and looking at database prefix to source. */
     {
-    // TODO: share code with baseByBaseItems
     char *speciesOrder = trackDbRequiredSetting(track->tdb, "speciesOrder");
-    char *species[100];
+    char *species[200];
     int speciesCt = chopLine(speciesOrder, species);
-    struct hash *hash = newHash(8);	/* keyed by database. */
-    struct hashEl *el;
     int i;
-
-    for (maf = track->customPt; maf != NULL; maf = maf->next)
-        {
-	struct mafComp *mc;
-        boolean isMyOrg = TRUE;
-	for (mc = maf->components; mc != NULL; mc = mc->next)
-	    {
-            if (isMyOrg) 
-                {
-                /* skip first maf component (this organism) */
-                isMyOrg = FALSE;
-                continue;
-                }
-	    dbPartOfName(mc->src, buf, sizeof(buf));
-	    if (hashLookup(hash, buf) == NULL)
-	        {
-		AllocVar(mi);
-		mi->db = cloneString(buf);
-                otherOrganism = hOrganism(mi->db);
-                mi->name = 
-                    (otherOrganism == NULL ? cloneString(buf) : otherOrganism);
-                tolowers(mi->name);
-
-		hashAdd(hash, mi->name, mi);
-		}
-	    }
-	}
-    if (track->visibility == tvFull)
-        /* check for existence of a wiggle table for first item.
-         * if missing, revert to pack mode */
-        if ((el = hashLookup(hash, species[0])) != NULL)
-            {
-            mi = (struct wigMafItem *)el->val;
-            if (!hTableExists(getWigTablename(mi->name, suffix)))
-                track->visibility = tvPack;
-            }
 
     /* build item list in species order */
     for (i = 0; i < speciesCt; i++)
@@ -265,18 +231,14 @@ if (suffix != NULL);
         /* skip this species if UI checkbox was unchecked */
         if (!cartUsualBoolean(cart, option, TRUE))
             continue;
-
-        if ((el = hashLookup(hash, species[i])) != NULL)
-            {
-            mi = (struct wigMafItem *)el->val;
-            if (track->visibility == tvFull)
-                mi->height = smallWigHeight;
-            else
-                mi->height = tl.fontHeight;
-            slAddHead(&miList, mi);
-            }
+        AllocVar(mi);
+        mi->name = species[i];
+        if (track->visibility == tvFull)
+            mi->height = smallWigHeight;
+        else
+            mi->height = tl.fontHeight;
+        slAddHead(&miList, mi);
         }
-    hashFree(&hash);
     }
 slReverse(&miList);
 return miList;
@@ -286,19 +248,16 @@ static struct wigMafItem *loadWigMafItems(struct track *track,
                                                  boolean isBaseLevel)
 /* Load up items */
 {
-struct mafAli *mafList = NULL; struct wigMafItem *miList = NULL;
-struct sqlConnection *conn = hAllocConn();
+struct wigMafItem *miList = NULL;
 
 /* Load up mafs and store in track so drawer doesn't have
  * to do it again. */
-mafList = wigMafLoadInRegion(conn, track->mapName, chromName, winStart, winEnd);
-track->customPt = mafList;
-
 /* Make up tracks for display. */
 if (isBaseLevel)
     {
     miList = loadBaseByBaseItems(track);
     }
+/* zoomed out */
 else if (track->visibility == tvFull || track->visibility == tvPack)
     {
     miList = loadPairwiseItems(track);
@@ -314,7 +273,6 @@ else
     miList->name = cloneString(track->shortLabel);
     miList->height = tl.fontHeight;
     }
-hFreeConn(&conn);
 return miList;
 }
 
@@ -449,16 +407,77 @@ static int getIxMafAli(int *ixMafAli, int position, int maxPos)
     return *(ixMafAli + position);
 }
 
-static void drawDenseMaf(struct mafAli *mafList,int height,
+static void drawScoreOverview(char *tableName, int height,
+                             int seqStart, int seqEnd, 
+                            struct vGfx *vg, int xOff, int yOff,
+                            int width, MgFont *font, 
+                            Color color, Color altColor,
+                            enum trackVisibility vis)
+/* Draw density plot or graph for overall maf scores rather than computing
+ * by sections, for speed.  Don't actually load the mafs -- just
+ * the scored refs from the table.
+ * TODO: reuse code in mafTrack.c 
+ */
+{
+char **row;
+int rowOffset;
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr = hRangeQuery(conn, tableName, chromName, 
+                                        seqStart, seqEnd, NULL, &rowOffset);
+double scale = scaleForPixels(width);
+int x1,x2,y,w;
+int height1 = height - 2;
+
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    struct scoredRef ref;
+    scoredRefStaticLoad(row + rowOffset, &ref);
+    x1 = round((ref.chromStart - seqStart)*scale);
+    x2 = round((ref.chromEnd - seqStart)*scale);
+    w = x2-x1;
+    if (w < 1) w = 1;
+    if (vis == tvFull)
+        {
+        y = ref.score * height1;
+        vgBox(vg, x1 + xOff, yOff + height1 - y, 1, y+1, color);
+        }
+    else
+        {
+        int shade = ref.score * maxShade;
+        if ((shade < 0) || (shade >= maxShade))
+            shade = 0;
+        Color c = shadesOfGray[shade];
+        vgBox(vg, x1 + xOff, yOff, 1, height-1, c);
+        }
+    }
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+}
+
+static void drawMafScore(char *tableName, int height,
                             int seqStart, int seqEnd, 
                             struct vGfx *vg, int xOff, int yOff,
                             int width, MgFont *font, 
-                            Color color, Color altColor)
-/* display alignments in dense format (uses on-the-fly scoring) */
+                            Color color, enum trackVisibility vis)
+/* display alignments using on-the-fly scoring */
 {
-drawMafRegionDetails(mafList, height, seqStart, seqEnd, 
+struct mafAli *mafList;
+struct sqlConnection *conn;
+
+if (seqEnd - seqStart > 1000000)
+    drawScoreOverview(tableName, height, seqStart, seqEnd, vg, xOff, yOff,
+                          width, font, color, color, vis);
+else
+    {
+    /* load mafs */
+    conn = hAllocConn();
+    mafList = wigMafLoadInRegion(conn, tableName, chromName, 
+                                    seqStart, seqEnd);
+    drawMafRegionDetails(mafList, height, seqStart, seqEnd, 
                              vg, xOff, yOff, width, font,
-                             color, altColor, tvDense, FALSE);
+                             color, color, vis, FALSE);
+    hFreeConn(&conn);
+    }
 }
 
 static boolean wigMafDrawPairwise(struct track *track, int seqStart, int seqEnd,
@@ -469,80 +488,96 @@ static boolean wigMafDrawPairwise(struct track *track, int seqStart, int seqEnd,
  *  for pack mode, display density plot of mafs.
  */
 {
-struct mafAli *mafList;
-struct sqlConnection *conn;
 boolean ret = FALSE;
 char *suffix;
-char *tablename;
+char *tableName;
 Color newColor;
 struct track *wigTrack = track->subtracks;
-int wigTrackHeight = pairwiseWigHeight(wigTrack);
+int pairwiseHeight = pairwiseWigHeight(wigTrack);
 struct wigMafItem *miList = track->items, *mi = miList;
 int seqSize = seqEnd - seqStart;
 
 if (miList == NULL)
     return FALSE;
-conn = hAllocConn();
 
 /* obtain suffix for pairwise wiggle tables */
 suffix = trackDbSetting(track->tdb, "pairwise");
 if (suffix == NULL)
     return FALSE;
 
+/* we will display pairwise, either a graph (wiggle or on-the-fly),
+   or density plot */
+ret = TRUE;
 if (vis == tvFull)
     {
+    double minY = 50.0;
+    double maxY = 100.0;
+
     if (wigTrack == NULL)
         return FALSE;
     /* swap colors for pairwise wiggles */
     newColor = wigTrack->ixColor;
     wigTrack->ixColor = wigTrack->ixAltColor;
     wigTrack->ixAltColor = newColor;
+    wigSetCart(wigTrack, MIN_Y, (void *)&minY);
+    wigSetCart(wigTrack, MAX_Y, (void *)&maxY);
     }
 
-/* display all loaded pairwise items */
+/* display pairwise items */
 for (mi = miList; mi != NULL; mi = mi->next)
     {
+    if (mi->ix < 0)
+        /* ignore item for the score */
+        continue;
     if (vis == tvFull)
         {
         /* get wiggle table, of pairwise 
            for example, percent identity */
-        tablename = getWigTablename(mi->name, suffix);
-        if (!hTableExists(tablename))
-            continue;
-        /* reuse the wigTrack for pairwise tables */
-        wigTrack->mapName = tablename;
-        wigTrack->loadItems(wigTrack);
-        wigTrack->height = wigTrack->lineHeight = wigTrack->heightPer =
-                                                            wigTrackHeight - 1;
-        /* clip, but leave 1 pixel border */
-        vgSetClip(vg, xOff, yOff, width, wigTrack->height);
-        wigTrack->drawItems(wigTrack, seqStart, seqEnd, vg, xOff, yOff,
+        tableName = getWigTablename(mi->name, suffix);
+        if (hTableExists(tableName))
+            {
+            /* reuse the wigTrack for pairwise tables */
+            wigTrack->mapName = tableName;
+            wigTrack->loadItems(wigTrack);
+            wigTrack->height = wigTrack->lineHeight = wigTrack->heightPer =
+                                                    pairwiseHeight - 1;
+            /* clip, but leave 1 pixel border */
+            vgSetClip(vg, xOff, yOff, width, wigTrack->height);
+            wigTrack->drawItems(wigTrack, seqStart, seqEnd, vg, xOff, yOff,
                              width, font, color, tvFull);
-        vgUnclip(vg);
+            vgUnclip(vg);
+            }
+        else
+            {
+            /* no wiggle table for this -- compute a graph on-the-fly 
+               from mafs */
+            vgSetClip(vg, xOff, yOff, width, mi->height);
+            tableName = getMafTablename(mi->name, suffix);
+            if (hTableExists(tableName))
+                drawMafScore(tableName, mi->height, seqStart, seqEnd, 
+                                 vg, xOff, yOff, width, font,
+                                 track->ixAltColor, tvFull);
+            vgUnclip(vg);
+            }
         /* need to add extra space between wiggles (for now) */
         //mi->height = wigTotalHeight(wigTrack, tvFull);
-        mi->height = wigTrackHeight;
-        ret = TRUE;
+        mi->height = pairwiseHeight;
         }
     else 
         {
         /* pack */
         /* get maf table, containing pairwise alignments for this organism */
-        tablename = getMafTablename(mi->name, suffix);
-        if (!hTableExists(tablename))
-            continue;
-        mafList = wigMafLoadInRegion(conn, tablename, chromName, 
-                                    seqStart, seqEnd);
         /* display pairwise alignments in this region in dense format */
-        drawDenseMaf(mafList, mi->height, seqStart, seqEnd, 
+        vgSetClip(vg, xOff, yOff, width, mi->height);
+        tableName = getMafTablename(mi->name, suffix);
+        if (hTableExists(tableName))
+            drawMafScore(tableName, mi->height, seqStart, seqEnd, 
                                  vg, xOff, yOff, width, font,
-                                 color, track->ixAltColor);
-        ret = TRUE;
-        mafAliFreeList(&mafList);
+                                 color, tvDense);
+        vgUnclip(vg);
         }
     yOff += mi->height;
     }
-hFreeConn(&conn);
 return ret;
 }
 
@@ -670,27 +705,27 @@ static int wigMafDrawScoreGraph(struct track *track, int seqStart, int seqEnd,
 {
 /* Draw routine for score graph, returns new Y offset */
 struct track *wigTrack = track->subtracks;
+enum trackVisibility wigVis;
 
-/* wiggle is displayed dense for all visibilities except full */
-enum trackVisibility wigVis = (vis == tvFull || vis == tvPack ? tvFull : tvDense);
+if (zoomedToBaseLevel)
+    /* wiggle is displayed dense for all visibilities except full and  pack */
+    wigVis = (vis == tvFull || vis == tvPack ? tvFull : tvDense);
+else
+    /* wiggle is displayed full for all visibilities except dense */
+    wigVis = (vis == tvDense ? tvDense : tvFull);
 if (wigTrack != NULL)
     {
     wigTrack->ixColor = vgFindRgb(vg, &wigTrack->color);
     wigTrack->ixAltColor = vgFindRgb(vg, &wigTrack->altColor);
-    /*
-     * TODO: debug this -- the squished wiggle seems to persist, and
-     * leak into other tracks.  
     if (zoomedToBaseLevel && (vis == tvSquish || vis == tvPack))
         {
         /* display squished wiggle by reducing wigTrack height */
-    /*
         wigTrack->height = wigTrack->lineHeight = wigTrack->heightPer =
                                                             tl.fontHeight - 1;
         vgSetClip(vg, xOff, yOff, width, wigTrack->height - 1);
         }
     else
-        */
-        vgSetClip(vg, xOff, yOff, width, wigTotalHeight(wigTrack, wigVis) - 1);
+    vgSetClip(vg, xOff, yOff, width, wigTotalHeight(wigTrack, wigVis) - 1);
     wigTrack->drawItems(wigTrack, seqStart, seqEnd, vg, xOff, yOff,
                          width, font, color, wigVis);
     vgUnclip(vg);

@@ -7,7 +7,7 @@
 #include "common.h"
 #include "errabort.h"
 
-static char const rcsid[] = "$Id: common.c,v 1.54 2004/03/05 15:11:24 baertsch Exp $";
+static char const rcsid[] = "$Id: common.c,v 1.58 2004/03/13 05:38:03 markd Exp $";
 
 void *cloneMem(void *pt, size_t size)
 /* Allocate a new buffer of given size, and copy pt to it. */
@@ -196,7 +196,10 @@ void *slPopHead(void *vListPt)
 struct slList **listPt = (struct slList **)vListPt;
 struct slList *el = *listPt;
 if (el != NULL)
+    {
     *listPt = el->next;
+    el->next = NULL;
+    }
 return el;
 }
 
@@ -457,6 +460,15 @@ strcpy(sn->name, name);
 return sn;
 }
 
+struct slName *slNameNewN(char *name, int size)
+/* Return new slName of given size. */
+{
+struct slName *sn = needMem(sizeof(*sn) + size);
+memcpy(sn->name, name, size);
+return sn;
+}
+
+
 int slNameCmp(const void *va, const void *vb)
 /* Compare two slNames. */
 {
@@ -506,6 +518,44 @@ el = newSlName(string);
 slAddHead(pList, el);
 return el->name;
 }
+
+struct slName *slNameCloneList(struct slName *list)
+/* Return clone of list. */
+{
+struct slName *el, *newEl, *newList = NULL;
+for (el = list; el != NULL; el = el->next)
+    {
+    newEl = slNameNew(el->name);
+    slAddHead(&newList, newEl);
+    }
+slReverse(&newList);
+return newList;
+}
+
+struct slName *slNameListFromString(char *s, char delimiter)
+/* Return list of slNames gotten from parsing delimited string.
+ * The final delimiter is optional. a,b,c  and a,b,c, are equivalent
+ * for comma-delimited lists. */
+{
+char *e;
+struct slName *list = NULL, *el;
+while (s != NULL && s[0] != 0)
+    {
+    e = strchr(s, delimiter);
+    if (e == NULL)
+	el = slNameNew(s);
+    else
+	{
+        el = slNameNewN(s, e-s);
+	e += 1;
+	}
+    slAddHead(&list, el);
+    s = e;
+    }
+slReverse(&list);
+return list;
+}
+
 
 struct slRef *refOnList(struct slRef *refList, void *val)
 /* Return ref if val is already on list, otherwise NULL. */
@@ -646,6 +696,19 @@ for (i=0; ;i += 1)
     if (string[i] != c)
         return FALSE;
     }
+}
+
+char *rStringIn(char *needle, char *haystack)
+/* Return last position of needle in haystack, or NULL if it's not there. */
+{
+int nSize = strlen(needle);
+char *pos;
+for (pos = haystack + strlen(haystack) - nSize; pos >= haystack; pos -= 1)
+    {
+    if (memcmp(needle, pos, nSize) == 0)
+        return pos;
+    }
+return NULL;
 }
 
 boolean endsWith(char *string, char *end)

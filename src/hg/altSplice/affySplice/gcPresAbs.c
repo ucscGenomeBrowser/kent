@@ -8,6 +8,7 @@
 #include "linefile.h"
 #include "obscure.h"
 #include "options.h"
+#include "dystring.h"
 #include <gsl/gsl_math.h>
 #include <gsl/gsl_cdf.h>
 
@@ -56,6 +57,11 @@ boolean combineCols = FALSE;       /* Combine columns that are the same samples?
 int repToSort = 0;                 /* What replicate to sort the gc bins by. */
 int maxReplicates = 0;             /* What are the maximum number of replicates. */
 int sampleCount = 0;               /* Number of samples. */
+int numBadProbes = 0;              /* Number of bad probes counted. */
+FILE *gCountsFile = NULL;              /* File to output 'G' counts per probe to. */
+FILE *gcCountFile = NULL;             /* File to output 'G' + 'C' counts per probe to. */
+FILE *cCountsFile = NULL;              /* File to output 'C' counts per probe. */
+
 static struct optionSpec optionSpecs[] = 
 /* Our acceptable options to be called with. */
 {
@@ -66,6 +72,7 @@ static struct optionSpec optionSpecs[] =
     {"combineReplicates", OPTION_BOOLEAN},
     {"outputDuplicates", OPTION_BOOLEAN},
     {"testVals", OPTION_BOOLEAN},
+    {"countPrefix", OPTION_STRING},
     {NULL,0}
 };
 
@@ -79,6 +86,7 @@ static char *optionDescripts[] =
     "Combine experiments with same name prefix.",
     "When used with combineReplicates, outputs a column for each tissue that has same prefix.",
     "Skip everything else and just run inverse chisq on each value degreeFreedom pair on command line.",
+    "Output G/C probe countent counts to prefixCounts.tab"
 };
 
 void usage()
@@ -115,11 +123,17 @@ return b->intensity[repToSort] - a->intensity[repToSort];
 int countGc(char *sequence)
 /* Count the numbers of G's+C's in the sequence. */
 {
-int count = 0;
+int gCount = 0, cCount =0;
 tolowers(sequence);
-count += countChars(sequence, 'g');
-count += countChars(sequence, 'c');
-return count;
+gCount = countChars(sequence, 'g');
+if(gCountsFile)
+    fprintf(gCountsFile, "%d\n", gCount);
+cCount = countChars(sequence, 'c');
+if(cCountsFile)
+    fprintf(cCountsFile, "%d\n", cCount);
+if(gcCountFile)
+    fprintf(gcCountFile, "%d\n", cCount + gCount);
+return cCount + gCount;
 }
 
 void initGcBins(int minGc, int maxGc)
@@ -218,7 +232,10 @@ for(row = rowList; row != NULL; row = rowNext)
     /* Skip things that are on the kill list. */
     tolowers(row->seq);
     if(killHash != NULL && hashFindVal(killHash, row->seq) != NULL)
+	{
+	numBadProbes++;
 	continue;
+	}
 
     /* Add it to the correct gc bin. */
     row->gcCount = countGc(row->seq);
@@ -294,6 +311,7 @@ void probeSetCalcPval(void *val)
 struct slRef *ref = NULL, *refList = NULL;
 struct psProb *ps = NULL;
 struct row1lq *row = NULL;
+boolean debug = FALSE;
 double probProduct = 0;
 int probeCount = 0;
 int probRepCount = 0;
@@ -307,24 +325,36 @@ if(probeCount < minProbeNum)
     return;
 assert(probeCount > 0);
 
+
 /* Allocate some memory. */
 AllocVar(ps);
 row = refList->val;
 safef(ps->psName, sizeof(ps->psName), "%s", row->psName);
-
+if(sameString(row->psName, "G6905332@J919098_RC@j_at") && debug)
+    {
+    warn("\nDoing probeSet G6905332@J919098_RC@j_at, %d probes", slCount(refList));
+    }
 /* For each probe in probe set look at all the replicates. */
 for(ref = refList; ref != NULL; ref = ref->next)
     {
     row = ref->val;
+    if(sameString(row->psName, "G6905332@J919098_RC@j_at") && debug)
+	fprintf(stderr,"%s\t%d\t", row->seq,row->gcCount);
     for(i = 0; i < row->repCount; i++)
 	{
+	if(sameString(row->psName, "G6905332@J919098_RC@j_at") && debug)
+	    fprintf(stderr, "%.2f,",row->pVal[i]);
 	probRepCount++;
 	probProduct = probProduct + log(row->pVal[i]);
 	}
+    if(sameString(row->psName, "G6905332@J919098_RC@j_at") && debug)
+	fprintf(stderr,"\n");
     }
 
 /* Fisher's method for combining probabilities. */
 ps->pVal = gsl_cdf_chisq_P(-2*probProduct,2*probRepCount); 
+if(sameString(row->psName, "G6905332@J919098_RC@j_at") && debug)
+    fprintf(stderr, "Overall pval is: %.2f\n", ps->pVal);
 if(ps->pVal > 1 || ps->pVal < 0) 
     warn("%s pVal is %.10f, wrong!");
 slAddHead(&probePVals, ps);
@@ -511,7 +541,9 @@ FILE *out = NULL;
 struct replicateMap *rMapList = NULL, *rMap = NULL;
 boolean outputDuplicates = optionExists("outputDuplicates");
 dotForUserInit(1);
-initGcBins(5,20);
+initGcBins(8,17); /* Determined by where most of the data lives...
+		     On the altmousea chip the data drops of significantly
+		     before 8 (15,732 3% <= 8) and after 18 (9636 2% >=18) */
 
 /* See if we have a kill list. */
 badProbeName = optionVal("badProbes", NULL);
@@ -564,6 +596,7 @@ for(rMap = rMapList; rMap != NULL; rMap = rMap->next)
 			&probeSetPVals, &probeSetNames, &psCount);
     }
 warn("Done.");
+warn("Found %d bad probes.", numBadProbes);
 warn("Writing out the results.");
 out = mustOpen(outFile, "w");
 
@@ -618,6 +651,31 @@ carefulClose(&out);
 warn("Done");
 }
 
+void initCountFiles(char *prefix)
+/* open files for probe counts. */
+{
+struct dyString *dy = newDyString(1024);
+dyStringClear(dy);
+dyStringPrintf(dy, "%s.gcCounts.tab", prefix);
+gcCountFile = mustOpen(dy->string, "w");
+
+dyStringClear(dy);
+dyStringPrintf(dy, "%s.gCounts.tab", prefix);
+gCountsFile = mustOpen(dy->string, "w");
+
+dyStringClear(dy);
+dyStringPrintf(dy, "%s.cCounts.tab", prefix);
+cCountsFile = mustOpen(dy->string, "w");
+dyStringFree(&dy);
+}
+
+void closeCountFiles()
+/* Close the counting file handles. */
+{
+carefulClose(&gcCountFile);
+carefulClose(&gCountsFile);
+carefulClose(&cCountsFile);
+}
     
 int main(int argc, char *argv[])
 {
@@ -627,6 +685,8 @@ int origCount = argc;
 optionInit(&argc, argv, optionSpecs);
 if(optionExists("help") || origCount < 3)
     usage();
+if(optionExists("countPrefix"))
+    initCountFiles(optionVal("countPrefix", NULL));
 affy1lqName = optionVal("1lqFile", NULL);
 outFileName = optionVal("outFile", NULL);
 if(optionExists("testVals"))
@@ -635,6 +695,9 @@ else if(affy1lqName == NULL || outFileName == NULL)
     errAbort("Need to specify 1lqFile and outFile, use -help for usage.");
 else 
     gcPresAbs(outFileName, affy1lqName, argc-1, argv+1);
+
+if(optionExists("countPrefix"))
+    closeCountFiles();
 return 0;
 }
 

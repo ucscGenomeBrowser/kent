@@ -1,13 +1,18 @@
 include ../../inc/common.mk
-HG_WARN = ${HG_WARN_ERR}
+HG_WARN = -Wall
 
 
 O = faSplit.o 
 
-faSplit: $(O)
-	gcc ${F64} -o $(HOME)/bin/$(MACHTYPE)/faSplit $O ../../lib/$(MACHTYPE)/jkweb.a
+faSplit: ${O}
+	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/faSplit $O \
+	../../lib/${MACHTYPE}/jkweb.a
+	strip ${HOME}/bin/${MACHTYPE}/faSplit
 
 debug:
-	gcc ${F64} -o faSplit $O ../../lib/$(MACHTYPE)/jkweb.a
+	${CC} ${COPT} -o faSplit $O ../../lib/${MACHTYPE}/jkweb.a
+
+clean::
+	rm -f ${O} faSplit
 
 

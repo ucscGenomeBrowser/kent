@@ -112,3 +112,15 @@ color 0,60,120
 altColor 200,220,255
 spectrum on
 type psl xeno
+
+track blatCi1
+shortLabel Squirt Blat
+longLabel Ciona intestinalis Translated Blat Alignments
+group compGeno
+priority 111
+visibility hide
+color 0,60,120
+altColor 200,220,255
+spectrum on
+type psl xeno 
+
