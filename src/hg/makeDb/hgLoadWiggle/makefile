@@ -36,6 +36,10 @@ test:
 test_verbose:
 	cd tests && ./RunTest.sh -verbose
 
+install::
+	rm -f ${SCRIPTS}/chkWiggleTable.sh
+	cp -p chkWiggleTable.sh ${SCRIPTS}
+
 clean:
 	rm -f test_data/chr1_0.wib test_data/chr1_0.wig test_data/chr1_1.wib \
 	test_data/chr1_1.wig test_data/chr1_2.wib test_data/chr1_2.wig \

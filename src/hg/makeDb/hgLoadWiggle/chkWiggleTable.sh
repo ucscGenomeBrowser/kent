@@ -2,8 +2,9 @@
 #
 #	chkWiggleTable.sh - verify a wiggle table coordinates are OK
 #
+# 	source tree location: src/hg/makeDb/hgLoadWiggle/chkWiggleTable.sh
 
-# ident "$Id: chkWiggleTable.sh,v 1.1 2004/09/28 19:33:39 hiram Exp $";
+# ident "$Id: chkWiggleTable.sh,v 1.2 2004/09/29 23:10:51 hiram Exp $";
 
 HGWIGGLE=hgWiggle
 
