@@ -25,10 +25,10 @@ my $verbose   = 0;
 
 # Hard-coded behaviors:
 my $debug         = 0;
-my %autoSqlIgnore = ( "$kentSrc/hg/lib/bed.as" => "",
-		      "$kentSrc/hg/lib/ggDbRep.as" => "",
-		      "$kentSrc/hg/lib/rmskOut.as" => "",
-		      "$kentSrc/lib/pslWScore.as" => "",
+my %autoSqlIgnore = ( "hg/lib/bed.as" => "",
+		      "hg/lib/ggDbRep.as" => "",
+		      "hg/lib/rmskOut.as" => "",
+		      "lib/pslWScore.as" => "",
 		    );
 
 my $basename      = $0;  $basename =~ s@.*/@@;
@@ -122,7 +122,8 @@ sub slurpAutoSql {
   while (<P>) {
     chop;
     my $filename = $_;
-    next if (defined $autoSqlIgnore{$filename});
+    my $filetail = $filename;  $filetail =~ s/^$kentSrc\///;
+    next if (defined $autoSqlIgnore{$filetail});
     open(F, "$filename") || die "Can't open $filename";
     my $as = "";
     my $table = "";
