@@ -159,7 +159,7 @@
 #include "pscreen.h"
 #include "jalview.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.835.2.1 2005/02/24 19:25:12 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.835.2.2 2005/02/24 19:40:33 fanhsu Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -6866,6 +6866,7 @@ char **row, **row2;
 char query[256], query2[256];
 char *mrnaAcc;
 char *chp;
+char *refseqDesc;
 
 cartWebStart(cart, "CCDS Gene");
 
@@ -6882,8 +6883,14 @@ while (row != NULL)
     chp = strstr(mrnaAcc, ".");
     if (chp != NULL) *chp = '\0';
     
+    safef(query2, sizeof(query2), "select product from refLink where mrnaAcc = '%s'", mrnaAcc);
+    sr2  = sqlGetResult(conn2, query2);
+    row2 = sqlNextRow(sr2);
+    refseqDesc = row2[0];
+    
     printf("<B>RefSeq:</B> <A HREF=\"../cgi-bin/hgc?g=refGene&i=%s&db=%s\"", mrnaAcc, database);
-    printf(" TARGET=_blank> %s</A><BR>\n",mrnaAcc);fflush(stdout); 
+    printf(" TARGET=_blank> %s</A> %s<BR>\n", mrnaAcc, refseqDesc);fflush(stdout); 
+    sqlFreeResult(&sr2);
     row = sqlNextRow(sr);
     }
 sqlFreeResult(&sr);
