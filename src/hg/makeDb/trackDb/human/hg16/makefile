@@ -6,16 +6,16 @@ clean::
 	rm -f ${UVA_LINKS} ${UCSD_LINKS}
      
 UVA_LINKS = \
-	encode_UVa_ORI_0_2.html \
-	encode_UVa_ORI_0_2.html \
-	encode_UVa_ORI_2_4.html \
-	encode_UVa_ORI_4_6.html \
-	encode_UVa_ORI_6_8.html \
-	encode_UVa_ORI_8_10.html 
+	encode_UVA_DNARep_0_2.html \
+	encode_UVA_DNARep_0_2.html \
+	encode_UVA_DNARep_2_4.html \
+	encode_UVA_DNARep_4_6.html \
+	encode_UVA_DNARep_6_8.html \
+	encode_UVA_DNARep_8_10.html 
 
 UVA:    ${UVA_LINKS}
 
-encode_UVa_ORI_%.html: encode_UVa_ORI.html
+encode_UVA_DNARep_%.html: encode_UVA_DNARep.html
 	rm -f $@
 	ln -s $< $@
 
