@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit ~/kent/src/utils/doBlastzChainNet.pl instead.
 
-# $Id: doBlastzChainNet.pl,v 1.3 2005/02/19 01:10:22 angie Exp $
+# $Id: doBlastzChainNet.pl,v 1.4 2005/02/22 03:17:50 angie Exp $
 
 # to-do items:
 # - lots of testing
@@ -23,6 +23,7 @@ use warnings;
 use strict;
 
 # Hardcoded paths/command sequences:
+my $getFileServer = '/cluster/bin/scripts/fileServer';
 my $blastzRunUcsc = '/cluster/bin/scripts/blastz-run-ucsc';
 my $partition = '/cluster/bin/scripts/partitionSequence.pl';
 my $gensub2 = '/parasol/bin/gensub2';
@@ -37,11 +38,18 @@ my $clusterData = '/cluster/data';
 my $trackBuild = 'bed';
 my $goldenPath = '/usr/local/apache/htdocs/goldenPath';
 my $downloadPath = "$dbHost:$goldenPath";
+my $clusterLocal = '/scratch/hg';
+my $clusterSortaLocal = '/iscratch/i';
+my @clusterNAS = ('/cluster/bluearc', '/panasas');
+my $clusterNAS = join('/... or ', @clusterNAS) . '/...';
+my @clusterNoNo = ('/cluster/home', '/projects');
+my @fileServerNoNo = ('kkhome', 'kks00');
 
 # Option variable names:
 use vars qw/
     $opt_continue
     $opt_stop
+    $opt_blastzOutRoot
     $opt_debug
     $opt_verbose
     $opt_help
@@ -77,6 +85,13 @@ options:
                           $stepVals
     -stop step            Stop after completing the specified step.
                           (same possible values as for -continue above)
+    -blastzOutRoot dir    Directory path where outputs of the blastz cluster
+                          run will be stored.  By default, they will be
+                          stored in the $clusterData build directory , but
+                          this option can specify something more cluster-
+                          friendly: $clusterNAS .
+                          If dir does not already exist it will be created.
+                          Blastz outputs are removed in the cleanup step.
     -debug                Don't actually run commands, just display them.
     -verbose num          Set verbose level to num (default $defaultVerbose).
     -help                 Show detailed help and exit.
@@ -118,14 +133,14 @@ Assumptions:
 3. DEF's SEQ1_DIR is either a directory containing one nib file per 
    target sequence (usually chromosome), OR a complete path to a 
    single .2bit file containing all target sequences.  This directory 
-   should be in /scratch/hg/ or /iscratch/i
+   should be in $clusterLocal or $clusterSortaLocal .
    SEQ2_DIR: ditto for query.
 4. DEF's SEQ1_LEN is a tab-separated dump of the target database table 
    chromInfo -- or at least a file that contains all sequence names 
    in the first column, and corresponding sizes in the second column.
    Normally this will be $clusterData/\$tDb/chrom.sizes, but for a 
-   scaffold-based assembly, it is a good idea to put it in /iscratch 
-   or /cluster/bluearc, /panasas etc. because it will be a large file 
+   scaffold-based assembly, it is a good idea to put it in $clusterSortaLocal 
+   or $clusterNAS because it will be a large file 
    and it is read by blastz-run-ucsc (big cluster script).
    SEQ2_LEN: ditto for query.
 5. DEF's SEQ1_CHUNK and SEQ1_LAP determine the step size and overlap size 
@@ -140,7 +155,7 @@ Assumptions:
    b. SEQ1_SMSK must be set to a directory containing one file per target 
       sequence, with the name pattern \$seq.out.spec.  This file must be 
       a RepeatMasker .out file (usually filtered by DateRepeats).  The 
-      directory should be under /scratch/hg/ or /iscratch/i/.  
+      directory should be under $clusterLocal or $clusterSortaLocal .
       SEQ2_SMSK: ditto for query.
 7. DEF's BLASTZ_[A-Z] variables will be translated into blastz command line 
    options (e.g. BLASTZ_H=foo --> H=foo, BLASTZ_Q=foo --> Q=foo).  
@@ -171,10 +186,35 @@ BLASTZ_Q=$clusterData/blastz/HoxD55.q
 my %defVars = ();
 my ($DEF, $tDb, $qDb, $QDb, $isSelf, $buildDir, $startStep, $stopStep);
 
+sub isInDirList {
+  # Return TRUE if $dir is under (begins with) something in dirList.
+  my ($dir, @dirList) = @_;
+  my $pat = '^(' . join('|', @dirList) . ')(/.*)?$';
+  return ($dir =~ m@$pat@);
+}
+
+sub enforceClusterNoNo {
+  # Die right away if user is trying to put cluster output somewhere 
+  # off-limits.
+  my ($dir, $desc) = @_;
+  if (&isInDirList($dir, @clusterNoNo)) {
+    die "\ncluster outputs are forbidden to go to " .
+      join (' or ', @clusterNoNo) . " so please choose a different " .
+      "$desc instead of $dir .\n\n";
+  }
+  my $fileServer = `$getFileServer $dir/`;
+  if (scalar(grep /^$fileServer$/, @fileServerNoNo)) {
+    die "\ncluster outputs are forbidden to go to fileservers " .
+      join (' or ', @fileServerNoNo) . " so please choose a different " .
+      "$desc instead of $dir (which is hosted on $fileServer).\n\n";
+  }
+}
+
 sub checkOptions {
   # Make sure command line options are valid/supported.
   my $ok = GetOptions("continue=s",
 		      "stop=s",
+		      "blastzOutRoot=s",
 		      "verbose=n",
 		      "debug",
 		      "help");
@@ -203,6 +243,18 @@ sub checkOptions {
     warn "\n-stop step ($opt_stop) must not precede -continue step " .
       "($opt_continue).\n";
     &usage(1);
+  }
+  if ($opt_blastzOutRoot) {
+    if ($opt_blastzOutRoot !~ m@^/\S+/\S+@) {
+      warn "\n-blastzOutRoot must specify a full path.\n";
+      &usage(1);
+    }
+    &enforceClusterNoNo($opt_blastzOutRoot, '-blastzOutRoot');
+    if (! &isInDirList($opt_blastzOutRoot, @clusterNAS)) {
+      warn "\n-blastzOutRoot is intended to specify something on " .
+	"$clusterNAS, but I'll trust your judgment " .
+	"and use $opt_blastzOutRoot\n\n";
+    }
   }
 }
 
@@ -368,10 +420,12 @@ sub doBlastzClusterRun {
   my $queryList = $isSelf ? $targetList : "$qDb.lst";
   my $tPartDir = ($defVars{'SEQ1_DIR'} =~ /\.2bit$/) ? "-lstDir tParts" : '';
   my $qPartDir = ($defVars{'SEQ2_DIR'} =~ /\.2bit$/) ? "-lstDir qParts" : '';
+  my $outRoot = $opt_blastzOutRoot ? "$opt_blastzOutRoot/psl" : '../psl';
+  my $mkOutRoot = $opt_blastzOutRoot ? "mkdir -p $opt_blastzOutRoot" : "";
   my $partitionTargetCmd = 
     ("$partition $defVars{SEQ1_CHUNK} $defVars{SEQ1_LAP} " .
 
-     "$defVars{SEQ1_DIR} $defVars{SEQ1_LEN} -xdir xdir.sh -rawDir ../psl " .
+     "$defVars{SEQ1_DIR} $defVars{SEQ1_LEN} -xdir xdir.sh -rawDir $outRoot " .
      "$tPartDir > $targetList");
   my $partitionQueryCmd = 
     ($isSelf ?
@@ -382,7 +436,8 @@ sub doBlastzClusterRun {
   my $templateCmd = ("$blastzRunUcsc -outFormat psl " .
 		     ($isSelf ? '-dropSelf ' : '') .
 		     '$(path1) $(path2) ../DEF ' .
-		     '{check out exists ../psl/$(file1)/$(file1)_$(file2).psl }');
+		     '{check out exists ' .
+		     $outRoot . '/$(file1)/$(file1)_$(file2).psl }');
   &mustMkdir($runDir);
   open (GSUB, ">$runDir/gsub")
     || die "Couldn't open $runDir/gsub for writing: $!\n";
@@ -408,6 +463,7 @@ _EOF_
 
 cd $runDir
 $partitionTargetCmd
+$mkOutRoot
 csh -ef xdir.sh
 $partitionQueryCmd
 $gensub2 $targetList $queryList gsub jobList
@@ -463,6 +519,7 @@ _EOF_
   ;
   close(CAT);
 
+  my $outRoot = $opt_blastzOutRoot ? "$opt_blastzOutRoot/psl" : '../psl';
   my $bossScript = "$runDir/doCatRun.csh";
   open(SCRIPT, ">$bossScript")
     || die "Couldn't open $bossScript for writing: $!\n";
@@ -472,11 +529,11 @@ _EOF_
 # from $DEF.
 # It is to be executed on $paraHub in $runDir .
 # It sets up and performs a small cluster run to concatenate all files in 
-# each subdirectory of ../psl into a per-target-chunk file.
+# each subdirectory of $outRoot into a per-target-chunk file.
 # This script will fail if any of its commands fail.
 
 cd $runDir
-ls -1d ../psl/* | sed -e 's@/\$@\@' > tParts.lst
+ls -1d $outRoot/* | sed -e 's@/\$@\@' > tParts.lst
 chmod a+x cat.csh
 $gensub2 tParts.lst single gsub jobList
 mkdir ../pslParts
@@ -826,6 +883,7 @@ sub cleanup {
   # Make compressed chain, net, axtNet files for download.
   my ($fileServer) = @_;
   my $runDir = $buildDir;
+  my $outRoot = $opt_blastzOutRoot ? "$opt_blastzOutRoot/psl" : "$buildDir/psl";
   my $bossScript = "$buildDir/cleanUp.csh";
   open(SCRIPT, ">$bossScript")
     || die "Couldn't open $bossScript for writing: $!\n";
@@ -841,11 +899,11 @@ sub cleanup {
 
 cd $runDir
 
-rm -fr psl/
-rm -fr axtChain/run/chain/
-rm -f axtChain/noClass.net
-rm -fr axtChain/net/
-rm -fr axtChain/chain/
+rm -fr $outRoot/
+rm -fr $buildDir/axtChain/run/chain/
+rm -f  $buildDir/axtChain/noClass.net
+rm -fr $buildDir/axtChain/net/
+rm -fr $buildDir/axtChain/chain/
 _EOF_
   ;
   close(SCRIPT);
@@ -869,6 +927,10 @@ _EOF_
 my $date = `date +%Y-%m-%d`;
 chomp $date;
 $buildDir = "$clusterData/$tDb/$trackBuild/blastz.$qDb.$date";
+if (! $opt_blastzOutRoot) {
+  &enforceClusterNoNo($buildDir,
+	  'blastz/chain/net build directory (or use -blastzOutRoot)');
+}
 &verbose(1, "Building in $buildDir\n");
 
 if (! -d $buildDir) {
@@ -876,7 +938,7 @@ if (! -d $buildDir) {
   &run("cp $DEF $buildDir/DEF");
 }
 
-my $fileServer = `fileServer $buildDir/`;
+my $fileServer = `$getFileServer $buildDir/`;
 chomp $fileServer;
 
 my $step = 0;
