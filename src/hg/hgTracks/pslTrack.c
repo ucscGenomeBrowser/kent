@@ -331,8 +331,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     pslFree(&psl);
     }
 slReverse(&lfList);
-tg->items = lfList;	/* Do this twice for benefit of limit visibility */
-if (limitVisibility(tg) != tvDense)
+if (tg->visibility != tvDense)
     slSort(&lfList, linkedFeaturesCmpStart);
 if (tg->extraUiData)
     filterMrna(tg, &lfList);
