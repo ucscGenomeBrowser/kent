@@ -41,7 +41,7 @@
 #define	WIG_NO_DATA	128
 #define MAX_BYTE_VALUE	127
 
-static char const rcsid[] = "$Id: wigAsciiToBinary.c,v 1.23 2004/07/19 21:45:13 sugnet Exp $";
+static char const rcsid[] = "$Id: wigAsciiToBinary.c,v 1.24 2004/08/03 18:57:27 hiram Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -301,6 +301,8 @@ for (i = 1; i < argc; ++i)
 	    chromStart = Offset;
 	    verbose(2, "first offset: %llu\n", chromStart);
 	}
+	else if ((validLines > 1) && (Offset <= previousOffset))
+	    errAbort("ERROR: chrom positions not in order. previous: %llu >= %llu <-current", previousOffset+1, Offset+1);
 	/* if we are working on a zoom level and the data is not exactly
 	 * spaced according to the span, then we need to put each value
 	 * in its own row in order to keep positioning correct for these
@@ -312,8 +314,6 @@ for (i = 1; i < argc; ++i)
 	    {
 	    int skippedBases;
 	    int spansSkipped;
-	    if (Offset < previousOffset)
-		errAbort("ERROR: chrom positions not in order. previous: %llu > %llu <-current", previousOffset, Offset);
 	    skippedBases = Offset - previousOffset;
 	    spansSkipped = skippedBases / dataSpan;
 	    if ((spansSkipped * dataSpan) != skippedBases)
@@ -337,7 +337,7 @@ for (i = 1; i < argc; ++i)
 	     *  it with nothing.
 	     */
 	    fillSize = (Offset - (previousOffset + dataSpan)) / dataSpan;
-	    verbose(2, "filling NO_DATA for %llu bytes\n", fillSize);
+	    verbose(2, "filling NO_DATA for %llu bytes at bincount: %llu\n", fillSize, bincount);
 	    if (fillSize + bincount >= binsize)
 		{
 		verbose(2, "completing a bin due to  NO_DATA for %llu bytes, only %llu - %llu = %llu to go\n", fillSize, binsize, bincount, binsize - bincount);
@@ -356,7 +356,7 @@ for (i = 1; i < argc; ++i)
 		    ++bincount;	/*	count scores in this bin */
 		    if (bincount >= binsize) break;
 		    }
-		verbose(2, "filled NO_DATA for %llu bytes\n", fillSize);
+		verbose(2, "filled NO_DATA for %llu bytes at bincount: %llu\n", fillSize, bincount);
 		/*	If that finished off this bin, output it
 		 *	This most likely should not happen here.  The
 		 *	check above: if (fillSize + bincount >= binsize) 
