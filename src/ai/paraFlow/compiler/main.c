@@ -572,7 +572,7 @@ for (;;)
 *pTokList = tok;
 }
 
-struct pfParse *pfParseAtom(struct pfParse *parent,
+static struct pfParse *parseAtom(struct pfParse *parent,
 	struct pfToken **pTokList, struct pfScope *scope)
 /* Parse atomic expression - const, variable, or parenthesized expression. */
 {
@@ -606,6 +606,33 @@ switch (tok->type)
 return pp;
 }
 
+struct pfParse *parseCall(struct pfParse *parent,
+	struct pfToken **pTokList, struct pfScope *scope)
+/* Parse out function call. */
+{
+struct pfParse *pp = parseAtom(parent, pTokList, scope);
+struct pfToken *tok = *pTokList;
+if (tok->type == '(')
+    {
+    struct pfParse *func = pp;
+    struct pfParse *parameters = NULL;
+    pp = pfParseNew(pptCall, tok, parent);
+    func->parent = pp;
+    pp->children = func;
+    tok = tok->next;
+    if (tok->type != ')')
+        {
+	parameters = pfParseExpression(pp, &tok, scope);
+	func->next = parameters;
+	}
+    if (tok->type != ')')
+        expectingGot(")", tok);
+    tok = tok->next;
+    *pTokList = tok;
+    }
+return pp;
+}
+
 struct pfParse *pfParseNegation(struct pfParse *parent,
 	struct pfToken **pTokList, struct pfScope *scope)
 /* Parse unary minus. */
@@ -616,11 +643,11 @@ if (tok->type == '-')
     {
     pp = pfParseNew(pptNegate, tok, parent);
     tok = tok->next;
-    pp->children = pfParseAtom(pp, &tok, scope);
+    pp->children = parseCall(pp, &tok, scope);
     }
 else
     {
-    pp = pfParseAtom(parent, &tok, scope);
+    pp = parseCall(parent, &tok, scope);
     }
 *pTokList = tok;
 return pp;
