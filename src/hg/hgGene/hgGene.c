@@ -16,7 +16,7 @@
 #include "hgColors.h"
 #include "hgGene.h"
 
-static char const rcsid[] = "$Id: hgGene.c,v 1.42 2005/02/18 17:46:39 kent Exp $";
+static char const rcsid[] = "$Id: hgGene.c,v 1.43 2005/02/25 00:20:42 fanhsu Exp $";
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
@@ -28,6 +28,8 @@ char *curGeneName;		/* Biological name of gene. */
 char *curGeneChrom;	/* Chromosome current gene is on. */
 struct genePred *curGenePred;	/* Current gene prediction structure. */
 int curGeneStart,curGeneEnd;	/* Position in chromosome. */
+char *curGeneType;		/* Type of gene track */
+char *curGeneItem;		/* gene item (CCDS Gene ID) */
 struct sqlConnection *spConn;	/* Connection to SwissProt database. */
 char *swissProtAcc;		/* SwissProt accession (may be NULL). */
 
@@ -265,6 +267,14 @@ fprintf(f, "../cgi-bin/hgc?%s&g=mrna&i=%s&c=%s&o=%d&l=%d&r=%d&db=%s",
     curGeneEnd, database);
 }
 
+static void printOurCcdsGeneUrl(FILE *f, char *accession)
+/* Print URL for Entrez browser on a nucleotide. */
+{
+fprintf(f, "../cgi-bin/hgc?%s&g=ccdsGene&i=%s&c=%s&o=%d&l=%d&r=%d&db=%s",
+    cartSidUrlString(cart), accession, curGeneChrom, curGeneStart, curGeneStart,
+    curGeneEnd, database);
+}
+
 boolean idInAllMrna(char *id, struct sqlConnection *conn)
 /* Return TRUE if id is in allMrna table */
 {
@@ -272,6 +282,62 @@ char query[256];
 safef(query, sizeof(query), 
 	"select count(*) from all_mrna where qName = '%s'", id);
 return sqlQuickNum(conn, query) > 0;
+}
+
+int countAlias(char *id, struct sqlConnection *conn)
+/* Count how many valid gene symbols to be printed */
+{
+char query[256];
+struct sqlResult *sr;
+int cnt = 0;
+char **row;
+safef(query, sizeof(query), "select alias from kgAlias where kgId = '%s' order by alias", id);
+sr = sqlGetResult(conn, query);
+
+row = sqlNextRow(sr);
+while (row != NULL)
+    {
+    /* skip kgId and the maint gene symbol (curGeneName) */
+    if ((!sameWord(id, row[0])) && (!sameWord(row[0], curGeneName))) 
+    	{
+	cnt++;
+	}
+    row = sqlNextRow(sr);
+    }
+sqlFreeResult(&sr);
+return(cnt);
+}
+
+void printAlias(char *id, struct sqlConnection *conn)
+/* Print out description of gene given ID. */
+{
+char query[256];
+struct sqlResult *sr;
+char **row;
+int totalCount;
+int cnt = 0;
+
+totalCount = countAlias(id,conn);
+if (totalCount > 0)
+    {
+    hPrintf("<B>Alternate Gene Symbols:</B> ");
+    safef(query, sizeof(query), "select alias from kgAlias where kgId = '%s' order by alias", id);
+    sr = sqlGetResult(conn, query);
+    row = sqlNextRow(sr);
+    while (cnt < totalCount)
+    	{
+        /* skip kgId and the maint gene symbol (curGeneName) */
+        if ((!sameWord(id, row[0])) && (!sameWord(row[0], curGeneName))) 
+		{
+    		hPrintf("%s", row[0]);
+		if (cnt < (totalCount-1)) hPrintf(", ");
+		cnt++;
+		}
+    	row = sqlNextRow(sr);
+    	}
+    hPrintf("<BR>");   
+    }
+sqlFreeResult(&sr);
 }
 
 void printDescription(char *id, struct sqlConnection *conn)
@@ -283,6 +349,15 @@ char *protAcc = getSwissProtAcc(conn, spConn, id);
 char *spDisplayId;
 boolean gotRnaAli = idInAllMrna(id, conn);
 
+if (sameWord(curGeneType, "ccdsGene"))
+    {
+    hPrintf("<B>");
+    hPrintf("Consensus CDS Gene");
+    hPrintf(": </B> <A HREF=\"");
+    printOurCcdsGeneUrl(stdout, curGeneItem);
+    hPrintf("\" TARGET=_blank>%s</A><BR>\n", curGeneItem);
+    }
+
 description = genoQuery(id, "descriptionSql", conn);
 hPrintf("<B>Description:</B> ");
 if (description != NULL)
@@ -290,6 +365,7 @@ if (description != NULL)
 else
     hPrintf("%s<BR>", "No description available");
 freez(&description);
+printAlias(id, conn);
 
 if (gotRnaAli)
     {
@@ -573,7 +649,7 @@ void doKgMethod(struct sqlConnection *conn)
 /* display knownGene.html content 
 (USCS Known Genes Method, Credits, and Data Use Restrictions) */
     {
-    struct trackDb *tdb;
+    struct trackDb *tdb, *tdb2;
     struct section *sectionList = NULL;
     struct section *section;
 
@@ -604,8 +680,8 @@ void doKgMethod(struct sqlConnection *conn)
 	{
         tdb = hTrackDbForTrack("sgdGene");
 	}
-	
-    hPrintf("%s", tdb->html);
+    tdb2 = hTrackDbForTrack(curGeneType);
+    hPrintf("%s", tdb2->html);
 
     cartWebEnd();
     }
@@ -620,6 +696,16 @@ getDbAndGenome(cart, &database, &genome);
 hSetDb(database);
 conn = hAllocConn();
 curGeneId = cartString(cart, hggGene);
+curGeneType = cgiOptionalString(hggType);
+if (curGeneType == NULL) 
+    {
+    curGeneType = cloneString("knownGene");
+    curGeneItem = NULL;
+    }
+else
+    {
+    curGeneItem = cgiOptionalString("hgg_item");
+    }
 getGenomeSettings();
 getGenePosition(conn);
 curGenePred = getCurGenePred(conn);
