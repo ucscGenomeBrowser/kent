@@ -4382,11 +4382,13 @@ else
 printf("<TABLE  BGCOLOR=\"#000000\" BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"1\"><TR><TD>\n");
 printf("<TABLE  BGCOLOR=\"#fffee8\" BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"1\">\n<tr>");
 printf("<th colspan=%d>False Color Key</th></tr>\n<tr>",numColumns);
+printf("<th width=55><b> NA </b></th>");
 for(currentVal = minVal; currentVal <= maxVal; currentVal = (2*currentVal))
     {
     printf("<th width=55><b> %7.2g </b></th>", currentVal);
     }
 printf("</tr>\n<tr>");
+printf("<td bgcolor=\"#%.2X%.2X%.2X\">&nbsp</td>\n", 128,128,128);
 for(currentVal = minVal; currentVal <= maxVal; currentVal = (2*currentVal))
     {
     struct rgbColor rgb = getColor(currentVal, maxVal);
@@ -4792,7 +4794,8 @@ void printAffyLinks(char *name)
 {
 char *netaffx = "https://www.netaffx.com/LinkServlet?array=U95&probeset=";
 char *netaffxDisp = "https://www.netaffx.com/svghtml?query=";
-char *gnf = "http://expression.gnf.org/promoter/tissue/images/";
+char *gnfDetailed = "http://expression.gnf.org/cgi-bin/index.cgi?text=";
+/* char *gnf = "http://expression.gnf.org/promoter/tissue/images/"; */
 if(name != NULL)
     {
     printf("<p>More information about individual probes and probe sets is available ");
@@ -4803,8 +4806,8 @@ if(name != NULL)
     printf("<li> A graphical representation is also <a href=\"%s%s\">available</a> ",netaffxDisp, name);
     printf("<basefont size=-2>[svg viewer required]</basefont></li>\n");
     printf("</ul>\n");
-    printf("<p>A <a href=\"%s%s.png\">histogram</a> of the data for the probe set selected (%s) over all",gnf, name, name);
-    printf("tissues is available at <a href=\"http://www.gnf.org\">Novartis</a>.\n");
+    printf("<p>A <a href=\"%s%s\">histogram</a> of the data for the probe set selected (%s) over all ",gnfDetailed, name, name);
+    printf("tissues is available at <a href=\"http://expression.gnf.org/cgi-bin/index.cgi\">the Novartis web supplement</a>.\n");
     }
 }
 
