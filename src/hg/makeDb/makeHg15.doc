@@ -1009,9 +1009,6 @@ Locate motifs on all promoters with
 	wget ftp://ftp.ncbi.nih.gov/repository/dbSTS/dbSTS.FASTA.dailydump.Z
         gunzip dbSTS.FASTA.dailydump.Z
 
-# Create updated files
-        cd /projects/hg2/booch/psl/update
-
 # Edit Makefile to latest sts.X version from PREV, and update STS files
         make update
 
@@ -1235,7 +1232,7 @@ Locate motifs on all promoters with
 
 
 
-# FOSEND SEQUENCE ALIGNMENTS (DONE 050603)
+# FOSEND SEQUENCE ALIGNMENTS (DONE 051503)
 
 # Create full sequence alignments
         ssh kk
@@ -1256,8 +1253,7 @@ Locate motifs on all promoters with
         make copy.assembly
         make clean
 
-IN PROGRESS
-# FOSEND PAIRS TRACK (TODO)
+# FOSEND PAIRS TRACK (DONE 051603)
 
 # Update Makefile with location of pairs files, if necessary
         ssh kks00
@@ -1265,7 +1261,7 @@ IN PROGRESS
 
 # Make initial file of alignments
 	make fosEnds.rdb
- DONE TO HERE
+
 # Try to fish out more pairs
 	make fosEndsMiss.psl
 
