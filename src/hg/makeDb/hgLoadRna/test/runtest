@@ -1,0 +1,14 @@
+#!/bin/csh -f
+
+# run on test file, diff with "golden" file
+
+${HOME}/bin/i386/hgLoadRna -filesOnly add -type=EST fr1 test.fa test.ra \
+                         >& /dev/null
+
+diff mrna.tab mrna.tab.gold > /dev/null
+set status1 = $status
+diff tissue.tab tissue.tab.gold > /dev/null
+if ($status || $status1) then
+    echo '*** FAIL ***'
+endif
+rm -f *.tab

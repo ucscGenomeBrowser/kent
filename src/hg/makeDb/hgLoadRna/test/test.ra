@@ -1,0 +1,30 @@
+acc X52016
+def R.norvegicus mRNA for von Ebner's gland protein.
+key lipocalin; secretory protein; von ebner's gland protein.
+src Rattus norvegicus (Norway rat)
+org Rattus norvegicus
+aut Schmale,H., Holtgreve-Grez,H. and Christiansen,H.
+tis lingual salivary gland
+cds 56..589
+pro von Ebner's gland protein
+ver 1
+ngi 57473
+cat ROD
+dat 14-JAN-1992
+siz 200
+
+acc X74806
+def R.norvegicus VEGP2 mRNA.
+key von ebner's gland protein.
+src Rattus norvegicus (Norway rat)
+org Rattus norvegicus
+aut Kock,K., Ahlers,C. and Schmale,H.
+tis lingual salivary gland\
+cds 54..587
+pro rat von Ebner's gland protein 2
+ver 1
+ngi 505302
+cat ROD
+dat 30-JUL-1994
+siz 200
+
