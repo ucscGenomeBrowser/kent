@@ -140,7 +140,7 @@
 #include "HInv.h"
 #include "bed6FloatScore.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.697 2004/07/23 06:44:12 hartera Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.698 2004/07/23 23:38:28 hiram Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -1793,6 +1793,7 @@ int chainWinSize;
 double subSetScore = 0.0;
 int qs, qe;
 boolean nullSubset = FALSE;
+char *foundTable = (char *)NULL;
 
 if (! sameWord(otherDb, "seq"))
     {
@@ -1830,11 +1831,27 @@ else
     }
 printf("<B>Chain ID:</B> %s<BR>\n", item);
 printf("<B>Score:</B> %1.0f\n", chain->score);
+
 if (nullSubset)
     printf("<B>Score within browser window:</B> N/A (no aligned bases)<BR>\n");
 else
     printf("<B>Approximate Score within browser window:</B> %1.0f<BR>\n",
 	   subSetScore);
+
+if (chainDbNormScoreAvailable(chain->tName, track, &foundTable))
+    {
+    char query[256];
+    struct sqlResult *sr;
+    char **row;
+    safef(query, ArraySize(query), 
+	 "select normScore from %s where id = '%s'", foundTable, item);
+    sr = sqlGetResult(conn, query);
+    if ((row = sqlNextRow(sr)) != NULL)
+	printf("<B>Normalized Score:</B> %1.0f<BR>\n", atof(row[0]));
+    sqlFreeResult(&sr);
+    freeMem(foundTable);
+    }
+
 printf("<BR>\n");
 
 chainWinSize = min(winEnd-winStart, chain->tEnd - chain->tStart);
