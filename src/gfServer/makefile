@@ -17,6 +17,8 @@ test:
 		tests/input/mCreaGeno.nib > tests/output/testNib
 	$X direct tests/input/mCrea.mrna tests/input/creaGeno.2bit \
 		>tests/output/testTwoBit
+	cd tests && testProtNib output/testProtNib
+	cd tests && testProtTwoBit output/testProtTwoBit
 	cd tests && testTransNib output/testTransNib
 	cd tests && testTransTwoBit output/testTransTwoBit
 	diff -r -x CVS tests/expected tests/output
