@@ -3,6 +3,7 @@
 #include "options.h"
 #include "errabort.h"
 #include "net.h"
+#include "portable.h"
 #include "internet.h"
 #include "log.h"
 #include "paraLib.h"
@@ -45,9 +46,7 @@ return host;
 int forkOrDie()
 /* Fork, aborting if it fails. */
 {
-int childId = fork();
-if (childId == -1)
-    errnoAbort("Unable to fork");
+int childId = mustFork();
 if (childId == 0)
      paraForkDepth++;
 return childId;
@@ -92,20 +91,6 @@ void paraDaemonize(char *progName)
  * starting logging based on the -logFacility and -log command line options .
  * if -debug is supplied , don't fork. */
 {
-if (!optionExists("debug"))
-    {
-    int i, maxFiles = getdtablesize();
-    if (forkOrDie() != 0)
-        exit(0);  /* parent goes away */
-
-    /* Close all open files first (before logging) */
-    for (i = 0; i < maxFiles; i++)
-        close(i);
-    }
-
-/* Set up log handler. */
-if (optionExists("log"))
-    logOpenFile(progName, optionVal("log", NULL));
-else    
-    logOpenSyslog(progName, optionVal("logFacility", NULL));
+logDaemonize(progName);
 }
+
