@@ -4606,7 +4606,7 @@ if (isFull)
 	/* cghi = hashFindVal(hash, cghRecord.name); */
 	if (cghi == NULL)
 	   cghi = otherCghItem;
-	col = getExprDataColor((cghRecord.score * -1), 0.8, TRUE);
+	col = getExprDataColor((cghRecord.score * -1), 0.7, TRUE);
 	x1 = roundingScale(cghRecord.chromStart-winStart, width, baseWidth)+xOff;
 	x2 = roundingScale(cghRecord.chromEnd-winStart, width, baseWidth)+xOff;
 	w = x2-x1;
@@ -4622,7 +4622,7 @@ else
     while ((row = sqlNextRow(sr)) != NULL)
         {
 	cghStaticLoad(row+rowOffset, &cghRecord);
-	col = getExprDataColor((cghRecord.score * -1), 0.8, TRUE);
+	col = getExprDataColor((cghRecord.score * -1), 0.5, TRUE);
 	x1 = roundingScale(cghRecord.chromStart-winStart, width, baseWidth)+xOff;
 	x2 = roundingScale(cghRecord.chromEnd-winStart, width, baseWidth)+xOff;
 	w = x2-x1;
