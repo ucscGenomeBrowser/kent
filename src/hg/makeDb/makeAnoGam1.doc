@@ -819,4 +819,122 @@ anoGam1.downloadDir = anoGam1
           insert into blatServers values("anoGam1", "blat8", "17781", 0, 0);' \
       | hgsql -h genome-testdb hgcentraltest
 
+# MAKE Drosophila Proteins track (Done 08-07-2004 braney)
+    ssh kksilo
+    mkdir -p /cluster/data/anoGam1/blastDb
+    cd /cluster/data/anoGam1/blastDb
+    for i in ../*/*/*_[0-9]*_[0-9]*.fa; do ln -s $i .; done
+    for i in *.fa; do formatdb -i $i -p F 2> /dev/null; done
+    rm *.fa *.log
 
+    ssh kkr1u00
+    mkdir -p /iscratch/i/anoGam1/blastDb
+    cp /cluster/data/anoGam1/blastDb/* /iscratch/i/anoGam1/blastDb
+    (~kent/bin/iSync) 2>&1 > sync.out
+    
+    mkdir -p /cluster/data/anoGam1/bed/tblastn.dm1FB
+    cd /cluster/data/anoGam1/bed/tblastn.dm1FB
+    ls -1S /iscratch/i/anoGam1/blastDb/*.nsq | sed "s/\.nsq//" > skeeter.lst
+    exit
+
+    # back to kksilo
+    cd /cluster/data/anoGam1/bed/tblastn.dm1FB
+    mkdir fbfa
+    # calculate a reasonable number of jobs (didn't actually do this for anoGam1)
+    calc `wc /cluster/data/dm1/bed/blat.dm1FB/dm1FB.psl | awk "{print \\\$1}"`/\(164630/`wc skeeter.lst | awk "{print \\\$1}"`\)
+    # 18735/(150000/463) = 57.828700
+    split -l 58 /cluster/data/dm1/bed/blat.dm1FB/dm1FB.psl fbfa/fb
+    cd fbfa
+    for i in *; do pslxToFa $i $i.fa; rm $i; done
+    cd ..
+    ls -1S fbfa/*.fa > fb.lst
+    mkdir blastOut
+    for i in `cat fb.lst`; do  mkdir blastOut/`basename $i .fa`; done
+    cat << '_EOF_' > blastGsub
+#LOOP
+blastSome $(path1) {check in line $(path2)} {check out exists blastOut/$(root2)/q.$(root1).psl } 
+#ENDLOOP
+'_EOF_'
+    cat << '_EOF_' > blastSome
+#!/bin/sh
+BLASTMAT=/iscratch/i/blast/data
+export BLASTMAT
+f=/tmp/`basename $3`
+for eVal in 0.01 0.001 0.0001 0.00001 0.000001 1E-09 1E-11
+do
+if /scratch/blast/blastall -M BLOSUM80 -m 0 -F no -e $eVal -p tblastn -d $1 -i $2 -o $f.8
+then
+        mv $f.8 $f.1
+        break;
+fi
+done
+if test -f  $f.1
+then
+if /cluster/bin/i386/blastToPsl $f.1 $f.2
+then
+        liftUp -nosort -type=".psl" -nohead $f.3 /cluster/data/anoGam1/jkStuff/liftAll.lft warn $f.2
+        liftUp -nosort -type=".psl" -pslQ -nohead $3.tmp /iscratch/i/dm1/protein.lft warn $f.3
+        mv $3.tmp $3
+        rm -f $f.1 $f.2 $f.3
+        exit 0
+    fi
+fi
+rm -f $f.1 $f.2 $3.tmp $f.3 $f.8
+exit 1
+'_EOF_'
+
+    chmod +x blastSome
+    gensub2 skeeter.lst fb.lst blastGsub blastSpec
+
+    ssh kk
+    cd /cluster/data/anoGam1/bed/tblastn.dm1FB
+    para create blastSpec
+    para shove   # jobs will need to be restarted, but they should all finish
+
+    exit
+    # back to kksilo
+
+    cat << '_EOF_' > chainGsub
+#LOOP
+chainSome $(path1)
+#ENDLOOP
+'_EOF_'
+
+    cat << '_EOF_' > chainSome
+(cd $1; cat q.*.psl | simpleChain -outPsl -maxGap=20000 stdin ../c.`basename $1`.psl)
+'_EOF_'
+    chmod +x chainSome
+
+    ls -1dS `pwd`/blastOut/fb?? > chain.lst
+    gensub2 chain.lst single chainGsub chainSpec
+
+    ssh kki
+    cd /cluster/data/anoGam1/bed/tblastn.dm1FB
+    para create chainSpec
+    para push
+
+    exit
+    # back to kksilo
+    cd /cluster/data/anoGam1/bed/tblastn.dm1FB/blastOut
+    for i in fb??
+    do 
+	awk "(\$13 - \$12)/\$11 > 0.6 {print}" c.$i.psl > c60.$i.psl
+	sort -rn c60.$i.psl | pslUniq stdin u.$i.psl
+	awk "((\$1 / \$11) ) > 0.60 { print   }" c60.$i.psl > m60.$i.psl
+	echo $i
+    done
+
+    cat u.*.psl m60* |  sort -T /tmp -k 14,14 -k 16,16n -k 17,17n  | uniq  > ../preblastDm1FB.psl
+    cd ..
+    blatDir=/cluster/data/dm1/bed/blat.dm1FB
+    protDat -fb preblastDm1FB.psl $blatDir/dm1FB.psl $blatDir/dm1FB.mapNames blastDm1FB.psl
+
+    ssh hgwdev
+    cd /cluster/data/anoGam1/bed/tblastn.dm1FB
+    hgLoadPsl anoGam1 blastDm1FB.psl
+    exit
+
+    # back to kksilo
+    rm -rf blastOut
+
+# End tblastn
