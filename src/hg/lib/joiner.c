@@ -1,7 +1,9 @@
 /* joiner - information about what fields in what tables
  * in what databases can fruitfully be related together
  * or joined.  Another way of looking at it is this
- * defines identifiers shared across tables. 
+ * defines identifiers shared across tables.  This also
+ * defines what tables depend on what other tables
+ * through dependency attributes and statements.
  *
  * The main routines you'll want to use here are 
  *    joinerRead - to read in a joiner file
@@ -77,6 +79,56 @@ for (el = *pList; el != NULL; el = next)
 *pList = NULL;
 }
 
+static void joinerTableFree(struct joinerTable **pTable)
+/* Free up memory associated with joinerTable. */
+{
+struct joinerTable *table = *pTable;
+if (table != NULL)
+    {
+    slFreeList(&table->dbList);
+    freeMem(table->table);
+    freez(pTable);
+    }
+}
+
+static void joinerTableFreeList(struct joinerTable **pList)
+/* Free up memory associated with list of joinerTables. */
+{
+struct joinerTable *el, *next;
+
+for (el = *pList; el != NULL; el = next)
+    {
+    next = el->next;
+    joinerTableFree(&el);
+    }
+*pList = NULL;
+}
+
+static void joinerDependencyFree(struct joinerDependency **pDep)
+/* Free up memory associated with joinerDependency. */
+{
+struct joinerDependency *dep = *pDep;
+if (dep != NULL)
+    {
+    joinerTableFree(&dep->table);
+    joinerTableFreeList(&dep->dependsOnList);
+    freez(pDep);
+    }
+}
+
+static void joinerDependencyFreeList(struct joinerDependency **pList)
+/* Free up memory associated with list of joinerDependencys. */
+{
+struct joinerDependency *el, *next;
+
+for (el = *pList; el != NULL; el = next)
+    {
+    next = el->next;
+    joinerDependencyFree(&el);
+    }
+*pList = NULL;
+}
+
 static void joinerIgnoreFree(struct joinerIgnore **pIg)
 /* Free up memory associated with joinerIgnore. */
 {
@@ -114,6 +166,7 @@ if (joiner != NULL)
     hashFreeList(&joiner->exclusiveSets);
     freeHash(&joiner->databasesChecked);
     freeHash(&joiner->databasesIgnored);
+    joinerDependencyFreeList(&joiner->dependencyList);
     joinerIgnoreFreeList(&joiner->tablesIgnored);
     freez(pJoiner);
     }
@@ -458,7 +511,58 @@ slReverse(&ig->tableList);
 return ig;
 }
 
-void addCommasToHash(struct hash *hash, char *s)
+static struct joinerTable *parseTableSpec(struct lineFile *lf, char *spec)
+/* Parse out table from spec.  Spec is form db1,db2...,dbN.table. */
+{
+struct joinerTable *table;
+char *dotPos = strchr(spec, '.');
+if (dotPos == NULL)
+    errAbort("Need . in table specification line %d of %s", 
+    	lf->lineIx, lf->fileName);
+AllocVar(table);
+*dotPos++ = 0;
+table->table = cloneString(dotPos);
+table->dbList = slNameListFromComma(spec);
+if (table->dbList == NULL)
+    errAbort("Need at least one database before . in table spec line %d of %s",
+    	lf->lineIx, lf->fileName);
+return table;
+}
+
+static void dependencySyntaxErr(struct lineFile *lf)
+/* Explain dependency syntax and exit. */
+{
+errAbort("Expecting at least two table specifiers after dependency line %d of %s",
+    lf->lineIx, lf->fileName);
+}
+
+static struct joinerDependency *parseDependency(struct lineFile *lf, char *line)
+/* Parse out dependency - just a space separated list of table specs, with
+ * the first one having a special meaning. */
+{
+struct joinerDependency *dep;
+struct joinerTable *table;
+int count = 0;
+char *word;
+AllocVar(dep);
+word = nextWord(&line);
+if (word == NULL)
+    dependencySyntaxErr(lf);
+dep->table = parseTableSpec(lf, word);
+while ((word = nextWord(&line)) != NULL)
+    {
+    table = parseTableSpec(lf, word);
+    slAddHead(&dep->dependsOnList, table);
+    ++count;
+    }
+if (count < 1)
+    dependencySyntaxErr(lf);
+slReverse(&dep->dependsOnList);
+return dep;
+}
+
+
+static void addCommasToHash(struct hash *hash, char *s)
 /* Add contents of comma-separated list to hash. */
 {
 struct slName *el, *list = slNameListFromComma(trimSpaces(s));
@@ -466,6 +570,7 @@ for (el = list; el != NULL; el = el->next)
     hashAdd(hash, el->name, NULL);
 slFreeList(&list);
 }
+
 
 static struct joiner *joinerParsePassOne(char *fileName)
 /* Do first pass parsing of joiner file and return list of
@@ -523,6 +628,12 @@ while ((line = nextSubbedLine(lf, joiner->symHash, dyBuf)) != NULL)
 	    struct joinerIgnore *ig;
 	    ig = parseTablesIgnored(lf, line, joiner->symHash, dyBuf);
 	    slAddHead(&joiner->tablesIgnored, ig);
+	    }
+	else if (sameString("dependency", word))
+	    {
+	    struct joinerDependency *dep;
+	    dep = parseDependency(lf, line);
+	    slAddHead(&joiner->dependencyList, dep);
 	    }
         else
             {

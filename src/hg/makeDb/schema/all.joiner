@@ -1029,6 +1029,16 @@ identifier encodeRegion
     hgFixed.encodeRegionInfo.name
     $hg.encodeRegions.name
 
+# Dependencies not already captured in identifiers
+
+dependency $mm.affyGnfU74ADistance $mm.knownToU74  hgFixed.gnfMouseU74aMedianRatio
+dependency $mm.affyGnfU74BDistance $mm.knownToU74  hgFixed.gnfMouseU74bMedianRatio
+dependency $mm.affyGnfU74CDistance $mm.knownToU74  hgFixed.gnfMouseU74cMedianRatio
+dependency $hg.gnfU95Distance $hg.knownToU95 hgFixed.gnfHumanU95MedianRatio
+dependency $ce.kimExpDistance hgFixed.kimWormLifeMedianRatio
+dependency $dm.arbExpDistance $dm.bdgpToCanonical hgFixed.arbFlyLifeMedianRatio 
+dependency $sacCer.choExpDistance hgFixed.yeastChoCellCycle
+
 # Ignored tables - no linkage here that we check at least.
 
 tablesIgnored go

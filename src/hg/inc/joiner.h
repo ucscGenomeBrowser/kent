@@ -1,7 +1,9 @@
 /* joiner - information about what fields in what tables
  * in what databases can fruitfully be related together
  * or joined.  Another way of looking at it is this
- * defines identifiers shared across tables. 
+ * defines identifiers shared across tables.  This also
+ * defines what tables depend on what other tables
+ * through dependency attributes and statements.
  *
  * The main routines you'll want to use here are 
  *    joinerRead - to read in a joiner file
@@ -49,6 +51,22 @@ struct joinerSet
     boolean isDependency;	/* Primary key update forces full update? */
     };
 
+struct joinerTable
+/* A list of tables (that may be in multiple datbases). */
+    {
+    struct joinerTable *next;	/* Next in list. */
+    struct slName *dbList;	/* List of databases. */
+    char *table;		/* The table name. */
+    };
+
+struct joinerDependency
+/* A list of table dependencies. */
+    {
+    struct joinerDependency *next;	/* Next in list. */
+    struct joinerTable *table;		/* A table. */
+    struct joinerTable *dependsOnList;	/* LIst of tables it depends on. */
+    };
+
 struct joinerIgnore
 /* A list of tables to ignore. */
     {
@@ -67,6 +85,7 @@ struct joiner
     struct hash *exclusiveSets; /* List of hashes of exclusive databases. */
     struct hash *databasesChecked; /* List of databases to check. */
     struct hash *databasesIgnored; /* List of database to ignore. */
+    struct joinerDependency *dependencyList; /* List of table dependencies. */
     struct joinerIgnore *tablesIgnored;	/* List of tables to ignore. */
     };
 
