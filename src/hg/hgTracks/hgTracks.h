@@ -329,6 +329,12 @@ void linkedFeaturesDraw(struct track *tg, int seqStart, int seqEnd,
         MgFont *font, Color color, enum trackVisibility vis);
 /* Draw linked features items. */
 
+void linkedFeaturesAverageDense(struct track *tg, 
+	int seqStart, int seqEnd,
+        struct vGfx *vg, int xOff, int yOff, int width, 
+        MgFont *font, Color color, enum trackVisibility vis);
+/* Draw dense linked features items. */
+
 void linkedFeaturesMethods(struct track *tg);
 /* Fill in track group methods for linked features. 
  * Many other methods routines will call this first
@@ -340,6 +346,9 @@ Color lfChromColor(struct track *tg, void *item, struct vGfx *vg);
 
 char *lfMapNameFromExtra(struct track *tg, void *item);
 /* Return map name of item from extra field. */
+
+int getFilterColor(char *type, int colorIx);
+/* Get color corresponding to type - MG_RED for "red" etc. */
 
 void spreadString(struct vGfx *vg, int x, int y, int width, int height,
 	Color color, MgFont *font, char *s, int count);
@@ -359,6 +368,18 @@ void altGraphXMethods(struct track *tg);
 
 void axtMethods(struct track *tg, char *otherDb);
 /* Make track group for axt alignments. */
+
+void pslMethods(struct track *track, struct trackDb *tdb, 
+	int argc, char *argv[]);
+/* Load up psl type methods. */
+
+struct linkedFeatures *lfFromPslx(struct psl *psl, 
+	int sizeMul, boolean isXeno, boolean nameGetsPos);
+/* Create a linked feature item from pslx.  Pass in sizeMul=1 for DNA, 
+ * sizeMul=3 for protein. */
+
+struct linkedFeatures *lfFromPsl(struct psl *psl, boolean isXeno);
+/* Create a linked feature item from psl. */
 
 #define uglyh printHtmlComment
 /* Debugging aid. */
