@@ -853,7 +853,7 @@ type psl xeno mm5
 otherDb mm5
 
 track chainMm5
-shortLabel Mouse Chain 
+shortLabel Mm5 Chain 
 longLabel $o_Organism ($o_date/$o_db) Chained Blastz Alignments
 group compGeno
 priority 185
@@ -865,7 +865,7 @@ type chain mm5
 otherDb mm5
 
 track netMm5
-shortLabel Mouse Net
+shortLabel Mm5 Net
 longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno
 priority 186
@@ -875,7 +875,7 @@ type netAlign mm5 chainMm5
 otherDb mm5
 
 track syntenyMm5
-shortLabel Mouse Synteny
+shortLabel Mm5 Synteny
 longLabel $o_Organism ($o_date/$o_db) Synteny Using Blastz Single Coverage (100k window)
 group compGeno
 priority 187
@@ -886,7 +886,7 @@ type bed 4 .
 otherDb mm5
 
 track syntenyNetMm5
-shortLabel Mouse Syntenic Net
+shortLabel Mm5 Syntenic Net
 longLabel $o_Organism ($o_date/$o_db) Syntenic Alignment Net
 group compGeno
 priority 188
@@ -896,7 +896,7 @@ type netAlign mm5 chainMm5
 otherDb mm5
 
 track blastzMm4
-shortLabel Mm4 Blastz
+shortLabel $o_Organism Blastz
 longLabel $o_Organism ($o_date/$o_db) Blastz All Alignments
 group compGeno
 priority 182
@@ -908,7 +908,7 @@ type psl xeno mm4
 otherDb mm4
 
 track blastzBestMm4
-shortLabel Mm4 Best
+shortLabel $o_Organism Best
 longLabel $o_Organism ($o_date/$o_db) Blastz Best-in-Genome Alignments
 group compGeno
 priority 183
@@ -920,7 +920,7 @@ type psl xeno mm4
 otherDb mm4
 
 track blastzTightMm4
-shortLabel Mm4 Tight
+shortLabel $o_Organism Tight
 longLabel $o_Organism ($o_date/$o_db) Blastz Tight Subset of Best Alignments
 group compGeno
 priority 184
@@ -932,7 +932,7 @@ type psl xeno mm4
 otherDb mm4
 
 track chainMm4
-shortLabel Mm4 Chain 
+shortLabel $o_Organism Chain 
 longLabel $o_Organism ($o_date/$o_db) Chained Blastz Alignments
 group compGeno
 priority 185
@@ -944,7 +944,7 @@ type chain mm4
 otherDb mm4
 
 track netMm4
-shortLabel Mm4 Net
+shortLabel $o_Organism Net
 longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno
 priority 186
@@ -954,7 +954,7 @@ type netAlign mm4 chainMm4
 otherDb mm4
 
 track syntenyMm4
-shortLabel Mm4 Synteny
+shortLabel $o_Organism Synteny
 longLabel $o_Organism ($o_date/$o_db) Synteny Using Blastz Single Coverage (100k window)
 group compGeno
 priority 187
@@ -965,7 +965,7 @@ type bed 4 .
 otherDb mm4
 
 track syntenyNetMm4
-shortLabel Mm4 Syntenic Net
+shortLabel $o_Organism Syntenic Net
 longLabel $o_Organism ($o_date/$o_db) Syntenic Alignment Net
 group compGeno
 priority 188
