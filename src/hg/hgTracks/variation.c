@@ -28,7 +28,7 @@ int    snpSource = 0;
 
 for (snpSource=0; snpSource<snpSourceCount; snpSource++)
     if (!strcmp(snpSourceDataEnumToString((enum snpSourceEnum)snpSource),el->source))
- 	if ( (int)snpSourceColorStringToEnum(snpSourceCart[snpSource]) != snpSourceExclude)
+ 	if ( (int)snpSourceDefaultStringToEnum(snpSourceCart[snpSource]) != snpSourceExclude)
  	    return TRUE;
 return FALSE;
 }
@@ -55,7 +55,7 @@ int  snpType = 0;
 for (snpSource=0; snpSource<snpSourceCount; snpSource++)
     snpSourceCart[snpSource] = 
  	cartUsualString(cart, snpSourceEnumToString((enum snpSourceEnum)snpSource),
- 			snpSourceColorEnumToString((enum snpSourceEnum)snpSource) );
+ 			snpSourceDefaultEnumToString((enum snpSourceEnum)snpSource) );
 for (snpType=0; snpType<snpTypeCount; snpType++)
     snpTypeCart[snpType] = 
  	cartUsualString(cart, snpTypeEnumToString((enum snpTypeEnum)snpType),
@@ -79,7 +79,7 @@ int snpSource = 0;
 enum snpSourceEnum snpColor = snpSourceBlack; /* default */
 for (snpSource=0; snpSource<snpSourceCount; snpSource++)
     if (!strcmp(snpSourceDataEnumToString((enum snpSourceEnum)snpSource),el->source))
- 	snpColor = snpSourceColorStringToEnum(snpSourceCart[snpSource]);
+ 	snpColor = snpSourceDefaultStringToEnum(snpSourceCart[snpSource]);
 switch (snpColor)
     {
     case snpSourceRed:

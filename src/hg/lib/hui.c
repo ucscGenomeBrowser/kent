@@ -11,7 +11,7 @@
 #include "hCommon.h"
 #include "chainCart.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.46 2004/08/16 22:40:01 heather Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.47 2004/08/30 19:34:01 daryl Exp $";
 
 char *hUserCookie()
 /* Return our cookie name. */
@@ -273,6 +273,17 @@ static char *snpTypeStates[] = {
     "exclude",
 };
 
+static char *snpTypeValue[] = {
+    "include",
+    "exclude",
+};
+
+static char *snpTypeDefaults[] = {
+    "include",
+    "include",
+    "include",
+};
+
 enum snpTypeEnum snpTypeStringToEnum(char *string)
 /* Convert from string to enum representation. */
 {
@@ -306,7 +317,7 @@ return snpTypeLabels[x];
 enum snpTypeEnum snpTypeStateStringToEnum(char *string)
 /* Convert from string to enum representation. */
 {
-int x = stringIx(string, snpTypeStates);
+int x = stringIx(string, snpTypeValue);
 if (x < 0)
    errAbort("Unknown option '%s' in snpTypeStateStringToEnum", string);
 return x;
@@ -315,7 +326,22 @@ return x;
 char *snpTypeStateEnumToString(enum snpTypeEnum x)
 /* Convert from enum to string representation. */
 {
-return snpTypeStates[x];
+return snpTypeValue[x];
+}
+
+enum snpTypeEnum snpTypeDefaultStringToEnum(char *string)
+/* Convert from string to enum representation. */
+{
+int x = stringIx(string, snpTypeValue);
+if (x < 0)
+   errAbort("Unknown option '%s' in snpTypeDefaultStringToEnum", string);
+return x;
+}
+
+char *snpTypeDefaultEnumToString(enum snpTypeEnum x)
+/* Convert from enum to string representation. */
+{
+return snpTypeValue[x];
 }
 
 enum snpTypeEnum snpTypeDataStringToEnum(char *string)
@@ -362,13 +388,21 @@ static char *snpSourceDataName[] = {
     "Affy120K",
 };
 
-static char *snpSourceColor[] = {
+static char *snpSourceValue[] = {
     "red",
     "green",
     "blue",
     "black",
     "exclude",
-    "exclude",
+};
+
+static char *snpSourceDefault[] = {
+    "blue",
+    "blue",
+    "red",
+    "black",
+    "green",
+    "green",
 };
 
 enum snpSourceEnum snpSourceStringToEnum(char *string)
@@ -386,34 +420,25 @@ char *snpSourceEnumToString(enum snpSourceEnum x)
 return snpSourceStrings[x];
 }
 
-enum snpSourceEnum snpSourceLabelStringToEnum(char *string)
-/* Convert from string to enum representation. */
-{
-int x = stringIx(string, snpSourceLabels);
-if (x < 0)
-   errAbort("Unknown option '%s' in snpSourceLabelStringToEnum", string);
-return x;
-}
-
 char *snpSourceLabelEnumToString(enum snpSourceEnum x)
 /* Convert from enum to string representation. */
 {
 return snpSourceLabels[x];
 }
 
-enum snpSourceEnum snpSourceColorStringToEnum(char *string)
+enum snpSourceEnum snpSourceDefaultStringToEnum(char *string)
 /* Convert from string to enum representation. */
 {
-int x = stringIx(string, snpSourceColor);
+int x = stringIx(string, snpSourceValue);
 if (x < 0)
-   errAbort("Unknown option '%s' in snpSourceColorStringToEnum", string);
+    errAbort("Unknown option '%s' in snpSourceDefaultStringToEnum", string);
 return x;
 }
 
-char *snpSourceColorEnumToString(enum snpSourceEnum x)
+char *snpSourceDefaultEnumToString(enum snpSourceEnum x)
 /* Convert from enum to string representation. */
 {
-return snpSourceColor[x];
+return snpSourceValue[x];
 }
 
 enum snpSourceEnum snpSourceDataStringToEnum(char *string)

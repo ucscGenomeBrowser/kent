@@ -22,7 +22,7 @@
 #define CDS_HELP_PAGE "../goldenPath/help/hgCodonColoring.html"
 #define CDS_MRNA_HELP_PAGE "../goldenPath/help/hgCodonColoringMrna.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.135 2004/08/27 05:25:56 kent Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.136 2004/08/30 19:33:54 daryl Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -100,9 +100,9 @@ void snpUi(struct trackDb *tdb)
 /* Put up UI snpMarkers. */
 {
 char *snpSourceCart[snpSourceCount];
-/* char *snpTypeCart[snpTypeCount];  see comment below */
+char *snpTypeCart[snpTypeCount];
 int   snpSource = 0;
-/* int   snpType = 0;	*/
+int   snpType = 0;
 
 if (strncmp(database,"hg",2))
     return;
@@ -111,23 +111,21 @@ for (snpSource=0; snpSource<snpSourceCount; snpSource++)
     {
     snpSourceCart[snpSource] = 
 	cartUsualString(cart, snpSourceEnumToString((enum snpSourceEnum)snpSource),
-			snpSourceColorEnumToString((enum snpSourceEnum)snpSource) );
+			snpSourceDefaultEnumToString((enum snpSourceEnum)snpSource) );
     snpSourceFilterButtons(snpSourceEnumToString((enum snpSourceEnum)snpSource), 
 			   snpSourceCart[snpSource]);
     printf(" - <B>%s</B><BR>\n",snpSourceLabelEnumToString((enum snpSourceEnum)snpSource));
     }
-/*  Removing code that doesn't work - needs to be fixed.
 printf("<BR><B>Variant Types:</B><BR>\n");
 for (snpType=0; snpType<snpTypeCount; snpType++)
     {
     snpTypeCart[snpType] = 
 	cartUsualString(cart, snpTypeEnumToString((enum snpTypeEnum)snpType), 
-			snpTypeStateEnumToString((enum snpTypeEnum)snpType));
+			snpTypeDefaultEnumToString((enum snpTypeEnum)snpType));
     snpTypeFilterButtons(snpTypeEnumToString((enum snpTypeEnum)snpType), 
 			 snpTypeCart[snpType]);
     printf(" - <B>%s</B><BR>\n",snpTypeLabelEnumToString((enum snpTypeEnum)snpType));
     }
-*/
 }
 
 void cbrWabaUi(struct trackDb *tdb)
