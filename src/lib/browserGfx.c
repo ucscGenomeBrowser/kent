@@ -6,7 +6,7 @@
 #include "vGfx.h"
 #include "browserGfx.h"
 
-static char const rcsid[] = "$Id: browserGfx.c,v 1.6 2003/05/06 07:33:41 kate Exp $";
+static char const rcsid[] = "$Id: browserGfx.c,v 1.7 2003/09/29 19:39:19 braney Exp $";
 
 
 static long figureTickSpan(long totalLength, int maxNumTicks)
@@ -109,18 +109,20 @@ void vgBarbedHorizontalLine(struct vGfx *vg, int x, int y,
 int x1, x2;
 int yHi, yLo;
 int offset, startOffset, endOffset, barbAdd;
+int scrOff = (barbSpacing - 1) - (x % (barbSpacing));
 
 yHi = y + barbHeight;
 yLo = y - barbHeight;
 if (barbDir < 0)
     {
-    startOffset = 0;
+    startOffset = scrOff - barbHeight;
+    startOffset = (startOffset >= 0) ?startOffset : 0;
     endOffset = width - barbHeight;
     barbAdd = barbHeight;
     }
 else
     {
-    startOffset = barbHeight;
+    startOffset = scrOff + barbHeight;
     endOffset = width;
     barbAdd = -barbHeight;
     }
