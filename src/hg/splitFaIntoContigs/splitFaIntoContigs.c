@@ -22,7 +22,7 @@ static const int defaultSize = 1000000;
 /*
 The top-level dir where we are sticking all the split up data files
 */
-static char destDir[256];
+static char outputDir[256];
 
 void usage()
 /* 
@@ -37,44 +37,66 @@ fflush(stdout);
       "\n");
 }
 
+void writeChromFaFile(char *chromName, char *dna, int dnaSize)
+{
+char command[256];
+char destDir[256];
+char filename [256];
+int i = 0;
+
+/* Strip off the leading "chr" prefix */
+sprintf(destDir, "%s/%s", outputDir, &chromName[3]);
+sprintf(command, "mkdir -p %s", destDir);
+system(command);
+
+sprintf(filename, "%s/%s.fa", destDir, chromName);
+faWrite(filename, chromName, dna, dnaSize);
+}
+
 void createSplitFile(DNA *dna, struct agpGap *startGap, struct agpGap *endGap)
 {
 int startOffset = startGap->chromStart;
 int endOffset = endGap->chromEnd;
 int i = 0;
-FILE *fp = NULL;
 char filename[32];
-char command[32];
+char command[256];
 static int sequenceNum = 0;
+char destDir[256];
+int dnaSize = 0;
+char sequenceName[32];
 
 printf("Writing gap file for chromo %s\n", endGap->chrom);
 printf("Writing file starting at dna[%d] up to but not including dna[%d]\n", startOffset, endOffset);
 
-sprintf(command, "mkdir -p %s", destDir);
-sprintf(command, "mkdir -p %s/%s", destDir, startGap->chrom);
-system(command);
-
 /*
-filename = storageDir/chromName/sequenceNum:startOffset->endOffset
-*/
 
-sprintf(filename, "%s/%s/%d:%d->%d", destDir, startGap->chrom, ++sequenceNum, startOffset, endOffset);
-printf("Filename = %s\n", filename);
-fp = fopen(filename, "w");
+filename = outputDir/chromName/chromFrag/chromFrag.fa
+
+example:
+
+outputDir = output
+chromName = chr1 - we strip off the chr
+chromFrag = chr1_1
+output/1/chr1_1/chr1_1.fa
+
+*/
 
 if (0 == startGap->chromStart)
     {
-    fputs(">", fp);
-    fputs(startGap->chrom, fp);
-    fputs("\n", fp);
+    /* Restart the sequence number */
+    sequenceNum = 0;
     }
 
-for (i = startOffset; i < endOffset; i++)
-    {
-    fputc(dna[i], fp);
-    }
+++sequenceNum;
+sprintf(destDir, "%s/%s/%s_%d", outputDir, &(startGap->chrom[3]), startGap->chrom, sequenceNum);
+sprintf(command, "mkdir -p %s", destDir);
+system(command);
+sprintf(filename, "%s/%s_%d.fa", destDir, startGap->chrom, sequenceNum);
+printf("Filename = %s\n", filename);
 
-fputs("\n", fp);
+sprintf(sequenceName, "%s_%d %d-%d", startGap->chrom, sequenceNum, startOffset, endOffset);
+dnaSize = endOffset - startOffset;
+faWrite(filename, sequenceName, &dna[startOffset], dnaSize);
 }
 
 struct agpGap* nextAgpEntryToSplitOn(struct lineFile *lfAgpFile, int dnaSize, int splitSize, struct agpGap **retStartGap)
@@ -175,8 +197,11 @@ printf("Processing agpFile %s and fasta file %s, with split boundaries of %d bas
 while (faSpeedReadNext(lfFa, &dna, &dnaSize, &chromName))
     {
     printf("\nAnalyzing data for Chromosome: %s, size: %d\n", chromName, dnaSize);
+
+    writeChromFaFile(chromName, dna, dnaSize);
     makeSuperContigs(lfAgp, dna, dnaSize, splitSize);
     printf("Done processing chromosome %s\n", chromName);
+    /* TODO: Free the fa entry if necessary */
     }
 
 printf("Done processing agpFile %s and fasta file %s, with split boundaries of %d kbases\n", agpFile, faFile, splitSize);
@@ -188,6 +213,7 @@ Process command line then delegate main work to splitFaIntoContigs().
 */
 {
 int size = defaultSize;
+char command[256];
 
 cgiSpoof(&argc, argv);
 
@@ -196,7 +222,9 @@ if (4 != argc && 5 != argc)
     usage();
     }
 
-strcpy(destDir, argv[3]);
+strcpy(outputDir, argv[3]);
+sprintf(command, "mkdir -p %s", outputDir);
+system(command);
 
 if (5 == argc) 
     {
