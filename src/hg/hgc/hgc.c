@@ -108,7 +108,7 @@
 #include "axtLib.h"
 #include "ensFace.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.435 2003/06/18 03:26:02 kent Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.436 2003/06/18 19:06:14 hiram Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -116,6 +116,7 @@ struct cart *cart;	/* User's settings. */
 char *seqName;		/* Name of sequence we're working on. */
 int winStart, winEnd;   /* Bounds of sequence. */
 char *database;		/* Name of mySQL database. */
+char *organism;		/* Name of organism. */
 
 char *protDbName;	/* Name of proteome database */
 struct hash *trackHash;	/* A hash of all tracks - trackDb valued */
@@ -2940,7 +2941,7 @@ struct dyString *dy = newDyString(1024);
 struct sqlConnection *conn = hgAllocConn();
 struct sqlResult *sr;
 char **row;
-char *type,*direction,*source,*organism,*library,*clone,*sex,*tissue,
+char *type,*direction,*source,*orgFullName,*library,*clone,*sex,*tissue,
     *development,*cell,*cds,*description, *author,*geneName,
     *date,*productName;
 boolean isMgcTrack = startsWith("mgc", tdb->tableName);
@@ -3004,7 +3005,7 @@ sr = sqlMustGetResult(conn, dy->string);
 row = sqlNextRow(sr);
 if (row != NULL)
     {
-    type=row[0];direction=row[1];source=row[2];organism=row[3];library=row[4];clone=row[5];
+    type=row[0];direction=row[1];source=row[2];orgFullName=row[3];library=row[4];clone=row[5];
     sex=row[6];tissue=row[7];development=row[8];cell=row[9];cds=row[10];description=row[11];
     author=row[12];geneName=row[13];productName=row[14];
     seqSize = sqlUnsigned(row[15]);
@@ -3038,8 +3039,8 @@ if (row != NULL)
     medlineLinkedLine("Author", author, dy->string);
     printf("<B>Organism:</B> ");
     printf("<A href=\"http://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?mode=Undef&name=%s&lvl=0&srchmode=1\" TARGET=_blank>", 
-	   cgiEncode(organism));
-    printf("%s</A><BR>\n", organism);
+	   cgiEncode(orgFullName));
+    printf("%s</A><BR>\n", orgFullName);
     printf("<B>Tissue:</B> %s<BR>\n", tissue);
     printf("<B>Development stage:</B> %s<BR>\n", development);
     printf("<B>Cell type:</B> %s<BR>\n", cell);
@@ -3054,12 +3055,15 @@ if (row != NULL)
         printf("<B>Version:</B> %s<BR>\n", version);
         }
 
-    /* Put up Gene Lynx */
-    if (sameWord(type, "mrna"))
-        printGeneLynxAcc(acc);
+    if (!startsWith("worm", organism))
+    {
+	/* Put up Gene Lynx */
+	if (sameWord(type, "mrna"))
+	    printGeneLynxAcc(acc);
     
-    /* Put up Stanford Source link. */
-    printStanSource(acc, type);
+	/* Put up Stanford Source link. */
+	printStanSource(acc, type);
+    }
 
     if ((strstr(hgGetDb(), "mm") != NULL) 
         && hTableExists("rikenaltid"))
@@ -3152,12 +3156,10 @@ struct psl *pslList = NULL;
 
 if (sameString("xenoMrna", track) || sameString("xenoBestMrna", track) || sameString("xenoEst", track) || sameString("sim4", track))
     {
-    char *organism = hOrganism(database);
     char temp[256];
     sprintf(temp, "non-%s RNA", organism);
     type = temp;
     table = track;
-    freez(&organism);
     }
 else if (stringIn("est", track) || stringIn("Est", track) ||
          (stringIn("mgc", track) && stringIn("Picks", track)))
@@ -3598,7 +3600,6 @@ char *oLetters = cloneString(oSeq->dna);
 //int cfmStart=0;
 int qbafStart, qbafEnd, tbafStart, tbafEnd;
 int qcfmStart, qcfmEnd, tcfmStart, tcfmEnd;
-char *organism = hOrganism(database);
 
 /* Load dna sequence. */
 dnaSeq = hDnaFromSeq(seqName, tStart, tEnd, dnaLower);
@@ -5478,7 +5479,6 @@ char *url = tdb->url;
 if (url != NULL && url[0] != 0)
     {
     char supfamURL[512];
-    char *organism;
     char *genomeStr = "";
     char *genomeStrEnsembl = "";
 
@@ -5488,7 +5488,6 @@ if (url != NULL && url[0] != 0)
     char *geneID;
     char *ans;
 
-    organism = hOrganism(database);
     genomeStrEnsembl = ensOrgName(organism);
     if (genomeStrEnsembl == NULL)
 	{
@@ -5586,7 +5585,6 @@ char *url = tdb->url;
 if (url != NULL && url[0] != 0)
     {
     char supfamURL[1024];
-    char *organism;
     char cond_str[256];
     char *proteinID;
     char genomeStr[10];
@@ -5596,8 +5594,6 @@ if (url != NULL && url[0] != 0)
     struct sqlResult *sr;
     char **row;
 
-    organism = hOrganism(database);
-    
     printf("The corresponding protein %s has the following Superfamily domain(s):", itemName);
     printf("<UL>\n");
     
@@ -5746,16 +5742,19 @@ if (rl->locusLinkId != 0)
 	sqlFreeResult(&sr);
 	}
     } 
-medlineLinkedLine("PubMed on Gene", rl->name, rl->name);
-if (rl->product[0] != 0)
-    medlineLinkedLine("PubMed on Product", rl->product, rl->product);
-printf("\n");
-printGeneLynxName(rl->name);
-printf("\n");
-printf("<B>GeneCards:</B> ");
-printf("<A HREF = \"http://bioinfo.weizmann.ac.il/cards-bin/cardsearch.pl?search=%s\" TARGET=_blank>",
+if (!startsWith("worm", organism))
+{
+    medlineLinkedLine("PubMed on Gene", rl->name, rl->name);
+    if (rl->product[0] != 0)
+	medlineLinkedLine("PubMed on Product", rl->product, rl->product);
+    printf("\n");
+    printGeneLynxName(rl->name);
+    printf("\n");
+    printf("<B>GeneCards:</B> ");
+    printf("<A HREF = \"http://bioinfo.weizmann.ac.il/cards-bin/cardsearch.pl?search=%s\" TARGET=_blank>",
        rl->name);
-printf("%s</A><BR>\n", rl->name);
+    printf("%s</A><BR>\n", rl->name);
+}
 if (hTableExists("jaxOrtholog"))
     {
     struct jaxOrtholog jo;
@@ -5785,7 +5784,10 @@ if (startsWith("hg", hGetDb()))
 	   rl->name);
     printf("%s</A><BR>\n", rl->name);
     }
-printStanSource(rl->mrnaAcc, "mrna");
+if (!startsWith("worm", organism))
+{
+    printStanSource(rl->mrnaAcc, "mrna");
+}
 
 htmlHorizontalLine();
 
@@ -11635,7 +11637,9 @@ char *item = cartOptionalString(cart, "i");
 char title[256];
 struct trackDb *tdb;
 
+/*	database and organism are global variables used in many places	*/
 database = cartUsualString(cart, "db", hGetDb());
+organism = hOrganism(database);
 
 hDefaultConnect(); 	/* set up default connection settings */
 hSetDb(database);
