@@ -10,7 +10,7 @@
 #include "hui.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: wiggleCart.c,v 1.1 2004/01/20 19:39:56 hiram Exp $";
+static char const rcsid[] = "$Id: wiggleCart.c,v 1.2 2004/01/20 19:59:37 hiram Exp $";
 
 extern struct cart *cart;      /* defined in hgTracks.c or hgTrackUi */
 
@@ -18,7 +18,7 @@ extern struct cart *cart;      /* defined in hgTracks.c or hgTrackUi */
 	{ double d; d = max; max = min; min = d; }
 /* check a min,max pair (doubles) and keep them properly in order */
 
-#if ! defined(DEBUG)
+#if defined(DEBUG)
 /****           some simple debug output during development	*/
 static char dbgFile[] = "trash/wig.dbg";
 static boolean debugOpened = FALSE;
