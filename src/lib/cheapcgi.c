@@ -889,20 +889,23 @@ boolean cgiFromFile(char *fileName)
  */
 {
 char **argv = NULL;
-int argc = 1; /* Remember that first arg is program name. */
+int argc = 0; 
 int maxArgc = 10;
 int i;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
 char *line, *word;
 boolean spoof= FALSE;
 AllocArray(argv, maxArgc);
+/* Remember that first arg is program name.
+   Put filename there instead. */
+argc = 1; 
 argv[0] = cloneString(fileName);
 for(;;)
     {
     /* If we are at the end we're done. */
     if(!lineFileNext(lf, &line, NULL))
 	break;
-    /* If it is a comment skip it. */
+    /* If it is a comment or blank line skip it. */
     if (line[0] == '#' || sameString(line, ""))
         continue;
     /* If our argv array is full expand it. */
@@ -915,7 +918,6 @@ for(;;)
     argv[argc++] = cloneString(line);
     }
 spoof = cgiSpoof(&argc, argv);
-
 /* Cleanup. */
 lineFileClose(&lf);
 for(i=0; i<argc; i++)
