@@ -68,7 +68,7 @@
 #include "web.h"
 #include "grp.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.578 2003/08/12 07:11:51 kate Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.579 2003/08/12 20:05:32 baertsch Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROMOSOME_SHADES 4
@@ -6388,6 +6388,9 @@ registerTrackHandler("chr18deletions", chr18deletionsMethods);
 registerTrackHandler("mouseSyn", mouseSynMethods);
 registerTrackHandler("mouseSynWhd", mouseSynWhdMethods);
 registerTrackHandler("ensRatMusHom", ensPhusionBlastMethods);
+registerTrackHandler("syntenyMm3", syntenyMethods);
+registerTrackHandler("syntenyRn3", syntenyMethods);
+registerTrackHandler("syntenyHg16", syntenyMethods);
 registerTrackHandler("syntenyHuman", syntenyMethods);
 registerTrackHandler("syntenyMouse", syntenyMethods);
 registerTrackHandler("syntenyRat", syntenyMethods);
@@ -6397,6 +6400,7 @@ registerTrackHandler("syntenyBerk", syntenyMethods);
 registerTrackHandler("syntenyRatBerkSmall", syntenyMethods);
 registerTrackHandler("syntenySanger", syntenyMethods);
 registerTrackHandler("syntenyPevzner", syntenyMethods);
+registerTrackHandler("syntenyBaylor", syntenyMethods);
 registerTrackHandler("mouseOrtho", mouseOrthoMethods);
 registerTrackHandler("mouseOrthoSeed", mouseOrthoMethods);
 //registerTrackHandler("orthoTop4", drawColorMethods);
@@ -6429,7 +6433,9 @@ registerTrackHandler("tightEst", mrnaMethods);
 registerTrackHandler("cpgIsland", cpgIslandMethods);
 registerTrackHandler("exoMouse", exoMouseMethods);
 registerTrackHandler("pseudoMrna", xenoMrnaMethods);
+registerTrackHandler("pseudoMrna2", xenoMrnaMethods);
 registerTrackHandler("mrnaBlastz", xenoMrnaMethods);
+registerTrackHandler("mrnaBlastz2", xenoMrnaMethods);
 registerTrackHandler("xenoBlastzMrna", xenoMrnaMethods);
 registerTrackHandler("xenoBestMrna", xenoMrnaMethods);
 registerTrackHandler("xenoMrna", xenoMrnaMethods);
