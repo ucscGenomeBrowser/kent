@@ -21,33 +21,36 @@
 #include "botDelay.h"
 #include "liftOver.h"
 
-static char const rcsid[] = "$Id: hgLiftOver.c,v 1.12 2004/04/12 23:43:29 kate Exp $";
+static char const rcsid[] = "$Id: hgLiftOver.c,v 1.13 2004/04/14 05:25:22 kate Exp $";
 
 /* CGI Variables */
 #define HGLFT_USERDATA_VAR "hglft.userData"     /* typed/pasted in data */
 #define HGLFT_DATAFILE_VAR "hglft.dataFile"     /* file of data to convert */
 #define HGLFT_DATAFORMAT_VAR "hglft.dataFormat" /* format of data to convert */
+#define HGLFT_FROMDB_VAR "hglft.fromDb"         /* FROM assembly */
+#define HGLFT_TODB_VAR "hglft.toDb"             /* TO assembly */
 
 /* Global Variables */
 struct cart *cart;	        /* CGI and other variables */
 struct hash *oldCart = NULL;
 
+/* Data Formats */
+#define POSITION_FORMAT "Position"
+#define BED_FORMAT      "BED"
+#define WIGGLE_FORMAT   "Wiggle"
+
 char *formatList[] = 
-        //{"Position", "BED*", "MAF*", "Wiggle*", "GFF", 0};
-        //{"Position", "BED", 0};
-        {"BED", 0};
+        {BED_FORMAT, POSITION_FORMAT, 0};
 
-char *genomeList[] = {"Human", 0};
-//char *origAssemblyList[] = {"June 2002", "Nov. 2002", "April 2003", 0};
-//char *newAssemblyList[] = {"Nov. 2002", "April 2003", "July 2003", 0};
-char *origAssemblyList[] = {"April 2003"};
-char *newAssemblyList[] = {"July 2003"};
+#define DEFAULT_FORMAT  "BED"
 
-void webMain(char *db, char *organism)
-/* set up page for entering data */
+/* Filename prefix */
+#define HGLFT   "hglft"
+
+void webMain(char *organism, char *fromDb, char *toDb, char *dataFormat)
+    /* set up page for entering data */
 {
-struct dbDb *dbList;
-char *previousDb;
+    struct dbDb *dbList;
 
 cgiParagraph(
     "This tool converts genome coordinates and genome annotation files "
@@ -72,26 +75,23 @@ cgiTableRowEnd();
 
 cgiSimpleTableRowStart();
 
+/* genome */
 cgiSimpleTableFieldStart();
-//cgiMakeDropList("genome", genomeList, 1, "Human");
-// NOTE: get default DB from cart, else use default Human
 dbList = hGetLiftOverFromDatabases();
-printSomeGenomeListHtml(db, dbList, "");
+printSomeGenomeListHtml(fromDb, dbList, "");
 cgiTableFieldEnd();
 
+/* from assembly */
 cgiSimpleTableFieldStart();
-//cgiMakeDropList("origAssembly", origAssemblyList, 1, "April 2003");
-previousDb = hPreviousAssembly(db);
-printSomeAssemblyListHtml(previousDb, dbList, "");
-//printAssemblyListHtml("hg15", "");
+printSomeAssemblyListHtmlParm(fromDb, dbList, HGLFT_FROMDB_VAR, "");
 cgiTableFieldEnd();
 
+/* to assembly */
 cgiSimpleTableFieldStart();
-//cgiMakeDropList("newAssembly", newAssemblyList, 1, "July 2003");
 if (dbList)
     dbDbFreeList(&dbList);
-dbList = hGetLiftOverToDatabases(previousDb);
-printSomeAssemblyListHtml(db, dbList, "");
+dbList = hGetLiftOverToDatabases(fromDb);
+printSomeAssemblyListHtmlParm(toDb, dbList, HGLFT_TODB_VAR, "");
 cgiTableFieldEnd();
 
 cgiTableRowEnd();
@@ -106,7 +106,8 @@ cgiSimpleTableStart();
 cgiSimpleTableRowStart();
 cgiTableField("Data Format: ");
 cgiSimpleTableFieldStart();
-cgiMakeDropList(HGLFT_DATAFORMAT_VAR, formatList, 1, "BED");
+cgiMakeDropList(HGLFT_DATAFORMAT_VAR, 
+                formatList, sizeof(formatList)/sizeof (char*) - 1, dataFormat);
 cgiTableFieldEnd();
 cgiTableRowEnd();
 cgiTableEnd();
@@ -117,6 +118,8 @@ cgiSimpleTableStart();
 cgiSimpleTableRowStart();
 
 cgiSimpleTableFieldStart();
+/* TODO: leave user data in text box, but still allow RESET button to work */
+//cgiMakeTextArea(HGLFT_USERDATA_VAR, cartCgiUsualString(cart, HGLFT_USERDATA_VAR, NULL), 10, 80);
 cgiMakeTextArea(HGLFT_USERDATA_VAR, NULL, 10, 80);
 cgiTableFieldEnd();
 
@@ -177,7 +180,10 @@ void doMiddle(struct cart *theCart)
 {
 char *userData;
 char *dataFile;
-char *db, *organism;    
+char *dataFormat;
+char *organism;
+char *db, *previousDb;    
+char *fromDb, *toDb;
 char *err = NULL;
 cart = theCart;
 
@@ -188,10 +194,14 @@ if (cartOptionalString(cart, "SubmitFile"))
     userData = cartOptionalString(cart, HGLFT_DATAFILE_VAR);
 else
     userData = cartOptionalString(cart, HGLFT_USERDATA_VAR);
+dataFormat = cartCgiUsualString(cart, HGLFT_DATAFORMAT_VAR, DEFAULT_FORMAT);
 cartWebStart(cart, "Lift Genome Annotations");
 
 getDbAndGenome(cart, &db, &organism);
-webMain(db, organism);
+previousDb = hPreviousAssembly(db);
+fromDb = cartCgiUsualString(cart, HGLFT_FROMDB_VAR, previousDb);
+toDb = cartCgiUsualString(cart, HGLFT_TODB_VAR, db);
+webMain(organism, fromDb, toDb, dataFormat);
 
 if (userData == NULL || userData[0] == '\0')
     {
@@ -201,36 +211,73 @@ if (userData == NULL || userData[0] == '\0')
 else 
     {
     struct hash *chainHash = newHash(0);
+    char *chainFile;
     struct tempName oldTn, mappedTn, unmappedTn;
     FILE *old, *mapped, *unmapped;
     char *line;
     int lineSize;
     struct lineFile *errFile;
-    int ct;
-    int errCt;
+    char *chrom;
+    int start, end;
+    char *str, *pos;
+    int ct = 0, errCt = 0;
+    char *fromDb, *toDb;
 
     /* read in user data and save to file */
-    makeTempName(&oldTn, "hglft", ".user");
+    makeTempName(&oldTn, HGLFT, ".user");
     old = mustOpen(oldTn.forCgi, "w");
-    fputs(userData, old);
+    if (sameString(dataFormat, POSITION_FORMAT))
+        {
+        /* convert to BED */
+        str = userData;
+        while ((pos = strtok(str, "\n")) != NULL)
+            {
+            if (hgParseChromRangeDb(pos, &chrom, &start, &end, FALSE))
+                fprintf(old, "%s\t%d\t%d\n", chrom, start, end);
+            else
+                fprintf(old, "%s\n", pos);
+            str = NULL;
+            }
+        }
+    else
+        fputs(userData, old);
     carefulClose(&old);
     chmod(oldTn.forCgi, 0666);
 
     /* setup output files -- one for converted lines, the other
      * for lines that could not be mapped */
-    makeTempName(&mappedTn, "hglft", ".bed");
-    makeTempName(&unmappedTn, "hglft", ".err");
+    makeTempName(&mappedTn, HGLFT, ".bed");
+    makeTempName(&unmappedTn, HGLFT, ".err");
     mapped = mustOpen(mappedTn.forCgi, "w");
     chmod(mappedTn.forCgi, 0666);
     unmapped = mustOpen(unmappedTn.forCgi, "w");
     chmod(unmappedTn.forCgi, 0666);
 
-    //readLiftOverTable("hg16", "chainHg15", chainHash);
-    readLiftOverMap("/usr/local/apache/htdocs/encode/hg15toHg16.chain", 
-                        chainHash);
-    ct = liftOverBed(
-                oldTn.forCgi, chainHash, LIFTOVER_MINMATCH, LIFTOVER_MINBLOCKS,
-                                 FALSE, mapped, unmapped, &errCt);
+    fromDb = cgiString(HGLFT_FROMDB_VAR);
+    toDb = cgiString(HGLFT_TODB_VAR);
+    chainFile = liftOverChainFile(fromDb, toDb);
+    if (chainFile == NULL)
+        errAbort("ERROR: Can't convert from %s to %s: no chain file loaded",
+                                fromDb, toDb);
+    readLiftOverMap(chainFile, chainHash);
+    if (sameString(dataFormat, WIGGLE_FORMAT))
+        /* TODO: implement Wiggle */
+            {}
+    else if (sameString(dataFormat, POSITION_FORMAT) ||
+                sameString(dataFormat, BED_FORMAT))
+        {
+        if (sameString(dataFormat, POSITION_FORMAT))
+            {
+            /* construct BED file from positions */
+            }
+        ct = liftOverBed(oldTn.forCgi, chainHash, 
+                        LIFTOVER_MINMATCH, LIFTOVER_MINBLOCKS,
+                        FALSE, mapped, unmapped, &errCt);
+        }
+    else
+        /* programming error */
+        errAbort("ERROR: Unsupported data format: %s\n", dataFormat);
+
     webNewSection("Results");
     if (ct)
         {
