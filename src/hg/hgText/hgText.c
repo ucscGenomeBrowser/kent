@@ -34,7 +34,7 @@
 #include "wiggle.h"
 #include "hgText.h"
 
-static char const rcsid[] = "$Id: hgText.c,v 1.148 2004/05/14 00:13:50 angie Exp $";
+static char const rcsid[] = "$Id: hgText.c,v 1.149 2004/06/29 17:43:31 angie Exp $";
 
 /* sources of tracks, other than the current database: */
 static char *hgFixed = "hgFixed";
@@ -45,7 +45,7 @@ struct customTrack *theCtList = NULL;
 struct slName *browserLines = NULL;
 
 /* can change this to "GET" for debugging, "POST" for production  dbg */
-char *httpFormMethod = "POST";
+char *httpFormMethod = "GET";
 
 #define TOO_BIG_FOR_HISTO 500000
 
@@ -1099,6 +1099,16 @@ slSort(&posTableList, compareTable);
 slSort(retNonposTableList, compareTable);
 }
 
+void explainCoordSystem()
+/* Our coord system is counter-intuitive to users.  Warn them in advance to 
+ * reduce the frequency with which they find this "bug" on their own and 
+ * we have to explain it on the genome list. */
+{
+puts("<P>Note: all start coordinates in our database are 0-based, not \n"
+     "1-based.  See explanation \n"
+     "<A HREF=\"http://genome.ucsc.edu/FAQ/FAQtracks#tracks1\">here</A>.</P>");
+}
+
 void doChooseTable()
 /* Offer the user choice of tracks/tables, positions, actions */
 {
@@ -1166,6 +1176,7 @@ cgiMakeButton("phase", outputOptionsPhase);
 cgiMakeButton("phase", descTablePhase);
 
 puts("</FORM>");
+explainCoordSystem();
 hgPositionsHelpHtml(organism, database);
 webEnd();
 }
@@ -2225,6 +2236,8 @@ else
 	    cartCgiUsualString(cart, "outputType", outputTypeNonPosMenu[0]));
 
 cgiMakeButton("phase", getOutputPhase);
+if (tableIsPositional)
+    explainCoordSystem();
 
 printf("<P><HR><H3> (Optional) Filter %s Records by Field Values </H3>",
        table);
@@ -3076,6 +3089,8 @@ cgiMakeButton("phase", oldAllFieldsPhase);
 cgiMakeButton("phase", oldSeqOptionsPhase);
 cgiMakeButton("phase", outputOptionsPhase);
 
+if (tableIsPositional)
+    explainCoordSystem();
 if (sameString(customTrackPseudoDb, db))
     describeCustomTrack(table);
 else
