@@ -19,6 +19,7 @@
 #include "psl.h"
 #include "agpFrag.h"
 #include "agpGap.h"
+#include "cgh.h"
 #include "ctgPos.h"
 #include "clonePos.h"
 #include "genePred.h"
@@ -4520,8 +4521,130 @@ tg->freeItems = freeExprBed;
 #endif /*CHUCK_CODE*/
 
 
+#ifdef FUREY_CODE
 
+/* Use the RepeatMasker style code to generate the
+ * the Comparative Genomic Hybridization track */
 
+static struct repeatItem *otherCghItem = NULL;
+static char *cghClassNames[] = {
+  "Breast", "CNS", "Colon", "Leukemia", "Lung", "Melanoma", "Ovary", "Prostate", "Renal",
+};
+static char *cghClasses[] = {
+  "BREAST", "CNS", "COLON", "LEUKEMIA", "LUNG", "MELANOMA", "OVARY", "PROSTATE", "RENAL",
+};
+
+struct repeatItem *makeCghItems()
+/* Make the stereotypical CGH tracks */
+{
+struct repeatItem *ri, *riList = NULL;
+int i;
+int numClasses = ArraySize(cghClasses);
+for (i=0; i<numClasses; ++i)
+    {
+    AllocVar(ri);
+    ri->class = cghClasses[i];
+    ri->className = cghClassNames[i];
+    slAddHead(&riList, ri);
+    }
+otherCghItem = riList;
+slReverse(&riList);
+return riList;
+}
+
+void cghLoadTrack(struct trackGroup *tg)
+/* Load up CGH tracks.  (Will query database during drawing for a change.) */
+{
+tg->items = makeCghItems();
+}
+
+static void cghDraw(struct trackGroup *tg, int seqStart, int seqEnd,
+        struct memGfx *mg, int xOff, int yOff, int width, 
+        MgFont *font, Color color, enum trackVisibility vis)
+{
+int baseWidth = seqEnd - seqStart;
+struct repeatItem *cghi;
+int y = yOff;
+int heightPer = tg->heightPer;
+int lineHeight = tg->lineHeight;
+int x1,x2,w;
+boolean isFull = (vis == tvFull);
+Color col;
+int ix = 0;
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr = NULL;
+char **row;
+int rowOffset;
+struct cgh cghRecord;
+
+/* Set up the shades of colors */
+if (!exprBedColorsMade)
+    makeRedGreenShades(mg);
+
+if (isFull)
+    {
+    /* Create tissue specific average track */
+    struct hash *hash = newHash(6);
+    char statusLine[128];
+
+    for (cghi = tg->items; cghi != NULL; cghi = cghi->next)
+        {
+	cghi->yOffset = y;
+	y += lineHeight;
+	hashAdd(hash, cghi->class, cghi);
+	}
+    sr = hRangeQuery(conn, "cgh", chromName, winStart, winEnd, "type = 2", &rowOffset);
+    while ((row = sqlNextRow(sr)) != NULL)
+        {
+	cghStaticLoad(row+rowOffset, &cghRecord);
+	cghi = hashFindVal(hash, cghRecord.tissue);
+	if (cghi == NULL)
+	   cghi = otherCghItem;
+	col = getExprDataColor((cghRecord.score * -1), 1.0, TRUE);
+	x1 = roundingScale(cghRecord.chromStart-winStart, width, baseWidth)+xOff;
+	x2 = roundingScale(cghRecord.chromEnd-winStart, width, baseWidth)+xOff;
+	w = x2-x1;
+	if (w <= 0)
+	    w = 1;
+	mgDrawBox(mg, x1, cghi->yOffset, w, heightPer, col);
+        }
+    freeHash(&hash);
+    }
+else
+    {
+    sr = hRangeQuery(conn, "cgh", chromName, winStart, winEnd, "type = 1", &rowOffset);
+    while ((row = sqlNextRow(sr)) != NULL)
+        {
+	cghStaticLoad(row+rowOffset, &cghRecord);
+	col = getExprDataColor((cghRecord.score * -1), 1.0, TRUE);
+	x1 = roundingScale(cghRecord.chromStart-winStart, width, baseWidth)+xOff;
+	x2 = roundingScale(cghRecord.chromEnd-winStart, width, baseWidth)+xOff;
+	w = x2-x1;
+	if (w <= 0)
+	  w = 1;
+	mgDrawBox(mg, x1, yOff, w, heightPer, col);
+        }
+    }
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+}
+
+void cghMethods(struct trackGroup *tg)
+/* Make track group for CGH experiments. */
+{
+tg->loadItems = cghLoadTrack;
+tg->freeItems = repeatFree;
+tg->drawItems = cghDraw;
+tg->colorShades = shadesOfGray;
+tg->itemName = repeatName;
+tg->mapItemName = repeatName;
+tg->totalHeight = tgFixedTotalHeight;
+tg->itemHeight = tgFixedItemHeight;
+tg->itemStart = tgWeirdItemStart;
+tg->itemEnd = tgWeirdItemEnd;
+}
+
+#endif /*FUREY_CODE*/
 
 enum trackVisibility limitVisibility(struct trackGroup *tg)
 /* Return default visibility limited by number of items. */
@@ -5308,6 +5431,7 @@ if (calledSelf)
 /* Register tracks that include some non-standard methods. */
 registerTrackHandler("cytoBand", cytoBandMethods);
 registerTrackHandler("bacEndPairs", bacEndPairsMethods);
+registerTrackHandler("cgh", cghMethods);
 registerTrackHandler("mapGenethon", genethonMethods);
 registerTrackHandler("stsMarker", stsMarkerMethods);
 registerTrackHandler("stsMap", stsMapMethods);
