@@ -2282,7 +2282,23 @@ ftp://ftp.ncbi.nih.gov/repository/UniSTS/UniSTS_MapReports/Mus_musculus/*
 	downloads/MRK_Dump2.rpt downloads/PRB_PrimerSeq.rpt \
 	downloads/MRK_Sequence.rpt downloads/UniSTS_mouse.alias \
 	downloads/UniSTS_mouse.sts | sed -e "s/\t*$//" > newbedfile
-    cp -p newbedfile stsMouseinfo.bed
+    cp -p newbedfile stsMouseInfo.bed
+    # comparing to Mm3, this file was used there:
+    # /projects/hg2/booch/psl/mm.2003.02/mm3/info/stsInfoMouseNew.bed
+    # a wc of it shows:
+    # 25341  339289 3572880 stsInfoMouseNew.bed
+    # that is about half of what we have here:
+    # 57377  796754 6539945 stsInfoMouse.bed
+XXX I wonder if this is a problem ?  The old file is missing fields
+XXX	that are now present.  But I wonder about the line count.
+    # the first line from the Mm3 file:
+1^IU23883^I^I^I6674^I2^IU23883;MMU23883^IAATTGGCAGCTGCTTAGATG^ITGCACGCGTTAAGTTACTTC^I215^I^IMus musculus$
+    # and the first line from this new file:
+1^IU23883^I106145^ID16IUM41^I6674^I2^IU23883;MMU23883^IAATTGGCAGCTGCTTAGATG^ITGCACGCGTTAAGTTACTTC^I215^I0^IMUS MUSCULUS^I^I^I^IMGD^I16^I57.6$
+    # There is something wrong with the new file at 25278 where it
+    #	should be continuing from the old file.  It has a broken line:
+    # 25342^I^I^I^I^I0^I^I^I^I^I0^IMUS MUSCULUS$
+
 
     # and from that, create new primer fa, epcr, etc:
     /cluster/store5/mouseMarker/code/luConvertPrimerToFa \
@@ -2295,6 +2311,9 @@ ftp://ftp.ncbi.nih.gov/repository/UniSTS/UniSTS_MapReports/Mus_musculus/*
 #	     0       0       0 mouseC.fa
 #	268733  268671 6054456 mouseP.fa
 #	 30876  154398 1949198 mouseP.info
+    # the equivalent Mm3 versions:
+    #   243750  243721 5544726 musPrimer.fa == mouseP.fa
+    #    25341  126705 1609168 mouse.primers == mouseP.info
 
     #	copy the primers over to the bluearc for the kluster run
     cp -p mouseP.fa /cluster/bluearc/scratch/mus/mm4
