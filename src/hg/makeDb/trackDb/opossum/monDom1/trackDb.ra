@@ -28,11 +28,19 @@ type psl protein
 pred hg17.blastKGPep01
 blastRef hg17.blastKGRef01
 
+track blatzHg17KG
+shortLabel Human mRNAs
+longLabel Human(hg17) Known Gene mRNAs Mapped by BLATZ
+group rna
+priority 142
+visibility pack
+type psl xeno
+
 track multiz5way
 shortLabel Conservation
 longLabel Conservation in Opossum/Chicken/Human/Mouse/Zebrafish
 group compGeno
-priority 110
+priority 55
 visibility pack
 type wigMaf 0.0 1.0
 maxHeightPixels 100:40:11
