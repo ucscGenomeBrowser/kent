@@ -70,7 +70,7 @@ for (;;)
     }
 
 /* Allocate DNA and fill it up from file. */
-dna = sequence = needLargeMem(dnaSize+1);
+dna = sequence = needHugeMem(dnaSize+1);
 fseek(f, offset, SEEK_SET);
 for (;;)
     {
@@ -164,7 +164,7 @@ struct dnaSeq *seq;
 
 if (maxSize < 0)
     errAbort("can't open %s", fileName);
-s = needLargeMem(maxSize+1);
+s = needHugeMem(maxSize+1);
 fd = open(fileName, O_RDONLY);
 read(fd, s, maxSize);
 close(fd);
@@ -181,13 +181,13 @@ static void expandFaFastBuf(int bufPos)
 if (faFastBufSize == 0)
     {
     faFastBufSize = 64 * 1024;
-    faFastBuf = needLargeMem(faFastBufSize);
+    faFastBuf = needHugeMem(faFastBufSize);
     }
 else
     {
     DNA *newBuf;
     int newBufSize = faFastBufSize + faFastBufSize;
-    newBuf = needLargeMem(newBufSize);
+    newBuf = needHugeMem(newBufSize);
     memcpy(newBuf, faFastBuf, bufPos);
     freeMem(faFastBuf);
     faFastBuf = newBuf;
