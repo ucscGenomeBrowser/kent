@@ -106,19 +106,15 @@ else
     return seq;
 }
 
-
-struct dnaSeq *faFromMemText(char *text)
-/* Return a sequence from a .fa file that's been read into
- * a string in memory. This cannabalizes text, which should
- * be allocated with needMem.  This buffer becomes part of
- * the returned dnaSeq, which may be freed normally with
- * freeDnaSeq. */
+bioSeq *faSeqFromMemText(char *text, boolean isDna)
+/* Convert fa in memory to bioSeq. */
 {
 char *name = "";
 char *s, *d;
 struct dnaSeq *seq;
 int size = 0;
 char c;
+char *filter = (isDna ? ntChars : aaChars);
 
 dnaUtilOpen();
 if (text[0] == '>')
@@ -140,20 +136,35 @@ while ((c = *s++) != 0)
     {
     if (isspace(c) || isdigit(c))
 	continue;
-    if ((c = ntChars[c]) != 0) 
+    if ((c = filter[c]) != 0) 
         d[size++] = c;
     else
-	d[size++] = 'n';
+	{
+	if (isDna)
+	    d[size++] = 'n';
+	else
+	    d[size++] = 'X';
+	}
     }
 d[size] = 0;
 
-/* Put sequence into our little DNA structure. */
+/* Put sequence into our little sequence structure. */
 seq->dna = text;
 seq->size = size;
 return seq;
 }
 
-struct dnaSeq *faReadDna(char *fileName)
+struct dnaSeq *faFromMemText(char *text)
+/* Return a sequence from a .fa file that's been read into
+ * a string in memory. This cannabalizes text, which should
+ * be allocated with needMem.  This buffer becomes part of
+ * the returned dnaSeq, which may be freed normally with
+ * freeDnaSeq. */
+{
+return faSeqFromMemText(text, TRUE);
+}
+
+struct dnaSeq *faReadSeq(char *fileName, boolean isDna)
 /* Open fa file and read a single sequence from it. */
 {
 int maxSize = fileSize(fileName);
@@ -169,7 +180,19 @@ fd = open(fileName, O_RDONLY);
 read(fd, s, maxSize);
 close(fd);
 s[maxSize] = 0;
-return faFromMemText(s);
+return faSeqFromMemText(s, isDna);
+}
+
+struct dnaSeq *faReadDna(char *fileName)
+/* Open fa file and read a single nucleotide sequence from it. */
+{
+return faReadSeq(fileName, TRUE);
+}
+
+struct dnaSeq *faReadAa(char *fileName)
+/* Open fa file and read a peptide single sequence from it. */
+{
+return faReadSeq(fileName, FALSE);
 }
 
 static int faFastBufSize = 0;

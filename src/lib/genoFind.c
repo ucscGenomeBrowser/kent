@@ -8,6 +8,7 @@
 #include "errabort.h"
 #include "ooc.h"
 #include "genoFind.h"
+#include "trans3.h"
 
 char *gfSignature()
 /* Return signature that starts each command to gfServer. Helps defend 
@@ -24,12 +25,28 @@ int length = strlen(s);
 UBYTE len;
 
 if (length > 255)
-    errAbort("Trying to send a string longer than 255 bytes (%d byte)", length);
+    errAbort("Trying to send a string longer than 255 bytes (%d bytes)", length);
 len = length;
 if (write(sd, &len, 1)<0)
     errnoAbort("Couldn't send string to socket");
 if (write(sd, s, length)<0)
     errnoAbort("Couldn't send string to socket");
+}
+
+void gfSendLongString(int sd, char *s)
+/* Send a long string down socket: two bytes for length. */
+{
+unsigned length = strlen(s);
+UBYTE b[2];
+
+if (length >= 64*1024)
+    errAbort("Trying to send a string longer than 64k bytes (%d bytes)", length);
+b[0] = (length>>8);
+b[1] = (length&0xff);
+if (write(sd, b, 2) < 0)
+    errnoAbort("Couldn't send long string to socket");
+if (write(sd, s, length)<0)
+    errnoAbort("Couldn't send long string to socket");
 }
 
 int gfReadMulti(int sd, void *vBuf, size_t size)
@@ -77,6 +94,30 @@ buf[length] = 0;
 return buf;
 }
 
+char *gfGetLongString(int sd)
+/* Read string and return it.  freeMem
+ * the result when done. */
+{
+UBYTE b[2];
+char *s = NULL;
+int length = 0;
+if (gfReadMulti(sd, b, 2)<0)
+    {
+    warn("Couldn't read long string length");
+    return NULL;
+    }
+length = (b[0]<<8) + b[1];
+s = needMem(length+1);
+if (length > 0)
+    if (gfReadMulti(sd, s, length) < 0)
+	{
+	warn("Couldn't read long string");
+	return NULL;
+	}
+s[length] = 0;
+return s;
+}
+
 char *gfRecieveString(int sd, char buf[256])
 /* Read string into buf and return it.  If buf is NULL
  * an internal buffer will be used. Abort if any problem. */
@@ -84,7 +125,19 @@ char *gfRecieveString(int sd, char buf[256])
 char *s = gfGetString(sd, buf);
 if (s == NULL)
      noWarnAbort();   
+return s;
 }
+
+char *gfRecieveLongString(int sd)
+/* Read string and return it.  freeMem
+ * the result when done. Abort if any problem*/
+{
+char *s = gfGetLongString(sd);
+if (s == NULL)
+     noWarnAbort();   
+return s;
+}
+
 
 void genoFindFree(struct genoFind **pGenoFind)
 /* Free up a genoFind index. */
@@ -413,11 +466,112 @@ return gf;
 }
 
 void gfIndexTransNibs(struct genoFind *transGf[2][3], int nibCount, char *nibNames[], 
-    int minMatch, int maxGap, int tileSize, int maxPat)
+    int minMatch, int maxGap, int tileSize, int maxPat, char *oocFile)
 /* Make translated (6 frame) index for all nib files. */
 {
-uglyf("gfIndexTransNibs\n");
-uglyAbort("All for now\n");
+FILE *f = NULL;
+int nibSize;
+struct genoFind *gf;
+int i,isRc, frame;
+bits32 offset[2][3];
+char *nibName;
+struct gfSeqSource *ss;
+struct dnaSeq *seq;
+struct trans3 *t3;
+
+uglyf("gfIndexTransNibs nibCount %d, tileSize %d, minMatch %d\n", nibCount, tileSize, minMatch);
+
+/* Allocate indices for all reading frames. */
+for (isRc=0; isRc <= 1; ++isRc)
+    {
+    for (frame = 0; frame < 3; ++frame)
+	{
+	transGf[isRc][frame] = gf = gfNewEmpty(minMatch, maxGap, tileSize, maxPat, oocFile, TRUE);
+	}
+    }
+
+/* Scan through nib files once counting tiles. */
+for (i=0; i<nibCount; ++i)
+    {
+    nibName = nibNames[i];
+    uglyf("Counting %s in 3 frames\n", nibName);
+    seq = nibLoadAll(nibName);
+    uglyf("Loaded %s\n", nibName);
+    for (isRc=0; isRc <= 1; ++isRc)
+	{
+	if (isRc)
+	    {
+	    reverseComplement(seq->dna, seq->size);
+	    uglyf("Reverse complemented\n %s", nibName);
+	    }
+	t3 = trans3New(seq);
+	uglyf("Translated %s\n", nibName);
+	for (frame = 0; frame < 3; ++frame)
+	    {
+	    gfCountSeq(transGf[isRc][frame], t3->trans[frame]);
+	    uglyf("Counted frame %d\n", frame);
+	    }
+	}
+    trans3Free(&t3);
+    freeDnaSeq(&seq);
+    }
+
+/* Get space for entries in indexed of all reading frames. */
+for (isRc=0; isRc <= 1; ++isRc)
+    {
+    for (frame = 0; frame < 3; ++frame)
+	{
+	gf = transGf[isRc][frame];
+	gfAllocLists(gf);
+	gfZeroNonOverused(gf);
+	AllocArray(gf->sources, nibCount);
+	gf->sourceCount = nibCount;
+	offset[isRc][frame] = 0;
+	}
+    }
+
+/* Scan through nibs a second time building index. */
+for (i=0; i<nibCount; ++i)
+    {
+    nibName = nibNames[i];
+    uglyf("Adding %s in 3 frames\n", nibName);
+    seq = nibLoadAll(nibName);
+    uglyf("Loaded %s\n", nibName);
+    for (isRc=0; isRc <= 1; ++isRc)
+	{
+	if (isRc)
+	    {
+	    reverseComplement(seq->dna, seq->size);
+	    uglyf("Reverse complemented\n %s", nibName);
+	    }
+	t3 = trans3New(seq);
+	uglyf("Translated %s\n", nibName);
+	for (frame = 0; frame < 3; ++frame)
+	    {
+	    gf = transGf[isRc][frame];
+	    gfAddSeq(gf, t3->trans[frame], offset[isRc][frame]);
+	    uglyf("Added frame %d\n", frame);
+	    ss = gf->sources+i;
+	    ss->fileName = nibName;
+	    ss->start = offset[isRc][frame];
+	    offset[isRc][frame] += t3->trans[frame]->size;
+	    ss->end = offset[isRc][frame];
+	    }
+	}
+    trans3Free(&t3);
+    freeDnaSeq(&seq);
+    }
+
+printf("Done adding\n");
+for (isRc=0; isRc <= 1; ++isRc)
+    {
+    for (frame = 0; frame < 3; ++frame)
+	{
+	gf = transGf[isRc][frame];
+	gfZeroOverused(gf);
+	}
+    }
+uglyf("Done zeroing\n");
 }
 
 struct genoFind *gfIndexSeq(bioSeq *seqList,

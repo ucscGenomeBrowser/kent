@@ -384,6 +384,8 @@ boolean gotAny = FALSE;
 boolean startDash;
 boolean gotEq;
 
+if (cgiIsOnWeb())
+    return;	/* No spoofing required! */
 q += sprintf(q, "%s", "QUERY_STRING=cgiSpoof=on");
 for (i=0; i<argcLeft; )
     {

@@ -6,6 +6,7 @@
 #include <netinet/in.h>
 #include <netdb.h>
 #include "linefile.h"
+#include "sqlNum.h"
 #include "fa.h"
 #include "fuzzyFind.h"
 #include "supStitch.h"
@@ -120,13 +121,9 @@ if (diff == 0)
 return diff;
 }
 
-static struct gfRange *gfQuerySeq(char *hostName, char *portName, struct dnaSeq *seq)
-/* Ask server for places sequence hits. */
+static int startConnect(char *hostName, char *portName)
+/* Start connection with server. */
 {
-struct gfRange *rangeList = NULL, *range;
-char buf[256], *row[6];
-int rowSize;
-
 /* Connect to server. */
 int sd = setupSocket(hostName, portName);
 if (connect(sd, &sai, sizeof(sai)) == -1)
@@ -135,14 +132,31 @@ if (connect(sd, &sai, sizeof(sai)) == -1)
                "again in a day or so.");
     errnoAbort("Couldn't connect to socket in oneStrand");
     }
+return sd;
+}
 
-/* Do start of query. */
-sprintf(buf, "%squery %d", gfSignature(), seq->size);
+static int startSeqQuery(char *hostName, char *portName, bioSeq *seq, char *type)
+/* Open server and send a query that involves some sequence. */
+{
+int sd = startConnect(hostName, portName);
+char buf[256];
+sprintf(buf, "%s%s %d", gfSignature(), type, seq->size);
 write(sd, buf, strlen(buf));
 read(sd, buf, 1);
 if (buf[0] != 'Y')
     errAbort("Expecting 'Y' from server, got %c", buf[0]);
 write(sd, seq->dna, seq->size);
+return sd;
+}
+
+
+static struct gfRange *gfQuerySeq(char *hostName, char *portName, struct dnaSeq *seq)
+/* Ask server for places sequence hits. */
+{
+struct gfRange *rangeList = NULL, *range;
+char buf[256], *row[6];
+int rowSize;
+int sd = startSeqQuery(hostName, portName, seq, "query");
 
 /* Read results line by line and save in list, and return. */
 for (;;)
@@ -165,6 +179,111 @@ close(sd);
 slReverse(&rangeList);
 return rangeList;
 }
+
+static void gfQuerySeqTrans(char *hostName, char *portName, aaSeq *seq, struct gfClump *clumps[2][3])
+/* Query server for clumps where aa sequence hits translated index. */
+{
+int sd;
+int frame, isRc, rowSize;
+struct gfClump *clump;
+struct gfHit *hit;
+int tileSize = 4;
+char *line, *var, *val, *word;
+char *s;
+char buf[256], *row[12];
+struct hash *ssHash = newHash(0);
+struct gfSeqSource *ssList = NULL, *ss;
+
+for (isRc = 0; isRc <= 1; ++isRc)
+    for (frame = 0; frame<3; ++frame)
+	clumps[isRc][frame] = NULL;
+
+/* Send sequence to server. */
+sd = startSeqQuery(hostName, portName, seq, "protQuery");
+
+uglyf("Started seq query ok\n");
+
+/* Parse first line from server: var/val pairs. */
+line = gfRecieveString(sd, buf);
+uglyf("%s\n", buf);
+for (;;)
+    {
+    var = nextWord(&line);
+    if (var == NULL)
+         break;
+    val = nextWord(&line);
+    if (val == NULL)
+	 {
+	 internalErr();
+         break;
+	 }
+    uglyf("%s %s\n", var, val);
+    if (sameString("tileSize", var))
+         {
+	 tileSize = atoi(val);
+	 uglyf("Got tile size %d\n", tileSize);
+	 if (tileSize <= 0)
+	     internalErr();
+	 }
+    }
+freez(&s);
+
+
+/* Read results line by line and save in memory. */
+for (;;)
+    {
+    /* Read and parse first line that describes clump overall. */
+    gfRecieveString(sd, buf);
+    uglyf("%s\n", buf);
+    if (sameString(buf, "end"))
+	{
+	break;
+	}
+    rowSize = chopLine(buf, row);
+    if (rowSize < 8)
+	errAbort("Expecting 8 words from server got %d", rowSize);
+    AllocVar(clump);
+    clump->qStart = sqlUnsigned(row[0]);
+    clump->qEnd = sqlUnsigned(row[1]);
+    if ((ss = hashFindVal(ssHash, row[2])) == NULL)
+	{
+	AllocVar(ss);
+	slAddHead(&ssList, ss);
+	hashAddSaveName(ssHash, row[2], ss, &ss->fileName);
+	}
+    clump->target = ss;
+    clump->tStart = sqlUnsigned(row[3]);
+    clump->tEnd = sqlUnsigned(row[4]);
+    clump->hitCount = sqlUnsigned(row[5]);
+    isRc = ((row[6][0] == '-') ? 0 : 1);
+    frame = sqlUnsigned(row[7]);
+    slAddHead(&clumps[isRc][frame], clump);
+
+    /* Read and parse next (long) line that describes hits. */
+    s = line = gfRecieveLongString(sd);
+    for (;;)
+        {
+	if ((row[0] = nextWord(&line)) == NULL)
+	     break;
+	if ((row[1] = nextWord(&line)) == NULL)
+	     internalErr();
+	AllocVar(hit);
+	hit->qStart = sqlUnsigned(row[0]);
+	hit->tStart = sqlUnsigned(row[1]);
+	slAddHead(&clump->hitList, hit);
+	}
+    slReverse(&clump->hitList);
+    assert(slCount(clump->hitList) == clump->hitCount);
+    uglyf("%d hits in clump\n", clump->hitCount);
+    freez(&s);
+    }
+close(sd);
+for (isRc = 0; isRc <= 1; ++isRc)
+    for (frame = 0; frame<3; ++frame)
+	slReverse(&clumps[isRc][frame]);
+uglyf("Done gfSeqQueryTrans\n");
+}
+
 
 static struct gfRange *gfRangesBundle(struct gfRange *exonList, int maxIntron)
 /* Bundle a bunch of 'exons' into plausable 'genes'.  It's
@@ -657,6 +776,45 @@ for (range = rangeList; range != NULL; range = range->next)
     }
 for (frame=0; frame<3; ++frame)
     gfClumpFreeList(&clumps[frame]);
+}
+
+void gfAlignTrans(char *hostName, char *portName, char *nibDir, aaSeq *seq,
+    int minMatch, GfSaveAli outFunction, struct gfSavePslxData *outData)
+/* Search indexed translated genome on server with an amino acid sequence. 
+ * Then load homologous bits of genome locally and do detailed alignment.
+ * Call 'outFunction' with each alignment that is found. */
+{
+struct ssBundle *bun;
+struct gfClump *clumps[2][3];
+struct gfRange *rangeList = NULL, *range;
+struct dnaSeq *targetSeq;
+char dir[256], chromName[128], ext[64];
+int chromSize;
+
+gfQuerySeqTrans(hostName, portName, seq, clumps);
+
+#ifdef SOON
+ ~~~
+rangeList = gfQuerySeq(hostName, portName, seq);
+slSort(&rangeList, gfRangeCmpTarget);
+rangeList = gfRangesBundle(rangeList, 500000);
+for (range = rangeList; range != NULL; range = range->next)
+    {
+    splitPath(range->tName, dir, chromName, ext);
+    targetSeq = expandAndLoad(range, nibDir, seq, &chromSize);
+    AllocVar(bun);
+    bun->qSeq = seq;
+    bun->genoSeq = targetSeq;
+    bun->data = range;
+    alignComponents(range, bun, stringency);
+    ssStitch(bun, stringency);
+    saveAlignments(chromName, chromSize, range->tStart, 
+	bun, outData, isRc, stringency, minMatch, outFunction);
+    ssBundleFree(&bun);
+    freeDnaSeq(&targetSeq);
+    }
+gfRangeFreeList(&rangeList);
+#endif /* SOON */
 }
 
 void untranslateRangeList(struct gfRange *rangeList, int qFrame, int tFrame, struct hash *t3Hash)
