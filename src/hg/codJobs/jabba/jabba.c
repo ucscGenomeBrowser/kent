@@ -3,6 +3,7 @@
 #include "linefile.h"
 #include "hash.h"
 #include "dystring.h"
+#include "obscure.h"
 #include "cheapcgi.h"
 #include "jksql.h"
 #include "jobDb.h"
@@ -89,7 +90,7 @@ char *replaceNullString(char *s)
 if (s == NULL)
    return cloneString("");
 else
-    return s;
+    return cloneString(s);
 }
 
 struct job *jobFromLine(struct lineFile *lf, char *line)
@@ -537,11 +538,23 @@ long nowInSeconds()
 return dateToSeconds(nowAsString());
 }
 
-void parseRunJobOutput(char *fileName, char **retStartTime, char **retEndTime, float *retCpuTime,
-	int *retRet, boolean *gotRet, boolean *retTrackingError, char host[128])
+struct runJobOutput
+/* Info about a run job. */
+    {
+    char *startTime;
+    char *endTime;
+    float cpuTime;
+    int retVal;
+    boolean gotRet;
+    boolean trackingError;
+    char host[128];
+    };
+
+struct runJobOutput *parseRunJobOutput(char *fileName)
 /* Parse a run job output file.  Might have trouble if the program output
  * is horribly complex. */
 {
+static struct runJobOutput ret;
 struct lineFile *lf;
 char *line, *words[20], *s;
 int wordCount;
@@ -552,28 +565,29 @@ char *hostPattern = "Executing host: ";
 boolean gotStart = FALSE, gotEnd = FALSE;
 boolean gotCpu = FALSE, gotReturn = FALSE;
 
-/* Set up default return values. */
-*retCpuTime = *retRet = *gotRet = *retTrackingError = 0;
-*retStartTime = *retEndTime = NULL;
+/* Set up default return values.  Free old strings. */
+freez(&ret.startTime);
+freez(&ret.endTime);
+ZeroVar(&ret);
 
 lf = lineFileMayOpen(fileName, TRUE);
 if (lf == NULL)
     {
-    *retTrackingError = TRUE;
-    return;
+    ret.trackingError = TRUE;
+    return &ret;
     }
 while (lineFileNext(lf, &line, NULL))
     {
     if (startsWith(startPattern, line))
         {
 	line += strlen(startPattern);
-	*retStartTime = cloneString(trimSpaces(line));
+	ret.startTime = cloneString(trimSpaces(line));
 	gotStart = TRUE;
 	}
     else if (startsWith(endPattern, line))
 	{
 	line += strlen(endPattern);
-	*retEndTime = cloneString(trimSpaces(line));
+	ret.endTime = cloneString(trimSpaces(line));
 	gotEnd = TRUE;
 	break;
 	}
@@ -581,7 +595,7 @@ while (lineFileNext(lf, &line, NULL))
         {
 	line += strlen(hostPattern);
 	trimSpaces(line);
-	strcpy(host, line);
+	strcpy(ret.host, line);
 	}
     else if (isdigit(line[0]) )
 	{
@@ -589,7 +603,7 @@ while (lineFileNext(lf, &line, NULL))
 	if (wordCount >= 3 && lastChar(words[0]) == 'u'
 	    && lastChar(words[1]) == 's' && isdigit(words[1][0]))
 	    {
-	    *retCpuTime = atof(words[0]) + atof(words[1]);
+	    ret.cpuTime = atof(words[0]) + atof(words[1]);
 	    gotCpu = TRUE;
 	    }
 	}
@@ -597,14 +611,14 @@ while (lineFileNext(lf, &line, NULL))
 	{
 	line += strlen(returnPattern);
 	line = skipLeadingSpaces(line);
-	*retRet = atoi(line);
-	*gotRet = TRUE;
+	ret.retVal = atoi(line);
+	ret.gotRet = TRUE;
 	gotReturn = TRUE;
 	}
     }
 if (!gotStart)
     {
-    *retTrackingError = TRUE;
+    ret.trackingError = TRUE;
     }
 if (gotEnd)
     {
@@ -612,6 +626,7 @@ if (gotEnd)
        errAbort("%s is not in a runJob format jabba can parse", fileName);
     }
 lineFileClose(&lf);
+return  &ret;
 }
 
 void killSubmission(struct submission *sub)
@@ -633,7 +648,6 @@ struct job *job;
 struct submission *sub;
 char *line, *words[10];
 int wordCount;
-boolean gotRet, trackingError;
 long killSeconds = killTime*60;
 long warnSeconds = warnTime*60;
 long duration;
@@ -648,10 +662,10 @@ for (job=db->jobList; job != NULL; job = job->next)
 	 * possibly finished. */
 	if (!sub->queueError && !sub->inQueue && !sub->crashed && !sub->hung && !sub->ranOk)
 	    {
-	    char *startTime, *endTime;
-	    parseRunJobOutput(sub->outFile, &startTime, &endTime, 
-	        &sub->cpuTime, &sub->retVal, &gotRet, &trackingError, host);
-	    if (trackingError)
+	    struct runJobOutput *rjo = parseRunJobOutput(sub->outFile);
+	    sub->startTime = replaceNullString(rjo->startTime);
+	    sub->endTime = replaceNullString(rjo->endTime);
+	    if (rjo->trackingError)
 	        {
 		long subTime, curTime;
 		subTime = dateToSeconds(sub->submitTime);
@@ -664,10 +678,10 @@ for (job=db->jobList; job != NULL; job = job->next)
 		}
 	    else
 	        {
-		sub->startTime = replaceNullString(startTime);
-		sub->endTime = replaceNullString(endTime);
-		sub->gotRetVal = gotRet;
-		if (gotRet)
+		sub->cpuTime = rjo->cpuTime;
+		sub->retVal = rjo->retVal;
+		sub->gotRetVal = rjo->gotRet;
+		if (rjo->gotRet)
 		    {
 		    if (sub->retVal == 0 && checkOneJob(job, "out", checkHash) == 0)
 			sub->ranOk = TRUE;
@@ -844,23 +858,30 @@ void problemReport(struct job *job, struct submission *sub, char *type)
 {
 struct check *check;
 struct hash *hash = newHash(0);
-char *startTime, *endTime;
-float cpuTime;
-int retVal;
-boolean trackingError, gotRet;
-char host[128];
+struct runJobOutput *rjo = parseRunJobOutput(sub->outFile);
 
-printf("%s\n", job->command);
+printf("job: %s\n", job->command);
 printf("failure type: %s\n", type);
-parseRunJobOutput(sub->outFile, &startTime, &endTime, 
-    &cpuTime, &retVal, &gotRet, &trackingError, host);
-printf("host: %s\n", host);
-printf("start time: %s\n", startTime);
-if (gotRet)
-    printf("return: %d\n", retVal);
+printf("host: %s\n", rjo->host);
+printf("start time: %s\n", rjo->startTime);
+if (rjo->gotRet)
+    printf("return: %d\n", rjo->retVal);
 for (check = job->checkList; check != NULL; check = check->next)
     {
     doOneCheck(check, hash, stdout);
+    }
+if (fileExists(sub->errFile))
+    {
+    char *buf;
+    size_t size;
+    printf("stderr:\n");
+    readInGulp(sub->errFile, &buf, &size);
+    mustWrite(stdout, buf, size);
+    freez(&buf);
+    }
+else
+    {
+    printf("stderr file doesn't exist\n");
     }
 printf("\n");
 hashFree(&hash);
@@ -945,18 +966,12 @@ for (job = db->jobList; job != NULL; job = job->next)
 	   }
 	else
 	   {
-	   char *startTime, *endTime;
-	   float cpuTime;
-	   int retVal;
-	   boolean trackingError, gotRet;
-	   char host[128];
-	   parseRunJobOutput(sub->outFile, &startTime, &endTime, 
-	        &cpuTime, &retVal, &gotRet, &trackingError, host);
-	   if (gotRet && endTime != NULL)
+	   struct runJobOutput *rjo = parseRunJobOutput(sub->outFile);
+	   if (rjo->gotRet && rjo->endTime != NULL)
 	       {
 	       ++timedCount;
-	       totalCpu += cpuTime;
-	       oneWall = dateToSeconds(endTime) - dateToSeconds(startTime);
+	       totalCpu += rjo->cpuTime;
+	       oneWall = dateToSeconds(rjo->endTime) - dateToSeconds(rjo->startTime);
 	       totalWall += oneWall;
 	       if (oneWall > longestWall) longestWall = oneWall;
 	       }
