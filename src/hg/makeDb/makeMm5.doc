@@ -3428,3 +3428,22 @@ skipped, 4519 warning(s) loading psl.tab
 # featureBits mm4 bacEndPairsBad
 # 1074505863 bases of 2627444668 (40.895%) in intersection
 
+# LOAD GENEID GENES (DONE 8/2/04 Fan)
+    # reloaded 3/16/04 with -gtf instead of -exon=CDS (nec. now! for stop_codon)
+    mkdir -p /cluster/data/mm5/bed/geneid/download
+    cd /cluster/data/mm5/bed/geneid/download
+    foreach f (/cluster/data/mm5/*/chr*.fa)
+      set chr = $f:t:r
+      wget \
+http://genome.imim.es/genepredictions/M.musculus/mmMay2004/geneid_v1.2/$chr.gtf
+      wget \
+http://genome.imim.es/genepredictions/M.musculus/mmMay2004/geneid_v1.2/$chr.prot
+    end
+    # Add missing .1 to protein id's
+    foreach f (*.prot)
+      perl -wpe 's/^(>chr\w+)$/$1.1/' $f > $f:r-fixed.prot
+    end
+    cd ..
+    ldHgGene -gtf mm5 geneid download/*.gtf
+    hgPepPred mm5 generic geneidPep download/*-fixed.prot
+
