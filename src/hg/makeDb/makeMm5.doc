@@ -4703,6 +4703,11 @@ ftp://ftp.ncbi.nih.gov/repository/UniSTS/UniSTS_MapReports/Mus_musculus/*
 
     # Yontao updated /cluster/store5/mouseMarker/code/cleanInfo.pl 8/10/04
     /cluster/store5/mouseMarker/code/cleanInfo.pl newbedfile > stsInfoMouse.bed
+	
+    # copy the stsInfoMouse.bed file from working dir to the marker info storage fold.
+    # added 2 new steps by Yontao	
+	mv /cluster/store5/mouseMarker/stsInfoMouse.bed /cluster/store5/mouseMarker/stsInfoMouse.bed_mm4
+	cp stsInfoMouse.bed /cluster/store5/mouseMarker/stsInfoMouse.bed
 
     # comparing to Mm4, this file was used there:
     # /cluster/store6/mm4/bed/STSmarkers
