@@ -27,7 +27,7 @@
 #include "minGeneInfo.h"
 #include <regex.h>
 
-static char const rcsid[] = "$Id: hgFind.c,v 1.139 2004/05/08 03:11:12 kate Exp $";
+static char const rcsid[] = "$Id: hgFind.c,v 1.140 2004/06/04 21:19:31 angie Exp $";
 
 extern struct cart *cart;
 char *hgAppName = "";
@@ -766,20 +766,6 @@ while ((table = *tables++) != NULL)
     }
 hFreeConn(&conn);
 return pslList;
-}
-
-static int pslMrnaScore(const struct psl *psl)
-/* Return a simple score for psl. */
-{
-return psl->match + (psl->repMatch>>1) - psl->misMatch - psl->qNumInsert;
-}
-
-static int pslCmpScore(const void *va, const void *vb)
-/* Compare two psl to sort by score position . */
-{
-const struct psl *a = *((struct psl **)va);
-const struct psl *b = *((struct psl **)vb);
-return pslMrnaScore(b) - pslMrnaScore(a);
 }
 
 static void mrnaHtmlStart(struct hgPosTable *table, FILE *f)
