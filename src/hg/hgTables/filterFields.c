@@ -17,7 +17,7 @@
 #include "joiner.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: filterFields.c,v 1.20 2004/11/22 21:32:10 hiram Exp $";
+static char const rcsid[] = "$Id: filterFields.c,v 1.21 2004/11/23 19:49:12 kent Exp $";
 
 /* ------- Stuff shared by Select Fields and Filters Pages ----------*/
 
@@ -973,8 +973,16 @@ struct dyString *dy = NULL;
 boolean needAnd = FALSE;
 char dbTableBuf[256];
 char splitTable[256];
+char oldDb[128];
+char explicitDb[128];
 
+safef(oldDb, sizeof(oldDb), "%s", db);
 dbOverrideFromTable(dbTableBuf, &db, &table);
+if (!sameString(oldDb, db))
+     safef(explicitDb, sizeof(explicitDb), "%s.", db);
+else
+     explicitDb[0] = 0;
+     
 /* Cope with split table. */
     {
     struct sqlConnection *conn = sqlConnect(db);
@@ -1031,7 +1039,7 @@ for (var = varList; var != NULL; var = var->next)
 		if (needOr)
 		    dyStringAppend(dy, " OR ");
 		needOr = TRUE;
-		dyStringPrintf(dy, "%s.%s.%s ", db, splitTable, field);
+		dyStringPrintf(dy, "%s%s.%s ", explicitDb, splitTable, field);
 		if (sqlWildcardIn(sqlPat))
 		    {
 		    if (neg)
@@ -1074,20 +1082,20 @@ for (var = varList; var != NULL; var = var->next)
 		if (strchr(pat, '.')) /* Assume floating point */
 		    {
 		    double a = atof(words[0]), b = atof(words[1]);
-		    dyStringPrintf(dy, "%s.%s.%s >= %f && %s.%s.%s < %f",
-		    	db, splitTable, field, a, db, splitTable, field, b);
+		    dyStringPrintf(dy, "%s%s.%s >= %f && %s%s.%s < %f",
+		    	explicitDb, splitTable, field, a, explicitDb, splitTable, field, b);
 		    }
 		else
 		    {
 		    int a = atoi(words[0]), b = atoi(words[1]);
-		    dyStringPrintf(dy, "%s.%s.%s >= %d && %s.%s.%s < %d",
-		    	db, splitTable, field, a, db, splitTable, field, b);
+		    dyStringPrintf(dy, "%s%s.%s >= %d && %s%s.%s < %d",
+		    	explicitDb, splitTable, field, a, explicitDb, splitTable, field, b);
 		    }
 		freez(&dupe);
 		}
 	    else
 	        {
-		dyStringPrintf(dy, "%s.%s.%s %s ", db, splitTable, field, cmpVal);
+		dyStringPrintf(dy, "%s%s.%s %s ", explicitDb, splitTable, field, cmpVal);
 		if (strchr(pat, '.'))	/* Assume floating point. */
 		    dyStringPrintf(dy, "%f", atof(pat));
 		else

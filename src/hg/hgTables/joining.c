@@ -15,7 +15,7 @@
 #include "hgTables.h"
 
 
-static char const rcsid[] = "$Id: joining.c,v 1.34 2004/11/06 07:13:42 kent Exp $";
+static char const rcsid[] = "$Id: joining.c,v 1.35 2004/11/23 19:49:12 kent Exp $";
 
 struct joinedRow
 /* A row that is joinable.  Allocated in joinableResult->lm. */
@@ -511,17 +511,6 @@ struct joinerPair *jp;
 int fieldCount = 0, keyCount = 0;
 int idFieldIx = -1;
 struct sqlConnection *conn = sqlConnect(tj->database);
-char *filter = filterClause(tj->database, tj->table, regionList->chrom);
-     /* Note this will have problems on split tables.  Argh... messy to resolve. */
-
-if (filter != NULL)
-    {
-    if (joined->filter == NULL)
-        joined->filter = dyStringNew(0);
-    else
-        dyStringAppend(joined->filter, " AND ");
-    dyStringAppend(joined->filter, filter);
-    }
 
 /* Create field spec for sql - first fields user will see, and
  * second keys if any. */
@@ -552,8 +541,17 @@ if (idHash != NULL)
 for (region = regionList; region != NULL; region = region->next)
     {
     char **row;
+    char *filter = filterClause(tj->database, tj->table, region->chrom);
     struct sqlResult *sr = regionQuery(conn, tj->table, 
     	sqlFields->string, region, isPositional, filter);
+    if (filter != NULL && region == regionList)
+	{
+	if (joined->filter == NULL)
+	    joined->filter = dyStringNew(0);
+	else
+	    dyStringAppend(joined->filter, " AND ");
+	dyStringAppend(joined->filter, filter);
+	}
     while (sr != NULL && (row = sqlNextRow(sr)) != NULL)
         {
 	if (idFieldIx < 0)
@@ -589,13 +587,13 @@ for (region = regionList; region != NULL; region = region->next)
 	    }
 	}
     sqlFreeResult(&sr);
+    freez(&filter);
     if (!isPositional)
         break;
     }
 if (isFirst)
     slReverse(&joined->rowList);
 tj->loaded = TRUE;
-freez(&filter);
 sqlDisconnect(&conn);
 }
 	
