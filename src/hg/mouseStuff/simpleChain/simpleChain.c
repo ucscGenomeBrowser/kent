@@ -7,6 +7,7 @@
 #include "chain.h"
 #include "dystring.h"
 
+#ifndef MACHTYPE_x86_64
 int maxGap=250000;
 boolean outPsl = FALSE;
 int sizeMul = 1;
@@ -479,3 +480,11 @@ sizeMul = optionExists("prot") ? 3 : 1;
 simpleChain(argv[1], argv[2]);
 return 0;
 }
+#else
+int
+main()
+{
+printf("Not supported on x86_64\n");
+exit(1);
+}
+#endif
