@@ -11,7 +11,7 @@
 #include "genbank.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: genePred.c,v 1.44 2004/04/12 06:54:18 markd Exp $";
+static char const rcsid[] = "$Id: genePred.c,v 1.45 2004/04/12 16:27:55 markd Exp $";
 
 /* SQL to create a genePred table */
 static char *createSql = 
@@ -396,6 +396,13 @@ else
     }
 }
 
+static boolean isCds(char *feat)
+/* determine if a feature is CDS */
+{
+return sameWord(feat, "CDS") ||  sameWord(feat, "stop_codon")
+    || sameWord(feat, "start_codon");
+}
+
 static void chkGroupLine(struct gffGroup *group, struct gffLine *gl, struct genePred *gp)
 /* check that a gffLine is consistent with the genePred being built.  this
  * helps detect some problems that lead to corrupt genePreds */
@@ -440,6 +447,21 @@ if ((iStop >= 0) && (gp->exonFrames[iStop] < 0))
     }
 }
 
+static int phaseToFrame(char phase)
+/* convert GTF/GFF phase to frame */
+{
+switch (phase)
+    {
+    case '0':
+        return 0;
+    case '1':
+        return 2;
+    case '2':
+        return 1;
+    }
+return -1;
+}
+
 static struct genePred *mkFromGroupedGxf(struct gffFile *gff, struct gffGroup *group, char *name,
                                          boolean isGtf, char *exonSelectWord, unsigned optFields)
 /* common function to create genePreds from GFFs or GTFs.  This is a little
@@ -461,7 +483,7 @@ for (gl = group->lineList; gl != NULL; gl = gl->next)
     char *feat = gl->feature;
     if (isExon(feat, isGtf, exonSelectWord))
 	++exonCount;
-    if (sameWord(feat, "CDS") || sameWord(feat, "stop_codon") || sameWord(feat, "start_codon"))
+    if (isCds(gl->feature))
         {
 	if (gl->start < cdsStart)
             cdsStart = gl->start;
@@ -564,7 +586,7 @@ i = -1; /* before first exon */
 /* fill in exons, merging overlaping and adjacent exons */
 for (gl = group->lineList; gl != NULL; gl = gl->next)
     {
-    if (isExon(gl->feature, isGtf, exonSelectWord))
+    if (isExon(gl->feature, isGtf, exonSelectWord) || isCds(gl->feature))
         {
         chkGroupLine(group, gl, gp);
         if ((i < 0) || (gl->start > eEnds[i]))
@@ -583,22 +605,17 @@ for (gl = group->lineList; gl != NULL; gl = gl->next)
             if (gl->end > eEnds[i])
                 eEnds[i] = gl->end;
             }
-        if ((optFields & genePredExonFramesFld) && sameWord(gl->feature, "CDS"))
-            {
-            /* set frame if this is a CDS, convert from GFF/GTF definition.
-             * leave unchanged if no frame.*/
-            switch (gl->frame) {
-                case '0':
-                    eFrames[i] = 0;
-                    break;
-                case '1':
-                    eFrames[i] = 2;
-                    break;
-                case '2':
-                    eFrames[i] = 1;
-                    break;
-                }
-            }
+        }
+    /* frame: don't include start/stop_codon check here, only CDS. This is
+     * outside of the isExon test to handle GFF */
+    if ((optFields & genePredExonFramesFld) && sameWord(gl->feature, "CDS"))
+        {
+        /* set frame if this is a CDS, convert from GFF/GTF definition.
+         * Leave unchanged if no frame so as not to overwrite frame from
+         * other feature of the same exon */
+        int frame = phaseToFrame(gl->frame);
+        if (frame >= 0)
+            eFrames[i] = frame;
         }
     }
 gp->exonCount = i+1;
