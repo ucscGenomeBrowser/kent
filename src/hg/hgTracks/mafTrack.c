@@ -12,7 +12,7 @@
 #include "maf.h"
 #include "scoredRef.h"
 
-static char const rcsid[] = "$Id: mafTrack.c,v 1.10 2003/05/17 06:26:57 kent Exp $";
+static char const rcsid[] = "$Id: mafTrack.c,v 1.10.16.1 2003/07/28 20:20:29 heather Exp $";
 
 struct mafItem
 /* A maf track item. */
@@ -321,7 +321,10 @@ int masterSize = mcMaster->size;
 char *masterText = mcMaster->text;
 
 mafColMinMaxScore(maf, &minScore, &maxScore);
-scoreScale = 1.0/(maxScore - minScore);
+if ((maxScore - minScore) < 0.0001)
+    scoreScale = 0.0001;
+else
+    scoreScale = 1.0/(maxScore - minScore);
 if (numScores >= masterSize)	 /* More pixels than bases */
     {
     int x1,x2;
