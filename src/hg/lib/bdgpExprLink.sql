@@ -15,5 +15,5 @@ CREATE TABLE bdgpExprLink (
     platePos int not null,	# Position on plate
     newRelease char(1) not null,	# 'Y' if this gene is a new release
               #Indices
-    INDEX(bdgpName), INDEX(flyBaseId)
+    INDEX(bdgpName(10)), INDEX(flyBaseId(12))
 );
