@@ -17,7 +17,7 @@
 #include "hash.h"
 #include "liftOver.h"
 
-static char const rcsid[] = "$Id: hgLiftOver.c,v 1.21 2004/04/20 23:45:09 kate Exp $";
+static char const rcsid[] = "$Id: hgLiftOver.c,v 1.22 2004/04/21 19:50:21 kate Exp $";
 
 /* CGI Variables */
 #define HGLFT_USERDATA_VAR "hglft_userData"     /* typed/pasted in data */
@@ -125,9 +125,7 @@ cgiSimpleTableStart();
 cgiSimpleTableRowStart();
 
 cgiSimpleTableFieldStart();
-/* TODO: leave user data in text box, but still allow RESET button to work */
-//cgiMakeTextArea(HGLFT_USERDATA_VAR, cartCgiUsualString(cart, HGLFT_USERDATA_VAR, NULL), 10, 80);
-cgiMakeTextArea(HGLFT_USERDATA_VAR, NULL, 10, 80);
+cgiMakeTextArea(HGLFT_USERDATA_VAR, cartCgiUsualString(cart, HGLFT_USERDATA_VAR, NULL), 10, 80);
 cgiTableFieldEnd();
 
 /* right element of table is a nested table
@@ -144,6 +142,21 @@ cgiTableRowEnd();
 cgiSimpleTableRowStart();
 cgiSimpleTableFieldStart();
 cgiMakeResetButton();
+cgiTableFieldEnd();
+cgiTableRowEnd();
+
+cgiSimpleTableRowStart();
+cgiSimpleTableFieldStart();
+/*
+    { 
+    char clearCommand[1024];
+    safef(clearCommand, sizeof(clearCommand), 
+    "document.mainForm.%s.value = ''; document.mainForm.submit();\"",
+                    HGLFT_USERDATA_VAR);
+    cgiMakeOnClickButton(clearCommand, " Clear  ");
+    }
+    */
+cgiMakeClearButton("mainForm", HGLFT_USERDATA_VAR);
 cgiTableFieldEnd();
 cgiTableRowEnd();
 
