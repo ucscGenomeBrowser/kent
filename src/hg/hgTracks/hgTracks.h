@@ -184,6 +184,7 @@ extern int winStart;	  /* Start of window in sequence. */
 extern int winEnd;	  /* End of window in sequence. */
 extern int seqBaseCount;  /* Number of bases in sequence. */
 extern int winBaseCount;  /* Number of bases in window. */
+extern boolean zoomedToBaseLevel; /* TRUE if zoomed so we can draw bases. */
 
 extern int maxShade;		  /* Highest shade in a color gradient. */
 extern Color shadesOfGray[10+1];  /* 10 shades of gray from white to black
@@ -332,11 +333,18 @@ Color lfChromColor(struct track *tg, void *item, struct vGfx *vg);
 char *lfMapNameFromExtra(struct track *tg, void *item);
 /* Return map name of item from extra field. */
 
+void spreadString(struct vGfx *vg, int x, int y, int width, int height,
+	Color color, MgFont *font, char *s, int count);
+/* Draw evenly spaced letters in string. */
+
 void chainMethods(struct track *tg);
 /* Return name of item from extra field. */
 
 void netMethods(struct track *tg);
 /* Make track group for chain/net alignment. */
+
+void mafMethods(struct track *tg);
+/* Make track group for maf multiple alignment. */
 
 #define uglyh printHtmlComment
 /* Debugging aid. */

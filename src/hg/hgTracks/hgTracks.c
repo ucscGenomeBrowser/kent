@@ -125,6 +125,7 @@ int insideX;			/* Start of area to draw track in in pixels. */
 int insideWidth;		/* Width of area to draw tracks in in pixels. */
 int leftLabelX;			/* Start of area to draw left labels on. */
 int leftLabelWidth;		/* Width of area to draw left labels on. */
+boolean zoomedToBaseLevel; 	/* TRUE if zoomed so we can draw bases. */
 
 char *protDbName;               /* Name of proteome database for this genome. */
 
@@ -136,9 +137,6 @@ struct slName *browserLines = NULL; /* Custom track "browser" lines. */
 boolean withLeftLabels = TRUE;		/* Display left labels? */
 boolean withCenterLabels = TRUE;	/* Display center labels? */
 boolean withGuidelines = TRUE;		/* Display guidelines? */
-#ifdef ROBERTS_EXPERIMENT
-boolean withPopUps = TRUE;		/* Display PopUps? */
-#endif /* ROBERTS_EXPERIMENT */
 boolean withRuler = TRUE;		/* Display ruler? */
 boolean hideControls = FALSE;		/* Hide all controls? */
 
@@ -273,13 +271,6 @@ tl.picWidth = 620;
 setPicWidth(cartOptionalString(cart, "pix"));
 }
 
-boolean zoomedToBaseLevel()
-/* Return TRUE if zoomed in enough we can actually draw 
- * bases. */
-{
-int winWidth = winEnd - winStart;
-return winWidth * tl.mWidth <= insideWidth;
-}
 
 char *offOn[] =
 /* Off/on control. */
@@ -574,23 +565,6 @@ for (tg = trackList; tg != NULL; tg = tg->next)
     }
 return dy;
 }
-
-#ifdef ROBERTS_EXPERIMENT
-void mapStatusMessage(char *format, ...)
-/* Write out stuff that will cause a status message to
- * appear when the mouse is over this box. */
-{
-if( withPopUps ) 
-    {
-    va_list(args);
-    va_start(args, format);
-    hPrintf(" onMouseover=\"javascript:popup('");
-    hvPrintf(format, args);
-    hPrintf("');\" onMouseOut=\"javascript:popupoff();\"");
-    va_end(args);
-    }
-}
-#endif /* ROBERTS_EXPERIMENT */
 
 void mapStatusMessage(char *format, ...)
 /* Write out stuff that will cause a status message to
@@ -8530,24 +8504,30 @@ void printYAxisLabel( struct vGfx *vg, int y, struct track *track, char *labelSt
     vgTextRight(vg, gfxBorder, tmp, inWid-1, itemHeight0, track->ixColor, tl.font, labelString );
 }
 
-void drawBases(struct vGfx *vg, int x, int y, int width, int height,
+void spreadString(struct vGfx *vg, int x, int y, int width, int height,
+	Color color, MgFont *font, char *s, int count)
+/* Draw evenly spaced letters in string. */
+{
+char c[2];
+int i;
+int x1,x2;
+
+c[1] = 0;	/* Put zero tag on string. */
+for (i=0; i<count; ++i)
+    {
+    x1 = i * width / count;
+    x2 = (i+1) * width/count;
+    c[0] = s[i];
+    vgTextCentered(vg,x1+x,y,x2-x1,height,color,font,c);
+    }
+}
+
+static void drawBases(struct vGfx *vg, int x, int y, int width, int height,
 	Color color, MgFont *font)
 /* Draw evenly spaced bases. */
 {
 struct dnaSeq *seq = hDnaFromSeq(chromName, winStart, winEnd, dnaUpper);
-int baseCount = seq->size;
-char s[2];
-int i;
-int x1,x2;
-
-s[1] = 0;	/* Put zero tag on string. */
-for (i=0; i<baseCount; ++i)
-    {
-    x1 = i * width / baseCount;
-    x2 = (i+1) * width/baseCount;
-    s[0] = seq->dna[i];
-    vgTextCentered(vg,x1+x,y,x2-x1,height,color,font,s);
-    }
+spreadString(vg, x, y, width, height, color, font, seq->dna, seq->size);
 freeDnaSeq(&seq);
 }
 
@@ -8582,7 +8562,6 @@ char maxRangeStr[32];
 struct slList *prev = NULL;
 int start;
 int newy;
-boolean needDrawBases = zoomedToBaseLevel();
 
 /* Figure out dimensions and allocate drawing space. */
 pixWidth = tl.picWidth;
@@ -8591,7 +8570,7 @@ pixWidth = tl.picWidth;
 pixHeight = gfxBorder;
 if (withRuler)
     {
-    if (needDrawBases);
+    if (zoomedToBaseLevel);
 	basePositionHeight += baseHeight;
     yAfterRuler += basePositionHeight;
     pixHeight += basePositionHeight;
@@ -8868,7 +8847,7 @@ if (withRuler)
     relNumOff = winStart;
     vgDrawRulerBumpText(vg, insideX, y, rulerHeight, insideWidth, MG_BLACK, font,
 			relNumOff, winBaseCount, 0, 1);
-    if (needDrawBases)
+    if (zoomedToBaseLevel)
         drawBases(vg, insideX, y+rulerHeight, insideWidth, baseHeight, 
 		MG_BLACK, font);
     vgUnclip(vg);
@@ -9036,9 +9015,6 @@ smallBreak();
 smallBreak();
 hPrintf("<IMG SRC = \"%s\" BORDER=1 WIDTH=%d HEIGHT=%d USEMAP=#%s ",
     gifTn.forHtml, pixWidth, pixHeight, mapName);
-#ifdef ROBERTS_EXPERIMENT
-hPrintf("onMouseOut=\"javascript:popupoff();\"");
-#endif /* ROBERTS_EXPERIMENT */
 hPrintf("><BR>\n");
 }
 
@@ -9455,6 +9431,10 @@ else if (sameWord(type, "chain"))
 else if (sameWord(type, "netAlign"))
     {
     netMethods(track);
+    }
+else if (sameWord(type, "maf"))
+    {
+    mafMethods(track);
     }
 }
 
@@ -9954,6 +9934,7 @@ char *s;
 boolean hideAll = cgiVarExists("hgt.hideAll");
 boolean showedRuler = FALSE;
 
+zoomedToBaseLevel = (winBaseCount * tl.mWidth) <= insideWidth;
 if (psOutput != NULL)
    {
    suppressHtml = TRUE;
@@ -9973,9 +9954,6 @@ if (userSeqString && !ssFilesExist(userSeqString))
     }
 if (!hideControls)
     hideControls = cartUsualBoolean(cart, "hideControls", FALSE);
-#ifdef ROBERTS_EXPERIMENT
-withPopUps = cartUsualBoolean(cart, "popUps", TRUE);
-#endif /* ROBERTS_EXPERIMENT */
 s = cartUsualString(cart, "ruler", "on");
 withRuler = sameWord(s, "on");
 
@@ -9985,6 +9963,7 @@ registerTrackHandler("cytoBand", cytoBandMethods);
 registerTrackHandler("bacEndPairs", bacEndPairsMethods);
 registerTrackHandler("bacEndPairsBad", bacEndPairsBadMethods);
 registerTrackHandler("bacEndPairsLong", bacEndPairsLongMethods);
+zoomedToBaseLevel = (winBaseCount * tl.mWidth) <= insideWidth;
 registerTrackHandler("fosEndPairs", fosEndPairsMethods);
 registerTrackHandler("fosEndPairsBad", fosEndPairsBadMethods);
 registerTrackHandler("fosEndPairsLong", fosEndPairsLongMethods);
@@ -10263,10 +10242,6 @@ if (!hideControls)
     hCheckBox("leftLabels", withLeftLabels);
     hPrintf("center ");
     hCheckBox("centerLabels", withCenterLabels);
-#ifdef ROBERTS_EXPERIMENT
-    hPrintf("popUp ");
-    hCheckBox("popUps", withPopUps);
-#endif /* ROBERTS_EXPERIMENT */
     hPrintf(" ");
     hButton("submit", "refresh");
     hPrintf("<BR>\n");
@@ -10635,6 +10610,7 @@ winBaseCount = winEnd - winStart;
 if (winBaseCount <= 0)
     errAbort("Window out of range on %s", chromName);
 /* Save computed position in cart. */
+printHtmlComment("zoomedToBaseLevel = %d\n", zoomedToBaseLevel);
 sprintf(newPos, "%s:%d-%d", chromName, winStart+1, winEnd);
 cartSetString(cart, "position", newPos);
 if (cgiVarExists("hgt.psOutput"))
