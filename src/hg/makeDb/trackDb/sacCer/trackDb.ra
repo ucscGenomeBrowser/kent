@@ -30,7 +30,7 @@ exonArrows on
 
 track mrna
 shortLabel $Organism RNAs
-longLabel $Organism RNAs from Genbank 
+longLabel $Organism RNAs from GenBank 
 group rna
 priority 54
 visibility pack
