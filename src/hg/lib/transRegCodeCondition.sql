@@ -8,5 +8,6 @@ CREATE TABLE transRegCodeCondition (
     name varchar(255) not null,	# Name of transcription factor
     growthCondition varchar(255) not null,	# Growth condition seen in
               #Indices
-    PRIMARY KEY(name)
+    INDEX(name(32)),
+    INDEX(growthCondition(32))
 );
