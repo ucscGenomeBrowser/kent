@@ -6,7 +6,7 @@
 #include "common.h"
 #include "bits.h"
 
-static char const rcsid[] = "$Id: bits.c,v 1.15 2004/12/09 23:59:57 krish Exp $";
+static char const rcsid[] = "$Id: bits.c,v 1.16 2004/12/30 20:16:22 braney Exp $";
 
 
 static Bits oneBit[8] = { 0x80, 0x40, 0x20, 0x10, 0x8, 0x4, 0x2, 0x1};
@@ -132,7 +132,7 @@ count += bitsInByte[b[endByte] & rightMask[endBits]];
 return count;
 }
 
-static int bitFind(Bits *b, int startIx, boolean val, int bitCount)
+int bitFind(Bits *b, int startIx, boolean val, int bitCount)
 /* Find the index of the the next set bit. */
 {
 unsigned char notByteVal = val ? 0 : 0xff;
