@@ -7,7 +7,7 @@
 #include "rle.h"
 #include "agpFrag.h"
 
-static char const rcsid[] = "$Id: chimpChromQuals.c,v 1.1 2004/01/31 01:57:23 kate Exp $";
+static char const rcsid[] = "$Id: chimpChromQuals.c,v 1.2 2004/02/07 02:00:00 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -103,10 +103,6 @@ for (;;)
     if (size != frag->chromEnd - frag->chromStart)
         errAbort("chrom/scaffold size mismatch line %d of %s",
                                   lf->lineIx, lf->fileName);
-    /* Ignore for now
-    if (frag->strand[0] != '+')
-        errAbort("Strand not + line %d of %s", lf->lineIx, lf->fileName);
-        */
     chrom = hashFindVal(chromHash, frag->chrom);
     if (chrom == NULL)
         {
@@ -121,7 +117,7 @@ for (;;)
 slReverse(&chromList);
 for (chrom = chromList; chrom != NULL; chrom = chrom->next)
     slReverse(&chrom->list);
-printf("Got %d chrom in %s\n", slCount(chrom), lf->fileName);
+printf("Got %d chroms in %s\n", slCount(chromList), lf->fileName);
 lineFileClose(&lf);
 hashFree(&chromHash);
 return chromList;
@@ -156,6 +152,10 @@ for (chrom = chromList; chrom != NULL; chrom = chrom->next)
 	qa.qa = needHugeZeroedMem(qa.size);
 	qaMaxSize = qa.size;
 	}
+    else
+        {
+        zeroBytes(qa.qa, qa.size);
+        }
 
     /* Uncompress contig quality scores and copy into chrom's quality buffer. */
     for (frag = chrom->list; frag != NULL; frag = frag->next)
@@ -168,6 +168,8 @@ for (chrom = chromList; chrom != NULL; chrom = chrom->next)
 	    buf = needMem(bufSize);
 	    }
 	rleUncompress(qac->data, qac->compSize, buf, qac->uncSize);
+        if (frag->strand[0] == '-')
+            reverseBytes(buf, qac->uncSize);
 	fragSize = frag->fragEnd - frag->fragStart;
 	memcpy(qa.qa + frag->chromStart, buf + frag->fragStart, fragSize);
 	}
