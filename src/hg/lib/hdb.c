@@ -25,7 +25,7 @@
 #include "scoredRef.h"
 #include "maf.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.136 2003/09/10 19:20:10 braney Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.137 2003/09/12 21:58:27 weber Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
@@ -568,7 +568,7 @@ else
     for(i=0; i<bed->blockCount; i++)
 	{
 	block = nibLoadPart(fileName, offSet+bed->chromStarts[i], bed->blockSizes[i]);
-	dyStringPrintf(currentSeq, "%s", block->dna);
+	dyStringAppend(currentSeq, block->dna);
 	dnaSeqFree(&block);
 	}
     AllocVar(bedSeq);
