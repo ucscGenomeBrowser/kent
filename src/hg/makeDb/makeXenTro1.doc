@@ -421,6 +421,137 @@ tmp=/tmp -window=1200000
     nice featureBits xenTro1 genscan
     # 63766483 bases of 1381238994 (4.617%) in intersection
 
+# MAKE Human Proteins track (hg17) (DONE 2004-11-04 braney)
+    ssh kksilo
+    mkdir -p /cluster/data/xenTro1/blastDb
+    cd /cluster/data/xenTro1/blastDb
+    faSplit sequence ../downloads/xen*fasta 500 x 
+    for i in x*
+    do
+	formatdb -i $i -p F
+    done
+    rm *.log *.fa
+
+    ssh kkr1u00
+    mkdir -p /iscratch/i/xenTro1/blastDb
+    cp /cluster/data/xenTro1/blastDb/* /iscratch/i/xenTro1/blastDb
+    (iSync) > sync.out
+    exit # back to kksilo
+
+    mkdir -p /cluster/data/xenTro1/bed/tblastn.hg17KG
+    cd /cluster/data/xenTro1/bed/tblastn.hg17KG
+    ls -1S /iscratch/i/xenTro1/blastDb/*.nsq | sed "s/\.nsq//" > frog.lst
+
+    mkdir kgfa
+    calc `wc /cluster/data/hg16/bed/blat.hg16KG/hg16KG.psl | awk "{print \\\$1}"`/\(150000/`wc frog.lst | awk "{print \\\$1}"`\)
+    # 41117/(150000/498) = 136.508440
+    mkdir -p /cluster/bluearc/xenTro1/bed/tblastn.hg17KG/kgfa
+    split -l 137 /cluster/data/hg17/bed/blat.hg17KG/hg17KG.psl /cluster/bluearc/xenTro1/bed/tblastn.hg17KG/kgfa/kg
+    ln -s /cluster/bluearc/xenTro1/bed/tblastn.hg17KG/kgfa kgfa
+    cd kgfa
+    for i in *; do pslxToFa $i $i.fa; rm $i; done
+    cd ..
+    ls -1S kgfa/*.fa > kg.lst
+    mkdir blastOut
+    for i in `cat kg.lst`; do  mkdir blastOut/`basename $i .fa`; done
+    tcsh
+    cat << '_EOF_' > blastGsub
+#LOOP
+blastSome $(path1) {check in line $(path2)} {check out exists blastOut/$(root2)/q.$(root1).psl } 
+#ENDLOOP
+'_EOF_'
+    cat << '_EOF_' > blastSome
+#!/bin/sh
+BLASTMAT=/iscratch/i/blast/data
+export BLASTMAT
+g=`basename $2`
+f=/tmp/`basename $3`.$g
+for eVal in 0.01 0.001 0.0001 0.00001 0.000001 1E-09 1E-11
+do
+if /scratch/blast/blastall -M BLOSUM80 -m 0 -F no -e $eVal -p tblastn -d $1 -i $2 -o $f.8
+then
+        mv $f.8 $f.1
+        break;
+fi
+done
+if test -f  $f.1
+then
+if /cluster/bin/i386/blastToPsl $f.1 $f.2
+then
+        liftUp -nosort -type=".psl" -pslQ -nohead $3.tmp /cluster/data/hg17/bed/blat.hg17KG/protein.lft warn $f.2
+	if pslCheck -prot $3.tmp
+	then
+	    mv $3.tmp $3
+	    rm -f $f.1 $f.2 
+	fi
+        exit 0
+    fi
+fi
+rm -f $f.1 $f.2 $3.tmp $f.8
+exit 1
+'_EOF_'
+
+    chmod +x blastSome
+    gensub2 frog.lst kg.lst blastGsub blastSpec
+
+    ssh kk
+    cd /cluster/data/xenTro1/bed/tblastn.hg17KG
+    para create blastSpec
+    para push
+# Completed: 146412 of 146412 jobs
+# CPU time in finished jobs:   43595624s  726593.73m 12109.90h  504.58d  1.382 y
+# IO & Wait Time:               1997243s   33287.38m   554.79h   23.12d  0.063 y
+# Average job time:                 311s       5.19m     0.09h    0.00d
+# Longest job:                     1860s      31.00m     0.52h    0.02d
+# Submission to last job:         54876s     914.60m    15.24h    0.64d
+
+    cat << '_EOF_' > chainGsub
+#LOOP
+chainSome $(path1)
+#ENDLOOP
+'_EOF_'
+
+    cat << '_EOF_' > chainSome
+(cd $1; cat q.*.psl | simpleChain -prot -outPsl -maxGap=50000 stdin ../c.`basename $1`.psl)
+'_EOF_'
+    chmod +x chainSome
+
+    ls -1dS `pwd`/blastOut/kg?? > chain.lst
+    gensub2 chain.lst single chainGsub chainSpec
+
+    ssh kki
+    cd /cluster/data/xenTro1/bed/tblastn.hg17KG
+    para create chainSpec
+    para push
+# Completed: 294 of 294 jobs
+# CPU time in finished jobs:        893s      14.88m     0.25h    0.01d  0.000 y
+# IO & Wait Time:                 20958s     349.30m     5.82h    0.24d  0.001 y
+# Average job time:                  74s       1.24m     0.02h    0.00d
+# Longest job:                      156s       2.60m     0.04h    0.00d
+# Submission to last job:          1727s      28.78m     0.48h    0.02d
+
+    exit
+    # back to kksilo
+    cd /cluster/data/xenTro1/bed/tblastn.hg17KG/blastOut
+    for i in kg??
+    do 
+	awk "(\$13 - \$12)/\$11 > 0.6 {print}" c.$i.psl > c60.$i.psl
+	sort -rn c60.$i.psl | pslUniq stdin u.$i.psl
+	awk "((\$1 / \$11) ) > 0.60 { print   }" c60.$i.psl > m60.$i.psl
+	echo $i
+    done
+
+    cat u.*.psl m60* | sort -T /tmp -k 14,14 -k 17,17n -k 17,17n  | uniq  > ../blastHg17KG.psl
+    cd ..
+
+    ssh hgwdev
+    cd /cluster/data/xenTro1/bed/tblastn.hg17KG
+    hgLoadPsl xenTro1 blastHg17KG.psl
+
+    # back to kksilo
+    rm -rf blastOut
+# End tblastn
+
 # PRODUCING FUGU BLAT ALIGNMENTS (DONE 10/27/04 Fan)
     ssh kksilo
     cd /cluster/data/xenTro1
