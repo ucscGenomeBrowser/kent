@@ -1,5 +1,6 @@
 /* hgSeqSearch - CGI-script to manage fast human genome sequence searching. */
 #include "common.h"
+#include "errabort.h"
 #include "hCommon.h"
 #include "portable.h"
 #include "linefile.h"
@@ -107,12 +108,35 @@ if (diff == 0)
 return diff;
 }
 
+int cmpChrom(char *a, char *b)
+/* Compare two chromosomes. */
+{
+char cA, cB;
+int diff;
+
+if (startsWith("chr", a)) a += 3;
+if (startsWith("chr", b)) b += 3;
+cA = *a;
+cB = *b;
+if (isdigit(cA))
+    {
+    if (isdigit(cB))
+       return atoi(a) - atoi(b);
+    else
+       return -1;
+    }
+else if (isdigit(cB))
+    return 1;
+else
+    return strcmp(a, b);
+}
+
 int pslCmpTargetScore(const void *va, const void *vb)
 /* Compare to sort based on target then score. */
 {
 const struct psl *a = *((struct psl **)va);
 const struct psl *b = *((struct psl **)vb);
-int diff = strcmp(a->tName, b->tName);
+int diff = cmpChrom(a->tName, b->tName);
 if (diff == 0)
     diff = pslScore(b) - pslScore(a);
 return diff;
@@ -123,10 +147,30 @@ int pslCmpTargetStart(const void *va, const void *vb)
 {
 const struct psl *a = *((struct psl **)va);
 const struct psl *b = *((struct psl **)vb);
-int diff = strcmp(a->tName, b->tName);
+int diff = cmpChrom(a->tName, b->tName);
 if (diff == 0)
     diff = a->tStart - b->tStart;
 return diff;
+}
+
+static void earlyWarning(char *format, va_list args)
+/* Write an error message so user can see it before page is really started. */
+{
+static boolean initted = FALSE;
+if (!initted)
+    {
+    htmlStart("HTC Error");
+    initted = TRUE;
+    }
+htmlVaParagraph(format,args);
+}
+
+static void enterHtml(char *title)
+/* Print out header of web page with title.  Set
+ * error handler to normal html error handler. */
+{
+htmlStart(title);
+pushWarnHandler(htmlVaParagraph);
 }
 
 
@@ -480,18 +524,31 @@ if(userSeq != 0 && userSeq[0] == '\0') {
 //printf("file   : %s\n", cgiOptionalString("file"));
 
 if(userSeq == NULL || userSeq[0] == '\0')
+    {
+    enterHtml("BLAT Search");
     askForSeq();
+    }
 else
+    {
+    enterHtml("BLAT Results");
     blatSeq(userSeq);
+    }
 }
 
+
+void errDoMiddle()
+/* Do middle with a nice early warning error handler. */
+{
+pushWarnHandler(earlyWarning);
+dnaUtilOpen();
+doMiddle();
+}
 
 int main(int argc, char *argv[])
 /* Process command line. */
 {
 cgiSpoof(&argc, argv);
-dnaUtilOpen();
 htmlSetBackground("../images/floret.jpg");
-htmShell("BLAT Search", doMiddle, NULL);
+htmEmptyShell(errDoMiddle, NULL);
 return 0;
 }
