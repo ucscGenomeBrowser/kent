@@ -9,6 +9,9 @@
 struct liftOverChain *liftOverChainList();
 /* Get list of all liftOver chains in the central database */
 
+char *liftOverChainFile(char *fromDb, char *toDb);
+/* Get filename of liftOver chain */
+
 int liftOverBed(char *fileName, struct hash *chainHash, 
                             double minMatch,  double minBlocks, bool fudgeThick,
                                 FILE *f, FILE *unmapped, int *errCt);
