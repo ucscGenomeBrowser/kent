@@ -29,7 +29,7 @@
 #include "dbDb.h"
 #include "htmlPage.h"
 
-static char const rcsid[] = "$Id: qaPushQ.c,v 1.67 2004/12/22 20:39:05 galt Exp $";
+static char const rcsid[] = "$Id: qaPushQ.c,v 1.68 2004/12/23 00:03:14 galt Exp $";
 
 char msg[2048] = "";
 char ** saveEnv;
@@ -3059,7 +3059,7 @@ int topCount=0;
 char *encodeClause = "";
 
 if (isEncode)
-    encodeClause = " and track like '%ENCODE%'";
+    encodeClause = " and releaseLog like '%ENCODE%'";
 
 ZeroVar(&dbDbTemp);
 
