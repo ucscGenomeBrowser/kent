@@ -55,6 +55,7 @@
 #include "pslWScore.h"
 #include "lfs.h"
 #include "mcnBreakpoints.h"
+#include "fishClones.h"
 #include "featureBits.h"
 
 #define CHUCK_CODE 1
@@ -667,6 +668,7 @@ struct trackDb *tdbList = hTrackDb(seqName), *tdb;
 Bits *uBits = bitAlloc(winSize);	/* Underline bits. */
 Bits *iBits = bitAlloc(winSize);	/* Italic bits. */
 Bits *bBits = bitAlloc(winSize);	/* Bold bits. */
+
 
 hgcStart("Extended DNA Output");
 printf("<TT><PRE>");
@@ -3144,6 +3146,116 @@ hFreeConn(&conn);
 hFreeConn(&conn1);
 }
 
+void doFishClones(struct trackDb *tdb, char *clone)
+/* Handle click on the FISH clones track */
+{
+char query[256];
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr = NULL;
+char **row;
+int start = cgiInt("o");
+int end = cgiInt("t");
+struct fishClones *fc;
+char sband[32], eband[32];
+int i;
+
+/* Print out non-sequence info */
+hgcStart(clone);
+
+/* Find the instance of the object in the bed table */ 
+sprintf(query, "SELECT * FROM fishClones WHERE name = '%s' 
+                AND chrom = '%s' AND chromStart = %d
+                AND chromEnd = %d",
+	        clone, seqName, start, end);  
+sr = sqlMustGetResult(conn, query);
+row = sqlNextRow(sr);
+if (row != NULL)
+    {
+    fc = fishClonesLoad(row);
+    /* Print out general sequence positional information */
+    printf("<H2>Clone %s</H2>\n", fc->name);
+    htmlHorizontalLine();
+    printf("<TABLE>\n");
+    printf("<TR><TH ALIGN=left>Chromosome:</TH><TD>%s</TD></TR>\n", seqName);
+    printf("<TR><TH ALIGN=left>Start:</TH><TD>%d</TD></TR>\n",start);
+    printf("<TR><TH ALIGN=left>End:</TH><TD>%d</TD></TR>\n",end);
+    chromBand(seqName, start, sband);
+    chromBand(seqName, end, eband);
+    if (sameString(sband,eband)) 
+        {
+	printf("<TR><TH ALIGN=left>Band:</TH><TD>%s</TD></TR>\n",sband);
+	}
+    else
+        {
+	printf("<TR><TH ALIGN=left>Bands:</TH><TD>%s - %s</TD></TR>\n",sband, eband);
+	}
+    printf("</TABLE>\n");
+    htmlHorizontalLine();
+
+    /* Print out information about the clone */
+    printf("<H4>Placement of %s on draft sequence was determined using the location of %s</H4>\n",
+	   clone, fc->placeType);
+    printf("<TABLE>\n");
+    if (fc->accCount > 0)
+        {
+	printf("<TR><TH>Genbank Accession:</TH>");
+	for (i = 0; i < fc->accCount; i++) 
+	    {
+	    printf("<TD><A HREF=");
+	    printEntrezNucleotideUrl(stdout, fc->accNames[i]);
+	    printf(">%s</A></TD>", fc->accNames[i]);	  
+	    }
+	printf("</TR>\n");
+	}
+    if (fc->stsCount > 0) 
+        {
+	printf("<TR><TH ALIGN=left>STS Markers within clone:</TH>");
+	for (i = 0; i < fc->stsCount; i++) 
+	    {
+	    printf("<TD>%s</TD>", fc->stsNames[i]);
+	    }
+	printf("</TR>\n");
+	} 
+    if (fc->beCount > 0) 
+        {
+	printf("<TR><TH ALIGN=left>BAC end sequence:</TH>");
+	for (i = 0; i < fc->beCount; i++) 
+	    {
+	    printf("<TD><A HREF=");
+	    printEntrezNucleotideUrl(stdout, fc->beNames[i]);
+	    printf(">%s</A></TD>", fc->beNames[i]);
+	    }
+	printf("</TR>\n");
+	} 
+    printf("</TABLE>\n");
+    htmlHorizontalLine();
+
+    /* Print out FISH placement information */
+    printf("<H3>Placements of %s by FISH</H3>\n", clone);
+    printf("<TABLE>\n");
+    printf("<TR><TH WIDTH=100>Lab</TH><TH>Band Position</TH></TR>\n");
+    for (i = 0; i < fc->placeCount; i++) 
+        {
+	if (sameString(fc->bandStarts[i],fc->bandEnds[i]))
+	    {
+	    printf("<TR><TD WIDTH=100 ALIGN=center>%s</TD><TD ALIGN=center>%s</TD></TR>",
+		   fc->labs[i], fc->bandStarts[i]);
+	    }
+	else
+	    {
+	    printf("<TR><TD WIDTH=100 ALIGN=center>%s</TD><TD ALIGN=center>%s - %s</TD></TR>",
+		   fc->labs[i], fc->bandStarts[i], fc->bandEnds[i]);
+	    }
+	}
+
+    }
+printf("</TABLE>\n"); 
+htmlHorizontalLine();
+puts(tdb->html);
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+}
+
 void doMouseSyn(char *track, char *itemName)
 /* Handle click on mouse synteny track. */
 {
@@ -4221,6 +4333,10 @@ else if (sameWord(track, "blatMouse") || sameWord(track, "bestMouse"))
 else if (sameWord(track, "rnaGene"))
     {
     doRnaGene(tdb, item);
+    }
+else if (sameWord(track, "fishClones"))
+    {
+    doFishClones(tdb, item);
     }
 else if (sameWord(track, "stsMarker"))
     {
