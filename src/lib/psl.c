@@ -18,7 +18,7 @@
 #include "aliType.h"
 #include "binRange.h"
 
-static char const rcsid[] = "$Id: psl.c,v 1.36 2004/01/09 19:10:31 heather Exp $";
+static char const rcsid[] = "$Id: psl.c,v 1.37 2004/01/09 19:49:53 heather Exp $";
 
 static char *createString = 
 "CREATE TABLE %s (\n"
@@ -112,7 +112,6 @@ if (sizeOne != ret->blockCount)
 assert(sizeOne == ret->blockCount);
 return ret;
 }
-
 
 struct psl *pslCommaIn(char **pS, struct psl *ret)
 /* Create a psl out of a comma separated string. 
@@ -383,7 +382,10 @@ fprintf(f, uformat, headers[7], el->qEnd, sep);
 
 fprintf(f, hformat, headers[8]);
 if (sep == ',') fputc('"',f);
-fprintf(f, "%s", skipChr(el->tName));
+/* skip leading 'chr' in string to get only chromosome part */
+if (startsWith("chr", el->tName))
+   el->tName += 3;
+fprintf(f, "%s", el->tName);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
 
