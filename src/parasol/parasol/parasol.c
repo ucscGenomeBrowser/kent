@@ -308,6 +308,13 @@ void status()
 hubCommandAndPrint("status");
 }
 
+void pstat()
+/* Send status command to hub and print. */
+{
+hubCommandAndPrint("pstat");
+}
+
+
 void ping(int count)
 /* Ping hub server given number of times. */
 {
@@ -374,6 +381,10 @@ else if (sameString(command, "list"))
         listUsers();
     else
         usage();
+    }
+else if (sameString(command, "pstat"))
+    {
+    pstat();
     }
 else if (sameString(command, "ping"))
     {
