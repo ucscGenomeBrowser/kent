@@ -629,4 +629,7 @@ o - Rescuing STS track:
      - rm contig.psl
      - mv chrom.psl ../convert.psl
 
-
+LOADING PENN STATE MOUSE REFERENCE ALIGNMENTS
+     - zcat /projects/hg3/mouse/penn/alignments.gz >alignments
+     - hgRefAlign webb hg7 mouseRef alignments
+     - rm alignments
