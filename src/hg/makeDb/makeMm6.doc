@@ -1,7 +1,7 @@
 # This file describes browser build for the mouse
 # genome, March 2005, ncbi mouse_34 - Mm6
 #
-#	"$Id: makeMm6.doc,v 1.16 2005/04/04 20:47:32 hiram Exp $"
+#	"$Id: makeMm6.doc,v 1.17 2005/04/05 00:09:36 hiram Exp $"
 #
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2005-03-09 - Hiram)
 #
@@ -1591,8 +1591,9 @@ SEQ2_LEN=$BASE/S2.len
     time /cluster/bin/scripts/doBlastzChainNet.pl -bigClusterHub kki \
 	-fileServer eieio -chainMinScore 5000 `pwd`/DEF > blast.run.out 2>&1 &
     #	STARTED - 2005-04-01 16:30
-    time /cluster/bin/scripts/doBlastzChainNet.pl -bigClusterHub kki \
-	-continue cat -fileServer eieio -chainMinScore 5000 `pwd`/DEF > blast.run.out 2>&1 &
+    time /cluster/bin/scripts/doBlastzChainNet.pl -bigClusterHub kk9 \
+	-continue cat -fileServer eieio -chainMinScore 5000 \
+	`pwd`/DEF > cat.run.out 2>&1 &
     #	STARTED - 2005-04-01 16:30
 
     #	detach from screen session: Ctrl-a Ctrl-d
@@ -1602,7 +1603,7 @@ SEQ2_LEN=$BASE/S2.len
     #	STARTED - 2005-03-17 11:00
     #	FINISHED - 2005-03-19 00:14
     time /cluster/bin/scripts/doBlastzChainNet.pl -fileServer eieio \
-	-swap `pwd`/DEF > swap.run.out 2>&1 &
+	-chainMinScore 5000 -swap `pwd`/DEF > swap.run.out 2>&1 &
     cat << '_EOF_' > measurements.sh
 #!/bin/sh
 
@@ -1615,8 +1616,8 @@ echo -en "    #\t"
 time featureBits $db $tbl
 }
 
-DB=DanRer2
-dB=danRer2
+DB=Fr1
+dB=fr1
 export DB dB
 doOne mm6 net${DB}
 doOne mm5 net${DB}
@@ -1988,6 +1989,38 @@ SEQ2_LEN=$BASE/S2.len
     time /cluster/bin/scripts/doBlastzChainNet.pl -bigClusterHub kk9 \
 	-continue cat -fileServer eieio -chainMinScore 5000 \
 	`pwd`/DEF > cat.run.out 2>&1 &
+    #	Check measurements at this point:
+    featureBits mm6 netCanFam1
+    #   2544343230 bases of 2597150411 (97.967%) in intersection
+    featureBits mm5 netCanFam1
+    #   2456773441 bases of 2615483787 (93.932%) in intersection
+    featureBits mm6 chainCanFam1
+    #   2562947250 bases of 2597150411 (98.683%) in intersection
+    featureBits mm5 chainCanFam1
+    #   2464497454 bases of 2615483787 (94.227%) in intersection
+    featureBits mm6 chainCanFam1Link
+    #   798637320 bases of 2597150411 (30.751%) in intersection
+    featureBits mm5 chainCanFam1Link
+    #   859275338 bases of 2615483787 (32.853%) in intersection
+
+    #	Those are looking pretty good, so now do the swap:
+    ssh eieio
+    cd /cluster/data/mm6/bed/blastzCanFam1.2005_03_18
+    time /cluster/bin/scripts/doBlastzChainNet.pl -bigClusterHub kk9 \
+	-swap -fileServer eieio -chainMinScore 5000 \
+	`pwd`/DEF > swap.run.out 2>&1 &
+    #	125 minutes
+    featureBits canFam1 netMm6
+    #   2305458923 bases of 2359845093 (97.695%) in intersection
+    featureBits canFam1 netMm5
+    #   2255138517 bases of 2359845093 (95.563%) in intersection
+    featureBits canFam1 chainMm6
+    #   2310615069 bases of 2359845093 (97.914%) in intersection
+    featureBits canFam1 chainMm5
+    #   2257403477 bases of 2359845093 (95.659%) in intersection
+    featureBits canFam1 chainMm6Link
+
+
 
 #########################################################################
 # BLASTZ Cow bosTau1 (WORKING - 2005-03-18 - Hiram)
@@ -2024,6 +2057,21 @@ BASE=/cluster/data/mm6/bed/blastzBosTau1.2005_03_18
     #	STARTED - 2005-03-18 13:20
     #	BROKEN - 2005-03-20 - 22:03 - power failure to all machines
     #	RESTARTED - 2005-03-30 14:35
+    #	After several reruns of the batch, believe it may be finished.
+    #	establish check point marker in the run.time file:
+    para time > run.time
+    #	Now to the rest of the story:
+    ssh eieio
+    cd /cluster/data/mm6/bed/blastzBosTau1.2005_03_18
+    time /cluster/bin/scripts/doBlastzChainNet.pl -fileServer eieio \
+	-continue cat `pwd`/DEF > cat.run.out 2>&1 &
+# Completed: 40 of 40 jobs
+# CPU time in finished jobs:        834s      13.90m     0.23h    0.01d  0.000 y
+# IO & Wait Time:                  2421s      40.35m     0.67h    0.03d  0.000 y
+# Average job time:                  81s       1.36m     0.02h    0.00d
+# Longest job:                      334s       5.57m     0.09h    0.00d
+# Submission to last job:           365s       6.08m     0.10h    0.00d
+ 
 
 # BLASTZ SELF (WORKING - 2005-03-31 - Hiram)
     # The procedure for lineage spec business with self is to simply
@@ -2118,6 +2166,17 @@ SEQ2_LEN=$BASE/S2.len
     time /cluster/bin/scripts/doBlastzChainNet.pl \
 	-continue cat -fileServer eieio `pwd`/DEF > cat.run.out 2>&1 &
     # STARTED - 2005-04-04 11:40
+    #	three jobs failed, go to kolossus and try them there:
+    ssh kolossus
+    cd /cluster/data/mm6/bed/blastzSelf/axtChain/run
+    ./chain.csh chrUn_random.nib:chrUn_random: \
+	chain/chrUn_random.nib:chrUn_random:.chain
+    #	chrUn failed too on kolossus
+    ./chain.csh chrY_random.nib:chrY_random: \
+	chain/chrY_random.nib:chrY_random:.chain
+    #	chrY worked in 28 minutes
+    ./chain.csh chrX.nib:chrX: chain/chrX.nib:chrX:.chain
+    #	chrX worked in 44 minutes
 
 # BLASTZ CHICKEN - (WORKING - 2005-03-21 - Hiram)
 
@@ -2216,6 +2275,21 @@ SEQ2_LEN=$BASE/S2.len
     time /cluster/bin/scripts/doBlastzChainNet.pl -swap -chainMinScore=5000 \
 	-fileServer eieio `pwd`/DEF > swap.run.out 2>&1 &
 
+    #	and measure:
+    featureBits galGal2 netMm6
+    #   832583709 bases of 1054197620 (78.978%) in intersection
+    featureBits galGal2 netMm5
+    #   835277984 bases of 1054197620 (79.234%) in intersection
+    featureBits galGal2 chainMm6
+    #   843746491 bases of 1054197620 (80.037%) in intersection
+    featureBits galGal2 chainMm5
+    #   846905330 bases of 1054197620 (80.336%) in intersection
+    featureBits galGal2 chainMm6Link
+    #   72687426 bases of 1054197620 (6.895%) in intersection
+    featureBits galGal2 chainMm5Link
+    #   70542788 bases of 1054197620 (6.692%) in intersection
+
+
 # BLASTZ OPOSSUM (WORKING - 2005-04-01 - Hiram)
     ssh eieio
     mkdir /cluster/data/mm6/bed/blastzMonDom1.2005_04_01
@@ -2276,3 +2350,32 @@ SEQ2_LEN=$BASE/S2.len
     time /cluster/bin/scripts/doBlastzChainNet.pl -chainMinScore=5000 \
 	-continue cat -fileServer eieio `pwd`/DEF > cat.run.out 2>&1 &
     #	STARTED 2005-04-03 11:45
+    #	during the load of the tables, this command failed, perhaps due
+    #	to kksilo crashes:
+    netClass -verbose=0 -noAr noClass.net mm6 monDom1 mm6.monDom1.net
+    #	So, trying to recover: 2005-04-04 15:15
+    ssh hgwdev
+    cd /cluster/data/mm6/bed/blastzMonDom1.2005_04_01/axtChain
+    time netClass -verbose=0 -noAr noClass.net mm6 monDom1 mm6.monDom1.net
+    #	Fails with the same error:
+Can't start query:
+select genoName,genoStart,genoEnd,repName,repClass,repFamily from rmsk order by genoName,genoStart
+
+mySQL error 3: Error writing file '/tmp/MYUAGF4h' (Errcode: 28)
+
+    #	I wonder if it is due to tmp space:
+    #	Filesystem            Size  Used Avail Use% Mounted on
+    #	/dev/sdb3             267G  244G  9.1G  97% /
+
+    #	Yes, it was that, I removed some garbage from /scratch to make
+    #	more space:
+    #	Filesystem            Size  Used Avail Use% Mounted on
+    #	/dev/sdb3             267G  242G   12G  96% /
+    #	And the command finished.  I don't know where it was keeping its
+    #	files as I was watching for something large to show up in /tmp
+    #	during this 65 minute command, but I never saw a large file
+    #	there but I did see available space get down to only a couple Gb
+    #	free.  Now, to finish the load of the nets:
+    netFilter -minGap=10 mm6.monDom1.net | hgLoadNet \
+	-verbose=0 mm6 netMonDom1 stdin
+    #	5 minute load time
