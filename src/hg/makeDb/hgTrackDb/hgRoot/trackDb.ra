@@ -367,18 +367,6 @@ spectrum on
 type psl xeno
 private on
 
-track ancientR_chr1
-shortLabel Ancient Repeats
-longLabel Ancient Mouse Repeats
-priority 24.2
-visibility dense
-color 0,0,255
-altColor 255,240,200
-spectrum on
-chromosomes 1,
-type bed 12
-private on
-
 track exoMouse
 shortLabel Exonerate Mouse
 longLabel Mouse/Human Evolutionarily Conserved Regions (Exonerate)
@@ -575,3 +563,18 @@ priority 40
 visibility dense
 chromosomes chr22,
 type bed 15 +
+
+
+track ancientR_chr1
+shortLabel Ancient Repeats
+longLabel Ancient Mouse Repeats
+priority 41
+visibility dense
+color 0,0,255
+altColor 255,240,200
+spectrum on
+chromosomes 1,
+type bed 12
+private on
+
+
