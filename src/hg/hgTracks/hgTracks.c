@@ -1667,7 +1667,7 @@ for(lf = tg->items; lf != NULL; lf = lf->next)
 	    if( wiggleType == wiggleLinearInterpolation ) 
 	    /*connect samples*/
 		{
-		if( lineGapSize < 0 || sampleX - prevX <= lineGapSize )   
+		if( lineGapSize < 0 || prevX - sampleX <= lineGapSize )
 		    /*don't interpolate over large gaps*/
 		    {
 		    if (fill)
