@@ -27,7 +27,7 @@
 #include "maf.h"
 #include "ra.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.158 2003/12/12 21:29:14 angie Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.159 2003/12/19 01:12:54 baertsch Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
@@ -837,8 +837,8 @@ dbSize = sqlLongLong(row[1]);
 diskSize = fileSize(path);
 if (dbSize != diskSize)
     {
-    errAbort("External file %s has changed, need to resync database.  Old size %lld, new size %lld", 
-    	path, dbSize, diskSize);
+    errAbort("External file %s cannot be opened or has wrong size.  Old size %lld, new size %lld, error %s", 
+   	path, dbSize, diskSize, strerror(errno));
     }
 sqlFreeResult(&sr);
 hgFreeConn(&conn);
