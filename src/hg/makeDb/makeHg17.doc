@@ -6210,10 +6210,10 @@ axtChain $1 /iscratch/i/gs.18/build35/bothMaskedNibs \
     ssh hgwdev
     cd /cluster/data/hg17/bed/blastzSelf/axtChain/chain
     bash	#	for tcsh users
-    for i in *.chain
+    for I in *.chain
     do
-        c=${i/.chain/}
-        hgLoadChain hg17 ${c}_chainSelf $i
+        c=${I/.chain/}
+        hgLoadChain hg17 ${c}_chainSelf $I
         echo done $c
     done
 XXXX - running 2004-07-08 08:56
@@ -6221,3 +6221,256 @@ XXXX - running 2004-07-08 08:56
     #	This is a 50 minute job
 
     #	featureBits hg17 chainSelf
+
+# NET SELF (WORKING - 2004-07-08 - Hiram)
+
+    ssh eieio
+    cd /cluster/data/hg17/bed/blastzSelf/axtChain
+    mkdir preNet
+    cd chain
+    bash	#	for tcsh users
+    for I in *.chain
+    do
+      echo preNetting $I
+      /cluster/bin/i386/chainPreNet $I /cluster/data/hg17/chrom.sizes \
+                        /cluster/data/hg17/chrom.sizes ../preNet/$I
+    done
+XXX - running 2004-07-08 10:25
+
+    cd ..
+    mkdir n1
+    cd preNet
+    foreach i (*.chain)
+      set n = $i:r.net
+      echo primary netting $i
+      /cluster/bin/i386/chainNet $i -minSpace=1 /cluster/data/hg17/chrom.sizes \
+                            /cluster/data/hg17/chrom.sizes ../n1/$n /dev/null
+    end
+    # exit bash if you are tcsh
+
+    cd ..
+    cat n1/*.net | /cluster/bin/i386/netSyntenic stdin hNoClass.net
+    #	memory usage 2510467072, utime 19307 s/100, stime 3181
+
+    ssh hgwdev
+    cd /cluster/data/hg17/bed/blastzSelf/axtChain
+    time netClass hNoClass.net hg17 hg17 human.net \
+	-tNewR=/cluster/bluearc/scratch/hg/gs.18/build35/linSpecRep.notInRat \
+	-qNewR=/cluster/bluearc/rat/hg17/linSpecRep.notInHuman
+    #	real    34m29.829s
+    #	user    11m30.440s
+    #	sys     1m52.730s
+
+    # If things look good do
+    ssh eieio
+    cd /cluster/data/hg17/bed/blastzSelf/axtChain
+    rm -r n1 hNoClass.net
+    # Make a 'syntenic' subset of these with
+    time netFilter -syn human.net > humanSyn.net
+    #	real    16m25.640s
+    #	user    7m41.330s
+    #	sys     1m1.150s
+
+    # Load the nets into database
+    ssh hgwdev
+    cd /cluster/data/hg17/bed/blastzSelf/axtChain
+    netFilter -minGap=10 human.net |  hgLoadNet hg17 netRn3 stdin
+    netFilter -minGap=10 humanSyn.net | hgLoadNet hg17 syntenyNetRn3 stdin
+    #	real    37m0.199s
+    #	user    15m13.770s
+    #	sys     1m41.540s
+
+    # check results
+    # featureBits hg17 netRn3
+    # 2817656275 bases of 2866216770 (98.306%) in intersection
+    # (with axtFilter) 2816623107 bases of 2866216770 (98.270%) in intersection
+    # featureBits hg16 netRn3
+    # 2820958389 bases of 2865248791 (98.454%) in intersection
+
+    # featureBits hg17 syntenyNetRn3
+    # 2781748096 bases of 2866216770 (97.053%) in intersection
+    # (with axtFilter) 2780883450 bases of 2866216770 (97.023%) in intersection
+    # featureBits hg16 syntenyNetRn3
+    # 2784011730 bases of 2865248791 (97.165%) in intersection
+
+    # Add entries for net and chain to rat/hg17 trackDb
+
+    # make net
+    ssh eieio
+    cd /cluster/data/hg17/bed/blastzSelf/axtChain
+    mkdir humanNet
+    time netSplit human.net humanNet
+    #	real    12m1.478s
+    #	user    8m35.050s
+    #	sys     1m7.230s
+
+    # extract axts from net 
+    mkdir ../axtNet 
+    foreach n (humanNet/chr*.net)
+	set c=$n:t:r
+	echo "netToAxt: $c.net -> $c.axt"
+	rm -f ../axtNet/$c.axt
+	netToAxt humanNet/$c.net chain/$c.chain \
+		/cluster/data/hg17/nib \
+		/cluster/data/hg17/nib stdout ../axtNet/$c.axt
+	echo "Complete: $c.net -> axtNet/$c.axt"
+    end
+    # sort axt's and convert to maf format
+    mkdir ../mafNet
+cat << 'EOF' > makeMaf.csh
+    foreach f (../axtNet/chr*.axt)
+        set c=$f:t:r
+        echo $c.axt
+        mv ../axtNet/$c.axt ../axtNet/$c.unsorted.axt
+        axtSort ../axtNet/$c.unsorted.axt ../axtNet/$c.axt
+        rm ../axtNet/$c.unsorted.axt
+        axtToMaf ../axtNet/$c.axt \
+            /cluster/data/hg17/chrom.sizes /cluster/data/hg17/chrom.sizes \
+                ../mafNet/$c.maf -tPrefix=hg17. -qPrefix=hg17.
+    end
+'EOF'
+    csh makeMaf.csh >&! makeMaf.log &
+    tail -100f makeMaf.log
+
+    ln -s ../axtNet/chr*.axt .
+
+    # copy net axt's to download area
+    ssh hgwdev
+    cd /cluster/data/hg17/bed/blastzSelf/axtNet
+    mkdir -p /usr/local/apache/htdocs/goldenPath/hg17/vsRn3/axtNet
+    cp -p *.axt /usr/local/apache/htdocs/goldenPath/hg17/vsRn3/axtNet
+    cd /usr/local/apache/htdocs/goldenPath/hg17/vsRn3/axtNet
+    gzip *.axt
+    # add README.txt file to dir (use previous assembly's copy as template)
+
+    #  Convert those axt files to psl
+    ssh eieio
+    cd /cluster/data/hg17/bed/blastzSelf
+    mkdir pslBest
+    foreach a (axtBest/chr*.axt)
+	set c=$a:t:r
+	echo "processing $c.axt -> ${c}_blastzBestRn3.psl"
+    /cluster/bin/i386/axtToPsl axtBest/${c}.axt \
+	S1.len S2.len pslBest/${c}_blastzBestRn3.psl
+	echo "Done: ${c}_blastzBestRn3.psl"
+    end
+
+    # Load tables
+    ssh hgwdev
+    cd /cluster/data/hg17/bed/blastzSelf/pslBest
+    for I in chr*BestRn3.psl
+    do
+	/cluster/bin/i386/hgLoadPsl hg17 ${I}
+	echo "done ${I}"
+    done
+
+     # check results
+    # featureBits hg17 blastzBestRn3
+    #	975533772 bases of 2866216770 (34.036%) in intersection
+    # (with axtFilter) 970005525 bases of 2866216770 (33.843%) in intersection
+    # featureBits hg16 blastzBestRn3
+    #	976121391 bases of 2865248791 (34.068%) in intersection
+
+    # Make /gbdb links and add them to the axtInfo table:
+     mkdir -p /gbdb/hg17/axtBest/Rn3
+     cd /gbdb/hg17/axtBest/Rn3
+     ln -s /cluster/data/hg17/bed/blastzSelf/axtNet/chr*.axt .
+     cd /cluster/data/hg17/bed/blastzSelf/axtNet
+     rm -f axtInfoInserts.sql
+     foreach f (/gbdb/hg17/axtBest/Rn3/chr*.axt)
+       set chr=$f:t:r
+       echo "INSERT INTO axtInfo (species, alignment, chrom, fileName) \
+                VALUES ('hg17','Blastz Best in Genome','$chr','$f');" \
+         >> axtInfoInserts.sql
+     end
+    hgsql hg17 < ~/kent/src/hg/lib/axtInfo.sql
+    #	table axtInfo may already exist, ignore create error.
+    hgsql hg17 < axtInfoInserts.sql
+
+# MAKING HUMAN SYNTENY (TO BE DONE - 2004-07-08 - Hiram)
+#	Re-Done after above done without the axtFilter
+
+ssh hgwdev
+mkdir /cluster/data/hg17/bed/syntenyRn3
+cd /cluster/data/hg17/bed/syntenyRn3
+
+# Copy all the needed scripts from /cluster/data/hg16/bed/syntenyMm3
+cp -p /cluster/data/hg16/bed/syntenyMm3/*.pl .
+cp -p /cluster/data/hg16/bed/syntenyMm3/*.sh .
+
+./syntenicBest.pl -db=hg17 -table=blastzBestRn3
+./smooth.pl
+./joinsmallgaps.pl
+./fillgap.pl -db=hg17 -table=blastzBestRn3
+./synteny2bed.pl
+#	The five commands above
+#	real    196m2.565s
+#	user    0m21.170s
+#	sys     0m4.690s
+
+#	Used to load this in syntenyRn3, but that type is misleading to
+#	the table browser and fails the checkTableCoords check.
+#	Better to use this ensRatMusHom type:
+sed -e 's/ensPhusionBlast/ensRn3MusHom/g' \
+      $HOME/kent/src/hg/lib/ensPhusionBlast.sql \
+      > ensRatMusHg17.sql
+hgLoadBed hg17 ensRatMusHg17 ucsc100k.bed -sqlTable=ensRatMusHg17.sql
+
+    #	featureBits hg17 ensRn3MusHom
+    #	2592164486 bases of 2866216770 (90.439%) in intersection
+    #	featureBits hg16 syntenyRn3
+    #	2595919851 bases of 2865248791 (90.600%) in intersection
+
+
+# MAKING HUMAN AXTTIGHT FROM AXTBEST (TO BE DONE - 2004-07-08 - Hiram)
+    # After creating axtBest alignments above, use subsetAxt to get axtTight:
+    ssh eieio
+    cd /cluster/data/hg17/bed/blastzSelf/axtNet
+    mkdir -p ../axtTight
+    foreach i (*.axt)
+      echo $i
+      subsetAxt  $i ../axtTight/$i \
+        ~kent/src/hg/mouseStuff/subsetAxt/coding.mat 3400
+    end
+
+    # translate to psl
+    cd ../axtTight
+    mkdir ../pslTight
+    foreach i (*.axt)
+      set c = $i:r
+      axtToPsl $i ../S1.len ../S2.len ../pslTight/${c}_blastzTightRn3.psl
+      echo "Done: $i"
+    end
+
+    # Load tables into database
+    ssh hgwdev
+    cd /cluster/data/hg17/bed/blastzSelf/pslTight
+    for I in chr*TightRn3.psl
+    do
+	/cluster/bin/i386/hgLoadPsl hg17 ${I}
+	echo "done ${I}"
+    done
+
+    #	Compare results with previous assembly
+    #	featureBits hg17 blastzTightRn3
+    #	153936720 bases of 2866216770 (5.371%) in intersection
+    #	featureBits hg16 blastzTightRn3
+    #	153151903 bases of 2865248791 (5.345%) in intersection
+
+
+    # copy  axt's to download area
+    ssh hgwdev
+    cd /cluster/data/hg17/bed/blastzSelf/axtTight
+    mkdir -p /usr/local/apache/htdocs/goldenPath/hg17/vsRn3/axtTight
+    cp -p *.axt /usr/local/apache/htdocs/goldenPath/hg17/vsRn3/axtTight
+    cd /usr/local/apache/htdocs/goldenPath/hg17/vsRn3/axtTight
+    gzip *.axt
+    # add README.txt file to dir (use previous assembly's copy as template)
+
+# BLASTZ SELF CLEAN UP (TO BE DONE - 2004-07-08 - Hiram)
+    ssh eieio
+    cd /cluster/data/hg17/bed/blastzSelf
+    nice rm -rf raw &
+    nice rm axtChain/run1/chain/* &
+    nice gzip {axt,psl}Chrom/* lav/*/* axtChain/{all.chain,*.net} &
+
