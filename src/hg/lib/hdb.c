@@ -25,7 +25,7 @@
 #include "scoredRef.h"
 #include "maf.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.137 2003/09/12 21:58:27 weber Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.138 2003/09/14 23:10:43 sugnet Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
@@ -551,7 +551,8 @@ struct dnaSeq *hSeqForBed(struct bed *bed)
 char fileName[512];
 struct dnaSeq *block = NULL;
 struct dnaSeq *bedSeq = NULL;
-int i;
+int i = 0 ;
+int size = 0;
 assert(bed);
 /* Handle very simple beds and beds with blocks. */
 if(bed->blockCount == 0)
@@ -563,7 +564,10 @@ if(bed->blockCount == 0)
 else
     {
     int offSet = bed->chromStart;
-    struct dyString *currentSeq = newDyString(512);
+    struct dyString *currentSeq = NULL;
+    for(i=0;i<bed->blockCount; i++)
+	size += bed->blockSizes[i];
+    currentSeq = newDyString(size + 1);
     hNibForChrom(bed->chrom, fileName);
     for(i=0; i<bed->blockCount; i++)
 	{
