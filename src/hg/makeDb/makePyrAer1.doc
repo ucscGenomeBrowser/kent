@@ -89,6 +89,29 @@ altColor 255,128,0
 defaultViewLimits 30:70
 type wig 0 100    
 
+# CONTIG TRACK 
+    # reformat is a Todd Lowe program
+    for num in `seq 746 946`; do   
+       curl -o ${num}.gbk "http://www.ncbi.nlm.nih.gov/entrez/viewer.fcgi?txt=on&val=AE009${num}.1"
+       reformat fasta ${num}.gbk >> contigs.fa
+    done
+    blat /cluster/data/pyrAer1/chr1.fa contigs.fa -minIdentity=100 contigs.psl
+    perfectBlatBed4 contigs.psl contigs.bed
+    mkdir /cluster/data/pyrAer1/bed/pyrAer1Contigs
+    cp contigs.bed /cluster/data/pyrAer1/bed/pyrAer1Contigs
+    cd /cluster/data/pyrAer1/bed/pyrAer1Contigs
+    hgLoadBed pyrAer1 pyrAer1Contigs contigs.bed
+    # the trackDb entry: 
+track pyrAer1Contigs
+shortLabel Contigs
+longLabel Contigs deposited in Genbank
+group map
+priority 0.5
+visibility pack
+url http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?db=nucleotide&cmd=search&term=$$
+type bed 4 .
+
+
 # TANDEM REPEAT MASKER (NOT DONE YET)
 
     ssh hgwdev
