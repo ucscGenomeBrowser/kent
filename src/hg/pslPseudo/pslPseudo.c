@@ -23,7 +23,7 @@
 #include "pseudoGeneLink.h"
 #include "scoreWindow.h"
 
-#define ScoreNorm 2
+#define ScoreNorm 10
 #define BEDCOUNT 3
 #define POLYASLIDINGWINDOW 10
 #define POLYAREGION 160
@@ -33,13 +33,13 @@
 #define NOTPSEUDO -1
 #define BETTER -2
 
-static char const rcsid[] = "$Id: pslPseudo.c,v 1.20 2004/06/15 22:34:01 baertsch Exp $";
+static char const rcsid[] = "$Id: pslPseudo.c,v 1.21 2004/07/16 23:04:41 baertsch Exp $";
 
 char *db;
 char *nibDir;
 char *mrnaSeq;
 float minAli = 0.98;
-float maxRep = 0.50;
+float maxRep = 0.70;
 float minAliPseudo = 0.60;
 float nearTop = 0.005;
 float repsPerIntron = 0.8;
@@ -55,7 +55,7 @@ boolean singleHit = FALSE;
 boolean noHead = FALSE;
 boolean quiet = FALSE;
 boolean skipExciseRepeats = FALSE;
-int wt[10];     /* weights on score function*/
+double  wt[10];     /* weights on score function*/
 int minNearTopSize = 10;
 struct genePred *gpList1 = NULL, *gpList2 = NULL, *kgList = NULL;
 FILE *bestFile, *pseudoFile, *linkFile, *axtFile;
@@ -117,7 +117,7 @@ errAbort(
     "    -maxBlockGap=N  Max gap size between adjacent blocks that are combined. \n"
     "               Default 60.\n"
     "    -maxRep=N  max ratio of overlap with repeat masker track \n"
-    "               for aligmnent to be kept.  Default .50\n");
+    "               for aligmnent to be kept.  Default .70\n");
 }
 
 struct cachedFile
@@ -624,8 +624,19 @@ pseudoGeneLinkOutput(pg, linkFile, '\t','\n');
 
 void initWeights()
 {
-wt[0] = 0.3; wt[1] = 0.75; wt[2] = 1; wt[3] = 0.5;
-wt[4] = 0.5; wt[5] = 0.25; wt[6] = 0.5; wt[7] = 0.5;
+/*
+    0 = milliBad
+    1 = exon Coverage
+    2 = log axtScore
+    3 = log polyA
+    4 = overlapDiag
+    5 = log (qSize - qEnd)
+    6 = intronCount ^.5
+    7 = log maxOverlap
+    8 = coverage
+ */
+wt[0] = 0.3; wt[1] = 0.75; wt[2] = 0.9; wt[3] = 0.5;
+wt[4] = 0.5; wt[5] = 0.25; wt[6] = 1  ; wt[7] = 0.5; wt[8] = 0.5;
 }
 void outputLink(struct psl *psl, struct pseudoGeneLink *pg , struct dyString *reason)
    /* char *type, char *bestqName, char *besttName, 
@@ -657,10 +668,18 @@ if (pg->label == PSEUDO || pg->label == BETTER)
     }
 
 /* all weighted features are scaled to range from 0 to 1000 */
-pseudoScore = ( + wt[0]*pg->milliBad + wt[1]*pg->exonCover*200 + wt[2]*log(pg->axtScore>0?pg->axtScore:0)*70 
+assert(psl->qSize > 0);
+pseudoScore = ( wt[0]*pg->milliBad + wt[1]*(log(pg->exonCover+1)/log(2))*200 
+                + wt[2]*log(pg->axtScore>0?pg->axtScore:1)*70 
                 + wt[3]*(log(pg->polyA)*200) + wt[4]*(100-pg->overlapDiag)*10 
                 + wt[5]*(12-log(psl->qSize-psl->qEnd))*80 + wt[6]*pow(pg->intronCount,0.5)*2000 
-                + wt[7]*(12-log(pg->maxOverlap+1))*80 ) / ScoreNorm;
+                + wt[7]*(12-log(pg->maxOverlap+1))*80 +wt[8]*(pg->coverage*10)) / ScoreNorm;
+printf ("##score %d %4.1f %4.1f %4.1f %4.1f %4.1f %4.1f %4.1f %4.1f %4.1f\n", pseudoScore,
+                wt[0]*pg->milliBad, wt[1]*(log(pg->exonCover+1)/log(2))*200 , 
+                wt[2]*log(pg->axtScore>0?pg->axtScore:1)*70 , 
+                wt[3]*(log(pg->polyA)*200) , wt[4]*(100-pg->overlapDiag)*10 ,
+                wt[5]*(12-log(psl->qSize-psl->qEnd))*80 , wt[6]*pow(pg->intronCount,0.5)*2000 ,
+                wt[7]*(12-log(pg->maxOverlap+1))*80 ,wt[8]*(pg->coverage*10))  ;
 
 outputNoLinkScore(psl, pg, pseudoScore);
 /*type, bestqName, besttName, besttStart, besttEnd, 
@@ -943,19 +962,19 @@ seq = nibLdPartMasked(NIB_MASK_MIXED, nibFile, f, seqSize, seqStart, region);
 if (strand[0] == '+')
     {
     assert (seq->size <= POLYAREGION);
-printf("\n + range=%d %d %s \n",seqStart, seqStart+region, seq->dna );
+//printf("\n + range=%d %d %s \n",seqStart, seqStart+region, seq->dna );
     count = scoreWindow('A',seq->dna,seq->size, score, polyAstart, polyAend, 1, -1);
     }
 else
     {
     assert (seq->size <= POLYAREGION);
-printf("\n - range=%d %d %s \n",seqStart, seqStart+region, seq->dna );
+//printf("\n - range=%d %d %s \n",seqStart, seqStart+region, seq->dna );
     count = scoreWindow('T',seq->dna,seq->size, score, polyAend, polyAstart, 1, -1);
     }
 pStart += seqStart;
 *polyAstart += seqStart;
 *polyAend += seqStart;
-printf("\nst=%d %s range %d %d cnt %d\n",seqStart, seq->dna, *polyAstart, *polyAend, count);
+//printf("\nst=%d %s range %d %d cnt %d\n",seqStart, seq->dna, *polyAstart, *polyAend, count);
 freeDnaSeq(&seq);
 return count;
 }
@@ -1799,6 +1818,7 @@ if (pslList != NULL)
                    }
                 if (keepChecking)
                    {
+                   /*
                    if (!quiet)
                         {
                         printf("YES %s %d rr %3.1f rl %d ln %d %s iF %d maxE %d bestAli %d isp %d score %d match %d cover %3.1f rp %d polyA %d syn %d polyA %d start %d",
@@ -1810,6 +1830,7 @@ if (pslList != NULL)
                             pg->polyA, pg->polyAstart );
                        printf("\n");
                        }
+                       */
                    if (pg->exonCover < 2)
                        {
                        dyStringAppend(reason,"singleExon ");
