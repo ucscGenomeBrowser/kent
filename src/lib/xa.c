@@ -102,6 +102,7 @@ int partCount;
 double percentScore;
 int symCount;
 int newOffset = 0;
+char *s, *e;
 
 /* Get first line and parse out everything but the sym lines. */
 if (fgets(line, sizeof(line), f) == NULL)
@@ -115,13 +116,18 @@ if (!sameString(words[1], "align"))
     errAbort("Bad line in cross-species alignment file");
 AllocVar(xa);
 xa->name = cloneString(words[0]);
-partCount = chopString(words[5+newOffset], ":-", parts, ArraySize(parts));
-if (partCount != 3)
-    errAbort("Bad line in cross-species alignment file");
+s = words[5+newOffset];
+e = strrchr(s, ':');
+if (e == NULL)
+    errAbort("Bad line (no colon) in cross-species alignment file");
+*e++ = 0;
+partCount = chopString(e, "-", parts, ArraySize(parts));
+if (partCount != 2)
+    errAbort("Bad range format in cross-species alignment file");
 if (!condensed)
-    xa->query = cloneString(parts[0]);
-xa->qStart = atoi(parts[1]);
-xa->qEnd = atoi(parts[2]);
+    xa->query = cloneString(s);
+xa->qStart = atoi(parts[0]);
+xa->qEnd = atoi(parts[1]);
 xa->qStrand = words[6+newOffset][0];
 partCount = chopString(words[7+newOffset], ":-", parts, ArraySize(parts));
 if (!condensed)
