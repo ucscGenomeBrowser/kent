@@ -14,7 +14,7 @@
 #include "qa.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: hgTablesTest.c,v 1.32 2005/02/12 00:40:08 angie Exp $";
+static char const rcsid[] = "$Id: hgTablesTest.c,v 1.33 2005/02/17 21:39:04 angie Exp $";
 
 /* Command line variables. */
 char *clOrg = NULL;	/* Organism from command line. */
@@ -730,7 +730,7 @@ while (s != NULL && s[0] != 0)
 	if (fieldCount != 2)
 	    {
 	    qaStatusSoftError(tablesTestList->status, 
-		    "Got %d fields line %s of  joined result, expected 2", 
+		    "Got %d fields line %d of  joined result, expected 2", 
 		    fieldCount, lineIx);
 	    break;
 	    }
@@ -752,38 +752,38 @@ if (!gotNa)
 
 void testJoining(struct htmlPage *rootPage)
 /* Simulate pressing buttons to get a reasonable join on a
- * couple of swissProt tables. */
+ * couple of uniProt tables. */
 {
 struct htmlPage *allPage, *page;
-char *org = NULL, *db = NULL, *group = "allTables", *track="swissProt";
-int expectedCount = tableSize("swissProt", "taxon");
+char *org = NULL, *db = NULL, *group = "allTables", *track="uniProt";
+int expectedCount = tableSize("uniProt", "taxon");
 
-allPage = quickSubmit(rootPage, org, db, group, "swissProt", 
-	"swissProt.taxon", "taxonJoin1", NULL, NULL);
+allPage = quickSubmit(rootPage, org, db, group, "uniProt", 
+	"uniProt.taxon", "taxonJoin1", NULL, NULL);
 if (allPage != NULL)
     {
     if (allPage->forms == NULL)
         {
-	errAbort("swissProt page with no form");
+	errAbort("uniProt page with no form");
 	}
     else
 	{
 	int count = testAllFields(allPage, allPage->forms, org, db,
-	    group, track, "swissProt.taxon");
+	    group, track, "uniProt.taxon");
 	if (count != expectedCount)
 	    qaStatusSoftError(tablesTestList->status, 
-		    "Got %d rows in swissProt.taxon, expected %d", count, 
+		    "Got %d rows in uniProt.taxon, expected %d", count, 
 		    expectedCount);
 	htmlPageSetVar(allPage, NULL, hgtaOutputType, "selectedFields");
 	page = quickSubmit(allPage, org, db, group, track, 
-	    "swissProt.taxon", "taxonJoin2", hgtaDoTopSubmit, "submit");
-	htmlPageSetVar(page, NULL, "hgta_fs.linked.swissProt.commonName", "on");
+	    "uniProt.taxon", "taxonJoin2", hgtaDoTopSubmit, "submit");
+	htmlPageSetVar(page, NULL, "hgta_fs.linked.uniProt.commonName", "on");
 	serialSubmit(&page, org, db, group, track, NULL, "taxonJoin3",
 	    hgtaDoSelectFieldsMore, "submit");
 	if (page != NULL)
 	    {
-	    htmlPageSetVar(page, NULL, "hgta_fs.check.swissProt.taxon.binomial", "on");
-	    htmlPageSetVar(page, NULL, "hgta_fs.check.swissProt.commonName.val", "on");
+	    htmlPageSetVar(page, NULL, "hgta_fs.check.uniProt.taxon.binomial", "on");
+	    htmlPageSetVar(page, NULL, "hgta_fs.check.uniProt.commonName.val", "on");
 	    serialSubmit(&page, org, db, group, track, NULL, "taxonJoin4",
 		hgtaDoPrintSelectedFields, "submit");
 	    if (page != NULL)
@@ -797,7 +797,7 @@ if (allPage != NULL)
     }
 
 htmlPageFree(&allPage);
-verbose(1, "Tested joining on swissProt.taxon & commonName\n");
+verbose(1, "Tested joining on uniProt.taxon & commonName\n");
 }
 
 void checkXenopus(char *s)
@@ -814,6 +814,9 @@ while (s != NULL && s[0] != 0)
         *e++ = 0;
     if (s[0] != '#')
 	{
+	char *t = strchr(s, '\t');
+	if (t != NULL)
+	    *t = 0;
 	if (!startsWith("Xenopus", s))
 	    {
 	    qaStatusSoftError(tablesTestList->status, 
@@ -827,25 +830,25 @@ while (s != NULL && s[0] != 0)
     }
 if (!gotLaevis)
     qaStatusSoftError(tablesTestList->status, 
-	 "Can't find Xenopus laevis in filtered swissProt.taxon");
+	 "Can't find Xenopus laevis in filtered uniProt.taxon");
 }
 
 void testFilter(struct htmlPage *rootPage)
 /* Simulate pressing buttons to get a reasonable filter on
- * swissProt taxon. */
+ * uniProt taxon. */
 {
-char *org = NULL, *db = NULL, *group = "allTables", *track="swissProt",
-	*table = "swissProt.taxon";
+char *org = NULL, *db = NULL, *group = "allTables", *track="uniProt",
+	*table = "uniProt.taxon";
 struct htmlPage *page;
-page = quickSubmit(rootPage, org, db, group, "swissProt", 
+page = quickSubmit(rootPage, org, db, group, "uniProt", 
 	table, "taxonFilter1", hgtaDoFilterPage, "submit");
 if (page != NULL)
     {
     struct htmlFormVar *var = htmlFormVarGet(page->forms, 
-    	"hgta_fil.v.swissProt.taxon.binomial.pat");
+    	"hgta_fil.v.uniProt.taxon.binomial.pat");
     if (var == NULL)
         internalErr();
-    htmlPageSetVar(page, NULL, "hgta_fil.v.swissProt.taxon.binomial.pat",
+    htmlPageSetVar(page, NULL, "hgta_fil.v.uniProt.taxon.binomial.pat",
         "Xenopus*");
     serialSubmit(&page, org, db, group, track, table, "taxonFilter2",
     	hgtaDoFilterSubmit, "submit");
@@ -856,7 +859,7 @@ if (page != NULL)
 	    hgtaDoTopSubmit, "submit");
 	if (page != NULL)
 	    {
-	    htmlPageSetVar(page, NULL, "hgta_fs.check.swissProt.taxon.binomial",
+	    htmlPageSetVar(page, NULL, "hgta_fs.check.uniProt.taxon.binomial",
 	    	"on");
 	    serialSubmit(&page, org, db, group, track, table, "taxonFilter4",
 		hgtaDoPrintSelectedFields, "submit");
@@ -866,7 +869,7 @@ if (page != NULL)
 	    }
 	}
     }
-verbose(1, "Tested filter on swissProt.taxon\n");
+verbose(1, "Tested filter on uniProt.taxon\n");
 }
 
 void testIdentifier(struct htmlPage *rootPage)
@@ -874,10 +877,10 @@ void testIdentifier(struct htmlPage *rootPage)
  * 8355	Xenopus laevis being stable taxon (and not being filtered out
  * by testFilter). */
 {
-char *org = NULL, *db = NULL, *group = "allTables", *track="swissProt",
-	*table = "swissProt.taxon";
+char *org = NULL, *db = NULL, *group = "allTables", *track="uniProt",
+	*table = "uniProt.taxon";
 struct htmlPage *page;
-page = quickSubmit(rootPage, org, db, group, "swissProt", 
+page = quickSubmit(rootPage, org, db, group, "uniProt", 
 	table, "taxonId1", hgtaDoPasteIdentifiers, "submit");
 if (page != NULL)
     {
@@ -891,7 +894,7 @@ if (page != NULL)
 	    hgtaDoTopSubmit, "submit");
 	if (page != NULL)
 	    {
-	    htmlPageSetVar(page, NULL, "hgta_fs.check.swissProt.taxon.binomial",
+	    htmlPageSetVar(page, NULL, "hgta_fs.check.uniProt.taxon.binomial",
 	    	"on");
 	    serialSubmit(&page, org, db, group, track, table, "taxonId4",
 		hgtaDoPrintSelectedFields, "submit");
@@ -900,7 +903,7 @@ if (page != NULL)
 		if (!stringIn("Xenopus laevis", page->htmlText))
 		    {
 		    qaStatusSoftError(tablesTestList->status, 
-			 "Can't find Xenopus laevis in swissProt.taxon #8355");
+			 "Can't find Xenopus laevis in uniProt.taxon #8355");
 		    }
 		checkExpectedSimpleRows(page, 1);
 		}
@@ -908,7 +911,7 @@ if (page != NULL)
 	    }
 	}
     }
-verbose(1, "Tested identifier on swissProt.taxon\n");
+verbose(1, "Tested identifier on uniProt.taxon\n");
 }
 
 void statsOnSubsets(struct tablesTest *list, int subIx, FILE *f)
@@ -1017,7 +1020,7 @@ else
 	}
     }
 
-/* Do some more complex tests on swissProt. */
+/* Do some more complex tests on uniProt. */
 testJoining(rootPage);
 testFilter(rootPage);
 testIdentifier(rootPage);
