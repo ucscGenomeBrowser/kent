@@ -16,7 +16,7 @@
 #include "fuzzyFind.h"
 #include "aliType.h"
 
-static char const rcsid[] = "$Id: psl.c,v 1.26 2003/06/11 07:04:01 markd Exp $";
+static char const rcsid[] = "$Id: psl.c,v 1.27 2003/09/10 23:22:38 braney Exp $";
 
 static char *createString = 
 "CREATE TABLE %s (\n"
@@ -551,15 +551,26 @@ sqlUnsignedArray(row[20], ret->tStarts, ret->blockCount);
 return ret;
 }
 
+boolean pslIsProtein(const struct psl *psl)
+/* is psl a protein psl (are it's blockSizes and scores in protein space) */
+{
+int lastBlock = psl->blockCount - 1;
+
+return  (((psl->strand[1] == '+' ) &&
+    (psl->tEnd == psl->tStarts[lastBlock] + 3*psl->blockSizes[lastBlock])) ||
+   ((psl->strand[1] == '-') && 
+    (psl->tStart == (psl->tSize-(psl->tStarts[lastBlock] + 3*psl->blockSizes[lastBlock])))));
+}
 int pslCalcMilliBad(struct psl *psl, boolean isMrna)
 /* Calculate badness in parts per thousand. */
 {
+int sizeMul = pslIsProtein(psl) ? 3 : 1;
 int qAliSize, tAliSize, aliSize;
 int milliBad;
 int sizeDif;
 int insertFactor;
 
-qAliSize = psl->qEnd - psl->qStart;
+qAliSize = sizeMul * (psl->qEnd - psl->qStart);
 tAliSize = psl->tEnd - psl->tStart;
 aliSize = min(qAliSize, tAliSize);
 if (aliSize <= 0)
@@ -572,19 +583,21 @@ if (sizeDif < 0)
     else
 	sizeDif = -sizeDif;
     }
-insertFactor = psl->qNumInsert;
+insertFactor = psl->qNumInsert * sizeMul;
 if (!isMrna)
     insertFactor += psl->tNumInsert;
 
-milliBad = (1000 * (psl->misMatch + insertFactor + round(3*log(1+sizeDif)))) / (psl->match + psl->repMatch + psl->misMatch);
+milliBad = (1000 * (psl->misMatch*sizeMul + insertFactor + round(3*log(1+sizeDif)))) / (psl->match * sizeMul + sizeMul * psl->repMatch + sizeMul * psl->misMatch);
 return milliBad;
 }
 
 int pslScore(const struct psl *psl)
 /* Return score for psl. */
 {
-return psl->match + (psl->repMatch>>1) - psl->misMatch - psl->qNumInsert
-  - psl->tNumInsert;
+int sizeMul = pslIsProtein(psl) ? 3 : 1;
+
+return sizeMul * psl->match + (sizeMul * psl->repMatch>>1) - 
+	sizeMul * psl->misMatch - psl->qNumInsert - psl->tNumInsert;
 }
 
 
