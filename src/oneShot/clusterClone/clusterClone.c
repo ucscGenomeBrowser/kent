@@ -7,16 +7,18 @@
 #include "psl.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: clusterClone.c,v 1.8 2004/07/07 20:50:44 hiram Exp $";
+static char const rcsid[] = "$Id: clusterClone.c,v 1.9 2004/07/16 22:27:09 hiram Exp $";
 
 float minCover = 80.0;		/*	percent coverage to count hit */
 unsigned maxGap = 1000;		/*	maximum gap between pieces */
 boolean agp = FALSE;		/*	AGP output requested, default BED */
+boolean allowDuplicates = FALSE; /*	allow same part to be used more than once */
 
 static struct optionSpec options[] = {
    {"minCover", OPTION_FLOAT},
    {"maxGap", OPTION_INT},
    {"agp", OPTION_BOOLEAN},
+   {"allowDuplicates", OPTION_BOOLEAN},
    {NULL, 0},
 };
 
@@ -31,6 +33,7 @@ errAbort(
   "   -minCover=P - minimum P percent coverage to count an alignment (default 80.0)\n"
   "   -maxGap=M - maximum M bases gap between pieces to stitch together, default 1000\n"
   "   -agp - output AGP format (default is bed format)\n"
+  "   -allowDuplicates - allow duplicates to be packaged together\n"
   "   -verbose=N - set verbose level N (3: everything, 2: important stuff)"
   );
 }
@@ -243,7 +246,8 @@ if (agp)
     /*	+1 to the start for 1 relative coordinates in the AGP file */
     /*	The status D will be fixed later	*/
     /*	These ones with tooManyParts need to be fixed elsewhere	*/
-    if(tooManyParts)
+    /*	If allowDuplicates is requested, let them be used */
+    if(tooManyParts && (! allowDuplicates) )
 	{
 	verbose(1,"#AGP %s\t%u\t%u\t%d\tD\t%s\t%u\t%u\t%c\n", ctgName,
 	    coord->start+1, coord->end, cloneCount, coord->name,
@@ -646,6 +650,7 @@ if (argc < 2)
 minCover = optionFloat("minCover", 80.0);
 maxGap = optionInt("maxGap", 1000);
 agp = optionExists("agp");
+allowDuplicates = optionExists("allowDuplicates");
 
 verbose(2,"#\tminCover: %% %g\n", minCover);
 verbose(2,"#\tmaxGap: %u\n", maxGap);
