@@ -10,9 +10,9 @@ O = $X.o advFilter.o association.o configure.o examples.o expRatio.o getSeq.o \
 
 my: compile
 	mv $X /usr/local/apache/cgi-bin-$(USER)/$X
-	chmod -Rf a+r hgNearData
+	chmod -R a+r hgNearData
 	chmod a+rx hgNearData
-	find hgNearData -type d -exec /bin/chmod -f g+swx {} \;
+	find hgNearData -type d -exec /bin/chmod -f a+rx {} \;
 	rsync -ar --delete hgNearData /usr/local/apache/cgi-bin-$(USER)/
 
 alpha: compile
