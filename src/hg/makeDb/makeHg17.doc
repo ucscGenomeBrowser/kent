@@ -2492,9 +2492,10 @@ cat > template << 'EOF'
     cd /cluster/data/hg17/bed/sts
     /cluster/bin/scripts/combineSeqPrimerPos stsMarkers.final primers/primers.final
         # creates *_pos.rdb
-# GOT HERE
     /cluster/bin/scripts/createSTSbed /cluster/data/ncbi/sts.9/stsInfo2.bed \
                 stsMarkers_pos.rdb > stsMap.bed
+
+# GOT HERE
 
     # Set up sequence files
     ssh hgwdev
@@ -2518,59 +2519,67 @@ cat > template << 'EOF'
 
     
 # RECOMBINATION RATES (2004-07-13 Terry)
+#                       (2004-07-21 kate)
 
 # The STS MArkers track must be completed prior to creating this track
 
-	mkdir -p /cluster/data/hg17/bed/recombRate
-	cd /cluster/data/hg17/bed/recombRate
-
-# Create a file of the chromosome sizes
-	ssh hgwdev
-	mkdir -p /tmp/rr/
-	echo 'select chrom,size into outfile "/tmp/rr/chromSizes.txt" from chromInfo' \
-	    | hgsql hg17
-        mv /tmp/rr/chromSizes.txt .
-	rm -r /tmp/rr
+    ssh eieio
+    cd /cluster/data/hg17/bed
+    mv recombRate recombRate.terry
+    mkdir -p recombRate
+	cd recombRate
 
 # Copy other necessary files here (in future, can take from previous version)
-	cp /projects/hg2/booch/psl/info/decode_all .
-	cp /projects/hg2/booch/psl/info/marshfield_all .
-	cp /projects/hg2/booch/psl/info/genethon_all .
+    cp /projects/hg2/booch/psl/info/decode_all .
+    cp /projects/hg2/booch/psl/info/marshfield_all .
+    cp /projects/hg2/booch/psl/info/genethon_all .
 	
 # Determine maximum concordant set of markers for each of the maps
-	/cluster/bin/scripts/assignGPsts -full -maxcon \
-	    /cluster/data/hg17/bed/sts/stsAlias.bed \
-	    /cluster/data/hg17/bed/sts/stsMarkers_pos.rdb \
-	    decode_all > decode.marker.rdb
-	/cluster/bin/scripts/assignGPsts -full -maxcon \
-	    /cluster/data/hg17/bed/sts/stsAlias.bed \
-	    /cluster/data/hg17/bed/sts/stsMarkers_pos.rdb \
-	    marshfield_all > marshfield.marker.rdb
-	/cluster/bin/scripts/assignGPsts -full -maxcon \
-	    /cluster/data/hg17/bed/sts/stsAlias.bed \
-	    /cluster/data/hg17/bed/sts/stsMarkers_pos.rdb \
-	    genethon_all > genethon.marker.rdb
+    /cluster/bin/scripts/assignGPsts -full -maxcon \
+        /cluster/data/ncbi/sts.9/stsAlias.bed \
+        /cluster/data/hg17/bed/sts/stsMarkers_pos.rdb \
+        decode_all > decode.marker.rdb
+    /cluster/bin/scripts/assignGPsts -full -maxcon \
+        /cluster/data/ncbi/sts.9/stsAlias.bed \
+        /cluster/data/hg17/bed/sts/stsMarkers_pos.rdb \
+        marshfield_all > marshfield.marker.rdb
+    /cluster/bin/scripts/assignGPsts -full -maxcon \
+        /cluster/data/ncbi/sts.9/stsAlias.bed \
+        /cluster/data/hg17/bed/sts/stsMarkers_pos.rdb \
+        genethon_all > genethon.marker.rdb
 
 # Determine the rates for each of the maps
-	/cluster/bin/scripts/markers_to_recomb_rate.terry.pl decode.marker.rdb \
-	    chromSizes.txt 1000000 1000000 > decode_1mb_slide_1mb
-	/cluster/bin/scripts/markers_to_recomb_rate.terry.pl genethon.marker.rdb \
-	    chromSizes.txt 1000000 1000000 > genethon_1mb_slide_1mb
-        /cluster/bin/scripts/markers_to_recomb_rate.terry.pl marshfield.marker.rdb \
-	    chromSizes.txt 1000000 1000000 > marshfield_1mb_slide_1mb
+    /cluster/bin/scripts/markers_to_recomb_rate.terry.pl decode.marker.rdb \
+            /cluster/data/hg17/chrom.sizes 1000000 1000000 \
+                > decode_1mb_slide_1mb
+    /cluster/bin/scripts/markers_to_recomb_rate.terry.pl genethon.marker.rdb \
+            /cluster/data/hg17/chrom.sizes 1000000 1000000 \
+                > genethon_1mb_slide_1mb
+        # Marker number 2 at position 120005974 on chr9 is out of genetic distance order. DISCARDING
+    /cluster/bin/scripts/markers_to_recomb_rate.terry.pl marshfield.marker.rdb \
+            /cluster/data/hg17/chrom.sizes 1000000 1000000 \
+                > marshfield_1mb_slide_1mb
+        # Marker number 1 at position 124276104 on chr9 is out of genetic distance order. DISCARDING
 
 # Convert files to proper format
-	/cluster/bin/scripts/convertRecombRate decode_1mb_slide_1mb /cluster/data/hg17/inserts \
-	    /cluster/data/hg17 1000 > decode_1mb_slide_1mb_conv
-        /cluster/bin/scripts/convertRecombRate marshfield_1mb_slide_1mb /cluster/data/hg17/inserts \
-	    /cluster/data/hg17 1000 > marshfield_1mb_slide_1mb_conv
-        /cluster/bin/scripts/convertRecombRate genethon_1mb_slide_1mb /cluster/data/hg17/inserts \
+    /cluster/bin/scripts/convertRecombRate decode_1mb_slide_1mb \
+        /cluster/data/hg17/inserts \
+        /cluster/data/hg17 1000 > decode_1mb_slide_1mb_conv
+    /cluster/bin/scripts/convertRecombRate marshfield_1mb_slide_1mb \
+        /cluster/data/hg17/inserts \
+         /cluster/data/hg17 1000 > marshfield_1mb_slide_1mb_conv
+    /cluster/bin/scripts/convertRecombRate genethon_1mb_slide_1mb \
+        /cluster/data/hg17/inserts \
 	    /cluster/data/hg17 1000 > genethon_1mb_slide_1mb_conv
 
 # Create bed file and load
-	/cluster/bin/scripts/createRRbed decode_1mb_slide_1mb_conv \
-	    marshfield_1mb_slide_1mb_conv genethon_1mb_slide_1mb_conv > recombRate.bed
-	hgLoadBed -noBin -tab -sqlTable=/cluster/home/kent/src/hg/lib/recombRate.sql \
+    /cluster/bin/scripts/createRRbed decode_1mb_slide_1mb_conv \
+        marshfield_1mb_slide_1mb_conv genethon_1mb_slide_1mb_conv \
+                > recombRate.bed
+
+        # GOT HERE
+    hgLoadBed -noBin -tab \
+        -sqlTable=/cluster/home/kent/src/hg/lib/recombRate.sql \
 	    hg17 recombRate recombRate.bed
 	   
 
@@ -2579,58 +2588,62 @@ cat > template << 'EOF'
 # The STS Marker, Coverage, and BAC End Pairs tracks must be completed prior to 
 # creating this track
 
-	mkdir -p /cluster/data/ncbi/fishClones/fishClones.2004-07/
-	cd /cluster/data/ncbi/fishClones/fishClones.2004-07/
+    ssh eieio
+    mkdir -p /cluster/data/ncbi/fishClones/fishClones.2004-07/
+    cd /cluster/data/ncbi/fishClones/fishClones.2004-07/
 
 # Download information from NCBI
         # point browser at http://www.ncbi.nlm.nih.gov/genome/cyto/cytobac.cgi?CHR=all&VERBOSE=ctg
         # change "Show details on sequence-tag" to "yes"
         # change "Download or Display" to "Download table for UNIX"
         # press Submit - save as /cluster/data/ncbi/fishClones/fishClones.2004-07/hbrc.txt
-	chmod 664 /cluster/data/ncbi/fishClones/fishClones.2004-07/hbrc.txt
+    chmod 664 /cluster/data/ncbi/fishClones/fishClones.2004-07/hbrc.txt
 
 # Get current clone/accession information
-	wget http://www.ncbi.nlm.nih.gov/genome/clone/DATA/clac.out
+    wget http://www.ncbi.nlm.nih.gov/genome/clone/DATA/clac.out
 
 # Create initial Fish Clones bed file
-	mkdir -p /cluster/data/hg17/bed/fishClones
-	cd /cluster/data/hg17/bed/fishClones
+    mkdir -p /cluster/data/hg17/bed/fishClones
+    cd /cluster/data/hg17/bed/fishClones
 
 # Copy previous sts info from fhcrc (take from previous build in future)
-	cp ~/tracks/fish/fhcrc.sts .
-	fishClones -verbose=1 -fhcrc=fhcrc.sts -noBin hg17 \
-	     /cluster/data/ncbi/fishClones/fishClones.2004-07/hbrc.txt \
-	     /cluster/data/ncbi/fishClones/fishClones.2004-07/clac.out \
-	     /cluster/data/ncbi/bacends/human/bacends.4/cl_acc_gi_len \
-	     /cluster/data/hg17/bed/bacends/lifted/bacEnds.lifted.psl fishClones_initial
+    cp ~booch/tracks/fish/fhcrc.sts .
+    fishClones -verbose=1 -fhcrc=fhcrc.sts -noBin hg17 \
+         /cluster/data/ncbi/fishClones/fishClones.2004-07/hbrc.txt \
+         /cluster/data/ncbi/fishClones/fishClones.2004-07/clac.out \
+         /cluster/data/ncbi/bacends/human/bacends.4/cl_acc_gi_len \
+         /cluster/data/hg17/bed/bacends/lifted/bacEnds.lifted.psl \
+            fishClones_initial
 	     
 # Get sequences for accessions not in genome
-	ssh kolossus
-	mkdir -p /cluster/bluearc/hg17/fishClones/
-	cd /cluster/bluearc/hg17/fishClones/
+    ssh kolossus
+    mkdir -p /cluster/bluearc/hg17/fishClones/
+    cd /cluster/bluearc/hg17/fishClones/
+# GOT HERE
 	# goto http://www.ncbi.nlm.nih.gov/entrez/batchentrez.cgi?db=Nucleotide
 	# select file "/cluster/data/hg17/bed/fishClones/fishClones_initial.acc"
 	# change output to FASTA format
 	# download results to "/cluster/bluearc/hg17/fishClones/notFound.fa"
 
 # Align these using blat
-	cp ~/tracks/gs.17/build34/fish/convert.pl .
-	cp ~/tracks/gs.17/build34/fish/blatAll.pl .
-	convert.pl  < notFound.fa > notFound.convert.fa
-	mkdir out
-	blatAll.pl /cluster/data/hg17 notFound.convert.fa out
+    cp ~booch/tracks/gs.17/build34/fish/convert.pl .
+    cp ~booch/tracks/gs.17/build34/fish/blatAll.pl .
+    convert.pl  < notFound.fa > notFound.convert.fa
+    mkdir out
+    blatAll.pl /cluster/data/hg17 notFound.convert.fa out
 
 # Make final fishClones file with this new clone placement info
-	cd /cluster/data/hg17/bed/fishClones
-	fishClones -verbose=1 -fhcrc=fhcrc.sts -noBin \
-	     -psl=/cluster/bluearc/hg17/fishClones/notFound.psl hg17 \
-	     /cluster/data/ncbi/fishClones/fishClones.2004-07/hbrc.txt \
-	     /cluster/data/ncbi/fishClones/fishClones.2004-07/clac.out \
-	     /cluster/data/ncbi/bacends/human/bacends.4/cl_acc_gi_len \
-	     /cluster/data/hg17/bed/bacends/lifted/bacEnds.lifted.psl fishClones
+    cd /cluster/data/hg17/bed/fishClones
+    fishClones -verbose=1 -fhcrc=fhcrc.sts -noBin \
+         -psl=/cluster/bluearc/hg17/fishClones/notFound.psl hg17 \
+         /cluster/data/ncbi/fishClones/fishClones.2004-07/hbrc.txt \
+         /cluster/data/ncbi/fishClones/fishClones.2004-07/clac.out \
+         /cluster/data/ncbi/bacends/human/bacends.4/cl_acc_gi_len \
+         /cluster/data/hg17/bed/bacends/lifted/bacEnds.lifted.psl fishClones
 
 # Load the track
-    hgLoadBed -noBin -tab -sqlTable=/cluster/home/kent/src/hg/lib/fishClones.sql \
+    hgLoadBed -noBin -tab \
+        -sqlTable=/cluster/home/kent/src/hg/lib/fishClones.sql \
 	hg17 fishClones fishClones.bed
 
 
@@ -2669,6 +2682,7 @@ cat > template << 'EOF'
 # Load ideogram table
     hgLoadBed -noBin -tab -sqlTable=/cluster/home/booch/src/hg/lib/cytoBandIdeo.sql \
 	hg17 cytoBandIdeo cytobands.bed
+
 
 # LOAD AFFYRATIO (DONE - 2004-07-14 - Hiram)
 #	Copied from Hg16 doc
