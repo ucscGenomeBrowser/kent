@@ -16,7 +16,7 @@
 #include "interaction.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: hgGeneRing.c,v 1.3 2005/02/14 23:08:25 galt Exp $";
+static char const rcsid[] = "$Id: hgGeneRing.c,v 1.4 2005/02/15 00:07:59 galt Exp $";
 
 
 struct interaction *interactions = NULL;
@@ -364,7 +364,7 @@ if (showAll)
     );
     puts(
     "</td></tr><tr><td>"
-    "<a href=\"/cgi-bin/hgGeneRing?ring_action=getGeneList\">back</a>\n"
+    "<a href=\"/cgi-bin/hgGeneRing?ring_action=getGeneList\">gene-list</a>\n"
     "</td></tr><tr><td>"
     "<a href=\"/cgi-bin/hgGeneRing?ring_action=drawScreen\">screen</a>\n"
     );
@@ -632,23 +632,22 @@ for(i=0;i<ringCount;i++)
 	    }
 	for(l=rays;l;l=l->next)
 	    {
-	    if (l->node->ringRank==1)
+	    if (l->node->ring)
+		{ /* this ring-ring line gets draw twice but that's ok */
+		x = l->node->xpos;
+		y = l->node->ypos;
+		mgDrawLine(mg, x, y, nl->node->xpos, nl->node->ypos, MG_BLACK);
+		}
+	    else if (l->node->ringRank==1)
 		{
-		if (l->node->ring)
-		    { /* this ring-ring line gets draw twice but that's ok */
-		    mgDrawLine(mg, x, y, nl->node->xpos, nl->node->ypos, MG_BLACK);
-		    }
-		else
-		    {
-		    doneOutside++;
-		    x = xCen + (int) OUTRING_SIZE*cos((i-.5)*angle+(doneOutside*subAngle));
-		    y = yCen + (int) OUTRING_SIZE*sin((i-.5)*angle+(doneOutside*subAngle));
-		    l->node->xpos = x;
-		    l->node->ypos = y;
-		    mgCircle(mg, x, y, NODE_SIZE, MG_BLACK, FALSE);
-		    addMap(l);
-		    mgDrawLine(mg, x, y, nl->node->xpos, nl->node->ypos, color);
-		    }
+		doneOutside++;
+		x = xCen + (int) OUTRING_SIZE*cos((i-.5)*angle+(doneOutside*subAngle));
+		y = yCen + (int) OUTRING_SIZE*sin((i-.5)*angle+(doneOutside*subAngle));
+		l->node->xpos = x;
+		l->node->ypos = y;
+		mgCircle(mg, x, y, NODE_SIZE, MG_BLACK, FALSE);
+		addMap(l);
+		mgDrawLine(mg, x, y, nl->node->xpos, nl->node->ypos, color);
 		}
 	    }
 	}
@@ -671,8 +670,12 @@ printf("<TR><TD><IMG SRC = \"%s\" BORDER=1 WIDTH=%d HEIGHT=%d USEMAP=#%s >",
        filename.forHtml, width, height, mapName);
 printf("</TD></TR>");
 printf("<TR><TD HEIGHT=5></TD></TR>");
-printf("<TR><TD><a href = \"/cgi-bin/hgGeneRing?ring_action=saveGeneList\">back</a>");
-printf("</TD></TR>");
+printf(
+    "<TR><TD>"
+    "<a href = \"/cgi-bin/hgGeneRing?ring_action=saveGeneList\">back</a> "
+    "<a href = \"/cgi-bin/hgGeneRing?ring_action=getGeneList\">gene-list</a> "
+    "<a href = \"/cgi-bin/hgGeneRing?ring_action=drawScreen\">refresh</a> "
+    "</TD></TR>");
 printf("<TR><TD HEIGHT=5></TD></TR></TABLE></CENTER>");
 			    
 }
@@ -712,16 +715,21 @@ void hgGeneRing()
 {
 char *action = cartUsualString(cart, "ring_action", "");
 char *geneList = cartUsualString(cart, "ring_geneList", "");
+char *temp = NULL, *temphold = NULL;
 if (sameWord(action,""))
     {
     action = "getGeneList";
     cartSetString(cart, "ring_action", action);
     }
-if (sameWord(geneList,""))
+temphold=cloneString(geneList);
+temp=trimSpaces(temphold);
+if (sameString(temp,""))
     {
-    getGeneList();
+    action = "getGeneList";
+    cartSetString(cart, "ring_action", action);
     }
-else if (sameWord(action,"getGeneList"))
+freez(&temphold);    
+if (sameWord(action,"getGeneList"))
     {
     getGeneList();
     }
@@ -777,16 +785,26 @@ else if (sameWord(action,"removeFromRing"))
     char *newGeneList = needMem(l);
     int lg = strlen(gene)+2+1;
     char *newGene = needMem(lg);
+    char *temp = NULL;
     safef(newGeneList,l," %s ",geneList);
     safef(newGene,lg," %s ",gene);
     geneList = replaceChars(newGeneList, newGene, " ");
     cartSetString(cart, "ring_geneList", geneList);
     //printf("<pre>geneList(after removal %s)=[%s]</pre>\n",gene,geneList);
     freez(&newGeneList);
-    freez(&geneList);
     freez(&newGene);
     saveGeneList(FALSE);
-    drawScreen();
+    /* in lieue of actually just redirecting the browser */
+    temp=trimSpaces(geneList);
+    if (sameString(temp,""))
+	{
+    	getGeneList();
+	}
+    else
+	{
+	drawScreen();
+	}
+    freez(&geneList);
     }
 else
     {
