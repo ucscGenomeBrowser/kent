@@ -299,7 +299,7 @@ type bed 6 .
 
 track blastzSelf
 shortLabel Blastz Self
-longLabel Human Merged Blastz Alignments
+longLabel $Organism Merged Blastz Self Alignments
 group varRep
 priority 147.2
 visibility hide
@@ -311,7 +311,7 @@ otherDb hg15
 
 track selfChain
 shortLabel Self Chain 
-longLabel Human/$Organism Chained Blastz Alignments
+longLabel $Organism Chained Blastz Self Alignments
 group varRep
 priority 147.3
 visibility hide
@@ -323,7 +323,7 @@ otherDb hg15
 
 track selfChain2
 shortLabel Self Chain 2 
-longLabel Human/$Organism Chained Blastz Alignments smaller gap score
+longLabel $Organism Chained Blastz Self Alignments Smaller Gap Score
 group varRep
 priority 147.4
 visibility hide

@@ -841,7 +841,7 @@ otherDb mm5
 
 track blastzSelf
 shortLabel Self Blastz
-longLabel Self Blastz Alignments
+longLabel $Organism Blastz Self Alignments
 group varRep
 priority 160
 visibility hide
@@ -853,7 +853,7 @@ otherDb hg17
 
 track blastzBestSelf
 shortLabel Self Best
-longLabel Self Blastz Best-in-Genome Alignments
+longLabel $Organism Blastz Best-in-Genome Self Alignments
 group varRep
 priority 161
 visibility hide
@@ -865,7 +865,7 @@ otherDb hg17
 
 track blastzTightSelf
 shortLabel Tight Self
-longLabel Self Blastz Tight Subset of Best Alignments
+longLabel $Organism Blastz Tight Subset of Best Self Alignments
 group varRep
 priority 162
 visibility hide
@@ -877,7 +877,7 @@ otherDb hg17
 
 track chainSelf
 shortLabel Self Chain 
-longLabel Self Chained Blastz Alignments
+longLabel $Organism Chained Blastz Self Alignments
 group varRep
 priority 163
 visibility hide
@@ -890,7 +890,7 @@ otherDb hg17
 
 track netSelf
 shortLabel Self Net
-longLabel Self Alignment Net
+longLabel $Organism Chained Self Alignment Net
 group varRep
 priority 164
 visibility hide
@@ -900,7 +900,7 @@ otherDb hg17
 
 track ensRatMusHg17
 shortLabel Self Synteny
-longLabel $Organism/$o_Organism ($o_date/$o_db) Synteny Using Blastz Single Coverage (100k window)
+longLabel $Organism Self Synteny Using Blastz Single Coverage (100k window)
 group varRep
 priority 165
 visibility hide
@@ -910,7 +910,7 @@ type bed 4 .
 
 track syntenyNetSelf
 shortLabel Self Syntenic Net
-longLabel Self Syntenic Alignment Net
+longLabel $Organism Syntenic Self Alignment Net
 group varRep
 priority 166
 visibility hide

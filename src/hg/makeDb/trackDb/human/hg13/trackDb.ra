@@ -220,7 +220,7 @@ otherDb rn1
 
 track humanChain
 shortLabel Human Chain 
-longLabel Human/Human Chained Blastz Alignments
+longLabel $Organism Chained Blastz Self Alignments
 group varRep
 priority 145.1
 visibility hide
@@ -232,7 +232,7 @@ otherDb hg13
 
 track humanChainNew
 shortLabel Human Chain 2
-longLabel Human/Human Alignments Chained Blastz New Self Alignment
+longLabel $Organism Chained Blastz New Self Alignments
 group varRep
 priority 145.11
 visibility hide
@@ -244,7 +244,7 @@ otherDb hg13
 
 track blastzHuman
 shortLabel Blastz Human
-longLabel Human (Self) Merged Blastz Alignments
+longLabel $Organism Merged Blastz Self Alignments
 group varRep
 priority 145.2
 visibility hide
@@ -256,7 +256,7 @@ otherDb hg13
 
 track blastzBestHuman
 shortLabel Best Human 
-longLabel Human Blastz (Self) Best-in-Genome Alignments
+longLabel $Organism  Blastz Best-in-Genome Self Alignments
 group varRep
 priority 145.32
 visibility hide
@@ -268,7 +268,7 @@ otherDb hg13
 
 track blastzTightHuman
 shortLabel Tight Human 
-longLabel Human Blastz (Self) Tight Subset of Best Alignments
+longLabel $Organism Blastz Tight Subset of Best Self Alignments
 group varRep
 priority 145.4
 visibility hide

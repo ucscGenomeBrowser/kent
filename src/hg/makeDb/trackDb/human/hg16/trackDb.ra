@@ -742,7 +742,7 @@ otherDb hg16
 
 track blastzBestSelf
 shortLabel Self Best
-longLabel $Organism Blastz Self Best-in-Genome Alignments
+longLabel $Organism Blastz Best-in-Genome Self Alignments
 group varRep
 priority 161
 visibility hide
@@ -753,7 +753,7 @@ type psl xeno hg16
 
 track blastzTightSelf
 shortLabel Tight Self
-longLabel Self Blastz Tight Subset of Best Alignments
+longLabel Blastz Tight Subset of Best Self Alignments
 group varRep
 priority 162
 visibility hide
@@ -765,7 +765,7 @@ otherDb hg16
 
 track chainSelf
 shortLabel Self Chain 
-longLabel Human/$Organism Chained Blastz Alignments
+longLabel Chained Blastz Self Alignments
 group varRep
 priority 163
 visibility hide
@@ -777,7 +777,7 @@ otherDb hg16
 
 track netSelf
 shortLabel Self Net
-longLabel Human/$Organism Alignment Net
+longLabel Chained Self Alignment Net
 group varRep
 priority 164
 visibility hide
@@ -787,7 +787,7 @@ otherDb hg16
 
 track syntenySelf
 shortLabel Self Synteny
-longLabel Human/Human Synteny Using Blastz Single Coverage (100k window)
+longLabel Self Synteny Using Blastz Single Coverage (100k window)
 group varRep
 priority 165
 visibility hide
@@ -797,7 +797,7 @@ type bed 4 .
 
 track syntenyNetSelf
 shortLabel Self Syntenic Net
-longLabel Self Syntenic Alignment Net
+longLabel Syntenic Self Alignment Net
 group varRep
 priority 166
 visibility hide
