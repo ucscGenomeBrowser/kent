@@ -13,7 +13,7 @@ errAbort(
   "hgPepPred - Load peptide predictions from Ensembl or Genie\n"
   "usage:\n"
   "   hgPepPred database type file(s)\n"
-  "where type is either 'ensembl' or 'genie'");
+  "where type is either 'ensembl' or 'genie' or 'softberry'");
 }
 
 
@@ -73,7 +73,7 @@ return NULL;
 
 void oneEnsFile(char *ensFile, struct hash *uniq, FILE *f)
 /* Process one ensemble peptide prediction file into tab delimited
- * output f, using iniq hash to make sure no dupes. */
+ * output f, using uniq hash to make sure no dupes. */
 {
 struct lineFile *lf = lineFileOpen(ensFile, TRUE);
 char *line;
@@ -216,6 +216,77 @@ loadTableFromTabFile(database, "genieAltPep", altTab);
 freeHash(&uniq);
 }
 
+void genericOne(char *fileName, struct hash *uniq, FILE *f)
+/* Process one ensemble peptide prediction file into tab delimited
+ * output f, using uniq hash to make sure no dupes. */
+{
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+char *line;
+int lineSize;
+boolean firstTime = TRUE;
+char *trans;
+
+/* Do cursory sanity check. */
+if (!lineFileNext(lf, &line, &lineSize))
+    errAbort("%s is empty", fileName);
+if (line[0] != '>')
+    errAbort("%s is badly formatted, doesn't begin with '>'", fileName);
+lineFileReuse(lf);
+
+while (lineFileNext(lf, &line, &lineSize))
+    {
+    if (line[0] == '>')
+        {
+	/* End last line. */
+	if (firstTime)
+	    firstTime = FALSE;
+	else
+	    fputc('\n', f);
+	trans = firstWordInLine(line+1);
+	if (hashLookup(uniq, trans) != NULL)
+	    errAbort("Duplicate %s line %d of %s", trans, lf->lineIx, lf->fileName);
+	hashAdd(uniq, trans, NULL);
+	fprintf(f, "%s\t", trans);
+	}
+    else
+        {
+	mustWrite(f, line, lineSize-1);
+	}
+    }
+fputc('\n', f);
+lineFileClose(&lf);
+}
+
+
+int genericPepPred(char *database, int fileCount, char *fileNames[], char *table)
+/* Load a generic (simple) peptide file. */
+{
+int i;
+char *fileName;
+char tempName[256];
+FILE *f;
+struct hash *uniq = newHash(16);
+
+sprintf(tempName, "%s.tab", table);
+f = mustOpen(tempName, "w");
+makeCustomTable(database, table, createString);
+for (i=0; i<fileCount; ++i)
+    {
+    fileName = fileNames[i];
+    printf("Processing %s\n", fileName);
+    genericOne(fileName, uniq, f);
+    }
+carefulClose(&f);
+loadTableFromTabFile(database, table, tempName);
+freeHash(&uniq);
+}
+
+int softberryPepPred(char *database, int fileCount, char *fileNames[])
+/* Load Softberry peptide predictions into database. */
+{
+genericPepPred(database, fileCount, fileNames, "softberryPep");
+}
+
 int main(int argc, char *argv[])
 /* Process command line. */
 {
@@ -227,6 +298,8 @@ if (sameWord(type, "ensembl"))
     ensPepPred(argv[1], argc-3, argv+3);
 else if (sameWord(type, "genie"))
     geniePepPred(argv[1], argc-3, argv+3);
+else if (sameWord(type, "softberry"))
+    softberryPepPred(argv[1], argc-3, argv+3);
 else
     usage();
 return 0;
