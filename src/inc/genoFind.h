@@ -117,44 +117,54 @@ void genoFindFree(struct genoFind **pGenoFind);
 
 /* ---  Stuff for saving results ---- */
 
-typedef void (*GfSaveAli)(char *chromName, int chromSize, int chromOffset,
-	struct ffAli *ali, bioSeq *tSeq, struct hash *t3Hash, bioSeq *qSeq, 
-	boolean qIsRc, boolean tIsRc,
-	enum ffStringency stringency, int minMatch, void  *outputData);
-/* This is the type of a client provided function to save an alignment. 
- * The parameters are:
- *     chromName - name of target (aka genomic or database) sequence.
- *     chromSize - size of target sequence.
- *     chromOffset - offset of genoSequence in target.
- *     ffAli - alignment with pointers into tSeq/qSeq or in
- *             translated target case, into t3Hash.
- *     tSeq - part of target sequence in normal case.   In translated
- *             target case look at t3Hash instead.
- *     t3Hash - used only in translated target case.  A hash keyed by
- *             target sequence name with values *lists* of trans3 structures.
- *             This hash can be searched to find both the translated and
- *             untranslated versions of the bits of the target that are in 
- *             memory.  (You can assume at this point all parts needed for
- *             output are indeed in memory.)
- *     qSeq - query sequence (this isn't segmented at all). 
- *     isRc - True if query is reverse complemented.
- *     stringency - ffCdna, etc.  I'm hoping to move this elsewhere.
- *     minMatch - minimum score to output.  Also should be moved elsewhere.
- *     outputData - custom data for specific output function.
- * The interface is a bit complex - partly from the demands of translated
- * output, and partly from trying not to have the entire target sequence in
- * memory.
- */
 
-struct gfSavePslxData
-/* This is the data structure passed as output data for gfSavePslx below. */
+struct gfOutput
+/* A polymorphic object to help us write many file types. */
     {
-    FILE *f;			/* Output file. */
+    struct gfOutput *next;
+    void *data;		/* Type-specific data pointer. */
+    void (*out)(char *chromName, int chromSize, int chromOffset,
+	    struct ffAli *ali, bioSeq *tSeq, struct hash *t3Hash, bioSeq *qSeq, 
+	    boolean qIsRc, boolean tIsRc,
+	    enum ffStringency stringency, int minMatch, struct gfOutput *out);
+    /* This is the type of a client provided function to save an alignment. 
+     * The parameters are:
+     *     chromName - name of target (aka genomic or database) sequence.
+     *     chromSize - size of target sequence.
+     *     chromOffset - offset of genoSequence in target.
+     *     ffAli - alignment with pointers into tSeq/qSeq or in
+     *             translated target case, into t3Hash.
+     *     tSeq - part of target sequence in normal case.   In translated
+     *             target case look at t3Hash instead.
+     *     t3Hash - used only in translated target case.  A hash keyed by
+     *             target sequence name with values *lists* of trans3 structures.
+     *             This hash can be searched to find both the translated and
+     *             untranslated versions of the bits of the target that are in 
+     *             memory.  (You can assume at this point all parts needed for
+     *             output are indeed in memory.)
+     *     qSeq - query sequence (this isn't segmented at all). 
+     *     isRc - True if query is reverse complemented.
+     *     stringency - ffCdna, etc.  I'm hoping to move this elsewhere.
+     *     minMatch - minimum score to output.  Also should be moved elsewhere.
+     *     outputData - custom data for specific output function.
+     * The interface is a bit complex - partly from the demands of translated
+     * output, and partly from trying not to have the entire target sequence in
+     * memory.
+     */
+    void (*queryOut)(FILE *f, struct gfOutput *out);  /* Called for each query. */
+    void (*fileHead)(FILE *f);	/* Write file header if any */
     boolean reportTargetStrand; /* Report target as well as query strand? */
     struct hash *maskHash;	/* Hash to associate target sequence name and mask. */
     int minGood;		/* Minimum sequence identity in parts per thousand. */
     boolean qIsProt;		/* Query is peptide. */
     boolean tIsProt;		/* Target is peptide. */
+    int queryIx;		/* Index of query */
+    };
+
+struct gfSavePslxData
+/* This is the data structure put in gfOutput.data for psl/pslx output. */
+    {
+    FILE *f;			/* Output file. */
     boolean saveSeq;		/* Save sequence too? */
     };
 
@@ -162,38 +172,23 @@ void gfSavePslx(char *chromName, int chromSize, int chromOffset,
 	struct ffAli *ali, 
 	struct dnaSeq *tSeq, struct hash *t3Hash, struct dnaSeq *qSeq, 
 	boolean qIsRc, boolean tIsRc, 
-	enum ffStringency stringency, int minMatch, void *outputData);
+	enum ffStringency stringency, int minMatch, struct gfOutput *out);
 /* Analyse one alignment and if it looks good enough write it out to file in
  * pslx format.  This is meant for translated alignments. */
 
 struct gfSaveAxtData
-/* This data structure passed as output data for gfSaveWuBlast and
- * possibly others. */
+/* This is the data structure put in gfOutput.data for axt/blast output. */
     {
     struct gfSaveAxtData *next;
     struct axtBundle *bundleList;	/* List of bundles. */
-    int minGood;	 /* Minimum sequence identity in parts per thousand. */
-    boolean qIsProt;		/* Query is peptide. */
-    boolean tIsProt;		/* Target is peptide. */
-    int queryIx;		/* Index of query */
     };
 
 void gfSaveAxtBundle(char *chromName, int chromSize, int chromOffset,
 	struct ffAli *ali, 
 	struct dnaSeq *tSeq, struct hash *t3Hash, struct dnaSeq *qSeq, 
 	boolean qIsRc, boolean tIsRc, 
-	enum ffStringency stringency, int minMatch, void *outputData);
+	enum ffStringency stringency, int minMatch, struct gfOutput *out);
 /* Analyse one alignment and if it looks good enough save it in axtBundle. */
-
-struct gfOutput
-/* A polymorphic object to help us write many file types. */
-    {
-    struct gfOutput *next;
-    void *data;		/* Type-specific data pointer. */
-    GfSaveAli out;   /* Main output function - called for each ffAli. */
-    void (*queryOut)(FILE *f, void *data);  /* Called for each query. */
-    void (*fileHead)(FILE *f);	/* Write file header if any */
-    };
 
 /* -------- Routines to build up index ------------ */
 

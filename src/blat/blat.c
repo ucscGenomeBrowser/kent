@@ -380,20 +380,16 @@ struct gfSavePslxData pslxOutData;	/* Data for psl/pslx format. */
 struct gfSaveAxtData axtOutData;	/* Data for blast and other formats. */
 
 
-void axtQueryOut(FILE *f, void *data)
+void axtQueryOut(FILE *f, struct gfOutput *out)
 /* Do axt oriented output - at end of processing query. */
 {
-struct gfSaveAxtData *aod = data;
+struct gfSaveAxtData *aod = out->data;
 struct axtBundle *gab;
-struct axtScoreScheme *ss = axtScoreSchemeDefault();
 for (gab = aod->bundleList; gab != NULL; gab = gab->next)
     {
     struct axt *axt;
     for (axt = gab->axtList; axt != NULL; axt = axt->next)
-	{
-	axt->score = axtScore(axt, ss);
 	axtWrite(axt, f);
-	}
     }
 axtBundleFreeList(&aod->bundleList);
 }
@@ -403,29 +399,29 @@ void axtBlastOut(struct axtBundle *abList, int queryIx,
 	char *databaseName, int databaseSeqCount, double databaseLetterCount, 
 	boolean isWu, char *ourId);
 
-void anyBlastQueryOut(FILE *f, void *data, boolean isWu)
+void anyBlastQueryOut(FILE *f, struct gfOutput *out, boolean isWu)
 /* Output wublast on query. */
 {
 char blatName[16];
-struct gfSaveAxtData *aod = data;
-++aod->queryIx;
+struct gfSaveAxtData *aod = out->data;
+++gvo->queryIx;
 sprintf(blatName, "blat %d", version);
-axtBlastOut(aod->bundleList, aod->queryIx, aod->qIsProt, f,
+axtBlastOut(aod->bundleList, out->queryIx, out->qIsProt, f,
 	databaseName, databaseSeqCount, databaseLetterCount,
 	isWu, blatName);
 axtBundleFreeList(&aod->bundleList);
 }
 
-void wuBlastQueryOut(FILE *f, void *data)
+void wuBlastQueryOut(FILE *f, struct gfOutput *out)
 /* Output wublast on query. */
 {
-anyBlastQueryOut(f, data, TRUE);
+anyBlastQueryOut(f, out, TRUE);
 }
 
-void ncbiBlastQueryOut(FILE *f, void *data)
+void ncbiBlastQueryOut(FILE *f, struct gfOutput *out)
 /* Output NCBI blast on query. */
 {
-anyBlastQueryOut(f, data, FALSE);
+anyBlastQueryOut(f, out, FALSE);
 }
 
 struct gfOutput *gfOutputNew(char *format, FILE *f, 
@@ -443,20 +439,20 @@ if (sameWord(format, "psl") || sameWord(format, "pslx"))
     out->data = &pslxOutData;
     if (!noHead)
         out->fileHead = pslWriteHead;
-    pslxOutData.minGood = goodPpt;
+    out->minGood = goodPpt;
     pslxOutData.saveSeq = sameWord(format, "pslx");
     pslxOutData.f = f;
-    pslxOutData.qIsProt = qIsProt;
-    pslxOutData.tIsProt = tIsProt;
+    out->qIsProt = qIsProt;
+    out->tIsProt = tIsProt;
     }
 else if (sameWord(format, "blast") || 
 	sameWord(format, "wu-blast") || sameWord(format, "axt"))
     {
     out->out = gfSaveAxtBundle;
     out->data = &axtOutData;
-    axtOutData.minGood = goodPpt;
-    axtOutData.qIsProt = qIsProt;
-    axtOutData.tIsProt = tIsProt;
+    out->minGood = goodPpt;
+    out->qIsProt = qIsProt;
+    out->tIsProt = tIsProt;
     if (tIsProt && !qIsProt)
         errAbort("Sorry, at the moment %s output doesn't support dna/protein alignments", format);
     if (sameWord(format, "wu-blast"))
@@ -475,7 +471,7 @@ void finishBasicOutput(FILE *f)
 /* Write out stuff to file */
 {
 if (gvo->queryOut != NULL)
-    gvo->queryOut(f, gvo->data);
+    gvo->queryOut(f, gvo);
 }
 
 
@@ -523,7 +519,7 @@ if (isProt)
     }
 else
     {
-    pslxOutData.maskHash = maskHash;
+    gvo->maskHash = maskHash;
     searchOneStrand(seq, gf, f, FALSE, maskHash, qMaskBits);
     reverseComplement(seq->dna, seq->size);
     searchOneStrand(seq, gf, f, TRUE, maskHash, qMaskBits);
@@ -678,7 +674,7 @@ return t3List;
 void tripleSearch(aaSeq *qSeq, struct genoFind *gfs[3], struct hash *t3Hash, boolean dbIsRc, FILE *f)
 /* Look for qSeq in indices for three frames.  Then do rest of alignment. */
 {
-pslxOutData.reportTargetStrand = TRUE;
+gvo->reportTargetStrand = TRUE;
 gfFindAlignAaTrans(gfs, qSeq, t3Hash, dbIsRc, minScore, gvo);
 }
 
@@ -687,7 +683,7 @@ void transTripleSearch(struct dnaSeq *qSeq, struct genoFind *gfs[3], struct hash
 /* Translate qSeq three ways and look for each in three frames of index. */
 {
 int qIsRc;
-pslxOutData.reportTargetStrand = TRUE;
+gvo->reportTargetStrand = TRUE;
 for (qIsRc = 0; qIsRc <= qIsDna; qIsRc += 1)
     {
     gfLongTransTransInMem(qSeq, gfs, t3Hash, qIsRc, dbIsRc, !qIsDna, minScore, gvo);

@@ -496,7 +496,7 @@ for (ffi = bun->ffList; ffi != NULL; ffi = ffi->next)
     {
     struct ffAli *ff = ffi->ff;
     out->out(chromName, chromSize, chromOffset, ff, tSeq, t3Hash, qSeq, 
-    	qIsRc, tIsRc, stringency, minMatch, out->data);
+    	qIsRc, tIsRc, stringency, minMatch, out);
     }
 }
 
