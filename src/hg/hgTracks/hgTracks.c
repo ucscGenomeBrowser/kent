@@ -1153,7 +1153,7 @@ struct sqlResult *sr = NULL;
 char **row;
 struct linkedFeatures *lfList = NULL, *lf;
 
-sprintf(query, "select * from %s where tName = '%s' and tStart<%u and tEnd>%u",
+sprintf(query, "select * from %s where tName = '%s' and tStart<%u and tEnd>%u order by tStart",
     table, chrom, winEnd, winStart);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
