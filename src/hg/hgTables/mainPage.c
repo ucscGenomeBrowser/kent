@@ -16,7 +16,7 @@
 #include "hgTables.h"
 #include "joiner.h"
 
-static char const rcsid[] = "$Id: mainPage.c,v 1.60 2004/11/18 22:41:54 kent Exp $";
+static char const rcsid[] = "$Id: mainPage.c,v 1.61 2004/11/21 17:14:24 kent Exp $";
 
 
 int trackDbCmpShortLabel(const void *va, const void *vb)
@@ -515,15 +515,17 @@ hPrintf("</TD></TR>\n");
 /* Intersection line. */
 if (isPositional)
     {
-    hPrintf("<TR><TD><B>intersection:</B>\n");
     if (anyIntersection())
         {
+	hPrintf("<TR><TD><B>intersection with %s:</B>\n",
+		cartString(cart, hgtaIntersectTrack));
 	cgiMakeButton(hgtaDoIntersectPage, "Edit");
 	hPrintf(" ");
 	cgiMakeButton(hgtaDoClearIntersect, "Clear");
 	}
     else
         {
+	hPrintf("<TR><TD><B>intersection:</B>\n");
 	cgiMakeButton(hgtaDoIntersectPage, "Create");
 	}
     hPrintf("</TD></TR>\n");
