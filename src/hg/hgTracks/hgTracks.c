@@ -3412,6 +3412,19 @@ tg->items = itemList;
 hFreeConn(&conn);
 }
 
+static Color contrastingColor(struct memGfx *mg, int backgroundIx)
+/* Return black or white whichever would be more visible over
+ * background. */
+{
+struct rgbColor *c = &mg->colorMap[backgroundIx];
+int valSquared = c->r * c->r + c->g * c->g + c->b * c->b;
+int threshold = 3*150*150;
+if (valSquared > threshold)
+    return MG_BLACK;
+else
+    return MG_WHITE;
+}
+
 static void bedDrawSimple(struct trackGroup *tg, int seqStart, int seqEnd,
         struct memGfx *mg, int xOff, int yOff, int width, 
         MgFont *font, Color color, enum trackVisibility vis)
@@ -3427,9 +3440,9 @@ boolean isFull = (vis == tvFull);
 double scale = width/(double)baseWidth;
 int invPpt;
 int midLineOff = heightPer/2;
-int midY = y + midLineOff;
 int dir;
 Color *shades = tg->colorShades;
+Color textColor = MG_WHITE;
 
 
 for (item = tg->items; item != NULL; item = item->next)
@@ -3459,7 +3472,10 @@ for (item = tg->items; item != NULL; item = item->next)
 		x2 = xOff + width;
 	    w = x2-x1;
 	    if (w > mgFontStringWidth(font, s))
-		mgTextCentered(mg, x1, y, w, heightPer, MG_WHITE, font, s);
+		{
+		textColor = contrastingColor(mg, color);
+		mgTextCentered(mg, x1, y, w, heightPer, textColor, font, s);
+		}
 	    }
 	}
     if (tg->subType == lfWithBarbs)
@@ -3471,7 +3487,11 @@ for (item = tg->items; item != NULL; item = item->next)
             dir = -1;
 	    w = x2-x1;
         if (dir != 0)
-        mgBarbedHorizontalLine(mg, x1, midY, w, 2, 5, dir, MG_WHITE, TRUE);
+	    {
+	    int midY = y + midLineOff;
+	    textColor = contrastingColor(mg, color);
+	    mgBarbedHorizontalLine(mg, x1, midY, w, 2, 5, dir, textColor, TRUE);
+	    }
         }
     if (isFull)
 	y += lineHeight;
@@ -4070,7 +4090,6 @@ boolean isFull = (vis == tvFull);
 double scale = width/(double)baseWidth;
 int invPpt;
 int midLineOff = heightPer/2;
-int midY = y + midLineOff;
 int dir;
 Color *shades = tg->colorShades;
 
@@ -4125,7 +4144,10 @@ for (item = tg->items; item != NULL; item = item->next)
             dir = -1;
 	    w = x2-x1;
         if (dir != 0)
-        mgBarbedHorizontalLine(mg, x1, midY, w, 2, 5, dir, MG_WHITE, TRUE);
+	    {
+	    int midY = y + midLineOff;
+	    mgBarbedHorizontalLine(mg, x1, midY, w, 2, 5, dir, MG_WHITE, TRUE);
+	    }
         }
     if (isFull)
 	y += lineHeight;
@@ -5271,6 +5293,7 @@ tg->drawName = FALSE;
 tg->subType = lfWithBarbs ;
 
 }
+
 void syntenyBerkMethods(struct trackGroup *tg)
 {
 tg->loadItems = loadSyntenyBerk;
@@ -5279,6 +5302,7 @@ tg->itemColor = syntenyBerkItemColor;
 tg->drawName = FALSE;
 tg->subType = lfWithBarbs ;
 }
+
 void syntenySangerMethods(struct trackGroup *tg)
 {
 tg->loadItems = loadSyntenySanger;
@@ -5287,6 +5311,7 @@ tg->itemColor = syntenySangerItemColor;
 tg->drawName = FALSE;
 tg->subType = lfWithBarbs ;
 }
+
 void mouseOrthoMethods(struct trackGroup *tg)
 {
 char option[128];
@@ -5302,6 +5327,7 @@ else
     tg->itemColor = NULL;
 tg->drawName = TRUE;
 }
+
 void humanParalogMethods(struct trackGroup *tg)
 {
 char option[128];
