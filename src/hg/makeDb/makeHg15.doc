@@ -597,8 +597,7 @@ exit; # don't actually run this like a script :)
     rm upstream5000.fa
 
 
-# O+O: ASSEMBLY [GOLD], GAP, COVERAGE, MAP CONTIGS TRACKS (MOSTLY DONE - 041103 
-- BUT NEED TO REDO WHEN WE GET THE .gl FILES)
+# O+O: ASSEMBLY [GOLD], GAP, COVERAGE, MAP CONTIGS TRACKS (DONE - 042203) 
     # Store o+o info in database.
     # Note: for build31, Terry specially requested these files from NCBI:
     # finished.finf
@@ -621,7 +620,7 @@ exit; # don't actually run this like a script :)
     if (-f contig_overlaps.agp) then
       hgGoldGapGl hg15 /cluster/store5/gs.16 build33 
       cd /cluster/store5/gs.16
-      hgClonePos hg15 build33 ffa/sequence.inf /cluster/store5/gs.16 -maxErr=3
+      /cluster/bin/i386/hgClonePos hg15 build33 ffa/sequence.inf /cluster/store5/gs.16 -maxErr=3
     end 
     cd /cluster/store5/gs.16
     hgCtgPos hg15 build33 
@@ -1319,13 +1318,17 @@ DONE TO HERE - RUNNING...
         cp /projects/hg2/booch/psl/fish/all.fish.format /projects/hg2/booch/psl/gs.16/build33/fish/
 
 
-# CREATE AND LOAD FISH CLONES TRACK (TO DO)
+# CREATE AND LOAD FISH CLONES TRACK (DONE 4/23/2003)
 # (must be done after STS markers track and BAC end pairs track)
 
 # Extract the file with clone positions from database
         ssh hgwdev
         echo 'select * into outfile "/tmp/booch/clonePos.txt" from clonePos' | hgsql hg15
         mv /tmp/booch/clonePos.txt /projects/hg2/booch/psl/gs.16/build33/fish
+
+# Get current clone/accession information
+	wget http://www.ncbi.nlm.nih.gov/genome/clone/DATA/clac.out
+
 
 # Create bed file
         cd /projects/hg2/booch/psl/gs.16/build33/fish
@@ -1341,13 +1344,13 @@ DONE TO HERE - RUNNING...
         echo 'load data local infile "fishClones.bed" into table fishClones;' | hgsql hg15
         
 
-# CREATE AND LOAD CHROMOSOME BANDS TRACK (TO DO)
+# CREATE AND LOAD CHROMOSOME BANDS TRACK (DONE - 4/23/2003)
 # (must be done after FISH Clones track) 
 
 # Create bed file
         ssh hgwdev
-        # DONE - DON'T Do AGAIN! make setBands.txt   # NOTE: may get errors if inserts file out-of-sync with pctSetBands file 
-        #make cytobands.pct.ranges DONE - DON'T DO AGAIN!
+        make setBands.txt   # NOTE: may get errors if inserts file out-of-sync with pctSetBands file 
+        make cytobands.pct.ranges
         make predict
 
 # Create database table
