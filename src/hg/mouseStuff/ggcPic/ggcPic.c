@@ -19,6 +19,7 @@ errAbort(
   "   -generic - Scale things for generic gene\n"
   "   -restrict=file  Restrict to only accessions listed in file\n"
   "          File should have one accession per line\n"
+  "   -geneParts=parts.txt - Include info on parts of each gene in file\n"
   );
 }
 
@@ -275,10 +276,21 @@ if (size > 0)
     tallyHits(pcm, hits+start, covers+start, size, isRev);
 }
 
+int countBools(bool *b, int size)
+/* Return count of booleans in array that are TRUE. */
+{
+int i, count = 0;
+for (i=0; i<size; ++i)
+    if (b[i])
+       ++count;
+return count;
+}
+
 int totalGenes = 0, reviewedGenes = 0, genesUsed = 0;
 
 void ggcChrom(struct chromGenes *chrom, char *axtFile, 
-	struct ggcInfo *g, struct hash *restrictHash)
+	struct ggcInfo *g, struct hash *restrictHash, 
+	FILE *fParts)
 /* Tabulate matches on chromosome. */
 {
 struct lineFile *lf = lineFileOpen(axtFile, TRUE);
@@ -463,6 +475,28 @@ for (gp = chrom->geneList; gp != NULL; gp = gp->next)
     tallyHits(&g->utr5, utr5Hits, utr5Covers, utr5Size, isRev);
     tallyHits(&g->utr3, utr3Hits, utr3Covers, utr3Size, isRev);
     tallyHits(&g->cdsAll, cdsAllHits, cdsAllCovers, cdsAllSize, isRev);
+
+    /* Optionally write out file with gene by gene info. */
+    if (fParts != NULL)
+        {
+	/* Write header line first time through. */
+	static boolean firstTime = TRUE;
+	if (firstTime)
+	    {
+	    firstTime = FALSE;
+	    fprintf(fParts, "#accession\tsize_5\tali_5\tmatch_5\tsize_c\tali_c\tmatch_c\tsize_3\tali_3\tmatch_3\n");
+	    }
+	fprintf(fParts, "%s\t", gp->name);
+	fprintf(fParts, "%d\t%d\t%d\t", utr5Size, 
+		countBools(utr5Covers, utr5Size),
+		countBools(utr5Hits, utr5Size));
+	fprintf(fParts, "%d\t%d\t%d\t", cdsAllSize, 
+		countBools(cdsAllCovers, cdsAllSize),
+		countBools(cdsAllHits, cdsAllSize));
+	fprintf(fParts, "%d\t%d\t%d\n", utr3Size, 
+		countBools(utr3Covers, utr3Size),
+		countBools(utr3Hits, utr3Size));
+	}
 
     /* Tally upstream/downstream hits. */
 	{
@@ -657,7 +691,8 @@ else
     }
 }
 
-void ggcPic(char *axtDir, char *chromSizes, char *genePred, char *outDir)
+void ggcPic(char *axtDir, char *chromSizes, char *genePred, char *outDir,
+	char *outParts)
 /* ggcPic - Generic picture of conservation of features near a gene. */
 {
 struct hash *chromHash;
@@ -666,16 +701,19 @@ struct ggcInfo *g = newGgcInfo();
 char axtFile[512];
 char fileName[512];
 FILE *f = NULL;
+FILE *fParts = NULL;
 struct pcm *pcm;
 struct hash *restrictHash = readRestrictHash();
 
+if (outParts != NULL)
+    fParts = mustOpen(outParts, "w");
 makeDir(outDir);
 readGenes(genePred, &chromHash, &chromList);
 addSizes(chromSizes, chromHash, chromList);
 for (chrom = chromList; chrom != NULL; chrom = chrom->next)
     {
     snprintf(axtFile, sizeof(axtFile), "%s/%s.axt", axtDir, chrom->name);
-    ggcChrom(chrom, axtFile, g, restrictHash);
+    ggcChrom(chrom, axtFile, g, restrictHash, fParts);
     }
 snprintf(fileName, sizeof(fileName), "%s/%s", outDir, "genericGene.tab");
 f = mustOpen(fileName, "w");
@@ -733,6 +771,6 @@ restrictFile = optionVal("restrict", NULL);
 if (argc != 5)
     usage();
 pushCarefulMemHandler(1000*1000*1000);
-ggcPic(argv[1], argv[2], argv[3], argv[4]);
+ggcPic(argv[1], argv[2], argv[3], argv[4], optionVal("geneParts", NULL));
 return 0;
 }
