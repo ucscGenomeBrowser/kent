@@ -343,7 +343,7 @@ void touppers(char *s);
 void tolowers(char *s);
 /* Convert entire string to lower case */
 
-char *replaceChars(char *string, char *old, char *new);
+char *replaceChars(char *string, char *oldStr, char *newStr);
 /*
   Replaces the old with the new.
  The old and new string need not be of equal size
