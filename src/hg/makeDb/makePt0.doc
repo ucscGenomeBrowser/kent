@@ -506,9 +506,9 @@ cat << 'EOF' > runChainRandom.csh
 
     ssh kksilo
     cd /cluster/data/pt0/bed/blastz.hg16/axtChain
-    #mkdir humanNet
-    #time netSplit humanGap10.net humanNet
-    #cd humanNet
+    mkdir humanNet
+    time netSplit humanGap10.net humanNet
+    cd humanNet
     mkdir humanChainSubset
     /cluster/home/kate/bin/x86_64/netChainSubset humanGap10.net all.chain humanChainSubset/all.chain
     
@@ -524,7 +524,7 @@ cat << 'EOF' > runChainRandom.csh
 # UPDATE WITH NOV13 ASSEMBLY
 
     cd /cluster/data/pt0
-    wget -r -nH ftp://clint:eastwood@ftp-genome.wi.mit.edu/Assembly.Nov13.2003
+    wget -r -nH ftp://user:passwd@ftp-genome.wi.mit.edu/Assembly.Nov13.2003
     cd Assembly.Nov13.2003
     gunzip contigs.bases.gz
     
@@ -536,6 +536,9 @@ cat << 'EOF' > runChainRandom.csh
     # list of unplaced scaffolds from prior assembly
     # add 1 replaced, 3 new scaffolds
     cd /cluster/data/pt0/bed
+
+    # NOTE: blastz.hg16.nomask not used in final chain/net 
+    
     mkdir -p blastz.hg16.2003-11-20
     ln -s blastz.hg16.2003-11-20 blastz.hg16.nomask
     cd blastz.hg16.nomask
@@ -575,6 +578,8 @@ foreach i (1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 X Y Un M)
 
 
 # RUN BLASTZ OF UNPLACED SCAFFOLDS VS. UNMASKED HUMAN
+# NOTE: this run was aborted due to excessive running time
+# A blat was run instead (see below).
 
 # distribute scaffolds and unmaksed nibs to bluearc and /iscratch/i 
 # for cluster run
@@ -667,6 +672,8 @@ SEQ2_LEN=$BASE/S2.len
     para check
     para push
 
+    # NOTE -- aborted this run, it would have taken too long
+
 
 # LOAD CHIMP SEQUENCE INTO HUMAN BROWSER
     mkdir -p /gbdb/hg16/pt0
@@ -680,8 +687,42 @@ SEQ2_LEN=$BASE/S2.len
     #mkdir -p /cluster/bluearc/pt0/unplacedScaffolds300
     #faSplit sequence /cluster/data/pt0/bed/blastz.hg16.nomask/unplaced.fa \
                 #300 /cluster/bluearc/pt0/unplacedScaffolds300/
-    # NOTE: delete these files
+    mkdir /cluster/data/pt0/bed/blatHg16.scaffolds
+    cd /cluster/data/pt0/bed/blatHg16.scaffolds
+    mkdir psl
+    foreach f (/cluster/data/hg16/?{,?}/N?_??????/N?_??????.fa)
+      set c=$f:t:r
+      echo $c
+      mkdir -p psl/$c
+    end
 
+    # create cluster job
+    mkdir run
+    cd run
+    ls -1S /cluster/bluearc/pt0/unplacedScaffolds300/*.fa > pt0.lst
+    ls -1S /scratch/hg/gs.17/build34/trfFa/*.fa > human.lst
+cat << 'EOF' > gsub
+#LOOP
+/cluster/bin/i386/blat -ooc=/scratch/hg/h/11.ooc -q=dna -t=dna {check in line+ $(path1)} {check in line+ $(path2)} {check out line+ /cluster/data/pt0/bed/blatHg16.scaffolds/psl/$(root1)/$(root1)_$(root2).psl}
+#ENDLOOP
+'EOF'
+    # << this line makes emacs coloring happy
+    gensub2 human.lst pt0.lst gsub spec
+
+    ssh kk
+    cd /cluster/data/pt0
+    cd bed/blatHg16.scaffolds
+    cd run
+    para create spec
+       # 145336 jobs
+    para try
+    para check
+    para push
+    para check
+
+
+    # NOTE: blatHg16 not used in final chain/net;
+    # it consists of blastz.hg16 + blatHg16.scaffolds chains
     ssh kksilo
     mkdir /cluster/data/pt0/bed/blatHg16
     cd /cluster/data/pt0/bed/blatHg16
@@ -728,3 +769,136 @@ cat << 'EOF' > gsub
     para push
     para check
 
+    # lift psl files to chromosome coordinates
+    ssh kksilo
+    cd /cluster/data/pt0/bed/blatHg16.scaffolds
+    pslCat -dir psl/N?_?????? | \
+      liftUp -type=.psl stdout \
+        /cluster/data/hg16/jkStuff/liftAll.lft warn stdin | \
+      pslSortAcc nohead chrom temp stdin
+      # sort by target
+
+
+# CHAIN UNPLACED SCAFFOLD PSL'S
+
+    ssh kkr1u00
+    mkdir -p /cluster/data/pt0/bed/blatHg16.scaffolds/pslChain/run1
+    cd /cluster/data/pt0/bed/blatHg16.scaffolds/pslChain/run1
+    mkdir out chain
+
+  ls -1S /cluster/data/pt0/bed/blatHg16.scaffolds/chrom/*.psl > input.lst
+  cat << '_EOF_' > gsub
+#LOOP
+doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain} {check out line+ out/$(root1).out}
+#ENDLOOP
+'_EOF_'
+    # << this line makes emacs coloring happy
+
+    cat << '_EOF_' > doChain
+#!/bin/csh
+    # NOTE: axtChain in /cluster/bin has a memory problem
+    ~kate/bin/i386/axtChain -psl $1 \
+        /iscratch/i/gs.17/build34/unmaskedNib \
+        -faQ /cluster/data/pt0/bed/blastz.hg16.nomask/unplaced.fa $2 > $3
+'_EOF_'
+    # << this line makes emacs coloring happy
+    chmod a+x doChain
+    gensub2 input.lst single gsub jobList
+    para create jobList
+        # 40 jobs
+    para try
+    para push
+
+    # merge with blastz-generated chains
+
+    ssh kksilo
+    cd /cluster/data/pt0/bed
+    # filter out scaffold 28690, which is replaced in the newer assembly
+    chainFilter -notQ=scaffold_28690 blastz.hg16/axtChain/all.chain \
+        > all.blastz.chain
+    chainMergeSort all.blastz.chain \
+        blatHg16.scaffolds/pslChain/run1/chain/*.chain > all.chain
+
+    chainSplit chain all.chain
+
+    ssh hgwdev
+    cd /cluster/data/pt0/bed/blastz.hg16/axtChain/chain
+    foreach i (*.chain)
+        set c = $i:r
+        hgLoadChain hg16 ${c}_chainPt0 $i
+        eco done $c
+    end
+    
+    # optionally: rm run1/chain/*.chain
+
+    # NOTE: didn't preNet
+
+
+    # REVERSE NET FILE FOR LaDeana
+    ssh kolossus
+    cd /cluster/data/pt0/bed
+    /cluster/home/kate/bin/x86_64/chainNet all.chain -minSpace=10 /cluster/data/hg16/chrom.sizes /cluster/data/pt0/Assembly.Nov13.2003/scaffold.sizes chimpGap10.net humanGap10.net
+    # takes a few minutes
+    # writing chimpGap10.net
+#subchainInfo T 81232621,81233154 81218758,81244581 ali 19126, subSize 529, score 1473313.000000, subScore 40749.899456
+#subchainInfo T 81238921,81239448 81218758,81244581 ali 19126, subSize 510, score 1473313.000000, subScore 39286.292481
+#writing humanGap10.net
+#memory usage 4688400384, utime 13822 s/100, stime 945
+
+    grep -v gap humanGap10.net > humanFill10.net
+    cp humanFill10.net /usr/local/apache/htdocs/kate/chimp
+    # takes a few minutes
+
+    # filter out tiny alignments and post to web site
+    ssh kksilo
+    cd /cluster/data/pt0/bed
+    netFilter humanGap10.net -minAli=150 > humanGap10.filtered.net
+    grep -v gap humanGap10.filtered.net > humanFill10.filtered.net
+    cp humanFill10.filtered.net /usr/local/apache/htdocs/kate/chimp
+
+
+    # CHAIN FILES FROM NET
+    ssh kksilo
+    cd /cluster/data/pt0/bed
+    mkdir blastz-blatHg16.2003-11-24
+    ln -s blastz-blatHg16.2003-11-24 blastz-blatHg16
+    mv all*.chain chain *.net blastz-blatHg16.2003-11-24
+
+    cd blastz-blatHg16
+    netFilter chimpGap10.net -minAli=150 > chimpGap10.filtered.net
+    netSplit chimpGap10.filtered.net chimpNet
+    mkdir chimpChainSubset
+    cd chimpNet
+    foreach f (*.net)
+        set c = $f:r
+        echo "chain subset $c"
+        netChainSubset $f ../chain/$c.chain ../chimpChainSubset/$c.chain
+    end
+    cd ../chimpChainSubset
+    tar cvfz humanChimpChain.gz *.chain
+    mv /usr/local/apache/htdocs/kate/chimp/humanChimpChain.gz \
+        /usr/local/apache/htdocs/kate/chimp/old
+    mv humanChimpChain.gz /usr/local/apache/htdocs/kate/chimp
+    cd ../
+
+    netChainSubset chimpGap10.filtered.net all.chain \
+                        chimpGap10.filtered.chain
+
+    # REVERSED CHAIN FILES FROM NET
+    chainSwap all.chain all.swap.chain
+    netChainSubset humanGap10.filtered.net all.swap.chain \
+                        humanGap10.filtered.chain
+    gzip -c humanGap10.filtered.chain >  \
+                /usr/local/apache/htdocs/kate/chimp/chimpHumanChainAll.gz
+
+
+
+# REFINE BLAT ALIGNMENTS -- RUN BLASTZ ON UNPLACED SCAFFOLDS VS.
+#        ONLY HUMAN CONTIGS IDENTIFIED BY BLAT ALIGNMENTS
+# This was proposed, but not completed
+    ssh kksilo
+    cd /cluster/data/pt0/bed/blatHg16.scaffolds
+    pslCat -dir psl/N?_?????? | \
+      pslSortAcc nohead contig temp stdin
+        # Processed 4644940 lines into 19 temp files
+      # sorted by target contig
