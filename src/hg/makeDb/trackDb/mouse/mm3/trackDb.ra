@@ -165,15 +165,15 @@ type bed 4 +
 
 track blastzBestHuman
 shortLabel Best Human
-longLabel Blastz Human (Nov. 02) Best in Genome Alignments
+longLabel Blastz Human (Apr. 03) Best in Genome Alignments
 group compGeno
 priority 127.5
 visibility hide
 color 100,50,0
 altColor 255,240,200
 spectrum on
-type psl xeno hg13
-otherDb hg13
+type psl xeno hg15
+otherDb hg15
 
 track blastzHuman
 shortLabel Blastz Human
