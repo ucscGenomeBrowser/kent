@@ -6741,3 +6741,47 @@ hgLoadBlastTab hg16 dmBlastTab -maxPer=1 *.tab
 # Scanning through 7748 files
 # Loading database with 28645 rows
 #	row count went from 27173 to 28645
+
+LOAD SNPS (Done.  Daryl Thomas; February 18, 2004)
+    # SNP processing has been condensed into a single script,
+    # which makes snpNih, snpTsc, and snpMap
+    #   ${HOME}/kent/src/hg/snp/locations/processSnpLocations.csh
+
+    # snpBuild = 119
+    # Run from directory $oo/bed/snp/build$snpBuild/snpMap
+    mkdir -p $oo/bed/snp/build$snpBuild/snpMap
+    cd       $oo/bed/snp/build$snpBuild/snpMap
+    processSnpLocations.csh hg16 human 34_2 119 >& log &
+
+    # check data:
+    # wc -l snpTsc.bed; hg16 -e "select count(*) from snpTsc; 
+    # wc -l snpNih.bed; hg16 -e "select count(*) from snpNih; 
+    # wc -l snpMap.bed; hg16 -e "select count(*) from snpMap; 
+    # select * from snpNih limit 5; desc snpNih; show indexes from snpNih"
+    # select * from snpTsc limit 5; desc snpTsc; show indexes from snpTsc"
+    # select * from snpMap limit 5; desc snpMap; show indexes from snpMap"
+
+    # remove temp files
+    # rm human* *bed.gz
+
+LOAD SNP DETAILS (Done.  Daryl Thomas; February 18, 2004)
+    # SNP processing has been condensed into a single script,
+    # which makes dbSnpRsHg
+    #   ${HOME}/kent/src/hg/snp/details/processSnpDetails.csh
+
+    # snpBuild = 119
+    # Run from directory $oo/bed/snp/build$snpBuild/snpMap
+    mkdir -p $oo/bed/snp/build$snpBuild/details/Done
+    mkdir -p $oo/bed/snp/build$snpBuild/details/Observed
+    cd       $oo/bed/snp/build$snpBuild/details
+    processSnpDetails.csh hg16 human 119 >& log &
+    load data local infile "$fileBase.out" into table $database.$table
+    gzip $fileBase.out
+
+    # check data:
+    # hgFixed -e "select count(*) from dbSnpRsHg; 
+    # select * from dbSnpRSHg limit 5; desc dbSnpRsHg; show indexes from dbSnpRSHg"
+
+    # remove temp files
+    # rm dbSnpRs*
+

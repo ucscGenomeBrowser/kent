@@ -3248,3 +3248,48 @@ ssh hgwdev
 hgsql mm4 < ~/kent/src/hg/lib/ensGtp.sql
 zcat /cluster/store1/superFamily/genomes/ass_11-Jan-2004.tab.gz | \
 	hgKnownToSuper mm4 mm stdin
+
+
+LOAD SNPS (Done.  Daryl Thomas; February 18, 2004)
+    # SNP processing has been condensed into a single script,
+    # which makes snpNih, snpTsc, and snpMap
+    #   ${HOME}/kent/src/hg/snp/locations/processSnpLocations.csh
+
+    # snpBuild = 119
+    # Run from directory $oo/bed/snp/build$snpBuild/snpMap
+    mkdir -p $oo/bed/snp/build$snpBuild/snpMap
+    cd       $oo/bed/snp/build$snpBuild/snpMap
+    processSnpLocations.csh mm4 mouse 32 119 >& log &
+
+    # check data:
+    # wc -l snpTsc.bed; mm4 -e "select count(*) from snpTsc; 
+    # wc -l snpNih.bed; mm4 -e "select count(*) from snpNih; 
+    # wc -l snpMap.bed; mm4 -e "select count(*) from snpMap; 
+    # select * from snpNih limit 5; desc snpNih; show indexes from snpNih"
+    # select * from snpTsc limit 5; desc snpTsc; show indexes from snpTsc"
+    # select * from snpMap limit 5; desc snpMap; show indexes from snpMap"
+
+    # remove temp files
+    # rm mouse* *bed.gz
+
+LOAD SNP DETAILS (Done.  Daryl Thomas; February 18, 2004)
+    # SNP processing has been condensed into a single script,
+    # which makes dbSnpRsMm
+    #   ${HOME}/kent/src/hg/snp/details/processSnpDetails.csh
+
+    # snpBuild = 119
+    # Run from directory $oo/bed/snp/build$snpBuild/snpMap
+    mkdir -p $oo/bed/snp/build$snpBuild/details/Done
+    mkdir -p $oo/bed/snp/build$snpBuild/details/Observed
+    cd       $oo/bed/snp/build$snpBuild/details
+    processSnpDetails.csh mm4 mouse 119 >& log &
+    load data local infile "$fileBase.out" into table $database.$table
+    gzip $fileBase.out
+
+    # check data:
+    # hgFixed -e "select count(*) from dbSnpRsMm; 
+    # select * from dbSnpRSMm limit 5; desc dbSnpRsMm; show indexes from dbSnpRSMm"
+
+    # remove temp files
+    # rm dbSnpRs*
+

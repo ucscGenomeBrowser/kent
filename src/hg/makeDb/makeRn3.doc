@@ -2918,3 +2918,47 @@ XXXX - ready to go 2003-11-03 16:50
     hgPepPred rn3 tab ECgenePep ECgene_rn3_v1.1_25oct2003_genepep.txt
     rm genePred.tab
     gzip *
+
+
+
+LOAD SNPS (Done.  Daryl Thomas; February 18, 2004)
+    # SNP processing has been condensed into a single script,
+    # which makes snpNih, snpTsc, and snpMap
+    #   ${HOME}/kent/src/hg/snp/locations/processSnpLocations.csh
+
+    # snpBuild = 119
+    # Run from directory $oo/bed/snp/build$snpBuild/snpMap
+    mkdir -p $oo/bed/snp/build$snpBuild/snpMap
+    cd       $oo/bed/snp/build$snpBuild/snpMap
+    processSnpLocations.csh rn3 rat 2 119 >& log &
+
+    # check data:
+    # wc -l snpNih.bed; rn3 -e "select count(*) from snpNih; 
+    # wc -l snpMap.bed; rn3 -e "select count(*) from snpMap; 
+    # select * from snpNih limit 5; desc snpNih; show indexes from snpNih"
+    # select * from snpMap limit 5; desc snpMap; show indexes from snpMap"
+
+    # remove temp files
+    # rm rat* *bed.gz
+
+LOAD SNP DETAILS (Done.  Daryl Thomas; February 18, 2004)
+    # SNP processing has been condensed into a single script,
+    # which makes dbSnpRsMm
+    #   ${HOME}/kent/src/hg/snp/details/processSnpDetails.csh
+
+    # snpBuild = 119
+    # Run from directory $oo/bed/snp/build$snpBuild/snpMap
+    mkdir -p $oo/bed/snp/build$snpBuild/details/Done
+    mkdir -p $oo/bed/snp/build$snpBuild/details/Observed
+    cd       $oo/bed/snp/build$snpBuild/details
+    processSnpDetails.csh rn3 rat 119 >& log &
+    load data local infile "$fileBase.out" into table $database.$table
+    gzip $fileBase.out
+
+    # check data:
+    # hgFixed -e "select count(*) from dbSnpRsRn; 
+    # select * from dbSnpRsRn limit 5; desc dbSnpRsRn; show indexes from dbSnpRSRn"
+
+    # remove temp files
+    # rm dbSnpRs*
+
