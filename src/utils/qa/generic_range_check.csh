@@ -69,6 +69,7 @@ while ( $del_num != $linenum )
 	# If col_type is non numeric, set min and max values to na
 	if ($col_type =~ varchar* || \
 	$col_type =~ longblob || \
+	$col_type =~ blob || \
 	$col_type =~ enum* || \
 	$col_type =~ text || \
 	$col_type =~ char* || \
