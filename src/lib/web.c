@@ -71,7 +71,7 @@ puts(
     "			<A HREF=\"/index.html\" onMouseOver=\"HOME.src='/images/hl_home.jpg'\" onMouseOut=\"HOME.src='/images/h_home.jpg'\">" "\n"
     "			<IMG SRC=\"/images/h_home.jpg\" ALIGN=\"absmiddle\" BORDER=\"0\" NAME=\"HOME\" ALT=\"Home\" ></A></TD>" "\n"
     "		<TD WIDTH=155>" "\n"
-    "			<A HREF=\"/goldenPath/hgTracks.html\" onMouseOver=\"BROWSER.src='/images/hl_browser.jpg'\" onMouseOut=\"BROWSER.src='/images/h_browser.jpg'\">" "\n"
+    "			<A HREF=\"/cgi-bin/hgGateway\" onMouseOver=\"BROWSER.src='/images/hl_browser.jpg'\" onMouseOut=\"BROWSER.src='/images/h_browser.jpg'\">" "\n"
     "			<IMG SRC=\"/images/h_browser.jpg\" ALIGN=\"absmiddle\" BORDER=\"0\" NAME=\"BROWSER\" ALT=\"&nbsp;&nbsp; Genome Browser\"></A></TD>		" "\n"
     "		<TD WIDTH=100>" "\n"
     "			<A HREF=\"/cgi-bin/hgBlat?command=start\" onMouseOver=\"SEARCH.src='/images/hl_blat.jpg'\" onMouseOut=\"SEARCH.src='/images/h_blat.jpg'\">" "\n"

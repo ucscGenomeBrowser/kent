@@ -1,7 +1,8 @@
 .c.o:
 	gcc -D_GNU_SOURCE -ggdb -O -Wformat -Wimplicit -Wuninitialized -Wreturn-type -I../inc -c $*.c
 
-O = aliType.o bits.o blastParse.o cda.o cheapcgi.o codebias.o common.o crudeali.o \
+O = aliType.o bits.o binRange.o \
+    blastParse.o cda.o cheapcgi.o codebias.o common.o crudeali.o \
     dgRange.o diGraph.o dlist.o dnaseq.o dnautil.o dystring.o errabort.o \
     fa.o ffAli.o flydna.o fof.o fuzzyFind.o fuzzyShow.o gdf.o \
     gemfont.o genoFind.o gfClientLib.o gfNet.o gff.o \
@@ -10,7 +11,7 @@ O = aliType.o bits.o blastParse.o cda.o cheapcgi.o codebias.o common.o crudeali.
     keys.o kxTok.o largefnt.o linefile.o localmem.o \
     medfnt.o memalloc.o memgfx.o net.o nib.o \
     nt4.o obscure.o oldGff.o ooc.o osunix.o patSpace.o \
-    portimpl.o psl.o repMask.o rle.o sailfnt.o seqOut.o servcis.o \
+    portimpl.o psl.o ra.o repMask.o rle.o sailfnt.o seqOut.o servcis.o \
     servCrunx.o servcl.o servmsII.o servpws.o shaRes.o \
     sixhi.o smallishfnt.o snof.o snofmake.o snofsig.o spaceSaver.o \
     sqlNum.o sqlList.o  supStitch.o trans3.o wildcmp.o wormdna.o \
