@@ -10,7 +10,7 @@
 #include "hui.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: wiggleCart.c,v 1.9 2004/05/10 23:45:02 hiram Exp $";
+static char const rcsid[] = "$Id: wiggleCart.c,v 1.10 2004/05/11 17:08:02 hiram Exp $";
 
 extern struct cart *cart;      /* defined in hgTracks.c or hgTrackUi */
 
@@ -79,6 +79,8 @@ wigDebugPrint("wigFetch");
  *	User requested limits are defined in the cart
  *	Default opening display limits are optionally defined with the
  *		defaultViewLimits declaration from trackDb
+ *		or viewLimits from custom tracks
+ *		(both identifiers work from either custom or trackDb)
  *****************************************************************************/
 void wigFetchMinMaxY(struct trackDb *tdb, double *min, double *max,
     double *tDbMin, double *tDbMax, int wordCount, char **words)
@@ -95,6 +97,7 @@ char * tdbDefault = cloneString(
     trackDbSettingOrDefault(tdb, DEFAULTVIEWLIMITS, "NONE") );
 double defaultViewMinY = 0.0;	/* optional default viewing window	*/
 double defaultViewMaxY = 0.0;	/* can be different than absolute min,max */
+char * viewLimits = (char *)NULL;
 boolean optionalViewLimitsExist = FALSE;	/* to decide if using these */
 
 
@@ -105,21 +108,22 @@ if (sameWord("NONE",tdbDefault))
     tdbDefault = cloneString(trackDbSettingOrDefault(tdb, VIEWLIMITS, "NONE"));
     }
 
-if (sameWord("NONE",tdbDefault))
+/*	And check for either viewLimits in custom track settings */
+if ((tdb->settings != (char *)NULL) &&
+    (tdb->settingsHash != (struct hash *)NULL))
     {
     struct hashEl *hel;
-    /*	no viewLimits from trackDb, maybe it is in tdb->settings
-     *	(custom tracks keep settings here)
-     */
-    if ((tdb->settings != (char *)NULL) &&
-	(tdb->settingsHash != (struct hash *)NULL))
-	{
-	if ((hel = hashLookup(tdb->settingsHash, VIEWLIMITS)) != NULL)
-	    {
-	    freeMem(tdbDefault);
-	    tdbDefault = cloneString((char *)hel->val);
-	    }
-	}
+    if ((hel = hashLookup(tdb->settingsHash, VIEWLIMITS)) != NULL)
+	viewLimits = cloneString((char *)hel->val);
+    else if ((hel = hashLookup(tdb->settingsHash, DEFAULTVIEWLIMITS)) != NULL)
+	viewLimits = cloneString((char *)hel->val);
+    }
+
+/*	If no viewLimits from trackDb, if in settings, use them.  */
+if (sameWord("NONE",tdbDefault) && (viewLimits != (char *)NULL))
+    {
+    freeMem(tdbDefault);
+    tdbDefault = cloneString(viewLimits);
     }
 
 /*	Assume last resort defaults, these should never be used
@@ -132,7 +136,10 @@ if (sameWord("NONE",tdbDefault))
 *min = minY = DEFAULT_MIN_Yv;
 *max = maxY = DEFAULT_MAX_Yv;
 
-/*	Let's see what trackDb has to say about these things	*/
+/*	Let's see what trackDb has to say about these things,
+ *	these words come from the trackDb.ra type wig line:
+ *	type wig <min> <max>
+ */
 switch (wordCount)
     {
 	case 3:
@@ -146,8 +153,47 @@ switch (wordCount)
 	    break;
     } 
 correctOrder(minY,maxY);
-*tDbMin = minY;
-*tDbMax = maxY;
+
+/*	Check to see if custom track viewLimits will override the
+ *	track type wig limits.  When viewLimits are greater than the
+ *	type wig limits, use the viewLimits.  This is necessary because
+ *	the custom track type wig limits are exactly at the limits of
+ *	the data input and thus it is better if viewLimits are set
+ *	outside the limits of the data so it will look better in the
+ *	graph.
+ */
+if (viewLimits)
+    {
+    char *words[2];
+    char *sep = ":";
+    int wordCount = chopString(viewLimits,sep,words,ArraySize(words));
+    double viewMin;
+    double viewMax;
+    if (wordCount == 2)
+	{
+	viewMin = atof(words[0]);
+	viewMax = atof(words[1]);
+	/*	make sure they are in order	*/
+	correctOrder(viewMin,viewMax);
+
+	/*	and they had better be different	*/
+	if (! ((viewMax - viewMin) > 0.0))
+	    {
+	    viewMax = viewMin = 0.0;	/* failed the test */
+	    }
+	else
+	    {
+	    minY = min(minY, viewMin);
+	    maxY = max(maxY, viewMax);
+	    }
+	}
+    }
+
+/*	return if OK to do that	*/
+if (tDbMin)
+    *tDbMin = minY;
+if (tDbMax)
+    *tDbMax = maxY;
 
 /*	See if a default viewing window is specified in the trackDb.ra file
  *	Yes, it is true, this parsing is paranoid and verifies that the
@@ -212,6 +258,7 @@ else
 correctOrder(*min,*max);
 
 freeMem(tdbDefault);
+freeMem(viewLimits);
 }	/*	void wigFetchMinMaxY()	*/
 
 /*	Min, Max, Default Pixel height of track
