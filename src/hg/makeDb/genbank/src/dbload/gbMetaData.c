@@ -31,7 +31,7 @@
 #include "genbank.h"
 #include "gbSql.h"
 
-static char const rcsid[] = "$Id: gbMetaData.c,v 1.9 2003/07/25 18:25:33 markd Exp $";
+static char const rcsid[] = "$Id: gbMetaData.c,v 1.10 2003/08/24 21:30:22 markd Exp $";
 
 // FIXME: move mrna, otherse to objects.
 
@@ -495,27 +495,6 @@ if (raFaSize == 0)
 return raAcc;
 }
 
-static boolean isIdInTable(struct sqlConnection *conn, char* table, HGID id)
-/* check if there is a row with the id column set to the specified
- * value */
-{
-char query[512];
-safef(query, sizeof(query), "SELECT count(*) FROM %s WHERE id=%d",
-      table, id);
-return (sqlQuickNum(conn, query) > 0);
-}
-
-static void checkIdInTable(struct sqlConnection *conn, char* table, HGID id,
-                           char *acc)
-/* verify that the sequence id for update is in the specified table.  If
- * it's not, the tables are confused and the user must fix them */
-{
-/*FIXME, expensive, make debug option or drop; never caught a bug */ 
-if (!isIdInTable(conn, table, id))
-    errAbort("seq id %d for %s not found in %s, the genbank tables are out of"
-             " sync, probably need to reload them", id, acc, table);
-}
-
 static void seqUpdate(struct gbStatus* status, HGID faFileId)
 /* Update the seq table for the current entry */
 {
@@ -559,7 +538,6 @@ if (status->stateChg & GB_NEW)
     }
 else if (status->stateChg & GB_META_CHG)
     {
-    checkIdInTable(conn, "mrna", status->gbSeqId, raAcc);
     sqlUpdaterModRow(mrnaUpd, 1, "version='%u', moddate='%s', direction='%c', "
                      "source=%u, organism=%u, library=%u, mrnaClone=%u, sex=%u, "
                      "tissue=%u, development=%u, cell=%u, cds=%u, keyword=%u, "
@@ -845,6 +823,28 @@ sqlDeleterDel(deleter, conn, "mrna", "acc");
 sqlDeleterDel(deleter, conn, SEQ_TBL, "acc");
 }
 
+static void refSeqPepClean(struct sqlConnection *conn)
+/* Delete all refseq peptides that are in gbSeq but no longer
+ * referenced by refLink.  */
+{
+char query[1024];
+struct sqlResult* sr;
+char **row;
+struct sqlDeleter* deleter = sqlDeleterNew(gTmpDir, (verbose >= 2));
+
+/* Use a join to get list of acc, which proved reasonable fastly because
+* the the list is small */
+safef(query, sizeof(query), "SELECT acc FROM gbSeq left JOIN refLink ON (refLink.protAcc = gbSeq.acc) "
+      "WHERE (acc LIKE 'NP_%%') AND (refLink.protAcc IS NULL)");
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    sqlDeleterAddAcc(deleter, row[0]);
+sqlFreeResult(&sr);
+
+sqlDeleterDel(deleter, conn, SEQ_TBL, "acc");
+sqlDeleterFree(&deleter);
+}
+
 void gbMetaDataDeleteOutdated(struct sqlConnection *conn,
                               struct gbSelect* select,
                               struct gbStatusTbl* statusTbl,
@@ -882,6 +882,14 @@ for (status = statusTbl->orphanList; status != NULL; status = status->next)
 gbMetaDataDeleteFromTables(conn, select->release->srcDb, deleter);
 
 sqlDeleterFree(&deleter);
+
+/* if we are cleaning out the ext table, we need to get rid of any
+ * refseq peptides in gbSeq that are no longer referenced.  We don't
+ * do it other times as these are not reachable
+ */
+if ((select->release->srcDb == GB_REFSEQ)
+    && (gOptions->flags & DBLOAD_EXT_FILE_UPDATE))
+    refSeqPepClean(conn);
 } 
 
 struct slName* gbMetaDataListTables(struct sqlConnection *conn)

@@ -30,7 +30,7 @@
 #include "extFileTbl.h"
 #include <signal.h>
 
-static char const rcsid[] = "$Id: gbLoadRna.c,v 1.10 2003/08/22 22:36:38 genbank Exp $";
+static char const rcsid[] = "$Id: gbLoadRna.c,v 1.11 2003/08/24 21:30:22 markd Exp $";
 
 /* FIXME: add optimize subcommand to sort all alignment tables */
 
@@ -739,8 +739,6 @@ errAbort(
   "\n"
   "     -workdir=work/load - Temporary directory for load files.\n"
   "      would require more memory.\n"
-  "\n"
-  "     -noPerChrom - don't build the per-chromosome tables.\n"
   "\n"
   "     -extFileUpdate - update the gbSeq table to link each sequence to\n"
   "      the latest release.  This allows removing fasta files for older\n"

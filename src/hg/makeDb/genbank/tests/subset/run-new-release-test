@@ -22,5 +22,5 @@ chmod ug+rwx data/processed/*/* aligned/*/$db/*
 chmod a-rwx data/processed/*${version2} data/aligned/*${version2}
 db-load-test -initialLoad all
 chmod ug+rwx data/processed/* data/aligned/*
-db-load-test newrel
+db-load-test -extFileUpdate newrel
 

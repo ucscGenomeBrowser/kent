@@ -113,14 +113,18 @@ runMySql("$tbldir/mrna.tbl", $mrnaSel);
 runMySql("$tbldir/gbSeq.tbl",
          "SELECT acc,version,size,file_size,type,srcDb FROM gbSeq ORDER BY acc");
 
-# this always differs, so don't save in tbldir
-runMySql("$main::outdir/gbExtFile.tbl",
-         "SELECT path,size FROM gbExtFile ORDER BY path");
+# this always differs, save with no compare esxtension
+runMySql("$tbldir/gbSeq.nctbl",
+         "SELECT * FROM gbSeq ORDER BY acc");
+runMySql("$tbldir/gbExtFile.nctbl",
+         "SELECT * FROM gbExtFile ORDER BY id");
+runMySql("$tbldir/gbSeqExtFile.nctbl",
+         "SELECT acc,gbSeq.id,path,gbExtFile.id FROM gbSeq,gbExtFile WHERE gbSeq.gbExtFile = gbExtFile.id ORDER BY acc");
 
 # gbStatus, save select data for diff, plus full table
 runMySql("$tbldir/gbStatus.tbl",
          "SELECT acc,version,modDate,type,srcDb,numAligns FROM gbStatus ORDER BY acc");
-runMySql("$main::outdir/gbStatus.tbl",
+runMySql("$tbldir/gbStatus.nctbl",
          "SELECT * FROM gbStatus ORDER BY acc");
 
 # refseq-specific tables

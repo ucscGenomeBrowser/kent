@@ -1,6 +1,6 @@
 #!/bin/bash -e
 
-# db-load-test [-initialLoad] [-reloadList file] [-conf conf] name
+# db-load-test [-initialLoad] [-reloadList file] [-conf conf] [-extFileUpdate] name
 # run load tests on the current set of readable data files.
 
 # find GBROOT based location of this script.
@@ -25,6 +25,8 @@ while [[ $1 == -* ]] ; do
             flags="$flags -conf=$1"
             chkFlags="$chkFlags -conf=$1"
             shift;;
+        -extFileUpdate)
+            flags="$flags -extFileUpdate";;
         *)  echo "invalid option $opt" >&2
             exit 1;;
     esac
