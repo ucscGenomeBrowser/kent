@@ -7,10 +7,6 @@ name global
 nameSql select geneSymbol from kgXref where kgID = '%s'
 proteinSql select spId from kgXref where kgID = '%s'
 descriptionSql select description from kgXref where kgID = '%s'
-summaryTables refSeqSummary kgXref
-summarySql select summary from refSeqSummary,kgXref where kgXref.kgID='%s' and refSeqSummary.mrnaAcc=kgXref.refseq
-summarySource RefSeq Summary
 knownGene knownGene
-knownGeneMrna knownGeneMrna
 knownGenePep knownGenePep
 pfamDescSql select description from proteins092903.pfamDesc where pfamAC='%s'

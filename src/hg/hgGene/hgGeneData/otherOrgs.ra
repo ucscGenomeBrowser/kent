@@ -26,18 +26,21 @@ priority 30
 
 name drosophila
 shortLabel Drosophila
+tables dmBlastTab
 idSql select target from dmBlastTab where query = '%s'
 url http://flybase.bio.indiana.edu/.bin/fbidq.html?%s
 priority 40
 
 name cElegans
 shortLabel C. elegans
+tables ceBlastTab
 idSql select target from ceBlastTab where query = '%s'
 url http://www.wormbase.org/db/gene/gene?name=%s
 priority 50
 
 name yeast
 shortLabel Saccharomyces cerevisiae
+tables scBlastTab
 idSql select target from scBlastTab where query = '%s'
 url http://db.yeastgenome.org/cgi-bin/SGD/locus.pl?locus=%s
 priority 60

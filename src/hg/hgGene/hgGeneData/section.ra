@@ -10,7 +10,7 @@ priority 20
 
 name swissProtComments
 shortLabel SwissProt Comments
-longLabel Descriptive Text from SwissProt
+longLabel Comments and Description Text from SwissProt
 priority 30
 
 name microarray

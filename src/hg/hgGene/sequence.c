@@ -91,8 +91,14 @@ if (sqlTableExists(conn, table))
 static void printMrnaLink(struct sqlConnection *conn, char *geneId)
 /* Print out link to fetch mRNA. */
 {
-printSeqLink(conn, geneId, "knownGeneMrna", hggDoGetMrnaSeq,
-	"mRNA (may differ from genome)");
+char *title = "mRNA";
+char *tableId = "knownGene";
+if (genomeOptionalSetting("knownGeneMrna") != NULL)
+    {
+    title = "mRNA (may differ from genome)";
+    tableId = "knownGeneMrna";
+    }
+printSeqLink(conn, geneId, tableId, hggDoGetMrnaSeq, title);
 }
 
 static void printProteinLink(struct sqlConnection *conn, char *geneId)
@@ -177,10 +183,47 @@ sqlFreeResult(&sr);
 hPrintf("</PRE></TT>");
 }
 
+static void showMrnaFromGenePred(struct sqlConnection *conn, 
+	char *geneId, char *geneName)
+/* Get mRNA sequence for gene from gene prediction. */
+{
+char *table = genomeSetting("knownGene");
+struct sqlResult *sr;
+char **row;
+char query[256];
+struct genePos *gp;
+
+hPrintf("<TT><PRE>");
+safef(query, sizeof(query), 
+    "select * from %s where name='%s'"
+    " and chrom='%s' and txStart=%d and txEnd=%d", 
+    table, geneId, curGeneChrom, curGeneStart, curGeneEnd);
+sr = sqlGetResult(conn, query);
+if ((row = sqlNextRow(sr)) != NULL)
+    {
+    struct genePred *gene = genePredLoad(row);
+    struct bed *bed = bedFromGenePred(gene);
+    struct dnaSeq *seq = hSeqForBed(bed);
+    hPrintf(">%s (%s predicted mRNA)\n", geneId, geneName);
+    writeSeqWithBreaks(stdout, seq->dna, seq->size, 50);
+    dnaSeqFree(&seq);
+    bedFree(&bed);
+    genePredFree(&gene);
+    }
+else
+    errAbort("Couldn't find %s at %s:%d-%d", geneId, 
+    	curGeneChrom, curGeneStart, curGeneEnd);
+sqlFreeResult(&sr);
+hPrintf("</TT></PRE>");
+}
+
 void doGetMrnaSeq(struct sqlConnection *conn, char *geneId, char *geneName)
 /* Get mRNA sequence in a simple page. */
 {
-showSeq(conn, geneId, geneName, "knownGeneMrna");
+if (genomeOptionalSetting("knownGeneMrna") != NULL)
+    showSeq(conn, geneId, geneName, "knownGeneMrna");
+else
+    showMrnaFromGenePred(conn, geneId, geneName);
 }
 
 void doGetProteinSeq(struct sqlConnection *conn, char *geneId, char *geneName)
