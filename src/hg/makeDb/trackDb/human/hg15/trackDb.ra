@@ -61,7 +61,7 @@ type axt mm3
 
 track blastzBestMm3
 shortLabel Best Mouse
-longLabel Blastz Mouse(Feb03) Best in Genome Alignments
+longLabel Blastz Mouse (Feb. 03) Best in Genome Alignments
 group compGeno
 priority 126
 visibility dense
@@ -72,7 +72,7 @@ type psl xeno mm3
 
 track blastzTightMm3
 shortLabel Tight Mouse
-longLabel Blastz Mouse(Feb03), Tight Subset of Best Alignments
+longLabel Blastz Mouse (Feb. 03), Tight Subset of Best Alignments
 group compGeno
 priority 123
 visibility hide
