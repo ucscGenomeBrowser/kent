@@ -169,7 +169,7 @@ for (i=0; i<=i9; i++)
     }
 }
 
-void markResStamp(struct pbStamp *pbStampPtr, struct pbStampPict *stampPictPtr,
+void markResStamp(char aaChar, struct pbStamp *pbStampPtr, struct pbStampPict *stampPictPtr,
  		  int iTarget, double yValue, double tx[], double ty[], 
 		  double avg[], double stddev[])
 /* mark the AA residual stamp */
@@ -181,6 +181,9 @@ double txmin, tymin, txmax, tymax;
 double yPlotValue;
 int len;
 int xx,  yy;
+double pctLow, pctHi;
+char cond_str[255];
+char *answer;
    
 len	= pbStampPtr->len; 
 txmin	= pbStampPtr->xmin;
@@ -190,6 +193,12 @@ tymax	= pbStampPtr->ymax;
     
 ix	= stampPictPtr->xOrig;
 iy	= stampPictPtr->yOrig;
+
+sprintf(cond_str, "AA='%c'", aaChar);
+answer = sqlGetField(NULL, database, "pbAnomLimit", "pctLow", cond_str);
+pctLow    = (double)(atof(answer));
+answer = sqlGetField(NULL, database, "pbAnomLimit", "pctHi", cond_str);
+pctHi    = (double)(atof(answer));
    
 calStampXY(stampPictPtr, (txmax-txmin)/2.0, tymax, &xx, &yy);
   
@@ -202,21 +211,18 @@ else
     yPlotValue = yValue;
     }
     
-if (yValue >= (avg[iTarget] + 2.0*stddev[iTarget]))
+if (yValue >= pctHi)
     {
-    //vLineM(tx[iTarget]+0.4, 0, yPlotValue, 3, MG_RED);
     vLineM(tx[iTarget]+0.4, 0, yPlotValue, 3, abnormalColor);
     }
 else
     {
-    if (yValue <= (avg[iTarget] - 2.0*stddev[iTarget]))
+    if (yValue <= pctLow)
 	{
-	//vLineM(tx[iTarget]+0.4, 0, yPlotValue, 3, MG_RED);
 	vLineM(tx[iTarget]+0.4, 0, yPlotValue, 3, abnormalColor);
 	}
     else
 	{
-	//vLineM(tx[iTarget]+0.5, 0, yPlotValue, 2, MG_BLUE);
 	vLineM(tx[iTarget]+0.5, 0, yPlotValue, 2, normalColor);
 	}
     }
@@ -234,6 +240,10 @@ double txmin, tymin, txmax, tymax;
 double yValue, yPlotValue;
 int len;
 int xx,  yy;
+double pctLow, pctHi;
+char cond_str[255];
+char *answer;
+char aaChar;
    
 len	= pbStampPtr->len; 
 txmin	= pbStampPtr->xmin;
@@ -245,7 +255,14 @@ tymax	=  4.0;
    
 ix	= stampPictPtr->xOrig;
 iy	= stampPictPtr->yOrig;
-   
+
+aaChar = aaAlphabet[iTarget];
+sprintf(cond_str, "AA='%c'", aaChar);
+answer = sqlGetField(NULL, database, "pbAnomLimit", "pctLow", cond_str);
+pctLow    = (double)(atof(answer));
+answer = sqlGetField(NULL, database, "pbAnomLimit", "pctHi", cond_str);
+pctHi    = (double)(atof(answer));
+
 yScale = (double)(120)/8.0;
 calStampXY(stampPictPtr, (txmax-txmin)/2.0, tymax, &xx, &yy);
   
@@ -266,28 +283,27 @@ else
         }
     }
     
-if (yPlotValue > 0.0)
+if (yValueIn > pctHi)
     {
-    //vLine(tx[iTarget]+0.4, 0.0, yPlotValue, 3, MG_BLUE);
-    vLine(tx[iTarget]+0.4, 0.0, yPlotValue, 2, normalColor);
-    }
-else
-    {
-    //vLine(tx[iTarget]+0.4, 0.0+yPlotValue, -yPlotValue, 3, MG_BLUE);
-    vLine(tx[iTarget]+0.4, 0.0+yPlotValue, -yPlotValue, 2, normalColor);
-    }
-
-if (yPlotValue >= 2.0)
-    {
-    //vLine(tx[iTarget]+0.4, 0.0, yPlotValue, 3, MG_RED);
     vLine(tx[iTarget]+0.4, 0.0, yPlotValue, 3, abnormalColor);
     }
 else
     {
-    if (yPlotValue <= -2.0)
+    if (yValueIn <= pctLow)
   	{
-	//vLine(tx[iTarget]+0.4, 0.0+yPlotValue, -yPlotValue, 3, MG_RED);
 	vLine(tx[iTarget]+0.4, 0.0+yPlotValue, -yPlotValue, 3, abnormalColor);
+	}
+    else
+  	{
+	// normal range
+	if ((yValueIn - avg[iTarget]) >= 0.0)
+    	    {
+    	    vLine(tx[iTarget]+0.4, 0.0, yPlotValue, 2, normalColor);
+    	    }
+	else
+    	    {
+    	    vLine(tx[iTarget]+0.4, 0.0+yPlotValue, -yPlotValue, 2, normalColor);
+    	    }
 	}
     }
 }
@@ -310,9 +326,9 @@ txmin = pbStampPtr->xmin;
 txmax = pbStampPtr->xmax;
 tymin = pbStampPtr->ymin;
 tymax = pbStampPtr->ymax;
-  
+
 calStampXY(stampPictPtr, txmin+(txmax-txmin)/2.0, tymax, &xx, &yy);
-    vgTextCentered(g_vg, xx-5, yy+3, 10, 10, MG_BLUE, g_font, valStr);
+    vgTextCentered(g_vg, xx-5, yy+3, 10, 10, pbBlue, g_font, valStr);
     
 ix	= stampPictPtr->xOrig;
 iy	= stampPictPtr->yOrig;
@@ -339,7 +355,7 @@ if (iTarget != -1)
 	ytop = 0.1 * (tymax - tymin) + tymin;
 	}
     }
-vLineM(tx[iTarget]+(tx[iTarget+1]-tx[iTarget])/2.0, 0, ytop, 2,  MG_BLUE);
+vLineM(tx[iTarget]+(tx[iTarget+1]-tx[iTarget])/2.0, 0, ytop, 2,  pbBlue);
 }
 
 void markStamp0(struct pbStamp *pbStampPtr, struct pbStampPict *stampPictPtr,
@@ -362,7 +378,7 @@ tymin = pbStampPtr->ymin;
 tymax = pbStampPtr->ymax;
  
 calStampXY(stampPictPtr, txmin+(txmax-txmin)/2.0, tymax, &xx, &yy);
-vgTextCentered(g_vg, xx-5, yy+3, 10, 10, MG_BLUE, g_font, valStr);
+vgTextCentered(g_vg, xx-5, yy+3, 10, 10, pbBlue, g_font, valStr);
 }
 
 struct pbStamp *getStampData(char *stampName)
@@ -412,7 +428,6 @@ void mapBoxStamp(int x, int y, int width, int height, char *title, char *tagName
 hPrintf("<AREA SHAPE=RECT COORDS=\"%d,%d,%d,%d\" ", x-1, y-1, x+width+1, y+height+1);
 hPrintf("HREF=\"../goldenPath/help/pbTracksHelpFiles/pb%s.shtml\"", tagName);
 hPrintf(" target=_blank ALT=\"Click here for explanation of %c%s%c\">\n", '\'', title, '\'');
-//hPrintf(" target=\"HistogramHelp\" ALT=\"Click here for explanation of %c%s%c\">\n", '\'', title, '\'');
 }
 
 void mapBoxStampTitle(int x, int y, int width, int height, char *title, char *tagName)
@@ -420,7 +435,6 @@ void mapBoxStampTitle(int x, int y, int width, int height, char *title, char *ta
 hPrintf("<AREA SHAPE=RECT COORDS=\"%d,%d,%d,%d\" ", x-1, y-1, x+width+1, y+height+1);
 hPrintf("HREF=\"../goldenPath/help/pbTracksHelpFiles/pb%s.shtml\"", tagName);
 hPrintf(" target=_blank ALT=\"Click here for explanation of %c%s%c\">\n", '\'', title, '\'');
-//hPrintf(" target=\"HistogramHelp\" ALT=\"Click here for explanation of %c%s%c\">\n", '\'', title, '\'');
 }
 
 void drawPbStamp(struct pbStamp *pbStampPtr, struct pbStampPict *stampPictPtr)
@@ -537,20 +551,30 @@ vgTextCentered(g_vg, xx-5, yy-12, 10, 10, MG_BLACK, g_font, "Amino Acid Anomalie
 titleLen = strlen("Amino Acid Anomoly");
 mapBoxStampTitle(xx-5-titleLen*6/2-6, yy-14, titleLen*6+12, 14,  
 	         "Amino Acid Anomolies", "pepAnomalies");
-    
+/*
 calStampXY(stampPictPtr, txmax-(txmax-txmin)*.25, tymin+(tymax-tymin)/4.0*3.0, &xx, &yy);
 vgTextCentered(g_vg, xx, yy-10, 10, 10, MG_BLACK, g_font, "+2 stddev");
 calStampXY(stampPictPtr, txmax-(txmax-txmin)*.25, tymin+(tymax-tymin)/4.0, &xx, &yy);
 vgTextCentered(g_vg, xx, yy-10, 10, 10, MG_BLACK, g_font, "-2 stddev");
-   
+*/
+
+index = 0; 
+hLine(tx[index], (tymax-tymin)/8.0,     (tx[index+1]-tx[index])/2.0, 1, MG_GRAY);
+hLine(tx[index], (tymax-tymin)/4.0,     (tx[index+1]-tx[index])/2.0, 1, MG_GRAY);
+hLine(tx[index], (tymax-tymin)/8.0*3.0, (tx[index+1]-tx[index])/2.0, 1, MG_GRAY);
+hLine(tx[index], (tymax-tymin)/4.0*3.0, (tx[index+1]-tx[index])/2.0, 1, MG_GRAY);
+hLine(tx[index], (tymax-tymin)/8.0*4.0, (tx[index+1]-tx[index])/2.0, 1, MG_GRAY);
+hLine(tx[index], (tymax-tymin)/8.0*5.0, (tx[index+1]-tx[index])/2.0, 1, MG_GRAY);
+hLine(tx[index], (tymax-tymin)/8.0*7.0, (tx[index+1]-tx[index])/2.0, 1, MG_GRAY);
+
 for (index=0; index < (n-1); index++)
     {
-    hLine(tx[index], (tymax-tymin)/4.0,     (tx[index+1]-tx[index])/2.0, 1, MG_BLACK);
+    //hLine(tx[index], (tymax-tymin)/4.0,     (tx[index+1]-tx[index])/2.0, 1, MG_BLACK);
     hLine(tx[index], (tymax-tymin)/2.0,     tx[index+1]-tx[index], 1, MG_BLACK);
-    hLine(tx[index], (tymax-tymin)/4.0*3.0, (tx[index+1]-tx[index])/2.0, 1, MG_BLACK);
+    //hLine(tx[index], (tymax-tymin)/4.0*3.0, (tx[index+1]-tx[index])/2.0, 1, MG_BLACK);
     }
    
-vLine(tx[0], 0, ty[0], 1,  MG_BLUE);
+vLine(tx[0], 0, ty[0], 1,  pbBlue);
     
 hLine(txmin, tymin, txmax-txmin, 2, boundaryColor);
 // this line needs to call hLine2 for fine tuning at the right hand side ending 
@@ -567,40 +591,6 @@ if (strcmp(pbStampPtr->stampName, "pepRes") == 0)
 	vgTextCentered(g_vg, xx+1, yy+5, 10, 10, MG_BLACK, g_font, charStr);
 	}
     } 
-}
-
-void drawResStamp(struct pbStamp *pbStampPtr, int ix, int iy, int iw, int ih)
-/* draw the AA residue stamp */
-{
-char *stampTable, *stampTitle, *stampDesc;
-double txmin, tymin, txmax, tymax;
-int i, n, index;
-int xx, yy;
-
-stampTable	= cloneString(pbStampPtr->stampTable);
-stampTitle	= cloneString(pbStampPtr->stampTitle);
-n		= pbStampPtr->len;
-txmin		= pbStampPtr->xmin;
-txmax		= pbStampPtr->xmax;
-tymin		= pbStampPtr->ymin;
-tymax		= pbStampPtr->ymax;
-stampDesc	= cloneString(pbStampPtr->stampDesc);
-
-xScale = (double)(iw)/(txmax - txmin);
-yScale = (double)(ih)/(tymax - tymin);
-    
-calStampXY(stampPictPtr, (txmax-txmin)/2.0, tymax, &xx, &yy);
-vgTextCentered(g_vg, xx-5, yy+3, 10, 10, MG_BLACK, g_font, stampTitle);
-   
-for (index=0; index < (n-1); index++)
-    {
-    pbBox(tx[index], tymin, tx[index+1]-tx[index]-0.4, ty[index], MG_YELLOW);
-    }
-   
-hLine(txmin, tymin, txmax-txmin, 1, MG_BLACK);
-hLine(txmin, tymax, txmax-txmin, 1, MG_BLACK);
-vLine(txmin, tymin, tymax-tymin, 1, MG_BLACK);
-vLine(txmax, tymin, tymax-tymin, 1, MG_BLACK);
 }
 
 void doStamps(char *proteinID, char *mrnaID, char *aa, struct vGfx *vg, int *yOffp)
@@ -636,6 +626,7 @@ char *aap;
 double molWeight=0.0;
 double hydroSum;
 struct pbStamp *stampDataPtr;
+char tempStr[255];
 
 Color bkgColor;
 
@@ -758,7 +749,8 @@ if (answer != NULL)
     drawPbStamp(stampDataPtr, stampPictPtr);
     for (i=0; i<20; i++)
 	{
-        markResStamp(stampDataPtr, stampPictPtr, i, aaResFreqDouble[i], tx, ty, avg, stddev);
+        markResStamp(aaAlphabet[i], stampDataPtr, stampPictPtr, i, aaResFreqDouble[i], 
+			tx, ty, avg, stddev);
 	}
     pbStampFree(&stampDataPtr);
     }
@@ -847,6 +839,10 @@ if (answer != NULL)
     pbStampFree(&stampDataPtr);
     }
 
+// This section was used to plot freq distribution for each AA so that we can view than to decide on
+// whether +/- 2 stddev is applicable and what cutoff thresholds to use.  Keep it here for possible
+// future reuse.
+/*
 vertLabel = cloneString("Frequency");
 for (i=strlen(vertLabel)-1; i>=0; i--)
     {
@@ -854,4 +850,21 @@ for (i=strlen(vertLabel)-1; i>=0; i--)
     vgTextCentered(g_vg, 3, 45+i*10, 10, 10, MG_BLACK, g_font, vertLabel+i);
     vgTextCentered(g_vg, 3, 215+i*10, 10, 10, MG_BLACK, g_font, vertLabel+i);
     }
+
+xPosition = xPosition + 80;
+// draw individual AA distribution
+for (j=0; j<20; j++)
+    {
+    sprintf(tempStr, "%c", aaAlphabet[j]);
+    stampDataPtr = getStampData(tempStr);
+
+    xPosition = xPosition + stampWidth + stampWidth/8;
+    setPbStampPict(stampPictPtr, stampDataPtr, xPosition, yPosition, stampWidth, stampHeight);
+    drawPbStamp(stampDataPtr, stampPictPtr);
+    drawXScale(stampDataPtr, stampPictPtr, 10);
+    sprintf(valStr2, "%c", aaAlphabet[j]);
+    markStamp(stampDataPtr, stampPictPtr, 0.0, valStr2, tx, ty);
+    pbStampFree(&stampDataPtr);
+    }
+*/
 }
