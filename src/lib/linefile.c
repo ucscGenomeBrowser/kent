@@ -10,7 +10,7 @@
 #include "errabort.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: linefile.c,v 1.26 2003/11/15 21:14:09 kent Exp $";
+static char const rcsid[] = "$Id: linefile.c,v 1.27 2003/12/10 00:26:33 hiram Exp $";
 
 struct lineFile *lineFileAttatch(char *fileName, bool zTerm, int fd)
 /* Wrap a line file around an open'd file. */
@@ -366,6 +366,21 @@ if (c != '-' && !isdigit(c))
     errAbort("Expecting number field %d line %d of %s, got %s", 
     	wordIx+1, lf->lineIx, lf->fileName, ascii);
 return atoi(ascii);
+}
+
+double lineFileNeedDouble(struct lineFile *lf, char *words[], int wordIx)
+/* Make sure that words[wordIx] is an ascii double value, and return
+ * binary representation of it. */
+{
+char *valEnd;
+char *val = words[wordIx];
+double doubleValue;
+
+doubleValue = strtod(val, &valEnd);
+if ((*val == '\0') || (*valEnd != '\0'))
+    errAbort("Expecting double field %d line %d of %s, got %s",
+    	wordIx+1, lf->lineIx, lf->fileName, val);
+return doubleValue;
 }
 
 void lineFileSkip(struct lineFile *lf, int lineCount)

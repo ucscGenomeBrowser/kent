@@ -106,6 +106,10 @@ int lineFileNeedNum(struct lineFile *lf, char *words[], int wordIx);
 /* Make sure that words[wordIx] is an ascii integer, and return
  * binary representation of it. */
 
+double lineFileNeedDouble(struct lineFile *lf, char *words[], int wordIx);
+/* Make sure that words[wordIx] is an ascii double value, and return
+ * binary representation of it. */
+
 void lineFileSkip(struct lineFile *lf, int lineCount);
 /* Skip a number of lines. */
 
