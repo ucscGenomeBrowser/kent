@@ -398,6 +398,7 @@ void humMusSampleClick(struct sqlConnection *conn, struct trackDb *tdb,
 	char *item, int start, int smpSize)
 /* Handle click in humMus sample (wiggle) track. */
 {
+int i;
 char table[64];
 boolean hasBin;
 struct sample *smp;
@@ -421,6 +422,22 @@ while ((row = sqlNextRow(sr)) != NULL)
     printf("<B>Score:</B> %g<BR>\n", whichNum(smp->score,0.0,3.66958,1000));
     printf("<B>Strand:</B> %s<BR>\n", smp->strand);
     printPos(smp->chrom, smp->chromStart, smp->chromEnd, NULL, TRUE);
+
+    printf("<hr><br><h4>start&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            stop&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;L-score</h4>" );
+    for( i=1; i<smp->sampleCount; i=i+2 )
+    {
+        if( smp->sampleHeight[i] != smp->sampleHeight[i+1] )
+            errAbort("regions not paired properly(%d,%d,%d,%d)!!!\n",
+                    smp->sampleHeight[i-1],
+                    smp->sampleHeight[i], smp->sampleHeight[i+1],
+                    smp->sampleHeight[i+2]);
+
+        printf("%d&nbsp;&nbsp;&nbsp;&nbsp;%d&nbsp;&nbsp;&nbsp;&nbsp;%g<br>",
+                smp->chromStart + smp->samplePosition[i],
+                smp->chromStart +  smp->samplePosition[i+1],
+                whichNum(smp->sampleHeight[i],0.0,3.66958,1000) );
+    }
     }
 }
 
