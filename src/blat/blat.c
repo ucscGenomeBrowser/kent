@@ -15,6 +15,8 @@
 #include "trans3.h"
 #include "repMask.h"
 
+int version = 5;	/* Blat version number. */
+
 enum constants {
 	qWarnSize = 5000000,	/* Warn if more than this many bases in one query. */
 	};
@@ -43,7 +45,7 @@ void usage()
 /* Explain usage and exit. */
 {
 errAbort(
-  "blat - Standalone BLAT fast sequence search command line tool\n"
+  "blat - Standalone BLAT v. %d fast sequence search command line tool\n"
   "usage:\n"
   "   blat database query [-ooc=11.ooc] output.psl\n"
   "where:\n"
@@ -105,6 +107,7 @@ errAbort(
   "                   psl - Default.  Tab separated format without actual sequence\n"
   "                   pslx - Tab separated format with sequence\n"
   "   -dots=N     Output dot every N sequences to show program's progress\n"
+  , version
   );
 }
 

@@ -568,6 +568,21 @@ slReverse(&rangeList);
 return rangeList;
 }
 
+#ifdef DEBUG
+void dumpRange(struct gfRange *r, FILE *f)
+/* Dump range to file. */
+{
+fprintf(f, "%d-%d %s %d-%d, hits %d\n", r->qStart, r->qEnd, r->tName, r->tStart, r->tEnd, r->hitCount);
+}
+
+void dumpRangeList(struct gfRange *rangeList, FILE *f)
+/* Dump range list to file for debugging. */
+{
+struct gfRange *range;
+for (range = rangeList; range != NULL; range = range->next)
+    dumpRange(range, f);
+}
+#endif /* DEBUG */
 
 struct ssBundle *gfClumpsToBundles(struct gfClump *clumpList, struct dnaSeq *seq,
     boolean isRc, struct gfRange **retRangeList)
@@ -579,7 +594,7 @@ struct dnaSeq *targetSeq;
 
 rangeList = seqClumpToRangeList(clumpList, 0);
 slSort(&rangeList, gfRangeCmpTarget);
-rangeList = gfRangesBundle(rangeList, 500000);
+rangeList = gfRangesBundle(rangeList, 1000);
 for (range = rangeList; range != NULL; range = range->next)
     {
     targetSeq = range->tSeq;
@@ -1209,7 +1224,7 @@ for (qFrame = 0; qFrame<3; ++qFrame)
 	}
     }
 slSort(&rangeList, gfRangeCmpTarget);
-rangeList = gfRangesBundle(rangeList, 500000);
+rangeList = gfRangesBundle(rangeList, 1000);
 for (range = rangeList; range != NULL; range = range->next)
     {
     targetSeq = range->tSeq;
@@ -1491,7 +1506,8 @@ ssBundleFreeList(pOneList);
 }
 
 void gfLongDnaInMem(struct dnaSeq *query, struct genoFind *gf, 
-   boolean isRc, int minScore, Bits *qMaskBits, GfSaveAli outFunction, void *outData)
+   boolean isRc, int minScore, Bits *qMaskBits, 
+   GfSaveAli outFunction, void *outData)
 /* Chop up query into pieces, align each, and stitch back
  * together again. */
 {
@@ -1505,6 +1521,7 @@ int subOffset, subSize, nextOffset;
 DNA saveEnd, *endPos;
 struct ssBundle *oneBunList = NULL, *bigBunList = NULL, *bun;
 struct hash *bunHash = newHash(8);
+int pieceCount = 0;
 
 for (subOffset = 0; subOffset<query->size; subOffset = nextOffset)
     {
@@ -1541,6 +1558,7 @@ for (subOffset = 0; subOffset<query->size; subOffset = nextOffset)
     gfClumpFreeList(&clumpList);
     gfRangeFreeList(&rangeList);
     *endPos = saveEnd;
+    ++pieceCount;
     }
 for (bun = bigBunList; bun != NULL; bun = bun->next)
     {
