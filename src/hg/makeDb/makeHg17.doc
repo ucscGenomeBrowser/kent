@@ -2312,7 +2312,7 @@ cat > template << 'EOF'
 	     /cluster/data/ncbi/fishClones/fishClones.2004-07/hbrc.txt \
 	     /cluster/data/ncbi/fishClones/fishClones.2004-07/clac.out \
 	     /cluster/data/ncbi/bacends/human/bacends.4/cl_acc_gi_len \
-	     /cluster/data/hg17/bed/bacends/bacEnds.psl fishClones_initial
+	     /cluster/data/hg17/bed/bacends/lifted/bacEnds.lifted.psl fishClones_initial
 	     
 # Get sequences for accessions not in genome
 	ssh kolossus
@@ -2337,7 +2337,7 @@ cat > template << 'EOF'
 	     /cluster/data/ncbi/fishClones/fishClones.2004-07/hbrc.txt \
 	     /cluster/data/ncbi/fishClones/fishClones.2004-07/clac.out \
 	     /cluster/data/ncbi/bacends/human/bacends.4/cl_acc_gi_len \
-	     /cluster/data/hg17/bed/bacends/bacEnds.psl fishClones
+	     /cluster/data/hg17/bed/bacends/lifted/bacEnds.lifted.psl fishClones
 
 # Load the track
     hgLoadBed -noBin -tab -sqlTable=/cluster/home/kent/src/hg/lib/fishClones.sql \
