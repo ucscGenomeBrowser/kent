@@ -6331,6 +6331,7 @@ if (!hideControls)
     smallBreak();
 
     /* Display bottom control panel. */
+    cgiMakeButton("hgt.reset", "reset all");
     printf(" Guidelines ");
     cgiMakeCheckBox("guidelines", withGuidelines);
     printf(" <B>Labels:</B> ");
@@ -6604,7 +6605,7 @@ printf("new tracks, including some gene predictions.  Please try again tomorrow.
  * Because the browser is a central program, most of it's cart 
  * variables are not hgt. qualified.  It's a good idea if other
  * program's unique variables be qualified with a prefix though. */
-char *excludeVars[] = { "submit", "Submit", 
+char *excludeVars[] = { "submit", "Submit", "hgt.reset",
 	"hgt.in1", "hgt.in2", "hgt.in3", 
 	"hgt.out1", "hgt.out2", "hgt.out3",
 	"hgt.left1", "hgt.left2", "hgt.left3", 
@@ -6617,6 +6618,12 @@ int main(int argc, char *argv[])
 {
 cgiSpoof(&argc, argv);
 htmlSetBackground("../images/floret.jpg");
+if (cgiVarExists("hgt.reset"))
+    {
+    static char *except[] = {"position", "db", NULL};
+    cgiVarExcludeExcept(except);
+    cartResetInDb(hUserCookie());
+    }
 cartHtmlShell("UCSC Human Genome Browser v8", doMiddle, hUserCookie(), excludeVars);
 return 0;
 }
