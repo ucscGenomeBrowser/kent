@@ -13,7 +13,7 @@
 #include "scoredRef.h"
 #include "hgMaf.h"
 
-static char const rcsid[] = "$Id: mafTrack.c,v 1.15 2003/11/01 05:52:22 kate Exp $";
+static char const rcsid[] = "$Id: mafTrack.c,v 1.16 2003/11/01 16:53:13 kate Exp $";
 
 struct mafItem
 /* A maf track item. */
@@ -285,7 +285,7 @@ for (i=0; i<textSize && outIx < outSize;  ++i)
     }
 }
 
-static void setIxAlign(int ix, int *ixMafAli, int count)
+static void setIxMafAlign(int ix, int *ixMafAli, int count)
 /* make an array of alignment indices, one per base */
 {
     int i;
@@ -455,6 +455,7 @@ int height1 = mi->height-2;
 
 safef(dbChrom, sizeof(dbChrom), "%s.%s", database, chromName);
 mafList = mafOrAxtLoadInRegion(conn, tg, chromName, seqStart, seqEnd, isAxt);
+int ixMafAli = 0;       /* alignment index, to allow alternating color */
 for (full = mafList; full != NULL; full = full->next)
     {
     double scoreScale;
@@ -468,6 +469,7 @@ for (full = mafList; full != NULL; full = full->next)
         maf = full;
     if (maf != NULL)
 	{
+        ixMafAli++;
 	mcMaster = mafFindComponent(maf, dbChrom);
 	if (mcMaster->strand == '-')
 	    mafFlipStrand(maf);
@@ -484,7 +486,7 @@ for (full = mafList; full != NULL; full = full->next)
 		{
 		int y = pixelScores[i] * height1;
 		vgBox(vg, i+mafPixelStart+xOff, yOff + height1 - y, 
-		    1, y+1, color);
+		    1, y+1, (ixMafAli % 2) ? color : tg->ixAltColor);
 		}
 	    else
 	        {
@@ -604,7 +606,7 @@ for (maf = mafList; maf != NULL; maf = maf->next)
 		}
 	    }
 	getNormalizedScores(sub, mcMaster->text, scores + lineOffset, subSize);
-        setIxAlign(i, ixMafAli + lineOffset, subSize);
+        setIxMafAlign(i, ixMafAli + lineOffset, subSize);
 	}
     mafAliFree(&sub);
     }
