@@ -624,8 +624,8 @@ identifier knownGeneId typeOf=nativeMrnaAccession dependency
     $kgDb.knownGeneMrna.name full
     $kgDb.knownGenePep.name full
     $kgDb.knownGeneLink.name
-    $kgDb.knownGnfDistance.query
-    $kgDb.knownGnfDistance.target
+#   $kgDb.knownGnfDistance.query  (changed to gnfU95Distance)
+#   $kgDb.knownGnfDistance.target  (changed to gnfU95Distance)
     $kgDb.knownIsoforms.transcript full
     $kgDb.knownToCdsSnp.name
     $kgDb.knownToEnsembl.name
@@ -1310,6 +1310,7 @@ tablesIgnored $gbd
     axtInfo
     chromInfo
     cpgIsland
+    cpgIslandExt
     cytoBand
     firstEF
     gbLoaded
@@ -1318,6 +1319,7 @@ tablesIgnored $gbd
     gcPercent
     genscanSubopt
     grp
+    hgFindSpec
     history
     miRNA
     quality
@@ -1407,6 +1409,9 @@ tablesIgnored mm3
     chr%_mm3Hg15L
     ensEst
     recombRateMouse
+
+tablesIgnored rn2
+    refPep
 
 tablesIgnored hg13
     chr%_humMusL
