@@ -9,4 +9,4 @@ proteinSql select spId from kgXref where kgID = '%s'
 descriptionSql select description from kgXref where kgID = '%s'
 knownGene knownGene
 knownGenePep knownGenePep
-pfamDescSql select description from proteins092903.pfamDesc where pfamAC='%s'
+pfamDescSql select description from proteins031112.pfamDesc where pfamAC='%s'
