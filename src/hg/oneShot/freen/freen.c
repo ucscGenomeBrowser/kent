@@ -4,9 +4,14 @@
 #include "linefile.h"
 #include "hash.h"
 #include "portable.h"
-#include "chain.h"
+#include "jksql.h"
+#include "trackDb.h"
+#include "hdb.h"
 
-static char const rcsid[] = "$Id: freen.c,v 1.53 2004/11/23 00:23:12 kent Exp $";
+static char const rcsid[] = "$Id: freen.c,v 1.54 2004/11/30 17:22:26 kent Exp $";
+
+struct trackDb* loadTrackDb(struct sqlConnection *conn, char* where);
+/* load list of trackDb objects, with optional where */
 
 void usage()
 /* Print usage and exit. */
@@ -17,15 +22,19 @@ errAbort("usage: freen something");
 void freen(char *a)
 /* Test some hair-brained thing. */
 {
-struct chain *chainList = NULL, *chain;
-struct lineFile *lf = lineFileOpen(a, TRUE);
+struct trackDb *tdbList, *tdb;
+struct sqlConnection *conn;
+hSetDb(a);
+conn = hAllocConn();
+// tdbList = loadTrackDb(conn, NULL);
+// tdbList = trackDbLoadWhere(conn, "trackDb_kent", NULL);
+tdbList = hTrackDb(NULL);
 
-pushCarefulMemHandler(2000000000);
-while ((chain = chainRead(lf)) != NULL)
+for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
     {
-    slAddHead(&chainList, chain);
+    if (startsWith("blat", tdb->tableName))
+        printf("%s %s %s\n", tdb->tableName, tdb->type, tdb->shortLabel);
     }
-printf("%ld allocated in %d chains\n", carefulTotalAllocated(), slCount(chainList));
 }
 
 
