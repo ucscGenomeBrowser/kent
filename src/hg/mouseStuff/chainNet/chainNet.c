@@ -7,7 +7,7 @@
 #include "rbTree.h"
 #include "chainBlock.h"
 
-static char const rcsid[] = "$Id: chainNet.c,v 1.27 2003/12/03 22:20:22 kent Exp $";
+static char const rcsid[] = "$Id: chainNet.c,v 1.28 2003/12/12 21:47:08 kate Exp $";
 
 int minSpace = 25;	/* Minimum gap size to fill. */
 int minFill;		/* Minimum fill to record. */
@@ -246,7 +246,7 @@ for (b = chain->blockList; b != NULL; b = b->next)
 	}
     if (qe > clipEnd)
         {
-	te  -= (clipEnd - qe);
+	te  -= (qe - clipEnd);
 	qe = clipEnd;
 	}
     if (qMin > qs) qMin = qs;
@@ -291,7 +291,7 @@ for (b = chain->blockList; b != NULL; b = b->next)
 	}
     if (te > clipEnd)
         {
-	qe  -= (clipEnd - te);
+	qe  -= (te - clipEnd);
 	te = clipEnd;
 	}
     if (qMin > qs) qMin = qs;
