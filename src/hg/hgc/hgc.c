@@ -3351,7 +3351,7 @@ if (qName == NULL)
 htmStart(index, qName);
 fprintf(index, "<H3>Alignment of %s</H3>", qName);
 fprintf(index, "<A HREF=\"%s#cDNA\" TARGET=\"body\">%s</A><BR>\n", bodyTn.forCgi, qName);
-fprintf(index, "<A HREF=\"%s#genomic\" TARGET=\"body\">genomic</A><BR>\n", bodyTn.forCgi);
+fprintf(index, "<A HREF=\"%s#genomic\" TARGET=\"body\">%s.%s</A><BR>\n", bodyTn.forCgi, hOrganism(hGetDb()), psl->tName);
 for (i=1; i<=blockCount; ++i)
     {
     fprintf(index, "<A HREF=\"%s#%d\" TARGET=\"body\">block%d</A><BR>\n",
@@ -5627,19 +5627,24 @@ printTrackHtml(tdb);
 freez(&cgiItem);
 }
 
-void doBlatMus(struct trackDb *tdb, char *item)
+void doAlignmentOtherDb(struct trackDb *tdb, char *item)
 /* Put up cross-species alignment when the second species
- * sequence is in a nib file. */
+ * is another db, indicated by the 3rd word of tdb->type. */
 {
-longXenoPsl1(tdb, item, "Mouse", "chromInfo", "mm2");
+char *otherOrg;
+char *otherDb;
+char *typeLine = cloneString(tdb->type);
+char *words[8];
+int wordCount = chopLine(typeLine, words);
+if (words[0] == NULL || words[1] == NULL || words[2] == NULL ||
+    ! (sameString(words[0], "psl") &&
+       sameString(words[1], "xeno")))
+    errAbort("doAlignmentOtherDb: trackDb type must be \"psl xeno XXX\" where XXX is the name of the other database.");
+otherDb = words[2];
+otherOrg = hOrganism(otherDb);
+longXenoPsl1(tdb, item, otherOrg, "chromInfo", otherDb);
 }
 
-void doBlastzRn1(struct trackDb *tdb, char *item)
-/* Put up cross-species alignment when the second species
- * sequence is in a nib file. */
-{
-longXenoPsl1(tdb, item, "Rat", "chromInfo", "rn1");
-}
 
 void doMultAlignZoo(struct trackDb *tdb, char *item, char *otherName )
 /* Put up cross-species alignment when the second species
@@ -5671,27 +5676,6 @@ if (!(strcmp(otherName,"human")
 }
 
 
-
-void doBlatHuman(struct trackDb *tdb, char *item)
-/* Put up cross-species alignment when the second species
- * sequence is in a nib file. */
-{
-longXenoPsl1(tdb, item, "Human", "chromInfo", "hg12");
-}
-
-void doBlatHuman12(struct trackDb *tdb, char *item)
-/* Put up cross-species alignment when the second species
- * sequence is in a nib file. */
-{
-longXenoPsl1(tdb, item, "Human", "chromInfo", "hg12");
-}
-
-void doBlatHumanSelf(struct trackDb *tdb, char *item)
-/* Put up cross-species alignment when the second species
- * sequence is in a nib file. */
-{
-longXenoPsl1(tdb, item, "Human", "chromInfo", database);
-}
 
 void htcGenePsl(char *htcCommand, char *item)
 /* Interface for selecting & displaying alignments from axtInfo 
@@ -5806,13 +5790,19 @@ char *ptr;
 char name[128];
 struct dnaSeq *qSeq = NULL;
 
-psl = pslTrimToTargetRange(psl, winStart, winEnd);
-
 /* In hg10 tables, psl->qName can be org.chrom.  Strip it down to just 
  * the chrom: */
 qChrom = psl->qName;
 if ((ptr = strchr(qChrom, '.')) != NULL)
     qChrom = ptr+1;
+
+/* Make sure that otherOrg's chrom size matches psl's qSize */
+hSetDb2(otherDb);
+if (hChromSize2(qChrom) != psl->qSize)
+    errAbort("Alignment's query size for %s is %d, but the size of %s in database %s is %d.  Incorrect database in trackDb.type?",
+	     qChrom, psl->qSize, qChrom, otherDb, hChromSize2(qChrom));
+
+psl = pslTrimToTargetRange(psl, winStart, winEnd);
 
 qSeq = loadGenomePart(otherDb, qChrom, psl->qStart, psl->qEnd);
 snprintf(name, sizeof(name), "%s.%s", otherOrg, qChrom);
@@ -9971,26 +9961,9 @@ else if (sameWord(track, "blatMouse") || sameWord(track, "bestMouse")
     {
     doBlatMouse(tdb, item);
     }
-else if (sameWord(track, "blatMus")
-	 || (startsWith("blastz", track) && (! stringIn("ynMask", track)) &&
-	     (stringIn("Mm", track) || stringIn("Mouse", track)))
-         || sameWord("aarMm2", track)
-	 )
-    {
-    doBlatMus(tdb, item);
-    }
-else if (startsWith("blastz", track) &&
-	 (stringIn("Rn", track) || stringIn("Rat", track)))
-    {
-    doBlastzRn1(tdb, item);
-    }
 else if (startsWith("multAlignWebb", track))
     {
     doMultAlignZoo(tdb, item, &track[13] );
-    }
-else if (sameWord(track, "blatHuman"))
-    {
-    doBlatHuman(tdb, item);
     }
 /*
 Generalized code to show strict chain blastz alignments in the zoo browsers
@@ -10014,30 +9987,6 @@ else if (sameWord(track, "chimpBac"))
     {
     longXenoPsl1Chimp(tdb, item, "Chimpanzee", "chromInfo", database);
     }
-else if (sameWord(track, "blastzHg"))
-    {
-    doBlatHumanSelf(tdb, item);
-    }
-else if (sameWord(track, "blastzMmHg"))
-    {
-    doBlatHuman(tdb, item);
-    }
-else if (sameWord(track, "blastzMmHg12"))
-    {
-    doBlatHuman12(tdb, item);
-    }
-else if (startsWith("blastz", track) && stringIn("Human", track))
-    {
-    doBlatHuman(tdb, item);
-    }
-else if (sameWord(track, "blastzAllHuman"))
-    {
-    doBlatHuman(tdb, item);
-    }
-else if (sameWord(track, "blastzHgRef"))
-    {
-    doBlatHuman(tdb, item);
-    }
 else if (sameWord(track, "htcLongXenoPsl2"))
     {
     htcLongXenoPsl2(track, item);
@@ -10057,6 +10006,12 @@ else if (sameWord(track, "blatTetra"))
 else if (sameWord(track, "blatFugu"))
     {
     doBlatFish(tdb, item);
+    }
+/* This is a catch-all for blastz/blat tracks -- any special cases must be 
+ * above this point! */
+else if (startsWith("blastz", track) || startsWith("blat", track))
+    {
+    doAlignmentOtherDb(tdb, item);
     }
 else if (sameWord(track, "rnaGene"))
     {
