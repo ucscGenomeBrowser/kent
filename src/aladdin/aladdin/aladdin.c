@@ -266,7 +266,7 @@ void upcTraceback(int *scores, State **allStates, DNA *dna, int dnaSize, FILE *o
 {
 int i;
 int maxScore = -0x3fffffff;
-int maxState;
+int maxState = 0;
 int lineSize;
 int maxLineSize = 50;
 State *states;
@@ -428,7 +428,9 @@ struct dnaSeq *seq;
 int hist0[5], hist1[5][5], hist2[5][5][5];
 int i, size;
 DNA *dna;
-int val, lastVal, lastLastVal;
+int val = 0;
+int lastVal = 0;
+int lastLastVal = 0;
 int total = 0;
 
 zeroBytes(hist0, sizeof(hist0));
