@@ -173,9 +173,11 @@ char* genePredGetCreateSql(char* table, unsigned extFields, unsigned options);
  * consisting of the genePredFields values. Options are beit set of
  * genePredCreateOpts. Returned string should be freed. */
 
-struct genePred *getOverlappingGene(struct genePred **list,  char *table, char *chrom, int cStart, int cEnd, int *retOverlap);
+struct genePred *getOverlappingGene(struct genePred **list,  char *table, char *chrom, int cStart, int cEnd, char *name, int *retOverlap);
 /* read all genes from a table find the gene with the biggest overlap. 
-   Cache the list of genes to so we only read it once */
+ * Cache the list of genes to so we only read it once.
+ * If there are multiple hits and the name that matches exactly, 
+ * this overrides the biggest overlap */
 
 int genePredBases(struct genePred *gp);
 /* count coding and utr bases in a gene prediction */
