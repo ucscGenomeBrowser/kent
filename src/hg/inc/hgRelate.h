@@ -57,6 +57,9 @@ void hgLoadTabFile(struct sqlConnection *conn, char *tmpDir, char *tableName,
                    FILE **tabFh);
 /* Load tab delimited file corresponding to tableName. close fh if not NULL */
 
+void hgRemoveTabFile(char *tmpDir, char *tableName);
+/* Remove file. */
+
 HGID hgGetMaxId(struct sqlConnection *conn, char *tableName);
 /* get the maximum value of the id column in a table or zero if empry  */
 

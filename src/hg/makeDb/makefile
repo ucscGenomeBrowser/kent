@@ -24,6 +24,7 @@ DIRS = \
 	hgKnownMore \
 	hgKnownMore.oo21 \
 	hgLoadBed \
+	hgLoadBlastTab \
 	hgLoadChain \
 	hgLoadMaf \
 	hgLoadNet \
