@@ -3,7 +3,7 @@
 This file describes how to make chain and net tracks.
 These are higher level structures built on top
 of blastz mouse/human alignments.  
-This document is based on a README written by Robert Baertsch.
+This document is based on a README written by Jim Kent.
 It specifically refers to mouse/human alignment.
 
 The programs referred to here are currently
@@ -21,6 +21,7 @@ I. Do a little cluster run that does
 
    Note this only takes 4 hours to do serially, so you could do
    it as an overnight run rather than a little cluster run.
+   Note: this actually took 8 hours for rn3/hg15.
    Note since it's just on the little cluster and there are only
    24 jobs it's ok not to have the input on the node local disks.
 
