@@ -161,7 +161,6 @@ print an error message and abort.  If you
 need to catch errors underneath you see the
 file errAbort.h and install an "abort handler".
 
-Variable, function, and field names are 
 Memory is generally allocated through "needMem"
 (which aborts on failure to allocate) and the
 macros "AllocVar" and "AllocArray".  This 
@@ -206,7 +205,7 @@ names all start with "sl."
 Functions which work on a structure by convention begin with
 the name of the structure, simulating an object-oriented
 coding style.  In general these functions are all grouped
-in a file, in this case in twoBit.c.  Static functions in
+in a file, in this case in dyString.c.  Static functions in
 this file need not have the prefix, though they may.  Functions
 have comment between their prototype and the opening brace
 as in this example:
