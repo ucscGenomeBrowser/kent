@@ -1049,7 +1049,7 @@ int whichBin( double tmp, double thisMin, double thisMax, int n )
 {
     double atmp = tmp - thisMin;
     double amax = thisMax - thisMin;
-    double ret = (double)atmp * 1000.0 / (double)amax;
+    double ret = (double)atmp * (double)n / (double)amax;
     return( ret );
 }
 
@@ -1103,9 +1103,12 @@ char o2[128]; /* Option 2 - anti alias */
 char o3[128]; /* Option 3 - fill */
 char o4[128]; /* Option 4 - max gap where interpolation is still done */
 
-double hFactor;
+double hFactor, hFactor2;
 double minRange, maxRange;
+
 int gapPrevEnd = -1;
+
+Color lineColor = mgFindColor(mg, 220, 220, 255); /*for horizontal lines*/
 
 tg->colorShades = shadesFromBaseColor( &tg->color );
 shades = tg->colorShades;
@@ -1124,11 +1127,24 @@ aa = cartUsualString(cart, o2, "on");
 fill = atoi(cartUsualString(cart, o3, "1"));
 lineGapSize = atoi(cartUsualString(cart, o4, "10000"));
 
+heightPer = tg->heightPer+1;
+hFactor = (double)heightPer/1000.0;
+
 //this information should be moved to the trackDb.ra
 if( sameString( tg->mapName, "humMus" ) )
     {
     minRange = 500.0;
     maxRange = 1000.0;
+
+    /*draw horizontal line across track at 2.0 and 5.0*/
+    tmp = -whichBin( 2.0, -1.8805, 9.1808, 1000 );
+    y1 = (int)((double)y+((double)tmp)* hFactor+(double)heightPer);
+    mgDrawHorizontalLine( mg, y1, lineColor );
+
+    tmp = -whichBin( 5.0, -1.8805, 9.1808, 1000 );
+    y1 = (int)((double)y+((double)tmp)* hFactor+(double)heightPer);
+    mgDrawHorizontalLine( mg, y1, lineColor );
+    
     }
     else if( sameString( tg->mapName, "zoo" ) )
     {
@@ -1141,12 +1157,12 @@ if( sameString( tg->mapName, "humMus" ) )
     maxRange = 1000.0;
     }
 
-heightPer = tg->heightPer+1;
-hFactor = (double)heightPer/1000.0;
+
 for(lf = tg->items; lf != NULL; lf = lf->next) 
     {
     gapPrevEnd = -1;
     prevEnd = -1;
+    
     for (sf = lf->components; sf != NULL; sf = sf->next)
 	    {
 	    s = sf->start;
