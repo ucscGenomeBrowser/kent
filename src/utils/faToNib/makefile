@@ -2,7 +2,7 @@
 	gcc -ggdb -O -Wimplicit -I../inc -I../../inc -I../../../inc -c $*.c
 
 L = -lm
-MYLIBDIR = $(HOME)/src/lib/$(MACHTYPE)
+MYLIBDIR = ../../lib/$(MACHTYPE)
 MYLIBS =  $(MYLIBDIR)/jkweb.a
 
 O = faToNib.o
