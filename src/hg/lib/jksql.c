@@ -14,7 +14,7 @@
 #include "sqlNum.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: jksql.c,v 1.63 2004/09/03 23:04:11 markd Exp $";
+static char const rcsid[] = "$Id: jksql.c,v 1.64 2004/09/25 19:42:28 kent Exp $";
 
 /* flags controlling sql monitoring facility */
 static unsigned monitorInited = FALSE;      /* initialized yet? */
@@ -888,8 +888,8 @@ return -1;
 int sqlCountColumns(struct sqlResult *sr)
 /* Count the number of columns in result. */
 {
-if(sr != 0)
-	return mysql_field_count(sr->conn->conn);
+if(sr != NULL)
+    return mysql_field_count(sr->conn->conn);
 return 0;
 }
 
