@@ -87,7 +87,7 @@
 #include "versionInfo.h"
 #include "bedCart.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.880 2005/02/02 21:52:21 kent Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.881 2005/02/02 22:32:48 heather Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -10238,19 +10238,6 @@ puts("</FORM>");
 }
 
 
-void chromInfoPartialTotalRow(long long total)
-/* Make table row with total size from chromInfo. */
-{
-cgiSimpleTableRowStart();
-cgiSimpleTableFieldStart();
-printf("Partial Total (Row limit reached)");
-cgiTableFieldEnd();
-cgiSimpleTableFieldStart();
-printLongWithCommas(stdout, total);
-cgiTableFieldEnd();
-cgiTableRowEnd();
-}
-
 void chromInfoTotalRow(long long total)
 /* Make table row with total size from chromInfo. */
 {
@@ -10299,14 +10286,22 @@ struct sqlResult *sr = NULL;
 char **row = NULL;
 long long total = 0;
 char query[512];
+char msg1[512], msg2[512];
+int seqCount = 0;
+boolean truncating;
 
-if (limit == 0)
+seqCount = sqlQuickNum(conn, "select count(*) from chromInfo");
+truncating = (limit > 0) && (seqCount > limit);
+
+if (!truncating)
     {
     sr = sqlGetResult(conn, "select chrom,size from chromInfo order by size desc");
     }
 else
     {
-    sprintf(query, "select chrom,size from chromInfo order by size desc limit %d", limit);
+
+    safef(query, sizeof(query), "select chrom,size from chromInfo order by size desc limit %d", limit);
+    // sprintf(query, "select chrom,size from chromInfo order by size desc limit %d", limit);
     sr = sqlGetResult(conn, query);
     }
 
@@ -10325,13 +10320,22 @@ while ((row = sqlNextRow(sr)) != NULL)
     cgiTableRowEnd();
     total += size;
     }
-if (limit == 0)
+if (!truncating)
     {
     chromInfoTotalRow(total);
     }
 else
     {
-    chromInfoPartialTotalRow(total);
+    safef(msg1, sizeof(msg1), "Limit reached");
+    safef(msg2, sizeof(msg2), "%d rows displayed", limit);
+    cgiSimpleTableRowStart();
+    cgiSimpleTableFieldStart();
+    printf(msg1);
+    cgiTableFieldEnd();
+    cgiSimpleTableFieldStart();
+    printf(msg2);
+    cgiTableFieldEnd();
+    cgiTableRowEnd();
     }
 sqlFreeResult(&sr);
 hFreeConn(&conn);
