@@ -15,7 +15,7 @@
 #include "common.h"
 #include "dnautil.h"
 
-static char const rcsid[] = "$Id: dnautil.c,v 1.20 2003/06/26 05:37:37 kent Exp $";
+static char const rcsid[] = "$Id: dnautil.c,v 1.21 2003/12/31 01:48:15 weber Exp $";
 
 struct codonTable
 /* The dread codon table. */
@@ -187,7 +187,6 @@ if (!inittedNtVal)
     }
 }
 
-
 /* Returns one letter code for protein, 
    0 for stop codon or X for bad input,
  */
@@ -325,11 +324,10 @@ ntCompTable[')'] = '(';
 inittedCompTable = TRUE;
 }
 
-/* Reverse complement DNA. */
-void reverseComplement(DNA *dna, long length)
+/* Complement DNA (not reverse). */
+void complement(DNA *dna, long length)
 {
 int i;
-reverseBytes(dna, length);
 
 if (!inittedCompTable) initNtCompTable();
 for (i=0; i<length; ++i)
@@ -337,6 +335,15 @@ for (i=0; i<length; ++i)
     *dna = ntCompTable[*dna];
     ++dna;
     }
+}
+
+
+/* Reverse complement DNA. */
+void reverseComplement(DNA *dna, long length)
+{
+int i;
+reverseBytes(dna, length);
+complement(dna, length);
 }
 
 /* Reverse offset - return what will be offset (0 based) to
