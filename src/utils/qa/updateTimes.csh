@@ -3,8 +3,9 @@
 ################################
 #  
 #  04-08-04
-#  gets update times from dev and beta for tables in list
 #  Robert Kuhn
+#
+#  gets update times from dev and beta for tables in list
 #
 ################################
 
@@ -29,9 +30,6 @@ if (! -e $tablelist) then
   set tablelist="xxtablelistxx"
 endif
 
-echo
-echo "update times (dev first):"
-echo
 foreach table (`cat $tablelist`)
   echo $table
   echo "============="
