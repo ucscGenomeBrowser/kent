@@ -9,7 +9,7 @@
 #include "axtInfo.h"
 #include "hgColors.h"
 
-static char const rcsid[] = "$Id: web.c,v 1.70 2005/01/26 18:50:41 aamp Exp $";
+static char const rcsid[] = "$Id: web.c,v 1.71 2005/02/02 23:58:57 aamp Exp $";
 
 /* flag that tell if the CGI header has already been outputed */
 boolean webHeadAlreadyOutputed = FALSE;
@@ -437,6 +437,7 @@ struct dbDb *cur = NULL;
 struct hash *hash = hashNew(7); // 2^^7 entries = 128
 char *selGenome = hGenome(db);
 char *values [128];
+char *cgiName;
 
 for (cur = dbList; cur != NULL; cur = cur->next)
     {
@@ -451,13 +452,9 @@ for (cur = dbList; cur != NULL; cur = cur->next)
         }
     }
 
-if (customOrgCgiName != NULL)
-    cgiMakeDropListFull(customOrgCgiName, orgList, values, numGenomes, 
-                        selGenome, onChangeText);
-else
-    cgiMakeDropListFull(orgCgiName, orgList, values, numGenomes, 
-                        selGenome, onChangeText);
-    
+cgiName = (customOrgCgiName != NULL) ? customOrgCgiName : orgCgiName;
+cgiMakeDropListFull(cgiName, orgList, values, numGenomes, 
+                    selGenome, onChangeText);
 hashFree(&hash);
 }
 

@@ -32,7 +32,7 @@
 #include "twoBit.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.233 2005/02/02 22:48:44 kate Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.234 2005/02/03 00:02:43 aamp Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
@@ -3430,7 +3430,7 @@ struct slName *hLiftOverOrgs(boolean from, char *fromDb)
 {
 struct slName *dbs = (from) ? hLiftOverFromDbs() : hLiftOverToDbs(fromDb);
 struct slName *names = NULL, *org;
-for (org = dbs; org != NULL; org=org->next)
+for (org = dbs; org != NULL; org = org->next)
     slNameStore(&names, hArchiveOrganism(org->name));
 slReverse(&names);
 slFreeList(&dbs);
