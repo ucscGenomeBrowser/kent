@@ -231,6 +231,11 @@ identifier genscanName dependency
     $gbd.genscan.name
     $gbd.genscanPep.name full unique
 
+identifier jgiName dependency
+"Link together jgi predicted gene structure and peptide"
+    $gbd.jgiGene.name
+    $gbd.jgiPep.name unique minCheck=0.9
+
 identifier sgpGeneName dependency
 "Link together sgp predicted gene structure and peptide"
     $gbd.sgpGene.name
