@@ -74,7 +74,7 @@
 #include "web.h"
 #include "grp.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.522 2003/05/25 19:43:29 kent Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.523 2003/05/27 04:42:34 markd Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define EXPR_DATA_SHADES 16
@@ -2259,7 +2259,7 @@ for (fil = mud->filterList; fil != NULL; fil = fil->next)
 		pattern[len-1] = '*';
 		}
 	    anyWild = (strchr(pattern, '*') != NULL || strchr(pattern, '?') != NULL);
-	    sprintf(query, "select * from %s", fil->table);
+	    sprintf(query, "select id,name from %s", fil->table);
 	    touppers(pattern);
 	    sr = sqlGetResult(conn, query);
 	    while ((row = sqlNextRow(sr)) != NULL)
