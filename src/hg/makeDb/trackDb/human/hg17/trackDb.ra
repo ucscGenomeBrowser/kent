@@ -167,7 +167,7 @@ autoScaleDefault Off
 pairwise netBlastz
 speciesGroups mammal vertebrate
 sGroup_mammal panTro1 canFam1 mm5 rn3
-sGroup_vertebrate galGal2 danRer1 fr1 tetNig1 danRer1
+sGroup_vertebrate galGal2 xenTro1 fr1 tetNig1 danRer1
 treeImage phylo/tree10.jpg
 
 track multiz8way
