@@ -12,7 +12,7 @@
 #include "gfInternal.h"
 #include "gfPcrLib.h"
 
-static char const rcsid[] = "$Id: gfPcrLib.c,v 1.1 2004/06/01 16:49:03 kent Exp $";
+static char const rcsid[] = "$Id: gfPcrLib.c,v 1.2 2004/06/06 03:23:37 kent Exp $";
 
 /**** Input and Output Handlers *****/
 
@@ -399,7 +399,7 @@ for (range = rangeList; range != NULL; range = range->next)
     char seqName[PATH_LEN];
     struct dnaSeq *seq = gfiExpandAndLoadCached(range,
 	tFileCache, seqDir,  0, &tSeqSize, FALSE, FALSE, maxPrimerSize);
-    gfiGetSeqName(range->tName, seqName);
+    gfiGetSeqName(range->tName, seqName, NULL);
     gfPcrLocal(pcrName, seq, range->tStart, seqName, maxSize, 
 	    fPrimer, fPrimerSize, rPrimer, rPrimerSize, 
 	    minPerfect, minGood, range->tStrand, pOutList);

@@ -17,7 +17,7 @@
 #include "twoBit.h"
 #include "trans3.h"
 
-static char const rcsid[] = "$Id: gfBlatLib.c,v 1.2 2004/06/03 20:51:07 galt Exp $";
+static char const rcsid[] = "$Id: gfBlatLib.c,v 1.3 2004/06/06 03:23:37 kent Exp $";
 
 void dumpRange(struct gfRange *r, FILE *f)
 /* Dump range to file. */
@@ -537,6 +537,20 @@ if (cache != NULL)
     }
 }
 
+static void getTargetName(char *tSpec, boolean includeFile, char *targetName)
+/* Put sequence name, optionally prefixed by file: in targetName. */
+{
+if (includeFile)
+    {
+    char seqName[128];
+    char fileName[PATH_LEN];
+    gfiGetSeqName(tSpec, seqName, fileName);
+    safef(targetName, PATH_LEN, "%s:%s", fileName, seqName);
+    }
+else
+    gfiGetSeqName(tSpec, targetName, NULL);
+}
+
 
 void gfAlignStrand(int *pConn, char *tSeqDir, struct dnaSeq *seq,
     boolean isRc, int minMatch, struct hash *tFileCache, struct gfOutput *out)
@@ -547,7 +561,7 @@ void gfAlignStrand(int *pConn, char *tSeqDir, struct dnaSeq *seq,
 struct ssBundle *bun;
 struct gfRange *rangeList = NULL, *range;
 struct dnaSeq *targetSeq;
-char dir[256], chromName[128], ext[64];
+char targetName[PATH_LEN];
 
 rangeList = gfQuerySeq(*pConn, seq);
 close(*pConn);
@@ -557,7 +571,7 @@ slSort(&rangeList, gfRangeCmpTarget);
 rangeList = gfRangesBundle(rangeList, ffIntronMax);
 for (range = rangeList; range != NULL; range = range->next)
     {
-    gfiGetSeqName(range->tName, chromName);
+    getTargetName(range->tName, out->includeTargetFile, targetName);
     targetSeq = gfiExpandAndLoadCached(range, tFileCache, tSeqDir, 
     	seq->size, &range->tTotalSize, FALSE, FALSE, usualExpansion);
     AllocVar(bun);
@@ -566,7 +580,7 @@ for (range = rangeList; range != NULL; range = range->next)
     bun->data = range;
     alignComponents(range, bun, ffCdna);
     ssStitch(bun, ffCdna, minMatch, 3);
-    saveAlignments(chromName, range->tTotalSize, range->tStart, 
+    saveAlignments(targetName, range->tTotalSize, range->tStart, 
 	bun, NULL, isRc, FALSE, ffCdna, minMatch, out);
     ssBundleFree(&bun);
     freeDnaSeq(&targetSeq);
@@ -1043,7 +1057,7 @@ struct ssBundle *bun;
 struct gfClump *clumps[2][3], *clump;
 struct gfRange *rangeList = NULL, *range, *rl;
 struct dnaSeq *targetSeq, *tSeqList = NULL;
-char dir[256], chromName[256], ext[64];
+char targetName[PATH_LEN];
 int tileSize;
 int frame, isRc = 0;
 struct hash *t3Hash = NULL;
@@ -1109,8 +1123,8 @@ for (isRc = 0; isRc <= 1;  ++isRc)
 	t3 = hashMustFindVal(t3Hash, range->tName);
 	bun->t3List = t3;
 	ssStitch(bun, ffCdna, minMatch, 16);
-	gfiGetSeqName(range->tName, chromName);
-	saveAlignments(chromName, t3->nibSize, 0, 
+	getTargetName(range->tName, out->includeTargetFile, targetName);
+	saveAlignments(targetName, t3->nibSize, 0, 
 	    bun, t3Hash, FALSE, isRc, ffCdna, minMatch, out);
 	ssBundleFree(&bun);
 	}
@@ -1164,7 +1178,7 @@ void gfAlignTransTrans(int *pConn, char *tSeqDir, struct dnaSeq *qSeq,
  * that is found. */
 {
 struct gfClump *clumps[2][3][3], *clump;
-char dir[256], chromName[256], ext[64];
+char targetName[PATH_LEN];
 int qFrame, tFrame, tIsRc;
 struct gfSeqSource *ssList = NULL, *ss;
 struct lm *lm = lmInit(0);
@@ -1238,9 +1252,9 @@ for (tIsRc=0; tIsRc <= 1; ++tIsRc)
 	bun->data = range;
 	bun->ffList = gfRangesToFfItem(range->components, qSeq);
 	ssStitch(bun, stringency, minMatch, 16);
-	gfiGetSeqName(range->tName, chromName);
+	getTargetName(range->tName, out->includeTargetFile, targetName);
 	t3 = range->t3;
-	saveAlignments(chromName, t3->nibSize, t3->start, 
+	saveAlignments(targetName, t3->nibSize, t3->start, 
 	    bun, NULL, qIsRc, tIsRc, stringency, minMatch, out);
 	ssBundleFree(&bun);
 	}

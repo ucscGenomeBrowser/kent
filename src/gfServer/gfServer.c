@@ -20,7 +20,7 @@
 #include "cheapcgi.h"
 #include "trans3.h"
 
-static char const rcsid[] = "$Id: gfServer.c,v 1.39 2004/06/01 16:49:02 kent Exp $";
+static char const rcsid[] = "$Id: gfServer.c,v 1.40 2004/06/06 03:23:37 kent Exp $";
 
 int maxNtSize = 40000;
 int maxAaSize = 8000;
@@ -465,6 +465,7 @@ logIt("gfServer version %d on host %s, port %s\n", gfVersion,
 	hostName, portName);
 if (doTrans)
     {
+    uglyf("starting translated server...\n");
     logIt("setting up translated index\n");
     gfIndexTransNibsAndTwoBits(transGf, fileCount, seqFiles, 
     	minMatch, maxGap, tileSize, repMatch, NULL, allowOneMismatch, 

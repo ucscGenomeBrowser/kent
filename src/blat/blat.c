@@ -1,5 +1,5 @@
 /* blat - Standalone BLAT fast sequence search command line tool. */
-/* Copyright 2001-2003 Jim Kent.  All rights reserved. */
+/* Copyright 2001-2004 Jim Kent.  All rights reserved. */
 #include "common.h"
 #include "memalloc.h"
 #include "linefile.h"
@@ -18,7 +18,7 @@
 #include "trans3.h"
 #include "gfClientLib.h"
 
-static char const rcsid[] = "$Id: blat.c,v 1.96 2004/06/03 21:14:34 kent Exp $";
+static char const rcsid[] = "$Id: blat.c,v 1.97 2004/06/06 03:23:37 kent Exp $";
 
 /* Variables shared with other modules.  Set in this module, read only
  * elsewhere. */

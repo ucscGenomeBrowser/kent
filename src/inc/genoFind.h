@@ -167,6 +167,7 @@ struct gfOutput
     boolean qIsProt;		/* Query is peptide. */
     boolean tIsProt;		/* Target is peptide. */
     int queryIx;		/* Index of query */
+    boolean includeTargetFile;	/* Prefix file: to target sequence name. */
     };
 
 struct gfOutput *gfOutputAny(char *format, 

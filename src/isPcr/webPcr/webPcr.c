@@ -1,4 +1,6 @@
 /* webPcr - Web CGI Program For Fast In-Silico PCR Using gfServer. */
+/* Copyright 2004 Jim Kent.  All rights reserved. */
+
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"

@@ -10,7 +10,7 @@
 #include "nib.h"
 #include "twoBit.h"
 
-static char const rcsid[] = "$Id: gfInternal.c,v 1.1 2004/06/01 16:49:03 kent Exp $";
+static char const rcsid[] = "$Id: gfInternal.c,v 1.2 2004/06/06 03:23:37 kent Exp $";
 
 
 static int extendRespect(int oldX, int newX)
@@ -114,17 +114,29 @@ else
 return target;
 }
 
-void gfiGetSeqName(char *spec, char *name)
-/* Extract sequence name from spec, which includes nib and 2bit files. */
+void gfiGetSeqName(char *spec, char *name, char *file)
+/* Extract sequence name and optionally file name from spec, 
+ * which includes nib and 2bit files.  (The file may be NULL
+ * if you don't care.) */
 {
 if (nibIsFile(spec))
+    {
     splitPath(spec, NULL, name, NULL);
+    if (file != NULL)
+        strcpy(file, spec);
+    }
 else
     {
     char *s = strchr(spec, ':');
     if (s == NULL)
 	errAbort("Expecting colon in %s", spec);
     strcpy(name, s+1);
+    if (file != NULL)
+        {
+	int fileNameSize = s - spec;
+	memcpy(file, spec, fileNameSize);
+	file[fileNameSize] = 0;
+	}
     }
 }
 

@@ -29,7 +29,7 @@ struct gfWebConfig *gfWebConfigRead(char *fileName)
 struct gfWebConfig *cfg;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
 char *line, *word;
-struct hash *uniqHash = newHash(0);
+struct hash *uniqHash = newHash(0), *uniqTransHash = newHash(0), *hash;
 
 AllocVar(cfg);
 cfg->company = "";
@@ -52,14 +52,24 @@ while (lineFileNextReal(lf, &line))
 	if (server->name == NULL || server->name[0] == 0)
 	    errAbort("Badly formed gfServer command line %d of %s:\n%s",
 	    	lf->lineIx, fileName, line);
-	if (hashLookup(uniqHash, server->name))
+	if (sameString("gfServerTrans", word))
+	    {
+	    slAddTail(&cfg->transServerList, server);
+	    hash = uniqTransHash;
+	    }
+	else
+	    {
+	    slAddTail(&cfg->serverList, server);
+	    hash = uniqHash;
+	    }
+	if (hashLookup(hash, server->name))
 	    errAbort("Duplicate %s name %s line %d of %s",
 	    	word, server->name, lf->lineIx, fileName);
-	hashAdd(uniqHash, server->name, NULL);
-	if (sameString("gfServerTrans", word))
-	    slAddTail(&cfg->transServerList, server);
-	else
-	    slAddTail(&cfg->serverList, server);
+	hashAdd(hash, server->name, NULL);
+	}
+    else if (sameWord("tempDir", word))
+        {
+	cfg->tempDir = cloneString(trimSpaces(line));
 	}
     else if (sameWord("background", word))
         {
@@ -74,6 +84,7 @@ while (lineFileNextReal(lf, &line))
 if (cfg->serverList == NULL && cfg->transServerList == NULL)
     errAbort("no gfServer's specified in %s", fileName);
 freeHash(&uniqHash);
+freeHash(&uniqTransHash);
 return cfg;
 }
 

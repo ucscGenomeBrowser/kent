@@ -21,6 +21,7 @@ struct gfWebConfig
     char *background;	/* Web page background if any. */
     struct gfServerAt *serverList;  /* List of servers. */
     struct gfServerAt *transServerList;  /* List of translated servers. */
+    char *tempDir;	/* Where to put temporary files. */
     };
 
 struct gfWebConfig *gfWebConfigRead(char *fileName);

@@ -235,5 +235,10 @@ struct psl* pslFromAlign(char *qName, int qSize, int qStart, int qEnd, char *qSt
  * bases indicate repeat masking.  Returns NULL if alignment is empty after
  * triming leading and trailing indels.*/
 
+int pslShowAlignment(struct psl *psl, boolean isProt,
+	char *qName, bioSeq *qSeq, int qStart, int qEnd,
+	char *tName, bioSeq *tSeq, int tStart, int tEnd, FILE *f);
+/* Show protein/DNA alignment or translated DNA alignment in HTML format. */
+
 #endif /* PSL_H */
 

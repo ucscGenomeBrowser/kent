@@ -1,4 +1,6 @@
 /* webBlat - CGI Applet for Blat. */
+/* Copyright 2004 Jim Kent.  All rights reserved. */
+
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"
@@ -9,7 +11,10 @@
 #include "dnautil.h"
 #include "dnaseq.h"
 #include "fa.h"
+#include "nib.h"
+#include "twoBit.h"
 #include "psl.h"
+#include "fuzzyFind.h"
 #include "cheapCgi.h"
 #include "genoFind.h"
 #include "gfPcrLib.h"
@@ -27,6 +32,15 @@ errAbort(
 
 struct gfWebConfig *cfg;	/* Our configuration. */
 
+struct gfServerAt *findServer(boolean txServer)
+/* Find gfServer. */
+{
+if (txServer)
+    return gfWebFindServer(cfg->transServerList, "wb_db");
+else
+    return gfWebFindServer(cfg->serverList, "wb_db");
+}
+
 void doHelp()
 /* Put up help page. */
 {
@@ -35,9 +49,22 @@ uglyf("I'm just not very helpful");
 
 char *protQueryMenu[] = {"Protein", "Translated DNA", "Translated RNA"};
 char *nucQueryMenu[] = {"DNA", "RNA", };
-char *bothQueryMenu[] = {"DNA", "RNA", "Protein", "Translated DNA", "Translated RNA"};
+char *bothQueryMenu[] = {"BLAT's Guess", "DNA", "RNA", 
+	"Protein", "Translated DNA", "Translated RNA"};
 char *sortMenu[] = {"query,score", "query,start", "chrom,score", "chrom,start", "score"};
 char *outputMenu[] = {"hyperlink", "psl", "psl no header"};
+
+boolean isTxType(char *type)
+/* Return TRUE if it's a query requiring a translated server type */
+{
+int i;
+for (i=0; i<ArraySize(protQueryMenu); ++i)
+    {
+    if (sameWord(type, protQueryMenu[i]))
+	 return TRUE;
+    }
+return FALSE;
+}
 
 int countSame(char *a, char *b)
 /* Count number of characters that from start in a,b that are same. */
@@ -103,6 +130,27 @@ if (diff == 0)
 return diff;
 }
 
+char *skipFile(char *fileSeq)
+/* Skip over file: */
+{
+char *s = strchr(fileSeq, ':');
+if (s != NULL)
+    return s+1;
+else
+    {
+    internalErr();
+    return fileSeq;
+    }
+}
+
+void parseFileSeq(char *spec, char **retFile, char **retSeq)
+/* Parse out file:seq into file and seq. */
+{
+char *seq = skipFile(spec);
+*retSeq = cloneString(seq);
+*retFile = cloneStringZ(spec, seq - spec - 1);
+}
+
 
 void aliLines(char *pslName, char *faName, char *database,  char *type)
 /* Show all the places that align. */
@@ -112,15 +160,25 @@ char *sort = cgiUsualString("wb_sort", sortMenu[0]);
 char *output = cgiUsualString("wb_output", outputMenu[0]);
 boolean pslOut = startsWith("psl", output);
 struct lineFile *lf = pslFileOpen(pslName);
-struct psl *pslList = NULL, *psl;
+struct psl *pslList = NULL, *psl, **pslArray;
+int i, pslCount = 0;
 
 while ((psl = pslNext(lf)) != NULL)
     {
     slAddHead(&pslList, psl);
+    ++pslCount;
     }
 lineFileClose(&lf);
+slReverse(&pslList);
+
 if (pslList == NULL)
     errAbort("Sorry, no matches found");
+
+/* Keep an array in unsorted order */
+AllocArray(pslArray, pslCount);
+for (psl = pslList, i=0; psl != NULL; psl = psl->next, ++i)
+    pslArray[i] = psl;
+
 
 if (sameString(sort, "query,start"))
     {
@@ -163,29 +221,149 @@ else
     printf("---------------------------------------------------------------------------------------------------\n");
     for (psl = pslList; psl != NULL; psl = psl->next)
 	{
-	printf("<A HREF=\"%s?wb_qType=%s&wb_psl=%s&wb_fa=%s&wb_doDetailLine=%d\">",
-		url, type, pslName, faName, lineIx);
+	printf("<A HREF=\"%s?wb_qType=%s&wb_psl=%s&wb_fa=%s&wb_doDetailLine=%d&wb_db=%s\">",
+		url, type, pslName, faName, ptArrayIx(psl, pslArray, pslCount),
+		database);
 	printf("%-14s %5d %5d %5d %5d %5.1f%%  %4s  %2s  %9d %9d %6d",
 	    psl->qName, pslScore(psl), psl->qStart+1, psl->qEnd, psl->qSize,
 	    100.0 - pslCalcMilliBad(psl, TRUE) * 0.1,
-	    psl->tName, psl->strand, psl->tStart+1, psl->tEnd,
+	    skipFile(psl->tName), psl->strand, psl->tStart+1, psl->tEnd,
 	    psl->tEnd - psl->tStart);
 	printf("</A>\n");
 	++lineIx;
 	}
     }
 pslFreeList(&pslList);
+freez(&pslArray);
 printf("</TT></PRE>");
 }
 
-void doDetailLine()
-/* Show alignment details. */
+struct dnaSeq *faReadNamedSeq(char *fileName, char *name, boolean isProt)
+/* Return DNA sequence corresponding to named fasta record. */
 {
-uglyf("Doing details");
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+DNA *dna;
+int dnaSize;
+char *dnaName;
+struct dnaSeq *seq = NULL;
+while (faSomeSpeedReadNext(lf, &dna, &dnaSize, &dnaName, !isProt))
+    {
+    if (sameString(name, dnaName))
+        {
+	AllocVar(seq);
+	seq->name = cloneString(dnaName);
+	seq->size = dnaSize;
+	seq->dna = cloneStringZ(dna, dnaSize);
+	break;
+	}
+    }
+lineFileClose(&lf);
+return seq;
+}
+
+struct dnaSeq *readSeqFrag(char *seqDir, char *fileName, char *seqName, int start, int end)
+/* Read in fragment of sequence. */
+{
+char path[PATH_LEN];
+safef(path, sizeof(path), "%s/%s", seqDir, fileName);
+if (nibIsFile(path))
+    {
+    return nibLoadPart(path, start, end-start);
+    }
+else
+    {
+    struct twoBitFile *tbf = twoBitOpen(path);
+    struct dnaSeq *seq = twoBitReadSeqFragLower(tbf, seqName, start, end);
+    twoBitClose(&tbf);
+    return seq;
+    }
 }
 
 
-boolean doBlat()
+void doDetailLine()
+/* Show alignment details - creating a html frame with
+ * two pages: index and body. */
+{
+char *pslFileName = cgiString("wb_psl");
+char *faFileName = cgiString("wb_fa");
+char *type = cgiString("wb_qType");
+boolean isTx = isTxType(type);
+struct gfServerAt *server = findServer(isTx);
+int pslLineIx = cgiInt("wb_doDetailLine");
+int i;
+struct lineFile *lf = pslFileOpen(pslFileName);
+struct dnaSeq *qSeq = NULL, *tSeq = NULL;
+char *tFileName, *tSeqName;
+struct ffAli *ffAli;
+int blockCount;
+int tStart, tEnd;
+boolean tIsRc = FALSE;
+boolean protQuery = sameWord(type, "Protein");
+char *bodyName = cloneString(rTempName(cfg->tempDir, "body", ".html"));
+char *indexName = cloneString(rTempName(cfg->tempDir, "index", ".html"));
+FILE *f;
+
+/* Read in psl file and find the alignment line we're looking for. */
+struct psl *psl = NULL;
+for (i=0; i<=pslLineIx; ++i)
+    {
+    psl = pslNext(lf);
+    if (psl == NULL)
+        errAbort("Expecting at least %d lines, got %d in %s", pslLineIx+1, i+1, pslFileName);
+    }
+lineFileClose(&lf);
+
+/* Read in fa file and find the query sequence. */
+qSeq = faReadNamedSeq(faFileName, psl->qName, protQuery);
+if (qSeq == NULL)
+    errAbort("Couldn't find %s in %s", psl->qName, faFileName);
+
+
+/* Parse out file:seq into file and seq, and load needed part of target seq. */
+parseFileSeq(psl->tName, &tFileName, &tSeqName);
+tStart = psl->tStart - 120;
+if (tStart < 0) tStart = 0;
+tEnd = psl->tEnd + 120;
+if (tEnd > psl->tSize)
+    tEnd = psl->tSize;
+tSeq = readSeqFrag(server->seqDir, tFileName, tSeqName, tStart, tEnd);
+
+
+/* Write out body. */
+f = mustOpen(bodyName, "w");
+htmStart(f, psl->qName);
+blockCount = pslShowAlignment(psl, protQuery, psl->qName, qSeq, 0, qSeq->size,
+	tSeqName, tSeq, tStart, tEnd, f);
+htmEnd(f);
+carefulClose(&f);
+chmod(bodyName, 0666);
+
+/* Write out index. */
+f = mustOpen(indexName, "w");
+htmStart(f, psl->qName);
+fprintf(f, "<H3>Alignment of %s</H3>", psl->qName);
+fprintf(f, "<A HREF=\"%s#cDNA\" TARGET=\"body\">%s</A><BR>\n", bodyName, psl->qName);
+fprintf(f, "<A HREF=\"%s#genomic\" TARGET=\"body\">%s</A><BR>\n", bodyName, tSeqName);
+for (i=1; i<=blockCount; ++i)
+    {
+    fprintf(f, "<A HREF=\"%s#%d\" TARGET=\"body\">block%d</A><BR>\n",
+	    bodyName, i, i);
+    }
+fprintf(f, "<A HREF=\"%s#ali\" TARGET=\"body\">together</A><BR>\n", bodyName);
+carefulClose(&f);
+chmod(indexName, 0666);
+
+/* Write (to stdout) the main html page containing just the frame info. */
+puts("<FRAMESET COLS = \"13%,87% \" >");
+printf("  <FRAME SRC=\"%s\" NAME=\"index\">\n", indexName);
+printf("  <FRAME SRC=\"%s\" NAME=\"body\">\n", bodyName);
+puts("<NOFRAMES><BODY></BODY></NOFRAMES>");
+puts("</FRAMESET>");
+puts("</HTML>\n");
+}
+
+
+void doBlat()
 /* Do actual blatting */
 {
 char *seqText = cgiString("wb_seq");
@@ -198,37 +376,53 @@ int conn;
 FILE *f;
 struct gfOutput *gvo;
 struct hash *tFileCache = gfFileCacheNew();
-char *trashDir = "../trash";
-char *pslName = cloneString(rTempName(trashDir, "wb", ".psl"));
-char *faName = cloneString(rTempName(trashDir, "wb", ".fa"));
+char *pslName = cloneString(rTempName(cfg->tempDir, "wb", ".psl"));
+char *faName = cloneString(rTempName(cfg->tempDir, "wb", ".fa"));
 
 /* Figure out type and if it is a protein or a DNA based query */
-type = cgiUsualString("wb_qType", nucQueryMenu[0]);
-for (i=0; i<ArraySize(protQueryMenu); ++i)
-    {
-    if (sameWord(type, protQueryMenu[i]))
-         txServer = TRUE;
-    }
-protQuery = sameWord(type, "Protein");
+type = cgiUsualString("wb_qType", bothQueryMenu[0]);
 
 /* Get sequence from control into memory and also saved as fasta file. */
-seqList = faSeqListFromMemText(seqText, !protQuery);
-if (seqList == NULL)
+if (sameWord(type, bothQueryMenu[0]))
     {
-    warn("Please paste in a sequence");
-    return FALSE;
+    seqList = faSeqListFromMemText(seqText, FALSE);
+    if (seqList == NULL)
+	errAbort("Please go back and paste in a sequence");
+    if (seqIsDna(seqList))
+        {
+	for (seq = seqList; seq != NULL; seq = seq->next)
+	    {
+	    toLowerN(seq->dna, seq->size);
+	    dnaFilterToN(seq->dna, seq->dna);
+	    }
+	}
+    else
+        {
+	protQuery = TRUE;
+	type = "Protein";
+	}
+    }
+else
+    {
+    protQuery = sameWord(type, "Protein");
+    seqList = faSeqListFromMemText(seqText, !protQuery);
+    if (seqList == NULL)
+	errAbort("Please go back and paste in a sequence");
+    }
+if (seqList->name == NULL || seqList->name[0] == 0)
+    {
+    freez(seqList->name);
+    seqList->name = cloneString(type);
     }
 faWriteAll(faName, seqList);
 
 /* Set up output for blat. */
 f = mustOpen(pslName, "w");
 gvo = gfOutputPsl(0, protQuery, FALSE, f, FALSE, TRUE);
+gvo->includeTargetFile = TRUE;
 
-/* Find gfServer. */
-if (txServer)
-    server = gfWebFindServer(cfg->transServerList, "wb_db");
-else
-    server = gfWebFindServer(cfg->serverList, "wb_db");
+txServer = isTxType(type);
+server = findServer(txServer);
 
 /* Loop through sequences doing alignments and saving to file. */
 for (seq = seqList; seq != NULL; seq = seq->next)
@@ -243,7 +437,7 @@ for (seq = seqList; seq != NULL; seq = seq->next)
 	    }
 	else
 	    {
-	    boolean isRna = sameWord("type", "RNA");
+	    boolean isRna = sameWord(type, "RNA");
 	    gfAlignTransTrans(&conn, server->seqDir, seq, FALSE, 5,
 			    tFileCache, gvo, isRna);
 	    if (!isRna)
@@ -268,7 +462,6 @@ carefulClose(&f);
 
 /* Display alignment results. */
 aliLines(pslName, faName, server->name, type);
-return TRUE;
 }
 
 void doGetSeq()
@@ -319,39 +512,41 @@ printf("</SELECT>\n");
 qType = cgiUsualString("wb_qType", queryMenu[0]);
 printf("Query Type: ");
 cgiMakeDropList("wb_qType", queryMenu, queryMenuSize, qType);
+printf("<BR>\n");
 
 /* Put up sort and output type controls. */
 printf("Sort By: ");
 cgiMakeDropList("wb_sort", sortMenu, ArraySize(sortMenu), sortMenu[0]);
 printf("Output: ");
 cgiMakeDropList("wb_output", outputMenu, ArraySize(outputMenu), outputMenu[0]);
-
 cgiMakeButton("Submit", "Submit");
+printf("<BR>\n");
 
 cgiMakeTextArea("wb_seq", "", 10, 60);
+printf("<BR>\n");
+
+printf("Please paste in some sequence and press submit. You can submit multiple "
+       "sequences at once if they are in fasta format (where each sequence has "
+       "a header line that starts with > and contains the name of the sequence)");
 
 printf("</FORM>");
 }
 
-void doMiddle()
+void webBlat()
 /* Parse out CGI variables and decide which page to put up. */
 {
 if (cgiVarExists("wb_help"))
-    {
-    doHelp();
-    return;
-    }
+    htmShell("Web BLAT Help", doHelp, NULL);
 else if (cgiVarExists("wb_seq"))
-    {
-    if (doBlat())
-        return;
-    }
+    htmShell("Web BLAT Results", doBlat, NULL);
 else if (cgiVarExists("wb_doDetailLine"))
     {
+    puts("Content-Type:text/html");
+    puts("\n");
     doDetailLine();
-    return;
     }
-doGetSeq();
+else
+    htmShell("Web BLAT", doGetSeq, NULL);
 }
 
 int main(int argc, char *argv[])
@@ -360,13 +555,13 @@ int main(int argc, char *argv[])
 boolean isFromWeb = cgiIsOnWeb();
 htmlPushEarlyHandlers();
 dnaUtilOpen();
-cfg = gfWebConfigRead("webBlat.cfg");
 if (!isFromWeb && !cgiSpoof(&argc, argv))
     usage();
+cfg = gfWebConfigRead("webBlat.cfg");
+if (cfg->tempDir == NULL)
+    errAbort("No tempDir set in webBlat.cfg");
 if (cfg->background != NULL)
-    {
     htmlSetBackground(cfg->background);
-    }
-htmShell("Web BLAT", doMiddle, NULL);
+webBlat();
 return 0;
 }

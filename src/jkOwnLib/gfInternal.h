@@ -58,5 +58,7 @@ struct dnaSeq *gfiExpandAndLoadCached(struct gfRange *range,
  * Load up target sequence and return. (Done together because don't
  * know target size before loading.) */
 
-void gfiGetSeqName(char *spec, char *name);
-/* Extract sequence name from spec, which includes nib and 2bit files. */
+void gfiGetSeqName(char *spec, char *name, char *file);
+/* Extract sequence name and optionally file name from spec, 
+ * which includes nib and 2bit files.  (The file may be NULL
+ * if you don't care.) */

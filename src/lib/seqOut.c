@@ -12,7 +12,7 @@
 #include "htmshell.h"
 #include "axt.h"
 
-static char const rcsid[] = "$Id: seqOut.c,v 1.19 2004/06/02 23:07:30 braney Exp $";
+static char const rcsid[] = "$Id: seqOut.c,v 1.20 2004/06/06 03:23:37 kent Exp $";
 
 struct cfm *cfmNew(int wordLen, int lineLen, 
 	boolean lineNumbers, boolean countDown, FILE *out, int numOff)
@@ -306,7 +306,8 @@ if (++(baf->cix) >= baf->lineSize)
 void bafFlushLine(struct baf *baf)
 /* Write out alignment line if it has any characters in it. */
 {
-bafWriteLine(baf);
+if (baf->cix > 0)
+    bafWriteLine(baf);
 fprintf(baf->out, "<HR ALIGN=\"CENTER\">");
 baf->cix = 0;
 }
