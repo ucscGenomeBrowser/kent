@@ -53,7 +53,7 @@ if (cfm->lineLen)
 	        pos = 1-pos;
 		}
 	    pos += cfm->numOff;
-	    fprintf(cfm->out, " %ld", pos);
+	    fprintf(cfm->out, " %d", pos);
 	    }
 	fprintf(cfm->out, "\n");
 	cfm->inLine = 0;
