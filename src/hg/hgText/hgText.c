@@ -34,7 +34,7 @@
 #include "wiggle.h"
 #include "hgText.h"
 
-static char const rcsid[] = "$Id: hgText.c,v 1.144 2004/05/05 23:14:13 hiram Exp $";
+static char const rcsid[] = "$Id: hgText.c,v 1.145 2004/05/12 22:35:04 angie Exp $";
 
 /* sources of tracks, other than the current database: */
 static char *hgFixed = "hgFixed";
@@ -2458,6 +2458,7 @@ for (chromPtr=chromList;  chromPtr != NULL;  chromPtr = chromPtr->next)
 	char *constraints2 = constrainFields("2");
 	char fullTableName2[256];
 	int chromSize = hChromSize(chromPtr->name);
+	boolean isBpWise = (sameString("and", op) || sameString("or", op));
 
 	if ((!sameString("any", op)) &&
 	    (!sameString("none", op)) &&
@@ -2490,7 +2491,7 @@ for (chromPtr=chromList;  chromPtr != NULL;  chromPtr = chromPtr->next)
 	    if (! ignoreConstraints)
 		bf2 = constrainBedFields("2");
 	    fbListT2 = fbFromBed(track2, hti2, bedListT2, winStart, winEnd,
-				 FALSE, FALSE);
+				 isBpWise, FALSE);
 	    bedFreeList(&bedListT2);
 	    }
 	else
@@ -2505,22 +2506,22 @@ for (chromPtr=chromList;  chromPtr != NULL;  chromPtr = chromPtr->next)
 	    if ((typeWiggle2) && (bedListWig[WIG_TABLE_2] !=(struct bed *)NULL))
 		{
 		fbListT2 = fbFromBed(track2, hti2, bedListWig[WIG_TABLE_2],
-		    winStart, winEnd, FALSE, FALSE);
+				     winStart, winEnd, isBpWise, FALSE);
 		bedFreeList(&bedListWig[WIG_TABLE_2]);
 		}
 	    else
 		fbListT2 = fbGetRangeQueryDb(db2, track2, chrom, winStart,
-			    winEnd, constraints2, FALSE, FALSE);
+				        winEnd, constraints2, isBpWise, FALSE);
 	    }
 	bitsT2 = bitAlloc(chromSize+8);
 	fbOrBits(bitsT2, chromSize, fbListT2, 0);
-	if (sameString("and", op) || sameString("or", op))
+	if (isBpWise)
 	    {
 	    // Base-pair-wise operation: get featureBits for primary table too
 	    struct featureBits *fbListT1;
 	    Bits *bitsT1;
 	    fbListT1 = fbFromBed(track, hti, bedListT1, winStart, winEnd,
-				 FALSE, FALSE);
+				 isBpWise, FALSE);
 	    bitsT1 = bitAlloc(chromSize+8);
 	    fbOrBits(bitsT1, chromSize, fbListT1, 0);
 	    // invert inputs if necessary
