@@ -2900,13 +2900,27 @@ void doHgGold(struct trackDb *tdb, char *fragName)
 {
 char *track = tdb->tableName;
 struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn2 = hAllocConn();
+struct sqlConnection *conn3 = hAllocConn();
 char query[256];
 struct sqlResult *sr;
 char **row;
+char query2[256];
+struct sqlResult *sr2;
+char **row2;
+char query3[256];
+struct sqlResult *sr3;
+char **row3;
 struct agpFrag frag;
 int start = cartInt(cart, "o");
 boolean hasBin;
 char splitTable[64];
+char *chp;
+char *accession1, *accession2, *spanner, *evaluation, *variation, *varEvidence, 
+     *contact, *remark, *comment;
+char *secondAcc, *secondAccVer;
+char *tmpString;
+int first;
 
 cartWebStart(cart, fragName);
 hFindSplitTable(seqName, track, splitTable, &hasBin);
@@ -2916,13 +2930,99 @@ sr = sqlMustGetResult(conn, query);
 row = sqlNextRow(sr);
 agpFragStaticLoad(row+hasBin, &frag);
 
-printf("<B>Clone Fragment ID:</B> %s<BR>\n", frag.frag);
-printf("<B>Clone Bases:</B> %d-%d<BR>\n", frag.fragStart+1, frag.fragEnd);
-printPos(frag.chrom, frag.chromStart, frag.chromEnd, frag.strand, FALSE);
-printTrackHtml(tdb);
+printf("<B>Fragment ID:</B> %s<BR>\n", frag.frag);
+printf("<B>Fragment Type:</B> %s<BR>\n", frag.type);
 
+printf("<B>Bases:</B> %d-%d<BR>\n", frag.fragStart+1, frag.fragEnd);
+printPos(frag.chrom, frag.chromStart, frag.chromEnd, frag.strand, FALSE);
+
+if (hTableExists("certificate"))
+    {
+    first = 1;
+again:
+    tmpString = strdup(frag.frag);
+    chp = strstr(tmpString, ".");
+    if (chp != NULL) *chp = '\0';
+
+    if (first)
+	{
+    	sprintf(query2,"select * from certificate where accession1='%s';", tmpString);
+	}
+    else
+	{
+    	sprintf(query2,"select * from certificate where accession2='%s';", tmpString);
+	}
+    sr2 = sqlMustGetResult(conn2, query2);
+    row2 = sqlNextRow(sr2);
+    while (row2 != NULL)
+	{
+	printf("<HR>");
+        accession1 	= row2[0];
+        accession2 	= row2[1];
+        spanner		= row2[2];
+        evaluation      = row2[3];
+        variation 	= row2[4];
+        varEvidence 	= row2[5];
+        contact  	= row2[6];
+        remark 		= row2[7];
+        comment  	= row2[8];
+	
+	if (first)
+	    {
+	    secondAcc = accession2;
+	    }
+	else
+	    {
+	    secondAcc = accession1;
+	    }
+
+	sprintf(query3, "select frag from %s where frag like '%s.%c';",
+        	splitTable, secondAcc, '%');
+	sr3 = sqlMustGetResult(conn3, query3);
+	row3 = sqlNextRow(sr3);
+	if (row3 != NULL)
+	    {
+	    secondAccVer = row3[0]; 
+	    }
+	else
+	    {
+	    secondAccVer = secondAcc;
+	    }
+	
+	printf("<H3>Non-standard Join Certificate: </H3>\n");
+
+	printf("The join between %s and %s is not standard due to a ", frag.frag, secondAccVer);
+	printf("sub-optimal sequence alignment between the overlapping regions of the ");
+	printf("clones.  The following details are provided by the ");
+	printf("sequencing center to support the joining of these two clones:<BR><BR>");
+
+	printf("<B>Joined with Fragment: </B> %s<BR>\n", secondAccVer);
+
+	if (strcmp(spanner, "") != 0) printf("<B>Spanner: </B> %s<BR>\n", spanner);
+	//if (strcmp(evaluation, "") != 0) printf("<B>Evaluation: </B> %s<BR>\n", evaluation);
+	if (strcmp(variation, "") != 0) printf("<B>Variation: </B> %s<BR>\n", variation);
+	if (strcmp(varEvidence, "")!= 0) printf("<B>Variation Evidence: </B> %s<BR>\n", varEvidence);
+	if (strcmp(remark, "") != 0) printf("<B>Remark: </B> %s<BR>\n", remark);
+	if (strcmp(comment, "") != 0) printf("<B>Comment: </B> %s<BR>\n", comment);
+	if (strcmp(contact, "") != 0) 
+		printf("<B>Contact: </B> <A HREF=\"mailto:%s\">%s</A><BR>", contact, contact);
+
+	sqlFreeResult(&sr3);
+	row2 = sqlNextRow(sr2);
+	}
+    sqlFreeResult(&sr2);
+    
+    if (first)
+	{
+	first = 0;
+	goto again;
+	}
+    }
 sqlFreeResult(&sr);
 hFreeConn(&conn);
+hFreeConn(&conn2);
+hFreeConn(&conn3);
+printTrackHtml(tdb);
 }
 
 void doHgGap(struct trackDb *tdb, char *gapType)
