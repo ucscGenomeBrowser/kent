@@ -68,7 +68,7 @@
 #include "web.h"
 #include "grp.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.588 2003/08/29 05:54:04 kate Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.589 2003/08/29 23:09:46 braney Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROMOSOME_SHADES 4
@@ -1186,12 +1186,10 @@ for (sf = lf->components; sf != NULL; sf = sf->next)
 
 	x1 = round((double)((int)s-winStart)*scale) + xOff;
 	x2 = round((double)((int)e-winStart)*scale) + xOff;
+	x1--; /* this causes some lines to overwrite one
+		 pixel of the previous box */
 	w = x2-x1;
-	if (w < 1)
-	    w=1;
 	w++; /* innerLine subtracts 1 from the width */
-	x1--; /* this causes some line to overwrite one
-		 pixel of the box */
 #define GAPFACTOR 5
 	if (tGap > GAPFACTOR * qGap)
 	    innerLine(vg, x1, midY, w, color);
