@@ -60,6 +60,13 @@ int midScoreOff;		 /* Offset to middle of scoring array. */
 struct lm *lm;			 /* Local memory pool. */
 boolean didExt = FALSE;
 
+#ifdef DEBUG
+uglyf("bandExt: aStart %d, aSize %d, symAlloc %d\n", aSize, bSize, symAlloc);
+mustWrite(uglyOut, aStart, aSize);
+uglyf("\n");
+mustWrite(uglyOut, bStart, bSize);
+uglyf("\n");
+#endif /* DEBUG */
 /* For reverse direction just reverse bytes here and there.  It's
  * a lot easier than the alternative and doesn't cost much time in
  * the global scheme of things. */
@@ -227,8 +234,15 @@ if (global || bestScore > 0)
 	}
     for (;;)
 	{
-	int pOffset = bPos - bOffsets[aPos] + maxInsert;
-	UBYTE parent = parents[pOffset][aPos];
+	int pOffset;
+	UBYTE parent;
+	pOffset = bPos - bOffsets[aPos] + maxInsert;
+	if (pOffset < 0 || pOffset >= bandSize)
+	    {
+	    assert(global);
+	    return FALSE;
+	    }
+	parent = parents[pOffset][aPos];
 	switch (parent)
 	    {
 	    case ppDiag:

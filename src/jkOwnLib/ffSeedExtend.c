@@ -821,7 +821,7 @@ char nSym[25], hSym[25];
 int symCount, dummy;
 int seqScore, spliceScore, score, maxScore = 0;
 int nGap = right->nStart - left->nEnd;
-int hGap = right->hStart - right->hEnd;
+int hGap = right->hStart - left->hEnd;
 int peelLeft = (peelSize - nGap)/2;
 int intronSize = hGap - nGap;
 char *npStart = left->nEnd - peelLeft;
@@ -844,17 +844,19 @@ for (modIx=0; modIx < ArraySize(modSize); ++modIx)
     for (iPos=0; iPos <= modPeelSize; iPos++)
         {
 	grabAroundIntron(hpStart, iPos, iSize, modPeelSize, hSeq);
-	bandExt(TRUE, ss, 2, nSeq, peelSize, hSeq, modPeelSize, 1,
-		sizeof(hSym), &symCount, nSym, hSym, &dummy, &dummy);
-	seqScore = axtScoreSym(ss, symCount, nSym, hSym);
-	spliceScore = calcSpliceScore(ss, hpStart[iPos], hpStart[iPos+1],
-		hpStart[iPos+iSize-2], hpStart[iPos+iSize-1], orientation);
-	score = seqScore + spliceScore;
-	if (score > maxScore)
+	if (bandExt(TRUE, ss, 2, nSeq, peelSize, hSeq, modPeelSize, 1,
+		sizeof(hSym), &symCount, nSym, hSym, &dummy, &dummy))
 	    {
-	    maxScore = score;
-	    bestPos = iPos;
-	    bestMod = modOne;
+	    seqScore = axtScoreSym(ss, symCount, nSym, hSym);
+	    spliceScore = calcSpliceScore(ss, hpStart[iPos], hpStart[iPos+1],
+		    hpStart[iPos+iSize-2], hpStart[iPos+iSize-1], orientation);
+	    score = seqScore + spliceScore;
+	    if (score > maxScore)
+		{
+		maxScore = score;
+		bestPos = iPos;
+		bestMod = modOne;
+		}
 	    }
 	}
     }
@@ -865,7 +867,6 @@ if (maxScore > 0)
     int nIx, hIx;
     struct ffAli *ff;
 
-    uglyf("hardRefiningSpliceSite\n");
     /* Regenerate the best alignment. */
     grabAroundIntron(hpStart, bestPos, intronSize + bestMod, modPeelSize, hSeq); 
     bandExt(TRUE, ss, 2, nSeq, peelSize, hSeq, modPeelSize, 1,
@@ -972,10 +973,6 @@ if (maxScore > 0)
 return ffList;
 }
 
-boolean bandExt(boolean global, struct axtScoreScheme *ss, int maxInsert,
-	char *aStart, int aSize, char *bStart, int bSize, int dir,
-	int symAlloc, int *retSymCount, char *retSymA, char *retSymB, 
-	int *retStartA, int *retStartB);
 
 static struct ffAli *refineSpliceSites(struct dnaSeq *qSeq, struct dnaSeq *tSeq,
 	struct ffAli *ffList)
@@ -1005,8 +1002,6 @@ for (ff = ffList; ff != NULL; ff = nextFf)
 	ffList = hardRefineSplice(ff, nextFf, qSeq, tSeq, ffList, orientation);
 	}
     }
-// uglyf("after refinement:\n");
-// dumpFf(ffList, qSeq->dna, tSeq->dna);
 return ffList;
 }
 
