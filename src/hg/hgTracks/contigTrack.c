@@ -55,15 +55,12 @@ static void contigDraw(struct track *tg, int seqStart, int seqEnd,
         MgFont *font, Color color, enum trackVisibility vis)
 /* Draw contig items. */
 {
-int baseWidth = seqEnd - seqStart;
 struct ctgPos *ctg;
 int y = yOff;
 int heightPer = tg->heightPer;
 int lineHeight = tg->lineHeight;
 int x1,x2,w;
-int midLineOff = heightPer/2;
 boolean isFull = (vis == tvFull);
-Color col;
 int ix = 0;
 char *s;
 double scale = scaleForPixels(width);
