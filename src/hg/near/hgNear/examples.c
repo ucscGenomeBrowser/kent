@@ -14,11 +14,11 @@ displayData(conn, colList, NULL);
 hPrintf("<TABLE BORDER=1 CELLSPACING=0 CELLPADDING=0 BGCOLOR=\"#"HG_COL_BORDER"\"><TR><TD>");
 hPrintf("<TABLE BORDER=0 CELLSPACING=1 CELLPADDING=9 BGCOLOR=\"#"HG_COL_INSIDE"\"><TR><TD>\n");
 hPrintf("%s",
- "<P>This program displays a table of genes that are related to "
+ "<P>This program displays a sorted table of genes that are related to "
  "one another.  The relationship can be one of several types, including "
  "protein-level homology, similarity of gene expression profiles, or "
  "genomic proximity. </P>"
- "<P>To display a gene family:"
+ "<P>To display a gene and it's relatives:"
  "<OL>"
  "<LI>Select a genome and assembly from the corresponding pull-down menus. " 
  "<LI>Type a word or phrase into the <em>search</em> text box to specify "
