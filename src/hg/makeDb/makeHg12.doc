@@ -37,6 +37,13 @@ into gs.XX/buildXX/ directory.
 	mkdir contigs
 	/cluster/bin/i386/faNcbiToUcsc -split -ntLast ../ffa/ncbi_buildXX.fa contigs
 
+3.1) Make a fake chrM contig
+cd ~/oo
+mkdir M
+put the Mitochondrial fasta sequence there as chrM.fa
+mkdir M/NT_999999
+cp chrM.fa NT_999999/NT_999999.fa
+
 4) Create lift files (this will create chromosome directory structure) and inserts file
 
 	/cluster/bin/scripts/createNcbiLifts seq_contig.md .
@@ -240,7 +247,7 @@ using /cluster/bin/scripts/unPackffa .
      hgGoldGapGl hg12 /cluster/store1/gs.13 build30 
      cd /cluster/store1/gs.13
      hgClonePos hg12 build30 ffa/sequence.inf /cluster/store1/gs.13 -maxErr=3
-(Ignore warnings about missing clones - these are in chromosomes 21 and 22)
+#(Ignore warnings about missing clones - these are in chromosomes 21 and 22)
      hgCtgPos hg12 build30 
 
 Make and load GC percent table  DONE 7/12/02
@@ -287,7 +294,9 @@ format.
       gunzip -c hs.gbff.gz hs.faa.gz | \
         gbToFaRa ~kent/hg/h/mrna.fil ../refSeq.fa ../refSeq.ra ../refSeq.ta \
         stdin
-  o - Log onto server and change to your genbank directory.
+  o - Log onto server and change to yo gunzip -c gbpri*.gz gbmam*.gz gbrod*.gz gbv*.gz gbinv*.gz | \
+        gbToFaRa ~kent/hg/h/xenoRna.fil ../mrna.130/xenoRna.fa \
+        ../mrna.130/xenoRna.ra ../mrna.130/xenoRna.ta stdiur genbank directory.
       mkdir -p /cluster/store1/mrna.130
       cd /cluster/store1/mrna.130
       gunzip -c /cluster/store1/genbank.130/gbpri*.gz | \
@@ -313,7 +322,7 @@ o - Store the mRNA (non-alignment) info in database.
     The est line will take quite some time to complete.
 
 
-MAKING AND STORING mRNA AND EST ALIGNMENTS (TODO w/chrM and .130)
+MAKING AND STORING mRNA AND EST ALIGNMENTS (TODO w/ mrna.130)
 
 o - Load up the local disks of the cluster with refSeq.fa, mrna.fa and est.fa
     Copy the above 3 files from /cluster/store1/mrna.130 into 
@@ -348,7 +357,6 @@ Using the bash shell do:
 
 o - Process refSeq mRNA and EST alignments into near best in genome.
       cd ~/oo/bed
-
       cd refSeq
       pslSort dirs raw.psl /tmp psl
       pslReps -minCover=0.2 -sizeMatters -minAli=0.98 -nearTop=0.002 raw.psl contig.psl /dev/null
@@ -364,10 +372,10 @@ o - Process refSeq mRNA and EST alignments into near best in genome.
       cd ..
 
       cd est
-      pslSort dirs raw.psl /oldscratch psl
+      pslSort dirs raw.psl /cluster/store3/tmp psl
       pslReps -minAli=0.93 -nearTop=0.01 raw.psl contig.psl /dev/null
       liftUp -nohead all_est.psl ../../jkStuff/liftAll.lft carry contig.psl
-      pslSortAcc nohead chrom /oldscratch all_est.psl
+      pslSortAcc nohead chrom /cluster/store3/tmp all_est.psl
       cd ..
 
 o - Load refSeq alignments into database
@@ -387,7 +395,7 @@ In tcsh:
       hgLoadPsl hg12 *.psl
       cd ..
       hgLoadPsl hg12 all_mrna.psl -nobin
-
+DONE TO HERE 8/3/02
 o - Load EST alignments into database.
       ssh hgwdev
       cd /cluster/store1/gs.13/build30/bed/est/chrom
@@ -414,9 +422,9 @@ o - Put orientation info on ESTs and mRNAs into database:
     ALIGNMENTS" below.
      ssh kk
      cd ~/oo/bed/est
-     pslSortAcc nohead contig /oldscratch contig.psl
+     pslSortAcc nohead contig /cluster/store3/tmp contig.psl
      cd ~/oo/bed/mrna
-     pslSortAcc nohead contig /oldscratch contig.psl
+     pslSortAcc nohead contig /cluster/store3/tmp contig.psl
      ssh kkstore
      mkdir -p /scratch/hg/gs.13/build30/bed
      cp -r ~/oo/bed/est/contig /scratch/hg/gs.13/build30/bed/est
@@ -434,6 +442,7 @@ o - Put orientation info on ESTs and mRNAs into database:
      gensub2 psl.lst single gsub spec
      para create spec
      para try 
+     para check      
      para push
    check until done, or use 'para shove'
 
@@ -462,16 +471,15 @@ o - Create rnaCluster table (depends on {est,mrna}OrientInfo above)
    cd bed/rnaCluster
    hgLoadBed hg12 rnaCluster chrom/*.bed > /dev/null
 
-PRODUCING KNOWN GENES (DONE for 129 - TODO for 130)
+PRODUCING KNOWN GENES (DONE for 130)
 
-o - Align refSeq.fa to genome as described under mRNA/EST alignments above. 
 o - Get extra info from NCBI and produce refGene table as so:
        ssh hgwdev
        cd ~/oo/bed
        mkdir refSeq
        cd refSeq
-       wget ftp://ncbi.nlm.nih.gov/refseq/LocusLink/loc2ref 
-       wget ftp://ncbi.nlm.nih.gov/refseq/LocusLink/mim2loc 
+       wget ftp://ftp.ncbi.nih.gov/refseq/LocusLink/loc2ref 
+       wget ftp://ftp.ncbi.nih.gov/refseq/LocusLink/mim2loc 
 o - Similarly download refSeq proteins in fasta format to refSeq.pep - I believe this is hs.faa
 o - RefSeq should have already been aligned to the genome by processes 
         described under mRNA/EST alignments above.
@@ -940,10 +948,10 @@ cp -p /cluster/store1/gs.13/build30/?{,?}/*/NT_??????.fa.out \
 	cd ~/oo/bed
 	mkdir blatMus
 	cd blatMus
-	ls -1 /scratch/hg/mm2/trfFa.0802/*.fa.trf > mouseAll
+	ls -1 /scratch/hg/mm2/trfFa.0802/chr*.fa.trf > mouseAll
 	mkdir mm
 	cd mm
-	splitFile ../mouseAll 50 mmsplitFile
+	splitFile ../mouseAll 10 mmsplitFile
 	cd ..
 	ls -1 mm/* > mouse.lst
     Then bundle up the human into pieces of less than 12
@@ -958,7 +966,7 @@ cp -p /cluster/store1/gs.13/build30/?{,?}/*/NT_??????.fa.out \
 	splitFile ../bigH 1 big
 	rm bigXX # Note, this is just an empty file that the splitFile program erroneously created. Remove the last one.
 	splitFile ../smallH 4 small
-	rm small504
+	rm smallXXX
         cd ..
 	ls -1 hs/* > human.lst
     (The rm commands above indicate that splitFile needs a fix - they are zero length).
@@ -973,10 +981,11 @@ o - Do the cluster run as so
        cd ~/oo/bed/blatMus
        mkdir psl
        para create spec
-DONE TO HERE
+
        para try
+       para check
        para push
-         in progress
+
     and then do para check etc.
 
 o - Sort alignments as so 
@@ -1707,62 +1716,53 @@ mkdir /usr/local/apache/htdocs/goldenPath/28jun2002/bigZips
 mkdir /usr/local/apache/htdocs/goldenPath/28jun2002/database
 
 o zip up the chromosomes individually
-ssh kkstore (we use kkstore because no NFS traffic via kkstore = faster data transfer)
 
+ssh kkstore # (we use kkstore because no NFS traffic via kkstore = faster data transfer)
 cd ~/oo
-In tcsh run this script
-  foreach i (*/chr*.fa)
+
+#In tcsh run this script
+  tcsh
+  foreach i (?{,?}/chr*.fa)
       echo zip $i:r.zip $i
       zip $i:r.zip $i
   end
 
 Then do:  
 ssh hgwdev
-mv */chr*.zip /usr/local/apache/htdocs/goldenPath/28jun2002/chromosomes
+cd ~/oo
+mv ?{,?}/chr*.zip /usr/local/apache/htdocs/goldenPath/28jun2002/chromosomes
 
-Request that the admins push this to hgwbeta.
+Request that the admins push this to hgwbeta
 
 o Make the big zips
 
- - Make database.zip
-ssh hgwbeta
-cd /usr/local/apache/htdocs/goldenPath/28jun2002/database
-zip ../bigZips/database.zip *
+ssh kkstore
+cd ~/oo
+
+# Make the big zips
+zip chromAgp.zip ?{,?}/chr*.agp
+zip chromFa.zip ?{,?}/chr*.fa
+zip chromOut.zip ?{,?}/chr*.out
+zip contigAgp.zip ?{,?}/NT_??????/NT_??????.agp
+zip contigFa.zip ?{,?}/NT_??????/NT_??????.fa
+zip contigOut.zip ?{,?}/NT_??????/NT_??????.fa.out
+zip liftAll.zip jkStuff/liftAll.lft
+zip mrna.zip /cluster/store1/mrna.130/mrna.fa
 
 ssh hgwdev
 cd ~/oo
-
- # Make chromAgp.zip
-zip chromAgp.zip */chr*.agp
+# Move all the zips to the web server dirs
 mv chromAgp.zip /usr/local/apache/htdocs/goldenPath/28jun2002/bigZips
-
- # Make chromFa.zip
-zip chromFa.zip */chr*.fa
 mv chromFa.zip /usr/local/apache/htdocs/goldenPath/28jun2002/bigZips
-
- # Make chromOut.zip
-zip chromOut.zip */chr*.out
 mv chromOut.zip /usr/local/apache/htdocs/goldenPath/28jun2002/bigZips
-
- # Make contigAgp.zip
-zip contigAgp.zip */*/*.agp
 mv contigAgp.zip /usr/local/apache/htdocs/goldenPath/28jun2002/bigZips
-
- # Make contigFa.zip
-zip contigFa.zip */*/*.fa
 mv contigFa.zip /usr/local/apache/htdocs/goldenPath/28jun2002/bigZips
-
- # Make contigOut.zip
-zip contigOut.zip */*/*.out
 mv contigOut.zip /usr/local/apache/htdocs/goldenPath/28jun2002/bigZips
-
- # Make liftAll.zip
-zip liftAll.zip jkStuff/liftAll.lft
 mv liftAll.zip /usr/local/apache/htdocs/goldenPath/28jun2002/bigZips
+mv mrna.zip /usr/local/apache/htdocs/goldenPath/28jun2002/bigZips
 
- # Make mrna.zip TODO
-zip mrna.zip /cluster/store1/mrna.130/mrna.fa
-mv mrna.zip /usr/local/apache/htdocs/goldenPath/28jun2002/bigZip
+Request that the admins push all this to hgwbeta.
+
 
 o Dump the database
 ssh hgwbeta
@@ -1786,3 +1786,8 @@ When it is done do:
 cd /var/tmp/hg12-dump
 gzip *.txt
 mv * /usr/local/apache/htdocs/goldenPath/28jun2002/database
+
+ - Make database.zip
+ssh hgwbeta
+cd /usr/local/apache/htdocs/goldenPath/28jun2002/database
+zip ../bigZips/database.zip *
