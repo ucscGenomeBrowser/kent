@@ -310,7 +310,7 @@ struct dlNode *axtNode;
 struct asBlock *blockList = NULL, *block;
 
 /* Make initial list containing all axt's. */
-uglyf("ChainPair - %d axt's initially\n", slCount(sp->axtList));
+uglyf("ChainPair %s - %d axt's initially\n", sp->name, slCount(sp->axtList));
 for (axt = sp->axtList; axt != NULL; axt = axt->next)
     {
     axtNode = dlAddValTail(axtList, axt);
