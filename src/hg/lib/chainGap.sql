@@ -5,10 +5,11 @@
 
 #alignment block in chain
 CREATE TABLE chainGap (
+    tName varchar(255) not null,	# Target sequence name
     tStart int unsigned not null,	# Alignment start position in target
     tEnd int unsigned not null,	# Alignment end position in target
-    qGap int unsigned not null,	# Gap size in query
+    qStart int unsigned not null,	# start in query
     chainId int unsigned not null,	# chain id in chain table
               #Indices
-    PRIMARY KEY(tStart)
+    PRIMARY KEY(tName)
 );

@@ -15,10 +15,11 @@ void chainGapStaticLoad(char **row, struct chainGap *ret)
 int sizeOne,i;
 char *s;
 
-ret->tStart = sqlUnsigned(row[0]);
-ret->tEnd = sqlUnsigned(row[1]);
-ret->qGap = sqlUnsigned(row[2]);
-ret->chainId = sqlUnsigned(row[3]);
+ret->tName = row[0];
+ret->tStart = sqlUnsigned(row[1]);
+ret->tEnd = sqlUnsigned(row[2]);
+ret->qStart = sqlUnsigned(row[3]);
+ret->chainId = sqlUnsigned(row[4]);
 }
 
 struct chainGap *chainGapLoad(char **row)
@@ -30,10 +31,11 @@ int sizeOne,i;
 char *s;
 
 AllocVar(ret);
-ret->tStart = sqlUnsigned(row[0]);
-ret->tEnd = sqlUnsigned(row[1]);
-ret->qGap = sqlUnsigned(row[2]);
-ret->chainId = sqlUnsigned(row[3]);
+ret->tName = cloneString(row[0]);
+ret->tStart = sqlUnsigned(row[1]);
+ret->tEnd = sqlUnsigned(row[2]);
+ret->qStart = sqlUnsigned(row[3]);
+ret->chainId = sqlUnsigned(row[4]);
 return ret;
 }
 
@@ -43,7 +45,7 @@ struct chainGap *chainGapLoadAll(char *fileName)
 {
 struct chainGap *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[4];
+char *row[5];
 
 while (lineFileRow(lf, row))
     {
@@ -52,31 +54,6 @@ while (lineFileRow(lf, row))
     }
 lineFileClose(&lf);
 slReverse(&list);
-return list;
-}
-
-struct chainGap *chainGapLoadWhere(struct sqlConnection *conn, char *table, char *where)
-/* Load all chainGap from table that satisfy where clause. The
- * where clause may be NULL in which case whole table is loaded
- * Dispose of this with chainGapFreeList(). */
-{
-struct chainGap *list = NULL, *el;
-struct dyString *query = dyStringNew(256);
-struct sqlResult *sr;
-char **row;
-
-dyStringPrintf(query, "select * from %s", table);
-if (where != NULL)
-    dyStringPrintf(query, " where %s", where);
-sr = sqlGetResult(conn, query->string);
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-    el = chainGapLoad(row);
-    slAddHead(&list, el);
-    }
-slReverse(&list);
-sqlFreeResult(&sr);
-dyStringFree(&query);
 return list;
 }
 
@@ -90,9 +67,10 @@ int i;
 
 if (ret == NULL)
     AllocVar(ret);
+ret->tName = sqlStringComma(&s);
 ret->tStart = sqlUnsignedComma(&s);
 ret->tEnd = sqlUnsignedComma(&s);
-ret->qGap = sqlUnsignedComma(&s);
+ret->qStart = sqlUnsignedComma(&s);
 ret->chainId = sqlUnsignedComma(&s);
 *pS = s;
 return ret;
@@ -105,6 +83,7 @@ void chainGapFree(struct chainGap **pEl)
 struct chainGap *el;
 
 if ((el = *pEl) == NULL) return;
+freeMem(el->tName);
 freez(pEl);
 }
 
@@ -125,13 +104,19 @@ void chainGapOutput(struct chainGap *el, FILE *f, char sep, char lastSep)
 /* Print out chainGap.  Separate fields with sep. Follow last field with lastSep. */
 {
 int i;
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->tName);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
 fprintf(f, "%u", el->tStart);
 fputc(sep,f);
 fprintf(f, "%u", el->tEnd);
 fputc(sep,f);
-fprintf(f, "%u", el->qGap);
+fprintf(f, "%u", el->qStart);
 fputc(sep,f);
 fprintf(f, "%u", el->chainId);
 fputc(lastSep,f);
 }
+
+/* -------------------------------- End autoSql Generated Code -------------------------------- */
 

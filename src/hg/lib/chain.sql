@@ -6,15 +6,15 @@
 #Summary info about a chain of alignments
 CREATE TABLE chain (
     score double not null,	# score of chain
+    tName varchar(255) not null,	# Target sequence name
+    tSize int unsigned not null,	# Target sequence size
+    tStart int unsigned not null,	# Alignment start position in target
+    tEnd int unsigned not null,	# Alignment end position in target
     qName varchar(255) not null,	# Query sequence name
     qSize int unsigned not null,	# Query sequence size
     qStrand char(1) not null,	# Query strand
     qStart int unsigned not null,	# Alignment start position in query
     qEnd int unsigned not null,	# Alignment end position in query
-    tName varchar(255) not null,	# Target sequence name
-    tSize int unsigned not null,	# Target sequence size
-    tStart int unsigned not null,	# Alignment start position in target
-    tEnd int unsigned not null,	# Alignment end position in target
     id int unsigned not null,	# chain id
               #Indices
     PRIMARY KEY(score)
