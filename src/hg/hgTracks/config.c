@@ -8,6 +8,7 @@
 #include "hCommon.h"
 #include "cart.h"
 #include "web.h"
+#include "customTrack.h"
 #include "hgTracks.h"
 
 void textSizeDropDown()
@@ -149,6 +150,7 @@ struct track *ideoTrack = NULL;
 struct group *groupList = NULL;
 
 /* Get track list and group them. */
+ctList = customTracksParseCart(cart, &browserLines, &ctFileName);
 trackList = getTrackList();
 groupTracks(&trackList, &groupList);
 

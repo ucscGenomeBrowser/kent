@@ -87,7 +87,7 @@
 #include "versionInfo.h"
 #include "bedCart.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.879 2005/02/02 21:38:00 kent Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.880 2005/02/02 21:52:21 kent Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -143,7 +143,6 @@ int winStart;			/* Start of window in sequence. */
 int winEnd;			/* End of window in sequence. */
 static char *position = NULL; 		/* Name of position. */
 static char *userSeqString = NULL;	/* User sequence .fa/.psl file. */
-static char *ctFileName = NULL;	/* Custom track file. */
 
 int gfxBorder = hgDefaultGfxBorder;	/* Width of graphics border. */
 int trackTabWidth = 11;
@@ -159,6 +158,7 @@ char *protDbName;               /* Name of proteome database for this genome. */
 
 /* These variables are set by getPositionFromCustomTracks() at the very 
  * beginning of tracksDisplay(), and then used by loadCustomTracks(). */
+char *ctFileName = NULL;	/* Custom track file. */
 struct customTrack *ctList = NULL;  /* Custom tracks. */
 struct slName *browserLines = NULL; /* Custom track "browser" lines. */
 

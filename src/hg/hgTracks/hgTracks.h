@@ -247,6 +247,9 @@ extern boolean zoomedToBaseLevel; /* TRUE if zoomed so we can draw bases. */
 extern boolean zoomedToCodonLevel; /* TRUE if zoomed so we can print codon text in genePreds*/
 extern boolean zoomedToCdsColorLevel; /* TRUE if zoomed so we cancolor each codon*/
 
+extern char *ctFileName;	/* Custom track file. */
+extern struct customTrack *ctList;  /* Custom tracks. */
+extern struct slName *browserLines; /* Custom track "browser" lines. */
 
 extern int rulerMode;         /* on, off, full */
 extern boolean withLeftLabels;		/* Display left labels? */
