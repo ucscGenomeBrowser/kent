@@ -6,7 +6,7 @@
 #include "fa.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: faNcbiToUcsc.c,v 1.9 2003/07/28 20:29:40 booch Exp $";
+static char const rcsid[] = "$Id: faNcbiToUcsc.c,v 1.10 2004/05/19 23:15:49 hiram Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -53,7 +53,9 @@ while (lineFileNext(lf, &line, NULL))
 	    if (nt == NULL)
 		nt = stringIn("NG_", line);
 	    if (nt == NULL)
-		errAbort("Expecting NT_ in %s", line);
+		nt = stringIn("NC_", line);
+	    if (nt == NULL)
+		errAbort("Expecting NT_ NG_ or NC_in '%s'", line);
 	    e = strchr(nt, '|');
 	    if (e != NULL) *e = 0;
 	    e = strchr(nt, ' ');
