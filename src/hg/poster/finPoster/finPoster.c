@@ -24,10 +24,11 @@
 #include "cytoBand.h"
 #include "binRange.h"
 #include "refLink.h"
+#include "netAlign.h"
 #include "hCommon.h"
 #include "axt.h"
 
-static char const rcsid[] = "$Id: finPoster.c,v 1.10 2003/10/08 07:39:09 kent Exp $";
+static char const rcsid[] = "$Id: finPoster.c,v 1.11 2003/12/13 04:59:46 kent Exp $";
 
 /* Which database to use */
 char *database = "hg16";
@@ -533,17 +534,163 @@ while ((row = sqlNextRow(sr)) != NULL)
 sqlFreeResult(&sr);
 }
 
+struct netAlign *netAlignDeepest(struct netAlign *naList)
+/* Return deepest part of net in list. */
+{
+struct netAlign *na, *deepestNa = NULL;
+int deepest = -1;
+for (na = naList; na != NULL; na = na->next)
+    {
+    if (na->level > deepest)
+        {
+	deepest = na->level;
+	deepestNa = na;
+	}
+    }
+return deepestNa;
+}
 
-void getFishBlatHits(struct chromGaps *cg, char *chrom, struct sqlConnection *conn, FILE *f)
+struct binKeeper *netBinKeeper(struct sqlConnection *conn, 
+	char *netTrack, char *chrom, int chromSize)
+/* Make up a binKeeper for net. */
+{
+int rowOffset;
+struct netAlign *na;
+struct binKeeper *bk = binKeeperNew(0,chromSize);
+struct sqlResult *sr = hChromQuery(conn, netTrack, chrom, NULL, &rowOffset);
+char **row;
+
+while ((row = sqlNextRow(sr)) != NULL)
+     {
+     na = netAlignLoad(row + rowOffset);
+     binKeeperAdd(bk, na->tStart, na->tEnd, na);
+     }
+sqlFreeResult(&sr);
+return bk;
+}
+
+void netBinKeeperFree(struct binKeeper **pBk)
+/* Get rid of net bin keeper. */
+{
+struct binKeeper *bk = *pBk;
+struct binKeeperCookie *pos;
+int bin;
+
+if (bk == NULL)
+    return;
+for (bin=0; bin<bk->binCount; ++bin)
+    {
+    struct binElement *bel;
+    for (bel = bk->binLists[bin]; bel != NULL; bel = bel->next)
+        {
+	struct netAlign *na = bel->val;
+	netAlignFree(&na);
+	}
+    }
+binKeeperFree(pBk);
+}
+
+
+double minTopScore = 200000;  /* Minimum score for top level alignments. */
+double minSynScore = 200000;  /* Minimum score for block to be syntenic 
+                               * regardless.  On average in the human/mouse
+			       * net a score of 200,000 will cover 27000 
+			       * bases including 9000 aligning bases - more
+			       * than all but the heartiest of processed
+			       * pseudogenes. */
+double minSynSize = 20000;    /* Minimum size for syntenic block. */
+double minSynAli = 10000;     /* Minimum alignment size. */
+double maxFar = 200000;  /* Maximum distance to allow synteny. */
+
+boolean synFilter(struct netAlign *na)
+/* Filter based on synteny - tuned for human/mouse */
+{
+if (na->chainId == 0)  /* A gap */
+    return FALSE;
+if (na->score >= minSynScore && na->tEnd - na->tStart >= minSynSize && na->ali >= minSynAli)
+    return TRUE;
+if (sameString(na->type, "top"))
+    return na->score >= minTopScore;
+if (sameString(na->type, "nonSyn"))
+    return FALSE;
+if (na->qFar > maxFar)
+    return FALSE;
+return TRUE;
+}
+
+
+boolean isSyntenic(struct binKeeper *netBk, int pos)
+/* Return TRUE if pos looks to be on syntenic part of net. */
+{
+/* First find deepest level of net that intersects position
+ * to position+4 (to allow a little slop), then run it through
+ * synteny filter. */
+struct netAlign *deepestNa = NULL, *na;
+int deepest = -1;
+struct binElement *binEl, *binList = binKeeperFind(netBk, pos, pos+4);
+if (binList == NULL)
+    return FALSE;
+for (binEl = binList; binEl != NULL; binEl = binEl->next)
+    {
+    int level;
+    na = binEl->val;
+    level = na->level;
+    if (level > deepest)
+        {
+	deepest = level;
+	deepestNa = na;
+	}
+    }
+slFreeList(&binList);
+
+return synFilter(deepestNa);
+}
+
+
+void getSyntenicPslTicks(char *track, char *netTrack, char *outputName, int r, int g, int b,
+	struct chromGaps *cg, char *chrom, int chromSize,
+	struct sqlConnection *conn, FILE *f)
+/* Get PSL track stuff. */
+{
+struct binKeeper *netBk = netBinKeeper(conn, netTrack, chrom, chromSize);
+int rowOffset;
+struct sqlResult *sr = hChromQuery(conn, track, chrom, NULL, &rowOffset);
+char **row;
+struct psl *psl;
+int lastEnd = -BIGNUM;
+int sepDistance = 20000;
+
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    psl = pslLoad(row + rowOffset);
+    // if (psl->tStart > lastEnd + sepDistance)
+	{
+	if (isSyntenic(netBk, psl->tStart))
+	    printTab(f, cg, chrom, psl->tStart, psl->tStart+1, 
+		    outputName, "tick", r, g, b, ".");
+	lastEnd = psl->tStart;
+	}
+    pslFree(&psl);
+    }
+sqlFreeResult(&sr);
+netBinKeeperFree(&netBk);
+}
+
+
+
+void getFishBlatHits(struct chromGaps *cg, char *chrom, int chromSize, struct sqlConnection *conn, FILE *f)
 /* Get Fish Blat stuff. */
 {
-getPslTicks("blatFr1", "fugu", 0, 90, 180, cg, chrom, conn, f);
+printf(" Getting fishBlat\n");
+getSyntenicPslTicks("blatFr1", "netMm4", "fugu", 0, 90, 180, cg, chrom,
+	chromSize, conn, f);
 }
 
 
 void getEstTicks(struct chromGaps *cg, char *chrom, struct sqlConnection *conn, FILE *f)
 /* Get ests with introns. */
 {
+printf(" Getting est ticks\n");
 getPslTicks("intronEst", "est3", 0, 0, 0, cg, chrom, conn, f);
 }
 
@@ -564,7 +711,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     if (el->gcPpt != 0)
         {
 	double scale;
-	scale = (el->gcPpt - 320.0)*1.0/(570-320);
+	scale = (el->gcPpt - 320.0)*1.0/(620-320);
 	if (scale < minScale) minScale = scale;
 	if (scale > maxScale) maxScale = scale;
 	if (scale > 1) scale = 1;
@@ -1011,12 +1158,31 @@ while (lineFileRow(lf, row))
 slSort(&sdList, segDupeCmpIdentity);
 for (sd = sdList; sd != NULL; sd = sd->next)
     {
-    /* Want gray to be a linear function that maps 0.9 to 1.0 to 127 to 255. */
-    int gray = (sd->identity - 0.9) * 10.0 * 128 + 127;
-    if (gray < 0) gray = 0;
-    if (gray > 255) gray = 255;
+    int r,g,b;
+    if (sd->identity >= 0.98)
+        {
+	if (sd->identity >= 0.99)
+	    {
+	    r = 255;
+	    g = b = 0;
+	    }
+	else
+	    {
+	    r = 180;
+	    g = 160;
+	    b = 0;
+	    }
+	}
+    else
+	{
+	/* Want gray to be a linear function that maps 0.9 to 0.98 to 127 to 255. */
+	int gray = (sd->identity - 0.9) * 12.5 * 128 + 127;
+	if (gray < 0) gray = 0;
+	if (gray > 255) gray = 255;
+	r = g = b = gray;
+	}
     printTab(f, cg, chrom, sd->start, sd->end, 
-		"duplicon", "box", gray, gray, gray, ".");
+		"duplicon", "box", r, g, b, ".");
     }
 slFreeList(&sd);
 lineFileClose(&lf);
@@ -1029,9 +1195,15 @@ void getCentroTelo(struct chromGaps *cg, char *chrom,
 struct sqlResult *sr;
 char **row;
 char query[512];
+#ifdef NEVER
 safef(query, sizeof(query),
 	"select genoStart,genoEnd,repFamily from %s_rmsk "
 	"where repFamily = 'centr' or repFamily = 'telo'"
+	, chrom);
+#endif /* NEVER */
+safef(query, sizeof(query),
+	"select genoStart,genoEnd,repFamily from %s_rmsk "
+	"where repFamily = 'centr'"
 	, chrom);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
@@ -1044,7 +1216,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 		    "repTelomere", "box", 50, 50, 250, ".");
     else
 	printTab(f, cg, chrom, start, end, 
-		    "repCentromere", "box", 200, 0, 250, ".");
+		    "repCentromere", "box", 0, 200, 0, ".");
     }
 sqlFreeResult(&sr);
 }
@@ -1106,7 +1278,7 @@ while (lineFileNextReal(lf, &line))
 	    }
 	else
 	    {
-	    r = 150, g=75, b=0;
+	    r = 0, g=200, b=0;
 	    }
 	printTab(f, cg, chrom, s, e, 
 		"rnaGenes", "tick", r, g, b, ".");
@@ -1272,6 +1444,7 @@ sqlFreeResult(&sr);
 return bk;
 }
 
+
 void getMutationRate(struct chromGaps *cg, struct sqlConnection *conn,
 	char *chrom, int chromSize,
 	struct hash *muteHash, FILE *f)
@@ -1429,7 +1602,7 @@ getRnaGenes(cg, chrom, conn, f);
 #endif /* SOON */
 fakeRnaGenes(cg, chrom, conn, f);
 getCpgIslands(cg, chrom, conn, f);
-getFishBlatHits(cg,chrom,conn,f);
+getFishBlatHits(cg, chrom, chromSize, conn, f);
 getEstTicks(cg, chrom, conn, f);
 fakeEnsGenes(cg, chrom, conn, f, 160, 10, 0);
 // getPredGenes(cg, chrom, conn, f, "ensGene", 160, 10, 0);
