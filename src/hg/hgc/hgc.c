@@ -140,7 +140,7 @@
 #include "HInv.h"
 #include "bed6FloatScore.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.680 2004/07/07 18:40:55 braney Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.681 2004/07/08 01:58:49 braney Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -9029,7 +9029,12 @@ printf("%s DNA</A><BR>\n", otherGenome);
 /* Get alignment info and print. */
 printf("<H2>Alignments</H2>\n");
 hFindSplitTable(seqName, track, table, &hasBin);
-sprintf(query, "select * from %s where qName = '%s'", table, itemName);
+
+/* if this is a non-split table then query with tName */
+if (startsWith(track, table))
+    safef(query, sizeof(query), "select * from %s where qName = '%s' and tName = '%s'", table, itemName,seqName);
+else
+    safef(query, sizeof(query), "select * from %s where qName = '%s'", table, itemName);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
