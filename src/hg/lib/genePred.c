@@ -10,7 +10,7 @@
 #include "genePred.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: genePred.c,v 1.25 2004/01/16 01:37:45 markd Exp $";
+static char const rcsid[] = "$Id: genePred.c,v 1.26 2004/02/04 23:11:16 markd Exp $";
 
 /* SQL to create a genePred table */
 static char *createSql = 
@@ -352,6 +352,14 @@ for (gl = group->lineList; gl != NULL; gl = gl->next)
     {
     if (sameWord(gl->feature, "CDS") || sameWord(gl->feature, "exon"))
         {
+        if (!(sameString(gl->seq, gp->chrom) && (gl->strand == gp->strand[0])))
+            {
+            fprintf(stderr, "invalid gffGroup detected on line: ");
+            gffTabOut(gl, stderr);
+            errAbort("GFF/GTF group %s on %s%c, this line is on %s%c, all group members must be on same seq and strand",
+                     group->name, gp->chrom, gp->strand[0],
+                     gl->seq, gl->strand);
+            }
         if ((i == 0) || (gl->start > eEnds[i-1]))
             {
             eStarts[i] = gl->start;
