@@ -426,6 +426,14 @@ o - Load Softberry genes and associated peptides:
      hgPepPred hg6 softberry *.pro
      hgSoftberryHom hg6 *.pro
 
+o - Load Softberry promoters
+     cd ~/oo/bed
+     mkdir softPromoter
+     cd softPromoter
+    move Softberry_prometers.tar.gz from Victor's email
+    attachment into this directory. 
+     gtar -zxf *.gz
+     hgSoftPromoter hg6 *.prom
 
 o - Load exoFish table
      - login to cc94

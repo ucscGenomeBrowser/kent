@@ -180,7 +180,6 @@ o - Execute the following (which will take about
 	quit
 
 
-
 PRODUCING MOUSE ALIGNMENTS
 
 o - Make sure that contig/ctg*.fa.masked files exist already.
@@ -300,6 +299,59 @@ o - load sequence into database as so:
 	ssh cc94
 	hgLoadRna addSeq '-abbr=gnl|' hg7 /projects/hg3/mouse/ncbiTrimmed/fasta.*.fa
     This will take quite some time.  Perhaps an hour .
+
+PRODUCING FISH ALIGNMENTS
+
+o - Download sequence from ... and put it in 
+	ssh kks00
+       /projects/hg3/fish/seq15jun2001/bqcnstn_0106151510.fa
+    then
+	ln -s /projects/hg3/fish ~/fish
+    split this into multiple files and compress original with
+	cd ~/fish/seq15jun2001
+        faSplit sequence bq* 100 fish
+	compress bq*
+o - Do fish/human alignments.
+       ssh cc01
+       cd ~/fish
+       mkdir vsOo29
+       cd vsOo29
+       mkdir err out log psl
+       ls -1S /var/tmp/hg/gs.7/oo.29/tanMaskNib/*.fa.trf > human.lst
+       ls -1S /projects/hg3/fish/seq15jun2001/*.fa > fish.lst
+     Copy over aliFish.gsub from previous version and edit paths to
+     point to current assembly.
+       gensub2 fish.lst human.lst aliFish.gsub allCon
+     Break into many files by moving the header part of allCon to a file
+     called headCon and then
+       splitFile allCon 21000 m -head=headCon
+       foreach i (m??)
+           mv $i $i.con
+	end
+     Submit a several of the resulting mNN.con files  a day - trying to 
+     keep condor queue size between 1000 and 10000.  There's 3000 jobs
+     in each file.
+o - Check alignments as so:
+       ssh kks00
+       cd ~/fish/vsOo29
+       edit fixFish.sh as necessary to update versions.
+       gensub2 fish.lst human.lst fixFish.gsub fixFish.sh
+       chmod a+x fixFish.sh
+       fixFish.sh | tee fixFish.out
+o - Sort alignments as so 
+       cd ~/fish/vsOo29
+       pslCat -dir -check psl | liftUp -type=.psl stdout ~/oo/jkStuff/liftAll.lft warn stdin | pslSortAcc nohead chrom temp stdin
+o - Rename to correspond with tables as so and load into database:
+       ssh cc94
+       cd ~/fish/vsOo29/chrom
+       foreach i (*.psl)
+	   set r = $i:r
+           mv $i ${r}_blatFish.psl
+       end
+       hgLoadPsl hg7 *.psl
+
+
+
       
 LOADING IN EXTERNAL FILES
 
@@ -328,6 +380,23 @@ o - Load STSs (done)
       - At mysql> prompt type
           quit
       - Ignore warnings from extra fields (7611 of them).
+
+o - Load in Exonerate alignments
+      ssh cc94
+      cd ~/oo/bed
+      mkdir exonerate
+      cd exonerate
+      wget ftp.ebi.ac.uk/pub/software/ensembl/mouse_vs_ens110.tar.gz
+      tar -zxvf mouse*.gz
+      cat mouse_gff/*.gff | hgExonerate -elia hg7 exoMouse stdin
+       
+o - Load in Fiberglass alignments
+      ssh cc94
+      cd ~/oo/bed
+      mkdir fiberglass
+      cd fiberglass
+      wget http://waldo.wi.mit.edu/~danb/Chr22/all_hits
+      hgFiberglass hg7 all_hits
 
 o - Load SNPs into database.
       - ssh cc94
