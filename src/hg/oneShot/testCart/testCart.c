@@ -3,6 +3,7 @@
 #include "linefile.h"
 #include "hash.h"
 #include "cheapcgi.h"
+#include "htmshell.h"
 #include "jksql.h"
 #include "cartDb.h"
 
@@ -110,7 +111,7 @@ else
 return cdb;
 }
 
-struct cart *cartNew(char *userId, char *sessionId)
+struct cart *cartNew(unsigned int userId, unsigned int sessionId)
 /* Load up cart from user & session id's. */
 {
 struct cgiVar *cv;
@@ -119,10 +120,10 @@ struct sqlConnection *conn = sqlConnect("hgcentral");
 
 AllocVar(cart);
 cart->hash = newHash(8);
-cart->userId = atoi(userId);
-cart->sessionId = atoi(sessionId);
-cart->userInfo = loadDbOverHash(conn, "userDb", atoi(userId), cart->hash);
-cart->sessionInfo = loadDbOverHash(conn, "sessionDb", atoi(sessionId), cart->hash);
+cart->userId = userId;
+cart->sessionId = sessionId;
+cart->userInfo = loadDbOverHash(conn, "userDb", userId, cart->hash);
+cart->sessionInfo = loadDbOverHash(conn, "sessionDb", sessionId, cart->hash);
 for (cv = cgiVarList(); cv != NULL; cv = cv->next)
     cartSetString(cart, cv->name, cv->val);
 sqlDisconnect(&conn);
@@ -139,7 +140,6 @@ dyStringPrintf(dy, "UPDATE %s SET contents='", table);
 dyStringAppendN(dy, contents, contentSize);
 dyStringPrintf(dy, "',lastUse=now(),useCount=%d ", cdb->useCount+1);
 dyStringPrintf(dy, " where id=%u", cdb->id);
-uglyf("%s\n", dy->string);
 sqlUpdate(conn, dy->string);
 dyStringFree(&dy);
 }
@@ -215,21 +215,73 @@ char *cartOptionalString(struct cart *cart, char *var)
 return hashFindVal(cart->hash, var);
 }
 
-void testCart(char *userId, char *sessionId)
-/* testCart - Test cart routines.. */
+char *cartUsualString(struct cart *cart, char *var, char *usual)
+/* Return variable value, or 'usual' if it doesn't exist. */
 {
-struct cart *cart;
-cart = cartNew(userId, sessionId);
+char *s = cartOptionalString(cart, var);
+if (s == NULL)
+    s = usual;
+return s;
+}
+
+void cartSaveSession(struct cart *cart)
+/* Save session in a hidden variable. This needs to be called
+ * somewhere inside of form. */
+{
+char buf[64];
+sprintf(buf, "%u", cart->sessionInfo->id);
+cgiMakeHiddenVar("hgsid", buf);
+}
+
+void doMiddle(struct cart *cart)
+/* Print out middle parts. */
+{
+char *old;
+
+cartSetString(cart, "killroy", "was here");
+cartSetString(cart, "lost", "G*d d*ng it!");
+printf("<FORM ACTION=\"../cgi-bin/testCart\">\n");
+printf("<H3>Just a Test</H3>\n");
+printf("<B>Filter:</B> ");
+old = cartUsualString(cart, "filter", "red");
+cgiMakeRadioButton("filter", "red", sameString(old, "red"));
+cgiMakeRadioButton("filter", "green", sameString(old, "green"));
+cgiMakeRadioButton("filter", "blue", sameString(old, "blue"));
+cgiMakeButton("submit", "Submit");
+printf("</FORM>");
+printf("<TT><PRE>");
 cartDump(cart);
+}
+
+char *cookieDate(char *relative)
+/* Return date string for cookie format. */
+{
+return "Thu, 31-Dec-2037 23:59:59 GMT";
+}
+
+void cartHtmShell(char *title, void (*doMiddle)(struct cart *cart), char *cookieName)
+/* Load cart from cookie and session cgi variable. */
+{
+char *hguidString = findCookieData("hguid");
+int hguid = (hguidString == NULL ? 0 : atoi(hguidString));
+int hgsid = cgiUsualInt("hgsid", 0);
+struct cart *cart = cartNew(hguid, hgsid);
+
+printf("Set-Cookie: %s=%u; path=/; domain=.ucsc.edu; expires=%s\n",
+	cookieName, cart->userInfo->id, cookieDate("+2y"));
+puts("Content-Type:text/html");
+puts("\n");
+
+htmStart(stdout, title);
+doMiddle(cart);
 cartFree(&cart);
+htmlEnd();
 }
 
 int main(int argc, char *argv[])
 /* Process command line. */
 {
 cgiSpoof(&argc, argv);
-if (argc != 3)
-    usage();
-testCart(argv[1], argv[2]);
+cartHtmShell("testCart", doMiddle, "hguid");
 return 0;
 }

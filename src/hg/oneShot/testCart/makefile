@@ -8,5 +8,6 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = testCart.o
 
 testCart: $O $(MYLIBS)
-	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/testCart $O $(MYLIBS) $L
-	strip $(HOME)/bin/$(MACHTYPE)/testCart
+	gcc -ggdb -o testCart $O $(MYLIBS) $L
+	strip testCart
+	mv testCart /usr/local/apache/cgi-bin/testCart
