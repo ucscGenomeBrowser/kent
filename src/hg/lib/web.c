@@ -15,6 +15,17 @@ boolean webInTextMode = FALSE;
 static char *dbCgiName = "db";
 static char *orgCgiName = "org";
 
+void textVaWarn(char *format, va_list args)
+{
+vprintf(format, args);
+puts("\n");
+}
+
+void softAbort()
+{
+exit(0);
+}
+
 void webStartText()
 /* output the head for a text page */
 {
@@ -22,6 +33,8 @@ void webStartText()
 
 webHeadAlreadyOutputed = TRUE;
 webInTextMode = TRUE;
+pushWarnHandler(textVaWarn);
+pushAbortHandler(softAbort);
 }
 
 void webStartWrapperGateway(struct cart *theCart, char *format, va_list args, boolean withHttpHeader, boolean withLogo, boolean skipSectionHeader)
@@ -124,6 +137,7 @@ if(!skipSectionHeader)
 };
 
 pushWarnHandler(webVaWarn);
+pushAbortHandler(softAbort);
 
 /* set the flag */
 webHeadAlreadyOutputed = TRUE;
@@ -197,6 +211,7 @@ if(!webInTextMode)
 	    "</BODY></HTML>" "\n"
 	);
 	popWarnHandler();
+	popAbortHandler();
 	}
 }
 
@@ -224,11 +239,12 @@ if(webInTextMode)
 	printf("\n\n\n          %s\n\n", title);
 
 vprintf(format, args);
+printf("\n\n");
 
 webEnd();
 
 va_end(args);
-exit(1);
+exit(0);
 }
 
 void printOrgListHtml(char *db, char *onChangeText)
