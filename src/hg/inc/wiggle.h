@@ -67,7 +67,7 @@ void wiggleOutput(struct wiggle *el, FILE *f, char sep, char lastSep);
 #define wiggleCommaOut(el,f) wiggleOutput(el,f,',',',');
 /* Print out wiggle as a comma separated list including final comma. */
 
-/* -------------------------------- End autoSql Generated Code -------------------------------- */
+/* -------------- End autoSql Generated Code -------------------------- */
 
 #define DEFAULT_MIN_Yv	0.0
 #define DEFAULT_MAX_Yv	127.0
@@ -82,6 +82,13 @@ struct wiggleDatum
     {
     unsigned chromStart;    /* Start position in chromosome, 0 relative */
     double value;
+    };
+
+struct asciiDatum
+/* a single instance of a wiggle data value (trying float here to save space */
+    {
+    unsigned chromStart;    /* Start position in chromosome, 0 relative */
+    float value;
     };
 
 struct wiggleData
@@ -123,67 +130,7 @@ struct wigAsciiData
     char *chrom;		/*	chrom name for this set of data */
     unsigned span;		/*	span for this set of data	*/
     unsigned count;		/*	number of values in this block */
-    struct wiggleDatum *data;	/*	individual data items here */
-    };
-
-/*	the object wiggleDataStream is implemented in lib/wigDataStream.c */
-struct wiggleDataStream
-/*	object definition to access wiggle data, in DB or from file	*/
-    {
-    char *db;			/*	database name	*/
-    char *tblName;		/*	the table or file name	*/
-    boolean isFile;		/*	TRUE means it is a file, not DB */
-    struct lineFile *lf;	/*	file handle in case of file	*/
-    struct wigAsciiData *ascii;	/*	linked list of wiggle data values */
-    struct bed *bed;		/*	data in bed format	*/
-    struct wiggleStats *stats;	/*	linked list of wiggle stats	*/
-    boolean useDataConstraint;	/*	to simplify checking if it is on */
-    char *dataConstraint;	/*	one of < = >= <= == != 'in range' */
-    double limit_0;		/*	for constraint comparison	*/
-    double limit_1;		/*	for constraint comparison	*/
-    unsigned char ucLowerLimit;	/*	for comparison direct to bytes	*/
-    unsigned char ucUpperLimit;	/*	for comparison direct to bytes	*/
-    char *sqlConstraint;	/*	extra SQL constraints	*/
-    unsigned int currentSpan;	/*	for use during reading	*/
-    char *currentChrom;		/*	for use during reading	*/
-    char *wibFile;		/*	for use during reading	*/
-    int wibFH;			/*	wibFile handle	*/
-    struct sqlConnection *conn;	/*	SQL connection when talking to db */
-    struct sqlResult *sr;	/*	SQL result when talking to db	*/
-    char *chrName;		/*	for chrom==chrName on file reads */
-    unsigned spanLimit;		/*	for span==spanLimit on file reads */
-    int winStart;		/*	for fetches between winStart, winEnd */
-    int winEnd;			/*	for fetches between winStart, winEnd */
-    void (*freeAscii)(struct wiggleDataStream *wDS);
-    void (*freeBed)(struct wiggleDataStream *wDS);
-    void (*freeStats)(struct wiggleDataStream *wDS);
-    void (*freeConstraints)(struct wiggleDataStream *wDS);
-    boolean (*cmpDouble)(struct wiggleDataStream *wDS, double lower,
-	double upper);		/*	for comparing with SQL row values */
-    boolean (*cmpByte)(struct wiggleDataStream *wDS, unsigned char *value);
-				/*	for comparing to real data bytes */
-    void (*setPositionConstraint)(struct wiggleDataStream *wDS,
-	int winStart, int winEnd);
-				/*	work only within specified position */
-    void (*setChromConstraint)(struct wiggleDataStream *wDS, char *chr);
-				/*	work only on specified chrom 	*/
-    void (*setSpanConstraint)(struct wiggleDataStream *wDS, unsigned span);
-				/*	work only on specified span 	*/
-    void (*setDataConstraint)(struct wiggleDataStream *wDS,
-	char *dataConstraint, double lowerLimit, double upperLimit);
-				/*	setting data compare limits 	*/
-    void (*setCompareByte)(struct wiggleDataStream *wDS,
-	double lower, double range);
-/*	this will be internal only when the read functions are here */
-    void (*openWibFile)(struct wiggleDataStream *wDS, char *file);
-/*	this will be internal only when the read functions are here */
-    boolean (*nextRow)(struct wiggleDataStream *wDS, char *row[], int maxRow);
-	    /*      read next wig row from sql query or lineFile
-	     *      FALSE return on no more data    */
-    void (*closeWigConn)(struct wiggleDataStream *wDS);
-				/*	close a connection, leaves data here */
-    void (*openWigConn)(struct wiggleDataStream *wDS, char *tableName);
-				/*	start a connection	*/
+    struct asciiDatum *data;	/*	individual data items here */
     };
 
 #include "hdb.h"
@@ -289,6 +236,82 @@ void wigAsciiToBinary(char *wigAscii, char *wigFile, char *wibFile,
  *	the wigFile and wibFile outputs, return the upper and lower
  *	limits for all the data
  */
+
+/*	the object wiggleDataStream is implemented in lib/wigDataStream.c */
+
+#if defined(NOT)
+enum wigCompare 
+/*	type of comparison to be calculated	*/
+    {
+    wigNoOp, wigInRange, wigLessThan, wigLessEqual, wigEqual,
+	wigNotEqual, wigGreaterEqual, wigGreaterThan,
+    };
+#endif
+
+enum wigDataFetchType
+/*	bit masks to specify type of data to fetch via getData()	*/
+    {
+    wigFetchAscii = 1, wigFetchBed = 2, wigFetchStats = 4,
+    };
+
+struct wiggleDataStream
+/*	object definition to access wiggle data, in DB or from file	*/
+    {
+    char *db;			/*	database name	*/
+    char *tblName;		/*	the table or file name	*/
+    boolean isFile;		/*	TRUE == it is a file, FALSE == DB */
+    struct lineFile *lf;	/*	file handle in case of file	*/
+    struct wigAsciiData *ascii;	/*	list of wiggle data values */
+    struct bed *bed;		/*	data in bed format	*/
+    struct wiggleStats *stats;	/*	list of wiggle stats	*/
+    boolean useDataConstraint;	/*	to simplify checking if it is on */
+    char *dataConstraint;	/*	one of < = >= <= == != 'in range' */
+    double limit_0;		/*	for constraint comparison	*/
+    double limit_1;		/*	for constraint comparison	*/
+    unsigned char ucLowerLimit;	/*	for comparison direct to bytes	*/
+    unsigned char ucUpperLimit;	/*	for comparison direct to bytes	*/
+    char *sqlConstraint;	/*	extra SQL constraints	*/
+    unsigned int currentSpan;	/*	for use during reading	*/
+    char *currentChrom;		/*	for use during reading	*/
+    char *wibFile;		/*	for use during reading	*/
+    int wibFH;			/*	wibFile handle	*/
+    struct sqlConnection *conn;	/*	SQL connection when talking to db */
+    struct sqlResult *sr;	/*	SQL result when talking to db	*/
+    char *chrName;		/*	for chrom==chrName on file reads */
+    unsigned spanLimit;		/*	for span==spanLimit on file reads */
+    int winStart;		/*	for fetches between winStart, winEnd */
+    int winEnd;			/*	for fetches between winStart, winEnd */
+    unsigned long long rowsRead;     /*	reading stats, SQL rows read */
+    unsigned long long validPoints;  /*	reading stats, number of data bytes */
+    unsigned long long noDataPoints; /* reading stats, NO_DATA bytes	*/
+    unsigned long long bytesRead;    /* reading stats, total wib bytes */
+    unsigned long long bytesSkipped; /* reading stats, bytes not examined */
+    unsigned long long valuesMatched;  /* reading stats, number of data bytes */
+    void (*freeAscii)(struct wiggleDataStream *wDS);
+    void (*freeBed)(struct wiggleDataStream *wDS);
+    void (*freeStats)(struct wiggleDataStream *wDS);
+    void (*freeConstraints)(struct wiggleDataStream *wDS);
+    boolean (*cmpDouble)(struct wiggleDataStream *wDS, double lower,
+	double upper);		/*	for comparing with SQL row values */
+    boolean (*cmpByte)(struct wiggleDataStream *wDS, unsigned char *value);
+				/*	for comparing to real data bytes */
+    void (*setPositionConstraint)(struct wiggleDataStream *wDS,
+	int winStart, int winEnd);
+				/*	work only within specified position */
+    void (*setChromConstraint)(struct wiggleDataStream *wDS, char *chr);
+				/*	work only on specified chrom 	*/
+    void (*setSpanConstraint)(struct wiggleDataStream *wDS, unsigned span);
+				/*	work only on specified span 	*/
+    void (*setDataConstraint)(struct wiggleDataStream *wDS,
+	char *dataConstraint, double lowerLimit, double upperLimit);
+				/*	setting data compare limits 	*/
+    void (*asciiOut)(struct wiggleDataStream *wDS, char *fileName);
+    void (*getData)(struct wiggleDataStream *wDS, enum wigDataFetchType type);
+    void (*closeWigConn)(struct wiggleDataStream *wDS);
+				/*	close a connection, leaves data here */
+    void (*openWigConn)(struct wiggleDataStream *wDS, char *tableName);
+				/*	start a connection	*/
+    };
 
 /*	in lib/wigDataStream.c	*/
 struct wiggleDataStream *newWigDataStream();
