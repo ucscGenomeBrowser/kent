@@ -170,3 +170,11 @@ visibility hide
 color 50,50,250
 type bed 6 +
 
+
+
+searchTable pscreen
+searchType bed
+termRegex [^[:space:]]+
+padding 500
+searchPriority 50
+
