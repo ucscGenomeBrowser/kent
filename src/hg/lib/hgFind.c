@@ -512,7 +512,7 @@ char *type;
 char *extraCgi = hgp->extraCgi;
 char *ui = getUiUrl(cart);
 
-if ((type = mrnaType(acc)) == NULL)
+if ((type = mrnaType(acc)) == NULL || type[0] == 0)
     return FALSE;
 else
     {
