@@ -49,8 +49,10 @@ while ((psl = pslNext(lf)) != NULL)
     slAddHead(&pslList, psl);
     }
 lineFileClose(&lf);
-slSort(&pslList, pslCmpMatches);
+if (pslList == NULL)
+    errAbort("Sorry, no matches found");
 
+slSort(&pslList, pslCmpMatches);
 fprintf(stdout, "<TT><PRE>");
 fprintf(stdout, " SIZE IDENTITY  CHROMOSOME   START     END       cDNA   START  END  TOTAL\n");
 fprintf(stdout, "-------------------------------------------------------------------------\n");
