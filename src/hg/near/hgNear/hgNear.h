@@ -261,6 +261,9 @@ struct searchResult *knownGeneSearchResult(struct sqlConnection *conn,
 struct genePos *knownPosAll(struct sqlConnection *conn);
 /* Get all positions in knownGene table. */
 
+struct hash *knownCannonicalHash(struct sqlConnection *conn);
+/* Get all cannonical gene names in hash. */
+
 void fillInKnownPos(struct genePos *gp, struct sqlConnection *conn);
 /* If gp->chrom is not filled in go look it up. */
 
@@ -331,7 +334,7 @@ struct genePos *weedUnlessInHash(struct genePos *inList, struct hash *hash);
 /* Return input list with stuff not in hash removed. */
 
 struct genePos *getSearchNeighbors(struct column *colList, 
-	struct sqlConnection *conn);
+	struct sqlConnection *conn, struct hash *goodHash, int maxCount);
 /* Get neighbors by search. */
 
 /* ---- Column method setters. ---- */
@@ -366,16 +369,20 @@ void setupColumnKnownName(struct column *col, char *parameters);
 void setupColumnExpRatio(struct column *col, char *parameters);
 /* Set up expression ration type column. */
 
-boolean expRatioUseBlue();
-/* Return TRUE if should use blue instead of red
- * in the expression ratios. */
-
 boolean gotAdvSearch();
 /* Return TRUE if advanced search variables are set. */
 
 boolean advSearchColAnySet(struct column *col);
 /* Return TRUE if any of the advanced search variables
  * for this col are set. */
+
+/* ---- Get config options ---- */
+boolean showOnlyCannonical();
+/* Return TRUE if we only show cannonical splicing varients. */
+
+boolean expRatioUseBlue();
+/* Return TRUE if should use blue instead of red
+ * in the expression ratios. */
 
 /* ---- Create high level pages. ---- */
 void displayData(struct sqlConnection *conn, struct column *colList, struct genePos *gp);

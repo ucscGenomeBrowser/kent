@@ -10,11 +10,12 @@
 #include "hdb.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: advSearch.c,v 1.15 2003/08/26 18:49:42 kent Exp $";
+static char const rcsid[] = "$Id: advSearch.c,v 1.16 2003/08/29 21:33:37 kent Exp $";
 
-struct genePos *advancedSearchResults(struct column *colList, 
+static struct genePos *advancedSearchResults(struct column *colList, 
 	struct sqlConnection *conn)
-/* Get list of genes that pass all advanced search filters. */
+/* Get list of genes that pass all advanced search filters. 
+ * If goodHash is non-null then the genes must also be in goodHash. */
 {
 struct genePos *list = knownPosAll(conn);
 struct column *col;
@@ -349,7 +350,10 @@ if (col == NULL)
 hPrintf("<TT><PRE>");
 if (gotAdvSearch())
     {
-    list = getSearchNeighbors(colList, conn);
+    struct hash *goodHash = NULL;
+    if (showOnlyCannonical())
+	goodHash = knownCannonicalHash(conn);
+    list = getSearchNeighbors(colList, conn, goodHash, BIGNUM);
     }
 else
     {
@@ -397,13 +401,13 @@ return outList;
 }
 
 struct genePos *getSearchNeighbors(struct column *colList, 
-	struct sqlConnection *conn)
+	struct sqlConnection *conn, struct hash *goodHash, int maxCount)
 /* Get neighbors by search. */
 {
 struct genePos *list, *rejectList = NULL;
 
 list = advancedSearchResults(colList, conn);
-list = firstBitsOfList(list, displayCount, &rejectList);
+list = firstBitsOfList(list, maxCount, &rejectList);
 return list;
 }
 

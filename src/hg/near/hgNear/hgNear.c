@@ -15,7 +15,7 @@
 #include "ra.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: hgNear.c,v 1.47 2003/08/29 20:10:41 kent Exp $";
+static char const rcsid[] = "$Id: hgNear.c,v 1.48 2003/08/29 21:33:37 kent Exp $";
 
 char *excludeVars[] = { "submit", "Submit", confVarName, 
 	defaultConfName, hideAllConfName, showAllConfName,
@@ -723,8 +723,8 @@ gp->end = end;
 return gp;
 }
 
-static struct genePos *neighborhoodList(struct sqlConnection *conn, char *query, 
-	int maxCount)
+static struct genePos *neighborhoodList(struct sqlConnection *conn, 
+	char *query, struct hash *goodHash, int maxCount)
 /* Get list of up to maxCount from query. */
 {
 struct sqlResult *sr;
@@ -737,11 +737,14 @@ while ((row = sqlNextRow(sr)) != NULL)
     {
     if (!hashLookup(dupeHash, row[0]))
 	{
-	hashAdd(dupeHash, row[0], NULL);
-	name = genePosSimple(row[0]);
-	slAddHead(&list, name);
-	if (++count >= maxCount)
-	    break;
+	if (goodHash == NULL || hashLookup(goodHash, row[0]))
+	    {
+	    hashAdd(dupeHash, row[0], NULL);
+	    name = genePosSimple(row[0]);
+	    slAddHead(&list, name);
+	    if (++count >= maxCount)
+		break;
+	    }
 	}
     }
 freeHash(&dupeHash);
@@ -750,7 +753,8 @@ slReverse(&list);
 return list;
 }
 
-struct genePos *getExpressionNeighbors(struct sqlConnection *conn)
+struct genePos *getExpressionNeighbors(struct sqlConnection *conn,
+	struct hash *goodHash, int maxCount)
 /* Get expression neighborhood. */
 {
 struct dyString *query = dyStringNew(1024);
@@ -761,15 +765,16 @@ struct genePos *list;
 dyStringPrintf(query, 
 	"select target from knownExpDistance where query='%s'", 
 	curGeneId->name);
-dyStringPrintf(query, " order by distance limit %d", displayCount);
-list = neighborhoodList(conn, query->string, displayCount);
+dyStringPrintf(query, " order by distance limit %d", maxCount);
+list = neighborhoodList(conn, query->string, goodHash, maxCount);
 dyStringFree(&query);
 if (list == NULL)
     warn("There is no expression data associated with %s.", curGeneId->name);
 return list;
 }
 
-struct genePos *getHomologyNeighbors(struct sqlConnection *conn)
+struct genePos *getHomologyNeighbors(struct sqlConnection *conn,
+	struct hash *goodHash, int maxCount)
 /* Get homology neighborhood. */
 {
 struct dyString *query = dyStringNew(1024);
@@ -780,8 +785,8 @@ struct genePos *list;
 dyStringPrintf(query, 
 	"select target from knownBlastTab where query='%s'", 
 	curGeneId->name);
-dyStringPrintf(query, " order by bitScore desc limit %d", (int)(displayCount*1.5));
-list = neighborhoodList(conn, query->string, displayCount);
+dyStringPrintf(query, " order by bitScore desc limit %d", (int)(maxCount*1.5));
+list = neighborhoodList(conn, query->string, goodHash, maxCount);
 dyStringFree(&query);
 if (list == NULL)
     warn("There is no protein associated with %s. "
@@ -790,7 +795,8 @@ return list;
 }
 
 
-struct genePos *getGenomicNeighbors(struct sqlConnection *conn, struct genePos *curGp)
+struct genePos *getGenomicNeighbors(struct sqlConnection *conn, 
+	struct genePos *curGp, struct hash *goodHash, int maxCount)
 /* Get neighbors in genome. */
 {
 struct genePos *gpList = NULL, *gp, *next;
@@ -810,7 +816,10 @@ while ((row = sqlNextRow(sr)) != NULL)
     {
     gp = genePosFull(row[0], curGp->chrom, 
     	sqlUnsigned(row[1]), sqlUnsigned(row[2]));
-    slAddHead(&gpList, gp);
+    if (goodHash == NULL || hashLookup(goodHash, row[0]))
+	{
+	slAddHead(&gpList, gp);
+	}
     if (curGp->start == gp->start && curGp->end == gp->end 
     	&& sameString(curGp->name, gp->name) )
         chosenIx = ix;
@@ -824,8 +833,8 @@ if (chosenIx < 0)
     errAbort("%s is not mapped", curGp->name);
 
 /* Figure out start and ending index of genes we want. */
-startIx = chosenIx - displayCount/2;
-endIx = startIx + displayCount;
+startIx = chosenIx - maxCount/2;
+endIx = startIx + maxCount;
 if (startIx < 0) startIx = 0;
 if (endIx > geneCount) endIx = geneCount;
 listSize = endIx - startIx;
@@ -842,10 +851,11 @@ return geneList;
 }
 
 
-struct genePos *getPositionNeighbors(struct sqlConnection *conn)
+struct genePos *getPositionNeighbors(struct sqlConnection *conn, 
+	struct hash *goodHash, int maxCount)
 /* Get genes in genomic neighborhood. */
 {
-return getGenomicNeighbors(conn, curGeneId);
+return getGenomicNeighbors(conn, curGeneId, goodHash, maxCount);
 }
 
 struct scoredIdName
@@ -895,7 +905,8 @@ return sin;
 }
 
 struct genePos *getNameborhood(struct sqlConnection *conn,
-	char *curName, char *table, char *idField, char *nameField)
+	char *curName, char *table, char *idField, char *nameField,
+	struct hash *goodHash, int maxCount)
 /* Get list of all genes that are similarly prefixed. */
 {
 struct sqlResult *sr;
@@ -911,13 +922,16 @@ sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     sin = scorePrefixMatch(curName, row[0], row[1]);
-    slAddHead(&sinList, sin);
+    if (goodHash == NULL || hashLookup(goodHash, row[0]))
+	{
+	slAddHead(&sinList, sin);
+	}
     }
 sqlFreeResult(&sr);
 slSort(&sinList, scoredIdNameCmpScore);
 
 /* Make list of top ones. */
-for (i=0, sin=sinList; i<displayCount && sin != NULL; ++i, sin = sin->next)
+for (i=0, sin=sinList; i<maxCount && sin != NULL; ++i, sin = sin->next)
     {
     AllocVar(gp);
     gp->name = sin->id;
@@ -928,7 +942,8 @@ slReverse(&gpList);
 return gpList;
 }
 
-struct genePos *getNameNeighbors(struct sqlConnection *conn)
+struct genePos *getNameNeighbors(struct sqlConnection *conn,
+	struct hash *goodHash, int maxCount)
 /* Get genes in genomic neighborhood. */
 {
 char query[256];
@@ -936,7 +951,8 @@ char name[128];
 safef(query, sizeof(query), 
 	"select geneSymbol from kgXref where kgID = '%s'", curGeneId->name);
 if (sqlQuickQuery(conn, query, name, sizeof(name)))
-    return getNameborhood(conn, name, "kgXref", "kgID", "geneSymbol");
+    return getNameborhood(conn, name, "kgXref", "kgID", "geneSymbol", 
+    	goodHash, maxCount);
 else
     {
     warn("Couldn't find name for %s", curGeneId->name);
@@ -948,16 +964,19 @@ else
 struct genePos *getNeighbors(struct column *colList, struct sqlConnection *conn)
 /* Return gene neighbors. */
 {
+struct hash *goodHash = NULL;
+if (showOnlyCannonical())
+    goodHash = knownCannonicalHash(conn);
 if (sameString(groupOn, "expression"))
-    return getExpressionNeighbors(conn);
+    return getExpressionNeighbors(conn, goodHash, displayCount);
 else if (sameString(groupOn, "homology"))
-    return getHomologyNeighbors(conn);
+    return getHomologyNeighbors(conn, goodHash, displayCount);
 else if (sameString(groupOn, "position"))
-    return getPositionNeighbors(conn);
+    return getPositionNeighbors(conn, goodHash, displayCount);
 else if (sameString(groupOn, "name"))
-    return getNameNeighbors(conn);
+    return getNameNeighbors(conn, goodHash, displayCount);
 else if (sameString(groupOn, "advanced search"))
-    return getSearchNeighbors(colList, conn);
+    return getSearchNeighbors(colList, conn, goodHash, displayCount);
 else
     {
     errAbort("Unknown sort value %s", groupOn);
