@@ -1198,3 +1198,86 @@ SEQ2_LEN=$BASE/S2.len
     # align mrnas, then ests
     nice ./bin/gbAlignStep -initial -type=mrna -clusterRootDir=/cluster/bluearc/genbank -iserver=no fr1 
     nice ./bin/gbAlignStep -initial -type=est -clusterRootDir=/cluster/bluearc/genbank -iserver=no fr1 
+
+# ECORES FROM GENOSCOPE [in progress, hartera, 2004-03-29]
+# download data from  http://www.genoscope.cns.fr/externe/tetraodon/Data3/ecores
+
+# ecotigFH - ecores on Fugu, genome conserved with Human, hg16
+# ecotigFM - ecores on Fugu, genome conserved with Mouse, mm3
+# ecotigFR - ecores on Fugu, genome conserved with Rat, rn3
+
+    ssh hgwdev
+    mkdir /cluster/data/fr1/bed/ecores/
+    # add parse_ecotig.pl to this directory
+
+# MOUSE
+
+    mkdir /cluster/data/fr1/bed/ecores/mm3
+    cd /cluster/data/fr1/bed/ecores/mm3/
+
+    # download data for ecotigFH to this directory 
+    # parse ecotig files to produce a bed format file
+    perl ../parse_ecotig.pl < ecotigFM > ecotigFM.bed
+                                                                                
+    # remove "CONTIG:" and change from upper to lower case for "SCAFFOLD"
+    perl -pi.bak -e 's/CONTIG://g; s/SCAFFOLD/scaffold/g;' ecotigFM.bed
+                                                                                
+    # use liftUp to convert scaffold co-ordinates to chrUn co-ordinates
+    liftUp -type=.bed ecotigFMlift.bed /cluster/data/fr1/Un/chrUn.lft warn ecotigFM.bed
+    # only converts the chromStart and chromEnd fields, use fixLift.pl to 
+    # convert rest of the bed file
+
+    perl ../fixLift.pl < ecotigFMlift.bed > ecotigFMliftFixed.bed                                                                       
+    hgLoadBed -tab fr1 ecoresMm3 ecotigFMliftFixed.bed
+    # clean up
+    rm *.bak
+
+# RAT
+                                                                                
+    mkdir /cluster/data/fr1/bed/ecores/rn3
+    cd /cluster/data/fr1/bed/ecores/rn3/
+                                                                                
+    # download data for ecotigFH to this directory
+    # parse ecotig files to produce a bed format file
+    perl ../parse_ecotig.pl < ecotigFR > ecotigFR.bed
+                                                                                
+    # remove "CONTIG:" and change from upper to lower case for "SCAFFOLD"
+    perl -pi.bak -e 's/CONTIG://g; s/SCAFFOLD/scaffold/g;' ecotigFR.bed
+                                                                                
+    # use liftUp to convert scaffold co-ordinates to chrUn co-ordinates
+    liftUp -type=.bed ecotigFRlift.bed /cluster/data/fr1/Un/chrUn.lft warn ecotigFR.bed
+    # only converts the chromStart and chromEnd fields, use fixLift.pl to 
+    # convert rest of the bed file
+
+    perl ../fixLift.pl < ecotigFRlift.bed > ecotigFRliftFixed.bed                                                                       
+    hgLoadBed -tab fr1 ecoresRn3 ecotigFRliftFixed.bed
+    
+    # clean up
+    rm *.bak
+
+# HUMAN
+    mkdir /cluster/data/fr1/bed/ecores/hg16
+    cd /cluster/data/fr1/bed/ecores/hg16/
+
+    # download data for ecotigFH to this directory
+    # parse ecotig files to produce a bed format file
+    perl ../parse_ecotig.pl < ecotigFH > ecotigFH.bed
+                                                                                
+    # remove "CONTIG:" and change from upper to lower case for "SCAFFOLD"
+    perl -pi.bak -e 's/CONTIG://g; s/SCAFFOLD/scaffold/g;' ecotigFH.bed
+   
+    # use liftUp to convert scaffold co-ordinates to chrUn co-ordinates
+    liftUp -type=.bed ecotigFHlift.bed /cluster/data/fr1/Un/chrUn.lft warn ecotigFH.bed
+    # only converts the chromStart and chromEnd fields, use fixLift.pl to 
+    # convert rest of the bed file
+
+    perl ../fixLift.pl < ecotigFHlift.bed > ecotigFHliftFixed.bed                                                                       
+    hgLoadBed -tab fr1 ecoresHg16 ecotigFHliftFixed.bed
+    # clean up
+    rm *.bak
+
+
+    # add entries in kent/src/hg/makeDb/trackDb/fugu/trackDb.ra
+    # add html for details pages to this directory:
+    # ecoresMm3.html, ecoresRn3.html and ecoresHg16.html
+
