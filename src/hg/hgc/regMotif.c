@@ -231,17 +231,28 @@ if (trc != NULL)
     {
     char strand[2];
     seq = hDnaFromSeq(trc->chrom, trc->chromStart, trc->chromEnd, dnaLower);
-    strand[0] = dnaMotifBestStrand(motif, seq->dna);
+    if (seq->size != motif->columnCount)
+	{
+        printf("WARNING: seq->size = %d, motif->colCount=%d<BR>\n", 
+		seq->size, motif->columnCount);
+	strand[0] = '?';
+	seq = NULL;
+	}
+    else
+	{
+	strand[0] = dnaMotifBestStrand(motif, seq->dna);
+	if (strand[0] == '-')
+	    reverseComplement(seq->dna, seq->size);
+	}
     strand[1] = 0;
-    if (strand[0] == '-')
-        reverseComplement(seq->dna, seq->size);
     printf("<B>Name:</B> ");
     sacCerHgGeneLinkName(conn, trc->name);
     printf("<BR>\n");
     printf("<B>CHIP/CHIP Evidence:</B> %s<BR>\n", trc->chipEvidence);
     printf("<B>Species conserved in:</B> %d of 2<BR>\n", trc->consSpecies);
-    printf("<B>Bit Score of Motif Hit:</B> %4.2f<BR>\n", 
-    	dnaMotifBitScore(motif, seq->dna));
+    if (seq != NULL)
+	printf("<B>Bit Score of Motif Hit:</B> %4.2f<BR>\n", 
+	    dnaMotifBitScore(motif, seq->dna));
     printPosOnChrom(trc->chrom, trc->chromStart, trc->chromEnd, strand, TRUE, trc->name);
     }
 motifHitSection(seq, motif);
