@@ -843,7 +843,7 @@ track blatFugu
 shortLabel Fugu Blat
 longLabel Takifugu rubripes Translated Blat Alignments
 group compGeno
-priority 113
+priority 150
 visibility dense
 color 0,60,120
 altColor 200,220,255
@@ -854,7 +854,7 @@ track blatCi1
 shortLabel Squirt Blat
 longLabel Ciona intestinalis Translated Blat Alignments
 group compGeno
-priority 110
+priority 135
 visibility hide
 color 0,60,120
 altColor 200,220,255
@@ -898,7 +898,7 @@ longLabel Mouse/Human/Rat Evolutionary Conservation Score
 group compGeno
 color 100,50,0
 altColor 175,150,128
-priority 119.1
+priority 110
 visibility hide
 type sample 0 .466217
 
@@ -928,7 +928,7 @@ track ratNet
 shortLabel Rat Net
 longLabel Rat/$Organism Alignment Net
 group compGeno
-priority 134.5
+priority 171
 visibility hide
 spectrum on
 type netAlign rn2 ratChain

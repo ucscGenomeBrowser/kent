@@ -188,7 +188,7 @@ track slamNonCodingMouse
 shortLabel Slam Non Coding Mouse
 longLabel Slam Predictions of Human/Mouse Conserved Non-Coding Regions
 group compGeno
-priority 120
+priority 180
 visibility hide
 color 30,130,210
 altColor 200,220,255
@@ -199,7 +199,7 @@ track slamNonCodingRat
 shortLabel Slam Non Coding Rat
 longLabel Slam Predictions of Human/Rat Conserved Non-Coding Regions
 group compGeno
-priority 121
+priority 170
 visibility hide
 color 30,130,210
 altColor 200,220,255
@@ -264,7 +264,7 @@ track chimpSimpleDiff
 shortLabel Chimp Diff
 longLabel Chimp Simple Differences in Regions of High Quality Sequence
 group compGeno
-priority 145.8
+priority 206
 visibility hide
 type bed 3+
 
