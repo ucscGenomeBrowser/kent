@@ -17,15 +17,16 @@
 #include "../../hg/inc/agpFrag.h"
 #include "../../hg/inc/agpGap.h"
 
-static char const rcsid[] = "$Id: scaffoldFaToAgp.c,v 1.4 2003/09/27 02:03:47 kate Exp $";
+static char const rcsid[] = "$Id: scaffoldFaToAgp.c,v 1.5 2003/10/07 18:51:30 angie Exp $";
 
 #define SCAFFOLD_GAP_SIZE 1000
 /* TODO: optionize this */
 
 #define SCAFFOLD_GAP_TYPE "contig"   
 #define FRAGMENT_GAP_TYPE "frag"        /* within scaffolds (bridged) */
-#define MIN_FRAGMENT_GAP_SIZE  5        /* TODO - optionize */
 #define CHROM_NAME "chrUn"
+
+int minGapSize = 5;
 
 void usage()
 /* Print usage instructions and exit. */
@@ -33,6 +34,8 @@ void usage()
 errAbort("scaffoldFaToAgp - generate an AGP file, gap file, and lift file from a scaffold FA file.\n"
      "usage:\n"
      "    scaffoldFaToAgp source.fa\n"
+     "options:\n"
+     "      -minGapSize   Minimum threshold for calling a block of Ns a gap."
      "The resulting files will be source.{agp,gap,lft}\n"
      "Note: gaps of 1000 bases are inserted between scaffold records\n"
      "   as contig gaps in the .agp file.\n"
@@ -154,7 +157,7 @@ while (faMixedSpeedReadNext(lf, &scaffoldSeq, &size, &name))
     seqStart = start;
     while (seqGetGap(seq, &fragSize, &gapSize))
         {
-        if (gapSize > MIN_FRAGMENT_GAP_SIZE)
+        if (gapSize > minGapSize)
             {
             fragGap.size = gapSize;
             fragGap.chromStart = seqStart + fragSize + 1;
@@ -194,6 +197,7 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 optionHash(&argc, argv);
+minGapSize = optionInt("minGapSize", minGapSize);
 if (argc != 2)
     usage();
 scaffoldFaToAgp(argv[1]);
