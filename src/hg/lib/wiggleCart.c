@@ -10,7 +10,7 @@
 #include "hui.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: wiggleCart.c,v 1.3 2004/01/20 20:40:48 hiram Exp $";
+static char const rcsid[] = "$Id: wiggleCart.c,v 1.4 2004/02/02 19:52:42 hiram Exp $";
 
 extern struct cart *cart;      /* defined in hgTracks.c or hgTrackUi */
 
@@ -324,7 +324,7 @@ enum wiggleGraphOptEnum wigFetchGraphType(struct trackDb *tdb, char **optString)
 {
 char *Default = wiggleGraphEnumToString(wiggleGraphBar);
 char *notDefault = wiggleGraphEnumToString(wiggleGraphPoints);
-char option[MAX_OPT_STRLEN]; /* .horizGrid  */
+char option[MAX_OPT_STRLEN]; /* .lineBar  */
 char *graphType = NULL;
 
 snprintf( option, sizeof(option), "%s.lineBar", tdb->tableName );
@@ -348,3 +348,66 @@ if (optString)
 
 return wiggleGraphStringToEnum(graphType);
 }	/*	enum wiggleGraphOptEnum wigFetchGraphType()	*/
+
+/******	windowingFunction - Maximum by default **************************/
+enum wiggleWindowingEnum wigFetchWindowingFunction(struct trackDb *tdb,
+	char **optString)
+{
+char * Default = wiggleWindowingEnumToString(wiggleWindowingMax);
+char option[MAX_OPT_STRLEN]; /* .windowingFunction  */
+char * windowingFunction = NULL;
+
+snprintf( option, sizeof(option), "%s.windowingFunction", tdb->tableName );
+windowingFunction = cartOptionalString(cart, option);
+
+/*	If windowingFunction is a string, it came from the cart, otherwise
+ *	see if it is specified in the trackDb option, finally
+ *	return the default.
+ */
+if (!windowingFunction)
+    {
+    char * windowingTdb = 
+	trackDbSettingOrDefault(tdb, "windowingFunction", Default);
+    if (differentWord(Default,windowingTdb))
+	windowingFunction = windowingTdb;
+    else
+	windowingFunction = Default;
+    }
+
+if (optString)
+    *optString = windowingFunction;
+
+return wiggleWindowingStringToEnum(windowingFunction);
+}	/*	enum wiggleWindowingEnum wigFetchWindowingFunction() */
+
+/******	smoothingWindow - OFF by default **************************/
+enum wiggleSmoothingEnum wigFetchSmoothingWindow(struct trackDb *tdb,
+	char **optString)
+{
+char * Default = wiggleSmoothingEnumToString(wiggleSmoothingOff);
+char option[MAX_OPT_STRLEN]; /* .smoothingWindow  */
+char * smoothingWindow = NULL;
+
+snprintf( option, sizeof(option), "%s.smoothingWindow", tdb->tableName );
+smoothingWindow = cartOptionalString(cart, option);
+
+/*	If smoothingWindow is a string, it came from the cart, otherwise
+ *	see if it is specified in the trackDb option, finally
+ *	return the default.
+ */
+if (!smoothingWindow)
+    {
+    char * smoothingTdb = 
+	trackDbSettingOrDefault(tdb, "smoothingWindow", Default);
+    if (differentWord(Default,smoothingTdb))
+	smoothingWindow = smoothingTdb;
+    else
+	smoothingWindow = Default;
+    }
+
+if (optString)
+    *optString = smoothingWindow;
+
+return wiggleSmoothingStringToEnum(smoothingWindow);
+}	/*	enum wiggleSmoothingEnum wigFetchSmoothingWindow()	*/
+
