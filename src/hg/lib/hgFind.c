@@ -27,7 +27,7 @@
 #include "minGeneInfo.h"
 #include <regex.h>
 
-static char const rcsid[] = "$Id: hgFind.c,v 1.141 2004/07/02 01:47:30 donnak Exp $";
+static char const rcsid[] = "$Id: hgFind.c,v 1.142 2004/07/09 22:06:02 braney Exp $";
 
 extern struct cart *cart;
 char *hgAppName = "";
@@ -1120,9 +1120,8 @@ if (alignCount > 1)
     {
     char *organism = hOrganism(hgp->database);      /* dbDb organism column */
     slReverse(&table->posList);
-    sprintf(title, "%s%s %sAligned mRNA Search Results",
-                            isXeno ? "Non" : "", 
-                            organism, 
+    sprintf(title, "%s %sAligned mRNA Search Results",
+                            isXeno ? "Xeno" : organism, 
                             aligns ?  "" : "Non");
     freeMem(organism);
     table->description = cloneString(title);
@@ -1467,12 +1466,15 @@ if (rlList != NULL)
     char *xenoRefGene = "xenoRefGene";
     AllocVar(table);
 
+    table->description = cloneString("RefSeq Genes");
     if (!sqlTableExists(conn, refGene))
 	if (sqlTableExists(conn, xenoRefGene))
+	    {
 	    refGene = xenoRefGene;
+	    table->description = cloneString("Xeno RefSeq Genes");
+	    }
 
     slAddHead(&hgp->tableList, table);
-    table->description = cloneString("RefSeq Genes");
     table->name = cloneString(refGene);
     for (rl = rlList; rl != NULL; rl = rl->next)
         {
