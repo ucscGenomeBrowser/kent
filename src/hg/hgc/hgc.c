@@ -5883,7 +5883,7 @@ void doSoftberryPred(struct trackDb *tdb, char *geneName)
 {
 genericHeader(tdb, geneName);
 showHomologies(geneName, "softberryHom");
-showSAM_T02(geneName);
+if (sameWord(database, "sc1"))showSAM_T02(geneName);
 geneShowCommon(geneName, tdb, "softberryPep");
 printTrackHtml(tdb);
 }
