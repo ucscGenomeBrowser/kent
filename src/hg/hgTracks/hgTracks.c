@@ -9608,7 +9608,9 @@ if (gotBlat)
 printf("<TD ALIGN=CENTER><A HREF=\"%s&o=%d&g=getDna&i=mixed&c=%s&l=%d&r=%d&db=%s&%s\">"
       " %s </A></TD>",  hgcNameAndSettings(),
       winStart, chromName, winStart, winEnd, database, uiVars->string, wrapWhiteFont(" DNA "));
-printf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/hgText?db=%s&position=%s:%d-%d&phase=table\">%s</A></TD>", database, chromName, winStart+1, winEnd, wrapWhiteFont("Tables"));
+printf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/hgText?db=%s&position=%s:%d-%d&phase=table&%s=%u\">%s</A></TD>",
+       database, chromName, winStart+1, winEnd, cartSessionVarName(),
+       cartSessionId(cart), wrapWhiteFont("Tables"));
 
 if (gotBlat)
     {
