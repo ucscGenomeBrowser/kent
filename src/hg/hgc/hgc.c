@@ -1377,6 +1377,45 @@ else
     }
 }
 
+struct chain *chainDbLoad(struct sqlConnection *conn, char *track,
+	char *chrom, int id)
+/* Load chain. */
+{
+char table[64];
+char query[256];
+struct sqlResult *sr;
+char **row;
+int rowOffset;
+struct chain *chain;
+
+if (!hFindSplitTable(seqName, track, table, &rowOffset))
+    errAbort("No %s track in database", track);
+snprintf(query, sizeof(query), 
+	"select * from %s where id = %d", table, id);
+sr = sqlGetResult(conn, query);
+row = sqlNextRow(sr);
+if (row == NULL)
+    errAbort("Can't find %d in %s", id, table);
+chain = chainHeadLoad(row + rowOffset);
+sqlFreeResult(&sr);
+chainDbAddBlocks(chain, track, conn);
+return chain;
+}
+
+void chainToOtherBrowser(struct chain *chain, char *otherDb, char *otherOrg)
+/* Put up link that lets us use chain to browser on
+ * corresponding window of other species. */
+{
+struct chain *subChain = NULL, *toFree = NULL;
+int qs,qe;
+chainSubsetOnT(chain, winStart, winEnd, &subChain, &toFree);
+qChainRangePlusStrand(subChain, &qs, &qe);
+printf("<A target=\"_blank\" href=\"/cgi-bin/hgTracks?db=%s&position=%s%%3A%d-%d\">",
+	otherDb, subChain->qName, qs, qe);
+printf("Open %s browser </A> at position corresponding to the part of chain that is in this window.<BR>\n", otherOrg);
+chainFree(&toFree);
+}
+
 void genericChainClick(struct sqlConnection *conn, struct trackDb *tdb, 
     char *item, int start, char *otherDb)
 /* Handle click in chain track, at least the basics. */
@@ -1384,25 +1423,11 @@ void genericChainClick(struct sqlConnection *conn, struct trackDb *tdb,
 char *track = tdb->tableName;
 char *thisOrg = hOrganism(database);
 char *otherOrg = hOrganism(otherDb);
-char table[64];
-char query[256];
-struct sqlResult *sr;
-char **row;
-int rowOffset;
 struct chain *chain = NULL, *subChain = NULL, *toFree = NULL;
 int chainWinSize;
 int qs, qe;
 
-if (!hFindSplitTable(seqName, track, table, &rowOffset))
-    errAbort("No %s track in database", track);
-snprintf(query, sizeof(query), 
-	"select * from %s where id = %s", table, item);
-sr = sqlGetResult(conn, query);
-row = sqlNextRow(sr);
-if (row == NULL)
-    errAbort("Can't find %s in %s", item, table);
-chain = chainHeadLoad(row + rowOffset);
-sqlFreeResult(&sr);
+chain = chainDbLoad(conn, track, seqName, atoi(item));
 printf("<B>%s position:</B> %s:%d-%d</a>  size: %d <BR>\n",
     thisOrg, chain->tName, chain->tStart+1, chain->tEnd, chain->tEnd-chain->tStart);
 printf("<B>strand:</B> %c<BR>\n", chain->qStrand);
@@ -1425,13 +1450,7 @@ else
     printf("Zoom so that browser window covers 1,000,000 bases or less "
            "and return here to see alignment details.<BR>\n");
     }
-chainDbAddBlocks(chain, track, conn);
-chainSubsetOnT(chain, winStart, winEnd, &subChain, &toFree);
-qChainRangePlusStrand(subChain, &qs, &qe);
-printf("<A target=\"_blank\" href=\"/cgi-bin/hgTracks?db=%s&position=%s%%3A%d-%d\">",
-	otherDb, subChain->qName, qs, qe);
-printf("Open %s browser </A> at position corresponding to the part of chain that is in this window.<BR>\n", otherOrg);
-chainFree(&toFree);
+chainToOtherBrowser(chain, otherDb, otherOrg);
 chainFree(&chain);
 }
 
@@ -1486,6 +1505,7 @@ char *org = hOrganism(database);
 char *otherOrg = hOrganism(otherDb);
 int tSize, qSize;
 int netWinSize;
+struct chain *chain;
 
 hFindSplitTable(seqName, tdb->tableName, table, &rowOffset);
 snprintf(query, sizeof(query), 
@@ -1558,8 +1578,13 @@ if (net.chainId != 0)
 	}
     else
 	{
-	printf("Zoom so that browser window covers 1,000,000 bases or less "
-	       "and return here to see alignment details.<BR>\n");
+	printf("Too see alignment details zoom so that the browser window covers 1,000,000 bases or less.<BR>\n");
+	}
+    chain = chainDbLoad(conn, chainTrack, seqName, net.chainId);
+    if (chain != NULL)
+        {
+	chainToOtherBrowser(chain, otherDb, otherOrg);
+	chainFree(&chain);
 	}
     }
 }
