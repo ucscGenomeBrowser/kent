@@ -14,7 +14,7 @@ void usage(char **argv);
 
 void usage(char **argv)
 {
-   if(argv[1] == NULL/* || argv[2] == NULL*/) 
+   if(argv[1] == NULL || argv[2] == NULL) 
         {
         errAbort(
           "gpcrParser - Create xml files for gpcr snakeplots.\n"
@@ -119,7 +119,6 @@ struct dyString *proteinID = newDyString(24);
 start = end = tmNumber = count = seqLength = 0;
 while( ( line  = readLine(infile) ) != NULL )
     {  /*grab the protein ID after each <PRE> tag*/
-            printf("%s\n", line);
     while( (token = nextWord(&line)) != NULL )
         {
    	    if( sameString(token,"<PRE>#"))
@@ -172,10 +171,10 @@ int main(int argc, char** argv)
 FILE *infile;
 struct dyString *path = newDyString(128);
 usage(argv);
-dyStringAppend(path, argv[1]);
+dyStringAppend(path, argv[2]);
     if(!endsWith(path->string, "/"))
        dyStringAppend(path, "/");
-infile = mustOpen("/cluster/home/ctrople/test/result.htm", "r");
+infile = mustOpen(argv[1], "r");
 getTransFromFile(infile, path->string);
 carefulClose(&infile);
 freeDyString(&path);
