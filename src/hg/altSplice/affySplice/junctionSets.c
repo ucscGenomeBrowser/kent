@@ -22,6 +22,7 @@ struct junctionSet
     int junctCount;             /* Number of junctions in set. */
     char strand[2];             /* + or - depending on which strand. */
     char *genePSet;             /* Gene probe set name. */
+    char *hName;                /* Human name for locus or affy id if not present. */
     int maxJunctCount;          /* Maximum size of bedArray. */
     struct bed **bedArray;      /* Beds in the cluster. */
     int junctDupCount;          /* Number of redundant junctions in set. */
@@ -38,6 +39,7 @@ static struct optionSpec optionSpecs[] =
     {"setFile", OPTION_STRING},
     {"exonFile", OPTION_STRING},
     {"genePSet", OPTION_STRING},
+    {"geneMap", OPTION_STRING},
     {"db", OPTION_STRING},
     {"ctFile", OPTION_STRING},
     {"ctName", OPTION_STRING},
@@ -54,6 +56,7 @@ static char *optionDescripts[] =
     "File to output sets of probes that share a splice site to.",
     "File containing beds with exons that can't be used (i.e. transcription start or end).",
     "File containing list of gene probe sets.",
+    "File containing a map of affy ids to human names for genes.",
     "File database that coordinates correspond to.",
     "File that custom track will end up in.",
     "Name of custom track.",
@@ -91,7 +94,7 @@ char *desc = optionVal("ctDesc", "Alt-Splicing Sets of Junction Probes");
 char *color = optionVal("ctColor", "255,0,0");
 ctFile = mustOpen(fileName, "w");
 warn("Opening file %s to write", fileName);
-fprintf(ctFile, "track name=\"%s\" desc=\"%s\" color=%s\n", name, desc, color);
+fprintf(ctFile, "track name=\"%s\" description=\"%s\" color=%s\n", name, desc, color);
 }
 
 void loadSoftExons(char *exonFile)
@@ -138,7 +141,7 @@ return bed->chromStart + bed->chromStarts[1];
 }
 
 int bedCmpEnd(const void *va, const void *vb)
-/* Compare to sort based on chrom,chromStart. */
+/* Compare to sort based on chrom,chromStart largest first. */
 {
 const struct bed *a = *((struct bed **)va);
 const struct bed *b = *((struct bed **)vb);
@@ -167,8 +170,8 @@ void junctionSetTabOut(struct junctionSet *js, FILE *out)
 /* Write out junctionSet to a file. */
 {
 int i;
-fprintf(out, "%s\t%d\t%d\t%s\t%d\t%s\t%s\t", js->chrom, js->chromStart, js->chromEnd, 
-	js->name, js->junctCount, js->strand, js->genePSet);
+fprintf(out, "%s\t%d\t%d\t%s\t%d\t%s\t%s\t%s\t", js->chrom, js->chromStart, js->chromEnd, 
+	js->name, js->junctCount, js->strand, js->genePSet, js->hName);
 for(i = 0; i < js->junctCount - 1; i++) 
     {
     fprintf(out, "%s,", js->bedArray[i]->name);
@@ -470,6 +473,38 @@ while(lineFileNextReal(lf, &string))
 lineFileClose(&lf);
 }
 
+void populateGeneMapHash(struct hash *hash, char *geneMapFile)
+/* Create a hash that contains gene probeMap names indexed by their
+   GXXXXXX identifier. */
+{
+struct lineFile *lf = NULL;
+char *row[2]; 
+lf = lineFileOpen(geneMapFile, TRUE);
+while(lineFileNextRowTab(lf, row, 2))
+    {
+    hashAdd(hash, row[1], cloneString(row[0]));
+    }
+lineFileClose(&lf);
+}
+
+char *geneNameForId(struct hash *hash, char *id)
+/* Return the human name for probe set id. */
+{
+char *mark = NULL;
+char buff[256];
+char *name = hashFindVal(hash, id);
+if(name == NULL)
+    {
+    safef(buff, sizeof(buff), "%s", id);
+    mark = strchr(buff, '_');
+    assert(mark);
+    *mark = '\0';
+    name = cloneString(buff);
+    }
+return name;
+}
+	
+
 char *findGeneSet(struct junctionSet *js, struct hash *hash)
 /* Find the corresponding gene probe set for this junction set. */
 {
@@ -485,7 +520,7 @@ name = hashFindVal(hash, buff);
 return name;
 }
 
-void junctionSets(char *bedFile, char *setFile, char *geneSetFile) 
+void junctionSets(char *bedFile, char *setFile, char *geneSetFile, char *geneMapFile) 
 /* Bin up the beds into sets that have the same splice sites. */
 {
 struct bed *bed = NULL, *bedList = NULL;
@@ -494,10 +529,11 @@ FILE *out = mustOpen(setFile, "w");
 char *exonFile = optionVal("exonFile", NULL);
 int totalCount = 0;
 struct hash *geneSetHash = newHash(12);
+struct hash *geneMapHash = newHash(12);
 warn("Reading beds.");
 bedList = bedLoadAll(bedFile);
 populateGeneSetHash(geneSetHash, geneSetFile);
-
+populateGeneMapHash(geneMapHash, geneMapFile);
 if(exonFile != NULL)
     loadSoftExons(exonFile);
 warn("Clustering starts.");
@@ -516,9 +552,9 @@ for(js = merged; js != NULL; js = js->next)
 	   about 30 genes, don't know where they come from. */
 	if(js->genePSet != NULL)
 	    {
+	    js->hName = geneNameForId(geneMapHash, js->genePSet);
 	    if(ctFile != NULL)
 		{
-		fprintf(ctFile, "%s\n", js->genePSet);
 		for(i = 0; i < js->junctCount; i++)
 		    bedTabOutN(js->bedArray[i], 12, ctFile);
 		for(i = 0; i < js->junctDupCount; i++)
@@ -541,6 +577,7 @@ char *bedFile = NULL;
 char *setFile = NULL;
 char *ctFileName = NULL;
 char *genePName = NULL;
+char *geneMap = NULL;
 if(argc == 1)
     usage();
 optionInit(&argc, argv, optionSpecs);
@@ -550,8 +587,9 @@ bedFile = optionVal("bedFile", NULL);
 setFile = optionVal("setFile", NULL);
 ctFileName = optionVal("ctFile", NULL);
 genePName = optionVal("genePSet", NULL);
-if(bedFile == NULL || setFile == NULL || genePName == NULL)
-    errAbort("Must specify bedFile, setFile and genePSet files, use -help for usage.");
+geneMap = optionVal("geneMap", NULL);
+if(bedFile == NULL || setFile == NULL || genePName == NULL || geneMap == NULL)
+    errAbort("Must specify bedFile, setFile, geneMap and genePSet files, use -help for usage.");
 if(ctFileName != NULL)
     initCtFile(ctFileName);
 if(bedFile == NULL || setFile == NULL)
@@ -559,7 +597,7 @@ if(bedFile == NULL || setFile == NULL)
     warn("Error: Must specify both a bedFile and a setFile.");
     usage();
     }
-junctionSets(bedFile, setFile, genePName);
+junctionSets(bedFile, setFile, genePName, geneMap);
 carefulClose(&ctFile);
 return 0;
 }
