@@ -129,7 +129,7 @@
 #include "hgFind.h"
 #include "botDelay.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.581 2004/03/10 23:45:25 angie Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.582 2004/03/16 23:39:11 kate Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -2028,8 +2028,16 @@ struct sqlConnection *conn = hAllocConn();
 if (itemForUrl == NULL)
     itemForUrl = item;
 dupe = cloneString(tdb->type);
-genericHeader(tdb, item);
 wordCount = chopLine(dupe, words);
+if (wordCount > 0)
+    {
+    type = words[0];
+    if (sameString(type, "maf") || sameString(type, "wigMaf"))
+        /* suppress printing item name in page header, as it is
+           not informative for these track types */
+        item = NULL;
+    }
+genericHeader(tdb, item);
 printCustomUrl(tdb, itemForUrl, item == itemForUrl);
 if (plus != NULL)
     {
