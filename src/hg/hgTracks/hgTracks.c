@@ -6057,7 +6057,7 @@ if (!hideControls)
     printf("<TABLE BORDER=0 CELLSPACING=2 CELLPADDING=2 WIDTH=%d COLS=%d><TR>\n", 
     	CONTROL_TABLE_WIDTH, 12);
     printf("<TD COLSPAN=2 ALIGN=CENTER>");
-    printf("dink left end<BR>");
+    printf("move left end<BR>");
     cgiMakeButton("hgt.dinkLL", " < ");
     cgiMakeTextVar("dinkLP", cartUsualString(cart, "dinkLP", "5%"), 4);
     cgiMakeButton("hgt.dinkLR", " > ");
@@ -6068,7 +6068,7 @@ if (!hideControls)
 	  "clicked.",
 	  stdout);
     printf("<TD COLSPAN=2 ALIGN=CENTER>");
-    printf("dink right end<BR>");
+    printf("move right end<BR>");
     cgiMakeButton("hgt.dinkRL", " < ");
     cgiMakeTextVar("dinkRP", cartUsualString(cart, "dinkRP", "5%"), 4);
     cgiMakeButton("hgt.dinkRR", " > ");
