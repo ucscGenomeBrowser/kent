@@ -523,7 +523,6 @@ struct sqlResult *sr;
 struct hTableInfo *hti;
 struct bed *bedList=NULL, *bedItem;
 char **row;
-char itemName[128];
 char parsedChrom[32];
 char rootName[256];
 char fullTableName[256];
@@ -538,7 +537,7 @@ int i;
 hParseTableName(table, rootName, parsedChrom);
 hti = hFindTableInfoDb(db, chrom, rootName);
 if (hti == NULL)
-    errAbort("Error", "Could not find table info for table %s (%s)",
+    errAbort("Could not find table info for table %s (%s)",
 	     rootName, table);
 if (hti->isSplit)
     snprintf(fullTableName, sizeof(fullTableName), "%s_%s", chrom, rootName);
@@ -701,8 +700,6 @@ while ((row = sqlNextRow(sr)) != NULL)
 	bedItem->chromStarts = NULL;
 	bedItem->blockSizes  = NULL;
 	}
-    if (hti->strandField[0] == 0)
-	strcpy(bedItem->strand, "?");
     slAddHead(&bedList, bedItem);
     }
 dyStringFree(&query);
