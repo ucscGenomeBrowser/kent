@@ -107,7 +107,7 @@
 #include "pseudoGeneLink.h"
 #include "axtLib.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.430 2003/06/17 00:34:08 kent Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.431 2003/06/17 03:16:36 braney Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -7089,9 +7089,10 @@ printAlignments(pslList, start, "htcBlatXeno", track, itemName);
 printTrackHtml(tdb);
 }
 
-void doBlatSquirt(struct trackDb *tdb, char *itemName)
+void doBlatCompGeno(char *db, struct trackDb *tdb, char *itemName)
 /* Handle click on blatCi1 track. */
 {
+char *org = hGenome(db);
 char *track = tdb->tableName;
 char query[256];
 struct sqlConnection *conn = hAllocConn();
@@ -7104,87 +7105,12 @@ boolean hasBin;
 char table[64];
 
 cartWebStart(cart, itemName);
-printf("<H1>Information on Ciona intestinalis Sequence %s</H1>", itemName);
+printf("<H1>Information on %s Sequence %s</H1>", org, itemName);
 
 printf("Get ");
 printf("<A HREF=\"%s&g=htcExtSeq&c=%s&l=%d&r=%d&i=%s\">",
        hgcPathAndSettings(), seqName, winStart, winEnd, itemName);
-printf("Ciona intestinalis DNA</A><BR>\n");
-
-/* Get alignment info and print. */
-printf("<H2>Alignments</H2>\n");
-hFindSplitTable(seqName, track, table, &hasBin);
-sprintf(query, "select * from %s where qName = '%s'", table, itemName);
-sr = sqlGetResult(conn, query);
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-    psl = pslLoad(row+hasBin);
-    slAddHead(&pslList, psl);
-    }
-sqlFreeResult(&sr);
-slReverse(&pslList);
-printAlignments(pslList, start, "htcBlatXeno", track, itemName);
-printTrackHtml(tdb);
-}
-
-void doBlatCb1(struct trackDb *tdb, char *itemName)
-/* Handle click on blatCi1 track. */
-{
-char *track = tdb->tableName;
-char query[256];
-struct sqlConnection *conn = hAllocConn();
-struct sqlResult *sr = NULL;
-char **row;
-int start = cartInt(cart, "o");
-struct psl *pslList = NULL, *psl;
-struct dnaSeq *seq;
-boolean hasBin;
-char table[64];
-
-cartWebStart(cart, itemName);
-printf("<H1>Information on C.briggsae Sequence %s</H1>", itemName);
-
-printf("Get ");
-printf("<A HREF=\"%s&g=htcExtSeq&c=%s&l=%d&r=%d&i=%s\">",
-       hgcPathAndSettings(), seqName, winStart, winEnd, itemName);
-printf("C.briggsae DNA</A><BR>\n");
-
-/* Get alignment info and print. */
-printf("<H2>Alignments</H2>\n");
-hFindSplitTable(seqName, track, table, &hasBin);
-sprintf(query, "select * from %s where qName = '%s'", table, itemName);
-sr = sqlGetResult(conn, query);
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-    psl = pslLoad(row+hasBin);
-    slAddHead(&pslList, psl);
-    }
-sqlFreeResult(&sr);
-slReverse(&pslList);
-printAlignments(pslList, start, "htcBlatXeno", track, itemName);
-printTrackHtml(tdb);
-}
-void doBlatCe1(struct trackDb *tdb, char *itemName)
-/* Handle click on blatCi1 track. */
-{
-char *track = tdb->tableName;
-char query[256];
-struct sqlConnection *conn = hAllocConn();
-struct sqlResult *sr = NULL;
-char **row;
-int start = cartInt(cart, "o");
-struct psl *pslList = NULL, *psl;
-struct dnaSeq *seq;
-boolean hasBin;
-char table[64];
-
-cartWebStart(cart, itemName);
-printf("<H1>Information on C.elegans Sequence %s</H1>", itemName);
-
-printf("Get ");
-printf("<A HREF=\"%s&g=htcExtSeq&c=%s&l=%d&r=%d&i=%s\">",
-       hgcPathAndSettings(), seqName, winStart, winEnd, itemName);
-printf("C.elegans DNA</A><BR>\n");
+printf("%s DNA</A><BR>\n",org);
 
 /* Get alignment info and print. */
 printf("<H2>Alignments</H2>\n");
@@ -11944,25 +11870,19 @@ else if (sameWord(track, "blatFugu"))
     {
     doBlatFish(tdb, item);
     }
-else if (sameWord(track, "blatCe1"))
+else if (sameWord(track, "blatCe1")
+    || sameWord(track, "blatCi1")
+    || sameWord(track, "blatCb1")
+    || sameWord(track, "blatHg15")
+    || sameWord(track, "blatMm3")
+    || sameWord(track, "blatRn2"))
     {
-    doBlatCe1(tdb, item);
-    }
-else if (sameWord(track, "blatCb1"))
-    {
-    doBlatCb1(tdb, item);
-    }
-else if (sameWord(track, "blatHg15")  || sameWord(track, "blatMm3")|| sameWord(track, "blatRn2"))
-    {
-    doBlatSquirt(tdb, item);
+    char *db = &track[4];
+    doBlatCompGeno(db, tdb, item);
     }
 else if (sameWord(track, "humanKnownGene")) 
     {
-    doBlatSquirt(tdb, item);
-    }
-else if (sameWord(track, "blatCi1"))
-    {
-    doBlatSquirt(tdb, item);
+    doKnownGene(tdb, item);
     }
 /* This is a catch-all for blastz/blat tracks -- any special cases must be 
  * above this point! */
