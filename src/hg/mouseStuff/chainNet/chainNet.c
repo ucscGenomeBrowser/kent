@@ -1,13 +1,14 @@
 /* chainNet - Make alignment nets out of chains. */
 #include "common.h"
 #include "linefile.h"
+#include "localmem.h"
 #include "hash.h"
 #include "options.h"
 #include "dnautil.h"
 #include "rbTree.h"
 #include "chainBlock.h"
 
-static char const rcsid[] = "$Id: chainNet.c,v 1.31 2004/02/23 17:03:52 kent Exp $";
+static char const rcsid[] = "$Id: chainNet.c,v 1.32 2004/11/23 00:22:32 kent Exp $";
 
 int minSpace = 25;	/* Minimum gap size to fill. */
 int minFill;		/* Minimum fill to record. */
@@ -143,7 +144,8 @@ boolean strictlyInside(int minStart, int maxEnd, int start, int end)
 return (minStart < start && start + minSpace <= end && end < maxEnd);
 }
 
-void makeChroms(char *fileName, struct hash **retHash, struct chrom **retList)
+void makeChroms(char *fileName, struct lm *lm, struct rbTreeNode **stack,
+	struct hash **retHash, struct chrom **retList)
 /* Read size file and make chromosome structure for each  element. */
 {
 char *row[2];
@@ -160,7 +162,7 @@ while (lineFileRow(lf, row))
     slAddHead(&chromList, chrom);
     hashAddSaveName(hash, name, chrom, &chrom->name);
     chrom->size = lineFileNeedNum(lf, row, 1);
-    chrom->spaces = rbTreeNew(spaceCmp);
+    chrom->spaces = rbTreeNewDetailed(spaceCmp, lm, stack);
     chrom->root = gapNew(0, chrom->size, 0, 0);
     addSpaceForGap(chrom, chrom->root);
     }
@@ -734,10 +736,13 @@ struct hash *qHash, *tHash;
 struct chrom *qChromList, *tChromList, *tChrom, *qChrom;
 struct chain *chain;
 double lastScore = -1;
+struct lm *lm = lmInit(0);
+struct rbTreeNode **rbStack;
 
 
-makeChroms(qSizes, &qHash, &qChromList);
-makeChroms(tSizes, &tHash, &tChromList);
+lmAllocArray(lm, rbStack, 256);
+makeChroms(qSizes, lm, rbStack, &qHash, &qChromList);
+makeChroms(tSizes, lm, rbStack, &tHash, &tChromList);
 verbose(1, "Got %d chroms in %s, %d in %s\n", slCount(tChromList), tSizes,
        slCount(qChromList), qSizes);
 
