@@ -11,7 +11,7 @@
 #include "genbank.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: genePred.c,v 1.31 2004/02/15 21:22:47 baertsch Exp $";
+static char const rcsid[] = "$Id: genePred.c,v 1.32 2004/02/20 22:53:24 markd Exp $";
 
 /* SQL to create a genePred table */
 static char *createSql = 
@@ -46,8 +46,8 @@ static char *name2FieldSql =
 "   INDEX(name2(10)),";
 
 static char *cdsStatFieldSql = 
-"   cdsStartStat enum('none', 'incmpl', 'cmpl') not null,"    /* Status of cdsStart annotation */
-"   cdsEndStat enum('none', 'incmpl', 'cmpl') not null,";     /* Status of cdsEnd annotation */
+"   cdsStartStat enum('none', 'unk', 'incmpl', 'cmpl') not null,"    /* Status of cdsStart annotation */
+"   cdsEndStat enum('none', 'unk', 'incmpl', 'cmpl') not null,";     /* Status of cdsEnd annotation */
 
 static char *exonFramesFieldSql = 
 "    exonFrames longblob not null,";    /* List of frame for each exon, or -1 if no frame or not known. NULL if not available. */

@@ -27,7 +27,7 @@ test: fileTests tableTests fromPslTests compatTblTests
 ###
 # test of reading/writing tab-separated files.
 ###
-fileTests: fileMinTest fileIdTest fileName2Test fileIdName2Test fileFrameTest
+fileTests: fileMinTest fileIdTest fileName2Test fileIdName2Test fileFrameTest fileFrameStatTest
 doFileTest = ${MAKE} -f genePredTests.mk doFileTest
 
 fileMinTest:
@@ -45,6 +45,10 @@ fileIdName2Test:
 fileFrameTest:
 	${doFileTest} id=$@ inGp=refSeqFrame.gp opts="-cdsStatFld -exonFramesFld"
 
+# this regress a bug parsing unk cds status
+fileFrameStatTest:
+	${doFileTest} id=$@ inGp=refSeqFrameStat.gp opts="-cdsStatFld -exonFramesFld"
+
 # Recurisve target to run a file read/write test.  Will diff the output
 # with the input, which should be identical.
 # Expects the following variables to be set:
@@ -59,7 +63,7 @@ doFileTest: mkout
 ###
 # test of loading and reading database tables
 ###
-tableTests: tableMinTest tableIdTest tableName2Test tableIdName2Test tableFrameTest
+tableTests: tableMinTest tableIdTest tableName2Test tableIdName2Test tableFrameTest tableFrameStatTest
 doTableTest = ${MAKE} -f genePredTests.mk doTableTest
 
 tableMinTest:
@@ -76,6 +80,9 @@ tableIdName2Test:
 
 tableFrameTest:
 	${doTableTest} id=$@ inGp=refSeqFrame.gp opts="-cdsStatFld -exonFramesFld"
+
+tableFrameStatTest:
+	${doTableTest} id=$@ inGp=refSeqFrameStat.gp opts="-cdsStatFld -exonFramesFld"
 
 
 # Recurisve target to run a table read/write test.  Will diff the output
