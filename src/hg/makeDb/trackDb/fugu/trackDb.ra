@@ -36,8 +36,8 @@ color 170,100,0
 type genePred genscanPep
 
 track xenoMrna
-shortLabel Xeno mRNA
-longLabel Xeno mRNAs from Genbank
+shortLabel Non-$Organism mRNA
+longLabel Non-$Organism mRNAs from Genbank
 group rna
 priority 63
 visibility dense
