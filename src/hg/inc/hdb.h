@@ -65,6 +65,7 @@ struct hTableInfo
     char countField[32];	/* Name of exon(block)Count field. */
     char startsField[32];	/* Name of exon(block)Starts field. */
     char endsSizesField[32];	/* Name of exon(block)Ends(Sizes) field. */
+    char spanField[32];		/* Name of span field. (wiggle) */
     boolean hasCDS;		/* True if it has cdsStart,cdsEnd fields. */
     boolean hasBlocks;		/* True if it has count,starts,endsSizes. */
     char *type;			/* A guess at the trackDb type for this. */
