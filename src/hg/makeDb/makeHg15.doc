@@ -2450,6 +2450,132 @@ o - [hgwdev:hg15> cd /cluster/store1/sugnet/hg15/build33
     cd ~/hg15/bed/blastz.mm3.2003-04-12-03-MS/pslTight
     hgLoadPsl hg15 chr*_blastzTightMm3.psl
 
+# RUNNING MM4 BLASTZ  (IN PROGRESS 2003-07-10 kate)
+
+    ssh eieio
+    mkdir -p /cluster/data/hg15/bed/blastz.mm4
+    cd /cluster/data/hg15/bed/blastz.mm4
+    cat << '_EOF_' > DEF
+# human/mouse
+export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/home/angie/schwartzbin:/cluster/home/kent/bin/i386
+
+ALIGN=blastz-run
+BLASTZ=blastz
+BLASTZ_H=2000
+BLASTZ_ABRIDGE_REPEATS=1
+
+# TARGET
+SEQ1_DIR=/iscratch/i/gs.16/build33/chromTrfMixedNib/
+SEQ1_RMSK=/iscratch/i/gs.16/build33/rmsk/
+SEQ1_SMSK=/iscratch/i/gs.16/build33/linSpecRep/
+SEQ1_FLAG=-primate
+SEQ1_IN_CONTIGS=0
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY
+SEQ2_DIR=/cluster/bluearc/mm4/mixedNib/
+# not currently used
+SEQ2_RMSK=/cluster/bluearc/mm4/rmsk/
+SEQ2_SMSK=/cluster/bluearc/mm4/linSpecRep/
+SEQ2_FLAG=-rodent
+SEQ2_IN_CONTIGS=0
+SEQ2_CHUNK=30000000
+SEQ2_LAP=0
+
+BASE=/cluster/store5/gs.16/build33/bed/blastz.mm4
+
+DEF=$BASE/DEF
+RAW=$BASE/raw
+CDBDIR=$BASE
+SEQ1_LEN=$BASE/S1.len
+SEQ2_LEN=$BASE/S2.len
+'_EOF_'
+                                                
+    # save the DEF file in the current standard place
+    chmod +x DEF
+    cp DEF ~angie/hummus/DEF.hg15-mm4.2003-07-10
+
+    ssh kk
+    cd ~/hg15/bed/blastz.mm4
+    
+    # source the DEF file
+    bash
+    . ./DEF
+
+    # follow the next set of directions slavishly
+    mkdir -p $BASE/run
+    # give up on avoiding angie's directories
+    # tcl script
+    # creates xdir.sh and joblist run/j
+    ~angie/hummus/make-joblist $DEF > $BASE/run/j
+    
+    # xdir.sh makes a bunch of result directories in $BASE/raw/
+    # based on chrom name and CHUNK size
+    sh $BASE/xdir.sh
+    cd $BASE/run
+    
+    # now edit j to prefix path to executable name
+    # NOTE: we should have a controlled version of schwartz bin executables
+    sed -e 's#^#/cluster/home/angie/schwartzbin/#' j > j2
+    wc -l j*
+    head j2
+
+    # make sure the j2 edits are OK, then use it:
+    mv j2 j
+
+    # para create will create the file: 'batch' for the cluster run
+    para create j
+        # 44460 jobs written to batch
+    para try
+    para check
+    para push
+    # ... etc ...
+       # 1.3 hr longest job
+
+    # post-process blastz
+    ssh eieio
+    cd ~/hg15/bed/blastz.mm4
+        #   source the DEF file again in case you are coming back to this
+    bash
+    . ./DEF
+    
+    # a new run directory
+    mkdir -p $BASE/run.1
+
+    # copy files to cluster fileserver
+    clusterdir=/cluster/bluearc/hg/gs.16/build33/bed/blastz.mm4
+    mkdir -p $clusterdir/{raw,lav}
+    cp -r $BASE/raw $clusterdir
+    
+    # create a new job list to convert out files to lav
+    /cluster/bin/scripts/blastz-make-out2lav $DEF $clusterdir \
+                        > $BASE/run.1/jobList
+    cd $BASE/run.1
+
+    # make sure the job list is OK
+    wc -l jobList
+       # 342 jobs 
+    head jobList
+
+    # run on cluster
+    ssh kkr9u01
+    cd ~/hg15/bed/blastz.mm4/run.1
+    para create jobList
+    para try
+    para check
+    para push
+    # etc.
+    # 10 minutes total 
+
+    # convert lav files to axt
+    ssh eieio
+    set base="/cluster/bluearc/hg/gs.16/build33/bed/blastz.mm4"
+    set seq1_dir="/cluster/data/hg15/nib"
+    set seq2_dir="/cluster/data/mm4/softNib"
+    /cluster/bin/scripts/blastz-lav2axt $base $seq1_dir $seq2_dir
+    
+
 # BEGINNING OF RAT BLASTZ
 
 # SET UP RAT BLASTZ CLUSTER RUNS
@@ -2637,6 +2763,71 @@ SEQ2_LEN=$BASE/S2.len
     para check
     para push
     # ... etc ...
+       # 1.3 hr longest job
+
+    # post-process blastz
+    ssh eieio
+    cd ~/hg15/bed/blastz.rn3
+        #   source the DEF file again in case you are coming back to this
+    bash
+    . ./DEF
+    
+    # a new run directory
+    mkdir -p $BASE/run.1
+
+    # copy files to cluster fileserver
+    clusterdir=/cluster/bluearc/hg/gs.16/build33/bed/blastz.rn3
+    mkdir -p $clusterdir/{raw,lav}
+    cp -r $BASE/raw $clusterdir
+    
+    # create a new job list to convert out files to lav
+    /cluster/bin/scripts/blastz-make-out2lav $DEF $clusterdir \
+                        > $BASE/run.1/jobList
+    cd $BASE/run.1
+
+    # make sure the job list is OK
+    wc -l jobList
+       # 342 jobs 
+    head jobList
+
+    # run on cluster
+    ssh kkr9u01
+    cd ~/hg15/bed/blastz.rn3/run.1
+    para create jobList
+    para try
+    para check
+    para push
+    # etc.
+    # 10 minutes total 
+
+    # convert lav files to axt and sort
+    ssh eieio
+    cd /cluster/data/hg15/bed/blastz.rn3
+    set base="/cluster/bluearc/hg/gs.16/build33/bed/blastz.rn3"
+    set seq1_dir="/cluster/data/hg15/nib"
+    set seq2_dir="/cluster/data/rn3/softNib"
+    /cluster/bin/scripts/blastz-lav2axt $base $seq1_dir $seq2_dir >&! \
+                lav2axt.log &
+    tail -100f lav2axt.log
+    # 3 hours total ?  No problems with axtSort memory
+    # copy axt's from cluster data area to permanent storage area
+    rm -fr axtChrom
+    cp -r $base/axtChrom .
+
+    # translate sorted axt files into psl
+    mkdir -p pslChrom
+    foreach f (axtChrom/chr*.axt)
+      set c=$f:t:r
+      /cluster/bin/i386/axtToPsl $f S1.len S2.len pslChrom/${c}_${tbl}.psl
+    end
+    
+    # load these blastz results
+    # NOTE: skipped this step -- do Best and/or Chain before loading
+    # ssh hgwdev
+    # cd /cluster/data/hg15/bed/blastz.rn3/pslChrom
+    # /cluster/bin/i386/hgLoadPsl hg15 chr*_*.psl
+
+
 # XXX END OF RAT BLASTZ
 
 # BEGINNING OF HUMAN BLASTZ
