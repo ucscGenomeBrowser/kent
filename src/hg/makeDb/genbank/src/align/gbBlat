@@ -46,7 +46,7 @@
 # written in Tcl because bash version was getting hideously hard and wanted
 # a language with named fuction parameters, like fortran.
 #
-# $Id: gbBlat,v 1.33 2004/10/25 18:24:02 fanhsu Exp $
+# $Id: gbBlat,v 1.34 2004/10/26 01:06:12 markd Exp $
 #
 
 # Tools are normally taken from /cluster/bin, however we allow them to be
@@ -55,6 +55,10 @@
 set gbBin [file dir [info script]]/i386
 set stdBin /cluster/bin/i386
 set env(PATH) "$gbBin:$stdBin:$env(PATH)"
+
+# FXIME: tmp workaround for libmysqlclient.so.* not being on cluster
+set env(LD_LIBRARY_PATH) [file dir [file dir [info script]]]/lib/i386
+
 
 ##
 # Choose OOC based on genome.  Will return empty string if no ooc should be used, but one
