@@ -2727,8 +2727,8 @@ for (exonIx = 0; exonIx < gp->exonCount; ++exonIx)
     exonEnd = gp->exonEnds[exonIx];
     exonSize = exonEnd - exonStart;
     totalSize += exonSize;
-    missingStart += exonSize - rangeIntersection(exonStart, exonEnd, gp->cdsStart, exonEnd);
-    missingEnd += exonSize - rangeIntersection(exonStart, exonEnd, exonStart, gp->cdsEnd);
+    missingStart += exonSize - positiveRangeIntersection(exonStart, exonEnd, gp->cdsStart, exonEnd);
+    missingEnd += exonSize - positiveRangeIntersection(exonStart, exonEnd, exonStart, gp->cdsEnd);
     }
 *retCdsStart = missingStart;
 *retCdsEnd = totalSize - missingEnd;
