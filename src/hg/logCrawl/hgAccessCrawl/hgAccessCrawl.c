@@ -6,7 +6,7 @@
 #include "obscure.h"
 #include "cheapcgi.h"
 
-static char const rcsid[] = "$Id: hgAccessCrawl.c,v 1.4 2003/12/24 11:23:33 kent Exp $";
+static char const rcsid[] = "$Id: hgAccessCrawl.c,v 1.5 2004/01/02 19:35:53 kent Exp $";
 
 int verbose = 0;
 FILE *errLog = NULL;
@@ -232,6 +232,8 @@ else if (startsWith("Googlebot", program))
 else if (startsWith("ia_archiver", program))
     return TRUE;
 else if (startsWith("Hatena Antenna", program))
+    return TRUE;
+else if (startsWith("webBlat", program))
     return TRUE;
 if (roboHash == NULL)
     {
