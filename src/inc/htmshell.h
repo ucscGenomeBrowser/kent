@@ -51,7 +51,11 @@ void htmlEnd();
 void htmEnd(FILE *f);
 
 void htmlSetBackground(char *imageFile);
-/* Set background - needs to be called before htmlStart
+/* Set background image - needs to be called before htmlStart
+ * or htmShell. */
+
+void htmlSetBgColor(int *color);
+/* Set background color - needs to be called before htmlStart
  * or htmShell. */
 
 /* Echo the input string to the output. */
