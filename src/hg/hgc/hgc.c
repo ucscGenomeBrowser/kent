@@ -1542,8 +1542,13 @@ void doGetDna2()
 /* Do second DNA dialog (or just fetch DNA) */
 {
 char *tbl = cartString(cart, "table");
+int itemCount;
+
 puts("<PRE>");
-hgSeqItemsInRange(tbl, seqName, cartInt(cart, "o"), cartInt(cart, "t"), NULL);
+itemCount = hgSeqItemsInRange(tbl, seqName, cartInt(cart, "o"),
+			      cartInt(cart, "t"), NULL);
+if (itemCount == 0)
+    printf("\n# No results returned from query.\n\n");
 puts("</PRE>");
 }
 
@@ -3564,10 +3569,13 @@ void htcDnaNearGene(char *geneName)
 {
 char *table    = cartString(cart, "o");
 char constraints[256];
+int itemCount;
 
 snprintf(constraints, sizeof(constraints), "name = '%s'", geneName);
 puts("<PRE>");
-hgSeqItemsInRange(table, seqName, winStart, winEnd, constraints);
+itemCount = hgSeqItemsInRange(table, seqName, winStart, winEnd, constraints);
+if (itemCount == 0)
+    printf("\n# No results returned from query.\n\n");
 puts("</PRE>");
 }
 
@@ -8838,7 +8846,6 @@ else if (sameWord(track, "triangle") || sameWord(track, "triangleSelf") || sameW
     {
     doTriangle(tdb, item);
     }
-<<<<<<< hgc.c
 else if( sameWord( track, "humMusL" ))
     {
     humMusClickHandler( tdb, item, 0);
@@ -8847,26 +8854,10 @@ else if( sameWord( track, "musHumL" ) )
     {
     humMusClickHandler( tdb, item, 1);
     }
-=======
-/*BLANCHETTE'S CODE*/
->>>>>>> 1.253
 else if( sameWord( track, "footPrinter" ))
     {
     footPrinterClickHandler( tdb, item );
-<<<<<<< hgc.c
     }
-=======
-    }
-else if( sameWord( track, "humMusL" ) )
-        {
-        humMusClickHandler( tdb, item, 0 );
-        }
-else if( sameWord( track, "musHumL" ) )
-        {
-        humMusClickHandler( tdb, item, 1 );
-        }
-
->>>>>>> 1.253
 else if (sameWord(track, "jaxQTL"))
     {
     doJaxQTL(tdb, item);
