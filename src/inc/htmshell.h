@@ -122,3 +122,9 @@ param method - The function pointer to execute in the middle
 param method - The browser request method to use
  */
 void htmShellWithHead( char *title, char *head, void (*doMiddle)(), char *method); 
+
+/* tell htmlOut to not escape special HTML chars '<', '>' */
+void htmlNoEscape();
+
+/* tell htmlOut to escape special HTML chars '<', '>' */
+void htmlDoEscape();
