@@ -5,20 +5,31 @@
 #include "dnaseq.h"
 #include "trans3.h"
 
-static char const rcsid[] = "$Id: trans3.c,v 1.3 2003/09/09 21:44:03 kent Exp $";
+static char const rcsid[] = "$Id: trans3.c,v 1.4 2003/10/03 18:59:51 kent Exp $";
 
 struct trans3 *trans3New(struct dnaSeq *seq)
 /* Create a new set of translated sequences. */
 {
 struct trans3 *t3;
 int frame;
+int lastPos = seq->size - 1;
 
 AllocVar(t3);
 t3->name = seq->name;
 t3->seq = seq;
 t3->end = seq->size;
 for (frame=0; frame<3; ++frame)
-    t3->trans[frame] = translateSeq(seq, frame, FALSE);
+    {
+    /* Position and frame are the same except in the
+     * very rare case where we are trying to translate 
+     * something less than 3 bases.  In this case this
+     * somewhat cryptic construction will force it to
+     * return empty sequences for the missing frames
+     * avoiding an assert in translateSeq. */
+    int pos = frame;
+    if (pos > lastPos) pos = lastPos;
+    t3->trans[frame] = translateSeq(seq, pos, FALSE);
+    }
 return t3;
 }
 

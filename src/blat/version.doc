@@ -1,3 +1,6 @@
+25:
+     o Fixed crash when aligning translated sequences of less than 3 bases.
+
 24:
      o Tweaked gap penalty in trimFlakyEnds, which should make it so
        that with the -fine flag you get less small terminal exons with bad
