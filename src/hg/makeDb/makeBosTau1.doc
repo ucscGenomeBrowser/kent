@@ -660,6 +660,9 @@ SEQ2_LEN=$BASE/S2.len
   ldHgGene -gtf bosTau1 genscan genscan.gtf
   hgPepPred bosTau1 generic genscanPep genscan.pep
   hgLoadBed bosTau1 genscanSubopt genscanSubopt.bed
+  featureBits bosTau1 genscan
+  # 49346362 bases of 2261116798 (2.182%) in intersection
+
 
 
 # RE-INDEX TABLES TO ACCOMODATE LONG SCAFFOLD NAMES
