@@ -3,7 +3,8 @@
  * representation of objects. */
 
 #include "common.h"
-#include "jksql.h"
+#include "sqlList.h"
+#include "sqlNum.h"
 #include "repMask.h"
 
 void repeatMaskOutStaticLoad(char **row, struct repeatMaskOut *ret)

@@ -214,7 +214,7 @@ char *qs;
 if (s != NULL)
     return s;
 qs = getenv("QUERY_STRING");
-if (qs == NULL || qs[0] == 0)
+if (qs == NULL)
     return "POST";
 return "QUERY";
 }
