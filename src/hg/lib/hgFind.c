@@ -19,6 +19,7 @@
 #include "fishClones.h"
 #include "lfs.h"
 #include "snp.h"
+#include "snpMap.h"
 #include "rnaGene.h"
 #include "stsMarker.h"
 #include "stsMap.h"
@@ -40,7 +41,7 @@
 #include "minGeneInfo.h"
 #include <regex.h>
 
-static char const rcsid[] = "$Id: hgFind.c,v 1.126 2004/02/11 07:47:40 kent Exp $";
+static char const rcsid[] = "$Id: hgFind.c,v 1.127 2004/02/19 01:49:53 daryl Exp $";
 
 /* alignment tables to check when looking for mrna alignments */
 static char *estTables[] = { "all_est", "xenoEst", NULL};
@@ -1702,7 +1703,7 @@ static boolean findGenePredLike(char *spec, struct hgPositions *hgp, char *table
 
 
 static boolean findSnpPos(char *spec, struct hgPositions *hgp, char *tableName)
-/* Look for position in snpNih/snpTsc table. */
+/* Look for position in snpMap table. */
 {
 struct sqlConnection *conn = NULL;
 struct sqlResult *sr = NULL;
@@ -1710,15 +1711,13 @@ struct dyString *query = NULL;
 char **row = NULL;
 boolean ok = FALSE;
 char *chrom = NULL;
-struct snp snp;
+struct snpMap snpMap; /* for snpMap */
 struct hgPosTable *table = NULL;
 struct hgPos *pos = NULL;
 int rowOffset = 0;
 
 /* Make sure it starts with 'rs'.  Then skip over it. */
-if (!startsWith("rs", spec))
-    return FALSE;
-if (!hTableExists(tableName))
+if (strlen(spec)<=2 || !startsWith("rs", spec))  /* All SNP searches will start with 'rs' */
     return FALSE;
 rowOffset = hOffsetPastBin(NULL, tableName);
 conn = hAllocConn();
@@ -1727,24 +1726,24 @@ dyStringPrintf(query, "select * from %s where name = '%s'", tableName, spec);
 sr = sqlGetResult(conn, query->string);
 while ((row = sqlNextRow(sr)) != NULL)
     {
-    if (ok == FALSE)
+    if (!ok)
         {
 	ok = TRUE;
 	AllocVar(table);
-	dyStringClear(query);
-	dyStringPrintf(query, "SNP %s Position", spec);
+	dyStringClear(query); /* 'query' no longer needed, reuse memory */
+	dyStringPrintf(query, "Position of %s in %s:", spec, tableName);
 	table->description = cloneString(query->string);
 	table->name = cloneString(tableName);
 	slAddHead(&hgp->tableList, table);
 	}
-    snpStaticLoad(row+rowOffset, &snp);
-    if ((chrom = hgOfficialChromName(snp.chrom)) == NULL)
-	errAbort("Internal Database error: Odd chromosome name '%s' in %s",
-		 snp.chrom, tableName); 
-    AllocVar(pos);
+    snpMapStaticLoad(row+rowOffset, &snpMap);
+    if ((chrom = hgOfficialChromName(snpMap.chrom)) == NULL)
+	errAbort("Internal Database error: invalid chromosome name '%s' in %s",
+		 snpMap.chrom, tableName); 
+    AllocVar(pos); 
     pos->chrom = chrom;
-    pos->chromStart = snp.chromStart - 5000;
-    pos->chromEnd = snp.chromEnd + 5000;
+    pos->chromStart = snpMap.chromStart - 5000;
+    pos->chromEnd = snpMap.chromEnd + 5000;
     pos->name = cloneString(spec);
     slAddHead(&table->posList, pos);
     }
@@ -3317,8 +3316,7 @@ else
     findZooGenes(query, hgp);
     findRgdGenes(query, hgp);
     findEncodeRegions(query, hgp, "encodeRegions");
-    findSnpPos(query, hgp, "snpTsc");
-    findSnpPos(query, hgp, "snpNih");
+    findSnpPos(query, hgp, "snpMap");
     findAffySnpPos(query, hgp, "affyGeno");
     findGenePred(query, hgp, "sanger22");
     findGenePred(query, hgp, "sanger20");
