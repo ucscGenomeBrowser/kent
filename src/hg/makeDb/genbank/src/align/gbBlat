@@ -27,7 +27,7 @@
 # is still produced.  This script is very careful to exit non-zero if an error
 # occurs.
 #
-# $Id: gbBlat,v 1.18 2004/02/26 18:12:00 angie Exp $
+# $Id: gbBlat,v 1.19 2004/02/28 03:40:32 markd Exp $
 #
 set -e
 
@@ -141,23 +141,18 @@ case "$database" in
 esac
 
 # determine blat parameters
+#    - repeat-masking only used on xeno
 case "$orgCat" in
     native)
         isNative=YES
         case "$type" in
             mrna)
-                if [ "$srcDb" = "refseq" ] ; then
-                    # don't use -trimHardA, results in qSize being less than
-                    # the sequence size.
-                    blatParams="-q=rna -fine $oocOpt"
-                else
-                    blatParams="-q=rna -fine $oocOpt"
-                fi
+                blatParams="-q=rna -fine $oocOpt"
                 ;;
             est)
-                blatParams="-mask=lower $oocOpt" ;;
+                blatParams="$oocOpt" ;;
         esac;;
-    xeno) 
+    xeno)
         isNative=NO
         case "$type" in
             mrna)
