@@ -6521,6 +6521,8 @@ if (customText != NULL && customText[0] != 0)
     ctFileName = tn.forCgi;
     customTrackSave(ctList, tn.forCgi);
     cartSetString(cart, "ct", tn.forCgi);
+    cartRemove(cart, "hgt.customText");
+    cartRemove(cart, "hgt.customFile");
     }
 else if (fileName != NULL)
     {
@@ -7054,7 +7056,7 @@ char newPos[256];
 
 /* Read in input from CGI. */
 position = cartString(cart, "position");
-if (!findGenomePos(position, &chromName, &winStart, &winEnd))
+if (!findGenomePos(position, &chromName, &winStart, &winEnd)) 
     return;
 
 seqBaseCount = hChromSize(chromName);
@@ -7166,7 +7168,7 @@ char *excludeVars[] = { "submit", "Submit", "hgt.reset",
 			"hgt.left1", "hgt.left2", "hgt.left3", 
 			"hgt.right1", "hgt.right2", "hgt.right3", 
 			"hgt.dinkLL", "hgt.dinkLR", "hgt.dinkRL", "hgt.dinkRR",
-			"hgt.customText", "hgt.customFile", "hgt.tui", "hgt.hideAll",
+			"hgt.tui", "hgt.hideAll",
 			NULL };
 
 void resetVars()
