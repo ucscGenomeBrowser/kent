@@ -707,10 +707,12 @@ o - Copy to hgwdev:/scratch.  Rename to correspond with tables as so and
        hgLoadRna addSeq mm2 /cluster/store2/fish/seq15jun2001/*.fa
 
 
-PRODUCING FUGU FISH ALIGNMENTS (In progress)
+PRODUCING FUGU FISH ALIGNMENTS (Done 10/7/02 by Matt)
 
 o - Download sequence to /cluster/store3/fuguSeq from ... and put it on the cluster local disk
     at /scratch/hg/fugu on kkstore.
+
+faSplit sequence fugu*.fa 1000 fuguSplit
 o - Do fish/mouse alignments.
        ssh kk
        cd ~/mm/bed
@@ -726,21 +728,21 @@ o - Do fish/mouse alignments.
      Make sure jobs are going ok with para check.  Then
        para push
      wait about 2 hours and do another
-       para push - IN PROGRESS
+       para push
        do para checks and if necessary para pushes until done
      or use para shove.
 o - Sort alignments as so 
-       pslCat -dir psl | liftUp -type=.psl stdout ~/mm/jkStuff/liftAll.lft warn stdin | pslSortAcc nohead chrom /cluster/fast1/temp stdin
-o - Copy to hgwdev:/scratch.  Rename to correspond with tables as so and 
+       pslCat -dir psl | liftUp -type=.psl stdout ~/mm2/jkStuff/liftAll.lft warn stdin | pslSortAcc nohead chrom /oldscratch stdin
+o - ssh hgwdevd 
     load into database:
        ssh hgwdev
-       cd ~/mm/bed/blatFugu/chrom
+       cd ~/mm2/bed/blatFugu/chrom
        foreach i (*.psl)
 	   set r = $i:r
            mv $i ${r}_blatFugu.psl
        end
        hgLoadPsl mm2 *.psl
-       hgLoadRna addSeq mm2 /cluster/store2/fugu/seq15jun2001/*.fa
+       hgLoadRna addSeq mm2 /cluster/store3/fuguSeq/fugu*.fa
 
 
 LOAD GENEID GENES (done)
