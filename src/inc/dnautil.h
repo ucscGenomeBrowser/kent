@@ -131,6 +131,9 @@ void dnaFilterToN(char *in, DNA *out);
 /* Turn upper case letters to N's. */
 void upperToN(char *s, int size);
 
+/* Turn lower case letters to N's. */
+void lowerToN(char *s, int size);
+
 /* Count up frequency of occurance of each base and store 
  * results in histogram. Use X_BASE_VAL to index histogram. */
 void dnaBaseHistogram(DNA *dna, int dnaSize, int histogram[4]);
