@@ -4206,19 +4206,6 @@ XXX - have not created the knownToEnsembl table yet - 2004-07-15 - Hiram
 hgMapToGene hg17 ensGene knownGene knownToEnsembl
 #	table row count went from previous version: 36068 to 38251
 
-XXX - DO NOT YET HAVE snp tables - not at NCBI yet - 2004-07-15 - Hiram
-# Make knownToCdsSnp column.  This is a little complicated by
-# having to merge data form the snpTsc and the snpNih tracks.
-hgMapToGene hg17 snpTsc knownGene knownToCdsSnp -createOnly -all -cds
-hgMapToGene hg17 snpTsc knownGene snp1 -noLoad -all -cds
-hgMapToGene hg17 snpNih knownGene snp2 -noLoad -all -cds
-sort snp1.tab snp2.tab > knownToCdsSnp.tab
-rm snp1.tab snp2.tab
-hgsql \
-    -e 'load data local infile "knownToCdsSnp.tab" into table knownToCdsSnp;' \
-	hg17
-#	row count went from 87273 to 106199
-
 # Make knownToCdsSnp table (DONE Nov 11, 2004, Heather)
   ssh hgwdev
   nice hgMapToGene hg17 snp knownGene knownToCdsSnp -all -cds
