@@ -54,6 +54,13 @@ transcriptomes</A>, Published online before print, PNAS
 denominator was calculated by first taking the median of replicants for
 each non-cancerous tissue,  and then taking the median of these medians.
 </P>
+<P>To associate particular genes with expression data we use a fairly simple-minded
+scheme.  First we align the cDNA sequences around which the probes were designed to
+the genome.  Then for each gene we pick the cDNA sequence with the alignment that most
+overlaps the gene as the source for expression data for that gene.  Since many of the cDNA 
+sequences and probes designed for the cDNA sequences just cover part of the gene, in most
+cases different splice varients of a gene will end up mapped to the same cDNA sequence. 
+</P>
 
 <H3>Credits</H3>
 The data for this column was kindly provided by 
