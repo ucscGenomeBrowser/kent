@@ -24,11 +24,31 @@ color 0,100,180
 type genePred vegaPep
 url http://vega.sanger.ac.uk/Homo_sapiens/geneview?transcript=$$
 
+track vegaGene2
+shortLabel Vega Genes
+longLabel Vega Annotations from Sanger, Genoscope
+group genes
+priority 36
+visibility hide
+color 0,100,180
+type genePred vegaPep
+url http://vega.sanger.ac.uk/Homo_sapiens/geneview?transcript=$$
+
 track vegaPseudoGene
 shortLabel Vega Pseudogenes
 longLabel Vega Annotated Pseudogenes and Immunoglobulin Segments
 group genes
 priority 37.1
+visibility hide
+color 30,130,210
+type genePred
+url http://vega.sanger.ac.uk/Homo_sapiens/geneview?transcript=$$
+
+track vegaPseudoGene2
+shortLabel Vega Pseudogenes
+longLabel Vega Annotated Pseudogenes and Immunoglobulin Segments
+group genes
+priority 36.1
 visibility hide
 color 30,130,210
 type genePred
@@ -44,6 +64,17 @@ color 0,60,120
 altColor 200,220,255
 spectrum on
 type psl xeno
+
+track fuguPseudo
+shortLabel Fugu Pseudo
+longLabel Takifugu rubripes Translated Blat Alignments that overlap Processed Pseudogenes
+group compGeno
+priority 125.1
+visibility hide
+color 0,60,120
+altColor 200,220,255
+spectrum on
+type bed 12
 
 track blastzMm3
 shortLabel Mm3 Blastz
