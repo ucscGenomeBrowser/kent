@@ -41,7 +41,7 @@
 #define	WIG_NO_DATA	128
 #define MAX_BYTE_VALUE	127
 
-static char const rcsid[] = "$Id: wigAsciiToBinary.c,v 1.22 2004/03/10 20:01:05 hiram Exp $";
+static char const rcsid[] = "$Id: wigAsciiToBinary.c,v 1.23 2004/07/19 21:45:13 sugnet Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -51,6 +51,8 @@ static struct optionSpec optionSpecs[] = {
     {"chrom", OPTION_STRING},
     {"wibFile", OPTION_STRING},
     {"name", OPTION_STRING},
+    {"minVal", OPTION_FLOAT},
+    {"maxVal", OPTION_FLOAT},
     {NULL, 0}
 };
 
@@ -71,7 +73,9 @@ static long long dataSpan = 1;		/* bases spanned per data point */
 static char * chrom = (char *) NULL;	/* to specify chrom name	*/
 static char * wibFile = (char *) NULL;	/* to name the .wib file	*/
 static char * name = (char *) NULL;	/* to specify feature name	*/
-
+static double minVal = BIGNUM;          /* minimum value that is allowed in data. */
+static double maxVal = BIGNUM;          /* maximum value that is allowed in data. */
+static boolean trimVals = FALSE;        /* should the data be trimmed by min & maxVal? */
 static void usage()
 {
 errAbort(
@@ -87,6 +91,8 @@ errAbort(
     "\t-name=<feature name> - to name the feature, default chrN or\n"
     "\t\t-chrom= specified\n"
     "\t-verbose=N - display process while underway (only N=2 does something)\n"
+    "\t-minVal=N - minimum allowable data value, values will be capped here.\n"
+    "\t-maxVal=N - maximum allowable data value, values will be capped here.\n"
     "If the name of the input files are of the form: chrN.<....> this will\n"
     "\tset the output file names.  Otherwise use the -wibFile option.\n"
     "Each ascii file is a two column file.  Whitespace separated.\n"
@@ -239,7 +245,7 @@ for (i = 1; i < argc; ++i)
 		snprintf(featureName, sizeof(featureName) - 1, "%s", tmpString);
 	    freeMem(tmpString);
 	    } else {
-errAbort("Can not determine output file name, no -wibFile specified\n");
+	    errAbort("Can not determine output file name, no -wibFile specified\n");
 	    }
 	}
 
@@ -279,6 +285,11 @@ errAbort("Can not determine output file name, no -wibFile specified\n");
 	Offset = atoll(words[0]);
 	val = words[1];
 	dataValue = strtod(val, &valEnd);
+	if(trimVals)
+	    {
+	    dataValue = max(minVal, dataValue);
+	    dataValue = min(maxVal, dataValue);
+	    }
 	if ((*val == '\0') || (*valEnd != '\0'))
 	    errAbort("Not a valid float at line %d: %s\n", lineCount, words[1]);
 	if (Offset < 1)
@@ -408,6 +419,9 @@ dataSpan = optionLongLong("dataSpan", 1);
 chrom = optionVal("chrom", NULL);
 wibFile = optionVal("wibFile", NULL);
 name = optionVal("name", NULL);
+minVal = optionFloat("minVal", -1 * INFINITY);
+maxVal = optionFloat("maxVal", INFINITY);
+trimVals = optionExists("minVal") || optionExists("maxVal");
 
 verbose(2, "options: -verbose, offset= %llu, binsize= %llu, dataSpan= %llu\n",
     add_offset, binsize, dataSpan);
