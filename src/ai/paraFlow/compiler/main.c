@@ -62,8 +62,6 @@ enum pfParseType
     pptShiftLeft,
     pptShiftRight,
     pptMod,
-    pptAnd,
-    pptOr,
     pptComma,
     pptSame,
     pptNotSame,
@@ -74,6 +72,11 @@ enum pfParseType
     pptNegate,
     pptNot,
     pptFlipBits,
+    pptBitAnd,
+    pptBitOr,
+    pptBitXor,
+    pptLogAnd,
+    pptLogOr,
     };
 
 
@@ -150,10 +153,6 @@ switch (type)
         return "pptShiftRight";
     case pptMod:
 	return "pptMod";
-    case pptAnd:
-	return "pptAnd";
-    case pptOr:
-	return "pptOr";
     case pptComma:
 	return "pptComma";
     case pptSame:
@@ -174,6 +173,16 @@ switch (type)
         return "pptNot";
     case pptFlipBits:
         return "pptFlipBits";
+    case pptBitAnd:
+	return "pptBitAnd";
+    case pptBitOr:
+	return "pptBitOr";
+    case pptBitXor:
+	return "pptBitXor";
+    case pptLogAnd:
+	return "pptLogAnd";
+    case pptLogOr:
+	return "pptLogOr";
     default:
         internalErr();
 	return NULL;
@@ -510,10 +519,11 @@ struct pfParse *parseProduct(struct pfParse *parent,
 struct pfToken *tok = *pTokList;
 struct pfParse *pp = parseNegation(parent, &tok, scope);
 while (tok->type == '*' || tok->type == '/' || tok->type == '%'
-	|| tok->type == pftShiftLeft || tok->type == pftShiftRight)
+	|| tok->type == pftShiftLeft || tok->type == pftShiftRight
+	|| tok->type == '&')
     {
     struct pfParse *left = pp, *right;
-    enum pfTokType tt = pptMul;
+    enum pfTokType tt = pptNone;
     switch (tok->type)
         {
 	case '*':
@@ -530,6 +540,9 @@ while (tok->type == '*' || tok->type == '/' || tok->type == '%'
 	   break;
 	case pftShiftRight:
 	   tt = pptShiftRight;
+	   break;
+	case '&':
+	   tt = pptBitAnd;
 	   break;
 	}
     pp = pfParseNew(tt, tok, parent);
@@ -549,10 +562,25 @@ struct pfParse *parseSum(struct pfParse *parent,
 {
 struct pfToken *tok = *pTokList;
 struct pfParse *pp = parseProduct(parent, &tok, scope);
-while (tok->type == '+' || tok->type == '-')
+while (tok->type == '+' || tok->type == '-' || tok->type == '|' || tok->type == '^')
     {
     struct pfParse *left = pp, *right;
-    enum pfTokType tt = (tok->type == '+' ? pptPlus : pptMinus);
+    enum pfTokType tt = pptNone;
+    switch (tok->type)
+        {
+	case '+':
+	   tt = pptPlus;
+	   break;
+	case '-':
+	   tt = pptMinus;
+	   break;
+	case '|':
+	   tt = pptBitOr;
+	   break;
+	case '^':
+	   tt = pptBitXor;
+	   break;
+	}
     pp = pfParseNew(tt, tok, parent);
     left->parent = pp;
     tok = tok->next;
@@ -608,15 +636,54 @@ while (tok->type == pftEqualsEquals || tok->type == pftNotEquals
 return pp;
 }
 
+struct pfParse *parseLogAnd(struct pfParse *parent,
+	struct pfToken **pTokList, struct pfScope *scope)
+/* Parse logical and. */
+{
+struct pfToken *tok = *pTokList;
+struct pfParse *pp = parseCmp(parent, &tok, scope);
+if (tok->type == pftLogAnd)
+    {
+    struct pfParse *left = pp, *right;
+    pp = pfParseNew(pptLogAnd, tok, parent);
+    left->parent = pp;
+    tok = tok->next;
+    right = parseCmp(pp, &tok, scope);
+    pp->children = left;
+    left->next = right;
+    }
+*pTokList = tok;
+return pp;
+}
+
+struct pfParse *parseLogOr(struct pfParse *parent,
+	struct pfToken **pTokList, struct pfScope *scope)
+/* Parse logical and. */
+{
+struct pfToken *tok = *pTokList;
+struct pfParse *pp = parseLogAnd(parent, &tok, scope);
+if (tok->type == pftLogOr)
+    {
+    struct pfParse *left = pp, *right;
+    pp = pfParseNew(pptLogOr, tok, parent);
+    left->parent = pp;
+    tok = tok->next;
+    right = parseLogAnd(pp, &tok, scope);
+    pp->children = left;
+    left->next = right;
+    }
+*pTokList = tok;
+return pp;
+}
+
 struct pfParse *parseAssign(struct pfParse *parent,
 	struct pfToken **pTokList, struct pfScope *scope)
 /* Parse '=' separated expression */
 {
 struct pfToken *tok = *pTokList;
-struct pfParse *pp = parseCmp(parent, &tok, scope);
+struct pfParse *pp = parseLogOr(parent, &tok, scope);
 struct pfParse *assign = NULL;
 enum pfParseType type = pptNone;
-
 
 switch (tok->type)
     {
@@ -647,7 +714,7 @@ if (type != pptNone)
     for (;;)
 	{
 	tok = tok->next;
-	pp = parseCmp(assign, &tok, scope);
+	pp = parseLogOr(assign, &tok, scope);
 	slAddHead(&assign->children, pp);
 	if (tok->type != '=' || type != pptAssignment)
 	    break;

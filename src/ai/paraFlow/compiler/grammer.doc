@@ -1,3 +1,10 @@
+operator precedence:
+     unary - ! ~
+     * / >> << % &
+     + = |
+     == != >= > <= <
+     &&
+     ||
 
 program: statementList
 
