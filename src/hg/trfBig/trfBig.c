@@ -6,13 +6,13 @@
 #include "portable.h"
 #include "cheapcgi.h"
 
-static char const rcsid[] = "$Id: trfBig.c,v 1.13 2004/06/28 20:53:23 kent Exp $";
+static char const rcsid[] = "$Id: trfBig.c,v 1.14 2004/06/29 19:47:47 kent Exp $";
 
 /* Variables that can be set from command line. */
 char *trfExe = "trf";	/* trf executable name. */
 boolean doBed = FALSE;	/* Output .bed file. */
 char *tempDir = ".";	/* By default use current dir. */
-int maxPeriod = 2500;    /* Maximum size of repeat. */
+int maxPeriod = 2000;    /* Maximum size of repeat. */
 
 void usage()
 /* Explain usage and exit. */
