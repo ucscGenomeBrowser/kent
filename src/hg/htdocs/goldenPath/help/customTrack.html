@@ -648,6 +648,15 @@ error message &quot;line # of custom input: missing = in var/val pair&quot;.<BR>
 <B><I>Solution:</I></B> Check for incorrect syntax in the track lines in the annotation file. Be sure that each track line
 attribute pair consists of the format <I>attribute=attribute name</I>.
 
+<P><B><I>Problem:</I></B> When I click the Submit button, I get the
+error message &quot;line # of custom input: BED chromStarts[i] must be in ascending order&quot;.<BR>
+<B><I>Solution:</I></B> This is most likely caused by a logical conflict in the 
+Genome Browse software. It accepts custom GFF tracks that have multiple &quot;exons&quot; at
+the same position, but not BED tracks. Because the browser translates GFF tracks 
+to BED format before storing the custom track data, GFF tracks with multiple 
+exons will case an error when the BED is read back in. To work around this 
+problem, remove duplicate lines in the GFF track. 
+
 <P><B><I>Problem:</I></B> When I click the Submit button, the Genome Browser
 track window displays OK, but my track isn't visible.<BR>
 <B><I>Solution:</I></B> Check the browser and track lines in your annotation
