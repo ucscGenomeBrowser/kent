@@ -30,8 +30,8 @@ endif
 # --------------------------------------------
 #  get sets of KG, FB, PB tables:
 
-hgsql -N -e "SELECT $column FROM $table" $db | sort -u > $db.$table.$column.dev
-hgsql -N -h hgwbeta -e "SELECT $column FROM $table" $db | sort -u > $db.$table.$column.beta
+hgsql -N -e "SELECT $column FROM $table" $db | sort  > $db.$table.$column.dev
+hgsql -N -h hgwbeta -e "SELECT $column FROM $table" $db | sort  > $db.$table.$column.beta
 comm -23 $db.$table.$column.dev $db.$table.$column.beta >$db.$table.$column.devOnly
 comm -13 $db.$table.$column.dev $db.$table.$column.beta >$db.$table.$column.betaOnly
 comm -12 $db.$table.$column.dev $db.$table.$column.beta >$db.$table.$column.common
