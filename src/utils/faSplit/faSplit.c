@@ -9,7 +9,7 @@
 #include "options.h"
 #include "bits.h"
 
-static char const rcsid[] = "$Id: faSplit.c,v 1.12 2003/10/07 18:50:23 angie Exp $";
+static char const rcsid[] = "$Id: faSplit.c,v 1.13 2004/02/02 01:13:39 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -41,6 +41,7 @@ errAbort(
   "at gap boundaries if possible.\n"
   "\n"
   "Options:\n"
+  "    -verbose - Write names of each file created\n"
   "    -maxN=N - Suppress pieces with more than maxN n's.  Only used with size.\n"
   "              default is size-1 (only suppresses pieces that are all N).\n"
   "    -oneFile - Put output in one file. Only used with size\n"
@@ -52,6 +53,19 @@ errAbort(
 );
 
 }
+
+/* command line option specifications */
+static struct optionSpec optionSpecs[] = {
+    {"verbose", OPTION_BOOLEAN},
+    {"maxN", OPTION_INT},
+    {"oneFile", OPTION_BOOLEAN},
+    {"out", OPTION_STRING},
+    {"lift", OPTION_STRING},
+    {"minGapSize", OPTION_INT},
+    {NULL, 0}
+};
+
+boolean verbose = FALSE;
 
 unsigned long estimateFaSize(char *fileName)
 /* Estimate number of bases from file size. */
@@ -136,7 +150,8 @@ while (lineFileNext(lf, &line, &lineSize))
 		}
 	    sprintf(outPathName, "%s%s%0*d.fa", dir, outFile, 
 	    	digits, fileCount);
-	    printf("writing %s\n", outPathName);
+            if (verbose)
+                printf("writing %s\n", outPathName);
 	    f = mustOpen(outPathName, "w");
 	    fprintf(f, ">%s%0*d\n", outFile, digits, fileCount);
 	    ++fileCount;
@@ -182,7 +197,8 @@ while (faMixedSpeedReadNext(lf, &seq.dna, &seq.size, &seq.name))
         {
 	carefulClose(&f);
 	sprintf(outPath, "%s%s%0*d.fa", outDir, outFile, digits, fileCount++);
-	printf("writing %s\n", outPath);
+        if (verbose)
+            printf("writing %s\n", outPath);
 	f = mustOpen(outPath, "w");
 	nextEnd = calcNextEnd(fileCount, splitCount, estSize);
 	}
@@ -214,7 +230,8 @@ while (faMixedSpeedReadNext(lf, &seq.dna, &seq.size, &seq.name))
 	carefulClose(&f);
 	curPos = 0;
 	sprintf(outPath, "%s%s%0*d.fa", outDir, outFile, digits, fileCount++);
-	printf("writing %s\n", outPath);
+        if (verbose)
+            printf("writing %s\n", outPath);
 	f = mustOpen(outPath, "w");
 	}
     curPos += seq.size;
@@ -238,7 +255,8 @@ while (faMixedSpeedReadNext(lf, &seq.dna, &seq.size, &seq.name))
     {
     carefulClose(&f);
     sprintf(outPath, "%s%s.fa", outDir, seq.name);
-    printf("writing %s\n", outPath);
+    if (verbose)
+        printf("writing %s\n", outPath);
     f = mustOpen(outPath, "w");
     faWriteNext(f, seq.name, seq.dna, seq.size);
     }
@@ -548,12 +566,13 @@ char *inName = NULL;
 int count;
 char *outRoot;
 
-optionHash(&argc, argv);
+optionInit(&argc, argv, optionSpecs);
 how = argv[1];
 inName = argv[2];
 
 if (argc < 4 )
     usage();
+verbose = optionExists("verbose");
 
 if (sameWord(how, "byname"))
     {
