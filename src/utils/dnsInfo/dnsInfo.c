@@ -26,7 +26,7 @@ struct hostent *h;
 char **aliases, **addresses;
 char str[INET6_ADDRSTRLEN];
 if ((h = gethostbyname(machine)) == NULL)
-    errAbort("Couldn't gethostbyname %s", hstrerror(h_errno));
+    errAbort("Couldn't gethostbyname: %s", hstrerror(h_errno));
 printf("official hostname: %s\n", h->h_name);
 for (aliases = h->h_aliases; *aliases != NULL; ++aliases)
     printf("\talias: %s\n", *aliases);
