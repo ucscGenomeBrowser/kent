@@ -1434,22 +1434,22 @@ ln -s /cluster/store3/fuguSeq/fugu_v3_mask.fasta /gbdb/hg12/fugu/fugu_v3_mask.fa
 Now load the Fugu sequence data
        hgLoadRna addSeq hg12 /gbdb/hg12/fugu/fugu_v3_mask.fasta
 
-TIGR GENE INDEX (todo)
-
-  o - Download ftp://ftp.tigr.org/private/HGI_ren/*aug.tgz into
-      ~/oo.29/bed/tgi and then execute the following commands:
-          cd ~/oo.29/bed/tgi
-	  mv cattleTCs_aug.tgz cowTCs_aug.tgz
-	  foreach i (mouse cow human pig rat)
-	      mkdir $i
-	      cd $i
-	      gtar -zxf ../${i}*.tgz
-	      gawk -v animal=$i -f ../filter.awk * > ../$i.gff
-	      cd ..
-	  end
-	  mv human.gff human.bak
-	  sed s/THCs/TCs/ human.bak > human.gff
-	  ldHgGene -exon=TCs hg7 tigrGeneIndex *.gff
+TIGR GENE INDEX (DONE 12/18/02)
+    mkdir -p ~/hg12/bed/tigr
+    cd ~/hg12/bed/tigr
+    wget ftp://ftp.tigr.org/private/HGI_ren/TGI_track_HumanGenome_build30.tgz
+    gunzip -c TGI*.tgz | tar xvf -
+    foreach f (*cattle*)
+      set f1 = `echo $f | sed -e 's/cattle/cow/g'`
+      mv $f $f1
+    end
+    foreach o (mouse cow human pig rat)
+      setenv O $o
+      foreach f (chr*_$o*s)
+        tail +2 $f | perl -wpe 's /THC/TC/; s/(TH?C\d+)/$ENV{O}_$1/;' > $f.gff
+      end
+    end
+    ldHgGene -exon=TC hg12 tigrGeneIndex *.gff
 
 
 LOAD STS MAP (todo) TODO BY TERRY I BELIEVE - HE WILL UPDATE THIS
