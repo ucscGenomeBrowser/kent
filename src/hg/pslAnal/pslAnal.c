@@ -1458,7 +1458,8 @@ void cdsIndels(struct sqlConnection *conn, struct pslInfo *pi, struct dnaSeq *rn
 	  prevtend = tstart;
 	  }
 	unaligned = qstart - prevqend;
-	if (((tstart - prevtend) != 0) && (!pi->splice[i]) && ((tstart - prevtend) < 30))
+	/*if (((tstart - prevtend) != 0) && (!pi->splice[i]) && ((tstart - prevtend) < 30))*/
+	if (((tstart - prevtend) != 0) && (!pi->splice[i]))
 	  unali = TRUE;
 	else
 	  unali = FALSE;
@@ -1528,7 +1529,7 @@ void cdsIndels(struct sqlConnection *conn, struct pslInfo *pi, struct dnaSeq *rn
             /* Create an indel record for this */	
 	    if ((indelReport) && (!unali)) 
 	      {
-		ni = createIndel(conn, prevqend, qstart, pi->psl->tName, prevtend, tstart, rna, pi->psl->strand, pi->mrnaCloneId, pi->mrna, 1, leftShift + rightShift + 1, insert, TRUE); 
+		ni = createIndel(conn, prevqend, qstart, pi->psl->tName, prevtend, prevtend, rna, pi->psl->strand, pi->mrnaCloneId, pi->mrna, 1, leftShift + rightShift + 1, insert, TRUE); 
 		slAddHead(&niList,ni);
 	      }
 	  }
