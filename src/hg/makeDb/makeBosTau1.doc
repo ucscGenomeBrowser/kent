@@ -64,7 +64,7 @@ exit; # don't actually run this like a script :)
   /cluster/bin/i386/checkAgpAndFa contigs/Btau_v1.0_20040927.gap linearScaffolds/Btau20040927-freeze > check.err
 
 
-# SPLIT SCAFFOLDS
+# SPLIT SCAFFOLDS (DONE Sep. 30, 2004, Heather)
 
   ssh eieio
   cd /cluster/data/bosTau1
@@ -77,7 +77,7 @@ exit; # don't actually run this like a script :)
   mv 4 scaffolds
   etc.
 
-# MAKE 2BIT NIB FILE
+# MAKE 2BIT NIB FILE (DONE Oct.1, 2004, Heather)
 
   ssh kksilo
   cd /cluster/data/bosTau1/linearScaffolds
@@ -92,6 +92,36 @@ exit; # don't actually run this like a script :)
   mkdir /gbdb/bosTau1/nib
   ln -s /cluster/data/bosTau1/bosTau1.2bit /gbdb/bosTau1/nib
 
+# CREATE DATABASE
 
+  ssh hgwdev
+  hgsql hg17
+  create database bosTau1;
+  use bosTau1;
+  create table grp (PRIMARY KEY(NAME)) select * from hg17.grp;
+  # add rows to hgcentraltest on hgwbeta in dbDb and defaultDb
+  # set orderKey past dog, before mouse
 
-  
+# CREATE GAP TABLE
+
+  ssh hgwdev
+  cd kent/src/hg/lib
+  # remove bin column for now
+  hgsql bosTau1 < gap2.sql
+  cd /cluster/data/bosTau1/download/contigs
+  grep fragment Btau_v1.0_20040927.agp > fragment.txt
+  hgsql bosTau1
+  load data local infile 'fragment.txt' into table gap
+  # create trackDb/cow/bosTau1/gap.html
+
+# CREATE CHROMINFO TABLE
+
+  ssh hgwdev
+  cd kent/src/hg/lib
+  # allow size and fileName to be null
+  hgsql bosTau1 < chromInfo2.sql
+  cd /cluster/data/bosTau1/download/scaffolds
+  hgsql bosTau1
+  load data local infile 'id.fa' into table chromInfo
+  update chromInfo set size = <largenum>
+  update chromInfo set fileName = "/gbdb/bosTau1/nib/bosTau1.2bit"
