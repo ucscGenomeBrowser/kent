@@ -84,7 +84,7 @@
 #include "estOrientInfo.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.827 2004/10/23 05:27:11 kate Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.831 2004/11/05 00:04:57 donnak Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
@@ -281,6 +281,17 @@ hWrites(" -->\n");
 fflush(stdout); /* USED ONLY FOR DEBUGGING BECAUSE THIS IS SLOW - MATT */
 va_end(args);
 }
+
+void reportTime(char *label)
+/* Report how long something takes.  Call with a NULL label to initialize. */
+{
+static long lastTime = 0;
+long time = clock1000();
+if (label != NULL)
+    hPrintf("%s: %d millis<BR>\n", label, time - lastTime);
+lastTime = time;
+}
+
 
 void setPicWidth(char *s)
 /* Set pixel width from ascii string. */
@@ -6492,12 +6503,6 @@ Color alignInsertsColor()
     return orangeColor;
 }
 
-Color alignBreakColor()
-/* Return color used for alignment break indicators in multiple alignments */
-{
-    return brickColor;
-}
-
 int spreadStringCharWidth(int width, int count)
 {
     return width/count;
@@ -6570,27 +6575,6 @@ for (i=0; i<count; i++, text++, textPos++)
         continue;
         }
     printChar = *text;
-    if (match != NULL && (*text == UNALIGNED_SEQ_BEFORE ||
-                         *text == UNALIGNED_SEQ_AFTER ||
-                         *text == UNALIGNED_SEQ_BOTH))
-        {
-        /* process unaligned region indicators - display as gaps
-         * delimited by vertical red bars, suppressing redundant ones:
-         * X, ^ -> left bar, unless preceded by V or X
-         * X, V -> right bar, unless preceded by ^ or X
-         */ 
-        if (*text == UNALIGNED_SEQ_BEFORE || *text == UNALIGNED_SEQ_BOTH)
-            if (i==0 || (text[-1] != UNALIGNED_SEQ_AFTER && 
-                         text[-1] != UNALIGNED_SEQ_BOTH))
-                /* vertical bar to the left of the gap */
-                vgBox(vg, x+x1, y, 1, height, alignBreakColor());
-        if (*text == UNALIGNED_SEQ_AFTER || *text == UNALIGNED_SEQ_BOTH)
-            if (i==count-1 || (text[1] != UNALIGNED_SEQ_BEFORE && 
-                               text[1] != UNALIGNED_SEQ_BOTH))
-                /* vertical bar to the right of the gap */
-                vgBox(vg, x+x2, y, 1, height, alignBreakColor());
-        printChar = '-';
-        }
     c[0] = printChar;
     clr = color;
     if (dots)
@@ -7035,6 +7019,9 @@ if (withLeftLabels)
 		    char *name = track->itemName(track, item);
 		    int itemHeight = track->itemHeight(track, item);
 		    newy = y;
+
+                    if (track->itemLabelColor != NULL)
+                        labelColor = track->itemLabelColor(track, item, vg);
 		    
 		    /* Do some fancy stuff for sample tracks. 
 		     * Draw y-value limits for 'sample' tracks. */
@@ -8640,6 +8627,7 @@ registerTrackHandler("stsMap", stsMapMethods);
 registerTrackHandler("stsMapMouseNew", stsMapMouseMethods);
 registerTrackHandler("stsMapRat", stsMapRatMethods);
 registerTrackHandler("snpMap", snpMapMethods);
+registerTrackHandler("snp", snpMethods);
 registerTrackHandler("recombRate", recombRateMethods);
 registerTrackHandler("recombRateMouse", recombRateMouseMethods);
 registerTrackHandler("recombRateRat", recombRateRatMethods);
@@ -8964,7 +8952,7 @@ if (!hideControls)
     hPrintf("</TD><TD COLSPAN=15>");
     hWrites("Click on a feature for details. "
 	  "Click on base position to zoom in around cursor. "
-	  "Click on left mini-buttons for track-specific options" );
+	  "Click on left mini-buttons for track-specific options." );
     hPrintf("</TD><TD COLSPAN=6 ALIGN=CENTER NOWRAP>");
     hPrintf("move end<BR>");
     hButton("hgt.dinkRL", " < ");
@@ -9691,6 +9679,7 @@ int main(int argc, char *argv[])
 /* Push very early error handling - this is just
  * for the benefit of the cgiVarExists, which 
  * somehow can't be moved effectively into doMiddle. */
+reportTime(NULL);
 htmlPushEarlyHandlers();
 cgiSpoof(&argc, argv);
 if (cgiVarExists("hgt.reset"))

@@ -1,6 +1,6 @@
 #!/bin/bash -e
 #
-# mgc-dbload [-inclEsts] [-extFileUpdate]
+# mgc-dbload [-inclEsts] [-extFileUpdate] [-allowLargeDeletes]
 #
 # dbload for mgc server.
 #   - loads all MGC tables (in conf file)

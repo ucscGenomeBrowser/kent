@@ -11,7 +11,7 @@
 #include "hCommon.h"
 #include "chainCart.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.49 2004/10/19 18:55:00 kent Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.50 2004/11/02 10:07:29 daryl Exp $";
 
 char *hUserCookie()
 /* Return our cookie name. */
@@ -256,213 +256,398 @@ cgiMakeDropList(var, stsMapRatOptions, ArraySize(stsMapRatOptions),
 	curVal);
 }
 
-/****** Some stuff for snp type related controls *******/
+/****** Some stuff for snpMapType related controls *******/
 
-static char *snpTypeLabels[] = {
-    "Single Nucleotide Polymorphisms",
-    "Insertions and Deletions",
-    "Segmental Duplications",
-};
-
-static char *snpTypes[] = {
-    "snpSingle.type",
-    "snpIndels.type",
-    "snpSegmental.type",
-};
-
-static char *snpTypeDataName[] = {
-    "SNP",
-    "INDEL",
-    "SEGMENTAL",
-};
-
-static char *snpTypeStates[] = {
-    "include",
-    "include",
-    "exclude",
-};
-
-static char *snpTypeDefaults[] = {
-    "include",
-    "include",
-    "include",
-};
-
-static char *snpTypeValue[] = {
-    "include",
-    "exclude",
-};
-
-enum snpTypeEnum snpTypeStringToEnum(char *string)
-/* Convert from string to enum representation. */
+int snpMapTypeIndex(char *string)
+/* Convert from string to index representation. */
 {
-int x = stringIx(string, snpTypes);
+int x = stringIx(string, snpMapTypeLabel);
 if (x < 0)
-   errAbort("Unknown option '%s' in snpTypeStringToEnum", string);
+   errAbort("Unknown option '%s' in snpMapTypeIndex", string);
 return x;
 }
 
-char *snpTypeEnumToString(enum snpTypeEnum x)
-/* Convert from enum to string representation. */
+char *snpMapTypeString(int x)
+/* Convert from index to string representation. */
 {
-return snpTypes[x];
+return snpMapTypeLabel[x];
 }
 
-enum snpTypeEnum snpTypeLabelStringToEnum(char *string)
-/* Convert from string to enum representation. */
+char *snpMapTypeLabelStr(int x)
+/* Convert from index to string representation. */
 {
-int x = stringIx(string, snpTypeLabels);
+return snpMapTypeLabels[x];
+}
+
+int snpMapTypeDefaultIndex(char *string)
+/* Convert from string to index representation. */
+{
+int x = stringIx(string, snpMapTypeDefault);
 if (x < 0)
-   errAbort("Unknown option '%s' in snpTypeLabelStringToEnum", string);
+   errAbort("Unknown option '%s' in snpMapTypeDefaultIndex", string);
 return x;
 }
 
-char *snpTypeLabelEnumToString(enum snpTypeEnum x)
-/* Convert from enum to string representation. */
+char *snpMapTypeDefaultString(int x)
+/* Convert from index to string representation. */
 {
-return snpTypeLabels[x];
+return snpMapTypeDefault[x];
 }
 
-enum snpTypeEnum snpTypeStateStringToEnum(char *string)
-/* Convert from string to enum representation. */
+int snpMapTypeDataIndex(char *string)
+/* Convert from string to index representation. */
 {
-int x = stringIx(string, snpTypeValue);
+int x = stringIx(string, snpMapTypeDataName);
 if (x < 0)
-   errAbort("Unknown option '%s' in snpTypeStateStringToEnum", string);
+   errAbort("Unknown option '%s' in snpMapTypeDataIndex", string);
 return x;
 }
 
-char *snpTypeStateEnumToString(enum snpTypeEnum x)
-/* Convert from enum to string representation. */
+char *snpMapTypeDataString(int x)
+/* Convert from index to string representation. */
 {
-return snpTypeValue[x];
+return snpMapTypeDataName[x];
 }
 
-enum snpTypeEnum snpTypeDefaultStringToEnum(char *string)
-/* Convert from string to enum representation. */
+/****** Some stuff for snpMapSource related controls *******/
+
+int snpMapSourceIndex(char *string)
+/* Convert from string to index representation. */
 {
-int x = stringIx(string, snpTypeValue);
+int x = stringIx(string, snpMapSourceStrings);
 if (x < 0)
-   errAbort("Unknown option '%s' in snpTypeDefaultStringToEnum", string);
+   errAbort("Unknown option '%s' in snpMapSourceIndex", string);
 return x;
 }
 
-char *snpTypeDefaultEnumToString(enum snpTypeEnum x)
-/* Convert from enum to string representation. */
+char *snpMapSourceString(int x)
+/* Convert from index to string representation. */
 {
-return snpTypeValue[x];
+return snpMapSourceStrings[x];
 }
 
-enum snpTypeEnum snpTypeDataStringToEnum(char *string)
-/* Convert from string to enum representation. */
+char *snpMapSourceLabel(int x)
+/* Convert from int to string representation. */
 {
-int x = stringIx(string, snpTypeDataName);
+return snpMapSourceLabels[x];
+}
+
+int snpMapSourceDefaultIndex(char *string)
+/* Convert from string to index representation. */
+{
+int x = stringIx(string, snpMapSourceDefault);
 if (x < 0)
-   errAbort("Unknown option '%s' in snpTypeDataStringToEnum", string);
+    errAbort("Unknown option '%s' in snpMapSourceDefaultIndex", string);
 return x;
 }
 
-char *snpTypeDataEnumToString(enum snpTypeEnum x)
-/* Convert from enum to string representation. */
+char *snpMapSourceDefaultString(int x)
+/* Convert from index to string representation. */
 {
-return snpTypeDataName[x];
+return snpMapSourceDefault[x];
 }
 
-/****** Some stuff for snp source related controls *******/
+int snpMapSourceDataIndex(char *string)
+/* Convert from string to index representation. */
+{
+int x = stringIx(string, snpMapSourceDataName);
+if (x < 0)
+   errAbort("Unknown option '%s' in snpMapSourceDataIndex", string);
+return x;
+}
 
-static char *snpSourceLabels[] = {
-    "BAC Overlaps",
-    "Mixed",
-    "Random",
-    "Other",
-    "Affymetrix Genotyping Array 10K",
-    "Affymetrix Genotyping Array 120K",
-};
+char *snpMapSourceDataString(int x)
+/* Convert from int to string representation. */
+{
+return snpMapSourceDataName[x];
+}
 
-static char *snpSourceStrings[] = {
-    "snpBAC.source",
-    "snpMIXED.source",
-    "snpRANDOM.source",
-    "snpOTHER.source",
-    "snpAffy10K.source",
-    "snpAffy120K.source",
-};
+/****** Some stuff for snpColor related controls *******/
 
-static char *snpSourceDataName[] = {
-    "BAC_OVERLAP",
-    "MIXED",
-    "RANDOM",
-    "OTHER",
-    "Affy10K",
-    "Affy120K",
-};
+int snpColorSourceIndex(char *string)
+/* Convert from string to index representation. */
+{
+int x = stringIx(string, snpColorSourceLabel);
+if (x < 0)
+   errAbort("Unknown option '%s' in snpColorSourceIndex", string);
+return x;
+}
 
-static char *snpSourceDefault[] = {
-    "blue",
-    "blue",
-    "red",
-    "black",
-    "green",
-    "green",
-};
+char *snpColorSourceString(int x)
+/* Convert from index to string representation. */
+{
+return snpColorSourceLabel[x];
+}
 
-static char *snpSourceValue[] = {
-    "red",
-    "green",
-    "blue",
-    "black",
-    "exclude",
-};
-
-enum snpSourceEnum snpSourceStringToEnum(char *string)
+int snpColorIndex(char *string)
 /* Convert from string to enum representation. */
+{
+int x = stringIx(string, snpColorLabel);
+if (x < 0)
+    errAbort("Unknown option '%s' in snpColorStringToEnum", string);
+return x;
+}
+
+enum snpColorEnum snpColorStringToEnum(char *string)
+/* Convert from string to enum representation. */
+{
+int x = stringIx(string, snpColorLabel);
+if (x < 0)
+    errAbort("Unknown option '%s' in snpColorStringToEnum", string);
+return x;
+}
+
+char *snpColorString(int x)
+/* Convert from index to string representation. */
+{
+return snpColorLabel[x];
+}
+
+/****** Some stuff for snpSource related controls *******/
+
+int snpSourceIndex(char *string)
+/* Convert from string to index representation. */
 {
 int x = stringIx(string, snpSourceStrings);
 if (x < 0)
-   errAbort("Unknown option '%s' in snpSourceStringToEnum", string);
+   errAbort("Unknown option '%s' in snpSourceIndex", string);
 return x;
 }
 
-char *snpSourceEnumToString(enum snpSourceEnum x)
-/* Convert from enum to string representation. */
+char *snpSourceString(int x)
+/* Convert from index to string representation. */
 {
 return snpSourceStrings[x];
 }
 
-char *snpSourceLabelEnumToString(enum snpSourceEnum x)
-/* Convert from enum to string representation. */
+char *snpSourceLabel(int x)
+/* Convert from int to string representation. */
 {
 return snpSourceLabels[x];
 }
 
-enum snpSourceEnum snpSourceDefaultStringToEnum(char *string)
-/* Convert from string to enum representation. */
+int snpSourceDefaultIndex(char *string)
+/* Convert from string to index representation. */
 {
-int x = stringIx(string, snpSourceValue);
+int x = stringIx(string, snpSourceDefault);
 if (x < 0)
-    errAbort("Unknown option '%s' in snpSourceDefaultStringToEnum", string);
+    errAbort("Unknown option '%s' in snpSourceDefaultIndex", string);
 return x;
 }
 
-char *snpSourceDefaultEnumToString(enum snpSourceEnum x)
-/* Convert from enum to string representation. */
+char *snpSourceDefaultString(int x)
+/* Convert from index to string representation. */
 {
-return snpSourceValue[x];
+return snpSourceDefault[x];
 }
 
-enum snpSourceEnum snpSourceDataStringToEnum(char *string)
-/* Convert from string to enum representation. */
+int snpSourceDataIndex(char *string)
+/* Convert from string to index representation. */
 {
 int x = stringIx(string, snpSourceDataName);
 if (x < 0)
-   errAbort("Unknown option '%s' in snpSourceDataStringToEnum", string);
+   errAbort("Unknown option '%s' in snpSourceDataIndex", string);
 return x;
 }
 
-char *snpSourceDataEnumToString(enum snpSourceEnum x)
-/* Convert from enum to string representation. */
+char *snpSourceDataString(int x)
+/* Convert from index to string representation. */
 {
 return snpSourceDataName[x];
+}
+
+/****** Some stuff for snpMolType related controls *******/
+
+int snpMolTypeIndex(char *string)
+/* Convert from string to index representation. */
+{
+int x = stringIx(string, snpMolTypeStrings);
+if (x < 0)
+   errAbort("Unknown option '%s' in snpMolTypeStringToEnum", string);
+return x;
+}
+
+char *snpMolTypeString(int x)
+/* Convert from index to string representation. */
+{
+return snpMolTypeStrings[x];
+}
+
+char *snpMolTypeLabel(int x)
+/* Convert from index to string representation. */
+{
+return snpMolTypeLabels[x];
+}
+
+int snpMolTypeDefaultIndex(char *string)
+/* Convert from string to enum representation. */
+{
+int x = stringIx(string, snpMolTypeDefault);
+if (x < 0)
+    errAbort("Unknown option '%s' in snpMolTypeDefaultIndex", string);
+return x;
+}
+
+char *snpMolTypeDefaultString(int x)
+/* Convert from index to string representation. */
+{
+return snpMolTypeDefault[x];
+}
+
+int snpMolTypeDataIndex(char *string)
+/* Convert from string to index representation. */
+{
+int x = stringIx(string, snpMolTypeDataName);
+if (x < 0)
+   errAbort("Unknown option '%s' in snpMolTypeDataIndex", string);
+return x;
+}
+
+char *snpMolTypeDataString(int x)
+/* Convert from index to string representation. */
+{
+return snpMolTypeDataName[x];
+}
+
+/****** Some stuff for snpClass related controls *******/
+
+int snpClassIndex(char *string)
+/* Convert from string to index representation. */
+{
+int x = stringIx(string, snpClassStrings);
+if (x < 0)
+   errAbort("Unknown option '%s' in snpClassStringToEnum", string);
+return x;
+}
+
+char *snpClassString(int x)
+/* Convert from index to string representation. */
+{
+return snpClassStrings[x];
+}
+
+char *snpClassLabel(int x)
+/* Convert from index to string representation. */
+{
+return snpClassLabels[x];
+}
+
+int snpClassDefaultIndex(char *string)
+/* Convert from string to enum representation. */
+{
+int x = stringIx(string, snpClassDefault);
+if (x < 0)
+    errAbort("Unknown option '%s' in snpClassDefaultIndex", string);
+return x;
+}
+
+char *snpClassDefaultString(int x)
+/* Convert from index to string representation. */
+{
+return snpClassDefault[x];
+}
+
+int snpClassDataIndex(char *string)
+/* Convert from string to index representation. */
+{
+int x = stringIx(string, snpClassDataName);
+if (x < 0)
+   errAbort("Unknown option '%s' in snpClassDataIndex", string);
+return x;
+}
+
+char *snpClassDataString(int x)
+/* Convert from index to string representation. */
+{
+return snpClassDataName[x];
+}
+
+/****** Some stuff for snpValid related controls *******/
+
+int snpValidIndex(char *string)
+/* Convert from string to index representation. */
+{
+int x = stringIx(string, snpValidStrings);
+if (x < 0)
+   errAbort("Unknown option '%s' in snpValidStringToEnum", string);
+return x;
+}
+
+char *snpValidString(int x)
+/* Convert from index to string representation. */
+{
+return snpValidStrings[x];
+}
+
+char *snpValidLabel(int x)
+/* Convert from index to string representation. */
+{
+return snpValidLabels[x];
+}
+
+char *snpValidDefaultString(int x)
+/* Convert from index to string representation. */
+{
+return snpValidDefault[x];
+}
+
+int snpValidDataIndex(char *string)
+/* Convert from string to enum representation. */
+{
+int x = stringIx(string, snpValidDataName);
+if (x < 0)
+   errAbort("Unknown option '%s' in snpValidDataIndex", string);
+return x;
+}
+
+char *snpValidDataString(int x)
+/* Convert from index to string representation. */
+{
+return snpValidDataName[x];
+}
+
+/****** Some stuff for snpFunc related controls *******/
+
+int snpFuncIndex(char *string)
+/* Convert from string to index representation. */
+{
+int x = stringIx(string, snpFuncStrings);
+if (x < 0)
+   errAbort("Unknown option '%s' in snpFuncIndex", string);
+return x;
+}
+
+char *snpFuncString(int x)
+/* Convert from index to string representation. */
+{
+return snpFuncStrings[x];
+}
+
+char *snpFuncLabel(int x)
+/* Convert from index to string representation. */
+{
+return snpFuncLabels[x];
+}
+
+char *snpFuncDefaultString(int x)
+/* Convert from index to string representation. */
+{
+return snpFuncDefault[x];
+}
+
+int snpFuncDataIndex(char *string)
+/* Convert from string to enum representation. */
+{
+int x = stringIx(string, snpFuncDataName);
+if (x < 0)
+   errAbort("Unknown option '%s' in snpFuncDataIndex", string);
+return x;
+}
+
+char *snpFuncDataString(int x)
+/* Convert from index to string representation. */
+{
+return snpFuncDataName[x];
 }
 
 /****** Some stuff for fishClones related controls *******/

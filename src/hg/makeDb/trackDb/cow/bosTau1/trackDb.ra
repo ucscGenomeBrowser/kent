@@ -19,4 +19,22 @@ shortCircuit 1
 termRegex (ctg|BX|AL)[0-9]+
 query select chrom,chromStart,chromEnd,contig from %s where contig like '%s'
 searchPriority 5
-                                                                                
+
+track all_est
+shortLabel $Organism ESTs
+longLabel $Organism ESTs Including Unspliced
+group rna
+priority 57
+visibility hide
+spectrum on
+type psl est
+
+track all_mrna
+shortLabel $Organism mRNAs
+longLabel $Organism mRNAs from GenBank 
+group rna
+priority 54
+visibility pack
+spectrum on
+type psl .
+cdsDrawOptions enabled

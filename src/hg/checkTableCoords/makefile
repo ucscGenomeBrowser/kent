@@ -20,9 +20,9 @@ install:
 	mv $A $(HOME)/bin/$(MACHTYPE)/$A
 
 test:
-	cd tests; make
+	cd tests && ${MAKE}
 
 clean:
 	-rm -f $A *.o
-	cd tests; make clean
+	cd tests && ${MAKE} clean
 

@@ -41,7 +41,7 @@
 #define	WIG_NO_DATA	128
 #define MAX_BYTE_VALUE	127
 
-static char const rcsid[] = "$Id: wigAsciiToBinary.c,v 1.24 2004/08/03 18:57:27 hiram Exp $";
+static char const rcsid[] = "$Id: wigAsciiToBinary.c,v 1.25 2004/10/28 08:01:19 kent Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -76,7 +76,9 @@ static char * name = (char *) NULL;	/* to specify feature name	*/
 static double minVal = BIGNUM;          /* minimum value that is allowed in data. */
 static double maxVal = BIGNUM;          /* maximum value that is allowed in data. */
 static boolean trimVals = FALSE;        /* should the data be trimmed by min & maxVal? */
+
 static void usage()
+/* Explain how to use program. */
 {
 errAbort(
     "wigAsciiToBinary - convert ascii Wiggle data to binary file\n"
@@ -86,7 +88,7 @@ errAbort(
     "\t-offset=N - add N to all coordinates, default 0\n"
     "\t-binsize=N - # of points per database row entry, default 1024\n"
     "\t-dataSpan=N - # of bases spanned for each data point, default 1\n"
-    "\t-chrom=chrN - this data is for chrN\n"
+    "\t-chrom=chrN - this data is for chrN. Use with twoColumn output\n"
     "\t-wibFile=chrN - to name the .wib output file\n"
     "\t-name=<feature name> - to name the feature, default chrN or\n"
     "\t\t-chrom= specified\n"
@@ -95,9 +97,13 @@ errAbort(
     "\t-maxVal=N - maximum allowable data value, values will be capped here.\n"
     "If the name of the input files are of the form: chrN.<....> this will\n"
     "\tset the output file names.  Otherwise use the -wibFile option.\n"
-    "Each ascii file is a two column file.  Whitespace separated.\n"
-    "First column of data is a chromosome location, 1-relative (IN NUMERICAL ORDER).\n"
-    "Second column is data value for that location, any real data value allowed."
+    "Generally the ascii files have one to three columns.\n"
+    "\t<sequence name> <sequence position> <data value>   or \n"
+    "\t<sequence position> <data value> or\n"
+    "\t<data value>\n"
+    "If the sequence position is not specified in a line, it is assumed to be\n"
+    "one past the previous position.  If the sequence name is not specified\n"
+    "it is the same as the previous line.\n"
 );
 }
 
@@ -196,19 +202,25 @@ fileOffsetBegin = fileOffset;
 
 }	/*	static void output_row()	*/
 
+void badFormat(struct lineFile *lf)
+/* Complain about format. */
+{
+errAbort("Badly formatted line %d of %s", lf->lineIx, lf->fileName);
+}
+
 void wigAsciiToBinary( int argc, char *argv[] )
 {
 int i = 0;				/* general purpose int counter	*/
 struct lineFile *lf;			/* for line file utilities	*/
 char * fileName;			/* the basename of the input file */
 char *line = (char *) NULL;		/* to receive data input line	*/
-char *words[2];				/* to split data input line	*/
+char *words[4];				/* to split data input line	*/
 int wordCount = 0;			/* result of split	*/
-int lineCount = 0;			/* counting all input lines	*/
 int validLines = 0;			/* counting only lines with data */
 unsigned long long previousOffset = 0;	/* for data missing detection */
 double dataValue = 0.0;				/* from data input	*/
 char *wigfile = (char *) NULL;	/*	file name of wiggle database file */
+boolean firstInChrom;		/* Is this the first line in chromosome? */
 
 /*	for each input data file	*/
 for (i = 1; i < argc; ++i)
@@ -218,13 +230,13 @@ for (i = 1; i < argc; ++i)
     fileName = basename(argv[i]);
     if (name)		/*	Is the name of this feature specified ?	*/
 	{
-	    snprintf( featureName, sizeof(featureName) - 1, "%s", name);
+	safef( featureName, sizeof(featureName) - 1, "%s", name);
 	}
     if (chrom)		/*	Is the chrom name specified ? */
 	{
 	chromName = cloneString(chrom);
 	if (! name)	/*	that names the feature too if not already */
-	    snprintf( featureName, sizeof(featureName) - 1, "%s", chrom);
+	    safef( featureName, sizeof(featureName) - 1, "%s", chrom);
 	}
     /*	Name mangling to determine output file name */
     if (wibFile)	/*	when specified, simply use it	*/
@@ -242,7 +254,7 @@ for (i = 1; i < argc; ++i)
 	    if (! chrom)	/*	if not already taken care of	*/
 		chromName = cloneString(tmpString);
 	    if (! name && ! chrom)	/*	if not already done	*/
-		snprintf(featureName, sizeof(featureName) - 1, "%s", tmpString);
+		safef(featureName, sizeof(featureName) - 1, "%s", tmpString);
 	    freeMem(tmpString);
 	    } else {
 	    errAbort("Can not determine output file name, no -wibFile specified\n");
@@ -250,40 +262,61 @@ for (i = 1; i < argc; ++i)
 	}
 
     verbose(2, "output files: %s, %s\n", binfile, wigfile);
-    lineCount = 0;	/* to count all lines	*/
     validLines = 0;	/* to count only lines with data */
     rowCount = 0;	/* to count rows output */
     bincount = 0;	/* to count up to binsize	*/
     fileOffset = 0;	/* current location within binary data file	*/
     fileOffsetBegin = 0;/* location in binary data file where this bin starts*/
-    if (data_values) freeMem((void *) data_values);
-    if (validData) freeMem((void *) validData);
-    data_values = (double *) needMem( (size_t) (binsize * sizeof(double)));
-    validData = (unsigned char *)
-		needMem( (size_t) (binsize * sizeof(unsigned char)));
+    firstInChrom = TRUE;
+    freeMem(data_values);
+    freeMem(validData);
+    data_values =  needMem( (size_t) (binsize * sizeof(double)));
+    validData = needMem( (size_t) (binsize * sizeof(unsigned char)));
     overallLowerLimit = 1.0e+300;	/* for the complete set of data */
     overallUpperLimit = -1.0e+300;	/* for the complete set of data */
     binout = mustOpen(binfile,"w");	/*	binary data file	*/
     wigout = mustOpen(wigfile,"w");	/*	table row definition file */
     lf = lineFileOpen(argv[i], TRUE);	/*	input file	*/
-    while (lineFileNext(lf, &line, NULL))
+    while (lineFileNextReal(lf, &line))
 	{
 	boolean readingFrameSlipped;
 	char *valEnd;
 	char *val;
-
-	++lineCount;
-	chopPrefixAt(line, '#'); /* ignore any comments starting with # */
-	if (strlen(line) < 3)	/*	anything left on this line */
-	    continue;		/*	no, go to next line	*/
-
 	++validLines;
-	wordCount = chopByWhite(line, words, 2);
-	if (wordCount < 2)
-	    errAbort("Expecting at least two words at line %d, found %d",
-		lineCount, wordCount);
-	Offset = atoll(words[0]);
-	val = words[1];
+	wordCount = chopByWhite(line, words, ArraySize(words));
+	if (wordCount == 1)
+	    {
+	    Offset += 1;
+	    val = words[0];
+	    }
+	else if (wordCount == 2)
+	    {
+	    Offset = atoll(words[0]) - 1;
+	    val = words[1];
+	    }
+	else if (wordCount == 3)
+	    {
+	    char *newChrom = words[0];
+	    boolean sameChrom = (chromName == NULL || sameString(chromName, newChrom));
+	    Offset = atoll(words[1]) - 1;
+	    val = words[2];
+	    if (!sameChrom)
+		{
+		output_row();
+		firstInChrom = TRUE;
+		freez(&chromName);
+		}
+	    if (chromName == NULL)
+		chromName = cloneString(newChrom);
+	    }
+	else
+	    {
+	    val = NULL;
+	    badFormat(lf);
+	    }
+	if (Offset < 0)
+	    errAbort("Illegal offset %llu at line %d of %s", Offset+1, lf->lineIx,
+	    	lf->fileName);
 	dataValue = strtod(val, &valEnd);
 	if(trimVals)
 	    {
@@ -291,18 +324,16 @@ for (i = 1; i < argc; ++i)
 	    dataValue = min(maxVal, dataValue);
 	    }
 	if ((*val == '\0') || (*valEnd != '\0'))
-	    errAbort("Not a valid float at line %d: %s\n", lineCount, words[1]);
-	if (Offset < 1)
-	    errAbort("Illegal offset: %llu at line %d, dataValue: %g", Offset, 
-		    lineCount, dataValue);
-	Offset -= 1;	/* our coordinates are zero relative half open */
+	    errAbort("Not a valid float at line %d: %s\n", lf->lineIx, val);
 	/* see if this is the first time through, establish chromStart 	*/
-	if (validLines == 1) {
+	if (firstInChrom) {
 	    chromStart = Offset;
 	    verbose(2, "first offset: %llu\n", chromStart);
 	}
-	else if ((validLines > 1) && (Offset <= previousOffset))
-	    errAbort("ERROR: chrom positions not in order. previous: %llu >= %llu <-current", previousOffset+1, Offset+1);
+	else if (!firstInChrom && (Offset <= previousOffset))
+	    errAbort("ERROR: chrom positions not in order. line %d of %s\n"
+	             "previous: %llu >= %llu <-current", 
+		     lf->lineIx, lf->fileName, previousOffset+1, Offset+1);
 	/* if we are working on a zoom level and the data is not exactly
 	 * spaced according to the span, then we need to put each value
 	 * in its own row in order to keep positioning correct for these
@@ -310,7 +341,7 @@ for (i = 1; i < argc; ++i)
 	 * multiple of dataSpan
 	 */
 	readingFrameSlipped = FALSE;
-	if ((validLines > 1) && (dataSpan > 1))
+	if (!firstInChrom && (dataSpan > 1))
 	    {
 	    int skippedBases;
 	    int spansSkipped;
@@ -321,12 +352,12 @@ for (i = 1; i < argc; ++i)
 	    }
 	if (readingFrameSlipped)
 	    {
-	    verbose(2, "data not spanning %llu bases, prev: %llu, this: %llu, at line: %d\n", dataSpan, previousOffset, Offset, lineCount);
+	    verbose(2, "data not spanning %llu bases, prev: %llu, this: %llu, at line: %d\n", dataSpan, previousOffset, Offset, lf->lineIx);
 	    output_row();
 	    chromStart = Offset;	/*	a full reset here	*/
 	    }
 	/*	Check to see if data is being skipped	*/
-	else if ( (validLines > 1) && (Offset > (previousOffset + dataSpan)) )
+	else if ( (!firstInChrom) && (Offset > (previousOffset + dataSpan)) )
 	    {
 	    unsigned long long off;
 	    unsigned long long fillSize;	/* number of bytes */
@@ -345,7 +376,7 @@ for (i = 1; i < argc; ++i)
 			Offset, previousOffset);
 		output_row();
 		chromStart = Offset;	/*	a full reset here	*/
-		} else {
+	    } else {
 		fillSize = 0;
 		/*	fill missing data with NO_DATA indication	*/
 		for (off = previousOffset + dataSpan; off < Offset;
@@ -382,6 +413,7 @@ for (i = 1; i < argc; ++i)
 	    output_row();
 	    }
 	previousOffset = Offset;
+	firstInChrom = FALSE;
         }	/*	reading file input loop end	*/
     /*	Done with input file, any data points left in this bin ?	*/
     if (bincount)
@@ -389,8 +421,8 @@ for (i = 1; i < argc; ++i)
 	output_row();
 	}
     verbose(2, "fini: %s, read %d lines, table rows: %llu, data bytes: %lld\n",
-	    argv[i], lineCount, rowCount, fileOffset);
-    verbose(1, "%s: data limits: [%g:%g], range: %g\n", chromName,
+	    argv[i], lf->lineIx, rowCount, fileOffset);
+    verbose(1, "data limits: [%g:%g], range: %g\n", 
 	overallLowerLimit, overallUpperLimit,
 	overallUpperLimit - overallLowerLimit);
     lineFileClose(&lf);

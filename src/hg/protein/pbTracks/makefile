@@ -37,7 +37,7 @@ debug: $O
 	mv a.out $A
 
 lib:
-	cd ../../lib; make
+	cd ../../lib && ${MAKE}
 
 clean:
 	rm -f $O $A

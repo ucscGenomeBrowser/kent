@@ -45,13 +45,16 @@ public class ApacheReport {
     *  @return          The PrintWriter object for daily file report.
     */
     static PrintWriter setDailyFile(String outpath, int year, int month, int day) throws Exception {
-      String filename = outpath + year + getMonth(month) + day + ".html";
+      DecimalFormat df2 = new DecimalFormat("#,#00");
+      String filename = outpath + year + getMonth(month) + df2.format(day)
+                        + ".html";
       System.out.println("\nWriting daily report to \n" + filename + "\n");
       String url = "/usr/local/apache/htdocs/";
       if (outpath.startsWith(url)) {
         String urlpath = outpath.replaceFirst(url, "http://hgwdev.cse.ucsc.edu/");
         System.out.println("Try the URL directly: \n" +
-                           urlpath + year + getMonth(month) + day + ".html");
+                           urlpath + year + getMonth(month) + df2.format(day) 
+                           + ".html");
       }
       FileWriter fout = new FileWriter(filename);
       PrintWriter pw = new PrintWriter(fout);
@@ -85,6 +88,7 @@ public class ApacheReport {
       String thisMonth = getMonth(nowMonth);
 
       if (!thisMonth.equals(yestMonth)) {
+        System.out.println("\n========================================\n");
         System.out.println("\n" + getMonth(month)
                    + " monthly report available at: \n" + fileMonth + "\n");
         String url = "/usr/local/apache/htdocs/";
@@ -421,10 +425,8 @@ public class ApacheReport {
      throws Exception {
 
     File f = new File(fileMonth);
-    // System.exit(1);
     FileReader  frMonth = new FileReader(f);
     BufferedReader  brMonth = new BufferedReader(frMonth);
-
 
     // get existing file and load into linklist,
     // filtering out the closing HTML tags.
@@ -451,12 +453,14 @@ public class ApacheReport {
     // print LinkedList
     ListIterator iter = ll.listIterator(0);
 
-    String outLine;
-
+    String outLine = "";
     while (iter.hasNext()) {
-      outLine = iter.next().toString();
-      // System.out.println(outLine);
-      pwMonth.print(outLine + "\n");
+      String prevLine = outLine; 
+      outLine = iter.next().toString() + "\n";
+      // don't reprint line if run twice in same day
+      if (! outLine.equals(prevLine)) {
+        pwMonth.print(outLine);
+      }
     }
 
     // print footer back.
@@ -480,7 +484,7 @@ public class ApacheReport {
     newDataLine = "<TR><TD>" + index + "</TD> " +
                       "<TD>" + access + "</TD> " +
                       "<TD>" + error + "</TD> " +
-                      "<TD>" + totPercent + "</TD> </TR>\n";
+                      "<TD>" + totPercent + "</TD> </TR>";
     return(newDataLine);
   }
 }

@@ -18,7 +18,7 @@ checkExp: $O $(MYLIBS)
 	strip $(HOME)/bin/$(MACHTYPE)/checkExp
 
 lib:
-	cd ../../lib; make ; cd ../hg/lib ; make
+	cd ../../lib && ${MAKE}
 
 test: chr3 chr9 chr11
 %:	input/%.bed

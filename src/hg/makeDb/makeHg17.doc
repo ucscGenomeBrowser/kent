@@ -5425,6 +5425,9 @@ axtChain -scoreScheme=/cluster/data/blastz/HoxD55.q \
     # Add entries for chainGalGal2, netGalGal2, syntenyGalGal2 to 
     # human/hg17 trackDb
 
+# XENOPUS BLASTZ/CHAIN/NET (DONE 9/24/04 jk)
+# see makeXenTro1.doc and search for zb.hg17
+# The results of this are also symlinked under hg17/bed
 
 # GENERATE GALGAL2 MAF FOR MULTIZ FROM NET (DONE 6/23/04 angie)
     ssh eieio
@@ -9703,5 +9706,28 @@ line+ psl/$(root1)_$(root2).psl}
         hg17 genomicSuperDups stdin
     # clean up
     rm bed.tab
+
+# ECGENE TRACK (DONE, 2004-10-29, hartera)
+    ssh eieio
+    mkdir -p /cluster/data/hg17/bed/ECgene.2004-10-27
+    ln -s /cluster/data/hg17/bed/ECgene.2004-10-27 \
+          /cluster/data/hg17/bed/ECgene
+    cd  /cluster/data/hg17/bed/ECgene
+    wget \
+"http://genome.ewha.ac.kr/ECgene/download/v1.2_ECgene/v1.2_hg17_low_gene.txt.gz"
+    wget \
+"http://genome.ewha.ac.kr/ECgene/download/v1.2_ECgene/v1.2_hg17_low_pep.txt.gz"
+    gunzip *.gz
+
+    # load database
+    ssh hgwdev
+    cd /cluster/data/hg17/bed/ECgene
+    ldHgGene -predTab hg17 ECgene v1.2_hg17_low_gene.txt
+    # 646778 gene predictions
+    hgPepPred hg17 tab ECgenePep v1.2_hg17_low_pep.txt
+    rm *.tab
+    nice gzip *.txt
+
+
 
 

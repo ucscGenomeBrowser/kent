@@ -22,7 +22,7 @@
 #define CDS_HELP_PAGE "../goldenPath/help/hgCodonColoring.html"
 #define CDS_MRNA_HELP_PAGE "../goldenPath/help/hgCodonColoringMrna.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.145 2004/10/19 22:02:32 kate Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.147 2004/11/02 10:07:15 daryl Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -79,7 +79,25 @@ printf(" ");
 smroeDropDown("stsMapRat.type", stsMapRatMap);
 }
 
-void snpSourceFilterButtons(char *filterTypeVar, char *filterTypeVal)
+void snpMapTypeFilterButtons(char *filterTypeVar, char *filterTypeVal)
+/* Put up some filter buttons. */
+{
+radioButton(filterTypeVar, filterTypeVal, "include");
+radioButton(filterTypeVar, filterTypeVal, "exclude");
+}
+
+void snpColorFilterButtons(char *filterTypeVar, char *filterTypeVal)
+/* Put up some filter buttons. */
+{
+radioButton(filterTypeVar, filterTypeVal, "Source");
+radioButton(filterTypeVar, filterTypeVal, "MolType");
+radioButton(filterTypeVar, filterTypeVal, "Class");
+radioButton(filterTypeVar, filterTypeVal, "Valid");
+radioButton(filterTypeVar, filterTypeVal, "Func");
+radioButton(filterTypeVar, filterTypeVal, "Black");
+}
+
+void snpFilterButtons(char *filterTypeVar, char *filterTypeVal)
 /* Put up some filter buttons. */
 {
 radioButton(filterTypeVar, filterTypeVal, "red");
@@ -89,42 +107,90 @@ radioButton(filterTypeVar, filterTypeVal, "black");
 radioButton(filterTypeVar, filterTypeVal, "exclude");
 }
 
-void snpTypeFilterButtons(char *filterTypeVar, char *filterTypeVal)
-/* Put up some filter buttons. */
+void snpMapUi(struct trackDb *tdb)
+/* Put up UI snpMap data. */
 {
-radioButton(filterTypeVar, filterTypeVal, "include");
-radioButton(filterTypeVar, filterTypeVal, "exclude");
-}
-
-void snpUi(struct trackDb *tdb)
-/* Put up UI snpMarkers. */
-{
-char *snpSourceCart[snpSourceCount];
-char *snpTypeCart[snpTypeCount];
-int   snpSource = 0;
-int   snpType = 0;
+int   snpMapSource = 0;
+int   snpMapType = 0;
 
 if (strncmp(database,"hg",2))
     return;
 printf("<BR><B>Variant Sources:</B><BR>\n");
-for (snpSource=0; snpSource<snpSourceCount; snpSource++)
+for (snpMapSource=0; snpMapSource<ArraySize(snpMapSourceCart); snpMapSource++)
     {
-    snpSourceCart[snpSource] = 
-	cartUsualString(cart, snpSourceEnumToString((enum snpSourceEnum)snpSource),
-			snpSourceDefaultEnumToString((enum snpSourceEnum)snpSource) );
-    snpSourceFilterButtons(snpSourceEnumToString((enum snpSourceEnum)snpSource), 
-			   snpSourceCart[snpSource]);
-    printf(" - <B>%s</B><BR>\n",snpSourceLabelEnumToString((enum snpSourceEnum)snpSource));
+    snpMapSourceCart[snpMapSource] = 
+	cartUsualString(cart, snpMapSourceString(snpMapSource),	snpMapSourceDefaultString(snpMapSource));
+    snpFilterButtons(snpMapSourceString(snpMapSource), snpMapSourceCart[snpMapSource]);
+    printf(" - <B>%s</B><BR>\n",snpMapSourceLabel(snpMapSource));
     }
 printf("<BR><B>Variant Types:</B><BR>\n");
-for (snpType=0; snpType<snpTypeCount; snpType++)
+for (snpMapType=0; snpMapType<3; snpMapType++)
     {
-    snpTypeCart[snpType] = 
-	cartUsualString(cart, snpTypeEnumToString((enum snpTypeEnum)snpType), 
-			snpTypeDefaultEnumToString((enum snpTypeEnum)snpType));
-    snpTypeFilterButtons(snpTypeEnumToString((enum snpTypeEnum)snpType), 
-			 snpTypeCart[snpType]);
-    printf(" - <B>%s</B><BR>\n",snpTypeLabelEnumToString((enum snpTypeEnum)snpType));
+    snpMapTypeCart[snpMapType] = 
+	cartUsualString(cart, snpMapTypeString(snpMapType), snpMapTypeDefaultString(snpMapType));
+    snpMapTypeFilterButtons(snpMapTypeString(snpMapType), snpMapTypeCart[snpMapType]);
+    printf(" - <B>%s</B><BR>\n",snpMapTypeLabelStr(snpMapType));
+    }
+}
+
+void snpUi(struct trackDb *tdb)
+/* Put up UI snp data. */
+{
+int   snpSourceCount  = ArraySize(snpSourceCart);
+int   snpMolTypeCount = ArraySize(snpMolTypeCart);
+int   snpClassCount   = ArraySize(snpClassCart);
+int   snpValidCount   = ArraySize(snpValidCart);
+int   snpFuncCount    = ArraySize(snpFuncCart);
+int   snpSource  = 0;
+int   snpMolType = 0;
+int   snpClass   = 0;
+int   snpValid   = 0;
+int   snpFunc    = 0;
+
+if (strncmp(database,"hg",2))
+    return;
+printf("<BR><B>Color Specification:</B><BR>\n");
+    snpColorSourceCart[0] = cartUsualString(cart, "snpColor", "Source" );
+    snpColorFilterButtons("snpColor", snpColorSourceCart[0]);
+printf("<BR><BR><B>Sources:</B><BR>\n");
+for (snpSource=0; snpSource < snpSourceCount; snpSource++)
+    {
+    snpSourceCart[snpSource] = 
+	cartUsualString(cart, snpSourceString(snpSource), snpSourceDefaultString(snpSource));
+    snpFilterButtons(snpSourceString(snpSource), snpSourceCart[snpSource]);
+    printf(" - <B>%s</B><BR>\n",snpSourceLabel(snpSource));
+    }
+printf("<BR><B>Molecule Types:</B><BR>\n");
+for (snpMolType=0; snpMolType<snpMolTypeCount; snpMolType++)
+    {
+    snpMolTypeCart[snpMolType] = 
+	cartUsualString(cart, snpMolTypeString(snpMolType), snpMolTypeDefaultString(snpMolType));
+    snpFilterButtons(snpMolTypeString(snpMolType), snpMolTypeCart[snpMolType]);
+    printf(" - <B>%s</B><BR>\n",snpMolTypeLabel(snpMolType));
+    }
+printf("<BR><B>Classes:</B><BR>\n");
+for (snpClass=0; snpClass<snpClassCount; snpClass++)
+    {
+    snpClassCart[snpClass] = 
+	cartUsualString(cart, snpClassString(snpClass), snpClassDefaultString(snpClass));
+    snpFilterButtons(snpClassString(snpClass), snpClassCart[snpClass]);
+    printf(" - <B>%s</B><BR>\n",snpClassLabel(snpClass));
+    }
+printf("<BR><B>Validation Status:</B><BR>\n");
+for (snpValid=0; snpValid<snpValidCount; snpValid++)
+    {
+    snpValidCart[snpValid] = 
+	cartUsualString(cart, snpValidString(snpValid), snpValidDefaultString(snpValid));
+    snpFilterButtons(snpValidString(snpValid), snpValidCart[snpValid]);
+    printf(" - <B>%s</B><BR>\n",snpValidLabel(snpValid));
+    }
+printf("<BR><B>Functional classification:</B><BR>\n");
+for (snpFunc=0; snpFunc<snpFuncCount; snpFunc++)
+    {
+    snpFuncCart[snpFunc] = 
+	cartUsualString(cart, snpFuncString(snpFunc), snpFuncDefaultString(snpFunc));
+    snpFilterButtons(snpFuncString(snpFunc), snpFuncCart[snpFunc]);
+    printf(" - <B>%s</B><BR>\n",snpFuncLabel(snpFunc));
     }
 }
 
@@ -762,30 +828,91 @@ puts("<P><B>Short (2-30 base) sequence:</B>");
 cgiMakeTextVar(oligoMatchVar, oligo, 45);
 }
 
+struct wigMafSpecies 
+    {
+    struct wigMafSpecies *next;
+    char *name;
+    int group;
+    };
+
 void wigMafUi(struct trackDb *tdb)
 /* UI for maf/wiggle track
  * NOTE: calls wigUi */
 {
-char *speciesOrder = trackDbRequiredSetting(tdb, SPECIES_ORDER_VAR);
+char *speciesOrder = trackDbSetting(tdb, SPECIES_ORDER_VAR);
+char *speciesGroup = trackDbSetting(tdb, SPECIES_GROUP_VAR);
 char *species[100];
-int speciesCt = chopLine(speciesOrder, species);
+char *groups[20];
+char sGroup[24];
+char *treeImage = NULL;
+struct wigMafSpecies *wmSpecies, *wmSpeciesList = NULL;
+int group, prevGroup;
+int speciesCt = 0, groupCt = 1;
 int i;
 char option[64];
+
+if (speciesOrder == NULL && speciesGroup == NULL)
+    errAbort(
+      "Track %s missing required trackDb setting: speciesOrder or speciesGroup",
+                tdb->tableName);
+if (speciesGroup)
+    groupCt = chopLine(speciesGroup, groups);
+
+for (group = 0; group < groupCt; group++)
+    {
+    if (groupCt != 1 || !speciesOrder)
+        {
+        safef(sGroup, sizeof sGroup, "%s%s", 
+                                SPECIES_GROUP_PREFIX, groups[group]);
+        speciesOrder = trackDbRequiredSetting(tdb, sGroup);
+        }
+    speciesCt = chopLine(speciesOrder, species);
+    for (i = 0; i < speciesCt; i++)
+        {
+        AllocVar(wmSpecies);
+        wmSpecies->name = cloneString(species[i]);
+        wmSpecies->group = group;
+        slAddHead(&wmSpeciesList, wmSpecies);
+        }
+    }
+slReverse(&wmSpeciesList);
 
 //#define CODON_HIGHLIGHT
 #ifdef CODON_HIGHLIGHT
 char *currentCodonMode;
 #endif
+
 puts("<P><B>Pairwise alignments:</B><BR>" );
-puts("<TABLE><TR>");
-for (i = 0; i < speciesCt; i++)
+treeImage = trackDbSetting(tdb, "treeImage");
+if (treeImage)
+    printf("<IMG ALIGN=right SRC=\"/images/%s\">", treeImage);
+if (groupCt == 1)
+    puts("<TABLE><TR>");
+group = -1;
+for (wmSpecies = wmSpeciesList, i = 0; wmSpecies != NULL; 
+                wmSpecies = wmSpecies->next, i++)
     {
+    char *label;
+    prevGroup = group;
+    group = wmSpecies->group;
+    if (groupCt != 1 && group != prevGroup)
+        {
+        i = 0;
+        if (group != 0)
+            puts("</TR></TABLE>");
+        printf("<P>&nbsp;&nbsp;<B><EM>%s</EM></B>", groups[group]);
+        puts("<TABLE><TR>");
+        }
     if (i != 0 && (i % 6) == 0)
         puts("</TR><TR>");
     puts("<TD>");
-    safef(option, sizeof(option), "%s.%s", tdb->tableName, species[i]);
+    safef(option, sizeof(option), "%s.%s", tdb->tableName, wmSpecies->name);
     cgiMakeCheckBox(option, cartUsualBoolean(cart, option, TRUE));
-    printf ("%s<BR>", species[i]);
+    label = hOrganism(wmSpecies->name);
+    if (label == NULL)
+        label = wmSpecies->name;
+    *label = tolower(*label);
+    printf ("%s<BR>", label);
     puts("</TD>");
     }
 puts("</TR></TABLE><BR>");
@@ -796,7 +923,7 @@ cgiMakeCheckBox(option, cartCgiUsualBoolean(cart, option, FALSE));
 puts("Display bases identical to reference as dots<BR>" );
 safef(option, sizeof option, "%s.%s", tdb->tableName, MAF_CHAIN_VAR);
 cgiMakeCheckBox(option, cartCgiUsualBoolean(cart, option, FALSE));
-puts("Display unaligned bases with spanning chain as gaps with break indicator" );
+puts("Display unaligned bases with spanning chain as o's" );
 
 puts("<P><B>Codon highlighting:</B></P>" );
 
@@ -999,6 +1126,8 @@ else if (sameString(track, "stsMapMouseNew"))
 else if (sameString(track, "stsMapRat"))
         stsMapRatUi(tdb);
 else if (sameString(track, "snpMap"))
+        snpMapUi(tdb);
+else if (sameString(track, "snp"))
         snpUi(tdb);
 else if (sameString(track, "cbr_waba"))
         cbrWabaUi(tdb);

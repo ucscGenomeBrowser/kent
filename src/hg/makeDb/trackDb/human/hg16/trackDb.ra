@@ -526,7 +526,12 @@ wiggle chr7_phyloHMMcons_CFTR
 yLineOnOff Off
 pairwise CFTR 20
 autoScaleDefault Off
-speciesOrder chimp orangutan baboon macaque vervet lemur rabbit rn3 mm3 cow pig horse cat dog ajbat cpbat hedgehog opossum dunnart platypus chicken zfish tetra fr1
+treeImage phylo/cftr25.gif
+speciesGroups primate placental mammal vertebrate
+sGroup_primate chimp orangutan baboon macaque vervet lemur 
+sGroup_placental rabbit rn3 mm3 cow pig horse cat dog ajbat cpbat hedgehog 
+sGroup_mammal opossum dunnart platypus 
+sGroup_vertebrate chicken zfish tetra fr1
 
 track lineageMutations
 shortLabel LineageMutations
@@ -1501,6 +1506,7 @@ shortLabel Promoter/Stanford
 longLabel Stanford Promoter Activity in ENCODE Regions
 group encode
 priority 20.1
+chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 visibility hide
 type expRatio
 expTable encode_Stanford_PromotersExps
@@ -1515,6 +1521,7 @@ longLabel NHGRI DNaseI-Hypersensitive Sites in ENCODE Regions
 group encode
 priority 25.1
 color 0,0,255
+chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 visibility hide
 type bed 4
 
@@ -1523,6 +1530,7 @@ shortLabel ChIP/LI Pol2 HeLa
 longLabel Ludwig Institute, UCSD ChIP/Chip (Pol II HeLa) in ENCODE Regions
 group encode
 priority 30.1
+chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 visibility hide
 type wig 0.0 16.0
 maxHeightPixels 128:16:16
@@ -1533,6 +1541,7 @@ shortLabel ChIP/LI Pol2 THP1
 longLabel Ludwig Institute, UCSD ChIP/Chip (Pol II THP1) in ENCODE Regions
 group encode
 priority 30.2
+chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 visibility hide
 color 12,12,125
 type wig 0.0 16.0
@@ -1544,6 +1553,7 @@ shortLabel ChIP/LI Pol2 IMR90
 longLabel Ludwig Institute,UCSD ChIP/Chip (Pol II IMR90) in ENCODE Regions
 group encode
 priority 30.3
+chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 visibility hide
 color 125,12,12
 type wig 0.0 16.0
@@ -1555,6 +1565,7 @@ shortLabel ChIP/LI Pol2 HCT116
 longLabel Ludwig Institute, UCSD ChIP/Chip (Pol II HCT116) in ENCODE Regions
 group encode
 priority 30.4
+chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 visibility hide
 color 12,125,12
 type wig 0.0 16.0
@@ -1566,6 +1577,7 @@ shortLabel ChIP/LI TAF1 HeLa
 longLabel Ludwig Institute, UCSD ChIP/Chip (TAF1 HeLa) in ENCODE Regions
 group encode
 priority 30.5
+chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 visibility hide
 type wig 0.0 16.0
 maxHeightPixels 128:16:16
@@ -1576,6 +1588,7 @@ shortLabel ChIP/LI TAF1 THP1
 longLabel Ludwig Institute, UCSD ChIP/Chip (TAF1 THP1) in ENCODE Regions
 group encode
 priority 30.6
+chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 visibility hide
 color 12,12,125
 type wig 0.0 16.0
@@ -1587,6 +1600,7 @@ shortLabel ChIP/LI TAF1 IMR90
 longLabel Ludwig Institute, UCSD ChIP/Chip (TAF1 IMR90) in ENCODE Regions
 group encode
 priority 30.7
+chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 visibility hide
 color 125,12,12
 type wig 0.0 16.0
@@ -1598,6 +1612,7 @@ shortLabel ChIP/LI TAF1 HCT116
 longLabel Ludwig Institute, UCSD ChIP/Chip (TAF1 HCT116) in ENCODE Regions
 group encode
 priority 30.8
+chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 visibility hide
 color 12,125,12
 type wig 0.0 16.0
@@ -1609,6 +1624,7 @@ shortLabel DNA Rep/UVA 0-2hr
 longLabel Univ. Virginia Temporal Profiling of DNA Replication (0-2 hrs) in ENCODE Regions
 group encode
 priority 40.1
+chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 visibility hide
 color 60,75,60
 type bed 3
@@ -1619,6 +1635,7 @@ longLabel Univ. Virginia Temporal Profiling of DNA Replication (2-4 hrs) in ENCO
 group encode
 priority 40.2
 color 45,80,45
+chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 visibility hide
 type bed 3
 
@@ -1627,6 +1644,7 @@ shortLabel DNA Rep/UVA 4-6hr
 longLabel Univ. Virginia Temporal Profiling of DNA Replication (4-6 hrs) in ENCODE Regions
 group encode
 priority 40.3
+chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 visibility hide
 color 30,90,30
 type bed 3
@@ -1636,6 +1654,7 @@ shortLabel DNA Rep/UVA 6-8hr
 longLabel Univ. Virginia Temporal Profiling of DNA Replication (6-8 hrs) in ENCODE Regions
 group encode
 priority 40.4
+chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 visibility hide
 color 20,110,20
 type bed 3
@@ -1645,6 +1664,19 @@ shortLabel DNA Rep/UVA 8-10hr
 longLabel Univ. Virginia Temporal Profiling of DNA Replication (8-10 hrs) in ENCODE Regions
 group encode
 priority 40.5
+chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 visibility hide
 color 10,130,10
 type bed 3
+
+searchTable encode_NHGRI_DNAseHS
+searchType bed
+termRegex 500bp_[0-9]+_[0-9]+
+searchMethod exact
+searchPriority 50.1
+
+searchTable encode_Stanford_Promoters
+searchType bed
+termRegex (me|se)(LONG|alt|ONLY)_R?P[0-9]+-[0-9]+
+searchMethod exact
+searchPriority 50.2

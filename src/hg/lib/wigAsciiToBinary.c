@@ -40,7 +40,7 @@
 #include	"wiggle.h"
 
 
-static char const rcsid[] = "$Id: wigAsciiToBinary.c,v 1.9 2004/08/04 21:30:46 hiram Exp $";
+static char const rcsid[] = "$Id: wigAsciiToBinary.c,v 1.12 2004/11/02 20:46:16 hiram Exp $";
 
 /*	This list of static variables is here because the several
  *	subroutines in this source file need access to all this business
@@ -216,7 +216,7 @@ if (fixedStart == 0)
     errAbort("Found start=0 at line %lu, the first chrom position is 1, not 0",
 	lineCount);
 else
-    fixedStart -= 1;	/* zero relative half-open */
+    fixedStart = BASE_0(fixedStart);	/* zero relative half-open */
 freeMem(clone);
 }
 
@@ -315,8 +315,13 @@ while (lineFileNext(lf, &line, NULL))
     if ((line == (char *)NULL) || (line[0] == (char)NULL) || (line[0] == '#'))
 	continue;		/*	!!! go to next line of input */
 
-    wordCount = chopByWhite(line, words, 10);
-    if (sameWord("variableStep",words[0]))
+    wordCount = chopByWhite(line, words, ArraySize(words));
+
+    if (sameWord("track",words[0]) || sameWord("browser",words[0]))
+	{
+	continue;	/* ignore track,browser lines if present	*/
+	}
+    else if (sameWord("variableStep",words[0]))
 	{
 	int i;
 	boolean foundChrom = FALSE;
@@ -426,19 +431,19 @@ while (lineFileNext(lf, &line, NULL))
 	bedChromStart = sqlLongLong(words[1]);
 	bedChromEnd = sqlLongLong(words[2]);
 	bedDataValue = sqlDouble(words[3]);
-	if (bedChromStart == 0)
-	    errAbort("Found chromStart=0 at line %lu, the first chrom position is 1, not 0",
-		lineCount);
-	else
-	    bedChromStart -= 1;	/* zero relative half-open */
-	if (bedChromStart > bedChromEnd)
-	    errAbort("Found chromStart > chromEnd at line %lu (%llu > %llu)",
-		lineCount, bedChromStart+1, bedChromEnd);
+	/* the bed format coordinate system is zero relative, half-open,
+	 * hence, no adjustment of bedChromStart is needed here, unlike the
+	 * fixed and variable step formats which will subtract one from the
+	 * incoming coordinate.
+	 */
+	if (bedChromStart >= bedChromEnd)
+	    errAbort("Found chromStart >= chromEnd at line %lu (%llu > %llu)",
+		lineCount, bedChromStart, bedChromEnd);
 	if (bedChromEnd > (bedChromStart + 10000000))
 	    errAbort("Limit of 10,000,000 length specification for bed format at line %lu, found: %llu)",
 		lineCount, bedChromEnd-bedChromStart);
 	if ((validLines > 0) && (bedChromStart < previousOffset))
-	    errAbort("chrom positions not in numerical order at line %lu. previous: %llu > %llu <-current", lineCount, previousOffset+1, bedChromStart+1);
+	    errAbort("chrom positions not in numerical order at line %lu. previous: %llu > %llu <-current", lineCount, previousOffset, bedChromStart);
 	freez(&prevChromName);
 	prevChromName = cloneString(chromName);
 	}
@@ -459,13 +464,13 @@ while (lineFileNext(lf, &line, NULL))
     ++validLines;		/*	counting good lines of data input */
 
     /*	Offset is the incoming specified position for this value,
-     *	fixedStart and bedChromStart have already been converted to zero
+     *	fixedStart has already been converted to zero
      *	relative half open
      */
     if (variableStep)
 	{
 	Offset = sqlLongLong(words[0]);
-	Offset -= 1;	/* zero relative half open */
+	Offset = BASE_0(Offset);	/* zero relative half open */
 	dataValue = sqlDouble(words[1]);
 	}
     else if (fixedStep)
@@ -491,7 +496,7 @@ while (lineFileNext(lf, &line, NULL))
 	verbose(2, "first offset: %llu\n", chromStart);
 	}
     else if ((validLines > 1) && (Offset <= previousOffset))
-	errAbort("chrom positions not in numerical order at line %lu. previous: %llu > %llu <-current", lineCount, previousOffset+1, Offset+1);
+	errAbort("chrom positions not in numerical order at line %lu. previous: %llu > %llu <-current", lineCount, BASE_1(previousOffset), BASE_1(Offset));
 
     /* if we are working on a zoom level and the data is not exactly
      * spaced according to the span, then we need to put each value
@@ -523,7 +528,7 @@ while (lineFileNext(lf, &line, NULL))
 	unsigned long long fillSize;	/* number of bytes */
 
 	verbose(2, "missing data offsets: %llu - %llu\n",
-		previousOffset+1,Offset-1);
+		BASE_1(previousOffset),BASE_0(Offset));
 	/*	If we are just going to fill the rest of this bin with
 	 *  no data, then may as well stop here.  No need to fill
 	 *  it with nothing.

@@ -8,7 +8,7 @@
 #include "hgColors.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: wigDataStream.c,v 1.59 2004/10/28 18:55:22 hiram Exp $";
+static char const rcsid[] = "$Id: wigDataStream.c,v 1.62 2004/11/01 19:14:37 hiram Exp $";
 
 /*	PRIVATE	METHODS	************************************************/
 static void addConstraint(struct wiggleDataStream *wds, char *left, char *right)
@@ -314,7 +314,7 @@ if (wds->spanLimit)
     fprintf (fh, "#\tspan specified: %u\n", wds->spanLimit);
 if (wds->winEnd)
     fprintf (fh, "#\tposition specified: %d-%d\n",
-	wds->winStart+1, wds->winEnd);
+	BASE_1(wds->winStart), wds->winEnd);
 if (wds->bedConstrained && !wds->chrName)
     fprintf (fh, "#\tconstrained by chr names and coordinates in bed list\n");
 else if (wds->bedConstrained)
@@ -394,7 +394,7 @@ if (wds->array)
 	slSort(&wds->array, arrayDataCmp);
 
     dataPtr = wds->array->data;
-    /*	user visible coordinates are 1 relative	*/
+    /*	user visible coordinates are wds->offset relative/based */
     chromPosition = wds->array->winStart + wds->offset;
     pointCount = wds->array->winEnd - wds->array->winStart;
     for (inx = 0; inx < pointCount; ++inx)
@@ -1879,14 +1879,20 @@ if (wds->stats)
 	{
 	if (htmlOut)
 	    {
-	    long long chromSize = hChromSize(stats->chrom);
+	    long long chromSize = 0;
 
 	    if (wds->winEnd)
 		chromSize = wds->winEnd - wds->winStart;
+	    else
+		{
+		if (! wds->isFile)
+		    chromSize = hChromSize(stats->chrom);
+		}
+
 
 	    fprintf(fh,"<TR><TH ALIGN=LEFT> %s </TH>\n", stats->chrom);
-	    fprintf(fh,"\t<TD ALIGN=RIGHT> %u </TD>\n", stats->chromStart+1);
-						    /* display closed coords */
+	    fprintf(fh,"\t<TD ALIGN=RIGHT> %u </TD>\n",
+			BASE_1(stats->chromStart)); /* display closed coords */
 	    fprintf(fh,"\t<TD ALIGN=RIGHT> %u </TD>\n", stats->chromEnd);
 	    fprintf(fh,"\t<TD ALIGN=RIGHT> ");
 	    printLongWithCommas(fh, (long long)stats->count);
@@ -1898,7 +1904,7 @@ if (wds->stats)
 		fprintf(fh,"&nbsp;(%.2f%%) </TD>\n",
 		    100.0*(double)(stats->count*stats->span)/(double)chromSize);
 	    else
-		fprintf(fh,"&nbsp;(100.00%%)</TD>\n");
+		fprintf(fh,"</TD>\n");
 	    fprintf(fh,"\t<TD ALIGN=RIGHT> %g </TD>\n", stats->lowerLimit);
 	    fprintf(fh,"\t<TD ALIGN=RIGHT> %g </TD>\n", stats->lowerLimit+stats->dataRange);
 	    fprintf(fh,"\t<TD ALIGN=RIGHT> %g </TD>\n", stats->dataRange);
@@ -1910,8 +1916,8 @@ if (wds->stats)
 	else
 	    {
 	    fprintf(fh,"%s", stats->chrom);
-	    fprintf(fh,"\t%u", stats->chromStart+1);
-						    /* display closed coords */
+	    fprintf(fh,"\t%u", BASE_1(stats->chromStart));
+					/* display closed coords */
 	    fprintf(fh,"\t%u", stats->chromEnd);
 	    fprintf(fh,"\t%u", stats->count);
 	    fprintf(fh,"\t%d", stats->span);
@@ -1998,7 +2004,7 @@ if (wds->ascii)
 	    data = asciiData->data;
 	    for (i = 0; i < asciiData->count; ++i)
 		{
-		/*	user visible coordinates are 1 relative	*/
+		/* user visible coordinates are wds->offset relative/based */
 		if (rawDataOut)
 		    fprintf (fh, "%g\n", data->value);
 		else
@@ -2076,7 +2082,7 @@ wdstream->asciiToDataArray = asciiToDataArray;
 wdstream->getDataViaBed = getDataViaBed;
 wdstream->getData = getData;
 wdstream->maxOutput = 0;
-wdstream->offset = 1;	/*	default 1-relative output	*/
+wdstream->offset = 1;	/*	default 1-relative/based output	*/
 return wdstream;
 }
 

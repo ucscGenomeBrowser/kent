@@ -9,7 +9,7 @@
 #include "jksql.h"
 #endif
 
-#define SNP_NUM_COLS 19
+#define SNP_NUM_COLS 20
 
 struct snp
 /* Polymorphism data from dbSnp XML or genotyping arrays */
@@ -34,6 +34,7 @@ struct snp
     unsigned chromHits;	/* Number of distinct chromosomes with a hit */
     unsigned contigHits;	/* Number of distinct contigs with a hit */
     unsigned seqHits;	/* Total number of hits to genome */
+    char *source;	/* Source of the data - dbSnp, Affymetrix, ... */
     };
 
 void snpStaticLoad(char **row, struct snp *ret);

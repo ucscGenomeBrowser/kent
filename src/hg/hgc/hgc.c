@@ -149,7 +149,7 @@
 #include "pscreen.h"
 #include "jalview.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.777.2.1 2004/10/29 21:45:56 heather Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.779 2004/11/02 10:07:23 daryl Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -7234,6 +7234,20 @@ if (access(textPath, R_OK) == 0)
     }
 }
 
+int gbCdnaGetVersion(struct sqlConnection *conn, char *acc)
+/* return mrna/est version, or 0 if not available */
+{
+int ver = 0;
+if (hHasField("gbCdnaInfo", "version"))
+    {
+    char query[128];
+    safef(query, sizeof(query),
+          "select version from gbCdnaInfo where acc = '%s'", acc);
+    ver = sqlQuickNum(conn, query);
+    }
+return ver;
+}
+
 void prRefGeneInfo(struct sqlConnection *conn, char *rnaName,
                    char *sqlRnaName, struct refLink *rl)
 /* print basic details information and links for a RefGene */
@@ -7241,13 +7255,18 @@ void prRefGeneInfo(struct sqlConnection *conn, char *rnaName,
 struct sqlResult *sr;
 char **row;
 char query[256];
+int ver = gbCdnaGetVersion(conn, rl->mrnaAcc);
+char accVer[64];
 char *cdsCmpl = NULL;
 
 printf("<td valign=top nowrap>\n");
 printf("<H2>RefSeq Gene %s</H2>\n", rl->name);
 printf("<B>RefSeq:</B> <A HREF=\"");
 printEntrezNucleotideUrl(stdout, rl->mrnaAcc);
-printf("\" TARGET=_blank>%s</A>", rl->mrnaAcc);
+if (ver > 0)
+    printf("\" TARGET=_blank>%s.%d</A>", rl->mrnaAcc, ver);
+else
+    printf("\" TARGET=_blank>%s</A>", rl->mrnaAcc);
 
 /* If refSeqStatus is available, report it: */
 if (hTableExists("refSeqStatus"))
@@ -7894,6 +7913,20 @@ if (hTableExists("all_mrna"))
     getSequenceInRange(&seqList , faHash, "all_mrna", "Parent", \
             pg->gChrom, pg->gStart, pg->gEnd);
     faWriteAll(faTn.forCgi, seqList);
+    /* either display a link to jalview or call it */
+    if (jal != NULL && sameString(jal, "YES"))
+        {
+        safef(inPath,sizeof(inPath), \
+            "cgi-bin/cgiClustalw?fa=%s&db=%s",\
+            faTn.forCgi, hGetDb());
+        printf("Please wait while sequences are aligned with clustalw.");
+        displayJalView(inPath, "CLUSTAL", NULL);
+        }
+    else
+        {
+        hgcAnchorJalview(pg->name,  faTn.forCgi);
+        printf("JalView alignment of parent gene to retroGene</a>\n");
+        }
 
     if (pslList != NULL)
         {
@@ -11121,7 +11154,7 @@ sqlFreeResult(&sr);
 hFreeConn(&conn);
 }
 
-void doSnp(struct trackDb *tdb, char *itemName)
+void doSnpOld(struct trackDb *tdb, char *itemName)
 /* Put up info on a SNP. */
 {
 char *group = tdb->tableName;
@@ -11175,6 +11208,63 @@ if (printId)
 	doSnpLocusLink(tdb, printId);
 	}
     }
+printTrackHtml(tdb);
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+}
+
+void doSnp(struct trackDb *tdb, char *itemName)
+/* Put up info on a SNP. */
+{
+char *group = tdb->tableName;
+struct snp snp;
+int start = cartInt(cart, "o");
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr;
+char **row;
+char query[256];
+int rowOffset;
+int firstOne=1;
+
+cartWebStart(cart, "Simple Nucleotide Polymorphism (SNP)");
+printf("<H2>Simple Nucleotide Polymorphism (SNP) %s</H2>\n", itemName);
+sprintf(query, 
+	"select * "
+	"from   %s "
+	"where  chrom = '%s' "
+	"  and  chromStart = %d "
+	"  and  name = '%s'",
+        group, seqName, start, itemName);
+rowOffset = hOffsetPastBin(seqName, group);
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    snpStaticLoad(row+rowOffset, &snp);
+    if (firstOne)
+	{
+	bedPrintPos((struct bed *)&snp, 3);
+	printf("<BR>\n");
+	firstOne=0; /* rs5886636 is good to test this */
+	}
+    if (strcmp((&snp)->strand,"?")) {printf("<B>Strand: </B>%s\n", (&snp)->strand);}
+    printf("<BR><B>Observed: </B>%s\n",          (&snp)->observed);
+    printf("<BR><B>Molecule Type: </B>%s\n",     (&snp)->molType);
+    printf("<BR><B>Variant Class: </B>%s\n",     (&snp)->class);
+    printf("<BR><B>Validation Status: </B>%s\n", (&snp)->valid);
+    if ((&snp)->avHet>0) {printf("<BR><B>Average Heterozygosity: </B>%.3f +/- %.3f", (&snp)->avHet, (&snp)->avHetSE);}
+    printf("<BR><B>Function: </B>%s\n",          (&snp)->func);
+    printf("<BR><B>Location Type: </B>%s\n",     (&snp)->locType);
+    printf("<BR><B>Hit Quality: </B>%s\n",       (&snp)->hitQuality);
+    if ((&snp)->mapWeight>0)  {printf("<BR><B>Map Weight: </B>%d", (&snp)->mapWeight);}
+    if ((&snp)->chromHits>0)  {printf("<BR><B>Chromosome Hits: </B>%d", (&snp)->chromHits);}
+    if ((&snp)->contigHits>0) {printf("<BR><B>Contig Hits: </B>%d", (&snp)->contigHits);}
+    if ((&snp)->seqHits>0)    {printf("<BR><B>Sequence Hits: </B>%d", (&snp)->seqHits);}
+    printf("<BR><B>Source: </B>%s\n",            (&snp)->source);
+    printf("<P>\n");
+    }
+printf("<P><A HREF=\"http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?");
+printf("type=rs&rs=%s\" TARGET=_blank>dbSNP link</A></P>\n", itemName);
+doSnpLocusLink(tdb, itemName);
 printTrackHtml(tdb);
 sqlFreeResult(&sr);
 hFreeConn(&conn);
@@ -15202,6 +15292,10 @@ else if (startsWith("ct_", track))
     hgCustom(track, item);
     }
 else if (sameWord(track, "snpTsc") || sameWord(track, "snpNih") || sameWord(track, "snpMap"))
+    {
+    doSnpOld(tdb, item);
+    }
+else if (sameWord(track, "snp"))
     {
     doSnp(tdb, item);
     }

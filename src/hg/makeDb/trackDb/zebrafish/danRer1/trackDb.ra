@@ -108,6 +108,15 @@ visibility hide
 spectrum on
 type psl est
 
+track uniGene_dr
+shortLabel UniGene
+longLabel $Organism UniGene Alignments
+group rna
+priority 70
+visibility hide
+type psl .
+url http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?db=unigene&term=$$[ClusterID]
+
 track tblastnHg16KGPep
 shortLabel Human tBLASTn
 longLabel $o_Organism ($o_date/$o_db) KnownGenePep tBLASTn
@@ -262,3 +271,10 @@ searchMethod prefix
 searchType psl
 termRegex [[:alnum:]\._]+
 searchPriority 8
+
+searchTable uniGene_dr
+searchMethod exact
+searchType psl
+termRegex Dr\.[0-9]+
+searchPriority 40
+

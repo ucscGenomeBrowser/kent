@@ -71,8 +71,7 @@ update:
 		echo $$cmd ;  $$cmd ; \
 	    fi ; \
 	done
-	cd zoo; make update; cd ..
-
+	cd zoo && ${MAKE} update
 
 alpha:
 	cvs up -d -P .
@@ -105,7 +104,7 @@ alpha:
 		fi ; \
 	    fi ; \
 	done
-	cd zoo; make alpha; cd ..
+	cd zoo && ${MAKE} alpha
 	cmd="${HOME}/kent/src/hg/encode/encodeTrackDb.csh"; echo $$cmd; $$cmd
 
 strict:
@@ -136,7 +135,7 @@ strict:
 		echo $$cmd ;  $$cmd ; \
 	    fi ; \
 	done
-	cd zoo; make strict; cd ..
+	cd zoo && ${MAKE} strict
 
 # this will fail if we are not in a beta checkout:
 checkbeta:

@@ -1,10 +1,44 @@
+track all_mrna
+shortLabel $Organism mRNAs
+longLabel $Organism mRNAs from GenBank
+group rna
+priority 54
+visibility pack
+spectrum on
+type psl .
+cdsDrawOptions enabled
+
+track all_est
+shortLabel $Organism ESTs
+longLabel $Organism ESTs Including Unspliced
+group rna
+priority 57
+visibility hide
+spectrum on
+type psl est
+
 track multiz5way
 shortLabel Conservation
 longLabel Conservation in Frog/Chicken/Human/Mouse/Zebrafish
 group compGeno
-priority 150
-visibility dense
-type maf
+priority 110
+visibility squish
+type wigMaf 0.0 1.0
+maxHeightPixels 100:40:11
+wiggle phastCons5
+yLinOnOff Off
+autoScaleDefault Off
+speciesOrder chicken human mouse zebrafish
+
+track mostConserved
+shortLabel Most Conserved
+longLabel Most Conserved (Top 3% of Genome) Elements
+group compGeno
+priority 111
+visibility hide
+exonArrows off
+showTopScorers 200
+type bed 5 .
 
 track chainGalGal2
 shortLabel $o_Organism Chain 
@@ -93,4 +127,18 @@ visibility hide
 spectrum on
 type netAlign danRer1 chainDanRer1
 otherDb danRer1
+
+searchName mrnaAcc2
+searchTable all_mrna
+searchMethod prefix
+searchType mrnaAcc
+shortCircuit 1
+termRegex [a-z][a-z0-9][0-9]+
+searchPriority 10
+
+searchName mrnaKeyword2
+searchTable all_mrna
+searchType mrnaKeyword
+searchPriority 30
+
 

@@ -1,6 +1,6 @@
 #!/bin/bash -e
 #
-# hgwdev-dbload [-inclEsts] [-extFileUpdate]
+# hgwdev-dbload [-inclEsts] [-extFileUpdate] [-allowLargeDeletes]
 #
 # dbload for hgwdev.
 #

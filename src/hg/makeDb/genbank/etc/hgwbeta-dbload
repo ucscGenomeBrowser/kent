@@ -1,6 +1,6 @@
 #!/bin/bash -e
 #
-# hgwbeta-dbload [-inclEsts] [-extFileUpdate]
+# hgwbeta-dbload [-inclEsts] [-extFileUpdate] [-allowLargeDeletes]
 #
 # dbload for hgwbeta
 #

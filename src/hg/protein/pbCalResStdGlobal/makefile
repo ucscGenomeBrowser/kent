@@ -28,7 +28,7 @@ compile: $O
 	chmod a+rx $A
 
 lib:
-	cd ../../../lib; make
+	cd ../../../lib && ${MAKE}
 
 tags: 
 	ctags *.h *.c ../../lib/*.c ../inc/*.h ../../../lib/*.c ../../../inc/*.h

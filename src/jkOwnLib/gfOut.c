@@ -14,7 +14,7 @@
 #include "psl.h"
 #include "genoFind.h"
 
-static char const rcsid[] = "$Id: gfOut.c,v 1.11 2004/09/04 17:29:48 kent Exp $";
+static char const rcsid[] = "$Id: gfOut.c,v 1.12 2004/10/30 04:55:54 kent Exp $";
 
 struct pslxData
 /* This is the data structure put in gfOutput.data for psl/pslx output. */
@@ -279,7 +279,6 @@ for (sAli = ali; sAli != NULL; sAli = eAli)
 	    int gap = max(nGap, hGap);
 	    if (nGap < 0 || hGap < 0)
 		{
-		uglyf("nGap %d, hGap %d\n", nGap, hGap);
 	        errAbort("Negative gap size in %s vs %s", tSeq->name, qSeq->name);
 		}
 	    if (nGap == gap)

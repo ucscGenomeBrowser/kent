@@ -339,6 +339,7 @@ struct place *createPlace(struct position *pos)
   ret->numSts = 0;
   ret->sts = NULL;
   ret->numBacEndPair = 0;
+  ret->bePair = NULL;
   ret->numBacEnd = 0;
   ret->bacEnd = NULL;
   if (sameString(ret->type, "Accession"))
@@ -800,9 +801,16 @@ int combinePos(struct place *p, struct position *pos)
 	} 
       if (sameString(pos->type, "STS Marker"))
 	{
-	  p->numSts++;
+	  /* Check if used for STS Marker */
 	  n = createName(pos->name);
-	  slAddHead(&p->sts, n);
+	  if (!inNameList(n, p->sts))
+	    {
+	      p->numSts++;
+	      n = createName(pos->name);
+	      slAddHead(&p->sts, n);
+	    } 
+	  else 
+	    nameFree(&n);
 	  /* if (sameString(p->type, "BAC End"))
 	     p->type = pos->type; */
 	} 
@@ -810,7 +818,7 @@ int combinePos(struct place *p, struct position *pos)
 	{
 	  /* Check if used for end pair */
 	  n = createName(pos->name);
-	  if (!inNameList(n, p->bePair))
+	  if ((!inNameList(n, p->bePair)) && (!inNameList(n, p->bacEnd)))
 	    {
 	      p->numBacEnd++;
 	      slAddHead(&p->bacEnd, n);

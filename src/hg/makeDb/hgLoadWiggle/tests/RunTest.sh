@@ -1,6 +1,7 @@
 #!/bin/sh
 
 HGWIGGLE=hgWiggle
+WIGENCODE=wigEncode
 tests=0
 failures=0
 verbose=""
@@ -15,6 +16,7 @@ oneTest() {
 
     if [ "${T}" != "$result" ]; then
 	echo "${C} FAIL: $cmd"
+	echo "expected: '$result' got: '$T'"
 	failures=`expr $failures + 1`
     else
 	if [ -n "${verbose}" ]; then
@@ -23,17 +25,50 @@ oneTest() {
     fi
 }
 
-if [ "$1" = "-verbose" ]; then
-    verbose="verbose"
+failedArgCheck=0
+export failedArgCheck
+
+while [ "$#" -gt 0 ]
+do
+    if [ "$1" = "-verbose" ]; then
+	verbose="verbose"
+    elif [ "$1" = "-home" ]; then
+	HGWIGGLE="$HOME/bin/$MACHTYPE/$HGWIGGLE"
+	WIGENCODE="$HOME/bin/$MACHTYPE/$WIGENCODE"
+    else
+	echo "unknown argument: $1"
+	failedArgCheck=1
+    fi
+    shift
+done
+
+export HGWIGGLE WIGENCODE verbose tests failures
+
+if [ "$failedArgCheck" -eq 1 ]; then
+    exit 255
 fi
 
-type $HGWIGGLE > /dev/null 2> /dev/null
+type ${HGWIGGLE} > /dev/null 2> /dev/null
 
 if [ "$?" -ne 0 ]; then
     echo "ERROR: can not find hgWiggle binary"
     echo -e "\t'$HGWIGGLE'"
     exit 255
 fi
+
+type ${WIGENCODE} > /dev/null 2> /dev/null
+
+if [ "$?" -ne 0 ]; then
+    echo "ERROR: can not find wigEncode binary"
+    echo -e "\t'$WIGENCODE'"
+    exit 255
+fi
+
+TF=/tmp/wigEncode.$$.txt
+wget "http://genome.ucsc.edu/encode/wiggleExample.txt" -O "${TF}" \
+	> /dev/null 2> /dev/null
+oneTest "${WIGENCODE} ${TF} stdout /dev/null 2> /dev/null" "04152     2"
+rm -f "${TF}"
 
 oneTest "$HGWIGGLE -lift=1 -chr=chrM -db=ce2 gc5Base" "26963    31"
 oneTest "$HGWIGGLE -chr=chrM -doBed -db=ce2 gc5Base" "37864     1"
@@ -52,6 +87,17 @@ oneTest "$HGWIGGLE -doStats -position=chrM:4000-10000 -dataConstraint=\"in range
 oneTest "$HGWIGGLE -doStats -doBed -position=chrM:4000-10000 -dataConstraint=\"in range\" -ll=23 -ul=60 -db=ce2 gc5Base" "06015     6"
 oneTest "$HGWIGGLE -span=5 -doHistogram -hBinSize=10 -hBinCount=10 -position=chrM:4000-10000 -dataConstraint=\"in range\" -ll=3 -ul=90 -db=ce2 gc5Base" "44411     1"
 oneTest "$HGWIGGLE -bedFile=mm5.miRNA.bed -dataConstraint=\">\" -ll=0.85 -chr=chr2 -doStats -db=mm5 phastCons" "62191     1"
+
+TF=/tmp/hgWiggle_test_$$.bed
+rm -f "${TF}"
+echo -e "chr7\t73016533\t73016543\tname0" > "${TF}"
+echo -e "chr1\t2500\t2510\tname1" >> "${TF}"
+echo -e "chr10\t200000\t200010\tname2" >> "${TF}"
+echo -e "chr1\t1500\t1510\tname3" >> "${TF}"
+
+oneTest "$HGWIGGLE -bedFile=${TF} -db=hg17 phastCons" "38333     1"
+
+rm -f "${TF}"
 
 if [ -n "${verbose}" ]; then
     C=`echo $tests | awk '{printf "%4d", $1}'`

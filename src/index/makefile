@@ -1,8 +1,8 @@
 all:
-	cd indexfa;make
-	cd indexgl;make
-	cd ixali;make
-	cd ixword1;make
-	cd ixword3;make
-	cd makepgo;make
-	cd stToXao; make
+	cd indexfa && ${MAKE}
+	cd indexgl && ${MAKE}
+	cd ixali && ${MAKE}
+	cd ixword1 && ${MAKE}
+	cd ixword3 && ${MAKE}
+	cd makepgo && ${MAKE}
+	cd stToXao && ${MAKE}

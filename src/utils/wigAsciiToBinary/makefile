@@ -24,7 +24,9 @@ wigBedToBinary: wigBedToBinary.o ${MYLIBS}
 	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/wigBedToBinary wigBedToBinary.o ${MYLIBS} $L
 
 test:
-	cd test_data && ./runtest
+	@echo "The testing is out of date and needs to be fixed"
+
+#	cd test_data && ./runtest
 
 clean:
 	rm -f ${HOME}/bin/${MACHTYPE}/${A} $O \

@@ -48,6 +48,11 @@
 #include <libgen.h>
 #endif
 
+#ifndef NAN
+#define NAN (0.0 / 0.0)
+#endif
+
+
 /* Let's pretend C has a boolean type. */
 #define TRUE 1
 #define FALSE 0

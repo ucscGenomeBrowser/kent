@@ -35,16 +35,16 @@ exit; # don't actually run this like a script :)
     # header line with just ">chrM".
 
     # Make a "pseudo-contig" for processing chrM too:
-    mkdir M/chrM_1
-    sed -e 's/chrM/chrM_1/' M/chrM.fa > M/chrM_1/chrM_1.fa
-    mkdir M/lift
-    echo "chrM_1/chrM_1.fa.out" > M/lift/oOut.lst
-    echo "chrM_1" > M/lift/ordered.lst
-    echo "0	M/chrM_1	16596	chrM	16596" > M/lift/ordered.lft
+    mkdir ./chrM_1
+    sed -e 's/chrM/chrM_1/' ./chrM.fa > ./chrM_1/chrM_1.fa
+    mkdir ./lift
+    echo "chrM_1/chrM_1.fa.out" > ./lift/oOut.lst
+    echo "chrM_1" > ./lift/ordered.lst
+    echo "0	M/chrM_1	16596	chrM	16596" > ./lift/ordered.lft
 
 # create a .agp file for chrM as hgGoldGapGl and other
 # programs require a .agp file so create chrM.agp
-    cat << '_EOF_' > M/chrM.agp
+    cat << '_EOF_' > ./chrM.agp
 M       1       16596	1       F	AC024175.3      1       16596	+
 '_EOF_'
 
@@ -198,7 +198,7 @@ M       1       16596	1       F	AC024175.3      1       16596	+
      # All are OK so all Fasta files are the correct size
 
 # BREAK UP SEQUENCE INTO 5MB CHUNKS AT CONTIGS/GAPS FOR CLUSTER RUNS
-# (DONE, 2005-05-27, hartera)
+# (DONE, 2004-05-27, hartera)
     
      ssh kksilo
      cd /cluster/data/danRer1
@@ -240,7 +240,7 @@ M       1       16596	1       F	AC024175.3      1       16596	+
     echo 'create database danRer1' | hgsql ''
     # if you need to delete that database:  !!! WILL DELETE EVERYTHING !!!
     echo 'drop database danRer1' | hgsql danRer1
-    # Use df to ake sure there is at least 5 gig free on
+    # Use df to make sure there is at least 5 gig free on
     df -h /var/lib/mysql
 # Before loading data:
 # Filesystem            Size  Used Avail Use% Mounted on
@@ -250,7 +250,7 @@ M       1       16596	1       F	AC024175.3      1       16596	+
     # next machine
     ssh hgwdev
     #  the following command copies all the data from the table
-    #  grp in the database galGal2 to our new database ce2
+    #  grp in the database gaGal2 to our new database danRer1
     echo "create table grp (PRIMARY KEY(NAME)) select * from galGal2.grp" \
       | hgsql danRer1
     # if you need to delete that table:   !!! WILL DELETE ALL grp data !!!
@@ -427,6 +427,7 @@ while (<STDIN>) {
     hgLoadBed danRer1 simpleRepeat \
       /cluster/data/danRer1/bed/simpleRepeat/simpleRepeat.bed \
       -sqlTable=$HOME/src/hg/lib/simpleRepeat.sql
+    # Loaded 582635 elements of size 16
 
 # PROCESS SIMPLE REPEATS INTO MASK (DONE, 2004-06-07, hartera)
     # After the simpleRepeats track has been built, make a filtered version
@@ -1174,7 +1175,7 @@ axtFilter $1 \
       -makeOoc=/cluster/bluearc/danRer1/11.ooc -repMatch=460
     # Wrote 44155 overused 11-mers to /cluster/bluearc/danRer1/11.ooc
     # For 10.ooc, repMatch = 4096 for human, so use 1840
-        blat nib.lst /dev/null /dev/null -tileSize=10 \
+    blat nib.lst /dev/null /dev/null -tileSize=10 \
       -makeOoc=/cluster/bluearc/danRer1/10.ooc -repMatch=1840
     # Wrote 10767 overused 10-mers to /cluster/bluearc/danRer1/10.ooc
     # keep copies of ooc files in this directory and copy to iscratch
@@ -1245,6 +1246,11 @@ danRer1.downloadDir = danRer1
     nice bin/gbDbLoadStep -verbose=1 danRer1
     cd /cluster/data/genbank/work
     mv initial.danRer1 initial.danRer1.genbank.est
+
+# XENOPUS BLASTZ/CHAIN/NET (DONE 9/24/04 jk)
+# see makeXenTro1.doc and search for zb.danRer1
+# The results of this are also symlinked under danRer1/bed
+
 
 # ENSEMBL GENES (DONE, 2004-06-22, hartera)
 
@@ -3283,3 +3289,409 @@ axtChain -scoreScheme=/cluster/data/blastz/HoxD55.q \
     nice rm -fr axtChain/n1 axtChain/noClass.net &
     nice gzip axtChrom/* pslChrom/* axtChain/all.chain axtChain/*.net &
 
+# REPEAT LIBRARY TEST (DONE, 2004-10-20, hartera)
+# Get new repeat library
+    ssh kksilo
+    cd /cluster/data/danRer1
+    wget --timestamp \
+         http://www.genetics.wustl.edu/fish_lab/repeats/Dr.repeats.020501
+    # copy to libraries directory for RepeatMasker
+    cp Dr.repeats.020501 /cluster/bluearc/RepeatMasker/Libraries/danioRW.lib
+    # temporarily move danio.lib to danioRM.lib.old
+    # add danioRW.lib to danio.lib
+# for now just mask 0.5Mb so use chr1_1_01.fa - unmasked
+    mkdir newRepeats
+    #  faSize chr1_1_01.fa
+    #  495381 bases (62485 N's 432896 real) in 1 sequences in 1 files
+    cp ./1/chr1_1/chr1_1_01.fa > ./newRepeats
+    # RepeatMasker script with input directory and name of .fa file
+    ssh kolossus 
+    cd /cluster/data/danRer1/newRepeats
+    nice /cluster/data/danRer1/jkStuff/RMZebrafish \
+         /cluster/data/danRer1/newRepeats chr1_1_01.fa
+    # can also use -lib option to use a custom library   
+    cat << '_EOF_' > jkStuff/RMandRWZebrafish
+#!/bin/csh -fe
+                                                                                
+cd $1
+pushd .
+/bin/mkdir -p /tmp/danRer1/$2
+/bin/cp $2 /tmp/danRer1/$2/
+cd /tmp/danRer1/$2
+/cluster/bluearc/RepeatMasker/RepeatMasker -ali -s -lib danioRMandRW.lib $2
+popd
+/bin/cp /tmp/danRer1/$2/$2.out ./
+if (-e /tmp/danRer1/$2/$2.align) /bin/cp /tmp/danRer1/$2/$2.align ./
+if (-e /tmp/danRer1/$2/$2.tbl) /bin/cp /tmp/danRer1/$2/$2.tbl ./
+if (-e /tmp/danRer1/$2/$2.cat) /bin/cp /tmp/danRer1/$2/$2.cat ./
+/bin/rm -fr /tmp/danRer1/$2/*
+/bin/rmdir --ignore-fail-on-non-empty /tmp/danRer1/$2
+/bin/rmdir --ignore-fail-on-non-empty /tmp/danRer1
+'_EOF_'
+    # << this line makes emacs coloring happy
+    chmod +x jkStuff/RMandRWZebrafish
+    cp /dev/null newRepeats/new/RMJobs
+    echo /cluster/data/danRer1/jkStuff/RMandRWZebrafish \
+         /cluster/data/danRer1/newRepeats/test chr1_1_01.fa  \
+   '{'check out line+ /cluster/data/danRer1/newRepeats/test/chr1_1_01.fa.out'}' \
+        >> newRepeats/test/RMJobs
+
+    #- Do the run
+    ssh kk
+    cd /cluster/data/danRer1/newRepeats/test
+    para create RMJobs
+    para try
+# para time
+# Completed: 1 of 1 jobs
+
+# with previous output some print errors at end of run but try using for mask 
+# anyway
+    # already have simpleRepeats for chr1_1_01.fa
+    
+    ssh kksilo
+    cd /cluster/data/danRer1/newRepeats/test   
+    # lift up to contig level
+    set d = /cluster/data/danRer1/1/chr1_1
+    liftUp chr1_1.fa.out $d/chr1_1.lft warn chr1_1_01.fa.out > /dev/null
+   
+
+    #- Lift pseudo-contigs to chromosome level
+      set d = /cluster/data/danRer1/1/
+      if (-e $d/lift/ordered.lft && ! -z $d/lift/ordered.lft) then
+       liftUp chr1.fa.out $d/lift/ordered.lft warn chr1_1.fa.out \
+        > /dev/null
+    # the new repeats "Drxxxx" do not have a class type so add this in 
+    # otherwise maskOutFa can not process this.
+awk 'BEGIN {OFS="\t";} {if ($10 ~ /^Dr[0-9]+$/ ){ print $1, $2, $3, $4, $5,
+$6, $7, $8, $9, $10, "DrRW", $11, $12, $13, $14;} else {print;}}' chr1.fa.out > chr1.format.out
+    mv chr1.fa.out chr1.fa.out.orig
+    mv chr1.format.out chr1.fa.out
+    set trfChr=/cluster/data/danRer1/bed/simpleRepeat/trfMaskChrom
+    foreach f (./chr*.fa)
+      echo "repeat- and trf-masking $f"
+      maskOutFa -soft $f $f.out $f
+      set chr = $f:t:r
+      maskOutFa -softAdd $f $trfChr/chr1.bed $f
+    end
+# blastz alignment of 0.5Mb region much improved - check with laj. 
+# removes many repeats
+ 
+# MAKE UNIGENE ALIGNMENTS (DONE, 2004-11-01, hartera)
+   ssh kksilo
+   mkdir /cluster/data/danRer1/bed/unigene
+   cd /cluster/data/danRer1/bed/unigene
+   # Download zebrafish UniGene and run Chuck's preproc scripts:
+   wget ftp://ftp.ncbi.nih.gov/repository/UniGene/Dr.info
+   wget ftp://ftp.ncbi.nih.gov/repository/UniGene/Dr.seq.uniq.gz
+   wget ftp://ftp.ncbi.nih.gov/repository/UniGene/Dr.data.gz
+   gunzip *.gz
+   # Chuck's script expects human (Hs) -- use Gga for chicken:
+   sed -e 's/Hs/Dr/g' /projects/cc/hg/sugnet/uniGene/countSeqsInCluster.pl \
+    > ./countSeqsInCluster.pl
+   chmod a+x ./countSeqsInCluster.pl
+   perl ./countSeqsInCluster.pl Dr.data counts.tab
+   perl /projects/cc/hg/sugnet/uniGene/parseUnigene.pl Dr.seq.uniq \
+      Dr.seq.uniq.simpleHeader.fa leftoverData.tab
+
+    # Put on iscratch for cluster run
+    ssh kkr1u00
+    mkdir /iscratch/i/danRer1/unigene
+    cp -p /cluster/data/danRer1/bed/unigene/Dr.seq.uniq.simpleHeader.fa \
+      /iscratch/i/danRer1/unigene/
+    iSync
+
+    # align on big cluster
+    ssh kk
+    cd /cluster/data/danRer1/bed/unigene
+    mkdir psl
+    ls -1S /iscratch/i/danRer1/trfFa/*.fa > genome.lst
+    ls -1S /iscratch/i/danRer1/unigene/*.fa > uniGene.lst
+    cat << '_EOF_' > template.sub
+#LOOP
+/cluster/bin/i386/blat -mask=lower -minIdentity=95 -ooc=/iscratch/i/danRer1/11.ooc {check in line+ $(path1)} {check in line+ $(path2)} {check out line+ psl/$(root1)_$(root2).psl}
+#ENDLOOP
+'_EOF_'
+    # << this line makes emacs coloring happy
+    gensub2 genome.lst uniGene.lst template.sub jobList
+    para create jobList
+    para try, check, push, check
+# para time
+# Completed: 310 of 310 jobs
+# CPU time in finished jobs:      12627s     210.44m     3.51h    0.15d  0.000 y
+# IO & Wait Time:                  2304s      38.41m     0.64h    0.03d  0.000 y
+# Average job time:                  48s       0.80m     0.01h    0.00d
+# Longest job:                       89s       1.48m     0.02h    0.00d
+# Submission to last job:           699s      11.65m     0.19h    0.01d
+
+    # postprocess
+    ssh kksilo
+    cd /cluster/data/danRer1/bed/unigene
+    pslSort dirs raw.psl tmp psl >& pslSort.log
+    liftUp -type=.psl stdout ../../jkStuff/liftAll.lft warn raw.psl \
+    | pslReps -minCover=0.2 -minAli=0.965 -nearTop=0.002 \
+      stdin uniGene.lifted.pslReps.psl /dev/null
+    rm raw.psl
+    gzip Dr.seq.uniq Dr.data
+    # load into db
+    ssh hgwdev
+    cd /cluster/data/danRer1/bed/unigene
+    mkdir /gbdb/danRer1/unigene
+    ln -s /cluster/data/danRer1/bed/unigene/Dr.seq.uniq.simpleHeader.fa \
+      /gbdb/danRer1/unigene/
+    hgLoadSeq danRer1 /gbdb/danRer1/unigene/Dr.seq.uniq.simpleHeader.fa
+    hgLoadPsl -fastLoad -table=uniGene_dr danRer1 uniGene.lifted.pslReps.psl
+
+# STS Markers (in progress, 2004-08-09, hartera)
+   # Check NCBI for latest update for STS makers in dbSTS.
+   # Our latest version is in store5 for space
+    ssh eieio
+    mkdir -p /cluster/store5/sts.2004-10-06
+    ln -s /cluster/store5/sts.2004-10-06 /cluster/data/ncbi
+    cd /cluster/data/ncbi/sts.2004-10-06
+    # The dbSTS.sts does not have as many ids as in the version 
+    # on the NCBI ftp site so get new version.
+    # update from NCBI
+    wget ftp://ftp.ncbi.nih.gov/repository/dbSTS/dbSTS.sts
+    wget ftp://ftp.ncbi.nih.gov/repository/dbSTS/dbSTS.aliases
+    wget ftp://ftp.ncbi.nih.gov/blast/db/FASTA/sts.gz
+    gunzip sts.gz
+    mv sts dbSTS.fa
+  # checked difference between these and sts.9 files - no Danio sequences added
+    mkdir -p /cluster/store5/UniSTS.2004-10-06
+    ln -s /cluster/store5/UniSTS.2004-10-06 /cluster/data/ncbi
+    cd /cluster/data/ncbi/UniSTS.2004-10-06
+    wget --timestamp ftp://ftp.ncbi.nih.gov/repository/UniSTS/UniSTS.sts
+    wget --timestamp ftp://ftp.ncbi.nih.gov/repository/UniSTS/UniSTS.aliases
+    wget --timestamp -r l1 \
+ftp://ftp.ncbi.nih.gov/repository/UniSTS/UniSTS_MapReports/Danio_rerio/
+    mkdir danRer1
+    cp ./ftp.ncbi.nih.gov/repository/UniSTS/UniSTS_MapReports/Danio_rerio/* \
+       ./danRer1
+    rm -r ftp.ncbi.nih.gov
+    # No difference between UniSTS and sts files so move dbSTS.fa to UniSTS dir
+    # convert dbSTS.fa file to easier reading format, and get accessions
+    cd  /cluster/data/ncbi/UniSTS.2004-10-06
+    mv /cluster/data/ncbi/sts.2004-10-06/dbSTS.fa .
+    perl /cluster/bin/scripts/convertGbFaFile dbSTS.fa > dbSTS.convert.fa
+    grep ">" dbSTS.convert.fa | cut -f 2 -d ">" > dbSTS.acc
+
+    # NOTE: updateStsInfo creates new stsInfo2.bed, all.primers, 
+    # all.STS.fa, stsAlias.bed files 
+    # create stsInfo2.bed.prev and all.STS.fa.prev as empty files
+    cp /dev/null stsInfo2.bed.prev
+    cp /dev/null all.STS.fa.prev
+    updateStsInfo -verbose=1 -gb=dbSTS.acc stsInfo2.bed.prev all.STS.fa.prev \
+                    dbSTS.sts dbSTS.aliases dbSTS.convert.fa new
+    # this creates a valid new.primers and new.fa file
+    mv new.primers all_primers
+    mv new.fa all.STS.fa
+
+    # above does not work well without previous information to add
+    # DONT USE THESE FILES - in a test dir
+    ssh kksilo
+    mkdir -p /cluster/store8/danRer1/STSmarkers
+    ln -s /cluster/store8/danRer1/STSmarkers \
+          /cluster/data/danRer1/bed/STSmarkers
+    mkdir /cluster/data/danRer1/bed/STSmarkers/downloads
+    cd /cluster/data/danRer1/bed/STSmarkers/downloads
+    # use UniSTSParse.pl to get alias names
+    cp /cluster/data/mm5/bed/STSmarkers/downloads/UniSTSParse.pl .
+    cp /cluster/data/ncbi/UniSTS.2004-10-06/UniSTS.sts .
+    cp /cluster/data/ncbi/UniSTS.2004-10-06/UniSTS.aliases .
+    # create a UniSTS_zebrafish.sts by grepping for lines with "Danio"
+    grep "Danio" UniSTS.sts > UniSTS_Danio_rerio.sts
+    perl ./UniSTSParse.pl UniSTS_Danio_rerio.sts UniSTS.aliases \
+         > UniSTS_Danio_rerio_alias.0
+    cat UniSTS_Danio_rerio_alias.0 | sort -u | sort -n \
+        > UniSTS_Danio_rerio.alias
+    # Download ZFIN data for all markers
+    wget --timestamp http://zfin.org/data_transfer/Downloads/genetic_markers.txt
+    grep "STS" genetic_markers.txt > zfinIDSTS.txt
+    # make file of mapping data
+    foreach f (/cluster/data/ncbi/UniSTS.2004-10-06/danRer1/*.txt)
+       cat $f >> danRer1STSMaps.txt
+    end
+    mv /cluster/data/ncbi/UniSTS.2004-10-06/danRer1/danRer1STSMaps.txt \
+       /cluster/data/danRer1/bed/STSmarkers/downloads
+    # Create new tables for STS so there are less columns in Info table
+ 
+    # make a .as file for stsMarkers which is similar to the hg17 stsInfo2 table
+
+    cat << '_EOF_' > $HOME/kent/src/hg/lib/stsMarkers.as
+table stsMarkers
+"Constant STS marker information - Oct 2004 revision"
+    (
+    uint identNo;                 "UCSC identification number"
+    string name;                  "Official UCSC name"
+    uint gbCount;                 "Number of related GenBank accessions"
+    string[gbCount] genbank;      "Related GenBank accessions"
+    string OtherDb;		  "Name of other database of marker IDs"
+    uint otherDbCount;            "Number of related other database identifiers"
+    string[OtherDbCount] gdb;     "Related other database identifiers"
+    uint nameCount;               "Number of alias names"
+    string[nameCount] otherNames; "Alias names"
+    uint dbSTSid;                 "ID number in UniSTS or dbSTS"
+    string leftPrimer;            "5' primer sequence"
+    string rightPrimer;           "3' primer sequence"
+    string distance;              "Length of STS sequence"
+    string organism;              "Organism for which STS discovered"
+    uint sequence;                "Whether the full sequence is available (1) or not (0) for STS"
+    )
+'_EOF_'
+    cd $HOME/kent/src/hg/lib/
+    autoSql stsMarkers.as stsMarkers
+    mv stsMarkers.h $HOME/kent/src/hg/inc
+
+    cat << '_EOF_' > $HOME/kent/src/hg/lib/stsMapping.as
+table stsMapping
+"STS marker and its position on golden path"
+    (
+    string chrom;       "Chromosome or 'unknown'"
+    int chromStart;     "Start position in chrom - negative 1 if unpositioned"
+    uint chromEnd;      "End position in chrom"
+    string name;        "Name of STS marker"
+    uint score;         "Score of a marker = 1000/(#placements) when placed uniquely, else 1500/(#placements) when placed in multiple locations"
+                                                                                
+    uint identNo;       "Identification number of STS"
+    string ctgAcc;      "Contig accession number"
+    string otherAcc; 	"Accession number of other contigs that the marker hits"
+    )
+'_EOF_'
+    
+    cd $HOME/kent/src/hg/lib/
+    autoSql stsMapping.as stsMapping
+    mv stsMapping.h $HOME/kent/src/hg/inc
+        
+    cat << '_EOF_' > $HOME/kent/src/hg/lib/stsMapPos.as
+table stsMapPos
+"STS marker and its position on genetic maps"
+    (
+    uint identNo;       "Identification number of STS"
+    string mapName; 	"Name or source of genetic map"
+    string name;	"Name of marker in map"
+    string chrom;	"Chromosome in map"
+    float pos;		"Position in map"
+    float LOD;		"LOD score in map"
+    )
+'_EOF_'
+
+    cd $HOME/kent/src/hg/lib/
+    autoSql stsMapPos.as stsMapPos
+    mv stsMapPos.h $HOME/kent/src/hg/inc
+
+    # stsAlias already exists in $HOME/kent/src/hg/lib/
+    # COMMIT THESE LATER
+    # do make to check it works and commit the .as, .sql, .c and .h file to CVS
+
+    # cluster run of zebrafish sts sequences
+    
+    ssh kksilo
+    cd /cluster/data/danRer1/bed/STSmarkers/downloads
+    # use list of zebrafish UniSTS entry accessions
+    awk 'BEGIN {FS="\t"} {print $7;}' UniSTS_Danio_rerio.sts \
+        | sed -e 's/;/\n/g' > danRer.accs
+    sort danRer.accs | uniq > danRer.uniq.accs
+    # 26894 lines; 26955 accessions; 17312 unique accessions
+    $HOME/bin/i386/faSomeRecords \
+         /cluster/data/ncbi/UniSTS.2004-10-06/dbSTS.convert.fa \
+         /cluster/data/danRer1/bed/STSmarkers/downloads/danRer.uniq.accs \
+         /cluster/data/danRer1/bed/STSmarkers/downloads/danRerdbSTS.fa
+    # got 6045 sequences, 11267 not found
+    # sequences not found - may all be in GenBank as ESTs, those found 
+    # by searching were in GenBank
+    # Get sequences from GenBank
+    ssh kksilo
+    mkdir -p /cluster/data/danRer1/bed/STSmarkers/sequences
+    cd /cluster/data/danRer1/bed/STSmarkers/sequences
+    echo 'restrict org = "Danio rerio"' > sts.filt
+    gbToFaRa sts.filt danRer.fa danRer.ra /dev/null \
+             /cluster/data/genbank/data/download/genbank.143.0/gbsts*.gz
+    # still does not have these missing records that are in dbEST
+    # try getting these sequences that are missing from the EST db
+    # make list of these missing accessions
+    grep '>' danRerdbSTS.fa | sed -e 's/>//' | sort > drSTS.accs.sort
+    # 6045 accs found here, 11266 missing; 17311 in danRer.uniq.acc2
+    comm -13 drSTS.accs.sort danRer.uniq.acc2 > notFound.accs
+    wc -l notFound.accs
+    # 11266
+    getRna hg17 notFound.accs notIndbSTSFASTA.fa > notInESTs.accs
+    # 11250 accs found so 16 to find still
+    awk '{print $1}' notInESTs.accs > accsToFind
+    # get these sequences from Batch Entrez at NCBI to batchseq.fa
+    perl /cluster/bin/scripts/convertGbFaFile batchseq.fa > batchseq.convert.fa
+    # cat sequences together
+    cat danRerdbSTS.fa notIndbSTSFASTA.fa batchseq.convert.fa \
+        > allSTSMarkerSeqs.fa
+    # split sequences to map these to the genome
+    mkdir -p /cluster/bluearc/stsMarker/zebrafishMarker/split
+    cd /cluster/bluearc/stsMarker/zebrafishMarker/split
+    faSplit sequence \
+    /cluster/data/danRer1/bed/STSmarkers/downloads/allSTSMarkerSeqs.fa 50 sts 
+    # do the blat run
+    ssh kk
+    cd /cluster/data/danRer1/bed/STSmarkers 
+    mkdir run
+    cd run
+    ls -1 /iscratch/i/danRer1/trfFa/*.fa > genome.lst
+    ls -1S /cluster/bluearc/stsMarker/zebrafishMarker/split/sts*.fa > sts.lst
+    mkdir -p /cluster/bluearc/danRer1/stsMarkers/sts/out
+    foreach f (`cat sts.lst`)
+        set d = $f:t:r
+        mkdir /cluster/bluearc/danRer1/stsMarkers/sts/out/$d
+    end
+# create alignments
+cat > template << 'EOF'
+#LOOP
+/cluster/bin/i386/blat $(path1) $(path2) -ooc=/cluster/bluearc/danRer1/11.ooc -stepSize=5 {check out line+ /cluster/bluearc/danRer1/stsMarkers/sts/out/$(root2)/$(root1).$(root2).psl}
+#ENDLOOP
+'EOF'
+# << for emacs
+
+    gensub2 genome.lst sts.lst template jobList
+    para create jobList
+    # 15190 jobs
+    para try, create, push ..... 
+# para time
+# Completed: 15190 of 15190 jobs
+# CPU time in finished jobs:      61925s    1032.09m    17.20h    0.72d  0.002 y
+# IO & Wait Time:                 51578s     859.63m    14.33h    0.60d  0.002 y
+# Average job time:                   7s       0.12m     0.00h    0.00d
+# Longest job:                       49s       0.82m     0.01h    0.00d
+# Submission to last job:           187s       3.12m     0.05h    0.00d
+
+    ssh kolossus
+    cd /cluster/bluearc/danRer1/stsMarkers/sts
+    pslSort dirs raw.psl temp out/*
+    rm -rf temp
+    pslReps -nearTop=0.0001 -minCover=0.6 -minAli=0.8 -noIntrons raw.psl \
+        stsMarkers.psl /dev/null
+    # Processed 2574993 alignments
+    # Lift them and get them ready to combine with primer alignments
+    liftUp -nohead stsMarkers.lifted.psl \
+        /cluster/data/danRer1/jkStuff/liftAll.lft warn stsMarkers.psl
+
+    /cluster/bin/scripts/extractPslInfo stsMarkers.lifted.psl
+        # creates <file>.initial
+    /cluster/bin/scripts/findAccession2 -agp stsMarkers.lifted.psl.initial \
+        /cluster/data/danRer1
+    sort -k 4n stsMarkers.lifted.psl.initial.acc > stsMarkers.final
+    # determine how many were mapped
+    cut -f 4 stsMarkers.final | sort -n | uniq > stsMarkers.found
+    wc -l stsMarkers.found
+    # 12365 stsMarkers.found  out of 17311
+    # retry with less stringent pslReps 
+    pslReps -nearTop=0.0001 -minAli=0.8 -noIntrons raw.psl \
+        stsMarkers2.psl /dev/null
+    # Processed 2574993 alignments
+    # Lift them and get them ready to combine with primer alignments
+    liftUp -nohead stsMarkers2.lifted.psl \
+        /cluster/data/danRer1/jkStuff/liftAll.lft warn stsMarkers2.psl
+    /cluster/bin/scripts/extractPslInfo stsMarkers2.lifted.psl
+        # creates <file>.initial
+    /cluster/bin/scripts/findAccession2 -agp stsMarkers2.lifted.psl.initial \
+        /cluster/data/danRer1
+    sort -k 4n stsMarkers2.lifted.psl.initial.acc > stsMarkers2.final
+    # determine how many were mapped
+    cut -f 4 stsMarkers2.final | sort -n | uniq > stsMarkers2.found
+    wc -l stsMarkers2.found
+    # 16310 stsMarkers2.found out of 17311 

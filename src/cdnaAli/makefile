@@ -1,14 +1,14 @@
 all:
-	cd lib;make
-	cd ali2alx;make
-	cd binGood;make
-	cd cdnaOff;make
-	cd cluster;make
-	cd exonAli;make
-	cd findCdna;make
-	cd g2cCheck;make
-	cd introns;make
-	cd refineAli;make
-	cd stitchea;make
-	cd sortFilt;make
-	cd aliGlue;make
+	cd lib && ${MAKE}
+	cd ali2alx && ${MAKE}
+	cd binGood && ${MAKE}
+	cd cdnaOff && ${MAKE}
+	cd cluster && ${MAKE}
+	cd exonAli && ${MAKE}
+	cd findCdna && ${MAKE}
+	cd g2cCheck && ${MAKE}
+	cd introns && ${MAKE}
+	cd refineAli && ${MAKE}
+	cd stitchea && ${MAKE}
+	cd sortFilt && ${MAKE}
+	cd aliGlue && ${MAKE}

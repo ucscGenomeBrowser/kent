@@ -1650,6 +1650,7 @@ tablesIgnored $galGal
 
 tablesIgnored $danRer
     chr%_gold
+    uniGene_dr
 
 tablesIgnored $canFam
     chr%_gold
@@ -1667,6 +1668,9 @@ tablesIgnored $hg
     chimpDels
     chimpSimpleDiff
     ctgPos
+    celeraCoverage
+    celeraDupPositive
+    celeraOverlay
     genomicSuperDups
     haplotype
     perlegen

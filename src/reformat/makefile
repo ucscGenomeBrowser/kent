@@ -1,9 +1,9 @@
 all:
-	cd fatont4; make
-	cd fixcr; make
-	cd gbtofa; make
-	cd geniegff; make
-	cd gffgenes; make
-	cd moresyn; make
-	cd gb2cdi; make
-	cd wabToSt; make
+	cd fatont4 && ${MAKE}
+	cd fixcr && ${MAKE}
+	cd gbtofa && ${MAKE}
+	cd geniegff && ${MAKE}
+	cd gffgenes && ${MAKE}
+	cd moresyn && ${MAKE}
+	cd gb2cdi && ${MAKE}
+	cd wabToSt && ${MAKE}

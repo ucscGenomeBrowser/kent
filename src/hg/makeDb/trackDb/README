@@ -87,15 +87,23 @@ For wigMaf tracks:
     o standard wig track settings may be included (e.g. 
         maxHeightPixels, yLineOnOff, autoScaleDefault).  These
         apply to both conservation and pairwise wiggles
-    o wiggle setting - contains table name of conservation wiggle 
+    * Settings:
+     o wiggle - contains table name of conservation wiggle 
                           (loaded with hgLoadWiggle)
-    o species order - specifies the order of each pairwise items in the display
-        Each species is specified with the "organism" field of dbDb,
-        the first letter lower-cased.
-        For organism names with embedded dots and/or spaces,
+     o speciesOrder - specifies the order of each pairwise items in the display
+        Each species is specified as in the MAF file
+        Organism names with embedded dots and/or spaces,
         these are stripped and replaced with underscore.
         E.g. (C. elegans -> c_elegans).
-    o pairwise setting - contains suffix of the pairwise maf tables.
+     o speciesGroup - list of "clades" to group the species
+        This option is an alternative to speciesOrder, used when
+        there are many species.  Each speciesGroup in the list must have it's
+        own setting (sGroup_<group>), followed by a list of species,
+        specified as for speciesOrder.
+     o treeImage - path from web server htdocs dir (normally /images)
+            to a file containing a picture of the phylogenetic tree for
+            this track
+     o pairwise - contains suffix of the pairwise maf tables.
             The prefix is generated from the species name, as specified above.
             An underscore is used to separate (e.g. chimp_hmrg if
             setting is "hmrg").  If there is a wig table named

@@ -12,7 +12,7 @@
 #include "memalloc.h"
 #include "dlist.h"
 
-static char const rcsid[] = "$Id: memalloc.c,v 1.17 2004/09/13 20:08:17 hiram Exp $";
+static char const rcsid[] = "$Id: memalloc.c,v 1.18 2004/10/30 02:04:04 kent Exp $";
 
 static void *defaultAlloc(size_t size)
 /* Default allocator. */
@@ -308,6 +308,7 @@ dlRemove((struct dlNode *)cmb);
 carefulParent->free(cmb);
 }
 
+
 static void *carefulRealloc(void *vpt, size_t size)
 /* realloc a careful memblock block. */
 {
@@ -354,6 +355,12 @@ int carefulCountBlocksAllocated()
 /* How many memory items are allocated? */
 {
 return dlCount(cmbAllocedList);
+}
+
+long carefulTotalAllocated()
+/* Return total bases allocated */
+{
+return carefulAlloced;
 }
 
 static struct memHandler carefulMemHandler = 

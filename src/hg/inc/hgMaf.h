@@ -3,6 +3,8 @@
 
 /* Track settings and variables */
 #define SPECIES_ORDER_VAR       "speciesOrder"
+#define SPECIES_GROUP_VAR       "speciesGroups"
+#define SPECIES_GROUP_PREFIX    "sGroup_"
 #define PAIRWISE_VAR            "pairwise"
 #define BASE_COLORS_VAR         "baseColors"
 #define BASE_COLORS_OFFSET_VAR  "baseColorsOffset"

@@ -10,16 +10,13 @@
 #include "spaceSaver.h"
 #include "hgTracks.h"
 
-char *snpSourceCart[snpSourceCount];
-char *snpTypeCart[snpTypeCount];
-
 void filterSnpItems(struct track *tg, boolean (*filter)(struct track *tg, void *item));
 /* Filter out items from track->itemList. */
 
-boolean snpSourceFilterItem(struct track *tg, void *item);
+boolean snpMapSourceFilterItem(struct track *tg, void *item);
 /* Return TRUE if item passes filter. */
 
-boolean snpTypeFilterItem(struct track *tg, void *item);
+boolean snpMapTypeFilterItem(struct track *tg, void *item);
 /* Return TRUE if item passes filter. */
 
 void loadSnpMap(struct track *tg);
@@ -38,6 +35,40 @@ void snpMapDrawItemAt(struct track *tg, void *item,
 
 void snpMapMethods(struct track *tg);
 /* Make track for snps. */
+
+
+boolean snpSourceFilterItem(struct track *tg, void *item);
+/* Return TRUE if item passes filter. */
+
+boolean snpMolTypeFilterItem(struct track *tg, void *item);
+/* Return TRUE if item passes filter. */
+
+boolean snpClassFilterItem(struct track *tg, void *item);
+/* Return TRUE if item passes filter. */
+
+boolean snpValidFilterItem(struct track *tg, void *item);
+/* Return TRUE if item passes filter. */
+
+boolean snpFuncFilterItem(struct track *tg, void *item);
+/* Return TRUE if item passes filter. */
+
+void loadSnp(struct track *tg);
+/* Load up snps from database table to track items. */
+
+void freeSnp(struct track *tg);
+/* Free up snp items. */
+
+Color snpColor(struct track *tg, void *item, struct vGfx *vg);
+/* Return color of snp track item. */
+
+void snpDrawItemAt(struct track *tg, void *item, 
+	struct vGfx *vg, int xOff, int y, 
+        double scale, MgFont *font, Color color, enum trackVisibility vis);
+/* Draw a single snp item at position. */
+
+void snpMethods(struct track *tg);
+/* Make track for snps. */
+
 
 char *perlegenName(struct track *tg, void *item);
 /* return the actual perlegen name, in form xx/yyyy cut off xx/ return yyyy */

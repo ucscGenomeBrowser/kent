@@ -7,6 +7,7 @@
 
 #include "common.h"
 #include "dnautil.h"
+#include "dlist.h"
 #include "fuzzyFind.h"
 #include "localmem.h"
 #include "patSpace.h"
@@ -14,7 +15,7 @@
 #include "supStitch.h"
 #include "chainBlock.h"
 
-static char const rcsid[] = "$Id: supStitch.c,v 1.23 2004/07/07 04:13:13 kent Exp $";
+static char const rcsid[] = "$Id: supStitch.c,v 1.24 2004/10/30 04:55:54 kent Exp $";
 
 void ssFfItemFree(struct ssFfItem **pEl)
 /* Free a single ssFfItem. */
@@ -589,13 +590,14 @@ static void ssFindBestBig(struct ffAli *ffList, bioSeq *qSeq, bioSeq *tSeq,
  * blocks in alignment. */
 {
 struct boxIn *boxList = NULL, *box, *prevBox;
-struct ffAli *ff;
+struct ffAli *ff, *farRight = NULL;
 struct lm *lm = lmInit(0);
 int boxSize;
 DNA *firstH = tSeq->dna;
 struct chain *chainList, *chain, *bestChain;
 int tMin = BIGNUM, tMax = -BIGNUM;
 struct ffAli **newList;
+struct dlNode *node;
 
 
 /* Make up box list for chainer. */
@@ -656,30 +658,32 @@ for (box = prevBox->next; box != NULL; box = box->next)
     prevBox = box;
     }
 
-/* Copy stuff from first chain to bestAli, and from rest of
- * chains to leftovers. */
-*retBestAli = NULL;
-*retLeftovers = NULL;
-newList = retBestAli;
-for (chain = chainList; chain != NULL; chain = chain->next)
+/* Copy stuff from first chain to bestAli. */
+farRight = NULL;
+for (box = chainList->blockList; box != NULL; box = box->next)
     {
-    struct ffAli *farRight = NULL;
+    ff = box->data;
+    ff->left = farRight;
+    farRight = ff;
+    }
+*retBestAli = ffMakeRightLinks(farRight);
+
+/* Copy stuff from other chains to leftovers. */
+farRight = NULL;
+for (chain = chainList->next; chain != NULL; chain = chain->next)
+    {
     for (box = chain->blockList; box != NULL; box = box->next)
         {
-	ff = box->data;
+        ff = box->data;
 	ff->left = farRight;
 	farRight = ff;
 	}
-    for (ff = farRight; ff != NULL; ff = ff->left)
-        {
-	ff->right = *newList;
-	*newList = ff;
-	}
-    newList = retLeftovers;
-    chain->blockList = NULL;	/* Don't want to free this, it's local. */
     }
+*retLeftovers = ffMakeRightLinks(farRight);
 
 *retScore = bestChain->score;
+for (chain = chainList; chain != NULL; chain = chain->next)
+    chain->blockList = NULL;	/* Don't want to free this, it's local. */
 chainFreeList(&chainList);
 lmCleanup(&lm);
 }
@@ -719,7 +723,6 @@ int newAliCount = 0;
 int totalFfCount = 0;
 boolean firstTime = TRUE;
 
-
 if (bundle->ffList == NULL)
     return 0;
 
@@ -737,7 +740,6 @@ slFreeList(&bundle->ffList);
 
 ffAliSort(&ffList, ffCmpHitsNeedleFirst);
 ffList = ffMergeClose(ffList);
-
 while (ffList != NULL)
     {
     ssFindBest(ffList, qSeq, genoSeq, stringency, 

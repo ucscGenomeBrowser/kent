@@ -1,4 +1,7 @@
 31:
+     o Fixed a pretty bad memory leak when doing blast type output.
+       Also fixed a more subtle one that occured in some cases usually
+       involving repeat-rich query sequences.
      o Fixed bug where blat of protein vs. translated DNA
        -q=prot -t=dnax would drop exons in some situations.  This
        was a side effect of the last change in version 29.  
