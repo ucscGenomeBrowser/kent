@@ -5268,7 +5268,9 @@ for (bed = ct->bedList; bed != NULL; bed = bed->next)
     if (bed->chromStart == start && sameString(seqName, bed->chrom))
          {
 	 if (bed->name == NULL || sameString(itemName, bed->name) )
+	     {
 	     break;
+	     }
 	 }
     }
 if (bed == NULL)
