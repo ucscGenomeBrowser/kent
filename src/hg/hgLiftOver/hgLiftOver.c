@@ -17,7 +17,7 @@
 #include "liftOver.h"
 #include "liftOverChain.h"
 
-static char const rcsid[] = "$Id: hgLiftOver.c,v 1.35 2005/02/02 08:49:09 aamp Exp $";
+static char const rcsid[] = "$Id: hgLiftOver.c,v 1.36 2005/02/02 19:23:44 aamp Exp $";
 
 /* CGI Variables */
 #define HGLFT_USERDATA_VAR "hglft_userData"     /* typed/pasted in data */
@@ -28,7 +28,13 @@ static char const rcsid[] = "$Id: hgLiftOver.c,v 1.35 2005/02/02 08:49:09 aamp E
 #define HGLFT_TOORG_VAR   "hglft_toOrg"           /* TO organism */
 #define HGLFT_TODB_VAR   "hglft_toDb"           /* TO assembly */
 #define HGLFT_ERRORHELP_VAR "hglft_errorHelp"      /* Print explanatory text */
-
+/* liftOver options: */
+#define HGLFT_MINMATCH "hglft_minMatch"          
+#define HGLFT_MINSIZEQ "hglft_minSizeQ"
+#define HGLFT_MINSIZET "hglft_minSizeT"
+#define HGLFT_MULTIPLE "hglft_multiple"
+#define HGLFT_MINBLOCKS "hglft_minBlocks"
+#define HGLFT_FUDGETHICK "hglft_fudgeThick"
 
 /* Global Variables */
 struct cart *cart;	        /* CGI and other variables */
@@ -134,7 +140,7 @@ cgiSimpleTableFieldStart();
 cgiTableField("Minimum ratio of bases that must remap:");
 cgiTableFieldEnd();
 cgiSimpleTableFieldStart();
-cgiMakeDoubleVar("hglft_minMatch",chain->minMatch,6);
+cgiMakeDoubleVar(HGLFT_MINMATCH,chain->minMatch,6);
 cgiTableFieldEnd();
 cgiTableRowEnd();
 cgiSimpleTableRowStart();
@@ -142,7 +148,7 @@ cgiSimpleTableFieldStart();
 cgiTableField("Minimum chain size in target:");
 cgiTableFieldEnd();
 cgiSimpleTableFieldStart();
-cgiMakeIntVar("hglft_minSizeT",chain->minSizeT,4);
+cgiMakeIntVar(HGLFT_MINSIZET,chain->minSizeT,4);
 cgiTableFieldEnd();
 cgiTableRowEnd();
 cgiSimpleTableRowStart();
@@ -150,7 +156,7 @@ cgiSimpleTableFieldStart();
 cgiTableField("Minimum chain size in query:");
 cgiTableFieldEnd();
 cgiSimpleTableFieldStart();
-cgiMakeIntVar("hglft_minSizeQ",chain->minSizeQ,4);
+cgiMakeIntVar(HGLFT_MINSIZEQ,chain->minSizeQ,4);
 cgiTableFieldEnd();
 cgiTableRowEnd();
 cgiSimpleTableRowStart();
@@ -158,7 +164,7 @@ cgiSimpleTableFieldStart();
 cgiTableField("Allow multiple output regions:");
 cgiTableFieldEnd();
 cgiSimpleTableFieldStart();
-cgiMakeCheckBox("hglft_multiple",(chain->multiple[0]=='Y') ? TRUE : FALSE);
+cgiMakeCheckBox(HGLFT_MULTIPLE,(chain->multiple[0]=='Y') ? TRUE : FALSE);
 cgiTableFieldEnd();
 cgiTableRowEnd();
 cgiSimpleTableRowStart();
@@ -166,7 +172,7 @@ cgiSimpleTableFieldStart();
 cgiTableField("Min ratio of alignment blocks/exons that must map:");
 cgiTableFieldEnd();
 cgiSimpleTableFieldStart();
-cgiMakeDoubleVar("hglft_minMatch",chain->minBlocks,6);
+cgiMakeDoubleVar(HGLFT_MINBLOCKS,chain->minBlocks,6);
 cgiTableFieldEnd();
 cgiTableRowEnd();
 cgiSimpleTableRowStart();
@@ -174,7 +180,7 @@ cgiSimpleTableFieldStart();
 cgiTableField("If thickStart/thickEnd is not mapped, use the closest mapped base:");
 cgiTableFieldEnd();
 cgiSimpleTableFieldStart();
-cgiMakeCheckBox("hglft_fudgeThick",(chain->fudgeThick[0]=='Y') ? TRUE : FALSE);
+cgiMakeCheckBox(HGLFT_FUDGETHICK,(chain->fudgeThick[0]=='Y') ? TRUE : FALSE);
 cgiTableFieldEnd();
 cgiTableRowEnd();
 cgiTableEnd();
@@ -431,25 +437,25 @@ previousDb = hPreviousAssembly(db);
 
 chainList = liftOverChainList();
 choice = defaultChoices(chainList);
-minSizeQ = cgiOptionalInt("hglft_minSizeQ",choice->minSizeQ);
-minSizeT = cgiOptionalInt("hglft_minSizeT",choice->minSizeT);
-minBlocks = cgiOptionalDouble("hglft_minBlocks",choice->minBlocks);
-minMatch = cgiOptionalDouble("hglft_minMatch",choice->minMatch);
-if (cgiBooleanDefined("hglft_fudgeThick"))
+minSizeQ = cgiOptionalInt(HGLFT_MINSIZEQ,choice->minSizeQ);
+minSizeT = cgiOptionalInt(HGLFT_MINSIZET,choice->minSizeT);
+minBlocks = cgiOptionalDouble(HGLFT_MINBLOCKS,choice->minBlocks);
+minMatch = cgiOptionalDouble(HGLFT_MINMATCH,choice->minMatch);
+if (cgiBooleanDefined(HGLFT_FUDGETHICK))
     {
     char buf[256];
     int val;
-    sprintf(buf, "%s%s", cgiBooleanShadowPrefix(), "hglft_fudgeThick");
+    sprintf(buf, "%s%s", cgiBooleanShadowPrefix(), HGLFT_FUDGETHICK);
     val = cgiInt(buf);
     fudgeThick = (val==1) ? TRUE : FALSE;
     }
 else 
     fudgeThick = (choice->fudgeThick[0]=='Y') ? TRUE : FALSE;
-if (cgiBooleanDefined("hglft_multiple"))
+if (cgiBooleanDefined(HGLFT_MULTIPLE))
     {
     char buf[256];
     int val;
-    sprintf(buf, "%s%s", cgiBooleanShadowPrefix(), "hglft_multiple");
+    sprintf(buf, "%s%s", cgiBooleanShadowPrefix(), HGLFT_MULTIPLE);
     val = cgiInt(buf);
     multiple = (val==1) ? TRUE : FALSE;
     }
