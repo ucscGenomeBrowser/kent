@@ -33,6 +33,7 @@ set familyDb $hg,$mm,$ce,$sacCer,$dm
 
 # Define the shared identifiers and the fields they appear in.
 identifier goId external=GO
+"Gene ontology term identifiers"
     $dm.bdgpInfo.go comma
     $dm.bdgpNonCodingInfo comma
 
@@ -103,6 +104,17 @@ identifier affyU74
     $mm.affyGnfU74C.name
     $mm.affyU74.qName
     $mm.knownToU74.value
+
+identifier nci60SampleId
+"Identifiers of NCI 60 Cell lines for expression experiments"
+    hgFixed.nci60Exps.id
+    $hg.nci60.expIds comma
+    $hg.nci60.expIds comma indexOf
+
+identifier rosettaChr22SampleId
+"Identifiers for samples used in Rosetta chromosome 22 public experiments"
+    hgFixed.rosettaExps.name
+    hgFixed.rosChr22Dat.expName
 
 identifier gnfU95SampleIdV0
 "Identifiers of RNA samples used early version of GNF Human Expression Atlas 1"
@@ -365,7 +377,7 @@ identifier knownGeneId typeOf=nativeMrnaAccession
     $knownDb.knownToLocusLink.name
     $knownDb.knownToPfam.name
     $knownDb.knownToRefSeq.name
-    $knownDb.knownToSuper.name
+    $knownDb.knownToSuper.gene
     $hg.knownToU133.name
     $hg.knownToU95.name
 
@@ -554,11 +566,12 @@ identifier pfamId external=Pfam
     $knownDb.knownToPfam.value
     $dm.bdgpToPfam.value
 
-identifier superfamilyId external=Superfamily
-"Protein Superfamily ID"
-    $knownDb.knownToSuper.value
+identifier superfamilyId external=SCOP
+"Protein SCOP/Superfamily ID"
+    $knownDb.knownToSuper.superfamily
     $gbd.sfAssign.sfID
     $gbd.sfDes.id
+    hgFixed.scopDes.sunid    
 
 identifier mouseGeneName
 "Mouse gene name from Jackson Labs/RefSeq"
@@ -761,9 +774,13 @@ identifier unigeneId
 "NCBI UniGene Cluster ID"
     $gbd.sage.uni
     $gbd.uniGene_2.name chopBefore=.
+    hgFixed.sage.uni
 
 identifier sageExpId
 "Sage experiment (tissue type etc) ID"
     $gbd.sageExp.num
     $gbd.sage.exps comma
+    hgFixed.sage.exps comma
+    hgFixed.sageCounts.expCounts comma indexOf
+    hgFixed.sageExp.num
 
