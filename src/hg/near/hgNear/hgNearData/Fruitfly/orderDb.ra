@@ -1,0 +1,16 @@
+# This contains D. melanogaster specific ordering info.
+#
+name arbExpn
+shortLabel Expression (Arbeitman)
+longLabel Difference in expression with selected gene
+type pair arbExpDistance query target distance 1
+priority 1
+
+name blastp
+type pair bdgpBlastTab query target bitScore -1 
+
+name nameSimilarity
+type nameSimilarity bdgpSwissProt bdgpName symbol
+
+name abc
+type abc bdgpSwissProt bdgpName symbol
