@@ -142,7 +142,7 @@ void termHandler()
 {
 if (grandChildId != 0)
     {
-    kill(grandChildId, SIGTERM);
+    kill(-grandChildId, SIGTERM);
     grandChildId = 0;
     }
 }
@@ -209,6 +209,7 @@ if ((grandChildId = fork()) == 0)
     /* Change to given user and dir. */
     changeUid(user, &homeDir);
     chdir(dir);
+    setpgrp();
     umask(umaskVal); 
 
     /* Redirect standard io.  There has to  be a less
