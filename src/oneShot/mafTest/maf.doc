@@ -37,26 +37,70 @@ General Structure
 
 The .maf format is line oriented. Multiple alignments each
 end with a blank line.  Each sequence in an alignment 
-is on a single line, which can get quite long. Lines 
+is on a single line, which can get quite long. Words in
+a line are delimited by any white space. Lines 
 starting with # are considered comments.  Lines starting 
 with ## can be ignored by most programs, but contain 
 meta-data of one form or another.  
 
-Each non-comment line within a multiple alignment begins
-with a type word.  Currently only types 'a' and 's' are
-defined.   Alignments begin with an 'a' line, which is
-followed by an arbitrary number of 's' lines.  Parsers
-should ignore lines starting with other type words for now.
+The file is broken into paragraphs that terminate in a
+blank line.  Within a paragraph the first word of a line
+indicates it's type.  Each multiple alignment is in 
+a paragraph by itself that begins with an 'a' line and
+which contains an 's' line for each sequence in the
+multiple alignment.  Parsers for now should ignore
+other types of paragraphs, and other types of lines within
+an alignment paragraph.
 
 
 The First Line
 
 The first line of a .maf file begins with ##maf.  This
-word is followed by whitespace separated name/value pairs.  
-A version name/value pair is required
+word is followed by whitespace separated variable=value pairs.  
+There must *not* be white space surrounding the =.
+The currently defined variables are:
+   version - Required.  Currently set to one.
+   scoring - Optional. A name for the scoring scheme used for the
+             alignments.  The current scoring schemes are:
+	bit - roughly corresponds to blast bit values - roughly
+	      2 points per aligning base minus penalties for mismatches
+	      and inserts.
+	blastz - blastz scoring scheme - roughly 100 points per aligning
+	      base.
+	probability - some score normalized between 0 and 1.
+   program - Optional. Name of program generating alignment.
+Parsers ignore variables they do not understand.
+
+'a' Lines
+
+Each alignment begins with an 'a' line.  The 'a' is followed
+by name=value pairs.   There are no required name=value pairs.
+The currently defined variables are:
+    score - Optional. Floating point score. If this is present
+            it is good practice to also define scoring in the first 
+	    line.
+[Note - Scott, I don't see how to generalize your notion of type
+to multiple alignments.]
 
 
-The 'a' Lines
+'s' Lines    
 
-Each alignment begins with an 'a' line.
+The s lines together with the a lines define a multiple alignment.
+The s lines have the following fields:
 
+  src - The name of one of the source sequences for the alignment.
+        Typically this will be the first word following the '>' in
+	a fasta file that was input to the multiple aligner.
+  start - The start of the aligning region in the source sequence.
+        This is a zero based number. If the strand field below is
+	'-' then this is the start relative to the reverse-complemented
+	source sequence.
+  size - The size of the aligning region in the source sequence.  This
+         number is equal to the number of non-dash characters in the
+	 alignment text field below.
+  strand - Either '+' or '-'.  If '-' then the alignment is to the
+         reverse complemented source.
+  srcSize - The size of the entire source sequence, not just the parts
+         involved in the alignment.
+  text - The bases (or amino acids) in the alignment and any dashes
+         as well.

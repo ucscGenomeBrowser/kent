@@ -4,6 +4,8 @@
 #include "hash.h"
 #include "options.h"
 #include "maf.h"
+#include "mafXml.h"
+#include "axt.h"
 
 void usage()
 /* Explain usage and exit. */
@@ -12,16 +14,27 @@ errAbort(
   "mafTest - Testing out maf stuff\n"
   "usage:\n"
   "   mafTest in out\n"
-  "options:\n"
-  "   -xxx=XXX\n"
   );
 }
 
 void mafTest(char *inFile, char *outFile)
 /* mafTest - Testing out maf stuff. */
 {
-struct mafFile *mm = mafReadAll(inFile);
-mafWriteAll(mm, outFile);
+struct mafFile *mm = NULL;
+FILE *f = mustOpen(outFile, "w");
+
+if (endsWith(inFile, ".maf"))
+   mm = mafReadAll(inFile);
+else if (endsWith(inFile, ".axt"))
+   {
+   struct lineFile *lf = lineFileOpen(inFile, TRUE);
+   while (axtRead(lf) != NULL)
+       ;
+   }
+else
+   mm = mafMafLoad(inFile);
+mafMafSave(mm, 0, f);
+mafFileFreeList(&mm);
 }
 
 int main(int argc, char *argv[])

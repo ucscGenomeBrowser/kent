@@ -3,6 +3,7 @@
 #include "common.h"
 #include "xap.h"
 #include "maf.h"
+#include "mafXml.h"
 
 void *mafStartHandler(struct xap *xp, char *name, char **atts);
 /* Called by expat with start tag.  Does most of the parsing work. */
@@ -23,7 +24,7 @@ fprintf(f, " version=\"%d\"", obj->version);
 if (obj->scoring != NULL)
     fprintf(f, " scoring=\"%s\"", obj->scoring);
 fprintf(f, ">");
-for (mafAli = obj->mafAli; mafAli != NULL; mafAli = mafAli->next)
+for (mafAli = obj->alignments; mafAli != NULL; mafAli = mafAli->next)
    {
    if (isNode)
        {
@@ -80,7 +81,7 @@ xapIndent(indent, f);
 fprintf(f, "<S");
 fprintf(f, " src=\"%s\"", obj->src);
 fprintf(f, " srcSize=\"%d\"", obj->srcSize);
-fprintf(f, " strand=\"%s\"", obj->strand);
+fprintf(f, " strand=\"%c\"", obj->strand);
 fprintf(f, " start=\"%d\"", obj->start);
 fprintf(f, " size=\"%d\"", obj->size);
 fprintf(f, ">");
@@ -132,7 +133,7 @@ else if (sameString(name, "ALI"))
         if  (sameString(st->elName, "MAF"))
             {
             struct mafFile *parent = st->object;
-            slAddHead(&parent->mafAli, obj);
+            slAddHead(&parent->alignments, obj);
             }
         }
     return obj;
@@ -149,7 +150,7 @@ else if (sameString(name, "S"))
         else if (sameString(name, "srcSize"))
             obj->srcSize = atoi(val);
         else if (sameString(name, "strand"))
-            obj->strand = cloneString(val);
+            obj->strand = val[0];
         else if (sameString(name, "start"))
             obj->start = atoi(val);
         else if (sameString(name, "size"))
@@ -157,7 +158,7 @@ else if (sameString(name, "S"))
         }
     if (obj->src == NULL)
         xapError(xp, "missing src");
-    if (obj->strand == NULL)
+    if (obj->strand == 0)
         xapError(xp, "missing strand");
     if (depth > 1)
         {
@@ -183,7 +184,7 @@ struct xapStack *stack = xp->stack;
 if (sameString(name, "MAF"))
     {
     struct mafFile *obj = stack->object;
-    slReverse(&obj->mafAli);
+    slReverse(&obj->alignments);
     }
 else if (sameString(name, "ALI"))
     {
