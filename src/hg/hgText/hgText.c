@@ -35,7 +35,7 @@
 #include "hgText.h"
 #include "botDelay.h"
 
-static char const rcsid[] = "$Id: hgText.c,v 1.150 2004/07/09 19:47:13 kent Exp $";
+static char const rcsid[] = "$Id: hgText.c,v 1.151 2004/07/14 05:51:59 kent Exp $";
 
 /* sources of tracks, other than the current database: */
 static char *hgFixed = "hgFixed";
@@ -5137,8 +5137,8 @@ struct cart *theCart;
 
 oldVars = hashNew(8);
 cgiSpoof(&argc, argv);
-// Sometimes we output HTML and sometimes plain text; let each outputter 
-// take care of headers instead of using a fixed cart*Shell().
+/* Sometimes we output HTML and sometimes plain text; let each outputter 
+ * take care of headers instead of using a fixed cart*Shell(). */
 theCart = cartAndCookieWithHtml(hUserCookie(), excludeVars, oldVars, FALSE);
 doMiddle(theCart);
 cartCheckout(&theCart);
