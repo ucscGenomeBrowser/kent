@@ -124,8 +124,9 @@
 #include "tfbsCons.h"
 #include "simpleNucDiff.h"
 #include "hgFind.h"
+#include "botDelay.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.555 2004/01/31 01:18:36 braney Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.556 2004/01/31 02:56:29 kent Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -13508,6 +13509,7 @@ void cartDoMiddle(struct cart *theCart)
 {
 initOrgDbHash();
 cart = theCart;
+hgBotDelay();
 doMiddle();
 }
 

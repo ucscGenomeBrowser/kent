@@ -29,8 +29,9 @@
 #include "customTrack.h"
 #include "hgColors.h"
 #include "tableDescriptions.h"
+#include "botDelay.h"
 
-static char const rcsid[] = "$Id: hgText.c,v 1.106 2003/12/15 20:28:42 angie Exp $";
+static char const rcsid[] = "$Id: hgText.c,v 1.107 2004/01/31 02:56:29 kent Exp $";
 
 /* sources of tracks, other than the current database: */
 static char *hgFixed = "hgFixed";
@@ -4867,6 +4868,7 @@ cgiSpoof(&argc, argv);
 // Sometimes we output HTML and sometimes plain text; let each outputter 
 // take care of headers instead of using a fixed cart*Shell().
 theCart = cartAndCookieWithHtml(hUserCookie(), excludeVars, oldVars, FALSE);
+hgBotDelay();
 doMiddle(theCart);
 cartCheckout(&theCart);
 return 0;

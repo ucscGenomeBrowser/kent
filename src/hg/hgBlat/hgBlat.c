@@ -18,8 +18,9 @@
 #include "blatServers.h"
 #include "web.h"
 #include "hash.h"
+#include "botDelay.h"
 
-static char const rcsid[] = "$Id: hgBlat.c,v 1.68 2003/11/19 22:49:05 kuhn Exp $";
+static char const rcsid[] = "$Id: hgBlat.c,v 1.69 2004/01/31 02:56:29 kent Exp $";
 
 struct cart *cart;	/* The user's ui state. */
 struct hash *oldVars = NULL;
@@ -623,6 +624,7 @@ if(userSeq == NULL || userSeq[0] == '\0' || showPage)
 else
     {
     cartWebStart(theCart, "%s BLAT Results", organism);
+    hgBotDelay();
     blatSeq(skipLeadingSpaces(userSeq));
     }
 cartWebEnd();
