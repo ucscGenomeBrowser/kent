@@ -8,7 +8,7 @@
 #include "portable.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: spToDb.c,v 1.5 2003/09/29 23:39:18 kent Exp $";
+static char const rcsid[] = "$Id: spToDb.c,v 1.6 2003/10/01 06:25:39 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -688,7 +688,7 @@ boolean isNewDir = makeDir(tabDir);
 FILE *displayId = createAt(tabDir, "displayId");
 FILE *otherAcc = createAt(tabDir, "otherAcc");
 FILE *organelle = createAt(tabDir, "organelle");
-FILE *singles = createAt(tabDir, "singles");
+FILE *info = createAt(tabDir, "info");
 FILE *description = createAt(tabDir, "description");
 FILE *geneLogic = createAt(tabDir, "geneLogic");
 FILE *gene = createAt(tabDir, "gene");
@@ -755,16 +755,16 @@ for (;;)
     /* organelle */
     organelleId = uniqueStore(organelleUni, spr->organelle);
 
-    /* singles */
-    fprintf(singles, "%s\t%d\t%d\t%d\t", 
+    /* info */
+    fprintf(info, "%s\t%d\t%d\t%d\t", 
     	acc, spr->isCurated, spr->aaSize, spr->molWeight);
-    toSqlDate(singles, spr->createDate);
-    fputc('\t', singles);
-    toSqlDate(singles, spr->seqDate);
-    fputc('\t', singles);
-    toSqlDate(singles, spr->annDate);
-    fputc('\t', singles);
-    fprintf(singles, "%d\n", organelleId);
+    toSqlDate(info, spr->createDate);
+    fputc('\t', info);
+    toSqlDate(info, spr->seqDate);
+    fputc('\t', info);
+    toSqlDate(info, spr->annDate);
+    fputc('\t', info);
+    fprintf(info, "%d\n", organelleId);
 
     /* description */
     if (spr->description != NULL)
