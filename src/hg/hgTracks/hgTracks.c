@@ -1086,6 +1086,9 @@ double hFactor;
 double minRange, maxRange;
 
 
+int gapPrevEnd = -1;
+
+
 tg->colorShades = shadesFromBaseColor( &tg->color );
 shades = tg->colorShades;
 
@@ -1107,17 +1110,23 @@ if( sameString( tg->mapName, "humMus" ) )
     minRange = 500.0;
     maxRange = 1000.0;
     }
+    else if( sameString( tg->mapName, "zoo" ) )
+    {
+    minRange = 600.0;
+    maxRange = 1000.0;
+    }
     else
     {
     minRange = 1.0;
     maxRange = 1000.0;
     }
 
-
 heightPer = tg->heightPer+1;
 hFactor = (double)heightPer/1000.0;
 for(lf = tg->items; lf != NULL; lf = lf->next) 
     {
+    gapPrevEnd = -1;
+    prevEnd = -1;
     for (sf = lf->components; sf != NULL; sf = sf->next)
 	    {
 	    s = sf->start;
@@ -1126,7 +1135,11 @@ for(lf = tg->items; lf != NULL; lf = lf->next)
         /*mapping or sequencing gap*/
         if( (sf->start - sf->end) == 0 ) 
 	        {
-            prevEnd = -1; /*connect next point with gray bar too*/
+            tmp = -whichBin( (int)((maxRange - minRange)/5.0+minRange), minRange, maxRange, 1000 );
+            y1 = (int)((double)y+((double)tmp)* hFactor+(double)heightPer);
+            if( prevEnd == -5 && gapPrevEnd >= 0 )
+	            drawScaledBox(mg, s, gapPrevEnd, scale, xOff, (int)y1, 10, shadesOfGray[2]);
+            prevEnd = -5; /*connect next point with gray bar too*/
             continue;
 	        }
 	
@@ -1164,6 +1177,7 @@ for(lf = tg->items; lf != NULL; lf = lf->next)
         if( fill )
 	        drawScaledBox(mg, s, s+1, scale, xOff, (int)y1+2, ybase-y1-2, shades[3]);
         prevEnd = s;
+        gapPrevEnd = prevEnd;
         prevY = y1;
 	
 	    }
@@ -6858,6 +6872,11 @@ if (withLeftLabels)
 	    {
 	    sprintf( minRangeStr, "%g", whichNum( 500.0, -12.9418, 9.1808, 1000 ));
 	    sprintf( maxRangeStr, "%g", whichNum( 1000.0, -12.9418, 9.1808, 1000 ));
+	    }
+	else if( sameString( group->mapName, "zoo" ) )
+	    {
+	    sprintf( minRangeStr, "%d", 60); //whichNum( 1.0, 1.0, 100.0, 1000 ));
+	    sprintf( maxRangeStr, "%d", 100);// whichNum( 1000.0, 1.0, 100.0, 1000 ));
 	    }
 	else
 	    {
