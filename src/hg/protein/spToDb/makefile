@@ -14,6 +14,6 @@ test: test1
 %:	input/%
 	mkdir -p output/$@
 	spToDb input/$@ output/$@
-	diff -r expected/$@ output/$@
+	diff -x CVS -r expected/$@ output/$@
 	rm -r output
 
