@@ -34,7 +34,7 @@
 #define NOTPSEUDO -1
 #define EXPRESSED -2
 
-static char const rcsid[] = "$Id: pslPseudo.c,v 1.24 2004/08/15 23:11:50 baertsch Exp $";
+static char const rcsid[] = "$Id: pslPseudo.c,v 1.25 2004/08/16 00:41:31 baertsch Exp $";
 
 char *db;
 char *nibDir;
@@ -357,13 +357,6 @@ if (psl->strand[0] == '-')
 if (psl->strand[1] == '-')
     reverseIntRange(&ts, &te, psl->tSize);
 
-//if (psl->strand[1] != 0)
-//    fprintf(f, "%d %s %d %d %s %d %d %c%c 0\n", ++ix, psl->tName, ts+1, 
-//            te, psl->qName, qs+1, qe, psl->strand[1], psl->strand[0]);
-//else
-//    fprintf(f, "%d %s %d %d %s %d %d %c 0\n", ++ix, psl->tName, psl->tStart+1, 
-//            psl->tEnd, psl->qName, qs+1, qe, psl->strand[0]);
-
 axt->qName = cloneString(psl->qName);
 axt->tName = cloneString(psl->tName);
 axt->qStart = qs+1;
@@ -387,7 +380,7 @@ if (strlen(q) != symCount)
     	symCount, strlen(q), psl->tName, psl->tStart, psl->qName, t, q);
 axt->qSym = cloneString(q);
 axt->score = axtScoreFilterRepeats(axt, ss);
-printf("axt score = %d\n",axt->score);
+verbose(1,"axt score = %d\n",axt->score);
 //for (i=0; i<size ; i++) 
 //    fputc(t[i],f);
 //for (i=0; i<size ; i++) 
@@ -462,7 +455,7 @@ if (qIsNib && psl->strand[0] == '-')
     qOffset = psl->qSize - psl->qEnd;
 else
     qOffset = 0;
-printf("qString len = %d qOffset = %d\n",strlen(qSeq->dna),qOffset);
+verbose(3,"qString len = %d qOffset = %d\n",strlen(qSeq->dna),qOffset);
 if (tName == NULL || !sameString(tName, psl->tName) || tIsNib)
     {
     freeDnaSeq(&tSeq);
@@ -473,7 +466,7 @@ if (tName == NULL || !sameString(tName, psl->tName) || tIsNib)
     }
 if (tIsNib && psl->strand[1] == '-')
     tOffset = psl->tSize - psl->tEnd;
-printf("tString len = %d tOffset = %d\n",strlen(tSeq->dna),tOffset);
+verbose(3,"tString len = %d tOffset = %d\n",strlen(tSeq->dna),tOffset);
 if (psl->strand[0] == '-')
     reverseComplement(qSeq->dna, qSeq->size);
 if (psl->strand[1] == '-')
@@ -529,6 +522,44 @@ if (tIsNib)
     freez(&tName);
 return axt;
 }
+
+void binKeeperPslHashFree(struct hash **hash)
+{
+if (*hash != NULL)
+    {
+    struct hashEl *hashEl = NULL;
+    struct hashCookie cookie = hashFirst(*hash);
+    while ((hashEl = hashNext(&cookie)) != NULL)
+        {
+        struct binKeeper *bk = hashEl->val;
+        struct binElement *elist = NULL, *el = NULL;;
+        elist = binKeeperFindAll(bk) ;
+        for (el = elist; el != NULL ; el = el->next)
+            {
+            struct psl *psl = el->val;
+            pslFreeList(&psl);
+            }
+        binKeeperFree(&bk);
+        }
+    hashFree(hash);
+    }
+}
+
+void binKeeperHashFree(struct hash **hash)
+{
+if (*hash != NULL)
+    {
+    struct hashEl *hashEl = NULL;
+    struct hashCookie cookie = hashFirst(*hash);
+    while ((hashEl = hashNext(&cookie)) != NULL)
+        {
+        struct binKeeper *bk = hashEl->val;
+        binKeeperFree(&bk);
+        }
+    hashFree(hash);
+    }
+}
+
 int calcMilliScore(struct psl *psl)
 /* Figure out percentage score. */
 {
@@ -606,7 +637,6 @@ if (strlen(pg->overStrand) < 1)
     pg->overStrand[1] = '\0'; 
     }
 pseudoGeneLinkOutput(pg, linkFile, '\t','\n');
-//fprintf(linkFile,"%s\t%s\t%s\t%s\t%d\t%d\t%s\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%s\t",
         /* 13        14   15        16         17           18  */
 //        trfRatio, type, bestqName, besttName, besttStart, besttEnd, 
 //        (bestStrand[0] == '+' || bestStrand[0] == '-') ? bestStrand : "0", 
@@ -620,7 +650,6 @@ pseudoGeneLinkOutput(pg, linkFile, '\t','\n');
 //        psl->qSize, psl->qSize-psl->qEnd, rep, qReps, overlapDiagonal, 
         /* 33      34      35      36         37              38,                   39       40               41=axtScore*/
 //        coverage, label, milliBad, oldScore, oldIntronCount, conservedIntrons, maxOverlap, iString->string != NULL ? iString->string :"0,0");
-//bedFree(&bed);
 }
 
 void initWeights()
@@ -697,46 +726,6 @@ verbose(1,"##score %d %4.1f %4.1f %4.1f %4.1f %4.1f %4.1f %4.1f %4.1f %4.1f %4.1
                 ) ;
 
 outputNoLinkScore(psl, pg, pseudoScore);
-/*type, bestqName, besttName, besttStart, besttEnd, 
-            maxExons, geneOverlap, bestStrand, polyA, polyAstart, label,
-            exonCover, intronCount, bestAliCount, tReps, qReps, overlapDiagonal,pseudoScore,
-            oldIntronCount, iString, conservedIntrons, maxOverlap); */
-/*
-fprintf(linkFile,"%d\t",pg->axtScore);
-if (gp != NULL)
-    {
-    fprintf(linkFile,"%s\t%d\t%d\t", gp->name, gp->txStart, gp->txEnd);
-    }
-else
-    {
-    fprintf(linkFile,"noRefSeq\t-1\t-1\t");
-    }
-
-if (mgc != NULL)
-    {
-    fprintf(linkFile,"%s\t%d\t%d\t", mgc->name, mgc->txStart, mgc->txEnd);
-    }
-else
-    {
-    fprintf(linkFile,"noMgc\t-1\t-1\t");
-    }
-
-if (kg != NULL)
-    {
-    if (kg->name2 != NULL)
-        {
-        fprintf(linkFile,"%s\t%d\t%d\t%d\t", kg->name2, kg->txStart, kg->txEnd, 0);
-        }
-    else
-        {
-        fprintf(linkFile,"%s\t%d\t%d\t%d\t", kg->name, kg->txStart, kg->txEnd, 0);
-        }
-    }
-else
-    {
-    fprintf(linkFile,"noKg\t-1\t-1\t-1\t");
-    }
-    */
 }
 
 int intronFactor(struct psl *psl, struct hash *bkHash, struct hash *trfHash)
@@ -796,8 +785,8 @@ for (i=1; i<blockCount; ++i)
         reps = 0;
 
     tGap = ts - te - reps*1.5 - trf;
-//    printf("%s:%d %d tGap %d ts %d te %d reps %d trf %d qs %d qe %d max %d\n",
-//            psl->tName, psl->tStart,2*abs(qs-qe),tGap, te, te, reps, trf, qs,qe, maxBlockGap);
+    verbose(3,"%s:%d %d tGap %d ts %d te %d reps %d trf %d qs %d qe %d max %d\n",
+            psl->tName, psl->tStart,2*abs(qs-qe),tGap, te, te, reps, trf, qs,qe, maxBlockGap);
     if (2*abs(qs - qe) <= tGap && tGap >= maxBlockGap ) 
         /* don't count q gaps in mrna as introns , if they are similar in size to tGap*/
         {
@@ -835,24 +824,16 @@ int score = calcMilliScore(psl) + sizeFactor(psl, bkHash, trfHash);
 return score;
 }
 
-boolean uglyTarget(struct psl *psl)
-/* Return TRUE if it's the one we're snooping on. */
-{
-return TRUE; //sameString(psl->qName, "NM_006905") || sameString(psl->qName, "AK");
-}
-
-
 boolean closeToTop(struct psl *psl, int *scoreTrack , int milliScore) /*struct hash *bkHash, struct hash *trfHash)*/
 /* Returns TRUE if psl is near the top scorer for at least 20 bases. */
 {
-//int milliScore = calcSizedScore(psl, bkHash, trfHash);
 int threshold = round(milliScore * (1.0+nearTop));
 int i, blockIx;
 int start, size, end;
 int topCount = 0;
 char strand = psl->strand[0];
 
-if (uglyTarget(psl)) uglyf("%s:%d milliScore %d, threshold %d\n", psl->tName, psl->tStart, milliScore, threshold);
+verbose(3,"%s:%d milliScore %d, threshold %d\n", psl->tName, psl->tStart, milliScore, threshold);
 for (blockIx = 0; blockIx < psl->blockCount; ++blockIx)
     {
     start = psl->qStarts[blockIx];
@@ -860,22 +841,19 @@ for (blockIx = 0; blockIx < psl->blockCount; ++blockIx)
     end = start+size;
     if (strand == '-')
 	reverseIntRange(&start, &end, psl->qSize);
-    //uglyf("block %d threshold=%d s-e:%d-%d. ",blockIx, threshold, start, end);
+    verbose(3,"block %d threshold=%d s-e:%d-%d. ",blockIx, threshold, start, end);
     for (i=start; i<end; ++i)
 	{
-        //uglyf("s=%d tc=%d ",scoreTrack[i],topCount);
+        verbose(3,"s=%d tc=%d ",scoreTrack[i],topCount);
 	if (scoreTrack[i] <= threshold)
 	    {
 	    if (++topCount >= minNearTopSize)
                 {
-                //uglyf("\nYES\n");
 		return TRUE;
                 }
 	    }
 	}
-        //uglyf("\nblock NO\n");
     }
-    //uglyf("\nctt=false\n");
 return FALSE;
 }
 
@@ -973,7 +951,7 @@ assert(region > 0);
 assert(end != 0);
 *polyAstart = 0 , *polyAend = 0;
 safef(nibFile, sizeof(nibFile), "%s/%s.nib", nibDir, chrom);
-printf("polyA file %s size %d start %d tSize %d\n",sfp->file, seqSize, seqStart, tSize);
+verbose(2,"polyA file %s size %d start %d tSize %d\n",sfp->file, seqSize, seqStart, tSize);
 assert (seqSize == tSize);
 if (seqStart < 0) seqStart = 0;
 if (seqStart + region > seqSize) region = seqSize - seqStart;
@@ -1458,7 +1436,7 @@ for (i = 0 ; i < targetM->blockCount ; i++)
 
 if(count > targetM->blockCount )
     {
-    printf("error in pslCountExonSpan: %s %s %s:%d-%d %d > targetBlk %d or query Blk %d \n",
+    verbose(1,"error in pslCountExonSpan: %s %s %s:%d-%d %d > targetBlk %d or query Blk %d \n",
             targetM->qName, queryM->qName, queryM->tName,queryM->tStart, queryM->tEnd, 
             count, targetM->blockCount, queryM->blockCount);
     assert(count > targetM->blockCount);
@@ -1528,10 +1506,10 @@ if (mrnaHash != NULL)
                 else
                     {
                     mrnaBases += positiveRangeIntersection(psl->tStart, psl->tEnd, mPsl->tStart, mPsl->tEnd);
-                    //printf("blk %d %s %d ec %d\n",mPsl->blockCount, mPsl->qName, mrnaBases, exonCount);
-                    //printf("blk merge %d %s %d ec %d\n",mPslMerge->blockCount, mPsl->qName, mrnaBases, exonCount);
+                    verbose(3,"blk %d %s %d ec %d\n",mPsl->blockCount, mPsl->qName, mrnaBases, exonCount);
+                    verbose(3,"blk merge %d %s %d ec %d\n",mPslMerge->blockCount, mPsl->qName, mrnaBases, exonCount);
                     }
-                printf("MRNABASES %d cnt %d %s %s %d-%d\n",mrnaBases, mPslMerge->blockCount, mPslMerge->qName, mPsl->qName, mPsl->tStart, mPsl->tEnd);
+                verbose(2,"MRNABASES %d cnt %d %s %s %d-%d\n",mrnaBases, mPslMerge->blockCount, mPslMerge->qName, mPsl->qName, mPsl->tStart, mPsl->tEnd);
                 if (mrnaBases > 50 && (mPslMerge->blockCount > 1))
                     {
                         *exonCount = (int)mPslMerge->blockCount;
@@ -1592,14 +1570,14 @@ for (psl = pslList; psl != NULL; psl = psl->next)
     int blockIx;
     char strand = psl->strand[0];
 
-    //printf("checking %s %s:%d-%d\n",psl->qName, psl->tName, psl->tStart, psl->tEnd);
+    verbose(3,"checking %s %s:%d-%d\n",psl->qName, psl->tName, psl->tStart, psl->tEnd);
     assert (psl!= NULL);
     milliScore = calcMilliScore(psl);
     if (milliScore >= milliMin)
 	{
 	++goodAliCount;
 	milliScore += sizeFactor(psl, bkHash, trfHash);
-//if (uglyTarget(psl)) uglyf("@ %s %s:%d milliScore %d\n", psl->qName, psl->tName, psl->tStart, milliScore);
+        verbose(3,"@ %s %s:%d milliScore %d\n", psl->qName, psl->tName, psl->tStart, milliScore);
 	for (blockIx = 0; blockIx < psl->blockCount; ++blockIx)
 	    {
 	    int start = psl->qStarts[blockIx];
@@ -1613,22 +1591,22 @@ for (psl = pslList; psl != NULL; psl = psl->next)
 		warn("Error: qName %s tName %s qSize %d psl->qSize %d start %d end %d",
 		    psl->qName, psl->tName, qSize, psl->qSize, start, end);
 		}
-//            uglyf("milliScore: %d qName %s tName %s:%d-%d qSize %d psl->qSize %d start %d end %d \n",
- //                   milliScore, psl->qName, psl->tName, psl->tStart, psl->tEnd, qSize, psl->qSize, start, end);
+            verbose(3,"milliScore: %d qName %s tName %s:%d-%d qSize %d psl->qSize %d start %d end %d \n",
+                    milliScore, psl->qName, psl->tName, psl->tStart, psl->tEnd, qSize, psl->qSize, start, end);
 	    for (i=start; i<end; ++i)
 		{
                 assert(i<=qSize);
 		if (milliScore > scoreTrack[i])
                     {
-                    //printf(" %d ",milliScore);
+                    verbose(3," %d ",milliScore);
                     scoreTrack[i] = milliScore;
                     }
 		}
 	    }
 	}
     }
-if (uglyTarget(pslList)) uglyf("---finding best---\n");
-/* Print out any alignments that are within 2% of top score. */
+verbose(3,"---finding best---\n");
+/* Print out any alignments that are within minTop% of top score. */
 bestScore = 0;
 bestSEScore = 0;
 for (psl = pslList; psl != NULL; psl = psl->next)
@@ -1687,7 +1665,7 @@ if (pslList != NULL)
         AllocVar(pg);
         pg->exonCount = maxExons;
         pg->bestAliCount = bestAliCount;
-        printf("checking %s:%d-%d %s best %s:%d-%d\n",psl->tName,psl->tStart, psl->tEnd, psl->qName, bestChrom, bestStart, bestEnd);
+        verbose(1,"checking %s:%d-%d %s best %s:%d-%d\n",psl->tName,psl->tStart, psl->tEnd, psl->qName, bestChrom, bestStart, bestEnd);
         pg->oldIntronCount = intronFactor(psl, bkHash, trfHash);
         pg->gChrom = cloneString(bestChrom);
         pg->gStart = bestStart;
@@ -1777,7 +1755,7 @@ if (pslList != NULL)
         if (pg->trfRatio > .5)
             {
             if (!quiet)
-                printf("NO. %s trf overlap %f > .5 %s %d \n",
+                verbose(1,"NO. %s trf overlap %f > .5 %s %d \n",
                         psl->qName, (float)trf/(float)(psl->match+psl->misMatch) ,
                         psl->tName, psl->tStart);
             keepChecking = FALSE;
@@ -1812,7 +1790,7 @@ if (pslList != NULL)
         if ((float)rep/(float)(psl->match+(psl->misMatch)) > maxRep )
             {
             if (!quiet)
-                printf("NO %s reps %.3f %.3f\n",psl->tName,(float)rep/(float)(psl->match+(psl->misMatch)) , maxRep);
+                verbose(1,"NO %s reps %.3f %.3f\n",psl->tName,(float)rep/(float)(psl->match+(psl->misMatch)) , maxRep);
             dyStringAppend(reason,"maxRep ");
             pg->label = NOTPSEUDO;
             keepChecking = FALSE;
@@ -1834,7 +1812,7 @@ if (pslList != NULL)
                     /* if overlap > 50 bases  and 50% overlap with pseudogene, then skip */
                     {
                     if (!quiet)
-                        printf("NO %s:%d-%d %s expressed blat mrna %s %d bases overlap %f %%\n",
+                        verbose(1,"NO %s:%d-%d %s expressed blat mrna %s %d bases overlap %f %%\n",
                                 psl->tName, psl->tStart, psl->tEnd, psl->qName,mrnaOverlap, 
                                 maxOverlap, (float)maxOverlap/(float)psl->qSize);
                     dyStringAppend(reason,"expressed ");
@@ -1851,26 +1829,20 @@ if (pslList != NULL)
                 if (pg->overlapDiag>= 40 && bestPsl == NULL)
                    {
                    if (!quiet)
-                        printf("NO. %s %d diag %s %d  bestChrom %s\n",psl->qName, 
+                        verbose(1,"NO. %s %d diag %s %d  bestChrom %s\n",psl->qName, 
                                 pg->overlapDiag, psl->tName, psl->tStart, bestChrom);
                    dyStringAppend(reason,"diagonal ");
                    keepChecking = FALSE;
                    }
                 if (keepChecking)
                    {
-                   /*
-                   if (!quiet)
-                        {
-                        printf("YES %s %d rr %3.1f rl %d ln %d %s iF %d maxE %d bestAli %d isp %d score %d match %d cover %3.1f rp %d polyA %d syn %d polyA %d start %d",
-                            psl->qName,psl->tStart,((float)rep/(float)(psl->tEnd-psl->tStart) ),rep, 
-                            psl->tEnd-psl->tStart,psl->tName, pg->intronCount, 
-                            maxExons , pg->bestAliCount, pg->exonCover,
-                            calcMilliScore(psl),  psl->match + psl->misMatch + psl->repMatch , 
-                            minCoverPseudo * (float)psl->qSize, pg->tReps + pg->qReps, pg->polyA, pg->overlapDiag,
-                            pg->polyA, pg->polyAstart );
-                       printf("\n");
-                       }
-                       */
+                    verbose(2,"YES %s %d rr %3.1f rl %d ln %d %s iF %d maxE %d bestAli %d isp %d score %d match %d cover %3.1f rp %d polyA %d syn %d polyA %d start %d\n",
+                        psl->qName,psl->tStart,((float)rep/(float)(psl->tEnd-psl->tStart) ),rep, 
+                        psl->tEnd-psl->tStart,psl->tName, pg->intronCount, 
+                        maxExons , pg->bestAliCount, pg->exonCover,
+                        calcMilliScore(psl),  psl->match + psl->misMatch + psl->repMatch , 
+                        minCoverPseudo * (float)psl->qSize, pg->tReps + pg->qReps, pg->polyA, pg->overlapDiag,
+                        pg->polyA, pg->polyAstart );
                    if (pg->exonCover < 2)
                        {
                        dyStringAppend(reason,"singleExon ");
@@ -1927,12 +1899,11 @@ if (pslList != NULL)
                    pg->label = NOTPSEUDO;
                    outputLink(psl, pg, reason);
                    }
-                if (!quiet)
-                    printf("NO. %s %s %d rr %3.1f rl %d ln %d %s iF %d maxE %d bestAli %d isp %d score %d match %d cover %3.1f rp %d\n",
-                        reason->string, psl->qName,psl->tStart,((float)rep/(float)(psl->tEnd-psl->tStart) ),rep, 
-                        psl->tEnd-psl->tStart,psl->tName, pg->intronCount, maxExons , pg->bestAliCount, pg->exonCover,
-                        calcMilliScore(psl),  psl->match + psl->misMatch + psl->repMatch , 
-                        minCoverPseudo * (float)psl->qSize, pg->tReps + pg->qReps);
+                verbose(2,"NO. %s %s %d rr %3.1f rl %d ln %d %s iF %d maxE %d bestAli %d isp %d score %d match %d cover %3.1f rp %d\n",
+                    reason->string, psl->qName,psl->tStart,((float)rep/(float)(psl->tEnd-psl->tStart) ),rep, 
+                    psl->tEnd-psl->tStart,psl->tName, pg->intronCount, maxExons , pg->bestAliCount, pg->exonCover,
+                    calcMilliScore(psl),  psl->match + psl->misMatch + psl->repMatch , 
+                    minCoverPseudo * (float)psl->qSize, pg->tReps + pg->qReps);
                 }
         dyStringFree(&iString);
         dyStringFree(&reason);
@@ -1997,16 +1968,15 @@ linkFile = mustOpen(linkFileName, "w");
 axtFile = mustOpen(axtFileName, "w");
 
 if (!quiet)
-    printf("Processing %s to %s and %s\n", inName, bestAliName, psuedoFileName);
+    verbose(1,"Processing %s to %s and %s\n", inName, bestAliName, psuedoFileName);
  if (!noHead)
      pslWriteHead(bestFile);
 safef(lastName, sizeof(lastName),"x");
 while (lineFileNext(in, &line, &lineSize))
     {
-    if (((++aliCount & 0x1ffff) == 0) && !quiet)
+    if ((++aliCount & 0x1ffff) == 0)
         {
-	printf(".");
-	fflush(stdout);
+	verboseDot();
 	}
     wordCount = chopTabs(line, words);
     if (wordCount != 21)
@@ -2029,46 +1999,9 @@ fclose(bestFile);
 fclose(pseudoFile);
 fclose(linkFile);
 fclose(axtFile);
-if (!quiet)
-    printf("Processed %d alignments\n", aliCount);
+verbose(1,"Processed %d alignments\n", aliCount);
 }
 
-void binKeeperPslHashFree(struct hash **hash)
-{
-if (*hash != NULL)
-    {
-    struct hashEl *hashEl = NULL;
-    struct hashCookie cookie = hashFirst(*hash);
-    while ((hashEl = hashNext(&cookie)) != NULL)
-        {
-        struct binKeeper *bk = hashEl->val;
-        struct binElement *elist = NULL, *el = NULL;;
-        elist = binKeeperFindAll(bk) ;
-        for (el = elist; el != NULL ; el = el->next)
-            {
-            struct psl *psl = el->val;
-            pslFreeList(&psl);
-            }
-        binKeeperFree(&bk);
-        }
-    hashFree(hash);
-    }
-}
-
-void binKeeperHashFree(struct hash **hash)
-{
-if (*hash != NULL)
-    {
-    struct hashEl *hashEl = NULL;
-    struct hashCookie cookie = hashFirst(*hash);
-    while ((hashEl = hashNext(&cookie)) != NULL)
-        {
-        struct binKeeper *bk = hashEl->val;
-        binKeeperFree(&bk);
-        }
-    hashFree(hash);
-    }
-}
 int main(int argc, char *argv[])
 /* Process command line. */
 {
@@ -2105,11 +2038,9 @@ noIntrons = optionExists("noIntrons");
 noHead = optionExists("nohead");
 initWeights();
 
-if (!quiet)
-    printf("Scanning %s\n", argv[12]);
+verbose(1,"Scanning %s\n", argv[12]);
 hashFileList(argv[12], fileHash, tHash);
-if (!quiet)
-    printf("Loading mrna sequences from %s\n",argv[13]);
+verbose(1,"Loading mrna sequences from %s\n",argv[13]);
 mrnaList = faReadAllMixed(argv[13]);
 if (mrnaList == NULL)
     errAbort("could not open %s\n",argv[13]);
@@ -2119,25 +2050,20 @@ gpList2 = genePredLoadAll(argv[15]);
 //kgLis = genePredReaderAll(gprKg);
 kgList = genePredLoadAll(argv[16]);
 
-if (!quiet)
-    printf("Loading Syntenic Bed %s\n",argv[5]);
+verbose(1,"Loading Syntenic Bed %s\n",argv[5]);
 synHash = readBedCoordToBinKeeper(argv[3], argv[5], BEDCOUNT);
-if (!quiet)
-    printf("Loading Trf Bed %s\n",argv[6]);
+verbose(1,"Loading Trf Bed %s\n",argv[6]);
 trfHash = readBedCoordToBinKeeper(argv[3], argv[6], BEDCOUNT);
 
-if (!quiet)
-    printf("Reading Repeats from %s\n",argv[4]);
+verbose(1,"Reading Repeats from %s\n",argv[4]);
 bkHash = readBedCoordToBinKeeper(argv[3], argv[4], BEDCOUNT);
 
-if (!quiet)
-    printf("Reading mrnas from %s\n",argv[7]);
+verbose(1,"Reading mrnas from %s\n",argv[7]);
 mrnaHash = readPslToBinKeeper(argv[3], argv[7]);
-if (!quiet)
-    printf("Scoring alignments from %s.\n",argv[2]);
-printf("start\n");
+verbose(1,"Scoring alignments from %s.\n",argv[2]);
+verbose(1,"start\n");
 pslPseudo(argv[2], bkHash, trfHash, synHash, mrnaHash, argv[8], argv[9], argv[10], argv[11]);
-printf("freeing everything\n");
+verbose(1,"freeing everything\n");
 binKeeperPslHashFree(&mrnaHash);
 binKeeperHashFree(&synHash);
 binKeeperHashFree(&trfHash);
