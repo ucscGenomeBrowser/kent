@@ -23,7 +23,7 @@
 #define CDS_HELP_PAGE "../goldenPath/help/hgCodonColoring.html"
 #define CDS_MRNA_HELP_PAGE "../goldenPath/help/hgCodonColoringMrna.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.159 2004/12/07 18:00:42 kate Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.160 2004/12/17 01:34:35 kent Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -1341,7 +1341,7 @@ struct trackDb *trackDbForRuler()
    It is not (yet?) a real track, so doesn't appear in trackDb */
 {
 return trackDbForPseudoTrack(RULER_TRACK_NAME,
-	RULER_TRACK_LABEL, RULER_TRACK_LONGLABEL, tvPack, FALSE);
+	RULER_TRACK_LABEL, RULER_TRACK_LONGLABEL, tvFull, FALSE);
 }
 
 struct trackDb *trackDbForOligoMatch()
