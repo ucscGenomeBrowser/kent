@@ -34,7 +34,7 @@ altColor 0,50,50
 type genePred twinscanPep
 
 track blastzTightHg15
-shortLabel Human Tight 15
+shortLabel Human Tight Hg15
 longLabel Human Blastz (hg15-Apr 03), Tight Subset of Best Alignments
 group compGeno
 priority 112
@@ -46,7 +46,7 @@ type psl xeno hg15
 otherDb hg15
 
 track blastzBestHg15
-shortLabel Human Best 15
+shortLabel Human Best Hg15
 longLabel $o_Organism ($o_date/$o_db) Blastz Best-in-Genome Alignments
 group compGeno
 priority 113
@@ -58,7 +58,7 @@ type psl xeno hg15
 otherDb hg15
 
 track blastzHg15
-shortLabel Human All 15
+shortLabel Human All Hg15
 longLabel $o_Organism ($o_date/$o_db) Blastz Alignments
 group compGeno
 priority 114
@@ -70,7 +70,7 @@ type psl xeno hg15
 otherDb hg15
 
 track chainHg15
-shortLabel Human Chain 15
+shortLabel Human Chain Hg15
 longLabel $o_Organism ($o_date/$o_db) Chained Blastz Alignments
 group compGeno
 priority 115
@@ -82,7 +82,7 @@ type chain hg15
 otherDb hg15
 
 track netHg15
-shortLabel Human Net 15
+shortLabel Human Net Hg15
 longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno
 priority 116
@@ -92,7 +92,7 @@ type netAlign hg15 chainHg15
 otherDb hg15
 
 track hg15SynNet
-shortLabel Human Syntenic Net 15
+shortLabel Human Syntenic Net Hg15
 longLabel Human (hg15-Apr 03) Syntenic Alignment Net
 group compGeno
 priority 117
@@ -102,7 +102,7 @@ type netAlign hg15 chainHg15
 otherDb hg15
 
 track syntenyHg15
-shortLabel Human Synteny 15
+shortLabel Human Synteny Hg15
 longLabel $Organism/$o_Organism ($o_date/$o_db) Synteny Using Blastz Single Coverage (100k window)
 group compGeno
 priority 127
