@@ -197,6 +197,8 @@ if (grandChildId != 0)
     {
     kill(-grandChildId, SIGTERM);
     grandChildId = 0;
+    sleep(3);
+    kill(-grandChildId, SIGKILL);
     }
 }
 
@@ -262,7 +264,8 @@ if ((grandChildId = fork()) == 0)
     /* Change to given user and dir. */
     changeUid(user, &homeDir);
     chdir(dir);
-    setpgrp();
+    setpgrp();  /* Make childPid the process group leader for any of it's children 
+		 * (so we can reap things spawned by user's scripts). */
     umask(umaskVal); 
 
     /* Update environment. */
@@ -293,6 +296,9 @@ if ((grandChildId = fork()) == 0)
     open(err, O_WRONLY | O_CREAT, 0666);
 
     
+    randomSleep();	/* Sleep a random bit before executing this thing
+                         * to help spread out i/o when a big batch of jobs
+			 * hit idle cluster */
     if ((execErr = execvp(exe, params)) < 0)
 	{
 	perror("execvp");
@@ -310,7 +316,6 @@ else
 
     signal(SIGTERM, termHandler);
     cid = wait(&status);
-    randomSleep();
     sd = netConnect("localhost", paraPort);
     if (sd >= 0)
         {
@@ -537,7 +542,7 @@ if (fileName != NULL)
 }
 
 void doKill(char *line)
-/* Kill current job if any. */
+/* Kill a specific job. */
 {
 char *jobIdString = nextWord(&line);
 int jobId = atoi(jobIdString);
@@ -623,19 +628,23 @@ jobsRunning = newDlList();
 jobsFinished = newDlList();
 
 /* Set up socket and self to listen to it. */
-socketHandle = netAcceptingSocket(paraPort, 10);
+socketHandle = netAcceptingSocket(paraPort, maxProcs*4);
 if (socketHandle < 0)
     errAbort("I'm dead without my socket, sorry");
 
 /* Event loop. */
 for (;;)
     {
+    /* Get next incoming connection and optionally check to make
+     * sure that it's from a host we trust, and check signature
+     * on first bit of incoming data. */
     struct sockaddr_in hubAddress;
     int len_inet = sizeof(hubAddress);
     connectionHandle = accept(socketHandle, 
     	(struct sockaddr *)&hubAddress, &len_inet);
     if (connectionHandle >= 0)
 	{
+	findNow();
 	if (hubName == NULL || hubAddress.sin_addr.s_addr == hubIp
 	    || hubAddress.sin_addr.s_addr == localIp)
 	    {
@@ -644,6 +653,8 @@ for (;;)
 		signature[sigLen] = 0;
 		if (sameString(paraSig, signature))
 		    {
+		    /* Host and signature look ok,  read a string and
+		     * parse out first word as command. */
 		    line = buf = netGetLongString(connectionHandle);
 		    if (line != NULL)
 			{

@@ -54,5 +54,10 @@ boolean parseRunJobMessage(char *line, struct runJobMessage *rjm);
 void fillInErrFile(char errFile[512], int jobId, char *tempDir);
 /* Fill in error file name */
 
+extern time_t now;	/* Time when started processing current message */
+
+void findNow();
+/* Just set now to current time. */
+
 #endif /* PARALIB_H */
 

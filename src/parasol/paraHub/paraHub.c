@@ -291,7 +291,6 @@ if (user != NULL && !dlEmpty(freeMachines) && !dlEmpty(freeSpokes))
     struct batch *batch = findLuckyBatch(user);
     struct job *job;
     struct machine *machine;
-    time_t now = time(NULL);
 
     /* Get free machine and spoke and move them to busy lists. */
     mNode = dlPopHead(freeMachines);
@@ -579,7 +578,10 @@ boolean sendViaSpoke(struct machine *machine, char *message)
 struct dlNode *node = dlPopHead(freeSpokes);
 struct spoke *spoke;
 if (node == NULL)
+    {
+    logIt("hub: out of spokes!\n");
     return FALSE;
+    }
 dlAddTail(busySpokes, node);
 spoke = node->val;
 spoke->lastPinged = time(NULL);
@@ -588,7 +590,7 @@ return TRUE;
 }
 
 void checkPeriodically(struct dlList *machList, int period, char *checkMessage,
-	int spokesToUse, time_t now)
+	int spokesToUse)
 /* Periodically send checkup messages to machines on list. */
 {
 struct dlNode *mNode;
@@ -614,7 +616,7 @@ for (i=0; i<spokesToUse; ++i)
     }
 }
 
-void hangman(int spokesToUse, time_t now)
+void hangman(int spokesToUse)
 /* Check that busy nodes aren't dead.  Also send message for 
  * busy nodes to check in, in case we missed one of their earlier
  * jobDone messages. */
@@ -644,14 +646,14 @@ for (i=0; i<spokesToUse; ++i)
     }
 }
 
-void graveDigger(int spokesToUse, time_t now)
+void graveDigger(int spokesToUse)
 /* Check out dead nodes.  Try and resurrect them periodically. */
 {
 checkPeriodically(deadMachines, MINUTE * machineCheckPeriod, "resurrect", 
-	spokesToUse, now);
+	spokesToUse);
 }
 
-void straightenSpokes(time_t now)
+void straightenSpokes()
 /* Move spokes that have been busy too long back to
  * free spoke list under the assumption that we
  * missed a recycleSpoke message. */
@@ -695,7 +697,7 @@ for (rq = resultQueues; rq != NULL; rq = rq->next)
 void writeResults(char *fileName, char *userName, char *machineName,
 	int jobId, char *exe, time_t submitTime, time_t startTime,
 	char *errFile, char *cmd,
-	time_t now, char *status, char *uTime, char *sTime)
+	char *status, char *uTime, char *sTime)
 /* Write out job results to output queue.  This
  * will create the output queue if it doesn't yet
  * exist. */
@@ -725,7 +727,7 @@ if (rq->f != NULL)
     }
 }
 
-void writeJobResults(struct job *job, time_t now, char *status,
+void writeJobResults(struct job *job, char *status,
 	char *uTime, char *sTime)
 /* Write out job results to output queue.  This
  * will create the output queue if it doesn't yet
@@ -746,7 +748,7 @@ else
 writeResults(batch->name, batch->user->name, job->machine->name,
 	job->id, job->exe, job->submitTime, 
 	job->startTime, job->err, job->cmd,
-	now, status, uTime, sTime);
+	status, uTime, sTime);
 }
 
 void resultQueueFree(struct resultQueue **pRq)
@@ -761,7 +763,7 @@ if (rq != NULL)
 }
 
 
-void sweepResults(time_t now)
+void sweepResults()
 /* Get rid of result queues that haven't been accessed for
  * a while. Flush all results. */
 {
@@ -815,18 +817,17 @@ void processHeartbeat()
 /* Check that system is ok.  See if we can do anything useful. */
 {
 int spokesToUse;
-time_t now = time(NULL);
 runner(30);
-straightenSpokes(now);
+straightenSpokes();
 spokesToUse = dlCount(freeSpokes);
 if (spokesToUse > 0)
     {
     spokesToUse >>= 1;
     spokesToUse -= 1;
     if (spokesToUse < 1) spokesToUse = 1;
-    graveDigger(spokesToUse, now);
-    hangman(spokesToUse, now);
-    sweepResults(now);
+    graveDigger(spokesToUse);
+    hangman(spokesToUse);
+    sweepResults();
     flushLog();
     saveJobId();
     }
@@ -990,10 +991,9 @@ boolean sendKillJobMessage(struct machine *machine, struct job *job)
 {
 char message[64];
 sprintf(message, "kill %d", job->id);
-logIt("  %s %s\n", machine->name, message);
+logIt("hub: %s %s\n", machine->name, message);
 if (!sendViaSpoke(machine, message))
     {
-    logIt("  out of spokes!\n");
     return FALSE;
     }
 return TRUE;
@@ -1122,10 +1122,9 @@ if (sTime != NULL)
     job = jobFind(runningJobs, atoi(id));
     if (job != NULL)
 	{
-	time_t now = time(NULL);
 	if (job->machine != NULL)
 	    job->machine->lastChecked = now;
-	writeJobResults(job, now, status, uTime, sTime);
+	writeJobResults(job, status, uTime, sTime);
 	finishJob(job);
 	runner(1);
 	}
@@ -1666,7 +1665,6 @@ if (mach == NULL)
     warn("%s seems to have more jobs running than it has cpus", mm->name);
 else
     {
-    time_t now = time(NULL);
     struct job *job = jobNew(rjm->command, rjm->user, rjm->dir, rjm->in,
 	    rjm->out, resultFile);
     struct batch *batch = job->batch;
@@ -1708,7 +1706,6 @@ void writeExistingResults(char *fileName, char *line, struct machine *mach,
 {
 char err[512], exe[256];
 int jobId = atoi(rjm->jobIdString);
-time_t now = time(NULL);
 char *status = nextWord(&line);
 char *uTime = nextWord(&line);
 char *sTime = nextWord(&line);
@@ -1727,7 +1724,7 @@ fileName = hashStoreName(stringHash, fileName);
 writeResults(fileName, rjm->user, mach->name, 
 	jobId, exe, now, now,
 	err, rjm->command, 
-	now, status, uTime, sTime);
+	status, uTime, sTime);
 }
 
 boolean processListJobs(struct multiMachine *mm,
@@ -1830,7 +1827,6 @@ struct hash *erHash = newHash(8);	/* A hash of existingResults */
 struct existingResults *erList = NULL, *er;
 struct hash *mmHash = newHash(0);	/* Hash of machines. */
 struct multiMachine *mmList = NULL, *mm;
-time_t now = time(NULL);
 
 printf("Checking for jobs already running on nodes\n");
 for (mach = machineList; mach != NULL; mach = mach->next)
@@ -1919,6 +1915,7 @@ for (;;)
     	(struct sockaddr *)&inAddress, &len_inet);
     if (connectionHandle < 0)
         continue;
+    findNow();
     if (ipAddressOk(inAddress.sin_addr.s_addr, subnet) || 
     	ipAddressOk(inAddress.sin_addr.s_addr, localHost))
 	{

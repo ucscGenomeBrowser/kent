@@ -15,6 +15,7 @@
 #include "paraLib.h"
 #include "net.h"
 #include "paraHub.h"
+#include "portable.h"
 
 int spokeLastId;	/* Id of last spoke allocated. */
 static char *runCmd = "run";
@@ -94,7 +95,7 @@ sig[sigLen] = 0;
 sd = socket(AF_UNIX, SOCK_STREAM, 0);
 if (sd < 0)
     {
-    warn("Couldn't create Unix socket");
+    warn("%s: Couldn't create Unix socket", socketName);
     return;
     }
 
@@ -104,7 +105,7 @@ sa.sun_family = AF_UNIX;
 strncpy(sa.sun_path, socketName, sizeof(sa.sun_path));
 if (bind(sd, (struct sockaddr *)&sa, sizeof(sa)) < 0)
     {
-    warn("Couldn't bind socket to %s", socketName);
+    warn("spoke: Couldn't bind socket to %s", socketName);
     close(sd);
     return;
     }
@@ -116,10 +117,11 @@ for (;;)
     {
     if (netReadAll(conn, sig, sigLen) != sigLen)
 	continue;
+    findNow();
     if (!sameString(sig, paraSig))
 	continue;
     line = buf = netGetLongString(conn);
-    // logIt("%s: %s\n", socketName, line);
+    logIt("%s: %s\n", socketName, line);
     machine = nextWord(&line);
     if (machine != NULL)
 	{
@@ -150,7 +152,7 @@ remove(socketName);
 childId = fork();
 if (childId < 0)
     {
-    warn("Couldn't fork in spokeNew");
+    warn("hub: Couldn't fork in spokeNew");
     close(sd);
     return NULL;
     }
@@ -215,7 +217,7 @@ if (sd == 0)
     sd = socket(AF_UNIX, SOCK_STREAM, 0);
     if (sd < 0)
 	{
-        warn("couldn't open socket in spokeSendMessage");
+        warn("spoke: couldn't open socket in spokeSendMessage");
 	return -1;
 	}
 
@@ -225,7 +227,7 @@ if (sd == 0)
     strncpy(sa.sun_path, spoke->socketName, sizeof(sa.sun_path));
     if (connect(sd, (struct sockaddr*) &sa, sizeof(sa)) < 0)
         {
-	warn("couldn't connect to socket in spokeSendMessage");
+	warn("spoke: couldn't connect to socket in spokeSendMessage");
 	close(sd);
 	return -1;
 	}

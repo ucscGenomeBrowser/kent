@@ -5,6 +5,13 @@
 #include "net.h"
 #include "paraLib.h"
 
+time_t now;	/* Time when started processing current message */
+
+void findNow()
+/* Just set now to current time. */
+{
+now = time(NULL);
+}
 
 char paraSig[17] = "0d2f070562685f29";  /* Mild security measure. */
 int paraSigSize = 16;
@@ -84,6 +91,7 @@ void vLogIt(char *format, va_list args)
 {
 if (logFile != NULL)
     {
+    fprintf(logFile, "%u ", now);
     vfprintf(logFile, format, args);
     if (logFlush)
 	fflush(logFile);
@@ -129,8 +137,7 @@ void setupDaemonLog(char *fileName)
 {
 if (fileName != NULL)
     logFile = mustOpen(fileName, "w");
-// logFlush = optionExists("logFlush");
-logFlush = TRUE;
+logFlush = optionExists("logFlush");
 pushWarnHandler(warnToLog);
 }
 
