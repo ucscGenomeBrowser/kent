@@ -15,8 +15,6 @@ TARGET=_blank>Blast or psi-Blast</A> in that protein folds are
 often conserved long after primary sequence alignment has become unreliable 
 (10-25% identity range). 
 <P>
-
-<P>
-Refer to the <A HREF="pbintPCnt.shtml">InterPro Domains histogram</A> to see the total number 
-of predicted domains within this protein and how this number compares to the number of 
+Refer to the <A HREF="pbintPCnt.shtml">InterPro Domains histogram</A> to view the total number 
+of predicted domains within this protein and compare this count to the number of 
 multiple-domain proteins genome-wide.

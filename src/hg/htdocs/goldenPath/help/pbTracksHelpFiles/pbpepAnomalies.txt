@@ -6,7 +6,7 @@ represented by a red vertical bar extending above or below the middle line,
 respectively. The height of the bar indicates the degree of departure of the
 amino acid frequency from the expected value genome-wide.
 <P>
-The histogram is based on data from approximately 10,000 protein [FIXME - selection
+The histogram is based on data from approximately 10,000 proteins [FIXME - selection
 criteria?]. Amino acids are flagged as anomalous if their occurrence in a
 protein is less than 5% or greater than 95% of their average abundance
 genome-wide. Proteins with less than 100 amino acids have been filtered from

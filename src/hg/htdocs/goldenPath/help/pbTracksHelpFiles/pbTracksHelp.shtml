@@ -66,7 +66,7 @@
                                         <UL><B>
                                             <LI><A HREF="#intro">Overview</A>
                                             <LI><A HREF="#tracks">Protein Tracks</A>
-                                            <LI><A HREF="#histograms">Protein Histograms</A>
+                                            <LI><A HREF="#histograms">Protein Property Histograms</A>
                                             <LI><A HREF="#exonDisc">Exon Count</A>
                                             <LI><A HREF="#pIDisc">Polarity and Isoelectric Point</A>
                                             <LI><A HREF="#molWtDisc">Molecular Weight</A>
@@ -121,25 +121,25 @@
 				polarity, cysteine content, and SuperFamily domain composition.
 				For more information about
 				the individual tracks, see the <A HREF="#tracks">Protein Tracks</A> 
-				section. To access a brief description of a track from the Protein
+				section. To display a brief description of a track from the Protein
 				Browser web page, click on the track's label.
 				<P>
 				The navigation buttons permit scrolling and resizing of the tracks
 				image:
 				<UL>
 				<LI>
-				Scrolling left or right: To shift the browser tracks image
+				<B>Scrolling left or right:</B> To shift the browser tracks image
  				sideways to the left or right by 2%, 47.5%, or 95% of the displayed size, 
 				click the corresponding <I>move</I> arrow.
 				<LI>
-				Rescaling the image: The <I>Rescale to</I> buttons control the size
+				<B>Rescaling the image:</B> The <I>Rescale to</I> buttons control the size
 				of the tracks image. At the default "Full" setting, the
 				image is displayed at its full size. The "1/2" and "1/6" buttons shrink 
 				the image size by the equivalent amount. The image 
 				retains its scrolled settings when it is rescaled. The amino acid
 				sequence of the protein is displayed only in the full-sized image.
 				<LI>
-				Displaying the DNA sequence: To view the codons that 
+				<B>Displaying the DNA sequence:</B> To view the codons that 
 				correspond to the Amino Acid Sequence track and their reverse
 				complements, click the <I>DNA</I> rescale button. The DNA Sequence 
 				track is hidden by default.
@@ -152,18 +152,33 @@
 				molecular weight, exon count, cysteine abundance, hydrophobicity,
 				and the number of predicted domains. For detailed information on the
 				histograms, see the <A HREF="#histograms">Protein Property Histograms</A>
-				section. To access a brief description of a histogram from the Protein
+				section. To display a brief description of a histogram from the Protein
 				Browser web page, click on the graph's label.
+				<P>
+				<B>UCSC links:</B> The UCSC links display additional information
+				about the gene and mRNA associated with this protein. 
+				<UL>
+				<LI>The UCSC Genome Browser link: Displays the associated
+				mRNA in the Genome Browser.
+				<LI>UCSC Gene Details Page link: Displays the Genome Browser Known 
+				Genes details page for the gene associated with this protein. 
+				<LI>UCSC Gene Family Browser link: Displays the gene associated 
+				with this mRNA in the Family Browser, along with a set of related genes.
+				</UL>
 				<P>
 				<B>Domain information:</B> The browser provides 3 primary sources of
 				detailed domain information about the selected protein:
 				<UL>
 				<LI>
-				SuperFamily/SCOP track
+				<A HREF="http://supfam.mrc-lmb.cam.ac.uk/SUPERFAMILY/" TARGET=_blank>SuperFamily</A>/<A HREF="http://scop.mrc-lmb.cam.ac.uk/scop/" TARGET=_blank>SCOP</A> 
+				track. See the <A HREF="#tracks">Protein Tracks</A> section for a description 
+				of this track. Click on a yellow domain box in the track to display Superfamily 
+				information about that domain.
 				<LI>
 				EMBL-EBI 
 				<A HREF="http://www.ebi.ac.uk/interpro/" 
-				TARGET=_blank>InterPro</A> website link. Click on the <I>Graphical view</I> 
+				TARGET=_blank>InterPro</A> website link. Click on the <I>Graphical view of domain
+				structure</I> 
 				link to open a page showing protein matches from the UniProt-SwissProt 
 				database. Click on an ID number to display the InterPro 
 				information page for that domain.
@@ -175,14 +190,19 @@
 				database record for the domain.
 				</UL>
 				<P>
-				<B>Comparative 3D structures:</B> The ModBase section displays front, top, 
-				and side views of the predicted comparative 3D structure of the protein
-				obtained from UCSF's 
-				<A HREF="http://alto.compbio.ucsf.edu/modbase-cgi/index.cgi" 
-				TARGET=_blank>ModBase</A>. Click on the protein accession number or 
+				<B>Comparative 3D structures:</B>
+				<UL>
+				<LI>Protein Data Bank (<A HREF="http://www.rcsb.org/pdb/" TARGET=_blank>PDB</A>): 
+				When available, this section displays one or more 3-D structures of the protein from 
+				the PDB. Click on a structure number to display the associated PDB record.
+				<LI><A HREF="http://alto.compbio.ucsf.edu/modbase-cgi/index.cgi" 
+				TARGET=_blank>ModBase</A>: This section displays front, top, 
+				and Side views of the predicted comparative 3D structure of the protein
+				obtained from UCSF's ModBase. Click on the protein accession number or 
 				one of the images to display the ModBase database record for this 
 				protein. If no images are displayed, no ModBase structure exists for 
 				the protein. 
+				</UL>
 				<P>
 				<B>Pathways:</B> Pathway information for the selected protein is
 				provided by:
@@ -198,16 +218,7 @@
 				Encyclopedia of Genes and Genomes 
 				(<A HREF="http://www.genome.ad.jp/kegg/" TARGET=_blank>KEGG</A>). 
 				</UL>
-				<B>UCSC links:</B> The UCSC links display additional information
-				about the gene and mRNA associated with this protein. 
-				<UL>
-				<LI>The UCSC Genome Browser link: Displays the associated
-				mRNA in the Genome Browser.
-				<LI>UCSC Gene Details Page link: Displays the Genome Browser Known 
-				Genes details page for the gene associated with this protein. 
-				<LI>UCSC Gene Family Browser link: Displays the gene associated 
-				with this mRNA in the Family Browser, along with a set of related genes.
-				</UL>
+				<P>
 				<B>Fasta format:</B> This section contains the Fasta record for the 
 				protein showing the complete amino acid sequence.
                                 </TD>
@@ -293,7 +304,7 @@
             </TD></TR>
         </TABLE>
 
-<!-----------Protein Histograms-------------------------------------->
+<!-----------Protein Property Histograms----------------------------->
 <A NAME="histograms"></A><BR>
 
         <!--outer table is for border purposes-->
@@ -302,7 +313,7 @@
                 <TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0">
                     <TR><TD>
                         <TABLE BGCOLOR="D9E4F8" BACKGROUND="/images/hr.gif" WIDTH=100%>
-                            <TR><TD><FONT SIZE="4"><A NAME="TOC"></A><B>&nbsp; Protein Histograms</B></FONT>
+                            <TR><TD><FONT SIZE="4"><A NAME="TOC"></A><B>&nbsp; Protein Property Histograms</B></FONT>
                             </TD></TR>
                         </TABLE>
                         <TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0>

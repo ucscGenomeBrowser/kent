@@ -2,9 +2,8 @@
 This track shows the 
 distribution of hydrophobic residues across the selected protein, according to 
 the Kyte-Doolittle scale. Using a sliding 6-amino-acid window, this scale
-assigns hydrophobic amino 
-acids positive values, which are shown in blue above the center line on the 
-track. Hydrophilic amino acids are displayed in red below the center line on the track.
+assigns positive values to hydrophobic amino acids, which are shown in blue above the center line on the 
+track. Hydrophilic amino acids are displayed in red below the center line.
 <P>
 Hydrophobic residues occur most notably in the interior of 
 globular proteins, as trans-membrane segments or membrane-inserted tails, 

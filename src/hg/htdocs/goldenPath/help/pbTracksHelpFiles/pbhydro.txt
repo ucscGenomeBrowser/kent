@@ -6,4 +6,4 @@ of the histogram, and is indicated by a dark blue vertical line overlying the
 genome-wide distribution. 
 <P>
 To view the distribution of hydrophobic residues across the selected protein,
-see the <A HREF="pbhydroTrack.shtml">Hydrophobicity track</A>.
+see the <A HREF="pbhydroTr.shtml">Hydrophobicity track</A>.

@@ -1,11 +1,11 @@
 <!------------Description---------->
 This track appears as two types of display. If the mRNA matches the 
 forward (+) strand of the genomic sequence as displayed in the Genome Browser, 
-the DNA sequence is displayed as single row of nucleotides whose codons are
+the DNA sequence is displayed as a single row of nucleotides whose codons are
 read directly into the amino acid sequence.
 <P>
 If the mRNA matches the reverse (-) strand of the genomic sequence,
-the "DNA Sequence & Complement" track shows both strands of the DNA.
+this track shows both strands of the DNA.
 The upper strand matches the mRNA, to follow the convention that a 
 protein sequence is displayed in the amino-to-carboxy direction.  The 
 genomic sequence as viewed in the Genome Browser, therefore, is read from 

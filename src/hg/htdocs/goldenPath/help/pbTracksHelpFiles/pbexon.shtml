@@ -16,7 +16,7 @@
 <A NAME="TOP"></A>
 
 <!-----------Description Text---------------------------------------->
-<H2>Number of Exons Track</H2>
+<H2>Exons Track</H2>
 <H3>Description</H3>
 <P>
 <!--#include file="pbexon.txt" -->
