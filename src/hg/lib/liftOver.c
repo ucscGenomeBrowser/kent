@@ -12,7 +12,7 @@
 #include "liftOverChain.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: liftOver.c,v 1.7 2004/04/15 00:49:59 kate Exp $";
+static char const rcsid[] = "$Id: liftOver.c,v 1.8 2004/04/15 15:12:09 kate Exp $";
 
 struct chromMap
 /* Remapping information for one (old) chromosome */
@@ -782,6 +782,7 @@ return ct;
 }
 
 #define LIFTOVER_FILE_PREFIX    "liftOver"
+#define BEDSTART_TO_POSITION(coord)     (coord+1)
 
 int liftOverPositions(char *fileName, struct hash *chainHash, 
                         double minMatch,  double minBlocks, bool fudgeThick,
@@ -832,7 +833,7 @@ lf = lineFileOpen(mappedBedTn.forCgi, TRUE);
 while (lineFileNextReal(lf, &line))
     {
     sscanf(line, "%s\t%d\t%d", chrom, &start, &end);
-    fprintf(mapped, "%s:%d-%d\n", chrom, start, end);
+    fprintf(mapped, "%s:%d-%d\n", chrom, BEDSTART_TO_POSITION(start), end);
     }
 carefulClose(&mapped);
 lineFileClose(&lf);
@@ -845,7 +846,8 @@ while (lineFileNext(lf, &line, NULL))
     else
         {
         sscanf(line, "%s\t%d\t%d", chrom, &start, &end);
-        fprintf(unmapped, "%s:%d-%d\n", chrom, start, end);
+        fprintf(unmapped, "%s:%d-%d\n", chrom, 
+                        BEDSTART_TO_POSITION(start), end);
         }
     }
 carefulClose(&unmapped);
