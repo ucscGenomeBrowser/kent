@@ -39,7 +39,7 @@ struct sqlResult *sr;
 char **row;
 safef(query, sizeof(query), 
 	"select location.name,image.fileName from image,location"
-	" where image.id = %d", id);
+	" where image.id = %d and location.id=image.fullLocation", id);
 sr = sqlGetResult(conn, query);
 if ((row = sqlNextRow(sr)) == NULL)
     errAbort("No image of id %d", id);
