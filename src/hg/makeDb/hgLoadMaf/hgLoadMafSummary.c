@@ -12,7 +12,7 @@
 #include "dystring.h"
 #include "mafSummary.h"
 
-static char const rcsid[] = "$Id: hgLoadMafSummary.c,v 1.3 2005/03/08 23:11:52 kate Exp $";
+static char const rcsid[] = "$Id: hgLoadMafSummary.c,v 1.4 2005/03/09 17:37:34 kate Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -211,10 +211,10 @@ while ((maf = mafNext(mf)) != NULL)
         {
         /* break maf into maxSize pieces */
         int end = mcMaster->start + maxSize;
-        verbose(3, "Splitting maf %s:%d len %d\n", mcMaster->src,
-                                        mcMaster->start, mcMaster->size);
         struct mafAli *subMaf = 
                 mafSubset(maf, mcMaster->src, mcMaster->start, end);
+        verbose(3, "Splitting maf %s:%d len %d\n", mcMaster->src,
+                                        mcMaster->start, mcMaster->size);
         componentCount += 
             processMaf(subMaf, componentHash, &summaryList, mf, fileName);
         mafAliFree(&subMaf);
