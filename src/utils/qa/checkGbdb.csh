@@ -15,8 +15,7 @@ set debug="false"
 if ($#argv != 1) then
   echo
   echo "  script to check for /gbdb sync."
-  echo "    checks only active assemblies (but not ci1), "
-  echo "      unless other is specified."
+  echo "    checks only active assemblies."
   echo "    ignores scaffolds unless a db that uses them is specified."
   echo "    ignores: description genbank axtNetDp1 ci1 zoo."
   echo
