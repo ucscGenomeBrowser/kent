@@ -46,7 +46,7 @@
 # written in Tcl because bash version was getting hideously hard and wanted
 # a language with named fuction parameters, like fortran.
 #
-# $Id: gbBlat,v 1.47 2005/02/01 01:00:10 markd Exp $
+# $Id: gbBlat,v 1.48 2005/03/11 18:37:01 markd Exp $
 #
 
 # Tools are normally taken from /cluster/bin, however we allow them to be
@@ -59,6 +59,9 @@ set env(PATH) "$gbBin:$stdBin:$env(PATH)"
 # FXIME: tmp workaround for libmysqlclient.so.* not being on cluster
 set env(LD_LIBRARY_PATH) [file dir [file dir [info script]]]/lib/i386
 
+# use to record last command executed so that a shorter, more useful error
+# message can be generated on child process error
+set lastExec {}
 
 ##
 # Choose OOC based on genome.  Will return empty string if no ooc should be used, but one
@@ -100,7 +103,6 @@ proc getOoc {database} {
     }
 }
 
-
 # lassign list varname ?varname..?
 proc lassign {vals args} {
     set i 0
@@ -118,11 +120,22 @@ proc lassign {vals args} {
 # exec a command with verbose output if requested stderr passed through
 ##
 proc doExec {args} {
-    global verbose
+    global verbose lastExec
+
     if {$verbose} {
         puts stderr [join $args]
     }
+    set lastExec $args
     eval exec $args 2>@stderr
+}
+
+##
+# exec, recording last command
+##
+proc callProg {args} {
+    global lastExec
+    set lastExec $args
+    eval exec $args
 }
 
 ##
@@ -293,12 +306,12 @@ proc parseSubRangeSpec {genomeFile genomeType genomeFmt} {
         if {![regexp {^(.+/([^/]+)\.nib):([0-9]+)-([0-9]+)$}  $genomeFile {} nibFile genomeSeq genomeSubStart genomeSubEnd]} {
             abort "parse of subseq failed: $gemomeFile"
         }
-        set genomeSize [exec nibSize $nibFile | cut -f 3]
+        set genomeSize [callProg nibSize $nibFile | cut -f 3]
     } else {
         if {![regexp {^.+/[^/]+\.2bit:(.+):([0-9]+)-([0-9]+)$} $genomeFile {} genomeSeq genomeSubStart genomeSubEnd]} {
             abort "parse of subseq failed: $gemomeFile"
         }
-        set genomeSize [exec twoBitInfo $genomeFile stdout | cut -f 2]
+        set genomeSize [callProg twoBitInfo $genomeFile stdout | cut -f 2]
     }
     return [list $genomeSeq $genomeSize $genomeSubStart $genomeSubEnd]
 }
@@ -341,20 +354,20 @@ proc alignToGenome {genomeFile rnaFa blatParams orgCat cdnaType {subInfo {}}} {
     file delete $localPsl $localOi $localIntronPsl
     
     # align
-    eval doExec blat -noHead $blatParams [list $genomeFile $rnaFa] $localPsl 2>@stderr
+    eval doExec blat -noHead $blatParams [list $genomeFile $rnaFa] $localPsl
     liftOrCat psl $localPsl $outPslFh $subInfo
 
     # orientation info info and ESTs w/intron selection is only done for
     # native and if the output file length is greater than zero
     if {([file size $localPsl] > 0) && ($orgCat == "native")} {
         # get orientation info
-        doExec polyInfo $localPsl $genomeFile $rnaFa $localOi 2>@stderr
+        doExec polyInfo $localPsl $genomeFile $rnaFa $localOi
         liftOrCat bed $localOi $outOiFh $subInfo
 
         # if these are native ESTs, select ones that have introns, saving only
         # if some actually exist.
         if {$cdnaType == "est"} {
-            doExec pslIntronsOnly $localPsl $genomeFile $localIntronPsl 2>@stderr
+            doExec pslIntronsOnly $localPsl $genomeFile $localIntronPsl
             if {[file size $localIntronPsl] > 0} {
                 liftOrCat psl $localIntronPsl $outIntronPslFh $subInfo
             }
@@ -440,6 +453,30 @@ proc genMondoAlignments {database srcDb orgCat cdnaType genomeFile rnaFa seqsFil
     finishOutput
 }
 
+proc handleError {errorResult} {
+    global errorInfo errorCode keepTmp tmpDir lastExec
+    set holdErrorInfo $errorInfo
+    set holdErrorCode $errorCode
+    if {!$keepTmp} {
+        # don't use callProg here, need to preserve lastExec
+         exec rm -rf $tmpDir &
+    }
+    switch [lindex $holdErrorCode 0] {
+        CHILDSTATUS {
+            puts stderr "Error: $errorResult"
+            puts stderr "Exec: $lastExec"
+            exit 1
+        }
+        POSIX {
+            puts stderr "Error: $errorResult"
+            exit 1
+        }
+        default {
+            error $errorResult $holdErrorInfo $holdErrorCode
+        }
+    }
+}
+
 ##
 # entry, parse arguments
 ##
@@ -516,16 +553,16 @@ if {($seqsFile != "") && ($genomeFmt != "2bit")} {
 ##
 # create out directory now, so mkdir failure (usually NFS) will not happen
 # after blat has completed. Maintain group write/sticky
-exec rm -rf $tmpDir
-exec mkdir -p -m 02775 $tmpDir
-if {[catch {exec mkdir -p -m 02775 $outDir}]} {
+callProg rm -rf $tmpDir
+callProg mkdir -p -m 02775 $tmpDir
+if {[catch {callProg mkdir -p -m 02775 $outDir}]} {
     # Try twice, just because we sometimes get weird failures.  
-    exec sleep 2
-    exec mkdir -p -m 02775 $outDir
+    callProg sleep 2
+    callProg mkdir -p -m 02775 $outDir
 }
 set tmpBase $tmpDir/$outBase
 if {$keepTmp} {
-    puts stderr "note: will keep tmpDir [exec hostname] $tmpDir"
+    puts stderr "note: will keep tmpDir [callProg hostname] $tmpDir"
 }
 
 # generate alignments, cleaning up tmp on error
@@ -535,14 +572,9 @@ if {[catch {
     } else {
         genMondoAlignments $database $srcDb $orgCat $cdnaType $genomeFile $rnaFa $seqsFile
     }
-} msg]} {
-    set holdErrorInfo $errorInfo
-    set holdErrorCode $errorCode
-    if {!$keepTmp} {
-        exec rm -rf $tmpDir &
-    }
-    error $msg $holdErrorInfo $holdErrorCode
+} errorResult]} {
+    handleError $errorResult
 }
 if {!$keepTmp} {
-    exec rm -rf $tmpDir &
+    callProg rm -rf $tmpDir &
 }
