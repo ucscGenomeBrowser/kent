@@ -29,6 +29,16 @@ enum pfTokType
     pftMulEquals,
     pftModEquals,
     pftEqualsEquals,
+
+    /* - reserved words - */
+    pftClass,
+    pftTo,
+    pftFor,
+    pftForeach,
+    pftWhile,
+    pftOf,
+    pftIf,
+    pftElse,
     };
 
 struct pfSource
@@ -48,6 +58,7 @@ struct pfTokenizer
     struct pfSource *source;	/* Current source file. */
     char *pos;			/* Current position within source->contents. */
     char *endPos;		/* Last position within source->contents. */
+    struct hash *reserved;	/* Hash of built-in reserved words. */
     struct hash *symbols;	/* Hash containing all symbols. */
     struct hash *strings;	/* Hash containing all strings. */
     struct dyString *dy;	/* Dynamic string buffer - for symbols and
@@ -75,8 +86,10 @@ struct pfToken
     int textSize;		/* Size of text. */
     };
 
-struct pfTokenizer *pfTokenizerNew(char *fileName);
-/* Create tokenizing structure on file. */
+
+struct pfTokenizer *pfTokenizerNew(char *fileName, struct hash *reservedWords);
+/* Create tokenizing structure on file.  Reserved words is an int valued hash
+ * that may be NULL. */
 
 struct pfToken *pfTokenizerNext(struct pfTokenizer *tkz);
 /* Puts next token in token.  Returns token type. For single

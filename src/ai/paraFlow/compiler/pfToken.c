@@ -117,8 +117,9 @@ readInGulp(fileName, &source->contents, &source->contentSize);
 return source;
 }
 
-struct pfTokenizer *pfTokenizerNew(char *fileName)
-/* Create tokenizing structure on file. */
+struct pfTokenizer *pfTokenizerNew(char *fileName, struct hash *reservedWords)
+/* Create tokenizing structure on file.  Reserved words is an int valued hash
+ * that may be NULL. */
 {
 struct pfTokenizer *pfTkz;
 AllocVar(pfTkz);
@@ -129,6 +130,9 @@ pfTkz->endPos = pfTkz->pos + pfTkz->source->contentSize;
 pfTkz->symbols = hashNew(16);
 pfTkz->strings = hashNew(16);
 pfTkz->dy = dyStringNew(0);
+if (reservedWords == NULL)
+    reservedWords = hashNew(1);
+pfTkz->reserved = reservedWords;
 return pfTkz;
 }
 
@@ -705,6 +709,12 @@ switch (c)
     default:
 	tokSingleChar(tkz, tok, c);
 	break;
+    }
+if (tok->type == pftName)
+    {
+    int x = hashIntValDefault(tkz->reserved, tok->val.s, 0);
+    if (x != 0)
+        tok->type = x;
     }
 return tok;
 }
