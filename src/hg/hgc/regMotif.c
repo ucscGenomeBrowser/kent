@@ -463,7 +463,6 @@ if (probe != NULL)
     printf("<B>Name:</B> %s<BR>\n", probe->name);
     printPosOnChrom(probe->chrom, probe->chromStart, probe->chromEnd, 
     	NULL, TRUE, probe->name);
-    printf("<BR>\n");
 
     /* Make up list of all transcriptionFactors. */
     for (i=0; i<probe->tfCount; ++i)
@@ -509,8 +508,8 @@ if (probe != NULL)
 	printf("No significant immunoprecipitation at this level.");
     else
 	{
-	tfBindLevelSection("Good", 0.000, 0.004, tfList, conn, motifTable);
-	tfBindLevelSection("Weak", 0.004, 0.010, tfList, conn, motifTable);
+	tfBindLevelSection("Good (P 0.001)", 0.000, 0.004, tfList, conn, motifTable);
+	tfBindLevelSection("Weak (P 0.005)", 0.004, 0.010, tfList, conn, motifTable);
 	}
     transRegCodeProbeFree(&probe);
     }
