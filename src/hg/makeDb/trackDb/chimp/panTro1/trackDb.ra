@@ -36,7 +36,7 @@ type genePred
 
 track gc20KBase
 shortLabel GC Percent
-longLabel GC Percent in 5 base windows
+longLabel GC Percent in 20K Base Windows
 group map
 priority 23.5
 visibility hide
@@ -66,7 +66,7 @@ type wig 0 50
 
 track chainHg16
 shortLabel Human Chain
-longLabel Human (July 03) Chained Alignments
+longLabel Human (hg16-Jul 03) Chained Alignments
 group compGeno
 priority 145.6
 visibility hide
@@ -78,7 +78,7 @@ otherDb hg16
 
 track netHg16
 shortLabel Human Net
-longLabel Human (July 03) Net 
+longLabel Human (hg16-Jul 03) Net 
 group compGeno
 priority 145.7
 visibility dense
@@ -87,7 +87,7 @@ type netAlign seq chainHg16
 
 track humanDels
 shortLabel Human Deletions
-longLabel Deletions in Human (hg16) Relative to Chimp
+longLabel Deletions in Human (hg16-Jul 03) Relative to Chimp
 group compGeno
 priority 147
 visibility dense
