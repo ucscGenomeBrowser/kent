@@ -67,7 +67,7 @@ MAKE HGCENTRALTEST ENTRY AND TRACKDB TABLE FOR SC1 (DONE 04/15/03)
     echo 'insert into defaultDb values("SARS", "sc1");' \
       | hgsql -h genome-testdb hgcentraltest
     echo 'insert into dbDb values("sc1", "SARS Cor. TOR2 Apr. 2003", \
-          "/gbdb/sc1/nib", "SARS", "TOR2", 1, 10, "SARS");' \
+          "/gbdb/sc1/nib", "SARS", "chr1", 1, 10, "SARS");' \
       | hgsql -h genome-testdb hgcentraltest
     # Make trackDb table so browser knows what tracks to expect:
     ssh hgwdev
