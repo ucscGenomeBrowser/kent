@@ -559,7 +559,7 @@ apiMel2.perChromTables = no
     # Make a README.txt which explains the files & formats.
     md5sum *.gz > md5sum.txt
 
-# MAKE Drosophila Proteins track  (IN PROGRESS braney)
+# MAKE Drosophila Proteins track  (DONE 2005-02-24 braney)
     ssh kksilo
     mkdir -p /cluster/data/apiMel2/blastDb
     cd /cluster/data/apiMel2/blastDb
@@ -634,12 +634,12 @@ exit 1
     para create blastSpec
     para try, push
 
-# Completed: 151668 of 151668 jobs
-# CPU time in finished jobs:    2212410s   36873.50m   614.56h   25.61d  0.070 y
-# IO & Wait Time:                704680s   11744.66m   195.74h    8.16d  0.022 y
-# Average job time:                  19s       0.32m     0.01h    0.00d
-# Longest job:                      287s       4.78m     0.08h    0.00d
-# Submission to last job:         59559s     992.65m    16.54h    0.69d
+# Completed: 149703 of 149703 jobs
+# CPU time in finished jobs:    4747336s   79122.27m  1318.70h   54.95d  0.151 y
+# IO & Wait Time:               1196093s   19934.88m   332.25h   13.84d  0.038 y
+# Average job time:                  40s       0.66m     0.01h    0.00d
+# Longest job:                      221s       3.68m     0.06h    0.00d
+# Submission to last job:          7580s     126.33m     2.11h    0.09d
 
     cat << '_EOF_' > chainGsub
 #LOOP
@@ -660,12 +660,12 @@ chainSome $(path1)
     # so you can limit the number of jobs starting to 3 or 4
     para try, push...
 
-# Completed: 383 of 383 jobs
-# CPU time in finished jobs:        189s       3.16m     0.05h    0.00d  0.000 y
-# IO & Wait Time:                  7289s     121.48m     2.02h    0.08d  0.000 y
-# Average job time:                  20s       0.33m     0.01h    0.00d
-# Longest job:                       38s       0.63m     0.01h    0.00d
-# Submission to last job:           599s       9.98m     0.17h    0.01d
+# Completed: 139 of 139 jobs
+# CPU time in finished jobs:       3259s      54.32m     0.91h    0.04d  0.000 y
+# IO & Wait Time:                  3745s      62.41m     1.04h    0.04d  0.000 y
+# Average job time:                  50s       0.84m     0.01h    0.00d
+# Longest job:                      930s      15.50m     0.26h    0.01d
+# Submission to last job:          1580s      26.33m     0.44h    0.02d
 
     exit
     # back to kksilo
@@ -684,6 +684,8 @@ chainSome $(path1)
 
     hgLoadPsl apiMel2 blastDm1FB.psl
 
+    #once everything checks out, rm the temp dir
+    rm -rf blastOut
 # End tblastn
 
 # MAKE SCAFFOLDS TRACK (DONE 2/23/2005 Andy)
