@@ -17,4 +17,4 @@ test: $(TESTO)
 	${CC} ${COPT} ${CFLAGS} -o test $(TESTO) $(MYLIBS) $L
 
 lib:
-	cd ../../lib; make
+	cd ../../lib && ${MAKE}
