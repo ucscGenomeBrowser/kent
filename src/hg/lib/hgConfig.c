@@ -24,6 +24,7 @@ char filename[BUFFER_SIZE];
 char line[BUFFER_SIZE];
 char name[BUFFER_SIZE];
 char value[BUFFER_SIZE];
+struct stat statBuf;
 
 cfgOptionsHash = newHash(6);
 
@@ -40,6 +41,16 @@ else	/* on the web, read from global config file */
     sprintf(filename, "%s/%s", GLOBAL_CONFIG_PATH, GLOBAL_CONFIG_FILE);
     }
 
+/* ensure that the file only readable by the user */
+if (stat(filename, &statBuf) == 0)
+    {
+    if ((statBuf.st_mode & (S_IRWXG|S_IRWXO)) != 0)
+        errAbort("config file %s allows group or other access, must only allow user access",
+                 filename);
+    
+    }
+
+/* parse; if the file is not there or can't be read, leave the hash empty */
 if((file = fopen(filename, "r")) != 0)
     {
     /* while there are lines to read */
@@ -54,7 +65,7 @@ if((file = fopen(filename, "r")) != 0)
 	    }
 	}
     }
-}	/* if the file is not there, leave the hash empty */
+}
 
 char* cfgOption(char* name)
 /* Return the option with the given name. */
