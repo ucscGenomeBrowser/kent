@@ -72,16 +72,13 @@ char *hashMustFindName(struct hash *hash, char *name);
 void *hashMustFindVal(struct hash *hash, char *name);
 /* Lookup name in hash and return val.  Abort if not found. */
 
-int hashFindSize(struct hash *hash, char *name);
-/* Find size of name in hash or die trying. */
-
 void *hashFindVal(struct hash *hash, char *name);
 /* Look up name in hash and return val or NULL if not found. */
 
 void hashAddInt(struct hash *hash, char *name, int val);
 /* Store integer value in hash */
 
-#define hashIntVal(hash, name) hashFindSize(hash, name) /* Synonym */
+int hashIntVal(struct hash *hash, char *name);
 /* Return integer value associated with name in a simple 
  * hash of ints. */
 
