@@ -1,0 +1,134 @@
+<H2>Description</H2>
+<P>
+  This track consolidates all the Simple Nucleotide Polymorphisms into
+  a single track.  
+</P>
+
+<H2>Visualization Controls</H2>
+<P>
+  Variants can be drawn in color based on their source, molecule type,
+  variant class, validation stauts, or functional classification.
+  Variants can also be excluded from the list based on these same
+  categories.
+</P>
+<P>
+  These definitions are taken from the DTD that describes the dbSnp
+  XML format, which is available <A target="_BLANK" HREF="ftp://ftp.ncbi.nih.gov/snp/human/XML/00readme">here</A>.
+  <UL>
+    <LI>
+      <B>Source</B>: Contributor of this data<BR>
+      <UL>
+        <LI><B>dbSnp</B> - From the current build of dbSnp
+        <LI><B>Affymetrix Genotyping Array 10K</B> - SNPs on the commercial array
+        <LI><B>Affymetrix Genotyping Array 10K v2</B> -  SNPs on the commercial array
+        <LI><B>Affymetrix Genotyping Array 50K HindIII</B> -  SNPs on the commercial array
+        <LI><B>Affymetrix Genotyping Array 50K XbaI</B> -  SNPs on the commercial array
+      </UL>
+    </LI>
+    <LI> 
+      <B>Molecule Type</B>: Sample used to find this variant<BR>
+      <UL>
+        <LI><B>Unknown</B> - sample type not known
+        <LI><B>Genomic</B> - variant was discovered using a genomic template
+        <LI><B>cDNA</B> - variant was discovered using a cDNA template
+        <LI><B>Mitochondrial</B> - variant was discovered using a mitochondrial template
+        <LI><B>Chloroplast</B> - variant was discovered using a chloroplast template
+      </UL>
+    </LI>
+    <LI> 
+      <B>Variant Class</B>: Variant classification<BR>
+      <UL>
+        <LI><B>Unknown</B> - no classification provided by data contributor
+        <LI><B>Single Nucleotide Polymorphism</B> - single nucleotide variation: alleles of length=1 and from set of {A,T,C,G}
+        <LI><B>Insertion / Deletion</B> - insertion / deletion variation: alleles of different length or include '-' character
+        <LI><B>Heterozygous</B> - heterozygous (undetermined) variation: allele contains string '(heterozygous)'
+        <LI><B>Microsatellite</B> - microsatellite variation: allele string contains numbers and '(motif)' pattern
+        <LI><B>Named</B> - insertion/deletion of named object (length unknown)
+        <LI><B>No Variation</B> - no variation asserted for sequence
+        <LI><B>Mixed</B> - mixed class
+        <LI><B>Multiple Nucleotide Polymorphism</B> - multiple nucleotide variation: alleles of length=1 and from set of {A,T,C,G}
+      </UL>
+    </LI>
+    <LI> 
+      <B>Validation Status</B>: How the variant has been validated<BR>
+      <UL>
+        <LI><B>Unknown</B> - no validation has been reported for this refSNP
+        <LI><B>Other Population</B> - at least one ss in cluster was validated by independent assay
+        <LI><B>By Frequency</B> - at least one subsnp in cluster has frequency data submitted
+        <LI><B>By Cluster</B> - cluster has 2+ submissions, with 1+ submissions assayed with a non-computational method
+        <LI><B>By 2 Hit / 2 Allele</B> - all alleles have been observed in 2+ chromosomes
+        <LI><B>By HapMap</B> - validated by HapMap project
+        <LI><B>By Genotype</B> - at least one genotype reported for this refSNP
+      </UL>
+    </LI>
+    <LI> 
+      <B>Functional Classification</B>: Predicted functional role<BR>
+      <UL>
+        <LI><B>Unknown</B> - no known functional classification
+        <LI><B>Locus Region</B> - variation in region of gene, but not in transcript
+        <LI><B>Coding</B> - variation in coding region of gene, assigned if allele-specific class unknown
+        <LI><B>Coding - Synonymous</B> - no change in peptide for allele with respect to contig seq
+        <LI><B>Coding - Non-Synonymous</B> - change in peptide with respect to contig sequence
+        <LI><B>mRNA/UTR</B> - variation in transcript, but not in coding region interval
+        <LI><B>Intron</B> - variation in intron, but not in first 2 or last 2 bases of intron
+        <LI><B>Splice Site</B> - variation in first 2 or last to bases of intron
+        <LI><B>Reference</B> - allele observed in reference contig sequence
+        <LI><B>Exception</B> - variation in coding region with
+           exception raised on alignment. This occurs when protein
+           with gap in sequence is aligned back to contig
+           sequence. variations 3' of the gap have undefined
+           functional inference.
+      </UL>
+    </LI>
+  </UL>
+</P>
+
+
+<H2>Filtering</H2>
+<P>
+  The SNPs in this track include all known polymorphisms that can be
+  mapped against the current assembly that are available in the
+  current build of <A HREF="http://www.ncbi.nlm.nih.gov/SNP/"
+  TARGET=_blank>dbSnp</A>, which is shown in the Genome Browser 
+  <A HREF="/goldenPath/releaseLog.html">release log</A>.
+</P>
+
+<P>
+  There are two reasons that some variants may not be mapped and/or
+  annotated in this track:
+  <UL>
+    <LI> 
+      Submissions that are completely masked as repetitive elements.
+      These are dropped from any further computations. This set of
+      reference SNPs is found in chromosome &quot;rs_chMasked&quot; on
+      the <A HREF="ftp://ftp.ncbi.nih.gov/snp/" TARGET=_blank>dbSNP
+      ftp site</A>.
+    </LI>
+    <LI>
+      Submissions that are defined in a cDNA context with extensive
+      splicing. These SNPs are typically annotated on refSeq mRNAs
+      through a separate annotation process. Effort is being made to
+      reverse map these variations back to contig coordinates, but
+      that has not been implemented. For now, you can find this set of
+      variations in &quot;rs_chNotOn&quot; on the <A
+      HREF="ftp://ftp.ncbi.nih.gov/snp/" TARGET=_blank>dbSNP ftp
+      site</A>.  
+    </LI>
+  </UL>
+</P>
+
+<P>
+  The heuristics for the non-SNP variations (i.e. named elements and
+  STRs) are quite conservative; therefore, some of these are probably
+  lost. This approach was chosen to avoid false annotation of
+  variation in inappropriate locations.
+</P>
+
+<H2>Credits</H2>
+<P>
+  Thanks to NIH's <A HREF="http://www.ncbi.nlm.nih.gov/SNP/"
+  TARGET=_blank>dbSNP</A> for providing the public data, which are
+  available from <A HREF="http://www.ncbi.nlm.nih.gov/SNP"
+  TARGET=_blank>dbSnp</A> at the NCBI.
+</P>
+
