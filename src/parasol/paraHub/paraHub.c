@@ -1844,7 +1844,9 @@ for (mach = machineList; mach != NULL; mach = mach->next)
 
 for (mm = mmList; mm != NULL; mm = mm->next)
     {
-    int sd = netConnect(mm->name, paraPort);
+    int sd;
+    printf("%s\n", mm->name);
+    sd = netConnect(mm->name, paraPort);
     if (sd < 0)
         {
 	multiMachineDown(mm);
