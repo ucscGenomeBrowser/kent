@@ -57,7 +57,7 @@ cd $gbRoot
 . $gbRoot/lib/gbCommon.sh
 
 verb=""
-verb="-verbose=1"
+#verb="-verbose=1"
 
 # allow 250mb core dumps
 ulimit -c 256000
