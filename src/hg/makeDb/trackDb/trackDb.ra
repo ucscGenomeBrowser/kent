@@ -1967,6 +1967,12 @@ searchTable xenoRefGene
 searchType refGene
 searchPriority 2.1
 
+searchTable pseudoGeneLink
+query select chrom, chromStart,chromEnd, refSeq from %s where refSeq like '%%%s%%'
+xrefTable refLink
+xrefQuery select mrnaAcc, name from %s where name like '%%%s%%'
+searchPriority 2.5
+
 searchTable superfamily
 searchType bed
 searchMethod fuzzy
