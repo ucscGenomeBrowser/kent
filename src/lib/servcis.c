@@ -17,8 +17,7 @@ static void _makeTempName(struct tempName *tn, char *base, char *suffix)
 char *tname;
 char buf[64];
 
-sprintf(buf, "%s_%s", getHost(), base);
-tname = rTempName("../trash", buf, suffix);
+tname = rTempName("../trash", base, suffix);
 strcpy(tn->forCgi, tname);
 strcpy(tn->forHtml, tname);
 }

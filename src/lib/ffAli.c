@@ -20,25 +20,22 @@ if (left->nEnd != right->nStart)
 return intronOrientation(left->hEnd, right->hStart);
 }
 
-int ffIntronOrientation(struct ffAli *ff)
-/* Return 1 if introns make it look like alignment is on + strand,
- *       -1 if introns make it look like alignment is on - strand,
- *        0 if can't tell. */
+int ffIntronOrientation(struct ffAli *ali)
+/* Return + for positive orientation overall, - for negative,
+ * 0 if can't tell. */
 {
-int intronDir = 0;
-int oneDir;
-struct ffAli *right;
+struct ffAli *left = ali, *right;
+int orient = 0;
 
-for (right = ff->right; right != NULL; ff = right, right = right->right)
+if (left != NULL)
     {
-    if ((oneDir = ffOneIntronOrientation(ff, right)) != 0)
+    while((right = left->right) != NULL)
 	{
-	if (intronDir && intronDir != oneDir)
-	    return 0;
-	intronDir = oneDir;
+	orient += intronOrientation(left->hEnd, right->hStart);
+	left = right;
 	}
     }
-return intronDir;
+return orient;
 }
 
 struct ffAli *ffRightmost(struct ffAli *ff)

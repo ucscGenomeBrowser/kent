@@ -3,6 +3,7 @@
 #include <unistd.h>
 #include <time.h>
 #include <dirent.h>
+#include <sys/utsname.h>
 #include "common.h"
 #include "portable.h"
 #include "portimpl.h"
@@ -188,9 +189,16 @@ if (hostName == NULL)
 	hostName = getenv("HOST");
 	if (hostName == NULL)
 	    {
-	    hostName = "";
+	    if (hostName == NULL)
+		{
+		static struct utsname unamebuf;
+		if (uname(&unamebuf) >= 0)
+		    hostName = unamebuf.nodename;
+		else
+		    hostName = "unknown";
+		}
 	    }
-	}
+        }
     strncpy(buf, hostName, sizeof(buf));
     chopSuffix(buf);
     hostName = buf;
@@ -224,10 +232,16 @@ char midder[256];
 int pid = getpid();
 int num = time(NULL);
 static char fileName[512];
+char host[512];
+char *s;
 
+strcpy(host, getHost());
+s = strchr(host, '.');
+if (s != NULL)
+     *s = 0;
 for (;;)
    {
-   sprintf(fileName, "%s/%s_%d_%d%s", dir, base, pid, num, suffix);
+   sprintf(fileName, "%s/%s_%s_%d_%d%s", dir, base, host, pid, num, suffix);
    if (!fileExists(fileName))
        break;
    num += 1;
