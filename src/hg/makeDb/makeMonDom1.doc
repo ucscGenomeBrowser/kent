@@ -596,6 +596,10 @@ Submission to last job:          1309s      21.82m     0.36h    0.02d
     #	request rsync of scratch to the cluster
 
 # PRODUCING GENSCAN PREDICTIONS (DONE - 2004-12-07 - Hiram)
+# PRODUCING GENSCAN PREDICTIONS (REDONE - 2005-01-07 - Angie  
+#                                          note added by kuhn)
+# genscanPep table touched by alisq to satisfy joinerCheck 2005-03-32 - kuhn)
+
     ssh kolossus
     cd /scratch/monDom1
     time maskOutFa maskedScaffolds.fa hard hardMaskedScaffolds.fa
