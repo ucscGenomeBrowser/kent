@@ -23,7 +23,7 @@
 #define CDS_HELP_PAGE "../goldenPath/help/hgCodonColoring.html"
 #define CDS_MRNA_HELP_PAGE "../goldenPath/help/hgCodonColoringMrna.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.160 2004/12/17 01:34:35 kent Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.161 2004/12/23 21:50:54 galt Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -588,7 +588,7 @@ snprintf(scoreVar, sizeof(scoreVar), "%s.scoreFilter", tdb->tableName);
 scoreSetting = cartUsualInt(cart,  scoreVar,  scoreVal);
 safef(tempScore, sizeof(tempScore), "%d",scoreSetting);
 cgiMakeTextVar( scoreVar, tempScore, 11);
-printf(" Data Range (0-20000000000)");
+printf(" Data Range (0-2000000000)");
 }
 
 void crossSpeciesUi(struct trackDb *tdb)
