@@ -18,7 +18,7 @@
 #include "customTrack.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: schema.c,v 1.17 2004/07/23 03:11:25 kent Exp $";
+static char const rcsid[] = "$Id: schema.c,v 1.18 2004/07/23 03:18:31 kent Exp $";
 
 static struct slName *storeRow(struct sqlConnection *conn, char *query)
 /* Just save the results of a single row query in a string list. */
@@ -182,6 +182,24 @@ hTableEnd();
 explainCoordSystem();
 }
 
+static int joinerPairCmpOnB(const void *va, const void *vb)
+/* Compare two joinerPair based on b element of pair. */
+{
+const struct joinerPair *jpA = *((struct joinerPair **)va);
+const struct joinerPair *jpB = *((struct joinerPair **)vb);
+struct joinerDtf *a = jpA->b;
+struct joinerDtf *b = jpB->b;
+int diff;
+diff = strcmp(a->database, b->database);
+if (diff == 0)
+   {
+   diff = strcmp(a->table, b->table);
+   if (diff == 0)
+       diff = strcmp(a->field, b->field);
+   }
+return diff;
+}
+
 
 static void showSchemaDb(char *db, char *table)
 /* Show schema to open html page. */
@@ -202,6 +220,7 @@ hPrintf("<BR>\n");
 describeFields(db, splitTable, asObj, conn);
 
 jpList = joinerRelate(joiner, db, table);
+slSort(&jpList, joinerPairCmpOnB);
 if (jpList != NULL)
     {
     webNewSection("Connected Tables and Joining Fields");
