@@ -90,6 +90,10 @@ static void swissProtCommentsPrint(struct section *section,
 struct spComment *com;
 char *acc = swissProtAcc;
 char *description = spDescription(spConn, acc);
+char *id = spAccToId(spConn, acc);
+hPrintf("<B>ID:</B> ");
+hPrintf("<A HREF=\"http://us.expasy.org/cgi-bin/niceprot.pl?%s\" TARGET=_blank>", acc);
+hPrintf("%s</A><BR>\n", id);
 if (description != NULL)
     hPrintf("<B>DESCRIPTION:</B> %s<BR>\n", description);
 for (com = section->items; com != NULL; com = com->next)
