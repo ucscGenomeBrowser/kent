@@ -31,7 +31,7 @@
 #include "genbank.h"
 #include "gbSql.h"
 
-static char const rcsid[] = "$Id: gbMetaData.c,v 1.23 2004/09/15 16:31:49 markd Exp $";
+static char const rcsid[] = "$Id: gbMetaData.c,v 1.24 2004/10/13 14:32:46 markd Exp $";
 
 // FIXME: move mrna, otherse to objects.
 
@@ -125,9 +125,21 @@ static char* refSeqSummaryCreate =
 /* list of the names of the id to string tables */
 static char *raFieldTables[] =
     {
-    "development", "cell", "cds", "geneName", "productName",
-    "source", "organism", "library", "mrnaClone", "sex", "tissue",
-    "author", "keyword", "description", NULL
+    "author",
+    "cds",
+    "cell",
+    "description",
+    "development",
+    "geneName",
+    "keyword",
+    "library",
+    "mrnaClone",
+    "organism",
+    "productName",
+    "sex",
+    "source",
+    "tissue",
+    NULL
     };
 
 /* global configuration */
