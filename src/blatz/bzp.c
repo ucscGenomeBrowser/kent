@@ -53,6 +53,12 @@ void bzpClientOptionsHelp(struct bzp *bzp)
 /* Explain options having to do with client side of alignments. */
 {
 printf("  -rna - If set will treat query as mRNA and look for introns in gaps\n");  
+printf("  -minScore=%d - Minimum score of to output after final chaining.  Each \n"
+       "                 matching base contributes roughly 100 to the score.  This has\n"
+       "                 little effect on the speed, but higher minScores will weed out\n"
+       "                 weaker alignments.  Controls sensitivity at highest level.\n"
+       , bzp->minScore);
+printf("  -bestScoreOnly - If set only output highest scoring chain for a given query\n");
 printf("  -multiHits=%d - If nonzero takes multiple hits on diagonal to trigger\n"
        "                  gapless extension (MSP). Greatly speeds up searches\n"
        "                  of larger databases at a modest cost in sensitivity\n", 
@@ -61,11 +67,6 @@ printf("  -transition=%d - If nonzero search single base transition mutations in
        "                   seed. This moderately increases sensitivity at the\n"
        "                   expense of tripling the large database search time\n"
        , bzp->transition);
-printf("  -minScore=%d - Minimum score of to output after final chaining.  Each \n"
-       "                 matching base contributes roughly 100 to the score.  This has\n"
-       "                 little effect on the speed, but higher minScores will weed out\n"
-       "                 weaker alignments.  Controls sensitivity at highest level.\n"
-       , bzp->minScore);
 printf("  -minGapless=%d - Minimum score of maximal gapless alignment (MSP) to \n"
        "                  trigger first level of chaining.\n"
        , bzp->minGapless);
@@ -101,6 +102,7 @@ void bzpSetOptions(struct bzp *bzp)
 bzp->weight = optionInt("weight", bzp->weight);
 bzp->rna = optionExists("rna");
 bzp->minScore = optionInt("minScore", bzp->minScore);
+bzp->bestScoreOnly = optionExists("bestScoreOnly");
 bzp->multiHits = optionInt("multiHits", bzp->multiHits);
 bzp->transition = optionInt("transition", bzp->transition);
 bzp->minGapless = optionInt("minGapless", bzp->minGapless);
