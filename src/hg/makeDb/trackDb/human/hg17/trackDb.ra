@@ -712,6 +712,14 @@ spectrum on
 type netAlign tetNig1 chainTetNig1
 otherDb tetNig1
 
+track chimpDels
+shortLabel Chimp Deletions
+longLabel Deletions in Chimp (lifted from Nov. 2003/panTro1) Relative to Human
+group compGeno
+priority 203
+visibility hide
+type bed 4 .
+
 searchTable uc16
 searchMethod exact
 searchType bed
