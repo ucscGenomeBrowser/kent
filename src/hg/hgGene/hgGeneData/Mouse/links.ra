@@ -1,5 +1,12 @@
 # Mouse-specific link info.
 
+name jax
+shortLabel Jackson Labs
+tables kgXref
+idSql select swissProt.extDbRef.extAcc1 from swissProt.extDbRef,swissProt.extDb,kgXref where swissProt.extDb.val = 'MGD' and swissProt.extDb.id = swissProt.extDbRef.extDb and swissProt.extDbRef.acc = kgXref.spID and kgXref.kgID = '%s' 
+priority 35
+url http://www.informatics.jax.org/searches/accession_report.cgi?id='%s'
+
 name geneLynx
 shortLabel GeneLynx
 tables kgXref
