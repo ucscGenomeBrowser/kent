@@ -17,6 +17,11 @@ errAbort(
   "usage:\n"
   "    paraStat machineList\n"
   "options:\n"
+  "    -retries=N Number of retries to get in touch with machine\n"
+  "               The first retry is after 1/100th of a second.  Each\n"
+  "               retry after that takes twice as long up to a maximum\n"
+  "               of 1 second per retry.  7 retries is default and takes\n"
+  "               about a second.\n"
   "    -long - List details of current and recent jobs\n");
 }
 
@@ -93,6 +98,8 @@ while (lineFileRow(lf, row))
     struct paraMessage pm;
     struct rudp *ru = rudpMustOpen();
 
+    if (optionExists("retries"))
+        ru->maxRetries = optionInt("retries", 7);
     pmInitFromName(&pm, name, paraNodePort);
     if (longFormat)
 	{
