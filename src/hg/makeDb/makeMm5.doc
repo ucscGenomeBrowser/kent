@@ -5531,6 +5531,24 @@ while (<>) {
     # featureBits mm3 ctgPos
     # 2500661074 bases of 2505900260 (99.791%) in intersection
 
+# RELOAD MAP CONTIGS TRACK (DONE - 2005-Mar-03 - Heather)
+# /cluster/data/mm5/ncbi/seq_contig.md contains more than just C57BL/6J.
+# Filter those out.
+
+    ssh hgwdev
+    cd /cluster/data/mm5/bed/ctgPos
+    cp /cluster/data/mm5/ncbi/seq_contig.md .
+    grep C57BL seq_contig.md > contig.C57BL
+    # contig.C57BL has 41061 lines (252 lines fewer than seq_contig.md)
+    ./parseSeqContig.pl contig.C57BL > ctgPosFiltered.tab
+    # ctgPosFiltered.tab has 302 rows (227 fewer than ctgPos.tab)
+    echo "delete from ctgPos" | hgsql mm5
+    echo "load data local infile 'ctgPosFiltered.tab' into table ctgPos" | hgsql mm5
+    # featureBits mm5 ctgPos
+    # 2557064874 bases of 2615483787 (97.766%) in intersection
+
+  
+
 # FUGU BLAT ALIGNMENTS (DONE 2004-09-08 Fan)
     ssh kk
     mkdir /cluster/data/mm5/bed/blatFr1
