@@ -9,7 +9,8 @@ static boolean overlapTest(struct cDnaAlign *aln1,
                            struct cDnaAlign *aln2)
 /* test if two alignments overlap on the same strand */
 {
-return (aln1->psl->tStart < aln2->psl->tEnd)
+return sameString(aln1->psl->tName, aln2->psl->tName)
+    && (aln1->psl->tStart < aln2->psl->tEnd)
     && (aln1->psl->tEnd > aln2->psl->tStart)
     && sameString(aln1->psl->strand, aln2->psl->strand);
 }

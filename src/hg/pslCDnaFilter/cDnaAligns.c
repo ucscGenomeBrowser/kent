@@ -167,8 +167,10 @@ if (cdAlns->nextCDnaPsl != NULL)
     }
 while (psl == NULL)
     {
-    if ((psl = pslNext(cdAlns->pslLf)) == NULL)
+    char *row[PSL_NUM_COLS];
+    if (!lineFileNextRowTab(cdAlns->pslLf, row, ArraySize(row)))
         break; /* EOF */
+    psl = pslLoad(row);
     cdAlns->totalCnts.aligns++;
     if (!validPsl(psl))
         {
@@ -300,7 +302,7 @@ struct cDnaAligns *cDnaAlignsNew(char *pslFile, float coverWeight,
 {
 struct cDnaAligns *cdAlns;
 AllocVar(cdAlns);
-cdAlns->pslLf = pslFileOpen(pslFile);
+cdAlns->pslLf = lineFileOpen(pslFile, TRUE);
 cdAlns->coverWeight = coverWeight;
 if (polyASizeFile != NULL)
     cdAlns->polyASizes = loadPolyASizes(polyASizeFile);
