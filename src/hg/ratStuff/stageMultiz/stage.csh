@@ -45,7 +45,7 @@
 #Run stageMultiz as so:
  cd $hm
  foreach i (*.axt)
-   stageMultiz $h/chrom.sizes $m/chrom.sizes $r/chrom.sizes $i $mr -hPrefix=$hg. -mPrefix=$mm. -rPrefix=$rn $hmr/$i:r
+   stageMultiz $h/chrom.sizes $m/chrom.sizes $r/chrom.sizes $i $mr -hPrefix=$hg. -mPrefix=$mm. -rPrefix=$rn. $hmr/$i:r
    echo done $i
  end
 
