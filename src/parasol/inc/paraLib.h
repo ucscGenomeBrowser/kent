@@ -23,6 +23,9 @@ void vLogIt(char *format, va_list args);
 void logIt(char *format, ...);
 /* Print message to log file. */
 
+void flushLog();
+/* Flush log file */
+
 void setupDaemonLog(char *fileName);
 /* Setup log file, and warning handler that goes to this
  * file.  If fileName is NULL then no log, and warning
