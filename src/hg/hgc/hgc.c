@@ -2139,7 +2139,7 @@ puts(
  "  repackaged in databases.<BR>"
  "2.Users are free to use the data in scientific papers analyzing "
  "  particular genes and regions, provided that providers of this data "
- "  (the Mouse Sequencing Consortium) are properly acknowledged. "
+ "  (the Mouse Sequencing Consortium) are properly acknowledged.<BR>"
  "3.The Centers producing the data reserve the right to publish the initial "
  "  large-scale analyses of the dataset-including large-scale identification "
  "  of regions of evolutionary conservation and large-scale "
