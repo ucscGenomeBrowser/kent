@@ -7344,9 +7344,17 @@ else if (sameWord(track, "blastzHg"))
     {
     doBlatHumanSelf(tdb, item);
     }
+else if (sameWord(track, "blastzMmHg"))
+    {
+    doBlatHuman(tdb, item);
+    }
+else if (sameWord(track, "blastzBestHuman"))
+    {
+    doBlatHuman(tdb, item);
+    }
 else if (sameWord(track, "blastzHgRef"))
     {
-    doBlatHumanSelf(tdb, item);
+    doBlatHuman(tdb, item);
     }
 else if (sameWord(track, "htcLongXenoPsl2"))
     {
