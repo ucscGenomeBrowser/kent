@@ -84,6 +84,10 @@ All rights reserved.
         Choose Organism &amp; Assembly</A>
         <LI><A CLASS="toc" HREF="#ChooseTable">
         Choose a Table</A>
+        <LI><A CLASS="toc" HREF="#PasteNames">
+        Paste in Names/Accessions</A>
+        <LI><A CLASS="toc" HREF="#UploadNames">
+        Upload a File of Names/Accessions</A>
         <LI><A CLASS="toc" HREF="#AdvancedQuery">
         Advanced Query</A>
         <LI><A CLASS="toc" HREF="#IntersectOptions">
@@ -188,12 +192,13 @@ newly filled gaps or assembly procedure refinements.)
 
 The Table Browser can retrieve DNA sequence data or annotation data, 
 for Genome Browser tracks or for intersections/unions of tracks, over 
-a given position range or over the whole genome.  
+a given position range, over a given set of accessions, 
+or over the whole genome.  
 It can display some basic statistics calculated over selected data.  
 It can generate a 
 <A HREF="/goldenPath/help/customTrack.html">custom track</A> and 
 automatically add it to the user's session, so that it can be graphically 
-displayed in the genome browser.  It allows 
+displayed in the Genome Browser.  It allows 
 <A HREF="#Intersection">combined queries</A> on two tables, or on a 
 user custom track and a table, so compound queries are possible.  
 
@@ -205,7 +210,6 @@ is also highly configurable.
 
 <P>
 Some things that the Table Browser cannot do (yet) include 
-retrieving data from multiple positions simultaneously and 
 joining together relational tables in a unified interface.  
 The Table Browser is not as powerful as running MySQL on a 
 <A HREF="/downloads.html">local installation of the database itself</A>.  
@@ -218,9 +222,6 @@ The
 <A HREF="/goldenPath/gbdDescriptions.html">
 Genome Browser Database</A> actually consists of several separate 
 databases, one for each genome assembly.  
-The Table Browser gateway page asks the user to select the organism, 
-genome assembly and genomic position.  To retrieve data from the 
-entire genome, enter <B>"genome"</B> as the position.  
 
 <A NAME="Positional"></A>
 <P>
@@ -286,8 +287,8 @@ given titles.
 <A NAME="Gateway"></A>
 <H4> Choose Organism &amp; Assembly </H4>
 
-This page prompts the user to select the organism (e.g. "Human"), 
-assembly (e.g. "Nov. 2002"), and position (e.g. "USP18", "genome").  
+This page prompts the user to select the organism (e.g. "Human") and 
+assembly (e.g. "Nov. 2002").  
 This is the gateway page for the Table Browser; it will appear when 
 the user clicks on the "Tables" link from the main page of the 
 genome server, or whenever the Table Browser is invoked without 
@@ -300,35 +301,68 @@ specifying which genome assembly to use.
 This page is the entry point for the Table Browser when the genome 
 assembly has already been specified (for example, when the user 
 follows the "Tables" link from the Genome Browser).  
-It allows the user to change the position if desired.  
-It lists the 
-<A HREF="#Positional">positional and non-positional</A> 
-database tables, and prompts the user to select one.  
-Having selected a table, the user can click a button to 
-"Get all fields" or specify an "Advanced Query".  
+There are four categories of tables:
+<UL>
+<LI> <B>Browser tracks</B>: Tables that correspond to Genome Browser tracks. 
+     </LI>
+<LI> <B><A HREF="/goldenPath/help/customTrack.html">Custom tracks</A></B>:
+     User custom tracks in the current session.  </LI>
+<LI> <B><A HREF="#Positional">Positional</A> tables</B>: All positional tables,
+     whether or not they correspond to Genome Browser tracks, both from 
+     the current assembly and from the hgFixed shared database.  </LI>
+<LI> <B>Non-positional tables</B>: Tables without genomic coordinates, both 
+     from the current assembly and from the hgFixed shared database.  </LI>
+</UL>
+
+In web browsers that support Javascript, whenever a selection is made from 
+one of the above menus, the other three menus are reset to avoid confusion.  
+In older web browsers without Javascript, it is possible to select tables 
+from multiple menus.  In that case, the Table Browser will use the leftmost 
+selected table.  Other selected tables will be ignored.  
 
 <P>
-In addition to database tables, the table browser can also retrieve 
-information from the user's 
-<A HREF="/goldenPath/help/customTrack.html">custom tracks</A>.  
-Custom tracks are always positional; if the user's session contains 
-any custom tracks, then they appear at the beginning of the list of 
-positional tables.  
+When a browser track, custom track or positional table is selected, 
+items can be selected from the table by position or by item name (which is 
+usually an accession for gene/mRNA/EST tracks).  The default position 
+is <B>"genome"</B>, which selects all items in the table.  Any position or 
+search term accepted by the Genome Browser will also be accepted by the 
+Table Browser.  If you have chosen to select items by name/accession, 
+then you must 
+<A HREF="#PasteNames">paste</A> or <A HREF="#UploadNames">upload</A> 
+a list of names/accessions before retrieving data.  
 
 <P>
-The positional table selection takes precedence over non-positional.  
-If the user selects both a positional table and a non-positional table,
-then the positional table will be used and the non-positional table will 
-be ignored.  
-
-<P>
-"Get all fields" is the quickest way to get output.  It simply retrieves 
+The "Get all fields" button simply retrieves 
 all elements from the table (at the specified position, if the table is 
 positional), and prints them out as 
 <A HREF="#TabSep">tab-separated plain text</A>.  
 
 <P>
-The "Advanced Query" button leads to the page described in the next section:
+The "Get sequence" button works only when a browser track, custom track, 
+or positional table has been selected.  It is for retrieving 
+<A HREF="#FASTAOptions">FASTA</A> sequence data for selected items.  
+
+<P>
+The "Advanced Query" button leads to a richer choice of output formats and 
+filtering options, described 
+<A HREF="#AdvancedQuery">below</A>.  
+
+
+<A NAME="PasteNames"></A>
+<H4> Paste in Names/Accessions  </H4>
+
+Here the user can enter in a list of item names (usually accessions for 
+gene/mRNA/EST tracks), which may contain wildcard characters ("?" to match 
+exactly one character, "*" to match 0 or more characters).  
+
+
+<A NAME="UploadNames"></A>
+<H4> Upload a File of Names/Accessions  </H4>
+
+On this page, the user can upload a file containing item names 
+(usually accessions for gene/mRNA/EST tracks).  Wildcards are not 
+allowed; the names must have exact matches in the table, or they will 
+be ignored.  
 
 
 <A NAME="AdvancedQuery"></A>
@@ -654,7 +688,8 @@ frequency histogram of a field's values in the query results.
 
 
 By default, the table browser retrieves all records for the specified
-coordinate range (use <B>"genome"</B> to search all chromosomes). 
+coordinate range (use <B>"genome"</B> to search all chromosomes) 
+or set of item names/accessions. 
 To restrict the set of records retrieved from this range, you may
 enter constraints on the values of fields.
 
@@ -1084,7 +1119,7 @@ June 2002 or later.
 The contents of the chr1_blastzBestMouse table that fall at least partly 
 in the selected position range will be printed out as 
 <A HREF="#TabSep">tab-separated text</A>.  
-The format used by the genome browser for tables containing alignments 
+The format used by the Genome Browser for tables containing alignments 
 (such as chrN_blastzBestMouse) is 
 <A HREF="/goldenPath/help/customTrack.html#PSL">PSL</A>.  
 
