@@ -138,7 +138,7 @@
 #include "zdobnovSynt.h"
 #include "HInv.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.640 2004/05/21 22:31:25 sugnet Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.641 2004/05/24 22:07:28 fanhsu Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -6823,10 +6823,11 @@ if (url != NULL && url[0] != 0)
     char *proteinID;
     char *geneID;
     char *ans;
+    char *ensPep;
 
     char *chp;
 
-    // shortItemName is the name without the "." + version 
+    /* shortItemName is the name without the "." + version */ 
     shortItemName = strdup(itemName);
     chp = strstr(shortItemName, ".");
     if (chp != NULL) *chp = '\0';
@@ -6847,9 +6848,18 @@ if (url != NULL && url[0] != 0)
 	{
     	sprintf(cond_str, "transcript_name='%s'", shortItemName);    
 	
-        //This is necessary, Ensembl kept changing their gene_xref table definition and content.
+        /* This is necessary, Ensembl kept changing their gene_xref table definition and content.*/
     	proteinID = NULL;
-	if (hTableExists("ensTranscript"))
+
+	if (hTableExists("ensemblXref3"))
+    	    {
+    	    /* use ensemblXref3 for Ensembl data release after ensembl34d */
+    	    safef(cond_str, sizeof(cond_str), "transcript='%s'", shortItemName);
+    	    ensPep = sqlGetField(conn, database, "ensemblXref3", "protein", cond_str);
+	    if (ensPep != NULL) proteinID = ensPep;
+	    }
+
+	if (hTableExists("ensTranscript") && (proteinID == NULL))
 	    {
 	    proteinID = sqlGetField(conn, database, "ensTranscript", "translation_name", cond_str);
   	    }
