@@ -22,7 +22,7 @@ pushQ.o: pushQ.c pushQ.h
 
 formPushQ.h: formPushQ.html
 	echo "char formQ[] =" > formPushQ.h
-	gawk '{ print "\"" $$0 "\"" }' formPushQ.html >> formPushQ.h
+	gawk '{ print "\"" $$0 "\\n\"" }' formPushQ.html >> formPushQ.h
 	echo ";" >> formPushQ.h
 	
 
