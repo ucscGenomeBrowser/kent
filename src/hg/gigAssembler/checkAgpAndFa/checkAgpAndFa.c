@@ -1,6 +1,8 @@
-/* checkAgpAndFa - take a .agp file and a .fa file and validate
+/* 
+checkAgpAndFa - take a .agp file and a .fa file and validate
 that they are in synch.
 */
+
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"
@@ -9,10 +11,10 @@ that they are in synch.
 #include "agpFrag.h"
 #include "agpGap.h"
 
-static const int NUM_WORDS = 9;
-
 void usage()
-/* Explain usage and exit. */
+/* 
+Explain usage and exit. 
+*/
 {
     fflush(stdout);
     errAbort(
@@ -23,8 +25,17 @@ void usage()
 }
 
 boolean containsOnlyChar(char *string, int offset, int strLength, char searchChar)
-/* Returns true if this string contains only the searchChar.
-Returns false if any other char is in this string */
+/* 
+Ensure that the searched string only contains a certain set char, like 'n', for example.
+
+param string - the string to examine
+param offset - the starting offset at which to begin examination
+param strLength - the number of chars to examine up from the offset
+param searchChar - the char to search for in the string
+
+returns true if this string contains only the searchChar
+returns false if any other char is in this string 
+*/
 {
 int charIndex = 0;
 int stringEnd = offset + strLength;
@@ -42,9 +53,19 @@ return TRUE;
 }
 
 boolean containsOnlyChars(char *string, int offset, int strLength, char *searchCharList, int numSearchChars)
-/* Returns true if this string contains only the chars that 
-are in the searchCharList.
- Returns false if any other char is in this string */
+/* 
+Ensure that the searched string only contains a certain set of chars, like 'acgtACGT',
+for example.
+
+param string - the string to examine
+param offset - the starting offset at which to begin examination
+param strLength - the number of chars to examine up from the offset
+param searchCharList - the set of chars to search for in the string
+param numSearchChars - the size of the searchCharList containing the searched-for chars
+
+returns true if this string contains only the searchChars
+returns false if any other char is in this string 
+*/
 {
 int charIndex = 0;
 int currentChar = 0;
@@ -73,11 +94,18 @@ return TRUE;
 }
 
 boolean agpMatchesFaEntry(struct agpFrag *agp, int offset, char *dna, int seqSize, char *seqName)
-/* Ensure that the metadata about the entry in the agp file agrees with the data
+/* 
+Ensure that the metadata about the entry in the agp file agrees with the data
    in the fa file.
-param *agp - pointer to incoming agp structure already 
-    containing agp data that *should* agree with the fasta entry.
+
+param *agp - pointer to incoming agp structure already containing 
+agp data that *should* agree with the fasta entry.
+param offset - the starting offset at which to begin validating in the dna string.
 param *dna - pointer to the fasta data already populated.
+param seqSize - the number of chars in the dna string to be checked, starting at the
+offset.
+param seqName - the name of the sequence to be checked.
+
 return TRUE - if the agp and fasta entries agree, FALSE otherwise
 */
 {
@@ -85,7 +113,6 @@ int fragSize = (agp->chromEnd - agp->chromStart);
 boolean result = FALSE;
 
 printf("In agpMatchesFaEntry()\n");
-/*agpFragOutput(agp, stdout, ' ', '\n');*/
 
 if (sameString(agp->chrom, seqName))
     {
@@ -106,7 +133,15 @@ return result;
 }
 
 void checkAgpAndFa(char *agpFile, char *faFile)
-/* checkAgpAndFa - read the .agp file and make sure that it agrees with the .fa file. */
+/* 
+checkAgpAndFa - read the .agp file and make sure that it agrees with the .fa file. 
+
+param agpFile - The pathname of the agp file to check.
+param faFile - The pathname of the fasta file to check.
+
+exceptions - this function aborts if it detects an entry where the agp and fasta
+files do not agree
+*/
 {
 struct lineFile *lfAgp = lineFileOpen(agpFile, TRUE);
 struct lineFile *lfFa = lineFileOpen(faFile, TRUE);
@@ -227,7 +262,9 @@ printf("All AGP and FASTA entries agree - both files are valid\n");
 }
 
 int main(int argc, char *argv[])
-/* Process command line. */
+/* 
+Process command line then delegate  main work to checkAgpAndFa().
+*/
 {
 cgiSpoof(&argc, argv);
 if (argc != 3)
