@@ -1207,7 +1207,196 @@ done
 	echo "done ${chrom}"
     end
     cd /usr/local/apache/htdocs/goldenPath/hg17/chromosomes
-    md5sum *.fa.gz > md5sum.txt
+    gzip *.fa
+
+
+# FOSMID END PAIRS TRACK (WORKING - 2004-06-09 kate)
+
+    # Use latest fosmid ends data prepared by Terry Furey.
+    # He says there is no on-going work on fosmid ends, so this
+    # should suffice indefinitely ?  Move/link this stuff into
+    # central data area.
+    ssh eieio
+    cd /cluster/data/ncbi
+    mkdir -p fosends/human
+    ln -s /cluster/store1/fosends.3 fosends/human
+    cd fosends/human/fosends.3
+    faSize fosEnds.fa
+       # 579735181 bases (369769 N's 579365412 real) in 1087670 sequences 
+       # 580M bases in 1M sequences
+    # create link in /gbdb/ncbi/fosends/human ?
+
+    # use pre-split fosend files, and associated list for cluster run
+    # Sequences are in /cluster/bluearc/hg/fosEnds
+    cp /cluster/bluearc/booch/fosends/fosEnds.lst /cluster/bluearc/hg/fosEnds
+    
+    # run on rack9 since kilokluster is busy
+    ssh kk9
+    cd /cluster/data/hg17
+    mkdir -p bed/fosends
+    cd bed/fosends
+    mkdir -p run
+    cd run
+    ls -1S /scratch/hg/gs.18/build35/maskedContigs/*.fa \
+                > contigs.lst
+    cp /cluster/bluearc/hg/fosEnds/fosEnds.lst fosEnds.lst
+        # 380 contigs vs 97 fosEnd files -> 40K jobs
+    # send output to kksilo, as it can better handle the NFS load
+    mkdir -p /cluster/store7/kate/hg17/fosends/out
+    ln -s /cluster/store7/kate/hg17/fosends/out ../out
+cat > gsub << 'EOF'
+#LOOP
+/cluster/bin/i386/blat $(path1) $(path2) -ooc=/scratch/hg/h/11.ooc {check out line+ /cluster/data/hg17/bed/fosends/out/$(root2)/$(root1).$(root2).psl}
+#ENDLOOP
+'EOF'
+    gensub2 contigs.lst fosEnds.lst gsub jobList
+    foreach f (`cat fosEnds.lst`)
+        set d = $f:r:t
+        echo $d
+        mkdir -p /cluster/data/hg17/bed/fosends/out/$d
+    end
+
+    para create jobList
+        # 36860 jobs
+    para try
+    para check
+    para push
+# CPU time in finished jobs:    1655943s   27599.05m   459.98h   19.17d  0.053 y
+# IO & Wait Time:                101145s    1685.75m    28.10h    1.17d  0.003 y
+# Average job time:                  48s       0.79m     0.01h    0.00d
+# Longest job:                     1294s      21.57m     0.36h    0.01d
+# Submission to last job:         19269s     321.15m     5.35h    0.22d
+
+    # sort, filter, and lift alignments
+    ssh eieio
+    cd /cluster/data/hg17/bed/fosends
+    pslSort dirs raw.psl temp out/fosEnds*
+    pslReps  -nearTop=0.01 -minCover=0.70 -minAli=0.85 -noIntrons raw.psl \
+                        fosEnds.psl /dev/null
+    rm -r temp
+    rm raw.psl
+    liftUp
+
+    /cluster/home/booch/bin/i386/pslPairs -tInsert=5000 -minId=0.94 -min=30000 -max=50000 -slop -short -long -orphan -mismatch -verbose fosEnds.psl.lifted $(PAIRS) all_fosends fosEnds
+    cat $(HEADER) fosEnds.pairs | row score ge 300 | sorttbl chr start | headchg -del > fosEndPairs.bed
+
+
+# BAC END PAIRS TRACK (DONE - 2004-06-09 kate)
+
+    # Use latest BAC ends data from NCBI
+    # Checked  ftp.ncbi.nih.gov/genomes/BACENDS/homo_sapiens,
+    #  and files were unchanged from Terry's last download
+    #  (to /cluster/store1/bacends.4)
+    # Link this stuff into central data area.
+    ssh eieio
+    cd /cluster/data/ncbi
+    mkdir -p bacends/human
+    ln -s /cluster/store1/bacends.4 bacends/human
+    cd bacends/human/bacends.4
+    faSize BACends.fa
+        # 400230494 bases (2743171 N's 397487323 real) in 832614 sequences
+        # 400M bases in 800K sequences
+
+    # use pre-split bacends files, and associated list for cluster run
+    ssh kk
+    cd /cluster/data/hg17
+    mkdir -p bed/bacends
+    cd bed/bacends
+    mkdir run
+    cd run
+    ls -1S /scratch/hg/gs.18/build35/maskedContigs/*.fa > contigs.lst
+    ls -1S /cluster/bluearc/hg/bacEnds/hs/*.fa > bacends.lst
+        # 380 contigs vs 98 bacends files -> 40K jobs
+
+    # send output to kksilo, as it can better handle the NFS load
+    # (these are quick jobs)
+    mkdir -p /cluster/store7/kate/hg17/bacends/out
+    ln -s /cluster/store7/kate/hg17/bacends/out ../out
+cat > gsub << 'EOF'
+#LOOP
+/cluster/bin/i386/blat $(path1) $(path2) -ooc=/scratch/hg/h/11.ooc {check out line+ /cluster/data/hg17/bed/bacends/out/$(root2)/$(root1).$(root2).psl}
+#ENDLOOP
+'EOF'
+    gensub2 contigs.lst bacends.lst gsub jobList
+    foreach f (`cat bacends.lst`)
+        set d = $f:r:t
+        echo $d
+        mkdir -p /cluster/data/hg17/bed/bacends/out/$d
+    end
+
+    para create jobList
+        # 37240 jobs written to batch
+    para try
+    para check
+    para push
+# CPU time in finished jobs:    1573932s   26232.19m   437.20h   18.22d  0.050 y
+# IO & Wait Time:                122751s    2045.86m    34.10h    1.42d  0.004 y
+# Average job time:                  46s       0.76m     0.01h    0.00d
+# Longest job:                     3312s      55.20m     0.92h    0.04d
+# Submission to last job:          7148s     119.13m     1.99h    0.08d
+
+    cd ../out/BACends000
+    pslCheck *.psl
+#Error: invalid PSL: AZ519021:1-575 NT_004559:1306426-1608347 - NT_004559.BACends000.psl:1101
+#AZ519021 query block 3 start 283 < previous block end 575
+    # NOTE: inquired with JK regarding these results
+
+    # lift alignments
+    ssh eieio
+    cd /cluster/data/hg17/bed/bacends
+    pslSort dirs raw.psl temp out/BACends*
+    # takes hours ?
+
+        # 37240 files in 98 dirs
+        # Got 37240 files 193 files per mid file
+    pslReps -nearTop=0.02 -minCover=0.60 -minAli=0.85 -noIntrons \
+                raw.psl  bacEnds.psl /dev/null
+        # Processed 52291246 alignments
+    mkdir lifted
+    liftUp lifted/bacEnds.lifted.psl \
+                /cluster/data/hg17/jkStuff/liftAll.lft warn bacEnds.psl
+    pslSort dirs bacEnds.sorted.psl temp lifted
+    rmdir temp
+    wc -l *.sorted.psl
+        # 2497227 bacEnds.sorted.psl
+
+    set ncbiDir = /cluster/data/ncbi/bacends/human/bacends.4
+    ~/bin/i386/pslPairs -tInsert=10000 -minId=0.91 -noBin -min=25000 -max=350000 -slopval=10000 -hardMax=500000 -slop -short -long -orphan -mismatch -verbose bacEnds.sorted.psl $ncbiDir/bacEndPairs.txt all_bacends bacEnds
+
+    # create header required by "rdb" tools
+    # TODO: replace w/ awk & sort
+    echo 'chr\tstart\tend\tclone\tscore\tstrand\tall\tfeatures\tstarts\tsizes' > header
+    echo '10\t10N\t10N\t10\t10N\t10\t10\t10N\t10\t10' >> header
+    cat header bacEnds.pairs | row score ge 300 | sorttbl chr start | headchg -del > bacEndPairs.bed
+    cat header  bacEnds.slop bacEnds.short bacEnds.long bacEnds.mismatch bacEnds.orphan \
+        | row score ge 300 | sorttbl chr start | headchg -del > bacEndPairsBad.bed
+
+    extractPslLoad -noBin bacEnds.sorted.psl bacEndPairs.bed \
+                bacEndPairsBad.bed | \
+                        sorttbl tname tstart | headchg -del > bacEnds.load.psl
+
+    # load into database
+    ssh hgwdev
+    cd /cluster/data/hg17/bed/bacends
+    hgLoadBed hg17 bacEndPairs bacEndPairs.bed \
+                 -sqlTable=/cluster/home/kate/kent/src/hg/lib/bacEndPairs.sql 
+        # Loaded 201380  
+    # note - this track isn't pushed to RR, just used for assembly QA
+    hgLoadBed hg17 bacEndPairsBad bacEndPairsBad.bed \
+                 -sqlTable=/cluster/home/kate/kent/src/hg/lib/bacEndPairsBad.sql
+        # Loaded 81773
+    #hgLoadPsl hg17 -nobin -table=all_bacends bacEnds.load.psl
+    # NOTE: truncates file to 0 if -nobin is used
+    hgLoadPsl hg17 -table=all_bacends bacEnds.load.psl
+        #load of all_bacends did not go as planned: 441072 record(s), 0 row(s) skipped, 30 warning(s) loading psl.tab
+    # load BAC end sequences
+
+    mkdir -p /gbdb/hg17/bacends
+    ln -s /cluster/data/ncbi/bacends/human/bacends.4/BACends.fa \
+                                /gbdb/hg17/bacends/BACends.fa
+    hgLoadSeq hg17 /gbdb/hg17/bacends/BACends.fa
+        # 158588 sequences
+
 
 # PLACE ASSEMBLY CLONES ON CONTIGS AND SEQUENCE (WORKING - 2004-06-04 - Hiram)
     ssh eieio
@@ -1288,6 +1477,7 @@ AL163540.11
     #	Using that list, sort the downloaded clones into their
     #	respective chrom directories:
     ./disburse.sh
+
     #	Check the number of sequences obtained:
     find ./? ./?? ./*_random ./6_hla* -type f | wc -l
     #	26872
@@ -1563,6 +1753,7 @@ exit ${RET}
  
         insert into gdbPdb values('hg17', 'proteins040515');
 
+
 # CREATE LINEAGE-SPECIFIC REPEATS FOR BLASTZ WITH ZEBRAFISH
 # (DONE, 2004-06-08, hartera)
     # Treat all repeats as lineage-specific
@@ -1572,6 +1763,80 @@ exit ${RET}
     end
     iSync
   
+
+# PREP FOR LIFTOVER CHAINS TO THIS ASSEMBLY (2004-06-10 kate)
+
+    # split into 3K chunks
+    ssh eieio
+    set tempDir = /cluster/data/hg17/bed/liftOver/liftSplit
+    mkdir -p $tempDir
+    cd $tempDir
+cat > split.csh << 'EOF'
+    set split = /iscratch/i/hg17/liftOver/split
+    mkdir -p $split
+    set tempDir = /cluster/data/hg17/bed/liftOver/liftSplit
+    foreach i (`cat /cluster/data/hg17/chrom.lst`)
+        echo chr$i
+        faSplit -lift=$tempDir/chr$i.lft size /cluster/data/hg17/$i/chr$i.fa -oneFile 3000 $split/chr$i
+    end
+'EOF'
+    csh split.csh >&! split.log &
+    tail -100f split.log
+
+    ssh kkr1u00
+    iSync
+
+
+# STS MARKERS (2004-06-09 kate)
+
+   # update from NCBI
+    ssh eieio
+   ln -s /cluster/store5/sts.2004-06 /cluster/data/ncbi
+   cd /cluster/data/ncbi/sts.2004-06
+    ln -s /cluster/data/ncbi/sts.2004-06 sts.9
+    wget ftp://ftp.ncbi.nih.gov/repository/dbSTS/dbSTS.sts
+    wget ftp://ftp.ncbi.nih.gov/repository/dbSTS/dbSTS.aliases
+    wget ftp://ftp.ncbi.nih.gov/blast/db/sts.tar.gz
+    mv sts.tar.gz dbSTS.FASTA.dailydump.Z
+    gunzip dbSTS.FASTA.dailydump.Z
+
+    # incremental update from previous build
+    # NOTE: could mysql dump this, unless hand-updated (like hg16)
+    # First - copy from Terry's dir
+    ssh eieio
+    ln -s /cluster/store1/sts.8 /cluster/data/ncbi
+    cd /cluster/data/ncbi/sts.9
+    cp ~booch/tracks/update/stsInfo2.bed .
+    # reuse hg16's fasta file
+    cp /cluster/data/ncbi/sts.8/all.STS.fa.new all.STS.fa
+    checkStsIds stsInfo2.bed dbSTS.aliases dbSTS.sts \
+                        dbSTS.FASTA.dailydump all.STS.fa
+    
+    # run alignment
+    ssh kk
+    cd /cluster/data/hg17
+    mkdir -p bed/sts
+    cd bed/sts
+    mkdir run
+    cd run
+    ls -1S /scratch/hg/hg17/maskedContigs/*.fa > contigs.lst
+    ls -1S /cluster/bluearc/sts.9/all.STS.fa > sts.lst
+
+    mkdir -p /cluster/store7/kate/hg17/sts/out
+    ln -s /cluster/store7/kate/hg17/sts/out ../out
+cat > gsub << 'EOF'
+#LOOP
+/cluster/bin/i386/blat $(path1) $(path2) -ooc=/scratch/hg/h/11.ooc {check out line+ /cluster/data/hg17/bed/sts/out/(root1).psl}
+#ENDLOOP
+'EOF'
+    gensub2 contigs.lst sts.lst gsub jobList
+    foreach f (`cat sts.lst`)
+        set d = $f:r:t
+        echo $d
+        mkdir -p /cluster/data/hg17/bed/bacends/out/$d
+    end
+
+
 # LOAD AFFYRATIO (WORKING - 2004-06-09 - Hiram)
 #	Copied from Hg16 doc
     # Set up cluster job to align consenesus/exemplars to hg17
@@ -1643,6 +1908,291 @@ done
 
     gensub2 nibList cloneList gsub jobList
     para create jobList
+
+# MAKE LINEAGE-SPECIFIC REPEATS FOR CHICKEN & FUGU (DONE 2004-06-10 kate)
+    # In an email 2/13/04 to Angie, Arian said we could treat all 
+    # human repeats as 
+    # lineage-specific for human-chicken blastz.  
+    # and Angie did the same for fugu.
+    # Scripts expect *.out.spec filenames.
+    ssh kkr1u00
+    cd /cluster/data/hg17
+    mkdir /iscratch/i/hg17/linSpecRep.chicken
+    foreach f (/iscratch/i/hg17/rmsk/chr*.fa.out)
+      cp -p $f /iscratch/i/hg17/linSpecRep.chicken/$f:t:r:r.out.spec
+    end
+    ln -s /iscratch/i/hg17/linSpecRep.chicken \
+          /iscratch/i/hg17/linSpecRep.fugu
+    iSync
+
+
+# BLASTZ FUGU (FR1) (WORKING 2004-06-10 kate)
+    ssh kk
+    mkdir -p /cluster/data/hg17/bed/blastz.fr1.2004-06-10
+    ln -s /cluster/data/hg17/bed/blastz.fr1.2004-06-10 \
+            /cluster/data/hg17/bed/blastz.fr1
+    cd /cluster/data/hg17/bed/blastz.fr1
+    # Set L=6000 (more relaxed than chicken) and abridge repeats.
+    # Treat all repeats as lineage-specific (reuse linSpecRep.Chicken).
+    cat << '_EOF_' > DEF
+# human vs. fugu
+export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/bin/i386:/cluster/home/angie/schwartzbin
+
+ALIGN=blastz-run
+BLASTZ=blastz
+
+# Reuse parameters from human-chicken.
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=6000
+BLASTZ_K=2200
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+BLASTZ_ABRIDGE_REPEATS=1
+
+# TARGET: Human
+SEQ1_DIR=/iscratch/i/hg17/bothMaskedNibs
+SEQ1_RMSK=
+SEQ1_FLAG=
+SEQ1_SMSK=/iscratch/i/hg17/linSpecRep.fugu
+SEQ1_IN_CONTIGS=0
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Fugu
+SEQ2_DIR=/iscratch/i/fr1/nib
+SEQ2_RMSK=
+SEQ2_FLAG=
+SEQ2_SMSK=/iscratch/i/fr1/linSpecRep
+SEQ2_IN_CONTIGS=0
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+
+BASE=/cluster/data/hg17/bed/blastz.fr1
+
+DEF=$BASE/DEF
+RAW=$BASE/raw
+CDBDIR=$BASE
+SEQ1_LEN=$BASE/S1.len
+SEQ2_LEN=$BASE/S2.len
+'_EOF_'
+    # << this line keeps emacs coloring happy
+
+    bash # if a csh/tcsh user
+    source DEF
+    mkdir $RAW run.0
+    /cluster/home/angie/hummus/make-joblist $DEF > $BASE/run.0/j
+    # GOT HERE
+    sh ./xdir.sh
+    cd run.0
+    sed -e 's@^blastz-run@/cluster/bin/penn/blastz-run@' j > jobList
+    para create jobList
+        # 11935 jobs
+    para try
+    para check
+    para push
+# Completed: 11935 of 11935 jobs
+# CPU time in finished jobs:    4673316s   77888.60m  1298.14h   54.09d  0.148 y
+# IO & Wait Time:                329249s    5487.48m    91.46h    3.81d  0.010 y
+# Average job time:                 419s       6.99m     0.12h    0.00d
+# Longest job:                      714s      11.90m     0.20h    0.01d
+# Submission to last job:          5575s      92.92m     1.55h    0.06d
+
+    # second cluster run: lift raw alignments -> lav dir
+    ssh kki
+    cd /cluster/data/hg17/bed/blastz.fr1
+    bash # if a csh/tcsh user
+    source DEF
+    mkdir run.1 lav
+    /cluster/bin/scripts/blastz-make-out2lav $DEF $BASE > $BASE/run.1/jobList
+    cd run.1
+    wc -l jobList
+    para create jobList
+        # 341 jobs
+    para try
+    para check 
+    para push
+# CPU time in finished jobs:        315s       5.26m     0.09h    0.00d  0.000 y
+# IO & Wait Time:                  4451s      74.18m     1.24h    0.05d  0.000 y
+# Average job time:                  14s       0.23m     0.00h    0.00d
+# Longest job:                      107s       1.78m     0.03h    0.00d
+# Submission to last job:           368s       6.13m     0.10h    0.00d
+
+    # third run: lav -> axt
+    ssh kki
+    cd /cluster/data/hg17/bed/blastz.fr1
+    mkdir axtChrom pslChrom run.2
+    cd run.2
+    cat << 'EOF' > do.csh
+#!/bin/csh -ef
+cd $1
+set chr = $1:t
+cat `ls -1 *.lav | sort -g` \
+| lavToAxt stdin \
+        /iscratch/i/hg17/bothMaskedNibs /iscratch/i/fr1/nib stdout \
+| axtSort stdin ../../axtChrom/$chr.axt 
+axtToPsl ../../axtChrom/$chr.axt ../../S1.len ../../S2.len \
+        ../../pslChrom/$chr.psl
+'EOF'
+    # << this line keeps emacs coloring happy
+    chmod a+x do.csh
+    cp /dev/null jobList
+    foreach d (../lav/chr*)
+      echo "do.csh $d" >> jobList
+    end
+    para create jobList
+        # 41 jobs
+    para try
+    para check
+    para push
+
+
+<<<<<<< makeHg17.doc
+# CHAIN FUGU BLASTZ (2004-06-11 kate)
+    # Run axtChain on little cluster
+    ssh kki
+    cd /cluster/data/hg17/bed/blastz.fr1
+    mkdir -p axtChain/run1
+    cd axtChain/run1
+    mkdir out chain
+    ls -1S /cluster/data/hg17/bed/blastz.fr1/axtChrom/*.axt \
+      > input.lst
+    cat << '_EOF_' > gsub
+#LOOP
+doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain} {check out line+ out/$(root1).out}
+#ENDLOOP
+'_EOF_'
+    # << this line makes emacs coloring happy
+
+    # Reuse gap penalties from chicken run.
+    cat << '_EOF_' > temp.gap
+tablesize	11
+smallSize	111
+position	1	2	3	11	111	2111	12111	32111	72111	152111	252111
+qGap	325	360	400	450	600	1100	3600	7600	15600	31600	56600
+tGap	325	360	400	450	600	1100	3600	7600	15600	31600	56600
+bothGap	625	660	700	750	900	1400	4000	8000	16000	32000	57000
+'_EOF_'
+    # << this line makes emacs coloring happy
+    sed 's/  */\t/g' temp.gap > ../../fuguHumanTuned.gap
+    rm -f temp.gap
+
+    cat << '_EOF_' > doChain
+#!/bin/csh
+axtChain -scoreScheme=/cluster/data/blastz/HoxD55.q \
+                      -linearGap=../../fuguHumanTuned.gap \
+                      -minScore=5000 $1 \
+    /iscratch/i/hg17/bothMaskedNibs \
+    /iscratch/i/fr1/nib $2 > $3
+'_EOF_'
+    # << this line makes emacs coloring happy
+    chmod a+x doChain
+    gensub2 input.lst single gsub jobList
+    para create jobList
+        # 46 jobs
+    para try
+    para check
+    para push
+        # 1 crashed job -- chr6_hla_hap1.chain is empty
+# CPU time in finished jobs:        610s      10.16m     0.17h    0.01d  0.000 y
+# IO & Wait Time:                  1644s      27.40m     0.46h    0.02d  0.000 y
+# Average job time:                  50s       0.83m     0.01h    0.00d
+# Longest job:                      233s       3.88m     0.06h    0.00d
+# Submission to last job:           339s       5.65m     0.09h    0.00d
+
+    # now on the cluster server, sort chains
+    ssh eieio
+    cd /cluster/data/hg17/bed/blastz.fr1/axtChain
+    chainMergeSort run1/chain/*.chain > all.chain
+    chainSplit chain all.chain
+    rm run1/chain/*.chain
+
+    # Load chains into database
+    ssh hgwdev
+    cd /cluster/data/hg17/bed/blastz.fr1/axtChain/chain
+    foreach i (*.chain)
+        set c = $i:r
+        echo loading $c
+        hgLoadChain hg17 ${c}_chainFr1 $i
+    end
+    featureBits hg16 chainFr1Link
+        # 50709290 bases of 2865248791 (1.770%) in intersection
+
+
+# ANCIENT REPEAT TABLE (2004-06-11 kate)
+
+    # The netClass operations requires an "ancientRepeat" table in one 
+    # of the databases.
+    # This is a hand curated table obtained from Arian.
+
+    ssh hgwdev
+    mkdir -p /cluster/data/hg17/bed/ancientRepeat
+    cd /cluster/data/hg17/bed/ancientRepeat
+    # mysqldump needs write permission to this directory
+    chmod 777 .
+    hgsqldump --all --tab=. hg15 ancientRepeat
+    chmod 775 .
+    hgsql hg17 < ancientRepeat.sql
+    echo "LOAD DATA LOCAL INFILE 'ancientRepeat.txt' into table ancientRepeat"\
+                | hgsql hg17
+
+
+# NET FUGU BLASTZ (2004-06-11 kate)
+    ssh eieio
+    cd /cluster/data/hg17/bed/blastz.fr1/axtChain
+    chainPreNet all.chain ../S1.len ../S2.len stdout \
+    | chainNet stdin -minSpace=1 ../S1.len ../S2.len stdout /dev/null \
+    | netSyntenic stdin noClass.net
+
+    # Add classification info using db tables:
+    ssh hgwdev
+    cd /cluster/data/hg17/bed/blastz.fr1/axtChain
+    netClass noClass.net hg17 fr1 human.net
+
+    # Make a 'syntenic' subset:
+    ssh eieio
+    cd /cluster/data/hg17/bed/blastz.fr1/axtChain
+    rm noClass.net
+    # Make a 'syntenic' subset of these with
+    netFilter -syn human.net > humanSyn.net
+
+    # Load the nets into database 
+    ssh hgwdev
+    cd /cluster/data/hg17/bed/blastz.fr1/axtChain
+    netFilter -minGap=10 human.net |  hgLoadNet hg17 netFr1 stdin
+    #netFilter -minGap=10 humanSyn.net | hgLoadNet hg17 netSyntenyFr1 stdin
+
+
+# EXTRACT AXT'S AND MAF'S FROM THE NET
+    ssh eieio
+    cd /cluster/data/hg17/bed/blastz.fr1/axtChain
+    netSplit human.net humanNet
+    mkdir -p ../axtNet
+cat > axtNet.csh << 'EOF'
+    foreach f (humanNet/chr*.net)
+        set c = $f:t:r
+        echo "axtNet on $c"
+        netToAxt -maxGap=300 humanNet/$c.net chain/$c.chain /cluster/data/hg17/nib /cluster/data/fr1/nib ../axtNet/$c.axt
+    end
+'EOF'
+    csh axtNet.csh >&! axtNet.log &
+    tail -100f axtNet.log
+    # 10 minutes or so
+
+    ssh eieio
+    cd /cluster/data/hg17/bed/blastz.fr1
+    cd axtNet
+    mkdir ../mafNet
+cat > makeMaf.csh << 'EOF'
+    foreach f (chr*.axt)
+      set maf = $f:t:r.fr1.maf
+      echo translating $f to $maf
+      axtToMaf $f \
+            /cluster/data/hg17/chrom.sizes /cluster/data/fr1/chrom.sizes \
+            ../mafNet/$maf -tPrefix=hg17. -qPrefix=fr1.
+    end
+'EOF'
+    csh makeMaf.csh >&! makeMaf.log &
+    tail -100f makeMaf.log
 
 
 #  BLASTZ RAT  (WORKING - 2004-06-11 - Hiram)
