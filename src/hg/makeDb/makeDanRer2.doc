@@ -2141,7 +2141,7 @@ axtChain $1 /iscratch/i/danRer2/nib \
     nice gzip axtChain/all.chain.antirepeat axtChain/chainAR/*.chain &
     nice rm -fr axtChain/chain axtChain/chainRaw axtChain/preNet &
 
-# BLASTZ FOR TETRAODON (tetNig1) (in progress, 2004-12-14, hartera)
+# BLASTZ FOR TETRAODON (tetNig1) (DONE, 2004-12-21, hartera)
     # blastz requires lineage-specific repeats but there are none
     # available between these two fish species 
     ssh kk
@@ -2299,7 +2299,8 @@ cat `ls -1 *.lav | sort -g` \
     ssh kolossus
     cd /cluster/data/danRer2/bed/blastz.tetNig1
     mkdir -p pslChrom
-    # need to copy S2.len for whole tetNig1 genome
+    # need to copy S2.len for whole tetNig1 genome - S2contigs.len
+    cp /cluster/data/tetNig1/bed/blastzSelf/S1.len S2contigs.len
     set tbl = "blastzTetNig1"
     foreach f (axtChrom/chr*.axt)
       set c=$f:t:r
@@ -2307,7 +2308,6 @@ cat `ls -1 *.lav | sort -g` \
       /cluster/bin/i386/axtToPsl $f \
               S1.len S2contigs.len pslChrom/${c}_${tbl}.psl
     end 
-    # UP TO HERE
     # Load database tables
     ssh hgwdev
     cd /cluster/data/danRer2/bed/blastz.tetNig1/pslChrom                                                   
@@ -2336,7 +2336,7 @@ cat `ls -1 *.lav | sort -g` \
 # contigs used with H=2500, L=6000
 # refGene:cds 0.512%, blastzTetNig1ContigsL6k 11.380%, both 0.415%,
 # cover 80.94%, enrich 7.11x
-# use M=50 and then try with seq1 in contigs and do swap
+# use M=50 and H=2500
 #featureBits -chrom=chr1 danRer2 refGene:cds blastzTetNig1ContigsM50 -enrichment
 # refGene:cds 0.512%, blastzTetNig1ContigsM50 12.643%, both 0.427%, cover 83.42%# ,enrich 6.60x
 # using contigs and dynamic masking improves the enrichment and makes little
@@ -2353,8 +2353,121 @@ cat `ls -1 *.lav | sort -g` \
 # blastzTetNig1ContigsH2k 825927
 # blastzTetNig1ContigsL6k 538149
 # blastzTetNig1ContigsM50 479228
-# Using M=50 reducse the number of alignments but coverage is the same as 
+# Using M=50 reduces the number of alignments but coverage is the same as 
 # for using M=100 so use the dynamic masking with M=50 and H=2500
+
+# CHAIN TETRAODON (tetNig1) BLASTZ (DONE, 2004-12-21, hartera)
+    # Run axtChain on little cluster
+    ssh kki
+    cd /cluster/data/danRer2/bed/blastz.tetNig1
+    mkdir -p axtChain/run1
+    cd axtChain/run1
+    mkdir out chain
+    ls -1S /cluster/data/danRer2/bed/blastz.tetNig1/axtChrom/*.axt \
+        > input.lst
+ cat << '_EOF_' > gsub
+#LOOP
+doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain} {check out line+ out/$(root1).out}
+#ENDLOOP
+'_EOF_'
+    # << this line makes emacs coloring happy
+                                                                                
+    cat << '_EOF_' > doChain
+#!/bin/csh
+axtChain $1 /iscratch/i/danRer2/nib \
+    /iscratch/i/tetNig1/nib $2 >& $3
+'_EOF_'
+    # << this line makes emacs coloring happy
+                                                                                
+    chmod a+x doChain
+    gensub2 input.lst single gsub jobList
+    para create jobList
+    para try, check, push, check...
+# para time
+# Completed: 28 of 28 jobs
+# CPU time in finished jobs:        446s       7.43m     0.12h    0.01d  0.000 y
+# IO & Wait Time:                   355s       5.92m     0.10h    0.00d  0.000 y
+# Average job time:                  29s       0.48m     0.01h    0.00d
+# Longest job:                       98s       1.63m     0.03h    0.00d
+# Submission to last job:            98s       1.63m     0.03h    0.00d
+
+    # now on the cluster server, sort chains
+    ssh kksilo
+    cd /cluster/data/danRer2/bed/blastz.tetNig1/axtChain
+    mkdir chain
+    # remove repeats from chains
+    cd run1/chain
+    foreach f (*.chain)
+       set c = $f:r
+       echo $c 
+       nice chainAntiRepeat /iscratch/i/danRer2/nib \
+                       /iscratch/i/tetNig1/nib $f \
+                       ../../chain/$c.chain
+    end
+    cd /cluster/data/danRer2/bed/blastz.tetNig1/axtChain
+    chainMergeSort ./chain/*.chain > all.chain.antirepeat
+    chainSplit chainAR all.chain.antirepeat
+    # take a look at score distr's
+    foreach f (chain/*.chain)
+      grep chain $f | awk '{print $2;}' | sort -nr > /tmp/score.$f:t:r
+      echo $f:t:r >> hist5000.out
+      textHistogram -binSize=5000 /tmp/score.$f:t:r >> hist5000.out
+      echo ""
+    end
+    # filter with minScore=5000
+    mv all.chain.antirepeat all.chainAR.unfiltered
+    chainFilter -minScore=5000 all.chainAR.unfiltered > all.chainARFilt5k
+    rm -r chain
+    chainSplit chainAR all.chainARFilt5k
+    # only chr1 has more than 100,000 chains with score of 5000
+    # or less after filtering             
+    # Load chains into database
+    ssh hgwdev
+    cd /cluster/data/danRer2/bed/blastz.tetNig1/axtChain/chainAR
+    foreach i (*.chain)
+        set c = $i:r
+        hgLoadChain danRer2 ${c}_chainTetNig1 $i
+        echo done $c
+    end
+# featureBits -chrom=chr1 danRer2 refGene:cds chainTetNig1Link -enrichment
+# refGene:cds 0.512%, chainTetNig1Link 11.005%, both 0.416%, cover 81.22%, 
+# enrich 7.38x 
+
+# NET TETRAODON (tetNig1) BLASTZ (DONE, 2004-12-21, hartera)
+    ssh kksilo
+    cd /cluster/data/danRer2/bed/blastz.tetNig1/axtChain
+    mkdir preNet
+    cd chainAR
+    foreach i (*.chain)
+       echo preNetting $i
+       /cluster/bin/i386/chainPreNet $i ../../S1.len ../../S2contigs.len \
+                                     ../preNet/$i
+    end
+    cd ..
+    mkdir n1
+    cd preNet
+    foreach i (*.chain)
+      set n = $i:r.net
+      echo primary netting $i
+      /cluster/bin/i386/chainNet $i -minSpace=1 ../../S1.len \
+                                 ../../S2contigs.len ../n1/$n /dev/null
+    end
+    cd ..
+    cat n1/*.net | /cluster/bin/i386/netSyntenic stdin noClass.net
+    # memory usage 102502400, utime 670 s/100, stime 69
+    # Add classification info using db tables:
+    ssh hgwdev
+    cd /cluster/data/danRer2/bed/blastz.tetNig1/axtChain
+    # use -noAr option - don't look for ancient repeats
+    netClass -noAr noClass.net danRer2 tetNig1 tetraTetNig1.net
+                                                                                
+    # Load the nets into database
+    ssh hgwdev
+    cd /cluster/data/danRer2/bed/blastz.tetNig1/axtChain
+    netFilter -minGap=10 tetraTetNig1.net | hgLoadNet danRer2 netTetNig1 stdin
+# featureBits danRer2 refGene:cds netTetNig1 -enrichment
+# refGene:cds 0.468%, netTetNig1 19.068%, both 0.410%, cover 87.50%, 
+# enrich 4.59x
 
 # BACENDS (in progress, 2004-12-16, hartera)
 # provided by Anthony DiBiase, Yi Zhou and Leonard Zon at the Boston
