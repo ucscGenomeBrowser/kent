@@ -13,7 +13,7 @@
 #include "chainBlock.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: axtChain.c,v 1.27 2004/07/27 23:02:30 angie Exp $";
+static char const rcsid[] = "$Id: axtChain.c,v 1.28 2004/09/08 21:58:42 baertsch Exp $";
 
 int minScore = 1000;
 char *detailsName = NULL;
@@ -29,6 +29,7 @@ errAbort(
   "options:\n"
   "   -psl Use psl instead of axt format for input\n"
   "   -faQ qNibDir is a fasta file with multiple sequences for query\n"
+  "   -faT tNibDir is a fasta file with multiple sequences for query\n"
   "   -minScore=N  Minimum score for chain, default %d\n"
   "   -details=fileName Output some additional chain details\n"
   "   -scoreScheme=fileName Read the scoring matrix from a blastz-format file\n"
@@ -934,6 +935,7 @@ FILE *details = NULL;
 struct lineFile *lf = NULL;
 struct dnaSeq *seq, *seqList = NULL;
 struct hash *faHash = newHash(0);
+struct hash *tFaHash = newHash(0);
 char comment[1024];
 FILE *faF;
 
@@ -955,6 +957,16 @@ if (optionExists("faQ"))
         }
     fclose(faF);
     }
+if (optionExists("faT"))
+    {
+    faF = mustOpen(tNibDir, "r");
+    while ( faReadMixedNext(faF, TRUE, NULL, TRUE, NULL, &seq))
+        {
+        hashAdd(tFaHash, seq->name, seq);
+        slAddHead(&seqList, seq);
+        }
+    fclose(faF);
+    }
 for (sp = spList; sp != NULL; sp = sp->next)
     {
     slReverse(&sp->blockList);
@@ -967,7 +979,13 @@ for (sp = spList; sp != NULL; sp = sp->next)
         }
     else
         loadIfNewSeq(qNibDir, sp->qName, sp->qStrand, &qName, &qSeq, &qStrand);
-    loadIfNewSeq(tNibDir, sp->tName, '+', &tName, &tSeq, &tStrand);
+    if (optionExists("faT"))
+        {
+        assert (tFaHash != NULL);
+        loadFaSeq(tFaHash, sp->tName, '+', &tName, &tSeq, &tStrand);
+        }
+    else 
+        loadIfNewSeq(tNibDir, sp->tName, '+', &tName, &tSeq, &tStrand);
     chainPair(sp, qSeq, tSeq, &chainList, details);
     }
 slSort(&chainList, chainCmpScore);
