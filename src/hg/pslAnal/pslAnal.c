@@ -388,7 +388,7 @@ char query[256];
 struct sqlResult *sr;
 char **row;
 
-sprintf(query, "select version from mrna where acc = '%s'", name); 
+safef(query, sizeof(query), "select version from mrna where acc = '%s'", name); 
 sr = sqlGetResult(conn, query);
 if ((row = sqlNextRow(sr)) != NULL)
     ret = cloneString(row[0]);
@@ -514,64 +514,37 @@ for (i=1; i<psl->blockCount; ++i)
 return(count);
 }
 
-boolean haveSnpTable(struct sqlConnection *conn)
-/* Check if the SNP table exists for this DB */
-{
-static boolean checked = FALSE;
-static boolean haveSnpTbl;
-if (!checked)
-    {
-    haveSnpTbl = sqlTableExists(conn, "snpTsc");
-    checked = TRUE;
-    if (!haveSnpTbl)
-      {
-        haveSnpTbl = sqlTableExists(conn, "snpNih");
-	if (!haveSnpTbl)        
-	  fprintf(stderr, "warning: no snpTsc table in this databsae\n");
-      }
-    }
-return haveSnpTbl;
-}
-
 int snpBase(struct sqlConnection *conn, char *chr, int position)
 /* Determine whether a given position is known to be a SNP */ 
 {
-char query[256];
 struct sqlResult *sr;
 char **row;
-int ret = 0;
-boolean haveSnpTsc = sqlTableExists(conn, "snpTsc");
-boolean haveSnpNih = sqlTableExists(conn, "snpNih");
-boolean haveAffyGeno = sqlTableExists(conn, "affyGeno");
+int rowOff;
+int ret = FALSE;
+static boolean checked = FALSE;
+static boolean haveSnp = FALSE;
 
-if (haveSnpTsc)
+if (!checked)
     {
-    sprintf(query, "select hgFixed.dbSnpRS.base1, hgFixed.dbSnpRS.base2 from snpTsc, hgFixed.dbSnpRS where snpTsc.chrom = '%s' and snpTsc.chromStart = %d and hgFixed.dbSnpRS.rsID=substring(snpTsc.name,3) and length(hgFixed.dbSnpRS.base1)=1 and length(hgFixed.dbSnpRS.base2)=1", chr, position); 
-    sr = sqlGetResult(conn, query);
-    if ((row = sqlNextRow(sr)) != NULL) 
-      if ((row[0][0] != '-') && (row[1][0] != '-'))
-	ret = 1;
-    sqlFreeResult(&sr);
+    haveSnp = sqlTableExists(conn, "snp");
+    checked = TRUE;
+    if (!haveSnp)
+        fprintf(stderr, "warning: no snp table in this databsae\n");
     }
 
-if ((haveSnpNih) && (!ret))
+/* the new table is snp, replacing snpTsc and snpNih+hgFixed.dsSnpRS */
+if (haveSnp)
     {
-    sprintf(query, "select hgFixed.dbSnpRS.base1, hgFixed.dbSnpRS.base2 from snpNih, hgFixed.dbSnpRS where snpNih.chrom = '%s' and snpNih.chromStart = %d and hgFixed.dbSnpRS.rsID=substring(snpNih.name,3) and length(hgFixed.dbSnpRS.base1)=1 and length(hgFixed.dbSnpRS.base2)=1", chr, position); 
-    sr = sqlGetResult(conn, query);
+    sr = hRangeQuery(conn, "snp", chr, position, position+1, NULL, &rowOff);
     if ((row = sqlNextRow(sr)) != NULL) 
-      if ((row[0][0] != '-') && (row[1][0] != '-'))
-	ret = 1;
+        {
+        struct snp snp;
+        snpStaticLoad(row+rowOff, &snp);
+        if (sameString(snp.class, "SNP"))
+            ret = TRUE;
+        }
     sqlFreeResult(&sr);
     }
-/* if ((haveAffyGeno) && (!ret))
-    {
-    sprintf(query, "select * from affyGeno where chrom = '%s' and chromStart = %d", chr, position); 
-    sr = sqlGetResult(conn, query);
-    if ((row = sqlNextRow(sr)) != NULL) 
-        ret = 1;
-    sqlFreeResult(&sr);
-    } */
-
 return(ret);
 }
 
@@ -590,14 +563,14 @@ int wordCount, id = -1;
 wordCount = chopByChar(a, '.', accs, ArraySize(accs)); 
 if (wordCount > 2) 
 errAbort("Accession not standard, %s\n", acc->name);*/
-sprintf(query, "select organism from mrna where acc = '%s'", acc->name); 
+safef(query, sizeof(query), "select organism from mrna where acc = '%s'", acc->name); 
 sr = sqlGetResult(conn, query);
 if ((row = sqlNextRow(sr)) != NULL)
     id = sqlUnsigned(row[0]);
 sqlFreeResult(&sr);
 if (id != -1)
     {
-    sprintf(query, "select name from organism where id = %d", id);   
+    safef(query, sizeof(query), "select name from organism where id = %d", id);   
     sr = sqlGetResult(conn, query);
     if ((row = sqlNextRow(sr)) != NULL)
       acc->organism = cloneString(row[0]);
@@ -623,7 +596,7 @@ struct clone *ret = NULL;
 AllocVar(ret);
 ret->next = NULL;
 
-sprintf(query, "select mrnaClone from mrna where acc = '%s'", acc); 
+safef(query, sizeof(query), "select mrnaClone from mrna where acc = '%s'", acc); 
 sr = sqlGetResult(conn, query);
 if ((row = sqlNextRow(sr)) != NULL)
     {
@@ -631,7 +604,7 @@ if ((row = sqlNextRow(sr)) != NULL)
     ret->imageId = 0;
     }
 sqlFreeResult(&sr);
-sprintf(query, "select imageId from imageClone where acc = '%s'", acc); 
+safef(query, sizeof(query), "select imageId from imageClone where acc = '%s'", acc); 
 sr = sqlGetResult(conn, query);
 if ((row = sqlNextRow(sr)) != NULL)
     ret->imageId = sqlUnsigned(row[0]);
@@ -1281,8 +1254,7 @@ for (i = 0; i < pi->psl->blockCount; i++)
             if ((char)r[qstart+j] == (char)d[tstart+j])
                 pi->cdsMatch++;
             /* Check if mismatch is due to a SNP */
-            else if (haveSnpTable(conn)
-                     && snpBase(conn,pi->psl->tName,tPosition)) 
+            else if (snpBase(conn,pi->psl->tName,tPosition))
                 {
                 pi->cdsMatch++;
                 pi->snp++;
@@ -1920,7 +1892,7 @@ int main(int argc, char *argv[])
 {
 struct lineFile *pf, *cf, *lf, *vf=NULL, *df=NULL;
 FILE *of, *in=NULL, *mm=NULL, *cs=NULL, *un=NULL;
-char *faFile, *db, filename[64], *vfName = NULL, *dfName = NULL;
+char *faFile, *db, filename[PATH_LEN], *vfName = NULL, *dfName = NULL;
 char *user, *password;
 int verb = 0;
 
@@ -1954,7 +1926,7 @@ pf = pslFileOpen(argv[1]);
 cf = lineFileOpen(argv[2], FALSE);
 lf = lineFileOpen(argv[3], FALSE);
 faFile = argv[4];
-sprintf(filename, "%s.anal", argv[5]);
+safef(filename, sizeof(filename), "%s.anal", argv[5]);
 of = mustOpen(filename, "w");
 fprintf(of, "Acc\tChr\tStart\tEnd\tmStart\tmEnd\tSize\tLoci\tCov\tID\tCdsStart\tCdsEnd\tCdsCov\tCdsID\tCdsMatch\tCdsMismatch\tSnp\tThirdPos\tSyn\tNonSyn\tSynSnp\tNonSynSnp\tIntrons\tStdSplice\tUnCds\tSingle\tTriple\tTotal\tIndels\tGaps\n");
 fprintf(of, "10\t10\t10N\t10N\t10N\t10N\t10N\t10N\t10N\t10N\t10N\t10N\t10N\t10N\t10N\t10N\t10N\t10N\t10N\t10N\t10N\t10N\t10N\t10N\t10N\t10N\t10N\t10N\t10\t10N\n");
@@ -1964,23 +1936,23 @@ if (dfName)
   df = lineFileOpen(dfName, FALSE);
 if (indelReport) 
     {
-    sprintf(filename, "%s.indel", argv[5]);
+    safef(filename, sizeof(filename), "%s.indel", argv[5]);
     in = mustOpen(filename, "w");
     }
 if (unaliReport) 
     {
-    sprintf(filename, "%s.unali", argv[5]);
+    safef(filename, sizeof(filename), "%s.unali", argv[5]);
     un = mustOpen(filename, "w");
     }
 if (mismatchReport)
     {
-    sprintf(filename, "%s.mismatch", argv[5]);
+    safef(filename, sizeof(filename), "%s.mismatch", argv[5]);
     mm = mustOpen(filename, "w");
     }
 
 if (codonSubReport)
     {
-    sprintf(filename, "%s.codonsub", argv[5]);
+    safef(filename, sizeof(filename), "%s.codonsub", argv[5]);
     cs = mustOpen(filename, "w");
     }
 
