@@ -154,9 +154,10 @@ format.
   o - gunzip -c /cluster/store1/genbank.129/gbest*.gz | gbToFaRa ~kent/hg/h/xenoRna.fil xenoEst.fa xenoEst.ra xenoEst.ta stdin
   o - gunzip -c /cluster/store1/genbank.129/gbest*.gz | gbToFaRa ~kent/hg/h/xenoRna.fil xenoEst.fa xenoEst.ra xenoEst.ta stdin -byOrganism=org
 
+  o - gunzip -c /cluster/store1/genbank.129/gbpri*.gz /cluster/store1/genbank.129/gbmam*.gz /cluster/store1/genbank.129/gbrod*.gz /cluster/store1/genbank.129/gbvrt*.gz /cluster/store1/genbank.129/gbinv*.gz | gbToFaRa ~kent/hg/h/xenoRna.fil xenoRna.fa xenoRna.ra xenoRna.ta stdin -byOrganism=org
+
   o - cd /cluster/store1/genbank.129
   o - gunzip -c gbpri*.gz gbmam*.gz gbrod*.gz gbvrt*.gz gbinv*.gz | gbToFaRa ~kent/hg/h/xenoRna.fil ../mrna.129/xenoRna.fa ../mrna.129/xenoRna.ra ../mrna.129/xenoRna.ta stdin
-  o - gunzip -c gbpri*.gz gbmam*.gz gbrod*.gz gbvrt*.gz gbinv*.gz | gbToFaRa ~kent/hg/h/xenoRna.fil ../mrna.129/xenoRna.fa ../mrna.129/xenoRna.ra ../mrna.129/xenoRna.ta stdin -byOrganism=org
 
 STORING mRNA/EST SEQUENCE AND AUXILIARY INFO  (DONE)
 
@@ -547,7 +548,7 @@ o - Load best in genome into database as so:
 	cd ~/mouse/vsOo33/bestMouse
         hgLoadPsl hg11 *.psl
 
-PRODUCING CROSS_SPECIES mRNA ALIGNMENTS (for mRNA, not for EST) IN PROGRESS
+PRODUCING CROSS_SPECIES mRNA ALIGNMENTS (for mRNA, not for EST) DONE
 
 Here you align vertebrate mRNAs against the masked genome on the
 cluster you set up during the previous step.
@@ -637,13 +638,11 @@ Sort xenoEst alignments:
 Load into database as so:
        ssh hgwdev
        cd ~/oo/bed/xenoEst
-       hgLoadPsl hg11 xenoEst.psl -tNameIx DONE
-TODO       cd /cluster/store1/mrna.129
-       foreach i (org/*)
-	   echo processing org/$i/xenoEst.fa  
-       end
- hgLoadRna add matt /cluster/store1/mrna.129/org/$i/xenoEst.fa /cluster/store1/mrna.129/org/$i/xenoEst.ra
-
+       hgLoadPsl hg11 xenoEst.psl -tNameI
+       cd /cluster/store1/mrna.129
+       hgLoadRna add hg11 /cluster/store1/mrna.129/xenoEst.fa /cluster/store1/mrna.129/xenoEst.ra
+    
+DONE
 
 PRODUCING FISH ALIGNMENTS (DONE)
 
