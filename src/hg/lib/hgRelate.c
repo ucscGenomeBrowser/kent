@@ -14,7 +14,31 @@
 #include "hgRelate.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: hgRelate.c,v 1.9 2003/05/16 04:01:21 kent Exp $";
+static char const rcsid[] = "$Id: hgRelate.c,v 1.10 2003/06/01 07:24:00 markd Exp $";
+
+static char extFileCreate[] =
+/* This keeps track of external files and directories. */
+"create table extFile ("
+  "id int unsigned not null primary key,"  /* Unique ID across all tables. */
+  "name varchar(64) not null,"	  /* Symbolic name of file.  */
+  "path varchar(255) not null,"   /* Full path. Ends in '/' if a dir. */
+  "size bigint unsigned not null,"           /* Size of file (checked) */
+                   /* Extra indices. */
+  "index (name))";
+
+static char historyCreate[] =	
+/* This contains a row for each update made to database.
+ * (The idea is that this is just updated in batch.)
+ * It keeps track of which id global ids are used
+ * as well as providing a record of updates. */
+"create table history ("
+  "ix int not null auto_increment primary key,"  /* Update number. */
+  "startId int unsigned not null,"              /* Start this session's ids. */
+  "endId int unsigned not null,"                /* First id for next session. */
+  "who varchar(255) not null,"         /* User who updated. */
+  "what varchar(255) not null,"        /* What they did. */
+  "modTime timestamp not null)";        /* Modification time. */
+
 
 void hgSetDb(char *dbName)
 /* Set the database name. */
@@ -97,10 +121,18 @@ return endUpdateId++;
 }
 
 struct sqlConnection *hgStartUpdate()
-/* This locks the update table for an update - which prevents anyone else
- * from updating and returns the first usable ID. */
+/* Open and connection and get next global id from the history table */
 {
+static boolean initialized = FALSE;
 struct sqlConnection *conn = sqlConnect(hgGetDb());
+
+if (!initialized)
+    {
+    if (sqlMaybeMakeTable(conn, "history", historyCreate))
+        sqlUpdate(conn, "INSERT into history VALUES(NULL,0,10,USER(),'New',NOW())");
+    initialized = TRUE;
+    }
+
 startUpdateId = endUpdateId = hgIdQuery(conn, 
     "SELECT MAX(endId) from history");
 return conn;
@@ -153,10 +185,18 @@ int hgAddToExtFile(char *path, struct sqlConnection *conn)
 /* Add entry to ext file table.  Delete it if it already exists. 
  * Returns extFile id. */
 {
+static boolean initialized = FALSE;
 char root[128], ext[64], name[256];
 struct dyString *dy = newDyString(1024);
 long long size = fileSize(path);
 HGID id = hgNextId();
+
+/* create table if it doesn't exist */
+if (!initialized)
+    {
+    sqlMaybeMakeTable(conn, "extFile", extFileCreate);
+    initialized = TRUE;
+    }
 
 /* Construct file name without the directory. */
 splitPath(path, NULL, root, ext);

@@ -42,7 +42,7 @@ HGID hgRealIdQuery(struct sqlConnection *conn, char *query);
 
 
 struct sqlConnection *hgStartUpdate();
-/* Get a connection for an update.  (Starts allocating id's) */
+/* Open and connection and get next global id from the history table */
 
 void hgEndUpdate(struct sqlConnection **pConn, char *comment, ...);
 /* Finish up connection with a printf format comment. */
