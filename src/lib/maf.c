@@ -383,12 +383,18 @@ if (mcMaster->strand == '-')
     reverseIntRange(&newStart, &newEnd, mcMaster->srcSize);
 
 /* Check if any real intersection and return NULL if not. */
-if (newStart < mcMaster->start)
-    return NULL;
-if (newEnd > mcMaster->start + mcMaster->size)
-    return NULL;
 if (newStart >= newEnd)
     return NULL;
+if (newStart >= mcMaster->start + mcMaster->size)
+    return NULL;
+if (newEnd <= mcMaster->start)
+    return NULL;
+
+/* Clip to bounds of actual data. */
+if (newStart < mcMaster->start)
+    newStart = mcMaster->start;
+if (newEnd > mcMaster->start + mcMaster->size)
+    newEnd = mcMaster->start + mcMaster->size;
 
 /* Translate position in master sequence to position in
  * multiple alignment. */
