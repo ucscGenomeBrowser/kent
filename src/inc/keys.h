@@ -26,6 +26,9 @@ void kvtClear(struct kvt *kvt);
 struct keyVal *kvtAdd(struct kvt *kvt, char *key, char *val);
 /* Add in new key. */
 
+struct keyVal* kvtGet(struct kvt *kvt, char *key);
+/* get the keyVal for the specified key, of NULL if not found. */
+
 char *kvtLookup(struct kvt *kvt, char *key);
 /* Search table for key.  Return key value, or NULL if
  * key not found. */

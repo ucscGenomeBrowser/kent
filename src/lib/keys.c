@@ -80,9 +80,8 @@ for (i=0; i<lineCount; ++i)
     }
 }
 
-char *kvtLookup(struct kvt *kvt, char *key)
-/* Search table for key.  Return key value, or NULL if
- * key not found. */
+struct keyVal* kvtGet(struct kvt *kvt, char *key)
+/* get the keyVal for the specified key, of NULL if not found. */
 {
 int i;
 struct keyVal *keyTable = kvt->table;
@@ -91,9 +90,20 @@ int keysUsed = kvt->used;
 for (i=0; i<keysUsed; ++i)
     {
     if (sameString(key, keyTable[i].key))
-        return keyTable[i].val;
+        return &keyTable[i];
     }
 return NULL;
+}
+
+char *kvtLookup(struct kvt *kvt, char *key)
+/* Search table for key.  Return key value, or NULL if
+ * key not found. */
+{
+struct keyVal *keyVal = kvtGet(kvt, key);
+if (keyVal == NULL)
+    return NULL;
+else
+    return keyVal->val;
 }
 
 void kvtWriteAll(struct kvt *kvt, FILE *f, struct slName *hideList)
