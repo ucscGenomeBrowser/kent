@@ -21,7 +21,7 @@ struct dbConv
     char *freeze;    /* assembly freeze, i.e. "Dec. 12, 2000" */
 };
 
-struct dbConv dbTable[] = {
+static struct dbConv dbTable[] = {
     {"hg3","July 17, 2000"},
     {"hg4","Sept. 5, 2000"},
     {"hg5","Oct. 7, 2000"},
@@ -332,11 +332,88 @@ char *hFreezeFromDb(char *database)
 {
 int i;
 for(i=0;i<ArraySize(dbTable);i++)
-    {
     if(sameString(database,dbTable[i].db))
 	return cloneString(dbTable[i].freeze);
-    }
 return NULL;
 }
 
+char *hDbFromFreeze(char *freeze)
+/* Return database version from freeze name. */
+{
+int i;
+for(i=0;i<ArraySize(dbTable);i++)
+    if(sameString(freeze,dbTable[i].freeze))
+	return cloneString(dbTable[i].db);
+return NULL;
+}
+
+struct slName *hDbList()
+/* List of all database versions. */
+{
+struct slName *nList = NULL, *n;
+int i;
+for(i=0;i<ArraySize(dbTable);i++)
+    {
+    n = newSlName(dbTable[i].db);
+    slAddTail(&nList, n);
+    }
+return nList;
+}
+
+
+static boolean fitFields(struct hash *hash, char *chrom, char *start, char *end,
+	char retChrom[32], char retStart[32], char retEnd[32])
+/* Return TRUE if chrom/start/end are in hash.  
+ * If so copy them to retChrom, retStart, retEnd. 
+ * Helper routine for findChromStartEndFields below. */
+{
+if (hashLookup(hash, chrom) && hashLookup(hash, start) && hashLookup(hash, end))
+    {
+    strcpy(retChrom, chrom);
+    strcpy(retStart, start);
+    strcpy(retEnd, end);
+    return TRUE;
+    }
+else
+    return FALSE;
+}
+
+boolean hFindChromStartEndFields(char *table, 
+	char retChrom[32], char retStart[32], char retEnd[32])
+/* Given a table return the fields for selecting chromosome, start, and end. */
+{
+char query[256];
+struct sqlResult *sr;
+char **row;
+struct hash *hash = newHash(5);
+struct sqlConnection *conn = hAllocConn();
+boolean gotIt = TRUE;
+
+/* Read table description into hash. */
+sprintf(query, "describe %s", table);
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    hashAdd(hash, row[0], NULL);
+    }
+sqlFreeResult(&sr);
+
+/* Look for bed-style names. */
+if (fitFields(hash, "chrom", "chromStart", "chromEnd", retChrom, retStart, retEnd))
+    ;
+/* Look for psl-style names. */
+else if (fitFields(hash, "tName", "tStart", "tEnd", retChrom, retStart, retEnd))
+    ;
+/* Look for gene prediction names. */
+else if (fitFields(hash, "chrom", "txStart", "txEnd", retChrom, retStart, retEnd))
+    ;
+/* Look for repeatMasker names. */
+else if (fitFields(hash, "genoName", "genoStart", "genoEnd", retChrom, retStart, retEnd))
+    ;
+else
+    gotIt = FALSE;
+freeHash(&hash);
+hFreeConn(&conn);
+return gotIt;
+}
 

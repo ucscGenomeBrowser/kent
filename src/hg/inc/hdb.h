@@ -66,7 +66,17 @@ struct hash *hCtgPosHash();
 
 char *hFreezeFromDb(char *database);
 /* return the freeze for the database version. 
-   For example: "db6" returns "Dec 12, 2000". If database
+   For example: "hg6" returns "Dec 12, 2000". If database
    not recognized returns NULL */
+
+char *hDbFromFreeze(char *freeze);
+/* Return database version from freeze name. */
+
+struct slName *hDbList();
+/* List of all database versions. */
+
+boolean hFindChromStartEndFields(char *table, 
+	char retChrom[32], char retStart[32], char retEnd[32]);
+/* Given a table return the fields for selecting chromosome, start, and end. */
 
 #endif /* HDB_H */
