@@ -2599,7 +2599,7 @@ void doGetSequence()
 /* Display FASTA sequence. */
 {
 struct hTableInfo *hti = getOutputHti();
-struct bed *bedList = getBedList(FALSE, NULL);
+struct bed *bedList;
 int itemCount;
 
 saveOutputOptionsState();
@@ -2608,6 +2608,7 @@ saveSequenceOptionsState();
 
 printf("Content-Type: text/plain\n\n");
 webStartText();
+bedList = getBedList(FALSE, NULL);
 
 itemCount = hgSeqBedDb(database, hti, bedList);
 bedFreeList(&bedList);
@@ -2791,7 +2792,7 @@ return(gffList);
 void doGetGFF()
 {
 struct hTableInfo *hti = getOutputHti();
-struct bed *bedList = getBedList(FALSE, NULL);
+struct bed *bedList;
 struct gffLine *gffList, *gffPtr;
 char source[64];
 char *db = getTableDb();
@@ -2803,6 +2804,7 @@ saveIntersectOptionsState();
 
 printf("Content-Type: text/plain\n\n");
 webStartText();
+bedList = getBedList(FALSE, NULL);
 
 if (sameString(customTrackPseudoDb, db))
     snprintf(source, sizeof(source), "%s", track);
@@ -2917,7 +2919,7 @@ return(ct);
 void doGetBed()
 {
 struct hTableInfo *hti = getOutputHti();
-struct bed *bedList = getBedList(FALSE, NULL);
+struct bed *bedList;
 struct bed *bedPtr;
 struct featureBits *fbList = NULL, *fbPtr;
 struct customTrack *ctNew = NULL;
@@ -2942,6 +2944,7 @@ saveBedOptionsState();
 
 printf("Content-Type: text/plain\n\n");
 webStartText();
+bedList = getBedList(FALSE, NULL);
 
 if (hti->hasBlocks)
     fields = 12;
@@ -3024,7 +3027,7 @@ bedFreeList(&bedList);
 void doGetBrowserLinks()
 {
 struct hTableInfo *hti = getOutputHti();
-struct bed *bedList = getBedList(FALSE, NULL);
+struct bed *bedList;
 struct bed *bedPtr;
 char *table = getTableName();
 char *track = getTrackName();
@@ -3037,6 +3040,8 @@ saveOutputOptionsState();
 saveIntersectOptionsState();
 
 webStart(cart, "Table Browser: %s: %s", freezeName, linksPhase);
+bedList = getBedList(FALSE, NULL);
+
 printf("<H3> Links to Genome Browser from %s </H3>\n", getTableName());
 puts("<A HREF=\"/goldenPath/help/hgTextHelp.html#Hyperlinks\">"
      "<B>Help</B></A><P>");
