@@ -482,3 +482,17 @@
      -mgcs with no cds annotation
 
 - check for loading with old table (string tbl crc column works)
+
+- POSSIBLE BUG: If an update dbload started while alignments are being
+  finished, what would happen.
+
+- change align and load functions to do one database at a time;
+  keeps special options simpler at the cost of more log files.
+
+- NCBI seems to be writing refseq files in an unsafe way:
+       size at end of download (769484668) does not match size at start (764975036) for ftp://ftp.ncbi.nih.gov/refseq/cumulative/rscu.gbff.Z at /cluster/store5/genbank/bin/../lib/gbFtp.pm line 190. at /cluster/store5/genbank/bin/../lib/gbCommon.pm line 179.
+       2003.06.17-21:55:32.download.log
+       mod time: Jun 18 08:15
+
+- instead of checking the mgc host name in the browser, make it a hg.conf
+  option.

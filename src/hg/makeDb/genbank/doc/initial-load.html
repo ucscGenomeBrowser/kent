@@ -57,15 +57,14 @@
                 The lift file is used to split the nibs for alignment.
            </UL>
            
-      <LI><CODE>ssh kkstore</CODE><BR>
-          The GenBank files currently live on an <CODE>eieio</CODE> file
-          system, however it doesn't have a copy of the cluster
-          <CODE>/scratch</CODE> directory, so <CODE>kkstore</CODE> is used.
+      <LI><CODE>ssh eieio</CODE><BR>
+          <EM>It is important to run on <CODE>eieio</CODE> to avoid creating
+             a heavy NFS load</EM> .
 
       <LI><CODE>cd /cluster/store5/genbank</CODE><BR>
           This directory is <CODE>$gbRoot</CODE>.
 
-      <LI> <CODE>bin/gbAlignStep -verbose=1 -initial $db $nibGlob $liftFile</CODE><BR>
+      <LI> <CODE>nice bin/gbAlignStep -verbose=1 -initial $db $nibGlob $liftFile</CODE><BR>
            <P>This will run the entire alignment process.
            The <CODE>-initial</CODE> option defaults several parameters for
            and initial alignment and prevents this alignment from blocking
@@ -138,7 +137,7 @@
           Drop Genbank and RefSeq related tables if there have been
           failed attempts to load the database.</LI>
       
-      <LI><CODE>bin/gbDbLoadStep -verbose=1 -initialLoad $db</CODE></LI>
+      <LI><CODE>nice bin/gbDbLoadStep -verbose=1 -initialLoad $db</CODE></LI>
       <UL>
       <LI> Add <CODE>-buildFullMgc=$db</CODE> if this a an MGC species
            (currently human and mouse).
