@@ -106,55 +106,50 @@ namePt = input;
 while(namePt != 0) 
     {
     filenamePt = 0;
-    // find the boundary
+    /* find the boundary */
     namePt = memmem(namePt, inputEnd - namePt, boundary, strlen(boundary));
     if(namePt != 0) 
 	{
-	// skip passed the boundary
+	/* skip passed the boundary */
 	namePt += strlen(boundary);	
 
-	// if we have -, we are done
+	/* if we have -, we are done */
 	if(*namePt == '-')
 	    break;
 
-	// find the name
+	/* find the name */
 	namePt = memmem(namePt, inputEnd - namePt, "name=\"", strlen("name=\""));
-	//namePt = strstr(namePt, "name=\"");
 	if(namePt == 0)
 	    errAbort("Mangled CGI input (0) string %s", input);
 	namePt += strlen("name=\"");
 
-	// find the end of the name
+	/* find the end of the name */
 	nameEndPt = memmem(namePt, inputEnd - namePt, "\"", strlen("\""));
-	//nameEndPt = strstr(namePt, "\"");
 	if (nameEndPt == 0)
 	    errAbort("Mangled CGI input (1) string %s", input);
 	*nameEndPt = 0;
 
-	// find the data
+	/* find the data */
 	dataPt = memmem(nameEndPt + 1, inputEnd - nameEndPt - 1, "\n\r\n", strlen("\n\r\n"));
-	//dataPt = strstr(nameEndPt + 1, "\n\r\n");
 	if (dataPt == 0)
 	    errAbort("Mangled CGI input (2) string %s", input);
 	dataPt += 3;
 
-	// find the end of the data
+	/* find the end of the data */
 	dataEndPt = memmem(dataPt, inputEnd - dataPt, boundary, strlen(boundary));
-	//dataEndPt = strstr(dataPt, boundary);
 	if (dataEndPt == 0)
 	    errAbort("Mangled CGI input (3) string %s", input);
 	dataEndPt -= 2;
 
 	*(dataEndPt) = '\0';
 
-	// find the filename if there is one
+	/* find the filename if there is one */
 	if(*(nameEndPt + 1) == ';' && *(nameEndPt + 2) == ' ' && *(nameEndPt + 3) == 'f') {
 	    char varNameFilename[256];
 	    struct cgiVar *filenameEl;
 
 	    filenamePt = nameEndPt + 13;
 	    filenameEndPt = memmem(filenamePt, inputEnd - filenamePt, "\"", strlen("\""));
-	    //filenameEndPt = strstr(filenamePt, "\"");
 	    if(filenameEndPt == 0)
 		errAbort("Mangled CGI input (4) string %s", input);
 	    *filenameEndPt = '\0';

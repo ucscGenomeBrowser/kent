@@ -655,8 +655,6 @@ int prevX = -1;
 
 if( abs(slope) < 1 )
     {
-
-    //errAbort("X:slope = %g, sign = %d, mult = %g\n", slope, sign(slope), mult );
     for (j=0; j<w; j += 1)
         {
         sum += slope;
@@ -679,7 +677,6 @@ if( abs(slope) < 1 )
     }
 else
     {
-    //errAbort("Y:slope = %g\n", slope );
     for (j=1; j<=h; j += 1)
         {
         sum += 1.0 / slope;
@@ -736,7 +733,7 @@ for (j=0; j<w; j += 1)
     pUpper = (int)(colRange * ((double)min(fabs(sum),h) - (double)yLower));
     pLower = (int)colRange - pUpper;
 
-    if( aa == 1 )  //anti-aliasing is on
+    if( aa == 1 )  /* anti-aliasing is on */
         {
         if( pUpper != colRange )
             {
@@ -792,7 +789,7 @@ for (j=1; j<=h; j += 1)
     pUpper = (int)(colRange * ((double)min(fabs(sum),w) - (double)yLower));
     pLower = (int)colRange - pUpper;
 
-    if( aa == 1 )  //anti-aliasing is on
+    if( aa == 1 )  /* anti-aliasing is on */
         {
         if( pUpper != colRange )
             pt1[yLower] = colors[max(pLower,3)];
@@ -839,7 +836,7 @@ double h;
 double colRange = 9.0;
 
 
-//adjust y if x is cutoff 
+/* adjust y if x is cutoff  */
 slope = (double)(y2d - y1d)/(double)(x2-x1);
 if (x1 <= mg->clipMinX)
     {
@@ -854,7 +851,6 @@ if (x2 >= mg->clipMaxX)
 
 if ((x2 - x1) <= 0)
     return;
-    //errAbort( "x1 = %d, x2 = %d\n (%d,%d)", x1, x2, mg->clipMaxX, mg->clipMinX);
 
 h = fabs(y2d-y1d);
 
@@ -882,7 +878,7 @@ if (minY <= y1i && y1i < maxY
         mgDrawXSlopedLineAntiAlias( mg, pt1, pt1Home, slope, mult,
             x2-x1, h, colors, colRange, pt1Base, aa, fill );
 
-    //fill in area below the line
+    /*fill in area below the line */
     if( fill )
         mgFilledSlopedLine( mg, pt1, pt1Home, slope, mult, 
             x2-x1, h, colors, colRange, pt1Base );

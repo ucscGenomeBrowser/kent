@@ -388,7 +388,7 @@ char *netGetString(int sd, char buf[256])
  * and return NULL if any problem. */
 {
 static char sbuf[256];
-UBYTE len;
+UBYTE len = 0;
 int length;
 if (buf == NULL) buf = sbuf;
 if (read(sd, &len, 1)<0)
@@ -414,6 +414,7 @@ char *netGetLongString(int sd)
 UBYTE b[2];
 char *s = NULL;
 int length = 0;
+b[0] = b[1] = 0;
 if (netReadAll(sd, b, 2)<0)
     {
     warn("Couldn't read long string length");

@@ -36,7 +36,10 @@ void dyStringAppendN(struct dyString *ds, char *string, int stringSize);
 /* Append string of given size to end of string. */
 
 char dyStringAppendC(struct dyString *ds, char c);
-/* Append char to end of string.  You might want to use the generally faster dyStringPut. */
+/* Append char to end of string. */ 
+
+void dyStringAppendMultiC(struct dyString *ds, char c, int n);
+/* Append N copies of char to end of string. */ 
 
 void dyStringVaPrintf(struct dyString *ds, char *format, va_list args);
 /* VarArgs Printf to end of dyString. */

@@ -93,7 +93,6 @@ void htmlSetBackground(char *imageFile)
 htmlBackground = imageFile;
 }
 
-//static char *htmlCookieString = NULL;
 
 void htmlSetCookie(char* name, char* value, char* expires, char* path, char* domain, boolean isSecure)
 /* create a cookie with the given stats */

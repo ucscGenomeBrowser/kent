@@ -57,13 +57,20 @@ void setDefaultMemHandler()
 mhStack = &defaultMemHandler;
 }
 
+static size_t maxAlloc = 128*4*1024*1024;
+
+void setMaxAlloc(size_t s)
+/* Set large allocation limit. */
+{
+maxAlloc = s;
+}
 
 void *needLargeMem(size_t size)
 /* This calls abort if the memory allocation fails. The memory is
  * not initialized to zero. */
 {
 void *pt;
-if (size == 0 || size >= 128*4*1024*1024)
+if (size == 0 || size >= maxAlloc)
     {
     warn("Program error: trying to allocate %d bytes in needLargeMem", size);
     assert(FALSE);
@@ -126,7 +133,7 @@ return pt;
 void *needMoreMem(void *old, size_t copySize, size_t newSize)
 /* Allocate a new buffer, copy old buffer to it, free old buffer. */
 {
-void *newBuf = needLargeMem(newSize);
+char *newBuf = needLargeMem(newSize);
 if (copySize > newSize)
     internalErr();
 memcpy(newBuf, old, copySize);

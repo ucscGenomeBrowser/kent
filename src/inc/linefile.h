@@ -50,6 +50,9 @@ void lineFileReuse(struct lineFile *lf);
 #define lineFileString(lf) ((lf)->buf + (lf)->lineStart)
 /* Current string in line file. */
 
+#define lineFileTell(lf) ((lf)->bufOffsetInFile + (lf)->lineStart)
+/* Current offset (of string start) in file. */
+
 void lineFileExpectWords(struct lineFile *lf, int expecting, int got);
 /* Check line has right number of words. */
 

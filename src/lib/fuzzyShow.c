@@ -45,12 +45,10 @@ fprintf(f, "Matching bases in cDNA and genomic sequences are colored blue%s. ",
 	(upcMatch ? " and capitalized" : ""));
 fputs("Light blue bases mark the boundaries of gaps in either side of "
       "the alignment (often splice sites). ", f);
-// if (showHaystack)
-    // fputs("Predicted exons are in upper case.", f);
-fputs("</P></CENTER>", f);
+if (showJumpTable)
+    fputs("</P></CENTER>", f);
 htmHorizontalLine(f);
 
-fprintf(f, "<TT><PRE>\n");
 fprintf(f, "<H4><A NAME=cDNA></A>cDNA %s%s</H4>\n", needleName, (rcNeedle ? " (reverse complemented)" : ""));
 
 if (rcHaystack) 
@@ -70,6 +68,7 @@ if (showNeedle)
     struct cfm *cfm = cfmNew(10, 50, TRUE, FALSE, f, needleNumOffset);
     char *n = cloneMem(needle, needleSize);
     zeroBytes(colorFlags, needleSize);
+    fprintf(f, "<TT><PRE>\n");
     for (ali = leftAli; ali != NULL; ali = ali->right)
 	{
 	int i;
@@ -91,6 +90,7 @@ if (showNeedle)
 	}
     cfmFree(&cfm);
     freeMem(n);
+    fprintf(f, "</TT></PRE>\n");
     htmHorizontalLine(f);
     }
 
@@ -101,6 +101,7 @@ if (showHaystack)
     fprintf(f, "<H4><A NAME=genomic></A>Genomic %s %s:</H4>\n", 
     	haystackName,
 	(rcHaystack ? "(reverse strand)" : ""));
+    fprintf(f, "<TT><PRE>\n");
     zeroBytes(colorFlags, haySize);
     for (ali = leftAli; ali != NULL; ali = ali->right)
 	{
@@ -140,12 +141,14 @@ if (showHaystack)
 	}
     cfmFree(&cfm);
     freeMem(h);
+    fprintf(f, "</TT></PRE>\n");
     htmHorizontalLine(f);
     }
 
 if (showSideBySide)
     {
     fprintf(f, "<H4><A NAME=ali></A>Side by Side Alignment</H4>\n");
+    fprintf(f, "<TT><PRE>\n");
     lastAli = NULL;
     charsInLine = 0;
     bafInit(&baf, needle, 0, FALSE, 
@@ -201,8 +204,8 @@ if (showSideBySide)
 	}
     if (leftAli != NULL)
 	bafFlushLine(&baf);
+    fprintf(f, "</TT></PRE>\n");
     }
-fprintf(f, "</TT></PRE>\n");
 if (rcNeedle)
     reverseComplement(needle, needleSize);
 return anchorCount;

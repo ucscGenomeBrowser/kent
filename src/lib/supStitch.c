@@ -104,7 +104,6 @@ if ((graph = *pGraph) != NULL)
     }
 }
 
-//#ifdef DEBUG
 void dumpNearCrossover(char *what, DNA *n, DNA *h, int size)
 /* Print sequence near crossover */
 {
@@ -147,7 +146,6 @@ for (bun = bunList; bun != NULL; bun = bun->next)
     }
 }
 
-// #endif /* DEBUG */
 
 static int bioScoreMatch(boolean isProt, char *a, char *b, int size)
 /* Return score of match (no inserts) between two bio-polymers. */

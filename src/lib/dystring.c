@@ -63,7 +63,7 @@ buf[newSize] = 0;
 }
 
 char dyStringAppendC(struct dyString *ds, char c)
-/* Append char to end of string.  You might want to use the generally faster dyStringPut. */
+/* Append char to end of string. */
 {
 char *s;
 if (ds->stringSize >= ds->bufSize)
@@ -72,6 +72,21 @@ s = ds->string + ds->stringSize++;
 *s++ = c;
 *s = 0;
 return c;
+}
+
+void dyStringAppendMultiC(struct dyString *ds, char c, int n)
+/* Append N copies of char to end of string. */ 
+{
+int oldSize = ds->stringSize;
+int newSize = oldSize + n;
+int newAllocSize = newSize + oldSize;
+char *buf;
+if (newSize > ds->bufSize)
+    dyStringExpandBuf(ds,newAllocSize);
+buf = ds->string;
+memset(buf+oldSize, c, n);
+ds->stringSize = newSize;
+buf[newSize] = 0;
 }
 
 void dyStringVaPrintf(struct dyString *ds, char *format, va_list args);

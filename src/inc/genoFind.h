@@ -224,20 +224,20 @@ void gfSavePslx(char *chromName, int chromSize, int chromOffset,
 /* Analyse one alignment and if it looks good enough write it out to file in
  * pslx format.  This is meant for translated alignments. */
 
-void gfAlignStrand(int conn, char *nibDir, struct dnaSeq *seq,
+void gfAlignStrand(int *pConn, char *nibDir, struct dnaSeq *seq,
     boolean isRc,  int minMatch, GfSaveAli outFunction, void *outData);
 /* Search genome on server with one strand of other sequence to find homology. 
  * Then load homologous bits of genome locally and do detailed alignment.
  * Call 'outFunction' with each alignment that is found.  gfSavePsl is a handy
  * outFunction to use. */
 
-void gfAlignTrans(int conn, char *nibDir, aaSeq *seq,
+void gfAlignTrans(int *pConn, char *nibDir, aaSeq *seq,
     int minMatch, GfSaveAli outFunction, struct gfSavePslxData *outData);
 /* Search indexed translated genome on server with an amino acid sequence. 
  * Then load homologous bits of genome locally and do detailed alignment.
  * Call 'outFunction' with each alignment that is found. */
 
-void gfAlignTransTrans(int conn, char *nibDir, struct dnaSeq *seq, boolean isRc,
+void gfAlignTransTrans(int *pConn, char *nibDir, struct dnaSeq *seq, boolean isRc,
     int minMatch, GfSaveAli outFunction, struct gfSavePslxData *outData, boolean isRna);
 /* Search indexed translated genome on server with an dna sequence.  Translate
  * this sequence in three frames. Load homologous bits of genome locally

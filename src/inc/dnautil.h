@@ -48,7 +48,7 @@ extern int ntValLower[256];	/* NT values only for lower case. */
 /* Like ntVal, but with T_BASE_VAL in place of -1 for nonexistent nucleotides. */
 extern int ntValNoN[256];     
 
-/* Like ntVal but with N_BASE_VAL in place of -1 for 'n', 'x', etc. */
+/* Like ntVal but with N_BASE_VAL in place of -1 for 'n', 'x', '-', etc. */
 extern int ntVal5[256];
 
 /* Inverse array - takes X_BASE_VAL int to a DNA char

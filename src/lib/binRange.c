@@ -124,9 +124,14 @@ struct binElement *binKeeperFind(struct binKeeper *bk, int start, int end)
  * Free this list with slFreeList. */
 {
 struct binElement *list = NULL, *newEl, *el;
-int startBin = (start>>_binFirstShift), endBin = ((end-1)>>_binFirstShift);
+int startBin, endBin;
 int i,j;
 
+if (start < bk->minPos) start = bk->minPos;
+if (end > bk->maxPos) end = bk->maxPos;
+if (start >= end) return NULL;
+startBin = (start>>_binFirstShift);
+endBin = ((end-1)>>_binFirstShift);
 for (i=0; i<ArraySize(binOffsets); ++i)
     {
     int offset = binOffsets[i];

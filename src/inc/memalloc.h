@@ -34,5 +34,8 @@ int carefulCountBlocksAllocated();
 /* How many memory items are allocated? (Since called
  * pushCarefulMemHandler(). */
 
+void setMaxAlloc(size_t s);
+/* Set large allocation limit. */
+
 #endif /* MEMALLOC_H */
 

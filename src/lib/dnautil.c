@@ -118,8 +118,6 @@ DNA valToNtMasked[256];
 
 static boolean inittedNtVal = FALSE;
 
-
-
 static void initNtVal()
 {
 if (!inittedNtVal)

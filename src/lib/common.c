@@ -1109,21 +1109,21 @@ void removeReturns(char *dest, char *src)
 int i = 0;
 int j = 0;
 
-// until the end of the string
+/* until the end of the string */
 for (;;)
     {
-    // skip the returns
+    /* skip the returns */
     while(src[j] == '\r')
 	j++;
 
-    // copy the characters
+    /* copy the characters */
     dest[i] = src[j];
 
-    // check to see if done
+    /* check to see if done */
     if(src[j] == '\0')
 	break;
 
-    // advance the counters
+    /* advance the counters */
     i++;
     j++;
     }

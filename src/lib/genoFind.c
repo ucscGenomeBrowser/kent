@@ -53,6 +53,9 @@ while (totalRead < size)
 	perror("Couldn't finish large read");
 	return oneRead;
 	}
+    else if (oneRead == 0)
+    /* Avoid an infinite loop when the client closed the socket. */
+        break;
     totalRead += oneRead;
     }
 return totalRead;

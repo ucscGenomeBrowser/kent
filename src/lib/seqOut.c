@@ -272,7 +272,7 @@ void bafFlushLine(struct baf *baf)
 /* Write out alignment line if it has any characters in it. */
 {
 bafWriteLine(baf);
-htmHorizontalLine(baf->out);
+fprintf(baf->out, "<HR ALIGN=\"CENTER\">");
 baf->cix = 0;
 }
 
