@@ -10,7 +10,7 @@
 #include "gff.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: gff.c,v 1.18 2005/03/22 01:22:13 kate Exp $";
+static char const rcsid[] = "$Id: gff.c,v 1.19 2005/03/28 23:50:27 kate Exp $";
 
 void gffGroupFree(struct gffGroup **pGroup)
 /* Free up a gffGroup including lineList. */
@@ -88,7 +88,6 @@ static char *gffTnName(char *seqName, char *groupName)
 /* Make name that encorperates seq and group names.... */
 {
 static char nameBuf[512];
-char *s;
 if (startsWith("gene-", groupName))
     groupName += 5;
 if (startsWith("cc_", groupName))
@@ -141,7 +140,6 @@ for (;;)
    else
        {
        int len;
-       char *check;
        val = nextWord(&s);
        len = strlen(val) - 1;
        if (val[len] == ';')
@@ -207,7 +205,7 @@ for (;;)
        gl->exonNumber = atoi(val);
        }
    else if (sameString("intron_id", type))
-       gl->intronId = val;
+       gl->intronId = cloneString(val);
    else if (sameString("intron_status", type))
        {
        if ((hel = hashLookup(gff->intronStatusHash, val)) == NULL)
@@ -411,7 +409,6 @@ for (group = gff->groupList; group != NULL; group = group->next)
 void gffOutput(struct gffLine *el, FILE *f, char sep, char lastSep) 
 /* Print out GTF.  Separate fields with sep. Follow last field with lastSep. */
 {
-int i;
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->seq);
 if (sep == ',') fputc('"',f);
