@@ -12798,3 +12798,16 @@ hgsql hg17 -e 'load data local infile "rgdQtlLink.tab" into table hg17.rgdQtlLin
 # added ecoresTetNig1 entry to trackDb.ra in trackDb/human
 # and created ecoresTetNig1.html.  Genoscope will not be maintaining this
 # newest data in their Exofish comparative browser display.
+
+# UPDATE kgSpAlias TABLE WITH NEW UNIPROT DISPLAY ID ENTRIES (done 2/11/05 Fan)
+# Add new human protein display IDs to the alias table to support user search
+    
+    ssh hgwdev
+    cd /cluster/data/hg17/bed/pb
+    mkdir newDisplayId
+    cd newDisplayId
+ 
+    hgsql proteome -e 'select hg17.kgSpAlias.kgID, hg17.kgSpAlias.SpID, spOldNew.newDisplayId from spOldNew, hg17.kgSpAlias where spOldNew.acc=hg17.kgSpAlias.spID and oldDisplayId != newDisplayId' |sort -u >hg17.tab
+    
+    hgsql hg17 -e 'load data local infile "hg17.tab" into table hg17.kgSpAlias'
+
