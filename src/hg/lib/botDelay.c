@@ -45,7 +45,7 @@ void botTerminateMessage(char *ip, int millis)
 /* Print out message saying why you are terminated. */
 {
 time_t now = time(NULL);
-errAbort("There is an exceedinly high volume of traffic coming from your "
+errAbort("There is an exceedingly high volume of traffic coming from your "
        "site (IP address %s) as of %s (California time).  It looks like "
        "a web robot is launching queries quickly, and not even waiting for "
        "the results of one query to finish before launching another query. "
