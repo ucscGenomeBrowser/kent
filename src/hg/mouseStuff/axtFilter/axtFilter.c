@@ -5,7 +5,7 @@
 #include "options.h"
 #include "axt.h"
 
-static char const rcsid[] = "$Id: axtFilter.c,v 1.6 2003/09/09 16:20:29 hiram Exp $";
+static char const rcsid[] = "$Id: axtFilter.c,v 1.7 2004/06/02 22:04:20 baertsch Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -27,6 +27,7 @@ errAbort(
   "   -tStartMin=N - restrict to those with tStart at least N\n"
   "   -tStartMax=N - restrict to those with tStart less than N\n"
   "   -strand=?    -restrict strand (to + or -)\n"
+  "   -qStartsWith=?  -restrict query side sequence to those starting with\n"
   );
 }
 
@@ -71,6 +72,7 @@ int qStartMax = optionInt("qStartMax", BIGNUM);
 int tStartMin = optionInt("tStartMin", -BIGNUM);
 int tStartMax = optionInt("tStartMax", BIGNUM);
 char *strand = optionVal("strand", NULL);
+char *qStartsWith = optionVal("qStartsWith", NULL);
 boolean notQ_random = optionExists("notQ_random");
 int i;
 
@@ -99,6 +101,8 @@ for (i=0; i<inCount; ++i)
 	if (axt->tStart < tStartMin || axt->tStart >= tStartMax)
 	    writeIt = FALSE;
 	if (strand != NULL && strand[0] != axt->qStrand)
+	    writeIt = FALSE;
+        if (!startsWith(qStartsWith, axt->qName))
 	    writeIt = FALSE;
 	if (writeIt)
 	    axtWrite(axt, stdout);
