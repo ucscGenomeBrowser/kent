@@ -37,7 +37,7 @@ invQueryOne select acc from proteins031112.pdbSP,swissProt.displayId where val=s
 
 name yeastChoCellCycle
 shortLabel Cho Cell Cycle
-longLabel Genome-wide transcriptional analysis of the mitotic cell cycle, Cho et al
+longLabel Genome-wide transcriptional analysis of the mitotic cell cycle, Cho et al.
 priority 3.0
 visibility on
 type expMulti sgdToSgd
@@ -55,7 +55,7 @@ name sgdLocalization
 type association sgdLocalization
 visibility off
 shortLabel Localization
-longLabel Cellular Localization from Huh et al Nature 2003 425:686-691
+longLabel Cellular Localization from Huh et al., Nature 2003 425:686-691
 priority 9.5
 queryFull select name,value from sgdLocalization
 queryOne select value,value from sgdLocalization where name = '%s'
@@ -65,7 +65,7 @@ name sgdAbundance
 type float sgdAbundance name abundance
 visibility off
 shortLabel Abundance
-longLabel Protein Abundance from from Ghaemmaghami et al Nature 2003 425:737-741
+longLabel Protein Abundance from Ghaemmaghami et al., Nature 2003 425:737-741
 priority 9.6
 
 name go
