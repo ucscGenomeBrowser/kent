@@ -96,7 +96,7 @@ printf(
   "   -maxGap=N   sets the size of maximum gap between tiles in a clump.  Usually\n"
   "               set from 0 to 3.  Default is 2. Only relevent for minMatch > 1.\n"
   "   -noHead     suppress .psl header (so it's just a tab-separated file)\n"
-  "   -makeOoc=N.ooc Make overused tile file\n"
+  "   -makeOoc=N.ooc Make overused tile file. Target needs to be complete genome.\n"
   "   -repMatch=N sets the number of repetitions of a tile allowed before\n"
   "               it is marked as overused.  Typically this is 256 for tileSize\n"
   "               12, 1024 for tile size 11, 4096 for tile size 10.\n"
@@ -823,7 +823,7 @@ if (dIsProtLike)
  * they are within range. */
 tileSize = cgiOptionalInt("tileSize", tileSize);
 minMatch = cgiOptionalInt("minMatch", minMatch);
-oneOff = cgiExists("oneOff", oneOff);
+oneOff = cgiVarExists("oneOff");
 minScore = cgiOptionalInt("minScore", minScore);
 maxGap = cgiOptionalInt("maxGap", maxGap);
 minRepDivergence = cgiUsualDouble("minRepDivergence", minRepDivergence);
