@@ -27,10 +27,7 @@ char *s =
 ;
 
 fprintf(f, "%%!PS-Adobe-3.1 EPSF-3.0\n");
-fprintf(f, "%%%%BoundingBox: 0 0 ");
-psFloatOut(f, width);
-psFloatOut(f, height);
-fprintf(f, "\n\n");
+fprintf(f, "%%%%BoundingBox: 0 0 %d %d\n\n", (int)ceil(width), (int)ceil(height));
 fprintf(f, "%s", s);
 }
 
@@ -162,7 +159,8 @@ void psTimesFont(struct psGfx *ps, double size)
 /* Set font to times of a certain size. */
 {
 FILE *f = ps->f;
-fprintf(f, "/Times-Roman findfont ");
+// fprintf(f, "/Times-Roman findfont ");
+fprintf(f, "/Helvetica findfont ");
 
 /* Note the 1.2 and the 1.0 below seem to get it to 
  * position about where the stuff developed for pixel
