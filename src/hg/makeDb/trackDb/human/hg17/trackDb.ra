@@ -1332,7 +1332,7 @@ shortLabel Ancestor TBA
 longLabel Ancestral TBA 4-way Multiple Alignment
 group x
 priority 110
-visibility pack
+visibility hide
 type wigMaf 0.0 1.0
 # maxHeightPixels 100:40:11
 # wiggle phastCons5
