@@ -309,10 +309,14 @@ format.
 <PRE>table chrN_gl
 "Fragment positions in golden path"
     (
-    string  frag;       "Fragment name"
-    uint    start;      "Start position in golden path"
-    uint    end;        "End position in golden path"
-    char[1] strand;     "+ or - for strand"
+    ushort  bin;          "A field to speed indexing added to many 
+                           tables August 2001"
+    uint    matches;      "Number of bases that match that aren't repeats"
+    uint    misMatches;   "Number of bases that don't match"
+    string  frag;         "Fragment name"
+    uint    start;        "Start position in golden path"
+    uint    end;          "End position in golden path"
+    char[1] strand;       "+ or - for strand"
     )
 </PRE>
 <H3><A name=CloneInfo></A>Clone Information</H3>
@@ -386,6 +390,10 @@ G/C.
 <PRE>table chrN_gap
 "Gaps in golden path"
     (
+    ushort bin;         "A field to speed indexing added to many 
+                         tables August 2001"
+    uint   matches;     "Number of bases that match that aren't repeats"
+    uint   misMatches;  "Number of bases that don't match"
     string chrom;       "which chromosome"
     uint   chromStart;  "start position in chromosome"
     uint   chromEnd;    "end position in chromosome"
@@ -511,6 +519,10 @@ Last used Oct. 2000
 <PRE>table chrN_gold
 "How to get through chromosome based on fragments"
     (
+    ushort  bin;        "A field to speed indexing added to many 
+                         tables August 2001"
+    uint    matches;    "Number of bases that match that aren't repeats"
+    uint    misMatches; "Number of bases that don't match"
     string  chrom;      "which chromosome"
     uint    chromStart; "start position in chromosome"
     uint    chromEnd;   "end position in chromosome"
@@ -541,7 +553,11 @@ all_mrna and all_est tables.<BR><BR>
 <TABLE CELLPADDING=0 CELLSPACING=0 MARGINS=0 BORDER=0>
 <TR><TD><PRE>table psl  </TD></TR>
 <TR><TD><PRE>"Summary info about a patSpace alignment"  </TD></TR>
-<TR><TD><PRE>    (  </TD></TR>
+<TR><TD><PRE>    (  </TD></TR> 
+<TR><TD><PRE>    ushort  bin;          "A field to speed indexing added to many 
+                           tables August 2001"
+<TR><TD><PRE>    uint    matches;      "Number of bases that match that aren't repeats"
+<TR><TD><PRE>    uint    misMatches;   "Number of bases that don't match"
 <TR><TD><PRE>    uint    matches;      "Number of bases that match that aren't repeats"  </TD></TR>
 <TR><TD><PRE>    uint    misMatches;   "Number of bases that don't match"  </TD></TR>
 <TR><TD><PRE>    uint    repMatches;   "Number of bases that match but are part of repeats"  </TD></TR>
@@ -601,6 +617,10 @@ These tables were created from RepeatMasker .out files.
 <PRE>table chrN_rmsk
 "RepeatMasker .out record"
     (
+    ushort  bin;        "A field to speed indexing added to many 
+                         tables August 2001"
+    uint    matches;    "Number of bases that match that aren't repeats"
+    uint    misMatches; "Number of bases that don't match"
     uint    swScore;    "Smith Waterman alignment score"
     uint    milliDiv;   "Base mismatches in parts per thousand"
     uint    milliDel;   "Bases deleted in parts per thousand"
@@ -643,6 +663,10 @@ of finding simple tandem repeats than RepeatMaskerdoes.
 <PRE>table simpleRepeat
 "Describes the Simple Tandem Repeats"
    (
+   ushort  bin;           "A field to speed indexing added to many 
+                           tables August 2001"
+   uint    matches;       "Number of bases that match that aren't repeats"
+   uint    misMatches;    "Number of bases that don't match"
    string chrom;          "Human chromosome or FPC contig"
    uint   chromStart;     "Start position in chromosome"
    uint   chromEnd;       "End position in chromosome"
@@ -667,6 +691,10 @@ This table is used for both the snpNih and snpTsc tables.
 <PRE>table snp
 "Single nucleotide polymorphisms"
    (
+   ushort  bin;           "A field to speed indexing added to many 
+                           tables August 2001"
+   uint    matches;       "Number of bases that match that aren't repeats"
+   uint    misMatches;    "Number of bases that don't match"
    string chrom;          "Human chromosome or FPC contig"
    uint   chromStart;     "Start position in chromosome"
    uint   chromEnd;       "End position in chromosome"
