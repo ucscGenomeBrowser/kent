@@ -1,5 +1,6 @@
 /* kgBestMrna - driver program to call blat to select best mRNA for each protein */
 
+#include	<sys/param.h>
 #include "common.h"
 #include "hCommon.h"
 #include "hdb.h"
@@ -34,6 +35,7 @@ FILE *o3, *o7;
 
 char *proteinDataDate;
 char *genomeRelease;
+char *genomeReadOnly;
 char *genomeDBname;
 char proteinsDB[100];
 char spDB[100];
@@ -43,9 +45,10 @@ char gbTempDB[100];
 void usage()
     {
     errAbort(
-  	"usage:\tkgResultBestMrna YYMMDD db > BestResult.out\n"
+  	"usage:\tkgResultBestMrna YYMMDD db ro_db> BestResult.out\n"
   	"\tYYMMDD is the release date of SWISS-PROT data, eg: 031117\n"
-  	"\tdb is the genome under construction, eg: mm4\n"
+  	"\tdb is the genome under construction, eg: kgDB\n"
+  	"\tro_db is the actual target genome, e.g.: mm4\n"
   	"kgResultBestMrna - after the cluster run is done, this reads the\n"
 	"\tresults and produces a best.lis listing.\n"
 	"\tExpects to find ./clusterRun and ./out directories in the\n"
@@ -157,11 +160,12 @@ int  months;
 int  diff;
 int  mrnalen;
 int  imrna;
-char dirName[1000];
-char mrnaFile[1000];
-char outName[1000];
-char outDir[1000];
-char blatCmd[1000];
+char dirName[PATH_MAX];
+char mrnaFile[PATH_MAX];
+char outName[PATH_MAX];
+char outDir[PATH_MAX];
+char blatCmd[PATH_MAX];
+char cwd[PATH_MAX];
 
 struct dnaSeq *seq;
 HGID id;
@@ -191,14 +195,15 @@ FILE *aaOut, *mrnaOut;
 char *aaSeq, *mrnaSeq;
 char cond_str[200];
 
-if (argc != 3) usage();
+if (argc != 4) usage();
     
 proteinDataDate = argv[1];
 genomeRelease = argv[2];
+genomeReadOnly = argv[3];
 
 // make sure db connection goes to correct genome
 // hRnaSeqAndIdx() needs this.
-hSetDb(genomeRelease);
+hSetDb(genomeReadOnly);
 
 sprintf(spDB, "sp%s", proteinDataDate);
 sprintf(proteinsDB, "proteins%s", proteinDataDate);
@@ -219,8 +224,6 @@ conn3= hAllocConn();
    
 proteinCount = 0; 
 snprintf(dirName, (size_t) sizeof(dirName), "%s", "./clusterRun" );
-if (chdir(dirName))
-    errAbort("ERROR: Can not change dir to %s\n", dirName);
 
 while (fgets(line, 1000, inf) != NULL)
     {
@@ -264,8 +267,10 @@ while (fgets(line, 1000, inf) != NULL)
     mrnaCount = imrna;
     sqlFreeResult(&sr2);
     
-    snprintf(outName, (size_t) sizeof(outName),"/cluster/data/mm4/bed/knownGenes/kgBestMrna/tResults/out/%s/b%05d.out",
-	outDir, proteinCount);
+    if ( ((char *) NULL) == getcwd(cwd, (size_t) sizeof(cwd)) )
+	errAbort("ERROR: Can not get current working directory");
+    snprintf(outName, (size_t) sizeof(outName),"%s/out/%s/b%05d.out",
+	cwd, outDir, proteinCount);
     
     inf2 = fopen(outName, "r");
     if ((FILE *) NULL == inf2)

@@ -34,18 +34,20 @@ char *bioentryID;
 char protDbName[100];
 char spDbName[100];
 char *dbName;
+char *ro_dbName;
 
 FILE *o1, *o2;
 
 struct dnaSeq *kgSeq;
     
-if (argc != 3) usage();
+if (argc != 4) usage();
 
 o1 = fopen("j.dat",  "w");
 o2 = fopen("jj.dat", "w");
     
 dbName = argv[1];
-hSetDb(dbName);
+ro_dbName = argv[3];
+hSetDb(ro_dbName);
 sprintf(protDbName,   "proteins%s", argv[2]);
 sprintf(spDbName, "sp%s",   argv[2]);
 

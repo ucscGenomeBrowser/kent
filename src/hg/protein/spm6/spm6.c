@@ -19,11 +19,12 @@ void usage()
 errAbort(
   "spm6 - generates sorted.lis and knownGene0.tab for further duplicates processing\n"
   "usage:\n"
-  "   spm6 xxxx yyyy\n"
+  "   spm6 xxxx db ro_db\n"
   "      xxxx is the release date of SWISS-PROT data\n"
-  "      yyyy is the genome under construction\n"
+  "      db is the genome under construction, e.g.: kgDB\n"
+  "      ro_db is the target genome to read data from\n"
   "example:\n"
-  "   spm6 070403 rn3\n");
+  "   spm6 040115 kgDB hg16\n");
 }
 void getCDS(char *cdsStart, char *cdsEnd, char *exonCount, char *exonStarts_in, char *exonEnds_in)
 
@@ -171,6 +172,7 @@ char *exon2StartStr, *exon2EndStr;
 int  exon2Start, exon2End;
 int  icdsStart, icdsEnd;
 char *genomeDBname;
+char *genomeReadOnly;
 char *proteinDataDate;
 char proteinsDB[40];
 
@@ -184,12 +186,14 @@ bioSeq *mSeq;
 HGID id;
 char *buf;
 
-if (argc != 3) usage();
+if (argc != 4) usage();
 
 proteinDataDate = argv[1];
 genomeDBname    = argv[2];
+genomeReadOnly = argv[3];
 
-hSetDb(genomeDBname);
+hSetDb(genomeReadOnly);
+
 o3 = fopen("j.dat", "w");
 o4 = fopen("jj.dat", "w");
 o5 = fopen("align.lis", "w");
@@ -198,6 +202,7 @@ conn2= hAllocConn();
 conn3= hAllocConn();
 conn4= hAllocConn();
     
+
 inf   = mustOpen("best.lis", "r");
 alignmentID = 0;
 
