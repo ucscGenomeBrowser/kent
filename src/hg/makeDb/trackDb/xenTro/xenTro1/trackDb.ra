@@ -1,3 +1,11 @@
+track multiz5way
+shortLabel Conservation
+longLabel Conservation in Frog/Chicken/Human/Mouse/Zebrafish
+group compGeno
+priority 150
+visibility dense
+type maf
+
 track chainGalGal2
 shortLabel $o_Organism Chain 
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
