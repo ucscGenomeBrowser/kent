@@ -37,7 +37,7 @@ url http://www.ensembl.org/Homo_sapiens/geneview?transcript=%s
 
 name aceView
 shortLabel AceView
-tables kgXref
+tables jaxOrtholog
 idSql select geneSymbol from kgXref where kgID = '%s'
 priority 110
 url http://www.ncbi.nih.gov/IEB/Research/Acembly/av.cgi?db=human&l=%s
