@@ -8802,3 +8802,11 @@ axtChain -linearGap=../../chickenHumanTuned.gap $1 \
 
     # Copy over & edit README.txt w/pointers to chain, net formats.
 
+# BLASTZ TETRAODON (tetNig1) CLEANUP (DONE, 2004-09-10, hartera)
+    ssh kksilo
+    cd /cluster/data/hg17/bed/blastz.tetNig1
+    nice rm -rf raw &
+    nice rm -rf lav &
+    nice rm axtChain/run1/chain/* &
+    nice gzip {axt,psl}Chrom/* axtChain/{all.chain,*.net} &
+
