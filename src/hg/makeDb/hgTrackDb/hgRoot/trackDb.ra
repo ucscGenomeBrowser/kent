@@ -565,17 +565,24 @@ priority 38
 visibility dense
 type bed 15 +
 
+track affy
+shortLabel Affymetrix
+longLabel Affymetrix Gene Expression from Novartis Institute
+priority 39
+visibility hide
+type bed 15 +
+
 track cghNci60
 shortLabel CGH NCI60
 longLabel Comparative Genomic Hybridization Experiments for NCI 60 Cell Lines
-priority 39
+priority 40
 visibility hide
 type bed 15 +
 
 track rosetta
 shortLabel Rosetta
 longLabel Rosetta Experimental Confirmation of Chr22 Exons
-priority 40
+priority 41
 visibility dense
 chromosomes chr22,
 type bed 15 +
