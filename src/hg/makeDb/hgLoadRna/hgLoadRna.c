@@ -253,7 +253,7 @@ if (extFilesHash == NULL)
         gotSize = fileSize(ex->path);
 	if (lastChar != '/' && ex->size != gotSize)
 	    {
-	    errAbort("External file %s out of sync.\n Expected size: %ul, got size %ul\n", ex->path, ex->size, gotSize);
+	    errAbort("External file %s out of sync.\n Expected size: %u, got size %u\n", ex->path, ex->size, gotSize);
 	    }
 	}
     sqlFreeResult(&sr);
