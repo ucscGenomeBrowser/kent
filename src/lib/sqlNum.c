@@ -7,7 +7,7 @@
 #include "common.h"
 #include "sqlNum.h"
 
-static char const rcsid[] = "$Id: sqlNum.c,v 1.8 2003/06/30 23:15:45 hiram Exp $";
+static char const rcsid[] = "$Id: sqlNum.c,v 1.9 2004/02/15 17:30:49 markd Exp $";
 
 unsigned sqlUnsigned(char *s)
 /* Convert series of digits to unsigned integer about
@@ -33,17 +33,19 @@ int sqlSigned(char *s)
  * all of string is number. */
 {
 int res = 0;
-char *p = s;
-char c;
+char *p, *p0 = s;
 
-if (*p == '-')
-    p++;
-while (((c = *(p++)) >= '0') && (c <= '9'))
+if (*p0 == '-')
+    p0++;
+p = p0;
+while ((*p >= '0') && (*p <= '9'))
     {
     res *= 10;
-    res += c - '0';
+    res += *p - '0';
+    p++;
     }
-if (c != '\0')
+/* test for invalid character, empty, or just a minus */
+if ((*p != '\0') || (p == p0))
     errAbort("invalid signed number: \"%s\"", s);
 if (*s == '-')
     return -res;
@@ -56,17 +58,20 @@ long long sqlLongLong(char *s)
  * number. */
 {
 long long res = 0;
-char *p = s;
+char *p, *p0 = s;
 char c;
 
-if (*p == '-')
-    p++;
-while (((c = *(p++)) >= '0') && (c <= '9'))
+if (*p0 == '-')
+    p0++;
+p = p0;
+while ((*p >= '0') && (*p <= '9'))
     {
     res *= 10;
-    res += c - '0';
+    res += *p - '0';
+    p++;
     }
-if (c != '\0')
+/* test for invalid character, empty, or just a minus */
+if ((*p != '\0') || (p == p0))
     errAbort("invalid signed number: \"%s\"", s);
 if (*s == '-')
     return -res;
