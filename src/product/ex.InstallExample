@@ -87,16 +87,12 @@ done
 #	Create the cb1 database and load its data
 mysql -pgenome -e "create database cb1;"
 cd ${WEBROOT}/html/goldenPath/cbJul2002/database
-for file in *.sql
+for SQL in *.sql
 do
-	mysql -pgenome cb1 < $file
-done
-for file in *.txt.gz
-do
-	FN=`echo $file | sed -e "s/.gz//"`
-	echo "working on $file"
-	gunzip $file
-	mysqlimport -pgenome cb1 $FN
-	echo "imported $FN"
-	gzip $FN &
+    T_NAME=${SQL%%.sql}
+    echo "loading table ${T_NAME}"
+    mysql -pgenome cb1 -e "DROP TABLE ${T_NAME};"
+    mysql -pgenome cb1 < ${SQL}
+    zcat "${T_NAME}.txt.gz" | mysql -pgenome cb1 -e \
+	"LOAD DATA LOCAL INFILE \"/dev/stdin\" INTO TABLE ${T_NAME};"
 done
