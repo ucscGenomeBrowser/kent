@@ -39,6 +39,8 @@ beta_old_update:
 	hgTrackDb hg6  trackDb ../../lib/trackDb.sql hgRoot
 	hgTrackDb hg7  trackDb ../../lib/trackDb.sql hgRoot
 
+alpha: beta_update
+
 beta: beta_update
 
 beta_update:
