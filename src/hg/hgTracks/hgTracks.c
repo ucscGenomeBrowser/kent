@@ -347,7 +347,7 @@ void mapBoxTrackUi(int x, int y, int width, int height, struct trackGroup *tg)
 {
 char *track = tg->mapName;
 printf("<AREA SHAPE=RECT COORDS=\"%d,%d,%d,%d\" ", x, y, x+width, y+height);
-printf("HREF=\"%s?%s=%u&c=%s&g=%s", hgTrackUiName(), 
+printf("HREF=\"%s?%s=%u&c=%s&g=%s\"", hgTrackUiName(), 
 	    cartSessionVarName(), cartSessionId(cart),
 	    chromName, tg->mapName);
 printf(" ALT= \"%s controls\">\n", tg->shortLabel);
