@@ -24,9 +24,10 @@ set droYak droYak1
 set anoGam anoGam1
 set cioSav cioSav1
 set tetNig tetNig1
+set xenTro xenTro1
 
 # Define all organism/assembly-specific databases.
-set gbd $hg,$mm,$rn,$fr,$ce,$cb,$dm,$dp,$sacCer,$panTro,$galGal,$ci,$danRer,$canFam,$droYak,$anoGam,$cioSav,$tetNig
+set gbd $hg,$mm,$rn,$fr,$ce,$cb,$dm,$dp,$sacCer,$panTro,$galGal,$ci,$danRer,$canFam,$droYak,$anoGam,$cioSav,$tetNig,$xenTro
 
 # Define organism databases based on whole-genome shotgun projects 
 # (Assembly based on WGS project contigs accessioned in Genbank)
