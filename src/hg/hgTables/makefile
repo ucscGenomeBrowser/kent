@@ -14,16 +14,19 @@ O = $A.o asObj.o bedList.o custom.o filterFields.o \
 include ../../inc/cgi_build_rules.mk
 
 my::
+	rm -f ${CGI_BIN}-${USER}/all.joiner
 	cp ../makeDb/schema/all.joiner ${CGI_BIN}-${USER}
 	chmod a+r ${CGI_BIN}-${USER}/all.joiner
 	chmod g+w ${CGI_BIN}-${USER}/all.joiner
 
 alpha::
+	rm -f ${CGI_BIN}/all.joiner
 	cp ../makeDb/schema/all.joiner ${CGI_BIN}
 	chmod a+r ${CGI_BIN}/all.joiner
 	chmod g+w ${CGI_BIN}/all.joiner
 
 beta::
+	rm -f ${CGI_BIN}-beta/all.joiner
 	cp ../makeDb/schema/all.joiner ${CGI_BIN}-beta
 	chmod a+r ${CGI_BIN}-beta/all.joiner
 	chmod g+w ${CGI_BIN}-beta/all.joiner
