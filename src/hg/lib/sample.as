@@ -10,6 +10,6 @@ char[2] strand;        "# + or -"
 
 uint sampleCount;                   "number of samples total"
 uint[sampleCount] samplePosition;   "bases relative to chromStart (x-values)"
-uint[sampleCount] sampleHeight;     "the height each pixel is drawn to [0,1000]"
+int[sampleCount] sampleHeight;     "the height each pixel is drawn to [0,1000]"
 )
 

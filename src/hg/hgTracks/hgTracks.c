@@ -2076,6 +2076,7 @@ for (i=0; i<sampleCount; ++i)
 slReverse(&sfList);
 lf->components = sfList;
 linkedFeaturesBoundsAndGrays(lf);
+lf->start = sample->chromStart;
 lf->end = sample->chromEnd;
 return lf;
 }

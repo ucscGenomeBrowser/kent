@@ -20,13 +20,13 @@ AllocVar(ret);
 ret->sampleCount = sqlUnsigned(row[6]);
 ret->chrom = cloneString(row[0]);
 ret->chromStart = sqlUnsigned(row[1]);
-ret->chromEnd = sqlSigned(row[2]);
+ret->chromEnd = sqlUnsigned(row[2]);
 ret->name = cloneString(row[3]);
 ret->score = sqlUnsigned(row[4]);
 strcpy(ret->strand, row[5]);
 sqlUnsignedDynamicArray(row[7], &ret->samplePosition, &sizeOne);
 assert(sizeOne == ret->sampleCount);
-sqlUnsignedDynamicArray(row[8], &ret->sampleHeight, &sizeOne);
+sqlSignedDynamicArray(row[8], &ret->sampleHeight, &sizeOne);
 assert(sizeOne == ret->sampleCount);
 return ret;
 }
@@ -49,7 +49,7 @@ slReverse(&list);
 return list;
 }
 
-struct sample *sampleLoadWhere(struct sqlConnection *conn, char *table, char *where)
+struct sample *sampleLoadWhere(struct sqlConnection *conn, char *table, char *where) 
 /* Load all sample from table that satisfy where clause. The
  * where clause may be NULL in which case whole table is loaded
  * Dispose of this with sampleFreeList(). */
@@ -59,9 +59,9 @@ struct dyString *query = dyStringNew(256);
 struct sqlResult *sr;
 char **row;
 
-dyStringPrintf(query, "select * from %s", table);
+dyStringPrintf(query, "select * from %s", table); 
 if (where != NULL)
-    dyStringPrintf(query, " where %s", where);
+    dyStringPrintf(query, " where %s", where); 
 sr = sqlGetResult(conn, query->string);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -73,6 +73,7 @@ sqlFreeResult(&sr);
 dyStringFree(&query);
 return list;
 }
+
 
 struct sample *sampleCommaIn(char **pS, struct sample *ret)
 /* Create a sample out of a comma separated string. 
@@ -103,7 +104,7 @@ s = sqlEatChar(s, '{');
 AllocArray(ret->sampleHeight, ret->sampleCount);
 for (i=0; i<ret->sampleCount; ++i)
     {
-    ret->sampleHeight[i] = sqlUnsignedComma(&s);
+    ret->sampleHeight[i] = sqlSignedComma(&s);
     }
 s = sqlEatChar(s, '}');
 s = sqlEatChar(s, ',');
@@ -173,10 +174,12 @@ fputc(sep,f);
 if (sep == ',') fputc('{',f);
 for (i=0; i<el->sampleCount; ++i)
     {
-    fprintf(f, "%u", el->sampleHeight[i]);
+    fprintf(f, "%d", el->sampleHeight[i]);
     fputc(',', f);
     }
 if (sep == ',') fputc('}',f);
 fputc(lastSep,f);
 }
+
+/* -------------------------------- End autoSql Generated Code -------------------------------- */
 
