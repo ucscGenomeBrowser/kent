@@ -123,6 +123,9 @@ void hParseTableName(char *table, char trackName[128], char chrom[32]);
 /* Parse an actual table name like "chr17_random_blastzWhatever" into 
  * the track name (blastzWhatever) and chrom (chr17_random). */
 
+int hdbChromSize(struct sqlConnection *conn, char *chromName);
+/* Get chromosome size from given database connection. */
+
 int hChromSize(char *chromName);
 /* Return size of chromosome. */
 
