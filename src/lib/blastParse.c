@@ -55,6 +55,21 @@ else
     }
 }
 
+static boolean bfSkipBlankLines(struct blastFile *bf)
+/* skip blank lines, return FALSE on EOF */
+{
+char *line = NULL;
+while ((line = bfNextLine(bf)) != NULL)
+    {
+    if (skipLeadingSpaces(line)[0] != '\0')
+        {
+	lineFileReuse(bf->lf);
+        return TRUE;
+        }
+    }
+return FALSE; /* EOF */
+}
+
 static char *bfNeedNextLine(struct blastFile *bf)
 /* Fetch next line of input or die trying. */
 {
@@ -172,11 +187,6 @@ if ((e = strchr(s, ' ')) == NULL)
 *e = 0;
 decomma(s);
 bq->queryBaseCount = atoi(s);
-/* I commented this out because I couldn't find a better solution
-	- George Shackelford
-uglyf("Query %s has %d bases\n", bq->query, bq->queryBaseCount);
-*/
-
 
 /* Seek until get something like:
  * Database: celegans98
@@ -214,6 +224,8 @@ for (;;)
 	lineFileReuse(bf->lf);
 	break;
 	}
+    if (stringIn("No hits found", line) != NULL)
+        break;
     }
 
 /* Read in gapped alignments. */
@@ -242,9 +254,9 @@ AllocVar(bga);
 bga->query = bq;
 
 /* First line should be query. */
-line = bfNextLine(bf);
-if (line == NULL)
+if (!bfSkipBlankLines(bf))
     return NULL;
+line = bfNextLine(bf);
 if (startsWith("  Database:", line))
     return NULL;
 if (line[0] != '>')
@@ -327,23 +339,45 @@ else
 static void parseBlockLine(struct blastFile *bf, int *startRet, int *endRet,
                            struct dyString *seq)
 /* read and parse the next target or query line, like:
- * Query: 26429 taccttgacattcctcagtgtgtcatcatcgttctctcctccaaacggcgagagtccgga 26488
+ *   Query: 26429 taccttgacattcctcagtgtgtcatcatcgttctctcctccaaacggcgagagtccgga 26488
+ *
+ * also handle broken NCBI tblastn output like:
+ *   Sbjct: 1181YYGEQRSTNGQTIQLKTQVFRRFPDDDDESEDHDDPDNAHESPEQEGAEGHFDLHYYENQ 1360
  */
 {
 char* line = bfNeedNextLine(bf);
 int a, b, s, e;
 char *words[16];
 int wordCount = chopLine(line, words);
-
-if ((wordCount != 4) || !isdigit(words[1][0]) || !isdigit(words[3][0]))
+if ((wordCount < 3) || (wordCount > 4)
+    || !(sameString("Query:", words[0]) || sameString("Sbjct:", words[0])))
     bfSyntax(bf);
-a = atoi(words[1]);
-b = atoi(words[3]);
+
+/* special handling for broken output */
+if (wordCount == 3)
+    {
+    char *p;
+    if (!isdigit(words[1][0]) || !isdigit(words[2][0]))
+        bfSyntax(bf);
+    a = atoi(words[1]);
+    b = atoi(words[2]);
+    p = words[1];
+    while ((*p != '\0') && (isdigit(*p)))
+        p++;
+    dyStringAppend(seq, p);
+    }
+else
+    {
+    if (!isdigit(words[1][0]) || !isdigit(words[3][0]))
+        bfSyntax(bf);
+    a = atoi(words[1]);
+    b = atoi(words[3]);
+    dyStringAppend(seq, words[2]);
+    }
 s = min(a,b);
 e = max(a,b);
 *startRet = min(s, *startRet);
 *endRet = max(e, *endRet);
-dyStringAppend(seq, words[2]);
 }
 
 struct blastBlock *blastFileNextBlock(struct blastFile *bf, 
@@ -374,10 +408,11 @@ for (;;)
 	break;
     }
 AllocVar(bb);
+bb->gappedAli = bga;
 wordCount = chopLine(line, words);
 if (wordCount < 8 || !sameWord("Score", words[0]) 
     || !isdigit(words[2][0]) || !(isdigit(words[7][0]) || words[7][0] == 'e')
-    || !sameWord("Expect", words[5]))
+    || !startsWith("Expect", words[5]))
     {
     bfError(bf, "Expecting something like:\n"
              "Score = 8770 bits (4424), Expect = 0.0");
@@ -389,6 +424,9 @@ bb->eVal = evalToDouble(words[7]);
  *   Identities = 8320/9618 (86%), Gaps = 3/9618 (0%)
  *             or
  *   Identities = 8320/9618 (86%)
+ *             or
+ *   Identities = 10/19 (52%), Positives = 15/19 (78%), Frame = +2
+ *     (wu-tblastn)
  */
 line = bfNeedNextLine(bf);
 wordCount = chopLine(line, words);
@@ -405,11 +443,18 @@ if (wordCount >= 7 && sameWord("Gaps", words[4]))
 	bfSyntax(bf);
     bb->insertCount = atoi(words[6]);
     }
+if ((wordCount >= 11) && sameWord("Frame", words[8]))
+    {
+    bb->qStrand = '+';
+    bb->tStrand = words[10][0];
+    bb->frame = atoi(words[10]);
+    }
 
 /* Process something like:
  *     Strand = Plus / Plus (blastn)
  *     Frame = +1           (tblastn)
  *     <blank line>         (blastp)
+ * note that wu-tblastn puts frame on Identities line
  */
 line = bfNeedNextLine(bf);
 wordCount = chopLine(line, words);
@@ -422,12 +467,16 @@ else if ((wordCount >= 3) && sameWord("Frame", words[0]))
     {
     bb->qStrand = '+';
     bb->tStrand = words[2][0];
-    bb->frame = atoi(words[2]+1);
+    bb->frame = atoi(words[2]);
     }
 else if (wordCount == 0)
     {
-    bb->qStrand = '+';
-    bb->tStrand = '+';
+    /* if we didn't parse frame, default it */
+    if (bb->qStrand == 0)
+        {
+        bb->qStrand = '+';
+        bb->tStrand = '+';
+        }
     }
 else
     bfError(bf, "Expecting Strand, Frame or blank line");
@@ -586,10 +635,31 @@ for (el = *pList; el != NULL; el = next)
 *pList = NULL;
 }
 
-/*
-2003/05/14 George Shackelford
-	- Ignore reading "Strand" line for BLASTP output
-	- Two fixes to handle case where seq description lines wrap around
-	- Commented out a call to "uglyf"
-*/
+void blastBlockPrint(struct blastBlock* bb, FILE* out)
+/* print a BLAST block for debugging purposes  */
+{
+fprintf(out, "    blk: %d-%d <=> %d-%d tcnt=%d mcnt=%d icnt=%d\n",
+        bb->qStart, bb->qEnd,  bb->tStart, bb->tEnd,
+        bb->totalCount, bb->matchCount, bb->insertCount);
+fprintf(out, "        Q: %s\n", bb->qSym);
+fprintf(out, "        T: %s\n", bb->tSym);
+}
 
+void blastGappedAliPrint(struct blastGappedAli* ba, FILE* out)
+/* print a BLAST gapped alignment for debugging purposes  */
+{
+struct blastBlock *bb;
+fprintf(out, "%s <=> %s\n", ba->query->query, ba->targetName);
+for (bb = ba->blocks; bb != NULL; bb = bb->next)
+    {
+    blastBlockPrint(bb, out);
+    }
+}
+
+void blastQueryPrint(struct blastQuery *bq, FILE* out)
+/* print a BLAST query for debugging purposes  */
+{
+struct blastGappedAli *ba;
+for (ba = bq->gapped; ba != NULL; ba = ba->next)
+    blastGappedAliPrint(ba, out);
+}

@@ -41,6 +41,7 @@ struct blastBlock
 /* Info about a single block of gapped alignment. */
     {
     struct blastBlock *next;
+    struct blastGappedAli *gappedAli;   /* gapped ali associated with block */
     int bitScore;                       /* About 2 bits per aligning nucleotide. */
     double eVal;                        /* Expected number of alignments in database. */
     int matchCount;                     /* Number of matching nucleotides. */
@@ -48,14 +49,14 @@ struct blastBlock
     int insertCount;                    /* Number of inserts. */
     BYTE qStrand;                       /* Query strand (+1 or -1) */
     BYTE tStrand;                       /* Target strand (+1 or -1) */
+    BYTE frame;                         /* Frame for tblastn, +/- 1, 2, 3, or
+                                         * 0 if none. */
     int qStart;                         /* Query start position. */
     int tStart;                         /* Target start position. */
     int qEnd;                           /* Query end position. */
     int tEnd;                           /* Target end position. */
     char *qSym;                         /* Query letters (including '-') */
     char *tSym;                         /* Target letters (including '-') */
-    BYTE frame;                         /* Frame for tblastn, 1, 2, 3, or
-                                         * 0 if none.  Strand not included */
     };
 
 struct blastFile *blastFileReadAll(char *fileName);
@@ -99,6 +100,15 @@ void blastBlockFree(struct blastBlock **pBb);
 
 void blastBlockFreeList(struct blastBlock **pList);
 /* Free a list of blastBlocks. */
+
+void blastBlockPrint(struct blastBlock* bb, FILE* out);
+/* print a BLAST block for debugging purposes  */
+
+void blastGappedAliPrint(struct blastGappedAli* ba, FILE* out);
+/* print a BLAST gapped alignment for debugging purposes  */
+
+void blastQueryPrint(struct blastQuery *bq, FILE* out);
+/* print a BLAST query for debugging purposes  */
 
 #endif /* BLASTPARSE_H */
 
