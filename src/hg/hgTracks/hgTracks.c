@@ -87,7 +87,7 @@
 #include "versionInfo.h"
 #include "bedCart.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.889 2005/02/04 20:43:21 kent Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.890 2005/02/04 21:39:09 kent Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -2310,8 +2310,8 @@ AllocVar(tdb);
 tg->mapName = "hgUserPsl";
 tg->canPack = TRUE;
 tg->visibility = tvPack;
-tg->longLabel = "Your Sequence from BLAT Search";
-tg->shortLabel = "BLAT Sequence";
+tg->longLabel = "Your Sequence from Blat Search";
+tg->shortLabel = "Blat Sequence";
 tg->loadItems = loadUserPsl;
 tg->mapItemName = lfMapNameFromExtra;
 tg->priority = 100;
@@ -9170,11 +9170,11 @@ hPrintf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/hgGateway?org=%s&db=%s\" class=\"
 
 if (gotBlat)
     {
-    hPrintf("<TD><P ALIGN=CENTER><A HREF=\"../cgi-bin/hgBlat?%s\" class=\"topbar\">BLAT</A></TD>", uiVars->string);
+    hPrintf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/hgBlat?%s\" class=\"topbar\">Blat</A></TD>", uiVars->string);
     }
 if (hgPcrOk(database))
     {
-    hPrintf("<TD><P ALIGN=CENTER><A HREF=\"../cgi-bin/hgPcr?%s\" class=\"topbar\">PCR</A></TD>", uiVars->string);
+    hPrintf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/hgPcr?%s\" class=\"topbar\">PCR</A></TD>", uiVars->string);
     }
 hPrintf("<TD ALIGN=CENTER><A HREF=\"%s&o=%d&g=getDna&i=mixed&c=%s&l=%d&r=%d&db=%s&%s\" class=\"topbar\">"
       " %s </A></TD>",  hgcNameAndSettings(),
@@ -9185,7 +9185,7 @@ hPrintf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/hgTables?db=%s&position=%s:%d-%d&
 
 if (hgNearOk(database))
     {
-    hPrintf("<TD><P ALIGN=CENTER><A HREF=\"../cgi-bin/hgNear?%s\" class=\"topbar\">%s</A></TD>",
+    hPrintf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/hgNear?%s\" class=\"topbar\">%s</A></TD>",
                  uiVars->string, "Gene Sorter");
     }
 
