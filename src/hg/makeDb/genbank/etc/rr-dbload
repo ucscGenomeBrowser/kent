@@ -6,7 +6,7 @@
 opts="$*"
 
 # databases to update
-databases="mm3 rn3 hg16"
+databases="mm3 rn3 hg16 fr1"
 
 # other options to include
 otherOpts="-updateDownloadSeqs"
