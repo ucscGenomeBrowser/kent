@@ -1,6 +1,7 @@
 /* hgExonerate - Convert Exonerate modified GFF files to BED format and load in database.. */
 #include "common.h"
 #include "linefile.h"
+#include "hash.h"
 #include "dystring.h"
 #include "jksql.h"
 
@@ -36,7 +37,6 @@ struct sqlConnection *conn = sqlConnect(database);
 struct dyString *dy = newDyString(2048);
 
 dyStringPrintf(dy, createString, table);
-uglyf("%s", dy->string);
 sqlMaybeMakeTable(conn, table, dy->string);
 if (clear)
     {
@@ -46,52 +46,92 @@ if (clear)
     }
 dyStringClear(dy);
 dyStringPrintf(dy, "LOAD data local infile '%s' into table %s", tabFile, table);
-uglyf("%s", dy->string);
 sqlUpdate(conn, dy->string);
 sqlDisconnect(&conn);
+}
+
+struct hash *hashGroup(struct lineFile *lf, char *s)
+/* Make a little hash from group field. */
+{
+struct hash *hash = newHash(4);
+char buf[128], *words[2], *e;
+int wordCount;
+
+for (;;)
+    {
+    s = skipLeadingSpaces(s);
+    if (s == NULL || s[0] == 0)
+        break;
+    e = strchr(s, ';');
+    if (e != NULL)
+       *e++ = 0;
+    wordCount = chopString(s, "=;", words, ArraySize(words));
+    if (wordCount != 2)
+       errAbort("malformed group line %d of %s\n", lf->lineIx, lf->fileName);
+    hashAdd(hash, words[0], cloneString(words[1]));
+    if (e == NULL)
+       break;
+    s = e;
+    }
+return hash;
 }
 
 void hgExonerate(char *database, char *table, char *file)
 /* hgExonerate - Convert Exonerate modified GFF files to BED format and load in database.. */
 {
 struct lineFile *lf = lineFileOpen(file, TRUE);
+char *line;
+int lineSize;
 FILE *f;
 char tabFileName[512];
-char *row[8];
+char *row[9];
 char *parts[6];
 char *subParts[3];
+char *strand;
 int partCount;
 double score;
 int count = 0;
 
 sprintf(tabFileName, "%s.tab", table);
-#ifdef SOON
 f = mustOpen(tabFileName, "w");
 printf("Converting %s to %s\n", file, tabFileName);
-while (lineFileRow(lf, row))
+while (lineFileNext(lf, &line, &lineSize))
     {
     ++count;
+    chopTabs(line, row);
     fprintf(f, "%s\t", row[0]);				/* chromosome. */
-    fprintf(f, "%d\t", lineFileNeedNum(lf, row, 2)-1);       /* chromStart. */
-    fprintf(f, "%s\t", row[3]);                         /* chromEnd. */
-    partCount = chopString(row[7], ".:", parts, ArraySize(parts));
-    if (partCount != 4)
-       errAbort("Unparsable field 8 line %d of %s", lf->lineIx, lf->fileName);
-    fprintf(f, "%s.%s\t", parts[0], parts[1]);          /* name. */
-    score = atof(row[4]);                               
+    fprintf(f, "%d\t", lineFileNeedNum(lf, row, 3)-1);       /* chromStart. */
+    fprintf(f, "%s\t", row[4]);                         /* chromEnd. */
+    score = atof(row[5]);                               
     if (score > 1000) score = 1000;
     if (score < 0) score = 0;
-    fprintf(f, "%d\t", round(score));			/* milliScore */
-    fprintf(f, "%s\t", row[5]);				/* strand */
-    partCount = chopByChar(parts[2], '-', subParts, ArraySize(subParts));
-    if (partCount != 2 || !isdigit(subParts[0][0]) || !isdigit(subParts[1][0]))
-       errAbort("Unparsable number range in field 8 line %d of %s", lf->lineIx, lf->fileName);
-    fprintf(f, "%d\t", atoi(subParts[0])-1);		/* otherStart */
-    fprintf(f, "%s\n", subParts[1]);			/* otherEnd */
+    strand = row[6];
+    if (startsWith("trace=", row[8]))
+        {
+	struct hash *hash = hashGroup(lf, row[8]);
+	char *trace = hashMustFindVal(hash, "trace");
+	int start = atoi(hashMustFindVal(hash, "hstart")) - 1;
+	int end = atoi(hashMustFindVal(hash, "hend"));
+	fprintf(f, "%s\t%d\t%s\t%d\t%d\n", trace, round(score), strand, start, end);
+	freeHashAndVals(&hash);
+	}
+    else
+        {
+	partCount = chopString(row[8], ".:", parts, ArraySize(parts));
+	if (partCount != 4)
+	   errAbort("Unparsable field 9 line %d of %s", lf->lineIx, lf->fileName);
+	fprintf(f, "%s.%s\t", parts[0], parts[1]);          /* name. */
+	fprintf(f, "%d\t", round(score));			/* milliScore */
+	fprintf(f, "%s\t", strand);				/* strand */
+	partCount = chopByChar(parts[2], '-', subParts, ArraySize(subParts));
+	if (partCount != 2 || !isdigit(subParts[0][0]) || !isdigit(subParts[1][0]))
+	   errAbort("Unparsable number range in field 9 line %d of %s", lf->lineIx, lf->fileName);
+	fprintf(f, "%d\t", atoi(subParts[0])-1);		/* otherStart */
+	fprintf(f, "%s\n", subParts[1]);			/* otherEnd */
+	}
     }
 carefulClose(&f);
 lineFileClose(&lf);
-#endif /* SOON */
 
 printf("Loading %d items into table %s in database %s\n", count, table, database);
 loadIntoDb(tabFileName, database, table, TRUE);
