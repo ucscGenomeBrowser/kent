@@ -10,7 +10,7 @@
 #include "hdb.h"
 #include "hgRelate.h"
 
-static char const rcsid[] = "$Id: hgLoadBed.c,v 1.25 2004/02/23 09:07:21 kent Exp $";
+static char const rcsid[] = "$Id: hgLoadBed.c,v 1.26 2004/09/10 20:18:36 braney Exp $";
 
 /* Command line switches. */
 boolean noSort = FALSE;		/* don't sort */
@@ -161,6 +161,11 @@ if (sqlTable != NULL)
     }
 else if (!oldTable)
     {
+    int minLength;
+
+    hSetDb(database);
+    minLength = hGetMinIndexLength();
+
     /* Create definition statement. */
     verbose(1, "Creating table definition for \n");
     dyStringPrintf(dy, "CREATE TABLE %s (\n", track);
@@ -195,11 +200,11 @@ else if (!oldTable)
        dyStringAppend(dy, "  expScores longblob not null,\n");
     dyStringAppend(dy, "#Indices\n");
     if (!noBin)
-       dyStringAppend(dy, "  INDEX(chrom(8),bin),\n");
+       dyStringPrintf(dy, "  INDEX(chrom(%d),bin),\n", minLength);
     if (bedSize >= 4)
        dyStringAppend(dy, "  INDEX(name(16)),\n");
-    dyStringAppend(dy, "  INDEX(chrom(8),chromStart),\n");
-    dyStringAppend(dy, "  INDEX(chrom(8),chromEnd)\n");
+    dyStringPrintf(dy, "  INDEX(chrom(%d),chromStart),\n", minLength);
+    dyStringPrintf(dy, "  INDEX(chrom(%d),chromEnd)\n", minLength);
     dyStringAppend(dy, ")\n");
     sqlRemakeTable(conn, track, dy->string);
     }

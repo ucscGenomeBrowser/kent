@@ -8,7 +8,7 @@
 #include "hdb.h"
 #include "hgRelate.h"
 
-static char const rcsid[] = "$Id: hgLoadPsl.c,v 1.26 2004/09/01 05:14:46 markd Exp $";
+static char const rcsid[] = "$Id: hgLoadPsl.c,v 1.27 2004/09/10 20:17:43 braney Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -55,9 +55,12 @@ errAbort(
   "   -nobin Repress binning");
 }
 
+
 void createTable(struct sqlConnection *conn, char* table)
 {
-char *sqlCmd = pslGetCreateSql(table, pslCreateOpts, 0);
+int minLength = hGetMinIndexLength();
+char *sqlCmd = pslGetCreateSql(table, pslCreateOpts, minLength);
+
 if (exportOutput)
     {
     char sqlFName[1024];
@@ -125,6 +128,7 @@ char tabFile[1024];
 struct sqlConnection *conn = NULL;
 char comment[256];
 
+hSetDb(database);
 if (!exportOutput)
     conn = sqlConnect(database);
 
