@@ -523,8 +523,8 @@ int cgiOptionalInt(char *varName, int defaultVal)
 /* This returns integer value of varName if it exists in cgi environment
  * and it's not just the empty string otherwise it returns defaultVal. */
 {
-char *s;
-if (!cgiVarExists(varName))
+char *s = cgiOptionalString(varName);
+if ((s == NULL) || (s[0] == 0))
     return defaultVal;
 return cgiInt(varName);
 }
