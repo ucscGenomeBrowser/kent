@@ -257,6 +257,7 @@ char o4[128]; /* Option 4 - minimum vertical range cutoff of plot */
 char o5[128]; /* Option 5 - maximum vertical range cutoff of plot */
 char o6[128]; /* Option 6 - max gap where interpolation is still done */
 char cartStr[64];
+char *fillStr;
 
 double hFactor, hFactor2;
 double minRange, maxRange;
@@ -284,14 +285,14 @@ antiAlias = sameString(aa, "on");
 //don't fill gcPercent track by default (but fill others)
 if(sameString( tg->mapName, "pGC") && sameString(database,"zooHuman3"))
 {
-    fill = atoi(cartUsualString(cart, o3, "0"));
-    cartSetString(cart, o3, "0" );
+    fillStr = cartUsualString(cart, o3, "0");
 }
 else
 {
-    fill = atoi(cartUsualString(cart, o3, "1"));
-    cartSetString(cart, o3, "1" );
+    fillStr = cartUsualString(cart, o3, "1");
 }
+fill = atoi(fillStr);
+cartSetString(cart, o3, fillStr );
 
 //the 0.1 is so the label doesn't get truncated with integer valued user input min
 //display range.
