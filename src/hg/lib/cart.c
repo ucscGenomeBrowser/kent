@@ -12,7 +12,7 @@
 #include "hdb.h"
 #include "jksql.h"
 
-static char const rcsid[] = "$Id: cart.c,v 1.45 2004/11/25 01:16:04 daryl Exp $";
+static char const rcsid[] = "$Id: cart.c,v 1.46 2005/03/24 21:18:53 braney Exp $";
 
 static char *sessionVar = "hgsid";	/* Name of cgi variable session is stored in. */
 static char *positionCgiName = "position";
@@ -878,21 +878,26 @@ void cartHtmlShell(char *title, void (*doMiddle)(struct cart *cart),
 {
 struct cart *cart;
 int status;
-char *db, *org, *pos;
+char *db, *org, *pos, *clade=NULL;
 char titlePlus[128];
+char extra[128];
 pushWarnHandler(cartEarlyWarningHandler);
 cart = cartAndCookie(cookieName, exclude, oldVars);
 getDbAndGenome(cart, &db, &org);
+clade = hClade(org);
 pos = cartOptionalString(cart, positionCgiName);
 pos = addCommasToPos(stripCommas(pos));
+*extra = 0;
+if ((clade != NULL) && sameString(clade,"ancestor"))
+    safef(extra, sizeof(extra), " Common Ancestor");
 if (pos == NULL && org != NULL) 
-    safef(titlePlus,sizeof(titlePlus), "%s - %s",org, title );
+    safef(titlePlus,sizeof(titlePlus), "%s%s - %s",org, extra, title );
 else if (pos != NULL && org == NULL)
     safef(titlePlus,sizeof(titlePlus), "%s - %s",pos, title );
 else if (pos == NULL && org == NULL)
     safef(titlePlus,sizeof(titlePlus), "%s", title );
 else
-    safef(titlePlus,sizeof(titlePlus), "%s %s - %s",org,pos, title );
+    safef(titlePlus,sizeof(titlePlus), "%s%s %s - %s",org, extra,pos, title );
 popWarnHandler();
 htmStart(stdout, titlePlus);
 cartWarnCatcher(doMiddle, cart, htmlVaWarn);
