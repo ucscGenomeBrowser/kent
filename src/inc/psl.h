@@ -68,10 +68,10 @@ void pslFreeList(struct psl **pList);
 void pslOutput(struct psl *el, FILE *f, char sep, char lastSep);
 /* Print out psl.  Separate fields with sep. Follow last field with lastSep. */
 
-#define pslTabOut(el,f) pslOutput(el,f,'\t','\n');
+#define pslTabOut(el,f) pslOutput(el,f,'\t','\n')
 /* Print out psl as a line in a tab-separated file. */
 
-#define pslCommaOut(el,f) pslOutput(el,f,',',',');
+#define pslCommaOut(el,f) pslOutput(el,f,',',',')
 /* Print out psl as a comma separated list including final comma. */
 
 /* ----- end autoSql generated part --------------- */
