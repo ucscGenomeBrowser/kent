@@ -9,7 +9,7 @@
 #include "jksql.h"
 #include "joiner.h"
 
-static char const rcsid[] = "$Id: joinerCheck.c,v 1.12 2004/03/12 09:39:45 kent Exp $";
+static char const rcsid[] = "$Id: joinerCheck.c,v 1.13 2004/03/12 09:59:04 kent Exp $";
 
 /* Variable that are set from command line. */
 boolean parseOnly; 
@@ -189,6 +189,25 @@ if (conn == NULL)
 return conn;
 }
 
+static char *doChops(struct joinerField *jf, char *id)
+/* Return chopped version of id.  (This may insert a zero into s) */
+{
+struct slName *chop;
+for (chop = jf->chopBefore; chop != NULL; chop = chop->next)
+    {
+    char *s = stringIn(chop->name, id);
+    if (s != NULL)
+	 id = s + strlen(chop->name);
+    }
+for (chop = jf->chopAfter; chop != NULL; chop = chop->next)
+    {
+    char *s = rStringIn(chop->name, id);
+    if (s != NULL)
+	*s = 0;
+    }
+return id;
+}
+
 struct hash *readKeyHash(char *db, struct joiner *joiner, 
 	struct joinerField *keyField)
 /* Read key-field into hash.  Check for dupes if need be. */
@@ -211,7 +230,6 @@ else
     struct sqlResult *sr;
     int itemCount = 0;
     int dupeCount = 0;
-    struct slName *chop;
     char *dupe = NULL;
     keyHash = hashNew(hashSize);
     safef(query, sizeof(query), "select %s from %s", 
@@ -220,19 +238,7 @@ else
     sr = sqlGetResult(conn, query);
     while ((row = sqlNextRow(sr)) != NULL)
         {
-	char *id = row[0];
-	for (chop = keyField->chopBefore; chop != NULL; chop = chop->next)
-	    {
-	    char *s = stringIn(chop->name, id);
-	    if (s != NULL)
-	         id = s + strlen(chop->name);
-	    }
-	for (chop = keyField->chopAfter; chop != NULL; chop = chop->next)
-	    {
-	    char *s = rStringIn(chop->name, id);
-	    if (s != NULL)
-	        *s = 0;
-	    }
+	char *id = doChops(keyField, row[0]);
 	if (hashLookup(keyHash, id))
 	    {
 	    if (!keyField->dupeOk)
@@ -278,13 +284,45 @@ if (conn != NULL)
 	sr = sqlGetResult(conn, query);
 	while ((row = sqlNextRow(sr)) != NULL)
 	    {
-	    ++total;
-	    if (hashLookup(keyHash, row[0]))
-	        ++hits;
-	    else
+	    if (jf->separator == NULL)
+		{
+		char *id = doChops(jf, row[0]);
+		if (hashLookup(keyHash, id))
+		    ++hits;
+		else
+		    {
+		    if (miss == NULL)
+			miss = cloneString(id);
+		    }
+		++total;
+		}
+	    else 
 	        {
-		if (miss == NULL)
-		    miss = cloneString(row[0]);
+		/* Do list. */
+		struct slName *el, *list;
+		int ix;
+		list = slNameListFromString(row[0], jf->separator[0]);
+		for (el = list, ix=0; el != NULL; el = el->next, ++ix)
+		    {
+		    char *id;
+		    char buf[16];
+		    if (jf->indexOf)
+			{
+		        safef(buf, sizeof(buf), "%d", ix);
+			id = buf;
+			}
+		    else
+		        id = doChops(jf, el->name);
+		    if (hashLookup(keyHash, id))
+			++hits;
+		    else
+			{
+			if (miss == NULL)
+			    miss = cloneString(id);
+			}
+		    ++total;
+		    }
+		slFreeList(&list);
 		}
 	    }
 	sqlFreeResult(&sr);
