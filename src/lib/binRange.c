@@ -129,11 +129,12 @@ int i,j;
 
 for (i=0; i<ArraySize(binOffsets); ++i)
     {
-    for (j=startBin; j<endBin; ++j)
+    int offset = binOffsets[i];
+    for (j=startBin+offset; j<=endBin+offset; ++j)
         {
 	for (el=bk->binLists[j]; el != NULL; el = el->next)
 	    {
-	    if (rangeIntersection(el->start, el->end, start, end))
+	    if (rangeIntersection(el->start, el->end, start, end) > 0)
 	        {
 		newEl = CloneVar(el);
 		slAddHead(&list, newEl);

@@ -62,12 +62,18 @@ void binKeeperFree(struct binKeeper **pBk);
 void binKeeperAdd(struct binKeeper *bk, int start, int end, void *val);
 /* Add item to binKeeper. */ 
 
+void binKeeperRemove(struct binKeeper *bk, int start, int end, void *val);
+/* Remove item from binKeeper. */ 
+
 struct binElement *binKeeperFind(struct binKeeper *bk, int start, int end);
 /* Return a list of all items in binKeeper that intersect range.
  * Free this list with slFreeList. */
 
 struct binElement *binKeeperFindSorted(struct binKeeper *bk, int start, int end);
 /* Like binKeeperFind, but sort list on start coordinates. */
+
+void binKeeperRemove(struct binKeeper *bk, int start, int end, void *val);
+/* Remove item from binKeeper. */ 
 
 #endif /* BINRANGE_H */
 
