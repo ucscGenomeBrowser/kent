@@ -68,6 +68,7 @@ shortLabel Mouse Ortholog
 longLabel Mouse Orthology using Fgenesh++ Gene Predictions (top 4 reciprocal best)
 priority 4.1
 visibility dense
+spectrum on
 color 0,100,0
 altColor 255,240,200
 type bed 5+
@@ -77,6 +78,7 @@ shortLabel Tight Ortholog
 longLabel Tight Mouse Orthology using Fgenesh++ Gene Predictions (only reciprocal best)
 priority 4.1
 visibility dense
+spectrum on
 color 0,100,0
 altColor 255,240,200
 type bed 5+
@@ -86,6 +88,7 @@ shortLabel Human Paralog
 longLabel Human Paralogs using Fgenesh++ Gene Predictions
 priority 4.2
 visibility hide
+spectrum on
 color 0,100,0
 altColor 255,240,200
 type bed 5+
