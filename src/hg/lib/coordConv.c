@@ -35,7 +35,8 @@ struct genomeTable genomeTable[] =  {
     {"hg5", "Oct. 7, 2000",  "/projects/cc/hg/oo.23/nib"},
     {"hg6", "Dec. 12, 2000", "/projects/hg2/gs.6/oo.27/nib"},
     {"hg7", "April 1, 2001", "/projects/hg3/gs.7/oo.29/nib"},
-    {"hg8", "Aug. 6, 2001",  "/projects/hg3/gs.8/oo.31/nib"}
+    {"hg8", "Aug. 6, 2001",  "/projects/hg3/gs.8/oo.31/nib"},
+    {"hg10", "Dec. 22, 2001 (NCBI)", "/cluster/store1/gs.11/build28"},
 };
 
 struct genomeTable *findGenome(char *db, boolean isTrans)

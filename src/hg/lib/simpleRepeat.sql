@@ -5,6 +5,7 @@
 
 #Describes the Simple Tandem Repeats
 CREATE TABLE simpleRepeat (
+    bin smallint unsigned not null,   # Bin for fast index
     chrom varchar(255) not null,	# Human chromosome or FPC contig
     chromStart int unsigned not null,	# Start position in chromosome
     chromEnd int unsigned not null,	# End position in chromosome
@@ -22,6 +23,7 @@ CREATE TABLE simpleRepeat (
     entropy float not null,	# Entropy
     sequence longblob not null,	# Sequence of repeat unit element
               #Indices
-    INDEX(chrom(12),chromStart),
-    INDEX(chrom(12),chromEnd)
+    INDEX(chrom(8),bin),
+    INDEX(chrom(8),chromStart),
+    INDEX(chrom(8),chromEnd)
 );

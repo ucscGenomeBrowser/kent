@@ -22,7 +22,7 @@ O = agpFrag.o agpGap.o bbRepMask.o bed.o cart.o cartDb.o \
     rnaGene.o roughAli.o sage.o sageExp.o sanger22extra.o \
     simpleRepeat.o snp.o softberryHom.o \
     softPromoter.o stsAlias.o stsInfo.o stsMarker.o \
-    traceInfo.o trackDb.o \
+    tilingPath.o traceInfo.o trackDb.o \
     trackDbCustom.o trackDb.o trackTable.o wabAli.o refAlign.o \
     sage.o sageExp.o pslWScore.o coordConv.o expRecord.o dnaProbe.o \
     ancientRref.o

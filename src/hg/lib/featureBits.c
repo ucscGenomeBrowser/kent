@@ -67,6 +67,12 @@ static boolean cdsQualifier(char *qualifier, char *extra, int *retSize)
 return fetchQualifiers("cds", qualifier, extra, retSize);
 }
 
+static boolean endQualifier(char *qualifier, char *extra, int *retSize)
+/* Return TRUE if it's an end qualifier. */
+{
+return fetchQualifiers("end", qualifier, extra, retSize);
+}
+
 boolean fbUnderstandTrack(char *track)
 /* Return TRUE if can turn track into a set of ranges or bits. */
 {
@@ -243,7 +249,7 @@ static struct featureBits *fbGenePredBits(int winStart, int winEnd,
 struct genePred *gp;
 char **row;
 int i, count, s, e, w, *starts, *ends;
-boolean doUp, doCds = FALSE, doExon;
+boolean doUp = FALSE, doEnd = FALSE, doCds = FALSE, doExon = FALSE;
 int promoSize = 0, extraSize = 0;
 struct featureBits *fbList = NULL;
 char nameBuf[512];
@@ -255,6 +261,9 @@ else if ((doCds = cdsQualifier(qualifier, extra, &extraSize)) != FALSE)
     {
     }
 else if ((doExon = exonQualifier(qualifier, extra, &extraSize)) != FALSE)
+    {
+    }
+else if ((doEnd = endQualifier(qualifier, extra, &extraSize)) != FALSE)
     {
     }
 while ((row = sqlNextRow(sr)) != NULL)
@@ -277,6 +286,25 @@ while ((row = sqlNextRow(sr)) != NULL)
 	sprintf(nameBuf, "%s_up_%d_%s_%d_%c", 
 		gp->name, promoSize, gp->chrom, start+1, frForStrand(strand));
 	fbAddFeature(&fbList, nameBuf, gp->chrom, start, promoSize, strand, 
+	    winStart, winEnd);
+	}
+    else if (doEnd)
+        {
+	int start;
+	char strand;
+	if (gp->strand[0] == '-')
+	    {
+	    start = gp->txStart;
+	    strand = '-';
+	    }
+	else
+	    {
+	    start = gp->txEnd - extraSize;
+	    strand = '+';
+	    }
+	sprintf(nameBuf, "%s_end_%d_%s_%d_%c", 
+		gp->name, promoSize, gp->chrom, start+1, frForStrand(strand));
+	fbAddFeature(&fbList, nameBuf, gp->chrom, start, extraSize, strand, 
 	    winStart, winEnd);
 	}
     else

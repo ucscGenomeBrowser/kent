@@ -69,10 +69,18 @@ for (bi = chromInserts->insertList; bi != NULL; bi = bi->next)
 return NULL;
 }
 
+static int chromInsertsDefaultGapSize = 200000;
+
+boolean chromInsertsSetDefaultGapSize(int size)
+/* Set default gap size. */
+{
+chromInsertsDefaultGapSize = size;
+}
+
 int chromInsertsGapSize(struct chromInserts *chromInserts, char *contig, boolean isFirst)
 /* Return size of gap before next contig. */
 {
-int size = (isFirst ? 0 : 200000);
+int size = (isFirst ? 0 : chromInsertsDefaultGapSize);
 if (chromInserts != NULL)
     {
     struct bigInsert *bi = bigInsertBeforeContig(chromInserts, contig);

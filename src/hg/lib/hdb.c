@@ -31,6 +31,7 @@ static struct dbConv dbTable[] = {
     {"hg6","Dec. 12, 2000"},
     {"hg7","April 1, 2001"},
     {"hg8","Aug. 6, 2001"},
+    {"hg10","Dec. 22, 2001 (NCBI)"},
 };
 
 static char *hdbHost;
@@ -749,9 +750,13 @@ boolean hTrackOnChrom(struct trackDb *tdb, char *chrom)
 /* Return TRUE if track exists on this chromosome. */
 {
 boolean chromOk = TRUE;
+char splitTable[64];
 if (tdb->restrictCount > 0)
     chromOk =  (stringArrayIx(chrom, tdb->restrictList, tdb->restrictCount) >= 0);
-return (chromOk && hFindSplitTable(chrom, tdb->tableName, NULL, NULL));
+return (chromOk && 
+	hFindSplitTable(chrom, tdb->tableName, splitTable, NULL) &&
+	!sameString(splitTable, "mrna")	 /* Long ago we reused this name badly. */
+	);
 }
 
 struct trackDb *hTrackDb(char *chrom)
