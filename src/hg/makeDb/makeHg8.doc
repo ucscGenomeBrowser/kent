@@ -672,8 +672,8 @@ do
 done
 
 Remove the first line from each psl file. It is junk.
-pslCat *.psl chimpBlat.psl
-hgLoadPsl chimpBlat.psl
+pslCat *.psl > chimpBlat.psl
+hgLoadPsl hg8 chimpBlat.psl
 
 
 FAKING DATA FROM PREVIOUS VERSION

@@ -28,3 +28,14 @@ altColor 200,220,255
 spectrum on
 type psl xeno
 url http://email.eva.mpg.de/~ebersber/custom_track_chimp/MPI-sg_jun02/$S/$$.html
+
+track chimpBac
+shortLabel Chimp BAC
+longLabel Pan troglodytes BAC track
+priority 28.2
+visibility dense
+color 0,60,120
+altColor 200,220,255
+spectrum on
+type psl xeno
+url http://email.eva.mpg.de/~ebersber/custom_track_chimp/Riken-be_jun02/$S/$$.html

@@ -1182,7 +1182,7 @@ Load into database as so:
        hgLoadRna add hg12 xenoEst.fa xenoEst.ra
     
 PRODUCING FISH ALIGNMENTS (DONE 08/05/02)
-
+TODO: Update this to reflect the fact that FUGU and NOT TETRA were used.
 o - Do fish/human alignments.
        ssh kk
        cd ~/oo/bed
@@ -1348,21 +1348,27 @@ LOAD ENSEMBL GENES (Done by Matt 9/20/02)
      mkdir ensembl
      cd ensembl
 
-     Get the ensembl gene data and protein data from http://www.ensembl.org/Homo_sapiens/martview
+        Get the ensembl gene data as below:
+        GET http://www.ebi.ac.uk/~stabenau/human_8_30.gtf.gz > ensGene.gz
+        (The above may only be a temproary location)
+
+        Get the ensembl protein data from http://www.ensembl.org/Homo_sapiens/martview
 
      Add "chr" to front of each line in the gene data gtf file to make it compatible with ldHgGene 
+
      ~matt/bin/addchr.pl ensGene.gtf ensembl.gtf
-     rm all.gtf
      ldHgGene hg12 ensGene ensembl.gtf
+
 o - Load Ensembl peptides:
      Get them from ensembl as above in the gene section
 
-     Substitute ENST for ENSP in ens with subs
+     Substitute ENST for ENSP in ensPep with the program called subs
      edit subs.in to read: ENSP|ENST
      subs -e ensPep.fa > /dev/null
 
      Run fixPep.pl ensPep.fa ensembl.pep
      hgPepPred hg12 generic ensPep ensembl.pep
+
 
     LOAD SANGER 22 Pseudogenes (from hg10 - Done by Robert)
     cd ~/hg12/bed/sanger22
@@ -1813,6 +1819,8 @@ TWINSCAN GENE PREDICTIONS (DONE 8/22/02)
     end
     hgPepPred hg12 generic twinscanPep chr*-fixed.fa
 
+LOAD CHIMP DATA
+
 o Load Ingo Ebersber's chimp BLAT alignments
 cd ~/oo
 mkdir bed/chimpBlat
@@ -1821,12 +1829,24 @@ cd bed/chimpBlat
 #!/bin/sh
 for i in 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 X Y
 do
-  wget http://email.eva.mpg.de/~ebersber/custom_track_chimp/MPI-sg_apr02/chr${i}_gp_F01Apr02.psl
+  wget http://email.eva.mpg.de/~ebersber/custom_track_chimp/MPI-sg_jun02/chr${i}_gp_F25Jun02.psl
 done
 
 Remove the first line from each psl file. It is junk.
-pslCat *.psl chimpBlat.psl
-hgLoadPsl chimpBlat.psl
+pslCat *.psl > chimpBlat.psl
+hgLoadPsl hg12 chimpBlat.psl
+
+o Load the chimp BAC data
+
+#!/bin/sh
+for i in 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 X Y
+do
+        wget http://email.eva.mpg.de/~ebersber/custom_track_chimp/Riken-be_jun02/chr${i}_gp_F25Jun02.psl
+done
+
+Remove the first line from each psl file. It is junk.
+pslCat *.psl > chimpBac.psl
+hgLoadPsl hg12 chimpBac.psl
 
 
 MAKING THE DOWNLOADABLE DATABASE FILES - DONE

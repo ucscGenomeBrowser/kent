@@ -1362,8 +1362,8 @@ do
 done
 
 Remove the first line from each psl file. It is junk.
-pslCat *.psl chimpBlat.psl
-hgLoadPsl chimpBlat.psl
+pslCat *.psl > chimpBlat.psl
+hgLoadPsl hg11 chimpBlat.psl
 
 
 MAKING THE DOWNLOADABLE DATABASE FILES - DONE
