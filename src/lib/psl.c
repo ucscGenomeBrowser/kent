@@ -10,13 +10,15 @@
 #include "sqlList.h"
 #include "localmem.h"
 #include "psl.h"
+#include "hash.h"
 #include "linefile.h"
 #include "dnaseq.h"
 #include "dystring.h"
 #include "fuzzyFind.h"
 #include "aliType.h"
+#include "binRange.h"
 
-static char const rcsid[] = "$Id: psl.c,v 1.28 2003/09/11 14:14:02 braney Exp $";
+static char const rcsid[] = "$Id: psl.c,v 1.29 2003/09/19 19:17:27 baertsch Exp $";
 
 static char *createString = 
 "CREATE TABLE %s (\n"
@@ -1153,3 +1155,39 @@ chkRanges(pslDesc, out, psl, psl->qName, "query", 'q',
 return errCount;
 }
 
+struct hash *readPslToBinKeeper(char *sizeFileName, char *pslFileName)
+/* read a list of psls and return results in hash of binKeeper structure for fast query*/
+{
+struct binKeeper *bk; 
+int size;
+struct psl *psl;
+struct lineFile *sf = lineFileOpen(sizeFileName, TRUE);
+struct lineFile *pf = lineFileOpen(pslFileName , TRUE);
+struct hash *hash = newHash(0);
+char *chromRow[2];
+char *row[21] ;
+
+while (lineFileRow(sf, chromRow))
+    {
+    char *name = chromRow[0];
+    int size = lineFileNeedNum(sf, chromRow, 1);
+
+    if (hashLookup(hash, name) != NULL)
+        warn("Duplicate %s, ignoring all but first\n", name);
+    else
+        {
+        bk = binKeeperNew(0, size);
+        assert(size > 1);
+	hashAdd(hash, name, bk);
+        }
+    }
+while (lineFileNextRow(pf, row, ArraySize(row)))
+    {
+    psl = pslLoad(row);
+    bk = hashMustFindVal(hash, psl->tName);
+    binKeeperAdd(bk, psl->tStart, psl->tEnd, psl);
+    }
+lineFileClose(&pf);
+lineFileClose(&sf);
+return hash;
+}
