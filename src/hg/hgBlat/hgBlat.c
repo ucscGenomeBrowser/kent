@@ -10,7 +10,7 @@
 #include "cheapcgi.h"
 #include "htmshell.h"
 
-char *defaultDatabase = "hg5";	/* Default database. */
+char *defaultDatabase = "hg6";	/* Default database. */
 
 struct serverTable
 /* Information on a server. */
@@ -426,13 +426,13 @@ printf("%s",
 "acids or more.  In practice DNA BLAT works well on primates, and protein\n"
 "blat on land vertebrates\n</P>"
 "<P>BLAT is not BLAST.  DNA BLAT works by keeping an index of the entire genome\n"
-"in memory.  The index consists of all non-overlapping 12-mers except for\n"
+"in memory.  The index consists of all non-overlapping 11-mers except for\n"
 "those heavily involved in repeats.  The index takes up a bit less than\n"
 "a gigabyte of RAM.  The genome itself is not kept in memory, allowing\n"
 "BLAT to deliver high performance on a reasonably priced Linux box.\n"
 "The index is used to find areas of probable homology, which are then\n"
 "loaded into memory for a detailed alignment. Protein BLAT works in a similar\n"
-"manner, except with 4-mers rather than 12-mers.  The protein index takes a little\n"
+"manner, except with 4-mers rather than 11-mers.  The protein index takes a little\n"
 "more than 2 gigabytes</P>\n"
 "<P>BLAT was written by <A HREF=\"mailto:jim_kent@pacbell.net\">Jim Kent</A>.\n"
 "Like most of Jim's software interactive use on this web server is free to all.\n"

@@ -113,12 +113,11 @@ struct clone *readCloneList(char *fileName, struct hash *cloneHash)
 struct clone *cloneList = NULL, *clone;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
 int wordCount;
-char *words[16];
+char *words[8];
 struct hashEl *hel;
 
-while ((wordCount = lineFileChop(lf, words)) != 0)
+while (lineFileRow(lf, words))
     {
-    lineFileExpectWords(lf, 8, wordCount);
     AllocVar(clone);
     chopSuffix(words[0]);
     hel = hashAddUnique(cloneHash, words[0], clone);

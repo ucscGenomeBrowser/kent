@@ -9,7 +9,7 @@
 
 char *finChroms[] = 
 /* Chromosomes that are finished - no need to assemble these. */
-    { "21", "22", };
+    { "20", "21", "22", };
 
 void usage()
 /* Explain usage and exit. */
@@ -182,6 +182,7 @@ char *shortType, *type, *suffix;
 char liftDir[512];
 boolean gotSizes = FALSE;
 struct hash *insertsHash = newHash(8);
+struct hash *contigHash = newHash(0);
 struct chromInserts *chromInsertList = NULL, *chromInserts;
 
 chromInsertList = chromInsertsRead(inserts, insertsHash);
@@ -233,6 +234,8 @@ while (lineFileNext(lf, &line, &lineSize))
 	    warn("No inserts found for %s", chromName);
 	ciList = readContigs(lf);
 	}
+    for (ci = ciList; ci != NULL; ci = ci->next)
+	hashStore(contigHash, ci->name);
     gotSizes |= fillInSizes(ciList, ooDir, shortName);
 
     sprintf(liftDir, "%s/%s/lift", ooDir, shortName);
@@ -249,6 +252,21 @@ while (lineFileNext(lf, &line, &lineSize))
 if (!gotSizes)
     warn("All contigs size 0??? Maybe you need to run goldToAgp.", chrom);
 lineFileClose(&lf);
+
+/* Check that all contigs in insert file are actually used. */
+for (chromInserts = chromInsertList; chromInserts != NULL; chromInserts = chromInserts->next)
+    {
+    struct bigInsert *bi;
+    for (bi = chromInserts->insertList; bi != NULL; bi = bi->next)
+        {
+	if (bi->ctgBefore && !hashLookup(contigHash, bi->ctgBefore))
+	    warn("Contig %s (chromosome %s) in inserts file but not map",
+	    	bi->ctgBefore, chromInserts->chrom);
+	if (bi->ctgAfter && !hashLookup(contigHash, bi->ctgAfter))
+	    warn("Contig %s (chromosome %s) in inserts file but not map",
+	    	bi->ctgAfter, chromInserts->chrom);
+	}
+    }
 }
 
 
