@@ -56,7 +56,7 @@ for (i=0; i<count; ++i)
     oneVar = (average-val);
     totalVar += oneVar*oneVar;
     }
-printf("standard deviation %f\n", sqrt(totalVar)/count);
+printf("standard deviation %f\n", sqrt(totalVar/count));
 }
 
 void ave(char *fileName)
