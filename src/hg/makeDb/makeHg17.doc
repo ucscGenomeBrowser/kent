@@ -7574,24 +7574,21 @@ XXX - running 2004-07-01 11:26
 
     # GOT HERE
 
-    # lift results
+    # lift results (use bash)
+    cd /cluster/data/hg17/bed/blat.hg16
+    for file in /cluster/data/hg16/nib/*.nib; do
+       chrom=`basename $file .nib`
+       liftUp -pslQ psl/$chrom.psl /cluster/bluearc/hg/gs.17/build34/liftOver/lift/$chrom.lft warn raw/chr*_${chrom}.psl
+    done
+    # There were some errors from not finding .lft files for the chr_random ones.
+    ssh kk9
+    cd ../liftOver
+    ln -s blat.hg16 blat.hg16.2005-01-22
+    makeLoChain-chain hg17 /cluster/data/hg17/nib hg16 /cluster/data/hg16/nib 2>chain.error.log >chain.log
     ssh eieio
-    cd /cluster/data/hg17
-    mkdir -p bed/liftOver
-    cd bed/liftOver
-    # lift directory defined in makeHg17.doc when split was performed
-    makeLoChain-lift hg17 hg16 /cluster/bluearc/hg/gs.17/build34/liftOver/lift
-                        >&! lift.log &
-    tail -100f lift.log
-    # GOT HERE -- error messages in lift log
-
-    # chain alignments
-    makeLoChain-chain
-    ssh kk
-
-    makeLoChain-net
-    makeLoChain-load
-
+    makeLoChain-net hg17 hg16
+    ssh hgwdev
+    makeLoChain-load hg17 hg16
 
 # Completed: 116281 of 116281 jobs
 # CPU time in finished jobs:   21807388s  363456.46m  6057.61h  252.40d  0.692 y
