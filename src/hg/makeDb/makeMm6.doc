@@ -1,7 +1,7 @@
 # This file describes browser build for the mouse
 # genome, March 2005, ncbi mouse_34 - Mm6
 #
-#	"$Id: makeMm6.doc,v 1.7 2005/03/17 20:53:35 hiram Exp $"
+#	"$Id: makeMm6.doc,v 1.8 2005/03/17 23:48:26 hiram Exp $"
 #
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2005-03-09 - Hiram)
 #
@@ -921,7 +921,7 @@ SEQ2_LEN=$BASE/S2.len
 XXXX - RUNNING - 2005-03-15 16:20
 
 #########################################################################
-# BLASTZ RAT Rn3 (WORKING - 2005-03-15 - Hiram)
+# BLASTZ RAT Rn3 (DONE - 2005-03-15 - 2005-03-17 - Hiram)
     ssh kksilo
     mkdir /cluster/data/mm6/bed/blastzRn3.2005_03_15
     cd /cluster/data/mm6/bed/blastzRn3.2005_03_15
@@ -977,7 +977,7 @@ SEQ2_LEN=$BASE/S2.len
     #	to reattach to this screen session:
     ssh kksilo
     screen -d -r
-XXXX - RUNNING - 2005-03-16 11:33
+    #	STARTED - 2005-03-16 11:33
 # Completed: 40713 of 40713 jobs
 # CPU time in finished jobs:   18170174s  302836.24m  5047.27h  210.30d  0.576 y
 # IO & Wait Time:               1770530s   29508.83m   491.81h   20.49d  0.056 y
@@ -999,6 +999,11 @@ XXXX - RUNNING - 2005-03-16 11:33
 # Average job time:                 350s       5.83m     0.10h    0.00d
 # Longest job:                     1016s      16.93m     0.28h    0.01d
 # Submission to last job:          1482s      24.70m     0.41h    0.02d
+
+    #	real    1545m58.914s
+    #	user    0m0.461s
+    #	sys     0m0.360s
+    #	FINISHED - 2005-03-17 13:26
 
 #########################################################################
 # BLASTZ Zebrafish danRer2 (WORKING - 2005-03-17 - Hiram)
