@@ -9879,7 +9879,549 @@ line+ psl/$(root1)_$(root2).psl}
     gunzip ensemblPep.fa.gz
     hgPepPred hg17 ensembl ensemblPep.fa
 
+# UPDATE GENE SORTER TABLES (AKA: FAMILY BROWSER) (DONE - 2004-11-29 - Fan)
+#	This should be done after knownGene tables are complete from known gene
+#	process.
+#
+# Cluster together various alt-splicing isoforms.
+#	Creates the knownIsoforms and knownCanonical tables
+ssh hgwdev
+mkdir /cluster/data/hg17/bed/geneSorter.2004-11-24
+# remove old symbolic link
+rm /cluster/data/hg17/bed/geneSorter
+ln -s /cluster/data/hg17/bed/geneSorter.2004-11-24 \
+	/cluster/data/hg17/bed/geneSorter
+cd /cluster/data/hg17/bed/geneSorter
+hgClusterGenes hg17 knownGene knownIsoforms knownCanonical
 
+# Extract peptides from knownGenes into fasta file
+# and create a blast database out of them.
+mkdir /cluster/data/hg17/bed/geneSorter/blastp
+cd /cluster/data/hg17/bed/geneSorter/blastp
+pepPredToFa hg17 knownGenePep known.faa
+#	You may need to build this binary in src/hg/near/pepPredToFa
+/scratch/blast/formatdb -i known.faa -t known -n known
+#	This command is in /projects/compbio/bin/$MACH/formatdb
 
+# Copy over database to bluearc
+rm -fr /cluster/bluearc/hg17/blastp
+mkdir -p /cluster/bluearc/hg17/blastp
+cp -p /cluster/data/hg17/bed/geneSorter/blastp/known.* \
+	/cluster/bluearc/hg17/blastp
 
+#	Had to pick up a new blastall binary (2004-06-15)
+#	Our old one would no longer run on our systems that have
+#	updated Linux versions
+mkdir /cluster/bluearc/blast2210
+cd /cluster/bluearc/blast2210
+wget --timestamping \
+    ftp://ftp.ncbi.nlm.nih.gov/blast/executables/release/2.2.10/blast-2.2.10-ia32-linux.tar.gz
+wget --timestamping \
+    ftp://ftp.ncbi.nlm.nih.gov/blast/executables/release/2.2.10/ChangeLog.txt
+wget --timestamping \
+    ftp://ftp.ncbi.nlm.nih.gov/blast/executables/release/2.2.10/ReleaseNotes.txt
+tar xvzf blast-2.2.10-ia32-linux.tar.gz
+
+# Split up fasta file into bite sized chunks for cluster
+cd /cluster/data/hg17/bed/geneSorter/blastp
+mkdir split
+faSplit sequence known.faa 8000 split/kg
+
+# Make parasol run directory
+ssh kk
+mkdir /cluster/data/hg17/bed/geneSorter/blastp/self
+cd /cluster/data/hg17/bed/geneSorter/blastp/self
+mkdir run
+cd run
+mkdir out
+
+# Make blast script
+cat  << '_EOF_' > blastSome
+#!/bin/sh
+BLASTMAT=/cluster/bluearc/blast229/data /cluster/bluearc/blast229/blastall \
+-p blastp -d /cluster/bluearc/hg17/blastp/known -i $1 -o $2 \
+-e 0.01 -m 8 -b 1000
+'_EOF_'
+    # << keep emacs happy
+chmod +x blastSome
+
+# Make gensub2 file
+cat  << '_EOF_' > gsub
+#LOOP
+blastSome {check in line+ $(path1)} {check out line out/$(root1).tab}
+#ENDLOOP
+'_EOF_'
+    # << keep emacs happy
+
+# Create parasol batch
+#	'ls ../../split/*.fa' is too much, hence the echo
+echo ../../split/*.fa | wordLine stdin > split.lst
+gensub2 split.lst single gsub jobList
+para create jobList
+para try
+# Wait a couple of minutes, and do a para check,  if all is good
+# then do a
+para push
+# This should finish in ~15 minutes if the cluster is free.
+Completed: 7748 of 7748 jobs
+CPU time in finished jobs:     191136s    3185.59m    53.09h    2.21d  0.006 y
+IO & Wait Time:                 66703s    1111.72m    18.53h    0.77d  0.002 y
+Average job time:                  33s       0.55m     0.01h    0.00d
+Longest job:                      370s       6.17m     0.10h    0.00d
+Submission to last job:           747s      12.45m     0.21h    0.01d
+
+# Load into database.  This takes about 30 minutes
+ssh hgwdev
+cd /cluster/data/hg17/bed/geneSorter/blastp/self/run/out
+time hgLoadBlastTab hg17 knownBlastTab *.tab
+# Scanning through 7748 files
+# Loading database with 12810133 rows
+# 306.480u 54.190s 26:35.50 22.6% 0+0k 0+0io 206pf+0w
+
+cd /cluster/data/hg17/bed/geneSorter
+# Create table that maps between known genes and RefSeq
+hgMapToGene hg17 refGene knownGene knownToRefSeq
+#	may need to build this command in src/hg/near/hgMapToGene
+#	hgsql -e "select count(*) from knownToRefSeq;" hg17
+#	row count changed 37611
+
+# Create table that maps between known genes and LocusLink
+hgsql --skip-column-names -e "select mrnaAcc,locusLinkId from refLink" hg17 \
+	> refToLl.txt
+hgMapToGene hg17 refGene knownGene knownToLocusLink -lookup=refToLl.txt
+#	hgsql -e "select count(*) from knownToLocusLink;" hg17
+#	row count changed to 37611
+
+# Create table that maps between known genes and Pfam domains
+hgMapViaSwissProt hg17 knownGene name proteinID Pfam knownToPfam
+#	hgsql -e "select count(*) from knownToPfam;" hg17
+#	row count changed to 36302
+
+# Create table to map between known genes and GNF Atlas2
+# expression data.
+    hgMapToGene hg17 gnfAtlas2 knownGene knownToGnfAtlas2 '-type=bed 12'
+#	hgsql -e "select count(*) from knownToGnfAtlas2;" hg17
+#	row count changed to 36373
+
+# Create expression distance table - takes about an hour
+    hgExpDistance hg17 hgFixed.gnfHumanAtlas2MedianRatio \
+    	hgFixed.gnfHumanAtlas2MedianExps gnfAtlas2Distance \
+	-lookup=knownToGnfAtlas2
+# Have 44696 elements in hgFixed.gnfHumanAtlas2MedianRatio
+# Got 36373 unique elements in hgFixed.gnfHumanAtlas2MedianRatio
+
+#	hgsql -e "select count(*) from gnfAtlas2Distance;" hg17
+#	row count changed to 36373000
+
+# Create a table that maps between known genes and 
+# the nice affy expression data.
+hgMapToGene "-type=bed 12" hg17 affyUclaNorm knownGene knownToU133
+#	hgsql -e "select count(*) from knownToU133;" hg17
+#	row count changed to 37299
+
+# Create expression distance table.  This will take about 2.5 hours
+cd /tmp
+cp -p ~/kent/src/hg/near/hgExpDistance/affyUcla.weight .
+time hgExpDistance hg17 affyUclaNorm affyUclaExp knownExpDistance \
+	-weights=affyUcla.weight -lookup=knownToU133
+# Have 43039 elements in affyUclaNorm
+# 211 genes, 42 weights, 26.500000 total wieght
+# Got 37299 unique elements in affyUclaNorm
+# 8212.320u 217.310s 2:38:07.84 88.8%     0+0k 0+0io 267pf+0w
+# Create table that maps between known genes and 
+# the GNF data.
+cd /tmp
+hgMapToGene hg17 affyU95 knownGene knownToU95
+#	row count changed to 18791
+#	hgFixed.gnfHumanU95Exps argument is unused, no need to exist
+hgExpDistance hg17 hgFixed.gnfHumanU95MedianRatio \
+	hgFixed.gnfHumanU95Exps gnfU95Distance  -lookup=knownToU95
+# Have 11545 elements in hgFixed.gnfHumanU95MedianRatio
+# Got 17682 unique elements in hgFixed.gnfHumanU95MedianRatio
+#	row count changed to 17682000 
+
+# Create known gene mapping table and expression distance tables
+# for GNF Atlas 2.  (The hgExpDistance takes only 10 minutes.)
+
+hgMapToGene hg17 affyGnf1h knownGene knownToGnf1h
+hgExpDistance hg17 hgFixed.gnfHumanAtlas2MedianRatio \
+	hgFixed.gnfHumanAtlas2MedianExps gnfAtlas2Distance \
+	-lookup=knownToGnf1h
+# Have 44696 elements in hgFixed.gnfHumanAtlas2MedianRatio
+# Got 10273 unique elements in hgFixed.gnfHumanAtlas2MedianRatio
+
+cd /cluster/data/hg17/bed/geneSorter
+hgMapToGene hg17 affyU133Plus2 knownGene knownToU133Plus2
+#	row count changed to 40015 
+
+# Make sure that GO database is up to date.
+# UPDATE GO DATABASE (DONE 11/24/04 Fan)
+
+# Download the terms and make the database.
+ssh hgwdev
+mkdir /cluster/store1/geneOntology/20041124
+cd /cluster/store1/geneOntology/20041124
+
+wget --timestamping http://www.godatabase.org/dev/database/archive/latest/go_200411-assocdb-data.gz
+
+hgsql mysql <<end
+create database go041124;
+end
+zcat go_*data.gz | hgsql go041124
+
+wget -timestamping ftp://ftp.geneontology.org/pub/go/gene-associations/gene_association.goa_sptr.gz
+
+wget --timestamping ftp://ftp.geneontology.org/pub/go/gene-associations/gene_association.goa_uniprot.gz
+
+zcat gene_association.goa_uniprot.gz | hgGoAssociation go041124 goaPart stdin 
+# Passed 4502016 of 5291097 of 5291097, 85.09%
+
+# Ask sys-admin to switch the database pointer go to point to go041124.
+
+cd /cluster/data/hg17/bed/geneSorter
+
+XXX - DO NOT YET HAVE ensGene table - must wait on Ensembl to release that
+XXX - have not created the knownToEnsembl table yet - 2004-07-15 - Hiram
+# Create knownToEnsembl column
+hgMapToGene hg17 ensGene knownGene knownToEnsembl
+#	table row count went from previous version: 36068 to 38251
+
+# Make knownToCdsSnp table (Heather did this table, Nov 29, 2004)
+  ssh hgwdev
+  nice hgMapToGene hg17 snp knownGene knownToCdsSnp -all -cds
+# row count 168336
+# approx. 5 minutes running time
+
+# Make C. elegans ortholog column using blastp on wormpep.
+# First make C. elegans protein database and copy it to cluster/bluearc
+# There was no /cluster/bluearc/ce1/blastp, so get the latest wormpep from Sanger
+cd /cluster/data/ce1/bed/blastp
+mkdir old
+cp -p * old
+wget --timestamp ftp://ftp.sanger.ac.uk/pub/databases/wormpep/wormpep134/wormpep134
+mv wormpep134 wormPep.faa
+formatdb -i wormPep.faa -t wormPep -n wormPep
+#copy them to /cluster/bluearc
+ssh kkr1u00
+mkdir -p /cluster/bluearc/ce1/blastp
+cp /cluster/data/ce1/bed/blastp/wormPep.p?? /cluster/bluearc/ce1/blastp
+
+#	The blast jobs below can be run on the kk or kk9 clusters
+# Create the ceBlastTab
+ssh kk9
+mkdir /cluster/data/hg17/bed/geneSorter/blastp/ce1
+cd /cluster/data/hg17/bed/geneSorter/blastp/ce1
+mkdir run
+cd run
+mkdir out
+
+# Make blast script
+cat  << '_EOF_' > blastSome
+#!/bin/sh
+BLASTMAT=/cluster/bluearc/blast229/data /cluster/bluearc/blast229/blastall \
+	-p blastp -d /cluster/bluearc/ce1/blastp/wormPep \
+	-i $1 -o $2 -e 0.01 -m 8 -b 1
+'_EOF_'
+    # << keep emacs happy
+chmod a+x blastSome
+
+# Make gensub2 file
+cat << '_EOF_' > gsub
+#LOOP
+blastSome {check in line+ $(path1)} {check out line out/$(root1).tab}
+#ENDLOOP
+'_EOF_'
+    # << keep emacs happy
+
+# Create parasol batch
+echo ../../split/*.fa | wordLine stdin > split.lst
+gensub2 split.lst single gsub jobList
+para create jobList
+para try
+para check
+para push ... etc ...
+#	Only takes 10 minutes on an idle cluster
+# Completed: 7748 of 7748 jobs
+# CPU time in finished jobs:      33235s     553.91m     9.23h    0.38d  0.001 y
+# IO & Wait Time:                 19891s     331.52m     5.53h    0.23d  0.001 y
+# Average job time:                   7s       0.11m     0.00h    0.00d
+# Longest job:                       68s       1.13m     0.02h    0.00d
+# Submission to last job:           653s      10.88m     0.18h    0.01d
+
+# Load into database.  
+ssh hgwdev
+cd /cluster/data/hg17/bed/geneSorter/blastp/ce1/run/out
+hgLoadBlastTab hg17 ceBlastTab -maxPer=1 *.tab
+#	row count changed to 28252
+
+# Make mouse ortholog column using blastp on mouse known genes.
+# First make mouse protein database and copy it to cluster/bluearc
+# if it doesn't exist already
+#	This already exists.  See makeMm5.doc for procedure
+#	the directory: /cluster/bluearc/scratch/mus/mm5/blastp should have data
+
+# Make parasol run directory 
+ssh kk
+mkdir /cluster/data/hg17/bed/geneSorter/blastp/mm5
+cd /cluster/data/hg17/bed/geneSorter/blastp/mm5
+mkdir run
+cd run
+mkdir out
+
+# Make blast script
+cat  << '_EOF_' > blastSome
+#!/bin/sh
+BLASTMAT=/cluster/bluearc/blast229/data /cluster/bluearc/blast229/blastall \
+	-p blastp -d /cluster/bluearc/scratch/mus/mm5/blastp/known \
+	-i $1 -o $2 -e 0.001 -m 8 -b 1
+'_EOF_'
+    # << keep emacs happy
+chmod a+x blastSome
+
+# Make gensub2 file
+cat << '_EOF_' > gsub
+#LOOP
+blastSome {check in line+ $(path1)} {check out line out/$(root1).tab}
+#ENDLOOP
+'_EOF_'
+    # << keep emacs happy
+
+# Create parasol batch
+#	this echo trick is used because otherwise the command line is
+#	too long and you can not do a simple ls
+echo ../../split/*.fa | wordLine stdin > split.lst
+gensub2 split.lst single gsub jobList
+para create jobList
+para try
+para check
+para push ... etc ...
+# Completed: 7748 of 7748 jobs
+# CPU time in finished jobs:     141842s    2364.04m    39.40h    1.64d  0.004 y
+# IO & Wait Time:                 52251s     870.85m    14.51h    0.60d  0.002 y
+# Average job time:                  25s       0.42m     0.01h    0.00d
+# Longest job:                      254s       4.23m     0.07h    0.00d
+# Submission to last job:           540s       9.00m     0.15h    0.01d
+
+# Load into database.  
+ssh hgwdev
+cd /cluster/data/hg17/bed/geneSorter/blastp/mm5/run/out
+hgLoadBlastTab hg17 mmBlastTab -maxPer=1 *.tab
+# Scanning through 7748 files
+#	row count changed to 37549 
+
+# Make rat ortholog column using blastp on rat known genes.
+# First make rat protein database and copy it to cluster/bluearc
+# if it doesn't exist already
+#	This already exists.  See makeRn3.doc for procedure.
+#	Files were put in this directory: /cluster/bluearc/rn3/blastp/
+
+# Make parasol run directory 
+ssh kk
+mkdir /cluster/data/hg17/bed/geneSorter/blastp/rn3
+cd /cluster/data/hg17/bed/geneSorter/blastp/rn3
+mkdir run
+cd run
+mkdir out
+
+# Make blast script
+cat  << '_EOF_' > blastSome
+#!/bin/sh
+BLASTMAT=/cluster/bluearc/blast229/data /cluster/bluearc/blast229/blastall \
+    -p blastp -d /cluster/bluearc/rn3/blastp/known \
+    -i $1 -o $2 -e 0.001 -m 8 -b 1
+'_EOF_'
+    # << keep emacs happy
+chmod a+x blastSome
+
+# Make gensub2 file
+cat << '_EOF_' > gsub
+#LOOP
+blastSome {check in line+ $(path1)} {check out line out/$(root1).tab}
+#ENDLOOP
+'_EOF_'
+    # << keep emacs happy
+
+# Create parasol batch
+#	this echo trick is used because otherwise the command line is
+#	too long and you can not do a simple ls
+echo ../../split/*.fa | wordLine stdin > split.lst
+gensub2 split.lst single gsub jobList
+para create jobList
+para try
+para check
+para push ... etc ...
+# Completed: 7748 of 7748 jobs
+# CPU time in finished jobs:      31786s     529.77m     8.83h    0.37d  0.001 y
+# IO & Wait Time:                 25795s     429.91m     7.17h    0.30d  0.001 y
+# Average job time:                   7s       0.12m     0.00h    0.00d
+# Longest job:                       75s       1.25m     0.02h    0.00d
+# Submission to last job:           157s       2.62m     0.04h    0.00d
+
+# Load into database.  
+ssh hgwdev
+cd /cluster/data/hg17/bed/geneSorter/blastp/rn3/run/out
+hgLoadBlastTab hg17 rnBlastTab -maxPer=1 *.tab
+# Scanning through 7748 files
+#Loading database with 26133 rows
+
+# Make Danio rerio (zebrafish) ortholog column using blastp on Ensembl.
+# First make protein database and copy it to cluster/bluearc
+# if it doesn't exist already
+# NOTE: data used to reside in /cluster/bluearc/dr1/blastp
+mv /cluster/bluearc/dr1/blastp /cluster/bluearc/danRer1/blastp
+#	the directory: /cluster/bluearc/danRer1/blastp should have data
+
+# Make parasol run directory 
+ssh kk
+mkdir /cluster/data/hg17/bed/geneSorter/blastp/danRer1
+cd /cluster/data/hg17/bed/geneSorter/blastp/danRer1
+mkdir run
+cd run
+mkdir out
+
+# Make blast script
+cat  << '_EOF_' > blastSome
+#!/bin/sh
+BLASTMAT=/cluster/bluearc/blast229/data /cluster/bluearc/blast229/blastall \
+	-p blastp -d /cluster/bluearc/danRer1/blastp/ensembl \
+	-i $1 -o $2 -e 0.005 -m 8 -b 1
+'_EOF_'
+    # << keep emacs happy
+chmod a+x blastSome
+
+# Make gensub2 file
+cat << '_EOF_' > gsub
+#LOOP
+blastSome {check in line+ $(path1)} {check out line out/$(root1).tab}
+#ENDLOOP
+'_EOF_'
+    # << keep emacs happy
+
+# Create parasol batch
+echo ../../split/*.fa | wordLine stdin > split.lst
+gensub2 split.lst single gsub jobList
+para create jobList
+para try
+para check
+para push ... etc ...
+# Completed: 7748 of 7748 jobs
+# CPU time in finished jobs:     102324s    1705.39m    28.42h    1.18d  0.003 y
+# IO & Wait Time:                 47203s     786.72m    13.11h    0.55d  0.001 y
+# Average job time:                  19s       0.32m     0.01h    0.00d
+# Longest job:                      230s       3.83m     0.06h    0.00d
+# Submission to last job:           427s       7.12m     0.12h    0.00d
+
+# Load into database.  
+ssh hgwdev
+cd /cluster/data/hg17/bed/geneSorter/blastp/danRer1/run/out
+hgLoadBlastTab hg17 drBlastTab -maxPer=1 *.tab
+# Loading database with 33852 rows
+
+# Make Saccharomyces cerevisiae (yeast) ortholog column using blastp on RefSeq.
+# First make protein database and copy it to cluster/bluearc
+# if it doesn't exist already
+#	This is already done, see makeMm3.doc for procedure
+#	the directory: /cluster/bluearc/sc1/blastp should have data
+
+# Make parasol run directory 
+ssh kk
+mkdir /cluster/data/hg17/bed/geneSorter/blastp/sc1
+cd /cluster/data/hg17/bed/geneSorter/blastp/sc1
+mkdir run
+cd run
+mkdir out
+
+# Make blast script
+cat  << '_EOF_' > blastSome
+#!/bin/sh
+BLASTMAT=/cluster/bluearc/blast229/data /cluster/bluearc/blast229/blastall \
+	-p blastp -d /cluster/bluearc/sc1/blastp/sgd \
+	-i $1 -o $2 -e 0.01 -m 8 -b 1
+'_EOF_'
+    # << keep emacs happy
+chmod a+x blastSome
+
+# Make gensub2 file
+cat << '_EOF_' > gsub
+#LOOP
+blastSome {check in line+ $(path1)} {check out line out/$(root1).tab}
+#ENDLOOP
+'_EOF_'
+    # << keep emacs happy
+
+# Create parasol batch
+echo ../../split/*.fa | wordLine stdin > split.lst
+gensub2 split.lst single gsub jobList
+para create jobList
+para try
+para check
+para push ... etc ...
+# Completed: 7748 of 7748 jobs
+# CPU time in finished jobs:      20983s     349.72m     5.83h    0.24d  0.001 y
+# IO & Wait Time:                 25513s     425.21m     7.09h    0.30d  0.001 y
+# Average job time:                   6s       0.10m     0.00h    0.00d
+# Longest job:                       37s       0.62m     0.01h    0.00d
+# Submission to last job:           106s       1.77m     0.03h    0.00d
+# Load into database.  
+ssh hgwdev
+cd /cluster/data/hg17/bed/geneSorter/blastp/sc1/run/out
+hgLoadBlastTab hg17 scBlastTab -maxPer=1 *.tab
+# Loading database with 18489 rows
+
+# Make Drosophila melanagaster ortholog column using blastp on FlyBase.
+# First make SwissProt protein database and copy it to cluster/bluearc
+# if it doesn't exist already
+#	This is already done, see makeMm3.doc for procedure
+#	the directory: /cluster/bluearc/dm1/blastp should have data
+
+# Make parasol run directory 
+ssh kk
+mkdir /cluster/data/hg17/bed/geneSorter/blastp/dm1
+cd /cluster/data/hg17/bed/geneSorter/blastp/dm1
+mkdir run
+cd run
+mkdir out
+
+# Make blast script
+cat  << '_EOF_' > blastSome
+#!/bin/sh
+BLASTMAT=/cluster/bluearc/blast229/data /cluster/bluearc/blast229/blastall \
+	-p blastp -d /cluster/bluearc/dm1/blastp/flyBase \
+	-i $1 -o $2 -e 0.01 -m 8 -b 1
+'_EOF_'
+    # << keep emacs happy
+chmod a+x blastSome
+
+# Make gensub2 file
+cat << '_EOF_' > gsub
+#LOOP
+blastSome {check in line+ $(path1)} {check out line out/$(root1).tab}
+#ENDLOOP
+'_EOF_'
+    # << keep emacs happy
+
+# Create parasol batch
+echo ../../split/*.fa | wordLine stdin > split.lst
+gensub2 split.lst single gsub jobList
+para create jobList
+para try
+para check
+para push ... etc ...
+# Completed: 7748 of 7748 jobs
+# CPU time in finished jobs:      83377s    1389.62m    23.16h    0.97d  0.003 y
+# IO & Wait Time:                 39913s     665.21m    11.09h    0.46d  0.001 y
+# Average job time:                  16s       0.27m     0.00h    0.00d
+# Longest job:                      167s       2.78m     0.05h    0.00d
+# Submission to last job:           365s       6.08m     0.10h    0.00d
+
+# Load into database.  
+ssh hgwdev
+cd /cluster/data/hg17/bed/geneSorter/blastp/dm1/run/out
+hgLoadBlastTab hg17 dmBlastTab -maxPer=1 *.tab
+# Loading database with 30067 rows
+
+# update knownToHInv table
+# Verified that there is now new release of HInv data.
+hgMapToGene hg17 HInvGeneMrna knownGene knownToHInv
+# count changed to 33236
 
