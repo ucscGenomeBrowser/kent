@@ -9,7 +9,7 @@
 #include "hdb.h"
 #include "hgMaf.h"
 
-static char const rcsid[] = "$Id: mafFrag.c,v 1.3 2003/10/25 05:28:20 kent Exp $";
+static char const rcsid[] = "$Id: mafFrag.c,v 1.4 2005/03/08 21:55:22 jsp Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -29,7 +29,6 @@ static struct optionSpec options[] = {
    {"outName", OPTION_STRING},
    {NULL, 0},
 };
-
 
 void mafFragCheck(char *database, char *track, 
 	char *chrom, char *startString, char *endString,
