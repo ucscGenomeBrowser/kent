@@ -22,9 +22,10 @@ set danRer danRer1
 set canFam canFam1
 set droYak droYak1
 set anoGam anoGam1
+set cioSav cioSav1
 
 # Define all organism/assembly specific databases.
-set gbd $hg,$mm,$rn,$fr,$ce,$cb,$dm,$dp,$sacCer,$panTro,$galGal,$ci,$danRer,$canFam,$droYak,$anoGam
+set gbd $hg,$mm,$rn,$fr,$ce,$cb,$dm,$dp,$sacCer,$panTro,$galGal,$ci,$danRer,$canFam,$droYak,$anoGam,$cioSav
 
 # Only consider one of members of gbd at a time.
 exclusiveSet $gbd
@@ -1246,6 +1247,27 @@ identifier encodeRegion
 "ENCODE (extensive analysis of 1% of genome) Region"
     hgFixed.encodeRegionInfo.name
     $hg.encodeRegions.name 
+
+ identifier blastDm1FBPepId
+ "dm1 proteins"
+     dm1.blastFBPep00.name
+     anoGam1.blastDm1FB.qName
+     dp2.blastDm1FB.qName
+     droYak1.blastDm1FB.qName
+
+ identifier blastHg16KGPepId
+ "hg16 proteins"
+     hg16.blastKGPep00.name
+     sacCer1.blastHg16KG.qName
+     ce2.blastHg16KG.qName
+     ci1.blastHg16KG.qName
+     cioSav1.blastHg16KG.qName
+     danRer1.blastHg16KG.qName
+     dm1.blastHg16KG.qName
+     fr1.blastHg16KG.qName
+     galGal2.blastHg16KG.qName
+
+
 
 # Dependencies not already captured in identifiers
 
