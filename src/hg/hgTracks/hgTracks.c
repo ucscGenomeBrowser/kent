@@ -5039,6 +5039,41 @@ return(strcmp(a->name, b->name));
 }
 
 
+struct linkedFeaturesSeries *bedFilterMinLength(struct bed *bedList, int minLength ) 
+{
+struct linkedFeaturesSeries *lfsList = NULL, **lfsArray;
+struct linkedFeatures *lf = NULL;
+struct bed *bed;
+
+
+
+/* traditionally if there is nothing to show
+   show nothing .... */
+if(bedList == NULL)
+    return NULL;
+
+lfsList = needMem(sizeof(struct linkedFeaturesSeries*));
+AllocVar(lfsList);
+
+for(bed = bedList; bed != NULL; bed = bed->next)
+    {
+	/* create the linked features */
+    if( bed->chromEnd - bed->chromStart >=  minLength )
+        {
+	    lf = lfFromBed(bed);
+	    slAddHead(&lfsList->features, lf);
+
+        }
+        else
+            free(&bed);
+    }
+
+slReverse(&lfsList);
+return lfsList;
+}
+
+
+
 struct linkedFeaturesSeries *msBedGroupByIndex(struct bed *bedList, char *database, char *table, int expIndex, 
 					       char *filter, int filterIndex) 
 /* groups bed expScores in multiple scores bed by the expIndex 
@@ -5304,6 +5339,24 @@ else
     }    
 bedFreeList(&bedList);
 }
+
+
+
+void lfsFromAncientRBed(struct trackGroup *tg)
+/* filters the bedList stored at tg->items
+into a linkedFeaturesSeries as determined by
+minimum munber of aligned bases cutoff */
+{
+struct linkedFeaturesSeries *lfsList = NULL, *lfs;
+struct linkedFeatures *lf;
+struct bed *bed = NULL, *bedList= NULL, *tmp=NULL, *tmpList=NULL;
+int ancientRMinLength = atoi(cartUsualString(cart, "ancientR.minLength", "50"));
+int i=0, et=-1;
+bedList = tg->items;
+tg->items = bedFilterMinLength(bedList, ancientRMinLength);
+bedFreeList(&bedList);
+}
+
 
 
 void lfsFromCghNci60Bed(struct trackGroup *tg)
@@ -5714,6 +5767,39 @@ void wiggleMethods(struct trackGroup *tg)
 {
 tg->drawItems = wiggleLinkedFeaturesDraw;
 }
+
+int globalAncientRMinLength;
+
+
+boolean ancientRFilterItem(struct trackGroup *tg, void *item)
+/* Return TRUE if ancient repeat item passes the filter:
+ * if it is greater than or equal to ancientRMinLength in
+ * number of aligned bases (not identical bases).*/
+{
+struct bed *el = item;
+if( el->chromEnd - el->chromStart  < globalAncientRMinLength )
+    return FALSE;
+else
+    return TRUE;
+}
+
+void loadAncientR(struct trackGroup *tg)
+/* Load up ancient repeats from database table to trackGroup items
+ * filtering out those below a certain length threshold. */
+{
+globalAncientRMinLength = atoi(cartUsualString(cart, "ancientR.minLength", "50"));
+bedLoadItem(tg, "ancientR", (ItemLoader)bedLoad12);
+filterItems(tg, ancientRFilterItem, "include" );
+}
+
+
+void ancientRMethods(struct trackGroup *tg)
+/* setup special methods for ancientR track */
+{
+//tg->loadItems = loadAncientR;
+//tg->trackFilter = lfsFromAncientRBed;
+}
+
 
 Color getExprDataColor(float val, float maxDeviation, boolean RG_COLOR_SCHEME ) 
 /** Returns the appropriate Color from the shadesOfGreen and shadesOfRed arrays
@@ -6774,6 +6860,7 @@ registerTrackHandler("cghNci60", cghNci60Methods);
 registerTrackHandler("rosetta", rosettaMethods);
 registerTrackHandler("affy", affyMethods);
 registerTrackHandler("wiggle", wiggleMethods );
+registerTrackHandler("ancientR", ancientRMethods );
 
 /* Load regular tracks, blatted tracks, and custom tracks. 
  * Best to load custom last. */
