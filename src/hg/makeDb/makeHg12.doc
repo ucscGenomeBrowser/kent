@@ -317,8 +317,8 @@ MAKING AND STORING mRNA AND EST ALIGNMENTS (TODO w/chrM and .130)
 
 o - Load up the local disks of the cluster with refSeq.fa, mrna.fa and est.fa
     Copy the above 3 files from /cluster/store1/mrna.130 into 
-    kkstore:/scratch/hg/h/mrna
-TODO    Request the admins to do a binrsync to the cluster.
+    kkstore:/scratch/hg/mrna.130
+    Request the admins to do a binrsync to the cluster.
 
 o - Use BLAT to generate refSeq, mRNA and EST alignments as so:
       Make sure that /scratch/hg/gs.13/build30/contig/ is loaded
@@ -330,14 +330,13 @@ o - Use BLAT to generate refSeq, mRNA and EST alignments as so:
           cd /cluster/store1/gs.13/build30/bed
 
 Using the bash shell do:
-
 	  for i in 'refSeq' 'mrna' 'est'
           do
 	      mkdir -p $i
 	      cd $i
               cp ~kent/lastOo/bed/$i/gsub .
 	      ls -1 /scratch/hg/gs.13/build30/contig.0729/*.fa > genome.lst
-	      ls -1 /scratch/hg/h/mrna/$i.fa > mrna.lst
+	      ls -1 /scratch/hg/mrna.130/$i.fa > mrna.lst
 	      mkdir -p psl
 	      gensub2 genome.lst mrna.lst gsub spec
 	      para create spec
@@ -923,23 +922,25 @@ ssh kk
 Check the destination directories below and make sure they are current.
 If not, do the steps below.
 
+ssh kkstore
 Mouse contigs:
 mkdir /scratch/hg/mm2/rmsk
-cp /cluster/store2/mm.2002.02/bed/rmsk/out/* /scratch/hg/mm2/rmsk
-cp -R /cluster/store2/mm.2002.02/mm2/trfFa/ /scratch/hg/mm2/
+cp -p /cluster/store2/mm.2002.02/mm2/?{,?}/chr*/chr?{,?}_?{,?}.fa.out \
+    /scratch/hg/mm2/rmsk
+cp -Rp /cluster/store2/mm.2002.02/mm2/trfFa/ /scratch/hg/mm2/trfFa.0802
 
 Human contigs:
 mkdir /scratch/hg/gs.13/build30/rmsk
-cp /cluster/store1/gs.13/build30/?/*/*.out /scratch/hg/gs.13/build30/rmsk
-cp /cluster/store1/gs.13/build30/??/*/*.out /scratch/hg/gs.13/build30/rmsk
-#- (handled in trfFa gen step) cp -R /cluster/store1/gs.13/build30/bed/trfFa/trf /scratch/hg/gs.13/build30/trfFa.0730
+cp -p /cluster/store1/gs.13/build30/?{,?}/*/NT_??????.fa.out \
+    /scratch/hg/gs.13/build30/rmsk
+#- (handled in trfFa gen step) cp -Rp /cluster/store1/gs.13/build30/bed/trfFa/trf /scratch/hg/gs.13/build30/trfFa.0730
 
     Then
         ssh kkstore
 	cd ~/oo/bed
 	mkdir blatMus
 	cd blatMus
-	ls -1 /scratch/hg/mm2/trfFa/*.fa.trf > mouseAll
+	ls -1 /scratch/hg/mm2/trfFa.0802/*.fa.trf > mouseAll
 	mkdir mm
 	cd mm
 	splitFile ../mouseAll 50 mmsplitFile
@@ -1022,7 +1023,7 @@ o - Load best in genome into database as so:
         hgLoadPsl hg12 *.psl
 
 
-PRODUCING CROSS_SPECIES mRNA ALIGNMENTS (TODO)
+PRODUCING CROSS_SPECIES mRNA ALIGNMENTS (DONE 8/7/02)
 
 Here you align vertebrate mRNAs against the masked genome on the
 cluster you set up during the previous step.
@@ -1033,13 +1034,11 @@ o - Make sure that gbpri, gbmam, gbrod, and gbvert are downloaded from
 
 o - Process these out of genbank flat files as so:
        ssh kkstore
-       cd /cluster/store1/genbank.130
-       cd ../mrna.130
+       cd /cluster/store1/mrna.130
        faSplit sequence xenoRna.fa 2 xenoRna
-       cd /scratch/hg
-       mkdir mrna.130
-       cp /cluster/store1/mrna.130/xenoRna*.* mrna.130
-Request binrysnc of /scratch/hg/mrna.130 from the admins
+       mkdir -p /scratch/hg/mrna.130
+       cp /cluster/store1/mrna.130/xenoRna*.* /scratch/hg/mrna.130
+    Request binrysnc of /scratch/hg/mrna.130 from the admins
 
 Set up cluster run.  First make sure genome is in
 kkstore:/scratch/hg/gs.13/build30/trfFa.0730 in RepeatMasked + trf form.
@@ -1055,6 +1054,8 @@ sure /scratch/hg/mrna.130 is loaded with xenoRna.fa Then do:
        cp ~/hg11/bed/xenoMrna/gsub .
        gensub2 human.lst mrna.lst gsub spec
        para create spec
+       ssh kk
+       cd ~/oo/bed/xenoMrna
        para try
        para check
        para push 
@@ -1076,7 +1077,7 @@ Load into database as so:
        cd ~/oo/bed/xenoMrna
        hgLoadPsl hg12 xenoMrna.psl -tNameIx
        cd /cluster/store1/mrna.130
-       hgLoadRna add hg12 /cluster/store1/mrna.130/xenoRna.fa /cluster/store1/hgLoadRna add hg12 /cluster/store1/mrna.130/xenoRna.fa xenoRna.ra
+       hgLoadRna add hg12 xenoRna.fa xenoRna.ra
 
 Similarly do xenoEst aligments:
    Prepare the est data:
@@ -1091,7 +1092,7 @@ Similarly do xenoEst aligments:
        ls -1S /scratch/hg/gs.13/build30/trfFa.0730/*.fa.trf > human.lst
        cp /cluster/store1/mrna.130/xenoEst?*.fa /scratch/hg/mrna.130
        ls -1S /scratch/hg/mrna.130/xenoEst?*.fa > mrna.lst
-       cp ~hg11/bed/xenoEst/gsub .
+       cp ~/hg11/bed/xenoEst/gsub .
 
 Request a binrysnc from the admin's of kkstore's /scratch/hg/mrna.130
 When done, do:
@@ -1112,11 +1113,11 @@ Sort xenoEst alignments:
 Load into database as so:
        ssh hgwdev
        cd ~/oo/bed/xenoEst
-       hgLoadPsl hg12 xenoEst.psl -tNameI
+       hgLoadPsl hg12 xenoEst.psl -tNameIx
        cd /cluster/store1/mrna.130
-       hgLoadRna add hg12 /cluster/store1/mrna.130/xenoEst.fa /cluster/store1/mrna.130/xenoEst.ra
+       hgLoadRna add hg12 xenoEst.fa xenoEst.ra
     
-PRODUCING FISH ALIGNMENTS (TODO)
+PRODUCING FISH ALIGNMENTS (DONE 08/05/02)
 
 o - Do fish/human alignments.
        ssh kk
@@ -1129,7 +1130,7 @@ o - Do fish/human alignments.
        # Copy over gsub from previous version.
        gensub2 human.lst fish.lst gsub spec
        para create spec 
-       para try TODO
+       para try
      Make sure jobs are going ok with para check.  Then
        para push
      wait about 2 hours and do another
@@ -1137,19 +1138,22 @@ o - Do fish/human alignments.
      do para checks and if necessary para pushes until done
      or use para shove.
 o - Sort alignments as so 
-       pslCat -dir psl | liftUp -type=.psl stdout ~/oo/jkStuff/liftAll.lft warn stdin | pslSortAcc nohead chrom temp stdin
+       pslCat -dir psl | \
+         liftUp -type=.psl stdout ~/oo/jkStuff/liftAll.lft warn stdin | \
+         pslSortAcc nohead chrom temp stdin
 o - Rename to correspond with tables as so and 
     load into database:
        ssh hgwdev
        cd ~/oo/bed/blatFish/chrom
+       rm -f chr*_blatFish.psl
        foreach i (*.psl)
-	   set r = $i:r
+           set r = $i:r
            mv $i ${r}_blatFish.psl
        end
        hgLoadPsl hg12 *.psl
 
 Now load the fish seqeuence data
-hgLoadRna addSeq hg12 /cluster/store3/tetFish/tet*.fa
+       hgLoadRna addSeq hg12 /cluster/store3/tetFish/tet*.fa
 
 
 TIGR GENE INDEX (todo)
@@ -1570,7 +1574,7 @@ o - Rescuing STS track:
      - mv chrom.psl ../convert.psl
 
 
-LOADING MOUSE MM2 BLASTZ ALIGNMENTS FROM PENN STATE: (markd)
+LOADING MOUSE MM2 BLASTZ ALIGNMENTS FROM PENN STATE: (DONE 8/05/02)
 
     - loading both blastz alignments and reference (single coverage) alignments
     - in xAli format, which includes sequence
@@ -1578,9 +1582,11 @@ LOADING MOUSE MM2 BLASTZ ALIGNMENTS FROM PENN STATE: (markd)
 
     - create psl files for each per-contig lav file
 
+       ssh kkstore
+       cd /cluster/store1/gs.13/build30/blastz.mm2.2002-08-01
        set sc=""
        set tbl="blastzMm2"
-       foreach chrdir (/cluster/store1/gs.13/build30/bed/blastz.mm2.2002-04-14/lav/chr*)
+       foreach chrdir (/cluster/store1/gs.13/build30/blastz.mm2.2002-08-01/lav/chr*)
          set chr=$chrdir:t
          set outdir=lav-psl${sc}/$chr
          mkdir -p $outdir
@@ -1589,8 +1595,13 @@ LOADING MOUSE MM2 BLASTZ ALIGNMENTS FROM PENN STATE: (markd)
          end
        end
 
+    - Substitute scratch/... path with chrom name:
+       foreach f (lav-psl${sc}/*/*.psl)
+         perl -wpi -e 's@scratch/hg/gs.13/build30/chromMixedNib.0729/(chr.+)\.nib:\d+-\d+@$1@' $f
+       end
+
     - Convert to per-chromsome files, sort, and add sequence
-       mkdir -p lav-xa{sc}
+       mkdir -p lav-xa${sc}
        foreach chrdir (lav-psl${sc}/*)
          set chr=$chrdir:t
          pslCat -check -nohead -ext=.psl -dir lav-psl${sc}/$chr \
@@ -1599,23 +1610,79 @@ LOADING MOUSE MM2 BLASTZ ALIGNMENTS FROM PENN STATE: (markd)
           | pslToXa stdin lav-xa${sc}/${chr}_${tbl}.xa /cluster/store2/mm.2002.02/mm2/nib /cluster/store1/gs.13/build30/nib
        end
 
-    - repeat both loops, this time doing the single-coverage alignment:
+    - repeat those loops, this time doing the single-coverage alignment:
         set sc=".sc"
-        set tbl="blastzMm2Sc
+        set tbl="blastzMm2Sc"
         <above loops>
 
+    - Until hgc is fixed to connect to mm2 for mm2 chrom info, create 
+      the hg12.mouseChrom table:
+        ssh hgwdev
+        mysqldump -u hgcat -pXXXXXX mm2 chromInfo | \
+          sed -e 's/chromInfo/mouseChrom/' > mouseChrom.sql
+        hgsql hg12 < mouseChrom.sql
+
     - Load tables
-        cd lav-xa
+        ssh hgwdev
+        cd /cluster/store1/gs.13/build30/blastz.mm2.2002-08-01/lav-xa
         hgLoadPsl -xa hg12 *.xa
-        cd lav-xa.sc
+        cd /cluster/store1/gs.13/build30/blastz.mm2.2002-08-01/lav-xa.sc
         hgLoadPsl -xa hg12 *.xa
-  
+
+MAKING THE BLASTZBESTMOUSE TRACK FROM PENN STATE MM2 AXT FILES (IN PROGRESS)
+    - When Scott Schwartz is done generating .axt's for the blastz mm2 
+      alignments (takes longer than the .lav used for blastxMm2 above):
+
+    - Create tSizes (human chrom size) and qSizes (mouse) for axtToPsl.
+      In mysql:
+         use hg12
+         select chrom,size from chromInfo;
+         use mm2
+         select chrom,size from chromInfo;
+      Edit the results of the first select into a tab-separated tSizes,
+      edit the results of the second select into a tab-separated qSizes.
+
+    - Consolidate AXT files to chrom level, sort, pick best, make psl.
+    ssh kkstore
+    cd ~/oo/blastz.mm2.2002-08-01
+    mkdir -p axtChrom axtBest pslBest
+    foreach chrdir (lav/chr*)
+      set chr=$chrdir:t
+      gunzip -c $chrdir/*.axt.gz > axtChrom/$chr.raw.axt
+      liftUp -type=.axt -axtQ axtChrom/$chr.lifted.axt \
+        /cluster/store2/mm.2002.02/mm2/jkStuff/liftAll.lft warn \
+        axtChrom/$chr.raw.axt
+      axtSort axtChrom/$chr.lifted.axt axtChrom/$chr.sorted.axt
+      axtBest axtChrom/$chr.sorted.axt $chr axtBest/$chr.axt
+      axtToPsl axtBest/$chr.axt tSizes qSizes pslBest/$chr.psl
+      echo Done with $chr.
+    end
+TODO    rm axtChrom/*.{raw,lifted}.axt
+
+    - Load tables
+     ssh hgwdev
+     cd ~/oo/blastz.mm2.2002-08-01/pslBest
+     hgLoadPsl hg12 *.psl
+     rm -f ~/kent/src/hg/lib/axtInfoFillHg12.sql
+     touch ~/kent/src/hg/lib/axtInfoFillHg12.sql
+     foreach f (/cluster/store3/gs.13/build30/blastz.mm2.2002-08-01/axtBest/chr*.axt)
+       set chr=$f:t:r
+       echo "insert into axtInfo values (\"Mouse Feb 2002\",\"Blastz Best in Genome\",\"$chr\",\"$f\"" \
+         >> ~/kent/src/hg/lib/axtInfoFillHg12.sql
+     end
+     hgsql hg12 < ~/kent/src/hg/lib/axtInfo.sql
+     hgsql hg12 < ~/kent/src/hg/lib/axtInfoFillHg12.sql
+     cvs add ~/kent/src/hg/lib/axtInfoFillHg12.sql
+     cvs ci ~/kent/src/hg/lib/axtInfoFillHg12.sql
+
+ALIGNED ANCIENT REPEATS FROM MOUSE BLASTZ (TODO)
 
    - Load aligned ancient repeats, from
-       /cluster/store1/gs.13/build30/bed/blastz.mm2.2002-04-14/aar
+       /cluster/store1/gs.13/build30/blastz.mm2.2002-08-01/aar
      Ryan create:
-       /cluster/store1/gs.13/build30/bed/blastz.mm2.2002-04-14/aar/xali
+       /cluster/store1/gs.13/build30/blastz.mm2.2002-08-01/aar/xali
      - Loaded into aarMm2
+
 
 MITOCHONDRIAL DNA PSEUDO-CHROMOSOME - TODO
 
