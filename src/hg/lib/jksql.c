@@ -12,7 +12,7 @@
 #include "jksql.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: jksql.c,v 1.29 2003/05/06 07:22:22 kate Exp $";
+static char const rcsid[] = "$Id: jksql.c,v 1.30 2003/05/25 15:58:43 baertsch Exp $";
 
 boolean sqlTrace = FALSE;  /* setting to true prints each query */
 int sqlTraceIndent = 0;    /* number of spaces to indent traces */
@@ -721,3 +721,8 @@ return hash;
 }
 
 
+char *connGetDatabase(struct sqlConnCache *conn)
+/* return database for a connection cache */
+{
+    return conn->database;
+}
