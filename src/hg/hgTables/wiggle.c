@@ -21,7 +21,7 @@
 #include "botDelay.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: wiggle.c,v 1.39 2004/12/21 23:06:17 hiram Exp $";
+static char const rcsid[] = "$Id: wiggle.c,v 1.40 2005/02/04 18:34:26 hiram Exp $";
 
 extern char *maxOutMenu[];
 
@@ -167,6 +167,22 @@ if (visibility != NULL)
 hPrintf("\n");
 }
 
+static unsigned long long getWigglePossibleIntersection(
+    struct wiggleDataStream *wds, char *db, char *table2,
+	struct bed **intersectBedList,
+	    char splitTableOrFileName[256], int operations)
+{
+unsigned long long valuesMatched = 0;
+
+if (table2 || *intersectBedList)
+    valuesMatched = wds->getDataViaBed(wds, db, splitTableOrFileName,
+	operations, intersectBedList);
+else
+    valuesMatched = wds->getData(wds, db, splitTableOrFileName, operations);
+
+return valuesMatched;
+}
+
 static int wigOutRegion(char *table, struct sqlConnection *conn,
 	struct region *region, int maxOut, enum wigOutputType wigOutType,
 	struct wigAsciiData **data)
@@ -218,12 +234,8 @@ if (table2)
 
 if (isCustom)
     {
-    if (table2 || intersectBedList)
-	valuesMatched = wds->getDataViaBed(wds, NULL, splitTableOrFileName,
-	    operations, &intersectBedList);
-    else
-	valuesMatched = wds->getData(wds, NULL,
-	    splitTableOrFileName, operations);
+    valuesMatched = getWigglePossibleIntersection(wds, NULL, table2,
+	&intersectBedList, splitTableOrFileName, operations);
     }
 else
     {
@@ -232,25 +244,15 @@ else
     if (hFindSplitTable(region->chrom, table, splitTableOrFileName, &hasBin))
 	{
 	/* XXX TBD, watch for a span limit coming in as an SQL filter */
-/*
-	span = minSpan(conn, splitTableOrFileName, region->chrom,
-	    region->start, region->end, cart);
-	wds->setSpanConstraint(wds, span);
-*/
 	if (table2 || intersectBedList)
 	    {
 	    unsigned span;	
 	    span = minSpan(conn, splitTableOrFileName, region->chrom,
 		region->start, region->end, cart, curTrack);
 	    wds->setSpanConstraint(wds, span);
-	    valuesMatched = wds->getDataViaBed(wds, database,
-		splitTableOrFileName, operations, &intersectBedList);
 	    }
-	else
-	    {
-	    valuesMatched = wds->getData(wds, database,
-		splitTableOrFileName, operations);
-	    }
+	valuesMatched = getWigglePossibleIntersection(wds, database, table2,
+	    &intersectBedList, splitTableOrFileName, operations);
 	}
     }
 
@@ -437,12 +439,8 @@ if (table2)
 
 if (isCustom)
     {
-    if (table2 || intersectBedList)
-	valuesMatched = wds->getDataViaBed(wds, NULL, splitTableOrFileName,
-	    operations, &intersectBedList);
-    else
-	valuesMatched = wds->getData(wds, NULL,
-		splitTableOrFileName, operations);
+    valuesMatched = getWigglePossibleIntersection(wds, NULL, table2,
+	&intersectBedList, splitTableOrFileName, operations);
     }
 else
     {
@@ -460,14 +458,8 @@ else
 	    region->start, region->end, cart, curTrack);
 	wds->setSpanConstraint(wds, span);
 
-	if (table2 || intersectBedList)
-	    {
-	    valuesMatched = wds->getDataViaBed(wds, database,
-		splitTableOrFileName, operations, &intersectBedList);
-	    }
-	else
-	    valuesMatched = wds->getData(wds, database,
-		splitTableOrFileName, operations);
+	valuesMatched = getWigglePossibleIntersection(wds, database, table2,
+	    &intersectBedList, splitTableOrFileName, operations);
 	}
     }
 
@@ -605,12 +597,9 @@ for (region = regionList; region != NULL; region = region->next)
      */
     if (isCustom)
 	{
-	if (table2 || intersectBedList)
-	    valuesMatched = wds->getDataViaBed(wds, NULL, splitTableOrFileName,
-		operations, &intersectBedList);
-	else
-	    valuesMatched = wds->getData(wds, NULL,
-				splitTableOrFileName, operations);
+	valuesMatched = getWigglePossibleIntersection(wds, NULL, table2,
+	    &intersectBedList, splitTableOrFileName, operations);
+
 	/*  XXX We need to properly get the smallest span for custom tracks */
 	/*	This is not necessarily the correct answer here	*/
 	if (wds->stats)
@@ -625,15 +614,10 @@ for (region = regionList; region != NULL; region = region->next)
 	    span = minSpan(conn, splitTableOrFileName, region->chrom,
 		region->start, region->end, cart, curTrack);
 	    wds->setSpanConstraint(wds, span);
+	    valuesMatched = getWigglePossibleIntersection(wds, database, table2,
+		&intersectBedList, splitTableOrFileName, operations);
 	    if (table2 || intersectBedList)
-		{
-		valuesMatched = wds->getDataViaBed(wds, database,
-		    splitTableOrFileName, operations, &intersectBedList);
 		span = 1;
-		}
-	    else
-		valuesMatched = wds->getData(wds, database,
-		    splitTableOrFileName, operations);
 	    }
 	}
     /*	when doing multiple regions, we need to print out each result as
@@ -807,7 +791,7 @@ double ll, ul;
 char *constraint;
 
 if (checkWigDataFilter(database, curTable, &constraint, &ll, &ul))
-{
+    {
     if (constraint && sameWord(constraint, "in range"))
 	{
 	hPrintf("&nbsp;&nbsp;data value %s [%g : %g)\n", constraint, ll, ul);
@@ -815,5 +799,5 @@ if (checkWigDataFilter(database, curTable, &constraint, &ll, &ul))
     else
 	hPrintf("&nbsp;&nbsp;data value %s %g\n", constraint, ll);
     freeMem(constraint);
-}
+    }
 }
