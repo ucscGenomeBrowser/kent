@@ -756,7 +756,7 @@ MAKING THE BLASTZBESTRAT TRACK FROM PENN STATE AXT FILES (TODO)
      cvs add ~/kent/src/hg/lib/axtInfoFillRn1.sql
      cvs ci ~/kent/src/hg/lib/axtInfoFillRn1.sql
 
-TWINSCAN GENE PREDICTIONS (IN PROGRESS)
+TWINSCAN GENE PREDICTIONS (DONE 01/27/03)
 
     mkdir -p ~/rn1/bed/twinscan
     cd ~/rn1/bed/twinscan
@@ -1151,20 +1151,21 @@ LOAD GENEID GENES (DONE 01/28/03)
     ldHgGene rn1 geneid download/*.gtf -exon=CDS
     hgPepPred rn1 generic geneidPep download/*-fixed.prot
 
-SGP GENE PREDICTIONS (TODO)
-     cd ~/rn1/bed
-     mkdir sgp
-     cd sgp
-     mkdir download
-     cd download
-   Now download *.gtf and *.prot from 
-   http://www1.imim.es/genepredictions/M.musculus/mmFeb2002/SGP/
-   Get rid of the extra .N in the transcripts with subs.  
-     cd ..
-     cp ~/lastRn/bed/sgp/subs .
-     subs -e download/*.gtf > /dev/null
-     ldHgGene rn1 sgpGene download/*.gtf -exon=CDS
-     hgPepPred rn1 generic sgpPep download/*.prot
+SGP GENE PREDICTIONS (DONE 02/10/03)
+    mkdir -p ~/rn1/bed/sgp/download
+    cd ~/rn1/bed/sgp/download
+    foreach f (~/rn1/?{,?}/chr?{,?}{,_random}.fa)
+      set chr = $f:t:r
+      wget http://genome.imim.es/genepredictions/R.norvegicus/rnNov2002/SGP/humangp20020628/$chr.gtf
+      wget http://genome.imim.es/genepredictions/R.norvegicus/rnNov2002/SGP/humangp20020628/$chr.prot
+    end
+    # Add missing .1 to protein id's
+    foreach f (*.prot)
+      perl -wpe 's/^(>chr\w+)$/$1.1/' $f > $f:r-fixed.prot
+    end
+    cd ..
+    ldHgGene rn1 sgpGene download/*.gtf -exon=CDS
+    hgPepPred rn1 generic sgpPep download/*-fixed.prot
 
 
 TIGR GENE INDEX (TODO)
