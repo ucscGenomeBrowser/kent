@@ -23,7 +23,7 @@ verb="-verbose=1"
 ulimit -c 256000
 
 # workdir is a local dir
-workdir=/scratch/tmp/genbank
+workdir=/var/tmp/genbank
 
 # data files and dirs
 dbloadVar=var/dbload/`hostname`
