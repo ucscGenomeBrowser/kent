@@ -34,6 +34,7 @@ The name/value pairs are
 
 id - ID of associated chain (gapped alignment) if any.
 score - Score of associated chain
+ali   - Number of bases in alignments in chain.
 qFar - For fill that is on the same chromosome as parent, how far fill is
        from position predicted by parent.   This let's you tell if a
        rearrangement is local or if a duplication is tandem.
