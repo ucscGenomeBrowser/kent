@@ -10,9 +10,42 @@
 
 var theDb = 'hg11';
 
+function setDb()
+{
+  theDb = document.dbForm.genome.options[document.dbForm.genome.selectedIndex].value;
+}
+
 function initDb()
 {
-theDb = document.dbForm.genome.options[document.dbForm.genome.selectedIndex].value;
+  theDb = document.dbForm.genome.options[document.dbForm.genome.selectedIndex].value;
+  var queryString = document.location.search.substring(1, document.location.search.length);
+  var dbIndex = queryString.indexOf('db=');
+  if (dbIndex >= 0)
+  {
+    theDb = queryString.substring(dbIndex + 3);
+    for (var items = 0; items < document.dbForm.genome.options.length; items++)
+    {
+      if(sameOrganism(theDb, document.dbForm.genome.options[items].value))
+      {
+        document.dbForm.genome.options[items].selected = true;
+      }
+    }     
+  }
+}
+
+function sameOrganism(db1, db2)
+{
+alert(db1.substring(0, 2));
+alert(db2.substring(0, 2));
+
+  if (db1.substring(0, 2) == db2.substring(0, 2))
+  {
+    return true;
+  }
+  else
+  {
+    return false;
+  }
 }
 
 function dbGo(theUrl)
@@ -62,7 +95,7 @@ document.location = theUrl + 'db=' + theDb;
 			<table cellpadding="" cellspacing="0" margins="0" border="0"><tr><td valign="top">
 				<FONT CLASS="leftbar">Organism</FONT>
 			</td></tr><tr valign="bottom"><td valign="bottom">
-					<SELECT NAME="genome" onChange="initDb();">
+					<SELECT NAME="genome" onChange="setDb();">
 						<OPTION VALUE="hg11">Human
 						<OPTION VALUE="mm2">Mouse 
 					</SELECT>
