@@ -9,7 +9,7 @@
 #include "dnautil.h"
 #include "axt.h"
 
-static char const rcsid[] = "$Id: axtBest.c,v 1.15 2004/07/14 23:23:27 baertsch Exp $";
+static char const rcsid[] = "$Id: axtBest.c,v 1.16 2004/07/16 22:49:43 baertsch Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -23,6 +23,7 @@ errAbort(
   "   -minScore=N - Minimum score alignments to consider.  Default 1000\n"
   "   -minOutSize=N - Minimum score of piece to output. Default 10\n"
   "   -matrix=file.mat - override default scoring matrix\n"
+  "   -verbose=N - Alter verbosity (default 1)\n"
   "   chrom=all - read all records and group by tName (in.axt must be axtSorted)\n"
   "Alignments scoring over minScore (where each matching base counts\n"
   "about +100 in the default scoring scheme) are projected onto the\n"
@@ -38,7 +39,6 @@ struct optionSpec options[] = {
    {"minScore", OPTION_INT},
    {"minOutSize", OPTION_INT},
    {"matrix", OPTION_STRING},
-   {"quiet", OPTION_BOOLEAN},
    {NULL,0}
 };
 
@@ -46,7 +46,6 @@ struct optionSpec options[] = {
 int winSize = 10000;
 int minScore = 1000;
 int minOutSize = 10;
-bool quiet = FALSE;
 
 /* Variables to keep statistics on aligments. */
 int writeCount = 0;	/* Keep track of number actually written. */
@@ -362,15 +361,13 @@ struct axt *axt, *nextAxt, *goodList = NULL;
 int i;
 if (axtList == NULL)
     {
-    if (!quiet)
-        printf("Empty %s\n", inName);
+    verbose(2,"Empty %s\n", inName);
     return;
     }
 chromRange(axtList, &chromStart, &chromEnd);
 rangeSize = chromEnd - chromStart;
 bk = bestKeepNew(chromStart, chromEnd);
-if (!quiet)
-    printf("Allocated %d elements in array\n", rangeSize);
+verbose(2,"Allocated %d elements in array\n", rangeSize);
 
 
 /* Find local best in big soft window and get rid of
@@ -397,8 +394,7 @@ for (axt = axtList; axt != NULL; axt = nextAxt)
     }
 slReverse(&goodList);
 axtList = NULL;
-if (!quiet)
-    printf("%d elements in after soft filter.\n", slCount(goodList));
+verbose(2,"%d elements in after soft filter.\n", slCount(goodList));
 
 /* Find local best alignments in big hard window and
  * output them. */
@@ -428,7 +424,7 @@ if (sameString(chromName,"all"))
     struct lineFile *lf = lineFileOpen(inName, TRUE);
     while ((axtList = readNextTnameList(lf, ss, minScore)) != NULL)
         {
-//        printf("Read %d elements from %s %s\n", slCount(axtList), inName, axtList->tName);
+        verbose(2,"Read %d elements from %s %s\n", slCount(axtList), inName, axtList->tName);
         axtBestList(axtList, inName, ss, f);
         axtFreeList(&axtList);
         }
@@ -436,16 +432,12 @@ if (sameString(chromName,"all"))
 else
     {
     axtList = readAllAxt(inName, ss, minScore, chromName);
-    if (!quiet)
-        printf("Read %d elements from %s\n", slCount(axtList), inName);
+    verbose(2,"Read %d elements from %s\n", slCount(axtList), inName);
     axtBestList(axtList, inName, ss, f);
     }
-if (!quiet)
-    {
-    printf("Output %d alignments including %d trimmed from overlaps\n", writeCount, subsetCount);
-    printf("Bases in %d, bases out %d (%4.2f%%)\n", baseInCount, baseOutCount,
+    verbose(2,"Output %d alignments including %d trimmed from overlaps\n", writeCount, subsetCount);
+    verbose(2,"Bases in %d, bases out %d (%4.2f%%)\n", baseInCount, baseOutCount,
             100.0 * baseOutCount / baseInCount);
-    }
 }
 
 
@@ -455,7 +447,6 @@ int main(int argc, char *argv[])
 optionInit(&argc, argv, options);
 if (argc != 4)
     usage();
-quiet = optionExists("quiet");
 winSize = optionInt("winSize", winSize);
 minScore = optionInt("minScore", minScore);
 minOutSize = optionInt("minOutSize", minOutSize);
