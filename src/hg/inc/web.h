@@ -29,13 +29,12 @@ void webAbort(char* title, char* format, ...);
 /* an abort function that outputs a error page */
 
 void printGenomeListHtml(char *selOrganism, char *onChangeText);
-/*
-Prints to stdout the HTML to render a dropdown list containing a list of the possible genomes to choose from.
-
-param curOrganism - The organism to choose as selected. 
-If NULL, no default selection.
-
-param onChangeText - Optional (can be NULL) text to pass in any onChange javascript.
+/* Prints to stdout the HTML to render a dropdown list containing 
+ * a list of the possible genomes to choose from.  
+ * param curOrganism - The organism to choose as selected. 
+ * If NULL, no default selection.  
+ * param onChangeText - Optional (can be NULL) text to pass in any 
+ * onChange javascript.
  */
 
 void webPushErrHandlers();
