@@ -129,7 +129,7 @@
 #include "hgFind.h"
 #include "botDelay.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.573 2004/02/23 10:15:15 aamp Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.574 2004/02/27 18:33:10 kate Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -2970,6 +2970,17 @@ else
 freeMem(encoded);
 }
 
+void medlineProductLinkedLine(char *title, char *text)
+/* Produce something that shows up on the browser as
+ *     TITLE: value
+ * with the value hyperlinked to medline. 
+ * Replaces commas in the product name with spaces, as commas sometimes
+ * interfere with PubMed search */
+{
+    subChar(text, ',', ' ');
+    medlineLinkedLine(title, text, text);
+}
+
 void appendAuthor(struct dyString *dy, char *gbAuthor, int len)
 /* Convert from  Kent,W.J. to Kent WJ and append to dy.
  * gbAuthor gets eaten in the process. 
@@ -3323,7 +3334,7 @@ if (row != NULL)
     printf("<B>Description:</B> %s<BR>\n", description);
 
     medlineLinkedLine("Gene", geneName, geneName);
-    medlineLinkedLine("Product", productName, productName);
+    medlineProductLinkedLine("Product", productName);
     dyStringClear(dy);
     gbToEntrezAuthor(author, dy);
     medlineLinkedLine("Author", author, dy->string);
@@ -6476,7 +6487,7 @@ if (hasMedical)
 		}
 	    medlineLinkedLine("PubMed on Gene", rl->name, rl->name);
 	    if (rl->product[0] != 0)
-    		medlineLinkedLine("PubMed on Product", rl->product, rl->product);
+    		medlineProductLinkedLine("PubMed on Product", rl->product);
 	    printf("\n");
 	    printGeneLynxName(rl->name);
 	    printf("\n");
@@ -6825,13 +6836,13 @@ if (!startsWith("Worm", organism))
 	if (! isBDGPName(rl->name))
 	    medlineLinkedLine("PubMed on Gene", rl->name, rl->name);
 	if (rl->product[0] != 0)
-	    medlineLinkedLine("PubMed on Product", rl->product, rl->product);
+	    medlineProductLinkedLine("PubMed on Product", rl->product);
 	}
     else
 	{
 	medlineLinkedLine("PubMed on Gene", rl->name, rl->name);
 	if (rl->product[0] != 0)
-	    medlineLinkedLine("PubMed on Product", rl->product, rl->product);
+	    medlineProductLinkedLine("PubMed on Product", rl->product);
 	}
     printf("\n");
     if (startsWith("Human", organism)) 
