@@ -9,6 +9,8 @@ int maxBinCount = 25;
 int minVal = 0;
 boolean doLog = FALSE;
 boolean noStar = FALSE;
+int col = 0;
+int aveCol = -1;
 
 void usage()
 /* Explain usage and exit. */
@@ -24,65 +26,120 @@ errAbort(
   "   -minVal=N  Minimum value to put in histogram, default 0\n"
   "   -log Do log transformation before plotting\n"
   "   -noStar Don't draw asterisks\n"
+  "   -col=N Which column to use. Default 1\n"
+  "   -aveCol=N A second column to average over. The averages\n"
+  "             will be output in place of counts of primary column.\n"
   );
 }
 
 void textHistogram(char *inFile)
 /* textHistogram - Make a histogram in ascii. */
 {
-int *hist;
-char *row[1];
+double *hist = NULL;
+double *total = NULL;
+char *row[256];
+int wordCount;
 struct lineFile *lf = lineFileOpen(inFile, TRUE);
-int i;
+int i,j;
 int minData = maxBinCount, maxData = 0;
-int maxCount = 0;
+double maxCount = 0;
 double maxCt;
+
+/* Allocate histogram and optionally space for
+ * second column totals. */
 AllocArray(hist, maxBinCount);
-while (lineFileRow(lf, row))
+if (aveCol >= 0)
+    AllocArray(total, maxBinCount);
+
+/* Go through each line of input file accumulating
+ * data. */
+uglyf("Col %d, aveCol %d\n", col, aveCol);
+while (wordCount = lineFileChop(lf, row))
     {
-    int x = lineFileNeedNum(lf, row, 0);
+    int x;
+    if (wordCount <= col || wordCount <= aveCol)
+        errAbort("Not enough words line %d of %s", lf->lineIx, lf->fileName);
+    x = lineFileNeedNum(lf, row, col);
     if (x >= minVal)
 	{
 	x -= minVal;
 	x /= binSize;
 	if (x >= 0 && x < maxBinCount)
+	    {
 	    hist[x] += 1;
+	    if (aveCol >= 0)
+	        total[x] += atof(row[aveCol]);
+	    }
 	}
     }
-for (i=0; i<maxBinCount; ++i)
+
+/* Figure out range that has data, maximum data
+ * value and optionally compute averages. */
+if (aveCol >= 0)
     {
-    int count = hist[i];
-    if (count != 0)
-        {
-	if (maxCount < count) maxCount = count;
-	if (minData > i) minData = i;
-	if (maxData < i) maxData = i;
+    double ave, maxAve = -BIGNUM;
+    for (i=0; i<maxBinCount; ++i)
+	{
+	int count = hist[i];
+	if (count != 0)
+	    {
+	    ave = total[i]/count;
+	    if (maxAve < ave) maxAve = ave;
+	    if (minData > i) minData = i;
+	    if (maxData < i) maxData = i;
+	    }
 	}
-    }
-maxCt = maxCount;
-if (doLog)
-    maxCt = log(maxCt);
-if (noStar)
-    {
-    for (i=minData; i<=maxData; ++i)
-	printf("%d\t%d\n", i*binSize + minVal, hist[i]);
+    maxCt = maxAve;
     }
 else
     {
-    for (i=minData; i<=maxData; ++i)
+    for (i=0; i<maxBinCount; ++i)
 	{
-	int j;
 	int count = hist[i];
-	double ct = count;
-	int astCount;
+	if (count != 0)
+	    {
+	    if (maxCount < count) maxCount = count;
+	    if (minData > i) minData = i;
+	    if (maxData < i) maxData = i;
+	    }
+	}
+    maxCt = maxCount;
+    }
+if (doLog)
+    maxCt = log(maxCt);
 
-	if (doLog)
-	    ct = log(ct);
-	astCount = round(ct * 60.0 / maxCt);
-	printf("%3d ", i*binSize + minVal);
+/* Output results. */
+for (i=minData; i<=maxData; ++i)
+    {
+    int count = hist[i];
+    double ct;
+    int binStart = i*binSize + minVal;
+
+    if (aveCol >= 0)
+	{
+	if (count > 0)
+	    ct = total[i]/count;
+	else
+	    ct = 0;
+	}
+    else
+	{
+	ct = count;
+	}
+    if (doLog)
+	ct = log(ct);
+    if (noStar)
+	printf("%d\t%f\n", binStart, ct);
+    else
+	{
+	int astCount = round(ct * 60.0 / maxCt);
+	printf("%3d ", binStart);
 	for (j=0; j<astCount; ++j)
 	    putchar('*');
-	printf(" %d\n", count);
+	if (aveCol >= 0)
+	    printf(" %f\n", ct);
+	else
+	    printf(" %d\n", count);
 	}
     }
 }
@@ -96,6 +153,10 @@ maxBinCount = optionInt("maxBinCount", maxBinCount);
 minVal = optionInt("minVal", minVal);
 doLog = optionExists("log");
 noStar = optionExists("noStar");
+if (optionExists("col"))
+    col = optionInt("col", col) - 1;
+if (optionExists("aveCol"))
+    aveCol = optionInt("aveCol", aveCol) - 1;
 if (argc != 2)
     usage();
 textHistogram(argv[1]);
