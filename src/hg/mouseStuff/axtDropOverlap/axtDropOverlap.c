@@ -3,7 +3,7 @@
 #include "linefile.h"
 #include "axt.h"
 
-static char const rcsid[] = "$Id: axtDropOverlap.c,v 1.2 2003/05/06 07:22:27 kate Exp $";
+static char const rcsid[] = "$Id: axtDropOverlap.c,v 1.3 2003/07/22 16:29:43 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -92,4 +92,5 @@ int main(int argc, char *argv[])
 if (argc != 3)
     usage();
 axtDropOverlap(argv[1], argv[2]);
+return 0;
 }
