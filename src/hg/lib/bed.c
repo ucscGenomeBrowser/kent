@@ -8,7 +8,7 @@
 #include "bed.h"
 #include "binRange.h"
 
-static char const rcsid[] = "$Id: bed.c,v 1.23 2003/10/02 17:15:21 angie Exp $";
+static char const rcsid[] = "$Id: bed.c,v 1.24 2003/12/14 23:28:56 sugnet Exp $";
 
 void bedStaticLoad(char **row, struct bed *ret)
 /* Load a row from bed table into ret.  The contents of ret will
@@ -110,6 +110,7 @@ if (dif == 0)
     dif = a->chromStart - b->chromStart;
 return dif;
 }
+
 
 int bedCmpScore(const void *va, const void *vb)
 /* Compare to sort based on score - lowest first. */
@@ -543,6 +544,42 @@ if (sep == ',') fputc('}',f);
 
 
 fputc(lastSep,f);
+}
+
+struct genePred *bedToGenePred(struct bed *bed)
+/* Convert a single bed to a genePred structure. */
+{
+struct genePred *gp = NULL;
+int i;
+assert(bed);
+AllocVar(gp);
+gp->name = cloneString(bed->name);
+gp->chrom = cloneString(bed->chrom);
+safef(gp->strand, sizeof(gp->strand), "%s", bed->strand);
+gp->txStart = bed->chromStart;
+gp->txEnd = bed->chromEnd;
+gp->cdsStart = bed->thickStart;
+gp->cdsEnd = bed->thickEnd;
+gp->exonCount = bed->blockCount;
+if(gp->exonCount != 0)
+    {
+    AllocArray(gp->exonStarts, gp->exonCount);
+    AllocArray(gp->exonEnds, gp->exonCount);
+    for(i=0; i<gp->exonCount; i++)
+	{
+	gp->exonStarts[i] = bed->chromStarts[i] + bed->chromStart;
+	gp->exonEnds[i] = gp->exonStarts[i] + bed->blockSizes[i];
+	}
+    }
+else 
+    {
+    gp->exonCount = 1;
+    AllocArray(gp->exonStarts, gp->exonCount);
+    AllocArray(gp->exonEnds, gp->exonCount);
+    gp->exonStarts[0] = bed->chromStart;
+    gp->exonEnds[0] = bed->chromEnd;
+    }
+return gp;
 }
 
 struct bed *bedFromGenePred(struct genePred *genePred)
