@@ -428,6 +428,16 @@ while ((row = sqlNextRow(sr)) != NULL)
 printf("</PRE></TT>\n");
 }
 
+void printTrackHtml(struct trackDb *tdb)
+/* If there's some html associated with track print it out. */
+{
+if (tdb->html != NULL && tdb->html[0] != 0)
+    {
+    htmlHorizontalLine();
+    puts(tdb->html);
+    }
+}
+
 void genericClickHandler(struct trackDb *tdb, char *item, char *itemForUrl)
 /* Put up generic track info. */
 {
@@ -471,11 +481,7 @@ if (wordCount > 0)
 	genericPslClick(conn, tdb, item, start, subType);
 	}
     }
-if (tdb->html != NULL && tdb->html[0] != 0)
-    {
-    htmlHorizontalLine();
-    puts(tdb->html);
-    }
+printTrackHtml(tdb);
 freez(&dupe);
 hFreeConn(&conn);
 webEnd();
@@ -1152,11 +1158,7 @@ htmlHorizontalLine();
 printf("<H3>%s/Genomic Alignments</H3>", type);
 printAlignments(pslList, start, "htcCdnaAli", table, acc);
 
-if (tdb->html != NULL && tdb->html[0] != 0)
-    {
-    htmlHorizontalLine();
-    puts(tdb->html);
-    }
+printTrackHtml(tdb);
 webEnd();
 }
 
@@ -1304,12 +1306,11 @@ sprintf(query,
     ctg->chrom, ctg->chromStart, ctg->chromEnd);
 cloneCount = sqlQuickNum(conn, query);
 
-printf("Fingerprint Map Contig %s includes %d clones and makes up bases %d-%d of the draft sequence of chromosome %s.<BR>\n",
-     ctgName, cloneCount, ctg->chromStart+1, ctg->chromEnd, skipChr(ctg->chrom));
-printf("Go back and type '%s' in the position field to bring the entire contig into the browser window.",
-     ctgName);
+printf("<B>Name:</B> %s<BR>\n", ctgName);
+printf("<B>Total Clones:</B> %d<BR>\n", cloneCount);
+printPos(ctg->chrom, ctg->chromStart, ctg->chromEnd, NULL, TRUE);
+printTrackHtml(tdb);
 
-sqlFreeResult(&sr);
 hFreeConn(&conn);
 webEnd();
 }
@@ -1955,8 +1956,7 @@ if (cgiVarExists("o"))
 	}
     hFreeConn(&conn);
     }
-htmlHorizontalLine();
-puts(tdb->html);
+printTrackHtml(tdb);
 webEnd();
 }
 
@@ -2725,7 +2725,7 @@ void doSoftberryPred(struct trackDb *tdb, char *geneName)
 genericHeader(tdb, geneName);
 showHomologies(geneName, "softberryHom");
 geneShowCommon(geneName, tdb, "softberryPep");
-puts(tdb->html);
+printTrackHtml(tdb);
 webEnd();
 }
 
@@ -2765,7 +2765,7 @@ void doSangerGene(struct trackDb *tdb, char *geneName, char *pepTable, char *mrn
 genericHeader(tdb, geneName);
 showSangerExtra(geneName, extraTable);
 geneShowCommon(geneName, tdb, pepTable);
-puts(tdb->html);
+printTrackHtml(tdb);
 webEnd();
 }
 
@@ -2828,7 +2828,7 @@ else
     {
     puts("<P>Click directly on a repeat for specific information on that repeat</P>");
     }
-puts(tdb->html);
+printTrackHtml(tdb);
 hFreeConn(&conn);
 webEnd();
 }
@@ -2922,7 +2922,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 sqlFreeResult(&sr);
 slReverse(&pslList);
 printAlignments(pslList, start, "htcBlatMouse", track, itemName);
-puts(tdb->html);
+printTrackHtml(tdb);
 webEnd();
 }
 
@@ -3915,10 +3915,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     printf("<B>Strand:</B> %s<BR>\n", bed->strand);
     bedPrintPos(bed);
     }
-if (tdb->html != NULL && tdb->html[0] != 0)
-    {
-    puts(tdb->html);
-    }
+printTrackHtml(tdb);
 hFreeConn(&conn);
 webEnd();
 }
