@@ -31,6 +31,7 @@ chromosome size, strand, and chain extents,  the mouse chromosome,
 chromosome size, strand and chain extents, and the chain id number.
 The extents are as zero-based half open intervals, meaning
 the first 100 bases of a sequence are represented as 0 100, while 
-the next 100 bases are represented as 100 200.
+the next 100 bases are represented as 100 200.  When the strand is
+'-' the coordinates are in terms of the reverse-complemented sequence.
 
 
