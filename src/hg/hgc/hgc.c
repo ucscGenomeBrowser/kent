@@ -137,7 +137,7 @@
 #include "vntr.h"
 #include "zdobnovSynt.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.619 2004/04/28 20:48:23 heather Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.620 2004/04/28 22:02:17 braney Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -1940,6 +1940,7 @@ netAlignFree(&net);
 }
 
 void tfbsCons(struct trackDb *tdb, char *item)
+/* detail page for tfbsCons track */
 {
 boolean printFactors = FALSE;
 boolean printedPlus = FALSE;
@@ -1961,6 +1962,7 @@ struct tfbsConsMap tfbsConsMap;
 boolean firstTime = TRUE;
 char *linkName = NULL;
 char *mappedId = NULL;
+boolean haveProtMap = hTableExists("kgProtMap");
 
 dupe = cloneString(tdb->type);
 genericHeader(tdb, item);
@@ -2033,15 +2035,16 @@ if (printFactors)
 	    printf("<B>SwissProt ID:</B> %s<BR>\n", sameString(tfbs->id, "N")? "unknown": tfbs->id);
 
 	    /* Only display link if entry exists in protein browser */
-	    sprintf(query, "select * from hg16.kgProtMap where qName = '%s';", tfbs->id );
-	    sr = sqlGetResult(conn, query); 
-	    if ((row = sqlNextRow(sr)) != NULL)                                                         
+	    if (haveProtMap)
 		{
-		printf("<A HREF=\"http://hgwdev.cse.ucsc.edu/cgi-bin/pbTracks?proteinID=%s&db=hg16\" target=_blank><B>Protein Browser Entry</B></A><BR><BR>",  tfbs->id);
-		sqlFreeResult(&sr); 
+		sprintf(query, "select * from kgProtMap where qName = '%s';", tfbs->id );
+		sr = sqlGetResult(conn, query); 
+		if ((row = sqlNextRow(sr)) != NULL)                                                         
+		    {
+		    printf("<A HREF=\"/cgi-bin/pbTracks?proteinID=%s\" target=_blank><B>Protein Browser Entry</B></A><BR><BR>",  tfbs->id);
+		    sqlFreeResult(&sr); 
+		    }
 		}
-	    else                                                                                          
-		printf("No Protein Browser entry.\n<BR><BR>"); 
 	    }
 	}
     }
