@@ -9,7 +9,7 @@
 #include "hdb.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: checkTableCoords.c,v 1.5 2004/10/07 18:05:30 angie Exp $";
+static char const rcsid[] = "$Id: checkTableCoords.c,v 1.6 2004/10/08 22:00:43 angie Exp $";
 
 /* Default parameter values */
 char *db = NULL;                        /* first arg */
@@ -46,6 +46,7 @@ static struct optionSpec optionSpecs[] = {
 #define SPLIT_WRONG_CHROM "%s.%s has %d records with chrom inconsistent with table name.\n"
 #define BAD_CHROM "%s.%s has %d records with chrom not described in chromInfo.\n"
 #define BLOCKSTART_NOT_START "%s.%s has %d records with blockStart[0] != start.\n"
+#define BLOCKSTART_LT_START "%s.%s has %d records with blockStart[i] < start.\n"
 #define BLOCKEND_LT_BLOCKSTART "%s.%s has %d records with blockEnd[i] < blockStart[i].\n"
 #define BLOCKS_NOT_ASCEND "%s.%s has %d records with blocks not in ascending order.\n"
 #define BLOCKS_OVERLAP "%s.%s has %d records with overlapping blocks.\n"
@@ -288,7 +289,7 @@ boolean checkBlocks(struct bed *bedList, char *table, struct hTableInfo *hti)
 {
 boolean gotError = FALSE;
 struct bed *bed = NULL;
-int bSNotStart=0, bELTBS=0, bENotEnd=0, bEGTEnd=0;
+int bSNotStart=0, bSLTStart=0, bELTBS=0, bENotEnd=0, bEGTEnd=0;
 int bNotAscend=0, bOverlap=0;
 for (bed = bedList;  bed != NULL;  bed = bed->next)
     {
@@ -305,6 +306,15 @@ for (bed = bedList;  bed != NULL;  bed = bed->next)
     lastStart = lastEnd = 0;
     for (i=0;  i < bed->blockCount;  i++)
 	{
+	if (bed->chromStarts[i] < 0)
+	    {
+	    if (verboseBlocks || verboseLevel() >= 2)
+		verbose(0, "%s.%s item %s %s:%d-%d: start of block %d (%d) is less than start.\n",
+		       db, table, bed->name, bed->chrom,
+		       bed->chromStart, bed->chromEnd,
+		       i, bed->chromStart + bed->chromStarts[i]);
+	    bSLTStart++;
+	    }
 	if (bed->chromStarts[i] < lastStart)
 	    {
 	    if (verboseBlocks || verboseLevel() >= 2)
@@ -357,6 +367,7 @@ for (bed = bedList;  bed != NULL;  bed = bed->next)
 	}
     }
 gotError |= reportErrors(BLOCKSTART_NOT_START, table, bSNotStart);
+gotError |= reportErrors(BLOCKSTART_LT_START, table, bSLTStart);
 gotError |= reportErrors(BLOCKEND_LT_BLOCKSTART, table, bELTBS);
 gotError |= reportErrors(BLOCKS_NOT_ASCEND, table, bNotAscend);
 gotError |= reportErrors(BLOCKS_OVERLAP, table, bOverlap);
