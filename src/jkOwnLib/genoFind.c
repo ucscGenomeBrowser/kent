@@ -16,7 +16,7 @@
 #include "genoFind.h"
 #include "trans3.h"
 
-static char const rcsid[] = "$Id: genoFind.c,v 1.12 2004/02/25 08:48:34 kent Exp $";
+static char const rcsid[] = "$Id: genoFind.c,v 1.13 2004/02/25 08:52:44 kent Exp $";
 
 static int blockSize = 1024;
 static int blockShift = 10;
@@ -679,15 +679,13 @@ for (isRc=0; isRc <= 1; ++isRc)
     if (isRc)
 	{
 	reverseComplement(seq->dna, seq->size);
-	printf("Reverse complemented\n");
 	}
     t3 = trans3New(seq);
     for (frame = 0; frame < 3; ++frame)
 	{
 	struct genoFind *gf = transGf[isRc][frame];
 	gfAddSeq(gf, t3->trans[frame], offset[isRc][frame]);
-	printf("Added frame %d\n", frame);
-	ss->fileName = fileName;
+	ss->fileName = cloneString(fileName);
 	ss->start = offset[isRc][frame];
 	offset[isRc][frame] += t3->trans[frame]->size;
 	ss->end = offset[isRc][frame];
@@ -796,8 +794,10 @@ for (i=0; i<fileCount; ++i)
 	struct twoBitIndex *index;
 	for (index = tbf->indexList; index != NULL; index = index->next)
 	    {
+	    char nameBuf[PATH_LEN+256];
+	    safef(nameBuf, sizeof(nameBuf), "%s:%s", fileName, index->name);
 	    seq = readMaskedTwoBit(tbf, index->name, doMask);
-	    transIndexBothStrands(seq, transGf, offset, ss, fileName);
+	    transIndexBothStrands(seq, transGf, offset, ss, nameBuf);
 	    ss += 1;
 	    freeDnaSeq(&seq);
 	    }
@@ -805,7 +805,6 @@ for (i=0; i<fileCount; ++i)
 	}
     }
 
-printf("Done adding\n");
 for (isRc=0; isRc <= 1; ++isRc)
     {
     for (frame = 0; frame < 3; ++frame)
