@@ -357,8 +357,6 @@ altColor 255,240,200
 spectrum on
 type psl xeno
 
-
-
 track footPrinter
 shortLabel FootPrinter
 longlabel FootPrinter Conservation Score
@@ -372,8 +370,7 @@ shortLabel Gene Annotations
 longLabel Curated Gene Annotations
 priority 540
 visibility hide
-color 150,100,30
-altColor 230,170,40
+color 0,100,180
 type bed 12 .
 
 track pjt_genscan
@@ -381,6 +378,5 @@ shortLabel Genscan
 longLabel Genscan Gene Predictions
 priority 550
 visibility hide
-color 150,100,30
-altColor 230,170,40
+color 170,100,0
 type bed 12 .
