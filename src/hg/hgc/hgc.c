@@ -151,7 +151,7 @@
 #include "jalview.h"
 #include "flyreg.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.792 2004/11/30 15:41:02 daryl Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.793 2004/12/02 17:53:57 kent Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -8870,8 +8870,9 @@ void doAlignmentOtherDb(struct trackDb *tdb, char *item)
 char *otherOrg;
 char *otherDb;
 char *words[8];
-if (words[0] == NULL || words[1] == NULL || words[2] == NULL ||
-    ! (sameString(words[0], "psl") && sameString(words[1], "xeno")))
+char *typeLine = cloneString(tdb->type);
+int wordCount = chopLine(typeLine, words);
+if (wordCount < 3 || !(sameString(words[0], "psl") && sameString(words[1], "xeno")))
     errAbort("doAlignmentOtherDb: trackDb type must be \"psl xeno XXX\" where XXX is the name of the other database.");
 otherDb = words[2];
 otherOrg = hOrganism(otherDb);

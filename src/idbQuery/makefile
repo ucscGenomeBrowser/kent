@@ -1,5 +1,9 @@
 include ../inc/common.mk
 
+L = -lm $(MYSQLLIBS)
+MYLIBDIR = ../lib/$(MACHTYPE)
+MYLIBS =  $(MYLIBDIR)/jkweb.a
+
 O = idbQuery.o 
 
 idbQuery.exe: $(O)
@@ -7,3 +11,4 @@ idbQuery.exe: $(O)
 	mv a.out idbQuery.exe
 	chmod a+rx idbQuery.exe
 	mv idbQuery.exe ${CGI_BIN}-${USER}
+
