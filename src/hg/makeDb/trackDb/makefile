@@ -30,6 +30,7 @@ update:
 	hgTrackDb fugu fr1 trackDb_$(USER) ../../lib/trackDb.sql .
 	hgTrackDb worm ce1 trackDb_$(USER) ../../lib/trackDb.sql .
 	hgTrackDb worm cb1 trackDb_$(USER) ../../lib/trackDb.sql .
+	hgTrackDb archae pae trackDb_$(USER) ../../lib/trackDb.sql .
 	cd zoo; make update; cd ..
 
 old_update:
