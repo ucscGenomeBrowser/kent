@@ -12,7 +12,7 @@
 #include "jksql.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: jksql.c,v 1.34 2003/08/27 23:51:03 markd Exp $";
+static char const rcsid[] = "$Id: jksql.c,v 1.35 2003/08/28 18:45:22 baertsch Exp $";
 
 boolean sqlTrace = FALSE;  /* setting to true prints each query */
 int sqlTraceIndent = 0;    /* number of spaces to indent traces */
@@ -182,8 +182,27 @@ char* user = getCfgValue("HGDB_USER", "db.user");
 char* password = getCfgValue("HGDB_PASSWORD", "db.password");
 
 if(host == 0 || user == 0 || password == 0)
-	errAbort("Could not read hostname, user, or password to the database from configuration file.");
-	
+    {
+    host = getCfgValue("HGDB_HOST", "ro.host");
+    user = getCfgValue("HGDB_USER", "ro.user");            
+    password = getCfgValue("HGDB_PASSWORD", "ro.password");   
+    if (host == 0 || user == 0 || password == 0)
+        errAbort("Could not read hostname, user, or password to the database from configuration file.");
+    }
+return sqlConnectRemote(host, user, password, database);
+}
+
+struct sqlConnection *sqlConnectReadOnly(char *database)
+/* Connect to database on default host as default user. */
+{
+char* host = getCfgValue("HGDB_HOST", "ro.host");
+char* user = getCfgValue("HGDB_USER", "ro.user");
+char* password = getCfgValue("HGDB_PASSWORD", "ro.password");
+
+if(host == 0 || user == 0 || password == 0)
+    {
+    errAbort("Could not read hostname, user, or password to the database from configuration file.");
+    }
 return sqlConnectRemote(host, user, password, database);
 }
 
