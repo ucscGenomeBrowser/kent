@@ -125,7 +125,7 @@
 #include "simpleNucDiff.h"
 #include "hgFind.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.553 2004/01/30 22:29:03 daryl Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.554 2004/01/31 01:16:06 angie Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -8660,6 +8660,7 @@ int i;
 struct psl *pslList = NULL, *psl;
 int pslStart;
 char *sqlMarker = marker;
+boolean hasBin;
 
 /* Make sure to escpae single quotes for DB parseability */
 if (strchr(marker, '\''))
@@ -8678,17 +8679,18 @@ sprintf(query, "SELECT * FROM %s WHERE name = '%s' "
 	table, sqlMarker, seqName, start, end);  
 sr = sqlMustGetResult(conn, query);
 row = sqlNextRow(sr);
+hasBin = hOffsetPastBin(seqName, table);
 if (row != NULL)
     {
     if (stsMapExists)
 	{
-	stsMapStaticLoad(row, &stsRow);
+	stsMapStaticLoad(row+hasBin, &stsRow);
 	}
     else
         /* Load and convert from original bed format */ 
 	{
 	struct stsMarker oldStsRow;
-	stsMarkerStaticLoad(row, &oldStsRow);
+	stsMarkerStaticLoad(row+hasBin, &oldStsRow);
 	stsMapFromStsMarker(&oldStsRow, &stsRow);
 	}
     if (stsInfo2Exists)
@@ -8701,7 +8703,7 @@ if (row != NULL)
 	if (row != NULL)
 	    {
 	    info2Row = stsInfo2Load(row);
-	    infoRow = stsInfoLoad(row);	    
+	    infoRow = stsInfoLoad(row);
 	    }
 	}
     else if (stsInfoExists)
@@ -8873,11 +8875,12 @@ if (row != NULL)
 	sprintf(query, "SELECT * FROM all_sts_seq WHERE qName = '%d'", 
 		infoRow->identNo);  
 	sr1 = sqlGetResult(conn1, query);
+	hasBin = hOffsetPastBin(seqName, "all_sts_seq");
 	i = 0;
 	pslStart = 0;
 	while ((row = sqlNextRow(sr1)) != NULL)
 	    {  
-	    psl = pslLoad(row);
+	    psl = pslLoad(row+hasBin);
 	    if ((sameString(psl->tName, seqName)) 
 		&& (abs(psl->tStart - start) < 1000))
 		{
@@ -8900,12 +8903,13 @@ if (row != NULL)
 	sprintf(stsid,"dbSTS_%d",infoRow->dbSTSid);
 	sprintf(query, "SELECT * FROM all_sts_primer WHERE qName = '%s'", 
 		stsid);  
+	hasBin = hOffsetPastBin(seqName, "all_sts_primer");
 	sr1 = sqlGetResult(conn1, query);
 	i = 0;
 	pslStart = 0;
 	while ((row = sqlNextRow(sr1)) != NULL)
 	    {  
-	    psl = pslLoad(row);
+	    psl = pslLoad(row+hasBin);
 	    if ((sameString(psl->tName, seqName)) 
 		&& (abs(psl->tStart - start) < 1000))
 		{
@@ -8972,17 +8976,18 @@ if (row != NULL)
                            "AND (chrom != '%s' OR chromStart != %d OR chromEnd != %d)",
 		    table, marker, seqName, start, end); 
 	    sr = sqlGetResult(conn,query);
+	    hasBin = hOffsetPastBin(seqName, table);
 	    while ((row = sqlNextRow(sr)) != NULL)
 		{
 		if (stsMapExists)
 		    {
-		    stsMapStaticLoad(row, &stsRow);
+		    stsMapStaticLoad(row+hasBin, &stsRow);
 		    }
 		else
 		    /* Load and convert from original bed format */ 
 		    {
 		    struct stsMarker oldStsRow;
-		    stsMarkerStaticLoad(row, &oldStsRow);
+		    stsMarkerStaticLoad(row+hasBin, &oldStsRow);
 		    stsMapFromStsMarker(&oldStsRow, &stsRow);
 		    }
 		printf("<TR><TD>%s:</TD><TD>%d</TD></TR>\n",
@@ -10715,6 +10720,7 @@ struct lfs *lfs, *lfsList = NULL;
 struct psl *pslList = NULL, *psl;
 char sband[32], eband[32];
 boolean gotS, gotB;
+boolean hasBin = hOffsetPastBin(seqName, track);
 
 /* Determine type */
 if (sameString("bacEndPairs", track)) 
@@ -10778,7 +10784,7 @@ sr = sqlMustGetResult(conn, query);
 row = sqlNextRow(sr);
 if (row != NULL)
     {
-    lfs = lfsLoad(row+1);
+    lfs = lfsLoad(row+hasBin);
     if (sameString("bacEndPairs", track)) 
 	{
 	printf("<H2><A HREF=");
@@ -10829,9 +10835,10 @@ if (row != NULL)
 	sprintf(query, "SELECT * FROM %s WHERE qName = '%s'", 
 	        lfs->pslTable, lfs->lfNames[i]);  
 	sr = sqlMustGetResult(conn, query);
+	hasBin = hOffsetPastBin(seqName, lfs->pslTable);
 	while ((row1 = sqlNextRow(sr)) != NULL)
 	    {
-	    psl = pslLoad(row1);
+	    psl = pslLoad(row1+hasBin);
 	    slAddHead(&pslList, psl);
 	    }
 	slReverse(&pslList);
