@@ -555,7 +555,7 @@ CREATE REFSEQ GENES TRACK (DONE 02/09/03)
     # Don't worry about the "No gene name" errors
 
     # Add RefSeq status info
-    hgRefSeqStatus mm3 loc2ref
+    hgRefSeqStatus -mouse mm3 loc2ref
 
 
 REFFLAT (DONE 02/25/03)
