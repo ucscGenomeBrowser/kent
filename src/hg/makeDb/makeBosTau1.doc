@@ -83,13 +83,14 @@ exit; # don't actually run this like a script :)
   cd /cluster/data/bosTau1/linearScaffolds
   /cluster/bin/i386/faToTwoBit Btau20040927-freeze-assembly.fa bosTau1.2bit
   /cluster/bin/i386/twoBitToFa bosTau1.2bit check.fa
+  mv bosTau1.2bit ../..
   # TO DO: split up so diff will work
   # diff Btau20040927-freeze-assembly.fa check.fa
   # note: size match
   ssh hgwdev
   mkdir /gbdb/bosTau1
   mkdir /gbdb/bosTau1/nib
-  ln -s /cluster/data/bosTau1/linearScaffolds/bosTau1.2bit /gbdb/bosTau1/nib
+  ln -s /cluster/data/bosTau1/bosTau1.2bit /gbdb/bosTau1/nib
 
 
 
