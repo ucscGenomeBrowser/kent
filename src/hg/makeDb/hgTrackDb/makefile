@@ -54,34 +54,34 @@ beta_update:
 	hgTrackDb mm2 trackDb ../../lib/trackDb.sql hgRoot
 
 betaZooUpdate:
-	hgTrackDb zooBaboon1 trackDb ../../lib/trackDb.sql hgRoot
-	hgTrackDb zooCat1 trackDb ../../lib/trackDb.sql hgRoot
-	hgTrackDb zooChicken1 trackDb ../../lib/trackDb.sql hgRoot
-	hgTrackDb zooChimp1 trackDb ../../lib/trackDb.sql hgRoot
-	hgTrackDb zooCow1 trackDb ../../lib/trackDb.sql hgRoot
-	hgTrackDb zooDog1 trackDb ../../lib/trackDb.sql hgRoot
-	hgTrackDb zooFugu1 trackDb ../../lib/trackDb.sql hgRoot
-	hgTrackDb zooHuman1 trackDb ../../lib/trackDb.sql hgRoot
-	hgTrackDb zooMouse1 trackDb ../../lib/trackDb.sql hgRoot
-	hgTrackDb zooPig1 trackDb ../../lib/trackDb.sql hgRoot
-	hgTrackDb zooRat1 trackDb ../../lib/trackDb.sql hgRoot
-	hgTrackDb zooZebrafish1 trackDb ../../lib/trackDb.sql hgRoot
-	hgTrackDb zooCombo1 trackDb ../../lib/trackDb.sql hgRoot
+	hgTrackDb zooBaboon3 trackDb ../../lib/trackDb.sql hgRoot
+	hgTrackDb zooCat3 trackDb ../../lib/trackDb.sql hgRoot
+	hgTrackDb zooChicken3 trackDb ../../lib/trackDb.sql hgRoot
+	hgTrackDb zooChimp3 trackDb ../../lib/trackDb.sql hgRoot
+	hgTrackDb zooCow3 trackDb ../../lib/trackDb.sql hgRoot
+	hgTrackDb zooDog3 trackDb ../../lib/trackDb.sql hgRoot
+	hgTrackDb zooFugu3 trackDb ../../lib/trackDb.sql hgRoot
+	hgTrackDb zooHuman3 trackDb ../../lib/trackDb.sql hgRoot
+	hgTrackDb zooMouse3 trackDb ../../lib/trackDb.sql hgRoot
+	hgTrackDb zooPig3 trackDb ../../lib/trackDb.sql hgRoot
+	hgTrackDb zooRat3 trackDb ../../lib/trackDb.sql hgRoot
+	hgTrackDb zooZebrafish3 trackDb ../../lib/trackDb.sql hgRoot
+	hgTrackDb zooCombo3 trackDb ../../lib/trackDb.sql hgRoot
 
 zooUpdate:
-	hgTrackDb zooBaboon1 trackDb_$(USER) ../../lib/trackDb.sql hgRoot
-	hgTrackDb zooCat1 trackDb_$(USER) ../../lib/trackDb.sql hgRoot
-	hgTrackDb zooChicken1 trackDb_$(USER) ../../lib/trackDb.sql hgRoot
-	hgTrackDb zooChimp1 trackDb_$(USER) ../../lib/trackDb.sql hgRoot
-	hgTrackDb zooCow1 trackDb_$(USER) ../../lib/trackDb.sql hgRoot
-	hgTrackDb zooDog1 trackDb_$(USER) ../../lib/trackDb.sql hgRoot
-	hgTrackDb zooFugu1 trackDb_$(USER) ../../lib/trackDb.sql hgRoot
-	hgTrackDb zooHuman1 trackDb_$(USER) ../../lib/trackDb.sql hgRoot
-	hgTrackDb zooMouse1 trackDb_$(USER) ../../lib/trackDb.sql hgRoot
-	hgTrackDb zooPig1 trackDb_$(USER) ../../lib/trackDb.sql hgRoot
-	hgTrackDb zooRat1 trackDb_$(USER) ../../lib/trackDb.sql hgRoot
-	hgTrackDb zooZebrafish1 trackDb_$(USER) ../../lib/trackDb.sql hgRoot
-	hgTrackDb zooCombo1 trackDb_$(USER) ../../lib/trackDb.sql hgRoot
+	hgTrackDb zooBaboon3 trackDb_$(USER) ../../lib/trackDb.sql hgRoot
+	hgTrackDb zooCat3 trackDb_$(USER) ../../lib/trackDb.sql hgRoot
+	hgTrackDb zooChicken3 trackDb_$(USER) ../../lib/trackDb.sql hgRoot
+	hgTrackDb zooChimp3 trackDb_$(USER) ../../lib/trackDb.sql hgRoot
+	hgTrackDb zooCow3 trackDb_$(USER) ../../lib/trackDb.sql hgRoot
+	hgTrackDb zooDog3 trackDb_$(USER) ../../lib/trackDb.sql hgRoot
+	hgTrackDb zooFugu3 trackDb_$(USER) ../../lib/trackDb.sql hgRoot
+	hgTrackDb zooHuman3 trackDb_$(USER) ../../lib/trackDb.sql hgRoot
+	hgTrackDb zooMouse3 trackDb_$(USER) ../../lib/trackDb.sql hgRoot
+	hgTrackDb zooPig3 trackDb_$(USER) ../../lib/trackDb.sql hgRoot
+	hgTrackDb zooRat3 trackDb_$(USER) ../../lib/trackDb.sql hgRoot
+	hgTrackDb zooZebrafish3 trackDb_$(USER) ../../lib/trackDb.sql hgRoot
+	hgTrackDb zooCombo3 trackDb_$(USER) ../../lib/trackDb.sql hgRoot
 
 betaZooUpdate2:
 	hgTrackDb zooBaboon2 trackDb ../../lib/trackDb.sql hgRoot
