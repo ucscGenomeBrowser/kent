@@ -138,27 +138,6 @@ spectrum on
 type genePred
 url http://www.pseudogene.org/cgi-bin/display-by-acc.cgi?id=$$
 
-
-track intronEst
-shortLabel Spliced ESTs
-longLabel $Organism ESTs That Have Been Spliced
-group rna
-priority 56
-visibility dense
-spectrum on
-intronGap 30
-type psl est
-
-track est
-shortLabel $Organism ESTs
-longLabel $Organism ESTs Including Unspliced
-group rna
-priority 57
-visibility hide
-spectrum on
-intronGap 30
-type psl est
-
 track HInvGeneMrna
 shortLabel H-Inv
 longLabel H-Invitational Genes mRNA Alignments
