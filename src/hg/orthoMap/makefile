@@ -6,13 +6,13 @@ MYLIBDIR = ../../lib/$(MACHTYPE)
 MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 
 % : %.c
-	gcc -Wimplicit -ggdb -I../inc  -I../../inc  -o $@ $(addsuffix .c,$@) $(O) $(MYLIBS) $(MYSQLLIBS) -lm -lz
-	cp $@ $(HOME)/bin/$(ARCHTYPE)
+	$(CC) $(COPTS) -I../inc  -I../../inc  -o $@ $(addsuffix .c,$@) $(O) $(MYLIBS) $(MYSQLLIBS) -lm -lz
+	cp $@ $(HOME)/bin/$(MACHTYPE)
 
 %Test: %Test.c 
 	gcc -Wimplicit -ggdb  -I../inc -I../../inc  -o $@ $(addsuffix .c,$@) $(MYLIBS) $(L)
 
-E =  orthoMap orthoEvaluate orthoPickIntron # spliceStats spliceVis
+E = mgcFastaForBed agxToIntronBeds bedToFrames orthoMap orthoEvaluate orthoPickIntron # spliceStats spliceVis
 
 O = orthoEval.o
 
