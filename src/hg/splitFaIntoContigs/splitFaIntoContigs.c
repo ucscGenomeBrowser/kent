@@ -25,8 +25,11 @@ that we can split a sequence at the end of it into supercontigs
 */
 static const char *NO = "no";
 
+/* The default size at which we split the genome on a non-bridged contig gap bound */
 int _nSize = 1000000;
+/* The size at which we split the genome on a bridged or non-bridged contig gap bound */
 int _bSize = 0;
+/* The size at which we split the genome on any contig fragment or gap bound */
 int _aSize = 0;
 
 /*
@@ -72,21 +75,19 @@ Explain usage and exit.
 fflush(stdout);
     printf(
       "\nusage:\n"
-      "\tsplitFaIntoContigs in.agp in.fa outputDir [-nSize=N (default 100000)] [-bSize=N]\n"
-//      "\tsplitFaIntoContigs in.agp in.fa outputDir [-nSize=N (default 100000)] [-bSize=N] [-aSize=N]\n"
+      "\tsplitFaIntoContigs in.agp in.fa outputDir [-nSize=N (default 100000)] [-bSize=N] [-aSize=N]\n"
       "\n"
       "splitFaIntoContigs - takes a .agp file, a .fa file, and an output directory in which to save the data \n"
       " along with hierarchical size parameters into which to split each chromosome of the fa file.\n"
       "The following parameters may be used alone or in combination: "
       "\n -nSize (non-bridged size) refers to the minimum size at which we want to split after NON-BRIDGED contig boundaries"
       "\n -bSize (bridged size) refers to the minimum size at which we want to split after BRIDGED contig boundaries"
-//      "\n -aSize (absolute size) refers to the size after which we want to split no matter what (i.e., no contig boundary is available)\n"
+      "\n -aSize (any fragment size) refers to the size after which we want to split no matter what (i.e., no contig boundary is available)\n"
       "\nWhen given more than one of these options, splitFaIntoContigs will first try to split at the nSize number on a non-bridged contig.\n"
       "If it reaches the bSize number without finding a non-bridged contig, it will try to split on a non-bridged or bridged contig.\n"
-//      "Finally, if given an aSize param, it will always split after that byte if no prior suitable bridged or\n"
-//      " non-bridged contig split boundary has been found.\n"
-      "NOTE: bSize > nSize must hold true\n\n");
-//      "NOTE: aSize > bSize > nSize must hold true\n\n");
+      "Finally, if given an aSize param, it will always split after that fragment if no prior suitable bridged or\n"
+      " non-bridged contig split boundary has been found.\n"
+      "NOTE: aSize > bSize > nSize must hold true\n\n");
     exit(-1);
 }
 
@@ -323,7 +324,7 @@ struct agpFrag *agpFrag = NULL;
 struct agpData *curAgpData = NULL;
 struct agpData *prevAgpData = NULL;
 boolean splitPointFound = FALSE;
-int splitSize = max(_nSize, _bSize);
+int splitSize = _nSize;
 
 do 
 {
@@ -336,6 +337,7 @@ if (line[0] == '#' || line[0] == '\n')
 
 curAgpData = AllocVar(curAgpData);
 curAgpData->endOfContig = FALSE;
+curAgpData->isGap = FALSE;
 curAgpData->prev = NULL;
 curAgpData->next = NULL;
 
@@ -354,14 +356,14 @@ if ('N' == words[4][0])
         startIndex = agpGap->chromStart;
         }
 
-    if (numBasesRead < _nSize)
+    if (numBasesRead >= _bSize)
         {
-        /* Split points are made at non-bridged contigs only here */
-        splitPointFound = (0 == strcasecmp(agpGap->bridge, NO));
+        splitPointFound = TRUE;
         }
     else
         {
-        splitPointFound = TRUE;
+        /* Split points are made after non-bridged contigs only here */
+        splitPointFound = (0 == strcasecmp(agpGap->bridge, NO));
         }
      
     curAgpData->isGap = TRUE;
@@ -370,13 +372,21 @@ if ('N' == words[4][0])
 else
     {
     agpFrag = agpFragLoad(words);
-    /* If we find a fragment and not a gap we can't split there */
+    /* If we find a fragment and not a gap */
     if (0 == startIndex)
         {
         startIndex = agpFrag->chromStart;
         }
 
-    splitPointFound = FALSE;
+    if (numBasesRead >= _aSize) 
+        {
+        splitPointFound = TRUE;
+        }
+    else
+        {
+        splitPointFound = FALSE;
+        }
+
     curAgpData->isGap = FALSE;
     curAgpData->data.pFrag = agpFrag;
     }
@@ -389,18 +399,18 @@ if (NULL == prevAgpData)
     }
 else
     {
-    /* Build a doubly linked list for use elewhere */
+    /* Build a doubly linked list for use elsewhere */
     prevAgpData->next = curAgpData;
     curAgpData->prev = prevAgpData;
     }
 
 prevAgpData = curAgpData;
 numBasesRead = curAgpData->data.pGap->chromEnd - startIndex;
+
 } while ((numBasesRead < splitSize || !splitPointFound)
-             && curAgpData->data.pGap->chromEnd < dnaSize);
+       && curAgpData->data.pGap->chromEnd < dnaSize);
 
 curAgpData->next = NULL; /* Terminate the linked list */
-
 curAgpData->endOfContig = TRUE;
 return curAgpData;
 }
@@ -545,7 +555,7 @@ else if (NULL != arg)
     usage();
     }
 
-/*arg = optionVal("aSize", NULL);
+arg = optionVal("aSize", NULL);
 if (NULL != arg && atoi(arg) > 0)
     {
     _aSize = atoi(arg);
@@ -554,7 +564,7 @@ else if (NULL != arg)
     {
     usage();
     }
-*/
+
 if ((_aSize != 0 && _aSize <= _bSize) 
  || (_bSize != 0 && _bSize <= _nSize)
  || (_aSize != 0 && _aSize <= _nSize))
