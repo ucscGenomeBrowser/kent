@@ -18,11 +18,11 @@
 #include "nib.h"
 
 /* Variables used by getFeatDna code */
-char *database = "hg6";		/* Which database? */
+char *database = "hg7";		/* Which database? */
 int chromStart = 0;		/* Start of range to select from. */
 int chromEnd = BIGNUM;          /* End of range. */
 char *where = NULL;		/* Extra selection info. */
-boolean breakUp =  TRUE;	/* Break up things? */
+boolean breakUp = FALSE;	/* Break up things? */
 int merge = -1;			/* Merge close blocks? */
 char *outputType = "fasta";	/* Type of output. */
 
@@ -41,8 +41,14 @@ webInTextMode = TRUE;
 }
 
 
-void webStart(char* title)
+void webStart(char* format,...)
 {
+va_list args;
+va_start(args, format);
+
+if(webHeadAlreadyOutputed)
+    return;
+
 /* Preamble. */
 dnaUtilOpen();
 
@@ -56,7 +62,7 @@ puts(
 	"	<TITLE>"
 );
 
-printf("%s", title);
+vprintf(format, args);
 
 puts(
 	"</TITLE>" "\n"
@@ -66,12 +72,12 @@ puts(
 	"<A NAME=\"TOP\"></A>" "\n"
 	"" "\n"
 	"<TABLE BORDER=0 WIDTH=\"100%\">" "\n"
-	"<TH COLSPAN=2 ALIGN=\"left\">	<IMG SRC=\"/images/title.jpg\"></TH>" "\n"
+	"<TR><TH COLSPAN=2 ALIGN=\"left\"><IMG SRC=\"/images/title.jpg\"></TH></TR>" "\n"
 	"" "\n"
 	"<!--HOTLINKS BAR----------------------------------------------------------->" "\n"
 	"<TR><TD COLSPAN=2 HEIGHT=40>" "\n"
 	"   <CENTER>" "\n"
-	"	<TABLE BACKGROUND=\"images/hl_mid.jpg\" BGCOLOR=\"253BDE\" WIDTH=100% CELLSPACING=0 CELLPADDING=0 BORDER=0 HEIGHT=\"22\"><TR><TD>" "\n"
+	"	<TABLE BGCOLOR=\"2636D1\" WIDTH=100% CELLSPACING=0 CELLPADDING=0 BORDER=1 HEIGHT=\"22\"><TR><TD>" "\n"
 	"		<TABLE WIDTH=431 CELLSPACING=4 CELLPADDING=0 BORDER=0><TR>" "\n"
 	"		<TD WIDTH=1></TD>" "\n"
 	"		<TD WIDTH=75>" "\n"
@@ -95,11 +101,11 @@ puts(
 	"<!--Content Tables------------------------------------------------------->" "\n"
 	"<TR><TD CELLPADDING=10>	" "\n"
 	"	<TABLE BGCOLOR=\"fffee8\" WIDTH=\"100%\" BORDERCOLOR=\"888888\" BORDER=1><TR><TD>" "\n"
-	"	<TABLE BGCOLOR=\"ffffff\" BACKGROUND=\"/images/hr.gif\" WIDTH=100%><TR><TD>" "\n"
+	"	<TABLE BGCOLOR=\"D9E4F8\" BACKGROUND=\"/images/hr.gif\" WIDTH=100%><TR><TD>" "\n"
 	"		<FONT SIZE=\"4\"><b>&nbsp;  "
 );
 
-printf("%s", title);
+vprintf(format, args);
 
 puts(
 	"</b></FONT>" "\n"
@@ -111,6 +117,7 @@ puts(
 
 webHeadAlreadyOutputed = TRUE;
 
+va_end(args);
 }
 
 
@@ -153,16 +160,16 @@ if(!webInTextMode)
 }
 
 
-void webAbort(char* format, ...)
+void webAbort(char* title, char* format, ...)
 {
 va_list args;
 va_start(args, format);
 
 if(!webHeadAlreadyOutputed)
-	webStart("Error");
+	webStart(title);
 
 if(webInTextMode)
-	printf("\n\n\n          Error: ");
+	printf("\n\n\n          %s\n\n", title);
 
 vprintf(format, args);
 
@@ -217,10 +224,11 @@ struct hgPos *pos;
 struct dyString *ui;
 
 hgp = hgPositionsFind(spec, "", FALSE);
+
 if (hgp == NULL || hgp->posCount == 0)
     {
     hgPositionsFree(&hgp);
-    webAbort("Sorry, couldn't locate %s in genome database\n", spec);
+    webAbort("Not found", "Sorry, couldn't locate %s in genome database\n", spec);
     return TRUE;
     }
 if ((pos = hgp->singlePos) != NULL)
@@ -233,8 +241,10 @@ if ((pos = hgp->singlePos) != NULL)
 	}
 else
 	{
+    webStart("Genome Table Browser");
     hgPositionsHtml(hgp, stdout, FALSE);
     hgPositionsFree(&hgp);
+    webEnd();
     return FALSE;
     }
 freeDyString(&ui);
@@ -272,7 +282,7 @@ return strcmp(a->name, b->name);
 
 
 void getTable()
-/* get the a talbe selection from the user */
+/* get the a table selection from the user */
 {
 char* database;
 
@@ -300,7 +310,7 @@ position = cgiOptionalString("position");
 /* select the database */
 database = cgiOptionalString("db");
 if (database == NULL)
-    database = "hg6";
+    database = "hg7";
 hSetDb(database);
 hDefaultConnect();
 conn = hAllocConn();
@@ -308,6 +318,8 @@ conn = hAllocConn();
 /* if the position information is not given, get it */
 if(position == NULL)
 	position = "";
+if(position[0] == '\0')
+    webAbort("Missing position", "Please enter a position");
 if(strcmp(position, "genome"))
 	{
 	if(position != NULL && position[0] != 0)
@@ -318,16 +330,8 @@ if(strcmp(position, "genome"))
 	findGenomePos(position, &chromName, &winStart, &winEnd);
 	}
 
-/* output the freexe name and informaion */
-freezeName = hFreezeFromDb(database);
-if(freezeName == NULL)
-	freezeName = "Unknown";
-printf("<H2>UCSC Genome Text Browser on %s Freeze</H2>\n",freezeName);
-
-
 /* iterate through all the tables and store the positional ones in a list */
 strcpy(query, "SHOW TABLES");
-//puts(query);
 sr = sqlGetResult(conn, query);
 while((row = sqlNextRow(sr)) != NULL)
 	{
@@ -367,9 +371,14 @@ puts("<TABLE CELLPADDING=\"8\">");
 puts("<TR><TD>");
 
 /* print the location and a jump button */
-puts("Choose a position: ");
-puts("</TD><TD>");
-cgiMakeTextVar("position", position, 30);
+{
+    char buf[256];
+    sprintf(buf, "%s:%d-%d", chromName, winStart+1, winEnd);
+
+    puts("Choose a position: ");
+    puts("</TD><TD>");
+    cgiMakeTextVar("position", buf, 30);
+}
 cgiMakeButton("submit", " jump ");
 cgiMakeHiddenVar("db", database);
 cgiMakeHiddenVar("phase", "table");
@@ -391,7 +400,10 @@ slSort(&nonposTableList, compareTable);
 currentListEl = posTableList;
 while(currentListEl != 0)
 	{
-	printf("<OPTION>%s</OPTION>\n", currentListEl->name);
+	if(existsAndEqual("table0", currentListEl->name))
+		printf("<OPTION SELECTED>%s</OPTION>\n", currentListEl->name);
+	else
+		printf("<OPTION>%s</OPTION>\n", currentListEl->name);
 
 	currentListEl = currentListEl->next;
 	}
@@ -403,7 +415,10 @@ printf("<OPTION VALUE=\"Choose table\">Non-positional tables</OPTION>\n");
 currentListEl = nonposTableList;
 while(currentListEl != 0)
 	{
-	printf("<OPTION>%s</OPTION>\n", currentListEl->name);
+	if(existsAndEqual("table1", currentListEl->name))
+		printf("<OPTION SELECTED>%s</OPTION>\n", currentListEl->name);
+	else
+		printf("<OPTION>%s</OPTION>\n", currentListEl->name);
 
 	currentListEl = currentListEl->next;
 	}
@@ -425,9 +440,23 @@ puts("</FORM>");
 
 hashElFreeList(&posTableList);
 
-webNewSection("Table Description");
+webNewSection("Getting started on the Table Browser");
 
-puts("Hello world!");
+puts(
+	"This web tool allows convenient and precise access to the primary database tables containing the human genome sequence and associated annotation tracks. By specifying chromosomal range and table type, the exact data set of interest can be viewed.  This tool thus makes it unnecessary to download and manipulate the human genome itself and its massive data tracks (though that option is will always remain <A HREF=\"http://genome.cse.ucsc.edu/\">available</A>." "\n"
+	"<P>" "\n"
+	"After each round of genome assembly, features such as mRNAs are located within the genome by alignment. This process generates <B>positional</B> stop-start coordinates and other descriptive data which are then stored within MySQL relational database tables. It is these tables that drive the graphical tracks in the Genome Browser, meaning that the two views of the data are always in agreement. Chromosomal coordinates usually change with each  build because of newly filled gaps or assembly procedure refinements." "\n"
+	"<P>" "\n"
+	"Other data is inherently <B>non-positional</B> (not tied to genome coordinates), such as submitting author of a GenBank EST, tissue of origin , or link to a RefSeq.  These data types are accessed separately." "\n"
+	"<P>" "\n"
+	"Familiarize yourself with the table browser tool by a <B>few minutes of exploration</B>. Starting at the top of the form, use the default position (or enter a cytological band, eg 20p12, or type in a keyword from a GenBank entry to look up). Next select a positional table from the menu, for example, chrN_mrna.  Choosing an action will then display -- relative to the chromosomal range in the text box -- a option to view and refine displayed data fields, all the mRNA coordinate data, or the genomic DNA sequences of the RNAs.  If the chromosomal range is too narrow, it may happen that no mRNA occurs there (meaning no data will be returned)." "\n"
+	"<P>" "\n"
+	"Notice that if you look up a gene or accession number, the tool typically returns a choice of several mRNAs.  Selecting one of these returns the table browser to its starting place but with the chromosomal location automaticallyentered in the text box." "\n"
+	"<P>" "\n"
+	"The non-positional tables display all entries associated with the selected assembly -- there is no way to restrict them to chromosomes.  However there is a provision in the text box to add a single word restriction.  Thus, to see which species of macaque monkeys have contributed sequence data, selected the organism table, view all fields, and restrict the text box to the genus Macaca." "\n"
+	"<P>" "\n"
+	"For either type of table, a user not familiar with what the table offers should select \"Choose fields\".   Some tables offer many columns of data of which only a few might be relevent. The fewer fields selected, the simpler the next stage of data return.  If all the fields are wanted, shortcut this step by selecting \"Get all fields\".  If a chromosome and range are in the text box, \"Get DNA\" will retrieve genomic sequences in fasta format without any table attributes other than chromosome, freeze date, and start-stop genomic coordinates." "\n"
+);
 }
 
 void parseTableName(char* dest, char* chrom_name)
@@ -477,6 +506,8 @@ char* position;
 position = cgiOptionalString("position");
 if(position == NULL)
 	position = "";
+if(position[0] == '\0')
+    webAbort("Missing position", "Please enter a position");
 if(strcmp(position, "genome"))
 	{
 	if(position != NULL && position[0] != 0)
@@ -490,7 +521,7 @@ if(strcmp(position, "genome"))
 /* if they haven't choosen a table tell them */
 if(existsAndEqual("table", "Choose table"))
 	{
-	webAbort("Please choose a table");
+	webAbort("Missing table selection", "Please choose a table");
 	}
 
 /* get the real name of the table */
@@ -498,7 +529,7 @@ parseTableName(table, choosenChromName);
 
 /* make sure that the table name doesn't have anything "weird" in it */
 if(!allLetters(table))
-	webAbort("Malformated table name.");
+	webAbort("Error", "Malformated table name.");
 	
 /* get the name of the start and end fields */
 if(hFindChromStartEndFields(table, chromFieldName, startName, endName))
@@ -540,6 +571,7 @@ void getChoosenFields()
 {
 struct cgiVar* current = cgiVarList();
 char table[256];
+char post[64];
 char query[256];
 int i;
 int numberColumns;
@@ -565,14 +597,12 @@ position = cgiOptionalString("position");
 
 /* if they haven't choosen a table tell them */
 if(existsAndEqual("table0", "Choose table") && existsAndEqual("table1", "Choose table"))
-	webAbort("Please choose a table.");
-
-webStart("Genome Text Browser");
+	webAbort("Missing table selection", "Please choose a table.");
 
 /* select the database */
 database = cgiOptionalString("db");
 if (database == NULL)
-    database = "hg6";
+    database = "hg7";
 hSetDb(database);
 hDefaultConnect();
 conn = hAllocConn();
@@ -580,6 +610,8 @@ conn = hAllocConn();
 /* if the position information is not given, get it */
 if(position == NULL)
 	position = "";
+if(position[0] == '\0')
+    webAbort("Missing position", "Please enter a position");
 if(strcmp(position, "genome"))
 	{
 	if(position != NULL && position[0] != 0)
@@ -593,31 +625,20 @@ else
 	allGenome = TRUE;	/* read all chrom info */
 
 /* print the form */
-puts("<CENTER>");
 printf("<FORM ACTION=\"%s\">\n\n", hgTextName());
 
-/* output the freexe name and informaion */
-freezeName = hFreezeFromDb(database);
-if(freezeName == NULL)
-	freezeName = "Unknown";
-printf("<H2>UCSC Genome Text Browser on %s Freeze</H2>\n",freezeName);
-
-if(!allGenome)
-	{
-	/* get the real name of the table */
+/* take a first stab */
+if(allGenome)
+	parseTableName(table, "chr22");
+else
 	parseTableName(table, chromName);
-	}
-else	/* if all the genome */
-	{
-	strncpy(table, getTableVar(), 255);
-	/* take table of the form chrN_* to chr1_* and uses chr1_* as prototypical table */
-	if(table[0] == 'c' && table[1] == 'h' && table[2] == 'r' && table[3] == 'N' && table[4] == '_')
-		table[3] = '1';
-	}
+
+if(!hTableExists(table))
+	webAbort("No data", "There is no information in table %s for chromosome %s.", getTableVar(), chromName);
 
 /* make sure that the table name doesn't have anything "weird" in it */
 if(!allLetters(table))
-	webAbort("Malformated table name.");
+	webAbort("Error", "Malformated table name.");
 
 /* print the location and a jump button if the table is positional */
 if(hFindChromStartEndFields(table, query, query, query))
@@ -657,7 +678,6 @@ puts("<INPUT TYPE=\"submit\" NAME=\"phase\" VALUE=\"Get these fields\">");
 
 puts("</TD></TR></TABLE>");
 puts("</FORM>");
-puts("</CENTER>");
 sqlDisconnect(&conn);
 
 webEnd();
@@ -690,6 +710,8 @@ char* position;
 position = cgiOptionalString("position");
 if(position == NULL)
 	position = "";
+if(position[0] == '\0')
+    webAbort("Missing position", "Please enter a position");
 if(strcmp(position, "genome"))
 	{
 	if(position != NULL && position[0] != 0)
@@ -705,7 +727,7 @@ parseTableName(table, choosenChromName);
 
 /* make sure that the table name doesn't have anything "weird" in it */
 if(!allLetters(table))
-	webAbort("Malformated table name.");
+	webAbort("Error", "Malformated table name.");
 
 strcpy(query, "SELECT");
 
@@ -716,7 +738,7 @@ while(current != 0)
 		{	
 		/* make sure that the field names don't have anything "weird" in them */
 		if(!allLetters(current->name + strlen("field_")))
-			webAbort("Malformated field name.");
+			webAbort("Error", "Malformated field name.");
 
 		sprintf(query, "%s %s", query, current->name + strlen("field_"));
 		break; /* only process the first field this way */
@@ -728,7 +750,7 @@ while(current != 0)
 /* if there are no fields sellected, say so */
 if(current == 0)
 	{
-	webAbort("No fields selected.");
+	webAbort("Missing fields selection", "No fields selected.");
 	//printf("Content-Type: text/plain\n\n");
 	//printf("\n\nNo fields selected.\n");
 	return;
@@ -743,7 +765,7 @@ while(current != 0)
 		{	
 		/* make sure that the field names don't have anything "weird" in them */
 		if(!allLetters(current->name + strlen("field_")))
-			webAbort("Malformated field name.");
+			webAbort("Error", "Malformated field name.");
 
 		sprintf(query, "%s, %s", query, current->name + strlen("field_"));
 		}
@@ -804,7 +826,7 @@ char* table = getTableVar();
 /* select the database */
 database = cgiOptionalString("db");
 if (database == NULL)
-    database = "hg6";
+    database = "hg7";
 hSetDb(database);
 hDefaultConnect();
 conn = hAllocConn();
@@ -818,7 +840,7 @@ while(current != 0)
 		{	
 		/* make sure that the field names don't have anything "weird" in them */
 		if(!allLetters(current->name + strlen("field_")))
-			webAbort("Malformated field name.");
+			webAbort("Error", "Malformated field name.");
 
 		sprintf(query, "%s %s", query, current->name + strlen("field_"));
 		break; /* only process the first field this way */
@@ -830,7 +852,7 @@ while(current != 0)
 /* if there are no fields sellected, say so */
 if(current == 0)
 	{
-	webAbort("No fields selected.\n");
+	webAbort("Missing field selection", "No fields selected.\n");
 	//printf("Content-Type: text/plain\n\n");
 	//printf("\n\nNo fields selected.\n");
 	return;
@@ -845,7 +867,7 @@ while(current != 0)
 		{	
 		/* make sure that the field names don't have anything "weird" in them */
 		if(!allLetters(current->name + strlen("field_")))
-			webAbort("Malformated field name.");
+			webAbort("Error", "Malformated field name.");
 
 		sprintf(query, "%s, %s", query, current->name + strlen("field_"));
 		}
@@ -943,7 +965,7 @@ char parsedTableName[256];
 /* select the database */
 database = cgiOptionalString("db");
 if (database == NULL)
-    database = "hg6";
+    database = "hg7";
 hSetDb(database);
 hDefaultConnect();
 conn = hAllocConn();
@@ -956,7 +978,7 @@ while(current != 0)
 		{	
 		/* make sure that the field names don't have anything "weird" in them */
 		if(!allLetters(current->name + strlen("field_")))
-			webAbort("Malformated field name.");
+			webAbort("Error", "Malformated field name.");
 
 		sprintf(fields, "%s %s", fields, current->name + strlen("field_"));
 		break; /* only process the first field this way */
@@ -968,7 +990,7 @@ while(current != 0)
 /* if there are no fields sellected, say so */
 if(current == 0)
 	{
-	webAbort("No fields selected.");
+	webAbort("Missing field selection", "No fields selected.");
 	//printf("Content-Type: text/plain\n\n");
 	//printf("\n\nNo fields selected.\n");
 	return;
@@ -983,7 +1005,7 @@ while(current != 0)
 		{	
 		/* make sure that the field names don't have anything "weird" in them */
 		if(!allLetters(current->name + strlen("field_")))
-			webAbort("Malformated field name.");
+			webAbort("Error", "Malformated field name.");
 
 		sprintf(fields, "%s, %s", fields, current->name + strlen("field_"));
 		}
@@ -1073,7 +1095,7 @@ table = getTableVar();
 /* make sure that the table name doesn't have anything "weird" in it */
 if(!allLetters(table))
 	{
-	webAbort("Malformated table name.");
+	webAbort("Error", "Malformated table name.");
 	//printf("Content-Type: text/plain\n\n");
 	//printf("Malformated table name.");
 	return;
@@ -1102,7 +1124,7 @@ char parsedTableName[256];
 /* select the database */
 database = cgiOptionalString("db");
 if (database == NULL)
-    database = "hg6";
+    database = "hg7";
 hSetDb(database);
 hDefaultConnect();
 conn = hAllocConn();
@@ -1166,9 +1188,7 @@ char* table = getTableVar();
 /* if they haven't choosen a table tell them */
 if(existsAndEqual("table", "Choose table"))
 	{
-	webAbort("Please choose a table.");
-	//printf("Content-type: text/plain\n\n");
-	//printf("\n\nPlease choose a table.");
+	webAbort("Missing table selection", "Please choose a table.");
 	exit(1);
 	}
 
@@ -1209,7 +1229,7 @@ if (sameWord(outputType, "pos"))
 else if (sameWord(outputType, "fasta"))
     faWriteNext(f, faHeader, dna, size);
 else
-    webAbort("Unknown output type %s\n", outputType);
+    webAbort("Error", "Unknown output type %s\n", outputType);
 }
 
 
@@ -1254,7 +1274,7 @@ int nibSize;
 s = size = 0;
 
 if (!hFindChromStartEndFields(table, chromField, startField, endField))
-    webAbort("Couldn't find chrom/start/end fields in table");
+    webAbort("Missing field in table", "Couldn't find chrom/start/end fields in table");
 
 if (merge >= 0)
     {
@@ -1280,7 +1300,13 @@ if (breakUp)
 	sr = sqlGetResult(conn, query->string);
 	while ((row = sqlNextRow(sr)) != NULL)
 	    {
-	    struct psl *psl = pslLoad(row);
+		char trash[32];
+		boolean isBinned;
+		struct psl *psl;
+		
+		hFindFieldsAndBin(table, trash, trash, trash, &isBinned);
+		
+	    psl = pslLoad(row + isBinned);
 	    if (psl->strand[1] == '-')	/* Minus strand on target */
 		{
 		int tSize = psl->tSize;
@@ -1323,7 +1349,7 @@ if (breakUp)
 	}
     else
         {
-        webAbort("Can only use breakUp parameter with psl or genePred formatted tables");
+        webAbort("Error", "Can only use breakUp parameter with psl or genePred formatted tables");
 	}
     }
 else
@@ -1341,7 +1367,7 @@ else
 	e = sqlUnsigned(row[1]);
 	sz = e - s;
 	if (seq != NULL && (sz < 0 || e >= size))
-	    webAbort("Coordinates out of range %d %d (%s size is %d)", s, e, chrom, size);
+	    webAbort("Out of range", "Coordinates out of range %d %d (%s size is %d)", s, e, chrom, size);
 	outputDna(f, chrom, table, s, sz, dna, nibFileName, nibFile, nibSize, '+');
 	}
     }
@@ -1414,7 +1440,7 @@ for (chromEl = chromList; chromEl != NULL; chromEl = chromEl->next)
         {
 	sprintf(chrTable, "%s_%s", chrom, table);
 	if (!hTableExists(table))
-	    webAbort("table %s (and %s) don't exist in %s", table, 
+	    webAbort("Cannot find table", "table %s (and %s) don't exist in %s", table, 
 	         chrTable, database);
 	}
     if (!toStdout)
@@ -1441,17 +1467,19 @@ int c;
 /* if they haven't choosen a table, tell them */
 if(existsAndEqual("table", "Choose table"))
 	{
-	webAbort("Please choose a table.");
+	webAbort("Missing table selection", "Please choose a table.");
 	}
 	
 /* select the database */
 database = cgiOptionalString("db");
 if (database == NULL)
-	database = "hg6";
+	database = "hg7";
 
 /* if the position information is not given, get it */
 if(position == NULL)
 	position = "";
+if(position[0] == '\0')
+    webAbort("Missing position", "Please enter a position");
 if(strcmp(position, "genome"))
 	{
 	if(position != NULL && position[0] != 0)
@@ -1464,7 +1492,7 @@ if(strcmp(position, "genome"))
 
 /* make sure that the table name doesn't have anything "weird" in it */
 if(!allLetters(table))
-	webAbort("Malformated table name.");
+	webAbort("Error", "Malformated table name.");
 
 webStartText();
 
@@ -1516,11 +1544,6 @@ else
 	chromStart = winStart;
 	chromEnd = winEnd;
 
-	puts(parsedTableName);
-	puts(choosenChromName);
-
-	printf("%d to %d\n", chromStart, chromEnd);
-	
 	getFeatDna(parsedTableName, choosenChromName, "stdout");
 	}
 }
@@ -1531,20 +1554,45 @@ void execute()
 {
 char* table = getTableVar("table");
 
+char* database;
+char* freezeName;
+
+/* select the database */
+database = cgiOptionalString("db");
+if (database == NULL)
+    database = "hg7";
+hSetDb(database);
+
+/* output the freexe name and informaion */
+freezeName = hFreezeFromDb(database);
+if(freezeName == NULL)
+    freezeName = "Unknown";
+
 hDefaultConnect();	/* read in the default connection options */
 
-/* if there is no table chosen, ask for one. If the user pushed the "jump"
- * of the choose table form, we ask for the table again */
+/*if(cgiOptionalString("position") == 0)
+	webAbort("No position given", "Please choose a position");*/
+
+/* if there is no table chosen, ask for one. */
 if(table == NULL || existsAndEqual("phase", "table"))
 	{
-	webStart("Genome Text Browser");
-	getTable();
-	webEnd();
+
+	if(cgiOptionalString("table0") == 0 && cgiOptionalString("table1") == 0)
+		{
+		webStart("Genome Table Browser on %s Freeze", freezeName);
+		getTable();
+		webEnd();
+	} else
+	    webAbort("Missing table selection", "Please choose a table and try again.");
 	}
 else
 	{
 	if(table != 0 && existsAndEqual("phase", "Choose fields"))
+		{
+		webStart("Genome Table Browser on %s Freeze", freezeName);
 		getChoosenFields();
+		webEnd();
+		}
 	else if(table != 0 && existsAndEqual("phase", "Get all fields"))
 		{	
 		if(existsAndEqual("position", "genome"))
@@ -1580,7 +1628,7 @@ if (!cgiIsOnWeb())
 /* select the database */
 database = cgiOptionalString("db");
 if (database == NULL)
-    database = "hg6";
+    database = "hg7";
 hSetDb(database);
 hDefaultConnect();
 
