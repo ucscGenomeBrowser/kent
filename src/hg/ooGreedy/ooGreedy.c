@@ -3633,7 +3633,10 @@ for (bel = barge->cloneList; bel != NULL; bel = bel->next)
 	    start = clone;
 	endPos = clone->defaultPos + clone->size;
 	if (endPos > maxEndPos)
+	    {
 	    end = clone;
+	    maxEndPos = endPos;
+	    }
 	}
     }
 assert(start != NULL);
@@ -3648,6 +3651,7 @@ void addRaftToRaftGraph(struct diGraph *raftGraph, struct raft *raft)
 {
 struct oogClone *clone, *startClone, *endClone;
 struct dgNode *raftNode;
+
 
 raft->node = raftNode = dgAddNumberedNode(raftGraph, raft->id, raft);
 if ((clone = singleCloneForRaft(raft)) != NULL)
@@ -3721,6 +3725,7 @@ makeRaftGraphSkeleton(raftGraph, bargeList, raftList, fixedRaft);
 for (barge = bargeList; barge != NULL; barge = barge->next)
     barge->node = node = dgAddNumberedNode(bargeGraph, barge->id, barge);
 slReverse(&bargeGraph->nodeList);
+
 
 /* Add in non-conflicting mrna lines one at a time. */
 for (ml = mrnaLineList; ml != NULL; ml = ml->next)
@@ -5271,7 +5276,6 @@ figureMapEnclosures(bargeList);
     status("%d self psls\n", slCount(selfPslList));
     processSelf(selfPslList, bargeList,  &cloneList, &fragList, cloneHash, fragHash,
     	mapOverlapHash);
-    uglyf("Done processSelf\n");
     }
 
 /* Make rafts inside of barges. */
@@ -5301,6 +5305,14 @@ calcPositions(bargeList, fragList, NULL);
 setRaftDefaultPositions(raftList);
 
 setRaftFlipTendencies(raftList);
+
+/* Dump rafts to log file for EZ debugging. */
+for (raft = raftList; raft != NULL; raft = raft->next)
+    {
+    dumpRaft(raft, logFile);
+    logIt("\n");
+    }
+
 
 /* Read in rna, est, paired reads and bac end pair lists and
  * merge them into one big list sorted by score. */  
