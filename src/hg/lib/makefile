@@ -25,7 +25,7 @@ O = affyAtlas.o affyGenoDetails.o affyOffset.o affyPairs.o agpFrag.o \
     hgMaf.o hgRelate.o hgSeq.o hui.o humanParalog.o \
     imageClone.o isochores.o jaxOrtholog.o jaxQTL.o jksql.o \
     kgAlias.o kgProtAlias.o knownInfo.o knownMore.o knownToSuper.o \
-    lfs.o llaInfo.o mapSts.o mcnBreakpoints.o minGeneInfo.o \
+    lfs.o liftUp.o llaInfo.o mapSts.o mcnBreakpoints.o minGeneInfo.o \
     mouseOrtho.o mouseSyn.o mouseSynWhd.o netAlign.o ooUtils.o \
     pepPred.o plasEndPairs.o pseudoGeneLink.o pslWScore.o qaSeq.o \
     recombRate.o refLink.o refSeqStatus.o riken.o rikenBest.o \
