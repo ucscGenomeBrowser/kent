@@ -23,8 +23,10 @@ O = agpFrag.o agpGap.o bbRepMask.o bed.o cart.o cartDb.o \
     simpleRepeat.o snp.o softberryHom.o \
     softPromoter.o stsAlias.o stsInfo.o stsMarker.o \
     traceInfo.o trackDb.o \
-    trackDbCustom.o trackTable.o wabAli.o refAlign.o \
-    sage.o sageExp.o pslWScore.o coordConv.o expRecord.o ancientRref.o
+    trackDbCustom.o trackDb.o trackTable.o wabAli.o refAlign.o \
+    sage.o sageExp.o pslWScore.o coordConv.o expRecord.o dnaProbe.o \
+    ancientRref.o
+
 
 ../../lib/$(MACHTYPE)/jkhgap.a: $(O) 
 	ar rcu ../../lib/$(MACHTYPE)/jkhgap.a $(O)
