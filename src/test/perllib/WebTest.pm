@@ -1,6 +1,27 @@
 #
 # WebTest: fetch pages, submit forms, check results etc.
 #
+# WebTest uses a configuration hash ref with a very specific structure:
+#
+# $config = { 'mustMatch'    => [ $goodPat,... ],
+#             'mustNotMatch' => [ $badPat,...  ],
+#             'minSize'      => $n,
+#             'maxSize'      => $m,
+#           };
+# 
+# $config is a ref to a hash that may contain any of the keys 
+# 'mustMatch', 'mustNotMatch', 'minSize', and/or 'maxSize' .
+# The keys 'mustMatch' and 'mustNotMatch' map to references to lists 
+# of patterns; a pattern is a string that will be interpreted as a 
+# regexp on the HTML returned from a query.  
+#
+# $config can be passed to a WebTest object when it is created, 
+# when it is checking a page, or with the method configure().  
+# When WebTest is checking a page, for each of the above keys that 
+# are defined in its $config, it will perform a test against the 
+# HTML for the page.  If any test fails, WebTest will describe the 
+# failure(s) and return 0 for failure.  
+#
 
 package WebTest;
 
@@ -19,18 +40,25 @@ use Carp;
 $VERSION = '0.01';
 
 #
-# new
+# new: create a WebTest object.
+# Mandatory argument: $ua = LWP::UserAgent for making HTTP requests.
+# Optional arguments: $sleep (# seconds)
+#                     $verbose (flag)
+#                     $debug (flag)
+#                     $config (config hash - see comments above)
 #
 sub new {
     my $class   = shift;
     my $ua      = shift;
     confess "Too few arguments" if (! defined $ua);
+    my $sleep   = shift;
     my $verbose = shift;
     my $debug   = shift;
     my $config  = shift;
     confess "Too many arguments" if (defined shift);
     my $this = {
 	'ua'     => $ua,
+	'sleep'  => $sleep,
 	'verbose'=> $verbose,
 	'debug'  => $debug,
 	'config' => $config,
@@ -40,7 +68,8 @@ sub new {
 
 
 #
-# configure
+# configure: set this object's $config.
+# Mandatory argument: $config (config hash - see comments above)
 #
 sub configure {
     my $this   = shift;
@@ -54,7 +83,10 @@ sub configure {
 } # end configure
 
 #
-# checkPage
+# checkPage: given URL info, fetch the page and check it.
+# Mandatory argument: $page (URL, up to but not includig the '?' for CGI's)
+# Optional arguments: $query (for CGI's, whatever goes after the '?')
+#                     $config (config hash - see comments above)
 #
 sub checkPage {
     my $this   = shift;
@@ -80,7 +112,9 @@ sub checkPage {
 } # end checkPage
 
 #
-# checkRequest
+# checkRequest: given an HTTP::Request object, fetch and check it.
+# Mandatory argument: $req (HTTP::Request object)
+# Optional arguments: $config (config hash - see comments above)
 #
 sub checkRequest {
     my $this   = shift;
@@ -89,12 +123,14 @@ sub checkRequest {
     confess "too few args" if (! defined $req);
     confess "too many args" if (defined shift);
     $config = $this->{'config'} if (! defined $config);
+    my $sleep = $this->{'sleep'};
     my $v = $this->{'verbose'};
     my $d = $this->{'debug'};
 
     my $desc = &cleanReqStr($req->as_string());
     print "$desc\n" if ($v);
 
+    sleep($sleep) if ($sleep);
     my $res = $this->{'ua'}->request($req);
 
     my $ok;
@@ -155,7 +191,9 @@ sub checkRequest {
 
 
 #
-# getPage
+# getPage: given URL info, fetch & return HTML
+# Mandatory argument: $page (URL, up to but not includig the '?' for CGI's)
+# Optional arguments: $query (for CGI's, whatever goes after the '?')
 #
 sub getPage {
     my $this   = shift;
@@ -163,22 +201,35 @@ sub getPage {
     confess "too few args" if (! defined $page);
     my $query  = shift;
     confess "too many args" if (defined shift);
-    my $v = $this->{'verbose'};
-    my $d = $this->{'debug'};
 
     my $req;
-    my $desc;
     if ((defined $query) && ($query ne "")) {
 	$req  = HTTP::Request->new(POST=>$page);
 	$req->content_type('application/x-www-form-urlencoded');
 	$req->content("$query");
-	$desc = "$page?$query";
     } else {
 	$req  = HTTP::Request->new(GET=>$page);
-	$desc = "$page";
     }
+    return($this->getRequest($req));
+} # end getPage
+
+#
+# getRequest: given an HTTP::Request object, fetch & return HTML
+# Mandatory argument: $req (HTTP::Request object)
+#
+sub getRequest {
+    my $this   = shift;
+    my $req   = shift;
+    confess "too few args" if (! defined $req);
+    confess "too many args" if (defined shift);
+    my $sleep = $this->{'sleep'};
+    my $v = $this->{'verbose'};
+    my $d = $this->{'debug'};
+
+    my $desc = &cleanReqStr($req->as_string());
     print "Fetching $desc\n" if ($v);
 
+    sleep($sleep) if ($sleep);
     my $res = $this->{'ua'}->request($req);
     my $resStr = $res->as_string();
     if ($res->is_success()) {
@@ -187,9 +238,10 @@ sub getPage {
 	&logErr("FETCH FAILED: |$desc|\n");
 	return undef;
     }
-} # end getPage
+} # end getRequest
 
 
+# internal use only, for making more succinct request descriptions
 sub cleanReqStr {
     my $str = shift;
     $str =~ s/POST //;
@@ -200,6 +252,7 @@ sub cleanReqStr {
 } # end cleanReqStr
 
 
+# internal use only, for reporting errors
 sub logErr {
     # could do better...
     print "--------------------------------------------------------------------------\n";
