@@ -1604,26 +1604,26 @@ maxHeightPixels 128:16:16
 autoScaleDefault Off
 
 track encode_UVa_ORI_0_2
-shortLabel Ori/UVa 0-2
-longLabel Univ. Virginia Replication Origins (0-2 hrs) in ENCODE Regions
+shortLabel DNA Rep/UVA 0-2
+longLabel Univ. Virginia Temporal Profiling of DNA Replication (0-2 hrs) in ENCODE Regions
 group encode
 priority 40.1
 visibility hide
-color 50,50,50
+color 60,75,60
 type bed 3
 
 track encode_UVa_ORI_2_4
-shortLabel Ori/UVa 2-4
-longLabel Univ. Virginia Replication Origins (2-4 hrs) in ENCODE Regions
+shortLabel DNA Rep/UVA 2-4
+longLabel Univ. Virginia Temporal Profiling of DNA Replication (2-4 hrs) in ENCODE Regions
 group encode
 priority 40.2
+color 45,80,45
 visibility hide
-color 40,70,40
 type bed 3
 
 track encode_UVa_ORI_4_6
-shortLabel Ori/UVa 4-6
-longLabel Univ. Virginia Replication Origins (4-6 hrs) in ENCODE Regions
+shortLabel DNA Rep/UVA 4-6hr
+longLabel Univ. Virginia Temporal Profiling of DNA Replication (4-6 hrs) in ENCODE Regions
 group encode
 priority 40.3
 visibility hide
@@ -1631,8 +1631,8 @@ color 30,90,30
 type bed 3
 
 track encode_UVa_ORI_6_8
-shortLabel Ori/UVa 6-8
-longLabel Univ. Virginia Replication Origins (6-8 hrs) in ENCODE Regions
+shortLabel DNA Rep/UVA 6-8hr
+longLabel Univ. Virginia Temporal Profiling of DNA Replication (6-8 hrs) in ENCODE Regions
 group encode
 priority 40.4
 visibility hide
@@ -1640,8 +1640,8 @@ color 20,110,20
 type bed 3
 
 track encode_UVa_ORI_8_10
-shortLabel Ori/UVa 8-10
-longLabel Univ. Virginia Replication Origins (8-10 hrs) in ENCODE Regions
+shortLabel DNA Rep/UVA 8-10hr
+longLabel Univ. Virginia Temporal Profiling of DNA Replication (8-10 hrs) in ENCODE Regions
 group encode
 priority 40.5
 visibility hide
