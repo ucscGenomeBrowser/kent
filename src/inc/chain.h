@@ -104,4 +104,8 @@ void chainSubsetOnQ(struct chain *chain, int subStart, int subEnd,
  * *retChainToFree.  The score and id fields are not really
  * properly filled in. */
 
+void chainRangeQPlusStrand(struct chain *chain, int *retQs, int *retQe);
+/* Return range of bases covered by chain on q side on the plus
+ * strand. */
+
 #endif /* CHAIN_H */
