@@ -2271,3 +2271,11 @@ chainSome $(path1)
     hgJgiFilteredModels xenopus.FilteredModels jgiFilteredModels.gff
     ldHgGene xenTro1 jgiFilteredModels jgiFilteredModels.gff
 # Then edit trackDb to put in the track.
+
+# MAKE NIBBPICS 
+#
+    ssh hgwdev
+    mkdir -p /cluster/data/xenTro1/bed/nibPics
+    cd /cluster/data/xenTro1/bed/nibPics
+    wget -O contigs.fa http://xenopus.nibb.ac.jp/data/contigs
+
