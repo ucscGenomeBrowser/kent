@@ -177,7 +177,7 @@ void qaStatusSoftError(struct qaStatus *qs, char *format, ...)
 struct dyString *dy = dyStringNew(0);
 va_list args;
 va_start(args, format);
-vaWarn(args, format);
+vaWarn(format, args);
 if (qs->errMessage)
     {
     dyStringAppend(dy, qs->errMessage);
