@@ -1,7 +1,8 @@
 24:
-     Doubled gap penalty in trimFlakyEnds, which should make it so
-     that with the -fine flag you get less small terminal exons with bad
-     splice sites way away from the rest of the alignment.
+     o Doubled gap penalty in trimFlakyEnds, which should make it so
+       that with the -fine flag you get less small terminal exons with bad
+       splice sites way away from the rest of the alignment.
+     o Fixing a memory leak.
 
 23:
      Made -maxIntron a command line option.  Default is 750000.

@@ -25,3 +25,5 @@ test:
 	cmp testProtX.psl refProtX.psl
 	blat -t=dnax -q=rnax hCrea.geno mCrea.mrna testRnaX.psl
 	cmp testRnaX.psl refRnaX.psl
+	blat -fine hCrea.geno hCrea.mrna testFine.psl
+	cmp testFine.psl refFine.psl
