@@ -11,7 +11,7 @@
 #include "genbank.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: genePred.c,v 1.28 2004/02/14 20:52:24 markd Exp $";
+static char const rcsid[] = "$Id: genePred.c,v 1.29 2004/02/15 02:21:27 baertsch Exp $";
 
 /* SQL to create a genePred table */
 static char *createSql = 
@@ -391,14 +391,14 @@ return dif;
 }
 
 struct genePred *genePredFromGroupedGff(struct gffFile *gff, struct gffGroup *group, char *name,
-	char *exonSelectWord)
+	char *exonSelectWord, boolean gFrame)
 /* Convert gff->groupList to genePred list. */
 {
 struct genePred *gp;
 int cdsStart = BIGNUM, cdsEnd = -BIGNUM;
 int exonCount = 0;
 struct gffLine *gl;
-unsigned *eStarts, *eEnds;
+unsigned *eStarts, *eEnds, *eFrames;
 int i;
 boolean anyExon = FALSE;
 
@@ -456,6 +456,16 @@ gp->cdsEnd = cdsEnd;
 gp->exonCount = exonCount;
 gp->exonStarts = AllocArray(eStarts, exonCount);
 gp->exonEnds = AllocArray(eEnds, exonCount);
+if (gFrame)
+    {
+    gp->exonFrames = AllocArray(eFrames, exonCount);
+    gp->optFields |= genePredExonFramesFld;
+    gp->optFields |= genePredCdsStatFld;
+    gp->cdsStartStat = cdsComplete;
+    gp->cdsEndStat = cdsComplete;
+    }
+else
+    eFrames = NULL;
 i = 0;
 for (gl = group->lineList; gl != NULL; gl = gl->next)
     {
@@ -463,6 +473,10 @@ for (gl = group->lineList; gl != NULL; gl = gl->next)
         {
 	eStarts[i] = gl->start;
 	eEnds[i] = gl->end;
+        if (gFrame && isdigit(gl->frame))
+            {
+            eFrames[i] = (int)gl->frame - '0';
+            }
 	++i;
 	}
     }
