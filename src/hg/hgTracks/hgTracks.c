@@ -84,7 +84,7 @@
 #include "estOrientInfo.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.754 2004/06/08 16:55:38 angie Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.755 2004/06/13 20:55:23 baertsch Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
@@ -7020,6 +7020,9 @@ struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr;
 char **row;
 int rowOffset;
+char optionScoreStr[128]; /* Option -  score filter */
+int optionScore;
+char extraWhere[128] ;
 
 if (tg->bedSize <= 3)
     loader = bedLoad3;
@@ -7029,7 +7032,17 @@ else if (tg->bedSize == 5)
     loader = bedLoad5;
 else
     loader = bedLoad6;
-sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd, NULL, &rowOffset);
+safef( optionScoreStr, sizeof(optionScoreStr), "%s.scoreFilter", tg->mapName);
+optionScore = cartUsualInt(cart, optionScoreStr, 0);
+if (optionScore > 0) 
+    {
+    safef(extraWhere, sizeof(extraWhere), "score >= %d",optionScore);
+    sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd, extraWhere, &rowOffset);
+    }
+else
+    {
+    sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd, NULL, &rowOffset);
+    }
 while ((row = sqlNextRow(sr)) != NULL)
     {
     bed = loader(row+rowOffset);
@@ -7260,8 +7273,21 @@ struct linkedFeatures *lfList = NULL, *lf;
 struct trackDb *tdb = tg->tdb;
 int scoreMin = atoi(trackDbSettingOrDefault(tdb, "scoreMin", "0"));
 int scoreMax = atoi(trackDbSettingOrDefault(tdb, "scoreMax", "1000"));
+char optionScoreStr[128]; /* Option -  score filter */
+int optionScore;
+char extraWhere[128] ;
 
-sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd, NULL, &rowOffset);
+safef( optionScoreStr, sizeof(optionScoreStr), "%s.scoreFilter", tg->mapName);
+optionScore = cartUsualInt(cart, optionScoreStr, 0);
+if (optionScore > 0) 
+    {
+    safef(extraWhere, sizeof(extraWhere), "score >= %d",optionScore);
+    sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd, extraWhere, &rowOffset);
+    }
+else
+    {
+    sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd, NULL, &rowOffset);
+    }
 while ((row = sqlNextRow(sr)) != NULL)
     {
     bed = bedLoad12(row+rowOffset);

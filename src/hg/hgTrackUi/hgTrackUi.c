@@ -20,7 +20,7 @@
 #define CDS_HELP_PAGE "../goldenPath/help/hgCodonColoring.html"
 #define CDS_MRNA_HELP_PAGE "../goldenPath/help/hgCodonColoringMrna.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.111 2004/06/08 16:13:05 kate Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.112 2004/06/13 20:55:03 baertsch Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -390,6 +390,21 @@ printf("<p><b>Filter by chromosome (eg. chr10) </b>: ");
 snprintf(filterVar, sizeof(filterVar), "%s.chromFilter", tdb->tableName);
 filterSetting = cartUsualString(cart, filterVar, filterVal);
 cgiMakeTextVar(filterVar, cartUsualString(cart, filterVar, ""), 5);
+}
+
+void scoreUi(struct trackDb *tdb)
+/* Put up UI for filtering bed track based on a score threshold */
+{
+char scoreVar[256];
+char *scoreSetting;
+int scoreVal = 0;
+/* initial value of score theshold is 0, unless
+ * overridden by the scoreDefault setting in the track */
+char *scoreDefault = trackDbSettingOrDefault(tdb, "scoreDefault", "0");
+printf("<p><b>Only Show items that score above </b>: ");
+snprintf(scoreVar, sizeof(scoreVar), "%s.scoreFilter", tdb->tableName);
+scoreSetting = cartUsualInt(cart,  scoreVar,  scoreVal);
+cgiMakeTextVar( scoreVar, cartUsualInt(cart,  scoreVar, 0), 4);
 }
 
 void zooWiggleUi(struct trackDb *tdb )
@@ -848,7 +863,7 @@ else if (sameString(track, "humMusL") ||
  * For crossSpeciesUi, the
  * default for chrom coloring is "on", unless track setting
  * colorChromDefault is set to "off" */
-else if (startsWith("selfChain", track))
+else if (endsWith("chainSelf", track))
     crossSpeciesUi(tdb);
 else if (sameString(track, "orthoTop4"))
     /* still used ?? */
@@ -865,13 +880,19 @@ else if (sameString(track, RULER_TRACK_NAME))
     rulerUi(tdb);
 else 
     {
-    /* handle all tracks with type "psl xeno <otherDb>" */
+    /* handle all tracks with type genePred or bed or "psl xeno <otherDb>" */
     if (tdb->type != NULL)
         typeLine = cloneString(tdb->type);
     wordCount = chopLine(typeLine, words);
     
     if (sameWord(words[0], "genePred"))
 	        cdsColorOptions(tdb, 2);
+    /* if bed has score then show optional filter based on score */
+    if (sameWord(words[0], "bed") && wordCount == 3)
+                {
+                if (atoi(words[1]) >= 4)
+                    scoreUi(tdb);
+                }
     else if (sameWord(words[0], "psl"))
                 {
                 if (wordCount == 3)
