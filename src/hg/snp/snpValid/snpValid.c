@@ -661,8 +661,8 @@ char affy120id[12];
 
 int matchScore = 100;
 int misMatchScore = 100;
-int gapOpenPenalty = 400;
-int gapExtendPenalty = 50;
+int gapOpenPenalty = 400;  // was 400, tried 250 ok
+int gapExtendPenalty = 5; // was 50, reducing for new snp version.
 
 int noDna = 0;
 //int snpMapRows = 0;
@@ -974,9 +974,10 @@ for (cn = cns; cn != NULL; cn = cn->next)
 	    
 	    seq = cloneString(origSeq);
 	    /* remove dashes indicating insert to simplify and correct processing of nib data */
-	    stripDashes(seq);      
-            ls = strlen(seq);      /* used to be: lengthOneDash(seq); */
+	    stripDashes(seq);     
 	    
+            //oldway: ls = strlen(seq);      /* used to be: lengthOneDash(seq); */
+	    ls = lf + rf + (snp->chromEnd - snp->chromStart);
 	    
 	    //debug
 	    //uglyf("about to call checkandFetchNib origSeq=%s lf=%d, rf=%d ls=%d \n", origSeq, lf, rf, ls);
@@ -1066,7 +1067,7 @@ for (cn = cns; cn != NULL; cn = cn->next)
 		strand = 1;
 		if (axtAln) 
 		    {
-		    bestScore = axtAln->score / ls;
+		    bestScore = axtAln->score / (lf+rf);   // was  ls;
 		    }
 		axtFree(&axtAln);
 		
@@ -1076,10 +1077,10 @@ for (cn = cns; cn != NULL; cn = cn->next)
 		    target.dna = rc;
 		    target.size = strlen(target.dna);
 		    axtAln = axtAffine(&query, &target, simpleDnaScheme);
-		    if ((axtAln) && (bestScore < (axtAln->score / ls)))
+		    if ((axtAln) && (bestScore < (axtAln->score / (lf+rf))))  // was ls
 			{
 			strand = -1;
-			bestScore = axtAln->score / ls;
+			bestScore = axtAln->score / (lf+rf);  // was ls;
 			}
 		    axtFree(&axtAln);
 		    }
