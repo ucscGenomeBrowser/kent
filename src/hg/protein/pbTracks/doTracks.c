@@ -54,7 +54,7 @@ if (trackOrigOffset > ((pbScale* protSeqLen) - 600))
     trackOrigOffset = pbScale*protSeqLen - 700;
 if (trackOrigOffset < 0) trackOrigOffset = 0;
 
-sprintf(pbScaleStr, "%d", pbScale);
+safef(pbScaleStr, sizeof(pbScaleStr), "%d", pbScale);
 cgiMakeHiddenVar("pbScaleStr", pbScaleStr);
 }
 
@@ -99,7 +99,7 @@ for (j=0; j<20; j++)
     aaResCnt[j] = 0;
        
     /* get cutoff threshold value pairs */
-    sprintf(cond_str, "AA='%c'", aaAlphabet[j]);
+    safef(cond_str, sizeof(cond_str), "AA='%c'", aaAlphabet[j]);
     answer = sqlGetField(NULL, database, "pbAnomLimit", "pctLow", cond_str);
     pctLow[j] = (double)(atof(answer));
     answer = sqlGetField(NULL, database, "pbAnomLimit", "pctHi", cond_str);
@@ -400,7 +400,7 @@ for (i=0; i<len; i++)
 	    vgBox(g_vg, xx-pbScale/2, yy-5*tb, 1, 5, MG_BLACK);
 	    }
     		
-	sprintf(scale_str, "%d", index);
+	safef(scale_str, sizeof(scale_str), "%d", index);
 	vgText(g_vg, xx-pbScale/2+4, yy+4-12*tb, MG_BLACK, g_font, scale_str);
 	}
     }
@@ -411,7 +411,7 @@ if (markedIndex != len)
     
     /* make the end tick a little taller than regular tick */
     vgBox(g_vg, xx-pbScale/2, yy-14*tb, 1, 14, MG_BLACK);
-    sprintf(scale_str, "%d", len);
+    safef(scale_str, sizeof(scale_str), "%d", len);
 
     /* label the end tick with a vertical offset so that it won't overlap with regular ticks */
     vgText(g_vg, xx-pbScale/2+4, yy+12-28*tb, MG_BLACK, g_font, scale_str);
@@ -530,7 +530,7 @@ for (j = 0; j < mrnaLen; j++)
 	    {
             if ((exonEndPos - exonStartPos)*pbScale/3 > 12) 
 	    	{
-	    	sprintf(exonNumStr, "%d", exonNumber);
+	    	safef(exonNumStr, sizeof(exonNumStr), "%d", exonNumber);
 	    	}
  	    printedExonNumber = exonNumber;
 	    }
@@ -663,7 +663,7 @@ for (j = 0; j < mrnaLen; j++)
 	    {
             if ((exonEndPos - exonStartPos)*pbScale/3 > 12) 
 	    	{
-	    	sprintf(exonNumStr, "%d", exonNumber);
+	    	safef(exonNumStr, sizeof(exonNumStr), "%d", exonNumber);
 	    	}
  	    printedExonNumber = exonNumber;
 	    }
@@ -713,8 +713,8 @@ if (jcnt > 0)
     	}
 
     mapBoxPrevGB(xx+(jPrevStart%3)*6, yy-2, (jPrevEnd-jPrevStart+1)*pbScale/3, 2, positionStr);
-    sprintf(prevPosMessage, "Previous position in UCSC Genome Browser: %s", positionStr);
-    if (strand == '-') sprintf(prevPosMessage, "%s (negative strand)", prevPosMessage);
+    safef(prevPosMessage, sizeof(prevPosMessage), "Previous position in UCSC Genome Browser: %s", positionStr);
+    if (strand == '-') safef(prevPosMessage, sizeof(prevPosMessage), "%s (negative strand)", prevPosMessage);
     vgText(g_vg, xx+(jPrevStart%3)*pbScale/3, yy-10, MG_BLACK, g_font, prevPosMessage);
     }
 else
@@ -733,8 +733,8 @@ else
 
     mapBoxPrevGB(xx-1, yy-1, 2, 6, positionStr);
     
-    sprintf(prevPosMessage,"Previous position in UCSC Genome Browser: %s (not in a CDS)",positionStr);
-    if (strand == '-') sprintf(prevPosMessage, "%s (negative strand)", prevPosMessage);
+    safef(prevPosMessage, sizeof(prevPosMessage), "Previous position in UCSC Genome Browser: %s (not in a CDS)",positionStr);
+    if (strand == '-') safef(prevPosMessage, sizeof(prevPosMessage), "%s (negative strand)", prevPosMessage);
     calxy(0, *yOffp, &xx0, &yy);
     calxy(jPrevExonPos/3, *yOffp, &xx, &yy);
     if (xx < xx0)
@@ -807,7 +807,7 @@ for (j = 0; j < mrnaLen; j++)
 	    {
             if ((exonEndPos - exonStartPos)*pbScale/3 > 12) 
 	    	{
-	    	sprintf(exonNumStr, "%d", exonNumber);
+	    	safef(exonNumStr, sizeof(exonNumStr), "%d", exonNumber);
             	vgTextRight(g_vg, xx-(exonEndPos - exonStartPos)*pbScale/3/2 - 4,
                                   yy-9, 10, 10, MG_WHITE, g_font, exonNumStr);
 	    	}
@@ -838,7 +838,7 @@ for (j = 0; j < mrnaLen; j++)
 
 if ((exonEndPos - exonStartPos)*pbScale/3 > 12)
     {
-    sprintf(exonNumStr, "%d", exonNumber);
+    safef(exonNumStr, sizeof(exonNumStr), "%d", exonNumber);
     vgTextRight(g_vg, xx-(exonEndPos - exonStartPos)*pbScale/3/2 - 5,
                       yy-9, 10, 10, MG_WHITE, g_font, exonNumStr);
     }
@@ -905,7 +905,7 @@ conn2 = hAllocConn();
 
 /* two steps query needed because the recent Ensembl gene_xref 11/2003 table does not have 
    valid translation_name */
-sprintf(cond_str, "external_name='%s'", protDisplayID);
+safef(cond_str, sizeof(cond_str), "external_name='%s'", protDisplayID);
 transcriptName = sqlGetField(conn, database, "ensGeneXref", "transcript_name", cond_str);
 if (transcriptName == NULL)
     {
@@ -913,7 +913,7 @@ if (transcriptName == NULL)
     }
 else
     {
-    sprintf(cond_str, "transcript_name='%s';", transcriptName);
+    safef(cond_str, sizeof(cond_str), "transcript_name='%s';", transcriptName);
     ensPep = sqlGetField(conn, database, "ensTranscript", "translation_name", cond_str);
     if (ensPep == NULL) 
 	{
@@ -924,7 +924,7 @@ else
 
 ensPepName = ensPep;
 
-sprintf(query, "select * from %s.sfAssign where seqID='%s' and evalue <= 0.02;", database, ensPep);
+safef(query, sizeof(query), "select * from %s.sfAssign where seqID='%s' and evalue <= 0.02;", database, ensPep);
 sr = sqlMustGetResult(conn, query);
 row = sqlNextRow(sr);
 if (row == NULL) return(0);
@@ -939,7 +939,7 @@ while (row != NULL)
     sfID     = row[5];
     /* sfDesc   = row[6]; */
     /* !!! the recent Suprefamily sfAssign table does not have valid sf description */
-    sprintf(cond_str, "id=%s;", sfID);
+    safef(cond_str, sizeof(cond_str), "id=%s;", sfID);
     sfDesc = sqlGetField(conn2, database, "sfDes", "description", cond_str);
 
     /* !!! refine logic here later to be defensive against illegal syntax */
@@ -1027,7 +1027,7 @@ for (ii=0; ii<sf_cnt; ii++)
     if (sfEnd[ii] != 0)
 	{
 	jj++;
-	sprintf(exonNumStr, "%d", jj);
+	safef(exonNumStr, sizeof(exonNumStr), "%d", jj);
 	calxy(sfStart[ii], *yOffp, &xx, &yy);
 
 	sf_len   = sfEnd[ii] - sfStart[ii];
@@ -1047,7 +1047,6 @@ for (ii=0; ii<sf_cnt; ii++)
 			  (sfEnd[ii] - sfStart[ii])*pbScale, 9,
 		 	  superfam_name[ii], sfId[ii]);
     	if (show_name) vgTextRight(g_vg, 
-	    			   //xx+(sfEnd[ii] - sfStart[ii])*pbScale/2 + (len/2)*5 - 5, 
 	    			   xx+(sfEnd[ii] - sfStart[ii])*pbScale/2 + (len/2)*5, 
 				   yy-9+(jj%3)*4, 10, 10, MG_BLACK, g_font, superfam_name[ii]);
 	}
@@ -1280,7 +1279,7 @@ char *chrom;
 char strand;
 
 g_font = mgSmallFont();
-sprintf(pbScaleStr, "%d", pbScale);
+safef(pbScaleStr, sizeof(pbScaleStr), "%d", pbScale);
 
 if (psOutput != NULL)
     {
@@ -1304,7 +1303,7 @@ if (cgiOptionalString("pbScale") != NULL)
     if (strcmp(cgiOptionalString("pbScale"), "1/2")  == 0) pbScale = 3;
     if (strcmp(cgiOptionalString("pbScale"), "FULL") == 0) pbScale = 6;
     if (strcmp(cgiOptionalString("pbScale"), "DNA")  == 0) pbScale =22;
-    sprintf(pbScaleStr, "%d", pbScale);
+    safef(pbScaleStr, sizeof(pbScaleStr), "%d", pbScale);
     cgiMakeHiddenVar("pbScaleStr", pbScaleStr);
     }
 else
@@ -1516,12 +1515,12 @@ hPrintf(
 hPrintf("<A HREF=\"../goldenPath/help/pbTracksHelpFiles/pbTracksHelp.shtml#tracks\" TARGET=_blank>");
 hPrintf("Explanation of Protein Tracks</A><br>");
 
-sprintf(trackOffset, "%d", trackOrigOffset);
+safef(trackOffset, sizeof(trackOffset), "%d", trackOrigOffset);
 cgiMakeHiddenVar("trackOffset", trackOffset);
 
 /* remember where the AA base origin is so that it can be passed to next PB page */
 aaOrigOffset = trackOrigOffset/pbScale;
-sprintf(aaOrigOffsetStr, "%d", aaOrigOffset);
+safef(aaOrigOffsetStr, sizeof(aaOrigOffsetStr), "%d", aaOrigOffset);
 cgiMakeHiddenVar("aaOrigOffset", aaOrigOffsetStr);
 
 /* save the following state variables, to be used by PDF/Postcript processing */
