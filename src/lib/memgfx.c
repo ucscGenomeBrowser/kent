@@ -627,6 +627,8 @@ int prevX = -1;
 
 if( abs(slope) < 1 )
     {
+
+    //errAbort("X:slope = %g, sign = %d, mult = %g\n", slope, sign(slope), mult );
     for (j=0; j<w; j += 1)
         {
         sum += slope;
@@ -640,7 +642,7 @@ if( abs(slope) < 1 )
         else
             pt1 = (mult * yLower) + pt1Home;
 
-        while( pt1 < pt1Base )
+        while( pt1 < pt1Base - mult )
             {
             pt1 += sign(slope)*mult;
             pt1[j] = colors[3];
@@ -649,6 +651,7 @@ if( abs(slope) < 1 )
     }
 else
     {
+    //errAbort("Y:slope = %g\n", slope );
     for (j=1; j<=h; j += 1)
         {
         sum += 1.0 / slope;
@@ -659,7 +662,7 @@ else
         pUpper = (int)(colRange * ((double)min(fabs(sum),w) - (double)yLower));
         pLower = (int)colRange - pUpper;
 
-        while( pt1 < pt1Base )
+        while( pt1 < pt1Base - mult )
             {
             pt1 += sign(slope)*mult;
             pt1[yLower] = colors[3];
