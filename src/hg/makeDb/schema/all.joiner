@@ -30,6 +30,18 @@ exclusiveSet $gbd
 # Define other databases that we check
 set otherDb swissProt,go,hgFixed
 
+# Define protein databases (currently not checked)
+set proteinDb proteins,proteins0111,proteins0305,proteins031112,proteins040115,proteins040115,proteins0405,proteins070403,proteins072003,proteins092903,proteins1129
+
+# Define zoo databases (currently not checked)
+set zooDb zooBaboon3,zooCat3,zooChicken3,zooChimp3,zooCow3,zooDog3,zooFugu3,zooHuman3,zooMouse3,zooPig3,zooRat3,zooTetra3,zooZebrafish3
+
+
+# Set up list of databases we ignore and those we check.  Program
+# will complain about other databases.
+databasesChecked $gbd,otherDb
+databasesIgnored $proteinDb,$zooDb
+
 # Define various non-self chains
 set chainDest Hg15,Hg16,Pt0,Mm2,Mm3,Mm4,Rn2,Rn3,Cb1,Dp1,PanTro1,GalGal2
 

@@ -86,7 +86,7 @@ if (joiner != NULL)
     freeMem(joiner->fileName);
     joinerSetFreeList(&joiner->jsList);
     freeHashAndVals(&joiner->symHash);
-    hashFreeList(&joiner->exclusiveList);
+    hashFreeList(&joiner->exclusiveSets);
     freez(pJoiner);
     }
 }
@@ -403,16 +403,29 @@ slReverse(&js->fieldList);
 return js;
 }
 
-static struct joinerSet *joinerParsePassOne(struct lineFile *lf, 
-	struct hash *symHash, struct hash **pJeList)
+void addCommasToHash(struct hash *hash, char *s)
+/* Add contents of comma-separated list to hash. */
+{
+struct slName *el, *list = slNameListFromComma(trimSpaces(s));
+for (el = list; el != NULL; el = el->next)
+    hashAdd(hash, el->name, NULL);
+slFreeList(&list);
+}
+
+static struct joiner *joinerParsePassOne(struct lineFile *lf)
 /* Do first pass parsing of joiner file and return list of
  * joinerSets. */
 {
 char *line, *word;
 struct dyString *dyBuf = dyStringNew(0);
+struct joiner *joiner;
 struct joinerSet *jsList = NULL, *js;
 
-while ((line = nextSubbedLine(lf, symHash, dyBuf)) != NULL)
+AllocVar(joiner);
+joiner->symHash = newHash(9);
+joiner->databasesChecked = newHash(8);
+joiner->databasesIgnored = newHash(8);
+while ((line = nextSubbedLine(lf, joiner->symHash, dyBuf)) != NULL)
     {
     if ((word = nextWord(&line)) != NULL)
         {
@@ -426,31 +439,39 @@ while ((line = nextSubbedLine(lf, symHash, dyBuf)) != NULL)
 	    if (val[0] == 0)
 	        errAbort("Set with no value line %d of %s", 
 			lf->lineIx, lf->fileName);
-	    hashAdd(symHash, var, cloneString(val));
+	    hashAdd(joiner->symHash, var, cloneString(val));
 	    }
 	else if (sameString("identifier", word))
 	    {
-	    js = parseOneJoiner(lf, line, symHash, dyBuf);
+	    js = parseOneJoiner(lf, line, joiner->symHash, dyBuf);
 	    if (js != NULL)
 	        slAddHead(&jsList, js);
 	    }
 	else if (sameString("exclusiveSet", word))
 	    {
 	    struct hash *exHash = newHash(8);
-	    struct slName *db, *dbList = slNameListFromComma(trimSpaces(line));
-	    for (db = dbList; db != NULL; db = db->next)
-		hashAdd(exHash, db->name, NULL);
-	    slAddHead(pJeList, exHash);
+	    addCommasToHash(exHash, line);
+	    slAddHead(&joiner->exclusiveSets, exHash);
+	    }
+	else if (sameString("databasesChecked", word))
+	    {
+	    addCommasToHash(joiner->databasesChecked, word);
+	    }
+	else if (sameString("databasesIgnored", word))
+	    {
+	    addCommasToHash(joiner->databasesIgnored, word);
 	    }
         else
             {
-            errAbort("unrecognized '%s' line %d of %s",word, lf->lineIx, lf->fileName);
+            errAbort("unrecognized '%s' line %d of %s",
+	    	word, lf->lineIx, lf->fileName);
             }
 	}
     }
 dyStringFree(&dyBuf);
 slReverse(&jsList);
-return jsList;
+joiner->jsList = jsList;
+return joiner;
 }
 
 static struct joinerSet *joinerExpand(struct joinerSet *jsList, char *fileName)
@@ -595,18 +616,12 @@ struct joiner *joinerRead(char *fileName)
 /* Read in a .joiner file. */
 {
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-struct hash *symHash = hashNew(10);
 struct hash *jeList = NULL;
-struct joinerSet *jsList = joinerParsePassOne(lf, symHash, &jeList);
-struct joiner *joiner;
+struct joiner *joiner = joinerParsePassOne(lf);
 
 lineFileClose(&lf);
-jsList = joinerExpand(jsList, fileName);
-joinerParsePassTwo(jsList, fileName);
-AllocVar(joiner);
-joiner->jsList = jsList;
-joiner->symHash = symHash;
-joiner->exclusiveList = jeList;
+joiner->jsList = joinerExpand(joiner->jsList, fileName);
+joinerParsePassTwo(joiner->jsList, fileName);
 joiner->fileName = cloneString(fileName);
 return joiner;
 }
@@ -746,7 +761,7 @@ boolean joinerExclusiveCheck(struct joiner *joiner, char *aDatabase,
 struct hash *exHash;
 if (sameString(aDatabase, bDatabase))
     return TRUE;
-for (exHash = joiner->exclusiveList; exHash != NULL; exHash = exHash->next)
+for (exHash = joiner->exclusiveSets; exHash != NULL; exHash = exHash->next)
     {
     if (hashLookup(exHash, aDatabase) && hashLookup(exHash, bDatabase))
         return FALSE;

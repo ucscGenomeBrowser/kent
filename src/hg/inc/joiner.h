@@ -67,7 +67,9 @@ struct joiner
     char *fileName;		/* Associated file name */
     struct joinerSet *jsList;	/* List of identifiers. */
     struct hash *symHash;	/* Hash of symbols from file. */
-    struct hash *exclusiveList; /* List of hashes of exclusive databases. */
+    struct hash *exclusiveSets; /* List of hashes of exclusive databases. */
+    struct hash *databasesChecked; /* List of databases to check. */
+    struct hash *databasesIgnored; /* List of database to ignore. */
     };
 
 void joinerFree(struct joiner **pJoiner);
