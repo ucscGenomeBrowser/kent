@@ -11,6 +11,10 @@
 #ifndef COMMON_H	/* Wrapper to avoid including this twice. */
 #define COMMON_H
 
+/* Some stuff to support large files in Linux. */
+#define _LARGEFILE_SOURCE 1
+#define _FILE_OFFSET_BITS 64
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdarg.h>
