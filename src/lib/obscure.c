@@ -10,7 +10,7 @@
 #include "obscure.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: obscure.c,v 1.36 2004/09/10 18:52:48 angie Exp $";
+static char const rcsid[] = "$Id: obscure.c,v 1.37 2004/09/10 19:16:31 angie Exp $";
 static int _dotForUserMod = 100; /* How often does dotForUser() output a dot. */
 
 long incCounterFile(char *fileName)
@@ -570,107 +570,5 @@ while ((c = *s) != 0)
         *s = '_';
     ++s;
     }
-}
-
-int chrStrippedCmp(char *chrA, char *chrB)
-/*	compare chrom names after stripping chr, Scaffold_ or ps_ prefix
- *	database ci1 has the Scaffold_ prefix, cioSav1 has the ps_
- *	prefix, dp2 has an unusual ContigN_ContigN pattern
- *	all the rest are prefixed chr
- *	This can be used in sort compare functions to order the chroms
- *	by number  (the _random's come out conveniently after everything
- *	else)
- */
-{
-int dif;
-int lenA = 0;
-int lenB = 0;
-
-if (startsWith("chr", chrA))
-    chrA += strlen("chr");
-else if (startsWith("Scaffold_",chrA))
-    chrA += strlen("Scaffold_");
-else if (startsWith("ps_",chrA))
-    chrA += strlen("ps_");
-
-if (startsWith("chr",chrB))
-    chrB += strlen("chr");
-else if (startsWith("Scaffold_",chrB))
-    chrB += strlen("Scaffold_");
-else if (startsWith("ps_",chrB))
-    chrB += strlen("ps_");
-
-lenA = strlen(chrA);
-lenB = strlen(chrB);
-
-dif = lenA - lenB;
-
-if (dif == 0)
-    dif = strcmp(chrA, chrB);
-
-return dif;
-}
-
-
-int chrNameCmp(char *str1, char *str2)
-/* Compare chromosome names by number, then suffix.  str1 and str2 must 
- * match the regex "chr([0-9]+|[A-Za-z0-9]+)(_[A-Za-z0-9_]+)?". */
-{
-int num1 = 0, num2 = 0;
-int match1 = 0, match2 = 0;
-char suffix1[512], suffix2[512];
-
-/* get past "chr" prefix: */
-if (!startsWith("chr", str1))
-    return -1;
-if (!startsWith("chr", str2))
-    return 1;
-str1 += 3;
-str2 += 3;
-/* If only one is numeric, that one goes first. */
-/* If both are numeric, compare by number; if same number, look at suffix. */
-/* Otherwise go alph. but put M and U/Un/Un_random at end. */
-match1 = sscanf(str1, "%d%s", &num1, suffix1);
-match2 = sscanf(str2, "%d%s", &num2, suffix2);
-if (match1 && !match2)
-    return -1;
-else if (!match1 && match2)
-    return 1;
-else if (match1 && match2)
-    {
-    int diff = num1 - num2;
-    if (diff != 0)
-	return diff;
-    /* same chrom number... got suffix? */
-    if (match1 > 1 && match2 <= 1)
-	return 1;
-    else if (match1 <= 1 && match2 > 1)
-	return -1;
-    else if (match1 > 1 && match2 > 1)
-	return strcmp(suffix1, suffix2);
-    else
-	/* This shouldn't happen (duplicate chrom name passed in) */
-	return 0;
-    }
-else if (sameString(str1, "M") && !sameString(str2, "M"))
-    return 1;
-else if (!sameString(str1, "M") && sameString(str2, "M"))
-    return -1;
-else if (str1[0] == 'U' && str2[0] != 'U')
-    return 1;
-else if (str1[0] != 'U' && str2[0] == 'U')
-    return -1;
-else
-    return strcmp(str1, str2);
-}
-
-int chrSlNameCmp(const void *el1, const void *el2)
-/* Compare chromosome names by number, then suffix.  el1 and el2 must be 
- * slName **s (as passed in by slSort) whose names match the regex 
- * "chr([0-9]+|[A-Za-z0-9]+)(_[A-Za-z0-9_]+)?". */
-{
-struct slName *sln1 = *(struct slName **)el1;
-struct slName *sln2 = *(struct slName **)el2;
-return chrNameCmp(sln1->name, sln2->name);
 }
 
