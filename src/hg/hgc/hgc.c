@@ -111,7 +111,7 @@
 #include "axtLib.h"
 #include "ensFace.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.461 2003/07/29 17:51:17 braney Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.462 2003/08/01 15:12:13 braney Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -1753,6 +1753,50 @@ printf("<B>%s new repeat bases:</B> %u (%1.1f%%)<BR>\n",
 printf("<B>%s size:</B> %d<BR>\n", org, net->tEnd - net->tStart);
 printf("<B>%s size:</B> %d<BR>\n", otherOrg, net->qEnd - net->qStart);
 netAlignFree(&net);
+}
+
+void firstEF(struct trackDb *tdb, char *item)
+{
+char *dupe, *type, *words[16];
+char title[256];
+int wordCount;
+int start = cartInt(cart, "o");
+struct sqlConnection *conn = hAllocConn();
+char table[64];
+boolean hasBin;
+struct bed *bed;
+char query[512];
+struct sqlResult *sr;
+char **row;
+boolean firstTime = TRUE;
+
+//itemForUrl = item;
+dupe = cloneString(tdb->type);
+genericHeader(tdb, item);
+wordCount = chopLine(dupe, words);
+printCustomUrl(tdb, item, FALSE);
+//printCustomUrl(tdb, itemForUrl, item == itemForUrl);
+
+hFindSplitTable(seqName, tdb->tableName, table, &hasBin);
+sprintf(query, "select * from %s where name = '%s' and chrom = '%s' and chromStart = %d",
+	    table, item, seqName, start);
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    if (firstTime)
+	firstTime = FALSE;
+    else
+	htmlHorizontalLine();
+    bed = bedLoadN(row+hasBin, 6);
+   
+    printf("<B>Item:</B> %s<BR>\n", bed->name);
+    printf("<B>Probability:</B> %g<BR>\n", bed->score / 1000.0);
+    printf("<B>Strand:</B> %s<BR>\n", bed->strand);
+    printPos(bed->chrom, bed->chromStart, bed->chromEnd, NULL, TRUE);
+    }
+printTrackHtml(tdb);
+freez(&dupe);
+hFreeConn(&conn);
 }
 
 void genericClickHandler(struct trackDb *tdb, char *item, char *itemForUrl)
@@ -12326,6 +12370,10 @@ else if (sameWord(track, "htcGenePsl"))
 else if (sameWord(track, "htcPseudoGene"))
     {
     htcPseudoGene(track, item);
+    }
+else if (sameWord(track, "firstEF"))
+    {
+    firstEF(tdb, item);
     }
 else if (sameWord(track, "chesChordataBlat"))
     {
