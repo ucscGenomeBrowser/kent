@@ -6,6 +6,7 @@
 #define WIGGLE_H
 
 #include "cart.h"
+#include "histogram.h"
 
 #define WIGGLE_NUM_COLS 13
 
@@ -286,6 +287,9 @@ struct wiggleDataStream
 			/*	output the ascii list results 	*/
     void (*sortResults)(struct wiggleDataStream *wDS);
 			/*	sort if you want to, the Outs do this too */
+    float *(*asciiToDataArray)(struct wiggleDataStream *wDS,
+	unsigned long long count, size_t *returned);
+			/*	convert the AsciiData list to a float array */ 
     unsigned long long (*getDataViaBed)(struct wiggleDataStream *wDS,
 	char *db, char *table, int operations, struct bed **bedList);
 			/*	fetch data constrained by bedList,
@@ -345,6 +349,8 @@ void destroyWigDataStream(struct wiggleDataStream **wDS);
 #define VERBOSE_HIGHEST		5
 
 /*	in lib/wiggleUtils.c	*/
+void printHistoGram(struct histoResult *histoResults);
+
 void statsPreamble(struct wiggleDataStream *wDS, char *chrom,
     int winStart, int winEnd, unsigned span, unsigned long long valuesMatched);
 
