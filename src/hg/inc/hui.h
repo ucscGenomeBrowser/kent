@@ -9,6 +9,13 @@ char *hUserCookie();
 char *wrapWhiteFont(char *s);
 /* Write white font around s */
 
+#define RULER_TRACK_NAME        "ruler"
+#define RULER_TRACK_LABEL       "Base Position"
+#define RULER_TRACK_LONGLABEL   "Genome Base Position"
+
+/* The base position ruler is not yet a full-fledged track, and does
+   not appear in trackDb */
+
 /******  Some stuff for tables of controls ******/
 #define CONTROL_TABLE_WIDTH 610
 
