@@ -11,7 +11,7 @@
 #include "wiggle.h"
 #include "scoredRef.h"
 
-static char const rcsid[] = "$Id: wigTrack.c,v 1.26 2004/01/11 06:36:05 hiram Exp $";
+static char const rcsid[] = "$Id: wigTrack.c,v 1.27 2004/01/12 22:29:48 hiram Exp $";
 
 /*	wigCartOptions structure - to carry cart options from wigMethods
  *	to all the other methods via the track->extraUiData pointer
@@ -365,6 +365,7 @@ double overallRange;		/*	determined from data	*/
 double graphUpperLimit;		/*	scaling choice will set these	*/
 double graphLowerLimit;		/*	scaling choice will set these	*/
 double graphRange;		/*	scaling choice will set these	*/
+double epsilon;			/*	range of data in one pixel	*/
 int x1 = 0;			/*	screen coordinates	*/
 int x2 = 0;			/*	screen coordinates	*/
 
@@ -581,6 +582,7 @@ if (autoScale == wiggleScaleAuto)
 	graphLowerLimit = wigCart->minY;
     }
 graphRange = graphUpperLimit - graphLowerLimit;
+epsilon = graphRange / tg->lineHeight;
 
 /*
  *	We need to put the graphing limits back into the items
@@ -608,57 +610,66 @@ for (x1 = 0; x1 < width; ++x1)
 	int h = tg->lineHeight;	/*	the height of our drawing window */
 	int boxHeight;		/*	the size of our box to draw	*/
 	int boxTop;		/*	box top starts here	*/
-	int y1;			/*	special y coordinate for points draw */
+	int y1;			/*	y coordinate of data point */
+	int y0;			/*	y coordinate of data = 0.0 */
+	int yPointGraph;	/*	y coordinate of data for point style */
 	double dataValue;	/*	the data value in data space	*/
 
-	/*	I don't like this section of code here.
-	 *	This is much too complicated for a simple matter
-	 *	of scaling.  This should be a lot easier here.
-	 *	Too many if() statements.
+	/*	The graphing coordinate conversion situation is:
+	 *	graph coordinate y = 0 is graphUpperLimit data space
+	 *	and total graph height is h which is graphRange in data space
+	 *	The Y axis is positive down, negative up.
+	 *
+	 *	Taking a simple coordinate conversion from data space
+	 *	to the graphing space, the data value is at:
+	 *	h * ((graphUpperLimit - dataValue)/graphRange)
+	 *	and a data value zero line is at:
+	 *	h * (graphUpperLimit/graphRange)
+	 *	These may end up to be negative meaning they are above
+	 *	the upper graphing limit, or be very large, meaning they
+	 *	are below the lower graphing limit.  This is OK, the
+	 *	clipping will be taken care of by the vgBox() function.
 	 */
-	dataValue = preDraw[preDrawIndex].max;
-	if (fabs(0.0 - preDraw[preDrawIndex].min) >
-		fabs(0.0 - preDraw[preDrawIndex].max) ) {
-	    dataValue = preDraw[preDrawIndex].min;
-	}
-	drawColor = tg->ixColor;
-	if (dataValue < 0.0) drawColor = tg->ixAltColor;
-	boxHeight = h * ((dataValue - graphLowerLimit) / graphRange);
-	if (boxHeight > h) boxHeight = h;
-	boxTop = h - boxHeight;
-	y1 = yOff+boxTop;
-	if ( (0.0 > graphLowerLimit) && (0.0 < graphUpperLimit) )
-	    {
-	    int maxBoxHeight;
-	    maxBoxHeight = h *
-		(max(fabs(graphUpperLimit),fabs(graphLowerLimit)) / graphRange);
-	    boxHeight = h * (fabs(dataValue) / graphRange);
-	    if (boxHeight > maxBoxHeight) boxHeight = maxBoxHeight;
-	    if (boxHeight > h) boxHeight = h;
-	    if (dataValue > 0.0)
-		{
-		boxTop = (h * (graphUpperLimit / graphRange));
-		boxTop -= boxHeight;
-		y1 = yOff+boxTop;
-		}
-	    else
-		{
-		boxTop = h - (h * (((0.0-graphLowerLimit) / graphRange)));
-		y1 = yOff+boxTop + boxHeight;
-		}
-	    }
-	else if (graphUpperLimit < 0.0)
-	    {
-	    boxHeight= h * ((graphUpperLimit-dataValue) / graphRange);
-	    if (boxHeight > h) boxHeight = h;
-	    boxTop = 0;
-	    y1 = yOff+boxTop + boxHeight;
-	    }
-	if (boxTop > h-1) boxTop = h - 1;
-	if (boxTop < 0) boxTop = 0;
 
-	/*	boxHeight may be zero, this is OK.  It means there is
- 	 *	nothing there to graph.  vgBox takes care of that.
+	/*	use the data value farthest from zero.
+	 *	Future enhancment could be to graph both the positive
+	 *	and negative values if more than one data point is in
+	 *	this pixel.
+	 */
+	if (fabs(preDraw[preDrawIndex].min) > fabs(preDraw[preDrawIndex].max))
+	    dataValue = preDraw[preDrawIndex].min;
+	else 
+	    dataValue = preDraw[preDrawIndex].max;
+
+	y1 = h * ((graphUpperLimit - dataValue)/graphRange);
+	yPointGraph = yOff + y1 - 1;
+	y0 = h * ((graphUpperLimit)/graphRange);
+	boxHeight = abs(y1 - y0);
+	boxTop = min(y1,y0);
+	/*	special case where dataValue is on the zero line, it
+ 	 *	needs to have a boxHeight of 1, otherwise it disappears into
+ 	 *	zero nothingness
+	 */
+	if (fabs(dataValue) < epsilon)
+	    {
+	    boxTop -= 1;
+	    boxHeight = 1;
+	    }
+	/*	Last pixel is a special case of a close interval */
+	if ((boxTop == h) && (boxHeight == 0))
+	    {
+	    boxTop = h -1;
+	    boxHeight = 1;
+	    }
+	/*	negative data is the alternate color	*/
+	if (dataValue < 0.0)
+	    drawColor = tg->ixAltColor;
+	else
+	    drawColor = tg->ixColor;
+
+	/*	vgBox will take care of clipping.  No need to worry
+	 *	about coordinates or height of line to draw.
+	 *	We are actually drawing single pixel wide lines here.
 	 */
 	if (vis == tvFull)
 	    {
@@ -667,8 +678,8 @@ for (x1 = 0; x1 < width; ++x1)
 		vgBox(vg, x1+xOff, yOff+boxTop, 1, boxHeight, drawColor);
 		}
 	    else
-		{
-		vgBox(vg, x1+xOff, y1-1, 1, 3, drawColor);
+		{	/*	draw a 3 pixel height box	*/
+		vgBox(vg, x1+xOff, yPointGraph, 1, 3, drawColor);
 		}
 	    }	/*	vis == tvFull	*/
 	else if (vis == tvDense)
@@ -765,8 +776,20 @@ else if( tg->visibility == tvFull)
 	    if (wi->graphLowerLimit < graphLowerLimit)
 		graphLowerLimit = wi->graphLowerLimit;
 	    }
-	snprintf(upper, 128, "%g %c", graphUpperLimit, upperTic);
-	snprintf(lower, 128, "%g _", graphLowerLimit);
+	/*  In areas where there is no data, these limits do not change */
+	if (graphUpperLimit < graphLowerLimit)
+	    {
+	    double d = graphLowerLimit;
+	    graphLowerLimit = graphUpperLimit;
+	    graphUpperLimit = d;
+	    snprintf(upper, 128, "No data %c", upperTic);
+	    snprintf(lower, 128, "No data _");
+	    }
+	else
+	    {
+	    snprintf(upper, 128, "%g %c", graphUpperLimit, upperTic);
+	    snprintf(lower, 128, "%g _", graphLowerLimit);
+	    }
 	drawColor = tg->ixColor;
 	if (graphUpperLimit < 0.0) drawColor = tg->ixAltColor;
 	vgTextRight(vg, xOff, yOff, width - 1, fontHeight, drawColor,
