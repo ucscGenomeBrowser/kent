@@ -15,6 +15,7 @@
 int minSize = 1;	/* Minimum size of feature. */
 char *clChrom = "all";	/* Which chromosome. */
 boolean orLogic = FALSE;  /* Do ors instead of ands? */
+char *where = NULL;		/* Extra selection info. */
 
 void usage()
 /* Explain usage and exit. */
@@ -31,6 +32,7 @@ errAbort(
   "   -minSize=N        Minimum size to output (default 1)\n"
   "   -chrom=chrN       Restrict to one chromosome\n"
   "   -or               Or tables together instead of anding them\n"
+  "   '-where=some sql pattern'  restrict to features matching some sql pattern\n"
   "You can include a '!' before a table name to negate it.\n"
   "Some table names can be followed by modifiers such as:\n"
   "    :exon:N  Break into exons and add N to each end of each exon\n"
@@ -246,7 +248,8 @@ else
     {
     isSplit = hFindSplitTable(chrom, t, table, &hasBin);
     if (hTableExists(table))
-	fbOrTableBits(acc, track, chrom, chromSize, conn);
+	fbOrTableBitsQuery(acc, track, chrom, chromSize, conn, where,
+			   TRUE, TRUE);
     }
 }
 
@@ -325,7 +328,8 @@ if (s != NULL)
     errAbort("Sorry, only database (not file) tracks allowed with "
              "fa output unless you use faMerge");
 isSplit = hFindSplitTable(chrom, t, table, &hasBin);
-fbList = fbGetRange(trackSpec, chrom, 0, hChromSize(chrom));
+fbList = fbGetRangeQuery(trackSpec, chrom, 0, hChromSize(chrom),
+			 where, TRUE, TRUE);
 for (fb = fbList; fb != NULL; fb = fb->next)
     {
     int s = fb->start, e = fb->end;
@@ -419,6 +423,7 @@ clChrom = optionVal("chrom", clChrom);
 orLogic = optionExists("or");
 if (argc < 3)
     usage();
+where = optionVal("where", NULL);
 featureBits(argv[1], argc-2, argv+2);
 return 0;
 }
