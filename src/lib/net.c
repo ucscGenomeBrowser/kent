@@ -9,26 +9,19 @@
 #include "net.h"
 #include "linefile.h"
 
-static struct sockaddr_in sai;		/* Some system socket info. */
 
-static int setupSocket(char *hostName, char *portName)
+int netSetupSocket(char *hostName, int port, struct sockaddr_in *sai)
 /* Set up our socket. */
 {
-int port;
 int sd;
 struct hostent *hostent;
 
-if (!isdigit(portName[0]))
-    errAbort("Expecting a port number got %s", portName);
-port = atoi(portName);
 hostent = gethostbyname(hostName);
 if (hostent == NULL)
-    {
     errAbort("Couldn't find host %s. h_errno %d", hostName, h_errno);
-    }
-sai.sin_family = AF_INET;
-sai.sin_port = htons(port);
-memcpy(&sai.sin_addr.s_addr, hostent->h_addr_list[0], sizeof(sai.sin_addr.s_addr));
+sai->sin_family = AF_INET;
+sai->sin_port = htons(port);
+memcpy(&sai->sin_addr.s_addr, hostent->h_addr_list[0], sizeof(sai->sin_addr.s_addr));
 sd = socket(AF_INET, SOCK_STREAM, 0);
 return sd;
 }
@@ -36,9 +29,15 @@ return sd;
 int netConnect(char *hostName, char *portName)
 /* Start connection with server. */
 {
+int sd, err, port;
+static struct sockaddr_in sai;		/* Some system socket info. */
+
+/* Convert port to number. */
+if (!isdigit(portName[0]))
+    errAbort("Expecting a port number got %s", portName);
+port = atoi(portName);
 /* Connect to server. */
-int sd = setupSocket(hostName, portName);
-int err;
+sd = netSetupSocket(hostName, port, &sai);
 if (sd < 0)
     {
     warn("Couldn't setup socket %s %s", hostName, portName);
@@ -257,5 +256,120 @@ int sd = netUrlOpen(url);
 struct lineFile *lf = lineFileAttatch(url, TRUE, sd);
 netSkipHttpHeaderLines(lf);
 return lf;
+}
+
+boolean netSendString(int sd, char *s)
+/* Send a string down a socket - length byte first. */
+{
+int length = strlen(s);
+UBYTE len;
+
+if (length > 255)
+    errAbort("Trying to send a string longer than 255 bytes (%d bytes)", length);
+len = length;
+if (write(sd, &len, 1)<0)
+    {
+    warn("Couldn't send string to socket");
+    return FALSE;
+    }
+if (write(sd, s, length)<0)
+    {
+    warn("Couldn't send string to socket");
+    return FALSE;
+    }
+return TRUE;
+}
+
+boolean netSendLongString(int sd, char *s)
+/* Send a long string down socket: two bytes for length. */
+{
+unsigned length = strlen(s);
+UBYTE b[2];
+
+if (length >= 64*1024)
+    errAbort("Trying to send a string longer than 64k bytes (%d bytes)", length);
+b[0] = (length>>8);
+b[1] = (length&0xff);
+if (write(sd, b, 2) < 0)
+    {
+    warn("Couldn't send long string to socket");
+    return FALSE;
+    }
+if (write(sd, s, length)<0)
+    {
+    warn("Couldn't send long string to socket");
+    return FALSE;
+    }
+return TRUE;
+}
+
+char *netGetString(int sd, char buf[256])
+/* Read string into buf and return it.  If buf is NULL
+ * an internal buffer will be used. Print warning message
+ * and return NULL if any problem. */
+{
+static char sbuf[256];
+UBYTE len;
+int length;
+if (buf == NULL) buf = sbuf;
+if (read(sd, &len, 1)<0)
+    {
+    warn("Couldn't read string length");
+    return NULL;
+    }
+length = len;
+if (length > 0)
+    if (netReadAll(sd, buf, length) < 0)
+	{
+	warn("Couldn't read string body");
+	return NULL;
+	}
+buf[length] = 0;
+return buf;
+}
+
+char *netGetLongString(int sd)
+/* Read string and return it.  freeMem
+ * the result when done. */
+{
+UBYTE b[2];
+char *s = NULL;
+int length = 0;
+if (netReadAll(sd, b, 2)<0)
+    {
+    warn("Couldn't read long string length");
+    return NULL;
+    }
+length = (b[0]<<8) + b[1];
+s = needMem(length+1);
+if (length > 0)
+    if (netReadAll(sd, s, length) < 0)
+	{
+	warn("Couldn't read long string body");
+	return NULL;
+	}
+s[length] = 0;
+return s;
+}
+
+
+char *netRecieveString(int sd, char buf[256])
+/* Read string into buf and return it.  If buf is NULL
+ * an internal buffer will be used. Abort if any problem. */
+{
+char *s = netGetString(sd, buf);
+if (s == NULL)
+     noWarnAbort();   
+return s;
+}
+
+char *netRecieveLongString(int sd)
+/* Read string and return it.  freeMem
+ * the result when done. Abort if any problem*/
+{
+char *s = netGetLongString(sd);
+if (s == NULL)
+     noWarnAbort();   
+return s;
 }
 
