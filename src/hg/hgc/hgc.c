@@ -118,7 +118,7 @@
 #include "encodeRegionInfo.h"
 #include "hgFind.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.527 2003/12/05 19:07:08 booch Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.528 2003/12/05 22:35:57 donnak Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -4858,14 +4858,14 @@ if (offset >= 0)
 else
     {
     if (sameString(repeat, "SINE"))
-	printf("This track contains the small interspersed (SINE) class of repeats , which includes ALUs.<BR>\n");
+	printf("This track contains the short interspersed nuclear element (SINE) class of repeats, which includes ALUs.\n");
     else if (sameString(repeat, "LINE"))
-        printf("This track contains the long interspersed (LINE) class of repeats<BR>\n");
+        printf("This track contains the long interspersed nuclear element (LINE) class of repeats.\n");
     else if (sameString(repeat, "LTR"))
-        printf("This track contains the LTR (long terminal repeat) class of repeats which includes retroposons<BR>\n");
+        printf("This track contains the class of long terminal repeats (LTRs), which includes retroposons.\n");
     else
-        printf("This track contains the %s class of repeats<BR>\n", repeat);
-    printf("Click on an individual repeat for more information on that repeat<BR>\n");
+        printf("This track contains the %s class of repeats.\n", repeat);
+    printf("Click on an individual repeat element within the track for more information about that item.<BR>\n");
     }
 printTrackHtml(tdb);
 }
