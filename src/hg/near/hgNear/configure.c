@@ -12,7 +12,7 @@
 #include "web.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: configure.c,v 1.35 2003/09/27 02:24:52 kent Exp $";
+static char const rcsid[] = "$Id: configure.c,v 1.36 2003/10/06 23:18:13 kent Exp $";
 
 static char *onOffString(boolean on)
 /* Return "on" or "off". */
@@ -103,14 +103,14 @@ static void bumpColList(char *bumpHow, struct column **pColList)
 char *dupe = cloneString(bumpHow);
 char *words[4], *upDown, *colName;
 
-if (chopString(dupe, ".", words, ArraySize(words)) < 3)
+if (chopString(dupe, ".", words, ArraySize(words)) < 4)
     {
     warn("Strange bumpHow value %s in bumpColList", bumpHow);
     cartRemove(cart, bumpHow);
     noWarnAbort();
     }
-upDown = words[1];
-colName = words[2];
+upDown = words[2];
+colName = words[3];
 
 if (sameString(upDown, "up"))
     {
