@@ -59,7 +59,7 @@
 #define ROGIC_CODE 1	/* Please take these out.  It's *everyone's* code now. -jk */
 #define FUREY_CODE 1
 #define MAX_CONTROL_COLUMNS 5
-
+#define NAME_LEN 256
 #define EXPR_DATA_SHADES 16
 boolean hgDebug = FALSE;      /* Activate debugging code. Set to true by hgDebug=on in command line*/
 
@@ -550,7 +550,7 @@ struct linkedFeatures
     int grayIx;				/* Average of components. */
     int filterColor;			/* Filter color (-1 for none) */
     float score;                        /* score for this feature */
-    char name[32];			/* Accession of query seq. */
+    char name[NAME_LEN];			/* Accession of query seq. */
     int orientation;                    /* Orientation. */
     struct simpleFeature *components;   /* List of component simple features. */
     void *extra;			/* Extra info that varies with type. */
