@@ -9,7 +9,7 @@
 #include "fa.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: twoBitToFa.c,v 1.1 2004/02/23 02:35:36 kent Exp $";
+static char const rcsid[] = "$Id: twoBitToFa.c,v 1.2 2004/02/23 05:21:45 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -128,6 +128,49 @@ slReverse(&tbh->indexList);
 return tbh;
 }
 
+int slowFindGreatestLowerBound(int blockCount, bits32 *pos, 
+	int val)
+/* Find index of greatest element in posArray that is less 
+ * than or equal to val using a linear search. */
+{
+int i, glb=0;
+for (i=0; i<blockCount; ++i)
+    {
+    if (pos[i] <= val)
+        glb = i;
+    else
+        break;
+    }
+return glb;
+}
+
+int findGreatestLowerBound(int blockCount, bits32 *pos, 
+	int val)
+/* Find index of greatest element in posArray that is less 
+ * than or equal to val using a binary search. */
+{
+int startIx=0, endIx=blockCount-1, midIx;
+int posVal;
+
+for (;;)
+    {
+    if (startIx == endIx)
+        {
+	posVal = pos[startIx];
+	if (posVal <= val || startIx == 0)
+	    return startIx;
+	else
+	    return startIx-1;
+	}
+    midIx = ((startIx + endIx)>>1);
+    posVal = pos[midIx];
+    if (posVal < val)
+        startIx = midIx+1;
+    else
+        endIx = midIx;
+    }
+}
+
 
 struct dnaSeq *twoBitReadSeqFrag(struct twoBitHeader *tbh, char *name,
 	int fragStart, int fragEnd)
@@ -163,7 +206,6 @@ if (fragEnd > seqSize)
 outSize = fragEnd - fragStart;
 if (outSize < 1)
     errAbort("twoBitReadSeqFrag start (%d) >= end (%d)", fragStart, fragEnd);
-uglyf("outSize = %d\n", outSize);
 
 /* Read in blocks of N. */
 nBlockCount = readBits32(f, isSwapped);
@@ -279,20 +321,39 @@ else
     }
 freez(&packedAlloc);
 
-#ifdef SOON
-/* Set relevant parts to N. */
-for (i=0; i<nBlockCount; ++i)
+if (nBlockCount > 0)
     {
-    memset(seq->dna + nStarts[i], 'n', nSizes[i]);
+    int startIx = findGreatestLowerBound(nBlockCount, nStarts, fragStart);
+    for (i=startIx; i<nBlockCount; ++i)
+        {
+	int s = nStarts[i];
+	int e = s + nSizes[i];
+	if (s < fragStart)
+	   s = fragStart;
+	if (e > fragEnd)
+	   e = fragEnd;
+	if (s < e)
+	    memset(seq->dna + s - fragStart, 'n', e - s);
+	}
     }
 
-/* Take care of case. */
 toUpperN(seq->dna, seq->size);
-for (i=0; i<maskBlockCount; ++i)
+if (maskBlockCount > 0)
     {
-    toLowerN(seq->dna + maskStarts[i], maskSizes[i]);
+    int startIx = findGreatestLowerBound(maskBlockCount, maskStarts, fragStart);
+    for (i=startIx; i<maskBlockCount; ++i)
+        {
+	int s = maskStarts[i];
+	int e = s + maskSizes[i];
+	if (s < fragStart)
+	   s = fragStart;
+	if (e > fragEnd)
+	   e = fragEnd;
+	if (s < e)
+	    toLowerN(seq->dna + s - fragStart, e - s);
+	}
     }
-#endif /* SOON */
+
 return seq;
 }
 
