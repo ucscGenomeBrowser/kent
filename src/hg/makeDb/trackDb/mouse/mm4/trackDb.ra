@@ -18,7 +18,7 @@ color 0,90,100
 type genePred sgpPep
 
 track blastzHg16
-shortLabel blastz Hg16
+shortLabel Human blastz
 longLabel Human (Jul 03/Hg16) All Blastz Alignments
 group compGeno
 priority 114
@@ -72,7 +72,7 @@ type netAlign hg16 chainHg16
 otherDb hg16
 
 track blastzRn3
-shortLabel blastz Rn3
+shortLabel Rat blastz
 longLabel Rat (Jun 03/Rn3) All Blastz Alignments
 group compGeno
 priority 140
