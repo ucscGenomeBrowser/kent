@@ -1891,3 +1891,32 @@ ALIGNED ANCIENT REPEATS FROM MOUSE BLASTZ
          zcat $aar | aarToAxt | axtToPsl stdin $mmdir/H.len $mmdir/M.len stdout | liftUp -type=.psl -nohead -pslQ stdout $mmdir/liftAllMm2.lft warn stdin > chr$aar:t:r:r_aarMm2.psl
     end   
     hgLoadPsl hg12 *.psl
+
+ALIGNMENT COUNTS FOR WIGGLE TRACK
+    # this needs to be updated to reflected the full process.
+ 
+    - Generate BED table of AARs used to select regions.
+        cat ../bed/aarMm2/*.psl | awk 'BEGIN{OFS="\t"} {print $14,$16,$17,"aar"}' >aarMm2.bed
+    
+    - Generate background counts with windows that have a 6kb counts,
+      with a maximum windows size of 512kb and sliding the windows by
+        foreach axt (../../blastz.mm2.2002-08-01/axtBest/chr*.axt)
+           set chr=$axt:t:r
+           set tab=$chr.6kb-aar.cnts  (??? need better name ???)
+           hgCountAlign -selectBed=aarMm2.bed -winSize=512000 -winSlide=1000 -fixedNumCounts=6000 -countCoords $axt $tab
+        end
+
+    - Generate counts for AARs with 50b windows, slide by 5b
+        foreach axt (../../blastz.mm2.2002-08-01/axtBest/chr*.axt)
+           set chr=$axt:t:r
+           set tab=$chr.50b-aar.cnts  (??? need better name ???)
+           hgCountAlign -selectBed=aarMm2.bed -winSize=50 -winSlide=5b $axt $tab
+        end
+
+    - Generate counts for all with 50b windows, slide by 5b
+        foreach axt (../../blastz.mm2.2002-08-01/axtBest/chr*.axt)
+           set chr=$axt:t:r
+           set tab=$chr.50b.cnts  (??? need better name ???)
+           hgCountAlign -winSize=50 -winSlide=5b $axt $tab
+        end
+
