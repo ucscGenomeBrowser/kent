@@ -159,7 +159,7 @@
 #include "pscreen.h"
 #include "jalview.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.841 2005/03/01 19:47:35 braney Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.842 2005/03/02 16:11:00 fanhsu Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -6919,7 +6919,14 @@ if ((row = sqlNextRow(sr)) == NULL)
 while (row != NULL)
     {
     mrnaAcc = row[0];
-    printf("<B>Hinxton:</B> <A HREF=\"../cgi-bin/hgc?g=ensGene&i=%s&db=%s\"", mrnaAcc, database);
+    if (strstr(mrnaAcc, "OTT") != NULL)
+    	{
+    	printf("<B>Hinxton:</B> <A HREF=\"http://www.ensembl.org/Homo_sapiens/geneview?gene=%s&db=vega\"", mrnaAcc);
+    	}
+    else
+    	{
+        printf("<B>Hinxton:</B> <A HREF=\"../cgi-bin/hgc?g=ensGene&i=%s&db=%s\"", mrnaAcc, database);
+    	}
     printf(" TARGET=_blank> %s</A><BR>\n",mrnaAcc);fflush(stdout); 
     row = sqlNextRow(sr);
     }
