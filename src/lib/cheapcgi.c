@@ -11,7 +11,7 @@
 #include "linefile.h"
 #include "errabort.h"
 
-static char const rcsid[] = "$Id: cheapcgi.c,v 1.62 2004/04/21 19:49:41 kate Exp $";
+static char const rcsid[] = "$Id: cheapcgi.c,v 1.63 2004/04/29 22:33:37 angie Exp $";
 
 /* These three variables hold the parsed version of cgi variables. */
 static char *inputString = NULL;
@@ -481,6 +481,9 @@ char *cgiEncode(char *inString)
 char c;
 int outSize = 0;
 char *outString, *out, *in;
+
+if (inString == NULL)
+    return(cloneString(""));
 
 /* Count up how long it will be */
 in = inString;
