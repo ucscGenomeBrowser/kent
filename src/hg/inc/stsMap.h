@@ -15,7 +15,7 @@ struct stsMap
     int chromStart;	/* Start position in chrom - negative 1 if unpositioned */
     unsigned chromEnd;	/* End position in chrom */
     char *name;	/* Name of STS marker */
-    unsigned score;	/* Score of a marker = 1000/(# of placements) */
+    unsigned score;     /* Score of a marker = 1000/(#placements) when placed uniquely, else 1500/(#placements) when placed in multiple locations */
     unsigned identNo;	/* Identification number of STS */
     char *ctgAcc;	/* Contig accession number */
     char *otherAcc;	/* Accession number of other contigs that the marker hits */

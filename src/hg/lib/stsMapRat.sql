@@ -9,7 +9,7 @@ CREATE TABLE stsMapRat (
     chromStart int not null,	# Start position in chrom - negative 1 if unpositioned
     chromEnd int unsigned not null,	# End position in chrom
     name varchar(255) not null,	# Name of STS marker
-    score int unsigned not null,	# Score of a marker = 1000/(# of placements)
+    score int unsigned not null,	# Score of a marker = 1000/(#placements) when placed uniquely, else 1500/(#placements) when placed in multiple locations
     identNo int unsigned not null,	# Identification number of STS
     ctgAcc varchar(255) not null,	# Contig accession number
     otherAcc varchar(255) not null,	# Accession number of other contigs that the marker hits

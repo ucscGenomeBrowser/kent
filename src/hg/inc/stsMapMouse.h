@@ -13,7 +13,7 @@ struct stsMapMouse
     int chromStart;	/* Start position in chrom - negative 1 if unpositioned */
     unsigned chromEnd;	/* End position in chrom */
     char *name;	/* Name of STS marker */
-    unsigned score;	/* Score of a marker = 1000/(# of placements) */
+    unsigned score;     /* Score of a marker = 1000/(#placements) when placed uniquely, else 1500/(#placements) when placed in multiple locations */
     unsigned identNo;	/* UCSC Id No. */
     unsigned probeId;	/* Probe Identification number of STS */
     unsigned markerId;	/* Marker Identification number of STS */
