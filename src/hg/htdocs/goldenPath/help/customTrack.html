@@ -133,7 +133,8 @@ Genome Browser, you may wish to customize the details pages for individual track
 features.  The Genome Browser automatically creates a default details page for each
 feature in the track containing the feature's name, position information, and a
 link to the corresponding DNA sequence. To view the
-details page for a feature in your custom annotation track (in full display
+details page for a feature in your custom annotation track (in full, pack, or 
+squish display
 mode), click on the item's label in the annotation track window. 
 <P>
 You can add a link from a details page to an external web page containing
@@ -213,6 +214,14 @@ Browser window will initially display the first 20000 bases of chr 22.
    <LI><B>dense <<I>track_name(s)</I>></B> - Displays the specified tracks in
    dense mode. Symbolic names must be used. Multiple track names should be
    space-separated. 
+   <LI><B>pack all</B> - Displays all tracks in pack mode.
+   <LI><B>pack <<I>track_name(s)</I>></B> - Displays the specified tracks in
+   pack mode. Symbolic names must be used. Multiple track names should be 
+   space-separated. 
+   <LI><B>squish all</B> - Displays all tracks in squish mode.
+   <LI><B>squish <<I>track_name(s)</I>></B> - Displays the specified tracks in
+   squish mode. Symbolic names must be used. Multiple track names should be 
+   space-separated. 
    <LI><B>full all</B> - Displays all tracks in full mode.
    <LI><B>full <<I>track_name(s)</I>></B> - Displays the specified tracks in
    full mode. Symbolic names must be used. Multiple track names should be 
@@ -269,9 +278,8 @@ Genome Browser:</P>
 	value is <I>User Supplied Track</I>.
 	<LI><B>visibility=<<I>display_mode</I>></B> - Defines the
 	initial display mode of the annotation track. Values for
-	<I>display_mode</I> include: 0 for hide, 1 for
-	dense display mode, and 2 for full display mode. The default is
-	1.
+	<I>display_mode</I> include: 0 - hide, 1 - dense, 2 - full, 3 - pack, 
+	and 4 - squish. The default is 1.
 	<LI><B>color=<<I>RGB,RGB,RGB</I>></B> - Defines the main color
 	for the annotation track.  The track color consists of three comma-separated
 	RGB values from 0-255.  The default value is 0,0,0 (black).
@@ -332,7 +340,8 @@ throughout any single set of data in an annotation track.
 <OL START=4>
 	<LI><B>name</B> - Defines the name of the BED line.  This label is
 	displayed to the left of the BED line in the Genome Browser
-	window when the track is open to full display mode. 
+	window when the track is open to full display mode or directly to the
+	left of the item in pack mode. 
 	<LI><B>score</B> - A score between 0 and 1000. If the track line 
 	<I>useScore</I> attribute is set to 1 for this annotation data set, the
 	<I>score</I> value will determine the level of gray in which
