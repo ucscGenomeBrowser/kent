@@ -13,7 +13,7 @@
 #include "hdb.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: joining.c,v 1.7 2004/07/17 06:48:17 kent Exp $";
+static char const rcsid[] = "$Id: joining.c,v 1.8 2004/07/17 16:03:22 kent Exp $";
 
 struct joinedRow
 /* A row that is joinable.  Allocated in joinableResult->lm. */
@@ -27,25 +27,42 @@ struct joinedTables
 /* Database query result table that is joinable. */
     {
     struct joinedTables *next;
-    struct lm *lm;	/* Local memory structure - used for all allocations. */
-    char **fieldNames;	/* Names of fields. */
-    int fieldCount;	/* Number of fields user has requested. */
-    char **keyNames;	/* Names of keys. */
-    int keyCount;	/* Number of keys. */
-    struct joinedRow *rowList;	/* Rows. */
+    struct lm *lm;	/* Local memory structure - used for row allocations. */
+    struct joinerDtf *fieldList;	/* Fields user has requested. */
+    int fieldCount;	/* Number of fields - calculated at start of load. */
+    struct joinerDtf *keyList;	/* List of keys. */
+    int keyCount;	/* Number of keys- calculated at start of load. */
+    struct joinedRow *rowList;	/* Rows - allocated in lm. */
     int rowCount;	/* Number of rows. */
     };
 
-void dumpJt(struct joinedTables *jt)
+void tabOutJoined(struct joinedTables *joined)
 /* Write out fields. */
 {
 struct joinedRow *jr;
-for (jr = jt->rowList; jr != NULL; jr = jr->next)
+struct joinerDtf *field;
+for (field = joined->fieldList; field != NULL; field = field->next)
+    {
+    hPrintf("%s.%s.%s", field->database, field->table, field->field);
+    if (field->next == NULL)
+        hPrintf("\n");
+    else
+        hPrintf("\t");
+    }
+for (jr = joined->rowList; jr != NULL; jr = jr->next)
     {
     int i;
-    for (i=0; i<jt->fieldCount; ++i)
-        printf("\t%s", jr->fields[i]);
-    printf("\n");
+    for (i=0; i<joined->fieldCount; ++i)
+	{
+	char *s;
+	if (i != 0)
+	    hPrintf("\t");
+	s = jr->fields[i];
+	if (s == NULL)
+	    s = "n/a";
+        hPrintf("%s", s);
+	}
+    hPrintf("\n");
     }
 }
 
@@ -58,9 +75,7 @@ struct lm *lm;
 AllocVar(jt);
 lm = jt->lm = lmInit(64*1024);
 jt->fieldCount = fieldCount;
-lmAllocArray(lm, jt->fieldNames, jt->fieldCount);
 jt->keyCount = keyCount;
-lmAllocArray(lm, jt->keyNames, jt->keyCount);
 return jt;
 }
 
@@ -71,6 +86,8 @@ struct joinedTables *jt = *pJt;
 if (jt != NULL)
     {
     lmCleanup(&jt->lm);
+    joinerDtfFreeList(&jt->fieldList);
+    joinerDtfFreeList(&jt->keyList);
     freez(pJt);
     }
 }
@@ -104,7 +121,7 @@ char **keys = jr->keys + keyOffset;
 char **fields = jr->fields + fieldOffset;
 struct lm *lm = joined->lm;
 
-if (fieldCount + fieldOffset > joined->keyCount)
+if (fieldCount + fieldOffset > joined->fieldCount)
     internalErr();
 if (keyCount + keyOffset > joined->keyCount)
     internalErr();
@@ -195,28 +212,6 @@ slReverse(&jt->rowList);
 return jt;
 }
 #endif /* OLD */
-
-struct hash *hashKeyField(struct joinedTables *jt, char *keyField,
-	struct slName *chopPrefix, struct slName *chopSuffix)
-/* Make a hash based on key field. */
-{
-int ix = stringArrayIx(keyField, jt->keyNames, jt->keyCount);
-int hashSize = digitsBaseTwo(jt->rowCount);
-struct hash *hash = NULL;
-struct joinedRow *jr;
-
-if (hashSize > 20)
-    hashSize = 20;
-hash = newHash(hashSize);
-if (ix < 0)
-    internalErr();
-for (jr = jt->rowList; jr != NULL; jr = jr->next)
-    {
-    char *key = chopKey(chopPrefix, chopSuffix, jr->keys[ix]);
-    hashAdd(hash, key, jr);
-    }
-return hash;
-}
 
 struct joinerDtf *fieldsToDtfs(struct slName *fieldList)
 /* Convert list from dotted triple to dtf format. */
@@ -383,6 +378,22 @@ if (primaryTf != NULL)
 *pTfList = tjList;
 }
 
+boolean inKeysOut(struct tableJoiner *tj, struct joinerPair *route)
+/* See if key implied by route is already in tableJoiner. */
+{
+struct slRef *ref;
+for (ref = tj->keysOut; ref != NULL; ref = ref->next)
+    {
+    struct joinerPair *jp = ref->val;
+    struct joinerDtf *a = jp->a;
+    if (sameString(a->database, route->a->database)
+     && sameString(a->table, route->a->table)
+     && sameString(a->field, route->a->field))
+         return TRUE;
+    }
+return FALSE;
+}
+
 void addOutKeys(struct hash *tableHash, struct joinerPair *routeList, 
 	struct tableJoiner **pTfList)
 /* Add output keys to tableJoiners.  These are in table hash.
@@ -409,7 +420,8 @@ for (route = routeList; route != NULL; route = route->next)
 	slAddTail(pTfList, tj);
 	hashAdd(tableHash, fullName, tj);
 	}
-    refAdd(&tj->keysOut, route);
+    if (!inKeysOut(tj, route))
+	refAdd(&tj->keysOut, route);
     }
 }
 
@@ -443,12 +455,17 @@ struct sqlConnection *conn = sqlConnect(tj->database);
  * second keys if any. */
 for (dtf = tj->fieldList; dtf != NULL; dtf = dtf->next)
     {
+    struct joinerDtf *dupe = joinerDtfClone(dtf);
+    slAddTail(&joined->fieldList, dupe);
     dyStringAddList(sqlFields, dtf->field);
     ++fieldCount;
     }
 for (ref = tj->keysOut; ref != NULL; ref = ref->next)
     {
+    struct joinerDtf *dupe;
     jp = ref->val;
+    dupe = joinerDtfClone(jp->a);
+    slAddTail(&joined->keyList, dupe);
     dyStringAddList(sqlFields, jp->a->field);
     ++keyCount;
     }
@@ -497,7 +514,7 @@ for (region = regionList; region != NULL; region = region->next)
     }
 if (isFirst)
     slReverse(&joined->rowList);
-tj->Loaded = TRUE;
+tj->loaded = TRUE;
 sqlDisconnect(&conn);
 }
 	
@@ -519,6 +536,53 @@ if (hti->nameField[0] != 0)
 tjLoadSome(regionList, joined, 0, 0, idField, idHash, tj, hti, TRUE);
 hashFree(&idHash);
 return joined;
+}
+
+int findDtfIndex(struct joinerDtf *list, struct joinerDtf *dtf)
+/* Find dtf on list. */
+{
+struct joinerDtf *el;
+int ix;
+for (el = list, ix=0; el != NULL; el = el->next, ++ix)
+    {
+    if (sameString(el->database, dtf->database)
+     && sameString(el->table, dtf->table)
+     && sameString(el->field, dtf->field))
+        return ix;
+    }
+return -1;
+}
+
+struct hash *hashKeyField(struct joinedTables *joined, int keyIx,
+	struct slName *chopPrefix, struct slName *chopSuffix)
+/* Make a hash based on key field. */
+{
+int hashSize = digitsBaseTwo(joined->rowCount);
+struct hash *hash = NULL;
+struct joinedRow *jr;
+
+if (hashSize > 20)
+    hashSize = 20;
+hash = newHash(hashSize);
+for (jr = joined->rowList; jr != NULL; jr = jr->next)
+    {
+    char *key = chopKey(chopPrefix, chopSuffix, jr->keys[keyIx]);
+    hashAdd(hash, key, jr);
+    }
+return hash;
+}
+
+struct tableJoiner *findTableJoiner(struct tableJoiner *list, 
+    char *database, char *table)
+/* Find tableJoiner for given database/table. */
+{
+struct tableJoiner *el;
+for (el = list; el != NULL; el = el->next)
+    {
+    if (sameString(el->database, database) && sameString(el->table, table))
+        return el;
+    }
+return NULL;
 }
 
 void tabOutFields(
@@ -569,6 +633,16 @@ else
         {
 	totalKeyCount += slCount(tj->keysOut);
 	totalFieldCount += slCount(tj->fieldList);
+	    {
+	    struct slRef *ref;
+	    uglyf("keys for %s:", tj->table);
+	    for (ref = tj->keysOut; ref != NULL; ref = ref->next)
+	        {
+		struct joinerPair *jp = ref->val;
+		uglyf(" %s", jp->a->field);
+		}
+	    uglyf("\n");
+	    }
 	}
 
     uglyf("Got %d hops in route\n", slCount(routeList));
@@ -581,42 +655,44 @@ else
 
     /* Do first table.  This one uses identifier hash if any. */
 	{
-	struct joinedTables *jt = tjLoadFirst(regionList,
+	joined = tjLoadFirst(regionList,
 		tjList, totalFieldCount, totalKeyCount);
 	curKeyCount = slCount(tjList->keysOut);
 	curFieldCount = slCount(tjList->fieldList);
+	uglyf("After load first %d rows, %d fields, %d keys\n", joined->rowCount, slCount(joined->fieldList), slCount(joined->keyList));
 	}
 
-    for (tj = tjList->next; tj != NULL; tj = tj->next)
-        {
-	}
-#ifdef SOON
-    for (tj = tjList; tj != NULL; tj = tj->next)
-        {
-	struct slRef *keyRef;
-	uglyf("%s.%s", tj->database, tj->table);
-	for (keyRef = tj->keysOut; keyRef != NULL; keyRef = keyRef->next)
-	    {
-	    struct joinerPair *jp = keyRef->val;
-	    uglyf(" %s", jp->a->field);
-	    }
-	uglyf("\n");
-	}
-
-    lastRoute = NULL;
+    /* Follow routing list for rest. */
+    if (!sameString(tjList->database, routeList->a->database))
+        internalErr();
+    if (!sameString(tjList->table, routeList->a->table))
+        internalErr();
     for (route = routeList; route != NULL; route = route->next)
-         {
-	 char fullName[256];
-	 struct joinerDtf *a = route->a;
-	 safef(fullName, sizeof(fullName), "%s.%s", a->database, a->table);
-	 tj = hashMustFindVal(tableHash, fullName);
-	 uglyf("I'll do something on this route someday\n");
-	 lastRoute = route;
-	 }
+        {
+	struct tableJoiner *tj = findTableJoiner(tjList, 
+		route->b->database, route->b->table);
+	if (tj == NULL)
+	    internalErr();
+	if (!tj->loaded)
+	    {
+	    struct hTableInfo *hti = getHti(tj->database, tj->table);
+	    int keyIx = findDtfIndex(joined->keyList, route->a);
+	    struct hash *keyHash = NULL;
+	    if (keyIx < 0)
+		internalErr();
+	    keyHash = hashKeyField(joined, keyIx, NULL, NULL);
+	    tjLoadSome(regionList, joined, curFieldCount, curKeyCount,
+	        route->b->field, keyHash, tj, hti, FALSE);
+	    curKeyCount += slCount(tj->keysOut);
+	    curFieldCount += slCount(tj->fieldList);
+	    uglyf("After load next %d rows, %d fields, %d keys\n", joined->rowCount, slCount(joined->fieldList), slCount(joined->keyList));
+	    hashFree(&keyHash);
+	    }
+	}
+    tabOutJoined(joined);
     sqlDisconnect(&conn);
     joinerDtfFreeList(&tableDtfs);
     hashFree(&tableHash);
-#endif /* SOON */
     }
 tableFieldsFreeList(&tjList);
 }
@@ -628,6 +704,8 @@ struct slName *fieldList = NULL, *field;
 field = slNameNew("hg16.softberryGene.name");
 slAddTail(&fieldList, field);
 field = slNameNew("hg16.softberryHom.description");
+slAddTail(&fieldList, field);
+field = slNameNew("hg16.softberryPep.seq");
 slAddTail(&fieldList, field);
 #ifdef SOON
 field = slNameNew("hg16.knownGene.name");
