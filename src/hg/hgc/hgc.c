@@ -164,7 +164,7 @@
 #include "putaInfo.h"
 
 
-static char const rcsid[] = "$Id: hgc.c,v 1.850 2005/03/15 21:16:43 ytlu Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.851 2005/03/15 23:43:53 ytlu Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -2285,7 +2285,6 @@ netAlignFree(&net);
 void tfbsConsSites(struct trackDb *tdb, char *item)
 /* detail page for tfbsConsSites track */
 {
-boolean printFactors = FALSE;
 boolean printedPlus = FALSE;
 boolean printedMinus = FALSE;
 char *dupe, *words[16];
