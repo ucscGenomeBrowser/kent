@@ -2389,7 +2389,11 @@ tg->items = lfList;	/* Do this twice for benefit of limit visibility */
 if (limitVisibility(tg) != tvDense)
     slSort(&lfList, linkedFeaturesCmpStart);
 if (tg->extraUiData)
+    {
     filterMrna(tg, &lfList);
+    tg->limitedVisSet = FALSE;	/* We need to recalculate this since we
+                                 * may have taken stuff out. */
+    }
 tg->items = lfList;
 sqlFreeResult(&sr);
 }
