@@ -164,7 +164,7 @@
 #include "putaInfo.h"
 
 
-static char const rcsid[] = "$Id: hgc.c,v 1.852 2005/03/17 11:39:53 daryl Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.853 2005/03/21 22:43:30 angie Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -4628,8 +4628,13 @@ char splitTable[64];
 
 cartWebStart(cart, "Gap in Sequence");
 hFindSplitTable(seqName, track, splitTable, &hasBin);
-sprintf(query, "select * from %s where chromStart = %d", 
-	splitTable, start);
+if (sameString(track, splitTable))
+    safef(query, sizeof(query), "select * from %s where chrom = '%s' and "
+	  "chromStart = %d", 
+	  splitTable, seqName, start);
+else
+    safef(query, sizeof(query), "select * from %s where chromStart = %d", 
+	  splitTable, start);
 sr = sqlMustGetResult(conn, query);
 row = sqlNextRow(sr);
 if (row == NULL)
