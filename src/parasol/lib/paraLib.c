@@ -1,4 +1,6 @@
 #include <sys/utsname.h>
+#include <pwd.h>
+#include <sys/types.h>
 #include "common.h"
 #include "options.h"
 #include "errabort.h"
@@ -55,6 +57,19 @@ if (host == NULL)
     host = cloneString(host);
     }
 return host;
+}
+
+char *getUser()
+/* Get user name */
+{
+uid_t uid = geteuid();
+struct passwd *pw = getpwuid(uid);
+if (pw == NULL)
+    {
+    warn("Can't getUser");
+    return "nobody";
+    }
+return pw->pw_name;
 }
 
 boolean parseRunJobMessage(char *line, struct runJobMessage *rjm)
