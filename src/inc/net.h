@@ -11,6 +11,9 @@
 #include "dystring.h"
 #endif /* DYSTRING_H */
 
+int netSetupSocket(char *hostName, int port, struct sockaddr_in *sai);
+/* Set up our socket. */
+
 int netConnect(char *hostName, char *portName);
 /* Start connection with server. */
 
@@ -24,6 +27,30 @@ int netReadAll(int sd, void *vBuf, size_t size);
 int netMustReadAll(int sd, void *vBuf, size_t size);
 /* Read given number of bytes into buffer or die.
  * Don't give up if first read is short! */
+
+boolean netSendString(int sd, char *s);
+/* Send a string down a socket - length byte first. */
+
+boolean netSendLongString(int sd, char *s);
+/* Send a string down a socket - up to 64k characters. */
+
+char *netRecieveString(int sd, char buf[256]);
+/* Read string into buf and return it.  If buf is NULL
+ * an internal buffer will be used. Abort if any problem. */
+
+char *netRecieveLongString(int sd);
+/* Read string and return it.  freeMem
+ * the result when done. Abort if any problem*/
+
+char *netGetString(int sd, char buf[256]);
+/* Read string into buf and return it.  If buf is NULL
+ * an internal buffer will be used. Print warning message
+ * and return NULL if any problem. */
+
+char *netGetLongString(int sd);
+/* Read string and return it.  freeMem
+ * the result when done.  Print warning message and
+ * return NULL if any problem. */
 
 void netCatchPipes();
 /* Set up to catch broken pipe signals. */
