@@ -10,8 +10,12 @@
 #define COMMON_H
 
 /* Some stuff to support large files in Linux. */
+#ifndef _LARGEFILE_SOURCE
 #define _LARGEFILE_SOURCE 1
+#endif
+#ifndef _GNU_SOURCE
 #define _GNU_SOURCE
+#endif
 
 #ifndef _FILE_OFFSET_BITS
 #define _FILE_OFFSET_BITS 64
