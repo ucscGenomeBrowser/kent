@@ -32,9 +32,6 @@ struct dnaSeq *faReadAllPep(char *fileName);
 struct dnaSeq *faReadAllSeq(char *fileName, boolean isDna);
 /* Return list of all sequences in FA file. */
 
-struct dnaSeq *faReadAllMixed(char *fileName);
-/* Read in mixed case fasta file, preserving case. */
-
 struct dnaSeq *faReadOneDnaSeq(FILE *f, char *name, boolean mustStartWithSign);
 /* Read one sequence from FA file. Assumes positioned at or before
  * the '>' at start of sequence. */  

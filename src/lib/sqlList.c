@@ -10,7 +10,6 @@
 #include "common.h"
 #include "sqlNum.h"
 #include "sqlList.h"
-#include "dystring.h"
 
 int sqlByteArray(char *s, signed char *array, int arraySize)
 /* Convert comma separated list of numbers to an array.  Pass in 
@@ -67,7 +66,7 @@ void sqlByteDynamicArray(char *s, signed char **retArray, int *retSize)
  * array, which should be freeMem()'d when done. */
 {
 signed char *sArray, *dArray = NULL;
-int size;
+unsigned size;
 
 sqlByteStaticArray(s, &sArray, &size);
 if (size > 0)
@@ -136,7 +135,7 @@ void sqlUbyteDynamicArray(char *s, unsigned char **retArray, int *retSize)
  * array, which should be freeMem()'d when done. */
 {
 unsigned char *sArray, *dArray = NULL;
-int size;
+unsigned size;
 
 sqlUbyteStaticArray(s, &sArray, &size);
 if (size > 0)
@@ -205,7 +204,7 @@ void sqlShortDynamicArray(char *s, short **retArray, int *retSize)
  * array, which should be freeMem()'d when done. */
 {
 short *sArray, *dArray = NULL;
-int size;
+unsigned size;
 
 sqlShortStaticArray(s, &sArray, &size);
 if (size > 0)
@@ -274,7 +273,7 @@ void sqlUshortDynamicArray(char *s, unsigned short **retArray, int *retSize)
  * array, which should be freeMem()'d when done. */
 {
 unsigned short *sArray, *dArray = NULL;
-int size;
+unsigned size;
 
 sqlUshortStaticArray(s, &sArray, &size);
 if (size > 0)
@@ -343,7 +342,7 @@ void sqlFloatDynamicArray(char *s, float **retArray, int *retSize)
  * array, which should be freeMem()'d when done. */
 {
 float *sArray, *dArray = NULL;
-int size;
+unsigned size;
 
 sqlFloatStaticArray(s, &sArray, &size);
 if (size > 0)
@@ -412,7 +411,7 @@ void sqlUnsignedDynamicArray(char *s, unsigned **retArray, int *retSize)
  * array, which should be freeMem()'d when done. */
 {
 unsigned *sArray, *dArray = NULL;
-int size;
+unsigned size;
 
 sqlUnsignedStaticArray(s, &sArray, &size);
 if (size > 0)
@@ -571,123 +570,6 @@ if (size > 0)
 *retSize = size;
 }
 
-char *sqlFloatArrayToString( float *array, int arraySize)
-{
-int i;
-struct dyString *string = newDyString(256);
-char *toRet = NULL;
-for( i = 0 ; i < arraySize; i++ )
-    {
-    dyStringPrintf(string, "%f,", array[i]);
-    }
-toRet = cloneString(string->string);
-dyStringFree(&string);
-return toRet;
-}
-
-char *sqlUnsignedArrayToString( unsigned *array, int arraySize)
-{
-int i;
-struct dyString *string = newDyString(256);
-char *toRet = NULL;
-for( i = 0 ; i < arraySize; i++ )
-    {
-    dyStringPrintf(string, "%u,", array[i]);
-    }
-toRet = cloneString(string->string);
-dyStringFree(&string);
-return toRet;
-}
-
-char *sqlSignedArrayToString( int *array, int arraySize)
-{
-int i;
-struct dyString *string = newDyString(256);
-char *toRet = NULL;
-for( i = 0 ; i < arraySize; i++ )
-    {
-    dyStringPrintf(string, "%d,", array[i]);
-    }
-toRet = cloneString(string->string);
-dyStringFree(&string);
-return toRet;
-}
-
-char *sqlShortArrayToString( short *array, int arraySize)
-{
-int i;
-struct dyString *string = newDyString(256);
-char *toRet = NULL;
-for( i = 0 ; i < arraySize; i++ )
-    {
-    dyStringPrintf(string, "%d,", array[i]);
-    }
-toRet = cloneString(string->string);
-dyStringFree(&string);
-return toRet;
-}
-
-char *sqlUshortArrayToString( unsigned short *array, int arraySize)
-{
-int i;
-struct dyString *string = newDyString(256);
-char *toRet = NULL;
-for( i = 0 ; i < arraySize; i++ )
-    {
-    dyStringPrintf(string, "%u,", array[i]);
-    }
-toRet = cloneString(string->string);
-dyStringFree(&string);
-return toRet;
-}
-
-char *sqlByteArrayToString( signed char *array, int arraySize)
-{
-int i;
-struct dyString *string = newDyString(256);
-char *toRet = NULL;
-for( i = 0 ; i < arraySize; i++ )
-    {
-    dyStringPrintf(string, "%d,", array[i]);
-    }
-toRet = cloneString(string->string);
-dyStringFree(&string);
-return toRet;
-}
-
-char *sqlUbyteArrayToString( unsigned char *array, int arraySize)
-{
-int i;
-struct dyString *string = newDyString(256);
-char *toRet = NULL;
-for( i = 0 ; i < arraySize; i++ )
-    {
-    dyStringPrintf(string, "%u,", array[i]);
-    }
-toRet = cloneString(string->string);
-dyStringFree(&string);
-return toRet;
-}
-
-char *sqlStringArrayToString( char **array, int arraySize)
-{
-int i;
-struct dyString *string = newDyString(256);
-char *toRet = NULL;
-for( i = 0 ; i < arraySize; i++ )
-    {
-    dyStringPrintf(string, "%s,", array[i]);
-    }
-toRet = cloneString(string->string);
-dyStringFree(&string);
-return toRet;
-}
-
-
-/* -------------- */
-
-
-
 void sqlStringFreeDynamicArray(char ***pArray)
 /* Free up a dynamic array (ends up freeing array and first string on it.) */
 {
@@ -697,34 +579,6 @@ if ((array = *pArray) != NULL)
     freeMem(array[0]);
     freez(pArray);
     }
-}
-
-char *sqlEscapeString(const char* from)
-{
-char *to = needMem((strlen(from)*2 +1) * sizeof(char));
-int fromPos =0, toPos=0;
-for(fromPos =0; fromPos < strlen(from); fromPos++)
-    {
-
-    if(from[fromPos] == '\'')
-	{
-	to[toPos] = '\\';
-	toPos++; 
-	to[toPos] = '\'';
-	}
-    else if(from[fromPos] == '\"')
-	{
-	to[toPos] = '\\';
-	toPos++; 
-	to[toPos] = '\"';
-	}
-    else
-	to[toPos] = from[fromPos];
-    toPos++;
-    }
-toPos++;
-to[toPos] = '\0';
-return to; 
 }
 
 int sqlUnsignedComma(char **pS)

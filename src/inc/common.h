@@ -393,11 +393,6 @@ char *firstWordInLine(char *line);
 /* Returns first word in line if any (white space separated).
  * Puts 0 in place of white space after word. */
 
-char *lastWordInLine(char *line);
-/* Returns last word in line if any (white space separated).
- * Returns NULL if string is empty.  Removes any terminating white space
- * from line. */
-
 char *nextWord(char **pLine);
 /* Return next word in *pLine and advance *pLine to next
  * word. Returns NULL when no more words. */
@@ -484,9 +479,6 @@ int roundingScale(int a, int p, int q);
 
 int intAbs(int a);
 /* Return integer absolute value */
-
-#define logBase2(x)(log(x)/log(2))
-/* return log base two of number */
 
 #define round(a) ((int)((a)+0.5))
 /* Round floating point val to nearest integer. */

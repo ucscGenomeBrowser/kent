@@ -20,7 +20,7 @@ webInTextMode = TRUE;
 }
 
 
-void webStartWrapper(char *format, va_list args, boolean withHttpHeader, boolean withLogo)
+void webStartWrapper(char *format, va_list args, boolean withHttpHeader)
 /* output a CGI and HTML header with the given title in printf format */
 {
 /* don't output two headers */
@@ -53,13 +53,9 @@ puts(
     "<BODY BGCOLOR=\"FFF9D2\" LINK=\"0000CC\" VLINK=\"#330066\" ALINK=\"#6600FF\">" "\n"
     "<A NAME=\"TOP\"></A>" "\n"
     "" "\n"
-    "<TABLE BORDER=0 WIDTH=\"100%\">" "\n");
-if (withLogo)
-    puts(
+    "<TABLE BORDER=0 WIDTH=\"100%\">" "\n"
     "<TR><TH COLSPAN=2 ALIGN=\"left\"><IMG SRC=\"/images/title.jpg\"></TH></TR>" "\n"
     "" "\n"
-    );
-puts(
     "<!--HOTLINKS BAR----------------------------------------------------------->" "\n"
     "<TR><TD COLSPAN=2 HEIGHT=40>" "\n"
     "   <CENTER>" "\n"
@@ -115,7 +111,7 @@ void webStart(char *format, ...)
 {
 va_list args;
 va_start(args, format);
-webStartWrapper(format, args, TRUE, TRUE);
+webStartWrapper(format, args, TRUE);
 va_end(args);
 }
 

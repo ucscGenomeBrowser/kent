@@ -6,7 +6,7 @@ O = aliType.o bits.o blastParse.o cda.o cheapcgi.o codebias.o common.o crudeali.
     fa.o ffAli.o flydna.o fof.o fuzzyFind.o fuzzyShow.o gdf.o \
     gemfont.o genoFind.o gfClientLib.o gfNet.o gff.o \
     gifcomp.o gifwrite.o hash.o \
-    hmmstats.o htmshell.o hugefnt.o intExp.o jointalign.o\
+    hmmstats.o htmshell.o hugefnt.o intExp.o \
     keys.o kxTok.o largefnt.o linefile.o localmem.o \
     medfnt.o memalloc.o memgfx.o net.o nib.o \
     nt4.o obscure.o oldGff.o ooc.o osunix.o patSpace.o \
@@ -14,7 +14,7 @@ O = aliType.o bits.o blastParse.o cda.o cheapcgi.o codebias.o common.o crudeali.
     servCrunx.o servcl.o servmsII.o servpws.o shaRes.o \
     sixhi.o smallishfnt.o snof.o snofmake.o snofsig.o spaceSaver.o \
     sqlNum.o sqlList.o  supStitch.o trans3.o wildcmp.o wormdna.o \
-    xa.o xap.o xenbig.o xenshow.o xensmall.o xp.o web.o 
+    xa.o xap.o xenbig.o xenshow.o xensmall.o xp.o web.o
 
 
 $(MACHTYPE)/jkweb.a: $(O) $(MACHTYPE)

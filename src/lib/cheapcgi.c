@@ -11,7 +11,6 @@
 #include "cheapcgi.h"
 #include "portable.h"
 
-
 /* These three variables hold the parsed version of cgi variables. */
 static char *inputString = NULL;
 static unsigned long inputSize;
@@ -72,9 +71,6 @@ for (i=0; i<inputSize; ++i)
     }
 inputString[inputSize] = 0;
 }
-
-#define memmem(hay, haySize, needle, needleSize) \
-    memMatch(needle, needleSize, hay, haySize)
 
 static void cgiParseMultipart(char *input, struct hash **retHash, struct cgiVar **retList)
 /* process a multipart form */
@@ -181,9 +177,8 @@ while(namePt != 0)
 	    carefulClose(&f);
 
 	    snprintf(varNameFilename, 256, "%s__data", namePt);
-
 	    AllocVar(filenameEl);
-	    filenameEl->val = cloneString(uploadedFile.forCgi);
+	    filenameEl->val = uploadedFile.forCgi;
 	    slAddHead(&list, filenameEl);
 	    hashAddSaveName(hash, varNameFilename, filenameEl, &filenameEl->name);
 	} else {
@@ -689,35 +684,6 @@ if (cgiVarExists(varName))
     struct cgiVar *cv = hashRemove(inputHash, varName);
     slRemoveEl(&inputList, cv);
     }
-}
-
-void cgiVarExcludeExcept(char **varNames)
-/* Exclude all variables except for those in NULL
- * terminated array varNames.  varNames may be NULL
- * in which case nothing is excluded. */
-{
-struct hashEl *list, *el;
-struct hash *exclude = newHash(8);
-char *s;
-
-/* Build up hash of things to exclude */
-if (varNames != NULL)
-   {
-   while ((s = *varNames++) != NULL)
-       hashAdd(exclude, s, NULL);
-   }
-
-/* Step through variable list and remove them if not
- * excluded. */
-initCgiInput();
-list = hashElListHash(inputHash);
-for (el = list; el != NULL; el = el->next)
-    {
-    if (!hashLookup(exclude, el->name))
-        cgiVarExclude(el->name);
-    }
-hashElFreeList(&list);
-freeHash(&exclude);
 }
 
 void cgiVarSet(char *varName, char *val)

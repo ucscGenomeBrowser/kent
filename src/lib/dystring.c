@@ -89,33 +89,3 @@ va_start(args, format);
 dyStringVaPrintf(ds, format, args);
 va_end(args);
 }
-
-struct dyString * dyStringSub(char *orig, char *in, char *out)
-/* Make up a duplicate of orig with all occurences of in substituted
- * with out. */
-{
-int inLen = strlen(in), outLen = strlen(out), origLen = strlen(orig);
-struct dyString *dy = newDyString(origLen + 2*outLen);
-char *s, *e;
-
-if (orig == NULL) return NULL;
-for (s = orig; ;)
-    {
-    e = stringIn(in, s);
-    if (e == NULL) 
-	{
-        e = orig + origLen;
-	dyStringAppendN(dy, s, e - s);
-	break;
-	}
-    else
-        {
-	dyStringAppendN(dy, s, e - s);
-	dyStringAppendN(dy, out, outLen);
-	s = e + inLen;
-	}
-    }
-return dy;
-}
-
-

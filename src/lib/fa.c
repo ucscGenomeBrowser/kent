@@ -490,26 +490,17 @@ boolean faSpeedReadNext(struct lineFile *lf, DNA **retDna, int *retSize, char **
 return faSomeSpeedReadNext(lf, retDna, retSize, retName, TRUE);
 }
 
-struct dnaSeq *faReadAllSeqMixable(char *fileName, boolean isDna, boolean mixed)
-/* Return list of all sequences in FA file. 
- * Mixed case parameter overrides isDna.  If mixed is false then
- * will return DNA in lower case and non-DNA in upper case. */
+struct dnaSeq *faReadAllSeq(char *fileName, boolean isDna)
+/* Return list of all sequences in FA file. */
 {
 struct lineFile *lf = lineFileOpen(fileName, FALSE);
 struct dnaSeq *seqList = NULL, *seq;
 DNA *dna;
 char *name;
 int size;
-boolean ok;
 
-for (;;)
+while (faSomeSpeedReadNext(lf, &dna, &size, &name, isDna))
     {
-    if (mixed)
-        ok = faMixedSpeedReadNext(lf, &dna, &size, &name);
-    else
-        ok = faSomeSpeedReadNext(lf, &dna, &size, &name, isDna);
-    if (!ok)
-        break;
     AllocVar(seq);
     seq->name = cloneString(name);
     seq->size = size;
@@ -520,12 +511,6 @@ lineFileClose(&lf);
 slReverse(&seqList);
 faFreeFastBuf();
 return seqList;
-}
-
-struct dnaSeq *faReadAllSeq(char *fileName, boolean isDna)
-/* Return list of all sequences in FA file. */
-{
-return faReadAllSeqMixable(fileName, isDna, FALSE);
 }
 
 struct dnaSeq *faReadAllDna(char *fileName)
@@ -540,8 +525,3 @@ struct dnaSeq *faReadAllPep(char *fileName)
 return faReadAllSeq(fileName, FALSE);
 }
 
-struct dnaSeq *faReadAllMixed(char *fileName)
-/* Read in mixed case fasta file, preserving case. */
-{
-return faReadAllSeqMixable(fileName, FALSE, TRUE);
-}
