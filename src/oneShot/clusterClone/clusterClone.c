@@ -7,7 +7,7 @@
 #include "psl.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: clusterClone.c,v 1.3 2004/06/17 21:40:33 hiram Exp $";
+static char const rcsid[] = "$Id: clusterClone.c,v 1.4 2004/06/17 22:54:54 hiram Exp $";
 
 float minCover = 50.0;		/*	percent coverage to count hit */
 
@@ -88,9 +88,10 @@ verbose(2,"# chr%s %d\n", hashEl->name, count);
 	}
     }
 verbose(2,"# chr%s %d highest count, next: %s %d\n", highName, highCount, secondHighestName, secondHighest);
+
 if (highCount == secondHighest)
     {
-verbose(2,"# chr%s %d highest count, next: %s %d  TIE *\n", highName, highCount, secondHighestName, secondHighest);
+verbose(2,"# ERROR TIE for high count chr%s %d highest count, next: %s %d  TIE *\n", highName, highCount, secondHighestName, secondHighest);
     }
 
 /*	for that highest count chrom, examine its coordinates, find high
@@ -310,7 +311,7 @@ for (i=1; i < argc; ++i)
 	freeMem(chrName);
 	pslFree(&psl);
 	}
-	processResult(chrHash, coordHash, prevAccName, querySize);
+    processResult(chrHash, coordHash, prevAccName, querySize);
     lineFileClose(&lf);
     }
 }
