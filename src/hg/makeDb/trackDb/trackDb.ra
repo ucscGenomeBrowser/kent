@@ -649,6 +649,7 @@ priority 68
 visibility hide
 color 100,0,0
 type genePred
+autoTranslate 0
 url http://www.tigr.org/tigr-scripts/tgi/tc_report.pl?$$
 
 track uniGene_2
