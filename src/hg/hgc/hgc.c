@@ -2978,8 +2978,8 @@ dna = cloneString(dnaSeq->dna);
 
 if (qName == NULL) 
     qName = psl->qName;
-fprintf(f, "<TT><PRE>");
 fprintf(f, "<H4><A NAME=cDNA></A>%s%s</H4>\n", qName, (qIsRc  ? " (reverse complemented)" : ""));
+fprintf(f, "<TT><PRE>");
 tolowers(oLetters);
 
 /* Display query sequence. */
