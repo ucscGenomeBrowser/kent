@@ -1,10 +1,12 @@
 /* gb2cdi - convert from genBank to cDNA info file format. */
 #include "common.h"
 #include "hash.h"
+#include "linefile.h"
 #include "dnautil.h"
 #include "dnaseq.h"
 #include "wormdna.h"
 
+char *targetSpecies = "Caenorhabditis elegans";
 /* 
  Format - text file, one record per line.  | separated fields. 
   accession|side|gene|product|CDS|stage|sex|reserved|Definition-line.
@@ -29,63 +31,6 @@ struct cdi
 
 char *threePrime = "-";
 char *fivePrime = "+";
-
-struct lineFile
-/* Structure for files read a line at a time. Lets you
- * push back a line. */
-    {
-    char *fileName;
-    FILE *file;
-    char *line;
-    int maxLineSize;
-    int lineCount;
-    boolean reuseLine;
-    };
-
-struct lineFile *lfOpen(char *name)
-/* Open file and create lineFile structure around it. */
-{
-struct lineFile *lf;
-AllocVar(lf);
-lf->fileName = cloneString(name);
-lf->file = mustOpen(name, "r");
-lf->maxLineSize = 16*1024;
-lf->line = needLargeMem(lf->maxLineSize);
-lf->line[0] = 0;
-return lf;
-}
-
-void lfClose(struct lineFile **pLf)
-/* Close file and free lineFile structure. */
-{
-struct lineFile *lf;
-if ((lf = *pLf) != NULL)
-    {
-    freeMem(lf->fileName);
-    carefulClose(&lf->file);
-    freeMem(lf->line);
-    freez(pLf);
-    }
-}
-
-void lfReuse(struct lineFile *lf)
-/* Reuse current line. */
-{
-assert(!lf->reuseLine);
-lf->reuseLine = TRUE;
-}
-
-char *lfNextLine(struct lineFile *lf)
-/* Get next line. */
-{
-if (lf->reuseLine)
-    {
-    lf->reuseLine = FALSE;
-    return lf->line;
-    }
-++lf->lineCount;
-return fgets(lf->line, lf->maxLineSize, lf->file); 
-}
 
 int mixedCount = 0;
 int maleCount = 0;
@@ -209,17 +154,17 @@ void findSubKeys(struct lineFile *lf, char **keys, char **dests,
 {
 int size;
 char *line;
+int lineSize;
 int i;
 
 for (i=0; i<keyCount; ++i)
     retDest[i] = NULL;
 
-for (;;)
+while (lineFileNext(lf, &line, &lineSize))
     {
-    line = lfNextLine(lf);
     if (!isspace(line[0]) || !isspace(line[5]))
         {
-        lfReuse(lf);
+        lineFileReuse(lf);
         return;
         }
     line = skipLeadingSpaces(line);
@@ -280,6 +225,15 @@ for (cloneIx = 0; cloneIx < wordCount; ++cloneIx)
 return NULL;
 }
 
+char *lfNextLine(struct lineFile *lf)
+/* Get next line from linefile. */
+{
+int lineSize;
+char *line = NULL;
+lineFileNext(lf, &line, &lineSize);
+return line;
+}
+
 void procOne(char *inName, FILE *faFile, FILE *cdiFile, struct hash *cdnaNameHash)
 /* Append contents of one genBank file to cdi file. */
 {
@@ -287,7 +241,7 @@ char *line;
 char *origLine = needMem(16*1024);
 char *words[256];
 int wordCount;
-struct lineFile *lf = lfOpen(inName);
+struct lineFile *lf = lineFileOpen(inName, TRUE);
 int maxDescription = 16*1024 - 1;
 char *description = needMem(maxDescription+1);
 char cdiName[64];
@@ -303,28 +257,36 @@ char *section;
 int baseCount;
 DNA *dna = NULL;
 int dnaAllocated = 0;
+int lineSize;
+int locusCount = 0;
 
 printf("Processing %s\n", inName);
-while ((line = lfNextLine(lf)) != NULL)
+while (lineFileNext(lf, &line, &lineSize))
     {
     if (!isspace(line[0]))
         {
-        wordCount = chopLine(lf->line, words);
+        wordCount = chopLine(line, words);
         section = words[0];
         if (sameString(section, "LOCUS"))
             {
+	    ++locusCount;
+	    if ((locusCount & 0x3ff) == 0)
+		{
+	        printf(".");
+		fflush(stdout);
+		}
             if (cdi != NULL)
                 {
                 errAbort("LOCUS in the middle of another line %d of %s\n",
-                    lf->lineCount, inName);
+                    lf->lineIx, inName);
                 }
             if (wordCount < 6)
-                errAbort("Short LOCUS line %d of %s\n", lf->lineCount, inName);
+                errAbort("Short LOCUS line %d of %s\n", lf->lineIx, inName);
             baseCount = atol(words[2]);
             if (baseCount <= 0)
                 {
                 errAbort("Expecting positive number of base pairs, got %s line %d of %s",
-                    lf->lineCount, inName, words[2]);
+                    lf->lineIx, inName, words[2]);
                 }
             if (sameString(words[4], "mRNA"))
                 AllocVar(cdi);
@@ -350,7 +312,7 @@ while ((line = lfNextLine(lf)) != NULL)
                 line = lfNextLine(lf);
                 wordCount = chopLine(line, words);
                 if ((cdi->name = nameAfterClone(words, wordCount, cdiName, &side)) == NULL)
-                    errAbort("Unusual Kohara line %d of %s!",lf->lineCount, lf->fileName);
+                    errAbort("Unusual Kohara line %d of %s!",lf->lineIx, lf->fileName);
                 }
             else if (sameString(words[2], "Chris") && sameString(words[3], "Martin") && sameString(words[4], "sorted"))  
                 
@@ -363,7 +325,7 @@ while ((line = lfNextLine(lf)) != NULL)
                 strcpy(uglyfLine, line);
                 wordCount = chopLine(line, words);
                 if ((cdi->name = nameAfterClone(words, wordCount, cdiName, &side)) == NULL)
-                    errAbort("Unusual Martin line %d of %s!",lf->lineCount, lf->fileName);
+                    errAbort("Unusual Martin line %d of %s!",lf->lineIx, lf->fileName);
                 }
             else if (sameString(words[4], "Stratagene") && sameString(words[5], "(cat.") )
                 {
@@ -376,11 +338,11 @@ while ((line = lfNextLine(lf)) != NULL)
                 else if (sameString(words[3], "embryo,"))
                     cdi->stage = "embryo";
                 else
-                    errAbort("Unusual Stratagene stage in line %d of %s", lf->lineCount, lf->fileName);
+                    errAbort("Unusual Stratagene stage in line %d of %s", lf->lineIx, lf->fileName);
                 line = lfNextLine(lf);
                 wordCount = chopLine(line, words);
                 if (wordCount < 6 || differentString(words[2], "clone") )
-                    errAbort("Unusual Stratagene line %d of %s", lf->lineCount, lf->fileName);
+                    errAbort("Unusual Stratagene line %d of %s", lf->lineIx, lf->fileName);
                 sprintf(cdiName, "%s", words[3]);
                 cdi->name = cdiName;
                 /* Chop of occassional trailing comma. */
@@ -420,7 +382,7 @@ while ((line = lfNextLine(lf)) != NULL)
                             else
                                 {
                                 errAbort("Unusual Univ. of Ariz/Wash U. EST line %d of %s",
-                                    lf->lineCount,  lf->fileName);
+                                    lf->lineIx,  lf->fileName);
                                 }
                             strcpy(cdiName, word);
                             cdiName[wordLen-2] = side;
@@ -442,7 +404,7 @@ while ((line = lfNextLine(lf)) != NULL)
                         newLen = wordLen + descriptionLen + 1;
                         if (newLen > maxDescription)
                             {
-                            errAbort("Long description line %d of %s\n", lf->lineCount, lf->fileName);
+                            errAbort("Long description line %d of %s\n", lf->lineIx, lf->fileName);
                             break;
                             }
                         memcpy(description+descriptionLen, word, wordLen);
@@ -457,7 +419,7 @@ while ((line = lfNextLine(lf)) != NULL)
                         }
                     if (!isspace(line[0]))
                         {
-                        lfReuse(lf);
+                        lineFileReuse(lf);
                         break;
                         }
                     wordCount = chopLine(line, words);
@@ -489,7 +451,7 @@ while ((line = lfNextLine(lf)) != NULL)
                     }
                 }
             if (cdi->side == NULL)
-                errAbort("Stratagene without direction line %d of %s", lf->lineCount, lf->fileName);
+                errAbort("Stratagene without direction line %d of %s", lf->lineIx, lf->fileName);
             }
         else if (cdi && sameString(section, "FEATURES"))
             {
@@ -498,7 +460,7 @@ while ((line = lfNextLine(lf)) != NULL)
                 line = lfNextLine(lf);
                 if (!isspace(line[0]))
                     {
-                    lfReuse(lf);
+                    lineFileReuse(lf);
                     break;
                     }
                 strcpy(origLine, line);
@@ -523,10 +485,10 @@ while ((line = lfNextLine(lf)) != NULL)
                     char *parts[2];
                     int partCount;
                     if (wordCount < 2)
-                        errAbort("Short CDS line %d of %s", lf->lineCount, lf->fileName);
+                        errAbort("Short CDS line %d of %s", lf->lineIx, lf->fileName);
                     partCount = chopString(words[1], ".", parts, ArraySize(parts));
                     if (partCount != 2)
-                        errAbort("Strange CDS line %d of %s", lf->lineCount, lf->fileName);
+                        errAbort("Strange CDS line %d of %s", lf->lineIx, lf->fileName);
                     if (parts[0][0] == '<')
                         {
                         cdi->cdsSoftStart = TRUE;
@@ -534,9 +496,8 @@ while ((line = lfNextLine(lf)) != NULL)
                         }
                     if (!isdigit(parts[0][0]))
                         {
-                        uglyf("%s", origLine);
                         warn("Expecting number at start of CDS got %s line %d of %s",
-                            parts[0], lf->lineCount, lf->fileName);
+                            parts[0], lf->lineIx, lf->fileName);
                         }
                     else
                         {
@@ -549,7 +510,7 @@ while ((line = lfNextLine(lf)) != NULL)
                         if (!isdigit(parts[1][0]))
                             {
                             errAbort("Expecting number at end of CDS got %s line %d of %s",
-                                parts[0], lf->lineCount, lf->fileName);
+                                parts[0], lf->lineIx, lf->fileName);
                             }
                         cdi->cdsEnd = atoi(parts[1]);
                         cdi->product = findOneSubKey(lf, "/product=", product, maxProduct);
@@ -568,7 +529,7 @@ while ((line = lfNextLine(lf)) != NULL)
             if (hashLookup(cdnaNameHash, cdi->name))
                 {
                 warn("Duplicate cDNA name %s.  Ignoring all but first. Line %d of %s",
-                    cdi->name, lf->lineCount, lf->fileName);
+                    cdi->name, lf->lineIx, lf->fileName);
                 }
             else
                 {
@@ -586,7 +547,7 @@ while ((line = lfNextLine(lf)) != NULL)
                     line = lfNextLine(lf);
                     if (!isspace(line[0]))
                         {
-                        lfReuse(lf);
+                        lineFileReuse(lf);
                         break;
                         }
                     /* Add in this line's worth of DNA. */
@@ -598,7 +559,7 @@ while ((line = lfNextLine(lf)) != NULL)
                                 {
                                 errAbort("Got more than %d bases, header said there "
                                          "should only be %d line %d of %s!",
-                                         dnaCount, baseCount, lf->lineCount, lf->fileName);
+                                         dnaCount, baseCount, lf->lineIx, lf->fileName);
                                 }
                             dna[dnaCount++] = base;                
                             }
@@ -613,9 +574,19 @@ while ((line = lfNextLine(lf)) != NULL)
                     putc('\n', faFile);
                     }
                 }
-            cdi = NULL;
+            freez(&cdi);
             }
         }
+    else
+        {
+	if (cdi != NULL && startsWith("  ORGANISM ", line))
+	    {
+	    line += strlen("  ORGANISM ");
+	    line = trimSpaces(line);
+	    if (!sameString(targetSpecies, line))
+	        freez(&cdi);
+	    }
+	}
     }
 if (cdi != NULL)
     {
@@ -625,7 +596,7 @@ freeMem(dna);
 freeMem(origLine);
 freeMem(product);
 freeMem(description);
-lfClose(&lf);
+lineFileClose(&lf);
 }
 
 
