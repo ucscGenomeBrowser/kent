@@ -1,3 +1,4 @@
+14 - Starting to hack in blast output format. 
 13 - Made things so that BLAT could find perfect 21mer matches
      fairly reliably.
 12 - Put in fix from Darren Platt that cured crashes on

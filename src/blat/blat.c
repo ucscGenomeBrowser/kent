@@ -17,7 +17,12 @@
 #include "trans3.h"
 #include "repMask.h"
 
-int version = 13;	/* Blat version number. */
+/* Variables shared with other modules.  Set in this module, read only
+ * elsewhere. */
+int version = 14;	/* Blat version number. */
+char *databaseName;		/* File name of database. */
+int databaseSeqCount = 0;	/* Number of sequences in database. */
+unsigned long databaseLetterCount = 0;	/* Number of bases in database. */
 
 enum constants {
 	qWarnSize = 5000000, /* Warn if more than this many bases in one query. */
@@ -96,6 +101,8 @@ errAbort(
   "   -out=type   Controls output file format.  Type is one of:\n"
   "                   psl - Default.  Tab separated format without actual sequence\n"
   "                   pslx - Tab separated format with sequence\n"
+  "                   axt - blastz-like axt format (only for nucleotides)\n"
+  "                   wu-blast - similar to wu-blast format\n"
   "   -dots=N     Output dot every N sequences to show program's progress\n"
   "   -t=type     Database type.  Type is one of:\n"
   "                 dna - DNA sequence\n"
@@ -362,36 +369,108 @@ slReverse(&seqList);
 return seqList;
 }
 
-void outputOptions(struct gfSavePslxData *outForm, FILE *f)
-/* Set up main output data structure. */
+struct gfVirtualOutput
+/* A polymorphic object to help us write many file types. */
+    {
+    struct gfVirtualOutput *next;
+    void *data;		/* Type-specific data pointer. */
+    GfSaveAli out;   /* Main output function - called for each ffAli. */
+    void (*queryOut)(FILE *f, void *data);  /* Called for each query. */
+    void (*fileHead)(FILE *f);	/* Write file header if any */
+    void (*fileTail)(FILE *f);	/* Write file tail if any */
+    };
+
+/* Stuff to support various output formats. */
+struct gfVirtualOutput gvo;		/* Overall output controller */
+struct gfSavePslxData pslxOutData;	/* Data for psl/pslx format. */
+struct gfSaveAxtData axtOutData;	/* Data for blast and other formats. */
+
+
+void axtQueryOut(FILE *f, void *data)
+/* Do axt oriented output - at end of processing query. */
 {
-ZeroVar(outForm);
-outForm->f =f;
-outForm->minGood = round(10*minIdentity);
-outForm->saveSeq = sameWord(outputFormat, "pslx");
+struct gfSaveAxtData *aod = data;
+struct gfAxtBundle *gab;
+struct axtScoreScheme *ss = axtScoreSchemeDefault();
+for (gab = aod->bundleList; gab != NULL; gab = gab->next)
+    {
+    struct axt *axt;
+    for (axt = gab->axtList; axt != NULL; axt = axt->next)
+	{
+	axt->score = axtScore(axt, ss);
+	axtWrite(axt, f);
+	}
+    }
+gfAxtBundleFreeList(&aod->bundleList);
 }
+
+void wublastQueryOut(FILE *f, void *data);
+
+
+void initBasicOutput(char *format, FILE *f, int minIdentity, boolean qIsProt, boolean tIsProt)
+/* Initialize output according to format.  Additional initialiazation
+ * of pslOutData/axtOutData may be necessary. */
+{
+int goodPpt = round(10*minIdentity);
+ZeroVar(&gvo);
+if (sameWord(format, "psl") || sameWord(format, "pslx"))
+    {
+    gvo.out = gfSavePslx;
+    gvo.data = &pslxOutData;
+    if (!noHead)
+        gvo.fileHead = pslWriteHead;
+    pslxOutData.minGood = goodPpt;
+    pslxOutData.saveSeq = sameWord(format, "pslx");
+    pslxOutData.f = f;
+    pslxOutData.qIsProt = qIsProt;
+    pslxOutData.tIsProt = tIsProt;
+    }
+else if (sameWord(format, "wu-blast") || sameWord(format, "axt"))
+    {
+    gvo.out = gfSaveAxtBundle;
+    gvo.data = &axtOutData;
+    axtOutData.minGood = goodPpt;
+    axtOutData.qIsProt = qIsProt;
+    axtOutData.tIsProt = tIsProt;
+    if (qIsProt || tIsProt)
+        errAbort("Sorry, at the moment %s output doesn't support protein alignments", format);
+    if (sameWord(format, "wu-blast"))
+        {
+	gvo.queryOut = wublastQueryOut;
+	}
+    else if (sameWord(format, "axt"))
+        {
+	gvo.queryOut = axtQueryOut;
+	}
+    }
+else
+    errAbort("Unrecognized output format '%s'", format);
+}
+
+void finishBasicOutput(FILE *f)
+/* Write out stuff to file */
+{
+if (gvo.queryOut != NULL)
+    gvo.queryOut(f, gvo.data);
+}
+
 
 void searchOneStrand(struct dnaSeq *seq, struct genoFind *gf, FILE *psl, 
 	boolean isRc, struct hash *maskHash, Bits *qMaskBits)
 /* Search for seq in index, align it, and write results to psl. */
 {
-struct gfSavePslxData data;
-outputOptions(&data, psl);
-data.maskHash = maskHash;
-gfLongDnaInMem(seq, gf, isRc, minScore, qMaskBits, gfSavePslx, &data);
+gfLongDnaInMem(seq, gf, isRc, minScore, qMaskBits, gvo.out, gvo.data);
 }
 
-void searchOneProt(aaSeq *seq, struct genoFind *gf, FILE *psl)
+
+void searchOneProt(aaSeq *seq, struct genoFind *gf, FILE *f)
 /* Search for protein seq in index and write results to psl. */
 {
 int hitCount;
 struct lm *lm = lmInit(0);
-struct gfSavePslxData outForm;
 struct gfClump *clump, *clumpList = gfFindClumps(gf, seq, lm, &hitCount);
-outputOptions(&outForm, psl);
-outForm.qIsProt = TRUE;
-outForm.tIsProt = TRUE;
-gfAlignAaClumps(gf, clumpList, seq, FALSE, minScore, gfSavePslx, &outForm);
+initBasicOutput(outputFormat, f, minIdentity, TRUE, TRUE);
+gfAlignAaClumps(gf, clumpList, seq, FALSE, minScore, gvo.out, gvo.data);
 gfClumpFreeList(&clumpList);
 lmCleanup(&lm);
 }
@@ -411,20 +490,24 @@ if (dotEvery > 0)
     }
 }
 
-void searchOne(bioSeq *seq, struct genoFind *gf, FILE *psl, boolean isProt, struct hash *maskHash, Bits *qMaskBits)
+void searchOne(bioSeq *seq, struct genoFind *gf, FILE *f, boolean isProt, struct hash *maskHash, Bits *qMaskBits)
 /* Search for seq on either strand in index. */
 {
 dotOut();
 if (isProt)
     {
-    searchOneProt(seq, gf, psl);
+    searchOneProt(seq, gf, f);
+    finishBasicOutput(f);
     }
 else
     {
-    searchOneStrand(seq, gf, psl, FALSE, maskHash, qMaskBits);
+    initBasicOutput(outputFormat, f, minIdentity, FALSE, FALSE);
+    pslxOutData.maskHash = maskHash;
+    searchOneStrand(seq, gf, f, FALSE, maskHash, qMaskBits);
     reverseComplement(seq->dna, seq->size);
-    searchOneStrand(seq, gf, psl, TRUE, maskHash, qMaskBits);
+    searchOneStrand(seq, gf, f, TRUE, maskHash, qMaskBits);
     reverseComplement(seq->dna, seq->size);
+    finishBasicOutput(f);
     }
 }
 
@@ -465,7 +548,7 @@ if (trimA)
     }
 }
 
-void searchOneIndex(int fileCount, char *files[], struct genoFind *gf, char *pslOut, 
+void searchOneIndex(int fileCount, char *files[], struct genoFind *gf, char *outName, 
 	boolean isProt, struct hash *maskHash)
 /* Search all sequences in all files against single genoFind index. */
 {
@@ -474,14 +557,14 @@ char *fileName;
 bioSeq *seqList = NULL, *targetSeq;
 int count = 0; 
 unsigned long totalSize = 0;
-FILE *psl = mustOpen(pslOut, "w");
+FILE *outFile = mustOpen(outName, "w");
 boolean maskQuery = (qMask != NULL);
 boolean lcMask = (qMask != NULL && sameWord(qMask, "lower"));
 struct dnaSeq trimmedSeq;
 ZeroVar(&trimmedSeq);
 
-if (!noHead)
-    pslWriteHead(psl);
+if (gvo.fileHead != NULL)
+    gvo.fileHead(outFile);
 for (i=0; i<fileCount; ++i)
     {
     fileName = files[i];
@@ -497,7 +580,7 @@ for (i=0; i<fileCount; ++i)
 	seq->name = cloneString(fileName);
 	trimSeq(seq, &trimmedSeq);
 	carefulClose(&f);
-	searchOne(&trimmedSeq, gf, psl, isProt, maskHash, NULL);
+	searchOne(&trimmedSeq, gf, outFile, isProt, maskHash, NULL);
 	totalSize += seq->size;
 	freeDnaSeq(&seq);
 	count += 1;
@@ -526,7 +609,7 @@ for (i=0; i<fileCount; ++i)
 		warn("Query sequence %d has size %d, it might take a while.", seq.name, seq.size);
 		}
 	    trimSeq(&seq, &trimmedSeq);
-	    searchOne(&trimmedSeq, gf, psl, isProt, maskHash, qMaskBits);
+	    searchOne(&trimmedSeq, gf, outFile, isProt, maskHash, qMaskBits);
 	    totalSize += seq.size;
 	    count += 1;
 	    bitFree(&qMaskBits);
@@ -534,7 +617,7 @@ for (i=0; i<fileCount; ++i)
 	lineFileClose(&lf);
 	}
     }
-carefulClose(&psl);
+carefulClose(&outFile);
 printf("Searched %lu bases in %d sequences\n", totalSize, count);
 }
 
@@ -568,13 +651,11 @@ return t3List;
 void tripleSearch(aaSeq *qSeq, struct genoFind *gfs[3], struct hash *t3Hash, boolean dbIsRc, FILE *f)
 /* Look for qSeq in indices for three frames.  Then do rest of alignment. */
 {
-static struct gfSavePslxData outForm;
-outputOptions(&outForm, f);
-outForm.t3Hash = t3Hash;
-outForm.targetRc = dbIsRc;
-outForm.reportTargetStrand = TRUE;
-outForm.qIsProt = TRUE;
-gfFindAlignAaTrans(gfs, qSeq, t3Hash, minScore, gfSavePslx, &outForm);
+initBasicOutput(outputFormat, f, minIdentity, TRUE, FALSE);
+pslxOutData.t3Hash = t3Hash;
+pslxOutData.targetRc = dbIsRc;
+pslxOutData.reportTargetStrand = TRUE;
+gfFindAlignAaTrans(gfs, qSeq, t3Hash, minScore, gvo.out, gvo.data);
 }
 
 void transTripleSearch(struct dnaSeq *qSeq, struct genoFind *gfs[3], struct hash *t3Hash, 
@@ -582,15 +663,14 @@ void transTripleSearch(struct dnaSeq *qSeq, struct genoFind *gfs[3], struct hash
 /* Translate qSeq three ways and look for each in three frames of index. */
 {
 int qIsRc;
-static struct gfSavePslxData outForm;
-outputOptions(&outForm, f);
-outForm.t3Hash = NULL;
-outForm.reportTargetStrand = TRUE;
-outForm.targetRc = dbIsRc;
+initBasicOutput(outputFormat, f, minIdentity, FALSE, FALSE);
+pslxOutData.t3Hash = NULL;
+pslxOutData.reportTargetStrand = TRUE;
+pslxOutData.targetRc = dbIsRc;
 
 for (qIsRc = 0; qIsRc <= qIsDna; qIsRc += 1)
     {
-    gfLongTransTransInMem(qSeq, gfs, t3Hash, qIsRc, !qIsDna, minScore, gfSavePslx, &outForm);
+    gfLongTransTransInMem(qSeq, gfs, t3Hash, qIsRc, !qIsDna, minScore, gvo.out, gvo.data);
     if (qIsDna)
 	{
         reverseComplement(qSeq->dna, qSeq->size);
@@ -607,7 +687,7 @@ struct genoFind *gfs[3];
 aaSeq *dbSeqLists[3];
 struct trans3 *t3List = NULL, *t3;
 int isRc;
-FILE *pslOut = mustOpen(outFile, "w");
+FILE *out = mustOpen(outFile, "w");
 struct lineFile *lf = NULL;
 struct hash *t3Hash = NULL;
 boolean forceUpper = FALSE;
@@ -636,8 +716,8 @@ else
     forceUpper = TRUE;
     }
 
-if (!noHead)
-    pslWriteHead(pslOut);
+if (gvo.fileHead != NULL)
+    gvo.fileHead(out);
 
 for (isRc = FALSE; isRc <= 1; ++isRc)
     {
@@ -680,9 +760,9 @@ for (isRc = FALSE; isRc <= 1; ++isRc)
 		}
 	    trimSeq(&qSeq, &trimmedSeq);
 	    if (transQuery)
-	        transTripleSearch(&trimmedSeq, gfs, t3Hash, isRc, qIsDna, pslOut);
+	        transTripleSearch(&trimmedSeq, gfs, t3Hash, isRc, qIsDna, out);
 	    else
-		tripleSearch(&trimmedSeq, gfs, t3Hash, isRc, pslOut);
+		tripleSearch(&trimmedSeq, gfs, t3Hash, isRc, out);
 	    }
 	lineFileClose(&lf);
 	}
@@ -700,11 +780,11 @@ for (isRc = FALSE; isRc <= 1; ++isRc)
 	reverseComplement(seq->dna, seq->size);
 	}
     }
-carefulClose(&pslOut);
+carefulClose(&out);
 }
 
 
-void blat(char *dbFile, char *queryFile, char *pslOut)
+void blat(char *dbFile, char *queryFile, char *outName)
 /* blat - Standalone BLAT fast sequence search command line tool. */
 {
 char **dbFiles, **queryFiles;
@@ -714,6 +794,8 @@ struct hash *dbHash = newHash(16);
 struct genoFind *gf;
 boolean dbIsProt = (tType == gftProt);
 boolean bothSimpleNuc = (tType == gftDna && (qType == gftDna || qType == gftRna));
+
+databaseName = dbFile;
 getFileArray(dbFile, &dbFiles, &dbCount);
 if (makeOoc != NULL)
     {
@@ -723,6 +805,9 @@ if (makeOoc != NULL)
     }
 getFileArray(queryFile, &queryFiles, &queryCount);
 dbSeqList = getSeqList(dbCount, dbFiles, dbHash, dbIsProt, tType == gftDnaX, mask);
+databaseSeqCount = slCount(dbSeqList);
+for (seq = dbSeqList; seq != NULL; seq = seq->next)
+    databaseLetterCount += seq->size;
 
 if (bothSimpleNuc || (tType == gftProt && qType == gftProt))
     {
@@ -740,16 +825,16 @@ if (bothSimpleNuc || (tType == gftProt && qType == gftProt))
 		hashAdd(maskHash, source[i].seq->name, source[i].maskedBits);
         unmaskNucSeqList(dbSeqList);
 	}
-    searchOneIndex(queryCount, queryFiles, gf, pslOut, dbIsProt, maskHash);
+    searchOneIndex(queryCount, queryFiles, gf, outName, dbIsProt, maskHash);
     freeHash(&maskHash);
     }
 else if (tType == gftDnaX && qType == gftProt)
     {
-    bigBlat(dbSeqList, queryCount, queryFiles, pslOut, FALSE, TRUE);
+    bigBlat(dbSeqList, queryCount, queryFiles, outName, FALSE, TRUE);
     }
 else if (tType == gftDnaX && (qType == gftDnaX || qType == gftRnaX))
     {
-    bigBlat(dbSeqList, queryCount, queryFiles, pslOut, TRUE, qType == gftDnaX);
+    bigBlat(dbSeqList, queryCount, queryFiles, outName, TRUE, qType == gftDnaX);
     }
 else
     {
