@@ -36,6 +36,13 @@
 #define CDS_PARTIAL_CODON_G 0xc0
 #define CDS_PARTIAL_CODON_B	0xc0
 
+#define CDS_DRAW_GENOMIC_CODONS 1
+#define CDS_DRAW_GENOMIC_BASES  2
+#define CDS_DRAW_MRNA_CODONS    3
+#define CDS_DRAW_MRNA_BASES     4 
+#define CDS_DRAW_DIFF_CODONS    5
+#define CDS_DRAW_DIFF_BASES     6 
+
 
  #define CDS_DRAW_DEFAULT "off"
 
