@@ -1323,6 +1323,13 @@ for (lf = lfs->features; lf != NULL; lf = lf->next)
         color, bColor, vis);
     prevEnd = lf->end;
     linkedFeaturesDrawAt(tg, lf, vg, xOff, y, scale, font, color, vis);
+    if(tg->mapsSelf) 
+	{
+	int x1 = round((double)((int)lf->start-winStart)*scale) + xOff;
+	int x2 = round((double)((int)lf->end-winStart)*scale) + xOff;
+	int w = x2-x1;
+	tg->mapItem(tg, lf, lf->name, lf->start, lf->end, x1, y, w, tg->heightPer);
+	}
     }
 lfSeriesDrawConnecter(lfs, vg, prevEnd, lfs->end, scale, xOff, midY, 
 	color, bColor, vis);
@@ -6826,155 +6833,6 @@ for(lf = tg->items; lf != NULL; lf = lf->next)
     }
 }
 
-void altGraphMapItem(struct track *tg, void *item, char *itemName, int start, int end, 
-		    int x, int y, int width, int height)
-/* create a link for each altGraph that centers it on browser with 
-   known genes, human mrnas, and intron est tracks open */
-{
-struct altGraph *ag = item;
-if(tg->visibility == tvFull)
-    {
-    hPrintf("<AREA SHAPE=RECT COORDS=\"%d,%d,%d,%d\" ", x, y, x+width, y+height);
-    hPrintf("HREF=\"%s?position=%s:%d-%d&mrna=full&intronEst=full&refGene=full&altGraph=full&%s\"",
-	   hgTracksName(), ag->tName, ag->tStart, ag->tEnd, cartSidUrlString(cart));
-    hPrintf(" ALT=\"Zoom to browser coordinates of altGraph\">\n");
-    }
-}
-
-static void altGraphDraw(struct track *tg, int seqStart, int seqEnd,         
-			 struct vGfx *vg, int xOff, int yOff, int width, 
-			 MgFont *font, Color color, enum trackVisibility vis)
-/* Draws the blocks for an alt-spliced gene and the connections */
-{
-int baseWidth = seqEnd - seqStart;
-int y = yOff;
-int heightPer = tg->heightPer;
-int lineHeight = tg->lineHeight;
-int x1,x2;
-boolean isFull = (vis == tvFull);
-double scale = scaleForPixels(width);
-int i;
-double y1, y2;
-int midLineOff = heightPer/2;
-struct altGraph *ag=NULL, *agList = NULL;
-int s =0, e=0;
-agList = tg->items;
-for(ag = agList; ag != NULL; ag = ag->next)
-    {	   
-    x1 = round((double)((int)ag->tStart-winStart)*scale) + xOff;
-    x2 = round((double)((int)ag->tEnd-winStart)*scale) + xOff;
-    if(tg->mapsSelf && tg->mapItem)
-	{
-	tg->mapItem(tg, ag, "notUsed", ag->tStart, ag->tEnd, xOff, y, width, heightPer);
-	}
-    if(!isFull && (x2-x1 > 0))
-	{
-	vgBox(vg, x1, yOff+tg->heightPer/2, x2-x1, 1, MG_BLACK);
-	}
-    for(i=0; i< ag->edgeCount; i++)
-	{
-        /* draw exons as boxes */
-	if( (ag->vTypes[ag->edgeStarts[i]] == ggHardStart || ag->vTypes[ag->edgeStarts[i]] == ggSoftStart)  
-	    && (ag->vTypes[ag->edgeEnds[i]] == ggHardEnd || ag->vTypes[ag->edgeEnds[i]] == ggSoftEnd)) 
-	    {
-	    s = ag->vPositions[ag->edgeStarts[i]] + ag->tStart;
-	    e = ag->vPositions[ag->edgeEnds[i]] + ag->tStart;
-	    if(isFull)
-		drawScaledBox(vg, s, e, scale, xOff, y+(heightPer/2), heightPer/2, MG_BLACK);
-	    else
-		drawScaledBox(vg, s, e, scale, xOff, y, heightPer, MG_BLACK);
-	    }
-	if(isFull)
-	    {
-	    /* draw introns as arcs */
-	    if( (ag->vTypes[ag->edgeStarts[i]] == ggHardEnd || ag->vTypes[ag->edgeStarts[i]] == ggSoftEnd) 
-		&& (ag->vTypes[ag->edgeEnds[i]] == ggHardStart || ag->vTypes[ag->edgeEnds[i]] == ggSoftStart))
-		{
-		int x1, x2;
-		int midX;   
-		int midY = y + heightPer/2;
-		s = ag->vPositions[ag->edgeStarts[i]] + ag->tStart;
-		e = ag->vPositions[ag->edgeEnds[i]] + ag->tStart;
-		x1 = round((double)((int) s - winStart)*scale) + xOff;
-		x2 = round((double)((int) e - winStart)*scale) + xOff;
-		midX = (x1+x2)/2;
-		vgLine(vg, x1, midY, midX, y, MG_BLACK);
-		vgLine(vg, midX, y, x2, midY, MG_BLACK);
-		}
-	    }
-	}
-    if(isFull)
-	y += lineHeight;
-    }
-}
-
-
-void altGraphLoadItems(struct track *tg)
-/* load the altGraph data to a track */
-{
-struct sqlConnection *conn = hAllocConn();
-int rowOffSet;
-char **row;
-struct altGraph *ag=NULL, *agList=NULL;
-struct sqlResult *sr = hRangeQuery(conn, tg->mapName, chromName,
-				   winStart, winEnd, NULL, &rowOffSet);
-while((row = sqlNextRow(sr)) != NULL)
-    {
-    ag = altGraphLoad(row + rowOffSet);
-    slAddHead(&agList, ag);
-    }
-slReverse(&agList);
-sqlFreeResult(&sr);
-tg->items = agList;
-}
-
-void altGraphFreeItems(struct track *tg)
-/* free up tha altGraph items in tg->items */
-{
-altGraphFreeList((struct altGraph**)(&tg->items));
-}
-
-static int altGraphFixedTotalHeight(struct track *tg, enum trackVisibility vis)
-/* set track height to 2 * font size if full , 1 * if dense
-*/
-{
-switch (vis)
-    {
-    case tvFull:
-	tg->lineHeight  = 2 * tl.fontHeight+1;
-	tg->heightPer = tg->lineHeight -1;
-	tg->height = slCount(tg->items) * tg->lineHeight;
-	break;
-    case tvDense:
-	tg->lineHeight  = tl.fontHeight+1;
-	tg->heightPer = tg->lineHeight -1;
-	tg->height = tg->lineHeight;
-	break;
-    }
-return tg->height;
-}
-
-char *altGraphItemName(struct track *tg, void *item)
-/* returns the number of alternative splice paths as a string name */
-{
-char buff[32];
-struct altGraph *ag = item;
-int numSplicings = altGraphNumAltSplices(ag);
-snprintf(buff, sizeof(buff), "%d", numSplicings );
-return (cloneString(buff));
-}
-
-void altGraphMethods(struct track *tg)
-/* setup special methods for altGraph track */
-{
-tg->drawItems = altGraphDraw;
-tg->loadItems = altGraphLoadItems;
-tg->freeItems = altGraphFreeItems;
-tg->totalHeight = altGraphFixedTotalHeight;
-tg->itemName = altGraphItemName;
-tg->mapsSelf = TRUE;
-tg->mapItem = altGraphMapItem;
-}
 
 void altGraphXMapItem(struct track *tg, void *item, char *itemName, int start, int end, 
 		    int x, int y, int width, int height)
@@ -7510,7 +7368,7 @@ void lfsMapItemName(struct track *tg, void *item, char *itemName, int start, int
 struct linkedFeaturesSeries *lfs = tg->items;
 struct linkedFeaturesSeries *lfsItem = item;
 if(tg->visibility == tvFull)
-    mapBoxHcTwoItems(start, end, x,y, width, height, tg->mapName, lfsItem->name, itemName, itemName);
+    mapBoxHcTwoItems(start, end, x,y, width, height, tg->mapName, itemName, itemName, itemName);
 }
 
 
@@ -8204,6 +8062,7 @@ int itemCount =0;
 struct bed *bedList = NULL, *bed;
 struct linkedFeatures *lfList = NULL, *lf;
 struct linkedFeaturesSeries *lfsList = NULL, *lfs;
+enum trackVisibility vis = tg->visibility;
 
 sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd, NULL, &rowOffset);
 while ((row = sqlNextRow(sr)) != NULL)
@@ -8220,17 +8079,14 @@ slReverse(&bedList);
    two or three, this can be computationally expensive.
    use the maxItemsInFullTrack as a cap on the number that
    will be computed */
-if(!tg->limitedVisSet)
+
+if(vis == tvFull)
     {
-    enum trackVisibility vis = tg->visibility;
-    tg->limitedVisSet = TRUE;
-    if(vis == tvFull)
-	{
-	if(itemCount > maxItemsInFullTrack) 
-	    vis = tvDense;
-	}
-    tg->limitedVis = vis;
+    if(itemCount > maxItemsInFullTrack) 
+	vis = tvDense;
     }
+tg->visibility = vis;
+
 
 /* run the filter if it exists, otherwise use default */
 if(tg->trackFilter != NULL)
@@ -10168,7 +10024,6 @@ registerTrackHandler("rosetta", rosettaMethods);
 registerTrackHandler("affy", affyMethods);
 registerTrackHandler("affyRatio", affyRatioMethods);
 registerTrackHandler("ancientR", ancientRMethods );
-registerTrackHandler("altGraph", altGraphMethods );
 registerTrackHandler("altGraphX", altGraphXMethods );
 registerTrackHandler("triangle", triangleMethods );
 registerTrackHandler("triangleSelf", triangleMethods );
