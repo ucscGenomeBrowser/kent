@@ -8,7 +8,7 @@ CREATE TABLE dbSnpRsRn (
     rsId      varchar(255) not null, # dbSnp reference snp (rs) identifier
     avHet     float        not null, # the average heterozygosity from all observations
     avHetSE   float        not null, # the Standard Error for the average heterozygosity
-    valid     enum (
+    valid     set (
 		'no-information',
 		'by-2hit-2allele',
 		'by-cluster',
