@@ -5620,7 +5620,7 @@ echo "Done" >> ${WINDOWS}/$c.done
     # will be combined across fragments
     cat << 'EOF' > doEstimate.sh
 #!/bin/sh
-zcat $1 | /cluster/bin/phast/phastCons - starting-tree.mod --gc 0.410 --target-coverage 0.125 --nrates 1,1 --conserved-scale 0.3 --no-post-probs --quiet --lnl $2 --log $3 --estimate-trees $4
+zcat $1 | /cluster/bin/phast/phastCons - starting-tree.mod --gc 0.410 --target-coverage 0.125 --nrates 1,1 --no-post-probs --quiet --lnl $2 --log $3 --estimate-trees $4
 EOF
     # Be sure to substitute in the right G+C content.  Also,
     # notice the 0.125.  We actually want 5% coverage but we have to
