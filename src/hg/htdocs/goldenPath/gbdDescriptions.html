@@ -433,6 +433,18 @@
   href="#ChainLink">chrN_chainSelfLink</A> 
   - Alignment block in self alignment chain </LI>
   <LI><A 
+  href="#Chain">chrN_chainTetNig1</A> 
+  - Summary info about chain of Tetraodon (tetNig1 assembly) alignments</LI>
+  <LI><A 
+  href="#ChainLink">chrN_chainTetNig1Link</A> 
+  - Alignment block in Tetraodon (tetNig1 assembly) chain </LI>
+  <LI><A 
+  href="#Chain">chrN_chainXenTro1</A> 
+  - Summary info about chain of <em>X. tropicalis</em> (xenTro1 assembly) alignments</LI>
+  <LI><A 
+  href="#ChainLink">chrN_chainXenTro1Link</A> 
+  - Alignment block in <em>X. tropicalis</em> (xenTro1 assembly) chain </LI>
+  <LI><A 
   href="#GapInfo">chrN_contigs_gap</A> 
   - Gap locations and types
   <LI><A 
@@ -745,11 +757,22 @@
   href="#BioCycMapDesc">bioCycPathway</A> 
   - Cross reference between BioCyc Pathway and Known Genes 
   <LI><A 
+  href="#PslInfo">blastDm1FB</A> 
+  - tBLASTn alignments of peptides from <em>D. melanogaster</em> predicted and
+  known genes in FlyBase
+  <LI><A 
   href="#PslInfo">blastHg16KG</A> 
   - tBLASTn alignments of peptides from hg16 knownGene predicted and known genes
   <LI><A 
-  href="#PslInfo">blastHg17KG</A> 
-  - tBLASTn alignments of peptides from hg17 knownGene predicted and known genes
+  href="#PepPred">blastHg17KG</A> 
+  - tBLASTn alignment of peptides from hg17 knownGene predicted and known genes
+  <LI><A 
+  href="#PslInfo">blastKGPep00</A> 
+  - tBLASTn alignments peptide sequences
+  <LI><A 
+  href="#BlastRef">blastKGRef00</A> 
+  - Associates a known gene ID with a gene name, position, and SwissProt name
+  for tBLASTn protein tracks
   <LI><A 
   href="#PslInfo">blatChimp</A> 
   - Blat alignments of Pan troglodytes against the draft human genome
@@ -847,12 +870,15 @@
   fish data from BAC Resource Consortium
   <LI><A 
   href="#GenePredictions">cytokines</A> 
-  - Cytokine gene annotations (Tetraodon)
-  fish data from BAC Resource Consortium
+  - Cytokine gene annotations (Tetraodon) fish data from BAC Resource 
+  Consortium
   <LI><A 
   href="#BED">cytoBandIdeo</A> 
   - Information for mapping ideogram
 <A NAME="D_GBD"></A>
+  <LI><A 
+  href="#ScoredRef">danRer1_netBlastz</A> 
+  - Scored reference file for zebrafish alignments
   <LI><A 
   href="#DbSnp">dbSnpRS</A> 
   - Information from dbSNP at the reference SNP level </LI>
@@ -971,8 +997,14 @@
   <LI><A 
   href="#FosEndPairs">fosEndPairs</A> 
   - Positions of end pairs for fosmids
+  <LI><A 
+  href="#ScoredRef">fugu_netBlastz</A> 
+  - Scored reference file for Fugu alignments
 
 <A NAME="G_GBD"></A>
+  <LI><A 
+  href="#ScoredRef">galGal2_netBlastz</A> 
+  - Scored reference file for chicken alignments
   <LI><A 
   href="#GenePredictions">gaze</A> 
   - Genoscope GAZE gene annotations (Tetraodon)
@@ -1173,8 +1205,14 @@
   href="#BED">haplotype</A> 
   - Common Haplotype Blocks - U. of Oxford and Sanger Institute (chr22 only) </LI>
   <LI><A 
+  href="#ScoredRef">hg17_netBlastz</A> 
+  - Scored reference file for human hg17 alignments
+  <LI><A 
   href="#HgFindSpec">hgFindSpec</A> 
   - Information that defines a search performed by hgFind binary</LI>
+  <LI><A 
+  href="#GenePredictions">hoxGene</A> 
+  - HOX gene mRNAs</LI>
   <LI><A 
   href="#Hugo">hugo</A> 
   - Cross reference between hugo and other databases
@@ -1345,6 +1383,9 @@ TrEMBL-NEW and their corresponding mRNAs from GenBank
   href="#BED">miRNA</A> 
   - MicroRNAs from the miRNA Registry at the WellCome Trust Sanger Institute.
   <LI><A 
+  href="#ScoredRef">mm5_netBlastz</A> 
+  - Scored reference file for mouse mm5 alignments
+  <LI><A 
   href="#BlastTab">mmBlastTab</A> 
   - Blastp results of known genes vs. one another (mouse)
   <LI><A 
@@ -1501,6 +1542,12 @@ TrEMBL-NEW and their corresponding mRNAs from GenBank
   href="#NetAlign">netSyntenyHg16</A> 
   - Database representation of a net of alignments with human assembly hg16 </LI>
   <LI><A 
+  href="#NetAlign">netTetNig1</A> 
+  - Database representation of a net of alignments with Tetraodon assembly tetNig1 </LI>
+  <LI><A 
+  href="#NetAlign">netXenTro1</A> 
+  - Database representation of a net of alignments with <em>X. tropicalis</em> assembly xenTro1 </LI>
+  <LI><A 
   href="#PslInfo">NIAGene</A> 
   - Alignments of the NIA Mouse Gene Index (v.3) with the selected mouse assembly</LI>
 
@@ -1569,6 +1616,10 @@ TrEMBL-NEW and their corresponding mRNAs from GenBank
   - Percentage of bases that are G or C in small regions across the genome </LI>
   <LI><A 
   href="#WiggleTrack2">phastCons</A> 
+  - "Wiggle track" display of evolutionary conservation based on a phylogentiec hidden 
+  Markov model, using multiz alignments 
+  <LI><A 
+  href="#WiggleTrack2">phastCons5</A> 
   - "Wiggle track" display of evolutionary conservation based on a phylogentiec hidden 
   Markov model, using multiz alignments 
   <LI><A 
@@ -2365,7 +2416,6 @@ cover the same region (replaced by snpMap starting with hg13) </LI>
 <H4><A name=BlastTab></A>Blast Output</H4>
 The following definition is used for several tables that contain blast 
 for various organisms.
-
 <PRE>table blastTab
 "Tab-delimited blast output file"
     (
@@ -2465,7 +2515,7 @@ the fields.<BR>
 <PRE>table cgapAlias
 "Associates CGAP pathway IDs with gene symbols or mRNA accessions"
    (
-   string cgapID;       "CGAP patheay ID"
+   string cgapID;       "CGAP pathway ID"
    string alias;        "Gene symbol or mRNA"
    )
 </PRE>
@@ -4848,6 +4898,18 @@ The bacEndPairs table uses all fields.
    string accession;       "SWISS-PROT accession number"
    string accession2;      "SWISS-PROT secondary accession number"
    )
+</PRE>
+
+<H4><A name=BlastRef></A>tBLASTn Protein Track Mappings</H4>
+<PRE>table blastRef
+"Mapping table for tblastn protein tracks"
+    (
+    string acc;         "Accession"
+    string geneId;      "Gene name"
+    string refPos;      "Reference position"
+    string extra1;      "Other link 1 (e.g. SwissProt name)
+    string extra2;      "Other link 2"
+    )
 </PRE>
 
 <H4><A name=TilingPath></A>Tiling Path of Clones through a Chromosome</H4>
