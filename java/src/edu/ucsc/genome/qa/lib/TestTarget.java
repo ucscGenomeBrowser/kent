@@ -9,6 +9,7 @@ public class TestTarget {
   // data
   public String machine;
   // could hold database name or the string "all"
+  public String server;
   public String dbSpec;
   public String table;
   public boolean quickOn;
@@ -30,6 +31,7 @@ public class TestTarget {
     Properties properties = new Properties();
     properties = QALibrary.readProps(propFileName);
     machine = properties.getProperty("machine", machine);
+    server = properties.getProperty("server", machine);
     dbSpec = properties.getProperty("dbSpec", dbSpec);
     table = properties.getProperty("table", table);
     String quick = properties.getProperty("quick", "false");
