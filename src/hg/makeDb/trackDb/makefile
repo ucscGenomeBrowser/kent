@@ -45,9 +45,9 @@ update:
 		else \
 		    vis="" ; \
 		fi ; fi; \
-		cmd="hgTrackDb $$vis $$org $$DB trackDb_$(USER) ../../lib/trackDb.sql ." ; \
+		cmd="hgTrackDb $$vis $$org $$DB trackDb_${USER} ../../lib/trackDb.sql ." ; \
 		echo $$cmd ;  $$cmd ; \
-		cmd="hgFindSpec $$org $$DB hgFindSpec ../../lib/hgFindSpec.sql ." ; \
+		cmd="hgFindSpec $$org $$DB hgFindSpec_${USER} ../../lib/hgFindSpec.sql ." ; \
 		echo $$cmd ;  $$cmd ; \
 	    fi ; \
 	done
