@@ -6992,6 +6992,20 @@ else
     str[strlen(str) - strlen(t)] = '\0';
 }
 
+void printYAxisLabel( struct memGfx *mg, int y, struct trackGroup *group, char *labelString )
+/*print a label for a horizontal y-axis line*/
+{
+    double tmp;
+    int fontHeight = mgFontLineHeight(tl.font);
+    double ymin = y - (group->heightPer / 2) + fontHeight;
+    int itemHeight0 = group->itemHeight(group, group->items);
+    int inWid = trackOffsetX()-gfxBorder*3;
+    
+    tmp = -whichBin( atof(labelString), -1.8805, 9.1808, 1000 );
+    tmp = (int)((double)ymin+((double)tmp)*(double)group->heightPer/1000.0+(double)group->heightPer);
+    mgTextRight(mg, gfxBorder, tmp, inWid-1, itemHeight0, group->ixAltColor, tl.font, labelString );
+}
+
 void makeActiveImage(struct trackGroup *groupList)
 /* Make image and image map. */
 {
@@ -7083,6 +7097,7 @@ if (withLeftLabels)
         {
 	struct slList *item;
 	int h;
+    double tmp;
 	lastY = y;
 	if (group->limitedVis != tvHide)
 	    {
@@ -7097,8 +7112,13 @@ if (withLeftLabels)
 
 	if( sameString( group->mapName, "humMus" ) )
 	    {
-	    sprintf( minRangeStr, "%g", whichNum( 500.0, -12.9418, 9.1808, 1000 ));
-	    sprintf( maxRangeStr, "%g", whichNum( 1000.0, -12.9418, 9.1808, 1000 ));
+	    sprintf( minRangeStr, "%0.2g", whichNum( 500.0, -12.9418, 9.1808, 1000 ));
+	    sprintf( maxRangeStr, "%0.2g", whichNum( 1000.0, -12.9418, 9.1808, 1000 ));
+
+        printYAxisLabel( mg, y, group, "0.0" );
+        printYAxisLabel( mg, y, group, "2.0" );
+        printYAxisLabel( mg, y, group, "5.0" );
+
 	    }
 	else if( sameString( group->mapName, "zoo" ) )
 	    {
