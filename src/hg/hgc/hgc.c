@@ -140,7 +140,7 @@
 #include "HInv.h"
 #include "bed6FloatScore.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.693 2004/07/19 19:47:52 kate Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.694 2004/07/20 19:44:55 markd Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -6911,42 +6911,124 @@ geneShowPosAndLinks(rl->mrnaAcc, rl->protAcc, tdb, "refPep", "htcTranslatedProte
 printTrackHtml(tdb);
 hFreeConn(&conn);
 }
-void doRefGene(struct trackDb *tdb, char *rnaName)
-/* Process click on a known RefSeq gene. */
+
+char *refSeqCdsCompleteness(struct sqlConnection *conn, char *sqlRnaName)
+/* get description of RefSeq CDS completeness or NULL if not available */
 {
-char *track = tdb->tableName;
-struct sqlConnection *conn = hAllocConn();
+/* table mapping names to descriptions */
+static char *cmplMap[][2] = 
+    {
+    {"Unknown", "completeness unknown"},
+    {"Complete5End", "5' complete"},
+    {"Complete3End", "3' complete"},
+    {"FullLength", "full length"},
+    {"IncompleteBothEnds", "5' and 3' incomplete"},
+    {"Incomplete5End", "5' incomplete"},
+    {"Incomplete3End", "3' incomplete"},
+    {"Partial", "partial"},
+    {NULL, NULL}
+    };
+if (sqlTableExists(conn, "refSeqSummary"))
+    {
+    char query[256], buf[64], *cmpl;
+    int i;
+    safef(query, sizeof(query),
+          "select completeness from refSeqSummary where mrnaAcc = '%s'",
+          sqlRnaName);
+    cmpl = sqlQuickQuery(conn, query, buf, sizeof(buf));
+    if (cmpl != NULL)
+        {
+        for (i = 0; cmplMap[i][0] != NULL; i++)
+            {
+            if (sameString(cmpl, cmplMap[i][0]))
+                return cmplMap[i][1];
+            }
+        }
+    }
+return NULL;
+}
+char *refSeqSummary(struct sqlConnection *conn, char *sqlRnaName)
+/* RefSeq summary or NULL if not available; free result */
+{
+char * summary = NULL;
+if (sqlTableExists(conn, "refSeqSummary"))
+    {
+    char query[256];
+    safef(query, sizeof(query),
+          "select summary from refSeqSummary where mrnaAcc = '%s'",
+          sqlRnaName);
+    summary = sqlQuickString(conn, query);
+    }
+return summary;
+}
+
+char *geneExtraImage(char *geneFileBase)
+/* check if there is a geneExtra image for the specified gene, if so return
+ * the relative URL in a static buffer, or NULL if it doesn't exist */
+{
+static char *imgExt[] = {"png", "gif", "jpg", NULL};
+static char path[256];
+int i;
+
+for (i = 0; imgExt[i] != NULL; i++)
+    {
+    safef(path, sizeof(path), "../htdocs/geneExtra/%s.%s", geneFileBase, imgExt[i]);
+    if (access(path, R_OK) == 0)
+        {
+        safef(path, sizeof(path), "../geneExtra/%s.%s", geneFileBase, imgExt[i]);
+        return path;
+        }
+    }
+return NULL;
+}
+
+void addGeneExtra(char *geneName)
+/* create html table columns with geneExtra data, see hgdocs/geneExtra/README
+ * for details */
+{
+char geneFileBase[256], *imgPath, textPath[256];
+
+/* lower-case gene name used as key */
+safef(geneFileBase, sizeof(geneFileBase), "%s", geneName);
+tolowers(geneFileBase);
+
+/* add image column, if exists */
+imgPath = geneExtraImage(geneFileBase);
+
+if (imgPath != NULL)
+    printf("<td><img src=\"%s\">", imgPath);
+
+/* add text column, if exists */
+safef(textPath, sizeof(textPath), "../htdocs/geneExtra/%s.txt", geneFileBase);
+if (access(textPath, R_OK) == 0)
+    {
+    FILE *fh = mustOpen(textPath, "r");
+    printf("<td valign=\"center\">");
+    copyOpenFile(fh, stdout);
+    fclose(fh);
+    }
+}
+
+void prRefGeneInfo(struct sqlConnection *conn, char *rnaName,
+                   char *sqlRnaName, struct refLink *rl)
+/* print basic details information and links for a RefGene */
+{
 struct sqlResult *sr;
 char **row;
 char query[256];
-char *mgiID;
-char *sqlRnaName = rnaName;
-struct refLink *rl;
-struct genePred *gp;
-int start = cartInt(cart, "o");
+char *cdsCmpl = NULL;
 
-/* Make sure to escape single quotes for DB parseability */
-if (strchr(rnaName, '\''))
-    {
-    sqlRnaName = replaceChars(rnaName, "'", "''");
-    }
-cartWebStart(cart, "RefSeq Gene");
-sprintf(query, "select * from refLink where mrnaAcc = '%s'", sqlRnaName);
-sr = sqlGetResult(conn, query);
-if ((row = sqlNextRow(sr)) == NULL)
-    errAbort("Couldn't find %s in refLink table - database inconsistency.", rnaName);
-rl = refLinkLoad(row);
-sqlFreeResult(&sr);
+printf("<td valign=top nowrap>\n");
 printf("<H2>RefSeq Gene %s</H2>\n", rl->name);
-    
 printf("<B>RefSeq:</B> <A HREF=\"");
 printEntrezNucleotideUrl(stdout, rl->mrnaAcc);
 printf("\" TARGET=_blank>%s</A>", rl->mrnaAcc);
+
 /* If refSeqStatus is available, report it: */
 if (hTableExists("refSeqStatus"))
     {
-    sprintf(query, "select status from refSeqStatus where mrnaAcc = '%s'",
-	    sqlRnaName);
+    safef(query, sizeof(query), "select status from refSeqStatus where mrnaAcc = '%s'",
+          sqlRnaName);
     sr = sqlGetResult(conn, query);
     if ((row = sqlNextRow(sr)) != NULL)
         {
@@ -6955,6 +7037,11 @@ if (hTableExists("refSeqStatus"))
     sqlFreeResult(&sr);
     }
 puts("<BR>");
+cdsCmpl = refSeqCdsCompleteness(conn, sqlRnaName);
+if (cdsCmpl != NULL)
+    {
+    printf("<B>CDS:</B> %s<BR>", cdsCmpl);
+    }
 if (rl->omimId != 0)
     {
     printf("<B>OMIM:</B> <A HREF=\"");
@@ -6974,7 +7061,8 @@ if (rl->locusLinkId != 0)
 
     if ( (strstr(hgGetDb(), "mm") != NULL) && hTableExists("MGIid"))
     	{
-	sprintf(query, "select MGIid from MGIid where LLid = '%d';",
+        char *mgiID;
+	safef(query, sizeof(query), "select MGIid from MGIid where LLid = '%d';",
 		rl->locusLinkId);
 
 	sr = sqlGetResult(conn, query);
@@ -7040,7 +7128,7 @@ if (hTableExists("jaxOrtholog"))
         {
         sqlRlName = replaceChars(rl->name, "'", "''");
         }
-    sprintf(query, "select * from jaxOrtholog where humanSymbol='%s'", sqlRlName);
+    safef(query, sizeof(query), "select * from jaxOrtholog where humanSymbol='%s'", sqlRlName);
     sr = sqlGetResult(conn, query);
     while ((row = sqlNextRow(sr)) != NULL)
         {
@@ -7060,12 +7148,54 @@ if (startsWith("hg", hGetDb()))
     printf("%s</A><BR>\n", rl->name);
     }
 printStanSource(rl->mrnaAcc, "mrna");
+}
 
+void doRefGene(struct trackDb *tdb, char *rnaName)
+/* Process click on a known RefSeq gene. */
+{
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr;
+char **row;
+char query[256];
+char *sqlRnaName = rnaName;
+char *summary = NULL;
+struct refLink *rl;
+int start = cartInt(cart, "o");
+
+/* Make sure to escape single quotes for DB parseability */
+if (strchr(rnaName, '\''))
+    {
+    sqlRnaName = replaceChars(rnaName, "'", "''");
+    }
+/* get refLink entry */
+safef(query, sizeof(query), "select * from refLink where mrnaAcc = '%s'", sqlRnaName);
+sr = sqlGetResult(conn, query);
+if ((row = sqlNextRow(sr)) == NULL)
+    errAbort("Couldn't find %s in refLink table - database inconsistency.", rnaName);
+rl = refLinkLoad(row);
+sqlFreeResult(&sr);
+
+/* print the first section with info  */
+cartWebStart(cart, "RefSeq Gene");
+printf("<table border=0>\n<tr>\n");
+prRefGeneInfo(conn, rnaName, sqlRnaName, rl);
+addGeneExtra(rl->name);  /* adds columns if extra info is available */
+printf("</tr>\n</table>\n");
+
+/* optional summary text */
+summary = refSeqSummary(conn, sqlRnaName);
+if (summary != NULL)
+    {
+    htmlHorizontalLine();
+    printf("<H3>Summary of %s</H3>\n", rl->name);
+    printf("<P>%s</P>\n", summary);
+    freeMem(summary);
+    }
 htmlHorizontalLine();
 
 /* print alignments that track was based on */
 {
-char *aliTbl = (sameString(track, "refGene") ? "refSeqAli" : "xenoRefSeqAli");
+char *aliTbl = (sameString(tdb->tableName, "refGene") ? "refSeqAli" : "xenoRefSeqAli");
 struct psl *pslList = getAlignments(conn, aliTbl, rl->mrnaAcc);
 printf("<H3>mRNA/Genomic Alignments</H3>");
 printAlignments(pslList, start, "htcCdnaAli", aliTbl, rl->mrnaAcc);
