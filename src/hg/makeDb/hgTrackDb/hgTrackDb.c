@@ -11,7 +11,7 @@
 #include "portable.h"
 #include "dystring.h"
 
-static char const rcsid[] = "$Id: hgTrackDb.c,v 1.11 2003/09/03 18:52:28 kent Exp $";
+static char const rcsid[] = "$Id: hgTrackDb.c,v 1.12 2003/09/09 23:55:37 heather Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -35,7 +35,7 @@ errAbort(
   );
 }
 
-void addVersion(char *dirName, char *raName, 
+void addVersion(char *tableExist, char *database, char *dirName, char *raName, 
     struct hash *uniqHash,
     struct hash *htmlHash,
     struct trackDb **pTrackList)
@@ -43,8 +43,40 @@ void addVersion(char *dirName, char *raName,
 {
 struct trackDb *tdList = NULL, *td, *tdNext;
 char fileName[512];
+char longname[512];
 
 tdList = trackDbFromRa(raName);
+
+
+if (tableExist != NULL) {
+  for (td = tdList; td != NULL; td = tdNext)
+      {
+      tdNext = td->next;
+      // printf("%s\n", td->tableName);
+      // won't work for worms and zoo
+      strcpy(longname, "");
+      strcat(longname, "chr1_");
+      strcat(longname, td->tableName);
+      // printf("%s\n", longname);
+  
+      if (hTableExistsDb(database, td->tableName))
+        {
+        // printf("%s\n", td->tableName);
+        continue;
+        }
+  
+      if (hTableExistsDb(database, longname)) 
+        {
+        // printf("%s\n", td->tableName);
+        continue;
+        }
+  
+        printf("%s missing\n", td->tableName);
+        slRemoveEl(tdList, td);
+      }
+}
+   
+
 for (td = tdList; td != NULL; td = tdNext)
     {
     tdNext = td->next;
@@ -127,7 +159,7 @@ return cloneString(newCreate);
 }
 
 
-void layerOn(char *dir, struct hash *uniqHash, 
+void layerOn(char *tableExist, char *database, char *dir, struct hash *uniqHash, 
 	struct hash *htmlHash,  boolean mustExist, struct trackDb **tdList)
 /* Read trackDb.ra from directory and any associated .html files,
  * and layer them on top of whatever is in tdList. */
@@ -136,7 +168,7 @@ char raFile[512];
 sprintf(raFile, "%s/trackDb.ra", dir);
 if (fileExists(raFile))
     {
-    addVersion(dir, raFile, uniqHash, htmlHash, tdList);
+    addVersion(tableExist, database, dir, raFile, uniqHash, htmlHash, tdList);
     }
 else 
     {
@@ -167,7 +199,7 @@ else
 }
 
 void hgTrackDb(char *org, char *database, char *trackDbName, char *sqlFile, char *hgRoot,
-               char *visibilityRa)
+               char *visibilityRa, char *tableExist)
 /* hgTrackDb - Create trackDb table from text files. */
 {
 struct hash *uniqHash = newHash(8);
@@ -182,9 +214,9 @@ snprintf(tab, sizeof(tab), "%s.tab", trackDbName);
 sprintf(rootDir, "%s", hgRoot);
 sprintf(orgDir, "%s/%s", hgRoot, org);
 sprintf(asmDir, "%s/%s/%s", hgRoot, org, database);
-layerOn(asmDir, uniqHash, htmlHash, FALSE, &tdList);
-layerOn(orgDir, uniqHash, htmlHash, FALSE, &tdList);
-layerOn(rootDir,uniqHash, htmlHash, TRUE, &tdList);
+layerOn(tableExist, database, asmDir, uniqHash, htmlHash, FALSE, &tdList);
+layerOn(tableExist, database, orgDir, uniqHash, htmlHash, FALSE, &tdList);
+layerOn(tableExist, database, rootDir, uniqHash, htmlHash, TRUE, &tdList);
 if (visibilityRa != NULL)
     trackDbOverrideVisbility(uniqHash, visibilityRa);
 slSort(&tdList, trackDbCmp);
@@ -244,6 +276,6 @@ optionHash(&argc, argv);
 if (argc != 6)
     usage();
 hgTrackDb(argv[1], argv[2], argv[3], argv[4], argv[5],
-          optionVal("visibility", NULL));
+          optionVal("visibility", NULL), optionVal("tableExist", NULL));
 return 0;
 }
