@@ -11,13 +11,14 @@
 #include "hdb.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: hgWiggle.c,v 1.3 2004/07/28 19:17:37 hiram Exp $";
+static char const rcsid[] = "$Id: hgWiggle.c,v 1.4 2004/07/28 21:27:22 hiram Exp $";
 
 /* Command line switches. */
 static char *db = NULL;		/* database to read from */
 static char *chr = NULL;		/* work on this chromosome only */
-static boolean silent = FALSE;	/*	turn timing on	*/
+static boolean silent = FALSE;	/*	no data points output */
 static boolean timing = FALSE;	/*	turn timing on	*/
+static boolean skipDataRead = FALSE;	/*	do not read the wib data */
 static unsigned span = 0;	/*	select for this span only	*/
 
 /*	global flags	*/
@@ -30,6 +31,7 @@ static struct optionSpec optionSpecs[] = {
     {"chr", OPTION_STRING},
     {"silent", OPTION_BOOLEAN},
     {"timing", OPTION_BOOLEAN},
+    {"skipDataRead", OPTION_BOOLEAN},
     {"span", OPTION_INT},
     {NULL, 0}
 };
@@ -46,6 +48,7 @@ errAbort(
   "   -chr=chrN - examine data only on chrN\n"
   "   -silent - no output, scanning data only\n"
   "   -timing - display timing statistics\n"
+  "   -skipDataRead - do not read the .wib data\n"
   "   When no database is specified, track names will refer to .wig files\n"
   "   example using the file gc5Base.wig:\n"
   "                hgWiggle -chr=chrM gc5Base\n"
@@ -63,9 +66,9 @@ int numCols;
 if (file)
     {
     numCols = lineFileChopNextTab(wigFile, row, maxRow);
+    if (numCols != maxRow) return FALSE;
     verbose(3, "#\tnumCols = %d, row[0]: %s, row[1]: %s, row[%d]: %s\n",
 	numCols, row[0], row[1], maxRow-1, row[maxRow-1]);
-    if (numCols != maxRow) return FALSE;
     }
 else
     {
@@ -87,13 +90,15 @@ void hgWiggle(int trackCount, char *tracks[])
 /* hgWiggle - dump wiggle data from database or .wig file */
 {
 struct sqlConnection *conn;
+FILE *f = (FILE *) NULL;
 int i;
 struct wiggle *wiggle;
 char *wibFile = NULL;
 struct sqlResult *sr;
-unsigned long fileBytes = 0;
+unsigned long long fileBytes = 0;
 unsigned long fileNoDataBytes = 0;
 long fileEt = 0;
+unsigned long long totalRows = 0;
 
 
 verbose(2, "#\texamining tracks:");
@@ -110,17 +115,16 @@ if (db)
 for (i=0; i<trackCount; ++i)
     {
     char *row[WIGGLE_NUM_COLS];
-    FILE *f = (FILE *) NULL;
-    unsigned char *ReadData;    /* the bytes read in from the file */
     int dataOffset = 0;         /*      within data block during reading */
-    int rowCount = 0;
+    unsigned long long rowCount = 0;
+    unsigned long long chrRowCount = 0;
     unsigned int currentSpan = 0;
     char *currentChrom = NULL;
     long startClock = clock1000();
     long endClock;
     long chrStartClock = clock1000();
     long chrEndClock;
-    unsigned long bytesRead = 0;
+    unsigned long long bytesRead = 0;
     unsigned long chrBytesRead = 0;
     unsigned long noDataBytes = 0;
     unsigned long chrNoDataBytes = 0;
@@ -154,6 +158,7 @@ for (i=0; i<trackCount; ++i)
     while (wigNextRow(sr, wigFile, row, WIGGLE_NUM_COLS))
 	{
 	++rowCount;
+	++chrRowCount;
 	wiggle = wiggleLoad(row);
 	if (file)
 	    {
@@ -174,9 +179,10 @@ for (i=0; i<trackCount; ++i)
 		chrEndClock = clock1000();
 		et = chrEndClock - chrStartClock;
 		if (timing)
- verbose(1,"#\t%s.%s %lu data bytes, %lu no-data bytes, ET: %ld ms\n",
-		    tracks[i], currentChrom, chrBytesRead, chrNoDataBytes, et);
-    		chrNoDataBytes = chrBytesRead = 0;
+ verbose(1,"#\t%s.%s %lu data bytes, %lu no-data bytes, %ld ms, %llu rows\n",
+		    tracks[i], currentChrom, chrBytesRead, chrNoDataBytes, et,
+			chrRowCount);
+    		chrRowCount = chrNoDataBytes = chrBytesRead = 0;
 		chrStartClock = clock1000();
 		}
 	    freeMem(currentChrom);
@@ -190,71 +196,75 @@ for (i=0; i<trackCount; ++i)
 		printf ("\n");
 	    }
 
-	verbose(2, "#\trow: %d, start: %u, data range: %g: [%g:%g]\n",
+	verbose(2, "#\trow: %llu, start: %u, data range: %g: [%g:%g]\n",
 		rowCount, wiggle->chromStart, wiggle->dataRange,
 		wiggle->lowerLimit, wiggle->lowerLimit+wiggle->dataRange);
 	verbose(2, "#\tresolution: %g per bin\n",
 		wiggle->dataRange/(double)MAX_WIG_VALUE);
-	if (wibFile)
+	if (!skipDataRead)
 	    {
-	    if (differentString(wibFile,wiggle->file))
-		{
-		if (f != (FILE *) NULL)
+	    unsigned char *ReadData;    /* the bytes read in from the file */
+	    if (wibFile)
+		{		/*	close and open only if different */
+		if (differentString(wibFile,wiggle->file))
 		    {
-		    fclose(f);
+		    carefulClose(&f);
 		    freeMem(wibFile);
+		    wibFile = cloneString(wiggle->file);
+		    f = mustOpen(wibFile, "r");
 		    }
-		wibFile = cloneString(wiggle->file);
-		f = mustOpen(wibFile, "r");
-		}
-	    }
-	else
-	    {
-	    wibFile = cloneString(wiggle->file);
-	    f = mustOpen(wibFile, "r");
-	    }
-	fseek(f, wiggle->offset, SEEK_SET);
-	ReadData = (unsigned char *) needMem((size_t) (wiggle->count + 1));
-	fread(ReadData, (size_t) wiggle->count,
-	    (size_t) sizeof(unsigned char), f);
-	verbose(2, "#\trow: %d, reading: %u bytes\n", rowCount, wiggle->count);
-	for (dataOffset = 0; dataOffset < wiggle->count; ++dataOffset)
-	    {
-	    unsigned char datum = ReadData[dataOffset];
-	    if (datum != WIG_NO_DATA)
-		{
-		double dataValue =
-  wiggle->lowerLimit+(((double)datum/(double)MAX_WIG_VALUE)*wiggle->dataRange);
-    		++bytesRead;
-    		++chrBytesRead;
-		if (!silent)
-		    printf("%d\t%g\n",
-			1 + wiggle->chromStart + (dataOffset * wiggle->span),
-				dataValue);
 		}
 	    else
 		{
-		++noDataBytes;
-		++chrNoDataBytes;
+		wibFile = cloneString(wiggle->file);	/* first time */
+		f = mustOpen(wibFile, "r");
 		}
-	    }
+	    fseek(f, wiggle->offset, SEEK_SET);
+	    ReadData = (unsigned char *) needMem((size_t) (wiggle->count + 1));
+	    fread(ReadData, (size_t) wiggle->count,
+		(size_t) sizeof(unsigned char), f);
+	verbose(2, "#\trow: %llu, reading: %u bytes\n", rowCount, wiggle->count);
+	    for (dataOffset = 0; dataOffset < wiggle->count; ++dataOffset)
+		{
+		unsigned char datum = ReadData[dataOffset];
+		if (datum != WIG_NO_DATA)
+		    {
+		    double dataValue =
+  wiggle->lowerLimit+(((double)datum/(double)MAX_WIG_VALUE)*wiggle->dataRange);
+		    ++bytesRead;
+		    ++chrBytesRead;
+		    if (!silent)
+			printf("%d\t%g\n",
+			    1 + wiggle->chromStart + (dataOffset * wiggle->span),
+				    dataValue);
+		    }
+		else
+		    {
+		    ++noDataBytes;
+		    ++chrNoDataBytes;
+		    }
+		}
+	    freeMem(ReadData);
+	    }	/*	if (!skipDataRead)	*/
 	wiggleFree(&wiggle);
 	}
     endClock = clock1000();
+    totalRows += rowCount;
     if (timing)
 	{
 	long et;
 	chrEndClock = clock1000();
 	et = chrEndClock - chrStartClock;
 	if (!file)
- verbose(1,"#\t%s.%s %lu data bytes, %lu no-data bytes, ET: %ld ms\n",
-		    tracks[i], currentChrom, chrBytesRead, chrNoDataBytes, et);
+ verbose(1,"#\t%s.%s %lu data bytes, %lu no-data bytes, %ld ms, %llu rows\n",
+		    tracks[i], currentChrom, chrBytesRead, chrNoDataBytes, et,
+			rowCount);
     		chrNoDataBytes = chrBytesRead = 0;
 		chrStartClock = clock1000();
 	et = endClock - startClock;
 	fileEt += et;
- verbose(1,"#\t%s %lu data bytes, %lu no-data bytes, ET: %ld ms\n",
-		tracks[i], bytesRead, noDataBytes, et);
+ verbose(1,"#\t%s %llu data bytes, %lu no-data bytes, %ld ms, %llu rows\n",
+		tracks[i], bytesRead, noDataBytes, et, totalRows);
 	}
     fileBytes += bytesRead;
     fileNoDataBytes += noDataBytes;
@@ -264,11 +274,14 @@ if (file)
     {
     lineFileClose(&wigFile);
     if (timing)
- verbose(1,"#\ttotal %lu data bytes, %lu no-data bytes, ET: %ld ms\n",
-		fileBytes, fileNoDataBytes, fileEt);
+ verbose(1,"#\ttotal %llu data bytes, %lu no-data bytes, %ld ms, %llu rows\n",
+		fileBytes, fileNoDataBytes, fileEt, totalRows);
     }
 if (wibFile)
+    {
+    carefulClose(&f);
     freeMem(wibFile);
+    }
 
 if (db)
     {
@@ -287,6 +300,7 @@ db = optionVal("db", NULL);
 chr = optionVal("chr", NULL);
 silent = optionExists("silent");
 timing = optionExists("timing");
+skipDataRead = optionExists("skipDataRead");
 span = optionInt("span", 0);
 
 if (db)
@@ -299,9 +313,11 @@ else
 if (chr)
     verbose(2, "#\tselect chrom: %s\n", chr);
 if (silent)
-    verbose(2, "#\tsilent option on\n");
+    verbose(2, "#\tsilent option on, no data points output\n");
 if (timing)
     verbose(2, "#\ttiming option on\n");
+if (skipDataRead)
+    verbose(2, "#\tskipDataRead option on, do not read .wib data\n");
 if (span)
     verbose(2, "#\tselect for span=%u only\n", span);
 
