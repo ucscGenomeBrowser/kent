@@ -314,7 +314,6 @@ if (dt < 0) dt = 0;
 return defaultGapPenalty(dq, dt);
 }
 
-
 struct predScore
 /* Predecessor and score we get merging with it. */
     {
@@ -323,7 +322,7 @@ struct predScore
     };
 
 struct predScore bestPredecessor(
-	struct asBlock *curBlock,   /* Block who's predecessor we seek */
+	struct asBlock *lonely,     /* Block looking for ancestor. */
 	int dim,		    /* Dimension level of tree splits on. */
 	struct asBranch *branch,    /* Subtree to explore */
 	struct predScore bestSoFar) /* Best predecessor so far. */
@@ -332,16 +331,16 @@ struct asBlock *leaf;
 
 /* If best score in this branch of tree wouldn't be enough
  * (even without gaps) don't bother exploring it. */
-if (branch->maxScore + curBlock->score < bestSoFar.score)
+if (branch->maxScore + lonely->score < bestSoFar.score)
     return bestSoFar;
 
 /* If it's a leaf branch, then calculate score to connect
  * with it. */
 else if ((leaf = branch->block) != NULL)
     {
-    if (leaf->qStart < curBlock->qStart && leaf->tStart < curBlock->tStart)
+    if (leaf->qStart < lonely->qStart && leaf->tStart < lonely->tStart)
 	{
-	int score = leaf->totalScore + curBlock->score - gap(leaf, curBlock);
+	int score = leaf->totalScore + lonely->score - gap(leaf, lonely);
 	if (score > bestSoFar.score)
 	   {
 	   bestSoFar.score = score;
@@ -355,14 +354,14 @@ else if ((leaf = branch->block) != NULL)
 else
     {
     int newDim = 1-dim;
-    int dimCoord = (dim == 0 ? curBlock->qStart : curBlock->tStart);
+    int dimCoord = (dim == 0 ? lonely->qStart : lonely->tStart);
     
     /* Explore hi branch first as it is more likely to have high
      * scores.  However only explore it if it can have things starting
      * before us. */
     if (dimCoord > branch->cutCoord)
-         bestSoFar = bestPredecessor(curBlock, newDim, branch->hi, bestSoFar);
-    bestSoFar = bestPredecessor(curBlock, newDim, branch->lo, bestSoFar);
+         bestSoFar = bestPredecessor(lonely, newDim, branch->hi, bestSoFar);
+    bestSoFar = bestPredecessor(lonely, newDim, branch->lo, bestSoFar);
     return bestSoFar;
     }
 }
