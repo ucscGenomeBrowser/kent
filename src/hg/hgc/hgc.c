@@ -7607,8 +7607,7 @@ if (snp!=NULL)
     printf("<font face=\"Courier New\">Sequence in Assembly:&nbsp;%s<BR></font>\n",snp->assembly);
     printf("<font face=\"Courier New\">Alternate Sequence:&nbsp;&nbsp;&nbsp;%s<BR></font>\n",snp->alternate);
     }
-else
-    printf("Could not find detail record for rsID %s<BR>\n",name);
+/* else printf("Could not find detail record for rsID %s<BR>\n",name); */
 dbSnpRSFree(&snp);
 sqlDisconnect(&conn);
 }
