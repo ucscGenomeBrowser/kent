@@ -117,3 +117,17 @@ priority 45
 visibility hide
 color 0,100,100
 type genePred twinscanPep
+
+
+
+
+searchTable softberryGene
+searchType genePred
+termRegex C[IVXM]+[0-9]+
+searchPriority 50
+
+searchTable twinscan
+searchType genePred
+termRegex chr.*\.[0-9]+\.[0-9]+
+searchPriority 50
+
