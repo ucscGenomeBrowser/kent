@@ -37,7 +37,7 @@ if (argc != 3) usage();
 kgTempDb    = argv[1];
 outfileName = argv[2];
 
-outf = fopen(outfileName, "w");
+outf = mustOpen(outfileName, "w");
 conn2= hAllocConn();
 conn3= hAllocConn();
 conn4= hAllocConn();
@@ -51,7 +51,7 @@ while (row2 != NULL)
     /* get all prot/mRna pairs in score table with this protein, ordered by score */
     protAcc = row2[0];
     safef(query3, sizeof(query3), 
-            "select mrnaAcc, score from %s.protMrnaScore where protAcc='%s' order by score desc", 
+            "select mrnaAcc, score from %s.protMrnaScore where protAcc='%s' order by score desc limit 1", 
     	    kgTempDb, protAcc);
     sr3  = sqlMustGetResult(conn3, query3);
     row3 = sqlNextRow(sr3);
