@@ -29,13 +29,17 @@ Arguments:
 
 Obtains other parameters from etc/genbank.conf:
 
-- $db.genome - a glob pattern of where to find the genome
-   contig or chromosome fasta, nib, or 2bit files on the cluster.
-   For example: 
-     hg13.genome = /scratch/hg/gs.14/build31/trfFa.1204/NT_*.fa.trf
+  - $db.genome - a glob pattern of where to find the genome
+     contig or chromosome fasta, nib, or 2bit files on the cluster.
+     For example: 
+       hg13.genome = /scratch/hg/gs.14/build31/trfFa.1204/NT_*.fa.trf
 
-- $db.lift - the lift file is used to split up nibs.  If fasta files or
-   whole nibs are used, it is ignored and can be empty or no.
+  - $db.lift - the lift file is used to split up nibs.  If fasta files or
+     whole nibs are used, it is ignored and can be empty or no.
+
+  - $db.mondoTwoBitParts - If specified, genome file is s two-bit file
+    with lots (tens of K) of small scaffolds.  This splits the genome into
+    this number of parts for alignment.
 
 Does:
    - Find updates that are missing alignments in the latest releases for
@@ -49,7 +53,7 @@ Does:
    - create a list of all expected PSL files.";
 
 #
-# $Id: gbAlignSetup,v 1.10 2004/10/16 05:02:49 markd Exp $
+# $Id: gbAlignSetup,v 1.11 2004/10/17 18:27:15 markd Exp $
 #
 use strict;
 use warnings;
@@ -108,17 +112,17 @@ sub isTwoBitFile($) {
     return ($genomeFile =~ /\.2bit$/);
 }
 
-# get chroms and size in a twobit file.  This is does in one
-# pass because there can be a lot of scaffolds in a twobit
-# These are return in pairs because perl is such a pain.
-sub getTwoBitChromsSizes($) {
-    my($genomeFile) = @_;
+# get chroms and size in a twobit file.  This is does in one pass because
+# there can be a lot of scaffolds in a twobit Return list of chroms, sorted in
+# assending size order, fill in hash with sizes.
+sub getTwoBitChromsSizes($$) {
+    my($genomeFile, $sizeTblRef) = @_;
     my @chromsSizes;
-    my $twoBitOut = callProg("twoBitInfo $genomeFile stdout");
+    my $twoBitOut = callProg("twoBitInfo $genomeFile stdout | sort -k 2,2n");
     foreach my $line (split(/\n/, $twoBitOut)) {
         my @row = split(/\t/, $line);
+        $sizeTblRef->{$row[0]} = $row[1];
         push(@chromsSizes, $row[0]);
-        push(@chromsSizes, $row[1]);
     }
     return @chromsSizes;
 }
@@ -270,6 +274,18 @@ sub parseTwoBitSubrangePath($) {
     return ($chrom, substr($range, 0, 1), $chrom . ":" . $range);
 }
 
+# parse mondo seq file subrange file references for getOutPslPath
+sub parseMondoSeqFilePath($) {
+    my($mondoSeqFile) = @_;
+
+    # genbank.37.0/mondo/bosTau1/scaffold1000.seqs
+    #   dir1 is scaffold
+    #   dir2 is last char
+    #   base is scaffold
+    my $chrom = basename($mondoSeqFile, ("\.seqs"));
+    return ($chrom, substr($chrom, length($chrom)-1), $chrom);
+}
+
 # parse a fasta or full nib file path for getOutPslPath
 sub parseFullFilePath($) {
     my($filePath) = @_;
@@ -308,14 +324,16 @@ sub parseFullFilePath($) {
 # query file and the first directory level to make sorting more efficient, so
 # don't change this with understanding what is going on.
 #
-sub getOutPslPath($$$) {
-    my($genomeFile, $rnaFa, $pslBaseDir) = @_;
+sub getOutPslPath($$$$) {
+    my($genomeFile, $mondoSeqFile, $rnaFa, $pslBaseDir) = @_;
     my $rnaBase = basename($rnaFa, "\.fa");
     my $genomeBase = basename($genomeFile);
 
     my($dir1, $dir2, $base);
 
-    if ($genomeBase =~ /^.+\.nib:.+$/) {
+    if (defined($mondoSeqFile)) {
+        ($dir1, $dir2, $base) = parseMondoSeqFilePath($mondoSeqFile);
+    } elsif ($genomeBase =~ /^.+\.nib:.+$/) {
         ($dir1, $dir2, $base) = parseNibSubrangePath($genomeBase);
     } elsif ($genomeBase =~ /^.+\.2bit:.+$/) {
         ($dir1, $dir2, $base) = parseTwoBitSubrangePath($genomeBase);
@@ -465,20 +483,115 @@ sub partitionNibFile($$@) {
 sub partitionTwoBitFile($$@) {
     my($db, $twoBitFile, @lifts) = @_;
     my @fileSpecs;
-    # gets a list of pairs
-    my @chromsSizes = getTwoBitChromsSizes($twoBitFile);
-    for (my $i = 0; $i <= $#chromsSizes; $i += 2) {
-        my $chrom = $chromsSizes[$i];
-        my $chromSize = $chromsSizes[$i+1];
+    my %sizeTbl;
+    my @chroms = getTwoBitChromsSizes($twoBitFile, \%sizeTbl);
+    foreach my $chrom (@chroms) {
         if ($#lifts >= 0) {
             push(@fileSpecs,
-                 partitionWithLift($db, $twoBitFile, $chrom, $chromSize, @lifts));
+                 partitionWithLift($db, $twoBitFile, $chrom, $sizeTbl{$chrom}, @lifts));
         } else {
             push(@fileSpecs,
-                 partitionByWindows($db, $twoBitFile, $chrom, $chromSize));
+                 partitionByWindows($db, $twoBitFile, $chrom, $sizeTbl{$chrom}));
         }
     }
     return @fileSpecs;
+}
+
+# Crude attempt to sort mondo sequences so that jobs with an even number
+# of sequences still have a mixture of large and small sequences.
+sub mondoBalance($@) {
+    my($sizeTblRef, @chroms) = @_;
+    # assumes chroms is sorted in assending order
+    my $iTop = 0;
+    my $iBot = $#chroms;
+    my @newChroms;
+
+    while ($iTop < $iBot) {
+        # 1 from bottom (larger)
+        push(@newChroms, $chroms[$iBot--]);
+        # 4 from top
+        for (my $i = 0; ($i < 4) && ($iTop <= $iBot); $i++) {
+            push(@newChroms, $chroms[$iTop++]);
+        }
+    }
+    if ($#newChroms != $#chroms) {
+        die("mondoBalance logic error, chrom lists different sizes: "
+            . "  old: " . $#chroms  . "  new: " . $#newChroms);
+    }
+    return @newChroms;
+}
+
+# partition on chrom in a mondo 2bit and write to SEQIDS
+sub partitionMondoTwoBitChrom($$$$@) {
+    my($db, $twoBitFile, $chrom, $sizeTblRef, @lifts) = @_;
+
+    # get list of file specs the standard way
+    my @fileSpecs;
+    if ($#lifts >= 0) {
+        push(@fileSpecs,
+             partitionWithLift($db, $twoBitFile, $chrom, $sizeTblRef->{$chrom}, @lifts));
+    } else {
+        push(@fileSpecs,
+             partitionByWindows($db, $twoBitFile, $chrom, $sizeTblRef->{$chrom}));
+    }
+
+    # now split it up, fileSpecs is either
+    #   "dir/foo.2bit:seqid:start-end"
+    #   "dir/foo.2bit:seqid"
+    foreach my $spec (@fileSpecs) {
+        # results is 4 parts:
+        #   (seqId, :st-end, st, end)
+        # or
+        #   (seqId, , , )
+        my(@parts) = ($spec =~ /\/[^\/]+\.2bit:([^:]+)(:([0-9]+)-([0-9]+))?/);
+        if (($#parts != 3) || (($parts[1] ne "") and ($parts[3] eq ""))) {
+            die("can't parse file spec: $spec");
+        }
+        if (!defined($sizeTblRef->{$parts[0]})) {
+            die("size not defined for seq $parts[0] from file spec: $spec");
+        }
+        if ($parts[1] ne "") {
+            print SEQIDS $parts[0],"\t",$sizeTblRef->{$parts[0]},"\t",$parts[2],"\t",$parts[3],"\n";
+        } else {
+            print SEQIDS $parts[0],"\n";
+        }
+    }
+}
+
+# partition a 2bit file with lots of small sequences in it.  Write files in
+# $outDir/$id.seqs, where id is the first sequence in the list.  Return list
+# of workDir relative seq files. This was done for bosTau1, which had 450K
+# scaffolds, lots of small ones.  Since gbBlat loops over the sequences,
+# invoking several programs, try to balancing number of sequences for each
+# jobs as well as sizes
+sub partitionMondoTwoBitFile($$$$) {
+    my($db, $twoBitFile, $numParts, $outDir) = @_;
+    my @seqFiles;
+    my %sizeTbl;
+    my @chroms = getTwoBitChromsSizes($twoBitFile, \%sizeTbl);
+    @chroms = mondoBalance(\%sizeTbl, @chroms);
+
+    my $liftFile = getDbConfNo($db, "lift");
+    my @lifts;
+    if (defined($liftFile)) {
+        @lifts = loadLiftFile($liftFile);
+    }
+
+    makeDir($workDir . "/" . $outDir);
+
+    # determine number of parts per jobs
+    my $chromsPerPart = ($#chroms+$numParts)/$numParts;
+    for (my $iChr = 0; $iChr <= $#chroms;) {
+        my $seqFile = $outDir . "/" . $chroms[$iChr] . ".seqs";
+        my $seqPath = $workDir . "/" . $seqFile;
+        open(SEQIDS, ">", $seqPath) || gbError("can't create $seqPath");
+        for (my $i = 0; ($iChr <= $#chroms) && $i < $chromsPerPart; $i++, $iChr++) {
+            partitionMondoTwoBitChrom($db, $twoBitFile, $chroms[$iChr], \%sizeTbl, @lifts)
+        }
+        close(SEQIDS) || gbError("error writing $seqFile");
+        push(@seqFiles, $seqFile);
+    }
+    return @seqFiles;
 }
 
 # partition a single genome file into a list of fileSepces
@@ -513,7 +626,7 @@ sub getGenomeFileSpecs($) {
         @lifts = loadLiftFile($liftFile);
     }
 
-    # genrate specs, validating that none are generated twice.
+    # genrate specs.
     my @fileSpecs;
     foreach my $genomeFile (@gfiles) {
         push(@fileSpecs, partitionGenomeFile($db, $genomeFile, @lifts));
@@ -522,9 +635,9 @@ sub getGenomeFileSpecs($) {
 }
 
 # write a single blat job
-sub writeBlatJob($$$$$$) {
-    my($jobFh, $expectedFh, $db, $genomeFile, $mrnaFa, $pslBaseDir) = @_;
-    my $outPsl = getOutPslPath($genomeFile, $mrnaFa, $pslBaseDir);
+sub writeBlatJob($$$$$$$) {
+    my($jobFh, $expectedFh, $db, $genomeFile, $mondoSeqFile, $mrnaFa, $pslBaseDir) = @_;
+    my $outPsl = getOutPslPath($genomeFile, $mondoSeqFile, $mrnaFa, $pslBaseDir);
 
     # make sure we don't overwrite output files
     if (defined($gOutPsls{$outPsl})) {
@@ -552,25 +665,47 @@ sub writeBlatJob($$$$$$) {
     }
         
     my $cmd = $gbBlatPath;
+    if (defined($mondoSeqFile)) {
+        $cmd .= " -seqs " . $mondoSeqFile;
+    }
     $cmd .= " $db $genomeFile $mrnaFa {check out exists $outPsl}\n";
     print $jobFh $cmd;
 }
 
-# Add alignment commands to a job file.  Check for existing files tmp
-# output psls to allow rerunnign if needed.
+# generate blat jobs
 sub genBlatJobs($$$@) {
-    my($jobFh, $expectedFh, $unaligned, @mrnaFas) = @_;
+    my($jobFh, $expectedFh, $genomeFilesRef, $mondoSeqFilesRef, $unaligned, $mrnaFasRef) = @_;
     my($release, $db, $update, $typeAccPrefix) = splitUnaligned($unaligned);
     
     # relative to work/align
     my $pslBaseDir = "$release/$db/$update/psl";
 
-    my @genomeFiles = getGenomeFileSpecs($db);
-    foreach my $genomeFile (@genomeFiles) {
-        foreach my $mrnaFa (@mrnaFas) {
-            writeBlatJob($jobFh, $expectedFh, $db, $genomeFile, $mrnaFa, $pslBaseDir);
+    foreach my $genomeFile (@{$genomeFilesRef}) {
+        foreach my $mondoSeqFile (@{$mondoSeqFilesRef}) {
+            foreach my $mrnaFa (@{$mrnaFasRef}) {
+                writeBlatJob($jobFh, $expectedFh, $db, $genomeFile, $mondoSeqFile, $mrnaFa, $pslBaseDir);
+            }
         }
     }
+}
+
+# generate jobs for on update. $mondoSeqFiles should be a list with one undef if
+# not being used
+sub genAlignUpdateJobs($$$$$$$) {
+    my($jobFh, $expectedFh, $release, $db, $unaligned, $genomeFilesRef, $mondoSeqFilesRef) = @_;
+    my $totalNumAlign = 0;
+    if ($gbCommon::verbose) {
+        print STDERR "gbAlignSetup: $unaligned\n";
+    }
+    my ($numAlign, @mrnaFas) = extractMRnaFastas($unaligned);
+    if ($gbCommon::verbose) {
+        print STDERR "  $numAlign unaligned\n";
+    }
+    if ($numAlign > 0) {
+        genBlatJobs($jobFh, $expectedFh, $genomeFilesRef, $mondoSeqFilesRef, $unaligned, \@mrnaFas);
+        $totalNumAlign += $numAlign;
+    }
+    return $totalNumAlign;
 }
 
 # Do all setup for blat alignment jobs for a release and update; extracting 
@@ -579,18 +714,22 @@ sub genAlignJobs($$$$$@) {
     my($jobFh, $expectedFh, $release, $db, $type, @orgCats) = @_;
     my @unalignedList = findUnaligned($release, $db, $type, @orgCats);
     my $totalNumAlign = 0;
+
+    # different setups depending on if we have the mondoTwoBitParts conf option
+
+    my $mondoNumParts = getDbConfUndef($db, "mondoTwoBitParts");
+    my(@genomeFiles, @mondoSeqFiles);
+
+    if (defined($mondoNumParts)) {
+        my $seqFileDir = $release . "/mondo/" . $db;
+        push(@genomeFiles, getDbConf($db, "genome"));
+        @mondoSeqFiles = partitionMondoTwoBitFile($db, $genomeFiles[0], $mondoNumParts, $seqFileDir);
+    } else {
+        @genomeFiles = getGenomeFileSpecs($db);
+        push(@mondoSeqFiles, undef);
+    }
     foreach my $unaligned (@unalignedList) {
-        if ($gbCommon::verbose) {
-            print STDERR "gbAlignSetup: $unaligned\n";
-        }
-        my ($numAlign, @mrnaFas) = extractMRnaFastas($unaligned);
-        if ($gbCommon::verbose) {
-            print STDERR "  $numAlign unaligned\n";
-        }
-        if ($numAlign > 0) {
-            genBlatJobs($jobFh, $expectedFh, $unaligned, @mrnaFas);
-            $totalNumAlign += $numAlign;
-        }
+        $totalNumAlign += genAlignUpdateJobs($jobFh, $expectedFh, $release, $db, $unaligned, \@genomeFiles, \@mondoSeqFiles);
     }
     return $totalNumAlign;
 }

@@ -7,8 +7,10 @@
 # Options:
 #  -keep - keep temporary files.
 #  -verbose - verbose debugging
-#  -seqs seqfile - file contains list of sequences ids or seq:start-end.
-#   Only works with 2bit files.
+#  -overwrite - overwrite existing output (for debugging)
+#  -seqs seqsfile - file contains lists of sequencs to align for
+#   Mondo 2bit files (lots of small sequences).  Each line contains
+#   either the the sequence id, or {seqId seqSize seqStart seqEnd}.
 # Arguments:
 #  - database - hg13, etc; used to determine ooc file to use.
 #
@@ -44,7 +46,7 @@
 # written in Tcl because bash version was getting hideously hard and wanted
 # a language with named fuction parameters, like fortran.
 #
-# $Id: gbBlat,v 1.30 2004/10/16 05:02:49 markd Exp $
+# $Id: gbBlat,v 1.31 2004/10/17 18:27:15 markd Exp $
 #
 
 # Tools are normally taken from /cluster/bin, however we allow them to be
@@ -297,8 +299,9 @@ proc liftOrCat {type inFile outFh subInfo} {
 
 ##
 # align and process one genome spec, appending to output files
+# n.b. genomeFile should have a subrange if subInfo is not empty.
 ##
-proc alignToGenome {genomeFile rnaFa blatParams orgCat cdnaType subInfo} {
+proc alignToGenome {genomeFile rnaFa blatParams orgCat cdnaType {subInfo {}}} {
     global tmpBase outPslFh outOiFh outIntronPslFh
 
     # tmp output on local FS
@@ -371,11 +374,48 @@ proc finishOutput {} {
     file rename -force $outPsl.tmp $outPsl
 }
 
+# generate alignments in normal manner, without seqs file
+proc genAlignments {database srcDb orgCat cdnaType genomeFile rnaFa subInfo} {
+    set blatParams [determineBlatParams $database $srcDb $orgCat $cdnaType]
+    setupOutput $orgCat $cdnaType
+    alignToGenome $genomeFile $rnaFa $blatParams $orgCat $cdnaType $subInfo
+    finishOutput
+}
+
+# parse a line of of the seqsFile
+proc parseSeqsFileLine {genomeFile line seqsFile} {
+    set row [split $line]
+    if {[llength $row] == 1} {
+        set genomeSpec $genomeFile:[lindex $row 0] 
+        set subInfo {}
+    } elseif {[llength $row] == 4} {
+        set genomeSpec $genomeFile:[lindex $row 0]:[lindex $row 2]-[lindex $row 3]
+        set subInfo $row
+    } else {
+        error "invalid line in $seqsFile: $line"
+    }
+    return [list $genomeSpec $subInfo]
+}
+
+# generate mondo alignments, using seqs file
+proc genMondoAlignments {database srcDb orgCat cdnaType genomeFile rnaFa seqsFile} {
+    set blatParams [determineBlatParams $database $srcDb $orgCat $cdnaType]
+    setupOutput $orgCat $cdnaType
+    set fh [open $seqsFile]
+    while {[gets $fh line] >= 0} {
+        lassign [parseSeqsFileLine $genomeFile $line $seqsFile] genomeSpec subInfo
+        alignToGenome $genomeSpec $rnaFa $blatParams $orgCat $cdnaType $subInfo
+    }
+    close $fh
+    finishOutput
+}
+
 ##
 # entry, parse arguments
 ##
 set keepTmp 0
 set verbose 0
+set overwrite 0
 set seqsFile {}
 while {[llength $argv] && [string match -* [lindex $argv 0]]} {
     set opt [cmdlinePop]
@@ -388,6 +428,9 @@ while {[llength $argv] && [string match -* [lindex $argv 0]]} {
         }
         -verbose {
             set verbose 1
+        }
+        -overwrite {
+            set overwrite 1
         }
         default {
             puts stderr "Error: invalid option: $opt"
@@ -413,21 +456,27 @@ set outIntronPsl $outPrefix.intronPsl
 set tmpDir /var/tmp/gbBlat.[pid].tmp
 
 # skip if output file already exists
-if {[file exists $outPsl]} {
+if {[file exists $outPsl] && !$overwrite} {
     puts stderr "Note: output psl exists, skipping: $outPsl"
     exit 0
 }
 
 lassign [parseCDnaFaPath $rnaFa] srcDb orgCat cdnaType
 
-set blatParams [determineBlatParams $database $srcDb $orgCat $cdnaType]
 lassign [getGeneomeInputType $genomeFile] genomeType genomeFmt
-
 if {$genomeType == "subseq"} {
+    if {$seqsFile != ""} {
+        abort("can't specify -seqs with subrange");
+    }
     set subInfo [parseSubRangeSpec $genomeFile $genomeType $genomeFmt]
 } else {
     set subInfo {}
 }
+
+if {($seqsFile != "") && ($genomeFmt != "2bit")} {
+    abort("can only specify -seqs with twobit files");
+}
+
 
 ##
 # tmp and output setup
@@ -446,12 +495,13 @@ if {$keepTmp} {
     puts stderr "note: will keep tmpDir [exec hostname] $tmpDir"
 }
 
-
-# generate alignments
+# generate alignments, cleaning up tmp on error
 if {[catch {
-    setupOutput $orgCat $cdnaType
-    alignToGenome $genomeFile $rnaFa $blatParams $orgCat $cdnaType $subInfo
-    finishOutput
+    if {$seqsFile == ""} {
+        genAlignments $database $srcDb $orgCat $cdnaType $genomeFile $rnaFa $subInfo
+    } else {
+        genMondoAlignments $database $srcDb $orgCat $cdnaType $genomeFile $rnaFa $seqsFile
+    }
 } msg]} {
     set holdErrorInfo $errorInfo
     set holdErrorCode $errorCode

@@ -1,3 +1,4 @@
+#!/usr/bin/perl
 #
 # Collecting of common functions used by genbank update.
 #
@@ -24,7 +25,8 @@ BEGIN {
                            gbChmod getReleases getLastRelease getUpdates
                            parseOptEq inList inListRef getTmpDir readFile makeAbs
                            backgroundStart backgroundWait
-                           findConf getConf getConfNo getDbConf getDbConfNo splitSpaceList
+                           findConf getConf getConfNo getDbConfUndef getDbConf
+                           getDbConfNo splitSpaceList
                            getHgConf setupHgConf callMysql runMysqlDump runMysql
                            getDownloadTimeFile getRelDownloadDir);
     
@@ -718,14 +720,22 @@ sub getConfNo($) {
     }
 }
 
-# get a configuration value for a database, or the default, or an error
+# get a configuration value for a database, or the default, or undef
 # if neither are specified
-sub getDbConf($$) {
+sub getDbConfUndef($$) {
     my($db, $name) = @_;
     my $value = findConf("$db.$name");
     if (!defined($value)) {
         $value = findConf("default.$name");
     }
+    return $value;
+}
+
+# get a configuration value for a database, or the default, or an error
+# if neither are specified
+sub getDbConf($$) {
+    my($db, $name) = @_;
+    my $value = getDbConfUndef($db, $name);
     if (!defined($value)) {
         die("no $db.$name or default for $name in $gbCommon::confFile");
     }
