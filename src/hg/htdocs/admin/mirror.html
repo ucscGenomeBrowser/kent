@@ -40,7 +40,7 @@
     </TD></TR>
 
 <!--Content Tables------------------------------------------------------->
-    <TR><TD>	
+    <TR><TD CELLPADDING=10>	
 	<TABLE BGCOLOR="fffee8" WIDTH="100%" BORDERCOLOR="888888" BORDER=1>
 	    <TR><TD>
 	    	<TABLE BGCOLOR="D9E4F8" BACKGROUND="/images/hr.gif" WIDTH=100%>
@@ -57,10 +57,7 @@
 			    instructions to incrementally create a mirror of the 
 			    UCSC Genome Browser. You may choose to set up either a 
 			    full mirror browser or a partial one, depending on your disk 
-			    space and needs. You are also welcome to try our 
-			    <A HREF="#script">script</A> which 
-			    can help you to create a mirror site on a Linux system 
-			    automatically.
+			    space and needs.
 			    <P>
 			    <B> Prerequisites:</B>
 			    <P>
@@ -107,9 +104,10 @@ databases </A> (70 GB)&nbsp;<B>NEW ITEMS!</B>
 <LI><A HREF="#step7">Set up Hgcentral session preference table</A>&nbsp;<B>NEW ITEMS!</B>
 <LI><A HREF="#step8">Create a $WEBROOT/trash apache user writable directory for temp files</A>
 <LI><A HREF="#step9">Set up HgFixed database</A>
-<LI><A HREF="#step10">Set up three protein databases</A>&nbsp;<B>NEW ITEMS!</B>
+<LI><A HREF="#step10">Set up the protein databases</A>&nbsp;<B>NEW ITEMS!</B>
+<LI><A HREF="#step11">Set up the swissProt database</A>&nbsp;<B>NEW ITEMS!</B>
 </OL>
-<BR>
+<BR><BR>
 <HR>
 <P>
 <A NAME="step1"></A>
@@ -140,8 +138,8 @@ THE WEBROOT WILL OVERWRITE ANY EXISTING DATA IN THAT AREA.</B>
 Find the location of your <em>cgi-bin</em> directory. It should be under
 the parent directory of the WEBROOT directory. For example, on 
 a Redhat Linux system using a stock apache RPM, the path of 
-the <em>cgi-bin</em> directory is <em>/var/www/cgi-bin</em>. We will refer to this 
-directory as CGIBIN in this document and you should substitute your 
+the <em>cgi-bin</em> directory is <em>/var/www/cgi-bin</em>. We will refer to
+this directory as CGIBIN in this document and you should substitute your 
 real path for CGIBIN whenever you see that.
 <BR>
 <LI>
@@ -166,14 +164,17 @@ installed on your system, obtain it from
 We are running a rsync server, but you must email us first 
 with the hostname from which you will be rsyncing so that we 
 can allow it access. Email to 
-<A HREF="mailto:&#103;&#101;n&#111;&#109;&#101;&#45;mi&#114;&#114;&#111;&#114;&#64;&#99;&#115;&#101;.&#117;&#99;&#115;&#99;.&#101;du">
-&#103;&#101;n&#111;&#109;&#101;&#45;mi&#114;&#114;&#111;&#114;&#64;&#99;&#115;&#101;.&#117;&#99;&#115;&#99;.&#101;du</A>.
+<A HREF="mailto:&#103;&#101;n&#111;&#109;&#101;&#45;mi&#114;&#114;&#111;&#114;&#64;&#99;&#115;&#101;.
+&#117;&#99;&#115;&#99;.&#101;du">
+&#103;&#101;n&#111;&#109;&#101;&#45;mi&#114;&#114;&#111;&#114;&#64;&#99;&#115;&#101;.
+&#117;&#99;&#115;&#99;.&#101;du</A>.
+<!-- above address is genome-mirror at cse.ucsc.edu -->
 <BR>
 <LI>
 After we respond to your request, do a test connection: 
 <BR> 
 <PRE>
-rsync -navz --progress rsync://genome-rsync.cse.ucsc.edu
+rsync -navz --progress --partial rsync://genome-rsync.cse.ucsc.edu
 </PRE>
 This should respond with:
 <PRE>
@@ -183,21 +184,29 @@ gbdb            UCSC Human Genome Browser New Config Files (282 GB)
 </PRE>
 <BR>
 <LI>Determine the destination of the copy ($WEBROOT) and fire off the production copy<BR>
-(the trailing slash is important!):<BR>
+<em>The trailing slash is important!</em><BR>
 <PRE>
-rsync --progress -avz \
- --exclude='goldenPath/*/bigZips/*' \ 
- --exclude='goldenPath/*/chromosomes/*' \
- --exclude='goldenPath/*/database/*' \
- --exclude='goldenPath/*/contigs/*' \
- --exclude='goldenPath/*/pieces/*' \ 
- --exclude='goldenPath/*/waba/*' \ 
- --exclude='goldenPath/*/alignments/*' \ 
- --exclude='goldenPath/*/sanger/*' \ 
- --exclude='goldenPath/*/vsMm3/*' \ 
- --exclude='goldenPath/*/vsMm2/*' \ 
- --exclude='goldenPath/chromReports/' \ 
- --exclude='goldenPath/mapPlots/' \ 
+rsync --progress --partial -avz \
+ --exclude='goldenPath/hg16/*' \ 
+ --exclude='goldenPath/10april2003/*' \
+ --exclude='goldenPath/14nov2002/*' \ 
+ --exclude='goldenPath/mm4/*' \ 
+ --exclude='goldenPath/mmFeb2003/*' \ 
+ --exclude='goldenPath/rnJun2003/*' \ 
+ --exclude='goldenPath/rnJan2003/*' \ 
+ --exclude='goldenPath/fr1/*' \ 
+ --exclude='goldenPath/dm1/*' \ 
+ --exclude='goldenPath/ceMay2003/*' \ 
+ --exclude='goldenPath/cbJul2002/*' \ 
+ --exclude='goldenPath/sacCer1/*' \ 
+ --exclude='goldenPath/scApr2003/*' \ 
+ --exclude='goldenPath/hgFixed/*' \ 
+ --exclude='goldenPath/chromReports/*' \ 
+ --exclude='goldenPath/proteins*' \ 
+ --exclude='goldenPath/mapPlots/*' \ 
+ --exclude='ancestors/*' \ 
+ --exclude='zoo/*' \ 
+ --exclude='ENCODE/*' \ 
  rsync://genome-rsync.cse.ucsc.edu/genome/ $WEBROOT/
 </PRE>
 </OL>
@@ -209,13 +218,13 @@ rsync --progress -avz \
 <LI>Get Human July, 2003 full data set (hg16: 8.6 GB) by doing:
 <P> 
 <PRE>
-rsync --progress -avz \
+rsync --progress --partial -avz \
   rsync://genome-rsync.cse.ucsc.edu/genome/goldenPath/hg16/bigZips/ \
   $WEBROOT/goldenPath/hg16/bigZips/
-rsync --progress -avz \
+rsync --progress --partial -avz \
   rsync://genome-rsync.cse.ucsc.edu/genome/goldenPath/hg16/chromosomes/ \
   $WEBROOT/goldenPath/hg16/chromosomes/
-rsync --progress -avz  \
+rsync --progress --partial -avz  \
   rsync://genome-rsync.cse.ucsc.edu/genome/goldenPath/hg16/database/ \
   $WEBROOT/goldenPath/hg16/database/
 </PRE>
@@ -223,13 +232,13 @@ rsync --progress -avz  \
 <LI>Get Human April 10, 2003 full data set (hg15: 6.5 GB) by doing:
 <P> 
 <PRE>
-rsync --progress -avz \
+rsync --progress --partial -avz \
   rsync://genome-rsync.cse.ucsc.edu/genome/goldenPath/10april2003/bigZips/ \
   $WEBROOT/goldenPath/10april2003/bigZips/
-rsync --progress -avz \
+rsync --progress --partial -avz \
   rsync://genome-rsync.cse.ucsc.edu/genome/goldenPath/10april2003/chromosomes/ \
   $WEBROOT/goldenPath/10april2003/chromosomes/
-rsync --progress -avz  \
+rsync --progress --partial -avz  \
   rsync://genome-rsync.cse.ucsc.edu/genome/goldenPath/10april2003/database/ \
   $WEBROOT/goldenPath/10april2003/database/
 </PRE>
@@ -237,13 +246,13 @@ rsync --progress -avz  \
 <LI>Get Human November 14, 2002 full data set (hg13: 12.0 GB) by doing:
 <P> 
 <PRE>
-rsync --progress -avz \
+rsync --progress --partial -avz \
   rsync://genome-rsync.cse.ucsc.edu/genome/goldenPath/14nov2002/bigZips/ \
   $WEBROOT/goldenPath/14nov2002/bigZips/
-rsync --progress -avz \
+rsync --progress --partial -avz \
   rsync://genome-rsync.cse.ucsc.edu/genome/goldenPath/14nov2002/chromosomes/ \
   $WEBROOT/goldenPath/14nov2002/chromosomes/
-rsync --progress -avz  \
+rsync --progress --partial -avz  \
   rsync://genome-rsync.cse.ucsc.edu/genome/goldenPath/14nov2002/database/ \
   $WEBROOT/goldenPath/14nov2002/database/
 </PRE>
@@ -251,13 +260,13 @@ rsync --progress -avz  \
 <LI>Get Mouse October, 2003 full data set (mm4: 6.0 GB) by doing:
 <P> 
 <PRE>
-rsync --progress -avz \
+rsync --progress --partial -avz \
   rsync://genome-rsync.cse.ucsc.edu/genome/goldenPath/mm4/bigZips/ \
   $WEBROOT/goldenPath/mm4/bigZips/
-rsync --progress -avz \
+rsync --progress --partial -avz \
   rsync://genome-rsync.cse.ucsc.edu/genome/goldenPath/mm4/chromosomes/ \
   $WEBROOT/goldenPath/mm4/chromosomes/
-rsync --progress -avz  \
+rsync --progress --partial -avz  \
   rsync://genome-rsync.cse.ucsc.edu/genome/goldenPath/mm4/database/ \
   $WEBROOT/goldenPath/mm4/database/
 </PRE>
@@ -265,13 +274,13 @@ rsync --progress -avz  \
 <LI>Get Mouse February, 2003 full data set (mm3: 12 GB) by doing:
 <P> 
 <PRE>
-rsync --progress -avz \
+rsync --progress --partial -avz \
   rsync://genome-rsync.cse.ucsc.edu/genome/goldenPath/mmFeb2003/bigZips/ \
   $WEBROOT/goldenPath/mmFeb2003/bigZips/
-rsync --progress -avz \
+rsync --progress --partial -avz \
   rsync://genome-rsync.cse.ucsc.edu/genome/goldenPath/mmFeb2003/chromosomes/ \
   $WEBROOT/goldenPath/mmFeb2003/chromosomes/
-rsync --progress -avz  \
+rsync --progress --partial -avz  \
   rsync://genome-rsync.cse.ucsc.edu/genome/goldenPath/mmFeb2003/database/ \
   $WEBROOT/goldenPath/mmFeb2003/database/
 </PRE>
@@ -279,7 +288,7 @@ rsync --progress -avz  \
 <LI>Get Rat June, 2003 full data set (rn3: 5.5 GB) by doing:
 <P> 
 <PRE>
-rsync --progress -avz \
+rsync --progress --partial -avz \
   rsync://genome-rsync.cse.ucsc.edu/genome/goldenPath/rnJun2003/ \
   $WEBROOT/goldenPath/rnJun2003/
 </PRE>
@@ -287,13 +296,13 @@ rsync --progress -avz \
 <LI>Get Rat January, 2003 full data set (rn2: 4.1 GB) by doing:
 <P> 
 <PRE>
-rsync --progress -avz \
+rsync --progress --partial -avz \
   rsync://genome-rsync.cse.ucsc.edu/genome/goldenPath/rnJan2003/bigZips/ \
   $WEBROOT/goldenPath/rnJan2003/bigZips/
-rsync --progress -avz \
+rsync --progress --partial -avz \
   rsync://genome-rsync.cse.ucsc.edu/genome/goldenPath/rnJan2003/chromosomes/ \
   $WEBROOT/goldenPath/rnJan2003/chromosomes/
-rsync --progress -avz  \
+rsync --progress --partial -avz  \
   rsync://genome-rsync.cse.ucsc.edu/genome/goldenPath/rnJan2003/database/ \
   $WEBROOT/goldenPath/rnJan2003/database/
 </PRE>
@@ -301,7 +310,7 @@ rsync --progress -avz  \
 <LI>Get Fugu August, 2003 full data set (fr1: 1.0 GB) by doing:
 <P> 
 <PRE>
-rsync --progress -avz \
+rsync --progress --partial -avz \
   rsync://genome-rsync.cse.ucsc.edu/genome/goldenPath/fr1/ \
   $WEBROOT/goldenPath/fr1/
 </PRE>
@@ -309,7 +318,7 @@ rsync --progress -avz \
 <LI>Get Fruitfly January, 2003 full data set (dm1: 1.0 GB) by doing:
 <P> 
 <PRE>
-rsync --progress -avz \
+rsync --progress --partial -avz \
   rsync://genome-rsync.cse.ucsc.edu/genome/goldenPath/dm1/ \
   $WEBROOT/goldenPath/dm1/
 </PRE>
@@ -317,7 +326,7 @@ rsync --progress -avz \
 <LI>Get C. elegans May, 2003 full data set (ce1: 2.0 GB) by doing:
 <P> 
 <PRE>
-rsync --progress -avz \
+rsync --progress --partial -avz \
   rsync://genome-rsync.cse.ucsc.edu/genome/goldenPath/ceMay2003/ \
   $WEBROOT/goldenPath/ceMay2003/
 </PRE>
@@ -325,15 +334,23 @@ rsync --progress -avz \
 <LI>Get C. briggsae July, 2002 full data set (cb1: 315 Mb) by doing:
 <P> 
 <PRE>
-rsync --progress -avz \
+rsync --progress --partial -avz \
   rsync://genome-rsync.cse.ucsc.edu/genome/goldenPath/cbJul2002/ \
   $WEBROOT/goldenPath/cbJul2002/
+</PRE>
+
+<LI>Get Yeast (Saccharomyces cerevisiae) October, 2003 full data set (sacCer1: 91 Mb) by doing:
+<P> 
+<PRE>
+rsync --progress --partial -avz \
+  rsync://genome-rsync.cse.ucsc.edu/genome/goldenPath/sacCer1/ \
+  $WEBROOT/goldenPath/sacCer1/
 </PRE>
 
 <LI>Get SARS coronavirus April, 2003 full data set (sc1: 106 Mb) by doing:
 <P> 
 <PRE>
-rsync --progress -avz \
+rsync --progress --partial -avz \
   rsync://genome-rsync.cse.ucsc.edu/genome/goldenPath/scApr2003/ \
   $WEBROOT/goldenPath/scApr2003/
 </PRE>
@@ -347,7 +364,7 @@ rsync --progress -avz \
 <LI>You will need the portions of /gbdb used by the browser (160 GB):
 <BR>
 <PRE>
-rsync --progress -avz \
+rsync --progress --partial -avz \
    rsync://genome-rsync.cse.ucsc.edu/gbdb/ \
    /gbdb/
 </PRE>
@@ -368,7 +385,7 @@ updates to be made, but that is not directly documented.
 date ($FREEZEDATE) and the database version ($DBVERSION) for each genome 
 assembly:
 <P>
-<TABLE CELLPADDING=0 CELLSPACING=0>
+<TABLE CELLPADDING=0 CELLSPACING=0 MARGINS=0>
 <TR><TD> $FREEZEDATE </TD><TD WIDTH=10></TD><TD> $DBVERSION </TD></TR>
 <TR><TD> --------------- </TD><TD></TD><TD> ---------------  </TD></TR>
 <TR><TD> hg16        </TD><TD></TD><TD> hg16        </TD></TR>
@@ -382,6 +399,7 @@ assembly:
 <TR><TD> dm1         </TD><TD></TD><TD> dm1         </TD></TR>
 <TR><TD> ceMay2003   </TD><TD></TD><TD> ce1         </TD></TR>
 <TR><TD> cbJul2002   </TD><TD></TD><TD> cb1         </TD></TR>
+<TR><TD> sacCer1     </TD><TD></TD><TD> sacCer1         </TD></TR>
 <TR><TD> scApr2003   </TD><TD></TD><TD> sc1         </TD></TR>
 </TABLE>
 </UL>
@@ -435,8 +453,9 @@ database is restricted to read-only.
 <LI>The cgi-bin binaries are available via:
 <BR>
 <PRE>
-rsync --progress -avz rsync://genome-rsync.cse.ucsc.edu/cgi-bin/ $CGIBIN/
+rsync --progress --partial -avz rsync://genome-rsync.cse.ucsc.edu/cgi-bin/ $CGIBIN/
 </PRE>
+<BR>
 
 <LI>In the CGIBIN directory, make a <A HREF="sample.html">hg.conf</A> file, in which, $USERNAME,$HOSTNAME and $PASSWORD used for the "$DBVERSION" database should be specified. Remember, variables should not be used in this file. 
 <BR><BR>
@@ -522,7 +541,7 @@ that runs the web server write access to it.
 <OL type="a">
 <LI>Download a copy of the dumped hgFixed tables.</LI>
 <PRE>
-rsync --progress -avz \
+rsync --progress --partial -avz \
    rsync://genome-rsync.cse.ucsc.edu/genome/goldenPath/hgFixed/ \
    $WEBROOT/goldenPath/hgFixed/database/
 </PRE>
@@ -539,42 +558,68 @@ mysql> create database hgFixed
 <OL type="a"> 
 <LI>Download a copy of the dumped protein tables.
 <PRE>
-rsync --progress -avz  \
+rsync --progress --partial -avz  \
 rsync://genome-rsync.cse.ucsc.edu/genome/goldenPath/proteins/ \
 $WEBROOT/goldenPath/proteins/database/
-rsync --progress -avz  \
+rsync --progress --partial -avz  \
 rsync://genome-rsync.cse.ucsc.edu/genome/goldenPath/proteins0111/ \
 $WEBROOT/goldenPath/proteins0111/database/
-rsync --progress -avz  \
-rsync://genome-rsync.cse.ucsc.edu/genome/goldenPath/proteins070403/ \
-$WEBROOT/goldenPath/proteins070403/database/
-rsync --progress -avz  \
-rsync://genome-rsync.cse.ucsc.edu/genome/goldenPath/proteins072003/ \
-$WEBROOT/goldenPath/proteins072003/database/
-rsync --progress -avz  \
+rsync --progress --partial -avz  \
 rsync://genome-rsync.cse.ucsc.edu/genome/goldenPath/proteins0305/ \
 $WEBROOT/goldenPath/proteins0305/database/
-rsync --progress -avz  \
+rsync --progress --partial -avz  \
 rsync://genome-rsync.cse.ucsc.edu/genome/goldenPath/proteins0405/ \
 $WEBROOT/goldenPath/proteins0405/database/
+rsync --progress --partial -avz  \
+rsync://genome-rsync.cse.ucsc.edu/genome/goldenPath/proteins070403/ \
+$WEBROOT/goldenPath/proteins070403/database/
+rsync --progress --partial -avz  \
+rsync://genome-rsync.cse.ucsc.edu/genome/goldenPath/proteins031112/ \
+$WEBROOT/goldenPath/proteins031112/database/
+rsync --progress --partial -avz  \
+rsync://genome-rsync.cse.ucsc.edu/genome/goldenPath/proteins040115/ \
+$WEBROOT/goldenPath/proteins040115/database/
 </PRE>
 <LI>Create the protein databases
 <PRE>
 mysql> create database proteins
 mysql> create database proteins0111
-mysql> create database proteins072003
-mysql> create database proteins070403
 mysql> create database proteins0305
 mysql> create database proteins0405
+mysql> create database proteins070403
+mysql> create database proteins031112
+mysql> create database proteins040115
 </PRE>
 <LI>Import the data in a similar fashion as listed above.
 </OL>
+
+<H4><a NAME="step11"></A>
+11. Create the swissProt database</H4>
+
+<OL type="a"> 
+<LI>Please note <A HREF="/goldenPath/swissProt/database/README.txt">
+	Usage Rights </A> for the swissProt database.
+
+<LI>Download a copy of the dumped swissProt tables.
+<PRE>
+rsync --progress --partial -avz  \
+rsync://genome-rsync.cse.ucsc.edu/genome/goldenPath/swissProt/ \
+$WEBROOT/goldenPath/swissProt
+</PRE>
+<LI>Create the swissProt database
+<PRE>
+mysql> create database swissProt
+</PRE>
+<LI>Import the data in a similar fashion as listed above.
+</OL>
+
 <hr WIDTH="100%">
-<em>Should you have any comments or questions, please contact
+<BR><em>Should you have any comments or questions, please contact
 <A HREF="mailto:&#103;&#101;n&#111;&#109;&#101;&#45;mi&#114;&#114;&#111;&#114;&#64;&#99;&#115;&#101;.&#117;&#99;&#115;&#99;.&#101;du">
 &#103;&#101;n&#111;&#109;&#101;&#45;mi&#114;&#114;&#111;&#114;&#64;&#99;&#115;&#101;.&#117;&#99;&#115;&#99;.&#101;du</A>
 </em>.
-<BR><em>Last Modified: 2003-11-03 - 03 Nov. 2003</em>
+<!-- above address is genome-mirror at cse.ucsc.edu -->
+<BR><em>Last Modified: 2004-02-10 - 10 Feb. 2004</em>
 <BR>
 			</TD>	    
 		    <TD WIDTH=15></TD></TR>
