@@ -145,7 +145,7 @@
 #include "bed6FloatScore.h"
 #include "pscreen.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.743 2004/09/09 03:58:32 kent Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.744 2004/09/10 21:47:34 markd Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -3558,32 +3558,62 @@ sqlFreeResult(&sr);
 return desc;
 }                   
 
+struct mgcDb
+/* information about an MGC databases */
+{
+    char *name;       /* collection name */
+    char *organism;   /* organism name */
+    char *server;     /* MGC server */
+};
+
+struct mgcDb getMgcDb()
+/* get the mgc database info for the current host */
+{
+struct mgcDb mgcDb;
+mgcDb.name = "MGC";
+mgcDb.server = "mgc";
+if (startsWith("hg", database))
+    mgcDb.organism = "Hs";
+else if (startsWith("mm", database))
+    mgcDb.organism = "Mm";
+else if (startsWith("rn", database))
+    mgcDb.organism = "Rn";
+else if (startsWith("danRer", database))
+    {
+    mgcDb.name = "ZGC";
+    mgcDb.organism = "Dr";
+    mgcDb.server = "zgc";
+    }
+else
+    errAbort("can't map database \"%s\" to an MGC organism", database);
+return mgcDb;
+}
+
+char *mgcDbName() 
+/* get just the MGC collection name for the current ucsc database */
+{
+return getMgcDb().name;
+}
+
 void printMgcRnaSpecs(struct trackDb *tdb, char *acc, int imageId)
 /* print status information for MGC mRNA or EST; must have imageId */
 {
 struct sqlConnection *conn = hgAllocConn();
-char *mgcOrganism = NULL, *statusDesc;
+struct mgcDb mgcDb = getMgcDb();
+char *statusDesc;
 
 /* link to MGC site only for full-length mRNAs */
 if (sameString(tdb->tableName, "mgcGenes"))
     {
-    if (startsWith("hg", database))
-        mgcOrganism = "Hs";
-    else if (startsWith("mm", database))
-        mgcOrganism = "Mm";
-    else if (startsWith("rn", database))
-        mgcOrganism = "Rn";
-    else
-        errAbort("can't map database \"%s\" to a MGC organism", database);
-    printf("<B>MGC clone information:</B> ");
-    printf("<A href=\"http://mgc.nci.nih.gov/Reagents/CloneInfo?ORG=%s&IMAGE=%d\" TARGET=_blank>IMAGE:%d</A><BR>", 
-           mgcOrganism, imageId, imageId);
+    printf("<B>%s clone information:</B> ", mgcDb.name);
+    printf("<A href=\"http://%s.nci.nih.gov/Reagents/CloneInfo?ORG=%s&IMAGE=%d\" TARGET=_blank>IMAGE:%d</A><BR>", 
+           mgcDb.server, mgcDb.organism, imageId, imageId);
     }
 
 /* add status description */
 statusDesc = getMgcStatusDesc(conn, imageId);
 if (statusDesc != NULL)
-    printf("<B>MGC status:</B> %s<BR>", statusDesc);
+    printf("<B>%s status:</B> %s<BR>", mgcDb.name, statusDesc);
 hFreeConn(&conn);
 }
 
@@ -3694,8 +3724,10 @@ if (row != NULL)
     /* Now we have all the info out of the database and into nicely named
      * local variables.  There's still a few hoops to jump through to 
      * format this prettily on the web with hyperlinks to NCBI. */
-    printf("<H2>Information on %s%s <A HREF=\"", 
-           (isMgcTrack ? "MGC " : ""), type);
+    if (isMgcTrack)
+        printf("<H2>Information on %s %s <A HREF=\"", mgcDbName(), type);
+    else
+        printf("<H2>Information on %s <A HREF=\"",  type);
     printEntrezNucleotideUrl(stdout, acc);
     printf("\" TARGET=_blank>%s</A></H2>\n", acc);
 
@@ -7797,7 +7829,7 @@ else
     }
 if (!sameString(pg->mgc,"noMgc"))
     {
-    printf("<LI><B>MGC Gene:</B> %s \n", pg->mgc);
+    printf("<LI><B>%s Gene:</B> %s \n", mgcDbName(), pg->mgc);
     linkToOtherBrowserExtra(database, pg->gChrom, pg->mStart, pg->mEnd, "mgcGenes=pack");
     printf("%s:%d-%d \n", pg->gChrom, pg->mStart, pg->mEnd);
     printf("</A></LI>");

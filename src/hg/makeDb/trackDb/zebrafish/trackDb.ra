@@ -10,3 +10,12 @@ otherDb hg16
 pred hg16.blastKGPep00
 blastRef hg16.blastKGRef00
 
+track mgcGenes
+shortLabel ZGC Genes
+longLabel Zebrafish Gene Collection Full ORF mRNAs
+group genes
+priority 36
+visibility hide
+color 34,139,34
+type genePred
+
