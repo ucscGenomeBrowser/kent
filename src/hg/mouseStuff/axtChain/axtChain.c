@@ -13,7 +13,7 @@
 #include "chainBlock.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: axtChain.c,v 1.26 2004/04/29 18:14:38 kent Exp $";
+static char const rcsid[] = "$Id: axtChain.c,v 1.27 2004/07/27 23:02:30 angie Exp $";
 
 int minScore = 1000;
 char *detailsName = NULL;
@@ -69,51 +69,6 @@ if (dif == 0)
 if (dif == 0)
     dif = (int)a->qStrand - (int)b->qStrand;
 return dif;
-}
-
-void addAxtBlocks(struct boxIn **pList, struct axt *axt)
-/* Add blocks (gapless subalignments) from axt to block list. */
-{
-boolean thisIn, lastIn = FALSE;
-int qPos = axt->qStart, tPos = axt->tStart;
-int qStart = 0, tStart = 0;
-int i;
-
-for (i=0; i<=axt->symCount; ++i)
-    {
-    int advanceQ = (isalpha(axt->qSym[i]) ? 1 : 0);
-    int advanceT = (isalpha(axt->tSym[i]) ? 1 : 0);
-    thisIn = (advanceQ && advanceT);
-    if (thisIn)
-        {
-	if (!lastIn)
-	    {
-	    qStart = qPos;
-	    tStart = tPos;
-	    }
-	}
-    else
-        {
-	if (lastIn)
-	    {
-	    int size = qPos - qStart;
-	    assert(size == tPos - tStart);
-	    if (size > 0)
-	        {
-		struct boxIn *b;
-		AllocVar(b);
-		b->qStart = qStart;
-		b->qEnd = qPos;
-		b->tStart = tStart;
-		b->tEnd = tPos;
-		slAddHead(pList, b);
-		}
-	    }
-	}
-    lastIn = thisIn;
-    qPos += advanceQ;
-    tPos += advanceT;
-    }
 }
 
 void addPslBlocks(struct boxIn **pList, struct psl *psl)
@@ -923,7 +878,7 @@ while ((axt = axtRead(lf)) != NULL)
 	sp->tName = cloneString(axt->tName);
 	sp->qStrand = axt->qStrand;
 	}
-    addAxtBlocks(&sp->blockList, axt);
+    axtAddBlocksToBoxInList(&sp->blockList, axt);
     sp->axtCount += 1;
     axtFree(&axt);
     }
