@@ -13,6 +13,8 @@
 # -extFileUpdate - update gbSeq/gbExtFile entries to point to the
 #  latest release.  A limit on the number to update is set in this
 #  file.
+# -getDownloadSeqs=days - see gbDbLOadStep
+# -allowLargeDeletes - see gbDbLOadStep
 
 # errors terminate with message
 set -e
@@ -34,7 +36,7 @@ while [[ $1 == -* ]] ; do
             opts="$opts -maxExtFileUpdate=$maxExtFileUpdate" ;;
         -getDownloadSeqs=*) 
             opts="$opts $opt" ;;
-        -updateDownloadSeqs)
+        -allowLargeDeletes)
             opts="$opts $opt" ;;
         -*) echo "Error: invalid option $opt" >&2
             exit 1 ;;

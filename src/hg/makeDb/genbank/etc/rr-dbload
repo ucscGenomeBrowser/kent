@@ -1,6 +1,6 @@
 #!/bin/bash -e
 #
-# rr-dbload [-inclEsts] [-extFileUpdate]
+# rr-dbload [-inclEsts] [-extFileUpdate] [-allowLargeDeletes]
 #
 # dbload for rr servers.
 opts="$*"
