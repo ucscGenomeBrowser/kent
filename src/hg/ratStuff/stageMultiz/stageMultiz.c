@@ -75,6 +75,39 @@ lineFileClose(&lf);
 return bk;
 }
 
+boolean allDash(char *s)
+/* Return TRUE if string is all '-'. */
+{
+char c;
+
+while ((c = *s++) != 0)
+    {
+    if (c != '-')
+        return FALSE;
+    }
+return TRUE;
+}
+
+boolean mafAllDash(struct mafAli *maf)
+/* Return TRUE if maf has a row which is all dashes. */
+{
+struct mafComp *comp;
+
+for (comp = maf->components; comp != NULL; comp = comp->next)
+    {
+    if (allDash(comp->text))
+	return TRUE;
+    }
+return FALSE;
+}
+
+void mafWriteGood(FILE *f, struct mafAli *maf)
+/* Write out maf if it's not all dash. */
+{
+if (!mafAllDash(maf))
+    mafWrite(f, maf);
+}
+
 void outputAxtAsMaf(FILE *f, struct axt *axt, 
 	struct hash *tSizeHash, char *tPrefix, struct hash *qSizeHash, char *qPrefix)
 /* Write out an axt in maf format. */
@@ -91,7 +124,7 @@ mafFromAxtTemp(axt, hashIntVal(tSizeHash, oldT),
 	hashIntVal(qSizeHash, oldQ), &temp);
 axt->qName = oldQ;
 axt->tName = oldT;
-mafWrite(f, &temp);
+mafWriteGood(f, &temp);
 }
 
 struct hash *loadSizeHash(char *fileName)
@@ -212,7 +245,7 @@ for (el = list; el != NULL; el = el->next)
 	rChromSize = hashIntVal(rSizeHash, axt->qName);
 	prefixAxt(axt, rPrefix, mPrefix);
 	mafFromAxtTemp(axt, mouseChromSize, rChromSize, &temp);
-	mafWrite(f, &temp);
+	mafWriteGood(f, &temp);
 	axtFree(&axt);
 	}
     }
