@@ -14,15 +14,23 @@
 #include "hui.h"
 
 #include "interaction.h"
+#include "bdgpGeneInfo.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: hgGeneRing.c,v 1.4 2005/02/15 00:07:59 galt Exp $";
+static char const rcsid[] = "$Id: hgGeneRing.c,v 1.5 2005/02/28 10:21:56 galt Exp $";
 
+char *errMsg = NULL;
+
+char *geneList = NULL;
+
+struct slName *geneNames = NULL;
+struct hash *aliasHash = NULL;
 
 struct interaction *interactions = NULL;
 
 struct node {
     char *name;               /* name or id - use also as hash key */
+    char *alias;              /* if used */
     struct nodelist *xrays;   /* out-going rays in directed graph  */
     struct nodelist *nrays;   /* in-coming rays in directed graph  */
     boolean ring;             /* member of gene-ring? */
@@ -49,6 +57,10 @@ struct hash *oldVars = NULL;
 char *clade = NULL;
 char *organism = NULL;
 char *db = NULL;
+
+
+/* ------ old junk cloned from hgGateway --------- */
+
 
 /*
   Remove any custom track data from the cart.
@@ -216,44 +228,175 @@ cartSaveSession(cart);
 puts("</FORM><BR>");
 }
 
+/* end of hgGateway junk that this code was cloned from */
 
 
-struct interaction* getGenesFromTable(char* table, char* geneString)
-/* read all the gene interactions from database, returns interaction-list */
+/* ----------------------------------------------------------------------- */
+
+boolean getGenesAsList()
+/* create name-list from geneString,
+   so that we don't have to keep re-parsing 
+   the cart string in different places
+*/
 {
-struct interaction* result = NULL;
-struct dyString *query=newDyString(512);
-char* sep = "where";
-char* ss = cloneString(geneString);
+char* ss = cloneString(geneList);
 char* s = ss;
 char* w = NULL;
-dyStringPrintf(query,"select * from %s",table);
-while(1)
+int c=0;
+char emsg[256];
+/* clean up unwanted characters if any */
+subChar(ss, ',' ,' ');
+subChar(ss, '\t',' ');
+subChar(ss, '\n',' ');
+subChar(ss, '\r',' ');
+while (1)
     {
-    struct hashEl *hel = NULL;
     if (!(w = nextWord(&s))) break;
-    hel = hashStore(nodeHash,w);
+    if(slNameInList(geneNames, w))  
+	/* could be optimized, but not expecting large lists for ring */
+	{
+	safef(emsg,sizeof(emsg), "Duplicate gene id (%s) found in list.",w);
+	errMsg = cloneString(emsg);
+	freez(&ss);    
+	return FALSE;
+	}
+    slNameAddHead(&geneNames, w);
+    c++;
+    }
+slReverse(&geneNames);
+if (c==0)
+    {
+    errMsg = "No genes in list. Please specify genes for ring.";
+    return FALSE;
+    }
+freez(&ss);    
+return TRUE;
+}
+
+void updateGeneList()
+/* update the cart list of genes */
+{
+char *sep = "";
+struct slName *sn = geneNames;
+struct dyString *geneList=newDyString(512);
+while(sn)
+    {
+    dyStringPrintf(geneList,"%s%s",sep,sn->name);
+    sep=" ";
+    sn=sn->next;
+    }
+cartSetString(cart, "ring_geneList", geneList->string);
+freeDyString(&geneList);
+}
+
+struct bdgpGeneInfo *bdgpGeneInfoLoadByQuery(struct sqlConnection *conn, char *query)
+/* Load all interaction from table that satisfy the query given.  
+ * Where query is of the form 'select * from example where something=something'
+ * or 'select example.* from example, anotherTable where example.something = 
+ * anotherTable.something'.
+ * Dispose of this with bdgpGeneInfoFreeList(). */
+{
+struct bdgpGeneInfo *list = NULL, *el;
+struct sqlResult *sr;
+char **row;
+
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    el = bdgpGeneInfoLoad(row);
+    slAddHead(&list, el);
+    }
+slReverse(&list);
+sqlFreeResult(&sr);
+return list;
+}
+
+
+void getGeneAliasesFromTable(char* table)
+/* read all the gene aliases from database, return bdgpGeneInfo-list */
+{
+struct bdgpGeneInfo *result = NULL, *this=NULL;
+struct dyString *query=newDyString(512);
+char *sep = "where";
+struct slName *sn = geneNames;
+dyStringPrintf(query,"select * from %s",table);
+while(sn)
+    {
+    char * nm = sn->name;
+    if (startsWith("CG",nm))
+	{
+	dyStringPrintf(query," %s bdgpName='%s'",sep,nm);
+    	sep = "or";
+	}
+    else if (!startsWith("FBgn",nm))
+	{
+	dyStringPrintf(query," %s symbol='%s'",sep,nm);
+    	sep = "or";
+	}
+    sn = sn->next;
+    }
+//uglyf("<br>SQL=%s<br><br>\n",query->string);    
+struct sqlConnection* conn = hAllocConn();
+result = bdgpGeneInfoLoadByQuery(conn, query->string);
+for(this=result;this;this=this->next)
+    {
+    //uglyf("<br>adding %s=%s<br>\n",this->bdgpName,this->flyBaseId); // debug
+    hashAdd(aliasHash,this->bdgpName,cloneString(this->flyBaseId));
+    //uglyf("<br>adding %s=%s<br>\n",this->symbol,this->flyBaseId); // debug
+    hashAdd(aliasHash,this->symbol,cloneString(this->flyBaseId));
+    }
+// Mysterious crashes if I free this list: 
+//bdgpGeneInfoFreeList(&result);
+hFreeConn(&conn);
+freeDyString(&query);
+}
+
+struct interaction *getGenesFromTable(char* table)
+/* read all the gene interactions from database, returns interaction-list */
+{
+struct interaction *result = NULL;
+struct dyString *query=newDyString(512);
+char *sep = "where";
+struct slName *sn = geneNames;
+getGeneAliasesFromTable("bdgpGeneInfo"); /* load aliases into hash */
+dyStringPrintf(query,"select * from %s",table);
+while(sn)
+    {
+    struct hashEl *hel = NULL, *hf=NULL;
+    char * nm = sn->name;
+    char * alias = NULL;
+    if (!startsWith("FBgn",nm))
+	{
+	if (hf = hashLookup(aliasHash,nm))
+	    {
+	    alias = sn->name;
+	    //uglyf("<br>aliasing %s with %s<br>\n",nm,(char *)hf->val); // debug
+	    nm = (char *)hf->val;
+	    }
+	}
+    hel = hashStore(nodeHash,nm);
     if (!hel->val)                /* add geneList elements to the hash */
 	{
 	struct node *n;
 	struct nodelist *nl;
 	AllocVar(n);
 	AllocVar(nl);
-	n->name = cloneString(w);
+	n->name  = cloneString(nm);
+	n->alias = cloneString(alias);
 	n->ring = TRUE;          /* this is a special ring member */
 	nl->node = n;
 	slAddHead(&allNodes,nl); /* all nodes going in hash are added to all-nodes list */
 	hel->val = n;
 	}
-    dyStringPrintf(query," %s fromX='%s' or toY='%s'",sep,w,w);
+    dyStringPrintf(query," %s fromX='%s' or toY='%s'",sep,nm,nm);
     sep = "or";
+    sn = sn->next;
     }
 //uglyf("<br>SQL=%s<br><br>\n",query->string);    
 struct sqlConnection* conn = hAllocConn();
 result = interactionLoadByQuery(conn, query->string);
 hFreeConn(&conn);
 freeDyString(&query);
-freez(&ss);
 return result;
 }
 
@@ -261,12 +404,16 @@ return result;
 void getGeneList()
 /* hgGeneRing - Gene Network Browser. */
 {
-char *geneList = cloneString(cartUsualString(cart, "ring_geneList", ""));
 
 /* not much point in this, though called old it's the same as current
    at this point.  It is not the old value from before the last submit.
 char *oldGeneList = hashFindVal(oldVars, "ring_geneList");
 */
+
+if (!sameString(errMsg,""))
+    {
+    printf("<CENTER>%s</CENTER>\n",errMsg);
+    }
 
 puts(
 "<FORM ACTION=\"/cgi-bin/hgGeneRing\" NAME=\"mainForm\" METHOD=\"GET\">\n"
@@ -285,8 +432,6 @@ puts(
 "<tr>\n"
 );
 
-cartSetString(cart, "ring_action", "saveGeneList");
-
 puts("<td align=center>\n");
 cgiMakeTextArea("ring_geneList", geneList, 25, 30);
 printf("</td>\n");
@@ -304,7 +449,9 @@ puts(
 );
 puts("</FORM>\n");
 
-freez(&geneList);
+cartSetString(cart, "ring_action", "saveGeneList");
+cartSetString(cart, "ring_errMsg", "");
+
 }
 
 
@@ -334,22 +481,14 @@ boolean saveGeneList(boolean showAll)
    Otherwise, show user's list and offer some links.
 */
 {
-char *geneList = cloneString(cartUsualString(cart, "ring_geneList", ""));
 struct interaction* intr;
 struct nodelist *nl;
 
-/* clean up unwanted characters */
-char *temp = NULL;
-subChar(geneList, ',' ,' ');
-subChar(geneList, '\t',' ');
-subChar(geneList, '\n',' ');
-subChar(geneList, '\r',' ');
-temp = replaceChars(geneList,"  "," ");
-freez(&geneList);
-geneList=temp;
-temp = NULL;
-cartSetString(cart, "ring_geneList", geneList);
-
+if (!getGenesAsList())
+    {
+    getGeneList();
+    return FALSE;
+    }
 
 
 if (showAll)
@@ -373,8 +512,9 @@ if (showAll)
     );
 
     }
+  
 
-interactions = getGenesFromTable("intrP2P",geneList);  /* adds geneList elements to hash */
+interactions = getGenesFromTable("intrP2P");  /* adds geneList elements to hash */
 
 if (showAll)
     {
@@ -482,9 +622,6 @@ if (showAll)
 
 
 
-
-
-freez(&geneList);
 return TRUE;
 }
 
@@ -512,16 +649,22 @@ struct node *node = nl->node;
 int x=node->xpos;
 int y=node->ypos;
 int r=NODE_SIZE;
+char *name = node->name;
+if (node->alias)
+    {
+    name = node->alias;
+    }
 printf(
  "<AREA SHAPE=CIRCLE COORDS=\"%d,%d,%d\""
- " HREF=\"/cgi-bin/hgGeneRing?ring_action=geneFrame&ring_gene=%s\""
+ " HREF=\"/cgi-bin/hgGeneRing?ring_action=geneFrame&ring_gene=%s&ring_position=%s\""
  " ALT=\"%s\""
  " TITLE=\"%s\">",
  x,y,r,
+ name,
  node->name,
- node->name,
- node->name
-);
+ name,
+ name
+ );
 }
 
 void drawScreen()
@@ -655,9 +798,9 @@ for(i=0;i<ringCount;i++)
     
     nl=nl->next;
     }
-    
+
+
 printf("</MAP>\n");
-    
 
 
 
@@ -680,13 +823,28 @@ printf("<TR><TD HEIGHT=5></TD></TR></TABLE></CENTER>");
 			    
 }
 
+char *unAlias(char *gene)
+/* deal with alias mapping for gene names, return FBgn */
+{
+struct hashEl *hf=NULL;
+if (!startsWith("FBgn",gene))
+    {
+    if (hf=hashLookup(aliasHash,gene))
+	{
+	gene=(char *)hf->val;
+	}
+    }
+return gene;    
+}
 
 void drawDetails()
 {
 char *gene = cartUsualString(cart, "ring_gene", "");
-struct hashEl *hel = hashStore(nodeHash,gene);
+char *targ = unAlias(gene);
+struct hashEl *hel = NULL;
 struct node *n;
-if (hel->val) /* add X to hash for 1st time */
+hel = hashLookup(nodeHash,targ);
+if (hel) 
     {
     n = hel->val;
     printf(
@@ -714,21 +872,11 @@ void hgGeneRing()
 /* hgGeneRing - Gene Network Browser. */
 {
 char *action = cartUsualString(cart, "ring_action", "");
-char *geneList = cartUsualString(cart, "ring_geneList", "");
-char *temp = NULL, *temphold = NULL;
+
 if (sameWord(action,""))
     {
     action = "getGeneList";
-    cartSetString(cart, "ring_action", action);
     }
-temphold=cloneString(geneList);
-temp=trimSpaces(temphold);
-if (sameString(temp,""))
-    {
-    action = "getGeneList";
-    cartSetString(cart, "ring_action", action);
-    }
-freez(&temphold);    
 if (sameWord(action,"getGeneList"))
     {
     getGeneList();
@@ -739,72 +887,48 @@ else if (sameWord(action,"saveGeneList"))
     }
 else if (sameWord(action,"drawScreen"))
     {
-    saveGeneList(FALSE);
-    drawScreen();
+    if (saveGeneList(FALSE))
+    	drawScreen();
     }
 else if (sameWord(action,"drawDetails"))
     {
-    saveGeneList(FALSE);
-    drawDetails();
+    if (saveGeneList(FALSE))
+    	drawDetails();
     }
 else if (sameWord(action,"addToRing"))
     {
     char *gene = cartUsualString(cart, "ring_gene", "");
-    char *geneList = cartUsualString(cart, "ring_geneList", "");
-    int l = strlen(geneList)+2+1+1;  //debug remove +1 
-    char *newGeneList = needMem(l);
-    int lg = strlen(gene)+2+1;
-    char *newGene = needMem(lg);
-    //printf("<pre>geneList(before adding %s)=[%s]</pre>\n",gene,geneList);
-    safef(newGeneList,l," %s  ",geneList);
-    safef(newGene,lg," %s ",gene);
-    //printf("<pre>newGene=[%s] newGeneList=[%s]</pre>\n",newGene,newGeneList);
-    char *junk=memMatch(newGene, strlen(newGene), newGeneList, strlen(newGeneList));
-    //printf("<pre>junk ptr returned by memMatch=[%d] </pre>\n",(int)junk);
-    if (!junk)
-       	/* if gene not already in ring, add it */
-	{
-	freez(&newGeneList);
-	l = strlen(geneList)+1+strlen(gene)+1;
-	newGeneList = needMem(l);
-	safef(newGeneList,l,"%s %s",geneList,gene);
-	cartSetString(cart, "ring_geneList", newGeneList);
-	geneList = cartUsualString(cart, "ring_geneList", "");
-	}
-    //printf("<pre>geneList(after adding %s)=[%s]</pre>\n",gene,geneList);
-    freez(&newGeneList);
-    freez(&newGene);
-    saveGeneList(FALSE);
-    drawScreen();
+    getGenesAsList();
+    slNameAddTail(&geneNames, gene);
+    updateGeneList();
+    /* in lieue of actually just redirecting the browser */
+    cartSaveSession(cart);
+    geneList = cloneString(cartUsualString(cart, "ring_geneList", ""));
+    slFreeList(&geneNames); /* just reset everything */
+    if (saveGeneList(FALSE))
+	drawScreen();
     }
 else if (sameWord(action,"removeFromRing"))
     {
     char *gene = cartUsualString(cart, "ring_gene", "");
-    char *geneList = cartUsualString(cart, "ring_geneList", "");
-    int l = strlen(geneList)+2+1;
-    char *newGeneList = needMem(l);
-    int lg = strlen(gene)+2+1;
-    char *newGene = needMem(lg);
-    char *temp = NULL;
-    safef(newGeneList,l," %s ",geneList);
-    safef(newGene,lg," %s ",gene);
-    geneList = replaceChars(newGeneList, newGene, " ");
-    cartSetString(cart, "ring_geneList", geneList);
-    //printf("<pre>geneList(after removal %s)=[%s]</pre>\n",gene,geneList);
-    freez(&newGeneList);
-    freez(&newGene);
-    saveGeneList(FALSE);
+    struct slName **psn = &geneNames;
+    getGenesAsList();
+    while(*psn)
+	{
+	if (sameString((*psn)->name,gene))
+	    {
+	    *psn = (*psn)->next;
+	    break;
+	    }
+	psn=&((*psn)->next);
+	}
+    updateGeneList();
     /* in lieue of actually just redirecting the browser */
-    temp=trimSpaces(geneList);
-    if (sameString(temp,""))
-	{
-    	getGeneList();
-	}
-    else
-	{
+    cartSaveSession(cart);
+    geneList = cloneString(cartUsualString(cart, "ring_geneList", ""));
+    slFreeList(&geneNames); /* just reset everything */
+    if (saveGeneList(FALSE))
 	drawScreen();
-	}
-    freez(&geneList);
     }
 else
     {
@@ -840,25 +964,29 @@ hSetDb(db);
 if (sameWord(action,"geneFrame"))
     { /* special handling for frameset - can't use cartWebStart etc. */
     char *gene = cartUsualString(cart, "ring_gene", "");
+    char *position = cartUsualString(cart, "ring_position", "");
     printf(
 	"<frameset rows = \"18%%, *\">"
     	"  <frame src =\"/cgi-bin/hgGeneRing?ring_action=drawDetails&ring_gene=%s\" />"
 	"  <frame src =\"/cgi-bin/hgTracks?position=%s&db=%s\" />"
     	"</frameset>",
 	gene,
-	gene,
+	position,
 	db
 	);
     }
 else
     {
     cartWebStart(theCart, "%s Gene Network Browser \n", organism);
+    geneList = cloneString(cartUsualString(cart, "ring_geneList", ""));
+    errMsg = cartUsualString(cart, "ring_errMsg", "");  /* any error from last time */
 
     hgGeneRing();
 
     cartSaveSession(cart);
     cartWebEnd();
     }
+freez(&geneList);
 }
 
 char *excludeVars[] = {NULL};
@@ -870,6 +998,7 @@ oldVars = hashNew(8);
 cgiSpoof(&argc, argv);
 
 nodeHash = newHash(8);
+aliasHash = newHash(8);
 cartEmptyShell(doMiddle, hUserCookie(), excludeVars, oldVars);
 freeHashAndVals(&nodeHash);
 return 0;
