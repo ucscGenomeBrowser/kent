@@ -486,7 +486,8 @@ o - Get extra info from NCBI and produce refGene table as so:
        # Note: downloaded these to refSeq.angie (refSeq dir perms)
        wget ftp://ftp.ncbi.nih.gov/refseq/LocusLink/loc2ref 
        wget ftp://ftp.ncbi.nih.gov/refseq/LocusLink/mim2loc 
-o - Similarly download refSeq proteins in fasta format to refSeq.pep - I believe this is hs.faa
+o - Similarly download refSeq proteins in fasta format to refSeq.pep - I believe this is hs.faa.
+        I have changed the name to hs.prot.fa.
 o - RefSeq should have already been aligned to the genome by processes 
         described under mRNA/EST alignments above.
 o - Produce refGene, refPep, refMrna, and refLink tables as so:
@@ -499,7 +500,7 @@ TODO:
 # a format-change issue with .-suffixes in mrna acc's
 #
        hgRefSeqMrna hg12 mrna/refSeq.fa mrna/refSeq.ra all_refSeq.psl \
-         loc2ref mrna/refSeq/human/hs.fa mim2loc
+         loc2ref mrna/refSeq/human/hs.prot.fa mim2loc
 
 o - Add RefSeq status info 
     hgRefSeqStatus hg12 loc2ref
