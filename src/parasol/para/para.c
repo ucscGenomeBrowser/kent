@@ -640,10 +640,22 @@ boolean isStatusOk(int status)
 return WIFEXITED(status) && (WEXITSTATUS(status) == 0);
 }
 
+double systemTickRate()
+/* Return number of seconds per system tick.
+ * It used to be CLK_TCK would work for this, but
+ * under recent Linux's it doesn't. */
+{
+#ifdef CLK_TCK
+    return 1.0/CLK_TCK
+#else
+    return 1.0/sysconf(_SC_CLK_TCK);
+#endif /* CLK_TCK */
+}
+
 double jrCpuTime(struct jobResult *jr)
 /* Get CPU time in seconds for job. */
 {
-return 1.0/(double)CLOCKS_PER_SEC * (jr->usrTicks + jr->sysTicks);
+return systemTickRate() * (jr->usrTicks + jr->sysTicks);
 }
 
 struct hash *markRunJobStatus(struct jobDb *db)
@@ -1288,6 +1300,7 @@ int runTime = 0;
 int otherCount = 0;
 struct hash *resultsHash;
 long now = time(NULL);
+double ioTime;
 
 markQueuedJobs(db);
 resultsHash = markRunJobStatus(db);
@@ -1356,7 +1369,9 @@ if (otherCount > 0)
 if (queueCount > 0)
     printf("In queue waiting: %d jobs\n", queueCount);
 printTimes("CPU time in finished jobs:", totalCpu, TRUE);
-printTimes("IO & Wait Time:", totalWall-totalCpu, TRUE);
+ioTime = totalWall - totalCpu;
+if (ioTime < 0) ioTime = 0;
+printTimes("IO & Wait Time:", ioTime, TRUE);
 if (runningCount > 0)
     {
     printTimes("Time in running jobs:", runTime, TRUE);
