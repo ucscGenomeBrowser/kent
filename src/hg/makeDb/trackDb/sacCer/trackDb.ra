@@ -50,7 +50,7 @@ intronGap 30
 
 track multizYeast 
 shortLabel Multiz Yeast
-longLabel S. cerevisia/paradoxus/mikatae/kudriavzevii/bayanus/castelli/kluyveri Alignments
+longLabel S. cerevisiae/paradoxus/mikatae/kudriavzevii/bayanus/castelli/kluyveri Alignments
 group compGeno
 priority 146
 visibility full
