@@ -1412,7 +1412,11 @@ SEQ2_LEN=$BASE/S2.len
 #	otherDb mm3
     # remake trackDb tables
 
-# MAKE BLASTZ BEST MOUSE MM3 (TBD)
+# MAKE BLASTZ BEST MOUSE MM3 (DONE - 2003-08-26 - Hiram)
+
+    #  IMPORTANT NOTE - This axtBest process has been replaced by the
+    #  chain to net to axt process.  Note procedure below continues
+    #  after the chain and nets have been produced.
 
     # Consolidate AXT files to chrom level, sort, pick best, make psl.
     ssh eieio
@@ -1424,9 +1428,6 @@ SEQ2_LEN=$BASE/S2.len
     # chr19 came along later:
     cp -p chr19.axt /cluster/bluearc/hg16/bed/blastz.mm3/axtChrom
 
-    #  IMPORTANT NOTE - This axtBest process has been replaced by the
-    #  chain to net to axt process.  Note procedure below continues
-    #  after the chain and nets have been produced.
     ssh kk
     cd /cluster/data/hg16/bed/blastz.mm3
     mkdir -p axtBest pslBest
@@ -1483,21 +1484,6 @@ Average job time:                 380s       6.33m     0.11h    0.00d
 Longest job:                     1247s      20.78m     0.35h    0.01d
 Submission to last job:          1261s      21.02m     0.35h    0.01d
 
-    #  To get a result for chr19 - proceed with the chain and net below
-    #	When the mouse.net is complete:  - This chr19 processing is
-    #	replaced by processing all the chroms as indicated next
-    # ssh eieio
-    # cd /cluster/data/hg16/bed/blastz.mm3/axtChain
-    # mkdir mouseNet
-    # netSplit mouse.net mouseNet
-    # netToAxt mouseNet/chr19.net chain/chr19.chain \
-    #	/cluster/bluearc/scratch/hg/gs.17/build34/bothMaskedNibs \
-    #	/cluster/data/mm3.RM030619/mixedNib \
-    #	../axtNet/chr19.axt
-# read 6175021 chains in chain/chr19.chain
-# Processing chr19
-# loaded /cluster/bluearc/scratch/hg/gs.17/build34/bothMaskedNibs/chr19.nib
-
     #	Better yet, Jim says to be consistent, do all the chroms in
     #	this manner:
     ssh eieio
@@ -1522,6 +1508,7 @@ Submission to last job:          1261s      21.02m     0.35h    0.01d
     #  Convert those axt files to psl
     ssh eieio
     cd /cluster/data/hg16/bed/blastz.mm3
+    mkdir pslBest
     foreach a (axtBest/chr*.axt)
 	set c=$a:t:r
 	echo "processing $c.axt -> ${c}_blastzBestMm3.psl"
@@ -1536,7 +1523,6 @@ Submission to last job:          1261s      21.02m     0.35h    0.01d
      set tbl="blastzBestMm3"
      cd $base/pslBest
      /cluster/bin/i386/hgLoadPsl hg16 chr*_${tbl}.psl
-XXXX
 
      # check results
      # the original axtBest stuff from the axtBest operation:
@@ -1902,7 +1888,7 @@ SEQ2_LEN=$BASE/S2.len
 #	type psl xeno rn3
 #	otherDb rn3
 
-# MAKE BLASTZ BEST RAT RN3 (TBD)
+# MAKE BLASTZ BEST RAT RN3 (DONE - 2003-08-08 - Hiram - Redone 08-26)
 
     # IMPORTANT NOTE - this axtBest process has been replaced by
     #	the chain -> net -> netToAxt process.  So, after chains and
@@ -1979,7 +1965,6 @@ doBestAxt $(root1) {check in line+ /cluster/bluearc/hg16/bed/blastz.rn3/axtChrom
 		../axtNet/$c.axt
 	echo "Complete: $c.net -> $c.axt"
     end
-XXXX
 
     mkdir -p /cluster/data/hg16/bed/blastz.rn3/axtBest
     cd /cluster/data/hg16/bed/blastz.rn3/axtBest
@@ -1988,6 +1973,7 @@ XXXX
     #  Convert those axt files to psl
     ssh eieio
     cd /cluster/data/hg16/bed/blastz.rn3
+    mkdir pslBest
     foreach a (axtBest/chr*.axt)
 	set c=$a:t:r
 	echo "processing $c.axt -> ${c}_blastzBestRn3.psl"
@@ -1998,30 +1984,26 @@ XXXX
 
     # Load tables
      ssh hgwdev
-     set base="/cluster/data/hg16/bed/blastz.rn3"
-     set tbl="blastzBestRn3"
-     cd $base/pslBest
-     /cluster/bin/i386/hgLoadPsl hg16 chr*_${tbl}.psl
+     cd /cluster/data/hg16/bed/blastz.rn3/pslBest
+     /cluster/bin/i386/hgLoadPsl hg16 chr*_blastzBestRn3.psl
 
      # check results
-     # the original axtBest stuff from the axtBest operation:
-#  featureBits hg16 blastzBestMm3
-#  1027438291 bases of 2865248791 (35.859%) in intersection
-     #  After going through the chain->net->axt operation:
-#  featureBits hg16 blastzBestMm3
-#   991468768 bases of 2865248791 (34.603%) in intersection
+#  Via the netToAxt process:
+#    featureBits hg16 blastzBestRn3
+#    976121391 bases of 2865248791 (34.068%) in intersection
+#  With the original axtBest process, before the netToAxt process:
+#    featureBits hg16 blastzBestRn3
+#    1002119325 bases of 2865248791 (34.975%) in intersection
 
-
-#  featureBits hg15 blastzBestMm3
-#  1035090465 bases of 2866466359 (36.110%) in intersection
-
+#  Hg15 results:
+#    featureBits hg15 blastzBestRn3
+#    992724355 bases of 2866466359 (34.632%) in intersection
 
     # Make /gbdb links and add them to the axtInfo table:
      mkdir -p /gbdb/hg16/axtBestRn3
      cd /gbdb/hg16/axtBestRn3
-     foreach f (/cluster/data/hg16/bed/blastz.rn3/axtNet/chr*.axt)
-       ln -s $f .
-     end
+     ln -s /cluster/data/hg16/bed/blastz.rn3/axtNet/chr*.axt .
+
      cd /cluster/data/hg16/bed/blastz.rn3/axtNet
      rm -f axtInfoInserts.sql
      touch axtInfoInserts.sql
@@ -2035,33 +2017,32 @@ XXXX
      # hgsql hg16 < ~/kent/src/hg/lib/axtInfo.sql
      hgsql hg16 < axtInfoInserts.sql
 
-    # Load tables
 
-     # check results
-     featureBits hg16 blastzBestRn3
-        # 1667035238 bases of 2571104688 (64.837%) in intersection
-     # no mouse alignment on rn2 
-     featureBits hg16 blastzRn3
-        # 1669090687 bases of 2571104688 (64.917%) in intersection
+# MAKING RAT AXTTIGHT FROM AXTBEST (DONE - 2003-08-26 - Hiram)
+    # After creating axtBest alignments above, use subsetAxt to get axtTight:
+    ssh eieio
+    cd /cluster/data/hg16/bed/blastz.rn3/axtNet
+    mkdir -p ../axtTight
+    tcsh
+    foreach i (*.axt)
+      echo $i
+      subsetAxt  $i ../axtTight/$i \
+        ~kent/src/hg/mouseStuff/subsetAxt/coding.mat 3400
+    end
 
-    # Make /gbdb links and add them to the axtInfo table:
-     mkdir -p /gbdb/hg16/axtBestRn3
-     cd /gbdb/hg16/axtBestRn3
-     foreach f ($base/axtBest/chr*.axt)
-       ln -s $f .
-     end
-     cd $base/axtBest
-     rm -f axtInfoInserts.sql
-     touch axtInfoInserts.sql
-     foreach f (/gbdb/hg16/axtBestRn3/chr*.axt)
-       set chr=$f:t:r
-       echo "INSERT INTO axtInfo (species, alignment, chrom, fileName) \
-                VALUES ('hg16','Blastz Best in Genome','$chr','$f');" \
-         >> axtInfoInserts.sql
-     end
-     # already done, above
-     # hgsql hg16 < ~/kent/src/hg/lib/axtInfo.sql
-     hgsql hg16 < axtInfoInserts.sql
+    # translate to psl
+    cd ../axtTight
+    mkdir -p ../pslTight
+    foreach i (*.axt)
+      set c = $i:r
+      axtToPsl $i ../S1.len ../S2.len ../pslTight/${c}_blastzTightRn3.psl
+      echo "Done: $i"
+    end
+
+    # Load tables into database
+    ssh hgwdev
+    cd /cluster/data/hg16/bed/blastz.rn3/pslTight
+    hgLoadPsl hg16 chr*_blastzTightRn3.psl
 
 # CHAIN RAT BLASTZ (DONE 2003-08-08 - Hiram)
 
@@ -2570,6 +2551,9 @@ cat << 'EOF' > gsub
 
 # MAKE BLASTZ BEST SELF (TBD)
 
+    #	Pick up on this process below after chain and nets have been
+    #	done.  This run.3 business is obsolete
+
     # Consolidate AXT files to chrom level, sort, pick best, make psl.
     ssh eieio
     cd /cluster/data/hg16/bed/blastzSelf/axtChrom
@@ -2641,6 +2625,79 @@ ut of memory - request size 984185908 bytes
 Out of memory - request size 973662824 bytes
 
 XXXX
+
+    #   Here is the replacement process for the above sequence
+    #	Better yet, Jim says to be consistent, do all the chroms in
+    #	this manner:
+    ssh eieio
+    cd /cluster/data/hg16/bed/blastzSelf/axtChain
+    mkdir mouseNet
+    netSplit mouse.net mouseNet
+    foreach n (mouseNet/chr*.net)
+	set c=$n:t:r
+	echo "netToAxt: $c.net -> $c.axt"
+	rm -f ../axtNet/$c.axt
+	netToAxt mouseNet/$c.net chain/$c.chain \
+		/cluster/bluearc/scratch/hg/gs.17/build34/bothMaskedNibs \
+		/cluster/data/mm3.RM030619/mixedNib \
+		../axtNet/$c.axt
+	echo "Complete: $c.net -> $c.axt"
+    end
+
+    mkdir -p /cluster/data/hg16/bed/blastzSelf/axtBest
+    cd /cluster/data/hg16/bed/blastzSelf/axtBest
+    ln -s ../axtNet/chr*.axt .
+
+    #  Convert those axt files to psl
+    ssh eieio
+    cd /cluster/data/hg16/bed/blastzSelf
+    mkdir pslBest
+    foreach a (axtBest/chr*.axt)
+	set c=$a:t:r
+	echo "processing $c.axt -> ${c}_blastzBestMm3.psl"
+    /cluster/bin/i386/axtToPsl axtBest/${c}.axt \
+	S1.len S2.len pslBest/${c}_blastzBestMm3.psl
+	echo "Done: ${c}_blastzBestMm3.psl"
+    end
+
+    # Load tables
+     ssh hgwdev
+     set base="/cluster/data/hg16/bed/blastzSelf"
+     set tbl="blastzBestMm3"
+     cd $base/pslBest
+     /cluster/bin/i386/hgLoadPsl hg16 chr*_${tbl}.psl
+
+     # check results
+     # the original axtBest stuff from the axtBest operation:
+#  featureBits hg16 blastzBestMm3
+#  1027438291 bases of 2865248791 (35.859%) in intersection
+     #  After going through the chain->net->axt operation:
+#  featureBits hg16 blastzBestMm3
+#   991468768 bases of 2865248791 (34.603%) in intersection
+
+
+#  featureBits hg15 blastzBestMm3
+#  1035090465 bases of 2866466359 (36.110%) in intersection
+
+
+    # Make /gbdb links and add them to the axtInfo table:
+     mkdir -p /gbdb/hg16/axtBestMm3
+     cd /gbdb/hg16/axtBestMm3
+     foreach f (/cluster/data/hg16/bed/blastzSelf/axtNet/chr*.axt)
+       ln -s $f .
+     end
+     cd /cluster/data/hg16/bed/blastzSelf/axtNet
+     rm -f axtInfoInserts.sql
+     touch axtInfoInserts.sql
+     foreach f (/gbdb/hg16/axtBestMm3/chr*.axt)
+       set chr=$f:t:r
+       echo "INSERT INTO axtInfo (species, alignment, chrom, fileName) \
+                VALUES ('mm3','Blastz Best in Genome','$chr','$f');" \
+         >> axtInfoInserts.sql
+     end
+     hgsql hg16 < ~/kent/src/hg/lib/axtInfo.sql
+     hgsql hg16 < axtInfoInserts.sql
+
     # 75 minutes.  Almost all of which is I/O time:
     ssh kkr1u00
     # remove the two empty results:
@@ -2732,6 +2789,30 @@ doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain} {check
 # Longest job:                     7146s     119.10m     1.99h    0.08d
 # Submission to last job:          7146s     119.10m     1.99h    0.08d
 
+    #  The chr19 recovery process:
+    ssh kkr1u00
+    cd /cluster/data/hg16/bed/blastzSelf/axtChain/run1
+    cat << '_EOF_' > gsubQ
+#LOOP
+doChainQ.sh $(path2) $(path1) {check out line+ chain/$(root1).$(path2).chain} {check out line+ out/$(root1).$(path2).out}
+#ENDLOOP
+'_EOF_'
+
+    cat << '_EOF_' > doChainQ.sh
+#!/bin/sh
+axtFilter -q=$1 $2 | axtChain stdin \
+	/cluster/store4/gs.17/build34/nib \
+	/cluster/store4/gs.17/build34/nib $3 > $4
+'_EOF_'
+    chmod +x doChainQ.sh
+    ls ../../axtChrom/*.axt > chr19Axt.lst
+    pushd /cluster/data/hg16
+    ls -d ?{,?} | sed -e "s/^/chr/" | grep -v chr19 \
+	> /cluster/data/hg16/bed/blastzSelf/axtChain/run1/chrom19.lst
+    popd
+
+    gensub2 chr19.lst chrom19.lst gsubQ spec19
+
     # now on the cluster server, sort chains
     ssh eieio
     cd /cluster/data/hg16/bed/blastzSelf/axtChain
@@ -2751,4 +2832,53 @@ doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain} {check
         echo done $c
     end
 XXXX
+
+# NET SELF BLASTZ (TBD)
+
+    ssh eieio
+    cd /cluster/data/hg16/bed/blastzSelf/axtChain
+    mkdir preNet
+    cd chain
+    foreach i (*.chain)
+      echo preNetting $i
+      /cluster/bin/i386/chainPreNet $i /cluster/data/hg16/chrom.sizes \
+                        /cluster/data/hg16/chrom.sizes ../preNet/$i
+    end
+    # This foreach loop will take about 15 min to execute.
+
+    cd ..
+    mkdir n1 
+    cd preNet
+    foreach i (*.chain)
+      set n = $i:r.net
+      echo primary netting $i
+      /cluster/bin/i386/chainNet $i -minSpace=1 /cluster/data/hg16/chrom.sizes \
+                            /cluster/data/hg16/chrom.sizes ../n1/$n /dev/null
+    end
+    #  The above takes about 5 minutes
+
+    cd ..
+    cat n1/*.net | /cluster/bin/i386/netSyntenic stdin hNoClass.net
+    # memory usage 531062784, utime 4416 s/100, stime 542
+
+    ssh hgwdev
+    cd /cluster/data/hg16/bed/blastzSelf/axtChain
+    ~/bin/i386/netClass hNoClass.net hg16 hg16 human.net \
+	-tNewR=/cluster/bluearc/scratch/hg/gs.17/build34/linSpecRep.notInHuman \
+	-qNewR=/cluster/bluearc/scratch/hg/gs.17/build34/linSpecRep.notInHuman
+
+    # If things look good do
+    ssh eieio
+    cd /cluster/data/hg16/bed/blastzSelf/axtChain
+    rm -r n1 hNoClass.net
+    # Make a 'syntenic' subset of these with
+    netFilter -syn human.net > humanSyn.net
+
+    # Load the nets into database 
+    ssh hgwdev
+    cd /cluster/data/hg16/bed/blastzSelf/axtChain
+    netFilter -minGap=10 human.net |  hgLoadNet hg16 selfNet stdin
+    netFilter -minGap=10 humanSyn.net | hgLoadNet hg16 syntenySelfNet stdin
+
+    # Add entries for net and chain to human/hg16 trackDb
 
