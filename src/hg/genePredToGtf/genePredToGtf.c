@@ -8,7 +8,7 @@
 #include "genePred.h"
 #include "genePredName.h"
 
-static char const rcsid[] = "$Id: genePredToGtf.c,v 1.3 2004/03/01 17:58:04 daryl Exp $";
+static char const rcsid[] = "$Id: genePredToGtf.c,v 1.4 2004/03/09 01:42:41 daryl Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -22,59 +22,14 @@ errAbort(
   "options:\n"
   "   -utr   Add UTRs to the output\n"
   "   -order Order by chrom, txStart\n"
-  "   -name  Include geneName from refFlat table\n"
+  "Note: use refFlat table to include geneName\n"
   );
 }
 
 static struct optionSpec options[] = {
    {"utr", OPTION_BOOLEAN},
    {"order", OPTION_BOOLEAN},
-   {"name", OPTION_BOOLEAN},
 };
-
-struct genePred *genePredLoadTable(char *database, char *table)
-/* Load all genePreds from table. */
-{
-struct genePred *gpList = NULL, *gp;
-struct sqlConnection *conn = sqlConnect(database);
-char query[256];
-struct sqlResult *sr;
-char **row;
-
-if (optionExists("order"))
-    safef(query, sizeof(query), "select * from %s order by chrom, txStart", table);
-else
-    safef(query, sizeof(query), "select * from %s", table);
-sr = sqlGetResult(conn, query);
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-    gp = genePredLoad(row);
-    slAddHead(&gpList, gp);
-    }
-sqlFreeResult(&sr);
-sqlDisconnect(&conn);
-slReverse(&gpList);
-return gpList;
-}
-
-static void writeGtfLine(FILE *f, char *source, char *geneName,
-	struct genePred *gp, char *type, 
-	int start, int end, int exonIx)
-/* Write a single exon to GTF file */
-{
-fprintf(f, "%s\t", gp->chrom);
-fprintf(f, "%s\t", source);
-fprintf(f, "%s\t", type);
-fprintf(f, "%d\t", start+1);
-fprintf(f, "%d\t", end);
-fprintf(f, ".\t");	/* Phase, we should fill in when we can. */
-fprintf(f, "%s\t", gp->strand);
-fprintf(f, ".\t");	/* Score. */
-fprintf(f, "gene_id \"%s\"; ", geneName);
-fprintf(f, "transcript_id \"%s\"; ", geneName);
-fprintf(f, "exon_number \"%d\"; ", exonIx+1);
-fprintf(f, "exon_id \"%s.%d\";\n", geneName, exonIx+1);
-}
 
 char *findUniqueName(struct hash *dupeHash, char *root)
 /* If root name is already in hash, return root_1, root_2
@@ -96,92 +51,56 @@ else
     }
 }
 
-void genePredWriteToGtf(struct genePred *gp, char *source, 
-	struct hash *dupeHash, FILE *f)
-/* Write out genePred to GTF file. */
-{
-int i;
-char *geneName = findUniqueName(dupeHash, gp->name);
-for (i=0; i<gp->exonCount; ++i)
-    {
-    int start = gp->exonStarts[i];
-    int end = gp->exonEnds[i];
-    int exonStart = start;
-    int exonEnd = end;
-
-    writeGtfLine(f, source, geneName, gp, "exon", start, end, i);
-    if (start < gp->cdsStart) start = gp->cdsStart;
-    if (end > gp->cdsEnd) end = gp->cdsEnd;
-    if (optionExists("utr"))
-	{
-	if (start < end)
-	    {
-	    if (start > exonStart)
-		writeGtfLine(f, source, geneName, gp, "UTR", exonStart, start, i);
-	    writeGtfLine(f, source, geneName, gp, "CDS", start, end, i);
-	    if (end < exonEnd)
-		writeGtfLine(f, source, geneName, gp, "UTR", end, exonEnd, i);
-	    }
-	else 
-	    writeGtfLine(f, source, geneName, gp, "UTR", exonStart, exonEnd, i);
-	}
-    else if (start < end)
-	writeGtfLine(f, source, geneName, gp, "CDS", start, end, i);
-    }
-}
-
 struct genePredName *genePredNameLoadTable(char *database, char *table)
 /* Load all genePredNames from table. */
 {
-struct genePredName *gpnList = NULL, *gpn;
+struct genePredName *gpnList = NULL;
 struct sqlConnection *conn = sqlConnect(database);
 char query[256];
-struct sqlResult *sr;
-char **row;
+char fields[]= "'' as geneName, ";
+char order[]= "order by chrom, txStart";
 
-if (optionExists("order"))
-    safef(query, sizeof(query), "select * from %s order by chrom, txStart", table);
-else
-    safef(query, sizeof(query), "select * from %s", table);
-sr = sqlGetResult(conn, query);
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-    gpn = genePredNameLoad(row);
-    slAddHead(&gpnList, gpn);
-    }
-sqlFreeResult(&sr);
+if (!optionExists("order"))
+    ZeroVar(order);
+if (sameString(table,"refFlat"))
+    ZeroVar(fields);
+safef(query, sizeof(query), "select %s%s.* from %s %s", fields, table, table, order);
+gpnList = genePredNameLoadByQuery(conn, query);
 sqlDisconnect(&conn);
-slReverse(&gpnList);
 return gpnList;
 }
 
-static void writeGtfLineName(FILE *f, char *source, char *name, char *geneName,
-	struct genePredName *gpn, char *type, 
+static void writeGtfLine(FILE *f, char *source, char *name, char *geneName,
+	char *chrom, char *strand, char *type, 
 	int start, int end, int exonIx)
 /* Write a single exon to GTF file */
 {
-fprintf(f, "%s\t", gpn->chrom);
+fprintf(f, "%s\t", chrom);
 fprintf(f, "%s\t", source);
 fprintf(f, "%s\t", type);
 fprintf(f, "%d\t", start+1);
 fprintf(f, "%d\t", end);
 fprintf(f, ".\t");	/* Phase, we should fill in when we can. */
-fprintf(f, "%s\t", gpn->strand);
+fprintf(f, "%s\t", strand);
 fprintf(f, ".\t");	/* Score. */
 fprintf(f, "gene_id \"%s\"; ", name);
 fprintf(f, "transcript_id \"%s\"; ", name);
 fprintf(f, "exon_number \"%d\"; ", exonIx+1);
-fprintf(f, "exon_id \"%s.%d\"; ", name, exonIx+1);
-fprintf(f, "gene_name \"%s\";\n", geneName);
+fprintf(f, "exon_id \"%s.%d\";", name, exonIx+1);
+if (strlen(geneName)>0)
+    fprintf(f, " gene_name \"%s\";", geneName);
+fprintf(f, "\n");
 }
 
-void genePredNameWriteToGtf(struct genePredName *gpn, char *source, 
+void genePredWriteToGtf(struct genePredName *gpn, char *source, 
 	struct hash *dupeHash, FILE *f)
 /* Write out genePredName to GTF file. */
 {
 int i;
 char *name = findUniqueName(dupeHash, gpn->name);
 char *geneName = gpn->geneName;
+char *chrom = gpn->chrom;
+char *strand = gpn->strand;
 
 for (i=0; i<gpn->exonCount; ++i)
     {
@@ -190,7 +109,7 @@ for (i=0; i<gpn->exonCount; ++i)
     int exonStart = start;
     int exonEnd = end;
 
-    writeGtfLineName(f, source, name, geneName, gpn, "exon", start, end, i);
+    writeGtfLine(f, source, name, geneName, chrom, strand, "exon", start, end, i);
     if (start < gpn->cdsStart) start = gpn->cdsStart;
     if (end > gpn->cdsEnd) end = gpn->cdsEnd;
     if (optionExists("utr"))
@@ -198,43 +117,83 @@ for (i=0; i<gpn->exonCount; ++i)
 	if (start < end)
 	    {
 	    if (start > exonStart)
-		writeGtfLineName(f, source, name, geneName, gpn, "UTR", exonStart, start, i);
-	    writeGtfLineName(f, source, name, geneName, gpn, "CDS", start, end, i);
+		writeGtfLine(f, source, name, geneName, chrom, strand, "UTR", exonStart, start, i);
+	    writeGtfLine(f, source, name, geneName, chrom, strand, "CDS", start, end, i);
 	    if (end < exonEnd)
-		writeGtfLineName(f, source, name, geneName, gpn, "UTR", end, exonEnd, i);
+		writeGtfLine(f, source, name, geneName, chrom, strand, "UTR", end, exonEnd, i);
 	    }
 	else 
-	    writeGtfLineName(f, source, name, geneName, gpn, "UTR", exonStart, exonEnd, i);
+	    writeGtfLine(f, source, name, geneName, chrom, strand, "UTR", exonStart, exonEnd, i);
 	}
     else if (start < end)
-	writeGtfLineName(f, source, name, geneName, gpn, "CDS", start, end, i);
+	writeGtfLine(f, source, name, geneName, chrom, strand, "CDS", start, end, i);
     }
 }
 
+char *sqlUnsignedDynamicArraySpoof(int *ui, int length)
+{
+char *tmp=NULL;
+char *ret=NULL;
+int i;
+
+for (i=0; i<length; i++)
+    {
+    sprintf(tmp, ",%d", ui[i]);
+    strcat(ret, tmp);
+    }
+return ret+1;
+}
+
+struct genePredName *genePredNameSpoof(struct genePred *gp)
+/* Convert a genePred struct to a genePredName struct by adding a NULL geneName *
+ * Dispose of this with genePredNameFree(). */
+{
+struct genePredName *ret;
+int sizeOne,i;
+char *s, *tmp;
+
+if (gp==NULL) 
+    return NULL;
+
+AllocVar(ret);
+ret->exonCount = gp->exonCount;
+ret->geneName = NULL;
+ret->name = cloneString(gp->name);
+ret->chrom = cloneString(gp->chrom);
+strcpy(ret->strand, gp->strand);
+ret->txStart = gp->txStart;
+ret->txEnd = gp->txEnd;
+ret->cdsStart = gp->cdsStart;
+ret->cdsEnd = gp->cdsEnd;
+tmp=sqlUnsignedDynamicArraySpoof(ret->exonStarts, gp->exonCount);
+sqlUnsignedDynamicArray(tmp, &ret->exonStarts, &sizeOne);
+assert(sizeOne == ret->exonCount);
+tmp=sqlUnsignedDynamicArraySpoof(ret->exonEnds, gp->exonCount);
+sqlUnsignedDynamicArray(tmp, &ret->exonEnds, &sizeOne);
+assert(sizeOne == ret->exonCount);
+return ret;
+}
+
 void genePredToGtf(char *database, char *table, char *gtfOut)
-/* genePredNameToGtf - Convert genePredName table or file to gtf.. */
+/* genePredToGtf - Convert genePredName table or file to gtf.. */
 {
 FILE *f = mustOpen(gtfOut, "w");
 struct hash *dupeHash = newHash(16);
-struct genePred *gpList = NULL, *gp;
+struct genePred *gpList = NULL, *gp = NULL;
 struct genePredName *gpnList = NULL, *gpn;
 
-if (sameString(table, "refFlat"))
+if (sameString(database, "file"))
     {
-    gpnList = genePredNameLoadTable(database, table);
-    for (gpn = gpnList; gpn != NULL; gpn = gpn->next)
-	genePredNameWriteToGtf(gpn, table, dupeHash, f);
-    carefulClose(&f);
-    return;
-    }
-else if (sameString(database, "file"))
+    printf("FILE\n");
     gpList = genePredLoadAll(table);
+    gpnList = genePredNameSpoof(gp);
+    }
 else
-    gpList = genePredLoadTable(database, table);
-
-for (gp = gpList; gp != NULL; gp = gp->next)
-    genePredWriteToGtf(gp, table, dupeHash, f);
+    gpnList = genePredNameLoadTable(database, table);
+for (gpn = gpnList; gpn != NULL; gpn = gpn->next)
+    genePredWriteToGtf(gpn, table, dupeHash, f);
 carefulClose(&f);
+return;
 }
 
 int main(int argc, char *argv[])
