@@ -373,7 +373,6 @@ switch (vis)
      }
 
 
-
 	tg->height = lines * tg->lineHeight;
 	//tg->height = tg->lineHeight; /*NO FULL FOR THESE TRACKS*/
 	break;
@@ -7916,9 +7915,6 @@ if (withLeftLabels)
 		    newy = y;
 		    
 		    
-		    /* Set the clipping rectangle to account for the buttons */
-		    mgSetClip(mg, gfxBorder + trackTabWidth, gfxBorder, inWid - (trackTabWidth), pixHeight - (2 * gfxBorder));
-		    
 		    /* Do some fancy stuff for sample tracks. Draw y-value limits for 'sample' tracks. */
 		    if(group->subType == lfSubSample )
 			{
@@ -7966,6 +7962,10 @@ if (withLeftLabels)
 			}
 		    else
 			{
+
+		    /* Set the clipping rectangle to account for the buttons */
+		    mgSetClip(mg, gfxBorder + trackTabWidth, gfxBorder, inWid - (trackTabWidth), pixHeight - (2 * gfxBorder));
+		    
 			mgTextRight(mg, gfxBorder, y, inWid - 1, itemHeight, group->ixColor, font, name);
                         /* Reset the clipping rectangle to its original proportions */
 			mgSetClip(mg, gfxBorder, gfxBorder, inWid, pixHeight - (2 * gfxBorder));
@@ -8112,7 +8112,9 @@ for (group = groupList; group != NULL; group = group->next)
 		for (item = group->items; item != NULL; item = item->next)
 		    {
 		    int height = group->itemHeight(group, item);
-		    
+
+            
+
 		    /*wiggle tracks don't always increment height (y-value) here*/
 		    newy = y;
 		    if( !start && group->subType == lfSubSample )
@@ -8121,25 +8123,21 @@ for (group = groupList; group != NULL; group = group->next)
 			    {
 			    newy += updateY( group->itemName(group, item), 
 					     group->itemName(group, item->next), height );
-			    if( newy == y )
-				{
-				start = 0;
-				continue;
-				}
 			    }
 			}
 		    else
-			newy += height;
-		    start = 0;
-		    
-		    if (!group->mapsSelf)
-			{
-			mapBoxHc(group->itemStart(group, item), group->itemEnd(group, item),
-				 trackPastTabX,y,trackPastTabWidth,height, group->mapName, 
-				 group->mapItemName(group, item), 
-				 group->itemName(group, item));
-			}
-		    y = newy;
+			    newy += height;
+
+            if (newy != y && !group->mapsSelf)
+	    	{
+	    	    	mapBoxHc(group->itemStart(group, item), group->itemEnd(group, item),
+				     trackPastTabX,y,trackPastTabWidth,height, group->mapName, 
+				     group->mapItemName(group, item), 
+				     group->itemName(group, item));
+		    }
+            start = 0;
+
+		   	y = newy;
 		    }
 		break;
 	    case tvDense:
@@ -8147,6 +8145,7 @@ for (group = groupList; group != NULL; group = group->next)
 		    y += fontHeight;
 		mapBoxToggleVis(trackPastTabX,y,trackPastTabWidth,group->lineHeight,group);
 		y += group->lineHeight;
+    
 		break;
 	    }
         }
