@@ -796,6 +796,7 @@ group regulation
 priority 85
 visibility hide
 type bed 15 +
+expTable affyExps
 
 track affyRatio
 shortLabel GNF Ratio
