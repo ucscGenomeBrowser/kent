@@ -440,11 +440,23 @@ TrEMBL-NEW and their corresponding mRNAs from Genbank
   href="#SimpleRepeats">simpleRepeat</A> 
   - Simple tandem repeats generated with the TRF program 
   <LI><A 
-  href="#GenePredictions">slam</A> 
-  - Slam predictions of coding exons in homologous DNA sequences
+  href="#GenePredictions">slamHuman</A> 
+  - Slam predictions of coding exons in homologous DNA sequences (human genome)
   <LI><A 
-  href="#BED">slamNonCoding</A> 
-  - Slam predictions of conserved noncoding regions in homologous DNA sequences 
+  href="#GenePredictions">slamMouse</A> 
+  - Slam predictions of coding exons in homologous DNA sequences (mouse genome)
+  <LI><A 
+  href="#GenePredictions">slamRat</A> 
+  - Slam predictions of coding exons in homologous DNA sequences (rat genome)
+  <LI><A 
+  href="#BED">slamHumanNonCoding</A> 
+  - Slam predictions of conserved noncoding regions in homologous DNA sequences (human genome) 
+  <LI><A 
+  href="#BED">slamMouseNonCoding</A> 
+  - Slam predictions of conserved noncoding regions in homologous DNA sequences  (mouse genome)
+  <LI><A 
+  href="#BED">slamRatNonCoding</A> 
+  - Slam predictions of conserved noncoding regions in homologous DNA sequences (rat genome)
   <LI><A 
   href="#SNPsites">snpNih</A> 
   - Locations of random SNPs as determined by the SNP Consortium 
@@ -515,6 +527,12 @@ TrEMBL-NEW and their corresponding mRNAs from Genbank
   <LI><A 
   href="#BED">uniGene_2</A> 
   - UniGene Alignments and SAGE Info (new version)  </LI>
+  <LI><A 
+  href="#GenePredictions">vegaGene</A> 
+  - Annotated genes from the <A HREF="http://vega.sanger.ac.uk/">Vertebrate Genome Annotation (VEGA) database</A> (Human chr14, 20, 22 only) </LI>
+  <LI><A 
+  href="#GenePredictions">vegaPseudoGene</A> 
+  - Annotated pseudogenes and immunoglobulin segments from the VEGA database</A> (Human chr14, 20, 22 only) </LI>
   <LI><A 
   href="#PslInfo">xenoEst</A> 
   - Nonhuman ESTs from Genbank </LI>
@@ -643,7 +661,7 @@ The following definition is used for several tables as follows:<BR>
 - nci60 uses the first 15 fields of this table. <BR>
 - perlegen uses the first 12 fields of this table. <BR>
 - rosetta uses the first 15 fields of this table. <BR>
-- slamNonCoding uses the first 5 fields of this table. <BR>
+- slamNonCoding* use the first 5 fields of this table. <BR>
 - superfamily uses the first 4 fields of this table. <BR>
 - uniGene_2 uses the first 12 fields of this table. <BR>
 <PRE>table bed
@@ -928,7 +946,7 @@ EST Clusters</H4>
 </PRE>    
 
 <H4><A name=GenePredictions></A>Gene Predictions and RefSeq Genes</H4>
-The following definition is used for the acembly, ensGene, geneid, genieAlt, genScan, genscanSubopt, refGene, sanger20, sanger22, slam, softberryGene, tigrGeneIndex, twinscan, and similar tables. In alternative splicing situations
+The following definition is used for the acembly, ensGene, geneid, genieAlt, genScan, genscanSubopt, refGene, sanger20, sanger22, slam*, softberryGene, tigrGeneIndex, twinscan, vegaGene, vegaPseudoGene, and similar tables. In alternative splicing situations
 each transcript has a row in this table.
 <PRE>table genePred
 "A gene prediction."
