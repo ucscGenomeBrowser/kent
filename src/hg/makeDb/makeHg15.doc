@@ -3664,7 +3664,7 @@ done
 #	drBlastTab           knownGeneMrna         mmBlastTab    
 #	dupSpMrna            knownGenePep          mrnaRefseq    
 #	keggMapDesc          knownGene             scBlastTab    
-#	keggPathway          knownGnfDistance      spMrna    
+#	keggPathway          gnfU95Distance        spMrna    
 #	kgAlias              knownIsoforms    
 
 
@@ -3801,7 +3801,7 @@ hgMapToGene hg15 affyRatio knownGene knownToU95
 #	row count changed from 13403 to 10949
 cd /tmp
 #	hgFixed.gnfHumanU95Exps argument is unused, no need to exist
-time hgExpDistance hg15 hgFixed.gnfHumanU95MedianRatio hgFixed.gnfHumanU95Exps knownGnfDistance  -lookup=knownToU95
+time hgExpDistance hg15 hgFixed.gnfHumanU95MedianRatio hgFixed.gnfHumanU95Exps gnfU95Distance    -lookup=knownToU95
 #	row count went from 11718000 to 10333000
 # Got 10333 unique elements in hgFixed.gnfHumanU95MedianRatio
 #	real    10m42.446s
