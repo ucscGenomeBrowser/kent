@@ -474,12 +474,8 @@ struct ssFfItem *ffl, *newFflList = NULL, *lastFfl = NULL;
 int ffCountAll = 0;
 int ffCountOne;
 
-if (bundle->isProt)
-    errAbort("proteins not yet supported in trimBundle");
 for (ffl = bundle->ffList; ffl != NULL; ffl = ffl->next)
-    {
-    ffl->trimScore = ffScore(ffl->ff, stringency);
-    }
+    ffl->trimScore = ffScoreSomething(ffl->ff, stringency, bundle->isProt);
 slSort(&bundle->ffList, cmpFflTrimScore);
 
 for (ffl = bundle->ffList; ffl != NULL; ffl = ffl->next)

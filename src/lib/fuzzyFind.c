@@ -385,20 +385,23 @@ while (--count >= 0)
 return score;
 }
 
-int ffScore(struct ffAli *ali, enum ffStringency stringency)
+int ffScoreSomething(struct ffAli *ali, enum ffStringency stringency,
+   boolean isProt)
 /* Score alignment. */
 {
 int score = 0;
 int oneScore;
+int (*scoreMatch)(char *a, char *b, int size);
 
 if (ali == NULL)
     return -0x7FFFFFFF;
+scoreMatch = (isProt ? aaScoreMatch : dnaScoreMatch );
 while (ali->left != NULL) ali = ali->left;
 while (ali != NULL)
     {
     int len = ali->hEnd - ali->hStart;
     struct ffAli *right = ali->right;
-    oneScore = dnaScoreMatch(ali->hStart, ali->nStart, len);
+    oneScore = scoreMatch(ali->hStart, ali->nStart, len);
     score += oneScore;
     if (right)  /* Calculate gap penalty */
         {
@@ -409,6 +412,12 @@ while (ali != NULL)
 return score;
 }
 
+int ffScore(struct ffAli *ali, enum ffStringency stringency)
+/* Score alignment. */
+{
+return ffScoreSomething(ali, stringency, FALSE);
+}
+
 int ffScoreCdna(struct ffAli *ali)
 /* Figure out overall score of this alignment. 
  * Perfect match is number of bases in needle. */
@@ -416,6 +425,11 @@ int ffScoreCdna(struct ffAli *ali)
 return ffScore(ali, ffCdna);
 }
 
+int ffScoreProtein(struct ffAli *ali, enum ffStringency stringency)
+/* Figure out overall score of protein alignment. */
+{
+return ffScoreSomething(ali, stringency, TRUE);
+}
 
 static boolean leftNextMatch(struct ffAli *ali, DNA *ns, DNA *ne, DNA *hs, DNA *he, 
     int gapPenalty, int maxSkip)
