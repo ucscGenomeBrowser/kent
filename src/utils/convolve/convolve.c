@@ -5,27 +5,15 @@
 #include	<math.h>
 
 
-static char const rcsid[] = "$Id: convolve.c,v 1.1 2003/10/08 18:29:22 hiram Exp $";
+static char const rcsid[] = "$Id: convolve.c,v 1.2 2003/10/08 18:31:12 hiram Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
-    {"offset", OPTION_LONG_LONG},
-    {"binsize", OPTION_LONG_LONG},
-    {"dataSpan", OPTION_LONG_LONG},
-    {"chrom", OPTION_STRING},
-    {"wibFile", OPTION_STRING},
-    {"name", OPTION_STRING},
     {"verbose", OPTION_BOOLEAN},
     {NULL, 0}
 };
 
-static long long add_offset = 0;	/* to allow "lifting" of the data */
-static long long binsize = 1024;	/* # of data points per table row */
-static long long dataSpan = 1;		/* bases spanned per data point */
 static boolean verbose = FALSE;		/* describe what happens	*/
-static char * chrom = (char *) NULL;	/* to specify chrom name	*/
-static char * wibFile = (char *) NULL;	/* to name the .wib file	*/
-static char * name = (char *) NULL;	/* to specify feature name	*/
 
 static void usage()
 {
