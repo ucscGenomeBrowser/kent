@@ -421,10 +421,8 @@ public class ApacheReport {
      throws Exception {
 
     File f = new File(fileMonth);
-    // System.exit(1);
     FileReader  frMonth = new FileReader(f);
     BufferedReader  brMonth = new BufferedReader(frMonth);
-
 
     // get existing file and load into linklist,
     // filtering out the closing HTML tags.
@@ -451,12 +449,14 @@ public class ApacheReport {
     // print LinkedList
     ListIterator iter = ll.listIterator(0);
 
-    String outLine;
-
+    String outLine = "";
     while (iter.hasNext()) {
+      String prevLine = outLine; 
       outLine = iter.next().toString();
-      // System.out.println(outLine);
-      pwMonth.print(outLine + "\n");
+      // don't reprint line if run twice in same day
+      if (! outLine.equals(prevLine)) {
+        pwMonth.print(outLine);
+      }
     }
 
     // print footer back.
@@ -480,7 +480,7 @@ public class ApacheReport {
     newDataLine = "<TR><TD>" + index + "</TD> " +
                       "<TD>" + access + "</TD> " +
                       "<TD>" + error + "</TD> " +
-                      "<TD>" + totPercent + "</TD> </TR>\n";
+                      "<TD>" + totPercent + "</TD> </TR>";
     return(newDataLine);
   }
 }
