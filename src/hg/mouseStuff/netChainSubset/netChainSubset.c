@@ -6,6 +6,8 @@
 #include "chain.h"
 #include "chainNet.h"
 
+char *type = NULL;
+
 void usage()
 /* Explain usage and exit. */
 {
@@ -15,6 +17,7 @@ errAbort(
   "   netChainSubset in.net in.chain out.chain\n"
   "options:\n"
   "   -gapOut=gap.tab - Output gap sizes to file\n"
+  "   -type=XXX - Restrict output to particular type in net file\n"
   );
 }
 
@@ -67,6 +70,11 @@ void convertFill(struct cnFill *fill,
 {
 struct chain *subChain, *chainToFree;
 
+if (type != NULL)
+    {
+    if (!sameString(type, fill->type))
+        return;
+    }
 chainSubsetOnT(chain, fill->tStart, fill->tStart + fill->tSize, 
 	&subChain, &chainToFree);
 assert(subChain != NULL);
@@ -117,6 +125,7 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 optionHash(&argc, argv);
+type = optionVal("type", type);
 if (argc != 4)
     usage();
 netChainSubset(argv[1], argv[2], argv[3]);
