@@ -32,7 +32,7 @@ char *wellMapped[] =
     
 char *finChroms[] = 
 /* Chromosomes that are finished - no need to assemble these. */
-    { "21", "22", };
+    { "20", "21", "22", };
 
 FILE *errLog;
 
@@ -182,6 +182,7 @@ bool isCommitted;
 
 while (lineFileNext(in, &line, &lineSize))
     {
+    if (line[0] == '#') continue;
     if (lineSize >= sizeof(oline))
 	errAbort("Line %d of %s too long (%d bytes)", in->lineIx, in->fileName, lineSize);
     memcpy(oline, line, lineSize+1);
@@ -322,6 +323,7 @@ slAddTail(pContigList, contig);
 contig->name = cloneString("ctg_na");
 while (lineFileNext(in, &line, &lineSize))
     {
+    if (line[0] == '#') continue;
     if (lineSize >= sizeof(oline))
 	errAbort("Line %d of %s too long (%d bytes)", in->lineIx, in->fileName, lineSize);
     memcpy(oline, line, lineSize+1);
@@ -379,6 +381,7 @@ while (lineFileNext(in, &line, &lineSize))
     {
     struct cmContig **pContigList;
 
+    if (line[0] == '#') continue;
     if (!startsWith("start human SUPERLINK", line))
 	continue;
     wordCount = chopLine(line, words);
