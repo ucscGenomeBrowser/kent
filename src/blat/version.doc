@@ -1,3 +1,6 @@
+20:
+     o  Recompiled without -o3 in Linux.  This recent change to a makefile
+        ended up causing problems.
 19: 
      o  Bumping max size of intron that gets stitched to 750kb from 500kb.
      o  Handle a rare case that could lead to zero sized exons.
