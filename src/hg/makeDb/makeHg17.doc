@@ -11083,6 +11083,7 @@ cat `ls -1 *.lav | sort -g` \
 # featureBits -chrom=chr1 hg17 refGene:cds blastzDanRer2Default -enrichment
 # refGene:cds 1.301%, blastzDanRer2Default 1.701%, both 0.846%, cover 65.04%, 
 # enrich 38.24x
+# same as first run but with no Y option set (default Y)
 # featureBits -chrom=chr1 hg17 refGene:cds blastzDanRer2NoY -enrichment
 # refGene:cds 1.301%, blastzDanRer2NoY 3.980%, both 0.877%, cover 67.47%, 
 # enrich 16.95x
@@ -11090,6 +11091,8 @@ cat `ls -1 *.lav | sort -g` \
 # row count:
 # danRer2  122160
 # danRer2L8k 62815
+# danRer2Default 75818
+# danRer2NoY 124129
 # can be pruned at the chaining step.
 # trackDb - change Zebrafish Blastz to danRer1 Blastz and display this track
 # for danRer2 as Zebrafish Blastz
@@ -11114,6 +11117,7 @@ cat `ls -1 *.lav | sort -g` \
 #   no need to reload
 
 # CHAIN DANRER2 BLASTZ (DONE, 2004-12-09, hartera)
+# RELOAD CHAINS WIH FILTERING (DONE, 2004-12-10, hartera)
     # Run axtChain on little cluster
     ssh kki
     cd /cluster/data/hg17/bed/blastz.danRer2
@@ -11216,7 +11220,10 @@ axtChain -scoreScheme=/cluster/data/blastz/HoxD55.q \
     ssh hgwdev
     echo 'drop table chr1_chainDanRer2Filt5k;' | hgsql hg17
     echo 'drop table chr1_chainDanRer2Filt5kLink;' | hgsql hg17
-    cd /cluster/data/hg17/bed/blastz.danRer2/axtChain/chain
+    # reload filtered chains instead of unfiltered (2004-12-10, hartera)
+    cd /cluster/data/hg17/bed/blastz.danRer2/axtChain/
+    mv chainFilt5k chain
+    cd chain
     foreach i (*.chain)
         set c = $i:r
         hgLoadChain hg17 ${c}_chainDanRer2 $i
@@ -11226,6 +11233,7 @@ axtChain -scoreScheme=/cluster/data/blastz/HoxD55.q \
 # for danRer2 as Zebrafish Chain.
 
 # NET DANRER2 BLASTZ (DONE, 2004-12-09, hartera)
+# RE-CREATE NET WITH FILTERED CHAINS (DONE, 2004-12-10, hartera)
     ssh kksilo
     cd /cluster/data/hg17/bed/blastz.danRer2/axtChain
     mkdir preNet
@@ -11246,7 +11254,7 @@ axtChain -scoreScheme=/cluster/data/blastz/HoxD55.q \
     end
     cd ..
     cat n1/*.net | /cluster/bin/i386/netSyntenic stdin noClass.net
-    # memory usage 194842624, utime 2801 s/100, stime 194 
+    # memory usage 145051648, utime 1650 s/100, stime 142
                                                                                 
     # Add classification info using db tables:
     # netClass looks for ancient repeats in one of the databases
@@ -11261,9 +11269,24 @@ axtChain -scoreScheme=/cluster/data/blastz/HoxD55.q \
     time netClass noClass.net hg17 danRer2 zfishdanRer2.net \
          -tNewR=/cluster/bluearc/hg17/linSpecRep.notInZebrafish \
          -qNewR=/cluster/bluearc/danRer2/linSpecRep.notInHuman -noAr
+    # 90.250u 52.170s 4:39.47 50.9%   0+0k 0+0io 201pf+0w
     # load net into database
     cd /cluster/data/hg17/bed/blastz.danRer2/axtChain
     netFilter -minGap=10 zfishdanRer2.net |  hgLoadNet hg17 netDanRer2 stdin
-    106.770u 63.770s 34:44.31 8.1%  0+0k 0+0io 206pf+0w
 # trackDb - change Zebrafish Net to danRer1 Net and display this track
 # for danRer2 as Zebrafish Net.
+
+# LOAD ACEMBLY TRACK (in progress, 2004-12-09, hartera)
+    mkdir -p /cluster/data/hg17/bed/acembly
+    cd /cluster/data/hg17/bed/acembly
+    # Data is obtained from 
+    # Danielle et Jean Thierry-Mieg     mieg@ncbi.nlm.nih.gov
+ 
+    wget --timestamping ftp://ftp.ncbi.nih.gov/repository/acedb/ncbi_35.human.genes/acembly.ncbi_35.genes.proteins.fasta.tar.gz
+    wget --timestamping ftp://ftp.ncbi.nih.gov/repository/acedb/ncbi_35.human.genes/acembly.ncbi_35.genes.gff.tar.gz
+    wget --timestamping ftp://ftp.ncbi.nih.gov/repository/acedb/ncbi_35.human.genes/acembly.ncbi_35.mrnas.fasta.tar.gz
+    wget --timestamping ftp://ftp.ncbi.nih.gov/repository/acedb/ncbi_35.human.genes/acembly.ncbi_35.genes.pfamhits.tar.gz
+    tar xvzf acembly.ncbi_35.genes.gff.tar.gz
+    tar xvzf acembly.ncbi_35.genes.proteins.fasta.tar.gz
+    cd acembly.ncbi_35.genes.gff
+
