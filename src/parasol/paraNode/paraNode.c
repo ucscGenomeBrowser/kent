@@ -319,7 +319,7 @@ else
     struct rudp *ru = rudpOpen();
     struct tms tms;
 
-    ru->maxRetries = 12;
+    ru->maxRetries = 15;
     signal(SIGTERM, termHandler);
     cid = wait(&status);
     times(&tms);
@@ -356,6 +356,7 @@ if (lastHost != NULL && sameString(lastHost, host))
 freez(&lastHost);
 lastHost = cloneString(host);
 lastAddress = internetHostIp(host);
+logIt("lookupIp(%s) = %x (the slow way)\n", host, lastAddress);
 return lastAddress;
 }
 
@@ -468,60 +469,70 @@ if (managingHost != NULL)
 void doRun(char *line)
 /* Execute command. */
 {
+char *jobMessage = cloneString(line);
 static char *args[1024];
 int argCount;
 nextRandom();
 if (line == NULL)
     warn("Executing nothing...");
-else if (busyProcs < maxProcs)
+else 
     {
-    char *exe;
-    int childPid;
-    char *jobMessage = cloneString(line);
     struct runJobMessage rjm;
-
-    if (!parseRunJobMessage(line, &rjm))
+    if (parseRunJobMessage(line, &rjm))
 	{
-	freez(&jobMessage);
-	return;
-	}
-    argCount = chopLine(rjm.command, args);
-    if (argCount >= ArraySize(args))
-	warn("Too many arguments to run");
-    else
-	{
-	args[argCount] = NULL;
-	if ((childPid = fork()) == 0)
+	int jobId = atoi(rjm.jobIdString);
+	if (findRunningJob(jobId) == NULL && findFinishedJob(jobId) == NULL)
 	    {
-	    /* Do JOB_ID substitutions */
-	    struct subText *st = subTextNew("$JOB_ID", rjm.jobIdString);
-	    int i;
-	    rjm.in = subTextString(st, rjm.in);
-	    rjm.out = subTextString(st, rjm.out);
-	    rjm.err = subTextString(st, rjm.err);
-	    for (i=0; i<argCount; ++i)
-	        args[i] = subTextString(st, args[i]);
+	    if (busyProcs < maxProcs)
+		{
+		char *exe;
+		int childPid;
+		argCount = chopLine(rjm.command, args);
+		if (argCount >= ArraySize(args))
+		    warn("Too many arguments to run");
+		else
+		    {
+		    args[argCount] = NULL;
+		    if ((childPid = fork()) == 0)
+			{
+			/* Do JOB_ID substitutions */
+			struct subText *st = subTextNew("$JOB_ID", rjm.jobIdString);
+			int i;
+			rjm.in = subTextString(st, rjm.in);
+			rjm.out = subTextString(st, rjm.out);
+			rjm.err = subTextString(st, rjm.err);
+			for (i=0; i<argCount; ++i)
+			    args[i] = subTextString(st, args[i]);
 
-	    execProc(rjm.managingHost, rjm.jobIdString, rjm.reserved,
-		rjm.user, rjm.dir, rjm.in, rjm.out, rjm.err, args[0], args);
-	    exit(0);
+			execProc(rjm.managingHost, rjm.jobIdString, rjm.reserved,
+			    rjm.user, rjm.dir, rjm.in, rjm.out, rjm.err, args[0], args);
+			exit(0);
+			}
+		    else
+			{
+			struct job *job;
+			AllocVar(job);
+			job->jobId = atoi(rjm.jobIdString);
+			job->pid = childPid;
+			job->startMessage = jobMessage;
+			jobMessage = NULL;	/* No longer own memory. */
+			job->node = dlAddValTail(jobsRunning, job);
+			++busyProcs;
+			}
+		    }
+		}
+	    else
+		{
+		warn("Trying to run when busy.");
+		}
 	    }
 	else
 	    {
-	    struct job *job;
-	    AllocVar(job);
-	    job->jobId = atoi(rjm.jobIdString);
-	    job->pid = childPid;
-	    job->startMessage = jobMessage;
-	    job->node = dlAddValTail(jobsRunning, job);
-	    ++busyProcs;
+	    warn("Duplicate run-job %d\n", jobId);
 	    }
 	}
-     }
-else
-    {
-    warn("Trying to run when busy.");
     }
+freez(&jobMessage);
 }
 
 void doFetch(char *line)
