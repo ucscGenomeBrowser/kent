@@ -5,7 +5,7 @@
 #include "options.h"
 #include "cheapcgi.h"
 
-static char const rcsid[] = "$Id: hgSgdGff3.c,v 1.10 2004/01/26 20:03:41 kent Exp $";
+static char const rcsid[] = "$Id: hgSgdGff3.c,v 1.11 2004/01/26 20:05:14 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -63,7 +63,7 @@ while ((wordCount = lineFileChopNextTab(lf, words, ArraySize(words))) != 0)
 	{
 	char *s = words[i];
 	if (i == 0 && sameString(s, "17")) /* 17 is a synonym for mitochondria */
-	    s = "M";
+	    s = cloneString("M");
 	if (i != 6)
 	    cgiDecode(s, s, strlen(s));
 	tf->fields[i] = cloneString(s);
