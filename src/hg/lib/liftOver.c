@@ -9,7 +9,7 @@
 #include "genePred.h"
 #include "sample.h"
 
-static char const rcsid[] = "$Id: liftOver.c,v 1.3 2004/03/25 01:06:58 kate Exp $";
+static char const rcsid[] = "$Id: liftOver.c,v 1.4 2004/03/25 23:55:06 kate Exp $";
 
 struct chromMap
 /* Remapping information for one (old) chromosome */
@@ -143,14 +143,14 @@ return ok;
 }
 
 static char *remapRange(struct hash *chainHash, double minRatio,
-                char *chrom, int s, int e, char strand, int minMatch,
+                char *chrom, int s, int e, char strand, double minMatch,
                 char **retChrom, int *retStart, int *retEnd, char *retStrand)
 /* Remap a range through chain hash.  If all is well return NULL
  * and results in retChrom, retStart, retEnd.  Otherwise
  * return a string describing the problem. */
 {
 int size = e - s;
-int minMatchSize =  minMatch * size;
+double minMatchSize =  minMatch * size;
 int intersectSize;
 struct binElement *list = findRange(chainHash, chrom, s, e), *el;
 struct chain *chainsHit = NULL, *chainsPartial = NULL, *chainsMissed = NULL, *chain;
@@ -210,7 +210,7 @@ else
 
 static int bedOverSmall(struct lineFile *lf, int fieldCount, 
                         struct hash *chainHash,
-                        int minMatch, FILE *mapped, FILE *unmapped, int *errCt)
+                        double minMatch, FILE *mapped, FILE *unmapped, int *errCt)
 /* Do a bed without a block-list. */
 {
 int i, wordCount, s, e;
@@ -272,7 +272,7 @@ return 0;
 }
 
 void liftOverGff(char *fileName, struct hash *chainHash, 
-                                int minMatch, int minBlocks, 
+                                double minMatch, double minBlocks, 
                                 FILE *mapped, FILE *unmapped)
 /* Lift over GFF file */
 {
@@ -433,7 +433,7 @@ for (;;)
 }
 
 static void remapRangeList(struct chain *chain, struct range **pRangeList,
-            int *pThickStart, int *pThickEnd, int minBlocks, bool fudgeThick,
+            int *pThickStart, int *pThickEnd, double minBlocks, bool fudgeThick,
             struct range **retGood, struct range **retBad, char **retError)
 /* Remap range list through chain.  Return error message on failure,
  * NULL on success. */
@@ -653,7 +653,7 @@ return rangeList;
 }
 
 static char *remapBlockedBed(struct hash *chainHash, struct bed *bed, 
-                            int minMatch, int minBlocks, bool fudgeThick)
+                            double minMatch, double minBlocks, bool fudgeThick)
 /* Remap blocks in bed, and also chromStart/chromEnd.  
  * Return NULL on success, an error string on failure. */
 {
@@ -735,7 +735,7 @@ return error;
 }
 
 static int bedOverBig(struct lineFile *lf, int refCount, 
-                    struct hash *chainHash, int minMatch, int minBlocks,
+                    struct hash *chainHash, double minMatch, double minBlocks,
                     bool fudgeThick, FILE *mapped, FILE *unmapped, int *errCt)
 /* Do a bed with block-list. */
 {
@@ -774,7 +774,7 @@ return ct;
 }
 
 int liftOverBed(char *fileName, struct hash *chainHash, 
-                                int minMatch,  int minBlocks, bool fudgeThick,
+                                double minMatch,  double minBlocks, bool fudgeThick,
                                 FILE *f, FILE *unmapped, int *errCt)
 /* Open up file, decide what type of bed it is, and lift it. 
  * Return the number of records successfully converted */
@@ -805,7 +805,7 @@ return ct;
 }
 
 static char *remapBlockedPsl(struct hash *chainHash, struct psl *psl, 
-                            int minMatch, int minBlocks, bool fudgeThick)
+                            double minMatch, double minBlocks, bool fudgeThick)
 /* Remap blocks in psl, and also chromStart/chromEnd.  
  * Return NULL on success, an error string on failure. */
 {
@@ -887,7 +887,7 @@ return error;
 }
 
 static void pslOver(struct lineFile *lf, struct hash *chainHash, 
-                    int minMatch, int minBlocks, bool fudgeThick,
+                    double minMatch, double minBlocks, bool fudgeThick,
                     FILE *mapped, FILE *unmapped)
 /* Do a psl with block-list. */
 {
@@ -915,7 +915,7 @@ while ((psl = pslNext(lf)) != NULL)
 }
 
 void liftOverPsl(char *fileName, struct hash *chainHash, 
-                                int minMatch, int minBlocks, bool fudgeThick,
+                                double minMatch, double minBlocks, bool fudgeThick,
                                 FILE *f, FILE *unmapped)
 /* Open up file, and lift it. */
 {
@@ -955,7 +955,7 @@ return bed;
 }
 
 void liftOverGenePred(char *fileName, struct hash *chainHash, 
-                        int minMatch, int minBlocks, bool fudgeThick,
+                        double minMatch, double minBlocks, bool fudgeThick,
                         FILE *mapped, FILE *unmapped)
 /* Lift over file in genePred format. */
 {
@@ -1142,7 +1142,7 @@ return sample;
 }
 
 static void remapSample(struct hash *chainHash, struct sample *sample, 
-                int minBlocks, bool fudgeThick, FILE *mapped, FILE *unmapped)
+                double minBlocks, bool fudgeThick, FILE *mapped, FILE *unmapped)
 /* Remap a single sample and output it. */
 {
 struct binElement *binList, *el;
@@ -1183,7 +1183,7 @@ slFreeList(&binList);
 }
 
 void liftOverSample(char *fileName, struct hash *chainHash, 
-                        int minMatch, int minBlocks, bool fudgeThick,
+                        double minMatch, double minBlocks, bool fudgeThick,
                         FILE *mapped, FILE *unmapped)
 /* Open up file, decide what type of bed it is, and lift it. */
 {
