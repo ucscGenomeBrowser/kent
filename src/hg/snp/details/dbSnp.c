@@ -11,7 +11,7 @@
 #include "hash.h"
 #include "jksql.h"
 
-static char const rcsid[] = "$Id: dbSnp.c,v 1.5 2003/05/06 07:22:35 kate Exp $";
+static char const rcsid[] = "$Id: dbSnp.c,v 1.6 2003/05/08 23:51:13 daryl Exp $";
 
 #define FLANK  20
 #define ALLELE 20
@@ -20,25 +20,25 @@ static char const rcsid[] = "$Id: dbSnp.c,v 1.5 2003/05/06 07:22:35 kate Exp $";
 struct snpInfo
 /* Various info on a SNP all in one place. */
 {
-  struct snpInfo *next;
-  char  *chrom;            /* Chromosome name - not allocated here. */
-  int    chromPos;         /* Position of SNP. */
-  char  *name;             /* Allocated in hash. */
-  char   baseInAsm[2];     /* Base in assembly. */
-  char   region[REGION+1]; /* SNP +/- FLANK bases */
+    struct snpInfo *next;
+    char  *chrom;            /* Chromosome name - not allocated here. */
+    int    chromPos;         /* Position of SNP. */
+    char  *name;             /* Allocated in hash. */
+    char   baseInAsm[2];     /* Base in assembly. */
+    char   region[REGION+1]; /* SNP +/- FLANK bases */
 };
 
 struct dbSnpAlleles
 /* More info on a SNP. */
 {
-  int    rsId;       /* reference Snp ID (name) */
-  float  avgHet;     /* Average Heterozygosity Standard Error */
-  float  avgHetSE;   /* Average Heterozygosity */
-  char   valid[20];  /* validation status */
-  char   allele1[ALLELE+1];   /* First allele */
-  char   allele2[ALLELE+1];   /* Second allele */ 
-  char   observed[REGION+1];  /* Observed sequence in browser */
-  char   alternate[REGION+1]; /* Observed sequence in browser */
+    char   rsId[20];            /* reference Snp ID (name) */
+    float  avgHet;              /* Average Heterozygosity Standard Error */
+    float  avgHetSE;            /* Average Heterozygosity */
+    char   valid[20];           /* validation status */
+    char   allele1[ALLELE+1];   /* First allele */
+    char   allele2[ALLELE+1];   /* Second allele */ 
+    char   observed[REGION+1];  /* Observed sequence in browser */
+    char   alternate[REGION+1]; /* Observed sequence in browser */
 };
 
 struct slName *getChromList()
@@ -49,10 +49,10 @@ struct sqlResult *sr;
 char **row=NULL;
 struct slName *list = NULL, *el;
 char   queryString[]="select chrom from chromInfo where chrom not like '%M%' "
-  " and chrom not like '%N%' and chrom not like '%random'";
+    " and chrom not like '%N%' and chrom not like '%random'";
 
 /* for debug */
-/* sprintf(queryString,"select chrom from chromInfo where chrom='chr22'"); */
+//sprintf(queryString,"select chrom from chromInfo where chrom='chr22'");
 
 sr = sqlGetResult(conn, queryString);
 while ((row=sqlNextRow(sr)))
@@ -71,6 +71,13 @@ void convertToLowercaseN(char *ptr, int n)
 int i;
 for( i=0;i<n && *ptr !='\0';i++,ptr++ )
     *ptr=tolower(*ptr);
+}
+
+void convertToUppercaseN(char *ptr, int n)
+{
+int i;
+for( i=0;i<n && *ptr !='\0';i++,ptr++ )
+    *ptr=toupper(*ptr);
 }
 
 long int addSnpsFromChrom(char *chromName, struct dnaSeq *seq,
@@ -125,13 +132,9 @@ void addAsmBase(char *database, char *input, char *output)
 struct lineFile *lf = lineFileOpen(input, TRUE);
 FILE *f = mustOpen(output, "w");
 char *row[8];
-char  bases[5]="    \0";
 struct hash *snpHash = NULL;
 long int counter[4];
 long int offset=0;
-long int counts[96];
-long int counts5[24];
-long int counts3[24];
 int      index=0;
 int      i=0;
 int      isHuman=0;
@@ -148,47 +151,60 @@ char     obs[REGION+1];
 char     alt[REGION+1];
 char     obsrc[REGION+1];
 char     altrc[REGION+1];
+char     obsLow[REGION+1];
+char     altLow[REGION+1];
+char     obsrcLow[REGION+1];
+char     altrcLow[REGION+1];
 struct   snpInfo *si;
 struct   dbSnpAlleles *dbSnp;
 
-for (i=0;i<96;i++) counts[i] = 0;
-for (i=0;i<4;i++) counter[i] = 0;
+for (i=0;i<4;i++) 
+    counter[i] = 0;
 hSetDb(database);
-if ( strncmp(database,"hg",2) == 0 )  isHuman = 1;
+if ( strncmp(database,"hg",2) == 0 )  
+    isHuman = 1;
 snpHash = makeSnpInfoHash(isHuman);
 AllocVar(dbSnp);
 while (lineFileRow(lf, row)) /* process one snp at a time */
-  {
-    /* reinitialize */
-    seq5len=seq3len=allele1len=allele2len=obslen=altlen=flankFail=0;
+    {
     counter[0]++; 
-    for ( i = 0; i <= FLANK; i++) 
-      {
-	strcpy(seq5+i,"\0");
-	strcpy(seq3+i,"\0");
-      }
-    for ( i = 0; i <= ALLELE; i++) 
-      {
-	strcpy(dbSnp->allele1+i,"\0");
-	strcpy(dbSnp->allele2+i,"\0");
-      }
-    for ( i = 0; i <= REGION; i++) 
-      {
-	strcpy(dbSnp->observed+i,"\0");
-	strcpy(dbSnp->alternate+i,"\0");
-	strcpy(obs+i,"\0");
-	strcpy(alt+i,"\0");
-	strcpy(obsrc+i,"\0");
-	strcpy(altrc+i,"\0");
-      }
+    for ( i = 0; i < 20; i++) 
+	strcpy(dbSnp->rsId+i,"\0");
 
     /* store values from file in local structures */
-    dbSnp->rsId     = atoi(row[0]);
-    si = hashFindVal(snpHash, row[0]);
+    snprintf(dbSnp->rsId, strlen(row[0])+3, "rs%s", row[0]);
+    si = hashFindVal(snpHash, dbSnp->rsId);
+
     if ( si == NULL )
-      counter[1]++; /* rsId not found in database */
+	counter[1]++; /* rsId not found in database */
     else
-      {
+	{
+	/* reinitialize */
+	seq5len=seq3len=allele1len=allele2len=obslen=altlen=flankFail=0;
+	for ( i = 0; i <= FLANK; i++) 
+	    {
+	    strcpy(seq5+i,"\0");
+	    strcpy(seq3+i,"\0");
+	    }
+	for ( i = 0; i <= ALLELE; i++) 
+	    {
+	    strcpy(dbSnp->allele1+i,"\0");
+	    strcpy(dbSnp->allele2+i,"\0");
+	    }
+	for ( i = 0; i <= REGION; i++) 
+	    {
+	    strcpy(dbSnp->observed+i,"\0");
+	    strcpy(dbSnp->alternate+i,"\0");
+	    strcpy(obs+i,"\0");
+	    strcpy(alt+i,"\0");
+	    strcpy(obsrc+i,"\0");
+	    strcpy(altrc+i,"\0");
+	    strcpy(obsLow+i,"\0");
+	    strcpy(altLow+i,"\0");
+	    strcpy(obsrcLow+i,"\0");
+	    strcpy(altrcLow+i,"\0");
+	    }
+
 	/* get the boring stuff to pass through to output */
 	dbSnp->avgHet   = atof(row[1]);
 	dbSnp->avgHetSE = atof(row[2]);
@@ -198,14 +214,12 @@ while (lineFileRow(lf, row)) /* process one snp at a time */
 	allele2len = strlen(row[5]);
 	strncpy( dbSnp->allele1, row[4], allele1len);
 	strncpy( dbSnp->allele2, row[5], allele2len);
-	convertToLowercaseN(dbSnp->allele1, allele1len);
-	convertToLowercaseN(dbSnp->allele2, allele2len);
+	convertToUppercaseN(dbSnp->allele1, allele1len);
+	convertToUppercaseN(dbSnp->allele2, allele2len);
 	
 	/* manipulate to create full flanking regions */
 	seq5len = strlen(row[6]);
 	seq3len = strlen(row[7]);
-	if ( seq5len < FLANK || seq3len < FLANK ) 
-	  counter[2]++; /* short flanking sequence */
 	strncpy( seq5, row[6], seq5len );
 	strncpy( seq3, row[7], seq3len );
 	convertToLowercaseN(seq5, seq5len);
@@ -215,27 +229,27 @@ while (lineFileRow(lf, row)) /* process one snp at a time */
 	/* while dealing with indels, where blank allele is represented */
 	/* as a "-" and generates an incorrect length                   */
 	if (strncmp(dbSnp->allele1,"-",1))
-	  {
+	    {
 	    sprintf(obs,"%s%s%s",seq5,dbSnp->allele1,seq3);
 	    strncpy(obs+seq5len+seq3len+allele1len,"\0", 1);
-	  }
+	    }
 	else
-	  {
+	    {
 	    sprintf(obs,"%s%s",seq5,seq3);
 	    strncpy(obs+seq5len+seq3len,"\0", 1);
 	    allele1len=0;
-	  }
+	    }
 	if (strncmp(dbSnp->allele2,"-",1))
-	  {
+	    {
 	    sprintf(alt,"%s%s%s",seq5,dbSnp->allele2,seq3);
 	    strncpy(obs+seq5len+seq3len+allele2len,"\0", 1);
-	  }
+	    }
 	else
-	  {
+	    {
 	    sprintf(alt,"%s%s",seq5,seq3);
 	    strncpy(alt+seq5len+seq3len,"\0", 1);
 	    allele2len=0;
-	  }
+	    }
 
 	/* generate reverse complements of observed and alternate alleles */
 	obslen=strlen(obs);
@@ -245,47 +259,59 @@ while (lineFileRow(lf, row)) /* process one snp at a time */
 	reverseComplement(obsrc, obslen);
 	reverseComplement(altrc, altlen);
 
+	strncpy(obsLow, obs, obslen );
+	strncpy(altLow, alt, altlen );
+	strncpy(obsrcLow, obsrc, obslen );
+	strncpy(altrcLow, altrc, altlen );
+	convertToLowercaseN(obsLow, obslen);
+	convertToLowercaseN(altLow, altlen);
+	convertToLowercaseN(obsrcLow, obslen);
+	convertToLowercaseN(altrcLow, altlen);
+
 	/* start comparisons to determine reference and alternate alleles in browser */
-	if (!strncmp(obs  +allele1len, si->region+FLANK-seq5len+1, obslen-allele1len))
-	  { /* database matches observed */
+	if (!strncmp(obsLow  +allele1len, si->region+FLANK-seq5len+1, obslen-allele1len))
+	    { /* database matches observed */
 	    strncpy(dbSnp->observed,obs,obslen);
 	    strncpy(dbSnp->alternate,alt,altlen);
-	  }
-	else if (!strncmp(alt  +allele2len, si->region+FLANK-seq5len+1, altlen-allele2len))
-	  { /* database matches alternate */
+	    }
+	else if (!strncmp(altLow  +allele2len, si->region+FLANK-seq5len+1, altlen-allele2len))
+	    { /* database matches alternate */
 	    strncpy(dbSnp->observed,alt,altlen);
 	    strncpy(dbSnp->alternate,obs,obslen);
-	  }
-	else if (!strncmp(obsrc+allele1len, si->region+FLANK-seq3len+1, obslen-allele1len))
-	  { /* database matches observed RC */
+	    }
+	else if (!strncmp(obsrcLow+allele1len, si->region+FLANK-seq3len+1, obslen-allele1len))
+	    { /* database matches observed RC */
 	    strncpy(dbSnp->observed,obsrc,obslen);
 	    strncpy(dbSnp->alternate,altrc,altlen);
-	  }
-	else if (!strncmp(altrc+allele2len, si->region+FLANK-seq3len+1, altlen-allele2len))
-	  { /* database matches alternate RC */
+	    }
+	else if (!strncmp(altrcLow+allele2len, si->region+FLANK-seq3len+1, altlen-allele2len))
+	    { /* database matches alternate RC */
 	    strncpy(dbSnp->observed,altrc,altlen);
 	    strncpy(dbSnp->alternate,obsrc,obslen);
-	  }
+	    }
 	else 
-	  { /* database sequence does not match file sequence */
+	    { /* database sequence does not match file sequence */
 	    counter[3]++;
 	    flankFail = 1;
-	  }
+	    }
 
 	if (flankFail == 0) /* match was found between database and file */
-	  fprintf(f,"%i\t%f\t%f\t%s\t%s\t%s\t%s\t%s\n",
-		  dbSnp->rsId, dbSnp->avgHet, dbSnp->avgHetSE,
-		  dbSnp->valid, dbSnp->allele1, dbSnp->allele2,
-		  dbSnp->observed, dbSnp->alternate);
-      }
+	    //	  fprintf(f,"%s\t%f\t%f\t%s\t%s\t%s\t%s\t%s\n",
+	    fprintf(f,"%ld\t%s\t%f\t%f\t%s\t%s\t%s\t%s\t%s\n",counter[0],
+		    dbSnp->rsId+2, dbSnp->avgHet, dbSnp->avgHetSE,
+		    dbSnp->valid, dbSnp->allele1, dbSnp->allele2,
+		    dbSnp->observed, dbSnp->alternate);
+	}
     }
- 
+
+fflush(f);
 /* print summary statistics */
 printf("Total SNPs:              \t%ld\n",           counter[0]);
 printf("Not in %s:               \t%ld\n", database, counter[1]);
 printf("Flank < %d bases:        \t%ld\n", 20,       counter[2]);
 printf("%s != %s:\t%ld\t(mismatches in flanking sequences)\n", database,  input, counter[3]);
 printf("There should be %ld lines in the output file %s.\n",counter[0]-counter[1]-counter[3],output);
+fflush(f);
 }
 
 void usage()
