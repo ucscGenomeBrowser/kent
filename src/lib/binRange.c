@@ -155,6 +155,12 @@ slSort(&list, binElementCmpStart);
 return list;
 }
 
+struct binElement *binKeeperFindAll(struct binKeeper *bk)
+/* Get all elements sorted. */
+{
+return binKeeperFindSorted(bk, bk->minPos, bk->maxPos);
+}
+
 struct binElement *binKeeperFindLowest(struct binKeeper *bk, int start, int end)
 /* Find the lowest overlapping range. Quick even if search range large */
 {

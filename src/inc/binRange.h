@@ -72,6 +72,9 @@ struct binElement *binKeeperFind(struct binKeeper *bk, int start, int end);
 struct binElement *binKeeperFindSorted(struct binKeeper *bk, int start, int end);
 /* Like binKeeperFind, but sort list on start coordinates. */
 
+struct binElement *binKeeperFindAll(struct binKeeper *bk);
+/* Get all elements sorted. */
+
 
 struct binElement *binKeeperFindLowest(struct binKeeper *bk, int start, int end);
 /* Find the lowest overlapping range. Quick even if search range large */
