@@ -10444,8 +10444,8 @@ if (!hideControls)
     // hPrintf("<B>Track Controls:</B>");
     // hPrintf("</th></tr>\n");
     hPrintf("<tr><td colspan='5' align='middle' nowrap>Note: "
-           "Tracks with more than %d items are always displayed in "
-           "dense mode.</td></tr>\n", maxItemsInFullTrack);
+	   "Tracks with lots of items will automatically be displayed in "
+	   "more compact modes.</td></tr>\n");
     cg = startControlGrid(MAX_CONTROL_COLUMNS, "left");
     for (group = groupList; group != NULL; group = group->next)
         {
