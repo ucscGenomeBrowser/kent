@@ -50,3 +50,11 @@ visibility dense
 color 150,0,0
 type genePred ensMergeTierDPep
 
+track jaxQTL
+shortLabel QTL
+longLabel Quantitative Trait Loci From Jax/MGI
+priority 11.9
+visibility hide
+color 200,100,0
+type bed 6 +
+url http://www.informatics.jax.org/searches/accession_report.cgi?id=$$
