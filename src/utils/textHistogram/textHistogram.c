@@ -4,7 +4,7 @@
 #include "hash.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: textHistogram.c,v 1.17 2004/08/18 17:54:51 hiram Exp $";
+static char const rcsid[] = "$Id: textHistogram.c,v 1.18 2004/09/15 19:33:19 hiram Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -296,11 +296,16 @@ for (i=begin; i<end; ++i)
     if (noStar)
 	{
 	if (verboseLevel()>1)
-	    printf("%2d\t", i);
+	    printf("%02d\t", i);
 	if (real)
 	    {
 	    if (pValues)
-		printf("%3d %g:%g", i, binStartR, binStartR+binSizeR);
+		{
+		if (verboseLevel()>1)
+		    printf("%g:%g", binStartR, binStartR+binSizeR);
+		else
+		    printf("%3d %g:%g", i, binStartR, binStartR+binSizeR);
+		}
 	    else
 		printf("%3d %g:%g\t%f", i, binStartR, binStartR+binSizeR, ct);
 	    }
