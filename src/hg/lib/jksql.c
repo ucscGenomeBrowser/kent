@@ -12,7 +12,7 @@
 #include "jksql.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: jksql.c,v 1.33 2003/08/25 01:02:13 markd Exp $";
+static char const rcsid[] = "$Id: jksql.c,v 1.34 2003/08/27 23:51:03 markd Exp $";
 
 boolean sqlTrace = FALSE;  /* setting to true prints each query */
 int sqlTraceIndent = 0;    /* number of spaces to indent traces */
@@ -396,10 +396,13 @@ if (options & SQL_TAB_FILE_CONCURRENT)
 else
     {
     concurrentOpt = "";
-    /* disable update of indexes during load. Inompatible with concurrent,
-     * since enable keys locks other's out. */
-    safef(query, sizeof(query), "ALTER TABLE %s DISABLE KEYS", table);
-    sqlUpdate(conn, query);
+    if (isMySql4)
+        {
+        /* disable update of indexes during load. Inompatible with concurrent,
+         * since enable keys locks other's out. */
+        safef(query, sizeof(query), "ALTER TABLE %s DISABLE KEYS", table);
+        sqlUpdate(conn, query);
+        }
     }
 
 safef(query, sizeof(query),  "LOAD DATA %s %s INFILE '%s' INTO TABLE %s",
