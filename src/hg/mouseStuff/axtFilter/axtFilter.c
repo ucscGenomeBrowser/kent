@@ -19,6 +19,10 @@ errAbort(
   "   -notT=chr1,chr2 - restrict target side sequence to those not named\n"
   "   -minScore=N - restrict to those scoring at least N\n"
   "   -maxScore=N - restrict to those scoring less than N\n"
+  "   -qStartMin=N - restrict to those with qStart at least N\n"
+  "   -qStartMax=N - restrict to those with qStart less than N\n"
+  "   -tStartMin=N - restrict to those with tStart at least N\n"
+  "   -tStartMax=N - restrict to those with tStart less than N\n"
   );
 }
 
@@ -58,6 +62,10 @@ struct hash *notQHash = hashCommaOption("notQ");
 struct hash *notTHash = hashCommaOption("notT");
 int minScore = optionInt("minScore", -BIGNUM);
 int maxScore = optionInt("maxScore", BIGNUM);
+int qStartMin = optionInt("qStartMin", -BIGNUM);
+int qStartMax = optionInt("qStartMax", BIGNUM);
+int tStartMin = optionInt("tStartMin", -BIGNUM);
+int tStartMax = optionInt("tStartMax", BIGNUM);
 int i;
 
 for (i=0; i<inCount; ++i)
@@ -77,6 +85,10 @@ for (i=0; i<inCount; ++i)
 	if (notTHash != NULL && hashLookup(notTHash, axt->tName))
 	    writeIt = FALSE;
 	if (axt->score < minScore || axt->score >= maxScore)
+	    writeIt = FALSE;
+	if (axt->qStart < qStartMin || axt->qStart >= qStartMax)
+	    writeIt = FALSE;
+	if (axt->tStart < tStartMin || axt->tStart >= tStartMax)
 	    writeIt = FALSE;
 	if (writeIt)
 	    axtWrite(axt, stdout);
