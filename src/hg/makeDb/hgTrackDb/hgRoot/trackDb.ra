@@ -319,7 +319,8 @@ longLabel NCBI Gene Predictions
 priority 17.8
 visibility full
 color 170,100,0
-type genePred refPep refMrna
+type genePred npredPep 
+url http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?db=nucleotide&cmd=search&term=$$
 
 track mrna
 shortLabel $Organism mRNAs
