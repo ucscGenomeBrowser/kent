@@ -92,7 +92,7 @@
 #include "cutterTrack.h"
 #include "retroGene.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.938 2005/03/31 18:05:37 kent Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.939 2005/04/02 19:43:57 braney Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -8425,23 +8425,35 @@ if (vis == tvFull || vis == tvPack)
 		 lf->orientation, color, FALSE);
     }
     */
+//for(count=1; count < 4; count++)
 for (sf = lf->components; sf != NULL; sf = sf->next)
     {
+    int yOff; 
     s = sf->start; e = sf->end;
     /* shade ORF (exon) based on the grayIx value of the sf */
     switch(sf->grayIx)
 	{
 	case 1:
+	    continue;
+	    heightPer = tg->heightPer>>2;
+	    yOff = y;
 	    color = vgFindColorIx(vg, 204, 204,204);
 	    break;
 	case 2:
+	    heightPer = tg->heightPer;
+	    yOff = y;
 	    color = vgFindColorIx(vg, 252, 90, 90);
 	    break;
 	case 3:
+	    yOff = midY -(tg->heightPer>>2);
+	    heightPer = tg->heightPer>>1;
 	    color = vgFindColorIx(vg, 0, 0,0);
 	    break;
+	default:
+	    continue;
 	}
-    drawScaledBox(vg, s, e, scale, xOff, y, heightPer,
+    //if (sf->grayIx == count)
+    drawScaledBox(vg, s, e, scale, xOff, yOff, heightPer,
 			color );
     }
 }
@@ -9660,9 +9672,8 @@ registerTrackHandler("BlastPBac",llBlastPMethods);
 registerTrackHandler("BlastPpyrFur2",llBlastPMethods);
 registerTrackHandler("codeBlast",codeBlastMethods);
 registerTrackHandler("tigrOperons",tigrOperonMethods);
-registerTrackHandler("scoreMm5",valAlMethods);
-registerTrackHandler("scoreMm2X",valAlMethods);
-registerTrackHandler("scoreMm3X",valAlMethods);
+registerTrackHandler("rabbitScore",valAlMethods);
+registerTrackHandler("armadilloScore",valAlMethods);
 registerTrackHandler("rnaGenes",rnaGenesMethods);
 registerTrackHandler("sargassoSea",sargassoSeaMethods);
 /* MGC related */
