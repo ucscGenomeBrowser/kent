@@ -24,7 +24,7 @@
 #include "scoredRef.h"
 #include "maf.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.111 2003/05/17 16:56:46 kent Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.112 2003/05/22 23:36:10 braney Exp $";
 
 #define DEFAULT_PROTEINS "proteins"
 #define DEFAULT_GENOME "Human"
@@ -651,7 +651,7 @@ static char* getSeqAndId(struct sqlConnection *conn, char *acc, HGID *retId, cha
 /* Return sequence as a fasta record in a string and it's database ID, or 
  * NULL if not found. Optionally get genbank modification date. */
 {
-struct sqlResult *sr;
+struct sqlResult *sr = NULL;
 char **row;
 char query[256];
 int fd;
@@ -663,15 +663,21 @@ int seqTblSet = SEQ_TBL_SET;
 struct dnaSeq *seq;
 struct largeSeqFile *lsf;
 
-sprintf(query,
-   "select id,extFile,file_offset,file_size,gb_date from seq where acc = '%s'",
-   acc);
-sr = sqlMustGetResult(conn, query);
-row = sqlNextRow(sr);
+row = NULL;
+if (sqlTableExists(conn, "seq"))
+    {
+    sprintf(query,
+       "select id,extFile,file_offset,file_size,gb_date from seq where acc = '%s'",
+       acc);
+    sr = sqlMustGetResult(conn, query);
+    row = sqlNextRow(sr);
+    }
+
 if ((row == NULL) && sqlTableExists(conn, "gbSeq"))
     {
     /* try gbSeq table */
-    sqlFreeResult(&sr);
+    if (sr)
+	sqlFreeResult(&sr);
     if (gbDate != NULL)
         sprintf(query,
                 "select id,gbExtFile,file_offset,file_size,moddate from gbSeq,mrna where (gbSeq.acc = '%s') and (mrna.acc = gbSeq.acc)",
