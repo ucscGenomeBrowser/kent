@@ -114,6 +114,14 @@ visibility hide
 type bed 4 +
 private on
 
+track mcnBreakpoints
+shortLabel MCN Breakpoints
+longLabel MCN breakpoints
+priority 11.7
+visibility hide
+type bed 4 +
+private on
+
 track genieKnown
 shortLabel Known Genes
 longLabel Known Genes (from full length mRNAs)
