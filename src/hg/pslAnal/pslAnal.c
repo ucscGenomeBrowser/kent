@@ -34,6 +34,7 @@ static struct optionSpec optionSpecs[] = {
     {"unaligned", OPTION_BOOLEAN},
     {"mismatches", OPTION_BOOLEAN},
     {"codonsub", OPTION_BOOLEAN},
+    {"noVersions", OPTION_BOOLEAN},
     {NULL, 0}
 };
 
@@ -43,6 +44,7 @@ boolean unaliReport = FALSE;
 boolean mismatchReport = FALSE;
 boolean codonSubReport = FALSE;
 boolean xeno = FALSE;
+boolean noVersions = FALSE;
 
 struct acc
 {
@@ -395,21 +397,26 @@ char *accs[4];
 int wordCount, id = -1;
   
 AllocVar(ret);
- ret->next = NULL;
-wordCount = chopByChar(name, '.', accs, ArraySize(accs)); 
-if (wordCount > 2) 
-  errAbort("Accession not standard, %s\n", name);
-ret->name = accs[0];
-if (wordCount = 1)
-     {
-     if ((!version) || (!hashLookup(version, name)))
-       ret->version = findVersion(name);
-     else 
-       ret->version = cloneString(hashFindVal(version, name));
-     }
+if (noVersions)
+    {
+    ret->name = name;
+    }
 else
-     ret->version = accs[1];
-ret->organism = NULL;
+    {
+    wordCount = chopByChar(name, '.', accs, ArraySize(accs)); 
+    if (wordCount > 2) 
+        errAbort("Accession not standard, %s\n", name);
+    ret->name = accs[0];
+    if (wordCount = 1)
+        {
+        if ((!version) || (!hashLookup(version, name)))
+            ret->version = findVersion(name);
+        else 
+            ret->version = cloneString(hashFindVal(version, name));
+        }
+    else
+        ret->version = accs[1];
+    }
 /* fprintf(stderr, "accession %s created\n", accFmt(ret));*/
 
 return(ret);
@@ -1720,8 +1727,15 @@ int main(int argc, char *argv[])
 struct lineFile *pf, *cf, *lf, *vf=NULL, *df=NULL;
 FILE *of, *in=NULL, *mm=NULL, *cs=NULL, *un=NULL;
 char *faFile, *db, filename[64], *vfName = NULL, *dfName = NULL;
-char *user = cfgOption("db.user");
-char *password = cfgOption("db.password");
+char *user, *password;
+
+/* try read-only first */
+user = cfgOption("ro.user");
+if (user == NULL) 
+    user = cfgOption("db.user");
+password = cfgOption("ro.password");
+if (password == NULL)
+    password = cfgOption("db.password");
 
 optionInit(&argc, argv, optionSpecs);
 if (argc != 6)
@@ -1738,6 +1752,7 @@ unaliReport = optionExists("unaligned");
 mismatchReport = optionExists("mismatches");
 codonSubReport = optionExists("codonsub");
 xeno = optionExists("xeno");
+noVersions = optionExists("noVersions");
 pf = pslFileOpen(argv[1]);
 cf = lineFileOpen(argv[2], FALSE);
 lf = lineFileOpen(argv[3], FALSE);
