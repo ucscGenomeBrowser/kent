@@ -4525,7 +4525,7 @@ hgsql \
 # Perform preliminary review, using the Genome Browser and Family Browser for mm4.
 # After successful review, notify QA to start formal review. 
  
-######## PROTEOME BROWSER BUILD #######  (DONE - 2004-04-16 - Fan)
+######## PROTEOME BROWSER BUILD #######  (REBUILT - 2004-04-19 - Fan)
 # These are instructions for building or rebuilding tables 
 # needed for the Proteome Browser.  
 # DON'T START THESE UNTIL TABLES FOR KNOWN GENES AND kgProtMap table
@@ -4536,43 +4536,43 @@ o Create the working directory
   mkdir /cluster/store6/mm4/bed/pb
   cd /cluster/store6/mm4/bed/pb 
 
-o save old PB tables (if they exist) to the backup DB, kgMm4Sav2
+o save old PB tables (if they exist) to the backup DB, kgMm4Sav3
 
 From mysql prompt:
 
-alter table mm4.pepCCntDist rename as kgMm4Sav2.pepCCntDist;
-alter table mm4.pepExonCntDist rename as kgMm4Sav2.pepExonCntDist;
-alter table mm4.pepHydroDist rename as kgMm4Sav2.pepHydroDist;
-alter table mm4.pepIPCntDist rename as kgMm4Sav2.pepIPCntDist;
-alter table mm4.pepMolWtDist rename as kgMm4Sav2.pepMolWtDist;
-alter table mm4.pepMwAa rename as kgMm4Sav2.pepMwAa;
-alter table mm4.pepPi rename as kgMm4Sav2.pepPi;
-alter table mm4.pepPiDist rename as kgMm4Sav2.pepPiDist;
-alter table mm4.pepResDist rename as kgMm4Sav2.pepResDist;
+alter table mm4.pepCCntDist rename as kgMm4Sav3.pepCCntDist;
+alter table mm4.pepExonCntDist rename as kgMm4Sav3.pepExonCntDist;
+alter table mm4.pepHydroDist rename as kgMm4Sav3.pepHydroDist;
+alter table mm4.pepIPCntDist rename as kgMm4Sav3.pepIPCntDist;
+alter table mm4.pepMolWtDist rename as kgMm4Sav3.pepMolWtDist;
+alter table mm4.pepMwAa rename as kgMm4Sav3.pepMwAa;
+alter table mm4.pepPi rename as kgMm4Sav3.pepPi;
+alter table mm4.pepPiDist rename as kgMm4Sav3.pepPiDist;
+alter table mm4.pepResDist rename as kgMm4Sav3.pepResDist;
 
-alter table mm4.pbAaDistA rename as kgMm4Sav2.pbAaDistA;
-alter table mm4.pbAaDistC rename as kgMm4Sav2.pbAaDistC;
-alter table mm4.pbAaDistD rename as kgMm4Sav2.pbAaDistD;
-alter table mm4.pbAaDistE rename as kgMm4Sav2.pbAaDistE;
-alter table mm4.pbAaDistF rename as kgMm4Sav2.pbAaDistF;
-alter table mm4.pbAaDistG rename as kgMm4Sav2.pbAaDistG;
-alter table mm4.pbAaDistH rename as kgMm4Sav2.pbAaDistH;
-alter table mm4.pbAaDistI rename as kgMm4Sav2.pbAaDistI;
-alter table mm4.pbAaDistK rename as kgMm4Sav2.pbAaDistK;
-alter table mm4.pbAaDistL rename as kgMm4Sav2.pbAaDistL;
-alter table mm4.pbAaDistM rename as kgMm4Sav2.pbAaDistM;
-alter table mm4.pbAaDistN rename as kgMm4Sav2.pbAaDistN;
-alter table mm4.pbAaDistP rename as kgMm4Sav2.pbAaDistP;
-alter table mm4.pbAaDistQ rename as kgMm4Sav2.pbAaDistQ;
-alter table mm4.pbAaDistR rename as kgMm4Sav2.pbAaDistR;
-alter table mm4.pbAaDistS rename as kgMm4Sav2.pbAaDistS;
-alter table mm4.pbAaDistT rename as kgMm4Sav2.pbAaDistT;
-alter table mm4.pbAaDistV rename as kgMm4Sav2.pbAaDistV;
-alter table mm4.pbAaDistW rename as kgMm4Sav2.pbAaDistW;
-alter table mm4.pbAaDistY rename as kgMm4Sav2.pbAaDistY;
-alter table mm4.pbAnomLimit rename as kgMm4Sav2.pbAnomLimit;
-alter table mm4.pbResAvgStd rename as kgMm4Sav2.pbResAvgStd;
-alter table mm4.pbStamp rename as kgMm4Sav2.pbStamp;
+alter table mm4.pbAaDistA rename as kgMm4Sav3.pbAaDistA;
+alter table mm4.pbAaDistC rename as kgMm4Sav3.pbAaDistC;
+alter table mm4.pbAaDistD rename as kgMm4Sav3.pbAaDistD;
+alter table mm4.pbAaDistE rename as kgMm4Sav3.pbAaDistE;
+alter table mm4.pbAaDistF rename as kgMm4Sav3.pbAaDistF;
+alter table mm4.pbAaDistG rename as kgMm4Sav3.pbAaDistG;
+alter table mm4.pbAaDistH rename as kgMm4Sav3.pbAaDistH;
+alter table mm4.pbAaDistI rename as kgMm4Sav3.pbAaDistI;
+alter table mm4.pbAaDistK rename as kgMm4Sav3.pbAaDistK;
+alter table mm4.pbAaDistL rename as kgMm4Sav3.pbAaDistL;
+alter table mm4.pbAaDistM rename as kgMm4Sav3.pbAaDistM;
+alter table mm4.pbAaDistN rename as kgMm4Sav3.pbAaDistN;
+alter table mm4.pbAaDistP rename as kgMm4Sav3.pbAaDistP;
+alter table mm4.pbAaDistQ rename as kgMm4Sav3.pbAaDistQ;
+alter table mm4.pbAaDistR rename as kgMm4Sav3.pbAaDistR;
+alter table mm4.pbAaDistS rename as kgMm4Sav3.pbAaDistS;
+alter table mm4.pbAaDistT rename as kgMm4Sav3.pbAaDistT;
+alter table mm4.pbAaDistV rename as kgMm4Sav3.pbAaDistV;
+alter table mm4.pbAaDistW rename as kgMm4Sav3.pbAaDistW;
+alter table mm4.pbAaDistY rename as kgMm4Sav3.pbAaDistY;
+alter table mm4.pbAnomLimit rename as kgMm4Sav3.pbAnomLimit;
+alter table mm4.pbResAvgStd rename as kgMm4Sav3.pbResAvgStd;
+alter table mm4.pbStamp rename as kgMm4Sav3.pbStamp;
 
 
 o Define pep* tables in mm4 DB
@@ -4590,7 +4590,7 @@ o Build the pepMwAa table
 
 
 hgsql mm4 <<end
-load data local infile "pepMwAa.tab" into table mm4.pepMwAa;
+load data local infile "pepMwAa.tab" into table mm4.pepMwAa ignore 1 lines;
 end
 
 o Build the pepPi table
@@ -4678,7 +4678,7 @@ o Download data files from Ensembl and create ensGeneXref and ensTranscript tabl
 
   If mm4.ensGeneXref table already exists
 
-     alter table mm4.ensGeneXref rename as kgMm4Sav2.ensGeneXref;
+     alter table mm4.ensGeneXref rename as kgMm4Sav3.ensGeneXref;
 
   ENSEMBL IS KNOWN FOR CHANGING THEIR TABLE DEFINTION AND CONTENT!!!
   So, first check if the table definition of gene_xref in mus_musculus_lite_19_32a.sql
@@ -4694,7 +4694,7 @@ o Download data files from Ensembl and create ensGeneXref and ensTranscript tabl
 
   If mm4.ensTranscript exists
 
-  	alter table mm4.ensTranscript rename as kgMm4Sav2.ensTranscript;
+  	alter table mm4.ensTranscript rename as kgMm4Sav3.ensTranscript;
  
   Again, check if the table definition of transcript in mus_musculus_lite_19_32a.sql
   is the same as ~/src/hg/lib/ensTranscript.sql.  If they are not the same, some
@@ -4726,7 +4726,7 @@ o Build or rebuild Superfamily track and create sf tables needed for PB
 
   If mm4.superfamily already exists
 
-	alter table mm4.superfamily rename as kgMm4Sav2.superfamily;
+	alter table mm4.superfamily rename as kgMm4Sav3.superfamily;
 
      hgSuperfam mm4 superfam040321 > sf.log
    
@@ -4736,7 +4736,7 @@ o Build or rebuild Superfamily track and create sf tables needed for PB
 
    If mm4.sfDescription exists,
 
-   	alter table mm4.sfDescription rename as kgMm4Sav2.sfDescription;
+   	alter table mm4.sfDescription rename as kgMm4Sav3.sfDescription;
 
    hgsql mm4 < ~/src/hg/lib/sfDescription.sql
 
@@ -4751,7 +4751,7 @@ o Build or rebuild Superfamily track and create sf tables needed for PB
 
    If mm4.sfDes already exists,
 
-   	alter table mm4.sfDes rename as kgMm4Sav2.sfDes;
+   	alter table mm4.sfDes rename as kgMm4Sav3.sfDes;
 
    hgsql superfam040321 -e "select * from des" >des.tab
 
@@ -4761,11 +4761,6 @@ o Build or rebuild Superfamily track and create sf tables needed for PB
 
 o Create pbStamp table for PB
    
-  If mm4.pbStamp already exists,
-
-  hgsql mm4 -e
-   	"alter table mm4.pbStamps rename as kgMm4Sav2.pbStamp;"
-
   hgsql mm4 < ~/src/hg/lib/pbStamp.sql
 
   cd ~/kent/src/hg/protein/pbTracks
