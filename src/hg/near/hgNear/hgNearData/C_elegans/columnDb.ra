@@ -1,0 +1,10 @@
+# This contains C. elegans specific column information.
+#
+name acc
+shortLabel WormBase
+longLabel WormBase Gene ID
+priority 2.3
+visibility on
+type acc
+itemUrl http://www.wormbase.org/db/gene/gene?name=%s
+

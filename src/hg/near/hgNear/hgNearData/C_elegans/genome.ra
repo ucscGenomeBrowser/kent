@@ -1,0 +1,6 @@
+name global
+examples Some examples of search terms 'coming soon for worm'.
+geneTable sangerGene
+cannonicalTable sangerCannonical
+allTranscriptQuery select name,chrom,txStart,txEnd,name from sangerGene
+allGeneQuery select transcript,chrom,chromStart,chromEnd,protein from sangerCannonical
