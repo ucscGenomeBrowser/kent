@@ -42,11 +42,16 @@
 #include "knownMore.h"
 #include "exprBed.h"
 #include "browserTable.h"
+#include "customTrack.h"
+
+/* Will things still run without CHUCK_CODE? */
 #define CHUCK_CODE 1
 #define ROGIC_CODE 1
 #define FUREY_CODE 1
+
 #define MAX_CONTROL_COLUMNS 5
 #define CONTROL_TABLE_WIDTH 600
+
 #ifdef CHUCK_CODE
 /* begin Chuck code */
 #define EXPR_DATA_SHADES 16
@@ -74,6 +79,7 @@ int winEnd;			/* End of window in sequence. */
 boolean seqReverse;		/* Look at reverse strand. */
 char *userSeqString = NULL;	/* User sequence .fa/.psl file. */
 char *eUserSeqString = NULL;    /* CGI encoded user seq. string. */
+char *ctFileName = NULL;	/* Custom track file. */
 
 boolean withLeftLabels = TRUE;		/* Display left labels? */
 boolean withCenterLabels = TRUE;	/* Display center labels? */
@@ -311,6 +317,8 @@ struct trackGroup *tg;
 dyStringPrintf(dy, "&db=%s&pix=%d", database, tl.picWidth);
 if (eUserSeqString != NULL)
     dyStringPrintf(dy, "&ss=%s", eUserSeqString);
+if (ctFileName != NULL)
+    dyStringPrintf(dy, "&ct=%s", ctFileName);
 if (withLeftLabels)
     dyStringPrintf(dy, "&leftLabels=on");
 if (withCenterLabels)
@@ -4925,6 +4933,67 @@ return tg;
 }
 #endif /* SOMEDAY */
 
+void customTrackLoadItems(struct trackGroup *tg)
+/* Load the items in one custom track - just move beds in
+ * window... */
+{
+struct customTrack *ct = tg->customPt;
+struct bed *bed, *nextBed, *list = NULL;
+for (bed = ct->bedList; bed != NULL; bed = nextBed)
+    {
+    nextBed = bed->next;
+    if (bed->chromStart < winEnd && bed->chromEnd > winStart 
+    		&& sameString(chromName, bed->chrom))
+	{
+	slAddHead(&list, bed);
+	}
+    }
+slReverse(&list);
+tg->items = list;
+}
+
+struct trackGroup *newCustomTrack(struct customTrack *ct)
+/* Make up a new custom track. */
+{
+struct trackGroup *tg = createBedTg(ct->bt);
+tg->customPt = ct;
+tg->loadItems = customTrackLoadItems;
+return tg;
+}
+
+void loadCustomTracks(struct trackGroup **pGroupList)
+/* Load up custom tracks and append to list. */
+{
+struct customTrack *ctList = NULL, *ct;
+struct browserTable *btList = NULL, *bt;
+struct trackGroup *tg;
+char *customText = cgiOptionalString("customText");
+char *fileName = cgiOptionalString("ct");
+
+customText = skipLeadingSpaces(customText);
+if (customText != NULL && customText[0] != 0)
+    {
+    static struct tempName tn;
+    makeTempName(&tn, "ct", ".bed");
+    ctList = customTracksFromText(customText);
+    ctFileName = tn.forCgi;
+    customTrackSave(ctList, tn.forCgi);
+    makeHiddenVar("ct", tn.forCgi);
+    }
+else if (fileName != NULL)
+    {
+    ctList = customTracksFromFile(fileName);
+    ctFileName = fileName;
+    makeHiddenVar("ct", fileName);
+    }
+for (ct = ctList; ct != NULL; ct = ct->next)
+    {
+    tg = newCustomTrack(ct);
+    slAddHead(pGroupList, tg);
+    }
+}
+
+
 enum trackVisibility limitVisibility(struct trackGroup *tg)
 /* Return default visibility limited by number of items. */
 {
@@ -5237,6 +5306,7 @@ else
 }
 
 
+
 void doForm()
 /* Make the tracks display form with the zoom/scroll
  * buttons and the active image. */
@@ -5246,6 +5316,8 @@ struct browserTable *tableList = NULL, *table = NULL;
 char *freezeName = NULL;
 int controlColNum=0;
 
+
+printf("<FORM ACTION=\"%s\">\n\n", hgTracksName());
 
 /* See if want to include sequence search results. */
 userSeqString = cgiOptionalString("ss");
@@ -5265,7 +5337,11 @@ if (calledSelf)
     }
 if(hTableExists("browserTable"))
    tableList = checkDbForTables();
-/* Make list of all track groups. */
+
+/* Start tracks with any ones user pasted in. */
+loadCustomTracks(&tGroupList);
+    
+/* Make list of all database track groups. */
 if (hTableExists("cytoBand")) slSafeAddHead(&tGroupList, cytoBandTg());
 if (hTableExists("mapGenethon")) slSafeAddHead(&tGroupList, genethonTg());
 if (hTableExists("stsMarker")) slSafeAddHead(&tGroupList, stsMarkerTg());
@@ -5347,9 +5423,6 @@ for (group = tGroupList; group != NULL; group = group->next)
 	group->limitedVis = limitVisibility(group);
 	}
     }
-
-/* Tell browser where to go when they click on image. */
-printf("<FORM ACTION=\"%s\">\n\n", hgTracksName());
 
 /* Center everything from now on. */
 printf("<CENTER>\n");
