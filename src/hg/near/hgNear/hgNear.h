@@ -18,9 +18,12 @@ struct column
     * that is guaranteed to be in each track.  */
    struct column *next;		/* Next column. */
    char *name;			/* Column name, not allocated here. */
-   char *label;			/* Column label. */
+   char *shortLabel;		/* Column label. */
+   char *longLabel;		/* Column description. */
    boolean on;			/* True if turned on. */
    float priority;		/* Order displayed. */
+   char *type;			/* Type - encodes which methods to used etc. */
+   struct hash *settings;	/* Settings from ra file. */
 
    /* -- Methods -- */
    boolean (*exists)(struct column *col, struct sqlConnection *conn);
@@ -36,6 +39,7 @@ struct column
    char *table;			/* Name of associated table. */
    char *keyField;		/* GeneId field in associated table. */
    char *valField;		/* Value field in associated table. */
+   char *curGeneField;		/* curGeneId field in associated table. */
    };
 
 /* ---- global variables ---- */
@@ -89,11 +93,15 @@ void doDefaultConfigure();
 
 /* ---- Some helper routines for column methods. ---- */
 
-char *cellSimpleVal(struct column *col, char *geneId, struct sqlConnection *conn);
+char *cellLookupVal(struct column *col, char *geneId, struct sqlConnection *conn);
 /* Get a field in a table defined by col->table, col->keyField, col->valField. */
 
 void cellSimplePrint(struct column *col, char *geneId, struct sqlConnection *conn);
 /* This just prints cellSimpleVal. */
+
+static void cellSelfLinkPrint(struct column *col, char *geneId,
+	struct sqlConnection *conn);
+/* Print self and hyperlink to make this the search term. */
 
 boolean simpleTableExists(struct column *col, struct sqlConnection *conn);
 /* This returns true if col->table exists. */
@@ -101,37 +109,32 @@ boolean simpleTableExists(struct column *col, struct sqlConnection *conn);
 void columnDefaultMethods(struct column *col);
 /* Set up default methods. */
 
-void simpleMethods(struct column *col, char *table, char *key, char *val);
-/* Set up the simplest type of methods for column. */
+void lookupTypeMethods(struct column *col, char *table, char *key, char *val);
+/* Set up the methods for a simple lookup column. */
 
 char *knownPosVal(struct column *col, char *geneId, 
 	struct sqlConnection *conn);
 /* Get genome position of knownPos table.  Ok to have col NULL. */
 
 /* ---- Column method setters. ---- */
-void numberMethods(struct column *col);
-/* Set up methods for accession column. */
 
-void geneNameMethods(struct column *col);
-/* Set up a column that shows gene name. */
+void setupColumnNum(struct column *col, char *parameters);
+/* Set up column that displays index in displayed list. */
 
-void geneDescriptionMethods(struct column *col);
-/* Set up a column that shows gene name. */
+void setupColumnLookup(struct column *col, char *parameters);
+/* Set up column that just looks up one field in a table
+ * keyed by the geneId. */
 
-void accMethods(struct column *col);
-/* Set up methods for accession column. */
+void setupColumnAcc(struct column *col, char *parameters);
+/* Set up a column that displays the geneId (accession) */
 
-void percentIdMethods(struct column *col);
-/* Set up methods for percentage ID column. */
+void setupColumnDistance(struct column *col, char *parameters);
+/* Set up a column that looks up a field in a distance matrix
+ * type table such as the expression or homology tables. */
 
-void eValMethods(struct column *col);
-/* Set up methods for e value column. */
-
-void bitScoreMethods(struct column *col);
-/* Set up methods for bit score column. */
-
-void knownPosMethods(struct column *col);
-/* Set up column that known gene to genome browser. */
+void setupColumnKnownPos(struct column *col, char *parameters);
+/* Set up column that links to genome browser based on known gene
+ * position. */
 
 #endif /* HGNEAR_H */
 

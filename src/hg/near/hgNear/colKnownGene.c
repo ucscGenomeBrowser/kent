@@ -12,7 +12,7 @@
 #include "hCommon.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: colKnownGene.c,v 1.3 2003/06/19 15:44:20 kent Exp $";
+static char const rcsid[] = "$Id: colKnownGene.c,v 1.4 2003/06/20 22:28:17 kent Exp $";
 
 static char *posFromRow3(char **row)
 /* Convert chrom/start/end row to position. */
@@ -81,7 +81,6 @@ hPrintf("</TD>");
 static void genePredPosMethods(struct column *col, char *table)
 /* Put in methods for genePred based positions. */
 {
-columnDefaultMethods(col);
 col->table = table;
 col->exists = simpleTableExists;
 col->cellVal = genePredPosVal;
@@ -109,21 +108,11 @@ if (pos == NULL)
 return pos;
 }
 
-void knownPosMethods(struct column *col)
-/* Set up column that links to genome browser. */
+void setupColumnKnownPos(struct column *col, char *parameters)
+/* Set up column that links to genome browser based on known gene
+ * position. */
 {
 genePredPosMethods(col, "knownGene");
 col->cellVal = knownPosVal;
 }
 
-void geneNameMethods(struct column *col)
-/* Set up a column that shows gene name. */
-{
-simpleMethods(col, "kgXref",  "kgID", "geneSymbol");
-}
-
-void geneDescriptionMethods(struct column *col)
-/* Set up a column that shows gene name. */
-{
-simpleMethods(col, "kgXref",  "kgID", "description");
-}

@@ -1,53 +1,53 @@
-column num
+name num
 shortLabel #
-longLabel item number/link to select gene
+longLabel display item number/link to select gene
 priority 1
 visibility on
 type num
 
-column name
+name name
 shortLabel Name
 longLabel gene name/link to details page
 priority 2
 visibility on
 type lookup kgXref kgID geneSymbol
 
-column acc
+name acc
 shortLabel Accession
 longLabel mRNA accession/link to NCBI
 priority 3
 visibility on
 type acc
 
-column bitScore
+name bitScore
 shortLabel Bits
 longLabel NCBI BLASTP bit score
 priority 4
 visibility off
 type distance knownBlastTab query target bitScore
 
-column eVal
+name eVal
 shortLabel E Value
 longLabel NCBI BLASTP E value
 priority 5
 visibility on
 type distance knownBlastTab query target eValue
 
-column percentId
+name percentId
 shortLabel %ID
 longLabel NCBI BLASTP percent identity
 priority 6
 visibility on
 type distance knownBlastTab query target identity
 
-column knownPos
+name knownPos
 shortLabel Genome Position
 longLabel genome position/link to Genome Browser
 priority 7
 visibility on
-type genome knownGene name chrom chromStart chromEnd
+type knownPos 
 
-column description
+name description
 shortLabel Description
 longLabel short description line
 priority 8

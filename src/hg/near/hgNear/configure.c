@@ -10,7 +10,7 @@
 #include "web.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: configure.c,v 1.2 2003/06/18 16:22:57 kent Exp $";
+static char const rcsid[] = "$Id: configure.c,v 1.3 2003/06/20 22:28:17 kent Exp $";
 
 static char *onOffString(boolean on)
 /* Return "on" or "off". */
@@ -33,6 +33,7 @@ hPrintf("<TR BGCOLOR=\"#EFEFFF\">");
 hPrintf("<TD>Name</TD>");
 hPrintf("<TD>State</TD>");
 hPrintf("<TD>Position</TD>");
+hPrintf("<TD>Description</TD>");
 hPrintf("</TR>");
 
 /* Write out other rows. */
@@ -41,7 +42,7 @@ for (col = colList; col != NULL; col = col->next)
     hPrintf("<TR>");
 
     /* Do small label. */
-    hPrintf("<TD>%s</TD>", col->label);
+    hPrintf("<TD>%s</TD>", col->shortLabel);
 
     /* Do on/off dropdown. */
     hPrintf("<TD>");
@@ -59,6 +60,9 @@ for (col = colList; col != NULL; col = col->next)
     if (col->next != NULL)
 	cgiMakeButton(varName, "down");
     hPrintf("</TD>");
+
+    /* Do long label. */
+    hPrintf("<TD>%s</TD>", col->longLabel);
 
     hPrintf("</TR>\n");
     }

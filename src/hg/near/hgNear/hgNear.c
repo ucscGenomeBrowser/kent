@@ -9,9 +9,10 @@
 #include "hdb.h"
 #include "hui.h"
 #include "web.h"
+#include "ra.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: hgNear.c,v 1.10 2003/06/20 08:20:30 kent Exp $";
+static char const rcsid[] = "$Id: hgNear.c,v 1.11 2003/06/20 22:28:17 kent Exp $";
 
 char *excludeVars[] = { "submit", "Submit", confVarName, defaultConfName,
 	resetConfName, NULL }; 
@@ -57,7 +58,8 @@ hPrintf("</TR></TABLE>");
 
 /* ---- Some helper routines for column methods. ---- */
 
-char *cellSimpleVal(struct column *col, char *geneId, struct sqlConnection *conn)
+char *cellLookupVal(struct column *col, char *geneId, 
+	struct sqlConnection *conn)
 /* Get a field in a table defined by col->table, col->keyField, col->valField. */
 {
 char query[512];
@@ -73,7 +75,8 @@ sqlFreeResult(&sr);
 return res;
 }
 
-void cellSimplePrint(struct column *col, char *geneId, struct sqlConnection *conn)
+void cellSimplePrint(struct column *col, char *geneId, 
+	struct sqlConnection *conn)
 /* This just prints one field from table. */
 {
 char *s = col->cellVal(col, geneId, conn);
@@ -86,6 +89,18 @@ else
     hPrintf("<TD>%s</TD>", s);
     freeMem(s);
     }
+}
+
+static void cellSelfLinkPrint(struct column *col, char *geneId,
+	struct sqlConnection *conn)
+/* Print self and hyperlink to make this the search term. */
+{
+char *s = col->cellVal(col, geneId, conn);
+if (s == NULL) 
+    s = cloneString("n/a");
+hPrintf("<TD><A HREF=\"../cgi-bin/hgNear?%s&near.search=%s\">%s</TD>",
+	cartSidUrlString(cart), geneId, s);
+freeMem(s);
 }
 
 static boolean alwaysExists(struct column *col, struct sqlConnection *conn)
@@ -114,17 +129,6 @@ col->cellVal = noVal;
 col->cellPrint = cellSimplePrint;
 }
 
-void simpleMethods(struct column *col, char *table, char *key, char *val)
-/* Set up the simplest type of methods for column. */
-{
-columnDefaultMethods(col);
-col->table = table;
-col->keyField = key;
-col->valField = val;
-col->exists = simpleTableExists;
-col->cellVal = cellSimpleVal;
-}
-
 /* ---- Accession column ---- */
 
 static char *accVal(struct column *col, char *geneId, struct sqlConnection *conn)
@@ -133,8 +137,8 @@ static char *accVal(struct column *col, char *geneId, struct sqlConnection *conn
 return cloneString(geneId);
 }
 
-void accMethods(struct column *col)
-/* Set up methods for accession column. */
+void setupColumnAcc(struct column *col, char *parameters)
+/* Set up a column that displays the geneId (accession) */
 {
 columnDefaultMethods(col);
 col->cellVal = accVal;
@@ -142,7 +146,8 @@ col->cellVal = accVal;
 
 /* ---- Number column ---- */
 
-static char *numberVal(struct column *col, char *geneId, struct sqlConnection *conn)
+static char *numberVal(struct column *col, char *geneId, 
+	struct sqlConnection *conn)
 /* Return incrementing number. */
 {
 static int ix = 0;
@@ -152,13 +157,81 @@ safef(buf, sizeof(buf), "%d", ix);
 return cloneString(buf);
 }
 
-void numberMethods(struct column *col)
-/* Set up methods for accession column. */
+void setupColumnNum(struct column *col, char *parameters)
+/* Set up column that displays index in displayed list. */
 {
 columnDefaultMethods(col);
 col->cellVal = numberVal;
+col->cellPrint = cellSelfLinkPrint;
 }
 
+/* ---- Simple table lookup type columns ---- */
+
+void lookupTypeMethods(struct column *col, char *table, char *key, char *val)
+/* Set up the methods for a simple lookup column. */
+{
+col->table = cloneString(table);
+col->keyField = cloneString(key);
+col->valField = cloneString(val);
+col->exists = simpleTableExists;
+col->cellVal = cellLookupVal;
+}
+
+void setupColumnLookup(struct column *col, char *parameters)
+/* Set up column that just looks up one field in a table
+ * keyed by the geneId. */
+{
+char *table = nextWord(&parameters);
+char *keyField = nextWord(&parameters);
+char *valField = nextWord(&parameters);
+if (valField == NULL)
+    errAbort("Not enough fields in type lookup for %s", col->name);
+lookupTypeMethods(col, table, keyField, valField);
+}
+
+/* ---- Distance table type columns ---- */
+
+static char *cellDistanceVal(struct column *col, char *geneId, struct sqlConnection *conn)
+/* Get a field in a table defined by col->table, col->keyField, col->valField. */
+{
+char query[512];
+struct sqlResult *sr;
+char **row;
+char *res = NULL;
+safef(query, sizeof(query), "select %s from %s where %s = '%s' and %s = '%s'",
+	col->valField, col->table, col->keyField, geneId, col->curGeneField, curGeneId);
+sr = sqlGetResult(conn, query);
+if ((row = sqlNextRow(sr)) != NULL)
+    res = cloneString(row[0]);
+sqlFreeResult(&sr);
+return res;
+}
+
+void distanceTypeMethods(struct column *col, char *table, 
+	char *curGene, char *otherGene, char *valField)
+/* Set up a column that looks up a field in a distance matrix
+ * type table such as the expression or homology tables. */
+{
+col->table = cloneString(table);
+col->keyField = cloneString(otherGene);
+col->valField = cloneString(valField);
+col->curGeneField = cloneString(curGene);
+col->exists = simpleTableExists;
+col->cellVal = cellDistanceVal;
+}
+
+void setupColumnDistance(struct column *col, char *parameters)
+/* Set up a column that looks up a field in a distance matrix
+ * type table such as the expression or homology tables. */
+{
+char *table = nextWord(&parameters);
+char *curGene = nextWord(&parameters);
+char *otherGene = nextWord(&parameters);
+char *valField = nextWord(&parameters);
+if (valField == NULL)
+    errAbort("Not enough fields in type distance for %s", col->name);
+distanceTypeMethods(col, table, curGene, otherGene, valField);
+}
 
 /* ---- Page/Form Making stuff ---- */
 
@@ -438,7 +511,8 @@ for (col = colList; col != NULL; col = col->next)
     }
 }
 
-struct column *getColumns(struct sqlConnection *conn)
+#ifdef OLD
+struct column *oldGetColumns(struct sqlConnection *conn)
 /* Return list of columns for big table. */
 {
 struct column *colList = NULL, *col;
@@ -521,6 +595,73 @@ refineVisibility(colList);
 slSort(&colList, columnCmpPriority);
 return colList;
 }
+#endif /* OLD */
+
+char *mustFindInRaHash(struct lineFile *lf, struct hash *raHash, char *name)
+/* Look up in ra hash or die trying. */
+{
+char *val = hashFindVal(raHash, name);
+if (val == NULL)
+    errAbort("Missing required %s field in record ending line %d of %s",
+    	name, lf->lineIx, lf->fileName);
+return val;
+}
+
+void setupColumnType(struct column *col)
+/* Set up methods and column-specific variables based on
+ * track type. */
+{
+char *dupe = cloneString(col->type);	
+char *s = dupe;
+char *type = nextWord(&s);
+
+if (type == NULL)
+    warn("Missing type value for column %s", col->name);
+if (sameString(type, "num"))
+    setupColumnNum(col, s);
+else if (sameString(type, "lookup"))
+    setupColumnLookup(col, s);
+else if (sameString(type, "acc"))
+    setupColumnAcc(col, s);
+else if (sameString(type, "distance"))
+    setupColumnDistance(col, s);
+else if (sameString(type, "knownPos"))
+    setupColumnKnownPos(col, s);
+else
+    errAbort("Unrecognized type %s for %s", col->type, col->name);
+freez(&dupe);
+}
+
+
+struct column *getColumns(struct sqlConnection *conn)
+/* Return list of columns for big table. */
+{
+char *raName = "columnDb.ra";
+struct lineFile *lf = lineFileOpen(raName, TRUE);
+struct column *col, *colList = NULL;
+struct hash *raHash;
+
+while ((raHash = raNextRecord(lf)) != NULL)
+    {
+    AllocVar(col);
+    col->name = mustFindInRaHash(lf, raHash, "name");
+    col->shortLabel = mustFindInRaHash(lf, raHash, "shortLabel");
+    col->longLabel = mustFindInRaHash(lf, raHash, "longLabel");
+    col->priority = atof(mustFindInRaHash(lf, raHash, "priority"));
+    col->on = sameString(mustFindInRaHash(lf, raHash, "visibility"), "on");
+    col->type = mustFindInRaHash(lf, raHash, "type");
+    col->settings = raHash;
+    columnDefaultMethods(col);
+    setupColumnType(col);
+    if (col->exists(col, conn))
+	slAddHead(&colList, col);
+    }
+lineFileClose(&lf);
+refinePriorities(colList);
+refineVisibility(colList);
+slSort(&colList, columnCmpPriority);
+return colList;
+}
 
 struct hash *hashColumns(struct column *colList)
 /* Return a hash of columns keyed by name. */
@@ -546,10 +687,10 @@ struct column *colList = getColumns(conn), *col;
 hPrintf("<TABLE BORDER=1 CELLSPACING=1 CELLPADDING=1>\n");
 
 /* Print label row. */
-hPrintf("<TR BGCOLOR=\"#E8E8FF\">");
+hPrintf("<TR BGCOLOR=\"#E0E0FF\">");
 for (col = colList; col != NULL; col = col->next)
     {
-    char *colName = col->label;
+    char *colName = col->shortLabel;
     if (col->on)
 	hPrintf("<TD><B>%s</B></TD>", colName); 
     }
@@ -560,7 +701,7 @@ for (gene = geneList; gene != NULL; gene = gene->next)
     {
     char *geneId = gene->name;
     if (sameString(geneId, curGeneId))
-        hPrintf("<TR BGCOLOR=\"#E8FFE8\">");
+        hPrintf("<TR BGCOLOR=\"#E0FFE0\">");
     else
         hPrintf("<TR>");
     for (col = colList; col != NULL; 
