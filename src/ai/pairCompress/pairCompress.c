@@ -28,6 +28,58 @@ static struct optionSpec options[] = {
 
 FILE *binaryFile = NULL;
 
+struct compSym
+/* Compression symbol */
+    {
+    struct compSym *next;		/* Next in list. */
+    struct slRef *children;		/* Children (mom's side). */
+    int id;				/* ID */
+    char *text;				/* Output text. */
+    int size;				/* Size of text. */
+    int useCount;			/* Number of times used. */
+    struct compSym *mom, *dad;		/* Ancestors. */
+    };
+
+int compSymCmp(const void *va, const void *vb)
+/* Compare two compSyms by useCount. */
+{
+const struct compSym *a = *((struct compSym **)va);
+const struct compSym *b = *((struct compSym **)vb);
+return b->useCount - a->useCount;
+}
+
+
+
+void outSymString(FILE *f, char *s, int size)
+/* Write out symbol in ascii of given size. */
+{
+char c;
+int i;
+fputc('\'', f);
+for (i=0; i<size; ++i)
+    {
+    c = s[i];
+    if (c == '\n')
+	 fprintf(f, "\\n");
+    else if (c == '\t')
+	 fprintf(f, "\\t");
+    else if (c == '\r')
+	 fprintf(f, "\\r");
+    else
+	 fputc(c, f);
+    }
+fputc('\'', f);
+}
+
+void outSym(FILE *f, struct compSym *sym)
+/* Output symbol */
+{
+if (sym != NULL)
+    {
+    outSymString(f, sym->text, sym->size);
+    }
+}
+
 struct nHashEl
 /* An element in a nHash list. */
     {
@@ -108,27 +160,6 @@ for (el = hash->table[nHashFunc(string,size)&hash->mask]; el != NULL; el = el->n
 return NULL;
 }
 
-struct compSym
-/* Compression symbol */
-    {
-    struct compSym *next;		/* Next in list. */
-    struct compSym *children;		/* Children (mom's side). */
-    int id;				/* ID */
-    char *text;				/* Output text. */
-    int size;				/* Size of text. */
-    int useCount;			/* Number of times used. */
-    struct compSym *mom, *dad;		/* Ancestors. */
-    };
-
-int compSymCmp(const void *va, const void *vb)
-/* Compare two compSyms by useCount. */
-{
-const struct compSym *a = *((struct compSym **)va);
-const struct compSym *b = *((struct compSym **)vb);
-return b->useCount - a->useCount;
-}
-
-
 struct nHash *newCompSymHash(struct compSym **pList)
 /* Return new nHash initialized with all one letter symbols. */
 {
@@ -149,52 +180,71 @@ for (i=0; i<256; ++i)
 return hash;
 }
 
-struct compSym *longestMatching(struct nHash *hash, char *string, int size, int longestEl)
-/* Return longest element in hash that is same as start of string. */
+struct compSym *rLongest(int level, struct compSym *initialSym, char *string, int size)
+/* Return longest child, grandchild, etc. that matches. */
 {
-int elSize;
-if (longestEl > size)
-    longestEl = size;
-for (elSize = longestEl; elSize >= 1; --elSize)
+struct slRef *ref;
+struct compSym *sym, *child, *promising, *bestSoFar = initialSym;
+int bestSize = bestSoFar->size;
+int i;
+
+for (ref = initialSym->children; ref != NULL; ref = ref->next)
     {
-    struct compSym *sym = nHashFindVal(hash, string, elSize);
-    if (sym != NULL)
-	{
-	sym->useCount += 1;
-        return sym;
+    sym = ref->val;
+    if (sym->size <= size)
+        {
+	struct compSym *dad = sym->dad;
+	if (memcmp(string, dad->text, dad->size) == 0)
+	    {
+	    promising = rLongest(level+1, sym, string+dad->size, size - dad->size);
+	    if (promising->size > bestSize)
+	        {
+		bestSoFar = promising;
+		bestSize = promising->size;
+		}
+	    }
 	}
     }
-return NULL;
+return bestSoFar;
 }
 
-void outSymString(FILE *f, char *s, int size)
-/* Write out symbol in ascii of given size. */
+struct compresser 
+/* Keep info needed while compressing. */
+    {
+    struct compresser *next;		/* Next compresser in list. */
+    struct compSym *letters[256];	/* Symbol that begins at each letter */
+    struct lm *lm;			/* Local memory pool */
+    int symCount;			/* Number of symbols we've used. */
+    };
+
+
+struct compresser *compresserNew(struct compSym **pSymList)
+/* Create and return a new compresser. */
 {
-char c;
+struct compresser *comp;
 int i;
-fputc('\'', f);
-for (i=0; i<size; ++i)
+struct lm *lm;
+AllocVar(comp);
+comp->lm = lm = lmInit(0);
+for (i=0; i<256; ++i)
     {
-    c = s[i];
-    if (c == '\n')
-	 fprintf(f, "\\n");
-    else if (c == '\t')
-	 fprintf(f, "\\t");
-    else if (c == '\r')
-	 fprintf(f, "\\r");
-    else
-	 fputc(c, f);
+    struct compSym *sym;
+    lmAllocVar(lm, sym);
+    sym->id = comp->symCount++;
+    sym->text = lmAlloc(lm, 1);
+    sym->text[0] = i;
+    sym->size = 1;
+    comp->letters[i] = sym;
+    slAddHead(pSymList, sym);
     }
-fputc('\'', f);
+return comp;
 }
 
-void outSym(FILE *f, struct compSym *sym)
-/* Output symbol */
+struct compSym *longestMatching(struct compresser *comp, 
+	char *string, int size)
+/* Return longest element in hash that is same as start of string. */
 {
-if (sym != NULL)
-    {
-    outSymString(f, sym->text, sym->size);
-    }
+return rLongest(0, comp->letters[string[0]], string+1, size-1);
 }
 
 static int maxSym = 0x200;
@@ -279,28 +329,31 @@ void pairCompress(char *inText, int inSize, char *streamOut, char *symOut)
  * new symbol rather than new letter at each stage. */
 {
 struct compSym *symList = NULL, *sym;
-struct nHash *hash = newCompSymHash(&symList);
-struct lm *lm = hash->lm;
-int longestEl = 1, elSize;
+struct compresser *comp = compresserNew(&symList);
+struct lm *lm = comp->lm;
 struct compSym *prev = NULL, *cur, *baby;
 int inPos = 0;
 FILE *f =  mustOpen(streamOut, "w");
 
 while (inPos < inSize)
     {
-    cur = longestMatching(hash, inText+inPos, inSize - inPos, longestEl);
+    cur = longestMatching(comp, inText+inPos, inSize - inPos);
+    cur->useCount += 1;
     inPos += cur->size;
     if (prev != NULL)
         {
+	struct slRef *ref;
 	lmAllocVar(lm, baby);
-	baby->id = hash->elCount;
+	baby->id = comp->symCount++;
 	baby->size = prev->size + cur->size;
 	baby->mom = prev;
 	baby->dad = cur;
-	nHashAdd(hash, inText + inPos - baby->size, baby->size, baby, &baby->text);
+	baby->text = lmAlloc(lm, baby->size);
+	memcpy(baby->text, inText + inPos - baby->size, baby->size);
 	slAddHead(&symList, baby);
-	if (longestEl < baby->size)
-	    longestEl = baby->size;
+	lmAllocVar(lm, ref);
+	ref->val = baby;
+	slAddHead(&prev->children, ref);
 	output(f, cur, baby);
 	}
     else
@@ -327,7 +380,7 @@ if (binaryFile)
 }
 
 void readAndCompress(char *inFile, char *outStream, char *outSym)
-/* Read in file and give it to compressor. */
+/* Read in file and give it to compresser. */
 {
 size_t inSize;
 char *inBuf;
