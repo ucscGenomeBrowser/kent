@@ -3,7 +3,7 @@
 #if !defined(HISTOGRAM_H)
 #define HISTOGRAM_H
 
-#define	DEFAULT_BIN_COUNT	25
+#define	DEFAULT_BIN_COUNT	26
 /*	ARBITRARY default choice of # of bins	*/
 
 struct histoResult {
