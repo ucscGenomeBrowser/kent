@@ -78,7 +78,7 @@
 #include "simpleNucDiff.h"
 #include "tfbsCons.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.672 2004/02/17 01:27:14 sugnet Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.673 2004/02/19 01:27:55 daryl Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
@@ -4917,7 +4917,6 @@ tg->drawItems = snpMapDrawItems;
 tg->drawItemAt = snpMapDrawItemAt;
 tg->loadItems = loadSnpMap;
 tg->freeItems = freeSnpMap;
-tg->labelColor = MG_BLUE;
 tg->itemColor = snpMapColor;
 tg->itemNameColor = snpMapColor;
 }
