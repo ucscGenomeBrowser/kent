@@ -12,5 +12,10 @@ CREATE TABLE refSeqMrna (
     prodName int unsigned not null,	# pointer to product name table
     locusLinkId int unsigned not null,	# Locus Link ID
               #Indices
-    PRIMARY KEY(name)
+    PRIMARY KEY(mrnaAcc(12)),
+    index(name(10)),
+    index(protAcc(10)),
+    index(locusLinkId),
+    index(prodName),
+    index(geneName),
 );

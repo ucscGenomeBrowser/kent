@@ -213,9 +213,9 @@ boolean sqlMaybeMakeTable(struct sqlConnection *sc, char *table, char *query)
 /* Create table from query if it doesn't exist already. 
  * Returns FALSE if didn't make table. */
 {
-MYSQL *conn = sc->conn;
-if (mysql_real_query(conn, query, strlen(query)) != 0)
+if (sqlTableExists(sc, table))
     return FALSE;
+sqlUpdate(sc, query);
 return TRUE;
 }
 
@@ -250,7 +250,6 @@ return res;
 }
 
 
-/* Query database. If result empty squawk and die. */
 void sqlUpdate(struct sqlConnection *conn, char *query)
 /* Tell database to do something that produces no results table. */
 {
