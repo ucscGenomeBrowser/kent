@@ -49,7 +49,9 @@ if (cfm->lineLen)
 	    {
 	    int pos = cfm->charCount;
 	    if (cfm->countDown)
-	        pos = -pos;
+		{
+	        pos = 1-pos;
+		}
 	    pos += cfm->numOff;
 	    fprintf(cfm->out, " %ld", pos);
 	    }
@@ -140,8 +142,8 @@ int nStartNum, nEndNum;
 
 if (baf->nCountDown)
     {
-    nStartNum = 1+baf->nNumOff - baf->nLineStart;
-    nEndNum = baf->nNumOff - baf->nCurPos;
+    nStartNum = baf->nNumOff - baf->nLineStart;
+    nEndNum = 1+baf->nNumOff - baf->nCurPos;
     }
 else
     {
@@ -190,8 +192,8 @@ fprintf(baf->out, "\n");
 
 if (baf->hCountDown)
     {
-    hStartNum = 1+baf->hNumOff - baf->hLineStart;
-    hEndNum = baf->hNumOff - baf->hCurPos;
+    hStartNum = baf->hNumOff - baf->hLineStart;
+    hEndNum = 1+baf->hNumOff - baf->hCurPos;
     }
 else
     {
