@@ -222,7 +222,7 @@ else if ((leaf = branch->leaf) != NULL)
     if (leaf->cb->qStart < lonely->cb->qStart 
      && leaf->cb->tStart < lonely->cb->tStart)
 	{
-	int score = leaf->totalScore + lonely->cb->score - 
+	double score = leaf->totalScore + lonely->cb->score - 
 		connectCost(leaf->cb, lonely->cb);
 	if (score > bestSoFar.score)
 	   {
