@@ -65,7 +65,7 @@ shortLabel Human Net
 longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno
 priority 124.3
-visibility dense
+visibility full
 spectrum on
 type netAlign hg17 chainHg17
 otherDb hg17
