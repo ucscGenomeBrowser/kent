@@ -1217,8 +1217,7 @@ identifier bgiSnpId external=BGI
 identifier bgiGeneId external=BGI
 "BGI Gene ID"
     $galGal.bgiGene.name
-    $galGal.bgiGeneSnp.geneName
-
+    $galGal.bgiGeneSnp.geneName minCheck=0.1
 
 # Other Identifiers
 
