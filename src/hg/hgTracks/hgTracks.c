@@ -43,6 +43,7 @@
 #include "exprBed.h"
 
 #define CHUCK_CODE 1
+#define ROGIC_CODE 1
 #define MAX_CONTROL_COLUMNS 5
 #define CONTROL_TABLE_WIDTH 600
 #ifdef CHUCK_CODE
@@ -950,6 +951,50 @@ char table[64];
 sprintf(table, "%s_mrna", chromName);
 tg->items = lfFromPslsInRange(table, winStart, winEnd);
 }
+#ifdef ROGIC_CODE
+struct linkedFeatures *lfFromPslsInRangeByChrom(char *table, char *chrom, int start, int end)
+/* Return linked features from range of table. */
+{
+char query[256];
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr = NULL;
+char **row;
+struct linkedFeatures *lfList = NULL, *lf;
+
+sprintf(query, "select * from %s where tName = '%s' and tStart<%u and tEnd>%u",
+    table, chrom, winEnd, winStart);
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    struct psl *psl = pslLoad(row);
+    lf = lfFromPsl(psl);
+    slAddHead(&lfList, lf);
+    pslFree(&psl);
+    }
+slReverse(&lfList);
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+return lfList;
+}
+
+void loadMgcMrnaAli(struct trackGroup *tg)
+/* Load up rnas from table into trackGroup items. */
+{
+tg->items = lfFromPslsInRangeByChrom("mgc_mrna", chromName, winStart, winEnd);
+}
+
+struct trackGroup *fullMgcMrnaTg()
+/* Make track group of full length mRNAs. */
+{
+struct trackGroup *tg = linkedFeaturesTg();
+tg->mapName = "mgc_mrna";
+tg->visibility = tvFull;
+tg->longLabel = "Full Length MGC mRNAs";
+tg->shortLabel = "Full MGC mRNAs";
+tg->loadItems = loadMgcMrnaAli;
+return tg;
+}
+#endif /* ROGIC_CODE */
 
 struct trackGroup *fullMrnaTg()
 /* Make track group of full length mRNAs. */
@@ -4598,6 +4643,7 @@ if (hTableExists("snpNih")) slSafeAddHead(&tGroupList, snpNihTg());
 if (hTableExists("snpTsc")) slSafeAddHead(&tGroupList, snpTscTg());
 if (chromTableExists("_rmsk")) slSafeAddHead(&tGroupList, repeatTg());
 if (hTableExists("simpleRepeat")) slSafeAddHead(&tGroupList, simpleRepeatTg());
+if (hTableExists("mgc_mrna")) slSafeAddHead(&tGroupList, fullMgcMrnaTg());
 #ifdef CHUCK_CODE
 if (hTableExists("rosettaTe") && sameString(chromName,"chr22")) slSafeAddHead(&tGroupList,rosettaTeTg());   
 if (hTableExists("rosettaPe") && sameString(chromName,"chr22")) slSafeAddHead(&tGroupList,rosettaPeTg()); 
@@ -4995,3 +5041,4 @@ htmlSetBackground("../images/floret.jpg");
 htmShell("Draft Genome Browser v4", doMiddle, NULL);
 //htmShell("Browser Being Updated", doDown, NULL);
 }
+
