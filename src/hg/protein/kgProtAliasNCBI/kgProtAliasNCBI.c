@@ -9,9 +9,10 @@ void usage()
 errAbort(
   "kgProtAliasNCBI - create gene alias (mRNA part) .tab files "
   "usage:\n"
-  "   kgProtAliasNCBI xxxx yyyy\n"
-  "            xxxx is genome  database name\n"
-  "example: kgProtAliasNCBI hg15\n");
+  "   kgProtAliasNCBI <DB> <RO_DB>\n"
+  "            <DB> is knownGene DB under construction\n"
+  "            <RO_DB> is read only target genome database\n"
+  "example: kgProtAliasNCBI kgDB hg16\n");
 }
 
 int main(int argc, char *argv[])
@@ -28,12 +29,14 @@ char *kgID;
 FILE *o1, *o2;
 char cond_str[256];
 char *database;
+char *ro_db;
 
 char *proteinID;
 char *proteinAC;
 
-if (argc != 2) usage();
+if (argc != 3) usage();
 database  = cloneString(argv[1]);
+ro_db  = cloneString(argv[2]);
 
 conn = hAllocConn();
 conn2= hAllocConn();
@@ -61,7 +64,7 @@ while (row2 != NULL)
     // get Genbank protein accession numbers
     if (strstr(kgID, "NM_") != NULL)
 	{
-	sprintf(query,"select protAcc from %s.refLink where mrnaAcc = '%s';", database, kgID);
+	sprintf(query,"select protAcc from %s.refLink where mrnaAcc = '%s';", ro_db, kgID);
 	sr = sqlMustGetResult(conn, query);
 	row = sqlNextRow(sr);
 	while (row != NULL)
