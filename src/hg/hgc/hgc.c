@@ -131,10 +131,9 @@
 #include "bgiGeneInfo.h"
 #include "bgiSnp.h"
 #include "bgiGeneSnp.h"
-#include "hgFind.h"
 #include "botDelay.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.602 2004/04/02 06:35:10 daryl Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.603 2004/04/03 02:35:59 angie Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -6834,6 +6833,34 @@ genericHeader(tdb, item);
 printSuperfamilyCustomUrl(tdb, itemForUrl, item == itemForUrl);
 
 printTrackHtml(tdb);
+}
+
+static boolean isBDGPName(char *name)
+/* Return TRUE if name is from BDGP (matching {CG,TE,CR}0123{,4}{,-R?})  */
+{
+int len = strlen(name);
+boolean isBDGP = FALSE;
+if (startsWith("CG", name) || startsWith("TE", name) || startsWith("CR", name))
+    {
+    int numNum = 0;
+    int i;
+    for (i=2;  i < len;  i++)
+	{
+	if (isdigit(name[i]))
+	    numNum++;
+	else
+	    break;
+	}
+    if ((numNum >= 4) && (numNum <= 5))
+	{
+	if (i == len)
+	    isBDGP = TRUE;
+	else if ((i == len-3) &&
+		 (name[i] == '-') && (name[i+1] == 'R') && isalpha(name[i+2]))
+	    isBDGP = TRUE;
+	}
+    }
+return(isBDGP);
 }
 
 void doRefGene(struct trackDb *tdb, char *rnaName)
