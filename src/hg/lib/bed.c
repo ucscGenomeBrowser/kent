@@ -703,3 +703,47 @@ struct bed *bedFilterList(struct bed *bedListIn, struct bedFilter *bf)
 return bedFilterListInRange(bedListIn, bf, NULL, 0, 0);
 }
 
+struct bed *bedFilterByNameHash(struct bed *bedList, struct hash *nameHash)
+/* Given a bed list and a hash of names to keep, return the list of bed 
+ * items whose name is in nameHash. */
+{
+struct bed *bedListOut = NULL, *bed=NULL;
+
+for (bed=bedList;  bed != NULL;  bed=bed->next)
+    {
+    if (hashLookup(nameHash, bed->name) != NULL)
+	{
+	struct bed *newBed = cloneBed(bed);
+	slAddHead(&bedListOut, newBed);
+	}
+    }
+
+slReverse(&bedListOut);
+return bedListOut;
+}
+
+struct bed *bedFilterByWildNames(struct bed *bedList, struct slName *wildNames)
+/* Given a bed list and a list of names that may include wildcard characters,
+ * return the list of bed items whose name matches at least one wildName. */
+{
+struct bed *bedListOut = NULL, *bed=NULL;
+struct slName *wildName=NULL;
+
+for (bed=bedList;  bed != NULL;  bed=bed->next)
+    {
+    for (wildName=wildNames;  wildName != NULL;  wildName=wildName->next)
+	{
+	if (wildMatch(wildName->name, bed->name))
+	    {
+	    struct bed *newBed = cloneBed(bed);
+	    slAddHead(&bedListOut, newBed);
+	    break;
+	    }
+	}
+    }
+
+slReverse(&bedListOut);
+return bedListOut;
+}
+
+ 
