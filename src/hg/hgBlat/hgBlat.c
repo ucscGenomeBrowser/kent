@@ -137,8 +137,18 @@ struct lineFile *lf = pslFileOpen(pslName);
 struct psl *pslList = NULL, *psl;
 char *browserUrl = hgTracksName();
 char *hgcUrl = hgcName();
-char *extraCgi = "";
+char *uiState;
 char *sort = cgiUsualString("sort", sortList[0]);
+
+cgiVarExclude("userSeq");
+cgiVarExclude("seqFile");
+cgiVarExclude("genome");
+cgiVarExclude("type");
+cgiVarExclude("sort");
+cgiVarExclude("position");
+cgiVarExclude("db");
+cgiVarExclude("ss");
+uiState = cgiUrlString()->string;
 
 while ((psl = pslNext(lf)) != NULL)
     {
@@ -178,9 +188,9 @@ printf("   ACTIONS      QUERY           SCORE START  END QSIZE IDENTITY CHRO STR
 printf("--------------------------------------------------------------------------------------------\n");
 for (psl = pslList; psl != NULL; psl = psl->next)
     {
-    printf("<A HREF=\"%s?position=%s:%d-%d&db=%s&ss=%s+%s%s\">",
+    printf("<A HREF=\"%s?position=%s:%d-%d&db=%s&ss=%s+%s&%s\">",
 	browserUrl, psl->tName, psl->tStart, psl->tEnd, database, 
-	pslName, faName, extraCgi);
+	pslName, faName, uiState);
     printf("browser</A> ");
     printf("<A HREF=\"%s?o=%d&g=htcUserAli&i=%s+%s+%s&c=%s&l=%d&r=%d&db=%s\">", 
     	hgcUrl, psl->tStart, pslName, faName, psl->qName,  psl->tName,
@@ -423,7 +433,7 @@ puts("Rather than pasting a sequence, you can choose to upload a text file conta
 puts("Upload sequence: <INPUT TYPE=FILE NAME=\"seqFile\">");
 puts(" <INPUT TYPE=SUBMIT Name=Submit VALUE=\"Submit File\"><P>\n");
 
-cgiMakeHiddenVar("db", serve->db);
+cgiContinueAllVars();
 
 printf("%s", 
 "<P>Only DNA sequences less than 20,000 bases and protein or translated \n"
