@@ -161,7 +161,7 @@
 #include "pscreen.h"
 #include "jalview.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.848 2005/03/15 01:18:40 markd Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.848.2.1 2005/03/22 17:20:52 heather Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -3158,7 +3158,7 @@ char *chrom = NULL;
 int start = 0;
 int end = 0;
 
-if (sameString(action, "Extended case/color options"))
+if (sameString(action, "extended case/color options"))
     {
     doGetDnaExtended1();
     return;
@@ -10937,7 +10937,7 @@ while ((row = sqlNextRow(sr))!=NULL)
 	chrom = cloneString(snp.chrom);
 	chromStart = snp.chromStart;
 	bedPrintPos((struct bed *)&snp, 3);
-	printSnpAlignment(snp);
+	/* printSnpAlignment(snp); */
 	printf("<BR>\n");
 	firstOne=0;
 	}
@@ -10948,7 +10948,7 @@ printf("<BR>\n");
 printf("<A HREF=\"http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?");
 printf("type=rs&rs=%s\" TARGET=_blank>dbSNP link</A>\n", itemName);
 doSnpEntrezGeneLink(tdb, itemName);
-printLsSnpLinks(snp);
+/* printLsSnpLinks(snp); */
 if (hTableExists("snpExceptions") && differentString(exception,"0"))
     writeSnpException(exception, itemName, rowOffset, chrom, chromStart);
 printTrackHtml(tdb);
