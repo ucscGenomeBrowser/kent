@@ -157,7 +157,7 @@
 #include "pscreen.h"
 #include "jalview.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.822 2005/01/21 04:08:57 kent Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.823 2005/01/22 01:21:38 markd Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -3849,7 +3849,7 @@ else if (startsWith("danRer", database))
 else if (startsWith("xenTro", database))
     {
     mgcDb.name = "XGC";
-    mgcDb.organism = "Xt";
+    mgcDb.organism = "Str";
     mgcDb.server = "xgc";
     }
 else
