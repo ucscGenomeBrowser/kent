@@ -34,7 +34,7 @@
 #include "wiggle.h"
 #include "hgText.h"
 
-static char const rcsid[] = "$Id: hgText.c,v 1.132 2004/04/06 17:45:25 angie Exp $";
+static char const rcsid[] = "$Id: hgText.c,v 1.133 2004/04/06 19:08:53 hiram Exp $";
 
 /* sources of tracks, other than the current database: */
 static char *hgFixed = "hgFixed";
@@ -4524,7 +4524,7 @@ if (hti->hasBlocks)
     getCumulativeStats(blockSizeArrs, itemCounts, numChroms, blockSizeStats);
     }
 
-if (0 && ! wiggleDone)
+if (1 || ! wiggleDone)
     {
     // For some reason BORDER=1 does not work in our web.c nested table scheme.
     // So use web.c's trick of using an enclosing table to provide a border.  
