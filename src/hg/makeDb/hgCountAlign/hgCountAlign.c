@@ -101,13 +101,16 @@ return prevBlock;
 static unsigned adjustWinStart(struct slidingWin *win,
                                unsigned winStart,
                                struct axt *block)
-/* If the range of the next window is before the next alignment block, move to
- * the first window that does overlap.  This saves slowly advancing the window
- * through large unaligned regions.  Note we move to the first window that
- * overlaps.
+/* If there are no counts in the window and the range of the next window is
+ * before the next alignment block, move to the first window that does
+ * overlap.  This saves slowly advancing the window through large unaligned
+ * regions.  Note we move to the first window that overlaps.  We don't adjust
+ * until the sliding window is empty, so that counts all windows containing
+ * counts are included.
  */
 {
-if ((winStart + win->winSize) < block->tStart)
+if (((winStart + win->winSize) < block->tStart)
+    && (win->sum->numCounts == 0))
     {
     unsigned newStart = ((block->tStart/win->winSlide) * win->winSlide)
         - (win->winSlide * (win->numSubWins-1));
@@ -136,9 +139,8 @@ while (nextBlock != NULL)
     slidingWinAdvance(win, winStart);
     nextBlock = countWindow(win->tail, align, nextBlock, UINT_MAX);
 
-    /* output if all subwindows are filled or if we reached the
-     * end without filling all, and we have counts in the window */
-    if ((win->curNumSubWins == win->numSubWins) || (nextBlock == NULL))
+    /* output if all subwindows are filled */
+    if (win->curNumSubWins == win->numSubWins)
         {
         slidingWinSum(win);
         if (win->sum->numCounts > 0)
@@ -146,6 +148,17 @@ while (nextBlock != NULL)
         }
     winStart += win->winSlide;
     }
+
+/* output remaining subwindows */
+while (win->sum->numCounts > 0)
+    {
+    slidingWinAdvance(win, winStart);
+    slidingWinSum(win);
+    if (win->sum->numCounts > 0)
+        winCountsTabOut(win->sum, out, countCoords);
+    winStart += win->winSlide;
+    }
+slidingWinFree(&win);
 }
 
 void countFixedCountWindows(unsigned winSize,
@@ -192,6 +205,9 @@ while (nextBlock != NULL)
         }
     winStart += win->winSlide;
     }
+
+/* output remaining subwindows */
+slidingWinFree(&win);
 }
 
 void alignCount(unsigned winSize,
