@@ -253,6 +253,7 @@ popd
 #135845121 total bases
     hgsql dp2 -N -e 'select chrom,size from chromInfo' > chrom.sizes
     wc -l chrom.sizes
+#    759 chrom.sizes
 
 
 # CREATING GRP TABLE FOR TRACK GROUPING (DONE 8/3/04 angie)
@@ -293,6 +294,7 @@ popd
     # go public on genome-test
     cvs commit makefile
     cvs commit drosophila/dp2
+    mkdir /gbdb/dp2/html
     # in a clean, updated tree's kent/src/hg/makeDb/trackDb:
     make alpha
 
@@ -360,31 +362,14 @@ popd
     iSync
 
 
-# MAKE DOWNLOADABLE FILES (TODO 8/2/04 angie)
+# MAKE DOWNLOADABLE FILES (DONE 8/16/04 angie)
     ssh kksilo
+    mkdir /cluster/data/dp2/zips
     cd /cluster/data/dp2
-    mkdir zips
-    zip -j zips/chromOut.zip ?{,?}/chr?{,?}.fa.out
-    # use head to keep the RepeatMasker output header of the first file, 
-    # and tail to skip past it in all subsequent files.
-    head -3 chunks/chunk_00.scaf.out > scaffolds.fa.out
-    foreach f ( chunks/*_??.scaf.out chunks/*_???.scaf.out)
-      tail +4 $f >> scaffolds.fa.out
-    end
-    zip zips/scaffoldOut.zip scaffolds.fa.out
-    rm scaffolds.fa.out
-    zip -j zips/chromFa.zip ?{,?}/chr?{,?}.fa
-    foreach f (?{,?}/chr?{,?}.fa)
-      maskOutFa $f hard $f.masked
-    end
-    zip -j zips/chromFaMasked.zip ?{,?}/chr?{,?}.fa.masked
+    zip -j zips/scaffoldOut.zip RMOut/scaffolds.fa.out
     zip -j zips/scaffoldFa.zip scaffolds/*.fa
     zip -j zips/scaffoldFaMasked.zip scaffoldsMasked/*.fa.masked
-    cd bed/simpleRepeat
-    zip ../../zips/chromTrf.zip trfMaskChrom/chr*.bed
-    zip ../../zips/scaffoldTrf.zip scaffoldsTrfMask.bed
-    cd ../..
-    zip -j zips/liftAll.zip jkStuff/liftAll.lft
+    zip -j zips/scaffoldTrf.zip bed/simpleRepeat/scaffoldsTrfMask.bed
     foreach f (zips/*.zip)
       echo $f
       unzip -t $f | tail -1
@@ -394,7 +379,9 @@ popd
     cd /usr/local/apache/htdocs/goldenPath/dp2
     mkdir bigZips database
     # Create README.txt files in bigZips/ and database/ to explain the files.
-    cp -p /cluster/data/dp2/zips/*.zip bigZips
+    cd bigZips
+    cp -p /cluster/data/dp2/zips/*.zip .
+    md5sum *.zip > md5sum.txt
 
 
 # SWAP DM1-DP2 BLASTZ (DONE 8/3/04 angie)
@@ -492,21 +479,36 @@ axtChain -verbose=0 $1 \
     | hgLoadNet dp2 netSyntenyDm1 stdin
 
 
-# MAKE VSDM1 DOWNLOADABLES (TODO 8/3/04 angie)
+# MAKE AXTNET (DONE 8/17/04 angie)
+    ssh kksilo
+    cd /cluster/data/dp2/bed/blastz.dm1/axtChain
+    netSplit melanogaster.net net
+    cd ..
+    mkdir axtNet
+    foreach f (axtChain/net/*)
+      set chr = $f:t:r
+      netToAxt $f axtChain/chain/$chr.chain /cluster/data/dp2/nib \
+        /cluster/data/dm1/nib stdout \
+      | axtSort stdin axtNet/$chr.axt
+    end
+
+
+# MAKE VSDM1 DOWNLOADABLES (DONE 8/17/04 angie)
     ssh hgwdev
     mkdir /usr/local/apache/htdocs/goldenPath/dp2/vsDm1
     cd /usr/local/apache/htdocs/goldenPath/dp2/vsDm1
     gzip -c \
       /cluster/data/dp2/bed/blastz.dm1/axtChain/all.chain \
-      > chain.gz
+      > melanogaster.chain.gz
     gzip -c \
-      /cluster/data/dp2/bed/blastz.dm1/axtChain/fruitflyFilt.net \
-      > net.gz
+      /cluster/data/dp2/bed/blastz.dm1/axtChain/melanogaster.net \
+      > melanogaster.net.gz
     mkdir axtNet
-    foreach f (/cluster/data/dp2 /bed/blastz.dm1/axtNet/*.axt)
+    foreach f (/cluster/data/dp2/bed/blastz.dm1/axtNet/*.axt)
       gzip -c $f > axtNet/$f:t.gz
     end
     # Make a README.txt which explains the files & formats.
+    md5sum *.gz */*.gz > md5sum.txt
 
 
 # LIFTOVER BDGP GENES (TODO 8/?/03 angie)
