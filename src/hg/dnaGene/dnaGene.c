@@ -17,6 +17,7 @@ errAbort(
 }
 
 char *dbName;
+char *genomeReadOnly;
 char tempDbName[40];
 
 /* check if a locusID points to a KG mRNA */
@@ -101,17 +102,21 @@ char *name, *chrom, *strand, *txStart, *txEnd, *cdsStart, *cdsEnd,
 char *mseq, *gseq, *hseq, *swissprot;
 int alignmentID=0;
 
-if (argc != 3) usage();
+if (argc != 4) usage();
     
 dbName = argv[1];
 protDbName = argv[2];
+genomeReadOnly = argv[3];
 
 sprintf(tempDbName, "%sTemp", dbName);
+
+hSetDb(genomeReadOnly);
 
 conn = hAllocConn();
 conn2= hAllocConn();
 conn3= hAllocConn();
 conn5= hAllocConn();
+
 
 o1 = fopen("dnaGene.tab", "w");
 o2 = fopen("j.dat", "w");
@@ -147,7 +152,7 @@ while (row2 != NULL)
     if ((!hasKGmRNA) && (gseq != NULL))
 	{
 	sprintf(cond_str, "name='%s'", refAC);
-	hseq = sqlGetField(conn, dbName, "refGene", "name", cond_str);
+	hseq = sqlGetField(conn, genomeReadOnly, "refGene", "name", cond_str);
 	if (hseq != NULL)
 	    {
 	    sprintf(cond_str, "refseq='%s';", refAC);
@@ -204,14 +209,14 @@ while (row2 != NULL)
 			}		
         	    row3 = sqlNextRow(sr3);
 		    }
+		sqlFreeResult(&sr3);
 		}
-	    sqlFreeResult(&sr3);
 
 	    if (proteinDisplayID != NULL)
 		{
 		// generate KG entry
 					
-                sprintf(query5,"select * from %s.refGene where name='%s';", dbName, refAC);
+                sprintf(query5,"select * from %s.refGene where name='%s';", genomeReadOnly, refAC);
 		sr5 = sqlMustGetResult(conn5, query5);
     		row5 = sqlNextRow(sr5);
     		while (row5 != NULL)
