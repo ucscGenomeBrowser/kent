@@ -35,6 +35,9 @@ void dumpCookieList();
 /* Return TRUE if looks like we're being run as a CGI. */
 boolean cgiIsOnWeb();
 
+/* Return name of script so libs can do context-sensitive stuff. */
+char *cgiScriptName();
+
 /* These routines abort the html output if the input isn't
  * there or is misformatted. */
 char *cgiString(char *varName);

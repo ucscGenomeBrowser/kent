@@ -11,7 +11,7 @@
 #include "linefile.h"
 #include "errabort.h"
 
-static char const rcsid[] = "$Id: cheapcgi.c,v 1.64 2004/06/01 16:49:03 kent Exp $";
+static char const rcsid[] = "$Id: cheapcgi.c,v 1.65 2004/06/08 15:39:56 angie Exp $";
 
 /* These three variables hold the parsed version of cgi variables. */
 static char *inputString = NULL;
@@ -44,6 +44,12 @@ boolean cgiIsOnWeb()
 /* Return TRUE if looks like we're being run as a CGI. */
 {
 return getenv("REQUEST_METHOD") != NULL;
+}
+
+char *cgiScriptName()
+/* Return name of script so libs can do context-sensitive stuff. */
+{
+return getenv("SCRIPT_NAME");
 }
 
 char *_cgiRawInput()
