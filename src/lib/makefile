@@ -9,13 +9,15 @@ O = aliType.o asParse.o axt.o bits.o binRange.o \
     fa.o ffAli.o ffScore.o filePath.o fixColor.o flydna.o fof.o \
     fuzzyShow.o gdf.o gemfont.o gfNet.o gff.o \
     gifcomp.o gifdecomp.o gifLabel.o gifread.o gifwrite.o hash.o \
-    hmmstats.o htmlPage.o htmshell.o hugefnt.o internet.o intExp.o jointalign.o\
+    hmmstats.o htmlPage.o htmshell.o hugefnt.o \
+    internet.o intExp.o jointalign.o \
     keys.o kxTok.o largefnt.o linefile.o localmem.o \
     maf.o mafFromAxt.o mafScore.o md5.o medfnt.o \
     memalloc.o memgfx.o net.o nib.o \
-    nt4.o obscure.o oldGff.o options.o osunix.o \
+    nt4.o obscure.o oldGff.o options.o osunix.o pairHmm.o \
     portimpl.o pscmGfx.o psGfx.o psl.o pslShow.o pthreadWrap.o ra.o rbTree.o \
-    repMask.o rle.o rudp.o sailfnt.o scoreWindow.o seqOut.o servBrcMcw.o servcis.o \
+    repMask.o rle.o rudp.o sailfnt.o scoreWindow.o \
+    seqOut.o servBrcMcw.o servcis.o \
     servCrunx.o servcl.o servmsII.o servpws.o shaRes.o \
     sixhi.o slog.o smallishfnt.o snof.o snofmake.o snofsig.o spaceSaver.o \
     sqlNum.o sqlList.o subText.o synQueue.o tokenizer.o \
