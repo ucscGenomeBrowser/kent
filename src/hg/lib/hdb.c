@@ -33,7 +33,7 @@
 #include "genbank.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.243 2005/04/04 23:59:11 markd Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.244 2005/04/06 20:06:37 angie Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
@@ -67,58 +67,57 @@ return val;
 }
 
 
-static struct hash *buildChromInfoHash(char *db)
-/* Return a hash that maps an upper-cased (for case-insensitive lookup) 
- * sequence name to a chromInfo struct -- we can query chromInfo only 
- * once and then use this hash to get info about a particular sequence, 
- * the default sequence for db, and/or a list of all sequences. */
+static struct chromInfo *lookupChromInfo(char *db, char *chrom)
+/* Query db.chromInfo for the first entry matching chrom. */
 {
-struct hash *hash = hashNew(12);
+struct chromInfo *ci = NULL;
 struct sqlConnection *conn = hAllocOrConnect(db);
-struct sqlResult *sr = sqlGetResult(conn, "select * from chromInfo");
+struct sqlResult *sr = NULL;
 char **row = NULL;
-while ((row = sqlNextRow(sr)) != NULL)
+char query[256];
+safef(query, sizeof(query), "select * from chromInfo where chrom like '%s'",
+      chrom);
+sr = sqlGetResult(conn, query);
+if ((row = sqlNextRow(sr)) != NULL)
     {
-    struct chromInfo *ci = chromInfoLoad(row);
-    char upcName[HDB_MAX_CHROM_STRING];
-    safef(upcName, sizeof(upcName), "%s", ci->chrom);
-    touppers(upcName);
-    hashAdd(hash, upcName, ci);
+    ci = chromInfoLoad(row);
     }
 sqlFreeResult(&sr);
 hFreeOrDisconnect(&conn);
-return hash;
+return ci;
 }
 
-static struct hash *chromInfoHash(char *db)
-/* Retrieve (or build if necessary) the cached hash of chromInfo contents
- * for db. */
+static struct chromInfo *getChromInfo(char *db, char *chrom)
+/* Get chromInfo for named chromosome (case-insens.) from db.  
+ * Return NULL if no such chrom. */
+/* Cache results, but build up the hash incrementally instead of in one slurp 
+ * from chromInfo because that takes a *long* time for scaffold-based dbs and 
+ * is usually not necessary. */
 {
 static struct hash *dbToInfo = NULL;
+struct hash *infoHash = NULL;
 struct hashEl *dHel = NULL;
+struct chromInfo *ci = NULL;
+char upcName[HDB_MAX_CHROM_STRING];
+safef(upcName, sizeof(upcName), chrom);
+touppers(upcName);
+
 if (dbToInfo == NULL)
     dbToInfo = hashNew(0);
 dHel = hashLookup(dbToInfo, db);
 if (dHel == NULL)
     {
-    struct hash *hash = buildChromInfoHash(db);
-    hashAdd(dbToInfo, db, hash);
-    return hash;
+    infoHash = hashNew(0);
+    hashAdd(dbToInfo, db, infoHash);
     }
 else
-    return (struct hash *)(dHel->val);
-}
-
-static struct chromInfo *getChromInfo(char *db, char *chrom)
-/* Get chromInfo for named chromosome from primary database.  
- * Return NULL if no such chrom. */
-{
-struct hash *hash = chromInfoHash(db);
-struct chromInfo *ci = NULL;
-char *upcName = cloneString(chrom);
-touppers(upcName);
-ci = hashFindVal(hash, upcName);
-freeMem(upcName);
+    infoHash = (struct hash *)(dHel->val);
+ci = (struct chromInfo *)hashFindVal(infoHash, upcName);
+if (ci == NULL)
+    {
+    ci = lookupChromInfo(db, chrom);
+    hashAdd(infoHash, upcName, ci);
+    }
 return ci;
 }
 
@@ -357,12 +356,24 @@ return hDefaultDbForGenome(DEFAULT_GENOME);
 char *hDefaultChromDb(char *db)
 /* Return some sequence named in chromInfo from the given db. */
 {
-struct hash *hash = chromInfoHash(db);
-struct hashCookie cookie = hashFirst(hash);
-struct chromInfo *ci = (struct chromInfo *)hashNextVal(&cookie);
-if (ci == NULL)
-    errAbort("hDefaultChromDb: empty chromInfo for db=%s", db);
-return cloneString(ci->chrom);
+static struct hash *hash = NULL;
+char *chrom = NULL;
+
+if (hash == NULL)
+    hash = hashNew(0);
+chrom = (char *)hashFindVal(hash, db);
+if (chrom == NULL)
+    {
+    struct sqlConnection *conn = hAllocOrConnect(db);
+    char buf[HDB_MAX_CHROM_STRING];
+    chrom = sqlQuickQuery(conn, "select chrom from chromInfo limit 1",
+			  buf, sizeof(buf));
+    if (chrom == NULL)
+	errAbort("hDefaultChromDb: database %s has no chromInfo", db);
+    hFreeOrDisconnect(&conn);
+    hashAdd(hash, db, cloneString(chrom));
+    }
+return cloneString(chrom);
 }
 
 char *hDefaultChrom()
@@ -751,29 +762,24 @@ void hParseTableName(char *table, char trackName[HDB_MAX_TABLE_STRING],
 		     char chrom[HDB_MAX_CHROM_STRING])
 /* Parse an actual table name like "chr17_random_blastzWhatever" into 
  * the track name (blastzWhatever) and chrom (chr17_random). */
+/* Note: for the sake of speed, this does not consult chromInfo 
+ * because that would be extremely slow for scaffold-based dbs.
+ * Instead this makes some assumptions about chromosome names and split 
+ * table names in databases that support split tables, and just parses text.
+ * When chromosome/table name conventions change, this will need an update! */
 {
-char *ptr;
-
 /* It might not be a split table; provide defaults: */
-safef(trackName, HDB_MAX_TABLE_STRING, "%s", table);
-safef(chrom, HDB_MAX_CHROM_STRING, "%s", hDefaultChrom());
-/*#*** This needs to handle Group and _hla_hap*... it would be a good idea to 
- *#*** just see if the table begins with something from chromInfo. */
-if (startsWith("chr", table))
+safef(trackName, HDB_MAX_TABLE_STRING, table);
+safef(chrom, HDB_MAX_CHROM_STRING, hDefaultChrom());
+if (startsWith("chr", table) || startsWith("Group", table))
     {
-    if ((ptr = strstr(table, "_random_")) != NULL)
+    char *ptr = strrchr(table, '_');
+    if (ptr != NULL)
 	{
-	strncpy(trackName, ptr+strlen("_random_"), HDB_MAX_TABLE_STRING);
-	strncpy(chrom, table, HDB_MAX_CHROM_STRING);
-	if ((ptr = strstr(chrom, "_random")) != NULL)
-	    *(ptr+strlen("_random")) = 0;
-	}
-    else if ((ptr = strrchr(table, '_')) != NULL)
-	{
-	strncpy(trackName, ptr+1, HDB_MAX_TABLE_STRING);
-	strncpy(chrom, table, HDB_MAX_CHROM_STRING);
-	if ((ptr = strrchr(chrom, '_')) != NULL)
-	    *ptr = 0;
+	int chromLen = min(HDB_MAX_CHROM_STRING-1, (ptr - table));
+	strncpy(chrom, table, chromLen);
+	chrom[chromLen] = 0;
+	safef(trackName, HDB_MAX_TABLE_STRING, ptr+1);
 	}
     }
 }
@@ -1048,17 +1054,20 @@ return hAllChromNamesDb(hdbName);
 struct slName *hAllChromNamesDb(char *db)
 /* Get list of all chromosome names in database. */
 {
-struct hash *hash = chromInfoHash(db);
-struct hashEl *hel = NULL;
-struct slName *chromNames = NULL;
+struct slName *list = NULL;
+struct sqlConnection *conn = hAllocOrConnect(db);
+struct sqlResult *sr;
+char **row;
 
-for (hel = hashElListHash(hash);  hel != NULL;  hel = hel->next)
+sr = sqlGetResult(conn, "select chrom from chromInfo");
+while ((row = sqlNextRow(sr)) != NULL)
     {
-    struct chromInfo *ci = (struct chromInfo *)(hel->val);
-    struct slName *cn = slNameNew(ci->chrom);
-    slAddHead(&chromNames, cn);
+    struct slName *el = slNameNew(row[0]);
+    slAddHead(&list, el);
     }
-return chromNames;
+sqlFreeResult(&sr);
+hFreeOrDisconnect(&conn);
+return list;
 }
 
 
