@@ -2285,13 +2285,16 @@ sprintf(query, "select * from %s where contig = '%s'", track, ctgName);
 selectOneRow(conn, track, query, &sr, &row);
 ctg = ctgPosLoad(row);
 sqlFreeResult(&sr);
-sprintf(query, 
-    "select count(*) from clonePos where chrom = '%s' and chromEnd >= %d and chromStart <= %d",
-    ctg->chrom, ctg->chromStart, ctg->chromEnd);
-cloneCount = sqlQuickNum(conn, query);
-
 printf("<B>Name:</B> %s<BR>\n", ctgName);
-printf("<B>Total Clones:</B> %d<BR>\n", cloneCount);
+
+if (hTableExists("clonePos"))
+    {
+    sprintf(query, 
+	    "select count(*) from clonePos where chrom = '%s' and chromEnd >= %d and chromStart <= %d",
+	    ctg->chrom, ctg->chromStart, ctg->chromEnd);
+    cloneCount = sqlQuickNum(conn, query);
+    printf("<B>Total Clones:</B> %d<BR>\n", cloneCount);
+    }
 printPos(ctg->chrom, ctg->chromStart, ctg->chromEnd, NULL, TRUE);
 printTrackHtml(tdb);
 
