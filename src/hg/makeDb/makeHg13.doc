@@ -1,3 +1,6 @@
+#!/bin/csh -f # set emacs mode
+exit; # don't actually run this like a script :)
+
 This file describes how we made the browser database on 
 NCBI build 31 (November, 2002 freeze)
 
@@ -1625,6 +1628,30 @@ LOAD SANGER22 GENES  TO DO
      # go to that directory while logged onto hgwdev.  Then:
         grep -v Pseudogene chr_20*.gtf | ldHgGene hg13 sanger20 stdin
 	hgSanger20 hg13 *.gtf *.info
+
+
+LOAD VEGA GENES (DONE 04/04/03)
+    mkdir ~/hg13/bed/vega
+    # Saved email attachment from Steve Searle <searle@sanger.ac.uk> to
+    # ~/hg13/bed/vega/vegagtf.tar.gz
+    gunzip -c vegagtf.tar.gz | tar xvf -
+    # Add "chr" to the beginning of each GTF line:
+    foreach f (chr*.gtf)
+      sed -e 's/^/chr/' $f > $f:r-fixed.gtf
+    end
+    # The pep files need their not-yet-stable otter ID's translated to 
+    # the transcript_id's used in the GTF.  
+    foreach f (chr*.fa)
+      set c = `echo $f:t:r | awk -F_ '{print $1;}'`
+      set g = ${c}_from_ev.gtf
+      ./fixOtterIds.pl $g $f > $f:r-fixed.fa
+    end
+    cat chr*.gtf.tab > vegaInfo.tab
+    ldHgGene hg13 vegaGene chr*-fixed.gtf
+    hgPepPred hg13 generic vegaPep chr*-fixed.fa
+    hgsql hg13 < ~/kent/src/hg/lib/vegaInfo.sql
+    echo "load data local infile 'vegaInfo.tab' into table vegaInfo" \
+    | hgsql hg13
 
 
 LOAD RNAGENES
