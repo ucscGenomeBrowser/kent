@@ -77,16 +77,6 @@ priority 119
 visibility hide
 type sample 0 8
 
-track HMRConservation
-shortLabel HMRCons
-longLabel Mouse/Human/Rat Evolutionary Conservation Score
-group compGeno
-color 100,50,0
-altColor 175,150,128
-priority 119.01
-visibility hide
-type sample 0 8
-
 track slamNonCodingMouse
 shortLabel Slam Non Coding Mouse
 longLabel SLAM predictions of human/mouse conserved non-coding regions
