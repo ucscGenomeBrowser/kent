@@ -1087,6 +1087,12 @@ while (readGbInfo(lf))
             kvtAdd(kvt, "cat", words[3]);
             kvtAdd(kvt, "dat", date);
             }
+	else if (wordCount == 5 && sameString(words[2], "bp") && isdigit(words[1][0]))
+	    {
+	    char *mol = words[3];
+	    if (sameString(mol, "mRNA") || sameString(mol, "DNA"))
+		kvtAdd(kvt, "mol", mol);
+	    }
         else
             {
 	    int i;
@@ -1096,7 +1102,7 @@ while (readGbInfo(lf))
 	    uglyf("\n");
             errAbort("Short LOCUS line in %s accession %s", inName, accession);
             }
-        if (sameString(words[4], "EST"))
+        if (wordCount >= 5 && sameString(words[4], "EST"))
             {
             /* Try and figure out if it's a 3' or 5' EST */
             char *def = definitionField->val;
