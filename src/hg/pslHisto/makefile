@@ -6,8 +6,7 @@ MYLIBDIR = ../../lib/${MACHTYPE}
 MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 
 
-H = pslTbl.h
-O = pslHisto.o pslTbl.o
+O = pslHisto.o
 B =  ${HOME}/bin/${MACHTYPE}/pslHisto
 
 $B: pslHisto
@@ -18,7 +17,6 @@ pslHisto: $O ${MYLIBS}
 	${CC} ${COPT} ${CFLAGS} -o pslHisto $O ${MYLIBS} ${MYSQLLIBS} $L
 
 pslHisto.o: pslHisto.c $H
-pslTbl.o: pslTbl.c pslTbl.h
 
 test:
 	cd tests && ${MAKE} test
