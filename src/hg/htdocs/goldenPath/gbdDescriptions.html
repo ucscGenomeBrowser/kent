@@ -147,8 +147,14 @@ format description of their fields.</P>
   href="#Chain">chrN_chainMm3</A> 
   - Summary info about chain of mouse (mm3 assembly) alignments</LI>
   <LI><A 
+  href="#Chain">chrN_chainMm4</A> 
+  - Summary info about chain of mouse (mm4 assembly) alignments</LI>
+  <LI><A 
   href="#ChainGap">chrN_chainMm3Link</A> 
   - Alignment block in mouse (mm3 assembly) chain </LI>
+  <LI><A 
+  href="#ChainGap">chrN_chainMm4Link</A> 
+  - Alignment block in mouse (mm4 assembly) chain </LI>
   <LI><A 
   href="#Chain">chrN_chainPt0</A> 
   - Summary info about chain of chimp (13 Nov 2003 assembly) alignments</LI>
@@ -219,14 +225,26 @@ stored in a single table rather than one table per chromosome:</P>
   - Translations of Acembly gene predictions into corresponding amino acid
     sequences </LI>
   <LI><A 
+  href="#BED">affy10K</A> 
+  - SNPs on the Affymetrix 10K SNP Genotyping Array</LI>
+  <LI><A 
   href="#BED">affyGeno</A> 
   - SNPs on the Affymetrix 120K SNP Genotyping Array</LI>
   <LI><A 
   href="#BED">affyRatio</A> 
   - Expression data from GNF using Affymetrix GeneChips</LI>
   <LI><A 
-  href="#wiggleTrack">affyTranscriptome</A> 
+  href="#PslInfo">affyU133</A> 
+  - Consensus and exemplar sequences used for probe selection on Affy HG-U133A and HG-U133B chips</LI>
+  <LI><A 
+  href="#PslInfo">affyU95</A> 
+  - Consensus and exemplar sequences used for probe selection on Affy HG-U95Av2 chip</LI>
+  <LI><A 
+  href="#AffyTranscriptome">affyTranscriptome</A> 
   - Transcriptome data for chr21 and chr22 from Affymetrix </LI>
+  <LI><A 
+  href="#atlasOncoGene">atlasOncoGene</A> 
+  - Link to Atlas Oncology site</LI>
   <LI><A 
   href="#PslInfo">all_bacends</A> 
   - BLAT alignment information for BAC clone end sequences on 
@@ -248,6 +266,9 @@ stored in a single table rather than one table per chromosome:</P>
   href="#PslInfo">all_sts_seq</A> 
   - BLAT alignment information for full STS markers sequences 
     on the draft sequence assembly </LI>
+  <LI><A 
+  href="#AltGraphX">altGraphX</A> 
+  - Summary of alt-splicing in EST and mRNA tracks
   <LI><A 
   href="#LFS">bacEndPairs</A> 
   - Locations of BAC clones using placements of its 5' and 3' 
@@ -278,11 +299,26 @@ stored in a single table rather than one table per chromosome:</P>
   href="#WiggleTrack">binomialCons2</A> 
   - Zoo blastz alignments conservation scores 
   <LI><A 
+  href="#BioCycMapDesc">bioCycMapDesc</A> 
+  - BioCyc pathway maps
+  <LI><A 
+  href="#BioCycMapDesc">bioCycPathway</A> 
+  - Cross reference between BioCyc Pathway and Known Genes 
+  <LI><A 
   href="#PslInfo">blatChimp</A> 
   - Blat alignments of Pan troglodytes against the draft human genome
   <LI><A 
   href="#BlastTab">ceBlastTab</A> 
   - Blastp results of known genes vs. one another (<em>C. elegans</em>)
+  <LI><A 
+  href="#CgapAlias">cgapAlias</A> 
+  - Associates CGAP pathway IDs with gene symbols or mRNA accessions</LI>
+  <LI><A 
+  href="#CgapBiocDesc">cgapBiocDesc</A> 
+  - CGAP/BioCarta pathway description
+  <LI><A 
+  href="#CgapBiocPathway">cgapBiocPathway</A> 
+  - Associates CGAP pathway IDs with BioCarta pathway IDs
   <LI><A 
   href="#ChainLink">chainLink</A> 
   - Alignment block in chain </LI>
@@ -298,6 +334,12 @@ stored in a single table rather than one table per chromosome:</P>
   <LI><A 
   href="#PslInfo">chimpBlat</A> 
   - Blat alignments of Pan troglodytes against the draft human genome
+  <LI><A 
+  href="#BED">chimpDels</A> 
+  - Human genome assembly regions deleted in chimp
+  <LI><A 
+  href="#ChimpSimpleDiff">chimpSimpleDiff</A> 
+  - Simple differences between the chimp and human genome assemblies
   <LI><A 
   href="#ChromInfo">chromInfo</A> 
   - Describes name and size of each chromosome as well as an external file 
@@ -335,6 +377,9 @@ stored in a single table rather than one table per chromosome:</P>
   href="#DupSpMrna">dupSpMrna</A> 
   - Duplicate mRNA/Protein entries that have identical CDS structures</LI>
   <LI><A 
+  href="#GenePredictions">ECgene</A> 
+  - ECGene gene predictions </LI>
+  <LI><A 
   href="#BED">encodeRegions</A> 
   - Names and positions of selected regions for the ENCODE project</LI>
   <LI><A 
@@ -358,6 +403,12 @@ stored in a single table rather than one table per chromosome:</P>
   <LI><A 
   href="#PepPredictions">ensPep</A> 
   - Translations of Ensembl gene predictions into corresponding amino acid sequences </LI>
+  <LI><A 
+  href="#EnsGeneXref">ensGeneXref</A> 
+  - Table gene_xref downloaded from Ensembl </LI>
+  <LI><A 
+  href="#EnsTranscript">ensTranscript</A> 
+  - Table transcript downloaded from Ensembl </LI>
   <LI><A 
   href="#OrientInfo">estOrientInfo</A> 
   - Extra information on ESTs calculated by polyInfo program
@@ -453,6 +504,12 @@ stored in a single table rather than one table per chromosome:</P>
   <LI><A 
   href="#JaxQTL">jaxQTL</A> 
   - Jackson Labs Mouse Quantitative Trait Loci </LI>
+  <LI><A 
+  href="#KeggMapDesc">keggMapDesc</A> 
+  - Description of KEGG pathway map
+  <LI><A 
+  href="#KeggPathway">keggPathway</A> 
+  - Associates KEGG pathway IDs with Known Genes and LocusLink IDs
   <LI><A 
   href="#KgAlias">kgAlias</A> 
   - Links together a Known Gene ID and a gene alias
@@ -577,11 +634,53 @@ TrEMBL-NEW and their corresponding mRNAs from GenBank
   href="#NetAlign">netMm3</A> 
   - Database representation of a net of alignments with mouse assembly Mm3 </LI>
   <LI><A 
+  href="#NetAlign">netMm4</A> 
+  - Database representation of a net of alignments with mouse assembly Mm4 </LI>
+  <LI><A 
   href="#NetAlign">netRn3</A> 
   - Database representation of a net of alignments with rat assembly Rn3 </LI>
   <LI><A 
   href="#NetAlign">netRxBestPt0</A> 
   - Database representation of a net of alignments with chimp assembly Pt0 </LI>
+  <LI><A 
+  href="#PbAaDistX">pbAaDistX</A> 
+  - Proteome Browser distribution for a specific amino acid X
+  <LI><A 
+  href="#PbAnomLimit">pbAnomLimit</A> 
+  - Proteome Browser amino acid anomaly limits for each AA
+  <LI><A 
+  href="#PbResAvgStd">pbResAvgStd</A> 
+  - Proteome Browser residue average and standard deviation
+  <LI><A 
+  href="#PbStamp">pbStamp</A> 
+  - Proteome Browser stamp information
+  <LI><A 
+  href="#PepCCntDist">pepCCntDist</A> 
+  - Proteome Browser cysteine count distribution
+  <LI><A 
+  href="#PepExonCntDist">pepExonCntDist</A> 
+  - Proteome Browser exon count distribution
+  <LI><A 
+  href="#PepHydroDist">pepHydroDist</A> 
+  - Proteome Browser hydrophobicity distribution
+  <LI><A 
+  href="#PepIPCntDist">pepIPCntDist</A> 
+  - Proteome Browser InterProt domain count distribution
+  <LI><A 
+  href="#PepMolWtDist">pepMolWtDist</A> 
+  - Proteome Browser molecular weight distribution
+  <LI><A 
+  href="#PepMwAa">pepMwAa</A> 
+  - Proteome Browser molecular weight and AA length of proteins
+  <LI><A 
+  href="#PepPiDist">pepPiDist</A> 
+  - Proteome Browser pI distribution
+  <LI><A 
+  href="#PepPred">pepPred</A> 
+  - Proteome Browser predicted peptide linked to predicted gene
+  <LI><A 
+  href="#PepResDist">pepResDist</A> 
+  - Proteome Browser residue distribution
   <LI><A 
   href="#BED">perlegen</A> 
   - Perlegen Common High-Resolution Haplotype Blocks (chr21 only) </LI>
@@ -628,6 +727,12 @@ TrEMBL-NEW and their corresponding mRNAs from GenBank
   <LI><A 
   href="#RefSeqSummary">RefSeqSummary</A> 
   - Sparse summary table created only for refSeqs that have "Summary:" or "COMPLETENESS:" in comment
+  <LI><A 
+  href="#RegPotential">regPotential2X</A> 
+  - 2-way regulatory potential score computed from human/mouse alignments
+  <LI><A 
+  href="#RegPotential">regPotential3X</A> 
+  - 3-way regulatory potential score computed from human/mouse/rat alignments
   <LI><A 
   href="#RikenAltid">rikenaltid</A> 
   - Riken altid table (Mouse Feb. 2002 and later)</LI>
@@ -701,6 +806,12 @@ TrEMBL-NEW and their corresponding mRNAs from GenBank
   <LI><A 
   href="#Seq">seq</A> 
   - Locations of database table sequences referenced in external fasta files </LI>
+  <LI><A 
+  href="#SfAssign">sfAssign</A> 
+  - Superfamily assignment table
+  <LI><A 
+  href="#SfDes">sfDes</A> 
+  - Superfamily description table
   <LI><A 
   href="#SfDescription">sfDescription</A> 
   - Stores domain descriptions for the Superfamily track</LI> 
@@ -948,6 +1059,60 @@ cover the same region </LI>
 This section describes the format of each table field by field in 
 autoSql format.
 
+ZZ
+
+<H4><A name=AffyTranscriptome></A>Affymetrix Transcriptome</H4>
+<PRE>table affyTranscriptome
+"Describes (x,y) pairs of samples"
+    ushort bin;                         "A field to speed indexing" 
+    string  chrom;                      "Chromosome alignment is on"
+    uint    chromStart;                 "Start position in chromosome"
+    uint    chromEnd;                   "End position in chromosome"
+    string  name;                       "Unique index given to each block of samples"
+    uint    score;                      "Overall block score from 0 to 1000"
+    char[1] strand;                     "Strand: + or -"
+    uint    sampleCount;                "Number of samples in this block"
+    uint[sampleCount] samplePosition;   "Base position of each sample in this
+                                         block, relative to chromStart"
+    uint[sampleCount] sampleHeight;     "Score for each sample (y-value) from 0 to 1000"
+</PRE>
+
+<H4><A name=AltGraphX></A>Alternative Splicing</H4>
+<PRE>table altGraphX
+"Summary of alt-splicing in EST and mRNA tracks"
+   (
+   string tName; 
+   int tStart; 
+   int tEnd; 
+   string name; 
+   int id; 
+   string strand; 
+   int vertexCount;
+   int[vertexCount] vTypes; 
+   int[vertexCount] vPositions; 
+   int edgeCount; 
+   int[edgeCount] edgeStarts;
+   int[edgeCount] edgeEnds; 
+   int[edgeCount] evidence;
+   int[edgeCount] edgeTypes;
+   int mrnaRefCount; 
+   int[mrnaRefCount] mrnaRefs;
+   int[mrnaRefCount] mrnaTissues;
+   int[mrnaRefCount] mrnaLibs;
+   )
+</PRE>
+
+<H4><A name=AtlasOncoGene></A>Atlas Oncology Site</H4>
+<PRE>table atlasOncoGene
+"Table used to link into ATLAS Oncology site"
+   (
+   string locusSymbol;  "LocusLink Symbol"
+   string atlasGene;    "ATLAS Gene"
+   string otherGene;    "Other gene"
+   string url;          "URL for corresonding ATLAS web page"
+   )
+</PRE>
+
 <H4><A name=BactigPos></A>Bactig Positions</H4>
 <PRE>table bactigPos
 "Bactig positions in chromosome coordinates (bed 4 +)."
@@ -959,6 +1124,25 @@ autoSql format.
     string startContig;  "First contig in this bactig"
     string endContig;    "Last contig in this bactig"
     )
+</PRE>
+
+<H4><A name=BioCycMapDesc></A>Bio Cyc Pathway Map</H4>
+<PRE>table bioCycMapDesc
+"Decription of BioCyc pathway maps"
+   (
+   string mapID;        "BioCyc pathway map"
+   string description;  "BioCyc pathway map description"
+   )
+</PRE>
+
+<H4><A name=BioCycPathway></A>Bio Cyc Pathway</H4>
+<PRE>table bioCycPathway
+"BioCyc Pathway to Known Gene cross reference"
+   (
+   string kgID;         "Known Gene ID" 
+   string geneID;       "Gene (RefSeq) ID"
+   string mapID;        "BioCyc pathway map ID"
+   )
 </PRE>
 
 <H4><A name=BlastTab></A>Blast Output</H4>
@@ -986,8 +1170,10 @@ for various organisms.
 
 <H4><A name=BED></A>Browser Extensible Data</H4>
 The following definition is used for several tables as follows:<BR>
+- affy10K -first 5 fields <BR>
 - affyGeno -first 4 fields <BR>
 - affyRatio -all 15 fields <BR>
+- chimpDels -first 5 fields <BR>
 - dhs - first 4 fields <BR>
 - encodeRegions - first 4 fields <BR>
 - firstEF - first 6 fields <BR>
@@ -1025,9 +1211,34 @@ The following definition is used for several tables as follows:<BR>
     )
 </PRE>
 
+<H4><A name=CgapAlias></A>CGAP Alias</H4>
+<PRE>table cgapAlias
+"Associates CGAP pathway IDs with gene symbols or mRNA accessions"
+   (
+   string cgapID;       "CGAP patheay ID"
+   string alias;        "Gene symbol or mRNA"
+   )
+</PRE>
 
+<H4><A name=CgapBiocDesc></A>CGAP/BioCarta Pathway Descriptions</H4>
+<PRE>table cgapBiocDesc
+"CGAP/BioCarta pathway description"
+  (
+  string mapID;         "CGAP/BioCarta pathway map ID"
+  string description;   "Description"
+  )
+</PRE>
 
-<H4><A name= Chain></A>Chain Alignments</H4>
+<H4><A name=CgapBiocPathway></A>CGAP/BioCarta Pathway Cross-Reference</H4>
+<PRE>table cgapBiocPathway
+"CGAP BioCarta pathway cross reference"
+   (
+   string cgapID;       "CGAP pathway ID"
+   string mapID;        "BioCarta pathway ID"
+   )
+</PRE>
+
+<H4><A name=Chain></A>Chain Alignments</H4>
 <PRE>table chain
 "Summary info about a chain of alignments"
    (
@@ -1066,6 +1277,18 @@ The following definition is used for several tables as follows:<BR>
    uint tEnd; 		"Alignment end position in target"
    uint qStart; 	"Start in query"
    uint chainId; 	"Chain ID in chain table"
+   )
+</PRE>
+
+<H4><A name=ChimpSimpleDiff></A>Chimp/Human Simple Differences</H4>
+<PRE>table chimpSimpleDiff
+"Simple differences between the chimp and human genome assemblies"
+   (
+   string chrom;        "Chromosome number"
+   uint   chromStart;   "Start position in chromosome"
+   uint   chromEnd;     "End position in chromosome"
+   string   tseq;	"Target sequence (A,T,C,G)"
+   string   qseq;	"Query sequence (A,T,C,G)"
    )
 </PRE>
 
@@ -1210,6 +1433,67 @@ The following definition is used for several tables as follows:<BR>
    )
 </PRE>
 
+<H4><A name=EnsGeneXref></A>Ensembl gene_xref Table</H4>
+Ensemble gene_xref table downloaded directly from the Ensembl ftp site (18.34 
+release 11/04). Refer to the Ensembl site for details.  CAUTION: Ensembl sometimes
+changes its table definitions and some fields may not contain the data that the 
+name indicates, e.g. translation_name.<BR>
+<PRE>table ensGeneXref
+"Table gene_xref downloaded from Ensembl"
+   (
+   string db;                   "#"
+   string analysis;             "#"
+   string type;                 "#"
+   int gene_id;                 "#"
+   string gene_name;            "#"
+   int[5] gene_version;         "#"
+   int transcript_id;           "#"
+   string transcript_name;      "#"
+   int[5] transcript_version;   "#"
+   int[5] translation_name;     "#"
+   int translation_id;          "#"
+   int[5] translation_version;  "#"
+   string external_db;          "#"
+   string external_name;        "#"
+   char[10] external_status;    "#"
+   )
+</PRE>
+
+<H4><A name=EnsTranscript></A>Ensembl transcript Table</H4>
+Ensembl transcript table downloaded directly from the Ensembl ftp site (18.34 
+release 11/04). Refer to the Ensembl site for details.  CAUTION: Ensembl 
+sometimes changes its table definitions and some fields may not contain the data 
+that the name indicates.
+<PRE>table ensTranscript
+"Table transcript downloaded from Ensembl"
+   (
+   int id;                      "#"
+   string db;                   "#"
+   string analysis;             "#"
+   string type;                 "#"
+   int transcript_id;           "#"
+   string transcript_name;      "#"
+   int transcript_version;      "#"
+   string chr_name;             "#"
+   int chr_start;               "#"
+   int chr_end;                 "#"
+   int chr_strand;              "#"
+   int coding_start;            "#"
+   int coding_end;              "#"
+   int translation_id;          "#"
+   string translation_name;     "#"
+   string translation_version;  "#"
+   int gene_id;                 "#"
+   string gene_name;            "#"
+   int gene_version;            "#"
+   lstring exon_structure;      "#"
+   lstring exon_ids;            "#"
+   string external_db;          "#"
+   string external_name;        "#"
+   char[10] external_status;    "#"
+   )
+</PRE>
+
 <H4><A name=Exofish></A>Exofish Information</H4>
 <PRE>table exoFish
 "An evolutionarily conserved region (ecore) with Tetroadon"
@@ -1347,7 +1631,7 @@ EST Clusters</H4>
 </PRE>    
 
 <H4><A name=GenePredictions></A>Gene Predictions and RefSeq Genes</H4>
-The following definition is used for the acembly, ensGene, geneid, genieAlt, genScan, genscanSubopt, mgcGenes, refGene, sanger20, sanger22, slam*, softberryGene, tigrGeneIndex, twinscan, vegaGene, vegaPseudoGene, and similar tables. In alternative splicing situations
+The following definition is used for the acembly, ECgene, ensGene, geneid, genieAlt, genScan, genscanSubopt, mgcGenes, refGene, sanger20, sanger22, slam*, softberryGene, tigrGeneIndex, twinscan, vegaGene, vegaPseudoGene, and similar tables. In alternative splicing situations
 each transcript has a row in this table.
 <PRE>table genePred
 "A gene prediction."
@@ -1504,6 +1788,25 @@ The following definition is used for tables that link a predicted peptide to a p
     )
 </PRE>
 
+<H4><A name=KeggMapDesc></A>Kegg Pathway Map Description</H4>
+<PRE>table keggMapDesc
+"Description of KEGG pathway map"
+   (
+   string mapID;        "KEGG pathway map ID"
+   string description;  "KEGG pathway map description"
+   )
+</PRE>
+
+<H4><A name=KeggPathway></A>Kegg Pathway Cross Reference</H4>
+<PRE>table keggPathway
+"Associates KEGG pathway IDs with Known Genes and LocusLink IDs"
+   (
+   string kgID;         "Known Gene ID"
+   string locusID;      "LocusLink ID"
+   string mapID;        "KEGG pathway map ID"
+   )
+</PRE>
+
 <H4><A name=KnownCanonical></A>Known Canonical</H4>
 <PRE>table knownCanonical
 "Describes the canonical splice variant of a gene"
@@ -1564,7 +1867,7 @@ TrEMBL-NEW and their corresponding mRNAs from GenBank"
 
 <H4><A name=KnownGeneLink></A>Known Genes Link</H4>
 <PRE>table knownGeneLink
-"Stores the seqType info for Known Genes track entries." 
+"Known Genes link table, currently storing DNA-based entries only"
     (
     string  name;       "Known Genes ID"
     char[1] seqType;    "Known Genes sequence type - mRNA-base genes=m, DNA-based genes=g"
@@ -1910,6 +2213,134 @@ The following definition is used by the mrnaOrientInfo and estOrientInfo tables.
    )
 </PRE>
 
+<H4><A name=PbAaDistX></A>Proteome Browser Amino Acid Distribution</H4>
+<PRE>table pbAaDistX
+"Distribution for a specific amino acid X"
+   (
+   float x; "x value"
+   float y; "count"
+   )
+</PRE>
+
+<H4><A name=PbAnomLimit></A>Proteome Browser Amino Acid Anomaly Limits</H4>
+<PRE>table pbAnomLimit
+"Protein amino acid anomaly limits for each AA"
+   (
+   char[1] AA;          "Amino Acid"
+   float   pctLow;      "Percentage (100%=1.0) Lower bound"
+   float   pctHi;       "Percentage (100%=1.0) Upper bound"
+   )
+</PRE>
+
+<H4><A name=PepCCntDist></A>Proteome Browser Cysteine Count Distribution</H4>
+<PRE>table pepCCntDist
+"Cysteine count distribution"
+   (
+   float x;             "Number of Cysteines"
+   float y;             "Count of proteins with x Cysteines"
+   )
+</PRE>
+
+<H4><A name=PepExonCntDist></A>Proteome Browser Exon Count Distribution</H4>
+<PRE>table pepExonCntDist
+"Exon count distribution"
+   (
+   float x;             "Number of exon"
+   float y;             "Count of proteins with x exons"
+   )
+</PRE>
+
+<H4><A name=PepHydroDist></A>Proteome Browser Hydrophobicity Distribution</H4>
+<PRE>table pepHydroDist
+"Hydrophobicity distribution"
+   (
+   float x;             "Hydrophobicity value"
+   float y;             "Count of proteins with hydrophobicity near x"
+   )
+</PRE>
+
+<H4><A name=PepIPCntDist></A>Proteome Browser InterProt Domain Count Distribution</H4>
+<PRE>table pepIPCntDist
+"InterProt domain count distribution"
+   (
+   float x;             "Number of InterPro domains"
+   float y;             "Count of proteins with x InterPro domains" 
+   )
+</PRE>
+
+<H4><A name=PepMwAa></A>Proteome Browser Molecular Weight and AA Length of Proteins</H4>
+<PRE>table pepMwAa 
+"Molecular weight and AA length of proteins"
+   (
+   string accession;    "SwissProt protein accession number"
+   float  molWeight;    "Molecular weight" 
+   int    aaLen;        "Length of protein sequence"
+   )
+</PRE>
+
+<H4><A name=PepMolWtDist></A>Proteome Browser Molecular Weight Distribution</H4>
+<PRE>table pepMolWtDist
+"Molecular weight distribution"
+   (
+   float x;             "Molecular weight value"
+   float y;             "Count of proteins with molecular weight near x"
+   )
+</PRE>
+
+<H4><A name=PepPiDist></A>Proteome Browser pI Distribution</H4>
+<PRE>table pepPiDist
+"pI distribution" 
+   (
+   float x;             "pI  value" 
+   float y;             "Count of proteins with pI value near x"
+   )
+</PRE>
+
+<H4><A name=PepPred></A>Proteome Browser Predicted Peptide/Predicted Gene</H4>
+<PRE>table pepPred
+"Predicted peptide linked to predicted gene"
+    (
+    string name;        "Name of gene - same as in genePred"
+    lstring seq;        "Peptide sequence" 
+    )
+</PRE>
+
+<H4><A name=PbResAvgStd></A>Proteome Browser Residue Average/Standard Deviation</H4>
+<PRE>table pbResAvgStd
+"Residue average and standard deviation"
+   (
+   char[1] residue;     "Protein residue"
+   float   avg;         "Average"
+   float   stddev;      "Standard deviation"
+   )
+</PRE>
+
+<H4><A name=PepResDist></A>Proteome Browser Residue Distribution</H4>
+<PRE>table pepResDist
+"Residue distribution" 
+   (
+   float x;             "Residue index (WCMHYNFIDQKRTVPGEASL) "
+   float y;             "Count of proteins with residue index of x"
+   )
+</PRE>
+
+<H4><A name=PbStamp></A>Proteome Browser Stamp Information</H4>
+<PRE>
+table pbStamp
+"Info needed for a Proteome Browser stamp"
+    (
+    char[40] stampName; 	"Short Name of stamp"
+    char[40] stampTable;	"Database table name of the stamp (distribution) data"
+    char[40] stampTitle;	"Stamp Title to be displayed"
+    int len;            	"Number of x-y pairs"
+    float  xmin;        	"x minimum"
+    float  xmax;        	"x maximum"
+    float  ymin;        	"y minimum"
+    float  ymax;        	"y maximum"
+    string stampDesc;   	"Description of the stamp"
+    )
+</PRE>
+
 <H4><A name=SyntenyRat></A>Rat Synteny Alignments </H4>
 <PRE>table syntenyRat
 "Rat synteny alignnments from blastz single coverage"
@@ -1982,6 +2413,25 @@ First used Oct. 2003
 			Incomplete5End, Incomplete3End, Partial"
     string summary;	"Summary text"
     )
+</PRE>
+
+<H4><A name=RegPotential></A>Regulatory Potential </H4>
+<PRE>table regPotentialX
+"Links RefSeq mRNA accessions with status"
+    (
+    string chrom; 	
+    int chromStart;
+    int chromEnd;
+    string cname; 
+    int span; 
+    int count;
+    int offset; 
+    string cfile; 
+    double lowerLimit; 
+    double dataRange; 
+    int validCount; 
+    double sumData; 
+    double sumSquares;
 </PRE>
 
 <H4><A name=RepeatInfo></A>Repeating Elements</H4>
@@ -2684,8 +3134,33 @@ The bacEndPairs table uses all fields.
     )
 </PRE>
 
+<H4><A name=SfAssign></A>Superfamily Assignments</H4>
+<PRE>table sfAssign
+"Superfamily assignment table"
+  (
+  string genomeID;      "Genome ID"
+  string seqID;         "Sequence ID"
+  string modelID;       "Model ID"
+  string region;        "Region"
+  string eValue;        "E value"
+  string sfID;          "Superfamily entry ID"
+  string sfDesc;        "Superfamily entry description"
+  )
+</PRE>
 
-<H4><A name=SfDescription></A>Superfamily Description</H4>
+<H4><A name=SfDes></A>Superfamily Description</H4>
+<PRE>table sfDes 
+"Superfamily description table"
+  (
+  int id;                       "ID"
+  char[2] level;                "Level"
+  string classification;        "Classification"
+  string name;                  "Name"
+  string description;           "Description"
+  )
+</PRE>
+
+<H4><A name=SfDescription></A>Superfamily Summary Entry Description</H4>
 <PRE>table sfDescription
 "Stores domain descriptions for the Superfamily track"
    (
