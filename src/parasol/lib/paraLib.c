@@ -106,7 +106,7 @@ void vLogIt(char *format, va_list args)
 {
 if (logFile != NULL)
     {
-    fprintf(logFile, "%u ", now);
+    fprintf(logFile, "%lu ", now);
     vfprintf(logFile, format, args);
     if (logFlush)
 	fflush(logFile);

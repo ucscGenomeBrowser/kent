@@ -22,7 +22,7 @@ void netS()
 /* netS - a net server. */
 {
 static struct sockaddr_in sai;
-char buf[513];
+char buf[64*1024];
 char *line;
 int readSize;
 struct hostent *hostent;
@@ -36,23 +36,32 @@ sai.sin_addr.s_addr = INADDR_ANY;
 socketHandle = socket(AF_INET, SOCK_DGRAM, 0);
 if (bind(socketHandle, (struct sockaddr *)&sai, sizeof(sai)) == -1)
     errAbort("Couldn't bind socket");
+{
+struct timeval tv;
+int tvSize = sizeof(tv);
+int bufSize;
+int bufSizeSize = sizeof(bufSize);
+tv.tv_sec = 0;
+tv.tv_usec = 100000;
+setsockopt(socketHandle, SOL_SOCKET, SO_RCVTIMEO, &tv, tvSize);
+getsockopt(socketHandle, SOL_SOCKET, SO_RCVTIMEO, &tv, &tvSize);
+printf("Read timeout = %lu.%lu\n",  tv.tv_sec, tv.tv_usec);
+getsockopt(socketHandle, SOL_SOCKET, SO_RCVBUF, &bufSize, &bufSizeSize);
+printf("Read buf size %d\n",  bufSize);
+}
 
 for (;;)
     {
     readSize = recv(socketHandle, buf, sizeof(buf)-1, 0);
-    buf[readSize] = 0;
-    if (!startsWith(signature, buf))
+    if (readSize > 0)
 	{
-	warn("Command without signature\n%s", buf);
-	continue;
+	buf[readSize] = 0;
+	line = buf;
+	printf("server read '%s'\n", line);
+	command = nextWord(&line);
+	if (sameString("quit", command))
+	    break;
 	}
-    line = buf + sizeof(signature);
-    printf("server read '%s'\n", line);
-    command = nextWord(&line);
-    if (sameString("quit", command))
-	break;
-    else
-	warn("Unrecognised command %s", command);
     }
 }
 
@@ -63,6 +72,7 @@ int main(int argc, char *argv[])
 if (argc != 2)
     usage();
 netS();
+return 0;
 }
 
 

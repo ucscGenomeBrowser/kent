@@ -11,3 +11,10 @@ all:
 	cd paraTestJob; make; cd ..
 	cd parasol; make; cd ..
 
+clean:
+	rm */*.o
+
+broad:
+	cd lib; make; cd ..
+	cd broadNode; make; cd ..
+	cd broadHub; make; cd ..
