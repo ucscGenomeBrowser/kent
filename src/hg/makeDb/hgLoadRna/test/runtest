@@ -2,13 +2,24 @@
 
 # run on test file, diff with "golden" file
 
-${HOME}/bin/i386/hgLoadRna -filesOnly add -type=EST fr1 test.fa test.ra \
+${HOME}/bin/i386/hgLoadRna -test add -type=EST fr1 test.fa test.ra \
                          >& /dev/null
 
-diff mrna.tab mrna.tab.gold > /dev/null
+# check version, type, and direction fields of mrna table
+# this test input should have EST in type field
+awk '{print $2, $4, $5}' < mrna.tab > mrna.out
+diff mrna.out mrna.out.gold > /dev/null
 set status1 = $status
-diff tissue.tab tissue.tab.gold > /dev/null
-if ($status || $status1) then
+
+# check name field of tissue table
+# this test input has a trailing backslash
+awk -F\\t '{print $2}' < tissue.tab > tissue.out
+diff tissue.out tissue.out.gold > /dev/null
+set status2 = $status
+
+if ($status1 || $status2) then
     echo '*** FAIL ***'
+    exit 1
 endif
-rm -f *.tab
+rm -f *.tab *.out
+exit 0
