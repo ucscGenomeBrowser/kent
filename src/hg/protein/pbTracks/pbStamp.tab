@@ -1,5 +1,5 @@
 pepMolWt	pepMolWtDist	Molecular Weight	20	0	200000	0	15000	Protein Molecular Weight
-pepPi	pepPiDist	pI	55	3.0	14.0	0	2000	Isoelectric Point
+pepPi	pepPiDist	pI	55	3.0	14.0	0	2400	Isoelectric Point
 exonCnt	pepExonCntDist	Number of Exons	31	0	30	0	6200	Exon Count
 intPCnt	pepIPCntDist	InterPro Domains	11	0.0	11.0	0	16000	InterPro Domains
 pepRes	pepResDist	Amino Acid Frequencies	21	1.0	21	0	0.11	AA Residue Frequency
