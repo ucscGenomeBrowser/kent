@@ -68,6 +68,7 @@ else
     {
     *start = 0;
     *end = 0;
+    strcpy(filePath, fileName);
     if (options & NIB_BASE_NAME)
         splitPath(fileName, NULL, name, NULL);
     else
