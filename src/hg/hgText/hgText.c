@@ -46,7 +46,7 @@ boolean allGenome;
 #define allFieldsPhase      "Tab-separated, All fields"
 #define chooseFieldsPhase   "Tab-separated, Choose fields..."
 #define seqOptionsPhase     "FASTA (DNA sequence)..."
-#define gffPhase            "GFF (not implemented)"
+#define gffPhase            "GTF"
 #define bedOptionsPhase     "BED/Custom Track..."
 #define linksPhase          "Hyperlinks to Genome Browser"
 char *outputTypePosMenu[] =
@@ -54,12 +54,11 @@ char *outputTypePosMenu[] =
     allFieldsPhase,
     chooseFieldsPhase,
     seqOptionsPhase,
-//#***    gffPhase,
     bedOptionsPhase,
     linksPhase,
+    gffPhase,
 };
-//#***int outputTypePosMenuSize = 6;
-int outputTypePosMenuSize = 5;
+int outputTypePosMenuSize = 6;
 char *outputTypeNonPosMenu[] =
 {
     allFieldsPhase,
@@ -1386,15 +1385,223 @@ if (itemCount == 0)
     printf("\n# No results returned from query.\n\n");
 }
 
+static void addGffLineFromBed(struct gffLine **pGffList, struct bed *bed,
+			      char *source, char *feature,
+			      int start, int end, char frame)
+/* Create a gffLine from a bed and line-specific parameters, add to list. */
+{
+struct gffLine *gff;
+AllocVar(gff);
+gff->seq = cloneString(bed->chrom);
+gff->source = cloneString(source);
+gff->feature = cloneString(feature);
+gff->start = start;
+gff->end = end;
+gff->score = bed->score;
+gff->strand = bed->strand[0];
+gff->frame = frame;
+gff->group = gff->geneId = cloneString(bed->name);
+slAddHead(pGffList, gff);
+}
+
+
+static void addCdsStartStop(struct gffLine **pGffList, struct bed *bed,
+			    char *source, int s, int e, char *frames,
+			    int i, int startIndx, int stopIndx,
+			    boolean gtf2StopCodons)
+{
+// start_codon (goes first for + strand) overlaps with CDS
+if ((i == startIndx) && (bed->strand[0] != '-'))
+    {
+    addGffLineFromBed(pGffList, bed, source, "start_codon",
+		      s, s+3, '.');
+    }
+// stop codon does not overlap with CDS as of GTF2
+if ((i == stopIndx) && gtf2StopCodons)
+    {
+    if (bed->strand[0] == '-')
+	{
+	addGffLineFromBed(pGffList, bed, source, "stop_codon",
+			  s, s+3, '.');
+	addGffLineFromBed(pGffList, bed, source, "CDS", s+3, e,
+			  frames[i]);
+	}
+    else
+	{
+	addGffLineFromBed(pGffList, bed, source, "CDS", s, e-3,
+			  frames[i]);
+	addGffLineFromBed(pGffList, bed, source, "stop_codon",
+			  e-3, e, '.');
+	}
+    }
+else
+    {
+    addGffLineFromBed(pGffList, bed, source, "CDS", s, e,
+		      frames[i]);
+    }
+// start_codon (goes last for - strand) overlaps with CDS
+if ((i == startIndx) && (bed->strand[0] == '-'))
+    {
+    addGffLineFromBed(pGffList, bed, source, "start_codon",
+		      e-3, e, '.');
+    }
+}
+
+
+struct gffLine *bedToGffLines(struct bed *bedList, struct hTableInfo *hti,
+			      char *source)
+/* Translate a (list of) bed into list of gffLine elements. */
+{
+struct gffLine *gffList = NULL, *gff;
+struct bed *bed;
+int i, j, s, e;
+
+for (bed = bedList;  bed != NULL;  bed = bed->next)
+    {
+    if (hti->hasBlocks && hti->hasCDS)
+	{
+	char *frames = needMem(bed->blockCount);
+	boolean gotFirstCds = FALSE;
+	int nextPhase = 0;
+	int startIndx = 0;
+	int stopIndx = 0;
+	// need a separate pass to compute frames, in case strand is '-'
+	for (i=0;  i < bed->blockCount;  i++)
+	    {
+	    if (bed->strand[0] == '-')
+		j = bed->blockCount-i-1;
+	    else
+		j = i;
+	    s = bed->chromStart + bed->chromStarts[j];
+	    e = s + bed->blockSizes[j];
+	    if ((s < bed->thickEnd) && (e > bed->thickStart))
+		{
+		int cdsSize = e - s;
+		if (e > bed->thickEnd)
+		    cdsSize = bed->thickEnd - s;
+		else if (s < bed->thickStart)
+		    cdsSize = e - bed->thickStart;
+		if (! gotFirstCds)
+		    {
+		    gotFirstCds = TRUE;
+		    startIndx = j;
+		    }
+		frames[j] = '0' + nextPhase;
+		nextPhase = (3 + ((nextPhase - cdsSize) % 3)) % 3;
+		stopIndx = j;
+		}
+	    else
+		{
+		frames[j] = '.';
+		}
+	    }
+	for (i=0;  i < bed->blockCount;  i++)
+	    {
+	    s = bed->chromStart + bed->chromStarts[i];
+	    e = s + bed->blockSizes[i];
+	    if ((s >= bed->thickStart) && (e <= bed->thickEnd))
+		{
+		addCdsStartStop(&gffList, bed, source, s, e, frames,
+				i, startIndx, stopIndx, FALSE);
+		}
+	    else if ((s < bed->thickStart) && (e > bed->thickEnd))
+		{
+		addCdsStartStop(&gffList, bed, source,
+				bed->thickStart, bed->thickEnd,
+				frames, i, startIndx, stopIndx, FALSE);
+		}
+	    else if ((s < bed->thickStart) && (e > bed->thickStart))
+		{
+		addCdsStartStop(&gffList, bed, source, bed->thickStart, e,
+				frames, i, startIndx, stopIndx, FALSE);
+		}
+	    else if ((s < bed->thickEnd) && (e > bed->thickEnd))
+		{
+		addCdsStartStop(&gffList, bed, source, s, bed->thickEnd,
+				frames, i, startIndx, stopIndx, FALSE);
+		}
+	    addGffLineFromBed(&gffList, bed, source, "exon", s, e, '.');
+	    }
+	freeMem(frames);
+	}
+    else if (hti->hasBlocks)
+	{
+	for (i=0;  i < bed->blockCount;  i++)
+	    {
+	    s = bed->chromStart + bed->chromStarts[i];
+	    e = s + bed->blockSizes[i];
+	    addGffLineFromBed(&gffList, bed, source, "exon", s, e, '.');
+	    }
+	}
+    else if (hti->hasCDS)
+	{
+	if (bed->thickStart > bed->chromStart)
+	    {
+	    addGffLineFromBed(&gffList, bed, source, "exon", bed->chromStart,
+			      bed->thickStart, '.');
+	    }
+	addGffLineFromBed(&gffList, bed, source, "CDS", bed->thickStart,
+			  bed->thickEnd, '0');
+	if (bed->thickEnd < bed->chromEnd)
+	    {
+	    addGffLineFromBed(&gffList, bed, source, "exon", bed->thickEnd,
+			      bed->chromEnd, '.');
+	    }
+	}
+    else
+	{
+	addGffLineFromBed(&gffList, bed, source, "exon", bed->chromStart,
+			  bed->chromEnd, '.');
+	}
+    }
+slReverse(&gffList);
+return(gffList);
+}
 
 void doGetGFF()
 {
+struct hTableInfo *hti;
+struct slName *chromList, *chromPtr;
+struct bed *bedList;
+struct gffLine *gffList, *gffPtr;
+char source[64];
+char *db = getTableDb();
+char *track = getTrackName();
 char *constraints;
-webStart(cart, "Table Browser: %s", freezeName);
+int itemCount;
+
+if (allGenome)
+    chromList = hAllChromNames();
+else
+    chromList = newSlName(chrom);
+
+printf("Content-Type: text/plain\n\n");
+webStartText();
 checkTableExists(fullTableName);
 constraints = constrainFields();
-puts("<H3> Not implemented yet </H3>");
-webEnd();
+hti = hFindTableInfoDb(db, chrom, track);
+if (hti == NULL)
+    webAbort("Error", "Could not find table info for table %s",
+	     track);
+
+snprintf(source, sizeof(source), "%s_%s", db, track);
+itemCount = 0;
+for (chromPtr=chromList;  chromPtr != NULL;  chromPtr = chromPtr->next)
+    {
+    getFullTableName(fullTableName, chromPtr->name);
+    bedList = hGetBedRangeDb(db, fullTableName, chrom, winStart,
+			     winEnd, constraints);
+    gffList = bedToGffLines(bedList, hti, source);
+    bedFreeList(&bedList);
+    for (gffPtr = gffList;  gffPtr != NULL;  gffPtr = gffPtr->next)
+	{
+	gffTabOut(gffPtr, stdout);
+	itemCount++;
+	}
+    slFreeList(&gffList);
+    }
+if (itemCount == 0)
+    printf("\n# No results returned from query.\n\n");
 }
 
 
@@ -1435,7 +1642,6 @@ void doGetBed()
 struct slName *chromList, *chromPtr;
 struct bed *bedList, *bedPtr;
 struct featureBits *fbList = NULL, *fbPtr;
-struct dyString *bedLine = newDyString(512);
 struct hTableInfo *hti;
 char *constraints;
 char *table = getTableName();
@@ -1448,6 +1654,7 @@ char *ctVis  = cgiUsualString("hgt.ctVis", "dense");
 char *ctUrl  = cgiUsualString("hgt.ctUrl", "");
 char *fbQual = fbOptionsToQualifier();
 char fbTQ[128];
+int fields;
 int i, totalCount;
 
 if (allGenome)
@@ -1478,6 +1685,16 @@ if ((fbQual == NULL) || (fbQual[0] == 0))
     {
     for (chromPtr=chromList;  chromPtr != NULL;  chromPtr = chromPtr->next)
 	{
+	if (hti->hasBlocks)
+	    fields = 12;
+	else if (hti->hasCDS)
+	    fields = 8;
+	else if (hti->strandField[0] != 0)
+	    fields = 6;
+	else if (hti->scoreField[0] != 0)
+	    fields = 5;
+	else
+	    fields = 4;
 	getFullTableName(fullTableName, chromPtr->name);
 	bedList = hGetBedRangeDb(db, fullTableName, chrom, winStart, winEnd,
 				 constraints);
@@ -1486,42 +1703,7 @@ if ((fbQual == NULL) || (fbQual[0] == 0))
 	    char *ptr = strchr(bedPtr->name, ' ');
 	    if (ptr != NULL)
 		*ptr = 0;
-	    dyStringClear(bedLine);
-	    dyStringPrintf(bedLine, "%s\t%d\t%d\t%s", bedPtr->chrom,
-			   bedPtr->chromStart, bedPtr->chromEnd, bedPtr->name);
-	    if (hti->scoreField[0] != 0)
-		dyStringPrintf(bedLine, "\t%d", bedPtr->score);
-	    else if (hti->strandField[0] != 0)
-		dyStringPrintf(bedLine, "\t%d", 0); // placeholder
-	    if (hti->strandField[0] != 0)
-		dyStringPrintf(bedLine, "\t%c", bedPtr->strand[0]);
-	    if (hti->hasCDS)
-		dyStringPrintf(bedLine, "\t%d\t%d", bedPtr->thickStart,
-			       bedPtr->thickEnd);
-	    else if (hti->hasBlocks)
-		dyStringPrintf(bedLine, "\t%d\t%d", bedPtr->chromStart,
-			       bedPtr->chromEnd);  // placeholder
-	    if (hti->hasBlocks)
-		{
-		dyStringPrintf(bedLine, "\t%d\t%d", 0, bedPtr->blockCount);
-		for (i=0;  i < bedPtr->blockCount;  i++)
-		    {
-		    if (i == 0)
-			dyStringAppend(bedLine, "\t");
-		    else
-			dyStringAppend(bedLine, ",");
-		    dyStringPrintf(bedLine, "%d", bedPtr->blockSizes[i]);
-		    }
-		for (i=0;  i < bedPtr->blockCount;  i++)
-		    {
-		    if (i == 0)
-			dyStringAppend(bedLine, "\t");
-		    else
-			dyStringAppend(bedLine, ",");
-		    dyStringPrintf(bedLine, "%d", bedPtr->chromStarts[i]);
-		    }
-		}
-	    puts(bedLine->string);
+	    bedTabOutN(bedPtr, fields, stdout);
 	    totalCount++;
 	    }
 	bedFreeList(&bedList);
