@@ -7,7 +7,8 @@
 CREATE TABLE stsAlias (
     alias varchar(255) not null,	# STS marker name
     identNo int unsigned not null,	# Identification number of STS marker
-    name varchar(255) not null,	# Official UCSC name for marker
+    name varchar(255) not null,		# Official UCSC name for marker
               #Indices
-    PRIMARY KEY(alias)
+    PRIMARY KEY(alias),
+    INDEX(identNo)
 );
