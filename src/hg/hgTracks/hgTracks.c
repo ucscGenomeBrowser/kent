@@ -86,7 +86,7 @@
 #include "versionInfo.h"
 #include "bedCart.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.854 2004/12/14 00:55:13 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.855 2004/12/14 17:03:32 fanhsu Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -5250,8 +5250,9 @@ char *rnaType;
 Color color={MG_BLACK};
 struct sqlConnection *conn;
 conn = hAllocConn();
-char *name = tg->itemName(tg, item);
-        
+char *name;
+
+name = tg->itemName(tg, item);
 sprintf(condStr, "name='%s'", name);
 rnaType = sqlGetField(conn, database, "wgRna", "type", condStr);
 if (sameWord(rnaType, "miRna"))   color = MG_RED;
