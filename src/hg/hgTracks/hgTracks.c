@@ -10,6 +10,7 @@
 #include "hash.h"
 #include "jksql.h"
 #include "memgfx.h"
+#include "gfxPoly.h"
 #include "vGfx.h"
 #include "browserGfx.h"
 #include "cheapcgi.h"
@@ -86,7 +87,7 @@
 #include "versionInfo.h"
 #include "bedCart.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.864 2005/01/20 19:10:39 kate Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.865 2005/01/21 05:45:46 kent Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
