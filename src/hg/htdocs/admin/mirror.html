@@ -755,9 +755,22 @@ mysql&gt; create database proteins040515
 mysql&gt; create database proteins040915
 mysql&gt; create database proteins041115
 mysql&gt; create database proteins050201
+mysql&gt; create database sp050201
 </PRE>
 <LI>Import the data from proteinDB/proteins*/database in a similar
 	fashion as listed above.
+<LI>Create symlinks for your MySQL database of:
+<PRE>
+	/var/lib/mysql/proteins -&gt; proteins040115
+	/var/lib/mysql/proteome -&gt; proteins050201
+	/var/lib/mysql/uniProt -&gt; sp050201
+</PRE>
+These symlinks are a new organization of these proteins databases
+as of February 2005 to take care of the renaming of Locus Link
+data items at SwissProt.  Some older assemblies continue to find
+their proteins via the gdbPdb table in the hgcentral database.
+Newer assemblies find their proteins and SwissProt data via
+these symlinks.
 </OL>
 
 <H4><a NAME="step11"></A>
