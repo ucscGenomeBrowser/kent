@@ -4,14 +4,21 @@
 #include "hash.h"
 #include "linefile.h"
 #include "dystring.h"
+#include "hdb.h"
 #include "spDb.h"
 #include "hgGene.h"
 #include "fbTables.h"
 #include "bdgpExprLink.h"
 
-static char const rcsid[] = "$Id: flyBaseInfo.c,v 1.5 2003/11/26 23:59:51 angie Exp $";
+static char const rcsid[] = "$Id: flyBaseInfo.c,v 1.6 2004/06/29 17:45:04 angie Exp $";
 
-static char *getFlyBaseId(struct sqlConnection *conn, char *geneId)
+boolean isFly()
+/* Return true if organism is D. melanogaster. */
+{
+return(sameWord(hOrganism(database), "D. melanogaster"));
+}
+
+char *getFlyBaseId(struct sqlConnection *conn, char *geneId)
 /* Return flyBase ID of gene if any. */
 {
 char query[256];

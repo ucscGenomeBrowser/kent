@@ -947,7 +947,7 @@ identifier bdgpIsoformCluster
 identifier bdgpGeneId external=BDGP
 "Berkeley Drosophila Genome Project Gene ID"
     $dm.bdgpGeneInfo.bdgpName
-    $dm.bdgpExprLink.bdgpName minCheck=0.99
+    $dm.bdgpExprLink.bdgpName minCheck=0.85
     $dm.bdgpToCanonical.value
 
 identifier bdgpTranscriptId external=BDGP dependency
@@ -963,7 +963,7 @@ identifier bdgpTranscriptId external=BDGP dependency
     $dm.bdgpNear.name
     $dm.bdgpSwissProt.bdgpName
     $dm.bdgpToCanonical.name
-    $dm.bdgpToLocusLink.name
+    $dm.bdgpToLocusLink.name minCheck=0.80
     $dm.bdgpToPfam.name
     $dm.bdgpToRefSeq.name
     $dm.ceBlastTab.query
@@ -971,7 +971,7 @@ identifier bdgpTranscriptId external=BDGP dependency
     $dm.hgBlastTab.query
     $dm.mmBlastTab.query
     $dm.scBlastTab.query
-    $dm.fbTranscript.transcriptId
+    $dm.fbTranscript.transcriptId minCheck=0.95
     $dm.hgBlastTab.query
 
 identifier bdgpNonCodingId external=BDGP
@@ -1498,6 +1498,8 @@ tablesIgnored $gbd
     chr%_rmsk
     axtNet%
     blat%
+    blast%
+    repeats
 
 tablesIgnored $kgDb
     pbAaDist_
@@ -1513,6 +1515,9 @@ tablesIgnored $ce
     chr%_gold
     chr%_wabaCbr
     wabaCbr
+
+tablesIgnored $ci
+    snapGene
 
 tablesIgnored $dm
     anophelesEcores

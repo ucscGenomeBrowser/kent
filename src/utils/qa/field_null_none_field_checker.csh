@@ -37,3 +37,4 @@ foreach table ($table_a)
 	end
 	echo
 end
+rm -f *Cols

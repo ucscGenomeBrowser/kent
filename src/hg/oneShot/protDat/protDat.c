@@ -55,11 +55,16 @@ for(; pslPtr; pslPtr = pslPtr->next)
 
 for(pslPtr = protPsls; pslPtr; pslPtr = pslPtr->next)
     {
-    blatPsl = hashMustFindVal(blatHash, pslPtr->qName);
-    alPtr = hashMustFindVal(aliasHash, pslPtr->qName);
-    sprintf(buffer,"%s.%s:%d-%d.%s.%s",pslPtr->qName,blatPsl->tName, blatPsl->tStart, blatPsl->tEnd,alPtr->kgName, alPtr->spName); 
-    pslPtr->qName = buffer;
-    pslTabOut(pslPtr, outFile);
+    if ((blatPsl = hashFindVal(blatHash, pslPtr->qName)) != NULL)
+	{
+	if ((alPtr = hashFindVal(aliasHash, pslPtr->qName)) != NULL)
+	    {
+	    sprintf(buffer,"%s.%s:%d-%d.%s.%s",pslPtr->qName,blatPsl->tName, 
+		blatPsl->tStart, blatPsl->tEnd,alPtr->kgName, alPtr->spName); 
+	    pslPtr->qName = buffer;
+	    pslTabOut(pslPtr, outFile);
+	    }
+	}
     }
 }
 

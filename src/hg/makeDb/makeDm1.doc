@@ -475,7 +475,7 @@ exit; # don't actually run this like a script :)
     hgsql dm1 < /cluster/data/dm1/bed/bdgpAnnotations/bdgpNonCodingInfo.sql
 
 
-# FLYBASE GENES (REDONE 6/17/04 angie)
+# FLYBASE GENES (REDONE 6/28/04 angie)
     ssh hgwdev
     mkdir /cluster/data/dm1/bed/flyBase
     cd /cluster/data/dm1/bed/flyBase
@@ -487,8 +487,9 @@ exit; # don't actually run this like a script :)
 #Allele class: hypom
     #line 459025 (459026 of original)
 #uncertain *u FBan0017679; annotated data are available for this gene.
+    #line 3128725 (3128726 of original), for Trn-SR / FBgn0031456:
+#%f nu
     hgFlyBase dm1 genes.txt.040617
-#Warning: load of fbTranscript did not go as planned: 18810 record(s), 2 row(s) skipped, 0 warning(s) loading ./fbTranscript.tab
 
 
 # BDGP GENE DISRUPTION PROJECT/PSCREEN (DONE 5/18/04 angie)
@@ -2365,11 +2366,25 @@ axtChain -scoreScheme=/cluster/data/blastz/HoxD55.q \
 
     # setup external files for database reference
     ssh hgwdev
-    mkdir -p /gbdb/dm1/multizDroYak1Dp1AnoGam1
-    ln -s /cluster/data/dm1/bed/multiz.dm1droYak1dp1anoGam1/mypa/*.maf \
-      /gbdb/dm1/multizDroYak1Dp1AnoGam1
+    mkdir /gbdb/dm1/mzDy1Dp1Ag1_phast
+    ln -s /cluster/data/dm1/bed/multiz.dm1droYak1dp1anoGam1/mypa/chr*.maf \
+      /gbdb/dm1/mzDy1Dp1Ag1_phast/
     # load into database
-    hgLoadMaf -warn dm1 multizDroYak1Dp1AnoGam1
+    hgLoadMaf -warn dm1 mzDy1Dp1Ag1_phast
+    # load pairwise mafs for wigMaf track
+    cd /gbdb/dm1
+    mkdir -p d_yakuba_mypa d_pseudoobscura_mypa a_gambiae_mypa
+    cd /tmp
+    ln -s /cluster/data/dm1/bed/blastz.droYak1.2004-05-22/mafNet/*.maf \
+      /gbdb/dm1/d_yakuba_mypa
+    hgLoadMaf -WARN dm1 d_yakuba_mypa
+    ln -s /cluster/data/dm1/bed/blastz.dp1.2003-11-14/mafNet/*.maf \
+      /gbdb/dm1/d_pseudoobscura_mypa
+    hgLoadMaf -WARN dm1 d_pseudoobscura_mypa
+    ln -s /cluster/data/dm1/bed/blastz.anoGam1.2004-06-10/mafNet/*.maf \
+      /gbdb/dm1/a_gambiae_mypa
+    hgLoadMaf -WARN dm1 a_gambiae_mypa
+
     # put it out for download
     mkdir /usr/local/apache/htdocs/goldenPath/dm1/multizDroYak1Dp1AnoGam1
     cd /usr/local/apache/htdocs/goldenPath/dm1/multizDroYak1Dp1AnoGam1
@@ -2726,13 +2741,13 @@ rm $TMP/$root.pp
             -wibFile=wib/${chr}_phastCons4way stdin
     end
     ssh hgwdev
+    mkdir -p /gbdb/dm1/wib/mzDy1Dp1Ag1_phast
     cd /cluster/data/dm1/bed/phastCons4way
-    hgLoadWiggle dm1 phastCons4way wib/chr*_phastCons4way.wig
-    mkdir -p /gbdb/dm1/wib
-    rm -f /gbdb/dm1/wib/*phastCons4way.wib
-    ln -s `pwd`/wib/*.wib /gbdb/dm1/wib
     chmod 775 . wib
     chmod 664 wib/*.wib
+    ln -s `pwd`/wib/*.wib /gbdb/dm1/wib/mzDy1Dp1Ag1_phast/
+    hgLoadWiggle dm1 mzDy1Dp1Ag1_phast_wig \
+      -pathPrefix=/gbdb/dm1/wib/mzDy1Dp1Ag1_phast wib/*.wig
 
     # step 3:  predictions of conserved elements
     # (could do these at the same time as step 2, but we want to use
@@ -2796,6 +2811,14 @@ $PHAST/phastCons $file rev-dg.mod --rates-cut 1 --nrates 10 --viterbi PREDICTION
     hgLoadBed dm1 phastCons4wayElements all.bed
 
     # should gzip or even delete contents of SS directory when done
+    nice gzip SS/*/*.ss &
+
+    # make top-5000 list and launcher on Adam's home page:
+    sed 's/id //' PREDICTIONS/*/*.bed | sort -k5,5nr | head -5000 \
+    > top5000.bed
+    /cluster/home/acs/bin/make-launcher-with-scores.sh top5000.bed \
+      /cse/grads/acs/public_html/dm-top5000-4way \
+      "top 5000 conserved elements (4way)" dm1
 
 
 # LOAD ENSEMBL GENES (NEVER MIND 6/16/04 angie)

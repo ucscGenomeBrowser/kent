@@ -28,7 +28,7 @@ void selectAddCoordCols(unsigned opts, struct lineFile *tabLf, struct coordCols*
 /* add records with coordiates at a specified columns */
 
 boolean selectIsOverlapped(unsigned opts, struct chromAnn *inCa,
-                           float overlapThreshold,
+                           float overlapThreshold, float overlapSimilarity,
                            struct slRef **overlappedRecLines);
 /* determine if an range is overlapped.  If overlappedRecLines is not null,
  * a list of the line form of overlapping chromAnn objects is returned.  Free

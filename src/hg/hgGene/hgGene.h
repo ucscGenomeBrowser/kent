@@ -163,6 +163,12 @@ int gpRangeIntersection(struct genePred *gp, int start, int end);
 boolean checkDatabases(char *databases);
 /* Check all databases in space delimited string exist. */
 
+boolean isFly();
+/* Return true if organism is D. melanogaster. */
+
+char *getFlyBaseId(struct sqlConnection *conn, char *geneId);
+/* Return flyBase ID of gene if any. */
+
 /* -------- CGI Command Variables ---------- */
 #define hggDoPrefix "hgg_do_"	/* Prefix for all commands. */
 #define hggDoKgMethod "hgg_do_kgMethod"

@@ -189,12 +189,12 @@ double calcApproximateTime(boolean considerRc)
 /* Get an estimated time in minutes. */
 {
 double time, t;
-double convMult = 1.0;
+double convMult = 0.33;	/* Adjust for server speed here. */
 time = findSeedsFragTime(considerRc, defaultTileSize);
 t = findSeedsScanTime(considerRc);
 if (t < time)
     time = t;
-return time;
+return time*convMult;
 }
 
 /* Frequency tables for the null model (background). */
@@ -2634,7 +2634,7 @@ fprintf(htmlOut, "background model %s; background data %s;</P>",
     backgroundName);
     
 approxTime = calcApproximateTime(considerRc);
-progress("This run would take about %2.2f minutes on a lightly loaded vintage 1999 web server.",
+progress("This run would take about %2.2f minutes on a lightly loaded vintage 2003 web server.",
     approxTime);
 fprintf(htmlOut, "<TT><PRE>\n");
 horizontalLine();

@@ -26,7 +26,7 @@
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
     {"db", OPTION_STRING},
-    {"ver", OPTION_STRING},
+    {"verbose", OPTION_STRING},
     {"der", OPTION_STRING},
     {"xeno", OPTION_BOOLEAN},
     {"indels", OPTION_BOOLEAN},
@@ -104,13 +104,14 @@ struct indel
   int mrnaStart;
   int mrnaEnd;
   struct clone *clones;
+  struct clone *libraries;
   struct acc *accs;
   struct evid *hs;
   struct evid *xe;
   char* mrnaSeq;
   char* genSeq;
   boolean insertion;
-  boolean cds;
+  boolean inCds;
 
   /* fields used if this is tracking codon substitutions*/
   int codonGenPos[3];  /* position of the codon bases */
@@ -270,6 +271,7 @@ if ((i = *in) == NULL) return;
 evidListFree(&(i->hs));
 evidListFree(&(i->xe));
 cloneFreeList(&(i->clones));
+cloneFreeList(&(i->libraries));
 /* accFreeList(&(i->accs)); - freed by evidFreeList */
 free(i->mrnaSeq);
 free(i->genSeq);
@@ -620,6 +622,31 @@ sqlFreeResult(&sr);
 return(ret);
 }
 
+struct clone *getMrnaLibId(struct sqlConnection *conn, char *acc)
+/* Find the library id for an mrna accession */
+{
+char query[256];
+struct sqlResult *sr, *sr1;
+char **row;
+char *a;
+char *accs[4];
+int wordCount, i;
+struct clone *ret = NULL;
+
+AllocVar(ret);
+ret->next = NULL;
+
+safef(query, sizeof(query), "select library from mrna where acc = '%s'", acc); 
+sr = sqlGetResult(conn, query);
+if ((row = sqlNextRow(sr)) != NULL)
+    {
+    ret->id = sqlUnsigned(row[0]);
+    ret->imageId = 0;
+    }
+sqlFreeResult(&sr);
+return(ret);
+}
+
 boolean refseqAcc(struct refseq *r, char *name, char* rs)
 /* Check if accession was used to create refseq sequence */
 {
@@ -671,7 +698,7 @@ return(0);
 }
 
 boolean usedClone(struct clone *c, struct clone *clist) 
-/* Determine if clone is in list */
+/* Determine if clone/library is in list */
 {
 struct clone *el;
 
@@ -1007,7 +1034,7 @@ void searchTrans(struct sqlConnection *conn, char *table, struct dnaSeq *rna, st
 struct sqlResult *sr;
 char **row;
 int offset, start, end;
-struct clone *cloneId;
+struct clone *cloneId, *libId;
 struct psl *psl;
 DNA mdna[10000];
 struct sqlConnection *conn2 = hAllocConn();
@@ -1085,11 +1112,14 @@ while ((row = sqlNextRow(sr)) != NULL)
     name = cloneString(psl->qName);
     acc = createAcc(name);
     cloneId = getMrnaCloneId(conn2, acc->name);
+    libId = getMrnaLibId(conn2, acc->name);
     if ((!sameAcc(acc,ni->mrna)) && (!sameClone(cloneId,mrnaCloneId)) && 
 	((!rs) || (!refseqAcc(rs, acc->name, ni->mrna->name))) &&
-	(!usedClone(cloneId, ni->clones)) && (!usedAcc(acc, ni->accs)))
+	(!usedClone(cloneId, ni->clones)) && (!usedAcc(acc, ni->accs)) &&
+	(!usedClone(libId, ni->libraries)))
       {
 	slAddHead(&(ni->clones), cloneId);
+	slAddHead(&(ni->libraries), libId);
 	slAddHead(&(ni->accs), acc);	
 	searchTransPsl(table, mdna, ni, strand, type, psl, gseq, acc, left, right);
       }
@@ -1133,7 +1163,7 @@ struct evid *ev;
 
 struct indel *createMismatch(struct sqlConnection *conn, char *mrna, int mbase, char* chr, int gbase, 
 			     struct dnaSeq *rna, char *strand, struct clone *cloneId, struct acc *acc, 
-			     boolean snp, boolean valid, char r, char g)
+			     boolean snp, boolean valid, boolean inCds, char r, char g)
 /* Create a record of a mismatch */
 {
   struct indel *mi;
@@ -1147,6 +1177,7 @@ struct indel *createMismatch(struct sqlConnection *conn, char *mrna, int mbase, 
   mi->mrnaStart = mi->mrnaEnd = mbase;
   mi->hs = createEvid();
   mi->xe = createEvid();
+  mi->inCds = inCds;
   mi->knownSnp = snp;
   mi->validatedSnp = valid;
   mi->insertion = FALSE;
@@ -1172,7 +1203,7 @@ struct indel *createMismatch(struct sqlConnection *conn, char *mrna, int mbase, 
 struct indel *createCodonSub(struct sqlConnection *conn, int mrnaStart,
                              char *mCodon, char* chr, int genPos[3], char* gCodon,
                              struct dnaSeq *rna, char *strand, struct clone *cloneId,
-			     boolean knownSnp, struct acc *acc)
+			     boolean knownSnp, boolean knownValid, struct acc *acc)
 /* Create a record of a mismatch */
 {
   struct indel *mi;
@@ -1197,7 +1228,7 @@ struct indel *createCodonSub(struct sqlConnection *conn, int mrnaStart,
   mi->hs = createEvid();
   mi->xe = createEvid();
   mi->knownSnp = knownSnp;
-  mi->validatedSnp = FALSE;
+  mi->validatedSnp = knownValid;
     
   /* Determine whether mRNAs and ESTs support genomic or mRNA sequence in mismatch */
   searchTrans(conn, "mrna", rna, mi, strand, CODONSUB, cloneId, 0, 1);
@@ -1216,14 +1247,14 @@ void cdsCompare(struct sqlConnection *conn, struct pslInfo *pi, struct dnaSeq *r
 int i,j;
 DNA *r, *d; 
 DNA rCodon[4], dCodon[4];
-int codonSnps = 0, codonMismatches = 0, valid = 0;
+int codonSnps = 0, codonMismatches = 0, codonValid = 0, valid = 0;
 int codonGenPos[3];
-int codonMrnaStart = 0;
-int nCodonBases = 0;   /* to deal with partial codons */
+int codonMrnaStart = 0, tPosition = 0;;
+int nCodonBases = 0, iCodon = -1;   /* to deal with partial codons */
 struct indel *mi, *miList=NULL;
 struct indel *codonSub, *codonSubList=NULL;
 ZeroVar(codonGenPos);
-boolean knownSnp = FALSE, mmSnp = FALSE;
+boolean knownSnp = FALSE, knownValid = FALSE, mmSnp = FALSE, inCds = FALSE;
 
 strcpy(rCodon, "---");
 strcpy(dCodon, "---");
@@ -1238,90 +1269,116 @@ for (i = 0; i < pi->psl->blockCount; i++)
 
     /* Compare each base */
     for (j = 0; j < pi->psl->blockSizes[i]; j++) 
-        {
+      {
+	/* Determine genome base */
+	tPosition = tstart + j + pi->psl->tStarts[0];
+	if (pi->psl->strand[0] == '-')
+	  tPosition = pi->psl->tSize - tPosition - 1;
         /* Check if it is in the coding region */
 	if (((qstart+j) >= pi->cdsStart) && ((qstart+j) < pi->cdsEnd))
-            {
-	    int tPosition = tstart + j + pi->psl->tStarts[0];
-            int iCodon = ((qstart+j-pi->cdsStart)%3);
+	  {
+	    inCds = TRUE;
+	    /* Determine codon position */
+	    iCodon = ((qstart+j-pi->cdsStart)%3);
             if (iCodon == 0) {
-                codonSnps = 0;
-                codonMismatches = 0;
-                codonMrnaStart = qstart+j;
+	      codonSnps = 0;
+	      codonValid = 0;
+	      codonMismatches = 0;
+	      codonMrnaStart = qstart+j;
             }
 	    if (pi->psl->strand[0] == '-')
-                {
-	        tPosition = pi->psl->tSize - tPosition - 1;
-                codonGenPos[2-iCodon] = tPosition + 1;
-                }
-            else
-                {
-                codonGenPos[iCodon] = tPosition + 1;
-                }
-            rCodon[iCodon] = r[qstart+j];
-            dCodon[iCodon] = d[tstart+j];
-            nCodonBases++;
-            /* Bases match */
-            if ((char)r[qstart+j] == (char)d[tstart+j])
-                pi->cdsMatch++;
-            /* Check if mismatch is due to a SNP */
-            else if ((valid = snpBase(conn,pi->psl->tName,tPosition)) > 0)
-                {
-                pi->cdsMatch++;
-                pi->snp++;
-                codonSnps++;
-		valid--;
-		if (mismatchReport)
-		    {
-		    mi = createMismatch(conn, pi->mrna->name, qstart+j, pi->psl->tName, tPosition+1, rna, pi->psl->strand, pi->mrnaCloneId, pi->mrna, TRUE, valid, r[qstart+j], d[tstart+j]);
-		    slAddHead(&miList,mi);
-		    }
-                }
-            else
-                {
-                pi->cdsMismatch++;
-		if (mismatchReport)
-		    {
-		    mi = createMismatch(conn, pi->mrna->name, qstart+j, pi->psl->tName, tPosition+1, rna, pi->psl->strand, pi->mrnaCloneId, pi->mrna, FALSE, FALSE, r[qstart+j], d[tstart+j]);
-		    slAddHead(&miList,mi);
-		    }
-                codonMismatches++;
-                /* Check if mismatch is in a codon wobble position.*/
-                if (iCodon==2)
-                    pi->thirdPos++;
-                }
-            /* If third base, check codon for mismatch */
-            if ((iCodon==2) && (nCodonBases == 3) && !sameString(rCodon, dCodon))
-                {
-		if ((codonSnps) && (codonMismatches == 0))
-		    knownSnp = TRUE;
+	      codonGenPos[2-iCodon] = tPosition + 1;
+	    else
+	      codonGenPos[iCodon] = tPosition + 1;
+	    rCodon[iCodon] = r[qstart+j];
+	    dCodon[iCodon] = d[tstart+j];
+	    nCodonBases++;
+	  } 
+	else
+	  {
+	    inCds = FALSE;
+	    iCodon = 0;
+	  }
+	/* Bases match */
+	if ((char)r[qstart+j] == (char)d[tstart+j])
+	  {
+	    if (inCds)
+	      pi->cdsMatch++;
+	  }
+	/* Check if mismatch is due to a SNP */
+	else if ((valid = snpBase(conn,pi->psl->tName,tPosition)) > 0)
+	  {
+	    if (inCds)
+	      {
+		pi->cdsMatch++;
+		codonSnps++;
+	      }
+	    pi->snp++;
+	    valid--;
+	    codonValid += valid;
+	    if ((mismatchReport) && (inCds))
+	      {
+		mi = createMismatch(conn, pi->mrna->name, qstart+j, pi->psl->tName, tPosition+1, rna, pi->psl->strand, pi->mrnaCloneId, pi->mrna, TRUE, valid, inCds, r[qstart+j], d[tstart+j]);
+		slAddHead(&miList,mi);
+	      }
+	  }
+	else
+	  {
+	    if (inCds)
+	      pi->cdsMismatch++;
+	    if ((mismatchReport) && (inCds))
+	      {
+		mi = createMismatch(conn, pi->mrna->name, qstart+j, pi->psl->tName, tPosition+1, rna, pi->psl->strand, pi->mrnaCloneId, pi->mrna, FALSE, FALSE, inCds, r[qstart+j], d[tstart+j]);
+		slAddHead(&miList,mi);
+	      }
+	    if (inCds)
+	      {
+		codonMismatches++;
+		/* Check if mismatch is in a codon wobble position.*/
+		if (iCodon==2)
+		  pi->thirdPos++;
+	      }
+	  }
+	/* If third base, check codon for mismatch */
+	if ((iCodon==2) && (nCodonBases == 3) && !sameString(rCodon, dCodon) && (inCds))
+	  {
+	    if ((codonSnps) && (codonMismatches == 0))
+	      {
+		knownSnp = TRUE;
+		if (codonSnps == codonValid)
+		  knownValid = TRUE;
 		else
-		    knownSnp = FALSE;
-                if (lookupCodon(rCodon) == lookupCodon(dCodon))
-                    {
-                    pi->synSub++;
-                    if ((codonSnps > 0) && (codonMismatches == 0))
-			pi->synSubSnp++;
-                    }		
-                else
-                    {
-                    pi->nonSynSub++;
-                    if ((codonSnps > 0) && (codonMismatches == 0))
-                        pi->nonSynSubSnp++;
-                    }
-		if (codonSubReport)
-                    {
-                    codonSub = createCodonSub(conn, qstart+j,
-                                              rCodon, pi->psl->tName, codonGenPos,
-                                              dCodon, rna, pi->psl->strand, 
-					      pi->mrnaCloneId, knownSnp, pi->mrna);
-                    slAddHead(&codonSubList, codonSub);
-                    }
-                }
-            if (iCodon == 2) 
-                nCodonBases = 0;
-            }
-        }
+		  knownValid = FALSE;
+	      }
+	    else
+	      {
+		knownSnp = FALSE;
+		knownValid = FALSE;
+	      }
+	    if (lookupCodon(rCodon) == lookupCodon(dCodon))
+	      {
+		pi->synSub++;
+		if ((codonSnps > 0) && (codonMismatches == 0))
+		  pi->synSubSnp++;
+	      }		
+	    else
+	      {
+		pi->nonSynSub++;
+		if ((codonSnps > 0) && (codonMismatches == 0))
+		  pi->nonSynSubSnp++;
+	      }
+	    if (codonSubReport)
+	      {
+		codonSub = createCodonSub(conn, qstart+j,
+					  rCodon, pi->psl->tName, codonGenPos,
+					  dCodon, rna, pi->psl->strand, 
+					  pi->mrnaCloneId, knownSnp, knownValid, pi->mrna);
+		slAddHead(&codonSubList, codonSub);
+	      }
+	  }
+	if (iCodon == 2) 
+	  nCodonBases = 0;
+      }
     }
 if (mismatchReport)
     { 
@@ -1336,7 +1393,8 @@ if (codonSubReport)
 }
 
 struct indel *createUnali(struct sqlConnection *conn, int mstart, int mend, char* chr, int gstart, int gend, 
-			  struct dnaSeq *rna, char *strand, struct clone *cloneId, struct acc *acc, int left, int right, char* insert)
+			  struct dnaSeq *rna, char *strand, struct clone *cloneId, struct acc *acc, 
+			  int left, int right, char* insert, boolean inCds)
 /* Create a record of an unaligned region of cds */
 {
   struct indel *ni;
@@ -1355,6 +1413,7 @@ struct indel *createUnali(struct sqlConnection *conn, int mstart, int mend, char
   ni->insertion = FALSE;
   ni->mrnaSeq = insert;
   ni->genSeq = NULL;
+  ni->inCds = inCds;
  
   /* Determine whether mRNAs and ESTs support genomic or mRNA sequence in indel region */
   searchTrans(conn, "mrna", rna, ni, strand, UNALIGNED, cloneId, left, right);
@@ -1369,7 +1428,8 @@ struct indel *createUnali(struct sqlConnection *conn, int mstart, int mend, char
 }
 
 struct indel *createIndel(struct sqlConnection *conn, int mstart, int mend, char* chr, int gstart, int gend, 
-			  struct dnaSeq *rna, char *strand, struct clone *cloneId, struct acc *acc, int left, int right, char* seq, boolean insert)
+			  struct dnaSeq *rna, char *strand, struct clone *cloneId, struct acc *acc, 
+			  int left, int right, char* seq, boolean insert, boolean inCds)
 /* Create a record of an indel */
 {
   struct indel *ni;
@@ -1397,6 +1457,7 @@ struct indel *createIndel(struct sqlConnection *conn, int mstart, int mend, char
     ni->genSeq = seq;
   ni->knownSnp = FALSE;
   ni->validatedSnp = FALSE;
+  ni->inCds = inCds;
  
   /* Determine whether mRNAs and ESTs support genomic or mRNA sequence in indel region */
   searchTrans(conn, "mrna", rna, ni, strand, INDEL, cloneId, left, right);
@@ -1411,15 +1472,15 @@ struct indel *createIndel(struct sqlConnection *conn, int mstart, int mend, char
 }
 
 void cdsIndels(struct sqlConnection *conn, struct pslInfo *pi, struct dnaSeq *rna)
-/* Find indels in coding region of mRNA alignment */
+/* Find indels in coding regions and UTRs of mRNA alignment */
 {
   int i, j;
-  int unaligned=0, prevqend=0, prevtend=0, qstart=0, tstart=0;
+  int unaligned=0, unalignedCds=0, prevqend=0, prevtend=0, qstart=0, tstart=0;
   int leftShift = 0, rightShift = 0, tLeft = 0, tRight = 0, startIndel = 0;
   struct indel *ni=NULL, *niList=NULL, *uiList=NULL;
   DNA *insert;
   int cdsS = pi->cdsStart, cdsE = pi->cdsEnd;
-  boolean unali = FALSE;
+  boolean unali = FALSE, inCds = FALSE;
   struct dnaSeq *gseq;
   
   /* Check all blocks for indels */
@@ -1433,91 +1494,100 @@ void cdsIndels(struct sqlConnection *conn, struct pslInfo *pi, struct dnaSeq *rn
     tstart = pi->psl->tStarts[i];
     /* If block is in the cds region */
     if ((qstart >= cdsS) && (qstart <= cdsE))
+      inCds = TRUE;
+    else
+      inCds = FALSE;
+      
+    /* Determine where previous block left off in the alignment */
+    prevqend = pi->psl->qStarts[i-1] + pi->psl->blockSizes[i-1];
+    prevtend = pi->psl->tStarts[i-1] + pi->psl->blockSizes[i-1];
+    /* Adjust if previous end is not in coding region */
+    /* if (prevqend < pi->cdsStart)
       {
-        /* Determine where previous block left off in the alignment */
-	prevqend = pi->psl->qStarts[i-1] + pi->psl->blockSizes[i-1];
-	prevtend = pi->psl->tStarts[i-1] + pi->psl->blockSizes[i-1];
-	/* Adjust if previous end is not in coding region */
-	if (prevqend < pi->cdsStart)
-	  {
-	  prevqend = cdsS;
-	  prevtend = tstart;
+	prevqend = cdsS;
+	prevtend = tstart;
+      }
+    */
+    unaligned = qstart - prevqend;
+    if (inCds)
+      unalignedCds = qstart - cdsS;
+    else
+      unalignedCds = 0;
+   /*if (((tstart - prevtend) != 0) && (!pi->splice[i]) && ((tstart - prevtend) < 30))*/
+    if (((tstart - prevtend) != 0) && (!pi->splice[i]))
+      unali = TRUE;
+    else
+      unali = FALSE;
+    /* Check if there is an indel */
+    if (unaligned > 0)
+      {
+	/* Check if unaligned part is a gap in the mRNA alignment, not an insertion */
+	if (unaligned > 30)
+	  if (inCds)
+	    pi->cdsGap += unalignedCds;
+	if ((!unali) && (inCds))
+	  {	    
+	    if (unalignedCds == 1) 
+	      pi->singleIndel++;
+	    if ((unalignedCds%3) == 0) 
+	      pi->tripleIndel += unalignedCds/3;
+	    pi->totalIndel += unalignedCds;
+	    pi->indels[pi->indelCount] = unalignedCds;
+	    pi->indelCount++;
 	  }
-	unaligned = qstart - prevqend;
-	/*if (((tstart - prevtend) != 0) && (!pi->splice[i]) && ((tstart - prevtend) < 30))*/
-	if (((tstart - prevtend) != 0) && (!pi->splice[i]))
-	  unali = TRUE;
-	else
-	  unali = FALSE;
-	/* Check if there is an indel */
-	if (unaligned > 0)
+	if (inCds)
+	  pi->unalignedCds += unaligned;
+	/*if ((pi->cdsPctId >= 0.98) && (pi->cdsCoverage >= 0.80))
+	  indels[unaligned]++;*/
+	if (pi->indelCount > 256) 
+	  errAbort("Indel count too high");
+	/* Determine boundaries of the indel */
+	if (pi->psl->strand[0] == '-') {
+	  int temp = tstart;
+	  tstart = pi->psl->tSize - prevtend;
+	  prevtend = pi->psl->tSize - temp;
+	  tLeft = pi->psl->tSize - pi->psl->tStarts[i] - pi->psl->blockSizes[i];
+	  tRight = pi->psl->tSize - pi->psl->tStarts[i-1];
+	  gseq = hDnaFromSeq(pi->psl->tName, tLeft, tRight, dnaLower);
+	  reverseComplement(gseq->dna, gseq->size);
+	  startIndel = tRight - tstart;
+	} else {
+	  tLeft = pi->psl->tStarts[i-1];
+	  tRight = pi->psl->tStarts[i] + pi->psl->blockSizes[i];
+	  gseq = hDnaFromSeq(pi->psl->tName, tLeft, tRight, dnaLower);
+	  startIndel = prevtend-tLeft;
+	}
+	insert = needMem(unaligned+1);
+	strncpy(insert, rna->dna + prevqend, unaligned);
+	insert[unaligned] = '\0';
+	leftShift = shiftIndel(insert, unaligned, -1, startIndel, tRight-tLeft, gseq);
+	rightShift = shiftIndel(insert, unaligned, 1, startIndel-1, tRight-tLeft, gseq);
+	/*free(insert);*/
+	if (pi->psl->strand[0] == '-') 
 	  {
-	    /* Check if unaligned part is a gap in the mRNA alignment, not an insertion */
-	    if (unaligned > 30)
-	      pi->cdsGap += unaligned;
-	    if (!unali)
-	        {
-	        if (unaligned == 1) 
-	            pi->singleIndel++;
-		if ((unaligned%3) == 0) 
-	            pi->tripleIndel += unaligned/3;
-	        pi->totalIndel += unaligned;
-	        pi->indels[pi->indelCount] = unaligned;
-	        pi->indelCount++;
-		}
-	    pi->unalignedCds += unaligned;
-	    /*if ((pi->cdsPctId >= 0.98) && (pi->cdsCoverage >= 0.80))
-	      indels[unaligned]++;*/
-	    if (pi->indelCount > 256) 
-		errAbort("Indel count too high");
-	    /* Determine boundaries of the indel */
-	    if (pi->psl->strand[0] == '-') {
-	      int temp = tstart;
-	      tstart = pi->psl->tSize - prevtend;
-	      prevtend = pi->psl->tSize - temp;
-	      tLeft = pi->psl->tSize - pi->psl->tStarts[i] - pi->psl->blockSizes[i];
-	      tRight = pi->psl->tSize - pi->psl->tStarts[i-1];
-	      gseq = hDnaFromSeq(pi->psl->tName, tLeft, tRight, dnaLower);
-	      reverseComplement(gseq->dna, gseq->size);
-	      startIndel = tRight - tstart;
-	    } else {
-	      tLeft = pi->psl->tStarts[i-1];
-	      tRight = pi->psl->tStarts[i] + pi->psl->blockSizes[i];
-	      gseq = hDnaFromSeq(pi->psl->tName, tLeft, tRight, dnaLower);
-	      startIndel = prevtend-tLeft;
-	    }
-	    insert = needMem(unaligned+1);
-	    strncpy(insert, rna->dna + prevqend, unaligned);
-	    insert[unaligned] = '\0';
-	    leftShift = shiftIndel(insert, unaligned, -1, startIndel, tRight-tLeft, gseq);
-	    rightShift = shiftIndel(insert, unaligned, 1, startIndel-1, tRight-tLeft, gseq);
-	    /*free(insert);*/
-	    if (pi->psl->strand[0] == '-') 
-	      {
-		int temp = leftShift;
-		prevqend += rightShift;
-		qstart += rightShift;
-		prevtend += rightShift;
-		tstart += rightShift;
-		leftShift = rightShift;
-		rightShift = temp;
-	      }
-	    prevqend -= leftShift;
-	    qstart -= leftShift;
-	    prevtend -= leftShift;
-	    tstart -= leftShift;
-            /* Create an unali record for this */	
-	    if ((unaliReport) && (unali)) 
-	      {
-		ni = createUnali(conn, prevqend, qstart, pi->psl->tName, prevtend, tstart, rna, pi->psl->strand, pi->mrnaCloneId, pi->mrna, 1, leftShift + rightShift + 1, insert); 
-		slAddHead(&uiList, ni);
-	      }
-            /* Create an indel record for this */	
-	    if ((indelReport) && (!unali)) 
-	      {
-		ni = createIndel(conn, prevqend, qstart, pi->psl->tName, prevtend, prevtend, rna, pi->psl->strand, pi->mrnaCloneId, pi->mrna, 1, leftShift + rightShift + 1, insert, TRUE); 
-		slAddHead(&niList,ni);
-	      }
+	    int temp = leftShift;
+	    prevqend += rightShift;
+	    qstart += rightShift;
+	    prevtend += rightShift;
+	    tstart += rightShift;
+	    leftShift = rightShift;
+	    rightShift = temp;
+	  }
+	prevqend -= leftShift;
+	qstart -= leftShift;
+	prevtend -= leftShift;
+	tstart -= leftShift;
+	/* Create an unali record for this */	
+	if ((unaliReport) && (unali)) 
+	  {
+	    ni = createUnali(conn, prevqend, qstart, pi->psl->tName, prevtend, tstart, rna, pi->psl->strand, pi->mrnaCloneId, pi->mrna, 1, leftShift + rightShift + 1, insert, inCds); 
+	    slAddHead(&uiList, ni);
+	  }
+	/* Create an indel record for this */	
+	if ((indelReport) && (!unali)) 
+	  {
+	    ni = createIndel(conn, prevqend, qstart, pi->psl->tName, prevtend, prevtend, rna, pi->psl->strand, pi->mrnaCloneId, pi->mrna, 1, leftShift + rightShift + 1, insert, TRUE, inCds); 
+	    slAddHead(&niList,ni);
 	  }
       }
     
@@ -1529,27 +1599,39 @@ void cdsIndels(struct sqlConnection *conn, struct pslInfo *pi, struct dnaSeq *rn
     prevtend = 0;
     /* Check if in the coding region */
     if ((qstart >= cdsS) && (qstart <= cdsE))
+      inCds = TRUE;
+    else 
+      inCds = FALSE;
+    /* Determine where previous block left off in the alignment */
+    prevqend = pi->psl->qStarts[i-1] + pi->psl->blockSizes[i-1];
+    prevtend = pi->psl->tStarts[i-1] + pi->psl->blockSizes[i-1];
+    /* Adjust if previous end is not in coding region */
+    /*if (prevqend < pi->cdsStart)
       {
-        /* Determine where previous block left off in the alignment */
-	prevqend = pi->psl->qStarts[i-1] + pi->psl->blockSizes[i-1];
-	prevtend = pi->psl->tStarts[i-1] + pi->psl->blockSizes[i-1];
-	/* Adjust if previous end is not in coding region */
-	if (prevqend < pi->cdsStart)
-	  {
-	  prevqend = qstart;
-	  prevtend = tstart;
-	  }
-	unaligned = tstart - prevtend;
-	if ((qstart - prevqend) > 0)
-	    unali = TRUE;
-	else
-	    unali = FALSE;
-	/* Check if unaligned part is an intron */
-	if ((unaligned > 30) || (pi->splice[i]))
-	  /*pi->cdsGap += unaligned;*/
-	  pi->cdsGap += 0;
-	/* Check if there is an indel */
-	else if ((unaligned != 0) && (!unali)) 
+      prevqend = qstart;
+      prevtend = tstart;
+      }
+    */
+    unaligned = tstart - prevtend;
+    if (inCds)
+      unalignedCds = tstart - qstart;
+    else
+      unalignedCds = 0;
+    if ((qstart - prevqend) > 0)
+      unali = TRUE;
+    else
+      unali = FALSE;
+    /* Check if unaligned part is an intron */
+    if ((unaligned > 30) || (pi->splice[i]))
+      {
+	/*pi->cdsGap += unaligned;*/
+	if (inCds)
+	  pi->cdsGap += 0;  
+      }
+    /* Check if there is an indel */
+    else if ((unaligned != 0) && (!unali)) 
+      {
+	if (inCds)
 	  {
 	    if (unaligned == 1) 
 	      pi->singleIndel++;
@@ -1560,62 +1642,62 @@ void cdsIndels(struct sqlConnection *conn, struct pslInfo *pi, struct dnaSeq *rn
 	    pi->indelCount++;
 	    if (pi->indelCount > 256) 
 	      errAbort("Indel count too high");
-	    /*if ((pi->cdsPctId >= 0.98) && (pi->cdsCoverage >= 0.80))
-	      indels[unaligned]++;*/
-	    /* Create an indel record for this */
-	    if (pi->psl->strand[0] == '-') {
-	      int temp = tstart;
-	      tstart = pi->psl->tSize - prevtend;
-	      prevtend = pi->psl->tSize - temp;
-	      tLeft = pi->psl->tSize - pi->psl->tStarts[i] - pi->psl->blockSizes[i];
-	      tRight = pi->psl->tSize - pi->psl->tStarts[i-1];
-	      gseq = hDnaFromSeq(pi->psl->tName, tLeft, tRight, dnaLower);
-	      reverseComplement(gseq->dna, gseq->size);
-	      startIndel = tRight - tstart;
-	    } else {
-	      tLeft = pi->psl->tStarts[i-1];
-	      tRight = pi->psl->tStarts[i] + pi->psl->blockSizes[i];
-	      gseq = hDnaFromSeq(pi->psl->tName, tLeft, tRight, dnaLower);
-	      startIndel = prevtend - tLeft;
-	    }
-	    insert = needMem(unaligned+1);
-	    strncpy(insert, gseq->dna + startIndel, unaligned);
-	    insert[unaligned] = '\0';
-	    leftShift = shiftIndel(insert, unaligned, -1, startIndel, tLeft+tRight, gseq);
-	    rightShift = shiftIndel(insert, unaligned, 1, startIndel, tLeft+tRight, gseq);
-	    /* free(insert); */
-	    if (pi->psl->strand[0] == '-') 
-	      {
-		int temp = leftShift;
-		prevqend += rightShift;
-		qstart += rightShift;
-		prevtend += rightShift;
-		tstart += rightShift;
-		leftShift = rightShift;
-		rightShift = temp;
-	      }
-	    prevqend -= leftShift;
-	    qstart -= leftShift;
-	    prevtend -= leftShift;
-	    tstart -= leftShift;
-	    if (indelReport)
-	        {
-		ni = createIndel(conn, prevqend, qstart, pi->psl->tName, prevtend, tstart, rna, pi->psl->strand, pi->mrnaCloneId, pi->mrna, 1, rightShift + leftShift + 1, insert, FALSE); 
-		slAddHead(&niList,ni);
-		}
+	  }
+	/*if ((pi->cdsPctId >= 0.98) && (pi->cdsCoverage >= 0.80))
+	  indels[unaligned]++;*/
+	/* Create an indel record for this */
+	if (pi->psl->strand[0] == '-') {
+	  int temp = tstart;
+	  tstart = pi->psl->tSize - prevtend;
+	  prevtend = pi->psl->tSize - temp;
+	  tLeft = pi->psl->tSize - pi->psl->tStarts[i] - pi->psl->blockSizes[i];
+	  tRight = pi->psl->tSize - pi->psl->tStarts[i-1];
+	  gseq = hDnaFromSeq(pi->psl->tName, tLeft, tRight, dnaLower);
+	  reverseComplement(gseq->dna, gseq->size);
+	  startIndel = tRight - tstart;
+	} else {
+	  tLeft = pi->psl->tStarts[i-1];
+	  tRight = pi->psl->tStarts[i] + pi->psl->blockSizes[i];
+	  gseq = hDnaFromSeq(pi->psl->tName, tLeft, tRight, dnaLower);
+	  startIndel = prevtend - tLeft;
+	}
+	insert = needMem(unaligned+1);
+	strncpy(insert, gseq->dna + startIndel, unaligned);
+	insert[unaligned] = '\0';
+	leftShift = shiftIndel(insert, unaligned, -1, startIndel, tLeft+tRight, gseq);
+	rightShift = shiftIndel(insert, unaligned, 1, startIndel, tLeft+tRight, gseq);
+	/* free(insert); */
+	if (pi->psl->strand[0] == '-') 
+	  {
+	    int temp = leftShift;
+	    prevqend += rightShift;
+	    qstart += rightShift;
+	    prevtend += rightShift;
+	    tstart += rightShift;
+	    leftShift = rightShift;
+	    rightShift = temp;
+	  }
+	prevqend -= leftShift;
+	qstart -= leftShift;
+	prevtend -= leftShift;
+	tstart -= leftShift;
+	if (indelReport)
+	  {
+	    ni = createIndel(conn, prevqend, qstart, pi->psl->tName, prevtend, tstart, rna, pi->psl->strand, pi->mrnaCloneId, pi->mrna, 1, rightShift + leftShift + 1, insert, FALSE, inCds); 
+	    slAddHead(&niList,ni);
 	  }
       }
   }
   if (indelReport)
-      { 
+    { 
       slReverse(&niList);
       pi->indelList = niList;
-      }
+    }
   if (unaliReport)
-      { 
+    { 
       slReverse(&uiList);
       pi->unaliList = uiList;
-      }
+    }
 }
 
 void processCds(struct sqlConnection *conn, struct pslInfo *pi, struct dnaSeq *rna, struct dnaSeq *dna)
@@ -1713,24 +1795,33 @@ for (indel = iList; indel != NULL; indel=indel->next)
 		indel->size, accFmt(indel->mrna), indel->mrnaStart, indel->mrnaEnd,
 		indel->chrom, indel->chromStart, indel->chromEnd, indel->mrnaSeq, 
 		indel->genSeq);
+	if (indel->inCds)
+	  fprintf(of, ", CDS");
 	if (indel->insertion)
 	  fprintf(of, ", INSERTION\n");
 	else
 	  fprintf(of, ", DELETION\n");
       }
     else if (type == UNALIGNED)
-        fprintf(of, "Unaligned bases of size %d in %s:%d-%d vs. %s:%d-%d, %s vs. %s\n",
+      {
+        fprintf(of, "Unaligned bases of size %d in %s:%d-%d vs. %s:%d-%d, %s vs. %s",
                 indel->size, accFmt(indel->mrna), indel->mrnaStart, indel->mrnaEnd,
                 indel->chrom, indel->chromStart, indel->chromEnd, indel->mrnaSeq,
 		indel->genSeq);
+	if (indel->inCds)
+	  fprintf(of, ", CDS");
+	fprintf(of, "\n");
+      }
     else if (type == MISMATCH)
       {
       fprintf(of, "Mismatch at %s:%d vs. %s:%d, %s vs. %s",
               accFmt(indel->mrna), indel->mrnaStart, indel->chrom, indel->chromStart,
 	      indel->mrnaSeq, indel->genSeq);
+      if (indel->inCds)
+	fprintf(of, ", CDS");
       if (indel->knownSnp)
 	if (indel->validatedSnp)
-	  fprintf(of, ", SNP-validated");
+	  fprintf(of, ", SNP-validated\n");
 	else
           fprintf(of, ", SNP\n");
       else
@@ -1755,6 +1846,9 @@ for (indel = iList; indel != NULL; indel=indel->next)
        else
            fprintf(of, "%c", genAA);
        if (indel->knownSnp)
+	 if (indel->validatedSnp)
+	   fprintf(of, ", SNP-validated\n");
+	 else
 	   fprintf(of, ", SNP\n");
        else
 	   fprintf(of, "\n");	   

@@ -1,0 +1,101 @@
+<P><H3>About the <em>Danio rerio</em> (Zebrafish) assembly</P></H3>
+<P>
+The November 2003 Zebrafish Zv3 (UCSC version danRer1) assembly was provided by the
+<A HREF="http://www.sanger.ac.uk/Projects/D_rerio/Zv3_assembly_information.shtml" TARGET=_blank>Sanger Centre</A>.
+The assembly was constructed using two different methods.  Firstly, a whole 
+genome shotgun (WGS) approach was employed.  DNA from 1000 five day old 
+Tuebingen embryos was used to generate plasmid and fosmid libraries. The 
+libraries were sequenced and the resulting traces were assembled with the Sanger Centre assembler, Phusion.  The second approach was to use traditional clone 
+mapping and sequencing to produce a higher quality genome sequence. BAC 
+libraries were fingerprinted after HindIII restriction enzyem digestion and the FingerPrinted Contigs (FPC) <A HREF="http://www.sanger.ac.uk/Software/fpc" TARGET=_blank>program</A> was used to build contigs from fingerprinted clones and to generate an FPC map.  After generation of a tiling path that 
+covers the genome sequence from this map, clones were selected from the path for high quality sequencing and then pieced together to form the genome sequence.  
+The Zv3 assembly comprises 1,459,115,486 bp in 58,339 supercontigs resulting in a sequence coverage of about 5.7X.  This zebrafish assembly is the first to be 
+tied to the FPC map and 1,083,447,588 bp (74%) of the sequence could be mapped
+in this way. 
+<P>
+<B>Note:</B> The Sanger Centre states that this assembly is still preliminary and that there is a high level of misassembly due to polymorphisms in the DNA 
+source.  Highly variable regions of the assembly are difficult to assemble since they probably contain different haplotypes. 
+<P>
+Downloads of the Zebrafish data and annotations may be obtained from the UCSC
+<A HREF="ftp://hgdownload.cse.ucsc.edu/goldenPath/danRer1/" TARGET=_blank>FTP 
+site</A> or <A HREF=http://hgdownload.cse.ucsc.edu/downloads.html#zebrafish>Downloads page</A>. For more information about this assembly see the Sanger Centre 
+page for the <A HREF="http://www.sanger.ac.uk/Projects/D_rerio/" TARGET=_blank><em>Danio rerio</em> Sequencing Project</A>. 
+</P>
+<P><H3>Sample position queries</P></H3>
+
+<P>A genome position can be specified by the accession number of
+an mRNA or EST, a scaffold range, an Ensembl transcript ID, or keywords from 
+the Genbank description of an mRNA. The following list provides 
+examples of various types of position queries for the zebrafish genome. Note 
+that some position queries (e.g. "huntington") may return matches to the mRNA 
+records of other species. In these cases, the mRNAs are mapped to their homologs in zebrafish.
+See the 
+<A HREF="http://genome.cse.ucsc.edu/goldenPath/help/hgTracksHelp.html" TARGET=_blank>User Guide</A> for more help. 
+<P>
+
+<P>
+<TABLE  border=0 CELLPADDING=0 CELLSPACING=0>
+<TR><TD VALIGN=Top NOWRAP><B>Request:</B><br></TD>
+	<TD VALIGN=Top COLSPAN=2><B>&nbsp;&nbsp; Genome Browser Response:</B><br></TD></TR>
+	
+<TR><TD VALIGN=Top><br></TD></TR>
+	
+<TR><TD VALIGN=Top NOWRAP>chr1</TD>
+	<TD WIDTH=14></TD>
+	<TD VALIGN=Top>Displays all of chromosome 1</TD></TR>
+<TR><TD VALIGN=Top NOWRAP>chr1:1-200000</TD>
+	<TD WIDTH=14></TD>
+	<TD VALIGN=Top>Displays first two hundred thousand bases of chromosome 1</TD></TR>
+<TR><TD VALIGN=Top><br></TD></TR>
+
+<TR><TD VALIGN=Top NOWRAP>AF132084</TD>
+	<TD WIDTH=14></TD>
+	<TD VALIGN=Top>Displays region containing zebrafish mRNA with GenBank accession number AF132084</TD></TR>
+
+<TR><TD VALIGN=Top NOWRAP>AA658622</TD>
+	<TD WIDTH=14></TD>
+	<TD VALIGN=Top>Displays region containing zebrafish EST with GenBank accession AA658622
+</TD></TR>
+
+<TR><TD VALIGN=Top NOWRAP>ENSDART00000021228</TD>
+	<TD WIDTH=14></TD>
+	<TD VALIGN=Top>Displays region containing Ensembl gene prediction transcript ENSDART00000021228
+</TD></TR>
+
+<TR><TD VALIGN=Top><br></TD></TR>
+
+<TR><TD VALIGN=Top NOWRAP>p53</TD>
+	<TD WIDTH=14></TD>
+	<TD VALIGN=Top>Lists mRNAs related to the p53 tumor suppressor</TD></TR> 
+</TD></TR>
+
+
+<TR><TD VALIGN=Top NOWRAP>pseudogene mRNA</TD>
+	<TD WIDTH=14></TD>
+	<TD VALIGN=Top>Lists transcribed pseudogenes but not cDNAs, in Genbank</TD></TR>
+<TR><TD VALIGN=Top NOWRAP>homeobox caudal</TD>
+	<TD WIDTH=14></TD>
+	<TD VALIGN=Top>Lists mRNAs for caudal homeobox genes in Genbank</TD></TR>
+<TR><TD VALIGN=Top NOWRAP>zinc finger</TD>
+	<TD WIDTH=14></TD>
+	<TD VALIGN=Top>Lists many zinc finger mRNAs</TD></TR>
+<TR><TD VALIGN=Top NOWRAP>kruppel zinc finger</TD>
+	<TD WIDTH=14></TD>
+	<TD VALIGN=Top>Lists only kruppel-like zinc fingers</TD></TR>
+<TR><TD VALIGN=Top NOWRAP>huntington</TD>
+	<TD WIDTH=14></TD>
+	<TD VALIGN=Top>Lists mRNAs associated with Huntington's disease</TD></TR>
+
+<TR><TD VALIGN=Top><br></TD></TR>
+
+<TR><TD VALIGN=Top NOWRAP>zahler</TD>
+	<TD WIDTH=14></TD>
+	<TD VALIGN=Top>Lists mRNAs deposited by scientist named Zahler</TD></TR>
+<TR><TD VALIGN=Top NOWRAP>Evans,J.E.</TD>
+	<TD WIDTH=14></TD>
+	<TD VALIGN=Top>Lists mRNAs deposited by co-author J.E.  Evans</TD></TR>
+
+<TR><TD VALIGN=Top><br></TD></TR>
+	
+<TR><TD COLSPAN="3" > Use this last format for entry authors -- even though Genbank searches require Evans JE format, GenBank entries themselves use Evans,J.E.  internally.
+</TABLE>

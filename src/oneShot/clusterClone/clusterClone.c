@@ -7,7 +7,7 @@
 #include "psl.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: clusterClone.c,v 1.6 2004/06/18 23:54:38 hiram Exp $";
+static char const rcsid[] = "$Id: clusterClone.c,v 1.7 2004/06/28 22:18:12 hiram Exp $";
 
 float minCover = 80.0;		/*	percent coverage to count hit */
 unsigned maxGap = 1000;		/*	maximum gap between pieces */
@@ -200,7 +200,8 @@ if (agp)
 		(coord->end <= *endExtended))
 	    {
 	    ++cloneCount;
-    printf("%s\t%u\t%u\t%d\tD\t%s\t%u\t%u\t%c\n", ctgName, coord->start,
+    /*	+1 to the start for 1 relative coordinates in the AGP file */
+    printf("%s\t%u\t%u\t%d\tD\t%s\t%u\t%u\t%c\n", ctgName, coord->start+1,
 	coord->end, cloneCount, coord->name,
 	coord->start - *startExtended + 1, coord->end - *startExtended + 1,
 	(coord->strand == 1) ? '+' : '-');
@@ -209,6 +210,30 @@ if (agp)
 	}
     }
 }	/*	static void extendLimits() */
+
+static int countBases(struct hash *coordHash, char *name)
+{
+struct hashEl *coords;
+struct coordEl *coord;
+struct coordEl **coordListPt = (struct coordEl **) NULL;
+int baseCount = 0;
+
+verbose(2,"# counting bases in %s\n", name );
+
+coords = hashLookup(coordHash, name);
+if (coords) coordListPt = coords->val;
+else coordListPt = NULL;
+if (coordListPt) coord = *coordListPt;
+else coord = NULL;
+
+while (coord != NULL)
+    {
+    baseCount += coord->end - coord->start;
+    verbose(2,"# %s %d bases\n", coord->name, coord->end - coord->start);
+    coord = coord->next;
+    }
+return (baseCount);
+}	/*	static int countBases()	*/
 
 static void processResult(struct hash *chrHash, struct hash *coordHash,
 	char *accName, unsigned querySize)
@@ -259,9 +284,33 @@ verbose(2,"# %s %d\n", hashEl->name, count);
     }
 verbose(2,"# %s %d highest count, next: %s %d\n", ctgName, highCount, secondHighestName, secondHighest);
 
+if (highCount == 0)
+    return;
+
 if (highCount == secondHighest)
     {
+    int baseCount0 = 0;
+    int baseCount1 = 0;
+    /*	Try to break the tie by examining the number of bases covered in
+     *	each and take the one with the most
+     */
+    baseCount0 = countBases(coordHash, ctgName);
+    baseCount1 = countBases(coordHash, secondHighestName);
+    if (baseCount0 == baseCount1)
+	{
 verbose(1,"# ERROR TIE for high count %s %d highest count, next: %s %d  TIE *\n", ctgName, highCount, secondHighestName, secondHighest);
+verbose(1,"# ERROR TIE base count0: %d, base count1: %d\n", baseCount0, baseCount1);
+	}
+    else if (baseCount1 > baseCount0)	/*	switch the names */
+	{
+	char *t;
+	t = cloneString(ctgName);
+	freeMem(ctgName);
+	ctgName = cloneString(secondHighestName);
+	freeMem(secondHighestName);
+	secondHighestName = cloneString(t);
+	freeMem(t);
+	}
     }
 
 /*	for that highest count chrom, examine its coordinates, find high
@@ -328,7 +377,7 @@ if (coordCount > 0)
     extendLimits(coordListPt, median, querySize, &startExtended, &endExtended,
 	ctgName);
     verbose(2,
-	"# qSize: %u, Median: %u implies %u-%u %s\n#\textended to%u-%u\n",
+	"# qSize: %u, Median: %u implies %u-%u %s\n#\textended to %u-%u\n",
 	querySize, median, median - (querySize/2), median+(querySize/2),
 	accName, startExtended, endExtended);
     /*	if BED output, output the line here, AGP was done in extendLimits */
@@ -393,7 +442,7 @@ for (i=1; i < argc; ++i)
 	{
 	char *accName = (char *)NULL;
 	char *chrName = (char *)NULL;
-	int chrCount;
+	int chrCount = 0;
 	double percentCoverage;
 
 	accName = cloneString(psl->qName);
@@ -415,7 +464,8 @@ for (i=1; i < argc; ++i)
 	    if (partCount > 0)
 		processResult(chrHash, coordHash, prevAccName, querySize);
 	    else
-		verbose(1,"# ERROR - no coordinates found ? %s\n", prevAccName);
+		verbose(1,"# ERROR - no coordinates found for %s\n",
+		    prevAccName);
 	    freeMem(prevAccName);
 	    prevAccName = cloneString(accName);
 	    freeHash(&chrHash);
@@ -441,13 +491,24 @@ for (i=1; i < argc; ++i)
 	el = hashLookup(chrHash, chrName);
 	if (el == NULL)
 	    {
-	    hashAddInt(chrHash, chrName, 1);
-	    chrCount = 1;
+	    if (percentCoverage > minCover)
+		{
+		hashAddInt(chrHash, chrName, 1);
+		chrCount = 1;
+		}
+	    else
+		{
+		hashAddInt(chrHash, chrName, 0);
+		chrCount = 0;
+		}
 	    }
 	else
 	    {
-	    chrCount = ptToInt(el->val) + 1;
-	    el->val=intToPt(chrCount);
+	    if (percentCoverage > minCover)
+		{
+		chrCount = ptToInt(el->val) + 1;
+		el->val=intToPt(chrCount);
+		}
 	    }
 
 	AllocVar(coord);

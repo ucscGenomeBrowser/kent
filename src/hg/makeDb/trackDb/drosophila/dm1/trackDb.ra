@@ -16,13 +16,19 @@ visibility dense
 altColor 200,150,150
 type bed 4 +
 
-track multizDroYak1Dp1AnoGam1
-shortLabel 3-Fly+A.g. Multiz
-longLabel D.melanogaster/yakuba/pseudoobscura/A.gambiae Multiz (droYak1, dp1, anoGam1)
+track mzDy1Dp1Ag1_phast
+shortLabel Conservation
+longLabel D.mel./D.yakuba/D.pseudoob./A.gambiae Multiz Alignments & phastCons Scores
 group compGeno
-priority 101
-visibility full
-type maf
+priority 100
+visibility pack
+type wigMaf 0.0 1.0
+maxHeightPixels 100:40:11
+wiggle mzDy1Dp1Ag1_phast_wig
+yLineOnOff Off
+autoScaleDefault Off
+pairwise mypa
+speciesOrder d_yakuba d_pseudoobscura a_gambiae
 
 track multizDroYak1Dp1
 shortLabel 3-Fly Multiz
@@ -141,17 +147,6 @@ color 0,60,120
 altColor 200,220,255
 exonArrows off
 type bed 12 .
-
-track phastCons4way
-shortLabel phastCons4way 
-longLabel phastCons4way Conservation Score, melanogaster/yakuba/pseudoobscura/anopheles
-group compGeno
-priority 103
-visibility hide
-color 0,10,100
-maxHeightPixels 40
-type wig 0.0 1.0
-autoScaleDefault off
 
 track phastCons4wayElements
 shortLabel phastCons4wayElements

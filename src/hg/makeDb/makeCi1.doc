@@ -3,20 +3,20 @@ exit; # don't actually run this like a script :)
 
 # Ciona Intestinalis V1.0 from JGI
 
-DOWNLOAD SEQUENCE 
+# DOWNLOAD SEQUENCE 
 
     ssh eieio
     mkdir /cluster/store5/squirt
     cd /cluster/store5/squirt
-    wget ftp://ftp.jgi-psf.org/pub/JGI_data/Ciona/v1.0/ciona.rm.fasta.gz
-    gunzip ciona.rm.fasta
+    wget ftp://ftp.jgi-psf.org/pub/JGI_data/Ciona/v1.0/ciona.fasta.gz
+    gunzip ciona.fasta
 
     # translate to nib
     ln -s /cluster/store5/squirt/ci1 ~/ci1
     cd ~/ci1
     mkdir scaffolds
 
-    faSplit byname ciona.rm.fasta scaffolds/
+    faSplit byname ciona.fasta scaffolds/
 
     mkdir nib
     cd nib
@@ -24,20 +24,13 @@ DOWNLOAD SEQUENCE
         faToNib $i `basename $i .fa`.nib
     end
 
-CREATE DATABASE
-    # Create the database.
+# Create the database.
     ssh hgwdev
     echo 'create database ci1' | hgsql ''
-
-
-CREATING GRP TABLE FOR TRACK GROUPING 
-    ssh hgwdev
+# CREATING GRP TABLE FOR TRACK GROUPING 
     echo "create table grp (PRIMARY KEY(NAME)) select * from rn1.grp" \
       | hgsql ci1
 
-
-MAKE HGCENTRALTEST BLATSERVERS ENTRY FOR SC1 (TODO)
-    ssh hgwdev
     echo 'insert into blatServers values("ci1", "blat10", "17780", "1"); \
           insert into blatServers values("ci1", "blat10", "17781", "0");' \
       | hgsql -h genome-testdb hgcentraltest
@@ -79,13 +72,11 @@ MAKE HGCENTRALTEST BLATSERVERS ENTRY FOR SC1 (TODO)
 	echo "created indices on $i"
     end
 
-
-
-# GAP table
+### gap and repeats tables
     ssh hgwdev
     mkdir -p /cluster/data/ci1/bed/gapRmsk
     cd /cluster/data/ci1/bed/gapRmsk
-    simpleGap /cluster/data/ci1/nib gap.bed rmsk.out
+    simpleGap /cluster/data/ci1/nib gap.bed repeats.bed
     echo "drop table gap;" | hgsql ci1
     hgsql ci1 < ~/kent/src/hg/lib/gap.sql   
     hgLoadBed -oldTable ci1 gap gap.bed
@@ -93,22 +84,117 @@ MAKE HGCENTRALTEST BLATSERVERS ENTRY FOR SC1 (TODO)
     echo "create index chrom on gap (chrom(13), bin) ;" | hgsql ci1
     echo "create index chrom_2 on gap  (chrom(13), chromStart);" | hgsql ci1
     echo "create index chrom_3 on gap  (chrom(13), chromEnd);" | hgsql ci1
-    echo "drop table rmsk;" | hgsql ci1
-    hgsql ci1 < ~/kent/src/hg/lib/rmskOut.sql   
-    echo "rename table rmskOut to rmsk;" | hgsql ci1 
-    echo "load data local infile 'rmsk.out' into table rmsk;" | hgsql ci1 
+
+    # do RepeatMasking
+    cd /cluster/data/ci
+    echo "drop index bin on rmsk;" | hgsql ci1
+    echo "drop index genoStart on rmsk;" | hgsql ci1
+    echo "drop index genoEnd on rmsk;" | hgsql ci1
     echo "create index chrom_2 on rmsk  (genoName(13), genoStart);" | hgsql ci1
     echo "create index chrom_3 on rmsk  (genoName(13), genoEnd);" | hgsql ci1
 
-# JGI ciona genes
+    ssh eieio
+    mkdir -p /cluster/data/ci1/bed/simpleRepeat
+    cd /cluster/data/ci1/bed/simpleRepeat
+    mkdir trf
+    for i in ../../scaffolds/*.fa
+    do 
+    	trfBig $i /dev/null -bedAt=trf/`basename $i .fa`.bed > /dev/null 2>&1 ; echo $i;
+    done
+    cat trf/* > simpleRepeat.sql
+
     ssh hgwdev
+    hgLoadBed ci1 simpleRepeat /cluster/data/ci1/bed/simpleRepeat/simpleRepeat.bed \
+    	-sqlTable=$HOME/kent/src/hg/lib/simpleRepeat.sql 
+
+    ssh eieio
+    cd /cluster/data/ci1/bed/simpleRepeat
+    mkdir -p trfMask
+    cd trf
+    for i in *.bed
+    do
+      awk '{if ($5 <= 12) print;}' $i > ../trfMask/$i
+    done
+
+    # use RepeatMasker and simpleRepeat to build masked fa's
+    cd /cluster/data/ci1
+    mkdir maskedScaffolds
+    cd scaffolds
+    for i in *.fa
+    do
+        maskOutFa -soft $i ../bed/RM/out/$i.out ../maskedScaffolds/$i 
+        maskOutFa -softAdd ../maskedScaffolds/$i ../bed/simpleRepeat/trfMask/`basename $i .fa`.bed  ../maskedScaffolds/$i 
+    done
+
+    # Rebuild the nib files, using the soft masking in the fa:                                           
+    mkdir -p /cluster/data/ci1/nib
+    cd /cluster/data/ci1/nib/maskedScaffolds
+    
+    for i in *.fa
+    do
+      faToNib -softMask $i ../nib/`basename $i .fa`.nib
+    done
+
+    # Make one big 2bit file as well, and make a link to it in
+    # /gbdb/ci1/nib because hgBlat looks there (or so says galGal2)
+    faToTwoBit *.fa ../ci1.2bit                                                                     
+    ln -s /cluster/data/ci1/ci1.2bit /gbdb/ci1/nib/
+
+### JGI ciona genes
+# the GFF file on the JGI web site is garbage (per Daniel Rokhsar (dsrokhsar@lbl.gov)
+# build a genPred file from predicted transcripts and predicted proteins.
+# first blat transcripts against ci1
+    ssh kk
     mkdir /cluster/data/ci1/bed/jgiGene
     cd /cluster/data/ci1/bed/jgiGene
-    wget "ftp://ftp.jgi-psf.org/pub/JGI_data/Ciona/v1.0/ciona_genes.gff.gz"
-    zcat ciona_genes.gff.gz | sed "s/name \"//" | sed "s/\".*//" > jgiGene.gff
-    ldHgGene -genePredExt  -gtf ci1 jgiGene jgiGene.gff
+    wget "ftp://ftp.jgi-psf.org/pub/JGI_data/Ciona/v1.0/ciona.mrna.fasta.gz"
+    gunzip ciona.mrna.fasta.gz
+    cat << '_EOF_' > gsub
+#LOOP
+/cluster/bin/i386/blat -mask=lower -q=dna -t=dna {check in exists $(path1)} {check in line+ $(path2)} {check out line+ psl/$(root1)/$(root2).psl}
+#ENDLOOP
+'_EOF_'
+    ls -1S /iscratch/i/squirt/ci1/nib/* > squirt.lst
+    mkdir fas
+    faSplit sequence *.fasta 40 fas/ci
+    ls -1S fas/* > mrna.lst
+    gensub2 squirt.lst mrna.lst gsub spec
+    mkdir psl
+    cd psl
+    #!/bin/sh
+    for i in `cat ../squirt.lst`
+    do
+	mkdir `basename $i .nib`
+    done
+    cd ..
+    para create spec
+    para push
+# Completed: 100040 of 100040 jobs
+# CPU time in finished jobs:      78739s    1312.32m    21.87h    0.91d  0.002 y
+# IO & Wait Time:                284574s    4742.89m    79.05h    3.29d  0.009 y
+# Average job time:                   4s       0.06m     0.00h    0.00d
+# Longest job:                       37s       0.62m     0.01h    0.00d
+# Submission to last job:          1766s      29.43m     0.49h    0.02d
 
-# SNAP GENE PREDICTIONS FROM COLIN DEWEY (DONE 4/23/04 angie)
+    ssh eieio
+    pslSort dirs raw.psl /tmp psl/*
+    sed "1,5d" raw.psl | sort -rn | pslUniq stdin mrna.psl  
+
+# now blat proteins against predicted transcripts to get CDS
+    wget "ftp://ftp.jgi-psf.org/pub/JGI_data/Ciona/v1.0/ciona.prot.fasta.gz" 
+    gunzip ciona.prot.fasta.gz
+    blat -q=prot -t=dnax ciona.mrna.fasta ciona.prot.fasta cds.psl
+    sort -rn cds.psl | pslUniq stdin stdout | awk "{printf \"%s\t%s..%s\n\",\$14,\$16+1,\$17}" > jgiGene.cds
+    mrnaToGene -cdsFile=jgiGene.cds mrna.psl jgiGene.gp -genePredExt > log 2>&1 
+    gzip *fasta
+    rm -rf batch* err fas *.tab log psl *.psl  para* spec
+
+    ssh hgwdev
+    cd /cluster/data/ci1/bed/jgiGene
+    ldHgGene ci1 jgiGene jgiGene.gp -predTab -genePredExt
+    hgPepPred ci1 generic jgiGenePep /cluster/data/ci1/bed/jgiGene/ciona.prot.fasta
+
+### SNAP GENE PREDICTIONS FROM COLIN DEWEY (DONE 4/23/04 angie)
     ssh hgwdev
     mkdir /cluster/data/ci1/bed/snap
     cd /cluster/data/ci1/bed/snap
@@ -117,7 +203,7 @@ MAKE HGCENTRALTEST BLATSERVERS ENTRY FOR SC1 (TODO)
     gunzip SNAP.gff.gz
     ldHgGene -gtf -frame -id -geneName ci1 snapGene SNAP.gff
 
-# tblastn human proteins
+### tBLASTn human proteins
     ssh kk
     cd /cluster/data/ci1/bed
     mkdir tblastnHg16KG
@@ -212,10 +298,4 @@ MAKE HGCENTRALTEST BLATSERVERS ENTRY FOR SC1 (TODO)
     chainSwap chainCi1S.chain chainHg16S.chain
     hgLoadChain hg16 chainCi1ProtEx chainCi1S.chain
     hgLoadChain ci1 chainHg16ProtEx  chainHg16S.chain
-
-    grep ">" /cluster/data/hg16/bed/blat*7/known.fa | sed "s/>//" > kg.lst
-    kgName hg16 kg.lst kg.names
-    cd /cluster/data/hg16/bed/blat.hg16KG
-    cat $HOME/kent/src/hg/lib/kgMapName.sql | hgsql ci1
-    echo "load data local infile 'kg.mapNames' into table kgMapName;" | hgsql ci1
 

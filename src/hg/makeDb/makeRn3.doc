@@ -4238,5 +4238,179 @@ XXX - README file not done yet - 2004-06-15
     wc -l cpgIslandAndyMasked.bed cpgIslandGgfAndyMasked.bed
 # 124457 cpgIslandAndyMasked.bed
 #  91015 cpgIslandGgfAndyMasked.bed
+    # 6/28/04 -- masking simpleRepeats, and even repeats other than Alu's,
+    # might not be the right thing to do (?).  Give it a try with less-masked 
+    # sequence.
+    ssh eieio
+    cd /cluster/data/rn3/bed/cpgIslandGgfAndy
+    cp /dev/null cpgIslandGgfAndyOnlyRM.bed
+    cp /dev/null cpgIslandGgfAndyOnlyRMAlu.bed
+    foreach f (../../?{,?}/chr*.fa)
+      set chr = $f:t:r
+      echo preproc, ggf-andy $chr onlyRM
+      maskOutFa $f $f.out stdout \
+      | /cluster/home/angie/bin/$MACHTYPE/preProcGgfAndy stdin \
+      | /cluster/home/angie/ggf-andy-cpg-island.pl \
+      | perl -wpe 'chomp; ($s,$e,$cpg,$n,$c,$g,$oE) = split("\t"); $s--; \
+                   $gc = $c + $g;  $pCpG = (100.0 * 2 * $cpg / $n); \
+                   $pGc = (100.0 * $gc / $n); \
+                   $_ = "'$chr'\t$s\t$e\tCpG: $cpg\t$n\t$cpg\t$gc\t" . \
+                        "$pCpG\t$pGc\t$oE\n";' \
+      >> cpgIslandGgfAndyOnlyRM.bed
+      echo preproc, ggf-andy $chr onlyRMAlu
+      head -3 $f.out > /tmp/tmp2.fa.out
+      awk '$11 == "SINE/Alu" {print;}' $f.out >> /tmp/tmp2.fa.out
+      maskOutFa $f /tmp/tmp2.fa.out stdout \
+      | /cluster/home/angie/bin/$MACHTYPE/preProcGgfAndy stdin \
+      | /cluster/home/angie/ggf-andy-cpg-island.pl \
+      | perl -wpe 'chomp; ($s,$e,$cpg,$n,$c,$g,$oE) = split("\t"); $s--; \
+                   $gc = $c + $g;  $pCpG = (100.0 * 2 * $cpg / $n); \
+                   $pGc = (100.0 * $gc / $n); \
+                   $_ = "'$chr'\t$s\t$e\tCpG: $cpg\t$n\t$cpg\t$gc\t" . \
+                        "$pCpG\t$pGc\t$oE\n";' \
+      >> cpgIslandGgfAndyOnlyRMAlu.bed
+    end
+#  91272 cpgIslandGgfAndyOnlyRM.bed
+# 149225 cpgIslandGgfAndyOnlyRMAlu.bed
+    ssh hgwdev
+    cd /cluster/data/rn3/bed/cpgIslandGgfAndy
+    sed -e 's/cpgIslandExt/cpgIslandGgfAndyOnlyRM/g' \
+      $HOME/kent/src/hg/lib/cpgIslandExt.sql > /tmp/c.sql
+    hgLoadBed rn3 cpgIslandGgfAndyOnlyRM -tab -noBin -sqlTable=/tmp/c.sql \
+      cpgIslandGgfAndyOnlyRM.bed
+    sed -e 's/cpgIslandExt/cpgIslandGgfAndyOnlyRMAlu/g' \
+      $HOME/kent/src/hg/lib/cpgIslandExt.sql > /tmp/c.sql
+    hgLoadBed rn3 cpgIslandGgfAndyOnlyRMAlu -tab -noBin -sqlTable=/tmp/c.sql \
+      cpgIslandGgfAndyOnlyRMAlu.bed
+    featureBits rn3 cpgIslandGgfAndyOnlyRM.bed
+#44021003 bases of 2571104688 (1.712%) in intersection
+    featureBits rn3 cpgIslandGgfAndyOnlyRMAlu.bed
+#68483127 bases of 2571104688 (2.664%) in intersection
 
 
+######## GENE SORTER BUILD #######  (DONE - 2004-06-01 - Fan)
+# This update is to complement the KG update using SWISS-PROT data release of 3/15/04.
+# These are instructions for updating the
+# neighborhood browser.  Don't start these until
+# there is a knownGene track and the affy tracks
+
+# Cluster together various alt-splicing isoforms.
+#	Creates the knownIsoforms and knownCanonical tables
+ssh hgwdev
+mkdir /cluster/data/rn3/bed/famBro.2004-04-05
+rm /cluster/data/rn3/bed/famBro
+ln -s /cluster/data/rn3/bed/famBro.2004-04-05 /cluster/data/rn3/bed/famBro
+cd /cluster/data/rn3/bed/famBro
+hgClusterGenes rn3 knownGene knownIsoforms knownCanonical
+#	Got 25004 clusters, from 41693 genes in 44 chromosomes
+#	row count on knownIsoforms is 41669
+#	row count on knownCanonical is 25004
+
+# Extract peptides from knownGenes into fasta file
+# and create a blast database out of them.
+mkdir /cluster/data/rn3/bed/famBro/blastp
+cd /cluster/data/rn3/bed/famBro/blastp
+pepPredToFa rn3 knownGenePep known.faa
+#	You may need to build this binary in src/hg/near/pepPredToFa
+#
+#	expect to find /scratch/blast loaded with all required blast files
+/scratch/blast/formatdb -i known.faa -t known -n known
+
+# Copy over database to bluearc
+rm -fr /cluster/bluearc/rn3/blastp
+mkdir /cluster/bluearc/rn3
+mkdir /cluster/bluearc/rn3/blastp
+cp -p /cluster/data/rn3/bed/famBro/blastp/known.* /cluster/bluearc/rn3/blastp
+
+# Split up fasta file into bite sized chunks for cluster
+cd /cluster/data/rn3/bed/famBro/blastp
+mkdir split
+faSplit sequence known.faa 8000 split/kg
+
+# Make parasol run directory 
+ssh kk
+mkdir /cluster/data/rn3/bed/famBro/blastp/self
+cd /cluster/data/rn3/bed/famBro/blastp/self
+mkdir run
+cd run
+mkdir out
+
+# Make blast script
+cat  << '_EOF_' > blastSome
+#!/bin/sh
+BLASTMAT=/scratch/blast/data /scratch/blast/blastall -p blastp \
+	-d /cluster/bluearc/rn3/blastp/known -i $1 -o $2 -e 0.01 -m 8 -b 1000
+'_EOF_'
+chmod a+x blastSome
+
+# Make gensub2 file
+cat  << '_EOF_' > gsub
+#LOOP
+blastSome {check in line+ $(path1)} {check out line out/$(root1).tab}
+#ENDLOOP
+'_EOF_'
+
+# Create parasol batch
+#	'ls ../../split/*.fa' is too much, hence the echo
+echo ../../split/*.fa | wordLine stdin > split.lst
+gensub2 split.lst single gsub jobList
+para make jobList
+
+# This should finish in ~5 minutes
+# Completed: 7738 of 7738 jobs
+# CPU time in finished jobs:     108579s    1809.65m    30.16h    1.26d  0.003 y
+# IO & Wait Time:                 76232s    1270.54m    21.18h    0.88d  0.002 y
+# Average job time:                  24s       0.40m     0.01h    0.00d
+# Longest job:                      188s       3.13m     0.05h    0.00d
+# Submission to last job:           254s       4.23m     0.07h    0.00d
+
+# Load into database.  This takes about 15 minutes.
+ssh hgwdev
+cd /cluster/data/rn3/bed/famBro/blastp/self/run/out
+time hgLoadBlastTab rn3 knownBlastTab *.tab
+# Scanning through 7738 files
+# Loading database with 8019510 rows
+# 184.360u 28.660s 17:01.40 20.8% 0+0k 0+0io 202pf+0w
+
+# Create table that maps between known genes and RefSeq
+hgMapToGene rn3 refGene knownGene knownToRefSeq
+#	row count goes from 27744 to 30116
+
+# Part 2, started 5/25/04
+# Create table to map between known genes and GNF Atlas2
+# expression data.
+    hgMapToGene rn3 gnfAtlas2 knownGene knownToGnfAtlas2 '-type=bed 12'
+
+
+    hgExpDistance rn3 hgFixed.gnfRatAtlas2MedianRatio \
+        hgFixed.gnfRatAtlas2MedianExps gnfAtlas2Distance \
+        -lookup=knownToGnfAtlas2
+
+# Make sure that GO database is up to date.
+See README in /cluster/store1/geneOntology.
+GO database, go, downloaded and updated.
+
+# Create knownToEnsembl column
+cd /cluster/data/rn3/bed/famBro
+hgMapToGene rn3 ensGene knownGene knownToEnsembl
+#	row count went to 34357
+
+# Make knownToCdsSnp column.
+hgMapToGene rn3 snpMap knownGene knownToCdsSnp -all -cds
+#	row count went to 12061
+
+# CREATING KNOWNTOSUPER (which enables Superfamily stuff in hgNear/hgGene)
+# First see if need to update superfamily data from 
+# ftp server at supfam.mrc-lmb.cam.ac.uk following instructions
+# in /cluster/store1/superFamily/genomes/README.ucsc.  Then
+# make sure that knownToEnsembl and ensGtp tables are created, then:
+ssh hgwdev
+cat /cluster/store1/superFamily/040516/ass_16-May-2004.tab| hgKnownToSuper rn3 rn stdin
+#	5984 records output
+
+# CREATE KNOWNTOLOCUSLINK
+# that maps between known genes and LocusLink
+hgsql --skip-column-names -e "select mrnaAcc,locusLinkId from refLink" rn3 \
+        > refToLl.txt
+hgMapToGene rn3 refGene knownGene knownToLocusLink -lookup=refToLl.txt
+#       row count is 6084

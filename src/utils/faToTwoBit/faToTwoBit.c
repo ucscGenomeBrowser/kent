@@ -8,7 +8,7 @@
 #include "fa.h"
 #include "twoBit.h"
 
-static char const rcsid[] = "$Id: faToTwoBit.c,v 1.3 2004/02/23 06:49:10 kent Exp $";
+static char const rcsid[] = "$Id: faToTwoBit.c,v 1.4 2004/06/30 22:12:57 braney Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -75,6 +75,7 @@ for (i=0; i<inFileCount; ++i)
 	twoBit = twoBitFromDnaSeq(&seq, !noMask);
 	slAddHead(&twoBitList, twoBit);
 	}
+    lineFileClose(&lf);
     }
 slReverse(&twoBitList);
 f = mustOpen(outFile, "wb");

@@ -11,7 +11,7 @@
 #include "genePred.h"
 #include "bed.h"
 
-static char const rcsid[] = "$Id: hgSeq.c,v 1.21 2004/03/24 23:34:59 angie Exp $";
+static char const rcsid[] = "$Id: hgSeq.c,v 1.22 2004/06/26 16:09:06 braney Exp $";
 
 /* I don't like using this global, but don't want to do a zillion 
  * hChromSizes in addFeature and don't want to add it as a param of 
@@ -248,26 +248,45 @@ static void maskRepeats(char *chrom, int chromStart, int chromEnd,
 			DNA *dna, boolean soft)
 /* Lower case bits corresponding to repeats. */
 {
-int rowOffset;
+int rowOffset, i;
+struct bed *bedItem, *bedList;
 struct sqlConnection *conn;
 struct sqlResult *sr;
 char **row;
+struct hTableInfo *hti = hFindTableInfoDb(hGetDb(), chrom, "rmsk");
 
-conn = hAllocConn();
-sr = hRangeQuery(conn, "rmsk", chrom, chromStart, chromEnd, NULL, &rowOffset);
-while ((row = sqlNextRow(sr)) != NULL)
+if (hti == NULL)
     {
-    struct rmskOut ro;
-    rmskOutStaticLoad(row+rowOffset, &ro);
-    if (ro.genoEnd > chromEnd) ro.genoEnd = chromEnd;
-    if (ro.genoStart < chromStart) ro.genoStart = chromStart;
-    if (soft)
-	toLowerN(dna+ro.genoStart-chromStart, ro.genoEnd - ro.genoStart);
-    else
-        memset(dna+ro.genoStart-chromStart, 'n', ro.genoEnd - ro.genoStart);
+    /* if there isn't a rmsk track, look for the repeats bed file */
+    bedList = hGetBedRangeDb(hGetDb(), "repeats", chrom, chromStart, chromEnd, NULL);
+    for (bedItem = bedList;  bedItem != NULL;  bedItem = bedItem->next)
+	{
+	if (bedItem->chromEnd > chromEnd) bedItem->chromEnd = chromEnd;
+	if (bedItem->chromStart < chromStart) bedItem->chromStart = chromStart;
+	if (soft)
+	    toLowerN(dna+bedItem->chromStart-chromStart, bedItem->chromEnd - bedItem->chromStart);
+	else
+	    memset(dna+bedItem->chromStart-chromStart, 'n', bedItem->chromEnd - bedItem->chromStart);
+	}
     }
-sqlFreeResult(&sr);
-hFreeConn(&conn);
+else
+    {
+    conn = hAllocConn();
+    sr = hRangeQuery(conn, "rmsk", chrom, chromStart, chromEnd, NULL, &rowOffset);
+    while ((row = sqlNextRow(sr)) != NULL)
+	{
+	struct rmskOut ro;
+	rmskOutStaticLoad(row+rowOffset, &ro);
+	if (ro.genoEnd > chromEnd) ro.genoEnd = chromEnd;
+	if (ro.genoStart < chromStart) ro.genoStart = chromStart;
+	if (soft)
+	    toLowerN(dna+ro.genoStart-chromStart, ro.genoEnd - ro.genoStart);
+	else
+	    memset(dna+ro.genoStart-chromStart, 'n', ro.genoEnd - ro.genoStart);
+	}
+    sqlFreeResult(&sr);
+    hFreeConn(&conn);
+    }
 }
 
 

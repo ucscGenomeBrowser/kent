@@ -18,6 +18,7 @@ DBS = 	hg13 hg15 hg16 hg17 \
 	rn2 rn3 \
 	galGal2 \
 	fr1 \
+	cioSav1 \
 	danRer1 \
 	dm1 \
 	dp1 \
