@@ -18,8 +18,8 @@ struct psl *psl = NULL, *pslList = NULL;
 boolean hasBin;
 char splitTable[64];
 char query[256];
-struct sqlConnection *conn = hAllocConn();
 struct dnaSeq *seq = NULL;
+struct sqlConnection *conn = hAllocConn();
 
 hFindSplitTable(tName, table, splitTable, &hasBin);
 safef(query, sizeof(query), "select qName from %s where tName = '%s' and tEnd > %d and tStart < %d", splitTable, tName, tStart, tEnd);
@@ -47,7 +47,6 @@ hFreeConn(&conn);
 
 int main(int argc, char *argv[])
 {
-cgiSpoof(&argc,argv);
 struct dnaSeq *seqList = NULL, *seq;
 struct hash *faHash = hashNew(0);
 // char *db=cgiString("db");
@@ -59,6 +58,8 @@ struct lineFile *lf;
 char *line = NULL;
 char clustal[512];
 int ret;
+
+cgiSpoof(&argc,argv);
 
 if (faIn == NULL)
     webAbort("Error", "Requires input fa file");
