@@ -17,9 +17,11 @@
 #include "dbDb.h"
 #include "blatServers.h"
 #include "web.h"
+#include "hash.h"
 
 struct cart *cart;	/* The user's ui state. */
 char *defaultDatabase;	/* Default database. */
+struct hash *oldVars = NULL;
 
 struct serverTable
 /* Information on a server. */
@@ -510,30 +512,29 @@ printf(
 "<TR>\n");
 cartSaveSession(cart);
 
-printf("%s", "<TD WIDTH=\"20%\"<CENTER>\n");
-printf("Organism:<BR>");
+printf("%s", "<TD><CENTER>\n");
+printf("Genome:<BR>");
 printOrgListHtml(db, onChangeText);
-printf("%s", "</TD><TD WIDTH=\"22%\"<CENTER>\n");
-printf("Freeze:<BR>");
+printf("%s", "</TD><TD><CENTER>\n");
+printf("Assembly:<BR>");
 printBlatAssemblyListHtml(db);
-printf("%s", "</TD><TD WIDTH=\"22%\"<CENTER>\n");
+printf("%s", "</TD><TD><CENTER>\n");
 printf("Query type:<BR>");
 cgiMakeDropList("type", typeList, ArraySize(typeList), NULL);
-printf("%s", "</TD><TD WIDTH=\"20%\"<CENTER>\n");
+printf("%s", "</TD><TD><CENTER>\n");
 printf("Sort output:<BR>");
 cgiMakeDropList("sort", sortList, ArraySize(sortList), cartOptionalString(cart, "sort"));
 printf("%s", "</TD>\n");
-printf("%s", "<TD WIDTH=\"20%\"<CENTER>\n");
+printf("%s", "<TD><CENTER>\n");
 printf("Output type:<BR>");
 cgiMakeDropList("output", outputList, ArraySize(outputList), cartOptionalString(cart, "output"));
-printf("%s", "</TD>\n");
-printf("%s", "<TD WIDTH=\"18%\">\n"
-    "<CENTER>\n"
-    "<P><INPUT TYPE=SUBMIT NAME=Submit VALUE=Submit>\n"
-    "</CENTER>\n"
+puts("</TD>\n");
+
+puts("<TD><CENTER>&nbsp;<BR><INPUT TYPE=SUBMIT NAME=Submit VALUE=Submit Align=\"bottom\">\n"
     "</TD>\n"
     "</TR>\n"
-    "</TABLE>\n");
+    "</TABLE>\n"
+);
 
 puts("Please paste in a query sequence to see where it is located in the ");
 printf("the genome.  Multiple sequences can be searched\n");
@@ -589,6 +590,8 @@ char *userSeq;
 cart = theCart;
 dnaUtilOpen();
 
+cartWebStart(theCart, "BLAT Search");
+
 /* Get sequence - from userSeq variable, or if 
  * that is empty from a file. */
 userSeq = cartOptionalString(cart, "userSeq");
@@ -612,10 +615,11 @@ char *excludeVars[] = {"Submit", "submit", "type", "genome", "userSeq", "seqFile
 int main(int argc, char *argv[])
 /* Process command line. */
 {
+oldVars = hashNew(8);
 cgiSpoof(&argc, argv);
 defaultDatabase = hGetDb();
 htmlSetBackground("../images/floret.jpg");
-cartHtmlShell("BLAT Search", doMiddle, hUserCookie(), excludeVars, NULL);
+cartEmptyShell(doMiddle, "hguid", excludeVars, oldVars);
 return 0;
 }
 
