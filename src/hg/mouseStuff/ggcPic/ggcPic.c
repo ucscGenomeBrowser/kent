@@ -3,6 +3,7 @@
 #include "linefile.h"
 #include "hash.h"
 #include "options.h"
+#include "portable.h"
 #include "axt.h"
 #include "genePred.h"
 
@@ -10,9 +11,9 @@ void usage()
 /* Explain usage and exit. */
 {
 errAbort(
-  "ggcPic - Generic picture of conservation of features near a gene\n"
+  "ggcPic - Generic gene conservation picture\n"
   "usage:\n"
-  "   ggcPic axtDir chrom.sizes genePred.txt out.gif\n"
+  "   ggcPic axtDir chrom.sizes genePred.txt outDir\n"
   "options:\n"
   "   -xxx=XXX\n"
   );
@@ -92,6 +93,8 @@ struct pcm
 /* Keep track of matches bases vs. total bases at
  * a certain pixel resolution. */
     {
+    struct pcm *next;	/* Next in list. */
+    char *name;		/* Name. */
     int pixels;		/* Pixel resolution. */
     int *match;		/* Array of match counts. */
     int *count;		/* Array of total counts. */
@@ -100,20 +103,31 @@ struct pcm
 struct ggcInfo
 /* Info necessary to make pic. */
     {
-    int baseSplice5, baseSplice3; /* How many bases in splice sites. */
+    int closeSize;	/* How big is close-up */
     int baseUp, baseDown;  /* Bases in upstream/downstream regions. */
-    struct pcm utr5, utr3;  /* Track UTRs. */
-    struct pcm cds; /* Track CDS */
-    struct pcm splice5, intron, splice3; /* Track intron. */
+    struct pcm *pcmList;   /* List of all enclosed pcm's. */
+    struct pcm utr5, utr3; /* Track UTRs. */
+    struct pcm cdsAll;     /* Track overall CDS */
+    struct pcm cdsFirst;   /* Track first CDS exon */
+    struct pcm cdsMiddle;  /* Track middle CDS exons */
+    struct pcm cdsLast;    /* Track last CDS exon */
+    struct pcm cdsSingle;  /* Track only one CDS exon genes. */
+    struct pcm singleExon; /* Track single exon genes. */
+    struct pcm intron; /* Track intron. */
     struct pcm up, down;		/* Upstream/downstream regions. */
+    struct pcm splice5, splice3; /* Track splice sites */
+    struct pcm txStart, txEnd;	/* Transcription start/end */
+    struct pcm tlStart, tlEnd;	/* Translation start/end */
     };
 
-void initPcm(struct pcm *pcm, int pixels)
+void initPcm(struct ggcInfo *g, struct pcm *pcm, char *name, int pixels)
 /* Allocate and initialize pcm */
 {
+pcm->name = cloneString(name);
 pcm->pixels = pixels;
 AllocArray(pcm->match, pixels);
 AllocArray(pcm->count, pixels);
+slAddTail(&g->pcmList, pcm);
 }
 
 struct ggcInfo *newGgcInfo()
@@ -121,16 +135,25 @@ struct ggcInfo *newGgcInfo()
 {
 struct ggcInfo *g;
 AllocVar(g);
-g->baseSplice5 = g->baseSplice3 = 30;
-g->baseUp = g->baseDown = 1000;
-initPcm(&g->utr3, 1000);
-initPcm(&g->utr5, 1000);
-initPcm(&g->cds, 1000);
-initPcm(&g->splice5, g->baseSplice5);
-initPcm(&g->intron, 1000);
-initPcm(&g->splice3, g->baseSplice3);
-initPcm(&g->up, 1000);
-initPcm(&g->down, 1000);
+g->closeSize = 40;
+g->baseUp = g->baseDown = 3000;
+initPcm(g, &g->up, "up", g->baseUp);
+initPcm(g, &g->down, "down", g->baseDown);
+initPcm(g, &g->utr3, "utr3", 200);
+initPcm(g, &g->utr5, "utr5", 200);
+initPcm(g, &g->cdsFirst, "cdsFirst", 100);
+initPcm(g, &g->cdsMiddle, "cdsMiddle", 100);
+initPcm(g, &g->cdsLast, "cdsLast", 100);
+initPcm(g, &g->cdsSingle, "cdsSingle", 200);
+initPcm(g, &g->cdsAll, "cdsAll", 200);
+initPcm(g, &g->singleExon, "singleExon", 400);
+initPcm(g, &g->intron, "intron", 1000);
+initPcm(g, &g->splice5, "splice5", g->closeSize);
+initPcm(g, &g->splice3, "splice3", g->closeSize);
+initPcm(g, &g->txStart, "txStart", g->closeSize);
+initPcm(g, &g->txEnd, "txEnd", g->closeSize);
+initPcm(g, &g->tlStart, "tlStart", g->closeSize);
+initPcm(g, &g->tlEnd, "tlEnd", g->closeSize);
 return g;
 }
 
@@ -180,6 +203,8 @@ bool *hits;
 int hitCount = 0;
 struct axt *axt;
 struct genePred *gp;
+int closeSize = g->closeSize;
+int closeHalf = closeSize/2;
 
 /* Build up array of booleans - one per base - which are
  * 1's where mouse/human align and bases match, zero 
@@ -217,11 +242,11 @@ printf("%d hits (%4.2f%%)\n", hitCount, 100.0*hitCount/chrom->size);
 for (gp = chrom->geneList; gp != NULL; gp = gp->next)
     {
     int exonIx;
-    int utr3Size = 0, utr5Size = 0, cdsSize = 0;
-    int utr3Pos = 0, utr5Pos = 0, cdsPos = 0;
+    int utr3Size = 0, utr5Size = 0, cdsAllSize = 0;
+    int utr3Pos = 0, utr5Pos = 0, cdsAllPos = 0;
     bool *utr3Hits = NULL;
     bool *utr5Hits = NULL;
-    bool *cdsHits = NULL;
+    bool *cdsAllHits = NULL;
     bool isRev = (gp->strand[0] == '-');
 
     /* Total up UTR and CDS sizes. */
@@ -234,7 +259,7 @@ for (gp = chrom->geneList; gp != NULL; gp = gp->next)
 	 oneCds = rangeIntersection(gp->cdsStart, gp->cdsEnd, eStart, eEnd);
 	 if (oneCds > 0)
 	     {
-	     cdsSize += oneCds;
+	     cdsAllSize += oneCds;
 	     }
 	 if (eStart < gp->cdsStart)
 	     {
@@ -263,8 +288,8 @@ for (gp = chrom->geneList; gp != NULL; gp = gp->next)
 	AllocArray(utr5Hits, utr5Size);
     if (utr3Size > 0)
 	AllocArray(utr3Hits, utr3Size);
-    if (cdsSize > 0)
-	AllocArray(cdsHits, cdsSize);
+    if (cdsAllSize > 0)
+	AllocArray(cdsAllHits, cdsAllSize);
     for (exonIx=0; exonIx<gp->exonCount; ++exonIx)
 	{
 	int eStart = gp->exonStarts[exonIx];
@@ -279,8 +304,8 @@ for (gp = chrom->geneList; gp != NULL; gp = gp->next)
 
 	    if (cdsStart < gp->cdsStart)
 		cdsStart = gp->cdsStart;
-	    memcpy(cdsHits + cdsPos, hits + cdsStart, oneCds * sizeof(*hits));
-	    cdsPos += oneCds;
+	    memcpy(cdsAllHits + cdsAllPos, hits + cdsStart, oneCds * sizeof(*hits));
+	    cdsAllPos += oneCds;
 	    }
 	if (eStart < gp->cdsStart)
 	    {
@@ -317,61 +342,139 @@ for (gp = chrom->geneList; gp != NULL; gp = gp->next)
 	}
     assert(utr3Pos == utr3Size);
     assert(utr5Pos == utr5Size);
-    assert(cdsPos == cdsSize);
+    assert(cdsAllPos == cdsAllSize);
 
     tallyHits(&g->utr5, utr5Hits, utr5Size, isRev);
     tallyHits(&g->utr3, utr3Hits, utr3Size, isRev);
-    tallyHits(&g->cds, cdsHits, cdsSize, isRev);
-    if (isRev)
-        {
-	tallyInRange(&g->down, hits, chrom->size, gp->txStart - g->baseDown,
-	    gp->txStart, isRev);
-	tallyInRange(&g->up, hits, chrom->size, gp->txEnd, 
-	    gp->txEnd + g->baseUp, isRev);
-	}
-    else
+    tallyHits(&g->cdsAll, cdsAllHits, cdsAllSize, isRev);
+
+    /* Tally upstream/downstream hits. */
 	{
-	tallyInRange(&g->up, hits, chrom->size, gp->txStart - g->baseUp,
-	    gp->txStart, isRev);
-	tallyInRange(&g->down, hits, chrom->size, gp->txEnd, 
-	    gp->txEnd + g->baseDown, isRev);
+	int s1 = gp->txStart - closeHalf;
+	int e1 = s1 + closeSize;
+	int s2 = gp->txEnd - closeHalf;
+	int e2 = s2 + closeSize;
+	if (isRev)
+	    {
+	    tallyInRange(&g->down, hits, chrom->size, gp->txStart - g->baseDown,
+		gp->txStart, isRev);
+	    tallyInRange(&g->up, hits, chrom->size, gp->txEnd, 
+		gp->txEnd + g->baseUp, isRev);
+	    tallyInRange(&g->txEnd, hits, chrom->size, s1, e1, isRev);
+	    tallyInRange(&g->txStart, hits, chrom->size, s2, e2, isRev);
+	    }
+	else
+	    {
+	    tallyInRange(&g->up, hits, chrom->size, gp->txStart - g->baseUp,
+		gp->txStart, isRev);
+	    tallyInRange(&g->down, hits, chrom->size, gp->txEnd, 
+		gp->txEnd + g->baseDown, isRev);
+	    tallyInRange(&g->txStart, hits, chrom->size, s1, e1, isRev);
+	    tallyInRange(&g->txEnd, hits, chrom->size, s2, e2, isRev);
+	    }
 	}
-    if (isRev)
-    /* Tally hits in introns. */
+
+    /* Tally hits in coding exons */
+    for (exonIx=0; exonIx < gp->exonCount; ++exonIx)
+        {
+	int eStart = gp->exonStarts[exonIx];
+	int eEnd = gp->exonEnds[exonIx];
+	/* Single coding exon. */
+	if (eStart <= gp->cdsStart && eEnd >= gp->cdsEnd)
+	   {
+	   eStart = gp->cdsStart;
+	   eEnd = gp->cdsEnd;
+	   tallyInRange(&g->cdsSingle, hits, chrom->size,
+	   		eStart, eEnd, isRev);
+	   }
+	/* Initial coding exon */
+	else if (eStart < gp->cdsStart && eEnd > gp->cdsStart)
+	    {
+	    int cs = gp->cdsStart - closeHalf;
+	    int ce = cs + closeSize;
+	    eStart = gp->cdsStart;
+	    if (isRev)
+	        {
+		tallyInRange(&g->tlEnd, hits, chrom->size, cs, ce, isRev);
+		tallyInRange(&g->cdsLast, hits, chrom->size, 
+			eStart, eEnd, isRev);
+		}
+	    else
+	        {
+		tallyInRange(&g->tlStart, hits, chrom->size, cs, ce, isRev);
+		tallyInRange(&g->cdsFirst, hits, chrom->size, 
+			eStart, eEnd, isRev);
+		}
+	    }
+	/* Final coding exon */
+	else if (eStart < gp->cdsEnd && eEnd > gp->cdsEnd)
+	    {
+	    int cs = gp->cdsEnd - closeHalf;
+	    int ce = cs + closeSize;
+	    eEnd = gp->cdsEnd;
+	    if (isRev)
+	        {
+		tallyInRange(&g->tlStart, hits, chrom->size, cs, ce, isRev);
+		tallyInRange(&g->cdsFirst, hits, chrom->size, 
+			eStart, eEnd, isRev);
+		}
+	    else
+	        {
+		tallyInRange(&g->tlEnd, hits, chrom->size, cs, ce, isRev);
+		tallyInRange(&g->cdsLast, hits, chrom->size, 
+			eStart, eEnd, isRev);
+		}
+	    }
+	/* Middle (but not only) coding exon */
+	else if (eStart >= gp->cdsStart && eEnd <= gp->cdsEnd)
+	    {
+	    tallyInRange(&g->cdsMiddle, hits, chrom->size, eStart, eEnd, isRev);
+	    }
+	else
+	    {
+	    }
+	}
+	
+
+    /* Tally hits in introns and splice sites. */
     for (exonIx=1; exonIx<gp->exonCount; ++exonIx)
         {
 	int iStart = gp->exonEnds[exonIx-1];
 	int iEnd = gp->exonStarts[exonIx];
+	int s1 = iStart - closeHalf;
+	int e1 = s1 + closeSize;
+	int s2 = iEnd - closeHalf;
+	int e2 = s2 + closeSize;
 	if (isRev)
 	    {
-	    tallyInRange(&g->splice3, hits, chrom->size, 
-		    iStart, iStart + g->baseSplice3, isRev);
 	    tallyInRange(&g->splice5, hits, chrom->size, 
-		    iEnd - g->baseSplice5, iEnd, isRev);
+		    s1, e1, isRev);
+	    tallyInRange(&g->splice3, hits, chrom->size, 
+		    s2, e2, isRev);
 	    }
 	else
 	    {
-	    tallyInRange(&g->splice5, hits, chrom->size, 
-		    iStart, iStart + g->baseSplice3, isRev);
 	    tallyInRange(&g->splice3, hits, chrom->size, 
-		    iEnd - g->baseSplice5, iEnd, isRev);
+		    s1, e1, isRev);
+	    tallyInRange(&g->splice5, hits, chrom->size, 
+		    s2, e2, isRev);
 	    }
 	tallyInRange(&g->intron, hits, chrom->size, iStart, iEnd, isRev);
 	}
     freez(&utr5Hits);
     freez(&utr3Hits);
-    freez(&cdsHits);
+    freez(&cdsAllHits);
     }
 freez(&hits);
 lineFileClose(&lf);
 }
 
 
-void dumpPcm(struct pcm *pcm, char *label, FILE *f)
+void dumpPcm(struct pcm *pcm, FILE *f)
 /* Dump out PCM to file. */
 {
 int i;
-fprintf(f, "%s:\n", label);
+fprintf(f, "#%s:\n", pcm->name);
 for (i=0; i<pcm->pixels; ++i)
     {
     double percent;
@@ -382,18 +485,20 @@ for (i=0; i<pcm->pixels; ++i)
         percent = 100.0 * pcm->match[i] / c;
     fprintf(f, "%1.2f%%\n", percent);
     }
-fprintf(f, "\n");
 }
 
-void ggcPic(char *axtDir, char *chromSizes, char *genePred, char *outGif)
+void ggcPic(char *axtDir, char *chromSizes, char *genePred, char *outDir)
 /* ggcPic - Generic picture of conservation of features near a gene. */
 {
 struct hash *chromHash;
 struct chromGenes *chromList, *chrom;
 struct ggcInfo *g = newGgcInfo();
 char axtFile[512];
-FILE *f = mustOpen(outGif, "w");
+char fileName[512];
+FILE *f = NULL;
+struct pcm *pcm;
 
+makeDir(outDir);
 readGenes(genePred, &chromHash, &chromList);
 addSizes(chromSizes, chromHash, chromList);
 for (chrom = chromList; chrom != NULL; chrom = chrom->next)
@@ -401,14 +506,26 @@ for (chrom = chromList; chrom != NULL; chrom = chrom->next)
     snprintf(axtFile, sizeof(axtFile), "%s/%s.axt", axtDir, chrom->name);
     ggcChrom(chrom, axtFile, g);
     }
-dumpPcm(&g->up, "Up1000", f);
-dumpPcm(&g->down, "Down1000", f);
-dumpPcm(&g->utr5, "5'UTR", f);
-dumpPcm(&g->utr3, "3'UTR", f);
-dumpPcm(&g->cds, "CDS", f);
-dumpPcm(&g->splice5, "5'Splice", f);
-dumpPcm(&g->splice3, "3'Splice", f);
-dumpPcm(&g->intron, "Intron", f);
+snprintf(fileName, sizeof(fileName), "%s/%s", outDir, "genericGene.tab");
+f = mustOpen(fileName, "w");
+dumpPcm(&g->up, f);
+dumpPcm(&g->utr5, f);
+dumpPcm(&g->cdsFirst, f);
+dumpPcm(&g->intron, f);
+dumpPcm(&g->cdsMiddle, f);
+dumpPcm(&g->intron, f);
+dumpPcm(&g->cdsLast, f);
+dumpPcm(&g->utr3, f);
+dumpPcm(&g->down, f);
+carefulClose(&f);
+
+for (pcm = g->pcmList; pcm != NULL; pcm = pcm->next)
+    {
+    snprintf(fileName, sizeof(fileName), "%s/%s.tab", outDir, pcm->name);
+    f = mustOpen(fileName, "w");
+    dumpPcm(pcm, f);
+    carefulClose(&f);
+    }
 }
 
 int main(int argc, char *argv[])
