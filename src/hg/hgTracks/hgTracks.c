@@ -90,8 +90,9 @@
 #include "cytoBand.h"
 #include "gencodeIntron.h"
 #include "cutterTrack.h"
+#include "retroGene.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.931 2005/03/24 00:19:55 aamp Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.932 2005/03/24 05:31:11 baertsch Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -9580,6 +9581,7 @@ registerTrackHandler("sanger22", sanger22Methods);
 registerTrackHandler("sanger22pseudo", sanger22Methods);
 registerTrackHandler("vegaGene", vegaMethods);
 registerTrackHandler("vegaPseudoGene", vegaMethods);
+registerTrackHandler("pseudoGeneLink", retroGeneMethods);
 registerTrackHandler("bdgpGene", bdgpGeneMethods);
 registerTrackHandler("bdgpNonCoding", bdgpGeneMethods);
 registerTrackHandler("bdgpLiftGene", bdgpGeneMethods);

@@ -696,6 +696,19 @@ void affyUclaNormMethods(struct track *tg);
 void cghNci60Methods(struct track *tg);
 /* set up special methods for CGH NCI60 track */
 
+char *getOrganism(struct sqlConnection *conn, char *acc);
+/* lookup the organism for an mrna, or NULL if not found.  Warning: static
+ * return */
+
+char *getGeneName(struct sqlConnection *conn, char *acc);
+/* get geneName from refLink or NULL if not found.  Warning: static return */
+
+char *refGeneName(struct track *tg, void *item);
+/* Get name to use for refGene item. */
+
+char *refGeneMapName(struct track *tg, void *item);
+/* Return un-abbreviated genie name. */
+
 #define uglyh printHtmlComment
 /* Debugging aid. */
 
