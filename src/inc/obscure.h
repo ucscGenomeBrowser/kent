@@ -25,6 +25,9 @@ void readAllWords(char *fileName, char ***retWords, int *retWordCount, char **re
 void copyFile(char *source, char *dest);
 /* Copy file from source to dest. */
 
+void cpFile(int s, int d);
+/* Copy from source file to dest until reach end of file. */
+
 void *intToPt(int i);
 /* Convert integer to pointer. Use when really want to store an
  * int in a pointer field. */

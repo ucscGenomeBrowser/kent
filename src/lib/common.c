@@ -38,7 +38,7 @@ void zeroBytes(void *vpt, int count)
 {
 char *pt = (char*)vpt;
 while (--count>=0)
-	*pt++=0;
+    *pt++=0;
 }
 
 /* Reverse the order of the bytes. */
@@ -975,6 +975,15 @@ void chopSuffix(char *s)
 /* Remove suffix (last . in string and beyond) if any. */
 {
 char *e = strrchr(s, '.');
+if (e != NULL)
+    *e = 0;
+}
+    
+void chopSuffixAt(char *s, char c)
+/* Remove end of string from first occurrence of char c. 
+ * chopSuffixAt(s, '.') is equivalent to regular chopSuffix. */
+{
+char *e = strrchr(s, c);
 if (e != NULL)
     *e = 0;
 }

@@ -141,6 +141,10 @@ void mgTextCentered(struct memGfx *mg, int x, int y, int width, int height,
 	Color color, MgFont *font, char *text);
 /* Draw a line of text centered in box defined by x/y/width/height */
 
+void mgTextRight(struct memGfx *mg, int x, int y, int width, int height, 
+	Color color, MgFont *font, char *text);
+/* Draw a line of text right justified in box defined by x/y/width/height */
+
 int mgFontPixelHeight(MgFont *font);
 /* How high in pixels is font? */
 

@@ -1626,7 +1626,7 @@ for (i=0; i<fileCount; ++i)
 	}
     else
         {
-	seqList = faReadSeq(inName, tType != gftProt);
+	seqList = faReadAllSeq(inName, tType != gftProt);
 	}
     printf("Counting %s\n", inName);
     for (seq = seqList; seq != NULL; seq = seq->next)

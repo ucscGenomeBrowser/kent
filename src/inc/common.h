@@ -412,6 +412,10 @@ void splitPath(char *path, char dir[256], char name[128], char extension[64]);
 void chopSuffix(char *s);
 /* Remove suffix (last . in string and beyond) if any. */
 
+void chopSuffixAt(char *s, char c);
+/* Remove end of string from last occurrence of char c. 
+ * chopSuffixAt(s, '.') is equivalent to regular chopSuffix. */
+
 FILE *mustOpen(char *fileName, char *mode);
 /* Open a file - or squawk and die. */
 

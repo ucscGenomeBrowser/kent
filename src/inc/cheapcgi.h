@@ -27,7 +27,11 @@ int cgiOptionalInt(char *varName, int defaultVal);
 /* This returns value of varName if it exists in cgi environment, 
  * otherwise it returns defaultVal. */
 
+double cgiOptionalDouble(char *varName, double defaultVal);
+/* Returns double value. */
+
 #define cgiUsualInt cgiOptionalInt
+#define cgiUsualDouble cgiOptionalDouble
 
 struct cgiChoice
 /* Choice table */
