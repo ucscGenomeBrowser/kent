@@ -460,6 +460,9 @@ char *cloneStringZ(char *s, int size);
 char *cloneString(char *s);
 /* Make copy of string in dynamic memory */
 
+char *cloneLongString(char *s);
+/* Make clone of long string. */
+
 int differentWord(char *s1, char *s2);
 /* strcmp ignoring case - returns zero if strings are
  * the same (ignoring case) otherwise returns difference

@@ -8,7 +8,7 @@
 #include "errabort.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: common.c,v 1.71 2004/11/04 22:05:57 kent Exp $";
+static char const rcsid[] = "$Id: common.c,v 1.72 2004/11/09 23:33:39 kent Exp $";
 
 void *cloneMem(void *pt, size_t size)
 /* Allocate a new buffer of given size, and copy pt to it. */
@@ -35,6 +35,14 @@ if (s == NULL)
 else
     return cloneStringZ(s, strlen(s));
 }
+
+char *cloneLongString(char *s)
+/* Make clone of long string. */
+{
+size_t size = strlen(s);
+return cloneMem(s, size+1);
+}
+
 
 /* fill a specified area of memory with zeroes */
 void zeroBytes(void *vpt, int count)
