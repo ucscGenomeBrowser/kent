@@ -645,7 +645,7 @@ if (sqlTableExists(conn, "bioCycPathway"))
 	    mapDescription = sqlGetField(conn2, database, "bioCycMapDesc", "description", cond_str);
 	    hPrintf("<A HREF = \"");
 
-	    hPrintf("http://biocyc.org:1555/HUMAN/new-image?type=PATHWAY&object=%s&detail-level=2",
+	    hPrintf("http://biocyc.org/HUMAN/new-image?type=PATHWAY&object=%s&detail-level=2",
 		   mapID);
 	    hPrintf("\" TARGET=_blank>%s</A> %s <BR>\n",mapID, mapDescription);
             row = sqlNextRow(sr);
