@@ -1913,6 +1913,7 @@ password = cfgOption("ro.password");
 if (password == NULL)
     password = cfgOption("db.password");
 
+verboseSetLevel(0);
 optionInit(&argc, argv, optionSpecs);
 if (argc != 6)
     {
