@@ -23,6 +23,7 @@ errCatchTest: errCatchTest.o ${MYLIBS} mkdirs
 
 htmlExpandUrlTest: htmlExpandUrlTest.o ${MYLIBS} mkdirs
 	${CC} ${COPT} -o ${BIN_DIR}/htmlExpandUrlTest htmlExpandUrlTest.o ${MYLIBS} $L
+	strip ${BIN_DIR}/htmlExpandUrlTest
 	${BIN_DIR}/htmlExpandUrlTest > output/htmlExpandUrlTest 2>&1
 	diff expected/htmlExpandUrlTest output/htmlExpandUrlTest
 
