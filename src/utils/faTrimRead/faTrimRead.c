@@ -30,6 +30,7 @@ int minMatch = 0;
 int window = 0;
 int lineSize = 50;
 bool showQual = FALSE;
+bool clip = FALSE;
 bool lower = FALSE;
 
 static struct optionSpec optionSpecs[] = {
@@ -38,6 +39,7 @@ static struct optionSpec optionSpecs[] = {
     {"minScore",OPTION_INT},
     {"lineSize",OPTION_INT},
     {"showQual",OPTION_BOOLEAN},
+    {"clip",OPTION_BOOLEAN},
     {"lower",OPTION_BOOLEAN},
     {NULL, 0}
 };
@@ -55,7 +57,8 @@ errAbort(
         "    -window=N    window size to check for matches at start and end of read (default %d)\n"
         "    -lineSize=N  output line size (default 50)\n"
         "    -showQual    show qual scores and trimmed bases for debugging\n",
-        "    -lower       change low scoring bases to lower case instead of N and do not trim sequence ends\n",
+        "    -lower       change low scoring bases to lower case instead of Ns\n",
+        "    -clip        trim start and end of sequence at low scoring ends \n",
         MINSCORE,MINMATCH, WINDOW        );
 }
 
@@ -326,10 +329,10 @@ while (faSomeSpeedReadNext(lf, &seq.dna, &seq.size, &seq.name, FALSE))
         //faWriteNext(f, seq.name, seq.dna+clipStart, clipEnd-clipStart+1);
         if (seq.name != NULL)
             fprintf(f, ">%s\n", seq.name);
-        if (lower)
-            writeSeqWithBreaks(f, seq.dna, seq.size, lineSize);
-        else
+        if (clip)
             writeSeqWithBreaks(f, seq.dna+clipStart, clipEnd-clipStart+1, lineSize);
+        else
+            writeSeqWithBreaks(f, seq.dna, seq.size, lineSize);
         }
     fprintf(lift,"%s\t%d\t%d\t%d\n",seq.name, clipStart, clipEnd, seq.size);
     freez(&qual.array);
