@@ -170,7 +170,7 @@ color 0,0,160
 type bed 3 .
 
 track parsPValues
-shortLabel parsimony P-Values
+shortLabel Parsimony P-Values
 longlabel Parsimony P-Values Conservation Score
 priority 430
 altColor 0,0,160
@@ -186,7 +186,7 @@ color 0,120,0
 type bed 3 .
 
 track uniformPValues
-shortLabel uniform P-Values
+shortLabel Uniform P-Values
 longlabel Uniform PValues Conservation Score
 priority 435
 altColor 0,120,0
