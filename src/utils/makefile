@@ -64,6 +64,7 @@ DIRS = \
 	lineCount \
 	newProg \
 	nibFrag \
+	nibSize \
 	nt4Frag \
 	pslToXa \
 	randomLines \
