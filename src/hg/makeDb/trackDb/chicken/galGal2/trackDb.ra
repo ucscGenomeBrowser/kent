@@ -171,3 +171,13 @@ visibility hide
 type psl . 
 url http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?db=unigene&term=$$[ClusterID]
 
+track pileups
+shortLabel Self Pileups
+longLabel Pileup (>50) Locations from Self Blastz Alignments
+group x
+priority 9
+visibility hide
+color 0,0,0
+type bed 5 +
+useScore 1
+
