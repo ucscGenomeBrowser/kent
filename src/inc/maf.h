@@ -32,7 +32,7 @@ struct mafAli
     struct mafAli *next;
     double score;        /* Score.  Meaning depends on mafFile.scoring.  0.0 if no scoring. */
     struct mafComp *components;	/* List of components of alignment */
-    int textSize;	 /* Size of text in each component. */
+    int textSize;         /* Size of text in each component. */
     };
 
 void mafAliFree(struct mafAli **pObj);

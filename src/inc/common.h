@@ -222,6 +222,9 @@ void reverseInts(int *a, int length);
 void reverseUnsigned(unsigned *a, int length);
 /* Reverse the order of the unsigned array. */
 
+void reverseDoubles(double *a, int length);
+/* Reverse the order of the double array. */
+
 void swapBytes(char *a, char *b, int length);
 /* Swap buffers a and b. */
 
