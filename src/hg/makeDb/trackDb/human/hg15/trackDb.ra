@@ -408,12 +408,12 @@ spectrum on
 type bed 6 +
 
 track tfbsCons
-shortLabel conserved_tfbs
-longLabel Transcription factor binding sites conserved in the human/mouse/rat alignment
+shortLabel TFBS_Conserved
+longLabel Transcription factor binding sites conserved in the Human/Mouse/Rat alignment
 priority 1000
-group other
+group regulation
 visibility hide
 type bed 6
 spectrum on
-scoreMin 850
+scoreMin 830
 scoreMax 1000
