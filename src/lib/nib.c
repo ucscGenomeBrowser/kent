@@ -31,8 +31,8 @@ if (sig != nibSig)
 *retFile = f;
 }
 
-
-struct dnaSeq *nibLdPart(char *fileName, FILE *f, int seqSize, int start, int size)
+static struct dnaSeq *nibLd(char *fileName, FILE *f, int seqSize, int start, int size,
+    char *faName)
 /* Load part of an open .nib file. */
 {
 int end;
@@ -40,7 +40,6 @@ DNA *d;
 int bVal;
 struct dnaSeq *seq;
 int bytePos, byteSize;
-char nameBuf[512];
 
 assert(start >= 0);
 assert(size >= 0);
@@ -50,8 +49,7 @@ if (end > seqSize)
 
 AllocVar(seq);
 seq->size = size;
-sprintf(nameBuf, "%s:%d-%d", fileName, start, start+size);
-seq->name = cloneString(nameBuf);
+seq->name = cloneString(faName);
 seq->dna = d = needLargeMem(size+1);
 bytePos = (start>>1);
 fseek(f, bytePos + 2*sizeof(bits32), SEEK_SET);
@@ -87,12 +85,20 @@ if (size&1)
 return seq;
 }
 
+
+struct dnaSeq *nibLdPart(char *fileName, FILE *f, int seqSize, int start, int size)
+/* Load part of an open .nib file. */
+{
+char nameBuf[512];
+sprintf(nameBuf, "%s:%d-%d", fileName, start, start+size);
+return nibLd(fileName, f, seqSize, start, size, nameBuf);
+}
+
 struct dnaSeq *nibLoadPart(char *fileName, int start, int size)
 /* Load part of an .nib file. */
 {
 struct dnaSeq *seq;
 FILE *f;
-
 int seqSize;
 nibOpenVerify(fileName, &f, &seqSize);
 seq = nibLdPart(fileName, f, seqSize, start, size);
@@ -100,6 +106,17 @@ fclose(f);
 return seq;
 }
 
+struct dnaSeq *nibLoadAll(char *fileName)
+/* Load part of an .nib file. */
+{
+struct dnaSeq *seq;
+FILE *f;
+int seqSize;
+nibOpenVerify(fileName, &f, &seqSize);
+seq = nibLd(fileName, f, seqSize, 0, seqSize, fileName);
+fclose(f);
+return seq;
+}
 
 void nibWrite(struct dnaSeq *seq, char *fileName)
 /* Write out file in format of four bits per nucleotide. */
