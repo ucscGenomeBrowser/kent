@@ -93,7 +93,6 @@ DIRS = \
 	barger \
 	bedIntersect \
 	bedSort \
-	blastToPsl \
 	borfBig \
 	cartDump \
 	cartReset \
