@@ -64,7 +64,8 @@
 #include "web.h"
 #include "jaxOrtholog.h"
 #include "expRecord.h"
-#include "dnaProbe.h"
+//#include "dnaProbe.h"
+#include "ancientRref.h"
 
 #define CHUCK_CODE 1
 #define ROGIC_CODE 1
@@ -3850,6 +3851,9 @@ struct dnaProbe *dp = NULL;
 char buff[256];
  genericHeader(tdb, item); 
 snprintf(buff, sizeof(buff), "select * from dnaProbe where name='%s'",  item);
+
+/*
+
 dp = dnaProbeLoadByQuery(conn, buff);
 if(dp != NULL)
     {
@@ -3870,6 +3874,9 @@ if(dp != NULL)
     printf("<b>Comparison:</b> %f<br>", dp->comparison);
     printf("<hr>\n");
     }
+
+*/
+    
 genericBedClick(conn, tdb, item, start, 1);
 printTrackHtml(tdb);
 hFreeConn(&conn);
@@ -3971,6 +3978,8 @@ boolean firstTime = TRUE;
 char *itemForUrl = item;
 double ident = -1.0;
 
+struct ancientRref *ar;
+
 if(tdb == NULL)
     errAbort("TrackDb entry null for ancientR, item=%s\n", item);
 
@@ -4009,8 +4018,22 @@ while ((row = sqlNextRow(sr)) != NULL)
     printf("<B>Strand:</B> %s<BR>\n", bed->strand);
     bedPrintPos(bed);
 
-    printf("<br>test line<br>");
     }
+
+htmlHorizontalLine();
+
+/* look in associated table 'ancientRref' to get human/mouse alignment*/
+sprintf(query, "select * from %sref where id = '%s'", table, item );
+printf("(%s)<br>", query );
+sr = sqlGetResult( conn, query );
+while ((row = sqlNextRow(sr)) != NULL )
+    {
+    ar = ancientRrefLoad(row);
+    printf("id: %s<br>", ar->id );
+    printf("Human sequence: %s<br>", ar->hseq );
+    printf("Mouse sequence: %s<br>", ar->mseq );
+    }
+
 printTrackHtml(tdb);
 hFreeConn(&conn);
 webEnd();
