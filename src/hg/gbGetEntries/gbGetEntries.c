@@ -5,7 +5,7 @@
 #include "dystring.h"
 #include "hash.h"
 
-static char const rcsid[] = "$Id: gbGetEntries.c,v 1.1 2004/02/26 08:01:12 markd Exp $";
+static char const rcsid[] = "$Id: gbGetEntries.c,v 1.2 2004/02/26 08:10:19 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -20,7 +20,7 @@ void usage()
 errAbort(
 "gbGetEntries - retrieve records from a GenBank flat file.\n"
 "usage:\n"
-"  gbGetEntries [-accFile=file] gbFile acc(s)\n"
+"  gbGetEntries [-accFile=file] gbFile [acc ...]\n"
 "\n"
 "The output will be printed to standard out\n"
 "Either acc or acc.version maybe specified\n");
