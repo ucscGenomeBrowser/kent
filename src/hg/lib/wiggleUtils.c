@@ -9,7 +9,7 @@
 #include "hCommon.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: wiggleUtils.c,v 1.24 2004/09/02 18:02:09 hiram Exp $";
+static char const rcsid[] = "$Id: wiggleUtils.c,v 1.25 2004/09/02 18:40:41 hiram Exp $";
 
 void printHistoGram(struct histoResult *histoResults)
 {
@@ -98,7 +98,7 @@ printf("<P><B> Total Bases in view: </B> %s </P>\n", num1Buf);
 if (wDS->useDataConstraint)
     {
     if (sameWord(wDS->dataConstraint,"in range"))
-	printf("<P><B> Filter: (%g >= data value < %g) </B></P>\n",
+	printf("<P><B> Filter: %g >= (data value) < %g </B></P>\n",
 		wDS->limit_0, wDS->limit_1);
     else
 	printf("<P><B> Filter: (data value %s %g) </B> </P>\n",

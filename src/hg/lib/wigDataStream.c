@@ -7,7 +7,7 @@
 #include "portable.h"
 #include "hgColors.h"
 
-static char const rcsid[] = "$Id: wigDataStream.c,v 1.34 2004/09/02 18:02:09 hiram Exp $";
+static char const rcsid[] = "$Id: wigDataStream.c,v 1.35 2004/09/02 18:40:41 hiram Exp $";
 
 /*	PRIVATE	METHODS	************************************************/
 static void addConstraint(struct wiggleDataStream *wDS, char *left, char *right)
@@ -89,7 +89,7 @@ else
 if (wDS->limit_1 < lower)
     wDS->ucUpperLimit = 0;
 else if (wDS->limit_1 > (lower+range))
-    wDS->ucUpperLimit = MAX_WIG_VALUE;
+    wDS->ucUpperLimit = MAX_WIG_VALUE + 1;	/* +1 because in range is [) */
 else
     wDS->ucUpperLimit = MAX_WIG_VALUE * ((wDS->limit_1 - lower)/range);
 
@@ -613,18 +613,25 @@ static void setDataConstraint(struct wiggleDataStream *wDS,
 	char *dataConstraint, double lowerLimit, double upperLimit)
 {
 wDS->dataConstraint = cloneString(dataConstraint);
-if (lowerLimit < upperLimit)
+if (differentWord(wDS->dataConstraint, "in range"))
     {
     wDS->limit_0 = lowerLimit;
-    wDS->limit_1 = upperLimit;
     }
-else if (!(upperLimit < lowerLimit))
-  errAbort("wigSetDataConstraint: upper and lower limits are equal: %g == %g",
-	lowerLimit, upperLimit);
 else
     {
-    wDS->limit_0 = upperLimit;
-    wDS->limit_1 = lowerLimit;
+    if (lowerLimit < upperLimit)
+	{
+	wDS->limit_0 = lowerLimit;
+	wDS->limit_1 = upperLimit;
+	}
+    else if (!(upperLimit < lowerLimit))
+      errAbort("wigSetDataConstraint: upper and lower limits are equal: %g == %g",
+	    lowerLimit, upperLimit);
+    else
+	{
+	wDS->limit_0 = upperLimit;
+	wDS->limit_1 = lowerLimit;
+	}
     }
 wigSetCompareFunctions(wDS);
 wDS->useDataConstraint = TRUE;
