@@ -12,6 +12,7 @@
 #include "obscure.h"
 #include "genoFind.h"
 #include "trans3.h"
+#include "repMask.h"
 
 enum {qSizeMax = 100000};	/* Maximum size of single query sequence. */
 
@@ -28,6 +29,8 @@ char *makeOoc = NULL;
 char *ooc = NULL;
 enum gfType qType = gftDna;
 enum gfType tType = gftDna;
+char *mask = NULL;
+double minRepDivergence = 15;
 
 
 void usage()
@@ -57,9 +60,9 @@ errAbort(
   "   -maxGap=N   sets the size of maximum gap between tiles in a clump.  Usually set\n"
   "               from 0 to 3.  Default is 2.\n"
   "   -repMatch=N sets the number of repetitions of a tile allowed before\n"
-  "               it is masked.  Typically this is 1024 for tileSize 12,\n"
-  "               4096 for tile size 11, 16384 for tile size 10.\n"
-  "               Default is 4096\n"
+  "               it is masked.  Typically this is 256 for tileSize 12,\n"
+  "               1024 for tile size 11, 4096 for tile size 10.\n"
+  "               Default is 1024\n"
   "   -noHead     suppress .psl header (so it's just a tab-separated file)\n"
   "   -ooc=N.ooc  Use overused tile file N.ooc.  N should correspond to \n"
   "               the tileSize\n"
@@ -77,6 +80,14 @@ errAbort(
   "                 rnax - DNA sequence translated in three frames to protein\n"
   "               The default is dna\n"
   "   -prot       Synonymous with -d=prot -q=prot\n"
+  "   -mask=type  Mask out repeats.  Alignments won't be started in masked region but\n"
+  "               may extend through it.  Mask types are:\n"
+  "                 lower - mask out lower cased sequence\n"
+  "                 upper - mask out upper cased sequence\n"
+  "                 out   - mask according to database.out RepeatMasker .out file\n"
+  "                 file.out - mask database according to RepeatMasker file.out\n"
+  "   -minRepDivergence=NN - minimum percent divergence of repeats to allow them to be\n"
+  "               unmasked.  Default is 15\n"
   "   -dots=N     Output dot every N sequences to show program's progress\n"
   );
 }
@@ -117,7 +128,123 @@ else
     }
 }
 
-bioSeq *getSeqList(int fileCount, char *files[], struct hash *hash, boolean isProt)
+void toggleCase(char *s, int size)
+/* toggle upper and lower case chars in string. */
+{
+char c;
+int i;
+for (i=0; i<size; ++i)
+    {
+    c = s[i];
+    if (isupper(c))
+        c = tolower(c);
+    else if (islower(c))
+        c = toupper(c);
+    s[i] = c;
+    }
+}
+
+void unmaskNucSeqList(struct dnaSeq *seqList)
+/* Unmask all sequences. */
+{
+struct dnaSeq *seq;
+for (seq = seqList; seq != NULL; seq = seq->next)
+    faToDna(seq->dna, seq->size);
+}
+
+void maskFromOut(struct dnaSeq *seqList, char *outFile)
+/* Mask DNA sequence by putting bits more than 85% identical to
+ * repeats as defined in RepeatMasker .out file to upper case. */
+{
+struct lineFile *lf = lineFileOpen(outFile, TRUE);
+struct hash *hash = newHash(0);
+struct dnaSeq *seq;
+char *line;
+
+for (seq = seqList; seq != NULL; seq = seq->next)
+    hashAdd(hash, seq->name, seq);
+if (!lineFileNext(lf, &line, NULL))
+    errAbort("Empty mask file %s\n", lf->fileName);
+if (!startsWith("There were no", line))	/* No repeats is ok. Not much work. */
+    {
+    if (!startsWith("   SW", line))
+	errAbort("%s isn't a RepeatMasker .out file.", lf->fileName);
+    if (!lineFileNext(lf, &line, NULL) || !startsWith("score", line))
+	errAbort("%s isn't a RepeatMasker .out file.", lf->fileName);
+    lineFileNext(lf, &line, NULL);  /* Blank line. */
+    while (lineFileNext(lf, &line, NULL))
+	{
+	char *words[32];
+	struct repeatMaskOut rmo;
+	int wordCount;
+	int seqSize;
+	int repSize;
+	wordCount = chopLine(line, words);
+	if (wordCount < 14)
+	    errAbort("%s line %d - error in repeat mask .out file\n", lf->fileName, lf->lineIx);
+	repeatMaskOutStaticLoad(words, &rmo);
+	/* If repeat is more than 15% divergent don't worry about it. */
+	if (rmo.percDiv + rmo.percDel + rmo.percInc <= minRepDivergence)
+	    {
+	    if((seq = hashFindVal(hash, rmo.qName)) == NULL)
+		errAbort("%s is in %s but not corresponding sequence file, files out of sync?\n", 
+			rmo.qName, lf->fileName);
+	    seqSize = seq->size;
+	    if (rmo.qStart <= 0 || rmo.qStart > seqSize || rmo.qEnd <= 0 
+	    	|| rmo.qEnd > seqSize || rmo.qStart > rmo.qEnd)
+		{
+		warn("Repeat mask sequence out of range (%d-%d of %d in %s)\n",
+		    rmo.qStart, rmo.qEnd, seqSize, rmo.qName);
+		if (rmo.qStart <= 0)
+		    rmo.qStart = 1;
+		if (rmo.qEnd > seqSize)
+		    rmo.qEnd = seqSize;
+		}
+	    repSize = rmo.qEnd - rmo.qStart + 1;
+	    if (repSize > 0)
+		toUpperN(seq->dna + rmo.qStart - 1, repSize);
+	    }
+	}
+    }
+freeHash(&hash);
+lineFileClose(&lf);
+}
+
+void maskNucSeqList(struct dnaSeq *seqList, char *seqFileName, char *maskType)
+/* Apply masking to simple nucleotide sequence by making masked nucleotides
+ * upper case (since normal DNA sequence is lower case for us. */
+{
+struct dnaSeq *seq;
+DNA *dna;
+int size, i;
+char *outFile = NULL, outNameBuf[512];
+
+if (sameWord(maskType, "upper"))
+    {
+    /* This is easy - use has done it for us. */
+    return;
+    }
+else if (sameWord(maskType, "lower"))
+    {
+    for (seq = seqList; seq != NULL; seq = seq->next)
+	toggleCase(seq->dna, seq->size);
+    return;
+    }
+if (sameWord(maskType, "out"))
+    {
+    sprintf(outNameBuf, "%s.out", seqFileName);
+    outFile = outNameBuf;
+    }
+else
+    {
+    outFile = maskType;
+    }
+unmaskNucSeqList(seqList);
+maskFromOut(seqList, outFile);
+
+}
+
+bioSeq *getSeqList(int fileCount, char *files[], struct hash *hash, boolean isProt, boolean simpleNuc, char *maskType)
 /* From an array of .fa and .nib file names, create a
  * list of dnaSeqs. */
 {
@@ -126,37 +253,62 @@ char *fileName;
 bioSeq *seqList = NULL, *seq;
 int count = 0; 
 unsigned long totalSize = 0;
+boolean maskWarned = FALSE;
+boolean softMask = (simpleNuc && maskType != NULL);
 
 for (i=0; i<fileCount; ++i)
     {
+    struct dnaSeq *list = NULL, sseq;
     fileName = files[i];
     if (isNib(fileName))
         {
 	FILE *f;
 	int size;
 
+	if (maskType != NULL && !maskWarned)
+	    {
+	    if (sameWord(maskType, "lower") || sameWord(maskType, "upper"))
+	        warn("Warning: mask=lower and mask=upper don't work with .nib files.");
+	    }
 	nibOpenVerify(fileName, &f, &size);
 	seq = nibLdPart(fileName, f, size, 0, size);
 	seq->name = fileName;
 	carefulClose(&f);
-	slAddHead(&seqList, seq);
+	slAddHead(&list, seq);
 	hashAddUnique(hash, seq->name, seq);
 	totalSize += size;
 	count += 1;
 	}
     else
         {
-	struct dnaSeq *list, *next;
-	list = faReadAllSeq(fileName, !isProt);
-	for (seq = list; seq != NULL; seq = next)
+	struct lineFile *lf = lineFileOpen(fileName, TRUE);
+	while (faMixedSpeedReadNext(lf, &sseq.dna, &sseq.size, &sseq.name))
 	    {
-	    next = seq->next;
-	    slAddHead(&seqList, seq);
+	    seq = cloneDnaSeq(&sseq);
+	    if (!softMask)
+	        {
+		if (isProt)
+		    faToProtein(seq->dna, seq->size);
+		else
+		    faToDna(seq->dna, seq->size);
+		}
 	    hashAddUnique(hash, seq->name, seq);
+	    slAddHead(&list, seq);
 	    totalSize += seq->size;
 	    count += 1;
 	    }
+	faFreeFastBuf();
 	}
+    /* If necessary mask sequence from file. */
+    if (softMask)
+	{
+	slReverse(&list);
+	maskNucSeqList(list, fileName, maskType);
+	slReverse(&list);
+	}
+
+    /* Move local list to head of bigger list. */
+    seqList = slCat(list, seqList);
     }
 printf("Loaded %lu letters in %d sequences\n", totalSize, count);
 slReverse(&seqList);
@@ -400,6 +552,7 @@ for (isRc = FALSE; isRc <= 1; ++isRc)
 carefulClose(&pslOut);
 }
 
+
 void blat(char *dbFile, char *queryFile, char *pslOut)
 /* blat - Standalone BLAT fast sequence search command line tool. */
 {
@@ -408,8 +561,8 @@ int dbCount, queryCount;
 struct dnaSeq *dbSeqList, *seq;
 struct hash *dbHash = newHash(16);
 struct genoFind *gf;
-
 boolean dbIsProt = (tType == gftProt);
+boolean bothSimpleNuc = (tType == gftDna && (qType == gftDna || qType == gftRna));
 getFileArray(dbFile, &dbFiles, &dbCount);
 if (makeOoc != NULL)
     {
@@ -418,13 +571,15 @@ if (makeOoc != NULL)
     exit(0);
     }
 getFileArray(queryFile, &queryFiles, &queryCount);
-dbSeqList = getSeqList(dbCount, dbFiles, dbHash, dbIsProt);
+dbSeqList = getSeqList(dbCount, dbFiles, dbHash, dbIsProt, bothSimpleNuc, mask);
 
-if ((tType == gftDna && (qType == gftDna || qType == gftRna))
- || (tType == gftProt && qType == gftProt))
+if (bothSimpleNuc || (tType == gftProt && qType == gftProt))
     {
+    /* Build index, possibly upper-case masked. */
     gf = gfIndexSeq(dbSeqList, minMatch, maxGap, tileSize, repMatch, ooc, 
     	dbIsProt, oneOff);
+    if (mask != NULL)
+        unmaskNucSeqList(dbSeqList);
     searchOneIndex(queryCount, queryFiles, gf, pslOut, dbIsProt);
     }
 else if (tType == gftDnaX && qType == gftProt)
@@ -437,7 +592,7 @@ else if (tType == gftDnaX && (qType == gftDnaX || qType == gftRnaX))
     }
 else
     {
-    uglyAbort("Don't handle all translated types yet\n");
+    errAbort("Unrecognized combination of target and query types\n");
     }
 if (dotEvery > 0)
     printf("\n");
@@ -469,6 +624,7 @@ switch (tType)
         dIsProtLike = FALSE;
 	break;
     default:
+	dIsProtLike = FALSE;
         errAbort("Illegal value for 't' parameter");
 	break;
     }
@@ -534,23 +690,23 @@ else
 	if (tileSize == 15)
 	    repMatch = 16;
 	else if (tileSize == 14)
-	    repMatch = 64;
+	    repMatch = 32;
 	else if (tileSize == 13)
-	    repMatch = 256;
+	    repMatch = 128;
 	else if (tileSize == 12)
-	    repMatch = 1024;
+	    repMatch = 256;
 	else if (tileSize == 11)
-	    repMatch = 4*1024;
+	    repMatch = 4*256;
 	else if (tileSize == 10)
-	    repMatch = 16*1024;
+	    repMatch = 16*256;
 	else if (tileSize == 9)
-	    repMatch = 64*1024;
+	    repMatch = 64*256;
 	else if (tileSize == 8)
-	    repMatch = 256*1024;
+	    repMatch = 256*256;
 	else if (tileSize == 7)
-	    repMatch = 1024*1024;
+	    repMatch = 1024*256;
 	else if (tileSize == 6)
-	    repMatch = 4*1024*1024;
+	    repMatch = 4*1024*256;
 	}
     }
 
@@ -559,6 +715,8 @@ noHead = cgiBoolean("noHead");
 oneOff = cgiBoolean("oneOff");
 ooc = cgiOptionalString("ooc");
 makeOoc = cgiOptionalString("makeOoc");
+mask = cgiOptionalString("mask");
+minRepDivergence = cgiUsualDouble("minRepDivergence", minRepDivergence);
 
 /* Call routine that does the work. */
 blat(argv[1], argv[2], argv[3]);
