@@ -1,27 +1,26 @@
-track ctgPos2
-shortLabel Contigs
-longLabel Assembly Contigs
-group map
-priority 9
-visibility hide
-color 150,0,0
-
 track gold
 shortLabel Scaffolds
 longLabel Assembly Scaffolds (Supercontigs)
 group map
-priority 10
-visibility hide
+priority 9
+visibility hide 
 color 150,100,30
 altColor 230,170,40
 type bed 3 +
+
+track ctgPos2
+shortLabel Contigs
+longLabel Assembly Contigs
+group map
+priority 10
+visibility hide
 
 track gap
 shortLabel Gap
 longLabel Gap Locations
 priority 11
 group map
-visibility hide
+visibility dense
 type bed 3 +
 
 track blastzHg17
@@ -53,7 +52,7 @@ shortLabel Human Net
 longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno
 priority 124.3
-visibility hide
+visibility dense
 spectrum on
 type netAlign hg17 chainHg17
 otherDb hg17
@@ -113,7 +112,7 @@ track tblastnHg16KGPep
 shortLabel Human tBLASTn
 longLabel $o_Organism ($o_date/$o_db) KnownGenePep tBLASTn
 group compGeno
-priority 142
+priority 121
 visibility hide
 colorChromDefault off
 type psl protein
