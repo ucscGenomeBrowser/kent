@@ -8,8 +8,9 @@
 #include "psl.h"
 #include "linefile.h"
 #include "genePred.h"
+#include "hdb.h"
 
-static char const rcsid[] = "$Id: genePred.c,v 1.13 2003/05/08 23:29:24 markd Exp $";
+static char const rcsid[] = "$Id: genePred.c,v 1.14 2003/05/25 16:12:25 baertsch Exp $";
 
 /* SQL to create a genePred table */
 static char *createSql = 
@@ -402,4 +403,76 @@ char sqlCmd[1024];
 safef(sqlCmd, sizeof(sqlCmd), createSql, table);
 
 return cloneString(sqlCmd);
+}
+struct genePred *getOverlappingGene(struct genePred **list, char *table, char *chrom, int cStart, int cEnd)
+{
+/* read all genes from a table find the gene with the biggest overlap. 
+   Cache the list of genes to so we only read it once */
+
+char query[256];
+struct genePred *gene;
+struct sqlConnection *conn;
+struct sqlResult *sr;
+boolean hasBin = 0;
+char **row;
+struct genePred *el = NULL, *bestMatch = NULL, *gp = NULL;
+int overlap = 0, i;
+struct psl *psl;
+
+
+if (*list == NULL)
+    {
+    printf("Loading Predictions from %s\n",table);
+    AllocVar(*list);
+    conn = hAllocConn();
+    AllocVar(gene);
+    sprintf(query, "select * from %s \n",table);
+    sr = sqlGetResult(conn, query);
+    while ((row = sqlNextRow(sr)) != NULL){
+        if (!sameString(table,"all_mrna"))
+            {
+            el = genePredLoad(row);
+            }
+        else
+            {
+            psl = pslLoad(row);
+            el = genePredFromPsl(psl, psl->tStart, psl->tEnd, 10);
+            }
+        slAddHead(list, el);
+        }
+    slReverse(list);
+    sqlFreeResult(&sr);
+    hFreeConn(&conn);
+    }
+for (el = *list; el != NULL; el = el->next)
+    {
+    if (chrom != NULL)
+        if (i = rangeIntersection(cStart,cEnd, el->txStart, el->txEnd) > overlap && sameString(chrom, el->chrom))
+            {
+            overlap = i;
+            bestMatch = el;
+            }
+    }
+if (bestMatch != NULL)
+    {
+    /* Allocate genePred and fill in values. */
+    AllocVar(gp);
+    gp->name = cloneString(bestMatch->name);
+    gp->chrom = cloneString(bestMatch->chrom);
+    gp->strand[1] = bestMatch->strand[1];
+    gp->strand[0] = bestMatch->strand[0];
+    gp->txStart = bestMatch->txStart;
+    gp->txEnd = bestMatch->txEnd;
+    gp->cdsStart = bestMatch->cdsStart;
+    gp->cdsEnd = bestMatch->cdsEnd;
+    gp->exonCount = bestMatch->exonCount;
+    AllocArray(gp->exonStarts, bestMatch->exonCount);
+    AllocArray(gp->exonEnds, bestMatch->exonCount);
+    for (i=0; i<bestMatch->exonCount; ++i)
+        {
+        gp->exonStarts[i] = bestMatch->exonStarts[i] ;
+        gp->exonEnds[i] = bestMatch->exonEnds[i] ;
+        }
+    }
+return gp;
 }

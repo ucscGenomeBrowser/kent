@@ -5,7 +5,7 @@
 #include "chromInfo.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: hCommon.c,v 1.17 2003/05/16 03:48:52 kent Exp $";
+static char const rcsid[] = "$Id: hCommon.c,v 1.18 2003/05/25 16:12:25 baertsch Exp $";
 
 static char *_hgcName = "../cgi-bin/hgc";	/* Path to click processing program. */
 static char *_hgTracksName = "../cgi-bin/hgTracks"; /* Path back to self. */
@@ -174,7 +174,6 @@ if (startsWith("chr", s))
     s += 3;
 return s;
 }
-
 boolean hIsMgcServer()
 /* Is this the MGC-custom server? */
 {

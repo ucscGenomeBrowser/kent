@@ -9,6 +9,7 @@ CREATE TABLE axtInfo (
     alignment char(35) not null,	# name of alignment
     chrom varchar(255) not null,	# chromosome name
     fileName varchar(255) not null,	# axt  file name 
+    sort int not null,	# sort order
               #Indices
-    PRIMARY KEY(species,alignment,chrom)
+    PRIMARY KEY(species)
 );

@@ -24,7 +24,8 @@
 #include "scoredRef.h"
 #include "maf.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.112 2003/05/22 23:36:10 braney Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.113 2003/05/25 16:12:25 baertsch Exp $";
+
 
 #define DEFAULT_PROTEINS "proteins"
 #define DEFAULT_GENOME "Human"
@@ -324,6 +325,24 @@ if (hdbCc2 == NULL)
 return sqlAllocConnection(hdbCc2);
 }
 
+struct sqlConnection *hAllocConnDb(char *db)
+/* Get free connection if possible. If not allocate a new one. */
+{
+if (hdbHost == NULL)
+    hDefaultConnect();
+if (hdbCc == NULL)
+    hdbCc = sqlNewRemoteConnCache(hdbName2, hdbHost, hdbUser, hdbPassword);
+if ( sameString( db, connGetDatabase(hdbCc)))
+    return sqlAllocConnection(hdbCc);
+if (hdbCc2 == NULL)
+    hdbCc2 = sqlNewRemoteConnCache(hdbName2, hdbHost, hdbUser, hdbPassword);
+if (sameString(connGetDatabase(hdbCc2),db))
+    return sqlAllocConnection(hdbCc2);
+else
+    errAbort("cannot find a connection to %s\n",db);
+return NULL;
+}
+
 void hFreeConn(struct sqlConnection **pConn)
 /* Put back connection for reuse. */
 {
@@ -394,6 +413,50 @@ boolean hTableExists2(char *table)
 /* Return TRUE if a table exists in secondary database. */
 {
 return(hTableExistsDb(hGetDb2(), table));
+}
+
+boolean hColExistsDb(char *db, char *table , char *column)
+/* Return TRUE if a column exists in a table in db. */
+{
+struct sqlConnection *conn;
+struct sqlResult *sr;
+boolean exists;
+char query[256];
+char *field;
+
+if (sameString(db, hGetDb()))
+    conn = hAllocConn();
+else if ((hGetDb2() != NULL) && sameString(db, hGetDb2()))
+    conn = hAllocConn2();
+else
+    {
+    hSetDb2(db);
+    conn = hAllocConn2();
+    }
+
+
+snprintf(query, sizeof(query), "select * from %s ", table);
+sr = sqlGetResult(conn, query);
+exists = FALSE;
+while (field = sqlFieldName(sr))
+    {
+    if (sameString(field, column ) && field != 0)
+        {
+        exists = TRUE;
+        }
+    }
+sqlFreeResult(&sr);
+
+if (sameString(db, hGetDb()))
+    hFreeConn(&conn);
+else
+    hFreeConn2(&conn);
+return exists;
+}
+boolean hColExists(char *table, char *column)
+/* Return TRUE if a column exists in a table. */
+{
+return(hColExistsDb(hGetDb(), table, column));
 }
 
 void hParseTableName(char *table, char trackName[128], char chrom[32])
@@ -2139,7 +2202,7 @@ for (dbName = dbNames;  dbName != NULL;  dbName = dbName->next)
 	    dyStringPrintf(query, " or name = '%s'", dbName->name);
 	}
     }
-dyStringPrintf(query, ") order by orderKey");
+dyStringPrintf(query, ") order by orderKey desc");
 if (count > 0)
     {
     sr = sqlGetResult(conn, query->string);
@@ -2166,7 +2229,7 @@ for (dbName = dbNames;  dbName != NULL;  dbName = dbName->next)
 	    dyStringPrintf(query, " or name = '%s'", dbName->name);
 	}
     }
-dyStringPrintf(query, ") order by orderKey");
+dyStringPrintf(query, ") order by orderKey desc");
 if (count > 0)
     {
     sr = sqlGetResult(conn, query->string);
@@ -2209,7 +2272,6 @@ hFreeConn(&conn);
 slReverse(&aiList);
 return aiList;
 }
-
 
 struct dbDb *hGetBlatIndexedDatabases()
 /* Get list of databases for which there is a BLAT index. 

@@ -5,4 +5,5 @@ table axtInfo
     char[35] alignment; "name of alignment"
     string chrom;	"chromosome name"
     string fileName;    "axt  file name "
+    int sort;          "sort order"
     )
