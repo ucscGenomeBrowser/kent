@@ -10,7 +10,7 @@
 #	are created.  See also, scripts:
 #	mkSwissProtDB.sh and mkProteinsDB.sh
 #
-#	"$Id: KGprocess.sh,v 1.12 2004/02/25 17:23:15 hiram Exp $"
+#	"$Id: KGprocess.sh,v 1.13 2004/03/18 17:22:00 fanhsu Exp $"
 #
 #	January 2004 - added the kgProtMap process, a second cluster run
 #	Thu Nov 20 11:16:16 PST 2003 - Created - Hiram
@@ -441,14 +441,6 @@ if [ ! -s duplicate.tab ]; then
     exit 255
 fi
 
-TablePopulated "dupSpMrna" ${DB} || { \
-    hgsql -e "drop table dupSpMrna;" ${DB} 2> /dev/null; \
-    hgsql ${DB} < ~/kent/src/hg/lib/dupSpMrna.sql; \
-    echo "`date` loading duplicate.tab into ${DB}.dupSpMrna"; \
-    hgsql -e 'LOAD DATA local INFILE "duplicate.tab" into table dupSpMrna;' \
-	${DB}; \
-}
-
 TablePopulated "knownGene" ${DB} || {
     hgsql -e "drop table knownGene;" ${DB} 2> /dev/null; \
     hgsql ${DB} < ~/kent/src/hg/lib/knownGene.sql; \
@@ -479,14 +471,6 @@ if [ ! -s dnaLink.tab ]; then
     exit 255
 fi
 
-TablePopulated "knownGeneLink" ${DB} || { \
-    hgsql -e "drop table knownGeneLink;" ${DB} 2> /dev/null; \
-    hgsql ${DB} < ~/kent/src/hg/lib/knownGeneLink.sql; \
-    echo "`date` loading dnaLink.tab into ${DB}.knownGeneLink"; \
-    hgsql -e 'LOAD DATA local INFILE "dnaLink.tab" into table knownGeneLink;' \
-	${DB}; \
-}
-
 #	We need to add dnaGene.tab to knownGene
 #	to make sure this is all done correctly, reload the entire
 #	table with both, now sorted
@@ -500,6 +484,22 @@ if [ ! -s sortedKnownGene.tab ]; then
 	'LOAD DATA local INFILE "sortedKnownGene.tab" into table knownGene;' \
 	${DB}
 fi
+
+TablePopulated "knownGeneLink" ${DB} || { \
+    hgsql -e "drop table knownGeneLink;" ${DB} 2> /dev/null; \
+    hgsql ${DB} < ~/kent/src/hg/lib/knownGeneLink.sql; \
+    echo "`date` loading dnaLink.tab into ${DB}.knownGeneLink"; \
+    hgsql -e 'LOAD DATA local INFILE "dnaLink.tab" into table knownGeneLink;' \
+	${DB}; \
+}
+
+TablePopulated "dupSpMrna" ${DB} || { \
+    hgsql -e "drop table dupSpMrna;" ${DB} 2> /dev/null; \
+    hgsql ${DB} < ~/kent/src/hg/lib/dupSpMrna.sql; \
+    echo "`date` loading duplicate.tab into ${DB}.dupSpMrna"; \
+    hgsql -e 'LOAD DATA local INFILE "duplicate.tab" into table dupSpMrna;' \
+	${DB}; \
+}
 
 cd ${TOP}
 
