@@ -8,7 +8,7 @@
 #include "dnautil.h"
 #include "chain.h"
 
-static char const rcsid[] = "$Id: chain.c,v 1.11 2003/07/21 23:11:23 kent Exp $";
+static char const rcsid[] = "$Id: chain.c,v 1.12 2003/08/06 04:57:09 baertsch Exp $";
 
 void chainFree(struct chain **pChain)
 /* Free up a chain. */
@@ -395,9 +395,9 @@ if (subStart <= chain->qStart && subEnd >= chain->qEnd)
 /* Build new block list and calculate bounds. */
 for (oldB = chain->blockList; oldB != NULL; oldB = oldB->next)
     {
-    if (oldB->tEnd <= subStart)
+    if (oldB->qEnd <= subStart)
         continue;
-    if (oldB->tStart >= subEnd)
+    if (oldB->qStart >= subEnd)
         break;
     b = CloneVar(oldB);
     if (b->qStart < subStart)
