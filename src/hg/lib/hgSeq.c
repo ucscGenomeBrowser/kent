@@ -5,6 +5,7 @@
 #include "cheapcgi.h"
 #include "cart.h"
 #include "hdb.h"
+#include "web.h"
 #include "rmskOut.h"
 #include "fa.h"
 #include "genePred.h"
@@ -13,78 +14,7 @@
 /* Both hgc and hgText define this as a global: */
 extern struct cart *cart;
 
-void hgSeqTrackInfoDb(char *db, char *table, boolean *isGene,
-		      boolean *canDoUTR, boolean *canDoIntrons, char **type)
-{
-boolean foundFields;
-char fChrom[32], fStart[32], fEnd[32], fName[32], fStrand[32];
-char fCdsStart[32], fCdsEnd[32], fCount[32], fStarts[32], fEndsSizes[32];
-
-foundFields = hFindGenePredFieldsDb(db, table,
-				    fChrom, fStart, fEnd, fName,
-				    fStrand, fCdsStart, fCdsEnd,
-				    fCount, fStarts, fEndsSizes);
-
-*isGene = *canDoUTR = *canDoIntrons = FALSE;
-if (foundFields)
-    {
-    if (sameString(fStarts, "exonStarts"))
-	{
-	/* genePred or variant */
-	*isGene = *canDoUTR = *canDoIntrons = TRUE;
-	*type = cloneString("genePred");
-	}
-    else if (sameString(fStarts, "chromStarts") ||
-	     sameString(fStarts, "blockStarts"))
-	{
-	/* bed 12 */
-	*isGene = *canDoUTR = *canDoIntrons = TRUE;
-	*type = cloneString("bed 12");
-	}
-    else if (sameString(fStarts, "tStarts"))
-	{
-	/* psl */
-	*canDoIntrons = TRUE;
-	*type = cloneString("psl");
-	}
-    else if (fCdsStart[0] != 0)
-	{
-	/* bed 8 */
-	*isGene = *canDoUTR = TRUE;
-	*type = cloneString("bed 8");
-	}
-    else if (fStrand[0] !=0  &&  fChrom[0] == 0)
-	{
-	*type = cloneString("gl");
-	}
-    else if (fStrand[0] !=0)
-	{
-	*isGene = TRUE;
-	*type = cloneString("bed 6");
-	}
-    else if (fName[0] !=0)
-	{
-	*type = cloneString("bed 4");
-	}
-    else
-	{
-	*type = cloneString("bed 3");
-	}
-    }
-else
-    {
-    *type = NULL;
-    }
-}
-
-void hgSeqTrackInfo(char *table, boolean *isGene, boolean *canDoUTR, 
-		    boolean *canDoIntrons, char **type)
-{
-hgSeqTrackInfoDb(hGetDb(), table, isGene, canDoUTR, canDoIntrons, type);
-}
-
-void hgSeqFeatureRegionOptions(boolean isGene, boolean canDoUTR,
-			       boolean canDoIntrons)
+void hgSeqFeatureRegionOptions(boolean canDoUTR, boolean canDoIntrons)
 /* Print out HTML FORM entries for feature region options. */
 {
 char *exonStr = canDoIntrons ? " Exons" : "";
@@ -171,6 +101,7 @@ puts("<P>\n");
 
 }
 
+
 void hgSeqDisplayOptions(boolean canDoUTR, boolean canDoIntrons)
 /* Print out HTML FORM entries for sequence display options. */
 {
@@ -205,19 +136,26 @@ puts(" to N <BR>\n");
 void hgSeqOptionsDb(char *db, char *table)
 /* Print out HTML FORM entries for gene region and sequence display options. */
 {
-boolean isGene, canDoUTR, canDoIntrons;
-char *type;
+struct hTableInfo *hti;
+char chrom[32];
+char rootName[256];
 
-hgSeqTrackInfoDb(db, table, &isGene, &canDoUTR, &canDoIntrons, &type);
-hgSeqFeatureRegionOptions(isGene, canDoUTR, canDoIntrons);
-hgSeqDisplayOptions(canDoUTR, canDoIntrons);
+hParseTableName(table, rootName, chrom);
+hti = hFindTableInfoDb(db, chrom, rootName);
+if (hti == NULL)
+    webAbort("Error", "Could not find table info for table %s (%s)",
+	     rootName, table);
+hgSeqFeatureRegionOptions(hti->hasCDS, hti->hasBlocks);
+hgSeqDisplayOptions(hti->hasCDS, hti->hasBlocks);
 }
+
 
 void hgSeqOptions(char *table)
 /* Print out HTML FORM entries for gene region and sequence display options. */
 {
 hgSeqOptionsDb(hGetDb(), table);
 }
+
 
 static void maskRepeats(char *chrom, int chromStart, int chromEnd,
 			DNA *dna, boolean soft)
@@ -244,6 +182,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 sqlFreeResult(&sr);
 hFreeConn(&conn);
 }
+
 
 void hgSeqConcatRegionsDb(char *db, char *chrom, char strand, char *name,
 			  int rCount, unsigned *rStarts, unsigned *rSizes,
@@ -333,6 +272,7 @@ sprintf(recName, "%s%s%s_%s range=%s:%d-%d 5'pad=%d 3'pad=%d revComp=%s strand=%
 faWriteNext(stdout, recName, cSeq->dna, cSeq->size);
 }
 
+
 void hgSeqRegionsDb(char *db, char *chrom, char strand, char *name,
 		    boolean concatRegions,
 		    int rCount, unsigned *rStarts, unsigned *rSizes,
@@ -370,6 +310,7 @@ hgSeqRegionsDb(hGetDb(), chrom, strand, name, concatRegions,
 	       rCount, rStarts, rSizes, exonFlags, cdsFlags);
 }
 
+
 void hgSeqRange(char *chrom, int chromStart, int chromEnd, char strand,
 		char *name)
 /* Print out dna sequence for the given range. */
@@ -389,6 +330,7 @@ hgSeqRegions(chrom, strand, name, FALSE, count, starts, sizes, exonFlags,
 	     cdsFlags);
 }
 
+
 void addFeature(int *count, unsigned *starts, unsigned *sizes,
 		boolean *exonFlags, boolean *cdsFlags,
 		int start, int size, boolean eFlag, boolean cFlag)
@@ -400,16 +342,17 @@ cdsFlags[*count]  = cFlag;
 (*count)++;
 }
 
+
 int hgSeqItemsInRangeDb(char *db, char *table, char *chrom, int chromStart,
 			int chromEnd, char *sqlConstraints)
 /* Print out dna sequence of all items (that match sqlConstraints, if nonNULL) 
    in the given range in table.  Return number of items. */
 {
-struct dyString *query = newDyString(512);
-struct sqlConnection *conn;
-struct sqlResult *sr;
-char **row;
+struct hTableInfo *hti;
+struct bed *bedList, *bedItem;
 char itemName[128];
+char parsedChrom[32];
+char rootName[256];
 boolean isRc;
 int count;
 unsigned *starts = NULL;
@@ -432,123 +375,32 @@ char *granularity  = cgiOptionalString("hgSeq.granularity");
 boolean concatRegions = granularity && sameString("gene", granularity);
 boolean isCDS, doIntron;
 boolean foundFields;
-char fChrom[32], fStart[32], fEnd[32], fName[32], fStrand[32];
-char fCdsStart[32], fCdsEnd[32], fCount[32], fStarts[32], fEndsSizes[32];
-boolean canDoUTR=FALSE, canDoIntrons=FALSE;
-char *name, *strand;
-int start, end, cdsStart, cdsEnd, blkCount;
-unsigned *blkStarts, *blkSizes;
-boolean useSqlConstraints = sqlConstraints != NULL && sqlConstraints[0] != 0;
+boolean canDoUTR, canDoIntrons;
 
-foundFields = hFindGenePredFieldsDb(db, table,
-				    fChrom, fStart, fEnd, fName,
-				    fStrand, fCdsStart, fCdsEnd,
-				    fCount, fStarts, fEndsSizes);
+hParseTableName(table, rootName, parsedChrom);
+hti = hFindTableInfoDb(db, chrom, rootName);
+if (hti == NULL)
+    webAbort("Error", "Could not find table info for table %s (%s)",
+	     rootName, table);
+canDoUTR = hti->hasCDS;
+canDoIntrons = hti->hasBlocks;
 
-if (sameString(db, hGetDb()))
-    conn = hAllocConn();
-else if (sameString(db, hGetDb2()))
-    conn = hAllocConn2();
-else
-    {
-    hSetDb2(db);
-    conn = hAllocConn2();
-    }
-dyStringClear(query);
-// row[0], row[1] -> start, end
-dyStringPrintf(query, "select %s,%s", fStart, fEnd);
-// row[2] -> name or placeholder
-if (fName[0] != 0)
-    dyStringPrintf(query, ",%s", fName);
-else
-    dyStringPrintf(query, ",%s", fStart);  // keep the same #fields!
-// row[3] -> strand or placeholder
-if (fStrand[0] != 0)
-    dyStringPrintf(query, ",%s", fStrand);
-else
-    dyStringPrintf(query, ",%s", fStart);  // keep the same #fields!
-// row[4], row[5] -> cdsStart, cdsEnd or placeholders
-if (fCdsStart[0] != 0)
-    {
-    dyStringPrintf(query, ",%s,%s", fCdsStart, fCdsEnd);
-    canDoUTR = TRUE;
-    }
-else
-    dyStringPrintf(query, ",%s,%s", fStart, fStart);  // keep the same #fields!
-// row[6], row[7], row[8] -> count, starts, ends/sizes or empty.
-if (fCount[0] != 0)
-    {
-    dyStringPrintf(query, ",%s,%s,%s", fCount, fStarts, fEndsSizes);
-    canDoIntrons = TRUE;
-    }
-dyStringPrintf(query, " from %s where %s < %d and %s > %d",
-	       table, fStart, chromEnd, fEnd, chromStart);
-if (fChrom[0] != 0)
-    dyStringPrintf(query, " and %s = '%s'", fChrom, chrom);
-if (useSqlConstraints)
-    dyStringPrintf(query, " and %s", sqlConstraints);
-
-// uglyf("# query: %s\n", query->string);
-sr = sqlGetResult(conn, query->string);
+bedList = hGetBedRangeDb(db, table, chrom, chromStart, chromEnd,
+			 sqlConstraints);
 
 rowCount = totalCount = 0;
-while ((row = sqlNextRow(sr)) != NULL)
+for (bedItem = bedList;  bedItem != NULL;  bedItem = bedItem->next)
     {
     rowCount++;
-    start     = atoi(row[0]);
-    end       = atoi(row[1]);
-    name      = row[2];
-    strand    = row[3];
-    cdsStart  = atoi(row[4]);
-    cdsEnd    = atoi(row[5]);
-    /* thickStart, thickEnd fields are sometimes used for other-organism 
-       coords (e.g. synteny100000, syntenyBuild30).  So if they look 
-       completely wrong, fake them out to start/end.  */
-    if (cdsStart < start)
-	cdsStart = start;
-    else if (cdsStart > end)
-	cdsStart = start;
-    if (cdsEnd < start)
-	cdsEnd = end;
-    else if (cdsEnd > end)
-	cdsEnd = end;
-    if (canDoIntrons)
+    // bed: translate relative starts to absolute starts
+    for (i=0;  i < bedItem->blockCount;  i++)
 	{
-	blkCount  = atoi(row[6]);
-	sqlUnsignedDynamicArray(row[7], &blkStarts, &count);
-	assert(count == blkCount);
-	sqlUnsignedDynamicArray(row[8], &blkSizes, &count);
-	assert(count == blkCount);
-	if (sameString("exonEnds", fEndsSizes))
-	    {
-	    // genePred: translate ends to sizes
-	    for (i=0;  i < blkCount;  i++)
-		{
-		blkSizes[i] -= blkStarts[i];
-		}
-	    }
-	if (sameString("chromStarts", fStarts) ||
-	    sameString("blockStarts", fStarts))
-	    {
-	    // bed: translate relative starts to absolute starts
-	    for (i=0;  i < blkCount;  i++)
-		{
-		blkStarts[i] += start;
-		}
-	    }
+	bedItem->chromStarts[i] += bedItem->chromStart;
 	}
-    else
-	{
-	blkCount  = 0;
-	blkStarts = NULL;
-	blkSizes  = NULL;
-	}
-    if (fStrand[0] == 0)
-	strand = "?";
-    isRc = (strand[0] == '-');
+    isRc = (bedItem->strand[0] == '-');
     // here's the max # of feature regions:
     if (canDoIntrons)
-	count = 2 + (2 * blkCount);
+	count = 2 + (2 * bedItem->blockCount);
     else
 	count = 5;
     starts    = needMem(sizeof(unsigned) * count);
@@ -560,86 +412,101 @@ while ((row = sqlNextRow(sr)) != NULL)
     if (!isRc && promoter && (promoterSize > 0))
 	{
 	addFeature(&count, starts, sizes, exonFlags, cdsFlags,
-		   (start - promoterSize), promoterSize, FALSE, FALSE);
+		   (bedItem->chromStart - promoterSize), promoterSize,
+		   FALSE, FALSE);
 	}
     else if (isRc && downstream && (downstreamSize > 0))
 	{
 	addFeature(&count, starts, sizes, exonFlags, cdsFlags,
-		   (start - downstreamSize), downstreamSize,
+		   (bedItem->chromStart - downstreamSize), downstreamSize,
 		   FALSE, FALSE);
 	}
     if (canDoIntrons && canDoUTR)
 	{
-	for (i=0;  i < blkCount;  i++)
+	for (i=0;  i < bedItem->blockCount;  i++)
 	    {
-	    if ((blkStarts[i] + blkSizes[i]) <= cdsStart)
+	    if ((bedItem->chromStarts[i] + bedItem->blockSizes[i]) <=
+		bedItem->thickStart)
 		{
 		if ((!isRc && utrExon5)   || (isRc && utrExon3))
 		    {
 		    addFeature(&count, starts, sizes, exonFlags, cdsFlags,
-			       blkStarts[i], blkSizes[i],
+			       bedItem->chromStarts[i], bedItem->blockSizes[i],
 			       TRUE, FALSE);
 		    }
 		if (((!isRc && utrIntron5) || (isRc && utrIntron3)) &&
-		    (i < blkCount - 1))
+		    (i < bedItem->blockCount - 1))
 		    {
 		    addFeature(&count, starts, sizes, exonFlags, cdsFlags,
-			       (blkStarts[i] + blkSizes[i]),
-			       (blkStarts[i+1] - blkStarts[i] - blkSizes[i]),
+			       (bedItem->chromStarts[i] +
+				bedItem->blockSizes[i]),
+			       (bedItem->chromStarts[i+1] -
+				bedItem->chromStarts[i] -
+				bedItem->blockSizes[i]),
 			       FALSE, FALSE);
 		    }
 		}
-	    else if (blkStarts[i] < cdsEnd)
+	    else if (bedItem->chromStarts[i] < bedItem->thickEnd)
 		{
-		if (blkStarts[i] < cdsStart)
+		if (bedItem->chromStarts[i] < bedItem->thickStart)
 		    {
 		    if ((!isRc && utrExon5)	  || (isRc && utrExon3))
 			{
 			addFeature(&count, starts, sizes, exonFlags, cdsFlags,
-				   blkStarts[i],
-				   (cdsStart - blkStarts[i]),
+				   bedItem->chromStarts[i],
+				   (bedItem->thickStart -
+				    bedItem->chromStarts[i]),
 				   TRUE, FALSE);
 			}
 		    if (cdsExon)
 			{
 			addFeature(&count, starts, sizes, exonFlags, cdsFlags,
-				   cdsStart,
-				   (blkStarts[i] + blkSizes[i] - cdsStart),
+				   bedItem->thickStart,
+				   (bedItem->chromStarts[i] +
+				    bedItem->blockSizes[i] -
+				    bedItem->thickStart),
 				   TRUE, TRUE);
 			}
 		    }
-		else if ((blkStarts[i] + blkSizes[i]) >
-			 cdsEnd)
+		else if ((bedItem->chromStarts[i] + bedItem->blockSizes[i]) >
+			 bedItem->thickEnd)
 		    {
 		    if (cdsExon)
 			{
 			addFeature(&count, starts, sizes, exonFlags, cdsFlags,
-				   blkStarts[i],
-				   (cdsEnd - blkStarts[i]),
+				   bedItem->chromStarts[i],
+				   (bedItem->thickEnd -
+				    bedItem->chromStarts[i]),
 				   TRUE, TRUE);
 			}
 		    if ((!isRc && utrExon3)	  || (isRc && utrExon5))
 			{
 			addFeature(&count, starts, sizes, exonFlags, cdsFlags,
-				   cdsEnd,
-				   (blkStarts[i] + blkSizes[i] - cdsEnd),
+				   bedItem->thickEnd,
+				   (bedItem->chromStarts[i] +
+				    bedItem->blockSizes[i] -
+				    bedItem->thickEnd),
 				   TRUE, FALSE);
 			}
 		    }
 		else if (cdsExon)
 		    {
 		    addFeature(&count, starts, sizes, exonFlags, cdsFlags,
-			       blkStarts[i], blkSizes[i],
+			       bedItem->chromStarts[i], bedItem->blockSizes[i],
 			       TRUE, TRUE);
 		    }
-		isCDS = ! ((blkStarts[i] + blkSizes[i]) > cdsEnd);
+		isCDS = ! ((bedItem->chromStarts[i] + bedItem->blockSizes[i]) >
+			   bedItem->thickEnd);
 		doIntron = (isCDS ? cdsIntron :
 			    ((!isRc) ? utrIntron3 : utrIntron5));
-		if (doIntron && (i < blkCount - 1))
+		if (doIntron && (i < bedItem->blockCount - 1))
 		    {
 		    addFeature(&count, starts, sizes, exonFlags, cdsFlags,
-			       (blkStarts[i] + blkSizes[i]),
-			       (blkStarts[i+1] - blkStarts[i] - blkSizes[i]),
+			       (bedItem->chromStarts[i] +
+				bedItem->blockSizes[i]),
+			       (bedItem->chromStarts[i+1] -
+				bedItem->chromStarts[i] -
+				bedItem->blockSizes[i]),
 			       FALSE, isCDS);
 		    }
 		}
@@ -648,15 +515,18 @@ while ((row = sqlNextRow(sr)) != NULL)
 		if ((!isRc && utrExon3)   || (isRc && utrExon5))
 		    {
 		    addFeature(&count, starts, sizes, exonFlags, cdsFlags,
-			       blkStarts[i], blkSizes[i],
+			       bedItem->chromStarts[i], bedItem->blockSizes[i],
 			       TRUE, FALSE);
 		    }
 		if (((!isRc && utrIntron3) || (isRc && utrIntron5)) &&
-		    (i < blkCount - 1))
+		    (i < bedItem->blockCount - 1))
 		    {
 		    addFeature(&count, starts, sizes, exonFlags, cdsFlags,
-			       (blkStarts[i] + blkSizes[i]),
-			       (blkStarts[i+1] - blkStarts[i] - blkSizes[i]),
+			       (bedItem->chromStarts[i] +
+				bedItem->blockSizes[i]),
+			       (bedItem->chromStarts[i+1] -
+				bedItem->chromStarts[i] -
+				bedItem->blockSizes[i]),
 			       FALSE, FALSE);
 		    }
 		}
@@ -664,19 +534,21 @@ while ((row = sqlNextRow(sr)) != NULL)
 	}
     else if (canDoIntrons)
 	{
-	for (i=0;  i < blkCount;  i++)
+	for (i=0;  i < bedItem->blockCount;  i++)
 	    {
 	    if (cdsExon)
 		{
 		addFeature(&count, starts, sizes, exonFlags, cdsFlags,
-			   blkStarts[i], blkSizes[i],
+			   bedItem->chromStarts[i], bedItem->blockSizes[i],
 			   TRUE, FALSE);
 		}
-	    if (cdsIntron && (i < blkCount - 1))
+	    if (cdsIntron && (i < bedItem->blockCount - 1))
 		{
 		addFeature(&count, starts, sizes, exonFlags, cdsFlags,
-			   (blkStarts[i] + blkSizes[i]),
-			   (blkStarts[i+1] - blkStarts[i] - blkSizes[i]),
+			   (bedItem->chromStarts[i] + bedItem->blockSizes[i]),
+			   (bedItem->chromStarts[i+1] -
+			    bedItem->chromStarts[i] -
+			    bedItem->blockSizes[i]),
 			   FALSE, FALSE);
 		}
 	    }
@@ -686,43 +558,47 @@ while ((row = sqlNextRow(sr)) != NULL)
 	if ((!isRc && utrExon5)   || (isRc && utrExon3))
 	    {
 	    addFeature(&count, starts, sizes, exonFlags, cdsFlags,
-		       start,
-		       (cdsStart - start), TRUE, FALSE);
+		       bedItem->chromStart,
+		       (bedItem->thickStart - bedItem->chromStart),
+		       TRUE, FALSE);
 	    }
 	if (cdsExon)
 	    {
 	    addFeature(&count, starts, sizes, exonFlags, cdsFlags,
-		       cdsStart, (cdsEnd - cdsStart),
+		       bedItem->thickStart,
+		       (bedItem->thickEnd - bedItem->thickStart),
 		       TRUE, TRUE);
 	    }
 	if ((!isRc && utrExon3)   || (isRc && utrExon5))
 	    {
 	    addFeature(&count, starts, sizes, exonFlags, cdsFlags,
-		       cdsEnd, (end - cdsEnd),
+		       bedItem->thickEnd,
+		       (bedItem->chromEnd - bedItem->thickEnd),
 		       TRUE, FALSE);
 	    }
 	}
     else
 	{
 	addFeature(&count, starts, sizes, exonFlags, cdsFlags,
-		   start, (end - start),
+		   bedItem->chromStart,
+		   (bedItem->chromEnd - bedItem->chromStart),
 		   TRUE, FALSE);
 	}
     if (!isRc && downstream && (downstreamSize > 0))
 	{
 	addFeature(&count, starts, sizes, exonFlags, cdsFlags,
-		   end, downstreamSize, FALSE, FALSE);
+		   bedItem->chromEnd, downstreamSize, FALSE, FALSE);
 	}
     else if (isRc && promoter && (promoterSize > 0))
 	{
 	addFeature(&count, starts, sizes, exonFlags, cdsFlags,
-		   end, promoterSize, FALSE, FALSE);
+		   bedItem->chromEnd, promoterSize, FALSE, FALSE);
 	}
-    if (fName[0] != 0)
-	snprintf(itemName, sizeof(itemName), "%s_%s", table, name);
+    if (hti->nameField[0] != 0)
+	snprintf(itemName, sizeof(itemName), "%s_%s", table, bedItem->name);
     else
 	strncpy(itemName, table, sizeof(itemName));
-    hgSeqRegionsDb(db, chrom, strand[0], itemName, concatRegions,
+    hgSeqRegionsDb(db, chrom, bedItem->strand[0], itemName, concatRegions,
 		   count, starts, sizes, exonFlags, cdsFlags);
     totalCount += count;
     freeMem(starts);
@@ -730,13 +606,10 @@ while ((row = sqlNextRow(sr)) != NULL)
     freeMem(exonFlags);
     freeMem(cdsFlags);
     }
-sqlFreeResult(&sr);
-if (sameString(db, hGetDb()))
-    hFreeConn(&conn);
-else
-    hFreeConn2(&conn);
+bedFreeList(&bedList);
 return totalCount;
 }
+
 
 int hgSeqItemsInRange(char *table, char *chrom, int chromStart, int chromEnd,
 		       char *sqlConstraints)
