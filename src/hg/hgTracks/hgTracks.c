@@ -562,6 +562,8 @@ for (lf = tg->items; lf != NULL; lf = lf->next)
     AllocVar(lfs);
     lfs->features = lf;
     lfs->grayIx = lf->grayIx;
+    lfs->start = lf->start;
+    lfs->end = lf->end;
     slAddHead(&lfsList, lfs)
     }
 slReverse(&lfsList);
@@ -722,14 +724,14 @@ const struct linkedFeaturesSeries *b = *((struct linkedFeaturesSeries **)vb);
 return b->grayIx - a->grayIx;
 }
 
-void sortByGray(struct trackGroup *tg, enum trackVisibility vis)
-/* Sort linked features by grayIx. */
+static int linkedFeaturesSeriesCmpStart(const void *va, const void *vb)
+/* Help sort linkedFeatures by starting pos. */
 {
-if (vis == tvDense)
-    slSort(&tg->items, cmpLfWhiteToBlack);
-else
-    slSort(&tg->items, cmpLfBlackToWhite);
+const struct linkedFeaturesSeries *a = *((struct linkedFeaturesSeries **)va);
+const struct linkedFeaturesSeries *b = *((struct linkedFeaturesSeries **)vb);
+return a->start - b->start;
 }
+
 
 #ifdef FUREY_CODE
 
@@ -758,7 +760,11 @@ boolean isXeno = tg->subType == lfSubXeno;
 boolean hideLine = (vis == tvDense && tg->subType == lfSubXeno);
 
 if (vis == tvDense)
-    sortByGray(tg, vis);
+    slSort(&tg->items, cmpLfWhiteToBlack);
+else
+    {
+    slSort(&tg->items, linkedFeaturesSeriesCmpStart);
+    }
 for (lfs = tg->items; lfs != NULL; lfs = lfs->next)
     {
     int midY = y + midLineOff;
@@ -4334,8 +4340,6 @@ int w;
 int prevEnd = -1;
 
 lf=tg->items;    
-if (vis == tvDense)
-    sortByGray(tg, vis);
 for(lf = tg->items; lf != NULL; lf = lf->next) 
     {
     if (tg->itemColor && shades == NULL)
