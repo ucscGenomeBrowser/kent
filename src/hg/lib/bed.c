@@ -8,7 +8,7 @@
 #include "bed.h"
 #include "binRange.h"
 
-static char const rcsid[] = "$Id: bed.c,v 1.24 2003/12/14 23:28:56 sugnet Exp $";
+static char const rcsid[] = "$Id: bed.c,v 1.25 2003/12/16 16:43:51 angie Exp $";
 
 void bedStaticLoad(char **row, struct bed *ret)
 /* Load a row from bed table into ret.  The contents of ret will
@@ -844,29 +844,35 @@ for (bed=bedListIn;  bed != NULL;  bed=bed->next)
 	passes &= (sameString(bed->chrom, chrom) &&
 		   (bed->chromStart < winEnd) &&
 		   (bed->chromEnd   > winStart));
-    passes &= filterString(bed->chrom, bf->chromFilter, bf->chromVals,
-			   bf->chromInvert);
-    passes &= filterInt(bed->chromStart, bf->chromStartFilter,
-			bf->chromStartVals);
-    passes &= filterInt(bed->chromEnd, bf->chromEndFilter, bf->chromEndVals);
-    passes &= filterString(bed->name, bf->nameFilter, bf->nameVals,
-			   bf->nameInvert);
-    passes &= filterInt(bed->score, bf->scoreFilter, bf->scoreVals);
-    passes &= filterChar(bed->strand[0], bf->strandFilter, bf->strandVals,
-			 bf->strandInvert);
-    passes &= filterInt(bed->thickStart, bf->thickStartFilter,
-			bf->thickStartVals);
-    passes &= filterInt(bed->thickEnd, bf->thickEndFilter, bf->thickEndVals);
-    passes &= filterInt(bed->blockCount, bf->blockCountFilter,
-			bf->blockCountVals);
-    passes &= filterInt((bed->chromEnd - bed->chromStart),
-			bf->chromLengthFilter, bf->chromLengthVals);
-    passes &= filterInt((bed->thickEnd - bed->thickStart),
-			bf->thickLengthFilter, bf->thickLengthVals);
-    cmpValues[0] = cmpValues[1] = bed->thickStart;
-    passes &= filterInt(bed->chromStart, bf->compareStartsFilter, cmpValues);
-    cmpValues[0] = cmpValues[1] = bed->thickEnd;
-    passes &= filterInt(bed->chromEnd, bf->compareEndsFilter, cmpValues);
+    if (bf != NULL)
+	{
+	passes &= filterString(bed->chrom, bf->chromFilter, bf->chromVals,
+			       bf->chromInvert);
+	passes &= filterInt(bed->chromStart, bf->chromStartFilter,
+			    bf->chromStartVals);
+	passes &= filterInt(bed->chromEnd, bf->chromEndFilter,
+			    bf->chromEndVals);
+	passes &= filterString(bed->name, bf->nameFilter, bf->nameVals,
+			       bf->nameInvert);
+	passes &= filterInt(bed->score, bf->scoreFilter, bf->scoreVals);
+	passes &= filterChar(bed->strand[0], bf->strandFilter, bf->strandVals,
+			     bf->strandInvert);
+	passes &= filterInt(bed->thickStart, bf->thickStartFilter,
+			    bf->thickStartVals);
+	passes &= filterInt(bed->thickEnd, bf->thickEndFilter,
+			    bf->thickEndVals);
+	passes &= filterInt(bed->blockCount, bf->blockCountFilter,
+			    bf->blockCountVals);
+	passes &= filterInt((bed->chromEnd - bed->chromStart),
+			    bf->chromLengthFilter, bf->chromLengthVals);
+	passes &= filterInt((bed->thickEnd - bed->thickStart),
+			    bf->thickLengthFilter, bf->thickLengthVals);
+	cmpValues[0] = cmpValues[1] = bed->thickStart;
+	passes &= filterInt(bed->chromStart, bf->compareStartsFilter,
+			    cmpValues);
+	cmpValues[0] = cmpValues[1] = bed->thickEnd;
+	passes &= filterInt(bed->chromEnd, bf->compareEndsFilter, cmpValues);
+	}
     if (passes)
 	{
 	struct bed *newBed = cloneBed(bed);
