@@ -1343,38 +1343,28 @@ LOAD CPGISLANDS (DONE 8/9/02)
      hgLoadBed hg12 cpgIsland -tab -noBin \
        -sqlTable=$HOME/kent/src/hg/lib/cpgIsland.sql cpgIsland.bed
 
-LOAD ENSEMBL GENES (todo - waiting for proper file formats from them, Matt 9/13/02)
+LOAD ENSEMBL GENES (Done by Matt 9/20/02)
      cd ~/oo/bed
      mkdir ensembl
      cd ensembl
-     Place the gtf dump file, xxx.gtf.gtz (for ensembl gene
-     predictions) here.
-     wget ftp://ftp.ensembl.org/pub/current_human/data/fasta/dna/Homo_sapiens.latestgp.fa.gz
-     gunzip ftp//ftp.ensembl.org/pub/current_human/data/fasta/dna/Homo_sapiens.latestgp.fa.gz
 
-     Starting from Hg10, ensembl seems to have done their own lifting,
-     so just collect all chromosome .gtf files.
-     cat ?.gtf ??.gtf >all.gtf
+     Get the ensembl gene data and protein data from http://www.ensembl.org/Homo_sapiens/martview
 
-     Add "chr" to front of each line to make it compatible with ldHgGene 
-     addchr all.gtf > ensembl.gtf
+     Add "chr" to front of each line in the gene data gtf file to make it compatible with ldHgGene 
+     ~matt/bin/addchr.pl ensGene.gtf ensembl.gtf
      rm all.gtf
      ldHgGene hg12 ensGene ensembl.gtf
 o - Load Ensembl peptides:
-     (poke around ensembl to get their peptide files as ensembl.pep)
-     
-     wget ftp://ftp.ensembl.org/pub/current_human/data/fasta/pep/*s.pep.fa.gz
+     Get them from ensembl as above in the gene section
 
-     gunzip Homo_sapiens.pep.fa.gz
-
-     Substitute ENST for ENSP in ensemble.pep with subs
+     Substitute ENST for ENSP in ens with subs
      edit subs.in to read: ENSP|ENST
+     subs -e ensPep.fa > /dev/null
 
-     subs -e Homo_sapiens.pep.fa >/dev/null
-
+     Run fixPep.pl ensPep.fa ensembl.pep
      hgPepPred hg12 generic ensPep ensembl.pep
 
-    LOAD SANGER 22 Pseudogenes (from hg10)
+    LOAD SANGER 22 Pseudogenes (from hg10 - Done by Robert)
     cd ~/hg12/bed/sanger22
     cp ~/hg10/bed/sanger22/cChr22.3.lx.pseudogene.gff .
     replace ^chr22 with hg10:chr22 in Chr22.3.lx.pseudogene.gff
