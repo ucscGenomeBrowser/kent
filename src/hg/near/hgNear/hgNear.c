@@ -20,7 +20,7 @@
 #include "hgNear.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: hgNear.c,v 1.148 2004/05/25 18:00:43 donnak Exp $";
+static char const rcsid[] = "$Id: hgNear.c,v 1.149 2004/06/24 19:54:08 angie Exp $";
 
 char *excludeVars[] = { "submit", "Submit", idPosVarName, NULL }; 
 /* The excludeVars are not saved to the cart. (We also exclude
@@ -905,11 +905,7 @@ if (minString != NULL || maxString != NULL)
     if (minString)
          dyStringPrintf(dy, " and %s >= %s", col->valField, minString);
     if (maxString)
-         {
-	 if (minString)
-	     dyStringPrintf(dy, " and ");
          dyStringPrintf(dy, " and %s <= %s", col->valField, maxString);
-	 }
     list = advFilterFromQuery(conn, dy->string, list);
     dyStringFree(&dy);
     }
